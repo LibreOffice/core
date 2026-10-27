@@ -22,7 +22,11 @@
 #include <comphelper/propertyvalue.hxx>
 #include <officecfg/Office/Common.hxx>
 
+#include <tools/UnitConversion.hxx>
+#include <editeng/lrspitem.hxx>
+#include <ndtxt.hxx>
 #include <pam.hxx>
+#include <unotextrange.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 #include <IDocumentSettingAccess.hxx>
@@ -40,6 +44,137 @@ public:
     {
     }
 };
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf171849_numberingPriority)
+{
+    auto verify = [this]() {
+        // Microsoft Word: direct formatting, direct numbering, derived style,
+        // numbering-defining style, and numbering over a parent style, respectively.
+        const sal_Int32 aLeftMargins[] = { 1905, 635, 1270, 1270, 635 };
+        for (int nPara = 1; nPara <= 5; ++nPara)
+        {
+            auto xPara = getParagraph(nPara);
+            SwUnoInternalPaM aPaM(*getSwDoc());
+            CPPUNIT_ASSERT(sw::XTextRangeToSwPaM(aPaM, xPara));
+            const SwTextNode* pNode = aPaM.GetPoint()->GetNode().GetTextNode();
+            CPPUNIT_ASSERT(pNode);
+            // ParaLeftMargin alone does not include the applicable numbering indent.
+            const sal_Int32 nLeftMargin
+                = getProperty<sal_Int32>(xPara, u"ParaLeftMargin"_ustr)
+                  + convertTwipToMm100(pNode->GetLeftMarginWithNum(/*bTextLeft=*/true));
+            CPPUNIT_ASSERT_EQUAL(aLeftMargins[nPara - 1], nLeftMargin);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(-635),
+                                 getProperty<sal_Int32>(xPara, u"ParaFirstLineIndent"_ustr));
+            CPPUNIT_ASSERT(!getProperty<OUString>(xPara, u"ListLabelString"_ustr).isEmpty());
+        }
+    };
+    createSwDoc("tdf171849_numberingPriority.docx");
+    verify();
+    saveAndReload(TestFilter::DOCX);
+    verify();
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf171849)
+{
+    auto verify = [this]() {
+        // Disabling the style's character indent must use the directly applied list's indent.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(635),
+                             getProperty<sal_Int32>(getParagraph(1), u"ParaLeftMargin"_ustr));
+        // Explicit paragraph indentation still overrides the numbering.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1270),
+                             getProperty<sal_Int32>(getParagraph(2), u"ParaLeftMargin"_ustr));
+        // Without numbering, the style's twip-based fallback is retained.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1482),
+                             getProperty<sal_Int32>(getParagraph(3), u"ParaLeftMargin"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(635),
+                             getProperty<sal_Int32>(getParagraph(4), u"ParaLeftMargin"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                             getProperty<sal_Int32>(getParagraph(4), u"ParaFirstLineIndent"_ustr));
+        // Attribute order must not affect explicit zero or nonzero indentation.
+        for (int nPara : { 5, 6, 7 })
+        {
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(635), getProperty<sal_Int32>(getParagraph(nPara),
+                                                                        u"ParaLeftMargin"_ustr));
+            CPPUNIT_ASSERT_EQUAL(
+                nPara == 5 ? sal_Int32(0) : sal_Int32(212),
+                getProperty<sal_Int32>(getParagraph(nPara), u"ParaFirstLineIndent"_ustr));
+        }
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1270),
+                             getProperty<sal_Int32>(getParagraph(8), u"ParaLeftMargin"_ustr));
+        // Both firstLineChars=0 and hangingChars=0 need the same numbering fallback.
+        for (int nPara : { 9, 10 })
+        {
+            CPPUNIT_ASSERT_EQUAL(
+                sal_Int32(-635),
+                getProperty<sal_Int32>(getParagraph(nPara), u"ParaFirstLineIndent"_ustr));
+        }
+        // A level override with zero indents must not fall through to paragraph-style indents.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                             getProperty<sal_Int32>(getParagraph(11), u"ParaLeftMargin"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                             getProperty<sal_Int32>(getParagraph(11), u"ParaFirstLineIndent"_ustr));
+        // Numbering on a style overrides indentation from that style's base style.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(635),
+                             getProperty<sal_Int32>(getParagraph(12), u"ParaLeftMargin"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                             getProperty<sal_Int32>(getParagraph(13), u"ParaLeftMargin"_ustr));
+        // An inherited level and the corresponding explicit level use the same list indent.
+        for (int nPara : { 14, 15 })
+        {
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(nPara),
+                                                                         u"ParaLeftMargin"_ustr));
+        }
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1482),
+                             getProperty<sal_Int32>(getParagraph(16), u"ParaLeftMargin"_ustr));
+        // Direct indentation, and indents on or below the numbering's style, still win.
+        for (int nPara : { 17, 18, 20 })
+        {
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), getProperty<sal_Int32>(getParagraph(nPara),
+                                                                         u"ParaLeftMargin"_ustr));
+        }
+        for (int nPara : { 18, 20 })
+        {
+            CPPUNIT_ASSERT_EQUAL(
+                sal_Int32(212),
+                getProperty<sal_Int32>(getParagraph(nPara), u"ParaFirstLineIndent"_ustr));
+        }
+        // A derived style without indents must not hide the inherited numbering.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(635),
+                             getProperty<sal_Int32>(getParagraph(19), u"ParaLeftMargin"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-635),
+                             getProperty<sal_Int32>(getParagraph(19), u"ParaFirstLineIndent"_ustr));
+        // Correct margins must not come at the expense of the numbering itself.
+        for (int nPara = 1; nPara <= 20; ++nPara)
+        {
+            auto xPara = getParagraph(nPara);
+            const bool bNumbered = nPara != 3 && nPara != 13 && nPara != 16;
+            CPPUNIT_ASSERT_EQUAL(bNumbered,
+                                 !getProperty<OUString>(xPara, u"ListLabelString"_ustr).isEmpty());
+            if (bNumbered)
+                CPPUNIT_ASSERT_EQUAL(sal_Int16(nPara == 14 || nPara == 15 ? 1 : 0),
+                                     getProperty<sal_Int16>(xPara, u"NumberingLevel"_ustr));
+        }
+        // Check the effective first-line offset, not a copied direct paragraph property.
+        for (int nPara : { 1, 2, 8, 12, 14, 15 })
+        {
+            auto xPara = getParagraph(nPara);
+            SwUnoInternalPaM aPaM(*getSwDoc());
+            CPPUNIT_ASSERT(sw::XTextRangeToSwPaM(aPaM, xPara));
+            const SwTextNode* pNode = aPaM.GetPoint()->GetNode().GetTextNode();
+            CPPUNIT_ASSERT(pNode);
+            short nFirstLine = 0;
+            CPPUNIT_ASSERT(pNode->GetFirstLineOfsWithNum(nFirstLine, SvxFontUnitMetrics()));
+            CPPUNIT_ASSERT_EQUAL(short(nPara >= 14 ? -180 : -360), nFirstLine);
+        }
+    };
+    createSwDoc("tdf171849.docx");
+    uno::Reference<beans::XPropertyState> xParagraph(getParagraph(1), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE,
+                         xParagraph->getPropertyState(u"ParaFirstLineIndent"_ustr));
+    verify();
+    saveAndReload(TestFilter::DOCX);
+    verify();
+}
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf165642_glossaryFootnote)
 {

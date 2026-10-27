@@ -1765,6 +1765,70 @@ uno::Any DomainMapper_Impl::GetAnyProperty(PropertyIds eId, const PropertyMapPtr
             return aProperty->second;
     }
 
+    // Match Word's numbering precedence (see MS-OI29500, 2.1.229).
+    // For inherited numbering, indents on its supplying style or a derived
+    // style still win, but indents from older base styles do not.
+    if (!IsStyleSheetImport() && pParaContext
+        && (eId == PROP_PARA_LEFT_MARGIN || eId == PROP_PARA_FIRST_LINE_INDENT))
+    {
+        const ParagraphPropertyMapPtr pPara(
+            dynamic_cast<ParagraphPropertyMap*>(pParaContext.get()));
+        const auto aRules = pParaContext->getProperty(PROP_NUMBERING_RULES);
+        uno::Reference<container::XIndexAccess> xRules;
+        StyleSheetEntryPtr pEntry;
+        // Numbering is set as direct formatting - use the list's indent information
+        if (aRules && pPara && pPara->props().GetListId() > (IsOOXMLImport() ? 0 : -1))
+            xRules.set(aRules->second, uno::UNO_QUERY);
+        // check the paragraph style to see if it or its parents define numbering.
+        else if (pPara && pPara->props().GetListId() < 0)
+        {
+            pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(GetCurrentParaStyleName());
+            for (StyleSheetEntryPtr pStyle = pEntry; pStyle;)
+            {
+                if (pStyle->m_pProperties)
+                {
+                    // Indents on the numbering-defining para style or on a style
+                    // derived from it still win.
+                    if (auto aProperty = pStyle->m_pProperties->getProperty(eId))
+                        return aProperty->second;
+
+                    const sal_Int32 nListId = pStyle->m_pProperties->props().GetListId();
+                    if (nListId >= 0)
+                    {
+                        if (nListId > (IsOOXMLImport() ? 0 : -1))
+                        {
+                            if (auto pList = GetListTable()->GetList(nListId))
+                                xRules = pList->GetNumberingRules();
+                        }
+                        break;
+                    }
+                }
+                const StyleSheetEntryPtr pParent = lcl_getParent(pStyle, GetStyleSheetTable());
+                if (pParent == pStyle)
+                    break;
+                pStyle = pParent;
+            }
+        }
+        if (xRules.is())
+        {
+            if (!pEntry)
+                pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(GetCurrentParaStyleName());
+            sal_Int16 nListLevel = GetListLevel(pEntry, pPara);
+            if (nListLevel == -1)
+                nListLevel = 0;
+
+            // Level 9 disables numbering; use the same effective level as finishParagraph().
+            if (nListLevel >= 0 && nListLevel < 9 && nListLevel < xRules->getCount())
+            {
+                const comphelper::SequenceAsHashMap aLevel(xRules->getByIndex(nListLevel));
+                uno::Any aRet = aLevel.getValue(eId == PROP_PARA_LEFT_MARGIN
+                                                   ? u"IndentAt"_ustr : u"FirstLineIndent"_ustr);
+                if (aRet.hasValue())
+                    return aRet;
+            }
+        }
+    }
+
     // then look whether it was inherited from a directly applied character style
     if ( eId != PROP_CHAR_STYLE_NAME && isCharacterProperty(eId) )
     {
