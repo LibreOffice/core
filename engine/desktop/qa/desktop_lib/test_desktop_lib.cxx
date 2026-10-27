@@ -149,6 +149,7 @@ public:
         // documents are already closed, no need to call UnoApiTest::tearDown
         test::BootstrapFixture::tearDown();
 
+        comphelper::COKit::resetUserSettingsRoles();
         comphelper::COKit::setActive(false);
     }
 
@@ -220,6 +221,9 @@ public:
     void testAutoCorrectDialogToggleColumns();
     void testAutoCorrectDialogOnlyOnce();
     void testAutoCorrectSettingsOnlyForOwner();
+    void testAutoCorrectDialogWithoutOwner();
+    void testAutoFormatToggleWithoutUserSettings();
+    void testDictionaryWithoutUserSettings();
     void testCommentAuthorFromSession();
     void testCommentAuthorAnonymous();
     void testSheetOperations();
@@ -332,6 +336,9 @@ public:
     CPPUNIT_TEST(testAutoCorrectDialogToggleColumns);
     CPPUNIT_TEST(testAutoCorrectDialogOnlyOnce);
     CPPUNIT_TEST(testAutoCorrectSettingsOnlyForOwner);
+    CPPUNIT_TEST(testAutoCorrectDialogWithoutOwner);
+    CPPUNIT_TEST(testAutoFormatToggleWithoutUserSettings);
+    CPPUNIT_TEST(testDictionaryWithoutUserSettings);
     CPPUNIT_TEST(testCommentAuthorFromSession);
     CPPUNIT_TEST(testCommentAuthorAnonymous);
     CPPUNIT_TEST(testSheetOperations);
@@ -4377,6 +4384,8 @@ void DesktopKitTest::testAutoCorrectSettingsOnlyForOwner()
         comphelper::COKit::setViewSetter(nullptr);
         comphelper::COKit::setViewGetter(nullptr);
     });
+    pDocument->setViewOption("userpersistence", "true");
+    pDocument->setView(pDocument->createView());
     pDocument->setViewOption("userpersistence", "otheruser");
     ViewCallback aView(pDocument);
     Scheduler::ProcessEventsToIdle();
@@ -4405,18 +4414,88 @@ void DesktopKitTest::testAutoCorrectSettingsOnlyForOwner()
     CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), getAutoCorrectDialogId(aView.m_aJSDialogPayloads));
     CPPUNIT_ASSERT(
         hasPayloadWith(aView.m_aJSDialogPayloads, "Sign in to change the AutoCorrect settings"));
+}
 
-    // And anyone on a document that runs with nobody's settings is told that
-    // they cannot be changed in it:
-    // Without the accompanying fix in place, this test would have failed, as such
-    // a user was told to sign in, or that the settings were someone else's.
-    aView.m_aJSDialogPayloads.clear();
+void DesktopKitTest::testAutoCorrectDialogWithoutOwner()
+{
+    // Given a Writer document in the kit that runs with nobody's settings:
+    COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
+    pDocument->initializeForRendering("{}");
+    KitHelper::registerViewCallbacks();
+    comphelper::ScopeGuard aRestore([] {
+        comphelper::COKit::setViewSetter(nullptr);
+        comphelper::COKit::setViewGetter(nullptr);
+    });
     pDocument->setViewOption("userpersistence", "noowner");
+    ViewCallback aView(pDocument);
+    Scheduler::ProcessEventsToIdle();
+
+    // When AutoCorrect Options is asked for:
     pDocument->postUnoCommand(".uno:AutoCorrectDlg", nullptr, false);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), getAutoCorrectDialogId(aView.m_aJSDialogPayloads));
-    CPPUNIT_ASSERT(hasPayloadWith(aView.m_aJSDialogPayloads,
-                                  "The AutoCorrect settings cannot be changed in this document"));
+
+    // Then it opens, as there is nobody whose settings it would change:
+    // Without the accompanying fix in place, this test would have failed, as nobody
+    // could change the settings of such a document, not even for the session.
+    const sal_uInt64 nDialogId = getAutoCorrectDialogId(aView.m_aJSDialogPayloads);
+    CPPUNIT_ASSERT(nDialogId != 0);
+    pDocument->sendDialogEvent(nDialogId,
+                               "{\"id\":\"cancel\", \"cmd\": \"click\", \"type\": \"pushbutton\"}");
+    Scheduler::ProcessEventsToIdle();
+}
+
+void DesktopKitTest::testAutoFormatToggleWithoutUserSettings()
+{
+    // Given a document of a host that keeps no user settings, in the view of a user:
+    COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
+    KitHelper::registerViewCallbacks();
+    pDocument->setViewOption("userpersistence", "false");
+    const bool bAutoFormat = SvxAutoCorrCfg::Get().IsAutoFormatByInput();
+    comphelper::ScopeGuard aRestore([bAutoFormat] {
+        SvxAutoCorrCfg::Get().SetAutoFormatByInput(bAutoFormat);
+        SvxAutoCorrCfg::Get().Commit();
+        comphelper::COKit::setViewSetter(nullptr);
+        comphelper::COKit::setViewGetter(nullptr);
+    });
+
+    // When the user toggles AutoCorrect While Typing:
+    pDocument->postUnoCommand(".uno:OnlineAutoFormat", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then it applies, as there is nobody whose settings it would change:
+    // Without the accompanying fix in place, this test would have failed, as the
+    // toggle was refused.
+    CPPUNIT_ASSERT_EQUAL(!bAutoFormat, SvxAutoCorrCfg::Get().IsAutoFormatByInput());
+}
+
+void DesktopKitTest::testDictionaryWithoutUserSettings()
+{
+    // Given a dictionary, and a document of a host that keeps no user settings, in the view of a
+    // user:
+    COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
+    KitHelper::registerViewCallbacks();
+    pDocument->setViewOption("userpersistence", "false");
+    const OUString aDicUrl = SvtPathOptions().SubstituteVariable(u"$(user)/wordbook/zzqy.dic"_ustr);
+    comphelper::ScopeGuard aRestore([&aDicUrl] {
+        osl::File::remove(aDicUrl);
+        comphelper::COKit::setViewSetter(nullptr);
+        comphelper::COKit::setViewGetter(nullptr);
+    });
+    uno::Reference<linguistic2::XSearchableDictionaryList> xDicList
+        = linguistic2::DictionaryList::create(comphelper::getProcessComponentContext());
+    uno::Reference<linguistic2::XDictionary> xDic = xDicList->createDictionary(
+        u"zzqy.dic"_ustr, lang::Locale(), linguistic2::DictionaryType_POSITIVE, aDicUrl);
+
+    // When the user adds a word to it:
+    const linguistic::DictionaryError eAdded
+        = linguistic::AddEntryToDic(xDic, u"Plorkvane"_ustr, false, OUString());
+
+    // Then the word is there, as there is nobody whose dictionary it would change:
+    // Without the accompanying fix in place, this test would have failed, as the
+    // word was refused.
+    CPPUNIT_ASSERT_EQUAL(linguistic::DictionaryError::NONE, eAdded);
+    CPPUNIT_ASSERT(xDic->getEntry(u"Plorkvane"_ustr).is());
+    CPPUNIT_ASSERT(xDic->remove(u"Plorkvane"_ustr));
 }
 
 void DesktopKitTest::testAutoCorrectDialogToggleColumns()

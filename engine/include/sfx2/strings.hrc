@@ -350,7 +350,6 @@
 #define STR_QUERY_CLR_UNAVAILABLE_DOCS_TEXT     NC_("STR_QUERY_CLR_UNAVAILABLE_DOCS_TEXT", "This action is irreversible.")
 #define STR_QUERY_CLR_UNAVAILABLE_DOCS_QUESTION NC_("STR_QUERY_CLR_UNAVAILABLE_DOCS_QUESTION", "Do you want to clear all unavailable Documents?")
 #define STR_AUTOCORRECT_SETTINGS_OF_ANOTHER_USER NC_("STR_AUTOCORRECT_SETTINGS_OF_ANOTHER_USER", "This document runs with the AutoCorrect settings of the user who opened it first, so only they can change them here.")
-#define STR_AUTOCORRECT_SETTINGS_NO_OWNER       NC_("STR_AUTOCORRECT_SETTINGS_NO_OWNER", "The AutoCorrect settings cannot be changed in this document.")
 #define STR_AUTOCORRECT_SETTINGS_NEED_SIGN_IN   NC_("STR_AUTOCORRECT_SETTINGS_NEED_SIGN_IN", "Sign in to change the AutoCorrect settings.")
 #define STR_AUTOCORRECT_DIALOG_ALREADY_OPEN     NC_("STR_AUTOCORRECT_DIALOG_ALREADY_OPEN", "AutoCorrect Options is open already, possibly for someone else editing this document. Try again once it is closed.")
 #endif

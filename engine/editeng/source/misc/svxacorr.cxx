@@ -2541,7 +2541,7 @@ SvStringsISortDtor* SvxAutoCorrectLanguageLists::GetCplSttExceptList()
 
 bool SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const OUString& rNew)
 {
-    if (!comphelper::COKit::isUserSettingsOwner())
+    if (!comphelper::COKit::mayChangeUserSettings())
         return false;
 
     bool bRet = false;
@@ -2564,7 +2564,7 @@ bool SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const OUString& rNew)
 
 bool SvxAutoCorrectLanguageLists::AddToWordStartExceptList(const OUString& rNew)
 {
-    if (!comphelper::COKit::isUserSettingsOwner())
+    if (!comphelper::COKit::mayChangeUserSettings())
         return false;
 
     bool bRet = false;
@@ -2820,10 +2820,10 @@ bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SotStorage& rStg )
 
 bool SvxAutoCorrectLanguageLists::MakeCombinedChanges( std::vector<SvxAutocorrWord>& aNewEntries, std::vector<SvxAutocorrWord>& aDeleteEntries )
 {
-    // The lists in the kit are the user's who owns the settings it runs with
-    // (see comphelper::COKit::getUserSettingsRole), and nobody else changes
-    // them, whichever way they would.
-    if (!comphelper::COKit::isUserSettingsOwner())
+    // The lists in the kit are the user's who owns the settings it runs with,
+    // if anyone does (see comphelper::COKit::mayChangeUserSettings), and
+    // nobody else changes them, whichever way they would.
+    if (!comphelper::COKit::mayChangeUserSettings())
         return false;
 
     // First get the current list!
@@ -2895,7 +2895,7 @@ bool SvxAutoCorrectLanguageLists::MakeCombinedChanges( std::vector<SvxAutocorrWo
 
 bool SvxAutoCorrectLanguageLists::PutText( const OUString& rShort, const OUString& rLong )
 {
-    if (!comphelper::COKit::isUserSettingsOwner())
+    if (!comphelper::COKit::mayChangeUserSettings())
         return false;
 
     // First get the current list!
@@ -2943,7 +2943,7 @@ bool SvxAutoCorrectLanguageLists::PutText( const OUString& rShort, const OUStrin
 void SvxAutoCorrectLanguageLists::PutText( const OUString& rShort,
                                                SfxObjectShell& rShell )
 {
-    if (!comphelper::COKit::isUserSettingsOwner())
+    if (!comphelper::COKit::mayChangeUserSettings())
         return;
 
     // First get the current list!

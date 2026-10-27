@@ -82,8 +82,8 @@ COMPHELPER_DLLPUBLIC bool isForkedChild();
 
 /// How the user of a view stands to the per-user settings the kit runs with:
 /// the configuration, the AutoCorrect lists and the dictionaries, which all
-/// views share. Only the owner may change them; changes made anywhere else
-/// would end up in the owner's settings.
+/// views share. Where they have an owner, only the owner may change them;
+/// changes made anywhere else would end up in the owner's settings.
 enum class UserSettingsRole
 {
     /// The user has no settings of their own, as a guest.
@@ -92,7 +92,8 @@ enum class UserSettingsRole
     Owner,
     /// The user has settings of their own, but the kit runs with another user's.
     OtherUser,
-    /// The kit runs with nobody's settings, so nobody may change them.
+    /// The kit runs with nobody's settings, so anyone may change them, for as
+    /// long as it runs.
     NoOwner
 };
 
@@ -107,6 +108,13 @@ COMPHELPER_DLLPUBLIC bool isUserSettingsOwner();
 /// whatever writes them, from whichever view and also once the owner's views
 /// are gone, writes the owner's. Always true outside the kit.
 COMPHELPER_DLLPUBLIC bool isUserSettingsPersistenceAvailable();
+/// Whether the current view may change those settings: it is the owner's, or
+/// they have no owner (see isUserSettingsPersistenceAvailable), and a change
+/// then lasts only as long as the kit, in nobody's settings.
+COMPHELPER_DLLPUBLIC bool mayChangeUserSettings();
+/// Forget the roles of all views, and that any was the owner's. For tests,
+/// which load documents of different hosts one after the other.
+COMPHELPER_DLLPUBLIC void resetUserSettingsRoles();
 
 /// Directory URL (file://...) of the per-user config tree; empty when unknown.
 COMPHELPER_DLLPUBLIC void setUserConfigDir(const OUString& rUrl);

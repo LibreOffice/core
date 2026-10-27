@@ -345,9 +345,9 @@ DictionaryError AddEntryToDic(
         return DictionaryError::NOT_EXISTS;
 
     // The dictionaries kept on disk are the user's who owns the settings the
-    // kit runs with, and only they change them.
+    // kit runs with, if anyone does, and only they change them then.
     uno::Reference< frame::XStorable > xKept( rxDic, UNO_QUERY );
-    if (xKept.is() && xKept->hasLocation() && !comphelper::COKit::isUserSettingsOwner())
+    if (xKept.is() && xKept->hasLocation() && !comphelper::COKit::mayChangeUserSettings())
         return DictionaryError::NOT_OWNER;
 
     OUString aTmp( rWord );

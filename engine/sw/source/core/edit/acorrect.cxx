@@ -648,9 +648,9 @@ void SwAutoCorrExceptWord::CheckChar( const SwPosition& rPos, sal_Unicode cChr )
     // If yes, then add the word to the list.
     if (m_cChar == cChr && rPos.GetNodeIndex() == m_nNode && rPos.GetContentIndex() == m_nContent)
     {
-        // The lists are the user's who owns the settings the kit runs with, so
-        // nothing is learned for anyone else.
-        if (!comphelper::COKit::isUserSettingsOwner())
+        // The lists are the user's who owns the settings the kit runs with, if
+        // anyone does, so nothing is learned for anyone else.
+        if (!comphelper::COKit::mayChangeUserSettings())
             return;
 
         // get the current autocorrection:

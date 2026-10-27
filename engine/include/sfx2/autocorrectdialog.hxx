@@ -34,8 +34,8 @@ class SFX2_DLLPUBLIC AutoCorrectDialog
 {
 public:
     /// Whether the current view may change the AutoCorrect settings, which are
-    /// the user's who owns the settings the kit runs with (see
-    /// comphelper::COKit::isUserSettingsOwner). When not, tells the user why,
+    /// the user's who owns the settings the kit runs with, if anyone does (see
+    /// comphelper::COKit::mayChangeUserSettings). When not, tells the user why,
     /// with pParent as the parent of the message, and returns false.
     static bool MayChangeSettings(weld::Window* pParent);
 

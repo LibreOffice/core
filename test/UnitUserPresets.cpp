@@ -1199,9 +1199,9 @@ public:
     }
 };
 
-/// A document opened first by a user without settings runs with nobody's, so nobody may change
-/// them: neither that user nor one with settings of their own who joins later, and both are told
-/// so, rather than to sign in or that the settings are someone else's.
+/// A document opened first by a user without settings runs with nobody's, so anyone may change
+/// them for as long as it is open: that user and one with settings of their own who joins later,
+/// rather than being told to sign in or that the settings are someone else's.
 class UnitNoSettingsOwner : public WopiTestServer
 {
     using Base = WopiTestServer;
@@ -1254,7 +1254,7 @@ public:
         LOK_ASSERT_STATE(_phase, Phase::WaitSecondView);
         LOK_ASSERT_EQUAL_MESSAGE("nobody's settings should be installed", 0, _installs);
         TRANSITION_STATE(_phase, Phase::Done);
-        passTest("the document runs with nobody's settings, and everyone is told so");
+        passTest("the document runs with nobody's settings, and everyone knows it");
     }
 
     void invokeWSDTest() override

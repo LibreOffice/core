@@ -59,24 +59,16 @@ bool isViewAlive(ViewShellId nViewShellId)
 
 bool AutoCorrectDialog::MayChangeSettings(weld::Window* pParent)
 {
-    TranslateId pReason = STR_AUTOCORRECT_SETTINGS_NEED_SIGN_IN;
-    switch (comphelper::COKit::getUserSettingsRole())
-    {
-        case comphelper::COKit::UserSettingsRole::Owner:
-            return true;
-        case comphelper::COKit::UserSettingsRole::OtherUser:
-            pReason = STR_AUTOCORRECT_SETTINGS_OF_ANOTHER_USER;
-            break;
-        case comphelper::COKit::UserSettingsRole::NoOwner:
-            pReason = STR_AUTOCORRECT_SETTINGS_NO_OWNER;
-            break;
-        case comphelper::COKit::UserSettingsRole::Guest:
-            pReason = STR_AUTOCORRECT_SETTINGS_NEED_SIGN_IN;
-            break;
-    }
+    if (comphelper::COKit::mayChangeUserSettings())
+        return true;
 
+    // The settings have an owner, and it is someone else.
     std::shared_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(
-        pParent, VclMessageType::Info, VclButtonsType::Ok, SfxResId(pReason)));
+        pParent, VclMessageType::Info, VclButtonsType::Ok,
+        SfxResId(comphelper::COKit::getUserSettingsRole()
+                         == comphelper::COKit::UserSettingsRole::OtherUser
+                     ? STR_AUTOCORRECT_SETTINGS_OF_ANOTHER_USER
+                     : STR_AUTOCORRECT_SETTINGS_NEED_SIGN_IN)));
     xInfoBox->runAsync(xInfoBox, [](sal_Int32) {});
     return false;
 }

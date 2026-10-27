@@ -219,6 +219,18 @@ bool isUserSettingsPersistenceAvailable()
     return g_bUserSettingsPersistenceAvailable;
 }
 
+bool mayChangeUserSettings()
+{
+    return isUserSettingsOwner() || !isUserSettingsPersistenceAvailable();
+}
+
+void resetUserSettingsRoles()
+{
+    std::lock_guard<std::mutex> aGuard(g_aUserSettingsPersistenceMutex);
+    g_aUserSettingsRoles.clear();
+    g_bUserSettingsPersistenceAvailable = false;
+}
+
 void setUserConfigDir(const OUString& rUrl)
 {
     std::lock_guard<std::mutex> aGuard(g_aUserConfigDirMutex);

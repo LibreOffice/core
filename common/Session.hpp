@@ -223,7 +223,7 @@ public:
     void setIsAdminUser(const std::optional<bool> isAdminUser) { _isAdminUser = isAdminUser; }
 
     /// How the user stands to the settings the document runs with, which only
-    /// the owner may change.
+    /// the owner, if there is one, may change.
     enum class UserSettingsRole
     {
         /// No settings of their own, as an anonymous session.
@@ -232,7 +232,8 @@ public:
         Owner,
         /// Settings of their own, but the document runs with another user's.
         OtherUser,
-        /// The document runs with nobody's settings.
+        /// The document runs with nobody's settings, which anyone may change for
+        /// as long as it is open.
         NoOwner
     };
 

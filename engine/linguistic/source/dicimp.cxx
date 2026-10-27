@@ -1009,8 +1009,8 @@ bool DictionaryNeo::isReadonly()
 bool DictionaryNeo::isChangeAllowed() const
 {
     // One kept on disk is part of the settings the kit runs with, and only
-    // their owner changes those.
-    return !bIsReadonly && (aMainURL.isEmpty() || comphelper::COKit::isUserSettingsOwner());
+    // their owner, if they have one, changes those.
+    return !bIsReadonly && (aMainURL.isEmpty() || comphelper::COKit::mayChangeUserSettings());
 }
 
 bool DictionaryNeo::store_Impl()
