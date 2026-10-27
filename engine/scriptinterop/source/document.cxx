@@ -847,9 +847,29 @@ public:
         return this;
     }
 
+    cpo::uno::Reference<scriptinterop::XRangeBuilder> addElementsBetween(
+        cpo::uno::Reference<scriptinterop::XElement> const & startElement,
+        cpo::uno::Reference<scriptinterop::XElement> const & endElementInclusive) override;
+
+    cpo::uno::Reference<scriptinterop::XRangeBuilder> addElementsBetweenOffsets(
+        cpo::uno::Reference<scriptinterop::XText> const & startTextElement, sal_Int32 startOffset,
+        cpo::uno::Reference<scriptinterop::XText> const & endTextElementInclusive,
+        sal_Int32 endOffsetInclusive) override;
+
     cpo::uno::Reference<scriptinterop::XSelection> build() override;
 
 private:
+    void addBetween(
+        cpo::uno::Reference<scriptinterop::XElement> const & startElement,
+        std::vector<sal_Int32> const & start, bool startOffset,
+        cpo::uno::Reference<scriptinterop::XElement> const & endElement,
+        std::vector<sal_Int32> const & end, bool endText);
+
+    bool cover(
+        cpo::uno::Reference<scriptinterop::XElement> const & element,
+        std::vector<sal_Int32> const & path, std::vector<sal_Int32> const & start, bool startOffset,
+        std::vector<sal_Int32> const & end, bool endText);
+
     // What was added, in that order, with the text it covers (null for a table, row, cell or inline
     // image, which are added as a whole):
     struct Added {
@@ -1643,6 +1663,20 @@ public:
         return container_;
     }
 
+    // As in GAS, the separator after a paragraph has the attributes of the paragraph's last
+    // character:
+    std::pair<cpo::uno::Reference<scriptinterop::XText>, sal_Int32> at(sal_Int32 offset) const {
+        auto const contents = this->contents();
+        checkIndex(contents, offset);
+        for (auto const & paragraph: contents.paragraphs) {
+            if (offset <= paragraph.start + paragraph.length) {
+                auto const inner = std::min(offset - paragraph.start, paragraph.length - 1);
+                return {paragraph.text, std::max<sal_Int32>(inner, 0)};
+            }
+        }
+        throw cpo::uno::RuntimeException(u"the offset is past the last paragraph"_ustr);
+    }
+
     cpo::uno::Reference<scriptinterop::XBody> asBody() override { return container_->asBody(); }
 
     cpo::uno::Reference<scriptinterop::XFootnote> asFootnote() override {
@@ -2037,20 +2071,6 @@ private:
                 "Index (" + OUString::number(offset) + ") must be less than the content length ("
                 + OUString::number(contents.text.getLength()) + ").");
         }
-    }
-
-    // As in GAS, the separator after a paragraph has the attributes of the paragraph's last
-    // character:
-    std::pair<cpo::uno::Reference<scriptinterop::XText>, sal_Int32> at(sal_Int32 offset) const {
-        auto const contents = this->contents();
-        checkIndex(contents, offset);
-        for (auto const & paragraph: contents.paragraphs) {
-            if (offset <= paragraph.start + paragraph.length) {
-                auto const inner = std::min(offset - paragraph.start, paragraph.length - 1);
-                return {paragraph.text, std::max<sal_Int32>(inner, 0)};
-            }
-        }
-        throw cpo::uno::RuntimeException(u"the offset is past the last paragraph"_ustr);
     }
 
     // Calls f with the text of each paragraph that the range reaches into, and the part of the
@@ -4640,6 +4660,232 @@ private:
     cpo::uno::Reference<cpo::uno::XInterface> uno_;
     std::vector<cpo::uno::Reference<scriptinterop::XRangeElement>> elements_;
 };
+
+cpo::uno::Reference<scriptinterop::XRangeBuilder> RangeBuilderImpl::addElementsBetween(
+    cpo::uno::Reference<scriptinterop::XElement> const & startElement,
+    cpo::uno::Reference<scriptinterop::XElement> const & endElementInclusive)
+{
+    if (!startElement.is() || !endElementInclusive.is()) {
+        throw cpo::uno::RuntimeException(
+            u"addElementsBetween: the elements must not be null"_ustr);
+    }
+    addBetween(
+        startElement, pathOf(startElement), false, endElementInclusive,
+        pathOf(endElementInclusive), false);
+    return this;
+}
+
+cpo::uno::Reference<scriptinterop::XRangeBuilder> RangeBuilderImpl::addElementsBetweenOffsets(
+    cpo::uno::Reference<scriptinterop::XText> const & startText, sal_Int32 startTextOffset,
+    cpo::uno::Reference<scriptinterop::XText> const & endText, sal_Int32 endTextOffsetInclusive)
+{
+    if (!startText.is() || !endText.is()) {
+        throw cpo::uno::RuntimeException(
+            u"addElementsBetween: the text elements must not be null"_ustr);
+    }
+    if (startTextOffset < 0
+        || startTextOffset >= std::max<sal_Int32>(startText->getText().getLength(), 1)
+        || endTextOffsetInclusive < 0
+        || endTextOffsetInclusive >= std::max<sal_Int32>(endText->getText().getLength(), 1))
+    {
+        throw cpo::uno::RuntimeException(
+            "addElementsBetween: offset out of range, got startOffset="
+            + OUString::number(startTextOffset) + ", endOffsetInclusive="
+            + OUString::number(endTextOffsetInclusive));
+    }
+    // As in GAS, an offset into the text of a table, row, cell or body, or into a text made with
+    // editAsText, is one into the child text of the paragraph there:
+    struct Located {
+        cpo::uno::Reference<scriptinterop::XElement> element;
+        std::vector<sal_Int32> path;
+        sal_Int32 offset;
+        sal_Int32 length;
+    };
+    auto const locate = [this](cpo::uno::Reference<scriptinterop::XText> text, sal_Int32 offset)
+        -> Located
+    {
+        if (auto const containerText = dynamic_cast<ContainerTextImpl *>(text.get())) {
+            std::tie(text, offset) = containerText->at(offset);
+        }
+        if (auto const impl = dynamic_cast<TextImpl *>(text.get()); impl && !impl->run()) {
+            auto const paragraph = paragraphOf(
+                model_,
+                cpo::uno::Reference<css::text::XTextContent>(
+                    text->getuno(), cpo::uno::UNO_QUERY_THROW));
+            auto const [child, childOffset] = textChildAt(paragraph, offset);
+            if (!child.is()) {
+                return {paragraph, pathOf(paragraph), 0, 0};
+            }
+            text = child;
+            offset = childOffset;
+        }
+        return {text, pathOf(text), offset, text->getText().getLength()};
+    };
+    auto [startElement, start, startOffset, startLength] = locate(startText, startTextOffset);
+    auto [endElement, end, endOffset, endLength] = locate(endText, endTextOffsetInclusive);
+    // An offset at the start or at the end of its text is the start or the end of the whole text:
+    if (startOffset != 0) {
+        start.push_back(startOffset);
+    }
+    if (endOffset < endLength - 1) {
+        end.push_back(endOffset);
+    }
+    addBetween(startElement, start, startOffset != 0, endElement, end, true);
+    return this;
+}
+
+void RangeBuilderImpl::addBetween(
+    cpo::uno::Reference<scriptinterop::XElement> const & startElement,
+    std::vector<sal_Int32> const & start, bool startOffset,
+    cpo::uno::Reference<scriptinterop::XElement> const & endElement,
+    std::vector<sal_Int32> const & end, bool endText)
+{
+    auto const rootOf = [](cpo::uno::Reference<scriptinterop::XElement> element) {
+        for (;;) {
+            auto const parent = element->getParent();
+            if (!parent.IsPresent) {
+                return element;
+            }
+            element = parent.Value;
+        }
+    };
+    auto const root = rootOf(startElement);
+    if (rootOf(endElement)->getuno() != root->getuno()) {
+        throw cpo::uno::RuntimeException(
+            u"addElementsBetween: the elements are not in the same part of the document"_ustr);
+    }
+    // An end that contains the start (as a whole text contains an offset into it) is not before it:
+    if (end < start
+        && !(end.size() <= start.size() && std::equal(end.begin(), end.end(), start.begin())))
+    {
+        throw cpo::uno::RuntimeException(
+            u"addElementsBetween: the end lies before the start"_ustr);
+    }
+    if (cover(root, {}, start, startOffset, end, endText)) {
+        cpo::uno::Reference<scriptinterop::XContainerElement> const container(
+            root, cpo::uno::UNO_QUERY_THROW);
+        auto const n = container->getNumChildren();
+        for (sal_Int32 i = 0; i != n; ++i) {
+            addElement(container->getChild(i));
+        }
+    }
+}
+
+// Whether the element at the given path lies wholly between the start and the end (as GAS then adds
+// it as a whole), else adding the parts of it that do:
+bool RangeBuilderImpl::cover(
+    cpo::uno::Reference<scriptinterop::XElement> const & element,
+    std::vector<sal_Int32> const & path, std::vector<sal_Int32> const & start, bool startOffset,
+    std::vector<sal_Int32> const & end, bool endText)
+{
+    auto const isPrefix = [](std::vector<sal_Int32> const & a, std::vector<sal_Int32> const & b) {
+        return a.size() <= b.size() && std::equal(a.begin(), a.end(), b.begin());
+    };
+    bool startsInside;
+    if (isPrefix(start, path)) {
+        startsInside = true;
+    } else if (isPrefix(path, start)) {
+        // As in GAS, an element that holds the start is not whole:
+        startsInside = false;
+    } else if (path < start) {
+        return false;
+    } else {
+        startsInside = true;
+    }
+    bool endsInside;
+    if (isPrefix(end, path)) {
+        endsInside = true;
+    } else if (isPrefix(path, end)) {
+        // As in GAS, an element other than a table that holds an end element as its last part is
+        // whole, unlike one that holds an end text:
+        endsInside = !endText && element->getType() != scriptinterop::ElementType_TABLE;
+        auto node = element;
+        for (std::size_t i = path.size(); endsInside && i != end.size(); ++i) {
+            cpo::uno::Reference<scriptinterop::XContainerElement> const container(
+                node, cpo::uno::UNO_QUERY_THROW);
+            endsInside = end[i] == container->getNumChildren() - 1;
+            node = container->getChild(end[i]);
+        }
+    } else if (end < path) {
+        return false;
+    } else {
+        endsInside = true;
+    }
+    if (startsInside && endsInside) {
+        return true;
+    }
+    switch (element->getType()) {
+    case scriptinterop::ElementType_PARAGRAPH:
+    case scriptinterop::ElementType_LIST_ITEM:
+        {
+            cpo::uno::Reference<scriptinterop::XContainerElement> const paragraph(
+                element, cpo::uno::UNO_QUERY_THROW);
+            auto const n = paragraph->getNumChildren();
+            auto const holds = [&path, &isPrefix](std::vector<sal_Int32> const & p) {
+                return p.size() > path.size() && isPrefix(path, p);
+            };
+            auto first = path;
+            first.push_back(0);
+            auto last = path;
+            last.push_back(n - 1);
+            // As in GAS, a paragraph that a start covers from its first child is whole, unless it
+            // also holds an end text or an end before its last child:
+            if ((!holds(start) || start == first) && (!holds(end) || (!endText && end == last))) {
+                return true;
+            }
+            for (sal_Int32 i = 0; i != n; ++i) {
+                auto childPath = path;
+                childPath.push_back(i);
+                auto const child = paragraph->getChild(i);
+                auto const startsBefore = !(childPath < start);
+                auto const endsAfter = isPrefix(end, childPath) || !(end < childPath);
+                if (child->getType() != scriptinterop::ElementType_TEXT) {
+                    if (startsBefore && endsAfter) {
+                        addElement(child);
+                    }
+                    continue;
+                }
+                cpo::uno::Reference<scriptinterop::XText> const text(
+                    child, cpo::uno::UNO_QUERY_THROW);
+                sal_Int32 from = 0;
+                if (startOffset && start.size() == childPath.size() + 1
+                    && isPrefix(childPath, start))
+                {
+                    from = start.back();
+                } else if (!startsBefore) {
+                    continue;
+                }
+                sal_Int32 to = text->getText().getLength() - 1;
+                if (endText && end.size() == childPath.size() + 1 && isPrefix(childPath, end)) {
+                    to = end.back();
+                } else if (!endsAfter) {
+                    continue;
+                }
+                if (from <= to) {
+                    addElementRange(text, from, to);
+                }
+            }
+            return false;
+        }
+    default:
+        break;
+    }
+    cpo::uno::Reference<scriptinterop::XContainerElement> const container(
+        element, cpo::uno::UNO_QUERY);
+    if (!container.is()) {
+        return false;
+    }
+    auto const n = container->getNumChildren();
+    for (sal_Int32 i = 0; i != n; ++i) {
+        auto childPath = path;
+        childPath.push_back(i);
+        auto const child = container->getChild(i);
+        if (cover(child, childPath, start, startOffset, end, endText)) {
+            addElement(child);
+        }
+    }
+    return false;
+}
 
 cpo::uno::Reference<scriptinterop::XSelection> RangeBuilderImpl::build() {
     if (added_.empty()) {

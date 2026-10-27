@@ -558,6 +558,16 @@ function test() {
         allOverImage[1].getElement().getType() === DocumentApp.ElementType.INLINE_IMAGE);
     console.assert(allOverImage[2].getElement().asText().getText() === 'bXar');
     console.assert(allOverImage[2].getEndOffsetInclusive() === 3);
+    // The elements between an image and the end of its paragraph are the image and the text after
+    // it:
+    const fromImage = doc.newRange().addElementsBetween(withImage.getChild(1), withImage).build()
+        .getRangeElements();
+    console.assert(fromImage.length === 2);
+    console.assert(
+        fromImage[0].getElement().getType() === DocumentApp.ElementType.INLINE_IMAGE);
+    console.assert(fromImage[1].getElement().asText().getText() === 'bXar');
+    console.assert(fromImage[1].getStartOffset() === 0);
+    console.assert(fromImage[1].getEndOffsetInclusive() === 3);
     // A paragraph that holds only an image can be selected together with the paragraph after it:
     console.assert(
         doc.setSelection(

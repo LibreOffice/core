@@ -254,6 +254,96 @@ function test() {
         console.assert(threw);
     }
 
+    // The elements between a start and an end are those that lie wholly between them, each as large
+    // as it can be, with the partly covered texts at the ends when start and end are given as texts
+    // with offsets:
+    const between = doc.newRange().addElementsBetween(body.getChild(0), body.getChild(2)).build()
+        .getRangeElements();
+    console.assert(between.length === 3);
+    console.assert(between[0].getElement().getType() === DocumentApp.ElementType.PARAGRAPH);
+    console.assert(between[1].getElement().getType() === DocumentApp.ElementType.TABLE);
+    console.assert(between[2].getElement().getType() === DocumentApp.ElementType.PARAGRAPH);
+    // The surrounding text of a position stands for its paragraph:
+    if (globalThis.cool) {
+        const surrounding = doc.newPosition(body.getChild(0).getChild(0), 1).getSurroundingText();
+        const fromSurrounding = doc.newRange().addElementsBetween(surrounding, body.getChild(2))
+            .build().getRangeElements();
+        console.assert(fromSurrounding.length === 3);
+        console.assert(
+            fromSurrounding[0].getElement().getType() === DocumentApp.ElementType.PARAGRAPH);
+    }
+    const betweenOffsets = doc.newRange().addElementsBetween(
+        body.getChild(0).editAsText(), 3, body.getChild(2).editAsText(), 2).build()
+        .getRangeElements();
+    console.assert(betweenOffsets.length === 3);
+    console.assert(betweenOffsets[0].getElement().getType() === DocumentApp.ElementType.TEXT);
+    console.assert(betweenOffsets[0].getStartOffset() === 3);
+    console.assert(betweenOffsets[0].getEndOffsetInclusive() === 5);
+    console.assert(betweenOffsets[1].getElement().getType() === DocumentApp.ElementType.TABLE);
+    console.assert(betweenOffsets[2].getElement().getType() === DocumentApp.ElementType.TEXT);
+    console.assert(betweenOffsets[2].getStartOffset() === 0);
+    console.assert(betweenOffsets[2].getEndOffsetInclusive() === 2);
+    const fromCell = doc.newRange().addElementsBetween(empty.getRow(0).getCell(1), body.getChild(2))
+        .build().getRangeElements();
+    console.assert(fromCell.length === 3);
+    console.assert(fromCell[0].getElement().getType() === DocumentApp.ElementType.TABLE_CELL);
+    console.assert(fromCell[0].getElement().getText() === 'B1');
+    console.assert(fromCell[1].getElement().getType() === DocumentApp.ElementType.TABLE_ROW);
+    console.assert(fromCell[2].getElement().getType() === DocumentApp.ElementType.PARAGRAPH);
+    const toCell = doc.newRange().addElementsBetween(body.getChild(0), empty.getRow(1).getCell(0))
+        .build().getRangeElements();
+    console.assert(toCell.length === 3);
+    console.assert(toCell[0].getElement().getType() === DocumentApp.ElementType.PARAGRAPH);
+    console.assert(toCell[1].getElement().getType() === DocumentApp.ElementType.TABLE_ROW);
+    console.assert(toCell[1].getElement().getText() === '\nB1');
+    console.assert(toCell[2].getElement().getType() === DocumentApp.ElementType.TABLE_CELL);
+    // An element that holds the start is not whole, and neither is a table that holds the end,
+    // unlike a row that ends with the end:
+    const fromFirstCell = doc.newRange().addElementsBetween(
+        empty.getRow(0).getCell(0), body.getChild(2)).build().getRangeElements();
+    console.assert(fromFirstCell.length === 4);
+    console.assert(fromFirstCell[0].getElement().getType() === DocumentApp.ElementType.TABLE_CELL);
+    console.assert(fromFirstCell[1].getElement().getType() === DocumentApp.ElementType.TABLE_CELL);
+    console.assert(fromFirstCell[2].getElement().getType() === DocumentApp.ElementType.TABLE_ROW);
+    console.assert(fromFirstCell[3].getElement().getType() === DocumentApp.ElementType.PARAGRAPH);
+    const toLastCell = doc.newRange().addElementsBetween(
+        body.getChild(0), empty.getRow(1).getCell(1)).build().getRangeElements();
+    console.assert(toLastCell.length === 3);
+    console.assert(toLastCell[0].getElement().getType() === DocumentApp.ElementType.PARAGRAPH);
+    console.assert(toLastCell[1].getElement().getType() === DocumentApp.ElementType.TABLE_ROW);
+    console.assert(toLastCell[2].getElement().getType() === DocumentApp.ElementType.TABLE_ROW);
+
+    // A range between an offset into a text and the last character of that text is that part of the
+    // text:
+    const tail = doc.newRange().addElementsBetween(
+        body.getChild(0).editAsText(), 3, body.getChild(0).editAsText(), 5).build()
+        .getRangeElements();
+    console.assert(tail.length === 1);
+    console.assert(tail[0].getStartOffset() === 3);
+    console.assert(tail[0].getEndOffsetInclusive() === 5);
+    // A start text that covers its paragraph from the start makes that paragraph whole, unlike an
+    // end text that covers its paragraph to the end:
+    const wholeEnds = doc.newRange().addElementsBetween(
+        body.getChild(0).editAsText(), 0, body.getChild(2).editAsText(), 6).build()
+        .getRangeElements();
+    console.assert(wholeEnds.length === 3);
+    console.assert(wholeEnds[0].getElement().getType() === DocumentApp.ElementType.PARAGRAPH);
+    console.assert(wholeEnds[1].getElement().getType() === DocumentApp.ElementType.TABLE);
+    console.assert(wholeEnds[2].getElement().getType() === DocumentApp.ElementType.TEXT);
+    console.assert(wholeEnds[2].getEndOffsetInclusive() === 6);
+    // An offset into the text of a cell is one into the text of the cell's paragraph there:
+    const fromCellText = doc.newRange().addElementsBetween(
+        empty.getRow(0).getCell(1).editAsText(), 0, body.getChild(2).editAsText(), 2).build()
+        .getRangeElements();
+    console.assert(fromCellText.length === 3);
+    console.assert(fromCellText[0].getElement().getType() === DocumentApp.ElementType.PARAGRAPH);
+    console.assert(fromCellText[0].getElement().getText() === 'B1');
+    console.assert(
+        fromCellText[0].getElement().getParent().getType() === DocumentApp.ElementType.TABLE_CELL);
+    console.assert(fromCellText[1].getElement().getType() === DocumentApp.ElementType.TABLE_ROW);
+    console.assert(fromCellText[2].getElement().getType() === DocumentApp.ElementType.TEXT);
+    console.assert(fromCellText[2].getEndOffsetInclusive() === 2);
+
     // A table cell that has already been read sees the changes made since through another object
     // for the same cell, here clearing it, which leaves one empty paragraph:
     console.assert(cell.getNumChildren() > 1);

@@ -17,6 +17,13 @@ interface XRangeBuilder {
     [overload addElement] XRangeBuilder addElementRange(
         [in] XText text, [in] long startOffset, [in] long endOffsetInclusive);
 
+    [overload addElementsBetween] XRangeBuilder addElementsBetween(
+        [in] XElement startElement, [in] XElement endElementInclusive);
+
+    [overload addElementsBetween] XRangeBuilder addElementsBetweenOffsets(
+        [in] XText startTextElement, [in] long startOffset, [in] XText endTextElementInclusive,
+        [in] long endOffsetInclusive);
+
     XSelection build();
 };
 
