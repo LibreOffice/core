@@ -530,8 +530,9 @@ private:
     void postForceModifiedCommand(bool modified);
 
 #if !defined(MACOSAPP) && !defined(QTAPP) && !defined(_WIN32)
-    /// The file picker the engine calls: asks the browser of the view that is current for a
-    /// file. The browser's answer comes back as a filepickerresult message.
+    /// Sends a filepicker: request, with the title and the file type filters, to the browser
+    /// of the view that is current, and keeps the completion until that browser answers. With
+    /// no session for the view, completes the pick at once as cancelled.
     static void pickFile(const char* title, const COKitFilePickerFilter* filters, size_t count,
                          void (*picked)(void* context, const char* url), void* context);
 #endif
