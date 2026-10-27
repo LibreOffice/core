@@ -702,30 +702,29 @@ private:
     cpo::uno::Reference<css::container::XIndexAccess> ranges_;
 };
 
-// Trivial single-element XIndexAccess wrapper so the XRangeBuilder can hand a single XTextRange
-// to SelectionImpl without depending on Writer's own SwXTextRanges service:
-class SingleRangeIndex: public cppu::WeakImplHelper<css::container::XIndexAccess> {
+// The text ranges that a range built by a script stands for, in document order:
+class TextRangesIndex: public cppu::WeakImplHelper<css::container::XIndexAccess> {
 public:
-    explicit SingleRangeIndex(cpo::uno::Reference<css::text::XTextRange> const & range):
-        range_(range) {}
+    explicit TextRangesIndex(std::vector<cpo::uno::Reference<css::text::XTextRange>> && ranges):
+        ranges_(std::move(ranges)) {}
 
-    sal_Int32 getCount() override { return 1; }
+    sal_Int32 getCount() override { return ranges_.size(); }
 
     cpo::uno::Any getByIndex(sal_Int32 index) override {
-        if (index != 0) {
+        if (index < 0 || o3tl::make_unsigned(index) >= ranges_.size()) {
             throw css::lang::IndexOutOfBoundsException();
         }
-        return cpo::uno::Any(range_);
+        return cpo::uno::Any(ranges_[index]);
     }
 
     cpo::uno::Type getElementType() override {
         return cppu::UnoType<css::text::XTextRange>::get();
     }
 
-    bool hasElements() override { return true; }
+    bool hasElements() override { return !ranges_.empty(); }
 
 private:
-    cpo::uno::Reference<css::text::XTextRange> range_;
+    std::vector<cpo::uno::Reference<css::text::XTextRange>> ranges_;
 };
 
 class RangeBuilderImpl: public cppu::WeakImplHelper<scriptinterop::XRangeBuilder> {
@@ -4548,8 +4547,18 @@ cpo::uno::Reference<scriptinterop::XSelection> RangeBuilderImpl::build() {
                             && a->getEndOffsetInclusive() == b->getEndOffsetInclusive();
                     }))
             {
-                uno = static_cast<cppu::OWeakObject *>(new SingleRangeIndex(cursor));
+                uno = static_cast<cppu::OWeakObject *>(new TextRangesIndex({cursor}));
             }
+        }
+        // Texts that Writer cannot select as one range are selected as one range for each text:
+        if (!uno.is()
+            && std::all_of(kept.begin(), kept.end(), [](Piece const & p) { return p.text; }))
+        {
+            std::vector<cpo::uno::Reference<css::text::XTextRange>> ranges;
+            for (auto const & piece: kept) {
+                ranges.emplace_back(piece.element->getuno(), cpo::uno::UNO_QUERY_THROW);
+            }
+            uno = static_cast<cppu::OWeakObject *>(new TextRangesIndex(std::move(ranges)));
         }
     } else if (kept.size() == 1
                && kept.front().element->getElement()->getType()
@@ -4821,19 +4830,22 @@ public:
         }
         cpo::uno::Reference<css::view::XSelectionSupplier> const sup(
             model_->uno()->getCurrentController(), cpo::uno::UNO_QUERY_THROW);
-        // Writer's select typically only recognises its own SwXTextRanges; when our XSelection
-        // wraps a single XTextRange, unwrap and pass that directly so Writer accepts it:
+        cpo::uno::Any selected(selection->getuno());
         cpo::uno::Reference<css::container::XIndexAccess> const idx(
             selection->getuno(), cpo::uno::UNO_QUERY);
-        if (idx.is() && idx->getCount() == 1) {
-            cpo::uno::Reference<css::text::XTextRange> range;
-            idx->getByIndex(0) >>= range;
-            if (range.is()) {
-                sup->select(cpo::uno::Any(range));
-                return this;
+        if (idx.is() && idx->getCount() != 0) {
+            cpo::uno::Sequence<cpo::uno::Reference<css::text::XTextRange>> ranges(idx->getCount());
+            auto const p = ranges.getArray();
+            for (sal_Int32 i = 0; i != ranges.getLength(); ++i) {
+                idx->getByIndex(i) >>= p[i];
+            }
+            if (std::all_of(ranges.begin(), ranges.end(), [](auto const & r) { return r.is(); })) {
+                selected <<= ranges;
             }
         }
-        sup->select(cpo::uno::Any(selection->getuno()));
+        if (!sup->select(selected)) {
+            throw cpo::uno::RuntimeException(u"setSelection: Writer did not select the range"_ustr);
+        }
         return this;
     }
 

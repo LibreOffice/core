@@ -215,14 +215,32 @@ function test() {
     console.assert(sorted[0].getElement().getText() === 'Before');
     console.assert(sorted[1].getElement().getType() === DocumentApp.ElementType.TABLE_CELL);
     console.assert(sorted[2].getElement().getText() === 'Between');
-    // Two paragraphs with the table between them stay two elements, which Writer cannot select
-    // together:
-    const apart = doc.newRange().addElement(body.getChild(0)).addElement(body.getChild(2)).build();
-    console.assert(apart.getRangeElements().length === 2);
+    // Two paragraphs with the table between them, or parts of them, stay two elements, also when
+    // selected:
+    const apart = doc.setSelection(
+        doc.newRange().addElement(body.getChild(0)).addElement(body.getChild(2)).build())
+        .getSelection().getRangeElements();
+    console.assert(apart.length === 2);
+    console.assert(apart[0].getElement().getType() === DocumentApp.ElementType.PARAGRAPH);
+    console.assert(apart[0].getElement().getText() === 'Before');
+    console.assert(apart[1].getElement().getType() === DocumentApp.ElementType.PARAGRAPH);
+    console.assert(apart[1].getElement().getText() === 'Between');
+    const apartParts = doc.setSelection(
+        doc.newRange().addElement(body.getChild(0).editAsText(), 1, 3)
+            .addElement(body.getChild(2).editAsText(), 0, 2).build())
+        .getSelection().getRangeElements();
+    console.assert(apartParts.length === 2);
+    console.assert(apartParts[0].getStartOffset() === 1);
+    console.assert(apartParts[0].getEndOffsetInclusive() === 3);
+    console.assert(apartParts[1].getStartOffset() === 0);
+    console.assert(apartParts[1].getEndOffsetInclusive() === 2);
+    // Writer cannot select a paragraph together with a table cell:
     if (globalThis.cool) {
         let threw = false;
         try {
-            doc.setSelection(apart);
+            doc.setSelection(
+                doc.newRange().addElement(body.getChild(0)).addElement(empty.getRow(0).getCell(0))
+                    .build());
         } catch (e) {
             threw = true;
         }
