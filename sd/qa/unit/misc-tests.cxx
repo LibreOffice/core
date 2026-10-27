@@ -52,7 +52,9 @@
 #include <LayerTabBar.hxx>
 #include <vcl/event.hxx>
 #include <vcl/keycodes.hxx>
+#include <svx/annotation/ObjectAnnotationData.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/svdorect.hxx>
 #include <tools/gen.hxx>
 #include <svx/view3d.hxx>
 #include <svx/scene3d.hxx>
@@ -1320,6 +1322,38 @@ CPPUNIT_TEST_FIXTURE(SdMiscTest, testEmptyPresObjSetOnObjectWithoutText)
 
     CPPUNIT_ASSERT(xShape->getPropertyValue(u"IsEmptyPresentationObject"_ustr) >>= bEmpty);
     CPPUNIT_ASSERT(bEmpty);
+}
+
+CPPUNIT_TEST_FIXTURE(SdMiscTest, testTdf169252_MoveAnnotationObjectWithoutAnnotation)
+{
+    // Given an Impress document with an object that is flagged as an annotation object, but whose
+    // annotation reference is empty (this is what a copied and pasted comment ends up as):
+    createSdImpressDoc();
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    SdPage* pPage = pDoc->GetSdPage(0, PageKind::Standard);
+    CPPUNIT_ASSERT(pPage);
+
+    rtl::Reference<SdrRectObj> pObj
+        = new SdrRectObj(*pDoc, tools::Rectangle(1000, 1000, 3000, 2000));
+    pPage->InsertObject(pObj.get());
+    pObj->setAsAnnotationObject();
+    CPPUNIT_ASSERT(pObj->isAnnotationObject());
+    CPPUNIT_ASSERT(pObj->getAnnotationData());
+    CPPUNIT_ASSERT(!pObj->getAnnotationData()->mxAnnotation);
+    const tools::Rectangle aOldRect = pObj->GetSnapRect();
+
+    // When moving the object, as dragging it with the mouse or pressing an arrow key does:
+    // Without the fix in place, this crashed, as SdrObject::Move() dereferenced the empty
+    // annotation reference to update its position.
+    pObj->Move(Size(500, 250));
+
+    // Then the object is moved and we get here without a crash:
+    tools::Rectangle aExpectedRect(aOldRect);
+    aExpectedRect.Move(500, 250);
+    CPPUNIT_ASSERT_EQUAL(aExpectedRect, pObj->GetSnapRect());
+    CPPUNIT_ASSERT(!pObj->getAnnotationData()->mxAnnotation);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
