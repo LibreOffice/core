@@ -147,18 +147,11 @@ function test() {
     console.assert(upTo.length === 2);
     console.assert(upTo[0].getElement().getType() === DocumentApp.ElementType.PARAGRAPH);
     console.assert(upTo[1].getElement().getType() === DocumentApp.ElementType.TABLE);
-    // A selected row is selected as that row (as its cells in Writer, whose selections do not tell
-    // a row from its cells):
+    // A selected row is selected as that row:
     const rowSelected = doc.setSelection(doc.newRange().addElement(empty.getRow(1)).build())
         .getSelection().getRangeElements();
-    if (globalThis.cool) {
-        console.assert(rowSelected.length === 2);
-        console.assert(
-            rowSelected[0].getElement().getType() === DocumentApp.ElementType.TABLE_CELL);
-    } else {
-        console.assert(rowSelected.length === 1);
-        console.assert(rowSelected[0].getElement().getType() === DocumentApp.ElementType.TABLE_ROW);
-    }
+    console.assert(rowSelected.length === 1);
+    console.assert(rowSelected[0].getElement().getType() === DocumentApp.ElementType.TABLE_ROW);
 
     // A range is made up of the elements added to it, in document order, with an added row as a
     // TABLE_ROW, an added table as a TABLE, the whole text of a cell as that TABLE_CELL, and a
@@ -194,6 +187,19 @@ function test() {
     console.assert(allOfText[0].getElement().getType() === DocumentApp.ElementType.TEXT);
     console.assert(allOfText[0].isPartial());
     console.assert(allOfText[0].getEndOffsetInclusive() === 5);
+    const allOfTextSelected = doc.setSelection(
+        doc.newRange().addElement(body.getChild(0).editAsText(), 0, 5).build())
+        .getSelection().getRangeElements();
+    console.assert(allOfTextSelected.length === 1);
+    console.assert(allOfTextSelected[0].getElement().getType() === DocumentApp.ElementType.TEXT);
+    console.assert(allOfTextSelected[0].isPartial());
+    // After the document changes, the selection is the one that Writer has:
+    if (globalThis.cool) {
+        doc.setSelection(doc.newRange().addElement(body.getChild(0).editAsText(), 2, 3).build());
+        body.getChild(0).editAsText().insertText(0, 'XX');
+        console.assert(doc.getSelection().getRangeElements()[0].getStartOffset() === 4);
+        body.getChild(0).editAsText().deleteText(0, 1);
+    }
     const textThenParagraph = doc.newRange().addElement(body.getChild(0).editAsText(), 0, 5)
         .addElement(body.getChild(0)).build().getRangeElements();
     console.assert(textThenParagraph.length === 1);
@@ -241,6 +247,19 @@ function test() {
     console.assert(apartParts[0].getEndOffsetInclusive() === 3);
     console.assert(apartParts[1].getStartOffset() === 0);
     console.assert(apartParts[1].getEndOffsetInclusive() === 2);
+    // Writer's own selection of the two paragraphs is read back as those paragraphs, too:
+    if (globalThis.cool) {
+        const controller = cool.getActiveUnoModel().getCurrentController();
+        doc.setSelection(
+            doc.newRange().addElement(body.getChild(0)).addElement(body.getChild(2)).build());
+        const writerSelection = controller.getSelection();
+        doc.setCursor(doc.newPosition(body.getChild(0), 0));
+        controller.select(writerSelection);
+        const fromWriter = doc.getSelection().getRangeElements();
+        console.assert(fromWriter.length === 2);
+        console.assert(fromWriter[0].getElement().getText() === 'Before');
+        console.assert(fromWriter[1].getElement().getText() === 'Between');
+    }
     // Writer cannot select a paragraph together with a table cell:
     if (globalThis.cool) {
         let threw = false;
@@ -360,7 +379,8 @@ function test() {
     console.assert(cell.getNumChildren() === 1);
 
     // With a table added at the end of the body through the UNO model of the document, which puts
-    // an empty paragraph after it, the last paragraph before it and that table can be selected:
+    // an empty paragraph after it, the last paragraph before it and that table can be selected, and
+    // Writer's own selection of them is read back as them:
     if (globalThis.cool) {
         const model = cool.getActiveUnoModel();
         const last = model.createInstance('com.sun.star.text.TextTable');
@@ -368,10 +388,14 @@ function test() {
         model.getText().insertTextContent(model.getText().getEnd(), last, false);
         const n = body.getNumChildren();
         console.assert(body.getChild(n - 2).getType() === DocumentApp.ElementType.TABLE);
-        const withLast = doc.setSelection(
+        doc.setSelection(
             doc.newRange().addElement(body.getChild(n - 3)).addElement(body.getChild(n - 2))
-                .build())
-            .getSelection().getRangeElements();
+                .build());
+        const controller = model.getCurrentController();
+        const writerSelection = controller.getSelection();
+        doc.setCursor(doc.newPosition(body.getChild(0), 0));
+        controller.select(writerSelection);
+        const withLast = doc.getSelection().getRangeElements();
         console.assert(withLast.length === 2);
         console.assert(withLast[1].getElement().getType() === DocumentApp.ElementType.TABLE);
     }

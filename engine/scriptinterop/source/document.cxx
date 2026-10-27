@@ -720,6 +720,43 @@ cpo::uno::Reference<css::text::XTextContent> createGraphicFromBlob(
     return graphic;
 }
 
+// The text of the text ranges of a selection, with a line end between two ranges:
+OUString textOfRanges(cpo::uno::Reference<css::container::XIndexAccess> const & ranges) {
+    OUStringBuffer buf;
+    auto const n = ranges->getCount();
+    for (sal_Int32 i = 0; i != n; ++i)
+    {
+        cpo::uno::Reference<css::text::XTextRange> range;
+        if (!(ranges->getByIndex(i) >>= range) || !range.is())
+        {
+            throw cpo::uno::RuntimeException(
+                u"getText: the selection contains something that is not text"_ustr);
+        }
+        if (!buf.isEmpty())
+        {
+            buf.append('\n');
+        }
+        buf.append(textOf(range));
+    }
+    return buf.makeStringAndClear();
+}
+
+void replaceRanges(
+    cpo::uno::Reference<css::container::XIndexAccess> const & ranges, OUString const & newText)
+{
+    auto const n = ranges->getCount();
+    for (sal_Int32 i = 0; i != n; ++i)
+    {
+        cpo::uno::Reference<css::text::XTextRange> range;
+        if (!(ranges->getByIndex(i) >>= range) || !range.is())
+        {
+            throw cpo::uno::RuntimeException(
+                u"replace: the selection contains something that is not text"_ustr);
+        }
+        range->setString(newText);
+    }
+}
+
 class SelectionImpl : public cppu::WeakImplHelper<scriptinterop::XSelection>
 {
 public:
@@ -739,41 +776,9 @@ public:
         override
     { return getRangeElements(); }
 
-    OUString getText() override
-    {
-        OUStringBuffer buf;
-        auto const n = ranges_->getCount();
-        for (sal_Int32 i = 0; i != n; ++i)
-        {
-            cpo::uno::Reference<css::text::XTextRange> range;
-            if (!(ranges_->getByIndex(i) >>= range) || !range.is())
-            {
-                throw cpo::uno::RuntimeException(
-                    u"getText: the selection contains something that is not text"_ustr);
-            }
-            if (!buf.isEmpty())
-            {
-                buf.append('\n');
-            }
-            buf.append(textOf(range));
-        }
-        return buf.makeStringAndClear();
-    }
+    OUString getText() override { return textOfRanges(ranges_); }
 
-    void replace(OUString const& newText) override
-    {
-        auto const n = ranges_->getCount();
-        for (sal_Int32 i = 0; i != n; ++i)
-        {
-            cpo::uno::Reference<css::text::XTextRange> range;
-            if (!(ranges_->getByIndex(i) >>= range) || !range.is())
-            {
-                throw cpo::uno::RuntimeException(
-                    u"replace: the selection contains something that is not text"_ustr);
-            }
-            range->setString(newText);
-        }
-    }
+    void replace(OUString const& newText) override { replaceRanges(ranges_, newText); }
 
 private:
     std::shared_ptr<Model> model_;
@@ -4821,7 +4826,14 @@ public:
         override
     { return getRangeElements(); }
 
+    // The text that Writer selects for the range, if any, is the same as for a selection that the
+    // user makes:
     OUString getText() override {
+        if (cpo::uno::Reference<css::container::XIndexAccess> const ranges{
+                uno_, cpo::uno::UNO_QUERY})
+        {
+            return textOfRanges(ranges);
+        }
         OUStringBuffer buf;
         for (auto const & element: elements_) {
             if (element->getElement()->getType() == scriptinterop::ElementType_INLINE_IMAGE) {
@@ -4851,6 +4863,12 @@ public:
             default:
                 break;
             }
+        }
+        if (cpo::uno::Reference<css::container::XIndexAccess> const ranges{
+                uno_, cpo::uno::UNO_QUERY})
+        {
+            replaceRanges(ranges, newText);
+            return;
         }
         for (auto const & element: elements_) {
             cpo::uno::Reference<css::text::XTextRange>(element->getuno(), cpo::uno::UNO_QUERY_THROW)
@@ -5351,9 +5369,18 @@ public:
 
     cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return model_->uno(); }
 
+    // The range given to setSelection stays the selection, with its own range elements, for as long
+    // as Writer still has what it selected for it and the document has not changed:
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XSelection>> getSelection()
         override
     {
+        if (selection_.is()) {
+            if (selectionGeneration_ == model_->generation() && stillSelected()) {
+                return {true, selection_};
+            }
+            selection_.clear();
+            selected_.clear();
+        }
         cpo::uno::Reference<css::text::XTextDocument> const doc(
             model_->uno(), cpo::uno::UNO_QUERY_THROW);
         cpo::uno::Reference<css::view::XSelectionSupplier> const sup(
@@ -5567,6 +5594,8 @@ public:
                 u"setCursor: the position is not somewhere the cursor can be"_ustr);
         }
         cursorPosition_ = position;
+        selection_.clear();
+        selected_.clear();
         return this;
     }
 
@@ -5598,6 +5627,9 @@ public:
         if (!sup->select(selected)) {
             throw cpo::uno::RuntimeException(u"setSelection: Writer did not select the range"_ustr);
         }
+        selection_ = selection;
+        selected_.set(sup->getSelection(), cpo::uno::UNO_QUERY);
+        selectionGeneration_ = model_->generation();
         return this;
     }
 
@@ -5698,8 +5730,64 @@ private:
         return info.is() && info->supportsService(u"com.sun.star.text.TextRanges"_ustr);
     }
 
+    // Whether Writer's selection is still the one that it made for the range given to setSelection,
+    // the same text ranges or the same cells of the same table:
+    bool stillSelected() {
+        cpo::uno::Reference<css::view::XSelectionSupplier> const sup(
+            model_->uno()->getCurrentController(), cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<cpo::uno::XInterface> const now(
+            sup->getSelection(), cpo::uno::UNO_QUERY);
+        if (now == selected_) {
+            return now.is();
+        }
+        if (cpo::uno::Reference<css::container::XIndexAccess> const
+                ranges{now, cpo::uno::UNO_QUERY}, before{selected_, cpo::uno::UNO_QUERY};
+            ranges.is() && before.is())
+        {
+            auto const n = ranges->getCount();
+            if (n != before->getCount()) {
+                return false;
+            }
+            for (sal_Int32 i = 0; i != n; ++i) {
+                cpo::uno::Reference<css::text::XTextRange> const a(
+                    ranges->getByIndex(i), cpo::uno::UNO_QUERY);
+                cpo::uno::Reference<css::text::XTextRange> const b(
+                    before->getByIndex(i), cpo::uno::UNO_QUERY);
+                if (!a.is() || !b.is()) {
+                    return false;
+                }
+                try {
+                    cpo::uno::Reference<css::text::XTextRangeCompare> const cmp(
+                        a->getText(), cpo::uno::UNO_QUERY_THROW);
+                    if (cmp->compareRegionStarts(a, b) != 0 || cmp->compareRegionEnds(a, b) != 0) {
+                        return false;
+                    }
+                } catch (css::lang::IllegalArgumentException const &) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        if (cpo::uno::Reference<css::text::XTextTableCursor> const cells{now, cpo::uno::UNO_QUERY},
+            before{selected_, cpo::uno::UNO_QUERY};
+            cells.is() && before.is())
+        {
+            return cells->getRangeName() == before->getRangeName()
+                && cpo::uno::Reference<css::beans::XPropertySet>(cells, cpo::uno::UNO_QUERY_THROW)
+                        ->getPropertyValue(u"TextTable"_ustr)
+                    == cpo::uno::Reference<css::beans::XPropertySet>(
+                        before, cpo::uno::UNO_QUERY_THROW)->getPropertyValue(u"TextTable"_ustr);
+        }
+        return false;
+    }
+
     std::shared_ptr<Model> model_;
     cpo::uno::Reference<scriptinterop::XCursor> cursorPosition_;
+    // The range given to setSelection, what Writer selected for it, and the generation of the
+    // document then:
+    cpo::uno::Reference<scriptinterop::XSelection> selection_;
+    cpo::uno::Reference<cpo::uno::XInterface> selected_;
+    std::uintmax_t selectionGeneration_ = 0;
 };
 }
 

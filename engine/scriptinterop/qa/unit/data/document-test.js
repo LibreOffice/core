@@ -587,6 +587,13 @@ function test() {
     console.assert(overImage[2].getElement().asText().getText() === 'bXar');
     console.assert(overImage[2].getStartOffset() === 0);
     console.assert(overImage[2].getEndOffsetInclusive() === 1);
+    // The text of a selected range over the image is the one of Writer's selection, as for a
+    // selection that the user makes:
+    if (globalThis.cool) {
+        console.assert(
+            doc.setSelection(doc.newRange().addElement(withImage.editAsText(), 1, 4).build())
+                .getSelection().getText() === 'oobX');
+    }
     const allOverImageRange = doc.newRange().addElement(withImage.editAsText(), 0, 6).build();
     doc.setSelection(allOverImageRange);
     const allOverImage = allOverImageRange.getRangeElements();
