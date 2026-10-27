@@ -1,12 +1,12 @@
 <!-- build-doc-start -->
 # Build the Android app
 
-These instructions build the Collabora Office app for Android. The native parts must be built on Linux; you build the engine first, then the app, from the same monorepo.
+These instructions build the Collabora Office app for Android. The native parts are built on Linux or macOS; you build the engine first, then the app, from the same monorepo.
 
 ## Requirements
 
-* **A computer running Linux.** The native parts of the Android app cannot currently be built on Windows.
-* **The Android platform tools, including a compatible NDK.** Builds have been tested with Android NDK 23.0.7599858; other NDK versions may or may not work.
+* **A computer running Linux or macOS.** The native parts of the Android app cannot currently be built on Windows. On macOS, install the build tools listed in the macOS build instructions (`macos/README.md`) first.
+* **The Android platform tools, including a compatible NDK.** The engine needs NDK 27 or later, and versions up to 30 have been used successfully. The app build uses the NDK version named in `android/app/build.gradle`, so install that one as well.
 * **An Android or ChromeOS device, or a simulator.** The app can run in a simulator, though some bugs may appear in a simulator but not on a physical device or vice versa — if you can, build and run on a physical device. [Connect the device or simulator to your computer using adb](https://developer.android.com/tools/adb#Enabling).
 
 ## Clone the monorepo
@@ -66,11 +66,26 @@ online or use adb to get a list of valid architectures
 Create a file called `autogen.input` in the `engine/` directory with the
 following content:
 
-    --build=x86_64-unknown-linux-gnu
-    --with-android-ndk=/home/$USER/Android/Sdk/ndk/23.0.7599858
+    --with-android-ndk=/home/$USER/Android/Sdk/ndk/29.0.14206865
     --with-android-sdk=/home/$USER/Android/Sdk
     --enable-sal-log
     --enable-dbgutil
+
+On macOS the SDK lives under `/Users/$USER/Library/Android/sdk`, and the
+engine build needs the make and pkg-config from Homebrew named in the
+file, the same way as in `macos/README.md`:
+
+    GNUMAKE=gmake
+    PKG_CONFIG=/opt/homebrew/bin/pkg-config
+    PKG_CONFIG_FOR_BUILD=/opt/homebrew/bin/pkg-config
+    --with-android-ndk=/Users/$USER/Library/Android/sdk/ndk/29.0.14206865
+    --with-android-sdk=/Users/$USER/Library/Android/sdk
+    --enable-sal-log
+    --enable-dbgutil
+
+`PKG_CONFIG_FOR_BUILD` is the pkg-config for the tools that are built for
+the build machine itself; without it, configure warns that pkgconf is
+required to build harfbuzz.
 
 You also need to add a line specifying which architecture you're building for
 
@@ -95,8 +110,7 @@ You also need to add a line specifying which architecture you're building for
 For example, if you have a device that supports `arm64-v8a` your autogen.input
 should contain this content
 
-    --build=x86_64-unknown-linux-gnu
-    --with-android-ndk=/home/$USER/Android/Sdk/ndk-bundle
+    --with-android-ndk=/home/$USER/Android/Sdk/ndk/29.0.14206865
     --with-android-sdk=/home/$USER/Android/Sdk
     --enable-sal-log
     --with-distro=CPAndroidAarch64
@@ -225,7 +239,6 @@ So the result will look something like this:
     ICECC_VERSION=/local/libreoffice/android/955ceb546ceb7a5715bf0223ddd788fe.tar.gz
     --with-parallelism=25
     --enable-icecream
-    --build=x86_64-unknown-linux-gnu
     --with-android-ndk=/home/$USER/Android/Sdk/ndk-bundle
     --with-android-sdk=/home/$USER/Android/Sdk
     --with-distro=CPAndroid
