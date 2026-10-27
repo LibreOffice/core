@@ -47,6 +47,7 @@ $(eval $(call gb_Library_add_defs,sofficeapp,\
 $(eval $(call gb_Library_set_precompiled_header,sofficeapp,desktop/inc/pch/precompiled_sofficeapp))
 
 $(eval $(call gb_Library_use_libraries,sofficeapp,\
+    $(call gb_Helper_optional,AVMEDIA,avmedia) \
     basegfx \
     comphelper \
     cppu \

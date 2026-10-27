@@ -16,6 +16,7 @@
 #include <rtl/ustring.hxx>
 #include <functional>
 #include <optional>
+#include <set>
 #include <vector>
 
 struct COKitFilePickerProvider;
@@ -54,8 +55,14 @@ requestAndRedispatch(const OUString& rCommand, const OUString& rArgument,
                      const std::vector<Filter>& rFilters, const OUString& rTitle,
                      const std::vector<css::beans::PropertyValue>& rExtraArguments = {});
 
-/** The graphic import formats as picker filters, one entry per format the graphic filter can
-    load. */
+/** Joins wildcards with semicolons ("*.bmp;*.emf;..."), the form a picker filter and
+    WildCard take. */
+SFX2_DLLPUBLIC OUString joinWildcards(const std::set<OUString>& rWildcards);
+
+/** The graphic import formats as lowercase wildcards, each once. */
+SFX2_DLLPUBLIC std::set<OUString> graphicImportWildcards();
+
+/** graphicImportWildcards() as one unnamed picker filter. */
 SFX2_DLLPUBLIC std::vector<Filter> graphicImportFilters();
 
 /** The import formats of the given document factory (for example Writer documents) as picker

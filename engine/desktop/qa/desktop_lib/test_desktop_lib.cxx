@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <memory>
+#include <set>
 #include <string_view>
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -294,6 +295,8 @@ public:
     void testColorPaletteCallback();
     void testTableContextOnLoad();
     void testNotebookbarAfterViewClosedEarly();
+    void testGetInsertableFileWildcards();
+    void testInsertFiles();
 
     CPPUNIT_TEST_SUITE(DesktopKitTest);
     CPPUNIT_TEST(testGetStyles);
@@ -410,6 +413,8 @@ public:
     CPPUNIT_TEST(testColorPaletteCallback);
     CPPUNIT_TEST(testTableContextOnLoad);
     CPPUNIT_TEST(testNotebookbarAfterViewClosedEarly);
+    CPPUNIT_TEST(testGetInsertableFileWildcards);
+    CPPUNIT_TEST(testInsertFiles);
     CPPUNIT_TEST_SUITE_END();
 
     OString m_aTextSelection;
@@ -5706,6 +5711,53 @@ void firstTileReachedClient(COKitDocumentImpl* pDocument, int nViewId)
     pDocument->viewGotFirstTile(nViewId);
     Scheduler::ProcessEventsToIdle();
 }
+}
+
+void DesktopKitTest::testGetInsertableFileWildcards()
+{
+    // The union of the engine's picture and media tables, lowercase, each wildcard once.
+    COKitImpl aOffice;
+    const std::string aList = aOffice.getInsertableFileWildcards();
+
+    std::set<std::string> aWildcards;
+    std::size_t nStart = 0;
+    while (nStart <= aList.size())
+    {
+        std::size_t nEnd = aList.find(';', nStart);
+        if (nEnd == std::string::npos)
+            nEnd = aList.size();
+        const std::string aWildcard = aList.substr(nStart, nEnd - nStart);
+        CPPUNIT_ASSERT_MESSAGE(aWildcard, aWildcards.insert(aWildcard).second);
+        nStart = nEnd + 1;
+    }
+
+    CPPUNIT_ASSERT(aWildcards.count("*.png"));
+    CPPUNIT_ASSERT(aWildcards.count("*.emf"));
+    CPPUNIT_ASSERT(aWildcards.count("*.mov"));
+    CPPUNIT_ASSERT(aWildcards.count("*.mp4"));
+    CPPUNIT_ASSERT(!aWildcards.count("*.MOV"));
+    CPPUNIT_ASSERT(!aWildcards.count(""));
+}
+
+void DesktopKitTest::testInsertFiles()
+{
+    COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+
+    const std::string aPicture(createFileURL(u"paste.jpg").toUtf8());
+    const std::string aMedia(
+        m_directories.getURLFromSrc(u"sd/qa/unit/data/video-320x240.webm").toUtf8());
+    const std::string aDocument(createFileURL(u"blank_text.odt").toUtf8());
+
+    // A document in the list: nothing goes in.
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(0),
+                         pDocument->insertFiles({ aPicture, aMedia, aDocument }));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDrawPage->getCount());
+
+    // A picture and a media file: both go in.
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), pDocument->insertFiles({ aPicture, aMedia }));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xDrawPage->getCount());
 }
 
 void DesktopKitTest::testNotebookbarAfterViewClosedEarly()

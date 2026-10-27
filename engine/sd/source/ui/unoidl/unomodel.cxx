@@ -101,6 +101,7 @@
 #include "unopool.hxx"
 #include <sfx2/kit/helper.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/cryptosign.hxx>
 #include <vcl/svapp.hxx>
@@ -167,6 +168,7 @@
 #include <svx/svdedxv.hxx>
 #include <svtools/unoimap.hxx>
 #include <svx/unoshape.hxx>
+#include <svx/insertfilehelper.hxx>
 #include <editeng/unonrule.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/outlobj.hxx>
@@ -7009,6 +7011,25 @@ void SdXImpressDocument::resetSelection()
     }
     // Reset graphic selection.
     pSdrView->UnmarkAll();
+}
+
+void SdXImpressDocument::insertFiles(const std::vector<vcl::InsertFile>& rFiles)
+{
+    SolarMutexGuard aGuard;
+
+    DrawViewShell* pViewShell = GetViewShell();
+    if (!pViewShell)
+        return;
+
+    ::sd::View* pView = pViewShell->GetView();
+    if (!pView)
+        return;
+
+    SfxDispatcher& rDispatcher = *pViewShell->GetViewFrame()->GetDispatcher();
+    pView->BegUndo(SdResId(STR_INSERTGRAPHIC));
+    for (const vcl::InsertFile& rFile : rFiles)
+        svx::DispatchInsertFile(rDispatcher, rFile);
+    pView->EndUndo();
 }
 
 void SdXImpressDocument::setPageZoom(int nPageZoom)

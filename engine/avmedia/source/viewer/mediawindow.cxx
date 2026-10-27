@@ -41,6 +41,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <memory>
+#include <set>
 #include <sal/log.hxx>
 #include <o3tl/string_view.hxx>
 
@@ -209,6 +210,19 @@ const FilterNameVector & MediaWindow::getMediaFilters()
     return gMediaFilters;
 }
 
+std::set<OUString> MediaWindow::getMediaWildcards()
+{
+    std::set<OUString> aWildcards;
+    for (const auto& rFilter : getMediaFilters())
+    {
+        for (sal_Int32 nIndex = 0; nIndex >= 0;)
+        {
+            const OUString aExtension(o3tl::getToken(rFilter.second, 0, ';', nIndex));
+            aWildcards.insert("*." + aExtension.toAsciiLowerCase());
+        }
+    }
+    return aWildcards;
+}
 
 bool MediaWindow::executeMediaURLDialog(weld::Window* pParent, OUString& rURL, bool *const o_pbLink)
 {
@@ -219,21 +233,11 @@ bool MediaWindow::executeMediaURLDialog(weld::Window* pParent, OUString& rURL, b
     if (o_pbLink != nullptr && sfx2::COKitFilePicker::isAvailable())
     {
         std::vector<sfx2::COKitFilePicker::Filter> aPickerFilters;
-        OUStringBuffer aWildcards;
-        for (const auto& rFilter : getMediaFilters())
-        {
-            for (sal_Int32 nIndex = 0; nIndex >= 0;)
-            {
-                if (!aWildcards.isEmpty())
-                    aWildcards.append(';');
-                aWildcards.append(OUString::Concat(u"*.")
-                                  + o3tl::getToken(rFilter.second, 0, ';', nIndex));
-            }
-        }
+        const OUString aWildcards = sfx2::COKitFilePicker::joinWildcards(getMediaWildcards());
 
         // FIXME: We should use a translation of "Media files" here and not an empty string.
         if (!aWildcards.isEmpty())
-            aPickerFilters.push_back({ u""_ustr, aWildcards.makeStringAndClear() });
+            aPickerFilters.push_back({ u""_ustr, aWildcards });
 
         if (sfx2::COKitFilePicker::requestAndRedispatch(u".uno:InsertAVMedia"_ustr, u"URL"_ustr,
                                                         aPickerFilters,

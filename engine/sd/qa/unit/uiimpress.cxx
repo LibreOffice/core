@@ -6590,6 +6590,27 @@ SdrMediaObj* findMediaObject(const uno::Reference<lang::XComponent>& xComponent)
 }
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testInsertFiles)
+{
+    // A picture and a media file go in as one undo step, without a media player.
+    createSdImpressDoc();
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+
+    pXImpressDocument->insertFiles(
+        { { createFileURL(u"TestImage1.png"), vcl::InsertFileKind::Graphic },
+          { createFileURL(u"video-320x240.webm"), vcl::InsertFileKind::Media } });
+
+    CPPUNIT_ASSERT(findMediaObject(mxComponent));
+    SdPage* pPage = pXImpressDocument->GetDoc()->GetSdPage(0, PageKind::Standard);
+    bool bHasGraphic = false;
+    for (const rtl::Reference<SdrObject>& pObj : *pPage)
+        bHasGraphic = bHasGraphic || dynamic_cast<SdrGrafObj*>(pObj.get()) != nullptr;
+    CPPUNIT_ASSERT(bHasGraphic);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1),
+                         pXImpressDocument->GetDoc()->GetUndoManager()->GetUndoActionCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testInsertMediaWithoutSize)
 {
     // A media file dispatched without a size goes in at the default size, even when no media

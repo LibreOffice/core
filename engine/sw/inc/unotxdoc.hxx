@@ -467,6 +467,8 @@ public:
     virtual void setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY) override;
     /// @see vcl::ITiledRenderable::resetSelection().
     virtual void resetSelection() override;
+    /// @see vcl::ITiledRenderable::insertFiles().
+    virtual void insertFiles(const std::vector<vcl::InsertFile>& rFiles) override;
     /// @see vcl::ITiledRenderable::getWriterPageRectangles().
     virtual std::string getWriterPageRectangles() override;
     /// @see vcl::ITiledRenderable::setClipboard().

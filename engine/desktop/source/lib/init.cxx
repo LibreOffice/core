@@ -196,6 +196,9 @@
 #include <sfx2/app.hxx>
 #endif
 #include <sfx2/cokitfilepicker.hxx>
+#if HAVE_FEATURE_AVMEDIA
+#include <avmedia/mediawindow.hxx>
+#endif
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
@@ -229,6 +232,7 @@
 #include <tools/fract.hxx>
 #include <tools/json_writer.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/wldcrd.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/langtab.hxx>
 #include <vcl/fontcharmap.hxx>
@@ -8310,6 +8314,39 @@ void COKitImpl::installFilePickerProvider(const COKitFilePickerProvider* pProvid
     sfx2::COKitFilePicker::installProvider(pProvider);
 }
 
+namespace
+{
+std::set<OUString> mediaWildcards()
+{
+#if HAVE_FEATURE_AVMEDIA
+    return avmedia::MediaWindow::getMediaWildcards();
+#else
+    return {};
+#endif
+}
+
+bool isMediaUrl(const OUString& rUrl)
+{
+#if HAVE_FEATURE_AVMEDIA
+    return avmedia::MediaWindow::isMediaURL(rUrl, u"", false);
+#else
+    (void)rUrl;
+    return false;
+#endif
+}
+}
+
+std::string COKitImpl::getInsertableFileWildcards()
+{
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    // The merge keeps the format both tables have (.mov) once.
+    std::set<OUString> aWildcards = sfx2::COKitFilePicker::graphicImportWildcards();
+    aWildcards.merge(mediaWildcards());
+    return std::string(sfx2::COKitFilePicker::joinWildcards(aWildcards).toUtf8());
+}
+
 // Renders the shared clipboard's formats now, so its contents survive the close
 // of the document that produced them. Operates on the process-global shared
 // clipboard, so the document argument only serves to reach this call.
@@ -8463,6 +8500,46 @@ void COKitDocumentImpl::resetSelection()
     }
 
     pDoc->resetSelection();
+}
+
+std::size_t COKitDocumentImpl::insertFiles(const std::vector<std::string>& rUrls)
+{
+    comphelper::ProfileZone aZone("COKitDocumentImpl::insertFiles");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    ITiledRenderable* pDoc = getTiledRenderable(this);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return 0;
+    }
+
+    // Media first: the graphic filter also claims a media format (.mov).
+    const WildCard aGraphicWildcards(
+        sfx2::COKitFilePicker::joinWildcards(sfx2::COKitFilePicker::graphicImportWildcards()), ';');
+    std::vector<vcl::InsertFile> aFiles;
+    aFiles.reserve(rUrls.size());
+    for (const std::string& rUrl : rUrls)
+    {
+        const OUString aUrl = OUString::fromUtf8(rUrl);
+        if (isMediaUrl(aUrl))
+            aFiles.push_back({ aUrl, vcl::InsertFileKind::Media });
+        else if (aGraphicWildcards.Matches(
+                     INetURLObject(aUrl).GetLastName(INetURLObject::DecodeMechanism::WithCharset)
+                         .toAsciiLowerCase()))
+            aFiles.push_back({ aUrl, vcl::InsertFileKind::Graphic });
+        else
+        {
+            SAL_INFO("desktop.lib", "insertFiles: " << aUrl << " is neither a picture nor media, inserting nothing");
+            return 0;
+        }
+    }
+
+    if (!aFiles.empty())
+        pDoc->insertFiles(aFiles);
+    return aFiles.size();
 }
 
 // The sentence checking rule packages that are installed, so the Options

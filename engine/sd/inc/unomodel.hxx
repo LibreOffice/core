@@ -498,6 +498,8 @@ public:
     SD_DLLPUBLIC virtual void setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY) override;
     /// @see COKitDocument::resetSelection().
     SD_DLLPUBLIC virtual void resetSelection() override;
+    /// @see vcl::ITiledRenderable::insertFiles().
+    SD_DLLPUBLIC virtual void insertFiles(const std::vector<vcl::InsertFile>& rFiles) override;
     /// @see vcl::ITiledRenderable::setClientVisibleArea().
     SD_DLLPUBLIC virtual void setClientVisibleArea(const tools::Rectangle& rRectangle) override;
     /// @see vcl::ITiledRenderable::setPageZoom().

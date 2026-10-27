@@ -46,6 +46,8 @@
 #include <officecfg/Office/Calc.hxx>
 #include <svl/numuno.hxx>
 #include <svl/hint.hxx>
+#include <svl/undo.hxx>
+#include <svx/insertfilehelper.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -112,6 +114,7 @@
 #include <formulagroup.hxx>
 #include <simpleformulacalc.hxx>
 #include <tools/urlobj.hxx>
+#include <globstr.hrc>
 #include <gridwin.hxx>
 #include <hints.hxx>
 #include <inputhdl.hxx>
@@ -1186,6 +1189,28 @@ void ScModelObj::resetSelection()
     // and hide the cell and text selection
     pViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION, ""_ostr);
     KitHelper::notifyOtherViews(pViewShell, COKitCallbackType::TEXT_VIEW_SELECTION, "selection", ""_ostr);
+}
+
+void ScModelObj::insertFiles(const std::vector<vcl::InsertFile>& rFiles)
+{
+    SolarMutexGuard aGuard;
+
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    if (!pViewData || !pDocShell)
+        return;
+
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    SfxUndoManager* pUndoManager = pDocShell->GetUndoManager();
+    pUndoManager->EnterListAction(ScResId(STR_UNDO_PASTE), OUString(), 0,
+                                  pViewShell->GetViewShellId());
+    SfxDispatcher& rDispatcher = *pViewShell->GetViewFrame().GetDispatcher();
+    for (const vcl::InsertFile& rFile : rFiles)
+    {
+        // An insert replaces a marked object, and each insert marks its object.
+        resetSelection();
+        svx::DispatchInsertFile(rDispatcher, rFile);
+    }
+    pUndoManager->LeaveListAction();
 }
 
 void ScModelObj::setClipboard(const uno::Reference<datatransfer::clipboard::XClipboard>& xClipboard)

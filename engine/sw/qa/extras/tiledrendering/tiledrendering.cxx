@@ -31,6 +31,7 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <svx/svdomedia.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdoutl.hxx>
@@ -1055,6 +1056,30 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoShapeLimiting)
     SfxViewShell::Current()->setCOKitViewCallback(nullptr);
     KitHelper::setView(nView2);
     SfxViewShell::Current()->setCOKitViewCallback(nullptr);
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInsertFiles)
+{
+    // A media file and then a picture go in as one undo step.
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    sw::UndoManager& rUndoManager = pWrtShell->GetDoc()->GetUndoManager();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rUndoManager.GetUndoActionCount());
+
+    pXTextDocument->insertFiles(
+        { { m_directories.getURLFromSrc(u"sd/qa/unit/data/video-320x240.webm"),
+            vcl::InsertFileKind::Media },
+          { createFileURL(u"fill.png"), vcl::InsertFileKind::Graphic } });
+
+    // Without the deselection in insertFiles the picture did not go in: the media object was
+    // still selected.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pWrtShell->GetFlyCount(FLYCNTTYPE_GRF));
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    bool bHasMedia = false;
+    for (const rtl::Reference<SdrObject>& pObj : *pPage)
+        bHasMedia = bHasMedia || dynamic_cast<SdrMediaObj*>(pObj.get()) != nullptr;
+    CPPUNIT_ASSERT(bHasMedia);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rUndoManager.GetUndoActionCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoDispatch)

@@ -23,6 +23,7 @@ $(eval $(call gb_CppunitTest_use_externals,desktop_app, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,desktop_app, \
+    $(call gb_Helper_optional,AVMEDIA,avmedia) \
     basegfx \
     comphelper \
     cppu \

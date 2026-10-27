@@ -18,6 +18,8 @@
  */
 
 #include <sal/config.h>
+
+#include <algorithm>
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -54,6 +56,8 @@
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <svl/stritem.hxx>
+#include <svx/insertfilehelper.hxx>
+#include <swundo.hxx>
 #include <unotxdoc.hxx>
 #include <svl/numformat.hxx>
 #include <svl/numuno.hxx>
@@ -4201,6 +4205,40 @@ void SwXTextDocument::resetSelection()
 
     SwWrtShell* pWrtShell = m_pDocShell->GetWrtShell();
     pWrtShell->ResetSelect(nullptr, false, ScrollSizeMode::ScrollSizeDefault);
+}
+
+void SwXTextDocument::insertFiles(const std::vector<vcl::InsertFile>& rFiles)
+{
+    SolarMutexGuard aGuard;
+
+    SwWrtShell* pWrtShell = m_pDocShell->GetWrtShell();
+    SwView* pView = m_pDocShell->GetView();
+    if (!pWrtShell || !pView)
+        return;
+
+    // Pictures first: a media object goes in at the middle of the visible
+    // area, and leaving it moves the cursor there.
+    std::vector<vcl::InsertFile> aFiles(rFiles);
+    std::stable_partition(aFiles.begin(), aFiles.end(), [](const vcl::InsertFile& rFile)
+                          { return rFile.eKind == vcl::InsertFileKind::Graphic; });
+
+    pWrtShell->StartUndo(SwUndoId::PASTE_CLIPBOARD);
+    for (const vcl::InsertFile& rFile : aFiles)
+    {
+        // Leave a picture, drawing object or table selection, which the insert
+        // would replace or delete. A text selection stays; the insert replaces
+        // it, as a paste does.
+        if (pWrtShell->IsSelFrameMode() || pWrtShell->GetSelectedObjCount()
+            || pWrtShell->IsTableMode())
+        {
+            pWrtShell->AssureStdMode();
+            // or the deferred shell switch leaves the picture shell in place,
+            // which drops the insert
+            pView->StopShellTimer();
+        }
+        svx::DispatchInsertFile(*pView->GetViewFrame().GetDispatcher(), rFile);
+    }
+    pWrtShell->EndUndo();
 }
 
 /**

@@ -47,6 +47,18 @@ namespace vcl
     extern const std::map <PointerStyle, OString> gaKitPointerMap;
 
 
+enum class InsertFileKind
+{
+    Graphic,
+    Media
+};
+
+struct InsertFile
+{
+    OUString aUrl;
+    InsertFileKind eKind;
+};
+
 class VCL_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") ITiledRenderable
 {
 public:
@@ -215,6 +227,15 @@ public:
      * @see COKitDocument::resetSelection().
      */
     virtual void resetSelection() = 0;
+
+    /**
+     * Inserts the files, embedded, in one undo step.
+     *
+     * @see COKitDocument::insertFiles().
+     */
+    virtual void insertFiles(const std::vector<InsertFile>& /*rFiles*/)
+    {
+    }
 
     /**
      * @see COKitDocument::getWriterPageRectangles().

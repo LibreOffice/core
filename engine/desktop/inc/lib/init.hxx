@@ -355,6 +355,7 @@ namespace desktop {
         void setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY) override;
         void setInPlaceObjectArea(int nX, int nY, int nWidth, int nHeight) override;
         void resetSelection() override;
+        std::size_t insertFiles(const std::vector<std::string>& rUrls) override;
         std::string getCommandValues(const char* pCommand) override;
         void setClientZoom(int nTilePixelWidth, int nTilePixelHeight, int nTileTwipWidth,
                            int nTileTwipHeight) override;
@@ -524,6 +525,7 @@ namespace desktop {
         registerRevealInFileManagerCallback(COKitRevealInFileManagerCallback pCallback) override;
         void installClipboardProvider(const COKitClipboardProvider* pProvider) override;
         void installFilePickerProvider(const COKitFilePickerProvider* pProvider) override;
+        std::string getInsertableFileWildcards() override;
         bool getGlobalClipboard(const char **pMimeTypes,
                                 std::vector<std::string>& rOutMimeTypes,
                                 std::vector<std::vector<char>>& rOutStreams) override;

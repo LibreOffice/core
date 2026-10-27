@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <set>
 #include <vector>
 #include <cpo/uno/Reference.hxx>
 #include <com/sun/star/media/XPlayerListener.hpp>
@@ -125,6 +126,8 @@ namespace avmedia
     public:
 
         static const FilterNameVector & getMediaFilters();
+        /// getMediaFilters() as lowercase "*.ext" wildcards, each once.
+        static std::set<OUString> getMediaWildcards();
         /// @param o_pbLink if not 0, this is an "insert" dialog: display link
         ///                 checkbox and store its state in *o_pbLink
         static bool         executeMediaURLDialog(weld::Window* pParent, OUString& rURL, bool *const o_pbLink);

@@ -1959,6 +1959,14 @@ struct COKit
     virtual void installFilePickerProvider(const COKitFilePickerProvider* pProvider) = 0;
 
     /**
+     * The files COKitDocument::insertFiles() takes, as lowercase "*.ext"
+     * wildcards separated by semicolons: every graphic import format and
+     * every media format. Needs no document, so an app can check a name
+     * off the engine thread.
+     */
+    virtual std::string getInsertableFileWildcards() = 0;
+
+    /**
      * Read the desktop app's single process-wide clipboard. See
      * Document::getClipboard() for the parameters; this needs no document
      * because the shared clipboard is process-global. The distinct name marks
@@ -2234,6 +2242,17 @@ struct COKitDocument
      * Gets rid of any text or graphic selection.
      */
     virtual void resetSelection() = 0;
+
+    /**
+     * Embeds pictures and media files in one undo step. The engine
+     * classifies each file by its own format tables; a list with a file
+     * that is neither inserts nothing, so the caller can give the whole
+     * list to its own paste. A text selection is replaced, as by a paste.
+     *
+     * @param rUrls file: URLs this process can read
+     * @return the number of files inserted: all of them, or none
+     */
+    virtual std::size_t insertFiles(const std::vector<std::string>& rUrls) = 0;
 
     /**
      * Returns a json mapping of the possible values for the given command

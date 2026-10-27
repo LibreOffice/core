@@ -18,6 +18,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <set>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/kit/helper.hxx>
@@ -139,12 +140,23 @@ bool requestAndRedispatch(const OUString& rCommand, const OUString& rArgument,
     return true;
 }
 
-std::vector<Filter> graphicImportFilters()
+OUString joinWildcards(const std::set<OUString>& rWildcards)
 {
-    std::vector<Filter> aFilters;
+    OUStringBuffer aJoined;
+    for (const OUString& rWildcard : rWildcards)
+    {
+        if (!aJoined.isEmpty())
+            aJoined.append(';');
+        aJoined.append(rWildcard);
+    }
+    return aJoined.makeStringAndClear();
+}
+
+std::set<OUString> graphicImportWildcards()
+{
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
 
-    OUStringBuffer aWildcards;
+    std::set<OUString> aWildcards;
     for (sal_uInt16 nFormat = 0; nFormat < rGraphicFilter.GetImportFormatCount(); ++nFormat)
     {
         for (sal_Int32 nEntry = 0;; ++nEntry)
@@ -152,14 +164,19 @@ std::vector<Filter> graphicImportFilters()
             const OUString sWildcard = rGraphicFilter.GetImportWildcard(nFormat, nEntry);
             if (sWildcard.isEmpty())
                 break;
-            if (!aWildcards.isEmpty())
-                aWildcards.append(';');
-            aWildcards.append(sWildcard);
+            aWildcards.insert(sWildcard.toAsciiLowerCase());
         }
     }
+    return aWildcards;
+}
+
+std::vector<Filter> graphicImportFilters()
+{
+    std::vector<Filter> aFilters;
+    const OUString sWildcards = joinWildcards(graphicImportWildcards());
     // FIXME: We should use a translation of "Images" here and not an empty string.
-    if (!aWildcards.isEmpty())
-        aFilters.push_back({ u""_ustr, aWildcards.makeStringAndClear() });
+    if (!sWildcards.isEmpty())
+        aFilters.push_back({ u""_ustr, sWildcards });
 
     return aFilters;
 }

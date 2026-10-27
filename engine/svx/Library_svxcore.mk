@@ -110,6 +110,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/annotation/TextAPI \
     svx/source/core/extedit \
     svx/source/core/graphichelper \
+    svx/source/core/insertfilehelper \
     svx/source/core/extendedprimitive2dxmldump \
     svx/source/seclabel/SecLabelStore \
     svx/source/seclabel/SecurityLabelTarget \

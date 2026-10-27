@@ -364,6 +364,9 @@ public:
     /// @see COKitDocument::resetSelection().
     virtual void resetSelection() override;
 
+    /// @see vcl::ITiledRenderable::insertFiles().
+    virtual void insertFiles(const std::vector<vcl::InsertFile>& rFiles) override;
+
     /// @see vcl::ITiledRenderable::setClipboard().
     virtual void setClipboard(const cpo::uno::Reference<css::datatransfer::clipboard::XClipboard>& xClipboard) override;
 
