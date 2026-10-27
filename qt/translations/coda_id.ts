@@ -121,23 +121,23 @@
     </message>
     <message>
         <source>Export Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Kesalahan Ekspor</translation>
     </message>
     <message>
         <source>Failed to export the document.</source>
-        <translation type="unfinished"></translation>
+        <translation>Gagal mengekspor dokumen.</translation>
     </message>
     <message>
         <source>Cannot open remote document</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat membuka dokumen jarak jauh</translation>
     </message>
     <message>
         <source>the Collabora Online server</source>
-        <translation type="unfinished"></translation>
+        <translation>server Collabora Online</translation>
     </message>
     <message>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>Simpan File</translation>
     </message>
     <message>
         <source>Presentation</source>
@@ -157,42 +157,42 @@
     </message>
     <message>
         <source>Template Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Kesalahan Templat</translation>
     </message>
     <message>
         <source>Could not create a new document from this template.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat membuat dokumen baru dari templat ini.</translation>
     </message>
     <message>
         <source>New Document Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Kesalahan Dokumen Baru</translation>
     </message>
     <message>
         <source>Could not create a new document.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat membuat dokumen baru.</translation>
     </message>
     <message>
         <source>Supported files</source>
-        <translation type="unfinished"></translation>
+        <translation>File yang didukung</translation>
     </message>
 </context>
 <context>
     <name>TabManager</name>
     <message>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Tutup</translation>
     </message>
     <message>
         <source>Close Others</source>
-        <translation type="unfinished"></translation>
+        <translation>Tutup Tab Lain</translation>
     </message>
     <message>
         <source>Move Tab to New Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Pindahkan Tab ke Jendela Baru</translation>
     </message>
     <message>
         <source>Preview of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Pratinjau %1</translation>
     </message>
 </context>
 <context>
