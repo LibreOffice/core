@@ -121,6 +121,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 	CppunitTest_sc_a11y \
 	CppunitTest_sc_filter_html \
 	CppunitTest_sc_filter_xml \
+	CppunitTest_sc_complex \
 ))
 
 ifneq ($(ENABLE_JUMBO_SHEETS),)

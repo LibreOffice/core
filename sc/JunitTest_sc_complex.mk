@@ -10,7 +10,6 @@
 $(eval $(call gb_JunitTest_JunitTest,sc_complex))
 
 $(eval $(call gb_JunitTest_add_classes,sc_complex, \
-    complex.sc.CalcRTL \
 ))
 
 $(eval $(call gb_JunitTest_use_unoapi_jars,sc_complex))
@@ -20,7 +19,6 @@ $(eval $(call gb_JunitTest_add_sourcefiles,sc_complex, \
     sc/qa/complex/dataPilot/_XDataPilotTable \
     sc/qa/complex/dataPilot/_XNamed \
     sc/qa/complex/dataPilot/_XPropertySet \
-    sc/qa/complex/sc/CalcRTL \
 ))
 
 $(eval $(call gb_JunitTest_set_defs,sc_complex, \
