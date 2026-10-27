@@ -5,6 +5,9 @@ let
     config = {
       allowUnfree = true;
       android_sdk.accept_license = true;
+      permittedInsecurePackages = [
+        "cypress-15.19.0" # Outdated Electron, only used in testing, issues are not relevant when trusted source is being tested
+      ];
     };
   };
 in
