@@ -1,0 +1,125 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-14 21:16+0000\n"
+"PO-Revision-Date: 2025-12-06 17:02+0000\n"
+"Last-Translator: Tigran Zargaryan <tigranflib@gmail.com>\n"
+"Language-Team: Armenian <https://hosted.weblate.org/projects/collabora-"
+"online/welcome-presentation/hy/>\n"
+"Language: hy\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.15-dev\n"
+
+#. content.xml (slide 'page1')
+msgid "All New Collabora Office"
+msgstr "Ամբողջովին նոր Collabora Office"
+
+#. content.xml (slide 'page1')
+msgid "Same look, same code"
+msgstr "Նույն տեսքը, նույն կոդը"
+
+#. content.xml (slide 'page1')
+msgid "Your files, your device"
+msgstr "Ձեր նքերը, ձեր սարքը"
+
+#. content.xml (slide 'page1')
+msgid "Find out more!"
+msgstr "Իմացեք ավելին!"
+
+#. content.xml (slide 'page2')
+msgid "Open it and feel instantly at home:"
+msgstr "Բացեք այն և անմիջապես զգացեք ձեզ ինչպես տանը:"
+
+#. content.xml (slide 'page2')
+msgid "ODF or DOCX"
+msgstr "ODF կամ DOCX"
+
+#. content.xml (slide 'page2')
+msgid "Quick edits or deep dives"
+msgstr "Արագ խմբագրումներ կամ խորը վերլուծություններ"
+
+#. content.xml (slide 'page2')
+msgid "A clean, beautiful interface"
+msgstr "Մաքուր, գեղեցիկ միջերես"
+
+#. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
+#. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
+#. content.xml (slide 'page7'); content.xml (slide 'page8')
+msgid "Next"
+msgstr "Հաջորդը"
+
+#. content.xml (slide 'page3')
+msgid "The familiar, powerful Collabora Online experience"
+msgstr "Ծանոթ, հզոր Collabora Online փորձը"
+
+#. content.xml (slide 'page3')
+msgid "Now locally on Windows, macOS, and Linux"
+msgstr "Այժմ տեղայնորեն Windows, macOS և Linux-ում"
+
+#. content.xml (slide 'page4'); content.xml (slide 'page5'); content.xml
+#. (slide 'page6'); content.xml (slide 'page7')
+msgid ""
+"Enjoy editing your documents locally with an intuitive, intelligent interface"
+msgstr ""
+"Վայելեք ձեր փաստաթղթերի տեղային խմբագրումը՝ կռահողական, խելացի միջերեսի "
+"միջոցով"
+
+#. content.xml (slide 'page4')
+msgid "Navigator bar with document search"
+msgstr "Նավարկիչի վահանակ փաստաթղթերի որոնումով"
+
+#. content.xml (slide 'page5')
+msgid "Helpful quick access examples"
+msgstr "Արագ մուտքի օգտակար օրինակներ"
+
+#. content.xml (slide 'page6')
+msgid "Create and edit tables within documents"
+msgstr "Ստեղծեք և խմբագրեք աղյուսակներ փաստաթղթերի ներսում"
+
+#. content.xml (slide 'page7')
+msgid "Powerful data and charting tools"
+msgstr "Հզոր տվյալների և գրաֆիկների գործիքներ"
+
+#. content.xml (slide 'page8')
+msgid "Privacy by design"
+msgstr "Գաղտնիություն ըստ նախագծի"
+
+#. content.xml (slide 'page8')
+msgid "Fully open source – no hidden executables, no spyware"
+msgstr ""
+"Լիովին բաց կոդով՝ առանց թաքնված կատարվող նիշքերի, առանց լրտեսող ծրագրերի "
+"ազդեցության"
+
+#. content.xml (slide 'page8')
+msgid "Documents never leave your device – unless you say so"
+msgstr "Փաստաթղթերը երբեք չեն լքում ձեր սարքը՝ եթե դուք չեք հրահանգել դա"
+
+#. content.xml (slide 'page9')
+msgid "Take back control"
+msgstr "Վերադարձրեք վերահսկողությունը"
+
+#. content.xml (slide 'page9')
+msgid "We’re excited to share this release with the community"
+msgstr "Մենք ուրախ ենք կիսվել այս թողարկմամբ համայնքի հետ"
+
+#. content.xml (slide 'page9')
+msgid "Try it out. Break things. Let us know what works and what doesn’t."
+msgstr ""
+"Փորձեք։ Փչացրեք ամեն ինչ։ Տեղեկացրեք մեզ, թե ինչն է աշխատում, իսկ ինչը՝ ոչ։"
+
+#. content.xml (slide 'page9')
+msgid ""
+"Together, we're building a privacy-respecting, open, and elegant office "
+"suite for everyone."
+msgstr ""
+"Միասին մենք կառուցում ենք գաղտնիությունը հարգող, բաց և նրբագեղ գրասենյակային "
+"համալիր բոլորի համար։"

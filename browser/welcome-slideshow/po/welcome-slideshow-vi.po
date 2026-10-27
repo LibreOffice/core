@@ -1,0 +1,126 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-14 21:16+0000\n"
+"PO-Revision-Date: 2025-12-17 10:51+0000\n"
+"Last-Translator: Loc Huynh <huynhloc.contact@gmail.com>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/collabora-"
+"online/welcome-presentation/vi/>\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.15.1-dev\n"
+
+#. content.xml (slide 'page1')
+msgid "All New Collabora Office"
+msgstr "Collabora Office hoàn toàn mới"
+
+#. content.xml (slide 'page1')
+msgid "Same look, same code"
+msgstr "Cùng một giao diện, cùng một mã"
+
+#. content.xml (slide 'page1')
+msgid "Your files, your device"
+msgstr "Tập tin của bạn, thiết bị của bạn"
+
+#. content.xml (slide 'page1')
+msgid "Find out more!"
+msgstr "Tìm hiểu thêm!"
+
+#. content.xml (slide 'page2')
+msgid "Open it and feel instantly at home:"
+msgstr "Mở nó và cảm thấy ngay lập tức như ở nhà:"
+
+#. content.xml (slide 'page2')
+msgid "ODF or DOCX"
+msgstr "ODF hoặc DOCX"
+
+#. content.xml (slide 'page2')
+msgid "Quick edits or deep dives"
+msgstr "Chỉnh sửa nhanh hoặc tìm hiểu sâu"
+
+#. content.xml (slide 'page2')
+msgid "A clean, beautiful interface"
+msgstr "Giao diện sạch, đẹp"
+
+#. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
+#. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
+#. content.xml (slide 'page7'); content.xml (slide 'page8')
+msgid "Next"
+msgstr "Kế tiếp"
+
+#. content.xml (slide 'page3')
+msgid "The familiar, powerful Collabora Online experience"
+msgstr "Trải nghiệm Collabora Online quen thuộc và mạnh mẽ"
+
+#. content.xml (slide 'page3')
+msgid "Now locally on Windows, macOS, and Linux"
+msgstr "Hiện chạy cục bộ trên Windows, macOS và Linux"
+
+#. content.xml (slide 'page4'); content.xml (slide 'page5'); content.xml
+#. (slide 'page6'); content.xml (slide 'page7')
+msgid ""
+"Enjoy editing your documents locally with an intuitive, intelligent interface"
+msgstr ""
+"Tận hưởng việc chỉnh sửa cục bộ tài liệu của bạn với giao diện trực quan, "
+"thông minh"
+
+#. content.xml (slide 'page4')
+msgid "Navigator bar with document search"
+msgstr "Thanh điều hướng với tìm kiếm tài liệu"
+
+#. content.xml (slide 'page5')
+msgid "Helpful quick access examples"
+msgstr "Ví dụ truy cập nhanh hữu ích"
+
+#. content.xml (slide 'page6')
+msgid "Create and edit tables within documents"
+msgstr "Tạo và chỉnh sửa bảng trong tài liệu"
+
+#. content.xml (slide 'page7')
+msgid "Powerful data and charting tools"
+msgstr "Công cụ biểu đồ và dữ liệu mạnh mẽ"
+
+#. content.xml (slide 'page8')
+msgid "Privacy by design"
+msgstr "Quyền riêng tư theo thiết kế"
+
+#. content.xml (slide 'page8')
+msgid "Fully open source – no hidden executables, no spyware"
+msgstr ""
+"Mã nguồn mở hoàn toàn – không tệp thực thi ẩn, không phần mềm gián điệp"
+
+#. content.xml (slide 'page8')
+msgid "Documents never leave your device – unless you say so"
+msgstr ""
+"Tài liệu không bao giờ rời khỏi thiết bị của bạn – trừ khi bạn muốn vậy"
+
+#. content.xml (slide 'page9')
+msgid "Take back control"
+msgstr "Lấy lại quyền kiểm soát"
+
+#. content.xml (slide 'page9')
+msgid "We’re excited to share this release with the community"
+msgstr "Chúng tôi rất vui mừng được chia sẻ bản phát hành này với cộng đồng"
+
+#. content.xml (slide 'page9')
+msgid "Try it out. Break things. Let us know what works and what doesn’t."
+msgstr ""
+"Hãy thử nó. Phá vỡ mọi thứ. Hãy cho chúng tôi biết điều gì hiệu quả và điều "
+"gì không."
+
+#. content.xml (slide 'page9')
+msgid ""
+"Together, we're building a privacy-respecting, open, and elegant office "
+"suite for everyone."
+msgstr ""
+"Cùng nhau, chúng ta đang xây dựng một bộ ứng dụng văn phòng trang nhã, cởi "
+"mở và tôn trọng quyền riêng tư cho mọi người."

@@ -36,6 +36,7 @@
       "release",
       "debug",
       "welcome",
+      "welcome-slideshow",
       "util",
       "templates",
       "introdocs",

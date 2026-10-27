@@ -1,0 +1,124 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-14 21:16+0000\n"
+"PO-Revision-Date: 2025-12-03 06:42+0000\n"
+"Last-Translator: bittin1ddc447d824349b2 <bittin@reimu.nl>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/collabora-online/"
+"welcome-presentation/sv/>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15-dev\n"
+
+#. content.xml (slide 'page1')
+msgid "All New Collabora Office"
+msgstr "Helt nytt Collabara Office"
+
+#. content.xml (slide 'page1')
+msgid "Same look, same code"
+msgstr "Samma utseende, samma kod"
+
+#. content.xml (slide 'page1')
+msgid "Your files, your device"
+msgstr "Dina filer, din enhet"
+
+#. content.xml (slide 'page1')
+msgid "Find out more!"
+msgstr "Ta reda på mer!"
+
+#. content.xml (slide 'page2')
+msgid "Open it and feel instantly at home:"
+msgstr "Öppna det och känn dig direkt som hemma:"
+
+#. content.xml (slide 'page2')
+msgid "ODF or DOCX"
+msgstr "ODF eller DOCX"
+
+#. content.xml (slide 'page2')
+msgid "Quick edits or deep dives"
+msgstr "Snabba redigeringar eller djupdykningar"
+
+#. content.xml (slide 'page2')
+msgid "A clean, beautiful interface"
+msgstr "Ett rent, vackert gränssnitt"
+
+#. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
+#. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
+#. content.xml (slide 'page7'); content.xml (slide 'page8')
+msgid "Next"
+msgstr "Nästa"
+
+#. content.xml (slide 'page3')
+msgid "The familiar, powerful Collabora Online experience"
+msgstr "Den välbekanta, kraftfulla Collabora Online-upplevelsen"
+
+#. content.xml (slide 'page3')
+msgid "Now locally on Windows, macOS, and Linux"
+msgstr "Nu lokalt på Windows, macOS och Linux"
+
+#. content.xml (slide 'page4'); content.xml (slide 'page5'); content.xml
+#. (slide 'page6'); content.xml (slide 'page7')
+msgid ""
+"Enjoy editing your documents locally with an intuitive, intelligent interface"
+msgstr ""
+"Njut av att redigera dina dokument lokalt med ett intuitivt och intelligent "
+"gränssnitt"
+
+#. content.xml (slide 'page4')
+msgid "Navigator bar with document search"
+msgstr "Navigeringsfält med dokumentsökning"
+
+#. content.xml (slide 'page5')
+msgid "Helpful quick access examples"
+msgstr "Användbara snabb åtkomst exempel"
+
+#. content.xml (slide 'page6')
+msgid "Create and edit tables within documents"
+msgstr "Skapa och redigera tabeller inom dokument"
+
+#. content.xml (slide 'page7')
+msgid "Powerful data and charting tools"
+msgstr "Kraftfulla data och diagramverktyg"
+
+#. content.xml (slide 'page8')
+msgid "Privacy by design"
+msgstr "Inbyggd integritet"
+
+#. content.xml (slide 'page8')
+msgid "Fully open source – no hidden executables, no spyware"
+msgstr "Helt öppen källkod – inga dolda körbara filer, inga spionprogram"
+
+#. content.xml (slide 'page8')
+msgid "Documents never leave your device – unless you say so"
+msgstr "Dokument lämnar aldrig din enhet – om du inte säger till"
+
+#. content.xml (slide 'page9')
+msgid "Take back control"
+msgstr "Ta tillbaka kontrollen"
+
+#. content.xml (slide 'page9')
+msgid "We’re excited to share this release with the community"
+msgstr "Vi är glada att kunna dela den här utgåvan med gemenskapen"
+
+#. content.xml (slide 'page9')
+msgid "Try it out. Break things. Let us know what works and what doesn’t."
+msgstr ""
+"Testa det. Ha sönder saker. Låt oss veta vad som fungerar och vad som inte "
+"fungerar."
+
+#. content.xml (slide 'page9')
+msgid ""
+"Together, we're building a privacy-respecting, open, and elegant office "
+"suite for everyone."
+msgstr ""
+"Tillsammans bygger vi en integritetsvänlig, öppen och elegant kontorssvit "
+"för alla."

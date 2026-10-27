@@ -249,6 +249,10 @@ while (<FILES>)
         {
             next;
         }
+        if ($file =~ m{^browser/(introdocs|welcome-slideshow)/.*\.od[pst]$}) # bundled documents with pictures
+        {
+            next;
+        }
         my $size = `git cat-file -s ":$file"`;
         # For now let's say large is 500KB
         my $limit = 500;

@@ -1,0 +1,124 @@
+# Hungarian translations for PACKAGE package.
+# Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Automatically generated, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-14 21:16+0000\n"
+"PO-Revision-Date: 2025-11-28 11:41+0000\n"
+"Last-Translator: Andras Timar <andras.timar@collabora.com>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/collabora-"
+"online/welcome-presentation/hu/>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15-dev\n"
+
+#. content.xml (slide 'page1')
+msgid "All New Collabora Office"
+msgstr "A megújult Collabora Office"
+
+#. content.xml (slide 'page1')
+msgid "Same look, same code"
+msgstr "Ugyanaz a kinézet, ugyanaz a kód"
+
+#. content.xml (slide 'page1')
+msgid "Your files, your device"
+msgstr "Saját fájlok, saját eszközön"
+
+#. content.xml (slide 'page1')
+msgid "Find out more!"
+msgstr "További információk!"
+
+#. content.xml (slide 'page2')
+msgid "Open it and feel instantly at home:"
+msgstr "A megnyitás után otthonos érzet:"
+
+#. content.xml (slide 'page2')
+msgid "ODF or DOCX"
+msgstr "ODF vagy DOCX"
+
+#. content.xml (slide 'page2')
+msgid "Quick edits or deep dives"
+msgstr "Gyors szerkesztés vagy elmélyült alkotás"
+
+#. content.xml (slide 'page2')
+msgid "A clean, beautiful interface"
+msgstr "Letisztult, szép felület"
+
+#. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
+#. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
+#. content.xml (slide 'page7'); content.xml (slide 'page8')
+msgid "Next"
+msgstr "Következő"
+
+#. content.xml (slide 'page3')
+msgid "The familiar, powerful Collabora Online experience"
+msgstr "Az ismerős, hatékony Collabora Online élmény"
+
+#. content.xml (slide 'page3')
+msgid "Now locally on Windows, macOS, and Linux"
+msgstr "Most helyben Windowson, macOS-en és Linuxon"
+
+#. content.xml (slide 'page4'); content.xml (slide 'page5'); content.xml
+#. (slide 'page6'); content.xml (slide 'page7')
+msgid ""
+"Enjoy editing your documents locally with an intuitive, intelligent interface"
+msgstr ""
+"A dokumentumszerkesztés élménye helyben, intuitív és intelligens felületen"
+
+#. content.xml (slide 'page4')
+msgid "Navigator bar with document search"
+msgstr "Navigátorpanel keresőmezővel"
+
+#. content.xml (slide 'page5')
+msgid "Helpful quick access examples"
+msgstr "Hasznos munkagyorsító példák"
+
+#. content.xml (slide 'page6')
+msgid "Create and edit tables within documents"
+msgstr "Táblázatok létrehozása és szerkesztése"
+
+#. content.xml (slide 'page7')
+msgid "Powerful data and charting tools"
+msgstr "Hatékony adatfeldolgozás és grafikonok"
+
+#. content.xml (slide 'page8')
+msgid "Privacy by design"
+msgstr "Fókuszban az adatvédelem"
+
+#. content.xml (slide 'page8')
+msgid "Fully open source – no hidden executables, no spyware"
+msgstr "Nyílt forráskód – nincsenek rejtett folyamatok, nincs telemetria"
+
+#. content.xml (slide 'page8')
+msgid "Documents never leave your device – unless you say so"
+msgstr "A dokumentumok csak a felhasználó tudtával hagyhatják el a rendszert"
+
+#. content.xml (slide 'page9')
+msgid "Take back control"
+msgstr "Az irányítás visszavétele"
+
+#. content.xml (slide 'page9')
+msgid "We’re excited to share this release with the community"
+msgstr "Nagy izgalommal tesszük közzé ezt szoftvert"
+
+#. content.xml (slide 'page9')
+msgid "Try it out. Break things. Let us know what works and what doesn’t."
+msgstr "Várjuk a visszajelzéseket, hogy mi működik, és mi nem."
+
+#. content.xml (slide 'page9')
+msgid ""
+"Together, we're building a privacy-respecting, open, and elegant office "
+"suite for everyone."
+msgstr ""
+"A közösséggel együtt mindenki számára készítjük ezt a biztonságos, nyílt és "
+"elegáns irodai programcsomagot."
+
+#~ msgid "Collabora Office Desktop"
+#~ msgstr "Collabora Office Desktop"

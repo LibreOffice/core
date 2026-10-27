@@ -511,9 +511,6 @@ parts:
       - -usr/share/doc/libuno*
       - -usr/share/doc/ure*
       - -usr/share/doc/uno*
-      # branding part overrides these with branded versions (after: collabora-office)
-      - -usr/share/coolwsd/browser/dist/welcome/welcome-slideshow.odp
-      - -usr/share/coolwsd/browser/dist/welcome/welcome.svg
     prime:
       # Nothing here is needed at runtime. Filtered at prime rather than
       # stage so the build environment is left exactly as it was.
@@ -567,7 +564,7 @@ parts:
     override-build: |
       set -e
       mkdir -p "$CRAFT_PART_INSTALL/usr/share/coolwsd/browser/dist"
-      cp -a branding* images welcome "$CRAFT_PART_INSTALL/usr/share/coolwsd/browser/dist/"
+      cp -a branding* images "$CRAFT_PART_INSTALL/usr/share/coolwsd/browser/dist/"
 
   # mythes-pl shipped as a separate part because its Ubuntu .deb declares
   # Depends: libreoffice-core (a Debian packaging quirk, not a runtime

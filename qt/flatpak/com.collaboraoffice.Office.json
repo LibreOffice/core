@@ -980,7 +980,7 @@
       "name": "collabora-office-branding",
       "buildsystem": "simple",
       "build-commands": [
-        "cp -a branding* images welcome /app/share/coolwsd/browser/dist/"
+        "cp -a branding* images /app/share/coolwsd/browser/dist/"
       ],
       "sources": [
         {

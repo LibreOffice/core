@@ -1,0 +1,121 @@
+# Czech translations for PACKAGE package.
+# Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Automatically generated, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-14 21:16+0000\n"
+"PO-Revision-Date: 2026-02-10 20:09+0000\n"
+"Last-Translator: Stanislav Horáček <stanislav.horacek@gmail.com>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/collabora-online/"
+"welcome-presentation/cs/>\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
+"X-Generator: Weblate 5.16-dev\n"
+
+#. content.xml (slide 'page1')
+msgid "All New Collabora Office"
+msgstr "Zcela nový Collabora Office"
+
+#. content.xml (slide 'page1')
+msgid "Same look, same code"
+msgstr "Stejný vzhled, stejný kód"
+
+#. content.xml (slide 'page1')
+msgid "Your files, your device"
+msgstr "Vaše soubory, vaše zařízení"
+
+#. content.xml (slide 'page1')
+msgid "Find out more!"
+msgstr "Zjistěte víc!"
+
+#. content.xml (slide 'page2')
+msgid "Open it and feel instantly at home:"
+msgstr "Otevřete a hned se budete cítit jako doma:"
+
+#. content.xml (slide 'page2')
+msgid "ODF or DOCX"
+msgstr "ODF nebo DOCX"
+
+#. content.xml (slide 'page2')
+msgid "Quick edits or deep dives"
+msgstr "Rychlé úpravy i pokročilá práce"
+
+#. content.xml (slide 'page2')
+msgid "A clean, beautiful interface"
+msgstr "Čisté, krásné rozhraní"
+
+#. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
+#. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
+#. content.xml (slide 'page7'); content.xml (slide 'page8')
+msgid "Next"
+msgstr "Další"
+
+#. content.xml (slide 'page3')
+msgid "The familiar, powerful Collabora Online experience"
+msgstr "Známé a výkonné prostředí Collabora Online"
+
+#. content.xml (slide 'page3')
+msgid "Now locally on Windows, macOS, and Linux"
+msgstr "Nyní lokálně na Windows, macOS a Linuxu"
+
+#. content.xml (slide 'page4'); content.xml (slide 'page5'); content.xml
+#. (slide 'page6'); content.xml (slide 'page7')
+msgid ""
+"Enjoy editing your documents locally with an intuitive, intelligent interface"
+msgstr "Užívejte si úpravy dokumentů lokálně v intuitivním, chytrém rozhraní"
+
+#. content.xml (slide 'page4')
+msgid "Navigator bar with document search"
+msgstr "Navigační lišta s vyhledáváním v dokumentu"
+
+#. content.xml (slide 'page5')
+msgid "Helpful quick access examples"
+msgstr "Užitečné příklady rychlého přístupu"
+
+#. content.xml (slide 'page6')
+msgid "Create and edit tables within documents"
+msgstr "Vytvářejte a upravujte tabulky v dokumentech"
+
+#. content.xml (slide 'page7')
+msgid "Powerful data and charting tools"
+msgstr "Výkonné nástroje pro práci s daty a grafy"
+
+#. content.xml (slide 'page8')
+msgid "Privacy by design"
+msgstr "Soukromí od základu"
+
+#. content.xml (slide 'page8')
+msgid "Fully open source – no hidden executables, no spyware"
+msgstr "Plně otevřený kód – žádné skryté procesy, žádný spyware"
+
+#. content.xml (slide 'page8')
+msgid "Documents never leave your device – unless you say so"
+msgstr "Dokumenty nikdy neopustí vaše zařízení – ledaže to výslovně povolíte"
+
+#. content.xml (slide 'page9')
+msgid "Take back control"
+msgstr "Získejte zpět kontrolu"
+
+#. content.xml (slide 'page9')
+msgid "We’re excited to share this release with the community"
+msgstr "Jsme nadšení, že se o toto vydání můžeme podělit s naší komunitou"
+
+#. content.xml (slide 'page9')
+msgid "Try it out. Break things. Let us know what works and what doesn’t."
+msgstr ""
+"Vyzkoušejte to. Klidně něco rozbijte. Dejte nám vědět, co funguje a co ne."
+
+#. content.xml (slide 'page9')
+msgid ""
+"Together, we're building a privacy-respecting, open, and elegant office "
+"suite for everyone."
+msgstr ""
+"Společně budujeme kancelářský balík pro každého – otevřený, elegantní a "
+"respektující soukromí."

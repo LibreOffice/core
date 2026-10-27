@@ -1,0 +1,127 @@
+# French translations for PACKAGE package.
+# Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#  <timar@andras-dell3660.localdomain>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-14 21:16+0000\n"
+"PO-Revision-Date: 2026-02-19 09:09+0000\n"
+"Last-Translator: Méven Car <meven.car@collabora.com>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/collabora-online/"
+"welcome-presentation/fr/>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.16.1-dev\n"
+
+#. content.xml (slide 'page1')
+msgid "All New Collabora Office"
+msgstr "Tout nouveau Collabora Office"
+
+#. content.xml (slide 'page1')
+msgid "Same look, same code"
+msgstr "Même look, même code"
+
+#. content.xml (slide 'page1')
+msgid "Your files, your device"
+msgstr "Vos fichiers, votre appareil"
+
+#. content.xml (slide 'page1')
+msgid "Find out more!"
+msgstr "En savoir plus !"
+
+#. content.xml (slide 'page2')
+msgid "Open it and feel instantly at home:"
+msgstr "Ouvrez-le et sentez-vous instantanément à domicile :"
+
+#. content.xml (slide 'page2')
+msgid "ODF or DOCX"
+msgstr "ODF ou DOCX"
+
+#. content.xml (slide 'page2')
+msgid "Quick edits or deep dives"
+msgstr "Éditions rapides ou plongées profondes"
+
+#. content.xml (slide 'page2')
+msgid "A clean, beautiful interface"
+msgstr "Une interface propre, belle"
+
+#. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
+#. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
+#. content.xml (slide 'page7'); content.xml (slide 'page8')
+msgid "Next"
+msgstr "Suivant"
+
+#. content.xml (slide 'page3')
+msgid "The familiar, powerful Collabora Online experience"
+msgstr "L'expérience familière et puissante de Collabora Online"
+
+#. content.xml (slide 'page3')
+msgid "Now locally on Windows, macOS, and Linux"
+msgstr "Maintenant localement sur Windows, macOS et Linux"
+
+#. content.xml (slide 'page4'); content.xml (slide 'page5'); content.xml
+#. (slide 'page6'); content.xml (slide 'page7')
+msgid ""
+"Enjoy editing your documents locally with an intuitive, intelligent interface"
+msgstr ""
+"Profitez de l'édition de vos documents localement avec une interface "
+"intuitive et intelligente"
+
+#. content.xml (slide 'page4')
+msgid "Navigator bar with document search"
+msgstr "Barre de navigation avec recherche de documents"
+
+#. content.xml (slide 'page5')
+msgid "Helpful quick access examples"
+msgstr "Explications d'accès rapide utiles"
+
+#. content.xml (slide 'page6')
+msgid "Create and edit tables within documents"
+msgstr "Créer et modifier des tableaux dans les documents"
+
+#. content.xml (slide 'page7')
+msgid "Powerful data and charting tools"
+msgstr "Outils de données et de graphe puissants"
+
+#. content.xml (slide 'page8')
+msgid "Privacy by design"
+msgstr "La vie privée par conception"
+
+#. content.xml (slide 'page8')
+msgid "Fully open source – no hidden executables, no spyware"
+msgstr ""
+"Entièrement open source - pas d'exécutables cachés, pas de logiciel espion"
+
+#. content.xml (slide 'page8')
+msgid "Documents never leave your device – unless you say so"
+msgstr ""
+"Les documents ne quittent jamais votre appareil – à moins que vous ne le "
+"disiez"
+
+#. content.xml (slide 'page9')
+msgid "Take back control"
+msgstr "Reprendre le contrôle"
+
+#. content.xml (slide 'page9')
+msgid "We’re excited to share this release with the community"
+msgstr "Nous sommes ravis de partager cette version avec la communauté"
+
+#. content.xml (slide 'page9')
+msgid "Try it out. Break things. Let us know what works and what doesn’t."
+msgstr ""
+"Essayez-le. Brisez les choses. Faites-nous savoir ce qui fonctionne et ce "
+"qui ne fonctionne pas."
+
+#. content.xml (slide 'page9')
+msgid ""
+"Together, we're building a privacy-respecting, open, and elegant office "
+"suite for everyone."
+msgstr ""
+"Ensemble, nous construisons un bureau respectueux de la vie privée, ouvert "
+"et élégantsuite pour tout le monde."

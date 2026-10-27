@@ -1,0 +1,121 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-14 21:16+0000\n"
+"PO-Revision-Date: 2025-12-05 22:56+0000\n"
+"Last-Translator: Rob Pearson <rob.dunedin@gmail.com>\n"
+"Language-Team: English (New Zealand) <https://hosted.weblate.org/projects/"
+"collabora-online/welcome-presentation/en_NZ/>\n"
+"Language: en_NZ\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15-dev\n"
+
+#. content.xml (slide 'page1')
+msgid "All New Collabora Office"
+msgstr "All New Collabora Office"
+
+#. content.xml (slide 'page1')
+msgid "Same look, same code"
+msgstr "Same look, same code"
+
+#. content.xml (slide 'page1')
+msgid "Your files, your device"
+msgstr "Your files, your device"
+
+#. content.xml (slide 'page1')
+msgid "Find out more!"
+msgstr "Find out more!"
+
+#. content.xml (slide 'page2')
+msgid "Open it and feel instantly at home:"
+msgstr "Open it and feel instantly at home:"
+
+#. content.xml (slide 'page2')
+msgid "ODF or DOCX"
+msgstr "ODF or DOCX"
+
+#. content.xml (slide 'page2')
+msgid "Quick edits or deep dives"
+msgstr "Quick edits or deep dives"
+
+#. content.xml (slide 'page2')
+msgid "A clean, beautiful interface"
+msgstr "A clean, beautiful interface"
+
+#. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
+#. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
+#. content.xml (slide 'page7'); content.xml (slide 'page8')
+msgid "Next"
+msgstr "Next"
+
+#. content.xml (slide 'page3')
+msgid "The familiar, powerful Collabora Online experience"
+msgstr "The familiar, powerful Collabora Online experience"
+
+#. content.xml (slide 'page3')
+msgid "Now locally on Windows, macOS, and Linux"
+msgstr "Now locally on Windows, macOS, and Linux"
+
+#. content.xml (slide 'page4'); content.xml (slide 'page5'); content.xml
+#. (slide 'page6'); content.xml (slide 'page7')
+msgid ""
+"Enjoy editing your documents locally with an intuitive, intelligent interface"
+msgstr ""
+"Enjoy editing your documents locally with an intuitive, intelligent interface"
+
+#. content.xml (slide 'page4')
+msgid "Navigator bar with document search"
+msgstr "Navigator bar with document search"
+
+#. content.xml (slide 'page5')
+msgid "Helpful quick access examples"
+msgstr "Helpful quick access examples"
+
+#. content.xml (slide 'page6')
+msgid "Create and edit tables within documents"
+msgstr "Create and edit tables within documents"
+
+#. content.xml (slide 'page7')
+msgid "Powerful data and charting tools"
+msgstr "Powerful data and charting tools"
+
+#. content.xml (slide 'page8')
+msgid "Privacy by design"
+msgstr "Privacy by design"
+
+#. content.xml (slide 'page8')
+msgid "Fully open source – no hidden executables, no spyware"
+msgstr "Fully open source – no hidden executables, no spyware"
+
+#. content.xml (slide 'page8')
+msgid "Documents never leave your device – unless you say so"
+msgstr "Documents never leave your device – unless you say so"
+
+#. content.xml (slide 'page9')
+msgid "Take back control"
+msgstr "Take back control"
+
+#. content.xml (slide 'page9')
+msgid "We’re excited to share this release with the community"
+msgstr "We’re excited to share this release with the community"
+
+#. content.xml (slide 'page9')
+msgid "Try it out. Break things. Let us know what works and what doesn’t."
+msgstr "Try it out. Break things. Let us know what works and what doesn’t."
+
+#. content.xml (slide 'page9')
+msgid ""
+"Together, we're building a privacy-respecting, open, and elegant office "
+"suite for everyone."
+msgstr ""
+"Together, we're building a privacy-respecting, open, and elegant office "
+"suite for everyone."

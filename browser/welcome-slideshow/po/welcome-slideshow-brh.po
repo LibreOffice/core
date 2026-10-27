@@ -1,0 +1,116 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-14 21:16+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: brh\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#. content.xml (slide 'page1')
+msgid "All New Collabora Office"
+msgstr ""
+
+#. content.xml (slide 'page1')
+msgid "Same look, same code"
+msgstr ""
+
+#. content.xml (slide 'page1')
+msgid "Your files, your device"
+msgstr ""
+
+#. content.xml (slide 'page1')
+msgid "Find out more!"
+msgstr ""
+
+#. content.xml (slide 'page2')
+msgid "Open it and feel instantly at home:"
+msgstr ""
+
+#. content.xml (slide 'page2')
+msgid "ODF or DOCX"
+msgstr ""
+
+#. content.xml (slide 'page2')
+msgid "Quick edits or deep dives"
+msgstr ""
+
+#. content.xml (slide 'page2')
+msgid "A clean, beautiful interface"
+msgstr ""
+
+#. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
+#. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
+#. content.xml (slide 'page7'); content.xml (slide 'page8')
+msgid "Next"
+msgstr ""
+
+#. content.xml (slide 'page3')
+msgid "The familiar, powerful Collabora Online experience"
+msgstr ""
+
+#. content.xml (slide 'page3')
+msgid "Now locally on Windows, macOS, and Linux"
+msgstr ""
+
+#. content.xml (slide 'page4'); content.xml (slide 'page5'); content.xml
+#. (slide 'page6'); content.xml (slide 'page7')
+msgid ""
+"Enjoy editing your documents locally with an intuitive, intelligent interface"
+msgstr ""
+
+#. content.xml (slide 'page4')
+msgid "Navigator bar with document search"
+msgstr ""
+
+#. content.xml (slide 'page5')
+msgid "Helpful quick access examples"
+msgstr ""
+
+#. content.xml (slide 'page6')
+msgid "Create and edit tables within documents"
+msgstr ""
+
+#. content.xml (slide 'page7')
+msgid "Powerful data and charting tools"
+msgstr ""
+
+#. content.xml (slide 'page8')
+msgid "Privacy by design"
+msgstr ""
+
+#. content.xml (slide 'page8')
+msgid "Fully open source – no hidden executables, no spyware"
+msgstr ""
+
+#. content.xml (slide 'page8')
+msgid "Documents never leave your device – unless you say so"
+msgstr ""
+
+#. content.xml (slide 'page9')
+msgid "Take back control"
+msgstr ""
+
+#. content.xml (slide 'page9')
+msgid "We’re excited to share this release with the community"
+msgstr ""
+
+#. content.xml (slide 'page9')
+msgid "Try it out. Break things. Let us know what works and what doesn’t."
+msgstr ""
+
+#. content.xml (slide 'page9')
+msgid ""
+"Together, we're building a privacy-respecting, open, and elegant office "
+"suite for everyone."
+msgstr ""

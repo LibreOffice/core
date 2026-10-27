@@ -1,0 +1,118 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-14 21:16+0000\n"
+"PO-Revision-Date: 2026-08-27 10:51+0000\n"
+"Last-Translator: AlexYang <a012-alex@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
+"projects/collabora-online/welcome-presentation/zh_Hans/>\n"
+"Language: zh_Hans\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 2026.9.dev0\n"
+
+#. content.xml (slide 'page1')
+msgid "All New Collabora Office"
+msgstr "全新 Collabora Office"
+
+#. content.xml (slide 'page1')
+msgid "Same look, same code"
+msgstr "相同的界面外观，相同的代码架构"
+
+#. content.xml (slide 'page1')
+msgid "Your files, your device"
+msgstr "您的文件，您的设备"
+
+#. content.xml (slide 'page1')
+msgid "Find out more!"
+msgstr "了解更多！"
+
+#. content.xml (slide 'page2')
+msgid "Open it and feel instantly at home:"
+msgstr "一键打开，上手即熟："
+
+#. content.xml (slide 'page2')
+msgid "ODF or DOCX"
+msgstr "ODF 或 DOCX"
+
+#. content.xml (slide 'page2')
+msgid "Quick edits or deep dives"
+msgstr "快速修改或深度编辑"
+
+#. content.xml (slide 'page2')
+msgid "A clean, beautiful interface"
+msgstr "简洁优雅的界面设计"
+
+#. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
+#. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
+#. content.xml (slide 'page7'); content.xml (slide 'page8')
+msgid "Next"
+msgstr "下一步"
+
+#. content.xml (slide 'page3')
+msgid "The familiar, powerful Collabora Online experience"
+msgstr "熟悉且强大的 Collabora Online 功能体验"
+
+#. content.xml (slide 'page3')
+msgid "Now locally on Windows, macOS, and Linux"
+msgstr "现已支持 Windows、macOS 和 Linux 本地运行"
+
+#. content.xml (slide 'page4'); content.xml (slide 'page5'); content.xml
+#. (slide 'page6'); content.xml (slide 'page7')
+msgid ""
+"Enjoy editing your documents locally with an intuitive, intelligent interface"
+msgstr "借助直观智能的界面，尽情享受本地文档编辑体验"
+
+#. content.xml (slide 'page4')
+msgid "Navigator bar with document search"
+msgstr "支持文档搜索的导航栏"
+
+#. content.xml (slide 'page5')
+msgid "Helpful quick access examples"
+msgstr "便捷实用的快速访问示例"
+
+#. content.xml (slide 'page6')
+msgid "Create and edit tables within documents"
+msgstr "在文档内创建并编辑表格"
+
+#. content.xml (slide 'page7')
+msgid "Powerful data and charting tools"
+msgstr "强大的数据与图表工具"
+
+#. content.xml (slide 'page8')
+msgid "Privacy by design"
+msgstr "原生隐私保护设计"
+
+#. content.xml (slide 'page8')
+msgid "Fully open source – no hidden executables, no spyware"
+msgstr "完全开源 – 无隐藏可执行文件，无间谍软件"
+
+#. content.xml (slide 'page8')
+msgid "Documents never leave your device – unless you say so"
+msgstr "除非您亲自授权，否则文档绝不离开您的设备"
+
+#. content.xml (slide 'page9')
+msgid "Take back control"
+msgstr "重新掌控您的数据隐私"
+
+#. content.xml (slide 'page9')
+msgid "We’re excited to share this release with the community"
+msgstr "我们很高兴向社区推出此版本"
+
+#. content.xml (slide 'page9')
+msgid "Try it out. Break things. Let us know what works and what doesn’t."
+msgstr "欢迎试用，尽情折腾，并随时反馈体验与改进意见。"
+
+#. content.xml (slide 'page9')
+msgid ""
+"Together, we're building a privacy-respecting, open, and elegant office "
+"suite for everyone."
+msgstr "让我们携手打造一款尊重隐私、开放且优雅的面向大众的办公套件。"

@@ -1,0 +1,122 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-14 21:16+0000\n"
+"PO-Revision-Date: 2026-01-27 05:17+0000\n"
+"Last-Translator: BoneNI <bounkirdni@gmail.com>\n"
+"Language-Team: Lao <https://hosted.weblate.org/projects/collabora-online/"
+"welcome-presentation/lo/>\n"
+"Language: lo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.16-dev\n"
+
+#. content.xml (slide 'page1')
+msgid "All New Collabora Office"
+msgstr "Collabora Office ໂສມໃໝ່ທັງໝົດ"
+
+#. content.xml (slide 'page1')
+msgid "Same look, same code"
+msgstr "ຮູບລັກສະນະຄືເກົ່າ, ລະຫັດຄືເກົ່າ"
+
+#. content.xml (slide 'page1')
+msgid "Your files, your device"
+msgstr "ໄຟລ໌ຂອງທ່ານ, ອຸປະກອນຂອງທ່ານ"
+
+#. content.xml (slide 'page1')
+msgid "Find out more!"
+msgstr "ຊອກຫາຂໍ້ມູນເພີ່ມເຕີມ!"
+
+#. content.xml (slide 'page2')
+msgid "Open it and feel instantly at home:"
+msgstr "ເປີດມັນແລ້ວຈະຮູ້ສຶກຄຸ້ນເຄີຍທັນທີ:"
+
+#. content.xml (slide 'page2')
+msgid "ODF or DOCX"
+msgstr "ODF ຫຼື DOCX"
+
+#. content.xml (slide 'page2')
+msgid "Quick edits or deep dives"
+msgstr "ແກ້ໄຂແບບດ່ວນ ຫຼື ລົງເລິກລາຍລະອຽດ"
+
+#. content.xml (slide 'page2')
+msgid "A clean, beautiful interface"
+msgstr "ສ່ວນຕິດຕໍ່ຜູ້ໃຊ້ທີ່ສະອາດ ແລະ ສວຍງາມ"
+
+#. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
+#. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
+#. content.xml (slide 'page7'); content.xml (slide 'page8')
+msgid "Next"
+msgstr "ຕໍ່ໄປ"
+
+#. content.xml (slide 'page3')
+msgid "The familiar, powerful Collabora Online experience"
+msgstr "ປະສົບການ Collabora Online ທີ່ຄຸ້ນເຄີຍ ແລະ ຊົງພະລັງ"
+
+#. content.xml (slide 'page3')
+msgid "Now locally on Windows, macOS, and Linux"
+msgstr "ດຽວນີ້ຢູ່ໃນເຄື່ອງທ້ອງຖິ່ນ ທັງ Windows, macOS, ແລະ Linux"
+
+#. content.xml (slide 'page4'); content.xml (slide 'page5'); content.xml
+#. (slide 'page6'); content.xml (slide 'page7')
+msgid ""
+"Enjoy editing your documents locally with an intuitive, intelligent interface"
+msgstr "ເພີດເພີນກັບການແກ້ໄຂເອກະສານຂອງທ່ານໃນເຄື່ອງ ດ້ວຍສ່ວນຕິດຕໍ່ຜູ້ໃຊ້ທີ່ໃຊ້ງານງ່າຍ ແລະ ສະຫຼາດ"
+
+#. content.xml (slide 'page4')
+msgid "Navigator bar with document search"
+msgstr "ແຖບນຳທາງ ພ້ອມດ້ວຍການຄົ້ນຫາເອກະສານ"
+
+#. content.xml (slide 'page5')
+msgid "Helpful quick access examples"
+msgstr "ຕົວຢ່າງການເຂົ້າເຖິງແບບດ່ວນທີ່ມີປະໂຫຍດ"
+
+#. content.xml (slide 'page6')
+msgid "Create and edit tables within documents"
+msgstr "ສ້າງ ແລະ ແກ້ໄຂຕາຕະລາງພາຍໃນເອກະສານ"
+
+#. content.xml (slide 'page7')
+msgid "Powerful data and charting tools"
+msgstr "ເຄື່ອງມືຈັດການຂໍ້ມູນ ແລະ ແຜນພູມທີ່ຊົງພະລັງ"
+
+#. content.xml (slide 'page8')
+msgid "Privacy by design"
+msgstr "ຄວາມເປັນສ່ວນຕົວທີ່ຖືກອອກແບບມາແຕ່ເລີ່ມຕົ້ນ"
+
+#. content.xml (slide 'page8')
+msgid "Fully open source – no hidden executables, no spyware"
+msgstr ""
+"ໂອເພັນຊອດ (Open source) ແບບເຕັມຮູບແບບ – ບໍ່ມີໄຟລ໌ລັນໂປຣແກຣມທີ່ເຊື່ອງໄວ້, ບໍ່ມີສະປາຍແວ "
+"(Spyware)"
+
+#. content.xml (slide 'page8')
+msgid "Documents never leave your device – unless you say so"
+msgstr "ເອກະສານຈະບໍ່ອອກຈາກອຸປະກອນຂອງທ່ານ – ເວັ້ນເສຍແຕ່ທ່ານຈະອະນຸຍາດ"
+
+#. content.xml (slide 'page9')
+msgid "Take back control"
+msgstr "ເອົາການຄວບຄຸມກັບຄືນມາ"
+
+#. content.xml (slide 'page9')
+msgid "We’re excited to share this release with the community"
+msgstr "ພວກເຮົາຕື່ນເຕັ້ນທີ່ຈະແບ່ງປັນເວີຊັນນີ້ໃຫ້ກັບຊຸມຊົນ"
+
+#. content.xml (slide 'page9')
+msgid "Try it out. Break things. Let us know what works and what doesn’t."
+msgstr "ລອງໃຊ້ເບິ່ງ. ທົດລອງທຸກຢ່າງ. ບອກໃຫ້ພວກເຮົາຮູ້ວ່າອັນໃດໃຊ້ໄດ້ຜົນ ແລະ ອັນໃດບໍ່ໄດ້."
+
+#. content.xml (slide 'page9')
+msgid ""
+"Together, we're building a privacy-respecting, open, and elegant office "
+"suite for everyone."
+msgstr ""
+"ພວກເຮົາຮ່ວມກັນສ້າງຊຸດໂປຣແກຣມຫ້ອງການທີ່ເຄົາລົບຄວາມເປັນສ່ວນຕົວ, ເປີດກວ້າງ, ແລະ ສວຍງາມ "
+"ສຳລັບທຸກຄົນ."

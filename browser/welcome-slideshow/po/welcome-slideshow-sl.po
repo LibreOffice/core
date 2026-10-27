@@ -1,0 +1,125 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-14 21:16+0000\n"
+"PO-Revision-Date: 2025-12-08 21:00+0000\n"
+"Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
+"Language-Team: Slovenian <https://hosted.weblate.org/projects/collabora-"
+"online/welcome-presentation/sl/>\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
+"n%100==4 ? 2 : 3;\n"
+"X-Generator: Weblate 5.15-dev\n"
+
+#. content.xml (slide 'page1')
+msgid "All New Collabora Office"
+msgstr "Povsem nov paket Collabora Office"
+
+#. content.xml (slide 'page1')
+msgid "Same look, same code"
+msgstr "Isti videz, ista koda"
+
+#. content.xml (slide 'page1')
+msgid "Your files, your device"
+msgstr "Vaše datoteke, vaša naprava"
+
+#. content.xml (slide 'page1')
+msgid "Find out more!"
+msgstr "Izvejte podrobnosti!"
+
+#. content.xml (slide 'page2')
+msgid "Open it and feel instantly at home:"
+msgstr "Odprite in se počutite takoj doma:"
+
+#. content.xml (slide 'page2')
+msgid "ODF or DOCX"
+msgstr "ODF ali DOCX"
+
+#. content.xml (slide 'page2')
+msgid "Quick edits or deep dives"
+msgstr "Hitro urejanje ali podrobne analize"
+
+#. content.xml (slide 'page2')
+msgid "A clean, beautiful interface"
+msgstr "Čist, prekrasen vmesnik"
+
+#. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
+#. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
+#. content.xml (slide 'page7'); content.xml (slide 'page8')
+msgid "Next"
+msgstr "Naprej"
+
+#. content.xml (slide 'page3')
+msgid "The familiar, powerful Collabora Online experience"
+msgstr "Dobro znana, zmogljiva izkušnja Collabora Online"
+
+#. content.xml (slide 'page3')
+msgid "Now locally on Windows, macOS, and Linux"
+msgstr "Odslej doma tudi na sistemih Windows, macOS in Linux"
+
+#. content.xml (slide 'page4'); content.xml (slide 'page5'); content.xml
+#. (slide 'page6'); content.xml (slide 'page7')
+msgid ""
+"Enjoy editing your documents locally with an intuitive, intelligent interface"
+msgstr ""
+"Uživajte v urejanju svojih dokumentov pri sebi z intuitivnim, pametnim "
+"vmesnikom"
+
+#. content.xml (slide 'page4')
+msgid "Navigator bar with document search"
+msgstr "Vrstica Krmarja z iskanjem po dokumentu"
+
+#. content.xml (slide 'page5')
+msgid "Helpful quick access examples"
+msgstr "Uporabni primeri hitrega dostopa"
+
+#. content.xml (slide 'page6')
+msgid "Create and edit tables within documents"
+msgstr "Ustvarjajte in urejajte tabele v dokumentih"
+
+#. content.xml (slide 'page7')
+msgid "Powerful data and charting tools"
+msgstr "Zmogljiva orodja za delo s podatki in grafikoni"
+
+#. content.xml (slide 'page8')
+msgid "Privacy by design"
+msgstr "Zasebnost v zasnovi"
+
+#. content.xml (slide 'page8')
+msgid "Fully open source – no hidden executables, no spyware"
+msgstr ""
+"Povsem odprta koda - brez prikritih izvajalnih programov, brez vohunskega "
+"programja"
+
+#. content.xml (slide 'page8')
+msgid "Documents never leave your device – unless you say so"
+msgstr "Dokumenti nikoli ne zapustijo vaše naprave - razen ko to želite"
+
+#. content.xml (slide 'page9')
+msgid "Take back control"
+msgstr "Prevzemite nazaj nadzor"
+
+#. content.xml (slide 'page9')
+msgid "We’re excited to share this release with the community"
+msgstr "Navdušeni smo, da lahko to objavo delimo s skupnostjo"
+
+#. content.xml (slide 'page9')
+msgid "Try it out. Break things. Let us know what works and what doesn’t."
+msgstr "Preizkusite ga. Naj gre kaj narobe. Povejte nam, kaj deluje in kaj ne."
+
+#. content.xml (slide 'page9')
+msgid ""
+"Together, we're building a privacy-respecting, open, and elegant office "
+"suite for everyone."
+msgstr ""
+"Skupaj gradimo do zasebnosti spoštljiv, odprt in eleganten pisarniški paket "
+"za vsakogar."

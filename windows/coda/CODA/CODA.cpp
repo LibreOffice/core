@@ -748,9 +748,8 @@ static void do_hullo_handling_things(DocumentTab& data)
 static void do_welcome_handling_things(DocumentTab& data)
 {
 #if ENABLE_DEBUG
-    // A debug build bundles the placeholder slideshow, shown only when the configuration turns
-    // the welcome screen on. A release build carries a slideshow only when the app branding
-    // provides one.
+    // A debug build shows the slideshow only when the configuration turns the welcome screen
+    // on.
     if (!ConfigUtil::getBool("welcome.enable", false))
         return;
 #endif

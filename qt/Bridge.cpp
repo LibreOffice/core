@@ -835,11 +835,10 @@ QVariant Bridge::cool(const QString& messageStr)
     else if (tokens.equals(0, "WELCOME"))
     {
 #if ENABLE_DEBUG
-        // A debug build bundles the placeholder slideshow, shown only when the configuration
-        // turns the welcome screen on.
+        // A debug build shows the slideshow only when the configuration turns the welcome
+        // screen on.
         const bool welcomeEnabled = ConfigUtil::getBool("welcome.enable", false);
 #else
-        // A release build carries a slideshow only when the app branding provides one.
         const bool welcomeEnabled = true;
 #endif
         const std::string welcomePath = getBrowserDistDir() + "/welcome/welcome-slideshow.odp";

@@ -1206,22 +1206,18 @@ if APP_HAS_BRANDING
 	@if test -d "$(APP_BRANDING_DIR)" ; then cp -a "$(APP_BRANDING_DIR)"/branding* $(DIST_FOLDER)/ ; fi
 	@if test -d "$(APP_BRANDING_DIR)" ; then cp -a "$(APP_BRANDING_DIR)"/images/*.svg $(DIST_FOLDER)/images/ ; fi
 	@if test -d "$(APP_BRANDING_DIR)" ; then cp -a "$(APP_BRANDING_DIR)/images/toolbar-bg-logo.svg" $(DIST_FOLDER)/images/toolbar-bg.svg ; fi
-	@if test "$(ENABLE_QTAPP)" = true || test "$(ENABLE_MACOSAPP)" = true || test "$(ENABLE_WINDOWSAPP)" = true ; then \
-		if test -d "$(APP_BRANDING_DIR)/welcome" ; then cp -a "$(APP_BRANDING_DIR)/welcome" "$(DIST_FOLDER)/" ; fi ; \
-	fi
 	@echo
 	@echo "JS, HTML and CSS has been updated ($(DIST_FOLDER))."
 endif
-# A release build carries a welcome slideshow only when the app branding provides one. A debug
-# build also bundles the placeholder, which the apps keep hidden unless the welcome.enable
-# setting is true.
-if ENABLE_DEBUG
+# The welcome slideshow of the desktop apps, translated like the introductory documents. The
+# apps show it in release builds, and in debug builds when the welcome.enable setting is true.
 	@if test "$(ENABLE_QTAPP)" = true || test "$(ENABLE_MACOSAPP)" = true || test "$(ENABLE_WINDOWSAPP)" = true ; then \
+		echo "Generating the localized welcome slideshow"; \
 		mkdir -p $(DIST_FOLDER)/welcome && \
-		test -f $(DIST_FOLDER)/welcome/welcome-slideshow.odp || cp $(srcdir)/welcome/welcome-slideshow.odp $(DIST_FOLDER)/welcome/welcome-slideshow.odp ; \
-		test -f $(DIST_FOLDER)/welcome/welcome.svg || cp $(srcdir)/welcome/welcome.svg $(DIST_FOLDER)/welcome/welcome.svg ; \
+		cp $(srcdir)/welcome-slideshow/welcome.svg $(DIST_FOLDER)/welcome/welcome.svg && \
+		cp $(srcdir)/welcome-slideshow/welcome-slideshow.odp $(DIST_FOLDER)/welcome/welcome-slideshow.odp && \
+		$(PYTHON) $(srcdir)/introdocs/create_l10n_intro_docs.py $(srcdir)/welcome-slideshow/po $(DIST_FOLDER)/welcome/welcome-slideshow.odp >/dev/null || exit 1 ; \
 	fi
-endif
 # The previews are the committed renderings from introdocs/render_previews.py, the English one
 # and one per translated language; a document without them shows the thumbnail embedded in
 # the file.
@@ -1939,11 +1935,13 @@ check-introdocs:
 	@if $(PYTHON) -c "import polib" 2>/dev/null; then \
 		echo "Running introdocs l10n tooling checks..."; \
 		(cd $(srcdir)/introdocs && $(PYTHON) -m unittest discover -s tests) || exit 1; \
-		for doc in $(srcdir)/introdocs/*.odt $(srcdir)/introdocs/*.ods $(srcdir)/introdocs/*.odp; do \
-			test -f "$$doc" || continue; \
-			name=`basename "$${doc%.*}"`; \
-			$(PYTHON) $(srcdir)/introdocs/extract_odf_text.py --check "$$doc" \
-				"$(srcdir)/introdocs/po/templates/$$name.pot" || exit 1; \
+		for dir in introdocs welcome-slideshow; do \
+			for doc in $(srcdir)/$$dir/*.odt $(srcdir)/$$dir/*.ods $(srcdir)/$$dir/*.odp; do \
+				test -f "$$doc" || continue; \
+				name=`basename "$${doc%.*}"`; \
+				$(PYTHON) $(srcdir)/introdocs/extract_odf_text.py --check "$$doc" \
+					"$(srcdir)/$$dir/po/templates/$$name.pot" || exit 1; \
+			done; \
 		done; \
 	else \
 		echo "SKIPPED introdocs l10n checks: python3 module 'polib' not installed"; \

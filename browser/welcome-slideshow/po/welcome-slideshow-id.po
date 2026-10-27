@@ -1,0 +1,127 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-14 21:16+0000\n"
+"PO-Revision-Date: 2026-01-01 17:01+0000\n"
+"Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/collabora-"
+"online/welcome-presentation/id/>\n"
+"Language: id\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.15.1\n"
+
+#. content.xml (slide 'page1')
+msgid "All New Collabora Office"
+msgstr "Collabora Office Serba Baru"
+
+#. content.xml (slide 'page1')
+msgid "Same look, same code"
+msgstr "Tampilan sama, kode sama"
+
+#. content.xml (slide 'page1')
+msgid "Your files, your device"
+msgstr "File Anda, perangkat Anda"
+
+#. content.xml (slide 'page1')
+msgid "Find out more!"
+msgstr "Cari tahu lebih lanjut!"
+
+#. content.xml (slide 'page2')
+msgid "Open it and feel instantly at home:"
+msgstr "Buka dan langsung terasa familiar:"
+
+#. content.xml (slide 'page2')
+msgid "ODF or DOCX"
+msgstr "ODF atau DOCX"
+
+#. content.xml (slide 'page2')
+msgid "Quick edits or deep dives"
+msgstr "Edit cepat atau penelusuran mendalam"
+
+#. content.xml (slide 'page2')
+msgid "A clean, beautiful interface"
+msgstr "Antarmuka yang bersih dan indah"
+
+#. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
+#. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
+#. content.xml (slide 'page7'); content.xml (slide 'page8')
+msgid "Next"
+msgstr "Berikutnya"
+
+#. content.xml (slide 'page3')
+msgid "The familiar, powerful Collabora Online experience"
+msgstr "Pengalaman Collabora Online yang familiar dan andal"
+
+#. content.xml (slide 'page3')
+msgid "Now locally on Windows, macOS, and Linux"
+msgstr "Kini tersedia secara lokal di Windows, macOS, dan Linux"
+
+#. content.xml (slide 'page4'); content.xml (slide 'page5'); content.xml
+#. (slide 'page6'); content.xml (slide 'page7')
+msgid ""
+"Enjoy editing your documents locally with an intuitive, intelligent interface"
+msgstr ""
+"Nikmati mengedit dokumen Anda secara lokal dengan antarmuka yang intuitif "
+"dan cerdas"
+
+#. content.xml (slide 'page4')
+msgid "Navigator bar with document search"
+msgstr "Bilah navigator dengan pencarian dokumen"
+
+#. content.xml (slide 'page5')
+msgid "Helpful quick access examples"
+msgstr "Contoh akses cepat yang membantu"
+
+#. content.xml (slide 'page6')
+msgid "Create and edit tables within documents"
+msgstr "Buat dan edit tabel di dalam dokumen"
+
+#. content.xml (slide 'page7')
+msgid "Powerful data and charting tools"
+msgstr "Alat data dan pembuatan grafik yang andal"
+
+#. content.xml (slide 'page8')
+msgid "Privacy by design"
+msgstr "Privasi sejak perancangan"
+
+#. content.xml (slide 'page8')
+msgid "Fully open source – no hidden executables, no spyware"
+msgstr ""
+"Sepenuhnya sumber terbuka – tanpa executable tersembunyi, tanpa spyware"
+
+#. content.xml (slide 'page8')
+msgid "Documents never leave your device – unless you say so"
+msgstr ""
+"Dokumen tidak pernah meninggalkan perangkat Anda – kecuali jika Anda "
+"mengizinkannya"
+
+#. content.xml (slide 'page9')
+msgid "Take back control"
+msgstr "Ambil kembali kendali"
+
+#. content.xml (slide 'page9')
+msgid "We’re excited to share this release with the community"
+msgstr "Kami antusias membagikan rilis ini kepada komunitas"
+
+#. content.xml (slide 'page9')
+msgid "Try it out. Break things. Let us know what works and what doesn’t."
+msgstr ""
+"Coba saja. Buat kerusakan. Beri tahu kami apa yang berfungsi dan apa yang "
+"tidak."
+
+#. content.xml (slide 'page9')
+msgid ""
+"Together, we're building a privacy-respecting, open, and elegant office "
+"suite for everyone."
+msgstr ""
+"Bersama-sama, kita membangun paket aplikasi perkantoran yang menghargai "
+"privasi, terbuka, dan elegan untuk semua orang."

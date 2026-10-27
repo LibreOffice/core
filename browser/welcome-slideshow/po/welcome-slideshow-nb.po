@@ -1,0 +1,125 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-14 21:16+0000\n"
+"PO-Revision-Date: 2026-10-17 10:17+0000\n"
+"Last-Translator: Roy-Magne Mo <gaupe@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
+"collabora-online/welcome-presentation/nb/>\n"
+"Language: nb\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2026.11.dev0\n"
+
+#. content.xml (slide 'page1')
+msgid "All New Collabora Office"
+msgstr "Helt nye Collabora Office"
+
+#. content.xml (slide 'page1')
+msgid "Same look, same code"
+msgstr "Samme utseende, samme kode"
+
+#. content.xml (slide 'page1')
+msgid "Your files, your device"
+msgstr "Filene dine, enheten din"
+
+#. content.xml (slide 'page1')
+msgid "Find out more!"
+msgstr "Les mer!"
+
+#. content.xml (slide 'page2')
+msgid "Open it and feel instantly at home:"
+msgstr "Åpne den og føl deg umiddelbart hjemme:"
+
+#. content.xml (slide 'page2')
+msgid "ODF or DOCX"
+msgstr "ODF eller DOCX"
+
+#. content.xml (slide 'page2')
+msgid "Quick edits or deep dives"
+msgstr "Raske endringer eller dypdykk"
+
+#. content.xml (slide 'page2')
+msgid "A clean, beautiful interface"
+msgstr "Et rent og pent grensesnitt"
+
+#. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
+#. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
+#. content.xml (slide 'page7'); content.xml (slide 'page8')
+msgid "Next"
+msgstr "Neste"
+
+#. content.xml (slide 'page3')
+msgid "The familiar, powerful Collabora Online experience"
+msgstr "Den kjente og kraftfulle Collabora Online-opplevelsen"
+
+#. content.xml (slide 'page3')
+msgid "Now locally on Windows, macOS, and Linux"
+msgstr "Nå lokalt på Windows, macOS og Linux"
+
+#. content.xml (slide 'page4'); content.xml (slide 'page5'); content.xml
+#. (slide 'page6'); content.xml (slide 'page7')
+msgid ""
+"Enjoy editing your documents locally with an intuitive, intelligent interface"
+msgstr ""
+"Nyt å redigere dokumentene dine lokalt med et intuitivt og intelligent "
+"grensesnitt"
+
+#. content.xml (slide 'page4')
+msgid "Navigator bar with document search"
+msgstr "Dokumentstrukturlinje med søk i dokumentet"
+
+#. content.xml (slide 'page5')
+msgid "Helpful quick access examples"
+msgstr "Nyttige eksempler for rask tilgang"
+
+#. content.xml (slide 'page6')
+msgid "Create and edit tables within documents"
+msgstr "Lag og rediger tabeller i dokumenter"
+
+#. content.xml (slide 'page7')
+msgid "Powerful data and charting tools"
+msgstr "Kraftige data- og diagramverktøy"
+
+#. content.xml (slide 'page8')
+msgid "Privacy by design"
+msgstr "Personvern fra grunnen av"
+
+#. content.xml (slide 'page8')
+msgid "Fully open source – no hidden executables, no spyware"
+msgstr ""
+"Fullt ut åpen kildekode – ingen skjulte kjørbare filer, ingen spionprogrammer"
+
+#. content.xml (slide 'page8')
+msgid "Documents never leave your device – unless you say so"
+msgstr "Dokumentene forlater aldri enheten din – med mindre du sier det"
+
+#. content.xml (slide 'page9')
+msgid "Take back control"
+msgstr "Ta tilbake kontrollen"
+
+#. content.xml (slide 'page9')
+msgid "We’re excited to share this release with the community"
+msgstr "Vi gleder oss til å dele denne utgaven med fellesskapet"
+
+#. content.xml (slide 'page9')
+msgid "Try it out. Break things. Let us know what works and what doesn’t."
+msgstr ""
+"Prøv den ut. Ødelegg ting. Gi oss beskjed om hva som fungerer og hva som "
+"ikke gjør det."
+
+#. content.xml (slide 'page9')
+msgid ""
+"Together, we're building a privacy-respecting, open, and elegant office "
+"suite for everyone."
+msgstr ""
+"Sammen bygger vi en åpen og elegant kontorpakke som respekterer "
+"personvernet, for alle."

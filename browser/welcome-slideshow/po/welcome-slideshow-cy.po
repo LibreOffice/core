@@ -1,0 +1,125 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-14 21:16+0000\n"
+"PO-Revision-Date: 2026-06-03 18:58+0000\n"
+"Last-Translator: Rhoslyn Prys <rprys@posteo.net>\n"
+"Language-Team: Welsh <https://hosted.weblate.org/projects/collabora-online/"
+"welcome-presentation/cy/>\n"
+"Language: cy\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=(n==0) ? 0 : (n==1) ? 1 : (n==2) ? 2 : "
+"(n==3) ? 3 :(n==6) ? 4 : 5;\n"
+"X-Generator: Weblate 2026.6\n"
+
+#. content.xml (slide 'page1')
+msgid "All New Collabora Office"
+msgstr "Collabora Office Newydd Sbon"
+
+#. content.xml (slide 'page1')
+msgid "Same look, same code"
+msgstr "Yr un edrychiad, yr un cod"
+
+#. content.xml (slide 'page1')
+msgid "Your files, your device"
+msgstr "Eich ffeiliau, eich dyfais"
+
+#. content.xml (slide 'page1')
+msgid "Find out more!"
+msgstr "Mwy o wybodaeth!"
+
+#. content.xml (slide 'page2')
+msgid "Open it and feel instantly at home:"
+msgstr "Agorwch ef a theimlo'n gartrefol ar unwaith:"
+
+#. content.xml (slide 'page2')
+msgid "ODF or DOCX"
+msgstr "ODF neu DOCX"
+
+#. content.xml (slide 'page2')
+msgid "Quick edits or deep dives"
+msgstr "Golygiadau cyflym neu ddefnydd trwm"
+
+#. content.xml (slide 'page2')
+msgid "A clean, beautiful interface"
+msgstr "Rhyngwyneb glân, hardd"
+
+#. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
+#. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
+#. content.xml (slide 'page7'); content.xml (slide 'page8')
+msgid "Next"
+msgstr "Nesaf"
+
+#. content.xml (slide 'page3')
+msgid "The familiar, powerful Collabora Online experience"
+msgstr "Profiad cyfarwydd, pwerus Collabora Online"
+
+#. content.xml (slide 'page3')
+msgid "Now locally on Windows, macOS, and Linux"
+msgstr "Nawr yn lleol ar Windows, macOS, a Linux"
+
+#. content.xml (slide 'page4'); content.xml (slide 'page5'); content.xml
+#. (slide 'page6'); content.xml (slide 'page7')
+msgid ""
+"Enjoy editing your documents locally with an intuitive, intelligent interface"
+msgstr ""
+"Mwynhewch olygu eich dogfennau'n lleol gyda rhyngwyneb greddfol, deallus"
+
+#. content.xml (slide 'page4')
+msgid "Navigator bar with document search"
+msgstr "Bar llywio gyda chwilio dogfennau"
+
+#. content.xml (slide 'page5')
+msgid "Helpful quick access examples"
+msgstr "Enghreifftiau cyflym defnyddiol"
+
+#. content.xml (slide 'page6')
+msgid "Create and edit tables within documents"
+msgstr "Creu a golygu tablau o fewn dogfennau"
+
+#. content.xml (slide 'page7')
+msgid "Powerful data and charting tools"
+msgstr "Data pwerus ac offer siartio"
+
+#. content.xml (slide 'page8')
+msgid "Privacy by design"
+msgstr "Preifatrwydd yn sail"
+
+#. content.xml (slide 'page8')
+msgid "Fully open source – no hidden executables, no spyware"
+msgstr "Cod gwbl agored – dim gweithredadwy cudd, dim ysbiwedd"
+
+#. content.xml (slide 'page8')
+msgid "Documents never leave your device – unless you say so"
+msgstr ""
+"Dyw dogfennau byth yn gadael eich dyfais – oni bai eich bod caniatáu hynny"
+
+#. content.xml (slide 'page9')
+msgid "Take back control"
+msgstr "Chi sy'n rheoli"
+
+#. content.xml (slide 'page9')
+msgid "We’re excited to share this release with the community"
+msgstr "Rydym yn falch iawn o rannu'r fersiwn yma gyda'r gymuned"
+
+#. content.xml (slide 'page9')
+msgid "Try it out. Break things. Let us know what works and what doesn’t."
+msgstr ""
+"Rhowch gynnig arni. Torrwch bethau. Gadewch i ni weld beth sy'n gweithio a "
+"beth sydd ddim."
+
+#. content.xml (slide 'page9')
+msgid ""
+"Together, we're building a privacy-respecting, open, and elegant office "
+"suite for everyone."
+msgstr ""
+"Gyda'n gilydd, rydym yn adeiladu i bawb becyn swyddfa sy'n parchu "
+"preifatrwydd, yn agored ac yn gain."

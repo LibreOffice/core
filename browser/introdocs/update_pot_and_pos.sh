@@ -10,9 +10,12 @@
 #
 # Regenerate the .pot template for every introductory document from its
 # "_"-marked strings, and merge those new strings into any existing .po files.
+# With a directory argument it does the same for the documents in that
+# directory, like ../welcome-slideshow.
 #
 set -euo pipefail
-cd "$(dirname "$0")"
+TOOLDIR="$(cd "$(dirname "$0")" && pwd)"
+cd "${1:-$TOOLDIR}"
 
 PYTHON="${PYTHON:-python3}"
 MSGMERGE="${MSGMERGE:-msgmerge}"
@@ -27,7 +30,7 @@ for doc in *.odt *.ods *.odp; do
     pot="$POT_DIR/$name.pot"
 
     echo "1) Extracting strings from $doc -> $pot"
-    $PYTHON extract_odf_text.py "$doc" "$pot"
+    $PYTHON "$TOOLDIR/extract_odf_text.py" "$doc" "$pot"
 
     echo "2) Merging existing $name-*.po files"
     for po in "$PO_DIR/$name"-*.po; do

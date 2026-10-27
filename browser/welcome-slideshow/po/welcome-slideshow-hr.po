@@ -1,0 +1,123 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-14 21:16+0000\n"
+"PO-Revision-Date: 2025-12-07 18:51+0000\n"
+"Last-Translator: Milo Ivir <mail@milotype.de>\n"
+"Language-Team: Croatian <https://hosted.weblate.org/projects/collabora-"
+"online/welcome-presentation/hr/>\n"
+"Language: hr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.15-dev\n"
+
+#. content.xml (slide 'page1')
+msgid "All New Collabora Office"
+msgstr "Potpuno novi Collabora Office"
+
+#. content.xml (slide 'page1')
+msgid "Same look, same code"
+msgstr "Isti izgled, isti kod"
+
+#. content.xml (slide 'page1')
+msgid "Your files, your device"
+msgstr "Tvoje datoteke, tvoj uređaj"
+
+#. content.xml (slide 'page1')
+msgid "Find out more!"
+msgstr "Saznaj više!"
+
+#. content.xml (slide 'page2')
+msgid "Open it and feel instantly at home:"
+msgstr "Otvori aplikaciju i odmah se osjećaj kao kod kuće:"
+
+#. content.xml (slide 'page2')
+msgid "ODF or DOCX"
+msgstr "ODF ili DOCX"
+
+#. content.xml (slide 'page2')
+msgid "Quick edits or deep dives"
+msgstr "Brze promjene ili dubinska istraživanja"
+
+#. content.xml (slide 'page2')
+msgid "A clean, beautiful interface"
+msgstr "Čisto, prekrasno sučelje"
+
+#. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
+#. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
+#. content.xml (slide 'page7'); content.xml (slide 'page8')
+msgid "Next"
+msgstr "Sljedeće"
+
+#. content.xml (slide 'page3')
+msgid "The familiar, powerful Collabora Online experience"
+msgstr "Poznato, moćno iskustvo s Collabora Online"
+
+#. content.xml (slide 'page3')
+msgid "Now locally on Windows, macOS, and Linux"
+msgstr "Sada lokalno na Windowsu, macOS-u i Linuxu"
+
+#. content.xml (slide 'page4'); content.xml (slide 'page5'); content.xml
+#. (slide 'page6'); content.xml (slide 'page7')
+msgid ""
+"Enjoy editing your documents locally with an intuitive, intelligent interface"
+msgstr "Uživaj uređivati dokumente lokalno uz intuitivno, inteligentno sučelje"
+
+#. content.xml (slide 'page4')
+msgid "Navigator bar with document search"
+msgstr "Navigacijska traka s pretraživanjem dokumenata"
+
+#. content.xml (slide 'page5')
+msgid "Helpful quick access examples"
+msgstr "Korisni primjeri brzog pristupa"
+
+#. content.xml (slide 'page6')
+msgid "Create and edit tables within documents"
+msgstr "Stvori i uređuj tablice unutar dokumenata"
+
+#. content.xml (slide 'page7')
+msgid "Powerful data and charting tools"
+msgstr "Moćni alati za podatke i dijagrame"
+
+#. content.xml (slide 'page8')
+msgid "Privacy by design"
+msgstr "Privatnost po dizajnu"
+
+#. content.xml (slide 'page8')
+msgid "Fully open source – no hidden executables, no spyware"
+msgstr ""
+"Potpuno otvoreni kod – bez skrivenih izvršnih datoteka, bez špijunskog "
+"softvera"
+
+#. content.xml (slide 'page8')
+msgid "Documents never leave your device – unless you say so"
+msgstr "Dokumenti nikada ne napuštaju tvoj uređaj – osim ako želiš"
+
+#. content.xml (slide 'page9')
+msgid "Take back control"
+msgstr "Preuzmi kontrolu"
+
+#. content.xml (slide 'page9')
+msgid "We’re excited to share this release with the community"
+msgstr "Veselimo se što možemo ovu verziju podijeliti sa zajednicom"
+
+#. content.xml (slide 'page9')
+msgid "Try it out. Break things. Let us know what works and what doesn’t."
+msgstr "Isprobaj. Pokvari stvari. Javi nam što funkcionira, a što ne."
+
+#. content.xml (slide 'page9')
+msgid ""
+"Together, we're building a privacy-respecting, open, and elegant office "
+"suite for everyone."
+msgstr ""
+"Zajedno gradimo paket uredskih aplikacija koji poštuje privatnost i koji je "
+"otvoren i elegantan za sve."

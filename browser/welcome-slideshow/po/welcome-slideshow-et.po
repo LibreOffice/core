@@ -1,0 +1,125 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-14 21:16+0000\n"
+"PO-Revision-Date: 2025-12-18 18:00+0000\n"
+"Last-Translator: Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Estonian <https://hosted.weblate.org/projects/collabora-"
+"online/welcome-presentation/et/>\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.1-dev\n"
+
+#. content.xml (slide 'page1')
+msgid "All New Collabora Office"
+msgstr "Uuendunud Collabora Office"
+
+#. content.xml (slide 'page1')
+msgid "Same look, same code"
+msgstr "Sama välimus, sama lähtekood"
+
+#. content.xml (slide 'page1')
+msgid "Your files, your device"
+msgstr "Sinu failid, sinu seadmes"
+
+#. content.xml (slide 'page1')
+msgid "Find out more!"
+msgstr "Loe lisaks!"
+
+#. content.xml (slide 'page2')
+msgid "Open it and feel instantly at home:"
+msgstr "Ava rakendus ja kõik tundub tavapärane:"
+
+#. content.xml (slide 'page2')
+msgid "ODF or DOCX"
+msgstr "ODF või DOCX"
+
+#. content.xml (slide 'page2')
+msgid "Quick edits or deep dives"
+msgstr "Sobin nii kiireteks muudatusteks kui süvenemisega tööks"
+
+#. content.xml (slide 'page2')
+msgid "A clean, beautiful interface"
+msgstr "Puhas ja lihtne kasutajaliides"
+
+#. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
+#. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
+#. content.xml (slide 'page7'); content.xml (slide 'page8')
+msgid "Next"
+msgstr "Järgmine"
+
+#. content.xml (slide 'page3')
+msgid "The familiar, powerful Collabora Online experience"
+msgstr "Tuttav ja võimas Collabora Online'i kasutuskogemus"
+
+#. content.xml (slide 'page3')
+msgid "Now locally on Windows, macOS, and Linux"
+msgstr "Nüüd saadaval kohalikuna Windowsis, macOS-is ja Linuxis"
+
+#. content.xml (slide 'page4'); content.xml (slide 'page5'); content.xml
+#. (slide 'page6'); content.xml (slide 'page7')
+msgid ""
+"Enjoy editing your documents locally with an intuitive, intelligent interface"
+msgstr ""
+"Muuda oma dokumente kohalikus seadmes intuitiivse ja nutika kasutajaliidese "
+"abil"
+
+#. content.xml (slide 'page4')
+msgid "Navigator bar with document search"
+msgstr "Ülevaateriba koos dokumentide otsinguga"
+
+#. content.xml (slide 'page5')
+msgid "Helpful quick access examples"
+msgstr "Abiks on kiired näited ligipääsuks"
+
+#. content.xml (slide 'page6')
+msgid "Create and edit tables within documents"
+msgstr "Lisa dokumentidesse tabeleid ja muuda neid"
+
+#. content.xml (slide 'page7')
+msgid "Powerful data and charting tools"
+msgstr "Rohked võimalused andmete töötluseks ja diagrammide koostamiseks"
+
+#. content.xml (slide 'page8')
+msgid "Privacy by design"
+msgstr "Olemuselt privaatne"
+
+#. content.xml (slide 'page8')
+msgid "Fully open source – no hidden executables, no spyware"
+msgstr "Täielikult avatud lähtekoodiga - pole peidetud programme ega nuhkvara"
+
+#. content.xml (slide 'page8')
+msgid "Documents never leave your device – unless you say so"
+msgstr ""
+"Dokumendid mitte kunagi ei lahku sinu seadmest - kui sa just seda ise ei "
+"soovi"
+
+#. content.xml (slide 'page9')
+msgid "Take back control"
+msgstr "Kontroll on tagasi sinu käes"
+
+#. content.xml (slide 'page9')
+msgid "We’re excited to share this release with the community"
+msgstr "Me suurima rõõmuga jagame seda uut versiooni kogukonnaga"
+
+#. content.xml (slide 'page9')
+msgid "Try it out. Break things. Let us know what works and what doesn’t."
+msgstr ""
+"Proovi teda. Kanguta, mida tahad. Anna meile teada, mis toimib ja mis mitte."
+
+#. content.xml (slide 'page9')
+msgid ""
+"Together, we're building a privacy-respecting, open, and elegant office "
+"suite for everyone."
+msgstr ""
+"Üheskoos me loome privaatsust austava, avatud ja elegantse kontoritööks "
+"mõeldud rakenduse kõigile."

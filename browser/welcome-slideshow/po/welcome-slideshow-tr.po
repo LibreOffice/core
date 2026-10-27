@@ -1,0 +1,124 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-14 21:16+0000\n"
+"PO-Revision-Date: 2025-12-16 18:16+0000\n"
+"Last-Translator: Bayram Çiçek <bayramcicek2125@gmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/collabora-online/"
+"welcome-presentation/tr/>\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.1-dev\n"
+
+#. content.xml (slide 'page1')
+msgid "All New Collabora Office"
+msgstr "Tamamıyla Yeni Collabora Office"
+
+#. content.xml (slide 'page1')
+msgid "Same look, same code"
+msgstr "Aynı görünüş, aynı kod"
+
+#. content.xml (slide 'page1')
+msgid "Your files, your device"
+msgstr "Senin dosyaların, senin cihazın"
+
+#. content.xml (slide 'page1')
+msgid "Find out more!"
+msgstr "Daha fazlasını öğrenin!"
+
+#. content.xml (slide 'page2')
+msgid "Open it and feel instantly at home:"
+msgstr "Açın ve anında evinizde hissedin:"
+
+#. content.xml (slide 'page2')
+msgid "ODF or DOCX"
+msgstr "ODF ya da DOCX"
+
+#. content.xml (slide 'page2')
+msgid "Quick edits or deep dives"
+msgstr "Hızlıca düzenleyin veya derinlemesine inceleyin"
+
+#. content.xml (slide 'page2')
+msgid "A clean, beautiful interface"
+msgstr "Saf, güzel bir arayüz"
+
+#. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
+#. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
+#. content.xml (slide 'page7'); content.xml (slide 'page8')
+msgid "Next"
+msgstr "Sonraki"
+
+#. content.xml (slide 'page3')
+msgid "The familiar, powerful Collabora Online experience"
+msgstr "Collabora Online'a benzer güçlü bir deneyim"
+
+#. content.xml (slide 'page3')
+msgid "Now locally on Windows, macOS, and Linux"
+msgstr "Şimdi Windows, macOS ve Linux platformlarında"
+
+#. content.xml (slide 'page4'); content.xml (slide 'page5'); content.xml
+#. (slide 'page6'); content.xml (slide 'page7')
+msgid ""
+"Enjoy editing your documents locally with an intuitive, intelligent interface"
+msgstr ""
+"Doğal ve akıllı bir arayüzle belgelerinizi yerel olarak düzenlemenin keyfini "
+"çıkarın"
+
+#. content.xml (slide 'page4')
+msgid "Navigator bar with document search"
+msgstr "Belge arama özelliğine sahip gezinme çubuğu"
+
+#. content.xml (slide 'page5')
+msgid "Helpful quick access examples"
+msgstr "Yararlı hızlı erişim örnekleri"
+
+#. content.xml (slide 'page6')
+msgid "Create and edit tables within documents"
+msgstr "Belgeler içinde tablolar oluşturun ve düzenleyin"
+
+#. content.xml (slide 'page7')
+msgid "Powerful data and charting tools"
+msgstr "Güçlü veri ve grafik araçları"
+
+#. content.xml (slide 'page8')
+msgid "Privacy by design"
+msgstr "Tasarım gereği gizlilik"
+
+#. content.xml (slide 'page8')
+msgid "Fully open source – no hidden executables, no spyware"
+msgstr ""
+"Tamamen açık kaynaklıdır - gizli yürütülebilir dosya veya casus yazılım "
+"yoktur"
+
+#. content.xml (slide 'page8')
+msgid "Documents never leave your device – unless you say so"
+msgstr "İstemediğiniz sürece belgeler asla cihazınızdan çıkmaz"
+
+#. content.xml (slide 'page9')
+msgid "Take back control"
+msgstr "Kontrolünüzü geri alın"
+
+#. content.xml (slide 'page9')
+msgid "We’re excited to share this release with the community"
+msgstr "Bu sürümü toplulukla paylaşmaktan heyecan duyuyoruz"
+
+#. content.xml (slide 'page9')
+msgid "Try it out. Break things. Let us know what works and what doesn’t."
+msgstr "Deneyin. Kurcalayın. Neyin çalışıp çalışmadığını bize bildirin."
+
+#. content.xml (slide 'page9')
+msgid ""
+"Together, we're building a privacy-respecting, open, and elegant office "
+"suite for everyone."
+msgstr ""
+"Birlikte, herkes için gizliliğe saygılı, açık ve zarif bir ofis paketi "
+"oluşturuyoruz."

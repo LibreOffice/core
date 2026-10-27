@@ -1,0 +1,124 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-14 21:16+0000\n"
+"PO-Revision-Date: 2025-12-09 11:40+0000\n"
+"Last-Translator: \"Miguel A. Bouzada\" <mbouzada@gmail.com>\n"
+"Language-Team: Galician <https://hosted.weblate.org/projects/collabora-"
+"online/welcome-presentation/gl/>\n"
+"Language: gl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15-dev\n"
+
+#. content.xml (slide 'page1')
+msgid "All New Collabora Office"
+msgstr "Novo Collabora Office"
+
+#. content.xml (slide 'page1')
+msgid "Same look, same code"
+msgstr "Mesmo aspecto, mesmo código"
+
+#. content.xml (slide 'page1')
+msgid "Your files, your device"
+msgstr "Os teus documentos, o teu dispositivo"
+
+#. content.xml (slide 'page1')
+msgid "Find out more!"
+msgstr "Máis información!"
+
+#. content.xml (slide 'page2')
+msgid "Open it and feel instantly at home:"
+msgstr "Ábreo e síntete instantaneamente como na casa:"
+
+#. content.xml (slide 'page2')
+msgid "ODF or DOCX"
+msgstr "ODF ou DOCX"
+
+#. content.xml (slide 'page2')
+msgid "Quick edits or deep dives"
+msgstr "Edicións rápidas ou análises en profundidade"
+
+#. content.xml (slide 'page2')
+msgid "A clean, beautiful interface"
+msgstr "Unha interface limpa e fermosa"
+
+#. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
+#. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
+#. content.xml (slide 'page7'); content.xml (slide 'page8')
+msgid "Next"
+msgstr "Seguinte"
+
+#. content.xml (slide 'page3')
+msgid "The familiar, powerful Collabora Online experience"
+msgstr "A experiencia familiar e poderosa de Collabora Online"
+
+#. content.xml (slide 'page3')
+msgid "Now locally on Windows, macOS, and Linux"
+msgstr "Agora dispoñíbel localmente en Windows, macOS e Linux"
+
+#. content.xml (slide 'page4'); content.xml (slide 'page5'); content.xml
+#. (slide 'page6'); content.xml (slide 'page7')
+msgid ""
+"Enjoy editing your documents locally with an intuitive, intelligent interface"
+msgstr ""
+"Goza editando os teus documentos localmente cunha interface intuitiva e "
+"intelixente"
+
+#. content.xml (slide 'page4')
+msgid "Navigator bar with document search"
+msgstr "Barra de navegación con busca de documentos"
+
+#. content.xml (slide 'page5')
+msgid "Helpful quick access examples"
+msgstr "Exemplos útiles de acceso rápido"
+
+#. content.xml (slide 'page6')
+msgid "Create and edit tables within documents"
+msgstr "Crea e edita táboas dentro dos documentos"
+
+#. content.xml (slide 'page7')
+msgid "Powerful data and charting tools"
+msgstr "Potentes ferramentas de datos e gráficos"
+
+#. content.xml (slide 'page8')
+msgid "Privacy by design"
+msgstr "Privacidade desde o deseño"
+
+#. content.xml (slide 'page8')
+msgid "Fully open source – no hidden executables, no spyware"
+msgstr ""
+"Totalmente de código aberto; sen executábeis agochados, sen software espía"
+
+#. content.xml (slide 'page8')
+msgid "Documents never leave your device – unless you say so"
+msgstr ""
+"Os documentos nunca saen do teu dispositivo, a non ser que ti o decidas"
+
+#. content.xml (slide 'page9')
+msgid "Take back control"
+msgstr "Recupera o control"
+
+#. content.xml (slide 'page9')
+msgid "We’re excited to share this release with the community"
+msgstr "Estamos encantados de compartir esta publicación coa comunidade"
+
+#. content.xml (slide 'page9')
+msgid "Try it out. Break things. Let us know what works and what doesn’t."
+msgstr "Próbao. Racha cousas. Fainos saber que funciona e que non."
+
+#. content.xml (slide 'page9')
+msgid ""
+"Together, we're building a privacy-respecting, open, and elegant office "
+"suite for everyone."
+msgstr ""
+"Xuntos, estamos a construír unha suite de oficina aberta, elegante e "
+"respectuosa coa privacidade de todos."

@@ -333,7 +333,7 @@ final class DocumentController: NSDocumentController {
         }
 
         guard let url = Bundle.main.url(forResource: "welcome-slideshow", withExtension: "odp", subdirectory: "welcome") else {
-            COWrapper.LOG_ERR("welcome/welcome.odp not found in bundle")
+            COWrapper.LOG_ERR("welcome/welcome-slideshow.odp not found in bundle")
             return
         }
 
