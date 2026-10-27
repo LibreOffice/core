@@ -2097,6 +2097,10 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yContextTableTyping)
 
     // Then the table given has that cell's new text, and the others as they were:
     CPPUNIT_ASSERT_EQUAL(std::string("XOne|Two|Three|Four|"), aCellTexts());
+    // And the paragraph before the table is still given:
+    CPPUNIT_ASSERT_EQUAL(
+        std::string("Before the table."),
+        aView.m_aA11yFocusedParagraph.get_child("before").begin()->second.get_value<std::string>());
 
     // And when the cell gains a paragraph:
     pWrtShell->SplitNode();
