@@ -1573,6 +1573,24 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testQueryTableExport)
     assertXPath(pConn, "/x:connections/x:connection[1]/x:textPr", "delimiter", u"_x0000_");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testDecorativeODF14)
+{
+    // a shape whose graphic style has the ODF 1.4 draw:decorative="true"
+    createScDoc("fods/decorative-odf14.fods");
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    // Without the fix draw:decorative was ignored
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"Decorative"_ustr).get<bool>());
+
+    save(TestFilter::ODS);
+    xmlDocUniquePtr pDoc = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "//style:graphic-properties[@draw:decorative='true']", 1);
+    assertXPath(pDoc, "//style:graphic-properties[@loext:decorative='true']", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

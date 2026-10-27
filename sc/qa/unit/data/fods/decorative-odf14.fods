@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:automatic-styles>
+  <style:style style:name="gr1" style:family="graphic">
+   <style:graphic-properties draw:decorative="true"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="Sheet1">
+    <table:shapes>
+     <draw:rect draw:style-name="gr1" draw:name="Ornament" svg:x="1cm" svg:y="1cm" svg:width="2cm" svg:height="2cm"/>
+    </table:shapes>
+    <table:table-column/>
+    <table:table-row>
+     <table:table-cell/>
+    </table:table-row>
+   </table:table>
+  </office:spreadsheet>
+ </office:body>
+</office:document>
