@@ -29,6 +29,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdocapt.hxx>
+#include <svx/svdocirc.hxx>
 #include <svx/svdoedge.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdomeas.hxx>
@@ -354,6 +355,13 @@ std::vector<ObjectContent::Handle> shapingHandlesOf(const SdrObject& rObject)
     SdrHdlList aHandleList(nullptr);
     rObject.AddToHdlList(aHandleList);
 
+    // a rectangle that takes no corner radius, a chart for one, still adds the handle of it, which
+    // the office leaves out; the angles of a piece of a circle come as the same kind
+    SdrObjTransformInfoRec aWhatItAllows;
+    rObject.TakeObjInfo(aWhatItAllows);
+    const bool bRadiusLeftOut(!aWhatItAllows.bEdgeRadiusAllowed
+                              && nullptr == dynamic_cast<const SdrCircObj*>(&rObject));
+
     std::vector<ObjectContent::Handle> aHandles;
     for (size_t nHandle = 0; nHandle < aHandleList.GetHdlCount(); ++nHandle)
     {
@@ -376,7 +384,7 @@ std::vector<ObjectContent::Handle> shapingHandlesOf(const SdrObject& rObject)
                            || (eKind == SdrHdlKind::Poly
                                && (bLine || nullptr == dynamic_cast<const SdrPathObj*>(&rObject)))
                            || (eKind == SdrHdlKind::User && bMeasurement));
-        if (!bWanted)
+        if (!bWanted || (eKind == SdrHdlKind::Circle && bRadiusLeftOut))
             continue;
 
         const Point aPosition(pHandle->GetPos());
