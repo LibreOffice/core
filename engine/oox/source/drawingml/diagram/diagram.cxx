@@ -211,6 +211,7 @@ void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentSha
     maParagraphsIndentedByLayout.clear();
     maDeferredUserVariables.clear();
     maLaidOutSideways.clear();
+    maTurnedAlongPath.clear();
     maWidthOfDescendantSizes.clear();
     maDeferredSpacers.clear();
 
@@ -223,6 +224,7 @@ void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentSha
         // group a point smaller, down to the least the layout's rule allows. A Diagram whose
         // texts all fit is laid out once.
         maFontCandidates.clear();
+        maFontFloors.clear();
         maGroupsThatShrank.clear();
         maColumnFits.clear();
         maContentHeights.clear();
@@ -239,6 +241,7 @@ void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentSha
             maFittedFontSizes.clear();
             maDeferredUserVariables.clear();
             maLaidOutSideways.clear();
+            maTurnedAlongPath.clear();
             maWidthOfDescendantSizes.clear();
             maDeferredSpacers.clear();
             mpLayout->getPresPointShapeMap().clear();
@@ -259,10 +262,16 @@ void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentSha
             for (const OUString& rGroup : maGroupsThatDidNotFit)
             {
                 const auto aCandidate = maFontCandidates.find(rGroup);
+                // no lower than the rule of the group's nodes allows, the text may then stand out
+                // of its box
+                const auto aFloor = maFontFloors.find(rGroup);
+                const double fLeast(aFloor != maFontFloors.end()
+                                        ? std::max(mfLeastFont, aFloor->second)
+                                        : mfLeastFont);
                 if (aCandidate == maFontCandidates.end()
-                    || aCandidate->second <= mfLeastFont + 1e-6)
+                    || aCandidate->second <= fLeast + 1e-6)
                     continue;
-                aCandidate->second = std::max(mfLeastFont, aCandidate->second - 1.0);
+                aCandidate->second = std::max(fLeast, aCandidate->second - 1.0);
                 maGroupsThatShrank.insert(rGroup);
                 bAnyShrank = true;
             }
@@ -966,6 +975,11 @@ oox::drawingml::Color DiagramColor::getColorByIndex(const DiagramColorList& rLis
     aAddOffset(XML_hueOff, aWantedHSL.getRed() - aStartHSL.getRed(), PER_DEGREE);
     aAddOffset(XML_satOff, aWantedHSL.getGreen() - aStartHSL.getGreen(), MAX_PERCENT);
     aAddOffset(XML_lumOff, aWantedHSL.getBlue() - aStartHSL.getBlue(), MAX_PERCENT);
+    // the alpha is spread the same way, from the one color to the next
+    aAddOffset(XML_alphaOff,
+               (rColors[nFirst].getTransparency() - rColors[nFirst + 1].getTransparency()) / 100.0
+                   * fFactor,
+               MAX_PERCENT);
 
     return aRetval;
 }

@@ -449,6 +449,14 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
                 rPropMap.setProperty(ShapeProperty::FillColor, aFillColor);
                 if( maFillColor.hasTransparency() )
                     rPropMap.setProperty( ShapeProperty::FillTransparency, maFillColor.getTransparency() );
+                // a placeholder takes the transparency of the color it stands for, as a Diagram's
+                // color list gives it to the shapes of a style label
+                else if (maFillColor.isPlaceHolder()
+                         && nPhClr != ::Color(ColorTransparency, 0xffffffff)
+                         && nPhClr.IsTransparent())
+                    rPropMap.setProperty(ShapeProperty::FillTransparency,
+                                         static_cast<sal_Int16>(std::round(
+                                             (255 - nPhClr.GetAlpha()) * 100.0 / 255.0)));
 
                 model::ComplexColor aComplexColor;
                 // It's a theme color if there's no explicit color given in the

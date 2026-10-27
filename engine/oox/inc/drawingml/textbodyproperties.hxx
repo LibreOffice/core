@@ -51,6 +51,8 @@ struct TextBodyProperties
     std::optional< sal_Int32 >                    moTextOffLower;
     std::optional< sal_Int32 >                    moTextOffRight;
     css::drawing::TextVerticalAdjust                meVA;
+    /// whether bodyPr states the anchor, meVA is its default otherwise
+    bool                                            mbAnchorStated = false;
     OUString                                        msPrst;
     /// Normal autofit: font scale (default: 100%).
     sal_Int32 mnFontScale = 100000;

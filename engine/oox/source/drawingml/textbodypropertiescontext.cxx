@@ -172,7 +172,10 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper cons
     // ST_TextAnchoringType
     mrTextBodyProp.mbAnchorCtr = rAttribs.getBool(XML_anchorCtr, false );
     if (rAttribs.hasAttribute(XML_anchor))
+    {
         mrTextBodyProp.meVA = GetTextVerticalAdjust( rAttribs.getToken(XML_anchor, XML_t));
+        mrTextBodyProp.mbAnchorStated = true;
+    }
     // else meVA is initialized to TextVerticalAdjust_TOP
 
     sal_Int32 tVert = mrTextBodyProp.moVert.value_or(XML_horz);

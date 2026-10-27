@@ -202,6 +202,9 @@ public:
     /// did not fit on a pass is a point smaller on the next, down to the least the layout's
     /// rule allows. A group whose texts all fit keeps its size.
     std::map<OUString, double>& getFontCandidates() { return maFontCandidates; }
+    /// least font in points each group may shrink to, the lowest primFontSz rule of its
+    /// nodes; a group without such a rule is not in it
+    std::map<OUString, double>& getFontFloors() { return maFontFloors; }
     /// The groups a text of which did not fit on this pass, its box holding less than its text
     /// or a word of it being wider than the box.
     std::set<OUString>& getGroupsThatDidNotFit() { return maGroupsThatDidNotFit; }
@@ -249,6 +252,10 @@ public:
     /// The shapes of a hierarchy that lies sideways which its branch has placed as a whole,
     /// roots, branches and the shapes in them. Each holds its final place and size already.
     std::set<const Shape*>& getLaidOutSideways() { return maLaidOutSideways; }
+    /// shapes a ring turns along its path (rotPath alongPath) and the shapes below them,
+    /// on this pass
+    std::set<const Shape*>& getTurnedAlongPath() { return maTurnedAlongPath; }
+    const std::set<const Shape*>& getTurnedAlongPath() const { return maTurnedAlongPath; }
 
     /// width (EMU) the "for des" sizes of a column across a row refer to: that row's width
     std::map<const Shape*, sal_Int32>& getWidthOfDescendantSizes()
@@ -297,6 +304,7 @@ private:
     std::map<OUString, double> maFittedFontSizes;
     OUString msTextFont;
     std::map<OUString, double> maFontCandidates;
+    std::map<OUString, double> maFontFloors;
     std::set<OUString> maGroupsThatDidNotFit;
     std::map<OUString, sal_Int64> maContentHeights;
     std::map<OUString, sal_Int64> maNextContentHeights;
@@ -308,6 +316,7 @@ private:
     std::map<OUString, double> maColumnFitsOfThisPass;
     double mfLeastFont = 5.0;
     std::set<const Shape*> maLaidOutSideways;
+    std::set<const Shape*> maTurnedAlongPath;
     std::map<const Shape*, sal_Int32> maWidthOfDescendantSizes;
     std::map<sal_Int32, DeferredUserVariable> maDeferredUserVariables;
     std::vector<DeferredSpacer> maDeferredSpacers;

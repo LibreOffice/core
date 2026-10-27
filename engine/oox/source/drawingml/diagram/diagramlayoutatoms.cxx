@@ -2319,6 +2319,37 @@ static std::set<OUString> fontAtMostAsOf(const SmartArtDiagram& rDgm, std::u16st
     return aNames;
 }
 
+// the lowest primFontSz rule of the layout node rName, in any branch; none without
+static std::optional<double> ruleFontFloorOf(const SmartArtDiagram& rDgm, const OUString& rName)
+{
+    if (!rDgm.getLayout() || !rDgm.getLayout()->getNode())
+        return std::nullopt;
+    std::map<OUString, const LayoutNode*> aNodes;
+    gatherLayoutNodes(*rDgm.getLayout()->getNode(), aNodes);
+    const auto aNode = aNodes.find(rName);
+    if (aNode == aNodes.end() || !aNode->second)
+        return std::nullopt;
+    std::optional<double> oFloor;
+    std::function<void(const LayoutAtom&)> aWalk = [&](const LayoutAtom& rAtom) {
+        for (const LayoutAtomPtr& pChild : rAtom.getChildren())
+        {
+            if (dynamic_cast<const LayoutNode*>(pChild.get()))
+                continue;
+            if (const RuleAtom* pRule = dynamic_cast<const RuleAtom*>(pChild.get()))
+            {
+                const Rule& rRule = pRule->getRule();
+                if (rRule.mnType == XML_primFontSz && std::isfinite(rRule.mfValue)
+                    && rRule.mfValue > 0.0)
+                    oFloor = std::min(oFloor.value_or(rRule.mfValue), rRule.mfValue);
+            }
+            else
+                aWalk(*pChild);
+        }
+    };
+    aWalk(*aNode->second);
+    return oFloor;
+}
+
 // The font the group of rName is laid out with on this pass, in points, the stated size on the
 // first pass or 65 where none is stated.
 static double fontOfGroup(const SmartArtDiagram& rDgm, const std::vector<Constraint>& rConstraints,
@@ -2330,6 +2361,9 @@ static double fontOfGroup(const SmartArtDiagram& rDgm, const std::vector<Constra
     auto aCandidate = rMutable.getFontCandidates().find(rGroup);
     if (aCandidate == rMutable.getFontCandidates().end())
     {
+        // the group shrinks no lower than the rule of the node that starts it
+        if (const std::optional<double> oFloor = ruleFontFloorOf(rDgm, rName))
+            rMutable.getFontFloors()[rGroup] = *oFloor;
         aCandidate = rMutable.getFontCandidates()
                          .emplace(rGroup, statedFontFor(rConstraints, rName).value_or(65.0))
                          .first;
@@ -4712,10 +4746,15 @@ void centreDrawnShapes(const SmartArtDiagram& rDgm, const ShapePtr& pRoot)
                 // Chevron_List's chevron of 1024214 by 1463163 turned by 90 degrees covers just
                 // that, not 1463163 by 1024214, which made the union 5051k wide and put the
                 // whole 1538k to the right of the drawing.
+                // a shape turned along the ring's path counts with its box not turned, the ring was
+                // fitted by those boxes
                 const sal_Int32 nDiagramTurn(pChild->getDiagramRotation());
-                const double fAngle(basegfx::deg2rad<60000>(
-                    pChild->getRotation()
-                    + (nDiagramTurn % (90 * 60000) == 0 ? 0 : nDiagramTurn)));
+                const double fAngle(
+                    rDgm.getTurnedAlongPath().count(pChild.get())
+                        ? 0.0
+                        : basegfx::deg2rad<60000>(
+                              pChild->getRotation()
+                              + (nDiagramTurn % (90 * 60000) == 0 ? 0 : nDiagramTurn)));
                 const double fCos(std::abs(cos(fAngle)));
                 const double fSin(std::abs(sin(fAngle)));
                 double fHalfWide(
@@ -9276,6 +9315,15 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
 
         case XML_conn:
         {
+            // a connector showing its text has no tx algorithm, its text is centred
+            if (const TextBodyPtr& pConnectorText = rShape->getTextBody();
+                pConnectorText && !pConnectorText->getTextProperties().mbAnchorStated)
+            {
+                pConnectorText->getTextProperties().meVA = css::drawing::TextVerticalAdjust_CENTER;
+                pConnectorText->getTextProperties().maPropertyMap.setProperty(
+                    PROP_TextVerticalAdjust, css::drawing::TextVerticalAdjust_CENTER);
+            }
+
             if (rShape->getSubType() == XML_conn)
             {
                 // There is no shape type "conn", replace it by an arrow based
@@ -10356,19 +10404,41 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                     const size_t nGaps(bWholeRing ? aPlaces.size() : aPlaces.size() - 1);
                     const double fPlaceTurn(static_cast<double>(nSpanAngle) / nGaps);
                     const double fPlaceStep(basegfx::deg2rad(std::abs(fPlaceTurn)));
-                    double fRingOfWidth(0.0);
-                    for (size_t nPlace = 0; nPlace < nGaps; ++nPlace)
+                    const auto aRingFor = [&](double fSibling) {
+                        double fRing(0.0);
+                        for (size_t nPlace = 0; nPlace < nGaps; ++nPlace)
+                        {
+                            const double fFrom(
+                                basegfx::deg2rad(nPlace * fPlaceTurn + nStartAngle));
+                            const double fTo(
+                                basegfx::deg2rad((nPlace + 1) * fPlaceTurn + nStartAngle));
+                            const double fAlong(std::atan2(-cos(fTo) + cos(fFrom),
+                                                           sin(fTo) - sin(fFrom)));
+                            const RingPlace& rNext(aPlaces[(nPlace + 1) % aPlaces.size()]);
+                            fRing = std::max(fRing, (aLeaveOf(aPlaces[nPlace], fAlong)
+                                                     + aLeaveOf(rNext, fAlong) + fSibling)
+                                                        / (2.0 * sin(fPlaceStep / 2.0)));
+                        }
+                        return fRing;
+                    };
+                    double fRingOfWidth(aRingFor(fSiblingPart));
+                    // a negative sibSp bringing a place over the middle of the ring is none, the
+                    // places then stand edge to edge
+                    if (fSiblingPart < 0.0)
                     {
-                        const double fFrom(basegfx::deg2rad(nPlace * fPlaceTurn + nStartAngle));
-                        const double fTo(
-                            basegfx::deg2rad((nPlace + 1) * fPlaceTurn + nStartAngle));
-                        const double fAlong(std::atan2(-cos(fTo) + cos(fFrom),
-                                                       sin(fTo) - sin(fFrom)));
-                        const RingPlace& rNext(aPlaces[(nPlace + 1) % aPlaces.size()]);
-                        fRingOfWidth = std::max(fRingOfWidth,
-                                                (aLeaveOf(aPlaces[nPlace], fAlong)
-                                                 + aLeaveOf(rNext, fAlong) + fSiblingPart)
-                                                    / (2.0 * sin(fPlaceStep / 2.0)));
+                        bool bOverTheMiddle(false);
+                        for (size_t nPlace = 0; nPlace < aPlaces.size(); ++nPlace)
+                        {
+                            const double fAt(basegfx::deg2rad(nPlace * fPlaceTurn + nStartAngle));
+                            if (fRingOfWidth < aLeaveOf(aPlaces[nPlace],
+                                                        std::atan2(-cos(fAt), sin(fAt))))
+                                bOverTheMiddle = true;
+                        }
+                        if (bOverTheMiddle)
+                        {
+                            fSiblingPart = 0.0;
+                            fRingOfWidth = aRingFor(0.0);
+                        }
                     }
                     if (fRingOfWidth <= 0.0)
                         fRingOfWidth = 0.5 / sin(fPlaceStep / 2.0);
@@ -10383,7 +10453,7 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                         const double fX(fRingOfWidth * sin(fAt));
                         const double fY(-fRingOfWidth * cos(fAt));
                         const double fHalfWidth(aPlaces[nPlace].fWidth / 2.0);
-                        const double fHalfHeight(aPlaces[nPlace].fHeight * fHeightOfWidth / 2.0);
+                        const double fHalfHeight(aPlaces[nPlace].fHeight / 2.0);
                         if (nPlace == 0)
                         {
                             fLeftMost = fX - fHalfWidth;
@@ -11020,7 +11090,18 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                     }
 
                     if (nRotationPath == XML_alongPath && !bSpansTheCircle)
+                    {
                         aCurrShape->setRotation(fAngle * PER_DEGREE);
+                        // we centre the whole by the boxes not turned, the turn may go down later
+                        std::set<const Shape*>& rTurned(
+                            const_cast<SmartArtDiagram&>(rDgm).getTurnedAlongPath());
+                        const auto aMark = [&rTurned](const ShapePtr& pOne, auto& rSelf) -> void {
+                            rTurned.insert(pOne.get());
+                            for (const ShapePtr& pBelow : pOne->getChildren())
+                                rSelf(pBelow, rSelf);
+                        };
+                        aMark(aCurrShape, aMark);
+                    }
 
                     // connectors should be handled in conn, but we don't have
                     // reference to previous and next child, so it's easier here
@@ -14443,25 +14524,6 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                 break;
             }
 
-            const sal_Int32 atxAnchorVert = maMap.count(XML_txAnchorVert) ? maMap.find(XML_txAnchorVert)->second : XML_mid;
-
-            switch(atxAnchorVert)
-            {
-                case XML_t:
-                pTextBody->getTextProperties().meVA = css::drawing::TextVerticalAdjust_TOP;
-                break;
-                case XML_b:
-                pTextBody->getTextProperties().meVA = css::drawing::TextVerticalAdjust_BOTTOM;
-                break;
-                case XML_mid:
-                // text centered vertically by default
-                default:
-                pTextBody->getTextProperties().meVA = css::drawing::TextVerticalAdjust_CENTER;
-                break;
-            }
-
-            pTextBody->getTextProperties().maPropertyMap.setProperty(PROP_TextVerticalAdjust, pTextBody->getTextProperties().meVA);
-
             // normalize list level
             sal_Int32 nBaseLevel = pTextBody->getParagraphs().front()->getProperties().getLevel();
             for (auto & aParagraph : pTextBody->getParagraphs())
@@ -14480,10 +14542,14 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
             nStartBulletsAtLevel--;
 
             bool isBulletList = false;
+            // child text are paragraphs drawn below the top level: a deeper one, or a bullet
+            bool bChildText(false);
             for (auto & aParagraph : pTextBody->getParagraphs())
             {
                 sal_Int32 nLevel = aParagraph->getProperties().getLevel() - nBaseLevel;
                 aParagraph->getProperties().setLevel(nLevel);
+                if (nLevel >= std::min(1, nStartBulletsAtLevel))
+                    bChildText = true;
                 if (nLevel >= nStartBulletsAtLevel)
                 {
                     // the bullet indent goes with the font of the paragraph; a paragraph we
@@ -14519,6 +14585,35 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                     isBulletList = true;
                 }
             }
+
+            // an anchor the data point states holds over the layout's; child text takes
+            // txAnchorVertCh, top by default
+            const sal_Int32 nAnchorParam(bChildText ? XML_txAnchorVertCh : XML_txAnchorVert);
+            const sal_Int32 atxAnchorVert = maMap.count(nAnchorParam)
+                                                ? maMap.find(nAnchorParam)->second
+                                                : (bChildText ? XML_t : XML_mid);
+            if (!pTextBody->getTextProperties().mbAnchorStated)
+            {
+                switch (atxAnchorVert)
+                {
+                    case XML_t:
+                        pTextBody->getTextProperties().meVA = css::drawing::TextVerticalAdjust_TOP;
+                        break;
+                    case XML_b:
+                        pTextBody->getTextProperties().meVA
+                            = css::drawing::TextVerticalAdjust_BOTTOM;
+                        break;
+                    case XML_mid:
+                    // text centered vertically by default
+                    default:
+                        pTextBody->getTextProperties().meVA
+                            = css::drawing::TextVerticalAdjust_CENTER;
+                        break;
+                }
+            }
+
+            pTextBody->getTextProperties().maPropertyMap.setProperty(PROP_TextVerticalAdjust, pTextBody->getTextProperties().meVA);
+
 
             // explicit alignment
             ParamMap::const_iterator aDir = maMap.find(XML_parTxLTRAlign);
