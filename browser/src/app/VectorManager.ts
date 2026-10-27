@@ -383,7 +383,12 @@ class VectorManager extends RenderManagerBase {
 					entered !== undefined &&
 					obj.kind === undefined &&
 					!VectorManager._isInside(data, id, entered.groupId);
-				if (ghosted)
+				const upright =
+					options?.activeInPlace?.objectId === id
+						? VectorManager._uprightInPlace(obj, options.activeInPlace.area)
+						: undefined;
+				if (upright) this._renderer.renderPrimitive(context, upright);
+				else if (ghosted)
 					this._renderGhosted(
 						context,
 						obj,
@@ -397,6 +402,28 @@ class VectorManager extends RenderManagerBase {
 			// The master lies between the page's own background and its objects.
 			if (obj.kind === 'page') this._renderMaster(context, data);
 		}
+	}
+
+	/*
+		An object active in place drawn upright into the rectangle its window fills, which is how
+		the office shows it while it is edited: its own mapping is taken back and the rectangle's
+		laid on. Nothing where the object has no mapping or the rectangle no size.
+	*/
+	private static _uprightInPlace(
+		object: cool.SlideObject,
+		area: number[],
+	): cool.TransformPrimitive | undefined {
+		const mapping = cool.Matrix2D.fromArray(object.transform)?.invert();
+		if (!mapping || !(area[2] > 0) || !(area[3] > 0)) return undefined;
+
+		const upright = cool.Matrix2D.fromRange(
+			new cool.Range2D(area[0], area[1], area[0] + area[2], area[1] + area[3]),
+		);
+		return {
+			type: cool.TransformPrimitive.type,
+			matrix: mapping.then(upright).toArray(),
+			children: object.primitives,
+		} as cool.TransformPrimitive;
 	}
 
 	// whether the object is that group or lies in it, at any depth

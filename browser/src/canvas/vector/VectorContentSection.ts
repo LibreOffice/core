@@ -137,12 +137,26 @@ namespace cool {
 			// Inside an entered group the rest of the page is drawn ghosted, so entering and
 			// leaving draw it anew.
 			const place = Interaction.placeOf(GraphicSelection.selectedObjectIDs);
-			const entered = place.kind === 'page' ? undefined : place.group;
+			const entered =
+				place.kind === 'group' || place.kind === 'diagram'
+					? place.group
+					: undefined;
+
+			// The object active in place is drawn upright into its window while it is edited.
+			const activeInPlace =
+				place.kind === 'inPlace' && GraphicSelection.inPlaceArea
+					? {
+							objectId: place.object,
+							area: GraphicSelection.inPlaceArea.slice(),
+						}
+					: undefined;
 
 			// The objects drawn elsewhere are left out of the page, so the drawing is made again
 			// when they change.
 			const renderKey =
 				String(entered) +
+				':' +
+				String(activeInPlace?.area) +
 				':' +
 				RenderManager.drawnElsewhereVersion() +
 				':' +
@@ -165,6 +179,7 @@ namespace cool {
 				RenderManager.renderInto(this._offscreenCtx, cached, {
 					editView: true,
 					ghostedOutside: entered,
+					activeInPlace: activeInPlace,
 				});
 				// The view edits the page, so it marks out the placeholders.
 				RenderManager.renderPlaceholderAids(this._offscreenCtx, cached);

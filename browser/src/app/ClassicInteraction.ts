@@ -692,9 +692,118 @@ class ClassicDiagramContext extends ClassicGroupContext {
 	}
 }
 
+/*
+	An object active in place, a chart being edited. It is edited by itself, with an undo of its
+	own while it is active, and the engine knows where its window lies, which is an upright
+	rectangle also for a turned object. So everything goes to the engine and the object: presses
+	in its window are the object's, one outside leaves it, and the keys, Escape among them, are
+	the object's first. Nothing is selected or changed here and no command is offered here.
+*/
+class ClassicInPlaceContext implements InteractionContext {
+	/*
+		A press outside the object leaves it, and the engine selects nothing for that press. So
+		what it met of the page is noted here for the report that follows: the object hit, as the
+		page takes a press, the outermost group of a member for one, or nothing.
+	*/
+	public press(hit: number | undefined, modifier: number): boolean {
+		/*
+			A press on another object outside the object's window leaves it here at once and is
+			taken as the page takes it, so it selects that object and can start a drag of it. A
+			press in the window, on what lies under it included, is the object's.
+		*/
+		if (hit !== undefined && ClassicInPlaceContext.pressedOutside()) {
+			GraphicSelection.leaveInPlace();
+			return Interaction.context().press(hit, modifier);
+		}
+
+		GraphicSelection.pressedOutside =
+			hit === undefined ? null : RenderGeometrySection.outermostOf(hit);
+		return false;
+	}
+
+	/// A drag that begins on another object outside the object's window leaves it and carries
+	/// that object, as the page does; one in the window is the object's.
+	public takesHoldFor(hit: number, modifier: number): number | undefined {
+		if (!ClassicInPlaceContext.pressedOutside()) return undefined;
+
+		GraphicSelection.leaveInPlace();
+		return Interaction.context().takesHoldFor(hit, modifier);
+	}
+
+	/// Whether the last press landed outside the upright rectangle of the object's window.
+	private static pressedOutside(): boolean {
+		const at = GraphicSelection.pressedAt;
+		const area = GraphicSelection.inPlaceArea;
+		if (!at || !area) return false;
+
+		return (
+			at.x < area[0] ||
+			at.x > area[0] + area[2] ||
+			at.y < area[1] ||
+			at.y > area[1] + area[3]
+		);
+	}
+
+	public doublePress(_hit: number | undefined): boolean {
+		return false;
+	}
+
+	public altPress(_hits: number[], _backwards: boolean): boolean {
+		return false;
+	}
+
+	public arrowKey(_towards: cool.Point, _event: KeyboardEvent): boolean {
+		return false;
+	}
+
+	public escape(): boolean {
+		return false;
+	}
+
+	public enterKey(): boolean {
+		return false;
+	}
+
+	public leaveKey(): boolean {
+		return false;
+	}
+
+	public commandStates(): { [command: string]: boolean } {
+		const states: { [command: string]: boolean } = {};
+		for (const command of Interaction.statesGivenHere) states[command] = false;
+		return states;
+	}
+
+	public ungroup(): boolean {
+		return false;
+	}
+
+	public tabKey(_forwards: boolean): boolean {
+		return false;
+	}
+
+	public toAnEnd(_first: boolean): boolean {
+		return false;
+	}
+
+	public groupEntered(): void {
+		// No group is entered from inside an object active in place.
+	}
+
+	public enteredBy(selection: number[]): number[] {
+		return selection;
+	}
+
+	public whatIsLeft(selected: number[]): number[] {
+		return selected;
+	}
+}
+
 class ClassicInteractionSet implements InteractionSet {
 	public contextFor(place: InteractionPlace): InteractionContext {
 		switch (place.kind) {
+			case 'inPlace':
+				return new ClassicInPlaceContext();
 			case 'group':
 				return new ClassicGroupContext(place.group);
 			case 'diagram':

@@ -16,9 +16,11 @@
 
 	- the page context, with nothing selected or with objects of the page selected;
 	- a group context, with members of a group selected;
-	- a diagram context, where the members selected are held by a diagram, however far up it is.
+	- a diagram context, where the members selected are held by a diagram, however far up it is;
+	- an in-place context, while an object is active in place, a chart being edited. That one is
+	  read from the engine's report of it, before the selection.
 
-	Exactly one of the three applies at any time. In a group context and a diagram context there is
+	Exactly one of the four applies at any time. In a group context and a diagram context there is
 	always a selection; only in the page context can there be none. A selected group is a selected
 	object and stands in the context of its parent: it is not entered.
 
@@ -31,7 +33,8 @@
 type InteractionPlace =
 	| { kind: 'page' }
 	| { kind: 'group'; group: number }
-	| { kind: 'diagram'; group: number; diagram: number };
+	| { kind: 'diagram'; group: number; diagram: number }
+	| { kind: 'inPlace'; object: number };
 
 /// What one context answers. Each action answers whether it was taken here; one that is not goes
 /// on to the engine.
@@ -173,6 +176,15 @@ class Interaction {
 		it for all of them.
 	*/
 	public static placeOf(selected: number[]): InteractionPlace {
+		// An object active in place takes everything while it is, whatever it selects inside.
+		if (
+			RenderManager.isVectorRendering() &&
+			GraphicSelection.inPlaceActive &&
+			GraphicSelection.inPlaceArea &&
+			GraphicSelection.inPlaceObject !== undefined
+		)
+			return { kind: 'inPlace', object: GraphicSelection.inPlaceObject };
+
 		const first = selected[0];
 		const parent =
 			first === undefined ? undefined : RenderGeometrySection.parentOf(first);

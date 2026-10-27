@@ -542,6 +542,11 @@ class MouseControl extends CanvasSectionObject {
 			);
 			if (hit === undefined) return false;
 
+			// where the press is, for a context that asks, the one of an object active in place
+			GraphicSelection.pressedAt = new cool.Point(
+				this.positionOnMouseDown.x,
+				this.positionOnMouseDown.y,
+			);
 			const objectId = Interaction.context().takesHoldFor(hit, modifier);
 			if (objectId === undefined) return false;
 
@@ -748,6 +753,9 @@ class MouseControl extends CanvasSectionObject {
 		if (buttons !== app.LOButtons.left) return false;
 		if (!RenderGeometrySection.answersPointer()) return false;
 		if (app.file.textCursor.visible) return false;
+
+		// where the press is, for a context that asks, the one of an object active in place
+		GraphicSelection.pressedAt = new cool.Point(point.x, point.y);
 
 		const alt = app.UNOModifier.ALT;
 		const taken =

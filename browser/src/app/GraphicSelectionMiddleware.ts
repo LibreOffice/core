@@ -33,6 +33,34 @@ class GraphicSelection {
 	public static tileTwipsOffset: number[] = [0, 0];
 	public static inPlaceArea: number[] | null = null;
 	public static inPlaceMath: boolean = false;
+	/// The object active in place, as the selection named it when it became active. Undefined
+	/// where none is.
+	public static inPlaceObject: number | undefined = undefined;
+	/// The object that was active in place until the last INPLACE EXIT, while no selection has
+	/// been reported since. Undefined otherwise.
+	private static leftInPlace: number | undefined = undefined;
+	/// Where the last left press that the client answers landed, in twips.
+	public static pressedAt: cool.Point | null = null;
+
+	/*
+		Ends being active in place here, ahead of the engine's report of it: the frame and the
+		state go, so the press that left the object can select and carry another one at once.
+		The engine ends it as soon as it is asked for another selection.
+	*/
+	public static leaveInPlace(): void {
+		app.map._docLayer._oleCSelections.clear();
+		this.darkOverlayRectangle = null;
+		this.inPlaceActive = false;
+		this.inPlaceArea = null;
+		this.inPlaceMath = false;
+		this.inPlaceObject = undefined;
+		this.leftInPlace = undefined;
+		this.pressedOutside = undefined;
+	}
+
+	/// What the last left press while an object was active in place met of the page: an object,
+	/// null for nothing, undefined where no press was noted.
+	public static pressedOutside: number | null | undefined = undefined;
 	public static inPlaceTileOffset: number[] = [0, 0];
 	private static selectionEdges: number[] | null = null;
 	public static handlesSection: ShapeHandlesSection = null;
@@ -920,8 +948,11 @@ class GraphicSelection {
 	private static makeSelectionSection(): void {
 		const objectIds = this.selectedObjectIDs;
 		const several = objectIds.length > 1;
+		// An object active in place is edited by itself, with its own undo, so it has no handles.
 		const wanted =
-			RenderManager.isVectorRendering() && objectIds.length
+			RenderManager.isVectorRendering() &&
+			objectIds.length &&
+			Interaction.placeOf(objectIds).kind !== 'inPlace'
 				? several
 					? MultiSelectionSection.sectionName
 					: ObjectSelectionSection.nameFor(objectIds[0])
@@ -1741,7 +1772,37 @@ class GraphicSelection {
 	public static onMessage(textMsg: string) {
 		URLPopUpSection.closeURLPopUp();
 
+		// Whatever is reported after leaving an object active in place settles what is selected.
+		const left = this.leftInPlace;
+		if (!textMsg.match('INPLACE EXIT')) this.leftInPlace = undefined;
+
 		if (textMsg.match('EMPTY')) {
+			// In the vector view an object active in place deselects a part of itself so, a
+			// series of a chart for one; the selection stays the object.
+			if (
+				this.inPlaceArea &&
+				this.inPlaceActive &&
+				RenderManager.isVectorRendering()
+			) {
+				this.showInPlaceFrame();
+				return;
+			}
+			/*
+				A press that left an object active in place selects what it met: another object,
+				or, where it met nothing, the object that was active, unlike the office, so it can
+				be worked on at once. The engine selects nothing for that press.
+			*/
+			if (
+				left !== undefined &&
+				this.pressedOutside !== undefined &&
+				RenderManager.isVectorRendering()
+			) {
+				const met = this.pressedOutside;
+				this.pressedOutside = undefined;
+				this.selectObjects([met === null ? left : met]);
+				this.updateSelectionSection();
+				return;
+			}
 			if (this.outdatedReport([])) return;
 			this.resetSelectionRanges();
 			if (this.inPlaceArea) this.showInPlaceFrame();
@@ -1751,6 +1812,10 @@ class GraphicSelection {
 			this.inPlaceActive = false;
 			this.inPlaceArea = null;
 			this.inPlaceMath = false;
+			this.leftInPlace = this.inPlaceObject;
+			this.inPlaceObject = undefined;
+			// the handles come back once the object is no longer active in place
+			if (RenderManager.isVectorRendering()) this.updateSelectionSection();
 		} else if (textMsg.match('INPLACE')) {
 			try {
 				var msgData = this.parseMessage(textMsg);
@@ -1758,10 +1823,16 @@ class GraphicSelection {
 				if (isMathObject && app.map._docLayer._docType !== 'text') {
 					this.inPlaceArea = null;
 					this.inPlaceActive = false;
+					this.inPlaceObject = undefined;
 					this.extractAndSetGraphicSelection(msgData.slice(0, 4));
 				} else if (msgData.length > 1) {
 					this.inPlaceMath = isMathObject;
 					this.inPlaceArea = msgData.slice(0, 4);
+					// the object that was selected is the one now active, and no press has left it
+					if (this.inPlaceObject === undefined) {
+						this.inPlaceObject = this.selectedObjectIDs[0];
+						this.pressedOutside = undefined;
+					}
 					this.showInPlaceFrame();
 				}
 			} catch (error) {
@@ -1773,7 +1844,17 @@ class GraphicSelection {
 			if (this.rectangle) this.renderDarkOverlay();
 
 			if (!this.inPlaceArea) this.rectangle = null;
-		} else if (this.inPlaceArea && this.selectsInPlaceObject(textMsg)) {
+
+			// an object active in place shows no handles
+			if (RenderManager.isVectorRendering()) this.updateSelectionSection();
+		} else if (
+			this.inPlaceArea &&
+			// In the vector view everything the engine reports while an object is active in
+			// place is a selection inside it, of a part of a chart for one; leaving the object
+			// comes as INPLACE EXIT first, and only then the new selection.
+			((this.inPlaceActive && RenderManager.isVectorRendering()) ||
+				this.selectsInPlaceObject(textMsg))
+		) {
 			this.showInPlaceFrame();
 			if (!window.ThisIsTheiOSApp && !this.inPlaceMath)
 				app.socket.sendMessage('rendershapeselection mimetype=image/svg+xml');
@@ -1791,6 +1872,7 @@ class GraphicSelection {
 				return;
 
 			this.inPlaceActive = false;
+			this.inPlaceObject = undefined;
 			const isMathObject = this.isMathSelection(msgData);
 
 			this.transformGraphicSelection(msgData);
