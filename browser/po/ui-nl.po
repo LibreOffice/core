@@ -8,12 +8,12 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-23 00:15+0200\n"
-"PO-Revision-Date: 2026-10-22 16:51+0000\n"
+"PO-Revision-Date: 2026-10-27 00:00+0000\n"
 "Last-Translator: Stephan Paternotte <stephan-"
 "p@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/nl/>\n"
-"Language: \n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -144,7 +144,7 @@ msgstr "Geüpload"
 
 #: admin/admin.strings.js:43
 msgid "WOPI host"
-msgstr "WOPI server"
+msgstr "WOPI-host"
 
 #: admin/admin.strings.js:44
 msgid "Kill"
@@ -152,7 +152,7 @@ msgstr "Beëindigen"
 
 #: admin/admin.strings.js:45
 msgid "Graphs"
-msgstr "Diagram"
+msgstr "Diagrammen"
 
 #: admin/admin.strings.js:46
 msgid "Memory Graph"
@@ -245,11 +245,11 @@ msgstr "Serverbeschikbaarheid"
 
 #: admin/admin.strings.js:63
 msgid "Refresh Log"
-msgstr "Vernieuw gebeurtenisoverzicht"
+msgstr "Logboek vernieuwen"
 
 #: admin/admin.strings.js:64
 msgid "Channel Filter:"
-msgstr "Kanaal filter:"
+msgstr "Kanaalfilter:"
 
 #: admin/admin.strings.js:65
 #: admin/src/integrator/AdminIntegratorSettings.ts:4797
@@ -303,11 +303,11 @@ msgstr "Over"
 
 #: admin/src/AdminClusterOverview.js:105
 msgid "CPU History"
-msgstr "CPU activiteit"
+msgstr "CPU-activiteit"
 
 #: admin/src/AdminClusterOverview.js:116
 msgid "Memory History"
-msgstr "Geheugen activiteit"
+msgstr "Geheugenactiviteit"
 
 #: admin/src/AdminClusterOverview.js:356
 msgid "Memory"
@@ -444,6 +444,8 @@ msgstr ""
 #: src/control/Control.ServerAuditDialog.ts:107
 msgid "No WOPI host configured: trusting the first host that connected"
 msgstr ""
+"Geen WOPI-host geconfigureerd: vertrouwen op de eerste host die verbinding "
+"maakte"
 
 #: admin/src/AdminSocketServerAudit.js:55
 #: src/control/Control.ServerAuditDialog.ts:122
@@ -451,7 +453,7 @@ msgid ""
 "Your server is configured with insufficient hardware resources, which may "
 "lead to poor performance."
 msgstr ""
-"Je server is geconfigureerd met onvoldoende hardwarebronnen, wat kan leiden "
+"Uw server is geconfigureerd met onvoldoende hardwarebronnen, wat kan leiden "
 "tot slechte prestaties."
 
 #: admin/src/AdminSocketServerAudit.js:59
@@ -518,19 +520,17 @@ msgid "API key lacks permissions"
 msgstr "De API-sleutel heeft onvoldoende rechten"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:711
-#, fuzzy
 msgid ""
 "This AI host is not in the server's allowed AI host list "
 "(ai.allowed_hosts). Ask your administrator to permit it."
 msgstr ""
-"Deze AI-host staat niet op de lijst met toegestane hosts van de server "
-"(lok_allow.host). Vraag je beheerder om deze toe te staan."
+"Deze AI-host staat niet op de lijst met toegestane AI-hosts van de server "
+"(ai.allowed_hosts). Vraag de beheerder om deze toe te staan."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:713
 #: src/control/Control.AIChatSidebar.ts:2183
 msgid "Rate limited - please wait a moment and retry"
-msgstr ""
-"Beperkte verwerkingssnelheid – even geduld a.u.b. en probeer het nog eens"
+msgstr "Beperkte verwerkingssnelheid – wacht even en probeer het opnieuw"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:714
 #: src/control/Control.AIChatSidebar.ts:2184
@@ -619,7 +619,7 @@ msgstr "Gebruik de zoom-instellingen van deze server"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:811
 msgid "Smart Zoom"
-msgstr "Slim Inzoomen"
+msgstr "Slim zoomen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:812
 msgid "Default Zoom"
@@ -651,7 +651,7 @@ msgstr "Opmaakmarkeringen weergeven"
 #: src/control/Control.NotebookbarWriter.js:2427
 #: src/control/jsdialog/Widget.HTMLContent.ts:52
 msgid "Show Comments"
-msgstr "Opmerkingen weergeven"
+msgstr "Commentaar weergeven"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:819
 msgid "Accessibility Checker"
@@ -837,7 +837,7 @@ msgstr "Verborgen tekst"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:862
 msgid "Placeholders"
-msgstr "Plaatshouders"
+msgstr "Tijdelijke aanduidingen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:863
 msgid "Left pages"
@@ -893,7 +893,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1636
 msgid "Upload Autotext"
-msgstr "Upload Autotekst"
+msgstr "Autotekst uploaden"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1642
 msgid "Custom dictionaries"
@@ -905,11 +905,11 @@ msgid ""
 "(.dic) will be available for spelling checks."
 msgstr ""
 "Woorden aan een spellingcontrolewoordenboek toevoegen, of bewerken. Woorden "
-"in jouw woordenboek (.dic) zullen beschikbaar zijn voor spellingcontrole."
+"in uw woordenboek (.dic) zullen beschikbaar zijn voor spellingcontrole."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1650
 msgid "Upload Wordbook"
-msgstr "Upload woordenboek"
+msgstr "Woordenboek uploaden"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1656
 msgid "Document themes"
@@ -964,7 +964,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1693
 msgid "Upload Security Policy"
-msgstr "Upload beveiligingsbeleid"
+msgstr "Uploadsbeveiligingsbeleid"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1782
 msgid "Settings are only available to signed-in users."
@@ -1031,7 +1031,7 @@ msgstr "Standaardinstellingen document herstellen"
 #: admin/src/integrator/AdminIntegratorSettings.ts:2309
 #: admin/src/integrator/Xcu.ts:661
 msgid "Are you sure you want to reset Document settings?"
-msgstr "Weet je zeker dat je de documentinstellingen opnieuw wilt instellen?"
+msgstr "Weet u zeker dat u de documentinstellingen opnieuw wilt instellen?"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2326
 #: admin/src/integrator/Xcu.ts:676
@@ -1046,7 +1046,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2841
 msgid "Notebookbar view"
-msgstr "Notebookbar weergave"
+msgstr "Notebookbar-weergave"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2848
 #: src/control/Control.NotebookbarCalc.js:1665
@@ -1102,7 +1102,7 @@ msgstr "Vergroot het hele venster, inclusief het document en de menu's."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3116
 msgid "As per system"
-msgstr "Vanaf systeem"
+msgstr "Volgens het systeem"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3151
 msgid ""
@@ -1166,7 +1166,7 @@ msgstr "AI-assistent"
 #: admin/src/integrator/AdminIntegratorSettings.ts:5185
 #: admin/src/integrator/AdminIntegratorSettings.ts:6044
 msgid "Reset"
-msgstr "Opnieuw instellen"
+msgstr "Herstellen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3389
 msgid "Use the AI provider set on the server"
@@ -1222,7 +1222,7 @@ msgstr "Tekstgeneratie"
 #: src/control/Control.NotebookbarCalc.js:1048
 #: src/control/jsdialog/Definitions.Menu.ts:2410
 msgid "Default"
-msgstr "Standaardinstelling"
+msgstr "Standaard"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3689
 #: admin/src/integrator/AdminIntegratorSettings.ts:3788
@@ -1255,12 +1255,12 @@ msgstr "Dezelfde als de tekstaanbieder"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4103
 msgid "Required for this provider"
-msgstr "Vereist voor deze ambieerde"
+msgstr "Vereist voor deze aanbieder"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4196
 msgid "Enter an API key for this provider to list its models."
 msgstr ""
-"Voer een API-sleutel in waarmee deze provider zijn modellen kan weergeven."
+"Voer een API-sleutel in waarmee deze aanbieder zijn modellen kan weergeven."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4212
 #: admin/src/integrator/AdminIntegratorSettings.ts:4334
@@ -1272,7 +1272,7 @@ msgstr "Modellen ophalen..."
 #: admin/src/integrator/AdminIntegratorSettings.ts:4376
 #: admin/src/integrator/AdminIntegratorSettings.ts:4390
 msgid "No models found"
-msgstr "Er zijn geen modellen gevonden"
+msgstr "Geen modellen gevonden"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4284
 #: admin/src/integrator/AdminIntegratorSettings.ts:4400
@@ -1282,7 +1282,7 @@ msgstr "Verbonden"
 #: admin/src/integrator/AdminIntegratorSettings.ts:4290
 #: admin/src/integrator/AdminIntegratorSettings.ts:4406
 msgid "Failed to fetch models"
-msgstr "Het ophalen van modellen is mislukt"
+msgstr "Ophalen van modellen is mislukt"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4304
 msgid "Invalid provider configuration"
@@ -1309,26 +1309,28 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4636
 msgid "Lightproof Sentence Checker"
-msgstr "Lightproof Zinscontrole"
+msgstr "Lightproof grammaticacontrole"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4639
 msgid "Choose what the sentence checker looks for as you type."
-msgstr "Kies wat de zinscontrole zoekt terwijl u typt."
+msgstr "Kies wat de grammaticacontrole zoekt terwijl u typt."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4687
 msgid "Remote Sentence Checkers"
-msgstr ""
+msgstr "Externe grammaticacontrole"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4691
 msgid ""
 "Checkers that run on a server. The text of the document is sent there to be "
 "checked."
 msgstr ""
+"Controleprogramma's die op een server draaien. De tekst van het document "
+"wordt daar naartoe gestuurd om te worden gecontroleerd."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4726
 #: admin/src/integrator/AdminIntegratorSettings.ts:5066
 msgid "Enabled"
-msgstr ""
+msgstr "Ingeschakeld"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4738
 #: admin/src/integrator/AdminIntegratorSettings.ts:5103
@@ -1337,62 +1339,61 @@ msgid "Server URL"
 msgstr "Server-URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4750
-#, fuzzy
 msgid "Username"
 msgstr "Gebruikersnaam"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4772
 #: admin/src/integrator/AdminIntegratorSettings.ts:5122
 msgid "Verify the server certificate"
-msgstr ""
+msgstr "Verifieer het servercertificaat"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4780
 msgid "Enabled on this server for: {0}"
-msgstr ""
+msgstr "Ingeschakeld op deze server voor: {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4795
 msgid "Checking level"
-msgstr ""
+msgstr "Controleniveau"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4798
 msgid "Single words"
-msgstr ""
+msgstr "Enkele woorden"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4799
 msgid "Spelling"
-msgstr ""
+msgstr "Spelling"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4800
 msgid "Spelling and grammar"
-msgstr ""
+msgstr "Spelling en grammatica"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4810
 msgid "German spelling"
-msgstr ""
+msgstr "Duitse spelling"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4812
 msgid "Duden recommendation"
-msgstr ""
+msgstr "Duden-aanbeveling"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4813
 msgid "Conservative"
-msgstr ""
+msgstr "Conservatief"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4814
 msgid "Progressive"
-msgstr ""
+msgstr "Progressief"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4815
 msgid "Tolerant"
-msgstr ""
+msgstr "Tolerant"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4816
 msgid "Press agencies"
-msgstr ""
+msgstr "Persagentschappen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4826
 msgid "Explanations"
-msgstr ""
+msgstr "Verklaringen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4829
 #: src/control/Control.AIChatSidebar.ts:154
@@ -1400,100 +1401,100 @@ msgid "Short"
 msgstr "Kort"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4830
-#, fuzzy
 msgid "Long"
-msgstr "Logboek"
+msgstr "Uitgebreid"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4831
 msgid "Long, with an example"
-msgstr ""
+msgstr "Uitgebreid met een voorbeeld"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4841
 msgid "Correction profiles"
-msgstr ""
+msgstr "Correctieprofielen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4851
 msgid "Dictionaries"
-msgstr ""
+msgstr "Woordenboeken"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4858
 msgid "Foreign words with a German equivalent"
-msgstr ""
+msgstr "Buitenlandse woorden met een Duits equivalent"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4859
 msgid "Archaic words"
-msgstr ""
+msgstr "Verouderde woorden"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4860
 msgid "Regional words"
-msgstr ""
+msgstr "Regionale woorden"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4861
 msgid "Colloquial and vulgar words"
-msgstr ""
+msgstr "Informele en vulgaire woorden"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4862
 msgid "Filler words"
-msgstr ""
+msgstr "Vulwoorden"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4863
 msgid "Offensive wording"
-msgstr ""
+msgstr "Aanstootgevende formulering"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4864
 msgid "Gender-inclusive wording"
-msgstr ""
+msgstr "Genderinclusieve formulering"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4865
 msgid "Complex sentences"
-msgstr ""
+msgstr "Complexe zinnen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4887
 msgid "Style checks (German only)"
-msgstr ""
+msgstr "Stijlcontroles (alleen Duits)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5011
-#, fuzzy
 msgid "Translation"
-msgstr "Overgang"
+msgstr "Vertaling"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5015
 msgid ""
 "Machine translation of the document text with the Translate command. The "
 "text is sent to the provider to be translated."
 msgstr ""
+"Machinevertaling van de documenttekst met de opdracht Vertalen. De tekst "
+"wordt naar de aanbieder gestuurd om te worden vertaald."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5028
 msgid "The first one that is set up"
-msgstr ""
+msgstr "De eerste die is ingesteld"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5081
 msgid "API URL"
-msgstr ""
+msgstr "API-URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5090
 msgid "Authentication key"
-msgstr ""
+msgstr "Authenticatiesleutel"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5132
 msgid "Set up on this server."
-msgstr ""
+msgstr "Ingesteld op deze server."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5133
 msgid "Enabled on this server, but not set up."
-msgstr ""
+msgstr "Ingeschakeld op deze server, maar niet ingesteld."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5190
 msgid "Use the default settings"
-msgstr ""
+msgstr "Gebruik de standaardinstellingen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5191
 msgid "Use the settings set on the server"
-msgstr ""
+msgstr "Gebruik de instellingen die op de server zijn ingesteld"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5199
 msgid "Your own settings are dropped when you save."
-msgstr ""
+msgstr "Uw eigen instellingen worden bij het opslaan verwijderd."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5253
 #: admin/src/integrator/AdminIntegratorSettings.ts:5914
@@ -1586,7 +1587,7 @@ msgstr "Er is iets misgegaan bij het laden van de documentinstellingen."
 
 #: admin/src/integrator/Xcu.ts:584
 msgid "Adjust how office documents behave."
-msgstr "Pas aan hoe kantoordocumenten zich gedragen."
+msgstr "Aanpassen hoe kantoordocumenten zich gedragen."
 
 #: admin/src/integrator/Xcu.ts:633
 msgid "Select a tab to view settings."
@@ -1796,7 +1797,7 @@ msgstr "Donker"
 #: src/app/TableStylesService.ts:112
 #: src/control/jsdialog/Widget.ColorPicker.ts:367
 msgid "Custom"
-msgstr "Op maat"
+msgstr "Aangepast"
 
 #: src/app/TableStylesService.ts:251 src/app/TableStylesService.ts:263
 #: src/app/TableStylesService.ts:266 src/app/TableStyleGalleryService.ts:99
@@ -1888,7 +1889,7 @@ msgstr "Verwijderd"
 #: src/layer/marker/TextInput.js:482 src/layer/tile/CanvasTileLayer.js:3777
 #: src/layer/tile/CanvasTileLayer.js:3788
 msgid "Comment"
-msgstr "Opmerking"
+msgstr "Commentaar"
 
 #: src/canvas/sections/CommentSection.ts:1328
 msgid "Modify"
@@ -1939,7 +1940,7 @@ msgstr "Weergeven in navigator"
 
 #: src/canvas/sections/CommentSection.ts:1691
 msgid "Press Ctrl + Enter to post, or %1 to discard"
-msgstr ""
+msgstr "Druk op Ctrl + Enter om te posten of op %1 om weg te gooien"
 
 #: src/canvas/sections/CommentSection.ts:1720
 #: src/canvas/sections/CommentSection.ts:1725
@@ -1992,7 +1993,7 @@ msgstr "Link verwijderen"
 
 #: src/canvas/sections/GroupButtonSection.ts:66
 msgid "Edit Diagram"
-msgstr ""
+msgstr "Diagram bewerken"
 
 #: src/canvas/sections/FormFieldButton.ts:106
 msgid "Unfold"
@@ -2178,23 +2179,23 @@ msgstr "Nieuw gesprek"
 
 #: src/control/Control.AIChatSidebar.ts:730
 msgid "What would you like to do with this spreadsheet?"
-msgstr ""
+msgstr "Wat wilt u doen met deze spreadsheet?"
 
 #: src/control/Control.AIChatSidebar.ts:732
 msgid "What would you like to do with this presentation?"
-msgstr ""
+msgstr "Wat wilt u doen met deze presentatie?"
 
 #: src/control/Control.AIChatSidebar.ts:734
 msgid "What would you like to do with this drawing?"
-msgstr ""
+msgstr "Wat wilt u doen met deze tekening?"
 
 #: src/control/Control.AIChatSidebar.ts:736
 msgid "What would you like to do with this document?"
-msgstr ""
+msgstr "Wat wilt u doen met dit document?"
 
 #: src/control/Control.AIChatSidebar.ts:753
 msgid "Select some content first to work on just that part."
-msgstr ""
+msgstr "Selecteer eerst wat inhoud om alleen aan dat deel te werken."
 
 #: src/control/Control.AIChatSidebar.ts:775
 #: src/control/Control.AIChatSidebar.ts:2218
@@ -3191,7 +3192,7 @@ msgstr "%1 (%2%) kan worden opgeruimd"
 
 #: src/control/Control.CleanupSidebar.ts:384
 msgid "Fix"
-msgstr "Repareren"
+msgstr "Oplossen"
 
 #: src/control/Control.CleanupSidebar.ts:460
 msgid "%1 byte"
@@ -4436,7 +4437,7 @@ msgstr "Kolommen"
 
 #: src/control/Control.JSDialogBuilder.js:2078
 msgid "Insert Table"
-msgstr "Invoegen Tabel"
+msgstr "Tabel invoegen"
 
 #: src/control/Control.LanguageDialog.js:64 src/control/Control.Menubar.ts:433
 #: src/control/Control.Menubar.ts:435 src/control/Control.Menubar.ts:437
@@ -4518,7 +4519,7 @@ msgstr "Document sluiten"
 #: src/control/Control.NotebookbarImpress.js:414
 #: src/control/Control.NotebookbarWriter.js:393
 msgid "Repair"
-msgstr "Herstellen"
+msgstr "Repareren"
 
 #: src/control/Control.Menubar.ts:163 src/control/Control.Menubar.ts:510
 #: src/control/Control.Menubar.ts:718 src/control/Control.Menubar.ts:894
@@ -5151,7 +5152,7 @@ msgstr "Koppenrij"
 #: src/control/Notebookbar.CalcTableTab.ts:219
 #: src/control/Notebookbar.TableDesignTabBase.ts:123
 msgid "Total Row"
-msgstr "Totalenrij"
+msgstr "Totaalrij"
 
 #: src/control/Notebookbar.CalcTableTab.ts:241
 #: src/control/Notebookbar.TableDesignTabBase.ts:146
@@ -5826,7 +5827,7 @@ msgstr "Automatische spellingcontrole"
 #: src/control/Control.NotebookbarImpress.js:2159
 #: src/control/jsdialog/Widget.HTMLContent.ts:52
 msgid "Comments"
-msgstr "Opmerkingen"
+msgstr "Commentaar"
 
 #: src/control/Control.NotebookbarCalc.js:2801
 #: src/control/Control.NotebookbarWriter.js:2482
@@ -6105,9 +6106,8 @@ msgid "Switch to Editing"
 msgstr "Overschakelen naar bewerken"
 
 #: src/control/Control.HyperlinkWizard.ts:67
-#, fuzzy
 msgid "Link"
-msgstr "Lijn"
+msgstr "Link"
 
 #: src/control/Control.PartsPreview.js:456
 msgid "Show everyone on this slide"
@@ -6148,61 +6148,59 @@ msgstr "voorbeeldweergave van pagina %1"
 
 #: src/control/Control.PartsPreview.js:967
 msgid "preview of page %1, %3 is missing"
-msgstr ""
+msgstr "voorbeeld van pagina %1, %3 ontbreekt"
 
 #: src/control/Control.PartsPreview.js:968
 msgid "Slide %1, %3 is missing"
-msgstr ""
+msgstr "Dia %1, %3 ontbreekt"
 
 #: src/control/Control.PartsPreview.js:972
-#, fuzzy
 msgid "preview of page %1, not found in %3"
-msgstr "voorbeeld van pagina %1, gekoppeld aan %2 in %3"
+msgstr "voorbeeld van pagina %1, niet aangetroffen in %3"
 
 #: src/control/Control.PartsPreview.js:973
 msgid "Slide %1, not found in %3"
-msgstr ""
+msgstr "Dia %1, niet aangetroffen in %3"
 
 #: src/control/Control.PartsPreview.js:977
 msgid "preview of page %1, no access to %3"
-msgstr ""
+msgstr "voorbeeld van pagina %1, geen toegang tot %3"
 
 #: src/control/Control.PartsPreview.js:978
 msgid "Slide %1, no access to %3"
-msgstr ""
+msgstr "Dia %1, geen toegang tot %3"
 
 #: src/control/Control.PartsPreview.js:982
 msgid "preview of page %1, could not open %3"
-msgstr ""
+msgstr "voorbeeld van pagina %1, kan %3 niet openen"
 
 #: src/control/Control.PartsPreview.js:983
 msgid "Slide %1, could not open %3"
-msgstr ""
+msgstr "Dia %1, kan %3 niet openen"
 
 #: src/control/Control.PartsPreview.js:988
 msgid "preview of page %1, %2 changed in %3"
-msgstr ""
+msgstr "voorbeeld van pagina %1, %2 gewijzigd in %3"
 
 #: src/control/Control.PartsPreview.js:989
 msgid "Slide %1, %2 changed in %3"
-msgstr ""
+msgstr "Dia %1, %2 gewijzigd in %3"
 
 #: src/control/Control.PartsPreview.js:992
-#, fuzzy
 msgid "preview of page %1, changed in %3"
-msgstr "voorbeeld van pagina %1, gekoppeld aan %2"
+msgstr "voorbeeld van pagina %1, gewijzigd in %3"
 
 #: src/control/Control.PartsPreview.js:993
 msgid "Slide %1, changed in %3"
-msgstr ""
+msgstr "Dia %1, gewijzigd in %3"
 
 #: src/control/Control.PartsPreview.js:997
 msgid "preview of page %1, %3 is disconnected"
-msgstr ""
+msgstr "voorbeeld van pagina %1, verbinding met %3 verbroken"
 
 #: src/control/Control.PartsPreview.js:998
 msgid "Slide %1, %3 is disconnected"
-msgstr ""
+msgstr "Dia %1, verbinding met %3 verbroken"
 
 #: src/control/Control.PartsPreview.js:1002
 msgid "preview of page %1, linked to %2 in %3"
@@ -6287,7 +6285,7 @@ msgstr "{0} gewijzigd"
 
 #: src/control/Control.SlideImportPane.tsx:693
 msgid "Disconnected"
-msgstr ""
+msgstr "Verbinding verbroken"
 
 #: src/control/Control.SlideImportPane.tsx:694
 #: src/control/Control.SlideLinkToolbar.tsx:115
@@ -6667,7 +6665,7 @@ msgstr "systeemaanroepbeveiliging filteren ingeschakeld"
 
 #: src/control/Control.ServerAuditDialog.ts:112
 msgid "The trusted WOPI hosts are configured"
-msgstr ""
+msgstr "De vertrouwde WOPI-hosts zijn geconfigureerd"
 
 #: src/control/Control.ServerAuditDialog.ts:128
 msgid "Hardware resources are sufficient for optimal performance"
@@ -6893,7 +6891,7 @@ msgstr "Voer een nieuwe werkbladnaam in"
 
 #: src/control/Control.Tabs.js:758
 msgid "Protect Sheet"
-msgstr "Bescherm werkblad"
+msgstr "Blad beveiligen"
 
 #: src/control/Control.Tabs.js:758
 msgid "Enter a password to protect the sheet"
@@ -6901,7 +6899,7 @@ msgstr "Voer een wachtwoord in om het werkblad te beveiligen"
 
 #: src/control/Control.Tabs.js:762
 msgid "Unprotect Sheet"
-msgstr "De beveiliging van het werkblad opheffen"
+msgstr "Bladbeveiliging opheffen"
 
 #: src/control/Control.Tabs.js:762
 msgid "Enter the password to unprotect the sheet"
@@ -6925,7 +6923,7 @@ msgstr "Document opnieuw berekend in %1 ms"
 
 #: src/control/Control.TopToolbar.js:121 src/control/Control.TopToolbar.js:125
 msgid "Show Menu Bar"
-msgstr ""
+msgstr "Menubalk weergeven"
 
 #: src/control/Control.TopToolbar.js:180
 msgid "Active Sheet"
@@ -7513,7 +7511,7 @@ msgstr "Bewerkingsmodus"
 
 #: src/control/PermissionMode.ts:273
 msgid "Review Mode"
-msgstr ""
+msgstr "Beoordelingsmodus"
 
 #: src/control/PermissionMode.ts:291 src/control/PermissionMode.ts:471
 #: src/control/PermissionMode.ts:477 src/control/PermissionMode.ts:483
@@ -7522,7 +7520,7 @@ msgstr "Weergeven"
 
 #: src/control/PermissionMode.ts:467
 msgid "Reviewing"
-msgstr ""
+msgstr "Beoordelen"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:380
 msgid "Save Image to Server"
@@ -7530,7 +7528,7 @@ msgstr "Afbeelding opslaan op de server"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:399
 msgid "Fit slide to view"
-msgstr ""
+msgstr "Dia passend maken"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:499
 msgid "Paste Special"
@@ -8674,7 +8672,7 @@ msgstr "Dia"
 
 #: src/layer/marker/A11yTextInput.js:265
 msgid "Comment by {0}: {1}"
-msgstr ""
+msgstr "Commentaar van {0}: {1}"
 
 #: src/layer/marker/A11yTextInput.js:379
 msgid "Heading level {0}"
@@ -8739,30 +8737,28 @@ msgid "{0} deleted"
 msgstr "{0} verwijderd"
 
 #: src/layer/marker/TextInput.js:489
-#, fuzzy
 msgid "Placeholder"
-msgstr "Plaatshouders"
+msgstr "Plaatshouder"
 
 #: src/layer/marker/TextInput.js:509
 msgid "Drop-down list"
-msgstr ""
+msgstr "Uitklaplijst"
 
 #: src/layer/marker/TextInput.js:511
 msgid "Combo box"
-msgstr ""
+msgstr "Combo-box"
 
 #: src/layer/marker/TextInput.js:515
 msgid "Content control"
-msgstr ""
+msgstr "Inhoudscontrole"
 
 #: src/layer/marker/TextInput.js:528
-#, fuzzy
 msgid "Object"
-msgstr "Voorwerpen"
+msgstr "Object"
 
 #: src/layer/marker/TextInput.js:530
 msgid "Frame"
-msgstr ""
+msgstr "Frame"
 
 #: src/layer/marker/TextInput.js:681
 msgid "Screen reader support for text content is disabled. "
@@ -9012,7 +9008,7 @@ msgstr "De presentatiemodus is uitgeschakeld voor dit document"
 
 #: src/map/handler/Map.StateChanges.js:204
 msgid "Editing slide %1 - click outside or press Esc to finish"
-msgstr ""
+msgstr "Dia %1 bewerken - klik erbuiten of druk op Esc om te voltooien"
 
 #: src/map/handler/Map.VersionBar.js:50
 msgid "Your Collabora Online server needs updating. Version {0} is available."
@@ -9140,7 +9136,7 @@ msgstr "Presenteren aan Iedereen"
 
 #: src/slideshow/PresenterConsole.js:43
 msgid "Exit"
-msgstr "Sluiten"
+msgstr "Afsluiten"
 
 #: src/slideshow/PresenterConsole.js:44
 msgid "Go Back"
@@ -9216,11 +9212,11 @@ msgstr "Het uitbreidingscommando is mislukt: %1"
 
 #: src/control/Control.Extension.ts:2060
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: src/control/Control.Extension.ts:2061
 msgid "No"
-msgstr ""
+msgstr "Nee"
 
 #: templates/templates.js:6 templates/templates.js:10
 msgid "Business Letter"
@@ -9394,7 +9390,7 @@ msgstr "Help mee"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:49-7
 msgid "https://www.collaboraoffice.org/"
-msgstr "https://www.collaboraonline.org/"
+msgstr "https://www.collaboraoffice.org/"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
 msgid ""
@@ -9408,13 +9404,13 @@ msgid ""
 "\">filing a bug report</a> with all the essential steps on how to reproduce "
 "it."
 msgstr ""
-"Ben je geïnteresseerd om bij te dragen, maar weet je niet waar je moet "
+"Bent u geïnteresseerd om bij te dragen, maar weet u niet waar u moet "
 "beginnen? Ga naar de <a target=\"_blank\" rel=\"noopener\" href=\"https://"
-"www.collaboraonline.org/post/build-code/\">stapsgewijze instructies</a> en "
+"www.collaboraoffice.org/post/build-code/\">stapsgewijze instructies</a> en "
 "bouw CODE vanaf de grond. Je kunt ook helpen met <a target=\"_blank\" "
-"rel=\"noopener\" href=\"https://collaboraonline.github.io/post/translate/\">"
+"rel=\"noopener\" href=\"https://collaboraoffice.github.io/post/translate/\">"
 "vertalen</a> of met het <a target=\"_blank\" rel=\"noopener\" href=\"https://"
-"www.collaboraonline.org/post/filebugs/\">rapporteren van fouten</a> met "
+"www.collaboraoffice.org/post/filebugs/\">rapporteren van fouten</a> met "
 "essentiële stappen om die te reproduceren."
 
 #: welcome/welcome.html%2Bhtml.body.div.div:55-5

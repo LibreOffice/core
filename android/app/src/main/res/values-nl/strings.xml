@@ -31,7 +31,7 @@
     <string name="external_sd_path">Extern SD-pad</string>
     <string name="physical_storage_settings">Instellingen voor fysieke opslag</string>
     <string name="owncloud_settings">Instellingen cloudserver</string>
-    <string name="storage_provider_settings">Instellingen opslagprovider</string>
+    <string name="storage_provider_settings">Instellingen opslagaanbieder</string>
     <string name="otg_missing_error">Ongeldig rootbestand. Controleer uw OTG-apparaat en/of configuratie.</string>
     <string name="ext_document_provider_error">Ongeldig root-bestand. Controleer uw SD kaartconfiguratie.</string>
     <string name="owncloud_unspecified_error">Onbekende fout bij het verbinden met de cloud-server. Controleer uw configuratie en/of probeer het later.</string>
@@ -110,7 +110,7 @@
     <string name="choose_theme">Kies thema</string>
     <string name="theme">Thema</string>
     <string name="pref_user_name_guest">Gast-gebruiker</string>
-    <string name="pref_user_name_info">Gebruikt bij het maken van notities</string>
+    <string name="pref_user_name_info">Gebruikt bij het toevoegen van commentaar</string>
     <string name="pref_user_name">Gebruikersnaam</string>
     <string name="app_version_and_hash">Versie: %1$s\ngit-hash: %2$s</string>
 </resources>

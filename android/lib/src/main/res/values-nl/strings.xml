@@ -8,12 +8,12 @@
     <string name="temp_file_saving_disabled">Door de bronapp gedeeld als alleen-lezen. Gebruik \"Een kopie bewerken\" om wijzigingen aan te brengen.</string>
     <string name="saving">Opslaan...</string>
     <string name="preparing_for_the_first_start_after_an_update">Voorbereiding voor de eerste start na een update.</string>
-    <string name="rate_our_app_text">Als je enthousiast bent, geef dan alsjeblieft 5 sterren in Google Play. Jouw goede recensies zijn onze beste motivatie.</string>
+    <string name="rate_our_app_text">Bent u enthousiast, geef dan alsjeblieft 5 sterren in Google Play. Goede recensies zijn onze beste motivatie.</string>
     <string name="rate_our_app_title">Bedankt voor het gebruiken van %1$s!</string>
     <string name="later">Later</string>
     <string name="rate_now">Beoordeel nu</string>
     <string name="exiting">Afsluiten...</string>
-    <string name="ask_for_copy">Dit document is alleen-lezen. Wil je een kopie maken om te bewerken?</string>
+    <string name="ask_for_copy">Dit document is alleen-lezen. Wilt u een kopie maken om te bewerken?</string>
     <string name="edit_copy">Bewerk een kopie</string>
     <string name="view_only">Alleen bekijken</string>
     <string name="restarting">Opnieuw starten...</string>

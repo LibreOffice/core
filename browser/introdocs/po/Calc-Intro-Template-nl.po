@@ -3,8 +3,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Calc-Intro-Template.ods\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-10-19 09:51+0000\n"
-"Last-Translator: Sebastiaan Veld <notify@virtfields.nl>\n"
+"PO-Revision-Date: 2026-10-26 15:52+0000\n"
+"Last-Translator: Stephan Paternotte <stephan-"
+"p@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "desktop-apps/calc-intro-template/nl/>\n"
 "Language: nl\n"
@@ -45,7 +46,7 @@ msgstr ""
 
 #. content.xml (validation title)
 msgid "Use other options"
-msgstr "Gebruik andere opties"
+msgstr "Andere opties gebruiken"
 
 #. content.xml (validation help message)
 msgid "Use Standard or Advanced Filter to narrow down your data more precisely"
