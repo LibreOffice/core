@@ -110,6 +110,137 @@ CPPUNIT_TEST_FIXTURE(SingleSelectQueryComposerTest, testSubQueries)
     CPPUNIT_ASSERT_EQUAL(sExpectedQuery, sExecutableQuery);
 }
 
+CPPUNIT_TEST_FIXTURE(SingleSelectQueryComposerTest, testDisjunctiveNormalForm)
+{
+    uno::Reference<XConnection> xConnection = setUpDBConnection();
+
+    uno::Reference<lang::XMultiServiceFactory> xFactory(xConnection, UNO_QUERY);
+    CPPUNIT_ASSERT(xFactory.is());
+
+    Reference<XSingleSelectQueryComposer> xComposer(
+        xFactory->createInstance(u"com.sun.star.sdb.SingleSelectQueryComposer"_ustr),
+        UNO_QUERY_THROW);
+
+    // a simple case: WHERE clause simply is a combination of predicates knitted with AND
+    OUString sQuery = u"SELECT \"CUSTOMERS\".\"NAME\", "
+                      "\"CUSTOMERS\".\"ADDRESS\", "
+                      "\"CUSTOMERS\".\"CITY\", "
+                      "\"CUSTOMERS\".\"POSTAL\", "
+                      "\"PRODUCTS\".\"NAME\" "
+                      "FROM \"ORDERS\", \"CUSTOMERS\", \"ORDERS_DETAILS\", \"PRODUCTS\" "
+                      "WHERE (   \"ORDERS\".\"CUSTOMERID\" = \"CUSTOMERS\".\"ID\" "
+                      "AND \"ORDERS_DETAILS\".\"ORDERID\" = \"ORDERS\".\"ID\" "
+                      "AND \"ORDERS_DETAILS\".\"PRODUCTID\" = \"PRODUCTS\".\"ID\" "
+                      ") "_ustr;
+    xComposer->setQuery(sQuery);
+
+    {
+        Sequence<Sequence<PropertyValue>> disjunctiveNormalForm = xComposer->getStructuredFilter();
+        Sequence<PropertyValue> expectedDNF(3);
+        PropertyValue* pExpectedDNF = expectedDNF.getArray();
+
+        pExpectedDNF[0].Name = u"CUSTOMERID"_ustr;
+        pExpectedDNF[0].Handle = SQLFilterOperator::EQUAL;
+        pExpectedDNF[0].Value <<= u"\"CUSTOMERS\".\"ID\""_ustr;
+        pExpectedDNF[0].State = PropertyState_DIRECT_VALUE;
+
+        pExpectedDNF[1].Name = u"ORDERID"_ustr;
+        pExpectedDNF[1].Handle = SQLFilterOperator::EQUAL;
+        pExpectedDNF[1].Value <<= u"\"ORDER\".\"ID\""_ustr;
+        pExpectedDNF[1].State = PropertyState_DIRECT_VALUE;
+
+        pExpectedDNF[2].Name = u"PRODUCTID"_ustr;
+        pExpectedDNF[2].Handle = SQLFilterOperator::EQUAL;
+        pExpectedDNF[2].Value <<= u"\"PRODUCT\".\"ID\""_ustr;
+        pExpectedDNF[2].State = PropertyState_DIRECT_VALUE;
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), disjunctiveNormalForm.getLength());
+        for (auto i = 0; i < expectedDNF.getLength(); ++i)
+        {
+            CPPUNIT_ASSERT_EQUAL(expectedDNF[i].Name, disjunctiveNormalForm[0][i].Name);
+        }
+    }
+
+    // somewhat more challenging: One of the conjunction terms is a disjunction itself
+    sQuery = u"SELECT \"CUSTOMERS\".\"NAME\", "
+             "\"CUSTOMERS\".\"ADDRESS\", "
+             "\"CUSTOMERS\".\"CITY\", "
+             "\"CUSTOMERS\".\"POSTAL\", "
+             "\"PRODUCTS\".\"NAME\" "
+             "FROM \"ORDERS\", \"CUSTOMERS\", \"ORDERS_DETAILS\", \"PRODUCTS\" "
+             "WHERE (   \"ORDERS\".\"CUSTOMERID\" = \"CUSTOMERS\".\"ID\" "
+             "AND \"ORDERS_DETAILS\".\"ORDERID\" = \"ORDERS\".\"ID\" "
+             "AND \"ORDERS_DETAILS\".\"PRODUCTID\" = \"PRODUCTS\".\"ID\" "
+             ") "
+             "AND "
+             "(  \"PRODUCTS\".\"Name\" = 'Apples' "
+             "OR \"products\".\"ID\" = 2 "
+             ")"_ustr;
+    xComposer->setQuery(sQuery);
+
+    Sequence<Sequence<PropertyValue>> disjunctiveNormalForm = xComposer->getStructuredFilter();
+    {
+        Sequence<PropertyValue> firstExpectedDNF(4);
+        PropertyValue* pFirstExpectedDNF = firstExpectedDNF.getArray();
+        pFirstExpectedDNF[0].Name = u"CUSTOMERID"_ustr;
+        pFirstExpectedDNF[0].Handle = SQLFilterOperator::EQUAL;
+        pFirstExpectedDNF[0].Value <<= u"\"CUSTOMERS\".\"ID\""_ustr;
+        pFirstExpectedDNF[0].State = PropertyState_DIRECT_VALUE;
+
+        pFirstExpectedDNF[1].Name = u"ORDERID"_ustr;
+        pFirstExpectedDNF[1].Handle = SQLFilterOperator::EQUAL;
+        pFirstExpectedDNF[1].Value <<= u"\"ORDER\".\"ID\""_ustr;
+        pFirstExpectedDNF[1].State = PropertyState_DIRECT_VALUE;
+
+        pFirstExpectedDNF[2].Name = u"PRODUCTID"_ustr;
+        pFirstExpectedDNF[2].Handle = SQLFilterOperator::EQUAL;
+        pFirstExpectedDNF[2].Value <<= u"\"PRODUCT\".\"ID\""_ustr;
+        pFirstExpectedDNF[2].State = PropertyState_DIRECT_VALUE;
+
+        pFirstExpectedDNF[3].Name = u"Name"_ustr;
+        pFirstExpectedDNF[3].Handle = SQLFilterOperator::EQUAL;
+        pFirstExpectedDNF[3].Value <<= u"\"Apples\""_ustr;
+        pFirstExpectedDNF[3].State = PropertyState_DIRECT_VALUE;
+
+        Sequence<PropertyValue> secondExpectedDNF(4);
+        PropertyValue* pSecondExpectedDNF = secondExpectedDNF.getArray();
+
+        pSecondExpectedDNF[0].Name = u"CUSTOMERID"_ustr;
+        pSecondExpectedDNF[0].Handle = SQLFilterOperator::EQUAL;
+        pSecondExpectedDNF[0].Value <<= u"\"CUSTOMERS\".\"ID\""_ustr;
+        pSecondExpectedDNF[0].State = PropertyState_DIRECT_VALUE;
+
+        pSecondExpectedDNF[1].Name = u"ORDERID"_ustr;
+        pSecondExpectedDNF[1].Handle = SQLFilterOperator::EQUAL;
+        pSecondExpectedDNF[1].Value <<= u"\"ORDER\".\"ID\""_ustr;
+        pSecondExpectedDNF[1].State = PropertyState_DIRECT_VALUE;
+
+        pSecondExpectedDNF[2].Name = u"PRODUCTID"_ustr;
+        pSecondExpectedDNF[2].Handle = SQLFilterOperator::EQUAL;
+        pSecondExpectedDNF[2].Value <<= u"\"PRODUCT\".\"ID\""_ustr;
+        pSecondExpectedDNF[2].State = PropertyState_DIRECT_VALUE;
+
+        pSecondExpectedDNF[3].Name = u"ID"_ustr;
+        pSecondExpectedDNF[3].Handle = SQLFilterOperator::EQUAL;
+        pSecondExpectedDNF[3].Value <<= sal_Int32(2);
+        pSecondExpectedDNF[3].State = PropertyState_DIRECT_VALUE;
+
+        Sequence<Sequence<PropertyValue>> expectedDNF(2);
+        Sequence<PropertyValue>* pExpectedDNF = expectedDNF.getArray();
+
+        pExpectedDNF[0] = firstExpectedDNF;
+        pExpectedDNF[1] = secondExpectedDNF;
+        CPPUNIT_ASSERT_EQUAL(expectedDNF.getLength(), disjunctiveNormalForm.getLength());
+        for (auto i = 0; i < expectedDNF.getLength(); ++i)
+        {
+            for (auto j = 0; j < expectedDNF[0].getLength(); ++j)
+            {
+                CPPUNIT_ASSERT_EQUAL(expectedDNF[i][j].Name, disjunctiveNormalForm[i][j].Name);
+            }
+        }
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
