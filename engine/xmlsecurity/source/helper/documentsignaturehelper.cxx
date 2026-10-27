@@ -91,15 +91,17 @@ static void ImplFillElementList(
 {
     const Sequence< OUString > aElements = rxStore->getElementNames();
 
+    const bool bRootStorage = rRootStorageName.empty();
+
     for ( const auto& rName : aElements )
     {
-        if (rName == "[Content_Types].xml")
+        if (bRootStorage && rName == "[Content_Types].xml")
             // OOXML
             continue;
 
         // If the user enabled validating according to OOo 3.0
         // then mimetype and all content of META-INF must be excluded.
-        if (mode != DocumentSignatureAlgorithm::OOo3_2
+        if (mode != DocumentSignatureAlgorithm::OOo3_2 && bRootStorage
             && (rName == "META-INF" || rName == "mimetype"))
         {
             continue;
@@ -114,11 +116,13 @@ static void ImplFillElementList(
 
             if ( rxStore->isStreamElement( rName ) )
             {
-                //Exclude documentsignatures.xml!
-                if (rName ==
-                    DocumentSignatureHelper::GetDocumentContentSignatureDefaultStreamName())
-                    continue;
                 OUString aFullName( rRootStorageName + sEncName );
+                //Exclude META-INF/documentsignatures.xml!
+                if (aFullName
+                    == Concat2View(
+                        "META-INF/"
+                        + DocumentSignatureHelper::GetDocumentContentSignatureDefaultStreamName()))
+                    continue;
                 rList.push_back(aFullName);
             }
             else if ( bRecursive && rxStore->isStorageElement( rName ) )
