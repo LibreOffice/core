@@ -524,11 +524,12 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 					'type': 'toolbox',
 					'children': [
 						{
-							'id': 'online-help',
-							'type': 'bigtoolitem',
-							'text': _('Online Help'),
-							'command': '.uno:OnlineHelp',
-							'accessibility': { focusBack: false, combination: 'H', de: null }
+							'id': 'onboardingtour',
+							'type': 'bigcustomtoolitem',
+							'text': _('Show Tour'),
+							'icon': 'lc_onboardingtour.svg',
+							'command': 'onboardingtour',
+							'accessibility': { focusBack: false, combination: 'ST', de: null }
 						}
 					]
 				},
@@ -536,12 +537,11 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 					'type': 'toolbox',
 					'children': [
 						{
-							'id': 'onboardingtour',
-							'type': 'bigcustomtoolitem',
-							'text': _('Show tour'),
-							'icon': 'lc_helpindex.svg',
-							'command': 'onboardingtour',
-							'accessibility': { focusBack: false, combination: 'ST', de: null }
+							'id': 'online-help',
+							'type': 'bigtoolitem',
+							'text': _('Online Help'),
+							'command': '.uno:OnlineHelp',
+							'accessibility': { focusBack: false, combination: 'H', de: null }
 						}
 					]
 				},
