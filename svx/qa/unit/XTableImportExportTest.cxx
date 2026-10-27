@@ -76,4 +76,6 @@ CPPUNIT_TEST_FIXTURE(XTableImportExportTest, testImportExport)
     }
 }
 
+CPPUNIT_PLUGIN_IMPLEMENT();
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

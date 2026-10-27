@@ -193,4 +193,6 @@ CPPUNIT_TEST_FIXTURE(FrameLinkArrayTest, testMergedCellRtl)
     CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::DOUBLE, stArr.GetCellStyleBottom(7, 6).Type());
 }
 
+CPPUNIT_PLUGIN_IMPLEMENT();
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

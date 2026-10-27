@@ -216,4 +216,7 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf139968ShearRotateArcFlip)
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("EndAngle wrong", 18000.0, fAngleE, 2.0);
 }
 }
+
+CPPUNIT_PLUGIN_IMPLEMENT();
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

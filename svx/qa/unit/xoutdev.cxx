@@ -128,4 +128,6 @@ CPPUNIT_TEST_FIXTURE(XOutdevTest, testFillColorThemeUnoApi)
     }
 }
 
+CPPUNIT_PLUGIN_IMPLEMENT();
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

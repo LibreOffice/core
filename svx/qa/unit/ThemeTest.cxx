@@ -10,6 +10,7 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 
 #include <docmodel/theme/Theme.hxx>
 
@@ -33,5 +34,7 @@ CPPUNIT_TEST_FIXTURE(ThemeTest, testPitchFamilyConversion)
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0x32), aFont.getPitchFamily());
 }
 }
+
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

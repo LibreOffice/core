@@ -663,4 +663,6 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testReflectionOfCustomShapeIsDrawnOnce)
 }
 }
 
+CPPUNIT_PLUGIN_IMPLEMENT();
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

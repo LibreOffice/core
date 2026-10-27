@@ -38,7 +38,20 @@ $(eval $(call gb_Module_add_l10n_targets,svx,\
 ))
 
 $(eval $(call gb_Module_add_check_targets,svx,\
-	CppunitTest_svx_unit \
+	CppunitTest_svx_unit_SdrTextObject \
+	CppunitTest_svx_unit_customshapes \
+	CppunitTest_svx_unit_classicshapes \
+	CppunitTest_svx_unit_form \
+	CppunitTest_svx_unit_framelinkarray \
+	CppunitTest_svx_unit_gluepointTest \
+	CppunitTest_svx_unit_sdr \
+	CppunitTest_svx_unit_svdraw \
+	CppunitTest_svx_unit_table \
+	CppunitTest_svx_unit_unodraw \
+	CppunitTest_svx_unit_xoutdev \
+	CppunitTest_svx_unit_xml \
+	CppunitTest_svx_unit_XTableImportExportTest \
+	CppunitTest_svx_unit_ThemeTest \
 	CppunitTest_svx_gallery_test \
 	CppunitTest_svx_removewhichrange \
 	CppunitTest_svx_core \
