@@ -305,7 +305,12 @@ class LOUtil {
 			'lc_numberformatincdecimals.svg',
 			'lc_numberformatthousands.svg',
 		],
-		es: ['lc_bold.svg', 'lc_underline.svg', 'lc_underlinedouble.svg'],
+		es: [
+			'lc_bold.svg',
+			'lc_italic.svg',
+			'lc_underline.svg',
+			'lc_underlinedouble.svg',
+		],
 		fr: ['lc_bold.svg'],
 		hu: ['lc_italic.svg', 'lc_underline.svg', 'lc_underlinedouble.svg'],
 		it: ['lc_italic.svg'],

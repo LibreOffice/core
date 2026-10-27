@@ -3891,6 +3891,7 @@ share/coolwsd/browser/dist/images/dark/de/lc_numberformatdecimal.svg
 share/coolwsd/browser/dist/images/dark/de/lc_numberformatincdecimals.svg
 share/coolwsd/browser/dist/images/dark/de/lc_numberformatthousands.svg
 share/coolwsd/browser/dist/images/dark/es/lc_bold.svg
+share/coolwsd/browser/dist/images/dark/es/lc_italic.svg
 share/coolwsd/browser/dist/images/dark/es/lc_underline.svg
 share/coolwsd/browser/dist/images/dark/es/lc_underlinedouble.svg
 share/coolwsd/browser/dist/images/dark/expand-slides.svg
@@ -4935,6 +4936,7 @@ share/coolwsd/browser/dist/images/errorleft_30.svg
 share/coolwsd/browser/dist/images/errorright_30.svg
 share/coolwsd/browser/dist/images/errorup_30.svg
 share/coolwsd/browser/dist/images/es/lc_bold.svg
+share/coolwsd/browser/dist/images/es/lc_italic.svg
 share/coolwsd/browser/dist/images/es/lc_underline.svg
 share/coolwsd/browser/dist/images/es/lc_underlinedouble.svg
 share/coolwsd/browser/dist/images/expand-slides.svg
