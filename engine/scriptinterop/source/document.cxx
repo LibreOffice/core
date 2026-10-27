@@ -31,6 +31,7 @@
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -1099,17 +1100,34 @@ public:
                 : scriptinterop::TextAlignment_NORMAL};
     }
 
-    // GAS guarantees at least one attribute index for any text (uniform text has one index at 0):
+    // GAS guarantees at least one attribute index for any text (uniform text has one index at 0),
+    // and has an index only where an attribute of the text changes (while Writer also starts a new
+    // run at an inline image or a bookmark):
     cpo::uno::Sequence<sal_Int32> getTextAttributeIndices() override {
+        static cpo::uno::Sequence<OUString> const names{
+            u"CharBackColor"_ustr, u"CharColor"_ustr, u"CharEscapement"_ustr,
+            u"CharFontName"_ustr, u"CharHeight"_ustr, u"CharPosture"_ustr, u"CharStrikeout"_ustr,
+            u"CharUnderline"_ustr, u"CharWeight"_ustr, u"HyperLinkURL"_ustr};
         auto const runs = this->runs();
         std::vector<sal_Int32> v;
         v.reserve(runs.empty() ? 1 : runs.size());
         sal_Int32 off = 0;
+        cpo::uno::Sequence<cpo::uno::Any> previous;
+        cpo::uno::Sequence<css::beans::PropertyState> previousStates;
         for (auto const & r: runs) {
             // A footnote reference is a run without text:
             auto const length = textOf(r).getLength();
             if (length != 0) {
-                v.push_back(off);
+                auto const attributes = cpo::uno::Reference<css::beans::XMultiPropertySet>(
+                    r, cpo::uno::UNO_QUERY_THROW)->getPropertyValues(names);
+                // As in GAS, an attribute set directly differs from the same value by default:
+                auto const states = cpo::uno::Reference<css::beans::XPropertyState>(
+                    r, cpo::uno::UNO_QUERY_THROW)->getPropertyStates(names);
+                if (v.empty() || attributes != previous || states != previousStates) {
+                    v.push_back(off);
+                }
+                previous = attributes;
+                previousStates = states;
                 off += length;
             }
         }

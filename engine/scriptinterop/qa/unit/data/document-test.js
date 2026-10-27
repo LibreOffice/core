@@ -575,6 +575,14 @@ function test() {
         }
         console.assert(message === 'Element must be preceded by an element of the same type.');
     }
+    // Bold text across the image has one attribute index, as the image changes no attribute:
+    withImage.editAsText().setBold(1, 4, true);
+    console.assert(JSON.stringify(withImage.editAsText().getTextAttributeIndices()) === '[0,1,5]');
+    withImage.editAsText().setBold(1, 4, null);
+    // Text set directly to not bold has an attribute index of its own:
+    const notBold = body.appendParagraph('abcd').editAsText();
+    notBold.setBold(0, 1, false);
+    console.assert(JSON.stringify(notBold.getTextAttributeIndices()) === '[0,2]');
     // A range over the image is split into the image and the parts of the texts around it:
     const overImage = doc.newRange().addElement(withImage.editAsText(), 1, 4).build()
         .getRangeElements();
