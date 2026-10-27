@@ -1047,6 +1047,8 @@ window.L.Map.WOPI = window.L.Handler.extend({
 				value += '.' + saveAsFormat;
 			}
 			action(value, saveAsFormat);
+		}, false, () => {
+			this._map._saveImageToWopi = false;
 		});
 	},
 
