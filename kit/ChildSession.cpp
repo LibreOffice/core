@@ -4263,7 +4263,9 @@ bool ChildSession::filePickerResult(const StringVector& tokens)
     const bool wellFormed = (tokens.size() == 2 || tokens.size() == 3) &&
                             getTokenInteger(tokens[1], "id", id) && id >= 0 &&
                             (tokens.size() == 2 || getTokenString(tokens[2], "name", name));
-    if (!wellFormed)
+    // The file is picked out of the insertfile directory by name, so a name is a plain file
+    // name: no path separator and not a directory reference.
+    if (!wellFormed || (!name.empty() && !Util::isPlainFileName(name)))
     {
         sendTextFrameAndLogError("error: cmd=filepickerresult kind=syntax");
         return false;
