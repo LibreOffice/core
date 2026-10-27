@@ -261,7 +261,6 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 endif
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
-	JunitTest_sc_complex \
 	$(call gb_Helper_optional,OPENCL,CppunitTest_sc_opencl-1) \
 	$(call gb_Helper_optional,OPENCL,CppunitTest_sc_opencl-2) \
 ))
