@@ -24,8 +24,6 @@
 
 #include <vcl/weld/MessageDialog.hxx>
 
-#include <svdata.hxx>
-
 #include <rtl/ustrbuf.hxx>
 #include <osl/thread.h>
 
@@ -78,10 +76,6 @@ AbsoluteScreenPixelRectangle X11SalSystem::GetDisplayScreenPosSizePixel( unsigne
 
 void X11SalSystem::ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage)
 {
-    ImplSVData* pSVData = ImplGetSVData();
-    if( pSVData->mpIntroWindow )
-        pSVData->mpIntroWindow->Hide();
-
     std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(nullptr,
                                                VclMessageType::Warning, VclButtonsType::NONE,
                                                rMessage));
