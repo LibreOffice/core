@@ -724,6 +724,44 @@ soffice share it (September 2026).
 - iOS, Android and wasm have no http(s) content provider, so the download
   fails at once there and the paste keeps the HTML.
 
+### File-manager copies: the kit embeds the pictures and media
+
+A copy of files in a file manager puts a `text/uri-list` on the system
+clipboard. The engine's own paste links such a list in Writer (the COKit
+rule in `SwTransferable::PasteFileList`, kept so that hyperlinks copied
+on iOS and macOS do not open the "Insert section" dialog on the server).
+
+The embedding lives once in the shared kit. `ChildSession::unoCommand`
+intercepts the plain `.uno:Paste` in the in-process apps
+(`Util::isMobileApp()`) and reads the file list from the document
+clipboard: `text/uri-list`, and `text/x-coda-readable-uri-list`
+(`ReadableUriListMimeType` in `common/ClipboardData.hpp`), the same
+files under paths this process can read, which wins when a provider
+offers it. Both come from one read. Through the provider that read
+reaches the platform clipboard only while it is foreign.
+`ChildSession::insertFileList` gives the readable `file:` URLs to the
+engine in one call, `COKitDocument::insertFiles`. Online keeps no list
+of formats: the engine classifies each file by its own tables, media
+first (`MediaWindow::isMediaURL`, so `.mov` is media), then a picture
+when the name matches the graphic filter's import wildcards. A list
+with a file that is neither inserts nothing. The media is embedded
+with the size from the file headers (`MediaWindow::readVideoSize`), so
+the insert needs no media player. All go in as one undo step, and a
+text selection is replaced as by a paste. A list the engine does not
+take goes to the engine unchanged, an unreadable file is skipped with
+a warning, and Paste Special is never intercepted. macOS and Windows
+serve their native file-list formats as `text/uri-list` (see the
+sections above) and get the same paste.
+
+Under the flatpak the Qt provider resolves the FileTransfer portal key
+that GTK 4 file managers put beside their `text/uri-list`
+(`qt/PortalFileTransfer.cpp`, shared with the drop path) and serves the
+returned paths as the readable list. The `text/uri-list` stays the
+source's own, so a list the engine links keeps the host paths.
+
+The engine holds no "a provider is installed" flag: whether a URL names
+a local file the user copied is for the app and kit to decide.
+
 ## Action plan
 
 Ordered by effort. Each item points back to the section above that

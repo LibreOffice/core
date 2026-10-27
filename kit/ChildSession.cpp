@@ -28,6 +28,7 @@
 
 #include <common/Anonymizer.hpp>
 #include <common/Clipboard.hpp>
+#include <common/ClipboardData.hpp>
 #include <common/CommandControl.hpp>
 #include <common/ConfigUtil.hpp>
 #include <common/FileUtil.hpp>
@@ -2812,6 +2813,67 @@ std::string pickedFileName(const std::string& uploadName)
         return std::string();
     return fileName;
 }
+
+/// The local path a file: URL names, or empty for any other URL.
+std::string localPathOfFileUrl(const std::string& url)
+{
+    try
+    {
+        const Poco::URI uri(url);
+        if (uri.getScheme() != "file" || !uri.getHost().empty())
+            return std::string();
+
+        return FileUtil::fixPocoURIgetPathReturnValue(uri.getPath());
+    }
+    catch (const std::exception&)
+    {
+        return std::string();
+    }
+}
+}
+
+std::size_t ChildSession::insertFileList(std::string_view uriList)
+{
+    const StringVector lines = StringVector::tokenizeAnyOf(std::string(uriList), "\r\n");
+    std::vector<std::string> urls;
+    for (std::size_t i = 0; i < lines.size(); ++i)
+    {
+        const std::string url = lines[i];
+        // A line starting with '#' is a comment (RFC 2483).
+        if (url[0] == '#')
+            continue;
+        const std::string path = localPathOfFileUrl(url);
+        if (path.empty())
+            continue;
+
+        std::ifstream file;
+        FileUtil::openFileToIFStream(path, file);
+        if (!file.good())
+        {
+            LOG_WRN("Skipping the file [" << path << "] of the list: cannot read it");
+            continue;
+        }
+        urls.push_back(url);
+    }
+
+    if (urls.empty())
+        return 0;
+    // The engine inserts the list when every file is a picture or media, else nothing.
+    return getLOKitDocument()->insertFiles(urls);
+}
+
+bool ChildSession::pasteFileList()
+{
+    // The engine's own copy has no uri-list, so this reads only a foreign
+    // clipboard. Both lists come from one read: a provider's readable list
+    // wins, and the source's own list keeps the paths that the engine links.
+    const char* mimeTypes[] = { "text/uri-list", ReadableUriListMimeType, nullptr };
+    const std::vector<COKitClipboardItem> items = getLOKitDocument()->getClipboard(mimeTypes);
+    if (items.size() != 2 || items[0].aData.empty())
+        return false;
+    const std::vector<char>& list = items[1].aData.empty() ? items[0].aData : items[1].aData;
+
+    return insertFileList(std::string_view(list.data(), list.size())) > 0;
 }
 
 bool ChildSession::insertFile(const StringVector& tokens)
@@ -4186,6 +4248,11 @@ bool ChildSession::unoCommand(const StringVector& tokens)
         _docManager->alertAllUsers("internal", "diskfull");
         return true;
     }
+
+    // The engine links a pasted file list in Writer; the in-process apps
+    // embed its pictures and media files instead.
+    if (Util::isMobileApp() && tokens.equals(1, ".uno:Paste") && pasteFileList())
+        return true;
 
     getLOKitDocument()->postUnoCommand(tokens[1].c_str(), saveArgs.c_str(), notify);
     return true;
