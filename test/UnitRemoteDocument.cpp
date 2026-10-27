@@ -3501,9 +3501,9 @@ public:
 };
 
 /// Reads the slides of a remote presentation over the subscription a view holds to it: the
-/// presentation information and the slide sections are answered from the preview index of
-/// the source, which the server holding it gives without a loaded document, as the replies a
-/// loaded document gives.
+/// presentation information, the slide sections and the picture of a slide are answered from
+/// the preview index of the source, which the server holding it gives without a loaded
+/// document, as the replies a loaded document gives.
 class UnitRemoteDocumentPreview : public WopiTestServer
 {
     STATE_ENUM(Phase, Load, WaitLoadStatus, WaitConnected, WaitSlides, Done) _phase;
@@ -3517,8 +3517,8 @@ class UnitRemoteDocumentPreview : public WopiTestServer
 
     std::string encodedRemoteWopiSrc() const { return Uri::encode(remoteWopiSrc()); }
 
-    bool _gotInfo = false;
     bool _gotSections = false;
+    bool _gotPicture = false;
 
 public:
     UnitRemoteDocumentPreview()
@@ -3554,6 +3554,17 @@ public:
         }
 
         return true;
+    }
+
+    /// The width a PNG declares in its header.
+    static unsigned pngWidth(const std::string_view png)
+    {
+        if (png.size() < 24)
+            return 0;
+
+        return (static_cast<unsigned char>(png[16]) << 24) |
+               (static_cast<unsigned char>(png[17]) << 16) |
+               (static_cast<unsigned char>(png[18]) << 8) | static_cast<unsigned char>(png[19]);
     }
 
     bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
@@ -3598,15 +3609,36 @@ public:
             LOK_ASSERT_MESSAGE("A slide is named by its part", !part.empty());
             LOK_ASSERT_MESSAGE("The reply carries no token",
                                message.find("remotetoken") == std::string_view::npos);
-            _gotInfo = true;
+
+            // The picture of the first slide, asked for at the size a browser view uses.
+            WSD_CMD("remotedoccommand source=" + encodedRemoteWopiSrc() +
+                    " tile nviewid=0 part=" + part +
+                    " mode=0 width=160 height=90 tileposx=0 tileposy=0 tilewidth=" +
+                    std::to_string(docWidth) + " tileheight=" + std::to_string(docHeight) +
+                    " id=0");
         }
         else if (frame.starts_with("slidesections: "))
         {
             TST_LOG("Got: [" << frame << ']');
             _gotSections = true;
         }
+        else if (frame.starts_with("tile: "))
+        {
+            const std::size_t end = frame.find('\n');
+            LOK_ASSERT_MESSAGE("The tile carries its picture after its header",
+                               end != std::string_view::npos);
+            const std::string_view header = frame.substr(0, end);
+            TST_LOG("Got: [" << header << ']');
+            LOK_ASSERT_MESSAGE("The tile echoes the id of the request",
+                               header.find(" id=0") != std::string_view::npos);
+            const std::string_view png = frame.substr(end + 1);
+            LOK_ASSERT_MESSAGE("The picture is a PNG", png.starts_with("\x89PNG"));
+            // The preview index serves one fixed size, wider than the request asked for.
+            LOK_ASSERT_EQUAL(320u, pngWidth(png));
+            _gotPicture = true;
+        }
 
-        if (_gotInfo && _gotSections)
+        if (_gotSections && _gotPicture)
         {
             TRANSITION_STATE(_phase, Phase::Done);
             passTest("The slides of a remote presentation reached the view over its link");

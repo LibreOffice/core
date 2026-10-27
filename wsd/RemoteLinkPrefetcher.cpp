@@ -17,14 +17,17 @@
 #include <common/ConfigUtil.hpp>
 #include <common/JsonUtil.hpp>
 #include <common/Log.hpp>
+#include <common/Protocol.hpp>
 #include <common/Uri.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <wsd/RemoteDocumentBroker.hpp>
 
 #include <Poco/JSON/Array.h>
 
+#include <algorithm>
 #include <chrono>
 #include <sstream>
+#include <string_view>
 
 namespace
 {
@@ -84,6 +87,27 @@ std::string slideSectionsOf(const Poco::JSON::Object::Ptr& index)
     return oss.str();
 }
 
+/// The URL of the picture of the slide with the given part in the index of a source. Empty
+/// when the index has no such slide.
+std::string pictureUrlOf(const Poco::JSON::Object::Ptr& index, const std::string& part)
+{
+    const Poco::JSON::Array::Ptr slides = index->getArray("slides");
+    if (!slides || part.empty())
+        return std::string();
+
+    for (std::size_t i = 0; i < slides->size(); ++i)
+    {
+        const Poco::JSON::Object::Ptr slide = slides->getObject(i);
+        if (!slide || slide->optValue<std::string>("part", std::string()) != part)
+            continue;
+
+        const Poco::JSON::Object::Ptr preview = slide->getObject("preview");
+        return preview ? preview->optValue<std::string>("url", std::string()) : std::string();
+    }
+
+    return std::string();
+}
+
 /// An HTTP session to the server remote documents are reached through, with the timeout of
 /// a preview request. Null when there is no such server.
 std::shared_ptr<http::Session> createPreviewSession()
@@ -141,13 +165,14 @@ bool RemoteLinkPrefetcher::answerFromIndex(DocumentBroker& docBroker, const std:
 {
     const bool info = command == "getpresentationinfo";
     const bool sections = command == "getslidesections";
-    if (!info && !sections)
+    const bool tile = command.starts_with("tile ");
+    if (!info && !sections && !tile)
         return false;
 
     // The presentation information is the first thing asked for when the slides of a source
     // are read, and read again after the source changed, so that is the request a changed
-    // source is fetched anew for. The sections asked for right after it wait for the same
-    // answer.
+    // source is fetched anew for. The sections and the pictures asked for right after it wait
+    // for the same answer.
     if (!_index || _indexRequest || (info && _indexStale))
     {
         _waiting.push_back(command);
@@ -155,10 +180,26 @@ bool RemoteLinkPrefetcher::answerFromIndex(DocumentBroker& docBroker, const std:
         return true;
     }
 
-    const std::string answer = info ? "presentationinfo: " + presentationInfoOf(_index)
-                                    : "slidesections: " + slideSectionsOf(_index);
-    docBroker.sendRemoteDocumentCommandResult(_tag, Uri::encode(_wopiSrc),
-                                              std::vector<char>(answer.begin(), answer.end()));
+    if (info || sections)
+    {
+        const std::string answer = info ? "presentationinfo: " + presentationInfoOf(_index)
+                                        : "slidesections: " + slideSectionsOf(_index);
+        docBroker.sendRemoteDocumentCommandResult(_tag, Uri::encode(_wopiSrc),
+                                                  std::vector<char>(answer.begin(), answer.end()));
+        return true;
+    }
+
+    std::string part;
+    COOLProtocol::getTokenStringFromMessage(command, "part", part);
+    const std::string url = pictureUrlOf(_index, part);
+    if (url.empty())
+    {
+        LOG_DBG("The index of [" << Anonymizer::anonymizeUrl(_wopiSrc) << "] has no slide ["
+                                 << part << "], the live link answers");
+        return false;
+    }
+
+    fetchPicture(docBroker, command, url);
     return true;
 }
 
@@ -259,11 +300,88 @@ void RemoteLinkPrefetcher::onIndexFetched(DocumentBroker& docBroker,
     }
 }
 
+void RemoteLinkPrefetcher::fetchPicture(DocumentBroker& docBroker, const std::string& command,
+                                        const std::string& url)
+{
+    docBroker.assertCorrectThread();
+
+    std::shared_ptr<http::Session> httpSession = createPreviewSession();
+    if (!httpSession)
+    {
+        forwardCommand(docBroker, command);
+        return;
+    }
+
+    // The answer takes the request out of the ones in flight, and goes to the view as the
+    // tile the command asked for, which the live link paints instead when the picture
+    // cannot be read. A subscription dropped while the request was out takes no answer.
+    const std::weak_ptr<DocumentBroker> weakDocBroker = docBroker.weak_from_this();
+    const std::weak_ptr<RemoteLinkPrefetcher> weakSelf = weak_from_this();
+    const auto finish = [weakSelf, weakDocBroker, command](
+                            const std::shared_ptr<http::Session>& session,
+                            const std::string_view png)
+    {
+        const std::shared_ptr<RemoteLinkPrefetcher> self = weakSelf.lock();
+        const std::shared_ptr<DocumentBroker> broker = weakDocBroker.lock();
+        if (!self || !broker)
+            return;
+
+        std::vector<std::shared_ptr<http::Session>>& requests = self->_pictureRequests;
+        requests.erase(std::remove(requests.begin(), requests.end(), session), requests.end());
+
+        if (png.empty())
+        {
+            self->forwardCommand(*broker, command);
+            return;
+        }
+
+        static constexpr std::string_view commandName = "tile ";
+        std::vector<char> payload;
+        payload.reserve(commandName.size() + command.size() + 2 + png.size());
+        const std::string header = "tile: " + command.substr(commandName.size()) + "\n";
+        payload.insert(payload.end(), header.begin(), header.end());
+        payload.insert(payload.end(), png.begin(), png.end());
+        broker->sendRemoteDocumentCommandResult(self->_tag, Uri::encode(self->_wopiSrc),
+                                                payload);
+    };
+
+    const std::string linkAnonym = Anonymizer::anonymizeUrl(_wopiSrc);
+    const std::string tag = _tag;
+    httpSession->setFinishedHandler(
+        [finish, tag, linkAnonym](const std::shared_ptr<http::Session>& session)
+        {
+            const std::shared_ptr<const http::Response> response = session->response();
+            const http::StatusCode status =
+                response ? response->statusLine().statusCode() : http::StatusCode::BadGateway;
+            if (status != http::StatusCode::OK)
+            {
+                LOG_WRN("A slide picture request of view [" << tag << "] for [" << linkAnonym
+                                                            << "] answered " << status);
+                finish(session, std::string_view());
+                return;
+            }
+
+            finish(session, response->getBody());
+        });
+    httpSession->setConnectFailHandler(
+        [finish, tag, linkAnonym](const std::shared_ptr<http::Session>& session)
+        {
+            LOG_WRN("A slide picture request of view [" << tag << "] for [" << linkAnonym
+                                                        << "] could not connect");
+            finish(session, std::string_view());
+        });
+
+    LOG_TRC("Fetching a slide picture of [" << linkAnonym << "] for view [" << _tag << ']');
+    _pictureRequests.push_back(httpSession);
+    httpSession->asyncRequest(http::Request(url), docBroker.getPoll());
+}
+
 void RemoteLinkPrefetcher::dumpState(std::ostream& os) const
 {
     os << " index: " << (_index ? "yes" : "no") << " stale: " << (_indexStale ? "yes" : "no")
        << " index request: " << (_indexRequest ? "yes" : "no")
-       << " waiting commands: " << _waiting.size();
+       << " waiting commands: " << _waiting.size()
+       << " picture requests: " << _pictureRequests.size();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

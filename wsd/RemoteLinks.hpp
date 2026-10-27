@@ -93,9 +93,8 @@ public:
                        const std::string& encodedWopiSrc, const std::string& eventArguments);
 
     /// Answers a read-only client command from one view about the remote document bound to
-    /// the given persistent link, when that view is subscribed to it. The presentation
-    /// information and the slide sections of the source are answered from its preview index,
-    /// every other command goes to the live link.
+    /// the given persistent link, when that view is subscribed to it. The slides of the
+    /// source are answered from its preview index, every other command goes to the live link.
     void sendCommand(DocumentBroker& docBroker, const std::string& tag,
                      const std::string& persistentLink, const std::string& command);
 
@@ -139,8 +138,8 @@ private:
         /// failed or missing. A subscription is connected once the preview index of the
         /// source arrived or the live link is up, whichever comes first.
         std::string state;
-        /// The preview index of the source, which answers the view before the live link is
-        /// up.
+        /// The preview index of the source and the pictures of its slides, which answer the
+        /// view before the live link is up.
         std::shared_ptr<RemoteLinkPrefetcher> prefetcher;
         /// Whether the live link to the source was dialed. It is dialed once the preview
         /// index answered, whether or not it came.

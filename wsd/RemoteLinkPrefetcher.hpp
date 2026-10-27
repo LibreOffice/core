@@ -25,9 +25,11 @@ class DocumentBroker;
 
 /// The slides of a remote presentation for one view's subscription to it, without its live
 /// link: the preview index of the source, fetched over HTTP from the server that holds the
-/// source with the token the view holds. The presentation information and the slide sections
-/// are answered from the index. Every other command goes to the live link of the
-/// subscription. Every call is made on the thread of the document the view belongs to.
+/// source with the token the view holds, and the pictures of its slides, fetched from the URLs
+/// the index names. The presentation information, the slide sections and the tile of a slide
+/// are answered from the index. Every other command, and one the index cannot answer, goes
+/// to the live link of the subscription. Every call is made on the thread of the document the
+/// view belongs to.
 class RemoteLinkPrefetcher : public std::enable_shared_from_this<RemoteLinkPrefetcher>
 {
 public:
@@ -63,6 +65,11 @@ private:
     /// is none.
     void onIndexFetched(DocumentBroker& docBroker, const Poco::JSON::Object::Ptr& index);
 
+    /// Fetches the picture of the slide a tile command names, from the URL the index gives
+    /// for it, and answers the command with it.
+    void fetchPicture(DocumentBroker& docBroker, const std::string& command,
+                      const std::string& url);
+
     /// Sends one command to the live link of the subscription.
     void forwardCommand(const DocumentBroker& docBroker, const std::string& command) const;
 
@@ -83,6 +90,8 @@ private:
     std::shared_ptr<http::Session> _indexRequest;
     /// The commands that wait for the index to arrive.
     std::vector<std::string> _waiting;
+    /// The picture requests in flight.
+    std::vector<std::shared_ptr<http::Session>> _pictureRequests;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
