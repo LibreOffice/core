@@ -18,7 +18,10 @@ static bool is_env_arg(rtl_uString const* str)
     return !rtl_ustr_ascii_compare_WithLength (str->buffer, 5, "-env:");
 }
 
-const struct {
+namespace
+{
+const struct ArgDescr
+{
     const char   *name;
     bool bInhibitSplash : 1;
     bool bInhibitPagein : 1;
@@ -55,6 +58,7 @@ const struct {
     { "h", true, true, true, true, nullptr },
     { "?", true, true, true, true, nullptr },
 };
+}
 
 Args *args_parse (void)
 {
@@ -95,17 +99,16 @@ Args *args_parse (void)
             length--;
         }
 
-        for ( j = 0; j < SAL_N_ELEMENTS (pArgDescr); ++j ) {
-            if (rtl_ustr_ascii_compare_WithLength(
-                    arg, length, pArgDescr[j].name)
-                == 0)
+        for (const ArgDescr& rArgDescr : pArgDescr)
+        {
+            if (rtl_ustr_ascii_compare_WithLength(arg, length, rArgDescr.name) == 0)
             {
-                args->bInhibitSplash  |= pArgDescr[j].bInhibitSplash;
-                args->bInhibitPagein  |= pArgDescr[j].bInhibitPagein;
-                args->bInhibitJavaLdx |= pArgDescr[j].bInhibitJavaLdx;
-                args->bInhibitPipe    |= pArgDescr[j].bInhibitPipe;
-                if (pArgDescr[j].pPageinType)
-                    args->pPageinType = pArgDescr[j].pPageinType;
+                args->bInhibitSplash |= rArgDescr.bInhibitSplash;
+                args->bInhibitPagein |= rArgDescr.bInhibitPagein;
+                args->bInhibitJavaLdx |= rArgDescr.bInhibitJavaLdx;
+                args->bInhibitPipe |= rArgDescr.bInhibitPipe;
+                if (rArgDescr.pPageinType)
+                    args->pPageinType = rArgDescr.pPageinType;
                 break;
             }
         }
