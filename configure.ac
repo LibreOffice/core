@@ -925,7 +925,13 @@ if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_w
 
    AC_MSG_CHECKING([for CollaboraOffice build tree to build against])
    if test -z "$with_lo_builddir"; then
-      AC_MSG_ERROR([You MUST use the --with-lo-builddir option when configuring the mobile or Windows app build tree.])
+      if test "$enable_androidapp" = "yes"; then
+         # The Android engine is built in the monorepo's engine/ directory, like the Linux
+         # and macOS ones, so that is the default when no other build directory is named.
+         with_lo_builddir="engine"
+      else
+         AC_MSG_ERROR([You MUST use the --with-lo-builddir option when configuring the iOS or Windows app build tree.])
+      fi
    fi
 
    LOBUILDDIR="$with_lo_builddir"
