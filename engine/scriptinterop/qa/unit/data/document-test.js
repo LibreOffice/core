@@ -503,6 +503,11 @@ function test() {
     console.assert(doc.newPosition(withImage.getChild(0), 3).insertInlineImage(blob) !== null);
     withImage.editAsText().insertText(4, 'X');
     console.assert(withImage.editAsText().getText() === 'foobXar');
+    // A paragraph that holds only an image can be selected together with the paragraph after it:
+    console.assert(
+        doc.setSelection(
+            doc.newRange().addElement(withImage.getPreviousSibling()).addElement(withImage).build())
+            .getSelection().getRangeElements().length === 2);
     // An image adds no line to the text of a range:
     if (globalThis.cool) {
         console.assert(

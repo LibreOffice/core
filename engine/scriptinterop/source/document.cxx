@@ -4523,11 +4523,17 @@ cpo::uno::Reference<scriptinterop::XSelection> RangeBuilderImpl::build() {
             std::vector<cpo::uno::Reference<scriptinterop::XRangeElement>> whole;
             splitAtParagraphBoundaries(model_, cursor, whole);
             // An empty paragraph at either end of the range, which Writer cannot tell from the
-            // boundary of the text next to it, is left out as when splitting:
+            // boundary of the text next to it, is left out as when splitting (unlike one that holds
+            // only inline images):
             auto const isEmpty = [](Piece const & p) {
-                return p.text
-                    && cpo::uno::Reference<css::text::XTextRange>(
-                        p.element->getuno(), cpo::uno::UNO_QUERY_THROW)->getString().isEmpty();
+                if (!p.text) {
+                    return false;
+                }
+                cpo::uno::Reference<css::text::XTextRange> const range(
+                    p.element->getuno(), cpo::uno::UNO_QUERY_THROW);
+                return cpo::uno::Reference<css::text::XTextRangeCompare>(
+                    range->getText(), cpo::uno::UNO_QUERY_THROW)
+                    ->compareRegionStarts(range->getStart(), range->getEnd()) == 0;
             };
             auto begin = elements.begin();
             auto end = elements.end();
