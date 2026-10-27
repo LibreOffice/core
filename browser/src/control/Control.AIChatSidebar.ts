@@ -302,6 +302,13 @@ namespace cool {
 			return this.customTones.find((t) => t.id === id);
 		}
 
+		// Accessible name of a tone button.
+		private toneAriaLabel(name: string): string {
+			// TRANSLATORS: {0} is the name of a tone of voice, either a preset
+			// TRANSLATORS: such as "Formal" or a name that the user typed
+			return _('{0} tone').replace('{0}', name);
+		}
+
 		private createBuilder(): void {
 			this.builder = new window.L.control.jsDialogBuilder({
 				mobileWizard: this,
@@ -1132,7 +1139,7 @@ namespace cool {
 				pressed: this.selectedTone === p.id,
 				enabled: true,
 				aria: {
-					label: p.label + ' ' + _('tone'),
+					label: this.toneAriaLabel(p.label),
 				},
 			}));
 
@@ -1182,7 +1189,7 @@ namespace cool {
 						icon: t.icon,
 						pressed: this.selectedTone === t.id,
 						enabled: true,
-						aria: { label: t.name + ' ' + _('tone') },
+						aria: { label: this.toneAriaLabel(t.name) },
 						actions: [
 							{
 								id: 'aichat-tone-edit-' + t.id,
@@ -1591,7 +1598,7 @@ namespace cool {
 								icon: draft.icon,
 								pressed: false,
 								enabled: true,
-								aria: { label: draft.name + ' ' + _('tone') },
+								aria: { label: this.toneAriaLabel(draft.name) },
 							},
 						],
 					},
