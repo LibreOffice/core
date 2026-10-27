@@ -42,7 +42,7 @@ struct EnhancedCustomShapeEquation
         }
 };
 
-class EnhancedCustomShape2d;
+class EnhancedCustomShapeFormulas;
 
 namespace EnhancedCustomShape {
 
@@ -243,7 +243,7 @@ public:
         @return the generated function object.
        */
 
-    UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) static std::shared_ptr<ExpressionNode> const & parseFunction( std::u16string_view rFunction, const EnhancedCustomShape2d& rCustoShape );
+    UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) static std::shared_ptr<ExpressionNode> const & parseFunction( std::u16string_view rFunction, const EnhancedCustomShapeFormulas& rCustoShape );
 
     // this is a singleton
     FunctionParser() = delete;

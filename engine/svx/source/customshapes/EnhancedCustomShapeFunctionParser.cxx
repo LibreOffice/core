@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <o3tl/untaint.hxx>
-#include <svx/EnhancedCustomShape2d.hxx>
+#include <svx/EnhancedCustomShapeFormulas.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <tools/fract.hxx>
@@ -143,11 +143,11 @@ public:
 class AdjustmentExpression : public ExpressionNode
 {
     sal_Int32                       mnIndex;
-    const EnhancedCustomShape2d&    mrCustoShape;
+    const EnhancedCustomShapeFormulas&    mrCustoShape;
 
 public:
 
-    AdjustmentExpression( const EnhancedCustomShape2d& rCustoShape, sal_Int32 nIndex )
+    AdjustmentExpression( const EnhancedCustomShapeFormulas& rCustoShape, sal_Int32 nIndex )
     : mnIndex       ( nIndex )
     , mrCustoShape( rCustoShape )
 
@@ -184,12 +184,12 @@ public:
 class EquationExpression : public ExpressionNode
 {
     const sal_Int32                 mnIndex;
-    const EnhancedCustomShape2d&    mrCustoShape;
+    const EnhancedCustomShapeFormulas&    mrCustoShape;
     mutable bool                    mbGettingValueGuard;
 
 public:
 
-    EquationExpression( const EnhancedCustomShape2d& rCustoShape, sal_Int32 nIndex )
+    EquationExpression( const EnhancedCustomShapeFormulas& rCustoShape, sal_Int32 nIndex )
         : mnIndex       ( nIndex )
         , mrCustoShape( rCustoShape )
         , mbGettingValueGuard(false)
@@ -225,11 +225,11 @@ public:
 class EnumValueExpression : public ExpressionNode
 {
     const ExpressionFunct           meFunct;
-    const EnhancedCustomShape2d&    mrCustoShape;
+    const EnhancedCustomShapeFormulas&    mrCustoShape;
 
 public:
 
-    EnumValueExpression( const EnhancedCustomShape2d& rCustoShape, const ExpressionFunct eFunct )
+    EnumValueExpression( const EnhancedCustomShapeFormulas& rCustoShape, const ExpressionFunct eFunct )
         : meFunct       ( eFunct )
         , mrCustoShape  ( rCustoShape )
     {
@@ -765,7 +765,7 @@ struct ParserContext
     // a composite ExpressionNode otherwise.
     OperandStack                maOperandStack;
 
-    const EnhancedCustomShape2d* mpCustoShape;
+    const EnhancedCustomShapeFormulas* mpCustoShape;
 
 };
 
@@ -1145,7 +1145,7 @@ const ParserContextSharedPtr& getParserContext()
 namespace EnhancedCustomShape  {
 
 
-std::shared_ptr<ExpressionNode> const & FunctionParser::parseFunction( std::u16string_view rFunction, const EnhancedCustomShape2d& rCustoShape )
+std::shared_ptr<ExpressionNode> const & FunctionParser::parseFunction( std::u16string_view rFunction, const EnhancedCustomShapeFormulas& rCustoShape )
 {
     // TODO(Q1): Check if a combination of the RTL_UNICODETOTEXT_FLAGS_*
     // gives better conversion robustness here (we might want to map space
