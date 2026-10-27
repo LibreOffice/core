@@ -2359,8 +2359,8 @@ public:
     SC_DLLPUBLIC bool           HasPrintRange();
     SC_DLLPUBLIC sal_uInt16     GetPrintRangeCount( SCTAB nTab );
     SC_DLLPUBLIC const ScRange* GetPrintRange( SCTAB nTab, sal_uInt16 nPos );
-    SC_DLLPUBLIC std::optional<ScRange> GetRepeatColRange( SCTAB nTab );
-    SC_DLLPUBLIC std::optional<ScRange> GetRepeatRowRange( SCTAB nTab );
+    SC_DLLPUBLIC std::optional<ScRange> GetRepeatColRange( SCTAB nTab ) const;
+    SC_DLLPUBLIC std::optional<ScRange> GetRepeatRowRange( SCTAB nTab ) const;
     /** Returns true, if the specified sheet is always printed. */
     bool                        IsPrintEntireSheet( SCTAB nTab ) const;
 

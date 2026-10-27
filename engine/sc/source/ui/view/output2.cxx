@@ -1404,13 +1404,23 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, tools::Long nPosX, too
     rParam.maClipRect.Normalize();
 }
 
-/// what a database range's labels head, where this position holds one of them
+/// what a database range's labels or the sheet's rows and columns to repeat head, where this
+/// position holds one of them
 static vcl::pdf::PDFWriter::StructAttributeValue
 lcl_GetLabelScope(const ScDocument& rDoc, SCTAB nTab, SCCOL nCol, SCROW nRow)
 {
     const ScDBData* pDBData(rDoc.GetDBAtCursor(nCol, nRow, nTab, ScDBDataPortion::AREA));
     if (!pDBData || !pDBData->HasHeader())
+    {
+        // the rows to repeat on every page head the columns, the columns to repeat the rows
+        const std::optional<ScRange> oRows(rDoc.GetRepeatRowRange(nTab));
+        if (oRows && oRows->aStart.Row() <= nRow && nRow <= oRows->aEnd.Row())
+            return vcl::pdf::PDFWriter::Column;
+        const std::optional<ScRange> oCols(rDoc.GetRepeatColRange(nTab));
+        if (oCols && oCols->aStart.Col() <= nCol && nCol <= oCols->aEnd.Col())
+            return vcl::pdf::PDFWriter::Row;
         return vcl::pdf::PDFWriter::Invalid;
+    }
 
     ScRange aRange;
     pDBData->GetArea(aRange);
@@ -1423,7 +1433,8 @@ lcl_GetLabelScope(const ScDocument& rDoc, SCTAB nTab, SCCOL nCol, SCROW nRow)
                                        : vcl::pdf::PDFWriter::Invalid;
 }
 
-/// the element for a cell, a TH where a database range says the cell holds one of its labels
+/// the element for a cell, a TH where a database range or the rows and columns to repeat say
+/// the cell holds a label
 static sal_Int32 lcl_OpenCellElement(vcl::PDFExtOutDevData& rPDF, const ScDocument& rDoc,
                                      SCTAB nTab, SCCOL nCol, SCROW nRow)
 {

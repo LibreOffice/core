@@ -67,6 +67,8 @@ private:
 
     bool hasTextInPdf(const char* sText, bool& bFound);
 
+    OString getTableCellTypes();
+
     void setFont(ScFieldEditEngine& rEE, sal_Int32 nStart, sal_Int32 nEnd,
                  const OUString& rFontName);
 
@@ -93,6 +95,8 @@ public:
     void testCellLinkDestinations();
     void testPageRangeSkipsSheetStart();
     void testDatabaseRangeHeader();
+    void testRepeatRowsHeader();
+    void testRepeatRowsDatabaseRange();
     void testTableStyleCellStyleExcludedFont();
     void testTableStyleRotatedText();
     void testForcepoint97();
@@ -122,6 +126,8 @@ public:
     CPPUNIT_TEST(testCellLinkDestinations);
     CPPUNIT_TEST(testPageRangeSkipsSheetStart);
     CPPUNIT_TEST(testDatabaseRangeHeader);
+    CPPUNIT_TEST(testRepeatRowsHeader);
+    CPPUNIT_TEST(testRepeatRowsDatabaseRange);
     CPPUNIT_TEST(testTableStyleCellStyleExcludedFont);
     CPPUNIT_TEST(testTableStyleRotatedText);
     CPPUNIT_TEST(testForcepoint97);
@@ -1165,11 +1171,10 @@ void ScPDFExportTest::testPageRangeSkipsSheetStart()
     CPPUNIT_ASSERT_EQUAL(2, nOutlineItems);
 }
 
-void ScPDFExportTest::testDatabaseRangeHeader()
+/// the cells of the one table in the exported PDF, each as its element type and the scope a
+/// header cell announces, row after row
+OString ScPDFExportTest::getTableCellTypes()
 {
-    loadFromFile(u"db-range-header.fods");
-    exportWholeDocumentToPDF({ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) });
-
     vcl::filter::PDFDocument aDocument;
     CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
 
@@ -1220,6 +1225,13 @@ void ScPDFExportTest::testDatabaseRangeHeader()
         }
         aCells.append("| ");
     }
+    return aCells.makeStringAndClear();
+}
+
+void ScPDFExportTest::testDatabaseRangeHeader()
+{
+    loadFromFile(u"db-range-header.fods");
+    exportWholeDocumentToPDF({ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) });
 
     // Without the fix every cell was a TD, so this read
     // "TD TD | TD TD | TD TD | TD | TD TD | TD TD | TD TD | TD TD | ".
@@ -1228,7 +1240,35 @@ void ScPDFExportTest::testDatabaseRangeHeader()
     // defined without labels or outside every range
     CPPUNIT_ASSERT_EQUAL("TH/Column TH/Column | TD TD | TD TD | TD | TD TD | TD TD | "
                          "TH/Row TD | TH/Row TD | "_ostr,
-                         aCells.makeStringAndClear());
+                         getTableCellTypes());
+}
+
+void ScPDFExportTest::testRepeatRowsHeader()
+{
+    // A sheet with no database range, whose first row repeats on every page and whose first
+    // column repeats on every page across
+    loadFromFile(u"repeat-rows-header.fods");
+    exportWholeDocumentToPDF({ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) });
+
+    // Without the fix every cell was a TD, so this read "TD TD TD | TD TD TD | TD TD TD | ".
+    CPPUNIT_ASSERT_EQUAL("TH/Column TH/Column TH/Column | TH/Row TD TD | TH/Row TD TD | "_ostr,
+                         getTableCellTypes());
+}
+
+void ScPDFExportTest::testRepeatRowsDatabaseRange()
+{
+    // The first two rows repeat on every page; column A is a database range with labels, column B
+    // one without
+    loadFromFile(u"repeat-rows-db-range.fods");
+    exportWholeDocumentToPDF({ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) });
+
+    // Without the fix the cells of the range without labels were TD, so this read
+    // "TH/Column TD | TD TD | TD TD | ".
+    //
+    // the database range with labels decides for its own cells, so A2 is data although it
+    // repeats, while the one without labels leaves its cells to the rows to repeat
+    CPPUNIT_ASSERT_EQUAL("TH/Column TH/Column | TD TH/Column | TD TD | "_ostr,
+                         getTableCellTypes());
 }
 
 void ScPDFExportTest::testTableStyleCellStyleExcludedFont()

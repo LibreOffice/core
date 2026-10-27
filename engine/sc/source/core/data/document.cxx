@@ -6557,17 +6557,17 @@ const ScRange* ScDocument::GetPrintRange( SCTAB nTab, sal_uInt16 nPos )
     return nullptr;
 }
 
-std::optional<ScRange> ScDocument::GetRepeatColRange( SCTAB nTab )
+std::optional<ScRange> ScDocument::GetRepeatColRange( SCTAB nTab ) const
 {
-    if (ScTable* pTable = FetchTable(nTab))
+    if (const ScTable* pTable = FetchTable(nTab))
         return pTable->GetRepeatColRange();
 
     return std::nullopt;
 }
 
-std::optional<ScRange> ScDocument::GetRepeatRowRange( SCTAB nTab )
+std::optional<ScRange> ScDocument::GetRepeatRowRange( SCTAB nTab ) const
 {
-    if (ScTable* pTable = FetchTable(nTab))
+    if (const ScTable* pTable = FetchTable(nTab))
         return pTable->GetRepeatRowRange();
     return std::nullopt;
 }
