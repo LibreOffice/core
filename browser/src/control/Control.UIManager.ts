@@ -1193,10 +1193,18 @@ class UIManager extends window.L.Control {
 		if (!window.mode.isDesktop() || window.mode.isInteractivePreview()) return;
 
 		if (this.map.navigator) {
-			const show = this.getBooleanDocTypePref('ShowNavigator', false);
-			// The argument sets the panel to the wanted state, even if app.showNavigator is stale.
-			if (show !== !!app.showNavigator)
+			const show = this.isNavigatorPreferred();
+			if (this.map.isPresentationOrDrawing()) {
+				// The panel holds the slide list beside the navigator, so the
+				// preference opens and closes the whole panel.
+				if (show !== this.map.navigator.isNavigationPanelVisible()) {
+					if (show) this.map.navigator.showSlideSorter(false);
+					else this.map.navigator.closePanel();
+				}
+			} else if (show !== !!app.showNavigator) {
+				// The argument sets the panel to the wanted state, even if app.showNavigator is stale.
 				this.map.sendUnoCommand('.uno:Navigator?Navigator:bool=' + show);
+			}
 		}
 
 		if (this.map.sidebar) {
@@ -1248,10 +1256,14 @@ class UIManager extends window.L.Control {
 	initializeNavigator(): void {
 		if (!window.mode.isDesktop()) return;
 
+		// A presentation or drawing opens the panel on its slide list as the
+		// document layer starts, and the navigator in it is opened on request.
+		if (this.map.isPresentationOrDrawing()) return;
+
 		// The panel starts closed, so open it only when the saved state wants
 		// the navigator open. The argument opens it, and leaves an open panel
 		// open when this runs again for the same view.
-		if (this.getBooleanDocTypePref('ShowNavigator', false))
+		if (this.isNavigatorPreferred())
 			app.socket.sendMessage('uno .uno:Navigator?Navigator:bool=true');
 	}
 
@@ -1263,6 +1275,15 @@ class UIManager extends window.L.Control {
 		this.notesPanelOpenedOnLoad = true;
 		if (this.getBooleanDocTypePref('ShowNotesPanel', true))
 			this.map.notesPanel.setOpen(true);
+	}
+
+	/**
+	 * Whether the stored preference of the document type wants the navigator
+	 * panel open. A presentation or drawing keeps its slide list in that panel,
+	 * so there the panel is open unless the user turned it off.
+	 */
+	isNavigatorPreferred(): boolean {
+		return this.getBooleanDocTypePref('ShowNavigator', this.map.isPresentationOrDrawing());
 	}
 
 	/**

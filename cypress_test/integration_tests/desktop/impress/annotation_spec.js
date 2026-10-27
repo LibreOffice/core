@@ -247,7 +247,8 @@ describe(['tagdesktop'], 'Collapsed Annotation Tests', function() {
 
 		helper.processToIdle(this.win);
 		helper.reloadDocument(newFilePath);
-		desktopHelper.closeNavigatorSidebar();
+		// The navigation panel closed before the reload stays closed.
+		cy.cGet('#navigation-sidebar').should('not.have.class', 'visible');
 		desktopHelper.getNbIcon('ModifyPage.selected').click();
 		cy.cGet('.cool-annotation-img').scrollIntoView().click();
 		cy.cGet('.cool-annotation-content-wrapper').should('exist');

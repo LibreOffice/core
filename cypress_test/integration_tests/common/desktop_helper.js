@@ -333,6 +333,41 @@ function closeNavigatorSidebar () {
 	cy.cGet('.close-navigation-button').click();
 }
 
+// Flips one Interface Settings toggle of a document type in the Options dialog and saves it.
+// The toggle has to be in the state given by wasChecked before the flip.
+function toggleInterfaceSetting(docType, setting, wasChecked) {
+	cy.log('>> toggleInterfaceSetting - start');
+
+	var settingsBody = function() {
+		return cy.cframe()
+			.find('.iframe-settings-modal')
+			.its('0.contentDocument').should('exist')
+			.its('body').should('not.be.empty')
+			.then(cy.wrap);
+	};
+
+	cy.getFrameWindow().then(function(win) {
+		win.app.map.settings.showSettingsDialog('browser-setting');
+	});
+	cy.cGet('.iframe-settings-wrap').should('be.visible');
+
+	// The dialog opens on the Calc tab. Wait for that, otherwise its own click on that tab
+	// replaces the tab picked below.
+	settingsBody().find('#bs-tab-spreadsheet.active').should('exist');
+	settingsBody().find('#bs-tab-' + docType).click();
+
+	// The switch draws over its input, which hides the input from a plain click.
+	settingsBody()
+		.find('#' + docType + '-' + setting + '-input')
+		.should(wasChecked ? 'be.checked' : 'not.be.checked')
+		.click({ force: true });
+
+	cy.cGet('#iframe-settings-save').click();
+	cy.cGet('.iframe-settings-wrap').should('not.exist');
+
+	cy.log('<< toggleInterfaceSetting - end');
+}
+
 function insertComment(text = 'some text0', save = true) {
 	cy.log('>> insertComment - start');
 
@@ -990,6 +1025,7 @@ module.exports.scrollWriterDocumentToTop = scrollWriterDocumentToTop;
 module.exports.scrollViewDown = scrollViewDown;
 module.exports.assertVisiblePage = assertVisiblePage;
 module.exports.closeNavigatorSidebar = closeNavigatorSidebar;
+module.exports.toggleInterfaceSetting = toggleInterfaceSetting;
 module.exports.sidebarToggle = sidebarToggle;
 module.exports.ensureSidebarHidden = ensureSidebarHidden;
 module.exports.ensureSidebarVisible = ensureSidebarVisible;

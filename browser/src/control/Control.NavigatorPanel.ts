@@ -75,10 +75,11 @@ class NavigatorPanel extends SidebarBase {
 
 	onDocLayerInit() {
 		const allowedDocTypes = ['presentation', 'drawing'];
-		// for presentation show slide sorter navigation panel by default
+		// for presentation show slide sorter navigation panel unless the user turned it off
 		if (
 			allowedDocTypes.includes(app.map.getDocType()) &&
-			!window.mode.isSmallScreenDevice()
+			!window.mode.isSmallScreenDevice() &&
+			this.map.uiManager.isNavigatorPreferred()
 		) {
 			// Navigator panel should be visible and by default we should open slide sorter in case of impress/draw
 			this.showNavigationPanel(false);
@@ -154,10 +155,7 @@ class NavigatorPanel extends SidebarBase {
 		this.closeNavButton.setAttribute('tabindex', '0');
 
 		const clickFunction = function () {
-			this.closeNavigation();
-			if (app.showNavigator) {
-				app.map.sendUnoCommand('.uno:Navigator?Navigator:bool=false');
-			}
+			this.closePanel();
 			app.map.focus();
 		}.bind(this);
 
@@ -356,13 +354,10 @@ class NavigatorPanel extends SidebarBase {
 		this.floatingNavIcon.addEventListener(
 			'click',
 			function () {
-				this.showNavigationPanel(true);
 				if (app.map.isPresentationOrDrawing()) {
-					this.switchNavigationTab('tab-slide-sorter');
-					app.layoutingService.appendLayoutingTask(() => {
-						this.focusNavigationItem();
-					});
+					this.showSlideSorter(true);
 				} else {
+					this.showNavigationPanel(true);
 					app.map.sendUnoCommand('.uno:Navigator?Navigator:bool=true');
 					this.focusSearch();
 				}
@@ -596,6 +591,27 @@ class NavigatorPanel extends SidebarBase {
 
 	isNavigationPanelVisible(): boolean {
 		return this.navigationPanel.classList.contains('visible');
+	}
+
+	// Opens the panel on the slide list of a presentation or drawing. The panel
+	// then stays open on the next load of this document type.
+	showSlideSorter(setFocus: boolean) {
+		this.showNavigationPanel(setFocus);
+		this.switchNavigationTab('tab-slide-sorter');
+		this.map.uiManager.setDocTypePref('ShowNavigator', true);
+		if (setFocus)
+			app.layoutingService.appendLayoutingTask(() => {
+				this.focusNavigationItem();
+			});
+	}
+
+	// Closes the panel with the navigator in it. The panel then stays closed on
+	// the next load of this document type.
+	closePanel() {
+		this.closeNavigation();
+		if (app.showNavigator)
+			app.map.sendUnoCommand('.uno:Navigator?Navigator:bool=false');
+		this.map.uiManager.setDocTypePref('ShowNavigator', false);
 	}
 
 	closeNavigation() {
