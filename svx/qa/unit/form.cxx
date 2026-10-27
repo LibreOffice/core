@@ -41,8 +41,6 @@ using namespace ::com::sun::star;
 
 namespace
 {
-// the test uses an embedded Firebird database
-#if ENABLE_FIREBIRD_SDBC
 /// Tests for svx/source/form/ code.
 class Test : public UnoApiTest
 {
@@ -147,7 +145,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf170190)
     CPPUNIT_ASSERT_EQUAL(u"LIKE 'A%' AND LIKE '%e'"_ustr,
                          aPredicates[0][0].replaceAll(u"  ", u" "));
 }
-#endif
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

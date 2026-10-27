@@ -41,7 +41,7 @@ $(eval $(call gb_Module_add_check_targets,svx,\
 	CppunitTest_svx_unit_SdrTextObject \
 	CppunitTest_svx_unit_customshapes \
 	CppunitTest_svx_unit_classicshapes \
-	CppunitTest_svx_unit_form \
+	$(if $(ENABLE_FIREBIRD_SDBC),CppunitTest_svx_unit_form) \
 	CppunitTest_svx_unit_framelinkarray \
 	CppunitTest_svx_unit_gluepointTest \
 	CppunitTest_svx_unit_sdr \
