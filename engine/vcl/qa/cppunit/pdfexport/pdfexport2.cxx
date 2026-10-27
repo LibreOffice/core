@@ -7782,6 +7782,61 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testShapeClickLinkTaggedNotesPages)
     CPPUNIT_ASSERT_EQUAL(1, nLinks);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testGroupClickLink)
+{
+    // a group with a title and a click action that opens a URL
+    loadFromFile(u"group-link.fodp");
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"PDFUACompliance"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
+    // Without the fix the click action of a group gave no link
+    auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"_ostr));
+    CPPUNIT_ASSERT(pAnnots);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pAnnots->GetElements().size());
+    auto pAnnotReference
+        = dynamic_cast<vcl::filter::PDFReferenceElement*>(pAnnots->GetElements()[0]);
+    CPPUNIT_ASSERT(pAnnotReference);
+    vcl::filter::PDFObjectElement* pAnnot = pAnnotReference->LookupObject();
+    CPPUNIT_ASSERT(pAnnot);
+    auto pA = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pAnnot->Lookup("A"_ostr));
+    CPPUNIT_ASSERT(pA);
+    auto pURI = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pA->LookupElement("URI"_ostr));
+    CPPUNIT_ASSERT(pURI);
+    CPPUNIT_ASSERT_EQUAL("https://example.org/"_ostr, pURI->GetValue());
+
+    // the Link has the Figure of the group inside
+    int nLinks = 0;
+    for (auto* pObject : aDocument.GetObjects())
+    {
+        auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+        if (!pS || pS->GetValue() != "Link")
+            continue;
+        ++nLinks;
+        auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject->Lookup("K"_ostr));
+        CPPUNIT_ASSERT(pKids);
+        int nFigure = 0;
+        for (auto* pKid : pKids->GetElements())
+        {
+            auto pRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKid);
+            if (!pRef)
+                continue;
+            vcl::filter::PDFObjectElement* pKidObject = pRef->LookupObject();
+            CPPUNIT_ASSERT(pKidObject);
+            auto pKidS = dynamic_cast<vcl::filter::PDFNameElement*>(pKidObject->Lookup("S"_ostr));
+            CPPUNIT_ASSERT(pKidS);
+            CPPUNIT_ASSERT_EQUAL("Figure"_ostr, pKidS->GetValue());
+            ++nFigure;
+        }
+        CPPUNIT_ASSERT_EQUAL(1, nFigure);
+    }
+    CPPUNIT_ASSERT_EQUAL(1, nLinks);
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
