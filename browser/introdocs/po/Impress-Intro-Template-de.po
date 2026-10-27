@@ -3,10 +3,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Impress-Intro-Template.odp\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-10-17 20:54+0000\n"
-"Last-Translator: Mr-Update <mr-update@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-10-25 00:03+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@users.noreply.hosted.weblate.org>"
+"\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
-"impress-intro-template/de/>\n"
+"desktop-apps/impress-intro-template/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -94,7 +95,7 @@ msgstr ""
 
 #. content.xml (slide 'page2')
 msgid "Start editing your slide."
-msgstr ""
+msgstr "Beginnen Sie mit der Bearbeitung Ihrer Folie."
 
 #. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
 #. (slide 'page4'); content.xml (slide 'page5'); styles.xml (master page
@@ -138,6 +139,7 @@ msgstr ""
 #. content.xml (slide 'page3')
 msgid "Now your master is set and ready to use across all slides."
 msgstr ""
+"Nun ist Ihr Master eingerichtet und kann auf allen Folien verwendet werden."
 
 #. content.xml (slide 'page3')
 msgid ""
@@ -205,12 +207,14 @@ msgstr ""
 
 #. content.xml (slide 'page5')
 msgid "Pick a transition style you would like to use."
-msgstr ""
+msgstr "Wählen Sie einen Übergangsstil aus, den Sie verwenden möchten."
 
 #. content.xml (slide 'page5')
 msgid ""
 "Adjust other properties – set the duration, pick a variant, or choose timing."
 msgstr ""
+"Passen Sie weitere Eigenschaften an – legen Sie die Dauer fest, wählen Sie "
+"eine Variante aus oder bestimmen Sie den Zeitablauf."
 
 #. content.xml (slide 'page5')
 msgid ""

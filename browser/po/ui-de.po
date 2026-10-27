@@ -12,8 +12,9 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-23 00:15+0200\n"
-"PO-Revision-Date: 2026-10-24 20:21+0000\n"
-"Last-Translator: Mr-Update <mr-update@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-10-25 00:03+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@users.noreply.hosted.weblate.org>"
+"\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/de/>\n"
 "Language: de\n"
@@ -1108,6 +1109,7 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:3110
 msgid "Magnify the whole window, including the document and the menus."
 msgstr ""
+"Das gesamte Fenster, einschließlich des Dokuments und der Menüs, vergrößern."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3116
 msgid "As per system"
@@ -1480,7 +1482,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5028
 msgid "The first one that is set up"
-msgstr ""
+msgstr "Das erste, das eingerichtet wird"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5081
 msgid "API URL"
@@ -3806,6 +3808,8 @@ msgid ""
 "Each tab gathers the tools for one kind of work, such as inserting or "
 "reviewing."
 msgstr ""
+"Auf jeder Registerkarte sind die Werkzeuge für eine bestimmte Art von Arbeit "
+"zusammengefasst, beispielsweise zum Einfügen oder Überprüfen."
 
 #: src/control/onboarding/OnboardingSteps.ts:50
 msgid "The menus"
@@ -3822,6 +3826,8 @@ msgstr "Die Werkzeuge"
 #: src/control/onboarding/OnboardingSteps.ts:58
 msgid "The buttons of the tab you selected appear along this row."
 msgstr ""
+"Die Schaltflächen der von Ihnen ausgewählten Registerkarte werden in dieser "
+"Zeile angezeigt."
 
 #: src/control/onboarding/OnboardingSteps.ts:64
 msgid "The toolbar"
@@ -3875,7 +3881,7 @@ msgstr "Die Personen in dem Dokument"
 
 #: src/control/onboarding/OnboardingSteps.ts:100
 msgid "See who else is editing and share the document."
-msgstr ""
+msgstr "Sehen Sie, wer noch an dem Dokument arbeitet, und teilen Sie es."
 
 #: src/control/onboarding/OnboardingSteps.ts:110
 msgid "The status bar"
@@ -3886,6 +3892,8 @@ msgid ""
 "The state of the document, the language of the text and the zoom level are "
 "along the bottom."
 msgstr ""
+"Der Status des Dokuments, die Sprache des Textes und der Zoomfaktor werden "
+"am unteren Rand angezeigt."
 
 #: src/control/onboarding/OnboardingSteps.ts:119
 msgid "You are ready to work"
@@ -7574,7 +7582,7 @@ msgstr "Anzeigen"
 
 #: src/control/PermissionMode.ts:467
 msgid "Reviewing"
-msgstr ""
+msgstr "Überprüfung"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:380
 msgid "Save Image to Server"
@@ -8815,7 +8823,7 @@ msgstr "Platzhalter"
 
 #: src/layer/marker/TextInput.js:509
 msgid "Drop-down list"
-msgstr ""
+msgstr "Ausklappliste"
 
 #: src/layer/marker/TextInput.js:511
 msgid "Combo box"
