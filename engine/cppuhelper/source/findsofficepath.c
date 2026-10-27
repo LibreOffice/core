@@ -144,6 +144,7 @@ static char* platformSpecific(void)
     char* str = NULL;
     char* dir = NULL;
     char* sep = NULL;
+    char* saveptr = NULL;
 
     char buffer[PATH_MAX];
     int pos;
@@ -163,7 +164,7 @@ static char* platformSpecific(void)
         return NULL;
 
     /* get the tokens separated by ':' */
-    dir = strtok( str, PATHSEPARATOR );
+    dir = strtok_r( str, PATHSEPARATOR, &saveptr );
 
     while ( dir )
     {
@@ -197,7 +198,7 @@ static char* platformSpecific(void)
             }
         }
 
-        dir = strtok( NULL, PATHSEPARATOR );
+        dir = strtok_r( NULL, PATHSEPARATOR, &saveptr );
         free( file );
     }
 
