@@ -186,7 +186,7 @@ tasks.register('copyAssets', Copy) {
     into('share') {
         from "${coInstdir}/share"
         // Filter data is needed by e.g. the drawingML preset shape import.
-        includes = ['registry/**', 'filter/**', 'gallery/**', 'palette/**']
+        includes = ['registry/**', 'filter/**', 'gallery/**', 'palette/**', 'theme_definitions/collabora/**']
     }
 }
 
@@ -196,11 +196,6 @@ tasks.register('createFullConfig', Copy) {
     from("${coInstdir}/share/config") {
         includes = ['soffice.cfg/**', 'images_colibre.zip']
     }
-}
-
-tasks.register('copyBrandTheme', Copy) {
-    from "${coBrandingDir}/online-theme"
-    into "src/main/assets/share/theme_definitions/online"
 }
 
 tasks.register('copyDocTemplates', Copy) {
@@ -287,8 +282,7 @@ clean.doFirst {
 
 // creating the UI stuff is cheap, don't bother only applying it for the flavor..
 preBuild.dependsOn 'createRCfiles',
-        'createFullConfig',
-        'copyBrandTheme'
+        'createFullConfig'
 
 tasks.register('generateCoolDebugAssets') {
     doLast {
@@ -313,9 +307,6 @@ tasks.register('generateCoolReleaseAssets') {
 }
 
 afterEvaluate {
-	if (!file("${coBrandingDir}").exists()) {
-		copyBrandTheme.enabled = false
-	}
 	generateDebugAssets.dependsOn copyDocTemplates, generateCoolDebugAssets
 	generateReleaseAssets.dependsOn copyDocTemplates, generateCoolReleaseAssets
 

@@ -7,7 +7,6 @@ ext {
     coVersionMinor    = '@COOLWSD_VERSION_MINOR@'
     coVersionHash     = '@COOLWSD_VERSION_HASH@'
     coApplicationId   = '@APP_PACKAGE_NAME@'
-    coBrandingDir     = '@APP_BRANDING_DIR@'
     coGooglePlay      = '@APP_GOOGLE_PLAY@'
     coAbiSplit        = [@ANDROID_ABI_SPLIT@]
 }

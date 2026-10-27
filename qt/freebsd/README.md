@@ -35,9 +35,8 @@ The port fetches `collabora-office-brand-<BRAND_VERSION>.tar.gz` from the
 Collabora download site, the same tarball the snap and flatpak use, and applies
 it the same way: the app is configured with `--with-app-branding` pointing at
 the extracted tree, which puts the CSS, images and welcome files into the
-browser bundle, and `online-theme` is installed as the engine's `online`
-theme definition. Bump `BRAND_VERSION` and rerun `makesum` when a new branding
-tarball is published.
+browser bundle. The widget theme comes with the engine. Bump `BRAND_VERSION`
+and rerun `makesum` when a new branding tarball is published.
 
 ## Fonts
 

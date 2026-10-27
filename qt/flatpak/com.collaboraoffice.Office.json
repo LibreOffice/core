@@ -980,7 +980,6 @@
       "name": "collabora-office-branding",
       "buildsystem": "simple",
       "build-commands": [
-        "cp -a online-theme /app/collaboraoffice/share/theme_definitions/online/",
         "cp -a branding* images welcome /app/share/coolwsd/browser/dist/"
       ],
       "sources": [

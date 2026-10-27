@@ -566,8 +566,6 @@ parts:
     after: [collabora-office]
     override-build: |
       set -e
-      mkdir -p "$CRAFT_PART_INSTALL/usr/lib/collaboraoffice/share/theme_definitions"
-      cp -a online-theme "$CRAFT_PART_INSTALL/usr/lib/collaboraoffice/share/theme_definitions/online/"
       mkdir -p "$CRAFT_PART_INSTALL/usr/share/coolwsd/browser/dist"
       cp -a branding* images welcome "$CRAFT_PART_INSTALL/usr/share/coolwsd/browser/dist/"
 

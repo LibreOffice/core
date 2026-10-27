@@ -193,8 +193,6 @@ do-build:
 
 do-install:
 	cd ${ENGINE_WRKSRC} && ${SETENV} ${MAKE_ENV} ${MAKE_CMD} DESTDIR=${STAGEDIR} distro-pack-install
-	${MKDIR} ${STAGEDIR}${LO_PATH}/share/theme_definitions/online
-	${CP} -a ${BRAND_WRKSRC}/online-theme/ ${STAGEDIR}${LO_PATH}/share/theme_definitions/online
 	cd ${WRKSRC} && ${SETENV} ${MAKE_ENV} ${MAKE_CMD} DESTDIR=${STAGEDIR} install
 
 post-install:
