@@ -120,21 +120,17 @@ separately for Android.
 
 ### Configure
 
-Set the ABI to the one you built the engine for...
-
-    export ABI=arm64-v8a
-
-Now step back to the top of the monorepo (one level up from `engine/`) and configure the Collabora Office build
+Step back to the top of the monorepo (one level up from `engine/`) and configure the Collabora Office build
 
     cd ..
     ./autogen.sh
-    ./configure --enable-androidapp \
-                --enable-debug \
-                --with-android-abi=${ABI}
+    ./configure --enable-androidapp --enable-debug
 
-The engine you built in `engine/` is found by default. Add
-`--with-lo-builddir=/path/to/engine/builddir` only when the engine was
-built in another directory.
+The engine you built in `engine/` is found by default, and the ABI is
+the one that engine was configured for. Add
+`--with-lo-builddir=/path/to/engine/builddir` when the engine was built
+in another directory, and `--with-android-abi` when building for
+several ABIs at once (see `./configure --help`).
 
 The app gets the Collabora Office theme from `browser/branding` by default, and the
 launcher icon and drawer header in `android/app/src/main/res` are Collabora's too. The

@@ -350,10 +350,11 @@ AC_ARG_WITH(build-id,
 
 AC_ARG_WITH(android-abi,
             AS_HELP_STRING([--with-android-abi=x86_64],
-                           [Allows specification of a concrete ABI that is to be built for, defaults to armeabi-v7a
-                            (when only one build dir is provided in --with-lo-builddir) or to all 4 supported ABIs at
-                            the same time (when there are more builddirs provided in --with-lo-builddir, separated
-                            by colons).  The supported ABIs are: armeabi-v7a, arm64-v8a, x86 and x86_64.
+                           [Allows specification of a concrete ABI that is to be built for, defaults to the ABI
+                            the engine build in --with-lo-builddir was configured for (when only one build dir is
+                            provided) or to all 4 supported ABIs at the same time (when there are more builddirs
+                            provided in --with-lo-builddir, separated by colons).  The supported ABIs are:
+                            armeabi-v7a, arm64-v8a, x86 and x86_64.
                             Please note that you need to specify the build dirs for --with-lo-builddir
                             in the order of armeabi-v7a:arm64-v8a:x86:x86_64 (POCO is taken from each
                             engine build dir's workdir).
@@ -902,19 +903,6 @@ ZSTDLIB_X86=
 ZSTDLIB_X86_64=
 
 if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_windowsapp" = "yes" \) -o \( "$enable_androidapp" = "yes" \) -o "$host_os" = "emscripten" ; then
-   if test "$enable_androidapp" = "yes" ; then
-      AC_MSG_CHECKING([for Android ABI to build for])
-      if test -n "$with_android_abi" ; then
-         ANDROID_ABI=`echo $with_android_abi | sed 's/:/ /g'`
-      else
-         if echo "$with_lo_builddir" | grep -qs ':' ; then
-            ANDROID_ABI="armeabi-v7a arm64-v8a x86 x86_64"
-         fi
-      fi
-      ANDROID_ABI_SPLIT=`echo $ANDROID_ABI | sed "s/^/'/g;s/ /','/g;s/$/'/g"`
-      AC_MSG_RESULT([$ANDROID_ABI])
-   fi
-
    if test "$host_os" = emscripten; then
       AC_MSG_CHECKING([for CollaboraOffice source tree to build against])
       if test -z "$with_lo_sourcedir"; then
@@ -971,6 +959,23 @@ if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_w
       AC_MSG_RESULT([$LOBUILDDIR])
    else
       AC_MSG_ERROR([This is not a CollaboraOffice core build directory: $LOBUILDDIR])
+   fi
+
+   if test "$enable_androidapp" = "yes" ; then
+      AC_MSG_CHECKING([for Android ABI to build for])
+      if test -n "$with_android_abi" ; then
+         ANDROID_ABI=`echo $with_android_abi | sed 's/:/ /g'`
+      elif echo "$with_lo_builddir" | grep -qs ':' ; then
+         ANDROID_ABI="armeabi-v7a arm64-v8a x86 x86_64"
+      elif test -f "$LOBUILDDIR/config_host.mk" ; then
+         # A single engine build is for one ABI, and its config_host.mk records which one.
+         ANDROID_ABI=`sed -n 's/^export ANDROID_APP_ABI=//p' "$LOBUILDDIR/config_host.mk"`
+         if test -z "$ANDROID_ABI" ; then
+            AC_MSG_ERROR([The engine build in $LOBUILDDIR is not configured for Android.])
+         fi
+      fi
+      ANDROID_ABI_SPLIT=`echo $ANDROID_ABI | sed "s/^/'/g;s/ /','/g;s/$/'/g"`
+      AC_MSG_RESULT([$ANDROID_ABI])
    fi
 
    if test -n "$LOBUILDDIR_ARM64_V8A" ; then
