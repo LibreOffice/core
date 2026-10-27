@@ -1751,20 +1751,20 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf149551Pyramid)
     // The file contains a diagram of type "Basic Pyramid".
     createSdImpressDoc("pptx/tdf149551_SmartArt_Pyramid.pptx");
     uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY);
-    // shape at index 0 is the background shape
-    uno::Reference<drawing::XShape> xShape = getChildShape(xGroup, 1);
+    // index 0 is the background shape, the middle trapezoid has a txXfrm narrower than
+    // its box
+    uno::Reference<drawing::XShape> xShape = getChildShape(xGroup, 2);
     CPPUNIT_ASSERT(xShape.is());
     auto pCustomShape = dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape));
     CPPUNIT_ASSERT(pCustomShape);
     tools::Rectangle aTextRect;
     pCustomShape->TakeTextAnchorRect(aTextRect);
-    // without fix the text area rectangle had LT [9369,2700] and RB[14632,6185]. The values from
-    // txXfrm were ignored.
+    // the text area is the txXfrm less the insets
     // The used tolerance is estimated.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(9368), sal_Int32(aTextRect.Left()), 4);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(2699), sal_Int32(aTextRect.Top()), 4);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(14632), sal_Int32(aTextRect.Right()), 4);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(7370), sal_Int32(aTextRect.Bottom()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(8568), sal_Int32(aTextRect.Left()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(6254), sal_Int32(aTextRect.Top()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(15432), sal_Int32(aTextRect.Right()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(9741), sal_Int32(aTextRect.Bottom()), 4);
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf149551Venn)

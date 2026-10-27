@@ -33,6 +33,7 @@
 #include <comphelper/sequence.hxx>
 #include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
+#include <svx/EnhancedCustomShapeFormulas.hxx>
 
 #include <algorithm>
 
@@ -227,6 +228,77 @@ bool CustomShapeProperties::isAngleAdjustment( sal_Int32 nPresetType, sal_Int32 
     return false;
 }
 
+bool CustomShapeProperties::mergeAdjustments( Sequence< PropertyValue >& rGeometry ) const
+{
+    for ( auto& rGeoProp : asNonConstRange(rGeometry) )
+    {
+        if ( rGeoProp.Name == u"AdjustmentValues"_ustr )
+        {
+            cpo::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
+            if ( rGeoProp.Value >>= aAdjustmentSeq )
+            {
+                auto aAdjustmentSeqRange = asNonConstRange(aAdjustmentSeq);
+                int nIndex=0;
+                for (auto const& adjustmentGuide : maAdjustmentGuideList)
+                {
+                    if ( adjustmentGuide.maName.getLength() > 3 )
+                    {
+                        sal_Int32 nAdjustmentIndex = o3tl::toInt32(adjustmentGuide.maName.subView( 3 )) - 1;
+                        if ( ( nAdjustmentIndex >= 0 ) && ( nAdjustmentIndex < aAdjustmentSeq.getLength() ) )
+                        {
+                            EnhancedCustomShapeAdjustmentValue aAdjustmentVal;
+                            aAdjustmentVal.Value <<= adjustmentGuide.maFormula.toInt32();
+                            aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
+                            aAdjustmentVal.Name = adjustmentGuide.maName;
+                            aAdjustmentSeqRange[ nAdjustmentIndex ] = std::move(aAdjustmentVal);
+                        }
+                    } else if ( aAdjustmentSeq.hasElements() ) {
+                        EnhancedCustomShapeAdjustmentValue aAdjustmentVal;
+                        aAdjustmentVal.Value <<= adjustmentGuide.maFormula.toInt32();
+                        aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
+                        aAdjustmentVal.Name = adjustmentGuide.maName;
+                        if (nIndex < aAdjustmentSeq.getLength())
+                        {
+                            aAdjustmentSeqRange[nIndex] = std::move(aAdjustmentVal);
+                            ++nIndex;
+                        }
+                    }
+                }
+                rGeoProp.Value <<= aAdjustmentSeq;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+Sequence< PropertyValue > CustomShapeProperties::presetGeometry() const
+{
+    if (maPresetDataMap.empty())
+        initializePresetDataMap();
+    const auto aPreset = maPresetDataMap.find(mnShapePresetType);
+    if (aPreset == maPresetDataMap.end())
+        return {};
+    PropertyMap aPropertyMap(aPreset->second);
+    aPropertyMap.setProperty( PROP_MirroredX, mbMirroredX );
+    aPropertyMap.setProperty( PROP_MirroredY, mbMirroredY );
+    Sequence< PropertyValue > aGeometry = aPropertyMap.makePropertyValueSequence();
+    mergeAdjustments( aGeometry );
+    return aGeometry;
+}
+
+std::optional<awt::Rectangle> CustomShapeProperties::getPresetTextArea(const awt::Size& rSize) const
+{
+    if (mnShapePresetType < 0 || rSize.Width <= 0 || rSize.Height <= 0)
+        return std::nullopt;
+    const Sequence<PropertyValue> aGeometry(presetGeometry());
+    if (!aGeometry.hasElements())
+        return std::nullopt;
+    const tools::Rectangle aArea(EnhancedCustomShapeFormulas::GetTextRectFor(
+        aGeometry, Size(rSize.Width, rSize.Height)));
+    return awt::Rectangle(aArea.Left(), aArea.Top(), aArea.GetWidth(), aArea.GetHeight());
+}
+
 void CustomShapeProperties::pushToPropSet(
     const Reference < XPropertySet >& xPropSet, const awt::Size &aSize )
 {
@@ -271,49 +343,8 @@ void CustomShapeProperties::pushToPropSet(
             static constexpr OUString sCustomShapeGeometry(u"CustomShapeGeometry"_ustr);
             cpo::uno::Any aGeoPropSet = xPropSet->getPropertyValue( sCustomShapeGeometry );
             cpo::uno::Sequence< beans::PropertyValue > aGeoPropSeq;
-            if ( aGeoPropSet >>= aGeoPropSeq )
-            {
-                for ( auto& rGeoProp : asNonConstRange(aGeoPropSeq) )
-                {
-                    if ( rGeoProp.Name == u"AdjustmentValues"_ustr )
-                    {
-                        cpo::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
-                        if ( rGeoProp.Value >>= aAdjustmentSeq )
-                        {
-                            auto aAdjustmentSeqRange = asNonConstRange(aAdjustmentSeq);
-                            int nIndex=0;
-                            for (auto const& adjustmentGuide : maAdjustmentGuideList)
-                            {
-                                if ( adjustmentGuide.maName.getLength() > 3 )
-                                {
-                                    sal_Int32 nAdjustmentIndex = o3tl::toInt32(adjustmentGuide.maName.subView( 3 )) - 1;
-                                    if ( ( nAdjustmentIndex >= 0 ) && ( nAdjustmentIndex < aAdjustmentSeq.getLength() ) )
-                                    {
-                                        EnhancedCustomShapeAdjustmentValue aAdjustmentVal;
-                                        aAdjustmentVal.Value <<= adjustmentGuide.maFormula.toInt32();
-                                        aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
-                                        aAdjustmentVal.Name = adjustmentGuide.maName;
-                                        aAdjustmentSeqRange[ nAdjustmentIndex ] = std::move(aAdjustmentVal);
-                                    }
-                                } else if ( aAdjustmentSeq.hasElements() ) {
-                                    EnhancedCustomShapeAdjustmentValue aAdjustmentVal;
-                                    aAdjustmentVal.Value <<= adjustmentGuide.maFormula.toInt32();
-                                    aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
-                                    aAdjustmentVal.Name = adjustmentGuide.maName;
-                                    if (nIndex < aAdjustmentSeq.getLength())
-                                    {
-                                        aAdjustmentSeqRange[nIndex] = std::move(aAdjustmentVal);
-                                        ++nIndex;
-                                    }
-                                }
-                            }
-                            rGeoProp.Value <<= aAdjustmentSeq;
-                            xPropSet->setPropertyValue( sCustomShapeGeometry, Any( aGeoPropSeq ) );
-                            break;
-                        }
-                    }
-                }
-            }
+            if ( ( aGeoPropSet >>= aGeoPropSeq ) && mergeAdjustments( aGeoPropSeq ) )
+                xPropSet->setPropertyValue( sCustomShapeGeometry, Any( aGeoPropSeq ) );
         }
     }
     else

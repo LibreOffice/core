@@ -21,8 +21,13 @@
 #define INCLUDED_OOX_DRAWINGML_CUSTOMSHAPEPROPERTIES_HXX
 
 #include <memory>
+#include <optional>
 #include <unordered_map>
 #include <vector>
+#include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -122,6 +127,10 @@ public:
     void pushToPropSet( const cpo::uno::Reference < css::beans::XPropertySet > & xPropSet,
                         const css::awt::Size &aSize );
 
+    /// text area of the preset in a shape of rSize, in EMU from its top left; none for no
+    /// preset
+    std::optional<css::awt::Rectangle> getPresetTextArea(const css::awt::Size& rSize) const;
+
     sal_Int32 getShapePresetType() const { return mnShapePresetType; }
     OUString getShapePresetTypeName() const;
     void setShapePresetType( sal_Int32 nShapePresetType ){ mnShapePresetType = nShapePresetType; };
@@ -177,6 +186,13 @@ private:
 
     static PresetDataMap maPresetDataMap;
     static void initializePresetDataMap();
+
+    /// puts the values of the adjustment guides into the AdjustmentValues of rGeometry; false
+    /// where rGeometry has none
+    bool mergeAdjustments( cpo::uno::Sequence< css::beans::PropertyValue >& rGeometry ) const;
+    /// the CustomShapeGeometry of the preset with the adjustments of this shape, empty for a
+    /// preset there is no data for
+    cpo::uno::Sequence< css::beans::PropertyValue > presetGeometry() const;
 
 public:
     /// Whether the adjustment nIndex, counted from 1, of the preset nPresetType is an angle, in

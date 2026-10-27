@@ -1935,128 +1935,76 @@ static sal_Int64 measureTextHeight(const std::vector<OUString>& rParagraphs, sal
     return static_cast<sal_Int64>(aEngine.GetTextHeight()) * 360;
 }
 
-// The inset of the text area of the shape rShape on each side, as a part of its shorter side:
-// a roundRect holds its text 0.29289 of its corner's radius in, the radius its adjustment, a part
-// of the shorter side, 1/6 where not stated; Vertical_Bullet_List's parent text of 1843 has 1663
-// of room in it. An ellipse holds its text in the rectangle inside it. 0 for a shape whose
-// text has the whole of it.
-static double textAreaInsetPart(const ShapePtr& rShape)
-{
-    if (!rShape || !rShape->getCustomShapeProperties())
-        return 0.0;
-    if (rShape->getCustomShapeProperties()->getShapePresetType() == XML_ellipse)
-        return (1.0 - std::sqrt(0.5)) / 2.0;
-    if (rShape->getCustomShapeProperties()->getShapePresetType() != XML_roundRect)
-        return 0.0;
-    double fRadius(1.0 / 6.0);
-    for (const CustomShapeGuide& rGuide :
-         rShape->getCustomShapeProperties()->getAdjustmentGuideList())
-        if (rGuide.maName == "adj" || rGuide.maName == "adj1")
-        {
-            const OUString aValue(rGuide.maFormula.startsWith("val ")
-                                      ? rGuide.maFormula.copy(4)
-                                      : rGuide.maFormula);
-            fRadius = std::clamp(aValue.toDouble() / 100000.0, 0.0, 0.5);
-        }
-    return 0.29289 * fRadius;
-}
-
-// parts of the box a preset keeps free of text, left, top, right and bottom, after the
-// preset's own formulas: an arrow holds its text in its stem, a chevron between notch and
-// point. Nothing for a preset that uses the whole box or is handled by textAreaInsetPart
+// the parts of rShape's box (fWidth x fHeight) its preset keeps free of text: left, top,
+// right, bottom; none where the text has the whole box
 static std::optional<std::array<double, 4>> textAreaPartsOf(const ShapePtr& rShape,
                                                              double fWidth, double fHeight)
 {
     if (!rShape || !rShape->getCustomShapeProperties() || fWidth <= 0.0 || fHeight <= 0.0)
         return std::nullopt;
-    const sal_Int32 nType(rShape->getCustomShapeProperties()->getShapePresetType());
-    if (nType != XML_downArrow && nType != XML_upArrow && nType != XML_rightArrow
-        && nType != XML_leftArrow && nType != XML_chevron && nType != XML_homePlate)
+    const std::optional<awt::Rectangle> oArea(rShape->getCustomShapeProperties()->getPresetTextArea(
+        awt::Size(static_cast<sal_Int32>(fWidth), static_cast<sal_Int32>(fHeight))));
+    if (!oArea)
         return std::nullopt;
-    double fFirst(50000.0), fSecond(50000.0);
-    for (const CustomShapeGuide& rGuide :
-         rShape->getCustomShapeProperties()->getAdjustmentGuideList())
-    {
-        const OUString aValue(rGuide.maFormula.startsWith("val ") ? rGuide.maFormula.copy(4)
-                                                                  : rGuide.maFormula);
-        if (rGuide.maName == "adj1" || rGuide.maName == "adj")
-            fFirst = aValue.toDouble();
-        else if (rGuide.maName == "adj2")
-            fSecond = aValue.toDouble();
-    }
-    const double fShorter(std::min(fWidth, fHeight));
-    // chevron and homePlate: the text stands between notch and point
-    if (nType == XML_chevron || nType == XML_homePlate)
-    {
-        const double fPoint(std::clamp(fFirst, 0.0, 100000.0 * fWidth / fShorter) / 100000.0
-                            * fShorter);
-        if (nType == XML_homePlate)
-            return std::array<double, 4>{ 0.0, 0.0, fPoint / 2.0 / fWidth, 0.0 };
-        if (fWidth - 2.0 * fPoint <= 0.0)
-            return std::nullopt;
-        return std::array<double, 4>{ fPoint / fWidth, 0.0, fPoint / fWidth, 0.0 };
-    }
-    const bool bUpDown(nType == XML_downArrow || nType == XML_upArrow);
-    // stem across and head along the arrow, both from the adjustments
-    const double fAcross(bUpDown ? fWidth : fHeight);
-    const double fAlong(bUpDown ? fHeight : fWidth);
-    const double fStemPart(std::clamp(fFirst, 0.0, 100000.0) / 100000.0);
-    const double fHead(
-        std::clamp(fSecond, 0.0, 100000.0 * fAlong / fShorter) / 100000.0 * fShorter);
-    const double fStemSide((fAcross - fAcross * fStemPart) / 2.0);
-    // the text reaches into the head up to where stem and head meet
-    const double fIntoHead(fStemSide * fHead / (fAcross / 2.0));
-    const double fAcrossPart(fStemSide / fAcross);
-    const double fAlongPart(std::max(0.0, fHead - fIntoHead) / fAlong);
-    switch (nType)
-    {
-        case XML_downArrow:
-            return std::array<double, 4>{ fAcrossPart, 0.0, fAcrossPart, fAlongPart };
-        case XML_upArrow:
-            return std::array<double, 4>{ fAcrossPart, fAlongPart, fAcrossPart, 0.0 };
-        case XML_rightArrow:
-            return std::array<double, 4>{ 0.0, fAcrossPart, fAlongPart, fAcrossPart };
-        default:
-            return std::array<double, 4>{ fAlongPart, fAcrossPart, 0.0, fAcrossPart };
-    }
+    const std::array<double, 4> aParts{ oArea->X / fWidth, oArea->Y / fHeight,
+                                        (fWidth - oArea->X - oArea->Width) / fWidth,
+                                        (fHeight - oArea->Y - oArea->Height) / fHeight };
+    if (std::all_of(aParts.begin(), aParts.end(), [](double f) { return f < 1e-4; }))
+        return std::nullopt;
+    return aParts;
 }
 
-// The height the paragraphs rParagraphs take in the shape rShape nWidthEmu wide, in EMU, as
-// measureTextHeight measures them, with the inset of the shape's text area over and under the
-// text added and taken off the width too; nOverUnderEmu are the margins over and under the text,
-// which make the shape higher and with that the inset where the height is the shorter side. The
-// inset on each side goes to pInsetEmu where given, 0 for a shape whose text has the whole of it.
+// height of rParagraphs in rShape in EMU: measureTextHeight in nWidthEmu plus what the
+// preset keeps free over and under the text, the width less what it keeps free beside.
+// nSidesEmu and nOverUnderEmu are the margins, they make the shape and so the free
+// parts larger. Half of what is free across goes to pInsetEmu where given.
 static sal_Int64 measureTextHeightInShape(const ShapePtr& rShape,
                                           const std::vector<OUString>& rParagraphs,
-                                          sal_Int64 nWidthEmu, sal_Int64 nOverUnderEmu,
-                                          double fFontPt,
+                                          sal_Int64 nWidthEmu, sal_Int64 nSidesEmu,
+                                          sal_Int64 nOverUnderEmu, double fFontPt,
                                           const std::vector<double>& rFontOfParagraph,
                                           const std::vector<sal_Int32>& rLevelOfParagraph,
                                           const SpaceAfterParts& rSpaceAfter,
                                           std::u16string_view rTextFont,
                                           sal_Int64* pInsetEmu = nullptr)
 {
-    const double fPart(textAreaInsetPart(rShape));
     if (pInsetEmu)
         *pInsetEmu = 0;
-    if (fPart <= 0.0)
-        return measureTextHeight(rParagraphs, nWidthEmu, fFontPt, rTextFont, rFontOfParagraph,
-                                 rLevelOfParagraph, rSpaceAfter);
-    // the inset follows the shorter side, which is the height the text makes where the shape
-    // is wider than that, so a few rounds settle it
-    sal_Int64 nInset(static_cast<sal_Int64>(fPart * nWidthEmu));
-    sal_Int64 nText(0);
+    sal_Int64 nText(measureTextHeight(rParagraphs, nWidthEmu, fFontPt, rTextFont,
+                                      rFontOfParagraph, rLevelOfParagraph, rSpaceAfter));
+    if (!rShape || !rShape->getCustomShapeProperties())
+        return nText;
+    // turned by a quarter by its layout node the box here is turned, its own box and the
+    // text area of its preset lie the other way
+    const sal_Int32 nNodeTurn(((rShape->getDiagramRotation() / PER_DEGREE) % 360 + 360) % 360);
+    const bool bNodeQuarter((nNodeTurn > 45 && nNodeTurn < 135)
+                            || (nNodeTurn > 225 && nNodeTurn < 315));
+    // the free parts follow the height the text gives the shape, a few rounds settle it
+    sal_Int64 nAcross(0), nAlong(0);
     for (int nRound = 0; nRound < 4; ++nRound)
     {
-        nText = measureTextHeight(rParagraphs, std::max<sal_Int64>(1, nWidthEmu - 2 * nInset),
+        const awt::Size aShape(static_cast<sal_Int32>(nWidthEmu + nSidesEmu),
+                               static_cast<sal_Int32>(nText + nOverUnderEmu + nAlong));
+        const awt::Size aOwnBox(bNodeQuarter ? awt::Size(aShape.Height, aShape.Width) : aShape);
+        const std::optional<awt::Rectangle> oArea(
+            rShape->getCustomShapeProperties()->getPresetTextArea(aOwnBox));
+        if (!oArea)
+            break;
+        const sal_Int64 nAreaWidth(bNodeQuarter ? oArea->Height : oArea->Width);
+        const sal_Int64 nAreaHeight(bNodeQuarter ? oArea->Width : oArea->Height);
+        const sal_Int64 nNewAcross(std::max<sal_Int64>(0, aShape.Width - nAreaWidth));
+        const sal_Int64 nNewAlong(std::max<sal_Int64>(0, aShape.Height - nAreaHeight));
+        if (nNewAcross == nAcross && nNewAlong == nAlong)
+            break;
+        nAcross = nNewAcross;
+        nAlong = nNewAlong;
+        nText = measureTextHeight(rParagraphs, std::max<sal_Int64>(1, nWidthEmu - nAcross),
                                   fFontPt, rTextFont, rFontOfParagraph, rLevelOfParagraph,
                                   rSpaceAfter);
-        const double fHeight(static_cast<double>(nText + nOverUnderEmu) / (1.0 - 2.0 * fPart));
-        nInset = static_cast<sal_Int64>(fPart * std::min<double>(nWidthEmu, fHeight));
     }
     if (pInsetEmu)
-        *pInsetEmu = nInset;
-    return nText + 2 * nInset;
+        *pInsetEmu = nAcross / 2;
+    return nText + nAlong;
 }
 
 // The width of the widest of the paragraphs rParagraphs on one line, in EMU, measured by the
@@ -2537,13 +2485,15 @@ static std::vector<sal_Int32> textParagraphLevelsOf(const SmartArtDiagram& rDgm,
 // margins over and under it, stated for the node by the nodes above in rConstraints or by the
 // node itself as parts of the font. rbWordsFit turns false where the widest word is wider than
 // the width. The font candidate of the Diagram is set from the stated size where none stands
-// yet. Nothing where the shape is no text node that grows.
+// yet. Nothing where the shape is no text node that grows. With bWidthInTextArea nWidth is
+// in the preset's text area already.
 static std::optional<sal_Int64> textDrivenHeight(const SmartArtDiagram& rDgm,
                                                  const std::vector<Constraint>& rConstraints,
                                                  const LayoutNode& rNode,
                                                  const rtl::Reference<svx::diagram::Point>& rPoint,
                                                  const ShapePtr& rShape, sal_Int64 nWidth,
-                                                 bool& rbWordsFit, bool bGrowingOnly = true)
+                                                 bool& rbWordsFit, bool bGrowingOnly = true,
+                                                 bool bWidthInTextArea = false)
 {
     std::vector<const AlgAtom*> aAlgorithms;
     gatherOwnAlgorithms(rNode, aAlgorithms);
@@ -2569,6 +2519,7 @@ static std::optional<sal_Int64> textDrivenHeight(const SmartArtDiagram& rDgm,
     }
     double fOverUnder(0.0), fSides(0.0);
     sal_Int64 nFixed(0);
+    const sal_Int64 nShapeWidth(nWidth);
     for (const sal_Int32 nSide : { XML_lMarg, XML_tMarg, XML_rMarg, XML_bMarg })
     {
         const TextMargin aMargin(
@@ -2593,7 +2544,8 @@ static std::optional<sal_Int64> textDrivenHeight(const SmartArtDiagram& rDgm,
     const sal_Int64 nText(aParagraphs.empty()
                               ? 0
                               : measureTextHeightInShape(
-                                  rShape, aParagraphs, std::max<sal_Int64>(nWidth, 1),
+                                  bWidthInTextArea ? ShapePtr() : rShape, aParagraphs,
+                                  std::max<sal_Int64>(nWidth, 1), nShapeWidth - nWidth,
                                   nFixed + static_cast<sal_Int64>(fOverUnder * fFont * fPoint),
                                   fTextFont, aFontOfParagraph, aLevels,
                                   spaceAfterPartsOf(rNode), rDgm.getTextFont(), &nInset));
@@ -2870,7 +2822,7 @@ static bool layoutTextDrivenSnake(const SmartArtDiagram& rDgm, const AlgAtom& rA
                 ? 0
                 : measureTextHeightInShape(pChild, aParagraphs,
                                            std::max<sal_Int64>(1, aCell.mnWidth - nSides),
-                                           nOverUnder, fTextFont, aFontOfParagraph, aLevels,
+                                           nSides, nOverUnder, fTextFont, aFontOfParagraph, aLevels,
                                            spaceAfterPartsOf(rNode), rDgm.getTextFont()));
         aCell.mnHeight = aGrown(nStatedHeight, nText + nOverUnder);
         rMutable.getFittedFontSizes()[pChild->getInternalName()] = fTextFont;
@@ -12026,7 +11978,9 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                             const double fTextFont(aFontOfParagraph.empty()
                                                        ? fOwnFont
                                                        : aFontOfParagraph.front());
-                            nWidth -= static_cast<sal_Int64>(fSides * fOwnFont * fPoint);
+                            const sal_Int64 nSidesOfOne(
+                                static_cast<sal_Int64>(fSides * fOwnFont * fPoint));
+                            nWidth -= nSidesOfOne;
                             // the words stand in the width the shape leaves its text
                             sal_Int64 nInset(0);
                             const sal_Int64 nText(
@@ -12034,6 +11988,7 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                                     ? 0
                                     : measureTextHeightInShape(
                                           pOne, aParagraphs, std::max<sal_Int64>(nWidth, 1),
+                                          nSidesOfOne,
                                           nFixed
                                               + static_cast<sal_Int64>(fOverUnder * fOwnFont
                                                                        * fPoint),
@@ -12438,7 +12393,8 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                                                  false);
                     fOverUnder += unstatedMarginPart(rConstraints, aOwn,
                                                      pChild->getInternalName(), true);
-                    nWidth -= static_cast<sal_Int64>(fSides * fFont * fPoint);
+                    const sal_Int64 nSidesOfChild(static_cast<sal_Int64>(fSides * fFont * fPoint));
+                    nWidth -= nSidesOfChild;
                     // the words stand in the width the shape leaves its text
                     sal_Int64 nInset(0);
                     const sal_Int64 nText(
@@ -12446,6 +12402,7 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                             ? 0
                             : measureTextHeightInShape(
                                   pChild, aParagraphs, std::max<sal_Int64>(nWidth, 1),
+                                  nSidesOfChild,
                                   static_cast<sal_Int64>(fOverUnder * fFont * fPoint), fTextFont,
                                   aFontOfParagraph, aLevels,
                                   spaceAfterPartsOf(*aNode->second), rDgm.getTextFont(), &nInset));
@@ -14355,7 +14312,8 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                     bool bWordsFit(true);
                     const std::optional<sal_Int64> oNeed(textDrivenHeight(
                         rDgm, rConstraints, getLayoutNode(), xPoint, rShape,
-                        static_cast<sal_Int64>(fRoomWidth), bWordsFit, /*bGrowingOnly*/ false));
+                        static_cast<sal_Int64>(fRoomWidth), bWordsFit, /*bGrowingOnly*/ false,
+                        /*bWidthInTextArea*/ true));
                     OUString aGroup;
                     const double fGroupFont(
                         fontOfGroup(rDgm, rConstraints, rShape->getInternalName(), aGroup));
