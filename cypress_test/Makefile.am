@@ -71,6 +71,7 @@ PID_FILE=$(abs_builddir)/workdir/coolwsd.pid
 ERROR_LOG=$(abs_builddir)/workdir/error.log
 COOLWSD_LOG=$(abs_builddir)/cypress/wsd_logs/coolwsd.log
 COOLWSD_OUTPUT=$(abs_builddir)/cypress/wsd_logs/coolwsd_output.log
+COOLWSD_LOG_LEVEL=debug
 
 SUPPORT_FILE_ABS = $(abs_srcdir)/support/index.js
 SUPPORT_FILE = $(if $(findstring $(abs_srcdir),$(abs_builddir)),support/index.js,$(SUPPORT_FILE_ABS))
@@ -409,7 +410,7 @@ define start_coolwsd_instance
 			--o:ssl.key_file_path="$(abs_top_srcdir)/etc/key.pem" \
 			--o:ssl.ca_file_path="$(abs_top_srcdir)/etc/ca-chain.cert.pem" \
 			--o:admin_console.username=admin --o:admin_console.password=admin \
-			--o:logging.file[@enable]=true --o:logging.level=debug \
+			--o:logging.file[@enable]=true --o:logging.level=$(COOLWSD_LOG_LEVEL) \
 			--o:logging.disabled_areas="" --o:welcome.enable=false \
 			--o:user_interface.mode=$(USER_INTERFACE) \
 			--o:accessibility.enable=$(A11Y_ENABLE) \
