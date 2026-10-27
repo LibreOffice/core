@@ -169,8 +169,8 @@ private:
     std::unique_ptr<weld::MetricSpinButton> m_xSymbolHeightMF;
     std::unique_ptr<weld::CheckButton> m_xSymbolRatioCB;
 
-    /// true while this page exists. The host's file picker answers asynchronously, so the
-    /// completion checks this before it touches the page.
+    /// true while this page exists, false once its destructor has run. Shared so a callback
+    /// that outlives the page can read it.
     std::shared_ptr<bool> m_xAlive;
 
     // handler for gallery popup menu button + size
