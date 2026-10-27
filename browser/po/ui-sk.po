@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-23 00:15+0200\n"
-"PO-Revision-Date: 2026-08-20 01:08+0000\n"
-"Last-Translator: \"Graweeld - (grwd)\" <graweeld@gmail.com>\n"
+"PO-Revision-Date: 2026-10-27 21:24+0000\n"
+"Last-Translator: Michal <mumintrol17812@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/sk/>\n"
-"Language: \n"
+"Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.9.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -471,7 +471,7 @@ msgstr "Chyba"
 
 #: admin/src/AdminSocketServerAudit.js:115
 msgid "Learn more"
-msgstr ""
+msgstr "Zistiť viac"
 
 #: admin/src/AdminSocketSettings.js:46
 msgid "Are you sure you want to shut down the server?"
@@ -494,17 +494,18 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:706
 msgid "Invalid request"
-msgstr ""
+msgstr "Neplatná požiadavka"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:707
 #: src/control/Control.AIChatSidebar.ts:2178
 msgid "Invalid API key"
-msgstr ""
+msgstr "Neplatný API kľúč"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:708
 #: src/control/Control.AIChatSidebar.ts:2179
+#, fuzzy
 msgid "API key lacks permissions"
-msgstr ""
+msgstr "Chýbajúce poverenia na API kľúč"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:711
 msgid ""
@@ -520,16 +521,16 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:714
 #: src/control/Control.AIChatSidebar.ts:2184
 msgid "API server error - try again later"
-msgstr ""
+msgstr "Chyba servera API - skúste znova neskôr"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:715
 #: src/control/Control.AIChatSidebar.ts:2185
 msgid "Service temporarily unavailable"
-msgstr ""
+msgstr "Služba dočasne nedostupná"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:788
 msgid "Signature Certificate"
-msgstr ""
+msgstr "Podpisový certifikát"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:789
 #, fuzzy
@@ -544,30 +545,29 @@ msgstr "Podpis"
 #: admin/src/integrator/AdminIntegratorSettings.ts:791
 #: admin/src/integrator/AdminIntegratorSettings.ts:795
 #: admin/src/integrator/AdminIntegratorSettings.ts:5026
-#, fuzzy
 msgid "Provider"
-msgstr "Poskytovateľ:"
+msgstr "Poskytovateľ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:792
 #: admin/src/integrator/AdminIntegratorSettings.ts:796
 #: admin/src/integrator/AdminIntegratorSettings.ts:4761
 #: admin/src/integrator/AdminIntegratorSettings.ts:5112
 msgid "API key"
-msgstr ""
+msgstr "API kľúč"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:793
 #: admin/src/integrator/AdminIntegratorSettings.ts:798
 msgid "Model"
-msgstr ""
+msgstr "Model"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:794
 #: admin/src/integrator/AdminIntegratorSettings.ts:797
 msgid "Base URL"
-msgstr ""
+msgstr "Základná URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:799
 msgid "Image size"
-msgstr ""
+msgstr "Veľkosť obrázku"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:800
 msgid "Request timeout"
@@ -575,11 +575,11 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:803
 msgid "Client ID"
-msgstr ""
+msgstr "ID klienta"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:804
 msgid "Secret"
-msgstr ""
+msgstr "Tajomstvo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:807
 msgid "In-document Screen Reader"
@@ -599,7 +599,7 @@ msgstr "Tmavý režim"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:809
 msgid "Automatic Spell Checking"
-msgstr ""
+msgstr "Automatické overovanie pravopisu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:810
 msgid "Use this server's zoom settings"
@@ -607,11 +607,11 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:811
 msgid "Smart Zoom"
-msgstr ""
+msgstr "Inteligentné priblíženie"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:812
 msgid "Default Zoom"
-msgstr ""
+msgstr "Predvolené priblíženie"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:813
 msgid "Smooth scrolling"
@@ -673,13 +673,14 @@ msgstr "Mriežka"
 #: admin/src/integrator/AdminIntegratorSettings.ts:829
 #: src/control/Control.BackstageView.ts:177
 msgid "Print"
-msgstr ""
+msgstr "Tlačiť"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:830
 #: src/control/backstage/CloudProviderKinds.ts:66
 #: src/control/backstage/CloudProviderKinds.ts:85
+#, fuzzy
 msgid "Other"
-msgstr ""
+msgstr "Iný"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:831
 #: src/control/Control.NotebookbarImpress.js:776
@@ -696,8 +697,9 @@ msgid "Synchronize axes"
 msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:834
+#, fuzzy
 msgid "Empty Pages"
-msgstr ""
+msgstr "Prázdne Strany"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:835
 msgid "Force Breaks"
@@ -711,20 +713,21 @@ msgstr "Všetky hárky"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:837
 msgid "Content"
-msgstr ""
+msgstr "Obsah"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:838
 msgid "Display"
 msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:839
+#, fuzzy
 msgid "Show Boundaries"
-msgstr ""
+msgstr "Ukázať hranice"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:840
 #: src/control/Control.BackstageView.ts:892
 msgid "Drawing"
-msgstr ""
+msgstr "Kreslenie"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:841
 #: src/control/Control.NotebookbarDraw.js:1274
@@ -743,7 +746,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:844
 msgid "Booklet"
-msgstr ""
+msgstr "Brožúra"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:845
 msgid "Booklet front"
@@ -755,7 +758,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:847
 msgid "Page name"
-msgstr ""
+msgstr "Názov strany"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:848
 #: src/control/Control.NotebookbarCalc.js:862
@@ -772,11 +775,11 @@ msgstr "Čas"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:850
 msgid "Hidden pages"
-msgstr ""
+msgstr "Skryté strany"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:851
 msgid "From printer setup"
-msgstr ""
+msgstr "Z nastavení tlače"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:852
 #: src/control/Control.BackstageView.ts:891
@@ -806,7 +809,7 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:857
 #: src/control/Control.CleanupSidebar.ts:216
 msgid "Images"
-msgstr ""
+msgstr "Obrázky"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:858
 msgid "Controls"
@@ -814,7 +817,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:859
 msgid "Background"
-msgstr ""
+msgstr "Pozadie"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:860
 msgid "Print Black"
@@ -822,7 +825,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:861
 msgid "Hidden text"
-msgstr ""
+msgstr "Skrytý text"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:862
 msgid "Placeholders"
@@ -830,11 +833,11 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:863
 msgid "Left pages"
-msgstr ""
+msgstr "Ľavé strany"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:864
 msgid "Right pages"
-msgstr ""
+msgstr "Pravé strany"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:865
 msgid "Brochure"
@@ -846,19 +849,19 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:876
 msgid "English"
-msgstr ""
+msgstr "Angličtina"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:877
 msgid "Hungarian"
-msgstr ""
+msgstr "Maďarčina"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:878
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "Portugalčina (Brazília)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:879
 msgid "Russian"
-msgstr ""
+msgstr "Ruština"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1612
 msgid "Invalid JSON file"
@@ -901,18 +904,23 @@ msgid "Upload Wordbook"
 msgstr "Nahrať Wordbook"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1656
+#, fuzzy
 msgid "Document themes"
-msgstr ""
+msgstr "Vzhľad dokumentov"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1658
+#, fuzzy
 msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
 msgstr ""
+"Nahrajte vlastné vzhľady (.theme). Tieto definujú paletu farieb dostupnú v "
+"Format > Theme."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1664
+#, fuzzy
 msgid "Upload Theme"
-msgstr ""
+msgstr "Nahranie vzhľadu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1670
 #: src/control/Control.Menubar.ts:453 src/control/Control.Menubar.ts:669
@@ -922,21 +930,25 @@ msgstr ""
 #: src/control/Control.NotebookbarImpress.js:172
 #: src/control/Control.NotebookbarWriter.js:143
 msgid "Extensions"
-msgstr ""
+msgstr "Rozšírenia"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1672
+#, fuzzy
 msgid ""
 "Upload a packaged extension as a .zip; its contents (manifest.json, ...) "
 "are unpacked on the server."
 msgstr ""
+"Nahrajte zabalené rozšírenie ako .zip. Jeho súbory (manifest.json, ...) sú "
+"rozbalené na serveri."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1678
 msgid "Upload Extension"
-msgstr ""
+msgstr "Nahranie Rozšírenia"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1685
+#, fuzzy
 msgid "Security policies"
-msgstr ""
+msgstr "Bezpečnostná politika"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1687
 msgid ""
@@ -945,12 +957,13 @@ msgid ""
 msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1693
+#, fuzzy
 msgid "Upload Security Policy"
-msgstr ""
+msgstr "Nahrať Bezpečnostnú Politiku"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1782
 msgid "Settings are only available to signed-in users."
-msgstr ""
+msgstr "Nastavenia sú dostupné iba pre prihlásených používateľov."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1791
 msgid "Something went wrong. Please try to refresh the page."
@@ -973,8 +986,9 @@ msgstr "Nastaviť predvolené predvoľby rozhrania."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2072
 #: admin/src/integrator/AdminIntegratorSettings.ts:5457
+#, fuzzy
 msgid "Zoom Behaviour"
-msgstr ""
+msgstr "Správanie priblíženia"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2217
 msgid ""
@@ -990,8 +1004,9 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2276
 #: admin/src/integrator/Xcu.ts:624
+#, fuzzy
 msgid "No settings available for {0}"
-msgstr ""
+msgstr "Nie sú dostupné žiadne nastavenia pre {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2288
 msgid "Select a tab to browser settings."
@@ -1062,7 +1077,7 @@ msgstr "Prístupnosť"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3105
 msgid "User interface zoom"
-msgstr ""
+msgstr "Priblíženie užívateľského rozhrania"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3110
 msgid "Magnify the whole window, including the document and the menus."
@@ -1079,17 +1094,19 @@ msgid ""
 msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3160
+#, fuzzy
 msgid "Zotero account API settings"
-msgstr ""
+msgstr "Nastavenia API Zotero účtu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3185
+#, fuzzy
 msgid "Zotero Settings"
-msgstr ""
+msgstr "Nastavenia Zotero"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3254
 #: admin/src/integrator/AdminIntegratorSettings.ts:3282
 msgid "Electronic Signature"
-msgstr ""
+msgstr "Elektronický podpis"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3257
 msgid ""
@@ -1110,8 +1127,9 @@ msgid ""
 msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3334
+#, fuzzy
 msgid "Document Signing Settings"
-msgstr ""
+msgstr "Nastavenia podpisovanie dokumentov"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3376
 #: admin/src/integrator/AdminIntegratorSettings.ts:3408
@@ -1129,24 +1147,23 @@ msgstr "AI Asistent"
 #: admin/src/integrator/AdminIntegratorSettings.ts:5185
 #: admin/src/integrator/AdminIntegratorSettings.ts:6044
 msgid "Reset"
-msgstr ""
+msgstr "Reset"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3389
 msgid "Use the AI provider set on the server"
 msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3439
-#, fuzzy
 msgid "Providers"
-msgstr "Poskytovateľ:"
+msgstr "Poskytovatelia"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3442
 msgid "Managed by your admin"
-msgstr ""
+msgstr "Spravované vašou administráciou"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3448
 msgid "No providers added yet"
-msgstr ""
+msgstr "Neboli zatiaľ pridaný žiadny poskytovatelia"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3454
 msgid ""
@@ -1156,11 +1173,11 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3462
 msgid "Add provider..."
-msgstr ""
+msgstr "Pridať poskytovateľa..."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3482
 msgid "Choose the AI provider to use for text and image generation."
-msgstr ""
+msgstr "Vyberte poskytovateľa AI na generovanie textu a obrázkov."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3484
 msgid ""
@@ -1170,11 +1187,11 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3639
 msgid "seconds"
-msgstr ""
+msgstr "sekundy"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3648
 msgid "Text generation"
-msgstr ""
+msgstr "Generovanie textu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3658
 #: src/control/Control.NotebookbarCalc.js:1048
@@ -1185,13 +1202,13 @@ msgstr "Predvolený"
 #: admin/src/integrator/AdminIntegratorSettings.ts:3689
 #: admin/src/integrator/AdminIntegratorSettings.ts:3788
 msgid "e.g."
-msgstr ""
+msgstr "napr."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3700
 #: admin/src/integrator/AdminIntegratorSettings.ts:3886
 #: admin/src/integrator/AdminIntegratorSettings.ts:4104
 msgid "Leave empty if your server does not require one"
-msgstr ""
+msgstr "Nechajte prázdne ak to váš server nepožaduje"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3721
 msgid ""
@@ -1202,49 +1219,53 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3740
 msgid "Image generation"
-msgstr ""
+msgstr "Generácia obrázkov"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3748
+#, fuzzy
 msgid "Same as text provider"
-msgstr ""
+msgstr "Rovnaký poskytovateľ textu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4103
 msgid "Required for this provider"
-msgstr ""
+msgstr "Požadované pre tohto poskytovateľa"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4196
+#, fuzzy
 msgid "Enter an API key for this provider to list its models."
-msgstr ""
+msgstr "Ak chcete zobraziť modely, zadajte API kľúč poskytovateľa."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4212
 #: admin/src/integrator/AdminIntegratorSettings.ts:4334
 msgid "Fetching models..."
-msgstr ""
+msgstr "Získavanie modelov..."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4259
 #: admin/src/integrator/AdminIntegratorSettings.ts:4274
 #: admin/src/integrator/AdminIntegratorSettings.ts:4376
 #: admin/src/integrator/AdminIntegratorSettings.ts:4390
 msgid "No models found"
-msgstr ""
+msgstr "Neboli nájdené žiadne modely"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4284
 #: admin/src/integrator/AdminIntegratorSettings.ts:4400
 msgid "Connected"
-msgstr ""
+msgstr "Pripojené"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4290
 #: admin/src/integrator/AdminIntegratorSettings.ts:4406
+#, fuzzy
 msgid "Failed to fetch models"
-msgstr ""
+msgstr "Chyba získavania modelov"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4304
 msgid "Invalid provider configuration"
-msgstr ""
+msgstr "Neplatná konfigurácia poskytovateľov"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4441
+#, fuzzy
 msgid "None (disable image generation)"
-msgstr ""
+msgstr "Žiadne (deaktivované generovanie obrázkov)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4458
 msgid "Fetch models to select"
@@ -1260,8 +1281,9 @@ msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
 msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4636
+#, fuzzy
 msgid "Lightproof Sentence Checker"
-msgstr ""
+msgstr "Kontrola viet Lightproof"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4639
 msgid "Choose what the sentence checker looks for as you type."
@@ -1279,19 +1301,19 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4726
 #: admin/src/integrator/AdminIntegratorSettings.ts:5066
+#, fuzzy
 msgid "Enabled"
-msgstr ""
+msgstr "Aktivované"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4738
 #: admin/src/integrator/AdminIntegratorSettings.ts:5103
 #: src/control/backstage/CloudDialogs.tsx:104
 msgid "Server URL"
-msgstr ""
+msgstr "URL serveru"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4750
-#, fuzzy
 msgid "Username"
-msgstr "Meno používateľa"
+msgstr "Používateľské meno"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4772
 #: admin/src/integrator/AdminIntegratorSettings.ts:5122
@@ -1299,8 +1321,9 @@ msgid "Verify the server certificate"
 msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4780
+#, fuzzy
 msgid "Enabled on this server for: {0}"
-msgstr ""
+msgstr "Aktivované pre tento server na: {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4795
 msgid "Checking level"
@@ -1312,15 +1335,15 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4799
 msgid "Spelling"
-msgstr ""
+msgstr "Pravopis"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4800
 msgid "Spelling and grammar"
-msgstr ""
+msgstr "Pravopis a gramatika"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4810
 msgid "German spelling"
-msgstr ""
+msgstr "Nemecký pravopis"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4812
 msgid "Duden recommendation"
@@ -1332,11 +1355,11 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4814
 msgid "Progressive"
-msgstr ""
+msgstr "Progresívny"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4815
 msgid "Tolerant"
-msgstr ""
+msgstr "Tolerantný"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4816
 msgid "Press agencies"
@@ -1344,22 +1367,23 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4826
 msgid "Explanations"
-msgstr ""
+msgstr "Vysvetlenia"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4829
 #: src/control/Control.AIChatSidebar.ts:154
 #, fuzzy
 msgid "Short"
-msgstr "Zoradiť"
+msgstr "Krátky"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4830
 #, fuzzy
 msgid "Long"
-msgstr "Protokol"
+msgstr "Dlhý"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4831
+#, fuzzy
 msgid "Long, with an example"
-msgstr ""
+msgstr "Dlhý s príkladom"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4841
 msgid "Correction profiles"
@@ -1367,7 +1391,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4851
 msgid "Dictionaries"
-msgstr ""
+msgstr "Slovníky"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4858
 msgid "Foreign words with a German equivalent"
@@ -1375,40 +1399,41 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4859
 msgid "Archaic words"
-msgstr ""
+msgstr "Archaické slová"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4860
 msgid "Regional words"
-msgstr ""
+msgstr "Nárečové slová"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4861
 msgid "Colloquial and vulgar words"
-msgstr ""
+msgstr "Hovorové a vulgárne slová"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4862
 msgid "Filler words"
 msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4863
+#, fuzzy
 msgid "Offensive wording"
-msgstr ""
+msgstr "Útočná formulácia"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4864
 msgid "Gender-inclusive wording"
 msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4865
+#, fuzzy
 msgid "Complex sentences"
-msgstr ""
+msgstr "Komplexné vety"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4887
 msgid "Style checks (German only)"
 msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5011
-#, fuzzy
 msgid "Translation"
-msgstr "Prechod"
+msgstr "Preklad"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5015
 msgid ""
@@ -1422,7 +1447,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5081
 msgid "API URL"
-msgstr ""
+msgstr "URL adresa API"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5090
 msgid "Authentication key"
@@ -1476,7 +1501,7 @@ msgstr "Nahrať Xcu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5982
 msgid "Delete {0}"
-msgstr ""
+msgstr "Odstrániť {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:6045
 msgid "Reset to default {0}"
@@ -1488,7 +1513,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:6069
 msgid "Save {0}"
-msgstr ""
+msgstr "Uložiť {0}"
 
 #: admin/src/integrator/WordBook.ts:117
 msgid "Standard dictionary"
@@ -1649,7 +1674,7 @@ msgstr "HTML súbor (.html)"
 
 #: src/app/ExportFormats.ts:70
 msgid "Markdown (.md)"
-msgstr ""
+msgstr "Markdown (.md)"
 
 #: src/app/ExportFormats.ts:76 src/control/Control.Menubar.ts:862
 #: src/control/Control.NotebookbarBuilder.js:436
@@ -1726,22 +1751,22 @@ msgid "file type icon"
 msgstr "ikona typu súboru"
 
 #: src/app/TableStylesService.ts:106
-#, fuzzy
 msgid "Light"
-msgstr "Tesné"
+msgstr "Svetlé"
 
 #: src/app/TableStylesService.ts:108
+#, fuzzy
 msgid "Medium"
-msgstr ""
+msgstr "Stredné"
 
 #: src/app/TableStylesService.ts:110
 msgid "Dark"
-msgstr ""
+msgstr "Tmavé"
 
 #: src/app/TableStylesService.ts:112
 #: src/control/jsdialog/Widget.ColorPicker.ts:367
 msgid "Custom"
-msgstr ""
+msgstr "Vlastné"
 
 #: src/app/TableStylesService.ts:251 src/app/TableStylesService.ts:263
 #: src/app/TableStylesService.ts:266 src/app/TableStyleGalleryService.ts:99
@@ -1754,7 +1779,7 @@ msgstr ""
 
 #: src/app/TableStylesService.ts:355
 msgid "Set as Default"
-msgstr ""
+msgstr "Nastaviť ako predvolený"
 
 #: src/app/TableStylesService.ts:361
 msgid "Duplicate Style"
@@ -1824,9 +1849,8 @@ msgid "Resolved"
 msgstr "Vyriešené"
 
 #: src/canvas/sections/CommentSection.ts:673
-#, fuzzy
 msgid "Removed"
-msgstr "Odstrániť"
+msgstr "Odstránené"
 
 #: src/canvas/sections/CommentSection.ts:1318
 #: src/control/jsdialog/Widget.Comment.ts:177
@@ -1883,8 +1907,9 @@ msgid "Show in navigator"
 msgstr "Zobraziť v navigátore"
 
 #: src/canvas/sections/CommentSection.ts:1691
+#, fuzzy
 msgid "Press Ctrl + Enter to post, or %1 to discard"
-msgstr ""
+msgstr "Stlačte Ctrl + Enter na odoslanie, alebo %1 na zahodenie"
 
 #: src/canvas/sections/CommentSection.ts:1720
 #: src/canvas/sections/CommentSection.ts:1725
@@ -1893,8 +1918,9 @@ msgid "Saved"
 msgstr "Uložené"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:118
+#, fuzzy
 msgid "Last edited by %1 on %2"
-msgstr ""
+msgstr "Naposledy upravené užívateľom %1 o %2"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:199
 msgid "%1: Initial Version"
@@ -1940,8 +1966,9 @@ msgid "Edit Diagram"
 msgstr ""
 
 #: src/canvas/sections/FormFieldButton.ts:106
+#, fuzzy
 msgid "Unfold"
-msgstr ""
+msgstr "Rozbaliť"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:80
 msgid "Help on this error"
@@ -1961,11 +1988,12 @@ msgstr ""
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:152
 msgid "Header"
-msgstr ""
+msgstr "Hlavička"
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:160
+#, fuzzy
 msgid "Footer"
-msgstr ""
+msgstr "Pätka"
 
 #: src/control/CalcNotifications.ts:48
 msgid "A formula range was not extended to include the inserted cells."
@@ -2003,7 +2031,7 @@ msgstr ""
 
 #: src/control/Control.AboutDialog.ts:212
 msgid "\"Slow Proxy\""
-msgstr "\"Pomalé proxy\""
+msgstr "\"Pomalá proxy\""
 
 #: src/control/Control.AboutDialog.ts:270
 msgid "Copy all version information in English"
@@ -2031,8 +2059,9 @@ msgid "Make it more concise"
 msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:136
+#, fuzzy
 msgid "Summarize this text"
-msgstr ""
+msgstr "Zosumarizuj tento text"
 
 #: src/control/Control.AIChatSidebar.ts:137
 msgid "Expand this text"
@@ -2044,20 +2073,19 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:152
 msgid "Natural"
-msgstr ""
+msgstr "Prírodný"
 
 #: src/control/Control.AIChatSidebar.ts:153
-#, fuzzy
 msgid "Formal"
-msgstr "Formát"
+msgstr "Formálny"
 
 #: src/control/Control.AIChatSidebar.ts:155
 msgid "Friendly"
-msgstr ""
+msgstr "Kamarátsky"
 
 #: src/control/Control.AIChatSidebar.ts:156
 msgid "Professional"
-msgstr ""
+msgstr "Profesionálny"
 
 #: src/control/Control.AIChatSidebar.ts:157
 msgid "Casual"
@@ -2078,7 +2106,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:405
 msgid "Unknown"
-msgstr ""
+msgstr "Neznámy"
 
 #: src/control/Control.AIChatSidebar.ts:426
 msgid ""
@@ -2088,19 +2116,20 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:518
 msgid "Your message"
-msgstr ""
+msgstr "Vaša správa"
 
 #: src/control/Control.AIChatSidebar.ts:520
 msgid "Action requiring approval"
-msgstr ""
+msgstr "Akcia potrebuje schválenie"
 
 #: src/control/Control.AIChatSidebar.ts:522
 msgid "Error message"
-msgstr ""
+msgstr "Chybová správa"
 
 #: src/control/Control.AIChatSidebar.ts:523
+#, fuzzy
 msgid "AI response"
-msgstr ""
+msgstr "Odpoveď AI"
 
 #: src/control/Control.AIChatSidebar.ts:626
 msgid ""
@@ -2113,7 +2142,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:714
 msgid "New conversation"
-msgstr ""
+msgstr "Nová konverzácia"
 
 #: src/control/Control.AIChatSidebar.ts:730
 msgid "What would you like to do with this spreadsheet?"
@@ -2151,7 +2180,7 @@ msgstr ""
 #: src/control/Control.AIChatSidebar.ts:874
 #: src/control/Control.SlideImportPane.tsx:1177
 msgid "Retry"
-msgstr ""
+msgstr "Skúsiť znova"
 
 #: src/control/Control.AIChatSidebar.ts:898
 #: src/control/Control.AIChatSidebar.ts:931
@@ -2169,13 +2198,14 @@ msgstr "Vložiť"
 
 #: src/control/Control.AIChatSidebar.ts:899
 #: src/control/Control.AIChatSidebar.ts:933
+#, fuzzy
 msgid "Insert at cursor"
-msgstr ""
+msgstr "Vložiť na kurzore"
 
 #: src/control/Control.AIChatSidebar.ts:908
 #: src/control/Control.AIChatSidebar.ts:940
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Kopírovať do schránky"
 
 #: src/control/Control.AIChatSidebar.ts:960
 msgid "Using selected text as context"
@@ -2183,7 +2213,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:967
 msgid "Ask AI..."
-msgstr ""
+msgstr "Opýtať sa AI…"
 
 #: src/control/Control.AIChatSidebar.ts:970
 msgid "Message input"
@@ -2191,11 +2221,11 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:986
 msgid "Stop generating"
-msgstr ""
+msgstr "Zastaviť generovanie"
 
 #: src/control/Control.AIChatSidebar.ts:987
 msgid "Send message"
-msgstr ""
+msgstr "Odoslať správu"
 
 #: src/control/Control.AIChatSidebar.ts:1003
 #: src/control/Control.AIChatSidebar.ts:1016
@@ -2212,7 +2242,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:1030
 msgid "with emoji"
-msgstr ""
+msgstr "s emoji"
 
 #: src/control/Control.AIChatSidebar.ts:1072
 #: src/control/Control.AIChatSidebar.ts:1122
@@ -2245,7 +2275,7 @@ msgstr "Režim úprav"
 
 #: src/control/Control.AIChatSidebar.ts:1144
 msgid "+ Add my own voice"
-msgstr ""
+msgstr "+ Pridať môj vlastný hlas"
 
 #: src/control/Control.AIChatSidebar.ts:1146
 msgid "Add a custom tone of voice"
@@ -3227,9 +3257,8 @@ msgstr[2] ""
 #: src/control/Control.NotebookbarWriter.js:502
 #: src/control/Control.SlideImportPane.tsx:1512 src/control/IFrameDialog.js:39
 #: src/map/handler/Map.Settings.ts:236
-#, fuzzy
 msgid "Options"
-msgstr "Možnosť"
+msgstr "Možnosti"
 
 #: src/control/Control.CleanupSidebar.ts:783
 msgid "Image resolution"
@@ -4949,23 +4978,25 @@ msgstr ""
 
 #: src/control/Notebookbar.AIAssistantTab.ts:164
 msgid "Summarize"
-msgstr ""
+msgstr "Sumarizovať"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:166
 msgid "Summarize the key points of the selected text."
 msgstr ""
 
 #: src/control/Notebookbar.AIAssistantTab.ts:171
+#, fuzzy
 msgid "Expand"
-msgstr ""
+msgstr "Rozšíriť"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:173
 msgid "Expand the selected text and add more detail."
 msgstr ""
 
 #: src/control/Notebookbar.AIAssistantTab.ts:178
+#, fuzzy
 msgid "Fix Grammar"
-msgstr ""
+msgstr "Opraviť gramatiku"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:181
 msgid "Fix grammar, spelling, and punctuation errors in the selected text."
@@ -4980,12 +5011,13 @@ msgid "Rewrite the selected text as short bullet points."
 msgstr ""
 
 #: src/control/Notebookbar.AIAssistantTab.ts:194
+#, fuzzy
 msgid "Create Slides"
-msgstr ""
+msgstr "Vytvoriť snímky"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:201
 msgid "Generate Image"
-msgstr ""
+msgstr "Vytvoriť obrázok"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:208
 msgid "Generate Speaker Notes"
@@ -5026,7 +5058,7 @@ msgstr ""
 
 #: src/control/Notebookbar.CalcTableTab.ts:105
 msgid "Tools"
-msgstr ""
+msgstr "Nástroje"
 
 #: src/control/Notebookbar.CalcTableTab.ts:190
 #: src/control/Notebookbar.TableDesignTabBase.ts:91
@@ -5056,12 +5088,12 @@ msgstr ""
 #: src/control/Notebookbar.CalcTableTab.ts:279
 #: src/control/Notebookbar.TableDesignTabBase.ts:186
 msgid "First Column"
-msgstr ""
+msgstr "Prvý stĺpec"
 
 #: src/control/Notebookbar.CalcTableTab.ts:295
 #: src/control/Notebookbar.TableDesignTabBase.ts:203
 msgid "Last Column"
-msgstr ""
+msgstr "Posledný stĺpec"
 
 #: src/control/Notebookbar.CalcTableTab.ts:317
 msgid "Filter Buttons"
@@ -5070,7 +5102,7 @@ msgstr ""
 #: src/control/Notebookbar.ImpressAnimationTab.ts:24
 #: src/slideshow/engine/SlideShowHandler.ts:412
 msgid "Animation"
-msgstr ""
+msgstr "Animácia"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:41
 msgid "Applied animations"
@@ -5078,19 +5110,19 @@ msgstr ""
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:59
 msgid "Move Up"
-msgstr ""
+msgstr "Pousunúť hore"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:75
 msgid "Move Down"
-msgstr ""
+msgstr "Posunúť dole"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:105
 msgid "Category"
-msgstr ""
+msgstr "Kategória"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:120
 msgid "Start"
-msgstr ""
+msgstr "Štart"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:140
 #, fuzzy
@@ -5114,13 +5146,12 @@ msgstr "Prechod"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:41
 #: src/control/Sidebar.FromNotebookbarPanel.ts:137
-#, fuzzy
 msgid "Transitions"
-msgstr "Prechod"
+msgstr "Prechody"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:73
 msgid "Variant"
-msgstr "Variant"
+msgstr "Varianta"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:89
 msgid "Duration"
@@ -5137,7 +5168,7 @@ msgstr "Po"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:146
 msgid "Apply to All Slides"
-msgstr ""
+msgstr "Použiť na všetky snímky"
 
 #: src/control/Notebookbar.WriterReferencesTab.ts:41
 msgid "Table of content"
