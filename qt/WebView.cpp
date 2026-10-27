@@ -501,6 +501,14 @@ void CODAWebEngineView::setDropFeedbackVisible(bool bVisible)
     page()->runJavaScript(script);
 }
 
+// Decided from the names in the drag, without a portal call, so enter, move and drop agree.
+// Any other drop opens the files.
+bool CODAWebEngineView::dropInsertsIntoDocument(const QMimeData* mimeData) const
+{
+    return _owner && _owner->showsLocalDocument()
+           && hasOnlyInsertableFiles(droppedLocalFiles(mimeData));
+}
+
 void CODAWebEngineView::dragEnterEvent(QDragEnterEvent* event)
 {
     // Drags started inside the web content have a non-null source.
@@ -511,9 +519,9 @@ void CODAWebEngineView::dragEnterEvent(QDragEnterEvent* event)
         return;
     }
 
-    if (hasOnlyInsertableFiles(droppedLocalFiles(event->mimeData())))
+    if (dropInsertsIntoDocument(event->mimeData()))
     {
-        QWebEngineView::dragEnterEvent(event);
+        event->acceptProposedAction();
         return;
     }
 
@@ -532,13 +540,7 @@ void CODAWebEngineView::dragMoveEvent(QDragMoveEvent* event)
         return;
     }
 
-    if (hasOnlyInsertableFiles(droppedLocalFiles(event->mimeData())))
-    {
-        QWebEngineView::dragMoveEvent(event);
-        return;
-    }
-
-    if (hasDroppableFiles(event->mimeData()))
+    if (dropInsertsIntoDocument(event->mimeData()) || hasDroppableFiles(event->mimeData()))
         event->acceptProposedAction();
 }
 
@@ -556,15 +558,16 @@ void CODAWebEngineView::dropEvent(QDropEvent* event)
         return;
     }
 
-    if (hasOnlyInsertableFiles(droppedLocalFiles(event->mimeData())))
-    {
-        QWebEngineView::dropEvent(event);
-        return;
-    }
-
     setDropFeedbackVisible(false);
 
     const QMimeData* mimeData = event->mimeData();
+
+    if (dropInsertsIntoDocument(mimeData))
+    {
+        event->acceptProposedAction();
+        insertDroppedFiles(event);
+        return;
+    }
 
     const QStringList portalFiles = filesFromPortalTransfer(mimeData);
     if (!portalFiles.isEmpty())
@@ -580,6 +583,34 @@ void CODAWebEngineView::dropEvent(QDropEvent* event)
         event->acceptProposedAction();
         coda::openFiles(files);
     }
+}
+
+// Gives the page the files as a text/uri-list with the drop point, and the page sends them to
+// the kit. Under the flatpak the portal paths go in place of the host paths. The kit warns
+// about a file it cannot read.
+void CODAWebEngineView::insertDroppedFiles(QDropEvent* event)
+{
+    const QMimeData* mimeData = event->mimeData();
+    QStringList files = filesFromPortalTransfer(mimeData);
+    if (files.isEmpty())
+        files = droppedLocalFiles(mimeData);
+    if (files.isEmpty())
+        return;
+
+    QStringList uris;
+    uris.reserve(files.size());
+    for (const QString& file : files)
+        uris << fileUri(file);
+
+    // Base64 keeps the list out of the script's quoting.
+    const QString list = QString::fromLatin1(uris.join(QStringLiteral("\r\n")).toUtf8().toBase64());
+    // The page wants the point in physical pixels relative to the view.
+    const QPointF point = event->position() * devicePixelRatioF();
+    page()->runJavaScript(QStringLiteral("window.app && app.map && app.map._docLayer && "
+                                         "app.map._docLayer.insertDroppedFiles(%1, %2, '%3');")
+                              .arg(point.x())
+                              .arg(point.y())
+                              .arg(list));
 }
 
 QWebEngineView* CODAWebEngineView::createWindow(QWebEnginePage::WebWindowType /*type*/)
@@ -798,6 +829,7 @@ void WebView::createWebEngineView()
     _viewLiveSince.start();
     _webView = std::make_unique<CODAWebEngineView>(nullptr);
     _webView->setMainWindow(_mainWindow);
+    _webView->setOwner(this);
 
     QWebEnginePage* page = new LoggingWebEnginePage(_profile, _webView.get());
     _webView->setPage(page);

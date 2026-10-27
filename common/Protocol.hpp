@@ -378,6 +378,7 @@ namespace COOLProtocol
         // We need to assume modification rather than not.
         if (tokens.equals(0, "key") || tokens.equals(0, "outlinestate") ||
             tokens.equals(0, "paste") || tokens.equals(0, "insertfile") ||
+            tokens.equals(0, "insertfilelist") ||
             tokens.equals(0, "slideimport") ||
             tokens.equals(0, "inplaceobjectarea") ||
             tokens.equals(0, "textinput") || tokens.equals(0, "windowkey") ||

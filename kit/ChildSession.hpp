@@ -245,9 +245,11 @@ private:
     std::string getTextSelectionInternal(const std::string& mimeType);
     bool paste(const char* buffer, int length, const StringVector& tokens);
     bool insertPastedGif(const char* data, int size);
-    /// Embeds the pictures and media of a text/uri-list in one undo step.
-    /// Returns how many went in.
-    std::size_t insertFileList(std::string_view uriList);
+    /// Embeds the pictures and media of a text/uri-list that this process
+    /// can read, in one undo step. Returns how many went in.
+    std::size_t insertReadableFiles(std::string_view uriList);
+    /// The insertfilelist message: a dropped text/uri-list after the first line.
+    bool insertFileList(const char* buffer, int length, const StringVector& tokens);
     /// True when a pasted file list went in, so the paste stops here.
     bool pasteFileList();
     std::string writeFileToJail(const std::string& path, const char* data, std::size_t size);

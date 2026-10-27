@@ -739,7 +739,7 @@ clipboard: `text/uri-list`, and `text/x-coda-readable-uri-list`
 files under paths this process can read, which wins when a provider
 offers it. Both come from one read. Through the provider that read
 reaches the platform clipboard only while it is foreign.
-`ChildSession::insertFileList` gives the readable `file:` URLs to the
+`ChildSession::insertReadableFiles` gives the readable `file:` URLs to the
 engine in one call, `COKitDocument::insertFiles`. Online keeps no list
 of formats: the engine classifies each file by its own tables, media
 first (`MediaWindow::isMediaURL`, so `.mov` is media), then a picture
@@ -756,7 +756,9 @@ sections above) and get the same paste.
 The same tables answer the drop pre-check in coda-qt:
 `COKit::getInsertableFileWildcards` is the union of both lists as
 lowercase `*.ext` wildcards, read once at kit start-up and checked
-against the dropped names on the GUI thread.
+against the dropped names on the GUI thread. A drop of files that all
+pass goes to the kit as an `insertfilelist` message and shares
+`insertReadableFiles` with the paste.
 
 Under the flatpak the Qt provider resolves the FileTransfer portal key
 that GTK 4 file managers put beside their `text/uri-list`

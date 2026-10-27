@@ -692,6 +692,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "setclipboard") ||
                tokens.equals(0, "paste") ||
                tokens.equals(0, "insertfile") ||
+               tokens.equals(0, "insertfilelist") ||
                tokens.equals(0, "slideimport") ||
                tokens.equals(0, "slidelink") ||
                tokens.equals(0, "key") ||
@@ -825,6 +826,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "insertfile"))
         {
             return insertFile(tokens);
+        }
+        else if (tokens.equals(0, "insertfilelist"))
+        {
+            return insertFileList(buffer, length, tokens);
         }
         else if (tokens.equals(0, "slideimport"))
         {
@@ -2832,13 +2837,13 @@ std::string localPathOfFileUrl(const std::string& url)
 }
 }
 
-std::size_t ChildSession::insertFileList(std::string_view uriList)
+std::size_t ChildSession::insertReadableFiles(std::string_view uriList)
 {
     const StringVector lines = StringVector::tokenizeAnyOf(std::string(uriList), "\r\n");
     std::vector<std::string> urls;
-    for (std::size_t i = 0; i < lines.size(); ++i)
+    for (const StringToken& line : lines)
     {
-        const std::string url = lines[i];
+        const std::string url = lines.getParam(line);
         // A line starting with '#' is a comment (RFC 2483).
         if (url[0] == '#')
             continue;
@@ -2862,6 +2867,26 @@ std::size_t ChildSession::insertFileList(std::string_view uriList)
     return getLOKitDocument()->insertFiles(urls);
 }
 
+bool ChildSession::insertFileList(const char* buffer, int length, const StringVector& /*tokens*/)
+{
+    // Only the in-process apps read local files, and only an editing view
+    // inserts.
+    if (!Util::isMobileApp() || isReadOnly())
+    {
+        sendTextFrameAndLogError("error: cmd=insertfilelist kind=notallowed");
+        return false;
+    }
+
+    const std::string firstLine = getFirstLine(buffer, length);
+    const std::size_t bodyStart = firstLine.size() + 1;
+    if (bodyStart >= NumUtil::makeUnsigned(length))
+        return true;
+
+    getLOKitDocument()->setView(_viewId);
+    insertReadableFiles(std::string_view(buffer + bodyStart, length - bodyStart));
+    return true;
+}
+
 bool ChildSession::pasteFileList()
 {
     // The engine's own copy has no uri-list, so this reads only a foreign
@@ -2873,7 +2898,7 @@ bool ChildSession::pasteFileList()
         return false;
     const std::vector<char>& list = items[1].aData.empty() ? items[0].aData : items[1].aData;
 
-    return insertFileList(std::string_view(list.data(), list.size())) > 0;
+    return insertReadableFiles(std::string_view(list.data(), list.size())) > 0;
 }
 
 bool ChildSession::insertFile(const StringVector& tokens)

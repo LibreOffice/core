@@ -35,6 +35,7 @@ class QDragEnterEvent;
 class QDragMoveEvent;
 class QDragLeaveEvent;
 class QDropEvent;
+class QMimeData;
 class QTemporaryDir;
 class QUrl;
 
@@ -86,6 +87,9 @@ public:
     void setMainWindow(QMainWindow* mainWindow) { _mainWindow = mainWindow; }
     QMainWindow* mainWindow() const { return _mainWindow; }
 
+    // The owning WebView; it says whether a drop has a document under it.
+    void setOwner(WebView* owner) { _owner = owner; }
+
     void arrangePresentationWindows();
     void exchangeMonitors();
 
@@ -109,11 +113,15 @@ private:
     // Show or hide the web-side hint shown while a file is dragged over the window.
     void setDropFeedbackVisible(bool bVisible);
 
+    bool dropInsertsIntoDocument(const QMimeData* mimeData) const;
+    void insertDroppedFiles(QDropEvent* event);
+
     void claimChildWindow(WebView* child, const QUrl& url);
 
     // The hosting TabbedWindow or StandaloneWindow; updated when the view
     // moves between windows (tab drag).
     QMainWindow* _mainWindow;
+    WebView* _owner = nullptr;
     // Given the general inability of wayland based environments
     // to restore a window's position, especially after moving
     // it to another monitor full-screen, the slideshow and the
@@ -268,6 +276,13 @@ public:
     bool isDocumentModified() const;
     void endPresentation();
     bool isStarterScreen() const { return _docType == QStringLiteral("starter"); }
+    // A drop goes into the document only here. The starter screen, the welcome slideshow and
+    // a remote document open dropped files instead.
+    bool showsLocalDocument() const
+    {
+        return !isStarterScreen() && !_isWelcome && !_document._remoteInfo
+               && _document._fakeClientFd >= 0;
+    }
     bool isWelcome() const { return _isWelcome; }
 
     /// Apply the stored user interface zoom to this window's web view. An

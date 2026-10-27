@@ -3466,30 +3466,47 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		app.activeDocument.activeView.clearTextSelection();
 	},
 
+	// The point is in physical pixels relative to the web view; dividing by the device pixel
+	// ratio gives the position in the page. The click carries no modifier: a Ctrl held for the
+	// drag would make it a Ctrl+click, which leaves the caret where it is.
+	_moveCursorToDropPoint: function (x, y) {
+		const scale = window.devicePixelRatio || 1;
+		const canvasRectangle = app.sectionContainer.getCanvasBoundingClientRect();
+		const documentAnchor = app.sectionContainer.getDocumentAnchor();
+		// The mouse control section starts at the document anchor, so subtract it to get the
+		// point in that section's own coordinates.
+		const point = cool.SimplePoint.fromCorePixels([
+			(x / scale - canvasRectangle.left) * app.dpiScale - documentAnchor[0],
+			(y / scale - canvasRectangle.top) * app.dpiScale - documentAnchor[1]]);
+		app.activeDocument.mouseControl.moveCursorToPoint(point, 0);
+	},
+
 	// Insert a file that the app received as a drag and drop from the desktop, at the point where it
-	// was dropped. The bytes arrive base64-encoded, as the bridge from the app carries strings only,
-	// and the point arrives in physical pixels relative to the app window. The web view covers the
-	// whole client area of that window, so dividing by the device pixel ratio gives the position in
-	// the page. A negative point means the file was dropped on the window frame rather than on the
-	// document, and the file then goes in where the cursor already is.
+	// was dropped. The bytes arrive base64-encoded, as the bridge from the app carries strings only.
+	// A negative point means the file was dropped on the window frame rather than on the document,
+	// and the file then goes in where the cursor already is.
 	insertDroppedFile: function (name, mimetype, base64Data, x, y) {
 		if (!this._map._clip)
 			return;
 
-		if (x >= 0 && y >= 0) {
-			const scale = window.devicePixelRatio || 1;
-			const canvasRectangle = app.sectionContainer.getCanvasBoundingClientRect();
-			const documentAnchor = app.sectionContainer.getDocumentAnchor();
-			// The mouse control section starts at the document anchor, so subtract it to get the
-			// point in that section's own coordinates.
-			const point = cool.SimplePoint.fromCorePixels([
-				(x / scale - canvasRectangle.left) * app.dpiScale - documentAnchor[0],
-				(y / scale - canvasRectangle.top) * app.dpiScale - documentAnchor[1]]);
-			app.activeDocument.mouseControl.moveCursorToPoint(point, this._map.keyboard.modifier);
-		}
+		if (x >= 0 && y >= 0)
+			this._moveCursorToDropPoint(x, y);
 
 		const bytes = Uint8Array.from(window.atob(base64Data), (c) => c.charCodeAt(0));
 		this._map._clip._asyncReadPasteFile(new File([bytes], name, { type: mimetype }));
+	},
+
+	// Insert files dropped from the desktop at the drop point. The list is a text/uri-list,
+	// base64-encoded as the bridge from the app carries strings only; the kit inserts it in one
+	// undo step.
+	insertDroppedFiles: function (x, y, base64UriList) {
+		if (this._map.isReadOnlyMode())
+			return;
+
+		if (x >= 0 && y >= 0)
+			this._moveCursorToDropPoint(x, y);
+
+		app.socket.sendMessage('insertfilelist\n' + window.atob(base64UriList));
 	},
 
 	recalculateZoomOnResize: function() {
