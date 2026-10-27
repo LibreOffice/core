@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-23 00:15+0200\n"
-"PO-Revision-Date: 2026-10-24 04:08+0000\n"
-"Last-Translator: Inger Leire Fenger <user-"
-"170807@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-10-26 07:43+0000\n"
+"Last-Translator: Mette Kærgaard Hansen "
+"<mkh_brain@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/da/>\n"
 "Language: da\n"
@@ -520,7 +520,6 @@ msgid "API key lacks permissions"
 msgstr "API-nøglen mangler rettigheder"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:711
-#, fuzzy
 msgid ""
 "This AI host is not in the server's allowed AI host list "
 "(ai.allowed_hosts). Ask your administrator to permit it."
@@ -544,19 +543,16 @@ msgid "Service temporarily unavailable"
 msgstr "Tjenesten er midlertidigt utilgængelig"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:788
-#, fuzzy
 msgid "Signature Certificate"
 msgstr "Signaturcertifikat"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:789
-#, fuzzy
 msgid "Signature Key"
-msgstr "Underskrift"
+msgstr "Signaturnøgle"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:790
-#, fuzzy
 msgid "Signature CA"
-msgstr "Underskrift"
+msgstr "Signatur-CA"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:791
 #: admin/src/integrator/AdminIntegratorSettings.ts:795
@@ -683,7 +679,6 @@ msgstr "Typografiliste"
 #: src/control/Control.NotebookbarCalc.js:1231
 #: src/control/Control.NotebookbarDraw.js:560
 #: src/control/Control.NotebookbarImpress.js:767
-#, fuzzy
 msgid "Grid"
 msgstr "Gitter"
 
@@ -695,7 +690,6 @@ msgstr "Udskriv"
 #: admin/src/integrator/AdminIntegratorSettings.ts:830
 #: src/control/backstage/CloudProviderKinds.ts:66
 #: src/control/backstage/CloudProviderKinds.ts:85
-#, fuzzy
 msgid "Other"
 msgstr "Øvrige"
 
@@ -1133,9 +1127,8 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3309
 #: admin/src/integrator/AdminIntegratorSettings.ts:5695
-#, fuzzy
 msgid "Document Signing"
-msgstr "Dokumentindstillinger"
+msgstr "Dokumentsignering"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3313
 msgid ""
@@ -1338,7 +1331,6 @@ msgid "Server URL"
 msgstr "Server-URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4750
-#, fuzzy
 msgid "Username"
 msgstr "Brugernavn"
 
@@ -2926,7 +2918,6 @@ msgid "Cell"
 msgstr "Celle"
 
 #: src/control/Control.AIChatSidebar.ts:3698
-#, fuzzy
 msgid "Sheet"
 msgstr "Ark"
 
@@ -3339,9 +3330,8 @@ msgid "Stop"
 msgstr "Stop"
 
 #: src/control/Control.CleanupSidebar.ts:926
-#, fuzzy
 msgid "Scan presentation"
-msgstr "Afslut præsentation"
+msgstr "Gennemgå præsentation"
 
 #: src/control/Control.CleanupSidebar.ts:962
 msgid "Fix all"
