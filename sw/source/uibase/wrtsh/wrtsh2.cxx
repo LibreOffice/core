@@ -641,7 +641,7 @@ static bool LoadURL(const SfxViewShell& rView, const OUString& rURL, LoadUrlFlag
     // tdf#138347 - do not open a new window on internal services
     const bool bDispatchOnly
         = rURL.startsWithIgnoreAsciiCase("vnd.sun.star.script:")
-          || rURL.startsWithIgnoreAsciiCase("macro:") || rURL.startsWithIgnoreAsciiCase("slot:")
+          || rURL.startsWithIgnoreAsciiCase("macro:")
           || rURL.startsWithIgnoreAsciiCase("service:") || rURL.startsWithIgnoreAsciiCase(".uno:");
     if ((nFilter & LoadUrlFlags::NewView) && !comphelper::LibreOfficeKit::isActive()
         && !bDispatchOnly)
