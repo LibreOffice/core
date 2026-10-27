@@ -38,6 +38,7 @@ class HTTPServerTest : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST_SUITE(HTTPServerTest);
 
     CPPUNIT_TEST(testCoolGet);
+    CPPUNIT_TEST(testCoolPagesNoStore);
     CPPUNIT_TEST(testCoolPostPoco);
     CPPUNIT_TEST(testCoolPost);
     CPPUNIT_TEST(testIntegratorSettingsUnrestrictedFraming);
@@ -55,6 +56,7 @@ class HTTPServerTest : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST_SUITE_END();
 
     void testCoolGet();
+    void testCoolPagesNoStore();
     void testCoolPostPoco();
     void testCoolPost();
     void testIntegratorSettingsUnrestrictedFraming();
@@ -128,6 +130,22 @@ void HTTPServerTest::testCoolGet()
     LOK_ASSERT(html.find("111111111") != std::string::npos);
     LOK_ASSERT(html.find(_uri.getHost()) != std::string::npos);
     LOK_ASSERT(html.find(Util::getCoolVersionHash()) != std::string::npos);
+}
+
+void HTTPServerTest::testCoolPagesNoStore()
+{
+    constexpr std::string_view testname = __func__;
+
+    for (const std::string page : { "cool.html", "cool-preview.html" })
+    {
+        TST_LOG("Page: " << page);
+        const std::shared_ptr<const http::Response> httpResponse =
+            http::get(_uri.toString(), "/browser/dist/" + page + "?access_token=111111111");
+
+        LOK_ASSERT_EQUAL(http::StatusCode::OK, httpResponse->statusLine().statusCode());
+        LOK_ASSERT_EQUAL_STR("no-store", httpResponse->get("Cache-Control"));
+        LOK_ASSERT_EQUAL_STR("", httpResponse->get("ETag"));
+    }
 }
 
 void HTTPServerTest::testCoolPostPoco()

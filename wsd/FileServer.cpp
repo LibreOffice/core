@@ -657,8 +657,9 @@ bool FileServerRequestHandler::handleRequest(const HTTPRequest& request,
             endPoint == "localizations.json" ||
             endPoint == "uno-localizations.json")
         {
+            // The html pages hold the access token; only the json files may be cached.
             accessDetails = preprocessFile(request, response, requestDetails, message,
-                                           endPoint == "cool.html" /* noCache */, socket);
+                                           endPoint.ends_with(".html") /* noCache */, socket);
             return true;
         }
 
@@ -1907,7 +1908,7 @@ FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::prepro
     }
 
     httpResponse.set("Last-Modified", Util::getHttpTimeNow());
-    if (noCache) // critical to serve cool.html each time
+    if (noCache) // the page holds the access token
     {
         httpResponse.set("Cache-Control", "no-store");
     }
@@ -3182,8 +3183,8 @@ void FileServerRequestHandler::preprocessIntegratorAdminFile(const HTTPRequest& 
 
     response.add("Content-Security-Policy", csp.generate());
     response.set("Last-Modified", Util::getHttpTimeNow());
-    response.set("Cache-Control", "max-age=11059200");
-    response.set("ETag", COOLWSD_VERSION_HASH);
+    // The page holds the access token.
+    response.set("Cache-Control", "no-store");
     response.add("X-Content-Type-Options", "nosniff");
     response.add("X-XSS-Protection", "1; mode=block");
     response.add("Referrer-Policy", "no-referrer");
@@ -3306,6 +3307,8 @@ void FileServerRequestHandler::preprocessAdminFile(const HTTPRequest& request,
     // No referrer-policy
     response.add("Referrer-Policy", "no-referrer");
     response.add("X-Content-Type-Options", "nosniff");
+    // The page holds the admin JWT.
+    response.set("Cache-Control", "no-store");
     response.set("Server", http::getServerString());
     response.set("Date", Util::getHttpTimeNow());
 
