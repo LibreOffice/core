@@ -12,11 +12,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-23 00:15+0200\n"
-"PO-Revision-Date: 2026-10-19 17:22+0000\n"
+"PO-Revision-Date: 2026-10-26 15:52+0000\n"
 "Last-Translator: H2Oufoe <regularwater@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "collabora-online/collabora-ui/pt_BR/>\n"
-"Language: \n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -448,6 +448,7 @@ msgstr ""
 #: src/control/Control.ServerAuditDialog.ts:107
 msgid "No WOPI host configured: trusting the first host that connected"
 msgstr ""
+"Nenhum host WOPI configurado: Confiando no primeiro host que se conectou"
 
 #: admin/src/AdminSocketServerAudit.js:55
 #: src/control/Control.ServerAuditDialog.ts:122
@@ -524,13 +525,12 @@ msgid "API key lacks permissions"
 msgstr "A chave de API não possui as permissões necessárias"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:711
-#, fuzzy
 msgid ""
 "This AI host is not in the server's allowed AI host list "
 "(ai.allowed_hosts). Ask your administrator to permit it."
 msgstr ""
 "Este host de IA não está na lista de hosts permitidos do servidor "
-"(lok_allow.host). Peça ao seu administrador para autorizá-lo."
+"(ai.allowed_hosts). Peça ao seu administrador para autorizá-lo."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:713
 #: src/control/Control.AIChatSidebar.ts:2183
@@ -1318,7 +1318,7 @@ msgstr "Escolha qual frase do verificador de frases você quer enquanto digita."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4687
 msgid "Remote Sentence Checkers"
-msgstr ""
+msgstr "Verificadores de sentença remoto"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4691
 msgid ""
@@ -1329,7 +1329,7 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:4726
 #: admin/src/integrator/AdminIntegratorSettings.ts:5066
 msgid "Enabled"
-msgstr ""
+msgstr "Habilitado"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4738
 #: admin/src/integrator/AdminIntegratorSettings.ts:5103
@@ -1338,14 +1338,13 @@ msgid "Server URL"
 msgstr "Link do servidor"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4750
-#, fuzzy
 msgid "Username"
 msgstr "Nome de usuário"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4772
 #: admin/src/integrator/AdminIntegratorSettings.ts:5122
 msgid "Verify the server certificate"
-msgstr ""
+msgstr "Verifique o certificado do servidor"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4780
 msgid "Enabled on this server for: {0}"
@@ -1401,9 +1400,8 @@ msgid "Short"
 msgstr "Curto"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4830
-#, fuzzy
 msgid "Long"
-msgstr "Registro"
+msgstr "Longo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4831
 msgid "Long, with an example"
@@ -1415,7 +1413,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4851
 msgid "Dictionaries"
-msgstr ""
+msgstr "Dicionários"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4858
 msgid "Foreign words with a German equivalent"
@@ -1454,9 +1452,8 @@ msgid "Style checks (German only)"
 msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5011
-#, fuzzy
 msgid "Translation"
-msgstr "Transição"
+msgstr "Tradução"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5015
 msgid ""
@@ -1486,7 +1483,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5190
 msgid "Use the default settings"
-msgstr ""
+msgstr "Usar as configurações padrão"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5191
 msgid "Use the settings set on the server"
@@ -1532,7 +1529,7 @@ msgstr "Apagar {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:6045
 msgid "Reset to default {0}"
-msgstr "Redefinir {0} para o padrão"
+msgstr "Redefinir para o padrão {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:6049
 msgid "Are you sure you want to reset {0}?"
@@ -1811,7 +1808,7 @@ msgstr "Estilos de tabela"
 
 #: src/app/TableStylesService.ts:355
 msgid "Set as Default"
-msgstr "Set as Default"
+msgstr "Definir como Padrão"
 
 #: src/app/TableStylesService.ts:361
 msgid "Duplicate Style"
@@ -5056,7 +5053,7 @@ msgstr "Resuma"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:166
 msgid "Summarize the key points of the selected text."
-msgstr "Resuma os pontos principais do texto selecionado"
+msgstr "Resuma os pontos principais do texto selecionado."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:171
 msgid "Expand"
@@ -5096,9 +5093,8 @@ msgid "Generate Speaker Notes"
 msgstr ""
 
 #: src/control/Notebookbar.AIAssistantTab.ts:215
-#, fuzzy
 msgid "Create Formula"
-msgstr "Crie uma fórmula"
+msgstr "Criar Fórmula"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:222
 msgid "Explain Formula"
@@ -5322,9 +5318,8 @@ msgid "Fill Color (Transparent Pictures Only)"
 msgstr ""
 
 #: src/control/Control.Notebookbar.js:668
-#, fuzzy
 msgid "Line"
-msgstr "Link"
+msgstr "Linha"
 
 #: src/control/Control.Notebookbar.js:711
 msgid "Line Width"
@@ -6103,7 +6098,6 @@ msgid "Switch to Editing"
 msgstr "Mudar para a edição"
 
 #: src/control/Control.HyperlinkWizard.ts:67
-#, fuzzy
 msgid "Link"
 msgstr "Link"
 
@@ -6153,9 +6147,8 @@ msgid "Slide %1, %3 is missing"
 msgstr ""
 
 #: src/control/Control.PartsPreview.js:972
-#, fuzzy
 msgid "preview of page %1, not found in %3"
-msgstr "visualização da página % 1, conectada a % 2 em % 3"
+msgstr "visualização da página % 1, não encontrada em % 3"
 
 #: src/control/Control.PartsPreview.js:973
 msgid "Slide %1, not found in %3"
@@ -6186,9 +6179,8 @@ msgid "Slide %1, %2 changed in %3"
 msgstr ""
 
 #: src/control/Control.PartsPreview.js:992
-#, fuzzy
 msgid "preview of page %1, changed in %3"
-msgstr "visualização da página % 1, vinculada a % 2"
+msgstr "visualização da página % 1, mudado em %3"
 
 #: src/control/Control.PartsPreview.js:993
 msgid "Slide %1, changed in %3"
@@ -6684,14 +6676,12 @@ msgid "Direct network connection"
 msgstr ""
 
 #: src/control/Control.ServerAuditDialog.ts:169
-#, fuzzy
 msgid ""
 "Connected with the old WebSocket URL form, which is planned for removal. "
 "Check that your proxy passes the compact form through."
 msgstr ""
-"Alguns clientes se conectaram usando o formato antigo de URL WebSocket, cuja "
-"remoção está planejada. Verifique se o seu proxy permite a passagem do "
-"formato compacto."
+"Conectado usando o formato antigo de URL WebSocket, cuja remoção está "
+"planejada. Verifique se o seu proxy permite a passagem do formato compacto."
 
 #: src/control/Control.ServerAuditDialog.ts:175
 msgid "Connected with the compact WebSocket URL form"
@@ -6923,7 +6913,7 @@ msgstr "Folha ativa"
 #: src/control/Control.TopToolbar.js:194 templates/templates.js:46
 #: templates/templates.js:50
 msgid "Default Style"
-msgstr "Estilo Padrão"
+msgstr "Estilo padrão"
 
 #: src/control/Control.TopToolbar.js:263
 msgid "Insert table"
@@ -6938,9 +6928,8 @@ msgid "Insert connectors"
 msgstr "Insira conectores"
 
 #: src/control/Control.UIManager.ts:123
-#, fuzzy
 msgid "Main"
-msgstr "Min"
+msgstr "Principal"
 
 #: src/control/Control.UIManager.ts:255
 msgid "You are currently in View mode, press {0} to edit"
@@ -7174,9 +7163,8 @@ msgid "Updating citations"
 msgstr "Atualizando citações"
 
 #: src/control/Control.Zotero.js:1538
-#, fuzzy
 msgid "Unlinked citations"
-msgstr "Desvincular Citações"
+msgstr "Desvincular citações"
 
 #: src/control/Control.Zotero.js:1543
 msgid ""
@@ -7240,9 +7228,8 @@ msgid "Wrong password provided. Please try again."
 msgstr "Senha inválida. Tente novamente."
 
 #: src/control/Permission.js:193
-#, fuzzy
 msgid "Document requires a password to edit."
-msgstr "O documento exige uma senha de abertura."
+msgstr "Documento exige uma senha para editar."
 
 #: src/control/Permission.js:430
 msgid "Edit locally"
@@ -7269,9 +7256,8 @@ msgid "Continue with your version"
 msgstr ""
 
 #: src/control/Permission.js:470
-#, fuzzy
 msgid "Join collaborative editing"
-msgstr "Edição colaborativa"
+msgstr "Entrar em edição colaborativa"
 
 #: src/control/Permission.js:496
 msgid "Waiting for changes to be saved..."
@@ -7876,9 +7862,8 @@ msgid "Watermark"
 msgstr ""
 
 #: src/control/jsdialog/Definitions.Menu.ts:2433
-#, fuzzy
 msgid "Insert comment"
-msgstr "Inserir Comentário"
+msgstr "Inserir comentário"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2437
 #: src/control/jsdialog/Definitions.Menu.ts:2452
@@ -7891,9 +7876,8 @@ msgid "Insert Comment"
 msgstr "Inserir Comentário"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2448
-#, fuzzy
 msgid "Insert Note"
-msgstr "Inserir Data"
+msgstr "Inserir nota"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:36
 msgid "Dark 1"
@@ -7973,9 +7957,8 @@ msgid "Color palette"
 msgstr ""
 
 #: src/control/jsdialog/Widget.Combobox.js:290
-#, fuzzy
 msgid "Open list"
-msgstr "Abrir link"
+msgstr "Abrir lista"
 
 #: src/control/jsdialog/Widget.Combobox.js:498
 msgid "Filter entries"
@@ -8087,9 +8070,8 @@ msgid "Entering text mode"
 msgstr "Entrar no modo de texto"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:49
-#, fuzzy
 msgid "Insert Mode"
-msgstr "Inserir Data"
+msgstr "Modo de Inserir"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:54
 msgid "Selection Mode"
@@ -8106,7 +8088,7 @@ msgstr "Seleção de funções"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:68
 msgid "Table Cell Functions"
-msgstr ""
+msgstr "Funções de célula de tabela"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:72
 msgid "Size of selected shape"
@@ -8117,19 +8099,16 @@ msgid "Shape Size"
 msgstr ""
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:79
-#, fuzzy
 msgid "Sheet Navigation"
-msgstr "Fechar navegação"
+msgstr "Navegação de folha"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:81
-#, fuzzy
 msgid "Slide Navigation"
-msgstr "Fechar navegação"
+msgstr "Navegação de slide"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:82
-#, fuzzy
 msgid "Page Navigation"
-msgstr "Fechar navegação"
+msgstr "Navegação de página"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:88
 msgid "Your changes have been saved"
@@ -8149,7 +8128,7 @@ msgstr "Bordas da célula"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:107
 msgid "New Table Style..."
-msgstr ""
+msgstr "Novo estilo de tabela..."
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:119
 msgid "Clear Style"
@@ -8332,7 +8311,7 @@ msgstr ""
 
 #: src/app/Socket.ts:2717
 msgid "The document could not be made editable."
-msgstr ""
+msgstr "O documento não pôde ser editável."
 
 #: src/app/Socket.ts:2787 src/app/Socket.ts:2798
 msgid "Missing Fonts"
@@ -8371,27 +8350,24 @@ msgid "Delete section"
 msgstr ""
 
 #: src/docdispatcher.ts:1007
-#, fuzzy
 msgid "Delete slides"
-msgstr "apagar %n slide"
+msgstr "Apagar slides"
 
 #: src/docdispatcher.ts:1008
-#, fuzzy
 msgid "Delete %n slide?"
 msgid_plural "Delete %n slides?"
-msgstr[0] "apagar %n slide"
-msgstr[1] "apagar %n slides"
+msgstr[0] "Apagar %n slide?"
+msgstr[1] "Apagar %n slides?"
 
 #: src/docdispatcher.ts:1012
 msgid "Delete pages"
 msgstr ""
 
 #: src/docdispatcher.ts:1013
-#, fuzzy
 msgid "Delete %n page?"
 msgid_plural "Delete %n pages?"
-msgstr[0] "apagar %n slide"
-msgstr[1] "apagar %n slides"
+msgstr[0] "Apagar %n página?"
+msgstr[1] "Apagar %n páginas?"
 
 #: src/docstate.ts:174
 msgid "Standard"
@@ -8574,11 +8550,10 @@ msgid "Failed to load document."
 msgstr "Falha ao carregar o documento."
 
 #: src/errormessages.ts:75
-#, fuzzy
 msgid "Save failed due to no disk space left. Document will now be read-only."
 msgstr ""
-"Falhou a gravação devido à falta de espaço em disco. O documento será agora "
-"apenas de leitura."
+"Falha ao salvar devido à falta de espaço no armazenamento. O documento "
+"ficará apenas em modo de leitura."
 
 #: src/errormessages.ts:78
 msgid ""
@@ -8647,9 +8622,8 @@ msgid "Document cannot be exported. Please try again."
 msgstr "Documento não pode ser exportado. Por favor tente novamente."
 
 #: src/layer/marker/A11yTextInput.js:94
-#, fuzzy
 msgid "Slide"
-msgstr "Slides"
+msgstr "Slide"
 
 #: src/layer/marker/A11yTextInput.js:265
 msgid "Comment by {0}: {1}"
@@ -8661,7 +8635,7 @@ msgstr ""
 
 #: src/layer/marker/A11yTextInput.js:1071
 msgid "Out of table"
-msgstr ""
+msgstr "Fora da tabela"
 
 #: src/layer/marker/A11yTextInput.js:1076
 msgid "%n row"
@@ -8718,9 +8692,8 @@ msgid "{0} deleted"
 msgstr ""
 
 #: src/layer/marker/TextInput.js:489
-#, fuzzy
 msgid "Placeholder"
-msgstr "Campos pré-preenchidos"
+msgstr "Exemplo"
 
 #: src/layer/marker/TextInput.js:509
 msgid "Drop-down list"
@@ -8793,7 +8766,7 @@ msgstr "Para colar fora do {productname}, clique primeiro no botão 'Transferir'
 
 #: src/map/Clipboard.js:209
 msgid "Copying from the document has been disabled by your administrator"
-msgstr ""
+msgstr "Copiar do documento foi desativado pelo administrador"
 
 #: src/map/Clipboard.js:322
 msgid "warning: copy/paste request timed out"
@@ -8805,32 +8778,35 @@ msgstr "Falha ao baixar a área de transferência. Copie novamente"
 
 #: src/map/Clipboard.js:406
 msgid "Failed to upload the clipboard"
-msgstr ""
+msgstr "Falha ao fazer upload da área de transferência"
 
 #: src/map/Clipboard.js:1545
 msgid ""
 "Your browser has very limited access to the clipboard, so please use the "
 "paste buttons on your on-screen keyboard instead."
 msgstr ""
+"Seu navegador tem acesso muito limitado à área de transferência, então por "
+"favor use os botões de colar no teclado na tela."
 
 #: src/map/Clipboard.js:1551
 msgid ""
 "Your browser has very limited access to the clipboard, so use these "
 "keyboard shortcuts:"
 msgstr ""
+"Seu navegador tem acesso muito limitado à área de transferência, então use "
+"esses botões no teclado:"
 
 #: src/map/Clipboard.js:1585
 msgid "Cut"
-msgstr ""
+msgstr "Cortar"
 
 #: src/map/Clipboard.js:1601
-#, fuzzy
 msgid ""
 "A download due to a large copy/paste operation has already started. Please, "
 "wait for the current download or cancel it before starting a new one"
 msgstr ""
-"<p>Uma transferência grande de copiar e colar está em curso. Aguarde seu "
-"término, ou cancele-a antes de iniciar uma nova</p>"
+"Uma transferência grande de copiar e colar já está em andamento. Por favor, "
+"aguarde o término ou cancele antes de iniciar uma nova"
 
 #: src/map/Clipboard.js:1629
 msgid "Paste from this document"
@@ -8842,15 +8818,15 @@ msgstr "Cancelar colar especial"
 
 #: src/map/Clipboard.js:1651
 msgid "Your browser has very limited access to the clipboard"
-msgstr ""
+msgstr "Seu navegador tem acesso muito limitado à área de transferência"
 
 #: src/map/Clipboard.js:1656
 msgid "Please use following combination to see more options:"
-msgstr ""
+msgstr "Por favor, use a seguinte combinação para ver mais opções:"
 
 #: src/map/Clipboard.js:1674
 msgid "Close popup to ignore paste special"
-msgstr ""
+msgstr "Fechar a janela para ignorar o colar especial"
 
 #: src/map/Map.js:226
 msgid "Initializing..."
@@ -8862,18 +8838,17 @@ msgstr "Documento salvo:"
 
 #: src/map/Map.js:1155
 msgid "Please wait!"
-msgstr ""
+msgstr "Por favor aguarde!"
 
 #: src/map/handler/Map.Feedback.js:95
 msgid "Please send us your feedback"
 msgstr "Envie-nos por favor o seu feedback"
 
 #: src/map/handler/Map.FileInserter.js:200
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file has no name"
 msgstr ""
-"Falha ao fazer upload do documento do tipo {0} para o servidor, o arquivo "
-"não possuí nome"
+"O arquivo do tipo: {0} não pode ser inserido, já que o arquivo não possuí "
+"nome"
 
 #: src/map/handler/Map.FileInserter.js:201
 #, javascript-format
@@ -8881,22 +8856,20 @@ msgid ""
 "The file of type: {0} cannot be uploaded to server since the file has no "
 "name"
 msgstr ""
-"Falha ao fazer upload do documento do tipo {0} para o servidor, o arquivo "
-"não possuí nome"
+"O arquivo do tipo: {0} não pode ser enviado para o servidor já que o arquivo "
+"não tem nome"
 
 #: src/map/handler/Map.FileInserter.js:204
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file is empty"
 msgstr ""
-"Falha ao fazer upload do documento do tipo {0} para o servidor, o arquivo "
-"está vazio"
+"O arquivo do tipo: {0} não pode ser inserido já que o arquivo está vazio"
 
 #: src/map/handler/Map.FileInserter.js:205
 #, javascript-format
 msgid ""
 "The file of type: {0} cannot be uploaded to server since the file is empty"
 msgstr ""
-"Falha ao fazer upload do documento do tipo {0} para o servidor, o arquivo "
+"O arquivo do tipo: {0} não pode ser enviado para o servidor já que o arquivo "
 "está vazio"
 
 #: src/map/handler/Map.FileInserter.js:241
