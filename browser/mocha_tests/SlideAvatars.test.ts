@@ -100,17 +100,14 @@ describe('SlideAvatars', function () {
 		});
 	});
 
-	it('writes the counter as a plus and one digit', function () {
-		for (let hidden = 2; hidden <= 40; hidden++)
-			nodeassert.ok(
-				/^\+[2-9]$/.test(SlideAvatars.counterText(hidden)),
-				'hidden: ' + hidden,
-			);
+	it('writes the exact count after a plus up to nine', function () {
+		for (let hidden = 2; hidden <= 9; hidden++)
+			nodeassert.equal(SlideAvatars.counterText(hidden), '+' + hidden);
 	});
 
-	it('stops the counter at nine', function () {
-		[9, 10, 40, 400].forEach(function (hidden) {
-			nodeassert.equal(SlideAvatars.counterText(hidden), '+9');
+	it('writes nine and a plus above nine', function () {
+		[10, 11, 40, 400].forEach(function (hidden) {
+			nodeassert.equal(SlideAvatars.counterText(hidden), '9+');
 		});
 	});
 });

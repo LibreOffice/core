@@ -34,7 +34,8 @@ class SlideAvatars {
 
 	// Nine stands for nine or more.
 	public static counterText(hidden: number): string {
-		return '+' + Math.min(hidden, SlideAvatars.counterCap);
+		if (hidden > SlideAvatars.counterCap) return SlideAvatars.counterCap + '+';
+		return '+' + hidden;
 	}
 }
 
