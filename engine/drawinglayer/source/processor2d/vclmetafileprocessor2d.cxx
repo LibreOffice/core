@@ -2915,6 +2915,12 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
             {
                 mpPDFExtOutDevData->SetStructureAnnotIds(rStructureTagCandidate.GetAnnotIds());
             }
+            if (rTagElement == vcl::pdf::StructElement::Link)
+            {
+                for (sal_Int32 const nLinkId : rStructureTagCandidate.GetAnnotIds())
+                    mpPDFExtOutDevData->SetStructureAttributeNumerical(
+                        vcl::pdf::PDFWriter::LinkAnnotation, nLinkId);
+            }
             if (rTagElement == vcl::pdf::StructElement::TableHeader)
             {
                 mpPDFExtOutDevData->SetStructureAttribute(vcl::pdf::PDFWriter::Scope,

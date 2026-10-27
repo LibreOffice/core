@@ -5583,20 +5583,22 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
                 OUString const linkText(altText.isEmpty()
                     ? SdResId(SdTPAction::GetClickActionSdResId(eCa))
                     : altText);
+                // the link is tagged with the shape
+                SdrObject const*const pLinkObj(SdrObject::getSdrObjectFromXShape(xShape));
                 switch ( eCa )
                 {
                     case presentation::ClickAction_LASTPAGE :
                     {
                         sal_Int32 nCount = rDoc.GetSdPageCount( PageKind::Standard );
                         sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nCount - 1, vcl::pdf::PDFWriter::DestAreaType::FitRectangle );
-                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink(aLinkRect, linkText);
+                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink(aLinkRect, linkText, -1, pLinkObj);
                         rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
                     }
                     break;
                     case presentation::ClickAction_FIRSTPAGE :
                     {
                         sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, 0, vcl::pdf::PDFWriter::DestAreaType::FitRectangle );
-                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink(aLinkRect, linkText);
+                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink(aLinkRect, linkText, -1, pLinkObj);
                         rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
                     }
                     break;
@@ -5606,7 +5608,7 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
                         if ( nDestPage )
                             nDestPage--;
                         sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nDestPage, vcl::pdf::PDFWriter::DestAreaType::FitRectangle );
-                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink(aLinkRect, linkText);
+                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink(aLinkRect, linkText, -1, pLinkObj);
                         rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
                     }
                     break;
@@ -5617,7 +5619,7 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
                         if ( nDestPage > nLastPage )
                             nDestPage = nLastPage;
                         sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nDestPage, vcl::pdf::PDFWriter::DestAreaType::FitRectangle );
-                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink(aLinkRect, linkText);
+                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink(aLinkRect, linkText, -1, pLinkObj);
                         rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
                     }
                     break;
@@ -5635,7 +5637,7 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
                                 case presentation::ClickAction_DOCUMENT :
                                 case presentation::ClickAction_PROGRAM :
                                 {
-                                    sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink(aLinkRect, linkText);
+                                    sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink(aLinkRect, linkText, -1, pLinkObj);
                                     rPDFExtOutDevData.SetLinkURL( nLinkId, aBookmark );
                                 }
                                 break;
@@ -5645,7 +5647,7 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
                                     if ( nPage != -1 )
                                     {
                                         sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nPage, vcl::pdf::PDFWriter::DestAreaType::FitRectangle );
-                                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink(aLinkRect, linkText);
+                                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink(aLinkRect, linkText, -1, pLinkObj);
                                         rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
                                     }
                                 }

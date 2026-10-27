@@ -53,7 +53,7 @@ namespace drawinglayer::primitive2d
             bool                                    mbIsDecorative;
             /// anchor structure element (Writer)
             void const* m_pAnchorStructureElementKey;
-            /// for Annot structure element, the ids of the annotations
+            /// for Annot or Link structure element, the ids of the annotations
             ::std::vector<sal_Int32> m_AnnotIds;
             /// for a table cell element, the columns and the rows it spans
             sal_Int32 mnColSpan;

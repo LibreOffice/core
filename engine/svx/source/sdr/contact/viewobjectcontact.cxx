@@ -460,14 +460,21 @@ void ViewObjectContact::createStructureTag(drawinglayer::primitive2d::Primitive2
                         pAnchorKey = pUserCall->GetPDFAnchorStructureElementKey(*pSdrObj);
                     }
 
+                    auto const pPDFExtOutDevData(GetObjectContact().GetPDFExtOutDevData());
+                    assert(pPDFExtOutDevData);
                     ::std::vector<sal_Int32> annotIds;
                     if (eElement == vcl::pdf::StructElement::Annot
                         && !static_cast<SdrMediaObj*>(pSdrObj)->getURL().isEmpty())
                     {
-                        auto const pPDFExtOutDevData(GetObjectContact().GetPDFExtOutDevData());
-                        assert(pPDFExtOutDevData);
                         annotIds = pPDFExtOutDevData->GetScreenAnnotIds(pSdrObj);
                     }
+                    // ISO 14289-1:2014, Clause: 7.18.5: the links on the object, such as its
+                    // click action, are tagged with a Link element around it; not in a preview
+                    // of the page, such as the slide on a notes page, which has no links
+                    ::std::vector<sal_Int32> const*const pLinkIds(
+                        GetObjectContact().IsPreviewRenderer()
+                            ? nullptr
+                            : pPDFExtOutDevData->GetLinkAnnotIds(pSdrObj));
 
                     rNewPrimitiveSequence = drawinglayer::primitive2d::Primitive2DContainer {
                             new drawinglayer::primitive2d::StructureTagPrimitive2D(
@@ -476,9 +483,22 @@ void ViewObjectContact::createStructureTag(drawinglayer::primitive2d::Primitive2
                                 bImage,
                                 false, // Decorative
                                 std::move(rNewPrimitiveSequence),
-                                pAnchorKey,
+                                pLinkIds ? nullptr : pAnchorKey,
                                 &annotIds)
                     };
+                    if (pLinkIds)
+                    {
+                        rNewPrimitiveSequence = drawinglayer::primitive2d::Primitive2DContainer {
+                                new drawinglayer::primitive2d::StructureTagPrimitive2D(
+                                    vcl::pdf::StructElement::Link,
+                                    bBackground,
+                                    false, // Image
+                                    false, // Decorative
+                                    std::move(rNewPrimitiveSequence),
+                                    pAnchorKey,
+                                    pLinkIds)
+                        };
+                    }
                 }
             }
         }
@@ -492,6 +512,29 @@ void ViewObjectContact::createStructureTag(drawinglayer::primitive2d::Primitive2
                     false, // Image
                     true, // Decorative
                     std::move(rNewPrimitiveSequence))
+            };
+        }
+    }
+    else if (!rNewPrimitiveSequence.empty() && isExportPDFTags() && pSdrObj
+             && !GetObjectContact().IsPreviewRenderer())
+    {
+        // ISO 14289-1:2014, Clause: 7.18.5: a link on a member of a group is tagged with a
+        // Link element around the member, inside the element of the group
+        auto const pPDFExtOutDevData(GetObjectContact().GetPDFExtOutDevData());
+        assert(pPDFExtOutDevData);
+        ::std::vector<sal_Int32> const*const pLinkIds(pPDFExtOutDevData->GetLinkAnnotIds(pSdrObj));
+        SdrPage const*const pSdrPage(pSdrObj->getSdrPageFromSdrObject());
+        if (pLinkIds && pSdrPage)
+        {
+            rNewPrimitiveSequence = drawinglayer::primitive2d::Primitive2DContainer {
+                    new drawinglayer::primitive2d::StructureTagPrimitive2D(
+                        vcl::pdf::StructElement::Link,
+                        pSdrPage->IsMasterPage(), // Background
+                        false, // Image
+                        false, // Decorative
+                        std::move(rNewPrimitiveSequence),
+                        nullptr,
+                        pLinkIds)
             };
         }
     }
