@@ -696,7 +696,9 @@ void describeObject(SdrObject& rObject, ObjectContent& rContent,
     const bool bSizeHeldFast(rObject.IsResizeProtect());
     rContent.mbCanBeMoved = !bPlaceHeldFast;
     rContent.mbCanBeResized = !bSizeHeldFast;
-    rContent.mbCanBeTurned = aWhatItAllows.bRotateFreeAllowed && !bPlaceHeldFast;
+    // a 3D scene turns in 3D with a drag of its own, it keeps no turn and no shear in 2D
+    const bool bScene(nullptr != DynCastE3dScene(&rObject));
+    rContent.mbCanBeTurned = aWhatItAllows.bRotateFreeAllowed && !bPlaceHeldFast && !bScene;
     rContent.mbCanBeResizedFreely = aWhatItAllows.bResizeFreeAllowed;
     rContent.mbCanBeMirrored = aWhatItAllows.bMirrorFreeAllowed && !bPlaceHeldFast;
     // The office lets a measurement be sheared, but the measurement stays at right angles to
@@ -704,7 +706,8 @@ void describeObject(SdrObject& rObject, ObjectContent& rContent,
     // a sheared line is just another line, same thing
     const SdrObjKind eKind(rObject.GetObjIdentifier());
     const bool bLineLike(SdrObjKind::Measure == eKind || SdrObjKind::Line == eKind);
-    rContent.mbCanBeSheared = aWhatItAllows.bShearAllowed && !bSizeHeldFast && !bLineLike;
+    rContent.mbCanBeSheared
+        = aWhatItAllows.bShearAllowed && !bSizeHeldFast && !bLineLike && !bScene;
     rContent.mbCanBeFlipped = aWhatItAllows.bMirror90Allowed && !bPlaceHeldFast;
     rContent.mbCanBeChangedToCurves = aWhatItAllows.bCanConvToPath;
     // a line is shaped by its two ends only, as a measurement is
