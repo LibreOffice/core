@@ -42,7 +42,6 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <tools/stream.hxx>
 #include <tools/zcodec.hxx>
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>

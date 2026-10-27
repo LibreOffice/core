@@ -28,7 +28,6 @@
 #include <sot/formats.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/vectorgraphicdata.hxx>
 
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <sfx2/linkmgr.hxx>
