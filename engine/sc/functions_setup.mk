@@ -8,7 +8,7 @@
 #
 
 # common body for the functions test templates, $(1) is the full test name
-# and $(2) is the test source file under sc/qa/unit
+# and $(2) is the list of test source files under sc/qa/unit
 define sc_functions_test_common
 
 $(eval $(call gb_CppunitTest_CppunitTest,$(1)))
@@ -16,7 +16,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,$(1)))
 $(eval $(call gb_CppunitTest_use_common_precompiled_header,$(1)))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,$(1), \
-    sc/qa/unit/$(2) \
+    $(addprefix sc/qa/unit/,$(2)) \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,$(1), \

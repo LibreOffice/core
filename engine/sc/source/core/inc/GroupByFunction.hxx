@@ -43,11 +43,16 @@ private:
     /// Sorts the groups and lists them in output order, with their totals. Node 0 stands for the
     /// grand total.
     static std::vector<size_t> ListOutputNodes(Grouping& rGrouping);
-    /// Puts the names of the key and value columns into the first row of xOutput.
-    void PutHeaderRow(const Grouping& rGrouping, const ScMatrixRef& xOutput);
-    /// Puts one row per listed group into xOutput, from nFirstRow on: its keys and its results.
+    /// Puts the name of a value column into xOutput: its header, or a generated name.
+    void PutValueName(const Grouping& rGrouping, SCSIZE nValueColumn, const ScMatrixRef& xOutput,
+                      SCSIZE nColumn, SCSIZE nRow);
+    /// Puts the header rows into xOutput: the labels of functions in a row, and the names of the
+    /// key and value columns when they are shown.
+    void PutHeaderRows(const Grouping& rGrouping, const ScMatrixRef& xOutput);
+    /// Puts the rows of each listed group into xOutput, after the header rows: the keys of the
+    /// group and its results.
     void PutGroupRows(const Grouping& rGrouping, const std::vector<size_t>& rOutputNodes,
-                      const ScMatrixRef& xOutput, SCSIZE nFirstRow);
+                      const ScMatrixRef& xOutput);
 };
 }
 

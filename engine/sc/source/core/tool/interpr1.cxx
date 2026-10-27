@@ -9538,6 +9538,11 @@ void ScInterpreter::ScHorizontalOrVerticalStack(bool bHorizontal)
     SCSIZE nColumns = 0;
     SCSIZE nRows = 0;
     std::vector<ScMatrixRef> aResMatrix;
+    // A function argument takes one cell, and a stack of functions takes its own size. When an
+    // argument is a function, the result is a grid of functions, and the other arguments give the
+    // values of the cells without a function.
+    std::vector<FormulaCallableRef> aArgumentCallables;
+    bool bHasCallable = false;
     while (nGlobalError == FormulaError::NONE && nParamCount-- > 0)
     {
         if (IsMissing())
@@ -9546,18 +9551,35 @@ void ScInterpreter::ScHorizontalOrVerticalStack(bool bHorizontal)
             return;
         }
 
-        ScMatrixRef pRefMatrix = GetMatrix();
-        if (!pRefMatrix)
+        FormulaCallableRef pCallable;
+        ScMatrixRef pRefMatrix;
+        SCSIZE nC = 1;
+        SCSIZE nR = 1;
+        if (GetStackType() == svCallable)
         {
-            PushIllegalParameter();
-            return;
+            pCallable = GetCallable();
+            if (auto pArray = dynamic_cast<const ScCallableArray*>(pCallable.get()))
+            {
+                nC = pArray->GetColumns();
+                nR = pArray->GetRows();
+            }
+            bHasCallable = true;
+        }
+        else
+        {
+            pRefMatrix = GetMatrix();
+            if (!pRefMatrix)
+            {
+                PushIllegalParameter();
+                return;
+            }
+            pRefMatrix->GetDimensions(nC, nR);
         }
 
-        SCSIZE nC = 0, nR = 0;
-        pRefMatrix->GetDimensions(nC, nR);
         nColumns = bHorizontal ? nColumns + nC : std::max(nColumns, nC);
         nRows = bHorizontal ? std::max(nRows , nR) : nRows + nR;
         aResMatrix.emplace_back(pRefMatrix);
+        aArgumentCallables.push_back(pCallable);
     }
 
     // No result
@@ -9574,11 +9596,40 @@ void ScInterpreter::ScHorizontalOrVerticalStack(bool bHorizontal)
         return;
     }
 
-    SCSIZE nCount = 0;
-    for (const ScMatrixRef& rMatrix : aResMatrix)
+    std::vector<FormulaCallableRef> aCallables(bHasCallable ? nColumns * nRows : 0);
+    auto aCopyCell =
+        [&](size_t nArgument, SCSIZE nSourceColumn, SCSIZE nSourceRow, SCSIZE nColumn, SCSIZE nRow)
     {
-        SCSIZE nC = 0, nR = 0;
-        rMatrix->GetDimensions(nC, nR);
+        const FormulaCallableRef& pCallable = aArgumentCallables[nArgument];
+        if (!pCallable)
+        {
+            FillMatrixCell(aResMatrix[nArgument], pResMat, nSourceColumn, nSourceRow, nColumn,
+                           nRow);
+            return;
+        }
+        if (auto pArray = dynamic_cast<const ScCallableArray*>(pCallable.get()))
+        {
+            aCallables[nRow * nColumns + nColumn] = pArray->GetCallable(nSourceColumn, nSourceRow);
+            if (!aCallables[nRow * nColumns + nColumn])
+                FillMatrixCell(pArray->GetValues(), pResMat, nSourceColumn, nSourceRow, nColumn,
+                               nRow);
+        }
+        else
+            aCallables[nRow * nColumns + nColumn] = pCallable;
+    };
+
+    SCSIZE nCount = 0;
+    for (size_t nArgument = 0; nArgument < aResMatrix.size(); ++nArgument)
+    {
+        SCSIZE nC = 1, nR = 1;
+        if (aResMatrix[nArgument])
+            aResMatrix[nArgument]->GetDimensions(nC, nR);
+        else if (auto pArray
+                 = dynamic_cast<const ScCallableArray*>(aArgumentCallables[nArgument].get()))
+        {
+            nC = pArray->GetColumns();
+            nR = pArray->GetRows();
+        }
         if (bHorizontal)
         {
             for (SCSIZE col = 0; col < nC; ++col)
@@ -9586,7 +9637,7 @@ void ScInterpreter::ScHorizontalOrVerticalStack(bool bHorizontal)
                 for (SCSIZE row = 0; row < nRows; ++row)
                 {
                     if (row < nR)
-                        FillMatrixCell(rMatrix, pResMat, col, row, nCount, row);
+                        aCopyCell(nArgument, col, row, nCount, row);
                     else
                         pResMat->PutError(FormulaError::NotAvailable, nCount, row);
                 }
@@ -9600,7 +9651,7 @@ void ScInterpreter::ScHorizontalOrVerticalStack(bool bHorizontal)
                 for (SCSIZE col = 0; col < nColumns; ++col)
                 {
                     if (col < nC)
-                        FillMatrixCell(rMatrix, pResMat, col, row, col, nCount);
+                        aCopyCell(nArgument, col, row, col, nCount);
                     else
                         pResMat->PutError(FormulaError::NotAvailable, col, nCount);
                 }
@@ -9609,7 +9660,10 @@ void ScInterpreter::ScHorizontalOrVerticalStack(bool bHorizontal)
         }
     }
 
-    PushMatrix(pResMat);
+    if (bHasCallable)
+        PushCallable(new ScCallableArray(nColumns, nRows, std::move(aCallables), pResMat));
+    else
+        PushMatrix(pResMat);
 }
 
 void ScInterpreter::ScTake()

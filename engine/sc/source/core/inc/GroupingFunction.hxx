@@ -25,6 +25,10 @@
 
 class ScInterpreter;
 class ScMatrix;
+namespace svl
+{
+class SharedStringPool;
+}
 
 namespace sc::grouping
 {
@@ -89,18 +93,18 @@ struct SortOrder
 {
     /// The direction of each key column.
     std::vector<bool> maKeyAscending;
-    /// The sort entries in their order, as 0-based columns: the key columns, then the value
+    /// The sort entries in their order, as 0-based columns: the key columns, then the result
     /// columns. Each is paired with whether it sorts ascending.
     std::vector<std::pair<SCSIZE, bool>> maColumns;
-    /// The value column to sort by and its direction, when the only entry names a value column.
+    /// The result column to sort by and its direction, when the only entry names a result column.
     std::optional<std::pair<SCSIZE, bool>> moValueSort;
 };
 
-/// Reads a sort order. Each entry is a 1-based column: the key columns, then the value columns. A
+/// Reads a sort order. Each entry is a 1-based column: the key columns, then the result columns. A
 /// negative entry sorts in descending order. Several entries may only name key columns, and each
 /// column at most once. Returns nothing for an invalid sort order.
 std::optional<SortOrder> getSortOrder(const ScMatrix* pSortOrder, SCSIZE nKeyColumns,
-                                      SCSIZE nValueColumns);
+                                      SCSIZE nResultColumns);
 
 /// Sorts the groups of every level among their siblings: by rCompareValues when it is set, then by
 /// the key column of the level.
@@ -120,6 +124,38 @@ bool takesAllValues(const formula::FormulaCallable& rCallable);
 
 /// The generated header name of a key or value column, for example "Value 2".
 OUString getGeneratedName(TranslateId aNameId, SCSIZE nColumn);
+
+/// The functions of the function argument and their labels. A single function gives one result per
+/// value column. Functions in a row give a column of results each, and functions in a column a row
+/// of results each.
+struct FunctionList
+{
+    std::vector<formula::FormulaCallableRef> maFunctions;
+    /// The position in mxLabelSource of the label of each function. Without labels a function is
+    /// labeled with its name.
+    std::vector<std::pair<SCSIZE, SCSIZE>> maLabelPositions;
+    ScMatrixRef mxLabelSource;
+    bool mbInRows = false;
+    /// The labels are shown when there are several functions or the labels are given.
+    bool mbShowLabels = false;
+};
+
+/// A function, or a stack of functions in one row or one column. A second row or column of the
+/// stack, beside the functions, holds a label for each function.
+std::optional<FunctionList> getFunctionList(const formula::FormulaCallableRef& pCallable);
+
+/// The function and the value column of each result. The functions pair up with the value columns,
+/// whether they lie in a row or in a column: a single function applies to every value column, and
+/// every function applies to a single value column. Otherwise there are as many functions as value
+/// columns, and each function applies to the value column at its position.
+std::optional<std::vector<std::pair<size_t, SCSIZE>>> getResultColumns(const FunctionList& rList,
+                                                                       SCSIZE nValueColumns);
+
+/// Puts the label of a function into xOutput: the given label, or else the name of the function. A
+/// LAMBDA has no name of its own and is labeled CUSTOM.
+void putFunctionLabel(const FunctionList& rList, size_t nFunction,
+                      svl::SharedStringPool& rStringPool, const ScMatrixRef& xOutput,
+                      SCSIZE nColumn, SCSIZE nRow);
 }
 
 namespace sc

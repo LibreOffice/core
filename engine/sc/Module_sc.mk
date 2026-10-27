@@ -152,6 +152,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 	CppunitTest_sc_ooxml_functions_dynamic_array_test \
 	CppunitTest_sc_ooxml_functions_let_test \
 	CppunitTest_sc_ooxml_functions_mathematical_test \
+	CppunitTest_sc_ooxml_functions_spreadsheet_test \
 	CppunitTest_sc_ooxml_functions_text_test \
 	CppunitTest_sc_annotationobj \
 	CppunitTest_sc_annotationshapeobj \

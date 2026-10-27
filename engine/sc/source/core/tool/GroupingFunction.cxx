@@ -14,13 +14,16 @@
 #include <interpre.hxx>
 #include <callable.hxx>
 #include <cellvalue.hxx>
+#include <compiler.hxx>
 #include <dociter.hxx>
 #include <formulacell.hxx>
 #include <global.hxx>
+#include <globstr.hrc>
 #include <scmatrix.hxx>
 #include <scresid.hxx>
 #include <token.hxx>
 
+#include <svl/sharedstringpool.hxx>
 #include <unotools/collatorwrapper.hxx>
 
 #include <algorithm>
@@ -223,7 +226,7 @@ std::optional<TotalLayout> getTotalLayout(std::optional<sal_Int32> oTotalDepth, 
 }
 
 std::optional<SortOrder> getSortOrder(const ScMatrix* pSortOrder, SCSIZE nKeyColumns,
-                                      SCSIZE nValueColumns)
+                                      SCSIZE nResultColumns)
 {
     SortOrder aSortOrder;
     aSortOrder.maKeyAscending.assign(nKeyColumns, true);
@@ -235,7 +238,7 @@ std::optional<SortOrder> getSortOrder(const ScMatrix* pSortOrder, SCSIZE nKeyCol
     if (nSortColumns != 1 && nSortRows != 1)
         return std::nullopt;
     const SCSIZE nEntries = nSortColumns * nSortRows;
-    std::vector<bool> aUsed(nKeyColumns + nValueColumns, false);
+    std::vector<bool> aUsed(nKeyColumns + nResultColumns, false);
     for (SCSIZE nEntry = 0; nEntry < nEntries; ++nEntry)
     {
         const SCSIZE nEntryColumn = nSortColumns == 1 ? 0 : nEntry;
@@ -245,7 +248,7 @@ std::optional<SortOrder> getSortOrder(const ScMatrix* pSortOrder, SCSIZE nKeyCol
         const double fEntry = pSortOrder->GetDouble(nEntryColumn, nEntryRow);
         const double fColumn = std::abs(fEntry);
         if (fColumn != std::trunc(fColumn) || fColumn < 1
-            || fColumn > static_cast<double>(nKeyColumns + nValueColumns))
+            || fColumn > static_cast<double>(nKeyColumns + nResultColumns))
             return std::nullopt;
         const SCSIZE nColumn = static_cast<SCSIZE>(fColumn) - 1;
         if (aUsed[nColumn] || (nEntries > 1 && nColumn >= nKeyColumns))
@@ -323,6 +326,102 @@ bool takesAllValues(const FormulaCallable& rCallable)
 OUString getGeneratedName(TranslateId aNameId, SCSIZE nColumn)
 {
     return ScResId(aNameId).replaceFirst("%1", OUString::number(nColumn + 1));
+}
+
+std::optional<FunctionList> getFunctionList(const formula::FormulaCallableRef& pCallable)
+{
+    FunctionList aList;
+    auto pArray = dynamic_cast<const ScCallableArray*>(pCallable.get());
+    if (!pArray)
+    {
+        aList.maFunctions.push_back(pCallable);
+        return aList;
+    }
+    if (pArray->GetColumns() * pArray->GetRows() == 1)
+    {
+        aList.maFunctions.push_back(pArray->GetCallable(0, 0));
+        return aList;
+    }
+
+    // A line is a row of the stack when the functions lie in a row, and a column otherwise.
+    auto aReadLines = [&](bool bInRows) -> bool
+    {
+        const SCSIZE nFunctions = bInRows ? pArray->GetRows() : pArray->GetColumns();
+        const SCSIZE nLines = bInRows ? pArray->GetColumns() : pArray->GetRows();
+        auto aGetCallable = [&](SCSIZE nLine, SCSIZE nIndex)
+        {
+            return bInRows ? pArray->GetCallable(nLine, nIndex)
+                           : pArray->GetCallable(nIndex, nLine);
+        };
+        auto aIsLine = [&](SCSIZE nLine, bool bFunctions)
+        {
+            for (SCSIZE nIndex = 0; nIndex < nFunctions; ++nIndex)
+            {
+                if (bool(aGetCallable(nLine, nIndex)) != bFunctions)
+                    return false;
+            }
+            return true;
+        };
+        if (nLines > 2)
+            return false;
+        SCSIZE nFunctionLine = 0;
+        if (!aIsLine(0, true))
+        {
+            if (nLines == 1 || !aIsLine(1, true))
+                return false;
+            nFunctionLine = 1;
+        }
+        const SCSIZE nLabelLine = 1 - nFunctionLine;
+        if (nLines == 2 && !aIsLine(nLabelLine, false))
+            return false;
+
+        aList.mbInRows = bInRows;
+        aList.mbShowLabels = nFunctions > 1 || nLines == 2;
+        for (SCSIZE nIndex = 0; nIndex < nFunctions; ++nIndex)
+        {
+            aList.maFunctions.push_back(aGetCallable(nFunctionLine, nIndex));
+            if (nLines == 2)
+                aList.maLabelPositions.push_back(bInRows ? std::make_pair(nLabelLine, nIndex)
+                                                         : std::make_pair(nIndex, nLabelLine));
+        }
+        if (nLines == 2)
+            aList.mxLabelSource = pArray->GetValues();
+        return true;
+    };
+    if (aReadLines(false) || aReadLines(true))
+        return aList;
+    return std::nullopt;
+}
+
+std::optional<std::vector<std::pair<size_t, SCSIZE>>> getResultColumns(const FunctionList& rList,
+                                                                       SCSIZE nValueColumns)
+{
+    const size_t nFunctions = rList.maFunctions.size();
+    std::vector<std::pair<size_t, SCSIZE>> aResultColumns;
+    if (nFunctions > 1 && nValueColumns > 1 && nFunctions != nValueColumns)
+        return std::nullopt;
+    const SCSIZE nResultColumns = std::max<SCSIZE>(nFunctions, nValueColumns);
+    for (SCSIZE nResultColumn = 0; nResultColumn < nResultColumns; ++nResultColumn)
+        aResultColumns.emplace_back(nFunctions == 1 ? 0 : nResultColumn,
+                                    nValueColumns == 1 ? 0 : nResultColumn);
+    return aResultColumns;
+}
+
+void putFunctionLabel(const FunctionList& rList, size_t nFunction,
+                      svl::SharedStringPool& rStringPool, const ScMatrixRef& xOutput,
+                      SCSIZE nColumn, SCSIZE nRow)
+{
+    if (rList.mxLabelSource)
+    {
+        const auto& [nLabelColumn, nLabelRow] = rList.maLabelPositions[nFunction];
+        ScInterpreter::FillMatrixCell(rList.mxLabelSource, xOutput, nLabelColumn, nLabelRow,
+                                      nColumn, nRow);
+        return;
+    }
+    const OpCode eOpCode = rList.maFunctions[nFunction]->GetOpCode();
+    const OUString aName
+        = eOpCode == ocLambda ? ScResId(STR_GROUPBY_CUSTOM) : ScCompiler::GetNativeSymbol(eOpCode);
+    xOutput->PutString(rStringPool.intern(aName), nColumn, nRow);
 }
 }
 

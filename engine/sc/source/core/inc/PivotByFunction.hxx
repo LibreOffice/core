@@ -40,17 +40,17 @@ private:
     bool ReadArguments(Pivot& rPivot);
     /// Calls the function on the rows that a row group and a column group share, unless that cell
     /// is already computed. Returns the column of the cell in the cell matrix.
-    SCSIZE ComputeCell(Pivot& rPivot, size_t nRowNode, size_t nColumnNode, SCSIZE nValueColumn);
+    SCSIZE ComputeCell(Pivot& rPivot, size_t nRowNode, size_t nColumnNode, SCSIZE nResultColumn);
     /// Sorts the row groups and the column groups among their siblings.
     void SortGroups(Pivot& rPivot);
-    /// Puts the keys of the column groups, the names of the value columns and the names of the row
-    /// keys into the header rows of xOutput.
+    /// Puts the header rows into xOutput: the keys of the column groups, the labels of functions in
+    /// a row, the names of the value columns and the names of the row keys.
     void PutHeaderRows(const Pivot& rPivot, const std::vector<size_t>& rColumnOutput,
-                       bool bValueHeaderRow, const ScMatrixRef& xOutput);
-    /// Puts one row per listed row group into xOutput, from nFirstRow on: its keys and its cells.
+                       const ScMatrixRef& xOutput);
+    /// Puts the rows of each listed row group into xOutput, after the header rows: the keys of the
+    /// group and its cells.
     void PutGroupRows(Pivot& rPivot, const std::vector<size_t>& rRowOutput,
-                      const std::vector<size_t>& rColumnOutput, const ScMatrixRef& xOutput,
-                      SCSIZE nFirstRow);
+                      const std::vector<size_t>& rColumnOutput, const ScMatrixRef& xOutput);
 };
 }
 

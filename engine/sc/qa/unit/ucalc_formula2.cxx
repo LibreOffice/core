@@ -8090,6 +8090,9 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFunctionValueKeepsItsNameThroughOOXML)
     // OOXML formula back gives the same function.
     const std::vector<std::tuple<OUString, OUString, OpCode>> aFormulas{
         { u"GROUPBY(A1:A4;B1:B4;SUM)"_ustr, u"_xlfn.GROUPBY(A1:A4,B1:B4,_xleta.SUM)"_ustr, ocSum },
+        { u"GROUPBY(A1:A4;B1:B4;HSTACK(SUM;PERCENTOF))"_ustr,
+          u"_xlfn.GROUPBY(A1:A4,B1:B4,_xlfn.HSTACK(_xleta.SUM,_xleta.PERCENTOF))"_ustr,
+          ocPercentOf },
         { u"BYCOL(A1:B4;SORT)"_ustr, u"_xlfn.BYCOL(A1:B4,_xleta.SORT)"_ustr, ocSort },
         { u"PERCENTOF(A1;A1:A4)"_ustr, u"_xlfn.PERCENTOF(A1,A1:A4)"_ustr, ocPercentOf },
     };
@@ -9565,6 +9568,117 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncGROUPBYFunctionArgument)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncGROUPBYSeveralFunctions)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    // The results show the names of the functions as text. With label lookup a later formula
+    // reads such a name as the label of the cells under it, not as the function.
+    ScDocOptions aOptions = m_pDoc->GetDocOptions();
+    aOptions.SetLookUpColRowNames(false);
+    m_pDoc->SetDocOptions(aOptions);
+    fillGroupByKeysAndAmounts(*m_pDoc);
+
+    // Functions side by side give a result column each, under a header row with their names.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 0, 0),
+                          u"=GROUPBY(T1:T4;U1:U4;HSTACK(SUM;COUNT))"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 0, 0),
+                      { { u""_ustr, u"SUM"_ustr, u"COUNT"_ustr },
+                        { u"a"_ustr, u"5"_ustr, u"1"_ustr },
+                        { u"b"_ustr, u"30"_ustr, u"2"_ustr },
+                        { u"c"_ustr, u"10"_ustr, u"1"_ustr },
+                        { u"Total"_ustr, u"45"_ustr, u"4"_ustr } });
+
+    // Functions on top of each other give every group a row each, with the names after the keys.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 10, 0),
+                          u"=GROUPBY(T1:T4;U1:U4;VSTACK(SUM;COUNT))"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 10, 0),
+                      { { u"a"_ustr, u"SUM"_ustr, u"5"_ustr },
+                        { u"a"_ustr, u"COUNT"_ustr, u"1"_ustr },
+                        { u"b"_ustr, u"SUM"_ustr, u"30"_ustr },
+                        { u"b"_ustr, u"COUNT"_ustr, u"2"_ustr },
+                        { u"c"_ustr, u"SUM"_ustr, u"10"_ustr },
+                        { u"c"_ustr, u"COUNT"_ustr, u"1"_ustr },
+                        { u"Total"_ustr, u"SUM"_ustr, u"45"_ustr },
+                        { u"Total"_ustr, u"COUNT"_ustr, u"4"_ustr } });
+
+    // A second row or column beside the functions gives their labels.
+    insertSpillingFormula(
+        *m_pDoc, ScAddress(0, 30, 0),
+        u"=GROUPBY(T1:T4;U1:U4;VSTACK(HSTACK(SUM;COUNT);{\"Amount\";\"Rows\"}))"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 30, 0),
+                      { { u""_ustr, u"Amount"_ustr, u"Rows"_ustr },
+                        { u"a"_ustr, u"5"_ustr, u"1"_ustr },
+                        { u"b"_ustr, u"30"_ustr, u"2"_ustr },
+                        { u"c"_ustr, u"10"_ustr, u"1"_ustr },
+                        { u"Total"_ustr, u"45"_ustr, u"4"_ustr } });
+    insertSpillingFormula(
+        *m_pDoc, ScAddress(0, 40, 0),
+        u"=GROUPBY(T1:T4;U1:U4;HSTACK(VSTACK(SUM;COUNT);{\"Amount\"|\"Rows\"}))"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 40, 0),
+                      { { u"a"_ustr, u"Amount"_ustr, u"5"_ustr },
+                        { u"a"_ustr, u"Rows"_ustr, u"1"_ustr },
+                        { u"b"_ustr, u"Amount"_ustr, u"30"_ustr },
+                        { u"b"_ustr, u"Rows"_ustr, u"2"_ustr },
+                        { u"c"_ustr, u"Amount"_ustr, u"10"_ustr },
+                        { u"c"_ustr, u"Rows"_ustr, u"1"_ustr },
+                        { u"Total"_ustr, u"Amount"_ustr, u"45"_ustr },
+                        { u"Total"_ustr, u"Rows"_ustr, u"4"_ustr } });
+
+    // Functions side by side pair up with the value columns, SUM with the amounts and MAX with the
+    // doubled amounts. A sort entry counts the result columns.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 50, 0),
+                          u"=GROUPBY(T1:T4;HSTACK(U1:U4;U1:U4*2);HSTACK(SUM;MAX);;;-3)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 50, 0),
+                      { { u""_ustr, u"SUM"_ustr, u"MAX"_ustr },
+                        { u"b"_ustr, u"30"_ustr, u"40"_ustr },
+                        { u"c"_ustr, u"10"_ustr, u"20"_ustr },
+                        { u"a"_ustr, u"5"_ustr, u"10"_ustr },
+                        { u"Total"_ustr, u"45"_ustr, u"40"_ustr } });
+
+    // Functions on top of each other on several value columns show the name of the value column
+    // of each row after the function names, when the field headers are shown.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 60, 0),
+                          u"=GROUPBY(T1:T4;HSTACK(U1:U4;U1:U4*2);VSTACK(SUM;MAX);2)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 60, 0),
+                      { { u"Row Field 1"_ustr, u""_ustr, u""_ustr, u""_ustr },
+                        { u"a"_ustr, u"SUM"_ustr, u"Value 1"_ustr, u"5"_ustr },
+                        { u"a"_ustr, u"MAX"_ustr, u"Value 2"_ustr, u"10"_ustr },
+                        { u"b"_ustr, u"SUM"_ustr, u"Value 1"_ustr, u"30"_ustr },
+                        { u"b"_ustr, u"MAX"_ustr, u"Value 2"_ustr, u"40"_ustr },
+                        { u"c"_ustr, u"SUM"_ustr, u"Value 1"_ustr, u"10"_ustr },
+                        { u"c"_ustr, u"MAX"_ustr, u"Value 2"_ustr, u"20"_ustr },
+                        { u"Total"_ustr, u"SUM"_ustr, u"Value 1"_ustr, u"45"_ustr },
+                        { u"Total"_ustr, u"MAX"_ustr, u"Value 2"_ustr, u"40"_ustr } });
+
+    // A LAMBDA among the functions is labeled CUSTOM.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 80, 0),
+                          u"=GROUPBY(T1:T4;U1:U4;HSTACK(SUM;LAMBDA(x;MAX(x)-MIN(x))))"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 80, 0),
+                      { { u""_ustr, u"SUM"_ustr, u"CUSTOM"_ustr },
+                        { u"a"_ustr, u"5"_ustr, u"0"_ustr },
+                        { u"b"_ustr, u"30"_ustr, u"10"_ustr },
+                        { u"c"_ustr, u"10"_ustr, u"0"_ustr },
+                        { u"Total"_ustr, u"45"_ustr, u"15"_ustr } });
+
+    // A single function with its label beside it, on two value columns, gives every group one row
+    // per value column.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 90, 0),
+                          u"=GROUPBY(T1:T4;HSTACK(U1:U4;U1:U4*2);HSTACK(\"Amount\";SUM);2)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 90, 0),
+                      { { u"Row Field 1"_ustr, u""_ustr, u""_ustr, u""_ustr },
+                        { u"a"_ustr, u"Amount"_ustr, u"Value 1"_ustr, u"5"_ustr },
+                        { u"a"_ustr, u"Amount"_ustr, u"Value 2"_ustr, u"10"_ustr },
+                        { u"b"_ustr, u"Amount"_ustr, u"Value 1"_ustr, u"30"_ustr },
+                        { u"b"_ustr, u"Amount"_ustr, u"Value 2"_ustr, u"60"_ustr },
+                        { u"c"_ustr, u"Amount"_ustr, u"Value 1"_ustr, u"10"_ustr },
+                        { u"c"_ustr, u"Amount"_ustr, u"Value 2"_ustr, u"20"_ustr },
+                        { u"Total"_ustr, u"Amount"_ustr, u"Value 1"_ustr, u"45"_ustr },
+                        { u"Total"_ustr, u"Amount"_ustr, u"Value 2"_ustr, u"90"_ustr } });
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncGROUPBYInvalidArguments)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
@@ -9585,6 +9699,14 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncGROUPBYInvalidArguments)
         // The filter leaves no rows.
         u"=GROUPBY(T1:T4;U1:U4;SUM;;;;T1:T4=\"z\")"_ustr,
         u"=GROUPBY(T1:T4;U1:U4;SUM;;;;;2)"_ustr,
+        // A stack of functions needs one label per function, and holds one row or one column of
+        // functions.
+        u"=GROUPBY(T1:T4;U1:U4;VSTACK(HSTACK(SUM;COUNT);{\"a\";\"b\";\"c\"}))"_ustr,
+        u"=GROUPBY(T1:T4;U1:U4;VSTACK(HSTACK(SUM;COUNT);HSTACK(MIN;MAX)))"_ustr,
+        // Several functions, side by side or on top of each other, need one value column, or one
+        // value column per function.
+        u"=GROUPBY(T1:T4;HSTACK(U1:U4;U1:U4);HSTACK(SUM;COUNT;MAX))"_ustr,
+        u"=GROUPBY(T1:T4;HSTACK(U1:U4;U1:U4);VSTACK(SUM;COUNT;MAX))"_ustr,
     };
     for (size_t nIndex = 0; nIndex < aFormulas.size(); ++nIndex)
     {
@@ -9844,6 +9966,93 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncPIVOTBYRelativeTo)
                         { u"Apples"_ustr, u"0.25"_ustr, u"0.25"_ustr, u"0.25"_ustr },
                         { u"Pears"_ustr, u"0.75"_ustr, u"0.75"_ustr, u"0.75"_ustr },
                         { u"Total"_ustr, u"1"_ustr, u"1"_ustr, u"1"_ustr } });
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncPIVOTBYSeveralFunctions)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    // The results show the names of the functions as text. With label lookup a later formula
+    // reads such a name as the label of the cells under it, not as the function.
+    ScDocOptions aOptions = m_pDoc->GetDocOptions();
+    aOptions.SetLookUpColRowNames(false);
+    m_pDoc->SetDocOptions(aOptions);
+    fillPivotByRegionsAndYears(*m_pDoc);
+
+    // Functions side by side give every column group a column each, and their names go in a header
+    // row under the years.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 0, 0),
+                          u"=PIVOTBY(T1:T6;U1:U6;V1:V6;HSTACK(SUM;COUNT))"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 0, 0),
+                      { { u""_ustr, u"2023"_ustr, u"2023"_ustr, u"2024"_ustr, u"2024"_ustr,
+                          u"Total"_ustr, u"Total"_ustr },
+                        { u""_ustr, u"SUM"_ustr, u"COUNT"_ustr, u"SUM"_ustr, u"COUNT"_ustr,
+                          u"SUM"_ustr, u"COUNT"_ustr },
+                        { u"East"_ustr, u"70"_ustr, u"2"_ustr, u"50"_ustr, u"1"_ustr, u"120"_ustr,
+                          u"3"_ustr },
+                        { u"North"_ustr, u""_ustr, u""_ustr, u"5"_ustr, u"1"_ustr, u"5"_ustr,
+                          u"1"_ustr },
+                        { u"West"_ustr, u"20"_ustr, u"1"_ustr, u"10"_ustr, u"1"_ustr, u"30"_ustr,
+                          u"2"_ustr },
+                        { u"Total"_ustr, u"90"_ustr, u"3"_ustr, u"65"_ustr, u"3"_ustr,
+                          u"155"_ustr, u"6"_ustr } });
+
+    // Functions on top of each other give every row group a row each, with the names in a column
+    // after the regions.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 10, 0),
+                          u"=PIVOTBY(T1:T6;U1:U6;V1:V6;VSTACK(SUM;COUNT))"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 10, 0),
+                      { { u""_ustr, u""_ustr, u"2023"_ustr, u"2024"_ustr, u"Total"_ustr },
+                        { u"East"_ustr, u"SUM"_ustr, u"70"_ustr, u"50"_ustr, u"120"_ustr },
+                        { u"East"_ustr, u"COUNT"_ustr, u"2"_ustr, u"1"_ustr, u"3"_ustr },
+                        { u"North"_ustr, u"SUM"_ustr, u""_ustr, u"5"_ustr, u"5"_ustr },
+                        { u"North"_ustr, u"COUNT"_ustr, u""_ustr, u"1"_ustr, u"1"_ustr },
+                        { u"West"_ustr, u"SUM"_ustr, u"20"_ustr, u"10"_ustr, u"30"_ustr },
+                        { u"West"_ustr, u"COUNT"_ustr, u"1"_ustr, u"1"_ustr, u"2"_ustr },
+                        { u"Total"_ustr, u"SUM"_ustr, u"90"_ustr, u"65"_ustr, u"155"_ustr },
+                        { u"Total"_ustr, u"COUNT"_ustr, u"3"_ustr, u"3"_ustr, u"6"_ustr } });
+
+    // Functions side by side on two value columns pair up with them, and the function names set
+    // the columns apart without a row of value names.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 50, 0),
+                          u"=PIVOTBY(T1:T6;U1:U6;HSTACK(V1:V6;V1:V6*2);HSTACK(SUM;MAX);;;;0)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 50, 0),
+                      { { u""_ustr, u"2023"_ustr, u"2023"_ustr, u"2024"_ustr, u"2024"_ustr },
+                        { u""_ustr, u"SUM"_ustr, u"MAX"_ustr, u"SUM"_ustr, u"MAX"_ustr },
+                        { u"East"_ustr, u"70"_ustr, u"80"_ustr, u"50"_ustr, u"100"_ustr },
+                        { u"North"_ustr, u""_ustr, u""_ustr, u"5"_ustr, u"10"_ustr },
+                        { u"West"_ustr, u"20"_ustr, u"40"_ustr, u"10"_ustr, u"20"_ustr },
+                        { u"Total"_ustr, u"90"_ustr, u"80"_ustr, u"65"_ustr, u"100"_ustr } });
+
+    // A single function with its label beside it, on two value columns, gives every row group one
+    // row per value column.
+    insertSpillingFormula(
+        *m_pDoc, ScAddress(0, 60, 0),
+        u"=PIVOTBY(T1:T6;U1:U6;HSTACK(V1:V6;V1:V6*2);HSTACK(\"Amount\";SUM);;;;0)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 60, 0),
+                      { { u""_ustr, u""_ustr, u"2023"_ustr, u"2024"_ustr },
+                        { u""_ustr, u""_ustr, u""_ustr, u""_ustr },
+                        { u"East"_ustr, u"Amount"_ustr, u"70"_ustr, u"50"_ustr },
+                        { u"East"_ustr, u"Amount"_ustr, u"140"_ustr, u"100"_ustr },
+                        { u"North"_ustr, u"Amount"_ustr, u""_ustr, u"5"_ustr },
+                        { u"North"_ustr, u"Amount"_ustr, u""_ustr, u"10"_ustr },
+                        { u"West"_ustr, u"Amount"_ustr, u"20"_ustr, u"10"_ustr },
+                        { u"West"_ustr, u"Amount"_ustr, u"40"_ustr, u"20"_ustr },
+                        { u"Total"_ustr, u"Amount"_ustr, u"90"_ustr, u"65"_ustr },
+                        { u"Total"_ustr, u"Amount"_ustr, u"180"_ustr, u"130"_ustr } });
+
+    // PERCENTOF among several functions still compares each cell with its total.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 30, 0),
+                          u"=PIVOTBY(T1:T6;;V1:V6;HSTACK(SUM;PERCENTOF))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"SUM"_ustr, m_pDoc->GetString(ScAddress(1, 30, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"PERCENTOF"_ustr, m_pDoc->GetString(ScAddress(2, 30, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"East"_ustr, m_pDoc->GetString(ScAddress(0, 31, 0)));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(120.0, m_pDoc->GetValue(ScAddress(1, 31, 0)), 1e-12);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(120.0 / 155.0, m_pDoc->GetValue(ScAddress(2, 31, 0)), 1e-12);
+    CPPUNIT_ASSERT_EQUAL(u"Total"_ustr, m_pDoc->GetString(ScAddress(0, 34, 0)));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, m_pDoc->GetValue(ScAddress(2, 34, 0)), 1e-12);
 
     m_pDoc->DeleteTab(0);
 }

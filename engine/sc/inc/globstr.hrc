@@ -623,6 +623,8 @@
 #define STR_GROUPBY_ROW_FIELD                   NC_("STR_GROUPBY_ROW_FIELD", "Row Field %1")
 // %1 is the number of the column
 #define STR_GROUPBY_VALUE                       NC_("STR_GROUPBY_VALUE", "Value %1")
+// The header of the results of a custom function, in capitals like the names of the other functions
+#define STR_GROUPBY_CUSTOM                      NC_("STR_GROUPBY_CUSTOM", "CUSTOM")
 
 #endif
 

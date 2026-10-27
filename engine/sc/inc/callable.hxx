@@ -22,10 +22,12 @@
 #include <sal/config.h>
 
 #include <forward_list>
+#include <utility>
 #include <vector>
 
 #include <formula/callable.hxx>
 #include <formula/opcode.hxx>
+#include "scmatrix.hxx"
 #include "tokenarray.hxx"
 #include <interpre.hxx>
 
@@ -97,6 +99,38 @@ public:
         return maReplacementPositions[nParam];
     }
     short GetNumRequiredParams() const { return mnRequiredParams; }
+};
+
+/// A grid of functions and values, the result of stacking functions side by side or on top of
+/// each other. Each cell holds either a function or a value, for example the label of a function.
+/// The grid itself cannot be called.
+class SAL_DLLPUBLIC_RTTI ScCallableArray : public formula::FormulaCallable
+{
+private:
+    SCSIZE mnColumns;
+    SCSIZE mnRows;
+    /// The function of each cell, row by row. A cell that holds a value has no function.
+    std::vector<formula::FormulaCallableRef> maCallables;
+    /// The value of each cell that holds no function.
+    ScMatrixRef mxValues;
+
+public:
+    ScCallableArray(SCSIZE nColumns, SCSIZE nRows,
+                    std::vector<formula::FormulaCallableRef> aCallables, ScMatrixRef xValues)
+        : mnColumns(nColumns)
+        , mnRows(nRows)
+        , maCallables(std::move(aCallables))
+        , mxValues(std::move(xValues))
+    {
+    }
+
+    SCSIZE GetColumns() const { return mnColumns; }
+    SCSIZE GetRows() const { return mnRows; }
+    const formula::FormulaCallableRef& GetCallable(SCSIZE nColumn, SCSIZE nRow) const
+    {
+        return maCallables[nRow * mnColumns + nColumn];
+    }
+    const ScMatrixRef& GetValues() const { return mxValues; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
