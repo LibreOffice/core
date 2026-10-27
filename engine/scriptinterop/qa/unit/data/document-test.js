@@ -503,18 +503,112 @@ function test() {
     console.assert(doc.newPosition(withImage.getChild(0), 3).insertInlineImage(blob) !== null);
     withImage.editAsText().insertText(4, 'X');
     console.assert(withImage.editAsText().getText() === 'foobXar');
+    // The image splits the text into a child text before it and one after it:
+    console.assert(withImage.getNumChildren() === 3);
+    console.assert(withImage.getChild(0).getType() === DocumentApp.ElementType.TEXT);
+    console.assert(withImage.getChild(0).asText().getText() === 'foo');
+    console.assert(withImage.getChild(1).getType() === DocumentApp.ElementType.INLINE_IMAGE);
+    console.assert(withImage.getChild(2).asText().getText() === 'bXar');
+    console.assert(withImage.getChildIndex(withImage.getChild(2)) === 2);
+    console.assert(
+        withImage.getChild(0).getNextSibling().getType()
+            === DocumentApp.ElementType.INLINE_IMAGE);
+    console.assert(
+        withImage.getChild(2).getPreviousSibling().getType()
+            === DocumentApp.ElementType.INLINE_IMAGE);
+    console.assert(withImage.getChild(2).getNextSibling() === null);
+    // Text inserted at the offset after the image goes into the text after it, and the text of the
+    // paragraph has the paragraph's siblings:
+    withImage.editAsText().insertText(3, 'Y');
+    console.assert(withImage.getChild(2).asText().getText() === 'YbXar');
+    withImage.editAsText().deleteText(3, 3);
+    console.assert(withImage.getChild(2).asText().getText() === 'bXar');
+    console.assert(withImage.getNumChildren() === 3);
+    console.assert(
+        withImage.editAsText().getPreviousSibling().getText()
+            === withImage.getPreviousSibling().getText());
+    // A position at the end of a child text is the position after it in its paragraph, and one in
+    // the text of the paragraph is one in the child text there:
+    const afterFoo = doc.newPosition(withImage.getChild(0), 3);
+    console.assert(afterFoo.getElement().getType() === DocumentApp.ElementType.PARAGRAPH);
+    console.assert(afterFoo.getOffset() === 1);
+    const inBXar = doc.newPosition(withImage.editAsText(), 4);
+    console.assert(inBXar.getElement().getType() === DocumentApp.ElementType.TEXT);
+    console.assert(inBXar.getElement().asText().getText() === 'bXar');
+    console.assert(inBXar.getOffset() === 1);
+    // A range over the image is split into the image and the parts of the texts around it:
+    const overImage = doc.newRange().addElement(withImage.editAsText(), 1, 4).build()
+        .getRangeElements();
+    console.assert(overImage.length === 3);
+    console.assert(overImage[0].getElement().asText().getText() === 'foo');
+    console.assert(overImage[0].getStartOffset() === 1);
+    console.assert(overImage[0].getEndOffsetInclusive() === 2);
+    console.assert(
+        overImage[1].getElement().getType() === DocumentApp.ElementType.INLINE_IMAGE);
+    console.assert(overImage[2].getElement().asText().getText() === 'bXar');
+    console.assert(overImage[2].getStartOffset() === 0);
+    console.assert(overImage[2].getEndOffsetInclusive() === 1);
+    const allOverImageRange = doc.newRange().addElement(withImage.editAsText(), 0, 6).build();
+    doc.setSelection(allOverImageRange);
+    const allOverImage = allOverImageRange.getRangeElements();
+    console.assert(allOverImage.length === 3);
+    console.assert(allOverImage[0].getElement().asText().getText() === 'foo');
+    console.assert(allOverImage[0].getEndOffsetInclusive() === 2);
+    console.assert(
+        allOverImage[1].getElement().getType() === DocumentApp.ElementType.INLINE_IMAGE);
+    console.assert(allOverImage[2].getElement().asText().getText() === 'bXar');
+    console.assert(allOverImage[2].getEndOffsetInclusive() === 3);
     // A paragraph that holds only an image can be selected together with the paragraph after it:
     console.assert(
         doc.setSelection(
             doc.newRange().addElement(withImage.getPreviousSibling()).addElement(withImage).build())
             .getSelection().getRangeElements().length === 2);
+    // An image lies in its paragraph:
+    console.assert(
+        doc.newRange().addElement(withImage.getChild(1)).addElement(withImage).build()
+            .getRangeElements().length === 1);
     // An image adds no line to the text of a range:
     if (globalThis.cool) {
         console.assert(
             doc.newRange().addElement(withImage).addElement(withImage.getChild(1)).build().getText()
                 === 'foobXar');
     }
-
+    // A child text stays the same text when an image is inserted into, or removed from, the text
+    // before it:
+    const heldText = withImage.getChild(2);
+    const earlierImage = doc.newPosition(withImage.getChild(0), 1).insertInlineImage(blob);
+    console.assert(heldText.getText() === 'bXar');
+    earlierImage.removeFromParent();
+    console.assert(heldText.getText() === 'bXar');
+    // A child text next to an image at the start or the end of its paragraph is not all of the
+    // paragraph:
+    const imageFirst = body.appendParagraph('foo');
+    const firstImage = doc.newPosition(imageFirst.getChild(0), 0).insertInlineImage(blob);
+    const withFirstImage = doc.newRange().addElement(firstImage).addElement(imageFirst.getChild(1))
+        .build().getRangeElements();
+    console.assert(withFirstImage.length === 2);
+    console.assert(
+        withFirstImage[0].getElement().getType() === DocumentApp.ElementType.INLINE_IMAGE);
+    console.assert(withFirstImage[1].getElement().getType() === DocumentApp.ElementType.TEXT);
+    const imageLast = body.appendParagraph('bar');
+    const lastImage = doc.newPosition(imageLast.getChild(0), 3).insertInlineImage(blob);
+    const withLastImage = doc.newRange().addElement(imageLast.getChild(0)).addElement(lastImage)
+        .build().getRangeElements();
+    console.assert(withLastImage.length === 2);
+    console.assert(withLastImage[0].getElement().getType() === DocumentApp.ElementType.TEXT);
+    console.assert(
+        withLastImage[1].getElement().getType() === DocumentApp.ElementType.INLINE_IMAGE);
+    // Writer's own selection of only the text is that text:
+    if (globalThis.cool) {
+        const controller = cool.getActiveUnoModel().getCurrentController();
+        doc.setSelection(doc.newRange().addElement(imageFirst.getChild(1)).build());
+        const writerSelection = controller.getSelection();
+        doc.setCursor(doc.newPosition(body.getChild(0), 0));
+        controller.select(writerSelection);
+        const textOnly = doc.getSelection().getRangeElements();
+        console.assert(textOnly.length === 1);
+        console.assert(textOnly[0].getElement().getType() === DocumentApp.ElementType.TEXT);
+    }
     // Each appended paragraph's object stays on its own paragraph:
     const one = body.appendParagraph('One');
     const two = body.appendParagraph('Two');

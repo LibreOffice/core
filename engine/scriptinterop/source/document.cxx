@@ -391,6 +391,18 @@ OUString textOf(cpo::uno::Reference<css::text::XTextRange> const & range)
     return text;
 }
 
+// Moves the cursor right past the steps without text (the anchors of inline images, but also those
+// of footnotes and other objects, and empty fields) before the next character of text, which there
+// must be in the paragraph (as GAS starts the text at an offset after the inline images before the
+// character there):
+void skipAnchors(cpo::uno::Reference<css::text::XTextCursor> const & cursor) {
+    for (auto const probe = cursor->getText()->createTextCursorByRange(cursor);
+         probe->goRight(1, true) && textOf(probe).isEmpty(); probe->collapseToEnd())
+    {
+        cursor->gotoRange(probe->getEnd(), false);
+    }
+}
+
 // Moves the cursor right past count characters of text, in steps that fit the short that goRight
 // takes, plus one step for each anchor character, as of an inline image, which the text lacks:
 void goRight(
@@ -410,38 +422,100 @@ void goRight(
     } while (remaining > 0);
 }
 
-sal_Int32 childIndexOf(
-    scriptinterop::XContainerElement & container,
-    cpo::uno::Reference<scriptinterop::XElement> const & child)
+// Calls f with each image anchored as given to a character of the paragraph, which its text
+// portions have, and with the text portion of that character:
+template<typename F> void forEachFramedImage(
+    cpo::uno::Reference<css::text::XTextContent> const & paragraph,
+    css::text::TextContentAnchorType anchorType, F f)
 {
-    if (!child.is()) {
-        throw cpo::uno::RuntimeException(u"getChildIndex: the child must not be null"_ustr);
+    cpo::uno::Reference<css::container::XEnumerationAccess> const ea(
+        paragraph, cpo::uno::UNO_QUERY);
+    if (!ea.is()) {
+        return;
     }
-    auto const target = child->getuno();
-    assert(target.is());
-    // Writer can have two UNO objects for one inline image, which then match by its unique name:
-    cpo::uno::Reference<css::container::XNamed> const named(
-        child->getType() == scriptinterop::ElementType_INLINE_IMAGE ? target : nullptr,
-        cpo::uno::UNO_QUERY);
-    auto const n = container.getNumChildren();
-    for (sal_Int32 i = 0; i != n; ++i) {
-        auto const candidate = container.getChild(i);
-        if (candidate->getType() != child->getType()) {
+    auto const en = ea->createEnumeration();
+    while (en.is() && en->hasMoreElements()) {
+        cpo::uno::Reference<css::beans::XPropertySet> portion;
+        en->nextElement() >>= portion;
+        if (!portion.is()) {
             continue;
         }
-        if (candidate->getuno() == target) {
-            return i;
+        OUString portionType;
+        portion->getPropertyValue(u"TextPortionType"_ustr) >>= portionType;
+        if (portionType != u"Frame") {
+            continue;
         }
-        if (named.is()) {
-            cpo::uno::Reference<css::container::XNamed> const other(
-                candidate->getuno(), cpo::uno::UNO_QUERY);
-            if (other.is() && other->getName() == named->getName()) {
-                return i;
+        cpo::uno::Reference<css::container::XContentEnumerationAccess> const cea(
+            portion, cpo::uno::UNO_QUERY);
+        if (!cea.is()) {
+            continue;
+        }
+        auto const contents
+            = cea->createContentEnumeration(u"com.sun.star.text.TextContent"_ustr);
+        while (contents.is() && contents->hasMoreElements()) {
+            cpo::uno::Reference<css::text::XTextContent> frame;
+            contents->nextElement() >>= frame;
+            if (!frame.is()) {
+                continue;
+            }
+            cpo::uno::Reference<css::lang::XServiceInfo> const info(
+                frame, cpo::uno::UNO_QUERY);
+            if (!info.is()
+                || !info->supportsService(u"com.sun.star.text.TextGraphicObject"_ustr))
+            {
+                continue;
+            }
+            if (auto const frameProps = cpo::uno::Reference<css::beans::XPropertySet>(
+                    frame, cpo::uno::UNO_QUERY))
+            {
+                css::text::TextContentAnchorType anchor;
+                if ((frameProps->getPropertyValue(u"AnchorType"_ustr) >>= anchor)
+                    && anchor == anchorType)
+                {
+                    f(portion, frame);
+                }
             }
         }
     }
-    throw cpo::uno::RuntimeException(
-        u"getChildIndex: the element does not contain the given child"_ustr);
+}
+
+// A paragraph in reading order, as the runs of its text before, between and after its inline images
+// (which can be empty), and those images:
+struct ParagraphPart {
+    // The image, or null for a run of text:
+    cpo::uno::Reference<css::text::XTextContent> image;
+    cpo::uno::Reference<css::text::XTextRange> range;
+    // For a run of text, the name of the image before it (which is unique in the document), or
+    // empty for the first run:
+    OUString after;
+};
+
+std::vector<ParagraphPart> paragraphParts(
+    cpo::uno::Reference<css::text::XTextContent> const & paragraph)
+{
+    cpo::uno::Reference<css::text::XTextRange> const whole(paragraph, cpo::uno::UNO_QUERY_THROW);
+    auto const host = whole->getText();
+    std::vector<ParagraphPart> parts;
+    auto run = host->createTextCursorByRange(whole->getStart());
+    OUString after;
+    forEachFramedImage(
+        paragraph, css::text::TextContentAnchorType_AS_CHARACTER,
+        [&host, &parts, &run, &after](
+            cpo::uno::Reference<css::beans::XPropertySet> const & portion,
+            cpo::uno::Reference<css::text::XTextContent> const & image)
+        {
+            cpo::uno::Reference<css::text::XTextRange> const range(
+                portion, cpo::uno::UNO_QUERY_THROW);
+            run->gotoRange(range->getStart(), true);
+            parts.push_back({{}, run, after});
+            parts.push_back({image, range, {}});
+            run = host->createTextCursorByRange(range->getEnd());
+            after = cpo::uno::Reference<css::container::XNamed>(image, cpo::uno::UNO_QUERY_THROW)
+                ->getName();
+        });
+    run->gotoRange(whole->getEnd(), true);
+    parts.push_back({{}, run, after});
+    return parts;
 }
 
 cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XElement>> enumerateElements(
@@ -727,6 +801,10 @@ private:
     std::vector<cpo::uno::Reference<css::text::XTextRange>> ranges_;
 };
 
+// The document text that a text element covers:
+cpo::uno::Reference<css::text::XTextRange> textRangeOf(
+    cpo::uno::Reference<scriptinterop::XText> const & text);
+
 class RangeBuilderImpl: public cppu::WeakImplHelper<scriptinterop::XRangeBuilder> {
 public:
     explicit RangeBuilderImpl(std::shared_ptr<Model> const & model):
@@ -749,8 +827,7 @@ public:
                 + OUString::number(startOffset) + ", endOffsetInclusive="
                 + OUString::number(endOffsetInclusive));
         }
-        cpo::uno::Reference<css::text::XTextRange> const para(
-            text->getuno(), cpo::uno::UNO_QUERY_THROW);
+        auto const para = textRangeOf(text);
         auto const host = para->getText();
         if (!host.is()) {
             throw cpo::uno::RuntimeException(
@@ -762,6 +839,9 @@ public:
                 u"addElementRange: cannot place a cursor at the element"_ustr);
         }
         goRight(cursor, startOffset, false);
+        if (!text->getText().isEmpty()) {
+            skipAnchors(cursor);
+        }
         goRight(cursor, endOffsetInclusive - startOffset + 1, true);
         added_.push_back({text, cursor, true});
         return this;
@@ -873,8 +953,8 @@ public:
         std::shared_ptr<Model> const & model,
         cpo::uno::Reference<scriptinterop::XElement> const & parent,
         cpo::uno::Reference<css::text::XTextContent> const & content,
-        scriptinterop::ElementType reportedType):
-        model_(model), parent_(parent), content_(content), reportedType_(reportedType)
+        scriptinterop::ElementType reportedType, std::optional<OUString> run = {}):
+        model_(model), parent_(parent), content_(content), reportedType_(reportedType), run_(run)
     {}
 
     cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return content_; }
@@ -955,11 +1035,8 @@ public:
         return {true, url};
     }
 
-    // A text portion has no true siblings in our model (paragraph.getChild only exposes one Text
-    // child), so both sides are null; TODO: real sibling walk once inline images and breaks join
-    // the paragraph's child list:
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getNextSibling() override {
-        return {false, {}};
+        return sibling(true);
     }
 
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getParent() override {
@@ -967,12 +1044,9 @@ public:
     }
 
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getPreviousSibling() override
-    { return {false, {}}; }
+    { return sibling(false); }
 
-    OUString getText() override {
-        return textOf(
-            cpo::uno::Reference<css::text::XTextRange>(content_, cpo::uno::UNO_QUERY_THROW));
-    }
+    OUString getText() override { return textOf(wholeRange()); }
 
     css::beans::Optional<scriptinterop::TextAlignment> getTextAlignment(sal_Int32 offset) override {
         auto const any = getProp(
@@ -1019,11 +1093,32 @@ public:
         auto const host = whole->getText();
         auto const cursor = host->createTextCursorByRange(whole->getStart());
         goRight(cursor, offset, false);
+        if (offset < textOf(whole).getLength()) {
+            skipAnchors(cursor);
+        }
         host->insertString(cursor, text, false);
         return this;
     }
 
     scriptinterop::ElementType getType() override { return reportedType_; }
+
+    // For a child text, the name of the inline image before its run of the paragraph's text, which
+    // is empty for the first run:
+    std::optional<OUString> const & run() const { return run_; }
+
+    cpo::uno::Reference<css::text::XTextRange> wholeRange() {
+        if (!run_) {
+            return cpo::uno::Reference<css::text::XTextRange>(content_, cpo::uno::UNO_QUERY_THROW);
+        }
+        for (auto const & part: paragraphParts(content_)) {
+            if (!part.image.is() && part.after == *run_) {
+                return part.range;
+            }
+        }
+        throw cpo::uno::RuntimeException(u"the text is no longer part of its paragraph"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XParagraph> paragraph();
 
     css::beans::Optional<bool> isBold(sal_Int32 offset) override {
         auto const any = getProp(runAt(offset), u"isBold", u"bold attribute", u"CharWeight"_ustr);
@@ -1068,8 +1163,13 @@ public:
         return {true, underline != css::awt::FontUnderline::NONE};
     }
 
+    // As in GAS, a child text removes its run of the paragraph's text:
     cpo::uno::Reference<scriptinterop::XElement> removeFromParent() override {
-        removeParagraph(content_);
+        if (run_) {
+            wholeRange()->setString(OUString());
+        } else {
+            removeParagraph(content_);
+        }
         return this;
     }
 
@@ -1227,6 +1327,15 @@ private:
                 }
             }
         }
+        if (run_) {
+            auto const whole = wholeRange();
+            cpo::uno::Reference<css::text::XTextRangeCompare> const cmp(
+                whole->getText(), cpo::uno::UNO_QUERY_THROW);
+            std::erase_if(runs, [&cmp, &whole](auto const & r) {
+                return cmp->compareRegionStarts(whole, r) < 0
+                    || cmp->compareRegionEnds(r, whole) < 0;
+            });
+        }
         return runs;
     }
 
@@ -1280,10 +1389,6 @@ private:
         return std::nullopt;
     }
 
-    cpo::uno::Reference<css::text::XTextRange> wholeRange() {
-        return cpo::uno::Reference<css::text::XTextRange>(content_, cpo::uno::UNO_QUERY_THROW);
-    }
-
     cpo::uno::Reference<css::text::XTextRange> subRange(
         std::u16string_view method, sal_Int32 startOffset, sal_Int32 endOffsetInclusive)
     {
@@ -1297,6 +1402,9 @@ private:
         auto const whole = wholeRange();
         auto const cursor = whole->getText()->createTextCursorByRange(whole->getStart());
         goRight(cursor, startOffset, false);
+        if (startOffset < textOf(whole).getLength()) {
+            skipAnchors(cursor);
+        }
         goRight(cursor, endOffsetInclusive - startOffset + 1, true);
         return cursor;
     }
@@ -1447,11 +1555,78 @@ private:
             value.Value ? css::awt::FontUnderline::SINGLE : css::awt::FontUnderline::NONE)));
     }
 
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> sibling(bool next) {
+        // A text made with editAsText, which is its paragraph, has the paragraph's siblings:
+        if (!run_) {
+            if (reportedType_ == scriptinterop::ElementType_TEXT) {
+                return {false, {}};
+            }
+            return maybe(siblingContent(model_, content_, parent_, next));
+        }
+        cpo::uno::Reference<scriptinterop::XContainerElement> const paragraph(
+            parent_, cpo::uno::UNO_QUERY_THROW);
+        auto const index = paragraph->getChildIndex(this) + (next ? 1 : -1);
+        if (index < 0 || index >= paragraph->getNumChildren()) {
+            return {false, {}};
+        }
+        return {true, paragraph->getChild(index)};
+    }
+
     std::shared_ptr<Model> model_;
     cpo::uno::Reference<scriptinterop::XElement> parent_;
     cpo::uno::Reference<css::text::XTextContent> content_;
     scriptinterop::ElementType reportedType_;
+    std::optional<OUString> run_;
 };
+
+cpo::uno::Reference<css::text::XTextRange> textRangeOf(
+    cpo::uno::Reference<scriptinterop::XText> const & text)
+{
+    if (auto const impl = dynamic_cast<TextImpl *>(text.get())) {
+        return impl->wholeRange();
+    }
+    return cpo::uno::Reference<css::text::XTextRange>(text->getuno(), cpo::uno::UNO_QUERY_THROW);
+}
+
+sal_Int32 childIndexOf(
+    scriptinterop::XContainerElement & container,
+    cpo::uno::Reference<scriptinterop::XElement> const & child)
+{
+    if (!child.is()) {
+        throw cpo::uno::RuntimeException(u"getChildIndex: the child must not be null"_ustr);
+    }
+    auto const target = child->getuno();
+    assert(target.is());
+    // The text children of a paragraph are the runs of its text:
+    auto const text = child->getType() == scriptinterop::ElementType_TEXT
+        ? dynamic_cast<TextImpl *>(child.get()) : nullptr;
+    // Writer can have two UNO objects for one inline image, which then match by its unique name:
+    cpo::uno::Reference<css::container::XNamed> const named(
+        child->getType() == scriptinterop::ElementType_INLINE_IMAGE ? target : nullptr,
+        cpo::uno::UNO_QUERY);
+    auto const n = container.getNumChildren();
+    for (sal_Int32 i = 0; i != n; ++i) {
+        auto const candidate = container.getChild(i);
+        if (candidate->getType() != child->getType()) {
+            continue;
+        }
+        if (candidate->getuno() == target
+            && (text == nullptr
+                || dynamic_cast<TextImpl &>(*candidate).run() == text->run()))
+        {
+            return i;
+        }
+        if (named.is()) {
+            cpo::uno::Reference<css::container::XNamed> const other(
+                candidate->getuno(), cpo::uno::UNO_QUERY);
+            if (other.is() && other->getName() == named->getName()) {
+                return i;
+            }
+        }
+    }
+    throw cpo::uno::RuntimeException(
+        u"getChildIndex: the element does not contain the given child"_ustr);
+}
 
 // As in GAS, the text of a container joins the texts of all the paragraphs in it, also those in
 // nested tables, and each paragraph but the last is followed by a one-character separator:
@@ -1963,8 +2138,6 @@ public:
         return hundredthMmToPixels(hundredthMm);
     }
 
-    // TODO: the siblings are the neighbours in the child list of the paragraph, which has the
-    // paragraph's whole Text first and then its inline images, not yet in reading order:
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getNextSibling() override {
         return sibling(1);
     }
@@ -2282,18 +2455,16 @@ public:
         }
     }
 
-    // TODO: match GAS's per-portion reading order, where an image splits the surrounding text into
-    // a Text before it and a Text after it:
     cpo::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
-        if (index == 0) {
-            return new TextImpl(model_, this, content_, scriptinterop::ElementType_TEXT);
-        }
-        auto const & images = inlineImages();
-        auto const imgIndex = index - 1;
-        if (imgIndex < 0 || imgIndex >= static_cast<sal_Int32>(images.size())) {
+        auto const & children = this->children();
+        if (index < 0 || o3tl::make_unsigned(index) >= children.size()) {
             return {};
         }
-        return new InlineImageImpl(this, images[imgIndex]);
+        auto const & child = children[index];
+        if (child.image.is()) {
+            return new InlineImageImpl(this, child.image);
+        }
+        return new TextImpl(model_, this, content_, scriptinterop::ElementType_TEXT, child.run);
     }
 
     sal_Int32 getChildIndex(cpo::uno::Reference<scriptinterop::XElement> const & child) override
@@ -2491,9 +2662,7 @@ public:
         return maybe(siblingContent(model_, content_, parent_, true));
     }
 
-    sal_Int32 getNumChildren() override {
-        return 1 + inlineImages().size();
-    }
+    sal_Int32 getNumChildren() override { return children().size(); }
 
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getParent() override {
         return maybe(parent_);
@@ -2545,9 +2714,24 @@ public:
     }
 
 private:
-    std::vector<cpo::uno::Reference<css::text::XTextContent>> const & inlineImages() {
-        return inlineImages_.get(model_->generation(), [this] {
-            return enumerateFramedImages(css::text::TextContentAnchorType_AS_CHARACTER);
+    // As in GAS, the children are the inline images and the runs of text that are not empty, each
+    // run with the name of the image before it:
+    struct Child {
+        cpo::uno::Reference<css::text::XTextContent> image;
+        OUString run;
+    };
+
+    std::vector<Child> const & children() {
+        return children_.get(model_->generation(), [this] {
+            std::vector<Child> children;
+            for (auto const & part: paragraphParts(content_)) {
+                if (part.image.is()) {
+                    children.push_back({part.image, {}});
+                } else if (!textOf(part.range).isEmpty()) {
+                    children.push_back({{}, part.after});
+                }
+            }
+            return children;
         });
     }
 
@@ -2594,62 +2778,18 @@ private:
         css::text::TextContentAnchorType anchorType)
     {
         std::vector<cpo::uno::Reference<css::text::XTextContent>> images;
-        cpo::uno::Reference<css::container::XEnumerationAccess> const ea(
-            content_, cpo::uno::UNO_QUERY);
-        if (!ea.is()) {
-            return images;
-        }
-        auto const en = ea->createEnumeration();
-        while (en.is() && en->hasMoreElements()) {
-            cpo::uno::Reference<css::beans::XPropertySet> portion;
-            en->nextElement() >>= portion;
-            if (!portion.is()) {
-                continue;
-            }
-            OUString portionType;
-            portion->getPropertyValue(u"TextPortionType"_ustr) >>= portionType;
-            if (portionType != u"Frame") {
-                continue;
-            }
-            cpo::uno::Reference<css::container::XContentEnumerationAccess> const cea(
-                portion, cpo::uno::UNO_QUERY);
-            if (!cea.is()) {
-                continue;
-            }
-            auto const contents
-                = cea->createContentEnumeration(u"com.sun.star.text.TextContent"_ustr);
-            while (contents.is() && contents->hasMoreElements()) {
-                cpo::uno::Reference<css::text::XTextContent> frame;
-                contents->nextElement() >>= frame;
-                if (!frame.is()) {
-                    continue;
-                }
-                cpo::uno::Reference<css::lang::XServiceInfo> const info(
-                    frame, cpo::uno::UNO_QUERY);
-                if (!info.is()
-                    || !info->supportsService(u"com.sun.star.text.TextGraphicObject"_ustr))
-                {
-                    continue;
-                }
-                if (auto const frameProps = cpo::uno::Reference<css::beans::XPropertySet>(
-                        frame, cpo::uno::UNO_QUERY))
-                {
-                    css::text::TextContentAnchorType anchor;
-                    if ((frameProps->getPropertyValue(u"AnchorType"_ustr) >>= anchor)
-                        && anchor == anchorType)
-                    {
-                        images.push_back(frame);
-                    }
-                }
-            }
-        }
+        forEachFramedImage(
+            content_, anchorType,
+            [&images](auto const &, cpo::uno::Reference<css::text::XTextContent> const & frame) {
+                images.push_back(frame);
+            });
         return images;
     }
 
     std::shared_ptr<Model> model_;
     cpo::uno::Reference<scriptinterop::XElement> parent_;
     cpo::uno::Reference<css::text::XTextContent> content_;
-    Cached<std::vector<cpo::uno::Reference<css::text::XTextContent>>> inlineImages_;
+    Cached<std::vector<Child>> children_;
 };
 
 // A paragraph's text view casts back to the paragraph, as it reports the paragraph's type:
@@ -2665,6 +2805,31 @@ cpo::uno::Reference<scriptinterop::XParagraph> TextImpl::asParagraph() {
         return ElementImpl::asParagraph();
     }
     return new ParagraphImpl(model_, parent_, content_);
+}
+
+// The child text of a paragraph or list item that holds the character at an offset into all of the
+// paragraph's text, and the offset there (an offset past the last character being in the last child
+// text, and null for a paragraph without text):
+std::pair<cpo::uno::Reference<scriptinterop::XText>, sal_Int32> textChildAt(
+    cpo::uno::Reference<scriptinterop::XContainerElement> const & paragraph, sal_Int32 offset)
+{
+    std::pair<cpo::uno::Reference<scriptinterop::XText>, sal_Int32> last;
+    sal_Int32 start = 0;
+    auto const n = paragraph->getNumChildren();
+    for (sal_Int32 i = 0; i != n; ++i) {
+        auto const child = paragraph->getChild(i);
+        if (child->getType() != scriptinterop::ElementType_TEXT) {
+            continue;
+        }
+        cpo::uno::Reference<scriptinterop::XText> const text(child, cpo::uno::UNO_QUERY_THROW);
+        auto const length = text->getText().getLength();
+        if (offset < start + length) {
+            return {text, offset - start};
+        }
+        last = {text, offset - start};
+        start += length;
+    }
+    return last;
 }
 
 // The element that holds the paragraphs of a text, which is the body for the body text and the
@@ -2684,6 +2849,15 @@ cpo::uno::Reference<scriptinterop::XElement> tableParentOf(
 cpo::uno::Reference<scriptinterop::XParagraph> paragraphOf(
     std::shared_ptr<Model> const & model,
     cpo::uno::Reference<css::text::XTextContent> const & paragraph);
+
+// A text made with editAsText has the parent of its paragraph, and a child text or the text from
+// getSurroundingText has its paragraph as its parent:
+cpo::uno::Reference<scriptinterop::XParagraph> TextImpl::paragraph() {
+    if (reportedType_ != scriptinterop::ElementType_TEXT) {
+        return new ParagraphImpl(model_, parent_, content_);
+    }
+    return cpo::uno::Reference<scriptinterop::XParagraph>(parent_, cpo::uno::UNO_QUERY_THROW);
+}
 
 cpo::uno::Reference<scriptinterop::XParagraph> PositionedImageImpl::getParagraph() {
     if (getPageAnchor().IsPresent) {
@@ -3186,7 +3360,6 @@ public:
         }
         cpo::uno::Reference<css::text::XTextRange> const paraRange(
             paragraph_, cpo::uno::UNO_QUERY_THROW);
-        paragraphLen_ = textOf(paraRange).getLength();
         auto const host = paraRange->getText();
         if (!host.is()) {
             throw cpo::uno::RuntimeException(u"the paragraph is not part of the document"_ustr);
@@ -3197,6 +3370,14 @@ public:
         }
         probe->gotoRange(range->getStart(), true);
         startOffset_ = textOf(probe).getLength();
+        // An inline image takes up no character of the text, so only the range's start and end
+        // tell whether it covers all of its paragraph (and a paragraph without text has no text
+        // that a range could be a part of):
+        cpo::uno::Reference<css::text::XTextRangeCompare> const cmp(
+            host, cpo::uno::UNO_QUERY_THROW);
+        whole_ = textOf(paraRange).isEmpty()
+            || (cmp->compareRegionStarts(range, paraRange) == 0
+                && cmp->compareRegionEnds(range, paraRange) == 0);
     }
 
     cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return range_; }
@@ -3206,41 +3387,57 @@ public:
             throw cpo::uno::RuntimeException(
                 u"getElement: this range element is not inside a paragraph"_ustr);
         }
-        auto const paragraph = paragraphOf(model_, paragraph_);
+        if (!isPartial()) {
+            return paragraphOf(model_, paragraph_);
+        }
         // Same as in GAS, the element of a partial range element is the Text that the offsets
         // count in:
-        return isPartial() ? paragraph->getChild(0) : paragraph;
+        auto const text = textChild().first;
+        if (!text.is()) {
+            throw cpo::uno::RuntimeException(
+                u"getElement: this range element is not inside a text"_ustr);
+        }
+        return text;
     }
 
     sal_Int32 getEndOffsetInclusive() override {
         if (!isPartial()) {
             return -1;
         }
-        return rangeLen_ == 0 ? startOffset_ : startOffset_ + rangeLen_ - 1;
+        auto const start = textChild().second;
+        return rangeLen_ == 0 ? start : start + rangeLen_ - 1;
     }
 
     sal_Int32 getStartOffset() override {
         if (!isPartial()) {
             return -1;
         }
-        return startOffset_;
+        return textChild().second;
     }
 
     bool isPartial() override {
         if (partial_ || !paragraph_.is()) {
             return true;
         }
-        return startOffset_ != 0 || startOffset_ + rangeLen_ != paragraphLen_;
+        return !whole_;
     }
 
 private:
+    std::pair<cpo::uno::Reference<scriptinterop::XText>, sal_Int32> const & textChild() {
+        if (!textChild_) {
+            textChild_ = textChildAt(paragraphOf(model_, paragraph_), startOffset_);
+        }
+        return *textChild_;
+    }
+
     std::shared_ptr<Model> model_;
     cpo::uno::Reference<css::text::XTextRange> range_;
     cpo::uno::Reference<css::text::XTextContent> paragraph_;
     bool partial_;
+    bool whole_ = false;
+    std::optional<std::pair<cpo::uno::Reference<scriptinterop::XText>, sal_Int32>> textChild_;
     sal_Int32 startOffset_ = 0;
     sal_Int32 rangeLen_ = 0;
-    sal_Int32 paragraphLen_ = 0;
 };
 
 // An element that is selected as a whole, such as a table cell:
@@ -3264,16 +3461,51 @@ private:
     cpo::uno::Reference<scriptinterop::XElement> element_;
 };
 
+class ImageRangeElementImpl: public cppu::WeakImplHelper<scriptinterop::XRangeElement> {
+public:
+    ImageRangeElementImpl(
+        std::shared_ptr<Model> const & model,
+        cpo::uno::Reference<css::text::XTextContent> const & image):
+        model_(model), image_(image) {}
+
+    cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return image_; }
+
+    cpo::uno::Reference<scriptinterop::XElement> getElement() override {
+        auto const anchor = image_->getAnchor();
+        if (!anchor.is()) {
+            throw cpo::uno::RuntimeException(u"getElement: the image has no anchor"_ustr);
+        }
+        auto const para = findContainingParagraph(anchor);
+        if (!para.is()) {
+            throw cpo::uno::RuntimeException(
+                u"getElement: the image is not anchored in a paragraph"_ustr);
+        }
+        return new InlineImageImpl(paragraphOf(model_, para), image_);
+    }
+
+    sal_Int32 getEndOffsetInclusive() override { return -1; }
+
+    sal_Int32 getStartOffset() override { return -1; }
+
+    bool isPartial() override { return false; }
+
+private:
+    std::shared_ptr<Model> model_;
+    cpo::uno::Reference<css::text::XTextContent> image_;
+};
+
 // Walk the host XText and push one RangeElementImpl per paragraph that the raw range overlaps.
 // The sub-range for each paragraph is the intersection of the raw range with the paragraph's
 // extent, so a paragraph that lies fully inside the raw range becomes a non-partial element and
 // the first and last paragraphs become partial ones.  A table that lies fully inside the raw
 // range becomes a whole element, and an empty piece at either end, as when the raw range ends at
-// the start of the paragraph after a table, is dropped unless it is the only one:
+// the start of the paragraph after a table, is dropped unless it is the only one (and with partial,
+// as for a text given with offsets, a whole paragraph is split at its inline images like a partial
+// one):
 void splitAtParagraphBoundaries(
     std::shared_ptr<Model> const & model,
     cpo::uno::Reference<css::text::XTextRange> const & range,
-    std::vector<cpo::uno::Reference<scriptinterop::XRangeElement>> & out)
+    std::vector<cpo::uno::Reference<scriptinterop::XRangeElement>> & out, bool partial = false)
 {
     assert(range.is());
     auto host = range->getText();
@@ -3367,8 +3599,41 @@ void splitAtParagraphBoundaries(
                 continue;
             }
             cursor->gotoRange(subEnd, true);
-            pieces.emplace_back(new RangeElementImpl(model, cursor));
-            empty.push_back(cursor->isCollapsed());
+            rtl::Reference<RangeElementImpl> const piece(new RangeElementImpl(model, cursor));
+            if ((!partial && !piece->isPartial()) || cursor->isCollapsed()) {
+                pieces.emplace_back(piece);
+                empty.push_back(cursor->isCollapsed());
+                continue;
+            }
+            auto const parts = paragraphParts(xtc);
+            if (parts.size() == 1) {
+                pieces.emplace_back(piece);
+                empty.push_back(false);
+                continue;
+            }
+            // As in GAS, a part of a paragraph is split at the paragraph's inline images, into the
+            // images and the pieces of the runs of text that it holds:
+            for (auto const & part: parts) {
+                if (part.image.is()) {
+                    if (cmp->compareRegionStarts(cursor, part.range) >= 0
+                        && cmp->compareRegionEnds(part.range, cursor) >= 0)
+                    {
+                        pieces.emplace_back(new ImageRangeElementImpl(model, part.image));
+                        empty.push_back(false);
+                    }
+                    continue;
+                }
+                auto const from = cmp->compareRegionStarts(part.range, cursor) > 0
+                    ? cursor->getStart() : part.range->getStart();
+                auto const to = cmp->compareRegionEnds(part.range, cursor) > 0
+                    ? part.range->getEnd() : cursor->getEnd();
+                if (cmp->compareRegionStarts(from, to) > 0) {
+                    auto const run = host->createTextCursorByRange(from);
+                    run->gotoRange(to, true);
+                    pieces.emplace_back(new RangeElementImpl(model, run));
+                    empty.push_back(false);
+                }
+            }
         } catch (css::lang::IllegalArgumentException const & e) {
             SAL_WARN(
                 "scriptinterop",
@@ -3400,39 +3665,6 @@ SelectionImpl::getRangeElements() {
     }
     return cpo::uno::Sequence(v.data(), v.size());
 }
-
-class ImageRangeElementImpl: public cppu::WeakImplHelper<scriptinterop::XRangeElement> {
-public:
-    ImageRangeElementImpl(
-        std::shared_ptr<Model> const & model,
-        cpo::uno::Reference<css::text::XTextContent> const & image):
-        model_(model), image_(image) {}
-
-    cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return image_; }
-
-    cpo::uno::Reference<scriptinterop::XElement> getElement() override {
-        auto const anchor = image_->getAnchor();
-        if (!anchor.is()) {
-            throw cpo::uno::RuntimeException(u"getElement: the image has no anchor"_ustr);
-        }
-        auto const para = findContainingParagraph(anchor);
-        if (!para.is()) {
-            throw cpo::uno::RuntimeException(
-                u"getElement: the image is not anchored in a paragraph"_ustr);
-        }
-        return new InlineImageImpl(paragraphOf(model_, para), image_);
-    }
-
-    sal_Int32 getEndOffsetInclusive() override { return -1; }
-
-    sal_Int32 getStartOffset() override { return -1; }
-
-    bool isPartial() override { return false; }
-
-private:
-    std::shared_ptr<Model> model_;
-    cpo::uno::Reference<css::text::XTextContent> image_;
-};
 
 // An inline image that is selected on its own, as one whole range element:
 class ImageSelectionImpl: public cppu::WeakImplHelper<scriptinterop::XSelection> {
@@ -4248,6 +4480,11 @@ cpo::uno::Reference<scriptinterop::XParagraph> paragraphOf(
 // among their siblings, from the outermost ancestor down, so that comparing two of these
 // lexicographically compares the elements in document order:
 std::vector<sal_Int32> pathOf(cpo::uno::Reference<scriptinterop::XElement> element) {
+    // The text of a whole paragraph, as made with editAsText or getSurroundingText, stands for the
+    // paragraph:
+    if (auto const text = dynamic_cast<TextImpl *>(element.get()); text && !text->run()) {
+        element = text->paragraph();
+    }
     std::vector<sal_Int32> path;
     for (;;) {
         auto const parent = element->getParent();
@@ -4324,13 +4561,18 @@ cpo::uno::Reference<scriptinterop::XRangeBuilder> RangeBuilderImpl::addElement(
     default:
         break;
     }
-    cpo::uno::Reference<css::text::XTextRange> const range(
-        element->getuno(), cpo::uno::UNO_QUERY);
+    cpo::uno::Reference<scriptinterop::XText> const text(element, cpo::uno::UNO_QUERY);
+    auto const range = text.is()
+        ? textRangeOf(text)
+        : cpo::uno::Reference<css::text::XTextRange>(element->getuno(), cpo::uno::UNO_QUERY);
     if (!range.is()) {
         throw cpo::uno::RuntimeException(
             u"addElement: only text elements can be added to a range"_ustr);
     }
-    added_.push_back({element, range});
+    // As in GAS, a child text stays a part of its paragraph also when it is all of it:
+    added_.push_back({
+        element, range,
+        text.is() && dynamic_cast<TextImpl &>(*text).run().has_value()});
     return this;
 }
 
@@ -4409,7 +4651,10 @@ cpo::uno::Reference<scriptinterop::XSelection> RangeBuilderImpl::build() {
         cpo::uno::Reference<scriptinterop::XRangeElement> element;
         std::vector<sal_Int32> position;
         bool text;
+        // For a text, its paragraph, the child text (or -1 for all of the paragraph), and the
+        // offsets of its first and last character there:
         cpo::uno::Reference<cpo::uno::XInterface> paragraph = {};
+        sal_Int32 child = -1;
         sal_Int32 from = 0;
         sal_Int32 to = SAL_MAX_INT32;
         bool offsets = false;
@@ -4418,20 +4663,23 @@ cpo::uno::Reference<scriptinterop::XSelection> RangeBuilderImpl::build() {
     for (auto const & added: added_) {
         if (added.range.is()) {
             std::vector<cpo::uno::Reference<scriptinterop::XRangeElement>> elements;
-            splitAtParagraphBoundaries(model_, added.range, elements);
+            splitAtParagraphBoundaries(model_, added.range, elements, added.offsets);
             for (auto const & element: elements) {
                 auto position = pathOf(element->getElement());
-                if (element->isPartial()) {
+                if (element->getElement()->getType() == scriptinterop::ElementType_INLINE_IMAGE) {
+                    pieces.push_back({element, std::move(position), false});
+                } else if (element->isPartial()) {
+                    auto const child = position.back();
                     position.push_back(element->getStartOffset());
                     pieces.push_back({
                         element, std::move(position), true,
-                        element->getElement()->getParent().Value->getuno(),
+                        element->getElement()->getParent().Value->getuno(), child,
                         element->getStartOffset(), element->getEndOffsetInclusive(),
                         added.offsets});
                 } else {
                     pieces.push_back({
-                        element, std::move(position), true, element->getElement()->getuno(), 0,
-                        SAL_MAX_INT32, added.offsets});
+                        element, std::move(position), true, element->getElement()->getuno(), -1,
+                        0, SAL_MAX_INT32, added.offsets});
                 }
             }
         } else if (added.element->getType() == scriptinterop::ElementType_INLINE_IMAGE) {
@@ -4447,17 +4695,22 @@ cpo::uno::Reference<scriptinterop::XSelection> RangeBuilderImpl::build() {
         }
     }
     // As in GAS, the range elements are in document order, each element only once, and an element
-    // that lies in another element of the range that is a whole table, row or cell, or a text that
-    // lies in another text of the range, is left out:
+    // that lies in another element of the range that is a whole table, row or cell, a text that
+    // lies in another text of the range, or an inline image in a whole paragraph of the range, is
+    // left out:
     std::stable_sort(pieces.begin(), pieces.end(), [](Piece const & a, Piece const & b) {
         return std::tie(a.position, a.offsets) < std::tie(b.position, b.offsets);
     });
     std::vector<Piece> kept;
     for (auto & piece: pieces) {
         auto const contained = std::any_of(kept.begin(), kept.end(), [&piece](Piece const & k) {
+            if (k.text && !piece.text) {
+                return k.child == -1 && piece.position.size() > k.position.size()
+                    && std::equal(k.position.begin(), k.position.end(), piece.position.begin());
+            }
             if (k.text) {
-                return piece.text && k.paragraph == piece.paragraph && k.from <= piece.from
-                    && piece.to <= k.to;
+                return k.paragraph == piece.paragraph && (k.child == -1 || k.child == piece.child)
+                    && k.from <= piece.from && piece.to <= k.to;
             }
             return piece.position.size() >= k.position.size()
                 && std::equal(k.position.begin(), k.position.end(), piece.position.begin())
@@ -4471,10 +4724,13 @@ cpo::uno::Reference<scriptinterop::XSelection> RangeBuilderImpl::build() {
     for (auto const & piece: kept) {
         elements.push_back(piece.element);
     }
-    // Writer can select text and whole tables that run on without gaps, a single inline image, and
-    // the cells of a cell range (an added row or table being its cells):
+    // Writer can select text with whole tables and inline images that run on without gaps, a single
+    // inline image, and the cells of a cell range (an added row or table being its cells):
     auto const isTable = [](Piece const & p) {
         return p.element->getElement()->getType() == scriptinterop::ElementType_TABLE;
+    };
+    auto const isImage = [](Piece const & p) {
+        return p.element->getElement()->getType() == scriptinterop::ElementType_INLINE_IMAGE;
     };
     auto const isTablePart = [](Piece const & p) {
         auto const type = p.element->getElement()->getType();
@@ -4484,17 +4740,27 @@ cpo::uno::Reference<scriptinterop::XSelection> RangeBuilderImpl::build() {
     };
     cpo::uno::Reference<cpo::uno::XInterface> uno;
     if (std::any_of(kept.begin(), kept.end(), [](Piece const & p) { return p.text; })
-        && std::all_of(kept.begin(), kept.end(), [&isTable](Piece const & p) {
-               return p.text || isTable(p);
+        && std::all_of(kept.begin(), kept.end(), [&isTable, &isImage](Piece const & p) {
+               return p.text || isTable(p) || isImage(p);
            }))
     {
-        auto const boundary = [](Piece const & piece, bool start)
+        auto const boundary = [&isImage](Piece const & piece, bool start)
             -> cpo::uno::Reference<css::text::XTextRange>
         {
             if (piece.text) {
                 cpo::uno::Reference<css::text::XTextRange> const range(
                     piece.element->getuno(), cpo::uno::UNO_QUERY_THROW);
                 return start ? range->getStart() : range->getEnd();
+            }
+            // An inline image takes up the one step of its anchor:
+            if (isImage(piece)) {
+                auto const anchor = cpo::uno::Reference<css::text::XTextContent>(
+                    piece.element->getuno(), cpo::uno::UNO_QUERY_THROW)->getAnchor();
+                auto const cursor = anchor->getText()->createTextCursorByRange(anchor->getStart());
+                if (!start) {
+                    cursor->goRight(1, false);
+                }
+                return cursor->getStart();
             }
             auto const parent = piece.element->getElement()->getParent();
             if (!parent.IsPresent) {
@@ -4521,7 +4787,9 @@ cpo::uno::Reference<scriptinterop::XSelection> RangeBuilderImpl::build() {
             auto const cursor = host->createTextCursorByRange(first);
             cursor->gotoRange(last, true);
             std::vector<cpo::uno::Reference<scriptinterop::XRangeElement>> whole;
-            splitAtParagraphBoundaries(model_, cursor, whole);
+            splitAtParagraphBoundaries(
+                model_, cursor, whole,
+                std::any_of(kept.begin(), kept.end(), [](Piece const & p) { return p.offsets; }));
             // An empty paragraph at either end of the range, which Writer cannot tell from the
             // boundary of the text next to it, is left out as when splitting (unlike one that holds
             // only inline images):
@@ -4761,16 +5029,34 @@ public:
             throw cpo::uno::RuntimeException(
                 "newPosition: expected a non-negative offset, got " + OUString::number(offset));
         }
+        // As in GAS, an offset into the text of a paragraph (as made with editAsText) is one into
+        // the child text there:
+        if (auto const impl = dynamic_cast<TextImpl *>(element.get()); impl && !impl->run()) {
+            auto const paragraph = paragraphOf(
+                model_,
+                cpo::uno::Reference<css::text::XTextContent>(
+                    element->getuno(), cpo::uno::UNO_QUERY_THROW));
+            auto const [child, childOffset] = textChildAt(paragraph, offset);
+            return child.is() ? newPosition(child, childOffset) : newPosition(paragraph, offset);
+        }
         if (element->getType() == scriptinterop::ElementType_TEXT) {
-            cpo::uno::Reference<css::text::XTextRange> const text(
-                element->getuno(), cpo::uno::UNO_QUERY_THROW);
-            if (offset > textOf(text).getLength()) {
+            auto const text = textRangeOf(
+                cpo::uno::Reference<scriptinterop::XText>(element, cpo::uno::UNO_QUERY_THROW));
+            auto const length = textOf(text).getLength();
+            if (offset > length) {
                 throw cpo::uno::RuntimeException(
                     "newPosition: offset " + OUString::number(offset)
                     + " is past the end of the text");
             }
             auto const cursor = text->getText()->createTextCursorByRange(text->getStart());
             goRight(cursor, offset, false);
+            // As in GAS, the end of a child text is the position after it in its paragraph:
+            if (auto const parent = element->getParent(); offset == length && parent.IsPresent) {
+                return new CursorImpl(
+                    model_, cursor->getStart(), parent.Value,
+                    cpo::uno::Reference<scriptinterop::XContainerElement>(
+                        parent.Value, cpo::uno::UNO_QUERY_THROW)->getChildIndex(element) + 1);
+            }
             return new CursorImpl(model_, cursor->getStart(), element, offset);
         }
         cpo::uno::Reference<scriptinterop::XContainerElement> const container(
@@ -4790,7 +5076,15 @@ public:
                 element->getuno(), cpo::uno::UNO_QUERY_THROW);
             return new CursorImpl(model_, whole->getEnd(), element, offset);
         }
-        auto const child = container->getChild(offset)->getuno();
+        auto const childElement = container->getChild(offset);
+        if (childElement->getType() == scriptinterop::ElementType_TEXT) {
+            return new CursorImpl(
+                model_,
+                textRangeOf(cpo::uno::Reference<scriptinterop::XText>(
+                    childElement, cpo::uno::UNO_QUERY_THROW))->getStart(),
+                element, offset);
+        }
+        auto const child = childElement->getuno();
         // An inline image or a paragraph starts where its anchor does:
         if (cpo::uno::Reference<css::text::XTextContent> const content{child, cpo::uno::UNO_QUERY})
         {

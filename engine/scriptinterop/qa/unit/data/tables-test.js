@@ -199,6 +199,13 @@ function test() {
     console.assert(textThenParagraph.length === 1);
     console.assert(
         textThenParagraph[0].getElement().getType() === DocumentApp.ElementType.PARAGRAPH);
+    // A child text added on its own stays a part of its paragraph:
+    const childText = doc.newRange().addElement(body.getChild(0).getChild(0)).build()
+        .getRangeElements();
+    console.assert(childText.length === 1);
+    console.assert(childText[0].getElement().getType() === DocumentApp.ElementType.TEXT);
+    console.assert(childText[0].isPartial());
+    console.assert(childText[0].getEndOffsetInclusive() === 5);
     // The text of a table and of a row stands for that element:
     if (globalThis.cool) {
         const tableText = doc.newRange().addElement(empty.editAsText()).build().getRangeElements();
