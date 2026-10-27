@@ -495,8 +495,12 @@ void resetTerminationFlags()
                     "Crashed in unattended run and won't wait for debugger. Re-run without "
                     "--unattended to attach a debugger.";
                 std::cerr << msg << std::endl;
+                // A kit has fd 0 closed, so gdb's pipe from "iconv -l" would get fd 0, which gdb
+                // treats as its own stdin and never reads, and iconv can block forever.
                 char gdb[1024];
-                snprintf(gdb, sizeof(gdb), "gdb --pid %d -batch -ex='thread apply all backtrace full'", getpid());
+                snprintf(gdb, sizeof(gdb),
+                         "gdb --pid %d -batch -ex='thread apply all backtrace full' </dev/null",
+                         getpid());
                 if (system(gdb) != 0)
                     std::cerr << "Error when executing command: " << gdb << std::endl;
             }
