@@ -753,6 +753,11 @@ a warning, and Paste Special is never intercepted. macOS and Windows
 serve their native file-list formats as `text/uri-list` (see the
 sections above) and get the same paste.
 
+The same tables answer the drop pre-check in coda-qt:
+`COKit::getInsertableFileWildcards` is the union of both lists as
+lowercase `*.ext` wildcards, read once at kit start-up and checked
+against the dropped names on the GUI thread.
+
 Under the flatpak the Qt provider resolves the FileTransfer portal key
 that GTK 4 file managers put beside their `text/uri-list`
 (`qt/PortalFileTransfer.cpp`, shared with the drop path) and serves the

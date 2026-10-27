@@ -12,6 +12,7 @@
 #include <config.h>
 
 #include "WebView.hpp"
+#include "InsertableFiles.hpp"
 #include "PortalFileTransfer.hpp"
 #include "StandaloneWindow.hpp"
 #include "TabbedWindow.hpp"
@@ -412,17 +413,9 @@ QStringList droppedLocalFiles(const QMimeData* mimeData)
     return files;
 }
 
-bool hasOnlyImageFiles(const QStringList& files)
+bool hasOnlyInsertableFiles(const QStringList& files)
 {
-    if (files.isEmpty())
-        return false;
-    for (const QString& file : files)
-    {
-        QString ext = QFileInfo(file).suffix().toLower();
-        if (ext != "png" && ext != "jpg" && ext != "jpeg" && ext != "gif" && ext != "svg" && ext != "webp")
-            return false;
-    }
-    return true;
+    return !files.isEmpty() && std::all_of(files.begin(), files.end(), isInsertableFileName);
 }
 
 bool hasDroppableFiles(const QMimeData* mimeData)
@@ -518,7 +511,7 @@ void CODAWebEngineView::dragEnterEvent(QDragEnterEvent* event)
         return;
     }
 
-    if (hasOnlyImageFiles(droppedLocalFiles(event->mimeData())))
+    if (hasOnlyInsertableFiles(droppedLocalFiles(event->mimeData())))
     {
         QWebEngineView::dragEnterEvent(event);
         return;
@@ -539,7 +532,7 @@ void CODAWebEngineView::dragMoveEvent(QDragMoveEvent* event)
         return;
     }
 
-    if (hasOnlyImageFiles(droppedLocalFiles(event->mimeData())))
+    if (hasOnlyInsertableFiles(droppedLocalFiles(event->mimeData())))
     {
         QWebEngineView::dragMoveEvent(event);
         return;
@@ -563,7 +556,7 @@ void CODAWebEngineView::dropEvent(QDropEvent* event)
         return;
     }
 
-    if (hasOnlyImageFiles(droppedLocalFiles(event->mimeData())))
+    if (hasOnlyInsertableFiles(droppedLocalFiles(event->mimeData())))
     {
         QWebEngineView::dropEvent(event);
         return;

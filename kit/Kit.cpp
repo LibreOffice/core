@@ -139,6 +139,7 @@ Util::LoadTimings KitLoadTimings;
 #endif
 
 #ifdef QTAPP
+#include <qt/InsertableFiles.hpp>
 #include <qt/QtClipboard.hpp>
 #include <qt/QtFileManager.hpp>
 #include <qt/QtFilePicker.hpp>
@@ -4031,6 +4032,19 @@ static void startMainLoop(const COKit* kit, const std::shared_ptr<COKit>& loKit,
     // its own file dialog.
 #if defined(MACOSAPP) || defined(QTAPP) || defined(_WIN32)
     install_filepicker_provider(*loKit);
+#endif
+
+    // For the drop check on the GUI thread. Without the wildcards a drop
+    // opens the files as documents.
+#if defined(QTAPP)
+    try
+    {
+        setInsertableFileWildcards(loKit->getInsertableFileWildcards());
+    }
+    catch (const std::exception& ex)
+    {
+        LOG_ERR("Cannot read the insertable file wildcards from the engine: " << ex.what());
+    }
 #endif
 
     LOG_INF("Kit unipoll loop run");
