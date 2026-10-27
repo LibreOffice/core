@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-23 00:15+0200\n"
-"PO-Revision-Date: 2026-10-23 06:26+0000\n"
-"Last-Translator: Mette Kærgaard Hansen "
-"<mkh_brain@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-10-24 04:08+0000\n"
+"Last-Translator: Inger Leire Fenger <user-"
+"170807@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/da/>\n"
 "Language: da\n"
@@ -427,6 +427,8 @@ msgid ""
 "Documents are not effectively contained: missing capabilities, namespaces "
 "and landlock."
 msgstr ""
+"Dokumenterne er ikke tilstrækkeligt isoleret: Der mangler capabilities, "
+"navnerum og Landlock."
 
 #: admin/src/AdminSocketServerAudit.js:45
 #: src/control/Control.ServerAuditDialog.ts:97
@@ -441,6 +443,8 @@ msgstr ""
 #: src/control/Control.ServerAuditDialog.ts:107
 msgid "No WOPI host configured: trusting the first host that connected"
 msgstr ""
+"Ingen WOPI-vært er konfigureret: Den første vært, der opretter forbindelse, "
+"betragtes som pålidelig"
 
 #: admin/src/AdminSocketServerAudit.js:55
 #: src/control/Control.ServerAuditDialog.ts:122
@@ -455,11 +459,14 @@ msgstr ""
 #: src/control/Control.ServerAuditDialog.ts:136
 msgid "Slow Kit jail setup with copying, cannot bind-mount."
 msgstr ""
+"Langsom opsætning af Kit-sandkassen med filkopiering, da bind-montering ikke "
+"er mulig."
 
 #: admin/src/AdminSocketServerAudit.js:60
 #: src/control/Control.ServerAuditDialog.ts:151
 msgid "Fast kit jail bind mounting not configured"
 msgstr ""
+"Bind-montering til hurtig opsætning af Kit-sandkassen er ikke konfigureret"
 
 #: admin/src/AdminSocketServerAudit.js:64
 msgid ""
@@ -529,12 +536,12 @@ msgstr "Forespørgselsgrænsen er nået - vent lidt og prøv igen"
 #: admin/src/integrator/AdminIntegratorSettings.ts:714
 #: src/control/Control.AIChatSidebar.ts:2184
 msgid "API server error - try again later"
-msgstr ""
+msgstr "API-serverfejl – prøv igen senere"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:715
 #: src/control/Control.AIChatSidebar.ts:2185
 msgid "Service temporarily unavailable"
-msgstr ""
+msgstr "Tjenesten er midlertidigt utilgængelig"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:788
 #, fuzzy
@@ -567,12 +574,12 @@ msgstr "API-nøgle"
 #: admin/src/integrator/AdminIntegratorSettings.ts:793
 #: admin/src/integrator/AdminIntegratorSettings.ts:798
 msgid "Model"
-msgstr ""
+msgstr "Model"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:794
 #: admin/src/integrator/AdminIntegratorSettings.ts:797
 msgid "Base URL"
-msgstr ""
+msgstr "Basis-URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:799
 msgid "Image size"
@@ -580,19 +587,19 @@ msgstr "Billedstørrelse"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:800
 msgid "Request timeout"
-msgstr ""
+msgstr "Tidsgrænse for anmodninger"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:803
 msgid "Client ID"
-msgstr ""
+msgstr "Klient-id"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:804
 msgid "Secret"
-msgstr ""
+msgstr "Klienthemmelighed"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:807
 msgid "In-document Screen Reader"
-msgstr ""
+msgstr "Skærmlæser i dokumentet"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:808
 #: src/control/Control.Menubar.ts:200 src/control/Control.Menubar.ts:535
@@ -608,23 +615,23 @@ msgstr "Mørkt tema"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:809
 msgid "Automatic Spell Checking"
-msgstr ""
+msgstr "Automatisk stavekontrol"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:810
 msgid "Use this server's zoom settings"
-msgstr ""
+msgstr "Brug denne servers zoomindstillinger"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:811
 msgid "Smart Zoom"
-msgstr ""
+msgstr "Intelligent zoom"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:812
 msgid "Default Zoom"
-msgstr ""
+msgstr "Standardzoom"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:813
 msgid "Smooth scrolling"
-msgstr ""
+msgstr "Jævn rulning"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:814
 msgid "Compact layout"
@@ -641,7 +648,7 @@ msgstr "Vis lineal"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:817
 msgid "Show Formatting Marks"
-msgstr ""
+msgstr "Vis formateringstegn"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:818
 #: src/control/Control.NotebookbarWriter.js:2411
@@ -662,16 +669,15 @@ msgstr "Navigation"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:821
 msgid "Show Sidebar"
-msgstr ""
+msgstr "Vis sidepanel"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:822
 msgid "Custom Animation"
 msgstr "Brugerdefineret animation"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:825
-#, fuzzy
 msgid "Style List"
-msgstr "Typografi-liste"
+msgstr "Typografiliste"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:828
 #: src/control/Control.NotebookbarCalc.js:1231
@@ -712,7 +718,7 @@ msgstr "Tomme sider"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:835
 msgid "Force Breaks"
-msgstr ""
+msgstr "Gennemtving skift"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:836
 #: src/control/Control.Menubar.ts:878 src/control/Control.TopToolbar.js:181
@@ -726,11 +732,11 @@ msgstr "Indhold"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:838
 msgid "Display"
-msgstr ""
+msgstr "Visning"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:839
 msgid "Show Boundaries"
-msgstr ""
+msgstr "Vis afgrænsninger"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:840
 #: src/control/Control.BackstageView.ts:892
@@ -750,10 +756,9 @@ msgstr "Tilpas til side"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:843
 msgid "Tile pages"
-msgstr ""
+msgstr "Vis sider side om side"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:844
-#, fuzzy
 msgid "Booklet"
 msgstr "Hæfte"
 
@@ -762,13 +767,12 @@ msgid "Booklet front"
 msgstr "Hæfte forside"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:846
-#, fuzzy
 msgid "Booklet back"
-msgstr "Hæfte bagside"
+msgstr "Hæftebagside"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:847
 msgid "Page name"
-msgstr ""
+msgstr "Sidenavn"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:848
 #: src/control/Control.NotebookbarCalc.js:862
@@ -789,7 +793,7 @@ msgstr "Skjulte sider"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:851
 msgid "From printer setup"
-msgstr ""
+msgstr "Fra printeropsætning"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:852
 #: src/control/Control.BackstageView.ts:891
@@ -804,7 +808,7 @@ msgstr "Noter"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:854
 msgid "Handouts"
-msgstr ""
+msgstr "Uddelingskopier"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:855
 #: src/control/Control.NavigatorPanel.ts:227
@@ -814,7 +818,7 @@ msgstr "Disposition"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:856
 msgid "Handout horizontal"
-msgstr ""
+msgstr "Vandret uddelingskopi"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:857
 #: src/control/Control.CleanupSidebar.ts:216
@@ -823,7 +827,7 @@ msgstr "Billeder"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:858
 msgid "Controls"
-msgstr ""
+msgstr "Kontrolelementer"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:859
 msgid "Background"
@@ -831,7 +835,7 @@ msgstr "Baggrund"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:860
 msgid "Print Black"
-msgstr ""
+msgstr "Udskriv i sort"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:861
 msgid "Hidden text"
@@ -839,7 +843,7 @@ msgstr "Skjult tekst"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:862
 msgid "Placeholders"
-msgstr ""
+msgstr "Pladsholdere"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:863
 msgid "Left pages"
@@ -859,19 +863,19 @@ msgstr "Brochure højre til venstre"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:876
 msgid "English"
-msgstr ""
+msgstr "Engelsk"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:877
 msgid "Hungarian"
-msgstr ""
+msgstr "Ungarsk"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:878
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "Portugisisk (Brasilien)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:879
 msgid "Russian"
-msgstr ""
+msgstr "Russisk"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1612
 msgid "Invalid JSON file"
@@ -915,17 +919,19 @@ msgstr "Upload ordbog"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1656
 msgid "Document themes"
-msgstr ""
+msgstr "Dokumenttemaer"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1658
 msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
 msgstr ""
+"Upload brugerdefinerede dokumenttemaer (.theme). De definerer, hvilke "
+"farvepaletter der er tilgængelige under Format > Tema."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1664
 msgid "Upload Theme"
-msgstr ""
+msgstr "Upload tema"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1670
 #: src/control/Control.Menubar.ts:453 src/control/Control.Menubar.ts:669
@@ -935,35 +941,40 @@ msgstr ""
 #: src/control/Control.NotebookbarImpress.js:172
 #: src/control/Control.NotebookbarWriter.js:143
 msgid "Extensions"
-msgstr ""
+msgstr "Udvidelser"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1672
 msgid ""
 "Upload a packaged extension as a .zip; its contents (manifest.json, ...) "
 "are unpacked on the server."
 msgstr ""
+"Upload en udvidelse som en ZIP-fil. Indholdet (manifest.json m.m.) pakkes ud "
+"på serveren."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1678
 msgid "Upload Extension"
-msgstr ""
+msgstr "Upload udvidelse"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1685
 msgid "Security policies"
-msgstr ""
+msgstr "Sikkerhedspolitikker"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1687
 msgid ""
 "Upload SPIF security policies (.xml). These define the classifications and "
 "categories available when applying a security label to a document."
 msgstr ""
+"Upload SPIF-sikkerhedspolitikker (.xml). De definerer de klassifikationer og "
+"kategorier, der er tilgængelige, når du tildeler et dokument en "
+"sikkerhedsetiket."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1693
 msgid "Upload Security Policy"
-msgstr ""
+msgstr "Upload sikkerhedspolitik"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1782
 msgid "Settings are only available to signed-in users."
-msgstr ""
+msgstr "Indstillinger er kun tilgængelige for brugere, der er logget ind."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1791
 msgid "Something went wrong. Please try to refresh the page."
@@ -978,7 +989,7 @@ msgstr "Noget gik galt ved hentning af ordbogen. Prøv at genindlæse siden."
 #: admin/src/integrator/AdminIntegratorSettings.ts:1994
 #: admin/src/integrator/AdminIntegratorSettings.ts:5452
 msgid "Interface Settings"
-msgstr ""
+msgstr "Indstillinger for brugerfladen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1996
 msgid "Set default interface preferences."
@@ -987,29 +998,33 @@ msgstr "Angiv standardindstillinger for grænsefladen."
 #: admin/src/integrator/AdminIntegratorSettings.ts:2072
 #: admin/src/integrator/AdminIntegratorSettings.ts:5457
 msgid "Zoom Behaviour"
-msgstr ""
+msgstr "Zoomindstillinger"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2217
 msgid ""
 "When on, text documents open at the zoom this server chooses. Turn it off "
 "to choose the zoom yourself."
 msgstr ""
+"Når indstillingen er slået til, åbnes tekstdokumenter med det zoomniveau, "
+"serveren vælger. Slå den fra for selv at vælge zoomniveau."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2223
 msgid ""
 "When on, Writer fits the document to the viewport width on open. When off, "
 "the document opens at the Default Zoom level set below."
 msgstr ""
+"Når indstillingen er slået til, tilpasser Writer dokumentet til "
+"visningsområdets bredde ved åbning. Når den er slået fra, åbnes dokumentet "
+"med det standardzoomniveau, der er angivet nedenfor."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2276
 #: admin/src/integrator/Xcu.ts:624
 msgid "No settings available for {0}"
-msgstr ""
+msgstr "Ingen indstillinger er tilgængelige for {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2288
-#, fuzzy
 msgid "Select a tab to browser settings."
-msgstr "Vælg en fane for at vise indstillinger."
+msgstr "Vælg en fane for at åbne browserindstillinger."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2305
 #: admin/src/integrator/Xcu.ts:646
@@ -1033,7 +1048,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2841
 msgid "Notebookbar view"
-msgstr ""
+msgstr "Visning med fanebånd"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2848
 #: src/control/Control.NotebookbarCalc.js:1665
@@ -1077,40 +1092,44 @@ msgstr "Tilgængelighed"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3105
 msgid "User interface zoom"
-msgstr ""
+msgstr "Zoom i brugerfladen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3110
 msgid "Magnify the whole window, including the document and the menus."
-msgstr ""
+msgstr "Forstør hele vinduet, herunder dokumentet og menuerne."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3116
 msgid "As per system"
-msgstr ""
+msgstr "Følg systemindstillingen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3151
 msgid ""
 "To use Zotero specify your API key here. You can create your API key in "
 "your "
 msgstr ""
+"For at bruge Zotero skal du angive din API-nøgle her. Du kan oprette din API-"
+"nøgle under "
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3160
 msgid "Zotero account API settings"
-msgstr ""
+msgstr "API-indstillinger for din Zotero-konto"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3185
 msgid "Zotero Settings"
-msgstr ""
+msgstr "Zotero-indstillinger"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3254
 #: admin/src/integrator/AdminIntegratorSettings.ts:3282
 msgid "Electronic Signature"
-msgstr ""
+msgstr "Elektronisk signatur"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3257
 msgid ""
 "Credentials for the electronic signature service. They are shared by "
 "everyone on this server."
 msgstr ""
+"Legitimationsoplysninger til tjenesten for elektroniske signaturer. De deles "
+"af alle på denne server."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3309
 #: admin/src/integrator/AdminIntegratorSettings.ts:5695
@@ -1123,10 +1142,12 @@ msgid ""
 "To use document signing, specify your signing certificate, key and CA chain "
 "here."
 msgstr ""
+"Hvis du vil signere dokumenter, skal du angive dit signeringscertifikat, din "
+"nøgle og din CA-certifikatkæde her."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3334
 msgid "Document Signing Settings"
-msgstr ""
+msgstr "Indstillinger for dokumentsignering"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3376
 #: admin/src/integrator/AdminIntegratorSettings.ts:3408
@@ -1144,11 +1165,11 @@ msgstr "AI Assistent"
 #: admin/src/integrator/AdminIntegratorSettings.ts:5185
 #: admin/src/integrator/AdminIntegratorSettings.ts:6044
 msgid "Reset"
-msgstr ""
+msgstr "Nulstil"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3389
 msgid "Use the AI provider set on the server"
-msgstr ""
+msgstr "Brug den AI-udbyder, der er angivet på serveren"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3439
 msgid "Providers"
@@ -1156,39 +1177,43 @@ msgstr "Leverandør"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3442
 msgid "Managed by your admin"
-msgstr ""
+msgstr "Administreres af din administrator"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3448
 msgid "No providers added yet"
-msgstr ""
+msgstr "Ingen udbydere er tilføjet endnu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3454
 msgid ""
 "Add a provider to start using AI for text generation, image generation, or "
 "both. Your administrator's provider is filled in for you."
 msgstr ""
+"Tilføj en udbyder for at bruge AI til at generere tekst, billeder eller "
+"begge dele. Den udbyder, din administrator har valgt, er allerede angivet."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3462
 msgid "Add provider..."
-msgstr ""
+msgstr "Tilføj udbyder..."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3482
 msgid "Choose the AI provider to use for text and image generation."
-msgstr ""
+msgstr "Vælg den AI-udbyder, der skal bruges til at generere tekst og billeder."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3484
 msgid ""
 "Use your own AI provider instead of the one set up by your administrator. "
 "This applies only to you."
 msgstr ""
+"Brug din egen AI-udbyder i stedet for den, din administrator har "
+"konfigureret. Dette gælder kun for dig."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3639
 msgid "seconds"
-msgstr ""
+msgstr "sekunder"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3648
 msgid "Text generation"
-msgstr ""
+msgstr "Tekstgenerering"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3658
 #: src/control/Control.NotebookbarCalc.js:1048
@@ -1199,13 +1224,13 @@ msgstr "Standard"
 #: admin/src/integrator/AdminIntegratorSettings.ts:3689
 #: admin/src/integrator/AdminIntegratorSettings.ts:3788
 msgid "e.g."
-msgstr ""
+msgstr "f.eks."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3700
 #: admin/src/integrator/AdminIntegratorSettings.ts:3886
 #: admin/src/integrator/AdminIntegratorSettings.ts:4104
 msgid "Leave empty if your server does not require one"
-msgstr ""
+msgstr "Lad feltet stå tomt, hvis serveren ikke kræver en nøgle"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3721
 msgid ""
@@ -1213,94 +1238,104 @@ msgid ""
 "Models without it (e.g. base llama3, gemma) can still chat but cannot use "
 "document tools."
 msgstr ""
+"Hvis du vil redigere dokumenter, skal du vælge en model, der understøtter "
+"værktøjskald, f.eks. gpt-4o eller llama3.1. Modeller uden denne funktion "
+"(f.eks. grundmodellen llama3 eller gemma) kan stadig bruges til chat, men "
+"kan ikke bruge dokumentværktøjer."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3740
 msgid "Image generation"
-msgstr ""
+msgstr "Billedgenerering"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3748
 msgid "Same as text provider"
-msgstr ""
+msgstr "Samme som tekstudbyder"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4103
 msgid "Required for this provider"
-msgstr ""
+msgstr "Påkrævet for denne udbyder"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4196
 msgid "Enter an API key for this provider to list its models."
-msgstr ""
+msgstr "Angiv en API-nøgle til denne udbyder for at få vist dens modeller."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4212
 #: admin/src/integrator/AdminIntegratorSettings.ts:4334
 msgid "Fetching models..."
-msgstr ""
+msgstr "Henter modeller..."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4259
 #: admin/src/integrator/AdminIntegratorSettings.ts:4274
 #: admin/src/integrator/AdminIntegratorSettings.ts:4376
 #: admin/src/integrator/AdminIntegratorSettings.ts:4390
 msgid "No models found"
-msgstr ""
+msgstr "Ingen modeller fundet"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4284
 #: admin/src/integrator/AdminIntegratorSettings.ts:4400
 msgid "Connected"
-msgstr ""
+msgstr "Forbundet"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4290
 #: admin/src/integrator/AdminIntegratorSettings.ts:4406
 msgid "Failed to fetch models"
-msgstr ""
+msgstr "Modellerne kunne ikke hentes"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4304
 msgid "Invalid provider configuration"
-msgstr ""
+msgstr "Ugyldig udbyderkonfiguration"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4441
 msgid "None (disable image generation)"
-msgstr ""
+msgstr "Ingen (deaktivér billedgenerering)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4458
 msgid "Fetch models to select"
-msgstr ""
+msgstr "Hent modeller for at vælge en"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4509
 #: src/control/Control.AIChatSidebar.ts:2181
 msgid "API quota exceeded - check your plan and billing details"
 msgstr ""
+"API-kvoten er overskredet – kontrollér dit abonnement og dine "
+"faktureringsoplysninger"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4514
 msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
 msgstr ""
+"Modellerne kunne ikke hentes (HTTP {0}). Kontrollér udbyderens URL og API-"
+"nøglen."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4636
 msgid "Lightproof Sentence Checker"
-msgstr ""
+msgstr "Sætningskontrol med Lightproof"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4639
 msgid "Choose what the sentence checker looks for as you type."
-msgstr ""
+msgstr "Vælg, hvad sætningskontrollen skal undersøge, mens du skriver."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4687
 msgid "Remote Sentence Checkers"
-msgstr ""
+msgstr "Eksterne sætningskontroller"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4691
 msgid ""
 "Checkers that run on a server. The text of the document is sent there to be "
 "checked."
 msgstr ""
+"Sætningskontroller, der kører på en server. Dokumentets tekst sendes til "
+"serveren for at blive kontrolleret."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4726
 #: admin/src/integrator/AdminIntegratorSettings.ts:5066
 msgid "Enabled"
-msgstr ""
+msgstr "Aktiveret"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4738
 #: admin/src/integrator/AdminIntegratorSettings.ts:5103
 #: src/control/backstage/CloudDialogs.tsx:104
 msgid "Server URL"
-msgstr ""
+msgstr "Server-URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4750
 #, fuzzy
@@ -1310,173 +1345,177 @@ msgstr "Brugernavn"
 #: admin/src/integrator/AdminIntegratorSettings.ts:4772
 #: admin/src/integrator/AdminIntegratorSettings.ts:5122
 msgid "Verify the server certificate"
-msgstr ""
+msgstr "Kontrollér servercertifikatet"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4780
 msgid "Enabled on this server for: {0}"
-msgstr ""
+msgstr "Aktiveret på denne server for: {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4795
 msgid "Checking level"
-msgstr ""
+msgstr "Kontrolniveau"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4798
 msgid "Single words"
-msgstr ""
+msgstr "Enkelte ord"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4799
 msgid "Spelling"
-msgstr ""
+msgstr "Stavning"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4800
 msgid "Spelling and grammar"
-msgstr ""
+msgstr "Stavning og grammatik"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4810
 msgid "German spelling"
-msgstr ""
+msgstr "Tysk retskrivning"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4812
 msgid "Duden recommendation"
-msgstr ""
+msgstr "Dudens anbefaling"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4813
 msgid "Conservative"
-msgstr ""
+msgstr "Konservativ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4814
 msgid "Progressive"
-msgstr ""
+msgstr "Progressiv"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4815
 msgid "Tolerant"
-msgstr ""
+msgstr "Tolerant"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4816
 msgid "Press agencies"
-msgstr ""
+msgstr "Pressebureauer"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4826
 msgid "Explanations"
-msgstr ""
+msgstr "Forklaringer"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4829
 #: src/control/Control.AIChatSidebar.ts:154
 msgid "Short"
-msgstr ""
+msgstr "Kort"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4830
-#, fuzzy
 msgid "Long"
-msgstr "Log"
+msgstr "Lang"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4831
 msgid "Long, with an example"
-msgstr ""
+msgstr "Lang, med et eksempel"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4841
 msgid "Correction profiles"
-msgstr ""
+msgstr "Korrekturprofiler"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4851
 msgid "Dictionaries"
-msgstr ""
+msgstr "Ordbøger"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4858
 msgid "Foreign words with a German equivalent"
-msgstr ""
+msgstr "Fremmedord med et tilsvarende tysk ord"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4859
 msgid "Archaic words"
-msgstr ""
+msgstr "Forældede ord"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4860
 msgid "Regional words"
-msgstr ""
+msgstr "Regionale ord"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4861
 msgid "Colloquial and vulgar words"
-msgstr ""
+msgstr "Dagligdags og vulgære ord"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4862
 msgid "Filler words"
-msgstr ""
+msgstr "Fyldord"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4863
 msgid "Offensive wording"
-msgstr ""
+msgstr "Stødende formuleringer"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4864
 msgid "Gender-inclusive wording"
-msgstr ""
+msgstr "Kønsinkluderende formuleringer"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4865
 msgid "Complex sentences"
-msgstr ""
+msgstr "Komplekse sætninger"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4887
 msgid "Style checks (German only)"
-msgstr ""
+msgstr "Stilkontrol (kun tysk)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5011
-#, fuzzy
 msgid "Translation"
-msgstr "Overgang"
+msgstr "Oversættelse"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5015
 msgid ""
 "Machine translation of the document text with the Translate command. The "
 "text is sent to the provider to be translated."
 msgstr ""
+"Maskinoversættelse af dokumentets tekst med kommandoen Oversæt. Teksten "
+"sendes til udbyderen for at blive oversat."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5028
 msgid "The first one that is set up"
-msgstr ""
+msgstr "Den første, der er konfigureret"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5081
 msgid "API URL"
-msgstr ""
+msgstr "API-URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5090
 msgid "Authentication key"
-msgstr ""
+msgstr "Godkendelsesnøgle"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5132
 msgid "Set up on this server."
-msgstr ""
+msgstr "Konfigureret på denne server."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5133
 msgid "Enabled on this server, but not set up."
-msgstr ""
+msgstr "Aktiveret på denne server, men ikke konfigureret."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5190
 msgid "Use the default settings"
-msgstr ""
+msgstr "Brug standardindstillingerne"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5191
 msgid "Use the settings set on the server"
-msgstr ""
+msgstr "Brug de indstillinger, der er angivet på serveren"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5199
 msgid "Your own settings are dropped when you save."
-msgstr ""
+msgstr "Dine egne indstillinger fjernes, når du gemmer."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5253
 #: admin/src/integrator/AdminIntegratorSettings.ts:5914
 msgid "Enter {0}"
-msgstr ""
+msgstr "Angiv {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5378
 msgid ""
 "This document is using the document settings it was opened with. What you "
 "change here applies to the next document you open."
 msgstr ""
+"Dette dokument bruger de dokumentindstillinger, det blev åbnet med. "
+"Ændringer, du foretager her, gælder for det næste dokument, du åbner."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5381
 msgid ""
 "This document is open in more than one window, so what you change here "
 "applies to the next document you open rather than this one."
 msgstr ""
+"Dette dokument er åbent i flere vinduer. Derfor gælder de ændringer, du "
+"foretager her, først for det næste dokument, du åbner."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5491
 #: admin/src/integrator/Xcu.ts:580
@@ -1489,19 +1528,19 @@ msgstr "Upload XCU"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5982
 msgid "Delete {0}"
-msgstr ""
+msgstr "Slet {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:6045
 msgid "Reset to default {0}"
-msgstr ""
+msgstr "Nulstil {0} til standardindstillingen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:6049
 msgid "Are you sure you want to reset {0}?"
-msgstr ""
+msgstr "Er du sikker på, at du vil nulstille {0}?"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:6069
 msgid "Save {0}"
-msgstr ""
+msgstr "Gem {0}"
 
 #: admin/src/integrator/WordBook.ts:117
 msgid "Standard dictionary"
@@ -1605,10 +1644,12 @@ msgid ""
 "The system is currently adjusting resources. Please wait a moment while we "
 "retry your request..."
 msgstr ""
+"Systemet tilpasser ressourcerne i øjeblikket. Vent et øjeblik, mens vi "
+"sender din anmodning igen..."
 
 #: js/global.js:2149
 msgid "The document is being migrated to a new server. Retrying shortly..."
-msgstr ""
+msgstr "Dokumentet flyttes til en ny server. Prøver igen om lidt..."
 
 #: js/global.js:2151
 msgid "Failed to get RouteToken from controller"
@@ -1660,7 +1701,7 @@ msgstr "HTML-fil (.html)"
 
 #: src/app/ExportFormats.ts:70
 msgid "Markdown (.md)"
-msgstr ""
+msgstr "Markdown (.md)"
 
 #: src/app/ExportFormats.ts:76 src/control/Control.Menubar.ts:862
 #: src/control/Control.NotebookbarBuilder.js:436
@@ -1730,29 +1771,28 @@ msgstr "Billede (.png)"
 
 #: src/app/LOUtil.ts:1208
 msgid "{0} website, opens in new tab"
-msgstr ""
+msgstr "Webstedet for {0}, åbner i en ny fane"
 
 #: src/app/LOUtil.ts:1211
 msgid "file type icon"
 msgstr "filtype-ikon"
 
 #: src/app/TableStylesService.ts:106
-#, fuzzy
 msgid "Light"
-msgstr "Kompakt"
+msgstr "Lys"
 
 #: src/app/TableStylesService.ts:108
 msgid "Medium"
-msgstr ""
+msgstr "Mellem"
 
 #: src/app/TableStylesService.ts:110
 msgid "Dark"
-msgstr ""
+msgstr "Mørk"
 
 #: src/app/TableStylesService.ts:112
 #: src/control/jsdialog/Widget.ColorPicker.ts:367
 msgid "Custom"
-msgstr ""
+msgstr "Brugerdefineret"
 
 #: src/app/TableStylesService.ts:251 src/app/TableStylesService.ts:263
 #: src/app/TableStylesService.ts:266 src/app/TableStyleGalleryService.ts:99
@@ -1761,15 +1801,15 @@ msgstr ""
 #: src/control/Notebookbar.TableDesignTabBase.ts:234
 #: src/control/Notebookbar.TableDesignTabBase.ts:235
 msgid "Table Styles"
-msgstr ""
+msgstr "Tabeltypografier"
 
 #: src/app/TableStylesService.ts:355
 msgid "Set as Default"
-msgstr ""
+msgstr "Angiv som standard"
 
 #: src/app/TableStylesService.ts:361
 msgid "Duplicate Style"
-msgstr ""
+msgstr "Duplikér typografi"
 
 #: src/canvas/sections/CommentListSection.ts:2153
 #: src/canvas/sections/CommentListSection.ts:2166
@@ -1819,7 +1859,7 @@ msgstr "Besvar"
 
 #: src/canvas/sections/CommentSection.ts:557
 msgid "Press Ctrl + Enter to post"
-msgstr ""
+msgstr "Tryk på Ctrl + Enter for at sende"
 
 #: src/canvas/sections/CommentSection.ts:631
 #: src/canvas/sections/CommentSection.ts:632
@@ -1836,9 +1876,8 @@ msgid "Resolved"
 msgstr "Løst"
 
 #: src/canvas/sections/CommentSection.ts:673
-#, fuzzy
 msgid "Removed"
-msgstr "Fjern"
+msgstr "Fjernet"
 
 #: src/canvas/sections/CommentSection.ts:1318
 #: src/control/jsdialog/Widget.Comment.ts:177
@@ -1892,11 +1931,11 @@ msgstr "Åben i fuld visning"
 
 #: src/canvas/sections/CommentSection.ts:1370
 msgid "Show in navigator"
-msgstr ""
+msgstr "Vis i navigatoren"
 
 #: src/canvas/sections/CommentSection.ts:1691
 msgid "Press Ctrl + Enter to post, or %1 to discard"
-msgstr ""
+msgstr "Tryk på Ctrl + Enter for at sende eller på %1 for at kassere"
 
 #: src/canvas/sections/CommentSection.ts:1720
 #: src/canvas/sections/CommentSection.ts:1725
@@ -1906,27 +1945,27 @@ msgstr "Gemt"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:118
 msgid "Last edited by %1 on %2"
-msgstr ""
+msgstr "Sidst redigeret af %1 den %2"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:199
 msgid "%1: Initial Version"
-msgstr ""
+msgstr "%1: Oprindelig version"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:203
 msgid "%1: Current Version"
-msgstr ""
+msgstr "%1: Aktuel version"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:210
 msgid "Initial Version"
-msgstr ""
+msgstr "Oprindelig version"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:214
 msgid "Current Version"
-msgstr ""
+msgstr "Aktuel version"
 
 #: src/canvas/sections/OtherViewCellCursorSection.ts:185
 msgid "%n more"
-msgstr ""
+msgstr "%n flere"
 
 #: src/canvas/sections/ShapeHandlesSection.ts:540
 msgid "Document contains unsupported media"
@@ -1949,47 +1988,49 @@ msgstr "Fjern link"
 
 #: src/canvas/sections/GroupButtonSection.ts:66
 msgid "Edit Diagram"
-msgstr ""
+msgstr "Redigér diagram"
 
 #: src/canvas/sections/FormFieldButton.ts:106
 msgid "Unfold"
-msgstr ""
+msgstr "Fold ud"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:80
 msgid "Help on this error"
-msgstr ""
+msgstr "Hjælp til denne fejl"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:103
 msgid "Inspect with Function Wizard"
-msgstr ""
+msgstr "Undersøg med Funktionsguiden"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:108
 msgid "Edit in Formula Bar"
-msgstr ""
+msgstr "Redigér på formellinjen"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:116
 msgid "Help fix this error with AI"
-msgstr ""
+msgstr "Få hjælp fra AI til at rette denne fejl"
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:152
 msgid "Header"
-msgstr ""
+msgstr "Sidehoved"
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:160
 msgid "Footer"
-msgstr ""
+msgstr "Sidefod"
 
 #: src/control/CalcNotifications.ts:48
 msgid "A formula range was not extended to include the inserted cells."
-msgstr ""
+msgstr "Et formelområde blev ikke udvidet til at omfatte de indsatte celler."
 
 #: src/control/CalcNotifications.ts:65
 msgid "Deletion created #REF! errors in other formulas. Undo to restore."
 msgstr ""
+"Sletningen medførte #REF!-fejl i andre formler. Fortryd for at gendanne det "
+"slettede."
 
 #: src/control/CalcNotifications.ts:66
 msgid "Find First"
-msgstr ""
+msgstr "Find første"
 
 #: src/control/ColorPicker.ts:269
 msgid "No color"
@@ -2002,16 +2043,15 @@ msgstr "Automatisk farve"
 #: src/control/Control.AboutDialog.ts:88
 #: src/control/jsdialog/Widget.TreeView.ts:859
 msgid "(opens in new tab)"
-msgstr ""
+msgstr "(åbner i en ny fane)"
 
 #: src/control/Control.AboutDialog.ts:154
-#, fuzzy
 msgid "Served by: "
-msgstr "Server drevet af:"
+msgstr "Leveret af: "
 
 #: src/control/Control.AboutDialog.ts:177
 msgid "View widgets"
-msgstr ""
+msgstr "Vis widgets"
 
 #: src/control/Control.AboutDialog.ts:212
 msgid "\"Slow Proxy\""
@@ -2023,7 +2063,7 @@ msgstr "Kopiér al versionsinformation i engelsk"
 
 #: src/control/Control.AboutDialog.ts:389
 msgid "Version information has been copied"
-msgstr ""
+msgstr "Versionsoplysningerne er kopieret"
 
 #: src/control/Control.AboutDialog.ts:433
 msgid "Version:"
@@ -2036,48 +2076,47 @@ msgstr "celleadresse"
 #: src/control/Control.AddressInputField.ts:72
 #: src/control/Control.AddressInputField.ts:124
 msgid "Name Box"
-msgstr ""
+msgstr "Navnefelt"
 
 #: src/control/Control.AIChatSidebar.ts:135
 msgid "Make it more concise"
-msgstr ""
+msgstr "Gør teksten mere kortfattet"
 
 #: src/control/Control.AIChatSidebar.ts:136
 msgid "Summarize this text"
-msgstr ""
+msgstr "Opsummér denne tekst"
 
 #: src/control/Control.AIChatSidebar.ts:137
 msgid "Expand this text"
-msgstr ""
+msgstr "Udvid denne tekst"
 
 #: src/control/Control.AIChatSidebar.ts:138
 msgid "Fix grammar & spelling"
-msgstr ""
+msgstr "Ret grammatik og stavning"
 
 #: src/control/Control.AIChatSidebar.ts:152
 msgid "Natural"
-msgstr ""
+msgstr "Naturlig"
 
 #: src/control/Control.AIChatSidebar.ts:153
-#, fuzzy
 msgid "Formal"
-msgstr "Format"
+msgstr "Formel"
 
 #: src/control/Control.AIChatSidebar.ts:155
 msgid "Friendly"
-msgstr ""
+msgstr "Venlig"
 
 #: src/control/Control.AIChatSidebar.ts:156
 msgid "Professional"
-msgstr ""
+msgstr "Professionel"
 
 #: src/control/Control.AIChatSidebar.ts:157
 msgid "Casual"
-msgstr ""
+msgstr "Uformel"
 
 #: src/control/Control.AIChatSidebar.ts:399
 msgid "Best"
-msgstr ""
+msgstr "Bedst"
 
 #: src/control/Control.AIChatSidebar.ts:401
 #: src/control/Control.NotebookbarCalc.js:1075
@@ -2086,84 +2125,87 @@ msgstr "Godt"
 
 #: src/control/Control.AIChatSidebar.ts:403
 msgid "Poor"
-msgstr ""
+msgstr "Dårlig"
 
 #: src/control/Control.AIChatSidebar.ts:405
 msgid "Unknown"
-msgstr ""
+msgstr "Ukendt"
 
 #: src/control/Control.AIChatSidebar.ts:426
 msgid ""
 "Ethical AI rating: {0} ({1}). Based on open-source licensing, self-hosting, "
 "and training data."
 msgstr ""
+"Etisk AI-vurdering: {0} ({1}). Baseret på open source-licenser, mulighed for "
+"selvhosting og træningsdata."
 
 #: src/control/Control.AIChatSidebar.ts:518
 msgid "Your message"
-msgstr ""
+msgstr "Din besked"
 
 #: src/control/Control.AIChatSidebar.ts:520
 msgid "Action requiring approval"
-msgstr ""
+msgstr "Handling, der kræver godkendelse"
 
 #: src/control/Control.AIChatSidebar.ts:522
 msgid "Error message"
-msgstr ""
+msgstr "Fejlmeddelelse"
 
 #: src/control/Control.AIChatSidebar.ts:523
 msgid "AI response"
-msgstr ""
+msgstr "AI-svar"
 
 #: src/control/Control.AIChatSidebar.ts:626
 msgid ""
 "Content generated by an external AI service ({0}). Please review before use."
 msgstr ""
+"Indhold genereret af en ekstern AI-tjeneste ({0}). Gennemgå det før brug."
 
 #: src/control/Control.AIChatSidebar.ts:629
 msgid "Content generated by an external AI service. Please review before use."
-msgstr ""
+msgstr "Indhold genereret af en ekstern AI-tjeneste. Gennemgå det før brug."
 
 #: src/control/Control.AIChatSidebar.ts:714
 msgid "New conversation"
-msgstr ""
+msgstr "Ny samtale"
 
 #: src/control/Control.AIChatSidebar.ts:730
 msgid "What would you like to do with this spreadsheet?"
-msgstr ""
+msgstr "Hvad vil du gøre med dette regneark?"
 
 #: src/control/Control.AIChatSidebar.ts:732
 msgid "What would you like to do with this presentation?"
-msgstr ""
+msgstr "Hvad vil du gøre med denne præsentation?"
 
 #: src/control/Control.AIChatSidebar.ts:734
 msgid "What would you like to do with this drawing?"
-msgstr ""
+msgstr "Hvad vil du gøre med denne tegning?"
 
 #: src/control/Control.AIChatSidebar.ts:736
 msgid "What would you like to do with this document?"
-msgstr ""
+msgstr "Hvad vil du gøre med dette dokument?"
 
 #: src/control/Control.AIChatSidebar.ts:753
 msgid "Select some content first to work on just that part."
-msgstr ""
+msgstr "Markér først det indhold, du vil arbejde med."
 
 #: src/control/Control.AIChatSidebar.ts:775
 #: src/control/Control.AIChatSidebar.ts:2218
 msgid "Thinking..."
-msgstr ""
+msgstr "Tænker..."
 
 #: src/control/Control.AIChatSidebar.ts:805
 msgid "Chat messages"
-msgstr ""
+msgstr "Chatbeskeder"
 
 #: src/control/Control.AIChatSidebar.ts:835
 msgid "AI generated image"
-msgstr ""
+msgstr "AI-genereret billede"
 
 #: src/control/Control.AIChatSidebar.ts:874
 #: src/control/Control.SlideImportPane.tsx:1177
 msgid "Retry"
-msgstr ""
+msgstr "Prøv igen"
 
 #: src/control/Control.AIChatSidebar.ts:898
 #: src/control/Control.AIChatSidebar.ts:931
@@ -2176,97 +2218,94 @@ msgstr ""
 #: src/control/Control.NotebookbarImpress.js:2263
 #: src/control/Control.NotebookbarWriter.js:81
 #: src/control/Control.NotebookbarWriter.js:1076 src/control/Styles.js:38
-#, fuzzy
 msgid "Insert"
-msgstr "Tilføj"
+msgstr "Indsæt"
 
 #: src/control/Control.AIChatSidebar.ts:899
 #: src/control/Control.AIChatSidebar.ts:933
 msgid "Insert at cursor"
-msgstr ""
+msgstr "Indsæt ved markøren"
 
 #: src/control/Control.AIChatSidebar.ts:908
 #: src/control/Control.AIChatSidebar.ts:940
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Kopiér til udklipsholder"
 
 #: src/control/Control.AIChatSidebar.ts:960
 msgid "Using selected text as context"
-msgstr ""
+msgstr "Bruger den markerede tekst som kontekst"
 
 #: src/control/Control.AIChatSidebar.ts:967
 msgid "Ask AI..."
-msgstr ""
+msgstr "Spørg AI..."
 
 #: src/control/Control.AIChatSidebar.ts:970
 msgid "Message input"
-msgstr ""
+msgstr "Beskedfelt"
 
 #: src/control/Control.AIChatSidebar.ts:986
 msgid "Stop generating"
-msgstr ""
+msgstr "Stop genereringen"
 
 #: src/control/Control.AIChatSidebar.ts:987
 msgid "Send message"
-msgstr ""
+msgstr "Send besked"
 
 #: src/control/Control.AIChatSidebar.ts:1003
 #: src/control/Control.AIChatSidebar.ts:1016
 msgid "Set tone"
-msgstr ""
+msgstr "Angiv tone"
 
 #: src/control/Control.AIChatSidebar.ts:1027
 msgid "Set tone of voice"
-msgstr ""
+msgstr "Angiv tone"
 
 #: src/control/Control.AIChatSidebar.ts:1028
 msgid "Tone of voice: {0}{1}"
-msgstr ""
+msgstr "Tone: {0}{1}"
 
 #: src/control/Control.AIChatSidebar.ts:1030
 msgid "with emoji"
-msgstr ""
+msgstr "med emoji"
 
 #: src/control/Control.AIChatSidebar.ts:1072
 #: src/control/Control.AIChatSidebar.ts:1122
 #: src/control/Control.AIChatSidebar.ts:1531
-#, fuzzy
 msgid "tone"
-msgstr "Ingen"
+msgstr "tone"
 
 #: src/control/Control.AIChatSidebar.ts:1085
 #: src/control/Control.AIChatSidebar.ts:1393
 msgid "Tone of voice"
-msgstr ""
+msgstr "Tone"
 
 #: src/control/Control.AIChatSidebar.ts:1091
 msgid "Reset voice"
-msgstr ""
+msgstr "Nulstil tone"
 
 #: src/control/Control.AIChatSidebar.ts:1094
 msgid "Reset tone of voice"
-msgstr ""
+msgstr "Nulstil tone"
 
 #: src/control/Control.AIChatSidebar.ts:1110
 msgid "Your tones"
-msgstr ""
+msgstr "Dine toneprofiler"
 
 #: src/control/Control.AIChatSidebar.ts:1127
-#, fuzzy
 msgid "Edit tone"
-msgstr "Redigeringstilstand"
+msgstr "Redigér tone"
 
 #: src/control/Control.AIChatSidebar.ts:1144
 msgid "+ Add my own voice"
-msgstr ""
+msgstr "+ Opret min egen tone"
 
 #: src/control/Control.AIChatSidebar.ts:1146
 msgid "Add a custom tone of voice"
-msgstr ""
+msgstr "Opret en brugerdefineret tone"
 
 #: src/control/Control.AIChatSidebar.ts:1157
 msgid "Emojify"
-msgstr ""
+msgstr "Tilføj emoji"
 
 #: src/control/Control.AIChatSidebar.ts:1163
 #: src/control/Control.StatusBar.js:183
@@ -2281,317 +2320,335 @@ msgstr "Fra"
 
 #: src/control/Control.AIChatSidebar.ts:1166
 msgid "Toggle emojify"
-msgstr ""
+msgstr "Slå emoji til eller fra"
 
 #: src/control/Control.AIChatSidebar.ts:1364
 msgid "Use icon"
-msgstr ""
+msgstr "Brug ikon"
 
 #: src/control/Control.AIChatSidebar.ts:1374
 msgid "Pick another emoji"
-msgstr ""
+msgstr "Vælg en anden emoji"
 
 #: src/control/Control.AIChatSidebar.ts:1388
 msgid "Back to tones"
-msgstr ""
+msgstr "Tilbage til tonevalg"
 
 #: src/control/Control.AIChatSidebar.ts:1401
 msgid "Icon"
-msgstr ""
+msgstr "Ikon"
 
 #: src/control/Control.AIChatSidebar.ts:1413
 msgid "Name your tone"
-msgstr ""
+msgstr "Navngiv din tone"
 
 #: src/control/Control.AIChatSidebar.ts:1420
 msgid "e.g. Quick reply"
-msgstr ""
+msgstr "f.eks. Hurtigt svar"
 
 #: src/control/Control.AIChatSidebar.ts:1422
 msgid "Tone name"
-msgstr ""
+msgstr "Tonens navn"
 
 #: src/control/Control.AIChatSidebar.ts:1427
 msgid "Describe how AI should write"
-msgstr ""
+msgstr "Beskriv, hvordan AI skal skrive"
 
 #: src/control/Control.AIChatSidebar.ts:1435
 msgid ""
 "Write short, direct sentences. Use plain language and skip the small talk."
 msgstr ""
+"Skriv korte, direkte sætninger. Brug et enkelt sprog, og undlad småsnak."
 
 #: src/control/Control.AIChatSidebar.ts:1439
 msgid "Tone description"
-msgstr ""
+msgstr "Beskrivelse af tonen"
 
 #: src/control/Control.AIChatSidebar.ts:1448
 #: src/control/Control.AIChatSidebar.ts:1510
 #: src/control/Control.AIChatSidebar.ts:1552
 msgid "Delete tone"
-msgstr ""
+msgstr "Slet tone"
 
 #: src/control/Control.AIChatSidebar.ts:1450
 msgid "Delete this tone"
-msgstr ""
+msgstr "Slet denne tone"
 
 #: src/control/Control.AIChatSidebar.ts:1463
 msgid "Save voice"
-msgstr ""
+msgstr "Gem tone"
 
 #: src/control/Control.AIChatSidebar.ts:1465
 msgid "Save tone of voice"
-msgstr ""
+msgstr "Gem tone"
 
 #: src/control/Control.AIChatSidebar.ts:1480
 #: src/control/jsdialog/Widget.EmojiPicker.ts:410
 msgid "Search emojis"
-msgstr ""
+msgstr "Søg efter emojier"
 
 #: src/control/Control.AIChatSidebar.ts:1481
 #: src/control/jsdialog/Widget.EmojiPicker.ts:401
 msgid "Choose an emoji"
-msgstr ""
+msgstr "Vælg en emoji"
 
 #: src/control/Control.AIChatSidebar.ts:1505
 msgid "Delete tone confirmation"
-msgstr ""
+msgstr "Bekræft sletning af tone"
 
 #: src/control/Control.AIChatSidebar.ts:1516
 msgid "This tone of voice will be deleted"
-msgstr ""
+msgstr "Denne tone bliver slettet"
 
 #: src/control/Control.AIChatSidebar.ts:1545
 msgid "Cancel delete"
-msgstr ""
+msgstr "Annullér sletning"
 
 #: src/control/Control.AIChatSidebar.ts:1572
 #: src/control/Control.AIChatSidebar.ts:1633
 msgid "You have reached the maximum of {0} custom tones."
-msgstr ""
+msgstr "Du har nået grænsen på {0} brugerdefinerede toner."
 
 #: src/control/Control.AIChatSidebar.ts:1812
 msgid "Diagnose formula error"
-msgstr ""
+msgstr "Undersøg formelfejl"
 
 #: src/control/Control.AIChatSidebar.ts:1819
 msgid "Sanity check data"
-msgstr ""
+msgstr "Kontrollér data for mulige fejl"
 
 #: src/control/Control.AIChatSidebar.ts:1826
 msgid "Create a formula"
-msgstr ""
+msgstr "Opret en formel"
 
 #: src/control/Control.AIChatSidebar.ts:1834
 msgid "Create slides"
-msgstr ""
+msgstr "Opret slides"
 
 #: src/control/Control.AIChatSidebar.ts:1867
 msgid "See less"
-msgstr ""
+msgstr "Vis mindre"
 
 #: src/control/Control.AIChatSidebar.ts:1867
 msgid "See more"
-msgstr ""
+msgstr "Vis mere"
 
 #: src/control/Control.AIChatSidebar.ts:1979
 msgid "Image inserted at cursor"
-msgstr ""
+msgstr "Billedet er indsat ved markøren"
 
 #: src/control/Control.AIChatSidebar.ts:1998
 msgid "Text inserted at cursor"
-msgstr ""
+msgstr "Teksten er indsat ved markøren"
 
 #: src/control/Control.AIChatSidebar.ts:2077
 msgid "Approaching message length limit"
-msgstr ""
+msgstr "Du nærmer dig grænsen for beskedlængde"
 
 #: src/control/Control.AIChatSidebar.ts:2124
 msgid ""
 "The request timed out. You can increase the request timeout in the AI "
 "section of the settings."
 msgstr ""
+"Tidsgrænsen for anmodningen blev overskredet. Du kan øge tidsgrænsen under "
+"AI-indstillinger."
 
 #: src/control/Control.AIChatSidebar.ts:2135
 msgid "Request too large"
-msgstr ""
+msgstr "Anmodningen er for stor"
 
 #: src/control/Control.AIChatSidebar.ts:2136
 msgid "Invalid request format"
-msgstr ""
+msgstr "Ugyldigt anmodningsformat"
 
 #: src/control/Control.AIChatSidebar.ts:2137
 msgid "Request superseded by a newer request"
-msgstr ""
+msgstr "Anmodningen er erstattet af en nyere anmodning"
 
 #: src/control/Control.AIChatSidebar.ts:2138
 msgid "No messages provided"
-msgstr ""
+msgstr "Ingen beskeder angivet"
 
 #: src/control/Control.AIChatSidebar.ts:2139
 msgid "Message too long"
-msgstr ""
+msgstr "Beskeden er for lang"
 
 #: src/control/Control.AIChatSidebar.ts:2140
 msgid "AI features are disabled by the administrator"
-msgstr ""
+msgstr "AI-funktioner er deaktiveret af administratoren"
 
 #: src/control/Control.AIChatSidebar.ts:2141
 msgid "AI is not available for guests"
-msgstr ""
+msgstr "AI er ikke tilgængelig for gæster"
 
 #: src/control/Control.AIChatSidebar.ts:2143
 msgid "AI features are disabled for this document"
-msgstr ""
+msgstr "AI-funktioner er deaktiveret for dette dokument"
 
 #: src/control/Control.AIChatSidebar.ts:2144
 msgid "AI settings not configured"
-msgstr ""
+msgstr "AI-indstillingerne er ikke konfigureret"
 
 #: src/control/Control.AIChatSidebar.ts:2146
 msgid "The AI provider URL is invalid, check the AI settings"
-msgstr ""
+msgstr "AI-udbyderens URL er ugyldig. Kontrollér AI-indstillingerne"
 
 #: src/control/Control.AIChatSidebar.ts:2148
 msgid "The AI image provider URL is invalid, check the AI settings"
-msgstr ""
+msgstr "AI-billedudbyderens URL er ugyldig. Kontrollér AI-indstillingerne"
 
 #: src/control/Control.AIChatSidebar.ts:2151
 msgid ""
 "Host \"{0}\" is not in the allowed host list, contact your administrator"
 msgstr ""
+"Værten \"{0}\" er ikke på listen over tilladte værter. Kontakt din "
+"administrator"
 
 #: src/control/Control.AIChatSidebar.ts:2153
 msgid "Network error - please check your connection"
-msgstr ""
+msgstr "Netværksfejl – kontrollér din forbindelse"
 
 #: src/control/Control.AIChatSidebar.ts:2155
 msgid "Could not connect to the AI provider"
-msgstr ""
+msgstr "Der kunne ikke oprettes forbindelse til AI-udbyderen"
 
 #: src/control/Control.AIChatSidebar.ts:2156
 msgid "No response from AI"
-msgstr ""
+msgstr "Intet svar fra AI"
 
 #: src/control/Control.AIChatSidebar.ts:2157
 msgid "AI used too many tool steps"
-msgstr ""
+msgstr "AI brugte for mange værktøjstrin"
 
 #: src/control/Control.AIChatSidebar.ts:2160
 msgid ""
 "The model ran out of tokens before producing output. Try a shorter input or "
 "a model with a larger output budget."
 msgstr ""
+"Modellen løb tør for tokens, før den kunne generere et svar. Prøv med en "
+"kortere tekst eller en model med en højere tokengrænse for output."
 
 #: src/control/Control.AIChatSidebar.ts:2164
 msgid ""
 "The model returned an empty response (no tokens generated). This is usually "
 "a temporary provider issue - please retry, or try a different model."
 msgstr ""
+"Modellen returnerede et tomt svar (ingen tokens genereret). Dette skyldes "
+"normalt et midlertidigt problem hos udbyderen. Prøv igen, eller vælg en "
+"anden model."
 
 #: src/control/Control.AIChatSidebar.ts:2166
 msgid "Image generation failed: no prompt from model"
-msgstr ""
+msgstr "Billedgenerering mislykkedes: Modellen leverede ingen prompt"
 
 #: src/control/Control.AIChatSidebar.ts:2167
 msgid "Document not available"
-msgstr ""
+msgstr "Dokumentet er ikke tilgængeligt"
 
 #: src/control/Control.AIChatSidebar.ts:2168
 msgid "The edited outline is not valid: {0}"
-msgstr ""
+msgstr "Den redigerede disposition er ugyldig: {0}"
 
 #: src/control/Control.AIChatSidebar.ts:2170
 msgid "Could not build any slides from the outline. Please try again."
-msgstr ""
+msgstr "Der kunne ikke oprettes slides ud fra dispositionen. Prøv igen."
 
 #: src/control/Control.AIChatSidebar.ts:2171
 msgid "AI image settings not configured"
-msgstr ""
+msgstr "AI-billedindstillinger er ikke konfigureret"
 
 #: src/control/Control.AIChatSidebar.ts:2172
 msgid "Image model not configured"
-msgstr ""
+msgstr "Billedmodel er ikke konfigureret"
 
 #: src/control/Control.AIChatSidebar.ts:2173
 msgid "Image generation failed: {0}"
-msgstr ""
+msgstr "Billedgenerering mislykkedes: {0}"
 
 #: src/control/Control.AIChatSidebar.ts:2174
 msgid "No image generated"
-msgstr ""
+msgstr "Intet billede genereret"
 
 #: src/control/Control.AIChatSidebar.ts:2175
 msgid "Failed to parse the AI response"
-msgstr ""
+msgstr "AI-svaret kunne ikke fortolkes"
 
 #: src/control/Control.AIChatSidebar.ts:2177
 msgid "The AI provider rejected the request as invalid"
-msgstr ""
+msgstr "AI-udbyderen afviste anmodningen som ugyldig"
 
 #: src/control/Control.AIChatSidebar.ts:2186
 msgid "API error ({0})"
-msgstr ""
+msgstr "API-fejl ({0})"
 
 #: src/control/Control.AIChatSidebar.ts:2215
 msgid "Extracting link targets..."
-msgstr ""
+msgstr "Finder linkenes destinationer …"
 
 #: src/control/Control.AIChatSidebar.ts:2216
 msgid "Evaluating formula..."
-msgstr ""
+msgstr "Beregner formel..."
 
 #: src/control/Control.AIChatSidebar.ts:2217
 msgid "Loading function catalog..."
-msgstr ""
+msgstr "Indlæser funktionskatalog..."
 
 #: src/control/Control.AIChatSidebar.ts:2219
 msgid "Working..."
-msgstr ""
+msgstr "Arbejder..."
 
 #: src/control/Control.AIChatSidebar.ts:2220
 msgid "Setting formulas..."
-msgstr ""
+msgstr "Angiver formler..."
 
 #: src/control/Control.AIChatSidebar.ts:2221
 msgid "Building slide {0} of {1}..."
-msgstr ""
+msgstr "Opretter slide {0} af {1}..."
 
 #: src/control/Control.AIChatSidebar.ts:2222
 msgid "Skipping slide {0}..."
-msgstr ""
+msgstr "Springer slide {0} over..."
 
 #: src/control/Control.AIChatSidebar.ts:2223
 msgid "Generating image {0} of {1}..."
-msgstr ""
+msgstr "Genererer billede {0} af {1}..."
 
 #: src/control/Control.AIChatSidebar.ts:2243
 msgid ""
 "This document is too large to read in full. Pick a section to focus on:"
 msgstr ""
+"Dette dokument er for stort til at blive læst i sin helhed. Vælg et afsnit "
+"at fokusere på:"
 
 #: src/control/Control.AIChatSidebar.ts:2251
 msgid "This sheet is too large to read in full. To narrow it down, you can:"
 msgstr ""
+"Dette ark er for stort til at blive læst i sin helhed. Du kan afgrænse "
+"området ved at:"
 
 #: src/control/Control.AIChatSidebar.ts:2255
 msgid "Select a range of cells in the sheet, then ask your question again"
-msgstr ""
+msgstr "Markér et celleområde i arket og stil derefter dit spørgsmål igen"
 
 #: src/control/Control.AIChatSidebar.ts:2258
 msgid "Reply with a range to focus on, like `A1:D100`"
-msgstr ""
+msgstr "Svar med et celleområde, f.eks. `A1:D100`"
 
 #: src/control/Control.AIChatSidebar.ts:2263
 msgid "Your deck is ready: {0} slides built from the approved outline."
 msgstr ""
+"Din præsentation er klar: {0} slides er oprettet ud fra den godkendte "
+"disposition."
 
 #: src/control/Control.AIChatSidebar.ts:2271
 msgid "{0} slide(s) could not be built and were skipped."
 msgstr ""
+"Antal slides, der ikke kunne oprettes og derfor blev sprunget over: {0}."
 
 #: src/control/Control.AIChatSidebar.ts:2279
 msgid "{0} image(s) could not be generated and show a placeholder."
 msgstr ""
+"Antal billeder, der ikke kunne genereres: {0}. Pladsholdere vises i stedet."
 
 #: src/control/Control.AIChatSidebar.ts:2319
 #: src/control/Control.AIChatSidebar.ts:3851
@@ -2599,26 +2656,28 @@ msgid ""
 "The selection contains images or other non-text content that cannot be sent "
 "as context."
 msgstr ""
+"Markeringen indeholder billeder eller andet indhold, der ikke er tekst, og "
+"som ikke kan sendes som kontekst."
 
 #: src/control/Control.AIChatSidebar.ts:2409
 msgid "Message is too long. Please shorten it and try again."
-msgstr ""
+msgstr "Beskeden er for lang. Forkort den, og prøv igen."
 
 #: src/control/Control.AIChatSidebar.ts:2468
 msgid "Error: "
-msgstr ""
+msgstr "Fejl: "
 
 #: src/control/Control.AIChatSidebar.ts:2498
 msgid "Generated image"
-msgstr ""
+msgstr "Genereret billede"
 
 #: src/control/Control.AIChatSidebar.ts:2510
 msgid "AI request failed"
-msgstr ""
+msgstr "AI-anmodningen mislykkedes"
 
 #: src/control/Control.AIChatSidebar.ts:2527
 msgid "The AI assistant"
-msgstr ""
+msgstr "AI-assistenten"
 
 #: src/control/Control.AIChatSidebar.ts:2566
 msgid "insert %n slide"
@@ -2629,240 +2688,242 @@ msgstr[1] "Indsæt %n figurer"
 #: src/control/Control.AIChatSidebar.ts:2569
 msgid "delete %n slide"
 msgid_plural "delete %n slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "slette %n slide"
+msgstr[1] "slette %n slides"
 
 #: src/control/Control.AIChatSidebar.ts:2574
 msgid "duplicate %n slide"
 msgid_plural "duplicate %n slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "duplikere %n slide"
+msgstr[1] "duplikere %n slides"
 
 #: src/control/Control.AIChatSidebar.ts:2580
 msgid "move %n slide"
 msgid_plural "move %n slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "flytte %n slide"
+msgstr[1] "flytte %n slides"
 
 #: src/control/Control.AIChatSidebar.ts:2583
 msgid "rename %n slide"
 msgid_plural "rename %n slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "omdøbe %n slide"
+msgstr[1] "omdøbe %n slides"
 
 #: src/control/Control.AIChatSidebar.ts:2588
 msgid "change %n layout"
 msgid_plural "change %n layouts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ændre %n layout"
+msgstr[1] "ændre %n layout"
 
 #: src/control/Control.AIChatSidebar.ts:2592
 msgid "set text in %n place"
 msgid_plural "set text in %n places"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "indsætte tekst %n sted"
+msgstr[1] "indsætte tekst %n steder"
 
 #: src/control/Control.AIChatSidebar.ts:2600
 msgid "format text in %n place"
 msgid_plural "format text in %n places"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "formatere tekst %n sted"
+msgstr[1] "formatere tekst %n steder"
 
 #: src/control/Control.AIChatSidebar.ts:2608
 msgid "generate %n image"
 msgid_plural "generate %n images"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "generere %n billede"
+msgstr[1] "generere %n billeder"
 
 #: src/control/Control.AIChatSidebar.ts:2616
 msgid "run %n document command"
 msgid_plural "run %n document commands"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "udføre %n dokumentkommando"
+msgstr[1] "udføre %n dokumentkommandoer"
 
 #: src/control/Control.AIChatSidebar.ts:2647
 msgid "run %n %1 command"
 msgid_plural "run %n %1 commands"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "udføre %n %1-kommando"
+msgstr[1] "udføre %n %1-kommandoer"
 
 #: src/control/Control.AIChatSidebar.ts:2655
 msgid "apply the design template '%1'"
-msgstr ""
+msgstr "anvende designskabelonen '%1'"
 
 #: src/control/Control.AIChatSidebar.ts:2658
 msgid "This will: %1."
-msgstr ""
+msgstr "Dette vil %1."
 
 #: src/control/Control.AIChatSidebar.ts:2672
 msgid "Do you want to proceed?"
-msgstr ""
+msgstr "Vil du fortsætte?"
 
 #: src/control/Control.AIChatSidebar.ts:2675
 msgid "%1 wants to inspect your document. Do you want to proceed?"
-msgstr ""
+msgstr "%1 vil undersøge dit dokument. Vil du fortsætte?"
 
 #: src/control/Control.AIChatSidebar.ts:2679
 msgid "Modify document structure"
-msgstr ""
+msgstr "Ændr dokumentstruktur"
 
 #: src/control/Control.AIChatSidebar.ts:2685
 msgid "%1 wants to modify your document:"
-msgstr ""
+msgstr "%1 vil ændre dit dokument:"
 
 #: src/control/Control.AIChatSidebar.ts:2690
 #: src/control/Control.AIChatSidebar.ts:2701
 msgid "Do you want to apply this change?"
-msgstr ""
+msgstr "Vil du anvende denne ændring?"
 
 #: src/control/Control.AIChatSidebar.ts:2692
 msgid "Set cell formula"
-msgstr ""
+msgstr "Angiv celleformel"
 
 #: src/control/Control.AIChatSidebar.ts:2694
 msgid "%1 wants to set a formula in your spreadsheet:"
-msgstr ""
+msgstr "%1 vil angive en formel i dit regneark:"
 
 #: src/control/Control.AIChatSidebar.ts:2704
 msgid "%1 wants to perform an action. Do you want to proceed?"
-msgstr ""
+msgstr "%1 vil udføre en handling. Vil du fortsætte?"
 
 #: src/control/Control.AIChatSidebar.ts:2732
 #: src/control/Control.AIChatSidebar.ts:3352
 msgid "Approve"
-msgstr ""
+msgstr "Godkend"
 
 #: src/control/Control.AIChatSidebar.ts:2734
 msgid "Approve action"
-msgstr ""
+msgstr "Godkend handling"
 
 #: src/control/Control.AIChatSidebar.ts:2738
 #: src/control/Control.AIChatSidebar.ts:3355
 msgid "Reject"
-msgstr ""
+msgstr "Afvis"
 
 #: src/control/Control.AIChatSidebar.ts:2740
 msgid "Reject action"
-msgstr ""
+msgstr "Afvis handling"
 
 #: src/control/Control.AIChatSidebar.ts:2758
 msgid "Applying changes..."
-msgstr ""
+msgstr "Anvender ændringer..."
 
 #: src/control/Control.AIChatSidebar.ts:2761
 msgid "Change rejected"
-msgstr ""
+msgstr "Ændringen er afvist"
 
 #: src/control/Control.AIChatSidebar.ts:2868
 msgid "Use section: "
-msgstr ""
+msgstr "Brug afsnit: "
 
 #: src/control/Control.AIChatSidebar.ts:2908
 msgid "Selection fetch timeout"
-msgstr ""
+msgstr "Tidsgrænsen for hentning af markeringen blev overskredet"
 
 #: src/control/Control.AIChatSidebar.ts:2927
 msgid "Failed to parse selection content"
-msgstr ""
+msgstr "Det markerede indhold kunne ikke fortolkes"
 
 #: src/control/Control.AIChatSidebar.ts:3211
 msgid "Design (optional):"
-msgstr ""
+msgstr "Design (valgfrit):"
 
 #: src/control/Control.AIChatSidebar.ts:3228
 msgid "No design"
-msgstr ""
+msgstr "Intet design"
 
 #: src/control/Control.AIChatSidebar.ts:3229
 msgid "Continue without a design template"
-msgstr ""
+msgstr "Fortsæt uden en designskabelon"
 
 #: src/control/Control.AIChatSidebar.ts:3295
 msgid ""
 "Here is a proposed outline. Edit the titles or descriptions, remove slides "
 "you do not want, then approve to build the deck:"
 msgstr ""
+"Her er et forslag til en disposition. Redigér titlerne eller beskrivelserne, "
+"fjern uønskede slides, og godkend derefter dispositionen for at oprette "
+"præsentationen:"
 
 #: src/control/Control.AIChatSidebar.ts:3356
 msgid "Reject outline"
-msgstr ""
+msgstr "Afvis disposition"
 
 #: src/control/Control.AIChatSidebar.ts:3362
 msgid "Give every added slide a title to approve."
-msgstr ""
+msgstr "Giv alle tilføjede slides en titel, før du godkender."
 
 #: src/control/Control.AIChatSidebar.ts:3390
 msgid "Slide %1 title"
-msgstr ""
+msgstr "Titel på slide %1"
 
 #: src/control/Control.AIChatSidebar.ts:3396
 msgid "Slide %1 description"
-msgstr ""
+msgstr "Beskrivelse af slide %1"
 
 #: src/control/Control.AIChatSidebar.ts:3402
 msgid "Remove slide %1"
-msgstr ""
+msgstr "Fjern slide %1"
 
 #: src/control/Control.AIChatSidebar.ts:3450
 msgid "Slide title"
-msgstr ""
+msgstr "Slidetitel"
 
 #: src/control/Control.AIChatSidebar.ts:3462
 msgid "What this slide should cover"
-msgstr ""
+msgstr "Hvad denne slide skal handle om"
 
 #: src/control/Control.AIChatSidebar.ts:3487
 msgid "Add slide"
-msgstr ""
+msgstr "Tilføj slide"
 
 #: src/control/Control.AIChatSidebar.ts:3525
 msgid "Outline approved - building %1 slides."
-msgstr ""
+msgstr "Dispositionen er godkendt – opretter %1 slides."
 
 #: src/control/Control.AIChatSidebar.ts:3534
 msgid "Outline rejected."
-msgstr ""
+msgstr "Dispositionen er afvist."
 
 #: src/control/Control.AIChatSidebar.ts:3570
 msgid "Building slides..."
-msgstr ""
+msgstr "Opretter slides..."
 
 #: src/control/Control.AIChatSidebar.ts:3604
 msgid "Formula analysis timeout"
-msgstr ""
+msgstr "Timeout ved formelanalyse"
 
 #: src/control/Control.AIChatSidebar.ts:3627
 msgid "Select the content you want the assistant to work on first."
-msgstr ""
+msgstr "Markér først det indhold, du vil have assistenten til at arbejde med."
 
 #: src/control/Control.AIChatSidebar.ts:3642
 msgid "Analyzing formula dependencies..."
-msgstr ""
+msgstr "Analyserer formlens afhængigheder..."
 
 #: src/control/Control.AIChatSidebar.ts:3650
 msgid "Failed to analyze formula."
-msgstr ""
+msgstr "Formlen kunne ikke analyseres."
 
 #: src/control/Control.AIChatSidebar.ts:3660
 msgid "The selected cell does not contain a formula."
-msgstr ""
+msgstr "Den markerede celle indeholder ikke en formel."
 
 #: src/control/Control.AIChatSidebar.ts:3662
 msgid "The selected cell does not have a formula error."
-msgstr ""
+msgstr "Den markerede celle har ikke en formelfejl."
 
 #: src/control/Control.AIChatSidebar.ts:3671
 msgid "Diagnose formula error in"
-msgstr ""
+msgstr "Undersøg formelfejl i"
 
 #: src/control/Control.AIChatSidebar.ts:3692
 msgid "I have a formula error in my spreadsheet."
-msgstr ""
+msgstr "Jeg har en formelfejl i mit regneark."
 
 #: src/control/Control.AIChatSidebar.ts:3694
-#, fuzzy
 msgid "Cell"
-msgstr "Celler"
+msgstr "Celle"
 
 #: src/control/Control.AIChatSidebar.ts:3698
 #, fuzzy
@@ -2871,7 +2932,7 @@ msgstr "Ark"
 
 #: src/control/Control.AIChatSidebar.ts:3702
 msgid "contains"
-msgstr ""
+msgstr "indeholder"
 
 #: src/control/Control.AIChatSidebar.ts:3704
 #: src/control/Control.FormulaBarJSDialog.js:116
@@ -2883,133 +2944,147 @@ msgstr "Formel"
 
 #: src/control/Control.AIChatSidebar.ts:3708
 msgid "Referenced cells"
-msgstr ""
+msgstr "Celler, der henvises til"
 
 #: src/control/Control.AIChatSidebar.ts:3714
 msgid "Please diagnose why this formula produces the"
-msgstr ""
+msgstr "Undersøg, hvorfor denne formel giver fejlen"
 
 #: src/control/Control.AIChatSidebar.ts:3718
 msgid "error."
-msgstr ""
+msgstr "."
 
 #: src/control/Control.AIChatSidebar.ts:3720
 msgid "Explain the root cause and suggest how to fix it."
-msgstr ""
+msgstr "Forklar den grundlæggende årsag, og foreslå en løsning."
 
 #: src/control/Control.AIChatSidebar.ts:3724
 msgid ""
 "When referencing specific cells, format each cell address as a clickable "
 "link: [A1](cell://A1)."
 msgstr ""
+"Når du henviser til bestemte celler, skal hver celleadresse formateres som "
+"et klikbart link: [A1](cell://A1)."
 
 #: src/control/Control.AIChatSidebar.ts:3739
-#, fuzzy
 msgid "formula"
-msgstr "Formel"
+msgstr "formel"
 
 #: src/control/Control.AIChatSidebar.ts:3741
 msgid "ERROR"
-msgstr ""
+msgstr "FEJL"
 
 #: src/control/Control.AIChatSidebar.ts:3755
 msgid "value"
-msgstr ""
+msgstr "værdi"
 
 #: src/control/Control.AIChatSidebar.ts:3765
-#, fuzzy
 msgid "text"
-msgstr "Tekst"
+msgstr "tekst"
 
 #: src/control/Control.AIChatSidebar.ts:3770
 msgid "empty"
-msgstr ""
+msgstr "tom"
 
 #: src/control/Control.AIChatSidebar.ts:3772
 msgid "range"
-msgstr ""
+msgstr "område"
 
 #: src/control/Control.AIChatSidebar.ts:3774
 msgid "errors in"
-msgstr ""
+msgstr "fejl i"
 
 #: src/control/Control.AIChatSidebar.ts:3777
 msgid "only partially scanned"
-msgstr ""
+msgstr "kun delvist undersøgt"
 
 #: src/control/Control.AIChatSidebar.ts:3786
 msgid "circular reference"
-msgstr ""
+msgstr "cirkulær reference"
 
 #: src/control/Control.AIChatSidebar.ts:3836
 msgid "Select the data you want to sanity-check first."
-msgstr ""
+msgstr "Markér først de data, du vil kontrollere for mulige fejl."
 
 #: src/control/Control.AIChatSidebar.ts:3841
 msgid "Analyzing selected data..."
-msgstr ""
+msgstr "Analyserer de markerede data..."
 
 #: src/control/Control.AIChatSidebar.ts:3854
 msgid "Failed to extract spreadsheet data."
-msgstr ""
+msgstr "Regnearksdata kunne ikke udtrækkes."
 
 #: src/control/Control.AIChatSidebar.ts:3863
 msgid "No data found in selection."
-msgstr ""
+msgstr "Ingen data fundet i markeringen."
 
 #: src/control/Control.AIChatSidebar.ts:3892
 msgid ""
 "Describe the slides you want to create. For example: \"A 5-slide overview "
 "of renewable energy\" or \"An introduction to our team\"."
 msgstr ""
+"Beskriv de slides, du vil oprette. For eksempel: \"En oversigt over "
+"vedvarende energi på fem slides\" eller \"En introduktion til vores team\"."
 
 #: src/control/Control.AIChatSidebar.ts:3900
 msgid ""
 "Describe the image you want to generate. For example: \"A watercolour of a "
 "mountain lake at sunrise\"."
 msgstr ""
+"Beskriv det billede, du vil generere. For eksempel: \"En akvarel af en "
+"bjergsø ved solopgang\"."
 
 #: src/control/Control.AIChatSidebar.ts:3907
 msgid "Write speaker notes for the current slide."
-msgstr ""
+msgstr "Skriv talernoter til den aktuelle slide."
 
 #: src/control/Control.AIChatSidebar.ts:3940
 msgid ""
 "Describe what formula you need. For example: \"Calculate the average of "
 "column B\" or \"Sum all values where column A is greater than 100\"."
 msgstr ""
+"Beskriv den formel, du har brug for. For eksempel: \"Beregn gennemsnittet af "
+"kolonne B\" eller \"Summér alle værdier, hvor kolonne A er større end 100\"."
 
 #: src/control/Control.AIChatSidebar.ts:3950
 msgid ""
 "Read row numbers from the \"Row\" column — do not count or estimate row "
 "positions."
 msgstr ""
+"Læs rækkenumrene i kolonnen \"Row\" – undlad at tælle eller anslå rækkernes "
+"placering."
 
 #: src/control/Control.AIChatSidebar.ts:3954
 msgid ""
 "To identify a cell's column, match the value to the column letter in the "
 "header row — do not guess."
 msgstr ""
+"Find en celles kolonne ved at matche værdien med kolonnebogstavet i "
+"overskriftsrækken – undlad at gætte."
 
 #: src/control/Control.AIChatSidebar.ts:3958
 msgid ""
 "Reference a cell by combining its column header with the row number (e.g., "
 "column B + row 2 = B2)."
 msgstr ""
+"Henvis til en celle ved at kombinere dens kolonneoverskrift med "
+"rækkenummeret (f.eks. kolonne B + række 2 = B2)."
 
 #: src/control/Control.AIChatSidebar.ts:3961
 msgid ""
 "When referencing specific cells, format each cell as a clickable link: [B2]"
 "(cell://B2)."
 msgstr ""
+"Når du henviser til bestemte celler, skal hver celle formateres som et "
+"klikbart link: [B2](cell://B2)."
 
 #: src/control/Control.AIChatSidebar.ts:3967
 msgid "Sanity check the following spreadsheet data."
-msgstr ""
+msgstr "Kontrollér følgende regnearksdata for mulige fejl."
 
 #: src/control/Control.AIChatSidebar.ts:3968
 msgid "Please analyze this data for:"
-msgstr ""
+msgstr "Analysér disse data for:"
 
 #: src/control/Control.AIChatSidebar.ts:3972
 msgid ""
@@ -3017,34 +3092,43 @@ msgid ""
 "values deviates significantly from the expected distribution, which may "
 "suggest data manipulation."
 msgstr ""
+"Afvigelser fra Benfords lov – kontrollér, om fordelingen af det første "
+"ciffer i talværdier afviger væsentligt fra den forventede fordeling, hvilket "
+"kan tyde på manipulation af data."
 
 #: src/control/Control.AIChatSidebar.ts:3978
 msgid ""
 "Statistical outliers — identify values that deviate significantly from "
 "their column or group."
 msgstr ""
+"Statistisk afvigende værdier – identificér værdier, der afviger væsentligt "
+"fra deres kolonne eller gruppe."
 
 #: src/control/Control.AIChatSidebar.ts:3984
 msgid ""
 "General anomalies — suspicious patterns, unexpected duplicates, "
 "inconsistencies, or formatting issues."
 msgstr ""
+"Generelle uregelmæssigheder – mistænkelige mønstre, uventede dubletter, "
+"uoverensstemmelser eller formateringsproblemer."
 
 #: src/control/Control.CleanupSidebar.ts:204
 msgid "Images stored with more detail than a slide can show"
-msgstr ""
+msgstr "Billeder gemt med flere detaljer, end en slide kan vise"
 
 #: src/control/Control.CleanupSidebar.ts:207
 msgid "Images stored at more than %1 DPI, more detail than a slide can show"
 msgstr ""
+"Billeder gemt med en opløsning på mere end %1 DPI, hvilket giver flere "
+"detaljer, end en slide kan vise"
 
 #: src/control/Control.CleanupSidebar.ts:224
 msgid "High-resolution images"
-msgstr ""
+msgstr "Billeder i høj opløsning"
 
 #: src/control/Control.CleanupSidebar.ts:230
 msgid "Cropped images"
-msgstr ""
+msgstr "Beskårne billeder"
 
 #: src/control/Control.CleanupSidebar.ts:236
 #: src/control/Control.BackstageView.ts:891
@@ -3057,73 +3141,73 @@ msgstr "Slides"
 
 #: src/control/Control.CleanupSidebar.ts:241
 msgid "Hidden slides"
-msgstr ""
+msgstr "Skjulte slides"
 
 #: src/control/Control.CleanupSidebar.ts:246
 msgid "Unused master slides"
-msgstr ""
+msgstr "Ubrugte slidemastere"
 
 #: src/control/Control.CleanupSidebar.ts:252
 msgid "For sharing"
-msgstr ""
+msgstr "Til deling"
 
 #: src/control/Control.CleanupSidebar.ts:254
 msgid "Speaker notes"
-msgstr ""
+msgstr "Talernoter"
 
 #: src/control/Control.CleanupSidebar.ts:258
 msgid "Embedded objects"
-msgstr ""
+msgstr "Indlejrede objekter"
 
 #: src/control/Control.CleanupSidebar.ts:359
 msgid "images left alone"
-msgstr ""
+msgstr "billeder bevares uændrede"
 
 #: src/control/Control.CleanupSidebar.ts:361
 msgid "%1 DPI, quality %2 %"
-msgstr ""
+msgstr "%1 DPI, kvalitet %2 %"
 
 #: src/control/Control.CleanupSidebar.ts:374
 msgid "%1 can be cleaned up"
-msgstr ""
+msgstr "%1 kan fjernes ved oprydning"
 
 #: src/control/Control.CleanupSidebar.ts:376
 msgid "%1 (%2%) can be cleaned up"
-msgstr ""
+msgstr "%1 (%2%) kan fjernes ved oprydning"
 
 #: src/control/Control.CleanupSidebar.ts:384
 msgid "Fix"
-msgstr ""
+msgstr "Ret"
 
 #: src/control/Control.CleanupSidebar.ts:460
 msgid "%1 byte"
 msgid_plural "%1 bytes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 byte"
+msgstr[1] "%1 byte"
 
 #: src/control/Control.CleanupSidebar.ts:468
 msgid "%1 KB"
-msgstr ""
+msgstr "%1 KB"
 
 #: src/control/Control.CleanupSidebar.ts:473
 msgid "%1 MB"
-msgstr ""
+msgstr "%1 MB"
 
 #: src/control/Control.CleanupSidebar.ts:479
 msgid "Remove %1"
-msgstr ""
+msgstr "Fjern %1"
 
 #: src/control/Control.CleanupSidebar.ts:481
 msgid "Fix %1"
-msgstr ""
+msgstr "Ret %1"
 
 #: src/control/Control.CleanupSidebar.ts:545
 msgid "Master slide"
-msgstr ""
+msgstr "Slidemaster"
 
 #: src/control/Control.CleanupSidebar.ts:546
 msgid "Master slide, image %1"
-msgstr ""
+msgstr "Slidemaster, billede %1"
 
 #: src/control/Control.CleanupSidebar.ts:549
 #: src/control/Control.PartsPreview.js:956
@@ -3132,90 +3216,90 @@ msgstr "Slide%1"
 
 #: src/control/Control.CleanupSidebar.ts:550
 msgid "Slide %1, image %2"
-msgstr ""
+msgstr "Slide %1, billede %2"
 
 #: src/control/Control.CleanupSidebar.ts:554
 msgid "Slide %1 is hidden and can be removed"
-msgstr ""
+msgstr "Slide %1 er skjult og kan fjernes"
 
 #: src/control/Control.CleanupSidebar.ts:556
 msgid "Master slide '%1' is not used by any slide"
-msgstr ""
+msgstr "Slidemasteren '%1' bruges ikke i præsentationen"
 
 #: src/control/Control.CleanupSidebar.ts:561
 msgid "Slide %1 has speaker notes"
-msgstr ""
+msgstr "Slide %1 har talernoter"
 
 #: src/control/Control.CleanupSidebar.ts:564
 msgid "Slide %1: embedded object"
-msgstr ""
+msgstr "Slide %1: indlejret objekt"
 
 #: src/control/Control.CleanupSidebar.ts:565
 msgid "Slide %1: embedded object, no image to replace it with"
-msgstr ""
+msgstr "Slide %1: indlejret objekt, intet billede at erstatte det med"
 
 #: src/control/Control.CleanupSidebar.ts:579
 msgid "%1 DPI"
-msgstr ""
+msgstr "%1 DPI"
 
 #: src/control/Control.CleanupSidebar.ts:581
 msgid "%1 at %2 DPI"
-msgstr ""
+msgstr "%1 ved %2 DPI"
 
 #: src/control/Control.CleanupSidebar.ts:586
 #, javascript-format
 msgid "%1% cropped away"
-msgstr ""
+msgstr "%1% beskåret væk"
 
 #: src/control/Control.CleanupSidebar.ts:588
 msgid "%1, %2% cropped away"
-msgstr ""
+msgstr "%1, %2% beskåret væk"
 
 #: src/control/Control.CleanupSidebar.ts:655
 msgid "Leave images alone"
-msgstr ""
+msgstr "Bevar billeder uændret"
 
 #: src/control/Control.CleanupSidebar.ts:656
 msgid "96 DPI"
-msgstr ""
+msgstr "96 DPI"
 
 #: src/control/Control.CleanupSidebar.ts:657
 msgid "150 DPI"
-msgstr ""
+msgstr "150 DPI"
 
 #: src/control/Control.CleanupSidebar.ts:658
 msgid "220 DPI"
-msgstr ""
+msgstr "220 DPI"
 
 #: src/control/Control.CleanupSidebar.ts:659
 msgid "300 DPI"
-msgstr ""
+msgstr "300 DPI"
 
 #: src/control/Control.CleanupSidebar.ts:683
 msgid "Scanning..."
-msgstr ""
+msgstr "Gennemgår..."
 
 #: src/control/Control.CleanupSidebar.ts:685
 msgid "Measuring images..."
-msgstr ""
+msgstr "Måler billeder..."
 
 #: src/control/Control.CleanupSidebar.ts:687
 msgid "Preparing cleanup..."
-msgstr ""
+msgstr "Forbereder oprydning..."
 
 #: src/control/Control.CleanupSidebar.ts:689
 msgid "Cleaning up..."
-msgstr ""
+msgstr "Rydder op..."
 
 #: src/control/Control.CleanupSidebar.ts:729
 msgid "Saved %1"
-msgstr ""
+msgstr "Der er sparet %1"
 
 #: src/control/Control.CleanupSidebar.ts:736
 msgid "%1 thing to clean up"
 msgid_plural "%1 things to clean up"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 ting, der skal ryddes op"
+msgstr[1] "%1 ting, der skal ryddes op"
 
 #: src/control/Control.CleanupSidebar.ts:759
 #: src/control/Control.BackstageView.ts:220 src/control/Control.Menubar.ts:146
@@ -3227,33 +3311,32 @@ msgstr[1] ""
 #: src/control/Control.NotebookbarWriter.js:502
 #: src/control/Control.SlideImportPane.tsx:1512 src/control/IFrameDialog.js:39
 #: src/map/handler/Map.Settings.ts:236
-#, fuzzy
 msgid "Options"
-msgstr "Indstilling"
+msgstr "Indstillinger"
 
 #: src/control/Control.CleanupSidebar.ts:783
 msgid "Image resolution"
-msgstr ""
+msgstr "Billedopløsning"
 
 #: src/control/Control.CleanupSidebar.ts:805
 msgid "JPEG quality (%)"
-msgstr ""
+msgstr "JPEG-kvalitet (%)"
 
 #: src/control/Control.CleanupSidebar.ts:830
 msgid "Prepare for sharing"
-msgstr ""
+msgstr "Klargør til deling"
 
 #: src/control/Control.CleanupSidebar.ts:859
 msgid "%1 of %2"
-msgstr ""
+msgstr "%1 af %2"
 
 #: src/control/Control.CleanupSidebar.ts:872
 msgid "Cleanup progress"
-msgstr ""
+msgstr "Oprydningsstatus"
 
 #: src/control/Control.CleanupSidebar.ts:905
 msgid "Stop"
-msgstr ""
+msgstr "Stop"
 
 #: src/control/Control.CleanupSidebar.ts:926
 #, fuzzy
@@ -3262,35 +3345,36 @@ msgstr "Afslut præsentation"
 
 #: src/control/Control.CleanupSidebar.ts:962
 msgid "Fix all"
-msgstr ""
+msgstr "Ret alle"
 
 #: src/control/Control.CleanupSidebar.ts:1006
 msgid "This document cannot be changed here, so there is nothing to clean up."
-msgstr ""
+msgstr "Dette dokument kan ikke ændres her, så der er ikke noget at rydde op i."
 
 #: src/control/Control.CleanupSidebar.ts:1013
 msgid "Find what makes this presentation large, and clean it up here."
 msgstr ""
+"Find ud af, hvorfor denne præsentation fylder meget, og ryd op i den her."
 
 #: src/control/Control.CleanupSidebar.ts:1077
 msgid "saves %1"
-msgstr ""
+msgstr "sparer %1"
 
 #: src/control/Control.CleanupSidebar.ts:1169
 #: src/control/Control.SlideImportPane.tsx:696
 msgid "Not checked"
-msgstr ""
+msgstr "Ikke kontrolleret"
 
 #: src/control/Control.CleanupSidebar.ts:1272
 #: src/control/Control.Menubar.ts:664
 #: src/control/Control.NotebookbarImpress.js:2183
 #: src/control/Control.NotebookbarImpress.js:2184
 msgid "Clean Up"
-msgstr ""
+msgstr "Ryd op"
 
 #: src/control/Control.CleanupSidebar.ts:2439
 msgid "The cleanup did not answer. Please try again."
-msgstr ""
+msgstr "Oprydningsfunktionen svarede ikke. Prøv igen."
 
 #: src/control/Control.AlertDialog.js:55
 msgid "External link"
@@ -3341,7 +3425,7 @@ msgstr "Vis ikke igen"
 
 #: src/control/Control.AlertDialog.js:108
 msgid "A {0} error occurred while processing the {1} command."
-msgstr ""
+msgstr "Der opstod en {0}-fejl under behandlingen af kommandoen {1}."
 
 #: src/control/Control.AlertDialog.js:109
 msgid "The server encountered a {0} error while parsing the {1} command."
@@ -3366,7 +3450,7 @@ msgstr "Ny"
 #: src/control/Control.BackstageView.ts:127
 #: src/control/backstage/OpenView.tsx:42
 msgid "Open"
-msgstr ""
+msgstr "Åbn"
 
 #: src/control/Control.BackstageView.ts:145
 #: src/control/Control.Notebookbar.js:1257
@@ -3385,7 +3469,7 @@ msgstr "Del"
 
 #: src/control/Control.BackstageView.ts:153
 msgid "Info"
-msgstr ""
+msgstr "Oplysninger"
 
 #: src/control/Control.BackstageView.ts:169
 #: src/control/Control.NotebookbarCalc.js:193
@@ -3399,7 +3483,7 @@ msgstr "Gem som"
 
 #: src/control/Control.BackstageView.ts:185
 msgid "Export"
-msgstr ""
+msgstr "Eksportér"
 
 #: src/control/Control.BackstageView.ts:193
 msgid "Sign"
@@ -3407,11 +3491,11 @@ msgstr "Signer"
 
 #: src/control/Control.BackstageView.ts:213
 msgid "Quit"
-msgstr ""
+msgstr "Afslut"
 
 #: src/control/Control.BackstageView.ts:279
 msgid "Start a new document from one of the following templates."
-msgstr ""
+msgstr "Opret et nyt dokument ud fra en af følgende skabeloner."
 
 #: src/control/Control.BackstageView.ts:318
 #: src/control/jsdialog/Widget.ColorPicker.ts:474
@@ -3420,43 +3504,41 @@ msgstr "Seneste"
 
 #: src/control/Control.BackstageView.ts:833
 msgid "Document Info"
-msgstr ""
+msgstr "Dokumentoplysninger"
 
 #: src/control/Control.BackstageView.ts:834
 msgid "View document properties and information"
-msgstr ""
+msgstr "Vis dokumentets egenskaber og oplysninger"
 
 #: src/control/Control.BackstageView.ts:856
 msgid "Export Document"
-msgstr ""
+msgstr "Eksportér dokument"
 
 #: src/control/Control.BackstageView.ts:857
 msgid "export your documents in different formats"
-msgstr ""
+msgstr "eksportér dokumenter i forskellige formater"
 
 #: src/control/Control.BackstageView.ts:889
 msgid "Text Document"
-msgstr ""
+msgstr "Tekstdokument"
 
 #: src/control/Control.BackstageView.ts:889
 #: src/control/Control.BackstageView.ts:892
 #: src/control/Control.PartsPreview.js:138
-#, fuzzy
 msgid "Pages"
-msgstr "Side"
+msgstr "Sider"
 
 #: src/control/Control.BackstageView.ts:890
 msgid "Spreadsheet"
-msgstr ""
+msgstr "Regneark"
 
 #: src/control/Control.BackstageView.ts:890 src/control/Control.Tabs.js:218
-#, fuzzy
 msgid "Sheets"
 msgstr "Ark"
 
 #: src/control/Control.BackstageView.ts:897
 msgid "Parts"
-msgstr ""
+msgstr "Dele"
 
 #: src/control/Control.BackstageView.ts:901
 #: src/control/backstage/CloudDialogs.tsx:99
@@ -3466,73 +3548,72 @@ msgstr "Type"
 
 #: src/control/Control.BackstageView.ts:907
 msgid "Mode"
-msgstr ""
+msgstr "Tilstand"
 
 #: src/control/Control.BackstageView.ts:908
 msgid "View Only"
-msgstr ""
+msgstr "Kun visning"
 
 #: src/control/Control.BackstageView.ts:915
 msgid "File Name"
-msgstr ""
+msgstr "Filnavn"
 
 #: src/control/Control.BackstageView.ts:1063
 msgid "Blank Spreadsheet"
-msgstr ""
+msgstr "Tomt regneark"
 
 #: src/control/Control.BackstageView.ts:1067
-#, fuzzy
 msgid "Blank Presentation"
-msgstr "Afslut præsentation"
+msgstr "Tom præsentation"
 
 #: src/control/Control.BackstageView.ts:1071
 msgid "Blank Drawing"
-msgstr ""
+msgstr "Tom tegning"
 
 #: src/control/Control.BackstageView.ts:1076
 msgid "Blank Document"
-msgstr ""
+msgstr "Tomt dokument"
 
 #: src/control/Control.BackstageView.ts:1225
 msgid "Untitled"
-msgstr ""
+msgstr "Unavngivet"
 
 #: src/control/backstage/Common.tsx:48
 msgid "Loading templates…"
-msgstr ""
+msgstr "Indlæser skabeloner…"
 
 #: src/control/backstage/Common.tsx:65
 msgid "Recently opened documents will appear here"
-msgstr ""
+msgstr "Senest åbnede dokumenter vises her"
 
 #: src/control/backstage/Sidebar.tsx:87 src/control/backstage/Sidebar.tsx:88
 msgid "Close backstage"
-msgstr ""
+msgstr "Luk filoversigten"
 
 #: src/control/backstage/Sidebar.tsx:113 src/control/backstage/Sidebar.tsx:114
 msgid "Back to document"
-msgstr ""
+msgstr "Tilbage til dokumentet"
 
 #: src/control/backstage/HomeView.tsx:52 src/control/backstage/HomeView.tsx:55
 msgid "More Templates"
-msgstr ""
+msgstr "Flere skabeloner"
 
 #: src/control/backstage/HomeView.tsx:70
 #: src/control/jsdialog/Widget.TreeView.ts:383
 msgid "Name"
-msgstr ""
+msgstr "Navn"
 
 #: src/control/backstage/HomeView.tsx:72
 msgid "Modified Date"
-msgstr ""
+msgstr "Ændringsdato"
 
 #: src/control/backstage/TemplatesView.tsx:156
 msgid "No templates match your search."
-msgstr ""
+msgstr "Ingen skabeloner matcher din søgning."
 
 #: src/control/backstage/TemplatesView.tsx:173
 msgid "Search templates"
-msgstr ""
+msgstr "Søg efter skabeloner"
 
 #: src/control/backstage/InfoView.tsx:31 src/control/Control.Menubar.ts:421
 #: src/control/Control.Menubar.ts:1451
@@ -3550,94 +3631,94 @@ msgstr "Egenskaber"
 
 #: src/control/backstage/InfoView.tsx:37
 msgid "More Property Info"
-msgstr ""
+msgstr "Flere egenskabsoplysninger"
 
 #: src/control/backstage/OpenView.tsx:43
 msgid "Open a document from your computer or a cloud location."
-msgstr ""
+msgstr "Åbn et dokument fra din computer eller fra skyen."
 
 #: src/control/backstage/OpenView.tsx:47
 msgid "Open File from Computer"
-msgstr ""
+msgstr "Åbn fil fra computeren"
 
 #: src/control/backstage/OpenView.tsx:65
 msgid "Add Cloud +"
-msgstr ""
+msgstr "Tilføj skytjeneste +"
 
 #: src/control/backstage/OpenView.tsx:139
 #: src/control/backstage/OpenView.tsx:140
 #: src/control/backstage/CloudDialogs.tsx:90
 msgid "Edit account"
-msgstr ""
+msgstr "Redigér konto"
 
 #: src/control/backstage/CloudDialogs.tsx:90
 msgid "Add new account"
-msgstr ""
+msgstr "Tilføj ny konto"
 
 #: src/control/backstage/CloudDialogs.tsx:109
 msgid "Enter server URL"
-msgstr ""
+msgstr "Angiv server-URL"
 
 #: src/control/backstage/CloudDialogs.tsx:117
 msgid "Display name"
-msgstr ""
+msgstr "Visningsnavn"
 
 #: src/control/backstage/CloudDialogs.tsx:123
 msgid "Enter display name"
-msgstr ""
+msgstr "Angiv visningsnavn"
 
 #: src/control/backstage/CloudDialogs.tsx:130
 msgid "Name displayed in your cloud list (max. 40 characters)."
-msgstr ""
+msgstr "Navnet, der vises på din liste over skytjenester (maks. 40 tegn)."
 
 #: src/control/backstage/CloudDialogs.tsx:143
 msgid "Save changes"
-msgstr ""
+msgstr "Gem ændringer"
 
 #: src/control/backstage/CloudDialogs.tsx:143
 msgid "Add Account"
-msgstr ""
+msgstr "Tilføj konto"
 
 #: src/control/backstage/CloudDialogs.tsx:183
 msgid "Remove account"
-msgstr ""
+msgstr "Fjern konto"
 
 #: src/control/backstage/CloudDialogs.tsx:185
 msgid "Disconnects this cloud"
-msgstr ""
+msgstr "Afbryder forbindelsen til denne skytjeneste"
 
 #: src/control/backstage/CloudDialogs.tsx:213
 msgid "New account successfully added"
-msgstr ""
+msgstr "Ny konto er tilføjet"
 
 #: src/control/backstage/CloudDialogs.tsx:218
 msgid "You can now access your files from this cloud."
-msgstr ""
+msgstr "Du kan nu få adgang til dine filer fra denne skytjeneste."
 
 #: src/control/backstage/CloudDialogs.tsx:241
 msgid "Open Files"
-msgstr ""
+msgstr "Åbn filer"
 
 #: src/control/backstage/CloudDialogs.tsx:267
 msgid "Remove this account?"
-msgstr ""
+msgstr "Fjern denne konto?"
 
 #: src/control/backstage/CloudDialogs.tsx:272
 msgid "You'll be disconnected from this cloud account."
-msgstr ""
+msgstr "Forbindelsen til denne skytjenestekonto bliver afbrudt."
 
 #: src/control/DropFileOverlay.tsx:30
 msgid "Drop file to open"
-msgstr ""
+msgstr "Slip filen for at åbne den"
 
 #: src/control/AccessibilityNotice.tsx:34
 #: src/control/AccessibilityNotice.tsx:64
 msgid "This mobile view is not fully accessible."
-msgstr ""
+msgstr "Denne mobilvisning er ikke fuldt tilgængelig."
 
 #: src/control/AccessibilityNotice.tsx:43
 msgid "Accessibility statement"
-msgstr ""
+msgstr "Tilgængelighedserklæring"
 
 #: src/control/AccessibilityNotice.tsx:50
 #: src/control/jsdialog/Util.SnackbarController.ts:157
@@ -3647,125 +3728,133 @@ msgstr "Afvis"
 
 #: src/control/onboarding/OnboardingSteps.ts:25
 msgid "Welcome to Collabora Online"
-msgstr ""
+msgstr "Velkommen til Collabora Online"
 
 #: src/control/onboarding/OnboardingSteps.ts:27
 msgid "This short tour points out the parts of the screen you will use most."
-msgstr ""
+msgstr "Denne korte rundvisning viser de dele af skærmen, du vil bruge mest."
 
 #: src/control/onboarding/OnboardingSteps.ts:32
 msgid "The document name"
-msgstr ""
+msgstr "Dokumentets navn"
 
 #: src/control/onboarding/OnboardingSteps.ts:34
 msgid ""
 "Select the name to rename the document. Every change is saved as you work."
 msgstr ""
+"Vælg navnet for at omdøbe dokumentet. Alle ændringer gemmes, mens du "
+"arbejder."
 
 #: src/control/onboarding/OnboardingSteps.ts:41
 msgid "The tabs"
-msgstr ""
+msgstr "Fanerne"
 
 #: src/control/onboarding/OnboardingSteps.ts:43
 msgid ""
 "Each tab gathers the tools for one kind of work, such as inserting or "
 "reviewing."
 msgstr ""
+"Hver fane samler værktøjer til en bestemt type arbejde, f.eks. indsættelse "
+"eller gennemgang."
 
 #: src/control/onboarding/OnboardingSteps.ts:50
 msgid "The menus"
-msgstr ""
+msgstr "Menuerne"
 
 #: src/control/onboarding/OnboardingSteps.ts:51
 msgid "Every command of the editor is in one of these menus."
-msgstr ""
+msgstr "Alle redigeringsværktøjets kommandoer findes i en af disse menuer."
 
 #: src/control/onboarding/OnboardingSteps.ts:57
 msgid "The tools"
-msgstr ""
+msgstr "Værktøjerne"
 
 #: src/control/onboarding/OnboardingSteps.ts:58
 msgid "The buttons of the tab you selected appear along this row."
-msgstr ""
+msgstr "Knapperne fra den valgte fane vises på denne række."
 
 #: src/control/onboarding/OnboardingSteps.ts:64
 msgid "The toolbar"
-msgstr ""
+msgstr "Værktøjslinjen"
 
 #: src/control/onboarding/OnboardingSteps.ts:65
 msgid "The buttons you need most often sit here, under the menus."
-msgstr ""
+msgstr "De knapper, du bruger oftest, findes her under menuerne."
 
 #: src/control/onboarding/OnboardingSteps.ts:71
 msgid "The formula bar"
-msgstr ""
+msgstr "Formellinjen"
 
 #: src/control/onboarding/OnboardingSteps.ts:73
 msgid ""
 "The contents of the selected cell appear here. Type an equals sign to start "
 "a formula."
 msgstr ""
+"Indholdet af den markerede celle vises her. Skriv et lighedstegn for at "
+"starte en formel."
 
 #: src/control/onboarding/OnboardingSteps.ts:80
 msgid "The slide panel"
-msgstr ""
+msgstr "Slidepanelet"
 
 #: src/control/onboarding/OnboardingSteps.ts:82
 msgid ""
 "Every slide or page of the document is listed here. Select one to work on "
 "it."
 msgstr ""
+"Alle dokumentets slides eller sider vises her. Vælg en slide eller en side "
+"for at arbejde med den."
 
 #: src/control/onboarding/OnboardingSteps.ts:90
 msgid "The sidebar"
-msgstr ""
+msgstr "Sidepanelet"
 
 #: src/control/onboarding/OnboardingSteps.ts:92
 msgid ""
 "The sidebar holds the settings for whatever you have selected, such as "
 "text, a shape or a cell."
 msgstr ""
+"Sidepanelet indeholder indstillinger for det, du har markeret, f.eks. tekst, "
+"en figur eller en celle."
 
 #: src/control/onboarding/OnboardingSteps.ts:99
 msgid "The people in the document"
-msgstr ""
+msgstr "Personerne i dokumentet"
 
 #: src/control/onboarding/OnboardingSteps.ts:100
 msgid "See who else is editing and share the document."
-msgstr ""
+msgstr "Se, hvem der ellers redigerer, og del dokumentet."
 
 #: src/control/onboarding/OnboardingSteps.ts:110
-#, fuzzy
 msgid "The status bar"
-msgstr "Vis statuslinjen"
+msgstr "Statuslinjen"
 
 #: src/control/onboarding/OnboardingSteps.ts:112
 msgid ""
 "The state of the document, the language of the text and the zoom level are "
 "along the bottom."
-msgstr ""
+msgstr "Dokumentets status, tekstens sprog og zoomniveauet vises nederst."
 
 #: src/control/onboarding/OnboardingSteps.ts:119
 msgid "You are ready to work"
-msgstr ""
+msgstr "Du er klar til at arbejde"
 
 #: src/control/onboarding/OnboardingSteps.ts:120
 msgid "You can walk through this tour again from the Help menu."
-msgstr ""
+msgstr "Du kan tage denne rundvisning igen fra menuen Hjælp."
 
 #: src/control/onboarding/Control.OnboardingTour.ts:245
 #: src/slideshow/engine/SlideShowHandler.ts:116
 msgid "Skip"
-msgstr ""
+msgstr "Spring over"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:251
 msgid "Back"
-msgstr ""
+msgstr "Tilbage"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:258
-#, fuzzy
 msgid "Done"
-msgstr "Ingen"
+msgstr "Færdig"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:258
 #: src/control/Control.Zotero.js:270 src/control/Control.Zotero.js:469
@@ -3782,19 +3871,20 @@ msgstr "Lås op"
 
 #: src/control/Control.DocumentNameInput.js:27
 msgid "Document name"
-msgstr ""
+msgstr "Dokumentnavn"
 
 #: src/control/Control.DocumentNameInput.js:39
 msgid "A document name cannot contain a slash or a backslash."
 msgstr ""
+"Et dokumentnavn må ikke indeholde en skråstreg eller en omvendt skråstreg."
 
 #: src/control/Control.DocumentNameInput.js:42 src/app/Socket.ts:2579
 msgid "Please enter a valid document name."
-msgstr ""
+msgstr "Angiv et gyldigt dokumentnavn."
 
 #: src/control/Control.DocumentNameInput.js:55
 msgid "Invalid document name"
-msgstr ""
+msgstr "Ugyldigt dokumentnavn"
 
 #: src/control/Control.DocumentRepair.js:27
 #: src/control/Control.DocumentRepair.js:28
@@ -4293,11 +4383,11 @@ msgstr "Typografi"
 
 #: src/control/Control.JSDialogBuilder.js:1730
 msgid "Toggle dropdown"
-msgstr ""
+msgstr "Åbn eller luk rullelisten"
 
 #: src/control/Control.JSDialogBuilder.js:1732
 msgid "Dialog dropdown"
-msgstr ""
+msgstr "Rulleliste til dialogboks"
 
 #: src/control/Control.JSDialogBuilder.js:1734
 #: src/control/Control.NotebookbarWriter.js:1719
@@ -4306,12 +4396,12 @@ msgstr "Dropdown-menu"
 
 #: src/control/Control.JSDialogBuilder.js:1736
 msgid "Apply action dropdown"
-msgstr ""
+msgstr "Rulleliste til anvendelse af handlinger"
 
 #: src/control/Control.JSDialogBuilder.js:1762
 #: src/control/jsdialog/Widget.Combobox.js:289
 msgid "Open {name}"
-msgstr ""
+msgstr "Åbn {name}"
 
 #: src/control/Control.JSDialogBuilder.js:2057
 #: src/control/Control.Menubar.ts:1052
@@ -4412,11 +4502,11 @@ msgstr "Reparér"
 #: src/control/Control.Menubar.ts:163 src/control/Control.Menubar.ts:510
 #: src/control/Control.Menubar.ts:718 src/control/Control.Menubar.ts:894
 msgid "Find"
-msgstr ""
+msgstr "Find"
 
 #: src/control/Control.Menubar.ts:167
 msgid "Compare Changes"
-msgstr ""
+msgstr "Sammenlign ændringer"
 
 #: src/control/Control.Menubar.ts:186 src/control/Control.Menubar.ts:514
 #: src/control/Control.Menubar.ts:520 src/control/Control.Menubar.ts:722
@@ -4431,7 +4521,7 @@ msgstr "Nulstil zoom"
 
 #: src/control/Control.Menubar.ts:192
 msgid "Fit to Screen"
-msgstr ""
+msgstr "Tilpas til skærmen"
 
 #: src/control/Control.Menubar.ts:195 src/control/Control.Menubar.ts:526
 #: src/control/Control.Menubar.ts:734 src/control/Control.Menubar.ts:917
@@ -4442,7 +4532,7 @@ msgstr "Aktivér UI-tilstand"
 #: src/control/Control.NotebookbarWriter.js:1851
 #: src/control/Control.StatusBar.js:298 src/control/Control.StatusBar.js:299
 msgid "Multi Page View"
-msgstr ""
+msgstr "Vis flere sider"
 
 #: src/control/Control.Menubar.ts:198 src/control/Control.Menubar.ts:528
 #: src/control/Control.Menubar.ts:739 src/control/Control.Menubar.ts:918
@@ -4481,7 +4571,7 @@ msgstr "Lokalt billede..."
 #: src/control/Control.Menubar.ts:216 src/control/Control.Menubar.ts:554
 #: src/control/Control.Menubar.ts:748 src/control/Control.Menubar.ts:943
 msgid "Shapes ..."
-msgstr ""
+msgstr "Figurer ..."
 
 #: src/control/Control.Menubar.ts:237 src/control/Control.Menubar.ts:239
 #: src/control/Control.Menubar.ts:1424 src/control/Control.Menubar.ts:1426
@@ -4577,7 +4667,7 @@ msgstr "Online Hjælp"
 #: src/control/Control.Menubar.ts:842 src/control/Control.Menubar.ts:1161
 #: src/control/Control.NotebookbarWriter.js:541
 msgid "Show tour"
-msgstr ""
+msgstr "Vis rundvisning"
 
 #: src/control/Control.Menubar.ts:458 src/control/Control.Menubar.ts:674
 #: src/control/Control.Menubar.ts:844 src/control/Control.Menubar.ts:1163
@@ -4635,23 +4725,23 @@ msgstr "Notesider"
 #: src/control/Control.Menubar.ts:529
 #: src/control/Control.NotebookbarImpress.js:746
 msgid "View Notes"
-msgstr ""
+msgstr "Vis noter"
 
 #: src/control/Control.Menubar.ts:530
 #: src/control/Control.NotebookbarImpress.js:748
 msgid "Bottom Panel"
-msgstr ""
+msgstr "Bundpanel"
 
 #: src/control/Control.Menubar.ts:531
 #: src/control/Control.NotebookbarImpress.js:749
 msgid "Handout Page"
-msgstr ""
+msgstr "Uddelingsside"
 
 #: src/control/Control.Menubar.ts:532
 #: src/control/Control.NotebookbarImpress.js:750
 #: src/control/jsdialog/Definitions.Menu.ts:1847
 msgid "Hidden"
-msgstr ""
+msgstr "Skjult"
 
 #: src/control/Control.Menubar.ts:537
 #: src/control/Control.NotebookbarImpress.js:757
@@ -4668,15 +4758,15 @@ msgstr "Lokale multimedier..."
 #: src/control/Control.NotebookbarImpress.js:2740
 #: src/control/Control.NotebookbarImpress.js:3107
 msgid "Distribute"
-msgstr ""
+msgstr "Fordel"
 
 #: src/control/Control.Menubar.ts:641
 msgid "Insert Slides from File..."
-msgstr ""
+msgstr "Indsæt slides fra fil..."
 
 #: src/control/Control.Menubar.ts:643
 msgid "Update Linked Slides..."
-msgstr ""
+msgstr "Opdatér sammenkædede slides..."
 
 #: src/control/Control.Menubar.ts:650 src/control/Control.Menubar.ts:1282
 #: src/control/Control.PresentationBar.js:143
@@ -4893,7 +4983,7 @@ msgstr "Resultater"
 
 #: src/control/Control.NavigatorPanel.ts:628
 msgid "Find and Replace"
-msgstr ""
+msgstr "Find og erstat"
 
 #: src/control/Control.NavigatorPanel.ts:637
 #: src/control/jsdialog/Widget.Combobox.js:497
@@ -4903,168 +4993,169 @@ msgstr "Søg..."
 
 #: src/control/Control.QuickFindPanel.ts:122
 msgid "Type in the search box to find anything in your document"
-msgstr ""
+msgstr "Skriv i søgefeltet for at finde indhold i dit dokument"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:79
 #: src/control/Notebookbar.AIAssistantTab.ts:122
 msgid "Text Tools"
-msgstr ""
+msgstr "Tekstværktøjer"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:93
 msgid "Slide Tools"
-msgstr ""
+msgstr "Slideværktøjer"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:106
 msgid "Formula Tools"
-msgstr ""
+msgstr "Formelværktøjer"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:116
 msgid "Data Tools"
-msgstr ""
+msgstr "Dataværktøjer"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:143
 msgid "Shorten"
-msgstr ""
+msgstr "Forkort"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:145
 msgid "Rewrite the selected text so it is shorter."
-msgstr ""
+msgstr "Omskriv den markerede tekst, så den bliver kortere."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:150
 msgid "Formalize"
-msgstr ""
+msgstr "Gør sproget formelt"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:152
 msgid "Rewrite the selected text in a formal tone."
-msgstr ""
+msgstr "Omskriv den markerede tekst i en formel tone."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:157
 msgid "Casualize"
-msgstr ""
+msgstr "Gør sproget uformelt"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:159
 msgid "Rewrite the selected text in a casual, friendly tone."
-msgstr ""
+msgstr "Omskriv den markerede tekst i en uformel, venlig tone."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:164
 msgid "Summarize"
-msgstr ""
+msgstr "Opsummér"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:166
 msgid "Summarize the key points of the selected text."
-msgstr ""
+msgstr "Opsummér hovedpunkterne i den markerede tekst."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:171
 msgid "Expand"
-msgstr ""
+msgstr "Udvid"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:173
 msgid "Expand the selected text and add more detail."
-msgstr ""
+msgstr "Udvid den markerede tekst med flere detaljer."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:178
 msgid "Fix Grammar"
-msgstr ""
+msgstr "Ret grammatik"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:181
 msgid "Fix grammar, spelling, and punctuation errors in the selected text."
 msgstr ""
+"Ret grammatiske fejl, stavefejl og tegnsætningsfejl i den markerede tekst."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:187
 msgid "Make Bullets"
-msgstr ""
+msgstr "Opret punktopstilling"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:189
 msgid "Rewrite the selected text as short bullet points."
-msgstr ""
+msgstr "Omskriv den markerede tekst til korte punkter."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:194
 msgid "Create Slides"
-msgstr ""
+msgstr "Opret slides"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:201
 msgid "Generate Image"
-msgstr ""
+msgstr "Generér billede"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:208
 msgid "Generate Speaker Notes"
-msgstr ""
+msgstr "Generér talernoter"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:215
 msgid "Create Formula"
-msgstr ""
+msgstr "Opret formel"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:222
 msgid "Explain Formula"
-msgstr ""
+msgstr "Forklar formel"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:224
 msgid "Explain the formula in the selected cell."
-msgstr ""
+msgstr "Forklar formlen i den markerede celle."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:229
 msgid "Fix Formula Error"
-msgstr ""
+msgstr "Ret formelfejl"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:236
 msgid "Clean Up Data"
-msgstr ""
+msgstr "Ryd op i data"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:243
 msgid "Suggest Chart"
-msgstr ""
+msgstr "Foreslå diagram"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:245
 msgid "Suggest a chart for the selected data."
-msgstr ""
+msgstr "Foreslå et diagram til de markerede data."
 
 #: src/control/Notebookbar.CalcTableTab.ts:45
 #: src/control/Notebookbar.TableDesignTabBase.ts:54
 msgid "Table Design"
-msgstr ""
+msgstr "Tabeldesign"
 
 #: src/control/Notebookbar.CalcTableTab.ts:105
 msgid "Tools"
-msgstr ""
+msgstr "Værktøjer"
 
 #: src/control/Notebookbar.CalcTableTab.ts:190
 #: src/control/Notebookbar.TableDesignTabBase.ts:91
 msgid "Table Options"
-msgstr ""
+msgstr "Tabelindstillinger"
 
 #: src/control/Notebookbar.CalcTableTab.ts:204
 #: src/control/Notebookbar.TableDesignTabBase.ts:106
 msgid "Header Row"
-msgstr ""
+msgstr "Overskriftsrække"
 
 #: src/control/Notebookbar.CalcTableTab.ts:219
 #: src/control/Notebookbar.TableDesignTabBase.ts:123
 msgid "Total Row"
-msgstr ""
+msgstr "Totalrække"
 
 #: src/control/Notebookbar.CalcTableTab.ts:241
 #: src/control/Notebookbar.TableDesignTabBase.ts:146
 msgid "Banded Rows"
-msgstr ""
+msgstr "Stribede rækker"
 
 #: src/control/Notebookbar.CalcTableTab.ts:257
 #: src/control/Notebookbar.TableDesignTabBase.ts:163
 msgid "Banded Columns"
-msgstr ""
+msgstr "Stribede kolonner"
 
 #: src/control/Notebookbar.CalcTableTab.ts:279
 #: src/control/Notebookbar.TableDesignTabBase.ts:186
 msgid "First Column"
-msgstr ""
+msgstr "Første kolonne"
 
 #: src/control/Notebookbar.CalcTableTab.ts:295
 #: src/control/Notebookbar.TableDesignTabBase.ts:203
 msgid "Last Column"
-msgstr ""
+msgstr "Sidste kolonne"
 
 #: src/control/Notebookbar.CalcTableTab.ts:317
 msgid "Filter Buttons"
-msgstr ""
+msgstr "Filterknapper"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:24
 #: src/slideshow/engine/SlideShowHandler.ts:412
@@ -5073,19 +5164,19 @@ msgstr "Animation"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:41
 msgid "Applied animations"
-msgstr ""
+msgstr "Anvendte animationer"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:59
 msgid "Move Up"
-msgstr ""
+msgstr "Flyt op"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:75
 msgid "Move Down"
-msgstr ""
+msgstr "Flyt ned"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:105
 msgid "Category"
-msgstr ""
+msgstr "Kategori"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:120
 msgid "Start"
@@ -5105,7 +5196,7 @@ msgstr "Design"
 #: src/control/Notebookbar.ImpressTableDesignTab.ts:65
 #: src/control/Notebookbar.WriterTableDesignTab.ts:69
 msgid "Cell Background"
-msgstr ""
+msgstr "Cellebaggrund"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:24
 msgid "Transition"
@@ -5126,7 +5217,7 @@ msgstr "Varighed"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:117
 msgid "On mouse click"
-msgstr ""
+msgstr "Ved museklik"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:125
 #: src/control/HRuler.ts:338
@@ -5135,7 +5226,7 @@ msgstr "Efter"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:146
 msgid "Apply to All Slides"
-msgstr ""
+msgstr "Anvend på alle slides"
 
 #: src/control/Notebookbar.WriterReferencesTab.ts:41
 msgid "Table of content"
@@ -5148,9 +5239,8 @@ msgstr "Fodnote/Slutnote"
 #: src/control/Notebookbar.WriterReferencesTab.ts:313
 #: src/control/Control.NotebookbarDraw.js:1707
 #: src/control/Control.NotebookbarImpress.js:1782
-#, fuzzy
 msgid "Field"
-msgstr "Felter"
+msgstr "Felt"
 
 #: src/control/Notebookbar.WriterTableTab.ts:24
 #: src/control/Control.NotebookbarCalc.js:1840
@@ -5165,7 +5255,7 @@ msgstr "Tabel"
 #: src/control/Notebookbar.WriterTableTab.ts:39
 #: src/control/Control.NotebookbarImpress.js:2203
 msgid "Select"
-msgstr ""
+msgstr "Vælg"
 
 #: src/control/Notebookbar.WriterTableTab.ts:209
 #: src/control/Control.NotebookbarCalc.js:1199
@@ -5176,14 +5266,14 @@ msgstr "Størrelse"
 #: src/control/Notebookbar.WriterTableTab.ts:307
 #: src/control/Control.NotebookbarImpress.js:2369
 msgid "Merge & Split"
-msgstr ""
+msgstr "Flet og opdel"
 
 #: src/control/Notebookbar.WriterTableTab.ts:365
 #: src/control/Control.NotebookbarCalc.js:689
 #: src/control/Control.NotebookbarDraw.js:861
 #: src/control/Control.NotebookbarImpress.js:2408
 msgid "Alignment"
-msgstr ""
+msgstr "Justering"
 
 #: src/control/Notebookbar.WriterTableTab.ts:472
 #: src/control/Control.NotebookbarCalc.js:72
@@ -5196,17 +5286,17 @@ msgstr "Format"
 #: src/control/Notebookbar.WriterTableTab.ts:530
 #: src/control/Control.NotebookbarCalc.js:2403
 msgid "Sort"
-msgstr ""
+msgstr "Sortér"
 
 #: src/control/Notebookbar.WriterTableTab.ts:550
 msgid "Protect"
-msgstr ""
+msgstr "Beskyt"
 
 #: src/control/Notebookbar.WriterTableTab.ts:602
 #: src/control/Control.NotebookbarWriter.js:3005
 #: src/control/Control.NotebookbarWriter.js:3384
 msgid "Caption"
-msgstr ""
+msgstr "Billedtekst"
 
 #: src/control/Sidebar.FromNotebookbarPanel.ts:154
 msgid "Animations"
@@ -5215,29 +5305,28 @@ msgstr "Animationer"
 #: src/control/Control.Notebookbar.js:657
 #: src/control/Control.NotebookbarWriter.js:3079
 msgid "Fill Color (Transparent Pictures Only)"
-msgstr ""
+msgstr "Fyldfarve (kun gennemsigtige billeder)"
 
 #: src/control/Control.Notebookbar.js:668
-#, fuzzy
 msgid "Line"
-msgstr "Link"
+msgstr "Linje"
 
 #: src/control/Control.Notebookbar.js:711
 msgid "Line Width"
-msgstr ""
+msgstr "Linjebredde"
 
 #: src/control/Control.Notebookbar.js:744
 msgid "Transparency:"
-msgstr ""
+msgstr "Gennemsigtighed:"
 
 #: src/control/Control.Notebookbar.js:763
 msgid "Thickness:"
-msgstr ""
+msgstr "Tykkelse:"
 
 #: src/control/Control.NotebookbarBuilder.js:205
 #: src/control/Control.NotebookbarBuilder.js:610
 msgid "Unsaved changes. Save"
-msgstr ""
+msgstr "Ikke-gemte ændringer. Gem"
 
 #: src/control/Control.NotebookbarBuilder.js:269
 msgid "Click to expand"
@@ -5258,11 +5347,11 @@ msgstr "Tryk for at minimere"
 
 #: src/control/Control.NotebookbarBuilder.js:398
 msgid "PDF Document (.pdf) with options"
-msgstr ""
+msgstr "PDF-dokument (.pdf) med indstillinger"
 
 #: src/control/Control.NotebookbarBuilder.js:607
 msgid "Unsaved changes."
-msgstr ""
+msgstr "Ikke-gemte ændringer."
 
 #: src/control/Control.NotebookbarCalc.js:29
 #: src/control/Control.NotebookbarDraw.js:63
@@ -5313,7 +5402,7 @@ msgstr "Billede"
 #: src/control/Control.NotebookbarWriter.js:128
 #: src/layer/marker/TextInput.js:526
 msgid "Chart"
-msgstr ""
+msgstr "Diagram"
 
 #: src/control/Control.NotebookbarCalc.js:101
 #: src/control/Control.NotebookbarDraw.js:129
@@ -5358,7 +5447,7 @@ msgstr "Se historik"
 #: src/control/Control.NotebookbarImpress.js:447
 #: src/control/Control.NotebookbarWriter.js:426
 msgid "Security label"
-msgstr ""
+msgstr "Sikkerhedsetiket"
 
 #: src/control/Control.NotebookbarCalc.js:409
 #: src/control/Control.NotebookbarDraw.js:403
@@ -5380,7 +5469,7 @@ msgstr "Omdøb"
 #: src/control/Control.NotebookbarImpress.js:859
 #: src/control/Control.NotebookbarWriter.js:716
 msgid "Clipboard"
-msgstr ""
+msgstr "Udklipsholder"
 
 #: src/control/Control.NotebookbarCalc.js:507
 #: src/control/Control.NotebookbarDraw.js:683
@@ -5388,13 +5477,15 @@ msgstr ""
 #: src/control/Control.NotebookbarWriter.js:743
 #: src/control/Control.TopToolbar.js:190
 msgid "Clone Formatting (double click to keep active)"
-msgstr ""
+msgstr "Kopiér formatering (dobbeltklik for at holde funktionen aktiv)"
 
 #: src/control/Control.NotebookbarCalc.js:508
 msgid ""
 "Clone Formatting is active (press Enter on a cell to apply, click again or "
 "press Esc to exit)"
 msgstr ""
+"Funktionen »Kopiér formatering« er aktiv (tryk på Enter i en celle for at "
+"anvende formateringen, klik igen, eller tryk på Esc for at afslutte)"
 
 #: src/control/Control.NotebookbarCalc.js:544
 #: src/control/Control.NotebookbarDraw.js:720
@@ -5404,7 +5495,7 @@ msgstr "Skrifttype"
 
 #: src/control/Control.NotebookbarCalc.js:828
 msgid "Merge & Center"
-msgstr ""
+msgstr "Flet og centrér"
 
 #: src/control/Control.NotebookbarCalc.js:843
 #: src/control/Control.NotebookbarCalc.js:859
@@ -5446,7 +5537,7 @@ msgstr "Tekst"
 
 #: src/control/Control.NotebookbarCalc.js:873
 msgid "Number Format"
-msgstr ""
+msgstr "Talformat"
 
 #: src/control/Control.NotebookbarCalc.js:946
 msgid "Cells"
@@ -5528,7 +5619,7 @@ msgstr "Slet kolonner"
 #: src/control/Control.NotebookbarWriter.js:2822
 #: src/control/Control.NotebookbarWriter.js:3192
 msgid "Align"
-msgstr ""
+msgstr "Justér"
 
 #: src/control/Control.NotebookbarCalc.js:1421
 #: src/control/Control.NotebookbarCalc.js:3196
@@ -5541,35 +5632,35 @@ msgstr ""
 #: src/control/Control.NotebookbarWriter.js:2893
 #: src/control/Control.NotebookbarWriter.js:3263
 msgid "Arrange"
-msgstr ""
+msgstr "Arrangér"
 
 #: src/control/Control.NotebookbarCalc.js:1483
 msgid "Sheet View"
-msgstr ""
+msgstr "Arkvisning"
 
 #: src/control/Control.NotebookbarCalc.js:1497
 msgid "Default View"
-msgstr ""
+msgstr "Standardvisning"
 
 #: src/control/Control.NotebookbarCalc.js:1514
 msgid "Open Views List"
-msgstr ""
+msgstr "Åbn liste over visninger"
 
 #: src/control/Control.NotebookbarCalc.js:1521
 msgid "New Sheet View"
-msgstr ""
+msgstr "Ny arkvisning"
 
 #: src/control/Control.NotebookbarCalc.js:1528
 msgid "Remove Sheet View"
-msgstr ""
+msgstr "Fjern arkvisning"
 
 #: src/control/Control.NotebookbarCalc.js:1535
 msgid "Exit Sheet View"
-msgstr ""
+msgstr "Afslut arkvisning"
 
 #: src/control/Control.NotebookbarCalc.js:1550
 msgid "Freeze"
-msgstr ""
+msgstr "Frys"
 
 #: src/control/Control.NotebookbarCalc.js:1604
 #: src/control/Control.NotebookbarDraw.js:453
@@ -5608,30 +5699,30 @@ msgstr "Statusbjælke"
 #: src/control/Control.NotebookbarImpress.js:3241
 #: src/control/Control.NotebookbarWriter.js:2950
 #: src/control/Control.NotebookbarWriter.js:3320
-#, fuzzy
 msgid "Group"
 msgstr "Gruppér"
 
 #: src/control/Control.NotebookbarCalc.js:1762
 msgid "Ungroup"
-msgstr ""
+msgstr "Ophæv gruppering"
 
 #: src/control/Control.NotebookbarCalc.js:1784
 msgid "Pivot Table"
-msgstr ""
+msgstr "Pivottabel"
 
 #: src/control/Control.NotebookbarCalc.js:1849
 #: src/control/Control.NotebookbarCalc.js:1852
 msgid "Table styles are only available in .xlsx files"
-msgstr ""
+msgstr "Tabeltypografier er kun tilgængelige i .xlsx-filer"
 
 #: src/control/Control.NotebookbarCalc.js:1850
 msgid "Insert a styled table"
-msgstr ""
+msgstr "Indsæt en tabel med typografi"
 
 #: src/control/Control.NotebookbarCalc.js:1853
 msgid "Select an editable cell range to insert a styled table"
 msgstr ""
+"Markér et redigerbart celleområde for at indsætte en tabel med typografi"
 
 #: src/control/Control.NotebookbarCalc.js:1862
 #: src/control/Control.NotebookbarDraw.js:1062
@@ -5660,12 +5751,11 @@ msgstr "Assistent"
 
 #: src/control/Control.NotebookbarCalc.js:2143
 msgid "Insert Function"
-msgstr ""
+msgstr "Indsæt funktion"
 
 #: src/control/Control.NotebookbarCalc.js:2151
-#, fuzzy
 msgid "Function Library"
-msgstr "Funktionsguide"
+msgstr "Funktionsbibliotek"
 
 #: src/control/Control.NotebookbarCalc.js:2165
 #, fuzzy
@@ -5674,7 +5764,7 @@ msgstr "AutoSum"
 
 #: src/control/Control.NotebookbarCalc.js:2178
 msgid "Financial"
-msgstr ""
+msgstr "Finansielle"
 
 #: src/control/Control.NotebookbarCalc.js:2196
 msgid "Logical"
@@ -5686,19 +5776,19 @@ msgstr "Dato & tidspunkt"
 
 #: src/control/Control.NotebookbarCalc.js:2238
 msgid "Lookup & Reference"
-msgstr ""
+msgstr "Opslag og reference"
 
 #: src/control/Control.NotebookbarCalc.js:2256
 msgid "Math & Trig"
-msgstr ""
+msgstr "Matematik og trigonometri"
 
 #: src/control/Control.NotebookbarCalc.js:2268
 msgid "More Functions"
-msgstr ""
+msgstr "Flere funktioner"
 
 #: src/control/Control.NotebookbarCalc.js:2313
 msgid "Range"
-msgstr ""
+msgstr "Område"
 
 #: src/control/Control.NotebookbarCalc.js:2454
 #, fuzzy
@@ -5707,13 +5797,13 @@ msgstr "Filtrér"
 
 #: src/control/Control.NotebookbarCalc.js:2691
 msgid "Proofing"
-msgstr ""
+msgstr "Korrektur"
 
 #: src/control/Control.NotebookbarCalc.js:2719
 #: src/control/Control.NotebookbarImpress.js:2129
 #: src/control/Control.NotebookbarWriter.js:2384
 msgid "Auto Spell Check"
-msgstr ""
+msgstr "Automatisk stavekontrol"
 
 #: src/control/Control.NotebookbarCalc.js:2751
 #: src/control/Control.NotebookbarImpress.js:2159
@@ -5724,15 +5814,15 @@ msgstr "Kommentarer"
 #: src/control/Control.NotebookbarCalc.js:2801
 #: src/control/Control.NotebookbarWriter.js:2482
 msgid "Tracking"
-msgstr ""
+msgstr "Registrering af ændringer"
 
 #: src/control/Control.NotebookbarCalc.js:2844
 msgid "Comment on Change"
-msgstr ""
+msgstr "Kommentér ændring"
 
 #: src/control/Control.NotebookbarCalc.js:2855
 msgid "Protection"
-msgstr ""
+msgstr "Beskyttelse"
 
 #: src/control/Control.NotebookbarCalc.js:2925
 msgid "Format Cells"
@@ -5741,7 +5831,7 @@ msgstr "Formatér celler"
 #: src/control/Control.NotebookbarCalc.js:2985
 #: src/control/Control.NotebookbarImpress.js:1977
 msgid "Themes"
-msgstr ""
+msgstr "Temaer"
 
 #: src/control/Control.NotebookbarCalc.js:3062
 #: src/control/Control.NotebookbarCalc.js:3399
@@ -5755,7 +5845,7 @@ msgstr "Ombryd"
 #: src/control/Control.NotebookbarImpress.js:2943
 #: src/control/Control.NotebookbarWriter.js:3027
 msgid "Image Controls"
-msgstr ""
+msgstr "Billedværktøjer"
 
 #: src/control/Control.NotebookbarDraw.js:82
 #: src/control/Control.NotebookbarWriter.js:87
@@ -5778,6 +5868,8 @@ msgstr "Lineal"
 #: src/control/Control.TopToolbar.js:190
 msgid "Clone Formatting is active (click again or press Esc to exit)"
 msgstr ""
+"Funktionen »Kopiér formatering« er aktiv (klik igen, eller tryk på Esc for "
+"at afslutte)"
 
 #: src/control/Control.NotebookbarDraw.js:948
 #: src/control/Control.NotebookbarImpress.js:1118
@@ -5787,7 +5879,7 @@ msgstr "Paragraf"
 
 #: src/control/Control.NotebookbarImpress.js:110
 msgid "Slide Show"
-msgstr ""
+msgstr "Slideshow"
 
 #: src/control/Control.NotebookbarImpress.js:157
 msgid "Master"
@@ -5795,7 +5887,7 @@ msgstr "Master"
 
 #: src/control/Control.NotebookbarImpress.js:539
 msgid "Start Slide Show"
-msgstr ""
+msgstr "Start slideshow"
 
 #: src/control/Control.NotebookbarImpress.js:544
 msgid "From Beginning"
@@ -5803,7 +5895,7 @@ msgstr "Fra start"
 
 #: src/control/Control.NotebookbarImpress.js:545
 msgid "Fullscreen, starting at slide 1"
-msgstr ""
+msgstr "Fuld skærm, start fra slide 1"
 
 #: src/control/Control.NotebookbarImpress.js:552
 msgid "From Current Slide"
@@ -5811,48 +5903,48 @@ msgstr "Fra nuværende slide"
 
 #: src/control/Control.NotebookbarImpress.js:553
 msgid "Fullscreen, starting at this slide"
-msgstr ""
+msgstr "Fuld skærm, start fra denne slide"
 
 #: src/control/Control.NotebookbarImpress.js:561
 msgid "Presenter View"
-msgstr ""
+msgstr "Præsentationsvisning"
 
 #: src/control/Control.NotebookbarImpress.js:562
 msgid "Shows your notes, next slide, and a timer"
-msgstr ""
+msgstr "Viser dine noter, næste slide og en timer"
 
 #: src/control/Control.NotebookbarImpress.js:577
 msgid "Present"
-msgstr ""
+msgstr "Præsentér"
 
 #: src/control/Control.NotebookbarImpress.js:584
 msgid "Plays inside the document window. Starts at slide 1"
-msgstr ""
+msgstr "Afspilles i dokumentvinduet. Starter fra slide 1"
 
 #: src/control/Control.NotebookbarImpress.js:592
 msgid "Present to All"
-msgstr ""
+msgstr "Præsentér for alle"
 
 #: src/control/Control.NotebookbarImpress.js:593
 msgid "Starts a slideshow on every viewer's screen"
-msgstr ""
+msgstr "Starter et slideshow på alle deltageres skærme"
 
 #: src/control/Control.NotebookbarImpress.js:601
 #: src/slideshow/SlideShowPresenter.ts:1700
 msgid "Follow Presenter"
-msgstr ""
+msgstr "Følg oplægsholderen"
 
 #: src/control/Control.NotebookbarImpress.js:602
 msgid "View slides as the presenter advances them"
-msgstr ""
+msgstr "Følg med i slidesene, når oplægsholderen skifter mellem dem"
 
 #: src/control/Control.NotebookbarImpress.js:612
 msgid "Set Up"
-msgstr ""
+msgstr "Opsætning"
 
 #: src/control/Control.NotebookbarImpress.js:739
 msgid "Slide Views"
-msgstr ""
+msgstr "Slidevisninger"
 
 #: src/control/Control.NotebookbarImpress.js:783
 msgid "Snap to Grid"
@@ -5860,12 +5952,12 @@ msgstr "Fastgør til gitter"
 
 #: src/control/Control.NotebookbarImpress.js:823
 msgid "Shapes Sidebar"
-msgstr ""
+msgstr "Sidepanel til figurer"
 
 #: src/control/Control.NotebookbarImpress.js:924
 #: src/control/Control.NotebookbarImpress.js:2005
 msgid "Slide Layout"
-msgstr ""
+msgstr "Slidelayout"
 
 #: src/control/Control.NotebookbarImpress.js:946
 #: src/control/Control.NotebookbarImpress.js:2015
@@ -5877,15 +5969,15 @@ msgstr "Sidelayout"
 #: src/control/Control.NotebookbarImpress.js:954
 #: src/control/Control.NotebookbarImpress.js:2022
 msgid "Reset Layout"
-msgstr ""
+msgstr "Nulstil layout"
 
 #: src/control/Control.NotebookbarImpress.js:968
 msgid "Character"
-msgstr ""
+msgstr "Tegn"
 
 #: src/control/Control.NotebookbarImpress.js:1234
 msgid "Spacing & Color"
-msgstr ""
+msgstr "Afstand og farve"
 
 #: src/control/Control.NotebookbarImpress.js:1582
 #, fuzzy
@@ -5894,11 +5986,11 @@ msgstr "Indsæt figurer"
 
 #: src/control/Control.NotebookbarImpress.js:1590
 msgid "Update Links"
-msgstr ""
+msgstr "Opdatér links"
 
 #: src/control/Control.NotebookbarImpress.js:1942
 msgid "Master Slide Templates"
-msgstr ""
+msgstr "Skabeloner til slidemastere"
 
 #: src/control/Control.NotebookbarImpress.js:1954
 #, fuzzy
@@ -5907,15 +5999,15 @@ msgstr "Luk præsentation"
 
 #: src/control/Control.NotebookbarImpress.js:1963
 msgid "Presentation Templates"
-msgstr ""
+msgstr "Præsentationsskabeloner"
 
 #: src/control/Control.NotebookbarImpress.js:2034
 msgid "Slide Size"
-msgstr ""
+msgstr "Slidestørrelse"
 
 #: src/control/Control.NotebookbarImpress.js:2057
 msgid "Background Image"
-msgstr ""
+msgstr "Baggrundsbillede"
 
 #: src/control/Control.NotebookbarImpress.js:2977
 #, fuzzy
@@ -5936,15 +6028,15 @@ msgstr "Gå offline"
 
 #: src/control/Control.NotebookbarWriter.js:517
 msgid "Lets a screen reader follow the cursor and read the document"
-msgstr ""
+msgstr "Gør det muligt for en skærmlæser at følge markøren og læse dokumentet"
 
 #: src/control/Control.NotebookbarWriter.js:654
 msgid "Validate Sidebar"
-msgstr ""
+msgstr "Kontrollér sidepanelets tilgængelighed"
 
 #: src/control/Control.NotebookbarWriter.js:661
 msgid "Validate Dialog"
-msgstr ""
+msgstr "Kontrollér dialogboksens tilgængelighed"
 
 #: src/control/Control.NotebookbarWriter.js:1056
 #: src/control/Control.Zotero.js:829
@@ -5953,20 +6045,20 @@ msgstr "Typografier"
 
 #: src/control/Control.NotebookbarWriter.js:1209
 msgid "Lists/Bullets"
-msgstr ""
+msgstr "Lister/punktopstillinger"
 
 #: src/control/Control.NotebookbarWriter.js:1496
 msgid "Header & Footer"
-msgstr ""
+msgstr "Sidehoved og sidefod"
 
 #: src/control/Control.NotebookbarWriter.js:1565
 msgid "Section"
-msgstr ""
+msgstr "Sektion"
 
 #: src/control/Control.NotebookbarWriter.js:1650
 #: src/control/jsdialog/Widget.EmojiPicker.ts:182
 msgid "Symbols"
-msgstr ""
+msgstr "Symboler"
 
 #: src/control/Control.NotebookbarWriter.js:1703
 msgid "Rich Text"
@@ -5978,27 +6070,27 @@ msgstr "Tjekboks"
 
 #: src/control/Control.NotebookbarWriter.js:1772
 msgid "Page Width"
-msgstr ""
+msgstr "Sidebredde"
 
 #: src/control/Control.NotebookbarWriter.js:2359
 msgid "Spellcheck"
-msgstr ""
+msgstr "Stavekontrol"
 
 #: src/control/Control.NotebookbarWriter.js:2372
 msgid "Spelling Options"
-msgstr ""
+msgstr "Indstillinger for stavekontrol"
 
 #: src/control/Control.NotebookbarWriter.js:2496
 msgid "View Changes"
-msgstr ""
+msgstr "Vis ændringer"
 
 #: src/control/Control.NotebookbarWriter.js:2658
 msgid "Element categories"
-msgstr ""
+msgstr "Elementkategorier"
 
 #: src/control/Control.ContextToolbar.ts:154
 msgid "Switch to Editing"
-msgstr ""
+msgstr "Skift til redigering"
 
 #: src/control/Control.HyperlinkWizard.ts:67
 #, fuzzy
@@ -6007,7 +6099,7 @@ msgstr "Link"
 
 #: src/control/Control.PartsPreview.js:456
 msgid "Show everyone on this slide"
-msgstr ""
+msgstr "Vis alle på denne slide"
 
 #: src/control/Control.PartsPreview.js:622
 #: src/control/Control.PartsPreview.js:697 src/map/Clipboard.js:1585
@@ -6016,27 +6108,27 @@ msgstr "Indsæt"
 
 #: src/control/Control.PartsPreview.js:761
 msgid "Unlink Slide"
-msgstr ""
+msgstr "Fjern sammenkædning af slide"
 
 #: src/control/Control.PartsPreview.js:783
 msgid "Add Section"
-msgstr ""
+msgstr "Tilføj sektion"
 
 #: src/control/Control.PartsPreview.js:900
 msgid "with 1 other"
 msgid_plural "with %n others"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "med 1 anden"
+msgstr[1] "med %n andre"
 
 #: src/control/Control.PartsPreview.js:910
 msgid "with %1"
-msgstr ""
+msgstr "med %1"
 
 #: src/control/Control.PartsPreview.js:911
 msgid "with %1 and 1 other"
 msgid_plural "with %1 and %n others"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "med %1 og 1 anden"
+msgstr[1] "med %1 og %n andre"
 
 #: src/control/Control.PartsPreview.js:952
 msgid "preview of page %1"
@@ -6044,216 +6136,222 @@ msgstr "forhåndsvisning af side %1"
 
 #: src/control/Control.PartsPreview.js:967
 msgid "preview of page %1, %3 is missing"
-msgstr ""
+msgstr "forhåndsvisning af side %1, %3 mangler"
 
 #: src/control/Control.PartsPreview.js:968
 msgid "Slide %1, %3 is missing"
-msgstr ""
+msgstr "Slide %1, %3 mangler"
 
 #: src/control/Control.PartsPreview.js:972
 msgid "preview of page %1, not found in %3"
-msgstr ""
+msgstr "forhåndsvisningen af side %1 blev ikke fundet i %3"
 
 #: src/control/Control.PartsPreview.js:973
 msgid "Slide %1, not found in %3"
-msgstr ""
+msgstr "Slide %1 blev ikke fundet i %3"
 
 #: src/control/Control.PartsPreview.js:977
 msgid "preview of page %1, no access to %3"
-msgstr ""
+msgstr "forhåndsvisning af side %1, ingen adgang til %3"
 
 #: src/control/Control.PartsPreview.js:978
 msgid "Slide %1, no access to %3"
-msgstr ""
+msgstr "Slide %1, ingen adgang til %3"
 
 #: src/control/Control.PartsPreview.js:982
 msgid "preview of page %1, could not open %3"
-msgstr ""
+msgstr "forhåndsvisning af side %1, %3 kunne ikke åbnes"
 
 #: src/control/Control.PartsPreview.js:983
 msgid "Slide %1, could not open %3"
-msgstr ""
+msgstr "Slide %1, %3 kunne ikke åbnes"
 
 #: src/control/Control.PartsPreview.js:988
 msgid "preview of page %1, %2 changed in %3"
-msgstr ""
+msgstr "forhåndsvisning af side %1, %2 er ændret i %3"
 
 #: src/control/Control.PartsPreview.js:989
 msgid "Slide %1, %2 changed in %3"
-msgstr ""
+msgstr "Slide %1, %2 er ændret i %3"
 
 #: src/control/Control.PartsPreview.js:992
 msgid "preview of page %1, changed in %3"
-msgstr ""
+msgstr "forhåndsvisning af side %1, ændret i %3"
 
 #: src/control/Control.PartsPreview.js:993
 msgid "Slide %1, changed in %3"
-msgstr ""
+msgstr "Slide %1, ændret i %3"
 
 #: src/control/Control.PartsPreview.js:997
 msgid "preview of page %1, %3 is disconnected"
-msgstr ""
+msgstr "forhåndsvisning af side %1, forbindelsen til %3 er afbrudt"
 
 #: src/control/Control.PartsPreview.js:998
 msgid "Slide %1, %3 is disconnected"
-msgstr ""
+msgstr "Slide %1, forbindelsen til %3 er afbrudt"
 
 #: src/control/Control.PartsPreview.js:1002
 msgid "preview of page %1, linked to %2 in %3"
-msgstr ""
+msgstr "forhåndsvisning af side %1, sammenkædet med %2 i %3"
 
 #: src/control/Control.PartsPreview.js:1003
 msgid "Slide %1, linked to %2 in %3"
-msgstr ""
+msgstr "Slide %1, sammenkædet med %2 i %3"
 
 #: src/control/Control.PartsPreview.js:1006
 msgid "preview of page %1, linked to %2"
-msgstr ""
+msgstr "forhåndsvisning af side %1, sammenkædet med %2"
 
 #: src/control/Control.PartsPreview.js:1007
 msgid "Slide %1, linked to %2"
-msgstr ""
+msgstr "Slide %1, sammenkædet med %2"
 
 #: src/control/Control.PartsPreview.js:1355
 #: src/control/Control.PartsPreview.js:1487
 msgid "Rename Section"
-msgstr ""
+msgstr "Omdøb sektion"
 
 #: src/control/Control.PartsPreview.js:1362
 msgid "Remove Section"
-msgstr ""
+msgstr "Fjern sektion"
 
 #: src/control/Control.PartsPreview.js:1370
 msgid "Remove Section & Slides"
-msgstr ""
+msgstr "Fjern sektion og slides"
 
 #: src/control/Control.PartsPreview.js:1379
 msgid "Move Section Up"
-msgstr ""
+msgstr "Flyt sektion op"
 
 #: src/control/Control.PartsPreview.js:1388
 msgid "Move Section Down"
-msgstr ""
+msgstr "Flyt sektion ned"
 
 #: src/control/Control.PartsPreview.js:1397
 msgid "Collapse All Sections"
-msgstr ""
+msgstr "Fold alle sektioner sammen"
 
 #: src/control/Control.PartsPreview.js:1405
 msgid "Expand All Sections"
-msgstr ""
+msgstr "Fold alle sektioner ud"
 
 #: src/control/Control.PartsPreview.js:1439 src/docdispatcher.ts:1002
 msgid "Delete section \"%1\" and its %n slide?"
 msgid_plural "Delete section \"%1\" and its %n slides?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Slet sektionen \"%1\" og dens %n slide?"
+msgstr[1] "Slet sektionen \"%1\" og dens %n slides?"
 
 #: src/control/Control.PartsPreview.js:1488
 msgid "Enter new section name:"
-msgstr ""
+msgstr "Angiv nyt sektionsnavn:"
 
 #: src/control/Control.PresentationBar.js:99
 msgid "Import your slides"
-msgstr ""
+msgstr "Importér dine slides"
 
 #: src/control/Control.SlideImportPane.tsx:678
 msgid "Checking..."
-msgstr ""
+msgstr "Kontrollerer..."
 
 #: src/control/Control.SlideImportPane.tsx:680
 #: src/control/Control.SlideLinkToolbar.tsx:165
 msgid "Missing"
-msgstr ""
+msgstr "Mangler"
 
 #: src/control/Control.SlideImportPane.tsx:682
 #: src/control/Control.SlideLinkToolbar.tsx:163
 msgid "No access"
-msgstr ""
+msgstr "Ingen adgang"
 
 #: src/control/Control.SlideImportPane.tsx:684
 msgid "Could not open"
-msgstr ""
+msgstr "Kunne ikke åbnes"
 
 #: src/control/Control.SlideImportPane.tsx:690
 msgid "{0} changed"
-msgstr ""
+msgstr "{0} er ændret"
 
 #: src/control/Control.SlideImportPane.tsx:693
 msgid "Disconnected"
-msgstr ""
+msgstr "Forbindelsen er afbrudt"
 
 #: src/control/Control.SlideImportPane.tsx:694
 #: src/control/Control.SlideLinkToolbar.tsx:115
 msgid "Linked"
-msgstr ""
+msgstr "Sammenkædet"
 
 #: src/control/Control.SlideImportPane.tsx:697
 #: src/control/Control.SlideImportPane.tsx:1442
 msgid "Not linked"
-msgstr ""
+msgstr "Ikke sammenkædet"
 
 #: src/control/Control.SlideImportPane.tsx:740
 #: src/control/Control.SlideImportPane.tsx:759
 msgid "Reading the slides..."
-msgstr ""
+msgstr "Indlæser slides..."
 
 #: src/control/Control.SlideImportPane.tsx:742
 msgid "Looking for the file..."
-msgstr ""
+msgstr "Leder efter filen..."
 
 #: src/control/Control.SlideImportPane.tsx:745
 msgid ""
 "The slides are in this presentation. You do not have permission to open the "
 "file they came from."
 msgstr ""
+"Slidesene findes i denne præsentation. Du har ikke tilladelse til at åbne "
+"den fil, de stammer fra."
 
 #: src/control/Control.SlideImportPane.tsx:749
 msgid ""
 "The slides are in this presentation. Looking for the file they came from "
 "did not work this time."
 msgstr ""
+"Slidesene findes i denne præsentation, men det lykkedes ikke at finde den "
+"fil, de stammer fra."
 
 #: src/control/Control.SlideImportPane.tsx:752
 msgid ""
 "The slides are in this presentation. The file they came from is no longer "
 "here."
 msgstr ""
+"Slidesene findes i denne præsentation. Filen, de stammer fra, findes ikke "
+"længere her."
 
 #: src/control/Control.SlideImportPane.tsx:756
 msgid "This file is here. You do not have permission to open it."
-msgstr ""
+msgstr "Denne fil findes her. Du har ikke tilladelse til at åbne den."
 
 #: src/control/Control.SlideImportPane.tsx:758
 msgid "This file could not be read this time."
-msgstr ""
+msgstr "Denne fil kunne ikke læses denne gang."
 
 #: src/control/Control.SlideImportPane.tsx:769
 #: src/control/Control.SlideImportPane.tsx:1292
 msgid "Look again"
-msgstr ""
+msgstr "Søg igen"
 
 #: src/control/Control.SlideImportPane.tsx:774
 #: src/control/Control.SlideImportPane.tsx:1297
 msgid "Locate file"
-msgstr ""
+msgstr "Find fil"
 
 #: src/control/Control.SlideImportPane.tsx:783
 #: src/control/Control.SlideImportPane.tsx:1316
 msgid "Reload slides"
-msgstr ""
+msgstr "Genindlæs slides"
 
 #: src/control/Control.SlideImportPane.tsx:857
 msgid "1 slide inserted"
-msgstr ""
+msgstr "1 slide indsat"
 
 #: src/control/Control.SlideImportPane.tsx:858
 msgid "{0} slides inserted"
-msgstr ""
+msgstr "{0} slides indsat"
 
 #: src/control/Control.SlideImportPane.tsx:865
 msgid "Slide {0}"
-msgstr ""
+msgstr "Slide {0}"
 
 #: src/control/Control.SlideImportPane.tsx:870
 #, fuzzy
@@ -6262,52 +6360,49 @@ msgstr "Indsæt figurer"
 
 #: src/control/Control.SlideImportPane.tsx:878
 msgid "Insert {0} from {1}"
-msgstr ""
+msgstr "Indsæt {0} fra {1}"
 
 #: src/control/Control.SlideImportPane.tsx:881
-#, fuzzy
 msgid "Insert 1 slide"
-msgstr "Indsæt figurer"
+msgstr "Indsæt 1 slide"
 
 #: src/control/Control.SlideImportPane.tsx:882
-#, fuzzy
 msgid "Insert {0} slides"
-msgstr "Indsæt figurer"
+msgstr "Indsæt {0} slides"
 
 #: src/control/Control.SlideImportPane.tsx:914
 msgid "{0} of {1}"
-msgstr ""
+msgstr "{0} af {1}"
 
 #: src/control/Control.SlideImportPane.tsx:917
 #: src/control/Control.SlideImportPane.tsx:1688
 msgid "{0} slides"
-msgstr ""
+msgstr "{0} slides"
 
 #: src/control/Control.SlideImportPane.tsx:924
 msgid "Inserts at the end"
-msgstr ""
+msgstr "Indsættes til sidst"
 
 #: src/control/Control.SlideImportPane.tsx:925
 msgid "Inserts after slide {0}"
-msgstr ""
+msgstr "Indsættes efter slide {0}"
 
 #: src/control/Control.SlideImportPane.tsx:929
 msgid "Opening file..."
-msgstr ""
+msgstr "Åbner fil..."
 
 #: src/control/Control.SlideImportPane.tsx:930
 msgid "Inserting slides..."
-msgstr ""
+msgstr "Indsætter slides..."
 
 #: src/control/Control.SlideImportPane.tsx:1013
-#, fuzzy
 msgid "Import slides"
-msgstr "Indsæt figurer"
+msgstr "Importér slides"
 
 #: src/control/Control.SlideImportPane.tsx:1019
 #: src/control/Control.SlideImportPane.tsx:1020
 msgid "Close slide import"
-msgstr ""
+msgstr "Luk import af slides"
 
 #: src/control/Control.SlideImportPane.tsx:1035
 msgid "Add presentation…"
@@ -6315,209 +6410,216 @@ msgstr "Afslut præsentation…"
 
 #: src/control/Control.SlideImportPane.tsx:1050
 msgid "No presentations yet"
-msgstr ""
+msgstr "Ingen præsentationer endnu"
 
 #: src/control/Control.SlideImportPane.tsx:1054
 msgid ""
 "Add a presentation to browse its slides and insert them into this deck."
 msgstr ""
+"Tilføj en præsentation for at gennemse dens slides og indsætte dem i denne "
+"præsentation."
 
 #: src/control/Control.SlideImportPane.tsx:1087
 msgid "Hide all slides"
-msgstr ""
+msgstr "Skjul alle slides"
 
 #: src/control/Control.SlideImportPane.tsx:1087
 msgid "Show all slides"
-msgstr ""
+msgstr "Vis alle slides"
 
 #: src/control/Control.SlideImportPane.tsx:1119
 #: src/control/Control.SlideImportPane.tsx:1120
 msgid "Filter presentations"
-msgstr ""
+msgstr "Filtrér præsentationer"
 
 #: src/control/Control.SlideImportPane.tsx:1148
 msgid "Slide sources"
-msgstr ""
+msgstr "Slidekilder"
 
 #: src/control/Control.SlideImportPane.tsx:1156
 msgid "Presentations to import from"
-msgstr ""
+msgstr "Præsentationer, der kan importeres fra"
 
 #: src/control/Control.SlideImportPane.tsx:1225
 msgid "{0} picked"
-msgstr ""
+msgstr "{0} valgt"
 
 #: src/control/Control.SlideImportPane.tsx:1263
 msgid "Actions for {0}"
-msgstr ""
+msgstr "Handlinger for {0}"
 
 #: src/control/Control.SlideImportPane.tsx:1307
 msgid "Hide slides"
-msgstr ""
+msgstr "Skjul slides"
 
 #: src/control/Control.SlideImportPane.tsx:1307
 msgid "Show slides"
-msgstr ""
+msgstr "Vis slides"
 
 #: src/control/Control.SlideImportPane.tsx:1323
 msgid "Select all slides"
-msgstr ""
+msgstr "Markér alle slides"
 
 #: src/control/Control.SlideImportPane.tsx:1331
 msgid "Update the slides linked to this file"
-msgstr ""
+msgstr "Opdatér de slides, der er sammenkædet med denne fil"
 
 #: src/control/Control.SlideImportPane.tsx:1338
 msgid "Remove from list"
-msgstr ""
+msgstr "Fjern fra liste"
 
 #: src/control/Control.SlideImportPane.tsx:1427
 msgid "Slides in {0}"
-msgstr ""
+msgstr "Slides i {0}"
 
 #: src/control/Control.SlideImportPane.tsx:1441
 msgid "Original design"
-msgstr ""
+msgstr "Oprindeligt design"
 
 #: src/control/Control.SlideImportPane.tsx:1444
 msgid "Linked, follows the slide number"
-msgstr ""
+msgstr "Sammenkædet, følger slidenummeret"
 
 #: src/control/Control.SlideImportPane.tsx:1445
 msgid "Linked, follows the slide"
-msgstr ""
+msgstr "Sammenkædet, følger sliden"
 
 #: src/control/Control.SlideImportPane.tsx:1482
 msgid "Keep original design"
-msgstr ""
+msgstr "Bevar oprindeligt design"
 
 #: src/control/Control.SlideImportPane.tsx:1496
 msgid "Stay linked to the source file"
-msgstr ""
+msgstr "Bevar sammenkædning med kildefilen"
 
 #: src/control/Control.SlideImportPane.tsx:1534
 msgid "Follow the slide, wherever it moves"
-msgstr ""
+msgstr "Følg sliden, uanset hvor den flyttes hen"
 
 #: src/control/Control.SlideImportPane.tsx:1536
 msgid "Follow the slide number"
-msgstr ""
+msgstr "Følg slidenummeret"
 
 #: src/control/Control.SlideImportPane.tsx:1694
 msgid "Select the slides of {0}"
-msgstr ""
+msgstr "Vælg slides fra {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:102
 msgid "Linked to {0} in {1}"
-msgstr ""
+msgstr "Sammenkædet med {0} i {1}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:126
 msgid "Hide the actions for this linked slide"
-msgstr ""
+msgstr "Skjul handlingerne for denne sammenkædede slide"
 
 #: src/control/Control.SlideLinkToolbar.tsx:127
 msgid "Show the actions for this linked slide"
-msgstr ""
+msgstr "Vis handlingerne for denne sammenkædede slide"
 
 #: src/control/Control.SlideLinkToolbar.tsx:137
 msgid "Unlink"
-msgstr ""
+msgstr "Fjern sammenkædning"
 
 #: src/control/Control.SlideLinkToolbar.tsx:161
 msgid "Not available"
-msgstr ""
+msgstr "Ikke tilgængelig"
 
 #: src/control/SlideSectionHeader.tsx:68
 msgid "Toggle section %1"
-msgstr ""
+msgstr "Fold sektion %1 ud eller sammen"
 
 #: src/slideimport/SlideImportSession.ts:255
 msgid "The slides of the source could not be read."
-msgstr ""
+msgstr "Slidesene fra kilden kunne ikke læses."
 
 #: src/slideimport/SlideImportSession.ts:306
 #: src/slideimport/SlideImportSession.ts:315
 msgid "Inserting the slides failed."
-msgstr ""
+msgstr "Slidesene kunne ikke indsættes."
 
 #: src/slideimport/SlideImportSession.ts:324
 msgid "Importing slides failed."
-msgstr ""
+msgstr "Slidesene kunne ikke importeres."
 
 #: src/slideimport/SlideLinks.ts:238
 msgid "No slide of this presentation is linked to another file."
-msgstr ""
+msgstr "Ingen slides i denne præsentation er sammenkædet med en anden fil."
 
 #: src/slideimport/SlideLinks.ts:276
 msgid "This slide is not linked to another file."
-msgstr ""
+msgstr "Denne slide er ikke sammenkædet med en anden fil."
 
 #: src/slideimport/SlideLinks.ts:433 src/slideimport/SlideLinks.ts:723
 msgid ""
 "{0} is not one of the documents this one is related to, so the server "
 "cannot read it."
 msgstr ""
+"{0} er ikke et af de dokumenter, dette dokument er relateret til, så "
+"serveren kan ikke læse det."
 
 #: src/slideimport/SlideLinks.ts:457
 msgid "You do not have access to {0}, so its pages cannot be refreshed."
-msgstr ""
+msgstr "Du har ikke adgang til {0}, så siderne derfra kan ikke opdateres."
 
 #: src/slideimport/SlideLinks.ts:458 src/slideimport/SlideLinks.ts:726
 msgid "{0} could not be read."
-msgstr ""
+msgstr "{0} kunne ikke læses."
 
 #: src/slideimport/SlideLinks.ts:560
 msgid "Cannot update the slides of {0}: source lacks the matching slides"
 msgstr ""
+"Slidesene fra {0} kan ikke opdateres: Kilden indeholder ikke de tilsvarende "
+"slides"
 
 #: src/slideimport/SlideLinks.ts:563 src/slideimport/SlideLinks.ts:729
 msgid "The slides of {0} could not be read into this presentation."
-msgstr ""
+msgstr "Slidesene fra {0} kunne ikke indlæses i denne præsentation."
 
 #: src/slideimport/SlideLinks.ts:654
 msgid "Cannot update slide {0}: the source lacks matching slide"
 msgstr ""
+"Slide {0} kan ikke opdateres: Kilden indeholder ikke den tilsvarende slide"
 
 #: src/slideimport/SlideLinks.ts:669
 msgid "Unlinking the slide failed."
-msgstr ""
+msgstr "Sammenkædningen af sliden kunne ikke fjernes."
 
 #: src/slideimport/SlideLinks.ts:680 src/slideimport/SlideLinks.ts:741
 msgid "Updating the slides of {0} failed."
-msgstr ""
+msgstr "Slidesene fra {0} kunne ikke opdateres."
 
 #: src/slideimport/SlideLinks.ts:695
 msgid "No slide of {0} was updated."
-msgstr ""
+msgstr "Ingen slides fra {0} blev opdateret."
 
 #: src/slideimport/SlideLinks.ts:699
 msgid "1 slide updated from {0}."
-msgstr ""
+msgstr "1 slide opdateret fra {0}."
 
 #: src/slideimport/SlideLinks.ts:703
 msgid "{0} slides updated from {1}."
-msgstr ""
+msgstr "{0} slides opdateret fra {1}."
 
 #: src/slideimport/SlideLinks.ts:732
 msgid "No slide of this presentation is linked to {0}."
-msgstr ""
+msgstr "Ingen slides i denne præsentation er sammenkædet med {0}."
 
 #: src/slideimport/SlideLinks.ts:738
 msgid "Another update is still running. Ask for {0} again in a moment."
-msgstr ""
+msgstr "En anden opdatering kører stadig. Anmod om {0} igen om et øjeblik."
 
 #: src/control/Control.PaneExpander.ts:111
 #: src/control/Control.PaneExpander.ts:115
 msgid "Maximize to grid"
-msgstr ""
+msgstr "Udvid til gittervisning"
 
 #: src/control/Control.PaneExpander.ts:115
 msgid "Exit grid"
-msgstr ""
+msgstr "Afslut gittervisning"
 
 #: src/control/Control.PaneSplitter.tsx:70
 msgid "Resize panels"
-msgstr ""
+msgstr "Tilpas panelstørrelser"
 
 #: src/control/Control.Scroll.Annotation.js:19
 msgid "Scroll up annotations"
@@ -6533,23 +6635,23 @@ msgstr "Ingen problemer med SSL-verifikation identificeret"
 
 #: src/control/Control.ServerAuditDialog.ts:78
 msgid "Each document is securely contained (landlock)"
-msgstr ""
+msgstr "Hvert dokument er sikkert isoleret (Landlock)"
 
 #: src/control/Control.ServerAuditDialog.ts:83
 msgid "Each document is securely contained (Linux namespaces)"
-msgstr ""
+msgstr "Hvert dokument er sikkert isoleret (Linux-navnerum)"
 
 #: src/control/Control.ServerAuditDialog.ts:88
 msgid "Each document is securely contained (capabilities and chroot)"
-msgstr ""
+msgstr "Hvert dokument er sikkert isoleret (capabilities og chroot)"
 
 #: src/control/Control.ServerAuditDialog.ts:102
 msgid "System call security filtering enabled"
-msgstr ""
+msgstr "Sikkerhedsfiltrering af systemkald er aktiveret"
 
 #: src/control/Control.ServerAuditDialog.ts:112
 msgid "The trusted WOPI hosts are configured"
-msgstr ""
+msgstr "Betroede WOPI-værter er konfigureret"
 
 #: src/control/Control.ServerAuditDialog.ts:128
 msgid "Hardware resources are sufficient for optimal performance"
@@ -6557,19 +6659,21 @@ msgstr "Hardware-ressourcer er tilstrækkelige for optimal ydelse"
 
 #: src/control/Control.ServerAuditDialog.ts:141
 msgid "Fast kit jail bind mounting enabled"
-msgstr ""
+msgstr "Hurtig bind-montering af Kit-sandkassen er aktiveret"
 
 #: src/control/Control.ServerAuditDialog.ts:146
 msgid "Fast kit jail setup with landlock, nothing to copy or mount"
 msgstr ""
+"Hurtig opsætning af Kit-sandkassen med Landlock – ingen filer skal kopieres "
+"eller monteres"
 
 #: src/control/Control.ServerAuditDialog.ts:159
 msgid "Poorly performing proxying of all network requests."
-msgstr ""
+msgstr "Langsom videresendelse af alle netværksanmodninger via proxy."
 
 #: src/control/Control.ServerAuditDialog.ts:163
 msgid "Direct network connection"
-msgstr ""
+msgstr "Direkte netværksforbindelse"
 
 #: src/control/Control.ServerAuditDialog.ts:169
 #, fuzzy
@@ -6582,7 +6686,7 @@ msgstr ""
 
 #: src/control/Control.ServerAuditDialog.ts:175
 msgid "Connected with the compact WebSocket URL form"
-msgstr ""
+msgstr "Forbundet med det kompakte WebSocket-URL-format"
 
 #: src/control/Control.ServerAuditDialog.ts:184
 msgid "The IsAdminUser property is not set by integration"
@@ -6610,16 +6714,15 @@ msgstr "Integrator er ikke klar til PostMessage-kald"
 
 #: src/control/Control.ServerAuditDialog.ts:289
 msgid "Document container started in {1} ms"
-msgstr ""
+msgstr "Dokumentcontaineren blev startet på {1} ms"
 
 #: src/control/Control.ServerAuditDialog.ts:374
 msgid "Alerts:"
 msgstr "Advarsler:"
 
 #: src/control/Control.ServerAuditDialog.ts:442
-#, fuzzy
 msgid "Check warnings of your server"
-msgstr "Tjek sikkerhedsadvarsler på din server"
+msgstr "Tjek din servers sikkerhedsadvarsler"
 
 #: src/control/Control.ServerAuditDialog.ts:443
 msgid "OPEN"
@@ -6649,7 +6752,7 @@ msgstr "Indsæt ark"
 
 #: src/control/Control.SheetsBar.js:88
 msgid "Show sheet list"
-msgstr ""
+msgstr "Vis arkliste"
 
 #: src/control/Control.StatusBar.js:237
 #: src/control/jsdialog/Definitions.Menu.ts:184
@@ -6684,25 +6787,27 @@ msgstr "Antal i markering"
 
 #: src/control/Control.StatusBar.js:311
 msgid "Zoom to Fit Slide"
-msgstr ""
+msgstr "Tilpas zoom til slide"
 
 #: src/control/Control.StatusBar.js:312
 msgid ""
 "Fit the page to the window width. Smart Zoom on open can be toggled in "
 "Options under File tab."
 msgstr ""
+"Tilpas siden til vinduets bredde. Intelligent zoom ved åbning kan slås til "
+"eller fra i Indstillinger under fanen Filer."
 
 #: src/control/Control.StatusBar.js:312
 msgid "Fit the page to the window width."
-msgstr ""
+msgstr "Tilpas siden til vinduets bredde."
 
 #: src/control/Control.StatusBar.js:317
 msgid "Status Bar Menu"
-msgstr ""
+msgstr "Statuslinjemenu"
 
 #: src/control/Control.StatusBar.js:613
 msgid "The document is probably locked and has been opened as view-only"
-msgstr ""
+msgstr "Dokumentet er sandsynligvis låst og er åbnet i visningstilstand"
 
 #: src/control/Control.StatusBar.js:622
 msgid ""
@@ -6740,7 +6845,7 @@ msgstr "Indsæt ark efter dette"
 
 #: src/control/Control.Tabs.js:109 src/control/Control.Tabs.js:116
 msgid "Reset Tab Color"
-msgstr ""
+msgstr "Nulstil fanefarve"
 
 #: src/control/Control.Tabs.js:136 src/control/Control.Tabs.js:140
 msgid "Move Sheet Left"
@@ -6756,7 +6861,7 @@ msgstr "Kopiér ark..."
 
 #: src/control/Control.Tabs.js:364
 msgid "{0}, protected"
-msgstr ""
+msgstr "{0}, beskyttet"
 
 #: src/control/Control.Tabs.js:709
 msgid "Are you sure you want to delete sheet, {sheet}?"
@@ -6772,19 +6877,19 @@ msgstr "Angiv et nyt arknavn"
 
 #: src/control/Control.Tabs.js:758
 msgid "Protect Sheet"
-msgstr ""
+msgstr "Beskyt ark"
 
 #: src/control/Control.Tabs.js:758
 msgid "Enter a password to protect the sheet"
-msgstr ""
+msgstr "Angiv en adgangskode for at beskytte arket"
 
 #: src/control/Control.Tabs.js:762
 msgid "Unprotect Sheet"
-msgstr ""
+msgstr "Fjern arkbeskyttelse"
 
 #: src/control/Control.Tabs.js:762
 msgid "Enter the password to unprotect the sheet"
-msgstr ""
+msgstr "Angiv adgangskoden for at fjerne arkbeskyttelsen"
 
 #: src/control/Control.Toolbar.js:1060
 msgid ""
@@ -6796,15 +6901,15 @@ msgstr ""
 
 #: src/control/Control.Toolbar.js:1095
 msgid "Sheet recalculated in %1 ms"
-msgstr ""
+msgstr "Arket blev genberegnet på %1 ms"
 
 #: src/control/Control.Toolbar.js:1096
 msgid "Document recalculated in %1 ms"
-msgstr ""
+msgstr "Dokumentet blev genberegnet på %1 ms"
 
 #: src/control/Control.TopToolbar.js:121 src/control/Control.TopToolbar.js:125
 msgid "Show Menu Bar"
-msgstr ""
+msgstr "Vis menulinje"
 
 #: src/control/Control.TopToolbar.js:180
 msgid "Active Sheet"
@@ -6828,13 +6933,12 @@ msgid "Insert connectors"
 msgstr "Indsæt forbindelseslinjer"
 
 #: src/control/Control.UIManager.ts:123
-#, fuzzy
 msgid "Main"
-msgstr "Min"
+msgstr "Hoved"
 
 #: src/control/Control.UIManager.ts:255
 msgid "You are currently in View mode, press {0} to edit"
-msgstr ""
+msgstr "Du er i visningstilstand. Tryk på {0} for at redigere"
 
 #: src/control/Control.UIManager.ts:660
 msgid "Enter new name"
@@ -6853,34 +6957,36 @@ msgid ""
 "An embedded script uses the legacy com.sun.star UNO API, which may be "
 "removed in future releases."
 msgstr ""
+"Et indlejret script bruger det ældre UNO-API (com.sun.star), som muligvis "
+"fjernes i fremtidige versioner."
 
 #: src/control/Control.UIManager.ts:3127
 msgid "Confirm password"
-msgstr ""
+msgstr "Bekræft adgangskode"
 
 #: src/control/Control.UIManager.ts:3173
 msgid "The confirmation does not match the password"
-msgstr ""
+msgstr "Adgangskoderne stemmer ikke overens"
 
 #: src/control/Control.UIManager.ts:3390
 msgid "Copy error details"
-msgstr ""
+msgstr "Kopiér fejloplysninger"
 
 #: src/control/Control.UIManager.ts:3437
 msgid "Show technical details"
-msgstr ""
+msgstr "Vis tekniske oplysninger"
 
 #: src/control/Control.UIManager.ts:3451
 msgid "Technical Details:"
-msgstr ""
+msgstr "Tekniske oplysninger:"
 
 #: src/control/Control.UIManager.ts:3455
 msgid "Error details copied to clipboard"
-msgstr ""
+msgstr "Fejloplysningerne er kopieret til udklipsholderen"
 
 #: src/control/Control.UIManager.ts:3465
 msgid "Failed to copy error details"
-msgstr ""
+msgstr "Fejloplysningerne kunne ikke kopieres"
 
 #: src/control/Control.UserList.ts:64
 msgid "{user} has joined"
@@ -7077,15 +7183,17 @@ msgstr ""
 
 #: src/control/HRuler.ts:326
 msgid "First line"
-msgstr ""
+msgstr "Første linje"
 
 #: src/control/HRuler.ts:332
 msgid "Before"
-msgstr ""
+msgstr "Før"
 
 #: src/control/HRuler.ts:404
 msgid "Double-click to insert a tab stop. Right-click for more options."
 msgstr ""
+"Dobbeltklik for at indsætte et tabulatorstop. Højreklik for at se flere "
+"muligheder."
 
 #: src/control/HRuler.ts:788 src/control/HRuler.ts:953
 msgid "Left Margin"
@@ -7128,81 +7236,80 @@ msgid "Wrong password provided. Please try again."
 msgstr "Forkert adgangskode. Prøv igen."
 
 #: src/control/Permission.js:193
-#, fuzzy
 msgid "Document requires a password to edit."
-msgstr "Dokumentet kræver en adgangskode for at blive vist."
+msgstr "Dokumentet kræver en adgangskode for at kunne redigeres."
 
 #: src/control/Permission.js:430
 msgid "Edit locally"
-msgstr ""
+msgstr "Redigér lokalt"
 
 #: src/control/Permission.js:431
 msgid "Changes sync when you save"
-msgstr ""
+msgstr "Ændringerne synkroniseres, når du gemmer"
 
 #: src/control/Permission.js:437
 msgid "Collaborative editing"
-msgstr ""
+msgstr "Samarbejdsredigering"
 
 #: src/control/Permission.js:438 src/control/Permission.js:471
 msgid "Edit together in real-time"
-msgstr ""
+msgstr "Redigér sammen i realtid"
 
 #: src/control/Permission.js:461
 msgid "Keep viewing local copy"
-msgstr ""
+msgstr "Fortsæt med at se den lokale kopi"
 
 #: src/control/Permission.js:462
 msgid "Continue with your version"
-msgstr ""
+msgstr "Fortsæt med din version"
 
 #: src/control/Permission.js:470
 msgid "Join collaborative editing"
-msgstr ""
+msgstr "Deltag i samarbejdsredigering"
 
 #: src/control/Permission.js:496
 msgid "Waiting for changes to be saved..."
-msgstr ""
+msgstr "Venter på, at ændringerne gemmes..."
 
 #: src/control/Permission.js:588 src/control/Permission.js:638
 msgid "How would you like to edit?"
-msgstr ""
+msgstr "Hvordan vil du redigere?"
 
 #: src/control/Permission.js:589
 msgid ""
 "Other users are editing this document. Choose how you'd like to continue:"
-msgstr ""
+msgstr "Andre brugere redigerer dette dokument. Vælg, hvordan du vil fortsætte:"
 
 #: src/control/Permission.js:598
 msgid "opened this document"
-msgstr ""
+msgstr "åbnede dette dokument"
 
 #: src/control/Permission.js:599
 msgid "{0} opened this document"
-msgstr ""
+msgstr "{0} åbnede dette dokument"
 
 #: src/control/Permission.js:600 src/control/Permission.js:616
 msgid "Choose how you'd like to continue:"
-msgstr ""
+msgstr "Vælg, hvordan du vil fortsætte:"
 
 #: src/control/Permission.js:610
 msgid "started editing"
-msgstr ""
+msgstr "begyndte at redigere"
 
 #: src/control/Permission.js:611
 msgid "{0} started editing"
-msgstr ""
+msgstr "{0} begyndte at redigere"
 
 #: src/control/Permission.js:621
 msgid ""
 "Someone else is now editing this document. Choose how you'd like to "
 "continue:"
-msgstr ""
+msgstr "En anden redigerer nu dette dokument. Vælg, hvordan du vil fortsætte:"
 
 #: src/control/Permission.js:639
 msgid ""
 "Other users are viewing this document. Choose how you'd like to continue:"
-msgstr ""
+msgstr "Andre brugere ser dette dokument. Vælg, hvordan du vil fortsætte:"
 
 #: src/control/Permission.js:657
 msgid "Save as ODF format"
@@ -7258,87 +7365,87 @@ msgstr ""
 
 #: src/control/Styles.js:19 src/control/jsdialog/Definitions.Menu.ts:2266
 msgid "Title Slide"
-msgstr ""
+msgstr "Titelslide"
 
 #: src/control/Styles.js:20 src/control/jsdialog/Definitions.Menu.ts:2267
 msgid "Title, Content"
-msgstr ""
+msgstr "Titel, indhold"
 
 #: src/control/Styles.js:21 src/control/jsdialog/Definitions.Menu.ts:2268
 msgid "Title and 2 Content"
-msgstr ""
+msgstr "Titel og 2 indholdsfelter"
 
 #: src/control/Styles.js:22 src/control/jsdialog/Definitions.Menu.ts:2269
 msgid "Title Only"
-msgstr ""
+msgstr "Kun titel"
 
 #: src/control/Styles.js:23 src/control/jsdialog/Definitions.Menu.ts:2265
 msgid "Blank Slide"
-msgstr ""
+msgstr "Tom slide"
 
 #: src/control/Styles.js:24 src/control/jsdialog/Definitions.Menu.ts:2270
 msgid "Centered Text"
-msgstr ""
+msgstr "Centreret tekst"
 
 #: src/control/Styles.js:25 src/control/jsdialog/Definitions.Menu.ts:2272
 msgid "Title, Content and 2 Content"
-msgstr ""
+msgstr "Titel, indhold og 2 indholdsfelter"
 
 #: src/control/Styles.js:26 src/control/jsdialog/Definitions.Menu.ts:2271
 msgid "Title, 2 Content and Content"
-msgstr ""
+msgstr "Titel, 2 indholdsfelter og indhold"
 
 #: src/control/Styles.js:27 src/control/jsdialog/Definitions.Menu.ts:2273
 msgid "Title, 2 Content over Content"
-msgstr ""
+msgstr "Titel, 2 indholdsfelter over indhold"
 
 #: src/control/Styles.js:28 src/control/jsdialog/Definitions.Menu.ts:2274
 msgid "Title, Content over Content"
-msgstr ""
+msgstr "Titel, indhold over indhold"
 
 #: src/control/Styles.js:29 src/control/jsdialog/Definitions.Menu.ts:2275
 msgid "Title, 4 Content"
-msgstr ""
+msgstr "Titel, 4 indholdsfelter"
 
 #: src/control/Styles.js:30 src/control/jsdialog/Definitions.Menu.ts:2276
 msgid "Title, 6 Content"
-msgstr ""
+msgstr "Titel, 6 indholdsfelter"
 
 #: src/control/Styles.js:31 src/control/jsdialog/Definitions.Menu.ts:2277
 msgid "Vertical Title, Text, Chart"
-msgstr ""
+msgstr "Lodret titel, tekst, diagram"
 
 #: src/control/Styles.js:32 src/control/jsdialog/Definitions.Menu.ts:2278
 msgid "Vertical Title, Vertical Text"
-msgstr ""
+msgstr "Lodret titel, lodret tekst"
 
 #: src/control/Styles.js:33 src/control/jsdialog/Definitions.Menu.ts:2279
 msgid "Title, Vertical Text"
-msgstr ""
+msgstr "Titel, lodret tekst"
 
 #: src/control/Styles.js:34 src/control/jsdialog/Definitions.Menu.ts:2280
 msgid "Title, Vertical Text, Clipart"
-msgstr ""
+msgstr "Titel, lodret tekst, clipart"
 
 #: src/control/Styles.js:43
 msgid "Standard selection"
-msgstr ""
+msgstr "Standardmarkering"
 
 #: src/control/Styles.js:44
 msgid "Extending selection"
-msgstr ""
+msgstr "Udvid markering"
 
 #: src/control/Styles.js:45
 msgid "Adding selection"
-msgstr ""
+msgstr "Tilføj til markering"
 
 #: src/control/Styles.js:46
 msgid "Block selection"
-msgstr ""
+msgstr "Blokmarkering"
 
 #: src/control/Toolbar.js:70
 msgid "The current font is not available and will be substituted."
-msgstr ""
+msgstr "Den aktuelle skrifttype er ikke tilgængelig og bliver erstattet."
 
 #: src/control/Toolbar.js:205 src/control/Toolbar.js:218
 msgid "Downloading..."
@@ -7355,7 +7462,7 @@ msgstr "Omdøber..."
 
 #: src/control/Toolbar.js:910
 msgid "Unable to share"
-msgstr ""
+msgstr "Kan ikke dele"
 
 #: src/control/VRuler.ts:198 src/control/VRuler.ts:425
 msgid "Top Margin"
@@ -7377,32 +7484,32 @@ msgstr "Skrivebeskyttet"
 
 #: src/control/PermissionMode.ts:259
 msgid "Viewing Mode"
-msgstr ""
+msgstr "Visningstilstand"
 
 #: src/control/PermissionMode.ts:265
 msgid "Editing Mode"
-msgstr ""
+msgstr "Redigeringstilstand"
 
 #: src/control/PermissionMode.ts:273
 msgid "Review Mode"
-msgstr ""
+msgstr "Korrekturtilstand"
 
 #: src/control/PermissionMode.ts:291 src/control/PermissionMode.ts:471
 #: src/control/PermissionMode.ts:477 src/control/PermissionMode.ts:483
 msgid "Viewing"
-msgstr ""
+msgstr "Visning"
 
 #: src/control/PermissionMode.ts:467
 msgid "Reviewing"
-msgstr ""
+msgstr "Korrektur"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:380
 msgid "Save Image to Server"
-msgstr ""
+msgstr "Gem billede på server"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:399
 msgid "Fit slide to view"
-msgstr ""
+msgstr "Tilpas slide til visningen"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:499
 msgid "Paste Special"
@@ -7423,11 +7530,11 @@ msgstr "Normal"
 
 #: src/control/jsdialog/Definitions.Menu.ts:116
 msgid "Wide"
-msgstr ""
+msgstr "Bred"
 
 #: src/control/jsdialog/Definitions.Menu.ts:121
 msgid "Narrow"
-msgstr ""
+msgstr "Smal"
 
 #: src/control/jsdialog/Definitions.Menu.ts:185
 msgid "Min"
@@ -7439,139 +7546,139 @@ msgstr "Maks"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1468
 msgid "Edit Single Sparkline"
-msgstr ""
+msgstr "Redigér minidiagram"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1479
 msgid "Delete Single Sparkline"
-msgstr ""
+msgstr "Slet minidiagram"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1517
 msgid "Portrait"
-msgstr ""
+msgstr "Stående"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1525
 msgid "Landscape"
-msgstr ""
+msgstr "Liggende"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1533
 msgid "A6"
-msgstr ""
+msgstr "A6"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1534
 msgid "A5"
-msgstr ""
+msgstr "A5"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1535
 msgid "A4"
-msgstr ""
+msgstr "A4"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1536
 msgid "A3"
-msgstr ""
+msgstr "A3"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1537
 msgid "B6 (ISO)"
-msgstr ""
+msgstr "B6 (ISO)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1538
 msgid "B5 (ISO)"
-msgstr ""
+msgstr "B5 (ISO)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1539
 msgid "B4 (ISO)"
-msgstr ""
+msgstr "B4 (ISO)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1540
 msgid "Letter"
-msgstr ""
+msgstr "Letter"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1541
 msgid "Legal"
-msgstr ""
+msgstr "Legal"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1542
 msgid "Long Bond"
-msgstr ""
+msgstr "Long Bond"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1543
 msgid "Tabloid"
-msgstr ""
+msgstr "Tabloid"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1544
 msgid "B6 (JIS)"
-msgstr ""
+msgstr "B6 (JIS)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1545
 msgid "B5 (JIS)"
-msgstr ""
+msgstr "B5 (JIS)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1546
 msgid "B4 (JIS)"
-msgstr ""
+msgstr "B4 (JIS)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1547
 msgid "16 Kai"
-msgstr ""
+msgstr "16 Kai"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1548
 msgid "32 Kai"
-msgstr ""
+msgstr "32 Kai"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1549
 msgid "Big 32 Kai"
-msgstr ""
+msgstr "Stor 32 Kai"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1550
 msgid "User"
-msgstr ""
+msgstr "Brugerdefineret"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1551
 msgid "DL Envelope"
-msgstr ""
+msgstr "DL-konvolut"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1552
 msgid "C6 Envelope"
-msgstr ""
+msgstr "C6-konvolut"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1553
 msgid "C6/5 Envelope"
-msgstr ""
+msgstr "C6/5-konvolut"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1554
 msgid "C5 Envelope"
-msgstr ""
+msgstr "C5-konvolut"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1555
 msgid "C4 Envelope"
-msgstr ""
+msgstr "C4-konvolut"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1558
 msgid "#6¾ Envelope"
-msgstr ""
+msgstr "#6¾-konvolut"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1563
 msgid "#7¾ (Monarch) Envelope"
-msgstr ""
+msgstr "#7¾-konvolut (Monarch)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1566
 msgid "#9 Envelope"
-msgstr ""
+msgstr "#9-konvolut"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1567
 msgid "#10 Envelope"
-msgstr ""
+msgstr "#10-konvolut"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1568
 msgid "#11 Envelope"
-msgstr ""
+msgstr "#11-konvolut"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1569
 msgid "#12 Envelope"
-msgstr ""
+msgstr "#12-konvolut"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1572
 msgid "Japanese Postcard"
-msgstr ""
+msgstr "Japansk postkort"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1771
 msgid "Insert Local Image"
@@ -7583,7 +7690,7 @@ msgstr "Indsæt lokale multimedier"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1783
 msgid "Compare Local Document"
-msgstr ""
+msgstr "Sammenlign lokalt dokument"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1789
 msgid "Very Tight"
@@ -7603,15 +7710,15 @@ msgstr "Meget rummelig"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1806
 msgid "Copy Markdown"
-msgstr ""
+msgstr "Kopiér Markdown"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1834
 msgid "Inline"
-msgstr ""
+msgstr "I teksten"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1841
 msgid "Side by Side"
-msgstr ""
+msgstr "Side om side"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1861
 msgid "This user"
@@ -7631,67 +7738,67 @@ msgstr "Regler for største/mindste værdier"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1984
 msgid "Color Scale"
-msgstr ""
+msgstr "Farveskala"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1989
 msgid "Data Bar"
-msgstr ""
+msgstr "Databjælke"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1994
 msgid "Icon Set"
-msgstr ""
+msgstr "Ikonsæt"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2011
 msgid "No Borders"
-msgstr ""
+msgstr "Ingen kantlinjer"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2017
 msgid "Left Border"
-msgstr ""
+msgstr "Venstre kantlinje"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2023
 msgid "Right Border"
-msgstr ""
+msgstr "Højre kantlinje"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2029
 msgid "Left And Right Borders"
-msgstr ""
+msgstr "Venstre og højre kantlinje"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2035
 msgid "Top Border"
-msgstr ""
+msgstr "Øverste kantlinje"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2041
 msgid "Bottom Border"
-msgstr ""
+msgstr "Nederste kantlinje"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2047
 msgid "Top And Bottom Border"
-msgstr ""
+msgstr "Øverste og nederste kantlinje"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2053
 msgid "Outer Border"
-msgstr ""
+msgstr "Ydre kantlinje"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2059
 msgid "All Horizontal Lines"
-msgstr ""
+msgstr "Alle vandrette kantlinjer"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2065
 msgid "Outer Border And Horizontal Lines"
-msgstr ""
+msgstr "Ydre og vandrette kantlinjer"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2071
 msgid "Outer Border and Vertical Lines"
-msgstr ""
+msgstr "Ydre og lodrette kantlinjer"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2077
 msgid "Outer Borders And All Inner lines"
-msgstr ""
+msgstr "Ydre og alle indre kantlinjer"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2083
 msgid "Line color"
-msgstr ""
+msgstr "Linjefarve"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2096
 msgid "Line style"
@@ -7699,77 +7806,76 @@ msgstr "Linjetypografi"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2100
 msgid "Hairline (0.05 pt)"
-msgstr ""
+msgstr "Hårfin (0,05 pkt.)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2109
 msgid "Very thin (0.50 pt)"
-msgstr ""
+msgstr "Meget tynd (0,50 pkt.)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2118
 msgid "Thin (0.75 pt)"
-msgstr ""
+msgstr "Tynd (0,75 pkt.)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2127
 msgid "Medium (1.50 pt)"
-msgstr ""
+msgstr "Mellem (1,50 pkt.)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2136
 msgid "Thick (2.25 pt)"
-msgstr ""
+msgstr "Tyk (2,25 pkt.)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2145
 msgid "Extra thick (4.50 pt)"
-msgstr ""
+msgstr "Ekstra tyk (4,50 pkt.)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2154
 msgid "Double Hairline (1.10 pt)"
-msgstr ""
+msgstr "Dobbelt hårfin linje (1,10 pkt.)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2163
 msgid "Double Hairline (2.35 pt)"
-msgstr ""
+msgstr "Dobbelt hårfin linje (2,35 pkt.)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2172
 msgid "Thin/Medium (3.00 pt)"
-msgstr ""
+msgstr "Tynd/mellem (3,00 pkt.)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2181
 msgid "Medium/Hairline (3.05 pt)"
-msgstr ""
+msgstr "Mellem/hårfin (3,05 pkt.)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2190
 msgid "Medium/Medium (4.50 pt)"
-msgstr ""
+msgstr "Mellem/mellem (4,50 pkt.)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2250
 msgid "Standard (4:3)"
-msgstr ""
+msgstr "Standard (4:3)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2255
 msgid "Widescreen (16:9)"
-msgstr ""
+msgstr "Bredformat (16:9)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2415
 msgid "Grayscale"
-msgstr ""
+msgstr "Gråtoner"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2420
 msgid "Black/White"
-msgstr ""
+msgstr "Sort/hvid"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2425
 msgid "Watermark"
-msgstr ""
+msgstr "Vandmærke"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2433
-#, fuzzy
 msgid "Insert comment"
-msgstr "Indsæt Kommentar"
+msgstr "Indsæt kommentar"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2437
 #: src/control/jsdialog/Definitions.Menu.ts:2452
 msgid "Comments list"
-msgstr ""
+msgstr "Kommentarliste"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2444
 #: src/control/jsdialog/Widget.Comment.ts:58
@@ -7777,65 +7883,64 @@ msgid "Insert Comment"
 msgstr "Indsæt Kommentar"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2448
-#, fuzzy
 msgid "Insert Note"
-msgstr "Indsæt dato"
+msgstr "Indsæt note"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:36
 msgid "Dark 1"
-msgstr ""
+msgstr "Mørk 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:37
 msgid "Light 1"
-msgstr ""
+msgstr "Lys 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:38
 msgid "Dark 2"
-msgstr ""
+msgstr "Mørk 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:39
 msgid "Light 2"
-msgstr ""
+msgstr "Lys 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:40
 msgid "Accent 1"
-msgstr ""
+msgstr "Accentfarve 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:41
 msgid "Accent 2"
-msgstr ""
+msgstr "Accentfarve 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:42
 msgid "Accent 3"
-msgstr ""
+msgstr "Accentfarve 3"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:43
 msgid "Accent 4"
-msgstr ""
+msgstr "Accentfarve 4"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:44
 msgid "Accent 5"
-msgstr ""
+msgstr "Accentfarve 5"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:45
 msgid "Accent 6"
-msgstr ""
+msgstr "Accentfarve 6"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:46
 msgid "Hyperlink"
-msgstr ""
+msgstr "Hyperlink"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:47
 msgid "Followed Hyperlink"
-msgstr ""
+msgstr "Besøgt hyperlink"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:56
 msgid "%1, %2% Lighter"
-msgstr ""
+msgstr "%1, %2% lysere"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:60
 msgid "%1, %2% Darker"
-msgstr ""
+msgstr "%1, %2% mørkere"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:79
 #: src/control/jsdialog/Widget.ColorPicker.ts:186
@@ -7852,98 +7957,99 @@ msgstr "Automatisk"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:286
 msgid "Palette"
-msgstr ""
+msgstr "Palet"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:301
 msgid "Color palette"
-msgstr ""
+msgstr "Farvepalet"
 
 #: src/control/jsdialog/Widget.Combobox.js:290
-#, fuzzy
 msgid "Open list"
-msgstr "Åbn link"
+msgstr "Åbn liste"
 
 #: src/control/jsdialog/Widget.Combobox.js:498
 msgid "Filter entries"
-msgstr ""
+msgstr "Filtrér poster"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:64
 msgid "Position {n}, split set"
-msgstr ""
+msgstr "Position {n}, opdeling indsat"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:65
 msgid "Position {n}, no split"
-msgstr ""
+msgstr "Position {n}, ingen opdeling"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:228
 msgid ""
 "Column split ruler. Use the arrow keys to move the cursor and Space to "
 "toggle a split."
 msgstr ""
+"Lineal til kolonneopdeling. Brug piletasterne til at flytte markøren og "
+"mellemrumstasten til at tilføje eller fjerne en opdeling."
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:414
 msgid "CSV import preview"
-msgstr ""
+msgstr "Forhåndsvisning af CSV-import"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:436
 msgid "Line number"
-msgstr ""
+msgstr "Linjenummer"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:451
 msgid "Column {index}"
-msgstr ""
+msgstr "Kolonne {index}"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:54
 msgid "Smileys"
-msgstr ""
+msgstr "Smileyer"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:100
 msgid "People & gestures"
-msgstr ""
+msgstr "Personer og gestus"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:136
 msgid "Objects"
-msgstr ""
+msgstr "Genstande"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:218
 msgid "Nature & food"
-msgstr ""
+msgstr "Natur og mad"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:364
 msgid "Recently used"
-msgstr ""
+msgstr "Senest brugte"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:384
 msgid "No emojis match \"{0}\""
-msgstr ""
+msgstr "Ingen emojier matcher \"{0}\""
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:139
 msgid "Top: {top}"
-msgstr ""
+msgstr "Øverst: {top}"
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:144
 msgid "Left: {left}"
-msgstr ""
+msgstr "Venstre: {left}"
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:154
 msgid "Bottom: {bottom}"
-msgstr ""
+msgstr "Nederst: {bottom}"
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:159
 msgid "Right: {right}"
-msgstr ""
+msgstr "Højre: {right}"
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:183
 msgid "Custom Margins…"
-msgstr ""
+msgstr "Brugerdefinerede margener…"
 
 #: src/control/jsdialog/Widget.PageSizeEntry.ts:91
 msgid "More Paper Sizes..."
-msgstr ""
+msgstr "Flere papirstørrelser..."
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:31
 msgid "Number of Pages. Click to open the Go to Page dialog box."
-msgstr ""
+msgstr "Antal sider. Klik for at åbne dialogboksen Gå til side."
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:32
 #: src/control/jsdialog/Widget.HTMLContent.ts:62
@@ -7966,7 +8072,7 @@ msgstr "Markeret celleområde"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:44
 msgid "Cell Selection"
-msgstr ""
+msgstr "Cellemarkering"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:48
 msgid "Entering text mode"
@@ -7992,30 +8098,27 @@ msgstr "Funktionsvalg"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:68
 msgid "Table Cell Functions"
-msgstr ""
+msgstr "Tabelcellefunktioner"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:72
 msgid "Size of selected shape"
-msgstr ""
+msgstr "Størrelse på den markerede figur"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:73
 msgid "Shape Size"
-msgstr ""
+msgstr "Figurstørrelse"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:79
-#, fuzzy
 msgid "Sheet Navigation"
-msgstr "Luk navigation"
+msgstr "Arknavigation"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:81
-#, fuzzy
 msgid "Slide Navigation"
-msgstr "Luk navigation"
+msgstr "Slidenavigation"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:82
-#, fuzzy
 msgid "Page Navigation"
-msgstr "Luk navigation"
+msgstr "Sidenavigation"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:88
 msgid "Your changes have been saved"
@@ -8027,7 +8130,7 @@ msgstr "Redigeringstilstand"
 
 #: src/control/jsdialog/Widget.LineWidthCustom.ts:77
 msgid "Last Custom Value"
-msgstr ""
+msgstr "Seneste brugerdefinerede værdi"
 
 #: src/control/jsdialog/Widget.MobileBorderSelector.js:111
 msgid "Cell borders"
@@ -8035,15 +8138,15 @@ msgstr "Cellekanter"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:107
 msgid "New Table Style..."
-msgstr ""
+msgstr "Ny tabeltypografi..."
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:119
 msgid "Clear Style"
-msgstr ""
+msgstr "Ryd typografi"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:145
 msgid "Open Styles Sidebar"
-msgstr ""
+msgstr "Åbn typografipanelet"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:261
 msgid "Scroll up"
@@ -8055,7 +8158,7 @@ msgstr "Scroll ned"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:281
 msgid "More options"
-msgstr ""
+msgstr "Flere muligheder"
 
 #: src/control/jsdialog/Widget.PushButton.ts:19
 msgid "Select range"
@@ -8063,7 +8166,7 @@ msgstr "Vælg område"
 
 #: src/control/jsdialog/Widget.ProgressDots.tsx:57
 msgid "Step %1 of %2"
-msgstr ""
+msgstr "Trin %1 af %2"
 
 #: src/control/jsdialog/Widget.Comment.ts:151
 msgid "reply"
@@ -8075,11 +8178,11 @@ msgstr "svar"
 
 #: src/control/jsdialog/Widget.SpinField.ts:279
 msgid "Increment value"
-msgstr ""
+msgstr "Forøg værdi"
 
 #: src/control/jsdialog/Widget.SpinField.ts:288
 msgid "Decrement value"
-msgstr ""
+msgstr "Formindsk værdi"
 
 #: src/control/jsdialog/Widget.SidebarContainers.tsx:145
 #: src/control/jsdialog/Widget.SidebarContainers.tsx:205
@@ -8088,15 +8191,15 @@ msgstr "Flere indstillinger for {1}"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1771
 msgid "Cell value"
-msgstr ""
+msgstr "Celleværdi"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1775
 msgid "row %1"
-msgstr ""
+msgstr "række %1"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1784
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: src/control/jsdialog/Widget.TreeView.ts:2562
 msgid "Headings and objects that you add to the document will appear here"
@@ -8105,7 +8208,7 @@ msgstr ""
 
 #: src/control/jsdialog/Widget.TreeView.ts:2619
 msgid "Search items"
-msgstr ""
+msgstr "Søg efter elementer"
 
 #: src/app/Socket.ts:340
 msgid "Oops, there is a problem connecting to {productname}: "
@@ -8121,7 +8224,7 @@ msgstr ""
 
 #: src/app/Socket.ts:699
 msgid "The connection to the document has been lost."
-msgstr ""
+msgstr "Forbindelsen til dokumentet er afbrudt."
 
 #: src/app/Socket.ts:700
 msgid "The server has been disconnected."
@@ -8141,11 +8244,11 @@ msgstr "Eksporteret succesfuldt: "
 
 #: src/app/Socket.ts:1233
 msgid "This document has links to external content."
-msgstr ""
+msgstr "Dette dokument indeholder links til eksternt indhold."
 
 #: src/app/Socket.ts:1234
 msgid "Allow"
-msgstr ""
+msgstr "Tillad"
 
 #: src/app/Socket.ts:1911
 msgid "Discard"
@@ -8180,7 +8283,7 @@ msgstr "GENINDLÆS"
 
 #: src/app/Socket.ts:2142
 msgid "Cluster configuration warning"
-msgstr ""
+msgstr "Advarsel om klyngekonfiguration"
 
 #: src/app/Socket.ts:2151
 msgid "Wrong server, reconnecting..."
@@ -8188,7 +8291,7 @@ msgstr "Forkert server, genetablerer forbindelse..."
 
 #: src/app/Socket.ts:2173
 msgid "Unsupported version."
-msgstr ""
+msgstr "Versionen understøttes ikke."
 
 #: src/app/Socket.ts:2174
 msgid "Unsupported server version."
@@ -8216,11 +8319,11 @@ msgstr "Kun dokumentets ejer kan ændre adgangskoden."
 
 #: src/app/Socket.ts:2716
 msgid "You do not have permission to edit this document."
-msgstr ""
+msgstr "Du har ikke tilladelse til at redigere dette dokument."
 
 #: src/app/Socket.ts:2717
 msgid "The document could not be made editable."
-msgstr ""
+msgstr "Redigering af dokumentet kunne ikke aktiveres."
 
 #: src/app/Socket.ts:2787 src/app/Socket.ts:2798
 msgid "Missing Fonts"
@@ -8254,31 +8357,31 @@ msgstr "Serveren lukker ned"
 
 #: src/docdispatcher.ts:681
 msgid "AI is not configured, contact your administrator"
-msgstr ""
+msgstr "AI er ikke konfigureret. Kontakt din administrator"
 
 #: src/docdispatcher.ts:1000
 msgid "Delete section"
-msgstr ""
+msgstr "Slet sektion"
 
 #: src/docdispatcher.ts:1007
 msgid "Delete slides"
-msgstr ""
+msgstr "Slet slides"
 
 #: src/docdispatcher.ts:1008
 msgid "Delete %n slide?"
 msgid_plural "Delete %n slides?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Slet %n slide?"
+msgstr[1] "Slet %n slides?"
 
 #: src/docdispatcher.ts:1012
 msgid "Delete pages"
-msgstr ""
+msgstr "Slet sider"
 
 #: src/docdispatcher.ts:1013
 msgid "Delete %n page?"
 msgid_plural "Delete %n pages?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Slet %n side?"
+msgstr[1] "Slet %n sider?"
 
 #: src/docstate.ts:174
 msgid "Standard"
@@ -8294,7 +8397,7 @@ msgstr "Dokumentfarver"
 
 #: src/docstatefunctions.js:252
 msgid ", cluster configuration error: mis-matching serverid"
-msgstr ""
+msgstr ", fejl i klyngekonfiguration: Server-id stemmer ikke overens"
 
 #: src/dom/NotebookbarAccessibility.js:334
 msgid "{0} tab selected"
@@ -8302,7 +8405,7 @@ msgstr "{0} tab er valgt"
 
 #: src/errormessages.ts:16
 msgid "No disk space left."
-msgstr ""
+msgstr "Der er ikke mere diskplads."
 
 #: src/errormessages.ts:17
 msgid "No disk space left on server."
@@ -8367,13 +8470,15 @@ msgstr ""
 
 #: src/errormessages.ts:39
 msgid "Your session will end in {time}. Refresh the page to continue."
-msgstr ""
+msgstr "Din session slutter om {time}. Genindlæs siden for at fortsætte."
 
 #: src/errormessages.ts:42
 msgid ""
 "Your session has ended. Further changes to the document might not be saved. "
 "Refresh the page to continue."
 msgstr ""
+"Din session er afsluttet. Yderligere ændringer af dokumentet bliver muligvis "
+"ikke gemt. Genindlæs siden for at fortsætte."
 
 #: src/errormessages.ts:45
 msgid ""
@@ -8538,17 +8643,16 @@ msgid "Document cannot be exported. Please try again."
 msgstr "Dokumentet kan ikke eksporteres. Prøv igen."
 
 #: src/layer/marker/A11yTextInput.js:94
-#, fuzzy
 msgid "Slide"
-msgstr "Slides"
+msgstr "Slide"
 
 #: src/layer/marker/A11yTextInput.js:265
 msgid "Comment by {0}: {1}"
-msgstr ""
+msgstr "Kommentar fra {0}: {1}"
 
 #: src/layer/marker/A11yTextInput.js:379
 msgid "Heading level {0}"
-msgstr ""
+msgstr "Overskriftsniveau {0}"
 
 #: src/layer/marker/A11yTextInput.js:1071
 msgid "Out of table"
@@ -8557,20 +8661,20 @@ msgstr "Uden for tabellen"
 #: src/layer/marker/A11yTextInput.js:1076
 msgid "%n row"
 msgid_plural "%n rows"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n række"
+msgstr[1] "%n rækker"
 
 #: src/layer/marker/A11yTextInput.js:1077
 msgid "%n column"
 msgid_plural "%n columns"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n kolonne"
+msgstr[1] "%n kolonner"
 
 #. TRANSLATORS: {0} is a row count, {1} a column count, both already
 #. TRANSLATORS: in their plural form, e.g. "3 rows" and "1 column"
 #: src/layer/marker/A11yTextInput.js:1080
 msgid "Table with {0} and {1}"
-msgstr ""
+msgstr "Tabel med {0} og {1}"
 
 #: src/layer/marker/A11yTextInput.js:1085
 msgid "Row {0} through {1}"
@@ -8610,27 +8714,27 @@ msgstr "{0} slettet"
 
 #: src/layer/marker/TextInput.js:489
 msgid "Placeholder"
-msgstr ""
+msgstr "Pladsholder"
 
 #: src/layer/marker/TextInput.js:509
 msgid "Drop-down list"
-msgstr ""
+msgstr "Rulleliste"
 
 #: src/layer/marker/TextInput.js:511
 msgid "Combo box"
-msgstr ""
+msgstr "Kombinationsfelt"
 
 #: src/layer/marker/TextInput.js:515
 msgid "Content control"
-msgstr ""
+msgstr "Indholdskontrolelement"
 
 #: src/layer/marker/TextInput.js:528
 msgid "Object"
-msgstr ""
+msgstr "Objekt"
 
 #: src/layer/marker/TextInput.js:530
 msgid "Frame"
-msgstr ""
+msgstr "Ramme"
 
 #: src/layer/marker/TextInput.js:681
 msgid "Screen reader support for text content is disabled. "
@@ -8658,7 +8762,7 @@ msgstr "menuen Vis"
 
 #: src/layer/tile/CanvasTileLayer.js:333
 msgid "Online Editor"
-msgstr ""
+msgstr "Onlineeditor"
 
 #: src/layer/tile/CanvasTileLayer.js:1456
 msgid "Functions"
@@ -8685,7 +8789,7 @@ msgstr ""
 
 #: src/map/Clipboard.js:209
 msgid "Copying from the document has been disabled by your administrator"
-msgstr ""
+msgstr "Din administrator har deaktiveret kopiering fra dokumentet"
 
 #: src/map/Clipboard.js:322
 msgid "warning: copy/paste request timed out"
@@ -8697,7 +8801,7 @@ msgstr "Kunne ikke downloade udklipsholderen, kopier venligst igen"
 
 #: src/map/Clipboard.js:406
 msgid "Failed to upload the clipboard"
-msgstr ""
+msgstr "Indholdet af udklipsholderen kunne ikke uploades"
 
 #: src/map/Clipboard.js:1545
 msgid ""
@@ -8712,10 +8816,12 @@ msgid ""
 "Your browser has very limited access to the clipboard, so use these "
 "keyboard shortcuts:"
 msgstr ""
+"Din browser har meget begrænset adgang til udklipsholderen. Brug derfor "
+"disse tastaturgenveje:"
 
 #: src/map/Clipboard.js:1585
 msgid "Cut"
-msgstr ""
+msgstr "Klip"
 
 #: src/map/Clipboard.js:1601
 msgid ""
@@ -8797,7 +8903,7 @@ msgstr "Upload af filen til serveren slog fejl med status: {0}"
 
 #: src/map/handler/Map.FileInserter.js:293
 msgid "Failed to read the selected file."
-msgstr ""
+msgstr "Den valgte fil kunne ikke læses."
 
 #: src/map/handler/Map.Print.js:44
 msgid "Print dialog"
@@ -8811,7 +8917,7 @@ msgstr "Tomt slideshow"
 #: src/map/handler/Map.SlideShow.js:60
 #: src/slideshow/SlideShowPresenter.ts:1443
 msgid "All slides are hidden!"
-msgstr ""
+msgstr "Alle slides er skjult!"
 
 #: src/map/handler/Map.SlideShow.js:175
 #: src/slideshow/SlideShowPresenter.ts:1470
@@ -8837,7 +8943,7 @@ msgstr "Præsentation i vinduestilstand: "
 #: src/map/handler/Map.SlideShow.js:210
 #: src/slideshow/SlideShowPresenter.ts:1278
 msgid "Presenting in another window"
-msgstr ""
+msgstr "Præsenterer i et andet vindue"
 
 #: src/map/handler/Map.SlideShow.js:211
 #: src/slideshow/SlideShowPresenter.ts:1279
@@ -8874,7 +8980,7 @@ msgstr "Præsentationstilstand er deaktiveret for dette dokument"
 
 #: src/map/handler/Map.StateChanges.js:204
 msgid "Editing slide %1 - click outside or press Esc to finish"
-msgstr ""
+msgstr "Redigerer slide %1 – klik udenfor, eller tryk på Esc for at afslutte"
 
 #: src/map/handler/Map.VersionBar.js:50
 msgid "Your Collabora Online server needs updating. Version {0} is available."
@@ -8886,7 +8992,7 @@ msgstr "Oprette en ny fil fra en skabelon..."
 
 #: src/map/handler/Map.WOPI.js:336
 msgid "Compare Document..."
-msgstr ""
+msgstr "Sammenlign dokument..."
 
 #: src/map/handler/Map.WOPI.js:933
 msgid "File name should contain an extension."
@@ -8907,22 +9013,23 @@ msgstr "Velkomstdialogen"
 #: src/map/handler/Map.Settings.ts:407
 msgid "Settings saved. Add an API key to use the AI assistant."
 msgstr ""
+"Indstillingerne er gemt. Tilføj en API-nøgle for at bruge AI-assistenten."
 
 #: src/map/handler/Map.Settings.ts:412
 msgid "Settings saved"
-msgstr ""
+msgstr "Indstillingerne er gemt"
 
 #: src/slideshow/engine/SlideShowHandler.ts:117
 msgid "First"
-msgstr ""
+msgstr "Første"
 
 #: src/slideshow/engine/SlideShowHandler.ts:118
 msgid "Skip All"
-msgstr ""
+msgstr "Spring alle over"
 
 #: src/slideshow/engine/SlideShowHandler.ts:119
 msgid "First Slide"
-msgstr ""
+msgstr "Første slide"
 
 #: src/slideshow/engine/SlideShowHandler.ts:120
 #: src/slideshow/PresenterConsole.js:32
@@ -8942,7 +9049,7 @@ msgstr "Indsæt slide"
 #: src/slideshow/engine/SlideShowHandler.ts:123
 #: src/slideshow/SlideShowPresenter.ts:933
 msgid "End Show"
-msgstr ""
+msgstr "Afslut slideshow"
 
 #: src/slideshow/engine/SlideShowHandler.ts:124
 #, fuzzy
@@ -8956,15 +9063,15 @@ msgstr "Fortsæt"
 
 #: src/slideshow/engine/SlideShowHandler.ts:404
 msgid "Animation: {0}, {1}"
-msgstr ""
+msgstr "Animation: {0}, {1}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:408
 msgid "Animation: {0}"
-msgstr ""
+msgstr "Animation: {0}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:555
 msgid "Transition: {0}"
-msgstr ""
+msgstr "Overgang: {0}"
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
@@ -8978,12 +9085,12 @@ msgstr "Nuværende slide"
 #: src/slideshow/SlideShowPresenter.ts:969
 #: src/slideshow/SlideShowPresenter.ts:982
 msgid "Disable Animations"
-msgstr ""
+msgstr "Deaktivér animationer"
 
 #: src/slideshow/PresenterConsole.js:38
 #: src/slideshow/SlideShowPresenter.ts:998
 msgid "Exchange"
-msgstr ""
+msgstr "Byt"
 
 #: src/slideshow/PresenterConsole.js:39
 msgid "Pause"
@@ -8999,7 +9106,7 @@ msgstr "Fortsæt"
 
 #: src/slideshow/PresenterConsole.js:42
 msgid "Present to all"
-msgstr ""
+msgstr "Præsentér for alle"
 
 #: src/slideshow/PresenterConsole.js:43
 #, fuzzy
@@ -9020,11 +9127,11 @@ msgstr "Zoom ud"
 
 #: src/slideshow/PresenterConsole.js:47
 msgid "Preview of the current slide"
-msgstr ""
+msgstr "Forhåndsvisning af den aktuelle slide"
 
 #: src/slideshow/PresenterConsole.js:48
 msgid "Preview of the next slide"
-msgstr ""
+msgstr "Forhåndsvisning af næste slide"
 
 #: src/slideshow/PresenterConsole.js:194
 msgid "Preview Slide {1}"
@@ -9032,16 +9139,16 @@ msgstr "Preview slide {1}"
 
 #: src/slideshow/PresenterConsole.js:824
 msgid "You are leaving the presentation."
-msgstr ""
+msgstr "Du forlader præsentationen."
 
 #: src/slideshow/PresenterConsole.js:825
 msgid "The link is not valid."
-msgstr ""
+msgstr "Linket er ugyldigt."
 
 #: src/slideshow/PresenterConsole.js:1198
 #: src/slideshow/SlideShowPresenter.ts:981
 msgid "Enable Animations"
-msgstr ""
+msgstr "Aktivér animationer"
 
 #: src/slideshow/PresenterConsole.js:1592
 msgid "Slide {0} of {1}"
@@ -9052,10 +9159,10 @@ msgid "No Notes"
 msgstr "Ingen noter"
 
 #: src/slideshow/PresenterConsole.js:1763
-#, fuzzy
 msgid "Repeat in %n second"
 msgid_plural "Repeat in %n seconds"
-msgstr[0] "Gentag om {0} sekunder"
+msgstr[0] "Gentag om %n sekund"
+msgstr[1] "Gentag om %n sekunder"
 
 #: src/slideshow/PresenterConsole.js:1770
 #: src/slideshow/SlideShowPresenter.ts:725
@@ -9064,11 +9171,11 @@ msgstr "Klik for at forlade præsentation..."
 
 #: src/slideshow/SlideShowPresenter.ts:897
 msgid "You are on the first slide"
-msgstr ""
+msgstr "Du er på den første slide"
 
 #: src/slideshow/SlideShowPresenter.ts:905
 msgid "Waiting for presenter to advance"
-msgstr ""
+msgstr "Venter på, at oplægsholderen skifter slide"
 
 #: src/slideshow/SlideShowPresenter.ts:1695
 #, fuzzy
@@ -9077,83 +9184,83 @@ msgstr "Stop med at følge"
 
 #: src/control/Control.Extension.ts:657 src/control/Control.Extension.ts:745
 msgid "Extension command failed: %1"
-msgstr ""
+msgstr "Udvidelseskommandoen mislykkedes: %1"
 
 #: src/control/Control.Extension.ts:2060
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: src/control/Control.Extension.ts:2061
 msgid "No"
-msgstr ""
+msgstr "Nej"
 
 #: templates/templates.js:6 templates/templates.js:10
 msgid "Business Letter"
-msgstr ""
+msgstr "Forretningsbrev"
 
 #: templates/templates.js:16 templates/templates.js:20
 msgid "Classic Business Letter"
-msgstr ""
+msgstr "Klassisk forretningsbrev"
 
 #: templates/templates.js:26 templates/templates.js:30
 msgid "CV"
-msgstr ""
+msgstr "CV"
 
 #: templates/templates.js:36
 msgid "Resume (one-page)"
-msgstr ""
+msgstr "CV (én side)"
 
 #: templates/templates.js:56 templates/templates.js:60
 msgid "Modern Style"
-msgstr ""
+msgstr "Moderne stil"
 
 #: templates/templates.js:66 templates/templates.js:70
 msgid "Simple Style"
-msgstr ""
+msgstr "Enkel stil"
 
 #: templates/templates.js:76 templates/templates.js:80
 msgid "Beehive"
-msgstr ""
+msgstr "Bikube"
 
 #: templates/templates.js:86 templates/templates.js:90
 msgid "Blue Curve"
-msgstr ""
+msgstr "Blå kurve"
 
 #: templates/templates.js:96 templates/templates.js:100
 msgid "Blueprint Plans"
-msgstr ""
+msgstr "Arbejdstegninger"
 
 #: templates/templates.js:106 templates/templates.js:110
 msgid "Candy"
-msgstr ""
+msgstr "Slik"
 
 #: templates/templates.js:116 templates/templates.js:120
 msgid "DNA"
-msgstr ""
+msgstr "DNA"
 
 #: templates/templates.js:126 templates/templates.js:130
 msgid "Focus"
-msgstr ""
+msgstr "Fokus"
 
 #: templates/templates.js:136 templates/templates.js:140
 msgid "Forestbird"
-msgstr ""
+msgstr "Skovfugl"
 
 #: templates/templates.js:146 templates/templates.js:150
 msgid "Freshes"
-msgstr ""
+msgstr "Friskhed"
 
 #: templates/templates.js:156 templates/templates.js:160
 msgid "Grey Elegant"
-msgstr ""
+msgstr "Grå elegance"
 
 #: templates/templates.js:166 templates/templates.js:170
 msgid "Growing Liberty"
-msgstr ""
+msgstr "Voksende frihed"
 
 #: templates/templates.js:176 templates/templates.js:180
 msgid "Inspiration"
-msgstr ""
+msgstr "Inspiration"
 
 #: templates/templates.js:186 templates/templates.js:190
 #, fuzzy
@@ -9162,55 +9269,55 @@ msgstr "Kompakt"
 
 #: templates/templates.js:196 templates/templates.js:200
 msgid "Metropolis"
-msgstr ""
+msgstr "Metropol"
 
 #: templates/templates.js:206 templates/templates.js:210
 msgid "Midnight Blue"
-msgstr ""
+msgstr "Midnatsblå"
 
 #: templates/templates.js:216 templates/templates.js:220
 msgid "Nature Illustration"
-msgstr ""
+msgstr "Naturillustration"
 
 #: templates/templates.js:226 templates/templates.js:230
 msgid "Pencil"
-msgstr ""
+msgstr "Blyant"
 
 #: templates/templates.js:236 templates/templates.js:240
 msgid "Piano"
-msgstr ""
+msgstr "Klaver"
 
 #: templates/templates.js:246 templates/templates.js:250
 msgid "Portfolio"
-msgstr ""
+msgstr "Portefølje"
 
 #: templates/templates.js:256 templates/templates.js:260
 msgid "Progress"
-msgstr ""
+msgstr "Fremskridt"
 
 #: templates/templates.js:266 templates/templates.js:270
 msgid "Sunset"
-msgstr ""
+msgstr "Solnedgang"
 
 #: templates/templates.js:276 templates/templates.js:279
 msgid "Vintage"
-msgstr ""
+msgstr "Vintage"
 
 #: templates/templates.js:286 templates/templates.js:290
 msgid "Vivid"
-msgstr ""
+msgstr "Livlig"
 
 #: templates/templates.js:296 templates/templates.js:300
 msgid "Yellow Idea"
-msgstr ""
+msgstr "Gul idé"
 
 #: introdocs/introdocs.js:5 introdocs/introdocs.js:8
 msgid "Welcome to Spreadsheet"
-msgstr ""
+msgstr "Velkommen til Regneark"
 
 #: introdocs/introdocs.js:13 introdocs/introdocs.js:16
 msgid "Welcome to Presentation"
-msgstr ""
+msgstr "Velkommen til Præsentation"
 
 #: welcome/welcome.html%2Bhtml.head.title:9-3
 msgid "Collabora Online Welcome"
