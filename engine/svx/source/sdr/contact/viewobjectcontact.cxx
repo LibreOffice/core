@@ -427,6 +427,9 @@ void ViewObjectContact::createStructureTag(drawinglayer::primitive2d::Primitive2
                                                        : vcl::pdf::StructElement::Figure;
                 else if (nIdentifier == SdrObjKind::Table)
                     eElement = vcl::pdf::StructElement::Table;
+                // the slide on a notes page is not an image: its content is tagged as on the slide
+                else if (nIdentifier == SdrObjKind::Page)
+                    eElement = vcl::pdf::StructElement::Division;
                 else if (nIdentifier == SdrObjKind::Media)
                     eElement = vcl::pdf::StructElement::Annot;
                 else if ( nIdentifier == SdrObjKind::TitleText )

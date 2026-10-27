@@ -7638,6 +7638,26 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf173709HyperlinkTitle)
     CPPUNIT_ASSERT_EQUAL(u"Help pages"_ustr, aContents[1]);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testNotesPageSlideTagged)
+{
+    // a slide with a title, and its notes page with the slide and the notes
+    loadFromFile(u"notes-page.fodp");
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"PDFUACompliance"_ustr, true),
+                               comphelper::makePropertyValue(u"ExportNotesPages"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aDocument.GetPages().size());
+    // Without the fix the slide on the notes page was a Figure without alternative text
+    for (auto* pObject : aDocument.GetObjects())
+    {
+        auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+        CPPUNIT_ASSERT(!pS || pS->GetValue() != "Figure");
+    }
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
