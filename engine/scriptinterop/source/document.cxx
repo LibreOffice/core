@@ -920,6 +920,8 @@ OUString elementTypeName(scriptinterop::ElementType type) {
         return u"FOOTNOTE_SECTION"_ustr;
     case scriptinterop::ElementType_TEXT:
         return u"TEXT"_ustr;
+    case scriptinterop::ElementType_DOCUMENT:
+        return u"DOCUMENT"_ustr;
     default:
         throw cpo::uno::RuntimeException(
             "unknown element type " + OUString::number(static_cast<sal_Int32>(type)));
@@ -2167,6 +2169,7 @@ private:
 template<typename T> cpo::uno::Reference<scriptinterop::XText> ElementImpl<T>::asText() {
     switch (this->getType()) {
     case scriptinterop::ElementType_BODY_SECTION:
+    case scriptinterop::ElementType_DOCUMENT:
     case scriptinterop::ElementType_FOOTNOTE_SECTION:
     case scriptinterop::ElementType_TABLE:
     case scriptinterop::ElementType_TABLE_CELL:
@@ -2920,8 +2923,9 @@ std::pair<cpo::uno::Reference<scriptinterop::XText>, sal_Int32> textChildAt(
     return last;
 }
 
-// The element that holds the paragraphs of a text, which is the body for the body text and the
-// table cell for the text of a table cell, and null for any other text (like a header or a frame):
+// The element that holds the paragraphs of a text, which is the body for the body text, the
+// footnote section for the text of a footnote, and the table cell for the text of a table cell, and
+// null for any other text (like a header or a frame):
 cpo::uno::Reference<scriptinterop::XElement> containerOf(
     std::shared_ptr<Model> const & model, cpo::uno::Reference<css::text::XText> const & text);
 
@@ -4181,21 +4185,14 @@ public:
     sal_Int32 getChildIndex(cpo::uno::Reference<scriptinterop::XElement> const & child) override
     { return childIndexOf(*this, child); }
 
-    // TODO: a footnote section is not part of a sibling list in our model:
-    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getNextSibling() override {
-        return {false, {}};
-    }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getNextSibling() override;
 
     sal_Int32 getNumChildren() override { return contents().size(); }
 
-    // TODO: no natural container for a footnote section in scriptinterop (GAS's Document analogue
-    // would be that parent, but we do not model it):
-    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getParent() override {
-        return {false, {}};
-    }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getParent() override;
 
-    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getPreviousSibling() override
-    { return {false, {}}; }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getPreviousSibling()
+        override;
 
     OUString getText() override {
         if (!text_.is()) {
@@ -4347,9 +4344,7 @@ public:
         return elementsOf(model_, this, contents());
     }
 
-    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getNextSibling() override {
-        return {false, {}};
-    }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getNextSibling() override;
 
     sal_Int32 getNumChildren() override { return contents().size(); }
 
@@ -4381,12 +4376,10 @@ public:
             "removePositionedImage: no image with ID " + id + " is anchored to a page");
     }
 
-    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getParent() override {
-        return {false, {}};
-    }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getParent() override;
 
-    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getPreviousSibling() override
-    { return {false, {}}; }
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getPreviousSibling()
+        override;
 
     OUString getText() override {
         if (!text_.is()) {
@@ -4400,7 +4393,7 @@ public:
     }
 
     cpo::uno::Reference<scriptinterop::XElement> removeFromParent() override {
-        throw cpo::uno::RuntimeException(u"the body has no parent to remove it from"_ustr);
+        throw cpo::uno::RuntimeException(u"the body cannot be removed from the document"_ustr);
     }
 
     std::vector<cpo::uno::Reference<css::text::XTextContent>> const & contents() override {
@@ -4541,6 +4534,153 @@ private:
     std::shared_ptr<Model> model_;
     cpo::uno::Reference<css::text::XText> text_;
 };
+
+// The footnotes of the document:
+std::vector<cpo::uno::Reference<css::text::XFootnote>> footnotesOf(
+    std::shared_ptr<Model> const & model)
+{
+    std::vector<cpo::uno::Reference<css::text::XFootnote>> v;
+    cpo::uno::Reference<css::text::XFootnotesSupplier> const sup(
+        model->uno(), cpo::uno::UNO_QUERY_THROW);
+    auto const idx = sup->getFootnotes();
+    if (!idx.is()) {
+        throw cpo::uno::RuntimeException(
+            u"getFootnotes: the document has no footnote list"_ustr);
+    }
+    auto const n = idx->getCount();
+    for (sal_Int32 i = 0; i != n; ++i) {
+        cpo::uno::Reference<css::text::XFootnote> footnote;
+        if (!(idx->getByIndex(i) >>= footnote) || !footnote.is()) {
+            throw cpo::uno::RuntimeException(
+                u"getFootnotes: the document's footnote list contains something that is not a"
+                " footnote"_ustr);
+        }
+        v.push_back(footnote);
+    }
+    return v;
+}
+
+// As in GAS, the document as an element, which holds the body and then the sections of the
+// footnotes:
+class DocumentElementImpl: public ElementImpl<scriptinterop::XContainerElement> {
+public:
+    explicit DocumentElementImpl(std::shared_ptr<Model> const & model): model_(model) {}
+
+    cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return model_->uno(); }
+
+    cpo::uno::Reference<scriptinterop::XContainerElement> clear() override {
+        throw cpo::uno::RuntimeException(u"clear: the document cannot be cleared as a whole"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XText> editAsText() override { return asText(); }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XRangeElement>> findText(
+        OUString const & searchPattern) override
+    { return asText()->findText(searchPattern); }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XRangeElement>> findTextFrom(
+        OUString const & searchPattern,
+        cpo::uno::Reference<scriptinterop::XRangeElement> const & from) override
+    { return asText()->findTextFrom(searchPattern, from); }
+
+    cpo::uno::Reference<scriptinterop::XElement> copy() override {
+        throw cpo::uno::RuntimeException(u"copy: the document cannot be copied as a whole"_ustr);
+    }
+
+    cpo::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
+        if (index == 0) {
+            return new BodyImpl(
+                model_,
+                cpo::uno::Reference<css::text::XTextDocument>(
+                    model_->uno(), cpo::uno::UNO_QUERY_THROW)->getText());
+        }
+        auto const footnotes = footnotesOf(model_);
+        if (index < 0 || o3tl::make_unsigned(index - 1) >= footnotes.size()) {
+            return {};
+        }
+        return new FootnoteSectionImpl(
+            model_,
+            cpo::uno::Reference<css::text::XText>(footnotes[index - 1], cpo::uno::UNO_QUERY_THROW));
+    }
+
+    sal_Int32 getChildIndex(cpo::uno::Reference<scriptinterop::XElement> const & child) override {
+        if (child.is() && child->getType() == scriptinterop::ElementType_BODY_SECTION
+            && child->getuno()
+                == cpo::uno::Reference<css::text::XTextDocument>(
+                    model_->uno(), cpo::uno::UNO_QUERY_THROW)->getText())
+        {
+            return 0;
+        }
+        return childIndexOf(*this, child);
+    }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getNextSibling() override {
+        return {false, {}};
+    }
+
+    sal_Int32 getNumChildren() override { return 1 + footnotesOf(model_).size(); }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getParent() override {
+        return {false, {}};
+    }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getPreviousSibling() override
+    { return {false, {}}; }
+
+    OUString getText() override { return asText()->getText(); }
+
+    scriptinterop::ElementType getType() override { return scriptinterop::ElementType_DOCUMENT; }
+
+    cpo::uno::Reference<scriptinterop::XElement> removeFromParent() override {
+        throw cpo::uno::RuntimeException(u"the document cannot be removed"_ustr);
+    }
+
+private:
+    std::shared_ptr<Model> model_;
+};
+
+// The sibling of a section of the document, among the children of the document element:
+css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> sectionSibling(
+    std::shared_ptr<Model> const & model,
+    cpo::uno::Reference<scriptinterop::XElement> const & section, bool next)
+{
+    rtl::Reference<DocumentElementImpl> const document(new DocumentElementImpl(model));
+    auto const index = document->getChildIndex(section) + (next ? 1 : -1);
+    if (index < 0 || index >= document->getNumChildren()) {
+        return {false, {}};
+    }
+    return {true, document->getChild(index)};
+}
+
+css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> BodyImpl::getNextSibling() {
+    return sectionSibling(model_, this, true);
+}
+
+css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> BodyImpl::getParent() {
+    return {true, new DocumentElementImpl(model_)};
+}
+
+css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> BodyImpl::getPreviousSibling()
+{
+    return sectionSibling(model_, this, false);
+}
+
+css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>>
+FootnoteSectionImpl::getNextSibling()
+{
+    return sectionSibling(model_, this, true);
+}
+
+css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> FootnoteSectionImpl::getParent()
+{
+    return {true, new DocumentElementImpl(model_)};
+}
+
+css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>>
+FootnoteSectionImpl::getPreviousSibling()
+{
+    return sectionSibling(model_, this, false);
+}
 
 // Selected table cells, each a whole range element of its own, in the order of the rows and of the
 // cells in each row (as in GAS, which also brings a range of table cells into that order).  The UNO
@@ -4717,6 +4857,9 @@ cpo::uno::Reference<scriptinterop::XElement> containerOf(
             ->getText());
     if (text == bodyText) {
         return new BodyImpl(model, bodyText);
+    }
+    if (cpo::uno::Reference<css::text::XFootnote>(text, cpo::uno::UNO_QUERY).is()) {
+        return new FootnoteSectionImpl(model, text);
     }
     cpo::uno::Reference<css::lang::XServiceInfo> const info(text, cpo::uno::UNO_QUERY);
     if (!(info.is() && info->supportsService(u"com.sun.star.text.CellProperties"_ustr))) {
@@ -5000,10 +5143,12 @@ void RangeBuilderImpl::addBetween(
     cpo::uno::Reference<scriptinterop::XElement> const & endElement,
     std::vector<sal_Int32> const & end, bool endText)
 {
+    // The part of the document is the section (like the body) that holds the element:
     auto const rootOf = [](cpo::uno::Reference<scriptinterop::XElement> element) {
         for (;;) {
             auto const parent = element->getParent();
-            if (!parent.IsPresent) {
+            if (!parent.IsPresent || parent.Value->getType() == scriptinterop::ElementType_DOCUMENT)
+            {
                 return element;
             }
             element = parent.Value;
@@ -5021,7 +5166,7 @@ void RangeBuilderImpl::addBetween(
         throw cpo::uno::RuntimeException(
             u"addElementsBetween: the end lies before the start"_ustr);
     }
-    if (cover(root, {}, start, startOffset, end, endText)) {
+    if (cover(root, pathOf(root), start, startOffset, end, endText)) {
         cpo::uno::Reference<scriptinterop::XContainerElement> const container(
             root, cpo::uno::UNO_QUERY_THROW);
         auto const n = container->getNumChildren();
@@ -5701,21 +5846,7 @@ public:
 
     cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XFootnote>> getFootnotes() override {
         std::vector<cpo::uno::Reference<scriptinterop::XFootnote>> v;
-        cpo::uno::Reference<css::text::XFootnotesSupplier> const sup(
-            model_->uno(), cpo::uno::UNO_QUERY_THROW);
-        auto const idx = sup->getFootnotes();
-        if (!idx.is()) {
-            throw cpo::uno::RuntimeException(
-                u"getFootnotes: the document has no footnote list"_ustr);
-        }
-        auto const n = idx->getCount();
-        for (sal_Int32 i = 0; i != n; ++i) {
-            cpo::uno::Reference<css::text::XFootnote> footnote;
-            if (!(idx->getByIndex(i) >>= footnote) || !footnote.is()) {
-                throw cpo::uno::RuntimeException(
-                    u"getFootnotes: the document's footnote list contains something that is not a"
-                    " footnote"_ustr);
-            }
+        for (auto const & footnote: footnotesOf(model_)) {
             v.emplace_back(new FootnoteImpl(model_, footnote));
         }
         return cpo::uno::Sequence(v.data(), v.size());

@@ -178,6 +178,25 @@ function test() {
     console.assert(noteContents.getNumChildren() >= 1);
     console.assert(noteContents.getChild(0).getText() === 'Note');
     console.assert(noteContents.getChildIndex(noteContents.getChild(0)) === 0);
+    // As in GAS, the document element holds the body and then the sections of the footnotes:
+    const documentElement = body.getParent();
+    console.assert(documentElement.getType() === DocumentApp.ElementType.DOCUMENT);
+    console.assert(documentElement.getParent() === null);
+    console.assert(documentElement.getNumChildren() === 3);
+    console.assert(documentElement.getChildIndex(body) === 0);
+    console.assert(body.getPreviousSibling() === null);
+    console.assert(body.getNextSibling().getType() === DocumentApp.ElementType.FOOTNOTE_SECTION);
+    console.assert(noteContents.getParent().getType() === DocumentApp.ElementType.DOCUMENT);
+    console.assert(documentElement.getChildIndex(noteContents) === 2);
+    // A paragraph of a footnote, also one found by a search, lies in the footnote's section:
+    const inNote = noteContents.findText('Note');
+    console.assert(
+        inNote.getElement().getParent().getParent().getType()
+            === DocumentApp.ElementType.FOOTNOTE_SECTION);
+    console.assert(
+        DocumentApp.getActiveDocument().newRange().addElementsBetween(
+            noteContents.getChild(0).editAsText(), noteContents.getChild(0)).build()
+            .getRangeElements().length === 1);
     // Only COOL has the legacy UNO API, through which a footnote section that has already been read
     // sees the changes made since, as well as those of undo:
     if (globalThis.cool) {

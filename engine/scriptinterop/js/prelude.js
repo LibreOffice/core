@@ -56,7 +56,7 @@ $internal.installGasServices = function(uiStub, menuItems, pendingAlerts) {
             BODY_SECTION: uno.idl.scriptinterop.ElementType.BODY_SECTION,
             COMMENT_SECTION: 'COMMENT_SECTION',
             DATE: 'DATE',
-            DOCUMENT: 'DOCUMENT',
+            DOCUMENT: uno.idl.scriptinterop.ElementType.DOCUMENT,
             EQUATION: 'EQUATION',
             EQUATION_FUNCTION: 'EQUATION_FUNCTION',
             EQUATION_FUNCTION_ARGUMENT_SEPARATOR: 'EQUATION_FUNCTION_ARGUMENT_SEPARATOR',
