@@ -277,6 +277,7 @@ coolwsd_sources = \
                   wsd/QuarantineUtil.cpp \
                   wsd/RemoteConfig.cpp \
                   wsd/RemoteDocumentBroker.cpp \
+                  wsd/RemoteLinkPrefetcher.cpp \
                   wsd/RemoteLinks.cpp \
                   wsd/RequestDetails.cpp \
                   wsd/RequestVettingStation.cpp \
@@ -384,6 +385,7 @@ wsd_headers = \
               wsd/RemoteConfig.hpp \
               wsd/RemoteDocumentBroker.hpp \
               wsd/RemoteLink.hpp \
+              wsd/RemoteLinkPrefetcher.hpp \
               wsd/RemoteLinks.hpp \
               wsd/RequestDetails.hpp \
               wsd/RequestVettingStation.hpp \

@@ -73,6 +73,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,wsd, \
     wsd/QuarantineUtil \
     wsd/RemoteConfig \
     wsd/RemoteDocumentBroker \
+    wsd/RemoteLinkPrefetcher \
     wsd/RemoteLinks \
     wsd/RequestDetails \
     wsd/RequestVettingStation \

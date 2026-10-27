@@ -30,6 +30,7 @@
 #include <wsd/DocumentBroker.hpp>
 #include <wsd/RemoteDocumentBroker.hpp>
 
+#include <Poco/JSON/Array.h>
 #include <Poco/Net/HTTPRequest.h>
 
 #include <algorithm>
@@ -3499,6 +3500,141 @@ public:
     }
 };
 
+/// Reads the slides of a remote presentation over the subscription a view holds to it: the
+/// presentation information and the slide sections are answered from the preview index of
+/// the source, which the server holding it gives without a loaded document, as the replies a
+/// loaded document gives.
+class UnitRemoteDocumentPreview : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitConnected, WaitSlides, Done) _phase;
+
+    /// The remote document, named by its fixture so the fake WOPI host reports that name and
+    /// the document loads as a presentation.
+    std::string remoteWopiSrc() const
+    {
+        return getWopiHostURI() + "/wopi/files/slide-link-source.odp";
+    }
+
+    std::string encodedRemoteWopiSrc() const { return Uri::encode(remoteWopiSrc()); }
+
+    bool _gotInfo = false;
+    bool _gotSections = false;
+
+public:
+    UnitRemoteDocumentPreview()
+        : WopiTestServer("UnitRemoteDocumentPreview", "slide-link-source.odp")
+        , _phase(Phase::Load)
+    {
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+        config.setBool("remote_links.enable", true);
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+
+        if (_phase == Phase::WaitLoadStatus)
+        {
+            // The subscribing document is up; the storage registers the remote presentation
+            // for the user, and the view then subscribes to it.
+            TRANSITION_STATE(_phase, Phase::WaitConnected);
+            registerRemoteLink(socketPoll(), getWopiHostURI() + "/wopi/files/consumer.odp",
+                               "anything", remoteWopiSrc(), "remotetoken",
+                               [this](unsigned status)
+                               {
+                                   LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::OK),
+                                                    status);
+                                   WSD_CMD("remotedocsubscribe source=" +
+                                           encodedRemoteWopiSrc());
+                               });
+        }
+
+        return true;
+    }
+
+    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        if (message.starts_with("remotelinks:") && _phase == Phase::WaitConnected &&
+            message.find("\"state\":\"connected\"") != std::string_view::npos)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitSlides);
+
+            // The slides are asked for the way a browser view does once the link is up.
+            WSD_CMD("remotedoccommand source=" + encodedRemoteWopiSrc() +
+                    " getpresentationinfo");
+            WSD_CMD("remotedoccommand source=" + encodedRemoteWopiSrc() + " getslidesections");
+            return false;
+        }
+
+        if (!message.starts_with("remotedoccommandresult:") || _phase != Phase::WaitSlides)
+            return false;
+
+        const std::size_t newline = message.find('\n');
+        LOK_ASSERT_MESSAGE("The reply carries the frame after its header",
+                           newline != std::string_view::npos);
+        LOK_ASSERT_MESSAGE("The reply names the remote by its persistent link",
+                           message.substr(0, newline).find(encodedRemoteWopiSrc()) !=
+                               std::string_view::npos);
+        const std::string_view frame = message.substr(newline + 1);
+
+        if (frame.starts_with("presentationinfo: "))
+        {
+            TST_LOG("Got: [" << COOLProtocol::getAbbreviatedMessage(frame) << ']');
+            Poco::JSON::Object::Ptr info;
+            LOK_ASSERT_MESSAGE("The presentation information is JSON",
+                               JsonUtil::parseJSON(frame.substr(18), info));
+            const int docWidth = info->optValue<int>("docWidth", 0);
+            const int docHeight = info->optValue<int>("docHeight", 0);
+            LOK_ASSERT_MESSAGE("The document size is reported", docWidth > 0 && docHeight > 0);
+            const Poco::JSON::Array::Ptr slides = info->getArray("slides");
+            LOK_ASSERT_MESSAGE("The slides are listed", slides && slides->size() == 10);
+            const std::string part =
+                slides->getObject(0)->optValue<std::string>("part", std::string());
+            LOK_ASSERT_MESSAGE("A slide is named by its part", !part.empty());
+            LOK_ASSERT_MESSAGE("The reply carries no token",
+                               message.find("remotetoken") == std::string_view::npos);
+            _gotInfo = true;
+        }
+        else if (frame.starts_with("slidesections: "))
+        {
+            TST_LOG("Got: [" << frame << ']');
+            _gotSections = true;
+        }
+
+        if (_gotInfo && _gotSections)
+        {
+            TRANSITION_STATE(_phase, Phase::Done);
+            passTest("The slides of a remote presentation reached the view over its link");
+        }
+
+        return false;
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
+
+                initWebsocket("/wopi/files/consumer.odp?access_token=anything");
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
     return new UnitBase* []
@@ -3512,7 +3648,7 @@ UnitBase** unit_create_wsd_multi(void)
             new UnitRemoteDocumentChain(), new UnitLinkPostPersistentLink(),
             new UnitLinkAccessResolve(), new UnitLinkAccessNotFound(), new UnitLinkAccessPerView(),
             new UnitLinkAccessBatch(), new UnitLinkAccessOneByOne(), new UnitLinkAccessDefaults(),
-            nullptr
+            new UnitRemoteDocumentPreview(), nullptr
     };
 }
 

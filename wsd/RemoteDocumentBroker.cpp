@@ -227,7 +227,14 @@ void HeadlessClientSession::handleMessage(const std::vector<char>& data)
         std::string kind;
         COOLProtocol::getTokenStringFromMessage(firstLine, "cmd", cmd);
         COOLProtocol::getTokenStringFromMessage(firstLine, "kind", kind);
-        if (cmd == "load" || cmd == "internal" || _state != State::Live)
+        if (cmd == "load" && kind == "docunloading")
+        {
+            LOG_INF("RemoteDoc: the remote document is unloading, dialing it again shortly");
+            _state = State::Closed;
+            remoteDocument->onDocumentUnloading();
+            shutdown(true, "Document unloading");
+        }
+        else if (cmd == "load" || cmd == "internal" || _state != State::Live)
         {
             LOG_ERR("RemoteDoc: the remote document failed to load: cmd=" << cmd
                                                                           << " kind=" << kind);
@@ -476,6 +483,28 @@ void RemoteDocument::onLoadFailed(const std::string& kind)
     shutdown();
     _failed = true;
     _pendingCommands.clear();
+}
+
+void RemoteDocument::onDocumentUnloading()
+{
+    _session.reset();
+
+    if (_consumers.empty())
+        return;
+
+    ++_reconnectAttempts;
+    if (_reconnectAttempts > _broker.getReconnectAttemptLimit())
+    {
+        LOG_ERR("RemoteDoc: giving up on the remote document ["
+                << _docKey << "], unloading on each of " << (_reconnectAttempts - 1)
+                << " attempts");
+        broadcastEvent("event=missing kind=docunloading");
+        _failed = true;
+        _pendingCommands.clear();
+        return;
+    }
+
+    _reconnectTime = std::chrono::steady_clock::now() + RemoteDocumentBroker::UnloadingRetryDelay;
 }
 
 void RemoteDocument::onSessionClosed()

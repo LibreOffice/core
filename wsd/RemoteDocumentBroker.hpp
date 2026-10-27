@@ -184,6 +184,9 @@ public:
     void onSaved(const std::string& lastModifiedTime);
     void onInvalidated(int part);
     void onLoadFailed(const std::string& kind);
+    /// The remote node refused the load because the document was unloading at that moment.
+    /// The session is dialed again shortly, when the document is gone and loads afresh.
+    void onDocumentUnloading();
     void onSessionClosed();
 
     void dumpState(std::ostream& os) const;
@@ -312,6 +315,8 @@ public:
 
     /// The base delay before the first reconnect attempt; doubled per attempt.
     static constexpr std::chrono::seconds ReconnectBaseDelay{ 2 };
+    /// The delay before dialing again a document that was unloading when dialed.
+    static constexpr std::chrono::milliseconds UnloadingRetryDelay{ 500 };
     static constexpr std::chrono::seconds ReconnectMaxDelay{ 60 };
 
     /// The configured maximum number of reconnect attempts.

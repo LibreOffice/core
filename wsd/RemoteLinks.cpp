@@ -26,6 +26,7 @@
 #include <wsd/DocumentBroker.hpp>
 #include <wsd/HostUtil.hpp>
 #include <wsd/RemoteDocumentBroker.hpp>
+#include <wsd/RemoteLinkPrefetcher.hpp>
 #include <wsd/RequestDetails.hpp>
 #include <wsd/wopi/StorageConnectionManager.hpp>
 
@@ -722,19 +723,78 @@ void RemoteLinks::handleSubscribe(DocumentBroker& docBroker, const std::string& 
         return;
     }
 
+    Subscription subscription;
+    subscription.wopiSrc = wopiSrc;
+    subscription.accessToken = itToken->second;
+    subscription.state = "subscribed";
+    subscription.prefetcher = std::make_shared<RemoteLinkPrefetcher>(
+        wopiSrc, itToken->second, tag,
+        [this, tag, remoteDocKey](DocumentBroker& broker)
+        { onIndexAnswered(broker, tag, remoteDocKey); });
+    view.subscriptions[remoteDocKey] = std::move(subscription);
+    refreshView(docBroker, tag);
+
+    // The preview index of the source comes first: the server holding the source answers it
+    // from its cache, without loading the document. The live link is dialed once the index
+    // answered.
+    view.subscriptions[remoteDocKey].prefetcher->fetchIndex(docBroker);
+}
+
+void RemoteLinks::onIndexAnswered(DocumentBroker& docBroker, const std::string& tag,
+                                  const std::string& remoteDocKey)
+{
+    docBroker.assertCorrectThread();
+
+    const auto itView = _views.find(tag);
+    if (itView == _views.end())
+        return;
+
+    const auto itSub = itView->second.subscriptions.find(remoteDocKey);
+    if (itSub == itView->second.subscriptions.end())
+        return;
+
+    // The slides of the source are at hand, so the link is connected for the view before the
+    // live link is up.
+    Subscription& subscription = itSub->second;
+    if (subscription.prefetcher->hasIndex() && subscription.state == "subscribed")
+    {
+        subscription.state = "connected";
+        refreshView(docBroker, tag);
+    }
+
+    // The live link joins the document the index was read from once the view that read it
+    // is done with it, so the two never cross while one of them is loading.
+    dialLiveLink(docBroker, tag, remoteDocKey);
+}
+
+void RemoteLinks::dialLiveLink(DocumentBroker& docBroker, const std::string& tag,
+                               const std::string& remoteDocKey)
+{
+    docBroker.assertCorrectThread();
+
+    const auto itView = _views.find(tag);
+    if (itView == _views.end())
+        return;
+
+    const auto itSub = itView->second.subscriptions.find(remoteDocKey);
+    if (itSub == itView->second.subscriptions.end())
+        return;
+
+    Subscription& subscription = itSub->second;
+    if (subscription.liveLinkDialed || !RemoteDocumentBroker::isInitialized())
+        return;
+
+    subscription.liveLinkDialed = true;
+
     RemoteDocumentRequest request;
-    request.wopiSrc = wopiSrc;
-    request.accessToken = itToken->second;
+    request.wopiSrc = subscription.wopiSrc;
+    request.accessToken = subscription.accessToken;
     request.tag = tag;
     request.localDocKey = docBroker.getDocKey();
     request.docKeyChain = _incomingDocKeyChain;
-    request.serverUrl = serverUrl;
+    request.serverUrl = RemoteDocumentBroker::getServerUrl();
     request.consumer = docBroker.shared_from_this();
-
-    view.subscriptions[remoteDocKey] = { wopiSrc, itToken->second, "subscribed" };
-
     RemoteDocumentBroker::instance().subscribeAsync(std::move(request));
-    refreshView(docBroker, tag);
 }
 
 void RemoteLinks::onRemoteEvent(DocumentBroker& docBroker, const std::string& tag,
@@ -776,6 +836,19 @@ void RemoteLinks::onRemoteEvent(DocumentBroker& docBroker, const std::string& ta
     // linked slides once the engine reads these events.
     docBroker.sendTextFrameToKit("remotedocevent tag=" + tag + " source=" +
                                  Uri::encode(persistentLink) + ' ' + eventArguments);
+
+    // The index of a source that changed is fetched anew the next time its slides are asked
+    // for.
+    if (event == "modified" || event == "invalidated" || event == "structure" || event == "saved")
+    {
+        const auto itStaleView = _views.find(tag);
+        if (itStaleView != _views.end())
+        {
+            const auto itStaleSub = itStaleView->second.subscriptions.find(docKey);
+            if (itStaleSub != itStaleView->second.subscriptions.end())
+                itStaleSub->second.prefetcher->markStale();
+        }
+    }
 
     // A save on the source uploaded a new file to storage. The new last-modified
     // time is the same for every view, so refresh the shared source record.
@@ -838,10 +911,7 @@ void RemoteLinks::sendCommand(DocumentBroker& docBroker, const std::string& tag,
         const auto itSub = itView->second.subscriptions.find(itEntry->first);
         if (itSub != itView->second.subscriptions.end())
         {
-            RemoteDocumentBroker::instance().sendCommandAsync(itSub->second.wopiSrc,
-                                                              itSub->second.accessToken,
-                                                              docBroker.getDocKey(), tag,
-                                                              command);
+            itSub->second.prefetcher->handleCommand(docBroker, command);
             return;
         }
     }
@@ -1151,8 +1221,12 @@ void RemoteLinks::dumpState(std::ostream& os) const
            << " asked on load: " << (itView.second.askedOnLoad ? "yes" : "no")
            << " link access asked: " << itView.second.linkAccess.size();
         for (const auto& it : itView.second.subscriptions)
+        {
             os << "\n      " << Anonymizer::anonymizeUrl(it.second.wopiSrc) << " state: "
-               << it.second.state;
+               << it.second.state
+               << " live link dialed: " << (it.second.liveLinkDialed ? "yes" : "no");
+            it.second.prefetcher->dumpState(os);
+        }
         for (const auto& it : itView.second.linkAccess)
             os << "\n      persistent link " << Anonymizer::anonymize(it.first) << " access: "
                << linkAccessName(it.second);

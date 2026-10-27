@@ -23,6 +23,7 @@
 
 class ClientSession;
 class DocumentBroker;
+class RemoteLinkPrefetcher;
 
 /// The remote links of one document, split into a shared part and a
 /// private part per browser view.
@@ -91,8 +92,10 @@ public:
     void onRemoteEvent(DocumentBroker& docBroker, const std::string& tag,
                        const std::string& encodedWopiSrc, const std::string& eventArguments);
 
-    /// Routes a read-only client command from one view to the remote document bound to the
-    /// given persistent link, when that view is subscribed to it.
+    /// Answers a read-only client command from one view about the remote document bound to
+    /// the given persistent link, when that view is subscribed to it. The presentation
+    /// information and the slide sections of the source are answered from its preview index,
+    /// every other command goes to the live link.
     void sendCommand(DocumentBroker& docBroker, const std::string& tag,
                      const std::string& persistentLink, const std::string& command);
 
@@ -133,8 +136,15 @@ private:
         /// The token the subscription was opened with.
         std::string accessToken;
         /// The last connection event: subscribed, connected, disconnected,
-        /// failed or missing.
+        /// failed or missing. A subscription is connected once the preview index of the
+        /// source arrived or the live link is up, whichever comes first.
         std::string state;
+        /// The preview index of the source, which answers the view before the live link is
+        /// up.
+        std::shared_ptr<RemoteLinkPrefetcher> prefetcher;
+        /// Whether the live link to the source was dialed. It is dialed once the preview
+        /// index answered, whether or not it came.
+        bool liveLinkDialed = false;
     };
 
     /// What asking the storage for the document behind one persistent link came to.
@@ -220,6 +230,15 @@ private:
 
     /// The name of one link access outcome, for logs and the state dump.
     static const char* linkAccessName(LinkAccess access);
+
+    /// Takes the answer to a preview index request of the given subscription of one view: the
+    /// subscription is connected once an index is there, and the live link is dialed.
+    void onIndexAnswered(DocumentBroker& docBroker, const std::string& tag,
+                         const std::string& remoteDocKey);
+
+    /// Opens the live link of the given subscription of one view, once.
+    void dialLiveLink(DocumentBroker& docBroker, const std::string& tag,
+                      const std::string& remoteDocKey);
 
     /// Answers one view's remote document subscription with an error event.
     static void sendError(DocumentBroker& docBroker, const std::string& tag,
