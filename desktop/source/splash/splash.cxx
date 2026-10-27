@@ -21,7 +21,6 @@
 
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/salnativewidgets.hxx>
 
 #include <rtl/bootstrap.hxx>
 #include <rtl/math.hxx>
@@ -29,34 +28,6 @@
 
 #define NOT_LOADED  (tools::Long(-1))
 #define NOT_LOADED_COLOR  (Color(ColorTransparency, 0xffffffff))
-
-SplashScreenWindow::SplashScreenWindow(SplashScreen* pSplash)
-    : m_pSplash(pSplash)
-    , m_pVDev(VclPtr<VirtualDevice>::Create(*GetOutDev()))
-{
-    m_pVDev->EnableRTL(IsRTLEnabled());
-}
-
-void SplashScreenWindow::dispose()
-{
-    m_pSplash = nullptr;
-    IntroWindow::dispose();
-}
-
-void SplashScreenWindow::SetOutputSizePixel(const Size& rNewSize)
-{
-    IntroWindow::SetOutputSizePixel(rNewSize);
-    m_pVDev->SetOutputSizePixel(rNewSize);
-}
-
-void SplashScreenWindow::Redraw()
-{
-    Invalidate();
-    // Trigger direct painting too - otherwise the splash screen won't be
-    // shown in some cases (when the idle timer won't be hit).
-    Paint(*GetOutDev(), tools::Rectangle());
-    GetOutDev()->Flush();
-}
 
 SplashScreen::SplashScreen(const OUString& rAppName)
     : m_pWindow(VclPtr<SplashScreenWindow>::Create(this))
@@ -444,76 +415,6 @@ void SplashScreen::determineProgressRatioValues(
         else
             break;
     }
-}
-
-void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
-{
-    if (!m_pSplash)
-        return;
-
-    //native drawing
-    // in case of native controls we need to draw directly to the window
-    if (m_pSplash->m_bNativeProgress
-        && rRenderContext.IsNativeControlSupported(ControlType::IntroProgress, ControlPart::Entire))
-    {
-        rRenderContext.DrawBitmap(Point(), m_pSplash->m_aIntroBmp);
-
-        ImplControlValue aValue(m_pSplash->m_nProgress * m_pSplash->m_nBarwidth
-                                / m_pSplash->m_nMax);
-        tools::Rectangle aDrawRect(Point(m_pSplash->m_nTlx, m_pSplash->m_nTly),
-                                   Size(m_pSplash->m_nBarwidth, m_pSplash->m_nBarheight));
-        tools::Rectangle aNativeControlRegion, aNativeContentRegion;
-
-        if (rRenderContext.GetNativeControlRegion(ControlType::IntroProgress, ControlPart::Entire, aDrawRect,
-                                                  ControlState::ENABLED, aValue,
-                                                  aNativeControlRegion, aNativeContentRegion))
-        {
-              tools::Long nProgressHeight = aNativeControlRegion.GetHeight();
-              aDrawRect.AdjustTop(-((nProgressHeight - m_pSplash->m_nBarheight) / 2));
-              aDrawRect.AdjustBottom((nProgressHeight - m_pSplash->m_nBarheight) / 2);
-        }
-
-        if (rRenderContext.DrawNativeControl(ControlType::IntroProgress, ControlPart::Entire,
-                                             aDrawRect, ControlState::ENABLED, aValue,
-                                             m_pSplash->m_sProgressText))
-        {
-            return;
-        }
-    }
-
-    // non native drawing
-    // draw bitmap
-    m_pVDev->DrawBitmap(Point(), m_pSplash->m_aIntroBmp);
-
-    if (m_pSplash->m_bPaintProgress)
-    {
-        // draw progress...
-        tools::Long length = (m_pSplash->m_nProgress * m_pSplash->m_nBarwidth / m_pSplash->m_nMax)
-                             - (2 * m_pSplash->m_nBarspace);
-        if (length < 0) length = 0;
-
-        // border
-        m_pVDev->SetFillColor();
-        m_pVDev->SetLineColor(m_pSplash->m_aProgressFrameColor);
-        m_pVDev->DrawRect(tools::Rectangle(m_pSplash->m_nTlx, m_pSplash->m_nTly,
-                                           m_pSplash->m_nTlx + m_pSplash->m_nBarwidth,
-                                           m_pSplash->m_nTly + m_pSplash->m_nBarheight));
-        m_pVDev->SetFillColor(m_pSplash->m_aProgressBarColor);
-        m_pVDev->SetLineColor();
-        m_pVDev->DrawRect(tools::Rectangle(
-            m_pSplash->m_nTlx + m_pSplash->m_nBarspace, m_pSplash->m_nTly + m_pSplash->m_nBarspace,
-            m_pSplash->m_nTlx + m_pSplash->m_nBarspace + length,
-            m_pSplash->m_nTly + m_pSplash->m_nBarheight - m_pSplash->m_nBarspace));
-        vcl::Font aFont;
-        aFont.SetFontSize(Size(0, 12));
-        aFont.SetAlignment(ALIGN_BASELINE);
-        m_pVDev->SetFont(aFont);
-        m_pVDev->SetTextColor(m_pSplash->m_aProgressTextColor);
-        m_pVDev->DrawText(Point(m_pSplash->m_nTlx, m_pSplash->m_nTextBaseline),
-                          m_pSplash->m_sProgressText);
-    }
-    rRenderContext.DrawOutDev(Point(), GetOutputSizePixel(), Point(), m_pVDev->GetOutputSizePixel(),
-                              *m_pVDev);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
