@@ -3315,7 +3315,9 @@ void DrawingML::WriteRun( const Reference< XTextRange >& rRun,
     if (nLevel !=-1 && bNumberingIsNumber && sText.isEmpty() )
          sText=u" "_ustr;
 
-    if ( bIsURLField )
+    // A run that stands for a hyperlink shows the words it was given, and the text of the run
+    // is those words, so the two agree wherever the run shows anything at all.
+    if (bIsURLField && !sText.isEmpty())
         sText = sFieldValue;
 
     if( sText.isEmpty())

@@ -866,6 +866,22 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testParagraphKeepsNoSpaceAbove)
     }
 }
 
+// An empty paragraph after a link stays empty.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testEmptyParagraphAfterALinkStaysEmpty)
+{
+    // Given a paragraph holding a link and an empty paragraph under it:
+    createSdImpressDoc("pptx/empty-paragraph-after-a-link.pptx");
+
+    save(TestFilter::PPTX);
+
+    // Without the fix in place, the empty paragraph was saved with the words of the link above
+    // it and a link of its own, so the slide gained a line of text.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPathContent(pXmlDoc, "//p:sp/p:txBody/a:p[1]/a:r/a:t", u"A link");
+    assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p[2]/a:r", 0);
+    assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p[2]//a:hlinkClick", 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
