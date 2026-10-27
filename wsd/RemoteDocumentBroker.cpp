@@ -425,6 +425,15 @@ void RemoteDocument::onLive()
     _reconnectAttempts = 0;
     _everConnected = true;
     broadcastEvent("event=connected");
+
+    std::vector<std::string> pending;
+    pending.swap(_pendingCommands);
+    for (const std::string& command : pending)
+    {
+        if (!_session || !_session->sendCommand(command))
+            LOG_DBG("RemoteDoc: command [" << COOLProtocol::getAbbreviatedMessage(command)
+                                           << "] to [" << _docKey << "] was not sent");
+    }
 }
 
 void RemoteDocument::onStructureChanged() { broadcastEvent("event=structure"); }
@@ -466,6 +475,7 @@ void RemoteDocument::onLoadFailed(const std::string& kind)
     broadcastEvent("event=missing kind=" + kind);
     shutdown();
     _failed = true;
+    _pendingCommands.clear();
 }
 
 void RemoteDocument::onSessionClosed()
@@ -482,6 +492,7 @@ void RemoteDocument::onSessionClosed()
                 << _docKey << "] after " << (_reconnectAttempts - 1) << " reconnect attempts");
         broadcastEvent("event=failed kind=disconnected");
         _failed = true;
+        _pendingCommands.clear();
         return;
     }
 
@@ -523,6 +534,16 @@ void RemoteDocument::sendCommand(const std::string& localDocKey, const std::stri
 {
     // Remember the requesting view so the remote's replies reach it.
     _commandSubscribers.emplace(localDocKey, tag);
+
+    // The link is connected for the view before the session is live, so a command may
+    // arrive while the remote document is still loading.
+    if (!_failed && (!_session || _session->state() != HeadlessClientSession::State::Live))
+    {
+        LOG_DBG("RemoteDoc: command [" << COOLProtocol::getAbbreviatedMessage(command)
+                                       << "] to [" << _docKey << "] waits for the session");
+        _pendingCommands.push_back(command);
+        return;
+    }
 
     if (!_session || !_session->sendCommand(command))
         LOG_DBG("RemoteDoc: command [" << COOLProtocol::getAbbreviatedMessage(command)
@@ -575,6 +596,7 @@ void RemoteDocument::dumpState(std::ostream& os) const
     os << "\n    commandSubscribers: " << _commandSubscribers.size();
     for (const auto& it : _commandSubscribers)
         os << "\n      " << it.first << " session: " << it.second;
+    os << "\n    pendingCommands: " << _pendingCommands.size();
     os << "\n    everConnected: " << _everConnected
        << "\n    failed: " << _failed
        << "\n    reconnectAttempts: " << _reconnectAttempts

@@ -148,7 +148,8 @@ public:
 
     /// Sends a read-only client command to the remote document on behalf of
     /// one browser view, and remembers that view so the remote's replies are
-    /// routed back to it.
+    /// routed back to it. A command sent while the headless session is not
+    /// live yet is sent once it is.
     void sendCommand(const std::string& localDocKey, const std::string& tag,
                      const std::string& command);
 
@@ -211,6 +212,10 @@ private:
     std::set<std::pair<std::string, std::string>> _commandSubscribers;
 
     std::shared_ptr<HeadlessClientSession> _session;
+
+    /// The commands sent while the headless session was not live yet, in the
+    /// order they were sent.
+    std::vector<std::string> _pendingCommands;
 
     /// Parts with invalidations not yet forwarded. Part -1 covers documents
     /// without parts.
