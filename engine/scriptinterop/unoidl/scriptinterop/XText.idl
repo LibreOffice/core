@@ -18,6 +18,12 @@ interface XText: XElement {
 
     XText editAsText();
 
+    [overload findText] com::sun::star::beans::Optional<XRangeElement> findText(
+        [in] string searchPattern);
+
+    [overload findText] com::sun::star::beans::Optional<XRangeElement> findTextFrom(
+        [in] string searchPattern, [in] XRangeElement from);
+
     com::sun::star::beans::Optional<string> getFontFamily([in] long offset);
 
     [overload getForegroundColor] com::sun::star::beans::Optional<string> getForegroundColor();

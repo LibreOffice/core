@@ -343,6 +343,15 @@ function test() {
     console.assert(fromCellText[1].getElement().getType() === DocumentApp.ElementType.TABLE_ROW);
     console.assert(fromCellText[2].getElement().getType() === DocumentApp.ElementType.TEXT);
     console.assert(fromCellText[2].getEndOffsetInclusive() === 2);
+    // A table, a row and the text of a cell find a match in the child text of a paragraph in a
+    // cell:
+    const inTable = empty.findText('1');
+    console.assert(inTable.getElement().asText().getText() === 'B1');
+    console.assert(inTable.getStartOffset() === 1);
+    console.assert(empty.getRow(0).findText('B').getEndOffsetInclusive() === 0);
+    const inCell = empty.getRow(0).getCell(1).editAsText().findText('1');
+    console.assert(inCell.getElement().asText().getText() === 'B1');
+    console.assert(inCell.getStartOffset() === 1);
 
     // A table cell that has already been read sees the changes made since through another object
     // for the same cell, here clearing it, which leaves one empty paragraph:

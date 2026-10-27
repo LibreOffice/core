@@ -33,6 +33,12 @@ $(eval $(call gb_Library_use_libraries,scriptinterop,\
     tl \
 ))
 
+$(eval $(call gb_Library_use_externals,scriptinterop,\
+    icu_headers \
+    icui18n \
+    icuuc \
+))
+
 $(eval $(call gb_Library_use_api,scriptinterop,\
     udkapi \
     offapi \

@@ -78,6 +78,9 @@
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/util/SearchAlgorithms2.hpp>
+#include <com/sun/star/util/SearchOptions2.hpp>
+#include <com/sun/star/util/TextSearch2.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -129,6 +132,7 @@
 #include <scriptinterop/XText.hpp>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
+#include <unicode/regex.h>
 
 #include "document.hxx"
 
@@ -1005,6 +1009,14 @@ public:
 
     cpo::uno::Reference<scriptinterop::XText> editAsText() override { return this; }
 
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XRangeElement>> findText(
+        OUString const & searchPattern) override
+    { return findTextFrom(searchPattern, {}); }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XRangeElement>> findTextFrom(
+        OUString const & searchPattern,
+        cpo::uno::Reference<scriptinterop::XRangeElement> const & from) override;
+
     css::beans::Optional<OUString> getFontFamily(sal_Int32 offset) override {
         auto const any = getProp(
             runAt(offset), u"getFontFamily", u"font family", u"CharFontName"_ustr);
@@ -1125,6 +1137,12 @@ public:
     // For a child text, the name of the inline image before its run of the paragraph's text, which
     // is empty for the first run:
     std::optional<OUString> const & run() const { return run_; }
+
+    // The child texts that this text is made of, which is just itself for a child text:
+    std::vector<cpo::uno::Reference<scriptinterop::XText>> childTexts();
+
+    // The characters of this text from start to end (exclusive), as a partial range element:
+    cpo::uno::Reference<scriptinterop::XRangeElement> part(sal_Int32 start, sal_Int32 end);
 
     cpo::uno::Reference<css::text::XTextRange> wholeRange() {
         if (!run_) {
@@ -1723,6 +1741,14 @@ public:
     }
 
     cpo::uno::Reference<scriptinterop::XText> editAsText() override { return this; }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XRangeElement>> findText(
+        OUString const & searchPattern) override
+    { return findTextFrom(searchPattern, {}); }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XRangeElement>> findTextFrom(
+        OUString const & searchPattern,
+        cpo::uno::Reference<scriptinterop::XRangeElement> const & from) override;
 
     css::beans::Optional<OUString> getFontFamily(sal_Int32 offset) override {
         auto const [text, inner] = at(offset);
@@ -2456,6 +2482,15 @@ public:
         return asText();
     }
 
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XRangeElement>> findText(
+        OUString const & searchPattern) override
+    { return asText()->findText(searchPattern); }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XRangeElement>> findTextFrom(
+        OUString const & searchPattern,
+        cpo::uno::Reference<scriptinterop::XRangeElement> const & from) override
+    { return asText()->findTextFrom(searchPattern, from); }
+
     css::beans::Optional<scriptinterop::HorizontalAlignment> getAlignment() override {
         auto const any = getParaProp(u"ParaAdjust"_ustr);
         if (!any) {
@@ -2906,6 +2941,15 @@ public:
 
     cpo::uno::Reference<scriptinterop::XText> editAsText() override { return asText(); }
 
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XRangeElement>> findText(
+        OUString const & searchPattern) override
+    { return asText()->findText(searchPattern); }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XRangeElement>> findTextFrom(
+        OUString const & searchPattern,
+        cpo::uno::Reference<scriptinterop::XRangeElement> const & from) override
+    { return asText()->findTextFrom(searchPattern, from); }
+
     // TODO: return a detached deep copy, not this; mutations on the "copy" write back to the live
     // element:
     cpo::uno::Reference<scriptinterop::XElement> copy() override { return this; }
@@ -3006,6 +3050,15 @@ public:
     }
 
     cpo::uno::Reference<scriptinterop::XText> editAsText() override { return asText(); }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XRangeElement>> findText(
+        OUString const & searchPattern) override
+    { return asText()->findText(searchPattern); }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XRangeElement>> findTextFrom(
+        OUString const & searchPattern,
+        cpo::uno::Reference<scriptinterop::XRangeElement> const & from) override
+    { return asText()->findTextFrom(searchPattern, from); }
 
     // TODO: return a detached deep copy, not this; mutations on the "copy" write back to the live
     // element:
@@ -3131,6 +3184,15 @@ public:
     }
 
     cpo::uno::Reference<scriptinterop::XText> editAsText() override { return asText(); }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XRangeElement>> findText(
+        OUString const & searchPattern) override
+    { return asText()->findText(searchPattern); }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XRangeElement>> findTextFrom(
+        OUString const & searchPattern,
+        cpo::uno::Reference<scriptinterop::XRangeElement> const & from) override
+    { return asText()->findTextFrom(searchPattern, from); }
 
     // TODO: return a detached deep copy, not this; mutations on the "copy" write back to the live
     // element:
@@ -3459,6 +3521,107 @@ private:
     sal_Int32 startOffset_ = 0;
     sal_Int32 rangeLen_ = 0;
 };
+
+std::vector<cpo::uno::Reference<scriptinterop::XText>> TextImpl::childTexts() {
+    if (run_) {
+        return {this};
+    }
+    std::vector<cpo::uno::Reference<scriptinterop::XText>> texts;
+    auto const paragraph = this->paragraph();
+    auto const n = paragraph->getNumChildren();
+    for (sal_Int32 i = 0; i != n; ++i) {
+        auto const child = paragraph->getChild(i);
+        if (child->getType() == scriptinterop::ElementType_TEXT) {
+            texts.emplace_back(child, cpo::uno::UNO_QUERY_THROW);
+        }
+    }
+    return texts;
+}
+
+cpo::uno::Reference<scriptinterop::XRangeElement> TextImpl::part(sal_Int32 start, sal_Int32 end) {
+    auto const whole = wholeRange();
+    auto const cursor = whole->getText()->createTextCursorByRange(whole->getStart());
+    goRight(cursor, start, false);
+    goRight(cursor, end - start, true);
+    return new RangeElementImpl(model_, cursor, true);
+}
+
+// As in GAS, the first match of a regular expression in the texts, after the given range element of
+// an earlier match when there is one, where each text is searched on its own, so that no match
+// spans the inline image between two child texts of a paragraph:
+css::beans::Optional<cpo::uno::Reference<scriptinterop::XRangeElement>> findInTexts(
+    std::vector<cpo::uno::Reference<scriptinterop::XText>> const & texts,
+    OUString const & searchPattern, cpo::uno::Reference<scriptinterop::XRangeElement> const & from)
+{
+    std::size_t first = 0;
+    sal_Int32 offset = 0;
+    if (from.is()) {
+        rtl::Reference<TextImpl> const element(dynamic_cast<TextImpl *>(from->getElement().get()));
+        auto const i = !element.is()
+            ? texts.end()
+            : std::find_if(texts.begin(), texts.end(), [&element](auto const & text) {
+                  auto & impl = dynamic_cast<TextImpl &>(*text);
+                  return impl.getuno() == element->getuno() && impl.run() == element->run();
+              });
+        if (i == texts.end()) {
+            throw cpo::uno::RuntimeException(
+                u"findText: the range element to search from is not in this text"_ustr);
+        }
+        first = i - texts.begin();
+        offset = from->getEndOffsetInclusive() + 1;
+    }
+    // As in GAS, an invalid pattern is an error, which TextSearch2 (using the same regular
+    // expressions of ICU) does not report:
+    UParseError parseError;
+    UErrorCode status = U_ZERO_ERROR;
+    std::unique_ptr<icu::RegexPattern> const pattern(icu::RegexPattern::compile(
+        icu::UnicodeString(searchPattern.getStr(), searchPattern.getLength()), 0, parseError,
+        status));
+    if (U_FAILURE(status)) {
+        throw cpo::uno::RuntimeException("findText: invalid regular expression " + searchPattern);
+    }
+    css::util::SearchOptions2 options;
+    options.AlgorithmType2 = css::util::SearchAlgorithms2::REGEXP;
+    options.searchString = searchPattern;
+    auto const search = css::util::TextSearch2::create(comphelper::getProcessComponentContext());
+    search->setOptions2(options);
+    for (auto i = first; i != texts.size(); ++i, offset = 0) {
+        auto const text = texts[i]->getText();
+        for (auto start = offset; start < text.getLength();) {
+            auto const result = search->searchForward(text, start, text.getLength());
+            if (result.subRegExpressions == 0) {
+                break;
+            }
+            // An empty match, as a pattern like "x*" has everywhere, is skipped:
+            if (result.endOffset[0] > result.startOffset[0]) {
+                return {
+                    true,
+                    dynamic_cast<TextImpl &>(*texts[i]).part(
+                        result.startOffset[0], result.endOffset[0])};
+            }
+            start = result.startOffset[0] + 1;
+        }
+    }
+    return {false, {}};
+}
+
+css::beans::Optional<cpo::uno::Reference<scriptinterop::XRangeElement>> TextImpl::findTextFrom(
+    OUString const & searchPattern, cpo::uno::Reference<scriptinterop::XRangeElement> const & from)
+{
+    return findInTexts(childTexts(), searchPattern, from);
+}
+
+css::beans::Optional<cpo::uno::Reference<scriptinterop::XRangeElement>>
+ContainerTextImpl::findTextFrom(
+    OUString const & searchPattern, cpo::uno::Reference<scriptinterop::XRangeElement> const & from)
+{
+    std::vector<cpo::uno::Reference<scriptinterop::XText>> texts;
+    for (auto const & paragraph: contents().paragraphs) {
+        auto const children = dynamic_cast<TextImpl &>(*paragraph.text).childTexts();
+        texts.insert(texts.end(), children.begin(), children.end());
+    }
+    return findInTexts(texts, searchPattern, from);
+}
 
 // An element that is selected as a whole, such as a table cell:
 class WholeElementRangeElementImpl: public cppu::WeakImplHelper<scriptinterop::XRangeElement> {
@@ -3930,6 +4093,15 @@ public:
 
     cpo::uno::Reference<scriptinterop::XText> editAsText() override { return asText(); }
 
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XRangeElement>> findText(
+        OUString const & searchPattern) override
+    { return asText()->findText(searchPattern); }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XRangeElement>> findTextFrom(
+        OUString const & searchPattern,
+        cpo::uno::Reference<scriptinterop::XRangeElement> const & from) override
+    { return asText()->findTextFrom(searchPattern, from); }
+
     // TODO: return a detached deep copy, not this; mutations on the "copy" write back to the live
     // element:
     cpo::uno::Reference<scriptinterop::XElement> copy() override { return this; }
@@ -4080,6 +4252,15 @@ public:
     }
 
     cpo::uno::Reference<scriptinterop::XText> editAsText() override { return asText(); }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XRangeElement>> findText(
+        OUString const & searchPattern) override
+    { return asText()->findText(searchPattern); }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XRangeElement>> findTextFrom(
+        OUString const & searchPattern,
+        cpo::uno::Reference<scriptinterop::XRangeElement> const & from) override
+    { return asText()->findTextFrom(searchPattern, from); }
 
     // TODO: return a detached deep copy, not this; mutations on the "copy" write back to the live
     // element:

@@ -536,6 +536,35 @@ function test() {
     console.assert(inBXar.getElement().getType() === DocumentApp.ElementType.TEXT);
     console.assert(inBXar.getElement().asText().getText() === 'bXar');
     console.assert(inBXar.getOffset() === 1);
+    // A search finds a match in one child text, never across the image:
+    const found = withImage.findText('bX');
+    console.assert(found.getElement().asText().getText() === 'bXar');
+    console.assert(found.isPartial());
+    console.assert(found.getStartOffset() === 0);
+    console.assert(found.getEndOffsetInclusive() === 1);
+    console.assert(withImage.findText('o.*b') === null);
+    {
+        let invalid = false;
+        try {
+            withImage.findText('(');
+        } catch (e) {
+            invalid = true;
+        }
+        console.assert(invalid);
+    }
+    const matches = [];
+    for (let r = withImage.findText('[oa]'); r !== null; r = withImage.findText('[oa]', r)) {
+        matches.push(r.getElement().asText().getText() + r.getStartOffset());
+    }
+    console.assert(matches.join() === 'foo1,foo2,bXar2');
+    console.assert(withImage.getChild(2).findText('a').getStartOffset() === 2);
+    console.assert(
+        withImage.editAsText().findText('ar').getElement().asText().getText() === 'bXar');
+    // A search of the body finds a match in a child text:
+    const inBody = body.findText('bXa');
+    console.assert(inBody.getElement().asText().getText() === 'bXar');
+    console.assert(inBody.getStartOffset() === 0);
+    console.assert(body.findText('bXa', inBody) === null);
     // A range over the image is split into the image and the parts of the texts around it:
     const overImage = doc.newRange().addElement(withImage.editAsText(), 1, 4).build()
         .getRangeElements();
