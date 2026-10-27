@@ -24,10 +24,6 @@
 #include <vector>
 #include <animations.hxx>
 
-#ifdef DBG_ANIM_LOG
-#include <stdio.h>
-#endif
-
 namespace com::sun::star::animations { class XAnimationNode; }
 namespace com::sun::star::drawing { class XDrawPage; }
 namespace ppt { struct AnimationNode; }
@@ -88,26 +84,6 @@ private:
     SvStream&   mrStCtrl;
 
     std::vector< sd::AfterEffectNode > maAfterEffectNodes;
-
-#ifdef DBG_ANIM_LOG
-    FILE * mpFile;
-    void dump_anim_group( const Atom* pAtom, const AnimationNode& rNode, const PropertySet& rSet, bool bOpen );
-    void dump( const OUString& rString );
-    void dump( sal_uInt32 nLen, bool bNewLine = true );
-#endif
-
-    static void dump_atom_header( const Atom* pAtom, bool bOpen, bool bAppend );
-    static void dump_atom( const Atom* pAtom, bool bNewLine = true );
-    static void dump_target( css::uno::Any& rAny );
-    static void dump( css::uno::Any& rAny );
-    static void dump( const PropertySet& rSet );
-    static void dump( const AnimationNode& rNode );
-    static void dump( const char * pText );
-    static void dump( const char * pText, sal_Int32 nInt );
-    void dump( const char * pText, sal_Int64 nInt );
-    static void dump( const char * pText, double fDouble );
-    static void dump( const char * pText, const char * pText2 );
-    static void dump( const char * pText, std::u16string_view rString );
 };
 
 } // namespace ppt

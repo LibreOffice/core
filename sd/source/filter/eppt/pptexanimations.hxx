@@ -19,10 +19,6 @@
 
 #pragma once
 
-#ifdef DBG_ANIM_LOG
-#include <stdio.h>
-#endif
-
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>

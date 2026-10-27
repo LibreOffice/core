@@ -52,13 +52,6 @@ $(eval $(call gb_Library_add_defs,sd,\
 	-DSDUI_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,sdui))\" \
 ))
 
-ifneq ($(strip $(dbg_anim_log)$(DBG_ANIM_LOG)),)
-$(eval $(call gb_Library_add_defs,sd,\
-	$$(DEFS) \
-	-DDBG_ANIM_LOG \
-))
-endif
-
 $(eval $(call gb_Library_use_custom_headers,sd,\
 	officecfg/registry \
 	oox/generated \
