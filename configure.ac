@@ -1326,11 +1326,15 @@ AC_SUBST(IOSAPP_EXCLUDED_SOURCE_FILE_NAMES)
 # We want this to be general, regardless of using --enable-macosapp, and it
 # could be potentially extended to handle the other defines like IOS, WASMAPP
 # or _WINDOWS (but at least iOS and Windows are using their own config.h)
+# The Android app may be configured on macOS too, and it reads this config.h,
+# but its code runs on Android, so it is left out.
 ENABLE_MACOS=
 case "$host_os" in
     darwin*)
-        ENABLE_MACOS=true
-        AC_DEFINE([MACOS], [1], [Define to 1 if building for macOS])
+        if test "$enable_androidapp" != "yes"; then
+            ENABLE_MACOS=true
+            AC_DEFINE([MACOS], [1], [Define to 1 if building for macOS])
+        fi
         ;;
 esac
 
