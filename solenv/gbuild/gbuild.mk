@@ -259,11 +259,11 @@ gb_TEST_ENV_VARS := MAX_CONCURRENCY=4
 #  the user's mozilla-descended application profile. To disable that we
 #  use a non-empty string here.
 #
-#  b) Using dbm: appears to nss as equivalent to an empty path so the
-#  initial NSS_InitReadWrite will fail. In response to that failure
-#  LibreOffice will create a temp fallback cert database which is removed
-#  on process exit
-gb_TEST_ENV_VARS += MOZILLA_CERTIFICATE_FOLDER=dbm:
+#  b) Using dbm: with a directory that does not exist makes the initial
+#  NSS_InitReadWrite fail without creating any files. In response to that
+#  failure LibreOffice will create a temp fallback cert database which is
+#  removed on process exit
+gb_TEST_ENV_VARS += MOZILLA_CERTIFICATE_FOLDER=dbm:$(WORKDIR)/nonexistent-nss-profile
 # Avoid hanging if the cups daemon requests a password:
 gb_TEST_ENV_VARS += SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION=1
 ifeq (,$(SAL_USE_VCLPLUGIN))

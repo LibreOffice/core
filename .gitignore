@@ -201,6 +201,3 @@ gdb.txt
 # Android builds
 /android/jniLibs/
 /android/obj/
-
-# xml unit tests sometimes leave these lying around
-**/secmod.db
