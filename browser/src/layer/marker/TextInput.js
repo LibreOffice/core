@@ -49,6 +49,10 @@ window.L.TextInput = window.L.Layer.extend({
 		// Signifies whether the keyboard is meant to be visible.
 		this._setAcceptInput(false);
 
+		// Date.now() of the last mousedown anywhere in the page.
+		this._lastPressTime = 0;
+		this._onPressBound = this._onPress.bind(this);
+
 		// Content
 		this._lastContent = []; // unicode characters
 		this._hasWorkingSelectionStart = undefined; // does it work ?
@@ -155,8 +159,12 @@ window.L.TextInput = window.L.Layer.extend({
 				};
 			};
 
-			// The iOS app calls this once the on-screen keyboard is dismissed.
+			// The iOS app calls this once the on-screen keyboard is dismissed. A hide
+			// within a second of a mouse down is a tap blurring the text area, so the
+			// edit goes on.
 			window.onNativeKeyboardHidden = function () {
+				if (Date.now() - that._lastPressTime < 1000)
+					return;
 				if (
 					app.map.getDocType() === 'spreadsheet' &&
 					app.file.textCursor.visible
@@ -165,6 +173,8 @@ window.L.TextInput = window.L.Layer.extend({
 					app.dispatcher.acceptFormulaInPlace();
 				}
 			};
+
+			document.addEventListener('mousedown', this._onPressBound, true);
 
 			window.postMobileMessage('FOCUSIFHWKBD');
 		}
@@ -187,6 +197,8 @@ window.L.TextInput = window.L.Layer.extend({
 		}
 		window.L.DomEvent.off(this._textArea, 'focus blur', this._onFocusBlur, this);
 		window.L.DomEvent.off(this._map.getContainer(), 'mousedown touchstart', this._abortComposition, this);
+		if (window.ThisIsTheiOSApp)
+			document.removeEventListener('mousedown', this._onPressBound, true);
 
 		if (this._cursorHandler)
 			app.sectionContainer.removeSection(this._cursorHandler.name);
@@ -1167,6 +1179,10 @@ window.L.TextInput = window.L.Layer.extend({
 		if (this.hasAccessibilitySupport()) {
 			this._updateFocusedParagraph();
 		}
+	},
+
+	_onPress: function() {
+		this._lastPressTime = Date.now();
 	},
 
 	// Called when the user goes back to a word to spellcheck or replace it,
