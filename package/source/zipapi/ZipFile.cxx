@@ -1200,8 +1200,11 @@ std::tuple<sal_Int64, sal_Int64, sal_Int64> ZipFile::findCentralDirectory()
         {
             throw ZipException(u"invalid end (entries)"_ustr );
         }
-        sal_Int32 const nEndDirSize = aGrabber.ReadInt32();
-        sal_Int32 const nEndDirOffset = aGrabber.ReadInt32();
+
+        // These fields are unsigned 32-bit values in the ZIP format.
+        // Keep them in 64-bit signed variables for subsequent arithmetic.
+        sal_Int64 const nEndDirSize = aGrabber.ReadUInt32();
+        sal_Int64 const nEndDirOffset = aGrabber.ReadUInt32();
 
         // Zip64 end of central directory locator must immediately precede
         // end of central directory record
@@ -1273,12 +1276,12 @@ std::tuple<sal_Int64, sal_Int64, sal_Int64> ZipFile::findCentralDirectory()
                 {
                     throw ZipException(u"inconsistent Zip/Zip64 end (entries)"_ustr);
                 }
-                if (nEndDirSize != -1
+                if (nEndDirSize != 0xFFFFFFFF
                     && nEnd64DirSize != nEndDirSize)
                 {
                     throw ZipException(u"inconsistent Zip/Zip64 end (size)"_ustr);
                 }
-                if (nEndDirOffset != -1
+                if (nEndDirOffset != 0xFFFFFFFF
                     && nEnd64DirOffset != nEndDirOffset)
                 {
                     throw ZipException(u"inconsistent Zip/Zip64 end (offset)"_ustr);
@@ -1298,10 +1301,9 @@ std::tuple<sal_Int64, sal_Int64, sal_Int64> ZipFile::findCentralDirectory()
             }
         }
 
-        sal_Int32 end;
-        if (o3tl::checked_add<sal_Int32>(nEndDirOffset, nEndDirSize, end)
+        sal_Int64 end;
+        if (o3tl::checked_add<sal_Int64>(nEndDirOffset, nEndDirSize, end)
             || nEndPos < end
-            || nEndDirOffset < 0
             || nEndPos - nEndDirSize != nEndDirOffset)
         {
             throw ZipException(u"Invalid END header (bad central directory size)"_ustr);
@@ -1323,10 +1325,10 @@ std::tuple<sal_Int64, sal_Int64, sal_Int64> ZipFile::findCentralDirectory()
     }
 }
 
-sal_Int32 ZipFile::readCEN()
+sal_Int64 ZipFile::readCEN()
 {
     // this method is called in constructor only, no need for mutex
-    sal_Int32 nCenPos = -1;
+    sal_Int64 nCenPos = -1;
 
     try
     {
