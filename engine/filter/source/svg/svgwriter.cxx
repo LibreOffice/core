@@ -996,10 +996,6 @@ void SVGTextWriter::createParagraphEnumeration()
             OSL_FAIL( "SVGTextWriter::createParagraphEnumeration: no valid xEnumeration interface found." );
         }
     }
-    else
-    {
-        OSL_FAIL( "SVGTextWriter::createParagraphEnumeration: no valid XText interface found." );
-    }
 }
 
 
