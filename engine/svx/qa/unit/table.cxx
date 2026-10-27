@@ -14,6 +14,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -126,6 +127,35 @@ CPPUNIT_TEST_FIXTURE(Test, testTableShadowBlur)
                 u"80");
     assertXPath(pDocument, "//objectinfo/group/sdrCell[4]/group/polypolygonrgba", "transparence",
                 u"80");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCellAnswersForTheNamesOfItsText)
+{
+    // Given a document holding a table:
+    loadFromFile(u"table-shadow-blur.pptx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTableShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XCellRange> xTable(xTableShape->getPropertyValue(u"Model"_ustr),
+                                             uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTable.is());
+    uno::Reference<beans::XPropertySet> xCell(xTable->getCellByPosition(0, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xCell.is());
+
+    // Then a cell answers for the names its text owns, rather than looking for an item of the
+    // pool that holds none of them.
+    CPPUNIT_ASSERT(xCell->getPropertyValue(u"NumberingStartValue"_ustr).hasValue());
+    CPPUNIT_ASSERT(xCell->getPropertyValue(u"ParaIsNumberingRestart"_ustr).hasValue());
+
+    uno::Reference<beans::XPropertyState> xCellState(xCell, uno::UNO_QUERY_THROW);
+    xCellState->getPropertyDefault(u"NumberingStartValue"_ustr);
+
+    xCell->setPropertyValue(u"NumberingStartValue"_ustr, uno::Any(sal_Int16(3)));
+    sal_Int32 nStartValue = 0;
+    CPPUNIT_ASSERT(xCell->getPropertyValue(u"NumberingStartValue"_ustr) >>= nStartValue);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), nStartValue);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf165521_fixedCellHeight)

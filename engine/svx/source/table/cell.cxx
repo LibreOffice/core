@@ -77,6 +77,15 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::style;
 
 
+namespace
+{
+/// The identifiers of the own attribute range stand for values that no item of the pool holds.
+bool namesNoItem(sal_uInt16 nWhich)
+{
+    return nWhich >= OWN_ATTR_VALUE_START && nWhich <= OWN_ATTR_VALUE_END;
+}
+}
+
 static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
 {
     // property map for an outliner text
@@ -1102,6 +1111,14 @@ void Cell::setPropertyValueImpl( const OUString& rPropertyName, const Any& rValu
     }
     default:
     {
+        // The names left over from the own attribute range belong to the text of the cell,
+        // which takes them.
+        if (namesNoItem(pMap->nWID))
+        {
+            SvxUnoTextBase::setPropertyValue(rPropertyName, rValue);
+            return;
+        }
+
         // Sometimes we have multiple property names (like FillColor and FillComplexColor)
         // that map to the same item, so when setting multiple properties at the same time,
         // we need to be careful to not overwrite things we have already set.
@@ -1217,6 +1234,11 @@ Any Cell::getPropertyValue( const OUString& PropertyName )
     }
     default:
     {
+        // The names left over from the own attribute range belong to the text of the cell,
+        // which answers for them.
+        if (namesNoItem(pMap->nWID))
+            return SvxUnoTextBase::getPropertyValue(PropertyName);
+
         SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), pMap->nWID, pMap->nWID);
         aSet.Put(mpProperties->GetItem(pMap->nWID));
 
@@ -1594,6 +1616,11 @@ Any Cell::getPropertyDefault( const OUString& aPropertyName )
 
         default:
         {
+            // The names left over from the own attribute range belong to the text of the
+            // cell, which answers for them.
+            if (namesNoItem(pMap->nWID))
+                return SvxUnoTextBase::getPropertyDefault(aPropertyName);
+
             if( SfxItemPool::IsWhich(pMap->nWID) )
             {
                 SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), pMap->nWID, pMap->nWID);
