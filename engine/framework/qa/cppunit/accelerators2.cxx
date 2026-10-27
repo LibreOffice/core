@@ -24,6 +24,7 @@
 #include <test/unoapi_test.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/processfactory.hxx>
+#include <osl/file.hxx>
 
 #include <filesystem>
 #include <array>
@@ -438,7 +439,7 @@ void AcceleratorsTest2::checkDocumentAccelCfg()
 {
     Reference<XMultiServiceFactory> msf = getMultiServiceFactory();
     OUString tempDirURL = getOfficeUserPath(msf) + "/test-temp/";
-    std::filesystem::create_directories(tempDirURL.toUtf8().getStr());
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, osl::Directory::createPath(tempDirURL));
     OUString sDocCfgName = appendPath(tempDirURL, u"test.cfg"_ustr);
     SaveDocumentAcceleratorConfiguration(sDocCfgName);
     LoadDocumentAcceleratorConfiguration(sDocCfgName);
