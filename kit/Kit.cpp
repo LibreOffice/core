@@ -2136,6 +2136,10 @@ void Document::pickFile(const char* title, const COKitFilePickerFilter* filters,
         return;
     }
 
+    // The browser keeps one request at a time, so an earlier pick of this view that it has
+    // not answered ends here, as cancelled.
+    document->cancelFilePicks(session->getViewId());
+
     const unsigned id = document->_nextFilePickId++;
     document->_pendingFilePicks[id] = PendingFilePick{ picked, context, session->getViewId() };
 
