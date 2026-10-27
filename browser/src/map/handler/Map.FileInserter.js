@@ -66,6 +66,12 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 	// file goes up through the insertfile POST like an inserted image, and the
 	// engine gets its name in a filepickerresult message with the request id.
 	_onFilePickerRequest: function (e) {
+		// The engine asks for one file at a time, so a request still open
+		// here was superseded. It ends with no file before the new one is
+		// taken, which also bounds what a browser without the cancel event
+		// on file inputs leaves open.
+		this._answerFilePicker(this._filePickerRequestId, null);
+
 		const input = document.getElementById('filepicker');
 		if (!input) {
 			this._answerFilePicker(e.id, null);

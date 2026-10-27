@@ -2166,7 +2166,9 @@ void Document::completeFilePick(unsigned id, int viewId, const std::string& url)
     const auto it = _pendingFilePicks.find(id);
     if (it == _pendingFilePicks.end())
     {
-        LOG_WRN("No open file pick with id [" << id << "]; ignoring the answer");
+        // A pick that a newer request of the same view replaced, or that its view's unload
+        // cancelled, is answered late by the browser.
+        LOG_DBG("No open file pick with id [" << id << "]; ignoring the answer");
         return;
     }
 
