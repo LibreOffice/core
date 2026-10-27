@@ -84,12 +84,15 @@ function kitApply(ops) {
 				const parent = element.getParent();
 				position = doc.newPosition(parent, parent.getChildIndex(element));
 			} else {
-				// A selected table cell can start with a nested table, whose first cell then holds
-				// the position:
+				// For a selected table, and for a selected table cell that starts with a nested
+				// table, the table's first cell holds the position:
 				let target = element;
-				while (target.getType() === DocumentApp.ElementType.TABLE_CELL
-					&& target.getChild(0).getType() === DocumentApp.ElementType.TABLE) {
-					target = target.getChild(0).getRow(0).getCell(0);
+				while (target.getType() === DocumentApp.ElementType.TABLE
+					|| (target.getType() === DocumentApp.ElementType.TABLE_CELL
+						&& target.getChild(0).getType() === DocumentApp.ElementType.TABLE)) {
+					const table = target.getType() === DocumentApp.ElementType.TABLE
+						? target : target.getChild(0);
+					target = table.getRow(0).getCell(0);
 				}
 				position = doc.newPosition(
 					target,
@@ -143,12 +146,15 @@ function kitDocumentLanguage() {
 			const parent = element.getParent();
 			cursor = doc.newPosition(parent, parent.getChildIndex(element));
 		} else {
-			// A selected table cell can start with a nested table, whose first cell then holds the
-			// position:
+			// For a selected table, and for a selected table cell that starts with a nested table,
+			// the table's first cell holds the position:
 			let target = element;
-			while (target.getType() === DocumentApp.ElementType.TABLE_CELL
-				&& target.getChild(0).getType() === DocumentApp.ElementType.TABLE) {
-				target = target.getChild(0).getRow(0).getCell(0);
+			while (target.getType() === DocumentApp.ElementType.TABLE
+				|| (target.getType() === DocumentApp.ElementType.TABLE_CELL
+					&& target.getChild(0).getType() === DocumentApp.ElementType.TABLE)) {
+				const table = target.getType() === DocumentApp.ElementType.TABLE
+					? target : target.getChild(0);
+				target = table.getRow(0).getCell(0);
 			}
 			cursor = doc.newPosition(target, first.isPartial() ? first.getStartOffset() : 0);
 		}

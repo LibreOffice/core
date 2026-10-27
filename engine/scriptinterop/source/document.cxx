@@ -2708,6 +2708,14 @@ cpo::uno::Reference<scriptinterop::XParagraph> TextImpl::asParagraph() {
 cpo::uno::Reference<scriptinterop::XElement> containerOf(
     std::shared_ptr<Model> const & model, cpo::uno::Reference<css::text::XText> const & text);
 
+cpo::uno::Reference<css::text::XTextTable> tableOf(
+    std::shared_ptr<Model> const & model, cpo::uno::Reference<css::text::XText> const & cell);
+
+// The element that holds a text table, which is the body for a table in the body text and the table
+// cell for a table nested in a cell, and null for a table elsewhere (like in a header):
+cpo::uno::Reference<scriptinterop::XElement> tableParentOf(
+    std::shared_ptr<Model> const & model, cpo::uno::Reference<css::text::XTextTable> const & table);
+
 // A paragraph, with the element that holds it as its parent:
 cpo::uno::Reference<scriptinterop::XParagraph> paragraphOf(
     std::shared_ptr<Model> const & model,
@@ -3270,30 +3278,104 @@ private:
     sal_Int32 paragraphLen_ = 0;
 };
 
+// An element that is selected as a whole, such as a table cell:
+class WholeElementRangeElementImpl: public cppu::WeakImplHelper<scriptinterop::XRangeElement> {
+public:
+    explicit WholeElementRangeElementImpl(
+        cpo::uno::Reference<scriptinterop::XElement> const & element):
+        element_(element) {}
+
+    cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return element_->getuno(); }
+
+    cpo::uno::Reference<scriptinterop::XElement> getElement() override { return element_; }
+
+    sal_Int32 getEndOffsetInclusive() override { return -1; }
+
+    sal_Int32 getStartOffset() override { return -1; }
+
+    bool isPartial() override { return false; }
+
+private:
+    cpo::uno::Reference<scriptinterop::XElement> element_;
+};
+
 // Walk the host XText and push one RangeElementImpl per paragraph that the raw range overlaps.
 // The sub-range for each paragraph is the intersection of the raw range with the paragraph's
 // extent, so a paragraph that lies fully inside the raw range becomes a non-partial element and
-// the first and last paragraphs become partial ones:
+// the first and last paragraphs become partial ones.  A table that lies fully inside the raw
+// range becomes a whole element, and an empty piece at either end, as when the raw range ends at
+// the start of the paragraph after a table, is dropped unless it is the only one:
 void splitAtParagraphBoundaries(
     std::shared_ptr<Model> const & model,
     cpo::uno::Reference<css::text::XTextRange> const & range,
     std::vector<cpo::uno::Reference<scriptinterop::XRangeElement>> & out)
 {
     assert(range.is());
-    auto const host = range->getText();
+    auto host = range->getText();
     if (!host.is()) {
         throw cpo::uno::RuntimeException(u"the selected range is not part of the document"_ustr);
+    }
+    auto rStart = range->getStart();
+    auto const rEnd = range->getEnd();
+    // For a range from a table cell to after the table (as Select All gives in a body that starts
+    // with a table), Writer gives the cell as the text (also when it is in a table nested in the
+    // cell), so the range starts with the table that lies in the text that holds the end (which
+    // only a comparison tells, as Writer creates cursors in a cell also at positions outside it):
+    auto const holdsEnd = [&rEnd](cpo::uno::Reference<css::text::XText> const & text) {
+        try {
+            cpo::uno::Reference<css::text::XTextRangeCompare>(text, cpo::uno::UNO_QUERY_THROW)
+                ->compareRegionStarts(text->getStart(), rEnd);
+            return true;
+        } catch (css::lang::IllegalArgumentException const &) {
+            return false;
+        }
+    };
+    for (auto text = host; !holdsEnd(text);) {
+        cpo::uno::Reference<css::lang::XServiceInfo> const cell(text, cpo::uno::UNO_QUERY);
+        if (!cell.is() || !cell->supportsService(u"com.sun.star.text.CellProperties"_ustr)) {
+            break;
+        }
+        auto const table = tableOf(model, text);
+        auto const parent = table.is() ? tableParentOf(model, table) : nullptr;
+        cpo::uno::Reference<css::text::XText> const around(
+            parent.is() ? parent->getuno() : nullptr, cpo::uno::UNO_QUERY);
+        if (!around.is()) {
+            break;
+        }
+        if (holdsEnd(around)) {
+            host = around;
+            rStart = table->getAnchor();
+            break;
+        }
+        text = around;
     }
     cpo::uno::Reference<css::text::XTextRangeCompare> const cmp(host, cpo::uno::UNO_QUERY_THROW);
     cpo::uno::Reference<css::container::XEnumerationAccess> const ea(
         host, cpo::uno::UNO_QUERY_THROW);
-    auto const rStart = range->getStart();
-    auto const rEnd = range->getEnd();
+    std::vector<cpo::uno::Reference<scriptinterop::XRangeElement>> pieces;
+    std::vector<bool> empty;
     auto const en = ea->createEnumeration();
     while (en.is() && en->hasMoreElements()) {
         cpo::uno::Reference<css::text::XTextContent> xtc;
         en->nextElement() >>= xtc;
         if (!xtc.is()) {
+            continue;
+        }
+        if (cpo::uno::Reference<css::text::XTextTable> const table{xtc, cpo::uno::UNO_QUERY}) {
+            auto const anchor = table->getAnchor();
+            try {
+                if (anchor.is() && cmp->compareRegionStarts(rStart, anchor) >= 0
+                    && cmp->compareRegionEnds(anchor, rEnd) >= 0)
+                {
+                    pieces.emplace_back(new WholeElementRangeElementImpl(
+                        elementOf(model, containerOf(model, host), xtc)));
+                    empty.push_back(false);
+                }
+            } catch (css::lang::IllegalArgumentException const & e) {
+                SAL_WARN(
+                    "scriptinterop",
+                    "splitAtParagraphBoundaries: comparing a table failed: " << e.Message);
+            }
             continue;
         }
         cpo::uno::Reference<css::lang::XServiceInfo> const info(xtc, cpo::uno::UNO_QUERY);
@@ -3320,13 +3402,23 @@ void splitAtParagraphBoundaries(
                 continue;
             }
             cursor->gotoRange(subEnd, true);
-            out.emplace_back(new RangeElementImpl(model, cursor));
+            pieces.emplace_back(new RangeElementImpl(model, cursor));
+            empty.push_back(cursor->isCollapsed());
         } catch (css::lang::IllegalArgumentException const & e) {
             SAL_WARN(
                 "scriptinterop",
                 "splitAtParagraphBoundaries: compareRegionStarts failed: " << e.Message);
         }
     }
+    std::size_t first = 0;
+    std::size_t last = pieces.size();
+    if (last - first > 1 && empty.front()) {
+        ++first;
+    }
+    if (last - first > 1 && empty.back()) {
+        --last;
+    }
+    out.insert(out.end(), pieces.begin() + first, pieces.begin() + last);
 }
 
 cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XRangeElement>>
@@ -3985,27 +4077,6 @@ private:
     cpo::uno::Reference<css::text::XText> text_;
 };
 
-// An element that is selected as a whole, such as a table cell:
-class WholeElementRangeElementImpl: public cppu::WeakImplHelper<scriptinterop::XRangeElement> {
-public:
-    explicit WholeElementRangeElementImpl(
-        cpo::uno::Reference<scriptinterop::XElement> const & element):
-        element_(element) {}
-
-    cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return element_->getuno(); }
-
-    cpo::uno::Reference<scriptinterop::XElement> getElement() override { return element_; }
-
-    sal_Int32 getEndOffsetInclusive() override { return -1; }
-
-    sal_Int32 getStartOffset() override { return -1; }
-
-    bool isPartial() override { return false; }
-
-private:
-    cpo::uno::Reference<scriptinterop::XElement> element_;
-};
-
 // Selected table cells, each a whole range element of its own, in the order of the rows and of the
 // cells in each row (as in GAS, which also brings a range of table cells into that order).  The UNO
 // object is the cell range that the cells make up, and null when they do not make up a whole cell
@@ -4111,11 +4182,6 @@ std::set<OUString> cellNamesOf(cpo::uno::Reference<css::table::XCellRange> const
     }
     return names;
 }
-
-// The element that holds a text table, which is the body for a table in the body text and the table
-// cell for a table nested in a cell, and null for a table elsewhere (like in a header):
-cpo::uno::Reference<scriptinterop::XElement> tableParentOf(
-    std::shared_ptr<Model> const & model, cpo::uno::Reference<css::text::XTextTable> const & table);
 
 // The cells of a text table that have the given names, in the order of the rows and of the cells in
 // each row:

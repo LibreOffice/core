@@ -123,6 +123,42 @@ function test() {
         inner.getParent().getParent().getParent().getParent().getParent().getParent().getType()
             === DocumentApp.ElementType.BODY_SECTION);
 
+    // A text selection over the whole table of child 1, made through the UNO model of the document,
+    // has that table as a whole element between the partly selected texts of children 0 and 2, and
+    // one that ends at the start of child 2 has no empty piece of child 2:
+    if (globalThis.cool) {
+        const model = cool.getActiveUnoModel();
+        const contents = model.getText().createEnumeration();
+        const before = contents.nextElement();
+        contents.nextElement();
+        const between = contents.nextElement();
+        const cursor = model.getText().createTextCursorByRange(before.getStart());
+        cursor.goRight(3, false);
+        cursor.gotoRange(between.getStart(), true);
+        cursor.goRight(3, true);
+        model.getCurrentController().select(cursor);
+        const across = doc.getSelection().getRangeElements();
+        console.assert(across.length === 3);
+        console.assert(across[0].getElement().getType() === DocumentApp.ElementType.TEXT);
+        console.assert(across[0].getStartOffset() === 3);
+        console.assert(across[0].getEndOffsetInclusive() === 5);
+        console.assert(across[1].getElement().getType() === DocumentApp.ElementType.TABLE);
+        console.assert(across[1].isPartial() === false);
+        console.assert(
+            across[1].getElement().getParent().getType() === DocumentApp.ElementType.BODY_SECTION);
+        console.assert(across[2].getElement().getType() === DocumentApp.ElementType.TEXT);
+        console.assert(across[2].getStartOffset() === 0);
+        console.assert(across[2].getEndOffsetInclusive() === 2);
+        console.assert(doc.getCursor() === null);
+        cursor.gotoRange(before.getStart(), false);
+        cursor.gotoRange(between.getStart(), true);
+        model.getCurrentController().select(cursor);
+        const upTo = doc.getSelection().getRangeElements();
+        console.assert(upTo.length === 2);
+        console.assert(upTo[0].getElement().getType() === DocumentApp.ElementType.PARAGRAPH);
+        console.assert(upTo[1].getElement().getType() === DocumentApp.ElementType.TABLE);
+    }
+
     // A table cell that has already been read sees the changes made since through another object
     // for the same cell, here clearing it, which leaves one empty paragraph:
     console.assert(cell.getNumChildren() > 1);
