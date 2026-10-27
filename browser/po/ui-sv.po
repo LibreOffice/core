@@ -8,12 +8,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-23 00:15+0200\n"
-"PO-Revision-Date: 2026-10-14 12:57+0000\n"
-"Last-Translator: bittin1ddc447d824349b2 "
-"<bittin1ddc447d824349b2@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-10-26 15:52+0000\n"
+"Last-Translator: Leif-Jöran Olsson <ljo@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/sv/>\n"
-"Language: \n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -441,7 +440,7 @@ msgstr ""
 #: admin/src/AdminSocketServerAudit.js:50
 #: src/control/Control.ServerAuditDialog.ts:107
 msgid "No WOPI host configured: trusting the first host that connected"
-msgstr ""
+msgstr "Ingen WOPI-värd konfigurerad: lita på den första värden som ansluter"
 
 #: admin/src/AdminSocketServerAudit.js:55
 #: src/control/Control.ServerAuditDialog.ts:122
@@ -515,12 +514,11 @@ msgid "API key lacks permissions"
 msgstr "API-nyckeln saknar tillstånd"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:711
-#, fuzzy
 msgid ""
 "This AI host is not in the server's allowed AI host list "
 "(ai.allowed_hosts). Ask your administrator to permit it."
 msgstr ""
-"Denna AI-värd finns inte i serverns tillåtna värdlista (lok_allow.host). "
+"Denna AI-värd finns inte i serverns tillåtna värdlista (ai.allowed_hosts). "
 "Fråga om din administratör kan tillåta den."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:713
@@ -1309,18 +1307,20 @@ msgstr "Välj vad meningskontrollen ska leta efter medan du skriver."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4687
 msgid "Remote Sentence Checkers"
-msgstr ""
+msgstr "Fjärrspråkgranskare för text"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4691
 msgid ""
 "Checkers that run on a server. The text of the document is sent there to be "
 "checked."
 msgstr ""
+"Språkgranskning som körs på en server. Texten i dokumentet skickas dit för "
+"att granskas."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4726
 #: admin/src/integrator/AdminIntegratorSettings.ts:5066
 msgid "Enabled"
-msgstr ""
+msgstr "Aktiverad"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4738
 #: admin/src/integrator/AdminIntegratorSettings.ts:5103
@@ -1329,54 +1329,53 @@ msgid "Server URL"
 msgstr "Server URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4750
-#, fuzzy
 msgid "Username"
 msgstr "Användarnamn"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4772
 #: admin/src/integrator/AdminIntegratorSettings.ts:5122
 msgid "Verify the server certificate"
-msgstr ""
+msgstr "Verifiera servercertifikatet"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4780
 msgid "Enabled on this server for: {0}"
-msgstr ""
+msgstr "Aktiverad på denna server för: {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4795
 msgid "Checking level"
-msgstr ""
+msgstr "Granskningsnivå"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4798
 msgid "Single words"
-msgstr ""
+msgstr "Enstaka ord"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4799
 msgid "Spelling"
-msgstr ""
+msgstr "Stavning"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4800
 msgid "Spelling and grammar"
-msgstr ""
+msgstr "Stavning och grammatik"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4810
 msgid "German spelling"
-msgstr ""
+msgstr "Tysk stavning"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4812
 msgid "Duden recommendation"
-msgstr ""
+msgstr "Duden-rekommendation"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4813
 msgid "Conservative"
-msgstr ""
+msgstr "Konservativ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4814
 msgid "Progressive"
-msgstr ""
+msgstr "Progressiv"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4815
 msgid "Tolerant"
-msgstr ""
+msgstr "Tolerant"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4816
 msgid "Press agencies"
