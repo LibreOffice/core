@@ -517,11 +517,34 @@ class Document: NSDocument {
         // we no longer need the file
         try? FileManager.default.removeItem(at: tmpURL)
 
+        // The print dialog previews the pages on paper of the orientation the print info
+        // carries, so a landscape document, such as a presentation, gets landscape paper.
+        // The preview then shows the slides the way they are, and the automatic rotation
+        // below only turns the pages that have the other orientation.
+        if let firstPage = pdfDocument.page(at: 0) {
+            self.printInfo.orientation = Document.paperOrientation(for: firstPage)
+        }
+
         guard let op = pdfDocument.printOperation(for: self.printInfo, scalingMode: .pageScaleNone, autoRotate: true) else {
             throw CocoaError(.fileReadCorruptFile, userInfo: [NSURLErrorKey: tmpURL])
         }
 
         return op
+    }
+
+    /**
+     * The orientation of the paper that the page fits without turning it: landscape when
+     * the page is wider than it is tall as the viewer shows it, portrait otherwise.
+     */
+    private static func paperOrientation(for page: PDFPage) -> NSPrintInfo.PaperOrientation {
+        let bounds = page.bounds(for: .mediaBox)
+
+        // A page rotation of 90 or 270 degrees swaps the sides the viewer shows.
+        let isTurned = (page.rotation / 90) % 2 != 0
+        let shownWidth = isTurned ? bounds.height : bounds.width
+        let shownHeight = isTurned ? bounds.width : bounds.height
+
+        return shownWidth > shownHeight ? .landscape : .portrait
     }
 
     /*
