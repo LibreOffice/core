@@ -180,7 +180,7 @@ public:
     getDependencies() const;
 
     /**
-       Return the update information URLs.
+       Return the update information URLs that use https.
 
        @return
        update information URLs
@@ -195,7 +195,7 @@ public:
         was provided.
 
         @return
-        download URLs
+        download URLs that use https
      */
     css::uno::Sequence< OUString > getUpdateDownloadUrls() const;
 

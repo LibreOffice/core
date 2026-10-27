@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <string_view>
+#include <vector>
 
 #include <dp_descriptioninfoset.hxx>
 
@@ -55,6 +56,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <o3tl/string_view.hxx>
 
@@ -547,15 +549,30 @@ DescriptionInfoset::getDependencies() const {
     return new EmptyNodeList;
 }
 
+namespace {
+
+css::uno::Sequence<OUString> getHttpsUrls(const css::uno::Sequence<OUString>& rUrls)
+{
+    std::vector<OUString> aHttpsUrls;
+    for (const OUString& rUrl : rUrls)
+    {
+        if (INetURLObject(rUrl).GetProtocol() == INetProtocol::Https)
+            aHttpsUrls.push_back(rUrl);
+    }
+    return comphelper::containerToSequence(aHttpsUrls);
+}
+
+}
+
 css::uno::Sequence< OUString >
 DescriptionInfoset::getUpdateInformationUrls() const {
-    return getUrls(u"desc:update-information/desc:src/@xlink:href"_ustr);
+    return getHttpsUrls(getUrls(u"desc:update-information/desc:src/@xlink:href"_ustr));
 }
 
 css::uno::Sequence< OUString >
 DescriptionInfoset::getUpdateDownloadUrls() const
 {
-    return getUrls(u"desc:update-download/desc:src/@xlink:href"_ustr);
+    return getHttpsUrls(getUrls(u"desc:update-download/desc:src/@xlink:href"_ustr));
 }
 
 OUString DescriptionInfoset::getIconURL( bool bHighContrast ) const
