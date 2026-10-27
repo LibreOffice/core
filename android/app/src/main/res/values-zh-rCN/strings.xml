@@ -72,8 +72,8 @@
     <string name="new_presentation">新建演示文稿</string>
     <string name="new_textdocument">新建文本文档</string>
     <string name="about_moreinfo">更多信息</string>
-    <string name="about_notice">显示通知</string>
-    <string name="about_license">显示许可证</string>
+    <string name="about_notice">查看声明</string>
+    <string name="about_license">查看许可证</string>
     <string name="pref_enable_chrome_debugger_info">启用以在文档中使用 Chrome 的调试工具</string>
     <string name="pref_enable_chrome_debugger">Chrome 调试</string>
     <string name="pref_show_debug_info_summary">启用以在文档查看器中显示调试信息</string>
