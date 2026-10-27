@@ -1573,8 +1573,9 @@ IMPL_LINK(SvxLineTabPage, GraphicHdl_Impl, const OUString&, rIdent, void)
                     if (GraphicFilter::LoadGraphic(*roUrl, OUString(), aPickedGraphic)
                         != ERRCODE_NONE)
                         return;
+                    const tools::Long nTypeBeforePick = m_nSymbolType;
                     m_nSymbolType = SVX_SYMBOLTYPE_BRUSHITEM;
-                    ApplySymbolGraphic(&aPickedGraphic, true, m_nSymbolType);
+                    ApplySymbolGraphic(&aPickedGraphic, true, nTypeBeforePick);
                 });
             return;
         }
