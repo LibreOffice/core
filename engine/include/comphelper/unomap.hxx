@@ -28,10 +28,14 @@
 
 namespace comphelper
 {
+// avoid LNK2005 duplicate WeakImplHelper definitions with MSVC
+class SAL_DLLPUBLIC_TEMPLATE UnoMap_Base : public cppu::WeakImplHelper<>
+{
+};
 
 // Purely here so we can tunnel a map over an UNO API
 class COMPHELPER_DLLPUBLIC StringToStringMap final :
-    public ::cppu::WeakImplHelper<>,
+    public UnoMap_Base,
     public std::unordered_map<OUString, OUString>
 {
 public:
@@ -41,7 +45,7 @@ public:
 
 // Purely here so we can tunnel a map over an UNO API
 class COMPHELPER_DLLPUBLIC ControlModelToControlShapeMap final :
-    public ::cppu::WeakImplHelper<>,
+    public UnoMap_Base,
     public std::unordered_map<cpo::uno::Reference<css::awt::XControlModel>, cpo::uno::Reference<css::drawing::XControlShape>>
 {
 public:
