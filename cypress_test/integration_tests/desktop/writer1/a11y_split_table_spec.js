@@ -23,7 +23,8 @@ describe(['tagdesktop'], 'Writer table split across pages', { testIsolation: fal
 
 	// Crossing the page break does not take one arrow per row, so read where the caret is.
 	function toRow(row) {
-		move('{ctrl}{home}');
+		// From inside a cell Writer takes Ctrl+Home to the cell's start, then the table's, then the document's.
+		move('{ctrl}{home}{home}{home}');
 		for (let left = row + 1; left > 0; left -= 10)
 			move('{downarrow}'.repeat(Math.min(10, left)));
 		cy.cGet('#readable-content').invoke('text').then(function (text) {
@@ -77,6 +78,22 @@ describe(['tagdesktop'], 'Writer table split across pages', { testIsolation: fal
 		});
 	}
 
+	function keyFromThePage(from, key, keyCode) {
+		cy.then(function () {
+			const cell = Array.from(win.document.querySelectorAll('#a11y-context-table td')).find(function (td) {
+				return td.textContent === from;
+			});
+			expect(cell, 'the cell ' + from + ' is given').to.not.equal(undefined);
+			win.document.activeElement.blur();
+			win.getSelection().collapse(cell.firstChild, 1);
+			win.document.body.dispatchEvent(new win.KeyboardEvent('keydown',
+				{ key: key, code: key, keyCode: keyCode, bubbles: true, cancelable: true }));
+		});
+		cy.then(function () {
+			return a11yHelper.processToIdleWithA11yContext(win);
+		});
+	}
+
 	before(function () {
 		helper.setupAndLoadDocument('writer/split_table_context.fodt');
 
@@ -99,6 +116,18 @@ describe(['tagdesktop'], 'Writer table split across pages', { testIsolation: fal
 	it('on a later page the rows are the table\'s, without its repeated heading', function () {
 		toRow(60);
 		givenAround(60);
+	});
+
+	it('Down from the last row given moves the caret to the row after it', function () {
+		toRow(10);
+		keyFromThePage('V' + (10 + WINDOW), 'ArrowDown', 40);
+		editing('V' + (10 + WINDOW + 1));
+	});
+
+	it('Up from the first row given moves the caret to the row before it', function () {
+		toRow(40);
+		keyFromThePage('R' + (40 - WINDOW), 'ArrowUp', 38);
+		editing('R' + (40 - WINDOW - 1));
 	});
 
 	it('crossing the page break tells the row of the same table', function () {
