@@ -14,6 +14,7 @@
 #include <functional>
 
 #include <sfx2/dllapi.h>
+#include <svl/undo.hxx>
 #include <vcl/vclptr.hxx>
 
 class VclAbstractDialog;
@@ -46,6 +47,11 @@ public:
     /// so that its callback will not run, is given up: what it took is put
     /// back, and it is disposed.
     static bool MayOpen(weld::Window* pParent);
+
+    /// To be called when the view of nViewShellId is about to go, as with a
+    /// closed tab: a dialog open in it would not close, so it is given up as
+    /// in MayOpen(), not left holding what it took until the next one opens.
+    static void ViewClosing(ViewShellId nViewShellId);
 
     /// Records pDialog, just created in the current view, as the open one, and
     /// aPutBack as what puts back what it took, should it be given up. Returns

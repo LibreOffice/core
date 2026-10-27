@@ -222,6 +222,7 @@ public:
     void testAutoCorrectDialogOnlyOnce();
     void testAutoCorrectSettingsOnlyForOwner();
     void testAutoCorrectDialogWithoutOwner();
+    void testAutoCorrectDialogOfClosedView();
     void testAutoFormatToggleWithoutUserSettings();
     void testDictionaryWithoutUserSettings();
     void testCommentAuthorFromSession();
@@ -337,6 +338,7 @@ public:
     CPPUNIT_TEST(testAutoCorrectDialogOnlyOnce);
     CPPUNIT_TEST(testAutoCorrectSettingsOnlyForOwner);
     CPPUNIT_TEST(testAutoCorrectDialogWithoutOwner);
+    CPPUNIT_TEST(testAutoCorrectDialogOfClosedView);
     CPPUNIT_TEST(testAutoFormatToggleWithoutUserSettings);
     CPPUNIT_TEST(testDictionaryWithoutUserSettings);
     CPPUNIT_TEST(testCommentAuthorFromSession);
@@ -4371,6 +4373,43 @@ void DesktopKitTest::testAutoCorrectDialogOnlyOnce()
         }
         closeDoc();
     }
+}
+
+void DesktopKitTest::testAutoCorrectDialogOfClosedView()
+{
+    // Given a Writer document with two views, and AutoCorrect Options open in the second:
+    COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
+    pDocument->initializeForRendering("{}");
+    KitHelper::registerViewCallbacks();
+    comphelper::ScopeGuard aRestore([] {
+        comphelper::COKit::setViewSetter(nullptr);
+        comphelper::COKit::setViewGetter(nullptr);
+    });
+    const int nFirstView = pDocument->getView();
+    const int nSecondView = pDocument->createView();
+    pDocument->setView(nSecondView);
+    pDocument->setViewOption("userpersistence", "true");
+    SvxSwAutoFormatFlags& rFlags = SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags();
+    CPPUNIT_ASSERT(rFlags.m_pAutoCompleteList == nullptr);
+    {
+        ViewCallback aView(pDocument);
+        Scheduler::ProcessEventsToIdle();
+        pDocument->postUnoCommand(".uno:AutoCorrectDlg", nullptr, false);
+        Scheduler::ProcessEventsToIdle();
+        CPPUNIT_ASSERT(getAutoCorrectDialogId(aView.m_aJSDialogPayloads) != 0);
+        // The dialog works on a copy of the word completion list.
+        CPPUNIT_ASSERT(rFlags.m_pAutoCompleteList != nullptr);
+    }
+
+    // When that view goes away with the dialog open, as with a closed tab:
+    pDocument->destroyView(nSecondView);
+    pDocument->setView(nFirstView);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the word completion list is Writer's own again:
+    // Without the accompanying fix in place, this test would have failed, as the
+    // dialog kept the list locked and pointing at its copy until the next one opened.
+    CPPUNIT_ASSERT(rFlags.m_pAutoCompleteList == nullptr);
 }
 
 void DesktopKitTest::testAutoCorrectSettingsOnlyForOwner()

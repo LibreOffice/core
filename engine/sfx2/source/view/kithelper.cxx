@@ -39,6 +39,7 @@
 #include <vcl/window.hxx>
 #include <sal/log.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/autocorrectdialog.hxx>
 #include <svl/hint.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
@@ -199,6 +200,7 @@ void KitHelper::destroyView(int nId)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
+        sfx2::AutoCorrectDialog::ViewClosing(pViewShell->GetViewShellId());
         pViewShell->SetKitAccessibilityState(false);
         SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
         SfxRequest aRequest(rViewFrame, SID_CLOSEWIN);

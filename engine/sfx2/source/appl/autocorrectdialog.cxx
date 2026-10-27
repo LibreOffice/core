@@ -55,6 +55,18 @@ bool isViewAlive(ViewShellId nViewShellId)
     }
     return false;
 }
+
+// Puts back what the open dialog took, and disposes it, as its callback will
+// not run.
+void giveUp(std::optional<OpenDialog>& rOpenDialog)
+{
+    OpenDialog aGivenUp = std::move(*rOpenDialog);
+    rOpenDialog.reset();
+    if (aGivenUp.aPutBack)
+        aGivenUp.aPutBack();
+    // Disposing it lets go of its callback, and with that of the dialog itself.
+    aGivenUp.pDialog->disposeOnce();
+}
 }
 
 bool AutoCorrectDialog::MayChangeSettings(weld::Window* pParent)
@@ -91,13 +103,15 @@ bool AutoCorrectDialog::MayOpen(weld::Window* pParent)
         return false;
     }
 
-    OpenDialog aGivenUp = std::move(**pOpenDialog);
-    pOpenDialog->reset();
-    if (aGivenUp.aPutBack)
-        aGivenUp.aPutBack();
-    // Disposing it lets go of its callback, and with that of the dialog itself.
-    aGivenUp.pDialog->disposeOnce();
+    giveUp(*pOpenDialog);
     return true;
+}
+
+void AutoCorrectDialog::ViewClosing(ViewShellId nViewShellId)
+{
+    std::optional<OpenDialog>* pOpenDialog = getOpenDialog();
+    if (pOpenDialog && *pOpenDialog && (*pOpenDialog)->nViewShellId == nViewShellId)
+        giveUp(*pOpenDialog);
 }
 
 sal_uInt32 AutoCorrectDialog::Opened(const VclPtr<VclAbstractDialog>& pDialog,
