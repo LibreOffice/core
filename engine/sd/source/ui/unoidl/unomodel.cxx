@@ -2488,7 +2488,7 @@ bool hasTextField(const SdrObject& rObject)
                 return true;
         }
     }
-    if (const SdrObjList* pChildren = rObject.GetSubList())
+    if (const SdrObjList* pChildren = svx::vector::membersOf(rObject))
     {
         for (size_t i = 0; i < pChildren->GetObjCount(); ++i)
         {
@@ -2585,7 +2585,7 @@ void markSubtreeDirty(SdXImpressDocument::VectorPartState& rState, const SdrObje
 {
     rState.maDirtyObjects.insert(pObject->GetUniqueID());
 
-    if (const SdrObjList* pChildren = pObject->GetSubList())
+    if (const SdrObjList* pChildren = svx::vector::membersOf(*pObject))
     {
         for (size_t i = 0; i < pChildren->GetObjCount(); ++i)
         {
@@ -2602,7 +2602,7 @@ void forgetSubtree(SdXImpressDocument::VectorPartState& rState, const SdrObject*
     rState.maObjectChangeVersions.erase(pObject->GetUniqueID());
     rState.maDirtyObjects.erase(pObject->GetUniqueID());
 
-    if (const SdrObjList* pChildren = pObject->GetSubList())
+    if (const SdrObjList* pChildren = svx::vector::membersOf(*pObject))
     {
         for (size_t i = 0; i < pChildren->GetObjCount(); ++i)
         {
@@ -3490,7 +3490,7 @@ private:
             if (!pObject)
                 continue;
             rObjects.push_back(pObject);
-            if (const SdrObjList* pChildren = pObject->GetSubList())
+            if (const SdrObjList* pChildren = svx::vector::membersOf(*pObject))
                 collectPaintedObjects(*pChildren, rObjects);
         }
     }
@@ -3515,7 +3515,7 @@ private:
                 // master names every member of such a group as the slide's to supply, so the
                 // slide carries the members along with the group.
                 rObjects.push_back(pObject);
-                if (const SdrObjList* pChildren = pObject->GetSubList())
+                if (const SdrObjList* pChildren = svx::vector::membersOf(*pObject))
                     collectPaintedObjects(*pChildren, rObjects);
             }
         }
@@ -3645,7 +3645,7 @@ private:
     {
         SdXImpressDocument::VectorObjectContent aContent;
 
-        const SdrObjList* pChildren = rObject.GetSubList();
+        const SdrObjList* pChildren = svx::vector::membersOf(rObject);
         if (!pChildren || pChildren->GetObjCount() == 0)
         {
             // A page object shows the page it stands for. One that stands for no page keeps
@@ -3700,7 +3700,7 @@ private:
         {
             for (const SdrObject* pObject : rObjects)
             {
-                const SdrObjList* pChildren = pObject->GetSubList();
+                const SdrObjList* pChildren = svx::vector::membersOf(*pObject);
                 if (pChildren && pChildren->GetObjCount() > 0)
                     aDirty.insert(pObject->GetUniqueID());
             }

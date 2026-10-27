@@ -549,10 +549,17 @@ void decomposeForComparison(ObjectContent& rContent,
     }
 }
 
+const SdrObjList* membersOf(const SdrObject& rObject)
+{
+    if (DynCastE3dScene(&rObject))
+        return nullptr;
+    return rObject.GetSubList();
+}
+
 void describeObject(SdrObject& rObject, ObjectContent& rContent,
                     const drawinglayer::geometry::ViewInformation2D& rViewInformation)
 {
-    const SdrObjList* pChildren = rObject.GetSubList();
+    const SdrObjList* pChildren = membersOf(rObject);
     if (!pChildren || pChildren->GetObjCount() == 0)
     {
         if (rContent.maPrimitives.empty())
