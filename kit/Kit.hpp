@@ -397,8 +397,9 @@ public:
 
     std::shared_ptr<ChildSession> findSessionByViewId(int viewId);
 
-    /// Answers the file pick with the given request id. An empty url means the user cancelled.
-    void completeFilePick(unsigned id, const std::string& url);
+    /// Answers the file pick with the given request id, from the view that was asked. An empty
+    /// url means the user cancelled. An answer from any other view is ignored.
+    void completeFilePick(unsigned id, int viewId, const std::string& url);
 
     void invalidateCanonicalId(const std::string& sessionId);
 

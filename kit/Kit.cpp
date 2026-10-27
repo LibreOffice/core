@@ -2157,12 +2157,19 @@ void Document::pickFile(const char* title, const COKitFilePickerFilter* filters,
 }
 #endif // !MACOSAPP && !QTAPP && !_WIN32
 
-void Document::completeFilePick(unsigned id, const std::string& url)
+void Document::completeFilePick(unsigned id, int viewId, const std::string& url)
 {
     const auto it = _pendingFilePicks.find(id);
     if (it == _pendingFilePicks.end())
     {
         LOG_WRN("No open file pick with id [" << id << "]; ignoring the answer");
+        return;
+    }
+
+    if (it->second.viewId != viewId)
+    {
+        LOG_WRN("File pick [" << id << "] was asked of view [" << it->second.viewId
+                              << "], not of view [" << viewId << "]; ignoring the answer");
         return;
     }
 

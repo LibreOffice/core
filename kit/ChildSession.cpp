@@ -2992,7 +2992,7 @@ bool ChildSession::insertFile(const StringVector& tokens)
         }
 
         getLOKitDocument()->setView(_viewId);
-        _docManager->completeFilePick(static_cast<unsigned>(filePickId), url);
+        _docManager->completeFilePick(static_cast<unsigned>(filePickId), _viewId, url);
         return !url.empty();
     }
 
@@ -4316,7 +4316,7 @@ bool ChildSession::filePickerResult(const StringVector& tokens)
         }
     }
 
-    _docManager->completeFilePick(static_cast<unsigned>(id), url);
+    _docManager->completeFilePick(static_cast<unsigned>(id), _viewId, url);
     return answered;
 }
 
