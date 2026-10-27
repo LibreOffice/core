@@ -55,6 +55,10 @@
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/presentation/XPresentationPage.hpp>
+#include <com/sun/star/table/XCell.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
+#include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 
@@ -144,6 +148,20 @@ private:
                 continue;
             dumpProperties(uno::Reference<beans::XPropertySet>(xPage, uno::UNO_QUERY), aPath);
             dumpShapes(xPage, aPath);
+
+            uno::Reference<presentation::XPresentationPage> xPresentationPage(xPage,
+                                                                              uno::UNO_QUERY);
+            if (xPresentationPage.is())
+            {
+                uno::Reference<drawing::XDrawPage> xNotes(xPresentationPage->getNotesPage());
+                if (xNotes.is())
+                {
+                    const OString aNotesPath = aPath + "/notes";
+                    dumpProperties(uno::Reference<beans::XPropertySet>(xNotes, uno::UNO_QUERY),
+                                   aNotesPath);
+                    dumpShapes(xNotes, aNotesPath);
+                }
+            }
         }
     }
 
@@ -165,7 +183,75 @@ private:
             if (xChildren.is())
                 dumpShapes(xChildren, aPath);
             else
+            {
                 dumpText(uno::Reference<text::XText>(xShape, uno::UNO_QUERY), aPath);
+                dumpTable(uno::Reference<beans::XPropertySet>(xShape, uno::UNO_QUERY), aPath);
+            }
+        }
+    }
+
+    /** A table holds its text in cells of its own, which the text of the shape
+        around them does not reach.  Walk the cells, their borders and fills. */
+    void dumpTable(const uno::Reference<beans::XPropertySet>& xShapeProps, std::string_view rPath)
+    {
+        if (!xShapeProps.is())
+            return;
+        uno::Reference<beans::XPropertySetInfo> xInfo(xShapeProps->getPropertySetInfo());
+        if (!xInfo.is() || !xInfo->hasPropertyByName(u"Model"_ustr))
+            return;
+
+        uno::Reference<table::XTable> xTable;
+        try
+        {
+            xShapeProps->getPropertyValue(u"Model"_ustr) >>= xTable;
+        }
+        catch (const uno::Exception&)
+        {
+            return;
+        }
+        if (!xTable.is())
+            return;
+
+        const sal_Int32 nRows = xTable->getRowCount();
+        const sal_Int32 nColumns = xTable->getColumnCount();
+        add(rPath, "RowCount", OUString::number(nRows));
+        add(rPath, "ColumnCount", OUString::number(nColumns));
+
+        dumpLine(xTable->getRows(), rPath, "row");
+        dumpLine(xTable->getColumns(), rPath, "column");
+
+        for (sal_Int32 nRow = 0; nRow < nRows; ++nRow)
+        {
+            for (sal_Int32 nColumn = 0; nColumn < nColumns; ++nColumn)
+            {
+                uno::Reference<table::XCell> xCell;
+                try
+                {
+                    xCell = xTable->getCellByPosition(nColumn, nRow);
+                }
+                catch (const uno::Exception&)
+                {
+                    continue;
+                }
+                if (!xCell.is())
+                    continue;
+                const OString aPath = indexed(indexed(rPath, "row", nRow), "cell", nColumn);
+                dumpProperties(uno::Reference<beans::XPropertySet>(xCell, uno::UNO_QUERY), aPath);
+                dumpText(uno::Reference<text::XText>(xCell, uno::UNO_QUERY), aPath);
+            }
+        }
+    }
+
+    void dumpLine(const uno::Reference<container::XIndexAccess>& xLines, std::string_view rPath,
+                  const char* pTag)
+    {
+        if (!xLines.is())
+            return;
+        for (sal_Int32 i = 0; i < xLines->getCount(); ++i)
+        {
+            uno::Reference<beans::XPropertySet> xLine(xLines->getByIndex(i), uno::UNO_QUERY);
+            if (xLine.is())
+                dumpProperties(xLine, indexed(rPath, pTag, i));
         }
     }
 
