@@ -1,0 +1,372 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Impress-Intro-Template.odp\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-10-24 04:08+0000\n"
+"Last-Translator: Michal Várady <majkl82@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/collabora-online/"
+"desktop-apps/impress-intro-template/cs/>\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
+"X-Generator: Weblate 2026.11.dev0\n"
+
+#. content.xml (slide 'page1')
+msgid "👋 Introduction"
+msgstr "👋 Úvod"
+
+#. content.xml (slide 'page1')
+msgid ""
+"<1>Collabora Office </1><2>presentation</2><3> is a </3><4>tool</4><5> that "
+"lets you create, edit, and deliver presentations in a simple way. You can "
+"work alone on a document, or collaboratively as part of a team. This "
+"introduction template will help you get started and explore some of the main"
+" features of the product.</5>"
+msgstr ""
+"<1>Collabora Office pro </1><2>prezentace</2><3> je </3><4>nástroj</4><5>, "
+"se kterým můžete snadno vytvářet, upravovat a předvádět prezentace. Na "
+"dokumentu můžete pracovat sami nebo společně v týmu. Tato úvodní šablona vám "
+"pomůže začít a seznámit se s některými hlavními funkcemi produktu.</5>"
+
+#. content.xml (slide 'page1'); styles.xml (master page
+#. 'Introduction_20_slide')
+msgid "Next Chapter: 🖼 Slides & Layouts"
+msgstr "Další kapitola: 🖼 Snímky a rozvržení"
+
+#. content.xml (slide 'page1')
+msgid "Here's what you'll discover"
+msgstr "S čím se seznámíte"
+
+#. content.xml (slide 'page1'); content.xml (slide 'page2')
+msgid "🖼 Slides & Layouts"
+msgstr "🖼 Snímky a rozvržení"
+
+#. content.xml (slide 'page1'); content.xml (slide 'page3')
+msgid "🎨 Design & Master Slides"
+msgstr "🎨 Vzhled a předlohy snímků"
+
+#. content.xml (slide 'page1'); content.xml (slide 'page4')
+msgid "✏️ Style & Visual"
+msgstr "✏️ Styl a vizuální prvky"
+
+#. content.xml (slide 'page1'); content.xml (slide 'page5')
+msgid "🎬 Slide Transitions"
+msgstr "🎬 Přechody snímků"
+
+#. content.xml (slide 'page1'); content.xml (slide 'page6')
+msgid "🎤 Presenting"
+msgstr "🎤 Předvádění prezentace"
+
+#. content.xml (slide 'page1'); content.xml (slide 'page7')
+msgid "🤝 Productivity & Collaboration"
+msgstr "🤝 Produktivita a spolupráce"
+
+#. content.xml (slide 'page2')
+msgid "Every presentation is a sequence of slides."
+msgstr "Každá prezentace je posloupností snímků."
+
+#. content.xml (slide 'page2')
+msgid ""
+"<1>Use the </1><2>Slide navigation</2><3> on the left to reorder them by "
+"dragging, or remove ones you don’t need.</3>"
+msgstr ""
+"<1>Pomocí </1><2>navigace mezi snímky</2><3> vlevo můžete přetažením měnit "
+"jejich pořadí nebo odstranit ty, které nepotřebujete.</3>"
+
+#. content.xml (slide 'page2')
+msgid ""
+"<1>Each slide can use a </1><2>different layout </2><3>– a predefined "
+"arrangement of placeholders for titles, text, and images. Pick the layout "
+"that fits the slide’s purpose.</3>"
+msgstr ""
+"<1>Každý snímek může mít </1><2>jiné rozvržení </2><3>– předem určené "
+"uspořádání zástupných polí pro nadpisy, text a obrázky. Vyberte rozvržení, "
+"které odpovídá účelu snímku.</3>"
+
+#. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
+#. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
+#. styles.xml (master page 'Content_20_slide'); styles.xml (master page
+#. 'Default')
+msgid "<1>➜</1><2>Try it:</2>"
+msgstr "<1>➜</1><2>Vyzkoušejte si:</2>"
+
+#. content.xml (slide 'page2')
+msgid "Add a new slide clicking “New” in Notebook bar."
+msgstr "Přidejte nový snímek klepnutím na „Nový“ na liště karet."
+
+#. content.xml (slide 'page2')
+msgid "Choose a layout for it from the layout chooser."
+msgstr "Vyberte pro něj rozvržení z nabídky rozvržení."
+
+#. content.xml (slide 'page2')
+msgid "Start editing your slide."
+msgstr "Začněte snímek upravovat."
+
+#. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
+#. (slide 'page4'); content.xml (slide 'page5'); styles.xml (master page
+#. 'Content_20_slide'); styles.xml (master page 'Default')
+msgid "Useful tip"
+msgstr "Užitečný tip"
+
+#. content.xml (slide 'page2')
+msgid ""
+"When you’re unsure which layout to pick, start with “Title, Content” – it "
+"works for almost any slide."
+msgstr ""
+"Pokud nevíte, které rozvržení zvolit, začněte s rozvržením „Nadpis a obsah“ "
+"– hodí se téměř pro každý snímek."
+
+#. content.xml (slide 'page2')
+msgid "Next Chapter: 🎨 Design & Master Slides"
+msgstr "Další kapitola: 🎨 Vzhled a předlohy snímků"
+
+#. content.xml (slide 'page3')
+msgid ""
+"<1>A </1><2>master slide</2><3> is the template behind every slide. It "
+"defines the colours, fonts, background, and where titles and footers go. "
+"</3><4>Change</4><5> </5><6>the master, and every slide updates at once. "
+"</6><7>This makes master slides the fastest way to keep a deck consistent. "
+"Set the look once (fonts, colours, logo, footer) and every new slide picks "
+"it up automatically. When you need to rebrand or tweak the design later, you"
+" change the master, not 30 slides.</7>"
+msgstr ""
+"<1>Každý snímek vychází z </1><2>předlohy snímku</2><3>. Ta určuje barvy, "
+"písma, pozadí a umístění nadpisů a zápatí. </3><4>Změňte</4><5> </5><6>"
+"předlohu a všechny snímky se najednou aktualizují. </6><7>Předlohy jsou tak "
+"nejrychlejším způsobem, jak zachovat jednotný vzhled prezentace. Stačí "
+"jednou nastavit vzhled (písma, barvy, logo a zápatí) a každý nový snímek jej "
+"automaticky převezme. Když později potřebujete změnit vizuální identitu nebo "
+"upravit vzhled, změníte předlohu, nikoli 30 snímků.</7>"
+
+#. content.xml (slide 'page3')
+msgid "Open the View tab in the Notebook bar."
+msgstr "Na liště karet otevřete kartu Zobrazit."
+
+#. content.xml (slide 'page3')
+msgid "Click “Master View” and edit your master design."
+msgstr "Klepněte na „Zobrazení předlohy“ a upravte vzhled předlohy."
+
+#. content.xml (slide 'page3')
+msgid "Once your master design is ready, click \"Close Master View\"."
+msgstr "Až bude vzhled předlohy hotový, klepněte na „Zavřít předlohu“."
+
+#. content.xml (slide 'page3')
+msgid "Now your master is set and ready to use across all slides."
+msgstr "Předloha je nyní nastavena a připravena k použití na všech snímcích."
+
+#. content.xml (slide 'page3')
+msgid ""
+"If a single slide needs a different look, create a second master slide and "
+"apply it just to that slide. The rest of your deck stays on the original "
+"master."
+msgstr ""
+"Pokud má mít jeden snímek jiný vzhled, vytvořte druhou předlohu a použijte "
+"ji pouze na tento snímek. Zbytek prezentace si ponechá původní předlohu."
+
+#. content.xml (slide 'page3')
+msgid "Next Chapter: ✏️ Style & Visual"
+msgstr "Další kapitola: ✏️ Styl a vizuální prvky"
+
+#. content.xml (slide 'page4')
+msgid ""
+"<1>There are two ways to make a slide stand out. First, </1><2>format your "
+"text</2><3> to give it structure and emphasis – fonts, sizes, weights, and "
+"colours guide the reader through your message. Second, </3><4>add visual "
+"elements</4><5> – images, shapes, icons, charts – to support your story.</5>"
+msgstr ""
+"<1>Snímek můžete zvýraznit dvěma způsoby. Za prvé </1><2>naformátujte text</"
+"2><3>, abyste mu dali strukturu a zdůraznili důležité části – písma, "
+"velikosti, řezy a barvy provedou čtenáře vaším sdělením. Za druhé </3><4>"
+"přidejte vizuální prvky</4><5> – obrázky, tvary, ikony a grafy –, které "
+"podpoří váš příběh.</5>"
+
+#. content.xml (slide 'page4')
+msgid ""
+"In the Notebook bar, open the Insert tab and add an object, image, table, or"
+" any other element that supports your content."
+msgstr ""
+"Na liště karet otevřete kartu Vložit a přidejte objekt, obrázek, tabulku "
+"nebo jiný prvek, který podpoří váš obsah."
+
+#. content.xml (slide 'page4')
+msgid ""
+"Click on it to select it, then resize and reposition it to fit your layout."
+msgstr ""
+"Klepnutím jej vyberte a pak změňte jeho velikost a polohu tak, aby zapadl do "
+"rozvržení."
+
+#. content.xml (slide 'page4')
+msgid ""
+"For editable objects like shapes or images, a contextual tab appears in the "
+"Notebook bar with all the available actions."
+msgstr ""
+"U upravitelných objektů, jako jsou tvary nebo obrázky, se na liště karet "
+"zobrazí kontextová karta se všemi dostupnými akcemi."
+
+#. content.xml (slide 'page4')
+msgid ""
+"Less is more. One strong visual, a clear headline, and a few well-formatted "
+"lines will always beat a slide packed with text and decorations."
+msgstr ""
+"Méně je více. Jeden výrazný vizuální prvek, jasný nadpis a několik dobře "
+"naformátovaných řádků vždy působí lépe než snímek přeplněný textem a "
+"ozdobami."
+
+#. content.xml (slide 'page4')
+msgid "Next Chapter: 🎬 Slide Transitions"
+msgstr "Další kapitola: 🎬 Přechody snímků"
+
+#. content.xml (slide 'page5')
+msgid ""
+"<1>A </1><2>transition</2><3> controls how one slide moves to the next "
+"during your slide show. The right transition makes your deck feel polished "
+"and professional, while the wrong one distracts from your message.</3>"
+msgstr ""
+"<1>Způsob přechodu z jednoho snímku na další při předvádění určuje </1><2>"
+"přechod</2><3>. Správný přechod dodá prezentaci uhlazený a profesionální "
+"vzhled, zatímco nevhodný odvádí pozornost od vašeho sdělení.</3>"
+
+#. content.xml (slide 'page5')
+msgid "Click Transition tab in Notebook bar."
+msgstr "Na liště karet klepněte na kartu Přechod."
+
+#. content.xml (slide 'page5')
+msgid "Pick a transition style you would like to use."
+msgstr "Vyberte styl přechodu, který chcete použít."
+
+#. content.xml (slide 'page5')
+msgid ""
+"Adjust other properties – set the duration, pick a variant, or choose "
+"timing."
+msgstr ""
+"Upravte další vlastnosti – nastavte délku trvání, vyberte variantu nebo "
+"zvolte časování."
+
+#. content.xml (slide 'page5')
+msgid "Click \"Apply to All Slides\" to use the same transition across your deck."
+msgstr ""
+"Klepnutím na „Použít na všechny obrazovky“ použijete stejný přechod v celé "
+"prezentaci."
+
+#. content.xml (slide 'page5')
+msgid ""
+"Use one transition across your whole deck to keep things consistent. Save a "
+"different transition for the slides you really want to stand out."
+msgstr ""
+"Pro zachování jednotnosti používejte v celé prezentaci jeden přechod. Jiný "
+"přechod si nechte pro snímky, které opravdu chcete zvýraznit."
+
+#. content.xml (slide 'page5')
+msgid "Next Chapter: 🎤 Presenting"
+msgstr "Další kapitola: 🎤 Předvádění prezentace"
+
+#. content.xml (slide 'page6')
+msgid ""
+"<1>When you're ready to present, start your slide show and the "
+"</1><2>Presenter Console</2><3> opens. You'll see your current slide, the "
+"next one coming up, a timer, and your speaker notes, while your audience "
+"sees only the slide.</3>"
+msgstr ""
+"<1>Až budete připraveni prezentovat, spusťte předvádění a otevře se </1><2>"
+"obrazovka přednášejícího</2><3>. Uvidíte aktuální snímek, následující "
+"snímek, časovač a poznámky přednášejícího, zatímco publikum uvidí pouze "
+"snímek.</3>"
+
+#. content.xml (slide 'page6')
+msgid "Switch to the View tab in the Notebook bar and open “Notes view”."
+msgstr ""
+"Na liště karet přejděte na kartu Zobrazit a otevřete „Zobrazit poznámky“."
+
+#. content.xml (slide 'page6')
+msgid "Add a speaker note to your slides."
+msgstr "Přidejte ke snímkům poznámku přednášejícího."
+
+#. content.xml (slide 'page6')
+msgid "When you're ready to present, open the Slide Show tab."
+msgstr "Až budete připraveni prezentovat, otevřete kartu Prezentace."
+
+#. content.xml (slide 'page6')
+msgid "Pick a slide show option to start presenting."
+msgstr "Výběrem možnosti předvádění spusťte prezentaci."
+
+#. content.xml (slide 'page6')
+msgid "Next Chapter: 🤝 Productivity & Collaboration"
+msgstr "Další kapitola: 🤝 Produktivita a spolupráce"
+
+#. content.xml (slide 'page7')
+msgid ""
+"<1>A range of features helps you </1><2>stay productive</2><3> and "
+"</3><4>collaborate with others</4><5>, making it easier to work together and"
+" share your decks.</5>"
+msgstr ""
+"<1>Řada funkcí vám pomůže </1><2>pracovat produktivně</2><3> a </3><4>"
+"spolupracovat s ostatními</4><5>, takže bude snazší pracovat společně a "
+"sdílet prezentace.</5>"
+
+#. content.xml (slide 'page7')
+msgid "📤 Document sharing"
+msgstr "📤 Sdílení dokumentů"
+
+#. content.xml (slide 'page7')
+msgid ""
+"<1>Work together in real time. Multiple people can edit the same "
+"presentation at once. Click the </1><2>Share button</2><3> in the top right "
+"to share your document with your colleagues.</3>"
+msgstr ""
+"<1>Spolupracujte v reálném čase. Stejnou prezentaci může současně upravovat "
+"více lidí. Klepněte na </1><2>tlačítko Sdílet</2><3> vpravo nahoře a "
+"sdílejte dokument s kolegy.</3>"
+
+#. content.xml (slide 'page7')
+msgid "⌨️ Shortcuts"
+msgstr "⌨️ Klávesové zkratky"
+
+#. content.xml (slide 'page7')
+msgid ""
+"<1>Keyboard shortcuts speed up your workflow. Find the full list under Help "
+"tab in </1><2>Keyboard shortcuts</2>"
+msgstr ""
+"<1>Klávesové zkratky urychlují práci. Úplný seznam najdete na kartě Nápověda "
+"v části </1><2>Klávesové zkratky</2>"
+
+#. content.xml (slide 'page7')
+msgid "▶️ Video tutorials"
+msgstr "▶️ Videonávody"
+
+#. content.xml (slide 'page7')
+msgid ""
+"Want to keep learning? Short video introductions cover additional features "
+"and help you build on what you’ve learned."
+msgstr ""
+"Chcete se učit dál? Krátká úvodní videa představují další funkce a pomohou "
+"vám navázat na to, co jste se naučili."
+
+#. content.xml (slide 'page7')
+msgid "Check out video tutorials."
+msgstr "Podívejte se na videonávody."
+
+#. styles.xml (master page 'Content_20_slide'); styles.xml (master page
+#. 'Default')
+msgid "Title"
+msgstr "Nadpis"
+
+#. styles.xml (master page 'Content_20_slide'); styles.xml (master page
+#. 'Default'); styles.xml (master page 'Introduction_20_slide')
+msgid "Text"
+msgstr "Text"
+
+#. styles.xml (master page 'Content_20_slide'); styles.xml (master page
+#. 'Default'); styles.xml (master page 'Introduction_20_slide')
+msgid "Next Chapter: name of next chapter"
+msgstr "Další kapitola: název další kapitoly"
+
+#. styles.xml (master page 'Introduction_20_slide')
+msgid "👋Introduction"
+msgstr "👋Úvod"
+
+#. styles.xml (master page 'Introduction_20_slide')
+msgid "Text title"
+msgstr "Nadpis textu"

@@ -1,0 +1,989 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Calc-Intro-Template.ods\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-10-24 04:08+0000\n"
+"Last-Translator: Michal Várady <majkl82@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/collabora-online/"
+"desktop-apps/calc-intro-template/cs/>\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
+"X-Generator: Weblate 2026.11.dev0\n"
+
+#. content.xml (validation title)
+msgid "Try formatting"
+msgstr "Vyzkoušejte formátování"
+
+#. content.xml (validation help message)
+msgid "Explore the Format tab to customize your data with styles and formats."
+msgstr "Prozkoumejte kartu Formát a upravte svá data pomocí stylů a formátů."
+
+#. content.xml (validation title)
+msgid "Help"
+msgstr "Nápověda"
+
+#. content.xml (validation help message)
+msgid ""
+"For Medium Stock use condition \"Values between: 20-80\" and style \"Medium "
+"Stock\"."
+msgstr ""
+"Pro střední zásobu použijte podmínku „Hodnoty mezi: 20-80“ a styl „Medium "
+"Stock“."
+
+#. content.xml (validation help message)
+msgid ""
+"For High Stock use condition \"Values greater than: 80\" and style \"High "
+"Stock\"."
+msgstr ""
+"Pro vysokou zásobu použijte podmínku „Hodnoty větší než: 80“ a styl „High "
+"Stock“."
+
+#. content.xml (validation title)
+msgid "Use other options"
+msgstr "Použijte další možnosti"
+
+#. content.xml (validation help message)
+msgid ""
+"Use Standard or Advanced Filter to narrow down your data more precisely"
+msgstr "Pomocí standardního nebo rozšířeného filtru můžete data omezit přesněji"
+
+#. content.xml (validation title)
+msgid "Share document link"
+msgstr "Sdílet odkaz na dokument"
+
+#. content.xml (validation help message)
+msgid ""
+"Share a direct link with people who already have access to the document for "
+"quick and easy access."
+msgstr ""
+"Sdílejte přímý odkaz s lidmi, kteří už mají k dokumentu přístup, aby jej "
+"mohli rychle a snadno otevřít."
+
+#. content.xml (sheet name)
+msgid "👋 Introduction"
+msgstr "👋 Úvod"
+
+#. content.xml (sheet '👋 Introduction')
+msgid "<1>Next Chapter: ✚</1><2> Formulas & Functions</2>"
+msgstr "<1>Další kapitola: ✚</1><2> Vzorce a funkce</2>"
+
+#. content.xml (sheet '👋 Introduction')
+msgid "👋General information"
+msgstr "👋Obecné informace"
+
+#. content.xml (sheet '👋 Introduction')
+msgid ""
+"Collabora Office spreadsheet can be used to calculate, analyse, and manage "
+"your data. This introduction template will help you get started and explore "
+"some of the main features of the product."
+msgstr ""
+"Tabulkový procesor Collabora Office slouží k výpočtům, analýze a správě dat. "
+"Tato úvodní šablona vám pomůže začít a seznámit se s některými hlavními "
+"funkcemi produktu."
+
+#. content.xml (sheet '👋 Introduction')
+msgid "Calc features – key features you can explore"
+msgstr "Funkce Calcu – hlavní funkce, které můžete prozkoumat"
+
+#. content.xml (sheet '👋 Introduction')
+msgid "Calculations (Formulas & Functions)"
+msgstr "Výpočty (vzorce a funkce)"
+
+#. content.xml (sheet '👋 Introduction')
+msgid ""
+"Use built-in functions to perform calculations on your data. Create formulas"
+" easily and get help with the Function Wizard."
+msgstr ""
+"Pomocí vestavěných funkcí provádějte výpočty s daty. Snadno vytvářejte "
+"vzorce a využijte pomoc průvodce funkcí."
+
+#. content.xml (sheet '👋 Introduction')
+msgid "Tables"
+msgstr "Tabulky"
+
+#. content.xml (sheet '👋 Introduction')
+msgid ""
+"Organise your data into structured tables. Quickly edit, sort, and filter "
+"information to keep everything clear and easy to manage."
+msgstr ""
+"Uspořádejte data do strukturovaných tabulek. Rychle upravujte, řaďte a "
+"filtrujte informace, aby vše zůstalo přehledné a snadno se spravovalo."
+
+#. content.xml (sheet '👋 Introduction')
+msgid "Charts"
+msgstr "Grafy"
+
+#. content.xml (sheet '👋 Introduction')
+msgid ""
+"Visualise your data with different chart types. Quickly create and customise"
+" charts to better understand trends and comparisons."
+msgstr ""
+"Znázorněte data pomocí různých typů grafů. Rychle vytvářejte a přizpůsobujte "
+"grafy, abyste lépe porozuměli trendům a mohli data porovnávat."
+
+#. content.xml (sheet '👋 Introduction')
+msgid "Sorting & filtering"
+msgstr "Řazení a filtrování"
+
+#. content.xml (sheet '👋 Introduction')
+msgid ""
+"Find what matters faster by sorting and filtering your data. Focus only on "
+"the information you need."
+msgstr ""
+"Pomocí řazení a filtrování dat rychleji najděte to podstatné. Zaměřte se "
+"pouze na informace, které potřebujete."
+
+#. content.xml (sheet '👋 Introduction')
+msgid "Data formatting"
+msgstr "Formátování dat"
+
+#. content.xml (sheet '👋 Introduction')
+msgid ""
+"Format your data to improve clarity and readability. Use colours, styles, "
+"and number formats to highlight key information."
+msgstr ""
+"Naformátujte data, aby byla přehlednější a čitelnější. Pomocí barev, stylů a "
+"číselných formátů zvýrazněte důležité informace."
+
+#. content.xml (sheet '👋 Introduction')
+msgid "Collaboration tools"
+msgstr "Nástroje pro spolupráci"
+
+#. content.xml (sheet '👋 Introduction')
+msgid ""
+"Work together in real time. Share, comment, and track changes directly in "
+"the document."
+msgstr ""
+"Spolupracujte v reálném čase. Sdílejte, komentujte a sledujte změny přímo v "
+"dokumentu."
+
+#. content.xml (sheet '👋 Introduction')
+msgid "Accessibility"
+msgstr "Přístupnost"
+
+#. content.xml (sheet '👋 Introduction')
+msgid ""
+"Calc is designed with accessibility in mind, helping ensure that everyone "
+"can easily create, edit, and work with spreadsheets."
+msgstr ""
+"Calc je navržen s ohledem na přístupnost, aby každý mohl snadno vytvářet a "
+"upravovat sešity a pracovat s nimi."
+
+#. content.xml (sheet name)
+msgid "✚ Formulas & Functions"
+msgstr "✚ Vzorce a funkce"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "✚Using simple functions"
+msgstr "✚Použití jednoduchých funkcí"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid ""
+"We will look at a practical case to learn how to use basic Calc features and"
+" simple functions."
+msgstr ""
+"Na praktickém příkladu se naučíme používat základní funkce Calcu a "
+"jednoduché výpočtové funkce."
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "Step-by-step guide – Adding values"
+msgstr "Podrobný postup – sčítání hodnot"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid ""
+"In this example we want to calculate the total number of items in stock. The"
+" SUM function allows you to quickly add numbers together."
+msgstr ""
+"V tomto příkladu chceme vypočítat celkový počet položek na skladě. Funkce "
+"SUM umožňuje rychle sčítat čísla."
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "Writing formula into cell"
+msgstr "Zadání vzorce do buňky"
+
+#. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
+#. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
+#. (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
+msgid "Item"
+msgstr "Položka"
+
+#. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
+#. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
+#. (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
+msgid "Quantity [pcs]"
+msgstr "Množství [ks]"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "1. Click on the cell below the Quantity column"
+msgstr "1. Klepněte na buňku pod sloupcem Množství"
+
+#. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
+#. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
+#. (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
+msgid "Laptop"
+msgstr "Notebook"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "<1>2. Type the formula </1><2>=SUM(E9:E11)</2>"
+msgstr "<1>2. Zadejte vzorec </1><2>=SUM(E9:E11)</2>"
+
+#. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
+#. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
+#. (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
+msgid "Mouse"
+msgstr "Myš"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid ""
+"<1>3. Press </1><2>Enter</2><3> to calculate the total number of items</3>"
+msgstr ""
+"<1>3. Stisknutím klávesy </1><2>Enter</2><3> vypočítejte celkový počet "
+"položek</3>"
+
+#. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
+#. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
+#. (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
+msgid "Notebook"
+msgstr "Zápisník"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "Inserting formula via Formulas tab – Formula wizard"
+msgstr "Vložení vzorce z karty Vzorce – průvodce funkcí"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "<1>2. Open </1><2>Formulas tab</2><3> in Notebook bar</3>"
+msgstr "<1>2. Na liště karet otevřete kartu </1><2>Vzorce</2><3></3>"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "<1>3. Click on </1><2>Insert Function</2>"
+msgstr "<1>3. Klepněte na </1><2>Vložit funkci</2>"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid ""
+"<1>4. Choose SUM from the list of functions, </1><2>=SUM ( )</2><3> should "
+"appear</3>"
+msgstr ""
+"<1>4. Ze seznamu funkcí vyberte SUM. Mělo by se zobrazit </1><2>=SUM ( )</2>"
+"<3></3>"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "5. Select the cells containing the values you want to add"
+msgstr "5. Vyberte buňky obsahující hodnoty, které chcete sečíst"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "<1>6. Click </1><2>OK</2><3> to insert the formula</3>"
+msgstr "<1>6. Klepnutím na </1><2>OK</2><3> vložte vzorec</3>"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "Inserting formula via Formulas tab chosen from Category"
+msgstr "Vložení vzorce vybraného z kategorie na kartě Vzorce"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "<1>3. Click on </1><2>AutoSum</2>"
+msgstr "<1>3. Klepněte na </1><2>Automatický součet</2>"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "Formulas Structure"
+msgstr "Struktura vzorců"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid ""
+"<1>Formulas in Calc always start with the equals sign </1><2>=</2><3>. After"
+" that comes the function name (for example </3><4>sum</4><5>), which defines"
+" what type of calculation will be performed. The </5><6>brackets</6><7> "
+"contain the cells that the formula will use for its calculation.</7>"
+msgstr ""
+"<1>Vzorce v Calcu vždy začínají rovnítkem </1><2>=</2><3>. Za ním následuje "
+"název funkce (například </3><4>sum</4><5>), který určuje, jaký typ výpočtu "
+"se provede. </5><6>Závorky</6><7> obsahují buňky, které vzorec použije pro "
+"výpočet.</7>"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "Function Library"
+msgstr "Knihovna funkcí"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid ""
+"Collabora Office Calc provides a large library of built-in functions that "
+"help you perform different types of calculations and data analysis."
+msgstr ""
+"Collabora Office Calc nabízí rozsáhlou knihovnu vestavěných funkcí, které "
+"vám pomohou provádět různé výpočty a analýzy dat."
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid ""
+"<1>Functions are organised into categories such as Database, </1><2>Date & "
+"Time, Financial, Information, Logical, Mathematical, Array, Statistical, "
+"Spreadsheet, Text </2><3>and</3><4> Add-in</4><5>, making it easier to find "
+"the function you need.</5>"
+msgstr ""
+"<1>Funkce jsou uspořádány do kategorií, jako jsou Databáze, </1><2>Datum a "
+"čas, Finanční, Informace, Logické, Matematické, Matice, Statistické, Sešit, "
+"Text </2><3>a</3><4> Doplňky</4><5>, takže snáze najdete funkci, kterou "
+"potřebujete.</5>"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid ""
+"<1>You can access these functions through the Function Library or by using "
+"the </1><2>Function Wizard.</2>"
+msgstr ""
+"<1>K těmto funkcím se dostanete pomocí knihovny funkcí nebo pomocí </1><2>"
+"průvodce funkcí.</2>"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "Next Chapter: 📋 Tables"
+msgstr "Další kapitola: 📋 Tabulky"
+
+#. content.xml (sheet name)
+msgid "📋 Tables"
+msgstr "📋 Tabulky"
+
+#. content.xml (sheet '📋 Tables')
+msgid "📋Create a table"
+msgstr "📋Vytvoření tabulky"
+
+#. content.xml (sheet '📋 Tables')
+msgid ""
+"Tables help you organise large amounts of information in a clear and "
+"structured way. They make it easier to manage data, perform calculations, "
+"and visualise information."
+msgstr ""
+"Tabulky pomáhají přehledně a strukturovaně uspořádat velké množství "
+"informací. Usnadňují správu dat, výpočty a znázornění informací."
+
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🎨 Conditional
+#. Formatting'); content.xml (sheet '📊 Charts'); content.xml (sheet '🔍 Data &
+#. filtering')
+msgid "Step-by-step guide"
+msgstr "Podrobný postup"
+
+#. content.xml (sheet '📋 Tables')
+msgid ""
+"In this example we will learn how to create and use tables to organise data "
+"in a spreadsheet."
+msgstr ""
+"V tomto příkladu se naučíme vytvářet a používat tabulky k uspořádání dat v "
+"sešitu."
+
+#. content.xml (sheet '📋 Tables')
+msgid "Create a table from existing data"
+msgstr "Vytvoření tabulky z existujících dat"
+
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
+msgid "Category"
+msgstr "Kategorie"
+
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
+msgid "Supplier"
+msgstr "Dodavatel"
+
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '📊 Charts'); content.xml
+#. (sheet '🔍 Data & filtering')
+msgid ""
+"1. Select the range of cells that contains your data (including headers)"
+msgstr "1. Vyberte oblast buněk obsahující vaše data (včetně záhlaví)"
+
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
+msgid "Electronics"
+msgstr "Elektronika"
+
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
+msgid "Dell"
+msgstr "Dell"
+
+#. content.xml (sheet '📋 Tables')
+msgid "<1>2. Open the </1><2>Insert tab</2><3> in the toolbar</3>"
+msgstr "<1>2. Na nástrojové liště otevřete kartu </1><2>Vložit</2><3></3>"
+
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
+msgid "Logitech"
+msgstr "Logitech"
+
+#. content.xml (sheet '📋 Tables')
+msgid "<1>3. Click </1><2>Table</2>"
+msgstr "<1>3. Klepněte na </1><2>Tabulka</2>"
+
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
+msgid "Office supplies"
+msgstr "Kancelářské potřeby"
+
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
+msgid "Staples"
+msgstr "Staples"
+
+#. content.xml (sheet '📋 Tables')
+msgid "<1>4. Click </1><2>OK</2>"
+msgstr "<1>4. Klepněte na </1><2>OK</2>"
+
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🎨 Conditional
+#. Formatting'); content.xml (sheet '📊 Charts'); content.xml (sheet '🔍 Data &
+#. filtering')
+msgid "Keyboard"
+msgstr "Klávesnice"
+
+#. content.xml (sheet '📋 Tables')
+msgid "5. Your data is now organised as a table"
+msgstr "5. Vaše data jsou nyní uspořádána jako tabulka"
+
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🎨 Conditional
+#. Formatting'); content.xml (sheet '📊 Charts'); content.xml (sheet '🔍 Data &
+#. filtering')
+msgid "Pen"
+msgstr "Pero"
+
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
+msgid "Bic"
+msgstr "Bic"
+
+#. content.xml (sheet '📋 Tables')
+msgid "Create a table from scratch"
+msgstr "Vytvoření tabulky od začátku"
+
+#. content.xml (sheet '📋 Tables')
+msgid "<1>1. Open the </1><2>Insert tab</2><3> in the toolbar</3>"
+msgstr "<1>1. Na nástrojové liště otevřete kartu </1><2>Vložit</2><3></3>"
+
+#. content.xml (sheet '📋 Tables')
+msgid "<1>2. Click </1><2>Table</2>"
+msgstr "<1>2. Klepněte na </1><2>Tabulka</2>"
+
+#. content.xml (sheet '📋 Tables')
+msgid "3. Select the range of cells where you want to create the table"
+msgstr "3. Vyberte oblast buněk, ve které chcete vytvořit tabulku"
+
+#. content.xml (sheet '📋 Tables')
+msgid "5. Your table is now ready to be filled with data"
+msgstr "5. Tabulka je nyní připravena k vyplnění daty"
+
+#. content.xml (sheet '📋 Tables')
+msgid "Editing tables"
+msgstr "Úpravy tabulek"
+
+#. content.xml (sheet '📋 Tables')
+msgid ""
+"When a table is created, additional tools become available in the toolbar. "
+"These tools allow you to customise and manage your table more easily. You "
+"can apply different table styles to improve the visual appearance of your "
+"data. You can also enable or disable options such as header rows, banded "
+"rows, and filter buttons, depending on how you want to display and work with"
+" your data."
+msgstr ""
+"Po vytvoření tabulky se na nástrojové liště zpřístupní další nástroje. "
+"Umožňují tabulku snadněji přizpůsobovat a spravovat. Pomocí různých stylů "
+"tabulky můžete zlepšit vzhled dat. Můžete také zapnout nebo vypnout "
+"možnosti, jako je řádek záhlaví, pruhované řádky a tlačítka filtru, podle "
+"toho, jak chcete data zobrazovat a pracovat s nimi."
+
+#. content.xml (sheet '📋 Tables')
+msgid ""
+"These features help you keep your table organised, highlight important "
+"information, and work more efficiently with your data."
+msgstr ""
+"Tyto funkce pomáhají udržet tabulku přehlednou, zvýraznit důležité informace "
+"a pracovat s daty efektivněji."
+
+#. content.xml (sheet '📋 Tables')
+msgid ""
+"<1>➜Try it: </1><2>Select your table, open tab Tables that appears in "
+"toolbar and explore.</2>"
+msgstr ""
+"<1>➜Vyzkoušejte si: </1><2>Vyberte tabulku, otevřete kartu Tabulky, která se "
+"zobrazí na nástrojové liště, a prozkoumejte ji.</2>"
+
+#. content.xml (sheet '📋 Tables')
+msgid "Pivot table"
+msgstr "Kontingenční tabulka"
+
+#. content.xml (sheet '📋 Tables')
+msgid ""
+"The pivot table (formerly known as DataPilot) allows you to combine, "
+"compare, and analyse large amounts of data. You can view different summaries"
+" of the source data, you can display the details of areas of interest, and "
+"you can create reports."
+msgstr ""
+"Kontingenční tabulka (dříve nazývaná průvodce daty) umožňuje kombinovat, "
+"porovnávat a analyzovat velké množství dat. Můžete prohlížet různé souhrny "
+"zdrojových dat, zobrazovat podrobnosti oblastí, které vás zajímají, a "
+"vytvářet sestavy."
+
+#. content.xml (sheet '📋 Tables')
+msgid ""
+"A table that has been created as a pivot table is an interactive table. Data"
+" can be arranged, rearranged or summarised according to different points of "
+"view."
+msgstr ""
+"Tabulka vytvořená jako kontingenční je interaktivní. Data lze uspořádat, "
+"přeuspořádat nebo shrnout podle různých hledisek."
+
+#. content.xml (sheet '📋 Tables')
+msgid ""
+"<1>➜Try it: </1><2>Go to the Insert tab and click Pivot Table to create one "
+"from your data.</2>"
+msgstr ""
+"<1>➜Vyzkoušejte si: </1><2>Přejděte na kartu Vložit a klepnutím na "
+"Kontingenční tabulka vytvořte tabulku ze svých dat.</2>"
+
+#. content.xml (sheet '📋 Tables')
+msgid "Next Chapter: 🎨 Conditional Formatting"
+msgstr "Další kapitola: 🎨 Podmíněné formátování"
+
+#. content.xml (sheet name)
+msgid "🎨 Conditional Formatting"
+msgstr "🎨 Podmíněné formátování"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid "🎨Conditional formatting"
+msgstr "🎨Podmíněné formátování"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid ""
+"Format your data to make it clearer and easier to understand. You can "
+"highlight important values, show patterns, and improve readability using "
+"colours, styles, and rules."
+msgstr ""
+"Naformátujte data, aby byla přehlednější a srozumitelnější. Pomocí barev, "
+"stylů a pravidel můžete zvýraznit důležité hodnoty, odhalit pravidelnosti v "
+"datech a zlepšit čitelnost."
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid ""
+"Conditional formatting automatically changes how cells look based on their "
+"values, helping you quickly spot trends or important data."
+msgstr ""
+"Podmíněné formátování automaticky mění vzhled buněk podle jejich hodnot a "
+"pomáhá rychle rozpoznat trendy nebo důležitá data."
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid ""
+"In this example, we will apply conditional formatting to highlight key "
+"values in the data and make important information easier to spot at a "
+"glance."
+msgstr ""
+"V tomto příkladu použijeme podmíněné formátování ke zvýraznění důležitých "
+"hodnot v datech, aby byly snadno patrné na první pohled."
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid "Apply conditional formatting"
+msgstr "Použití podmíněného formátování"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid "1. Select the range of cells you want to format"
+msgstr "1. Vyberte oblast buněk, kterou chcete formátovat"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid "<1>2. Open the </1><2>Format tab</2><3> in the toolbar</3>"
+msgstr "<1>2. Na nástrojové liště otevřete kartu </1><2>Formát</2><3></3>"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid "<1>3. Click </1><2>Conditional formatting</2>"
+msgstr "<1>3. Klepněte na </1><2>Podmíněné formátování</2>"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid "<1>4. Select the </1><2>rule</2><3> you want to apply</3>"
+msgstr "<1>4. Vyberte </1><2>pravidlo</2><3>, které chcete použít</3>"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid "5. Set the condition and select a cell style"
+msgstr "5. Nastavte podmínku a vyberte styl buňky"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid "<1>6. Click </1><2>OK</2><3> to apply</3>"
+msgstr "<1>6. Klepnutím na </1><2>OK</2><3> nastavení použijte</3>"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid "➜Try it: Inventory stock overview"
+msgstr "➜Vyzkoušejte si: Přehled skladových zásob"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid ""
+"Highlight important inventory data to quickly identify products that are "
+"running low on stock."
+msgstr ""
+"Zvýrazněte důležité údaje o zásobách, abyste rychle poznali výrobky, kterých "
+"je na skladě málo."
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid ""
+"<1>Low Stock</1><2> (less than 20 pcs) → </2><3>Red</3><4> background</4>"
+msgstr ""
+"<1>Nízká zásoba</1><2> (méně než 20 ks) → </2><3>Červené</3><4> pozadí</4>"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid ""
+"<1>Medium Stock</1><2> (between 20 and 80 pcs)→ </2><3>Orange</3><4> "
+"background</4>"
+msgstr ""
+"<1>Střední zásoba</1><2> (mezi 20 a 80 ks)→ </2><3>Oranžové</3><4> pozadí</4>"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid ""
+"<1>High Stock </1><2>(more than</2><3> </3><4>80 pcs)→ </4><5>Green</5><6> "
+"background</6>"
+msgstr ""
+"<1>Vysoká zásoba </1><2>(více než</2><3> </3><4>80 ks)→ </4><5>Zelené</5><6> "
+"pozadí</6>"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid ""
+"<1>💡Useful tip: </1><2>To remove formatting, use </2><3>Clear Direct "
+"Formatting</3><4> in the </4><5>Home tab</5><6> or manage and remove rules "
+"in </6><7>Manage Conditional Formatting</7><8> from the </8><9>Format "
+"tab</9><10>.</10>"
+msgstr ""
+"<1>💡Užitečný tip: </1><2>Chcete-li odstranit formátování, použijte </2><3>"
+"Vymazat přímé formátování</3><4> na kartě </4><5>Domů</5><6>, nebo spravujte "
+"a odstraňujte pravidla pomocí volby </6><7>Spravovat podmíněné formátování</"
+"7><8> na kartě </8><9>Formát</9><10>.</10>"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid "Next Chapter: 📊 Charts"
+msgstr "Další kapitola: 📊 Grafy"
+
+#. content.xml (sheet name)
+msgid "📊 Charts"
+msgstr "📊 Grafy"
+
+#. content.xml (sheet '📊 Charts')
+msgid "📊Create a chart"
+msgstr "📊Vytvoření grafu"
+
+#. content.xml (sheet '📊 Charts')
+msgid ""
+"Collabora Office lets you present data graphically in a chart so that you "
+"can visually compare data series and view trends in the data. You can insert"
+" charts into spreadsheets, text documents, drawings and presentations."
+msgstr ""
+"Collabora Office umožňuje znázornit data pomocí grafu, abyste mohli vizuálně "
+"porovnávat datové řady a sledovat trendy v datech. Grafy lze vkládat do "
+"sešitů, textových dokumentů, kreseb a prezentací."
+
+#. content.xml (sheet '📊 Charts')
+msgid ""
+"In this example we will learn how to create chart and explore the different "
+"types of charts available. On the other side, you can see an example table "
+"that can be used as a data source for creating charts."
+msgstr ""
+"V tomto příkladu se naučíme vytvořit graf a prozkoumáme dostupné typy grafů. "
+"Na druhé straně vidíte ukázkovou tabulku, kterou můžete použít jako zdroj "
+"dat pro vytvoření grafu."
+
+#. content.xml (sheet '📊 Charts')
+msgid "Create a chart from existing data"
+msgstr "Vytvoření grafu z existujících dat"
+
+#. content.xml (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
+msgid "Price per piece [£]"
+msgstr "Cena za kus [£]"
+
+#. content.xml (sheet '📊 Charts')
+msgid "<1>2. Open the </1><2>Insert tab </2><3>in the toolbar</3>"
+msgstr "<1>2. Otevřete kartu </1><2>Vložit </2><3>na nástrojové liště</3>"
+
+#. content.xml (sheet '📊 Charts')
+msgid "<1>3. Click </1><2>Chart</2>"
+msgstr "<1>3. Klepněte na </1><2>Graf</2>"
+
+#. content.xml (sheet '📊 Charts')
+msgid "4. Choose the chart type and style that best fits your data"
+msgstr "4. Vyberte typ a styl grafu, který nejlépe odpovídá vašim datům"
+
+#. content.xml (sheet '📊 Charts')
+msgid "<1>5. Click </1><2>Finish</2><3> to insert the chart</3>"
+msgstr "<1>5. Klepnutím na </1><2>Dokončit</2><3> vložte graf</3>"
+
+#. content.xml (sheet '📊 Charts')
+msgid "6. Your data is now displayed as a chart"
+msgstr "6. Vaše data jsou nyní zobrazena jako graf"
+
+#. content.xml (sheet '📊 Charts')
+msgid "Create a chart via Insert tab"
+msgstr "Vytvoření grafu z karty Vložit"
+
+#. content.xml (sheet '📊 Charts')
+msgid "1. Open the Insert tab in the toolbar"
+msgstr "1. Na nástrojové liště otevřete kartu Vložit"
+
+#. content.xml (sheet '📊 Charts')
+msgid "<1>2. Click </1><2>Chart</2>"
+msgstr "<1>2. Klepněte na </1><2>Graf</2>"
+
+#. content.xml (sheet '📊 Charts')
+msgid "3. Choose the chart type and style that best fits your data"
+msgstr "3. Vyberte typ a styl grafu, který nejlépe odpovídá vašim datům"
+
+#. content.xml (sheet '📊 Charts')
+msgid "<1>4. Click </1><2>Next</2>"
+msgstr "<1>4. Klepněte na </1><2>Další</2>"
+
+#. content.xml (sheet '📊 Charts')
+msgid ""
+"5. Select the range of cells that contains your data (including headers)"
+msgstr "5. Vyberte oblast buněk obsahující vaše data (včetně záhlaví)"
+
+#. content.xml (sheet '📊 Charts')
+msgid "<1>6. Click </1><2>Finish</2><3> to insert the chart</3>"
+msgstr "<1>6. Klepnutím na </1><2>Dokončit</2><3> vložte graf</3>"
+
+#. content.xml (sheet '📊 Charts')
+msgid "7. Your data is now displayed as a chart"
+msgstr "7. Vaše data jsou nyní zobrazena jako graf"
+
+#. content.xml (sheet '📊 Charts')
+msgid "Editing charts"
+msgstr "Úpravy grafů"
+
+#. content.xml (sheet '📊 Charts')
+msgid ""
+"To edit a chart, double click on it to activate editing mode. Once selected,"
+" you can use the options in the sidebar or open the context menu (right "
+"click) to modify the chart."
+msgstr ""
+"Chcete-li graf upravit, poklepáním na něj aktivujte režim úprav. Po výběru "
+"můžete graf měnit pomocí možností na postranní liště nebo v místní nabídce "
+"(klepnutí pravým tlačítkem)."
+
+#. content.xml (sheet '📊 Charts')
+msgid ""
+"You can add or adjust chart elements such as titles, axes, and labels, as "
+"well as change the data range or chart type. These tools allow you to "
+"customise the chart and better present your data."
+msgstr ""
+"Můžete přidávat a upravovat prvky grafu, jako jsou nadpisy, osy a popisky, a "
+"také měnit oblast dat nebo typ grafu. Tyto nástroje umožňují graf "
+"přizpůsobit a lépe představit data."
+
+#. content.xml (sheet '📊 Charts')
+msgid "Next Chapter:🔍 Data & filtering"
+msgstr "Další kapitola:🔍 Data a filtrování"
+
+#. content.xml (sheet name); content.xml (sheet '🔍 Data & filtering')
+msgid "🔍 Data & filtering"
+msgstr "🔍 Data a filtrování"
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid ""
+"Data and filtering tools help you organise and explore your data more "
+"efficiently. You can quickly sort information or apply filters to focus only"
+" on the data that matters."
+msgstr ""
+"Nástroje pro práci s daty a filtrování pomáhají data efektivněji uspořádat a "
+"prozkoumat. Informace můžete rychle seřadit nebo pomocí filtrů zobrazit jen "
+"data, která jsou důležitá."
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid ""
+"In this example, we will learn how to filter data to quickly find specific "
+"items in an inventory list."
+msgstr ""
+"V tomto příkladu se naučíme filtrovat data a rychle hledat konkrétní položky "
+"v seznamu zásob."
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid "Enable filtering"
+msgstr "Zapnutí filtrování"
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid "<1>2. Open the </1><2>Data tab </2><3>in the toolbar</3>"
+msgstr "<1>2. Otevřete kartu </1><2>Data </2><3>na nástrojové liště</3>"
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid "<1>3. Click </1><2>Auto Filter</2>"
+msgstr "<1>3. Klepněte na </1><2>Automatický filtr</2>"
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid "➜Try it: Find low stock items"
+msgstr "➜Vyzkoušejte si: Vyhledání položek s nízkou zásobou"
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid ""
+"Sort the Quantity [pcs] column to see which items have the lowest stock."
+msgstr ""
+"Seřaďte sloupec Množství [ks] a zjistěte, kterých položek je na skladě "
+"nejméně."
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid "➜Try it: Show only Electronics items"
+msgstr "➜Vyzkoušejte si: Zobrazení pouze položek elektroniky"
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid "Use the filter in the Category column and select Electronics."
+msgstr "Použijte filtr ve sloupci Kategorie a vyberte Elektronika."
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid ""
+"<1>💡Useful tip: </1><2>To disable the filter, select any cell within the "
+"filtered data, then go to the</2><3> Data tab</3><4> and click </4><5>Reset "
+"Filter</5><6>. All data will be visible again.</6>"
+msgstr ""
+"<1>💡Užitečný tip: </1><2>Chcete-li filtr vypnout, vyberte libovolnou buňku "
+"ve filtrovaných datech, přejděte na</2><3> kartu Data</3><4> a klepněte na </"
+"4><5>Odstranit filtr</5><6>. Všechna data budou opět viditelná.</6>"
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid "Other filtering options"
+msgstr "Další možnosti filtrování"
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid "Additional filtering options give you more control over your data."
+msgstr "Další možnosti filtrování vám dávají nad daty větší kontrolu."
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid ""
+"<1>Auto Filter</1><2> lets you quickly filter data directly in the table "
+"using simple selections.</2>"
+msgstr ""
+"<1>Automatický filtr</1><2> umožňuje rychle filtrovat data přímo v tabulce "
+"pomocí jednoduchých výběrů.</2>"
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid ""
+"<1>Standard Filter</1><2> allows you to define ranges that contain values in"
+" specific data fields. You can also combine conditions using logical AND or "
+"OR operators.</2>"
+msgstr ""
+"<1>Standardní filtr</1><2> umožňuje určit oblasti obsahující hodnoty v "
+"konkrétních datových polích. Podmínky můžete také kombinovat pomocí "
+"logických operátorů AND nebo OR.</2>"
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid ""
+"<1>Advanced Filter</1><2> allows you to define up to eight filter "
+"conditions. You can enter these conditions directly into the sheet for more "
+"precise and flexible filtering.</2>"
+msgstr ""
+"<1>Rozšířený filtr</1><2> umožňuje určit až osm podmínek filtrování. Tyto "
+"podmínky můžete zadat přímo do listu pro přesnější a pružnější filtrování.</"
+"2>"
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid "Last Chapter: 🤝 Productivity & collaboration"
+msgstr "Poslední kapitola: 🤝 Produktivita a spolupráce"
+
+#. content.xml (sheet name); content.xml (sheet '🤝 Productivity &
+#. collaboration')
+msgid "🤝 Productivity & collaboration"
+msgstr "🤝 Produktivita a spolupráce"
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid ""
+"A range of features helps you stay productive and collaborate with others, "
+"making it easier to organise work and share information in real time."
+msgstr ""
+"Řada funkcí vám pomůže pracovat produktivně a spolupracovat s ostatními, "
+"takže bude snazší organizovat práci a sdílet informace v reálném čase."
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid "Document sharing"
+msgstr "Sdílení dokumentů"
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid ""
+"Work together with others in real time. Multiple users can edit the same "
+"document simultaneously, making it easy to share ideas, review changes, and "
+"stay aligned."
+msgstr ""
+"Spolupracujte s ostatními v reálném čase. Stejný dokument může současně "
+"upravovat více uživatelů, takže lze snadno sdílet nápady, revidovat změny a "
+"postupovat společně."
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid ""
+"Each user is assigned a unique colour, so you can easily see who is editing "
+"what. You can click on a user’s name or avatar to jump directly to their "
+"cursor and follow their activity in the document. Notifications also inform "
+"you when someone joins or leaves."
+msgstr ""
+"Každý uživatel má přidělenou vlastní barvu, takže snadno poznáte, kdo co "
+"upravuje. Klepnutím na jméno nebo avatar uživatele se můžete přesunout přímo "
+"k jeho kurzoru a sledovat jeho činnost v dokumentu. Oznámení vás také "
+"informují o tom, když se někdo připojí nebo odejde."
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid "Start sharing your document"
+msgstr "Začněte sdílet dokument"
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid "1. Create new document or open existing one"
+msgstr "1. Vytvořte nový dokument nebo otevřete existující"
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid "<1>2. Click on </1><2>Share button</2><3> on right top side</3>"
+msgstr "<1>2. Klepněte na </1><2>tlačítko Sdílet</2><3> vpravo nahoře</3>"
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid "<1>3. </1><2>Share</2><3> your document with others</3>"
+msgstr "<1>3. </1><2>Sdílejte</2><3> dokument s ostatními</3>"
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid "➜Try it: Internal shares"
+msgstr "➜Vyzkoušejte si: Interní sdílení"
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid ""
+"Share files within your organisation. People who already have access to the "
+"document can use the link for quick and easy access."
+msgstr ""
+"Sdílejte soubory v rámci organizace. Lidé, kteří už mají k dokumentu "
+"přístup, mohou pomocí odkazu dokument rychle a snadno otevřít."
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid "➜Try it: External shares"
+msgstr "➜Vyzkoušejte si: Externí sdílení"
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid ""
+"Share files with others outside your organisation via public links and email"
+" addresses. You can also share to Nextcloud accounts on other instances "
+"using their federated cloud ID."
+msgstr ""
+"Sdílejte soubory s lidmi mimo vaši organizaci pomocí veřejných odkazů a e-"
+"mailových adres. Sdílet můžete také s účty Nextcloud na jiných instancích "
+"pomocí jejich federovaného cloudového ID."
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid "Shortcuts"
+msgstr "Klávesové zkratky"
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid ""
+"Keyboard shortcuts help you work faster by reducing the need to use menus "
+"and clicks. They allow you to quickly perform common actions, such as "
+"copying, formatting, or navigating through your document, making your "
+"workflow more efficient."
+msgstr ""
+"Klávesové zkratky urychlují práci tím, že omezují nutnost používat nabídky a "
+"klepat myší. Umožňují rychle provádět běžné akce, jako je kopírování, "
+"formátování nebo procházení dokumentu, a zvyšují tak efektivitu práce."
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid ""
+"<1>💡Useful tip: </1><2>To find a list of all shortcuts, go to the "
+"</2><3>Help tab</3><4> and click on </4><5>Keyboard shortcuts</5><6>. You "
+"can also use the search option to quickly find specific shortcuts.</6>"
+msgstr ""
+"<1>💡Užitečný tip: </1><2>Seznam všech zkratek najdete na kartě </2><3>"
+"Nápověda</3><4> po klepnutí na </4><5>Klávesové zkratky</5><6>. Konkrétní "
+"zkratky můžete rychle najít také pomocí vyhledávání.</6>"
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid "⏯Video tutorials"
+msgstr "⏯Videonávody"
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid ""
+"To continue learning, explore short video introductions that cover "
+"additional features. These videos offer quick guidance and help you build on"
+" what you’ve learned, so you can become more confident and efficient in your"
+" work."
+msgstr ""
+"Chcete-li se učit dál, podívejte se na krátká úvodní videa o dalších "
+"funkcích. Nabízejí rychlé rady a pomohou vám navázat na to, co jste se "
+"naučili, abyste mohli pracovat jistěji a efektivněji."
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid "Check out video tutorials"
+msgstr "Podívejte se na videonávody"
