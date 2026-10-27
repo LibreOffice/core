@@ -10,8 +10,8 @@
 		1F957DC22BA8229A006C9E78 /* Util-mobile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F957DC12BA82296006C9E78 /* Util-mobile.cpp */; };
 		1FCFA28A2B2AF13F007EE2DF /* coolwsd-fork.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FCFA2892B2AF13C007EE2DF /* coolwsd-fork.cpp */; };
 		3F3A77D22C59B04000947249 /* global.js in Resources */ = {isa = PBXBuildFile; fileRef = 3F3A77D12C59B04000947249 /* global.js */; };
-		F5298224F045BF70EF05D82D /* app-dark-theme.js in Resources */ = {isa = PBXBuildFile; fileRef = 067F260BDBEA5F447B2019E6 /* app-dark-theme.js */; };
 		3F3B54DD2A3928D100063C01 /* HttpRequest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3F3B54DB2A39288500063C01 /* HttpRequest.cpp */; };
+		526FD8C8FA21BFF3FAB03499 /* ProcUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2904EE83C8688DD8226AD2EA /* ProcUtil.cpp */; };
 		A5C2FA5A2AC1BB3900265946 /* Simd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A5C2FA592AC1BB3800265946 /* Simd.cpp */; };
 		A5C2FA5D2AC1BEC500265946 /* DeltaSimd.c in Sources */ = {isa = PBXBuildFile; fileRef = A5C2FA5B2AC1BEC500265946 /* DeltaSimd.c */; };
 		BE00F8A021396585001CE2D4 /* cool.html in Resources */ = {isa = PBXBuildFile; fileRef = BE00F89621396585001CE2D4 /* cool.html */; };
@@ -26,6 +26,9 @@
 		BE5315372CF5C48200A384A4 /* Unit-mobile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE5315362CF5C48200A384A4 /* Unit-mobile.cpp */; };
 		BE55E0EB2653FCCB007DDF29 /* ConfigUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE55E0E92653FCCB007DDF29 /* ConfigUtil.cpp */; };
 		BE55E0EB3653FCCB007DDF29 /* Crypto-stub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE55E0EC2653FCCB007DDF29 /* Crypto-stub.cpp */; };
+		BE5C4E022F13A00000848631 /* Socket-unix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE5C4E012F13A00000848631 /* Socket-unix.cpp */; };
+		BE5C4E042F13A00000848631 /* Watchdog-unix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE5C4E032F13A00000848631 /* Watchdog-unix.cpp */; };
+		BE5C4E062F13A00000848631 /* Syscall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE5C4E052F13A00000848631 /* Syscall.cpp */; };
 		BE5EB5C1213FE29900E0826C /* Log-poco.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE5EB5B9213FE29900E0826C /* Log-poco.cpp */; };
 		BE5EB5C1213FE29900E0826D /* Log-common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE5EB5B9213FE29900E0826D /* Log-common.cpp */; };
 		BE5EB5C2213FE29900E0826C /* SpookyV2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE5EB5BA213FE29900E0826C /* SpookyV2.cpp */; };
@@ -51,7 +54,6 @@
 		BE5EB5E721401E0F00E0826C /* RequestVettingStation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE5EB5E621401E0F00E0826C /* RequestVettingStation.cpp */; };
 		BE6362C22153B5B500F4237E /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE6362C12153B5B500F4237E /* CoreServices.framework */; };
 		BE7228E22417BC9F000ADABD /* StringVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE7228E02417BC9F000ADABD /* StringVector.cpp */; };
-		BE5C4E062F13A00000848631 /* Syscall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE5C4E052F13A00000848631 /* Syscall.cpp */; };
 		BE80E43221AD92F700859C97 /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = BE80E43121AD92F600859C97 /* Fonts */; };
 		BE80E45821B68F5700859C97 /* TemplateCollectionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BE80E45721B68F5700859C97 /* TemplateCollectionViewController.mm */; };
 		BE80E45E21B6CEF200859C97 /* TemplateSectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE80E45D21B6CEF200859C97 /* TemplateSectionHeaderView.m */; };
@@ -75,8 +77,6 @@
 		BE8D85D5214055F3009F1860 /* unorc in Resources */ = {isa = PBXBuildFile; fileRef = BE8D85C7214055F3009F1860 /* unorc */; };
 		BE8D85D6214055F3009F1860 /* rc in Resources */ = {isa = PBXBuildFile; fileRef = BE8D85C8214055F3009F1860 /* rc */; };
 		BE980C532CE3499900FED7BC /* Util-unix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE980C522CE3499900FED7BC /* Util-unix.cpp */; };
-		BE5C4E042F13A00000848631 /* Watchdog-unix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE5C4E032F13A00000848631 /* Watchdog-unix.cpp */; };
-		526FD8C8FA21BFF3FAB03499 /* ProcUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2904EE83C8688DD8226AD2EA /* ProcUtil.cpp */; };
 		BE980C552CE5EDE800FED7BC /* FileUtil-unix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE980C542CE5EDE800FED7BC /* FileUtil-unix.cpp */; };
 		BE980C592CEB557A00FED7BC /* FileUtil-apple.mm in Sources */ = {isa = PBXBuildFile; fileRef = BE980C582CEB557A00FED7BC /* FileUtil-apple.mm */; };
 		BE9ADE3F265D046600BC034A /* TraceEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE9ADE3D265D046600BC034A /* TraceEvent.cpp */; };
@@ -85,7 +85,6 @@
 		BEA283582146945500848631 /* ChildSession.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA283572146945500848631 /* ChildSession.cpp */; };
 		BEA2835A21470A1C00848631 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA2835921470A1C00848631 /* WebKit.framework */; };
 		BEA2835D21498AD400848631 /* Socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA2835C21498AD400848631 /* Socket.cpp */; };
-		BE5C4E022F13A00000848631 /* Socket-unix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE5C4E012F13A00000848631 /* Socket-unix.cpp */; };
 		BEA28360214ACA8500848631 /* FakeSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA2835F214ACA8500848631 /* FakeSocket.cpp */; };
 		BEA28377214FFD8C00848631 /* Unit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA28376214FFD8C00848631 /* Unit.cpp */; };
 		BEABFC6824AC94C3004DE339 /* Authorization.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEABFC6624AC94C3004DE339 /* Authorization.cpp */; };
@@ -107,6 +106,7 @@
 		C7CA440D2F430DCC0087DA36 /* FakeQuickLook.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C7CA43FF2F430DCC0087DA36 /* FakeQuickLook.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D49B580F2D1077F700E0E607 /* UniformTypeIdentifiers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D49B580E2D1077F700E0E607 /* UniformTypeIdentifiers.framework */; };
 		D4A0F3D72D64E86C00472DEE /* CoolURLSchemeHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A0F3D62D64E86C00472DEE /* CoolURLSchemeHandler.mm */; };
+		F5298224F045BF70EF05D82D /* app-dark-theme.js in Resources */ = {isa = PBXBuildFile; fileRef = 067F260BDBEA5F447B2019E6 /* app-dark-theme.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -141,10 +141,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		067F260BDBEA5F447B2019E6 /* app-dark-theme.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "app-dark-theme.js"; path = "../../../browser/dist/app-dark-theme.js"; sourceTree = "<group>"; };
 		1F957DC12BA82296006C9E78 /* Util-mobile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "Util-mobile.cpp"; sourceTree = "<group>"; };
 		1FCFA2892B2AF13C007EE2DF /* coolwsd-fork.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "coolwsd-fork.cpp"; sourceTree = "<group>"; };
+		2904EE83C8688DD8226AD2EA /* ProcUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ProcUtil.cpp; sourceTree = "<group>"; };
 		3F3A77D12C59B04000947249 /* global.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = global.js; path = ../../../browser/dist/global.js; sourceTree = "<group>"; };
-		067F260BDBEA5F447B2019E6 /* app-dark-theme.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "app-dark-theme.js"; path = "../../../browser/dist/app-dark-theme.js"; sourceTree = "<group>"; };
 		3F3B54DB2A39288500063C01 /* HttpRequest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HttpRequest.cpp; sourceTree = "<group>"; };
 		3F3B54DC2A39288500063C01 /* HttpRequest.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HttpRequest.hpp; sourceTree = "<group>"; };
 		3F3B54DF2A392C9C00063C02 /* Uri.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Uri.hpp; sourceTree = "<group>"; };
@@ -612,8 +613,8 @@
 		BE58E129217F295B00249358 /* Log.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Log.hpp; sourceTree = "<group>"; };
 		BE58E12A217F295B00249358 /* Png.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Png.hpp; sourceTree = "<group>"; };
 		BE58E12B217F295B00249358 /* SigUtil.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SigUtil.hpp; sourceTree = "<group>"; };
-		BE58E12C217F295B00249359 /* NumUtil.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NumUtil.hpp; sourceTree = "<group>"; };
 		BE58E12C217F295B00249358 /* Util.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Util.hpp; sourceTree = "<group>"; };
+		BE58E12C217F295B00249359 /* NumUtil.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NumUtil.hpp; sourceTree = "<group>"; };
 		BE58E12C217F295B01249358 /* RegexUtil.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RegexUtil.hpp; sourceTree = "<group>"; };
 		BE58E12C218F295B00249358 /* Uri.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Uri.hpp; sourceTree = "<group>"; };
 		BE58E12D217F295B00249358 /* KitQueue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = KitQueue.hpp; sourceTree = "<group>"; };
@@ -632,6 +633,9 @@
 		BE58E13B218793B600249358 /* svptext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svptext.cxx; path = "../lobuilddir-symlink/vcl/headless/svptext.cxx"; sourceTree = "<group>"; };
 		BE58E13C218793B600249358 /* svpvd.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpvd.cxx; path = "../lobuilddir-symlink/vcl/headless/svpvd.cxx"; sourceTree = "<group>"; };
 		BE58E13D218793B600249358 /* svpframe.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpframe.cxx; path = "../lobuilddir-symlink/vcl/headless/svpframe.cxx"; sourceTree = "<group>"; };
+		BE5C4E012F13A00000848631 /* Socket-unix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "Socket-unix.cpp"; path = "../net/Socket-unix.cpp"; sourceTree = "<group>"; };
+		BE5C4E032F13A00000848631 /* Watchdog-unix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "Watchdog-unix.cpp"; sourceTree = "<group>"; };
+		BE5C4E052F13A00000848631 /* Syscall.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Syscall.cpp; sourceTree = "<group>"; };
 		BE5EB5B9213FE29900E0826C /* Log-poco.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "Log-poco.cpp"; sourceTree = "<group>"; };
 		BE5EB5B9213FE29900E0826D /* Log-common.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "Log-common.cpp"; sourceTree = "<group>"; };
 		BE5EB5BA213FE29900E0826C /* SpookyV2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpookyV2.cpp; sourceTree = "<group>"; };
@@ -692,7 +696,6 @@
 		BE6C48662524A19C0066A166 /* vclxwindows.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vclxwindows.cxx; path = "../lobuilddir-symlink/toolkit/source/awt/vclxwindows.cxx"; sourceTree = "<group>"; };
 		BE6C48672524A19C0066A166 /* vclxdevice.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vclxdevice.cxx; path = "../lobuilddir-symlink/toolkit/source/awt/vclxdevice.cxx"; sourceTree = "<group>"; };
 		BE7228E02417BC9F000ADABD /* StringVector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StringVector.cpp; sourceTree = "<group>"; };
-		BE5C4E052F13A00000848631 /* Syscall.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Syscall.cpp; sourceTree = "<group>"; };
 		BE7228E12417BC9F000ADABD /* StringVector.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StringVector.hpp; sourceTree = "<group>"; };
 		BE7D6A2123FA9C2300C2E605 /* winreg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = winreg.cxx; path = "../lobuilddir-symlink/configmgr/source/winreg.cxx"; sourceTree = "<group>"; };
 		BE7D6A2223FA9C2300C2E605 /* propertynode.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = propertynode.hxx; path = "../lobuilddir-symlink/configmgr/source/propertynode.hxx"; sourceTree = "<group>"; };
@@ -933,7 +936,6 @@
 		BE8D77372136762500AC58EA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		BE8D773C2136762600AC58EA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BE8D773E2136762600AC58EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C7C0F1A02F5B00010000A001 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		BE8D773F2136762600AC58EA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		BE8D85BC214055F2009F1860 /* offapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = offapi.rdb; path = "../../../lobuilddir-symlink/workdir/CustomTarget/ios/resources/offapi.rdb"; sourceTree = "<group>"; };
 		BE8D85BD214055F2009F1860 /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = "../../../lobuilddir-symlink/workdir/CustomTarget/ios/resources/share"; sourceTree = "<group>"; };
@@ -1109,10 +1111,7 @@
 		BE93D46A216D5582007A39F4 /* watermarkitem.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = watermarkitem.cxx; path = "../lobuilddir-symlink/sfx2/source/doc/watermarkitem.cxx"; sourceTree = "<group>"; };
 		BE93D46B216D5582007A39F4 /* new.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = new.cxx; path = "../lobuilddir-symlink/sfx2/source/doc/new.cxx"; sourceTree = "<group>"; };
 		BE93D46C216D5582007A39F4 /* objembed.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = objembed.cxx; path = "../lobuilddir-symlink/sfx2/source/doc/objembed.cxx"; sourceTree = "<group>"; };
-		2904EE83C8688DD8226AD2EA /* ProcUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ProcUtil.cpp; sourceTree = "<group>"; };
-		C4F52A830C61CCDD874F0E92 /* ProcUtil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ProcUtil.hpp; sourceTree = "<group>"; };
 		BE980C522CE3499900FED7BC /* Util-unix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "Util-unix.cpp"; sourceTree = "<group>"; };
-		BE5C4E032F13A00000848631 /* Watchdog-unix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "Watchdog-unix.cpp"; sourceTree = "<group>"; };
 		BE980C542CE5EDE800FED7BC /* FileUtil-unix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "FileUtil-unix.cpp"; sourceTree = "<group>"; };
 		BE980C582CEB557A00FED7BC /* FileUtil-apple.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "FileUtil-apple.mm"; sourceTree = "<group>"; };
 		BE9ADE3D265D046600BC034A /* TraceEvent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TraceEvent.cpp; sourceTree = "<group>"; };
@@ -1152,7 +1151,6 @@
 		BEA283572146945500848631 /* ChildSession.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ChildSession.cpp; sourceTree = "<group>"; };
 		BEA2835921470A1C00848631 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		BEA2835C21498AD400848631 /* Socket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Socket.cpp; path = ../net/Socket.cpp; sourceTree = "<group>"; };
-		BE5C4E012F13A00000848631 /* Socket-unix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "Socket-unix.cpp"; path = "../net/Socket-unix.cpp"; sourceTree = "<group>"; };
 		BEA2835E214A8E2000848631 /* Socket.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Socket.hpp; sourceTree = "<group>"; };
 		BEA2835F214ACA8500848631 /* FakeSocket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FakeSocket.cpp; sourceTree = "<group>"; };
 		BEA28376214FFD8C00848631 /* Unit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Unit.cpp; sourceTree = "<group>"; };
@@ -1533,12 +1531,14 @@
 		BEF7898024C8D9F50013A906 /* ImageRepository.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ImageRepository.cxx; path = "../lobuilddir-symlink/vcl/source/image/ImageRepository.cxx"; sourceTree = "<group>"; };
 		BEFB1EDF21C29CC70081D757 /* L10n.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = L10n.h; sourceTree = "<group>"; };
 		BEFB1EE021C29CC70081D757 /* L10n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = L10n.mm; sourceTree = "<group>"; };
+		C4F52A830C61CCDD874F0E92 /* ProcUtil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ProcUtil.hpp; sourceTree = "<group>"; };
 		C73BEA612E8429C4009E12D3 /* MobileUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MobileUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C75AA5C0308B9E6400ED15D4 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		C75AA5C3308B9EA500ED15D4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C78C8ED32E9001F00011B574 /* data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = data; path = ../test/data; sourceTree = "<group>"; };
 		C792822F2DF89BB2001EA43B /* MobileSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MobileSocket.h; sourceTree = "<group>"; };
 		C79282302DF89BB2001EA43B /* MobileSocket.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MobileSocket.mm; sourceTree = "<group>"; };
+		C7C0F1A02F5B00010000A001 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		C7CA43FF2F430DCC0087DA36 /* FakeQuickLook.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FakeQuickLook.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7CA44002F430DCC0087DA36 /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
 		D49B580E2D1077F700E0E607 /* UniformTypeIdentifiers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UniformTypeIdentifiers.framework; path = System/Library/Frameworks/UniformTypeIdentifiers.framework; sourceTree = SDKROOT; };
@@ -2752,8 +2752,8 @@
 				C792822F2DF89BB2001EA43B /* MobileSocket.h */,
 				C79282302DF89BB2001EA43B /* MobileSocket.mm */,
 				D4A0F3D82D663A0000472DEE /* CoolURLSchemeHandler.h */,
-				D4A0F3D62D64E86C00472DEE /* CoolURLSchemeHandler.mm */,
 				BE58E13021874A2E00249358 /* Mobile.entitlements */,
+				D4A0F3D62D64E86C00472DEE /* CoolURLSchemeHandler.mm */,
 				BE5EB5D92140363100E0826C /* ios.mm */,
 				BE00F8922139494E001CE2D4 /* Resources */,
 				BE8D772A2136762500AC58EA /* AppDelegate.h */,
