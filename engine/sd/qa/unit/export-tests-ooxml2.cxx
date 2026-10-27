@@ -1662,25 +1662,25 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf106026)
     // where a reader looks for it. The text of the master says nothing, because what it holds
     // is the prompt the application shows and no document wrote.
     assertXPath(pXmlMasterContent,
-                "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:lstStyle/a:lvl1pPr/a:spcBef/a:spcPts",
+                "/p:sldMaster/p:cSld/p:spTree/p:sp[2]/p:txBody/a:lstStyle/a:lvl1pPr/a:spcBef/a:spcPts",
                 "val", u"1417");
     assertXPath(pXmlMasterContent,
-                "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:lstStyle/a:lvl2pPr/a:spcBef/a:spcPts",
+                "/p:sldMaster/p:cSld/p:spTree/p:sp[2]/p:txBody/a:lstStyle/a:lvl2pPr/a:spcBef/a:spcPts",
                 "val", u"1134");
     assertXPath(pXmlMasterContent,
-                "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:lstStyle/a:lvl3pPr/a:spcBef/a:spcPts",
+                "/p:sldMaster/p:cSld/p:spTree/p:sp[2]/p:txBody/a:lstStyle/a:lvl3pPr/a:spcBef/a:spcPts",
                 "val", u"850");
     assertXPath(pXmlMasterContent,
-                "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:lstStyle/a:lvl4pPr/a:spcBef/a:spcPts",
+                "/p:sldMaster/p:cSld/p:spTree/p:sp[2]/p:txBody/a:lstStyle/a:lvl4pPr/a:spcBef/a:spcPts",
                 "val", u"567");
     assertXPath(pXmlMasterContent,
-                "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:lstStyle/a:lvl5pPr/a:spcBef/a:spcPts",
+                "/p:sldMaster/p:cSld/p:spTree/p:sp[2]/p:txBody/a:lstStyle/a:lvl5pPr/a:spcBef/a:spcPts",
                 "val", u"283");
     assertXPath(pXmlMasterContent,
-                "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:lstStyle/a:lvl6pPr/a:spcBef/a:spcPts",
+                "/p:sldMaster/p:cSld/p:spTree/p:sp[2]/p:txBody/a:lstStyle/a:lvl6pPr/a:spcBef/a:spcPts",
                 "val", u"283");
     assertXPath(pXmlMasterContent,
-                "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:lstStyle/a:lvl7pPr/a:spcBef/a:spcPts",
+                "/p:sldMaster/p:cSld/p:spTree/p:sp[2]/p:txBody/a:lstStyle/a:lvl7pPr/a:spcBef/a:spcPts",
                 "val", u"283");
 
     xmlDocUniquePtr pXmlSlideContent = parseExport(u"ppt/slides/slide1.xml"_ustr);

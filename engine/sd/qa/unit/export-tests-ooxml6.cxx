@@ -845,6 +845,27 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testLineBreakKeepsItsFormatting)
     assertXPath(pXmlDoc, "//a:p/a:br/a:rPr", "b", u"1");
 }
 
+// A paragraph that keeps no space above itself keeps none after a save.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testParagraphKeepsNoSpaceAbove)
+{
+    // Given two paragraphs that keep no space above, in a document whose master keeps six
+    // points above every paragraph of its kind:
+    createSdImpressDoc("pptx/paragraph-without-space-above.pptx");
+
+    saveAndReload(TestFilter::PPTX);
+
+    // Without the fix in place, the saved file was silent about the space, so reading it back
+    // gave both paragraphs the six points of the master.
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
+    for (sal_Int32 nParagraph = 0; nParagraph < 2; ++nParagraph)
+    {
+        uno::Reference<beans::XPropertySet> xParagraph(getParagraphFromShape(nParagraph, xShape),
+                                                       uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(
+            sal_Int32(0), xParagraph->getPropertyValue(u"ParaTopMargin"_ustr).get<sal_Int32>());
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

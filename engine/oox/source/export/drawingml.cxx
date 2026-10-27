@@ -3915,10 +3915,14 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
         mpFS->endElementNS( XML_a, XML_lnSpc );
     }
 
-    if( nParaTopMargin != 0 )
+    // The space a paragraph keeps above and below itself is written also where it keeps none,
+    // so that a reader takes the space from the paragraph and not from the level it stands on.
+    const bool bWriteEverySpacing = GetDocumentType() == DOCUMENT_PPTX;
+
+    if (bWriteEverySpacing || nParaTopMargin != 0)
         WriteParagraphSpacing(XML_spcBef, nParaTopMargin);
 
-    if( nParaBottomMargin != 0 )
+    if (bWriteEverySpacing || nParaBottomMargin != 0)
         WriteParagraphSpacing(XML_spcAft, nParaBottomMargin);
 
     if (!bWriteNumbering)
