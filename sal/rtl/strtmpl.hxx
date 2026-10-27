@@ -1559,11 +1559,20 @@ void doubleToString(rtl_tString** pResult, sal_Int32* pResultCapacity, sal_Int32
         }
     }
 
-    sal_Int32 nBuf
-        = (nDigits <= 0 ? std::max<sal_Int32>(nDecPlaces, std::abs(nExp)) : nDigits + nDecPlaces)
-          + 10 + (pGroups ? std::abs(nDigits) * 2 : 0);
-    // max(nDigits) = max(nDecPlaces) + 1 + max(nExp) + 1 = 309 + 1 + 308 + 1 = 619
-    // max(nBuf) = max(nDigits) + max(nDecPlaces) + 10 + max(nDigits) * 2 = 619 * 3 + 309 + 10 = 2176
+    // F format writes every digit before the decimal point, filling those rounded away by a
+    // negative nDecPlaces with '0'
+    sal_Int32 nBufDigits = nDigits;
+    if (eFormat == rtl_math_StringFormat_F && nDecPlaces < 0)
+        nBufDigits -= nDecPlaces;
+
+    sal_Int32 nBuf = (nBufDigits <= 0 ? std::max<sal_Int32>(nDecPlaces, std::abs(nExp))
+                                      : nBufDigits + std::max<sal_Int32>(nDecPlaces, 0))
+                     + 10 + (pGroups ? std::abs(nBufDigits) * 2 : 0);
+    // max(nBufDigits) = max(nDecPlaces) + 1 + max(nExp) + 1 = 309 + 1 + 308 + 1 = 619
+    // max(nBuf) = max(nBufDigits) + max(nDecPlaces) + 10 + max(nBufDigits) * 2
+    //           = 619 * 3 + 309 + 10 = 2176
+    // With nBufDigits <= 0, std::abs(nExp) <= 324 and std::abs(nBufDigits) <= 323, so
+    // nBuf <= 324 + 10 + 323 * 2 = 980
     assert(nBuf <= 2176);
     auto* const pBuf = static_cast<Char_T<rtl_tString>*>(alloca(nBuf * sizeof(Char_T<rtl_tString>)));
     auto* p = pBuf;
@@ -1714,6 +1723,7 @@ void doubleToString(rtl_tString** pResult, sal_Int32* pResultCapacity, sal_Int32
         *p++ = nExp % 10 + '0';
     }
 
+    assert(p - pBuf <= nBuf);
     append(pResult, pResultCapacity, nResultOffset, std::basic_string_view(pBuf, p - pBuf));
 }
 
