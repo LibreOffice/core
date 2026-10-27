@@ -49,7 +49,7 @@ interface EditTarget {
 class VectorManager extends RenderManagerBase {
 	private _renderer: cool.VectorPrimitiveRenderer =
 		new cool.VectorPrimitiveRenderer(
-			(checksum) => this._bitmaps.get(checksum),
+			(checksum) => this._bitmaps.get(checksum) ?? this._standInFor(checksum),
 			(fontId) => this._fonts.has(fontId),
 		);
 
@@ -81,6 +81,14 @@ class VectorManager extends RenderManagerBase {
 			'commandvalues command=.uno:VectorRenderingGraphics?checksum=' +
 			String(checksum),
 	);
+
+	/*
+		Bitmaps drawn in place of one that is not decoded yet, by its checksum: the bitmap the
+		object had at the same place before the engine's answer. A picture the engine renders
+		anew at every size, a 3D scene for one, so shows the old picture at the new size until
+		the new one is there, rather than nothing.
+	*/
+	private _standIns: Map<number, number> = new Map();
 
 	// Loaded font faces keyed by font id, registered on document.fonts
 	// under the family name "vecfont-<id>".
@@ -957,7 +965,10 @@ class VectorManager extends RenderManagerBase {
 			}
 		}
 		for (const object of carried) {
-			if (object.id !== undefined) cached.objects.set(object.id, object);
+			if (object.id === undefined) continue;
+			const before = cached.objects.get(object.id);
+			if (before) this._noteStandIns(before, object);
+			cached.objects.set(object.id, object);
 		}
 
 		// The page rectangle rides on the page entry, so a delta that carries
@@ -1004,6 +1015,55 @@ class VectorManager extends RenderManagerBase {
 		);
 		this._fireChanged(replaced, values.inputSequence);
 		return replaced;
+	}
+
+	/// The decoded bitmap standing in for that checksum, where one does.
+	private _standInFor(checksum: number): HTMLImageElement | undefined {
+		const standIn = this._standIns.get(checksum);
+		return standIn === undefined ? undefined : this._bitmaps.get(standIn);
+	}
+
+	// The bitmaps the primitives name, in the order they are drawn.
+	private static _bitmapsInOrder(
+		primitives: cool.Primitive[] | undefined,
+	): number[] {
+		const found: number[] = [];
+		const walk = (list: cool.Primitive[]) => {
+			for (const primitive of list) {
+				if (cool.GraphicResource.is(primitive)) found.push(primitive.checksum);
+				const fillGraphic = (primitive as cool.FillGraphicPrimitive)
+					.fillGraphic;
+				if (fillGraphic && typeof fillGraphic.checksum === 'number')
+					found.push(fillGraphic.checksum);
+				const transparence = (primitive as cool.TransparencePrimitive)
+					.transparence;
+				if (Array.isArray(transparence)) walk(transparence);
+				if (primitive.children) walk(primitive.children);
+			}
+		};
+		walk(primitives ?? []);
+		return found;
+	}
+
+	/*
+		Pairs the bitmaps of an object as it was and as the engine answered, in drawing order,
+		and notes the old one as standing in for each new one that is not decoded yet.
+	*/
+	private _noteStandIns(
+		before: cool.SlideObject,
+		after: cool.SlideObject,
+	): void {
+		const was = VectorManager._bitmapsInOrder(before.primitives);
+		const now = VectorManager._bitmapsInOrder(after.primitives);
+		const count = Math.min(was.length, now.length);
+		for (let at = 0; at < count; ++at) {
+			if (now[at] === was[at] || this._bitmaps.get(now[at])) continue;
+			// the old one may itself still be stood in for
+			const standIn = this._bitmaps.get(was[at])
+				? was[at]
+				: this._standIns.get(was[at]);
+			if (standIn !== undefined) this._standIns.set(now[at], standIn);
+		}
 	}
 
 	// Shared off-screen 2d context for measuring text, created on first use.
@@ -1856,6 +1916,7 @@ class VectorManager extends RenderManagerBase {
 		// the in-flight mark on either outcome.
 		image.onload = () => {
 			this._bitmaps.setLoaded(values.checksum, image);
+			this._standIns.delete(values.checksum);
 			this._redrawPartsUsing(this._bitmaps.partsFor(values.checksum));
 			// A decoded bitmap changes nothing at the engine, so no object is answered.
 			this._fireChanged([]);
@@ -1872,6 +1933,7 @@ class VectorManager extends RenderManagerBase {
 	/// Record a checksum no usable image could be obtained for, so
 	/// it is not requested again, and log the reason.
 	private _markBitmapUnavailable(checksum: number, reason: string): void {
+		this._standIns.delete(checksum);
 		window.app.console.warn(
 			'VectorRenderingGraphics: bitmap ' +
 				String(checksum) +
