@@ -34,12 +34,13 @@ class SplashScreen;
 class SplashScreenWindow : public IntroWindow
 {
     SplashScreen* m_pSplash;
+    ScopedVclPtr<VirtualDevice> m_pVDev;
 
 public:
-    ScopedVclPtr<VirtualDevice> m_pVDev;
     explicit SplashScreenWindow(SplashScreen*);
     virtual ~SplashScreenWindow() override { disposeOnce(); }
     virtual void dispose() override;
+    virtual void SetOutputSizePixel(const Size& rNewSize) override;
     // workwindow
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
     void Redraw();

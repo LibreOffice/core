@@ -43,6 +43,12 @@ void SplashScreenWindow::dispose()
     IntroWindow::dispose();
 }
 
+void SplashScreenWindow::SetOutputSizePixel(const Size& rNewSize)
+{
+    IntroWindow::SetOutputSizePixel(rNewSize);
+    m_pVDev->SetOutputSizePixel(rNewSize);
+}
+
 void SplashScreenWindow::Redraw()
 {
     Invalidate();
@@ -85,7 +91,6 @@ SplashScreen::SplashScreen(const OUString& rAppName)
         SetScreenBitmap(m_aIntroBmp);
     Size aSize = m_aIntroBmp.GetSizePixel();
     m_pWindow->SetOutputSizePixel(aSize);
-    m_pWindow->m_pVDev->SetOutputSizePixel(aSize);
     m_nHeight = aSize.Height();
     m_nWidth = aSize.Width();
     if (m_nWidth > 500)
