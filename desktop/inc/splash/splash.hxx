@@ -33,8 +33,9 @@ class SplashScreen;
 
 class SplashScreenWindow : public IntroWindow
 {
-public:
     SplashScreen* m_pSplash;
+
+public:
     ScopedVclPtr<VirtualDevice> m_pVDev;
     explicit SplashScreenWindow(SplashScreen*);
     virtual ~SplashScreenWindow() override { disposeOnce(); }
