@@ -621,47 +621,78 @@ bool RemoteDocumentBroker::isEnabled()
     return enabled;
 }
 
+namespace
+{
+/// The base URL remote documents are dialed through, with the given scheme pair: the
+/// configured remote_links.server_url, else the server name, else this server's own address,
+/// with the service root appended and no trailing slash. Empty when none is available.
+std::string buildServerUrl(const char* plainScheme, const char* secureScheme)
+{
+    // The public address is secure when this server serves TLS itself or a proxy in front
+    // of it terminates TLS, as it is for the URLs the browser is given.
+    const bool secure = ConfigUtil::isSslEnabled() || ConfigUtil::isSSLTermination();
+
+    std::string url = ConfigUtil::getConfigValue<std::string>("remote_links.server_url", "");
+    if (url.empty())
+    {
+        std::string authority = COOLWSD::ServerName;
+        if (authority.empty() && COOLWSD::getClientPortNumber() > 0)
+        {
+            // Dial this server itself; the setup has no cluster proxy.
+            authority = "127.0.0.1:" + std::to_string(COOLWSD::getClientPortNumber());
+        }
+
+        if (authority.empty())
+            return std::string();
+
+        url = (secure ? secureScheme : plainScheme) + ("://" + authority) + COOLWSD::ServiceRoot;
+    }
+    else
+    {
+        // The configured URL names a scheme of either pair, or none.
+        const std::string_view schemes[] = { "http://", "https://", "ws://", "wss://" };
+        bool named = false;
+        for (const std::string_view& scheme : schemes)
+        {
+            if (url.starts_with(scheme))
+            {
+                const bool wasSecure = scheme == "https://" || scheme == "wss://";
+                url = (wasSecure ? secureScheme : plainScheme) +
+                      ("://" + url.substr(scheme.size()));
+                named = true;
+                break;
+            }
+        }
+
+        if (!named)
+            url = (secure ? secureScheme : plainScheme) + ("://" + url);
+    }
+
+    while (!url.empty() && url.back() == '/')
+        url.pop_back();
+
+    return url;
+}
+} // namespace
+
 std::string RemoteDocumentBroker::getServerUrl()
 {
     static const std::string serverUrl = []() -> std::string
     {
-        // The public address is secure when this server serves TLS itself or a proxy in front
-        // of it terminates TLS, as it is for the URLs the browser is given.
-        const bool secure = ConfigUtil::isSslEnabled() || ConfigUtil::isSSLTermination();
-
-        std::string url =
-            ConfigUtil::getConfigValue<std::string>("remote_links.server_url", "");
-        if (url.empty())
-        {
-            std::string authority = COOLWSD::ServerName;
-            if (authority.empty() && COOLWSD::getClientPortNumber() > 0)
-            {
-                // Dial this server itself; the setup has no cluster proxy.
-                authority = "127.0.0.1:" + std::to_string(COOLWSD::getClientPortNumber());
-            }
-
-            if (authority.empty())
-                return std::string();
-
-            url = (secure ? "wss://" : "ws://") + authority + COOLWSD::ServiceRoot;
-        }
-        else if (url.starts_with("http://"))
-        {
-            url.replace(0, 4, "ws");
-        }
-        else if (url.starts_with("https://"))
-        {
-            url.replace(0, 5, "wss");
-        }
-        else if (!url.starts_with("ws://") && !url.starts_with("wss://"))
-        {
-            url = (secure ? "wss://" : "ws://") + url;
-        }
-
-        while (!url.empty() && url.back() == '/')
-            url.pop_back();
-
+        const std::string url = buildServerUrl("ws", "wss");
         LOG_INF("RemoteDoc: remote documents are dialed through [" << url << ']');
+        return url;
+    }();
+
+    return serverUrl;
+}
+
+std::string RemoteDocumentBroker::getHttpServerUrl()
+{
+    static const std::string serverUrl = []() -> std::string
+    {
+        const std::string url = buildServerUrl("http", "https");
+        LOG_INF("RemoteDoc: remote documents are fetched through [" << url << ']');
         return url;
     }();
 

@@ -261,6 +261,10 @@ public:
     /// from request data. Empty when none of the sources is available.
     static std::string getServerUrl();
 
+    /// The same base URL in the http(s) scheme, for requests that are not WebSocket
+    /// upgrades. Empty when none of the sources is available.
+    static std::string getHttpServerUrl();
+
     static void initialize()
     {
         assert(Instance == nullptr && "Unexpected double initialization of RemoteDocumentBroker");
