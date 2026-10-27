@@ -557,11 +557,13 @@ public:
     /// Asks one view's storage again for the document behind one source this document names.
     void resolveRemoteDocumentSource(const std::string& tag, const std::string& persistentLink);
 
-    /// Records a remote link and gives its access token to the view that
-    /// holds the given one-time token, coming from POST /cool/links.
-    bool registerRemoteDocumentToken(const std::string& oneTimeToken, const std::string& wopiSrc,
-                                     const std::string& accessToken, const std::string& name,
-                                     const std::string& lastModifiedTime,
+    /// Records a remote link and gives its access token to the view that holds the given
+    /// one-time token, or to every view that opened the document with the given access token,
+    /// coming from POST /cool/links. False when no view matches either.
+    bool registerRemoteDocumentToken(const std::string& oneTimeToken,
+                                     const std::string& documentAccessToken,
+                                     const std::string& wopiSrc, const std::string& accessToken,
+                                     const std::string& name, const std::string& lastModifiedTime,
                                      const std::string& persistentLink);
 
     /// Drops the remote link bound to the given persistent link, at the request of a view. The

@@ -820,6 +820,135 @@ public:
     }
 };
 
+/// A POST to /cool/links may carry, instead of a view's one-time token, the access token
+/// the view opened the document with, which the storage that issued it knows. Verifies that a
+/// token no view opened the document with is refused, that a body naming neither a nonce nor
+/// an access token is refused, that the view's own access token registers the link, that the
+/// access token is not consumed, and that the registered token serves the view's subscription.
+class UnitLinkPostAccessToken : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoaded, Posting, WaitConnected, Done) _phase;
+
+    std::thread _postThread;
+
+    std::string documentWopiSrc() const
+    {
+        return getWopiHostURI() + "/wopi/files/1";
+    }
+
+    std::string remoteWopiSrc() const
+    {
+        return getWopiHostURI() + "/wopi/files/2";
+    }
+
+    /// POSTs the registration with the given body fields before Link, and returns the response
+    /// status.
+    unsigned postLink(const std::string& authorizationFields)
+    {
+        http::Request request("/cool/links?WOPISrc=" + Uri::encode(documentWopiSrc()),
+                              http::Request::VERB_POST);
+        request.setBody("{" + authorizationFields + "\"Link\":{\"WOPISrc\":\"" +
+                            remoteWopiSrc() + "\",\"AccessToken\":\"remotetoken\"" +
+                            ",\"PersistentLink\":\"" + remoteWopiSrc() + "\"" +
+                            ",\"LastModifiedTime\":\"2026-09-01T12:00:00.000000Z\"}}",
+                        "application/json");
+
+        auto session = http::Session::create(helpers::getTestServerURI());
+        session->setTimeout(std::chrono::seconds(10));
+        const std::shared_ptr<const http::Response> response = session->syncRequest(request);
+        return response ? static_cast<unsigned>(response->statusLine().statusCode()) : 0;
+    }
+
+public:
+    UnitLinkPostAccessToken()
+        : WopiTestServer("UnitLinkPostAccessToken")
+        , _phase(Phase::Load)
+    {
+    }
+
+    ~UnitLinkPostAccessToken()
+    {
+        if (_postThread.joinable())
+            _postThread.join();
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+        config.setBool("remote_links.enable", true);
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+
+        if (_phase != Phase::WaitLoaded)
+            return true;
+
+        TRANSITION_STATE(_phase, Phase::Posting);
+        _postThread = std::thread(
+            [this]
+            {
+                // An access token no view opened the document with is refused.
+                LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::Unauthorized),
+                                 postLink("\"AccessToken\":\"wrongtoken\","));
+
+                // A body naming neither a nonce nor an access token is refused.
+                LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::BadRequest),
+                                 postLink(std::string()));
+
+                // The access token the view opened the document with registers the link.
+                LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::OK),
+                                 postLink("\"AccessToken\":\"firsttoken\","));
+
+                // The access token is not consumed, so the storage may register again.
+                LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::OK),
+                                 postLink("\"AccessToken\":\"firsttoken\","));
+
+                // The registered token serves this view's subscription.
+                TRANSITION_STATE(_phase, Phase::WaitConnected);
+                WSD_CMD("remotedocsubscribe source=" + Uri::encode(remoteWopiSrc()));
+            });
+
+        return true;
+    }
+
+    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        if (!message.starts_with("remotedocevent:"))
+            return false;
+
+        TST_LOG("Got: [" << message << ']');
+
+        if (message.find("event=connected") != std::string::npos)
+        {
+            if (_phase == Phase::WaitConnected)
+            {
+                TRANSITION_STATE(_phase, Phase::Done);
+                passTest("The view's access token registered a remote link");
+            }
+        }
+        else if (message.find("event=error") != std::string::npos)
+        {
+            failTest("Unexpected remote document error: " + std::string(message));
+        }
+
+        return false;
+    }
+
+    void invokeWSDTest() override
+    {
+        if (_phase == Phase::Load)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitLoaded);
+
+            initWebsocket("/wopi/files/1?access_token=firsttoken");
+            WSD_CMD("load url=" + getWopiSrc());
+        }
+    }
+};
+
 /// Drops a remote link over the remotelinkremove command: a view drops it for every view
 class UnitLinkDelete : public WopiTestServer
 {
@@ -2743,7 +2872,7 @@ UnitBase** unit_create_wsd_multi(void)
 {
     return new UnitBase* [] { new UnitRemoteDocument(), new UnitRemoteDocumentViewClose(),
                               new UnitRemoteDocumentUnload(), new UnitRemoteDocumentCycle(),
-                              new UnitLinkPost(), new UnitLinkDelete(),
+                              new UnitLinkPost(), new UnitLinkPostAccessToken(), new UnitLinkDelete(),
                               new UnitRemoteDocumentMutual(),
                               new UnitRemoteDocumentCommand(), new UnitRemoteDocumentMissing(),
                               new UnitRemoteDocumentRetry(), new UnitRemoteDocumentIsolation(),

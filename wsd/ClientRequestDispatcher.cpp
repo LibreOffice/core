@@ -2275,16 +2275,19 @@ bool ClientRequestDispatcher::handleLinksRequest(
     }
 
     // Tokens travel only in the body, never in the URL. The caller proves it
-    // is one of the document's browser views by echoing that view's one-time
-    // link token, and names the remote link the same way a
-    // CheckFileInfo RemoteLinks entry does:
+    // acts for one of the document's views either by echoing that view's
+    // one-time link token, or by giving the access token the view opened the
+    // document with, which the storage that issued it knows. The remote link
+    // is named the same way a CheckFileInfo RemoteLinks entry is:
     //   { "Nonce": "<the view's one-time link token>",
+    //     "AccessToken": "<the view's access token for this document>",
     //     "Link": { "WOPISrc": "...", "AccessToken": "...",
     //               "BaseFileName": "...", "LastModifiedTime": "...",
     //               "PersistentLink": "<the reference the document's pages store for this
     //                                  file>" } }
     const std::string body(std::istreambuf_iterator<char>(message), {});
     std::string oneTimeToken;
+    std::string documentAccessToken;
     std::string remoteWopiSrc;
     std::string remoteAccessToken;
     std::string remoteName;
@@ -2294,6 +2297,7 @@ bool ClientRequestDispatcher::handleLinksRequest(
     if (JsonUtil::parseJSON(body, object))
     {
         JsonUtil::findJSONValue(object, "Nonce", oneTimeToken);
+        JsonUtil::findJSONValue(object, "AccessToken", documentAccessToken);
         if (auto link = object->getObject("Link"))
         {
             JsonUtil::findJSONValue(link, "WOPISrc", remoteWopiSrc);
@@ -2317,16 +2321,17 @@ bool ClientRequestDispatcher::handleLinksRequest(
     }
 
     // A view reaches a remote link by its persistent link alone, so the link needs one.
-    if (oneTimeToken.empty() || remoteWopiSrc.empty() || remoteAccessToken.empty() ||
-        remotePersistentLink.empty())
+    if ((oneTimeToken.empty() && documentAccessToken.empty()) || remoteWopiSrc.empty() ||
+        remoteAccessToken.empty() || remotePersistentLink.empty())
     {
         LOG_ERR_S("Links request rejected: incomplete body (have Nonce: "
-                  << !oneTimeToken.empty() << ", Link WOPISrc: " << !remoteWopiSrc.empty()
+                  << !oneTimeToken.empty() << ", AccessToken: " << !documentAccessToken.empty()
+                  << ", Link WOPISrc: " << !remoteWopiSrc.empty()
                   << ", Link AccessToken: " << !remoteAccessToken.empty()
                   << ", Link PersistentLink: " << !remotePersistentLink.empty()
                   << "): " << Anonymizer::anonymizeUrl(request.getURI()));
         HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket,
-                                         "missing Nonce or Link");
+                                         "missing Nonce or AccessToken, or Link");
         return true;
     }
 
@@ -2350,6 +2355,7 @@ bool ClientRequestDispatcher::handleLinksRequest(
     docBroker->setupTransfer(
         disposition,
         [docBroker, oneTimeToken = std::move(oneTimeToken),
+         documentAccessToken = std::move(documentAccessToken),
          remoteWopiSrc = std::move(remoteWopiSrc), remoteAccessToken = std::move(remoteAccessToken),
          remoteName = std::move(remoteName),
          remoteLastModifiedTime = std::move(remoteLastModifiedTime),
@@ -2358,16 +2364,17 @@ bool ClientRequestDispatcher::handleLinksRequest(
         {
             auto streamSocket = std::static_pointer_cast<StreamSocket>(moveSocket);
 
-            // The remote document's token becomes private to the one view that
-            // holds the one-time token. A request that carries no view's
-            // current token is refused, and the token is consumed on success.
-            if (!docBroker->registerRemoteDocumentToken(oneTimeToken, remoteWopiSrc,
-                                                        remoteAccessToken, remoteName,
-                                                        remoteLastModifiedTime,
+            // The remote document's token becomes private to the views that
+            // hold the one-time token or opened the document with the access
+            // token. A request that names no view is refused, and a one-time
+            // token is consumed on success.
+            if (!docBroker->registerRemoteDocumentToken(oneTimeToken, documentAccessToken,
+                                                        remoteWopiSrc, remoteAccessToken,
+                                                        remoteName, remoteLastModifiedTime,
                                                         remotePersistentLink))
             {
-                LOG_ERR_S("Links request for ["
-                          << docBroker->getDocKey() << "] with an invalid one-time token");
+                LOG_ERR_S("Links request for [" << docBroker->getDocKey()
+                                                << "] names no view of the document");
                 HttpHelper::sendErrorAndShutdown(http::StatusCode::Unauthorized, streamSocket,
                                                  "invalid token");
                 return;

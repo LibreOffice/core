@@ -5932,6 +5932,7 @@ void DocumentBroker::resolveRemoteDocumentSource(const std::string& tag,
 }
 
 bool DocumentBroker::registerRemoteDocumentToken(const std::string& oneTimeToken,
+                                                 const std::string& documentAccessToken,
                                                  const std::string& wopiSrc,
                                                  const std::string& accessToken,
                                                  const std::string& name,
@@ -5940,22 +5941,30 @@ bool DocumentBroker::registerRemoteDocumentToken(const std::string& oneTimeToken
 {
     ASSERT_CORRECT_THREAD();
 
-    // The token is private to the one view that was handed the one-time token,
-    // not to every view of the document. Nothing is recorded for a request
-    // that carries no view's current token.
+    // The token is private to the views the request names, not to every view
+    // of the document. Nothing is recorded for a request that names none.
+    bool registered = false;
     for (const auto& it : _sessions)
     {
-        if (it.second->matchesLinkToken(oneTimeToken))
+        if (!oneTimeToken.empty() && it.second->matchesLinkToken(oneTimeToken))
         {
             setRemoteDocumentSource(wopiSrc, name, lastModifiedTime, persistentLink);
             setRemoteDocumentViewToken(it.first, wopiSrc, accessToken);
             // Consume the one-time token and hand the view its next one.
             it.second->rotateLinkToken(/*notifyClient=*/true);
-            return true;
+            registered = true;
+        }
+        else if (!documentAccessToken.empty() &&
+                 it.second->getAuthorization().matchesToken(documentAccessToken))
+        {
+            // The same user may hold several views, each of them gets the token.
+            setRemoteDocumentSource(wopiSrc, name, lastModifiedTime, persistentLink);
+            setRemoteDocumentViewToken(it.first, wopiSrc, accessToken);
+            registered = true;
         }
     }
 
-    return false;
+    return registered;
 }
 
 bool DocumentBroker::removeRemoteDocumentSource(const std::string& persistentLink)
