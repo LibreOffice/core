@@ -8,11 +8,12 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-23 00:15+0200\n"
-"PO-Revision-Date: 2026-10-14 12:57+0000\n"
-"Last-Translator: tigran54 <tigran54@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-10-24 20:21+0000\n"
+"Last-Translator: Tigran Zargaryan "
+"<tigranflib@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Armenian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/hy/>\n"
-"Language: \n"
+"Language: hy\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -443,7 +444,7 @@ msgstr ""
 #: admin/src/AdminSocketServerAudit.js:50
 #: src/control/Control.ServerAuditDialog.ts:107
 msgid "No WOPI host configured: trusting the first host that connected"
-msgstr ""
+msgstr "WOPI հոսթինգը կարգավորված չէ. վստահելի է առաջին միացված հոսթինգը"
 
 #: admin/src/AdminSocketServerAudit.js:55
 #: src/control/Control.ServerAuditDialog.ts:122
@@ -518,13 +519,12 @@ msgid "API key lacks permissions"
 msgstr "API բանալին թույլտվություններ չունի"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:711
-#, fuzzy
 msgid ""
 "This AI host is not in the server's allowed AI host list "
 "(ai.allowed_hosts). Ask your administrator to permit it."
 msgstr ""
 "Այս ԱԲ հյուրընկալ սերվերը թույլատրված հյուրընկալումների ցանկում չէ "
-"(lok_allow.host): Խնդրեք ձեր ադմինիստրատորին թույլատրել այն:"
+"(ai.allowed_hosts): Խնդրեք ձեր ադմինիստրատորին թույլատրել այն:"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:713
 #: src/control/Control.AIChatSidebar.ts:2183
@@ -1309,18 +1309,20 @@ msgstr "Ընտրեք, թե ինչ է նախադասությունների ստո
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4687
 msgid "Remote Sentence Checkers"
-msgstr ""
+msgstr "Նախադասությունների հեռավար ստուգիչներ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4691
 msgid ""
 "Checkers that run on a server. The text of the document is sent there to be "
 "checked."
 msgstr ""
+"Ստուգիչներ, որոնք աշխատում են սերվերի վրա: Փաստաթղթի տեքստը ուղարկվում է "
+"այնտեղ՝ ստուգվելու համար:"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4726
 #: admin/src/integrator/AdminIntegratorSettings.ts:5066
 msgid "Enabled"
-msgstr ""
+msgstr "Միացված է"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4738
 #: admin/src/integrator/AdminIntegratorSettings.ts:5103
@@ -1329,62 +1331,61 @@ msgid "Server URL"
 msgstr "Սերվերի URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4750
-#, fuzzy
 msgid "Username"
-msgstr "Օգտվողի անուն"
+msgstr "Օգտանուն"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4772
 #: admin/src/integrator/AdminIntegratorSettings.ts:5122
 msgid "Verify the server certificate"
-msgstr ""
+msgstr "Վավերացրեք սերվերի վկայականը"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4780
 msgid "Enabled on this server for: {0}"
-msgstr ""
+msgstr "Այս սերվերում միացված է սրա համար: {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4795
 msgid "Checking level"
-msgstr ""
+msgstr "Ստուգման մակարդակ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4798
 msgid "Single words"
-msgstr ""
+msgstr "Առանձին բառեր"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4799
 msgid "Spelling"
-msgstr ""
+msgstr "Ուղղագրություն"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4800
 msgid "Spelling and grammar"
-msgstr ""
+msgstr "Ուղղագրություն և քերականություն"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4810
 msgid "German spelling"
-msgstr ""
+msgstr "Գերմաներենի ուղղագրություն"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4812
 msgid "Duden recommendation"
-msgstr ""
+msgstr "Դուդենի առաջարկությունը"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4813
 msgid "Conservative"
-msgstr ""
+msgstr "Պահպանողական"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4814
 msgid "Progressive"
-msgstr ""
+msgstr "Առաջադիմական"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4815
 msgid "Tolerant"
-msgstr ""
+msgstr "Հանդուրժող"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4816
 msgid "Press agencies"
-msgstr ""
+msgstr "Մամուլի գործակալություններ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4826
 msgid "Explanations"
-msgstr ""
+msgstr "Բացատրություններ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4829
 #: src/control/Control.AIChatSidebar.ts:154
@@ -1392,100 +1393,100 @@ msgid "Short"
 msgstr "Կարճ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4830
-#, fuzzy
 msgid "Long"
-msgstr "Գրանցամատյան"
+msgstr "Երկար"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4831
 msgid "Long, with an example"
-msgstr ""
+msgstr "Երկար, օրինակով"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4841
 msgid "Correction profiles"
-msgstr ""
+msgstr "Շտկման պրոֆիլներ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4851
 msgid "Dictionaries"
-msgstr ""
+msgstr "Բառարաններ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4858
 msgid "Foreign words with a German equivalent"
-msgstr ""
+msgstr "Օտար բառեր, որոնք ունեն գերմանական համարժեք"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4859
 msgid "Archaic words"
-msgstr ""
+msgstr "Հնացած բառեր"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4860
 msgid "Regional words"
-msgstr ""
+msgstr "Տարածաշրջանային բառեր"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4861
 msgid "Colloquial and vulgar words"
-msgstr ""
+msgstr "Խոսակցական և անպարկեշտ բառեր"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4862
 msgid "Filler words"
-msgstr ""
+msgstr "Լրացնող բառեր"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4863
 msgid "Offensive wording"
-msgstr ""
+msgstr "Վիրավորական ձևակերպում"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4864
 msgid "Gender-inclusive wording"
-msgstr ""
+msgstr "Սեռային առումով ներառող ձևակերպում"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4865
 msgid "Complex sentences"
-msgstr ""
+msgstr "Բարդ նախադասություններ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4887
 msgid "Style checks (German only)"
-msgstr ""
+msgstr "Ոճի ստուգումներ (միայն գերմաներեն)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5011
-#, fuzzy
 msgid "Translation"
-msgstr "Անցում"
+msgstr "Թարգմանություն"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5015
 msgid ""
 "Machine translation of the document text with the Translate command. The "
 "text is sent to the provider to be translated."
 msgstr ""
+"Փաստաթղթի տեքստի մեքենայական թարգմանություն՝ օգտագործելով Թարգմանել հրամանը: "
+"Տեքստը ուղարկվում է մատակարարին՝ թարգմանելու համար:"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5028
 msgid "The first one that is set up"
-msgstr ""
+msgstr "Առաջինը, որը տեղադրված է"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5081
 msgid "API URL"
-msgstr ""
+msgstr "API URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5090
 msgid "Authentication key"
-msgstr ""
+msgstr "Նույնականացման բանալի"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5132
 msgid "Set up on this server."
-msgstr ""
+msgstr "Կարգավորել այս սերվերի վրա։"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5133
 msgid "Enabled on this server, but not set up."
-msgstr ""
+msgstr "Միացված է այս սերվերի վրա, բայց կարգավորված չէ։"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5190
 msgid "Use the default settings"
-msgstr ""
+msgstr "Օգտագործեք լռելյայն կարգավորումները"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5191
 msgid "Use the settings set on the server"
-msgstr ""
+msgstr "Օգտագործեք սերվերի վրա սահմանված կարգավորումները"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5199
 msgid "Your own settings are dropped when you save."
-msgstr ""
+msgstr "Ձեր սեփական կարգավորումները կհեռացվեն, երբ դուք պահպանում եք։"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5253
 #: admin/src/integrator/AdminIntegratorSettings.ts:5914
@@ -1927,7 +1928,7 @@ msgstr "Ցուցադրել նավարկիչում"
 
 #: src/canvas/sections/CommentSection.ts:1691
 msgid "Press Ctrl + Enter to post, or %1 to discard"
-msgstr ""
+msgstr "Սեղմեք Ctrl + Enter՝ հրապարակելու համար, կամ %1՝ մերժելու համար"
 
 #: src/canvas/sections/CommentSection.ts:1720
 #: src/canvas/sections/CommentSection.ts:1725
@@ -1980,7 +1981,7 @@ msgstr "Հեռացնել հղումը"
 
 #: src/canvas/sections/GroupButtonSection.ts:66
 msgid "Edit Diagram"
-msgstr ""
+msgstr "Խմբագրել դիագրամը"
 
 #: src/canvas/sections/FormFieldButton.ts:106
 msgid "Unfold"
@@ -2165,23 +2166,24 @@ msgstr "Նոր խոսակցություն"
 
 #: src/control/Control.AIChatSidebar.ts:730
 msgid "What would you like to do with this spreadsheet?"
-msgstr ""
+msgstr "Ի՞նչ կցանկանայիք անել այս աղյուսակով։"
 
 #: src/control/Control.AIChatSidebar.ts:732
 msgid "What would you like to do with this presentation?"
-msgstr ""
+msgstr "Ի՞նչ կցանկանայիք անել այս ներկայացմամբ։"
 
 #: src/control/Control.AIChatSidebar.ts:734
 msgid "What would you like to do with this drawing?"
-msgstr ""
+msgstr "Ի՞նչ կցանկանայիք անել այս նկարով։"
 
 #: src/control/Control.AIChatSidebar.ts:736
 msgid "What would you like to do with this document?"
-msgstr ""
+msgstr "Ի՞նչ կցանկանայիք անել այս փաստաթղթով։"
 
 #: src/control/Control.AIChatSidebar.ts:753
 msgid "Select some content first to work on just that part."
 msgstr ""
+"Սկզբում ընտրեք որոշակի բովանդակություն՝ միայն այդ մասի վրա աշխատելու համար։"
 
 #: src/control/Control.AIChatSidebar.ts:775
 #: src/control/Control.AIChatSidebar.ts:2218
@@ -6080,9 +6082,8 @@ msgid "Switch to Editing"
 msgstr "Անցնել խմբագրման ռեժիմին"
 
 #: src/control/Control.HyperlinkWizard.ts:67
-#, fuzzy
 msgid "Link"
-msgstr "Գիծ"
+msgstr "Հղում"
 
 #: src/control/Control.PartsPreview.js:456
 msgid "Show everyone on this slide"
@@ -6123,61 +6124,59 @@ msgstr "%1 էջի նախադիտում"
 
 #: src/control/Control.PartsPreview.js:967
 msgid "preview of page %1, %3 is missing"
-msgstr ""
+msgstr "%1 էջի նախադիտում, %3-ը բացակայում է"
 
 #: src/control/Control.PartsPreview.js:968
 msgid "Slide %1, %3 is missing"
-msgstr ""
+msgstr "Սահիկ %1, %3 բացակայում է"
 
 #: src/control/Control.PartsPreview.js:972
-#, fuzzy
 msgid "preview of page %1, not found in %3"
-msgstr "%1 էջի նախադիտում, կապված %2-ի հետ %3-ում"
+msgstr "%1 էջի նախադիտում, չի գտնվել %3-ում"
 
 #: src/control/Control.PartsPreview.js:973
 msgid "Slide %1, not found in %3"
-msgstr ""
+msgstr "Սահիկ %1, չի գտնվել %3 -ում"
 
 #: src/control/Control.PartsPreview.js:977
 msgid "preview of page %1, no access to %3"
-msgstr ""
+msgstr "%1 էջի նախադիտում, %3-ին մուտք չկա"
 
 #: src/control/Control.PartsPreview.js:978
 msgid "Slide %1, no access to %3"
-msgstr ""
+msgstr "Սահիկ %1, %3-ին մուտք չկա"
 
 #: src/control/Control.PartsPreview.js:982
 msgid "preview of page %1, could not open %3"
-msgstr ""
+msgstr "%1 էջի նախադիտում, %3-ը չհաջողվեց բացել"
 
 #: src/control/Control.PartsPreview.js:983
 msgid "Slide %1, could not open %3"
-msgstr ""
+msgstr "Սահիկ %1, չի կարողանում բացել %3"
 
 #: src/control/Control.PartsPreview.js:988
 msgid "preview of page %1, %2 changed in %3"
-msgstr ""
+msgstr "%1 էջի նախադիտում, %2 փոփոխվել է %3-ում"
 
 #: src/control/Control.PartsPreview.js:989
 msgid "Slide %1, %2 changed in %3"
-msgstr ""
+msgstr "Սահիկ %1, %2 փոփոխված է %3-ում"
 
 #: src/control/Control.PartsPreview.js:992
-#, fuzzy
 msgid "preview of page %1, changed in %3"
-msgstr "%1 էջի նախադիտում, կապված %2-ի հետ"
+msgstr "%1 էջի նախադիտում, փոխված է %3-ում"
 
 #: src/control/Control.PartsPreview.js:993
 msgid "Slide %1, changed in %3"
-msgstr ""
+msgstr "Սահիկ %1, փոփոխված է %3-ում"
 
 #: src/control/Control.PartsPreview.js:997
 msgid "preview of page %1, %3 is disconnected"
-msgstr ""
+msgstr "%1 էջի նախադիտում, %3-ը անջատված է"
 
 #: src/control/Control.PartsPreview.js:998
 msgid "Slide %1, %3 is disconnected"
-msgstr ""
+msgstr "Սահիկ %1, %3-ը անջատված է"
 
 #: src/control/Control.PartsPreview.js:1002
 msgid "preview of page %1, linked to %2 in %3"
@@ -6262,7 +6261,7 @@ msgstr "{0} փոխվել է"
 
 #: src/control/Control.SlideImportPane.tsx:693
 msgid "Disconnected"
-msgstr ""
+msgstr "Անջատված է"
 
 #: src/control/Control.SlideImportPane.tsx:694
 #: src/control/Control.SlideLinkToolbar.tsx:115
@@ -6646,7 +6645,7 @@ msgstr "Համակարգային զանգերի անվտանգության զտ�
 
 #: src/control/Control.ServerAuditDialog.ts:112
 msgid "The trusted WOPI hosts are configured"
-msgstr ""
+msgstr "Վստահելի WOPI հոսթերը կարգավորված են"
 
 #: src/control/Control.ServerAuditDialog.ts:128
 msgid "Hardware resources are sufficient for optimal performance"
@@ -6905,7 +6904,7 @@ msgstr "Փաստաթուղթը վերահաշվարկվել է %1 մվ-ում"
 
 #: src/control/Control.TopToolbar.js:121 src/control/Control.TopToolbar.js:125
 msgid "Show Menu Bar"
-msgstr ""
+msgstr "Ցուցադրել ընտրացանկի վահանակը"
 
 #: src/control/Control.TopToolbar.js:180
 msgid "Active Sheet"
@@ -7494,7 +7493,7 @@ msgstr "Խմբագրման ռեժիմ"
 
 #: src/control/PermissionMode.ts:273
 msgid "Review Mode"
-msgstr ""
+msgstr "Վերանայման ռեժիմ"
 
 #: src/control/PermissionMode.ts:291 src/control/PermissionMode.ts:471
 #: src/control/PermissionMode.ts:477 src/control/PermissionMode.ts:483
@@ -7503,7 +7502,7 @@ msgstr "Դիտում"
 
 #: src/control/PermissionMode.ts:467
 msgid "Reviewing"
-msgstr ""
+msgstr "Վերանայվում է"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:380
 msgid "Save Image to Server"
@@ -7511,7 +7510,7 @@ msgstr "Պահպանել պատկերը սերվերում"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:399
 msgid "Fit slide to view"
-msgstr ""
+msgstr "Սահիկը հարմարեցնել դիտման համար"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:499
 msgid "Paste Special"
@@ -8655,7 +8654,7 @@ msgstr "Սահիկ"
 
 #: src/layer/marker/A11yTextInput.js:265
 msgid "Comment by {0}: {1}"
-msgstr ""
+msgstr "Մեկնաբանությունը {0}: {1}"
 
 #: src/layer/marker/A11yTextInput.js:379
 msgid "Heading level {0}"
@@ -8720,30 +8719,28 @@ msgid "{0} deleted"
 msgstr "{0} ջնջված"
 
 #: src/layer/marker/TextInput.js:489
-#, fuzzy
 msgid "Placeholder"
-msgstr "Տեղապահներ"
+msgstr "Տեղապահ"
 
 #: src/layer/marker/TextInput.js:509
 msgid "Drop-down list"
-msgstr ""
+msgstr "Բացվող-ընկնող ցուցակ"
 
 #: src/layer/marker/TextInput.js:511
 msgid "Combo box"
-msgstr ""
+msgstr "Կոմբո տուփ"
 
 #: src/layer/marker/TextInput.js:515
 msgid "Content control"
-msgstr ""
+msgstr "Բովանդակության վերահսկում"
 
 #: src/layer/marker/TextInput.js:528
-#, fuzzy
 msgid "Object"
-msgstr "Օբյեկտներ"
+msgstr "Օբյեկտ"
 
 #: src/layer/marker/TextInput.js:530
 msgid "Frame"
-msgstr ""
+msgstr "Շրջանակ"
 
 #: src/layer/marker/TextInput.js:681
 msgid "Screen reader support for text content is disabled. "
@@ -8983,7 +8980,7 @@ msgstr "Ներկայացման ռեժիմը անջատված է այս փաստ�
 
 #: src/map/handler/Map.StateChanges.js:204
 msgid "Editing slide %1 - click outside or press Esc to finish"
-msgstr ""
+msgstr "%1 սահիկի խմբագրում - սեղմեք դրսում կամ սեղմեք Esc՝ ավարտելու համար"
 
 #: src/map/handler/Map.VersionBar.js:50
 msgid "Your Collabora Online server needs updating. Version {0} is available."
@@ -9187,11 +9184,11 @@ msgstr "Ընդլայնման հրամանը ձախողվեց: %1"
 
 #: src/control/Control.Extension.ts:2060
 msgid "Yes"
-msgstr ""
+msgstr "Այո"
 
 #: src/control/Control.Extension.ts:2061
 msgid "No"
-msgstr ""
+msgstr "Ոչ"
 
 #: templates/templates.js:6 templates/templates.js:10
 msgid "Business Letter"
