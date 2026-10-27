@@ -398,6 +398,13 @@ void DiagramHelper_oox::reLayout()
     basegfx::B2DHomMatrix aCoverTransformation(aTransformation);
     basegfx::B2DRange aCover;
     gatherCover(*pShapePtr, basegfx::B2DPoint(0.0, 0.0), aCover);
+    // a shape may draw more than its box, a curved connector its path, so we cover what
+    // the made shapes draw too; the room's origin is at the group's
+    if (const tools::Rectangle aDrawn(pTarget->GetSnapRect()); !aDrawn.IsEmpty())
+        aCover.expand(basegfx::B2DRange(oox::drawingml::convertHmmToEmu(aDrawn.Left()),
+                                        oox::drawingml::convertHmmToEmu(aDrawn.Top()),
+                                        oox::drawingml::convertHmmToEmu(aDrawn.Right()),
+                                        oox::drawingml::convertHmmToEmu(aDrawn.Bottom())));
     const awt::Size& rRoom(pShapePtr->getSize());
     if (!aCover.isEmpty() && aCover.getWidth() > 0.0 && aCover.getHeight() > 0.0
         && rRoom.Width > 0 && rRoom.Height > 0)
