@@ -8,12 +8,12 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-23 00:15+0200\n"
-"PO-Revision-Date: 2026-10-15 13:25+0000\n"
+"PO-Revision-Date: 2026-10-26 15:52+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin "
 "<aindriu80@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ga/>\n"
-"Language: \n"
+"Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -441,7 +441,7 @@ msgstr ""
 #: admin/src/AdminSocketServerAudit.js:50
 #: src/control/Control.ServerAuditDialog.ts:107
 msgid "No WOPI host configured: trusting the first host that connected"
-msgstr ""
+msgstr "Gan aon óstach WOPI cumraithe: muinín sa chéad óstach a cheangail"
 
 #: admin/src/AdminSocketServerAudit.js:55
 #: src/control/Control.ServerAuditDialog.ts:122
@@ -516,13 +516,12 @@ msgid "API key lacks permissions"
 msgstr "Tá easpa ceadanna ar eochair API"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:711
-#, fuzzy
 msgid ""
 "This AI host is not in the server's allowed AI host list "
 "(ai.allowed_hosts). Ask your administrator to permit it."
 msgstr ""
-"Níl an t-óstach AI seo ar liosta óstach ceadaithe an fhreastalaí "
-"(lok_allow.host). Iarr ar do riarthóir cead a thabhairt dó."
+"Níl an t-óstach AI seo ar liosta na n-óstach AI ceadaithe ar an bhfreastalaí "
+"(ai.allowed_hosts). Iarr ar do riarthóir cead a thabhairt dó."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:713
 #: src/control/Control.AIChatSidebar.ts:2183
@@ -1314,18 +1313,20 @@ msgstr "Roghnaigh cad a lorgaíonn an seiceálaí abairtí agus tú ag clóscrí
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4687
 msgid "Remote Sentence Checkers"
-msgstr ""
+msgstr "Seiceálaithe Abairtí Cianda"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4691
 msgid ""
 "Checkers that run on a server. The text of the document is sent there to be "
 "checked."
 msgstr ""
+"Uirlisí seiceála a ritheann ar fhreastalaí. Seoltar téacs an doiciméid ansin "
+"chun é a sheiceáil."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4726
 #: admin/src/integrator/AdminIntegratorSettings.ts:5066
 msgid "Enabled"
-msgstr ""
+msgstr "Cumasaithe"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4738
 #: admin/src/integrator/AdminIntegratorSettings.ts:5103
@@ -1334,62 +1335,61 @@ msgid "Server URL"
 msgstr "URL an fhreastalaí"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4750
-#, fuzzy
 msgid "Username"
-msgstr "Ainm Úsáideora"
+msgstr "Ainm úsáideora"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4772
 #: admin/src/integrator/AdminIntegratorSettings.ts:5122
 msgid "Verify the server certificate"
-msgstr ""
+msgstr "Deimhnigh teastas an fhreastalaí"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4780
 msgid "Enabled on this server for: {0}"
-msgstr ""
+msgstr "Cumasaithe ar an bhfreastalaí seo le haghaidh: {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4795
 msgid "Checking level"
-msgstr ""
+msgstr "Ag seiceáil an leibhéil"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4798
 msgid "Single words"
-msgstr ""
+msgstr "Focail aonair"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4799
 msgid "Spelling"
-msgstr ""
+msgstr "Litriú"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4800
 msgid "Spelling and grammar"
-msgstr ""
+msgstr "Litriú agus gramadach"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4810
 msgid "German spelling"
-msgstr ""
+msgstr "Litriú na Gearmáinise"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4812
 msgid "Duden recommendation"
-msgstr ""
+msgstr "Moladh Duden"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4813
 msgid "Conservative"
-msgstr ""
+msgstr "Coimeádach"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4814
 msgid "Progressive"
-msgstr ""
+msgstr "Forásach"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4815
 msgid "Tolerant"
-msgstr ""
+msgstr "Lamhálach"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4816
 msgid "Press agencies"
-msgstr ""
+msgstr "Gníomhaireachtaí nuachta"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4826
 msgid "Explanations"
-msgstr ""
+msgstr "Míniúcháin"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4829
 #: src/control/Control.AIChatSidebar.ts:154
@@ -1397,100 +1397,100 @@ msgid "Short"
 msgstr "Gearr"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4830
-#, fuzzy
 msgid "Long"
-msgstr "Logáil"
+msgstr "Fada"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4831
 msgid "Long, with an example"
-msgstr ""
+msgstr "Fada, le sampla"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4841
 msgid "Correction profiles"
-msgstr ""
+msgstr "Próifílí ceartúcháin"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4851
 msgid "Dictionaries"
-msgstr ""
+msgstr "Foclóirí"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4858
 msgid "Foreign words with a German equivalent"
-msgstr ""
+msgstr "Focail iasachta a bhfuil coibhéis Ghearmánach acu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4859
 msgid "Archaic words"
-msgstr ""
+msgstr "Focail sheanda"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4860
 msgid "Regional words"
-msgstr ""
+msgstr "Focail réigiúnacha"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4861
 msgid "Colloquial and vulgar words"
-msgstr ""
+msgstr "Focail chomhráiteacha agus gharbha"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4862
 msgid "Filler words"
-msgstr ""
+msgstr "Focail líonta"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4863
 msgid "Offensive wording"
-msgstr ""
+msgstr "Foclaíocht chiontach"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4864
 msgid "Gender-inclusive wording"
-msgstr ""
+msgstr "Foclaíocht a chuimsíonn gach inscne"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4865
 msgid "Complex sentences"
-msgstr ""
+msgstr "Abairtí casta"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4887
 msgid "Style checks (German only)"
-msgstr ""
+msgstr "Seiceálacha stíle (Gearmáinis amháin)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5011
-#, fuzzy
 msgid "Translation"
-msgstr "Aistriú"
+msgstr "Aistriúchán"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5015
 msgid ""
 "Machine translation of the document text with the Translate command. The "
 "text is sent to the provider to be translated."
 msgstr ""
+"Aistriúchán meaisín ar théacs an doiciméid ag baint úsáide as an ordú "
+"Aistrigh. Seoltar an téacs chuig an soláthraí chun é a aistriú."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5028
 msgid "The first one that is set up"
-msgstr ""
+msgstr "An chéad cheann atá socraithe"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5081
 msgid "API URL"
-msgstr ""
+msgstr "URL API"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5090
 msgid "Authentication key"
-msgstr ""
+msgstr "Eochair fhíordheimhnithe"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5132
 msgid "Set up on this server."
-msgstr ""
+msgstr "Socraigh ar an bhfreastalaí seo."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5133
 msgid "Enabled on this server, but not set up."
-msgstr ""
+msgstr "Cumasaithe ar an bhfreastalaí seo, ach gan a bheith socraithe."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5190
 msgid "Use the default settings"
-msgstr ""
+msgstr "Úsáid na socruithe réamhshocraithe"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5191
 msgid "Use the settings set on the server"
-msgstr ""
+msgstr "Úsáid na socruithe atá socraithe ar an bhfreastalaí"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5199
 msgid "Your own settings are dropped when you save."
-msgstr ""
+msgstr "Cailltear do shocruithe féin nuair a shábhálann tú."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5253
 #: admin/src/integrator/AdminIntegratorSettings.ts:5914
@@ -1936,7 +1936,7 @@ msgstr "Taispeáin sa loingseoir"
 
 #: src/canvas/sections/CommentSection.ts:1691
 msgid "Press Ctrl + Enter to post, or %1 to discard"
-msgstr ""
+msgstr "Brúigh Ctrl + Enter chun postáil, nó %1 chun a chur i leataobh"
 
 #: src/canvas/sections/CommentSection.ts:1720
 #: src/canvas/sections/CommentSection.ts:1725
@@ -1989,7 +1989,7 @@ msgstr "Bain nasc"
 
 #: src/canvas/sections/GroupButtonSection.ts:66
 msgid "Edit Diagram"
-msgstr ""
+msgstr "Cuir Léaráid in Eagar"
 
 #: src/canvas/sections/FormFieldButton.ts:106
 msgid "Unfold"
@@ -2176,23 +2176,23 @@ msgstr "Comhrá nua"
 
 #: src/control/Control.AIChatSidebar.ts:730
 msgid "What would you like to do with this spreadsheet?"
-msgstr ""
+msgstr "Cad ba mhaith leat a dhéanamh leis an scarbhileog seo?"
 
 #: src/control/Control.AIChatSidebar.ts:732
 msgid "What would you like to do with this presentation?"
-msgstr ""
+msgstr "Cad ba mhaith leat a dhéanamh leis an gcur i láthair seo?"
 
 #: src/control/Control.AIChatSidebar.ts:734
 msgid "What would you like to do with this drawing?"
-msgstr ""
+msgstr "Cad ba mhaith leat a dhéanamh leis an líníocht seo?"
 
 #: src/control/Control.AIChatSidebar.ts:736
 msgid "What would you like to do with this document?"
-msgstr ""
+msgstr "Cad ba mhaith leat a dhéanamh leis an doiciméad seo?"
 
 #: src/control/Control.AIChatSidebar.ts:753
 msgid "Select some content first to work on just that part."
-msgstr ""
+msgstr "Roghnaigh ábhar éigin ar dtús chun oibriú ar an gcuid sin amháin."
 
 #: src/control/Control.AIChatSidebar.ts:775
 #: src/control/Control.AIChatSidebar.ts:2218
@@ -6144,9 +6144,8 @@ msgid "Switch to Editing"
 msgstr "Athraigh go dtí an modh eagarthóireachta"
 
 #: src/control/Control.HyperlinkWizard.ts:67
-#, fuzzy
 msgid "Link"
-msgstr "Líne"
+msgstr "Nasc"
 
 #: src/control/Control.PartsPreview.js:456
 msgid "Show everyone on this slide"
@@ -6193,61 +6192,59 @@ msgstr "réamhamharc ar leathanach %1"
 
 #: src/control/Control.PartsPreview.js:967
 msgid "preview of page %1, %3 is missing"
-msgstr ""
+msgstr "réamhamharc ar leathanach %1, tá %3 ar iarraidh"
 
 #: src/control/Control.PartsPreview.js:968
 msgid "Slide %1, %3 is missing"
-msgstr ""
+msgstr "Sleamhnán %1, tá %3 ar iarraidh"
 
 #: src/control/Control.PartsPreview.js:972
-#, fuzzy
 msgid "preview of page %1, not found in %3"
-msgstr "Réamhamharc ar leathanach %1, nasctha le %2 i %3"
+msgstr "réamhamharc ar leathanach %1, nár aimsíodh i %3"
 
 #: src/control/Control.PartsPreview.js:973
 msgid "Slide %1, not found in %3"
-msgstr ""
+msgstr "Sleamhnán %1, gan a bheith le fáil i %3"
 
 #: src/control/Control.PartsPreview.js:977
 msgid "preview of page %1, no access to %3"
-msgstr ""
+msgstr "réamhamharc ar leathanach %1, gan rochtain ar %3"
 
 #: src/control/Control.PartsPreview.js:978
 msgid "Slide %1, no access to %3"
-msgstr ""
+msgstr "Sleide %1, gan rochtain ar %3"
 
 #: src/control/Control.PartsPreview.js:982
 msgid "preview of page %1, could not open %3"
-msgstr ""
+msgstr "réamhamharc ar leathanach %1, níorbh fhéidir %3 a oscailt"
 
 #: src/control/Control.PartsPreview.js:983
 msgid "Slide %1, could not open %3"
-msgstr ""
+msgstr "Sleide %1, níorbh fhéidir %3 a oscailt"
 
 #: src/control/Control.PartsPreview.js:988
 msgid "preview of page %1, %2 changed in %3"
-msgstr ""
+msgstr "réamhamharc ar leathanach %1, %2 athraithe i %3"
 
 #: src/control/Control.PartsPreview.js:989
 msgid "Slide %1, %2 changed in %3"
-msgstr ""
+msgstr "Sleideanna %1, %2 athraithe i %3"
 
 #: src/control/Control.PartsPreview.js:992
-#, fuzzy
 msgid "preview of page %1, changed in %3"
-msgstr "Réamhamharc ar leathanach %1, nasctha le %2"
+msgstr "réamhamharc ar leathanach %1, athraithe i %3"
 
 #: src/control/Control.PartsPreview.js:993
 msgid "Slide %1, changed in %3"
-msgstr ""
+msgstr "Sleamhnán %1, athraithe i %3"
 
 #: src/control/Control.PartsPreview.js:997
 msgid "preview of page %1, %3 is disconnected"
-msgstr ""
+msgstr "réamhamharc ar leathanach %1, tá %3 dícheangailte"
 
 #: src/control/Control.PartsPreview.js:998
 msgid "Slide %1, %3 is disconnected"
-msgstr ""
+msgstr "Sleamhnán %1, tá %3 dícheangailte"
 
 #: src/control/Control.PartsPreview.js:1002
 msgid "preview of page %1, linked to %2 in %3"
@@ -6335,7 +6332,7 @@ msgstr "Athraíodh {0}"
 
 #: src/control/Control.SlideImportPane.tsx:693
 msgid "Disconnected"
-msgstr ""
+msgstr "Dícheangailte"
 
 #: src/control/Control.SlideImportPane.tsx:694
 #: src/control/Control.SlideLinkToolbar.tsx:115
@@ -6713,7 +6710,7 @@ msgstr "scagadh slándála glaonna córais cumasaithe"
 
 #: src/control/Control.ServerAuditDialog.ts:112
 msgid "The trusted WOPI hosts are configured"
-msgstr ""
+msgstr "Tá na hóstach WOPI iontaofa cumraithe"
 
 #: src/control/Control.ServerAuditDialog.ts:128
 msgid "Hardware resources are sufficient for optimal performance"
@@ -6974,7 +6971,7 @@ msgstr "Athríomhadh an doiciméad i %1 ms"
 
 #: src/control/Control.TopToolbar.js:121 src/control/Control.TopToolbar.js:125
 msgid "Show Menu Bar"
-msgstr ""
+msgstr "Taispeáin Barra Roghchláir"
 
 #: src/control/Control.TopToolbar.js:180
 msgid "Active Sheet"
@@ -7569,7 +7566,7 @@ msgstr "Mód Eagarthóireachta"
 
 #: src/control/PermissionMode.ts:273
 msgid "Review Mode"
-msgstr ""
+msgstr "Mód Athbhreithnithe"
 
 #: src/control/PermissionMode.ts:291 src/control/PermissionMode.ts:471
 #: src/control/PermissionMode.ts:477 src/control/PermissionMode.ts:483
@@ -7578,7 +7575,7 @@ msgstr "Ag féachaint"
 
 #: src/control/PermissionMode.ts:467
 msgid "Reviewing"
-msgstr ""
+msgstr "Ag athbhreithniú"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:380
 msgid "Save Image to Server"
@@ -7586,7 +7583,7 @@ msgstr "Sábháil Íomhá chuig an bhFreastalaí"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:399
 msgid "Fit slide to view"
-msgstr ""
+msgstr "Coigeartaigh an sleamhnán chun é a fheiceáil"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:499
 msgid "Paste Special"
@@ -8742,7 +8739,7 @@ msgstr "Sleamhnán"
 
 #: src/layer/marker/A11yTextInput.js:265
 msgid "Comment by {0}: {1}"
-msgstr ""
+msgstr "Trácht ó {0}: {1}"
 
 #: src/layer/marker/A11yTextInput.js:379
 msgid "Heading level {0}"
@@ -8813,30 +8810,28 @@ msgid "{0} deleted"
 msgstr "{0} scriosta"
 
 #: src/layer/marker/TextInput.js:489
-#, fuzzy
 msgid "Placeholder"
-msgstr "Coinnitheoirí áite"
+msgstr "Áitshealbhóir"
 
 #: src/layer/marker/TextInput.js:509
 msgid "Drop-down list"
-msgstr ""
+msgstr "Liosta anuas"
 
 #: src/layer/marker/TextInput.js:511
 msgid "Combo box"
-msgstr ""
+msgstr "Bosca teaglaim"
 
 #: src/layer/marker/TextInput.js:515
 msgid "Content control"
-msgstr ""
+msgstr "Rialú ábhair"
 
 #: src/layer/marker/TextInput.js:528
-#, fuzzy
 msgid "Object"
-msgstr "Réada"
+msgstr "Réad"
 
 #: src/layer/marker/TextInput.js:530
 msgid "Frame"
-msgstr ""
+msgstr "Fráma"
 
 #: src/layer/marker/TextInput.js:681
 msgid "Screen reader support for text content is disabled. "
@@ -9091,6 +9086,7 @@ msgstr "Díchumasaíodh mód léirithe don doiciméad seo"
 #: src/map/handler/Map.StateChanges.js:204
 msgid "Editing slide %1 - click outside or press Esc to finish"
 msgstr ""
+"Ag cur an tsleid %1 in eagar – cliceáil lasmuigh nó brúigh Esc chun críochnú"
 
 #: src/map/handler/Map.VersionBar.js:50
 msgid "Your Collabora Online server needs updating. Version {0} is available."
@@ -9295,11 +9291,11 @@ msgstr "Theip ar an ordú síneadh: %1"
 
 #: src/control/Control.Extension.ts:2060
 msgid "Yes"
-msgstr ""
+msgstr "Sea"
 
 #: src/control/Control.Extension.ts:2061
 msgid "No"
-msgstr ""
+msgstr "Ní hea"
 
 #: templates/templates.js:6 templates/templates.js:10
 msgid "Business Letter"
