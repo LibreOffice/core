@@ -503,6 +503,12 @@ function test() {
     console.assert(doc.newPosition(withImage.getChild(0), 3).insertInlineImage(blob) !== null);
     withImage.editAsText().insertText(4, 'X');
     console.assert(withImage.editAsText().getText() === 'foobXar');
+    // An image adds no line to the text of a range:
+    if (globalThis.cool) {
+        console.assert(
+            doc.newRange().addElement(withImage).addElement(withImage.getChild(1)).build().getText()
+                === 'foobXar');
+    }
 
     // Each appended paragraph's object stays on its own paragraph:
     const one = body.appendParagraph('One');
@@ -687,6 +693,12 @@ function test() {
         + 'BBMCJgQTAiYEEwImBBMCJgQTAiYEEwImBBMCJgQTAiYEEwImBBMCJgQTAiYEEwImBBMCJgQTAhKACcGEgAnBhIAJ'
         + '4akFT+KDSJWA/YAAAAAASUVORK5CYII=');
     const appendedImage = body.appendImage(Utilities.newBlob(png, 'image/png'));
+    // An appended image is in a paragraph of its own, and can be a range of its own:
+    console.assert(appendedImage.getParent().getType() === DocumentApp.ElementType.PARAGRAPH);
+    const imageRange = doc.newRange().addElement(appendedImage).build().getRangeElements();
+    console.assert(imageRange.length === 1);
+    console.assert(
+        imageRange[0].getElement().getType() === DocumentApp.ElementType.INLINE_IMAGE);
     console.assert(appendedImage.getWidth() === 300);
     console.assert(appendedImage.getHeight() === 200);
     const insertedImage = doc.newPosition(body.getChild(0), 0)
