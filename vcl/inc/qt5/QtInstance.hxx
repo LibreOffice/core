@@ -159,7 +159,7 @@ public:
         }
         else
         {
-            std::invoke_result_t<F> ret;
+            std::invoke_result_t<F> ret{};
             EmscriptenLightweightRunInMainThread_(
                 [&func, &ret] { ret = std::forward<std::invoke_result_t<F>>(func()); });
             return ret;
