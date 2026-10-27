@@ -12,9 +12,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-23 00:15+0200\n"
-"PO-Revision-Date: 2026-10-25 00:03+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@users.noreply.hosted.weblate.org>"
-"\n"
+"PO-Revision-Date: 2026-10-27 00:00+0000\n"
+"Last-Translator: Mr-Update <mr-update@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/de/>\n"
 "Language: de\n"
@@ -598,7 +597,7 @@ msgstr "Client-Kennung"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:804
 msgid "Secret"
-msgstr ""
+msgstr "Geheimnis"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:807
 msgid "In-document Screen Reader"
@@ -1104,7 +1103,7 @@ msgstr "Barrierefreiheit"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3105
 msgid "User interface zoom"
-msgstr ""
+msgstr "Zoom der Benutzeroberfläche"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3110
 msgid "Magnify the whole window, including the document and the menus."
@@ -1361,7 +1360,7 @@ msgstr "Benutzername"
 #: admin/src/integrator/AdminIntegratorSettings.ts:4772
 #: admin/src/integrator/AdminIntegratorSettings.ts:5122
 msgid "Verify the server certificate"
-msgstr ""
+msgstr "Serverzertifikat überprüfen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4780
 msgid "Enabled on this server for: {0}"
@@ -1369,7 +1368,7 @@ msgstr "Auf diesem Server aktiviert für: {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4795
 msgid "Checking level"
-msgstr ""
+msgstr "Ebene prüfen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4798
 msgid "Single words"
@@ -2751,8 +2750,8 @@ msgstr[1] "%n Folien umbenennen"
 #: src/control/Control.AIChatSidebar.ts:2588
 msgid "change %n layout"
 msgid_plural "change %n layouts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n Layout ändern"
+msgstr[1] "%n Layouts ändern"
 
 #: src/control/Control.AIChatSidebar.ts:2592
 msgid "set text in %n place"
@@ -3323,7 +3322,7 @@ msgstr "300 DPI"
 
 #: src/control/Control.CleanupSidebar.ts:683
 msgid "Scanning..."
-msgstr ""
+msgstr "Wird gescannt …"
 
 #: src/control/Control.CleanupSidebar.ts:685
 msgid "Measuring images..."
@@ -4855,7 +4854,7 @@ msgstr "Im Fenster anzeigen"
 #: src/control/Control.Menubar.ts:877
 #: src/control/jsdialog/Definitions.Menu.ts:1604
 msgid "Active sheet"
-msgstr "Aktive Seite"
+msgstr "Aktives Blatt"
 
 #: src/control/Control.Menubar.ts:927
 #: src/control/Control.NotebookbarCalc.js:1596
@@ -6094,6 +6093,8 @@ msgstr "Online Modus"
 #: src/control/Control.NotebookbarWriter.js:517
 msgid "Lets a screen reader follow the cursor and read the document"
 msgstr ""
+"Ermöglicht es einem Bildschirmleser, dem Cursor zu folgen und das Dokument "
+"vorzulesen"
 
 #: src/control/Control.NotebookbarWriter.js:654
 msgid "Validate Sidebar"
@@ -6985,7 +6986,7 @@ msgstr "Menüleiste anzeigen"
 
 #: src/control/Control.TopToolbar.js:180
 msgid "Active Sheet"
-msgstr "Aktive Seite"
+msgstr "Aktives Blatt"
 
 #: src/control/Control.TopToolbar.js:194 templates/templates.js:46
 #: templates/templates.js:50
@@ -7087,7 +7088,7 @@ msgstr "Avatar für {user}"
 
 #: src/control/Control.UserList.ts:89
 msgid "User List Summary"
-msgstr "Benutzerliste Zusammenfassung"
+msgstr "Zusammenfassung der Benutzerliste"
 
 #: src/control/Control.UserList.ts:676
 msgid "Following"
@@ -8131,23 +8132,22 @@ msgstr "Mehr Papiergrößen…"
 #: src/control/jsdialog/Widget.HTMLContent.ts:31
 msgid "Number of Pages. Click to open the Go to Page dialog box."
 msgstr ""
-"Anzahl der Seiten. Klicken Sie hier, um das Dialogfeld „Gehe zu Seite“ zu "
-"öffnen."
+"Seitenanzahl. Klicken Sie hier, um das Dialogfeld „Gehe zu Seite“ zu öffnen."
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:32
 #: src/control/jsdialog/Widget.HTMLContent.ts:62
 #: src/control/jsdialog/Widget.HTMLContent.ts:63
 msgid "Number of Pages"
-msgstr "Anzahl an Seiten"
+msgstr "Seitenanzahl"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:35
 msgid "Word Counter"
-msgstr "Anzahl an Wörtern"
+msgstr "Wortanzahl"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:38
 #: src/control/jsdialog/Widget.HTMLContent.ts:39
 msgid "Number of Sheets"
-msgstr "Anzahl an Tabellen"
+msgstr "Blattanzahl"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:43
 msgid "Selected range of cells"
@@ -8839,7 +8839,7 @@ msgstr "Objekt"
 
 #: src/layer/marker/TextInput.js:530
 msgid "Frame"
-msgstr ""
+msgstr "Rahmen"
 
 #: src/layer/marker/TextInput.js:681
 msgid "Screen reader support for text content is disabled. "
