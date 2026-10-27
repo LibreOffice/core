@@ -363,9 +363,23 @@ class VectorManager extends RenderManagerBase {
 		this._renderer.setEditViewContentVisible(options?.editView === true);
 		this._setUpColors(data);
 		const textEdits = this._textEditEntriesToDraw(data);
-		const entered =
-			options?.ghostedOutside !== undefined
-				? VectorManager._enteredGroup(data, options.ghostedOutside)
+		// an object active in place covers its upright window, not its own box
+		const window = options?.activeInPlace?.area;
+		const edited =
+			options?.edited !== undefined
+				? VectorManager._editedPart(
+						data,
+						options.edited.objectId,
+						options.activeInPlace?.objectId === options.edited.objectId &&
+							window
+							? [
+									window[0],
+									window[1],
+									window[0] + window[2],
+									window[1] + window[3],
+								]
+							: undefined,
+					)
 				: undefined;
 		let index = -1;
 		for (const id of data.order) {
@@ -379,21 +393,22 @@ class VectorManager extends RenderManagerBase {
 			// The slide's copy of a master placeholder is drawn with the master.
 			if (obj.masterContent) continue;
 			if (obj.primitives) {
-				const ghosted =
-					entered !== undefined &&
+				const outside =
+					edited !== undefined &&
 					obj.kind === undefined &&
-					!VectorManager._isInside(data, id, entered.groupId);
+					!VectorManager._isInside(data, id, edited.objectId);
+				const inFront =
+					outside &&
+					index > edited.lastAt &&
+					VectorManager._overlaps(obj, edited.box);
+				const pale = outside && options?.edited?.paleOutside === true;
 				const upright =
 					options?.activeInPlace?.objectId === id
 						? VectorManager._uprightInPlace(obj, options.activeInPlace.area)
 						: undefined;
 				if (upright) this._renderer.renderPrimitive(context, upright);
-				else if (ghosted)
-					this._renderGhosted(
-						context,
-						obj,
-						index > entered.lastAt && VectorManager._overlaps(obj, entered.box),
-					);
+				else if (pale || inFront)
+					this._renderGhosted(context, obj, inFront, pale);
 				else
 					for (const primitive of obj.primitives) {
 						this._renderer.renderPrimitive(context, primitive);
@@ -426,40 +441,41 @@ class VectorManager extends RenderManagerBase {
 		} as cool.TransformPrimitive;
 	}
 
-	// whether the object is that group or lies in it, at any depth
+	// whether the object is the one edited or lies in it, a group, at any depth
 	private static _isInside(
 		data: cool.VectorPrimitivesData,
 		objectId: number,
-		groupId: number,
+		editedId: number,
 	): boolean {
 		for (
 			let at: number | undefined = objectId, guard = 0;
 			at !== undefined && guard < 100;
 			at = data.objects.get(at)?.parent, ++guard
 		)
-			if (at === groupId) return true;
+			if (at === editedId) return true;
 		return false;
 	}
 
 	/*
-		The entered group as the ghosting needs it: the place of its last object in the paint
-		order, and the box round its objects. An object after that place and over that box lies in
-		front of what is being edited.
+		What is being edited, a group or one object, as the ghosting needs it: the place of its
+		last object in the paint order, and the box round its objects, or the box given. An object
+		after that place and over that box lies in front of what is being edited.
 	*/
-	private static _enteredGroup(
+	private static _editedPart(
 		data: cool.VectorPrimitivesData,
-		groupId: number,
-	): { groupId: number; lastAt: number; box: number[] | undefined } {
+		objectId: number,
+		given: number[] | undefined,
+	): { objectId: number; lastAt: number; box: number[] | undefined } {
 		let lastAt = -1;
-		let box: number[] | undefined;
+		let box: number[] | undefined = given;
 		data.order.forEach((id: number, at: number) => {
 			const object = data.objects.get(id);
 			if (!object || object.kind !== undefined) return;
-			if (!VectorManager._isInside(data, id, groupId)) return;
+			if (!VectorManager._isInside(data, id, objectId)) return;
 
 			lastAt = at;
 			const own = VectorManager._boxOf(object);
-			if (!own) return;
+			if (!own || given) return;
 			box = box
 				? [
 						Math.min(box[0], own[0]),
@@ -469,7 +485,7 @@ class VectorManager extends RenderManagerBase {
 					]
 				: own;
 		});
-		return { groupId, lastAt, box };
+		return { objectId, lastAt, box };
 	}
 
 	// the box an object paints in, as [minX, minY, maxX, maxY] in twips, where it has one
@@ -498,9 +514,9 @@ class VectorManager extends RenderManagerBase {
 	}
 
 	/*
-		How what lies outside an entered group is drawn, from the settings: the colour it is mixed
-		with (vectorGhostColor, white), how far towards it from 0 to 1 (vectorGhostAmount, 0.5 as
-		the office has it), and how transparent an object in front of the group is from 0 to 1
+		How what lies outside what is being edited is drawn, from the settings: the colour it is
+		mixed with (vectorGhostColor, white), how far towards it from 0 to 1 (vectorGhostAmount,
+		0.5 as the office has it), and how transparent an object in front of it is from 0 to 1
 		(vectorGhostTransparency, 0.8), so that what is edited shows through.
 	*/
 	private static _ghosting(): {
@@ -523,16 +539,17 @@ class VectorManager extends RenderManagerBase {
 		};
 	}
 
-	// an object outside the entered group is mixed towards the ghost colour, as the office draws
-	// it, and one in front of the group is made transparent as well
+	// an object outside what is being edited, mixed towards the ghost colour where pale, as the
+	// office draws it, and made transparent where it lies in front
 	private _renderGhosted(
 		context: CanvasRenderingContext2D,
 		object: cool.SlideObject,
 		inFront: boolean,
+		pale: boolean,
 	): void {
 		const ghosting = VectorManager._ghosting();
 		// the box the object paints in bounds the change, without one it covers the view
-		const ghosted = {
+		const mixed = {
 			type: cool.ModifiedColorPrimitive.type,
 			modifier: 'interpolate',
 			color: ghosting.color,
@@ -541,17 +558,19 @@ class VectorManager extends RenderManagerBase {
 			bounds: VectorManager._boxOf(object),
 			children: object.primitives,
 		} as cool.ModifiedColorPrimitive;
+		const drawn: cool.Primitive[] = pale ? [mixed] : (object.primitives ?? []);
 
-		this._renderer.renderPrimitive(
-			context,
-			inFront
-				? ({
-						type: cool.UnifiedTransparencePrimitive.type,
-						transparence: ghosting.transparency,
-						children: [ghosted],
-					} as cool.UnifiedTransparencePrimitive)
-				: ghosted,
-		);
+		if (!inFront) {
+			for (const primitive of drawn)
+				this._renderer.renderPrimitive(context, primitive);
+			return;
+		}
+
+		this._renderer.renderPrimitive(context, {
+			type: cool.UnifiedTransparencePrimitive.type,
+			transparence: ghosting.transparency,
+			children: drawn,
+		} as cool.UnifiedTransparencePrimitive);
 	}
 
 	/*

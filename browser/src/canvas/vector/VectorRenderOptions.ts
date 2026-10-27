@@ -14,9 +14,10 @@ namespace cool {
 	export interface VectorRenderOptions {
 		/// True when the render is the editable view of the document.
 		editView?: boolean;
-		/// The group that is entered: its objects are drawn as they are, every other object of
-		/// the page is drawn ghosted, mixed half way to white. Absent where no group is entered.
-		ghostedOutside?: number;
+		/// What is being edited: an entered group, or an object active in place. Objects in front
+		/// of it that cover part of it are drawn transparent; with paleOutside every object of
+		/// the page outside it is also drawn pale, mixed towards white. Absent where nothing is.
+		edited?: { objectId: number; paleOutside: boolean };
 		/// The object active in place, a chart being edited, and the upright rectangle its window
 		/// fills, as x, y, width and height in twips. The object is drawn into that rectangle.
 		/// Absent where no object is active in place.

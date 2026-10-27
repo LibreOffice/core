@@ -134,13 +134,18 @@ namespace cool {
 			const h = this.context.canvas.height;
 			this._ensureOffscreen(w, h);
 
-			// Inside an entered group the rest of the page is drawn ghosted, so entering and
-			// leaving draw it anew.
+			/*
+				Inside an entered group the rest of the page is drawn pale and what lies in front
+				of the group transparent; for an object active in place, whose surround is dimmed
+				already, only what lies in front of it. Entering and leaving draw it anew.
+			*/
 			const place = Interaction.placeOf(GraphicSelection.selectedObjectIDs);
-			const entered =
+			const edited =
 				place.kind === 'group' || place.kind === 'diagram'
-					? place.group
-					: undefined;
+					? { objectId: place.group, paleOutside: true }
+					: place.kind === 'inPlace'
+						? { objectId: place.object, paleOutside: false }
+						: undefined;
 
 			// The object active in place is drawn upright into its window while it is edited.
 			const activeInPlace =
@@ -154,7 +159,7 @@ namespace cool {
 			// The objects drawn elsewhere are left out of the page, so the drawing is made again
 			// when they change.
 			const renderKey =
-				String(entered) +
+				String(edited?.objectId) +
 				':' +
 				String(activeInPlace?.area) +
 				':' +
@@ -178,7 +183,7 @@ namespace cool {
 				this._offscreenCtx.scale(scale, scale);
 				RenderManager.renderInto(this._offscreenCtx, cached, {
 					editView: true,
-					ghostedOutside: entered,
+					edited: edited,
 					activeInPlace: activeInPlace,
 				});
 				// The view edits the page, so it marks out the placeholders.
