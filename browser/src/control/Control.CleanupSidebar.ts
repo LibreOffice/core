@@ -910,7 +910,7 @@ function statusJSON(state: CleanupPanelState): ContainerWidgetJSON {
 					{
 						id: CleanupWidgetId.stop,
 						type: 'pushbutton',
-						text: _('Stop'),
+						text: _('Stop Cleanup'),
 					} as PushButtonWidget,
 				],
 			} as ContainerWidgetJSON,
