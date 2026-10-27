@@ -5,12 +5,12 @@ msgstr ""
 "Project-Id-Version: Collabora Online UI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-23 00:15+0200\n"
-"PO-Revision-Date: 2026-10-19 09:51+0000\n"
+"PO-Revision-Date: 2026-10-26 15:52+0000\n"
 "Last-Translator: Martin Srebotnjak <filmsi@users.noreply.hosted.weblate.org>"
 "\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/sl/>\n"
-"Language: \n"
+"Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -444,6 +444,8 @@ msgstr ""
 #: src/control/Control.ServerAuditDialog.ts:107
 msgid "No WOPI host configured: trusting the first host that connected"
 msgstr ""
+"Noben gostitelj WOPI ni nastavljen: zaupanje velja prvemu povezanemu "
+"gostitelju"
 
 #: admin/src/AdminSocketServerAudit.js:55
 #: src/control/Control.ServerAuditDialog.ts:122
@@ -518,13 +520,12 @@ msgid "API key lacks permissions"
 msgstr "Ključ API nima dovoljenj"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:711
-#, fuzzy
 msgid ""
 "This AI host is not in the server's allowed AI host list "
 "(ai.allowed_hosts). Ask your administrator to permit it."
 msgstr ""
 "Ta gostitelj UI ni na strežnikovemu seznamu dovoljenih gostiteljev "
-"(lok_allow.host). Povprašajte skrbnika, če ga dovoli."
+"(ai.allowed_host). Povprašajte skrbnika, če ga dovoli."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:713
 #: src/control/Control.AIChatSidebar.ts:2183
@@ -1088,11 +1089,11 @@ msgstr "Povečava uporabniškega vmesnika"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3110
 msgid "Magnify the whole window, including the document and the menus."
-msgstr ""
+msgstr "Povečajte celo okno, vključno z dokumentom in meniji."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3116
 msgid "As per system"
-msgstr ""
+msgstr "Kot v sistemu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3151
 msgid ""
@@ -1100,7 +1101,7 @@ msgid ""
 "your "
 msgstr ""
 "Za uporabo Zotera tukaj navedite svoj ključ API. Svoj ključ API lahko "
-"ustvarite v "
+"ustvarite v svojem "
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3160
 msgid "Zotero account API settings"
