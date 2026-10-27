@@ -171,4 +171,45 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Chart dialog tests', funct
 		cy.cGet('#AttributeDialog #cancel-button').click();
 		cy.cGet('.lokdialog_container').should('not.exist');
 	});
+
+	it('Cancelling the file pick keeps the previous symbol', function() {
+		openDataSeriesLineTab(this.win);
+
+		// The native dialog cannot open under cypress; see the test above.
+		cy.getFrameWindow().then(function(win) {
+			win.document.getElementById('filepicker').click = function() {};
+		});
+
+		var widthBefore = '';
+		cy.cGet('#MF_SYMBOL_WIDTH-input').should(function($width) {
+			widthBefore = $width.val();
+			expect(widthBefore).to.not.equal('');
+		});
+
+		cy.cGet('#MB_SYMBOL_BITMAP').should('be.visible').and('not.have.attr', 'disabled');
+		cy.cGet('#MB_SYMBOL_BITMAP').click();
+		cy.cGet('#MB_SYMBOL_BITMAP-dropdown').should('be.visible');
+		cy.cGet('#MB_SYMBOL_BITMAP-dropdown').contains('.ui-combobox-entry', 'From file').click();
+		cy.cGet('#MB_SYMBOL_BITMAP-dropdown').should('not.exist');
+		cy.cGet('#filepicker[type=file]').should('have.attr', 'accept').and('include', '.png');
+
+		// The user closes the browser's file dialog without choosing a file.
+		cy.cGet('#filepicker[type=file]').then(function($input) {
+			const input = $input[0];
+			input.dispatchEvent(new (input.ownerDocument.defaultView.Event)('cancel'));
+		});
+
+		// The request is answered, so the browser holds no open request, and
+		// the dialog still shows the symbol it had.
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.map.fileInserter._filePickerRequestId).to.be.null;
+		});
+		helper.processToIdle(this.win);
+		cy.cGet('#MF_SYMBOL_WIDTH-input').should(function($width) {
+			expect($width.val()).to.equal(widthBefore);
+		});
+
+		cy.cGet('#AttributeDialog #cancel-button').click();
+		cy.cGet('.lokdialog_container').should('not.exist');
+	});
 });
