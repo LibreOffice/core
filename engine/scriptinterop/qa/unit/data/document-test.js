@@ -627,6 +627,15 @@ function test() {
         doc.setSelection(
             doc.newRange().addElement(withImage.getPreviousSibling()).addElement(withImage).build())
             .getSelection().getRangeElements().length === 2);
+    // A child text that lies wholly between the start and the end is whole:
+    const upToImageRange = doc.newRange()
+        .addElementsBetween(withImage.getPreviousSibling(), withImage.getChild(1)).build();
+    doc.setSelection(upToImageRange);
+    const upToImage = upToImageRange.getRangeElements();
+    console.assert(upToImage.length === 3);
+    console.assert(upToImage[1].getElement().asText().getText() === 'foo');
+    console.assert(!upToImage[1].isPartial());
+    console.assert(upToImage[2].getElement().getType() === DocumentApp.ElementType.INLINE_IMAGE);
     // An image lies in its paragraph:
     console.assert(
         doc.newRange().addElement(withImage.getChild(1)).addElement(withImage).build()
@@ -1054,4 +1063,16 @@ function test() {
     const intoEmpty = body.appendParagraph('Tail').editAsText().merge();
     console.assert(intoEmpty.getText() === 'Tail');
     console.assert(body.getChild(body.getNumChildren() - 1).getText() === 'Tail');
+
+    // Texts with offsets around a whole paragraph that holds an image are one Writer selection:
+    if (globalThis.cool) {
+        const first = body.appendParagraph('abc');
+        const middle = body.appendParagraph('foobar');
+        doc.newPosition(middle.getChild(0), 3).insertInlineImage(blob);
+        const last = body.appendParagraph('xyz');
+        doc.setSelection(
+            doc.newRange().addElementsBetween(first.editAsText(), 1, last.editAsText(), 1).build());
+        console.assert(
+            cool.getActiveUnoModel().getCurrentController().getSelection().getCount() === 1);
+    }
 }

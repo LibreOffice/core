@@ -886,6 +886,8 @@ private:
         cpo::uno::Reference<scriptinterop::XElement> element;
         cpo::uno::Reference<css::text::XTextRange> range;
         bool offsets = false;
+        // For a child text added as a whole element:
+        bool wholeText = false;
     };
 
     std::shared_ptr<Model> model_;
@@ -1275,8 +1277,7 @@ public:
     {
         auto const value = parseColor(color);
         auto const whole = wholeRange();
-        // The color goes on all the text of the paragraph, over the colors that parts of it
-        // already have:
+        // The color goes on all of the text, over the colors that parts of it already have:
         setForegroundColorOn(whole->getText()->createTextCursorByRange(whole), value);
         return this;
     }
@@ -3479,10 +3480,15 @@ cpo::uno::Reference<scriptinterop::XText> TextImpl::merge() {
 
 class RangeElementImpl: public cppu::WeakImplHelper<scriptinterop::XRangeElement> {
 public:
+    // A range element for the given range, which is partial if it does not cover all of its
+    // paragraph, or if partial is set, unless wholeText is set for a range that covers all of a
+    // child text, which is then the whole element:
     RangeElementImpl(
         std::shared_ptr<Model> const & model,
-        cpo::uno::Reference<css::text::XTextRange> const & range, bool partial = false):
-        model_(model), range_(range), paragraph_(findContainingParagraph(range)), partial_(partial)
+        cpo::uno::Reference<css::text::XTextRange> const & range, bool partial = false,
+        bool wholeText = false):
+        model_(model), range_(range), paragraph_(findContainingParagraph(range)), partial_(partial),
+        wholeText_(wholeText)
     {
         rangeLen_ = textOf(range).getLength();
         if (!paragraph_.is()) {
@@ -3517,6 +3523,9 @@ public:
             throw cpo::uno::RuntimeException(
                 u"getElement: this range element is not inside a paragraph"_ustr);
         }
+        if (wholeText_) {
+            return textChild().first;
+        }
         if (!isPartial()) {
             return paragraphOf(model_, paragraph_);
         }
@@ -3546,6 +3555,9 @@ public:
     }
 
     bool isPartial() override {
+        if (wholeText_) {
+            return false;
+        }
         if (partial_ || !paragraph_.is()) {
             return true;
         }
@@ -3564,6 +3576,7 @@ private:
     cpo::uno::Reference<css::text::XTextRange> range_;
     cpo::uno::Reference<css::text::XTextContent> paragraph_;
     bool partial_;
+    bool wholeText_;
     bool whole_ = false;
     std::optional<std::pair<cpo::uno::Reference<scriptinterop::XText>, sal_Int32>> textChild_;
     sal_Int32 startOffset_ = 0;
@@ -3730,13 +3743,14 @@ private:
 // extent, so a paragraph that lies fully inside the raw range becomes a non-partial element and
 // the first and last paragraphs become partial ones.  A table that lies fully inside the raw
 // range becomes a whole element, and an empty piece at either end, as when the raw range ends at
-// the start of the paragraph after a table, is dropped unless it is the only one (and with partial,
-// as for a text given with offsets, a whole paragraph is split at its inline images like a partial
-// one):
+// the start of the paragraph after a table, is dropped unless it is the only one (and a whole
+// paragraph in partial, as for a text given with offsets, is split at its inline images like a
+// partial one):
 void splitAtParagraphBoundaries(
     std::shared_ptr<Model> const & model,
     cpo::uno::Reference<css::text::XTextRange> const & range,
-    std::vector<cpo::uno::Reference<scriptinterop::XRangeElement>> & out, bool partial = false)
+    std::vector<cpo::uno::Reference<scriptinterop::XRangeElement>> & out,
+    std::set<cpo::uno::Reference<cpo::uno::XInterface>> const & partial = {})
 {
     assert(range.is());
     auto host = range->getText();
@@ -3831,7 +3845,11 @@ void splitAtParagraphBoundaries(
             }
             cursor->gotoRange(subEnd, true);
             rtl::Reference<RangeElementImpl> const piece(new RangeElementImpl(model, cursor));
-            if ((!partial && !piece->isPartial()) || cursor->isCollapsed()) {
+            if ((!piece->isPartial()
+                 && partial.find(cpo::uno::Reference<cpo::uno::XInterface>(
+                        xtc, cpo::uno::UNO_QUERY)) == partial.end())
+                || cursor->isCollapsed())
+            {
                 pieces.emplace_back(piece);
                 empty.push_back(cursor->isCollapsed());
                 continue;
@@ -5103,7 +5121,13 @@ bool RangeBuilderImpl::cover(
                 } else if (!endsAfter) {
                     continue;
                 }
-                if (from <= to) {
+                // As in GAS, a child text that lies wholly between the start and an end that does
+                // not hold it is whole:
+                if (from == 0 && to == text->getText().getLength() - 1 && start < childPath
+                    && childPath < end && !isPrefix(end, childPath))
+                {
+                    added_.push_back({text, textRangeOf(text), false, true});
+                } else if (from <= to) {
                     addElementRange(text, from, to);
                 }
             }
@@ -5151,7 +5175,15 @@ cpo::uno::Reference<scriptinterop::XSelection> RangeBuilderImpl::build() {
     for (auto const & added: added_) {
         if (added.range.is()) {
             std::vector<cpo::uno::Reference<scriptinterop::XRangeElement>> elements;
-            splitAtParagraphBoundaries(model_, added.range, elements, added.offsets);
+            if (added.wholeText) {
+                elements.emplace_back(new RangeElementImpl(model_, added.range, false, true));
+            } else {
+                std::set<cpo::uno::Reference<cpo::uno::XInterface>> partial;
+                if (added.offsets) {
+                    partial.emplace(findContainingParagraph(added.range), cpo::uno::UNO_QUERY);
+                }
+                splitAtParagraphBoundaries(model_, added.range, elements, partial);
+            }
             for (auto const & element: elements) {
                 auto position = pathOf(element->getElement());
                 if (element->getElement()->getType() == scriptinterop::ElementType_INLINE_IMAGE) {
@@ -5164,6 +5196,12 @@ cpo::uno::Reference<scriptinterop::XSelection> RangeBuilderImpl::build() {
                         element->getElement()->getParent().Value->getuno(), child,
                         element->getStartOffset(), element->getEndOffsetInclusive(),
                         added.offsets});
+                } else if (added.wholeText) {
+                    auto const child = position.back();
+                    pieces.push_back({
+                        element, std::move(position), true,
+                        element->getElement()->getParent().Value->getuno(), child, 0,
+                        SAL_MAX_INT32});
                 } else {
                     pieces.push_back({
                         element, std::move(position), true, element->getElement()->getuno(), -1,
@@ -5275,9 +5313,13 @@ cpo::uno::Reference<scriptinterop::XSelection> RangeBuilderImpl::build() {
             auto const cursor = host->createTextCursorByRange(first);
             cursor->gotoRange(last, true);
             std::vector<cpo::uno::Reference<scriptinterop::XRangeElement>> whole;
-            splitAtParagraphBoundaries(
-                model_, cursor, whole,
-                std::any_of(kept.begin(), kept.end(), [](Piece const & p) { return p.offsets; }));
+            std::set<cpo::uno::Reference<cpo::uno::XInterface>> partial;
+            for (auto const & piece: kept) {
+                if (piece.offsets) {
+                    partial.insert(piece.paragraph);
+                }
+            }
+            splitAtParagraphBoundaries(model_, cursor, whole, partial);
             // An empty paragraph at either end of the range, which Writer cannot tell from the
             // boundary of the text next to it, is left out as when splitting (unlike one that holds
             // only inline images):
@@ -5303,10 +5345,16 @@ cpo::uno::Reference<scriptinterop::XSelection> RangeBuilderImpl::build() {
                 && std::equal(
                     whole.begin(), whole.end(), begin,
                     [](auto const & a, auto const & b) {
+                        // A whole child text covers the same as a partial one over all of it:
+                        auto const span = [](auto const & e) {
+                            return e->isPartial()
+                                ? std::pair(e->getStartOffset(), e->getEndOffsetInclusive())
+                                : std::pair(
+                                    sal_Int32(0), e->getElement()->getText().getLength() - 1);
+                        };
                         return a->getElement()->getuno() == b->getElement()->getuno()
-                            && a->isPartial() == b->isPartial()
-                            && a->getStartOffset() == b->getStartOffset()
-                            && a->getEndOffsetInclusive() == b->getEndOffsetInclusive();
+                            && a->getElement()->getType() == b->getElement()->getType()
+                            && span(a) == span(b);
                     }))
             {
                 uno = static_cast<cppu::OWeakObject *>(new TextRangesIndex({cursor}));
