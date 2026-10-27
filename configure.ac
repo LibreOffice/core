@@ -2594,7 +2594,9 @@ AS_IF([test `uname -s` = "Linux" -o `uname -s` = "FreeBSD" -o `uname -s` = "Darw
        fi
        ])
 
-AS_IF([test `uname -s` = "Darwin" -a "$ENABLE_IOSAPP" != "true"],
+# The app builds link iconv from their own project files, so the probe is for the builds
+# that link through this tree.
+AS_IF([test `uname -s` = "Darwin" -a "$external_toolchain_app" != "yes"],
       [AC_CHECK_LIB(iconv, iconv_open, [], [AC_MSG_ERROR([No, please install libiconv.])])])
 
 AS_IF([test `uname -s` = "FreeBSD"],
