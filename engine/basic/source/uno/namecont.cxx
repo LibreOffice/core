@@ -337,6 +337,7 @@ void ModifiableHelper::setModified(bool _bModified, std::unique_lock<std::mutex>
 SfxLibraryContainer::SfxLibraryContainer()
     : mnRunningVBAScripts( 0 )
     , mbVBACompat( false )
+    , mbVBACompatDeferred( false )
     , meVBATextEncoding( RTL_TEXTENCODING_DONTKNOW )
     , maModifiable( *this )
     , maNameContainer( cppu::UnoType<XNameAccess>::get(), *this )
@@ -2723,6 +2724,7 @@ void SfxLibraryContainer::setVBACompatibilityMode( bool _vbacompatmodeon )
         to getBasicManager() may call getVBACompatibilityMode() which returns
         this value. */
     mbVBACompat = _vbacompatmodeon;
+    mbVBACompatDeferred = false;
     BasicManager* pBasMgr = getBasicManager();
     if( !pBasMgr )
         return;
@@ -2819,7 +2821,10 @@ void SfxLibraryContainer::setPropertyValue(const OUString& aPropertyName,
     if (aPropertyName == sVBATextEncodingPropName)
         aValue >>= meVBATextEncoding;
     else if (aPropertyName == sDeferredVBACompatibilityModePropName)
+    {
         aValue >>= mbVBACompat;
+        mbVBACompatDeferred = mbVBACompat;
+    }
     else
         throw UnknownPropertyException(aPropertyName, getXWeak());
 }
@@ -2829,7 +2834,7 @@ cpo::uno::Any SfxLibraryContainer::getPropertyValue(const OUString& aPropertyNam
     if (aPropertyName == sVBATextEncodingPropName)
         return cpo::uno::Any(meVBATextEncoding);
     if (aPropertyName == sDeferredVBACompatibilityModePropName)
-        return cpo::uno::Any(mbVBACompat);
+        return cpo::uno::Any(mbVBACompatDeferred);
     throw UnknownPropertyException(aPropertyName, getXWeak());
 }
 

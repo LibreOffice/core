@@ -159,6 +159,8 @@ class SfxLibraryContainer
     VBAScriptListenerContainer maVBAScriptListeners;
     sal_Int32 mnRunningVBAScripts;
     bool mbVBACompat;
+    // The VBA compatibility mode is on, and the Basic project has not been loaded for it yet.
+    bool mbVBACompatDeferred;
     rtl_TextEncoding meVBATextEncoding;
     OUString msProjectName;
 protected:
@@ -324,7 +326,7 @@ private:
                     const cpo::uno::Reference< css::embed::XStorage >& _rxInitialStorage,
                     std::unique_lock<std::mutex>& guard );
     static constexpr OUString sVBATextEncodingPropName = u"VBATextEncoding"_ustr;
-    // Sets the VBA compatibility mode without loading the Basic project.
+    // Sets the VBA compatibility mode and leaves the Basic project to load later.
     static constexpr OUString sDeferredVBACompatibilityModePropName
         = u"DeferredVBACompatibilityMode"_ustr;
 
