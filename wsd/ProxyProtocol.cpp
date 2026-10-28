@@ -176,7 +176,11 @@ ProxyProtocolHandler::parseEmitIncoming(const std::shared_ptr<StreamSocket>& soc
         }
 
         if (in[0] == '.')
+        {
+            // Consume the terminator too, so the input buffer is empty once the reply is sent.
+            in.eraseFirst(1);
             return ParseStatus::COMPLETE;
+        }
 
         if (in[0] != 'T' && in[0] != 'B')
         {

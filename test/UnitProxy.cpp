@@ -23,6 +23,10 @@
 #include <net/HttpRequest.hpp>
 #include <test/helpers.hpp>
 
+#include <Poco/MemoryStream.h>
+#include <Poco/Net/HTTPResponse.h>
+#include <Poco/Net/SocketAddress.h>
+#include <Poco/Net/StreamSocket.h>
 #include <Poco/Path.h>
 
 using namespace std::literals;
@@ -100,6 +104,40 @@ public:
         LOK_ASSERT_EQUAL(true, httpResponse->done());
         LOK_ASSERT_EQUAL(http::Response::State::Complete, httpResponse->state());
         LOK_ASSERT_EQUAL(http::StatusCode::OK, httpResponse->statusCode());
+
+        // The reply to a tunnel request is the only thing sent back on that connection. Read the
+        // raw bytes until the server closes, so anything after the reply is visible.
+        Poco::URI serverURI(helpers::getTestServerURI());
+        Poco::Net::StreamSocket rawSocket(
+            Poco::Net::SocketAddress(serverURI.getHost(), serverURI.getPort()));
+        rawSocket.setReceiveTimeout(Poco::Timespan(9, 0));
+        const std::string rawRequest = "POST /cool/" + wopiSRC + "/ws?WOPISrc=/wopi/files" +
+                                       wopiSRC + "&compat=/ws/" + accessToken +
+                                       "/write/3 HTTP/1.1\r\n"
+                                       "Host: " +
+                                       serverURI.getAuthority() +
+                                       "\r\n"
+                                       "ProxyPrefix: https://substituted-into-cool.html-from-here/\r\n"
+                                       "Content-Length: 1\r\n\r\n.";
+        rawSocket.sendBytes(rawRequest.data(), rawRequest.size());
+        std::string raw;
+        char buffer[4096];
+        while (true)
+        {
+            const int got = rawSocket.receiveBytes(buffer, sizeof(buffer));
+            if (got <= 0)
+                break;
+            raw.append(buffer, got);
+        }
+        const std::size_t headerEnd = raw.find("\r\n\r\n");
+        LOK_ASSERT_MESSAGE("No reply header in: " + raw, headerEnd != std::string::npos);
+        Poco::MemoryInputStream headerStream(raw.data(), headerEnd + 4);
+        Poco::Net::HTTPResponse reply;
+        reply.read(headerStream);
+        LOK_ASSERT_EQUAL(Poco::Net::HTTPResponse::HTTP_OK, reply.getStatus());
+        LOK_ASSERT_EQUAL_MESSAGE("Bytes after the reply in: " + raw,
+                                 headerEnd + 4 + static_cast<std::size_t>(reply.getContentLength()),
+                                 raw.size());
 
         TST_LOG("Attempt proxy URL fetch " << httpSession->getUrl() << _req.getUrl());
 
