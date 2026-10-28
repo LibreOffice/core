@@ -517,6 +517,7 @@
                     <property name="halign">end</property>
                     <property name="label" translatable="yes" context="customanimationspanel|delay_label">_Delay:</property>
                     <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">delay_value</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
