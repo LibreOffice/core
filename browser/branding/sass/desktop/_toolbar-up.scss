@@ -1,0 +1,149 @@
+@use '../def/base';
+
+#toolbar-top #sidebar{border: none !important;}
+#toolbar-top #sidebar .checked{border-color: transparent !important;}
+#toolbar-up > div > table > tbody > tr > td > div > .checked img.sidebar_modify_page{ background-size: 24px !important; }
+
+/*icons---END*/
+
+#toolbar-up .over {
+	border: 1px solid base.get-cssvar(primary-element);
+	background-color: base.get-cssvar(body-bg);
+	border-radius: base.get-cssvar(border-radius);
+}
+
+.checked > tbody > tr > td > table > tbody > tr > td > img{
+	@include base.filter(brightness(300%));
+}
+.checked > tbody > tr > td > table > tbody > tr > td > .togglemergecells, .checked > tbody > tr > td > table > tbody > tr > td > .setborderstyle{
+	@include base.filter(none);
+}
+
+/*drop-down menu*/
+.select2-container--default .select2-selection--single,
+#toolbar-up .ui-combobox,
+.ui-combobox.notebookbar,
+#toolbar-down #LanguageStatus .unotoolbutton,
+#toolbar-down #StateTableCellMenu .unotoolbutton,
+#toolbar-down #zoom .unotoolbutton,
+.sidebar.jsdialog.ui-listbox {
+	@include base.toolbar-up-dropdown(base.$theme);
+	border-radius: base.get-cssvar(border-radius);
+}
+.ui-combobox-button {
+	border-left: none;
+}
+.ui-toolbar .unotoolbutton .arrowbackground {
+	border-top-color: #696969;
+}
+.select2-container--default .select2-selection--single:hover,
+.sidebar.jsdialog.ui-listbox:hover {
+	@include base.toolbar-up-dropdown-hover(base.$theme)
+}
+.select2-container--below.select2-container--open .select2-selection--single{
+	@include base.toolbar-up-dropdown-open(base.$theme);
+}
+/* select (arrow and radius)*/
+.select2-container--default .select2-selection--single .select2-selection__arrow b,
+#toolbar-down #LanguageStatus .arrowbackground {
+	@include base.toolbar-up-dropdown-chevron(base.$theme);
+}
+#toolbar-down #languagestatus label,
+#zoom label {
+	color: var(--color-text-dark);
+}
+.ui-toolbar .unotoolbutton{
+	border-radius: base.get-cssvar(border-radius);
+}
+/*select----END---*/
+
+.select2-selection__rendered,
+.ui-combobox-content.notebookbar {
+	@include base.toolbar-up-dropdown-content(base.$theme);
+}
+/*drop-down menu----END----*/
+
+#toolbar-top #sidebar > div > table, #toolbar-top #modifypage > div > table, #toolbar-top #slidechangewindow > div > table, #toolbar-top #customanimation > div > table, #toolbar-top #masterslidespanel > div > table {
+	background: none !important;
+}
+#toolbar-top #sidebar .checked img, #toolbar-top #modifypage .checked img, #toolbar-top #slidechangewindow .checked img, #toolbar-top #customanimation .checked img, #toolbar-top #masterslidespanel .checked img{
+	@include base.filter(none);
+}
+#toolbar-top #sidebar > div > .unotoolbutton,
+#toolbar-top #modifypage > div > .unotoolbutton,
+#toolbar-top #slidechangewindow > div > .unotoolbutton,
+#toolbar-top #customanimation > div > .unotoolbutton,
+#toolbar-top #masterslidespanel > div > .unotoolbutton {
+	@include base.box-shadow-important(none);
+}
+#toolbar-top #sidebar > div > .checked:not(.over),
+#toolbar-top #modifypage > div > .checked:not(.over),
+#toolbar-top #slidechangewindow > div > .checked:not(.over),
+#toolbar-top #customanimation > div > .checked:not(.over),
+#toolbar-top #masterslidespanel > div > .checked:not(.over) {
+	border-color: #fff;
+}
+
+#icon-integrator-sidebar.icon-integrator-sidebar {
+	order: 90;
+	min-width: auto;
+	border: none;
+	border-radius: var(--co-border-radius);
+	flex-shrink: 0;
+	padding: 0;
+	// Same margin as sidebar buttons
+	margin-inline-end: 5px;
+	&:hover {
+		cursor: pointer;
+		background-color: var(--color-background-darker) !important;
+		opacity: 1;
+	}
+
+	&:focus,
+	&:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: -8px;
+	}
+}
+
+#toolbar-wrapper:not(.hasnotebookbar) {
+	border-top: none;
+}
+
+#toolbar-up .checked{
+	background-color: base.get-cssvar(primary-element);
+	border-color: transparent;
+	box-shadow: inset 0 0 1px 0 #696969;
+}
+#toolbar-up .checked.over{
+	border-color: transparent;
+	box-shadow: inset 0 0 1px 0 #696969, inset 0 0 24px 1px base.get-cssvar(primary-element), inset 0 0 24px 24px #ffffff50;
+}
+.w2ui-icon.fold, .w2ui-icon.unfold{
+	background-size: 16px !important;
+}
+.cool-annotation-edit #annotation-save,
+.leaflet-popup-content input[type='button']{
+	color: base.get-cssvar(primary-text);
+	background-color: base.get-cssvar(primary-element);
+	border: 1px solid base.get-cssvar(primary-element-light);
+}
+.cool-annotation-edit #annotation-save:hover,
+.leaflet-popup-content input[type='button']:hover {
+	background-color: base.get-cssvar(primary-element-light);
+	border: 1px solid base.get-cssvar(primary-element-light);
+}
+.cool-annotation-edit #annotation-cancel {
+	color: base.get-cssvar(color-main-text);
+	background-color: base.get-cssvar(color-background-dark);
+	border: 1px solid base.get-cssvar(color-background-dark);
+}
+.cool-annotation-edit #annotation-cancel:hover {
+	background-color: base.get-cssvar(color-background-hover);
+}
+.insertshape-grid .col:hover {
+	border: 1px solid base.get-cssvar(color-border-dark);
+}
+.insertshape-grid .row-header {
+	background-color: base.get-cssvar(color-background-dark);
+}

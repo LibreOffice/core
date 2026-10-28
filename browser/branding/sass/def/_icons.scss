@@ -1,0 +1,1285 @@
+/// It's set to false only once per theme via brand.sh
+$iconsetgenerated: true;
+
+$has-dark-theme: false !default;
+$img-darkmode: false !default;
+$img-invertbackground: false !default;
+$pad-l: var(--btn-img-size) !default;
+$pad-navigator-obj-l: 16px !default;
+$pad-hyperlink-dlg: 13px !default;
+$img-coda-app-logo: false !default;
+$img-coda-app-logo-dark: false !default;
+$img-app-logo: 'images/toolbar-bg-logo.svg' !default;
+$img-app-logo-dark: 'images/toolbar-bg-logo-dark.svg' !default;
+$img-app-logo-toolbar: $img-app-logo !default;
+$img-app-logo-toolbar-dark: $img-app-logo-dark !default;
+$img-about-lokit: 'remote/static/lokit-extra-img.svg' !default;
+$img-app-text: false !default;
+$img-app-spreadsheet: false !default;
+$img-app-presentation: false !default;
+$img-app-drawing: false !default;
+$img-compact-logo-text: false !default;
+$img-compact-logo-spreadsheet: false !default;
+$img-compact-logo-presentation: false !default;
+$img-compact-logo-drawing: false !default;
+$img-coda-app-text: false !default;
+$img-coda-app-spreadsheet: false !default;
+$img-coda-app-presentation: false !default;
+$img-coda-app-drawing: false !default;
+$img-open-local-editor: 'images/open-local-editor.svg' !default;
+$img-backstage-header-logo: false !default;
+$img-backstage-header-logo-dark: false !default;
+$img-backstage-cloud-logo: false !default;
+$img-backstage-cloud-logo-dark: false !default;
+$img-compact-open-local-editor: 'images/compact_open-local-editor.svg' !default;
+$img-compact-open-local-editor-dark: 'images/compact_open-local-editor-dark.svg' !default;
+$img-open-local-editor-invert: false !default;
+$img-app-close: 'images/closedoc-dark_branding.svg' !default;
+$img-app-close-size: var(--btn-size) !default;
+$img-app-close-size-svg: var(--btn-img-size) !default;
+$img-app-close-default-opacity: 1 !default;
+$opacity-icon: 1 !default;
+$opacity-icon-hover: 1 !default;
+$opacity-icon-active: 1 !default;
+$opacity-icon-disabled: 1 !default;
+$opacity-icon-darkmode: 1 !default;
+$opacity-icon-hover-darkmode: 1 !default;
+$opacity-icon-active-darkmode: 1 !default;
+$opacity-icon-disabled-darkmode: 1 !default;
+$img-integrator-sidebar: false !default;
+$img-integrator-sidebar-dark: false !default;
+$img-integrator-sidebar-text: false !default;
+$img-integrator-sidebar-presentation: false !default;
+$img-integrator-sidebar-spreadsheet: false !default;
+$img-integrator-sidebar-drawing: false !default;
+$img-integrator-sidebar-default-opacity: 1 !default;
+$img-integrator-sidebar-size: 24px !default;
+$img-integrator-sidebar-size-svg: 24px !default;
+$img-integrator-sidebar-with-separator: false !default;
+$shortcuts-bar-save-size: false !default;
+$img-save-shortcuts: 'images/lc_save_branding.svg' !default;
+$img-saved-shortcuts: 'images/lc_saved_branding.svg' !default;
+$img-save-modified-shortcuts: 'images/lc_savemodified_branding.svg' !default;
+$img-save: false !default;
+$img-savemodified: false !default;
+$img-saved: false !default;
+$img-exportas: false !default;
+$img-saveas: false !default;
+$img-revhistory: false !default;
+$img-exportas: false !default;
+$img-shareas: false !default;
+$img-print: false !default;
+$img-downloadas: false !default;
+$img-downloadas-odt-submenu-icon: false !default;
+$img-downloadas-rtf-submenu-icon: false !default;
+$img-downloadas-doc-submenu-icon: false !default;
+$img-downloadas-docx-submenu-icon: false !default;
+$img-downloadas-ods-submenu-icon: false !default;
+$img-downloadas-xls-submenu-icon: false !default;
+$img-downloadas-xlsx-submenu-icon: false !default;
+$img-downloadas-odp-submenu-icon: false !default;
+$img-downloadas-ppt-submenu-icon: false !default;
+$img-downloadas-pptx-submenu-icon: false !default;
+$img-downloadas-csv-submenu-icon: false !default;
+$img-downloadas-odg-submenu-icon: false !default;
+$img-downloadas-png-submenu-icon: false !default;
+$img-downloadas-pdf-submenu-icon: false !default;
+$img-downloadas-epub-submenu-icon: false !default;
+$img-downloadas-html-submenu-icon: false !default;
+$img-runmacro: false !default;
+$img-repair: false !default;
+$img-setdocumentproperties: false !default;
+$img-renamedocument: false !default;
+$img-settings: false !default;
+$img-signature: false !default;
+$img-togglewasm: false !default;
+$img-undo: false !default;
+$img-redo: false !default;
+$img-paste: false !default;
+$img-pastespecial: false !default;
+$img-cut: false !default;
+$img-formatpaintbrush: false !default;
+$img-copy: false !default;
+$img-resetattributes: false !default;
+$img-grow: false !default;
+$img-shrink: false !default;
+$img-graphicdialog: false !default;
+$img-delete: false !default;
+$img-subscript: false !default;
+$img-superscript: false !default;
+$img-compactsetborderstyle: 'images/compact_setborderstyle_branding.svg' !default;
+$img-setborderstyle: 'images/lc_setborderstyle_branding.svg' !default;
+$img-charspacing: false !default;
+$img-backgroundcolor: false !default;
+$img-backcolor: false !default;
+$img-fontcolor: false !default;
+$img-defaultbullet: false !default;
+$img-defaultnumbering: false !default;
+$img-incrementindent: false !default;
+$img-decrementindent: false !default;
+$img-controlcodes: false !default;
+$img-paralefttoright: false !default;
+$img-pararighttoleft: false !default;
+$img-leftpara: false !default;
+$img-centerpara: false !default;
+$img-rightpara: false !default;
+$img-justifypara: false !default;
+$img-linespacing: false !default;
+$img-linespacing1: false !default;
+$img-linespacing15: false !default;
+$img-linespacing2: false !default;
+$img-inserttext: false !default;
+$img-tabledialog: false !default;
+$img-inserttable: false !default;
+$img-table-obj: false !default;
+$img-insertgraphic: false !default;
+$img-insertmultimedia: false !default;
+$img-curve: false !default;
+$img-insertpagebreak: false !default;
+$img-charmapcontrol: false !default;
+$img-insertannotation: false !default;
+$img-showannotations: false !default;
+$img-search: false !default;
+$img-searchreplace: false !default;
+$img-titlepagedialog: false !default;
+$img-insertsection: false !default;
+$img-insertobjectchart: false !default;
+$img-hyperlinkdialog: false !default;
+$img-remotelink: false !default;
+$img-remoteaicontent: 'images/lc_inserthyperlink_branding.svg' !default;
+$img-copyremotelink: false !default;
+$img-editremotelink: false !default;
+$img-unlinkremotelink: false !default;
+$img-insertreferencefield: false !default;
+$img-pagenumberwizard: false !default;
+$img-insertfieldctrl: false !default;
+$img-insertpageheader: false !default;
+$img-insertpagefooter: false !default;
+$img-insertobjectstarmath: false !default;
+$img-insertqrcode: false !default;
+$img-line: false !default;
+$img-fontworkgalleryfloater: false !default;
+$img-verticaltext: false !default;
+$img-cropimage: false !default;
+$img-formattingmarkmenu: false !default;
+$img-pagedialog: false !default;
+$img-insertbreak: false !default;
+$img-formatcolumns: false !default;
+$img-menumargins: false !default;
+$img-formatcelldialog: false !default;
+$img-pageformatdialog: false !default;
+$img-sparkline: false !default;
+$img-pivottable: false !default;
+$img-recalcpivottable: false !default;
+$img-deletepivottable: false !default;
+$img-addname: false !default;
+$img-definename: false !default;
+$img-datasort: false !default;
+$img-dataautofilter: false !default;
+$img-datafilterstandardfilter: false !default;
+$img-sortascending: false !default;
+$img-sortdescending: false !default;
+$img-datafilterspecialfilter: false !default;
+$img-datafilterhideautofilter: false !default;
+$img-datafilterremovefilter: false !default;
+$img-group: false !default;
+$img-ungroup: false !default;
+$img-clearoutline: false !default;
+$img-showdetail: false !default;
+$img-hidedetail: false !default;
+$img-calculate: false !default;
+$img-goalseekdialog: false !default;
+$img-validation: false !default;
+$img-statisticsmenu: false !default;
+$img-printrangesmenu: false !default;
+$img-rowmenuheight: false !default;
+$img-columnmenuwidth: false !default;
+$img-freezepanes: false !default;
+$img-freezepanescolumn: false !default;
+$img-freezepanesrow: false !default;
+
+$img-watermark: false !default;
+$img-hyphenate: false !default;
+$img-linenumberingdialog: false !default;
+$img-chapternumberingdialog: false !default;
+$img-namegroup: false !default;
+$img-alttext: false !default;
+$img-themedialog: false !default;
+$img-selectall: false !default;
+$img-wrapoff: false !default;
+$img-wrapon: false !default;
+$img-wrapideal: false !default;
+$img-wrapleft: false !default;
+$img-wrapthrough: false !default;
+$img-wrapright: false !default;
+$img-objectalignleft: false !default;
+$img-aligncenter: false !default;
+$img-objectalignright: false !default;
+$img-alignup: false !default;
+$img-alignmiddle: false !default;
+$img-aligndown: false !default;
+$img-objectforwardone: false !default;
+$img-bringtofront: false !default;
+$img-objectbackone: false !default;
+$img-sendtoback: false !default;
+$img-insertmultiindex: false !default;
+$img-insertindexesentry: false !default;
+$img-updatecurindex: false !default;
+$img-insertfootnote: false !default;
+$img-insertendnote: false !default;
+$img-footnotedialog: false !default;
+$img-insertbookmark: false !default;
+$img-zoteroaddeditcitation: false !default;
+$img-zoteroaddnote: false !default;
+$img-zoteroaddeditbibliography: false !default;
+$img-zoterorefresh: false !default;
+$img-zoterounlink: false !default;
+$img-zoterosetdocPrefs: false !default;
+$img-zoterowebpage: false !default;
+$img-zoterojournalarticle: false !default;
+$img-zoterobook: false !default;
+$img-insertpagenumberfield: false !default;
+$img-insertpagecountfield: false !default;
+$img-insertdatefield: false !default;
+$img-inserttitlefield: false !default;
+$img-updateall: false !default;
+$img-spellingandgrammardialog: false !default;
+$img-thesaurusdialog: false !default;
+$img-languagemenu: false !default;
+$img-spellonline: false !default;
+$img-translate: false !default;
+$img-wordcountdialog: false !default;
+$img-showresolvedannotations: false !default;
+$img-speakernotes: false !default;
+$img-deletenote: false !default;
+$img-deleteallnotes: false !default;
+$img-trackchanges: false !default;
+$img-showtrackedchanges: false !default;
+$img-nexttrackedchange: false !default;
+$img-rejectalltrackedchanges: false !default;
+$img-rejecttrackedchange: false !default;
+$img-rejecttrackedchangeandnext: false !default;
+$img-accepttrackedchanges: false !default;
+$img-accepttrackedchange: false !default;
+$img-accepttrackedchangeandnext: false !default;
+$img-comparedocument: false !default;
+$img-viewchanges: false !default;
+$img-accessibilitycheck: false !default;
+$img-togglea11ystate: false !default;
+$img-fontdialog: false !default;
+$img-formatmenu: false !default;
+$img-paragraphdialog: false !default;
+$img-stylelistdeck: false !default;
+$img-formatbulletsmenu: false !default;
+$img-outlinebullet: false !default;
+$img-setoutline: false !default;
+$img-editregion: false !default;
+$img-formatline: false !default;
+$img-transformdialog: false !default;
+$img-insertcontentcontrol: false !default;
+$img-insertcheckboxcontentcontrol: false !default;
+$img-insertdropdowncontentcontrol: false !default;
+$img-insertpicturecontentcontrol: false !default;
+$img-insertdatecontentcontrol: false !default;
+$img-contentcontrolproperties: false !default;
+$img-insertcolumnsbefore: false !default;
+$img-insertcolumnsafter: false !default;
+$img-deletecolumns: false !default;
+$img-insertrowsbefore: false !default;
+$img-insertrowsafter: false !default;
+$img-deleterows: false !default;
+$img-mergecells: false !default;
+$img-selecttable: false !default;
+$img-cellverttop: false !default;
+$img-cellvertcenter: false !default;
+$img-cellvertbottom: false !default;
+$img-numberformatcurrency: 'images/lc_numberformatcurrency_branding.svg' !default;
+$img-numberformatdate: 'images/lc_numberformatdecimal_branding.svg' !default;
+$img-numberformatpercent: 'images/lc_numberformatpercent_branding.svg' !default;
+$img-numberformatdecdecimals: 'images/lc_numberformatdecdecimals_branding.svg' !default;
+$img-numberformatincdecimals: 'images/lc_numberformatincdecimals_branding.svg' !default;
+$img-styleapplydefault: false !default;
+$img-styleapplyheading1: false !default;
+$img-styleapplyheading2: false !default;
+$img-styleapplygood: false !default;
+$img-styleapplyneutral: false !default;
+$img-styleapplybad: false !default;
+$img-conditionalformat: false !default;
+
+$img-autosummenu: 'images/lc_autosum_branding.svg' !default;
+$img-startformula: false !default;
+$img-functiondialog: 'images/lc_functiondialog_branding.svg' !default;
+$img-acceptformula: false !default;
+$img-cancelformula: false !default;
+
+$img-flipvertical: false !default;
+$img-fliphorizontal: false !default;
+$img-fullscreen: false !default;
+$img-multipageview: 'images/lc_multipageview_branding.svg' !default;
+$img-pageprev: 'images/lc_uppage_branding.svg' !default;
+$img-pagenext: 'images/lc_downpage_branding.svg' !default;
+$img-sheetprev: 'images/lc_prevrecord_branding.svg' !default;
+$img-sheetnext: 'images/lc_nextrecord_branding.svg' !default;
+$img-sheetlast: 'images/lc_firstrecord_branding.svg' !default;
+$img-sheetfirst: 'images/lc_firstrecord_branding.svg' !default;
+$img-insertsheet: 'images/plus_branding.svg' !default;
+$img-sheetlist: 'images/lc_sheetlist_branding.svg' !default;
+$img-searchprev: 'images/lc_searchprev_branding.svg' !default;
+$img-searchnext: 'images/lc_searchnext_branding.svg' !default;
+/// images/lc_cancel_branding.svg
+$img-cancelsearch: false !default;
+$img-zoomreset: false !default;
+/// $img-single-toolbar-down: use the same toolbar-down related icons
+/// for light and dark mode
+$img-single-toolbardown: false !default;
+/// images/zoomreset_branding.svg
+$img-zoomreset-toolbardown: false !default;
+/// images/minus_branding.svg
+$img-zoomout-toolbardown: false !default;
+/// images/plus_white_branding.svg
+$img-zoomin-toolbardown: false !default;
+$img-zoomout: false !default;
+$img-zoomin: false !default;
+$img-toggleuimode: false !default;
+$img-showruler: false !default;
+$img-showstatusbar: false !default;
+$img-collapsenotebookbar: false !default;
+$img-sidebar-text: 'images/lc_sidebar_writer.svg' !default;
+$img-sidebar-spreadsheet: 'images/lc_sidebar_calc.svg' !default;
+$img-sidebar-presentation: 'images/lc_sidebar_impress.svg' !default;
+$img-sidebar-drawing: 'images/lc_sidebar_draw.svg' !default;
+$img-sidebar: false !default;
+$img-sidebar-checked: false !default;
+$img-sidebar-masterslidespanel: 'images/lc_sidebar_masterslide.svg' !default;
+$img-sidebar-slidechangewindow: 'images/lc_sidebar-transition.svg' !default;
+$img-sidebar-customanimation: 'images/lc_sidebar-animation.svg' !default;
+$img-sidebar-share: false !default;
+$img-closenavigator: 'images/close-widget.svg' !default;
+
+$img-slidemasterpage: false !default;
+$img-renamemasterpage: false !default;
+$img-closemasterpage: false !default;
+$img-hideslide: false !default;
+$img-showslide: false !default;
+$img-masterslidespanel: false !default;
+$img-sidebar-masterslidespanel-checked: false !default;
+$img-slidechangewindow: false !default;
+$img-sidebar-slidechangewindow-checked: false !default;
+$img-animationeffect: false !default;
+$img-customanimation: false !default;
+$img-sidebar-customanimation-checked: false !default;
+$img-ole-obj: false !default;
+$img-frame-obj: false !default;
+$img-comment-obj: false !default;
+$img-drawing-obj: false !default;
+$img-heading-obj: false !default;
+$img-navigator: false !default;
+$img-forumhelp: false !default;
+$img-onlinehelp: false !default;
+$img-keyboardshortcuts: false !default;
+$img-reportissue: false !default;
+$img-latestupdates: false !default;
+$img-feedback: false !default;
+$img-about: false !default;
+$img-styleupdatebyexample: false !default;
+$img-stylenewbyexample: false !default;
+$img-editstyle: false !default;
+$img-setdefault: false !default;
+$img-removebullets: false !default;
+$img-paraspaceincrease: false !default;
+$img-paraspacedecrease: false !default;
+$img-serveraudit: false !default;
+$img-togglesheetgrid: false !default;
+$img-togglefocuscell: false !default;
+$img-stylepreviews-scrollup: 'images/lc_stylepreviews-scrollup_branding.svg' !default;
+$img-stylepreviews-scrolldown: 'images/lc_stylepreviews-scrolldown_branding.svg' !default;
+$img-stylepreviews-more: false !default;
+
+$img-spinner-aboveparaspacing: false !default;
+$img-spinner-belowparaspacing: false !default;
+$img-spinner-beforetextindent: false !default;
+$img-spinner-aftertextindent: false !default;
+$img-spinner-firstlineindent: false !default;
+
+$img-hangingindent: false !default;
+$img-basicshapes: 'images/lc_ellipse_branding.svg' !default;
+$img-compactbasicshapes: false !default;
+$img-previoustrackedchange: false !default;
+$img-acceptalltrackedchanges: false !default;
+$img-splitcell: false !default;
+$img-splittable: false !default;
+$img-protect: false !default;
+$img-unsetcellsreadonly: false !default;
+$img-entirecell: false !default;
+$img-entirecolumn: false !default;
+$img-entirerow: false !default;
+$img-deletetable: false !default;
+$img-tablesort: false !default;
+$img-tablenumberformatdialog: false !default;
+$img-formatgroup: false !default;
+$img-entergroup: false !default;
+$img-leavegroup: false !default;
+$img-text: false !default;
+$img-fullscreen: false !default;
+$img-shadowed: false !default;
+$img-spacing: false !default;
+$img-connectortoolbox: false !default;
+$img-xlinecolor: false !default;
+$img-fillcolor: false !default;
+$img-fullscreenpresentation: false !default;
+$img-presentationcurrentslide: false !default;
+
+$img-assignlayout: false !default;
+$img-resetlayout: false !default;
+$img-insertpage: 'images/lc_insertpage_branding.svg' !default;
+$img-deletepage: 'images/lc_deletepage_branding.svg' !default;
+$img-selectbackground: false !default;
+$img-duplicatepage: 'images/lc_duplicatepage_branding.svg' !default;
+$img-presentation: false !default;
+$img-presentinwindow: false !default;
+$img-presenterconsole: false !default;
+$img-grid: false !default;
+$img-griduse: false !default;
+$img-insertdatefieldfix: false !default;
+$img-insertdatefieldvar: false !default;
+$img-inserttimefieldfix: false !default;
+$img-inserttimefieldvar: false !default;
+$img-insertslidefield: false !default;
+$img-insertslidesfield: false !default;
+$img-insertslidetitlefield: false !default;
+$img-headerandfooter: false !default;
+
+$img-fontworkalignmentfloater: false !default;
+$img-fontheight: false !default;
+$img-changefont: false !default;
+//icons - JSDialog
+
+$img-checkbox-on: 'images/checkbox-on.svg' !default;
+$img-checkbox-on-disabled: 'images/checkbox-on-disabled.svg' !default;
+$img-checkbox-off-disabled: 'images/checkbox-off-disabled.svg' !default;
+$img-check-off: 'images/checkbox-off.svg' !default;
+$img-radio-on: 'images/radio-on.svg' !default;
+$img-radio-on-disabled: 'images/radio-on-disabled.svg' !default;
+$img-radio-off-disabled: 'images/radio-off-disabled.svg' !default;
+$img-radio-off: 'images/radio-off.svg' !default;
+$img-radio-on-dark: 'images/radio-on-dark.svg' !default;
+$img-radio-on-disabled-dark: 'images/radio-on-disabled-dark.svg' !default;
+$img-radio-off-disabled-dark: 'images/radio-off-disabled-dark.svg' !default;
+$img-radio-off-dark: 'images/radio-off-dark.svg' !default;
+
+//icons - menu
+$img-menu-downloadas-pdf: 'images/lc_menu_downloadas_pdf_branding.svg' !default;
+$img-menu-fullscreen: 'images/lc_menu_fullscreen_branding.svg' !default;
+$img-menu-zoomreset: 'images/lc_menu_zoomreset_branding.svg' !default;
+
+//icons - m-toolbar-up
+/// REVIEW: w2ui
+$img-closemobile: 'images/lc_closedocmobile_branding.svg' !default;
+
+//icons - toolbar-up
+$img-edit: 'images/edit_branding.svg' !default;
+$img-fitcell: 'images/fit-cell_branding.svg' !default;
+$img-textpath: 'images/text-path_branding.svg' !default;
+$img-fitwidthzoom: false !default;
+
+//icon - cursors markers
+$img-column-resize-marker: 'images/table-column-resize-marker_branding.svg' !default;
+
+
+//icons - Ruler
+$img-indentation-marker-up: 'images/indentation_marker_up_branding.svg' !default;
+$img-indentation-marker-up-y-offset: 0 !default;
+$img-indentation-marker-down: 'images/indentation_marker_down_branding.svg' !default;
+$img-indentation-marker-down-y-offset: 0 !default;
+$img-indentation-marker-down-height: 10px !default;
+
+//icons - cursors-markers
+$img-column-resize-marker-hover: 'images/table-column-resize-marker-hover_branding.svg' !default;
+$img-row-resize-marker: 'images/table-row-resize-marker_branding.svg' !default;
+$img-row-resize-marker-hover: 'images/table-row-resize-marker-hover_branding.svg' !default;
+
+//icons - widgets
+$img-close-widget: 'images/close-widget.svg' !default;
+$img-close-widget-dark: 'images/close-widget-dark.svg' !default;
+$img-close-hide-upstream: true !default;
+$img-close-widget-hover: 'images/close-widget-hover.svg' !default;
+$img-grafmode: false !default;
+$img-grafluminance: false !default;
+$img-grafcontrast: false !default;
+$img-graftransparence: false !default;
+$img-editheaderandfooter: false !default;
+$img-morefunctionsmenu: false !default;
+$img-dataarearefresh: false !default;
+$img-selectdb: false !default;
+$img-definedbname: false !default;
+$img-convertformulatovalue: false !default;
+$img-mathandtrigfunctions: false !default;
+$img-logicalfunctions: false !default;
+$img-textfunctions: false !default;
+$img-financialfunctions: false !default;
+
+// navigator-tab-color
+$color-navigator-tab: false !default;
+
+@if $iconsetgenerated == false {
+	@debug 'icons.scss';
+
+	/// either $notdark or $onlydark is concatenated before every icon class
+	/// E.G.:  #{$notdark} .unosaveas .unobutton img
+	/// So, .unosaveas .unobutton img
+	$notdark: '';
+	@if $has-dark-theme == false {
+		/// Or, html:not([data-theme=dark]) .unosaveas .unobutton img
+		$notdark: 'html:not([data-theme=dark])';
+	}
+	/// Use the same icons for toolbar on both light and dark if $img-single-toolbardown
+	$toolbardownnotdark: if($img-single-toolbardown, '', $notdark);
+
+	@if $opacity-icon != 1
+		or $opacity-icon-hover != 1
+		or $opacity-icon-active != 1
+		or $opacity-icon-disabled != 1
+		or $opacity-icon-darkmode != 1
+		or $opacity-icon-hover-darkmode != 1
+		or $opacity-icon-active-darkmode != 1
+		or $opacity-icon-disabled-darkmode != 1 {
+
+		[data-theme="light"] {
+			--opacity-icon: #{$opacity-icon};
+			--opacity-icon-hover: #{$opacity-icon-hover};
+			--opacity-icon-active: #{$opacity-icon-active};
+			--opacity-icon-disabled: #{$opacity-icon-disabled};
+		}
+
+		[data-theme="dark"] {
+			--opacity-icon: #{$opacity-icon-darkmode};
+			--opacity-icon-hover: #{$opacity-icon-hover-darkmode};
+			--opacity-icon-active: #{$opacity-icon-active-darkmode};
+			--opacity-icon-disabled: #{$opacity-icon-disabled-darkmode};
+		}
+
+		#closebuttonwrapper:hover {
+			opacity: var(--opacity-icon-hover);
+		}
+
+		.unobutton img,
+		.unotoolbutton img,
+		.unotoolbutton button img {
+			opacity: var(--opacity-icon);
+		}
+
+		.unobutton:hover img,
+		.unobutton img:hover,
+		.unotoolbutton:hover img,
+		.unotoolbutton img:hover,
+		.unotoolbutton button img:hover {
+			opacity: var(--opacity-icon-hover);
+		}
+
+		.unobutton.selected img,
+		.unobutton.checked img,
+		.unotoolbutton.selected img,
+		.unotoolbutton.checked img,
+		.unotoolbutton .selected img,
+		.unotoolbutton .checked img {
+			opacity: var(--opacity-icon-active);
+		}
+
+		.unobutton.disabled img,
+		.unotoolbutton.disabled img,
+		.unotoolbutton.disabled button img {
+			opacity: var(--opacity-icon-disabled);
+		}
+
+		#inactive_user_message::before {
+			opacity: var(--opacity-icon);
+		}
+	}
+
+	@if $img-coda-app-logo { .img-coda-app-logo { background-image: url($img-coda-app-logo) !important; background-repeat: no-repeat !important; background-position: center !important;}}
+	@if $img-coda-app-logo-dark { html[data-theme=dark] .img-coda-app-logo { background-image: url($img-coda-app-logo-dark) !important; background-repeat: no-repeat !important; background-position: center !important;}}
+
+	@if $img-app-logo {
+		@debug $img-app-logo;
+		@keyframes MoveUpDown {
+			0%, 100% {bottom: -38px;}
+			50% {bottom: -48px;}
+		}
+		.leaflet-progress-spinner::before {
+			content: '';
+			position: relative;
+			animation: MoveUpDown 1s linear infinite;
+			z-index: 1;
+			display: block;
+			width: 100%;
+			height: 78px;
+			margin: 0 0 4px;
+		}
+		html:not([data-theme=dark]) .leaflet-progress-spinner::before {
+			background: var(--spinner-logo, url(#{$img-app-logo})) no-repeat 44px center/78px;
+		}
+		html[data-theme=dark] .leaflet-progress-spinner::before {
+			background: var(--spinner-logo, url(#{$img-app-logo-dark})) no-repeat 44px center/78px;
+		}
+		.leaflet-progress-spinner-canvas {opacity: 0;}
+		@if not ($img-app-text and $img-app-spreadsheet and $img-app-presentation) {
+			html:not([data-theme=dark]) .document-logo {
+				background-image: url($img-app-logo-toolbar) !important; background-repeat: no-repeat !important; background-position: center !important;
+			}
+			html[data-theme=dark] .document-logo {
+				background-image: url($img-app-logo-toolbar-dark) !important; background-repeat: no-repeat !important; background-position: center !important;
+			}
+			// The logo is drawn as a mask in the user's button text colour, on a pseudo-element so
+			// the mask leaves the focus ring of the link itself in place.
+			@media (forced-colors: active) {
+				.main-nav.hasnotebookbar #document-header .document-logo {
+					background-image: none !important;
+					background-color: transparent !important;
+					position: relative;
+				}
+				.main-nav.hasnotebookbar #document-header .document-logo::before {
+					content: '';
+					position: absolute;
+					inset: 0;
+					mask: url($img-app-logo-toolbar) center / contain no-repeat;
+					background-color: ButtonText;
+				}
+			}
+		}
+
+		.document-logo {
+			background-size: 30px !important;
+		}
+		#product-logo {
+			background-image: url($img-app-logo);
+			background-position: center 8px !important;
+		}
+		@if $img-app-logo-dark {
+			html[data-theme=dark] #product-logo {
+				background-image: url($img-app-logo-dark);
+			}
+		}
+	}
+	@if $img-about-lokit { #lokit-logo {background-image: url($img-about-lokit); background-position: center top; background-size: 82px no-repeat; display: flex; flex-grow: 1;} }
+	.unobutton { overflow: hidden; }
+	@if $img-menu-downloadas-pdf { #{$notdark} #menu-downloadas-pdf a {background-image: url($img-menu-downloadas-pdf); background-repeat: no-repeat; background-position: center right; background-size: 24px;}}
+	@if $img-menu-fullscreen { #{$notdark} #menu-downloadas-pdf a {background-image: url($img-menu-fullscreen); background-repeat: no-repeat; background-position: center right; background-size: 24px;}}
+	@if $img-menu-zoomreset { #{$notdark} #menu-downloadas-pdf a {background-image: url($img-menu-zoomreset); background-repeat: no-repeat; background-position: center right; background-size: 24px;}}
+	@if $img-closemobile { #{$notdark} .w2ui-icon.closemobile{ background-image: url($img-closemobile) !important; background-repeat: no-repeat !important; background-position: center !important; }}
+	@if $img-edit { #{$notdark} .w2ui-icon.edit{ background-image: url($img-edit) !important; background-repeat: no-repeat !important; background-position: center !important; }}
+	@if $img-fitcell { #{$notdark} .w2ui-icon.fitcell{ background-image: url($img-fitcell) !important; background-repeat: no-repeat !important; background-position: center !important; }}
+	@if $img-textpath { #{$notdark} .w2ui-icon.textpath{ background-image: url($img-textpath) !important; background-repeat: no-repeat !important; background-position: center !important; }}
+	@if $img-column-resize-marker { .table-column-resize-marker{background-image: url($img-column-resize-marker); width: 32px; height: 32px;}}
+	@if $img-saveas { #{$notdark} .unospan.saveas .unobutton img, #{$notdark} .unospan-saveas .unobutton img, #{$notdark} .unospan.unoSaveAs .unobutton img {background-image: url($img-saveas); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-revhistory { #{$notdark} .unoRev-History .unobutton img {background-image: url($img-revhistory); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	/// The notebookbar builds its toolitems through JSDialog.MakeIdUnique, which always
+	/// appends a counter, so the shortcuts save is save4 and the File tab save is
+	/// file-save6. A bare #save or #file-save never matches there. #save on its own is
+	/// the classic (compact) top toolbar, which is not built that way and keeps its id.
+	@if $img-save-shortcuts { #{$notdark} .notebookbar-shortcuts-bar .unoSave:not(.has-label) .unobutton img {background-image: url($img-save-shortcuts) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-saved-shortcuts { #{$notdark} .notebookbar-shortcuts-bar .unoSave.saved:not(.has-label) .unobutton img {background-image: url($img-saved-shortcuts) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-save-modified-shortcuts { #{$notdark} .notebookbar-shortcuts-bar .unoSave.savemodified:not(.has-label) .unobutton img {background-image: url($img-save-modified-shortcuts) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-save {
+		#{$notdark} .unoSave[id^="file-save"] .unobutton img , #{$notdark} #save img {background-image: url($img-save) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .mobile-wizard .ui-header .menu-entry-icon.save img {content: url($img-save)}
+	}
+	@if $img-savemodified { #{$notdark} .unoSave.savemodified .unobutton img , #{$notdark} #save.savemodified img {background-image: url($img-savemodified) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-saved { #{$notdark} #save.saved img {background-image: url($img-saved) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $shortcuts-bar-save-size { #{$notdark} .notebookbar-shortcuts-bar .unoSave.unotoolbutton.notebookbar .unobutton img {width: $shortcuts-bar-save-size !important; height: $shortcuts-bar-save-size !important;} }
+	@if $img-app-close {
+		/// Exception to the general $notdark, we need to solve always dark mode for this icon if it exists
+		#closebuttonwrapper {
+				width: $img-app-close-size;
+				height: $img-app-close-size !important;
+				align-items: center;
+				justify-content: center;
+		}
+		#closebuttonwrapper #closebutton {background-image: url($img-app-close) !important; background-repeat: no-repeat !important; background-position: center !important; background-size: $img-app-close-size-svg !important; width: $img-integrator-sidebar-size !important; height: $img-integrator-sidebar-size !important; opacity: $img-app-close-default-opacity; filter: none !important;}
+}
+	@if $img-compact-open-local-editor {
+		#{$notdark} [data-userinterfacemode='classic'] #toolbar-up .Open_Local_Editor {background-image: url($img-compact-open-local-editor) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: calc( var(--btn-img-size) * 2 ) !important; opacity: 1 !important;}
+	}
+	@if $img-compact-open-local-editor-dark {
+		html[data-theme=dark] [data-userinterfacemode='classic'] #toolbar-up .Open_Local_Editor {background-image: url($img-compact-open-local-editor-dark) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: calc( var(--btn-img-size) * 2 ) !important; opacity: 1 !important; filter: none;}
+	}
+	@if $img-open-local-editor {
+		#Open_Local_Editor img {background-image: url($img-open-local-editor) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: calc( var(--btn-img-size) * 2 ) !important;}
+		[data-theme="dark"] #Open_Local_Editor img {filter: none !important;}
+	}
+	@if $img-open-local-editor-invert {
+		[data-theme="dark"] #Open_Local_Editor img {filter: invert(1) hue-rotate(180deg) !important; opacity: .8;}
+		.w2ui-icon.Open_Local_Editor, #Open_Local_Editor img { opacity: .6; &:hover { opacity: .8;}}
+	}
+	@if $img-integrator-sidebar {
+		@if $img-integrator-sidebar-dark {
+			.notebookbar.shareas:not(.unospan-ShareAs) .unobutton img {background-image: url($img-integrator-sidebar); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important; filter: none; box-shadow: none; width: var(--btn-img-size); height: var(--btn-img-size);}
+		} @else {
+			#{$notdark} .notebookbar.shareas:not(.unospan-ShareAs) .unobutton img {background-image: url($img-integrator-sidebar); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important; filter: none; box-shadow: none; width: var(--btn-img-size); height: var(--btn-img-size);}
+		}
+	}
+	@if $img-integrator-sidebar-text {
+		/// Exception to the general $notdark, we need to solve always dark mode for this icon if it exists
+		[data-doctype='text'][data-userinterfacemode='notebookbar'] .notebookbar-options-section .notebookbar.shareas:not(.unospan-ShareAs) .unobutton img {background-image: url($img-integrator-sidebar-text); background-repeat: no-repeat; background-position: center; background-size: $img-integrator-sidebar-size-svg; width: $img-integrator-sidebar-size !important; height: $img-integrator-sidebar-size !important; padding-left:calc( var(--btn-img-size) * 2 ) !important;  opacity: $img-integrator-sidebar-default-opacity;}
+	}
+	@if $img-integrator-sidebar-spreadsheet {
+		/// Exception to the general $notdark, we need to solve always dark mode for this icon if it exists
+		[data-doctype='spreadsheet'][data-userinterfacemode='notebookbar'] .notebookbar-options-section .notebookbar.shareas:not(.unospan-ShareAs) .unobutton img {background-image: url($img-integrator-sidebar-spreadsheet); background-repeat: no-repeat; background-position: center; background-size: $img-integrator-sidebar-size-svg; width: $img-integrator-sidebar-size !important; height: $img-integrator-sidebar-size !important; padding-left:calc( var(--btn-img-size) * 2 ) !important; opacity: $img-integrator-sidebar-default-opacity;}
+	}
+	@if $img-integrator-sidebar-presentation {
+		/// Exception to the general $notdark, we need to solve always dark mode for this icon if it exists
+		[data-doctype='presentation'][data-userinterfacemode='notebookbar'] .notebookbar-options-section .notebookbar.shareas:not(.unospan-ShareAs) .unobutton img {background-image: url($img-integrator-sidebar-presentation); background-repeat: no-repeat; background-position: center; background-size: $img-integrator-sidebar-size-svg; width: $img-integrator-sidebar-size !important; height: $img-integrator-sidebar-size !important; padding-left:calc( var(--btn-img-size) * 2 ) !important; opacity: $img-integrator-sidebar-default-opacity;}
+	}
+	@if $img-integrator-sidebar-drawing {
+		/// Exception to the general $notdark, we need to solve always dark mode for this icon if it exists
+		[data-doctype='drawing'][data-userinterfacemode='notebookbar'] .notebookbar-options-section .notebookbar.shareas:not(.unospan-ShareAs) .unobutton img {background-image: url($img-integrator-sidebar-drawing); background-repeat: no-repeat; background-position: center; background-size: $img-integrator-sidebar-size-svg; width: $img-integrator-sidebar-size !important; height: $img-integrator-sidebar-size !important; padding-left:calc( var(--btn-img-size) * 2 ) !important; opacity: $img-integrator-sidebar-default-opacity;}
+	}
+
+	@if $img-integrator-sidebar-with-separator == false {
+		@debug $img-integrator-sidebar-with-separator;
+		#closebuttonwrapperseparator { visibility: hidden !important; width: 0 !important;}
+	}
+	@if $img-app-text { #{$notdark} body[data-doctype=text] .document-logo, body[data-doctype=text] #document-header a {background-image: url($img-app-text) !important;}}
+	@if $img-app-spreadsheet { #{$notdark} body[data-doctype=spreadsheet] .document-logo, body[data-doctype=spreadsheet] #document-header a {background-image: url($img-app-spreadsheet) !important;}}
+	@if $img-app-presentation { #{$notdark} body[data-doctype=presentation] .document-logo, body[data-doctype=presentation] #document-header a {background-image: url($img-app-presentation) !important;}}
+	@if $img-app-drawing { #{$notdark} body[data-doctype=drawing] .document-logo, body[data-doctype=drawing] #document-header a {background-image: url($img-app-drawing) !important;}}
+	@if $img-coda-app-text { .backstage-doc-icon-writer {background-image: url($img-coda-app-text) !important;}}
+	@if $img-coda-app-spreadsheet { .backstage-doc-icon-calc {background-image: url($img-coda-app-spreadsheet) !important;}}
+	@if $img-coda-app-presentation { .backstage-doc-icon-impress {background-image: url($img-coda-app-presentation) !important;}}
+	@if $img-coda-app-drawing { .backstage-doc-icon-draw {background-image: url($img-coda-app-drawing) !important;}}
+	@if $img-backstage-header-logo { .backstage-header-title::before {background-image: url($img-backstage-header-logo) !important;}}
+	@if $img-backstage-header-logo-dark { html[data-theme=dark] .backstage-header-title::before {background-image: url($img-backstage-header-logo-dark) !important;}}
+	@if $img-backstage-cloud-logo { .backstage-cloud-brand-icon {background-image: url($img-backstage-cloud-logo) !important;}}
+	@if $img-backstage-cloud-logo-dark { html[data-theme=dark] .backstage-cloud-brand-icon {background-image: url($img-backstage-cloud-logo-dark) !important;}}
+	@if $img-exportas { #{$notdark} .unoexportas .unobutton img {background-image: url($img-exportas); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-shareas { #{$notdark} .unoShareAs .unobutton img {background-image: url($img-shareas); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-print {
+		#{$notdark} .unoPrint .unobutton img , #{$notdark} #print img, #{$notdark} #printoptions img {background-image: url($img-print) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .mobile-wizard .ui-header .menu-entry-icon.print img {content: url($img-print)}
+	}
+	@if $img-downloadas { #{$notdark} .unodownloadas .unobutton img {background-image: url($img-downloadas); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-downloadas-odt-submenu-icon { #{$notdark} .unodownloadas-odt .unobutton img, #{$notdark} [class*='as-odt-submenu-icon'] {background-image: url($img-downloadas-odt-submenu-icon); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-downloadas-rtf-submenu-icon { #{$notdark} .unodownloadas-rtf .unobutton img, #{$notdark} [class*='as-rtf-submenu-icon'] {background-image: url($img-downloadas-rtf-submenu-icon); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-downloadas-doc-submenu-icon { #{$notdark} .unodownloadas-doc .unobutton img, #{$notdark} [class*='as-doc-submenu-icon'] {background-image: url($img-downloadas-doc-submenu-icon); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-downloadas-docx-submenu-icon { #{$notdark} .unodownloadas-docx .unobutton img, #{$notdark} [class*='as-docx-submenu-icon'] {background-image: url($img-downloadas-docx-submenu-icon); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-downloadas-ods-submenu-icon { #{$notdark} .unodownloadas-ods .unobutton img, #{$notdark} [class*='as-ods-submenu-icon'] {background-image: url($img-downloadas-ods-submenu-icon); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-downloadas-xls-submenu-icon { #{$notdark} .unodownloadas-xls .unobutton img, #{$notdark} [class*='as-xls-submenu-icon'] {background-image: url($img-downloadas-xls-submenu-icon); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-downloadas-xlsx-submenu-icon { #{$notdark} .unodownloadas-xlsx .unobutton img, #{$notdark} [class*='as-xlsx-submenu-icon'] {background-image: url($img-downloadas-xlsx-submenu-icon); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-downloadas-odp-submenu-icon { #{$notdark} .unodownloadas-odp .unobutton img, #{$notdark} [class*='as-odp-submenu-icon'] {background-image: url($img-downloadas-odp-submenu-icon); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-downloadas-ppt-submenu-icon { #{$notdark} .unodownloadas-ppt .unobutton img, #{$notdark} [class*='as-ppt-submenu-icon'] {background-image: url($img-downloadas-ppt-submenu-icon); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-downloadas-pptx-submenu-icon { #{$notdark} .unodownloadas-pptx .unobutton img, #{$notdark} [class*='as-pptx-submenu-icon'] {background-image: url($img-downloadas-pptx-submenu-icon); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-downloadas-csv-submenu-icon { #{$notdark} .unodownloadas-csv .unobutton img, #{$notdark} [class*='as-csv-submenu-icon'] {background-image: url($img-downloadas-csv-submenu-icon); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-downloadas-odg-submenu-icon { #{$notdark} .unodownloadas-odg .unobutton img, #{$notdark} [class*='as-odg-submenu-icon'] {background-image: url($img-downloadas-odg-submenu-icon); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-downloadas-png-submenu-icon { #{$notdark} .unodownloadas-png .unobutton img, #{$notdark} [class*='as-png-submenu-icon'] {background-image: url($img-downloadas-png-submenu-icon); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-downloadas-pdf-submenu-icon { #{$notdark} .unoexportpdf .unobutton img, #{$notdark} [class*='pdf-submenu-icon'] {background-image: url($img-downloadas-pdf-submenu-icon); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-downloadas-epub-submenu-icon { #{$notdark} .unoexportepub .unobutton img, #{$notdark} [class*='epub-submenu-icon'] {background-image: url($img-downloadas-epub-submenu-icon); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-downloadas-html-submenu-icon { #{$notdark} .unodownloadas-html .unobutton img, #{$notdark} [class*='html-submenu-icon'] {background-image: url($img-downloadas-html-submenu-icon); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-runmacro { #{$notdark} .unoRunMacro .unobutton img {background-image: url($img-runmacro); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-repair { #{$notdark} .unorepair .unobutton img {background-image: url($img-repair); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-setdocumentproperties { #{$notdark} .unoSetDocumentProperties .unobutton img {background-image: url($img-setdocumentproperties); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-signature { #{$notdark} .unoSignature .unobutton img {background-image: url($img-signature); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-renamedocument { #{$notdark} .unoRenameDocument .unobutton img {background-image: url($img-renamedocument); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-settings { #{$notdark} .unoSettings .unobutton img {background-image: url($img-settings); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-togglewasm { #{$notdark} .togglewasm .unobutton img {background-image: url($img-togglewasm); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-undo {
+		#{$notdark} .unoUndo .unobutton img , #{$notdark} #undo img {background-image: url($img-undo) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .mobile-wizard .ui-header .menu-entry-icon.undo img {content: url($img-undo)}
+	}
+	@if $img-redo {
+		#{$notdark} .unoRedo .unobutton img , #{$notdark} #redo img {background-image: url($img-redo) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}
+		 #{$notdark} .mobile-wizard .ui-header .menu-entry-icon.redo img {content: url($img-redo)}
+	}
+	@if $img-paste {
+		#{$notdark} .unoPaste .unobutton img {background-image: url($img-paste); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .mobile-wizard .ui-header .menu-entry-icon.paste img, #{$notdark} .ui-combobox-entry.unoPaste img {content: url($img-paste)}
+	}
+	@if $img-pastespecial { #{$notdark} .ui-combobox-entry.unoPasteSpecial img {content: url($img-pastespecial)}}
+	@if $img-cut {
+		#{$notdark} .unoCut .unobutton img {background-image: url($img-cut); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .mobile-wizard .ui-header .menu-entry-icon.cut img, #{$notdark} .ui-combobox-entry.unoCut img {content: url($img-cut)}
+	}
+	@if $img-formatpaintbrush { #{$notdark} .unoFormatPaintbrush .unobutton img , #{$notdark} #copyformat img, #{$notdark} .ui-combobox-entry.unoFormatPaintbrush img {content: url($img-formatpaintbrush)}}
+	@if $img-copy {
+		#{$notdark} .unoCopy .unobutton img {background-image: url($img-copy); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .mobile-wizard .ui-header .menu-entry-icon.copy img, #{$notdark} .ui-combobox-entry.unoCopy img {content: url($img-copy)}
+	}
+	@if $img-resetattributes {
+		#{$notdark} .unoResetAttributes:not(.mobile-wizard) .unobutton img , #{$notdark} #deleteformat img {background-image: url($img-resetattributes) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .mobile-wizard.unoResetAttributes .unobutton img, #{$notdark} .ui-combobox-entry.unoResetAttributes img {content: url($img-resetattributes)}
+	}
+	@if $img-delete { #{$notdark} .ui-combobox-entry.unoDelete img {content: url($img-delete)}}
+	@if $img-grow { #{$notdark} .unoGrow .unobutton img {background-image: url($img-grow); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-shrink { #{$notdark} .unoShrink .unobutton img {background-image: url($img-shrink); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-graphicdialog { #{$notdark} .ui-combobox-entry.unoGraphicDialog img {content: url($img-graphicdialog)}}
+	@if $img-subscript {
+		#{$notdark} .unoSubScript:not(.mobile-wizard) .unobutton img {background-image: url($img-subscript); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .mobile-wizard.unoSubScript .unobutton img {content: url($img-subscript)}
+	}
+	@if $img-superscript {
+		#{$notdark} .unoSuperScript:not(.mobile-wizard) .unobutton img {background-image: url($img-superscript); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .mobile-wizard.unoSuperScript .unobutton img {content: url($img-superscript)}
+	}
+	@if $img-compactsetborderstyle { #{$notdark} [data-userinterfacemode='classic'] #toolbar-up .unoSetBorderStyle .unobutton img {background-image: url($img_compactsetborderstyle) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-setborderstyle { #{$notdark} #setborderstyle img, #{$notdark} .unoSetBorderStyle .unobutton img {background-image: url($img-setborderstyle) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-charspacing { #{$notdark} .unoCharSpacing .unobutton img , #{$notdark} .unoSpacing .unobutton img {background-image: url($img-charspacing); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-backcolor { #{$notdark} .unospan-CharBackColor .unobutton img, #{$notdark} .unospan-BackColor .unobutton img, #{$notdark} #backgroundcolor img, #{$notdark} #backcolor img {background-image: url($img-backcolor) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-backgroundcolor { #{$notdark} .unospan-BackgroundColor .unobutton img, #{$notdark} .unospan-TableCellBackgroundColor .unobutton img, #{$notdark} .unoFillColor .unobutton img, #{$notdark} .ui-combobox-entry.unoFormatArea img {content: url($img-backgroundcolor)}}
+	@if $img-fontcolor { #{$notdark} .unospan-Color img, #{$notdark} .unospan-FontColor .unobutton img, #{$notdark} #fontcolor img {background-image: url($img-fontcolor) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-defaultbullet {
+		#{$notdark} .unoDefaultBullet:not(.mobile-wizard) .unobutton img , #{$notdark} #bullet img {background-image: url($img-defaultbullet) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .mobile-wizard.unoDefaultBullet .unobutton img {content: url($img-defaultbullet)}
+	}
+	@if $img-defaultnumbering {
+		#{$notdark} .unoDefaultNumbering:not(.mobile-wizard) .unobutton img , #{$notdark} #numbering img {background-image: url($img-defaultnumbering) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .mobile-wizard.unoDefaultNumbering .unobutton img {content: url($img-defaultnumbering)}
+	}
+	@if $img-incrementindent {
+		#{$notdark} .unoIncrementIndent:not(.mobile-wizard) .unobutton img , #{$notdark} #incrementindent img {background-image: url($img-incrementindent) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .mobile-wizard.unoIncrementIndent .unobutton img {content: url($img-incrementindent)}
+	}
+	@if $img-decrementindent {
+		#{$notdark} .unoDecrementIndent:not(.mobile-wizard) .unobutton img , #{$notdark} #decrementindent img {background-image: url($img-decrementindent) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .mobile-wizard.unoDecrementIndent .unobutton img {content: url($img-decrementindent)}
+	}
+	@if $img-controlcodes { #{$notdark} .unoControlCodes .unobutton img {background-image: url($img-controlcodes); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-paralefttoright {
+		#{$notdark} .unoParaLeftToRight:not(.mobile-wizard) .unobutton img {background-image: url($img-paralefttoright); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .mobile-wizard.unoParaLeftToRight .unobutton img {content: url($img-paralefttoright)}
+	}
+	@if $img-pararighttoleft {
+		#{$notdark} .unoSheetRightToLeft:not(.mobile-wizard) .unobutton img, #{$notdark} .unoParaRightToLeft:not(.mobile-wizard) .unobutton img {background-image: url($img-pararighttoleft); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .mobile-wizard.unoParaRightToLeft .unobutton img, #{$notdark} .mobile-wizard.unoSheetRightToLeft .unobutton img {content: url($img-pararighttoleft)}
+	}
+	@if $img-leftpara {
+		#{$notdark} .unoLeftPara:not(.mobile-wizard) .unobutton img , #{$notdark} .unoAlignLeft:not(.mobile-wizard) .unobutton img {background-image: url($img-leftpara); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .mobile-wizard.unoLeftPara .unobutton img, #{$notdark} .mobile-wizard.unoAlignLeft .unobutton img {content: url($img-leftpara)}
+	}
+	@if $img-centerpara {
+		#{$notdark} .unoCenterPara:not(.mobile-wizard) .unobutton img , #{$notdark} .unoAlignHorizontalCenter:not(.mobile-wizard) .unobutton img , #{$notdark} #alignhorizontal img {background-image: url($img-centerpara) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .mobile-wizard.unoCenterPara .unobutton img, #{$notdark} .mobile-wizard.unoAlignHorizontalCenter .unobutton img {content: url($img-centerpara)}
+	}
+	@if $img-rightpara {
+		#{$notdark} .unoRightPara:not(.mobile-wizard) .unobutton img , #{$notdark} .unoAlignRight:not(.mobile-wizard) .unobutton img {background-image: url($img-rightpara); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .mobile-wizard.unoRightPara .unobutton img, #{$notdark} .mobile-wizard.unoAlignRight .unobutton img {content: url($img-rightpara)}
+	}
+	@if $img-justifypara {
+		#{$notdark} .unoJustifyPara:not(.mobile-wizard) .unobutton img , #{$notdark} .unoAlignBlock:not(.mobile-wizard) .unobutton img, #{$notdark} #textalign img, #{$notdark} #alignblock img, #{$notdark} #aligntext img {background-image: url($img-justifypara) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .mobile-wizard.unoJustifyPara .unobutton img, #{$notdark} .mobile-wizard.unoAlignBlock .unobutton img {content: url($img-justifypara)}
+	}
+	@if $img-linespacing { #{$notdark} .unoLineSpacing .unobutton img , #{$notdark} #linespacing img {background-image: url($img-linespacing) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-linespacing1 { #{$notdark} .spacepara1 {background-image: url($img-linespacing1); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-linespacing15 { #{$notdark} .spacepara15 {background-image: url($img-linespacing15); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-linespacing2 { #{$notdark} .spacepara2 {background-image: url($img-linespacing2); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-inserttext { #{$notdark} .unoText .unobutton img, #{$notdark} .unoDrawText .unobutton img , #{$notdark} #inserttextbox img {background-image: url($img-inserttext) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-inserttable { #{$notdark} .unoInsertTable .unobutton img , #{$notdark} #inserttable img, #{$notdark} .unoInsertCalcTable .unobutton img {background-image: url($img-inserttable) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertgraphic {
+		#{$notdark} .unoInsertGraphic .unobutton img , #{$notdark} #insertgraphic img {background-image: url($img-insertgraphic) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .swresnc20003img {background-image: url($img-insertgraphic); background-repeat: no-repeat; background-position: center; background-size: $pad-navigator-obj-l; box-sizing: border-box; padding-left: $pad-navigator-obj-l !important; width: $pad-navigator-obj-l; height: $pad-navigator-obj-l;}
+	}
+	@if $img-insertmultimedia { #{$notdark} .insertmultimedia .unobutton img {background-image: url($img-insertmultimedia); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-curve { #{$notdark} .unoBezier_Unfilled .unobutton img {background-image: url($img-curve); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertpagebreak { #{$notdark} .unoInsertPagebreak .unobutton img {background-image: url($img-insertpagebreak); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-charmapcontrol { #{$notdark} .unoCharmapControl .unobutton img , #{$notdark} #insertsymbol img, #{$notdark} .unoInsertSymbol .unobutton img {content: url($img-charmapcontrol)}}
+	@if $img-insertannotation { #{$notdark} .unoInsertAnnotation .unobutton img , #{$notdark} #insertannotation img, #{$notdark} .ui-combobox-entry.unoInsertAnnotation img {content: url($img-insertannotation)}}
+	@if $img-search { #{$notdark} .unoSearch .unobutton img, #{$notdark} .home-search .unobutton img, #{$notdark} .LookupAndRefFunctionsMenu .unobutton img {background-image: url($img-search); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-searchreplace { #{$notdark} [class*="unoSearchDialog"] .unobutton img {background-image: url($img-searchreplace); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-titlepagedialog { #{$notdark} .unoTitlePageDialog .unobutton img {background-image: url($img-titlepagedialog); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertsection {
+		#{$notdark} .unoInsertSection .unobutton img {background-image: url($img-insertsection); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .swresnc20006img {background-image: url($img-insertsection); background-repeat: no-repeat; background-position: center; background-size: $pad-navigator-obj-l; box-sizing: border-box; padding-left: $pad-navigator-obj-l !important; width: $pad-navigator-obj-l; height: $pad-navigator-obj-l;}
+	}
+	@if $img-insertobjectchart { #{$notdark} .unoInsertObjectChart .unobutton img , #{$notdark} #insertobjectchart img {background-image: url($img-insertobjectchart) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-hyperlinkdialog {
+		#{$notdark} .unoHyperlinkDialog .unobutton img , #{$notdark} #inserthyperlink img, #{$notdark} .ui-combobox-entry.unoInsertHyperlink  img {content: url($img-hyperlinkdialog)}
+		#{$notdark} .swresnc20007img {background-image: url($img-hyperlinkdialog); background-repeat: no-repeat; background-position: center; background-size: $pad-navigator-obj-l; box-sizing: border-box; padding-left: $pad-navigator-obj-l !important; width: $pad-navigator-obj-l; height: $pad-navigator-obj-l;}
+	}
+	@if $img-copyremotelink { #{$notdark} .hyperlink-pop-up-copyimg {background-image: url($img-copyremotelink) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding: $pad-hyperlink-dlg !important}}
+	@if $img-editremotelink { #{$notdark} .hyperlink-pop-up-editimg {background-image: url($img-editremotelink) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding: $pad-hyperlink-dlg !important}}
+	@if $img-unlinkremotelink { #{$notdark} .hyperlink-pop-up-removeimg {background-image: url($img-unlinkremotelink) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding: $pad-hyperlink-dlg !important}}
+	@if $img-remotelink { #{$notdark} .unoremotelink .unobutton img , #{$notdark} #link img {background-image: url($img-remotelink) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-remoteaicontent { #{$notdark} .unoremoteaicontent .unobutton img , #{$notdark} #link img {background-image: url($img-remoteaicontent) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-zoteroaddeditcitation { #{$notdark} .unozoteroAddEditCitation .unobutton img {background-image: url($img-zoteroaddeditcitation); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-zoteroaddnote { #{$notdark} .unozoteroaddnote .unobutton img {background-image: url($img-zoteroaddnote); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-zoteroaddeditbibliography { #{$notdark} .unozoteroaddeditbibliography .unobutton img {background-image: url($img-zoteroaddeditbibliography); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-zoterorefresh { #{$notdark} .unozoterorefresh .unobutton img {background-image: url($img-zoterorefresh); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-zoterounlink { #{$notdark} .unozoterounlink .unobutton img {background-image: url($img-zoterounlink); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-zoterosetdocPrefs { #{$notdark} .unozoteroSetDocPrefs .unobutton img {background-image: url($img-zoterosetdocPrefs); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-zoterowebpage { #{$notdark} .ui-listview-icon.zoteroWebpageimg {background-image: url($img-zoterowebpage); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-zoterojournalarticle { #{$notdark} .ui-listview-icon.zoteroJournalArticleimg {background-image: url($img-zoterojournalarticle); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-zoterobook { #{$notdark} .ui-listview-icon.zoteroBookimg {background-image: url($img-zoterobook); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertreferencefield {
+		#{$notdark} .unoInsertReferenceField .unobutton img {background-image: url($img-insertreferencefield); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .swresnc20008img {background-image: url($img-insertreferencefield); background-repeat: no-repeat; background-position: center; background-size: $pad-navigator-obj-l; box-sizing: border-box; padding-left: $pad-navigator-obj-l !important; width: $pad-navigator-obj-l; height: $pad-navigator-obj-l;}
+	}
+	@if $img-pagenumberwizard { #{$notdark} .unoPageNumberWizard .unobutton img {background-image: url($img-pagenumberwizard); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertfieldctrl { #{$notdark} .unoInsertFieldCtrl .unobutton img {background-image: url($img-insertfieldctrl); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-assignlayout { #{$notdark} .unoAssignLayout.menubutton .unobutton img {background-image: url($img-assignlayout); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-resetlayout { #{$notdark} .unoAssignLayout:not(.menubutton) .unobutton img {background-image: url($img-resetlayout); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertpage { #{$notdark} .unoInsertPage .unobutton img, #{$notdark} #insertpage img, #{$notdark} .ui-combobox-entry.unoInsertPage img {content: url($img-insertpage)}}
+	@if $img-deletepage { #{$notdark} .unoDeletePage .unobutton img, #{$notdark} #deletepage img, #{$notdark} .ui-combobox-entry.unoDeletePage img {content: url($img-deletepage)}}
+	@if $img-selectbackground { #{$notdark} .unoselectbackground .unobutton img {background-image: url($img-selectbackground) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertpageheader { #{$notdark} .unoInsertPageHeader .unobutton img {background-image: url($img-insertpageheader); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertpagefooter { #{$notdark} .unoInsertPageFooter .unobutton img {background-image: url($img-insertpagefooter); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertobjectstarmath { #{$notdark} .unoInsertObjectStarMath .unobutton img {background-image: url($img-insertobjectstarmath); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertqrcode { #{$notdark} .unoInsertQrCode .unobutton img {background-image: url($img-insertqrcode); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-basicshapes { #{$notdark} body:not([data-userinterfacemode=classic]) .unoBasicShapes .unobutton img , #{$notdark} #basicshapes_ellipse img {background-image: url($img-basicshapes) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-compactbasicshapes { #{$notdark} [data-userinterfacemode='classic'] #toolbar-up .unoBasicShapes .unobutton img {background-image: url($img-basicshapes) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-line { #{$notdark} .unoLine .unobutton img, #{$notdark} #toolbar-up #line img {background-image: url($img-line) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-fontworkgalleryfloater { #{$notdark} .unoFontworkGalleryFloater .unobutton img {background-image: url($img-fontworkgalleryfloater); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-verticaltext { #{$notdark} .unoVerticalText .unobutton img {background-image: url($img-verticaltext); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-cropimage { #{$notdark} .unoCrop .unobutton img, #{$notdark} .ui-combobox-entry.unoCrop img {content: url($img-cropimage)}}
+	@if $img-formattingmarkmenu { #{$notdark} .unoFormattingMarkMenu .unobutton img {background-image: url($img-formattingmarkmenu); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-pagedialog { #{$notdark} .unoPageDialog .unobutton img, #{$notdark} .ui-combobox-entry.unoPageDialog img {content: url($img-pagedialog)}}
+	@if $img-insertbreak { #{$notdark} .unoInsertBreak .unobutton img {background-image: url($img-insertbreak); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-formatcolumns { #{$notdark} .unoFormatColumns .unobutton img {background-image: url($img-formatcolumns); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-menumargins { #{$notdark} .MenuMargins .unobutton img {background-image: url($img-menumargins); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-formatcelldialog { #{$notdark} .unoFormatCellDialog .unobutton img {background-image: url($img-formatcelldialog); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-pageformatdialog { #{$notdark} .unoPageFormatDialog .unobutton img {background-image: url($img-pageformatdialog); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-sparkline { #{$notdark} .unoFormat-SparklineMenu .unobutton img , #{$notdark} .unoInsertSparkline .unobutton img {background-image: url($img-sparkline); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-pivottable { #{$notdark} .unoDataDataPilotRun .unobutton img {background-image: url($img-pivottable); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-recalcpivottable { #{$notdark} .unoRecalcPivotTable .unobutton img {background-image: url($img-recalcpivottable); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-deletepivottable { #{$notdark} .unoDeletePivotTable .unobutton img {background-image: url($img-deletepivottable); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-addname { #{$notdark} .unoAddName .unobutton img {background-image: url($img-addname); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-definename { #{$notdark} .unoDefineName .unobutton img {background-image: url($img-definename); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-datasort { #{$notdark} .unoDataSort .unobutton img {background-image: url($img-datasort); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-dataautofilter { #{$notdark} .unoDataFilterAutoFilter .unobutton img {background-image: url($img-dataautofilter); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-sortascending { #{$notdark} .unoSortAscending .unobutton img , #{$notdark} #sortascending img {background-image: url($img-sortascending) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-sortdescending { #{$notdark} .unoSortDescending .unobutton img , #{$notdark} #sortdescending img {background-image: url($img-sortdescending) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-datafilterstandardfilter { #{$notdark} .unoDataFilterStandardFilter .unobutton img {background-image: url($img-datafilterstandardfilter); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-datafilterspecialfilter { #{$notdark} .unoDataFilterSpecialFilter .unobutton img {background-image: url($img-datafilterspecialfilter); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-datafilterspecialfilter { #{$notdark} .unoDatafilterSpecialFilter .unobutton img {background-image: url($img-datafilterspecialfilter); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-datafilterhideautofilter { #{$notdark} .unoDataFilterHideAutoFilter .unobutton img {background-image: url($img-datafilterhideautofilter); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-datafilterremovefilter { #{$notdark} .unoDataFilterRemoveFilter .unobutton img {background-image: url($img-datafilterremovefilter); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-group { #{$notdark} .unoGroup .unobutton img {background-image: url($img-group); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-ungroup { #{$notdark} .unoUngroup .unobutton img {background-image: url($img-ungroup); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-clearoutline { #{$notdark} .unoClearOutline .unobutton img {background-image: url($img-clearoutline); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-showdetail { #{$notdark} .unoShowDetail .unobutton img {background-image: url($img-showdetail); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-hidedetail { #{$notdark} .unoHideDetail .unobutton img {background-image: url($img-hidedetail); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-calculate { #{$notdark} .unoCalculate .unobutton img {background-image: url($img-calculate); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-goalseekdialog { #{$notdark} .unoGoalSeekDialog .unobutton img {background-image: url($img-goalseekdialog); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-validation { #{$notdark} .unoValidation .unobutton img {background-image: url($img-validation); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-statisticsmenu { #{$notdark} .unoData-StatisticsMenu .unobutton img {background-image: url($img-statisticsmenu); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-printrangesmenu { #{$notdark} .unoData-PrintRangesMenu .unobutton img {background-image: url($img-printrangesmenu); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-rowmenuheight { #{$notdark} .unoData-RowMenuHeight .unobutton img {background-image: url($img-rowmenuheight); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-columnmenuwidth { #{$notdark} .unoData-ColumnMenuWidth .unobutton img {background-image: url($img-columnmenuwidth); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-freezepanes { #{$notdark} .unoFreezePanes .unobutton img {background-image: url($img-freezepanes); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-freezepanescolumn { #{$notdark} .unoFreezePanesColumn .unobutton img {background-image: url($img-freezepanescolumn); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-freezepanesrow { #{$notdark} .unoFreezePanesRow .unobutton img {background-image: url($img-freezepanesrow); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-watermark { #{$notdark} .unoWatermark .unobutton img {background-image: url($img-watermark); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-hyphenate {#{$notdark} .unoHyphenation .unobutton img, #{$notdark} .unoHyphenate .unobutton img , #{$notdark} .unoWrapText .unobutton img , #{$notdark} #wraptext img {background-image: url($img-hyphenate) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-linenumberingdialog { #{$notdark} .unoLineNumberingDialog .unobutton img {background-image: url($img-linenumberingdialog); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-chapternumberingdialog { #{$notdark} .unoChapterNumberingDialog .unobutton img {background-image: url($img-chapternumberingdialog); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-namegroup { #{$notdark} .unoNameGroup .unobutton img {background-image: url($img-namegroup); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-alttext { #{$notdark} .unoObjectTitleDescription .unobutton img {background-image: url($img-alttext); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-themedialog { #{$notdark} .unoThemeDialog .unobutton img {background-image: url($img-themedialog); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-selectall { #{$notdark} .unoSelectAll .unobutton img {background-image: url($img-selectall); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-wrapoff { #{$notdark} .unoWrapOff .unobutton img {background-image: url($img-wrapoff); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-wrapon { #{$notdark} .unoWrapOn .unobutton img {background-image: url($img-wrapon); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-wrapideal { #{$notdark} .unoWrapIdeal .unobutton img {background-image: url($img-wrapideal); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-wrapleft { #{$notdark} .unoWrapLeft .unobutton img {background-image: url($img-wrapleft); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-wrapthrough { #{$notdark} .unoWrapThrough .unobutton img {background-image: url($img-wrapthrough); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-wrapright { #{$notdark} .unoWrapRight .unobutton img {background-image: url($img-wrapright); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-objectalignleft { #{$notdark} .unoObjectAlignLeft .unobutton img , #{$notdark} #alignleft img {background-image: url($img-objectalignleft) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-aligncenter { #{$notdark} .unoAlignCenter .unobutton img {background-image: url($img-aligncenter); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-objectalignright { #{$notdark} .unoObjectAlignRight .unobutton img , #{$notdark} #alignright img {background-image: url($img-objectalignright) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-alignup { #{$notdark} .unoAlignUp .unobutton img {background-image: url($img-alignup); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-alignmiddle { #{$notdark} .unoAlignMiddle .unobutton img {background-image: url($img-alignmiddle); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-aligndown { #{$notdark} .unoAlignDown .unobutton img {background-image: url($img-aligndown); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-objectforwardone { #{$notdark} .unoObjectForwardOne .unobutton img, #{$notdark} .ui-combobox-entry.unoObjectForwardOne img {content: url($img-objectforwardone)}}
+	@if $img-bringtofront { #{$notdark} .unoBringToFront .unobutton img, #{$notdark} .ui-combobox-entry.unoBringToFront img {content: url($img-bringtofront)}}
+	@if $img-objectbackone { #{$notdark} .unoObjectBackOne .unobutton img, #{$notdark} .ui-combobox-entry.unoObjectBackOne img {content: url($img-objectbackone)}}
+	@if $img-sendtoback { #{$notdark} .unoSendToBack .unobutton img, #{$notdark} .ui-combobox-entry.unoSendToBack img {content: url($img-sendtoback)}}
+	@if $img-insertmultiindex {
+		#{$notdark} .unoInsertMultiIndex .unobutton img {background-image: url($img-insertmultiindex); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .swresnc20009img {background-image: url($img-insertmultiindex); background-repeat: no-repeat; background-position: center; background-size: $pad-navigator-obj-l; box-sizing: border-box; padding-left: $pad-navigator-obj-l !important; width: $pad-navigator-obj-l; height: $pad-navigator-obj-l;}
+	}
+	@if $img-insertindexesentry { #{$notdark} .unoInsertIndexesEntry .unobutton img {background-image: url($img-insertindexesentry); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-updatecurindex { #{$notdark} .unoUpdateCurIndex .unobutton img {background-image: url($img-updatecurindex); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertfootnote { #{$notdark} .unoInsertFootnote .unobutton img {background-image: url($img-insertfootnote); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertendnote { #{$notdark} .unoInsertEndnote .unobutton img {background-image: url($img-insertendnote); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-footnotedialog {
+		#{$notdark} .unoFootnoteDialog .unobutton img {background-image: url($img-footnotedialog); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .swresnc20012img {background-image: url($img-footnotedialog); background-repeat: no-repeat; background-position: center; background-size: $pad-navigator-obj-l; box-sizing: border-box; padding-left: $pad-navigator-obj-l !important; width: $pad-navigator-obj-l; height: $pad-navigator-obj-l;}
+		#{$notdark} .swresnc20013img {background-image: url($img-footnotedialog); background-repeat: no-repeat; background-position: center; background-size: $pad-navigator-obj-l; box-sizing: border-box; padding-left: $pad-navigator-obj-l !important; width: $pad-navigator-obj-l; height: $pad-navigator-obj-l;}
+	}
+	@if $img-insertbookmark {
+		#{$notdark} .unoInsertBookmark .unobutton img {background-image: url($img-insertbookmark); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .swresnc20005img {background-image: url($img-insertbookmark); background-repeat: no-repeat; background-position: center; background-size: $pad-navigator-obj-l; box-sizing: border-box; padding-left: $pad-navigator-obj-l !important; width: $pad-navigator-obj-l; height: $pad-navigator-obj-l;}
+	}
+	@if $img-insertpagenumberfield { #{$notdark} .unoInsertPageNumberField .unobutton img {background-image: url($img-insertpagenumberfield); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertpagecountfield { #{$notdark} .unoInsertPageCountField .unobutton img {background-image: url($img-insertpagecountfield); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertdatefield { #{$notdark} .unoInsertDateField .unobutton img, #{$notdark} .unoInsertCurrentDate .unobutton img {background-image: url($img-insertdatefield); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-inserttitlefield { #{$notdark} .unoInsertTitleField .unobutton img {background-image: url($img-inserttitlefield); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-updateall { #{$notdark} .unoUpdateAll .unobutton img {background-image: url($img-updateall); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-spellingandgrammardialog { #{$notdark} .unoSpellDialog .unobutton img , #{$notdark} .unoSpellingAndGrammarDialog .unobutton img {background-image: url($img-spellingandgrammardialog); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-thesaurusdialog { #{$notdark} .unoThesaurusDialog .unobutton img {background-image: url($img-thesaurusdialog); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-languagemenu { #{$notdark} #LanguageMenu .unobutton img, #{$notdark} .unoLanguageMenu .unobutton img {background-image: url($img-languagemenu); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-spellonline { #{$notdark} .unoSpellOnline .unobutton img {background-image: url($img-spellonline); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-translate { #{$notdark} .unoTranslate .unobutton img {background-image: url($img-translate); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-wordcountdialog { #{$notdark} .unoWordCountDialog .unobutton img {background-image: url($img-wordcountdialog); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-showresolvedannotations { #{$notdark} .unoShowResolvedAnnotations .unobutton img {background-image: url($img-showresolvedannotations); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-showannotations { #{$notdark} .showannotations .unobutton img {background-image: url($img-showannotations); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-speakernotes { #{$notdark} .notesmode .unobutton img {background-image: url($img-speakernotes); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-deletenote { #{$notdark} .unoDeleteNote .unobutton img {background-image: url($img-deletenote); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-deleteallnotes {#{$notdark} .unoDeleteAllAnnotation .unobutton img, #{$notdark} .unoDeleteAllNotes .unobutton img {background-image: url($img-deleteallnotes); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-trackchanges { #{$notdark} .unoTrackChanges .unobutton img {background-image: url($img-trackchanges); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-showtrackedchanges { #{$notdark} .unoShowTrackedChanges .unobutton img {background-image: url($img-showtrackedchanges); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-nexttrackedchange { #{$notdark} .unoNextTrackedChange .unobutton img, #{$notdark} .ui-combobox-entry.unoNextTrackedChange img, #{$notdark} .ui-combobox-entry.unoDecrementLevel img {content: url($img-nexttrackedchange)}}
+	@if $img-previoustrackedchange { #{$notdark} .unoPreviousTrackedChange .unobutton img, #{$notdark} .ui-combobox-entry.unoPreviousTrackedChange img {content: url($img-previoustrackedchange)}}
+	@if $img-acceptalltrackedchanges { #{$notdark} .unoAcceptAllTrackedChanges .unobutton img {background-image: url($img-acceptalltrackedchanges); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-rejectalltrackedchanges { #{$notdark} .unoRejectAllTrackedChanges .unobutton img {background-image: url($img-rejectalltrackedchanges); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-accepttrackedchanges { #{$notdark} .unoAcceptTrackedChanges .unobutton img {background-image: url($img-accepttrackedchanges); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-accepttrackedchange { #{$notdark} .unoAcceptTrackedChange .unobutton img {background-image: url($img-accepttrackedchange); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-rejecttrackedchange { #{$notdark} .unoRejectTrackedChange .unobutton img {background-image: url($img-rejecttrackedchange); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-accepttrackedchangeandnext { #{$notdark} .unoAcceptTrackedChangeToNext .unobutton img {background-image: url($img-accepttrackedchangeandnext); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-rejecttrackedchangeandnext { #{$notdark} .unoRejectTrackedChangeToNext .unobutton img {background-image: url($img-rejecttrackedchangeandnext); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-comparedocument { #{$notdark} .unoCompareDocuments .unobutton img {background-image: url($img-comparedocument); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-viewchanges { #{$notdark} .viewchanges .unobutton img {background-image: url($img-viewchanges); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-togglea11ystate { #{$notdark} .unotogglea11ystate .unobutton img {background-image: url($img-togglea11ystate); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-accessibilitycheck { #{$notdark} .unoAccessibilityCheck .unobutton img {background-image: url($img-accessibilitycheck); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-fontdialog { #{$notdark} .unoFontDialog .unobutton img {background-image: url($img-fontdialog); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-formatmenu { #{$notdark} .unoFormatMenu .unobutton img {background-image: url($img-formatmenu); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-paragraphdialog { #{$notdark} .unoParagraphDialog .unobutton img {background-image: url($img-paragraphdialog); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-stylelistdeck { #{$notdark} .unoSidebarDeck\.StyleListDeck .unobutton img {background-image: url($img-stylelistdeck); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-formatbulletsmenu { #{$notdark} .unoFormatBulletsMenu .unobutton img {background-image: url($img-formatbulletsmenu); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-outlinebullet { #{$notdark} .unoOutlineBullet .unobutton img {background-image: url($img-outlinebullet); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-setoutline { #{$notdark} .unoSetOutline .unobutton img {background-image: url($img-setoutline); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-editregion { #{$notdark} .unoEditRegion .unobutton img {background-image: url($img-editregion); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-formatline { #{$notdark} .unoFormatLine .unobutton img, #{$notdark} .ui-combobox-entry.unoFormatLine img {content: url($img-formatline)}}
+	@if $img-transformdialog { #{$notdark} .unoTransformDialog .unobutton img, #{$notdark} .ui-combobox-entry.unoTransformDialog img {content: url($img-transformdialog)}}
+	@if $img-insertcontentcontrol { #{$notdark} .unoInsertContentControl .unobutton img {background-image: url($img-insertcontentcontrol); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertcheckboxcontentcontrol { #{$notdark} .unoInsertCheckboxContentControl .unobutton img {background-image: url($img-insertcheckboxcontentcontrol); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertdropdowncontentcontrol { #{$notdark} .unoInsertDropdownContentControl .unobutton img {background-image: url($img-insertdropdowncontentcontrol); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertpicturecontentcontrol { #{$notdark} .unoInsertPictureContentControl .unobutton img {background-image: url($img-insertpicturecontentcontrol); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertdatecontentcontrol { #{$notdark} .unoInsertDateContentControl .unobutton img {background-image: url($img-insertdatecontentcontrol); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-contentcontrolproperties { #{$notdark} .unoContentControlProperties .unobutton img {background-image: url($img-contentcontrolproperties); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-tabledialog { #{$notdark} .unoTableDialog .unobutton img {background-image: url($img-tabledialog); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertcolumnsbefore { #{$notdark} .unoInsertColumnsBefore .unobutton img {background-image: url($img-insertcolumnsbefore); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertcolumnsafter { #{$notdark} .unoInsertColumnsAfter .unobutton img {background-image: url($img-insertcolumnsafter); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-deletecolumns { #{$notdark} .unoDeleteColumns .unobutton img, #{$notdark} .ui-combobox-entry.unoDeleteColumns img {content: url($img-deletecolumns)}}
+	@if $img-insertrowsbefore { #{$notdark} .unoInsertRowsBefore .unobutton img {background-image: url($img-insertrowsbefore); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertrowsafter { #{$notdark} .unoInsertRowsAfter .unobutton img {background-image: url($img-insertrowsafter); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-deleterows { #{$notdark} .unoDeleteRows .unobutton img,  #{$notdark} .ui-combobox-entry.unoDeleteRows img {content: url($img-deleterows)}}
+	@if $img-mergecells { #{$notdark} .unoToggleMergeCells .unobutton img , #{$notdark} .unoMergeCells .unobutton img , #{$notdark} #togglemergecells img {background-image: url($img-mergecells) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-splitcell { #{$notdark} .unoSplitCell .unobutton img {background-image: url($img-splitcell); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-splittable { #{$notdark} .unoSplitTable .unobutton img {background-image: url($img-splittable); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-protect { #{$notdark} .unoProtect .unobutton img {background-image: url($img-protect); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-unsetcellsreadonly { #{$notdark} .unoUnsetCellsReadOnly .unobutton img {background-image: url($img-unsetcellsreadonly); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-entirecell { #{$notdark} .unoEntireCell .unobutton img {background-image: url($img-entirecell); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-entirecolumn { #{$notdark} .unoEntireColumn .unobutton img {background-image: url($img-entirecolumn); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-selecttable { #{$notdark} .unoSelectTable .unobutton img {background-image: url($img-selecttable); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-entirerow { #{$notdark} .unoEntireRow .unobutton img {background-image: url($img-entirerow); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-deletetable { #{$notdark} .unoDeleteTable .unobutton img {background-image: url($img-deletetable); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-cellverttop { #{$notdark} .unoCellVertTop .unobutton img , #{$notdark} .unoAlignTop .unobutton img {background-image: url($img-cellverttop); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-cellvertcenter { #{$notdark} .unoCellVertCenter .unobutton img , #{$notdark} .unoAlignVCenter .unobutton img {background-image: url($img-cellvertcenter); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-cellvertbottom { #{$notdark} .unoCellVertBottom .unobutton img , #{$notdark} .unoAlignBottom .unobutton img {background-image: url($img-cellvertbottom); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-tablesort { #{$notdark} .unoTableSort .unobutton img {background-image: url($img-tablesort); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-tablenumberformatdialog { #{$notdark} .unoTableNumberFormatDialog .unobutton img {background-image: url($img-tablenumberformatdialog); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-numberformatcurrency { #{$notdark} .unoNumberFormatCurrency .unobutton img , #{$notdark} #numberformatcurrency img {background-image: url($img-numberformatcurrency) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-numberformatdate { #{$notdark} .unoNumberFormatDate .unobutton img , #{$notdark} .unoNumberFormatDecimal .unobutton img {background-image: url($img-numberformatdate); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-numberformatpercent { #{$notdark} .unoNumberFormatPercent .unobutton img , #{$notdark} #numberformatpercent img {background-image: url($img-numberformatpercent) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-numberformatdecdecimals { #{$notdark} .unoNumberFormatDecDecimals .unobutton img , #{$notdark} #numberformatdecdecimals img {background-image: url($img-numberformatdecdecimals) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-numberformatincdecimals { #{$notdark} .unoNumberFormatIncDecimals .unobutton img , #{$notdark} #numberformatincdecimals img {background-image: url($img-numberformatincdecimals) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-styleapplydefault { #{$notdark} [modelid="StyleApplyDefault"] .unobutton img {background-image: url($img-styleapplydefault) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-styleapplyheading1 { #{$notdark} [modelid="StyleApplyHeading1"] .unobutton img {background-image: url($img-styleapplyheading1) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-styleapplyheading2 { #{$notdark} [modelid="StyleApplyHeading2"] .unobutton img {background-image: url($img-styleapplyheading2) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-styleapplygood { #{$notdark} [modelid="StyleApplyGood"] .unobutton img {background-image: url($img-styleapplygood) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-styleapplyneutral { #{$notdark} [modelid="StyleApplyNeutral"] .unobutton img {background-image: url($img-styleapplyneutral) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-styleapplybad { #{$notdark} [modelid="StyleApplyBad"] .unobutton img {background-image: url($img-styleapplybad) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-conditionalformat { #{$notdark} .unoConditionalFormatMenu .unobutton img , #{$notdark} #conditionalformatdialog img {background-image: url($img-conditionalformat) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-autosummenu { #{$notdark} .unoAutoSumMenu .unobutton img , #{$notdark} #autosum img {background-image: url($img-autosummenu) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-startformula { #{$notdark} .startformula .unobutton img {background-image: url($img-startformula) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-functiondialog { #{$notdark} .unoFunctionDialog .unobutton img , #{$notdark} #autosum img, #{$notdark} .unoCalculatedFieldRun .unobutton img {background-image: url($img-functiondialog) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-acceptformula { #{$notdark} .unoacceptformula .unobutton img , #{$notdark} #autosum img {background-image: url($img-acceptformula) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-cancelformula { #{$notdark} .unocancelformula .unobutton img , #{$notdark} #autosum img {background-image: url($img-cancelformula) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+
+
+	@if $img-flipvertical { #{$notdark} .unoFlipVertical .unobutton img {background-image: url($img-flipvertical); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-fliphorizontal { #{$notdark} .unoFlipHorizontal .unobutton img {background-image: url($img-fliphorizontal); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-formatgroup { #{$notdark} .unoFormatGroup .unobutton img {background-image: url($img-formatgroup); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-entergroup { #{$notdark} .unoEnterGroup .unobutton img {background-image: url($img-entergroup); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-leavegroup { #{$notdark} .unoLeaveGroup .unobutton img {background-image: url($img-leavegroup); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-text { #{$notdark} .unoText .unobutton img {background-image: url($img-text); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-fullscreen { #{$notdark} .unoFullScreen .unobutton img {background-image: url($img-fullscreen); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-multipageview {#{$toolbardownnotdark} body:not([data-doctype=spreadsheet]) #toolbar-down .unotoolbutton.multipageview img , #{$notdark} .notebookbar .unotoolbutton.multipageview img {background-image: url($img-multipageview) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-pagenext {#{$toolbardownnotdark} body:not([data-doctype=spreadsheet]) #toolbar-down .unotoolbutton.next img {background-image: url($img-pagenext) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-pageprev {#{$toolbardownnotdark} body:not([data-doctype=spreadsheet]) #toolbar-down .unotoolbutton.prev img {background-image: url($img-pageprev) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-sheetnext {#{$notdark} #nextrecord img {background-image: url($img-sheetnext) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important;}}
+	@if $img-sheetprev {#{$notdark} #prevrecord img {background-image: url($img-sheetprev) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important;}}
+	@if $img-sheetlast {#{$notdark} #lastrecord img {background-image: url($img-sheetlast) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important; transform: scaleX(-1) !important}}
+	@if $img-sheetfirst {#{$notdark} #firstrecord img {background-image: url($img-sheetfirst) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertsheet {#{$notdark} #insertsheet img {background-image: url($img-insertsheet) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-sheetlist {#{$notdark} #sheetlist img {background-image: url($img-sheetlist) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-searchnext {#{$toolbardownnotdark} #searchnext img {background-image: url($img-searchnext) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-searchprev {#{$toolbardownnotdark} #searchprev img {background-image: url($img-searchprev) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-cancelsearch {#{$toolbardownnotdark} #cancelsearch img {background-image: url($img-cancelsearch) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-zoomreset { #{$notdark} .unozoomreset .unobutton img, #{$notdark} .zoomreset .unobutton img {background-image: url($img-zoomreset); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-zoomreset-toolbardown { #{$toolbardownnotdark} #toolbar-down #zoomreset img {background-image: url($img-zoomreset-toolbardown) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-fitwidthzoom { #{$toolbardownnotdark} #toolbar-down .fitwidthzoom .unobutton img , #{$notdark} .notebookbar.fitwidthzoom .unobutton img {background-image: url($img-fitwidthzoom) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-zoomout-toolbardown {#{$toolbardownnotdark} #toolbar-down .zoomout .unobutton img {background-image: url($img-zoomout-toolbardown) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-zoomin-toolbardown {#{$toolbardownnotdark} #toolbar-down .zoomin .unobutton img {background-image: url($img-zoomin-toolbardown) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-zoomout {#{$notdark} .unozoomout .unobutton img {background-image: url($img-zoomout) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-zoomin {#{$notdark} .unozoomin .unobutton img {background-image: url($img-zoomin) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-toggleuimode { #{$notdark} .unotoggleuimode .unobutton img {background-image: url($img-toggleuimode); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-showruler { #{$notdark} .unoshowruler .unobutton img {background-image: url($img-showruler); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-showstatusbar { #{$notdark} .unoshowstatusbar .unobutton img {background-image: url($img-showstatusbar); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-collapsenotebookbar { #{$notdark} .unocollapsenotebookbar .unobutton img {background-image: url($img-collapsenotebookbar); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-sidebar-text { #{$notdark} [data-doctype='text'] .unoSidebar .unobutton img , #{$notdark} [data-doctype='text'] .notebookbar.unoSidebarDeck\.PropertyDeck:not(.has-label) .unobutton img , #{$notdark} [data-doctype='text'] .unoModifyPage .unobutton img , #{$notdark} #sidebar_modify_page img {background-image: url($img-sidebar-text) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important; }}
+	@if $img-sidebar-presentation { #{$notdark} [data-doctype='presentation'] .unoSidebar .unobutton img , #{$notdark} [data-doctype='presentation'] .notebookbar.unoSidebarDeck\.PropertyDeck:not(.has-label) .unobutton img , #{$notdark} [data-doctype='presentation'] .notebookbar.unoModifyPage .unobutton img , #{$notdark} #sidebar_modify_page img {background-image: url($img-sidebar-presentation) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important; }}
+	@if $img-sidebar-spreadsheet { #{$notdark} [data-doctype='spreadsheet'] .unoSidebar .unobutton img , #{$notdark} [data-doctype='spreadsheet'] .notebookbar.unoSidebarDeck\.PropertyDeck:not(.has-label) .unobutton img , #{$notdark} [data-doctype='spreadsheet'] .unoModifyPage .unobutton img , #{$notdark} #sidebar_modify_page img {background-image: url($img-sidebar-spreadsheet) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important; }}
+	@if $img-sidebar-drawing { #{$notdark} [data-doctype='drawing'] .unoSidebar .unobutton img , #{$notdark} [data-doctype='drawing'] .notebookbar.unoSidebarDeck\.PropertyDeck:not(.has-label) .unobutton img , #{$notdark} [data-doctype='drawing'] .unoModifyPage .unobutton img , #{$notdark} #sidebar_modify_page img {background-image: url($img-sidebar-drawing) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important; }}
+	@if $img-sidebar { #{$notdark} .unoSidebar .unobutton img , #{$notdark} .unoSidebarDeck\.PropertyDeck .unobutton img , #{$notdark} .unoModifyPage .unobutton img , #{$notdark} #sidebar_modify_page img {background-image: url($img-sidebar) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important; }}
+	@if $img-sidebar-checked {
+		#{$notdark} .unoSidebar.selected .unobutton img , #{$notdark} .unoSidebarDeck\.PropertyDeck.selected .unobutton img , #{$notdark} .unoModifyPage.selected .unobutton img,  #{$notdark} #sidebar_modify_page.selected img {background-image: url($img-sidebar-checked) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important; filter: none; box-shadow: none;}
+
+		#{$notdark} .unoSidebar.selected .unobutton , #{$notdark} .unoModifyPage.selected .unobutton {filter: none !important;}
+	}
+	@if $img-slidemasterpage {#{$notdark} .unoSlideMasterPage .unobutton img {background-image: url($img-slidemasterpage) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-renamemasterpage {#{$notdark} .unoRenameMasterPage .unobutton img {background-image: url($img-renamemasterpage) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-closemasterpage {#{$notdark} .unoCloseMasterView .unobutton img {background-image: url($img-closemasterpage) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-hideslide {#{$notdark} #hideslide img, #{$notdark} .unohideslide .unobutton img {background-image: url($img-hideslide) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-showslide {#{$notdark} #showslide img, #{$notdark} .unoshowslide .unobutton img {background-image: url($img-showslide) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-masterslidespanel {#{$notdark} .unoPageSetup .unobutton img, #{$notdark} .unoMasterSlidesPanel:not(.unospan-options-master-slides-panel) .unobutton img , #{$notdark} #sidebar_master_slides img {background-image: url($img-masterslidespanel) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-sidebar-masterslidespanel {#{$notdark} .notebookbar.unoMasterSlidesPanel.unospan-options-master-slides-panel .unobutton img , #{$notdark} #sidebar_master_slides img {background-image: url($img-sidebar-masterslidespanel) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-sidebar-masterslidespanel-checked {
+		#{$notdark} .unoMasterSlidesPanel.selected.unospan-options-master-slides-panel .unobutton img, #{$notdark} #sidebar_master_slides.selected img {background-image: url($img-masterslidespanel-checked) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important; filter: none; box-shadow: none;}
+
+		#{$notdark} .unoMasterSlidesPanel.selected .unobutton {
+			filter: none !important;
+		}
+	}
+	@if $img-slidechangewindow { #{$notdark} .unoSlideChangeWindow:not(.unospan-options-slide-change-window) .unobutton img , #{$notdark} #sidebar_slide_change img {background-image: url($img-slidechangewindow) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important; }}
+	@if $img-sidebar-slidechangewindow { #{$notdark} .notebookbar.unoSlideChangeWindow.unospan-options-slide-change-window .unobutton img , #{$notdark} #sidebar_slide_change img {background-image: url($img-sidebar-slidechangewindow) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important; }}
+	@if $img-sidebar-slidechangewindow-checked {
+		#{$notdark} .unoSlideChangeWindow.selected.unospan-options-slide-change-window .unobutton img, #{$notdark} #sidebar_slide_change.selected img {background-image: url($img-slidechangewindow-checked) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important; filter: none; box-shadow: none;}
+
+		#{$notdark} .unoSlideChangeWindow.selected .unobutton {
+			filter: none !important;
+		}
+	}
+	@if $img-animationeffect { #{$notdark} .unoAnimationEffects .unobutton img {background-image: url($img-animationeffect) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important; }}
+	@if $img-customanimation { #{$notdark} .unoCustomAnimation:not(.unospan-options-custom-animation) .unobutton img {background-image: url($img-customanimation) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important; }}
+	@if $img-sidebar-customanimation { #{$notdark} .notebookbar.unoCustomAnimation .unobutton img {background-image: url($img-sidebar-customanimation) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important; }}
+	@if $img-sidebar-customanimation-checked { #{$notdark} .unoCustomAnimation.selected .unobutton img, #{$notdark} #sidebar_custom_animation.selected img {background-image: url($img-sidebar-customanimation-checked) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important; filter: none; box-shadow: none;}}
+	@if $img-table-obj { #{$notdark} .swresnc20001img {background-image: url($img-table-obj); background-repeat: no-repeat; background-position: center; background-size: $pad-navigator-obj-l; box-sizing: border-box; padding-left: $pad-navigator-obj-l !important; width: $pad-navigator-obj-l; height: $pad-navigator-obj-l;}}
+	@if $img-ole-obj { #{$notdark} .swresnc20004img {background-image: url($img-ole-obj); background-repeat: no-repeat; background-position: center; background-size: $pad-navigator-obj-l; box-sizing: border-box; padding-left: $pad-navigator-obj-l !important; width: $pad-navigator-obj-l; height: $pad-navigator-obj-l;}}
+	@if $img-frame-obj {
+		/// Navigator icon
+		#{$notdark} .swresnc20002img {background-image: url($img-frame-obj); background-repeat: no-repeat; background-position: center; background-size: $pad-navigator-obj-l; box-sizing: border-box; padding-left: $pad-navigator-obj-l !important; width: $pad-navigator-obj-l; height: $pad-navigator-obj-l;}
+		/// NB icon
+		#{$notdark} .unoInsertFrame .unobutton img {background-image: url($img-frame-obj); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important;}
+	}
+	@if $img-comment-obj { #{$notdark} .swresnc20010img {background-image: url($img-comment-obj); background-repeat: no-repeat; background-position: center; background-size: $pad-navigator-obj-l; box-sizing: border-box; padding-left: $pad-navigator-obj-l !important; width: $pad-navigator-obj-l; height: $pad-navigator-obj-l;}}
+	@if $img-drawing-obj { #{$notdark} .swresnc20011img {background-image: url($img-drawing-obj); background-repeat: no-repeat; background-position: center; background-size: $pad-navigator-obj-l; box-sizing: border-box; padding-left: $pad-navigator-obj-l !important; width: $pad-navigator-obj-l; height: $pad-navigator-obj-l;}}
+	@if $img-heading-obj { #{$notdark} .swresnc20000img {background-image: url($img-heading-obj); background-repeat: no-repeat; background-position: center; background-size: $pad-navigator-obj-l; box-sizing: border-box; padding-left: $pad-navigator-obj-l !important; width: $pad-navigator-obj-l; height: $pad-navigator-obj-l;}}
+	@if $img-navigator { #{$notdark} .unoNavigator .unobutton img {background-image: url($img-navigator); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important; filter: none; box-shadow: none;}}
+	@if $img-forumhelp { #{$notdark} .unoForumHelp .unobutton img {background-image: url($img-forumhelp); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-onlinehelp { #{$notdark} .unoOnlineHelp .unobutton img {background-image: url($img-onlinehelp); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-keyboardshortcuts { #{$notdark} .unoKeyboardShortcuts .unobutton img {background-image: url($img-keyboardshortcuts); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-reportissue { #{$notdark} .unoReportIssue .unobutton img {background-image: url($img-reportissue); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-latestupdates { #{$notdark} .unoLatestUpdates .unobutton img {background-image: url($img-latestupdates); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-feedback { #{$notdark} .unoFeedback .unobutton img {background-image: url($img-feedback); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-about { #{$notdark} .unoAbout .unobutton img {background-image: url($img-about); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-styleupdatebyexample { #{$notdark} .unoStyleUpdateByExample .unobutton img {background-image: url($img-styleupdatebyexample); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-stylenewbyexample { #{$notdark} .unoStyleNewByExample .unobutton img {background-image: url($img-stylenewbyexample); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-editstyle { #{$notdark} .unoEditStyle .unobutton img {background-image: url($img-editstyle); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-shadowed { #{$notdark} .unoShadowed .unobutton img {background-image: url($img-shadowed); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-setdefault { #{$notdark} .unoSetDefault .unobutton img, #{$notdark} .ui-combobox-entry.unoSetDefault img {content: url($img-setdefault)}}
+	@if $img-spacing { #{$notdark} .unoSpacing .unobutton img , #{$notdark} .unoChangeDistance .unobutton img {background-image: url($img-spacing); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-removebullets { #{$notdark} .unoRemoveBullets .unobutton img {background-image: url($img-removebullets); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-paraspaceincrease { #{$notdark} .unoParaspaceIncrease .unobutton img {background-image: url($img-paraspaceincrease); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-paraspacedecrease {
+		#{$notdark} .unoParaspaceDecrease:not(.mobile-wizard) .unobutton img {background-image: url($img-paraspacedecrease); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .mobile-wizard.unoParaspaceDecrease .unobutton img {content: url($img-paraspacedecrease)}
+	}
+	@if $img-serveraudit { #{$notdark} .serveraudit .unobutton img {background-image: url($img-serveraudit); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-togglesheetgrid { #{$notdark} .unoToggleSheetGrid .unobutton img {background-image: url($img-togglesheetgrid); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-togglefocuscell { #{$notdark} .columnrowhighlight .unobutton img {background-image: url($img-togglefocuscell); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+
+	@if $img-spinner-aboveparaspacing {
+		#aboveparaspacingimg {background-image: url($img-spinner-aboveparaspacing); background-repeat: no-repeat; background-position: 0 center; box-sizing: border-box; width: var(--btn-img-size) !important; height: var(--btn-img-size) !important; padding-left: $pad-l !important}
+		#aboveparaspacingbox {grid-auto-columns: var(--btn-img-size);}
+	}
+	@if $img-spinner-belowparaspacing {
+		#belowparaspacingimg {background-image: url($img-spinner-belowparaspacing); background-repeat: no-repeat; background-position: 0 center; box-sizing: border-box; width: var(--btn-img-size) !important; height: var(--btn-img-size) !important; padding-left: $pad-l !important}
+		#belowparaspacingbox {grid-auto-columns: var(--btn-img-size);}
+	}
+	@if $img-spinner-beforetextindent {
+		#beforetextindentimg {background-image: url($img-spinner-beforetextindent); background-repeat: no-repeat; background-position: 0 center; box-sizing: border-box; width: var(--btn-img-size) !important; height: var(--btn-img-size) !important; padding-left: $pad-l !important}
+		#beforetextindentbox {grid-auto-columns: var(--btn-img-size);}
+	}
+	@if $img-spinner-aftertextindent {
+		#aftertextindentimg {background-image: url($img-spinner-aftertextindent); background-repeat: no-repeat; background-position: 0 center; box-sizing: border-box; width: var(--btn-img-size) !important; height: var(--btn-img-size) !important; padding-left: $pad-l !important;}
+		#aftertextindentbox {grid-auto-columns: var(--btn-img-size);}
+	}
+	@if $img-spinner-firstlineindent {
+		#firstlineindentimg {background-image: url($img-spinner-firstlineindent); background-repeat: no-repeat; background-position: 0 center; box-sizing: border-box; width: var(--btn-img-size) !important; height: var(--btn-img-size) !important; padding-left: $pad-l !important}
+		#firstlineindentbox {grid-auto-columns: var(--btn-img-size);}
+	}
+
+	@if $img-hangingindent { #{$notdark} .unoHangingIndent .unobutton img {background-image: url($img-hangingindent); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-connectortoolbox { #{$notdark} .unoConnectorToolbox .unobutton img , #{$notdark} #insertconnectors img {background-image: url($img-connectortoolbox); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-xlinecolor { #{$notdark} .unospan-XLineColor .unobutton img{background-image: url($img-xlinecolor) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-fillcolor { #{$notdark} .unospan-FillColor .unobutton img{background-image: url($img-fillcolor) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-duplicatepage {#{$notdark} .unoDuplicatePage .unobutton img, #{$notdark} .unoduplicatepage .unobutton img , #{$notdark} #duplicatepage img, #{$notdark} .ui-combobox-entry.unoDuplicatePage img {content: url($img-duplicatepage)}}
+	@if $img-presentation { #{$notdark} .unoPresentation .unobutton img , #{$notdark} .unopresentation .unobutton img , #{$notdark} #presentation img {background-image: url($img-presentation) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-presentinwindow { #{$notdark} .presentinwindow .unobutton img, #{$notdark} #presentinwindow img {background-image: url($img-presentinwindow) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-presenterconsole { #{$notdark} .presenterconsole .unobutton img {background-image: url($img-presenterconsole) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-grid { #{$notdark} .unoGridVisible .unobutton img {background-image: url($img-grid) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-griduse { #{$notdark} .unoGridUse .unobutton img {background-image: url($img-griduse) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertdatefieldfix { #{$notdark}.unoInsertCurrentDate .unobutton img, #{$notdark} .unoInsertDateFieldFix .unobutton img {background-image: url($img-insertdatefieldfix); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertdatefieldvar { #{$notdark} .unoInsertDateFieldVar .unobutton img {background-image: url($img-insertdatefieldvar); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-inserttimefieldfix { #{$notdark} .unoInsertCurrentTime .unobutton img, #{$notdark} .unoInsertTimeFieldFix .unobutton img, #{$notdark} .DateAndTimeFunctionsMenu .unobutton img {background-image: url($img-inserttimefieldfix); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-inserttimefieldvar { #{$notdark} .unoInsertTimeFieldVar .unobutton img {background-image: url($img-inserttimefieldvar); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertslidefield { #{$notdark} .unoInsertPageField .unobutton img, #{$notdark} .unoInsertSlideField .unobutton img {background-image: url($img-insertslidefield); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertslidesfield { #{$notdark} .unoInsertPagesField .unobutton img, #{$notdark} .unoInsertSlidesField .unobutton img {background-image: url($img-insertslidesfield); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-insertslidetitlefield { #{$notdark} .unoInsertPageTitleField .unobutton img, #{$notdark} .unoInsertSlideTitleField .unobutton img {background-image: url($img-insertslidetitlefield); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-headerandfooter { #{$notdark} .unoHeaderAndFooter .unobutton img, #{$notdark} .unoHeaderAndfooter .unobutton img, #{$notdark} .unoEditHeaderAndFooter  .unobutton img {background-image: url($img-headerandfooter); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-darkmode { #{$notdark} .unotoggledarktheme .unobutton img, #{$notdark} .toggledarktheme .unobutton img {background-image: url($img-darkmode); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-invertbackground { #{$notdark} .unoinvertbackground .unobutton img {background-image: url($img-invertbackground); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-checkbox-on { #{$notdark} .jsdialog input[type='checkbox']:checked {background-image: url($img-checkbox-on) !important;}}
+	@if $img-checkbox-on-disabled { #{$notdark} .jsdialog input[type='checkbox']:checked:disabled {background-image: url($img-checkbox-on-disabled) !important;}}
+	@if $img-check-off { #{$notdark} .jsdialog input[type='checkbox'] {background-image: url($img-check-off) !important; background-repeat: no-repeat !important; background-position: center !important;}}
+	@if $img-checkbox-off-disabled { @debug "$img-checkbox-off-disabled is set to true"; #{$notdark} .jsdialog input[type='checkbox']:disabled {background-image: url($img-checkbox-off-disabled) !important;}}
+	@if $img-radio-on { #{$notdark} .jsdialog input[type='radio']:checked:not(.ui-color-picker-entry) {background-image: url($img-radio-on) !important;}}
+	@if $img-radio-off { #{$notdark} .jsdialog input[type='radio']:not(.ui-color-picker-entry) {background-image: url($img-radio-off) !important; background-repeat: no-repeat !important; background-position: center !important;}}
+	@if $img-radio-on-disabled { #{$notdark} .jsdialog input[type='radio']:checked:disabled:not(.ui-color-picker-entry) {background-image: url($img-radio-on-disabled) !important;}}
+	@if $img-radio-off-disabled { #{$notdark} .jsdialog input[type='radio']:disabled:not(.ui-color-picker-entry) {background-image: url($img-radio-off-disabled) !important;}}
+	@if $img-radio-on-dark { html[data-theme=dark] .jsdialog input[type='radio']:checked:not(.ui-color-picker-entry) {background-image: url($img-radio-on-dark) !important;}}
+	@if $img-radio-off-dark { html[data-theme=dark] .jsdialog input[type='radio']:not(.ui-color-picker-entry) {background-image: url($img-radio-off-dark) !important; background-repeat: no-repeat !important; background-position: center !important;}}
+	@if $img-radio-on-disabled-dark { html[data-theme=dark] .jsdialog input[type='radio']:checked:disabled:not(.ui-color-picker-entry) {background-image: url($img-radio-on-disabled-dark) !important;}}
+	@if $img-radio-off-disabled-dark { html[data-theme=dark] .jsdialog input[type='radio']:disabled:not(.ui-color-picker-entry) {background-image: url($img-radio-off-disabled-dark) !important;}}
+	@if $img-indentation-marker-up { #{$notdark} .cool-ruler-indentation-marker-up {background-image: url($img-indentation-marker-up) !important; background-repeat: no-repeat !important; background-position: center $img-indentation-marker-up-y-offset !important;}}
+	@if $img-indentation-marker-down { #{$notdark} .cool-ruler-indentation-marker-down {height: $img-indentation-marker-down-height;background-image: url($img-indentation-marker-down) !important; background-repeat: no-repeat !important; background-position: center $img-indentation-marker-down-y-offset !important;}}
+	@if $img-column-resize-marker-hover { .table-column-resize-marker:hover{background-image: url($img-column-resize-marker-hover); width: 32px; height: 32px;}}
+	@if $img-row-resize-marker { .table-row-resize-marker{background-image: url($img-row-resize-marker); width: 32px; height: 32px;}}
+	@if $img-row-resize-marker-hover {.table-row-resize-marker:hover{background-image: url($img-row-resize-marker-hover);width: 32px; height: 32px;}}
+	@if $img-close-widget { .lokdialog_container .ui-dialog-titlebar-close .ui-icon {background-image: url($img-close-widget);border: none;background-position: center;filter:saturate(0);}}
+	@if $img-close-widget-dark { html[data-theme=dark] .lokdialog_container .ui-dialog-titlebar-close .ui-icon {background-image: url($img-close-widget-dark);border: none;background-position: center;filter: saturate(0);}}
+	@if $img-close-hide-upstream {.lokdialog_container .ui-dialog-titlebar-close {background: none;border: none;}}
+	@if $img-close-widget-hover { .lokdialog_container.ui-dialog .ui-dialog-titlebar-close:hover > .ui-icon-closethick {background-image: url($img-close-widget-hover);}}
+	@if $img-stylepreviews-scrollup {#{$toolbardownnotdark} #scroll-up img {background-image: url($img-stylepreviews-scrollup) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-stylepreviews-scrolldown {#{$toolbardownnotdark} #scroll-down img {background-image: url($img-stylepreviews-scrolldown) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-stylepreviews-more {#{$toolbardownnotdark} #format-style-list-dialog img {background-image: url($img-stylepreviews-more) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-fontworkalignmentfloater { #{$notdark} .unoChangeAlignment .unobutton img {background-image: url($img-fontworkalignmentfloater); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-fontheight { #{$notdark} .unoChangeFontSize .unobutton img {background-image: url($img-fontheight); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-changefont { #{$notdark} .unoChangeFont .unobutton img {background-image: url($img-changefont); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	// The shorthand's !important takes background-color too, so it has to stay out of forced colours.
+	@if $img-closenavigator {@media (forced-colors: none) {#{$notdark} .close-navigation-button {background-image: url($img-closenavigator) !important; background-repeat: no-repeat !important; background-position: center !important;border: none;background-position: center;}}}
+	@if $color-navigator-tab {#{$notdark} .navigator-btn-wrapper.hasnotebookbar {background-color: var($color-navigator-tab);}}
+	@if $img-grafluminance {#{$notdark} .unoGrafLuminance .unobutton img {background-image: url($img-grafluminance); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-grafcontrast {#{$notdark} .unoGrafContrast .unobutton img {background-image: url($img-grafcontrast); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-grafmode {#{$notdark} .unoGrafMode .unobutton img {background-image: url($img-grafmode); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-graftransparence {#{$notdark} .unoGrafTransparence .unobutton img {background-image: url($img-graftransparence); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-editheaderandfooter {#{$notdark} .unoEditHeaderAndFooter .unobutton img {background-image: url($img-editheaderandfooter); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-morefunctionsmenu {#{$notdark} .MoreFunctionsMenu .unobutton img {background-image: url($img-morefunctionsmenu); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-dataarearefresh {#{$notdark} .unoDataAreaRefresh .unobutton img {background-image: url($img-dataarearefresh); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-selectdb {#{$notdark} .unoSelectDB .unobutton img {background-image: url($img-selectdb); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-definedbname {#{$notdark} .unoDefineDBName .unobutton img {background-image: url($img-definedbname); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-convertformulatovalue {#{$notdark} .unoConvertFormulaToValue .unobutton img {background-image: url($img-convertformulatovalue); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-mathandtrigfunctions {#{$notdark} .MathAndTrigFunctionsMenu .unobutton img {background-image: url($img-mathandtrigfunctions); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-logicalfunctions {#{$notdark} .LogicalFunctionsMenu .unobutton img {background-image: url($img-logicalfunctions); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-textfunctions {#{$notdark} .TextFunctionsMenu .unobutton img {background-image: url($img-textfunctions); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-financialfunctions {#{$notdark} .FinancialFunctionsMenu .unobutton img {background-image: url($img-financialfunctions); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-fullscreenpresentation {#{$notdark} .fullscreen-presentation .unobutton img {background-image: url($img-fullscreenpresentation); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+	@if $img-presentationcurrentslide {#{$notdark} .presentation-currentslide .unobutton img {background-image: url($img-presentationcurrentslide); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
+}

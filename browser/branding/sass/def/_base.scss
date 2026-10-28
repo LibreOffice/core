@@ -1,0 +1,165 @@
+
+
+@import '_css-vars';
+
+//Variables
+$CO-logo: true !default;
+$special-fonteffects: false !default;
+$with-integrator-logo: false !default;
+/// Hide android marker on desktop
+$hide-desktop-marker: false !default;
+$hide-forum: false !default;
+$hide-report-issue: false !default;
+$hide-about: false !default;
+$hide-keyboard-shortcuts: false !default;
+$toolbar-down-per-doc-type: false !default;
+$toolbar-up-per-doc-type: true !default;
+$btn-selected-per-doc-type: false !default;
+$notebookbar-separators: true !default;
+$clr-backstage-header-background : false !default;
+$clr-backstage-header-background-dark : false !default;
+
+$font-stack: Helvetica, sans-serif;
+$text-color-indicator:  #1C99E0;
+$spreadsheet-color-indicator: #18A303;
+$presentation-color-indicator: #D36118;
+
+$color--amethyst-smoke: #9c99b6;
+$color--athens-gray-tint: #e7e7ee33;
+$color--brave-purple: #8c86bc; //+17, +29, +33
+$color--brave-purple-tint: #8c86bc33;
+
+$color--mineral-gray: #4c566a; //+9c
+$color--pale-sky: #747983;
+
+$color--wisteria: #8e69a8;
+$color--athens-gray: #e7e7ee;
+$color--athens-gray-tint: #e7e7ee33;
+
+//Assign colors
+$clr-wdgt-header-bg: #ffffff !default;
+$clr-wdgt-header-txt: $color--brave-purple !default;
+$clr-wdgt-header-close-bg: $color--brave-purple !default;
+@include set-cssvars((
+	//setting css var: --co-primary-text
+	color-main-text: #212121,
+	color-background-hover: #f5f5f5,
+	color-background-dark: #ededed,
+	body-bg: #ffffff,
+	text-accent: #38257a,
+	primary-element: #4c566a,
+	primary-elment-rgb: (76, 86, 106),
+	primary-element-light: #eaecf0,
+	primary-text: #ffffff,
+	border-radius: 3px,
+	color-border-dark: #b0b4bd,
+	color-text-lighter: #636363,
+	color-warning: #eca700,
+	color-main-background-translucent: transparent,
+	color-background-light: #f1f1f1,
+	color-text-nb-tab: #fff,
+	color-bg-nb-tab: rgba(0,0,0, 0.13),
+	settings-btn-primary: #00679e,
+	settings-btn-primary-text: #ffffff,
+	settings-btn-light: #e5eff5,
+	settings-btn-light-text: #00293f,
+	settings-border: #ededed,
+	settings-border-contrast: #dbdbdb,
+	settings-text: #222222,
+	settings-text-maxcontrast: #6b6b6b,
+	settings-background: #ffffff,
+	settings-background-hover: #f5f5f5,
+), (
+	//setting css var: --co-primary-text
+	color-main-text: #ededed,
+	color-background-hover: #262626,
+	color-background-dark: #1E1E1E,
+	body-bg: #262626,
+	text-accent: #83beec,
+	primary-element: #0b87e7,
+	primary-element-light: #83beec,
+	primary-text: #000,
+	color-border-dark: #1E1E1E,
+	color-text-lighter: #fff,
+	color-warning: #eca700,
+	color-main-background-translucent: transparent,
+	color-background-light: #363636,
+	color-bg-nb-tab: rgba(255,255,255, 0.05),
+	settings-btn-primary: #0091f2,
+	settings-btn-primary-text: #000000,
+	settings-btn-light: #14232c,
+	settings-btn-light-text: #99d3f9,
+	settings-border: #292929,
+	settings-border-contrast: #3b3b3b,
+	settings-text: #ebebeb,
+	settings-text-maxcontrast: #999999,
+	settings-background: #171717,
+	settings-background-hover: #212121,
+));
+
+@include set-cssvars((
+  btn-primary: var(--co-settings-btn-primary),
+  btn-primary-text: var(--co-settings-btn-primary-text),
+  btn-light: var(--co-settings-btn-light),
+  btn-light-text: var(--co-settings-btn-light-text),
+  border: var(--co-settings-border),
+  border-contrast: var(--co-settings-border-contrast),
+  text: var(--co-settings-text),
+  text-maxcontrast: var(--co-settings-text-maxcontrast),
+  background: var(--co-settings-background),
+  background-hover: var(--co-settings-background-hover)
+), (), settings);
+
+$clr-menu-li-hvr-border: #706aab !default;
+$clr-document-header-bg: #fdfdfd !default;
+$clr-document-header-border: #ececec !default;
+$clr-document-container-bg: #f8f9fa !default;
+$clr-toolbar-bezels-border: #e6e6e6 !default;
+$clr-wdgt-header-close-bg: $color--brave-purple + 33 !default;
+
+$clr-annotation-btn-cancel-bg: #e1e1e1 !default;
+$clr-annotation-btn-cancel-border: #e1e1e1 !default;
+$clr-annotation-btn-primary-bg: #0075CF !default;
+$clr-annotation-btn-primary-border: #dfdfdf !default;
+$clr-annotation-btn-primary-hover-bg: #005EA6 !default;
+$clr-annotation-btn-primary-hover-border: #005EA6 !default;
+
+//icons - scroll-indicators
+$ico-scroll-bar-indicator: 'images/scroll-double-white.svg' !default;
+$ico-scroll-bar-indicator-over: 'images/scroll-double-dark.svg' !default;
+
+
+//Mixins
+@mixin transform($property) {
+	-webkit-transform: $property;
+	-moz-transform: $property;
+	-ms-transform: $property;
+	-o-transform: $property;
+	transform: $property;
+}
+@mixin full-width() {
+	width: 100%;
+	width: -moz-available;          /* WebKit-based browsers will ignore this. */
+	width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+	width: fill-available;
+}
+@mixin filter($property){
+	-webkit-filter: $property;
+	filter: $property;
+}
+@mixin box-size($property){
+	box-sizing: $property;
+	-moz-box-sizing: $property;
+	-webkit-box-sizing: $property;
+}
+//place '...' so it accepts infinite optional arguments
+@mixin box-shadow($property...){
+	box-shadow: $property;
+	-moz-box-shadow: $property;
+	-webkit-box-shadow: $property;
+}
+@mixin box-shadow-important($property...){
+	box-shadow: $property !important;
+	-moz-box-shadow: $property !important;
+	-webkit-box-shadow: $property !important;
+}

@@ -1,0 +1,28 @@
+@use '../def/base';
+
+/* commented so markers also appear on desktop
+@media (pointer: fine) {
+	CSS for precise devices AKA cursor driven devices
+	.leaflet-selection-marker-start,.leaflet-selection-marker-end{
+		display: none;
+	}
+}*/
+.transform-handler--rotate{
+	stroke: #4b5569;
+	fill: #4b5569;
+}
+
+.transform-handler--rotate:hover{
+	stroke: #46bddd !important;
+	fill: white !important;
+	stroke-width: 8;
+	cursor: grab !important;
+}
+
+.leaflet-drag-transform-marker{
+	stroke: #4c566a;
+}
+
+.leaflet-drag-transform-marker:hover{
+	fill: #46bddd;
+}

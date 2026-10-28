@@ -1,0 +1,61 @@
+@use 'def/base';
+
+@use 'desktop/annotations';
+@use 'desktop/cursors-markers';
+@use 'desktop/loading';
+@use 'desktop/menu';
+@use 'desktop/ruler';
+@use 'desktop/scroll';
+@use 'desktop/sidebar';
+@use 'desktop/notebookbar';
+@use 'desktop/toolbar-up';
+@use 'desktop/toolbar-down';
+@use 'desktop/type-presentation';
+@use 'desktop/type-spreadsheet';
+@use 'desktop/type-text';
+@use 'desktop/vex';
+@use 'desktop/widgets';
+
+:root {
+	--settings-font-face: var(--native-font-stack);
+}
+.main-nav {
+	box-sizing: border-box;
+}
+
+html:not([data-theme=dark]) body {
+	//getting css var: --co-body-bg
+	color: base.get-cssvar(color-main-text);
+	background:  base.get-cssvar(body-bg);
+}
+
+html:not([data-theme=dark]) body #settingIframe {
+	color: base.get-cssvar(settings-text) !important;
+	background:  base.get-cssvar(settings-background) !important;
+}
+
+.leaflet-container {
+	background: base.$clr-document-container-bg;
+}
+#document-container {
+	border-color: base.$clr-toolbar-bezels-border !important;
+}
+
+.jsdialog:focus-visible:not(.ui-drawing-area) {
+	outline: 1px solid var(--co-primary-element);
+}
+
+.jsdialog input[type='checkbox']:focus-visible {
+	outline: 1px solid #005ebd;
+	outline-offset: -1px;
+}
+
+.backstage-header {
+	background-color: base.$clr-backstage-header-background !important;
+}
+
+@if base.$clr-backstage-header-background-dark {
+	html[data-theme=dark] .backstage-header {
+		background-color: base.$clr-backstage-header-background-dark !important;
+	}
+}

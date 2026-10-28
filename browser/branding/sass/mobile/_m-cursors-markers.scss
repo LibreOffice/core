@@ -1,0 +1,23 @@
+@if $tablet {
+	.leaflet-selection-marker-end {
+		margin-left: -4px;
+		background-size: 12px;
+		background-repeat: no-repeat;
+		background-image: url('images/ios_handle_end.svg');
+		margin-top: -24px;
+	}
+	.leaflet-selection-marker-start {
+		margin-left: -8px;
+		background-size: 12px;
+		background-repeat: no-repeat;
+		background-image: url('images/ios_handle_start.svg');
+		margin-top: -34px;
+	}
+	.leaflet-cursor-handler{
+		display: none;
+	}
+	/*porting some changes from iOSapp made by @tml and adjusting*/
+	.cool-context-toolbar{
+		top: -32px;
+	}
+}

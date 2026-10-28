@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="39"
+   height="39"
+   viewBox="0 0 8.0 10.31875"
+   version="1.1"
+   id="svg6417"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
+   sodipodi:docname="toolbar-bg-font.svg">
+  <defs
+     id="defs6411" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="11.2"
+     inkscape:cx="37.116072"
+     inkscape:cy="37.116072"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:showpageshadow="false"
+     inkscape:window-width="1982"
+     inkscape:window-height="1982"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata6414">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-286.68123)">
+    <polygon
+       id="polygon14"
+       points="17.914,44.893 17.358,44.386 17.258,20.718 17.772,20.172 30.958,32.599 "
+       style="fill:#ffffff"
+       transform="matrix(0.22178348,0,0,0.22178348,-3.8018229,284.62581)" />
+    <polygon
+       style="fill:#5c2983;fill-opacity:1"
+       id="polygon16"
+       points="30.958,32.599 30.379,33.145 17.914,44.893 28.654,55.638 51.742,32.55 28.561,9.362 17.763,20.162 17.772,20.172 30.379,32.053 "
+       transform="matrix(0.22178348,0,0,0.22178348,-3.8018229,284.62581)" />
+    <polygon
+       id="polygon18"
+       points="29.864,32.599 17.358,44.386 17.258,20.718 "
+       style="fill:#c8c8c8"
+       transform="matrix(0.22178348,0,0,0.22178348,-3.8018229,284.62581)" />
+    <polygon
+       style="fill:#2d0b47;fill-opacity:1"
+       id="polygon20"
+       points="31.847,41.483 27.743,35.628 18.807,44.052 "
+       transform="matrix(0.22178348,0,0,0.22178348,-3.8018229,284.62581)" />
+  </g>
+
+</svg>

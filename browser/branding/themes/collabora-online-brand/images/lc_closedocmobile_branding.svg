@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   id="svg20"
+   version="1.1"
+   viewBox="0 0 12 20"
+   height="20px"
+   width="12px">
+  <defs
+     id="defs7">
+    <path
+       id="path-1"
+       d="M18.0051546,9.00257732 C18.0051546,9.15893549 17.9450178,9.29725026 17.8247423,9.41752577 L16.9226804,10.3195876 C16.8024049,10.4398631 16.6640901,10.5 16.507732,10.5 C16.3513738,10.5 16.213059,10.4398631 16.0927835,10.3195876 L9.00257732,3.22938144 L1.91237113,10.3195876 C1.79209562,10.4398631 1.65378085,10.5 1.49742268,10.5 C1.34106451,10.5 1.20274974,10.4398631 1.08247423,10.3195876 L0.180412371,9.41752577 C0.0601368557,9.29725026 0,9.15893549 0,9.00257732 C0,8.84621915 0.0601368557,8.70790438 0.180412371,8.58762887 L8.58762887,0.180412371 C8.70790438,0.0601368557 8.84621915,0 9.00257732,0 C9.15893549,0 9.29725026,0.0601368557 9.41752577,0.180412371 L17.8247423,8.58762887 C17.9450178,8.70790438 18.0051546,8.84621915 18.0051546,9.00257732 Z" />
+  </defs>
+  <g
+     style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:1"
+     id="Page-1">
+    <path
+       id="rect838"
+       d="M -6.0000002,-2.0000003 H 18 V 22 H -6.0000002 Z"
+       style="opacity:1;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0.99999994;stroke-opacity:1;paint-order:markers stroke fill" />
+    <use
+       height="100%"
+       width="100%"
+       y="0"
+       x="0"
+       style="fill:#636363;fill-opacity:1"
+       transform="rotate(-90,10,9)"
+       xlink:href="#path-1"
+       id="angle-up" />
+  </g>
+
+</svg>

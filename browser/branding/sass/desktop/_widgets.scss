@@ -1,0 +1,120 @@
+@use '../def/base';
+
+/*icons*/
+
+.lokdialog_container .ui-dialog-titlebar.ui-widget-header {
+	background: var(--color-main-background);
+	color: var(--color-main-text);
+	@include base.widgets-titlebar-bezel();
+	font-family: sans-serif;
+	font-weight: normal;
+	border-bottom-left-radius: 0 !important;
+	border-bottom-right-radius: 0 !important;
+}
+
+.lokdialog_container.ui-dialog .ui-dialog-title {
+	margin-bottom: 0;
+}
+
+.lokdialog_container.ui-dialog .ui-state-default {
+	background: none;
+	border: none;
+}
+
+.lokdialog_container.ui-dialog .ui-dialog-titlebar-close:hover {
+	/*border: 1px solid #888888;
+	border-radius: base.get-cssvar(border-radius);*/
+	border-radius: 12px;
+	background-image: radial-gradient(rgb(var(--doc-type)) 50%, white 94%);
+	background-color: #4c566a; /* fallback for ie11 */
+	background-color: base.get-cssvar(primary-element);
+}
+.leaflet-popup-content-wrapper{
+	@include base.box-shadow(0 -1px 2px 0 rgba(0, 0, 0, 0.15), 0 2px 2px 0 rgba(0, 0, 0, 0.1));
+	border-radius: base.get-cssvar(border-radius);
+}
+.leaflet-control-layers{
+	@include base.box-shadow(shadow);
+}
+.leaflet-popup-content > table > tbody > tr > th:nth-child(2){
+	padding-left: 0px !important;
+}
+.leaflet-popup-selected > td:nth-child(4){
+	color: white;
+	background-color: #8C86BC;
+}
+
+.leaflet-popup-selected > td:nth-child(2){
+	padding-left: 1px;
+	border-left: 1px solid #8C86BC;
+}
+.leaflet-popup-selected > td:last-child{
+	padding-right: 1px;
+	border-right: 1px solid #8C86BC;
+}
+.leaflet-popup-selected > td{
+	border-bottom: 1px solid #8C86BC;
+	border-top: 1px solid #8C86BC;
+}
+
+.leaflet-popup-content > span{
+	padding-left: 4px;
+	color: base.get-cssvar(primary-element);
+	text-transform: uppercase;
+	font-family: sans-serif;
+}
+
+.leaflet-popup-content tr:first-of-type:hover{
+	background: none !important;
+	cursor: auto;
+}
+
+.leaflet-popup-selected {
+	background-color: white !important;
+	color: #504999;
+	border-color: #4c566a !important;
+}
+
+.leaflet-popup-content > table > tbody > tr > th:nth-child(6){
+	padding-right: 0px !important;
+}
+
+.leaflet-popup-content input[type='button'] {
+	border-radius: base.get-cssvar(border-radius);
+	height: 32px;
+	line-height: 0em;
+}
+*:not(.modalpopup) > .lokdialog_container.ui-dialog.ui-widget-content, .autofilter-container {
+	border: 1px solid base.get-cssvar(color-border-dark);
+	border-radius: base.get-cssvar(border-radius);
+}
+.iframe-dialog-modal {
+	border: 1px solid var(--co-color-border-dark);
+	border-radius: var(--co-border-radius);
+}
+.ui-widget-header, .lokdialog.ui-dialog-content.ui-widget-content{
+	border-radius: base.get-cssvar(border-radius) !important;
+}
+form:not(.snackbar) > .lokdialog.ui-dialog-content.ui-widget-content {
+	border-top-left-radius: 0 !important;
+	border-top-right-radius: 0 !important;
+}
+.button-primary {
+	background-color: rgb(var(--doc-type, 40, 40, 40));
+	border-color: rgb(var(--doc-type));
+}
+.button-primary:hover {
+	background-color: rgba(var(--doc-type, 40, 40, 40),0.06) !important;
+	color: rgb(var(--doc-type)) !important;
+	border-color: rgb(var(--doc-type, 40, 40, 40));
+}
+html[data-theme=dark] .button-primary:hover {
+	background-color: rgba(0,0,0,0.3) !important;
+}
+.ui-treeview-entry.selected {
+	background-color: var(--color-background-dark);
+	border-color: var(--co-primary-element);
+}
+.ui-treeview-entry.jsdialog:focus-visible {
+	outline-offset: -1px;
+}

@@ -1,0 +1,63 @@
+#mobile-wizard button,
+#mobile-wizard #FontworkSameLetterHeights {
+	color: base.get-cssvar(primary-text);
+	background-color: base.get-cssvar(primary-element);
+	border: 1px solid base.get-cssvar(primary-element);
+}
+#mobile-wizard-titlebar {
+	color: base.get-cssvar(color-text-lighter);
+}
+.ui-tab.selected.mobile-wizard{
+	color: base.get-cssvar(primary-element);
+	border-bottom: 1px solid base.get-cssvar(primary-element);
+}
+
+.ui-tab.mobile-wizard{
+	color: base.get-cssvar(color-text-lighter);
+}
+
+div#mobile-wizard-content .spinfieldcontainer{
+	border: 1px solid base.get-cssvar(color-border-dark);
+	border-radius: base.get-cssvar(border-radius);
+}
+.spinfieldcontrols {
+	background-color: base.get-cssvar(color-background-dark);
+	border-left: 1px solid base.get-cssvar(color-border-dark);
+}
+.plus {
+	border-left: 1px solid base.get-cssvar(color-border-dark);
+	color: base.get-cssvar(color-text-lighter) !important;
+}
+.minus {
+	border-right: 1px solid base.get-cssvar(color-border-dark);
+	color: base.get-cssvar(color-text-lighter) !important;
+}
+.spinfieldunit {
+	color: base.get-cssvar(color-text-lighter) !important;
+}
+.colors-container-selected-basic-color {
+	box-shadow: 0 2px 3px -2px base.get-cssvar(primary-element);
+	border-radius: base.get-cssvar(border-radius);
+}
+.color-sample-small {
+	border-color: base.get-cssvar(body-bg);
+}
+.color-sample-big {
+	box-shadow: 0px 0px 0px 1px base.get-cssvar(color-background-dark), 1px 1px 0 3px base.get-cssvar(body-bg);
+}
+.menu-entry-icon {
+	background: base.get-cssvar(color-main-background-translucent);
+}
+#mobile-wizard-content #commands.selected {
+	border-color: base.get-cssvar(primary-element);
+}
+/// Remove this after release and fix it upstream in
+/// mobilewizard.css "#mobile-wizard .cool-annotation-reply-count"
+#mobile-wizard .cool-annotation-reply-count {
+	margin-inline-end: 32px !important;
+}
+
+#mobile-wizard .ui-content.unobutton.selected {
+	box-shadow: 0 0 0px 6px var(--color-background-darker) !important;
+	background-color: var(--color-background-darker) !important;
+}

@@ -1,0 +1,11 @@
+{
+    "rules": {
+        "indentation": "tab",
+        "string-quotes": "single",
+        "no-duplicate-selectors": true,
+        "selector-combinator-space-after": "always",
+        "selector-attribute-quotes": "always",
+        "selector-attribute-brackets-space-inside": "never",
+        "function-url-quotes": "always"
+    }
+}

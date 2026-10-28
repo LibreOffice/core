@@ -1,0 +1,15 @@
+@use '../def/base';
+
+#product-name.product-collabora-online{
+	color: #504999;
+}
+#about-dialog hr{
+	color:#A8D3E059;
+}
+#about-dialog h3{
+	color: base.get-cssvar(primary-element);
+}
+#about-dialog{
+	overflow: visible;
+	overflow-wrap: initial;
+}

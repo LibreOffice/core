@@ -1,0 +1,416 @@
+@use '../def/base';
+
+$integrator-sidebarBtn-color: rgb(var(--doc-type));
+$integrator-sidebarBtn-color-border: rgb(var(--doc-type));
+
+@if base.$notebookbar-separators==false {
+	.notebookbar.ui-separator.vertical {
+		display: none !important;
+	}
+}
+
+#table-shortcutstoolbox > tr > td{
+	height: 25px;
+	margin: 0px;
+	padding: 0px;
+}
+
+/// notebookbar: save, no need to use dot dynamically, re-use classic view svg^
+#save.savemodified::after, #File .unoSave.savemodified:after { display: none; }
+
+/*Notebookbar and Sidebar icons*/
+.unospan-optionstoolboxdown {
+	background-color: transparent !important;
+	border-color: transparent !important;
+}
+.hasnotebookbar .unoSidebarDeck\.PropertyDeck img, .hasnotebookbar .unoModifyPage img {
+	display: inline;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	width: 24px !important;
+	height: 24px !important;
+	@include base.box-shadow-important(none);
+	filter: none;
+}
+.hasnotebookbar .unoSlideChangeWindow .unobutton img {
+	display: inline;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	width: 24px !important;
+	height: 24px !important;
+	@include base.box-shadow-important(none);
+	filter: none;
+}
+.hasnotebookbar .unoCustomAnimation .unobutton img {
+	display: inline;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	width: 24px !important;
+	height: 24px !important;
+	@include base.box-shadow-important(none);
+	filter: none;
+}
+.hasnotebookbar .unoMasterSlidesPanel .unobutton img {
+	display: inline;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	width: 24px !important;
+	height: 24px !important;
+	@include base.box-shadow-important(none);
+	filter: none;
+}
+.notebookbar.unoDefaultBullet img.selected {background-color: #e6e6e640;}
+
+
+.hasnotebookbar .unotoolbutton.notebookbar.has-label .unobutton.selected,
+.hasnotebookbar .unotoolbutton.notebookbar.inline .unobutton.selected  {
+	filter: none;
+	background-color: transparent;
+}
+
+html:not([data-theme=dark]) .hasnotebookbar .ui-content.unotoolbutton.selected:not(.has-label):not(.inline):not([class*='unospan-options-']),
+html:not([data-theme=dark]) .sidebar.unotoolbutton.selected,
+html:not([data-theme=dark]) .notebookbar.unotoolbutton.selected {
+	border-radius: base.get-cssvar(border-radius) !important;
+}
+html[data-theme=dark] .hasnotebookbar .ui-content.unotoolbutton.selected:not(.has-label):not(.inline):not([class*='unospan-options-']),
+html[data-theme=dark] .sidebar.unotoolbutton.selected {
+	border-radius: base.get-cssvar(border-radius) !important;
+	outline-color: transparent;
+}
+.hasnotebookbar .unotoolbutton.notebookbar:not(.has-label):not(.inline) .unobutton.selected + .ui-content.unolabel {
+	color: base.get-cssvar(primary-text) !important;
+}
+
+[id^='NumberFormatCurrency'] > img.selected {
+	filter: none !important;
+}
+
+.ui-content.unotoolbutton.selected:hover,
+.unotoolbutton:not(.importslides):hover,
+.ui-content.unotoolbutton.selected:not(.has-label):not(.inline):hover,
+#clearFormatting:hover,
+#FormatPaintbrush:hover {
+	border-radius: base.get-cssvar(border-radius) !important;
+	background-color: var(--color-background-dark) !important;
+	border-color: transparent !important;
+}
+
+#toolbar-down .unotoolbutton.jsdialog:hover {
+  border-radius: 0 !important;
+  border-block-color: transparent !important;
+}
+
+.ui-tab.notebookbar {
+	line-height: normal;
+}
+
+.ui-tab.selected.jsdialog {
+	box-shadow: 0 0 0 0 var(--color-box-shadow);
+	background-color: #ffffff50 !important;
+}
+
+[data-theme="dark"] .ui-tab.selected.jsdialog {
+	color: var(--co-color-text-lighter) !important;
+	box-shadow: none !important;
+}
+[data-theme="dark"] .ui-tab.jsdialog {
+ background-color: transparent !important;
+}
+
+.ui-tab.jsdialog:not(.selected):hover {
+	cursor: pointer !important;
+	background-color: var(--color-background-darker) !important;
+	color: var(--color-text-darker) !important;
+}
+
+@if base.$toolbar-up-per-doc-type {
+	$compact-doctype-logos: base.$img-compact-logo-text and base.$img-compact-logo-spreadsheet and base.$img-compact-logo-presentation and base.$img-compact-logo-drawing;
+	$integrator-sidebarBtn-color: rgba(0, 0, 0, 0.1);
+	$integrator-sidebarBtn-color-border: #fff;
+	.main-nav.hasnotebookbar {
+		.unotoolbutton.notebookbar:hover,
+		.unotoolbutton.notebookbar:hover .unobutton {
+			background-color: transparent !important;
+			border-color: var(--co-color-background-light) !important;
+		}
+		#document-name-input, #document-name-input.editable {
+			font-size: clamp(var(--tb-min-fs), var(--tb-fs-s), var(--tb-max-fs)) !important;
+			font-weight: normal;
+		}
+		#document-name-input.editable:focus {
+			box-shadow: none !important;
+		}
+		#document-header .document-logo {
+			border-radius: var(--border-radius);
+		}
+		.notebookbar-tabs-container {
+			align-self: end;
+		}
+		button.ui-tab.notebookbar {
+			height: calc(var(--header-height) + 2);
+			&:hover {
+				box-shadow: none;
+				color: var(--co-color-text-nb-tab) !important;
+				background-color: var(--co-color-bg-nb-tab) !important;
+			}
+		}
+		.ui-tab.selected.notebookbar{
+			height: var(--header-height);
+			margin-top: 2px;
+		}
+		.ui-tab.selected.notebookbar,
+		.ui-tab.selected.notebookbar:hover {
+			box-shadow: none !important;
+			background-color: var(--co-color-background-light) !important;
+		}
+		.ui-tab.selected.notebookbar:hover {
+			box-shadow: inset 0 -3px 0 0px rgb(var(--doc-type)) !important;
+		}
+	}
+	#toolbar-wrapper.hasnotebookbar, #navigation-sidebar {
+		background-color: var(--co-color-background-light) !important;
+	}
+
+	.navigator-btn-wrapper:hover{
+		background-color: var(--color-background-darker);
+	}
+
+	html:not([data-theme=dark]) {
+		#optionstoolboxdown .notebookbar.unotoolbutton:not(.shareas):hover {
+			border-color: transparent !important;
+		}
+		#optionstoolboxdown .notebookbar.unotoolbutton.selected {
+			background-color: transparent !important;
+			border-color: transparent !important;
+		}
+
+		#optionstoolboxdown .notebookbar.unotoolbutton.selected button img {
+			box-shadow: inset 0 -1px 0 0 var(--co-color-bg-nb-tab) !important;
+		}
+		.main-nav {
+			#document-name-input:not(:focus),
+			#document-name-input.editable:not(:focus) {
+				color: var(--color-background-lighter);
+			}
+			.document-title > label[for="document-name-input"] {
+				color: rgba(255, 255, 255, 0.85);
+			}
+			background-color: rgb(var(--doc-type, base.get-cssvar(primary-elment-rgb))) !important;
+			[id^='save'] .save-spinner {
+				color: var(--color-background-lighter) !important;
+			}
+		}
+		@if $compact-doctype-logos {
+			@each $doctype, $logo in (text: base.$img-compact-logo-text, spreadsheet: base.$img-compact-logo-spreadsheet, presentation: base.$img-compact-logo-presentation, drawing: base.$img-compact-logo-drawing) {
+				[data-userinterfacemode='classic'][data-doctype=#{$doctype}] .main-nav #document-header .document-logo {
+					background-image: url($logo) !important;
+				}
+			}
+		}
+		[data-userinterfacemode='classic'] #toolbar-wrapper {
+			background-color: var(--color-canvas);
+			[disabled] {
+				background-color: transparent;
+			}
+		}
+		[data-userinterfacemode='classic'] .main-nav {
+			background-color: var(--color-canvas) !important;
+			#document-name-input:not(:focus),
+			#document-name-input.editable:not(:focus),
+			#document-last-saved,
+			.lo-menu > li > a,
+			.lo-menu > li > a.has-submenu {
+				color: rgb(var(--doc-type));
+			}
+			.lo-menu > li > a:hover,
+			.lo-menu > li > a:focus,
+			.lo-menu > li > a:active,
+			.lo-menu > li > a.highlighted {
+				background-color: rgba(var(--doc-type), 0.1);
+				border-color: transparent;
+				color: rgb(var(--doc-type));
+			}
+			[id^='save'] .save-spinner {
+				color: rgb(var(--doc-type)) !important;
+			}
+			.document-title > label[for='document-name-input'] {
+				color: var(--color-text-light);
+			}
+			#document-name-input:focus {
+				background-color: var(--color-background-lighter);
+			}
+			#viewModeDropdown {
+				.unotoolbutton {
+					border-color: rgb(var(--doc-type));
+				}
+				.arrowbackground {
+					border-left-color: rgb(var(--doc-type));
+				}
+				.unoarrow {
+					border-top-color: rgb(var(--doc-type));
+				}
+				.unolabel {
+					color: rgb(var(--doc-type));
+				}
+				.unotoolbutton:hover {
+					background-color: rgba(var(--doc-type), 0.1) !important;
+					border-color: rgb(var(--doc-type)) !important;
+				}
+			}
+			#shareas {
+				background-color: transparent !important;
+				border-color: rgb(var(--doc-type)) !important;
+				.unolabel {
+					color: rgb(var(--doc-type)) !important;
+				}
+				&:hover {
+					background-color: rgba(var(--doc-type), 0.1) !important;
+				}
+			}
+			#closebuttonwrapper #closebutton {
+				background-image: none !important;
+				background-color: rgb(var(--doc-type)) !important;
+				mask-repeat: no-repeat;
+				mask-position: center;
+			}
+			@if not $compact-doctype-logos and base.$img-app-logo-toolbar {
+				#document-header .document-logo {
+					background-image: none !important;
+					background-color: rgb(var(--doc-type)) !important;
+					mask-repeat: no-repeat;
+					mask-position: center;
+					mask-image: url(base.$img-app-logo-toolbar);
+					mask-size: 48px;
+				}
+			}
+			#closebuttonwrapper #closebutton {
+				mask-image: url(base.$img-app-close);
+				mask-size: base.$img-app-close-size-svg;
+			}
+		}
+		button.ui-tab.notebookbar {
+			color: var(--color-background-lighter);
+		}
+		.ui-tab.selected.notebookbar,
+		.ui-tab.selected.notebookbar:hover {
+			color: rgb(var(--doc-type)) !important;
+		}
+		.ui-tab.notebookbar.contextual[role=tab]:not(.selected) {
+			background-image: linear-gradient(to top, rgba(255,255,255,0.1), rgba(255,255,255,0.3));
+		}
+	}
+	.ui-tab.notebookbar.contextual[role=tab]:not(.selected) {
+		background-image: linear-gradient(to top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.07));
+		color: var(--co-color-text-nb-tab);
+	}
+	#sidebar-dock-wrapper,
+	#navigator-dock-wrapper,
+	#presentation-toolbar,
+	#slide-sorter {
+		background: var(--co-color-background-light) !important;
+	}
+	#slide-sorter {
+		scrollbar-color: var(--color-background-darker) var(--co-color-background-light);
+	}
+}
+.main-nav {
+	#shareas {
+		background-color: $integrator-sidebarBtn-color !important;
+		height: var(--btn-size-s) !important;
+		position: relative;
+		.unobutton {
+			position: absolute;
+			inset: 0;
+			width: auto;
+			height: auto;
+			padding: 0px;
+
+			img {
+				display: none;
+			}
+
+			@media (forced-colors: active) {
+				forced-color-adjust: none;
+				appearance: none;
+				background: transparent !important;
+				border: none !important;
+				z-index: 0;
+			}
+		}
+		border-color: $integrator-sidebarBtn-color-border !important;
+		.unolabel {
+			font-size: 0.88rem;
+			line-height: 1.125rem;
+			color: #fff !important;
+
+			@media (forced-colors: active) {
+				color: ButtonText !important;
+				position: relative;
+				z-index: 1;
+			}
+		}
+	}
+}
+
+
+#readonlyMode,
+#viewModeDropdown {
+
+	.unolabel {
+		font-size: 0.88rem;
+		line-height: 1.125rem;
+	}
+}
+
+html:not([data-theme=dark]) {
+	#readonlyMode,
+	#viewModeDropdown {
+		.unotoolbutton {
+			border: 1px solid #fff;
+		}
+		.arrowbackground {
+			border-left: 1px solid #fff;
+		}
+		.unoarrow {
+			border-top: 5px solid #fff;
+		}
+		.unolabel {
+			color: #fff;
+		}
+	}
+}
+
+#viewModeDropdown .unotoolbutton:hover {
+	background-color: rgba(0, 0, 0, 0.4) !important;
+	border: 1px solid #fff !important;
+}
+
+html:not([data-theme=dark]) {
+	.main-nav .shareas {
+		.unolabel {
+			border-color: $integrator-sidebarBtn-color-border !important;
+		}
+	}
+	#readonlyMode {
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		background-color: rgba(0, 0, 0, 0.4);
+	}
+}
+
+html[data-theme=dark] #readonlyMode:hover {
+		background-color: transparent !important;
+		border-color: var(--color-btn-border) !important;
+}
+
+html[data-theme=dark] [data-userinterfacemode='classic'] .main-nav #shareas {
+	background-color: transparent !important;
+	border-color: var(--color-btn-border) !important;
+	.unolabel {
+		color: var(--color-main-text) !important;
+	}
+	&:hover {
+		background-color: rgba(0, 0, 0, 0.4) !important;
+		border-color: #fff !important;
+	}
+}

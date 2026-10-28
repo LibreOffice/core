@@ -1,0 +1,121 @@
+/// Collabora Online theme
+
+$theme: 'CO-theme';
+$icon-suffix: '_branding';
+$hide-forum: true;
+$hide-report-issue: true;
+$toolbar-down-per-doc-type: false;
+$btn-selected-per-doc-type: true;
+
+$color--amethyst-smoke: #9c99b6;
+$color--athens-gray-tint: #e7e7ee33;
+$color--brave-purple: #8c86bc; //+17, +29, +33
+$color--brave-purple-tint: #8c86bc33;
+$color-leaflet-progress: #504999;
+
+$clr-wdgt-header-close-bg: $color--brave-purple;
+
+@forward 'icons' with (
+	/// Set specific notebookbar app logo (same for both modes)
+	/// so it looks good with this theme that has $toolbar-up-per-doc-type
+	$img-app-logo-toolbar: 'images/toolbar-bg-logo-notebookbar.svg',
+	$img-app-logo-toolbar-dark: 'images/toolbar-bg-logo-notebookbar.svg',
+	$img-app-logo: 'images/toolbar-bg-logo.svg',
+	/// Compact mode, light theme: the header is on the canvas, so the logo
+	/// is a tile in the document type colour with its letter
+	$img-compact-logo-text: 'images/compact-logo-text.svg',
+	$img-compact-logo-spreadsheet: 'images/compact-logo-spreadsheet.svg',
+	$img-compact-logo-presentation: 'images/compact-logo-presentation.svg',
+	$img-compact-logo-drawing: 'images/compact-logo-drawing.svg',
+	$img-coda-app-logo: 'images/full-logo.svg',
+	$img-coda-app-logo-dark: 'images/full-logo-white.svg',
+);
+@import '_css-vars';
+
+@include set-cssvars((
+	calc-header-selected: #D2D2D2,
+	calc-header-hover:#9FD5B7,
+	text-calc-header-selected: #106802,
+	doc-name-input-bg-hover: rgba(0, 0, 0, 0.2),
+), (
+	calc-header-selected: #646464,
+	calc-header-hover: #217346,
+	text-calc-header-selected: #fff,
+	doc-name-input-bg-hover: rgba(0, 0, 0, 1),
+), (
+	color,
+));
+@include set-cssvars((
+	row-highlight: #9FD5B7,
+), (
+	row-highlight: #9FD5B7,
+), (
+	column,
+));
+@mixin about-version(){
+	text-align: center;
+}
+@mixin about-id(){
+	text-align: center;
+	background-repeat: no-repeat;
+	background-position: 52% bottom;
+	background-size: 68px;
+	padding-bottom: 88px;
+}
+@mixin widgets-titlebar-bezel(){
+	border: none;
+}
+
+@mixin toolbar-up-dropdown($theme){
+	// border-color: inherit from upstream
+}
+@mixin toolbar-up-dropdown-content($theme) {
+ 	// font-weight: inherit from upstream
+}
+@mixin toolbar-up-dropdown-hover($theme){
+	border: 1px solid #4c566a;
+	// background-color: inheirt from usptream
+}
+@mixin toolbar-up-dropdown-open($theme){
+	// border: inherit from upstream
+}
+@mixin toolbar-up-dropdown-chevron($theme){
+	// border: inherit from upstream
+}
+@mixin toolbar-up-dropdown-txt($theme){
+	font-weight: bold;
+	color: #4c566a !important;
+}
+@mixin document-name-input {
+	#document-name-input, #document-name-input.editable {
+		box-shadow: none;
+		border-radius: var(--border-radius);
+		background-color: transparent;
+		height: var(--btn-size) !important;
+		color: var(--color-main-text);
+	}
+	#document-name-input.editable:hover:not(:focus) {
+		background-color: var(--color-doc-name-input-bg-hover) !important;
+		box-shadow: none !important;
+	}
+	html[data-theme=dark] #document-name-input.editable:hover:not(:focus) {
+		background-color: var(--color-doc-name-input-bg-hover) !important;
+	}
+	#document-name-input.editable:focus {
+		flex: 0 1 auto;
+	}
+}
+
+#readonlyMode:hover {
+	background-color: rgba(0, 0, 0, 0.4) !important;
+}
+
+/*dropdown menu: compact view*/
+#toolbar-wrapper .select2-selection__rendered, #toolbar-wrapper .ui-listbox {
+	background-color: var(--color-background-lighter);
+	border-color: transparent;
+}
+#toolbar-wrapper .select2-selection__rendered:hover, #toolbar-wrapper .ui-listbox:hover {
+  background-color: var(--color-background-hover);
+  border-color: transparent;
+}

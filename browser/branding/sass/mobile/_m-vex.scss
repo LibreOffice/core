@@ -1,0 +1,42 @@
+@if $mobile {
+	#lokit-version ~ p {
+		margin: 0;
+	}
+	#about-dialog-header {
+		flex-flow: column;
+		align-items: center;
+	}
+
+	#about-dialog-logos {
+		flex-basis: 62px;
+		max-width: 168px;
+	}
+
+	#about-dialog-logos * {
+		background-position: left top;
+	}
+
+	#product-logo {
+		flex-grow: 0.8;
+		background-position: center top !important;
+	}
+
+	#product-name {
+		justify-content: center !important;
+	}
+
+	#lokit-logo {
+		flex-grow:1;
+		background-position: center 6px !important;
+	}
+
+	/// integrators
+	@debug base.$with-integrator-logo;
+	@if base.$with-integrator-logo {
+		#integrator-logo {
+			width: 128px;
+			max-height: 128px;
+			flex-basis: 64px;
+		}
+	}
+}

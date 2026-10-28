@@ -1,0 +1,61 @@
+@use '../def/base';
+
+/* Calc Spreadsheet styling*/
+
+.spreadsheet-tab{
+	background-color: transparent !important;
+	border-radius: base.get-cssvar(border-radius);
+	border-color: transparent !important
+}
+.spreadsheet-tab > div:not(.lock):not(.view-indicator) {
+	border-bottom: 2px solid transparent;
+}
+.spreadsheet-tab:hover > div:not(.lock) {
+	border-color: var(--color-border);
+}
+.spreadsheet-tab:hover, .spreadsheet-tab:focus:not(:focus-visible) {
+	outline: none;
+}
+.spreadsheet-tab.spreadsheet-tab-selected{
+	color: var(--color-main-text) !important;
+	font-weight: bold;
+	background-color: transparent !important;
+}
+.spreadsheet-tab.spreadsheet-tab-selected > div:not(.lock):not(.view-indicator){
+	border-bottom-color: rgb(var(--doc-type));
+}
+#spreadsheet-tab-scroll button.spreadsheet-tab-selected:hover,
+#spreadsheet-tab-scroll button.spreadsheet-tab-selected:focus:not(:focus-visible){
+	outline: none;
+	font-weight: bold;
+	background-color: rgb(var(--doc-type)) !important;
+}
+#tb_spreadsheet-toolbar_item_insertsheet {
+	padding-top: 2px;
+}
+#InsertMode.insert-inactive {/*will affect this proposal: https://bugs.collabora.com/show_bug.cgi?id=4291*/
+	opacity: 0.6;
+}
+
+input[type='checkbox'].autofilter, .jsdialog input[type='checkbox'] {
+	border-radius: 3px;
+	box-shadow: none !important;
+}
+input[type='checkbox'].autofilter:hover, .jsdialog input[type='checkbox']:hover {
+	box-shadow: inset 0px 0px 2px 2px var(--color-box-shadow), inset 0px 0px 0px 2px gray;
+}
+input[type='checkbox']:checked.autofilter:hover, .jsdialog input[type='checkbox']:checked:hover {
+	box-shadow: 0px 0px 1px 2px var(--color-box-shadow);
+}
+
+.jsdialog input[type='radio']:not(.ui-color-picker-entry) {
+	/*to be removed upon upstream merge */
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-o-appearance: none;
+	appearance: none;
+	width: 25px;
+	height: 20px;
+	margin: 1px 8px;
+	/*-*/
+}

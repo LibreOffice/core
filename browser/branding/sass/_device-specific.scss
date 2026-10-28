@@ -1,0 +1,11 @@
+/// Whoever calls this is supposed to set one of $mobile / $tablet / $desktop
+/// to true
+
+@use 'def/base';
+
+@import 'mobile/m-toolbar-up';
+@import 'mobile/m-toolbar-down';
+@import 'mobile/m-cursors-markers';
+@import 'mobile/m-type-spreadsheet';
+@import 'mobile/m-mobile-wizard';
+@import 'mobile/m-vex';

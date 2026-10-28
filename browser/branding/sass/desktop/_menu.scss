@@ -1,0 +1,101 @@
+@use '../def/base';
+
+/*icons*/
+@if base.$hide-forum==true {
+	#menu-forum, #Help.notebookbar .toolbox:has(.unoForumHelp), #help-forum-break {
+		display: none;
+	}
+}
+@if base.$hide-report-issue==true {
+	#menu-report-an-issue, #Help.notebookbar .toolbox:has(.unoReportIssue), #help-reportissue-break {
+		display: none;
+	}
+}
+@if base.$hide-about==true {
+	#menu-about, #Help.notebookbar .toolbox:has(.unoAbout), #help-about-break {
+		display: none;
+	}
+	/// Hiding About hamburger menu on mobile
+	#mobile-wizard-content-menubar .ui-header-about {
+		display: none;
+	}
+}
+@if base.$hide-keyboard-shortcuts==true {
+	#menu-keyboard-shortcuts, #Help.notebookbar .toolbox:has(.unoKeyboardShortcuts), #help-keyboardshortcuts-break, #help-accessibility-break {
+		display: none;
+	}
+}
+#main-menu{
+	margin-left: 0px;
+}
+#document-header {
+	@include base.box-size(border-box);
+	width: 38px;
+	height: 32px;
+}
+
+.lo-menu > li > a, .lo-menu > li > a.has-submenu{
+	border-radius: base.get-cssvar(border-radius);
+	font-size: var(--default-font-size);
+	color: var(--color-main-text);
+}
+
+html:not([data-theme=dark]) {
+	@if base.$toolbar-up-per-doc-type {
+		.lo-menu > li > a, .lo-menu > li > a.has-submenu{
+			color: var(--color-background-lighter);
+		}
+		.lo-menu > li > a:hover,
+		.lo-menu > li > a:focus,
+		.lo-menu > li > a:active,
+		.lo-menu > li > a.highlighted {
+			background-color: var(--co-color-bg-nb-tab);
+			border-color: var(--color-doc-name-input-bg-hover);
+		}
+		#menu-last-mod a{
+			color: base.get-cssvar(color-background-light);
+		}
+	} @else {
+		.lo-menu > li > a:hover,
+		.lo-menu > li > a:focus,
+		.lo-menu > li > a:active,
+		.lo-menu > li > a.highlighted{
+			background-color: base.get-cssvar(color-background-hover);
+			border-bottom-color: base.get-cssvar(primary-element-light);
+			color: base.get-cssvar(text-accent);
+		}
+		.lo-menu a:hover:not(.disabled),
+		.lo-menu a:focus,
+		.lo-menu a:active,
+		.lo-menu a.highlighted {
+			background: base.get-cssvar(primary-element);
+			color: base.get-cssvar(primary-text);
+		}
+		#menu-last-mod a{
+			color: base.get-cssvar(primary-element);
+		}
+	}
+}
+/* Disable parent menu styles for notebookbar */
+.lo-menu.notebookbar > li > a {
+	background-color: transparent;
+	border: none;
+	line-height: normal;
+}
+
+@include base.document-name-input;
+
+#menu-last-mod > a{
+	background-color: base.get-cssvar(bg-body);
+	font-size: 12px;
+	z-index: 0 !important;
+}
+#menu-last-mod span{
+	padding-left: 3px;
+	padding-right: 3px;
+}
+#menu-last-mod a:hover span{
+	color: base.get-cssvar(primary-text);
+	background-color: base.get-cssvar(primary-element);
+	border-radius: base.get-cssvar(border-radius);
+}

@@ -1,0 +1,72 @@
+//Mixins to help with CSS --vars
+
+/*
+Any of these can be used either by omitting the prefix (it will default to --co)
+or by setting a different prefix by passing it and 2nd argument
+*/
+
+
+/**
+	* Use this mixin to DECLARE a set of CSS Custom Properties in the :root element.
+	* The variables in $css_variables will be properly prefixed.
+	* The use of this mixin is encoraged to keep a good scalability.
+	* @include set-cssvars((
+	*  primary-color: #504999,
+	*  secondary-color: #38257a,
+	* ), (
+	*  primary-color: #38257a,
+	*  secondary-color: #504999,
+	* ));
+	* result in:
+	* root {
+	*  --co-primary-color: #504999;
+	*  --co-secondary-color: #38257a;
+	* }
+	* [data-theme="dark"] {
+	*  --co-primary-color: #38257a;
+	*  --co-secondary-color: #504999;
+	* }
+*/
+@mixin set-cssvars($css_variables, $dark_css_variables, $prefix: co) {
+	$important: '';
+	@if $prefix != 'co' { $important: '!important' }
+	:root {
+		@each $name, $value in $css_variables {
+			--#{$prefix}-#{$name}: #{$value} #{$important};
+		}
+	}
+	[data-theme="dark"] {
+		@each $name, $value in $dark_css_variables {
+			--#{$prefix}-#{$name}: #{$value} #{$important};
+		}
+	}
+}
+
+/**
+	* ASSIGN a css variable value with prefix
+	* .selector {
+	*   color: get-cssvar(primary-color);
+	* }
+	*
+	* result in:
+	* .selector {
+	*    color: var(--co-primary-color);
+	* }
+ */
+@function get-cssvar($name, $prefix: co) {
+	@return var(--#{$prefix}-#{$name});
+}
+
+/**
+	* ASSIGN a css variable value with prefix
+*.btn-primary {
+*   height: cssvar(button-height);
+*   &--big {
+*     // rewrite height for btn-primary--big
+*     @include update-cssvar(button-height, 56px);
+*  }
+*}
+ */
+@mixin update-cssvar ($name, $value: '', $prefix: co) {
+	--#{$prefix}-#{$name}: #{$value};
+}

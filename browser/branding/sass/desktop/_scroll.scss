@@ -1,0 +1,34 @@
+@use '../def/base';
+
+.ui-scroll-left, .ui-scroll-right {
+	background: rgb(var(--doc-type), 0.9) url(base.$ico-scroll-bar-indicator) center center/18px no-repeat;
+	@include base.box-shadow(0px 0px 2px var(--color-box-shadow));
+	width: 22px;
+	border-radius: 0px 10px 10px 0px;
+	[data-theme="dark"] & {
+		background: rgb(var(--doc-type), 0.6) url(base.$ico-scroll-bar-indicator) center center/18px no-repeat;
+	}
+}
+
+.ui-scroll-left::before,
+.ui-scroll-right::after {
+	display: none;
+}
+
+#toolbar-wrapper:not(.hasnotebookbar) .ui-scroll-left, #toolbar-wrapper:not(.hasnotebookbar) .ui-scroll-right {
+	height: 90%;
+	top: 5%;
+}
+
+.ui-scroll-right {
+	-webkit-transform: rotate(180deg);
+	-moz-transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+	-o-transform: rotate(180deg);
+	transform: rotate(180deg);
+
+}
+
+.ui-scroll-left:hover, .ui-scroll-right:hover {
+	background: rgb(var(--doc-type), 1) url(base.$ico-scroll-bar-indicator) center center/18px no-repeat;
+}

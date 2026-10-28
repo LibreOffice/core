@@ -138,8 +138,9 @@ By making a contribution to this project, I certify that:
 
 (a) The contribution was created in whole or in part by me and I
     have the right to submit it under the appropriate version of
-    the Mozilla Public License v2, or (for artwork) the Creative
-    Commons Zero (CC0) license; or
+    the Mozilla Public License v2, (for artwork) the Creative
+    Commons Zero (CC0) license, or (for the branding in
+    `browser/branding`) the Apache License, Version 2.0; or
 
 (b) The contribution is based upon previous work that, to the best
     of my knowledge, is covered under an appropriate open source
@@ -160,7 +161,9 @@ By making a contribution to this project, I certify that:
 
 (e) I am granting this work to this project under the terms of both
     the Mozilla Public License v2 and the GNU Lesser General Public
-    License version 3 as published by the Free Software Foundation.
+    License version 3 as published by the Free Software Foundation;
+    a contribution to `browser/branding` I am granting under the
+    terms of the Apache License, Version 2.0.
 
 (f) I agree that my contributions are adequately acknowledged by
     the "Copyright the Collabora Online contributors." header, and

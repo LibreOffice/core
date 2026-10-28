@@ -37,7 +37,7 @@
 * Collaborative editing features
 * Collabora Online works in any modern browser – no plugin needed
 * [Integrate, extend and customise](https://www.collaboraonline.com/integrations/)
-* Open Source – primarily under the [MPLv2](http://mozilla.org/MPL/2.0/) license. Some parts are under other open source licences, see e.g. [browser/LICENSE](https://github.com/CollaboraOnline/online/blob/main/browser/LICENSE).
+* Open Source – primarily under the [MPLv2](http://mozilla.org/MPL/2.0/) license. Some parts are under other open source licences, see e.g. [browser/LICENSE](https://github.com/CollaboraOnline/online/blob/main/browser/LICENSE); the branding in [browser/branding](https://github.com/CollaboraOnline/online/tree/main/browser/branding) is under the [Apache License 2.0](https://github.com/CollaboraOnline/online/blob/main/browser/branding/LICENSE).
 
 ## Get in touch 💬
 

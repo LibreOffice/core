@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   width="24"
+   height="24"
+   viewBox="0 0 24 24.000001"
+   version="1.1"
+   id="svg1491">
+  <defs
+     id="defs1485" />
+  <metadata
+     id="metadata1488">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="g2101"
+     transform="matrix(4.4465031,0,0,4.4859054,269.56336,163.5513)"
+     style="stroke-width:0.84625876" />
+  <path
+     id="rect3408"
+     d="m 14,6 1.292969,1.2929688 -3.125,3.1250002 1.414062,1.414062 3.125,-3.1249998 L 18,10 V 6 Z m -3.582031,6.167969 -3.1250002,3.125 L 6,14 v 4 h 4 l -1.2929688,-1.292969 3.1249998,-3.125 z"
+     style="opacity:1;vector-effect:none;fill:#4c566a;fill-opacity:1;stroke:none;stroke-width:1.39999986;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill" />
+  <g
+     transform="rotate(90,12.5,12.5)"
+     id="g3430">
+    <path
+       id="path3424"
+       d="M 10,18.999999 H 6 v -4 l 2,2 z"
+       style="opacity:1;vector-effect:none;fill:#88c0d0;fill-opacity:1;stroke:none;stroke-width:1.39999986;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill" />
+    <path
+       id="path3426"
+       d="m 13.999999,7 h 4 v 4 l -2,-2 z"
+       style="opacity:1;vector-effect:none;fill:#88c0d0;fill-opacity:1;stroke:none;stroke-width:1.39999986;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill" />
+  </g>
+
+</svg>

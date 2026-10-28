@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="39"
+   height="39"
+   viewBox="0 0 8.0 10.31875"
+   version="1.1"
+   id="svg6417"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs6411" />
+  <metadata
+     id="metadata6414">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     transform="translate(0,-286.68123)">
+    <polygon
+       style="fill:#ffffff;fill-opacity:1"
+       id="polygon16"
+       points="30.958,32.599 30.379,33.145 17.914,44.893 28.654,55.638 51.742,32.55 28.561,9.362 17.763,20.162 17.772,20.172 30.379,32.053 "
+       transform="matrix(0.22178348,0,0,0.22178348,-3.8018229,284.62581)" />
+    <polygon
+       id="polygon18"
+       points="17.358,44.386 17.258,20.718 29.864,32.599 "
+       style="display:inline;fill:#ffffff"
+       transform="matrix(0.22178348,0,0,0.22178348,-3.8018229,284.62581)" />
+  </g>
+</svg>

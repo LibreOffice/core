@@ -1,0 +1,83 @@
+#toolbar-up .ui-toolbar {
+	padding-top: 5px !important;
+}
+
+@if $mobile {
+	.ui-toolbar .unotoolbutton img {
+		margin: 1px;
+	}
+	#toolbar-up .checked{
+
+	}
+	#toolbar-up .checked.over{
+
+	}
+	.logo {
+		background-size: 100px;
+		max-width: 24px;
+		max-height: 31px;
+		top: 0;
+	}
+	#toolbar-logo {
+		width: 0px !important;
+	}
+	#toolbar-up .ui-toolbar {
+		padding-top: 5px !important;
+	}
+	#toolbar-hamburger.menuwizard-opened {
+		background-color: base.get-cssvar(color-background-dark) !important;
+	}
+	.ui-scroll-left, .ui-scroll-right {
+		box-shadow: 4px 0 13px 2px base.get-cssvar(primary-element),-6px 0 6px 6px base.get-cssvar(primary-element) !important;
+	}
+}
+
+/*avoid scroll indicators to be above other items*/
+@if $tablet {
+	.ui-tab.notebookbar {
+		line-height: normal;
+		padding: 2px 12px 2px 12px;
+	}
+	.ui-tabs.notebookbar {
+		height: auto !important;
+		border-radius: 8px;
+		@include base.box-shadow(inset 0 0 1px 0 rgba(0,0,0,0.15));
+	}
+
+	.notebookbar-tabs-container {
+		align-self: auto !important;
+	}
+
+	.main-nav.hasnotebookbar .ui-tab.selected.notebookbar {
+		text-shadow: none;
+		background-color: white;
+	}
+
+	.ui-tab.selected.notebookbar {
+		box-shadow: none;
+		border-radius: 8px !important;
+		@include base.box-shadow(inset 0 0 0px 1px #dbdbdb, 0 0 3px 0px #00000012);
+	}
+
+	.ui-tabs.notebookbar .ui-tab {
+		height: auto !important;
+		background-color: transparent;
+		color: base.get-cssvar(color-text-lighter);
+	}
+	.main-nav:not(.hasnotebookbar){
+		margin-right: 0px;
+		box-shadow: 0px 4px 2px -2px #adadad;
+	}
+	.ui-toolbar{
+		padding-top: 2px;
+	}
+	.ui-scroll-left, .ui-scroll-right {
+		box-shadow: 4px 0 13px 2px base.get-cssvar(primary-element),-6px 0 6px 6px base.get-cssvar(primary-element) !important;
+	}
+}
+@if $mobile {
+	#PermissionMode.status-readonly-mode {
+		background-color: transparent;
+		color: var(--co-color-text-lighter);
+	}
+}

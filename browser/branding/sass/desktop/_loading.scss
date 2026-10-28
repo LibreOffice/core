@@ -1,0 +1,21 @@
+@use '../def/base';
+
+/*loading spinner colors*/
+.leaflet-progress > span {
+	background: base.$color-leaflet-progress !important;
+	border: none !important;
+	border-radius: 1px !important;
+}
+.leaflet-progress {
+	background: #e9e7f0 !important;
+	border-radius: 1px !important;
+	height: 4px !important;
+	margin: 10px 0 0 !important;
+}
+.leaflet-progress > span > span {
+	padding: 0 8px !important;
+	font-size: 11px !important;
+	font-weight: bold !important;
+	color: base.$color-leaflet-progress !important;
+	text-shadow: none !important;
+}

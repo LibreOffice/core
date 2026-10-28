@@ -1,0 +1,62 @@
+@use '../def/base';
+
+.cool-annotation-img > .avatar-img{
+	background: none;
+}
+
+.cool-annotation-redline-content-wrapper {
+	outline: 1px dashed #e7c1e0;
+	outline-offset: -1px;
+}
+
+.cool-annotation-redline-content-wrapper, .cool-annotation-content-wrapper{
+	box-shadow: 0px 1px 3px var(--color-box-shadow);
+}
+
+.cool-annotation-redline-content-wrapper:hover, .cool-annotation-content-wrapper:hover{
+	box-shadow: 0px 3px 6px var(--color-box-shadow);
+}
+
+.annotation-active .cool-annotation-redline-content-wrapper, .annotation-active .cool-annotation-content-wrapper{
+	box-shadow: 0px 3px 6px var(--color-box-shadow);
+
+}
+
+.cool-annotation-collapsed.modalpopup .annotation-active,
+.cool-annotation-collapsed.modalpopup .cool-annotation-content-wrapper{
+	border: none !important;
+}
+
+.context-menu-list.cool-font.context-menu-root {
+	min-width: auto !important;
+}
+.cool-annotation-textarea{margin-bottom: 10px;}
+.cool-annotation-textarea:focus {
+	outline-color: base.get-cssvar(primary-element);
+}
+
+.cool-annotation-edit .annotation-button.button-primary, #table-buttonbox #ok {
+	background: none;
+	background-color: base.get-cssvar(primary-element);
+	color: base.get-cssvar(primary-text);
+}
+
+.cool-annotation-edit .annotation-button.button-primary:hover, #table-buttonbox #ok:hover{
+	// background-color: base.get-cssvar(primary-element-light);
+	background-color: base.get-cssvar(primary-light);
+	border: 1px solid var(--co-primary-element);
+	color: var(--co-primary-element);
+}
+.cool-annotation-edit .annotation-button.button-secodnary, #table-buttonbox #cancel {
+	background: none;
+	background-color: base.get-cssvar(color-background-dark);
+	height: 32px;
+	line-height: 0em;
+	color:black;
+	min-width: 62px;
+}
+
+.cool-annotation-edit .annotation-button.button-secodnary:hover, #table-buttonbox #cancel:hover {
+	background-color: base.get-cssvar(body-bg);
+	border: 1px solid base.get-cssvar(color-background-hover);
+}

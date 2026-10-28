@@ -1,0 +1,98 @@
+@use '../def/base';
+
+@if base.$toolbar-down-per-doc-type {
+	#toolbar-down .ui-separator.vertical {
+		background-color: transparent;
+	}
+	#toolbar-wrapper:not(.mobile) ~ #toolbar-down{
+		color: white;
+		background-color: rgb(var(--doc-type)) !important;
+		border-top-color: transparent !important;
+	}
+	#toolbar-wrapper:not(.mobile) ~ #toolbar-down.ui-toolbar > .root-container > div {
+		padding: 0;
+	}
+	#toolbar-wrapper:not(.mobile) ~ #toolbar-down .ui-badge,
+	#toolbar-wrapper:not(.mobile) ~ #toolbar-down .unolabel {
+		color: #f0f0f0 !important;
+	}
+	#toolbar-wrapper:not(.mobile) ~ #toolbar-down .ui-badge:hover,
+	#toolbar-wrapper:not(.mobile) ~ #toolbar-down .menubutton:hover .unolabel {
+		background-color: rgba(0, 0, 0, 0.2) !important;
+		color: white !important;
+	}
+	#toolbar-wrapper:not(.mobile) ~ #toolbar-down .jsdialog .ui-content.unobutton:hover,
+	#toolbar-wrapper:not(.mobile) ~ #toolbar-down .jsdialog .ui-content.unotoolbutton:hover,
+	#toolbar-wrapper:not(.mobile) ~ #toolbar-down .jsdialog .ui-content.unotoolbutton .arrowbackground:hover{
+		background-color: rgba(0, 0, 0, 0.2) !important;
+		border-color: transparent !important;
+	}
+
+	#toolbar-wrapper:not(.mobile) ~ #toolbar-down .menubutton:hover .unolabel {
+		color: white !important;
+	}
+	#toolbar-wrapper:not(.mobile) ~ #toolbar-down .unoarrow {
+		border-top-color: #f0f0f0 !important;
+	}
+	#toolbar-wrapper:not(.mobile) ~ #toolbar-down .jsdialog .ui-content.unobutton {
+		height: var(--btn-size-m);
+	}
+	#toolbar-wrapper:not(.mobile) ~ #toolbar-down #search {
+		background-color: transparent;
+		border-radius: var(--border-radius);
+		#search-input {
+			background: rgba(255, 255, 255, 0.2);
+			height: 26px;
+			line-height: 0;
+			border-radius: 0;
+			border-color: transparent !important;
+			&::placeholder {
+				color: white !important;
+			}
+			&:focus {
+				background-color: rgba(255, 255, 255, 0.9) !important;
+				outline-color: transparent;
+				&::placeholder {
+					color: black !important;
+				}
+			}
+			&:not(:focus):hover {
+				background-color: rgba(255, 255, 255, 0.4) !important;
+			}
+		}
+	}
+}
+#toolbar-wrapper:not(.mobile) ~ #toolbar-down{
+	min-height: 26px;
+	background-color: var(--co-color-background-light);
+}
+.leaflet-zoom-animated:hover > path:nth-child(2){
+	stroke: base.get-cssvar(primary-element) !important;
+	stroke-dasharray:1;
+}
+
+/**/
+#InsertMode.insert-mode-false{
+	background-color: base.get-cssvar(primary-element);
+	color:base.get-cssvar(primary-text);
+	border-radius: base.get-cssvar(border-radius);
+}
+#PermissionMode.status-readonly-mode {
+	background-color: base.get-cssvar(color-warning);
+	border-radius: base.get-cssvar(border-radius);
+	color: var(--co-main-text);
+}
+/**/
+
+#search-input.search-not-found {
+	border-color: #ba2323 !important;
+	background-color: #fac9c9 !important;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+	background-color: base.get-cssvar(primary-element);
+	color: base.get-cssvar(primary-text);
+}
+#toolbar-down #zoom-button img {
+  display: none;
+}

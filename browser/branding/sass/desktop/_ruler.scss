@@ -1,0 +1,39 @@
+@use '../def/base';
+.cool-ruler {
+	height: var(--ruler-height);
+}
+.cool-ruler-left:hover{
+	border-right: 3px solid rgb(var(--doc-type));
+}
+
+.cool-ruler-right:hover{
+	border-left: 3px solid rgb(var(--doc-type));
+}
+.cool-ruler-left.leaflet-drag-moving{
+	border-right: 2px dotted rgb(var(--doc-type));
+}
+.cool-ruler-right.leaflet-drag-moving{
+	border-left: 2px dotted rgb(var(--doc-type));
+}
+.leaflet-bar {
+	border-bottom: solid 1px base.$clr-toolbar-bezels-border !important;
+}
+// A tab stop marker is as tall as the ruler, with its glyph on the bottom edge, so the whole
+// glyph lies inside the tab stop area of the ruler and can be grabbed.
+.cool-ruler-tabstop-left,
+.cool-ruler-tabstop-right,
+.cool-ruler-tabstop-center,
+.cool-ruler-tabstop-decimal {
+	height: var(--ruler-height);
+	background-position: center bottom;
+}
+.cool-ruler-margin {
+	background-color: var(--color-background-dark) !important;
+}
+.cool-ruler {
+	background-color: var(--co-color-background-light) !important;
+}
+.cool-ruler.vruler {
+	border-top: solid 1px base.$clr-toolbar-bezels-border !important;
+	border-bottom: none !important;
+}
