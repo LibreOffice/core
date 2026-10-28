@@ -43,6 +43,7 @@
 
 #include <cctype>
 #include <cerrno>
+#include <csignal>
 #include <chrono>
 #include <condition_variable>
 #include <cstdio>
@@ -285,21 +286,91 @@ namespace {
         return *pollWakeupsMutex;
     }
 
-    /// True when a signal handler asked to wake every poll while a thread held the lock of the
-    /// list of polls, and no thread has woken them since.
+    /// True when a signal handler asked to wake every poll while a thread held the lock of the list
+    /// of polls, and no thread has woken them since.
     std::atomic<bool> PendingWakeupWorld(false);
+
+    /// 1 while this thread takes, holds or releases the lock of the list of polls. It is set to 1
+    /// before the lock is taken and set to 0 after it is released.
+    thread_local volatile std::sig_atomic_t InPollWakeupsLock = 0;
+
+    /// Takes the lock of the list of polls, waiting for it when wait is true, and marks this thread
+    /// as being in the lock until it is released.
+    class PollWakeupsGuard
+    {
+        std::unique_lock<std::mutex> _lock;
+
+    public:
+        explicit PollWakeupsGuard(bool wait)
+            : _lock(getPollWakeupsMutex(), std::defer_lock)
+        {
+            // The fences keep the mark ahead of the lock and behind the unlock, as a signal handler
+            // on this thread sees them.
+            InPollWakeupsLock = 1;
+            std::atomic_signal_fence(std::memory_order_seq_cst);
+            try
+            {
+                if (wait)
+                    _lock.lock();
+                else if (!_lock.try_lock())
+                    unmark();
+            }
+            catch (...)
+            {
+                unmark();
+                throw;
+            }
+        }
+
+        ~PollWakeupsGuard() { release(); }
+
+        /// Releases the lock, when this guard holds it, and unmarks the thread.
+        void release()
+        {
+            if (_lock.owns_lock())
+            {
+                _lock.unlock();
+                unmark();
+            }
+        }
+
+        bool ownsLock() const { return _lock.owns_lock(); }
+
+    private:
+        static void unmark()
+        {
+            std::atomic_signal_fence(std::memory_order_seq_cst);
+            InPollWakeupsLock = 0;
+        }
+    };
+
+    /// Wakes every poll in the list of polls. The caller holds the lock of the list.
+    void wakeupEveryPoll()
+    {
+        for (const auto& fd : getWakeupsArray())
+            SocketPoll::wakeup(fd);
+    }
+
+    /// Wakes every poll while a signal handler has asked for that, and no thread has done it.
+    void wakeupWorldIfPending()
+    {
+        while (PendingWakeupWorld.exchange(false))
+        {
+            PollWakeupsGuard lock(/*wait=*/true);
+            wakeupEveryPoll();
+        }
+    }
 
     /// Holds the lock of the list of polls. After releasing it, wakes every poll if a signal
     /// handler asked for that while the lock was held.
     class PollWakeupsLock
     {
-        std::mutex& _mutex;
+        PollWakeupsGuard _guard;
 
     public:
         PollWakeupsLock()
-            : _mutex(getPollWakeupsMutex())
+            : _guard(/*wait=*/true)
         {
-            _mutex.lock();
         }
 
         PollWakeupsLock(const PollWakeupsLock&) = delete;
@@ -307,13 +378,8 @@ namespace {
 
         ~PollWakeupsLock()
         {
-            _mutex.unlock();
-            while (PendingWakeupWorld.exchange(false))
-            {
-                std::lock_guard<std::mutex> lock(getPollWakeupsMutex());
-                for (const auto& fd : getWakeupsArray())
-                    SocketPoll::wakeup(fd);
-            }
+            _guard.release();
+            wakeupWorldIfPending();
         }
     };
 }
@@ -781,28 +847,28 @@ void SocketPoll::transfer(const SocketTransfer& pendingTransfer)
 void SocketPoll::wakeupWorld()
 {
     PollWakeupsLock lock;
-    for (const auto& fd : getWakeupsArray())
-        wakeup(fd);
+    wakeupEveryPoll();
 }
 
 void SocketPoll::wakeupWorldFromSignal()
 {
     // Record the request before trying the lock. When a thread holds the lock, that thread wakes
-    // every poll after it releases the lock, also when it is the thread that the signal
-    // interrupted. While this handler holds the lock, it also serves the requests that other
-    // handlers record, and it checks for one more after it releases the lock.
+    // every poll after it releases the lock. That is also the case when the signal interrupted a
+    // thread that is in the lock, so this handler leaves the lock alone then. While this handler
+    // holds the lock, it also serves the requests that other handlers record, and it checks for one
+    // more after it releases the lock.
     PendingWakeupWorld = true;
+    if (InPollWakeupsLock)
+        return;
+
     do
     {
-        std::unique_lock<std::mutex> lock(getPollWakeupsMutex(), std::try_to_lock);
-        if (!lock.owns_lock())
+        PollWakeupsGuard lock(/*wait=*/false);
+        if (!lock.ownsLock())
             return;
 
         while (PendingWakeupWorld.exchange(false))
-        {
-            for (const auto& fd : getWakeupsArray())
-                wakeup(fd);
-        }
+            wakeupEveryPoll();
     } while (PendingWakeupWorld);
 }
 

@@ -904,8 +904,8 @@ public:
     /// Wakeup the main polling loop in another thread
     void wakeup() const;
 
-    /// Global wakeup: wakeup all socket polls. It waits for the lock of the list of polls, so it
-    /// is not signal safe.
+    /// Global wakeup: wakeup all socket polls. It waits for the lock of the list of polls, so it is
+    /// not signal safe.
     static void wakeupWorld();
 
     /// Wakeup all socket polls from a signal handler, without waiting for the lock of the list of
