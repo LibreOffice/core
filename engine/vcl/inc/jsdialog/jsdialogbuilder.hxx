@@ -268,7 +268,8 @@ public:
 class SAL_LOPLUGIN_ANNOTATE("crosscast") OnDemandRenderingHandler
 {
 public:
-    virtual void render_entry(int pos, int dpiscale) = 0;
+    /// maxwidth is the width in pixels the client has for the entry, or 0 if unknown
+    virtual void render_entry(int pos, int dpiscale, int maxwidth) = 0;
 
     static bool imageToActionData(const Bitmap& rImage, sal_Int32 nPos,
                                   jsdialog::ActionDataMap& rMap)
@@ -615,7 +616,7 @@ public:
     void notifyChangedByDirectPick();
 
     // OnDemandRenderingHandler
-    virtual void render_entry(int pos, int dpiscale) override;
+    virtual void render_entry(int pos, int dpiscale, int maxwidth) override;
 };
 
 class JSNotebook final : public JSWidget<SalInstanceNotebook, ::TabControl>
@@ -806,7 +807,7 @@ public:
     virtual void clear_column_header_names() override;
 
     // OnDemandRenderingHandler
-    virtual void render_entry(int pos, int dpiscale) override;
+    virtual void render_entry(int pos, int dpiscale, int maxwidth) override;
 };
 
 class JSExpander final : public JSWidget<SalInstanceExpander, ::VclExpander>
@@ -840,7 +841,7 @@ public:
     virtual void do_unselect(int pos) override;
 
     // OnDemandRenderingHandler
-    virtual void render_entry(int pos, int dpiscale) override;
+    virtual void render_entry(int pos, int dpiscale, int maxwidth) override;
 };
 
 class JSRadioButton final : public JSWidget<SalInstanceRadioButton, ::RadioButton>

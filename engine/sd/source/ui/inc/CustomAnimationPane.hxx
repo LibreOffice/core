@@ -145,6 +145,8 @@ private:
 
     sal_Int32   mnLastSelectedAnimation;
     sal_Int32   mnPropertyType;
+    // the property type mxLBSubControl was created for
+    sal_Int32   mnSubControlType;
     static sal_Int32 const gnMotionPathPos = 3;
     sal_Int32   mnCurvePathPos;
     sal_Int32   mnPolygonPathPos;

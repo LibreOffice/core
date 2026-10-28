@@ -62,9 +62,12 @@ function requestOnDemandRender(
 	controlId: string,
 	entryId: number,
 	isAlive: () => boolean,
+	maxWidth: number = 0,
 ) {
 	const key = controlId + ':' + entryId;
 	const dpi = Math.floor(100 * window.devicePixelRatio);
+	const data =
+		entryId + ';' + dpi + ';' + dpi + (maxWidth > 0 ? ';' + maxWidth : '');
 	const pending: PendingRender = {
 		sent: false,
 		send: () => {
@@ -77,7 +80,7 @@ function requestOnDemandRender(
 				controlType,
 				'render_entry',
 				{ id: controlId },
-				entryId + ';' + dpi + ';' + dpi,
+				data,
 				builder,
 			);
 		},
@@ -93,6 +96,17 @@ function requestOnDemandRender(
 function onDemandRenderAnswered(key: string) {
 	const pending = pendingRenderSenders.get(key);
 	if (pending && pending.sent) pendingRenderSenders.delete(key);
+}
+
+function availableTreeViewWidth(placeholder: Element): number {
+	const list = placeholder.closest('.ui-treeview') as HTMLElement;
+	if (!list) return 0;
+
+	const listLeft =
+		list.getBoundingClientRect().left + list.clientLeft - list.scrollLeft;
+	const offset = placeholder.getBoundingClientRect().left - listLeft;
+	const paddingEnd = parseFloat(getComputedStyle(list).paddingInlineEnd) || 0;
+	return Math.max(Math.floor(list.clientWidth - paddingEnd - offset), 0);
 }
 
 function onDemandRenderer(
@@ -156,6 +170,7 @@ function onDemandRenderer(
 							controlId,
 							entryId,
 							() => parentContainer.isConnected,
+							availableTreeViewWidth(placeholder),
 						);
 					}
 				});

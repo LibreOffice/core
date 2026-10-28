@@ -455,6 +455,20 @@ button#button2.ui-pushbutton.jsdialog.sidebar {
 	text-align: center;
 }
 
+.sidebar#CustomAnimationsPanel #custom_animation_list {
+	overflow-x: auto;
+}
+
+/* Entries waiting for their rendered image do not widen the list. */
+.sidebar#CustomAnimationsPanel #custom_animation_list .ui-treeview-cell-text-content:not(img):not(:empty) {
+	display: inline-block;
+	vertical-align: top;
+	max-width: 200px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
 /* Keep the list height fixed so the rows below it don't move when
    no effect is selected. */
 .sidebar#CustomAnimationsPanel .ui-grid > #effect_list {

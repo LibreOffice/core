@@ -148,6 +148,7 @@ CustomAnimationPane::CustomAnimationPane( weld::Widget* pParent, ViewShellBase& 
     , maIdle("sd idle treeview select")
     , mnLastSelectedAnimation(-1)
     , mnPropertyType(nPropertyTypeNone)
+    , mnSubControlType(nPropertyTypeNone)
     , mnCurvePathPos(-1)
     , mnPolygonPathPos(-1)
     , mnFreeformPathPos(-1)
@@ -507,8 +508,6 @@ void CustomAnimationPane::updateControls()
 
     mxFTProperty->set_label(maStrProperty);
 
-    sal_Int32 nOldPropertyType = mnPropertyType;
-
     mnPropertyType = nPropertyTypeNone;
 
     if(bIsSelected)
@@ -536,12 +535,13 @@ void CustomAnimationPane::updateControls()
         if (!aValue.hasValue())
             nNewPropertyType = nPropertyTypeDirection;
 
-        if (!mxLBSubControl || nOldPropertyType != nNewPropertyType)
+        if (!mxLBSubControl || mnSubControlType != nNewPropertyType)
         {
             // for COKit destroy old widgets first
             mxLBSubControl.reset(nullptr);
             // then create new control, to keep correct pointers for actions
             mxLBSubControl = SdPropertySubControl::create(nNewPropertyType, mxFTProperty.get(), mxPlaceholderBox.get(), GetFrameWeld(), aValue, pEffect->getPresetId(), LINK(this, CustomAnimationPane, implPropertyHdl));
+            mnSubControlType = nNewPropertyType;
         }
         else
         {
@@ -651,12 +651,13 @@ void CustomAnimationPane::updateControls()
     else
     {
         // use an empty direction box to fill the space
-        if (!mxLBSubControl || (nOldPropertyType != nPropertyTypeDirection && nOldPropertyType != nPropertyTypeNone))
+        if (!mxLBSubControl || mnSubControlType != nPropertyTypeDirection)
         {
             // for COKit destroy old widgets first
             mxLBSubControl.reset(nullptr);
             // then create new control, to keep correct pointers for actions
             mxLBSubControl = SdPropertySubControl::create(nPropertyTypeDirection, mxFTProperty.get(), mxPlaceholderBox.get(), GetFrameWeld(), cpo::uno::Any(), OUString(), LINK(this, CustomAnimationPane, implPropertyHdl));
+            mnSubControlType = nPropertyTypeDirection;
         }
         else
             mxLBSubControl->setValue(cpo::uno::Any(), OUString());

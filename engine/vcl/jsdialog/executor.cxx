@@ -41,12 +41,14 @@ bool CustomRendererExecutor(weld::Widget& rWidget, const StringMap& rData)
     if (!pRenderer)
         return false;
 
-    // pos;dpix;dpiy
+    // pos;dpix;dpiy[;maxwidth]
     const OUString& sParams = rData.at(u"data"_ustr);
     const OUString aPos = sParams.getToken(0, ';');
     const OUString aDpiScale = sParams.getToken(1, ';');
+    const OUString aMaxWidth = sParams.getToken(3, ';');
 
-    pRenderer->render_entry(o3tl::toInt32(aPos), o3tl::toInt32(aDpiScale));
+    pRenderer->render_entry(o3tl::toInt32(aPos), o3tl::toInt32(aDpiScale),
+                            o3tl::toInt32(aMaxWidth));
 
     return true;
 };

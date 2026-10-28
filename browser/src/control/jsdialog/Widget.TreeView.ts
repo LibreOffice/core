@@ -2967,6 +2967,41 @@ JSDialog.treeView = function (
 	data: TreeWidgetJSON,
 	builder: JSBuilder,
 ) {
+	const entryTexts: { [row: string]: string } = {};
+	let hasRenderer = !!data.customEntryRenderer;
+	const collectEntryTexts = (entries: Array<TreeEntryJSON>) => {
+		for (const entry of entries || []) {
+			const columns = entry.columns || [];
+			if (columns.some((column) => column.customEntryRenderer))
+				hasRenderer = true;
+			entryTexts[entry.row] = columns
+				.map((column) => column.text)
+				.concat(entry.text)
+				.join('\t');
+			collectEntryTexts(entry.children);
+		}
+	};
+	collectEntryTexts(data.entries);
+
+	if (hasRenderer) {
+		if (!builder.rendersCache[data.id])
+			builder.rendersCache[data.id] = {
+				persistent: false,
+				images: [],
+				dpiScale: window.devicePixelRatio,
+			};
+
+		const rendersCache = builder.rendersCache[data.id];
+		if (!rendersCache.persistent) {
+			const cachedTexts = rendersCache.entryTexts || {};
+			for (const row of Object.keys(rendersCache.images)) {
+				if (cachedTexts[row] !== entryTexts[row])
+					delete rendersCache.images[row];
+			}
+			rendersCache.entryTexts = entryTexts;
+		}
+	}
+
 	var treeView = new TreeViewControl(data, builder);
 	treeView.build(data, builder, parentContainer);
 	parentContainer.appendChild(treeView._container);

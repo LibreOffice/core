@@ -41,6 +41,7 @@
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/kit.hxx>
 
 #include <sdresid.hxx>
 
@@ -123,9 +124,11 @@ static sal_Int32 getShapeIndex( const Reference< XShape >& xShape )
         return -1;
 }
 
-OUString getShapeDescription( const Reference< XShape >& xShape, bool bWithText )
+OUString getShapeDescription( const Reference< XShape >& xShape, bool bWithText, sal_Int32* pTextStart )
 {
     OUString aDescription;
+    if (pTextStart)
+        *pTextStart = -1;
     Reference< XPropertySet > xSet( xShape, UNO_QUERY );
     bool bAppendIndex = true;
 
@@ -168,6 +171,8 @@ OUString getShapeDescription( const Reference< XShape >& xShape, bool bWithText 
                 aText = aText.replace( '\n', ' ' );
                 aText = aText.replace( '\r', ' ' );
 
+                if (pTextStart)
+                    *pTextStart = aDescription.getLength();
                 aDescription += aText;
             }
         }
@@ -175,9 +180,10 @@ OUString getShapeDescription( const Reference< XShape >& xShape, bool bWithText 
     return aDescription;
 }
 
-static OUString getDescription( const Any& rTarget, bool bWithText )
+static OUString getDescription( const Any& rTarget, bool bWithText, sal_Int32& rTextStart )
 {
     OUString aDescription;
+    rTextStart = -1;
 
     if( rTarget.getValueType() == ::cppu::UnoType<ParagraphTarget>::get() )
     {
@@ -211,7 +217,10 @@ static OUString getDescription( const Any& rTarget, bool bWithText )
             xEnumeration->nextElement() >>= xParagraph;
 
             if( xParagraph.is() )
+            {
                 aDescription = xParagraph->getString();
+                rTextStart = 0;
+            }
         }
     }
     else
@@ -219,7 +228,7 @@ static OUString getDescription( const Any& rTarget, bool bWithText )
         Reference< XShape > xShape;
         rTarget >>= xShape;
         if( xShape.is() )
-            aDescription = getShapeDescription( xShape, bWithText );
+            aDescription = getShapeDescription( xShape, bWithText, &rTextStart );
     }
 
     return aDescription;
@@ -229,8 +238,9 @@ class CustomAnimationListEntryItem
 {
 public:
     CustomAnimationListEntryItem(OUString aDescription,
-                                 CustomAnimationEffectPtr pEffect);
+                                 CustomAnimationEffectPtr pEffect, sal_Int32 nTextStart = -1);
     const CustomAnimationEffectPtr& getEffect() const { return mpEffect; }
+    OUString getEntryText() const;
 
     Size GetSize(const vcl::RenderContext& rRenderContext);
     void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect, bool bSelected);
@@ -238,7 +248,14 @@ public:
     void PaintTrigger(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect);
 
 private:
+    OUString getStartImageName() const;
+    OUString getEffectImageName() const;
+
     OUString        msDescription;
+    // where the target's text starts in msDescription, or -1
+    sal_Int32       mnTextStart;
+    // msDescription as GetSize fitted it to the width the client has for the entry
+    OUString        msShownDescription;
     OUString        msEffectName;
     CustomAnimationEffectPtr mpEffect;
 
@@ -247,8 +264,9 @@ public:
     static const ::tools::Long nItemMinHeight = 38;
 };
 
-CustomAnimationListEntryItem::CustomAnimationListEntryItem(OUString aDescription, CustomAnimationEffectPtr pEffect)
+CustomAnimationListEntryItem::CustomAnimationListEntryItem(OUString aDescription, CustomAnimationEffectPtr pEffect, sal_Int32 nTextStart)
     : msDescription(std::move(aDescription))
+    , mnTextStart(nTextStart)
     , mpEffect(std::move(pEffect))
 {
     if (!mpEffect)
@@ -267,6 +285,31 @@ CustomAnimationListEntryItem::CustomAnimationListEntryItem(OUString aDescription
         msEffectName = SdResId(STR_CUSTOMANIMATION_MISC); break;
     }
     msEffectName = msEffectName.replaceFirst( "%1" , CustomAnimationPresets::getCustomAnimationPresets().getUINameForPresetId(mpEffect->getPresetId()));
+}
+
+// changing EntryText clears cached image
+OUString CustomAnimationListEntryItem::getEntryText() const
+{
+    if (!mpEffect || !comphelper::COKit::isActive())
+        return msDescription;
+
+    OUString sStart;
+    switch (mpEffect->getNodeType())
+    {
+    case EffectNodeType::ON_CLICK:
+        sStart = SdResId(STR_CUSTOMANIMATION_ON_CLICK); break;
+    case EffectNodeType::WITH_PREVIOUS:
+        sStart = SdResId(STR_CUSTOMANIMATION_WITH_PREVIOUS); break;
+    case EffectNodeType::AFTER_PREVIOUS:
+        sStart = SdResId(STR_CUSTOMANIMATION_AFTER_PREVIOUS); break;
+    default:
+        break;
+    }
+
+    OUString sText = msDescription + ", " + msEffectName;
+    if (!sStart.isEmpty())
+        sText += ", " + sStart;
+    return sText;
 }
 
 IMPL_STATIC_LINK(CustomAnimationList, CustomRenderHdl, weld::TreeView::render_args, aPayload, void)
@@ -292,11 +335,84 @@ IMPL_STATIC_LINK(CustomAnimationList, CustomGetSizeHdl, weld::TreeView::get_size
     return pItem->GetSize(rRenderContext);
 }
 
+OUString CustomAnimationListEntryItem::getStartImageName() const
+{
+    switch (mpEffect->getNodeType())
+    {
+    case EffectNodeType::ON_CLICK:
+        return BMP_CUSTOMANIMATION_ON_CLICK;
+    case EffectNodeType::AFTER_PREVIOUS:
+        return BMP_CUSTOMANIMATION_AFTER_PREVIOUS;
+    default:
+        //FIXME With previous image not defined in CustomAnimation.src
+        return OUString();
+    }
+}
+
+OUString CustomAnimationListEntryItem::getEffectImageName() const
+{
+    switch (mpEffect->getPresetClass())
+    {
+    case EffectPresetClass::ENTRANCE:
+        return BMP_CUSTOMANIMATION_ENTRANCE_EFFECT;
+    case EffectPresetClass::EXIT:
+        return BMP_CUSTOMANIMATION_EXIT_EFFECT;
+    case EffectPresetClass::EMPHASIS:
+        return BMP_CUSTOMANIMATION_EMPHASIS_EFFECT;
+    case EffectPresetClass::MOTIONPATH:
+        return BMP_CUSTOMANIMATION_MOTION_PATH;
+    case EffectPresetClass::OLEACTION:
+        return BMP_CUSTOMANIMATION_OLE;
+    case EffectPresetClass::MEDIACALL:
+        switch (mpEffect->getCommand())
+        {
+        case EffectCommands::TOGGLEPAUSE:
+            return BMP_CUSTOMANIMATION_MEDIA_PAUSE;
+        case EffectCommands::STOP:
+            return BMP_CUSTOMANIMATION_MEDIA_STOP;
+        case EffectCommands::PLAY:
+        default:
+            return BMP_CUSTOMANIMATION_MEDIA_PLAY;
+        }
+    default:
+        return OUString();
+    }
+}
+
 Size CustomAnimationListEntryItem::GetSize(const vcl::RenderContext& rRenderContext)
 {
-    auto width = rRenderContext.GetTextWidth( msDescription ) + nIconWidth;
-    if (width < (rRenderContext.GetTextWidth( msEffectName ) + 2*nIconWidth))
-        width = rRenderContext.GetTextWidth( msEffectName ) + 2*nIconWidth;
+    ::tools::Long width;
+    if (mpEffect)
+    {
+        // the same offsets PaintEffect draws the two lines at
+        OUString sStartImage = getStartImageName();
+        OUString sEffectImage = getEffectImageName();
+        ::tools::Long nDescriptionX = Image(StockImage::Yes, sStartImage.isEmpty() ? BMP_CUSTOMANIMATION_AFTER_PREVIOUS : sStartImage).GetSizePixel().Width() + 5;
+        ::tools::Long nEffectNameX = nDescriptionX + Image(StockImage::Yes, sEffectImage.isEmpty() ? BMP_CUSTOMANIMATION_ENTRANCE_EFFECT : sEffectImage).GetSizePixel().Width() + 5;
+
+        // truncate text to effect line / container width
+        msShownDescription = msDescription;
+        ::tools::Long nRoom = rRenderContext.GetOutputSizePixel().Width();
+        if (nRoom > 1)
+            nRoom = std::max(nRoom - 8, nEffectNameX + rRenderContext.GetTextWidth(msEffectName));
+        if (comphelper::COKit::isActive() && mnTextStart >= 0 && nRoom > 1
+            && nDescriptionX + rRenderContext.GetTextWidth(msDescription) > nRoom)
+        {
+            OUString sPrefix = msDescription.copy(0, mnTextStart);
+            ::tools::Long nTextRoom = nRoom - nDescriptionX - rRenderContext.GetTextWidth(sPrefix);
+            OUString sText = rRenderContext.GetEllipsisString(msDescription.copy(mnTextStart), std::max<::tools::Long>(nTextRoom, 0));
+            msShownDescription = sPrefix + (sText.isEmpty() ? u"..."_ustr : sText);
+        }
+
+        width = std::max(nDescriptionX + rRenderContext.GetTextWidth(msShownDescription),
+                         nEffectNameX + rRenderContext.GetTextWidth(msEffectName));
+    }
+    else
+    {
+        width = rRenderContext.GetTextWidth( msDescription ) + nIconWidth;
+        if (width < (rRenderContext.GetTextWidth( msEffectName ) + 2*nIconWidth))
+            width = rRenderContext.GetTextWidth( msEffectName ) + 2*nIconWidth;
+    }
 
     Size aSize(width, rRenderContext.GetTextHeight() * 2);
     if (aSize.Height() < nItemMinHeight)
@@ -352,60 +468,23 @@ void CustomAnimationListEntryItem::PaintEffect(vcl::RenderContext& rRenderContex
 
     Size nImageSize = Image(StockImage::Yes, BMP_CUSTOMANIMATION_AFTER_PREVIOUS).GetSizePixel();
 
-    sal_Int16 nNodeType = mpEffect->getNodeType();
-    if (nNodeType == EffectNodeType::ON_CLICK)
+    OUString sStartImage = getStartImageName();
+    if (!sStartImage.isEmpty())
     {
-        Image aImage(Image(StockImage::Yes, BMP_CUSTOMANIMATION_ON_CLICK));
+        Image aImage(StockImage::Yes, sStartImage);
         nImageSize = aImage.GetSizePixel();
         aPos.AdjustY(nItemHeight / 4 - nImageSize.Height() / 2);
         rRenderContext.DrawImage(aPos, aImage);
-    }
-    else if (nNodeType == EffectNodeType::AFTER_PREVIOUS)
-    {
-        Image aImage(Image(StockImage::Yes, BMP_CUSTOMANIMATION_AFTER_PREVIOUS));
-        nImageSize = aImage.GetSizePixel();
-        aPos.AdjustY(nItemHeight / 4 - nImageSize.Height() / 2);
-        rRenderContext.DrawImage(aPos, aImage);
-    }
-    else if (nNodeType == EffectNodeType::WITH_PREVIOUS)
-    {
-        //FIXME With previous image not defined in CustomAnimation.src
     }
 
     aPos = rRect.TopLeft();
     aPos.AdjustX(nImageSize.Width() + 5);
 
     //TODO, full width of widget ?
-    rRenderContext.DrawText(aPos, rRenderContext.GetEllipsisString(msDescription, rRect.GetWidth()));
+    const OUString& rDescription = msShownDescription.isEmpty() ? msDescription : msShownDescription;
+    rRenderContext.DrawText(aPos, rRenderContext.GetEllipsisString(rDescription, rRect.GetWidth()));
 
-    OUString sImage;
-    switch (mpEffect->getPresetClass())
-    {
-    case EffectPresetClass::ENTRANCE:
-        sImage = BMP_CUSTOMANIMATION_ENTRANCE_EFFECT; break;
-    case EffectPresetClass::EXIT:
-        sImage = BMP_CUSTOMANIMATION_EXIT_EFFECT; break;
-    case EffectPresetClass::EMPHASIS:
-        sImage = BMP_CUSTOMANIMATION_EMPHASIS_EFFECT; break;
-    case EffectPresetClass::MOTIONPATH:
-        sImage = BMP_CUSTOMANIMATION_MOTION_PATH; break;
-    case EffectPresetClass::OLEACTION:
-        sImage = BMP_CUSTOMANIMATION_OLE; break;
-    case EffectPresetClass::MEDIACALL:
-        switch (mpEffect->getCommand())
-        {
-        case EffectCommands::TOGGLEPAUSE:
-            sImage = BMP_CUSTOMANIMATION_MEDIA_PAUSE; break;
-        case EffectCommands::STOP:
-            sImage = BMP_CUSTOMANIMATION_MEDIA_STOP; break;
-        case EffectCommands::PLAY:
-        default:
-            sImage = BMP_CUSTOMANIMATION_MEDIA_PLAY; break;
-        }
-        break;
-    default:
-        break;
-    }
+    OUString sImage = getEffectImageName();
 
     if (!sImage.isEmpty())
     {
@@ -896,7 +975,8 @@ void CustomAnimationList::append( CustomAnimationEffectPtr pEffect )
     try
     {
         // create a ui description
-        OUString aDescription = getDescription(aTarget, pEffect->getTargetSubItem() != ShapeAnimationSubType::ONLY_BACKGROUND);
+        sal_Int32 nTextStart;
+        OUString aDescription = getDescription(aTarget, pEffect->getTargetSubItem() != ShapeAnimationSubType::ONLY_BACKGROUND, nTextStart);
 
         std::unique_ptr<weld::TreeIter> xParentEntry;
 
@@ -911,19 +991,20 @@ void CustomAnimationList::append( CustomAnimationEffectPtr pEffect )
         // create an entry for the effect
         std::unique_ptr<weld::TreeIter> xEntry = mxTreeView->make_iterator();
 
-        mxEntries.emplace_back(std::make_unique<CustomAnimationListEntryItem>(aDescription, pEffect));
+        mxEntries.emplace_back(std::make_unique<CustomAnimationListEntryItem>(aDescription, pEffect, nTextStart));
 
         OUString sId(weld::toId(mxEntries.back().get()));
+        OUString sEntryText(mxEntries.back()->getEntryText());
 
         if (xParentEntry)
         {
             // add a subentry
-            mxTreeView->insert(xParentEntry.get(), -1, &aDescription, &sId, nullptr, nullptr, false, xEntry.get());
+            mxTreeView->insert(xParentEntry.get(), -1, &sEntryText, &sId, nullptr, nullptr, false, xEntry.get());
         }
         else
         {
             // add a root entry
-            mxTreeView->insert(nullptr, -1, &aDescription, &sId, nullptr, nullptr, false, xEntry.get());
+            mxTreeView->insert(nullptr, -1, &sEntryText, &sId, nullptr, nullptr, false, xEntry.get());
 
             // and the new root entry becomes the possible next group header
             mxLastTargetShape = std::move(xTargetShape);

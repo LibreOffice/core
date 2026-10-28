@@ -1432,7 +1432,7 @@ void JSComboBox::notifyChangedByDirectPick()
     signal_changed();
 }
 
-void JSComboBox::render_entry(int pos, int dpiscale)
+void JSComboBox::render_entry(int pos, int dpiscale, int /*maxwidth*/)
 {
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITH_ALPHA);
     pDevice->SetDPIX(96.0 * dpiscale / 100);
@@ -2045,7 +2045,7 @@ void JSTreeView::clear_column_header_names()
     sendUpdate();
 }
 
-void JSTreeView::render_entry(int pos, int dpiscale)
+void JSTreeView::render_entry(int pos, int dpiscale, int maxwidth)
 {
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
     pDevice->SetDPIX(96.0 * dpiscale / 100);
@@ -2061,10 +2061,15 @@ void JSTreeView::render_entry(int pos, int dpiscale)
         return;
     }
 
-    Size aRenderSize = signal_custom_get_size(*pDevice, get_id(pos));
+    if (maxwidth > 1)
+        pDevice->SetOutputSizePixel(Size(maxwidth, 1));
+
+    const OUString* pId = static_cast<const OUString*>(pEntry->GetUserData());
+    Size aRenderSize = signal_custom_get_size(*pDevice, pId ? *pId : OUString());
     pDevice->SetOutputSize(aRenderSize);
     m_xTreeView->MakeVisible(pEntry);
-    m_xTreeView->DrawCustomEntry(*pDevice, tools::Rectangle(Point(0, 0), aRenderSize), *pEntry);
+    if (pId)
+        signal_custom_render(*pDevice, tools::Rectangle(Point(0, 0), aRenderSize), false, *pId);
 
     Bitmap aImage = pDevice->GetBitmap(Point(0, 0), aRenderSize);
 
@@ -2145,7 +2150,7 @@ void JSIconView::do_unselect(int pos)
     sendUpdate();
 }
 
-void JSIconView::render_entry(int pos, int dpiscale)
+void JSIconView::render_entry(int pos, int dpiscale, int /*maxwidth*/)
 {
     OUString sImage = m_xIconView->renderEntry(pos, dpiscale);
     if (sImage.isEmpty())

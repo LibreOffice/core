@@ -162,7 +162,8 @@ private:
 
 OUString getPropertyName( sal_Int32 nPropertyType );
 
-OUString getShapeDescription( const cpo::uno::Reference< css::drawing::XShape >& xShape, bool bWithText );
+OUString getShapeDescription( const cpo::uno::Reference< css::drawing::XShape >& xShape, bool bWithText,
+                              sal_Int32* pTextStart = nullptr );
 
 }
 
