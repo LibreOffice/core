@@ -928,7 +928,8 @@ void PageSettingsConverter::writePageSettingsProperties(
         bLandscape = bChartSheet;
 
     // paper size
-    if( !rModel.mbValidSettings )
+    bool bSizeSet = false;
+    if( rModel.mbValidSettings )
     {
         awt::Size aSize;
         bool bValid = false;
@@ -948,6 +949,18 @@ void PageSettingsConverter::writePageSettingsProperties(
         {
             if( bLandscape )
                 ::std::swap( aSize.Width, aSize.Height );
+            rPropSet.setProperty( PROP_Size, aSize );
+            bSizeSet = true;
+        }
+    }
+    // if the file has no paper size set, the page keeps the default size,
+    // but it might need to br rotated to match the orientation
+    if( !bSizeSet )
+    {
+        awt::Size aSize;
+        if( rPropSet.getProperty( aSize, PROP_Size ) && ( (aSize.Width > aSize.Height) != bLandscape ) )
+        {
+            ::std::swap( aSize.Width, aSize.Height );
             rPropSet.setProperty( PROP_Size, aSize );
         }
     }

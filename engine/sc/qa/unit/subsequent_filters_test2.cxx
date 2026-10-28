@@ -15,6 +15,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <drwlayer.hxx>
 #include <svl/zformat.hxx>
+#include <svx/pageitem.hxx>
 #include <svx/svdograf.hxx>
 
 #include <svx/svdpage.hxx>
@@ -28,6 +29,7 @@
 #include <editeng/justifyitem.hxx>
 #include <editeng/lineitem.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <cellvalue.hxx>
 #include <dbdata.hxx>
 #include <validat.hxx>
@@ -36,6 +38,7 @@
 #include <markdata.hxx>
 #include <olinetab.hxx>
 #include <scitems.hxx>
+#include <stlpool.hxx>
 #include <docsh.hxx>
 #include <attrib.hxx>
 #include <columnspanset.hxx>
@@ -1843,6 +1846,17 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testBackColorFilter)
     }
 }
 
+namespace
+{
+const SfxItemSet& getPageStyleItemSet(ScDocument& rDoc, SCTAB nTab)
+{
+    SfxStyleSheetBase* pStyleSheet
+        = rDoc.GetStyleSheetPool()->Find(rDoc.GetPageStyle(nTab), SfxStyleFamily::Page);
+    CPPUNIT_ASSERT(pStyleSheet);
+    return pStyleSheet->GetItemSet();
+}
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf66377)
 {
     createScDoc("xlsx/tdf66377.xlsx");
@@ -1856,6 +1870,62 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf66377)
     // we would have a transparent white color set
     /*const Color& rColor = pExplicitBackground->GetColor();
     CPPUNIT_ASSERT_EQUAL(Color(COL_TRANSPARENT), rColor);*/
+
+    // As a separate check, the pageSetup of the only sheet asks for
+    // A4 paper in landscape orientation, and it also sets usePrinterDefaults="1"
+    const SfxItemSet& rSet = getPageStyleItemSet(*getScDoc(), 0);
+
+    CPPUNIT_ASSERT(rSet.Get(ATTR_PAGE).IsLandscape());
+    // A4 is 297 mm by 210 mm, in twips, flipped
+    const Size& rSize = rSet.Get(ATTR_PAGE_SIZE).GetSize();
+    CPPUNIT_ASSERT_EQUAL(tools::Long(16838), rSize.Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(11906), rSize.Height());
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testPageSetupPaperSizeXLSB)
+{
+    createScDoc("xlsb/multiple_page_sizes.xlsb");
+
+    // File has two sheets, one in A3, landscape oritentation
+    const SfxItemSet& rSet1 = getPageStyleItemSet(*getScDoc(), 0);
+    CPPUNIT_ASSERT(rSet1.Get(ATTR_PAGE).IsLandscape());
+    const Size& rSize1 = rSet1.Get(ATTR_PAGE_SIZE).GetSize();
+    CPPUNIT_ASSERT_EQUAL(tools::Long(23811), rSize1.Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(16838), rSize1.Height());
+
+    // Other in A5 portrait orientation
+    const SfxItemSet& rSet2 = getPageStyleItemSet(*getScDoc(), 1);
+    CPPUNIT_ASSERT(!rSet2.Get(ATTR_PAGE).IsLandscape());
+    const Size& rSize2 = rSet2.Get(ATTR_PAGE_SIZE).GetSize();
+    CPPUNIT_ASSERT_EQUAL(tools::Long(8391), rSize2.Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(11906), rSize2.Height());
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testPageSetupNoPaperSizeXLSX)
+{
+    // File is original tdf147014.xlsx with two more sheets added, the orientation
+    // edited by hand. Each sheet has paperSize="0", which gives no paper size, so
+    // each page keeps the default paper size, and orientation is applied.
+    createScDoc("xlsx/tdf147014.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    // Portrait orientation: the page is taller than it is wide
+    const SfxItemSet& rPortrait = getPageStyleItemSet(*pDoc, 0);
+    CPPUNIT_ASSERT(!rPortrait.Get(ATTR_PAGE).IsLandscape());
+    const Size& rPortraitSize = rPortrait.Get(ATTR_PAGE_SIZE).GetSize();
+    CPPUNIT_ASSERT_GREATER(rPortraitSize.Width(), rPortraitSize.Height());
+
+    // Landscape orientation: the page is wider than it is tall
+    const SfxItemSet& rLandscape = getPageStyleItemSet(*pDoc, 1);
+    CPPUNIT_ASSERT(rLandscape.Get(ATTR_PAGE).IsLandscape());
+    const Size& rLandscapeSize = rLandscape.Get(ATTR_PAGE_SIZE).GetSize();
+    CPPUNIT_ASSERT_GREATER(rLandscapeSize.Height(), rLandscapeSize.Width());
+
+    // orientation="default": portrait for a worksheet
+    const SfxItemSet& rDefault = getPageStyleItemSet(*pDoc, 2);
+    CPPUNIT_ASSERT(!rDefault.Get(ATTR_PAGE).IsLandscape());
+    const Size& rDefaultSize = rDefault.Get(ATTR_PAGE_SIZE).GetSize();
+    CPPUNIT_ASSERT_GREATER(rDefaultSize.Width(), rDefaultSize.Height());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

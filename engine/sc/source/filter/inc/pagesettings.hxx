@@ -65,7 +65,8 @@ struct PageSettingsModel
     sal_Int32           mnPrintErrors;          /// Cell error printing mode.
     bool                mbUseEvenHF;            /// True = use maEvenHeader/maEvenFooter.
     bool                mbUseFirstHF;           /// True = use maFirstHeader/maFirstFooter.
-    bool                mbValidSettings;        /// True = use imported settings.
+    bool                mbValidSettings;        /// True = use imported settings (usePrinterDefaults in XLSX,
+                                                /// no fNoPls in XLSB).
     bool                mbUseFirstPage;         /// True = start page numbering with mnFirstPage.
     bool                mbBlackWhite;           /// True = print black and white.
     bool                mbDraftQuality;         /// True = print in draft quality.
