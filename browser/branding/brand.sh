@@ -6,14 +6,12 @@
 #
 # Generate a theme into a browser/dist directory.
 #
-# Usage: brand.sh [--pure] OUTDIR THEME
+# Usage: brand.sh OUTDIR THEME
 #
 #   OUTDIR   the browser/dist directory to brand
 #   THEME    CO-theme (Collabora Online), CODE (Collabora Online Development
 #            Edition) or CODA (Collabora Office); the theme ids of
 #            online-branding's brand.sh (1, 3, 10) work too
-#   --pure   for the mobile apps, which load the technology logo of the About
-#            dialog from the web instead of the server
 #
 # Environment: SASS (default: sass), SASS_FLAGS (extra sass options, like
 # --quiet), BRAND_VERSION (shown in the header of the generated files,
@@ -26,21 +24,14 @@ set -e
 usage()
 {
     cat 1>&2 << EOF
-Usage: brand.sh [--pure] OUTDIR THEME
+Usage: brand.sh OUTDIR THEME
 
   OUTDIR   the browser/dist directory to brand
   THEME    CO-theme, CODE or CODA (or the online-branding ids 1, 3, 10)
-  --pure   for the mobile apps, the About dialog loads the technology logo
-           from the web
 EOF
     exit 1
 }
 
-PURE=
-if [ "$1" = "--pure" ]; then
-    PURE=1
-    shift
-fi
 [ $# -eq 2 ] || usage
 
 OUTDIR="$1"
@@ -131,15 +122,9 @@ compile device-tablet.scss branding-tablet.css
 add_header "$OUTDIR/branding-mobile.css" "$OUTDIR/branding-tablet.css"
 
 # Copy the images that the CSS references.
-for i in $(grep -ho "images/.*svg" "$OUTDIR"/branding*.css | sed -e "s/images\///" | grep -v lokit-extra-img.svg | sort | uniq); do
+for i in $(grep -ho "images/.*svg" "$OUTDIR"/branding*.css | sed -e "s/images\///" | sort | uniq); do
     cp "$BASE_DIR/images/$i" "$OUTDIR/images/"
 done
-
-if [ -n "$PURE" ]; then
-    sed "s|remote/static/lokit-extra-img.svg|https://rating.collaboraonline.com/static/lokit-extra-img.svg|" \
-        "$OUTDIR/branding.css" > "$WORK/branding.css"
-    mv "$WORK/branding.css" "$OUTDIR/branding.css"
-fi
 
 # Document type icons for the macOS app
 if [ "$(uname)" = Darwin ] && command -v sips > /dev/null 2>&1; then

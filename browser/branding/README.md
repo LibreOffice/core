@@ -67,15 +67,14 @@ restart it to see the new CSS.
 
 ## Generating a theme by hand
 
-    browser/branding/brand.sh [--pure] OUTDIR THEME
+    browser/branding/brand.sh OUTDIR THEME
 
 for example
 
     browser/branding/brand.sh browser/dist CODE
 
 `THEME` is `CO-theme`, `CODE` or `CODA`; the theme ids of online-branding's `brand.sh`
-(1, 3, 10) work too. `--pure` is for the mobile apps, whose About dialog loads the
-technology logo from the web instead of the server. The script needs
+(1, 3, 10) work too. The script needs
 [dart-sass](https://sass-lang.com/dart-sass/) (`sass` on the `PATH`, or
 `SASS=browser/node_modules/.bin/sass`). Unlike the online-branding script, this one
 never modifies its sources.

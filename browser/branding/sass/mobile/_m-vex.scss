@@ -25,11 +25,6 @@
 		justify-content: center !important;
 	}
 
-	#lokit-logo {
-		flex-grow:1;
-		background-position: center 6px !important;
-	}
-
 	/// integrators
 	@debug base.$with-integrator-logo;
 	@if base.$with-integrator-logo {

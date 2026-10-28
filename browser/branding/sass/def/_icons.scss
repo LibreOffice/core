@@ -13,7 +13,6 @@ $img-app-logo: 'images/toolbar-bg-logo.svg' !default;
 $img-app-logo-dark: 'images/toolbar-bg-logo-dark.svg' !default;
 $img-app-logo-toolbar: $img-app-logo !default;
 $img-app-logo-toolbar-dark: $img-app-logo-dark !default;
-$img-about-lokit: 'remote/static/lokit-extra-img.svg' !default;
 $img-app-text: false !default;
 $img-app-spreadsheet: false !default;
 $img-app-presentation: false !default;
@@ -660,7 +659,6 @@ $color-navigator-tab: false !default;
 			}
 		}
 	}
-	@if $img-about-lokit { #lokit-logo {background-image: url($img-about-lokit); background-position: center top; background-size: 82px no-repeat; display: flex; flex-grow: 1;} }
 	.unobutton { overflow: hidden; }
 	@if $img-menu-downloadas-pdf { #{$notdark} #menu-downloadas-pdf a {background-image: url($img-menu-downloadas-pdf); background-repeat: no-repeat; background-position: center right; background-size: 24px;}}
 	@if $img-menu-fullscreen { #{$notdark} #menu-downloadas-pdf a {background-image: url($img-menu-fullscreen); background-repeat: no-repeat; background-position: center right; background-size: 24px;}}
