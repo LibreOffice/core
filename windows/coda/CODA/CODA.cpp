@@ -100,7 +100,7 @@ enum class DocumentType
     DRAWING,
 };
 
-enum class DocumentMode { EDIT, NEW, WELCOME, STARTER };
+enum class DocumentMode { EDIT, NEW, WELCOME, STARTER, CLOUD_ACCOUNT };
 
 struct FilenameAndUri
 {
@@ -3880,7 +3880,7 @@ static void closeTab(WindowState& window, int tabId)
             presenting->hConsoleWnd = 0;
         }
     }
-    else if (tab->mode != DocumentMode::STARTER)
+    else if (tab->mode != DocumentMode::STARTER && tab->mode != DocumentMode::CLOUD_ACCOUNT)
     {
         // A presentation ends with the document driving it: the console window
         // goes, and the window this document was playing in comes back out of
@@ -4981,6 +4981,55 @@ static void openStarterWindow()
     openCOOLWindow({}, DocumentMode::STARTER);
 }
 
+// Nothing in the window is intercepted, so a document opens in the COOL server's editor, as in a
+// browser.
+static void openAccountWindow(const std::string& url)
+{
+    int width, height;
+    defaultWindowSize(width, height);
+    WindowState& window = createAppWindow(Util::string_to_wide_string(APP_NAME),
+                                          WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
+                                          width, height);
+    DocumentTab& account = createTab(window, {}, DocumentMode::CLOUD_ACCOUNT);
+    account.hasContent = true;
+    activateTab(window, account.tabId);
+
+    const int accountTabId = account.tabId;
+    withWebView2Environment(
+        [accountTabId, url](ICoreWebView2Environment* env)
+        {
+            DocumentTab* tab = findTab(accountTabId);
+            if (!tab)
+            {
+                LOG_DBG("The account window closed before its web view was made");
+                return;
+            }
+
+            env->CreateCoreWebView2Controller(
+                tab->hWnd,
+                Microsoft::WRL::Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
+                    [accountTabId, url](HRESULT, ICoreWebView2Controller* controller) -> HRESULT
+                    {
+                        DocumentTab* account = findTab(accountTabId);
+                        WindowState* window = account ? findWindow(account->hWnd) : nullptr;
+                        if (!controller || !window)
+                        {
+                            LOG_WRN("The account window got no web view");
+                            return E_FAIL;
+                        }
+
+                        account->webViewController = controller;
+                        controller->get_CoreWebView2(account->webView.put());
+                        controller->put_Bounds(documentArea(*window));
+                        controller->put_IsVisible(TRUE);
+
+                        account->webView->Navigate(Util::string_to_wide_string(url).c_str());
+                        return S_OK;
+                    })
+                    .Get());
+        });
+}
+
 namespace
 {
 // Result of a WinHTTP request: an HTTP status code (>= 100), or one of the
@@ -6036,6 +6085,18 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             }
             if (data.mode == DocumentMode::STARTER)
                 PostMessageW(data.hWnd, CODA_WM_CLOSETAB, (WPARAM)data.tabId, 0);
+        }
+        else if (s.starts_with(L"openremote "))
+        {
+            // "openremote <url> account=<id>"
+            const StringVector tokens = StringVector::tokenize(Util::wide_string_to_string(s));
+            if (tokens.size() < 2)
+            {
+                LOG_WRN("An account was not opened: the message names no address");
+                return;
+            }
+
+            openAccountWindow(tokens[1]);
         }
         else if (s.starts_with(L"opendoc "))
         {
