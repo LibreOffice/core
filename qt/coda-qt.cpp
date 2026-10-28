@@ -186,6 +186,17 @@ int main(int argc, char** argv)
         QWebEngineUrlScheme::registerScheme(scheme);
     }
 
+    // ContentSecurityPolicyIgnored lets a page from a COOL server load scripts from coollocal:.
+    {
+        QWebEngineUrlScheme scheme("coollocal");
+        scheme.setSyntax(QWebEngineUrlScheme::Syntax::Host);
+        scheme.setFlags(QWebEngineUrlScheme::SecureScheme
+                      | QWebEngineUrlScheme::ContentSecurityPolicyIgnored
+                      | QWebEngineUrlScheme::CorsEnabled
+                      | QWebEngineUrlScheme::FetchApiAllowed);
+        QWebEngineUrlScheme::registerScheme(scheme);
+    }
+
     QApplication app(argc, argv);
 
     installBitmapCursorFix();
