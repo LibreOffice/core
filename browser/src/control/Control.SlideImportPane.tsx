@@ -26,6 +26,14 @@
 
 /* global app _ JSDialog */
 
+// A button offered under a source that shows no slides.
+interface SlideImportAction {
+  text: string;
+  enabled: boolean;
+  run: () => void;
+  icon?: string;
+}
+
 // What the pane holds of one source presentation.
 interface SlideImportPaneSource {
   // Names the source in the pane: its persistent link.
@@ -780,7 +788,7 @@ class SlideImportPane {
           'The slides are in this presentation. Looking for the file they came from did not work this time.',
         );
       return _(
-        'The slides are in this presentation. The file they came from is no longer here.',
+        "Original file can't be found. Choose it again to keep your slides up to date.",
       );
     }
     if (source.state === 'noaccess')
@@ -790,22 +798,23 @@ class SlideImportPane {
     return _('Reading the slides...');
   }
 
-  private sourceRecovery(
-    source: SlideImportPaneSource,
-  ): { text: string; enabled: boolean; run: () => void }[] {
+  private sourceRecovery(source: SlideImportPaneSource): SlideImportAction[] {
     if (source.state === 'missing') {
-      const actions: { text: string; enabled: boolean; run: () => void }[] = [];
+      const actions: SlideImportAction[] = [
+        {
+          text: _('Choose file…'),
+          icon: 'choose',
+          enabled: !!app.linkToken,
+          run: () => this.browseForImport(source),
+        },
+      ];
       if (this.canLookAgain(source))
         actions.push({
-          text: _('Look again'),
+          text: _('Try again'),
+          icon: 'retry',
           enabled: true,
           run: () => this.lookAgain(source),
         });
-      actions.push({
-        text: _('Locate file'),
-        enabled: !!app.linkToken,
-        run: () => this.browseForImport(source),
-      });
       return actions;
     }
     if (source.state === 'failed')
@@ -1383,12 +1392,14 @@ class SlideImportPane {
               {this.sourceMessage(source)}
             </span>
           )}
-          <button
-            class="slide-import-source-menu"
-            aria-label={_('Actions for {0}').replace('{0}', source.name)}
-            aria-haspopup="true"
-            onClick={(e: MouseEvent) => this.openSourceMenu(e, source)}
-          />
+          {source.state !== 'missing' && (
+            <button
+              class="slide-import-source-menu"
+              aria-label={_('Actions for {0}').replace('{0}', source.name)}
+              aria-haspopup="true"
+              onClick={(e: MouseEvent) => this.openSourceMenu(e, source)}
+            />
+          )}
         </div>
         <div
           id={panelId}
@@ -1405,26 +1416,6 @@ class SlideImportPane {
 
   private openSourceMenu(e: MouseEvent, source: SlideImportPaneSource): void {
     const entries: any[] = [];
-
-    // A file the storage lists no address for cannot be reached, so there is
-    // nothing to do with it but have the storage looked in again, or name it
-    // to the integration, which is what adding a presentation does.
-    if (source.state === 'missing') {
-      if (this.canLookAgain(source))
-        entries.push({
-          id: 'lookagain',
-          type: 'comboboxentry',
-          text: _('Look again'),
-        });
-      entries.push({
-        id: 'locate',
-        type: 'comboboxentry',
-        text: _('Locate file'),
-        enabled: !!app.linkToken,
-      });
-      this.showSourceMenu(e, entries, source);
-      return;
-    }
 
     entries.push({
       id: 'toggle',
@@ -1481,12 +1472,6 @@ class SlideImportPane {
     ) => {
       if (eventType !== 'selected') return false;
       switch (entry.id) {
-        case 'lookagain':
-          this.lookAgain(source);
-          break;
-        case 'locate':
-          this.browseForImport(source);
-          break;
         case 'toggle':
           this.toggleSource(source);
           break;
@@ -1531,14 +1516,21 @@ class SlideImportPane {
       return (
         <div class="slide-import-panel-message">
           <p>{message}</p>
-          {recovery.map((action) => (
-            <button
-              class="button slide-import-panel-action"
-              onClick={() => action.run()}
-            >
-              {action.text}
-            </button>
-          ))}
+          {recovery.length > 0 && (
+            <div class="slide-import-panel-actions">
+              {recovery.map((action) => (
+                <button
+                  class={
+                    'button slide-import-panel-action' +
+                    (action.icon ? ' ' + action.icon : '')
+                  }
+                  onClick={() => action.run()}
+                >
+                  {action.text}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       );
     }
