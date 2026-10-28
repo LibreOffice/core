@@ -98,7 +98,7 @@ window.L.Map.Settings = window.L.Handler.extend({
 			// The answer may never come. Give up rather than hold the dialog
 			// shut.
 			setTimeout(() => {
-				if (!this._resolveSentenceChecking) return; // answered in time
+				if (this._resolveSentenceChecking !== resolve) return; // answered, or asked again
 				this._resolveSentenceChecking = null;
 				this._sentenceCheckingAsked = null;
 				resolve();
@@ -117,7 +117,7 @@ window.L.Map.Settings = window.L.Handler.extend({
 				'commandvalues command=.uno:RemoteGrammarCheckers',
 			);
 			setTimeout(() => {
-				if (!this._resolveRemoteCheckers) return; // answered in time
+				if (this._resolveRemoteCheckers !== resolve) return; // answered, or asked again
 				this._resolveRemoteCheckers = null;
 				this._remoteCheckersAsked = null;
 				resolve();
@@ -133,7 +133,7 @@ window.L.Map.Settings = window.L.Handler.extend({
 			this._resolveTranslationProviders = resolve;
 			app.socket.sendMessage('commandvalues command=.uno:TranslationProviders');
 			setTimeout(() => {
-				if (!this._resolveTranslationProviders) return; // answered in time
+				if (this._resolveTranslationProviders !== resolve) return; // answered, or asked again
 				this._resolveTranslationProviders = null;
 				this._translationProvidersAsked = null;
 				resolve();
