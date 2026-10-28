@@ -163,6 +163,7 @@ class RenderGeometrySection extends CanvasSectionObject {
 				y: number;
 				data: cool.VectorPrimitivesData;
 				version: number | undefined;
+				edited: number | undefined;
 				hit: RenderGeometryHit | undefined;
 		  }
 		| undefined;
@@ -316,25 +317,64 @@ class RenderGeometrySection extends CanvasSectionObject {
 		const data = RenderGeometrySection.currentPart();
 		if (!data) return undefined;
 
+		const edited = RenderGeometrySection.editedPart();
 		const last = RenderGeometrySection._lastHit;
 		if (
 			last &&
 			last.x === x &&
 			last.y === y &&
 			last.data === data &&
-			last.version === data.version
+			last.version === data.version &&
+			last.edited === edited
 		)
 			return last.hit;
 
-		const hit = this.walkObjectsAt(data, x, y, false)[0];
+		/*
+			While one stands inside something, a group, a diagram or an object active in place,
+			what it holds is hit first, as the office picks in the group it stands in: an object
+			outside lying over it, a transparent one in front for one, does not take the press
+			or the hover from it. Only where nothing of it is hit is the frontmost object taken.
+		*/
+		const hits = this.walkObjectsAt(data, x, y, edited !== undefined);
+		const hit =
+			edited === undefined
+				? hits[0]
+				: (hits.find((one: RenderGeometryHit) =>
+						RenderGeometrySection.liesWithin(data, one.id, edited),
+					) ?? hits[0]);
 		RenderGeometrySection._lastHit = {
 			x: x,
 			y: y,
 			data: data,
 			version: data.version,
+			edited: edited,
 			hit: hit,
 		};
 		return hit;
+	}
+
+	/// What one stands inside: the entered group or diagram, or the object active in place.
+	/// Nothing on the page.
+	private static editedPart(): number | undefined {
+		const place = Interaction.placeOf(GraphicSelection.selectedObjectIDs);
+		if (place.kind === 'group' || place.kind === 'diagram') return place.group;
+		if (place.kind === 'inPlace') return place.object;
+		return undefined;
+	}
+
+	/// Whether the object is that one or lies inside it, at any depth.
+	private static liesWithin(
+		data: cool.VectorPrimitivesData,
+		objectId: number,
+		holderId: number,
+	): boolean {
+		for (
+			let at: number | undefined = objectId, guard = 0;
+			at !== undefined && guard < 100;
+			at = data.objects.get(at)?.parent, ++guard
+		)
+			if (at === holderId) return true;
+		return false;
 	}
 
 	/// The objects of the page under a document position, in twips, from the front to the back:
