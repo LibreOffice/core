@@ -1600,6 +1600,9 @@ void doubleToString(rtl_tString** pResult, sal_Int32* pResultCapacity, sal_Int32
                 *p++ = '0';
 
             nDecPos = 0;
+        } else if (nDigits <= 0) {
+            *p++ = '0';
+            nDecPos = 0;
         }
         else
             nDecPos = nExp + 1;
