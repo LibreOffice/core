@@ -26,6 +26,8 @@
 #   browser/Makefile.am for the runtime npm dependency closure
 # - scripts/sbom-externals.json for everything that cannot be discovered
 #   mechanically (vendored sources, vendors, licenses, homepages)
+# - browser/branding, when the build applied a theme (--branding-theme): its
+#   files in dist belong to the Apache-2.0 branding component, not the root
 
 import argparse
 import base64
@@ -481,8 +483,9 @@ def collect_files(srcdir, builddir, enable_mobileapp=False):
     return files
 
 
-def file_external(instpath, npm_names, vendored_by_dist_path):
-    """Which third-party component an installed file belongs to, if any."""
+def file_external(instpath, npm_names, vendored_by_dist_path,
+                  firstparty_by_dist_path):
+    """Which component other than the root an installed file belongs to."""
     dist_prefix = "usr/share/coolwsd/browser/dist/"
     if instpath.startswith(dist_prefix):
         rel = instpath[len(dist_prefix):]
@@ -493,7 +496,26 @@ def file_external(instpath, npm_names, vendored_by_dist_path):
                 return ("npm", name)
         if rel in vendored_by_dist_path:
             return ("vendored", vendored_by_dist_path[rel])
+        if rel in firstparty_by_dist_path:
+            return ("firstparty", firstparty_by_dist_path[rel])
     return None
+
+
+def branding_dist_files(srcdir, builddir):
+    """The files of the theme from browser/branding that are in browser/dist.
+
+    brand.sh writes the stylesheets and scripts to the top of dist and copies
+    the images the stylesheets reference next to the tree's own images, so
+    those are told apart by name against the theme's image directory."""
+    dist = os.path.join(builddir, "browser", "dist")
+    files = [name for name in os.listdir(dist)
+             if name.startswith("branding") and name.endswith((".css", ".js"))]
+    theme_images = os.path.join(srcdir, "browser", "branding", "themes",
+                                "collabora-online-brand", "images")
+    for name in os.listdir(theme_images):
+        if os.path.isfile(os.path.join(dist, "images", name)):
+            files.append(f"images/{name}")
+    return sorted(files)
 
 
 # ---------------------------------------------------------------------------
@@ -565,12 +587,13 @@ def sbom_skeleton(version, root_license):
 
 def make_component(graph, fragment, name, vendor, version, homepage, locator,
                    sha256, declared, concluded, sha512=None, purl=None,
-                   cpe_name=None):
+                   cpe_name=None, with_cpe=True):
     """Emit a software_Package + source artifact, engine-shape.
 
     cpe_name overrides the CPE product name where it differs from the name we
     use (NVD calls expat 'libexpat'); a product name no CPE uses matches no
-    CVE, and unlike a wrong vendor it cannot be saved by the '*' wildcard."""
+    CVE, and unlike a wrong vendor it cannot be saved by the '*' wildcard.
+    with_cpe=False is for our own components, which have no CPE."""
     pkg_spdx_id = make_spdx_id(fragment)
     pkg_element = {
         "type": "software_Package",
@@ -578,16 +601,20 @@ def make_component(graph, fragment, name, vendor, version, homepage, locator,
         "originatedBy": ["https://collaboraoffice.com"],
         "creationInfo": "_:creationinfo",
         "name": name,
-        "externalIdentifiers": [{
+        "externalIdentifiers": [],
+    }
+    if with_cpe:
+        pkg_element["externalIdentifiers"].append({
             "externalIdentifierType": "cpe23",
             "identifier": cpe23(vendor, cpe_name or name, version),
-        }],
-    }
+        })
     if purl:
         pkg_element["externalIdentifiers"].append({
             "externalIdentifierType": "packageURL",
             "identifier": purl,
         })
+    if not pkg_element["externalIdentifiers"]:
+        del pkg_element["externalIdentifiers"]
     if homepage:
         pkg_element["software_homePage"] = homepage
     if version:
@@ -684,11 +711,12 @@ def run_checks(args, annotations, gbuild_externals, poco_bundled, seeds,
         if name not in poco_bundled and "platforms" not in entry:
             errors.append(f"stale bundled entry in sbom-externals.json: {name}")
 
-    for entry in annotations["vendored"]:
-        source = os.path.join(args.srcdir, entry["source"])
-        if not os.path.exists(source):
-            errors.append(f"vendored source of {entry['name']} is gone: "
-                          f"{entry['source']}")
+    for section in ("vendored", "firstparty"):
+        for entry in annotations[section]:
+            source = os.path.join(args.srcdir, entry["source"])
+            if not os.path.exists(source):
+                errors.append(f"{section} source of {entry['name']} is gone: "
+                              f"{entry['source']}")
 
     # Policy: direct dependencies are listed in THIRDPARTYLICENSES.
     with open(os.path.join(args.srcdir, "THIRDPARTYLICENSES"),
@@ -730,6 +758,10 @@ def main():
                              "(default: BUILDDIR/browser/sbom-shipped-js.txt)")
     parser.add_argument("--mobileapp", action="store_true",
                         help="dist excludes of an ENABLE_MOBILEAPP build")
+    parser.add_argument("--branding-theme", default="",
+                        help="the theme from browser/branding that the build "
+                             "applied to dist (configure's BRANDING_THEME), "
+                             "empty for an unbranded build")
     parser.add_argument("--output",
                         help="default: BUILDDIR/collabora-online-sbom.spdx.json")
     parser.add_argument("--check", action="store_true",
@@ -775,6 +807,7 @@ def main():
         sys.exit(1 if errors else 0)
 
     document, root_spdx_id = sbom_skeleton(version, "MPL-2.0")
+    package_version = version
     graph = document["@graph"]
     graph.extend(license_cache["MPL-2.0"])
     emitted_licenses = {"MPL-2.0"}
@@ -840,6 +873,26 @@ def main():
             subdir = entry["source"].split("/")[2]
             vendored_by_dist_path[f"admin/{subdir}/{basename}"] = name
 
+    # Our own components under a license other than the tree's. The theme is
+    # in dist only when the build applied one; a theme that --with-app-branding
+    # copied in is not ours to declare and stays with the root.
+    firstparty_ids = {}
+    firstparty_by_dist_path = {}
+    for entry in annotations["firstparty"]:
+        if entry["source"] != "browser/branding" or not args.branding_theme:
+            continue
+        name = entry["name"]
+        firstparty_ids[name] = make_component(
+            graph, f"SPDXRef-{name}", name, None, package_version,
+            entry["url"], repo_url(entry["source"]), None, entry["declared"],
+            entry["concluded"], with_cpe=False)
+        emit_licenses(entry["declared"], entry["concluded"])
+        add_contains(graph, root_spdx_id, firstparty_ids[name])
+        for rel in branding_dist_files(args.srcdir, args.builddir):
+            firstparty_by_dist_path[rel] = name
+        log(f"theme {args.branding_theme}: {len(firstparty_by_dist_path)} "
+            f"files of {name}")
+
     # Runtime npm packages
     npm_ids = {}
     for name, info in sorted(npm_runtime.items()):
@@ -886,11 +939,14 @@ def main():
     for file in files:
         instpath = file["instpath"]
         file_spdx_id = make_spdx_id(f"File-{instpath}")
-        owner = file_external(instpath, npm_names, vendored_by_dist_path)
+        owner = file_external(instpath, npm_names, vendored_by_dist_path,
+                              firstparty_by_dist_path)
         if owner is None:
             parent = root_spdx_id
         elif owner[0] == "npm":
             parent = npm_ids[owner[1]]
+        elif owner[0] == "firstparty":
+            parent = firstparty_ids[owner[1]]
         else:
             parent = vendored_ids[owner[1]]
 

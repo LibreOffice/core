@@ -1125,6 +1125,7 @@ collabora-online-sbom.spdx.json: $(GBUILD_EXES) coolwsd.xml \
 		--srcdir $(abs_top_srcdir) \
 		--builddir $(abs_top_builddir) \
 		--engine-builddir $(ENGINE_BUILDDIR) \
+		--branding-theme "$(BRANDING_THEME)" \
 		--version $(PACKAGE_VERSION)
 
 # Consistency checks for the SBOM inputs: annotations in
@@ -1136,6 +1137,7 @@ sbom-check:
 		--srcdir $(abs_top_srcdir) \
 		--builddir $(abs_top_builddir) \
 		--engine-builddir $(ENGINE_BUILDDIR) \
+		--branding-theme "$(BRANDING_THEME)" \
 		--check
 
 # Check the SBOM's cpe23 identifiers against a vulnerability database: an

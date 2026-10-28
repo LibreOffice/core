@@ -78,6 +78,13 @@ the unpacked POCO tarball for the sources bundled inside POCO,
 binary's `DT_NEEDED`), and `scripts/sbom-externals.json` for vendored code and
 metadata.
 
+The root package is MPL-2.0. The theme from `browser/branding` is Collabora's
+own work under Apache-2.0, so when the build applied one (`--enable-branding`,
+the default in debug builds) its stylesheets, scripts and images in `dist` are
+listed under a separate `CollaboraOnline-branding` package contained by the
+root; an unbranded build has no such package. A theme copied in with
+`--with-app-branding` is not ours to declare and stays with the root.
+
 ### Container image
 
 `docker/from-packages` generates the image-level SBOMs in a dedicated `sbom`

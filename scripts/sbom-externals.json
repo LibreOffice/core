@@ -12,6 +12,9 @@
         "npm_thirdparty: direct npm dependencies that ship to the browser, mapped to",
         "  the heading text used in THIRDPARTYLICENSES (policy: direct dependencies",
         "  are listed in THIRDPARTYLICENSES, transitive ones only in the SBOM).",
+        "firstparty: our own code under a license other than the tree's MPL-2.0,",
+        "  not third-party, so not in THIRDPARTYLICENSES; the theme from",
+        "  browser/branding is in the SBOM only when the build applied one.",
         "cpe_name overrides the CPE product name when NVD uses a different one",
         "  (expat -> libexpat, zstd -> zstandard); a product or vendor no CPE uses",
         "  matches no CVE, and a scan of such an SBOM comes back clean rather than",
@@ -222,6 +225,16 @@
             "declared": "OFL-1.1",
             "concluded": "OFL-1.1",
             "thirdparty": "Montserrat"
+        }
+    ],
+    "firstparty": [
+        {
+            "name": "CollaboraOnline-branding",
+            "source": "browser/branding",
+            "url": "https://www.collaboraonline.com/",
+            "declared": "Apache-2.0",
+            "concluded": "Apache-2.0",
+            "comment": "The Collabora Online, CODE and Collabora Office theme, applied to browser/dist by --enable-branding"
         }
     ],
     "npm_thirdparty": {
