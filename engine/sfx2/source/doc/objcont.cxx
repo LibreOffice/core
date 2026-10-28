@@ -488,6 +488,10 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
     const SfxUInt16Item* pUpdateDocItem = pFile->GetItemSet().GetItem(SID_UPDATEDOCMODE, false);
     sal_Int16 bCanUpdateFromTemplate = pUpdateDocItem ? pUpdateDocItem->GetValue() : document::UpdateDocMode::NO_UPDATE;
 
+    // Without an update mode the styles are never taken over, so the template is left alone
+    if ( bCanUpdateFromTemplate == document::UpdateDocMode::NO_UPDATE )
+        return;
+
     // created from template?
     uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
     const OUString aTemplName( xDocProps->getTemplateName() );
