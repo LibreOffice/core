@@ -524,10 +524,14 @@ bool AccessibleEditableTextPara::GetAttributeRun( sal_Int32& nStartIndex, sal_In
     DBG_ASSERT(GetParagraphIndex() >= 0,
                "AccessibleEditableTextPara::getLocale: paragraph index value overflow");
 
-    return GetTextForwarder().GetAttributeRun( nStartIndex,
-                                               nEndIndex,
-                                               GetParagraphIndex(),
-                                               nIndex );
+    // the edit source counts the bullet text
+    const sal_Int32 nBulletLen = GetBulletTextLength();
+    if (!GetTextForwarder().GetAttributeRun(nStartIndex, nEndIndex, GetParagraphIndex(),
+                                            nIndex + nBulletLen))
+        return false;
+    nStartIndex -= nBulletLen;
+    nEndIndex -= nBulletLen;
+    return true;
 }
 
 // XAccessibleContext
@@ -928,11 +932,8 @@ cpo::uno::Sequence< beans::PropertyValue > AccessibleEditableTextPara::getCharac
 {
     SolarMutexGuard aGuard;
 
-    //Skip the bullet range to ignore the bullet text
     SvxTextForwarder& rCacheTF = GetTextForwarder();
     EBulletInfo aBulletInfo = rCacheTF.GetBulletInfo(GetParagraphIndex());
-    if (aBulletInfo.bVisible)
-        nIndex += aBulletInfo.aText.getLength();
     CheckIndex(nIndex); // may throw IndexOutOfBoundsException
 
     bool bSupplementalMode = false;
@@ -1424,7 +1425,7 @@ css::accessibility::TextSegment AccessibleEditableTextPara::getTextAtIndex( sal_
         // implGetAttributeRunBoundary() method there
         case AccessibleTextType::ATTRIBUTE_RUN:
         {
-            const sal_Int32 nTextLen = GetTextForwarder().GetTextLen( GetParagraphIndex() );
+            const sal_Int32 nTextLen = getCharacterCount();
 
             if( nIndex == nTextLen )
             {
@@ -1434,23 +1435,12 @@ css::accessibility::TextSegment AccessibleEditableTextPara::getTextAtIndex( sal_
             else
             {
                 sal_Int32 nStartIndex, nEndIndex;
-                //For the bullet paragraph, the bullet string is ignored for IAText::attributes() function.
-                SvxTextForwarder&   rCacheTF = GetTextForwarder();
-                // MT IA2: Not used? sal_Int32 nBulletLen = 0;
-                EBulletInfo aBulletInfo = rCacheTF.GetBulletInfo(GetParagraphIndex());
-                if (aBulletInfo.bVisible)
-                    nIndex += aBulletInfo.aText.getLength();
                 if (nIndex != 0  && nIndex >= getCharacterCount())
                     nIndex = getCharacterCount()-1;
                 CheckPosition(nIndex);
                 if( GetAttributeRun(nStartIndex, nEndIndex, nIndex) )
                 {
-                    aResult.SegmentText = GetTextRange(nStartIndex, nEndIndex);
-                    if (aBulletInfo.bVisible)
-                    {
-                        nStartIndex -= aBulletInfo.aText.getLength();
-                        nEndIndex -= aBulletInfo.aText.getLength();
-                    }
+                    aResult.SegmentText = getTextRange(nStartIndex, nEndIndex);
                     aResult.SegmentStart = nStartIndex;
                     aResult.SegmentEnd = nEndIndex;
                 }
@@ -1532,7 +1522,7 @@ css::accessibility::TextSegment AccessibleEditableTextPara::getTextBeforeIndex( 
         // implGetAttributeRunBoundary() method there
         case AccessibleTextType::ATTRIBUTE_RUN:
         {
-            const sal_Int32 nTextLen = GetTextForwarder().GetTextLen( GetParagraphIndex() );
+            const sal_Int32 nTextLen = getCharacterCount();
             sal_Int32 nStartIndex, nEndIndex;
 
             if( nIndex == nTextLen )
@@ -1541,7 +1531,7 @@ css::accessibility::TextSegment AccessibleEditableTextPara::getTextBeforeIndex( 
                 if( nIndex > 0 &&
                     GetAttributeRun(nStartIndex, nEndIndex, nIndex-1) )
                 {
-                    aResult.SegmentText = GetTextRange(nStartIndex, nEndIndex);
+                    aResult.SegmentText = getTextRange(nStartIndex, nEndIndex);
                     aResult.SegmentStart = nStartIndex;
                     aResult.SegmentEnd = nEndIndex;
                 }
@@ -1555,7 +1545,7 @@ css::accessibility::TextSegment AccessibleEditableTextPara::getTextBeforeIndex( 
                     if( nStartIndex > 0 &&
                         GetAttributeRun(nStartIndex, nEndIndex, nStartIndex-1) )
                     {
-                        aResult.SegmentText = GetTextRange(nStartIndex, nEndIndex);
+                        aResult.SegmentText = getTextRange(nStartIndex, nEndIndex);
                         aResult.SegmentStart = nStartIndex;
                         aResult.SegmentEnd = nEndIndex;
                     }
@@ -1700,11 +1690,11 @@ css::accessibility::TextSegment AccessibleEditableTextPara::getTextBehindIndex( 
             if( GetAttributeRun(nStartIndex, nEndIndex, nIndex) )
             {
                 // already at the right border?
-                if( nEndIndex < GetTextLen() )
+                if (nEndIndex < getCharacterCount())
                 {
                     if( GetAttributeRun(nStartIndex, nEndIndex, nEndIndex) )
                     {
-                        aResult.SegmentText = GetTextRange(nStartIndex, nEndIndex);
+                        aResult.SegmentText = getTextRange(nStartIndex, nEndIndex);
                         aResult.SegmentStart = nStartIndex;
                         aResult.SegmentEnd = nEndIndex;
                     }
@@ -2189,7 +2179,8 @@ cpo::uno::Sequence< beans::PropertyValue > AccessibleEditableTextPara::getRunAtt
 
     rtl::Reference< SvxAccessibleTextPropertySet > xPropSet( new SvxAccessibleTextPropertySet( &GetEditSource(),
                                            ImplGetSvxCharAndParaPropertiesSet() ) );
-    xPropSet->SetSelection( MakeSelection( nIndex ) );
+    // the edit source counts the bullet text
+    xPropSet->SetSelection(MakeSelection(nIndex + GetBulletTextLength()));
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
     if (!xPropSetInfo.is())
         throw cpo::uno::RuntimeException(u"Cannot query XPropertySetInfo"_ustr,

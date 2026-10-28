@@ -25,6 +25,18 @@ namespace cool {
 		url: string;
 	}
 
+	// a range of the paragraph text in bold, italic, underline, strikethrough, superscript or
+	// subscript; only the flags that are set
+	export interface InlineFormat {
+		start: MessageNumber;
+		end: MessageNumber;
+		bold?: boolean | string;
+		italic?: boolean | string;
+		underline?: boolean | string;
+		strikethrough?: boolean | string;
+		escapement?: 'super' | 'sub';
+	}
+
 	// a U+FFFC (OBJECT REPLACEMENT CHARACTER) standing for an image, or a shape, an object or a
 	// text frame read like one
 	export interface InlineImage {
@@ -64,6 +76,7 @@ namespace cool {
 	// the elements of one paragraph, each kind in order
 	export interface InlineElements {
 		links?: InlineLink[];
+		formats?: InlineFormat[];
 		images?: InlineImage[];
 		comments?: InlineComment[];
 		contentControls?: InlineContentControl[];
@@ -75,6 +88,7 @@ namespace cool {
 	// the elements of the paragraphs before or after the caret
 	export interface ContextInlineElements {
 		links?: PerParagraph<InlineLink>;
+		formats?: PerParagraph<InlineFormat>;
 		images?: PerParagraph<InlineImage>;
 		comments?: PerParagraph<InlineComment>;
 		contentControls?: PerParagraph<InlineContentControl>;
@@ -89,11 +103,14 @@ namespace cool {
 	// the fields of a message that carry them
 	export interface InlineElementsMessage {
 		links?: InlineLink[];
+		formats?: InlineFormat[];
 		images?: InlineImage[];
 		comments?: InlineComment[];
 		contentControls?: InlineContentControl[];
 		beforeLinks?: PerParagraph<InlineLink>;
 		afterLinks?: PerParagraph<InlineLink>;
+		beforeFormats?: PerParagraph<InlineFormat>;
+		afterFormats?: PerParagraph<InlineFormat>;
 		beforeImages?: PerParagraph<InlineImage>;
 		afterImages?: PerParagraph<InlineImage>;
 		beforeComments?: PerParagraph<InlineComment>;
@@ -108,18 +125,21 @@ namespace cool {
 		return {
 			paragraph: {
 				links: message.links,
+				formats: message.formats,
 				images: message.images,
 				comments: message.comments,
 				contentControls: message.contentControls,
 			},
 			before: {
 				links: message.beforeLinks,
+				formats: message.beforeFormats,
 				images: message.beforeImages,
 				comments: message.beforeComments,
 				contentControls: message.beforeContentControls,
 			},
 			after: {
 				links: message.afterLinks,
+				formats: message.afterFormats,
 				images: message.afterImages,
 				comments: message.afterComments,
 				contentControls: message.afterContentControls,

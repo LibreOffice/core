@@ -421,6 +421,7 @@ window.L.TextInput = window.L.Layer.extend({
 		const images = elements ? elements.images : undefined;
 		const comments = elements ? elements.comments : undefined;
 		const controls = elements ? elements.contentControls : undefined;
+		const formats = elements ? elements.formats : undefined;
 		const nodes = [];
 		let pos = 0;
 		for (const link of links || []) {
@@ -428,23 +429,24 @@ window.L.TextInput = window.L.Layer.extend({
 			const end = parseInt(link.end);
 			if (start < pos || end <= start || end > content.length)
 				continue;
-			nodes.push(...this._createCommentNodes(content, pos, start, images, comments, controls));
+			nodes.push(...this._createCommentNodes(content, pos, start, images, comments, controls,
+				formats));
 			const anchor = document.createElement('a');
 			anchor.setAttribute('href', window.sanitizeUrl(link.url));
 			anchor.append(...this._createCommentNodes(content, start, end, images, comments,
-				controls));
+				controls, formats));
 			nodes.push(anchor);
 			pos = end;
 		}
 		nodes.push(...this._createCommentNodes(content, pos, content.length, images, comments,
-			controls));
+			controls, formats));
 		return nodes;
 	},
 
 	// the text between start and end, with its commented ranges and its content controls; a
 	// comment's range ends after the U+FFFC of its anchor, and a comment without a range is that
 	// character alone
-	_createCommentNodes: function(content, start, end, images, comments, controls) {
+	_createCommentNodes: function(content, start, end, images, comments, controls, formats) {
 		const commentRanges = (comments || []).map(function (comment) {
 			return { id: comment.id, start: parseInt(comment.start), end: parseInt(comment.end) };
 		});
@@ -455,12 +457,12 @@ window.L.TextInput = window.L.Layer.extend({
 			return Object.assign({}, range, { start: Math.max(start, range.start),
 				end: Math.min(end, range.end) });
 		}).filter(function (range) { return range.start < range.end; });
-		return this._createMarkNodes(content, start, end, images, ranges);
+		return this._createMarkNodes(content, start, end, images, ranges, formats);
 	},
 
 	// a range inside another one, e.g. a reply repeating the range of its comment, is a mark in its
 	// mark; one partly inside is split at the end of the outer mark
-	_createMarkNodes: function(content, start, end, images, ranges) {
+	_createMarkNodes: function(content, start, end, images, ranges, formats) {
 		ranges.sort(function (a, b) { return a.start - b.start || b.end - a.end; });
 		const nodes = [];
 		let pos = start;
@@ -475,13 +477,14 @@ window.L.TextInput = window.L.Layer.extend({
 				}
 				inner.push(Object.assign({}, next, { end: Math.min(next.end, range.end) }));
 			}
-			nodes.push(...this._createImageNodes(content, pos, range.start, images));
+			nodes.push(...this._createImageNodes(content, pos, range.start, images, formats));
 			const mark = this._createRangeElement(range);
-			mark.append(...this._createMarkNodes(content, range.start, range.end, images, inner));
+			mark.append(...this._createMarkNodes(content, range.start, range.end, images, inner,
+				formats));
 			nodes.push(mark);
 			pos = range.end;
 		}
-		nodes.push(...this._createImageNodes(content, pos, end, images));
+		nodes.push(...this._createImageNodes(content, pos, end, images, formats));
 		return nodes;
 	},
 
@@ -552,7 +555,7 @@ window.L.TextInput = window.L.Layer.extend({
 	},
 
 	// the text between start and end, with its images; the character stays in the text
-	_createImageNodes: function(content, start, end, images) {
+	_createImageNodes: function(content, start, end, images, formats) {
 		const nodes = [];
 		let pos = start;
 		for (const image of images || []) {
@@ -561,7 +564,7 @@ window.L.TextInput = window.L.Layer.extend({
 				|| content.charAt(position) !== '\ufffc')
 				continue;
 			if (position > pos)
-				nodes.push(document.createTextNode(content.substring(pos, position)));
+				nodes.push(...this._createFormatNodes(content, pos, position, formats));
 			const node = document.createElement('span');
 			// one unit for the caret, so a reader announces it entered and left, as for <img>
 			node.setAttribute('contenteditable', 'false');
@@ -580,8 +583,49 @@ window.L.TextInput = window.L.Layer.extend({
 			pos = position + 1;
 		}
 		if (pos < end)
+			nodes.push(...this._createFormatNodes(content, pos, end, formats));
+		return nodes;
+	},
+
+	// the text between start and end, its formatted runs in elements whose computed style the
+	// browser exposes as text attributes (e.g. NVDA+F), and in <sup>/<sub>; see leaflet.css
+	_createFormatNodes: function(content, start, end, formats) {
+		const nodes = [];
+		let pos = start;
+		for (const format of formats || []) {
+			const from = Math.max(start, parseInt(format.start));
+			const to = Math.min(end, parseInt(format.end));
+			if (!(from >= pos && to > from))
+				continue;
+			if (from > pos)
+				nodes.push(document.createTextNode(content.substring(pos, from)));
+			nodes.push(this._createFormatElement(format, content.substring(from, to)));
+			pos = to;
+		}
+		if (pos < end)
 			nodes.push(document.createTextNode(content.substring(pos, end)));
 		return nodes;
+	},
+
+	_createFormatElement: function(format, text) {
+		const isSet = (flag) => String(flag) === 'true';
+		const classes = [isSet(format.bold) ? 'a11y-bold' : '',
+			isSet(format.italic) ? 'a11y-italic' : '',
+			isSet(format.underline) ? 'a11y-underline' : '',
+			isSet(format.strikethrough) ? 'a11y-line-through' : ''].filter(Boolean);
+		let element = document.createTextNode(text);
+		if (classes.length) {
+			const span = document.createElement('span');
+			span.className = classes.join(' ');
+			span.append(element);
+			element = span;
+		}
+		if (format.escapement === 'super' || format.escapement === 'sub') {
+			const script = document.createElement(format.escapement === 'super' ? 'sup' : 'sub');
+			script.append(element);
+			element = script;
+		}
+		return element;
 	},
 
 	_escapeWithLinks: function(content, elements) {

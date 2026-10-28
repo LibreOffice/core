@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:font-face-decls>
+  <style:font-face style:name="Liberation Serif" svg:font-family="'Liberation Serif'"/>
+  <style:font-face style:name="DejaVu Sans" svg:font-family="'DejaVu Sans'"/>
+  <style:font-face style:name="Noto Sans Lisu" svg:font-family="'Noto Sans Lisu'"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="paragraph">
+   <style:text-properties style:font-name="Liberation Serif" fo:font-size="12pt" style:font-name-asian="Noto Sans Lisu"/>
+  </style:default-style>
+  <style:style style:name="Head" style:family="paragraph"><style:text-properties fo:font-weight="bold"/></style:style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="Bold" style:family="text"><style:text-properties fo:font-weight="bold"/></style:style>
+  <style:style style:name="BoldFont" style:family="text"><style:text-properties fo:font-weight="bold" style:font-name="DejaVu Sans"/></style:style>
+  <style:style style:name="Italic" style:family="text"><style:text-properties fo:font-style="italic"/></style:style>
+  <style:style style:name="Under" style:family="text"><style:text-properties style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color"/></style:style>
+  <style:style style:name="Strike" style:family="text"><style:text-properties style:text-line-through-style="solid"/></style:style>
+  <style:style style:name="Super" style:family="text"><style:text-properties style:text-position="super 58%"/></style:style>
+  <style:style style:name="Sub" style:family="text"><style:text-properties style:text-position="sub 58%"/></style:style>
+  <style:style style:name="BoldItalic" style:family="text"><style:text-properties fo:font-weight="bold" fo:font-style="italic"/></style:style>
+  <style:style style:name="AsianBold" style:family="text"><style:text-properties style:font-weight-asian="bold"/></style:style>
+ </office:automatic-styles>
+ <office:body>
+  <office:text>
+   <text:p>First paragraph</text:p>
+   <text:p>A <text:span text:style-name="Bold">bo</text:span><text:span text:style-name="BoldFont">ld</text:span> <text:span text:style-name="Italic">italic</text:span> <text:span text:style-name="Under">under</text:span> <text:span text:style-name="Strike">struck</text:span> x<text:span text:style-name="Super">2</text:span> H<text:span text:style-name="Sub">2</text:span>O end.</text:p>
+   <text:p text:style-name="Head">A heading</text:p>
+   <text:p><text:span text:style-name="Bold">bold</text:span><text:span text:style-name="BoldItalic">both</text:span> end</text:p>
+   <text:p><text:span text:style-name="AsianBold">《》</text:span> <text:span text:style-name="AsianBold">ab</text:span></text:p>
+   <text:p><text:span text:style-name="Bold">bold words that wrap bold words that wrap bold words that wrap bold words that wrap bold words that wrap bold words that wrap bold words that wrap bold words that wrap bold words that wrap bold words that wrap bold words that wrap bold words that wrap</text:span></text:p>
+   <text:p>Last paragraph</text:p>
+  </office:text>
+ </office:body>
+</office:document>

@@ -2750,6 +2750,144 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphContentContro
     CPPUNIT_ASSERT_EQUAL(size_t(3), rAfter.size());
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphFormats)
+{
+    // Given a paragraph after the first one with bold text in two fonts, italic, underlined,
+    // struck, superscript and subscript text:
+    createDoc("a11y-formatting.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    Scheduler::ProcessEventsToIdle();
+
+    // When the caret moves into that paragraph:
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then each formatted run is reported by its range, the bold one once across its two fonts:
+    CPPUNIT_ASSERT_EQUAL(std::string("A bold italic under struck x2 H2O end."),
+                         aView.m_aA11yFocusedParagraph.get<std::string>("content", ""));
+    // Without the fix, there was no "formats" node.
+    CPPUNIT_ASSERT(aView.m_aA11yFocusedParagraph.get_child_optional("formats"));
+    const boost::property_tree::ptree& rFormats
+        = aView.m_aA11yFocusedParagraph.get_child("formats");
+    CPPUNIT_ASSERT_EQUAL(size_t(6), rFormats.size());
+    auto it = rFormats.begin();
+    auto check = [](const boost::property_tree::ptree& rFormat, int nStart, int nEnd,
+                    const char* pFlag, const char* pValue) {
+        CPPUNIT_ASSERT_EQUAL(nStart, rFormat.get<int>("start"));
+        CPPUNIT_ASSERT_EQUAL(nEnd, rFormat.get<int>("end"));
+        CPPUNIT_ASSERT_EQUAL(std::string(pValue), rFormat.get<std::string>(pFlag, ""));
+        // only the flags that are set
+        CPPUNIT_ASSERT_EQUAL(size_t(3), rFormat.size());
+    };
+    check((it++)->second, 2, 6, "bold", "true");
+    check((it++)->second, 7, 13, "italic", "true");
+    check((it++)->second, 14, 19, "underline", "true");
+    check((it++)->second, 20, 26, "strikethrough", "true");
+    check((it++)->second, 28, 29, "escapement", "super");
+    check(it->second, 31, 32, "escapement", "sub");
+
+    // And when its first character is selected (Shift+Right), and then made bold (Ctrl+B):
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(size_t(6), aView.m_aA11yFocusedParagraph.get_child("formats").size());
+    dispatchCommand(mxComponent, u".uno:Bold"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the paragraph is reported again, with that run:
+    const boost::property_tree::ptree& rNewFormats
+        = aView.m_aA11yFocusedParagraph.get_child("formats");
+    CPPUNIT_ASSERT_EQUAL(size_t(7), rNewFormats.size());
+    check(rNewFormats.begin()->second, 0, 1, "bold", "true");
+
+    // And when the caret moves back up, the runs are reported for the paragraph after it:
+    pWrtShell->Up(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(
+        size_t(7), aView.m_aA11yFocusedParagraph.get_child("afterFormats").begin()->second.size());
+    // and none for the first paragraph, which has none
+    CPPUNIT_ASSERT(!aView.m_aA11yFocusedParagraph.get_child_optional("formats"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphFormatKinds)
+{
+    // Given paragraphs bold by their style, bold next to bold italic, Asian text bold by its own
+    // weight next to Latin text with only that weight, and a bold run over several lines:
+    createDoc("a11y-formatting.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    auto formats = [&](sal_uInt16 nDown) {
+        pWrtShell->Down(/*bSelect=*/false, nDown);
+        Scheduler::ProcessEventsToIdle();
+        return aView.m_aA11yFocusedParagraph.get_child("formats");
+    };
+
+    // When the caret moves into each of them, then the runs are reported as displayed:
+    // the paragraph style
+    boost::property_tree::ptree aFormats = formats(2);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aFormats.size());
+    CPPUNIT_ASSERT_EQUAL(0, aFormats.begin()->second.get<int>("start"));
+    CPPUNIT_ASSERT_EQUAL(9, aFormats.begin()->second.get<int>("end"));
+    CPPUNIT_ASSERT_EQUAL(std::string("true"), aFormats.begin()->second.get<std::string>("bold"));
+    // two runs, as their formats differ
+    aFormats = formats(1);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aFormats.size());
+    auto it = aFormats.begin();
+    CPPUNIT_ASSERT_EQUAL(0, it->second.get<int>("start"));
+    CPPUNIT_ASSERT_EQUAL(4, it->second.get<int>("end"));
+    CPPUNIT_ASSERT_EQUAL(std::string("true"), it->second.get<std::string>("bold"));
+    CPPUNIT_ASSERT(!it->second.get_optional<std::string>("italic"));
+    ++it;
+    CPPUNIT_ASSERT_EQUAL(4, it->second.get<int>("start"));
+    CPPUNIT_ASSERT_EQUAL(8, it->second.get<int>("end"));
+    CPPUNIT_ASSERT_EQUAL(std::string("true"), it->second.get<std::string>("bold"));
+    CPPUNIT_ASSERT_EQUAL(std::string("true"), it->second.get<std::string>("italic"));
+    // the weight of the script of each run
+    // Without the fix, Asian text bold by its own weight was not reported as bold.
+    aFormats = formats(1);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aFormats.size());
+    CPPUNIT_ASSERT_EQUAL(0, aFormats.begin()->second.get<int>("start"));
+    CPPUNIT_ASSERT_EQUAL(2, aFormats.begin()->second.get<int>("end"));
+    // one run over the line ends
+    aFormats = formats(1);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aFormats.size());
+    CPPUNIT_ASSERT_EQUAL(0, aFormats.begin()->second.get<int>("start"));
+    CPPUNIT_ASSERT_EQUAL(251, aFormats.begin()->second.get<int>("end"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphFormatsTrackedChange)
+{
+    // Given the formatted paragraph after the first one, and changes recorded:
+    createDoc("a11y-formatting.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr,
+                    { comphelper::makePropertyValue(u"TrackChanges"_ustr, true) });
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // When text is typed at its start, the last of it inside that insertion:
+    pWrtShell->Insert(u"XY"_ustr);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Insert(u"Z"_ustr);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the runs are those of the character formatting alone, moved by the insertion:
+    // Without the fix, the plain runs were reported as underlined, as an insertion is shown.
+    CPPUNIT_ASSERT_EQUAL(std::string("XZYA bold italic under struck x2 H2O end."),
+                         aView.m_aA11yFocusedParagraph.get<std::string>("content", ""));
+    const boost::property_tree::ptree& rFormats
+        = aView.m_aA11yFocusedParagraph.get_child("formats");
+    CPPUNIT_ASSERT_EQUAL(size_t(6), rFormats.size());
+    const boost::property_tree::ptree& rBold = rFormats.begin()->second;
+    CPPUNIT_ASSERT_EQUAL(5, rBold.get<int>("start"));
+    CPPUNIT_ASSERT_EQUAL(9, rBold.get<int>("end"));
+    CPPUNIT_ASSERT(!rBold.get_optional<std::string>("underline"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yImageSelection)
 {
     for (const char* pFile : { "a11y-image.fodt", "a11y-image-at-paragraph.fodt" })

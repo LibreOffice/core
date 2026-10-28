@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <com/sun/star/accessibility/AccessibleTextType.hpp>
+#include <com/sun/star/accessibility/XAccessibleText.hpp>
+#include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -150,6 +154,73 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, tdf150064)
                              "</SHAPE>"_ustr,
                              collectText());
     }
+}
+
+CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, testBulletedParagraphRuns)
+{
+    // Given a text box with a numbered "plain BOLD end" and a bulleted "abc", "c" bold:
+    loadFromSrc(u"/sd/qa/unit/a11y/data/bulleted-runs.fodp"_ustr);
+    Scheduler::ProcessEventsToIdle();
+    uno::Reference<accessibility::XAccessibleContext> xBox;
+    for (const auto& xShape : getAllChildren(getDocumentAccessibleContext()))
+    {
+        if (xShape->getAccessibleChildCount() == 2)
+            xBox = xShape;
+    }
+    CPPUNIT_ASSERT(xBox.is());
+
+    // When the runs of each paragraph and their attributes are asked for:
+    const uno::Sequence<OUString> aNames{ u"CharWeight"_ustr };
+    // the characters whose run is bold, and the run of the last one
+    auto boldCharacters = [&](sal_Int64 nParagraph, accessibility::TextSegment& rLastRun) {
+        const auto xParagraph = xBox->getAccessibleChild(nParagraph)->getAccessibleContext();
+        const auto xText = xParagraph.queryThrow<accessibility::XAccessibleText>();
+        const auto xAttributes = xParagraph.queryThrow<accessibility::XAccessibleTextAttributes>();
+        OUStringBuffer aBold;
+        for (sal_Int32 i = 0; i < xText->getCharacterCount(); ++i)
+        {
+            float fWeight = awt::FontWeight::NORMAL;
+            for (const beans::PropertyValue& rValue : xAttributes->getRunAttributes(i, aNames))
+                rValue.Value >>= fWeight;
+            if (fWeight == awt::FontWeight::BOLD)
+                aBold.append(xText->getCharacter(i));
+            rLastRun = xText->getTextAtIndex(i, accessibility::AccessibleTextType::ATTRIBUTE_RUN);
+        }
+        return aBold.makeStringAndClear();
+    };
+
+    // Then they are those of the characters at the given positions, not after the bullet text:
+    accessibility::TextSegment aRun;
+    // Without the fix, it was "LD e": each run was 2 characters early, the length of "1."
+    CPPUNIT_ASSERT_EQUAL(u"BOLD"_ustr, boldCharacters(0, aRun));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), aRun.SegmentStart);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(14), aRun.SegmentEnd);
+    // Without the fix, it was empty
+    CPPUNIT_ASSERT_EQUAL(u"c"_ustr, boldCharacters(1, aRun));
+    // Without the fix, the run of "c" was the one of "ab"
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aRun.SegmentStart);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aRun.SegmentEnd);
+    // Without the fix, an IndexOutOfBoundsException
+    const auto xText = xBox->getAccessibleChild(0)
+                           ->getAccessibleContext()
+                           .queryThrow<accessibility::XAccessibleText>();
+    float fWeight = 0;
+    for (const beans::PropertyValue& rValue : xText->getCharacterAttributes(13, aNames))
+        rValue.Value >>= fWeight;
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, fWeight);
+
+    // Without the fix, it was "plain " at [2,8)
+    aRun = xText->getTextBehindIndex(0, accessibility::AccessibleTextType::ATTRIBUTE_RUN);
+    CPPUNIT_ASSERT_EQUAL(u"BOLD"_ustr, aRun.SegmentText);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aRun.SegmentStart);
+    // Without the fix, it was empty at [0,2), the range of "1."
+    aRun = xText->getTextBeforeIndex(7, accessibility::AccessibleTextType::ATTRIBUTE_RUN);
+    CPPUNIT_ASSERT_EQUAL(u"plain "_ustr, aRun.SegmentText);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aRun.SegmentStart);
+    // Without the fix, it was " end", not the empty run after the end
+    aRun = xText->getTextAtIndex(14, accessibility::AccessibleTextType::ATTRIBUTE_RUN);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(14), aRun.SegmentStart);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(14), aRun.SegmentEnd);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.presentation">
+  <office:automatic-styles>
+    <style:page-layout style:name="PM1">
+      <style:page-layout-properties fo:margin-top="0cm" fo:margin-bottom="0cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:page-width="28cm" fo:page-height="15.75cm" style:print-orientation="landscape"/>
+    </style:page-layout>
+    <style:style style:name="dp1" style:family="drawing-page"/>
+    <style:style style:name="gr1" style:family="graphic">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:auto-grow-height="true" draw:auto-grow-width="false"/>
+    </style:style>
+    <style:style style:name="T1" style:family="text">
+      <style:text-properties fo:font-weight="bold"/>
+    </style:style>
+    <text:list-style style:name="L1">
+      <text:list-level-style-number text:level="1" style:num-suffix="." style:num-format="1">
+        <style:list-level-properties text:space-before="0cm" text:min-label-width="1cm"/>
+      </text:list-level-style-number>
+    </text:list-style>
+    <text:list-style style:name="L2">
+      <text:list-level-style-bullet text:level="1" text:bullet-char="●">
+        <style:list-level-properties text:space-before="0cm" text:min-label-width="1cm"/>
+      </text:list-level-style-bullet>
+    </text:list-style>
+  </office:automatic-styles>
+  <office:master-styles>
+    <style:master-page style:name="Default" style:page-layout-name="PM1" draw:style-name="dp1"/>
+  </office:master-styles>
+  <office:body>
+    <office:presentation>
+      <draw:page draw:name="slide1" draw:style-name="dp1" draw:master-page-name="Default">
+        <draw:frame draw:style-name="gr1" svg:width="20cm" svg:height="6cm" svg:x="4cm" svg:y="4.875cm">
+          <draw:text-box>
+            <text:list text:style-name="L1">
+              <text:list-item>
+                <text:p>plain <text:span text:style-name="T1">BOLD</text:span> end</text:p>
+              </text:list-item>
+            </text:list>
+            <text:list text:style-name="L2">
+              <text:list-item>
+                <text:p>ab<text:span text:style-name="T1">c</text:span></text:p>
+              </text:list-item>
+            </text:list>
+          </draw:text-box>
+        </draw:frame>
+      </draw:page>
+    </office:presentation>
+  </office:body>
+</office:document>

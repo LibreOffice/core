@@ -640,6 +640,28 @@ div.leaflet-cursor-container:hover > .leaflet-cursor-header {
 	list-style: none;
 }
 
+/* character formatting, which the browser exposes as text attributes; classes, as the page's
+   content security policy blocks a style attribute in markup */
+.clipboard-container .a11y-bold {
+	font-weight: bold;
+}
+
+.clipboard-container .a11y-italic {
+	font-style: italic;
+}
+
+.clipboard-container .a11y-underline {
+	text-decoration-line: underline;
+}
+
+.clipboard-container .a11y-line-through {
+	text-decoration-line: line-through;
+}
+
+.clipboard-container .a11y-underline.a11y-line-through {
+	text-decoration-line: underline line-through;
+}
+
 input.clipboard {
 	width: 1px;
 	height: 1px;

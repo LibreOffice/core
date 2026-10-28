@@ -75,6 +75,10 @@
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/FontStrikeout.hpp>
+#include <com/sun/star/awt/FontUnderline.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 
 #include <comphelper/OAccessible.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -91,6 +95,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <i18nutil/scriptclass.hxx>
 #include <o3tl/string_view.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/settings.hxx>
@@ -741,6 +746,163 @@ boost::property_tree::ptree makeLinksTree(const std::vector<ParagraphLink>& rLin
     return aLinks;
 }
 
+// A run of formatted text, by its range in the accessible text of the paragraph
+struct ParagraphFormat
+{
+    sal_Int32 nStart = 0;
+    sal_Int32 nEnd = 0;
+    bool bBold = false;
+    bool bItalic = false;
+    bool bUnderline = false;
+    bool bStrikethrough = false;
+    sal_Int8 nEscapement = 0; // 1 for superscript, -1 for subscript
+
+    bool sameFormat(const ParagraphFormat& rOther) const
+    {
+        return bBold == rOther.bBold && bItalic == rOther.bItalic && bUnderline == rOther.bUnderline
+               && bStrikethrough == rOther.bStrikethrough && nEscapement == rOther.nEscapement;
+    }
+    bool operator==(const ParagraphFormat&) const = default;
+};
+
+// The attribute values behind a ParagraphFormat; the weight and the posture are kept per script,
+// Latin, Asian and complex
+struct FormatAttributes
+{
+    float aWeight[3]
+        = { awt::FontWeight::NORMAL, awt::FontWeight::NORMAL, awt::FontWeight::NORMAL };
+    awt::FontSlant aPosture[3] = { awt::FontSlant_NONE, awt::FontSlant_NONE, awt::FontSlant_NONE };
+    sal_Int16 nUnderline = awt::FontUnderline::NONE;
+    sal_Int16 nStrikeout = awt::FontStrikeout::NONE;
+    sal_Int16 nEscapement = 0;
+
+    // a value that is missing keeps the one before
+    void apply(const uno::Sequence<beans::PropertyValue>& rValues)
+    {
+        for (const beans::PropertyValue& rValue : rValues)
+        {
+            if (rValue.Name == "CharWeight")
+                rValue.Value >>= aWeight[0];
+            else if (rValue.Name == "CharWeightAsian")
+                rValue.Value >>= aWeight[1];
+            else if (rValue.Name == "CharWeightComplex")
+                rValue.Value >>= aWeight[2];
+            else if (rValue.Name == "CharPosture")
+                rValue.Value >>= aPosture[0];
+            else if (rValue.Name == "CharPostureAsian")
+                rValue.Value >>= aPosture[1];
+            else if (rValue.Name == "CharPostureComplex")
+                rValue.Value >>= aPosture[2];
+            else if (rValue.Name == "CharUnderline")
+                rValue.Value >>= nUnderline;
+            else if (rValue.Name == "CharStrikeout")
+                rValue.Value >>= nStrikeout;
+            else if (rValue.Name == "CharEscapement")
+                rValue.Value >>= nEscapement;
+        }
+    }
+};
+
+// 0 for Latin, 1 for Asian, 2 for complex text: the script of the first character that has one;
+// Writer splits a run where the script changes, editeng does not
+int runScript(const OUString& rText, int nFallback)
+{
+    for (sal_Int32 i = 0; i < rText.getLength();)
+    {
+        switch (i18nutil::GetScriptClass(rText.iterateCodePoints(&i)))
+        {
+            case i18n::ScriptType::ASIAN:
+                return 1;
+            case i18n::ScriptType::COMPLEX:
+                return 2;
+            case i18n::ScriptType::LATIN:
+                return 0;
+        }
+    }
+    // digits or spaces alone take the script before them, as in the layout
+    return nFallback;
+}
+
+// The runs of a paragraph in bold, italic, underline, strikethrough, superscript or subscript, as
+// displayed: from the attributes of the paragraph too, e.g. of a heading
+std::vector<ParagraphFormat>
+collectFormats(const uno::Reference<css::accessibility::XAccessibleText>& xAccText)
+{
+    const auto xAttributes = xAccText.query<accessibility::XAccessibleTextAttributes>();
+    const sal_Int32 nLength = xAccText->getCharacterCount();
+    if (!xAttributes.is() || nLength <= 0)
+        return {};
+    static const uno::Sequence<OUString> aNames{
+        u"CharWeight"_ustr,    u"CharWeightAsian"_ustr,  u"CharWeightComplex"_ustr,
+        u"CharPosture"_ustr,   u"CharPostureAsian"_ustr, u"CharPostureComplex"_ustr,
+        u"CharUnderline"_ustr, u"CharStrikeout"_ustr,    u"CharEscapement"_ustr
+    };
+    // not getCharacterAttributes(), which in Writer gives a run without attributes of its own the
+    // look of a tracked change at the cursor
+    FormatAttributes aDefaults;
+    aDefaults.apply(xAttributes->getDefaultAttributes(aNames));
+    std::vector<ParagraphFormat> aFormats;
+    sal_Int32 nPos = 0;
+    int nScript = 0;
+    while (nPos < nLength)
+    {
+        const accessibility::TextSegment aSegment
+            = xAccText->getTextAtIndex(nPos, accessibility::AccessibleTextType::ATTRIBUTE_RUN);
+        // at least one character, as a segment can be missing (-1) or end before nPos
+        const sal_Int32 nEnd = std::max(aSegment.SegmentEnd, nPos + 1);
+        FormatAttributes aAttributes = aDefaults;
+        aAttributes.apply(xAttributes->getRunAttributes(nPos, aNames));
+        nScript = runScript(aSegment.SegmentText, nScript);
+        const awt::FontSlant ePosture = aAttributes.aPosture[nScript];
+        const ParagraphFormat aFormat{
+            .nStart = nPos,
+            .nEnd = nEnd,
+            .bBold = aAttributes.aWeight[nScript] >= awt::FontWeight::SEMIBOLD,
+            .bItalic = ePosture != awt::FontSlant_NONE && ePosture != awt::FontSlant_DONTKNOW,
+            .bUnderline = aAttributes.nUnderline != awt::FontUnderline::NONE
+                          && aAttributes.nUnderline != awt::FontUnderline::DONTKNOW,
+            .bStrikethrough = aAttributes.nStrikeout != awt::FontStrikeout::NONE
+                              && aAttributes.nStrikeout != awt::FontStrikeout::DONTKNOW,
+            .nEscapement = static_cast<sal_Int8>(
+                aAttributes.nEscapement > 0 ? 1 : aAttributes.nEscapement < 0 ? -1 : 0)
+        };
+        nPos = nEnd;
+        if (!aFormat.bBold && !aFormat.bItalic && !aFormat.bUnderline && !aFormat.bStrikethrough
+            && !aFormat.nEscapement)
+            continue;
+        // a run is also split by a line end, and by attributes not sent, such as the font
+        if (!aFormats.empty() && aFormats.back().nEnd == aFormat.nStart
+            && aFormats.back().sameFormat(aFormat))
+            aFormats.back().nEnd = aFormat.nEnd;
+        else
+            aFormats.push_back(aFormat);
+    }
+    return aFormats;
+}
+
+boost::property_tree::ptree makeFormatsTree(const std::vector<ParagraphFormat>& rFormats)
+{
+    boost::property_tree::ptree aFormats;
+    for (const ParagraphFormat& rFormat : rFormats)
+    {
+        boost::property_tree::ptree aFormat;
+        aFormat.put("start", rFormat.nStart);
+        aFormat.put("end", rFormat.nEnd);
+        if (rFormat.bBold)
+            aFormat.put("bold", true);
+        if (rFormat.bItalic)
+            aFormat.put("italic", true);
+        if (rFormat.bUnderline)
+            aFormat.put("underline", true);
+        if (rFormat.bStrikethrough)
+            aFormat.put("strikethrough", true);
+        if (rFormat.nEscapement)
+            aFormat.put("escapement", rFormat.nEscapement > 0 ? "super" : "sub");
+        aFormats.push_back(std::make_pair("", aFormat));
+    }
+    return aFormats;
+}
+
 // An image, a shape, an embedded object or a text frame anchored as a character, by its position
 // in the paragraph text
 struct ParagraphImage
@@ -943,6 +1105,7 @@ struct ContextParagraph
     tools::Rectangle aTwips;
     sal_Int32 nLevel = 0;
     std::vector<ParagraphLink> aLinks;
+    std::vector<ParagraphFormat> aFormats;
     std::vector<ParagraphImage> aImages;
     std::vector<SfxParagraphComment> aComments;
     std::vector<SfxParagraphContentControl> aContentControls;
@@ -974,6 +1137,7 @@ ContextParagraph contextParagraph(const SfxViewShell* pViewShell,
         aParagraph.aText = xText->getText();
         aParagraph.nLevel = getHeadingLevel(xText);
         aParagraph.aLinks = collectLinks(xText);
+        aParagraph.aFormats = collectFormats(xText);
         aParagraph.aImages = collectImages(xText);
         if (pViewShell)
         {
@@ -1650,6 +1814,7 @@ class KitDocumentFocusListener :
     sal_Int32 m_nListPrefixLength;
     sal_Int32 m_nHeadingLevel;
     std::vector<ParagraphLink> m_aFocusedLinks;
+    std::vector<ParagraphFormat> m_aFocusedFormats;
     std::vector<ParagraphImage> m_aFocusedImages;
     std::vector<SfxParagraphComment> m_aFocusedComments;
     std::vector<SfxParagraphContentControl> m_aFocusedContentControls;
@@ -1793,6 +1958,8 @@ void KitDocumentFocusListener::paragraphPropertiesToTree(boost::property_tree::p
         aPayloadTree.put("headingLevel", m_nHeadingLevel);
     if (!m_aFocusedLinks.empty())
         aPayloadTree.add_child("links", makeLinksTree(m_aFocusedLinks));
+    if (!m_aFocusedFormats.empty())
+        aPayloadTree.add_child("formats", makeFormatsTree(m_aFocusedFormats));
     if (!m_aFocusedImages.empty())
         aPayloadTree.add_child("images", makeImagesTree(m_aFocusedImages));
     if (!m_aFocusedComments.empty())
@@ -1834,6 +2001,14 @@ void KitDocumentFocusListener::paragraphPropertiesToTree(boost::property_tree::p
         };
         aPayloadTree.add_child("beforeLinks", toLinks(m_aParagraphsBefore));
         aPayloadTree.add_child("afterLinks", toLinks(m_aParagraphsAfter));
+        auto toFormats = [](const std::vector<ContextParagraph>& rParagraphs) {
+            boost::property_tree::ptree aArray;
+            for (const ContextParagraph& rParagraph : rParagraphs)
+                aArray.push_back(std::make_pair("", makeFormatsTree(rParagraph.aFormats)));
+            return aArray;
+        };
+        aPayloadTree.add_child("beforeFormats", toFormats(m_aParagraphsBefore));
+        aPayloadTree.add_child("afterFormats", toFormats(m_aParagraphsAfter));
         auto toImages = [](const std::vector<ContextParagraph>& rParagraphs) {
             boost::property_tree::ptree aArray;
             for (const ContextParagraph& rParagraph : rParagraphs)
@@ -2347,6 +2522,7 @@ bool KitDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::acc
 
         // In case only caret position or text selection are different we can rely on specific events.
         std::vector<ParagraphLink> aLinks = collectLinks(xAccText);
+        std::vector<ParagraphFormat> aFormats = collectFormats(xAccText);
         std::vector<ParagraphImage> aImages = collectImages(xAccText);
         std::vector<SfxParagraphComment> aComments
             = m_pViewShell ? m_pViewShell->getKitParagraphComments(xAccText)
@@ -2356,11 +2532,13 @@ bool KitDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::acc
                            : std::vector<SfxParagraphContentControl>();
         if (m_sFocusedParagraph != sText || m_nHeadingLevel != nHeadingLevel
             || m_aFocusedLinks != aLinks || m_aFocusedImages != aImages
-            || m_aFocusedComments != aComments || m_aFocusedContentControls != aContentControls)
+            || m_aFocusedComments != aComments || m_aFocusedContentControls != aContentControls
+            || m_aFocusedFormats != aFormats)
         {
             m_sFocusedParagraph = sText;
             m_nHeadingLevel = nHeadingLevel;
             m_aFocusedLinks = std::move(aLinks);
+            m_aFocusedFormats = std::move(aFormats);
             m_aFocusedImages = std::move(aImages);
             m_aFocusedComments = std::move(aComments);
             m_aFocusedContentControls = std::move(aContentControls);
@@ -2399,6 +2577,7 @@ void KitDocumentFocusListener::resetParagraphInfo()
     m_nListPrefixLength = 0;
     m_nHeadingLevel = 0;
     m_aFocusedLinks.clear();
+    m_aFocusedFormats.clear();
     m_aFocusedImages.clear();
     m_aFocusedComments.clear();
     m_aFocusedContentControls.clear();
