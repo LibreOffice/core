@@ -1678,11 +1678,13 @@ pot:
 		src/app/LOUtil.ts \
 		src/app/TableStylesService.ts \
 		src/app/TableStyleGalleryService.ts \
+		src/app/Util.ts \
 		src/canvas/sections/CommentListSection.ts \
 		src/canvas/sections/CommentSection.ts \
 		src/canvas/sections/CompareChangesLabelSection.ts \
 		src/canvas/sections/OtherViewCellCursorSection.ts \
 		src/canvas/sections/ShapeHandlesSection.ts \
+		src/canvas/sections/SelectionSection.ts \
 		src/canvas/sections/URLPopUpSection.ts \
 		src/canvas/sections/TableInsertMarkerSection.ts \
 		src/canvas/sections/GenericButtonSection.ts \
@@ -1732,6 +1734,7 @@ pot:
 		src/control/Control.MobileSearchBar.ts \
 		src/control/Control.MobileTopBar.ts \
 		src/control/Control.MobileWizardBuilder.js \
+		src/control/Control.MobileWizardWindow.js \
 		src/control/Control.NavigatorPanel.ts \
 		src/control/Control.QuickFindPanel.ts \
 		src/control/Notebookbar.AIAssistantTab.ts \
@@ -1790,6 +1793,8 @@ pot:
 		src/control/jsdialog/Widget.ColorPicker.ts \
 		src/control/jsdialog/Widget.Combobox.js \
 		src/control/jsdialog/Widget.CsvGrid.ts \
+		src/control/jsdialog/Widget.EditEngine.ts \
+		src/control/jsdialog/Widget.FormulabarEdit.js \
 		src/control/jsdialog/Widget.SpellSentence.ts \
 		src/control/jsdialog/Widget.EmojiPicker.ts \
 		src/control/jsdialog/Widget.PageMarginEntry.ts \
@@ -1799,6 +1804,7 @@ pot:
 		src/control/jsdialog/Widget.MobileBorderSelector.js \
 		src/control/jsdialog/Widget.NewSlideLayoutEntry.ts \
 		src/control/jsdialog/Widget.NotebookbarIconView.ts \
+		src/control/jsdialog/Widget.OverflowGroup.ts \
 		src/control/jsdialog/Widget.RadioButton.ts \
 		src/control/jsdialog/Widget.PushButton.ts \
 		src/control/jsdialog/Widget.ProgressDots.tsx \
@@ -1806,6 +1812,7 @@ pot:
 		src/control/jsdialog/Widget.SpinField.ts \
 		src/control/jsdialog/Widget.FixedTextControl.ts \
 		src/control/jsdialog/Widget.SidebarContainers.tsx \
+		src/control/jsdialog/Widget.TabControl.tsx \
 		src/control/jsdialog/Widget.TreeView.ts \
 		src/app/QueuedSocket.ts \
 		src/app/DelaySocket.ts \
