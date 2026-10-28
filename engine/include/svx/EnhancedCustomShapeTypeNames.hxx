@@ -30,7 +30,9 @@ namespace EnhancedCustomShapeTypeNames
 // Exported unconditionally: svx's own unit test links against this one.
 SVXCORE_DLLPUBLIC MSO_SPT Get(const OUString&);
 UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) OUString Get(const MSO_SPT);
-UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) const OUString& GetAccName(const OUString&);
+// the name of a custom shape type, in the language of the user interface; exported
+// unconditionally for the unit test as well
+SVXCORE_DLLPUBLIC OUString GetAccName(const OUString&);
 }
 
 #endif

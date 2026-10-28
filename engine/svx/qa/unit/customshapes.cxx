@@ -1447,6 +1447,26 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testGalleryShapeTypeMapping)
                           EnhancedCustomShapeTypeNames::Get(u"up-right-arrow-callout"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testShapeTypeAccName)
+{
+    // Given custom shape types whose names held a configuration key, a trailing space and a
+    // typo:
+    // When their names are read, then the key, the space and the typo are gone:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Flowchart:Sequential Access
+    // - Actual  : drawingbar.fc.25=Flowchart:Sequential Access
+    CPPUNIT_ASSERT_EQUAL(
+        u"Flowchart:Sequential Access"_ustr,
+        EnhancedCustomShapeTypeNames::GetAccName(u"flowchart-sequential-access"_ustr));
+    CPPUNIT_ASSERT_EQUAL(
+        u"Flowchart:Alternate Process"_ustr,
+        EnhancedCustomShapeTypeNames::GetAccName(u"flowchart-alternate-process"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Lightning Bolt"_ustr,
+                         EnhancedCustomShapeTypeNames::GetAccName(u"lightning"_ustr));
+    // a type without a name
+    CPPUNIT_ASSERT(EnhancedCustomShapeTypeNames::GetAccName(u"can"_ustr).isEmpty());
+}
+
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testConvertRingToPolygonIsSingleObject)
 {
     // Given a ring (donut) shape:
