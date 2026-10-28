@@ -16,6 +16,11 @@ describe(['tagdesktop'], 'Top toolbar apply tests.', { testIsolation: false }, f
 		},
 	});
 
+	// The context toolbar holds a font name box with the same id, and it stays in the page once
+	// a selection has shown it, so the box is looked up in the Home tab only.
+	const FONT_NAME_BOX = '#Home-container #fontnamecombobox';
+	const FONT_NAME_INPUT = FONT_NAME_BOX + ' .ui-combobox-content';
+
 	beforeEach(function() {
 		writerHelper.selectAllTextOfDoc();
 	});
@@ -78,12 +83,12 @@ describe(['tagdesktop'], 'Top toolbar apply tests.', { testIsolation: false }, f
 	});
 
 	it('Font name box suggests a matching entry while typing.', function() {
-		cy.cGet('#fontnamecombobox.notebookbar .ui-combobox-content').click().clear();
-		helper.typeText('#fontnamecombobox.notebookbar .ui-combobox-content', 'Ale', 100);
+		cy.cGet(FONT_NAME_INPUT).click().clear();
+		helper.typeText(FONT_NAME_INPUT, 'Ale', 100);
 
 		// The suggested remainder of 'Alef' is selected, so accepting or continuing
 		// to type replaces it, but nothing has been committed yet.
-		cy.cGet('#fontnamecombobox.notebookbar .ui-combobox-content')
+		cy.cGet(FONT_NAME_INPUT)
 			.should('have.prop', 'value', 'Alef')
 			.should('have.prop', 'selectionStart', 3)
 			.should('have.prop', 'selectionEnd', 4);
@@ -92,11 +97,11 @@ describe(['tagdesktop'], 'Top toolbar apply tests.', { testIsolation: false }, f
 	it('Return clears the suggestion highlight and commits the full name.', function() {
 		helper.setDummyClipboardForCopy();
 
-		cy.cGet('#fontnamecombobox.notebookbar .ui-combobox-content').click().clear();
-		helper.typeText('#fontnamecombobox.notebookbar .ui-combobox-content', 'Liberation Ser', 100);
-		cy.cGet('#fontnamecombobox.notebookbar .ui-combobox-content').type('{enter}');
+		cy.cGet(FONT_NAME_INPUT).click().clear();
+		helper.typeText(FONT_NAME_INPUT, 'Liberation Ser', 100);
+		cy.cGet(FONT_NAME_INPUT).type('{enter}');
 
-		cy.cGet('#fontnamecombobox.notebookbar .ui-combobox-content')
+		cy.cGet(FONT_NAME_INPUT)
 			.should('have.prop', 'value', 'Liberation Serif')
 			.should('have.prop', 'selectionStart', 16)
 			.should('have.prop', 'selectionEnd', 16);
@@ -220,8 +225,6 @@ describe(['tagdesktop'], 'Top toolbar apply tests.', { testIsolation: false }, f
 	});
 
 	it('Font name box marks and describes a font the server does not have.', function() {
-		const FONT_NAME_BOX = '#fontnamecombobox.notebookbar';
-		const FONT_NAME_INPUT = FONT_NAME_BOX + ' .ui-combobox-content';
 		const MISSING_FONT = 'No Such Font Name';
 		const WARNING = 'The current font is not available and will be substituted.';
 
