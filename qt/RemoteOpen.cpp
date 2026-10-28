@@ -20,6 +20,8 @@
 #include <QSize>
 #include <QUrl>
 #include <QWebEnginePage>
+#include <QWebEngineScript>
+#include <QWebEngineScriptCollection>
 #include <QWebEngineUrlRequestInfo>
 #include <QWebEngineUrlRequestInterceptor>
 #include <QWebEngineView>
@@ -28,6 +30,14 @@ namespace
 {
 /// In pixels.
 const QSize ACCOUNT_WINDOW_SIZE(1280, 860);
+
+/// In the editor's iframe, replaces coolwsd's page with an empty document before it is parsed.
+const char* EMPTY_COOL_PAGE_SCRIPT = R"JS(
+if (window !== window.top && location.pathname.endsWith('/cool.html')) {
+    document.open();
+    document.close();
+}
+)JS";
 
 /// 2 MiB. The form Nextcloud posts for a document is about 5 KB.
 constexpr qsizetype MAX_FORM_BYTES = 2 * 1024 * 1024;
@@ -90,6 +100,14 @@ void openRemoteFile(const QString& serverUrl, QWidget* parent,
     auto* view = new QWebEngineView(window);
     auto* page = new QWebEnginePage(pickerProfile, view);
     page->setUrlRequestInterceptor(new EditorFormInterceptor(page));
+
+    QWebEngineScript emptyCoolPage;
+    emptyCoolPage.setSourceCode(QString::fromUtf8(EMPTY_COOL_PAGE_SCRIPT));
+    emptyCoolPage.setInjectionPoint(QWebEngineScript::DocumentCreation);
+    emptyCoolPage.setWorldId(QWebEngineScript::ApplicationWorld);
+    emptyCoolPage.setRunsOnSubFrames(true);
+    page->scripts().insert(emptyCoolPage);
+
     view->setPage(page);
     window->setCentralWidget(view);
     QObject::connect(view, &QWebEngineView::titleChanged, window, &QWidget::setWindowTitle);
