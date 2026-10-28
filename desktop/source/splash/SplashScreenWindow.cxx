@@ -24,6 +24,7 @@
 #include <o3tl/string_view.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/math.hxx>
+#include <unotools/configmgr.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/svapp.hxx>
@@ -49,6 +50,9 @@ SplashScreenWindow::SplashScreenWindow(const OUString& rAppName)
     , m_nTextBaseline(NOT_LOADED)
     , m_pVDev(VclPtr<VirtualDevice>::Create(*GetOutDev()))
 {
+    // set window title
+    SetText(utl::ConfigManager::getProductName());
+
     loadConfig();
 
     // start to determine bitmap and all other required value
