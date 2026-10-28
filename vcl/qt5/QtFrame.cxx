@@ -95,7 +95,7 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle)
     if (!(nStyle & SalFrameStyleFlags::SYSTEMCHILD))
     {
         if (nStyle & SalFrameStyleFlags::INTRO)
-            aWinFlags = Qt::SplashScreen;
+            aWinFlags = Qt::SplashScreen | Qt::FramelessWindowHint;
         // floating toolbars are frameless tool windows
         // + they must be able to receive keyboard focus
         else if ((nStyle & SalFrameStyleFlags::FLOAT)
