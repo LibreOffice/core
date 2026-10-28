@@ -38,7 +38,7 @@ private:
 
     OUString m_sProgressText;
 
-    sal_Int32 m_nMax;
+    static constexpr sal_Int32 PROGRESS_MAX = 100;
     sal_Int32 m_nProgress;
     bool m_bProgressEnd;
 
@@ -50,7 +50,7 @@ public:
     virtual void reset() override;
     virtual void setText(const OUString& aText) override;
     virtual void setValue(sal_Int32 nValue) override;
-    virtual void start(const OUString& aText, sal_Int32 nRange) override;
+    virtual void start(const OUString& aText) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

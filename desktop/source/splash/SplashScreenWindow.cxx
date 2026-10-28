@@ -137,7 +137,7 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
     {
         rRenderContext.DrawBitmap(Point(), m_aIntroBmp);
 
-        ImplControlValue aValue(m_pSplash->m_nProgress * m_nBarwidth / m_pSplash->m_nMax);
+        ImplControlValue aValue(m_pSplash->m_nProgress * m_nBarwidth / SplashScreen::PROGRESS_MAX);
         tools::Rectangle aDrawRect(Point(m_nTlx, m_nTly), Size(m_nBarwidth, m_nBarheight));
         tools::Rectangle aNativeControlRegion, aNativeContentRegion;
 
@@ -164,7 +164,7 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
 
     // draw progress...
     tools::Long length
-        = (m_pSplash->m_nProgress * m_nBarwidth / m_pSplash->m_nMax) - (2 * m_nBarspace);
+        = (m_pSplash->m_nProgress * m_nBarwidth / SplashScreen::PROGRESS_MAX) - (2 * m_nBarspace);
     if (length < 0)
         length = 0;
 

@@ -24,7 +24,6 @@
 
 SplashScreen::SplashScreen(const OUString& rAppName)
     : m_pWindow(VclPtr<SplashScreenWindow>::Create(this, rAppName))
-    , m_nMax(100)
     , m_nProgress(0)
     , m_bProgressEnd(false)
 {
@@ -39,9 +38,8 @@ SplashScreen::~SplashScreen()
     m_pWindow.disposeAndClear();
 }
 
-void SplashScreen::start(const OUString&, sal_Int32 nRange)
+void SplashScreen::start(const OUString&)
 {
-    m_nMax = nRange;
     m_bProgressEnd = false;
     SolarMutexGuard aSolarGuard;
     m_pWindow->Show();
@@ -50,7 +48,7 @@ void SplashScreen::start(const OUString&, sal_Int32 nRange)
 
 void SplashScreen::end()
 {
-    m_nProgress = m_nMax;
+    m_nProgress = PROGRESS_MAX;
     m_pWindow->Hide();
     m_bProgressEnd = true;
 }
@@ -88,8 +86,8 @@ void SplashScreen::setValue(sal_Int32 nValue)
     if (!m_bProgressEnd)
     {
         m_pWindow->Show();
-        if (nValue >= m_nMax)
-            m_nProgress = m_nMax;
+        if (nValue >= PROGRESS_MAX)
+            m_nProgress = PROGRESS_MAX;
         else
             m_nProgress = nValue;
         updateStatus();

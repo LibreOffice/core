@@ -20,7 +20,7 @@ class SplashScreenBase
 public:
     virtual ~SplashScreenBase() {}
 
-    virtual void start(const OUString& rText, sal_Int32 nRange) = 0;
+    virtual void start(const OUString& rText) = 0;
     virtual void end() = 0;
     virtual void setText(const OUString& rText) = 0;
     virtual void setValue(sal_Int32 nValue) = 0;
