@@ -33,6 +33,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/Frame.hxx>
 
 #include <officecfg/Office/Common.hxx>
 #include <unotools/useroptions.hxx>
@@ -408,16 +409,19 @@ OUString SvxGeneralTabPage::GetAllStrings()
 {
     OUStringBuffer sAllStrings;
     OUString labels[]
-        = { u"label1"_ustr,     u"companyft"_ustr,         u"nameft"_ustr,          u"rusnameft"_ustr,
-            u"eastnameft"_ustr, u"streetft"_ustr,          u"russtreetft"_ustr,     u"icityft"_ustr,
-            u"cityft"_ustr,     u"countryft"_ustr,         u"titleft"_ustr,         u"phoneft"_ustr,
-            u"faxft"_ustr,      u"cryptographylabel"_ustr, u"signingkeylabel"_ustr, u"encryptionkeylabel"_ustr };
+        = { u"label1"_ustr,      u"companyft"_ustr,       u"nameft"_ustr,
+            u"rusnameft"_ustr,   u"eastnameft"_ustr,      u"streetft"_ustr,
+            u"russtreetft"_ustr, u"icityft"_ustr,         u"cityft"_ustr,
+            u"countryft"_ustr,   u"titleft"_ustr,         u"phoneft"_ustr,
+            u"faxft"_ustr,       u"signingkeylabel"_ustr, u"encryptionkeylabel"_ustr };
 
     for (const auto& label : labels)
     {
         if (const auto pString = m_xBuilder->weld_label(label))
             sAllStrings.append(pString->get_label() + " ");
     }
+
+    sAllStrings.append(m_xBuilder->weld_frame(u"cryptography"_ustr)->get_label() + u" "_ustr) ;
 
     sAllStrings.append(m_xUseDataCB->get_label() + " " + m_xEncryptToSelfCB->get_label() + " ");
 
