@@ -48,10 +48,6 @@ SplashScreenWindow::SplashScreenWindow(SplashScreen* pSplash, const OUString& rA
     , m_nBarheight(NOT_LOADED)
     , m_nBarspace(2)
     , m_nTextBaseline(NOT_LOADED)
-    , m_fXPos(-1.0)
-    , m_fYPos(-1.0)
-    , m_fWidth(-1.0)
-    , m_fHeight(-1.0)
     , m_pVDev(VclPtr<VirtualDevice>::Create(*GetOutDev()))
 {
     loadConfig();
@@ -220,11 +216,6 @@ void SplashScreenWindow::loadConfig()
     // Determine full screen splash mode
     m_bFullScreenSplash = ((!sFullScreenSplash.isEmpty()) && (sFullScreenSplash != "0"));
 
-    // Try to retrieve the relative values for the progress bar. The current
-    // schema uses the screen ratio to retrieve the associated values.
-    if (m_bFullScreenSplash)
-        determineProgressRatioValues(m_fXPos, m_fYPos, m_fWidth, m_fHeight);
-
     if (!sProgressFrameColor.isEmpty())
     {
         sal_uInt8 nRed = 0;
@@ -344,80 +335,6 @@ void SplashScreenWindow::SetScreenBitmap(Bitmap& rBitmap)
         return;
 
     (void)Application::LoadBrandBitmap(u"intro", rBitmap);
-}
-
-void SplashScreenWindow::determineProgressRatioValues(double& rXRelPos, double& rYRelPos,
-                                                      double& rRelWidth, double& rRelHeight)
-{
-    sal_Int32 nScreenRatio(0);
-
-    // determine desktop resolution
-    sal_uInt32 nCount = Application::GetScreenCount();
-    if (nCount > 0)
-    {
-        // retrieve size from first screen
-        AbsoluteScreenPixelRectangle aScreenArea
-            = Application::GetScreenPosSizePixel(static_cast<unsigned int>(0));
-        sal_Int32 nWidth = aScreenArea.GetWidth();
-        sal_Int32 nHeight = aScreenArea.GetHeight();
-        nScreenRatio
-            = nHeight ? sal_Int32(rtl::math::round(double(nWidth) / double(nHeight), 2) * 100) : 0;
-    }
-
-    char szFullScreenProgressRatio[] = "FullScreenProgressRatio0";
-    char szFullScreenProgressPos[] = "FullScreenProgressPos0";
-    char szFullScreenProgressSize[] = "FullScreenProgressSize0";
-    for (sal_Int32 i = 0; i <= 9; i++)
-    {
-        char cNum = '0' + char(i);
-        szFullScreenProgressRatio[23] = cNum;
-        szFullScreenProgressPos[21] = cNum;
-        szFullScreenProgressSize[22] = cNum;
-
-        OUString sFullScreenProgressRatio
-            = implReadBootstrapKey(OUString::createFromAscii(szFullScreenProgressRatio));
-
-        if (!sFullScreenProgressRatio.isEmpty())
-        {
-            double fRatio = sFullScreenProgressRatio.toDouble();
-            sal_Int32 nRatio = sal_Int32(rtl::math::round(fRatio, 2) * 100);
-            if (nRatio == nScreenRatio)
-            {
-                OUString sFullScreenProgressPos
-                    = implReadBootstrapKey(OUString::createFromAscii(szFullScreenProgressPos));
-                OUString sFullScreenProgressSize
-                    = implReadBootstrapKey(OUString::createFromAscii(szFullScreenProgressSize));
-
-                if (!sFullScreenProgressPos.isEmpty())
-                {
-                    sal_Int32 idx = 0;
-                    double temp
-                        = o3tl::toDouble(o3tl::getToken(sFullScreenProgressPos, 0, ',', idx));
-                    if (idx != -1)
-                    {
-                        rXRelPos = temp;
-                        rYRelPos
-                            = o3tl::toDouble(o3tl::getToken(sFullScreenProgressPos, 0, ',', idx));
-                    }
-                }
-
-                if (!sFullScreenProgressSize.isEmpty())
-                {
-                    sal_Int32 idx = 0;
-                    double temp
-                        = o3tl::toDouble(o3tl::getToken(sFullScreenProgressSize, 0, ',', idx));
-                    if (idx != -1)
-                    {
-                        rRelWidth = temp;
-                        rRelHeight
-                            = o3tl::toDouble(o3tl::getToken(sFullScreenProgressSize, 0, ',', idx));
-                    }
-                }
-            }
-        }
-        else
-            break;
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

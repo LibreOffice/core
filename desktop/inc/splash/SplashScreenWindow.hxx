@@ -45,10 +45,6 @@ class SplashScreenWindow : public IntroWindow
     tools::Long m_nBarheight;
     tools::Long m_nBarspace;
     tools::Long m_nTextBaseline;
-    double m_fXPos;
-    double m_fYPos;
-    double m_fWidth;
-    double m_fHeight;
 
     static constexpr tools::Long _xoffset = 12;
     static constexpr tools::Long _yoffset = 18;
@@ -67,8 +63,6 @@ public:
 private:
     void loadConfig();
     void SetScreenBitmap(Bitmap& rBitmap);
-    static void determineProgressRatioValues(double& rXRelPos, double& rYRelPos, double& rRelWidth,
-                                             double& rRelHeight);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
