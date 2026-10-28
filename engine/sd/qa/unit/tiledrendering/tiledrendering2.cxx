@@ -16,6 +16,7 @@
 #include <svx/svxids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
+#include <vcl/jsdialog/executor.hxx>
 #include <vcl/scheduler.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -126,6 +127,46 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSidebarLayoutsKeptOnViewSwitch)
     // i.e. the panel was filled again and sent its selection on each switch, which the client
     // shows as a flicker.
     CPPUNIT_ASSERT_EQUAL(0, aView1.m_aJSDialogSelectCounts["layoutpanel_icons"]);
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSidebarLayoutsContextMenuUsesClickedLayout)
+{
+    // The context menu of the Layouts panel acts on the layout that was right-clicked. The first
+    // slide has the Title Slide layout, at position 1 of the panel.
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdTestViewCallback aView;
+    sfx2::sidebar::Sidebar::Setup(u"");
+    Scheduler::ProcessEventsToIdle();
+    const OUString sSidebarId
+        = OUString::number(reinterpret_cast<sal_uInt64>(SfxViewShell::Current())) + "sidebar";
+
+    // Right-click the Title, Content layout at position 2 the way the client does: a select, then
+    // a context menu request with the row and the pointer position as URI-encoded JSON.
+    StringMap aSelect{ { u"type"_ustr, u"iconview"_ustr },
+                       { u"cmd"_ustr, u"select"_ustr },
+                       { u"data"_ustr, u"2"_ustr } };
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(sSidebarId, u"layoutpanel_icons"_ustr, aSelect));
+    StringMap aContextMenu{
+        { u"type"_ustr, u"iconview"_ustr },
+        { u"cmd"_ustr, u"contextmenu"_ustr },
+        { u"data"_ustr, u"%7B%22row%22%3A2%2C%22clientX%22%3A500%2C%22clientY%22%3A300%7D"_ustr }
+    };
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(sSidebarId, u"layoutpanel_icons"_ustr, aContextMenu));
+    Scheduler::ProcessEventsToIdle();
+
+    StringMap aApply{ { u"type"_ustr, u"menu"_ustr },
+                      { u"cmd"_ustr, u"select"_ustr },
+                      { u"data"_ustr, u"apply"_ustr } };
+    // A context menu has no window of its own, so it is registered under the window id 0.
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(u"0"_ustr, u"__MENU__"_ustr, aApply));
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 20
+    // i.e. the context menu acted on the Blank Slide layout at position 0.
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT_EQUAL(AUTOLAYOUT_TITLE_CONTENT, pViewShell->GetActualPage()->GetAutoLayout());
 }
 
 #if ENABLE_PDFIMPORT

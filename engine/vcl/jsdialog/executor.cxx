@@ -867,6 +867,19 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
                 }
                 else if (sAction == "contextmenu")
                 {
+                    // Data is a plain position, or URI-encoded JSON with the position in "row"
+                    // next to the pointer coordinates.
+                    const OUString& rPosData = rData.at(u"data"_ustr);
+                    if (rPosData.startsWith("%7B") || rPosData.startsWith("{"))
+                    {
+                        OUString sDataJSON = rtl::Uri::decode(
+                            rPosData, rtl_UriDecodeMechanism::rtl_UriDecodeWithCharset,
+                            RTL_TEXTENCODING_UTF8);
+                        StringMap aMap(jsonToStringMap(
+                            OUStringToOString(sDataJSON, RTL_TEXTENCODING_ASCII_US).getStr()));
+                        nPos = o3tl::toInt32(aMap[u"row"_ustr]);
+                    }
+
                     tools::Rectangle aRect = pIconView->get_rect(nPos);
                     Point aPoint = aRect.Center();
                     assert(aPoint.getX() >= 0 && aPoint.getY() >= 0);
