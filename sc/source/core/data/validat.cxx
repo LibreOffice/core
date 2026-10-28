@@ -379,8 +379,8 @@ void ScValidationData::DoError(weld::Window* pParent, const OUString& rInput, co
                                const std::function<void(bool forget)>& callback) const
 {
     if ( eErrorStyle == SC_VALERR_MACRO ) {
-        DoMacro(rPos, rInput, nullptr, pParent);
-        callback(true);
+        // tdf#172202 - only discard the input if the macro returns false
+        callback(DoMacro(rPos, rInput, nullptr, pParent));
         return;
     }
 

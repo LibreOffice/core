@@ -29,8 +29,13 @@
 
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XCellRangeMovement.hpp>
+#include <com/sun/star/sheet/ConditionOperator.hpp>
 #include <com/sun/star/sheet/XFunctionAccess.hpp>
+#include <com/sun/star/sheet/XSheetCondition.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/sheet/ValidationAlertStyle.hpp>
+#include <com/sun/star/sheet/ValidationType.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -1260,6 +1265,52 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testFormulaCallingApplicationBasicIsMacroUse)
     ScFormulaCell* pCell = getScDoc()->GetFormulaCell(ScAddress(0, 0, 0));
     CPPUNIT_ASSERT(pCell);
     CPPUNIT_ASSERT_EQUAL(int(FormulaError::NoMacro), int(pCell->GetErrCode()));
+}
+
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf172202ValidationMacroResult)
+{
+    createScDoc();
+
+    css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
+    auto xLibs = xDocScr->getBasicLibraries();
+    auto xLibrary = xLibs->createLibrary(u"TestLibrary"_ustr);
+    xLibrary->insertByName(u"TestModule"_ustr, uno::Any(u"Function ValidateInput(sValue, sPos)\n"
+                                                        "  ValidateInput = sValue = \"11\"\n"
+                                                        "End Function\n"_ustr));
+
+    // Allow only whole numbers between 1 and 10 in A1 and call the macro on invalid input
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xSheets(xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference<table::XCellRange> xSheet(xSheets->getByIndex(0), UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xCell(xSheet->getCellByPosition(0, 0), UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xValidation(xCell->getPropertyValue(u"Validation"_ustr),
+                                                    UNO_QUERY_THROW);
+    xValidation->setPropertyValue(u"Type"_ustr, uno::Any(sheet::ValidationType_WHOLE));
+    xValidation->setPropertyValue(u"ShowErrorMessage"_ustr, uno::Any(true));
+    xValidation->setPropertyValue(u"ErrorAlertStyle"_ustr,
+                                  uno::Any(sheet::ValidationAlertStyle_MACRO));
+    xValidation->setPropertyValue(
+        u"ErrorTitle"_ustr, uno::Any(u"vnd.sun.star.script:TestLibrary.TestModule.ValidateInput?"
+                                     "language=Basic&location=document"_ustr));
+    uno::Reference<sheet::XSheetCondition> xCondition(xValidation, UNO_QUERY_THROW);
+    xCondition->setOperator(sheet::ConditionOperator_BETWEEN);
+    xCondition->setFormula1(u"1"_ustr);
+    xCondition->setFormula2(u"10"_ustr);
+    xCell->setPropertyValue(u"Validation"_ustr, uno::Any(xValidation));
+
+    ScDocument* pDoc = getScDoc();
+
+    // An invalid entry accepted by the macro must be kept
+    insertStringToCell(u"A1"_ustr, u"11");
+    // Without the fix in place, this test would have failed with
+    // - Expected: 11
+    // - Actual  : 0
+    // i.e. the entered value was discarded despite the macro accepted it
+    CPPUNIT_ASSERT_EQUAL(11.0, pDoc->GetValue(ScAddress(0, 0, 0)));
+
+    // An invalid entry rejected by the macro must be discarded
+    insertStringToCell(u"A1"_ustr, u"12");
+    CPPUNIT_ASSERT_EQUAL(11.0, pDoc->GetValue(ScAddress(0, 0, 0)));
 }
 
 ScMacrosTest::ScMacrosTest()
