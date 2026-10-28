@@ -1754,7 +1754,8 @@ void RTFDocumentImpl::set_tblInd(RTFSprms& tableRowSprms, int val)
     {
         RTFValue::Pointer_t pMarginLeft = pCellMargin->getSprms().find(NS_ooxml::LN_CT_TcMar_left);
         if (pMarginLeft)
-            val -= pMarginLeft->getAttributes().find(NS_ooxml::LN_CT_TblWidth_w)->getInt();
+            val = o3tl::saturating_sub(
+                val, pMarginLeft->getAttributes().find(NS_ooxml::LN_CT_TblWidth_w)->getInt());
     }
 
     putNestedAttribute(tableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblInd, +NS_ooxml::LN_CT_TblWidth_w,
