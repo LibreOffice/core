@@ -16,6 +16,7 @@
 #include <net/FakeSocket.hpp>
 #include <qt/bridge.hpp>
 
+#include <QBuffer>
 #include <QByteArray>
 #include <QIODevice>
 #include <QJsonDocument>
@@ -33,6 +34,7 @@
 #include <QWebEngineScriptCollection>
 #include <QWebEngineUrlRequestInfo>
 #include <QWebEngineUrlRequestInterceptor>
+#include <QWebEngineUrlRequestJob>
 #include <QWebEngineView>
 
 #include <chrono>
@@ -428,17 +430,28 @@ void CloudAccountPage::putCodaPageIn(QWebEngineFrame& frame)
 namespace coda
 {
 
-std::optional<QByteArray> receiveEditorFrameMessage(const QString& session, const QUrl& origin,
-                                                    const QString& kind, const QByteArray& message)
+void receiveEditorFrameMessage(QWebEngineUrlRequestJob* job, const QString& session,
+                               const QString& kind, const QByteArray& message)
 {
     const auto page = PagesBySession.find(session);
     if (page == PagesBySession.end())
     {
         LOG_WRN("account window: refused: a message names no open editor frame session");
-        return std::nullopt;
+        job->fail(QWebEngineUrlRequestJob::RequestDenied);
+        return;
     }
 
-    return page->second->receiveMessage(origin, kind, message);
+    const std::optional<QByteArray> reply =
+        page->second->receiveMessage(job->initiator(), kind, message);
+    if (!reply)
+    {
+        job->fail(QWebEngineUrlRequestJob::RequestDenied);
+        return;
+    }
+
+    auto* buffer = new QBuffer(job);
+    buffer->setData(*reply);
+    job->reply("text/plain", buffer);
 }
 
 void openRemoteFile(const QString& serverUrl, QWidget* parent,

@@ -16,7 +16,6 @@
 #include <qt/RemoteOpen.hpp>
 #include <qt/qt.hpp>
 
-#include <QBuffer>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -48,19 +47,7 @@ void receiveMessage(QWebEngineUrlRequestJob* job)
     const QString kind = query.queryItemValue(QStringLiteral("kind"));
     const QString text = query.queryItemValue(QStringLiteral("message"), QUrl::FullyDecoded);
     const QByteArray message = text.toUtf8();
-
-    const QUrl origin = job->initiator();
-    const std::optional<QByteArray> reply =
-        coda::receiveEditorFrameMessage(session, origin, kind, message);
-    if (!reply)
-    {
-        job->fail(QWebEngineUrlRequestJob::RequestDenied);
-        return;
-    }
-
-    auto* buffer = new QBuffer(job);
-    buffer->setData(*reply);
-    job->reply("text/plain", buffer);
+    coda::receiveEditorFrameMessage(job, session, kind, message);
 }
 }
 

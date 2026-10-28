@@ -11,23 +11,20 @@
 
 #pragma once
 
-#include <QByteArray>
 #include <QString>
 
-#include <optional>
-
-class QUrl;
+class QByteArray;
+class QWebEngineUrlRequestJob;
 class QWidget;
 class QWebEngineProfile;
 
 namespace coda
 {
 
-/// Takes a message that an editor frame sent to coollocal://message. The frame names its
-/// session, and the message must come from the origin of the frame given that session. Returns
-/// the reply, or nothing when the message is refused.
-std::optional<QByteArray> receiveEditorFrameMessage(const QString& session, const QUrl& origin,
-                                                    const QString& kind, const QByteArray& message);
+/// Takes a message that an editor frame sent to coollocal://message, from the origin of the frame
+/// given that session, and replies to job or fails it.
+void receiveEditorFrameMessage(QWebEngineUrlRequestJob* job, const QString& session,
+                               const QString& kind, const QByteArray& message);
 
 /// Opens the integrator at serverUrl in a window on pickerProfile. A document opened there loads
 /// the COOL server's editor in the integrator's frame, as in a browser.
