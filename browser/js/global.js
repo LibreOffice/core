@@ -875,6 +875,8 @@ class QtAppInitializer extends MobileAppInitializer {
 			writeRemoteDocFile: (name, base64, callback) =>
 				call('writeRemoteDocFile', [name, base64], callback),
 			readLocalDocBytes: (callback) => call('readLocalDocBytes', [], callback),
+			checkFileInfo: (callback) =>
+				call('checkFileInfo', [window.codaRemotePage.serverVariables.accessToken], callback),
 			getAllPrefs: (callback) => call('getAllPrefs', [], callback),
 			setPref: (key, value) => call('setPref', [key, value]),
 			saveCompleted: () => call('saveCompleted', []),

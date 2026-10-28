@@ -23,6 +23,10 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QMainWindow>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QPointer>
 #include <QSize>
 #include <QTimer>
 #include <QUrl>
@@ -139,6 +143,22 @@ constexpr int EDITOR_CHECKS = 200;
 /// 2 MiB. The form Nextcloud posts for a document is about 5 KB.
 constexpr qsizetype MAX_FORM_BYTES = 2 * 1024 * 1024;
 
+/// 1 MiB, the most a CheckFileInfo response can be.
+constexpr qint64 MAX_FILE_INFO_BYTES = 1024 * 1024;
+
+/// The CheckFileInfo fields coolwsd passes on to the editor in its wopi: message.
+const char* const EDITOR_FILE_INFO_FIELDS[] = {
+    "PostMessageOrigin", "BaseFileName", "BreadcrumbDocName", "TemplateSaveAs", "TemplateSource",
+    "HidePrintOption", "HideSaveOption", "HideExportOption", "HideRepairOption", "DisablePrint",
+    "DisableExport", "DisableCopy", "DisableInactiveMessages", "DownloadAsPostMessage",
+    "UserCanNotWriteRelative", "EnableInsertRemoteImage", "EnableInsertRemoteFile",
+    "DisableInsertLocalImage", "EnableRemoteLinkPicker", "EnableRemoteAIContent",
+    "DisableAISettings", "IsAnonymousUser", "EnableShare", "HideUserList", "SupportsRename",
+    "UserCanRename", "UserCanChangeSecurityLabel", "FileUrl", "UserCanWrite",
+    "HideChangeTrackingControls", "IsOwner", "PresentationLeader", "DisablePresentation",
+    "CommentAvatarUrl", "HostName",
+};
+
 /// The longest string V8 makes, in UTF-16 units: 2^29 - 24, measured in Qt WebEngine 6.11.
 constexpr qsizetype MAX_JS_STRING_UNITS = 536'870'888;
 
@@ -173,11 +193,13 @@ public:
     void keepForm(const QUrl& url, const QByteArray& form);
     std::optional<QByteArray> receiveMessage(const QUrl& origin, const QString& kind,
                                              const QByteArray& message);
+    void checkFileInfo(QWebEngineUrlRequestJob* job, const QByteArray& argumentsJson);
 
 private:
     void findEditorFrame();
     void putCodaPageIn(QWebEngineFrame& frame);
     std::optional<QByteArray> callBridge(const QString& method, const QString& argumentsJson);
+    void sendFileInfo(QNetworkReply* reply, const QPointer<QWebEngineUrlRequestJob>& job);
 
     QUrl _formUrl; ///< Where the kept form went, with the frame's id as the fragment.
     QByteArray _form;
@@ -188,6 +210,7 @@ private:
     QByteArray _parts; ///< The parts of a long message from the frame, so far.
     coda::DocumentData _document; ///< The document the editor frame shows.
     std::unique_ptr<Bridge> _bridge; ///< Takes the frame's messages. It refers to _document.
+    QNetworkAccessManager _network;
 };
 
 /// The pages with an editor frame, by the session of the frame.
@@ -387,6 +410,75 @@ std::optional<QByteArray> CloudAccountPage::callBridge(const QString& method,
     return std::nullopt;
 }
 
+void CloudAccountPage::checkFileInfo(QWebEngineUrlRequestJob* job, const QByteArray& argumentsJson)
+{
+    if (job->initiator() != _frameOrigin)
+    {
+        LOG_WRN("account window: refused: a CheckFileInfo request came from another origin");
+        job->fail(QWebEngineUrlRequestJob::RequestDenied);
+        return;
+    }
+
+    // The page sends only the token. The address is the session's own WOPISrc.
+    const QString token = QJsonDocument::fromJson(argumentsJson).array().at(0).toString();
+    QUrl url(_document._remoteInfo->wopiSrc);
+    const QString encodedToken = QString::fromLatin1(QUrl::toPercentEncoding(token));
+    url.setQuery("access_token=" + encodedToken, QUrl::StrictMode);
+
+    // TODO: Once this approach is accepted, move this request to common/ and send it through the
+    // HttpTransport of https://gerrit.collaboraoffice.com/c/online/+/15051, the proper way.
+    QNetworkRequest request(url);
+    request.setAttribute(QNetworkRequest::RedirectPolicyAttribute,
+                         QNetworkRequest::ManualRedirectPolicy);
+    request.setAttribute(QNetworkRequest::CookieLoadControlAttribute, QNetworkRequest::Manual);
+    request.setAttribute(QNetworkRequest::CookieSaveControlAttribute, QNetworkRequest::Manual);
+    request.setTransferTimeout();
+
+    QNetworkReply* reply = _network.get(request);
+    connect(reply, &QNetworkReply::downloadProgress, reply,
+            [reply](qint64 received, qint64)
+            {
+                if (received > MAX_FILE_INFO_BYTES)
+                    reply->abort();
+            });
+
+    const QPointer<QWebEngineUrlRequestJob> pending(job);
+    connect(reply, &QNetworkReply::finished, this,
+            [this, reply, pending] { sendFileInfo(reply, pending); });
+}
+
+void CloudAccountPage::sendFileInfo(QNetworkReply* reply,
+                                    const QPointer<QWebEngineUrlRequestJob>& job)
+{
+    reply->deleteLater();
+    if (!job)
+    {
+        LOG_DBG("account window: the editor frame stopped waiting for its CheckFileInfo");
+        return;
+    }
+
+    const int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    const bool isOk = reply->error() == QNetworkReply::NoError && status == 200;
+    if (!isOk)
+    {
+        LOG_WRN("account window: CheckFileInfo failed with HTTP status " << status);
+        job->fail(QWebEngineUrlRequestJob::RequestFailed);
+        return;
+    }
+
+    const QJsonObject fileInfo = QJsonDocument::fromJson(reply->readAll()).object();
+    QJsonObject editorFileInfo;
+    for (const char* field : EDITOR_FILE_INFO_FIELDS)
+    {
+        if (fileInfo.contains(field))
+            editorFileInfo[field] = fileInfo[field];
+    }
+
+    auto* buffer = new QBuffer(job);
+    buffer->setData(QJsonDocument(editorFileInfo).toJson(QJsonDocument::Compact));
+    job->reply("text/plain", buffer);
+}
+
 void CloudAccountPage::putCodaPageIn(QWebEngineFrame& frame)
 {
     PagesBySession.erase(_session);
@@ -438,6 +530,13 @@ void receiveEditorFrameMessage(QWebEngineUrlRequestJob* job, const QString& sess
     {
         LOG_WRN("account window: refused: a message names no open editor frame session");
         job->fail(QWebEngineUrlRequestJob::RequestDenied);
+        return;
+    }
+
+    // CheckFileInfo replies once the integrator has answered, so it takes the job.
+    if (kind == QStringLiteral("checkFileInfo"))
+    {
+        page->second->checkFileInfo(job, message);
         return;
     }
 

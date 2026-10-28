@@ -313,9 +313,24 @@ if (window.ThisIsTheEmscriptenApp) {
 	// so LOKit can load them through the standard fakesocket flow.
 	// Local-only docs take the default path: initUI + map.loadDocument.
 	var _codaQtRemoteBootstrap = function() {
-		new Promise(function(resolve) {
+		const remoteInfo = new Promise(function(resolve) {
 			window.bridge.getRemoteInfo(resolve);
-		}).then(function(infoJson) {
+		});
+
+		// The integrator's file properties arrive before the user interface is built, so its
+		// controls, such as Share, follow them. Only a remote page in an editor frame has them.
+		const fileInfo = new Promise(function(resolve) {
+			if (window.bridge.checkFileInfo)
+				window.bridge.checkFileInfo(resolve);
+			else
+				resolve('');
+		});
+
+		Promise.all([remoteInfo, fileInfo]).then(function(infos) {
+			const infoJson = infos[0];
+			if (infos[1])
+				map.fire('wopiprops', JSON.parse(infos[1]));
+
 			if (!infoJson) {
 				// Local-only document: standard path.
 				initUI();
