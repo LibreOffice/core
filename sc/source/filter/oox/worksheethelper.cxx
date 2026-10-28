@@ -75,6 +75,7 @@
 #include <cellsuno.hxx>
 #include <NamedSheetViewImporter.hxx>
 #include <fmtuno.hxx>
+#include <docfunc.hxx>
 
 #include <svl/stritem.hxx>
 #include <editeng/eeitem.hxx>
@@ -232,11 +233,6 @@ public:
     rtl::Reference< ScCellObj > getCell( const ScAddress& rAddress ) const;
     /** Returns the XSheetCellRanges interface for the passed cell range addresses. */
     rtl::Reference<ScCellRangesObj> getCellRangeList( const ScRangeList& rRanges ) const;
-
-    /** Returns the XCellRange interface for a column. */
-    Reference< XCellRange > getColumn( sal_Int32 nCol ) const;
-    /** Returns the XCellRange interface for a row. */
-    Reference< XCellRange > getRow( sal_Int32 nRow ) const;
 
     /** Returns the XDrawPage interface of the draw page of the current sheet. */
     Reference< XDrawPage > getDrawPage() const;
@@ -494,32 +490,6 @@ rtl::Reference<ScCellRangesObj> WorksheetGlobals::getCellRangeList( const ScRang
     return xRanges;
 }
 
-Reference< XCellRange > WorksheetGlobals::getColumn( sal_Int32 nCol ) const
-{
-    try
-    {
-        if (mxSheet)
-            return mxSheet->getScColumns()->getScTableColumnByIndex( nCol );
-    }
-    catch( Exception& )
-    {
-    }
-    return {};
-}
-
-Reference< XCellRange > WorksheetGlobals::getRow( sal_Int32 nRow ) const
-{
-    Reference< XCellRange > xRow;
-    try
-    {
-        xRow = mxSheet->getScRows()->GetTableRowByIndex( nRow );
-    }
-    catch( Exception& )
-    {
-    }
-    return xRow;
-}
-
 Reference< XDrawPage > WorksheetGlobals::getDrawPage() const
 {
     Reference< XDrawPage > xDrawPage;
@@ -676,11 +646,19 @@ ScRange WorksheetGlobals::getCellRangeFromRectangle( const awt::Rectangle& rRect
 
 void WorksheetGlobals::setPageBreak( const PageBreakModel& rModel, bool bRowBreak )
 {
-    if( rModel.mbManual && (rModel.mnColRow > 0) )
-    {
-        PropertySet aPropSet( bRowBreak ? getRow( rModel.mnColRow ) : getColumn( rModel.mnColRow ) );
-        aPropSet.setProperty( PROP_IsStartOfNewPage, true );
-    }
+    if (!rModel.mbManual || rModel.mnColRow <= 0)
+        return;
+
+    ScDocShell* pDocSh = getScDocument().GetDocumentShell();
+    if (!pDocSh)
+        return;
+
+    SCTAB nTab = getSheetIndex();
+    ScAddress aPos
+        = bRowBreak ? ScAddress(0, rModel.mnColRow, nTab) : ScAddress(rModel.mnColRow, 0, nTab);
+
+    ScDocFunc& rFunc = pDocSh->GetDocFunc();
+    rFunc.InsertPageBreak(!bRowBreak, aPos, true, true);
 }
 
 void WorksheetGlobals::setHyperlink( const HyperlinkModel& rModel )

@@ -168,8 +168,8 @@ public:
         bool bWidth, const std::vector<sc::ColRowSpan>& rRanges, SCTAB nTab,
         ScSizeMode eMode, sal_uInt16 nSizeTwips, bool bRecord, bool bApi );
 
-    bool            InsertPageBreak( bool bColumn, const ScAddress& rPos,
-                                             bool bRecord, bool bSetModified );
+    SC_DLLPUBLIC bool InsertPageBreak(bool bColumn, const ScAddress& rPos, bool bRecord,
+                                      bool bSetModified);
     bool            RemovePageBreak( bool bColumn, const ScAddress& rPos,
                                              bool bRecord, bool bSetModified );
 
