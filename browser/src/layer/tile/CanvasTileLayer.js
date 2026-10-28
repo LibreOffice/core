@@ -1005,6 +1005,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		else if (textMsg.startsWith('applicationbackgroundcolor:')) {
 			app.sectionContainer.setClearColor('#' + textMsg.substring('applicationbackgroundcolor:'.length + 1).trim());
 			app.sectionContainer.requestReDraw();
+			if (window.mode.isCODesktop())
+				RenderManager.markThumbnailStale();
 		}
 		else if (textMsg.startsWith('documentbackgroundcolor:')) {
 			app.sectionContainer.setDocumentBackgroundColor('#' + textMsg.substring('documentbackgroundcolor:'.length + 1).trim());

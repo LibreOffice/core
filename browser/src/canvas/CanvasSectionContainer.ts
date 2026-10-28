@@ -767,6 +767,13 @@ class CanvasSectionContainer {
 			this.drawRequest = requestAnimationFrame(this.redrawCallback.bind(this));
 	}
 
+	// Paint now instead of in an animation frame. A hidden view gets no frames.
+	public redrawNow() {
+		if (!this.drawingAllowed()) return;
+		if (this.drawRequest !== null) cancelAnimationFrame(this.drawRequest);
+		this.redrawCallback(performance.now());
+	}
+
 	private propagateCursorPositionChanged() {
 		// There is no target section for cursor position change, this event comes from core side.
 		// Sections with interactable = false will not be targeted.

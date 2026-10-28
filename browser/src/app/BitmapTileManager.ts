@@ -68,6 +68,9 @@ class BitmapTileManager extends RenderManagerBase {
 	// Milliseconds between two requests for the tiles ahead of a moving view.
 	private adjacentPreFetchIntervalMs: number = 50;
 	private pausedForCoherency: boolean = false;
+	// Set after a theme change. The tab thumbnail is retaken once the re-rendered tiles are in.
+	private thumbnailStale: boolean = false;
+	private thumbnailSawPendingTiles: boolean = false;
 	private dehydratedCurrentTiles: string[] = [];
 	private shrinkCurrentId: any = null;
 
@@ -286,6 +289,10 @@ class BitmapTileManager extends RenderManagerBase {
 			Math.max(this.tileBitmapList.length, 1)
 		);
 	}
+	public markThumbnailStale(): void {
+		this.thumbnailStale = true;
+		this.thumbnailSawPendingTiles = false;
+	}
 
 	private visibleTilesReady(): boolean {
 		for (const tile of this.tiles.values()) {
@@ -296,6 +303,9 @@ class BitmapTileManager extends RenderManagerBase {
 	}
 
 	private endTransactionHandleBitmaps(deltas: any[], bitmaps: ImageBitmap[]) {
+		// A visible tile still pending here is one of the re-rendered ones, not an old-theme one.
+		if (this.thumbnailStale && !this.visibleTilesReady())
+			this.thumbnailSawPendingTiles = true;
 		while (deltas.length) {
 			const delta = deltas.shift();
 			const bitmap = bitmaps.shift();
@@ -318,6 +328,11 @@ class BitmapTileManager extends RenderManagerBase {
 			app.sectionContainer.deferDrawing(null);
 			// Ensure that requestReDraw is called at least once. It may not get called in tileReady function.
 			app.sectionContainer.requestReDraw();
+			if (this.thumbnailStale && this.thumbnailSawPendingTiles) {
+				this.thumbnailStale = false;
+				app.sectionContainer.redrawNow();
+				(app.map as any).requestTabThumbnail?.();
+			}
 		}
 
 		if (this.nPendingWorkerTasks === 0)

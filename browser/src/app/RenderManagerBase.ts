@@ -103,6 +103,8 @@ abstract class RenderManagerBase {
 	reclaimGraphicsMemory(): void {}
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	discardAllCache(): void {}
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	markThumbnailStale(): void {}
 
 	// -- debug --
 	// Tile state change subscribers. Static, so a subscriber survives the

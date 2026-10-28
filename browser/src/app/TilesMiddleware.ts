@@ -66,6 +66,10 @@ class RenderManager {
 		RenderManager.ensureInstance().appendAfterVisualsReady(task);
 	}
 
+	static markThumbnailStale(): void {
+		RenderManager.ensureInstance().markThumbnailStale();
+	}
+
 	static updateOverlayMessages(): void {
 		RenderManager.ensureInstance().updateOverlayMessages();
 	}
