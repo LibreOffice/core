@@ -48,17 +48,18 @@ A debug build applies a theme to `browser/dist` by itself: the desktop app build
 (`--enable-macosapp`, `--enable-windowsapp`, `--enable-qtapp --disable-server`) get CODA,
 everything else gets CODE. A tree that builds the server and the qt app together gets
 CODE in `browser/dist`, and the qt app page loads `branding-app.js`, the script of the
-CODA theme, so that the server is CODE and the app is Collabora Office. Configure
-options:
+CODA theme, so that the server is CODE and the app is Collabora Office. The Android and
+iOS apps are Collabora Office in release builds too, so they get CODA by default; the
+iOS app bundles the theme from `ios/Mobile/Branding`, where the build generates it.
+Configure options:
 
 - `--disable-branding`: build an unbranded tree
 - `--enable-branding=CO-theme|CODE|CODA`: pick the theme, also in a release build
 
-Release builds, the Android and iOS builds and builds with `--with-app-branding` are
-not branded from here unless asked to, so the `coolwsd` package stays unbranded and
-the brand packages are made separately, as before. Switching the theme or turning it
-off leaves the generated files of the previous one in `browser/dist`; `make clean` in
-`browser/` removes them.
+Release server builds and builds with `--with-app-branding` are not branded from here
+unless asked to, so the `coolwsd` package stays unbranded and the brand packages are
+made separately, as before. Switching the theme or turning it off leaves the generated
+files of the previous one in `browser/dist`; `make clean` in `browser/` removes them.
 
 The build uses the dart-sass in `browser/node_modules` (a devDependency of
 `browser/package.json`, vendored in `browser/node_shrinkpack`). `make` in `browser/`

@@ -138,6 +138,12 @@ Now step back to the top of the monorepo (one level up from `engine/`) and confi
                 --enable-debug \
                 --with-android-abi=${ABI}
 
+The app gets the Collabora Office theme from `browser/branding` by default, and the
+launcher icon and drawer header in `android/app/src/main/res` are Collabora's too. The
+theme also names the product, so a build with its own `--with-app-name` wants
+`--disable-branding` for an unbranded app, or `--with-app-branding=<dir>` with its own
+`branding.css`, `branding.js` and images.
+
 ### Build
 
 Once again, after configuring the build you can run it with `make`

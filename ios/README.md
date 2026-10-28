@@ -84,6 +84,8 @@ Step back to the top of the `collabora-office` clone (one level up from `engine/
 --with-lo-builddir=$(pwd)/engine
 ```
 
+The app gets the Collabora Office theme from `browser/branding` by default, and the Collabora Office icon unless `--with-iosapp-appicon` points at your own. The theme also names the product, so a build with its own `--with-app-name` wants `--disable-branding` for an unbranded app, or `--with-app-branding=<dir>` with its own `branding.css`, `branding.js` and images.
+
 Then build the JavaScript bits by running make from the top of the monorepo:
 
 ```bash

@@ -1163,10 +1163,16 @@ endif
 
 TEMPLATE_MANIFEST = $(DIST_FOLDER)/templates/templates.js
 
+# The iOS app bundles the theme from ios/Mobile/Branding, see cool.html.m4
+if ENABLE_IOSAPP
+BRANDING_OUT = $(abs_top_builddir)/ios/Mobile/Branding
+else
+BRANDING_OUT = $(DIST_FOLDER)
+endif
 if ENABLE_BRANDING
 BRANDING_SRC = $(srcdir)/branding/brand.sh \
 	$(shell find $(srcdir)/branding/sass $(srcdir)/branding/themes -type f)
-BRANDING_DST = $(DIST_FOLDER)/branding.css
+BRANDING_DST = $(BRANDING_OUT)/branding.css
 endif
 
 admin-tsc.done: $(patsubst %,$(srcdir)/%,$(COOL_ADMIN_TS))
@@ -1622,10 +1628,10 @@ $(ADMIN_TEMPLATE_FOLDER)/%: $(srcdir)/admin/%
 # so it runs after those are in place; the stamp is touched last, so that the images it
 # copied do not trigger it again. The three themes share the stylesheet, so when the qt app
 # shares browser/dist with the server its page loads only its own script, branding-app.js.
-$(DIST_FOLDER)/branding.css: $(BRANDING_SRC) $(COOL_IMAGES_DST) $(COOL_IMAGES_CUSTOM_DST) node_modules
+$(BRANDING_OUT)/branding.css: $(BRANDING_SRC) $(COOL_IMAGES_DST) $(COOL_IMAGES_CUSTOM_DST) node_modules
 	@echo "Applying the $(BRANDING_THEME) theme from browser/branding"
 	@SASS="$(abs_builddir)/node_modules/.bin/sass" SASS_FLAGS=--quiet \
-		$(srcdir)/branding/brand.sh $(DIST_FOLDER) $(BRANDING_THEME)
+		$(srcdir)/branding/brand.sh $(BRANDING_OUT) $(BRANDING_THEME)
 if ENABLE_BRANDING_APP_JS
 	@cp $(srcdir)/branding/themes/CODA/branding.js $(DIST_FOLDER)/branding-app.js
 endif
@@ -1894,6 +1900,11 @@ l10n: pot
 
 clean-local:
 	@rm -rf $(DIST_FOLDER)
+if ENABLE_BRANDING
+if ENABLE_IOSAPP
+	@rm -rf $(BRANDING_OUT)/images $(BRANDING_OUT)/branding*
+endif
+endif
 	@rm -rf $(INTERMEDIATE_DIR)
 	@rm -rf $(TYPESCRIPT_JS_DIR)
 	@rm -rf $(ADMIN_TEMPLATE_FOLDER)
