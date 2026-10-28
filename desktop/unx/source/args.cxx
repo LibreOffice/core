@@ -23,40 +23,25 @@ namespace
 const struct ArgDescr
 {
     const char   *name;
-    bool bInhibitSplash : 1;
     bool bInhibitPagein : 1;
     bool bInhibitJavaLdx : 1;
     bool bInhibitPipe : 1;
     const char   *pPageinType;
 } pArgDescr[] = {
-    /* have a trailing argument */
-    { "pt", true, false, false, false, nullptr },
-    { "p", true, false, false, false, nullptr },
-    { "display", false, false, false, false, nullptr },
-
-    /* no splash */
-    { "nologo", true, false, false, false, nullptr },
-    { "headless", true, false, false, false, nullptr },
-    { "invisible", true, false, false, false, nullptr },
-    { "quickstart", true, false, false, false, nullptr },
-    { "minimized", true, false, false, false, nullptr },
-    { "convert-to", true, false, false, false, nullptr },
-    { "cat", true, false, false, false, nullptr },
-
     /* pagein bits */
-    { "writer", false, false, false, false, "pagein-writer" },
-    { "calc", false, false, false, false, "pagein-calc" },
-    { "draw", false, false, false, false, "pagein-draw" },
-    { "impress", false, false, false, false, "pagein-impress" },
+    { "writer", false, false, false, "pagein-writer" },
+    { "calc", false, false, false, "pagein-calc" },
+    { "draw", false, false, false, "pagein-draw" },
+    { "impress", false, false, false, "pagein-impress" },
 
     /* Do not send --help/--version over the pipe, as their output shall go to
        the calling process's stdout (ideally, this would also happen in the
        presence of unknown options); also prevent splash/pagein/javaldx overhead
        (as these options will be processed early in soffice_main): */
-    { "version", true, true, true, true, nullptr },
-    { "help", true, true, true, true, nullptr },
-    { "h", true, true, true, true, nullptr },
-    { "?", true, true, true, true, nullptr },
+    { "version", true, true, true, nullptr },
+    { "help", true, true, true, nullptr },
+    { "h", true, true, true, nullptr },
+    { "?", true, true, true, nullptr },
 };
 }
 
@@ -103,7 +88,6 @@ Args *args_parse (void)
         {
             if (rtl_ustr_ascii_compare_WithLength(arg, length, rArgDescr.name) == 0)
             {
-                args->bInhibitSplash |= rArgDescr.bInhibitSplash;
                 args->bInhibitPagein |= rArgDescr.bInhibitPagein;
                 args->bInhibitJavaLdx |= rArgDescr.bInhibitJavaLdx;
                 args->bInhibitPipe |= rArgDescr.bInhibitPipe;

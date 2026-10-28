@@ -18,7 +18,6 @@ struct Args
 {
     OUString sAppPath;
     const char* pPageinType = nullptr; // @pagein-writer for - writer etc. else NULL
-    bool bInhibitSplash = false; // should we show a splash screen
     bool bInhibitPagein = false; // should we run pagein ?
     bool bInhibitJavaLdx = false; // should we run javaldx ?
     bool bInhibitPipe = false; // for --help and --version
