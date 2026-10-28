@@ -700,7 +700,7 @@ namespace basegfx::utils
         B2DPolyPolygon createNonzeroConform(const B2DPolyPolygon& rCandidate)
         {
             constexpr sal_uInt32 nMaxPolygons(1000);
-            constexpr size_t nMaxCutPoints(65536);
+            constexpr size_t nMaxCutPoints(16384);
             if (rCandidate.count() > nMaxPolygons)
             {
                 SAL_WARN("basegfx", "this poly is too large, " << rCandidate.count() << " elements, to be able to process timeously, falling back to ignoring the winding rule, which is likely to cause rendering artifacts");
