@@ -897,6 +897,8 @@ void MacroChooser::SetMode (Mode nM)
 
 OUString MacroChooser::GetInfo( SbxVariable* pVar )
 {
+    if (!pVar)
+        return OUString();
     OUString aComment;
     SbxInfoRef xInfo = pVar->GetInfo();
     if ( xInfo.is() )
