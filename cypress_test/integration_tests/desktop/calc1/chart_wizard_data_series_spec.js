@@ -5,6 +5,7 @@ var helper = require('../../common/helper');
 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Chart wizard data series dialog tests', function() {
 	beforeEach(function() {
+		helper.withoutBrandTheme();
 		helper.setupAndLoadDocument('calc/chart_wizard.ods');
 		cy.viewport(1920, 720);
 	});

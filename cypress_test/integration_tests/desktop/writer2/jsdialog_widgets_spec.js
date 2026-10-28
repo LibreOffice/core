@@ -6,6 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'JSDialog widgets visual tests', function() {
 	beforeEach(function() {
 		cy.viewport(1600, helper.maxScreenshotableViewportHeight);
+		helper.withoutBrandTheme();
 		helper.setupAndLoadDocument('writer/help_dialog.odt');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;

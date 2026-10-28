@@ -272,9 +272,18 @@ AC_ARG_WITH([iosapp-fonts],
 
 AC_ARG_WITH([app-branding],
               AS_HELP_STRING([--with-app-branding=<path>],
-                             [Point to a directory containing a branding.css file and possibly other files it references,
-                              to be bundled and used by the mobile apps. The directory structure is copied to
-                              "browser/dist/branding" and that directory ends upp in the app bundle as "branding".]))
+                             [Point to a directory containing branding.css, branding.js and the images they reference,
+                              to be bundled and used by the apps. The files are copied into "browser/dist"; the iOS
+                              app bundles the directory as "Branding". Takes precedence over --enable-branding.]))
+
+AC_ARG_ENABLE([branding],
+              AS_HELP_STRING([--enable-branding@<:@=THEME@:>@],
+                             [Apply a theme from browser/branding to browser/dist: CO-theme (Collabora Online),
+                              CODE (Collabora Online Development Edition) or CODA (Collabora Office). Without THEME,
+                              the desktop app builds get CODA and the rest CODE; a tree that builds the server and
+                              the qt app gets CODE for the server and CODA for the app. Enabled by default in debug
+                              builds, except for Android, iOS, WASM and with --with-app-branding.
+                              --disable-branding builds an unbranded tree.]))
 
 AC_ARG_WITH([app-branding-suffix],
               AS_HELP_STRING([--with-app-branding-suffix=<suffix>],
@@ -1232,6 +1241,9 @@ if test "$enable_windowsapp" = "yes" -a -z "$with_app_name"; then
 fi
 
 APP_NAME="Collabora Online Development Edition"
+if test "$enable_macosapp" = yes -o "$enable_windowsapp" = yes -o "$enable_qtapp" = yes; then
+   APP_NAME="Collabora Office"
+fi
 if test -n "$with_app_name"; then
    APP_NAME="$with_app_name"
 fi
@@ -2647,6 +2659,44 @@ AC_SUBST(APP_BRANDING_SUFFIX)
 AC_SUBST(APP_HAS_BRANDING)
 AM_CONDITIONAL([APP_HAS_BRANDING], [test "$APP_HAS_BRANDING" = "true"])
 
+# The theme from browser/branding. BRANDING_THEME is what browser/dist gets; when the
+# server and the qt app are built from the same tree, the server page is CODE and the
+# app page loads its own script, branding-app.js, generated from the CODA theme.
+AC_MSG_CHECKING([for the theme from browser/branding])
+BRANDING_THEME=
+BRANDING_APP_JS=false
+case "$enable_branding" in
+    no)
+        ;;
+    yes|"")
+        if test "$enable_branding" = yes -o \( "$ENABLE_DEBUG" = true -a "$APP_HAS_BRANDING" != true \
+                -a "$enable_androidapp" != yes -a "$enable_iosapp" != yes -a "$host_os" != emscripten \); then
+            if test "$enable_macosapp" = yes -o "$enable_windowsapp" = yes -o \
+                    \( "$enable_qtapp" = yes -a "$ENABLE_SERVER" != true \); then
+                BRANDING_THEME=CODA
+            else
+                BRANDING_THEME=CODE
+            fi
+        fi
+        ;;
+    CO-theme|CODE|CODA)
+        BRANDING_THEME="$enable_branding"
+        ;;
+    *)
+        AC_MSG_ERROR([unknown theme "$enable_branding" for --enable-branding, use CO-theme, CODE or CODA])
+        ;;
+esac
+branding_msg="${BRANDING_THEME:-none}"
+if test -n "$BRANDING_THEME" -a "$enable_qtapp" = yes -a "$ENABLE_SERVER" = true; then
+    BRANDING_APP_JS=true
+    branding_msg="$BRANDING_THEME (server), CODA (qt app)"
+fi
+AC_MSG_RESULT([$branding_msg])
+AC_SUBST(BRANDING_THEME)
+AC_SUBST(BRANDING_APP_JS)
+AM_CONDITIONAL([ENABLE_BRANDING], [test -n "$BRANDING_THEME"])
+AM_CONDITIONAL([ENABLE_BRANDING_APP_JS], [test "$BRANDING_APP_JS" = true])
+
 APP_IC_LAUNCHER="ic_launcher$APP_BRANDING_SUFFIX"
 AC_SUBST(APP_IC_LAUNCHER)
 
@@ -3113,6 +3163,7 @@ Configuration:
     Uglification and bundling $bundle_msg
     Anonymization             $anonym_msg
     Browsersync               $browsersync_msg
+    Theme (browser/branding)  $branding_msg
     cypress                   $cypress_msg
     C++ compiler flags        $CXXFLAGS
     Code-Coverage             $coverage_msg

@@ -5,6 +5,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'JSDialog Tests', function() {
 
 	beforeEach(function() {
+		helper.withoutBrandTheme();
 		helper.setupAndLoadDocument('impress/jsdialog.odp');
 	});
 
@@ -53,6 +54,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'JSDialog Tests', function(
 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Master Page Preview', function() {
 	beforeEach(function() {
+		helper.withoutBrandTheme();
 		helper.setupAndLoadDocument('impress/masterpagepreview.odp');
 	});
 

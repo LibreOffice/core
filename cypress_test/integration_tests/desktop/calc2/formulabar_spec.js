@@ -7,6 +7,7 @@ var calcHelper = require('../../common/calc_helper');
 describe(['tagdesktop'], 'Formulabar in readonly mode', function() {
 
 	beforeEach(function() {
+		helper.withoutBrandTheme();
 		helper.setupAndLoadDocument('calc/formulabar.ods');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
@@ -46,6 +47,7 @@ describe(['tagdesktop'], 'Formulabar in readonly mode', function() {
 describe(['tagdesktop'], 'Formulabar tests', function() {
 
 	beforeEach(function() {
+		helper.withoutBrandTheme();
 		helper.setupAndLoadDocument('calc/formulabar.ods');
 		cy.cGet('#pos_window-input-address').should('have.value', 'AB106');
 	});

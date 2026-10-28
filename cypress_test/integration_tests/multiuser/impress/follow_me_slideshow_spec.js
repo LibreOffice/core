@@ -8,6 +8,7 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
     var win1, win2;
 
     beforeEach(function() {
+            helper.withoutBrandTheme();
             helper.setupAndLoadDocument('impress/follow.odp',true);
 
             cy.getFrameWindow('#iframe1').then((win) => { win1 = win; });

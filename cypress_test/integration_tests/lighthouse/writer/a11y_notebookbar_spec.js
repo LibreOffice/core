@@ -42,7 +42,9 @@ describe(['taglighthouse'], 'Accessibility Writer Notebookbar Tests', { testIsol
 
 	function selectAndValidateTab(tab) {
 		var selector = '#' + tab.id;
-		cy.cGet(selector).should('be.visible').click();
+		// The tab strip scrolls horizontally when the tabs do not fit the
+		// window, and the last ones sit beyond its edge at this viewport.
+		cy.cGet(selector).scrollIntoView().should('be.visible').click();
 		cy.cGet(selector).should('have.class', 'selected');
 
 		helper.processToIdle(win);

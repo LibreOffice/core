@@ -134,6 +134,15 @@ function setupAndPreviewDocument(filePath) {
  * call setupDocument and loadDocument directly
  * filePath: test document path, for example: 'calc/hello-world.ods'
  */
+// The pixel baselines show the page as the tree styles it. A debug build
+// serves the theme from browser/branding, which recolours the page from the
+// first paint on - the Calc headers read their colours when the canvas is set
+// up - so a spec that compares snapshots calls this before it loads the
+// document. Cypress forgets the route before each test.
+function withoutBrandTheme() {
+	cy.intercept('GET', '**/branding.css', { body: '' });
+}
+
 function setupAndLoadDocument(filePath, isMultiUser = false, copyCertificates = false, lang = undefined, extraQuery = undefined) {
 	cy.log('>> setupAndLoadDocument - start');
 
@@ -1645,6 +1654,7 @@ module.exports.setupDocument = setupDocument;
 module.exports.loadDocument = loadDocument;
 module.exports.setupAndPreviewDocument = setupAndPreviewDocument;
 module.exports.setupAndLoadDocument = setupAndLoadDocument;
+module.exports.withoutBrandTheme = withoutBrandTheme;
 module.exports.setupAndLoadTwoDocuments = setupAndLoadTwoDocuments;
 module.exports.reloadDocument = reloadDocument;
 module.exports.reloadFrameAndWaitForNewPage = reloadFrameAndWaitForNewPage;

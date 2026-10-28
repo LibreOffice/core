@@ -45,6 +45,7 @@
         "postcss": "^8.4.49",
         "postcss-cli": "^11.0.0",
         "prettier": "^3.1.1",
+        "sass": "1.89.2",
         "shrinkpack": "0.20.0",
         "smartmenus": "1.0.0",
         "stylelint": "13.7.0",
@@ -5327,6 +5328,13 @@
         "node": ">=10"
       }
     },
+    "node_modules/immutable": {
+      "version": "5.1.9",
+      "resolved": "file:node_shrinkpack/immutable-5.1.9.tar",
+      "integrity": "sha512-m8nVez3rwrgmWxtLMt1ZYXB2Lv7OKYn/disyxAlSDYAlKSlFoPPfIAmAM/M5xqL4m4C/wAPw7S2/CNaUii1Hxg== sha512-bFP8kJMZY9LyVHYnopzXpNNJRnNlHbCU3+tOdY0A+9Yj1y16FD9KaeFazkKeDtphpWYZ52/hTZkTLtNn0qe8VQ==",
+      "dev": true,
+      "license": "MIT"
+    },
     "node_modules/import-fresh": {
       "version": "3.3.1",
       "resolved": "file:node_shrinkpack/import-fresh-3.3.1.tar",
@@ -9015,6 +9023,54 @@
       "resolved": "file:node_shrinkpack/safer-buffer-2.1.2.tar",
       "integrity": "sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg== sha512-BGX42ygLCTOw2DeQ05VAq01OWEjZTc6nLtj4TCwwfDM+MBDjwcMdi7PqnIOjYusSQmEfXC33IBuNdTDbVEojpA==",
       "license": "MIT"
+    },
+    "node_modules/sass": {
+      "version": "1.89.2",
+      "resolved": "file:node_shrinkpack/sass-1.89.2.tar",
+      "integrity": "sha512-xCmtksBKd/jdJ9Bt9p7nPKiuqrlBMBuuGkQlkhZjjQk3Ty48lv93k5Dq6OPkKt4XwxDJ7tvlfrTa1MPA9bf+QA== sha512-A2gqZV6qzJhP4yqwXlZbqgJ0g7e6ZGesP0UXXfJ9CdPIss5eZOVJL+T7aNpdCa10eKPyT30T7slusrAmVBkHug==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "chokidar": "^4.0.0",
+        "immutable": "^5.0.2",
+        "source-map-js": ">=0.6.2 <2.0.0"
+      },
+      "bin": {
+        "sass": "sass.js"
+      },
+      "engines": {
+        "node": ">=14.0.0"
+      }
+    },
+    "node_modules/sass/node_modules/chokidar": {
+      "version": "4.0.3",
+      "resolved": "file:node_shrinkpack/chokidar-4.0.3.tar",
+      "integrity": "sha512-Qgzu8kfBvo+cA4962jnP1KkS6Dop5NS6g7R5LFYJr4b8Ub94PPQXUksCw9PvXoeXPRRddRNC5C1JQUR2SMGtnA== sha512-X2E5JuQHXUvZxW8i0g+0hKi+UfWBw9i3YxXllchZ4L6zKB56QJ1v0555gqsQ99TxKw2FxnF7oJ30obl31PEaAg==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "readdirp": "^4.0.1"
+      },
+      "engines": {
+        "node": ">= 14.16.0"
+      },
+      "funding": {
+        "url": "https://paulmillr.com/funding/"
+      }
+    },
+    "node_modules/sass/node_modules/readdirp": {
+      "version": "4.1.2",
+      "resolved": "file:node_shrinkpack/readdirp-4.1.2.tar",
+      "integrity": "sha512-GDhwkLfywWL2s6vEjyhri+eXmfH6j1L7JE27WhqLeYzoh/A3DBaYGEj2H/HFZCn/kMfim73FXxEJTw06WtxQwg== sha512-aM90PX/9A98maiw8dOxuW/I157hpqsCKkIagorX2UM9NLxw3Foq9DsCrHfMuMbxu1xuGCT5oP+tx2y8iz/U7JQ==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">= 14.18.0"
+      },
+      "funding": {
+        "type": "individual",
+        "url": "https://paulmillr.com/funding/"
+      }
     },
     "node_modules/saxes": {
       "version": "5.0.1",

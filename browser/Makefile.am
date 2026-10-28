@@ -1163,6 +1163,12 @@ endif
 
 TEMPLATE_MANIFEST = $(DIST_FOLDER)/templates/templates.js
 
+if ENABLE_BRANDING
+BRANDING_SRC = $(srcdir)/branding/brand.sh \
+	$(shell find $(srcdir)/branding/sass $(srcdir)/branding/themes -type f)
+BRANDING_DST = $(DIST_FOLDER)/branding.css
+endif
+
 admin-tsc.done: $(patsubst %,$(srcdir)/%,$(COOL_ADMIN_TS))
 	@mkdir -p $(TYPESCRIPT_JS_DIR)
 	$(QUIET_TSC) $(NODE) $(builddir)/node_modules/typescript/bin/tsc --outDir $(TYPESCRIPT_JS_DIR) --rootDir $(srcdir) $^
@@ -1200,6 +1206,7 @@ build-cool: \
 	$(WASM_FALLBACK_FILES) \
 	$(TEMPLATE_MANIFEST) \
 	$(COOL_ADMIN_TEMPLATE_DST) \
+	$(BRANDING_DST) \
 	adminIntegratorSettings
 	@echo "build cool completed"
 if APP_HAS_BRANDING
@@ -1387,7 +1394,8 @@ cool_html_defines = -PE -I $(INTERMEDIATE_DIR) \
 	-DCOOL_CSS="$(subst $(SPACE),$(COMMA),$(COOL_CSS_M4))" \
 	-DGLOBAL_JS="$(DIST_FOLDER)/global.js" \
 	-DVENDOR="$(VENDOR)" \
-	-DINFO_URL="$(INFO_URL)"
+	-DINFO_URL="$(INFO_URL)" \
+	-DBRANDING_APP_JS=$(BRANDING_APP_JS)
 
 # cool.html is the server page and cool-qt.html the app page; QTAPP is the only
 # define that differs.
@@ -1461,10 +1469,13 @@ node_modules: package.json npm-shrinkwrap.json node_shrinkpack
 	fi
 	@touch node_modules
 
+# sass needs its optional @parcel/watcher only for --watch; the prebuilt binaries for every
+# platform are 5.7 MB, so they are left out of the shrinkwrap and not vendored.
 update-shrinkpack:
 	npm update
 	npm shrinkwrap
 	npx shrinkpack
+	$(PYTHON) $(srcdir)/util/prune_shrinkwrap.py npm-shrinkwrap.json node_shrinkpack @parcel/watcher
 	cp npm-shrinkwrap.json npm-shrinkwrap.json.in
 	@echo "Done. Remember to commit node_shrinkpack/ and npm-shrinkwrap.json.in"
 
@@ -1606,6 +1617,19 @@ $(DIST_FOLDER)/admin/%: $(srcdir)/admin/%
 $(ADMIN_TEMPLATE_FOLDER)/%: $(srcdir)/admin/%
 	@mkdir -p $(dir $@)
 	@cp $< $@
+
+# The theme from browser/branding, see --enable-branding. It copies images into dist/images,
+# so it runs after those are in place; the stamp is touched last, so that the images it
+# copied do not trigger it again. The three themes share the stylesheet, so when the qt app
+# shares browser/dist with the server its page loads only its own script, branding-app.js.
+$(DIST_FOLDER)/branding.css: $(BRANDING_SRC) $(COOL_IMAGES_DST) $(COOL_IMAGES_CUSTOM_DST) node_modules
+	@echo "Applying the $(BRANDING_THEME) theme from browser/branding"
+	@SASS="$(abs_builddir)/node_modules/.bin/sass" SASS_FLAGS=--quiet \
+		$(srcdir)/branding/brand.sh $(DIST_FOLDER) $(BRANDING_THEME)
+if ENABLE_BRANDING_APP_JS
+	@cp $(srcdir)/branding/themes/CODA/branding.js $(DIST_FOLDER)/branding-app.js
+endif
+	@touch $@
 
 $(DIST_FOLDER)/wasm:
 	@mkdir -p $(dir $@)

@@ -18,6 +18,7 @@ function expandSection(name) {
 describe(['tagdesktop'], 'Scroll through document, modify heading', function() {
 
 	beforeEach(function() {
+		helper.withoutBrandTheme();
 		helper.setupAndLoadDocument('writer/navigator.odt');
 		cy.cGet('#navigator-floating-icon').click(); // Ensure it's open
 		cy.getFrameWindow().then((win) => {
@@ -268,6 +269,7 @@ describe(['tagdesktop'], 'Scroll through document, modify heading', function() {
 describe(['tagdesktop'], 'Navigator comments', function() {
 
 	beforeEach(function() {
+		helper.withoutBrandTheme();
 		helper.setupAndLoadDocument('writer/a11y_comment.fodt');
 		cy.cGet('#navigator-floating-icon').click(); // Ensure it's open
 	});

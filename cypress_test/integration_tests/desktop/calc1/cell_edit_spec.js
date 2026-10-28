@@ -7,6 +7,7 @@ var calcHelper = require('../../common/calc_helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test rendering of a cell on edit', function() {
 
 	beforeEach(function() {
+		helper.withoutBrandTheme();
 		helper.setupAndLoadDocument('calc/cell_edit.fods');
 		desktopHelper.selectZoomLevel(200); // make differences more significant
 

@@ -9,6 +9,7 @@ function getSlideShowContent() {
 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Some app', function() {
 	beforeEach(function() {
+		helper.withoutBrandTheme();
 		helper.setupAndLoadDocument('impress/slideshow.odp');
 		cy.cGet('.notebookbar #Slideshow-tab-label').click();
 		cy.cGet('.notebookbar #slide-fullscreen-presentation-button').click();

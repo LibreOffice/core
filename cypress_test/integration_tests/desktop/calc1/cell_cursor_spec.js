@@ -33,6 +33,7 @@ function lastRowColSelCount(win) {
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test jumping on large cell selection', function() {
 
 	beforeEach(function() {
+		helper.withoutBrandTheme();
 		helper.setupAndLoadDocument('calc/cell_cursor.ods');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
@@ -179,6 +180,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test jumping on large cell
 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test Cell Selections', function() {
 	beforeEach(function() {
+		helper.withoutBrandTheme();
 		helper.setupAndLoadDocument('calc/empty-selections.ods');
 		desktopHelper.sidebarToggle();
 		cy.cGet('#sidebar-dock-wrapper').should('not.be.visible');
@@ -251,6 +253,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test Cell Selections', fun
 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test keyboard cell navigation and selection', function() {
 	beforeEach(function() {
+		helper.withoutBrandTheme();
 		helper.setupAndLoadDocument('calc/empty-selections.ods');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
@@ -311,6 +314,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test keyboard cell navigat
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test jumping on large cell selection with split panes', function() {
 
 	beforeEach(function() {
+		helper.withoutBrandTheme();
 		helper.setupAndLoadDocument('calc/cell_cursor_split.ods');
 	});
 
@@ -338,6 +342,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test jumping on large cell
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test triple click content selection.', function() {
 
 	beforeEach(function() {
+		helper.withoutBrandTheme();
 		helper.setupAndLoadDocument('calc/cell-content-selection.ods');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;
@@ -372,6 +377,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test triple click content 
 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test decimal separator of cells with different languages.', function() {
 	beforeEach(function() {
+		helper.withoutBrandTheme();
 		helper.setupAndLoadDocument('calc/decimal_separator.ods');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;

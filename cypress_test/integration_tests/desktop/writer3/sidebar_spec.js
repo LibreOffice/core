@@ -6,6 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop'], 'Sidebar tests', function() {
 
 	beforeEach(function() {
+		helper.withoutBrandTheme();
 		helper.setupAndLoadDocument('writer/sidebar.odt');
 		cy.viewport(1920,1080);
 	});

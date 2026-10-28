@@ -6,6 +6,7 @@ var helper = require('../../common/helper');
 describe(['tagdesktop'], 'Formula dialog tests', function() {
 
 	beforeEach(function() {
+		helper.withoutBrandTheme();
 		helper.setupAndLoadDocument('calc/formula_dialog.ods');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;

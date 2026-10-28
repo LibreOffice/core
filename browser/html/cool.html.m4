@@ -351,8 +351,9 @@ m4_ifelse(APP, [true],
     ])
 
 m4_dnl The branding script declares the branded product name and URL globals, so in app builds it
-m4_dnl has to run before global.js reads them.
-m4_ifelse(APP, [true], [<script src="m4_ifelse(IOSAPP, [true], [Branding/])branding.js"></script>])
+m4_dnl has to run before global.js reads them. When the qt app shares browser/dist with a server
+m4_dnl built from the same tree, branding.js is the server's and the app loads branding-app.js.
+m4_ifelse(APP, [true], [<script src="m4_ifelse(IOSAPP, [true], [Branding/])m4_ifelse(BRANDING_APP_JS, [true], [branding-app.js], [branding.js])"></script>])
 
 m4_dnl This is GLOBAL_JS:
 m4_ifelse(APP, [true],

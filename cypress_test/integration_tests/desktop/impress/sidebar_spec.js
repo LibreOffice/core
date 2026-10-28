@@ -7,6 +7,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Sidebar Tests', function() {
 
 	beforeEach(function() {
+		helper.withoutBrandTheme();
 		helper.setupAndLoadDocument('impress/sidebar.odp');
 		cy.getFrameWindow().then(function(win) {
 			this.win = win;
@@ -95,6 +96,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Sidebar decks in compact v
 	beforeEach(function() {
 		// The compact toolbar shows the deck buttons only when it is this wide.
 		cy.viewport(1920, 1080);
+		helper.withoutBrandTheme();
 		helper.setupAndLoadDocument('impress/sidebar.odp');
 		desktopHelper.switchUIToCompact();
 		cy.getFrameWindow().then(function(win) {

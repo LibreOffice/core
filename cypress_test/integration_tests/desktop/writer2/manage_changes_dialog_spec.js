@@ -6,6 +6,7 @@ var desktopHelper = require('../../common/desktop_helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagscreenshot'], 'Manage Changes Dialog', function () {
 
 	beforeEach(function () {
+		helper.withoutBrandTheme();
 		helper.setupAndLoadDocument('writer/manage_tracking_changes.odt');
 		cy.getFrameWindow().then((win) => {
 			this.win = win;

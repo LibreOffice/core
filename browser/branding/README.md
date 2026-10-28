@@ -42,7 +42,30 @@ The welcome slideshow of Collabora Office is part of the product, not of the bra
 it lives in [../welcome-slideshow](../welcome-slideshow) and every desktop app build
 bundles it.
 
-## Generating a theme
+## In the build
+
+A debug build applies a theme to `browser/dist` by itself: the desktop app builds
+(`--enable-macosapp`, `--enable-windowsapp`, `--enable-qtapp --disable-server`) get CODA,
+everything else gets CODE. A tree that builds the server and the qt app together gets
+CODE in `browser/dist`, and the qt app page loads `branding-app.js`, the script of the
+CODA theme, so that the server is CODE and the app is Collabora Office. Configure
+options:
+
+- `--disable-branding`: build an unbranded tree
+- `--enable-branding=CO-theme|CODE|CODA`: pick the theme, also in a release build
+
+Release builds, the Android and iOS builds and builds with `--with-app-branding` are
+not branded from here unless asked to, so the `coolwsd` package stays unbranded and
+the brand packages are made separately, as before. Switching the theme or turning it
+off leaves the generated files of the previous one in `browser/dist`; `make clean` in
+`browser/` removes them.
+
+The build uses the dart-sass in `browser/node_modules` (a devDependency of
+`browser/package.json`, vendored in `browser/node_shrinkpack`). `make` in `browser/`
+regenerates the theme after a change here; coolwsd reads `browser/dist` at startup,
+restart it to see the new CSS.
+
+## Generating a theme by hand
 
     browser/branding/brand.sh [--pure] OUTDIR THEME
 
@@ -53,10 +76,9 @@ for example
 `THEME` is `CO-theme`, `CODE` or `CODA`; the theme ids of online-branding's `brand.sh`
 (1, 3, 10) work too. `--pure` is for the mobile apps, whose About dialog loads the
 technology logo from the web instead of the server. The script needs
-[dart-sass](https://sass-lang.com/dart-sass/) (`sass` on the `PATH`, or `SASS=...`).
-Unlike the online-branding script, this one never modifies its sources.
-
-coolwsd reads `browser/dist` at startup, restart it to see a new theme.
+[dart-sass](https://sass-lang.com/dart-sass/) (`sass` on the `PATH`, or
+`SASS=browser/node_modules/.bin/sass`). Unlike the online-branding script, this one
+never modifies its sources.
 
 ## Keeping online-branding in sync
 
