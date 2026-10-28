@@ -736,6 +736,9 @@ class QtAppInitializer extends MobileAppInitializer {
 		window.translationEnabled = true;
 
 		if (window.codaRemotePage) {
+			// The integrator around a remote page sends Host_PostmessageReady, as to a browser.
+			this._boundPostMessageHandler = this.postMessageHandler.bind(this);
+			window.addEventListener('message', this._boundPostMessageHandler, false);
 			this.sendOverCoolLocal(window.codaRemotePage.messageUrl);
 			return;
 		}
