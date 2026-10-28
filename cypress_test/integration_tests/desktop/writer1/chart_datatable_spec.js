@@ -12,6 +12,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Chart Data Table dialog', 
 
 		insertChart();
 		openDataTableDialog();
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
 	});
 
 	function insertChart() {
@@ -283,14 +286,20 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Chart Data Table dialog', 
 
 	it('Arrow keys keep cell focus after cancelling edit mode', function() {
 		getEntries().first().find('[role="gridcell"]').eq(0).click();
-		cy.cGet('#ChartDataDialog #InsertTextColumn').click();
-		// Wait for the rebuilt grid that has the new (empty) category column.
-		cy.cGet('#ChartDataDialog #datagrid-cell-1-2').should('exist');
+		getHeaders().its('length').then(function(headerCount) {
+			cy.cGet('#ChartDataDialog #InsertTextColumn').click();
+			// The old grid has a cell 1-2 too, so wait for the rebuilt grid with the new
+			// (empty) category column by its extra header.
+			getHeaders().should('have.length', headerCount + 1);
+		});
 
 		// Focus the empty category cell, enter then cancel edit mode.
 		cy.cGet('#ChartDataDialog #datagrid-cell-1-2').click();
 		cy.cGet('#ChartDataDialog #datagrid-cell-1-2')
 			.should('have.class', 'ui-treeview-cell-active');
+		// Core answers the click with a select and a grab_focus. The keys below go to the
+		// grid once those answers are applied.
+		helper.processToIdle(this.win);
 		cy.realPress('F2');
 		cy.cGet('#ChartDataDialog #datagrid .ui-treeview-inline-edit')
 			.should('be.visible');
@@ -305,9 +314,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Chart Data Table dialog', 
 			.should('have.class', 'ui-treeview-cell-active');
 		// Core answers the navigation with a grab_focus. The checks below read
 		// the focus after that answer, not the cell focus that precedes it.
-		cy.getFrameWindow().then(function (win) {
-			return helper.processToIdle(win);
-		});
+		helper.processToIdle(this.win);
 		cy.cGet('#ChartDataDialog #datagrid-cell-1-3').should('be.focused');
 		cy.cGet('#ChartDataDialog #datagrid').should('not.be.focused');
 
