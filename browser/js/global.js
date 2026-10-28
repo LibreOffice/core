@@ -827,8 +827,12 @@ class QtAppInitializer extends MobileAppInitializer {
 			const sent = previous.then(async () => {
 				const parts = splitIntoParts(msg);
 				const last = parts.pop();
-				for (const part of parts)
+				// The parts go one after another, so native code joins them in order. A wait is
+				// short: native code answers each part at once, with an empty reply.
+				for (const part of parts) {
+					// eslint-disable-next-line no-await-in-loop -- each part waits for the one before
 					await get('part', part);
+				}
 
 				const response = await get(kind, last);
 				return response.text();
@@ -842,6 +846,49 @@ class QtAppInitializer extends MobileAppInitializer {
 		window.postMobileError   = (msg) => { send('error', msg); };
 		window.postMobileDebug   = (msg) => { send('debug', msg); };
 		window.userInterfaceMode = window.coolParams.get('userinterfacemode');
+
+		// main.js and the prefs call the Bridge's methods by name, on the object the web channel
+		// gives CODA's own window. Here each method sends its arguments as a JSON array, in a
+		// message of the method's kind, and calls back with native code's reply.
+		const call = (method, args, callback) => {
+			const sent = send(method, JSON.stringify(args));
+			if (callback)
+				sent.then(callback, () => callback(''));
+		};
+
+		// The frame has the remote document's values itself, so this needs no native code.
+		const remoteInfo = JSON.stringify({
+			wopiSrc: new URLSearchParams(location.search).get('WOPISrc'),
+			accessToken: window.codaRemotePage.serverVariables.accessToken,
+			coolServer: location.origin,
+			coolPath: location.pathname,
+		});
+
+		window.bridge = {
+			cool: (msg, callback) => send('cool', msg).then(callback),
+			error: (msg) => { send('error', msg); },
+			debug: (msg) => { send('debug', msg); },
+			getRemoteInfo: (callback) => callback(remoteInfo),
+			writeRemoteDocFile: (name, base64, callback) =>
+				call('writeRemoteDocFile', [name, base64], callback),
+			readLocalDocBytes: (callback) => call('readLocalDocBytes', [], callback),
+			getAllPrefs: (callback) => call('getAllPrefs', [], callback),
+			setPref: (key, value) => call('setPref', [key, value]),
+			saveCompleted: () => call('saveCompleted', []),
+		};
+
+		window.bridge.getAllPrefs((prefsJson) => {
+			try {
+				for (const [key, value] of Object.entries(JSON.parse(prefsJson || '{}')))
+					window.prefs._localStorageCache[key] = value;
+			} catch (error) {
+				console.warn('getAllPrefs parse failed: ' + error);
+			}
+			window.prefs._bridgeReady = true;
+		});
+
+		window.qtBridgeReady = true;
+		window.dispatchEvent(new Event('qtbridgeready'));
 	}
 }
 
@@ -2712,7 +2759,10 @@ function showWelcomeSVG() {
 
 		global.socket.binaryType = 'arraybuffer';
 
-		if (global.ThisIsAMobileApp && !global.ThisIsTheEmscriptenApp && !window.starterScreen && global.docURL) {
+		// A remote page in an integrator's editor frame has WOPISrc in its address, so docURL is
+		// set, but it has no local file yet either: main.js fires HULLO once it has one.
+		const hasLocalFile = global.docURL && !window.codaRemotePage;
+		if (global.ThisIsAMobileApp && !global.ThisIsTheEmscriptenApp && !window.starterScreen && hasLocalFile) {
 			// This corresponds to the initial GET request when creating a WebSocket
 			// connection and tells the app's code that it is OK to start invoking
 			// TheFakeWebSocket's onmessage handler. The app code that handles this

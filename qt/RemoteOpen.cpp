@@ -19,6 +19,7 @@
 #include <QByteArray>
 #include <QIODevice>
 #include <QJsonDocument>
+#include <QJsonArray>
 #include <QJsonObject>
 #include <QMainWindow>
 #include <QSize>
@@ -174,6 +175,7 @@ public:
 private:
     void findEditorFrame();
     void putCodaPageIn(QWebEngineFrame& frame);
+    std::optional<QByteArray> callBridge(const QString& method, const QString& argumentsJson);
 
     QUrl _formUrl; ///< Where the kept form went, with the frame's id as the fragment.
     QByteArray _form;
@@ -339,16 +341,43 @@ std::optional<QByteArray> CloudAccountPage::receiveMessage(const QUrl& origin, c
         const QVariant reply = _bridge->cool(whole);
         return reply.isValid() ? reply.toString().toUtf8() : QByteArray();
     }
-
-    if (kind == QStringLiteral("error"))
+    else if (kind == QStringLiteral("error"))
     {
         _bridge->error(whole);
         return QByteArray();
     }
-
-    if (kind == QStringLiteral("debug"))
+    else if (kind == QStringLiteral("debug"))
     {
         _bridge->debug(whole);
+        return QByteArray();
+    }
+    else
+        return callBridge(kind, whole);
+}
+
+/// The page calls these Bridge methods by name, as the web channel gives them in CODA's own
+/// window. The kind of the message names the method, and the message is its arguments in JSON.
+std::optional<QByteArray> CloudAccountPage::callBridge(const QString& method,
+                                                       const QString& argumentsJson)
+{
+    const QJsonArray arguments = QJsonDocument::fromJson(argumentsJson.toUtf8()).array();
+    const QString first = arguments.at(0).toString();
+    const QString second = arguments.at(1).toString();
+
+    if (method == QStringLiteral("writeRemoteDocFile"))
+        return _bridge->writeRemoteDocFile(first, second).toUtf8();
+    else if (method == QStringLiteral("readLocalDocBytes"))
+        return _bridge->readLocalDocBytes().toUtf8();
+    else if (method == QStringLiteral("getAllPrefs"))
+        return _bridge->getAllPrefs().toUtf8();
+    else if (method == QStringLiteral("setPref"))
+    {
+        _bridge->setPref(first, second);
+        return QByteArray();
+    }
+    else if (method == QStringLiteral("saveCompleted"))
+    {
+        _bridge->saveCompleted();
         return QByteArray();
     }
 
