@@ -11,6 +11,7 @@
 #define INCLUDED_COMPHELPER_PARALLELSORT_HXX
 
 #include <comphelper/threadpool.hxx>
+#include <rtl/random.h>
 #include <tools/cpuid.hxx>
 
 #include <memory>
@@ -18,8 +19,6 @@
 #include <thread>
 #include <algorithm>
 #include <cmath>
-#include <exception>
-#include <stdexcept>
 #include <random>
 #include <functional>
 #include <chrono>
@@ -36,22 +35,13 @@ const size_t nThreadCountGlobal = std::thread::hardware_concurrency();
 const bool bHyperThreadingActive = cpuid::hasHyperThreading();
 static comphelper::ThreadPool& rTPool(comphelper::ThreadPool::getSharedOptimalPool());
 
-/// A seed from @aRandom, or from the clock when it throws, as std::random_device does without a
-/// source of entropy, such as in a jail. The seed only picks the samples to sort by.
-template <typename Random> std::mt19937::result_type seedOrClock(Random aRandom)
-{
-    try
-    {
-        return aRandom();
-    }
-    catch (const std::exception&)
-    {
-        return static_cast<std::mt19937::result_type>(
-            std::chrono::steady_clock::now().time_since_epoch().count());
-    }
-}
-
-static thread_local std::mt19937 aGenerator{ seedOrClock([] { return std::random_device{}(); }) };
+/// Seeds each thread's generator from the system random data. The seed only picks the samples to
+/// sort by.
+static thread_local std::mt19937 aGenerator{ [] {
+    std::mt19937::result_type nSeed = 0;
+    rtl_random_getBytes(&nSeed, sizeof(nSeed));
+    return nSeed;
+}() };
 
 
 namespace

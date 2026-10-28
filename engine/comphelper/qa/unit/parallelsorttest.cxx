@@ -19,7 +19,6 @@
 #include <vector>
 #include <algorithm>
 #include <random>
-#include <stdexcept>
 
 class ParallelSortTest : public CppUnit::TestFixture
 {
@@ -27,7 +26,6 @@ public:
     void testSortTiny();
     void testSortMedium();
     void testSortBig();
-    void testSeedWithoutRandomDevice();
 
     virtual void setUp() override;
     virtual void tearDown() override;
@@ -36,7 +34,6 @@ public:
     CPPUNIT_TEST(testSortTiny);
     CPPUNIT_TEST(testSortMedium);
     CPPUNIT_TEST(testSortBig);
-    CPPUNIT_TEST(testSeedWithoutRandomDevice);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -96,18 +93,6 @@ void ParallelSortTest::testSortMedium()
 }
 
 void ParallelSortTest::testSortBig() { sortTest(1024 * 16 + 3); }
-
-void ParallelSortTest::testSeedWithoutRandomDevice()
-{
-    CPPUNIT_ASSERT_EQUAL(std::mt19937::result_type(42),
-                         comphelper::seedOrClock([] { return std::mt19937::result_type(42); }));
-
-    // A source that throws, as std::random_device does without a source of entropy, such as in a
-    // jail, still gives a seed.
-    comphelper::seedOrClock([]() -> std::mt19937::result_type {
-        throw std::runtime_error("random_device could not be read");
-    });
-}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ParallelSortTest);
 
