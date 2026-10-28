@@ -31,7 +31,7 @@
             <property name="spacing">6</property>
             <child>
               <object class="GtkRadioButton" id="all">
-                <property name="label" translatable="yes" context="pdfgeneralpage|all">_All</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|all">_All</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -41,7 +41,7 @@
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="all-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|all">Exports all defined print ranges. If no print range is defined, exports the entire document.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|all">Exports all defined print ranges. If no print range is defined, exports the entire document.</property>
                   </object>
                 </child>
               </object>
@@ -53,7 +53,7 @@
             </child>
             <child>
               <object class="GtkRadioButton" id="pagerange">
-                <property name="label" translatable="yes" context="pdfgeneralpage|pagerange">_Pages:</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|pagerange">_Pages:</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -66,7 +66,7 @@
                 </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="pagerange-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|pagerange">Exports the pages you type in the box.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|pagerange">Exports the pages you type in the box.</property>
                   </object>
                 </child>
               </object>
@@ -87,7 +87,7 @@
                 </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="pages-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|pages">Exports the pages you type in the box.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|pages">Exports the pages you type in the box.</property>
                   </object>
                 </child>
               </object>
@@ -99,7 +99,7 @@
             </child>
             <child>
               <object class="GtkRadioButton" id="sheetrange">
-                <property name="label" translatable="yes" context="pdfgeneralpage|sheetrange">_Sheets:</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|sheetrange">_Sheets:</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -112,7 +112,7 @@
                 </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="sheetrange-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|sheetrange">Exports the sheets you type in the box.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|sheetrange">Exports the sheets you type in the box.</property>
                   </object>
                 </child>
               </object>
@@ -133,7 +133,7 @@
                 </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="sheets-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|sheets">Exports the sheets you type in the box.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|sheets">Exports the sheets you type in the box.</property>
                   </object>
                 </child>
               </object>
@@ -145,7 +145,7 @@
             </child>
             <child>
               <object class="GtkRadioButton" id="selection">
-                <property name="label" translatable="yes" context="pdfgeneralpage|selection">_Selection</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|selection">_Selection</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -155,7 +155,7 @@
                 <property name="group">all</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="selection-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|selection">Exports the current selection.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|selection">Exports the current selection.</property>
                   </object>
                 </child>
               </object>
@@ -170,7 +170,7 @@
                 <property name="can-focus">False</property>
                 <property name="no-show-all">True</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes" context="pdfgeneralpage|slides">_Slides:</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|slides">_Slides:</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -183,7 +183,7 @@
                 <property name="can-focus">False</property>
                 <property name="no-show-all">True</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes" context="pdfgeneralpage|selectedsheets">_Selection/Selected sheet(s)</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|selectedsheets">_Selection/Selected sheet(s)</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -193,7 +193,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="viewpdf">
-                <property name="label" translatable="yes" context="pdfgeneralpage|viewpdf">_View PDF after export</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|viewpdf">_View PDF after export</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -202,7 +202,7 @@
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="viewpdf-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|viewpdf">Open the exported document in the system default PDF viewer.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|viewpdf">Open the exported document in the system default PDF viewer.</property>
                   </object>
                 </child>
               </object>
@@ -218,7 +218,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="pdfgeneralpage|label1">Range</property>
+            <property name="label" translatable="yes" context="pdfgeneralpage-mobile|label1">Range</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -247,7 +247,7 @@
             <property name="spacing">6</property>
             <child>
               <object class="GtkRadioButton" id="losslesscompress">
-                <property name="label" translatable="yes" context="pdfgeneralpage|losslesscompress">_Lossless compression</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|losslesscompress">_Lossless compression</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -257,7 +257,7 @@
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="losslesscompress-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|losslesscompress">Selects a lossless compression of images. All pixels are preserved.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|losslesscompress">Selects a lossless compression of images. All pixels are preserved.</property>
                   </object>
                 </child>
               </object>
@@ -269,7 +269,7 @@
             </child>
             <child>
               <object class="GtkRadioButton" id="jpegcompress">
-                <property name="label" translatable="yes" context="pdfgeneralpage|jpegcompress">_JPEG compression</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|jpegcompress">_JPEG compression</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -279,7 +279,7 @@
                 <property name="group">losslesscompress</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="jpegcompress-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|jpegcompress">Select a JPEG compression level. With a high quality level, almost all pixels are preserved. With a low quality level, some pixels are lost and artifacts are introduced, but file sizes are reduced.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|jpegcompress">Select a JPEG compression level. With a high quality level, almost all pixels are preserved. With a low quality level, some pixels are lost and artifacts are introduced, but file sizes are reduced.</property>
                   </object>
                 </child>
               </object>
@@ -301,7 +301,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes" context="pdfgeneralpage|label6">_Quality:</property>
+                    <property name="label" translatable="yes" context="pdfgeneralpage-mobile|label6">_Quality:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">quality</property>
                   </object>
@@ -320,7 +320,7 @@
                     <property name="adjustment">adjustment1</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="quality-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|quality">Enter the quality level for JPEG compression.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|quality">Enter the quality level for JPEG compression.</property>
                       </object>
                     </child>
                   </object>
@@ -339,7 +339,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="changeresolution">
-                <property name="label" translatable="yes" context="pdfgeneralpage|changeresolution">Change ima_ge resolution to:</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|changeresolution">Change ima_ge resolution to:</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -351,7 +351,7 @@
                 </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="changeresolution-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|changeresolution">Select to resample or down-size the images to a lower number of pixels per inch.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|changeresolution">Select to resample or down-size the images to a lower number of pixels per inch.</property>
                   </object>
                 </child>
               </object>
@@ -368,17 +368,17 @@
                 <property name="margin-start">18</property>
                 <property name="has-entry">True</property>
                 <items>
-                  <item translatable="yes" context="pdfgeneralpage|resolution">75 DPI</item>
-                  <item translatable="yes" context="pdfgeneralpage|resolution">150 DPI</item>
-                  <item translatable="yes" context="pdfgeneralpage|resolution">300 DPI</item>
-                  <item translatable="yes" context="pdfgeneralpage|resolution">600 DPI</item>
-                  <item translatable="yes" context="pdfgeneralpage|resolution">1200 DPI</item>
+                  <item translatable="yes" context="pdfgeneralpage-mobile|resolution">75 DPI</item>
+                  <item translatable="yes" context="pdfgeneralpage-mobile|resolution">150 DPI</item>
+                  <item translatable="yes" context="pdfgeneralpage-mobile|resolution">300 DPI</item>
+                  <item translatable="yes" context="pdfgeneralpage-mobile|resolution">600 DPI</item>
+                  <item translatable="yes" context="pdfgeneralpage-mobile|resolution">1200 DPI</item>
                 </items>
                 <child internal-child="entry">
                   <object class="GtkEntry" id="comboboxtext-entry">
                     <property name="can-focus">True</property>
                     <property name="activates-default">True</property>
-                    <property name="text" translatable="yes" context="pdfgeneralpage|comboboxtext-entry">75 DPI</property>
+                    <property name="text" translatable="yes" context="pdfgeneralpage-mobile|comboboxtext-entry">75 DPI</property>
                     <property name="truncate-multiline">True</property>
                   </object>
                 </child>
@@ -387,7 +387,7 @@
                 </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="resolution-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|resolution">Select the target resolution for the images.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|resolution">Select the target resolution for the images.</property>
                   </object>
                 </child>
               </object>
@@ -403,7 +403,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="pdfgeneralpage|label2">Images</property>
+            <property name="label" translatable="yes" context="pdfgeneralpage-mobile|label2">Images</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -432,7 +432,7 @@
             <property name="spacing">6</property>
             <child>
               <object class="GtkCheckButton" id="watermark">
-                <property name="label" translatable="yes" context="pdfgeneralpage|watermark">Sign with _watermark</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|watermark">Sign with _watermark</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -441,7 +441,7 @@
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="watermark-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|watermark">Add a centered, vertical, light green watermark text to the page background. The watermark is not part of the source document.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|watermark">Add a centered, vertical, light green watermark text to the page background. The watermark is not part of the source document.</property>
                   </object>
                 </child>
               </object>
@@ -457,7 +457,7 @@
                 <property name="can-focus">False</property>
                 <property name="margin-start">18</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes" context="pdfgeneralpage|watermarklabel">Text:</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|watermarklabel">Text:</property>
                 <property name="use-underline">True</property>
                 <property name="mnemonic-widget">watermarkentry</property>
               </object>
@@ -476,7 +476,7 @@
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="watermarkentry-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|watermarkentry">Insert the text for the watermark signature.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|watermarkentry">Insert the text for the watermark signature.</property>
                   </object>
                 </child>
               </object>
@@ -492,7 +492,7 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="pdfgeneralpage|label3">Watermark</property>
+            <property name="label" translatable="yes" context="pdfgeneralpage-mobile|label3">Watermark</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -524,7 +524,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes" context="pdfgeneralpage|pdf_version">PDF_ Version:</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|pdf_version">PDF_ Version:</property>
                 <property name="use-underline">True</property>
                 <property name="mnemonic-widget">pdf_version</property>
               </object>
@@ -538,19 +538,19 @@
               <object class="GtkComboBoxText" id="pdf_version">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="tooltip-text" translatable="yes" context="pdfgeneralpage|pdf_version|tooltip_text">Select the PDF version. PDF/A version variants creates an ISO 19005 compliant PDF file, ideal for long-term document preservation.</property>
+                <property name="tooltip-text" translatable="yes" context="pdfgeneralpage-mobile|pdf_version|tooltip_text">Select the PDF version. PDF/A version variants creates an ISO 19005 compliant PDF file, ideal for long-term document preservation.</property>
                 <property name="active">3</property>
                 <items>
-                  <item id="17" translatable="yes" context="pdfgeneralpage|pdf_version">PDF 1.7</item>
-                  <item id="20" translatable="yes" context="pdfgeneralpage|pdf_version">PDF 2.0</item>
-                  <item id="1" translatable="yes" context="pdfgeneralpage|pdf_version">PDF/A-1b (PDF 1.4 base)</item>
-                  <item id="2" translatable="yes" context="pdfgeneralpage|pdf_version">PDF/A-2b (PDF 1.7 base)</item>
-                  <item id="3" translatable="yes" context="pdfgeneralpage|pdf_version">PDF/A-3b (PDF 1.7 base)</item>
-                  <item id="4" translatable="yes" context="pdfgeneralpage|pdf_version">PDF/A-4 (PDF 2.0 base)</item>
+                  <item id="17" translatable="yes" context="pdfgeneralpage-mobile|pdf_version">PDF 1.7</item>
+                  <item id="20" translatable="yes" context="pdfgeneralpage-mobile|pdf_version">PDF 2.0</item>
+                  <item id="1" translatable="yes" context="pdfgeneralpage-mobile|pdf_version">PDF/A-1b (PDF 1.4 base)</item>
+                  <item id="2" translatable="yes" context="pdfgeneralpage-mobile|pdf_version">PDF/A-2b (PDF 1.7 base)</item>
+                  <item id="3" translatable="yes" context="pdfgeneralpage-mobile|pdf_version">PDF/A-3b (PDF 1.7 base)</item>
+                  <item id="4" translatable="yes" context="pdfgeneralpage-mobile|pdf_version">PDF/A-4 (PDF 2.0 base)</item>
                 </items>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="pdf_version-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|pdf_version">Versions can be either the "classic" PDF (i.e. PDF 1.7, PDF 2.0) or PDF/A conformant. PDF/A is defined as an electronic document file format for long term preservation  and archiving. It allows only a subset of PDF features that are compatible with that use case. For example: All fonts that were used in the source document will be embedded into the generated PDF file. PDF tags will be written.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|pdf_version">Versions can be either the "classic" PDF (i.e. PDF 1.7, PDF 2.0) or PDF/A conformant. PDF/A is defined as an electronic document file format for long term preservation  and archiving. It allows only a subset of PDF features that are compatible with that use case. For example: All fonts that were used in the source document will be embedded into the generated PDF file. PDF tags will be written.</property>
                   </object>
                 </child>
               </object>
@@ -562,17 +562,17 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="pdfua">
-                <property name="label" translatable="yes" context="pdfgeneralpage|pdfua">Universal Accessibilit_y (PDF/UA)</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|pdfua">Universal Accessibilit_y (PDF/UA)</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
-                <property name="tooltip-text" translatable="yes" context="pdfgeneralpage|pdfua|tooltip_text">Creates a universal accessibility-compliant PDF file that follows the requirements of PDF/UA (ISO 14289) specifications.</property>
+                <property name="tooltip-text" translatable="yes" context="pdfgeneralpage-mobile|pdfua|tooltip_text">Creates a universal accessibility-compliant PDF file that follows the requirements of PDF/UA (ISO 14289) specifications.</property>
                 <property name="halign">start</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="pdfua-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|pdfua">Creates a universal accessibility-complying PDF file that follows the requirements of PDF/UA (ISO 14289) specifications.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|pdfua">Creates a universal accessibility-complying PDF file that follows the requirements of PDF/UA (ISO 14289) specifications.</property>
                   </object>
                 </child>
               </object>
@@ -584,17 +584,17 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="embed">
-                <property name="label" translatable="yes" context="pdfgeneralpage|embed">Hybrid PDF (em_bed ODF file)</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|embed">Hybrid PDF (em_bed ODF file)</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
-                <property name="tooltip-text" translatable="yes" context="pdfgeneralpage|embed|tooltip_text">Creates a PDF that embeds the original ODF file as an attachment.</property>
+                <property name="tooltip-text" translatable="yes" context="pdfgeneralpage-mobile|embed|tooltip_text">Creates a PDF that embeds the original ODF file as an attachment.</property>
                 <property name="halign">start</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="embed-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|embed">This setting enables you to export the document as a .pdf file containing two file formats: PDF and ODF as an attachment. </property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|embed">This setting enables you to export the document as a .pdf file containing two file formats: PDF and ODF as an attachment. </property>
                   </object>
                 </child>
               </object>
@@ -610,7 +610,7 @@
           <object class="GtkLabel" id="general_label">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="pdfgeneralpage|general_label">General</property>
+            <property name="label" translatable="yes" context="pdfgeneralpage-mobile|general_label">General</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -639,17 +639,17 @@
             <property name="spacing">6</property>
             <child>
               <object class="GtkCheckButton" id="forms">
-                <property name="label" translatable="yes" context="pdfgeneralpage|forms">Create PDF for_m</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|forms">Create PDF for_m</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
-                <property name="tooltip-text" translatable="yes" context="pdfgeneralpage|forms|tooltip_text">Creates a PDF with fields that can be filled out</property>
+                <property name="tooltip-text" translatable="yes" context="pdfgeneralpage-mobile|forms|tooltip_text">Creates a PDF with fields that can be filled out</property>
                 <property name="halign">start</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="forms-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|forms">Choose to create a PDF form. This can be filled out and printed by the user of the PDF document.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|forms">Choose to create a PDF form. This can be filled out and printed by the user of the PDF document.</property>
                   </object>
                 </child>
               </object>
@@ -671,7 +671,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes" context="pdfgeneralpage|label7">Submit _format:</property>
+                    <property name="label" translatable="yes" context="pdfgeneralpage-mobile|label7">Submit _format:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">format</property>
                   </object>
@@ -686,14 +686,14 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <items>
-                      <item translatable="yes" context="pdfgeneralpage|format">FDF</item>
-                      <item translatable="yes" context="pdfgeneralpage|format">PDF</item>
-                      <item translatable="yes" context="pdfgeneralpage|format">HTML</item>
-                      <item translatable="yes" context="pdfgeneralpage|format">XML</item>
+                      <item translatable="yes" context="pdfgeneralpage-mobile|format">FDF</item>
+                      <item translatable="yes" context="pdfgeneralpage-mobile|format">PDF</item>
+                      <item translatable="yes" context="pdfgeneralpage-mobile|format">HTML</item>
+                      <item translatable="yes" context="pdfgeneralpage-mobile|format">XML</item>
                     </items>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="format-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|format">Select the format of submitting forms from within the PDF file.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|format">Select the format of submitting forms from within the PDF file.</property>
                       </object>
                     </child>
                   </object>
@@ -705,7 +705,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="allowdups">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|allowdups">Allow duplicate field _names</property>
+                    <property name="label" translatable="yes" context="pdfgeneralpage-mobile|allowdups">Allow duplicate field _names</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
@@ -714,7 +714,7 @@
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="allowdups-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|allowdups">Allows you to use the same field name for multiple fields in the generated PDF file. If disabled, field names will be exported using generated unique names.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|allowdups">Allows you to use the same field name for multiple fields in the generated PDF file. If disabled, field names will be exported using generated unique names.</property>
                       </object>
                     </child>
                   </object>
@@ -737,7 +737,7 @@
           <object class="GtkLabel" id="forms_label">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="pdfgeneralpage|forms_label">Forms</property>
+            <property name="label" translatable="yes" context="pdfgeneralpage-mobile|forms_label">Forms</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -766,17 +766,17 @@
             <property name="spacing">6</property>
             <child>
               <object class="GtkCheckButton" id="tagged">
-                <property name="label" translatable="yes" context="pdfgeneralpage|tagged">_Tagged PDF (add document structure)</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|tagged">_Tagged PDF (add document structure)</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
-                <property name="tooltip-text" translatable="yes" context="pdfgeneralpage|tagged|tooltip_text">Includes a document's content structure information in a PDF</property>
+                <property name="tooltip-text" translatable="yes" context="pdfgeneralpage-mobile|tagged|tooltip_text">Includes a document's content structure information in a PDF</property>
                 <property name="halign">start</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="tagged-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|tagged">Select to write PDF tags. This can increase file size by huge amounts.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|tagged">Select to write PDF tags. This can increase file size by huge amounts.</property>
                   </object>
                 </child>
               </object>
@@ -788,17 +788,17 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="bookmarks">
-                <property name="label" translatable="yes" context="pdfgeneralpage|bookmarks">Export outl_ines</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|bookmarks">Export outl_ines</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
-                <property name="tooltip-text" translatable="yes" context="pdfgeneralpage|bookmarks|tooltip_text">Export headings along with hyperlinked entries in Table of Contents as PDF bookmarks.</property>
+                <property name="tooltip-text" translatable="yes" context="pdfgeneralpage-mobile|bookmarks|tooltip_text">Export headings along with hyperlinked entries in Table of Contents as PDF bookmarks.</property>
                 <property name="halign">start</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="bookmarks-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|bookmarks">PDF bookmarks are created for all paragraphs with outline level 1 or greater and for all “Table of Contents” entries with hyperlinks.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|bookmarks">PDF bookmarks are created for all paragraphs with outline level 1 or greater and for all “Table of Contents” entries with hyperlinks.</property>
                   </object>
                 </child>
               </object>
@@ -810,7 +810,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="exportplaceholders">
-                <property name="label" translatable="yes" context="pdfgeneralpage|exportplaceholders">Expo_rt placeholders</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|exportplaceholders">Expo_rt placeholders</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -819,7 +819,7 @@
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="exportplaceholders-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|exportplaceholders">Export the placeholders fields visual markings only. The exported placeholder is ineffective.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|exportplaceholders">Export the placeholders fields visual markings only. The exported placeholder is ineffective.</property>
                   </object>
                 </child>
               </object>
@@ -831,7 +831,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="comments">
-                <property name="label" translatable="yes" context="pdfgeneralpage|comments">Comm_ents as PDF annotations</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|comments">Comm_ents as PDF annotations</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -840,7 +840,7 @@
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="comments-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|comments">Select to export comments of Writer and Calc documents as PDF annotations.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|comments">Select to export comments of Writer and Calc documents as PDF annotations.</property>
                   </object>
                 </child>
               </object>
@@ -852,7 +852,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="commentsinmargin">
-                <property name="label" translatable="yes" context="pdfgeneralpage|commentsinmargin">_Comments in margin</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|commentsinmargin">_Comments in margin</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -861,7 +861,7 @@
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="commentsinmargin-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|commentsinmargin">Select to export comments of Writer documents in the page margin.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|commentsinmargin">Select to export comments of Writer documents in the page margin.</property>
                   </object>
                 </child>
               </object>
@@ -873,7 +873,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="notes">
-                <property name="label" translatable="yes" context="pdfgeneralpage|notes">Export _notes pages</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|notes">Export _notes pages</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -882,7 +882,7 @@
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="notes-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|notes">Export also the Notes pages view at the end of the exported PDF presentation document.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|notes">Export also the Notes pages view at the end of the exported PDF presentation document.</property>
                   </object>
                 </child>
               </object>
@@ -894,7 +894,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="onlynotes">
-                <property name="label" translatable="yes" context="pdfgeneralpage|onlynotes">Export onl_y notes pages</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|onlynotes">Export onl_y notes pages</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -904,7 +904,7 @@
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="onlynotes-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|onlynotes">Exports only the Notes page views.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|onlynotes">Exports only the Notes page views.</property>
                   </object>
                 </child>
               </object>
@@ -916,7 +916,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="hiddenpages">
-                <property name="label" translatable="yes" context="pdfgeneralpage|hiddenpages">Export _hidden pages</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|hiddenpages">Export _hidden pages</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -925,7 +925,7 @@
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="hiddenpages-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|hiddenpages">Exports document hidden slides.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|hiddenpages">Exports document hidden slides.</property>
                   </object>
                 </child>
               </object>
@@ -937,7 +937,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="singlepagesheets">
-                <property name="label" translatable="yes" context="pdfgeneralpage|singlepagesheets">Whole sheet export</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|singlepagesheets">Whole sheet export</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -946,7 +946,7 @@
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="singlepagesheets-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|singlepagessheets">Ignores each sheet’s paper size, print ranges and shown/hidden status and puts every sheet (even hidden sheets) on exactly one page, which is exactly as small or large as needed to fit the whole contents of the sheet.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|singlepagessheets">Ignores each sheet’s paper size, print ranges and shown/hidden status and puts every sheet (even hidden sheets) on exactly one page, which is exactly as small or large as needed to fit the whole contents of the sheet.</property>
                   </object>
                 </child>
               </object>
@@ -958,7 +958,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="emptypages">
-                <property name="label" translatable="yes" context="pdfgeneralpage|emptypages">Exp_ort automatically inserted blank pages</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|emptypages">Exp_ort automatically inserted blank pages</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -967,7 +967,7 @@
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="emptypages-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|emptypages">If switched on, automatically inserted blank pages are exported to the PDF file. This is best if you are printing the pdf file double-sided. Example: In a book a chapter paragraph style is set to always start with an odd numbered page. If the previous chapter ends on an odd page, then an even numbered blank page is normally automatically inserted. This option controls whether to export that even numbered page or not.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|emptypages">If switched on, automatically inserted blank pages are exported to the PDF file. This is best if you are printing the pdf file double-sided. Example: In a book a chapter paragraph style is set to always start with an odd numbered page. If the previous chapter ends on an odd page, then an even numbered blank page is normally automatically inserted. This option controls whether to export that even numbered page or not.</property>
                   </object>
                 </child>
               </object>
@@ -979,7 +979,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="usereferencexobject">
-                <property name="label" translatable="yes" context="pdfgeneralpage|usereferencexobject">Use reference XObjects</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage-mobile|usereferencexobject">Use reference XObjects</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -988,7 +988,7 @@
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="usereferencexobject-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|usereferencexobject">When the option is enabled, then the reference XObject markup is used:  viewers have to support this markup to show vector images. Otherwise a fallback bitmap is shown in the viewer.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage-mobile|extended_tip|usereferencexobject">When the option is enabled, then the reference XObject markup is used:  viewers have to support this markup to show vector images. Otherwise a fallback bitmap is shown in the viewer.</property>
                   </object>
                 </child>
               </object>
@@ -1004,7 +1004,7 @@
           <object class="GtkLabel" id="structure_label">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="pdfgeneralpage|structure_label">Structure</property>
+            <property name="label" translatable="yes" context="pdfgeneralpage-mobile|structure_label">Structure</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
