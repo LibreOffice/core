@@ -9,7 +9,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-23 00:15+0200\n"
 "PO-Revision-Date: 2026-10-28 12:30+0000\n"
-"Last-Translator: Leif-Jöran Olsson <ljo@users.noreply.hosted.weblate.org>\n"
+"Last-Translator: bittin1ddc447d824349b2 "
+"<bittin1ddc447d824349b2@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/sv/>\n"
 "Language: sv\n"
@@ -2163,11 +2164,11 @@ msgstr "Ny beskrivningsinstruktion"
 
 #: src/control/Control.AIChatSidebar.ts:730
 msgid "What would you like to do with this spreadsheet?"
-msgstr ""
+msgstr "Vad vill du göra med det här kalkylbladet?"
 
 #: src/control/Control.AIChatSidebar.ts:732
 msgid "What would you like to do with this presentation?"
-msgstr ""
+msgstr "Vad vill du göra med den här presentationen?"
 
 #: src/control/Control.AIChatSidebar.ts:734
 msgid "What would you like to do with this drawing?"
@@ -6137,32 +6138,31 @@ msgstr "förhandsgranskning av sidan %1, kunde inte öppna %3"
 
 #: src/control/Control.PartsPreview.js:983
 msgid "Slide %1, could not open %3"
-msgstr ""
+msgstr "Bild %1, kunde inte öppna %3"
 
 #: src/control/Control.PartsPreview.js:988
 msgid "preview of page %1, %2 changed in %3"
-msgstr ""
+msgstr "förhandsgranskning av sida %1, %2 ändrad i %3"
 
 #: src/control/Control.PartsPreview.js:989
 msgid "Slide %1, %2 changed in %3"
-msgstr ""
+msgstr "Bild %1, %2 ändrad i %3"
 
 #: src/control/Control.PartsPreview.js:992
-#, fuzzy
 msgid "preview of page %1, changed in %3"
-msgstr "förhandsgranskning av sida %1, länkad till %2"
+msgstr "förhandsgranskning av sida %1, ändrad i %3"
 
 #: src/control/Control.PartsPreview.js:993
 msgid "Slide %1, changed in %3"
-msgstr ""
+msgstr "Bild %1, ändrad i %3"
 
 #: src/control/Control.PartsPreview.js:997
 msgid "preview of page %1, %3 is disconnected"
-msgstr ""
+msgstr "förhandsgranskning av sida %1, %3 är frånkopplad"
 
 #: src/control/Control.PartsPreview.js:998
 msgid "Slide %1, %3 is disconnected"
-msgstr ""
+msgstr "Bild %1, %3 är frånkopplad"
 
 #: src/control/Control.PartsPreview.js:1002
 msgid "preview of page %1, linked to %2 in %3"
@@ -6247,7 +6247,7 @@ msgstr "{0} ändrades"
 
 #: src/control/Control.SlideImportPane.tsx:693
 msgid "Disconnected"
-msgstr ""
+msgstr "Frånkopplad"
 
 #: src/control/Control.SlideImportPane.tsx:694
 #: src/control/Control.SlideLinkToolbar.tsx:115
@@ -6624,7 +6624,7 @@ msgstr "säkerhetsfiltrering av systemanrop är aktiv"
 
 #: src/control/Control.ServerAuditDialog.ts:112
 msgid "The trusted WOPI hosts are configured"
-msgstr ""
+msgstr "De betrodda WOPI värdarna är konfigurerade"
 
 #: src/control/Control.ServerAuditDialog.ts:128
 msgid "Hardware resources are sufficient for optimal performance"
@@ -6883,7 +6883,7 @@ msgstr "Dokumentet omberäknades på %1 ms"
 
 #: src/control/Control.TopToolbar.js:121 src/control/Control.TopToolbar.js:125
 msgid "Show Menu Bar"
-msgstr ""
+msgstr "Visa menyrad"
 
 #: src/control/Control.TopToolbar.js:180
 msgid "Active Sheet"
@@ -7468,7 +7468,7 @@ msgstr "Redigeringsläge"
 
 #: src/control/PermissionMode.ts:273
 msgid "Review Mode"
-msgstr ""
+msgstr "Granskningsläge"
 
 #: src/control/PermissionMode.ts:291 src/control/PermissionMode.ts:471
 #: src/control/PermissionMode.ts:477 src/control/PermissionMode.ts:483
@@ -7477,7 +7477,7 @@ msgstr "Visning"
 
 #: src/control/PermissionMode.ts:467
 msgid "Reviewing"
-msgstr ""
+msgstr "Granskar"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:380
 msgid "Save Image to Server"
@@ -7485,7 +7485,7 @@ msgstr "Spara bild till servern"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:399
 msgid "Fit slide to view"
-msgstr ""
+msgstr "Anpassa bild till vy"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:499
 msgid "Paste Special"
@@ -8615,7 +8615,7 @@ msgstr "Bild"
 
 #: src/layer/marker/A11yTextInput.js:265
 msgid "Comment by {0}: {1}"
-msgstr ""
+msgstr "Kommentar av {0}: {1}"
 
 #: src/layer/marker/A11yTextInput.js:379
 msgid "Heading level {0}"
@@ -8680,30 +8680,28 @@ msgid "{0} deleted"
 msgstr "{0} borttagna"
 
 #: src/layer/marker/TextInput.js:489
-#, fuzzy
 msgid "Placeholder"
 msgstr "Platshållare"
 
 #: src/layer/marker/TextInput.js:509
 msgid "Drop-down list"
-msgstr ""
+msgstr "Rullgardinslista"
 
 #: src/layer/marker/TextInput.js:511
 msgid "Combo box"
-msgstr ""
+msgstr "Kombinationsruta"
 
 #: src/layer/marker/TextInput.js:515
 msgid "Content control"
-msgstr ""
+msgstr "Innehållskontroll"
 
 #: src/layer/marker/TextInput.js:528
-#, fuzzy
 msgid "Object"
-msgstr "Föremål"
+msgstr "Objekt"
 
 #: src/layer/marker/TextInput.js:530
 msgid "Frame"
-msgstr ""
+msgstr "Bildruta"
 
 #: src/layer/marker/TextInput.js:681
 msgid "Screen reader support for text content is disabled. "
@@ -8949,7 +8947,7 @@ msgstr "Presentationsläge har inaktiverats för detta dokumentet"
 
 #: src/map/handler/Map.StateChanges.js:204
 msgid "Editing slide %1 - click outside or press Esc to finish"
-msgstr ""
+msgstr "Redigerar bild %1 – klicka utanför eller tryck på Esc för att avsluta"
 
 #: src/map/handler/Map.VersionBar.js:50
 msgid "Your Collabora Online server needs updating. Version {0} is available."
@@ -9152,11 +9150,11 @@ msgstr "Utökningskommandot misslyckades: %1"
 
 #: src/control/Control.Extension.ts:2060
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: src/control/Control.Extension.ts:2061
 msgid "No"
-msgstr ""
+msgstr "Nej"
 
 #: templates/templates.js:6 templates/templates.js:10
 msgid "Business Letter"
