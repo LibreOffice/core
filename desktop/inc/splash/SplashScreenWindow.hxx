@@ -28,16 +28,47 @@ class SplashScreen;
 class SplashScreenWindow : public IntroWindow
 {
     SplashScreen* m_pSplash;
+
+    Bitmap m_aIntroBmp;
+    Color m_aProgressFrameColor;
+    Color m_aProgressBarColor;
+    Color m_aProgressTextColor;
+    bool m_bNativeProgress;
+    OUString m_sAppName;
+    bool m_bShowLogo;
+    bool m_bFullScreenSplash;
+    tools::Long m_nHeight;
+    tools::Long m_nWidth;
+    tools::Long m_nTlx;
+    tools::Long m_nTly;
+    tools::Long m_nBarwidth;
+    tools::Long m_nBarheight;
+    tools::Long m_nBarspace;
+    tools::Long m_nTextBaseline;
+    double m_fXPos;
+    double m_fYPos;
+    double m_fWidth;
+    double m_fHeight;
+
+    static constexpr tools::Long _xoffset = 12;
+    static constexpr tools::Long _yoffset = 18;
+
     ScopedVclPtr<VirtualDevice> m_pVDev;
 
 public:
-    explicit SplashScreenWindow(SplashScreen*);
+    explicit SplashScreenWindow(SplashScreen* pSplash, const OUString& rAppName);
     virtual ~SplashScreenWindow() override { disposeOnce(); }
     virtual void dispose() override;
     virtual void SetOutputSizePixel(const Size& rNewSize) override;
     // workwindow
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
     void Redraw();
+
+private:
+    void loadConfig();
+    void SetScreenBitmap(Bitmap& rBitmap);
+    static void determineProgressRatioValues(double& rXRelPos, double& rYRelPos, double& rRelWidth,
+                                             double& rRelHeight);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
