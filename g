@@ -21,6 +21,13 @@ set -e
 # When the change targets main, './g review' also compares its base against
 # the newest commit that passed the "Tinderbox for online main" Jenkins job,
 # and offers to rebase onto that commit first when the two differ.
+# Commits Gerrit already has (checked anonymously over HTTPS) are not pushed
+# again; when it has HEAD, './g review' pushes nothing.
+# Set G_REVIEW_AUTH to run both pushes inside one authentication command; its
+# '{}' is replaced by the command doing the pushes, e.g.
+#   export G_REVIEW_AUTH='ssh-agent bash -c "ssh-add ~/.ssh/id_ed25519 && {}"'
+# asks for the key passphrase once per './g review' that pushes, and not at
+# all when nothing needs pushing.
 #
 
 # e.g. co-4-2
@@ -141,7 +148,41 @@ recommend_known_good_base() {
     echo "Rebased onto $known_good."
 }
 
+# Whether Gerrit has the given commit as a patch set of a change visible to
+# anonymous users, on any branch: Gerrit rejects a push of such a commit as
+# "no new changes" whatever the target branch.  Asks the REST API
+# anonymously, so no credentials are needed; any failure answers "no".  A
+# commit hash covers all its ancestors, so the commits below a known one are
+# known too.
+on_gerrit() {
+    local sha
+    sha=$(git rev-parse "$1")
+    curl -sf --max-time 30 "https://gerrit.collaboraoffice.com/changes/?q=commit:$sha+project:online" | grep -q '"_number":'
+}
+
+# Push everything except the topmost commit as WIP, and the topmost commit
+# as the actual review.  Uses GERRIT_REMOTE, TRACKED_BRANCH, TOPIC and
+# PUSH_WIP, exported by the review handling below.
+push_for_review() {
+    if [ -n "$PUSH_WIP" ]; then
+        git push $GERRIT_REMOTE HEAD~1:refs/for/$TRACKED_BRANCH%wip${TOPIC:+,topic=$TOPIC}
+    fi
+    git push $GERRIT_REMOTE HEAD:refs/for/$TRACKED_BRANCH${TOPIC:+%topic=$TOPIC}
+}
+
+# Internal: the command that G_REVIEW_AUTH runs.
+if [ "$1" == "__review-push" ]; then
+    push_for_review
+    exit 0
+fi
+
 if [ "$1" == "review" ]; then
+    # Check before anything is pushed or rebased.
+    if [ -n "$G_REVIEW_AUTH" ] && [[ "$G_REVIEW_AUTH" != *'{}'* ]]; then
+        echo "Error: G_REVIEW_AUTH has no '{}' for the push command."
+        exit 1
+    fi
+
     # Find the remote that points at Collabora's Gerrit.  This is
     # usually 'origin' or 'cogerrit' depending on user's setup.
     GERRIT_REMOTE=
@@ -222,39 +263,41 @@ if [ "$1" == "review" ]; then
     # branch (e.g. main, distro/collabora/co-26-04).
     TRACKED_BRANCH=$(git rev-parse --abbrev-ref --symbolic-full-name HEAD@{upstream}|sed "s|${REMOTE}/||")
 
-    # Push everything except the topmost commit as WIP, and the
-    # topmost commit as the actual review.
     NUM_COMMITS=$(git rev-list --count $REMOTE/$TRACKED_BRANCH..HEAD)
     if [ "$NUM_COMMITS" -lt 1 ]; then
         echo "Error: no commits to push for review."
         exit 1
     fi
 
-    # Only main has a tinderbox job wired up here.  The check may rebase
-    # the branch, so count the commits to push after it.
+    # Only main has a tinderbox job wired up here.
     if [ "$TRACKED_BRANCH" == "main" ]; then
         recommend_known_good_base
-        NUM_COMMITS=$(git rev-list --count $REMOTE/$TRACKED_BRANCH..HEAD)
     fi
 
-    if [ "$NUM_COMMITS" -gt 1 ]; then
-        # Push WIP commits.  If Gerrit rejects with "no new changes" it
-        # just means the WIP patches are already up-to-date; continue
-        # to push the topmost commit as the actual review.
-        set +e
-        wip_output=$(git push $GERRIT_REMOTE HEAD~1:refs/for/$TRACKED_BRANCH%wip${TOPIC:+,topic=$TOPIC} 2>&1)
-        wip_status=$?
-        set -e
-        if [ $wip_status -eq 0 ]; then
-            echo "$wip_output"
-        elif echo "$wip_output" | grep -q "no new changes"; then
-            echo "Note: old (WIP) commits unchanged on the server - error message suppressed."
-        else
-            echo "$wip_output"
-            exit $wip_status
+    if on_gerrit HEAD; then
+        echo "Note: Gerrit already has HEAD - nothing to push."
+        if [ -n "$TOPIC" ]; then
+            echo "The topic '$TOPIC' was not applied: Gerrit can't set a topic for unmodified changes."
         fi
+        exit 0
     fi
-    git push $GERRIT_REMOTE HEAD:refs/for/$TRACKED_BRANCH${TOPIC:+%topic=$TOPIC}
+    # The check may have rebased the branch, so count the commits after it.
+    PUSH_WIP=
+    if [ "$(git rev-list --count $REMOTE/$TRACKED_BRANCH..HEAD)" -gt 1 ] && ! on_gerrit HEAD~1; then
+        PUSH_WIP=1
+    fi
+
+    export GERRIT_REMOTE TRACKED_BRANCH TOPIC PUSH_WIP
+    if [ -z "$G_REVIEW_AUTH" ]; then
+        push_for_review
+    else
+        # An absolute path, as './g' may be run as 'bash g'.  printf %q
+        # keeps a space through the quoting of G_REVIEW_AUTH; '$', '\', '"'
+        # or a backtick in the path may not survive it.
+        self="$(cd "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/$(basename -- "${BASH_SOURCE[0]}")"
+        push_command="$(printf %q "$self") __review-push"
+        eval "${G_REVIEW_AUTH//'{}'/"$push_command"}"
+    fi
 
     exit 0
 fi
