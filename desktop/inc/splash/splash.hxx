@@ -28,18 +28,12 @@
 
 class SplashScreen : public SplashScreenBase
 {
-    friend class SplashScreenWindow;
-
 private:
     VclPtr<SplashScreenWindow> m_pWindow;
 
     DECL_LINK(AppEventListenerHdl, VclSimpleEvent&, void);
     void updateStatus();
 
-    OUString m_sProgressText;
-
-    static constexpr sal_Int32 PROGRESS_MAX = 100;
-    sal_Int32 m_nProgress;
     bool m_bProgressEnd;
 
 public:

@@ -33,6 +33,7 @@
 
 SplashScreenWindow::SplashScreenWindow(SplashScreen* pSplash, const OUString& rAppName)
     : m_pSplash(pSplash)
+    , m_nProgress(0)
     , m_aProgressFrameColor(NOT_LOADED_COLOR)
     , m_aProgressBarColor(NOT_LOADED_COLOR)
     , m_aProgressTextColor(NOT_LOADED_COLOR)
@@ -137,7 +138,7 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
     {
         rRenderContext.DrawBitmap(Point(), m_aIntroBmp);
 
-        ImplControlValue aValue(m_pSplash->m_nProgress * m_nBarwidth / SplashScreen::PROGRESS_MAX);
+        ImplControlValue aValue(m_nProgress * m_nBarwidth / PROGRESS_MAX);
         tools::Rectangle aDrawRect(Point(m_nTlx, m_nTly), Size(m_nBarwidth, m_nBarheight));
         tools::Rectangle aNativeControlRegion, aNativeContentRegion;
 
@@ -152,7 +153,7 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
 
         if (rRenderContext.DrawNativeControl(ControlType::IntroProgress, ControlPart::Entire,
                                              aDrawRect, ControlState::ENABLED, aValue,
-                                             m_pSplash->m_sProgressText))
+                                             m_sProgressText))
         {
             return;
         }
@@ -163,8 +164,7 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
     m_pVDev->DrawBitmap(Point(), m_aIntroBmp);
 
     // draw progress...
-    tools::Long length
-        = (m_pSplash->m_nProgress * m_nBarwidth / SplashScreen::PROGRESS_MAX) - (2 * m_nBarspace);
+    tools::Long length = (m_nProgress * m_nBarwidth / PROGRESS_MAX) - (2 * m_nBarspace);
     if (length < 0)
         length = 0;
 
@@ -183,7 +183,7 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
     aFont.SetAlignment(ALIGN_BASELINE);
     m_pVDev->SetFont(aFont);
     m_pVDev->SetTextColor(m_aProgressTextColor);
-    m_pVDev->DrawText(Point(m_nTlx, m_nTextBaseline), m_pSplash->m_sProgressText);
+    m_pVDev->DrawText(Point(m_nTlx, m_nTextBaseline), m_sProgressText);
 
     rRenderContext.DrawOutDev(Point(), GetOutputSizePixel(), Point(), m_pVDev->GetOutputSizePixel(),
                               *m_pVDev);
