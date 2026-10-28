@@ -56,6 +56,8 @@
 #include <NotesPanelView.hxx>
 #include <DrawViewShell.hxx>
 #include <DrawDocShell.hxx>
+#include <Client.hxx>
+#include <svx/svdoole2.hxx>
 #include <slideshow.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
@@ -370,14 +372,30 @@ void ViewShell::Activate(bool bIsMDIActivate)
         GetDocSh()->Connect(this);
 }
 
-void ViewShell::UIActivating( SfxInPlaceClient*  )
+namespace
+{
+// an object active in place is drawn by the vector view as its parts, one that is not as a
+// whole, so the view is told when that changes, which changes nothing in the document
+void announceTheActiveObject(SfxInPlaceClient* pClient)
+{
+    if (!comphelper::COKit::isActive())
+        return;
+    if (auto* pOurs = dynamic_cast<Client*>(pClient))
+        if (SdrOle2Obj* pObject = pOurs->GetSdrOle2Obj())
+            pObject->BroadcastObjectChange();
+}
+}
+
+void ViewShell::UIActivating( SfxInPlaceClient* pClient )
 {
     OSL_ASSERT (GetViewShell()!=nullptr);
     GetViewShellBase().GetToolBarManager()->ToolBarsDestroyed();
+    announceTheActiveObject(pClient);
 }
 
-void ViewShell::UIDeactivated( SfxInPlaceClient*  )
+void ViewShell::UIDeactivated( SfxInPlaceClient* pClient )
 {
+    announceTheActiveObject(pClient);
     OSL_ASSERT (GetViewShell()!=nullptr);
     GetViewShellBase().GetToolBarManager()->ToolBarsDestroyed();
     if ( GetDrawView() )

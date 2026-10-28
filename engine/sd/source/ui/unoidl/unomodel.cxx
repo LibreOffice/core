@@ -2468,7 +2468,7 @@ bool isHiddenBehindSlide(const SdrObject& rObject)
     if (rObject.IsEmptyPresObj() && !(rObject.HasFillStyle() || rObject.HasLineStyle()))
         return true;
     // A member of a group that is hidden is hidden with it.
-    const SdrObject* pParent = rObject.getParentSdrObjectFromSdrObject();
+    const SdrObject* pParent = svx::vector::holderOf(rObject);
     return pParent && isHiddenBehindSlide(*pParent);
 }
 
@@ -3883,7 +3883,7 @@ private:
                 mpModel->noteVectorObjectWritten(*pPage, nObjectId, *pContent);
             }
 
-            const SdrObject* pParent = pObject->getParentSdrObjectFromSdrObject();
+            const SdrObject* pParent = svx::vector::holderOf(*pObject);
             writeObjectEntry(rWriter, *pObject, pParent ? pParent->GetUniqueID() : 0, *pContent);
         }
     }

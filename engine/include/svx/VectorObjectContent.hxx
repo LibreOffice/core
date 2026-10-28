@@ -462,9 +462,15 @@ struct ObjectContent
 
 /** The members of an object as the vector view takes them: those of a group, and nothing for any
     other object. A 3D scene holds its 3D objects as members but draws them as one picture of its
-    own, so it is taken whole.
+    own, so it is taken whole. A chart active in place has the objects of the page it draws on as
+    members, as long as it is active.
  */
 SVXCORE_DLLPUBLIC const SdrObjList* membersOf(const SdrObject& rObject);
+
+/** The object holding that one as the vector view takes it: its group, or for an object on the
+    page of a chart active in place, that chart. Nothing for an object directly on the page.
+ */
+SVXCORE_DLLPUBLIC const SdrObject* holderOf(const SdrObject& rObject);
 
 /** Fills in what the object says about itself: its handles, path, connector ties, glue points,
     what may be done to it, the box it paints and the mapping of its square onto the page, all in

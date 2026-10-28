@@ -11,9 +11,18 @@
 
 #include <svx/VectorObjectContent.hxx>
 
+#include <algorithm>
+#include <map>
+#include <vector>
+
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <comphelper/servicehelper.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
@@ -25,6 +34,7 @@
 #include <svx/sdmetitm.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/svdglue.hxx>
+#include <svx/charthelper.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdoashp.hxx>
@@ -33,6 +43,7 @@
 #include <svx/svdoedge.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdomeas.hxx>
+#include <svx/svdoole2.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdpage.hxx>
@@ -48,10 +59,12 @@
 #include <svx/sxmtfitm.hxx>
 #include <svx/sxmtpitm.hxx>
 #include <svx/sxmtritm.hxx>
+#include <svx/unopage.hxx>
 #include <svx/xlnwtit.hxx>
 #include <tools/json_writer.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
+#include <unotools/weakref.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>
@@ -549,11 +562,135 @@ void decomposeForComparison(ObjectContent& rContent,
     }
 }
 
+namespace
+{
+/// the page of a chart active in place, handed out as its members, with the chart and the
+/// mapping from the page onto the chart's upright window, in the units of the model
+struct Embedding
+{
+    unotools::WeakReference<SdrPage> mxPage;
+    unotools::WeakReference<SdrObject> mxHolder;
+    basegfx::B2DHomMatrix maMapping;
+};
+
+/// the pages and charts are held weakly, an entry whose page is gone is dropped
+std::vector<Embedding>& embeddings()
+{
+    static std::vector<Embedding> aEmbeddings;
+    std::erase_if(aEmbeddings,
+                  [](const Embedding& rEmbedding) { return !rEmbedding.mxPage.get().is(); });
+    return aEmbeddings;
+}
+
+Embedding* embeddingFor(const SdrPage* pPage)
+{
+    std::vector<Embedding>& rEmbeddings(embeddings());
+    const auto aFound(std::find_if(rEmbeddings.begin(), rEmbeddings.end(),
+                                   [pPage](const Embedding& rEmbedding)
+                                   { return rEmbedding.mxPage.get().get() == pPage; }));
+    return aFound == rEmbeddings.end() ? nullptr : &*aFound;
+}
+
+bool activeInPlace(const SdrOle2Obj& rObject)
+{
+    try
+    {
+        const cpo::uno::Reference<css::embed::XEmbeddedObject>& xObject(rObject.GetObjRef());
+        if (!xObject.is())
+            return false;
+        const sal_Int32 nState(xObject->getCurrentState());
+        return nState == css::embed::EmbedStates::INPLACE_ACTIVE
+               || nState == css::embed::EmbedStates::UI_ACTIVE;
+    }
+    catch (const cpo::uno::Exception&)
+    {
+        return false;
+    }
+}
+
+/// the page the chart draws its content on, or nothing for an object that is no chart
+SdrPage* chartPageOf(const SdrOle2Obj& rObject)
+{
+    if (!rObject.IsChart())
+        return nullptr;
+    const cpo::uno::Reference<css::drawing::XDrawPageSupplier> xSupplier(rObject.getXModel(),
+                                                                         cpo::uno::UNO_QUERY);
+    if (!xSupplier.is())
+        return nullptr;
+    SvxDrawPage* pPage(comphelper::getFromUnoTunnel<SvxDrawPage>(xSupplier->getDrawPage()));
+    return pPage ? pPage->GetSdrPage() : nullptr;
+}
+
+/*
+    The mapping of a chart's page onto the upright window of the chart active in place: the
+    range its content covers onto the chart's logic rectangle, which is what the window fills.
+    The range is the one the chart's content is embedded by when it is not active, so nothing
+    moves when it becomes active.
+*/
+basegfx::B2DHomMatrix mappingOfTheChart(const SdrOle2Obj& rObject)
+{
+    basegfx::B2DRange aRange;
+    ChartHelper::tryToGetChartContentAsPrimitive2DSequence(rObject.getXModel(), aRange);
+    const tools::Rectangle& rWindow(rObject.GetLogicRect());
+    if (aRange.isEmpty() || aRange.getWidth() <= 0.0 || aRange.getHeight() <= 0.0)
+        return basegfx::utils::createTranslateB2DHomMatrix(rWindow.Left(), rWindow.Top());
+
+    basegfx::B2DHomMatrix aMapping(
+        basegfx::utils::createTranslateB2DHomMatrix(-aRange.getMinX(), -aRange.getMinY()));
+    aMapping = basegfx::utils::createScaleB2DHomMatrix(rWindow.GetWidth() / aRange.getWidth(),
+                                                       rWindow.GetHeight() / aRange.getHeight())
+               * aMapping;
+    aMapping
+        = basegfx::utils::createTranslateB2DHomMatrix(rWindow.Left(), rWindow.Top()) * aMapping;
+    return aMapping;
+}
+
+/// how the object is embedded in a chart active in place, where it is on such a chart's page
+const Embedding* embeddingOf(const SdrObject& rObject)
+{
+    return embeddingFor(rObject.getSdrPageFromSdrObject());
+}
+}
+
 const SdrObjList* membersOf(const SdrObject& rObject)
 {
     if (DynCastE3dScene(&rObject))
         return nullptr;
+
+    // a chart active in place has the objects of its page as members, as long as it is active
+    if (const auto* pChart = dynamic_cast<const SdrOle2Obj*>(&rObject))
+    {
+        SdrPage* pPage(chartPageOf(*pChart));
+        if (!pPage)
+            return nullptr;
+        if (!activeInPlace(*pChart))
+        {
+            std::erase_if(embeddings(), [pPage](const Embedding& rEmbedding)
+                          { return rEmbedding.mxPage.get().get() == pPage; });
+            return nullptr;
+        }
+        if (Embedding* pEmbedding = embeddingFor(pPage))
+        {
+            pEmbedding->mxHolder = const_cast<SdrOle2Obj*>(pChart);
+            pEmbedding->maMapping = mappingOfTheChart(*pChart);
+        }
+        else
+            embeddings().push_back(Embedding{ unotools::WeakReference<SdrPage>(pPage),
+                                              unotools::WeakReference<SdrObject>(
+                                                  const_cast<SdrOle2Obj*>(pChart)),
+                                              mappingOfTheChart(*pChart) });
+        return pPage;
+    }
+
     return rObject.GetSubList();
+}
+
+const SdrObject* holderOf(const SdrObject& rObject)
+{
+    if (const SdrObject* pParent = rObject.getParentSdrObjectFromSdrObject())
+        return pParent;
+    const Embedding* pEmbedding(embeddingOf(rObject));
+    return pEmbedding ? pEmbedding->mxHolder.get().get() : nullptr;
 }
 
 void describeObject(SdrObject& rObject, ObjectContent& rContent,
@@ -563,7 +700,17 @@ void describeObject(SdrObject& rObject, ObjectContent& rContent,
     if (!pChildren || pChildren->GetObjCount() == 0)
     {
         if (rContent.maPrimitives.empty())
+        {
             rObject.GetViewContact().getViewIndependentPrimitive2DContainer(rContent.maPrimitives);
+
+            // an object of a chart active in place is drawn where the chart's window is
+            if (const Embedding* pEmbedding = embeddingOf(rObject);
+                pEmbedding && !rContent.maPrimitives.empty())
+                rContent.maPrimitives = drawinglayer::primitive2d::Primitive2DContainer{
+                    new drawinglayer::primitive2d::TransformPrimitive2D(
+                        pEmbedding->maMapping, std::move(rContent.maPrimitives))
+                };
+        }
 
         rContent.maHandles = shapingHandlesOf(rObject);
         rContent.maPath = pathOf(rObject);
@@ -717,6 +864,36 @@ void describeObject(SdrObject& rObject, ObjectContent& rContent,
         = paintedRectangleInTwips(rObject, rContent.maPrimitives, rViewInformation);
     rContent.maTransformation = transformationInTwips(rObject);
 
+    // an object of a chart active in place lies on the chart's page, so its mapping, handles and
+    // path are taken from there onto the chart's window, the primitives were above
+    if (const Embedding* pEmbedding = embeddingOf(rObject))
+    {
+        const basegfx::B2DHomMatrix aInTwips(
+            basegfx::utils::createScaleB2DHomMatrix(constTwipConversionFactor,
+                                                    constTwipConversionFactor)
+            * pEmbedding->maMapping
+            * basegfx::utils::createScaleB2DHomMatrix(1.0 / constTwipConversionFactor,
+                                                      1.0 / constTwipConversionFactor));
+        rContent.maTransformation = aInTwips * rContent.maTransformation;
+        rContent.maPath.transform(aInTwips);
+
+        // a group has no primitives, its box is the one round it on the chart's page
+        if (rContent.maPrimitives.empty())
+        {
+            basegfx::B2DRange aBox(
+                vcl::unotools::b2DRectangleFromRectangle(rObject.GetCurrentBoundRect()));
+            aBox.transform(pEmbedding->maMapping);
+            rContent.maPaintedBox = rangeInTwips(aBox);
+        }
+        for (ObjectContent::Handle& rHandle : rContent.maHandles)
+        {
+            const basegfx::B2DPoint aAt(
+                aInTwips * basegfx::B2DPoint(rHandle.maPosition.X(), rHandle.maPosition.Y()));
+            rHandle.maPosition = Point(basegfx::fround<tools::Long>(aAt.getX()),
+                                       basegfx::fround<tools::Long>(aAt.getY()));
+        }
+    }
+
     if (const auto* pMeasurement = dynamic_cast<const SdrMeasureObj*>(&rObject))
     {
         const SfxItemSet& rSet = pMeasurement->GetMergedItemSet();
@@ -805,7 +982,7 @@ void describeObject(SdrObject& rObject, ObjectContent& rContent,
     rContent.moLayer = sal_Int32(rObject.GetLayer().get());
     rContent.mbEmptyPlaceholder = rObject.IsEmptyPresObj();
     rContent.mbTextEdit = hasActiveTextEdit(&rObject);
-    const SdrObject* pParent = rObject.getParentSdrObjectFromSdrObject();
+    const SdrObject* pParent = holderOf(rObject);
     rContent.mnParentId = pParent ? pParent->GetUniqueID() : 0;
 }
 

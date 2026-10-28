@@ -38,6 +38,8 @@ class Client final : public SfxInPlaceClient
 public:
     Client(SdrOle2Obj* pObj, ViewShell& rSdViewShell, vcl::Window* pWindow);
     virtual ~Client() override;
+
+    SdrOle2Obj* GetSdrOle2Obj() const { return pSdrOle2Obj; }
 };
 
 } // end of namespace sd
