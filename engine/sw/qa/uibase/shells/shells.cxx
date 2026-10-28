@@ -166,7 +166,7 @@ void setAndCheckHyperlinkTitle(SwView& rView, OutlinerView& rOlView)
 
     // The URL field has the title:
     rOlView.SetSelection(ESelection(0, 0, 0, 1));
-    const SvxFieldItem* pFieldItem = rOlView.GetFieldAtSelection();
+    std::optional<SvxFieldItem> pFieldItem = rOlView.GetFieldAtSelection();
     CPPUNIT_ASSERT(pFieldItem);
     auto pURLField = dynamic_cast<const SvxURLField*>(pFieldItem->GetField());
     CPPUNIT_ASSERT(pURLField);
