@@ -363,6 +363,17 @@ namespace cool {
 		measurement?: ObjectMeasurement;
 		/// What lays out the tail of a caption. Absent for any other object.
 		caption?: ObjectCaption;
+		/** What a part of a chart active in place allows, for a part the chart selects on its
+		 * own: multiClick where a first click selects the part holding it and only the next one
+		 * this part, as a data point in its series; draggable, resizable and rotatable as the
+		 * chart allows. Absent for any object that is no such part.
+		 */
+		chartPart?: {
+			multiClick?: boolean;
+			draggable?: boolean;
+			resizable?: boolean;
+			rotatable?: boolean;
+		};
 		gluePoints?: ObjectGluePoint[];
 		/** The four glue points the object has at the middles of its sides - the upper, the
 		 * right, the lower and the left one - where they lie on the object, as gluePoints are

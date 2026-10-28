@@ -1081,15 +1081,19 @@ class RenderGeometrySection extends CanvasSectionObject {
 			: '';
 		if (!hit) return;
 
+		// What is marked is what a press there would take hold of: inside a chart that is the
+		// part the chart's rules name, which may hold the object hit.
+		const taken = RenderGeometrySection.whatAPressTakes(hit.id);
+
 		// An object that is selected is marked out by its handles already, so the outline under
 		// the pointer is kept for the objects that are not selected.
-		if (GraphicSelection.selectedObjectIDs.includes(hit.id)) return;
+		if (GraphicSelection.selectedObjectIDs.includes(taken)) return;
 
-		const object = data.objects.get(hit.id);
+		const object = data.objects.get(taken);
 		if (!object?.transform) return;
 
 		let drawn: Path2D | undefined;
-		for (const objectId of RenderGeometrySection.theOnesThatDraw([hit.id])) {
+		for (const objectId of RenderGeometrySection.theOnesThatDraw([taken])) {
 			const own = cool.VectorHitTest.outlineOf(
 				RenderGeometrySection.objectOf(objectId)?.primitives,
 			);
@@ -1275,6 +1279,10 @@ class RenderGeometrySection extends CanvasSectionObject {
 		in climbs the whole way, which is how pressing beside a group steps back out of it.
 	*/
 	public static outermostOf(objectId: number, standingIn?: number): number {
+		// inside a chart a press takes hold of a part of the chart, by the chart's own rules
+		const part = RenderGeometrySection.chartPartOf(objectId, standingIn);
+		if (part !== undefined) return part;
+
 		let outermost = objectId;
 
 		for (let guard = 0; guard < 100; ++guard) {
@@ -1287,6 +1295,51 @@ class RenderGeometrySection extends CanvasSectionObject {
 		}
 
 		return outermost;
+	}
+
+	/// What a press on that object takes hold of where one stands now: inside a chart the part
+	/// the chart's rules name, otherwise the object itself (a group is entered, not marked).
+	public static whatAPressTakes(objectId: number): number {
+		const place = Interaction.placeOf(GraphicSelection.selectedObjectIDs);
+		if (place.kind !== 'inPlace') return objectId;
+		return (
+			RenderGeometrySection.chartPartOf(objectId, place.object) ?? objectId
+		);
+	}
+
+	/*
+		The part of a chart a press on that object takes hold of, standing inside the chart: the
+		nearest part up the chain that the chart selects on its own, and where that part is
+		reached by a second click only, the part holding it unless that one is selected already.
+		So the first click on a bar selects its series and the next the bar, as in the chart.
+		Nothing where one does not stand inside a chart or the object is in no part of it.
+	*/
+	private static chartPartOf(
+		objectId: number,
+		standingIn?: number,
+	): number | undefined {
+		if (standingIn === undefined) return undefined;
+		const place = Interaction.placeOf(GraphicSelection.selectedObjectIDs);
+		if (place.kind !== 'inPlace' || place.object !== standingIn)
+			return undefined;
+
+		const partAbove = (from: number | undefined): number | undefined => {
+			for (let at = from, guard = 0; at !== undefined && guard < 100; ++guard) {
+				if (at === standingIn) return undefined;
+				if (RenderGeometrySection.objectOf(at)?.chartPart) return at;
+				at = RenderGeometrySection.parentOf(at);
+			}
+			return undefined;
+		};
+
+		const part = partAbove(objectId);
+		if (part === undefined) return undefined;
+		if (!RenderGeometrySection.objectOf(part)?.chartPart?.multiClick)
+			return part;
+
+		const holder = partAbove(RenderGeometrySection.parentOf(part));
+		if (holder === undefined) return part;
+		return GraphicSelection.selectedObjectIDs.includes(holder) ? part : holder;
 	}
 
 	/*

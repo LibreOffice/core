@@ -147,7 +147,7 @@ namespace cool {
 						? { objectId: place.object, paleOutside: false }
 						: undefined;
 
-			// The object active in place is drawn upright into its window while it is edited.
+			// An object active in place covers the upright window its parts are drawn into.
 			const activeInPlace =
 				place.kind === 'inPlace' && GraphicSelection.inPlaceArea
 					? {

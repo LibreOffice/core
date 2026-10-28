@@ -19,8 +19,8 @@ namespace cool {
 		/// the page outside it is also drawn pale, mixed towards white. Absent where nothing is.
 		edited?: { objectId: number; paleOutside: boolean };
 		/// The object active in place, a chart being edited, and the upright rectangle its window
-		/// fills, as x, y, width and height in twips. The object is drawn into that rectangle.
-		/// Absent where no object is active in place.
+		/// fills, as x, y, width and height in twips, which is what it covers of the page while
+		/// its parts are drawn upright into it. Absent where no object is active in place.
 		activeInPlace?: { objectId: number; area: number[] };
 	}
 }
