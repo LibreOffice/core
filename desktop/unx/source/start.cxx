@@ -35,7 +35,6 @@
 
 #include "args.hxx"
 #include "pagein.hxx"
-#include "splashx.h"
 
 #define PIPEDEFAULTPATH      "/tmp"
 #define PIPEALTERNATEPATH    "/var/tmp"
@@ -72,13 +71,7 @@ ChildInfo::~ChildInfo()
 }
 } // namespace
 
-static int
-child_info_get_status_fd(const ChildInfo& rInfo)
-{
-    return rInfo.status_fd;
-}
-
-static ChildInfo child_spawn(Args* args, bool bAllArgs, bool bWithStatus)
+static ChildInfo child_spawn(Args* args, bool bAllArgs)
 {
     rtl_uString* pTmp = nullptr;
     int status_pipe[2];
@@ -101,16 +94,6 @@ static ChildInfo child_spawn(Args* args, bool bAllArgs, bool bWithStatus)
     for (sal_uInt32 i = 0; i < nArgs; ++i)
         aArguments.push_back(args->aArgs.at(i));
 
-    if(bWithStatus)
-    {
-        char buffer[64];
-
-        /* add the pipe arg */
-        snprintf(buffer, 63, "--splash-pipe=%d", status_pipe[1]);
-        rtl_uString_newFromAscii( &pTmp, buffer );
-        aArguments.push_back(pTmp);
-    }
-
     /* start the main process */
     oslProcessError nError
         = osl_executeProcess(sApp.pData, aArguments.data(), aArguments.size(), osl_Process_NORMAL,
@@ -130,11 +113,9 @@ static ChildInfo child_spawn(Args* args, bool bAllArgs, bool bWithStatus)
     return info;
 }
 
-static bool child_exited_wait(ChildInfo& rInfo, bool bShortWait)
+static bool child_exited_wait(ChildInfo& rInfo)
 {
-    TimeValue t = { 0, 250 /* ms */ * 1000 * 1000 };
-    if (!bShortWait)
-        t.Seconds = 1024;
+    TimeValue t = { 1024, 250 /* ms */ * 1000 * 1000 };
 
     return osl_joinProcessWithTimeout(rInfo.child, &t) != osl_Process_E_TimedOut;
 }
@@ -428,63 +409,6 @@ static bool send_args(int fd, rtl_uString const *pCwdPath)
     return bResult;
 }
 
-
-#define BUFFER_LEN 255
-
-/* Read the percent to show in splash. */
-static ProgressStatus read_percent(const ChildInfo& rInfo, int *pPercent)
-{
-    static char pBuffer[BUFFER_LEN + 1];
-    static char *pNext = pBuffer;
-    static ssize_t nRead = 0;
-
-    char c;
-
-    /* from the last call */
-    int nNotProcessed = nRead - (pNext - pBuffer);
-    if (nNotProcessed >= BUFFER_LEN)
-        return ProgressContinue;
-
-    memmove(pBuffer, pNext, nNotProcessed);
-
-    /* read data */
-    ssize_t nThisRead = read(child_info_get_status_fd(rInfo),
-                             pBuffer + nNotProcessed, BUFFER_LEN - nNotProcessed);
-
-    if (nThisRead < 0)
-    {
-        if (errno == EINTR)
-            return ProgressContinue;
-
-        return ProgressExit;
-    }
-
-    nRead = nThisRead + nNotProcessed;
-    pBuffer[nRead] = '\0';
-
-    /* skip old data */
-    char* pBegin = pBuffer;
-    pNext = pBuffer;
-    for (char* pIter = pBuffer; *pIter; ++pIter)
-    {
-        if (*pIter == '\n')
-        {
-            pBegin = pNext;
-            pNext = pIter + 1;
-        }
-    }
-
-    if (!strncasecmp(pBegin, "end", 3))
-        return ProgressExit;
-    else if (!strncasecmp(pBegin, "restart", 7))
-        return ProgressRestart;
-    else if (sscanf(pBegin, "%d%c", pPercent, &c) == 2 && c == '%')
-        return ProgressContinue;
-
-    /* unexpected - let's exit the splash to be safe */
-    return ProgressExit;
-}
-
 /* Simple system check. */
 static void system_checks(void)
 {
@@ -638,7 +562,7 @@ static void sigterm_handler(int /*ignored*/)
 }
 
 
-SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
+SAL_IMPLEMENT_MAIN_WITH_ARGS(, argv)
 {
     bool bSentArgs = false;
     int status = 0;
@@ -657,15 +581,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     Args* args = args_parse();
     args->sAppPath = get_app_path(argv[0]);
-
-#ifndef ENABLE_QUICKSTART_LIBPNG
-    /* we can't load and render it anyway */
-    args->bInhibitSplash = true;
-#endif
-
-    const char* pUsePlugin = getenv("SAL_USE_VCLPLUGIN");
-    if (pUsePlugin && !strcmp(pUsePlugin, "svp"))
-        args->bInhibitSplash = true;
 
     if (!args->bInhibitPipe && !getenv("LIBO_FLATPAK"))
     {
@@ -694,17 +609,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     if (!bSentArgs)
     {
         /* we have to prepare for, and exec the binary */
-        int nPercent = 0;
         bool bAllArgs = true;
         bool bRestart;
 
         /* sanity check pieces */
         system_checks();
-
-        /* load splash image and create window */
-        struct splash* splash = nullptr;
-        if (!args->bInhibitSplash)
-            splash = splash_create(args->sAppPath.pData, argc, argv);
 
         /* pagein */
         if (!args->bInhibitPagein)
@@ -720,27 +629,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         {
             bRestart = false;
 
-            /* fast updates if we have somewhere to update it to */
-            bool bShortWait = splash != nullptr;
-
-            /* Periodically update the splash & the percent according
-               to what status_fd says, poll quickly only while starting */
-            ChildInfo info = child_spawn(args, bAllArgs, bShortWait);
+            ChildInfo info = child_spawn(args, bAllArgs);
             g_pProcess = info.child;
 
-            while (!child_exited_wait(info, bShortWait))
+            while (!child_exited_wait(info))
             {
-                ProgressStatus eResult;
-
-                splash_draw_progress(splash, nPercent);
-                eResult = read_percent(info, &nPercent);
-
-                if (eResult != ProgressContinue)
-                {
-                    splash_destroy(splash);
-                    splash = nullptr;
-                    bShortWait = false;
-                }
             }
 
             status = child_get_exit_code(info);

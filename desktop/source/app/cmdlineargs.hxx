@@ -96,7 +96,6 @@ class CommandLineArgs
         const OUString&     GetUnknown() const { return m_unknown;}
 
         // Access to string parameters
-        bool                    HasSplashPipe() const { return m_splashpipe;}
         std::vector< OUString > const & GetAccept() const { return m_accept;}
         std::vector< OUString > const & GetUnaccept() const { return m_unaccept;}
         void RemoveFilesFromOpenListEndingWith(const OUString& rExt);
@@ -158,7 +157,6 @@ class CommandLineArgs
         bool m_helpimpress;
         bool m_helpbase;
         bool m_version;
-        bool m_splashpipe;
         bool m_textcat;
         bool m_scriptcat;
         bool m_safemode;

@@ -2879,7 +2879,6 @@ desktop/inc/app.hxx
 desktop/inc/dp_misc.h
 desktop/inc/dp_shared.hxx
 desktop/inc/lib/init.hxx
-desktop/inc/splash/unxsplash.hxx
 desktop/qa/deployment_misc/test_dp_version.cxx
 desktop/qa/desktop_app/test_desktop_app.cxx
 desktop/qa/desktop_lib/test_desktop_lib.cxx
@@ -3001,7 +3000,6 @@ desktop/source/pkgchk/unopkg/unopkg_cmdenv.cxx
 desktop/source/pkgchk/unopkg/unopkg_misc.cxx
 desktop/source/pkgchk/unopkg/unopkg_shared.h
 desktop/source/splash/splash.cxx
-desktop/source/splash/unxsplash.cxx
 desktop/test/deployment/active/active_native.cxx
 desktop/test/deployment/passive/passive_native.cxx
 desktop/unx/source/args.cxx

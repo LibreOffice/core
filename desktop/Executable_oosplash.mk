@@ -16,40 +16,12 @@ $(eval $(call gb_Executable_use_libraries,oosplash,\
     sal \
 ))
 
-$(eval $(call gb_Executable_add_cobjects,oosplash,\
-    desktop/unx/source/splashx \
-))
-
 $(eval $(call gb_Executable_add_cxxobjects,oosplash,\
     desktop/unx/source/args \
     desktop/unx/source/file_image_unx \
     $(if $(ENABLE_PAGEIN),desktop/unx/source/pagein) \
     desktop/unx/source/start \
 ))
-
-ifneq ($(USING_X11),)
-$(eval $(call gb_Executable_add_libs,oosplash,\
-    -lXinerama \
-))
-endif
-
-ifneq ($(DISABLE_GUI),TRUE)
-
-ifneq ($(OS),WNT)
-$(eval $(call gb_Executable_add_libs,oosplash,\
-    -lX11 \
-))
-endif
-
-$(eval $(call gb_Executable_add_defs,oosplash,\
-    -DENABLE_QUICKSTART_LIBPNG \
-))
-
-$(eval $(call gb_Executable_use_externals,oosplash,\
-    libpng \
-))
-
-endif
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Executable_add_libs,oosplash,\

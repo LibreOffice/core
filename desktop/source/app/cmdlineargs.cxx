@@ -423,10 +423,6 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             {
                 m_version = true;
             }
-            else if ( oArg.startsWith("splash-pipe=") )
-            {
-                m_splashpipe = true;
-            }
 #ifdef MACOSX
             /* #i84053# ignore -psn on Mac
                Platform dependent #ifdef here is ugly, however this is currently
@@ -735,7 +731,6 @@ void CommandLineArgs::InitParamValues()
     m_helpimpress = false;
     m_helpbase = false;
     m_version = false;
-    m_splashpipe = false;
     m_bEmpty = true;
     m_bDocumentArgs  = false;
     m_textcat = false;

@@ -31,7 +31,6 @@
 
 #if HAVE_FEATURE_UI && !ENABLE_WASM_STRIP_SPLASH
 #include <splash/splash.hxx>
-#include <splash/unxsplash.hxx>
 #endif
 
 #include <cstdlib>
@@ -2545,11 +2544,7 @@ void Desktop::OpenSplashScreen()
     else if ( rCmdLine.IsWeb() )
         aAppName = "web";
 
-    if ( rCmdLine.HasSplashPipe() )
-        m_pSplashScreen = std::make_unique<UnxSplashScreen>();
-    else
-        m_pSplashScreen = std::make_unique<SplashScreen>(aAppName);
-
+    m_pSplashScreen = std::make_unique<SplashScreen>(aAppName);
     m_pSplashScreen->start(u"SplashScreen"_ustr, 100);
 #endif
 }

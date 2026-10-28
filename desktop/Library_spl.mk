@@ -36,7 +36,6 @@ $(eval $(call gb_Library_use_libraries,spl,\
 $(eval $(call gb_Library_add_exception_objects,spl,\
     desktop/source/splash/SplashScreenWindow \
     desktop/source/splash/splash \
-    desktop/source/splash/unxsplash \
 ))
 
 # vim: set ts=4 sw=4 et:
