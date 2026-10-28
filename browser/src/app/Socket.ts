@@ -1682,7 +1682,7 @@ class Socket {
 		'tile:',
 		'tilecombine:',
 		'delta:',
-		'rendersearchlist:',
+		'rendersearchresult:',
 		'slidelayer:',
 		'zstdslidelayer:',
 		'zstdvectorprimitives:',
