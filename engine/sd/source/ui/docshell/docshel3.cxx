@@ -33,6 +33,7 @@
 #include <svx/drawitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
@@ -43,6 +44,8 @@
 #include <drawdoc.hxx>
 #include <fusearch.hxx>
 #include <ViewShell.hxx>
+#include <ViewShellBase.hxx>
+#include <ViewShellManager.hxx>
 #include <slideshow.hxx>
 #include <fuhhconv.hxx>
 #include <memory>
@@ -119,6 +122,23 @@ static void lcl_setLanguage( const SdDrawDocument *pDoc, std::u16string_view rLa
             if (pObj->GetObjIdentifier() != SdrObjKind::Page)
                 lcl_setLanguageForObj( pObj.get(), nLang, bLanguageNone );
     }
+}
+
+/// Returns the outliner view of the text being edited, or null when no text is in edit mode. The
+/// view shell on top of the shell stack has the focus: that is the notes panel while the notes
+/// are typed there, and the main view shell otherwise.
+static OutlinerView* lcl_getTextEditOutlinerView(ViewShell& rMainViewShell)
+{
+    ViewShell* pViewShell = dynamic_cast<ViewShell*>(
+        rMainViewShell.GetViewShellBase().GetViewShellManager()->GetTopViewShell());
+    if (!pViewShell)
+        pViewShell = &rMainViewShell;
+
+    SdrView* pSdrView = pViewShell->GetDrawView();
+    if (!pSdrView)
+        return nullptr;
+
+    return pSdrView->GetTextEditOutlinerView();
 }
 
 /**
@@ -323,11 +343,11 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
                         if (bSelection || bParagraph)
                         {
-                            SdrView* pSdrView = mpViewShell->GetDrawView();
-                            if (!pSdrView)
+                            OutlinerView* pOutlinerView = lcl_getTextEditOutlinerView(*mpViewShell);
+                            if (!pOutlinerView)
                                 return;
 
-                            EditView& rEditView = pSdrView->GetTextEditOutlinerView()->GetEditView();
+                            EditView& rEditView = pOutlinerView->GetEditView();
                             const LanguageType nLangToUse = SvtLanguageTable::GetLanguageType( aNewLangTxt );
                             SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nLangToUse );
 
@@ -367,11 +387,11 @@ void DrawDocShell::Execute( SfxRequest& rReq )
         {
             if (!mpViewShell)
                 return;
-            SdrView* pSdrView = mpViewShell->GetDrawView();
-            if (!pSdrView)
+            OutlinerView* pOutlinerView = lcl_getTextEditOutlinerView(*mpViewShell);
+            if (!pOutlinerView)
                 return;
 
-            EditView& rEditView = pSdrView->GetTextEditOutlinerView()->GetEditView();
+            EditView& rEditView = pOutlinerView->GetEditView();
             OUString sIgnoreText;
             const SfxStringItem* pItem2 = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
             if (pItem2)
@@ -389,11 +409,11 @@ void DrawDocShell::Execute( SfxRequest& rReq )
         {
             if (!mpViewShell)
                 return;
-            SdrView* pSdrView = mpViewShell->GetDrawView();
-            if (!pSdrView)
+            OutlinerView* pOutlinerView = lcl_getTextEditOutlinerView(*mpViewShell);
+            if (!pOutlinerView)
                 return;
 
-            EditView& rEditView = pSdrView->GetTextEditOutlinerView()->GetEditView();
+            EditView& rEditView = pOutlinerView->GetEditView();
             OUString sApplyText;
             const SfxStringItem* pItem2 = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
             if (pItem2)
