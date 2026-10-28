@@ -1024,15 +1024,18 @@ void SfxObjectShell::CheckSecurityOnLoading_Impl()
     if (pImpl->pBaseModel.is())
         pImpl->pBaseModel->SetUIConfigurationMacroCallsAllowed_Impl(bMacrosAllowed);
 
-    // A document in VBA compatibility mode gets its Basic project loaded once macros are allowed.
-    // Import records that mode on the document's own Basic container, so only one that already
-    // exists can hold it.
+    // Import records a deferred VBA compatibility mode on the document's own Basic container, so
+    // only one that already exists can hold it.
     if (bMacrosAllowed)
     {
-        uno::Reference<script::vba::XVBACompatibility> xVBACompat(pImpl->xBasicLibraries,
-                                                                  uno::UNO_QUERY);
-        if (xVBACompat.is() && xVBACompat->getVBACompatibilityMode())
+        uno::Reference<beans::XPropertySet> xLibraries(pImpl->xBasicLibraries, uno::UNO_QUERY);
+        if (xLibraries.is()
+            && xLibraries->getPropertyValue(u"DeferredVBACompatibilityMode"_ustr).get<bool>())
+        {
+            uno::Reference<script::vba::XVBACompatibility> xVBACompat(xLibraries,
+                                                                      uno::UNO_QUERY_THROW);
             xVBACompat->setVBACompatibilityMode(true);
+        }
     }
 }
 
