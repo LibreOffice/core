@@ -1067,21 +1067,42 @@ QVariant Bridge::cool(const QString& messageStr)
         auto const serverDisplay = server.isEmpty()
             ? QObject::tr("the Collabora Online server") : server.toHtmlEscaped();
         auto const err = QString::fromStdString(tokens.substrFromToken(1));
-        auto const html = QStringLiteral(
-            "<!doctype html><html><head><meta charset=\"utf-8\">"
-            "<title>%1</title><style>"
+        auto const style = QStringLiteral(
             "body{font-family:sans-serif;padding:2em;color:#333;"
             "max-width:36em}"
             "h1{color:#c00;font-size:1.3em}"
-            "p{line-height:1.5}"
-            "</style></head><body><h1>%1</h1>"
+            "p{line-height:1.5}");
+
+        auto const body = QStringLiteral(
+            "<h1>%1</h1>"
             "<p>Could not open the document from %2.</p>"
             "<p>The server did not respond to the collaborative-"
             "editing connection (%3).</p>"
             "<p>It may be running a version of Collabora Online that "
-            "does not support remote editing from this app.</p>"
-            "</body></html>")
+            "does not support remote editing from this app.</p>")
             .arg(title, serverDisplay, err.toHtmlEscaped());
+
+        auto const html = QStringLiteral(
+            "<!doctype html><html><head><meta charset=\"utf-8\">"
+            "<title>%1</title><style>%2</style></head><body>%3</body></html>")
+            .arg(title, style, body);
+
+        // In an editor frame the integrator's page stays, and only the frame shows the failure.
+        // The frame's policy refuses an inline style, so the rules go in as a constructed sheet.
+        if (_frame)
+        {
+            LOG_ERR("remote bootstrap failed in the editor frame: " << err.toStdString());
+            const QJsonArray page{ style, body };
+            const QByteArray pageJson = QJsonDocument(page).toJson(QJsonDocument::Compact);
+            evalJS("(([style, body]) => {"
+                   " const sheet = new CSSStyleSheet();"
+                   " sheet.replaceSync(style);"
+                   " document.documentElement.innerHTML = '<head></head><body>' + body + '</body>';"
+                   " document.adoptedStyleSheets = [sheet];"
+                   "})(" + pageJson.toStdString() + ");");
+            return {};
+        }
+
         QTimer::singleShot(0, [this, html]() {
             if (_webView) {
                 _webView->setHtml(html);
