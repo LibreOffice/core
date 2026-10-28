@@ -13,20 +13,65 @@
 
 #include "CoolLocalSchemeHandler.hpp"
 #include <common/Log.hpp>
+#include <qt/RemoteOpen.hpp>
 #include <qt/qt.hpp>
 
+#include <QBuffer>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
 #include <QMimeDatabase>
 #include <QStringList>
 #include <QUrl>
+#include <QUrlQuery>
 #include <QWebEngineUrlRequestJob>
 
 #include <algorithm>
 
+namespace
+{
+/// The host of coollocal://message, where an editor frame sends its messages.
+const QString MESSAGE_HOST = QStringLiteral("message");
+
+/// Qt WebEngine cannot read a request body safely, so a message comes in the query of a GET.
+void receiveMessage(QWebEngineUrlRequestJob* job)
+{
+    if (job->requestMethod() != "GET")
+    {
+        LOG_WRN("coollocal: refused: a message must be a GET request");
+        job->fail(QWebEngineUrlRequestJob::RequestDenied);
+        return;
+    }
+
+    const QUrlQuery query(job->requestUrl());
+    const QString session = query.queryItemValue(QStringLiteral("session"));
+    const QString kind = query.queryItemValue(QStringLiteral("kind"));
+    const QString text = query.queryItemValue(QStringLiteral("message"), QUrl::FullyDecoded);
+    const QByteArray message = text.toUtf8();
+
+    const QUrl origin = job->initiator();
+    const std::optional<QByteArray> reply =
+        coda::receiveEditorFrameMessage(session, origin, kind, message);
+    if (!reply)
+    {
+        job->fail(QWebEngineUrlRequestJob::RequestDenied);
+        return;
+    }
+
+    auto* buffer = new QBuffer(job);
+    buffer->setData(*reply);
+    job->reply("text/plain", buffer);
+}
+}
+
 void CoolLocalSchemeHandler::requestStarted(QWebEngineUrlRequestJob* job)
 {
+    if (job->requestUrl().host() == MESSAGE_HOST)
+    {
+        receiveMessage(job);
+        return;
+    }
+
     if (job->requestMethod() != "GET")
     {
         LOG_WRN("coollocal: refused: only GET requests are allowed");

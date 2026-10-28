@@ -735,6 +735,11 @@ class QtAppInitializer extends MobileAppInitializer {
 		// until one is.
 		window.translationEnabled = true;
 
+		if (window.codaRemotePage) {
+			this.sendOverCoolLocal(window.codaRemotePage.messageUrl);
+			return;
+		}
+
 		const messageQueue = [];
 
 		// Define safe stub functions that queue messages, as QWebChannel doesn't initialize immediately.
@@ -787,6 +792,56 @@ class QtAppInitializer extends MobileAppInitializer {
 				bridge.debug("Qt bridge initialized");
 			}
 		});
+	}
+
+	// A remote page sits in an integrator's editor frame, which has no web channel. Each message
+	// goes in the URL of a GET to coollocal://message, as Qt WebEngine cannot read a request body
+	// safely. A message waits for the reply to the one before, so native code takes them in
+	// order. postMobileCall returns the reply.
+	sendOverCoolLocal(messageUrl) {
+		// Chromium takes a URL of up to 2 MiB. A UTF-16 unit encodes to at most 9 characters, so
+		// a part of 128 Ki units stays under 1.2 MB, and a longer message goes in parts.
+		const maxPartUnits = 128 * 1024;
+		const get = (kind, text) => {
+			return fetch(messageUrl + '&kind=' + kind + '&message=' + encodeURIComponent(text));
+		};
+
+		// encodeURIComponent refuses half a surrogate pair, so a part never ends inside one.
+		const splitIntoParts = (msg) => {
+			const parts = [];
+			let start = 0;
+			while (msg.length - start > maxPartUnits) {
+				const lastCode = msg.charCodeAt(start + maxPartUnits - 1);
+				const endsInPair = lastCode >= 0xd800 && lastCode <= 0xdbff;
+				const end = start + maxPartUnits - (endsInPair ? 1 : 0);
+				parts.push(msg.slice(start, end));
+				start = end;
+			}
+
+			parts.push(msg.slice(start));
+			return parts;
+		};
+
+		let previous = Promise.resolve();
+		const send = (kind, msg) => {
+			const sent = previous.then(async () => {
+				const parts = splitIntoParts(msg);
+				const last = parts.pop();
+				for (const part of parts)
+					await get('part', part);
+
+				const response = await get(kind, last);
+				return response.text();
+			});
+			previous = sent.catch(() => {});
+			return sent;
+		};
+
+		window.postMobileMessage = (msg) => { send('cool', msg); };
+		window.postMobileCall    = (msg) => send('cool', msg);
+		window.postMobileError   = (msg) => { send('error', msg); };
+		window.postMobileDebug   = (msg) => { send('debug', msg); };
+		window.userInterfaceMode = window.coolParams.get('userinterfacemode');
 	}
 }
 

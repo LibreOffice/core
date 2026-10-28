@@ -13,7 +13,8 @@
 
 #include <QWebEngineUrlSchemeHandler>
 
-/// Serves the files of CODA's browser folder, by their path in it.
+/// Serves the files of CODA's browser folder, by their path in it. Takes an editor frame's
+/// messages at coollocal://message.
 class CoolLocalSchemeHandler : public QWebEngineUrlSchemeHandler
 {
 public:
