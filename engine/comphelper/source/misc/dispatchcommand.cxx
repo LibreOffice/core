@@ -19,6 +19,8 @@
 
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
@@ -28,6 +30,10 @@
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
+
+#include <algorithm>
+#include <iterator>
+#include <vector>
 
 using namespace css;
 using namespace ::cpo;
@@ -52,28 +58,38 @@ bool dispatchCommand(const OUString& rCommand,
     if (!xDisp.is())
         return false;
 
-    // And do the work...
-    if (xListener.is())
+    // Without a listener, nothing waits for a result, so the command runs as the caller asked,
+    // synchronously or not.
+    if (!xListener.is())
     {
-        uno::Reference<frame::XNotifyingDispatch> xNotifyingDisp(xDisp, uno::UNO_QUERY);
-        if (xNotifyingDisp.is())
-        {
-            xNotifyingDisp->dispatchWithNotification(aCommandURL, rArguments, xListener);
-            return true;
-        }
+        xDisp->dispatch(aCommandURL, rArguments);
+        return true;
     }
 
-    xDisp->dispatch(aCommandURL, rArguments);
-
-    // This dispatch cannot tell how the command went, so the listener is told that the command
-    // ran, with an unknown outcome.
-    if (xListener.is())
+    uno::Reference<frame::XNotifyingDispatch> xNotifyingDisp(xDisp, uno::UNO_QUERY);
+    if (xNotifyingDisp.is())
     {
-        frame::DispatchResultEvent aEvent;
-        aEvent.Source = xDisp;
-        aEvent.State = frame::DispatchResultState::DONTKNOW;
-        xListener->dispatchFinished(aEvent);
+        xNotifyingDisp->dispatchWithNotification(aCommandURL, rArguments, xListener);
+        return true;
     }
+
+    // This dispatch does not implement XNotifyingDispatch, so it has no way to tell the listener
+    // how the command went. It is asked to run the command before it returns, so that the command
+    // has run when the listener is told, with an unknown outcome. This holds for every command
+    // with a listener that reaches such a dispatch, whatever mode the caller asked for. A dispatch
+    // that ignores SynchronMode still runs the command later, and the listener is told before then.
+    std::vector<beans::PropertyValue> aArguments;
+    aArguments.reserve(rArguments.getLength() + 1);
+    std::copy_if(rArguments.begin(), rArguments.end(), std::back_inserter(aArguments),
+                 [](const beans::PropertyValue& rArgument)
+                 { return rArgument.Name != "SynchronMode"; });
+    aArguments.push_back(comphelper::makePropertyValue(u"SynchronMode"_ustr, true));
+    xDisp->dispatch(aCommandURL, comphelper::containerToSequence(aArguments));
+
+    frame::DispatchResultEvent aEvent;
+    aEvent.Source = xDisp;
+    aEvent.State = frame::DispatchResultState::DONTKNOW;
+    xListener->dispatchFinished(aEvent);
 
     return true;
 }

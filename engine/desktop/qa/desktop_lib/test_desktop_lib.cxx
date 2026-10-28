@@ -11,6 +11,7 @@
 #include <config_features.h>
 #include <config_oox.h>
 #include <algorithm>
+#include <cassert>
 #include <cstdlib>
 #include <memory>
 #include <set>
@@ -115,7 +116,9 @@ enum class SaveDispatch
     /// No dispatch is found.
     Missing,
     /// The dispatch runs nothing, and cannot tell how the command went.
-    Silent
+    Silent,
+    /// The dispatch passes the save on to the real one, and cannot tell how it went.
+    Forwarding
 };
 }
 
@@ -228,6 +231,7 @@ public:
     void testSaveDispatchThrows();
     void testSaveDispatchMissing();
     void testSaveDispatchSilent();
+    void testSaveDispatchForwarding();
     void testWriterComments();
     void testTranslationProviders();
     void testAutoCorrectListFromHost();
@@ -348,6 +352,7 @@ public:
     CPPUNIT_TEST(testSaveDispatchThrows);
     CPPUNIT_TEST(testSaveDispatchMissing);
     CPPUNIT_TEST(testSaveDispatchSilent);
+    CPPUNIT_TEST(testSaveDispatchForwarding);
     CPPUNIT_TEST(testWriterComments);
     CPPUNIT_TEST(testTranslationProviders);
     CPPUNIT_TEST(testAutoCorrectListFromHost);
@@ -1435,18 +1440,62 @@ public:
     }
 };
 
+/// A dispatch that passes a command on to another dispatch, and cannot tell how it went. It
+/// records whether the document carried no changes when the other dispatch returned.
+class ForwardingDispatch : public cppu::WeakImplHelper<frame::XDispatch>
+{
+    uno::Reference<frame::XDispatch> m_xDispatch;
+    SfxObjectShell& m_rShell;
+    bool& m_rUnmodifiedOnReturn;
+
+public:
+    ForwardingDispatch(uno::Reference<frame::XDispatch> xDispatch, SfxObjectShell& rShell,
+                       bool& rUnmodifiedOnReturn)
+        : m_xDispatch(std::move(xDispatch))
+        , m_rShell(rShell)
+        , m_rUnmodifiedOnReturn(rUnmodifiedOnReturn)
+    {
+    }
+
+    void dispatch(const util::URL& rURL,
+                  const cpo::uno::Sequence<beans::PropertyValue>& rArguments) override
+    {
+        m_xDispatch->dispatch(rURL, rArguments);
+        m_rUnmodifiedOnReturn = !m_rShell.IsModified();
+    }
+    void addStatusListener(const uno::Reference<frame::XStatusListener>& xListener,
+                           const util::URL& rURL) override
+    {
+        m_xDispatch->addStatusListener(xListener, rURL);
+    }
+    void removeStatusListener(const uno::Reference<frame::XStatusListener>& xListener,
+                              const util::URL& rURL) override
+    {
+        m_xDispatch->removeStatusListener(xListener, rURL);
+    }
+};
+
 /// Intercepts .uno:Save, to send it to the dispatch that m_eDispatch names.
 class SaveInterceptor : public cppu::WeakImplHelper<frame::XDispatchProviderInterceptor>
 {
     uno::Reference<frame::XDispatchProvider> m_xMaster;
     uno::Reference<frame::XDispatchProvider> m_xSlave;
     const SaveDispatch m_eDispatch;
+    /// The document, for SaveDispatch::Forwarding. Null for the other dispatches.
+    SfxObjectShell* m_pShell;
+    /// Whether the document carried no changes when the forwarded save returned.
+    bool m_bUnmodifiedOnReturn = false;
 
 public:
-    explicit SaveInterceptor(SaveDispatch eDispatch)
+    explicit SaveInterceptor(SaveDispatch eDispatch, SfxObjectShell* pShell = nullptr)
         : m_eDispatch(eDispatch)
+        , m_pShell(pShell)
     {
+        // A forwarding save reads the modified state of the document, so it needs the document.
+        assert((eDispatch == SaveDispatch::Forwarding) == (pShell != nullptr));
     }
+
+    bool isUnmodifiedOnReturn() const { return m_bUnmodifiedOnReturn; }
 
     uno::Reference<frame::XDispatchProvider> getMasterDispatchProvider() override
     {
@@ -1475,6 +1524,10 @@ public:
                 throw cpo::uno::RuntimeException(u"Simulated failure dispatching the save"_ustr);
             if (m_eDispatch == SaveDispatch::Silent)
                 return new SilentDispatch;
+            if (m_eDispatch == SaveDispatch::Forwarding)
+                return new ForwardingDispatch(
+                    m_xSlave->queryDispatch(rURL, rTargetFrameName, nSearchFlags), *m_pShell,
+                    m_bUnmodifiedOnReturn);
             return {};
         }
         return m_xSlave->queryDispatch(rURL, rTargetFrameName, nSearchFlags);
@@ -1490,6 +1543,9 @@ public:
 
 boost::property_tree::ptree DesktopKitTest::saveWithDispatch(SaveDispatch eDispatch)
 {
+    // A forwarding save needs the document, which testSaveDispatchForwarding gives it itself.
+    CPPUNIT_ASSERT(eDispatch != SaveDispatch::Forwarding);
+
     COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
     pDocument->registerCallback(&DesktopKitTest::callback, this);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -1497,9 +1553,13 @@ boost::property_tree::ptree DesktopKitTest::saveWithDispatch(SaveDispatch eDispa
         xModel->getCurrentController()->getFrame(), uno::UNO_QUERY);
     rtl::Reference xInterceptor(new SaveInterceptor(eDispatch));
     xRegistration->registerDispatchProviderInterceptor(xInterceptor);
+    // The interceptor leaves the frame when this function returns, also through a failed
+    // assertion, so no later save runs into a dispatch that throws or stays silent.
+    comphelper::ScopeGuard aReleaseInterceptor(
+        [&xRegistration, &xInterceptor]
+        { xRegistration->releaseDispatchProviderInterceptor(xInterceptor); });
 
     boost::property_tree::ptree aTree = postSaveAndReadResult(pDocument, nullptr);
-    xRegistration->releaseDispatchProviderInterceptor(xInterceptor);
 
     CPPUNIT_ASSERT_EQUAL(std::string(".uno:Save"), aTree.get_child("commandName").get_value<std::string>());
     return aTree;
@@ -1528,6 +1588,40 @@ void DesktopKitTest::testSaveDispatchSilent()
 
     // The result does not say whether the save succeeded.
     CPPUNIT_ASSERT(!aTree.get_child_optional("success"));
+}
+
+void DesktopKitTest::testSaveDispatchForwarding()
+{
+    // A save through a dispatch that passes it on to the real save, but cannot tell how it went,
+    // has run by the time that dispatch returns.
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None,
+                         osl::File::copy(createFileURL(u"blank_text.odt"), maTempFile.GetURL()));
+    COKitDocumentImpl* pDocument = loadDocUrl(maTempFile.GetURL(), COKitDocumentType::TEXT);
+    pDocument->registerCallback(&DesktopKitTest::callback, this);
+    SfxObjectShell* pShell = SfxObjectShell::GetShellFromComponent(pDocument->mxComponent);
+    CPPUNIT_ASSERT(pShell);
+    // The document has changes to save.
+    pShell->SetModified(true);
+
+    // The save goes through a dispatch that passes it on and cannot notify.
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<frame::XDispatchProviderInterception> xRegistration(
+        xModel->getCurrentController()->getFrame(), uno::UNO_QUERY);
+    rtl::Reference xInterceptor(new SaveInterceptor(SaveDispatch::Forwarding, pShell));
+    xRegistration->registerDispatchProviderInterceptor(xInterceptor);
+    // The interceptor leaves the frame when this function returns, also through a failed
+    // assertion.
+    comphelper::ScopeGuard aReleaseInterceptor(
+        [&xRegistration, &xInterceptor]
+        { xRegistration->releaseDispatchProviderInterceptor(xInterceptor); });
+
+    boost::property_tree::ptree aTree = postSaveAndReadResult(pDocument, nullptr);
+
+    CPPUNIT_ASSERT_EQUAL(std::string(".uno:Save"),
+                         aTree.get_child("commandName").get_value<std::string>());
+    CPPUNIT_ASSERT(!aTree.get_child_optional("success"));
+    // The document was saved before that dispatch returned, so before the result was given.
+    CPPUNIT_ASSERT(xInterceptor->isUnmodifiedOnReturn());
 }
 
 void DesktopKitTest::testWriterComments()
