@@ -186,8 +186,10 @@ private:
 
     /// Asks the storage of every view, or of the given view alone, for the document behind
     /// each source the document names that the view holds no token for and has not asked
-    /// for yet. A view asks for the sources it finds on the document once, so the sources
-    /// editing names are left to the user to ask for.
+    /// for yet, and for the links the storage adds for the user on its own, which the
+    /// request names as DefaultsPersistentLink. A view asks once, when the document has
+    /// reported its sources, also when it reported none, so the sources editing names are
+    /// left to the user to ask for.
     void resolveUnlistedSources(DocumentBroker& docBroker);
     void resolveUnlistedSources(DocumentBroker& docBroker, const std::string& tag);
 
@@ -204,6 +206,17 @@ private:
     void applyLinkAccessAnswer(DocumentBroker& docBroker, const std::string& tag,
                                const std::string& persistentLink, unsigned statusCode,
                                const Poco::JSON::Object::Ptr& answer);
+
+    /// Records a link the storage adds for one view on its own, from an entry of its link
+    /// access answer for a persistent link the request did not name: the document for every
+    /// view and the token for this view. An entry that cannot be reached is ignored.
+    void addLinkFromStorage(DocumentBroker& docBroker, const std::string& tag,
+                            const Poco::JSON::Object::Ptr& entry);
+
+    /// Why a document the storage named cannot stand for a remote link of the given document:
+    /// it is that document itself, or its host is not allowed. Empty when it can.
+    static std::string linkProblem(const DocumentBroker& docBroker,
+                                   const RemoteLinkRegistration& link);
 
     /// The name of one link access outcome, for logs and the state dump.
     static const char* linkAccessName(LinkAccess access);
@@ -229,6 +242,10 @@ private:
     /// pages record, in the order the document names them. One a remote link is bound to is
     /// reported as that document; any other is reported as a document nothing can reach.
     std::vector<std::string> _namedSources;
+
+    /// Whether the document has reported the sources its content names yet, also when it
+    /// names none. A view asks its storage once the report is in.
+    bool _namedSourcesKnown = false;
 
     /// docKeys of the documents connected into this document through headless
     /// sessions, from the remotechain option of the sessions' load messages.

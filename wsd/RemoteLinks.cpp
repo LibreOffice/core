@@ -134,7 +134,9 @@ void RemoteLinks::setNamedSources(DocumentBroker& docBroker, std::vector<std::st
     if (!RemoteDocumentBroker::isEnabled())
         return;
 
-    if (names == _namedSources)
+    const bool firstReport = !_namedSourcesKnown;
+    _namedSourcesKnown = true;
+    if (!firstReport && names == _namedSources)
         return;
 
     _namedSources = std::move(names);
@@ -202,8 +204,8 @@ void RemoteLinks::resolveUnlistedSources(DocumentBroker& docBroker, const std::s
     if (itView == _views.end() || !itView->second.supportsLinkAccess)
         return;
 
-    // The sources the view finds on the document are asked for once.
-    if (itView->second.askedOnLoad || _namedSources.empty())
+    // The sources the view finds on the document are asked once
+    if (itView->second.askedOnLoad || !_namedSourcesKnown)
         return;
 
     itView->second.askedOnLoad = true;
@@ -218,12 +220,15 @@ void RemoteLinks::resolveUnlistedSources(DocumentBroker& docBroker, const std::s
             continue;
         if (itView->second.linkAccess.find(name) != itView->second.linkAccess.end())
             continue;
+        if (name == RemoteLink::DefaultsPersistentLink)
+            continue;
 
         toAsk.push_back(name);
     }
 
-    if (!toAsk.empty())
-        requestLinkAccess(docBroker, tag, std::move(toAsk));
+    // The same request asks for the links the storage adds for the user on its own
+    toAsk.push_back(RemoteLink::DefaultsPersistentLink);
+    requestLinkAccess(docBroker, tag, std::move(toAsk));
 
     refreshView(docBroker, tag);
 }
@@ -368,6 +373,15 @@ void RemoteLinks::completeLinkAccess(DocumentBroker& docBroker, const std::strin
     if (asked.empty())
         return;
 
+    const bool askedDefaults =
+        std::find(asked.begin(), asked.end(), RemoteLink::DefaultsPersistentLink) != asked.end();
+    const auto forgetDefaults = [this, &tag]
+    {
+        const auto it = _views.find(tag);
+        if (it != _views.end())
+            it->second.linkAccess.erase(RemoteLink::DefaultsPersistentLink);
+    };
+
     // Only a 200 answer carries a body to read; any other status is the whole answer.
     constexpr std::size_t MaxAnswerSize = 256 * 1024;
     Poco::JSON::Object::Ptr object;
@@ -395,6 +409,9 @@ void RemoteLinks::completeLinkAccess(DocumentBroker& docBroker, const std::strin
     {
         for (const std::string& persistentLink : asked)
         {
+            if (persistentLink == RemoteLink::DefaultsPersistentLink)
+                continue;
+
             unsigned entryStatus = static_cast<unsigned>(http::StatusCode::NotFound);
             Poco::JSON::Object::Ptr entry;
             for (std::size_t i = 0; i < links->size(); ++i)
@@ -416,13 +433,39 @@ void RemoteLinks::completeLinkAccess(DocumentBroker& docBroker, const std::strin
             applyLinkAccessAnswer(docBroker, tag, persistentLink, entryStatus, entry);
         }
 
+        // The entries for persistent links added by the storage itself
+        if (askedDefaults)
+        {
+            for (std::size_t i = 0; i < links->size(); ++i)
+            {
+                const Poco::JSON::Object::Ptr candidate = links->getObject(i);
+                std::string answeredLink;
+                if (candidate)
+                    JsonUtil::findJSONValue(candidate, "PersistentLink", answeredLink);
+                if (!candidate ||
+                    (answeredLink != RemoteLink::DefaultsPersistentLink &&
+                     std::find(asked.begin(), asked.end(), answeredLink) != asked.end()))
+                    continue;
+
+                addLinkFromStorage(docBroker, tag, candidate);
+            }
+
+            forgetDefaults();
+        }
+
         refreshView(docBroker, tag);
         return;
     }
 
-    // Any other answer is for the first source alone, so the others are asked for again, in
-    // one request that names the next of them on its own.
-    applyLinkAccessAnswer(docBroker, tag, asked.front(), statusCode, object);
+    // Any other answer is for the first source alone (old single-item API)
+    if (asked.front() == RemoteLink::DefaultsPersistentLink)
+    {
+        if (statusCode == static_cast<unsigned>(http::StatusCode::OK) && object)
+            addLinkFromStorage(docBroker, tag, object);
+        forgetDefaults();
+    }
+    else
+        applyLinkAccessAnswer(docBroker, tag, asked.front(), statusCode, object);
     if (asked.size() > 1)
         requestLinkAccess(docBroker, tag, std::vector<std::string>(asked.begin() + 1, asked.end()));
 
@@ -483,22 +526,12 @@ void RemoteLinks::applyLinkAccessAnswer(DocumentBroker& docBroker, const std::st
     link.readFrom(answer);
 
     std::string reason;
-    try
-    {
-        const Poco::URI wopiSrcUri(link.wopiSrc);
-        if (link.wopiSrc.empty() || link.accessToken.empty())
-            reason = "names no document or no token";
-        else if (!link.persistentLink.empty() && link.persistentLink != persistentLink)
-            reason = "answers for another persistent link";
-        else if (RequestDetails::getDocKey(link.wopiSrc) == docBroker.getDocKey())
-            reason = "names this document itself";
-        else if (!HostUtil::allowedWopiHost(wopiSrcUri.getHost(), wopiSrcUri.getPort()))
-            reason = "names a document on a host that is not allowed";
-    }
-    catch (const std::exception& exc)
-    {
-        reason = std::string("names an invalid document: ") + exc.what();
-    }
+    if (link.wopiSrc.empty() || link.accessToken.empty())
+        reason = "names no document or no token";
+    else if (!link.persistentLink.empty() && link.persistentLink != persistentLink)
+        reason = "answers for another persistent link";
+    else
+        reason = linkProblem(docBroker, link);
 
     if (!reason.empty())
     {
@@ -519,6 +552,60 @@ void RemoteLinks::applyLinkAccessAnswer(DocumentBroker& docBroker, const std::st
     link.persistentLink = persistentLink;
     setSource(docBroker, link);
     setViewToken(docBroker, tag, link.wopiSrc, link.accessToken);
+}
+
+void RemoteLinks::addLinkFromStorage(DocumentBroker& docBroker, const std::string& tag,
+                                     const Poco::JSON::Object::Ptr& entry)
+{
+    RemoteLinkRegistration link;
+    link.readFrom(entry);
+
+    // The persistent link of the entry is what the slides store once a page is read from the
+    // file, so the entry needs one of its own, not the name the request asked with.
+    std::string reason;
+    if (link.persistentLink == RemoteLink::DefaultsPersistentLink)
+        reason = "names DEFAULTS in place of a persistent link of its own";
+    else if (!RemoteLink::isValidPersistentLink(link.persistentLink))
+        reason = "names a persistent link of an unexpected syntax";
+    else if (!link.isComplete())
+        reason = "names no document, no token or no persistent link";
+    else
+        reason = linkProblem(docBroker, link);
+
+    if (!reason.empty())
+    {
+        LOG_ERR("The storage added a link for view [" << tag << "] of [" << docBroker.getDocKey()
+                                                      << "] that " << reason);
+        return;
+    }
+
+    LOG_INF("The storage added [" << Anonymizer::anonymizeUrl(link.wopiSrc) << "] as ["
+                                  << Anonymizer::anonymize(link.persistentLink) << "] of ["
+                                  << docBroker.getDocKey() << "] for view [" << tag << ']');
+
+    // The document stands for its persistent link for every view, and the token is this
+    // view's own.
+    setSource(docBroker, link);
+    setViewToken(docBroker, tag, link.wopiSrc, link.accessToken);
+}
+
+std::string RemoteLinks::linkProblem(const DocumentBroker& docBroker,
+                                     const RemoteLinkRegistration& link)
+{
+    try
+    {
+        const Poco::URI wopiSrcUri(link.wopiSrc);
+        if (RequestDetails::getDocKey(link.wopiSrc) == docBroker.getDocKey())
+            return "names this document itself";
+        if (!HostUtil::allowedWopiHost(wopiSrcUri.getHost(), wopiSrcUri.getPort()))
+            return "names a document on a host that is not allowed";
+    }
+    catch (const std::exception& exc)
+    {
+        return std::string("names an invalid document: ") + exc.what();
+    }
+
+    return std::string();
 }
 
 void RemoteLinks::handleSubscribe(DocumentBroker& docBroker, const std::string& tag,
@@ -1048,7 +1135,8 @@ void RemoteLinks::dumpState(std::ostream& os) const
         os << "\n    " << it.first << " name: " << Anonymizer::anonymize(it.second.name)
            << " last modified: " << it.second.lastModifiedTime
            << " persistent link: " << Anonymizer::anonymize(it.second.persistentLink);
-    os << "\n  sources the document names: " << _namedSources.size();
+    os << "\n  sources the document names: " << _namedSources.size()
+       << " reported: " << (_namedSourcesKnown ? "yes" : "no");
     for (const std::string& name : _namedSources)
         os << "\n    " << Anonymizer::anonymize(name);
     os << "\n  incoming docKey chain: " << _incomingDocKeyChain.size();

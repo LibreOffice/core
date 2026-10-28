@@ -2521,6 +2521,8 @@ protected:
     /// The source document the pages name, as the user knows it.
     static constexpr auto SourceName = "Q3 #1 100%.odp";
     static constexpr auto LinkAccessSuffix = "/linkaccess";
+    /// The entry every request on load ends with, asking for the storage's own links.
+    static constexpr auto Defaults = RemoteLink::DefaultsPersistentLink;
 
     std::mutex _requestsMutex;
     std::vector<LinkAccessRequest> _requests;
@@ -2558,6 +2560,13 @@ protected:
     /// The answer to one request: the status and the body.
     virtual std::pair<http::StatusCode, std::string>
     answerLinkAccess(const LinkAccessRequest& request) = 0;
+
+    /// Whether a request asks for the storage's own links alone, the way a request left over
+    /// for a storage that answers one source at a time does.
+    static bool asksDefaultsAlone(const LinkAccessRequest& request)
+    {
+        return request.persistentLink == Defaults;
+    }
 
     std::vector<LinkAccessRequest> requests()
     {
@@ -2699,9 +2708,10 @@ protected:
 
     /// Checks one request for what every link access request must be: sent next to the file,
     /// authorized like any WOPI request of the view, for the given sources, the first of them
-    /// named on its own too.
+    /// named on its own too. On load the request ends with the entry for the storage's own
+    /// links.
     void assertRequest(const LinkAccessRequest& request, const std::string& accessToken,
-                       const std::vector<std::string>& persistentLinks = { SourceName })
+                       const std::vector<std::string>& persistentLinks = { SourceName, Defaults })
     {
         LOK_ASSERT_EQUAL(std::string("/wopi/files/1") + LinkAccessSuffix, request.path);
         LOK_ASSERT_EQUAL(accessToken, request.accessToken);
@@ -2722,8 +2732,11 @@ class UnitLinkAccessResolve : public LinkAccessTestServer
     STATE_ENUM(Phase, Load, WaitLoad, WaitResolved, WaitConnected, Done) _phase;
 
     std::pair<http::StatusCode, std::string>
-    answerLinkAccess(const LinkAccessRequest&) override
+    answerLinkAccess(const LinkAccessRequest& request) override
     {
+        // A storage that answers one source at a time, with no links of its own to add.
+        if (asksDefaultsAlone(request))
+            return { http::StatusCode::NotFound, std::string() };
         return { http::StatusCode::OK, linkBody("remotetoken") };
     }
 
@@ -2767,8 +2780,9 @@ public:
             LOK_ASSERT_MESSAGE("A source a remote link stands for is no longer missing",
                                message.find("\"state\":\"missing\"") == std::string_view::npos);
 
+            // The request left over for the storage's own links may still be in flight.
             const std::vector<LinkAccessRequest> asked = requests();
-            LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), asked.size());
+            LOK_ASSERT_MESSAGE("The endpoint must have been asked", !asked.empty());
             assertRequest(asked[0], "anything");
 
             // The token the storage answered with serves this view's subscription.
@@ -2867,46 +2881,51 @@ public:
             {
                 nameSources({ std::string(SourceName) });
 
-                // The storage is asked once and says it knows no such document.
-                LOK_ASSERT_MESSAGE("The endpoint must be asked for the source",
-                                   waitForRequests(1));
+                // The storage says it knows no such document. It answers one source at a
+                // time, so the storage's own links are asked for in a request of their own.
+                LOK_ASSERT_MESSAGE("The endpoint must be asked for the source", waitForRequests(2));
                 LOK_ASSERT_MESSAGE("The answer must be recorded as not found",
                                    waitForBrokerState("access: notfound"));
                 const std::vector<LinkAccessRequest> asked = requests();
-                LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), asked.size());
+                LOK_ASSERT_EQUAL(static_cast<std::size_t>(2), asked.size());
                 assertRequest(asked[0], "anything");
+                assertRequest(asked[1], "anything", { Defaults });
+                LOK_ASSERT_MESSAGE("Nothing is recorded for the storage's own links",
+                                   dumpBrokerState().find(std::string("persistent link ") +
+                                                          Defaults) == std::string::npos);
 
                 // The same list again asks nothing more.
                 nameSources({ std::string(SourceName) });
                 LOK_ASSERT_MESSAGE("The endpoint must not be asked again for the same list",
                                    waitForBrokerState("sources the document names: 1") &&
-                                       requestCount() == 1);
+                                       requestCount() == 2);
 
                 // Editing names a source of its own. Neither it nor the source the storage
                 // knew nothing of is asked for: the view asked when it found its sources.
                 nameSources({ std::string(SourceName), std::string(OtherSourceName) });
                 LOK_ASSERT_MESSAGE("A changed list must ask nothing",
                                    waitForBrokerState("sources the document names: 2") &&
-                                       requestCount() == 1);
+                                       requestCount() == 2);
 
                 // The user has the source the storage knew nothing of looked for again, and
                 // that one alone is asked for.
                 WSD_CMD(std::string("remotelinkresolve source=") + EncodedSourceName);
                 LOK_ASSERT_MESSAGE("The user's request must ask the endpoint once more",
-                                   waitForRequests(2));
+                                   waitForRequests(3));
                 LOK_ASSERT_EQUAL(static_cast<std::size_t>(2), countRequestsFor(SourceName));
                 LOK_ASSERT_EQUAL(static_cast<std::size_t>(0), countRequestsFor(OtherSourceName));
+                assertRequest(requests()[2], "anything", { SourceName });
 
                 // A source the document does not name is asked for by nobody, which the
                 // request for one it does name, sent behind it, shows.
                 WSD_CMD(std::string("remotelinkresolve source=Nothing.odp"));
                 WSD_CMD(std::string("remotelinkresolve source=") + EncodedOtherSourceName);
                 LOK_ASSERT_MESSAGE("The source the document names must be asked for",
-                                   waitForRequests(3));
+                                   waitForRequests(4));
                 LOK_ASSERT_MESSAGE("The answers must be recorded as not found",
                                    waitForBrokerState(std::string("persistent link ") +
                                                       OtherSourceName + " access: notfound"));
-                LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), requestCount());
+                LOK_ASSERT_EQUAL(static_cast<std::size_t>(4), requestCount());
                 LOK_ASSERT_EQUAL(static_cast<std::size_t>(0), countRequestsFor("Nothing.odp"));
 
                 TRANSITION_STATE(_phase, Phase::Done);
@@ -2958,6 +2977,9 @@ class UnitLinkAccessPerView : public LinkAccessTestServer
     std::pair<http::StatusCode, std::string>
     answerLinkAccess(const LinkAccessRequest& request) override
     {
+        // A storage that answers one source at a time, with no links of its own to add.
+        if (asksDefaultsAlone(request))
+            return { http::StatusCode::NotFound, std::string() };
         // Each view is given a token of its own for the source.
         return { http::StatusCode::OK, linkBody("remote-" + request.accessToken) };
     }
@@ -3011,7 +3033,7 @@ public:
                 // The first view reads the source. The second view joins a document whose
                 // sources are already named, and holds no token for this one.
                 const std::vector<LinkAccessRequest> asked = requests();
-                LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), asked.size());
+                LOK_ASSERT_MESSAGE("The endpoint must have been asked", !asked.empty());
                 assertRequest(asked[0], "firsttoken");
 
                 TRANSITION_STATE(_phase, Phase::WaitSecondResolved);
@@ -3025,12 +3047,14 @@ public:
                 return false;
             }
 
-            if (_phase == Phase::WaitSecondResolved && requestCount() == 2)
+            if (_phase == Phase::WaitSecondResolved && requestCount() >= 3)
             {
                 // The first view's list did not change, so this is the second view's, once
-                // its own request was answered.
+                // its own request was answered. The first view's request for the storage's
+                // own links went out before the second view was opened.
                 const std::vector<LinkAccessRequest> asked = requests();
-                assertRequest(asked[1], "secondtoken");
+                assertRequest(asked[1], "firsttoken", { Defaults });
+                assertRequest(asked[2], "secondtoken");
 
                 TRANSITION_STATE(_phase, Phase::WaitConnected);
                 helpers::sendTextFrame(_secondWs->getWebSocket(),
@@ -3128,7 +3152,7 @@ public:
                 const std::vector<LinkAccessRequest> asked = requests();
                 LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), asked.size());
                 assertRequest(asked[0], "anything",
-                              { SourceName, NotFoundSourceName, DeniedSourceName });
+                              { SourceName, NotFoundSourceName, DeniedSourceName, Defaults });
 
                 // Each entry of the answer is recorded for its own source.
                 LOK_ASSERT_MESSAGE("The resolved source must be recorded",
@@ -3202,6 +3226,9 @@ class UnitLinkAccessOneByOne : public LinkAccessTestServer
     std::pair<http::StatusCode, std::string>
     answerLinkAccess(const LinkAccessRequest& request) override
     {
+        if (asksDefaultsAlone(request))
+            return { http::StatusCode::NotFound, std::string() };
+
         // The answer names a document for the one source in PersistentLink.
         const std::string wopiSrc =
             request.persistentLink == SourceName ? remoteWopiSrc() : otherWopiSrc();
@@ -3236,12 +3263,14 @@ public:
                 nameSources({ std::string(SourceName), std::string(OtherSourceName) });
 
                 // The first request names both sources, and the answer is for the first. The
-                // second request names the other source alone.
-                LOK_ASSERT_MESSAGE("The endpoint must be asked twice", waitForRequests(2));
+                // second request names the other source alone, and the third asks for the
+                // storage's own links.
+                LOK_ASSERT_MESSAGE("The endpoint must be asked three times", waitForRequests(3));
                 const std::vector<LinkAccessRequest> asked = requests();
-                LOK_ASSERT_EQUAL(static_cast<std::size_t>(2), asked.size());
-                assertRequest(asked[0], "anything", { SourceName, OtherSourceName });
-                assertRequest(asked[1], "anything", { OtherSourceName });
+                LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), asked.size());
+                assertRequest(asked[0], "anything", { SourceName, OtherSourceName, Defaults });
+                assertRequest(asked[1], "anything", { OtherSourceName, Defaults });
+                assertRequest(asked[2], "anything", { Defaults });
 
                 LOK_ASSERT_MESSAGE("The first source must be recorded",
                                    waitForBrokerState(std::string("persistent link ") + SourceName +
@@ -3249,7 +3278,7 @@ public:
                 LOK_ASSERT_MESSAGE("The other source must be recorded",
                                    waitForBrokerState(std::string("persistent link ") +
                                                       OtherSourceName + " access: resolved"));
-                LOK_ASSERT_EQUAL(static_cast<std::size_t>(2), requestCount());
+                LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), requestCount());
 
                 // The other source is read with the token of its own answer.
                 TRANSITION_STATE(_phase, Phase::WaitConnected);
@@ -3296,6 +3325,123 @@ public:
     }
 };
 
+/// The document names no source, and the storage is still asked, for the links it adds for
+/// this user on its own. It answers with two files under persistent links of its own, next
+/// to entries that cannot be used, and the two files are read through.
+class UnitLinkAccessDefaults : public LinkAccessTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoad, Checking, WaitConnected, Done) _phase;
+
+    static constexpr auto OtherSourceName = "Q4 outlook.odp";
+
+    std::thread _checkThread;
+    /// The connected events seen, one per file.
+    std::atomic<int> _connectedCount = 0;
+
+    std::string otherWopiSrc() const { return getWopiHostURI() + "/wopi/files/3"; }
+
+    std::pair<http::StatusCode, std::string> answerLinkAccess(const LinkAccessRequest&) override
+    {
+        // Two files of the storage's own, an entry under the asking name itself, and one
+        // without a token, which are ignored.
+        return { http::StatusCode::OK,
+                 "{\"Links\":[{" + linkFields(SourceName, remoteWopiSrc(), "remotetoken") +
+                     "},{\"PersistentLink\":\"" + std::string(Defaults) + "\",\"WOPISrc\":\"" +
+                     otherWopiSrc() + "\",\"AccessToken\":\"remotetoken\"},{" +
+                     linkFields(OtherSourceName, otherWopiSrc(), "remotetoken") +
+                     "},{\"PersistentLink\":\"No token.odp\",\"WOPISrc\":\"" + otherWopiSrc() +
+                     "\"}]}" };
+    }
+
+public:
+    UnitLinkAccessDefaults()
+        : LinkAccessTestServer("UnitLinkAccessDefaults")
+        , _phase(Phase::Load)
+    {
+    }
+
+    ~UnitLinkAccessDefaults()
+    {
+        if (_checkThread.joinable())
+            _checkThread.join();
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+
+        if (_phase != Phase::WaitLoad)
+            return true;
+
+        TRANSITION_STATE(_phase, Phase::Checking);
+        _checkThread = std::thread(
+            [this]
+            {
+                // The document reports that it names no source.
+                nameSources({});
+
+                // The storage is asked for its own links alone.
+                LOK_ASSERT_MESSAGE("The endpoint must be asked", waitForRequests(1));
+                const std::vector<LinkAccessRequest> asked = requests();
+                LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), asked.size());
+                assertRequest(asked[0], "anything", { Defaults });
+
+                // The two files are recorded, the other entries are not.
+                LOK_ASSERT_MESSAGE("The storage's own links must be recorded",
+                                   waitForBrokerState("remote link sources: 2"));
+                const std::string state = dumpBrokerState();
+                LOK_ASSERT_MESSAGE("Nothing is recorded for the storage's own links",
+                                   state.find(std::string("persistent link ") + Defaults) ==
+                                       std::string::npos);
+                LOK_ASSERT_MESSAGE("The view holds a token for each file",
+                                   state.find("tokens: 2") != std::string::npos);
+                LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), requestCount());
+
+                // The tokens the storage answered with serve this view's subscriptions.
+                TRANSITION_STATE(_phase, Phase::WaitConnected);
+                WSD_CMD("remotedocsubscribe source=" + Uri::encode(SourceName));
+                WSD_CMD("remotedocsubscribe source=" + Uri::encode(OtherSourceName));
+            });
+
+        return true;
+    }
+
+    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        if (!message.starts_with("remotedocevent:"))
+            return false;
+
+        TST_LOG("Got: [" << message << ']');
+
+        if (message.find("event=connected") != std::string::npos)
+        {
+            if (_phase == Phase::WaitConnected && ++_connectedCount == 2)
+            {
+                TRANSITION_STATE(_phase, Phase::Done);
+                passTest("The storage added two links of its own for the user");
+            }
+        }
+        else if (message.find("event=error") != std::string::npos)
+        {
+            failTest("Unexpected remote document error: " + std::string(message));
+        }
+
+        return false;
+    }
+
+    void invokeWSDTest() override
+    {
+        if (_phase == Phase::Load)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitLoad);
+
+            initWebsocket("/wopi/files/1?access_token=anything");
+            WSD_CMD("load url=" + getWopiSrc());
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
     return new UnitBase* []
@@ -3308,7 +3454,7 @@ UnitBase** unit_create_wsd_multi(void)
             new UnitRemoteDocumentSaved(), new UnitRemoteDocumentChain(),
             new UnitLinkPostPersistentLink(), new UnitLinkAccessResolve(),
             new UnitLinkAccessNotFound(), new UnitLinkAccessPerView(), new UnitLinkAccessBatch(),
-            new UnitLinkAccessOneByOne(), nullptr
+            new UnitLinkAccessOneByOne(), new UnitLinkAccessDefaults(), nullptr
     };
 }
 

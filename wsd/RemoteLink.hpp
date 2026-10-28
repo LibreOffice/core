@@ -39,6 +39,11 @@ struct RemoteLink
     /// the one name a view knows the remote link by.
     std::string persistentLink;
 
+    /// The persistent link that stands for no source in a link access request. It asks the
+    /// storage for the links it adds for the user on its own, which the storage answers with
+    /// entries for persistent links the request did not name.
+    static constexpr const char* DefaultsPersistentLink = "DEFAULTS";
+
     /// Reads the fields from the JSON object the storage sent. A field the object lacks is
     /// left empty.
     void readFrom(const Poco::JSON::Object::Ptr& object)
