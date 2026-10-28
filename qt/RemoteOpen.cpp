@@ -16,6 +16,8 @@
 
 #include <QByteArray>
 #include <QIODevice>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QMainWindow>
 #include <QSize>
 #include <QTimer>
@@ -44,6 +46,75 @@ if (window !== window.top && location.pathname.endsWith('/cool.html')) {
     document.close();
 }
 )JS";
+
+/// Builds CODA's editor page in the emptied editor iframe. It asks coolwsd for its settings by
+/// posting the integrator's form again, then loads CODA's page, scripts and styles from coollocal:.
+const char* PUT_CODA_PAGE_IN_SCRIPT = R"JS(
+(config) => {
+    if (window.codaRemotePage)
+        return;
+
+    window.codaRemotePage = { base: config.base };
+
+    const text = (response) => {
+        if (!response.ok)
+            throw new Error('a request returned ' + response.status);
+        return response.text();
+    };
+
+    const serverPage = fetch(config.formUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: config.formBody,
+    }).then(text);
+
+    const appPage = fetch(config.base + 'cool-qt.html').then(text);
+
+    Promise.all([serverPage, appPage]).then(([serverHtml, appHtml]) => {
+        // coolwsd writes the values for its editor into these two elements.
+        const server = new DOMParser().parseFromString(serverHtml, 'text/html');
+        const variables = server.getElementById('initial-variables');
+        const cssVariables = server.getElementById('init-css-vars');
+
+        window.codaRemotePage.serverVariables = variables ? { ...variables.dataset } : {};
+        window.codaRemotePage.cssVariables = cssVariables ? cssVariables.value : '';
+
+        const app = new DOMParser().parseFromString(appHtml, 'text/html');
+        const isRelative = (address) => address && !address.includes(':');
+
+        for (const link of app.querySelectorAll('link[href]'))
+            if (isRelative(link.getAttribute('href')))
+                link.href = config.base + link.getAttribute('href');
+
+        // Remove the scripts from the local cool-qt.html: moved scripts never run. We add them
+        // again later as 'coollocal://bundled/<path>' so that they are loaded from CODA.
+        const scripts = Array.from(app.scripts);
+        scripts.forEach((script) => script.remove());
+        const sources = scripts.map((script) => script.getAttribute('src')).filter(isRelative);
+
+        // Replace the frame's empty <html>, left by EMPTY_COOL_PAGE_SCRIPT, with CODA's <html>.
+        document.documentElement.replaceWith(document.adoptNode(app.documentElement));
+
+        // The load event fired when the page was emptied, and CODA's start waits for it.
+        const loaded = () => window.dispatchEvent(new Event('load'));
+
+        // Add CODA's scripts again, from config.base (coollocal://bundled/). With async off,
+        // they load in parallel and run in order.
+        sources.forEach((source, index) => {
+            const script = document.createElement('script');
+            script.src = config.base + source;
+            script.async = false;
+            if (index === sources.length - 1)
+                script.addEventListener('load', loaded);
+
+            document.head.append(script);
+        });
+    }).catch((error) => console.error('CODA could not put its editor page in: ' + error.message));
+}
+)JS";
+
+/// Where the editor frame loads CODA's files from.
+const QString COOLLOCAL_BUNDLED_URL = QStringLiteral("coollocal://bundled/");
 
 /// Starts the fragment that names an editor frame, as in "#coda=<id>".
 const QString FRAME_ID_PREFIX = QStringLiteral("coda=");
@@ -74,7 +145,8 @@ private:
 };
 
 /// A page in a cloud account window. It keeps the integrator's form posted for the document at
-/// load, and finds the editor's iframe the form went to.
+/// load, and finds the editor's iframe the form went to. It injects a script there that builds
+/// CODA's editor page.
 class CloudAccountPage : public QWebEnginePage
 {
 public:
@@ -84,6 +156,7 @@ public:
 
 private:
     void findEditorFrame();
+    void putCodaPageIn(QWebEngineFrame& frame);
 
     QUrl _formUrl; ///< Where the kept form went, with the frame's id as the fragment.
     QByteArray _form;
@@ -192,7 +265,21 @@ void CloudAccountPage::findEditorFrame()
         return;
     }
 
-    LOG_DBG("account window: found the editor frame for the kept form");
+    putCodaPageIn(*frame);
+}
+
+void CloudAccountPage::putCodaPageIn(QWebEngineFrame& frame)
+{
+    QJsonObject config;
+    config["formUrl"] = _formUrl.toString(QUrl::FullyEncoded);
+    config["formBody"] = QString::fromLatin1(_form);
+    config["base"] = COOLLOCAL_BUNDLED_URL;
+    const QByteArray configJson = QJsonDocument(config).toJson(QJsonDocument::Compact);
+    const QString putPageIn = QString::fromUtf8(PUT_CODA_PAGE_IN_SCRIPT);
+    const QString script = '(' + putPageIn + ")(" + QString::fromUtf8(configJson) + ')';
+
+    frame.runJavaScript(script, QWebEngineScript::MainWorld);
+    LOG_DBG("account window: putting CODA's editor page into the editor frame");
 }
 }
 
