@@ -1388,7 +1388,8 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
         }
         else if (requestDetails.equals(RequestDetails::Field::Type, "cool") &&
                  requestDetails.equals(1, "links") &&
-                 request.getMethod() == Poco::Net::HTTPRequest::HTTP_POST)
+                 (request.getMethod() == Poco::Net::HTTPRequest::HTTP_POST ||
+                  request.getMethod() == Poco::Net::HTTPRequest::HTTP_OPTIONS))
         {
             servedSync = handleLinksRequest(request, message, disposition, socket);
         }
@@ -2229,13 +2230,30 @@ bool ClientRequestDispatcher::handleLinksRequest(
 
     LOG_DBG_S("Links request: " << Anonymizer::anonymizeUrl(request.getURI()));
 
+    // The integrator's page may send the POST from the browser, where it is cross-origin, so
+    // every answer, the errors too, lets a page of any origin read it. The caller proves its
+    // right with the nonce or the access token in the body, never with the origin.
+    const std::string corsHeader = "Access-Control-Allow-Origin: *\r\n";
     if (!RemoteDocumentBroker::isEnabled())
     {
         LOG_ERR_S("Links request rejected: remote_links is disabled in the "
                   "configuration: "
                   << Anonymizer::anonymizeUrl(request.getURI()));
         HttpHelper::sendErrorAndShutdown(http::StatusCode::Forbidden, socket,
-                                         "remote links are disabled");
+                                         "remote links are disabled", corsHeader);
+        return true;
+    }
+
+    // The OPTIONS the browser sends before a JSON POST is answered with what the POST may
+    // carry, on a server that takes the POST at all.
+    if (request.getMethod() == Poco::Net::HTTPRequest::HTTP_OPTIONS)
+    {
+        const std::string preflightHeaders = corsHeader +
+                                             "Access-Control-Allow-Methods: POST, OPTIONS\r\n"
+                                             "Access-Control-Allow-Headers: Content-Type\r\n"
+                                             "Access-Control-Max-Age: 86400\r\n";
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::NoContent, socket, std::string_view(),
+                                         preflightHeaders);
         return true;
     }
 
@@ -2246,7 +2264,7 @@ bool ClientRequestDispatcher::handleLinksRequest(
                   << " a remote link is named in: "
                   << Anonymizer::anonymizeUrl(request.getURI()));
         HttpHelper::sendErrorAndShutdown(http::StatusCode::PayloadTooLarge, socket,
-                                         "body too large");
+                                         "body too large", corsHeader);
         return true;
     }
 
@@ -2262,16 +2280,19 @@ bool ClientRequestDispatcher::handleLinksRequest(
     {
         LOG_ERR_S("Links request without a WOPISrc query parameter: "
                   << Anonymizer::anonymizeUrl(request.getURI()));
-        HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket, "missing WOPISrc");
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket, "missing WOPISrc",
+                                         corsHeader);
         return true;
     }
 
     // Verify that the WOPISrc is properly encoded.
-    if (!HttpHelper::verifyWOPISrc(request.getURI(), wopiSrc, socket))
+    if (!HttpHelper::verifyWOPISrc(request.getURI(), wopiSrc))
     {
-        LOG_ERR_S("Links request with an unencoded WOPISrc, rejected: "
+        LOG_ERR_S("Links request with an invalid or unencoded WOPISrc, rejected: "
                   << Anonymizer::anonymizeUrl(request.getURI()));
-        return false;
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket, "invalid WOPISrc",
+                                         corsHeader);
+        return true;
     }
 
     // Tokens travel only in the body, never in the URL. The caller proves it
@@ -2363,7 +2384,7 @@ bool ClientRequestDispatcher::handleLinksRequest(
                   << ", links: " << links.size() << ", incomplete: " << incomplete
                   << "): " << Anonymizer::anonymizeUrl(request.getURI()));
         HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket,
-                                         "missing Nonce or AccessToken, or Links");
+                                         "missing Nonce or AccessToken, or Links", corsHeader);
         return true;
     }
 
@@ -2376,19 +2397,22 @@ bool ClientRequestDispatcher::handleLinksRequest(
             docBroker = it->second;
     }
 
+    // A document that is not open has no view, so the token names none, and the answer is the
+    // one a wrong token gets.
     if (!docBroker || !docBroker->isAlive())
     {
         LOG_ERR_S("Links request rejected: no live document for docKey [" << docKey
                                                                           << ']');
-        HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket, "no such document");
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::Unauthorized, socket, "invalid token",
+                                         corsHeader);
         return true;
     }
 
     docBroker->setupTransfer(
         disposition,
         [docBroker, oneTimeToken = std::move(oneTimeToken),
-         documentAccessToken = std::move(documentAccessToken),
-         links = std::move(links)](const std::shared_ptr<Socket>& moveSocket)
+         documentAccessToken = std::move(documentAccessToken), links = std::move(links),
+         corsHeader](const std::shared_ptr<Socket>& moveSocket)
         {
             auto streamSocket = std::static_pointer_cast<StreamSocket>(moveSocket);
 
@@ -2401,12 +2425,13 @@ bool ClientRequestDispatcher::handleLinksRequest(
                 LOG_ERR_S("Links request for [" << docBroker->getDocKey()
                                                 << "] names no view of the document");
                 HttpHelper::sendErrorAndShutdown(http::StatusCode::Unauthorized, streamSocket,
-                                                 "invalid token");
+                                                 "invalid token", corsHeader);
                 return;
             }
 
             http::Response httpResponse(http::StatusCode::OK);
             httpResponse.setContentLength(0);
+            httpResponse.add("Access-Control-Allow-Origin", "*");
             streamSocket->sendAndShutdown(httpResponse);
         });
 

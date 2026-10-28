@@ -703,7 +703,12 @@ class UnitLinkPost : public WopiTestServer
         auto session = http::Session::create(helpers::getTestServerURI());
         session->setTimeout(std::chrono::seconds(10));
         const std::shared_ptr<const http::Response> response = session->syncRequest(request);
-        return response ? static_cast<unsigned>(response->statusLine().statusCode()) : 0;
+        LOK_ASSERT_MESSAGE("The links endpoint must answer", response);
+        if (!response)
+            return 0;
+
+        LOK_ASSERT_EQUAL(std::string("*"), response->header().get("Access-Control-Allow-Origin"));
+        return static_cast<unsigned>(response->statusLine().statusCode());
     }
 
     /// Runs the POST sequence once the view has a token and the document is up.
@@ -864,7 +869,12 @@ class UnitLinkPostAccessToken : public WopiTestServer
         auto session = http::Session::create(helpers::getTestServerURI());
         session->setTimeout(std::chrono::seconds(10));
         const std::shared_ptr<const http::Response> response = session->syncRequest(request);
-        return response ? static_cast<unsigned>(response->statusLine().statusCode()) : 0;
+        LOK_ASSERT_MESSAGE("The links endpoint must answer", response);
+        if (!response)
+            return 0;
+
+        LOK_ASSERT_EQUAL(std::string("*"), response->header().get("Access-Control-Allow-Origin"));
+        return static_cast<unsigned>(response->statusLine().statusCode());
     }
 
 public:
@@ -988,12 +998,24 @@ class UnitLinkPostBatch : public WopiTestServer
                "\"PersistentLink\":\"batch-" + std::to_string(id) + "\"}";
     }
 
+    /// Sends the OPTIONS a browser sends before a cross-origin POST and returns the response.
+    std::shared_ptr<const http::Response> preflight()
+    {
+        http::Request request("/cool/links?WOPISrc=" + Uri::encode(documentWopiSrc()), "OPTIONS");
+        auto session = http::Session::create(helpers::getTestServerURI());
+        session->setTimeout(std::chrono::seconds(10));
+        return session->syncRequest(request);
+    }
+
     /// POSTs a batch of two links authorized by the given one-time token, the second of them
     /// complete or not, and returns the response status. With a single link too, the body
-    /// carries both Link and Links.
-    unsigned postLinks(const std::string& oneTimeToken, bool complete, bool withSingle = false)
+    /// carries both Link and Links. The batch names the document that is open unless another
+    /// WOPISrc is given. Every response lets a page of any origin read it.
+    unsigned postLinks(const std::string& oneTimeToken, bool complete, bool withSingle = false,
+                       const std::string& wopiSrc = std::string())
     {
-        http::Request request("/cool/links?WOPISrc=" + Uri::encode(documentWopiSrc()),
+        http::Request request("/cool/links?WOPISrc=" +
+                                  Uri::encode(wopiSrc.empty() ? documentWopiSrc() : wopiSrc),
                               http::Request::VERB_POST);
         const std::string single =
             withSingle ? ",\"Link\":" + linkEntry(2, "\"AccessToken\":\"remotetoken\",") : "";
@@ -1006,7 +1028,12 @@ class UnitLinkPostBatch : public WopiTestServer
         auto session = http::Session::create(helpers::getTestServerURI());
         session->setTimeout(std::chrono::seconds(10));
         const std::shared_ptr<const http::Response> response = session->syncRequest(request);
-        return response ? static_cast<unsigned>(response->statusLine().statusCode()) : 0;
+        LOK_ASSERT_MESSAGE("The links endpoint must answer", response);
+        if (!response)
+            return 0;
+
+        LOK_ASSERT_EQUAL(std::string("*"), response->header().get("Access-Control-Allow-Origin"));
+        return static_cast<unsigned>(response->statusLine().statusCode());
     }
 
     /// Runs the POST sequence once the view has a token and the document is up.
@@ -1020,6 +1047,20 @@ class UnitLinkPostBatch : public WopiTestServer
         _postThread = std::thread(
             [this, oneTimeToken = _oneTimeToken]
             {
+                // The browser's preflight is answered with what the POST may carry.
+                const std::shared_ptr<const http::Response> options = preflight();
+                LOK_ASSERT_MESSAGE("The links endpoint must answer the preflight", options);
+                if (options)
+                {
+                    LOK_ASSERT_EQUAL(http::StatusCode::NoContent, options->statusCode());
+                    LOK_ASSERT_EQUAL(std::string("*"),
+                                     options->header().get("Access-Control-Allow-Origin"));
+                    LOK_ASSERT_EQUAL(std::string("POST, OPTIONS"),
+                                     options->header().get("Access-Control-Allow-Methods"));
+                    LOK_ASSERT_EQUAL(std::string("Content-Type"),
+                                     options->header().get("Access-Control-Allow-Headers"));
+                }
+
                 // A batch with an incomplete link registers nothing.
                 LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::BadRequest),
                                  postLinks(oneTimeToken, /*complete=*/false));
@@ -1027,6 +1068,12 @@ class UnitLinkPostBatch : public WopiTestServer
                 // A body that carries both Link and Links registers nothing either.
                 LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::BadRequest),
                                  postLinks(oneTimeToken, /*complete=*/true, /*withSingle=*/true));
+
+                // A batch naming a document that is not open is refused the way a wrong token
+                // is, and spends nothing either.
+                LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::Unauthorized),
+                                 postLinks(oneTimeToken, /*complete=*/true, /*withSingle=*/false,
+                                           fileWopiSrc(9)));
 
                 // The refused batches did not spend the token, so the complete batch is
                 // registered with it.
@@ -1166,7 +1213,12 @@ class UnitLinkDelete : public WopiTestServer
         auto session = http::Session::create(helpers::getTestServerURI());
         session->setTimeout(std::chrono::seconds(10));
         const std::shared_ptr<const http::Response> response = session->syncRequest(request);
-        return response ? static_cast<unsigned>(response->statusLine().statusCode()) : 0;
+        LOK_ASSERT_MESSAGE("The links endpoint must answer", response);
+        if (!response)
+            return 0;
+
+        LOK_ASSERT_EQUAL(std::string("*"), response->header().get("Access-Control-Allow-Origin"));
+        return static_cast<unsigned>(response->statusLine().statusCode());
     }
 
     /// Registers the document once the view has a token and the document is up.
@@ -2360,7 +2412,12 @@ class UnitLinkPostPersistentLink : public WopiTestServer
         auto session = http::Session::create(helpers::getTestServerURI());
         session->setTimeout(std::chrono::seconds(10));
         const std::shared_ptr<const http::Response> response = session->syncRequest(request);
-        return response ? static_cast<unsigned>(response->statusLine().statusCode()) : 0;
+        LOK_ASSERT_MESSAGE("The links endpoint must answer", response);
+        if (!response)
+            return 0;
+
+        LOK_ASSERT_EQUAL(std::string("*"), response->header().get("Access-Control-Allow-Origin"));
+        return static_cast<unsigned>(response->statusLine().statusCode());
     }
 
     /// Names the source on the document's own thread, the way the kit's slide link list does,
@@ -3448,13 +3505,14 @@ UnitBase** unit_create_wsd_multi(void)
     {
         new UnitRemoteDocument(), new UnitRemoteDocumentViewClose(), new UnitRemoteDocumentUnload(),
             new UnitRemoteDocumentCycle(), new UnitLinkPost(), new UnitLinkPostAccessToken(),
-            new UnitLinkPostBatch(), new UnitLinkDelete(), new UnitRemoteDocumentMutual(),
-            new UnitRemoteDocumentCommand(), new UnitRemoteDocumentMissing(),
-            new UnitRemoteDocumentRetry(), new UnitRemoteDocumentIsolation(),
-            new UnitRemoteDocumentSaved(), new UnitRemoteDocumentChain(),
-            new UnitLinkPostPersistentLink(), new UnitLinkAccessResolve(),
-            new UnitLinkAccessNotFound(), new UnitLinkAccessPerView(), new UnitLinkAccessBatch(),
-            new UnitLinkAccessOneByOne(), new UnitLinkAccessDefaults(), nullptr
+            new UnitLinkPostBatch(), new UnitLinkDelete(),
+            new UnitRemoteDocumentMutual(), new UnitRemoteDocumentCommand(),
+            new UnitRemoteDocumentMissing(), new UnitRemoteDocumentRetry(),
+            new UnitRemoteDocumentIsolation(), new UnitRemoteDocumentSaved(),
+            new UnitRemoteDocumentChain(), new UnitLinkPostPersistentLink(),
+            new UnitLinkAccessResolve(), new UnitLinkAccessNotFound(), new UnitLinkAccessPerView(),
+            new UnitLinkAccessBatch(), new UnitLinkAccessOneByOne(), new UnitLinkAccessDefaults(),
+            nullptr
     };
 }
 
