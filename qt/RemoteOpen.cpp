@@ -12,15 +12,36 @@
 #include <config.h>
 
 #include <qt/RemoteOpen.hpp>
-#include <common/Log.hpp>
+
+#include <QMainWindow>
+#include <QSize>
+#include <QUrl>
+#include <QWebEnginePage>
+#include <QWebEngineView>
+
+namespace
+{
+/// In pixels.
+const QSize ACCOUNT_WINDOW_SIZE(1280, 860);
+}
 
 namespace coda
 {
 
-void openRemoteFile(const QString& /*serverUrl*/, QWidget* /*parent*/,
-                    QWebEngineProfile* /*profile*/, QWebEngineProfile* /*pickerProfile*/)
+void openRemoteFile(const QString& serverUrl, QWidget* parent,
+                    QWebEngineProfile* /*profile*/, QWebEngineProfile* pickerProfile)
 {
-    LOG_WRN("openRemoteFile: refused: no window can open a cloud account");
+    auto* window = new QMainWindow(parent);
+    window->setAttribute(Qt::WA_DeleteOnClose);
+    window->resize(ACCOUNT_WINDOW_SIZE);
+
+    auto* view = new QWebEngineView(window);
+    view->setPage(new QWebEnginePage(pickerProfile, view));
+    window->setCentralWidget(view);
+    QObject::connect(view, &QWebEngineView::titleChanged, window, &QWidget::setWindowTitle);
+
+    view->load(QUrl(serverUrl));
+    window->show();
 }
 
 } // namespace coda

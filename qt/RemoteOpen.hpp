@@ -19,6 +19,8 @@ class QWebEngineProfile;
 namespace coda
 {
 
+/// Opens the integrator at serverUrl in a window on pickerProfile. A document opened there loads
+/// the COOL server's editor in the integrator's frame, as in a browser.
 void openRemoteFile(const QString& serverUrl, QWidget* parent,
                     QWebEngineProfile* profile, QWebEngineProfile* pickerProfile);
 
