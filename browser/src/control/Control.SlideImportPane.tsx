@@ -425,7 +425,7 @@ class SlideImportPane {
         window.makeHttpUrl('/cool/links') +
         '?WOPISrc=' +
         encodeURIComponent(window.wopiSrc),
-      mimeTypeFilter: app.LOUtil.presentationMimeFilter,
+      MimeTypeFilter: app.LOUtil.presentationMimeFilter,
     };
     if (source) args.PersistentLink = source.persistentLink;
 

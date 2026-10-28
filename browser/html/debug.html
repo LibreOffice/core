@@ -323,7 +323,7 @@
                 decodeURIComponent(parentWopiSrc.substring(filesIndex + '/wopi/files'.length));
               const offered = entries.filter(function(entry) {
                 return entry.path !== openedPath &&
-                       matchesMimeTypeFilter(entry.name, values.mimeTypeFilter);
+                       matchesMimeTypeFilter(entry.name, values.MimeTypeFilter);
               });
               list.textContent = '';
               if (offered.length === 0) {
