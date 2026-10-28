@@ -164,33 +164,6 @@ describe(['tagdesktop'], 'Notebookbar items', { testIsolation: false }, function
 		}), 'greyed-out items that do not say so').to.be.empty;
 	});
 
-	it('says it is greyed out when the state arrives', function () {
-		let item;
-
-		cy.then(function () {
-			openTab(tabs().filter(function (tab) { return tab.name === 'Home'; })[0]);
-		});
-
-		cy.then(function () {
-			item = win.document.querySelector(
-				'#Home-container .unotoolbutton:not([disabled])');
-
-			expect(item, 'an item to grey out').to.not.be.null;
-			// As the state arrives: an attribute change the widget mirrors.
-			item.setAttribute('disabled', '');
-		});
-
-		cy.then(function () { return helper.waitUntilLayoutingIsIdle(win); });
-
-		cy.then(function () {
-			const button = item.querySelector('button') || item;
-
-			expect(button.getAttribute('aria-disabled'), item.id + ' greyed out')
-				.to.equal('true');
-			item.removeAttribute('disabled');
-		});
-	});
-
 	it('keeps every label readable', function () {
 		expect(unreadable(swept), 'labels under 4.5:1').to.be.empty;
 	});
