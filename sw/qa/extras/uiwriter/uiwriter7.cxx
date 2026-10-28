@@ -478,6 +478,33 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf131431)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(9), xReplace->findAll(xReplaceDes)->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf164402_FindWhiteColor)
+{
+    // the goal of this test is to check if white color text is found by the search function
+    // load document with some text in different colors, including white
+    createSwDoc("tdf164402_FindWhiteColor.odt");
+
+    // setup search for a white text
+    uno::Sequence<beans::PropertyValue> aSearchAttribute(
+        comphelper::InitPropertySequence({ { "CharColor", uno::Any(sal_Int32(0xFFFFFF)) } }));
+
+    uno::Reference<util::XReplaceable> xReplace(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<util::XReplaceDescriptor> xReplaceDes = xReplace->createReplaceDescriptor();
+    uno::Reference<util::XPropertyReplace> xPropReplace(xReplaceDes, uno::UNO_QUERY_THROW);
+    xPropReplace->setSearchAttributes(aSearchAttribute);
+
+    // a simple search should report one occurence in the document
+    uno::Reference<css::container::XIndexAccess> xIndex = xReplace->findAll(xReplaceDes);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndex->getCount());
+
+    uno::Reference<text::XTextRange> xMatch(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: white
+    // - Actual  : Black white black
+    CPPUNIT_ASSERT_EQUAL(u"white"_ustr, xMatch->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf147583_backwardSearch)
 {
     createSwDoc("tdf147583_backwardSearch.odt");
