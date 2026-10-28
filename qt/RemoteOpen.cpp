@@ -12,17 +12,69 @@
 #include <config.h>
 
 #include <qt/RemoteOpen.hpp>
+#include <common/Log.hpp>
 
+#include <QByteArray>
+#include <QIODevice>
 #include <QMainWindow>
 #include <QSize>
 #include <QUrl>
 #include <QWebEnginePage>
+#include <QWebEngineUrlRequestInfo>
+#include <QWebEngineUrlRequestInterceptor>
 #include <QWebEngineView>
 
 namespace
 {
 /// In pixels.
 const QSize ACCOUNT_WINDOW_SIZE(1280, 860);
+
+/// 2 MiB. The form Nextcloud posts for a document is about 5 KB.
+constexpr qsizetype MAX_FORM_BYTES = 2 * 1024 * 1024;
+
+/// The integrator opens a document by posting a form with the token and settings into the iframe
+/// that holds the editor. This keeps a copy of that form.
+class EditorFormInterceptor : public QWebEngineUrlRequestInterceptor
+{
+public:
+    using QWebEngineUrlRequestInterceptor::QWebEngineUrlRequestInterceptor;
+
+    void interceptRequest(QWebEngineUrlRequestInfo& info) override;
+
+private:
+    QByteArray _form; ///< The body of the last form posted into an editor frame.
+};
+
+void EditorFormInterceptor::interceptRequest(QWebEngineUrlRequestInfo& info)
+{
+    const bool isIFrame = info.resourceType() == QWebEngineUrlRequestInfo::ResourceTypeSubFrame;
+    const bool isPost = info.requestMethod() == "POST";
+    const bool isEditorPage = info.requestUrl().path().endsWith("/cool.html");
+    if (!isIFrame || !isPost || !isEditorPage)
+        return;
+
+    QIODevice* body = info.requestBody();
+    if (!body)
+    {
+        LOG_WRN("account window: refused: the form posted into an editor frame has no body");
+        return;
+    }
+
+    body->open(QIODevice::ReadOnly);
+    // Qt WebEngine returns the same first bytes on every read in pieces,
+    // so readAll() never ends (it's a bug). One read takes the whole body.
+    const QByteArray form = body->read(MAX_FORM_BYTES + 1);
+    if (form.size() > MAX_FORM_BYTES)
+    {
+        LOG_WRN("account window: refused: the form posted into an editor frame is at least "
+                << form.size() << " bytes, over the limit of " << MAX_FORM_BYTES << " bytes");
+        return;
+    }
+
+    _form = form;
+    LOG_DBG("account window: kept the " << _form.size()
+                                        << "-byte form posted into an editor frame");
+}
 }
 
 namespace coda
@@ -36,7 +88,9 @@ void openRemoteFile(const QString& serverUrl, QWidget* parent,
     window->resize(ACCOUNT_WINDOW_SIZE);
 
     auto* view = new QWebEngineView(window);
-    view->setPage(new QWebEnginePage(pickerProfile, view));
+    auto* page = new QWebEnginePage(pickerProfile, view);
+    page->setUrlRequestInterceptor(new EditorFormInterceptor(page));
+    view->setPage(page);
     window->setCentralWidget(view);
     QObject::connect(view, &QWebEngineView::titleChanged, window, &QWidget::setWindowTitle);
 
