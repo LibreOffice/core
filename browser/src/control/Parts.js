@@ -362,19 +362,36 @@ window.L.Map.include({
 		if (!source || !source.width || !source.height)
 			return;
 
-		const width = Math.round(240 * window.devicePixelRatio);
-		const height = Math.round(135 * window.devicePixelRatio);
-		const scale = Math.max(width / source.width, height / source.height);
-		const cropWidth = width / scale;
-		const cropHeight = height / scale;
+		const frameWidth = 240 * window.devicePixelRatio;
+		const frameHeight = 135 * window.devicePixelRatio;
+
+		let width, height, sx, sy, sw, sh;
+		if (docLayer.isCalc()) {
+			// Fit the whole canvas inside the frame; the app centres it on the card.
+			const scale = Math.min(frameWidth / source.width, frameHeight / source.height);
+			width = Math.max(1, Math.round(source.width * scale));
+			height = Math.max(1, Math.round(source.height * scale));
+			sx = 0;
+			sy = 0;
+			sw = source.width;
+			sh = source.height;
+		} else {
+			// Fill the frame and crop from the centre.
+			width = Math.round(frameWidth);
+			height = Math.round(frameHeight);
+			const scale = Math.max(width / source.width, height / source.height);
+			sw = width / scale;
+			sh = height / scale;
+			sx = (source.width - sw) / 2;
+			sy = (source.height - sh) / 2;
+		}
 
 		const thumbnail = document.createElement('canvas');
 		thumbnail.width = width;
 		thumbnail.height = height;
 		const context = thumbnail.getContext('2d');
 		context.imageSmoothingQuality = 'high';
-		context.drawImage(source, (source.width - cropWidth) / 2, (source.height - cropHeight) / 2,
-			cropWidth, cropHeight, 0, 0, width, height);
+		context.drawImage(source, sx, sy, sw, sh, 0, 0, width, height);
 		window.postMobileMessage('TABTHUMBNAIL ' + thumbnail.toDataURL('image/png'));
 	},
 
