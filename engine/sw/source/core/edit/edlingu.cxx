@@ -34,6 +34,7 @@
 #include <unotools/linguprops.hxx>
 #include <linguistic/lngprops.hxx>
 #include <editeng/langitem.hxx>
+#include <editeng/nhypitem.hxx>
 #include <editeng/SpellPortions.hxx>
 #include <svl/languageoptions.hxx>
 #include <editsh.hxx>
@@ -157,6 +158,7 @@ class SwHyphIter : public SwLinguIter
     friend SwTextFrame * sw::SwHyphIterCacheLastTextFrame(SwTextNode const * pNode, const sw::Creator& rCreator);
 
     bool m_bOldIdle;
+    std::vector<std::pair<SwPosition, SwPosition>> m_vNoHyphenRanges;
     static void DelSoftHyph( SwPaM &rPam );
 
 public:
@@ -432,6 +434,21 @@ void SwHyphIter::End()
 {
     if( !GetSh() )
         return;
+
+    // instead of de-hyphenation in Ignore() when the skip button is pressed, we do it once dialog
+    // is closed to avoid the relayout causing cascading effects in the following words.
+    if (!m_vNoHyphenRanges.empty())
+    {
+        SwEditShell* pEditshell = GetSh();
+        SvxNoHyphenItem noHyph(true, RES_CHRATR_NOHYPHEN);
+        for (auto& [rStart, rEnd] : m_vNoHyphenRanges)
+        {
+            SwPaM aWordPam(rStart, rEnd);
+            pEditshell->GetDoc()->getIDocumentContentOperations().InsertPoolItem(
+                aWordPam, noHyph, SetAttrMode::DEFAULT, pEditshell->GetLayout());
+        }
+        m_vNoHyphenRanges.clear();
+    }
     GetSh()->GetViewOptions()->SetIdle(m_bOldIdle);
     End_();
 }
@@ -501,6 +518,7 @@ void SwHyphIter::Ignore()
 
     // and continue
     auto [pStart, pEnd] = pCursor->StartEnd(); // SwPosition*
+    m_vNoHyphenRanges.emplace_back(*pStart, *pEnd);
     pStart->SetContent(pEnd->GetContentIndex());
     pCursor->SetMark();
 }
