@@ -18,13 +18,19 @@
 #include <QIODevice>
 #include <QMainWindow>
 #include <QSize>
+#include <QTimer>
 #include <QUrl>
+#include <QUuid>
+#include <QWebEngineFrame>
 #include <QWebEnginePage>
 #include <QWebEngineScript>
 #include <QWebEngineScriptCollection>
 #include <QWebEngineUrlRequestInfo>
 #include <QWebEngineUrlRequestInterceptor>
 #include <QWebEngineView>
+
+#include <chrono>
+#include <optional>
 
 namespace
 {
@@ -39,28 +45,73 @@ if (window !== window.top && location.pathname.endsWith('/cool.html')) {
 }
 )JS";
 
+/// Starts the fragment that names an editor frame, as in "#coda=<id>".
+const QString FRAME_ID_PREFIX = QStringLiteral("coda=");
+
+/// How often to look for the emptied editor frame after a form was kept.
+constexpr std::chrono::milliseconds EDITOR_CHECK_INTERVAL(50);
+
+/// 200 checks are 10 seconds.
+constexpr int EDITOR_CHECKS = 200;
+
 /// 2 MiB. The form Nextcloud posts for a document is about 5 KB.
 constexpr qsizetype MAX_FORM_BYTES = 2 * 1024 * 1024;
 
+class CloudAccountPage;
+
 /// The integrator opens a document by posting a form with the token and settings into the iframe
-/// that holds the editor. This keeps a copy of that form.
+/// that holds the editor. This keeps a copy of that form. It redirects the request to the same
+/// address with a new id as its fragment. coolwsd never sees the fragment, and the frame keeps it.
 class EditorFormInterceptor : public QWebEngineUrlRequestInterceptor
 {
 public:
-    using QWebEngineUrlRequestInterceptor::QWebEngineUrlRequestInterceptor;
+    explicit EditorFormInterceptor(CloudAccountPage& page);
 
     void interceptRequest(QWebEngineUrlRequestInfo& info) override;
 
 private:
-    QByteArray _form; ///< The body of the last form posted into an editor frame.
+    CloudAccountPage& _page;
 };
 
-/// The page of a cloud account's window.
+/// A page in a cloud account window. It keeps the integrator's form posted for the document at
+/// load, and finds the editor's iframe the form went to.
 class CloudAccountPage : public QWebEnginePage
 {
 public:
     CloudAccountPage(QWebEngineProfile* profile, QObject* parent);
+
+    void keepForm(const QUrl& url, const QByteArray& form);
+
+private:
+    void findEditorFrame();
+
+    QUrl _formUrl; ///< Where the kept form went, with the frame's id as the fragment.
+    QByteArray _form;
+    QTimer _editorCheck;
+    int _editorChecksLeft = 0;
 };
+
+/// The frame whose address is url, searched from frame down.
+std::optional<QWebEngineFrame> findFrame(const QWebEngineFrame& frame, const QUrl& url)
+{
+    if (frame.url() == url)
+        return frame;
+
+    for (const QWebEngineFrame& child : frame.children())
+    {
+        std::optional<QWebEngineFrame> found = findFrame(child, url);
+        if (found)
+            return found;
+    }
+
+    return std::nullopt;
+}
+
+EditorFormInterceptor::EditorFormInterceptor(CloudAccountPage& page)
+    : QWebEngineUrlRequestInterceptor(&page)
+    , _page(page)
+{
+}
 
 void EditorFormInterceptor::interceptRequest(QWebEngineUrlRequestInfo& info)
 {
@@ -68,6 +119,11 @@ void EditorFormInterceptor::interceptRequest(QWebEngineUrlRequestInfo& info)
     const bool isPost = info.requestMethod() == "POST";
     const bool isEditorPage = info.requestUrl().path().endsWith("/cool.html");
     if (!isIFrame || !isPost || !isEditorPage)
+        return;
+
+    // The redirected request comes here again, with the id and without the body.
+    const bool hasFrameId = info.requestUrl().fragment().startsWith(FRAME_ID_PREFIX);
+    if (hasFrameId)
         return;
 
     QIODevice* body = info.requestBody();
@@ -88,15 +144,19 @@ void EditorFormInterceptor::interceptRequest(QWebEngineUrlRequestInfo& info)
         return;
     }
 
-    _form = form;
-    LOG_DBG("account window: kept the " << _form.size()
+    QUrl frameUrl = info.requestUrl();
+    frameUrl.setFragment(FRAME_ID_PREFIX + QUuid::createUuid().toString(QUuid::Id128));
+
+    LOG_DBG("account window: kept the " << form.size()
                                         << "-byte form posted into an editor frame");
+    _page.keepForm(frameUrl, form);
+    info.redirect(frameUrl);
 }
 
 CloudAccountPage::CloudAccountPage(QWebEngineProfile* profile, QObject* parent)
     : QWebEnginePage(profile, parent)
 {
-    setUrlRequestInterceptor(new EditorFormInterceptor(this));
+    setUrlRequestInterceptor(new EditorFormInterceptor(*this));
 
     QWebEngineScript emptyCoolPage;
     emptyCoolPage.setSourceCode(QString::fromUtf8(EMPTY_COOL_PAGE_SCRIPT));
@@ -104,6 +164,35 @@ CloudAccountPage::CloudAccountPage(QWebEngineProfile* profile, QObject* parent)
     emptyCoolPage.setWorldId(QWebEngineScript::ApplicationWorld);
     emptyCoolPage.setRunsOnSubFrames(true);
     scripts().insert(emptyCoolPage);
+
+    _editorCheck.setInterval(EDITOR_CHECK_INTERVAL);
+    connect(&_editorCheck, &QTimer::timeout, this, &CloudAccountPage::findEditorFrame);
+}
+
+void CloudAccountPage::keepForm(const QUrl& url, const QByteArray& form)
+{
+    _formUrl = url;
+    _form = form;
+    _editorChecksLeft = EDITOR_CHECKS;
+    _editorCheck.start();
+}
+
+void CloudAccountPage::findEditorFrame()
+{
+    std::optional<QWebEngineFrame> frame = findFrame(mainFrame(), _formUrl);
+    _editorChecksLeft--;
+    const bool keepLooking = !frame && _editorChecksLeft > 0;
+    if (keepLooking)
+        return;
+
+    _editorCheck.stop();
+    if (!frame)
+    {
+        LOG_WRN("account window: refused: no editor frame opened for the kept form");
+        return;
+    }
+
+    LOG_DBG("account window: found the editor frame for the kept form");
 }
 }
 
