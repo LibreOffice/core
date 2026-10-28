@@ -19,12 +19,6 @@ class QWebEngineProfile;
 namespace coda
 {
 
-/// Show the remote file picker; once the user picks a document, open
-/// a WebView pointing at cool.html with the picker-extracted WOPI
-/// params attached to the WebView's RemoteDocInfo.  The page-JS does
-/// the /co/collab dance (fetch_url, GET bytes, write temp file via
-/// Bridge::writeRemoteDocFile) before the standard load flow runs.
-/// The picker runs on pickerProfile, and the editor on profile.
 void openRemoteFile(const QString& serverUrl, QWidget* parent,
                     QWebEngineProfile* profile, QWebEngineProfile* pickerProfile);
 

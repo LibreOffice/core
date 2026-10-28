@@ -1156,10 +1156,8 @@ QVariant Bridge::cool(const QString& messageStr)
     }
     else if (tokens.equals(0, "openremote"))
     {
-        // The remote server URL is configured on the JS side
-        // (backstage "Open" tab, cloud-provider tile) and passed
-        // along with the message so we can go straight to the
-        // integrator picker, no URL prompt needed.
+        // The server URL comes with the message, from the backstage's
+        // cloud-provider tile, so no URL prompt is needed.
         if (tokens.size() < 2)
         {
             LOG_WRN("openremote: missing server URL");

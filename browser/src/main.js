@@ -304,9 +304,9 @@ if (window.ThisIsTheEmscriptenApp) {
 		initEmscriptenModule('local', docURL);
 	}
 } else if (window.ThisIsTheQtApp) {
-	// CODA-Q: the picker side sets _document._remoteInfo (wopiSrc,
-	// accessToken, coolServer, coolPath) on the C++ side before
-	// cool.html loads, for remote docs only.  Pull that via
+	// CODA-Q: for a remote doc, _document._remoteInfo (wopiSrc,
+	// accessToken, coolServer, coolPath) is set on the C++ side before
+	// cool.html loads.  Pull that via
 	// Bridge::getRemoteInfo once the QWebChannel bridge is ready; if
 	// non-empty, run the COWASM-style /co/collab fetch from JS, then
 	// hand the bytes back to native via Bridge::writeRemoteDocFile

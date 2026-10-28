@@ -12,60 +12,15 @@
 #include <config.h>
 
 #include <qt/RemoteOpen.hpp>
-
-#include <qt/Document.hpp>
-#include <qt/IntegratorFilePicker.hpp>
-#include <qt/TabManager.hpp>
-#include <qt/TabbedWindow.hpp>
-#include <qt/WebView.hpp>
 #include <common/Log.hpp>
-
-#include <memory>
 
 namespace coda
 {
 
-void openRemoteFile(const QString& serverUrl, QWidget* parent,
-                    QWebEngineProfile* profile, QWebEngineProfile* pickerProfile)
+void openRemoteFile(const QString& /*serverUrl*/, QWidget* /*parent*/,
+                    QWebEngineProfile* /*profile*/, QWebEngineProfile* /*pickerProfile*/)
 {
-    // Show the integrator's web UI.  The picker emits wopiSelected()
-    // once the user picks a document, at which point we extract WOPI
-    // params, close the picker, and open a separate WebView for the
-    // editor.  The /co/collab fetch and download bytes-on-the-wire
-    // are handled by the page-JS once cool.html loads.
-    auto* picker = new IntegratorFilePicker(serverUrl, pickerProfile, parent);
-    picker->setAttribute(Qt::WA_DeleteOnClose);
-    QObject::connect(picker, &IntegratorFilePicker::wopiSelected, picker,
-        [picker, profile]() {
-            const QString wopiSrc = picker->wopiSrc();
-            const QString accessToken = picker->accessToken();
-            const QString coolServer = picker->coolServer();
-            const QString coolPath = picker->coolPath();
-            picker->close();
-
-            if (wopiSrc.isEmpty())
-            {
-                LOG_ERR("openRemoteFile: no WOPISrc from picker");
-                return;
-            }
-
-            LOG_TRC("openRemoteFile: WOPISrc=" << wopiSrc.toStdString()
-                    << " coolServer=" << coolServer.toStdString());
-
-            auto remoteInfo = std::make_shared<RemoteDocInfo>();
-            remoteInfo->wopiSrc = wopiSrc;
-            remoteInfo->accessToken = accessToken;
-            remoteInfo->coolServer = coolServer;
-            remoteInfo->coolPath = coolPath;
-
-            // The manager takes ownership of the WebView.
-            TabbedWindow* tw = TabbedWindow::getOrCreate(profile);
-            WebView* webViewInstance = new WebView(profile);
-            tw->manager()->adoptTab(webViewInstance, /*insertAt*/ -1);
-            webViewInstance->loadRemote(std::move(remoteInfo));
-            tw->activateTabFor(webViewInstance);
-        });
-    picker->show();
+    LOG_WRN("openRemoteFile: refused: no window can open a cloud account");
 }
 
 } // namespace coda
