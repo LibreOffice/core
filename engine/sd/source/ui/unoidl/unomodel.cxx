@@ -2583,7 +2583,7 @@ void recordOrderChange(SdXImpressDocument::VectorPartState& rState)
 /// Marks the object and, when it is a group, everything inside it.
 void markSubtreeDirty(SdXImpressDocument::VectorPartState& rState, const SdrObject* pObject)
 {
-    rState.maDirtyObjects.insert(pObject->GetUniqueID());
+    rState.maDirtyObjects.insert(svx::vector::idOf(*pObject));
 
     if (const SdrObjList* pChildren = svx::vector::membersOf(*pObject))
     {
@@ -2598,9 +2598,9 @@ void markSubtreeDirty(SdXImpressDocument::VectorPartState& rState, const SdrObje
 /// Forgets what was recorded for the object and everything inside it.
 void forgetSubtree(SdXImpressDocument::VectorPartState& rState, const SdrObject* pObject)
 {
-    rState.maObjectContent.erase(pObject->GetUniqueID());
-    rState.maObjectChangeVersions.erase(pObject->GetUniqueID());
-    rState.maDirtyObjects.erase(pObject->GetUniqueID());
+    rState.maObjectContent.erase(svx::vector::idOf(*pObject));
+    rState.maObjectChangeVersions.erase(svx::vector::idOf(*pObject));
+    rState.maDirtyObjects.erase(svx::vector::idOf(*pObject));
 
     if (const SdrObjList* pChildren = svx::vector::membersOf(*pObject))
     {
@@ -2630,7 +2630,7 @@ void recordObjectChange(SdXImpressDocument::VectorPartState& rState, const SdrOb
 
     for (const SdrObject* pParent = pObject->getParentSdrObjectFromSdrObject(); pParent;
          pParent = pParent->getParentSdrObjectFromSdrObject())
-        rState.maDirtyObjects.insert(pParent->GetUniqueID());
+        rState.maDirtyObjects.insert(svx::vector::idOf(*pParent));
 }
 
 /// Marks the page entry for comparison. The next write compares it against what was written
@@ -3561,7 +3561,7 @@ private:
         auto aOrderArray = rWriter.startArray("order");
         rWriter.putSimpleValue(constPageEntryId);
         for (const SdrObject* pObject : rObjects)
-            rWriter.putSimpleValue(sal_Int64(pObject->GetUniqueID()));
+            rWriter.putSimpleValue(sal_Int64(svx::vector::idOf(*pObject)));
 
         // The text of a running edit is last, so it draws over the object it runs on. Several
         // views can be editing at once, so there is one entry for each of them.
@@ -3684,8 +3684,8 @@ private:
         {
             for (const SdrObject* pObject : rObjects)
             {
-                if (mpModel->findVectorObjectContent(*pPage, pObject->GetUniqueID()))
-                    aDirty.insert(pObject->GetUniqueID());
+                if (mpModel->findVectorObjectContent(*pPage, svx::vector::idOf(*pObject)))
+                    aDirty.insert(svx::vector::idOf(*pObject));
             }
         }
 
@@ -3695,20 +3695,20 @@ private:
         std::vector<sal_uInt64> aOrder;
         aOrder.reserve(rObjects.size());
         for (const SdrObject* pObject : rObjects)
-            aOrder.push_back(pObject->GetUniqueID());
+            aOrder.push_back(svx::vector::idOf(*pObject));
         if (mpModel->recordVectorPaintOrder(*pPage, aOrder))
         {
             for (const SdrObject* pObject : rObjects)
             {
                 const SdrObjList* pChildren = svx::vector::membersOf(*pObject);
                 if (pChildren && pChildren->GetObjCount() > 0)
-                    aDirty.insert(pObject->GetUniqueID());
+                    aDirty.insert(svx::vector::idOf(*pObject));
             }
         }
 
         std::unordered_map<sal_uInt64, SdrObject*> aObjectById;
         for (SdrObject* pObject : rObjects)
-            aObjectById.emplace(pObject->GetUniqueID(), pObject);
+            aObjectById.emplace(svx::vector::idOf(*pObject), pObject);
 
         // An object under edit is compared like any other, because what is typed rides on the
         // entry for the edit and the object's own look stands still until something moves it.
@@ -3751,7 +3751,7 @@ private:
 
         for (const SdrObject* pObject : rObjects)
         {
-            if (mpModel->isVectorObjectChangedSince(*pPage, pObject->GetUniqueID(),
+            if (mpModel->isVectorObjectChangedSince(*pPage, svx::vector::idOf(*pObject),
                                                     sal_uInt64(mnSinceVersion)))
             {
                 return true;
@@ -3784,7 +3784,7 @@ private:
             // the text from before the last deletion replaces it with nothing.
             const SdrObject* pEdited = rView.mpView->GetTextEditObject();
             writeEntry(rWriter, textEditEntryId(rView.mnViewId),
-                       pEdited ? pEdited->GetUniqueID() : 0, "texteditoverlay",
+                       pEdited ? svx::vector::idOf(*pEdited) : 0, "texteditoverlay",
                        textEditContentOf(rView), rView.mnViewId);
         }
     }
@@ -3814,7 +3814,7 @@ private:
         // layer, so moving the edit to another object, or that object to another layer, is a
         // change of the entry.
         const SdrObject* pEdited = rView.GetTextEditObject();
-        aContent.mnParentId = pEdited ? pEdited->GetUniqueID() : 0;
+        aContent.mnParentId = pEdited ? svx::vector::idOf(*pEdited) : 0;
         if (pEdited)
             aContent.moLayer = sal_Int32(pEdited->GetLayer().get());
         return aContent;
@@ -3858,7 +3858,7 @@ private:
             // version. The rest stay in the order list. An object a text edit runs on says so in
             // the content compared, so beginning and ending an edit carries it.
             if (isDelta()
-                && !mpModel->isVectorObjectChangedSince(*pPage, pObject->GetUniqueID(),
+                && !mpModel->isVectorObjectChangedSince(*pPage, svx::vector::idOf(*pObject),
                                                         sal_uInt64(mnSinceVersion)))
             {
                 continue;
@@ -3867,7 +3867,7 @@ private:
             // The content compared in this write is written. An object not compared is
             // unchanged since its record, so the record is written. Only an object with no
             // record is built here.
-            const sal_uInt64 nObjectId = pObject->GetUniqueID();
+            const sal_uInt64 nObjectId = svx::vector::idOf(*pObject);
             const SdXImpressDocument::VectorObjectContent* pContent = nullptr;
             const auto aResolved = maResolvedContent.find(nObjectId);
             if (aResolved != maResolvedContent.end())
@@ -3884,7 +3884,8 @@ private:
             }
 
             const SdrObject* pParent = svx::vector::holderOf(*pObject);
-            writeObjectEntry(rWriter, *pObject, pParent ? pParent->GetUniqueID() : 0, *pContent);
+            writeObjectEntry(rWriter, *pObject, pParent ? svx::vector::idOf(*pParent) : 0,
+                             *pContent);
         }
     }
 
@@ -3896,7 +3897,7 @@ private:
                           const SdXImpressDocument::VectorObjectContent& rContent)
     {
         auto pObjectNode = rWriter.startStruct();
-        rWriter.put("id", sal_Int64(rObject.GetUniqueID()));
+        rWriter.put("id", sal_Int64(svx::vector::idOf(rObject)));
         rWriter.put("name", rContent.maName);
         // The group the object sits in, 0 for an object directly on the page.
         rWriter.put("parent", sal_Int64(nParentId));

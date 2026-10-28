@@ -26,6 +26,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <svl/eitem.hxx>
 #include <svl/itemset.hxx>
@@ -650,6 +651,102 @@ const Embedding* embeddingOf(const SdrObject& rObject)
 {
     return embeddingFor(rObject.getSdrPageFromSdrObject());
 }
+
+/*
+    The name the chart gives a part it selects on its own (its CID), without what changes when the
+    part is dragged, or empty for any other object. The chart names its parts "CID/...", and a
+    dragged part carries "/DragParameter=..." last, which changes with the drag.
+*/
+OUString partNameOf(const SdrObject& rObject)
+{
+    if (!embeddingOf(rObject))
+        return OUString();
+    OUString aName(rObject.GetName());
+    if (!aName.startsWith("CID/"))
+        return OUString();
+    const sal_Int32 nDragged(aName.indexOf("/DragParameter="));
+    return nDragged < 0 ? aName : aName.copy(0, nDragged);
+}
+
+/// the ids kept for the parts of a chart page, by the part's name
+struct PartIds
+{
+    unotools::WeakReference<SdrPage> mxPage;
+    std::map<OUString, UniqueID> maIds;
+};
+
+/// the pages are held weakly, an entry whose page is gone is dropped
+std::vector<PartIds>& partIds()
+{
+    static std::vector<PartIds> aPartIds;
+    std::erase_if(aPartIds, [](const PartIds& rPartIds) { return !rPartIds.mxPage.get().is(); });
+    return aPartIds;
+}
+
+std::map<OUString, UniqueID>& partIdsOf(SdrPage* pPage)
+{
+    std::vector<PartIds>& rPartIds(partIds());
+    const auto aFound(std::find_if(rPartIds.begin(), rPartIds.end(), [pPage](const PartIds& rIds)
+                                   { return rIds.mxPage.get().get() == pPage; }));
+    if (aFound != rPartIds.end())
+        return aFound->maIds;
+    rPartIds.push_back(PartIds{ unotools::WeakReference<SdrPage>(pPage), {} });
+    return rPartIds.back().maIds;
+}
+
+/*
+    What a part of a chart allows, from its name, as the chart decides it for its own selection
+    (ObjectIdentifier::getObjectType, isDragableObject, isRotateableObject and
+    Selection::isResizeableObjectSelected in chart2). The kind of the part is the last piece of
+    the name, after the last ":" or "/", so "D=0:CS=0:CT=0:Series=0" is a series and a bare
+    "D=0" the diagram. A title, a legend, the diagram and a data label can be dragged, the
+    diagram, its wall and the legend resized, and a part with a drag method of its own, a pie
+    segment for one, dragged along it. A turn is for a diagram in 3D only, which is not told
+    apart here yet.
+*/
+ObjectContent::ChartPart chartPartOf(std::u16string_view aName)
+{
+    ObjectContent::ChartPart aPart;
+    aPart.mbMultiClick = o3tl::starts_with(aName, u"CID/MultiClick/");
+    const bool bDragsItsOwnWay(aName.find(u"DragMethod=") != std::u16string_view::npos);
+
+    size_t nLast(aName.rfind(':'));
+    if (nLast == std::u16string_view::npos)
+        nLast = aName.rfind('/');
+    const std::u16string_view aKind(nLast == std::u16string_view::npos ? aName
+                                                                         : aName.substr(nLast + 1));
+
+    const bool bTitle(o3tl::starts_with(aKind, u"Title"));
+    const bool bLegend(o3tl::starts_with(aKind, u"Legend")
+                       && !o3tl::starts_with(aKind, u"LegendEntry"));
+    const bool bWall(o3tl::starts_with(aKind, u"DiagramWall"));
+    const bool bDiagram(!bWall && !o3tl::starts_with(aKind, u"DiagramFloor")
+                        && o3tl::starts_with(aKind, u"D="));
+    const bool bDataLabel(o3tl::starts_with(aKind, u"DataLabel")
+                          && !o3tl::starts_with(aKind, u"DataLabels"));
+    const bool bEquation(o3tl::starts_with(aKind, u"Equation"));
+
+    aPart.mbDraggable = bTitle || bLegend || bDiagram || bDataLabel || bEquation || bDragsItsOwnWay;
+    aPart.mbResizable = bDiagram || bWall || bLegend;
+    aPart.mbRotatable = false;
+    return aPart;
+}
+}
+
+sal_uInt64 idOf(const SdrObject& rObject)
+{
+    const OUString aName(partNameOf(rObject));
+    if (aName.isEmpty())
+        return rObject.GetUniqueID();
+
+    // only the outermost object of a part is the part, one inside it with the same name keeps
+    // its own id, so no two entries share one
+    if (const SdrObject* pParent = rObject.getParentSdrObjectFromSdrObject();
+        pParent && partNameOf(*pParent) == aName)
+        return rObject.GetUniqueID();
+
+    // a new UniqueID draws the next id of the one counter, so it is never another object's
+    return partIdsOf(rObject.getSdrPageFromSdrObject())[aName].getID();
 }
 
 const SdrObjList* membersOf(const SdrObject& rObject)
@@ -667,6 +764,8 @@ const SdrObjList* membersOf(const SdrObject& rObject)
         {
             std::erase_if(embeddings(), [pPage](const Embedding& rEmbedding)
                           { return rEmbedding.mxPage.get().get() == pPage; });
+            std::erase_if(partIds(), [pPage](const PartIds& rPartIds)
+                          { return rPartIds.mxPage.get().get() == pPage; });
             return nullptr;
         }
         if (Embedding* pEmbedding = embeddingFor(pPage))
@@ -722,8 +821,8 @@ void describeObject(SdrObject& rObject, ObjectContent& rContent,
             const SdrObject* pAtEnd = pConnector->GetConnectedNode(false);
             rContent.mbTiedAtStart = nullptr != pAtStart;
             rContent.mbTiedAtEnd = nullptr != pAtEnd;
-            rContent.mnTiedToAtStart = pAtStart ? pAtStart->GetUniqueID() : 0;
-            rContent.mnTiedToAtEnd = pAtEnd ? pAtEnd->GetUniqueID() : 0;
+            rContent.mnTiedToAtStart = pAtStart ? idOf(*pAtStart) : 0;
+            rContent.mnTiedToAtEnd = pAtEnd ? idOf(*pAtEnd) : 0;
             rContent.moRouting = routingOf(*pConnector);
         }
 
@@ -877,11 +976,13 @@ void describeObject(SdrObject& rObject, ObjectContent& rContent,
         rContent.maTransformation = aInTwips * rContent.maTransformation;
         rContent.maPath.transform(aInTwips);
 
-        // a group has no primitives, its box is the one round it on the chart's page
-        if (rContent.maPrimitives.empty())
+        // the box is the one round the object on the chart's page, mapped: a group has no
+        // primitives, and a part drawn inside a clip of the plot area answers that clip both
+        // for its primitives and for its bound rectangle, while its logic rectangle is its own
         {
-            basegfx::B2DRange aBox(
-                vcl::unotools::b2DRectangleFromRectangle(rObject.GetCurrentBoundRect()));
+            basegfx::B2DRange aBox(vcl::unotools::b2DRectangleFromRectangle(
+                rContent.maPrimitives.empty() ? rObject.GetCurrentBoundRect()
+                                              : rObject.GetLogicRect()));
             aBox.transform(pEmbedding->maMapping);
             rContent.maPaintedBox = rangeInTwips(aBox);
         }
@@ -978,12 +1079,16 @@ void describeObject(SdrObject& rObject, ObjectContent& rContent,
         aCaption.mbFitLineLength = rSet.Get(SDRATTR_CAPTIONFITLINELEN).GetValue();
         rContent.moCaption = aCaption;
     }
-    rContent.maName = rObject.GetName();
+    // the name of a part of a chart is what the chart knows it by, it stays here
+    const OUString aPartName(partNameOf(rObject));
+    rContent.maName = embeddingOf(rObject) ? OUString() : rObject.GetName();
+    if (!aPartName.isEmpty() && idOf(rObject) != rObject.GetUniqueID())
+        rContent.moChartPart = chartPartOf(aPartName);
     rContent.moLayer = sal_Int32(rObject.GetLayer().get());
     rContent.mbEmptyPlaceholder = rObject.IsEmptyPresObj();
     rContent.mbTextEdit = hasActiveTextEdit(&rObject);
     const SdrObject* pParent = holderOf(rObject);
-    rContent.mnParentId = pParent ? pParent->GetUniqueID() : 0;
+    rContent.mnParentId = pParent ? idOf(*pParent) : 0;
 }
 
 void writeEntryGeometry(tools::JsonWriter& rWriter, const ObjectContent& rContent,
@@ -1027,6 +1132,20 @@ void writeEntryGeometry(tools::JsonWriter& rWriter, const ObjectContent& rConten
             rWriter.put("textTurnedRightAngle", true);
         if (rMeasurement.mbTextTurnsItself)
             rWriter.put("textTurnsItself", true);
+    }
+
+    if (rContent.moChartPart)
+    {
+        const auto& rPart = *rContent.moChartPart;
+        auto aNode = rWriter.startNode("chartPart");
+        if (rPart.mbMultiClick)
+            rWriter.put("multiClick", true);
+        if (rPart.mbDraggable)
+            rWriter.put("draggable", true);
+        if (rPart.mbResizable)
+            rWriter.put("resizable", true);
+        if (rPart.mbRotatable)
+            rWriter.put("rotatable", true);
     }
 
     if (rContent.moCaption)

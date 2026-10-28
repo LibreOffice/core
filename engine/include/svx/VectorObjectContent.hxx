@@ -416,6 +416,23 @@ struct ObjectContent
 
     /// Nothing for any object that is not a caption.
     std::optional<Caption> moCaption;
+    /** What a part of a chart active in place allows, for a part the chart can select on its
+        own: whether a first click selects the part holding it and only the next one this part,
+        as a data point in its series, and whether it can be dragged, resized and turned.
+     */
+    struct ChartPart
+    {
+        bool mbMultiClick = false;
+        bool mbDraggable = false;
+        bool mbResizable = false;
+        bool mbRotatable = false;
+
+        bool operator==(const ChartPart&) const = default;
+    };
+
+    /// Nothing for any object that is no part of a chart active in place with a selection of
+    /// its own.
+    std::optional<ChartPart> moChartPart;
     /// The name the object carries, empty for an entry that stands for no object.
     OUString maName;
     /// The layer the entry draws with, nothing for an entry that belongs to no object. For
@@ -434,6 +451,7 @@ struct ObjectContent
     {
         return maPaintedBox == rOther.maPaintedBox && maTransformation == rOther.maTransformation
                && moMeasurement == rOther.moMeasurement && moCaption == rOther.moCaption
+               && moChartPart == rOther.moChartPart
                && maName == rOther.maName && moLayer == rOther.moLayer
                && mbEmptyPlaceholder == rOther.mbEmptyPlaceholder && mbTextEdit == rOther.mbTextEdit
                && mnParentId == rOther.mnParentId && maDrawn == rOther.maDrawn
@@ -466,6 +484,12 @@ struct ObjectContent
     members, as long as it is active.
  */
 SVXCORE_DLLPUBLIC const SdrObjList* membersOf(const SdrObject& rObject);
+
+/** The id the vector view knows the object by: its own, or for a part of a chart active in place
+    that the chart selects on its own, one kept for that part. The chart makes its shapes anew on
+    every change, so their own ids change, while the part stays the same.
+ */
+SVXCORE_DLLPUBLIC sal_uInt64 idOf(const SdrObject& rObject);
 
 /** The object holding that one as the vector view takes it: its group, or for an object on the
     page of a chart active in place, that chart. Nothing for an object directly on the page.
