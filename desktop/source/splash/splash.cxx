@@ -82,10 +82,7 @@ void SplashScreen::setValue(sal_Int32 nValue)
     if (!m_bProgressEnd)
     {
         m_pWindow->Show();
-        if (nValue >= SplashScreenWindow::PROGRESS_MAX)
-            m_pWindow->SetProgress(SplashScreenWindow::PROGRESS_MAX);
-        else
-            m_pWindow->SetProgress(nValue);
+        m_pWindow->SetProgress(std::min(nValue, SplashScreenWindow::PROGRESS_MAX));
         updateStatus();
     }
 }
