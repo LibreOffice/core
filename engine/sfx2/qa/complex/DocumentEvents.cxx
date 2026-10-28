@@ -14,7 +14,6 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <salhelper/thread.hxx>
-#include <condition_variable>
 #include <vector>
 
 using namespace ::cpo::uno;
@@ -44,7 +43,6 @@ public:
     void impl_tearDownDocCloseTest();
 
     std::mutex maMutex;
-    std::condition_variable maCondVar;
     std::vector<CloseEventType> m_observedCloseEvents;
 };
 
@@ -112,11 +110,8 @@ public:
 
     virtual void disposing(const EventObject&) override
     {
-        {
-            std::unique_lock l(m_rTest.maMutex);
-            m_rTest.m_observedCloseEvents.push_back(CloseEventType::Disposing);
-        }
-        m_rTest.maCondVar.notify_all();
+        std::unique_lock l(m_rTest.maMutex);
+        m_rTest.m_observedCloseEvents.push_back(CloseEventType::Disposing);
     }
 
 private:
@@ -149,9 +144,6 @@ std::ostream& operator<<(std::ostream& rStream, const std::vector<CloseEventType
  */
 void Test::impl_tearDownDocCloseTest()
 {
-    std::unique_lock l(maMutex);
-    maCondVar.wait_for(l, std::chrono::milliseconds(10000));
-
     std::vector<CloseEventType> aExpected{ CloseEventType::OnUnload, CloseEventType::NotifyClosing,
                                            CloseEventType::Disposing };
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong order of events when closing a doc", aExpected,
