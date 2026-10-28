@@ -9463,7 +9463,7 @@ void ScInterpreter::ScTextBeforeOrAfter(bool bBefore)
     svl::SharedString sText = GetString();
     if (sText.isEmpty())
     {
-        PushIllegalParameter();
+        PushError(FormulaError::NotAvailable);
         return;
     }
 
@@ -9524,8 +9524,10 @@ void ScInterpreter::ScTextBeforeOrAfter(bool bBefore)
     sal_Int32 nSize(aDelimiterPositions.size());
     if (nSize == 0 || std::abs(nInstanceNum) > nSize)
     {
-        if (aIfNotFound.has_value())
+        if (aIfNotFound.has_value() && !aIfNotFound.value().getString().isEmpty())
+        {
             PushString(aIfNotFound.value());
+        }
         else
             PushError(FormulaError::NotAvailable);
     }

@@ -3683,14 +3683,27 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="1048550">
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COM.MICROSOFT.TEXTBEFORE([.F3]; &quot;xxx&quot;;;;;)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#N/A</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce30" table:formula="of:=ISERROR([.A26])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>VERDADERO</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A26])" office:value-type="string" office:string-value="=TEXTBEFORE(F3; &quot;xxx&quot;;;;;)" calcext:value-type="string">
+      <text:p>=TEXTBEFORE(F3; &quot;xxx&quot;;;;;)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2" table:number-rows-repeated="1048549">
      <table:table-cell table:number-columns-repeated="7"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="7"/>
     </table:table-row>
     <calcext:conditional-formats>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C25">
+     <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C26">
       <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="true" calcext:value="=1" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="false" calcext:value="=0" calcext:base-cell-address="Sheet2.C2"/>
