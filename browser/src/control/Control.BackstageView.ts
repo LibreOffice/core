@@ -144,7 +144,10 @@ class BackstageView extends window.L.Class {
 				//TODO: Drop the `type: 'action'` alternative, along with the
 				// `actionType: 'open'`, once all CODA variants have online collab
 				// support:
-				type: window.ThisIsTheQtApp ? 'view' : 'action',
+				type:
+					window.ThisIsTheQtApp || window.ThisIsTheWindowsApp
+						? 'view'
+						: 'action',
 				actionType: 'open',
 				viewType: 'open',
 				icon: 'lc_open.svg',
