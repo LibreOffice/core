@@ -624,15 +624,20 @@ SdrPage* chartPageOf(const SdrOle2Obj& rObject)
 
 /*
     The mapping of a chart's page onto the upright window of the chart active in place: the
-    range its content covers onto the chart's logic rectangle, which is what the window fills.
-    The range is the one the chart's content is embedded by when it is not active, so nothing
-    moves when it becomes active.
+    range its content covers onto the window. The window has the size of the chart's logic
+    rectangle and stands upright on the middle of the chart as it is drawn, so a turned chart
+    is shown upright over its own place, as the office shows it. The range is the one the
+    chart's content is embedded by when it is not active, so nothing moves when it becomes
+    active.
 */
 basegfx::B2DHomMatrix mappingOfTheChart(const SdrOle2Obj& rObject)
 {
     basegfx::B2DRange aRange;
     ChartHelper::tryToGetChartContentAsPrimitive2DSequence(rObject.getXModel(), aRange);
-    const tools::Rectangle& rWindow(rObject.GetLogicRect());
+    tools::Rectangle aWindow(rObject.GetLogicRect());
+    aWindow.SetPos(rObject.GetSnapRect().Center() - Point(aWindow.GetWidth() / 2,
+                                                          aWindow.GetHeight() / 2));
+    const tools::Rectangle& rWindow(aWindow);
     if (aRange.isEmpty() || aRange.getWidth() <= 0.0 || aRange.getHeight() <= 0.0)
         return basegfx::utils::createTranslateB2DHomMatrix(rWindow.Left(), rWindow.Top());
 
