@@ -443,6 +443,23 @@ class InitializerBase {
 		this.initializeViewMode();
 		this.loadCSSFiles();
 	}
+
+	postMessageHandler(e) {
+		if (!(e && e.data))
+			return;
+
+		try {
+			var msg = JSON.parse(e.data);
+		} catch (err) {
+			return;
+		}
+
+		if (msg.MessageId === 'Host_PostmessageReady') {
+			window.WOPIPostmessageReady = true;
+			window.removeEventListener('message', this._boundPostMessageHandler, false);
+			console.log('Received Host_PostmessageReady.');
+		}
+	}
 }
 
 class BrowserInitializer extends InitializerBase {
@@ -517,23 +534,6 @@ class BrowserInitializer extends InitializerBase {
 		}
 		window.vendor = element.dataset.vendor;
 		window.copyrightYear = element.dataset.copyrightYear;
-	}
-
-	postMessageHandler(e) {
-		if (!(e && e.data))
-			return;
-
-		try {
-			var msg = JSON.parse(e.data);
-		} catch (err) {
-			return;
-		}
-
-		if (msg.MessageId === 'Host_PostmessageReady') {
-			window.WOPIPostmessageReady = true;
-			window.removeEventListener('message', this._boundPostMessageHandler, false);
-			console.log('Received Host_PostmessageReady.');
-		}
 	}
 }
 
