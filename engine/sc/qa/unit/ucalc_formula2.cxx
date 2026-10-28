@@ -8831,8 +8831,10 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testMalformedAdjacentNumbersPreserveTheirSpel
            u"=SUM(1).5"_ustr, u"=\"str\".5"_ustr, u"=1%.5"_ustr,      u"=1.2e3."_ustr,
            u"=1.e3."_ustr,    u"=1.2e3.e2"_ustr,  u"=1.2e3.e-2"_ustr, u"=1.."_ustr,
            u"=1.2e-3."_ustr,  u"=1.2e3..5"_ustr,  u"=1.2e3.٥"_ustr,   u"=1.2e3.５"_ustr })
+    {
         checkMalformedFormula(aPosition, rFormula, FormulaGrammar::GRAM_ENGLISH,
                               FormulaError::OperatorExpected);
+    }
 
     // A leading decimal after an operator is still an ordinary number.
     m_pDoc->SetFormula(aPosition, u"=11.3+.5"_ustr, FormulaGrammar::GRAM_ENGLISH);
@@ -8843,14 +8845,28 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testMalformedAdjacentNumbersPreserveTheirSpel
     // Invalid array contents retain their tokens when array merging fails.
     for (const OUString& rFormula :
          { u"={11.3.5;1}"_ustr, u"={1.2e3.5;1}"_ustr, u"={1.2e3.;1}"_ustr })
+    {
         checkMalformedFormula(aPosition, rFormula, FormulaGrammar::GRAM_ENGLISH,
                               FormulaError::BadArrayContent);
+    }
     m_pDoc->SetFormula(aPosition, u"={.5;1}"_ustr, FormulaGrammar::GRAM_ENGLISH);
     CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, m_pDoc->GetErrCode(aPosition));
     CPPUNIT_ASSERT_EQUAL(u"={0.5;1}"_ustr, m_pDoc->GetFormulaCell(aPosition)->GetFormula(
                                                FormulaGrammar::GRAM_ENGLISH));
     for (const OUString& rFormula : { u"=SUM(1.2e3.;1)"_ustr, u"=IF(1;1.2e3.;2)"_ustr })
+    {
         checkMalformedFormula(aPosition, rFormula, FormulaGrammar::GRAM_ENGLISH);
+    }
+    // Two numbers inside a function argument report a missing operator, not a
+    // missing bracket.
+    for (const OUString& rFormula : { u"=SUM(1 2)"_ustr, u"=IF(1;1 2;2)"_ustr })
+    {
+        checkMalformedFormula(aPosition, rFormula, FormulaGrammar::GRAM_ENGLISH,
+                              FormulaError::OperatorExpected);
+    }
+    // Two bad tokens that are not numbers report the missing bracket.
+    checkMalformedFormula(aPosition, u"=SUM(#getting_data)"_ustr, FormulaGrammar::GRAM_ENGLISH,
+                          FormulaError::PairExpected);
     for (const OUString& rFormula : { u"=1.2e3"_ustr, u"=1200."_ustr })
     {
         m_pDoc->SetFormula(aPosition, rFormula, FormulaGrammar::GRAM_ENGLISH);

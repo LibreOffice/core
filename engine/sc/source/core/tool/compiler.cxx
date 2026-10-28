@@ -2986,8 +2986,9 @@ Label_MaskStateMachine:
                 cGroupSep != cDecSep && cGroupSep != cDecSepAlt &&
                 cGroupSep != cSheetPrefix && cGroupSep != cSheetSep);
         // A numeric context may need the default locale's group separator.
-        // Repeated decimals in English grammar must retain its CharClass:
-        // a comma-decimal locale would split 1.2e-3. across the minus sign.
+        // English grammar with repeated decimal separators keeps the formula
+        // CharClass. It reads 1.2e-3 as one number, where a comma-decimal
+        // locale splits it at the minus sign.
         const bool bUseLocalNumericClass = !mxSymbols->isEnglishLocale() || nDecSeps < 2;
         const CharClass* pMyCharClass = (bUseLocalNumericClass
                 && ScGlobal::getCharClass().isDigit( OUString(pStart[nSrcPos]), 0) ?
@@ -3022,18 +3023,6 @@ Label_MaskStateMachine:
             }
             else
             {
-                // The i18n parser can skip whitespace that the ASCII fast
-                // path did not recognize. Keep that boundary in the existing
-                // whitespace tokens instead of letting ParseValue discard it.
-                // Whitespace inside a compound reference belongs to its symbol.
-                if (aRes.TokenType && aSymbol.isEmpty() && aRes.LeadingWhiteSpace)
-                {
-                    Whitespace aIgnoredSpace;
-                    const sal_Int32 nEnd = nSrcPos + aRes.LeadingWhiteSpace;
-                    while (nSrcPos < nEnd)
-                        addWhitespace(vSpaces, aIgnoredSpace, pStart[nSrcPos++]);
-                    vSpaces.emplace_back(aIgnoredSpace);
-                }
                 // When having parsed a second reference part, ensure that the
                 // i18n parser did not mistakenly parse a number that included
                 // a separator which happened to be meant as a parameter
@@ -5345,8 +5334,9 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
 
         // Numeric tokens normally store just the value. At a missing-operator
         // boundary, normalization can change the spelling or even make invalid
-        // input valid on reparse (e.g. 1.2e3. becomes 1200.). Keep the source
-        // spelling of the adjacent numbers through the existing ocBad tokens.
+        // input valid on reparse (for example 1.2e3. becomes 1200.). Keep the
+        // source spelling of the adjacent numbers through the existing ocBad
+        // tokens.
         const bool bNumber = maRawToken.GetType() == svDouble;
         std::u16string_view aNumber;
         if (bNumber)
@@ -5370,6 +5360,10 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
                 auto aSS = rDoc.GetSharedStringPool().intern(OUString(aNumber));
                 maRawToken.SetString(aSS.getData(), aSS.getDataIgnoreCase());
                 maRawToken.NewOpCode(ocBad);
+                // A number right after an operand is a missing operator. Inside an
+                // array the failed merge reports the bad content instead.
+                if (!bInArray)
+                    SetError(FormulaError::OperatorExpected);
             }
         }
         const OpCode eOp = maRawToken.GetOpCode();
@@ -5655,8 +5649,9 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
             }
         }
         meLastOp = maRawToken.GetOpCode();
-        // Any significant non-number ends the adjacency; in particular, array
-        // merging must not leave a saved index pointing into the merged array.
+        // The number is the last token added. Whitespace comes after it, so the saved
+        // index stays valid until the next significant token clears it. An array close
+        // clears it too, because its merge replaces the array tokens.
         aPreviousNumber = maRawToken.GetType() == svDouble ? aNumber : std::u16string_view();
         nPreviousNumber = mpArr->GetLen() - 1;
         if ( mbAutoCorrect )
