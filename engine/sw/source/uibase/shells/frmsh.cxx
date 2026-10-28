@@ -74,6 +74,7 @@
 #include <svx/drawitem.hxx>
 #include <svx/drawstyleutils.hxx>
 #include <algorithm>
+#include <functional>
 #include <memory>
 
 #define ShellClass_SwFrameShell
@@ -82,6 +83,7 @@
 #include <grfatr.hxx>
 #include <fldmgr.hxx>
 #include <flyfrm.hxx>
+#include <pagefrm.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -157,6 +159,22 @@ static void lcl_UpdateSizePercent(SwWrtShell& rSh, SwFlyFrameAttrMgr& rMgr, cons
     rMgr.GetAttrSet().Put(aFrameSize);
 }
 
+// Runs rChange on the draw view that holds the selected fly frames, as one undo step.
+static void lcl_ChangeSelectedFlyFrames(SwWrtShell& rSh,
+                                        const std::function<void(SdrView&)>& rChange)
+{
+    // Moving a fly frame switches drawing layer undo off, so it goes back to what it was.
+    IDocumentUndoRedo& rUndoRedo = rSh.GetDoc()->GetIDocumentUndoRedo();
+    const bool bDrawUndo = rUndoRedo.DoesDrawUndo();
+    rSh.StartAllAction();
+    rSh.StartUndo();
+    rChange(*rSh.GetDrawView());
+    rSh.EndUndo();
+    rSh.EndAllAction();
+    rUndoRedo.DoDrawUndo(bDrawUndo);
+    rSh.SetModified();
+}
+
 // Moves and resizes every selected fly frame together through the draw view, the way a set of
 // shapes is moved and resized. The requested position and size describe the rectangle around
 // the whole selection. The draw view's protection against moving or resizing holds. A request
@@ -167,16 +185,84 @@ static void lcl_TransformSelectedFlyFrames(SwWrtShell& rSh, const SfxItemSet* pA
         || pArgs->HasItem(SID_ATTR_TRANSFORM_DELTA_ANGLE))
         return;
 
-    // Moving a fly frame switches drawing layer undo off, so it goes back to what it was.
-    IDocumentUndoRedo& rUndoRedo = rSh.GetDoc()->GetIDocumentUndoRedo();
-    const bool bDrawUndo = rUndoRedo.DoesDrawUndo();
-    rSh.StartAllAction();
-    rSh.StartUndo();
-    rSh.GetDrawView()->SetGeoAttrToMarked(*pArgs);
-    rSh.EndUndo();
-    rSh.EndAllAction();
-    rUndoRedo.DoDrawUndo(bDrawUndo);
-    rSh.SetModified();
+    lcl_ChangeSelectedFlyFrames(rSh, [pArgs](SdrView& rView) { rView.SetGeoAttrToMarked(*pArgs); });
+}
+
+static bool lcl_IsObjectAlignSlot(sal_uInt16 nSlot)
+{
+    switch (nSlot)
+    {
+        case SID_OBJECT_ALIGN_LEFT:
+        case SID_OBJECT_ALIGN_CENTER:
+        case SID_OBJECT_ALIGN_RIGHT:
+        case SID_OBJECT_ALIGN_UP:
+        case SID_OBJECT_ALIGN_MIDDLE:
+        case SID_OBJECT_ALIGN_DOWN:
+            return true;
+        default:
+            return false;
+    }
+}
+
+// The whole selection moves as one block, so every frame has to be movable. A frame anchored as
+// character sits in its line of text, so a selection that holds one cannot be aligned.
+static bool lcl_CanAlignSelectedFlyFrames(const SwWrtShell& rSh)
+{
+    if (!rSh.GetDrawView()->IsMoveAllowed())
+        return false;
+    for (const SwFlyFrame* pFly : rSh.GetSelectedFlyFrames())
+    {
+        if (pFly->IsFlyInContentFrame())
+            return false;
+    }
+    return true;
+}
+
+// Aligns the selected fly frames as one block against the page margins of the first selected
+// frame. Every frame moves by the same distance, so the frames keep their places relative to
+// each other.
+static void lcl_AlignSelectedFlyFrames(SwWrtShell& rSh, sal_uInt16 nSlot)
+{
+    const std::vector<SwFlyFrame*> aFlyFrames = rSh.GetSelectedFlyFrames();
+    if (aFlyFrames.empty())
+        return;
+    const SwPageFrame* pPage = aFlyFrames.front()->FindPageFrame();
+    if (!pPage)
+        return;
+
+    SwRect aPrintArea(pPage->getFramePrintArea());
+    aPrintArea += pPage->getFrameArea().Pos();
+    const tools::Rectangle aArea(aPrintArea.SVRect());
+    const tools::Rectangle aSelection(rSh.GetDrawView()->GetMarkedObjRect());
+
+    Size aMove;
+    switch (nSlot)
+    {
+        case SID_OBJECT_ALIGN_LEFT:
+            aMove.setWidth(aArea.Left() - aSelection.Left());
+            break;
+        case SID_OBJECT_ALIGN_CENTER:
+            aMove.setWidth(aArea.Center().X() - aSelection.Center().X());
+            break;
+        case SID_OBJECT_ALIGN_RIGHT:
+            aMove.setWidth(aArea.Right() - aSelection.Right());
+            break;
+        case SID_OBJECT_ALIGN_UP:
+            aMove.setHeight(aArea.Top() - aSelection.Top());
+            break;
+        case SID_OBJECT_ALIGN_MIDDLE:
+            aMove.setHeight(aArea.Center().Y() - aSelection.Center().Y());
+            break;
+        case SID_OBJECT_ALIGN_DOWN:
+            aMove.setHeight(aArea.Bottom() - aSelection.Bottom());
+            break;
+        default:
+            return;
+    }
+    if (aMove.Width() == 0 && aMove.Height() == 0)
+        return;
+
+    lcl_ChangeSelectedFlyFrames(rSh, [aMove](SdrView& rView) { rView.MoveMarkedObj(aMove); });
 }
 
 void SwFrameShell::Execute(SfxRequest &rReq)
@@ -188,10 +274,13 @@ void SwFrameShell::Execute(SfxRequest &rReq)
     const SfxPoolItem* pItem;
     sal_uInt16 nSlot = rReq.GetSlot();
 
-    // Only the transform slot acts on several selected fly frames at once. The other frame
-    // commands are written for a single fly frame, so with several selected they do nothing.
+    // Only the transform and the align slots act on several selected fly frames at once. The
+    // other frame commands are written for a single fly frame, so with several selected they do
+    // nothing.
     if (rSh.IsMultipleFlyFramesSelected() && nSlot != SID_ATTR_TRANSFORM)
     {
+        if (lcl_IsObjectAlignSlot(nSlot) && lcl_CanAlignSelectedFlyFrames(rSh))
+            lcl_AlignSelectedFlyFrames(rSh, nSlot);
         return;
     }
 
@@ -837,14 +926,18 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
 
     // The frame commands act on one fly frame, so with several selected they are disabled.
     // Moving and resizing the whole selection stays available, so the transform slot keeps
-    // its default state.
+    // its default state. The align slots keep it too while the whole selection can move.
     if (rSh.IsMultipleFlyFramesSelected())
     {
+        const bool bAlignPossible = lcl_CanAlignSelectedFlyFrames(rSh);
         SfxWhichIter aIter( rSet );
         for (sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich())
         {
-            if (nWhich != SID_ATTR_TRANSFORM)
-                rSet.DisableItem(nWhich);
+            if (nWhich == SID_ATTR_TRANSFORM)
+                continue;
+            if (bAlignPossible && lcl_IsObjectAlignSlot(nWhich))
+                continue;
+            rSet.DisableItem(nWhich);
         }
         return;
     }

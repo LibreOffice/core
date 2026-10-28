@@ -1356,6 +1356,69 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTransformSeveralSelectedImages)
     CPPUNIT_ASSERT_EQUAL(aOldSecond.Left(), aFlyFrames[1]->getFrameArea().Left());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testAlignSeveralSelectedImages)
+{
+    // Aligning a selection of two images moves them as one block against the page margins, so
+    // the images keep their distance from each other. One undo step takes the move back.
+    createSwDoc("two-images.fodt");
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    CPPUNIT_ASSERT(pWrtShell->SelectObj(Point(), 0, pPage->GetObj(0)));
+    CPPUNIT_ASSERT(pWrtShell->SelectObj(Point(), SW_ADD_SELECT, pPage->GetObj(1)));
+    CPPUNIT_ASSERT(pWrtShell->IsMultipleFlyFramesSelected());
+    // The frame shell handles the align commands. The view switches to it on a timer after a
+    // selection change, so do that switch here.
+    SwView& rView = pWrtShell->GetView();
+    rView.SelectShell();
+
+    std::unique_ptr<SfxPoolItem> pItem;
+    CPPUNIT_ASSERT(rView.GetViewFrame().GetBindings().QueryState(SID_OBJECT_ALIGN_LEFT, pItem)
+                   != SfxItemState::DISABLED);
+
+    std::vector<SwFlyFrame*> aFlyFrames = pWrtShell->GetSelectedFlyFrames();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aFlyFrames.size());
+    // The first image is the one further left.
+    if (aFlyFrames[1]->getFrameArea().Left() < aFlyFrames[0]->getFrameArea().Left())
+        std::swap(aFlyFrames[0], aFlyFrames[1]);
+    const tools::Rectangle aOldFirst(aFlyFrames[0]->getFrameArea().SVRect());
+    const tools::Rectangle aOldSecond(aFlyFrames[1]->getFrameArea().SVRect());
+    const tools::Long nGap = aOldSecond.Left() - aOldFirst.Left();
+
+    // The document has one page.
+    const SwPageFrame* pPageFrame = pWrtShell->GetLayout()->Lower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPageFrame);
+    SwRect aPrintArea(pPageFrame->getFramePrintArea());
+    aPrintArea += pPageFrame->getFrameArea().Pos();
+    const tools::Rectangle aMargins(aPrintArea.SVRect());
+    // Both alignments below move the images.
+    CPPUNIT_ASSERT(aMargins.Left() != aOldFirst.Left());
+    CPPUNIT_ASSERT(aMargins.Right() != aOldSecond.Right());
+
+    // Aligning to the left puts the first image on the left margin and keeps the gap.
+    dispatchCommand(mxComponent, u".uno:ObjectAlignLeft"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(aMargins.Left(), aFlyFrames[0]->getFrameArea().SVRect().Left());
+    CPPUNIT_ASSERT_EQUAL(aMargins.Left() + nGap, aFlyFrames[1]->getFrameArea().SVRect().Left());
+    CPPUNIT_ASSERT_EQUAL(aOldFirst.Top(), aFlyFrames[0]->getFrameArea().SVRect().Top());
+    CPPUNIT_ASSERT_EQUAL(aOldSecond.Top(), aFlyFrames[1]->getFrameArea().SVRect().Top());
+
+    // One undo step puts both images back.
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(aOldFirst.Left(), aFlyFrames[0]->getFrameArea().SVRect().Left());
+    CPPUNIT_ASSERT_EQUAL(aOldSecond.Left(), aFlyFrames[1]->getFrameArea().SVRect().Left());
+
+    // Undo leaves one image selected, so select both again.
+    CPPUNIT_ASSERT(pWrtShell->SelectObj(Point(), 0, pPage->GetObj(0)));
+    CPPUNIT_ASSERT(pWrtShell->SelectObj(Point(), SW_ADD_SELECT, pPage->GetObj(1)));
+    rView.SelectShell();
+
+    // Aligning to the right puts the second image on the right margin and keeps the gap.
+    dispatchCommand(mxComponent, u".uno:ObjectAlignRight"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(aMargins.Right(), aFlyFrames[1]->getFrameArea().SVRect().Right());
+    CPPUNIT_ASSERT_EQUAL(aFlyFrames[1]->getFrameArea().SVRect().Left() - nGap,
+                         aFlyFrames[0]->getFrameArea().SVRect().Left());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testCopySeveralSelectedImages)
 {
     // Copying a selection of two images and pasting it adds two more images to the document.
