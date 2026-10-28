@@ -39,7 +39,6 @@ SplashScreenWindow::SplashScreenWindow(SplashScreen* pSplash, const OUString& rA
     , m_bNativeProgress(true)
     , m_sAppName(rAppName)
     , m_bShowLogo(true)
-    , m_bFullScreenSplash(false)
     , m_nHeight(0)
     , m_nWidth(0)
     , m_nTlx(NOT_LOADED)
@@ -210,11 +209,7 @@ void SplashScreenWindow::loadConfig()
     OUString sProgressTextBaseline = implReadBootstrapKey(u"ProgressTextBaseline"_ustr);
     OUString sSize = implReadBootstrapKey(u"ProgressSize"_ustr);
     OUString sPosition = implReadBootstrapKey(u"ProgressPosition"_ustr);
-    OUString sFullScreenSplash = implReadBootstrapKey(u"FullScreenSplash"_ustr);
     OUString sNativeProgress = implReadBootstrapKey(u"NativeProgress"_ustr);
-
-    // Determine full screen splash mode
-    m_bFullScreenSplash = ((!sFullScreenSplash.isEmpty()) && (sFullScreenSplash != "0"));
 
     if (!sProgressFrameColor.isEmpty())
     {

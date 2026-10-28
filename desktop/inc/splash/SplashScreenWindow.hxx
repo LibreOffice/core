@@ -36,7 +36,6 @@ class SplashScreenWindow : public IntroWindow
     bool m_bNativeProgress;
     OUString m_sAppName;
     bool m_bShowLogo;
-    bool m_bFullScreenSplash;
     tools::Long m_nHeight;
     tools::Long m_nWidth;
     tools::Long m_nTlx;
