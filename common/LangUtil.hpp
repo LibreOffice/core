@@ -11,24 +11,28 @@
 
 #pragma once
 
-#include <string>
+#include <string_view>
 
 namespace LangUtil
 {
-    inline bool isRtlLanguage(const std::string& language)
+    inline bool isRtlLanguage(std::string_view language)
     {
-        if (language.rfind("ar", 0) == 0 ||
-            language.rfind("arc", 0) == 0 ||
-            language.rfind("dv", 0) == 0 ||
-            language.rfind("fa", 0) == 0 ||
-            language.rfind("ha", 0) == 0 ||
-            language.rfind("he", 0) == 0 ||
-            language.rfind("khw", 0) == 0 ||
-            language.rfind("ks", 0) == 0 ||
-            language.rfind("ku", 0) == 0 ||
-            language.rfind("ps", 0) == 0 ||
-            language.rfind("ur", 0) == 0 ||
-            language.rfind("yi", 0) == 0)
+        // Compare only the language code, so that "arn" doesn't count as "ar".
+        static constexpr std::string_view letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const std::string_view code = language.substr(0, language.find_first_not_of(letters));
+
+        if (code == "ar" ||
+            code == "arc" ||
+            code == "dv" ||
+            code == "fa" ||
+            code == "ha" ||
+            code == "he" ||
+            code == "khw" ||
+            code == "ks" ||
+            code == "ku" ||
+            code == "ps" ||
+            code == "ur" ||
+            code == "yi")
             return true;
 
         return false;

@@ -97,7 +97,7 @@ NSString *app_text_direction;
     if (!app_locale || ![app_locale length])
         app_locale = [[NSLocale preferredLanguages] firstObject];
 
-    if (LangUtil::isRtlLanguage(std::string([app_locale UTF8String])))
+    if (LangUtil::isRtlLanguage([app_locale UTF8String]))
         app_text_direction = @"rtl";
     else
         app_text_direction = @"";

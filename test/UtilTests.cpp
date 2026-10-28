@@ -18,6 +18,7 @@
 #include <test/lokassert.hpp>
 
 #include <common/CharacterConverter.hpp>
+#include <common/LangUtil.hpp>
 #include <common/Util.hpp>
 
 #include <cppunit/extensions/HelperMacros.h>
@@ -37,6 +38,7 @@ class UtilTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testStreamMatch);
     CPPUNIT_TEST(testBase64Encode);
     CPPUNIT_TEST(testBase64Decode);
+    CPPUNIT_TEST(testIsRtlLanguage);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -46,6 +48,7 @@ class UtilTests : public CPPUNIT_NS::TestFixture
     void testStreamMatch();
     void testBase64Encode();
     void testBase64Decode();
+    void testIsRtlLanguage();
 };
 
 void UtilTests::testCharacterConverter()
@@ -183,6 +186,30 @@ void UtilTests::testBase64Decode()
     // Decode longer string.
     LOK_ASSERT_EQUAL(std::string("Hello World!"),
                      Util::base64Decode("SGVsbG8gV29ybGQh"));
+}
+
+void UtilTests::testIsRtlLanguage()
+{
+    constexpr std::string_view testname = __func__;
+
+    LOK_ASSERT(LangUtil::isRtlLanguage("ar"));
+    LOK_ASSERT(LangUtil::isRtlLanguage("he"));
+    LOK_ASSERT(LangUtil::isRtlLanguage("ar-EG"));
+    LOK_ASSERT(LangUtil::isRtlLanguage("he-IL"));
+    LOK_ASSERT(LangUtil::isRtlLanguage("ar_EG"));
+    LOK_ASSERT(LangUtil::isRtlLanguage("arc"));
+    LOK_ASSERT(LangUtil::isRtlLanguage(std::string("fa-IR")));
+
+    LOK_ASSERT(!LangUtil::isRtlLanguage("en-GB"));
+    LOK_ASSERT(!LangUtil::isRtlLanguage("de"));
+    LOK_ASSERT(!LangUtil::isRtlLanguage("fr"));
+    LOK_ASSERT(!LangUtil::isRtlLanguage(""));
+
+    // These only start with the letters of a right to left language code.
+    LOK_ASSERT(!LangUtil::isRtlLanguage("arn"));
+    LOK_ASSERT(!LangUtil::isRtlLanguage("arn-CL"));
+    LOK_ASSERT(!LangUtil::isRtlLanguage("haw"));
+    LOK_ASSERT(!LangUtil::isRtlLanguage("urj"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(UtilTests);

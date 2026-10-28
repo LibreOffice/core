@@ -800,7 +800,7 @@ static std::atomic<int> appDocIdCounter(1);
 }
 
 + (bool)isRtlLanguage:(NSString *)language {
-    return LangUtil::isRtlLanguage(std::string([language UTF8String]));
+    return LangUtil::isRtlLanguage([language UTF8String]);
 }
 
 // A debug build opens the welcome slideshow only from Help > Latest Updates.
