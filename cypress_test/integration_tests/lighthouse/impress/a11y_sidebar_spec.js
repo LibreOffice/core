@@ -146,6 +146,7 @@ describe(['taglighthouse'], 'Accessibility Impress Sidebar Tests', { testIsolati
 			win.app.map.sendUnoCommand('.uno:SidebarDeck.SdCustomAnimationDeck');
 			helper.processToIdle(win);
 		});
+		cy.cGet('#SdCustomAnimationDeck').should('be.visible');
 
 		runA11yValidation(win);
 
@@ -160,6 +161,7 @@ describe(['taglighthouse'], 'Accessibility Impress Sidebar Tests', { testIsolati
 			win.app.map.sendUnoCommand('.uno:SidebarDeck.SdMasterPagesDeck');
 			helper.processToIdle(win);
 		});
+		cy.cGet('#SdMasterPagesDeck').should('be.visible');
 
 		runA11yValidation(win);
 

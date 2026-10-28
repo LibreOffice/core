@@ -289,7 +289,9 @@ class Sidebar extends SidebarBase {
 							: false;
 						// just to be sure check with other method
 						if (isCurrent === 'false' || !isCurrent)
-							isCurrent = target === this.commandForDeck(activeDeckId);
+							isCurrent =
+								target === this.commandForDeck(activeDeckId) ||
+								target === '.uno:SidebarDeck.' + activeDeckId;
 						if (target && (isCurrent === 'false' || !isCurrent)) {
 							this.changeDeck(target);
 							// A closed sidebar opens on the last deck core showed. It stays
