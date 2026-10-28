@@ -1080,7 +1080,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
             default:
 #if OSL_DEBUG_LEVEL > 0
                 const size_t opt_nProp_size(opt.nProp.size());
-                SAL_WARN( "oox.vml", "TODO VMLExport::Commit(), unimplemented id: " << nId
+                SAL_INFO( "oox.vml", "TODO VMLExport::Commit(), unimplemented id: " << nId
                         << ", value: " << opt.nPropValue
                         << ", data: [" << opt_nProp_size << "]");
                 if ( opt.nProp.size() )
