@@ -22,6 +22,7 @@
 #include <splash/splash.hxx>
 
 #include <vcl/salnativewidgets.hxx>
+#include <vcl/scheduler.hxx>
 
 SplashScreenWindow::SplashScreenWindow(SplashScreen* pSplash)
     : m_pSplash(pSplash)
@@ -45,10 +46,9 @@ void SplashScreenWindow::SetOutputSizePixel(const Size& rNewSize)
 void SplashScreenWindow::Redraw()
 {
     Invalidate();
-    // Trigger direct painting too - otherwise the splash screen won't be
-    // shown in some cases (when the idle timer won't be hit).
-    Paint(*GetOutDev(), tools::Rectangle());
-    GetOutDev()->Flush();
+
+    // Trigger event processing to ensure drawing happens
+    Scheduler::ProcessEventsToIdle();
 }
 
 void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
