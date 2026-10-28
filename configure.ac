@@ -3180,6 +3180,23 @@ AS_IF([test "$ENABLE_IOSAPP" = "true"],
           else
              AC_MSG_RESULT([${with_iosapp_appicon:-default} embedded icon])
           fi
+
+          # The thumbnail extension draws the document icons of the icon theme. A custom icon
+          # theme supplies the icon when it has the file. The stock image is linked otherwise.
+          for icon in x-office-document x-office-spreadsheet x-office-presentation \
+                      x-office-drawing; do
+             imageset=ios/DocumentThumbnail/Assets.xcassets/$icon.imageset
+             if test -L $imageset/$icon.svg; then
+                rm -f $imageset/$icon.svg
+             elif test -f $imageset/$icon.svg; then
+                AC_MSG_ERROR([$imageset/$icon.svg exists and is not a symbolic link])
+             fi
+             if test -n "$CUSTOM_ICONS_DIRECTORY" -a -f "$CUSTOM_ICONS_DIRECTORY/$icon.svg"; then
+                ln -s "$CUSTOM_ICONS_DIRECTORY/$icon.svg" $imageset/$icon.svg
+             else
+                ln -s ../../../../browser/images/$icon.svg $imageset/$icon.svg
+             fi
+          done
        fi
       ],
       [

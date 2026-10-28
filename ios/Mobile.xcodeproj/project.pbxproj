@@ -108,6 +108,8 @@
 		C79282312DF89BB2001EA43B /* MobileSocket.mm in Sources */ = {isa = PBXBuildFile; fileRef = C79282302DF89BB2001EA43B /* MobileSocket.mm */; };
 		C7CA44012F430DCC0087DA36 /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7CA44002F430DCC0087DA36 /* QuickLook.framework */; };
 		C7CA440D2F430DCC0087DA36 /* FakeQuickLook.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C7CA43FF2F430DCC0087DA36 /* FakeQuickLook.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		C7E2B1012FA7C0D100A1B2C3 /* DocumentThumbnail.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C7E2B1042FA7C0D100A1B2C3 /* DocumentThumbnail.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		C7E2B1022FA7C0D100A1B2C3 /* QuickLookThumbnailing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7E2B1052FA7C0D100A1B2C3 /* QuickLookThumbnailing.framework */; };
 		D49B580F2D1077F700E0E607 /* UniformTypeIdentifiers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D49B580E2D1077F700E0E607 /* UniformTypeIdentifiers.framework */; };
 		D4A0F3D72D64E86C00472DEE /* CoolURLSchemeHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A0F3D62D64E86C00472DEE /* CoolURLSchemeHandler.mm */; };
 		F5298224F045BF70EF05D82D /* app-dark-theme.js in Resources */ = {isa = PBXBuildFile; fileRef = 067F260BDBEA5F447B2019E6 /* app-dark-theme.js */; };
@@ -128,6 +130,13 @@
 			remoteGlobalIDString = C7CA43FE2F430DCC0087DA36;
 			remoteInfo = FakeQuickLook;
 		};
+		C7E2B1032FA7C0D100A1B2C3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BE8D771F2136762500AC58EA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C7E2B1092FA7C0D100A1B2C3;
+			remoteInfo = DocumentThumbnail;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -138,6 +147,7 @@
 			dstSubfolderSpec = 13;
 			files = (
 				C7CA440D2F430DCC0087DA36 /* FakeQuickLook.appex in Embed Foundation Extensions */,
+				C7E2B1012FA7C0D100A1B2C3 /* DocumentThumbnail.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1547,6 +1557,8 @@
 		C7C0F1A02F5B00010000A001 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		C7CA43FF2F430DCC0087DA36 /* FakeQuickLook.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FakeQuickLook.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7CA44002F430DCC0087DA36 /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
+		C7E2B1042FA7C0D100A1B2C3 /* DocumentThumbnail.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DocumentThumbnail.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		C7E2B1052FA7C0D100A1B2C3 /* QuickLookThumbnailing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLookThumbnailing.framework; path = System/Library/Frameworks/QuickLookThumbnailing.framework; sourceTree = SDKROOT; };
 		D49B580E2D1077F700E0E607 /* UniformTypeIdentifiers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UniformTypeIdentifiers.framework; path = System/Library/Frameworks/UniformTypeIdentifiers.framework; sourceTree = SDKROOT; };
 		D4A0F3D62D64E86C00472DEE /* CoolURLSchemeHandler.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CoolURLSchemeHandler.mm; sourceTree = "<group>"; };
 		D4A0F3D82D663A0000472DEE /* CoolURLSchemeHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoolURLSchemeHandler.h; sourceTree = "<group>"; };
@@ -1560,11 +1572,19 @@
 			);
 			target = C7CA43FE2F430DCC0087DA36 /* FakeQuickLook */;
 		};
+		C7E2B1062FA7C0D100A1B2C3 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = C7E2B1092FA7C0D100A1B2C3 /* DocumentThumbnail */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		C73BEA622E8429C4009E12D3 /* MobileUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = MobileUITests; sourceTree = "<group>"; };
 		C7CA44022F430DCC0087DA36 /* FakeQuickLook */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (C7CA44112F430DCC0087DA36 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = FakeQuickLook; sourceTree = "<group>"; };
+		C7E2B1072FA7C0D100A1B2C3 /* DocumentThumbnail */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (C7E2B1062FA7C0D100A1B2C3 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = DocumentThumbnail; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1593,6 +1613,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7CA44012F430DCC0087DA36 /* QuickLook.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7E2B1082FA7C0D100A1B2C3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7E2B1022FA7C0D100A1B2C3 /* QuickLookThumbnailing.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1641,6 +1669,7 @@
 				BE00F8B6213ED573001CE2D4 /* libz.tbd */,
 				BE00F8B4213ED543001CE2D4 /* libiconv.tbd */,
 				C7CA44002F430DCC0087DA36 /* QuickLook.framework */,
+				C7E2B1052FA7C0D100A1B2C3 /* QuickLookThumbnailing.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2735,6 +2764,7 @@
 				BE8D77292136762500AC58EA /* Mobile */,
 				C73BEA622E8429C4009E12D3 /* MobileUITests */,
 				C7CA44022F430DCC0087DA36 /* FakeQuickLook */,
+				C7E2B1072FA7C0D100A1B2C3 /* DocumentThumbnail */,
 				BE8D77282136762500AC58EA /* Products */,
 				BE00F8B3213ED542001CE2D4 /* Frameworks */,
 			);
@@ -2746,6 +2776,7 @@
 				BE8D77272136762500AC58EA /* Mobile.app */,
 				C73BEA612E8429C4009E12D3 /* MobileUITests.xctest */,
 				C7CA43FF2F430DCC0087DA36 /* FakeQuickLook.appex */,
+				C7E2B1042FA7C0D100A1B2C3 /* DocumentThumbnail.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3689,6 +3720,7 @@
 			);
 			dependencies = (
 				C7CA440C2F430DCC0087DA36 /* PBXTargetDependency */,
+				C7E2B10C2FA7C0D100A1B2C3 /* PBXTargetDependency */,
 			);
 			name = Mobile;
 			productName = Mobile;
@@ -3740,6 +3772,28 @@
 			productReference = C7CA43FF2F430DCC0087DA36 /* FakeQuickLook.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		C7E2B1092FA7C0D100A1B2C3 /* DocumentThumbnail */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C7E2B10F2FA7C0D100A1B2C3 /* Build configuration list for PBXNativeTarget "DocumentThumbnail" */;
+			buildPhases = (
+				C7E2B10B2FA7C0D100A1B2C3 /* Sources */,
+				C7E2B1082FA7C0D100A1B2C3 /* Frameworks */,
+				C7E2B10A2FA7C0D100A1B2C3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				C7E2B1072FA7C0D100A1B2C3 /* DocumentThumbnail */,
+			);
+			name = DocumentThumbnail;
+			packageProductDependencies = (
+			);
+			productName = DocumentThumbnail;
+			productReference = C7E2B1042FA7C0D100A1B2C3 /* DocumentThumbnail.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -3765,6 +3819,9 @@
 					C7CA43FE2F430DCC0087DA36 = {
 						CreatedOnToolsVersion = 26.2;
 					};
+					C7E2B1092FA7C0D100A1B2C3 = {
+						CreatedOnToolsVersion = 26.2;
+					};
 				};
 			};
 			buildConfigurationList = BE8D77222136762500AC58EA /* Build configuration list for PBXProject "Mobile" */;
@@ -3784,6 +3841,7 @@
 				BE8D77262136762500AC58EA /* Mobile */,
 				C73BEA602E8429C4009E12D3 /* MobileUITests */,
 				C7CA43FE2F430DCC0087DA36 /* FakeQuickLook */,
+				C7E2B1092FA7C0D100A1B2C3 /* DocumentThumbnail */,
 			);
 		};
 /* End PBXProject section */
@@ -3843,6 +3901,13 @@
 				C75AA5C2308B9E6400ED15D4 /* AppIcon.icon in Resources */,
 				C74FE3C73090A8D900643C6B /* AppIcon_snapshot.icon in Resources */,
 				C74FE3C83090A8D900643C6B /* AppIcon_release.icon in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7E2B10A2FA7C0D100A1B2C3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3951,6 +4016,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C7E2B10B2FA7C0D100A1B2C3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -3963,6 +4035,11 @@
 			isa = PBXTargetDependency;
 			target = C7CA43FE2F430DCC0087DA36 /* FakeQuickLook */;
 			targetProxy = C7CA440B2F430DCC0087DA36 /* PBXContainerItemProxy */;
+		};
+		C7E2B10C2FA7C0D100A1B2C3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C7E2B1092FA7C0D100A1B2C3 /* DocumentThumbnail */;
+			targetProxy = C7E2B1032FA7C0D100A1B2C3 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -4389,6 +4466,90 @@
 			};
 			name = Release;
 		};
+		C7E2B10D2FA7C0D100A1B2C3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = J4FQ687VJK;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DocumentThumbnail/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DocumentThumbnail;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright 2026 Collabora. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = "$(APP_BUNDLE_SHORT_VERSION:default=1.0)";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_PACKAGE_NAME:default=com.collabora.office.Mobile).DocumentThumbnail";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "$(DOCUMENTTHUMBNAIL_PROVISIONING_PROFILE_SPECIFIER)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C7E2B10E2FA7C0D100A1B2C3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = J4FQ687VJK;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DocumentThumbnail/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DocumentThumbnail;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright 2026 Collabora. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = "$(APP_BUNDLE_SHORT_VERSION:default=1.0)";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_PACKAGE_NAME:default=com.collabora.office.Mobile).DocumentThumbnail";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "$(DOCUMENTTHUMBNAIL_PROVISIONING_PROFILE_SPECIFIER)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -4424,6 +4585,15 @@
 			buildConfigurations = (
 				C7CA440F2F430DCC0087DA36 /* Debug */,
 				C7CA44102F430DCC0087DA36 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C7E2B10F2FA7C0D100A1B2C3 /* Build configuration list for PBXNativeTarget "DocumentThumbnail" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C7E2B10D2FA7C0D100A1B2C3 /* Debug */,
+				C7E2B10E2FA7C0D100A1B2C3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

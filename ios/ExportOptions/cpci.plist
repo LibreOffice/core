@@ -12,6 +12,8 @@
     <string>Collabora Office Mobile CI</string>
     <key>com.collabora.office.Mobile.CI.FakeQuickLook</key>
     <string>Collabora Office Mobile CI FakeQuickLook</string>
+    <key>com.collabora.office.Mobile.CI.DocumentThumbnail</key>
+    <string>Collabora Office Mobile CI DocumentThumbnail</string>
   </dict>
 </dict>
 </plist>

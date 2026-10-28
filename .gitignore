@@ -181,6 +181,7 @@ ios/Mobile/Assets.xcassets/AppIcon.appiconset
 ios/FakeQuickLook/Assets.xcassets/AppIcon.appiconset
 ios/Mobile/AppIcon.icon
 ios/FakeQuickLook/AppIcon.icon
+ios/DocumentThumbnail/Assets.xcassets/*.imageset/*.svg
 
 # build numbers/versions
 BUNDLE-VERSION
