@@ -9,10 +9,14 @@
 
 #include <test/unoapixml_test.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
+#include <com/sun/star/table/XColumnRowRange.hpp>
+#include <com/sun/star/text/XText.hpp>
 
 #include <extendedprimitive2dxmldump.hxx>
 #include <rtl/ustring.hxx>
@@ -290,6 +294,68 @@ CPPUNIT_TEST_FIXTURE(Test, testAutoColorOnDarkBackground)
     assertXPath(pDocument, sCell2, "fontcolor", u"#000000");
     // Cell 2: black fill, expect white text
     assertXPath(pDocument, sCell3, "fontcolor", u"#ffffff");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTableLayoutWaitsForUnlock)
+{
+    // Given a table shape with text in its first cell:
+    loadFromURL(u"private:factory/simpress"_ustr);
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
+        = { comphelper::makePropertyValue(u"Rows"_ustr, sal_Int32(2)),
+            comphelper::makePropertyValue(u"Columns"_ustr, sal_Int32(2)) };
+    dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
+    CPPUNIT_ASSERT(pDrawPage);
+    SdrPage* pSdrPage = pDrawPage->GetSdrPage();
+    auto pTableObject
+        = dynamic_cast<sdr::table::SdrTableObj*>(pSdrPage->GetObj(pSdrPage->GetObjCount() - 1));
+    CPPUNIT_ASSERT(pTableObject);
+    uno::Reference<table::XCellRange> xTable(pTableObject->getTable(), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xCellText(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
+    xCellText->setString(u"A"_ustr);
+    const tools::Long nHeightBefore = pTableObject->GetSnapRect().getOpenHeight();
+
+    // When the first column gets narrower and the text of its first cell much larger while the
+    // shape is locked:
+    uno::Reference<document::XActionLockable> xLockable(pTableObject->getUnoShape(),
+                                                        uno::UNO_QUERY_THROW);
+    xLockable->addActionLock();
+    uno::Reference<table::XColumnRowRange> xColumnRowRange(xTable, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xFirstColumn(xColumnRowRange->getColumns()->getByIndex(0),
+                                                     uno::UNO_QUERY_THROW);
+    const sal_Int32 nWidth = xFirstColumn->getPropertyValue(u"Width"_ustr).get<sal_Int32>();
+    xFirstColumn->setPropertyValue(u"Width"_ustr, uno::Any(nWidth / 2));
+    uno::Reference<beans::XPropertySet> xCell(xTable->getCellByPosition(0, 0),
+                                              uno::UNO_QUERY_THROW);
+    xCell->setPropertyValue(u"CharHeight"_ustr, uno::Any(float(72)));
+
+    // Then the table keeps its height until the lock is released, and grows to fit the text after:
+    CPPUNIT_ASSERT_EQUAL(nHeightBefore, pTableObject->GetSnapRect().getOpenHeight());
+    xLockable->removeActionLock();
+    CPPUNIT_ASSERT_GREATER(nHeightBefore, pTableObject->GetSnapRect().getOpenHeight());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testEmptyCellUsesCellFontSize)
+{
+    // Given a 2x2 table whose cell styles set an 8pt font, where every cell has 8pt text, except
+    // the last cell, which is empty:
+    loadFromFile(u"table-empty-cell-font-size.fodp");
+
+    // When the document is loaded, then the empty row is as high as the row with text:
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XColumnRowRange> xTable(xShape->getPropertyValue(u"Model"_ustr),
+                                                  uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xRows = xTable->getRows();
+    uno::Reference<beans::XPropertySet> xTextRow(xRows->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xEmptyRow(xRows->getByIndex(1), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(xTextRow->getPropertyValue(u"Height"_ustr).get<sal_Int32>(),
+                         xEmptyRow->getPropertyValue(u"Height"_ustr).get<sal_Int32>());
 }
 }
 

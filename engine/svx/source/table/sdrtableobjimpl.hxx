@@ -49,6 +49,10 @@ public:
     cpo::uno::Reference< css::container::XIndexAccess > mxTableStyle;
     std::vector<std::unique_ptr<SdrUndoAction>> maUndos;
     bool mbSkipChangeLayout;
+    /// Number of uno_lock calls that have no matching uno_unlock yet.
+    sal_Int32 mnUnoLockCount;
+    /// True when the table changed while it was locked and has not been laid out since.
+    bool mbLayoutPending;
 
     void CropTableModelToSelection(const CellPos& rStart, const CellPos& rEnd);
 

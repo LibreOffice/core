@@ -199,8 +199,13 @@ SdrText* CellTextProvider::getText(sal_Int32 nIndex) const
             {
                 std::optional<OutlinerParaObject> pParaObj = mxCell->CreateEditOutlinerParaObject();
 
-                if( !pParaObj && mxCell->GetOutlinerParaObject())
-                    pParaObj = *mxCell->GetOutlinerParaObject();
+                if( !pParaObj )
+                {
+                    // An empty cell gets its paragraph here, so the cell attributes reach it too.
+                    mxCell->ForceOutlinerParaObject( OutlinerMode::TextObject );
+                    if( mxCell->GetOutlinerParaObject() )
+                        pParaObj = *mxCell->GetOutlinerParaObject();
+                }
 
                 if(pParaObj)
                 {

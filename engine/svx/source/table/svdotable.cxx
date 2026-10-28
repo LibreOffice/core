@@ -208,6 +208,8 @@ std::vector<sal_Int32> SdrTableObjImpl::lastColWidths;
 SdrTableObjImpl::SdrTableObjImpl()
 : mpTableObj( nullptr )
 , mbSkipChangeLayout(false)
+, mnUnoLockCount(0)
+, mbLayoutPending(false)
 {
 }
 
@@ -647,6 +649,7 @@ void SdrTableObjImpl::update()
     auto aRectangle = mpTableObj->getRectangle();
     LayoutTable(aRectangle, false, false);
     mpTableObj->setRectangle(aRectangle);
+    mbLayoutPending = false;
 
     mpTableObj->SetBoundAndSnapRectsDirty();
     mpTableObj->ActionChanged();
@@ -2460,9 +2463,15 @@ void SdrTableObj::SetChanged()
 {
     if( mpImpl.is() )
     {
-        auto aRectangle = getRectangle();
-        mpImpl->LayoutTable(aRectangle, false, false);
-        setRectangle(aRectangle);
+        // A locked table is laid out once, when the last lock is released.
+        if( mpImpl->mnUnoLockCount > 0 )
+            mpImpl->mbLayoutPending = true;
+        else
+        {
+            auto aRectangle = getRectangle();
+            mpImpl->LayoutTable(aRectangle, false, false);
+            setRectangle(aRectangle);
+        }
     }
 
     ::SdrTextObj::SetChanged();
@@ -2472,14 +2481,28 @@ void SdrTableObj::SetChanged()
 void SdrTableObj::uno_lock()
 {
     if( mpImpl.is() && mpImpl->mxTable.is() )
+    {
+        ++mpImpl->mnUnoLockCount;
         mpImpl->mxTable->lockBroadcasts();
+    }
 }
 
 
 void SdrTableObj::uno_unlock()
 {
     if( mpImpl.is() && mpImpl->mxTable.is() )
+    {
+        if( mpImpl->mnUnoLockCount > 0 )
+            --mpImpl->mnUnoLockCount;
+        // A change of the table model during the lock is broadcast here, and the table lays
+        // itself out on that broadcast, which clears the pending layout.
         mpImpl->mxTable->unlockBroadcasts();
+        if( mpImpl->mnUnoLockCount == 0 && mpImpl->mbLayoutPending )
+        {
+            mpImpl->mbLayoutPending = false;
+            SetChanged();
+        }
+    }
 }
 
 void SdrTableObj::dumpAsXml(xmlTextWriterPtr pWriter) const
