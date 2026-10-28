@@ -1065,7 +1065,6 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf84874)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(255), nErrorTextLen);
 }
 
-#if 0
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf136721_paper_size)
 {
     createScDoc("xlsx/tdf136721_letter_sized_paper.xlsx");
@@ -1076,7 +1075,6 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf136721_paper_size)
 
     assertXPath(pDoc, "/x:worksheet/x:pageSetup", "paperSize", u"70");
 }
-#endif
 
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf139258_rotated_image)
 {
