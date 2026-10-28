@@ -48,6 +48,9 @@ AVAILABLE TARGETS
        build-l10n-only      builds translation files for the build products
        build-non-l10n-only  builds the product without the localization files
        translations         extract .pot files to workdir/pot
+       pot                  the same as translations
+       l10n                 update the po files under translations/source
+                            with freshly extracted pot files
 
        packageinfo          generates package information for distros
        dump-deps-png        creates dependency diagrams in PNG format

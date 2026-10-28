@@ -150,7 +150,7 @@ $(call gb_Module_get_target,%) :
 		mkdir -p $(dir $@) && \
 		touch $@)
 
-.PHONY : build build-l10n-only build-non-l10n-only coverage unitcheck slowcheck screenshot subsequentcheck perfcheck uicheck clean check debugrun help showmodules translations
+.PHONY : build build-l10n-only build-non-l10n-only coverage unitcheck slowcheck screenshot subsequentcheck perfcheck uicheck clean check debugrun help showmodules translations pot l10n
 .DEFAULT_GOAL := build
 
 ifeq ($(gb_Side),build)
@@ -240,6 +240,24 @@ showmodules :
 	@true
 
 translations : $(WORKDIR)/pot.done
+
+pot : translations
+
+# l10n brings the po files under translations/source up to date with the
+# pot files. The pot files are regenerated first, so that the update never
+# works from a stale set.
+l10n : $(WORKDIR)/pot.done
+	$(call gb_Output_announce,translations/source,$(true),L10N,1)
+	$(call gb_Helper_abbreviate_dirs,\
+		$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/solenv/bin/update-translations.py \
+			$(WORKDIR)/pot $(SRCDIR)/translations/source)
+
+ifneq (,$(filter l10n,$(MAKECMDGOALS)))
+.PHONY : l10n.clean-pot
+$(WORKDIR)/pot.done : l10n.clean-pot
+l10n.clean-pot :
+	rm -rf $(WORKDIR)/pot $(WORKDIR)/pot.done
+endif
 
 $(WORKDIR)/pot.done : $(foreach exec,cfgex helpex localize propex ulfex xrmex treex, \
 							$(call gb_Executable_get_target_for_build,$(exec)))

@@ -9,7 +9,7 @@
 
 gb_Top_MODULE_CHECK_TARGETS := slowcheck unitcheck subsequentcheck perfcheck uicheck screenshot
 
-.PHONY : check-if-root check-makefile-version bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host clean-host-except-workdir stage-clean test-install distclean distro-pack-install docs download etags fetch fetch-repos id install install-gdb-printers install-strip tags debugrun help showmodules translations packageinfo coverage internal.clean $(gb_Top_MODULE_CHECK_TARGETS)
+.PHONY : check-if-root check-makefile-version bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host clean-host-except-workdir stage-clean test-install distclean distro-pack-install docs download etags fetch fetch-repos id install install-gdb-printers install-strip tags debugrun help showmodules translations pot l10n packageinfo coverage internal.clean $(gb_Top_MODULE_CHECK_TARGETS)
 
 DISABLE_GUI := @DISABLE_GUI@
 
@@ -17,7 +17,7 @@ MAKECMDGOALS?=build
 build_goal:=$(if $(filter build uicheck,$(MAKECMDGOALS)),build)\
  $(if $(filter check,$(MAKECMDGOALS)),unitcheck slowcheck subsequentcheck \
 	 $(if $(filter Linux,$(shell uname)),uicheck)) \
- $(filter build-l10n-only build-non-l10n-only debugrun help showmodules translations $(gb_Top_MODULE_CHECK_TARGETS) check packageinfo gbuildtojson,$(MAKECMDGOALS))
+ $(filter build-l10n-only build-non-l10n-only debugrun help showmodules translations pot l10n $(gb_Top_MODULE_CHECK_TARGETS) check packageinfo gbuildtojson,$(MAKECMDGOALS))
 
 SRCDIR := @SRC_ROOT@
 BUILDDIR := @BUILDDIR@
@@ -323,7 +323,7 @@ ifeq ($(OS),iOS)
 	$(KEEP_AWAKE_CMD) $(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) ios
 endif
 
-build-non-l10n-only build-l10n-only check debugrun translations packageinfo coverage $(gb_Top_MODULE_CHECK_TARGETS): build
+build-non-l10n-only build-l10n-only check debugrun translations pot l10n packageinfo coverage $(gb_Top_MODULE_CHECK_TARGETS): build
 
 help showmodules gbuildtojson pocheck:
 	$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
