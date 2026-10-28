@@ -133,7 +133,8 @@ bool Cache::supplyConfigFile(const std::string& cacheDir, const std::string& sta
         LOG_DBG("cacheFile: " << cacheStampFile << " with obsolete stamp: " << cacheStamp << " vs: " << stamp);
         return false;
     }
-    if (!FileUtil::copy(cacheContentsFile, dest, false, false))
+    // A kit can be reading dest while another document load supplies it again.
+    if (!FileUtil::copyAtomic(cacheContentsFile, dest, false))
     {
         LOG_WRN("cacheFile: " << cacheContentsFile << " couldn't be copied");
         return false;
