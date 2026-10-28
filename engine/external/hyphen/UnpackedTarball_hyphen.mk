@@ -13,10 +13,4 @@ $(eval $(call gb_UnpackedTarball_set_tarball,hyphen,$(HYPHEN_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,hyphen))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,hyphen,2))
-
-$(eval $(call gb_UnpackedTarball_add_patches,hyphen,\
-	external/hyphen/hyphen-build.patch \
-))
-
 # vim: set noet sw=4 ts=4:
