@@ -55,6 +55,13 @@ private:
     QByteArray _form; ///< The body of the last form posted into an editor frame.
 };
 
+/// The page of a cloud account's window.
+class CloudAccountPage : public QWebEnginePage
+{
+public:
+    CloudAccountPage(QWebEngineProfile* profile, QObject* parent);
+};
+
 void EditorFormInterceptor::interceptRequest(QWebEngineUrlRequestInfo& info)
 {
     const bool isIFrame = info.resourceType() == QWebEngineUrlRequestInfo::ResourceTypeSubFrame;
@@ -85,6 +92,19 @@ void EditorFormInterceptor::interceptRequest(QWebEngineUrlRequestInfo& info)
     LOG_DBG("account window: kept the " << _form.size()
                                         << "-byte form posted into an editor frame");
 }
+
+CloudAccountPage::CloudAccountPage(QWebEngineProfile* profile, QObject* parent)
+    : QWebEnginePage(profile, parent)
+{
+    setUrlRequestInterceptor(new EditorFormInterceptor(this));
+
+    QWebEngineScript emptyCoolPage;
+    emptyCoolPage.setSourceCode(QString::fromUtf8(EMPTY_COOL_PAGE_SCRIPT));
+    emptyCoolPage.setInjectionPoint(QWebEngineScript::DocumentCreation);
+    emptyCoolPage.setWorldId(QWebEngineScript::ApplicationWorld);
+    emptyCoolPage.setRunsOnSubFrames(true);
+    scripts().insert(emptyCoolPage);
+}
 }
 
 namespace coda
@@ -98,17 +118,7 @@ void openRemoteFile(const QString& serverUrl, QWidget* parent,
     window->resize(ACCOUNT_WINDOW_SIZE);
 
     auto* view = new QWebEngineView(window);
-    auto* page = new QWebEnginePage(pickerProfile, view);
-    page->setUrlRequestInterceptor(new EditorFormInterceptor(page));
-
-    QWebEngineScript emptyCoolPage;
-    emptyCoolPage.setSourceCode(QString::fromUtf8(EMPTY_COOL_PAGE_SCRIPT));
-    emptyCoolPage.setInjectionPoint(QWebEngineScript::DocumentCreation);
-    emptyCoolPage.setWorldId(QWebEngineScript::ApplicationWorld);
-    emptyCoolPage.setRunsOnSubFrames(true);
-    page->scripts().insert(emptyCoolPage);
-
-    view->setPage(page);
+    view->setPage(new CloudAccountPage(pickerProfile, view));
     window->setCentralWidget(view);
     QObject::connect(view, &QWebEngineView::titleChanged, window, &QWidget::setWindowTitle);
 
