@@ -13,6 +13,8 @@
 
 #include <qt/RemoteOpen.hpp>
 #include <common/Log.hpp>
+#include <net/FakeSocket.hpp>
+#include <qt/bridge.hpp>
 
 #include <QByteArray>
 #include <QIODevice>
@@ -22,6 +24,7 @@
 #include <QSize>
 #include <QTimer>
 #include <QUrl>
+#include <QUrlQuery>
 #include <QUuid>
 #include <QWebEngineFrame>
 #include <QWebEnginePage>
@@ -33,6 +36,7 @@
 
 #include <chrono>
 #include <map>
+#include <memory>
 #include <optional>
 
 namespace
@@ -178,6 +182,8 @@ private:
     QString _session; ///< Names the editor frame's session in its messages.
     QUrl _frameOrigin; ///< The origin of the editor frame given the session.
     QByteArray _parts; ///< The parts of a long message from the frame, so far.
+    coda::DocumentData _document; ///< The document the editor frame shows.
+    std::unique_ptr<Bridge> _bridge; ///< Takes the frame's messages. It refers to _document.
 };
 
 /// The pages with an editor frame, by the session of the frame.
@@ -325,12 +331,29 @@ std::optional<QByteArray> CloudAccountPage::receiveMessage(const QUrl& origin, c
         return QByteArray();
     }
 
-    const QByteArray whole = _parts + message;
+    const QString whole = QString::fromUtf8(_parts + message);
     _parts.clear();
 
-    LOG_TRC("account window: from the editor frame: " << kind.toStdString() << ": "
-                                                      << whole.toStdString());
-    return QByteArray();
+    if (kind == QStringLiteral("cool"))
+    {
+        const QVariant reply = _bridge->cool(whole);
+        return reply.isValid() ? reply.toString().toUtf8() : QByteArray();
+    }
+
+    if (kind == QStringLiteral("error"))
+    {
+        _bridge->error(whole);
+        return QByteArray();
+    }
+
+    if (kind == QStringLiteral("debug"))
+    {
+        _bridge->debug(whole);
+        return QByteArray();
+    }
+
+    LOG_WRN("account window: refused: a message from the editor frame has an unknown kind");
+    return std::nullopt;
 }
 
 void CloudAccountPage::putCodaPageIn(QWebEngineFrame& frame)
@@ -340,6 +363,24 @@ void CloudAccountPage::putCodaPageIn(QWebEngineFrame& frame)
     _session = QUuid::createUuid().toString(QUuid::Id128);
     _frameOrigin = originOf(frame.url());
     PagesBySession[_session] = this;
+
+    // The page keeps the access token, because it opens /co/collab itself.
+    auto remoteInfo = std::make_shared<coda::RemoteDocInfo>();
+    remoteInfo->wopiSrc = QUrlQuery(_formUrl).queryItemValue("WOPISrc", QUrl::FullyDecoded);
+    remoteInfo->coolServer = _frameOrigin.toString();
+    remoteInfo->coolPath = _formUrl.path();
+
+    _bridge.reset();
+    _document = {
+        ._fileURL = Poco::URI(), ///< Set on REMOTEDOC_WRITE, once the page has the document.
+        ._fakeClientFd = fakeSocketSocket(),
+        ._appDocId = coda::generateNewAppDocId(),
+        ._remoteInfo = std::move(remoteInfo),
+    };
+    QWebEngineView* view = QWebEngineView::forPage(this);
+    _bridge = std::make_unique<Bridge>(nullptr, nullptr, _document, view);
+    _bridge->setFrame(frame);
+    LOG_INF("account window: the editor frame's session has appDocId " << _document._appDocId);
 
     QJsonObject config;
     config["formUrl"] = _formUrl.toString(QUrl::FullyEncoded);
