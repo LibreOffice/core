@@ -40,7 +40,6 @@ private:
 
     sal_Int32 m_nMax;
     sal_Int32 m_nProgress;
-    bool m_bPaintProgress;
     bool m_bProgressEnd;
 
 public:

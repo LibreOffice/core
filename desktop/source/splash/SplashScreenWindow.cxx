@@ -162,31 +162,29 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
     // draw bitmap
     m_pVDev->DrawBitmap(Point(), m_aIntroBmp);
 
-    if (m_pSplash->m_bPaintProgress)
-    {
-        // draw progress...
-        tools::Long length
-            = (m_pSplash->m_nProgress * m_nBarwidth / m_pSplash->m_nMax) - (2 * m_nBarspace);
-        if (length < 0)
-            length = 0;
+    // draw progress...
+    tools::Long length
+        = (m_pSplash->m_nProgress * m_nBarwidth / m_pSplash->m_nMax) - (2 * m_nBarspace);
+    if (length < 0)
+        length = 0;
 
-        // border
-        m_pVDev->SetFillColor();
-        m_pVDev->SetLineColor(m_aProgressFrameColor);
-        m_pVDev->DrawRect(
-            tools::Rectangle(m_nTlx, m_nTly, m_nTlx + m_nBarwidth, m_nTly + m_nBarheight));
-        m_pVDev->SetFillColor(m_aProgressBarColor);
-        m_pVDev->SetLineColor();
-        m_pVDev->DrawRect(tools::Rectangle(m_nTlx + m_nBarspace, m_nTly + m_nBarspace,
-                                           m_nTlx + m_nBarspace + length,
-                                           m_nTly + m_nBarheight - m_nBarspace));
-        vcl::Font aFont;
-        aFont.SetFontSize(Size(0, 12));
-        aFont.SetAlignment(ALIGN_BASELINE);
-        m_pVDev->SetFont(aFont);
-        m_pVDev->SetTextColor(m_aProgressTextColor);
-        m_pVDev->DrawText(Point(m_nTlx, m_nTextBaseline), m_pSplash->m_sProgressText);
-    }
+    // border
+    m_pVDev->SetFillColor();
+    m_pVDev->SetLineColor(m_aProgressFrameColor);
+    m_pVDev->DrawRect(
+        tools::Rectangle(m_nTlx, m_nTly, m_nTlx + m_nBarwidth, m_nTly + m_nBarheight));
+    m_pVDev->SetFillColor(m_aProgressBarColor);
+    m_pVDev->SetLineColor();
+    m_pVDev->DrawRect(tools::Rectangle(m_nTlx + m_nBarspace, m_nTly + m_nBarspace,
+                                       m_nTlx + m_nBarspace + length,
+                                       m_nTly + m_nBarheight - m_nBarspace));
+    vcl::Font aFont;
+    aFont.SetFontSize(Size(0, 12));
+    aFont.SetAlignment(ALIGN_BASELINE);
+    m_pVDev->SetFont(aFont);
+    m_pVDev->SetTextColor(m_aProgressTextColor);
+    m_pVDev->DrawText(Point(m_nTlx, m_nTextBaseline), m_pSplash->m_sProgressText);
+
     rRenderContext.DrawOutDev(Point(), GetOutputSizePixel(), Point(), m_pVDev->GetOutputSizePixel(),
                               *m_pVDev);
 }

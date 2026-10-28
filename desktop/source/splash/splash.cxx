@@ -26,7 +26,6 @@ SplashScreen::SplashScreen(const OUString& rAppName)
     : m_pWindow(VclPtr<SplashScreenWindow>::Create(this, rAppName))
     , m_nMax(100)
     , m_nProgress(0)
-    , m_bPaintProgress(false)
     , m_bProgressEnd(false)
 {
     Application::AddEventListener(LINK(this, SplashScreen, AppEventListenerHdl));
@@ -99,11 +98,8 @@ void SplashScreen::setValue(sal_Int32 nValue)
 
 void SplashScreen::updateStatus()
 {
-    if (m_bProgressEnd)
-        return;
-    if (!m_bPaintProgress)
-        m_bPaintProgress = true;
-    m_pWindow->Redraw();
+    if (!m_bProgressEnd)
+        m_pWindow->Redraw();
 }
 
 // internal private methods
