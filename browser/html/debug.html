@@ -253,7 +253,8 @@
 
         // Registers the picked document with the server as a permanent link of the opened one:
         // a POST to the /cool/links address the editor named, carrying the editor's one-time
-        // token and the link the way a CheckFileInfo RemoteLinks entry names it.
+        // token and the link: the picked document, the token to reach it, its name, when it
+        // was last modified and the persistent link the pages of the opened document store.
         function addPermanentLink(values, entry) {
           const body = {
             Nonce: values.Nonce,

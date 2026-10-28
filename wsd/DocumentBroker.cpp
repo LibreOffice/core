@@ -5144,20 +5144,7 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
     try
     {
 #if !MOBILEAPP
-        bool supportsLinkAccess = false;
-        if (wopiFileInfo)
-        {
-            // The source list and last-modified times are public, the same for
-            // every view. This view's access tokens are private to it.
-            for (const auto& link : wopiFileInfo->getRemoteLinks())
-                setRemoteDocumentSource(link.wopiSrc, link.name, link.lastModifiedTime,
-                                        link.persistentLink);
-
-            for (const auto& token : wopiFileInfo->getRemoteLinkTokens())
-                setRemoteDocumentViewToken(session->getId(), token.wopiSrc, token.accessToken);
-
-            supportsLinkAccess = wopiFileInfo->getSupportsLinkAccess();
-        }
+        const bool supportsLinkAccess = wopiFileInfo && wopiFileInfo->getSupportsLinkAccess();
 #endif
 
         // First, download the document, since this can fail.

@@ -30,7 +30,6 @@
 #include <wsd/Exceptions.hpp>
 #include <wsd/HostUtil.hpp>
 #include <wsd/ProofKey.hpp>
-#include <wsd/RemoteDocumentBroker.hpp>
 
 #include <Poco/Exception.h>
 #include <Poco/File.h>
@@ -202,67 +201,10 @@ WopiStorage::WOPIFileInfo::WOPIFileInfo(const FileInfo& fileInfo, Poco::JSON::Ob
                 << _username << "] will be used until a valid name is specified.");
     }
 
-    // The public part of the remote links this document may subscribe to.
-    // A server that reads no remote links keeps none of them.
-    auto remoteLinks = object->getArray("RemoteLinks");
-    if (RemoteDocumentBroker::isEnabled() && remoteLinks)
-    {
-        for (std::size_t i = 0; i < remoteLinks->size(); ++i)
-        {
-            auto entry = remoteLinks->getObject(i);
-            if (!entry)
-                continue;
-
-            std::string wopiSrc;
-            std::string name;
-            std::string lastModifiedTime;
-            std::string persistentLink;
-            JsonUtil::findJSONValue(entry, "WOPISrc", wopiSrc);
-            JsonUtil::findJSONValue(entry, "BaseFileName", name);
-            JsonUtil::findJSONValue(entry, "LastModifiedTime", lastModifiedTime);
-            JsonUtil::findJSONValue(entry, "PersistentLink", persistentLink);
-
-            // A view reaches a remote link by its persistent link alone.
-            if (wopiSrc.empty() || persistentLink.empty())
-            {
-                LOG_WRN("Ignoring a RemoteLinks entry of CheckFileInfo that names no WOPISrc or "
-                        "no PersistentLink");
-                continue;
-            }
-
-            _remoteLinks.push_back({ std::move(wopiSrc), std::move(name),
-                                     std::move(lastModifiedTime), std::move(persistentLink) });
-        }
-    }
-
-    // The access tokens for those remote links are private to this view.
+    // An access token of a remote link that a storage puts in UserPrivateInfo.RemoteLinks is
+    // private to its view, so it leaves the info that is stored and logged.
     if (auto userPrivateInfo = object->getObject("UserPrivateInfo"))
-    {
-        if (auto linkTokens = userPrivateInfo->getArray("RemoteLinks"))
-        {
-            if (RemoteDocumentBroker::isEnabled())
-            {
-                for (std::size_t i = 0; i < linkTokens->size(); ++i)
-                {
-                    auto entry = linkTokens->getObject(i);
-                    if (!entry)
-                        continue;
-
-                    std::string wopiSrc;
-                    std::string accessToken;
-                    JsonUtil::findJSONValue(entry, "WOPISrc", wopiSrc);
-                    JsonUtil::findJSONValue(entry, "AccessToken", accessToken);
-                    if (!wopiSrc.empty() && !accessToken.empty())
-                        _remoteLinkTokens.push_back(
-                            { std::move(wopiSrc), std::move(accessToken) });
-                }
-            }
-
-            // A token is private to its view whether or not a document reads it, so it leaves
-            // the info that is stored and logged either way.
-            userPrivateInfo->remove("RemoteLinks");
-        }
-    }
+        userPrivateInfo->remove("RemoteLinks");
 
     std::ostringstream wopiResponse;
 

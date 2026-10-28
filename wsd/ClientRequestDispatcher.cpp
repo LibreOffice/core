@@ -2278,7 +2278,8 @@ bool ClientRequestDispatcher::handleLinksRequest(
     // acts for one of the document's views either by echoing that view's
     // one-time link token, or by giving the access token the view opened the
     // document with, which the storage that issued it knows. The remote link
-    // is named the same way a CheckFileInfo RemoteLinks entry is:
+    // names the remote document, the token to reach it, its name, when it was
+    // last modified and the persistent link the document's pages store for it:
     //   { "Nonce": "<the view's one-time link token>",
     //     "AccessToken": "<the view's access token for this document>",
     //     "Link": { "WOPISrc": "...", "AccessToken": "...",

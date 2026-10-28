@@ -60,44 +60,6 @@ public:
     const std::string& getHideUserList() const { return _hideUserList; }
     const std::string& getPresentationLeader() const { return _presentationLeader; }
 
-    // Public part
-    struct RemoteLink
-    {
-        /// The remote document's WOPISrc.
-        std::string wopiSrc;
-        /// The remote document as the user knows it, from the BaseFileName
-        /// of the entry. Empty when the integrator named none, and the
-        /// file name at the end of the WOPISrc stands for it then.
-        std::string name;
-        /// The time the remote document was last modified, as the
-        /// integrator reported it. Empty when none was provided.
-        std::string lastModifiedTime;
-        /// The persistent link the pages of the document record for the remote document,
-        /// from the PersistentLink of the entry.
-        std::string persistentLink;
-    };
-
-    // Private part
-    struct RemoteLinkToken
-    {
-        /// The remote document's WOPISrc.
-        std::string wopiSrc;
-        /// The access token to reach the remote document with.
-        std::string accessToken;
-    };
-
-    /// Remote links this document may subscribe to, without tokens.
-    const std::vector<RemoteLink>& getRemoteLinks() const
-    {
-        return _remoteLinks;
-    }
-
-    /// This view's access tokens for the remote links.
-    const std::vector<RemoteLinkToken>& getRemoteLinkTokens() const
-    {
-        return _remoteLinkTokens;
-    }
-
     bool getUserCanWrite() const { return _userCanWrite; }
     bool getIsAnonymousUser() const { return _isAnonymousUser; }
     void setHidePrintOption(bool hidePrintOption) { _hidePrintOption = hidePrintOption; }
@@ -250,12 +212,6 @@ private:
     std::string _presentationLeader;
     /// Sent by SharePoint, and maybe others. It is the name of the software.
     std::string _hostName;
-
-    /// The RemoteLinks entries this document may subscribe to
-    std::vector<RemoteLink> _remoteLinks;
-
-    /// This view's access tokens for the remote links
-    std::vector<RemoteLinkToken> _remoteLinkTokens;
 };
 
 /// WOPI protocol backed storage.
