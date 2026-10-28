@@ -50,7 +50,7 @@ public:
     virtual void reset() override;
     virtual void setText(const OUString& aText) override;
     virtual void setValue(sal_Int32 nValue) override;
-    virtual void start(const OUString& aText) override;
+    virtual void start() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

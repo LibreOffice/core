@@ -38,7 +38,7 @@ SplashScreen::~SplashScreen()
     m_pWindow.disposeAndClear();
 }
 
-void SplashScreen::start(const OUString&)
+void SplashScreen::start()
 {
     m_bProgressEnd = false;
     SolarMutexGuard aSolarGuard;

@@ -2545,7 +2545,7 @@ void Desktop::OpenSplashScreen()
         aAppName = "web";
 
     m_pSplashScreen = std::make_unique<SplashScreen>(aAppName);
-    m_pSplashScreen->start(u"SplashScreen"_ustr);
+    m_pSplashScreen->start();
 #endif
 }
 
