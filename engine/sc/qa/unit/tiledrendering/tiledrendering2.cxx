@@ -951,8 +951,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testHyperlinkCellEditedInsideAddressB
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEditingHyperlinkCellKeepsItsOwnLinkText)
 {
-    // A link whose text is not the address itself is one the user gave that text, and
-    // committing the text would not bring the link back, so editing has to leave it alone.
+    // A link whose text is not its address carries text the user gave it. Editing the cell keeps
+    // that link with its own text.
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     CPPUNIT_ASSERT(pView);
