@@ -13,6 +13,9 @@
 
 #include <sfx2/kit/helper.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
+#include <svx/svxids.hrc>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/bindings.hxx>
 #include <vcl/scheduler.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -84,6 +87,45 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSidebarSwitchDeck)
     CPPUNIT_ASSERT_EQUAL(std::string("false"), aTree.get_child("state").get_value<std::string>());
     it = aView.m_aStateChanges.find(".uno:MasterSlidesPanel");
     CPPUNIT_ASSERT(it != aView.m_aStateChanges.end());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSidebarLayoutsKeptOnViewSwitch)
+{
+    // Given an Impress document with the Layouts sidebar panel (ModifyPage deck) open in the first
+    // of two views:
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    int nView1 = KitHelper::getCurrentView();
+    SfxViewShell* pViewShell1 = SfxViewShell::Current();
+    SdTestViewCallback aView1;
+    sfx2::sidebar::Sidebar::Setup(u"");
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView1.m_aJSDialogSelectCounts["layoutpanel_icons"] > 0);
+    int nView2 = KitHelper::createView();
+    pXImpressDocument->initializeForTiledRendering({});
+    SdTestViewCallback aView2;
+    Scheduler::ProcessEventsToIdle();
+    aView1.m_aJSDialogSelectCounts.clear();
+
+    // When the two views take turns, as they do while two users work at the same time. In the
+    // running program each switch marks every state of the first view as dirty, so the first view
+    // reads the unchanged vertical text state again. The test does that by hand:
+    SfxBindings& rBindings1 = pViewShell1->GetViewFrame().GetBindings();
+    for (int i = 0; i < 3; ++i)
+    {
+        KitHelper::setView(nView1);
+        KitHelper::setView(nView2);
+        rBindings1.Invalidate(SID_VERTICALTEXT_STATE);
+        rBindings1.Update(SID_VERTICALTEXT_STATE);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    // Then the panel of the first view keeps its content:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 6
+    // i.e. the panel was filled again and sent its selection on each switch, which the client
+    // shows as a flicker.
+    CPPUNIT_ASSERT_EQUAL(0, aView1.m_aJSDialogSelectCounts["layoutpanel_icons"]);
 }
 
 #if ENABLE_PDFIMPORT

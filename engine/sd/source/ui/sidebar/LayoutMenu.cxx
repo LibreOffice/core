@@ -33,7 +33,6 @@
 #include <unokywds.hxx>
 #include <bitmaps.hlst>
 #include <tools/gen.hxx>
-#include <tools/SlotStateListener.hxx>
 #include <DrawController.hxx>
 #include <DrawDocShell.hxx>
 #include <DrawViewShell.hxx>
@@ -136,8 +135,7 @@ LayoutMenu::LayoutMenu (
       mbIsMainViewChangePending(false),
       mxSidebar(std::move(xSidebar)),
       mbIsDisposed(false),
-      maPreviewSize(0, 0),
-      bInContextMenuOperation(false)
+      maPreviewSize(0, 0)
 {
     implConstruct( *mrBase.GetDocument()->GetDocSh() );
     SAL_INFO("sd.ui", "created LayoutMenu at " << this);
@@ -160,12 +158,6 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
     mrBase.GetEventMultiplexer()->AddEventListener(aEventListenerLink);
 
     mxLayoutIconView->set_accessible_name(SdResId(STR_TASKPANEL_LAYOUT_MENU_TITLE));
-
-    Link<const OUString&,void> aStateChangeLink (LINK(this,LayoutMenu,StateChangeHandler));
-    mxListener = new ::sdtools::SlotStateListener(
-        aStateChangeLink,
-        Reference<frame::XDispatchProvider>(mrBase.GetController()->getFrame(), UNO_QUERY),
-        u".uno:VerticalTextState"_ustr);
 }
 
 LayoutMenu::~LayoutMenu()
@@ -183,9 +175,6 @@ void LayoutMenu::Dispose()
     SAL_INFO("sd.ui", "disposing LayoutMenu at " << this);
 
     mbIsDisposed = true;
-
-    if (mxListener.is())
-        mxListener->dispose();
 
     Clear();
     Link<sdtools::EventMultiplexerEvent&,void> aLink (LINK(this,LayoutMenu,EventMultiplexerListener));
@@ -237,10 +226,8 @@ IMPL_LINK(LayoutMenu, MousePressHdl, const MouseEvent&, rMEvet, bool)
         const ::tools::Rectangle aRect = mxLayoutIconView->get_rect(i);
         if (aRect.Contains(pPos))
         {
-            bInContextMenuOperation = true;
             mxLayoutIconView->select(i);
             ShowContextMenu(pPos);
-            bInContextMenuOperation = false;
             break;
         }
     }
@@ -573,13 +560,6 @@ void LayoutMenu::MenuSelect(std::u16string_view rIdent)
         return;
 
     HandleMenuSelect(rIdent);
-}
-
-IMPL_LINK_NOARG(LayoutMenu, StateChangeHandler, const OUString&, void)
-{
-    if (bInContextMenuOperation)
-        return;
-    InvalidateContent();
 }
 
 void LayoutMenu::HandleMenuSelect(std::u16string_view rIdent)

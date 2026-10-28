@@ -43,7 +43,6 @@ class ViewShellBase;
 namespace sdtools
 {
 class EventMultiplexerEvent;
-class SlotStateListener;
 }
 
 namespace sd::sidebar
@@ -92,10 +91,6 @@ private:
     ViewShellBase& mrBase;
 
     std::unique_ptr<weld::IconView> mxLayoutIconView;
-    /** If we are asked for the preferred window size, then use this
-        many columns for the calculation.
-    */
-    rtl::Reference<::sdtools::SlotStateListener> mxListener;
     bool mbIsMainViewChangePending;
     cpo::uno::Reference<css::ui::XSidebar> mxSidebar;
     bool mbIsDisposed;
@@ -106,14 +101,6 @@ private:
 
     // Store the size of preview image
     Size maPreviewSize;
-
-    /**
-     * Prevents StateChangeHandler from rebuilding layouts during context menu operations.
-     * Without this flag, the first context menu operation would trigger a layout rebuild that
-     * disrupts the selection state, causing the selected item to not appear highlighted.
-     * Subsequent operations work correctly.
-     */
-    bool bInContextMenuOperation;
 
     /** Fill the icon view with the layouts that are applicable to the
         current main view shell.
@@ -162,7 +149,6 @@ private:
     DECL_LINK(LayoutSelected, weld::IconView&, bool);
     DECL_LINK(MousePressHdl, const MouseEvent&, bool);
     DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
-    DECL_LINK(StateChangeHandler, const OUString&, void);
     DECL_LINK(EventMultiplexerListener, ::sdtools::EventMultiplexerEvent&, void);
     DECL_LINK(OnPopupEnd, const OUString&, void);
 
