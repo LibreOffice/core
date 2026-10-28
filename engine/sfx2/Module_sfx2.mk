@@ -39,6 +39,7 @@ $(eval $(call gb_Module_add_check_targets,sfx2,\
     CppunitTest_sfx2_doc \
     CppunitTest_sfx2_autoredaction \
     CppunitTest_sfx2_complex \
+    CppunitTest_sfx2_complex_documentevents \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,sfx2,\
