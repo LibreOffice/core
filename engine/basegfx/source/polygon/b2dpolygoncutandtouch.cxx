@@ -930,6 +930,25 @@ namespace basegfx::utils
                                 }
                             }
                         }
+
+                        if (pPointLimit)
+                        {
+                            size_t nPoints(0);
+                            for (b = 0; b < nCount; b++)
+                                nPoints += pTempData[b].getTemporaryPointVector().size();
+                            if (nPoints > *pPointLimit)
+                            {
+                                SAL_WARN("basegfx", "addPointsAtCutsAndTouches hit point limit");
+                                *pPointLimit = 0;
+                                return rCandidate;
+                            }
+                        }
+                    }
+
+                    if (pPointLimit)
+                    {
+                        for (a = 0; a < nCount; a++)
+                            *pPointLimit -= pTempData[a].getTemporaryPointVector().size();
                     }
 
                     // consolidate the result
