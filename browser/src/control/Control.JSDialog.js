@@ -850,8 +850,16 @@ window.L.Control.JSDialog = window.L.Control.extend({
 							const img = value.querySelector('img');
 							return img && img.alt === instance.clickToCloseText;
 						});
-				} else if ((matchingElements = parent.querySelectorAll('div.ui-iconview-entry > img')).length) {// iconview entry for context menu
-					parent = Array.from(matchingElements).find((img) => img.title === instance.clickToCloseText);
+				} else if ((matchingElements = parent.querySelectorAll('div.ui-iconview-entry')).length) {// iconview entry for context menu
+					// An entry holds its text in the alt of its image, or in a title next to the
+					// image when the text is shown.
+					const entry = Array.from(matchingElements).find((element) => {
+						const img = element.querySelector('img');
+						const title = element.querySelector('.ui-iconview-entry-title');
+						return (img && img.alt === instance.clickToCloseText)
+							|| (title && title.textContent === instance.clickToCloseText);
+					});
+					parent = entry ? entry.querySelector('img') || entry : undefined;
 				}
 			}
 
