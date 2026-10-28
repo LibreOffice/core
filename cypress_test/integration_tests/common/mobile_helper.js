@@ -394,6 +394,11 @@ function pressPushButtonOfDialog(name) {
 function tapNextToCursor(horizontalOffset, verticalOffset = 0) {
 	cy.log('>> tapNextToCursor - start');
 
+	// Core answers a cursor move later, and a layouting task then moves the caret element.
+	cy.getFrameWindow().then(function(win) {
+		helper.processToIdle(win);
+	});
+
 	cy.cGet('.blinking-cursor').should('be.visible').then(function(cursor) {
 		const cursorRect = cursor[0].getBoundingClientRect();
 		cy.cGet('#document-container').then(function(container) {
