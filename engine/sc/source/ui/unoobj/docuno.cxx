@@ -154,6 +154,8 @@
 
 #include <prnsave.hxx>
 
+#include <optional>
+
 using namespace com::sun::star;
 using namespace ::cpo;
 
@@ -640,7 +642,7 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
     KitControlHandler::paintControlTile(pPage, pDrawView, *pGridWindow, rDevice, aOutputSize, aTileRect);
 }
 
-void ScModelObj::setPart( int nPart, bool /*bAllowChangeFocus*/ )
+void ScModelObj::setPart( int nPart, bool bAllowChangeFocus )
 {
     ScViewData* pViewData = ScDocShell::GetViewData();
     if (!pViewData)
@@ -656,6 +658,12 @@ void ScModelObj::setPart( int nPart, bool /*bAllowChangeFocus*/ )
         pDrawView->SetNegativeX(comphelper::COKit::isActive() &&
             rDocument.IsLayoutRTL(nPart));
 
+    // A switch only to paint a tile is switched back afterwards, so the cell selection is kept
+    // across it.
+    std::optional<ScMarkData> oMark;
+    if (!bAllowChangeFocus)
+        oMark.emplace(pViewData->GetMarkData());
+
     // The sheet tab bar carries a page for each visible sheet, and a sheet view is held on a
     // hidden one, so it is switched to directly.
     const SCTAB nTab(nPart);
@@ -663,6 +671,12 @@ void ScModelObj::setPart( int nPart, bool /*bAllowChangeFocus*/ )
         pTabView->SetTabNo(nTab);
     else
         pTabView->SelectTabPage(nPart + 1);
+
+    if (oMark)
+    {
+        pViewData->GetMarkData() = std::move(*oMark);
+        pViewData->GetViewShell()->UpdateInputHandler(true, false);
+    }
 }
 
 int ScModelObj::getParts()

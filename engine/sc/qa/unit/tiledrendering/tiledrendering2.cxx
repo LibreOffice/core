@@ -41,6 +41,7 @@
 #include <svx/hlnkitem.hxx>
 #include <tabvwsh.hxx>
 #include <viewdata.hxx>
+#include <markdata.hxx>
 #include <postit.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editview.hxx>
@@ -1480,6 +1481,29 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDragDropMovePointer)
     // Without the fix in place, this test would have failed, as the client got the default pointer.
     CPPUNIT_ASSERT(std::find(aView.m_aMousePointers.begin(), aView.m_aMousePointers.end(), "move")
                    != aView.m_aMousePointers.end());
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPaintOtherSheetKeepsSelection)
+{
+    // Given a document where A1:A2 of the second sheet is selected:
+    ScModelObj* pModelObj = createDoc("two_sheets.ods");
+    ScTestViewCallback aView;
+    lcl_select(mxComponent, u"$Sheet2.$A$1:$A$2"_ustr);
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    ScViewData& rViewData = pView->GetViewData();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), rViewData.GetTabNumber());
+
+    // When a tile of the first sheet is painted, which switches the view there and back:
+    pModelObj->setPart(0, /*bAllowChangeFocus=*/false);
+    pModelObj->setPart(1, /*bAllowChangeFocus=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the selection is still A1:A2 of the second sheet.
+    // Without the fix in place, this test would have failed, as nothing was selected any more.
+    const ScMarkData& rMark = rViewData.GetMarkData();
+    CPPUNIT_ASSERT(rMark.IsMarked());
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 1, 0, 1, 1), rMark.GetMarkArea());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
