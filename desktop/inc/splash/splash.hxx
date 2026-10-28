@@ -22,12 +22,11 @@
 
 #include "SplashScreenBase.hxx"
 #include "SplashScreenWindow.hxx"
-#include "splash_dllapi.h"
 
 #include <vcl/bitmap.hxx>
 #include <vcl/vclevent.hxx>
 
-class SPLASH_DLLPUBLIC SplashScreen : public SplashScreenBase
+class SplashScreen : public SplashScreenBase
 {
     friend class SplashScreenWindow;
 

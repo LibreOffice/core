@@ -53,7 +53,6 @@ $(eval $(call gb_Pagein_add_objects,common,\
     filterconfig \
     uui \
     svt \
-    spl \
     avmedia \
     helplinker \
     sax \

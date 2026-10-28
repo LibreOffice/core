@@ -76,7 +76,6 @@ gb_MERGE_LIBRARY_LIST := \
 	sofficeapp \
 	sot \
 	spell \
-	$(if $(or $(DISABLE_GUI),$(ENABLE_WASM_STRIP_SPLASH)),,spl) \
 	srtrs1 \
 	$(call gb_Helper_optional,SCRIPTING,stringresource) \
 	svgio \

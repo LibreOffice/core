@@ -72,7 +72,6 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
     salhelper \
     sb \
     sfx \
-    $(if $(or $(DISABLE_GUI),$(ENABLE_WASM_STRIP_SPLASH)),,spl) \
     svl \
     svx \
     svxcore \
@@ -133,6 +132,10 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
         desktop/source/app/updater )\
     desktop/source/app/userinstall \
     desktop/source/migration/migration \
+    $(if $(or $(DISABLE_GUI),$(ENABLE_WASM_STRIP_SPLASH)),, \
+        desktop/source/splash/SplashScreenWindow \
+        desktop/source/splash/splash \
+    ) \
 ))
 
 # LibreOfficeKit bits

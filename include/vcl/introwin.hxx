@@ -23,7 +23,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/wrkwin.hxx>
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) IntroWindow : public WorkWindow
+class VCL_DLLPUBLIC IntroWindow : public WorkWindow
 {
 public:
     IntroWindow();
