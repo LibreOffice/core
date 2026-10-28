@@ -12,6 +12,7 @@
 #include <config.h>
 
 #include <common/MobileApp.hpp>
+#include <qt/CoolLocalSchemeHandler.hpp>
 #include <qt/CoolUrlSchemeHandler.hpp>
 #include <qt/QtClipboard.hpp>
 #include <qt/qt.hpp>
@@ -55,6 +56,7 @@ QWebEngineProfile* createSavedProfile(const QString& storageName, const QString&
     profile->setPersistentStoragePath(storagePath);
     profile->setCachePath(cachePath);
     profile->setHttpCacheType(QWebEngineProfile::DiskHttpCache);
+    profile->installUrlSchemeHandler("coollocal", new CoolLocalSchemeHandler(profile));
     return profile;
 }
 
