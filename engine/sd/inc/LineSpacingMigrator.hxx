@@ -13,12 +13,17 @@
 #include <vcl/virdev.hxx>
 
 #include <memory>
+#include <optional>
 #include <unordered_map>
 
 class SdDrawDocument;
 class SdOutliner;
 class SdrTextObj;
 class OutlinerParaObject;
+namespace sdr::table
+{
+class SdrTableObj;
+}
 
 namespace sd
 {
@@ -37,7 +42,11 @@ public:
 private:
     double getConversionFactor(const OUString& rFontName);
     void migrateShape(SdrTextObj* pTextObject);
-    bool migrateParagraph(OutlinerParaObject* pOutlinerParaObject, sal_Int32 nParagraph,
+    void migrateTable(sdr::table::SdrTableObj* pTableObject);
+    /// Returns the migrated text, or nothing when no paragraph needed a change.
+    std::optional<OutlinerParaObject> migrateText(const OutlinerParaObject& rOutlinerParaObject,
+                                                  const OUString& rFontName);
+    bool migrateParagraph(const OutlinerParaObject& rOutlinerParaObject, sal_Int32 nParagraph,
                           double fShapeFactor);
 
     SdOutliner* mpOutliner = nullptr;

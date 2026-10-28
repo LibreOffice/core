@@ -115,7 +115,7 @@ describe(['tagdesktop'], 'Table operations', { testIsolation: false }, function(
 		//assert the text position
 		cy.cGet('#document-container g.Page .TextParagraph .TextPosition').should('have.attr', 'x', '7290');
 
-		cy.cGet('#document-container g.Page .TextParagraph .TextPosition').should('have.attr', 'y', '5597');
+		cy.cGet('#document-container g.Page .TextParagraph .TextPosition').should('have.attr', 'y', '5635');
 	});
 
 	it('Insert Row After', function() {
@@ -138,7 +138,7 @@ describe(['tagdesktop'], 'Table operations', { testIsolation: false }, function(
 			.should('have.attr', 'x', '7290');
 
 		cy.cGet('#document-container g.Page .TextParagraph .TextPosition')
-			.should('have.attr', 'y', '5597');
+			.should('have.attr', 'y', '5635');
 	});
 
 	it('Insert column before.', function() {
@@ -163,7 +163,7 @@ describe(['tagdesktop'], 'Table operations', { testIsolation: false }, function(
 			.should('have.attr', 'x', '14339');
 
 		cy.cGet('#document-container g.Page .TextParagraph .TextPosition')
-			.should('have.attr', 'y', '5597');
+			.should('have.attr', 'y', '5635');
 	});
 
 	it('Insert column after.', function() {
@@ -188,7 +188,7 @@ describe(['tagdesktop'], 'Table operations', { testIsolation: false }, function(
 			.should('have.attr', 'x', '7290');
 
 		cy.cGet('#document-container g.Page .TextParagraph .TextPosition')
-			.should('have.attr', 'y', '5597');
+			.should('have.attr', 'y', '5635');
 	});
 
 	it('Delete row.', function() {
@@ -239,7 +239,7 @@ describe(['tagdesktop'], 'Table operations', { testIsolation: false }, function(
 			.should('have.attr', 'x', '7290');
 
 		cy.cGet('#document-container g.Page .TextParagraph .TextPosition')
-			.should('have.attr', 'y', '5597');
+			.should('have.attr', 'y', '5635');
 	});
 
 	it('Delete Table', function() {
@@ -273,7 +273,7 @@ describe(['tagdesktop'], 'Table operations', { testIsolation: false }, function(
 			.should('have.attr', 'x', '7290');
 
 		cy.cGet('#document-container g.Page .TextParagraph .TextPosition')
-			.should('have.attr', 'y', '5597');
+			.should('have.attr', 'y', '5635');
 	});
 
 	it('Merge Column', function() {
@@ -294,7 +294,7 @@ describe(['tagdesktop'], 'Table operations', { testIsolation: false }, function(
 			.should('have.attr', 'x', '7290');
 
 		cy.cGet('#document-container g.Page .TextParagraph .TextPosition')
-			.should('have.attr', 'y', '5597');
+			.should('have.attr', 'y', '5635');
 	});
 
 	it.skip('Split Cells', function() {

@@ -9,6 +9,7 @@
 
 #include <LineSpacingMigrator.hxx>
 
+#include <comphelper/scopeguard.hxx>
 #include <sal/log.hxx>
 
 #include <editeng/editdata.hxx>
@@ -20,7 +21,11 @@
 
 #include <svx/sdtfchim.hxx>
 #include <svx/svddef.hxx>
+#include <svx/svdotable.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/svdtext.hxx>
+
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <vcl/font.hxx>
 #include <vcl/metric.hxx>
@@ -36,6 +41,16 @@ constexpr double constFontIndependentBase = 1.2;
 
 // Arbitrary font height for metric queries. Exact value doesn't matter.
 constexpr sal_Int32 constReferenceHeight = 2048;
+
+bool hasCharacters(const EditTextObject& rEditText)
+{
+    for (sal_Int32 nParagraph = 0; nParagraph < rEditText.GetParagraphCount(); ++nParagraph)
+    {
+        if (rEditText.HasText(nParagraph))
+            return true;
+    }
+    return false;
+}
 }
 
 void LineSpacingMigrator::migrate(SdDrawDocument* pDocument)
@@ -50,8 +65,9 @@ void LineSpacingMigrator::migrate(SdDrawDocument* pDocument)
 
 void LineSpacingMigrator::handleSdrObject(SdrObject* pObject)
 {
-    SdrTextObj* pTextObject = DynCastSdrTextObj(pObject);
-    if (pTextObject)
+    if (auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pObject))
+        migrateTable(pTableObject);
+    else if (SdrTextObj* pTextObject = DynCastSdrTextObj(pObject))
         migrateShape(pTextObject);
 }
 
@@ -101,28 +117,83 @@ void LineSpacingMigrator::migrateShape(SdrTextObj* pTextObject)
         return;
 
     const OUString& rShapeFont = pTextObject->GetMergedItem(EE_CHAR_FONTINFO).GetFamilyName();
-    double fShapeFactor = getConversionFactor(rShapeFont);
+    std::optional<OutlinerParaObject> oMigrated = migrateText(*pOutlinerParaObject, rShapeFont);
+    if (oMigrated)
+    {
+        pTextObject->SetMergedItem(SdrTextFixedCellHeightItem(true));
+        pTextObject->SetOutlinerParaObject(std::move(oMigrated));
+    }
+}
+
+void LineSpacingMigrator::migrateTable(sdr::table::SdrTableObj* pTableObject)
+{
+    // Each cell has its own text and its own font independent line spacing flag, and the flag
+    // is saved with the cell style. The text index of a cell is row * column count + column.
+    cpo::uno::Reference<css::table::XTable> xTable = pTableObject->getTable();
+    const sal_Int32 nColumnCount = pTableObject->getColumnCount();
+    if (!xTable.is() || nColumnCount <= 0)
+        return;
+
+    // The table holds back its layout while it is locked, and lays itself out once on unlock.
+    pTableObject->uno_lock();
+    comphelper::ScopeGuard aUnlockGuard([pTableObject] { pTableObject->uno_unlock(); });
+
+    for (sal_Int32 nText = 0; nText < pTableObject->getTextCount(); ++nText)
+    {
+        SdrText* pCell = pTableObject->getText(nText);
+        if (!pCell || pCell->GetItemSet().Get(SDRATTR_TEXT_USEFIXEDCELLHEIGHT).GetValue())
+            continue;
+
+        // An empty cell keeps its line spacing. Its first line is laid out without the
+        // proportional line spacing, so in font independent mode the empty cell would be taller.
+        OutlinerParaObject* pOutlinerParaObject = pCell->GetOutlinerParaObject();
+        if (!pOutlinerParaObject || !hasCharacters(pOutlinerParaObject->GetTextObject()))
+            continue;
+
+        const OUString& rCellFont = pCell->GetItemSet().Get(EE_CHAR_FONTINFO).GetFamilyName();
+        std::optional<OutlinerParaObject> oMigrated = migrateText(*pOutlinerParaObject, rCellFont);
+        if (!oMigrated)
+            continue;
+
+        cpo::uno::Reference<css::beans::XPropertySet> xCell(
+            xTable->getCellByPosition(nText % nColumnCount, nText / nColumnCount),
+            cpo::uno::UNO_QUERY);
+        if (!xCell.is())
+            continue;
+        // A cell property set on a cell also copies the attributes of its first paragraph into
+        // the cell, and those then override later edits of the paragraph. While the flag is set,
+        // the cell holds only an empty paragraph with no attributes, so it gets the flag alone.
+        pCell->RemoveOutlinerParaObject();
+        xCell->setPropertyValue(u"FontIndependentLineSpacing"_ustr, cpo::uno::Any(true));
+        pCell->SetOutlinerParaObject(std::move(oMigrated));
+    }
+}
+
+std::optional<OutlinerParaObject>
+LineSpacingMigrator::migrateText(const OutlinerParaObject& rOutlinerParaObject,
+                                 const OUString& rFontName)
+{
+    double fShapeFactor = getConversionFactor(rFontName);
 
     mpOutliner->Clear();
-    mpOutliner->SetText(*pOutlinerParaObject);
+    mpOutliner->SetText(rOutlinerParaObject);
 
     bool bModified = false;
     const sal_Int32 nParagraphCount = mpOutliner->GetParagraphCount();
     for (sal_Int32 nParagraph = 0; nParagraph < nParagraphCount; ++nParagraph)
     {
-        if (migrateParagraph(pOutlinerParaObject, nParagraph, fShapeFactor))
+        if (migrateParagraph(rOutlinerParaObject, nParagraph, fShapeFactor))
             bModified = true;
     }
 
+    std::optional<OutlinerParaObject> oMigrated;
     if (bModified)
-    {
-        pTextObject->SetMergedItem(SdrTextFixedCellHeightItem(true));
-        pTextObject->SetOutlinerParaObject(mpOutliner->CreateParaObject(0, nParagraphCount));
-    }
+        oMigrated = mpOutliner->CreateParaObject(0, nParagraphCount);
     mpOutliner->Clear();
+    return oMigrated;
 }
 
-bool LineSpacingMigrator::migrateParagraph(OutlinerParaObject* pOutlinerParaObject,
+bool LineSpacingMigrator::migrateParagraph(const OutlinerParaObject& rOutlinerParaObject,
                                            sal_Int32 nParagraph, double fShapeFactor)
 {
     SfxItemSet aAttrs(mpOutliner->GetParaAttribs(nParagraph));
@@ -140,7 +211,7 @@ bool LineSpacingMigrator::migrateParagraph(OutlinerParaObject* pOutlinerParaObje
         return false;
 
     double fFactor = fShapeFactor;
-    const EditTextObject& rEditText = pOutlinerParaObject->GetTextObject();
+    const EditTextObject& rEditText = rOutlinerParaObject.GetTextObject();
     std::vector<EECharAttrib> aCharAttribs;
     rEditText.GetCharAttribs(nParagraph, aCharAttribs);
     for (const auto& rAttrib : aCharAttribs)

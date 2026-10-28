@@ -2305,6 +2305,53 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testFontIndependentLineSpacingMigration)
     }
 }
 
+// Every table cell that has text is migrated to font-independent line spacing, and the line
+// spacing stays the same when the document is saved and loaded again.
+CPPUNIT_TEST_FIXTURE(SdImportTest, testFontIndependentLineSpacingMigrationTable)
+{
+    createSdImpressDoc("odp/table-line-spacing-migration.fodp");
+
+    // Text indexes of the cells (0,0) and (1,1) in the 2 by 2 table.
+    const sal_Int32 aCells[] = { 0, 3 };
+
+    auto getLineSpacing = [](const sdr::table::SdrTableObj& rTable, sal_Int32 nText) {
+        const SdrText* pCell = rTable.getText(nText);
+        CPPUNIT_ASSERT(pCell);
+        CPPUNIT_ASSERT_MESSAGE("cell should use font-independent line spacing",
+                               pCell->GetItemSet().Get(SDRATTR_TEXT_USEFIXEDCELLHEIGHT).GetValue());
+        const OutlinerParaObject* pText = pCell->GetOutlinerParaObject();
+        CPPUNIT_ASSERT(pText);
+        SfxItemSet aAttrs(pText->GetTextObject().GetParaAttribs(0));
+        return aAttrs.Get(EE_PARA_SBL).GetPropLineSpace();
+    };
+
+    std::vector<sal_uInt16> aLoaded;
+    {
+        auto pTable = dynamic_cast<sdr::table::SdrTableObj*>(GetPage(1)->GetObj(0));
+        CPPUNIT_ASSERT(pTable);
+        for (sal_Int32 nText : aCells)
+            aLoaded.push_back(getLineSpacing(*pTable, nText));
+    }
+    // Both cells use the same font, so they get the same line spacing.
+    CPPUNIT_ASSERT_EQUAL(aLoaded[0], aLoaded[1]);
+
+    // The empty cell (1,0) keeps its line spacing, so its height stays the same.
+    {
+        auto pTable = dynamic_cast<sdr::table::SdrTableObj*>(GetPage(1)->GetObj(0));
+        CPPUNIT_ASSERT(pTable);
+        const SdrText* pEmptyCell = pTable->getText(1);
+        CPPUNIT_ASSERT(pEmptyCell);
+        CPPUNIT_ASSERT(!pEmptyCell->GetItemSet().Get(SDRATTR_TEXT_USEFIXEDCELLHEIGHT).GetValue());
+    }
+
+    saveAndReload(TestFilter::ODP);
+
+    auto pTable = dynamic_cast<sdr::table::SdrTableObj*>(GetPage(1)->GetObj(0));
+    CPPUNIT_ASSERT(pTable);
+    for (size_t i = 0; i < std::size(aCells); ++i)
+        CPPUNIT_ASSERT_EQUAL(aLoaded[i], getLineSpacing(*pTable, aCells[i]));
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTest, testLinkedOLEExport)
 {
     // Impress equivalent of Writer's testLinkedOLEExport: load a document
