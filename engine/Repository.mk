@@ -303,7 +303,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	drawinglayercore \
 	drawinglayer \
 	editeng \
-	$(if $(filter WNT,$(OS)),emser) \
 	evtatt \
 	$(call gb_Helper_optional,DBCONNECTIVITY, \
 		flat \
@@ -542,7 +541,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	) \
 	$(if $(filter WNT,$(OS)), \
 		fps \
-		inprocserv \
 	) \
 ))
 

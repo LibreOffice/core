@@ -83,7 +83,6 @@ void ReservedId::postRun() {
                 && id != "_MAX_PATH" // Windows
                 && id != "_POSIX_SOURCE"
                 && id != "_USE_MATH_DEFINES" // include/sal/config.h, Windows
-                && id != "_WIN32_DCOM" // embedserv/source/embed/esdll.cxx
                 && id != "_WTL_NO_CSTRING"
                     // fpicker/source/win32/filepicker/platform_vista.h (TODO:
                     // needed?)

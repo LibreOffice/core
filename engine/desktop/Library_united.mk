@@ -15,13 +15,9 @@ $(eval $(call gb_Library_use_library_objects,united,\
 ))
 
 # We cannot merge these libraries because:
-#  emser - contains a DllMain function that will conflict with the DllMain in sal/
-#  inprocserv - contains a DllMain function that will conflict with the DllMain in sal/
 #  oleautobridge - contains a DllMain function that will conflict with the DllMain in sal/
 #
 $(eval $(call gb_Library_use_libraries,united,\
-    $(if $(filter WNT,$(OS)),emser) \
-    $(if $(filter WNT,$(OS)),inprocserv) \
     $(if $(filter WNT,$(OS)),oleautobridge) \
 ))
 

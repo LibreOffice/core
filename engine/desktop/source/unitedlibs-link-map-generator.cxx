@@ -323,10 +323,6 @@ int main()
     line("embeddedobj_UNOEmbeddedObjectCreator_get_implementation");
     line("embeddedobj_OOoEmbeddedObjectFactory_get_implementation");
     line("embeddedobj_OOoSpecialEmbeddedObjectFactory_get_implementation");
-#ifdef _WIN32
-    // embedserv/util/emser.component
-    line("embedserv_EmbedServer");
-#endif
     // emfio/emfio.component
     line("emfio_emfreader_XEmfParser_get_implementation");
     // eventattacher/source/evtatt.component

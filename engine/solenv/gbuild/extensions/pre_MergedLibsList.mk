@@ -48,7 +48,6 @@ gb_MERGE_LIBRARY_LIST := \
 	embobj \
 	emboleobj \
 	emfio \
-	$(if $(filter WNT,$(OS)),emser) \
 	$(if $(ENABLE_EVOAB2),evoab) \
 	evtatt \
 	filterconfig \

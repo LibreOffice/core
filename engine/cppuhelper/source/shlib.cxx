@@ -307,9 +307,8 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
     OUString dllName = uri;
 #if ENABLE_UNITEDLIBS
 #ifdef _WIN32
-    // See desktop/Library_united.mk, even when unitedlibs is active, these 3 are excluded.
-    if (osl_isUnitedLibActive()
-        && !(dllName.endsWith("emserlo.dll") || dllName.endsWith("inprocservlo.dll") || dllName.endsWith("oleautobridgelo.dll")))
+    // See desktop/Library_united.mk, even when unitedlibs is active, this one is excluded.
+    if (osl_isUnitedLibActive() && !dllName.endsWith("oleautobridgelo.dll"))
         dllName = u"" SAL_MODULENAME("unitedlo") ""_ustr;
 #else
     if (osl_isUnitedLibActive())

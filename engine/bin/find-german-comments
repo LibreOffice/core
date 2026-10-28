@@ -269,7 +269,6 @@ class Parser:
             "drawinglayer" : 1,
             "editeng" : 1,
             "embeddedobj" : 1,
-            "embedserv" : 1,
             "eventattacher" : 1,
             "extensions" : 1,
             "external" : 1,
