@@ -842,10 +842,11 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
 
         sal_Int32 nHyphCount = 0;
 
+        // result.hyphens covers the encoded word without its trailing periods
         // FIXME: shouldn't we iterate code points instead?
         for (sal_Int32 i = 0; i < aWord.getLength(); i++)
         {
-            if (result.hyphens[i] & 1)
+            if (i < result.n && (result.hyphens[i] & 1))
                 nHyphCount++;
         }
 
@@ -858,7 +859,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         {
             hyphenatedWordBuffer.append(aWord[i]);
             // hyphenation position
-            if (result.hyphens[i] & 1)
+            if (i < result.n && (result.hyphens[i] & 1))
             {
                 // linguistic::PossibleHyphens is stuck with
                 // css::uno::Sequence<sal_Int16> because of
