@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-23 00:15+0200\n"
-"PO-Revision-Date: 2026-10-27 16:28+0000\n"
+"PO-Revision-Date: 2026-10-28 11:06+0000\n"
 "Last-Translator: Méven Car <meven@users.noreply.hosted.weblate.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/fr/>\n"
@@ -6285,10 +6285,10 @@ msgid "Expand All Sections"
 msgstr "Déplier toutes les sections"
 
 #: src/control/Control.PartsPreview.js:1439 src/docdispatcher.ts:1002
-#, fuzzy
 msgid "Delete section \"%1\" and its %n slide?"
 msgid_plural "Delete section \"%1\" and its %n slides?"
-msgstr[0] "Supprimer la section \"%1\" et ses %2 diapositive(s) ?"
+msgstr[0] "Supprimer la section \"%1\" et ses %2 diapositive ?"
+msgstr[1] "Supprimer la section \"%1\" et ses %2 diapositives ?"
 
 #: src/control/Control.PartsPreview.js:1488
 msgid "Enter new section name:"
@@ -6403,23 +6403,20 @@ msgid "Slide {0}"
 msgstr "Diapositive {0}"
 
 #: src/control/Control.SlideImportPane.tsx:870
-#, fuzzy
 msgid "Insert slides"
-msgstr "Insérer des formes"
+msgstr "Insérer des diapositives"
 
 #: src/control/Control.SlideImportPane.tsx:878
 msgid "Insert {0} from {1}"
 msgstr "Insérer {0} à partir de {1}"
 
 #: src/control/Control.SlideImportPane.tsx:881
-#, fuzzy
 msgid "Insert 1 slide"
-msgstr "Insérer des formes"
+msgstr "Insérer 1 diapositive"
 
 #: src/control/Control.SlideImportPane.tsx:882
-#, fuzzy
 msgid "Insert {0} slides"
-msgstr "Insérer des formes"
+msgstr "Insérer {0} diapositives"
 
 #: src/control/Control.SlideImportPane.tsx:914
 msgid "{0} of {1}"
@@ -6447,9 +6444,8 @@ msgid "Inserting slides..."
 msgstr "Insertion des diapositives..."
 
 #: src/control/Control.SlideImportPane.tsx:1013
-#, fuzzy
 msgid "Import slides"
-msgstr "Insérer des formes"
+msgstr "Importer des diapositives"
 
 #: src/control/Control.SlideImportPane.tsx:1019
 #: src/control/Control.SlideImportPane.tsx:1020
@@ -6457,9 +6453,8 @@ msgid "Close slide import"
 msgstr "Fermer l'importation de diapositive"
 
 #: src/control/Control.SlideImportPane.tsx:1035
-#, fuzzy
 msgid "Add presentation…"
-msgstr "Fin de la présentation"
+msgstr "Ajouter une présentation…"
 
 #: src/control/Control.SlideImportPane.tsx:1050
 msgid "No presentations yet"
@@ -6692,9 +6687,8 @@ msgid "No problems with SSL verification detected"
 msgstr "Aucun problème détecté pendant la vérification SSL"
 
 #: src/control/Control.ServerAuditDialog.ts:78
-#, fuzzy
 msgid "Each document is securely contained (landlock)"
-msgstr "Chacun des documents sont conteneurisés de façon sûre"
+msgstr "Chaque document est isolé en toute sécurité (landlock)"
 
 #: src/control/Control.ServerAuditDialog.ts:83
 msgid "Each document is securely contained (Linux namespaces)"
@@ -6734,14 +6728,12 @@ msgid "Direct network connection"
 msgstr "Connexion réseau direct"
 
 #: src/control/Control.ServerAuditDialog.ts:169
-#, fuzzy
 msgid ""
 "Connected with the old WebSocket URL form, which is planned for removal. "
 "Check that your proxy passes the compact form through."
 msgstr ""
-"Certains clients se sont connectés via l'ancienne URL WebSocket, dont la "
-"suppression est prévue. Vérifiez que votre proxy laisse passer la forme "
-"compacte."
+"Connecté avec l'ancien format d'URL de WebSocket, dont la suppression est "
+"prévue. Vérifiez que votre proxy laisse passer le format compact."
 
 #: src/control/Control.ServerAuditDialog.ts:175
 msgid "Connected with the compact WebSocket URL form"
