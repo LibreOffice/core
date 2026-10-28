@@ -376,6 +376,22 @@ public:
                     '.', aGroups, ',', true);
         CPPUNIT_ASSERT_EQUAL( u"10,00,00,00,00,00,00,00,00,000"_ustr, aRes);
 
+        CPPUNIT_ASSERT_EQUAL(
+            u"0"_ustr, rtl::math::doubleToUString(5.0, rtl_math_StringFormat_F, -3, '.', true));
+        CPPUNIT_ASSERT_EQUAL(
+            u"0"_ustr, rtl::math::doubleToUString(0.0, rtl_math_StringFormat_F, -3, '.', true));
+        CPPUNIT_ASSERT_EQUAL(
+            u"0"_ustr, rtl::math::doubleToUString(12345.0, rtl_math_StringFormat_F, -6, '.', true));
+        CPPUNIT_ASSERT_EQUAL(
+            u"0"_ustr, rtl::math::doubleToUString(1E20, rtl_math_StringFormat_F, -21, '.', true));
+        CPPUNIT_ASSERT_EQUAL(
+            u"0"_ustr,
+            rtl::math::doubleToUString(
+                1E20, rtl_math_StringFormat_F, -25, '.', aGroups, ',', true));
+        CPPUNIT_ASSERT_EQUAL(
+            u"1000000000000000000000"_ustr,
+            rtl::math::doubleToUString(6E20, rtl_math_StringFormat_F, -21, '.', true));
+
         // Check non-ASCII separators: Arabic decimal separator U+066B, thousand separator U+066C
         fVal = 123456.78;
         aRes = rtl::math::doubleToUString( fVal,
