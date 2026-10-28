@@ -35,9 +35,7 @@
 #include <algorithm>
 #include <sstream>
 
-void RemoteLinks::setSource(DocumentBroker& docBroker, const std::string& wopiSrc,
-                            const std::string& name, const std::string& lastModifiedTime,
-                            const std::string& persistentLink)
+void RemoteLinks::setSource(DocumentBroker& docBroker, const RemoteLink& link)
 {
     docBroker.assertCorrectThread();
 
@@ -45,36 +43,37 @@ void RemoteLinks::setSource(DocumentBroker& docBroker, const std::string& wopiSr
     // WOPISrc resolve to one source.
     try
     {
-        const std::string docKey = RequestDetails::getDocKey(wopiSrc);
+        const std::string docKey = RequestDetails::getDocKey(link.wopiSrc);
 
         // A view reaches a remote link by its persistent link alone, so a document that is
         // not recorded yet is recorded with one.
-        if (persistentLink.empty() && _entries.find(docKey) == _entries.end())
+        if (link.persistentLink.empty() && _entries.find(docKey) == _entries.end())
         {
-            LOG_WRN("Ignoring the remote link [" << Anonymizer::anonymizeUrl(wopiSrc) << "] of ["
-                                                 << docBroker.getDocKey()
+            LOG_WRN("Ignoring the remote link [" << Anonymizer::anonymizeUrl(link.wopiSrc)
+                                                 << "] of [" << docBroker.getDocKey()
                                                  << "]: it names no persistent link");
             return;
         }
 
-        Entry& entry = _entries[docKey];
-        entry.wopiSrc = wopiSrc.substr(0, wopiSrc.find('?'));
-        entry.lastModifiedTime = lastModifiedTime;
+        // The entry keeps the WOPISrc without its query parameters.
+        RemoteLink& entry = _entries[docKey];
+        entry.wopiSrc = link.wopiSrc.substr(0, link.wopiSrc.find('?'));
+        entry.lastModifiedTime = link.lastModifiedTime;
         // A report that names no document leaves the name it is known by as it is, so a later
         // report of the time alone keeps the name the integrator gave it.
-        if (!name.empty())
-            entry.name = name;
+        if (!link.name.empty())
+            entry.name = link.name;
 
         // The pages that store a persistent link come from one document, so the link moves to
         // the remote link reported for it and leaves any other.
-        if (!persistentLink.empty())
+        if (!link.persistentLink.empty())
         {
             for (auto& it : _entries)
             {
-                if (it.second.persistentLink == persistentLink)
+                if (it.second.persistentLink == link.persistentLink)
                     it.second.persistentLink.clear();
             }
-            entry.persistentLink = persistentLink;
+            entry.persistentLink = link.persistentLink;
         }
 
         refreshAllViews(docBroker);
@@ -82,7 +81,7 @@ void RemoteLinks::setSource(DocumentBroker& docBroker, const std::string& wopiSr
     catch (const std::exception& exc)
     {
         LOG_ERR("Ignoring the invalid remote link WOPISrc ["
-                << Anonymizer::anonymizeUrl(wopiSrc) << "]: " << exc.what());
+                << Anonymizer::anonymizeUrl(link.wopiSrc) << "]: " << exc.what());
     }
 }
 
@@ -383,26 +382,18 @@ void RemoteLinks::completeLinkAccess(DocumentBroker& docBroker, const std::strin
         return;
     }
 
-    std::string wopiSrc;
-    std::string accessToken;
-    std::string name;
-    std::string lastModifiedTime;
-    std::string answeredPersistentLink;
-    JsonUtil::findJSONValue(object, "WOPISrc", wopiSrc);
-    JsonUtil::findJSONValue(object, "AccessToken", accessToken);
-    JsonUtil::findJSONValue(object, "BaseFileName", name);
-    JsonUtil::findJSONValue(object, "LastModifiedTime", lastModifiedTime);
-    JsonUtil::findJSONValue(object, "PersistentLink", answeredPersistentLink);
+    RemoteLinkRegistration link;
+    link.readFrom(object);
 
     std::string reason;
     try
     {
-        const Poco::URI wopiSrcUri(wopiSrc);
-        if (wopiSrc.empty() || accessToken.empty())
+        const Poco::URI wopiSrcUri(link.wopiSrc);
+        if (link.wopiSrc.empty() || link.accessToken.empty())
             reason = "names no document or no token";
-        else if (!answeredPersistentLink.empty() && answeredPersistentLink != persistentLink)
+        else if (!link.persistentLink.empty() && link.persistentLink != persistentLink)
             reason = "answers for another persistent link";
-        else if (RequestDetails::getDocKey(wopiSrc) == docBroker.getDocKey())
+        else if (RequestDetails::getDocKey(link.wopiSrc) == docBroker.getDocKey())
             reason = "names this document itself";
         else if (!HostUtil::allowedWopiHost(wopiSrcUri.getHost(), wopiSrcUri.getPort()))
             reason = "names a document on a host that is not allowed";
@@ -423,13 +414,15 @@ void RemoteLinks::completeLinkAccess(DocumentBroker& docBroker, const std::strin
     }
 
     itAccess->second = LinkAccess::Resolved;
-    LOG_INF("The storage named [" << Anonymizer::anonymizeUrl(wopiSrc)
-                            << "] for the source [" << linkAnonym << "] of ["
-                            << docBroker.getDocKey() << "] for view [" << tag << ']');
+    LOG_INF("The storage named [" << Anonymizer::anonymizeUrl(link.wopiSrc) << "] for the source ["
+                                  << linkAnonym << "] of [" << docBroker.getDocKey()
+                                  << "] for view [" << tag << ']');
 
-    // The document stands for the source for every view, and the token is this view's own.
-    setSource(docBroker, wopiSrc, name, lastModifiedTime, persistentLink);
-    setViewToken(docBroker, tag, wopiSrc, accessToken);
+    // The document stands for the source asked for, for every view, and the token is this
+    // view's own.
+    link.persistentLink = persistentLink;
+    setSource(docBroker, link);
+    setViewToken(docBroker, tag, link.wopiSrc, link.accessToken);
 }
 
 void RemoteLinks::handleSubscribe(DocumentBroker& docBroker, const std::string& tag,
@@ -608,7 +601,10 @@ void RemoteLinks::onRemoteEvent(DocumentBroker& docBroker, const std::string& ta
         std::string time;
         if (arguments.size() > 1)
             COOLProtocol::getTokenString(arguments[1], "time", time);
-        setSource(docBroker, wopiSrc, std::string(), Uri::decode(time), std::string());
+        RemoteLink saved;
+        saved.wopiSrc = wopiSrc;
+        saved.lastModifiedTime = Uri::decode(time);
+        setSource(docBroker, saved);
         return;
     }
 
@@ -824,12 +820,12 @@ std::string RemoteLinks::documentName(const std::string& wopiSrc)
     return Uri::decode(name);
 }
 
-std::string RemoteLinks::entryName(const Entry& entry)
+std::string RemoteLinks::entryName(const RemoteLink& entry)
 {
     return entry.name.empty() ? documentName(entry.wopiSrc) : entry.name;
 }
 
-std::map<std::string, RemoteLinks::Entry>::const_iterator
+std::map<std::string, RemoteLink>::const_iterator
 RemoteLinks::findListed(const std::string& persistentLink) const
 {
     return std::find_if(_entries.begin(), _entries.end(),

@@ -534,9 +534,7 @@ public:
 
 #if !MOBILEAPP
     /// Records the public part of a remote link, the same for every view
-    void setRemoteDocumentSource(const std::string& wopiSrc, const std::string& name,
-                                 const std::string& lastModifiedTime,
-                                 const std::string& persistentLink);
+    void setRemoteDocumentSource(const RemoteLink& link);
 
     /// Records the source documents this document's own content names, the whole of what it
     /// names, so that a source the storage listed no remote link for is still reported.
@@ -562,9 +560,7 @@ public:
     /// coming from POST /cool/links. False when no view matches either.
     bool registerRemoteDocumentToken(const std::string& oneTimeToken,
                                      const std::string& documentAccessToken,
-                                     const std::string& wopiSrc, const std::string& accessToken,
-                                     const std::string& name, const std::string& lastModifiedTime,
-                                     const std::string& persistentLink);
+                                     const RemoteLinkRegistration& link);
 
     /// Drops the remote link bound to the given persistent link, at the request of a view. The
     /// link is dropped for every view, since the list of remote links is the same for all of

@@ -2289,47 +2289,32 @@ bool ClientRequestDispatcher::handleLinksRequest(
     const std::string body(std::istreambuf_iterator<char>(message), {});
     std::string oneTimeToken;
     std::string documentAccessToken;
-    std::string remoteWopiSrc;
-    std::string remoteAccessToken;
-    std::string remoteName;
-    std::string remoteLastModifiedTime;
-    std::string remotePersistentLink;
+    RemoteLinkRegistration remoteLink;
     Poco::JSON::Object::Ptr object;
     if (JsonUtil::parseJSON(body, object))
     {
         JsonUtil::findJSONValue(object, "Nonce", oneTimeToken);
         JsonUtil::findJSONValue(object, "AccessToken", documentAccessToken);
         if (auto link = object->getObject("Link"))
-        {
-            JsonUtil::findJSONValue(link, "WOPISrc", remoteWopiSrc);
-            JsonUtil::findJSONValue(link, "AccessToken", remoteAccessToken);
-            JsonUtil::findJSONValue(link, "BaseFileName", remoteName);
-            JsonUtil::findJSONValue(link, "LastModifiedTime", remoteLastModifiedTime);
-            JsonUtil::findJSONValue(link, "PersistentLink", remotePersistentLink);
-        }
+            remoteLink.readFrom(link);
     }
 
-    // sanitize: no control chars and not unusually long
-    constexpr std::size_t MaxPersistentLinkLength = 1024;
-    if (remotePersistentLink.size() > MaxPersistentLinkLength ||
-        std::any_of(remotePersistentLink.begin(), remotePersistentLink.end(),
-                    [](unsigned char c) { return c < 0x20 || c == 0x7f; }))
+    if (!RemoteLink::isValidPersistentLink(remoteLink.persistentLink))
     {
         LOG_WRN_S("Links request for [" << Anonymizer::anonymizeUrl(request.getURI())
                                         << "] names a persistent link of an unexpected syntax, "
                                            "ignored");
-        remotePersistentLink.clear();
+        remoteLink.persistentLink.clear();
     }
 
     // A view reaches a remote link by its persistent link alone, so the link needs one.
-    if ((oneTimeToken.empty() && documentAccessToken.empty()) || remoteWopiSrc.empty() ||
-        remoteAccessToken.empty() || remotePersistentLink.empty())
+    if ((oneTimeToken.empty() && documentAccessToken.empty()) || !remoteLink.isComplete())
     {
         LOG_ERR_S("Links request rejected: incomplete body (have Nonce: "
                   << !oneTimeToken.empty() << ", AccessToken: " << !documentAccessToken.empty()
-                  << ", Link WOPISrc: " << !remoteWopiSrc.empty()
-                  << ", Link AccessToken: " << !remoteAccessToken.empty()
-                  << ", Link PersistentLink: " << !remotePersistentLink.empty()
+                  << ", Link WOPISrc: " << !remoteLink.wopiSrc.empty()
+                  << ", Link AccessToken: " << !remoteLink.accessToken.empty()
+                  << ", Link PersistentLink: " << !remoteLink.persistentLink.empty()
                   << "): " << Anonymizer::anonymizeUrl(request.getURI()));
         HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket,
                                          "missing Nonce or AccessToken, or Link");
@@ -2357,11 +2342,7 @@ bool ClientRequestDispatcher::handleLinksRequest(
         disposition,
         [docBroker, oneTimeToken = std::move(oneTimeToken),
          documentAccessToken = std::move(documentAccessToken),
-         remoteWopiSrc = std::move(remoteWopiSrc), remoteAccessToken = std::move(remoteAccessToken),
-         remoteName = std::move(remoteName),
-         remoteLastModifiedTime = std::move(remoteLastModifiedTime),
-         remotePersistentLink =
-             std::move(remotePersistentLink)](const std::shared_ptr<Socket>& moveSocket)
+         remoteLink = std::move(remoteLink)](const std::shared_ptr<Socket>& moveSocket)
         {
             auto streamSocket = std::static_pointer_cast<StreamSocket>(moveSocket);
 
@@ -2370,9 +2351,7 @@ bool ClientRequestDispatcher::handleLinksRequest(
             // token. A request that names no view is refused, and a one-time
             // token is consumed on success.
             if (!docBroker->registerRemoteDocumentToken(oneTimeToken, documentAccessToken,
-                                                        remoteWopiSrc, remoteAccessToken,
-                                                        remoteName, remoteLastModifiedTime,
-                                                        remotePersistentLink))
+                                                        remoteLink))
             {
                 LOG_ERR_S("Links request for [" << docBroker->getDocKey()
                                                 << "] names no view of the document");

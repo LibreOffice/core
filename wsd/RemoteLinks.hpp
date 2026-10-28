@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include <wsd/RemoteLink.hpp>
+
 #include <iosfwd>
 #include <map>
 #include <memory>
@@ -34,15 +36,12 @@ class DocumentBroker;
 class RemoteLinks
 {
 public:
-    /// Records the public part of a remote link: its address, the document as the user knows
-    /// it, the time it was last modified and the persistent link the open document's pages
-    /// store for it. The same for every view. The latest report per WOPISrc wins, and a report
-    /// that carries no name or no persistent link keeps the recorded one. A persistent link
-    /// belongs to one remote link, so recording it here takes it off any other. A view
-    /// reaches a remote link by its persistent link alone, so a report of an address not
-    /// recorded yet that names none is ignored.
-    void setSource(DocumentBroker& docBroker, const std::string& wopiSrc, const std::string& name,
-                   const std::string& lastModifiedTime, const std::string& persistentLink);
+    /// Records the public part of a remote link, the same for every view. The latest report
+    /// per WOPISrc wins, and a report that carries no name or no persistent link keeps the
+    /// recorded one. A persistent link belongs to one remote link, so recording it here takes
+    /// it off any other. A view reaches a remote link by its persistent link alone, so a
+    /// report of an address not recorded yet that names none is ignored.
+    void setSource(DocumentBroker& docBroker, const RemoteLink& link);
 
     /// Records the source documents the open document's own content names, which is the whole of
     /// what it names: a name reported here and nowhere else stands for a document the storage
@@ -122,23 +121,6 @@ public:
     void dumpState(std::ostream& os) const;
 
 private:
-    /// The public part of one remote link, the same for every view.
-    struct Entry
-    {
-        /// The remote document's WOPISrc, decoded, without query parameters.
-        std::string wopiSrc;
-        /// The remote document as the user knows it, as the integrator named
-        /// it. Empty when the integrator named none.
-        std::string name;
-        /// The time the remote document was last modified, as the integrator
-        /// reported it. Empty when the integrator did not provide one.
-        std::string lastModifiedTime;
-        /// The persistent link to the remote document, which is the name after
-        /// vnd.collabora.slide-source:. It is not the WOPISrc, it is the reference the
-        /// storage resolves to it, and the one name a view knows the remote link by.
-        std::string persistentLink;
-    };
-
     /// One view's subscription to a remote document.
     struct Subscription
     {
@@ -185,11 +167,11 @@ private:
 
     /// The document one entry stands for, as the user knows it: the name the integrator gave it,
     /// or the one its WOPISrc names when the integrator gave none.
-    static std::string entryName(const Entry& entry);
+    static std::string entryName(const RemoteLink& entry);
 
     /// The remote link the given persistent link is bound to. The end of the entries when
     /// none is.
-    std::map<std::string, Entry>::const_iterator
+    std::map<std::string, RemoteLink>::const_iterator
     findListed(const std::string& persistentLink) const;
 
     /// True when a remote link stands for the source of the given persistent link.
@@ -228,7 +210,7 @@ private:
     void refreshAllViews(DocumentBroker& docBroker);
 
     /// The remote link sources the document knows, keyed by their docKey.
-    std::map<std::string, Entry> _entries;
+    std::map<std::string, RemoteLink> _entries;
 
     /// The source documents the open document's own content names, by the persistent link its
     /// pages record, in the order the document names them. One a remote link is bound to is

@@ -381,6 +381,7 @@ wsd_headers = \
               wsd/QuarantineUtil.hpp \
               wsd/RemoteConfig.hpp \
               wsd/RemoteDocumentBroker.hpp \
+              wsd/RemoteLink.hpp \
               wsd/RemoteLinks.hpp \
               wsd/RequestDetails.hpp \
               wsd/RequestVettingStation.hpp \
