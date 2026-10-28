@@ -2267,24 +2267,23 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		const sizeProperty = this._direction === 'x' ? 'width' : 'height';
 		const frames = [];
 		const sizes = [];
-		let gapSize = 0;
 		for (let i = 0; i < draggedParts.length; i++) {
 			const frame = this._previewTiles[draggedParts[i]].parentNode;
-			const size = frame.getBoundingClientRect()[sizeProperty];
 			frames.push(frame);
-			sizes.push(size);
-			gapSize += size;
+			sizes.push(frame.getBoundingClientRect()[sizeProperty]);
 		}
-		// In the grid layout the gap is one empty cell, so it takes a
-		// single slide's height rather than the dragged frames' sum.
-		if (this._gridMode && sizes.length)
-			gapSize = sizes[0];
+		// The dragged slides travel as one stack, so the gap takes the
+		// size of a single slide, whatever the number of slides dragged.
+		// A selected slide in a collapsed section is hidden and measures
+		// as zero, so the gap takes the first size that is not zero.
+		const gapSize = sizes.find((size) => size > 0) || 0;
 
 		this._dragState = {
 			draggedParts: draggedParts,
 			frames: frames,
 			sizes: sizes,
 			sizeProperty: sizeProperty,
+			stackSpaceProperty: this._direction === 'x' ? 'paddingInlineEnd' : 'paddingBottom',
 			grid: this._gridMode,
 			gapSize: gapSize,
 			gapFrame: null,
@@ -2329,6 +2328,11 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				frames[i].style.padding = '0px';
 				frames[i].style.opacity = '0';
 			}
+			// The gap holds one slide of the stack. The space of the others
+			// moves to the end of the sorter, so the sorter keeps its length
+			// and its scroll position while the drag goes on.
+			const stackSpace = sizes.reduce((sum, size) => sum + size, 0) - gapSize;
+			this._partsPreviewCont.style[state.stackSpaceProperty] = stackSpace + 'px';
 			// Closing the dragged frames pulls slides from below the view
 			// into it; load their previews once the frames have closed.
 			this._schedulePreviewRefresh();
@@ -2488,7 +2492,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 		this._applyDropLocally(insertIndex, state.draggedParts,
 			state.intoSection !== null);
-		this._finishDrag(false);
+		this._finishDrag(false, true);
 	},
 
 	// Slide the sorter's children from where they are into the places a
@@ -2828,12 +2832,14 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		this._updatePreviewPositionLabelsFrom(0);
 	},
 
-	// End the drag visuals. After a completed drop (animate = false) the
-	// dragged frames have just been moved into the gap, so restoring their
-	// size while the gap margin goes away in the same step is not a visible
-	// change. After a cancelled drag (animate = true) the gap closes and
-	// the dragged frames grow back at their original position.
-	_finishDrag: function (animate) {
+	// End the drag visuals. With animate = false the frames take back their
+	// size at once. After a cancelled drag (animate = true) the gap closes and
+	// the dragged frames grow back at their original position. After a
+	// completed drop (dropped = true) the dragged frames have just been moved
+	// into the gap: the first of them takes the gap's place at once, and the
+	// others grow in after it while the space at the end of the sorter
+	// shrinks by the same amount.
+	_finishDrag: function (animate, dropped) {
 		const state = this._dragState;
 		if (!state)
 			return;
@@ -2872,8 +2878,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 		this._removeDropGap(state);
 
-		if (!animate) {
+		if (!animate && !dropped) {
 			state.frames.forEach(restoreFrame);
+			container.style[state.stackSpaceProperty] = '';
 			// The restored sizes land while transitions are still off, so
 			// the frames appear at once when the class comes back off.
 			window.L.DomUtil.forceLayoutFlush(container);
@@ -2883,9 +2890,22 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			return;
 		}
 
+		// The frame that fills the gap is the one that gave the gap its size.
+		let gapFillIndex = -1;
+		if (dropped) {
+			gapFillIndex = state.sizes.findIndex((size) => size > 0);
+			if (gapFillIndex !== -1)
+				restoreFrame(state.frames[gapFillIndex]);
+			window.L.DomUtil.forceLayoutFlush(container);
+			container.classList.remove('drag-no-transition');
+		}
+
 		// Grow the frames back to their measured size so the change
 		// animates, then drop the inline styles once the transition is over.
+		container.style[state.stackSpaceProperty] = '';
 		for (let i = 0; i < state.frames.length; i++) {
+			if (i === gapFillIndex)
+				continue;
 			state.frames[i].style[state.sizeProperty] = state.sizes[i] + 'px';
 			state.frames[i].style.padding = '';
 			state.frames[i].style.opacity = '';

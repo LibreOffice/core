@@ -137,13 +137,20 @@
 /* Fluid drag-and-drop reordering: while a slide drag is in progress the
    frames animate size and margin changes, so the remaining slides close
    the space the dragged slide left and a new insertion gap opens under
-   the pointer. */
+   the pointer. The sorter animates the space at its end that stands in
+   for the dragged slides the gap does not hold. */
+#slide-sorter.dragging-slide {
+	transition: padding var(--duration-fast) var(--ease-out);
+}
+
 #slide-sorter.dragging-slide .preview-frame {
 	transition: margin var(--duration-fast) var(--ease-out), height var(--duration-fast) var(--ease-out),
 		width var(--duration-fast) var(--ease-out), padding var(--duration-fast) var(--ease-out), opacity var(--duration-fast) var(--ease-out);
 }
 
-/* A finished drop rearranges the frames in a single step. */
+/* The frames and the space at the end of the sorter change in a single
+   step. */
+#slide-sorter.dragging-slide.drag-no-transition,
 #slide-sorter.dragging-slide.drag-no-transition .preview-frame {
 	transition: none;
 }
@@ -188,6 +195,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+	#slide-sorter.dragging-slide,
 	#slide-sorter.dragging-slide .preview-frame {
 		transition: none;
 	}
