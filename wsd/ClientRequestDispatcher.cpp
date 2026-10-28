@@ -2277,47 +2277,93 @@ bool ClientRequestDispatcher::handleLinksRequest(
     // Tokens travel only in the body, never in the URL. The caller proves it
     // acts for one of the document's views either by echoing that view's
     // one-time link token, or by giving the access token the view opened the
-    // document with, which the storage that issued it knows. The remote link
+    // document with, which the storage that issued it knows. A remote link
     // names the remote document, the token to reach it, its name, when it was
-    // last modified and the persistent link the document's pages store for it:
+    // last modified and the persistent link the document's pages store for it.
+    // The links go in Links, and the request registers all of them at once:
     //   { "Nonce": "<the view's one-time link token>",
     //     "AccessToken": "<the view's access token for this document>",
-    //     "Link": { "WOPISrc": "...", "AccessToken": "...",
-    //               "BaseFileName": "...", "LastModifiedTime": "...",
-    //               "PersistentLink": "<the reference the document's pages store for this
-    //                                  file>" } }
+    //     "Links": [ { "WOPISrc": "...", "AccessToken": "...",
+    //                  "BaseFileName": "...", "LastModifiedTime": "...",
+    //                  "PersistentLink": "<the reference the document's pages store for
+    //                                     this file>" }, ... ] }
+    // The older form names one link in Link, an object with the same fields.
+    // It is still accepted in place of Links, never alongside it.
     const std::string body(std::istreambuf_iterator<char>(message), {});
     std::string oneTimeToken;
     std::string documentAccessToken;
-    RemoteLinkRegistration remoteLink;
+    std::vector<RemoteLinkRegistration> links;
+    bool incomplete = false;
     Poco::JSON::Object::Ptr object;
     if (JsonUtil::parseJSON(body, object))
     {
         JsonUtil::findJSONValue(object, "Nonce", oneTimeToken);
         JsonUtil::findJSONValue(object, "AccessToken", documentAccessToken);
-        if (auto link = object->getObject("Link"))
-            remoteLink.readFrom(link);
+
+        // A view reaches a remote link by its persistent link alone, so a link needs one, of
+        // the expected syntax.
+        const auto readLink = [&links, &incomplete, &request](const Poco::JSON::Object::Ptr& link)
+        {
+            if (!link)
+            {
+                incomplete = true;
+                return;
+            }
+
+            RemoteLinkRegistration registration;
+            registration.readFrom(link);
+
+            if (!RemoteLink::isValidPersistentLink(registration.persistentLink))
+            {
+                LOG_WRN_S("Links request for ["
+                          << Anonymizer::anonymizeUrl(request.getURI())
+                          << "] names a persistent link of an unexpected syntax, ignored");
+                registration.persistentLink.clear();
+            }
+
+            if (!registration.isComplete())
+            {
+                LOG_ERR_S("Links request for ["
+                          << Anonymizer::anonymizeUrl(request.getURI())
+                          << "] names an incomplete link (have WOPISrc: "
+                          << !registration.wopiSrc.empty()
+                          << ", AccessToken: " << !registration.accessToken.empty()
+                          << ", PersistentLink: " << !registration.persistentLink.empty() << ')');
+                incomplete = true;
+                return;
+            }
+
+            links.push_back(std::move(registration));
+        };
+
+        if (object->has("Link") && object->has("Links"))
+        {
+            LOG_ERR_S("Links request for [" << Anonymizer::anonymizeUrl(request.getURI())
+                                            << "] carries both Link and Links");
+            incomplete = true;
+        }
+        else if (object->has("Links"))
+        {
+            const auto array = object->getArray("Links");
+            if (!array)
+                incomplete = true;
+            for (std::size_t i = 0; array && i < array->size(); ++i)
+                readLink(array->getObject(i));
+        }
+        else if (object->has("Link"))
+            readLink(object->getObject("Link"));
     }
 
-    if (!RemoteLink::isValidPersistentLink(remoteLink.persistentLink))
-    {
-        LOG_WRN_S("Links request for [" << Anonymizer::anonymizeUrl(request.getURI())
-                                        << "] names a persistent link of an unexpected syntax, "
-                                           "ignored");
-        remoteLink.persistentLink.clear();
-    }
-
-    // A view reaches a remote link by its persistent link alone, so the link needs one.
-    if ((oneTimeToken.empty() && documentAccessToken.empty()) || !remoteLink.isComplete())
+    // A request that names no view, no link, a link that cannot be reached, or both
+    // Link and Links registers nothing.
+    if ((oneTimeToken.empty() && documentAccessToken.empty()) || links.empty() || incomplete)
     {
         LOG_ERR_S("Links request rejected: incomplete body (have Nonce: "
                   << !oneTimeToken.empty() << ", AccessToken: " << !documentAccessToken.empty()
-                  << ", Link WOPISrc: " << !remoteLink.wopiSrc.empty()
-                  << ", Link AccessToken: " << !remoteLink.accessToken.empty()
-                  << ", Link PersistentLink: " << !remoteLink.persistentLink.empty()
+                  << ", links: " << links.size() << ", incomplete: " << incomplete
                   << "): " << Anonymizer::anonymizeUrl(request.getURI()));
         HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket,
-                                         "missing Nonce or AccessToken, or Link");
+                                         "missing Nonce or AccessToken, or Links");
         return true;
     }
 
@@ -2342,16 +2388,15 @@ bool ClientRequestDispatcher::handleLinksRequest(
         disposition,
         [docBroker, oneTimeToken = std::move(oneTimeToken),
          documentAccessToken = std::move(documentAccessToken),
-         remoteLink = std::move(remoteLink)](const std::shared_ptr<Socket>& moveSocket)
+         links = std::move(links)](const std::shared_ptr<Socket>& moveSocket)
         {
             auto streamSocket = std::static_pointer_cast<StreamSocket>(moveSocket);
 
-            // The remote document's token becomes private to the views that
+            // The remote documents' tokens become private to the views that
             // hold the one-time token or opened the document with the access
             // token. A request that names no view is refused, and a one-time
-            // token is consumed on success.
-            if (!docBroker->registerRemoteDocumentToken(oneTimeToken, documentAccessToken,
-                                                        remoteLink))
+            // token is consumed on success, once for all the links.
+            if (!docBroker->registerRemoteDocumentLinks(oneTimeToken, documentAccessToken, links))
             {
                 LOG_ERR_S("Links request for [" << docBroker->getDocKey()
                                                 << "] names no view of the document");

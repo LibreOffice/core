@@ -13,6 +13,8 @@
 
 #include <wsd/RemoteLink.hpp>
 
+#include <Poco/JSON/Object.h>
+
 #include <iosfwd>
 #include <map>
 #include <memory>
@@ -62,9 +64,11 @@ public:
     /// source the document names that the view holds no remote link for. Private to that view.
     void enableViewLinkAccess(DocumentBroker& docBroker, const std::string& tag);
 
-    /// Takes the storage's answer to one view's link access request for one source.
+    /// Takes the storage's answer to one view's link access request for the given sources. An
+    /// answer that carries a Links array answers for each of them; any other answer is for the
+    /// first source alone, and the others are asked for again.
     void completeLinkAccess(DocumentBroker& docBroker, const std::string& tag,
-                            const std::string& persistentLink, unsigned statusCode,
+                            const std::vector<std::string>& persistentLinks, unsigned statusCode,
                             const std::string& body);
 
     /// Asks one view's storage again for the document behind one source the document names,
@@ -187,10 +191,19 @@ private:
     void resolveUnlistedSources(DocumentBroker& docBroker);
     void resolveUnlistedSources(DocumentBroker& docBroker, const std::string& tag);
 
-    /// Sends one view's storage the question for one source, authorized the way every WOPI
-    /// request of that view is, and records the question as pending.
+    /// Sends one view's storage the question for the given sources in one request, authorized
+    /// the way every WOPI request of that view is, and records each question as pending. The
+    /// body names the first source in PersistentLink and all of them in PersistentLinks.
     void requestLinkAccess(DocumentBroker& docBroker, const std::string& tag,
-                           const std::string& persistentLink);
+                           std::vector<std::string> persistentLinks);
+
+    /// Records what the storage's answer for one source came to, and when it named a document,
+    /// records that document as the source for every view and its token for this view. The
+    /// answer is the status the storage gave, with the object that names the document when
+    /// there is one.
+    void applyLinkAccessAnswer(DocumentBroker& docBroker, const std::string& tag,
+                               const std::string& persistentLink, unsigned statusCode,
+                               const Poco::JSON::Object::Ptr& answer);
 
     /// The name of one link access outcome, for logs and the state dump.
     static const char* linkAccessName(LinkAccess access);

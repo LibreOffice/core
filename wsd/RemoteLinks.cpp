@@ -29,6 +29,7 @@
 #include <wsd/RequestDetails.hpp>
 #include <wsd/wopi/StorageConnectionManager.hpp>
 
+#include <Poco/JSON/Array.h>
 #include <Poco/JSON/Object.h>
 #include <Poco/URI.h>
 
@@ -207,6 +208,7 @@ void RemoteLinks::resolveUnlistedSources(DocumentBroker& docBroker, const std::s
 
     itView->second.askedOnLoad = true;
 
+    std::vector<std::string> toAsk;
     for (const std::string& name : _namedSources)
     {
         // A source this view can already read needs no question
@@ -217,8 +219,11 @@ void RemoteLinks::resolveUnlistedSources(DocumentBroker& docBroker, const std::s
         if (itView->second.linkAccess.find(name) != itView->second.linkAccess.end())
             continue;
 
-        requestLinkAccess(docBroker, tag, name);
+        toAsk.push_back(name);
     }
+
+    if (!toAsk.empty())
+        requestLinkAccess(docBroker, tag, std::move(toAsk));
 
     refreshView(docBroker, tag);
 }
@@ -246,17 +251,26 @@ void RemoteLinks::resolveSource(DocumentBroker& docBroker, const std::string& ta
     if (itAccess != itView->second.linkAccess.end() && itAccess->second == LinkAccess::Pending)
         return;
 
-    requestLinkAccess(docBroker, tag, persistentLink);
+    requestLinkAccess(docBroker, tag, { persistentLink });
     refreshView(docBroker, tag);
 }
 
 void RemoteLinks::requestLinkAccess(DocumentBroker& docBroker, const std::string& tag,
-                                    const std::string& persistentLink)
+                                    std::vector<std::string> persistentLinks)
 {
+    if (persistentLinks.empty())
+        return;
+
     View& view = _views[tag];
     const std::shared_ptr<ClientSession> session = docBroker.findSession(tag);
     if (!session)
         return;
+
+    const auto markAll = [&view, &persistentLinks](const LinkAccess access)
+    {
+        for (const std::string& persistentLink : persistentLinks)
+            view.linkAccess[persistentLink] = access;
+    };
 
     // The question goes to the storage of this document.
     // Is authorized the way every other WOPI request of this view is.
@@ -266,20 +280,26 @@ void RemoteLinks::requestLinkAccess(DocumentBroker& docBroker, const std::string
     auth.authorizeURI(uri);
 
     const std::string uriAnonym = Anonymizer::anonymizeUrl(uri.toString());
-    const std::string linkAnonym = Anonymizer::anonymize(persistentLink);
+    const std::string linkAnonym = Anonymizer::anonymize(persistentLinks.front());
 
     // A relative URI has no host to send the request to.
     if (uri.isRelative())
     {
-        LOG_WRN("Not asking for the source [" << linkAnonym << "] of [" << docBroker.getDocKey()
-                                              << "]: the WOPI URL [" << uriAnonym
-                                              << "] is relative");
-        view.linkAccess[persistentLink] = LinkAccess::Failed;
+        LOG_WRN("Not asking for the " << persistentLinks.size() << " sources from [" << linkAnonym
+                                      << "] of [" << docBroker.getDocKey() << "]: the WOPI URL ["
+                                      << uriAnonym << "] is relative");
+        markAll(LinkAccess::Failed);
         return;
     }
 
+    // The first source is named on its own too, so a storage that answers for one source at a
+    // time answers for that one.
     Poco::JSON::Object::Ptr body = new Poco::JSON::Object();
-    body->set("PersistentLink", persistentLink);
+    body->set("PersistentLink", persistentLinks.front());
+    Poco::JSON::Array::Ptr links = new Poco::JSON::Array();
+    for (const std::string& persistentLink : persistentLinks)
+        links->add(persistentLink);
+    body->set("PersistentLinks", links);
     std::ostringstream bodyStream;
     body->stringify(bodyStream);
 
@@ -290,15 +310,16 @@ void RemoteLinks::requestLinkAccess(DocumentBroker& docBroker, const std::string
     std::shared_ptr<http::Session> httpSession = StorageConnectionManager::getWopiHttpSession(uri);
     if (!httpSession)
     {
-        LOG_WRN("Not asking for the source [" << linkAnonym << "] of [" << docBroker.getDocKey()
-                                              << "]: no HTTP session to [" << uriAnonym << ']');
-        view.linkAccess[persistentLink] = LinkAccess::Failed;
+        LOG_WRN("Not asking for the " << persistentLinks.size() << " sources from [" << linkAnonym
+                                      << "] of [" << docBroker.getDocKey()
+                                      << "]: no HTTP session to [" << uriAnonym << ']');
+        markAll(LinkAccess::Failed);
         return;
     }
 
     std::weak_ptr<DocumentBroker> weakBroker = docBroker.weak_from_this();
-    const auto complete = [weakBroker, tag, persistentLink](unsigned statusCode,
-                                                             const std::string& answer)
+    const auto complete =
+        [weakBroker, tag, persistentLinks](unsigned statusCode, const std::string& answer)
     {
         if (SigUtil::getShutdownRequestFlag())
             return;
@@ -307,7 +328,7 @@ void RemoteLinks::requestLinkAccess(DocumentBroker& docBroker, const std::string
         if (!broker || broker->isMarkedToDestroy())
             return;
 
-        broker->completeRemoteDocumentLinkAccess(tag, persistentLink, statusCode, answer);
+        broker->completeRemoteDocumentLinkAccess(tag, persistentLinks, statusCode, answer);
     };
     httpSession->setFinishedHandler(
         [complete](const std::shared_ptr<http::Session>& finishedSession)
@@ -319,18 +340,100 @@ void RemoteLinks::requestLinkAccess(DocumentBroker& docBroker, const std::string
     httpSession->setConnectFailHandler([complete](const std::shared_ptr<http::Session>&)
                                        { complete(0, std::string()); });
 
-    view.linkAccess[persistentLink] = LinkAccess::Pending;
-    LOG_INF("Asking [" << uriAnonym << "] for the source [" << linkAnonym << "] of ["
-                       << docBroker.getDocKey() << "] for view [" << tag << ']');
+    markAll(LinkAccess::Pending);
+    LOG_INF("Asking [" << uriAnonym << "] for " << persistentLinks.size() << " sources from ["
+                       << linkAnonym << "] of [" << docBroker.getDocKey() << "] for view [" << tag
+                       << ']');
     httpSession->asyncRequest(request, docBroker.getPoll());
 }
 
 void RemoteLinks::completeLinkAccess(DocumentBroker& docBroker, const std::string& tag,
-                                     const std::string& persistentLink, const unsigned statusCode,
-                                     const std::string& body)
+                                     const std::vector<std::string>& persistentLinks,
+                                     const unsigned statusCode, const std::string& body)
 {
     docBroker.assertCorrectThread();
 
+    const auto itView = _views.find(tag);
+    if (itView == _views.end())
+        return;
+
+    // A source dropped while the question was in flight has no answer to take.
+    std::vector<std::string> asked;
+    for (const std::string& persistentLink : persistentLinks)
+    {
+        const auto itAccess = itView->second.linkAccess.find(persistentLink);
+        if (itAccess != itView->second.linkAccess.end() && itAccess->second == LinkAccess::Pending)
+            asked.push_back(persistentLink);
+    }
+    if (asked.empty())
+        return;
+
+    // Only a 200 answer carries a body to read; any other status is the whole answer.
+    constexpr std::size_t MaxAnswerSize = 256 * 1024;
+    Poco::JSON::Object::Ptr object;
+    if (statusCode == static_cast<unsigned>(http::StatusCode::OK))
+    {
+        if (body.size() > MaxAnswerSize)
+        {
+            LOG_ERR("The storage answered the question for " << asked.size() << " sources of ["
+                                                             << docBroker.getDocKey() << "] with "
+                                                             << body.size() << " bytes, too many");
+        }
+        else if (!JsonUtil::parseJSON(body, object))
+        {
+            LOG_ERR("The storage answered the question for " << asked.size() << " sources of ["
+                                                             << docBroker.getDocKey()
+                                                             << "] with a body that is not JSON");
+        }
+    }
+
+    // A Links array answers for every source asked for. Each entry names its source in
+    // PersistentLink and carries a Status, 200 when absent; a source without an entry is one
+    // the storage knows no document for.
+    const Poco::JSON::Array::Ptr links = object ? object->getArray("Links") : nullptr;
+    if (links)
+    {
+        for (const std::string& persistentLink : asked)
+        {
+            unsigned entryStatus = static_cast<unsigned>(http::StatusCode::NotFound);
+            Poco::JSON::Object::Ptr entry;
+            for (std::size_t i = 0; i < links->size(); ++i)
+            {
+                const Poco::JSON::Object::Ptr candidate = links->getObject(i);
+                std::string answeredLink;
+                if (candidate)
+                    JsonUtil::findJSONValue(candidate, "PersistentLink", answeredLink);
+                if (answeredLink != persistentLink)
+                    continue;
+
+                entry = candidate;
+                int status = static_cast<int>(http::StatusCode::OK);
+                JsonUtil::findJSONValue(entry, "Status", status);
+                entryStatus = status < 0 ? 0 : static_cast<unsigned>(status);
+                break;
+            }
+
+            applyLinkAccessAnswer(docBroker, tag, persistentLink, entryStatus, entry);
+        }
+
+        refreshView(docBroker, tag);
+        return;
+    }
+
+    // Any other answer is for the first source alone, so the others are asked for again, in
+    // one request that names the next of them on its own.
+    applyLinkAccessAnswer(docBroker, tag, asked.front(), statusCode, object);
+    if (asked.size() > 1)
+        requestLinkAccess(docBroker, tag, std::vector<std::string>(asked.begin() + 1, asked.end()));
+
+    refreshView(docBroker, tag);
+}
+
+void RemoteLinks::applyLinkAccessAnswer(DocumentBroker& docBroker, const std::string& tag,
+                                        const std::string& persistentLink,
+                                        const unsigned statusCode,
+                                        const Poco::JSON::Object::Ptr& answer)
+{
     const auto itView = _views.find(tag);
     if (itView == _views.end())
         return;
@@ -346,7 +449,6 @@ void RemoteLinks::completeLinkAccess(DocumentBroker& docBroker, const std::strin
         LOG_INF("The storage knows no document for the source ["
                                 << linkAnonym << "] of [" << docBroker.getDocKey() << ']');
         itAccess->second = LinkAccess::NotFound;
-        refreshView(docBroker, tag);
         return;
     }
 
@@ -356,7 +458,6 @@ void RemoteLinks::completeLinkAccess(DocumentBroker& docBroker, const std::strin
         LOG_INF("The storage denies view [" << tag << "] the source ["
                                 << linkAnonym << "] of [" << docBroker.getDocKey() << ']');
         itAccess->second = LinkAccess::Denied;
-        refreshView(docBroker, tag);
         return;
     }
 
@@ -366,24 +467,20 @@ void RemoteLinks::completeLinkAccess(DocumentBroker& docBroker, const std::strin
                                 << linkAnonym << "] of [" << docBroker.getDocKey()
                                 << "] with status " << statusCode);
         itAccess->second = LinkAccess::Failed;
-        refreshView(docBroker, tag);
         return;
     }
 
-    constexpr std::size_t MaxAnswerSize = 64 * 1024;
-    Poco::JSON::Object::Ptr object;
-    if (body.size() > MaxAnswerSize || !JsonUtil::parseJSON(body, object))
+    if (!answer)
     {
         LOG_ERR("The storage answered the question for the source ["
                                 << linkAnonym << "] of [" << docBroker.getDocKey()
                                 << "] with a body that is not a link");
         itAccess->second = LinkAccess::Failed;
-        refreshView(docBroker, tag);
         return;
     }
 
     RemoteLinkRegistration link;
-    link.readFrom(object);
+    link.readFrom(answer);
 
     std::string reason;
     try
@@ -409,7 +506,6 @@ void RemoteLinks::completeLinkAccess(DocumentBroker& docBroker, const std::strin
                                 << linkAnonym << "] of [" << docBroker.getDocKey()
                                 << "] with a link that " << reason);
         itAccess->second = LinkAccess::Failed;
-        refreshView(docBroker, tag);
         return;
     }
 

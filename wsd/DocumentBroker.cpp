@@ -5902,12 +5902,11 @@ void DocumentBroker::enableRemoteDocumentLinkAccess(const std::string& tag)
     _remoteLinks.enableViewLinkAccess(*this, tag);
 }
 
-void DocumentBroker::completeRemoteDocumentLinkAccess(const std::string& tag,
-                                                      const std::string& persistentLink,
-                                                      unsigned statusCode,
-                                                      const std::string& body)
+void DocumentBroker::completeRemoteDocumentLinkAccess(
+    const std::string& tag, const std::vector<std::string>& persistentLinks, unsigned statusCode,
+    const std::string& body)
 {
-    _remoteLinks.completeLinkAccess(*this, tag, persistentLink, statusCode, body);
+    _remoteLinks.completeLinkAccess(*this, tag, persistentLinks, statusCode, body);
 }
 
 void DocumentBroker::resolveRemoteDocumentSource(const std::string& tag,
@@ -5916,33 +5915,36 @@ void DocumentBroker::resolveRemoteDocumentSource(const std::string& tag,
     _remoteLinks.resolveSource(*this, tag, persistentLink);
 }
 
-bool DocumentBroker::registerRemoteDocumentToken(const std::string& oneTimeToken,
+bool DocumentBroker::registerRemoteDocumentLinks(const std::string& oneTimeToken,
                                                  const std::string& documentAccessToken,
-                                                 const RemoteLinkRegistration& link)
+                                                 const std::vector<RemoteLinkRegistration>& links)
 {
     ASSERT_CORRECT_THREAD();
 
-    // The token is private to the views the request names, not to every view
+    // The tokens are private to the views the request names, not to every view
     // of the document. Nothing is recorded for a request that names none.
     bool registered = false;
     for (const auto& it : _sessions)
     {
-        if (!oneTimeToken.empty() && it.second->matchesLinkToken(oneTimeToken))
+        const bool byOneTimeToken =
+            !oneTimeToken.empty() && it.second->matchesLinkToken(oneTimeToken);
+        // The same user may hold several views, each of them gets the tokens.
+        const bool byAccessToken = !byOneTimeToken && !documentAccessToken.empty() &&
+                                   it.second->getAuthorization().matchesToken(documentAccessToken);
+        if (!byOneTimeToken && !byAccessToken)
+            continue;
+
+        for (const RemoteLinkRegistration& link : links)
         {
             setRemoteDocumentSource(link);
             setRemoteDocumentViewToken(it.first, link.wopiSrc, link.accessToken);
-            // Consume the one-time token and hand the view its next one.
+        }
+
+        // Consume the one-time token and hand the view its next one.
+        if (byOneTimeToken)
             it.second->rotateLinkToken(/*notifyClient=*/true);
-            registered = true;
-        }
-        else if (!documentAccessToken.empty() &&
-                 it.second->getAuthorization().matchesToken(documentAccessToken))
-        {
-            // The same user may hold several views, each of them gets the token.
-            setRemoteDocumentSource(link);
-            setRemoteDocumentViewToken(it.first, link.wopiSrc, link.accessToken);
-            registered = true;
-        }
+
+        registered = true;
     }
 
     return registered;

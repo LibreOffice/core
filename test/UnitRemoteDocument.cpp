@@ -33,6 +33,7 @@
 #include <Poco/Net/HTTPRequest.h>
 
 #include <algorithm>
+#include <atomic>
 #include <functional>
 #include <future>
 #include <map>
@@ -949,6 +950,179 @@ public:
         if (_phase == Phase::Load)
         {
             TRANSITION_STATE(_phase, Phase::WaitLoaded);
+
+            initWebsocket("/wopi/files/1?access_token=firsttoken");
+            WSD_CMD("load url=" + getWopiSrc());
+        }
+    }
+};
+
+/// A POST to /cool/links registers several links at once, in Links, and the one-time token is
+/// consumed once for all of them. A batch with an incomplete link registers nothing and leaves
+/// the token unspent.
+class UnitLinkPostBatch : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitToken, Posting, WaitConnected, Done) _phase;
+
+    /// The one-time token the view was handed for the POST.
+    std::string _oneTimeToken;
+    bool _documentLoaded = false;
+    /// Whether the batch that is complete was accepted yet.
+    std::atomic<bool> _registered = false;
+    /// The connected events seen, one per link.
+    std::atomic<int> _connectedCount = 0;
+
+    std::thread _postThread;
+
+    std::string documentWopiSrc() const { return getWopiHostURI() + "/wopi/files/1"; }
+
+    std::string fileWopiSrc(int id) const
+    {
+        return getWopiHostURI() + "/wopi/files/" + std::to_string(id);
+    }
+
+    /// One entry of Links naming the given file, with the given token field.
+    std::string linkEntry(int id, const std::string& tokenField) const
+    {
+        return "{\"WOPISrc\":\"" + fileWopiSrc(id) + "\"," + tokenField +
+               "\"PersistentLink\":\"batch-" + std::to_string(id) + "\"}";
+    }
+
+    /// POSTs a batch of two links authorized by the given one-time token, the second of them
+    /// complete or not, and returns the response status. With a single link too, the body
+    /// carries both Link and Links.
+    unsigned postLinks(const std::string& oneTimeToken, bool complete, bool withSingle = false)
+    {
+        http::Request request("/cool/links?WOPISrc=" + Uri::encode(documentWopiSrc()),
+                              http::Request::VERB_POST);
+        const std::string single =
+            withSingle ? ",\"Link\":" + linkEntry(2, "\"AccessToken\":\"remotetoken\",") : "";
+        request.setBody("{\"Nonce\":\"" + oneTimeToken + "\",\"Links\":[" +
+                            linkEntry(2, "\"AccessToken\":\"remotetoken\",") + ',' +
+                            linkEntry(3, complete ? "\"AccessToken\":\"remotetoken\"," : "") + "]" +
+                            single + '}',
+                        "application/json");
+
+        auto session = http::Session::create(helpers::getTestServerURI());
+        session->setTimeout(std::chrono::seconds(10));
+        const std::shared_ptr<const http::Response> response = session->syncRequest(request);
+        return response ? static_cast<unsigned>(response->statusLine().statusCode()) : 0;
+    }
+
+    /// Runs the POST sequence once the view has a token and the document is up.
+    void maybeStartPost()
+    {
+        if (_phase != Phase::WaitToken || _oneTimeToken.empty() || !_documentLoaded ||
+            _postThread.joinable())
+            return;
+
+        TRANSITION_STATE(_phase, Phase::Posting);
+        _postThread = std::thread(
+            [this, oneTimeToken = _oneTimeToken]
+            {
+                // A batch with an incomplete link registers nothing.
+                LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::BadRequest),
+                                 postLinks(oneTimeToken, /*complete=*/false));
+
+                // A body that carries both Link and Links registers nothing either.
+                LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::BadRequest),
+                                 postLinks(oneTimeToken, /*complete=*/true, /*withSingle=*/true));
+
+                // The refused batches did not spend the token, so the complete batch is
+                // registered with it.
+                _registered = true;
+                LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::OK),
+                                 postLinks(oneTimeToken, /*complete=*/true));
+
+                // The token was spent once, for the whole batch.
+                LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::Unauthorized),
+                                 postLinks(oneTimeToken, /*complete=*/true));
+
+                // Both registered tokens serve this view's subscriptions.
+                TRANSITION_STATE(_phase, Phase::WaitConnected);
+                WSD_CMD("remotedocsubscribe source=batch-2");
+                WSD_CMD("remotedocsubscribe source=batch-3");
+            });
+    }
+
+public:
+    UnitLinkPostBatch()
+        : WopiTestServer("UnitLinkPostBatch")
+        , _phase(Phase::Load)
+    {
+    }
+
+    ~UnitLinkPostBatch()
+    {
+        if (_postThread.joinable())
+            _postThread.join();
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+        config.setBool("remote_links.enable", true);
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+
+        _documentLoaded = true;
+        maybeStartPost();
+        return true;
+    }
+
+    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        if (message.starts_with("linktoken:"))
+        {
+            TST_LOG("Got: [" << message << ']');
+            // Keep the first token; a fresh one arrives after the accepted POST.
+            if (_oneTimeToken.empty())
+            {
+                _oneTimeToken = std::string(message.substr(message.find(' ') + 1));
+                maybeStartPost();
+            }
+
+            return false;
+        }
+
+        if (message.starts_with("remotelinks:"))
+        {
+            TST_LOG("Got: [" << message << ']');
+            if (!_registered && message.find("batch-") != std::string_view::npos)
+                failTest("A refused batch must register nothing");
+            return false;
+        }
+
+        if (!message.starts_with("remotedocevent:"))
+            return false;
+
+        TST_LOG("Got: [" << message << ']');
+
+        if (message.find("event=connected") != std::string::npos)
+        {
+            if (_phase == Phase::WaitConnected && ++_connectedCount == 2)
+            {
+                TRANSITION_STATE(_phase, Phase::Done);
+                passTest("One POST registered two links and spent the token once");
+            }
+        }
+        else if (message.find("event=error") != std::string::npos)
+        {
+            failTest("Unexpected remote document error: " + std::string(message));
+        }
+
+        return false;
+    }
+
+    void invokeWSDTest() override
+    {
+        if (_phase == Phase::Load)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitToken);
 
             initWebsocket("/wopi/files/1?access_token=firsttoken");
             WSD_CMD("load url=" + getWopiSrc());
@@ -2334,6 +2508,8 @@ struct LinkAccessRequest
     bool hasProofHeader = false;
     /// The PersistentLink of the body.
     std::string persistentLink;
+    /// The PersistentLinks of the body, in order.
+    std::vector<std::string> persistentLinks;
 };
 
 /// A fake WOPI host that lists no remote links and answers link access requests instead,
@@ -2362,13 +2538,21 @@ protected:
         return getWopiHostURI() + "/wopi/files/2";
     }
 
+    /// The fields that name the given document for the given source, readable with the given
+    /// token, the way one answer or one entry of a Links array carries them.
+    std::string linkFields(const std::string& persistentLink, const std::string& wopiSrc,
+                           const std::string& accessToken) const
+    {
+        return "\"WOPISrc\":\"" + wopiSrc + "\",\"AccessToken\":\"" + accessToken +
+               "\",\"BaseFileName\":\"Quarter.odp\","
+               "\"LastModifiedTime\":\"2026-09-01T12:00:00.000000Z\",\"PersistentLink\":\"" +
+               persistentLink + '"';
+    }
+
     /// The 200 answer naming file 2 for the source, readable with the given token.
     std::string linkBody(const std::string& accessToken) const
     {
-        return "{\"WOPISrc\":\"" + remoteWopiSrc() + "\",\"AccessToken\":\"" + accessToken +
-               "\",\"BaseFileName\":\"Quarter.odp\","
-               "\"LastModifiedTime\":\"2026-09-01T12:00:00.000000Z\",\"PersistentLink\":\"" +
-               std::string(SourceName) + "\"}";
+        return '{' + linkFields(SourceName, remoteWopiSrc(), accessToken) + '}';
     }
 
     /// The answer to one request: the status and the body.
@@ -2488,10 +2672,18 @@ protected:
         const std::string body(std::istreambuf_iterator<char>(message), {});
         Poco::JSON::Object::Ptr object;
         if (JsonUtil::parseJSON(body, object))
+        {
             JsonUtil::findJSONValue(object, "PersistentLink", record.persistentLink);
+            if (const auto links = object->getArray("PersistentLinks"))
+            {
+                for (std::size_t i = 0; i < links->size(); ++i)
+                    record.persistentLinks.push_back(links->getElement<std::string>(i));
+            }
+        }
 
-        TST_LOG("Link access request for [" << record.persistentLink << "] with token ["
-                                            << record.accessToken << ']');
+        TST_LOG("Link access request for ["
+                << record.persistentLink << "] and " << record.persistentLinks.size()
+                << " sources with token [" << record.accessToken << ']');
         {
             std::lock_guard<std::mutex> lock(_requestsMutex);
             _requests.push_back(record);
@@ -2506,13 +2698,19 @@ protected:
     }
 
     /// Checks one request for what every link access request must be: sent next to the file,
-    /// authorized like any WOPI request of the view, for the named source.
-    void assertRequest(const LinkAccessRequest& request, const std::string& accessToken)
+    /// authorized like any WOPI request of the view, for the given sources, the first of them
+    /// named on its own too.
+    void assertRequest(const LinkAccessRequest& request, const std::string& accessToken,
+                       const std::vector<std::string>& persistentLinks = { SourceName })
     {
         LOK_ASSERT_EQUAL(std::string("/wopi/files/1") + LinkAccessSuffix, request.path);
         LOK_ASSERT_EQUAL(accessToken, request.accessToken);
         LOK_ASSERT_EQUAL("Bearer " + accessToken, request.authorization);
-        LOK_ASSERT_EQUAL(std::string(SourceName), request.persistentLink);
+        LOK_ASSERT_EQUAL(persistentLinks.front(), request.persistentLink);
+        LOK_ASSERT_EQUAL(persistentLinks.size(), request.persistentLinks.size());
+        for (std::size_t i = 0; i < persistentLinks.size() && i < request.persistentLinks.size();
+             ++i)
+            LOK_ASSERT_EQUAL(persistentLinks[i], request.persistentLinks[i]);
     }
 };
 
@@ -2876,18 +3074,242 @@ public:
     }
 };
 
+/// The document names three sources and the storage answers for all of them in one request:
+/// one it resolves, one it knows no document for and one this user may not read. Each answer
+/// is recorded for its own source, and the resolved one is read through.
+class UnitLinkAccessBatch : public LinkAccessTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoad, Checking, WaitConnected, Done) _phase;
+
+    static constexpr auto NotFoundSourceName = "Q4 outlook.odp";
+    static constexpr auto DeniedSourceName = "Board only.odp";
+
+    std::thread _checkThread;
+
+    std::pair<http::StatusCode, std::string> answerLinkAccess(const LinkAccessRequest&) override
+    {
+        return { http::StatusCode::OK,
+                 "{\"Links\":[{" + linkFields(SourceName, remoteWopiSrc(), "remotetoken") +
+                     "},{\"PersistentLink\":\"" + std::string(NotFoundSourceName) +
+                     "\",\"Status\":404},{\"PersistentLink\":\"" + std::string(DeniedSourceName) +
+                     "\",\"Status\":403}]}" };
+    }
+
+public:
+    UnitLinkAccessBatch()
+        : LinkAccessTestServer("UnitLinkAccessBatch")
+        , _phase(Phase::Load)
+    {
+    }
+
+    ~UnitLinkAccessBatch()
+    {
+        if (_checkThread.joinable())
+            _checkThread.join();
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+
+        if (_phase != Phase::WaitLoad)
+            return true;
+
+        TRANSITION_STATE(_phase, Phase::Checking);
+        _checkThread = std::thread(
+            [this]
+            {
+                nameSources({ std::string(SourceName), std::string(NotFoundSourceName),
+                              std::string(DeniedSourceName) });
+
+                // The three sources go to the storage in one request.
+                LOK_ASSERT_MESSAGE("The endpoint must be asked for the sources",
+                                   waitForRequests(1));
+                const std::vector<LinkAccessRequest> asked = requests();
+                LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), asked.size());
+                assertRequest(asked[0], "anything",
+                              { SourceName, NotFoundSourceName, DeniedSourceName });
+
+                // Each entry of the answer is recorded for its own source.
+                LOK_ASSERT_MESSAGE("The resolved source must be recorded",
+                                   waitForBrokerState(std::string("persistent link ") + SourceName +
+                                                      " access: resolved"));
+                LOK_ASSERT_MESSAGE("The source the storage knows nothing of must be recorded",
+                                   waitForBrokerState(std::string("persistent link ") +
+                                                      NotFoundSourceName + " access: notfound"));
+                LOK_ASSERT_MESSAGE("The denied source must be recorded",
+                                   waitForBrokerState(std::string("persistent link ") +
+                                                      DeniedSourceName + " access: denied"));
+                LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), requestCount());
+
+                // The token the storage answered with serves this view's subscription.
+                TRANSITION_STATE(_phase, Phase::WaitConnected);
+                WSD_CMD("remotedocsubscribe source=" + Uri::encode(SourceName));
+            });
+
+        return true;
+    }
+
+    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        if (!message.starts_with("remotedocevent:"))
+            return false;
+
+        TST_LOG("Got: [" << message << ']');
+
+        if (message.find("event=connected") != std::string::npos)
+        {
+            if (_phase == Phase::WaitConnected)
+            {
+                TRANSITION_STATE(_phase, Phase::Done);
+                passTest("One request resolved three sources, each to its own answer");
+            }
+        }
+        else if (message.find("event=error") != std::string::npos)
+        {
+            failTest("Unexpected remote document error: " + std::string(message));
+        }
+
+        return false;
+    }
+
+    void invokeWSDTest() override
+    {
+        if (_phase == Phase::Load)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitLoad);
+
+            initWebsocket("/wopi/files/1?access_token=anything");
+            WSD_CMD("load url=" + getWopiSrc());
+        }
+    }
+};
+
+/// The document names two sources and the storage answers for one source at a time, the one
+/// named in PersistentLink, without a Links array. The first answer is taken for the first
+/// source, and the second source is asked for again, on its own.
+class UnitLinkAccessOneByOne : public LinkAccessTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoad, Checking, WaitConnected, Done) _phase;
+
+    static constexpr auto OtherSourceName = "Q4 outlook.odp";
+
+    std::thread _checkThread;
+
+    std::string otherWopiSrc() const { return getWopiHostURI() + "/wopi/files/3"; }
+
+    std::pair<http::StatusCode, std::string>
+    answerLinkAccess(const LinkAccessRequest& request) override
+    {
+        // The answer names a document for the one source in PersistentLink.
+        const std::string wopiSrc =
+            request.persistentLink == SourceName ? remoteWopiSrc() : otherWopiSrc();
+        return { http::StatusCode::OK,
+                 '{' + linkFields(request.persistentLink, wopiSrc, "remotetoken") + '}' };
+    }
+
+public:
+    UnitLinkAccessOneByOne()
+        : LinkAccessTestServer("UnitLinkAccessOneByOne")
+        , _phase(Phase::Load)
+    {
+    }
+
+    ~UnitLinkAccessOneByOne()
+    {
+        if (_checkThread.joinable())
+            _checkThread.join();
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+
+        if (_phase != Phase::WaitLoad)
+            return true;
+
+        TRANSITION_STATE(_phase, Phase::Checking);
+        _checkThread = std::thread(
+            [this]
+            {
+                nameSources({ std::string(SourceName), std::string(OtherSourceName) });
+
+                // The first request names both sources, and the answer is for the first. The
+                // second request names the other source alone.
+                LOK_ASSERT_MESSAGE("The endpoint must be asked twice", waitForRequests(2));
+                const std::vector<LinkAccessRequest> asked = requests();
+                LOK_ASSERT_EQUAL(static_cast<std::size_t>(2), asked.size());
+                assertRequest(asked[0], "anything", { SourceName, OtherSourceName });
+                assertRequest(asked[1], "anything", { OtherSourceName });
+
+                LOK_ASSERT_MESSAGE("The first source must be recorded",
+                                   waitForBrokerState(std::string("persistent link ") + SourceName +
+                                                      " access: resolved"));
+                LOK_ASSERT_MESSAGE("The other source must be recorded",
+                                   waitForBrokerState(std::string("persistent link ") +
+                                                      OtherSourceName + " access: resolved"));
+                LOK_ASSERT_EQUAL(static_cast<std::size_t>(2), requestCount());
+
+                // The other source is read with the token of its own answer.
+                TRANSITION_STATE(_phase, Phase::WaitConnected);
+                WSD_CMD("remotedocsubscribe source=" + Uri::encode(OtherSourceName));
+            });
+
+        return true;
+    }
+
+    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        if (!message.starts_with("remotedocevent:"))
+            return false;
+
+        TST_LOG("Got: [" << message << ']');
+
+        if (message.find("event=connected") != std::string::npos)
+        {
+            if (_phase == Phase::WaitConnected)
+            {
+                TRANSITION_STATE(_phase, Phase::Done);
+                passTest("A storage that answers one source at a time is asked again for the "
+                         "rest");
+            }
+        }
+        else if (message.find("event=error") != std::string::npos)
+        {
+            failTest("Unexpected remote document error: " + std::string(message));
+        }
+
+        return false;
+    }
+
+    void invokeWSDTest() override
+    {
+        if (_phase == Phase::Load)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitLoad);
+
+            initWebsocket("/wopi/files/1?access_token=anything");
+            WSD_CMD("load url=" + getWopiSrc());
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* [] { new UnitRemoteDocument(), new UnitRemoteDocumentViewClose(),
-                              new UnitRemoteDocumentUnload(), new UnitRemoteDocumentCycle(),
-                              new UnitLinkPost(), new UnitLinkPostAccessToken(), new UnitLinkDelete(),
-                              new UnitRemoteDocumentMutual(),
-                              new UnitRemoteDocumentCommand(), new UnitRemoteDocumentMissing(),
-                              new UnitRemoteDocumentRetry(), new UnitRemoteDocumentIsolation(),
-                              new UnitRemoteDocumentSaved(),
-                              new UnitRemoteDocumentChain(), new UnitLinkPostPersistentLink(),
-                              new UnitLinkAccessResolve(), new UnitLinkAccessNotFound(),
-                              new UnitLinkAccessPerView(), nullptr };
+    return new UnitBase* []
+    {
+        new UnitRemoteDocument(), new UnitRemoteDocumentViewClose(), new UnitRemoteDocumentUnload(),
+            new UnitRemoteDocumentCycle(), new UnitLinkPost(), new UnitLinkPostAccessToken(),
+            new UnitLinkPostBatch(), new UnitLinkDelete(), new UnitRemoteDocumentMutual(),
+            new UnitRemoteDocumentCommand(), new UnitRemoteDocumentMissing(),
+            new UnitRemoteDocumentRetry(), new UnitRemoteDocumentIsolation(),
+            new UnitRemoteDocumentSaved(), new UnitRemoteDocumentChain(),
+            new UnitLinkPostPersistentLink(), new UnitLinkAccessResolve(),
+            new UnitLinkAccessNotFound(), new UnitLinkAccessPerView(), new UnitLinkAccessBatch(),
+            new UnitLinkAccessOneByOne(), nullptr
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
