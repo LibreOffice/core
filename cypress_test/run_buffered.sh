@@ -106,7 +106,7 @@ run_specs ()
     local command=
     command=$(run_command "$@")
     rm -rf ${TEST_ERROR}
-    echo "`echo ${command} && ${command} || touch ${TEST_ERROR}`" >> ${TEST_LOG} 2>&1
+    { echo ${command}; ${command} || touch ${TEST_ERROR}; } >> ${TEST_LOG}
 }
 
 # The start, end and outcome cypress recorded for one spec, if it ran. The
