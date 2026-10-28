@@ -6160,6 +6160,12 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
                 postReplyToCall(data.hWnd, data.tabId, id, reply);
             }
         }
+        else if (s.starts_with(L"removecloudaccount "))
+        {
+            // There is nothing to delete for now.
+            // TODO: Give each account a WebView2 profile, as Qt does, and delete it here.
+            postReplyToCall(data.hWnd, data.tabId, id, std::string());
+        }
         else if (s == L"FETCHSETTINGSCONFIG")
         {
             postReplyToCall(data.hWnd, data.tabId, id, Desktop::fetchSettingsConfig());
