@@ -42,7 +42,7 @@ using namespace comphelper;
 
 MacroWarning::MacroWarning(weld::Window* pParent, bool _bWithSignatures)
     : MessageDialogController(pParent, u"uui/ui/macrowarnmedium.ui"_ustr, u"MacroWarnMedium"_ustr, u"grid"_ustr)
-    , mxGrid(m_xBuilder->weld_widget(u"grid"_ustr))
+    , mxGrid(m_xBuilder->weld_container(u"grid"_ustr))
     , mxSignsFI(m_xBuilder->weld_label(u"signsLabel"_ustr))
     , mxNotYetValid(m_xBuilder->weld_label(u"certNotYetValidLabel"_ustr))
     , mxNoLongerValid(m_xBuilder->weld_label(u"certNoLongerValidLabel"_ustr))
