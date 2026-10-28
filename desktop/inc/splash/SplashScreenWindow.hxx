@@ -23,12 +23,8 @@
 #include <vcl/introwin.hxx>
 #include <vcl/virdev.hxx>
 
-class SplashScreen;
-
 class SplashScreenWindow : public IntroWindow
 {
-    SplashScreen* m_pSplash;
-
     OUString m_sProgressText;
     sal_Int32 m_nProgress;
 
@@ -56,9 +52,8 @@ class SplashScreenWindow : public IntroWindow
 public:
     static constexpr sal_Int32 PROGRESS_MAX = 100;
 
-    explicit SplashScreenWindow(SplashScreen* pSplash, const OUString& rAppName);
+    explicit SplashScreenWindow(const OUString& rAppName);
     virtual ~SplashScreenWindow() override { disposeOnce(); }
-    virtual void dispose() override;
     virtual void SetOutputSizePixel(const Size& rNewSize) override;
     // workwindow
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;

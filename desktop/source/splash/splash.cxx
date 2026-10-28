@@ -23,7 +23,7 @@
 #include <vcl/svapp.hxx>
 
 SplashScreen::SplashScreen(const OUString& rAppName)
-    : m_pWindow(VclPtr<SplashScreenWindow>::Create(this, rAppName))
+    : m_pWindow(VclPtr<SplashScreenWindow>::Create(rAppName))
     , m_bProgressEnd(false)
 {
     Application::AddEventListener(LINK(this, SplashScreen, AppEventListenerHdl));

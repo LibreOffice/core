@@ -31,9 +31,8 @@
 #define NOT_LOADED (tools::Long(-1))
 #define NOT_LOADED_COLOR (Color(ColorTransparency, 0xffffffff))
 
-SplashScreenWindow::SplashScreenWindow(SplashScreen* pSplash, const OUString& rAppName)
-    : m_pSplash(pSplash)
-    , m_nProgress(0)
+SplashScreenWindow::SplashScreenWindow(const OUString& rAppName)
+    : m_nProgress(0)
     , m_aProgressFrameColor(NOT_LOADED_COLOR)
     , m_aProgressBarColor(NOT_LOADED_COLOR)
     , m_aProgressTextColor(NOT_LOADED_COLOR)
@@ -106,12 +105,6 @@ SplashScreenWindow::SplashScreenWindow(SplashScreen* pSplash, const OUString& rA
     m_pVDev->EnableRTL(IsRTLEnabled());
 }
 
-void SplashScreenWindow::dispose()
-{
-    m_pSplash = nullptr;
-    IntroWindow::dispose();
-}
-
 void SplashScreenWindow::SetOutputSizePixel(const Size& rNewSize)
 {
     IntroWindow::SetOutputSizePixel(rNewSize);
@@ -128,7 +121,7 @@ void SplashScreenWindow::Redraw()
 
 void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    if (!m_pSplash)
+    if (isDisposed())
         return;
 
     //native drawing
