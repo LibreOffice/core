@@ -1678,6 +1678,19 @@ class Socket {
 		});
 	}
 
+	private static readonly appImageFramePrefixes = [
+		'tile:',
+		'tilecombine:',
+		'delta:',
+		'rendersearchlist:',
+		'slidelayer:',
+		'zstdslidelayer:',
+		'zstdvectorprimitives:',
+		'zstdvectorprimitivesdelta:',
+		'zstdvectorrenderingfont:',
+		'windowpaint:',
+	];
+
 	private _extractTextImg(e: SlurpMessageEvent): void {
 		if (
 			(window.ThisIsTheiOSApp ||
@@ -1692,18 +1705,11 @@ class Socket {
 			// text on iOS in jsdialogs when using languages like Greek and
 			// Japanese by only setting the image bytes for only the same set
 			// of message types.
-			if (
-				e.data.startsWith('tile:') ||
-				e.data.startsWith('tilecombine:') ||
-				e.data.startsWith('delta:') ||
-				e.data.startsWith('rendersearchlist:') ||
-				e.data.startsWith('slidelayer:') ||
-				e.data.startsWith('zstdslidelayer:') ||
-				e.data.startsWith('zstdvectorprimitives:') ||
-				e.data.startsWith('zstdvectorprimitivesdelta:') ||
-				e.data.startsWith('zstdvectorrenderingfont:') ||
-				e.data.startsWith('windowpaint:')
-			) {
+			const data = e.data;
+			const isImageFrame = Socket.appImageFramePrefixes.some((prefix) =>
+				data.startsWith(prefix),
+			);
+			if (isImageFrame) {
 				let index: number;
 				index = e.data.indexOf('\n');
 				if (index < 0) index = e.data.length;
