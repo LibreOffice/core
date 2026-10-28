@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-23 00:15+0200\n"
-"PO-Revision-Date: 2026-10-26 15:52+0000\n"
+"PO-Revision-Date: 2026-10-28 11:06+0000\n"
 "Last-Translator: Leif-Jöran Olsson <ljo@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/sv/>\n"
@@ -1379,11 +1379,11 @@ msgstr "Tolerant"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4816
 msgid "Press agencies"
-msgstr ""
+msgstr "Nyhetsbyråer"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4826
 msgid "Explanations"
-msgstr ""
+msgstr "Förklaringar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4829
 #: src/control/Control.AIChatSidebar.ts:154
@@ -1391,68 +1391,68 @@ msgid "Short"
 msgstr "Korta ner"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4830
-#, fuzzy
 msgid "Long"
-msgstr "Logg"
+msgstr "Utförligt"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4831
 msgid "Long, with an example"
-msgstr ""
+msgstr "Utförligt, med ett exempel"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4841
 msgid "Correction profiles"
-msgstr ""
+msgstr "Korrigeringsprofiler"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4851
 msgid "Dictionaries"
-msgstr ""
+msgstr "Ordböcker"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4858
 msgid "Foreign words with a German equivalent"
-msgstr ""
+msgstr "Utländska ord med en tysk motsvarighet"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4859
 msgid "Archaic words"
-msgstr ""
+msgstr "Arkaiska ord"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4860
 msgid "Regional words"
-msgstr ""
+msgstr "Regionala ord"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4861
 msgid "Colloquial and vulgar words"
-msgstr ""
+msgstr "Vardagliga och vulgära ord"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4862
 msgid "Filler words"
-msgstr ""
+msgstr "Filtrera ord"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4863
 msgid "Offensive wording"
-msgstr ""
+msgstr "Anstötliga ordval"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4864
 msgid "Gender-inclusive wording"
-msgstr ""
+msgstr "Genusinkluderande ordval"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4865
 msgid "Complex sentences"
-msgstr ""
+msgstr "Komplexa meningar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4887
 msgid "Style checks (German only)"
-msgstr ""
+msgstr "Stilkontroller (endast tyska)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5011
-#, fuzzy
 msgid "Translation"
-msgstr "Övergång"
+msgstr "Översättning"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5015
 msgid ""
 "Machine translation of the document text with the Translate command. The "
 "text is sent to the provider to be translated."
 msgstr ""
+"Maskinöversättning av dokumenttexten med kommandot Översätt. Texten skickas "
+"till leverantören för att översättas."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5028
 msgid "The first one that is set up"
