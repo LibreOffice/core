@@ -692,3 +692,25 @@ div#fontstyletoolbox + div#style.mobile-wizard {
 		}
 	}
 }
+
+/* Calc has more toolbars than the other apps (the formula bar and the sheet
+   tabs), so 150px is not enough space to edit the document there */
+@media screen and (height <= 230px) {
+	html:has(#document-and-notes:focus-within):has(body[data-docType='spreadsheet']) {
+		#toolbar-down {
+			display: none !important;
+		}
+
+		#toolbar-wrapper:has(#toolbar-up) {
+			display: none !important;
+		}
+
+		#spreadsheet-toolbar {
+			display: none !important;
+		}
+
+		body > #formulabar-row {
+			display: none !important;
+		}
+	}
+}

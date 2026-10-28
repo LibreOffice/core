@@ -130,8 +130,8 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Toolbar tests', function() 
 		helper.typeIntoDocument('x');
 		cy.cGet('#toolbar-wrapper:has(#toolbar-up)').should('not.be.visible');
 
-		// ...and closing the keyboard should make it appear again
-		cy.viewport('iphone-6', 'landscape');
+		// ...and closing the keyboard - even if that only brings us just above the limit as it might on a small device - should make it appear again
+		cy.viewport(667, 151);
 		cy.cGet('#toolbar-wrapper:has(#toolbar-up)').should('be.visible');
 	});
 });
