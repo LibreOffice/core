@@ -431,8 +431,10 @@ class InitializerBase {
 				try { window.localStorage.setItem('darkTheme', darkTheme); }
 				catch (e) { /* localStorage may be unavailable */ }
 			}
-		} else if (darkTheme) {
-			window.uiDefaults = { 'darkTheme': 'true' };
+		} else if (darkTheme === 'true' || darkTheme === 'false') {
+			// The parameter sets the darkTheme default alone. The other defaults from the
+			// integrator and from coolwsd.xml stay as they are.
+			window.uiDefaults['darkTheme'] = darkTheme;
 		}
 	}
 
