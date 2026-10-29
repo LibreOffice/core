@@ -606,28 +606,23 @@ public:
                 closeRenderPass();
             }
         }
-        // check if object is part of an animated group
-        else if (SdrObject* pAncestor = getAnimatedAncestor(pObject))
-        {
-            // a new animated group is started ?
-            if (mpCurrentRenderPass->mpObject && mpCurrentRenderPass->mpObject != pAncestor)
-                closeRenderPass();
-
-            // Add the animated object
-            mpCurrentRenderPass->maObjectsAndParagraphs.emplace(pObject, std::deque<sal_Int32>());
-            mpCurrentRenderPass->meStage = eCurrentStage;
-            mpCurrentRenderPass->mbAnimation = true;
-            mpCurrentRenderPass->mpObject = pAncestor;
-        }
-        // No special handling is needed, just add the object to the current rendering pass
         else
         {
-            // an animated group is complete ?
-            if (mpCurrentRenderPass->mpObject)
+            // The animated group the object is part of, or nullptr when the object is not
+            // animated. Consecutive objects share a render pass only when they share this
+            // value, so an animated group gets a render pass of its own, apart from the not
+            // animated objects before and after it.
+            SdrObject* pAncestor = getAnimatedAncestor(pObject);
+            if (mpCurrentRenderPass->mpObject != pAncestor)
                 closeRenderPass();
 
             mpCurrentRenderPass->maObjectsAndParagraphs.emplace(pObject, std::deque<sal_Int32>());
             mpCurrentRenderPass->meStage = eCurrentStage;
+            if (pAncestor)
+            {
+                mpCurrentRenderPass->mbAnimation = true;
+                mpCurrentRenderPass->mpObject = pAncestor;
+            }
         }
         mePreviousStage = eCurrentStage;
     }

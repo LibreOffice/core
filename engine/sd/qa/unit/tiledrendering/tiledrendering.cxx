@@ -4847,7 +4847,8 @@ public:
         }
     }
 
-    void checkPageLayer(int nIndex, const std::string& rGroup, bool bIsAnimated = false)
+    void checkPageLayer(int nIndex, const std::string& rGroup, bool bIsAnimated = false,
+                        std::vector<sal_uInt8>* pLayerBuffer = nullptr)
     {
         const std::string sMsg = rGroup + " Layer Index: " + std::to_string(nIndex);
 
@@ -4861,6 +4862,9 @@ public:
 
         debugWriteImageToFile(mnImageFileStep++, pBuffer, mnViewWidth, mnViewHeight,
                               aJson.c_str());
+
+        if (pLayerBuffer)
+            *pLayerBuffer = pBuffer;
 
         boost::property_tree::ptree aTree;
         readJSON(aTree, aJson);
@@ -5437,6 +5441,38 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animate
 
     // not animated shape
     aSlideRendererChecker.checkPageLayer(1, "DrawPage", /*bIsAnimated=*/ false);
+
+    aSlideRendererChecker.checkFinalEmptyLayer();
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Shape_Before_Animated_Group)
+{
+    // a single not animated shape
+    // followed by 1 animated group made up by 2 not animated shapes
+
+    SdXImpressDocument* pXImpressDocument
+        = createDoc("SlideRenderingTest_Shape_Before_Animated_Group.fodp");
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    SlideRendererChecker aSlideRendererChecker(pXImpressDocument, 0, 2000, 2000, false, false);
+    aSlideRendererChecker.checkSlideSize(2000, 1125);
+
+    // The slide is 28cm wide and renders 2000 pixels wide, so 1cm is about 71 pixels. The center
+    // of the not animated rectangle is at (350, 234) and the center of the first rectangle of the
+    // group is at (873, 470). The alpha byte of a pixel is 0 where the layer draws nothing.
+    auto getAlpha = [](const std::vector<sal_uInt8>& rBuffer, int nX, int nY) {
+        return int(rBuffer[(nY * 2000 + nX) * 4 + 3]);
+    };
+
+    // the not animated shape has a layer of its own, so it is visible from the start
+    std::vector<sal_uInt8> aLayerBuffer;
+    aSlideRendererChecker.checkPageLayer(0, "DrawPage", /*bIsAnimated=*/ false, &aLayerBuffer);
+    CPPUNIT_ASSERT(getAlpha(aLayerBuffer, 350, 234) != 0);
+    CPPUNIT_ASSERT_EQUAL(0, getAlpha(aLayerBuffer, 873, 470));
+
+    // animated group, without the not animated shape
+    aSlideRendererChecker.checkPageLayer(1, "DrawPage", /*bIsAnimated=*/ true, &aLayerBuffer);
+    CPPUNIT_ASSERT_EQUAL(0, getAlpha(aLayerBuffer, 350, 234));
+    CPPUNIT_ASSERT(getAlpha(aLayerBuffer, 873, 470) != 0);
 
     aSlideRendererChecker.checkFinalEmptyLayer();
 }
