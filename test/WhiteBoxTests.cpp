@@ -27,6 +27,7 @@
 #include <common/StateEnum.hpp>
 #include <common/ThreadPool.hpp>
 #include <common/Util.hpp>
+#include <kit/KitHelper.hpp>
 #include <wsd/TileCache.hpp>
 #include <wsd/TileDesc.hpp>
 
@@ -87,6 +88,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testLogCaptureCaller);
     CPPUNIT_TEST(testIsIso8601);
     CPPUNIT_TEST(testSaveResult);
+    CPPUNIT_TEST(testFitPageInBox);
     CPPUNIT_TEST_SUITE_END();
 
     void testCOOLProtocolFunctions();
@@ -122,6 +124,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testLogCaptureCaller();
     void testIsIso8601();
     void testSaveResult();
+    void testFitPageInBox();
 
     size_t waitForThreads(size_t count);
 };
@@ -1478,6 +1481,47 @@ void WhiteBoxTests::testSaveResult()
     // An answer that does not say whether the save worked is a save with an unknown outcome.
     LOK_ASSERT_EQUAL(SaveResult::Outcome::Unknown,
                      parse(R"({ "commandName": ".uno:Save" })").outcome);
+}
+
+void WhiteBoxTests::testFitPageInBox()
+{
+    constexpr auto testname = __func__;
+
+    // The result as "<W>x<H>", which reads like the sizes a host asks for.
+    const auto fit = [](int boxWidth, int boxHeight, int64_t pageWidth, int64_t pageHeight)
+    {
+        const auto size = LOKitHelper::fitPageInBox(boxWidth, boxHeight, pageWidth, pageHeight);
+        return std::to_string(size.first) + 'x' + std::to_string(size.second);
+    };
+
+    // An A4 page in twips, portrait and landscape.
+    constexpr int64_t A4Short = 11906;
+    constexpr int64_t A4Long = 16838;
+
+    // In a square box, the long side of the page fills the box and the short side keeps the
+    // aspect ratio of the page.
+    LOK_ASSERT_EQUAL(std::string("707x1000"), fit(1000, 1000, A4Short, A4Long));
+    LOK_ASSERT_EQUAL(std::string("1000x707"), fit(1000, 1000, A4Long, A4Short));
+
+    // In a wide box, a portrait page is limited by the height of the box, and so is a landscape
+    // page, since the page is less wide than the box.
+    LOK_ASSERT_EQUAL(std::string("181x256"), fit(1000, 256, A4Short, A4Long));
+    LOK_ASSERT_EQUAL(std::string("362x256"), fit(1000, 256, A4Long, A4Short));
+
+    // In a tall box, a landscape page is limited by the width of the box.
+    LOK_ASSERT_EQUAL(std::string("256x181"), fit(256, 1000, A4Long, A4Short));
+
+    // A page with the aspect ratio of the box fills it.
+    LOK_ASSERT_EQUAL(std::string("256x256"), fit(256, 256, 1000, 1000));
+    LOK_ASSERT_EQUAL(std::string("1000x500"), fit(1000, 500, 2, 1));
+
+    // The size is at least 1x1: a very wide or very tall page keeps one pixel on its short
+    // side, and a page or a box without an area gives 1x1.
+    LOK_ASSERT_EQUAL(std::string("256x1"), fit(256, 256, 100000, 1));
+    LOK_ASSERT_EQUAL(std::string("1x256"), fit(256, 256, 1, 100000));
+    LOK_ASSERT_EQUAL(std::string("1x1"), fit(256, 256, 0, A4Long));
+    LOK_ASSERT_EQUAL(std::string("1x1"), fit(256, 256, A4Short, -1));
+    LOK_ASSERT_EQUAL(std::string("1x1"), fit(0, 256, A4Short, A4Long));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WhiteBoxTests);

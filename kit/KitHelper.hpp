@@ -16,12 +16,37 @@
 
 #include <COKit/COKit.hxx>
 
+#include <algorithm>
+#include <cstdint>
 #include <string>
 #include <unordered_map>
+#include <utility>
 
 namespace LOKitHelper
 {
     constexpr auto tunnelledDialogImageCacheSize = 100;
+
+    /// Returns the pixel size, as (width, height), of a page rendered to fit inside a box
+    /// while keeping the aspect ratio of the page. The page fills the box along one side and
+    /// is at least 1x1. A box or a page with a side of zero or less gives 1x1.
+    inline std::pair<int, int> fitPageInBox(int boxWidth, int boxHeight, int64_t pageWidthTwips,
+                                            int64_t pageHeightTwips)
+    {
+        if (boxWidth <= 0 || boxHeight <= 0 || pageWidthTwips <= 0 || pageHeightTwips <= 0)
+            return { 1, 1 };
+
+        // Comparing the products compares the two aspect ratios without a division, so the
+        // comparison is exact. The side of the page that limits the scale takes the full length
+        // of the box on that side, and the other side is scaled by the same factor, rounded down.
+        if (pageWidthTwips * boxHeight <= pageHeightTwips * boxWidth)
+        {
+            const int64_t width = pageWidthTwips * boxHeight / pageHeightTwips;
+            return { static_cast<int>(std::max<int64_t>(1, width)), boxHeight };
+        }
+
+        const int64_t height = pageHeightTwips * boxWidth / pageWidthTwips;
+        return { boxWidth, static_cast<int>(std::max<int64_t>(1, height)) };
+    }
 
     inline std::string documentTypeToString(COKitDocumentType type)
     {
