@@ -3507,7 +3507,15 @@ private:
         }
         else if (!_associatedWithDoc && !SigUtil::getShutdownRequestFlag())
         {
-            LOG_WRN("Unassociated Kit (" << _pid << ") disconnected unexpectedly");
+            // close() detaches the pid, and a spare kit is only destroyed after it left
+            // NewChildren, as when the spare kits of a dropped subforkit are closed.
+            if (!child || child->getPid() <= 0)
+            {
+                LOG_DBG("Spare Kit (" << _pid << ") disconnected after it was closed");
+                return;
+            }
+
+            LOG_WRN("Spare Kit (" << _pid << ") disconnected unexpectedly");
 
             std::string configId;
             std::unique_lock<std::mutex> lock(NewChildrenMutex);
