@@ -19,6 +19,7 @@
 #include <common/FileUtil.hpp>
 #include <common/JsonUtil.hpp>
 #include <common/Log.hpp>
+#include <common/Thumbnail.hpp>
 #include <common/TraceEvent.hpp>
 #include <common/Unit.hpp>
 #include <common/Uri.hpp>
@@ -47,6 +48,7 @@
 #include <Poco/StreamCopier.h>
 #include <Poco/URI.h>
 
+#include <algorithm>
 #include <cassert>
 #include <chrono>
 #include <memory>
@@ -177,6 +179,41 @@ void WopiStorage::handleWOPIFileInfo(const WOPIFileInfo& wopiFileInfo, LockConte
     _fileUrl = wopiFileInfo.getFileUrl();
 }
 
+std::vector<std::string> parseThumbnailSizes(const Poco::JSON::Array::Ptr& sizes)
+{
+    std::vector<std::string> result;
+    if (!sizes)
+        return result;
+
+    for (std::size_t i = 0; i < sizes->size(); ++i)
+    {
+        const Poco::Dynamic::Var entry = sizes->get(i);
+        const std::string text = entry.isString() ? entry.extract<std::string>() : std::string();
+        if (!Thumbnail::parseSize(text))
+        {
+            LOG_WRN("Ignoring the ThumbnailSizes entry ["
+                    << text << "] of CheckFileInfo, which is not \"<W>x<H>\" with each side from "
+                    << Thumbnail::MinSide << " to " << Thumbnail::MaxSide << " pixels");
+            continue;
+        }
+
+        if (std::find(result.begin(), result.end(), text) != result.end())
+            continue;
+
+        if (result.size() >= Thumbnail::MaxCount)
+        {
+            LOG_WRN("Ignoring the ThumbnailSizes entry ["
+                    << text << "] of CheckFileInfo and any after it, past the "
+                    << Thumbnail::MaxCount << " sizes allowed");
+            break;
+        }
+
+        result.push_back(text);
+    }
+
+    return result;
+}
+
 WopiStorage::WOPIFileInfo::WOPIFileInfo(const FileInfo& fileInfo, Poco::JSON::Object::Ptr& object,
                                         const Poco::URI& uriObject)
     : FileInfo(fileInfo)
@@ -186,6 +223,7 @@ WopiStorage::WOPIFileInfo::WOPIFileInfo(const FileInfo& fileInfo, Poco::JSON::Ob
     JsonUtil::findJSONValue(object, "UserFriendlyName", _username);
     JsonUtil::findJSONValue(object, "TemplateSaveAs", _templateSaveAs);
     JsonUtil::findJSONValue(object, "TemplateSource", _templateSource);
+    _thumbnailSizes = parseThumbnailSizes(object->getArray("ThumbnailSizes"));
 
     // UserFriendlyName is used as the Author when loading the document.
     // If it's missing, document loading fails. Since the UserFriendlyName

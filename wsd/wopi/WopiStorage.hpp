@@ -18,6 +18,7 @@
 #include <wsd/COOLWSD.hpp>
 #include <wsd/Storage.hpp>
 
+#include <Poco/JSON/Array.h>
 #include <Poco/JSON/Object.h>
 #include <Poco/URI.h>
 
@@ -27,6 +28,12 @@
 #include <vector>
 #include <optional>
 #include <string>
+
+/// Reads the ThumbnailSizes array of CheckFileInfo: the sizes of the thumbnails the host wants
+/// with each upload, each written as "<W>x<H>" in pixels. Returns the valid entries as the host
+/// wrote them, without duplicates and at most Thumbnail::MaxCount of them. An entry that is not
+/// a size, or one past that count, is logged and left out. A null array gives an empty list.
+std::vector<std::string> parseThumbnailSizes(const Poco::JSON::Array::Ptr& sizes);
 
 /// The file information that a WOPI host returns from CheckFileInfo.
 class WOPIFileInfo final : public StorageBase::FileInfo
@@ -59,6 +66,10 @@ public:
     const std::string& getPostMessageOrigin() const { return _postMessageOrigin; }
     const std::string& getHideUserList() const { return _hideUserList; }
     const std::string& getPresentationLeader() const { return _presentationLeader; }
+
+    /// The sizes of the thumbnails the host wants with each upload, each as "<W>x<H>" in
+    /// pixels, as the host wrote them. Empty when the host wants none.
+    const std::vector<std::string>& getThumbnailSizes() const { return _thumbnailSizes; }
 
     bool getUserCanWrite() const { return _userCanWrite; }
     bool getIsAnonymousUser() const { return _isAnonymousUser; }
@@ -216,6 +227,10 @@ private:
     std::string _presentationLeader;
     /// Sent by SharePoint, and maybe others. It is the name of the software.
     std::string _hostName;
+
+    /// The sizes of the thumbnails the host wants with each upload, each as "<W>x<H>" in
+    /// pixels, as the host wrote them. Empty when the host wants none.
+    std::vector<std::string> _thumbnailSizes;
 };
 
 /// WOPI protocol backed storage.

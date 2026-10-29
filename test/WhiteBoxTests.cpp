@@ -31,6 +31,7 @@
 #include <kit/KitHelper.hpp>
 #include <wsd/TileCache.hpp>
 #include <wsd/TileDesc.hpp>
+#include <wsd/wopi/WopiStorage.hpp>
 
 #include <test/lokassert.hpp>
 #include <test/testlog.hpp>
@@ -91,6 +92,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testSaveResult);
     CPPUNIT_TEST(testFitPageInBox);
     CPPUNIT_TEST(testThumbnailParseSize);
+    CPPUNIT_TEST(testParseThumbnailSizes);
     CPPUNIT_TEST_SUITE_END();
 
     void testCOOLProtocolFunctions();
@@ -128,6 +130,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testSaveResult();
     void testFitPageInBox();
     void testThumbnailParseSize();
+    void testParseThumbnailSizes();
 
     size_t waitForThreads(size_t count);
 };
@@ -1563,6 +1566,53 @@ void WhiteBoxTests::testThumbnailParseSize()
     LOK_ASSERT_EQUAL(std::string("none"), parse("0256x256"));
     LOK_ASSERT_EQUAL(std::string("none"), parse("256x256px"));
     LOK_ASSERT_EQUAL(std::string("none"), parse("256x256x256"));
+}
+
+void WhiteBoxTests::testParseThumbnailSizes()
+{
+    constexpr auto testname = __func__;
+
+    // The sizes read from a CheckFileInfo body, joined with commas.
+    const auto sizes = [](const std::string& json)
+    {
+        Poco::JSON::Object::Ptr object;
+        LOK_ASSERT(JsonUtil::parseJSON(json, object));
+        std::string joined;
+        for (const std::string& size : parseThumbnailSizes(object->getArray("ThumbnailSizes")))
+            joined += (joined.empty() ? "" : ",") + size;
+        return joined;
+    };
+
+    // The sizes come back as the host wrote them, in the host's order.
+    LOK_ASSERT_EQUAL(std::string("1000x1000,256x256"),
+                     sizes(R"({"ThumbnailSizes":["1000x1000","256x256"]})"));
+
+    // A missing property, an empty list, and a property that is not a list give no sizes.
+    LOK_ASSERT_EQUAL(std::string(), sizes(R"({"BaseFileName":"test.odt"})"));
+    LOK_ASSERT_EQUAL(std::string(), sizes(R"({"ThumbnailSizes":[]})"));
+    LOK_ASSERT_EQUAL(std::string(), sizes(R"({"ThumbnailSizes":"256x256"})"));
+    LOK_ASSERT_EQUAL(std::string(), sizes(R"({"ThumbnailSizes":{"size":"256x256"}})"));
+
+    // An entry that is not a size is left out and the others are kept: malformed text, a side
+    // under 16, a side over 2048, and an entry that is not a string.
+    LOK_ASSERT_EQUAL(std::string("1000x1000,256x256"),
+                     sizes(R"({"ThumbnailSizes":["1000x1000","large","256x256"]})"));
+    LOK_ASSERT_EQUAL(std::string("256x256"), sizes(R"({"ThumbnailSizes":["15x15","256x256"]})"));
+    LOK_ASSERT_EQUAL(std::string("256x256"), sizes(R"({"ThumbnailSizes":["256x256","2049x256"]})"));
+    LOK_ASSERT_EQUAL(std::string("256x256"), sizes(R"({"ThumbnailSizes":[256,"256x256",null]})"));
+
+    // A size given twice is kept once, where it first appears.
+    LOK_ASSERT_EQUAL(std::string("256x256,1000x1000"),
+                     sizes(R"({"ThumbnailSizes":["256x256","1000x1000","256x256"]})"));
+
+    // At most four sizes are kept, counted after the invalid ones and the duplicates are left
+    // out.
+    LOK_ASSERT_EQUAL(
+        std::string("16x16,32x32,64x64,128x128"),
+        sizes(R"({"ThumbnailSizes":["16x16","32x32","64x64","128x128","256x256","512x512"]})"));
+    LOK_ASSERT_EQUAL(
+        std::string("16x16,32x32,64x64,128x128"),
+        sizes(R"({"ThumbnailSizes":["16x16","bad","32x32","16x16","64x64","128x128","256x256"]})"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WhiteBoxTests);
