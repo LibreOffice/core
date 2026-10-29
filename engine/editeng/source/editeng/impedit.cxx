@@ -677,7 +677,8 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
     const bool bRendering = comphelper::COKit::isTiledPainting()
                             || comphelper::COKit::isVectorRendering();
 
-    if (comphelper::COKit::isActive() && mpViewShell && mpOutputWindow && !bRendering)
+    if (comphelper::COKit::isActive() && mpViewShell && mpOutputWindow && !bRendering
+        && !mbSuppressKitMessages)
         kitSelectionCallback(pPolyPoly, bStartHandleVisible, bEndHandleVisible);
 
     if (pRegion || comphelper::COKit::isActive())

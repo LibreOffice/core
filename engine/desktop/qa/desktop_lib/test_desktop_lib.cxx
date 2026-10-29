@@ -248,6 +248,7 @@ public:
     void testRedlineCalc();
     void testPaintPartTile();
     void testPaintPartTileMasterPage();
+    void testPaintPartTileKeepsTextEditCursor();
     void testPaintPartTileHidesGridOnOtherPart();
     void testPaintPartTileHidesGridOnActivePartPreview();
     void testPaintPartTileDifferentSchemes();
@@ -366,6 +367,7 @@ public:
     CPPUNIT_TEST(testRedlineCalc);
     CPPUNIT_TEST(testPaintPartTile);
     CPPUNIT_TEST(testPaintPartTileMasterPage);
+    CPPUNIT_TEST(testPaintPartTileKeepsTextEditCursor);
     CPPUNIT_TEST(testPaintPartTileHidesGridOnOtherPart);
     CPPUNIT_TEST(testPaintPartTileHidesGridOnActivePartPreview);
     CPPUNIT_TEST(testPaintPartTileDifferentSchemes);
@@ -2695,6 +2697,8 @@ public:
     int m_nComments = 0;
     int m_nDocSizeChanged = 0;
     int m_nTextViewSelection = 0;
+    /// How many times the view was told that its own cursor is hidden.
+    int m_nCursorHidden = 0;
     int m_nNotebookbarMessages = 0;
     bool m_bNotebookbarHasOwnFontNameBox = false;
     OString m_aLastContext;
@@ -2756,6 +2760,12 @@ public:
 
             if (m_aOwnCursor.Left() == 0 && m_aOwnCursor.Top() == 0)
                 m_bZeroCursor = true;
+        }
+        break;
+        case COKitCallbackType::CURSOR_VISIBLE:
+        {
+            if (aPayload == "false")
+                ++m_nCursorHidden;
         }
         break;
         case COKitCallbackType::COMMENT:
@@ -2931,6 +2941,51 @@ void DesktopKitTest::testPaintPartTile()
     // This failed: paintPartTile() (as a side-effect) ended the text edit of
     // the first view, so there were no invalidations.
     //CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
+}
+
+void DesktopKitTest::testPaintPartTileKeepsTextEditCursor()
+{
+    // Given a view that types into the title of the first slide:
+    COKitDocumentImpl* pDocument = loadDoc("2slides.odp");
+    pDocument->initializeForRendering("{}");
+    const int nView1 = pDocument->getView();
+    ViewCallback aView1(pDocument);
+    auto typeIntoFirstShape = [pDocument](char cText) {
+        pDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::TAB);
+        pDocument->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::TAB);
+        Scheduler::ProcessEventsToIdle();
+        pDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::RETURN);
+        pDocument->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::RETURN);
+        Scheduler::ProcessEventsToIdle();
+        pDocument->postKeyEvent(COKitKeyEventType::DOWN, cText, 0);
+        pDocument->postKeyEvent(COKitKeyEventType::UP, cText, 0);
+        Scheduler::ProcessEventsToIdle();
+    };
+    typeIntoFirstShape('a');
+
+    // And a second view that types into the title of the second slide:
+    pDocument->createView();
+    pDocument->initializeForRendering("{}");
+    ViewCallback aView2(pDocument);
+    const std::string aSecondSlide = pDocument->getPartId(1, 0);
+    pDocument->setPart(aSecondSlide.c_str());
+    Scheduler::ProcessEventsToIdle();
+    typeIntoFirstShape('b');
+
+    // When the first view paints a preview of the second slide:
+    pDocument->setView(nView1);
+    const tools::Rectangle aCursor = aView1.m_aOwnCursor;
+    aView1.m_nCursorHidden = 0;
+    std::vector<unsigned char> aPixels(256 * 256 * 4);
+    pDocument->paintPartTile(aPixels, aSecondSlide.c_str(), 0, 256, 256, 0, 0, 15000, 15000,
+                             /*bIsPreview=*/true);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the first view keeps its cursor where it types, and the cursor stays visible.
+    // Without the fix in place, this test would have failed: the first view was told that
+    // its cursor is at the cursor of the second view, on the second slide, and hidden.
+    CPPUNIT_ASSERT_EQUAL(0, aView1.m_nCursorHidden);
+    CPPUNIT_ASSERT_EQUAL(aCursor, aView1.m_aOwnCursor);
 }
 
 void DesktopKitTest::testPaintPartTileMasterPage()

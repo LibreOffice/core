@@ -417,6 +417,8 @@ public:
 
     void SetKitSpecialFlags(KitSpecialFlags eFlags);
 
+    /// Whether this view sends its view shell no messages about the cursor, its visibility or
+    /// the text selection.
     void SuppressKitMessages(bool bSet);
     bool IsSuppressKitMessages() const;
 

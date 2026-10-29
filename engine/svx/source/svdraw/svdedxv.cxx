@@ -248,8 +248,13 @@ SdrPageView* SdrObjEditView::ShowSdrPage(SdrPage* pPage)
             // Call GetSfxViewShell() to make sure ImpMakeOutlinerView()
             // registers the view shell of this draw view, and not the view
             // shell of pView.
+            // The cursor and the text selection of that edit belong to pView, so this
+            // outliner view reports neither of them to the view shell of this draw view.
             OutlinerView* pOutlinerView
-                = pView->ImpMakeOutlinerView(pOutDev->GetOwnerWindow(), nullptr, GetSfxViewShell());
+                = new OutlinerView(*pView->GetTextEditOutliner(), pOutDev->GetOwnerWindow());
+            pOutlinerView->GetEditView().SuppressKitMessages(true);
+            pView->ImpMakeOutlinerView(pOutDev->GetOwnerWindow(), pOutlinerView,
+                                       GetSfxViewShell());
             pOutlinerView->HideCursor();
             pView->GetTextEditOutliner()->InsertView(pOutlinerView);
         });
@@ -1685,8 +1690,12 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
                                 vcl::Window* pOtherWin = rOutDev.GetOwnerWindow();
                                 if (pOtherWin && !pOtherWin->isDisposed())
                                 {
+                                    // The cursor and the text selection belong to the outliner
+                                    // view of this draw view, so this one reports neither.
                                     OutlinerView* pOutlView
-                                        = ImpMakeOutlinerView(pOtherWin, nullptr);
+                                        = new OutlinerView(*mpTextEditOutliner, pOtherWin);
+                                    pOutlView->GetEditView().SuppressKitMessages(true);
+                                    ImpMakeOutlinerView(pOtherWin, pOutlView);
                                     pOutlView->HideCursor();
                                     pOtherWin->SetCursor(nullptr);
                                     mpTextEditOutliner->InsertView(pOutlView);
