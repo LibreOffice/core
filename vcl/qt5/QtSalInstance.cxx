@@ -36,7 +36,7 @@ std::unique_ptr<SalVirtualDevice> QtSalInstance::CreateVirtualDevice(SalGraphics
                                                                      tools::Long nDY, DeviceFormat,
                                                                      bool bAlphaMaskTransparent)
 {
-    std::unique_ptr<SalVirtualDevice> pVD(new QtVirtualDevice(/*scale*/ 1));
+    std::unique_ptr<SalVirtualDevice> pVD(new QtVirtualDevice);
     pVD->SetSize(nDX, nDY, bAlphaMaskTransparent);
     return pVD;
 }
@@ -45,7 +45,7 @@ std::unique_ptr<SalVirtualDevice> QtSalInstance::CreateVirtualDevice(SalGraphics
                                                                      tools::Long& nDY, DeviceFormat,
                                                                      const SystemGraphicsData&)
 {
-    std::unique_ptr<SalVirtualDevice> pVD(new QtVirtualDevice(/*scale*/ 1));
+    std::unique_ptr<SalVirtualDevice> pVD(new QtVirtualDevice);
     pVD->SetSize(nDX, nDY, /*bAlphaMaskTransparent*/ false);
     return pVD;
 }

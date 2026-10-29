@@ -38,10 +38,9 @@ class QtVirtualDevice final : public SalVirtualDevice
     std::vector<QtGraphics*> m_aGraphics;
     std::unique_ptr<QImage> m_pImage;
     QSize m_aFrameSize;
-    double m_fScale;
 
 public:
-    QtVirtualDevice(double fScale);
+    QtVirtualDevice();
 
     // SalVirtualDevice
     virtual SalGraphics* AcquireGraphics() override;
