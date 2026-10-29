@@ -593,6 +593,31 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf164961)
                          getNumberFormatType(xChartDoc, nNumberFormat));
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testPasteChartIntoNewCalcKeepsLabelFormat)
+{
+    // Data labels pasted into a new, unsaved spreadsheet keep the percent format of the cells they
+    // were linked to
+    loadFromFile(u"fods/tdf164961.fods");
+
+    dispatchCommand(mxComponent, u".uno:GoToObject"_ustr,
+                    { comphelper::makePropertyValue(u"ToObject"_ustr, u"Object 1"_ustr) });
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    loadFromURL(u"private:factory/scalc"_ustr);
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+    uno::Reference<beans::XPropertySet> xSeries(getDataSeriesFromDoc(xChartDoc, 0),
+                                                uno::UNO_QUERY_THROW);
+    // Without the fix in place, the pasted labels stayed linked to source cells that the new
+    // document does not have, and showed the General format
+    CPPUNIT_ASSERT(!xSeries->getPropertyValue(u"LinkNumberFormatToSource"_ustr).get<bool>());
+
+    sal_Int32 nNumberFormat = xSeries->getPropertyValue(u"NumberFormat"_ustr).get<sal_Int32>();
+    CPPUNIT_ASSERT_EQUAL(util::NumberFormat::PERCENT,
+                         getNumberFormatType(xChartDoc, nNumberFormat));
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testPasteChartWithSeriesInRows)
 {
     // A chart whose series are in rows keeps those series when pasted into another spreadsheet

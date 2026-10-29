@@ -744,6 +744,15 @@ SdrOle2Obj::SdrOle2Obj(
     Init();
 }
 
+// A document without a file location is identified by its address, so the clipboard and unsaved
+// documents each get an ID of their own.
+static OUString lcl_GetShellID(const comphelper::IEmbeddedHelper& rPersist)
+{
+    if (auto pShell = dynamic_cast<const SfxObjectShell*>(&rPersist))
+        return SfxObjectShell::CreateShellID(pShell);
+    return rPersist.getDocumentBaseURL();
+}
+
 SdrOle2Obj::SdrOle2Obj(SdrModel& rSdrModel, SdrOle2Obj const & rSource)
 :   SdrRectObj(rSdrModel, rSource),
     mpImpl(new SdrOle2ObjImpl(/*bFrame*/false))
@@ -777,7 +786,8 @@ SdrOle2Obj::SdrOle2Obj(SdrModel& rSdrModel, SdrOle2Obj const & rSource)
     {
         OUString aTmp;
         mpImpl->mxObjRef.Assign( pDestPers->getEmbeddedObjectContainer().CopyAndGetEmbeddedObject(
-            rContainer, xObj, aTmp, pSrcPers->getDocumentBaseURL(), pDestPers->getDocumentBaseURL()), rSource.GetAspect());
+            rContainer, xObj, aTmp, lcl_GetShellID(*pSrcPers), lcl_GetShellID(*pDestPers)),
+            rSource.GetAspect());
         mpImpl->mbTypeAsked = false;
         mpImpl->aPersistName = aTmp;
         CheckFileLink_Impl();
