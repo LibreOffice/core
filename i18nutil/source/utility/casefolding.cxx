@@ -183,6 +183,79 @@ is_ja_voice_sound_mark(sal_Unicode& current, sal_Unicode next)
         return c != 0;
 }
 
+static bool isAscii(const sal_Unicode *unistr, sal_Int32 nCount)
+{
+    auto p = unistr;
+    for (sal_Int32 i = 0; i < nCount; i++, ++p)
+        if (!rtl::isAscii(*p))
+            return false;
+    return true;
+}
+
+#define NOT_END_OF_STR1 (nMatch1 < nCount1 || e1.current < e1.element.nmap)
+#define NOT_END_OF_STR2 (nMatch2 < nCount2 || e2.current < e2.element.nmap)
+
+sal_Int32
+casefolding::compare(
+    const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1,
+    const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2,
+    Locale const & aLocale, MappingType nMappingType, TransliterationFlags moduleLoaded)
+{
+    const sal_Unicode *unistr1 = const_cast<sal_Unicode*>(str1.getStr()) + pos1;
+    const sal_Unicode *unistr2 = const_cast<sal_Unicode*>(str2.getStr()) + pos2;
+
+    // First check if we can do an ascii comparison. The check is cheap and
+    // the optimised compare is much faster.
+    // We avoid turkish because of https://en.wikipedia.org/wiki/Dotted_and_dotless_I_in_computing
+    const bool bTurkic = aLocale.Language == "tr" || aLocale.Language == "az";
+    if (!bTurkic && isAscii(unistr1, nCount1) && isAscii(unistr2, nCount2))
+    {
+        return rtl_ustr_compareIgnoreAsciiCase_WithLength(unistr1, nCount1, unistr2, nCount2);
+    }
+
+    sal_Unicode c1, c2;
+    i18nutil::MappingElement e1, e2;
+    sal_Int32 nMatch1 = 0;
+    sal_Int32 nMatch2 = 0;
+
+    while (NOT_END_OF_STR1 && NOT_END_OF_STR2) {
+        c1 = getNextChar(unistr1, nMatch1, nCount1, e1, aLocale, nMappingType, moduleLoaded);
+        c2 = getNextChar(unistr2, nMatch2, nCount2, e2, aLocale, nMappingType, moduleLoaded);
+        if (c1 != c2) {
+        nMatch1--; nMatch2--;
+        return c1 > c2 ? 1 : -1;
+        }
+    }
+
+    return (!NOT_END_OF_STR1 && !NOT_END_OF_STR2) ? 0
+                : (NOT_END_OF_STR1 ? 1 : -1);
+}
+
+sal_Int32
+casefolding::compare(
+    const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
+    const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2,
+    Locale const & aLocale, MappingType nMappingType, TransliterationFlags moduleLoaded)
+{
+    const sal_Unicode *unistr1 = const_cast<sal_Unicode*>(str1.getStr()) + pos1;
+    const sal_Unicode *unistr2 = const_cast<sal_Unicode*>(str2.getStr()) + pos2;
+    sal_Unicode c1, c2;
+    i18nutil::MappingElement e1, e2;
+    nMatch1 = nMatch2 = 0;
+
+    while (NOT_END_OF_STR1 && NOT_END_OF_STR2) {
+        c1 = getNextChar(unistr1, nMatch1, nCount1, e1, aLocale, nMappingType, moduleLoaded);
+        c2 = getNextChar(unistr2, nMatch2, nCount2, e2, aLocale, nMappingType, moduleLoaded);
+        if (c1 != c2) {
+        nMatch1--; nMatch2--;
+        return c1 > c2 ? 1 : -1;
+        }
+    }
+
+    return (!NOT_END_OF_STR1 && !NOT_END_OF_STR2) ? 0
+                : (NOT_END_OF_STR1 ? 1 : -1);
+}
+
 sal_Unicode casefolding::getNextChar(const sal_Unicode *str, sal_Int32& idx, sal_Int32 len, MappingElement& e, Locale const & aLocale, MappingType nMappingType, TransliterationFlags moduleLoaded)
 {
         if( idx >= len )

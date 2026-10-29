@@ -18,10 +18,11 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include <sal/types.h>
 #include <i18nutil/i18nutildllapi.h>
 #include <o3tl/typed_flags_set.hxx>
-#include <config_options.h>
+#include <rtl/ustring.hxx>
 
 namespace com::sun::star::lang { struct Locale; }
 
@@ -81,6 +82,14 @@ public:
     /// @throws css::uno::RuntimeException
     static sal_Unicode getNextChar(const sal_Unicode *str, sal_Int32& idx, sal_Int32 len, MappingElement& e, css::lang::Locale const & aLocale, MappingType nMappingtype, TransliterationFlags moduleLoaded);
 
+    static sal_Int32 compare(
+        const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
+        const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2,
+        css::lang::Locale const & aLocale, MappingType nMappingType, TransliterationFlags moduleLoaded);
+    static sal_Int32 compare(
+        const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1,
+        const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2,
+        css::lang::Locale const & aLocale, MappingType nMappingType, TransliterationFlags moduleLoaded);
 };
 
 }
