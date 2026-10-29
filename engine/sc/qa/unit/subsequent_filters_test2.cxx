@@ -1928,6 +1928,23 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testPageSetupNoPaperSizeXLSX)
     CPPUNIT_ASSERT_GREATER(rDefaultSize.Width(), rDefaultSize.Height());
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testPageSetupUsePrinterDefaultsFalseXLSX)
+{
+    // A pre-2016 version of Calc wrote this file with usePrinterDefaults="false" on every sheet,
+    // next to the page settings that it applied. The first sheet is A4, the second is Letter,
+    // both in portrait orientation. Make sure each sheet keeps its own paper size.
+    createScDoc("xlsx/formats.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    const Size& rA4Size = getPageStyleItemSet(*pDoc, 0).Get(ATTR_PAGE_SIZE).GetSize();
+    CPPUNIT_ASSERT_EQUAL(tools::Long(11906), rA4Size.Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(16838), rA4Size.Height());
+
+    const Size& rLetterSize = getPageStyleItemSet(*pDoc, 1).Get(ATTR_PAGE_SIZE).GetSize();
+    CPPUNIT_ASSERT_EQUAL(tools::Long(12240), rLetterSize.Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(15840), rLetterSize.Height());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
