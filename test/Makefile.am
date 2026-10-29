@@ -106,6 +106,7 @@ all_la_unit_tests = \
 	unit-join-disconnect.la \
 	unit-convert.la \
 	unit-wopi-temp.la \
+	unit-wopi-thumbnail-sizes.la \
 	unit-wopi-transient-connect-fault.la \
 	unit-password-protected.la \
 	unit-password-to-modify.la \
@@ -375,6 +376,8 @@ unit_csp_frame_ancestors_la_SOURCES = UnitCSPFrameAncestors.cpp
 unit_csp_frame_ancestors_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_wopi_temp_la_SOURCES = UnitWOPITemplate.cpp
 unit_wopi_temp_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
+unit_wopi_thumbnail_sizes_la_SOURCES = UnitWOPIThumbnailSizes.cpp
+unit_wopi_thumbnail_sizes_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_wopi_fileurl_la_SOURCES = UnitWOPIFileUrl.cpp
 unit_wopi_fileurl_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_wopi_httpredirect_la_SOURCES = UnitWOPIHttpRedirect.cpp
