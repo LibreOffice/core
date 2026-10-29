@@ -30,6 +30,8 @@ class SnackbarController {
 	snackbarTimeout: number = 10000;
 	snackbarQueue: Array<SnackbarData>;
 	showingSnackbar: boolean = false;
+	// The label of the snackbar that shows now, or null when none shows.
+	private shownLabel: string | null = null;
 	private liveRegion: HTMLElement = null;
 	private fadeOutTimer: ReturnType<typeof setTimeout> = null;
 
@@ -69,6 +71,7 @@ class SnackbarController {
 		this.fadeOutTimer = null;
 
 		this.showingSnackbar = false;
+		this.shownLabel = null;
 		this.writeLiveRegion('');
 		this.scheduleSnackbar();
 	}
@@ -106,6 +109,23 @@ class SnackbarController {
 		);
 	}
 
+	// A snackbar with the given label shows now, or waits in the queue to show.
+	public hasSnackbar(label: string): boolean {
+		return (
+			(this.showingSnackbar && this.shownLabel === label) ||
+			this.snackbarQueue.some((data) => data.label === label)
+		);
+	}
+
+	// Close the snackbar with the given label, or take it out of the queue. A snackbar with another
+	// label stays.
+	public closeSnackbarWithLabel(label: string) {
+		this.snackbarQueue = this.snackbarQueue.filter(
+			(data) => data.label !== label,
+		);
+		if (this.showingSnackbar && this.shownLabel === label) this.closeSnackbar();
+	}
+
 	public showSnackbar(
 		label: string,
 		action: string | undefined,
@@ -140,6 +160,7 @@ class SnackbarController {
 		const snackbarData = this.snackbarQueue.shift();
 		this.showSnackbarImpl(snackbarData);
 		this.showingSnackbar = true;
+		this.shownLabel = snackbarData.label;
 	}
 
 	private showSnackbarImpl(snackbarData: SnackbarData) {

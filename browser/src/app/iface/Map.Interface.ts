@@ -168,6 +168,7 @@ interface MapInterface extends Evented {
 	getViewName(viewId: number): string | null;
 
 	// TODO fix types:
+	_viewInfo: { [viewId: number]: any };
 	jsdialog: any;
 	zotero: any;
 	_extensions: { [id: string]: any };

@@ -675,6 +675,8 @@ COOL_JS_LST =\
 	src/layer/tile/ImpressTileLayer.js \
 	src/layer/tile/CalcTileLayer.js \
 	src/canvas/sections/CursorHeaderSection.ts \
+	src/canvas/sections/ShapeLockLabelSection.tsx \
+	src/canvas/sections/ShapeLockCalloutSection.tsx \
 	src/canvas/sections/CursorHandler.ts \
 	src/canvas/sections/TableInsertMarkerSection.ts \
 	src/canvas/sections/GenericButtonSection.ts \

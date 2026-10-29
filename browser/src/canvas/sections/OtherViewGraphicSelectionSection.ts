@@ -84,6 +84,7 @@ class OtherViewGraphicSelectionSection extends CanvasSectionObject {
         }
 
         section.setShowSection(section.checkMyVisibility());
+        ShapeLockLabelSection.update(viewId);
         app.sectionContainer.requestReDraw();
     }
 
@@ -132,6 +133,7 @@ class OtherViewGraphicSelectionSection extends CanvasSectionObject {
             const section = OtherViewGraphicSelectionSection.sectionPointers[i];
             section.setShowSection(section.checkMyVisibility());
         }
+        ShapeLockLabelSection.updateVisibilities();
         app.sectionContainer.requestReDraw();
     }
 }

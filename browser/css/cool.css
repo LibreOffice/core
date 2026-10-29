@@ -1110,6 +1110,183 @@ input, button {
 	border-radius: 50%;
 }
 
+/* Sits on top of the colored border around a shape whose text another user edits. The label has
+   the color of that user. */
+.shape-lock-label {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	height: 28px;
+	box-sizing: border-box;
+	padding: 4px;
+	margin-left: -1px;
+	color: white;
+	font-size: 13px;
+	line-height: 1;
+	white-space: nowrap;
+	cursor: default;
+}
+
+.shape-lock-label [hidden],
+.shape-lock-callout [hidden],
+.button.shape-lock-button[hidden] {
+	display: none;
+}
+
+/* The picture of a user, or the initials of the name, in a ring of the color of that user. */
+.shape-lock-avatar {
+	display: flex;
+	flex: 0 0 auto;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	box-sizing: border-box;
+	overflow: hidden;
+	border: 2px solid;
+	border-radius: 50%;
+	background-color: var(--color-background-lighter);
+	color: var(--color-main-text);
+	font-size: 11px;
+}
+
+.shape-lock-avatar img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.shape-lock-label-buttons {
+	display: flex;
+	flex: 0 0 auto;
+}
+
+/* A small button with the shared button look. */
+.button.shape-lock-button {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	width: auto;
+	min-width: 0;
+	height: 20px;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0 6px 0 4px;
+	border: 1px solid var(--color-btn-border);
+	border-radius: 2px;
+	background-color: var(--color-background-dark);
+	color: var(--color-main-text);
+	font-size: 12px;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.button.shape-lock-button:hover {
+	border-color: var(--color-btn-border);
+	background-color: var(--color-background-darker);
+	color: var(--color-main-text);
+}
+
+.button.shape-lock-button:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: 1px;
+}
+
+/* On the label the button shows the color of the label through it, with a faint white border. */
+.shape-lock-label .button.shape-lock-button {
+	padding: 0 6px;
+	border-color: rgba(255, 255, 255, 0.4);
+	background-color: transparent;
+	color: white;
+}
+
+.shape-lock-label .button.shape-lock-button:hover {
+	border-color: rgba(255, 255, 255, 0.7);
+	background-color: rgba(255, 255, 255, 0.15);
+	color: white;
+}
+
+.shape-lock-label .button.shape-lock-button:focus-visible {
+	outline-color: white;
+}
+
+/* The time until this user gets the text, over a bar that fills up in that time. */
+.shape-lock-label-wait {
+	position: relative;
+	min-width: 96px;
+	padding-bottom: 3px;
+	font-size: 12px;
+}
+
+.shape-lock-label-wait::after {
+	content: '';
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 2px;
+	background-color: rgba(255, 255, 255, 0.35);
+}
+
+/* The bar grows from the left edge by a transform. */
+.shape-lock-label-wait i {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	z-index: 1;
+	width: 100%;
+	height: 2px;
+	transform: scaleX(0);
+	transform-origin: left;
+	background-color: white;
+}
+
+.shape-lock-callout {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 8px 10px 11px;
+	border: 1px solid var(--color-border);
+	border-radius: 2px;
+	box-shadow: 0 0 3px var(--color-box-shadow);
+	background-color: var(--color-background-lighter);
+	color: var(--color-main-text);
+	font-size: 13px;
+	line-height: 1.2;
+	white-space: nowrap;
+	cursor: default;
+}
+
+.shape-lock-callout-countdown {
+	color: var(--color-text-light);
+	font-size: 12px;
+	font-variant-numeric: tabular-nums;
+}
+
+/* A bar along the bottom of the callout that fills up until the countdown ends. */
+.shape-lock-callout-progress {
+	position: absolute;
+	left: 1px;
+	right: 1px;
+	bottom: 1px;
+	height: 3px;
+	background-color: rgba(var(--orange1-txt-primary-color), 0.2);
+}
+
+/* The bar grows from the start of the line by a transform. */
+.shape-lock-callout-progress i {
+	display: block;
+	width: 100%;
+	height: 100%;
+	transform: scaleX(0);
+	transform-origin: left;
+	background-color: rgb(var(--orange1-txt-primary-color));
+}
+
+[dir='rtl'] .shape-lock-callout-progress i {
+	transform-origin: right;
+}
+
 .user-info {
 	border-radius: 50%;
 	width: var(--btn-size);

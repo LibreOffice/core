@@ -2565,6 +2565,23 @@ class UIManager extends window.L.Control {
 	}
 
 	/**
+	 * Closes the snackbar with the given label, or takes it out of the queue.
+	 * A snackbar with another label stays.
+	 * @param label - Message text of the snackbar.
+	 */
+	closeSnackbarWithLabel(label: string): void {
+		JSDialog.SnackbarController.closeSnackbarWithLabel(label);
+	}
+
+	/**
+	 * Whether a snackbar with the given label shows, or waits to show.
+	 * @param label - Message text of the snackbar.
+	 */
+	hasSnackbar(label: string): boolean {
+		return JSDialog.SnackbarController.hasSnackbar(label);
+	}
+
+	/**
 	 * Displays a snackbar notification.
 	 * @param label - Message text.
 	 * @param action - Action text.

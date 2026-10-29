@@ -3,7 +3,7 @@
  * window.L.CanvasTileLayer is a layer with canvas based rendering.
  */
 
-/* global app JSDialog CanvasSectionContainer GraphicSelection CanvasOverlay CursorHeaderSection $ _ CPolyUtil CPolygon Cursor UNOKey cool OtherViewCellCursorSection RenderManager SplitSection TextSelections CellSelectionMarkers URLPopUpSection CalcValidityDropDown DocumentBase CellCursorSection FormFieldButton TextCursorSection CStyleData CSelections CReferences OtherViewGraphicSelectionSection CompareChangesLabelSection AnimatedGifManager ViewState RenderGeometrySection LocalCaret */
+/* global app JSDialog CanvasSectionContainer GraphicSelection CanvasOverlay CursorHeaderSection $ _ CPolyUtil CPolygon Cursor UNOKey cool OtherViewCellCursorSection RenderManager SplitSection TextSelections CellSelectionMarkers URLPopUpSection CalcValidityDropDown DocumentBase CellCursorSection FormFieldButton TextCursorSection CStyleData CSelections CReferences OtherViewGraphicSelectionSection ShapeLockLabelSection ShapeLockCalloutSection CompareChangesLabelSection AnimatedGifManager ViewState RenderGeometrySection LocalCaret */
 
 function clamp(num, min, max)
 {
@@ -1881,6 +1881,10 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			this.lastCursorPos = app.file.textCursor.rectangle.clone();
 		}
 
+		// This user typed or moved the caret, so a request for the text gets no answer.
+		if (updateCursor && weAreModifier && !this._isReplayingMessages)
+			ShapeLockCalloutSection.onOwnInput();
+
 		const isHyperlinkChanged = this._isHyperlinkChanged(obj.hyperlink);
 		this._map.hyperlinkUnderCursor = obj.hyperlink;
 		if (URLPopUpSection.isOpen() && !(obj.hyperlink && obj.hyperlink.link))
@@ -1988,8 +1992,11 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		// when its own change moved the text the caret sits in. A server that
 		// doesn't name one leaves the move with the view it belongs to.
 		const editorViewId = obj.editorViewId !== undefined ? parseInt(obj.editorViewId) : -1;
-		if (editorViewId === -1 || editorViewId === viewId)
+		if (editorViewId === -1 || editorViewId === viewId) {
 			this._moveFollowingToActiveView(viewId);
+			if ((this.isImpress() || this.isDraw()) && !this._isReplayingMessages)
+				ShapeLockLabelSection.onViewCursor(viewId, rectangle);
+		}
 
 		if (app.getFollowedViewId() === viewId && (app.isFollowingEditor() || app.isFollowingUser())) {
 			if (this.isWriter() || this.isImpress() || this.isDraw()) {
@@ -2022,6 +2029,26 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			OtherViewGraphicSelectionSection.setViewLockInfo(viewId, obj);
 		else
 			OtherViewGraphicSelectionSection.setViewLockInfo(viewId, null);
+
+		// Ignore our own view and views we don't know
+		if (viewId === this._viewId || !this._map._viewInfo[viewId] || !(this.isImpress() || this.isDraw()))
+			return;
+
+		const rectangleTwips = obj.rectangle !== 'EMPTY' ? obj.rectangle.match(/-?\d+/g) : null;
+		const rectangle = rectangleTwips ? new cool.SimpleRectangle(parseInt(rectangleTwips[0]), parseInt(rectangleTwips[1]), parseInt(rectangleTwips[2]), parseInt(rectangleTwips[3])) : null;
+		ShapeLockLabelSection.setLock(viewId, rectangle, this.getIndexFromPart(obj.part), obj.mode !== undefined ? parseInt(obj.mode) : 0);
+
+		this._saveMessageForReplay(textMsg, viewId);
+	},
+
+	// This view and another view both want to edit the text of one shape.
+	_onTextEditLocked: function (state) {
+		const viewId = parseInt(state.viewId);
+
+		if (viewId === this._viewId || !this._map._viewInfo[viewId] || !(this.isImpress() || this.isDraw()))
+			return;
+
+		ShapeLockLabelSection.onTextEditLocked(viewId, state.reason);
 	},
 
 	_onCellViewCursorMsg: function (textMsg) {
@@ -2113,6 +2140,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		OtherViewCellCursorSection.removeView(viewId);
 		OtherViewGraphicSelectionSection.removeView(viewId);
+		ShapeLockLabelSection.removeView(viewId);
 
 		if (this._printTwipsMessagesForReplay)
 			this._printTwipsMessagesForReplay.removeView(viewId);
@@ -2280,6 +2308,13 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		}
 
 		if (json) {
+			// This is an event for the shape lock label, not the state of a command.
+			if (json.commandName === '.uno:TextEditLocked') {
+				if (json.state)
+					this._onTextEditLocked(json.state);
+				return;
+			}
+
 			// json.state as empty string is fine, for example it means no selection
 			// when json.commandName is '.uno:RowColSelCount'.
 			// A command may only carry 'enabled' flag (.uno:DatabaseSettings).
@@ -3903,7 +3938,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			] : [
 				'textviewselection',
 				'invalidateviewcursor',
-				'graphicviewselection'
+				'graphicviewselection',
+				'viewlock'
 			];
 
 			this._printTwipsMessagesForReplay = new window.L.MessageStore(ownViewTypes, otherViewTypes);
