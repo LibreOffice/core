@@ -1911,15 +1911,14 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                 return DefWindowProc(hWnd, message, wParam, lParam);
 
             // The client area takes the place of the title bar and of the resize border above it,
-            // and the system keeps the borders at the sides and at the bottom. A maximized window
-            // reaches above the screen by the height of that border, so its client area starts
-            // lower by as much.
+            // and the system keeps the borders at the sides and at the bottom. The client area
+            // starts at the top of the window also in a maximized window, which reaches above the
+            // screen by the height of that border. DWM places the caption buttons from the top of
+            // the window in both cases.
             NCCALCSIZE_PARAMS* params = reinterpret_cast<NCCALCSIZE_PARAMS*>(lParam);
             const LONG top = params->rgrc[0].top;
             const LRESULT result = DefWindowProc(hWnd, message, wParam, lParam);
             params->rgrc[0].top = top;
-            if (IsZoomed(hWnd))
-                params->rgrc[0].top += topResizeBorderHeight(hWnd);
             return result;
         }
 
@@ -3167,10 +3166,11 @@ static int topResizeBorderHeight(HWND hWnd)
 }
 
 // Where the strip starts from the top of the client area. A strip in the title bar leaves the top
-// resize border free, except in a maximized window, which has that border above the screen.
+// resize border free. In a maximized window that border is above the screen, so the strip starts
+// at the top of the screen.
 static int stripTop(const WindowState& window)
 {
-    if (!hasStripInTitleBar(window) || IsZoomed(window.hWnd))
+    if (!hasStripInTitleBar(window))
         return 0;
     return topResizeBorderHeight(window.hWnd);
 }
