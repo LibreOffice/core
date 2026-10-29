@@ -4797,6 +4797,154 @@ bool ChildSession::renderToPng(int width, int height, int xTwips, int yTwips, in
                                   getLOKitDocument()->getTileMode());
 }
 
+void ChildSession::renderThumbnails(const std::string& basePath)
+{
+    // The thumbnails of an earlier save go first. From here on, an image under one of these
+    // names is of the document as it is now.
+    for (const auto& [boxWidth, boxHeight] : _thumbnailSizes)
+        FileUtil::removeFile(Thumbnail::filePath(basePath, boxWidth, boxHeight));
+
+    if (_thumbnailSizes.empty())
+        return;
+
+    if (_docManager->isDocPasswordProtected())
+    {
+        LOG_DBG("No thumbnails of [" << anonymizeUrl(basePath)
+                                     << "]: the document is password protected");
+        return;
+    }
+
+    if (!getWatermarkText().empty())
+    {
+        LOG_DBG("No thumbnails of [" << anonymizeUrl(basePath) << "]: the session has a watermark");
+        return;
+    }
+
+    try
+    {
+        getLOKitDocument()->setView(_viewId);
+
+        // The page to paint: its size in twips, where it starts and the part it is on. A
+        // spreadsheet has no page to fit in the box, so the box is filled from the top left
+        // corner of the first sheet at 100% zoom instead.
+        int x = 0;
+        int y = 0;
+        int64_t pageWidth = 0;
+        int64_t pageHeight = 0;
+        std::string partId;
+        bool preview = false;
+        bool fillBox = false;
+        switch (getLOKitDocument()->getDocumentType())
+        {
+            case COKitDocumentType::TEXT:
+            {
+                // The page rectangles are "x, y, w, h; x, y, w, h; ..." in document order.
+                const std::string rectangles = getLOKitDocument()->getWriterPageRectangles();
+                const StringVector sides =
+                    StringVector::tokenize(rectangles.substr(0, rectangles.find(';')), ',');
+                int width = 0;
+                int height = 0;
+                if (sides.size() != 4 || !COOLProtocol::stringToInteger(sides[0], x) ||
+                    !COOLProtocol::stringToInteger(sides[1], y) ||
+                    !COOLProtocol::stringToInteger(sides[2], width) ||
+                    !COOLProtocol::stringToInteger(sides[3], height))
+                {
+                    LOG_ERR("No thumbnails of [" << anonymizeUrl(basePath)
+                                                 << "]: cannot read the page rectangles ["
+                                                 << rectangles << ']');
+                    return;
+                }
+
+                pageWidth = width;
+                pageHeight = height;
+                break;
+            }
+            case COKitDocumentType::PRESENTATION:
+            case COKitDocumentType::DRAWING:
+            {
+                // The document size is that of the page the view shows. In the slides and the
+                // slide masters, modes 0 and 1, that is the size of the slide that is painted.
+                // The notes and handout pages of the other modes have a size of their own.
+                const int mode = getLOKitDocument()->getEditMode();
+                if (mode > 1)
+                {
+                    LOG_DBG("No thumbnails of [" << anonymizeUrl(basePath)
+                                                 << "]: the view shows the notes or handout "
+                                                    "pages, edit mode "
+                                                 << mode);
+                    return;
+                }
+
+                // Every slide or page has the size of the document, so the first one is painted
+                // as a preview, which hides the editing grid.
+                const COKitSize size = getLOKitDocument()->getDocumentSize();
+                pageWidth = size.nWidth;
+                pageHeight = size.nHeight;
+                partId = getLOKitDocument()->getPartId(0, 0);
+                preview = true;
+                break;
+            }
+            case COKitDocumentType::SPREADSHEET:
+                partId = getLOKitDocument()->getPartId(0, 0);
+                fillBox = true;
+                break;
+            default:
+                LOG_DBG("No thumbnails of [" << anonymizeUrl(basePath)
+                                             << "]: the document type has no page to paint");
+                return;
+        }
+
+        for (const auto& [boxWidth, boxHeight] : _thumbnailSizes)
+        {
+            // At 100% zoom a pixel is 15 twips, so a filled box paints that many twips per side.
+            constexpr int TwipsPerPixel = 15;
+            std::pair<int, int> size(boxWidth, boxHeight);
+            int widthTwips = boxWidth * TwipsPerPixel;
+            int heightTwips = boxHeight * TwipsPerPixel;
+            if (!fillBox)
+            {
+                size = LOKitHelper::fitPageInBox(boxWidth, boxHeight, pageWidth, pageHeight);
+                widthTwips = static_cast<int>(pageWidth);
+                heightTwips = static_cast<int>(pageHeight);
+            }
+
+            std::vector<char> png;
+            if (!renderToPng(size.first, size.second, x, y, widthTwips, heightTwips, partId,
+                             preview, png))
+            {
+                LOG_ERR("Failed to encode the " << boxWidth << 'x' << boxHeight << " thumbnail of ["
+                                                << anonymizeUrl(basePath) << ']');
+                continue;
+            }
+
+            // The file is written under a temporary name and renamed into place, so under its
+            // own name it is either whole or absent.
+            const std::string path = Thumbnail::filePath(basePath, boxWidth, boxHeight);
+            const std::string temporaryPath = path + Util::rng::getFilename(12);
+            if (writeFileToJail(temporaryPath, png.data(), png.size()).empty())
+            {
+                FileUtil::removeFile(temporaryPath);
+                continue;
+            }
+
+            if (rename(temporaryPath.c_str(), path.c_str()) != 0)
+            {
+                LOG_SYS("Failed to rename [" << temporaryPath << "] to [" << path << ']');
+                FileUtil::removeFile(temporaryPath);
+                continue;
+            }
+
+            LOG_DBG("Wrote the " << size.first << 'x' << size.second << " pixel thumbnail ["
+                                 << anonymizeUrl(path) << ']');
+        }
+    }
+    catch (const std::exception& exc)
+    {
+        LOG_ERR("Failed to render the thumbnails of [" << anonymizeUrl(basePath)
+                                                       << "]: " << exc.what());
+    }
+}
+
 bool ChildSession::renderSlide(const StringVector& tokens)
 {
     // A view that asked for a slide waits for the rendering to report that it ended, so every
@@ -6274,6 +6422,13 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
                 consistencyCheckJail();
 
                 copyForUpload(getJailedFilePath());
+
+                // The thumbnails go with the copy that is uploaded, and only a save that
+                // wrote a new version of the document gets new ones.
+                if (!success.isEmpty() && success.toString() == "true")
+                {
+                    renderThumbnails(Poco::URI(getJailedFilePath()).getPath() + TO_UPLOAD_SUFFIX);
+                }
 
                 saveCommand = true;
             }

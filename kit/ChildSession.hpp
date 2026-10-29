@@ -305,6 +305,12 @@ private:
     /// the image could not be encoded.
     bool renderToPng(int width, int height, int xTwips, int yTwips, int widthTwips, int heightTwips,
                      const std::string& partId, bool preview, std::vector<char>& png);
+    /// Writes a PNG thumbnail of the document, named after basePath, for every size the host
+    /// asked for, after deleting the thumbnails of an earlier save under those names. Nothing
+    /// is written when the host asked for no sizes, when the document is password protected,
+    /// when the session has a watermark, or when the view of a presentation shows the notes or
+    /// handout pages. A failure is logged and leaves the document alone.
+    void renderThumbnails(const std::string& basePath);
     bool resizeWindow(const StringVector& tokens);
     bool resetSelection(const StringVector& tokens);
     bool saveAs(const StringVector& tokens);
