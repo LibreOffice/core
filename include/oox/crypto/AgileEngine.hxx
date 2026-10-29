@@ -18,8 +18,8 @@
 #include <sal/types.h>
 #include <comphelper/crypto/Crypto.hxx>
 
-namespace oox::crypto {
-
+namespace oox::crypto
+{
 struct OOX_DLLPUBLIC AgileEncryptionInfo
 {
     sal_Int32 spinCount;
@@ -76,29 +76,20 @@ private:
 
     void calculateHashFinal(std::u16string_view rPassword, std::vector<sal_uInt8>& aHashFinal);
 
-    void calculateBlock(
-            std::vector<sal_uInt8> const & rBlock,
-            std::vector<sal_uInt8>& rHashFinal,
-            std::vector<sal_uInt8>& rInput,
-            std::vector<sal_uInt8>& rOutput);
+    void calculateBlock(std::vector<sal_uInt8> const& rBlock, std::vector<sal_uInt8>& rHashFinal,
+                        std::vector<sal_uInt8>& rInput, std::vector<sal_uInt8>& rOutput);
 
-    void encryptBlock(
-            std::vector<sal_uInt8> const & rBlock,
-            std::vector<sal_uInt8>& rHashFinal,
-            std::vector<sal_uInt8>& rInput,
-            std::vector<sal_uInt8>& rOutput);
+    void encryptBlock(std::vector<sal_uInt8> const& rBlock, std::vector<sal_uInt8>& rHashFinal,
+                      std::vector<sal_uInt8>& rInput, std::vector<sal_uInt8>& rOutput);
 
     static comphelper::CryptoType cryptoType(const AgileEncryptionInfo& rInfo);
 
 public:
     AgileEngine();
 
-    AgileEncryptionInfo& getInfo() { return mInfo;}
+    AgileEncryptionInfo& getInfo() { return mInfo; }
 
-    void setPreset(AgileEncryptionPreset ePreset)
-    {
-        meEncryptionPreset = ePreset;
-    }
+    void setPreset(AgileEncryptionPreset ePreset) { meEncryptionPreset = ePreset; }
 
     // Decryption
 
@@ -106,9 +97,8 @@ public:
     bool decryptAndCheckVerifierHash(std::u16string_view rPassword);
 
     bool generateEncryptionKey(std::u16string_view rPassword) override;
-    bool readEncryptionInfo(css::uno::Reference<css::io::XInputStream> & rxInputStream) override;
-    bool decrypt(BinaryXInputStream& aInputStream,
-                 BinaryXOutputStream& aOutputStream) override;
+    bool readEncryptionInfo(css::uno::Reference<css::io::XInputStream>& rxInputStream) override;
+    bool decrypt(BinaryXInputStream& aInputStream, BinaryXOutputStream& aOutputStream) override;
 
     bool checkDataIntegrity() override;
 
@@ -119,11 +109,11 @@ public:
 
     void writeEncryptionInfo(BinaryXOutputStream& rStream) override;
 
-    void encrypt(const css::uno::Reference<css::io::XInputStream>&  rxInputStream,
+    void encrypt(const css::uno::Reference<css::io::XInputStream>& rxInputStream,
                  css::uno::Reference<css::io::XOutputStream>& rxOutputStream,
                  sal_uInt32 nSize) override;
 
-    bool setupEncryption(OUString const & rPassword) override;
+    bool setupEncryption(OUString const& rPassword) override;
 
     bool generateAndEncryptVerifierHash(std::u16string_view rPassword);
 
@@ -131,7 +121,7 @@ public:
     bool encryptHmacValue();
 
     bool encryptEncryptionKey(std::u16string_view rPassword);
-    void setupEncryptionParameters(AgileEncryptionParameters const & rAgileEncryptionParameters);
+    void setupEncryptionParameters(AgileEncryptionParameters const& rAgileEncryptionParameters);
     bool setupEncryptionKey(std::u16string_view rPassword);
 };
 
