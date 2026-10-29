@@ -1477,6 +1477,16 @@ class RenderGeometrySection extends CanvasSectionObject {
 	}
 
 	public static holdsObjects(objectId: number): boolean {
+		/*
+			A chart holds its parts only while it is edited in place. Once it is left, the engine
+			sends it as one object again, but its parts stay here until that answer arrives, so
+			the chart is no group meanwhile, whatever the parts say.
+		*/
+		if (
+			RenderGeometrySection.objectOf(objectId)?.objectKind === 23 &&
+			GraphicSelection.inPlaceObject !== objectId
+		)
+			return false;
 		return RenderGeometrySection.heldBy(objectId).length > 0;
 	}
 

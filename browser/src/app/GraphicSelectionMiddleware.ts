@@ -948,11 +948,14 @@ class GraphicSelection {
 	private static makeSelectionSection(): void {
 		const objectIds = this.selectedObjectIDs;
 		const several = objectIds.length > 1;
-		// An object active in place is edited by itself, with its own undo, so it has no handles.
+		// An object active in place is edited by itself, with its own undo, so it has no handles;
+		// a part of it selected inside it has the handles the part allows.
+		const place = Interaction.placeOf(objectIds);
 		const wanted =
 			RenderManager.isVectorRendering() &&
 			objectIds.length &&
-			Interaction.placeOf(objectIds).kind !== 'inPlace'
+			(place.kind !== 'inPlace' ||
+				(objectIds.length === 1 && objectIds[0] !== place.object))
 				? several
 					? MultiSelectionSection.sectionName
 					: ObjectSelectionSection.nameFor(objectIds[0])
@@ -1855,6 +1858,28 @@ class GraphicSelection {
 			((this.inPlaceActive && RenderManager.isVectorRendering()) ||
 				this.selectsInPlaceObject(textMsg))
 		) {
+			/*
+				A report that names parts the client holds inside the active object is the
+				object's own selection of them, as a chart reports the series or the bar a press
+				selected: those parts become the selection, with their handles, while the object
+				stays active. Any other report keeps the frame of the active object.
+			*/
+			if (this.inPlaceActive && RenderManager.isVectorRendering()) {
+				const parts = this.selectedObjectIDsOf(
+					this.parseMessage(textMsg)[5],
+				).filter(
+					(objectId: number) =>
+						RenderGeometrySection.objectOf(objectId) !== undefined &&
+						objectId !== this.inPlaceObject,
+				);
+				if (parts.length) {
+					this.outdatedReport(parts);
+					this.selectedObjectIDs = parts;
+					this.updateSelectionSection();
+					this.tellTheStates();
+					return;
+				}
+			}
 			this.showInPlaceFrame();
 			if (!window.ThisIsTheiOSApp && !this.inPlaceMath)
 				app.socket.sendMessage('rendershapeselection mimetype=image/svg+xml');

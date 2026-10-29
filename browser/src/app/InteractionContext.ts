@@ -70,6 +70,10 @@ interface InteractionContext {
 	/// by command name.
 	commandStates(): { [command: string]: boolean };
 
+	/// Whether the groups the selection stands in are marked by bands, with the buttons beside
+	/// them. Inside an object active in place its surround marks the level instead.
+	showsGroupBands(): boolean;
+
 	/// Ungroup, which takes apart what is selected. Answers whether it was run here; one that is
 	/// not goes to the engine.
 	ungroup(): boolean;

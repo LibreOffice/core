@@ -1089,6 +1089,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 		and taken apart again, while a group stays.
 	*/
 	private surroundObjects(): number[] {
+		if (!Interaction.context().showsGroupBands()) return [];
 		const objects = this.selectedObjects();
 		if (!objects.length) return [];
 
@@ -1162,6 +1163,8 @@ abstract class SelectionSection extends CanvasSectionObject {
 	public bandsWithButtons(): number[] {
 		const objects = this.selectedObjects();
 		if (!objects.length) return [];
+		if (!Interaction.contextAt(Interaction.placeOf(objects)).showsGroupBands())
+			return [];
 
 		let outermost: number | undefined;
 		for (

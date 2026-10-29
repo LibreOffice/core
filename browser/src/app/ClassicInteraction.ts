@@ -22,6 +22,10 @@ abstract class ClassicContext implements InteractionContext {
 		this.groupStoodIn = groupStoodIn;
 	}
 
+	public showsGroupBands(): boolean {
+		return true;
+	}
+
 	/*
 		Answers a press from the geometry the client holds, by naming the objects to the engine
 		instead of sending the press for it to hit test. A press that meets no object asks for no
@@ -716,8 +720,25 @@ class ClassicInPlaceContext implements InteractionContext {
 			return Interaction.context().press(hit, modifier);
 		}
 
-		GraphicSelection.pressedOutside =
-			hit === undefined ? null : RenderGeometrySection.outermostOf(hit);
+		if (ClassicInPlaceContext.pressedOutside()) {
+			GraphicSelection.pressedOutside = null;
+			return false;
+		}
+
+		/*
+			A plain press inside the window on a part the chart selects on its own selects that
+			part here, by the chart's rules for which part a press takes, and names it to the
+			engine, which selects it in the chart. The object stays active; the chart reports the
+			selection as its own. Any other press inside is the object's.
+		*/
+		const place = Interaction.placeOf(GraphicSelection.selectedObjectIDs);
+		if (modifier === 0 && hit !== undefined && place.kind === 'inPlace') {
+			const part = RenderGeometrySection.outermostOf(hit, place.object);
+			if (ClassicInPlaceContext.isAPart(part, place.object)) {
+				GraphicSelection.selectObjects([part]);
+				return true;
+			}
+		}
 		return false;
 	}
 
@@ -728,6 +749,30 @@ class ClassicInPlaceContext implements InteractionContext {
 
 		GraphicSelection.leaveInPlace();
 		return Interaction.context().takesHoldFor(hit, modifier);
+	}
+
+	/*
+		Whether that object is a part of the active object that is selected on its own: a part
+		the chart selects on its own, or a shape someone added to the chart, which lies directly
+		on its page. The groups the chart only organises its parts with hold parts and are none.
+	*/
+	private static isAPart(objectId: number, object: number): boolean {
+		if (objectId === object) return false;
+		if (RenderGeometrySection.objectOf(objectId)?.chartPart !== undefined)
+			return true;
+		return (
+			RenderGeometrySection.parentOf(objectId) === object &&
+			!ClassicInPlaceContext.holdsParts(objectId)
+		);
+	}
+
+	/// Whether that object holds a part the chart selects on its own, at any depth.
+	private static holdsParts(objectId: number): boolean {
+		return RenderGeometrySection.heldBy(objectId).some(
+			(held: number) =>
+				RenderGeometrySection.objectOf(held)?.chartPart !== undefined ||
+				ClassicInPlaceContext.holdsParts(held),
+		);
 	}
 
 	/// Whether the last press landed outside the upright rectangle of the object's window.
@@ -756,8 +801,37 @@ class ClassicInPlaceContext implements InteractionContext {
 		return false;
 	}
 
+	/*
+		Escape steps out one level at a time, as out of a group: from a selected part to the part
+		holding it, the one above it that the object selects on its own, up to the outermost
+		part. From there, or with nothing selected inside, Escape goes to the engine, which
+		leaves the object and keeps it selected.
+	*/
 	public escape(): boolean {
-		return false;
+		const place = Interaction.placeOf(GraphicSelection.selectedObjectIDs);
+		if (place.kind !== 'inPlace') return false;
+
+		const selected = GraphicSelection.selectedObjectIDs[0];
+		if (selected !== undefined && selected !== place.object) {
+			for (
+				let above = RenderGeometrySection.parentOf(selected), guard = 0;
+				above !== undefined && above !== place.object && guard < 100;
+				above = RenderGeometrySection.parentOf(above), ++guard
+			) {
+				if (RenderGeometrySection.objectOf(above)?.chartPart !== undefined) {
+					GraphicSelection.selectAndShow([above]);
+					return true;
+				}
+			}
+		}
+
+		// at the outermost part, or with nothing selected inside, the object is left here, as
+		// a press on nothing outside leaves it: selecting the object itself ends being active
+		// in the engine and keeps it selected
+		const object = place.object;
+		GraphicSelection.leaveInPlace();
+		GraphicSelection.selectAndShow([object]);
+		return true;
 	}
 
 	public enterKey(): boolean {
@@ -778,8 +852,37 @@ class ClassicInPlaceContext implements InteractionContext {
 		return false;
 	}
 
-	public tabKey(_forwards: boolean): boolean {
+	// the surround of the active object marks the level; the groups a chart organises its
+	// shapes with are not entered or taken apart one by one
+	public showsGroupBands(): boolean {
 		return false;
+	}
+
+	/*
+		Tab goes through the parts of the active object as one list in paint order: the parts a
+		chart selects on its own and the shapes someone added to it, the groups the chart only
+		organises its shapes with left out. With none selected the first is taken, or going
+		backwards the last; from the last it goes round to the first.
+	*/
+	public tabKey(forwards: boolean): boolean {
+		const place = Interaction.placeOf(GraphicSelection.selectedObjectIDs);
+		if (place.kind !== 'inPlace') return false;
+
+		const parts = (RenderGeometrySection.currentPart()?.order ?? []).filter(
+			(objectId: number) =>
+				ClassicInPlaceContext.isAPart(objectId, place.object),
+		);
+		if (!parts.length) return false;
+
+		const at = parts.indexOf(GraphicSelection.selectedObjectIDs[0]);
+		const to =
+			at < 0
+				? forwards
+					? 0
+					: parts.length - 1
+				: (at + (forwards ? 1 : -1) + parts.length) % parts.length;
+		GraphicSelection.selectAndShow([parts[to]]);
+		return true;
 	}
 
 	public toAnEnd(_first: boolean): boolean {
