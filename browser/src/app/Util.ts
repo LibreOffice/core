@@ -316,15 +316,15 @@ class Util {
 		const units = [
 			{
 				seconds: 365 * 24 * 3600,
-				one: _('1 year'),
-				several: _('{count} years'),
+				format: (n: number) => _n('%n year', '%n years', n),
 			},
-			{ seconds: 24 * 3600, one: _('1 day'), several: _('{count} days') },
-			{ seconds: 3600, one: _('1 hour'), several: _('{count} hours') },
-			{ seconds: 60, one: _('1 minute'), several: _('{count} minutes') },
+			{ seconds: 24 * 3600, format: (n: number) => _n('%n day', '%n days', n) },
+			{ seconds: 3600, format: (n: number) => _n('%n hour', '%n hours', n) },
+			{
+				seconds: 60,
+				format: (n: number) => _n('%n minute', '%n minutes', n),
+			},
 		];
-		const withCount = (wording: string, count: number): string =>
-			wording.replace('{count}', String(count));
 
 		let remaining = Math.max(0, Math.round(durationMs / 1000));
 		const parts: string[] = [];
@@ -333,7 +333,7 @@ class Util {
 			const count = Math.floor(remaining / unit.seconds);
 			if (!count) continue;
 			remaining -= count * unit.seconds;
-			parts.push(count === 1 ? unit.one : withCount(unit.several, count));
+			parts.push(unit.format(count));
 		}
 		if (!parts.length) {
 			parts.push(_('less than a minute'));
