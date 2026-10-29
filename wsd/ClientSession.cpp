@@ -372,16 +372,8 @@ bool ClientSession::matchesClipboardKeys(const std::string &/*viewId*/, const st
 static std::string getLocalPathToJail(std::string filePath, const DocumentBroker& docBroker)
 {
 #if !MOBILEAPP
-    // Prepend the jail path in the normal (non-nocaps) case
-    if (!COOLWSD::NoCapsForKit)
-    {
-        if (filePath.size() > 0 && filePath[0] == '/')
-            filePath = filePath.substr(1);
-
-        // Blank for failure.
-        filePath = FileUtil::findFileInJail(COOLWSD::EnableMountNamespaces,
-                                            docBroker.getJailRoot(), filePath);
-    }
+    // Blank for failure.
+    filePath = docBroker.findFileInJail(std::move(filePath));
 #else
     (void)docBroker;
 #endif
@@ -4695,19 +4687,14 @@ bool ClientSession::handleSaveAs(const std::shared_ptr<Message>& payload,
     // URI constructor implicitly decodes when it gets std::string as param
     Poco::URI resultURL(encodedURL);
 
-    // Prepend the jail path in the normal (non-nocaps) case
-    if (resultURL.getScheme() == "file" && !COOLWSD::NoCapsForKit)
+    if (resultURL.getScheme() == "file")
     {
         // getPath() already returns the decoded path (Poco::URI decodes
         // percent-encoded sequences internally), so no extra Uri::decode().
-        std::string relative = resultURL.getPath();
-
-        if (relative.size() > 0 && relative[0] == '/')
-            relative = relative.substr(1);
+        const std::string relative = resultURL.getPath();
 
         // Rewrite file:// URLs to be visible to the outside world.
-        const std::string path = FileUtil::findFileInJail(
-            COOLWSD::EnableMountNamespaces, docBroker->getJailRoot(), relative);
+        const std::string path = docBroker->findFileInJail(relative);
         if (!path.empty())
         {
             // Encode path for special characters (i.e '%') since Poco::URI::setPath implicitly decodes the input param

@@ -494,6 +494,11 @@ public:
     /// The path in the staging area of this document's jail that a file staged under
     /// the given name sits at. Empty when the jail cannot be reached.
     std::string jailStagingPath(const std::string& name) const;
+
+    /// The local path of the existing file that the kit names by kitPath, or an empty string
+    /// when there is no such file in this document's jail. An unjailed kit names real paths,
+    /// which are then under the jail root.
+    std::string findFileInJail(std::string kitPath) const;
 #endif
 
     /// Loads and adds a new session. Returns the new number of sessions.

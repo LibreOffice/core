@@ -5106,6 +5106,30 @@ bool DocumentBroker::sendUnoSave(const std::shared_ptr<ClientSession>& session,
     return false;
 }
 
+#if !MOBILEAPP
+std::string DocumentBroker::findFileInJail(std::string kitPath) const
+{
+    if (kitPath.starts_with('/'))
+        kitPath.erase(0, 1);
+
+    const std::string jailRoot = getJailRoot();
+    if (COOLWSD::NoCapsForKit)
+    {
+        std::string jailRootPrefix = jailRoot.substr(jailRoot.starts_with('/') ? 1 : 0);
+        if (!jailRootPrefix.ends_with('/'))
+            jailRootPrefix += '/';
+        if (jailRoot.empty() || !kitPath.starts_with(jailRootPrefix))
+        {
+            LOG_WRN("File [" << Anonymizer::anonymizeUrl(kitPath) << "] is outside the jail");
+            return std::string();
+        }
+        kitPath.erase(0, jailRootPrefix.size());
+    }
+
+    return FileUtil::findFileInJail(COOLWSD::EnableMountNamespaces, jailRoot, std::move(kitPath));
+}
+#endif
+
 std::string DocumentBroker::getJailRoot() const
 {
     if (!Util::isMobileApp())
@@ -8576,15 +8600,7 @@ std::string DocumentBroker::getEmbeddedMediaPath(const std::string& id, const st
 std::string DocumentBroker::getAbsoluteMediaPath(std::string localPath)
 {
 #if !MOBILEAPP
-    // We always extract media files in /tmp. Normally, we are in jail (chroot),
-    // and this would need to be accessed from WSD through the JailRoot path.
-    // But, when we have NoCapsForKit there is no jail, so the media file ends
-    // up in the host (AppImage) /tmp
-    if (COOLWSD::NoCapsForKit)
-        return "/" + localPath;
-
-    return FileUtil::findFileInJail(COOLWSD::EnableMountNamespaces, COOLWSD::ChildRoot + _jailId,
-                                    std::move(localPath));
+    return findFileInJail(std::move(localPath));
 #else // MOBILEAPP
     return getJailRoot() + "/" + localPath;
 #endif // MOBILEAPP
