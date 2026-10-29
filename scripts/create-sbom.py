@@ -28,6 +28,12 @@
 #   mechanically (vendored sources, vendors, licenses, homepages)
 # - browser/branding, when the build applied a theme (--branding-theme): its
 #   files in dist belong to the Apache-2.0 branding component, not the root
+#
+# With --brand-package it instead describes one of the brand packages that
+# browser/branding/packaging/make-brand-packages.sh stages: the Apache-2.0
+# theme is the root, and the Nextcloud community theme that the package may
+# carry under dist/nextcloud is a component of its own. No build tree or
+# engine is needed for that.
 
 import argparse
 import base64
@@ -522,7 +528,7 @@ def branding_dist_files(srcdir, builddir):
 # Document assembly
 # ---------------------------------------------------------------------------
 
-def sbom_skeleton(version, root_license):
+def sbom_skeleton(version, root_license, name="CollaboraOnline-coolwsd"):
     root_spdx_id = make_spdx_id("SPDXRef-coolwsd")
     document_spdx_id = f"urn:uuid:{uuid.uuid4()}"
     tool_spdx_id = make_spdx_id("SPDXRef-Tool-CustomScript")
@@ -558,7 +564,7 @@ def sbom_skeleton(version, root_license):
                 "type": "SpdxDocument",
                 "spdxId": document_spdx_id,
                 "creationInfo": "_:creationinfo",
-                "name": "CollaboraOnline-coolwsd",
+                "name": name,
                 "rootElement": [root_spdx_id],
                 "profileConformance": ["core", "software", "simpleLicensing"],
             },
@@ -566,7 +572,7 @@ def sbom_skeleton(version, root_license):
                 "type": "software_Package",
                 "spdxId": root_spdx_id,
                 "creationInfo": "_:creationinfo",
-                "name": "CollaboraOnline-coolwsd",
+                "name": name,
                 "software_packageVersion": version,
             },
             {
@@ -585,9 +591,40 @@ def sbom_skeleton(version, root_license):
     return document, root_spdx_id
 
 
+def add_source_artifact(graph, fragment, pkg_spdx_id, locator, sha256=None,
+                        sha512=None):
+    """Emit the source artifact a package is generated from."""
+    source_spdx_id = make_spdx_id(f"{fragment}-source")
+    source_element = {
+        "type": "software_SoftwareArtifact",
+        "spdxId": source_spdx_id,
+        "software_primaryPurpose": "source",
+    }
+    if locator:
+        source_element["externalRef"] = [{
+            "type": "ExternalRef",
+            "externalRefType": "SourceArtifact",
+            "locator": locator,
+        }]
+    if sha256 or sha512:
+        source_element["verifiedUsing"] = [{
+            "type": "Hash",
+            "algorithm": "sha256" if sha256 else "sha512",
+            "hashValue": sha256 if sha256 else sha512,
+        }]
+    graph.append(source_element)
+    graph.append({
+        "type": "Relationship",
+        "from": source_spdx_id,
+        "relationshipType": "generates",
+        "to": [pkg_spdx_id],
+        "completeness": "complete",
+    })
+
+
 def make_component(graph, fragment, name, vendor, version, homepage, locator,
                    sha256, declared, concluded, sha512=None, purl=None,
-                   cpe_name=None, with_cpe=True):
+                   cpe_name=None, with_cpe=True, comment=None):
     """Emit a software_Package + source artifact, engine-shape.
 
     cpe_name overrides the CPE product name where it differs from the name we
@@ -619,39 +656,46 @@ def make_component(graph, fragment, name, vendor, version, homepage, locator,
         pkg_element["software_homePage"] = homepage
     if version:
         pkg_element["software_packageVersion"] = version
+    if comment:
+        pkg_element["comment"] = comment
     graph.append(pkg_element)
 
     if locator or sha256 or sha512:
-        source_spdx_id = make_spdx_id(f"{fragment}-source")
-        source_element = {
-            "type": "software_SoftwareArtifact",
-            "spdxId": source_spdx_id,
-            "software_primaryPurpose": "source",
-        }
-        if locator:
-            source_element["externalRef"] = [{
-                "type": "ExternalRef",
-                "externalRefType": "SourceArtifact",
-                "locator": locator,
-            }]
-        if sha256 or sha512:
-            source_element["verifiedUsing"] = [{
-                "type": "Hash",
-                "algorithm": "sha256" if sha256 else "sha512",
-                "hashValue": sha256 if sha256 else sha512,
-            }]
-        graph.append(source_element)
-        graph.append({
-            "type": "Relationship",
-            "from": source_spdx_id,
-            "relationshipType": "generates",
-            "to": [pkg_spdx_id],
-            "completeness": "complete",
-        })
+        add_source_artifact(graph, fragment, pkg_spdx_id, locator, sha256,
+                            sha512)
 
     add_license_relationship(graph, pkg_spdx_id, "hasDeclaredLicense", declared)
     add_license_relationship(graph, pkg_spdx_id, "hasConcludedLicense", concluded)
     return pkg_spdx_id
+
+
+def emit_file(graph, parent_id, instpath, abspath):
+    """Emit an installed file with its hash as an artifact of parent_id."""
+    file_spdx_id = make_spdx_id(f"File-{instpath}")
+    flags = ["executable"] if is_executable_path(instpath) else []
+    hash_element = {
+        "type": "Hash",
+        "algorithm": "sha512",
+        "hashValue": get_sha512(abspath),
+    }
+    if flags:
+        hash_element["software_additionalPurpose"] = flags
+        hash_element["comment"] = ("software_additionalPurpose field is "
+            "used to indicate the properties of BSI TR-03183-2")
+    graph.append({
+        "type": "software_File",
+        "spdxId": file_spdx_id,
+        "name": instpath,
+        "verifiedUsing": [hash_element],
+    })
+    graph.append({
+        "type": "Relationship",
+        "from": parent_id,
+        "relationshipType": "hasDistributionArtifact",
+        "to": [file_spdx_id],
+        "completeness": "incomplete",
+    })
+    return file_spdx_id
 
 
 def add_contains(graph, parent_id, child_id, static=False):
@@ -744,13 +788,95 @@ def run_checks(args, annotations, gbuild_externals, poco_bundled, seeds,
     return errors
 
 
+NEXTCLOUD_THEME_PREFIX = "usr/share/coolwsd/browser/dist/nextcloud/"
+
+
+def write_brand_package_sbom(args):
+    """The SBOM of a brand package staged by make-brand-packages.sh.
+
+    The root is the theme from browser/branding. The Nextcloud community
+    theme, when the package carries it, comes from the online-branding
+    repository under its own terms, so its files hang off a component of
+    their own."""
+    for option in ("package_root", "version", "output"):
+        if not getattr(args, option):
+            raise Exception(f"--brand-package needs --{option.replace('_', '-')}")
+
+    annotations = read_annotations(args.srcdir)
+    custom_licenses.update(annotations.get("custom_licenses", {}))
+    entry = next(entry for entry in annotations["firstparty"]
+                 if entry["source"] == "browser/branding")
+
+    document, root_spdx_id = sbom_skeleton(
+        args.version, entry["concluded"],
+        name=f"CollaboraOnline-{args.brand_package}")
+    graph = document["@graph"]
+    add_license_relationship(graph, root_spdx_id, "hasDeclaredLicense",
+                             entry["declared"])
+    for element in graph:
+        if element.get("spdxId") == root_spdx_id:
+            element["software_homePage"] = entry["url"]
+            element["originatedBy"] = ["https://collaboraoffice.com"]
+    add_source_artifact(graph, "SPDXRef-coolwsd", root_spdx_id,
+                        repo_url(entry["source"]))
+    emitted_licenses = set()
+
+    def emit_licenses(*license_exprs):
+        for expr in license_exprs:
+            if expr not in emitted_licenses:
+                graph.extend(license_cache[expr])
+                emitted_licenses.add(expr)
+
+    emit_licenses(entry["declared"], entry["concluded"])
+
+    nextcloud_id = None
+    output = os.path.abspath(args.output)
+    count = 0
+    for root, dirs, names in os.walk(args.package_root):
+        dirs.sort()
+        for name in sorted(names):
+            abspath = os.path.join(root, name)
+            if os.path.abspath(abspath) == output:
+                continue
+            instpath = os.path.relpath(abspath, args.package_root)
+            parent = root_spdx_id
+            if instpath.startswith(NEXTCLOUD_THEME_PREFIX):
+                if nextcloud_id is None:
+                    nextcloud_id = make_component(
+                        graph, "SPDXRef-NC-theme-community",
+                        "NC-theme-community", None, args.version,
+                        "https://www.collaboraonline.com/", None, None,
+                        "NOASSERTION", "NOASSERTION", with_cpe=False,
+                        comment="The Nextcloud community theme, generated "
+                                "from the online-branding repository of "
+                                "Collabora Productivity.")
+                    emit_licenses("NOASSERTION")
+                    add_contains(graph, root_spdx_id, nextcloud_id)
+                parent = nextcloud_id
+            emit_file(graph, parent, instpath, abspath)
+            count += 1
+
+    with open(output, "w", encoding="utf-8") as f:
+        json.dump(document, f, indent=2)
+        f.write("\n")
+    log(f"wrote {output}: {len(graph)} elements, {count} files")
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Generate the Collabora Online SPDX 3.0.1 SBOM")
     parser.add_argument("--srcdir", default=os.path.dirname(
         os.path.dirname(os.path.abspath(__file__))))
-    parser.add_argument("--builddir", required=True)
-    parser.add_argument("--engine-builddir", required=True)
+    parser.add_argument("--builddir",
+                        help="required unless --brand-package is given")
+    parser.add_argument("--engine-builddir",
+                        help="required unless --brand-package is given")
+    parser.add_argument("--brand-package",
+                        help="describe this brand package (code-brand or "
+                             "collabora-online-brand) staged under "
+                             "--package-root instead of the build")
+    parser.add_argument("--package-root",
+                        help="the staged tree of --brand-package")
     parser.add_argument("--version",
                         help="package version (default: from config.h)")
     parser.add_argument("--shipped-js",
@@ -771,6 +897,12 @@ def main():
 
     global verbose
     verbose = args.verbose
+
+    if args.brand_package:
+        write_brand_package_sbom(args)
+        return
+    if not args.builddir or not args.engine_builddir:
+        parser.error("--builddir and --engine-builddir are required")
 
     version = args.version
     if version is None:
@@ -938,7 +1070,6 @@ def main():
     sysdep_ids = {}
     for file in files:
         instpath = file["instpath"]
-        file_spdx_id = make_spdx_id(f"File-{instpath}")
         owner = file_external(instpath, npm_names, vendored_by_dist_path,
                               firstparty_by_dist_path)
         if owner is None:
@@ -950,29 +1081,7 @@ def main():
         else:
             parent = vendored_ids[owner[1]]
 
-        flags = ["executable"] if is_executable_path(instpath) else []
-        hash_element = {
-            "type": "Hash",
-            "algorithm": "sha512",
-            "hashValue": get_sha512(file["abspath"]),
-        }
-        if flags:
-            hash_element["software_additionalPurpose"] = flags
-            hash_element["comment"] = ("software_additionalPurpose field is "
-                "used to indicate the properties of BSI TR-03183-2")
-        graph.append({
-            "type": "software_File",
-            "spdxId": file_spdx_id,
-            "name": instpath,
-            "verifiedUsing": [hash_element],
-        })
-        graph.append({
-            "type": "Relationship",
-            "from": parent,
-            "relationshipType": "hasDistributionArtifact",
-            "to": [file_spdx_id],
-            "completeness": "incomplete",
-        })
+        file_spdx_id = emit_file(graph, parent, instpath, file["abspath"])
 
         exe = instpath[len("usr/bin/"):] if instpath.startswith("usr/bin/") else None
         if exe in gbuild_externals:

@@ -1,0 +1,13 @@
+Package: collabora-online-brand
+Version: @VERSION@
+Section: web
+Priority: optional
+Maintainer: Andras Timar <andras.timar@collabora.com>
+Homepage: https://www.collaboraonline.com/
+Architecture: all
+Depends: coolwsd (>= 1.6.10)
+Conflicts: code-brand, cloudsuite-brand
+Provides: cloudsuite-brand
+Description: Collabora Online branding
+ The theme of Collabora Online for the coolwsd server: stylesheets, images
+ and the script that names the product.

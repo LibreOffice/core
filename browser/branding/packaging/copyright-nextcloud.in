@@ -1,0 +1,7 @@
+
+Files: usr/share/coolwsd/browser/dist/nextcloud/*
+Copyright: 2022-@YEAR@ Collabora Productivity Ltd.
+License: EULA
+ The Nextcloud community theme is maintained in the online-branding
+ repository of Collabora Productivity and is not covered by the Apache
+ License. All rights reserved.

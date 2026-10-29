@@ -26,6 +26,7 @@ online-branding repository.
 - `themes/CODA/branding.js`: the product name and link of Collabora Office
 - `generate-document-icons.sh`: the macOS document type icons, called by `brand.sh`
 - `sync-online-branding.py`: compares and synchronizes with online-branding, see below
+- `packaging/`: builds the `code-brand` and `collabora-online-brand` packages, see below
 
 ## Themes
 
@@ -79,6 +80,32 @@ for example
 [dart-sass](https://sass-lang.com/dart-sass/) (`sass` on the `PATH`, or
 `SASS=browser/node_modules/.bin/sass`). Unlike the online-branding script, this one
 never modifies its sources.
+
+## Brand packages
+
+The Linux repositories ship the theme as a package of its own next to the unbranded
+`coolwsd`: `code-brand` for Collabora Online Development Edition and
+`collabora-online-brand` for Collabora Online. `packaging/make-brand-packages.sh` builds
+them from this directory, as deb and rpm:
+
+    browser/branding/packaging/make-brand-packages.sh --version 26.04.6.0-1 out/
+
+Without `--version` it takes the version of `configure.ac` with revision 1. The packages
+install the theme under `/usr/share/coolwsd/browser/dist` and, under
+`/usr/share/doc/<package>/`, the Apache License, a machine-readable copyright file and an
+SPDX SBOM of the package's files (`scripts/create-sbom.py --brand-package`). The deb
+control and rpm spec templates next to the script keep the package names, dependencies
+and conflicts the online-branding packages had, so the repositories and the
+`collabora-online-brand` provider check see no difference. The script signs nothing; the
+repository jobs sign the packages.
+
+The CODE package also carries the Nextcloud community theme, which integrators ask for
+with `theme=nextcloud`. That theme stays in the online-branding repository, so the job
+generates it there (`brand.sh --pure /nowhere nc NC-theme-community`) and passes the
+directory with `--overlay nc`; the script copies it into the dist directory of
+`code-brand` and adds its own stanza to the copyright file.
+
+The customer brands are built by online-branding as before.
 
 ## Keeping online-branding in sync
 

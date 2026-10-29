@@ -1,0 +1,36 @@
+%global _source_filedigest_algorithm 8
+%global _binary_filedigest_algorithm 8
+%global _source_payload w2.xzdio
+%global _binary_payload w2.xzdio
+
+Name:           CODE-brand
+Version:        @VERSION@
+Release:        @RELEASE@
+Vendor:         Collabora
+Summary:        Collabora Online Development Edition (CODE) branding
+License:        Apache-2.0
+URL:            https://www.collaboraonline.com/code/
+Source0:        code-brand.tar.gz
+BuildArch:      noarch
+Requires:       coolwsd >= 1.6.10
+Conflicts:      collabora-online-brand cloudsuite-brand
+
+%description
+The theme of Collabora Online Development Edition for the coolwsd server:
+stylesheets, images and the script that names the product.
+
+%prep
+tar xzf %SOURCE0
+
+%build
+
+%install
+mkdir -p %{buildroot}
+cp -rp usr %{buildroot}
+
+%files
+/usr/share/coolwsd/browser/dist
+%dir /usr/share/doc/code-brand
+%license /usr/share/doc/code-brand/LICENSE
+%doc /usr/share/doc/code-brand/copyright
+%doc /usr/share/doc/code-brand/code-brand-sbom.spdx.json

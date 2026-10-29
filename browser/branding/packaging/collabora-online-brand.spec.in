@@ -1,0 +1,38 @@
+%global _source_filedigest_algorithm 8
+%global _binary_filedigest_algorithm 8
+%global _source_payload w2.xzdio
+%global _binary_payload w2.xzdio
+
+Name:           collabora-online-brand
+Version:        @VERSION@
+Release:        @RELEASE@
+Vendor:         Collabora
+Summary:        Collabora Online branding
+License:        Apache-2.0
+URL:            https://www.collaboraonline.com/
+Source0:        collabora-online-brand.tar.gz
+BuildArch:      noarch
+Requires:       coolwsd >= 1.6.4
+Conflicts:      CODE-brand
+Obsoletes:      cloudsuite-brand <= 1.0.1
+Provides:       cloudsuite-brand = 1.0.1
+
+%description
+The theme of Collabora Online for the coolwsd server: stylesheets, images
+and the script that names the product.
+
+%prep
+tar xzf %SOURCE0
+
+%build
+
+%install
+mkdir -p %{buildroot}
+cp -rp usr %{buildroot}
+
+%files
+/usr/share/coolwsd/browser/dist
+%dir /usr/share/doc/collabora-online-brand
+%license /usr/share/doc/collabora-online-brand/LICENSE
+%doc /usr/share/doc/collabora-online-brand/copyright
+%doc /usr/share/doc/collabora-online-brand/collabora-online-brand-sbom.spdx.json
