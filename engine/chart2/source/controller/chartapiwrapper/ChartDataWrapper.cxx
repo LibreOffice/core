@@ -606,7 +606,8 @@ void ChartDataWrapper::initDataAccess()
     {
         //create a separate "internal data provider" that is not connected to the model
         rtl::Reference<InternalDataProvider> xInternal
-            = new InternalDataProvider( xChartDoc, /*bConnectToModel*/false );
+            = new InternalDataProvider( xChartDoc, /*bConnectToModel*/false,
+                                        xChartDoc->isDataRowSourceColumns() );
         m_xDataAccess = xInternal;
     }
 }

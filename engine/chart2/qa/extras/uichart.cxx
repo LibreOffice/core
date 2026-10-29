@@ -593,6 +593,35 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf164961)
                          getNumberFormatType(xChartDoc, nNumberFormat));
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testPasteChartWithSeriesInRows)
+{
+    // A chart whose series are in rows keeps those series when pasted into another spreadsheet
+    loadFromFile(u"fods/chart-series-in-rows.fods");
+
+    dispatchCommand(mxComponent, u".uno:GoToObject"_ustr,
+                    { comphelper::makePropertyValue(u"ToObject"_ustr, u"Object 1"_ustr) });
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    loadFromURL(u"private:factory/scalc"_ustr);
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getNumberOfDataSeries(xChartDoc));
+
+    // Without the fix in place, the pasted chart read the rows as columns, and the first series
+    // held the first value of each row
+    uno::Reference<chart2::data::XDataSequence> xValues
+        = getDataSequenceFromDocByRole(xChartDoc, u"values-y", 0);
+    uno::Sequence<uno::Any> aValues = xValues->getData();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aValues.getLength());
+    CPPUNIT_ASSERT_EQUAL(1.0, aValues[0].get<double>());
+    CPPUNIT_ASSERT_EQUAL(2.0, aValues[1].get<double>());
+    CPPUNIT_ASSERT_EQUAL(3.0, aValues[2].get<double>());
+
+    uno::Reference<chart2::data::XDataSequence> xLabel = getLabelDataSequenceFromDoc(xChartDoc, 0);
+    CPPUNIT_ASSERT_EQUAL(u"Alpha"_ustr, xLabel->getData()[0].get<OUString>());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

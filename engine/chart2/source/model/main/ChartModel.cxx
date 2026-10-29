@@ -46,6 +46,7 @@
 #include <comphelper/dumpxmltostring.hxx>
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
 #include <chart2/AbstractPivotTableDataProvider.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -801,10 +802,12 @@ void ChartModel::createInternalDataProvider( bool bCloneExistingData )
     if( !hasInternalDataProvider() )
     {
         if( bCloneExistingData )
-            m_xInternalDataProvider = new InternalDataProvider( this, /*bConnectToModel*/true );
+            m_xInternalDataProvider = new InternalDataProvider( this, /*bConnectToModel*/true,
+                                                                isDataRowSourceColumns() );
         else
         {
-            m_xInternalDataProvider = new InternalDataProvider( nullptr, /*bConnectToModel*/true );
+            m_xInternalDataProvider = new InternalDataProvider( nullptr, /*bConnectToModel*/true,
+                                                                /*bDefaultDataInColumns*/ true );
             m_xInternalDataProvider->setChartModel(this);
         }
         m_xDataProvider.set( m_xInternalDataProvider );
@@ -1467,6 +1470,25 @@ bool ChartModel::isIncludeHiddenCells()
     }
 
     return bIncluded;
+}
+
+bool ChartModel::isDataRowSourceColumns()
+{
+    // The diagram of the old chart API returns the last "DataRowSource" it was given when the
+    // data ranges no longer tell whether the series are rows or columns.
+    uno::Reference< css::chart::XChartDocument > xOldDoc(
+        static_cast< cppu::OWeakObject* >( this ), uno::UNO_QUERY );
+    if( !xOldDoc.is() )
+        return true;
+
+    uno::Reference< beans::XPropertySet > xDiagramProperties(
+        xOldDoc->getDiagram(), uno::UNO_QUERY );
+    if( !xDiagramProperties.is() )
+        return true;
+
+    css::chart::ChartDataRowSource eDataRowSource = css::chart::ChartDataRowSource_COLUMNS;
+    xDiagramProperties->getPropertyValue( u"DataRowSource"_ustr ) >>= eDataRowSource;
+    return eDataRowSource == css::chart::ChartDataRowSource_COLUMNS;
 }
 
 bool ChartModel::setIncludeHiddenCells( bool bIncludeHiddenCells )

@@ -519,6 +519,10 @@ public:
     bool isIncludeHiddenCells();
     bool setIncludeHiddenCells( bool bIncludeHiddenCells );
 
+    /// True when the "DataRowSource" property of the diagram says that each data series is a
+    /// column, which is also the answer when the chart has no diagram.
+    bool isDataRowSourceColumns();
+
     std::shared_ptr<model::Theme> getDocumentTheme() const;
     ChartColorPaletteType getColorPaletteType() const { return m_eColorPaletteType; }
     sal_uInt32 getColorPaletteIndex() const { return m_nColorPaletteIndex; }
