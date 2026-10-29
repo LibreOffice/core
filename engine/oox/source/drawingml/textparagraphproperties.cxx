@@ -476,6 +476,12 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
             rioBulletMap.setProperty( PROP_LeftMargin, *noParaLeftMargin);
             noParaLeftMargin.reset();
         }
+        else if ( bPushDefaultValues )
+        {
+            // OOXML default of 0 for both
+            rioBulletMap.setProperty<sal_Int32>( PROP_LeftMargin, 0);
+            rioBulletMap.setProperty<sal_Int32>( PROP_FirstLineOffset, 0);
+        }
         if ( nNumberingType != NumberingType::BITMAP && !rioBulletMap.hasProperty( PROP_BulletColor ) && pFilterBase )
             rioBulletMap.setProperty( PROP_BulletColor, maTextCharacterProperties.maFillProperties.getBestSolidColor().getColor( pFilterBase->getGraphicHelper()));
     }
