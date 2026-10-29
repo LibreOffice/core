@@ -2101,7 +2101,7 @@ class GtkInstanceBuilder;
 #if !GTK_CHECK_VERSION(4, 0, 0)
         if (nKeyCode == 0)
         {
-            GdkKeymap* keymap = gdk_keymap_get_default();
+            GdkKeymap* keymap = gdk_keymap_get_for_display(gdk_display_get_default());
             guint8 best_group = GtkSalFrame::GetBestAccelKeyGroup(keymap, group);
             guint updated_keyval = GtkSalFrame::GetKeyValFor(keymap, hardware_keycode, best_group);
             nKeyCode = GtkSalFrame::GetKeyCode(updated_keyval);
@@ -12149,7 +12149,7 @@ public:
         GdkDevice* pDevice = gdk_seat_get_keyboard(pSeat);
         guint nState = gdk_device_get_modifier_state(pDevice);
 #else
-        GdkKeymap* pKeymap = gdk_keymap_get_default();
+        GdkKeymap* pKeymap = gdk_keymap_get_for_display(gdk_display_get_default());
         guint nState = gdk_keymap_get_modifier_state(pKeymap);
 #endif
         return GtkSalFrame::GetKeyModCode(nState);

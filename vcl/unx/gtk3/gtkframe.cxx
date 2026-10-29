@@ -461,7 +461,7 @@ bool GtkSalFrame::doKeyCallback( guint state,
     if( aEvent.mnCode == 0 )
     {
         // Try and find Latin layout
-        GdkKeymap* keymap = gdk_keymap_get_default();
+        GdkKeymap* keymap = gdk_keymap_get_for_display(gdk_display_get_default());
         guint8 best_group = GetBestAccelKeyGroup(keymap, group);
         guint updated_keyval = GetKeyValFor(keymap, hardware_keycode, best_group);
         aEvent.mnCode = GetKeyCode(updated_keyval);
