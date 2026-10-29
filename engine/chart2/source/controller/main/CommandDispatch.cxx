@@ -20,6 +20,9 @@
 #include <sal/config.h>
 
 #include <CommandDispatch.hxx>
+#include <com/sun/star/frame/DispatchResultEvent.hpp>
+#include <com/sun/star/frame/DispatchResultState.hpp>
+#include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <comphelper/kit.hxx>
 #include <COKit/COKit.hxx>
@@ -58,6 +61,18 @@ void CommandDispatch::disposing(std::unique_lock<std::mutex>& rGuard)
 // ____ XDispatch ____
 void CommandDispatch::dispatch( const util::URL& /* URL */, const Sequence< beans::PropertyValue >& /* Arguments */ )
 {}
+
+// ____ XNotifyingDispatch ____
+void CommandDispatch::dispatchWithNotification(
+    const util::URL& URL, const Sequence< beans::PropertyValue >& Arguments,
+    const Reference< frame::XDispatchResultListener >& Listener )
+{
+    // the chart runs its commands to their end within dispatch
+    dispatch( URL, Arguments );
+    if( Listener.is() )
+        Listener->dispatchFinished( frame::DispatchResultEvent(
+            static_cast< frame::XDispatch* >( this ), frame::DispatchResultState::SUCCESS, cpo::uno::Any() ) );
+}
 
 void CommandDispatch::addStatusListener( const Reference< frame::XStatusListener >& Control, const util::URL& URL )
 {

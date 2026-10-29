@@ -20,7 +20,7 @@
 
 #include <comphelper/compbase.hxx>
 #include <comphelper/interfacecontainer4.hxx>
-#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 
 #include <map>
@@ -34,7 +34,7 @@ namespace chart
 namespace impl
 {
 typedef ::comphelper::WeakComponentImplHelper<
-        css::frame::XDispatch,
+        css::frame::XNotifyingDispatch,
         css::util::XModifyListener >
     CommandDispatch_Base;
 }
@@ -97,6 +97,13 @@ protected:
     virtual void addStatusListener(
         const cpo::uno::Reference< css::frame::XStatusListener >& Control,
         const css::util::URL& URL ) override;
+
+    // ____ XNotifyingDispatch ____
+    /// runs the command as dispatch does, and tells the listener it is done once it returns
+    virtual void dispatchWithNotification(
+        const css::util::URL& URL,
+        const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments,
+        const cpo::uno::Reference< css::frame::XDispatchResultListener >& Listener ) override;
     virtual void removeStatusListener(
         const cpo::uno::Reference< css::frame::XStatusListener >& Control,
         const css::util::URL& URL ) override;
