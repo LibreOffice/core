@@ -645,8 +645,7 @@ RemoteDocumentBroker::RemoteDocumentBroker()
 
 bool RemoteDocumentBroker::isEnabled()
 {
-    static const bool enabled =
-        ConfigUtil::getConfigValue<bool>("remote_links.enable", false);
+    static const bool enabled = ConfigUtil::getBool("remote_links.enable", false);
     return enabled;
 }
 
