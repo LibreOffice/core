@@ -6,7 +6,6 @@ PORTNAME=	collabora-office
 DISTVERSION=	26.04.4.1-1
 CATEGORIES=	editors
 MASTER_SITES=	https://www.collaboraoffice.com/downloads/collabora-office/src/ \
-		https://www.collaboraoffice.com/downloads/collabora-office-brand/:brand \
 		https://gerrit.collaboraoffice.com/src/:src \
 		https://gerrit.collaboraoffice.com/extern/:extern \
 		https://gerrit.collaboraoffice.com/src/:poco
@@ -15,13 +14,11 @@ MASTER_SITES=	https://www.collaboraoffice.com/downloads/collabora-office/src/ \
 # engine tree with "gmake -f Makefile.fetch fetch-names" after a bump of
 # engine/download.lst.
 DISTFILES=	${DISTNAME}${EXTRACT_SUFX} \
-		collabora-office-brand-${BRAND_VERSION}.tar.gz:brand \
 		${ENGINE_SRC_TARBALLS:S/$/:src/} \
 		f543e6e2d7275557a839a164941c0a86e5f2c3f2a0042bfc434c88c6dde9e140-opens___.ttf:extern \
 		poco-1.15.4-all.tar.bz2:poco
 DIST_SUBDIR=	collabora-office
-EXTRACT_ONLY=	${DISTNAME}${EXTRACT_SUFX} \
-		collabora-office-brand-${BRAND_VERSION}.tar.gz
+EXTRACT_ONLY=	${DISTNAME}${EXTRACT_SUFX}
 
 MAINTAINER=	releng@collaboraoffice.com
 COMMENT=	Collabora Office desktop application
@@ -153,8 +150,6 @@ MAKE_ENV+=	container=port
 
 BINARY_ALIAS=	make=gmake
 
-BRAND_VERSION=	26.04.2.3
-BRAND_WRKSRC=	${WRKDIR}/collabora-office-brand
 ENGINE_WRKSRC=	${WRKSRC}/engine
 # The engine's distro-pack-install puts it under ${PREFIX}/lib/collaboraoffice,
 # which is what the app is configured with as --with-lo-path.
@@ -172,8 +167,7 @@ APP_CONFIGURE_ARGS=	--prefix=${PREFIX} --enable-qtapp --disable-server \
 			--with-lo-builddir=${ENGINE_WRKSRC} \
 			--with-vendor="Collabora Productivity Limited" \
 			--with-app-name="Collabora Office" \
-			--with-info-url=https://collaboraoffice.com/ \
-			--with-app-branding=${BRAND_WRKSRC} MAKE=${MAKE_CMD}
+			--with-info-url=https://collaboraoffice.com/ MAKE=${MAKE_CMD}
 
 ENGINE_SRC_TARBALLS=	afdko-5.0.1.tar.gz antlr4-cpp-runtime-4.13.2-source.zip \
 			cairo-1.18.4.tar.xz dragonbox-1.1.3.tar.gz \

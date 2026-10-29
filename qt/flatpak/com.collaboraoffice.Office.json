@@ -975,20 +975,6 @@
           "dest-filename": "opendyslexic-0.910.12-rc2-2019.10.17.zip"
         }
       ]
-    },
-    {
-      "name": "collabora-office-branding",
-      "buildsystem": "simple",
-      "build-commands": [
-        "cp -a branding* images /app/share/coolwsd/browser/dist/"
-      ],
-      "sources": [
-        {
-          "type": "archive",
-          "url": "https://www.collaboraoffice.com/downloads/collabora-office-brand/collabora-office-brand-26.04.4.3.tar.gz",
-          "sha256": "ea69060440d7d8d8694f42600ccd86fa2275dfef417324f8ad3818a6bd634288"
-        }
-      ]
     }
   ]
 }

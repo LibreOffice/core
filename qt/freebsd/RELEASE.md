@@ -28,14 +28,13 @@ The port builds two things from one source tarball: the engine, configured with 
 
 The distro-config takes every library the ports tree carries from packages and builds only the few externals the engine needs in its own form: the patched cairo and pixman, libjpeg-turbo, pdfium, POCO, argon2, dragonbox, libfixmath, zxcvbn, quickjs, afdko with antlr4, meson, and the OpenSymbol font. Fonts are not bundled; the port declares fourteen font packages as run-time dependencies instead. The engine's externals are listed as additional distfiles so the build needs no network access, which poudriere enforces. The browser build installs its npm packages from the shrinkpack committed in `browser/node_shrinkpack`, so npm needs no network either.
 
-The port fetches three kinds of files: the release source tarball from the Collabora download site, the branding tarball from the Collabora download site, and the engine externals, POCO included, from our own mirror at gerrit.collaboraoffice.com.
+The port fetches two kinds of files: the release source tarball from the Collabora download site, and the engine externals, POCO included, from our own mirror at gerrit.collaboraoffice.com.
 
 ## 3. Deliverables of a release, in one list
 
 - A release tag, the same name in the online repository and in the translations repository, for example `coda-26.04.4.1-1`.
 - `collabora-office-<version>.tar.xz`, made by `scripts/make-source-tarball.sh` from that tag and published at `https://www.collaboraoffice.com/downloads/collabora-office/src/`. The version is the tag without its product prefix, so `coda-26.04.4.1-1` gives `collabora-office-26.04.4.1-1.tar.xz`.
-- The branding tarball `collabora-office-brand-<version>.tar.gz` at `https://www.collaboraoffice.com/downloads/collabora-office-brand/`, which already exists for the snap and flatpak and is shared with them.
-- An updated port: `Makefile` with the new `DISTVERSION` and, when the branding changed, `BRAND_VERSION`; regenerated `distinfo`; regenerated `pkg-plist` if the installed file set changed.
+- An updated port: `Makefile` with the new `DISTVERSION`; regenerated `distinfo`; regenerated `pkg-plist` if the installed file set changed.
 - A `poudriere testport` log showing a clean build.
 - A Bugzilla report with the patch, or for the first release the new port directory.
 
@@ -108,7 +107,7 @@ Publish the file at `https://www.collaboraoffice.com/downloads/collabora-office/
 
 ### 5.3 Port Makefile
 
-In `qt/freebsd/editors/collabora-office/Makefile`, set `DISTVERSION` to the version, `26.04.4.1-1` in the example, and `BRAND_VERSION` to the branding tarball version in use. The ports framework turns `26.04.4.1-1` into the package version `26.04.4.1.1`.
+In `qt/freebsd/editors/collabora-office/Makefile`, set `DISTVERSION` to the version, `26.04.4.1-1` in the example. The ports framework turns `26.04.4.1-1` into the package version `26.04.4.1.1`.
 
 If `engine/download.lst` changed since the last release, regenerate the list of engine externals: configure an engine tree with `--with-distro=CPFreeBSDQt`, run `gmake -f Makefile.fetch fetch-names` in it, and update `ENGINE_SRC_TARBALLS` and the other `DISTFILES` entries accordingly. The README in `qt/freebsd/` says which download site each entry belongs to.
 
@@ -183,8 +182,8 @@ Expected result: a committer, most likely from the office@FreeBSD.org team that 
 
 Once the port is in the FreeBSD tree, a release is a patch that bumps it.
 
-1. Tag both repositories and publish the source tarball, as in 5.1 and 5.2. Publish a new branding tarball only if the branding changed.
-2. In the overlay, set `DISTVERSION`, and `BRAND_VERSION` if needed. Update the engine externals list if `engine/download.lst` changed, as in 5.3.
+1. Tag both repositories and publish the source tarball, as in 5.1 and 5.2.
+2. In the overlay, set `DISTVERSION`. Update the engine externals list if `engine/download.lst` changed, as in 5.3.
 3. `make makesum` to regenerate `distinfo`.
 4. Regenerate `pkg-plist` as in 5.5 if the installed file set may have changed. For a pure version bump this can be skipped.
 5. `portclippy` and `portfmt` as in 5.6.

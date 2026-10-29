@@ -556,15 +556,6 @@ parts:
       - -usr/share/doc/*/README*
       - -usr/share/doc/*/TODO*
       - -usr/share/doc/*/changelog*
-  branding:
-    plugin: nil
-    source: https://www.collaboraoffice.com/downloads/collabora-office-brand/collabora-office-brand-26.04.4.3.tar.gz
-    source-checksum: sha256/ea69060440d7d8d8694f42600ccd86fa2275dfef417324f8ad3818a6bd634288
-    after: [collabora-office]
-    override-build: |
-      set -e
-      mkdir -p "$CRAFT_PART_INSTALL/usr/share/coolwsd/browser/dist"
-      cp -a branding* images "$CRAFT_PART_INSTALL/usr/share/coolwsd/browser/dist/"
 
   # mythes-pl shipped as a separate part because its Ubuntu .deb declares
   # Depends: libreoffice-core (a Debian packaging quirk, not a runtime

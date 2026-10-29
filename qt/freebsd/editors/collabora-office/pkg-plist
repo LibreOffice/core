@@ -3702,8 +3702,6 @@ share/coolwsd/browser/dist/backstage.css
 share/coolwsd/browser/dist/branding-desktop.css
 share/coolwsd/browser/dist/branding-mobile.css
 share/coolwsd/browser/dist/branding-tablet.css
-share/coolwsd/browser/dist/branding-unsupported.css
-share/coolwsd/browser/dist/branding-unsupported.js
 share/coolwsd/browser/dist/branding.css
 share/coolwsd/browser/dist/branding.js
 share/coolwsd/browser/dist/btns.css
@@ -3779,6 +3777,10 @@ share/coolwsd/browser/dist/images/columns_52x60.svg
 share/coolwsd/browser/dist/images/columnstack3d_52x60.svg
 share/coolwsd/browser/dist/images/columnstack_52x60.svg
 share/coolwsd/browser/dist/images/columnstackline_52x60.svg
+share/coolwsd/browser/dist/images/compact-logo-drawing.svg
+share/coolwsd/browser/dist/images/compact-logo-presentation.svg
+share/coolwsd/browser/dist/images/compact-logo-spreadsheet.svg
+share/coolwsd/browser/dist/images/compact-logo-text.svg
 share/coolwsd/browser/dist/images/compact_backcolor.svg
 share/coolwsd/browser/dist/images/compact_basicshapes.svg
 share/coolwsd/browser/dist/images/compact_centerpara.svg
@@ -5944,7 +5946,6 @@ share/coolwsd/browser/dist/images/lc_saved.svg
 share/coolwsd/browser/dist/images/lc_saved_branding.svg
 share/coolwsd/browser/dist/images/lc_savemodified.svg
 share/coolwsd/browser/dist/images/lc_savemodified_branding.svg
-share/coolwsd/browser/dist/images/lc_saving_branding.svg
 share/coolwsd/browser/dist/images/lc_sb_softedge_radius.svg
 share/coolwsd/browser/dist/images/lc_scresnc01.svg
 share/coolwsd/browser/dist/images/lc_scresnc02.svg
@@ -6397,7 +6398,6 @@ share/coolwsd/browser/dist/images/text-path_branding.svg
 share/coolwsd/browser/dist/images/toolbar-bg-logo-dark.svg
 share/coolwsd/browser/dist/images/toolbar-bg-logo-notebookbar.svg
 share/coolwsd/browser/dist/images/toolbar-bg-logo.svg
-share/coolwsd/browser/dist/images/toolbar-bg.svg
 share/coolwsd/browser/dist/images/tr/lc_italic.svg
 share/coolwsd/browser/dist/images/typearea_16.svg
 share/coolwsd/browser/dist/images/typebar_16.svg
@@ -6441,12 +6441,8 @@ share/coolwsd/browser/dist/images/warningbox.svg
 share/coolwsd/browser/dist/images/wrapoff.svg
 share/coolwsd/browser/dist/images/x-office-document.svg
 share/coolwsd/browser/dist/images/x-office-drawing.svg
-share/coolwsd/browser/dist/images/x-office-drawing_branding.svg
 share/coolwsd/browser/dist/images/x-office-presentation.svg
-share/coolwsd/browser/dist/images/x-office-presentation_branding.svg
 share/coolwsd/browser/dist/images/x-office-spreadsheet.svg
-share/coolwsd/browser/dist/images/x-office-spreadsheet_branding.svg
-share/coolwsd/browser/dist/images/x-office-text_branding.svg
 share/coolwsd/browser/dist/images/zoomreset.svg
 share/coolwsd/browser/dist/impress-mobile.css
 share/coolwsd/browser/dist/impress.css

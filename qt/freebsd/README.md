@@ -6,8 +6,7 @@ builds the engine and the Qt app from one release source tarball, with the
 engine configured through `engine/distro-configs/CPFreeBSDQt.conf`.
 Everything the ports tree carries is taken from packages, fonts included; the
 few engine externals it still builds are listed in `DISTFILES` and fetched from
-their upstream sites, and the branding comes from its own tarball on the
-Collabora download site. The build itself runs without network access, as
+their upstream sites. The build itself runs without network access, as
 poudriere requires; the browser build installs its npm packages from the
 shrinkpack in `browser/node_shrinkpack`.
 
@@ -31,12 +30,12 @@ The tag's product prefix is dropped for the version, so the example gives
 
 ## Branding
 
-The port fetches `collabora-office-brand-<BRAND_VERSION>.tar.gz` from the
-Collabora download site, the same tarball the snap and flatpak use, and applies
-it the same way: the app is configured with `--with-app-branding` pointing at
-the extracted tree, which puts the CSS, images and welcome files into the
-browser bundle. The widget theme comes with the engine. Bump `BRAND_VERSION`
-and rerun `makesum` when a new branding tarball is published.
+The app is Collabora Office, so the build applies the CODA theme from
+`browser/branding` in the source tarball by itself: an app build without the
+server gets it by default, release or debug, see `browser/branding/README.md`.
+The theme's CSS and images land in the browser bundle, the welcome slideshow is
+part of the product and the widget theme comes with the engine. Nothing is
+fetched for the branding.
 
 ## Fonts
 
@@ -84,7 +83,7 @@ release. Two more things worth knowing for local tests outside poudriere:
 - `bin/coda-qt`, the app, plus the desktop file, icons, metainfo and Qt
   translations from the app's `make install`.
 - `share/coolwsd/browser/dist`, the web user interface the app shows, with the
-  branding applied.
+  CODA theme applied.
 - `lib/collaboraoffice`, the engine installation the app points at through
   `--with-lo-path`, produced by the engine's `distro-pack-install`, with the
   `online` theme definition added.
