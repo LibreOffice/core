@@ -522,6 +522,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPlaceholders)
     xSlide->insertTextBox(u"x"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSlide->getPlaceholders().getLength());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xSlide->getShapes().getLength());
+    CPPUNIT_ASSERT(!xSlide->getPlaceholder(scriptinterop::PlaceholderType_NONE).IsPresent);
     // On the title layout the title is the centered title, and the second placeholder is the
     // subtitle.
     auto const xTitleSlide

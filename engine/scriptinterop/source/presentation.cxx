@@ -1470,6 +1470,11 @@ public:
                 u"getPlaceholder: expected a non-negative index, got "_ustr
                 + OUString::number(placeholderIndex));
         }
+        // An ordinary shape reports NONE, but it is no placeholder.
+        if (wanted == scriptinterop::PlaceholderType_NONE)
+        {
+            return {false, {}};
+        }
         auto const layout = pageAutoLayout(page_);
         sal_Int32 seen = 0;
         for (auto const& shape : shapes())
