@@ -2223,12 +2223,12 @@ void GtkSalFrame::GetWorkArea( AbsoluteScreenPixelRectangle& rRect )
 {
     GdkRectangle aRect;
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    GdkScreen  *pScreen = gtk_widget_get_screen(m_pWindow);
+    GdkDisplay* pDisplay = gtk_widget_get_display(m_pWindow);
     AbsoluteScreenPixelRectangle aRetRect;
-    int max = gdk_screen_get_n_monitors (pScreen);
+    int max = gdk_display_get_n_monitors(pDisplay);
     for (int i = 0; i < max; ++i)
     {
-        gdk_screen_get_monitor_workarea(pScreen, i, &aRect);
+        gdk_monitor_get_workarea(gdk_display_get_monitor(pDisplay, i), &aRect);
         AbsoluteScreenPixelRectangle aMonitorRect(aRect.x, aRect.y, aRect.x+aRect.width, aRect.y+aRect.height);
         aRetRect.Union(aMonitorRect);
     }
