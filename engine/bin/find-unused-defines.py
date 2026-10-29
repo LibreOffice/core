@@ -116,7 +116,6 @@ excludeDirs = {
     ".vscode",
     "android",
     "animations",
-    "bean",
     "bin",
     "config_host",
     "compilerplugins",

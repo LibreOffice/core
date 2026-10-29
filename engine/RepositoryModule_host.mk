@@ -60,7 +60,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	) \
 	basegfx \
 	basic \
-	bean \
 	binaryurp \
 	bridges \
     codemaker \

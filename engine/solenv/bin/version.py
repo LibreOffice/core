@@ -8,7 +8,6 @@ import sys
 M = {
   'juh': 'javaunohelper',
   'jurt': 'jurt',
-  'officebean': 'bean',
   'ridl': 'ridljar',
   'unoil': 'unoil',
   'unoloader': 'ridljar',
