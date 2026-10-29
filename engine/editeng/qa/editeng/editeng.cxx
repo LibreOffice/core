@@ -253,6 +253,26 @@ CPPUNIT_TEST_FIXTURE(Test, testRTFBullet)
     CPPUNIT_ASSERT(aCnt.find("\\fi-600\\li1200") != std::string::npos);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testODFCopyOfOneParagraph)
+{
+    // Given a text of three paragraphs:
+    EditEngine aEditEngine(mpItemPool.get());
+    aEditEngine.SetText(u"alpha\nbravo\ncharlie"_ustr);
+
+    // When copying the middle paragraph:
+    uno::Reference<datatransfer::XTransferable> xData
+        = aEditEngine.CreateTransferable(ESelection(1, 0, 1, 5));
+
+    // Then the ODF on the clipboard holds that paragraph and not the others:
+    auto pData = dynamic_cast<EditDataObject*>(xData.get());
+    SvMemoryStream& rStream = pData->GetODFStream();
+    std::string aContent{ static_cast<const char*>(rStream.GetData()),
+                          static_cast<size_t>(rStream.GetSize()) };
+    CPPUNIT_ASSERT(aContent.find("bravo") != std::string::npos);
+    CPPUNIT_ASSERT_EQUAL(std::string::npos, aContent.find("alpha"));
+    CPPUNIT_ASSERT_EQUAL(std::string::npos, aContent.find("charlie"));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf119192)
 {
     // Tests that font changes due to a script type change are placed in paragraph scope

@@ -1712,6 +1712,7 @@ SvxUnoTextBase::SvxUnoTextBase(const SvxUnoTextBase& rText)
 ,   lang::XTypeProvider()
 {
     xParentText = rText.xParentText;
+    mbEnumerateSelectionOnly = rText.mbEnumerateSelectionOnly;
 }
 
 SvxUnoTextBase::~SvxUnoTextBase() noexcept
@@ -2012,16 +2013,16 @@ uno::Reference< container::XEnumeration > SvxUnoTextBase::createEnumeration()
     if (!GetEditSource())
         return uno::Reference< container::XEnumeration >();
 
-    if (maSelection == ESelection(0, 0, 0, 0) || maSelection == ESelection(EE_PARA_MAX, 0, 0, 0))
-    {
-        ESelection aSelection;
-        ::GetSelection( aSelection, GetEditSource()->GetTextForwarder() );
-        return new SvxUnoTextContentEnumeration(*this, aSelection);
-    }
-    else
+    // Setting text through this object moves its selection, so the whole text comes from the
+    // edit source, and only the export of part of a text enumerates the selection:
+    if (mbEnumerateSelectionOnly && maSelection != ESelection(0, 0, 0, 0)
+        && maSelection != ESelection(EE_PARA_MAX, 0, 0, 0))
     {
         return new SvxUnoTextContentEnumeration(*this, maSelection);
     }
+    ESelection aSelection;
+    ::GetSelection( aSelection, GetEditSource()->GetTextForwarder() );
+    return new SvxUnoTextContentEnumeration(*this, aSelection);
 }
 
 // XElementAccess ( container::XEnumerationAccess )

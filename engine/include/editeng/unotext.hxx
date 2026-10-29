@@ -446,6 +446,7 @@ class EDITENG_DLLPUBLIC SvxUnoTextBase  : public SvxUnoTextRangeBase,
                         public css::lang::XTypeProvider
 {
     cpo::uno::Reference< css::text::XText >   xParentText;
+    bool mbEnumerateSelectionOnly = false;
 
 protected:
     SvxUnoTextBase(const SvxItemPropertySet* _pSet);
@@ -457,6 +458,10 @@ public:
     UNO3_GETIMPLEMENTATION_DECL( SvxUnoTextBase )
 
     cpo::uno::Reference< css::text::XTextCursor > createTextCursorBySelection( const ESelection& rSel );
+
+    /** Limits the paragraph enumeration to the current selection, as when exporting part of the
+        text. Otherwise the enumeration covers the whole text as it is when it is created. */
+    void SetEnumerateSelectionOnly() { mbEnumerateSelectionOnly = true; }
 
     // cpo::uno::XInterface
     /// @throws cpo::uno::RuntimeException

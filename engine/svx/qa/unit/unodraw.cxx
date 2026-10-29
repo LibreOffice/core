@@ -21,6 +21,8 @@
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/util/XBlurEffect.hpp>
+#include <com/sun/star/text/XTextPortionAppend.hpp>
+#include <com/sun/star/text/XParagraphAppend.hpp>
 #include <com/sun/star/util/XComplexColor.hpp>
 #include <com/sun/star/util/XGlowEffect.hpp>
 #include <com/sun/star/util/XInnerShadowEffect.hpp>
@@ -209,6 +211,32 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testTitleShapeBullets)
     // Without the accompanying fix in place, this test would have failed, because the 2 paragraphs
     // were merged together (e.g. 1 bullet instead of 2 bullets for bulleted paragraphs).
     CPPUNIT_ASSERT(xTextE->hasMoreElements());
+}
+
+CPPUNIT_TEST_FIXTURE(UnodrawTest, testParagraphsAfterSetString)
+{
+    // Given a title shape whose text was set and then got a second paragraph:
+    loadFromURL(u"private:factory/simpress"_ustr);
+    uno::Reference<drawing::XDrawPagesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<text::XText> xText(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    xText->setString(u"foo"_ustr);
+    uno::Reference<text::XParagraphAppend> xParagraphAppend(xText, uno::UNO_QUERY);
+    xParagraphAppend->finishParagraph({});
+    uno::Reference<text::XTextPortionAppend> xPortionAppend(xText, uno::UNO_QUERY);
+    xPortionAppend->appendTextPortion(u"bar"_ustr, {});
+
+    // Then the paragraphs of the text are both paragraphs:
+    uno::Reference<container::XEnumerationAccess> xTextEA(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xTextE = xTextEA->createEnumeration();
+    CPPUNIT_ASSERT(xTextE->hasMoreElements());
+    xTextE->nextElement();
+    // Without the accompanying fix in place, this failed, the enumeration ended after the text
+    // that setString had set.
+    CPPUNIT_ASSERT(xTextE->hasMoreElements());
+    uno::Reference<text::XTextRange> xSecond(xTextE->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"bar"_ustr, xSecond->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(UnodrawTest, testPngExport)

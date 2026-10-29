@@ -277,6 +277,7 @@ SvxXMLTextExportComponent::SvxXMLTextExportComponent(
 
     mxText = new SvxUnoText( &aEditSource, &aSvxXMLTextExportComponentPropertySet, mxText );
     mxText->SetSelection(rSel);
+    mxText->SetEnumerateSelectionOnly();
 }
 
 void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& rSel )
