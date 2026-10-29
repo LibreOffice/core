@@ -819,44 +819,61 @@ class ClassicInPlaceContext implements InteractionContext {
 	}
 
 	/*
-		Escape steps out one level at a time, as out of a group: from a selected part to the part
-		holding it, the one above it that the object selects on its own, up to the outermost
-		part. From there, or with nothing selected inside, Escape goes to the engine, which
-		leaves the object and keeps it selected.
+		Escape steps out one level at a time, as the chart's own keys go up a level: from a
+		selected part to the part a level up. From the top level, or with nothing selected inside,
+		the object is left, and it stays selected.
 	*/
 	public escape(): boolean {
 		const place = Interaction.placeOf(GraphicSelection.selectedObjectIDs);
 		if (place.kind !== 'inPlace') return false;
 
-		const selected = GraphicSelection.selectedObjectIDs[0];
-		if (selected !== undefined && selected !== place.object) {
-			for (
-				let above = RenderGeometrySection.parentOf(selected), guard = 0;
-				above !== undefined && above !== place.object && guard < 100;
-				above = RenderGeometrySection.parentOf(above), ++guard
-			) {
-				if (RenderGeometrySection.objectOf(above)?.chartPart !== undefined) {
-					GraphicSelection.selectAndShow([above]);
-					return true;
-				}
-			}
+		const outside = ClassicInPlaceContext.keysOf()?.outside;
+		if (outside !== undefined) {
+			GraphicSelection.selectAndShow([outside]);
+			return true;
 		}
 
-		// at the outermost part, or with nothing selected inside, the object is left here, as
-		// a press on nothing outside leaves it: selecting the object itself ends being active
-		// in the engine and keeps it selected
+		// at the top level, or with nothing selected inside, the object is left here, as a press
+		// on nothing outside leaves it: selecting the object itself ends being active in the
+		// engine and keeps it selected
 		const object = place.object;
 		GraphicSelection.leaveInPlace();
 		GraphicSelection.selectAndShow([object]);
 		return true;
 	}
 
+	/// Return and F3 go a level down, to the first part there, as the chart's own keys do. A
+	/// part with nothing below it leaves the key to the object.
 	public enterKey(): boolean {
-		return false;
+		return ClassicInPlaceContext.goTo(ClassicInPlaceContext.keysOf()?.inside);
 	}
 
+	/// Ctrl+F3 goes a level up.
 	public leaveKey(): boolean {
-		return false;
+		return ClassicInPlaceContext.goTo(ClassicInPlaceContext.keysOf()?.outside);
+	}
+
+	/// Where the chart's keys go from the part selected inside the active object, nothing where
+	/// no such part is selected.
+	private static keysOf(): cool.SlideObject['chartKeys'] {
+		const selected = GraphicSelection.selectedObjectIDs;
+		if (selected.length !== 1) return undefined;
+		return RenderGeometrySection.objectOf(selected[0])?.chartKeys;
+	}
+
+	/// Selects that part here at once and names it to the engine; nothing for no part.
+	private static goTo(part: number | undefined): boolean {
+		if (part === undefined) return false;
+		GraphicSelection.selectAndShow([part]);
+		return true;
+	}
+
+	/// The first part of the top level, where the chart starts, nothing where none is known.
+	private static firstPart(): number | undefined {
+		const data = RenderGeometrySection.currentPart();
+		return data?.order.find(
+			(objectId: number) => data.objects.get(objectId)?.chartKeys?.first,
+		);
 	}
 
 	public commandStates(): { [command: string]: boolean } {
@@ -898,12 +915,23 @@ class ClassicInPlaceContext implements InteractionContext {
 	}
 
 	/*
-		Tab goes to the object active in place, which goes through its parts as it does in the
-		office: a chart takes the title first, round the parts of one level, Enter and F3 go down
-		a level. It reports the part it selected as its own selection.
+		Tab goes through the parts of one level as the chart's own keys do, round and round, and
+		with nothing selected inside it starts at the first part of the top level, going back at
+		the last. It is done here at once, along the ways the chart told; the engine is told what
+		is selected, as for a press.
 	*/
-	public tabKey(_forwards: boolean): boolean {
-		return false;
+	public tabKey(forwards: boolean): boolean {
+		const keys = ClassicInPlaceContext.keysOf();
+		if (keys)
+			return ClassicInPlaceContext.goTo(forwards ? keys.next : keys.previous);
+
+		const first = ClassicInPlaceContext.firstPart();
+		if (first === undefined) return false;
+		return ClassicInPlaceContext.goTo(
+			forwards
+				? first
+				: RenderGeometrySection.objectOf(first)?.chartKeys?.previous,
+		);
 	}
 
 	public toAnEnd(_first: boolean): boolean {

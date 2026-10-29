@@ -374,6 +374,19 @@ namespace cool {
 			resizable?: boolean;
 			rotatable?: boolean;
 		};
+		/** Where the chart's own keys go from a part of a chart active in place, by ids: next and
+		 * previous are the parts of its level going round, inside the first part a level down,
+		 * outside the part a level up; first marks the first part of the top level, where the
+		 * chart starts. Absent for any object the keys do not go to, and a link absent where
+		 * there is none.
+		 */
+		chartKeys?: {
+			next?: number;
+			previous?: number;
+			inside?: number;
+			outside?: number;
+			first?: boolean;
+		};
 		gluePoints?: ObjectGluePoint[];
 		/** The four glue points the object has at the middles of its sides - the upper, the
 		 * right, the lower and the left one - where they lie on the object, as gluePoints are
