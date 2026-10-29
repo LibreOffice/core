@@ -1196,11 +1196,7 @@ GtkWidget *SalGtkFilePicker::getWidget( sal_Int16 nControlId, GType *pType )
 static void HackWidthToFirst(GtkComboBox *pWidget)
 {
     GtkRequisition requisition;
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    gtk_widget_size_request(GTK_WIDGET(pWidget), &requisition);
-#else
     gtk_widget_get_preferred_size(GTK_WIDGET(pWidget), &requisition, nullptr);
-#endif
     gtk_widget_set_size_request(GTK_WIDGET(pWidget), requisition.width, -1);
 }
 
