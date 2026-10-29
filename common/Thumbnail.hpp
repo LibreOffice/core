@@ -15,6 +15,7 @@
 #include <optional>
 #include <string_view>
 #include <utility>
+#include <vector>
 
 /// The thumbnails of a document that a host can ask for with each upload of it.
 namespace Thumbnail
@@ -60,6 +61,25 @@ inline std::optional<std::pair<int, int>> parseSize(std::string_view size)
         return std::nullopt;
 
     return std::make_pair(*width, *height);
+}
+
+/// Parses sizes written as "<W>x<H>" and separated by commas, as "1000x1000,256x256".
+/// Returns the sizes that parseSize reads, in their order, at most MaxCount of them. An entry
+/// it cannot read is left out.
+inline std::vector<std::pair<int, int>> parseSizeList(std::string_view list)
+{
+    std::vector<std::pair<int, int>> sizes;
+    while (!list.empty() && sizes.size() < MaxCount)
+    {
+        const std::size_t comma = list.find(',');
+        const std::string_view entry = list.substr(0, comma);
+        list = (comma == std::string_view::npos) ? std::string_view() : list.substr(comma + 1);
+
+        if (const std::optional<std::pair<int, int>> size = parseSize(entry))
+            sizes.push_back(*size);
+    }
+
+    return sizes;
 }
 
 } // namespace Thumbnail

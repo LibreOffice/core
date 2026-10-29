@@ -92,6 +92,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testSaveResult);
     CPPUNIT_TEST(testFitPageInBox);
     CPPUNIT_TEST(testThumbnailParseSize);
+    CPPUNIT_TEST(testThumbnailParseSizeList);
     CPPUNIT_TEST(testParseThumbnailSizes);
     CPPUNIT_TEST_SUITE_END();
 
@@ -130,6 +131,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testSaveResult();
     void testFitPageInBox();
     void testThumbnailParseSize();
+    void testThumbnailParseSizeList();
     void testParseThumbnailSizes();
 
     size_t waitForThreads(size_t count);
@@ -1566,6 +1568,36 @@ void WhiteBoxTests::testThumbnailParseSize()
     LOK_ASSERT_EQUAL(std::string("none"), parse("0256x256"));
     LOK_ASSERT_EQUAL(std::string("none"), parse("256x256px"));
     LOK_ASSERT_EQUAL(std::string("none"), parse("256x256x256"));
+}
+
+void WhiteBoxTests::testThumbnailParseSizeList()
+{
+    constexpr auto testname = __func__;
+
+    // The parsed sizes written back as "<W>x<H>" separated by commas.
+    const auto parse = [](std::string_view text)
+    {
+        std::string joined;
+        for (const auto& [width, height] : Thumbnail::parseSizeList(text))
+            joined +=
+                (joined.empty() ? "" : ",") + std::to_string(width) + 'x' + std::to_string(height);
+        return joined;
+    };
+
+    // The sizes keep their order.
+    LOK_ASSERT_EQUAL(std::string("1000x1000,256x256"), parse("1000x1000,256x256"));
+    LOK_ASSERT_EQUAL(std::string("256x256"), parse("256x256"));
+    LOK_ASSERT_EQUAL(std::string(), parse(""));
+
+    // An entry that is not a size is left out: empty entries, text, a side out of range.
+    LOK_ASSERT_EQUAL(std::string("256x256"), parse(",256x256,"));
+    LOK_ASSERT_EQUAL(std::string("256x256"), parse("large,256x256"));
+    LOK_ASSERT_EQUAL(std::string("256x256"), parse("256x256,8x8,4096x4096"));
+    LOK_ASSERT_EQUAL(std::string(), parse(",,,"));
+
+    // At most four sizes are read.
+    LOK_ASSERT_EQUAL(std::string("16x16,32x32,64x64,128x128"),
+                     parse("16x16,32x32,64x64,128x128,256x256,512x512"));
 }
 
 void WhiteBoxTests::testParseThumbnailSizes()
