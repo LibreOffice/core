@@ -45,8 +45,10 @@
 #include <iterator>
 #include <stdexcept>
 #include <string>
+#include <string_view>
 #include <system_error>
 #include <thread>
+#include <utility>
 
 #ifndef TDOC
 #error TDOC must be defined (see Makefile.am)
@@ -71,6 +73,23 @@ std::vector<char> readDataFromFile(const std::string& filename);
 std::string readFileAsString(const std::string& filename);
 
 std::vector<char> readDataFromFile(std::unique_ptr<std::fstream>& file);
+
+/// The pixel size of a PNG image as {width, height}, read from its header. Asserts that the
+/// data starts like a PNG file.
+std::pair<int, int> getPngSize(std::string_view png, std::string_view testname);
+
+/// How a thumbnail image lies in the box it was rendered for.
+enum class ThumbnailShape
+{
+    Portrait, ///< Higher than wide, as the page is.
+    Landscape, ///< Wider than high, as the page is.
+    Filled ///< The whole box.
+};
+
+/// Asserts that png is a PNG image that fits in the box, fills it along at least one side and
+/// has the given shape.
+void assertThumbnailShape(std::string_view png, int boxWidth, int boxHeight, ThumbnailShape shape,
+                          std::string_view testname);
 
 /// Make a temp copy of a file, and prepend it with a prefix.
 /// Used by tests to avoid tainting the originals.

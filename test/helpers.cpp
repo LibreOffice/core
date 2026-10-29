@@ -153,6 +153,50 @@ std::string readFileAsString(const std::string& filename)
     return std::string(data.data(), data.size());
 }
 
+std::pair<int, int> getPngSize(std::string_view png, std::string_view testname)
+{
+    // The eight signature bytes, then the IHDR chunk with the width and the height as
+    // big-endian integers at offsets 16 and 20.
+    LOK_ASSERT_MESSAGE("Not a PNG image",
+                       png.size() >= 24 && png.substr(0, 8) == "\x89PNG\r\n\x1a\n");
+    const auto readInt = [png](std::size_t offset)
+    {
+        int value = 0;
+        for (std::size_t i = 0; i < 4; ++i)
+            value = (value << 8) | static_cast<unsigned char>(png[offset + i]);
+        return value;
+    };
+
+    return { readInt(16), readInt(20) };
+}
+
+void assertThumbnailShape(std::string_view png, int boxWidth, int boxHeight, ThumbnailShape shape,
+                          std::string_view testname)
+{
+    const auto [width, height] = getPngSize(png, testname);
+    TST_LOG("The thumbnail for the " << boxWidth << 'x' << boxHeight << " box is " << width << 'x'
+                                     << height);
+
+    // The image fits in the box and fills it along at least one side.
+    LOK_ASSERT(width >= 1 && width <= boxWidth);
+    LOK_ASSERT(height >= 1 && height <= boxHeight);
+    LOK_ASSERT(width == boxWidth || height == boxHeight);
+
+    switch (shape)
+    {
+        case ThumbnailShape::Portrait:
+            LOK_ASSERT(width < height);
+            break;
+        case ThumbnailShape::Landscape:
+            LOK_ASSERT(width > height);
+            break;
+        case ThumbnailShape::Filled:
+            LOK_ASSERT_EQUAL(boxWidth, width);
+            LOK_ASSERT_EQUAL(boxHeight, height);
+            break;
+    }
+}
+
 std::vector<char> readDataFromFile(std::unique_ptr<std::fstream>& file)
 {
     file->seekg(0, std::ios_base::end);
