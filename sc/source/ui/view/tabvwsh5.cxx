@@ -471,6 +471,9 @@ void ScTabViewShell::AppendInfoBarSelectAllSheets( const SCTAB nHiddenSheetsCoun
         weld::Button& rBtnNoShowAgain = pInfoBar->addButton();
         rBtnNoShowAgain.set_label( ScResId( STR_NOSHOWAGAIN ) );
         rBtnNoShowAgain.connect_clicked( LINK( this, ScTabViewShell, DontShowAgainHdl ) );
+        weld::Button& rBtnDeselectHiddenSheets = pInfoBar->addButton();
+        rBtnDeselectHiddenSheets.set_label( ScResId( STR_DESELECT_HIDDEN_SHEETS, nHiddenSheetsCount ) );
+        rBtnDeselectHiddenSheets.connect_clicked( LINK( this, ScTabViewShell, DeselectHiddenSheetsHdl ) );
     }
 }
 
@@ -480,6 +483,19 @@ IMPL_LINK_NOARG(ScTabViewShell, DontShowAgainHdl, weld::Button&, void)
         comphelper::ConfigurationChanges::create());
     officecfg::Office::UI::Infobar::Enabled::HiddenSheetsSelected::set(false, batch);
     batch->commit();
+    RemoveInfoBarSelectAllSheets();
+}
+
+IMPL_LINK_NOARG(ScTabViewShell, DeselectHiddenSheetsHdl, weld::Button&, void)
+{
+    ScDocument& rDoc = GetViewData().GetDocument();
+    ScMarkData& rMark = GetViewData().GetMarkData();
+    SCTAB nCount = rDoc.GetTableCount();
+    for ( SCTAB i = 0; i < nCount; i++ )
+    {
+        if ( !rDoc.IsVisible( i ) )
+            rMark.SelectTable( i, false );
+    }
     RemoveInfoBarSelectAllSheets();
 }
 
