@@ -116,6 +116,10 @@
         <translation>Lagre dokument</translation>
     </message>
     <message>
+        <source>This folder holds the drafts and is cleaned up automatically. Choose another location.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Cannot open remote document</source>
         <translation>Kan ikke åpne det eksterne dokumentet</translation>
     </message>
@@ -184,6 +188,10 @@
         <translation>Tegning</translation>
     </message>
     <message>
+        <source>%1 (Draft)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Supported files</source>
         <translation>Støttede filer</translation>
     </message>
@@ -211,6 +219,11 @@
     <message>
         <source>(untitled)</source>
         <extracomment>The name in a tab whose document has no name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Draft</source>
+        <extracomment>Badge in a tab whose document is a draft, not yet saved to a file of its own</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
