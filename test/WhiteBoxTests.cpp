@@ -26,6 +26,7 @@
 #include <common/SaveResult.hpp>
 #include <common/StateEnum.hpp>
 #include <common/ThreadPool.hpp>
+#include <common/Thumbnail.hpp>
 #include <common/Util.hpp>
 #include <kit/KitHelper.hpp>
 #include <wsd/TileCache.hpp>
@@ -89,6 +90,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testIsIso8601);
     CPPUNIT_TEST(testSaveResult);
     CPPUNIT_TEST(testFitPageInBox);
+    CPPUNIT_TEST(testThumbnailParseSize);
     CPPUNIT_TEST_SUITE_END();
 
     void testCOOLProtocolFunctions();
@@ -125,6 +127,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testIsIso8601();
     void testSaveResult();
     void testFitPageInBox();
+    void testThumbnailParseSize();
 
     size_t waitForThreads(size_t count);
 };
@@ -1522,6 +1525,44 @@ void WhiteBoxTests::testFitPageInBox()
     LOK_ASSERT_EQUAL(std::string("1x1"), fit(256, 256, 0, A4Long));
     LOK_ASSERT_EQUAL(std::string("1x1"), fit(256, 256, A4Short, -1));
     LOK_ASSERT_EQUAL(std::string("1x1"), fit(0, 256, A4Short, A4Long));
+}
+
+void WhiteBoxTests::testThumbnailParseSize()
+{
+    constexpr auto testname = __func__;
+
+    // The parsed size as "<W>x<H>" again, or "none" when the text is not a size.
+    const auto parse = [](std::string_view text)
+    {
+        const auto size = Thumbnail::parseSize(text);
+        return size ? std::to_string(size->first) + 'x' + std::to_string(size->second)
+                    : std::string("none");
+    };
+
+    // A size is two decimal integers with an 'x' between them, in pixels.
+    LOK_ASSERT_EQUAL(std::string("256x256"), parse("256x256"));
+    LOK_ASSERT_EQUAL(std::string("1000x500"), parse("1000x500"));
+
+    // Each side is at least 16 and at most 2048.
+    LOK_ASSERT_EQUAL(std::string("16x2048"), parse("16x2048"));
+    LOK_ASSERT_EQUAL(std::string("none"), parse("15x256"));
+    LOK_ASSERT_EQUAL(std::string("none"), parse("256x2049"));
+    LOK_ASSERT_EQUAL(std::string("none"), parse("0x0"));
+    LOK_ASSERT_EQUAL(std::string("none"), parse("100000x256"));
+
+    // Only the plain form is a size: no sign, no leading zero, no spaces, no missing side,
+    // no other separator, nothing after the height.
+    LOK_ASSERT_EQUAL(std::string("none"), parse(""));
+    LOK_ASSERT_EQUAL(std::string("none"), parse("256"));
+    LOK_ASSERT_EQUAL(std::string("none"), parse("x256"));
+    LOK_ASSERT_EQUAL(std::string("none"), parse("256x"));
+    LOK_ASSERT_EQUAL(std::string("none"), parse("256X256"));
+    LOK_ASSERT_EQUAL(std::string("none"), parse("256 x 256"));
+    LOK_ASSERT_EQUAL(std::string("none"), parse("+256x256"));
+    LOK_ASSERT_EQUAL(std::string("none"), parse("-256x256"));
+    LOK_ASSERT_EQUAL(std::string("none"), parse("0256x256"));
+    LOK_ASSERT_EQUAL(std::string("none"), parse("256x256px"));
+    LOK_ASSERT_EQUAL(std::string("none"), parse("256x256x256"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WhiteBoxTests);
