@@ -39,7 +39,7 @@ var Base64ToArrayBuffer = function(base64Str) {
 	var ab = new ArrayBuffer(binStr.length);
 	var bv = new Uint8Array(ab);
 	for (var i = 0, l = binStr.length; i < l; i++) {
-		bv[[i]] = binStr.charCodeAt(i);
+		bv[i] = binStr.charCodeAt(i);
 	}
 	return ab;
 };
