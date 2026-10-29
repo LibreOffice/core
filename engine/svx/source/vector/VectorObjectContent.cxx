@@ -21,7 +21,9 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
@@ -35,7 +37,6 @@
 #include <svx/sdmetitm.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/svdglue.hxx>
-#include <svx/charthelper.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdmodel.hxx>
@@ -573,7 +574,43 @@ struct Embedding
     unotools::WeakReference<SdrPage> mxPage;
     unotools::WeakReference<SdrObject> mxHolder;
     basegfx::B2DHomMatrix maMapping;
+    /// told of every change of the chart's content while it is active
+    cpo::uno::Reference<css::util::XModifyListener> mxListener;
 };
+
+/*
+    marks the chart as changed whenever its content changes, while it is active, so its parts are
+    sent anew. its bounds are worked out anew then, which builds its content and so its shapes
+    anew, before they are read
+*/
+class ChartChangeListener : public cppu::WeakImplHelper<css::util::XModifyListener>
+{
+    unotools::WeakReference<SdrObject> mxChart;
+
+public:
+    explicit ChartChangeListener(SdrObject& rChart)
+        : mxChart(&rChart)
+    {
+    }
+
+    void modified(const css::lang::EventObject&) override
+    {
+        SolarMutexGuard aGuard;
+        const rtl::Reference<SdrObject> xChart(mxChart.get());
+        if (!xChart.is())
+            return;
+        xChart->SetBoundRectDirty();
+        xChart->BroadcastObjectChange();
+    }
+
+    void disposing(const css::lang::EventObject&) override {}
+};
+
+cpo::uno::Reference<css::util::XModifyBroadcaster> broadcasterOf(const SdrOle2Obj& rChart)
+{
+    return cpo::uno::Reference<css::util::XModifyBroadcaster>(rChart.getXModel(),
+                                                              cpo::uno::UNO_QUERY);
+}
 
 /// the pages and charts are held weakly, an entry whose page is gone is dropped
 std::vector<Embedding>& embeddings()
@@ -629,12 +666,12 @@ SdrPage* chartPageOf(const SdrOle2Obj& rObject)
     rectangle and stands upright on the middle of the chart as it is drawn, so a turned chart
     is shown upright over its own place, as the office shows it. The range is the one the
     chart's content is embedded by when it is not active, so nothing moves when it becomes
-    active.
+    active: the one round the shapes on the chart's page, as they are now.
 */
-basegfx::B2DHomMatrix mappingOfTheChart(const SdrOle2Obj& rObject)
+basegfx::B2DHomMatrix mappingOfTheChart(const SdrOle2Obj& rObject, const SdrPage& rPage)
 {
-    basegfx::B2DRange aRange;
-    ChartHelper::tryToGetChartContentAsPrimitive2DSequence(rObject.getXModel(), aRange);
+    const basegfx::B2DRange aRange(
+        vcl::unotools::b2DRectangleFromRectangle(rPage.GetAllObjBoundRect()));
     tools::Rectangle aWindow(rObject.GetLogicRect());
     aWindow.SetPos(rObject.GetSnapRect().Center() - Point(aWindow.GetWidth() / 2,
                                                           aWindow.GetHeight() / 2));
@@ -811,22 +848,36 @@ const SdrObjList* membersOf(const SdrObject& rObject)
             return nullptr;
         if (!activeInPlace(*pChart))
         {
+            if (const Embedding* pEmbedding = embeddingFor(pPage); pEmbedding
+                && pEmbedding->mxListener.is())
+                if (const auto xBroadcaster = broadcasterOf(*pChart); xBroadcaster.is())
+                    xBroadcaster->removeModifyListener(pEmbedding->mxListener);
             std::erase_if(embeddings(), [pPage](const Embedding& rEmbedding)
                           { return rEmbedding.mxPage.get().get() == pPage; });
             std::erase_if(partIds(), [pPage](const PartIds& rPartIds)
                           { return rPartIds.mxPage.get().get() == pPage; });
             return nullptr;
         }
+        // working the chart's bounds out builds its content anew, which renews the shapes on
+        // its page, so we have that done before the shapes are handed out
+        pChart->GetCurrentBoundRect();
         if (Embedding* pEmbedding = embeddingFor(pPage))
         {
             pEmbedding->mxHolder = const_cast<SdrOle2Obj*>(pChart);
-            pEmbedding->maMapping = mappingOfTheChart(*pChart);
+            pEmbedding->maMapping = mappingOfTheChart(*pChart, *pPage);
         }
         else
+        {
+            cpo::uno::Reference<css::util::XModifyListener> xListener(
+                new ChartChangeListener(const_cast<SdrOle2Obj&>(*pChart)));
+            if (const auto xBroadcaster = broadcasterOf(*pChart); xBroadcaster.is())
+                xBroadcaster->addModifyListener(xListener);
             embeddings().push_back(Embedding{ unotools::WeakReference<SdrPage>(pPage),
                                               unotools::WeakReference<SdrObject>(
                                                   const_cast<SdrOle2Obj*>(pChart)),
-                                              mappingOfTheChart(*pChart) });
+                                              mappingOfTheChart(*pChart, *pPage),
+                                              xListener });
+        }
         return pPage;
     }
 
