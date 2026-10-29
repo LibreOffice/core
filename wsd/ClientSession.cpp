@@ -3040,6 +3040,17 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
             oss << " template=" << _wopiFileInfo->getTemplateSource();
         }
 
+        if (_wopiFileInfo && !_wopiFileInfo->getThumbnailSizes().empty())
+        {
+            oss << " thumbnailSizes=";
+            const char* separator = "";
+            for (const std::string& size : _wopiFileInfo->getThumbnailSizes())
+            {
+                oss << separator << size;
+                separator = ",";
+            }
+        }
+
         if (!getBatchMode().empty())
         {
             oss << " batch=" << getBatchMode();

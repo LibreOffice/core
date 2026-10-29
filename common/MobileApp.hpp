@@ -78,6 +78,7 @@ public:
     };
 
     std::string getTemplateSource() const { return std::string(); }
+    std::vector<std::string> getThumbnailSizes() const { return {}; }
 
     bool getDisablePrint() const { return false; }
     bool getDisableExport() const { return false; }

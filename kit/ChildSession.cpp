@@ -38,6 +38,7 @@
 #include <common/NumUtil.hpp>
 #include <common/Png.hpp>
 #include <common/SpookyV2.h>
+#include <common/Thumbnail.hpp>
 #include <common/TraceEvent.hpp>
 #include <common/Unit.hpp>
 #include <common/Uri.hpp>
@@ -1325,6 +1326,11 @@ void ChildSession::parseLoadCommand(const StringVector& tokens, std::string& par
         else if (name == "template")
         {
             _docTemplate = std::move(value);
+        }
+        else if (name == "thumbnailSizes")
+        {
+            _thumbnailSizes = Thumbnail::parseSizeList(value);
+            LOG_DBG("Read " << _thumbnailSizes.size() << " thumbnail sizes from [" << value << ']');
         }
         else if (name == "enableMacrosExecution")
         {

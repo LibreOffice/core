@@ -426,7 +426,10 @@ public:
             << "\n\tpendingProxyCallIds: " << pendingProxyCallCount()
             << "\n\tbackgroundDownloadAs: "
             << (_downloadAs ? _downloadAs->_path.tmpDir : std::string("none"))
-            << '\n';
+            << "\n\tthumbnailSizes:";
+        for (const auto& [width, height] : _thumbnailSizes)
+            oss << ' ' << width << 'x' << height;
+        oss << '\n';
 
         _stateRecorder.dumpState(oss);
     }
@@ -472,6 +475,10 @@ private:
     int _inputSequence = 0;
 
     std::string _docType;
+
+    /// The pixel sizes, as (width, height), of the boxes the thumbnails of the document are
+    /// rendered to fit in with each upload. Empty when the host wants no thumbnails.
+    std::vector<std::pair<int, int>> _thumbnailSizes;
 
     StateRecorder _stateRecorder;
 
