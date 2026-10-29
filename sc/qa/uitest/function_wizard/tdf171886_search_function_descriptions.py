@@ -19,17 +19,19 @@ class tdf171886(UITestCase):
                 # Select the "All" category and search for "k-th"
                 select_pos(xDialog.getChild("category"), "2")
                 type_text(xDialog.getChild("search"), "k-th")
-                # Category "Text" with function "T" is shown
-                self.assertEqual("2", get_state_as_dict(xFunctions)["Children"])
+                # Without the fix in place, this test would have failed with
+                # AssertionError: '0' != '2'
+                # i.e. the category "Text" with the function T was listed, since "k-th" contains T
+                self.assertEqual("0", get_state_as_dict(xFunctions)["Children"])
 
                 # Search also in the descriptions of the functions
                 xSearchOptions = xDialog.getChild("searchoptions")
                 xSearchOptions.executeAction("OPENFROMLIST", mkPropertyValues({"POS": "1"}))
-                # In addition, category "Statistical" with functions "LARGE" and "SMALL" are shown
-                self.assertEqual("5", get_state_as_dict(xFunctions)["Children"])
+                # Category "Statistical" with functions "LARGE" and "SMALL" is shown
+                self.assertEqual("3", get_state_as_dict(xFunctions)["Children"])
 
                 # Disable the search in the descriptions of the functions again
                 xSearchOptions.executeAction("OPENFROMLIST", mkPropertyValues({"POS": "1"}))
-                self.assertEqual("2", get_state_as_dict(xFunctions)["Children"])
+                self.assertEqual("0", get_state_as_dict(xFunctions)["Children"])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -242,8 +242,10 @@ void FuncPage::UpdateFunctionList(const OUString& aStr)
                 const bool bNameMatch
                     = m_bSimilaritySearch
                           ? utl::TextSearch::SimilaritySearch(aFunction, aSearchStr, aNameScore)
+                          // tdf#171886 - match the start of the search text only with longer function
+                          // names, otherwise short names like N or T match almost every search
                           : (aFunction.indexOf(aSearchStr) >= 0
-                             || aSearchStr.indexOf(aFunction) >= 0);
+                             || (aFunction.getLength() >= 4 && aSearchStr.startsWith(aFunction)));
                 // tdf#171886 - optionally search for the desired function also in the description
                 const bool bDescriptionMatch
                     = !bNameMatch && m_bDescriptionSearch

@@ -212,8 +212,10 @@ void ScFunctionWin::SearchFunction(const OUString& rFuncName, const OUString& rS
     std::pair<sal_Int32, sal_Int32> score = std::make_pair(0, 0);
     if (bSimilaritySearch && !utl::TextSearch::SimilaritySearch(rFuncName, rSearchString, score))
         return;
+    // tdf#171886 - match the start of the search text only with longer function names,
+    // otherwise short names like N or T match almost every search
     if (!bSimilaritySearch && rFuncName.indexOf(rSearchString) < 0
-        && rSearchString.indexOf(rFuncName) < 0)
+        && (rFuncName.getLength() < 4 || !rSearchString.startsWith(rFuncName)))
         return;
 
     sFuncScores.insert(std::make_pair(score, std::make_pair(rFuncName, pDesc)));
