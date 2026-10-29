@@ -35,6 +35,7 @@
 #include <svx/svxids.hrc>
 #include <editeng/fhgtitem.hxx>
 #include <osl/diagnose.h>
+#include <comphelper/kit.hxx>
 
 #include <com/sun/star/drawing/XShape.hpp>
 
@@ -141,9 +142,14 @@ SdrPageView* DrawViewWrapper::GetPageView() const
 
 void DrawViewWrapper::SetMarkHandles(SfxViewShell* pOtherShell)
 {
+    // the kit client draws the selection itself, so the frame handles get built in any case to
+    // have the selection reported, the chart's own handles then take their place
+    const bool bKit(comphelper::COKit::isActive());
+    if (bKit)
+        SdrView::SetMarkHandles(pOtherShell);
     if( m_pMarkHandleProvider && m_pMarkHandleProvider->getMarkHandles( maHdlList ) )
         return;
-    else
+    if (!bKit)
         SdrView::SetMarkHandles(pOtherShell);
 }
 

@@ -19,6 +19,7 @@
 
 
 #include <svx/svdmrkv.hxx>
+#include <svx/VectorObjectContent.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>
@@ -1079,7 +1080,32 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
                     && SdrObject::useAdvancedDiagramFeatures())
                     pMarked = pMarked->getDiagramSubSelection();
 
-                aExtraInfo.append(OString::number(pMarked ? pMarked->GetUniqueID() : 0));
+                /*
+                    A part of a chart active in place is known by the id kept for it, which the
+                    outermost object of the part's name carries. The chart may mark an object
+                    inside the part, of that same name or one without a name that only carries
+                    the part's handles, so the part is taken from there up.
+                */
+                if (pMarked && svx::vector::chartPartNameAround(*pMarked).isEmpty())
+                {
+                    for (SdrObject* pAbove = pMarked->getParentSdrObjectFromSdrObject(); pAbove;
+                         pAbove = pAbove->getParentSdrObjectFromSdrObject())
+                        if (!svx::vector::chartPartNameAround(*pAbove).isEmpty())
+                        {
+                            pMarked = pAbove;
+                            break;
+                        }
+                }
+                if (pMarked)
+                {
+                    const OUString aPart(svx::vector::chartPartNameAround(*pMarked));
+                    for (SdrObject* pAbove = pMarked->getParentSdrObjectFromSdrObject();
+                         pAbove && !aPart.isEmpty()
+                         && svx::vector::chartPartNameAround(*pAbove) == aPart;
+                         pAbove = pAbove->getParentSdrObjectFromSdrObject())
+                        pMarked = pAbove;
+                }
+                aExtraInfo.append(OString::number(pMarked ? svx::vector::idOf(*pMarked) : 0));
             }
             aExtraInfo.append("], \"isMathObject\": " + OString::boolean(lcl_isStarMath(pO)));
             aExtraInfo.append(", \"isDiagram\": " + OString::boolean(pO->isDiagram()));

@@ -37,6 +37,7 @@
 #include <svx/svdglue.hxx>
 #include <svx/charthelper.hxx>
 #include <svx/svdhdl.hxx>
+#include <svx/svditer.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdocapt.hxx>
@@ -699,6 +700,19 @@ std::map<OUString, UniqueID>& partIdsOf(SdrPage* pPage)
     return rPartIds.back().maIds;
 }
 
+/// the outermost object of a chart page carrying that name, which is the part
+SdrObject* partNamed(const SdrPage& rPage, std::u16string_view aName)
+{
+    SdrObjListIter aIterator(&rPage, SdrIterMode::DeepWithGroups);
+    while (aIterator.IsMore())
+    {
+        SdrObject* pObject(aIterator.Next());
+        if (pObject && partNameOf(*pObject) == aName)
+            return pObject;
+    }
+    return nullptr;
+}
+
 /*
     What a part of a chart allows, from its name, as the chart decides it for its own selection
     (ObjectIdentifier::getObjectType, isDragableObject, isRotateableObject and
@@ -736,6 +750,36 @@ ObjectContent::ChartPart chartPartOf(std::u16string_view aName)
     aPart.mbRotatable = false;
     return aPart;
 }
+}
+
+OUString chartPartNameOf(const SdrObject& rObject)
+{
+    const OUString aName(partNameOf(rObject));
+    if (aName.isEmpty())
+        return aName;
+    // the part is the outermost object of that name, as idOf gives the kept id to it alone
+    if (const SdrObject* pParent = rObject.getParentSdrObjectFromSdrObject();
+        pParent && partNameOf(*pParent) == aName)
+        return OUString();
+    return aName;
+}
+
+OUString chartPartNameAround(const SdrObject& rObject) { return partNameOf(rObject); }
+
+SdrObject* chartPartById(sal_uInt64 nId)
+{
+    for (const PartIds& rPartIds : partIds())
+    {
+        const rtl::Reference<SdrPage> xPage(rPartIds.mxPage.get());
+        if (!xPage)
+            continue;
+        for (const auto& rNameId : rPartIds.maIds)
+            if (rNameId.second.getID() == nId)
+                return partNamed(*xPage, rNameId.first);
+        if (SdrObject* pObject = xPage->FindObjectByUniqueID(nId))
+            return pObject;
+    }
+    return nullptr;
 }
 
 sal_uInt64 idOf(const SdrObject& rObject)
@@ -801,6 +845,9 @@ void describeObject(SdrObject& rObject, ObjectContent& rContent,
                     const drawinglayer::geometry::ViewInformation2D& rViewInformation)
 {
     const SdrObjList* pChildren = membersOf(rObject);
+    // an active chart holds its parts and still is the embedded object
+    if (rObject.GetObjIdentifier() == SdrObjKind::OLE2)
+        rContent.meKind = SdrObjKind::OLE2;
     if (!pChildren || pChildren->GetObjCount() == 0)
     {
         if (rContent.maPrimitives.empty())
@@ -816,7 +863,9 @@ void describeObject(SdrObject& rObject, ObjectContent& rContent,
                 };
         }
 
-        rContent.maHandles = shapingHandlesOf(rObject);
+        // a part of a chart is shaped by the chart alone, it has no handles of its own kind
+        if (!embeddingOf(rObject))
+            rContent.maHandles = shapingHandlesOf(rObject);
         rContent.maPath = pathOf(rObject);
         rContent.meKind = rObject.GetObjIdentifier();
 
@@ -1088,7 +1137,16 @@ void describeObject(SdrObject& rObject, ObjectContent& rContent,
     const OUString aPartName(partNameOf(rObject));
     rContent.maName = embeddingOf(rObject) ? OUString() : rObject.GetName();
     if (!aPartName.isEmpty() && idOf(rObject) != rObject.GetUniqueID())
+    {
         rContent.moChartPart = chartPartOf(aPartName);
+        // a part is moved and resized only as the chart allows it, in place of the drawing
+        // layer's own say, which knows nothing of the chart's rules
+        rContent.mbCanBeMoved = rContent.moChartPart->mbDraggable;
+        rContent.mbCanBeResized = rContent.moChartPart->mbResizable;
+        rContent.mbCanBeTurned = rContent.moChartPart->mbRotatable;
+        rContent.mbCanBeSheared = false;
+        rContent.mbCanBeMirrored = false;
+    }
     rContent.moLayer = sal_Int32(rObject.GetLayer().get());
     rContent.mbEmptyPlaceholder = rObject.IsEmptyPresObj();
     rContent.mbTextEdit = hasActiveTextEdit(&rObject);

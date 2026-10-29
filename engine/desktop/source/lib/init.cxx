@@ -17,6 +17,7 @@
 #include <svx/svdglue.hxx>
 #include <svx/svdomeas.hxx>
 #include <svx/svdopath.hxx>
+#include <svx/VectorObjectContent.hxx>
 #include <cmath>
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -188,6 +189,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <editeng/acorrcfg.hxx>
@@ -6630,9 +6632,36 @@ void COKitDocumentImpl::selectObjects(const char* pObjectIds)
         return;
     }
 
+    const OString aObjectIds(pObjectIds ? pObjectIds : "");
+
+    /*
+        A part of a chart active in place is selected in the chart, which selects by the name it
+        knows the part by and reports the selection itself. A chart selects one part at a time, so
+        the first id names it.
+    */
+    if (SfxInPlaceClient* pClient = pViewShell->GetIPClient();
+        pClient && pClient->IsObjectInPlaceActive() && !aObjectIds.isEmpty())
+    {
+        sal_Int32 nFirst = 0;
+        const OString aId(aObjectIds.getToken(0, ',', nFirst));
+        if (SdrObject* pPart = svx::vector::chartPartById(aId.toUInt64()))
+        {
+            KitChartHelper aChart(pViewShell);
+            cpo::uno::Reference<css::view::XSelectionSupplier> xSelection(
+                aChart.GetXController(), cpo::uno::UNO_QUERY);
+            // a part the chart names is selected by its name, a shape added to the chart as shape
+            const OUString aName(svx::vector::chartPartNameOf(*pPart));
+            if (xSelection.is() && !aName.isEmpty())
+                xSelection->select(cpo::uno::Any(aName));
+            else if (xSelection.is())
+                xSelection->select(cpo::uno::Any(cpo::uno::Reference<css::drawing::XShape>(
+                    pPart->getUnoShape(), cpo::uno::UNO_QUERY)));
+            return;
+        }
+    }
+
     // The objects to mark are gathered first, so that putting the marks on can report the change
     // once, at its last step, rather than once per object.
-    const OString aObjectIds(pObjectIds ? pObjectIds : "");
     const SdrObjList* pLevel = nullptr;
     std::vector<SdrObject*> aWanted;
     // The object of a diagram asked for, where the diagram itself is marked in its place.

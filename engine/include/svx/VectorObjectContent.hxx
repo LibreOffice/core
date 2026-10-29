@@ -491,6 +491,22 @@ SVXCORE_DLLPUBLIC const SdrObjList* membersOf(const SdrObject& rObject);
  */
 SVXCORE_DLLPUBLIC sal_uInt64 idOf(const SdrObject& rObject);
 
+/** The name a chart knows that part of it by, for a part of a chart active in place that the
+    chart selects on its own, without what a drag of it changes in the name. Empty for anything
+    else.
+ */
+SVXCORE_DLLPUBLIC OUString chartPartNameOf(const SdrObject& rObject);
+
+/// The same name for any object of the part, inner objects of the same name included.
+SVXCORE_DLLPUBLIC OUString chartPartNameAround(const SdrObject& rObject);
+
+/** The object of the chart active in place that the vector view knows by that id: a part the
+    chart selects on its own by the id kept for it, any other object of the chart's page by its
+    own id, a shape someone added to the chart for one. Nothing where the chart holds no such
+    object.
+ */
+SVXCORE_DLLPUBLIC SdrObject* chartPartById(sal_uInt64 nId);
+
 /** The object holding that one as the vector view takes it: its group, or for an object on the
     page of a chart active in place, that chart. Nothing for an object directly on the page.
  */
