@@ -5514,6 +5514,9 @@ bool ChildSession::saveAs(const StringVector& tokens)
 
     if (success)
     {
+        // The thumbnails go next to the new file, at the path the saveas message names.
+        renderThumbnails(Poco::URI(encodedURL).getPath());
+
         std::string encodedWopiFilename;
         Poco::URI::encode(wopiFilename, "", encodedWopiFilename);
         sendTextFrame("saveas: url=" + encodedURL + " filename=" + encodedWopiFilename);
