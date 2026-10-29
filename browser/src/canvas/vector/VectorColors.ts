@@ -186,5 +186,51 @@ namespace cool {
 				b: linearToSrgb(b),
 			});
 		}
+
+		/// Map a light color to a darker variant for a surface on a dark
+		/// background. White comes back as dark as the background, and
+		/// lighter inputs come back darker. Saturated colors keep their hue
+		/// and stay brighter than gray ones, so a yellow does not turn into
+		/// black. A dark input or one that cannot be read comes back as it
+		/// was.
+		export function getDarkVariant(color: string, background: string): string {
+			const rgb = parse(color);
+			if (!rgb || isDark(color)) return color;
+
+			const red = clamp(rgb.r);
+			const green = clamp(rgb.g);
+			const blue = clamp(rgb.b);
+
+			const maxChannel = Math.max(red, green, blue);
+			const minChannel = Math.min(red, green, blue);
+			const saturation =
+				maxChannel < 0.001 ? 0 : (maxChannel - minChannel) / maxChannel;
+
+			// The output stays below the luminance isDark accepts, and white
+			// lands on the luminance of the background.
+			const maximumOutput = 0.2;
+			const backgroundRgb = parse(background);
+			const backgroundLuminance = backgroundRgb
+				? wcagLuminance(backgroundRgb)
+				: 0;
+			const darkest = Math.min(backgroundLuminance, maximumOutput);
+			const floor = darkest + (saturation * (maximumOutput - darkest)) / 2;
+
+			// Inputs run from the lightest isDark rejects up to white, and the
+			// targets from the maximum down to the floor.
+			const lightest = 88 / 255;
+			const luminance = wcagLuminance({ r: red, g: green, b: blue });
+			const share = (1 - luminance) / (1 - lightest);
+			const target = floor + clamp(share) * (maximumOutput - floor);
+
+			// The target is below the input, so the ratio keeps every
+			// channel in range and the hue as it was.
+			const ratio = target / luminance;
+			return format({
+				r: linearToSrgb(srgbToLinear(red) * ratio),
+				g: linearToSrgb(srgbToLinear(green) * ratio),
+				b: linearToSrgb(srgbToLinear(blue) * ratio),
+			});
+		}
 	}
 }

@@ -135,4 +135,47 @@ describe('VectorColors', function () {
 			);
 		});
 	});
+
+	describe('dark variant', function () {
+		const BACKGROUND = '#1C1C1C';
+		const darkVariant = (color: string): string =>
+			cool.VectorColors.getDarkVariant(color, BACKGROUND);
+
+		it('turns white into the background', function () {
+			nodeassert.strictEqual(darkVariant('#FFFFFF'), BACKGROUND);
+		});
+
+		it('turns light colors dark', function () {
+			for (const color of ['#FFFFFF', '#E6E6E6', '#FFEE99', '#B3CCE6'])
+				nodeassert.ok(cool.VectorColors.isDark(darkVariant(color)), color);
+		});
+
+		it('turns a lighter color darker', function () {
+			const fromLighter = luminanceOf(darkVariant('#F2F2F2'));
+			const fromDarker = luminanceOf(darkVariant('#BFBFBF'));
+			nodeassert.ok(fromLighter < fromDarker);
+		});
+
+		it('keeps the hue of a saturated color', function () {
+			// Yellow comes back a dark yellow, not black: red and green stay
+			// above blue.
+			const dark = cool.VectorColors.parse(darkVariant('#FFFF00'));
+			nodeassert.ok(dark.r > dark.b);
+			nodeassert.ok(dark.g > dark.b);
+			const yellow = luminanceOf(darkVariant('#FFFF00'));
+			nodeassert.ok(yellow > luminanceOf(BACKGROUND));
+		});
+
+		it('leaves a dark color alone', function () {
+			for (const color of ['#000000', '#102030', '#FF0000', '#000080'])
+				nodeassert.strictEqual(darkVariant(color), color);
+		});
+
+		it('leaves a color it cannot read alone', function () {
+			nodeassert.strictEqual(
+				darkVariant(cool.VectorColors.AUTOMATIC),
+				cool.VectorColors.AUTOMATIC,
+			);
+		});
+	});
 });

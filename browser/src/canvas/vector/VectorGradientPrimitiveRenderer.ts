@@ -26,9 +26,15 @@ namespace cool {
 	/// Renders the gradient primitives with Canvas 2D drawing operations.
 	export class VectorGradientPrimitiveRenderer {
 		private _scratch: VectorScratchCanvases;
+		// The color a fill of the document is drawn in on the view.
+		private _fillColor: (color: string) => string;
 
-		constructor(scratch: VectorScratchCanvases) {
+		constructor(
+			scratch: VectorScratchCanvases,
+			fillColor: (color: string) => string = (color) => color,
+		) {
 			this._scratch = scratch;
+			this._fillColor = fillColor;
 		}
 
 		renderFillGradient(
@@ -78,7 +84,9 @@ namespace cool {
 			const path = primitive.path;
 			if (!gradient || !path) return;
 
-			const fill = VectorGradientPrimitiveRenderer._parseColor(primitive.color);
+			const fill = VectorGradientPrimitiveRenderer._parseColor(
+				primitive.color && this._fillColor(primitive.color),
+			);
 			const stops = VectorGradientPrimitiveRenderer._rampStops(gradient, fill);
 
 			context.save();
@@ -274,7 +282,11 @@ namespace cool {
 			transparency: number | undefined,
 			clip: () => void,
 		): void {
-			const stops = VectorGradientPrimitiveRenderer._rampStops(gradient);
+			const stops = VectorGradientPrimitiveRenderer._rampStops(
+				gradient,
+				undefined,
+				this._fillColor,
+			);
 			if (!stops.length) return;
 
 			context.save();
@@ -529,16 +541,20 @@ namespace cool {
 		}
 
 		// The stops a gradient describes. An alpha ramp keeps the given
-		// color and reads each stop's luminance as its transparency.
+		// color and reads each stop's luminance as its transparency. A color
+		// ramp draws each stop in the color stopColor gives for it.
 		private static _rampStops(
 			gradient: GradientAttribute,
 			fill?: RampColor,
+			stopColor: (color: string) => string = (color) => color,
 		): RampStop[] {
 			const source = gradient.colorStops;
 			if (!source || !source.length) return [];
 
 			let stops: RampStop[] = source.map((stop) => {
-				const color = VectorGradientPrimitiveRenderer._parseColor(stop.color);
+				const color = VectorGradientPrimitiveRenderer._parseColor(
+					!fill && stop.color ? stopColor(stop.color) : stop.color,
+				);
 				if (typeof stop.opacity === 'number') color.alpha = stop.opacity;
 				if (fill) {
 					const luminance =

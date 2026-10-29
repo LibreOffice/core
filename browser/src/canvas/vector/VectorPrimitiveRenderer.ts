@@ -52,12 +52,21 @@ namespace cool {
 		// through it.
 		private _pageBackdrop: string | undefined = undefined;
 		private _pageBackdropTransparency = 0;
+		// Whether fills and lines keep the colors the document gives them,
+		// whatever the theme of the view. Every entry point sets it.
+		private _authoredColors = false;
+		// How many pictures enclose what is being drawn. A picture keeps
+		// the colors it has.
+		private _pictureDepth = 0;
 
 		constructor(bitmapLookup?: BitmapLookup, fontLoaded?: FontLoadedLookup) {
 			this._bitmapLookup = bitmapLookup;
 			this._fontLoaded = fontLoaded;
 			this._scratch = new VectorScratchCanvases();
-			this._gradients = new VectorGradientPrimitiveRenderer(this._scratch);
+			this._gradients = new VectorGradientPrimitiveRenderer(
+				this._scratch,
+				(color) => this._fillColor(color),
+			);
 			this._fillGraphics = new VectorFillGraphicPrimitiveRenderer(bitmapLookup);
 		}
 
@@ -85,6 +94,39 @@ namespace cool {
 			this._pageBackdropTransparency = transparency;
 		}
 
+		/// Draw the fills and lines in the colors the document gives them,
+		/// or in colors that follow a dark view.
+		setAuthoredColors(authored: boolean): void {
+			this._authoredColors = authored;
+		}
+
+		private _followsDarkView(): boolean {
+			return this._documentBackgroundIsDark && !this._authoredColors;
+		}
+
+		// On a dark view a light surface turns dark, the same way the
+		// document background does.
+		private _surfaceColor(color: string): string {
+			if (!this._followsDarkView()) return color;
+			return VectorColors.getDarkVariant(color, this._documentBackground);
+		}
+
+		private _fillColor(color: string): string {
+			return this._pictureDepth > 0 ? color : this._surfaceColor(color);
+		}
+
+		// On a dark view a dark line turns light, so it shows on the fills
+		// that turned dark.
+		private _lineColor(color: string): string {
+			if (
+				this._pictureDepth > 0 ||
+				!this._followsDarkView() ||
+				!VectorColors.isDark(color)
+			)
+				return color;
+			return VectorColors.getLightVariant(color);
+		}
+
 		// The color a fill shows over what lies behind it, when it lets
 		// a share of that show through.
 		private _surfaceOver(
@@ -99,7 +141,7 @@ namespace cool {
 		private _pageSurface(): string {
 			if (this._pageBackdrop === undefined) return this._documentBackground;
 			return this._surfaceOver(
-				this._pageBackdrop,
+				this._surfaceColor(this._pageBackdrop),
 				this._pageBackdropTransparency,
 				this._documentBackground,
 			);
@@ -113,11 +155,11 @@ namespace cool {
 		): string {
 			const highlight = primitive.fillcolor;
 			if (highlight !== undefined && VectorColors.parse(highlight))
-				return highlight;
+				return this._fillColor(highlight);
 			const backdrop = primitive.backdrop;
 			if (backdrop !== undefined && VectorColors.parse(backdrop))
 				return this._surfaceOver(
-					backdrop,
+					this._fillColor(backdrop),
 					primitive.backdropTransparency,
 					this._pageSurface(),
 				);
@@ -133,7 +175,17 @@ namespace cool {
 			if (color === undefined || color === VectorColors.AUTOMATIC)
 				return VectorColors.isDark(surface) ? '#FFFFFF' : '#000000';
 
-			if (this._documentBackgroundIsDark && VectorColors.isDark(surface))
+			return this._readableColor(color, surface);
+		}
+
+		// A color of the document drawn over the given surface. On a dark view
+		// a dark surface lightens it. A picture keeps the colors it has.
+		private _readableColor(color: string, surface: string): string {
+			if (
+				this._pictureDepth === 0 &&
+				this._documentBackgroundIsDark &&
+				VectorColors.isDark(surface)
+			)
 				return VectorColors.getLightVariant(color);
 
 			return color;
@@ -250,8 +302,11 @@ namespace cool {
 					this._renderBitmapAlpha(context, primitive as BitmapAlphaPrimitive);
 					break;
 				case GraphicPrimitive.type:
+					// The helper draws the children of a vector graphic
+					// itself, so return here to skip the recursion at the
+					// end of renderPrimitive.
 					this._renderGraphic(context, primitive as GraphicPrimitive);
-					break;
+					return;
 				case TextSimplePortionPrimitive.type:
 					this._renderTextSimplePortion(
 						context,
@@ -355,7 +410,10 @@ namespace cool {
 			// names no color is the document background of the view.
 			context.save();
 			context.globalAlpha = 1 - (primitive.transparency ?? 0);
-			context.fillStyle = primitive.color ?? this._documentBackground;
+			context.fillStyle =
+				primitive.color !== undefined
+					? this._surfaceColor(primitive.color)
+					: this._documentBackground;
 			context.fillRect(0, 0, this._slideWidth, this._slideHeight);
 			context.restore();
 		}
@@ -375,7 +433,7 @@ namespace cool {
 				context.save();
 				context.globalAlpha = 1 - transparency;
 			}
-			context.fillStyle = primitive.color;
+			context.fillStyle = this._fillColor(primitive.color);
 			// The engine fills polypolygons with the even-odd rule, so
 			// a subpath inside another subpath reads as a hole.
 			context.fill(path, 'evenodd');
@@ -401,7 +459,7 @@ namespace cool {
 			const path = new Path2D(primitive.path);
 
 			context.save();
-			context.strokeStyle = line.color ?? '#000000';
+			context.strokeStyle = this._lineColor(line.color ?? '#000000');
 			// Width 0 means a hairline. Any other width is drawn as given,
 			// even when that is thinner than a device pixel.
 			const width = line.width ?? 0;
@@ -431,7 +489,7 @@ namespace cool {
 
 			const path = new Path2D(primitive.path);
 			context.save();
-			context.strokeStyle = primitive.color ?? '#000000';
+			context.strokeStyle = this._lineColor(primitive.color ?? '#000000');
 			context.lineWidth = this._hairlineWidth(context);
 			context.stroke(path);
 			context.restore();
@@ -445,7 +503,7 @@ namespace cool {
 			if (!bounds) return;
 
 			context.save();
-			context.fillStyle = primitive.color ?? '#000000';
+			context.fillStyle = this._fillColor(primitive.color ?? '#000000');
 			context.fillRect(bounds.minX, bounds.minY, bounds.width, bounds.height);
 			context.restore();
 		}
@@ -458,7 +516,7 @@ namespace cool {
 			if (!bounds) return;
 
 			context.save();
-			context.strokeStyle = primitive.color ?? '#000000';
+			context.strokeStyle = this._lineColor(primitive.color ?? '#000000');
 			context.lineWidth = this._hairlineWidth(context);
 			context.strokeRect(bounds.minX, bounds.minY, bounds.width, bounds.height);
 			context.restore();
@@ -474,7 +532,7 @@ namespace cool {
 			const endY = primitive.endY ?? 0;
 
 			context.save();
-			context.strokeStyle = primitive.color ?? '#000000';
+			context.strokeStyle = this._lineColor(primitive.color ?? '#000000');
 			context.lineWidth = this._hairlineWidth(context);
 			context.beginPath();
 			context.moveTo(startX, startY);
@@ -973,6 +1031,12 @@ namespace cool {
 					: context.measureText(frame.text).width;
 				const lineWidth = Math.max(1, frame.fontSize / 20);
 				const textColor = color ?? this._textColor(primitive);
+				const lineColor = (decorationColor: string | undefined): string => {
+					if (color !== undefined) return color;
+					if (decorationColor === undefined) return textColor;
+					const surface = this._textSurface(primitive);
+					return this._readableColor(decorationColor, surface);
+				};
 
 				const drawLine = (lineY: number, lineColor: string): void => {
 					context.strokeStyle = lineColor;
@@ -987,12 +1051,12 @@ namespace cool {
 					const lineY = primitive.underlineAbove
 						? frame.y - frame.fontSize * 0.85
 						: frame.y + frame.fontSize * 0.15;
-					drawLine(lineY, color ?? primitive.underlineColor ?? textColor);
+					drawLine(lineY, lineColor(primitive.underlineColor));
 				}
 				if (primitive.overline)
 					drawLine(
 						frame.y - frame.fontSize * 0.85,
-						color ?? primitive.overlineColor ?? textColor,
+						lineColor(primitive.overlineColor),
 					);
 				if (primitive.strikeout)
 					drawLine(frame.y - frame.fontSize * 0.3, textColor);
@@ -1025,9 +1089,18 @@ namespace cool {
 			primitive: GraphicPrimitive,
 		): void {
 			// Vector graphics arrive pre-decomposed. The children are
-			// already in slide coordinates, so let the post-switch
-			// recursion in renderPrimitive draw them.
-			if (primitive.vector) return;
+			// already in slide coordinates. They are a picture, so they keep
+			// their colors on a dark view.
+			if (primitive.vector) {
+				if (!primitive.children) return;
+				this._pictureDepth++;
+				try {
+					this._renderPrimitives(context, primitive.children);
+				} finally {
+					this._pictureDepth--;
+				}
+				return;
+			}
 			this._drawRaster(context, primitive.matrix, primitive.checksum, {
 				imageRect: primitive.imageRect,
 				rotation: primitive.rotation,
@@ -1139,7 +1212,7 @@ namespace cool {
 			if (!primitive.points?.length) return;
 
 			context.save();
-			context.fillStyle = primitive.color ?? '#000000';
+			context.fillStyle = this._lineColor(primitive.color ?? '#000000');
 			for (const point of primitive.points)
 				context.fillRect(point.x, point.y, 1, 1);
 			context.restore();
@@ -1443,7 +1516,7 @@ namespace cool {
 			else VectorScratchCanvases.clipToRange(context, area);
 
 			if (hatch.fillBackground && primitive.backgroundColor) {
-				context.fillStyle = primitive.backgroundColor;
+				context.fillStyle = this._fillColor(primitive.backgroundColor);
 				context.fillRect(area.minX, area.minY, area.width, area.height);
 			}
 
@@ -1486,7 +1559,7 @@ namespace cool {
 				Math.hypot(centerX - area.centerX, centerY - area.centerY);
 			const steps = Math.ceil(reach / spacing);
 
-			context.strokeStyle = hatch.color ?? '#000000';
+			context.strokeStyle = this._lineColor(hatch.color ?? '#000000');
 			context.lineWidth = 1 / pixels;
 			context.beginPath();
 			for (const lineAngle of angles) {

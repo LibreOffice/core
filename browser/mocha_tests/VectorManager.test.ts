@@ -923,6 +923,77 @@ describe('VectorManager', function () {
 		nodeassert.strictEqual(fillText?.properties.fillStyle, '#000000');
 	});
 
+	describe('on a dark view', function () {
+		const DARK = '#1C1C1C';
+		let originalSectionContainer: any;
+		beforeEach(function () {
+			originalSectionContainer = (app as any).sectionContainer;
+			(app as any).sectionContainer = {
+				getDocumentBackgroundColor: () => DARK,
+			};
+		});
+		afterEach(function () {
+			(app as any).sectionContainer = originalSectionContainer;
+		});
+
+		function whiteShapeOnSlide(manager: VectorManager): any {
+			const whiteFill = {
+				type: 'polyPolygonColor',
+				color: '#FFFFFF',
+				path: 'M 0 0 L 10 0 L 10 10 Z',
+			};
+			manager.handleVectorPrimitivesResponse({
+				partId: 'S0',
+				mode: cool.VectorMode.Slides,
+				version: 1,
+				objects: [
+					{ id: 0, kind: 'page', width: 200, height: 150, primitives: [] },
+					{ id: 11, primitives: [whiteFill] },
+				],
+			});
+			return manager.requestPart(0, cool.VectorMode.Slides);
+		}
+
+		function fillStyleOfShape(
+			manager: VectorManager,
+			data: any,
+			options?: any,
+		): string {
+			const recorder = new CanvasRecorder();
+			manager.renderInto(recorder as any, data, options);
+			const fill = recorder.findCall('fill');
+			nodeassert.ok(fill, 'fill not called');
+			return fill.properties.fillStyle;
+		}
+
+		it('draws a white shape dark in the view and white in a slideshow', function () {
+			const manager = new VectorManager();
+			const data = whiteShapeOnSlide(manager);
+
+			nodeassert.strictEqual(fillStyleOfShape(manager, data), DARK);
+			nodeassert.strictEqual(
+				fillStyleOfShape(manager, data, { authoredColors: true }),
+				'#FFFFFF',
+			);
+			// The view draws dark again after the slideshow.
+			nodeassert.strictEqual(fillStyleOfShape(manager, data), DARK);
+		});
+
+		it('mixes what lies outside an edited group towards the background of the view', function () {
+			// Settings that hold nothing give back the default they are asked with.
+			const originalPrefs = (window as any).prefs;
+			(window as any).prefs = {
+				get: (_key: string, byDefault: any) => byDefault,
+				getNumber: (_key: string, byDefault: number) => byDefault,
+			};
+			try {
+				nodeassert.strictEqual((VectorManager as any)._ghosting().color, DARK);
+			} finally {
+				(window as any).prefs = originalPrefs;
+			}
+		});
+	});
+
 	// A slide names the master it draws under itself. The master is painted
 	// between the slide's own background and its objects, in the master's
 	// order. A shared object is drawn as the master carries it. An object

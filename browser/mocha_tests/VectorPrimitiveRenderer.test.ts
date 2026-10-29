@@ -2438,11 +2438,24 @@ describe('VectorPrimitiveRenderer', function () {
 			);
 		});
 
-		it('draws automatic text black on a dark view over a light shape', function () {
-			// The surface right behind the text decides, so a light
-			// shape fill in a dark view keeps the text dark.
+		it('draws automatic text white on a dark view over a light shape', function () {
+			// The light shape fill turns dark on a dark view, and the text
+			// on it turns light with it.
 			const renderer = new cool.VectorPrimitiveRenderer();
 			renderer.setDocumentBackground(DARK);
+
+			nodeassert.strictEqual(
+				fillStyleOfText(renderer, cool.VectorColors.AUTOMATIC, '#FFEE99'),
+				'#FFFFFF',
+			);
+		});
+
+		it('draws automatic text black over a light shape in the colors of the document', function () {
+			// The surface right behind the text decides, so a light shape
+			// fill that keeps its color keeps the text dark.
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.setDocumentBackground(DARK);
+			renderer.setAuthoredColors(true);
 
 			nodeassert.strictEqual(
 				fillStyleOfText(renderer, cool.VectorColors.AUTOMATIC, '#FFEE99'),
@@ -2539,14 +2552,27 @@ describe('VectorPrimitiveRenderer', function () {
 		});
 
 		it('keeps a text color that sits on a light surface', function () {
-			// A dark view with a light shape fill behind the text: the
+			// A light shape fill that keeps its color behind the text: the
 			// color the document carries is readable as it is.
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.setDocumentBackground(DARK);
+			renderer.setAuthoredColors(true);
+
+			nodeassert.strictEqual(
+				fillStyleOfText(renderer, '#000080', '#FFEE99'),
+				'#000080',
+			);
+		});
+
+		it('lightens a text color on a light shape of a dark view', function () {
+			// The shape fill turns dark first, and the text is read against
+			// the color the fill is drawn in.
 			const renderer = new cool.VectorPrimitiveRenderer();
 			renderer.setDocumentBackground(DARK);
 
 			nodeassert.strictEqual(
 				fillStyleOfText(renderer, '#000080', '#FFEE99'),
-				'#000080',
+				cool.VectorColors.getLightVariant('#000080'),
 			);
 		});
 
@@ -2602,6 +2628,238 @@ describe('VectorPrimitiveRenderer', function () {
 			nodeassert.strictEqual(
 				fillStyleOfText(renderer, cool.VectorColors.AUTOMATIC),
 				'#000000',
+			);
+		});
+	});
+
+	describe('Fills and lines on a dark view', function () {
+		const DARK = '#1C1C1C';
+		const LIGHT = '#FFFFFF';
+
+		const shape = (color: string): any => ({
+			type: 'polyPolygonColor',
+			color: color,
+			path: 'M 0 0 L 10 0 L 10 10 Z',
+		});
+
+		const hairline = (color: string): any => ({
+			type: 'polygonHairline',
+			color: color,
+			path: 'M 0 0 L 10 10',
+		});
+
+		const darkRenderer = (): any => {
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.setSlideBounds(200, 150);
+			renderer.setDocumentBackground(DARK);
+			return renderer;
+		};
+
+		const fillStyleOf = (renderer: any, primitive: any): string => {
+			const recorder = new CanvasRecorder(200, 150);
+			renderer.renderPrimitive(recorder as any, primitive);
+			const fill = recorder.findCall('fill');
+			nodeassert.ok(fill, 'fill not called');
+			return fill.properties.fillStyle;
+		};
+
+		const strokeStyleOf = (renderer: any, primitive: any): string => {
+			const recorder = new CanvasRecorder(200, 150);
+			renderer.renderPrimitive(recorder as any, primitive);
+			const stroke = recorder.findCall('stroke');
+			nodeassert.ok(stroke, 'stroke not called');
+			return stroke.properties.strokeStyle;
+		};
+
+		it('draws a white shape as dark as the view', function () {
+			nodeassert.strictEqual(
+				fillStyleOf(darkRenderer(), shape('#FFFFFF')),
+				DARK,
+			);
+		});
+
+		it('draws a light shape in a dark color', function () {
+			const drawn = fillStyleOf(darkRenderer(), shape('#FFEE99'));
+			nodeassert.strictEqual(
+				drawn,
+				cool.VectorColors.getDarkVariant('#FFEE99', DARK),
+			);
+			nodeassert.ok(cool.VectorColors.isDark(drawn), drawn);
+		});
+
+		it('keeps a dark shape as it is', function () {
+			nodeassert.strictEqual(
+				fillStyleOf(darkRenderer(), shape('#102030')),
+				'#102030',
+			);
+		});
+
+		it('keeps the colors of a shape on a light view', function () {
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.setDocumentBackground(LIGHT);
+			nodeassert.strictEqual(
+				fillStyleOf(renderer, shape('#FFEE99')),
+				'#FFEE99',
+			);
+		});
+
+		it('keeps the colors of a shape where the document colors are asked for', function () {
+			const renderer = darkRenderer();
+			renderer.setAuthoredColors(true);
+			nodeassert.strictEqual(
+				fillStyleOf(renderer, shape('#FFEE99')),
+				'#FFEE99',
+			);
+			nodeassert.strictEqual(
+				strokeStyleOf(renderer, hairline('#000000')),
+				'#000000',
+			);
+		});
+
+		it('draws the page fill of the document dark', function () {
+			const recorder = new CanvasRecorder(200, 150);
+			darkRenderer().renderPrimitive(recorder as any, {
+				type: cool.BackgroundColorPrimitive.type,
+				color: '#FFFFFF',
+			});
+			nodeassert.strictEqual(
+				recorder.findCall('fillRect')?.properties.fillStyle,
+				DARK,
+			);
+		});
+
+		it('draws a dark line light', function () {
+			nodeassert.strictEqual(
+				strokeStyleOf(darkRenderer(), hairline('#000000')),
+				cool.VectorColors.getLightVariant('#000000'),
+			);
+		});
+
+		it('keeps a light line as it is', function () {
+			nodeassert.strictEqual(
+				strokeStyleOf(darkRenderer(), hairline('#FFEE99')),
+				'#FFEE99',
+			);
+		});
+
+		it('keeps the colors of a picture', function () {
+			const renderer = darkRenderer();
+			const recorder = new CanvasRecorder(200, 150);
+			renderer.renderPrimitive(recorder as any, {
+				type: 'graphic',
+				vector: true,
+				children: [shape('#FFFFFF'), hairline('#000000')],
+			});
+			nodeassert.strictEqual(
+				recorder.findCall('fill')?.properties.fillStyle,
+				'#FFFFFF',
+			);
+			nodeassert.strictEqual(
+				recorder.findCall('stroke')?.properties.strokeStyle,
+				'#000000',
+			);
+
+			// A shape drawn after the picture follows the view again.
+			nodeassert.strictEqual(fillStyleOf(renderer, shape('#FFFFFF')), DARK);
+		});
+
+		it('draws automatic text white on a white page of a dark view', function () {
+			// The page fill turns dark first, and the text is read against
+			// it.
+			const renderer = darkRenderer();
+			renderer.setPageBackdrop('#FFFFFF');
+			const recorder = new CanvasRecorder();
+			renderer.renderPrimitive(recorder as any, {
+				type: 'textSimplePortion',
+				text: 'Hi',
+				fontSize: 20,
+				matrix: [20, 0, 0, 20, 5, 7],
+				fontcolor: cool.VectorColors.AUTOMATIC,
+				familyname: 'Liberation Sans',
+			});
+			nodeassert.strictEqual(
+				recorder.findCall('fillText')?.properties.fillStyle,
+				'#FFFFFF',
+			);
+		});
+
+		it('reads text against a light highlight that turned dark', function () {
+			const renderer = darkRenderer();
+			const recorder = new CanvasRecorder();
+			renderer.renderPrimitive(recorder as any, {
+				type: 'textSimplePortion',
+				text: 'Hi',
+				fontSize: 20,
+				matrix: [20, 0, 0, 20, 5, 7],
+				fontcolor: '#000000',
+				fillcolor: '#FFFF00',
+				familyname: 'Liberation Sans',
+			});
+			nodeassert.strictEqual(
+				recorder.findCall('fillText')?.properties.fillStyle,
+				cool.VectorColors.getLightVariant('#000000'),
+			);
+		});
+
+		it('draws the light stops of a gradient dark', function () {
+			const recorder = new CanvasRecorder(200, 200);
+			darkRenderer().renderPrimitive(recorder as any, {
+				type: 'fillGradient',
+				outputRange: [0, 0, 100, 100],
+				gradient: {
+					style: 'linear',
+					colorStops: [
+						{ offset: 0, color: '#000000' },
+						{ offset: 1, color: '#FFFFFF' },
+					],
+				},
+			});
+			const stops = recorder.gradients[0].sortedStops();
+			nodeassert.strictEqual(stops[0].color, 'rgba(0,0,0,1)');
+			nodeassert.strictEqual(stops[stops.length - 1].color, 'rgba(28,28,28,1)');
+		});
+
+		it('keeps the text colors of a picture', function () {
+			// Dark text on the white area of a picture stays dark, the same
+			// as the area under it.
+			const recorder = new CanvasRecorder();
+			darkRenderer().renderPrimitive(recorder as any, {
+				type: 'graphic',
+				vector: true,
+				children: [
+					shape('#FFFFFF'),
+					{
+						type: 'textSimplePortion',
+						text: 'Hi',
+						fontSize: 20,
+						matrix: [20, 0, 0, 20, 5, 7],
+						fontcolor: '#000000',
+						familyname: 'Liberation Sans',
+					},
+				],
+			});
+			nodeassert.strictEqual(
+				recorder.findCall('fillText')?.properties.fillStyle,
+				'#000000',
+			);
+		});
+
+		it('draws an underline of its own color light on a shape that turned dark', function () {
+			const recorder = new CanvasRecorder();
+			darkRenderer().renderPrimitive(recorder as any, {
+				type: 'textDecoratedPortion',
+				text: 'Hi',
+				fontSize: 20,
+				matrix: [20, 0, 0, 20, 5, 7],
+				fontcolor: '#FFFFFF',
+				familyname: 'Liberation Sans',
+				backdrop: '#FFFFFF',
+				underline: 1,
+				underlineColor: '#000000',
+			});
+			nodeassert.strictEqual(
+				recorder.findCall('stroke')?.properties.strokeStyle,
+				cool.VectorColors.getLightVariant('#000000'),
 			);
 		});
 	});

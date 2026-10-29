@@ -175,9 +175,11 @@ class VectorCompositor extends SlideCompositor {
 			this.canvasWidth / data.slideWidth,
 			this.canvasHeight / data.slideHeight,
 		);
+		// A slideshow shows the document in its own colors.
 		RenderManager.renderInto(
 			context as unknown as CanvasRenderingContext2D,
 			data,
+			{ authoredColors: true },
 		);
 		context.restore();
 

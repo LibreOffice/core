@@ -407,6 +407,7 @@ class VectorManager extends RenderManagerBase {
 	): void {
 		this._renderer.setSlideBounds(data.slideWidth, data.slideHeight);
 		this._renderer.setEditViewContentVisible(options?.editView === true);
+		this._renderer.setAuthoredColors(options?.authoredColors === true);
 		this._setUpColors(data);
 		const textEdits = this._textEditEntriesToDraw(data);
 		// an object active in place covers its upright window, not its own box
@@ -533,9 +534,10 @@ class VectorManager extends RenderManagerBase {
 
 	/*
 		How what lies outside what is being edited is drawn, from the settings: the colour it is
-		mixed with (vectorGhostColor, white), how far towards it from 0 to 1 (vectorGhostAmount,
-		0.5 as the office has it), and how transparent an object in front of it is from 0 to 1
-		(vectorGhostTransparency, 0.8), so that what is edited shows through.
+		mixed with (vectorGhostColor, the document background of the view), how far towards it
+		from 0 to 1 (vectorGhostAmount, 0.5 as the office has it), and how transparent an object
+		in front of it is from 0 to 1 (vectorGhostTransparency, 0.8), so that what is edited
+		shows through.
 	*/
 	private static _ghosting(): {
 		color: string;
@@ -546,12 +548,13 @@ class VectorManager extends RenderManagerBase {
 			const value = window.prefs?.getNumber(name, byDefault) ?? byDefault;
 			return value >= 0 && value <= 1 ? value : byDefault;
 		};
-		const color = window.prefs?.get('vectorGhostColor', '#ffffff');
+		const background = cool.VectorColors.documentBackground();
+		const color = window.prefs?.get('vectorGhostColor', background);
 		return {
 			color:
 				typeof color === 'string' && /^#[0-9a-fA-F]{6}$/.test(color)
 					? color
-					: '#ffffff',
+					: background,
 			amount: share('vectorGhostAmount', 0.5),
 			transparency: share('vectorGhostTransparency', 0.8),
 		};
@@ -604,6 +607,7 @@ class VectorManager extends RenderManagerBase {
 	): void {
 		this._renderer.setSlideBounds(data.slideWidth, data.slideHeight);
 		this._renderer.setEditViewContentVisible(true);
+		this._renderer.setAuthoredColors(false);
 		this._setUpColors(data);
 
 		for (const id of objectIds) {
@@ -689,6 +693,7 @@ class VectorManager extends RenderManagerBase {
 		data: cool.VectorPrimitivesData,
 	): void {
 		this._renderer.setSlideBounds(data.slideWidth, data.slideHeight);
+		this._renderer.setAuthoredColors(false);
 		this._setUpColors(data);
 		for (const id of data.order) {
 			const obj = data.objects.get(id);
@@ -712,6 +717,7 @@ class VectorManager extends RenderManagerBase {
 	): void {
 		this._renderer.setSlideBounds(data.slideWidth, data.slideHeight);
 		this._renderer.setEditViewContentVisible(true);
+		this._renderer.setAuthoredColors(false);
 		this._setUpColors(data);
 
 		for (const primitive of primitives)
