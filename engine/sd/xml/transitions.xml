@@ -251,4 +251,58 @@
  <anim:par pres:preset-id="diagonal-squares-right-up">
   <anim:transitionFilter smil:type="waterfallWipe" smil:subtype="horizontalRight" smil:direction="reverse"/>
  </anim:par>
+ <anim:par pres:preset-id="tile-flip">
+  <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="across"/>
+ </anim:par>
+ <anim:par pres:preset-id="outside-cube">
+  <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="cornersOut"/>
+ </anim:par>
+ <anim:par pres:preset-id="revolving-circles">
+  <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="circle"/>
+ </anim:par>
+ <anim:par pres:preset-id="turning-helix">
+  <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="fanOutHorizontal"/>
+ </anim:par>
+ <anim:par pres:preset-id="inside-cube">
+  <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="cornersIn"/>
+ </anim:par>
+ <anim:par pres:preset-id="fall">
+  <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="leftToRight"/>
+ </anim:par>
+ <anim:par pres:preset-id="turn-around">
+  <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="topToBottom"/>
+ </anim:par>
+ <anim:par pres:preset-id="iris">
+  <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="topLeft"/>
+ </anim:par>
+ <anim:par pres:preset-id="turn-down">
+  <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="topRight"/>
+ </anim:par>
+ <anim:par pres:preset-id="rochade">
+  <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="bottomRight"/>
+ </anim:par>
+ <anim:par pres:preset-id="venetian3dv">
+  <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="bottomLeft"/>
+ </anim:par>
+ <anim:par pres:preset-id="venetian3dh">
+  <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="topCenter"/>
+ </anim:par>
+ <anim:par pres:preset-id="static">
+  <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="rightCenter"/>
+ </anim:par>
+ <anim:par pres:preset-id="finedissolve">
+  <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="bottomCenter"/>
+ </anim:par>
+ <anim:par pres:preset-id="vortex">
+  <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="vertical"/>
+ </anim:par>
+ <anim:par pres:preset-id="ripple">
+  <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="horizontal"/>
+ </anim:par>
+ <anim:par pres:preset-id="glitter">
+  <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="diamond"/>
+ </anim:par>
+ <anim:par pres:preset-id="honeycomb">
+  <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="heart"/>
+ </anim:par>
  </anim:seq>
