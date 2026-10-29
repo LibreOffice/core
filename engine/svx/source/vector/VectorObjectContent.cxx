@@ -21,6 +21,12 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/frame/FeatureStateEvent.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XStatusListener.hpp>
+#include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -576,7 +582,11 @@ struct Embedding
     basegfx::B2DHomMatrix maMapping;
     /// told of every change of the chart's content while it is active
     cpo::uno::Reference<css::util::XModifyListener> mxListener;
+    /// where the chart's keys go from each part, by id, read once and kept until the chart changes
+    std::optional<std::map<sal_uInt64, ObjectContent::ChartKeys>> moKeys;
 };
+
+Embedding* embeddingFor(const SdrPage* pPage);
 
 /*
     marks the chart as changed whenever its content changes, while it is active, so its parts are
@@ -586,10 +596,12 @@ struct Embedding
 class ChartChangeListener : public cppu::WeakImplHelper<css::util::XModifyListener>
 {
     unotools::WeakReference<SdrObject> mxChart;
+    unotools::WeakReference<SdrPage> mxPage;
 
 public:
-    explicit ChartChangeListener(SdrObject& rChart)
+    ChartChangeListener(SdrObject& rChart, SdrPage& rPage)
         : mxChart(&rChart)
+        , mxPage(&rPage)
     {
     }
 
@@ -601,6 +613,9 @@ public:
             return;
         xChart->SetBoundRectDirty();
         xChart->BroadcastObjectChange();
+        // the parts the keys go to may have changed with it
+        if (Embedding* pEmbedding = embeddingFor(mxPage.get().get()))
+            pEmbedding->moKeys.reset();
     }
 
     void disposing(const css::lang::EventObject&) override {}
@@ -750,6 +765,101 @@ SdrObject* partNamed(const SdrPage& rPage, std::u16string_view aName)
     return nullptr;
 }
 
+/// takes the state of a command once, as it is asked for
+class StateReader : public cppu::WeakImplHelper<css::frame::XStatusListener>
+{
+public:
+    cpo::uno::Any maState;
+
+    void statusChanged(const css::frame::FeatureStateEvent& rEvent) override
+    {
+        maState = rEvent.State;
+    }
+
+    void disposing(const css::lang::EventObject&) override {}
+};
+
+/// the part of a chart page whose name ends in that particle, the last piece of a CID, which
+/// stays the same whatever the name carries before it for a drag
+SdrObject* partWithParticle(const SdrPage& rPage, std::u16string_view aParticle)
+{
+    SdrObjListIter aIterator(&rPage, SdrIterMode::DeepWithGroups);
+    while (aIterator.IsMore())
+    {
+        SdrObject* pObject(aIterator.Next());
+        const OUString aName(pObject ? chartPartNameOf(*pObject) : OUString());
+        if (!aName.isEmpty() && aName.subView(aName.lastIndexOf('/') + 1) == aParticle)
+            return pObject;
+    }
+    return nullptr;
+}
+
+/// the id the vector view knows a part by, the chart naming it by its CID or, for a shape
+/// someone added, by the shape. 0 for none
+sal_uInt64 idOfNamedPart(const SdrPage& rPage, const cpo::uno::Any& rPart)
+{
+    OUString aName;
+    if (rPart >>= aName)
+    {
+        const SdrObject* pPart(
+            aName.isEmpty() ? nullptr
+                            : partWithParticle(rPage, aName.subView(aName.lastIndexOf('/') + 1)));
+        return pPart ? idOf(*pPart) : 0;
+    }
+    cpo::uno::Reference<css::drawing::XShape> xShape;
+    if (rPart >>= xShape)
+        if (const SdrObject* pShape = SdrObject::getSdrObjectFromXShape(xShape))
+            return idOf(*pShape);
+    return 0;
+}
+
+/*
+    where the chart's own keys go from each of its parts, as the chart tells it by the state of
+    its command KitPartNavigation: five values a part, the part, the next and the previous one,
+    the first one a level down and the one a level up. the first part it names is the first of
+    the top level
+*/
+std::map<sal_uInt64, ObjectContent::ChartKeys> keysOf(const SdrOle2Obj& rChart,
+                                                     const SdrPage& rPage)
+{
+    std::map<sal_uInt64, ObjectContent::ChartKeys> aKeys;
+    const cpo::uno::Reference<css::frame::XModel> xModel(rChart.getXModel());
+    if (!xModel.is())
+        return aKeys;
+    const cpo::uno::Reference<css::frame::XDispatchProvider> xProvider(
+        xModel->getCurrentController(), cpo::uno::UNO_QUERY);
+    if (!xProvider.is())
+        return aKeys;
+
+    css::util::URL aURL;
+    aURL.Complete = u".uno:KitPartNavigation"_ustr;
+    aURL.Protocol = u".uno:"_ustr;
+    aURL.Path = u"KitPartNavigation"_ustr;
+    const cpo::uno::Reference<css::frame::XDispatch> xDispatch(
+        xProvider->queryDispatch(aURL, OUString(), 0));
+    if (!xDispatch.is())
+        return aKeys;
+
+    // a listener is told the state at once when it is added
+    const rtl::Reference<StateReader> xReader(new StateReader);
+    xDispatch->addStatusListener(xReader, aURL);
+    xDispatch->removeStatusListener(xReader, aURL);
+
+    cpo::uno::Sequence<cpo::uno::Any> aTable;
+    xReader->maState >>= aTable;
+    for (sal_Int32 nAt = 0; nAt + 4 < aTable.getLength(); nAt += 5)
+    {
+        const sal_uInt64 nPart(idOfNamedPart(rPage, aTable[nAt]));
+        if (!nPart)
+            continue;
+        aKeys[nPart] = ObjectContent::ChartKeys{ idOfNamedPart(rPage, aTable[nAt + 1]),
+                                                 idOfNamedPart(rPage, aTable[nAt + 2]),
+                                                 idOfNamedPart(rPage, aTable[nAt + 3]),
+                                                 idOfNamedPart(rPage, aTable[nAt + 4]), nAt == 0 };
+    }
+    return aKeys;
+}
+
 /*
     What a part of a chart allows, from its name, as the chart decides it for its own selection
     (ObjectIdentifier::getObjectType, isDragableObject, isRotateableObject and
@@ -869,15 +979,19 @@ const SdrObjList* membersOf(const SdrObject& rObject)
         else
         {
             cpo::uno::Reference<css::util::XModifyListener> xListener(
-                new ChartChangeListener(const_cast<SdrOle2Obj&>(*pChart)));
+                new ChartChangeListener(const_cast<SdrOle2Obj&>(*pChart), *pPage));
             if (const auto xBroadcaster = broadcasterOf(*pChart); xBroadcaster.is())
                 xBroadcaster->addModifyListener(xListener);
             embeddings().push_back(Embedding{ unotools::WeakReference<SdrPage>(pPage),
                                               unotools::WeakReference<SdrObject>(
                                                   const_cast<SdrOle2Obj*>(pChart)),
                                               mappingOfTheChart(*pChart, *pPage),
-                                              xListener });
+                                              xListener, std::nullopt });
         }
+        // the order of the chart's keys is read once its shapes are built, it holds until the
+        // chart changes
+        if (Embedding* pEmbedding = embeddingFor(pPage); pEmbedding && !pEmbedding->moKeys)
+            pEmbedding->moKeys = keysOf(*pChart, *pPage);
         return pPage;
     }
 
@@ -1206,6 +1320,12 @@ void describeObject(SdrObject& rObject, ObjectContent& rContent,
         rContent.mbCanBeSheared = false;
         rContent.mbCanBeMirrored = false;
     }
+    if (const Embedding* pEmbedding = embeddingOf(rObject); pEmbedding && pEmbedding->moKeys)
+    {
+        const auto aKeys(pEmbedding->moKeys->find(idOf(rObject)));
+        if (aKeys != pEmbedding->moKeys->end())
+            rContent.moChartKeys = aKeys->second;
+    }
     rContent.moLayer = sal_Int32(rObject.GetLayer().get());
     rContent.mbEmptyPlaceholder = rObject.IsEmptyPresObj();
     rContent.mbTextEdit = hasActiveTextEdit(&rObject);
@@ -1268,6 +1388,22 @@ void writeEntryGeometry(tools::JsonWriter& rWriter, const ObjectContent& rConten
             rWriter.put("resizable", true);
         if (rPart.mbRotatable)
             rWriter.put("rotatable", true);
+    }
+
+    if (rContent.moChartKeys)
+    {
+        const auto& rKeys = *rContent.moChartKeys;
+        auto aNode = rWriter.startNode("chartKeys");
+        if (rKeys.mnNext)
+            rWriter.put("next", rKeys.mnNext);
+        if (rKeys.mnPrevious)
+            rWriter.put("previous", rKeys.mnPrevious);
+        if (rKeys.mnInside)
+            rWriter.put("inside", rKeys.mnInside);
+        if (rKeys.mnOutside)
+            rWriter.put("outside", rKeys.mnOutside);
+        if (rKeys.mbFirst)
+            rWriter.put("first", true);
     }
 
     if (rContent.moCaption)

@@ -433,6 +433,24 @@ struct ObjectContent
     /// Nothing for any object that is no part of a chart active in place with a selection of
     /// its own.
     std::optional<ChartPart> moChartPart;
+    /** Where the chart's own keys go from a part of a chart active in place, by the ids the
+        vector view knows the parts by, 0 for none: the next and the previous part of its level,
+        going round, the first part a level down and the part a level up. The first part of the
+        top level is marked, the chart starts there.
+     */
+    struct ChartKeys
+    {
+        sal_uInt64 mnNext = 0;
+        sal_uInt64 mnPrevious = 0;
+        sal_uInt64 mnInside = 0;
+        sal_uInt64 mnOutside = 0;
+        bool mbFirst = false;
+
+        bool operator==(const ChartKeys&) const = default;
+    };
+
+    /// Nothing for any object the chart's keys do not go to.
+    std::optional<ChartKeys> moChartKeys;
     /// The name the object carries, empty for an entry that stands for no object.
     OUString maName;
     /// The layer the entry draws with, nothing for an entry that belongs to no object. For
@@ -451,7 +469,7 @@ struct ObjectContent
     {
         return maPaintedBox == rOther.maPaintedBox && maTransformation == rOther.maTransformation
                && moMeasurement == rOther.moMeasurement && moCaption == rOther.moCaption
-               && moChartPart == rOther.moChartPart
+               && moChartPart == rOther.moChartPart && moChartKeys == rOther.moChartKeys
                && maName == rOther.maName && moLayer == rOther.moLayer
                && mbEmptyPlaceholder == rOther.mbEmptyPlaceholder && mbTextEdit == rOther.mbTextEdit
                && mnParentId == rOther.mnParentId && maDrawn == rOther.maDrawn

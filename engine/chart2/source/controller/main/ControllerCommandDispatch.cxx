@@ -27,6 +27,8 @@
 #include <TitleHelper.hxx>
 #include <LegendHelper.hxx>
 #include <ObjectIdentifier.hxx>
+#include <ObjectHierarchy.hxx>
+#include <ChartView.hxx>
 #include <ChartType.hxx>
 #include <ChartController.hxx>
 #include <RegressionCurveHelper.hxx>
@@ -42,6 +44,7 @@
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/kit.hxx>
+#include <comphelper/sequence.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 
@@ -89,6 +92,43 @@ cpo::uno::Any getPropertyIfSame(std::vector<Reference<beans::XPropertySet>>& xPr
 
 namespace chart
 {
+
+namespace
+{
+/*
+    the order the chart's own keys go through its parts in, as ObjectKeyNavigation takes it from
+    the ObjectHierarchy: five values a part, the part, the next and the previous one of its level
+    going round, the first one a level down and the one a level up. each is the part's CID, the
+    shape for a shape someone added, or nothing where there is none
+*/
+cpo::uno::Sequence<cpo::uno::Any> lcl_partNavigation(ChartController& rController)
+{
+    std::vector<cpo::uno::Any> aTable;
+    const ObjectHierarchy aHierarchy(rController.getChartModel(),
+                                     rController.getChartView().get());
+    const auto walk = [&aTable, &aHierarchy](const auto& rSelf,
+                                             const ObjectIdentifier& rParent) -> void
+    {
+        const ObjectHierarchy::tChildContainer& rChildren(aHierarchy.getChildren(rParent));
+        const size_t nCount(rChildren.size());
+        for (size_t nAt = 0; nAt < nCount; ++nAt)
+        {
+            const ObjectIdentifier& rPart(rChildren[nAt]);
+            aTable.push_back(rPart.getAny());
+            aTable.push_back(rChildren[(nAt + 1) % nCount].getAny());
+            aTable.push_back(rChildren[(nAt + nCount - 1) % nCount].getAny());
+            aTable.push_back(aHierarchy.hasChildren(rPart)
+                                 ? aHierarchy.getChildren(rPart).front().getAny()
+                                 : cpo::uno::Any());
+            aTable.push_back(ObjectHierarchy::isRootNode(rParent) ? cpo::uno::Any()
+                                                                  : rParent.getAny());
+            rSelf(rSelf, rPart);
+        }
+    };
+    walk(walk, ObjectHierarchy::getRootNodeOID());
+    return comphelper::containerToSequence(aTable);
+}
+}
 
 namespace impl
 {
@@ -641,6 +681,8 @@ void ControllerCommandDispatch::updateCommandAvailability()
         m_aCommandAvailability[u".uno:FillGradient"_ustr] = bFormatObjectAvailable;
         m_aCommandAvailability[u".uno:KitTransform"_ustr] = bIsWritable && bControllerStateIsValid && m_apControllerState->bHasSelectedObject;
         m_aCommandAvailability[u".uno:KitSetTextSelection"_ustr] = bIsWritable;
+        // its state is the order the chart's keys go through its parts in, built when asked
+        m_aCommandAvailability[u".uno:KitPartNavigation"_ustr] = true;
     }
 
     m_aCommandAvailability[ u".uno:DiagramType"_ustr ] = bIsWritable;
@@ -967,6 +1009,13 @@ void ControllerCommandDispatch::fireStatusEvent(
     const OUString & rURL,
     const Reference< frame::XStatusListener > & xSingleListener /* = 0 */ )
 {
+    if (rURL == ".uno:KitPartNavigation" && m_xChartController.is())
+    {
+        fireStatusEventForURL(rURL, cpo::uno::Any(lcl_partNavigation(*m_xChartController)), true,
+                              xSingleListener);
+        return;
+    }
+
     if (rURL.isEmpty() || rURL == ".uno:ChartElementSelector")
     {
         cpo::uno::Any aArg;
