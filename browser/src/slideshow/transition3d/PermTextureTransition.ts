@@ -101,6 +101,43 @@ class PermTextureTransition extends SimpleTransition {
 		return a;
 	}
 
+	// Uploads a prebuilt mesh of interleaved float vertices into a fresh vertex array and buffer,
+	// and points the given attributes at it. Each attribute is its shader name, its size in floats
+	// and its offset in floats within a vertex. Returns the number of vertices in the mesh.
+	protected uploadMesh(
+		mesh: Float32Array,
+		stride: number,
+		attributes: [string, number, number][],
+	): number {
+		const gl = this.gl;
+		this.vao = gl.createVertexArray();
+		gl.bindVertexArray(this.vao);
+
+		this.buffer = gl.createBuffer();
+		if (!this.buffer) throw new Error('Failed to create buffer');
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+		gl.bufferData(gl.ARRAY_BUFFER, mesh, gl.STATIC_DRAW);
+
+		const strideBytes = stride * 4;
+		for (const [name, size, offset] of attributes) {
+			const location = gl.getAttribLocation(this.program, name);
+			if (location === -1) continue;
+			gl.enableVertexAttribArray(location);
+			gl.vertexAttribPointer(
+				location,
+				size,
+				gl.FLOAT,
+				false,
+				strideBytes,
+				offset * 4,
+			);
+		}
+
+		gl.bindBuffer(gl.ARRAY_BUFFER, null);
+		gl.bindVertexArray(null);
+		return mesh.length / stride;
+	}
+
 	public displayPermSlide_(): void {
 		this.gl.activeTexture(this.gl.TEXTURE2);
 		this.gl.bindTexture(this.gl.TEXTURE_2D, this.permTexture);

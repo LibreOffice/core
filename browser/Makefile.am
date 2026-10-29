@@ -244,6 +244,39 @@ $(icons_js): Makefile.am Makefile $(BACKSTAGE_SVGS)
 	} > "$@.tmp"
 	@mv "$@.tmp" "$@"
 
+# Slideshow shaders
+shaders_dir = $(srcdir)/src/slideshow/shaders
+
+# Generated into the build tree like the icons above, so the shader sources can live in
+# their own .glsl files and still end up in the bundle.
+shaders_js = $(DIST_FOLDER)/src/slideshow/SlideshowShaders.js
+
+SLIDESHOW_SHADER_NAMES = \
+	GlitterTransition.vert.glsl \
+	GlitterTransition.frag.glsl \
+	VortexTransition.vert.glsl \
+	HoneycombTransition.vert.glsl \
+	HoneycombTransition.frag.glsl
+
+SLIDESHOW_SHADERS = $(addprefix $(shaders_dir)/,$(SLIDESHOW_SHADER_NAMES))
+
+# Each file becomes one string, with the line breaks kept as \n so that the
+# line comments in the shader stay on their own line.
+$(shaders_js): Makefile.am Makefile $(SLIDESHOW_SHADERS)
+	@mkdir -p "$(dir $@)"
+	@{ \
+	  echo "// AUTO-GENERATED. DO NOT EDIT."; \
+	  echo "var SlideshowShaders = {"; \
+	  for f in $(SLIDESHOW_SHADERS); do \
+	    name=$$(basename "$$f"); \
+	    echo "  \"$$name\": \"" | tr -d '\n'; \
+	    sed -e 's/\\/\\\\/g' -e 's/"/\\"/g' -e 's/\r//g' "$$f" | awk '{ printf "%s\\n", $$0 }'; \
+	    echo "\","; \
+	  done; \
+	  echo "};"; \
+	} > "$@.tmp"
+	@mv "$@.tmp" "$@"
+
 COOL_ADMIN_TS = \
 	admin/src/ModalDialogCreator.ts \
 	admin/src/integrator/AdminIntegratorSettings.ts \
@@ -969,6 +1002,7 @@ COOL_JS_LST =\
 	src/slideshow/transition/PushWipeTransition.ts \
 	src/slideshow/transition/CombTransition.ts \
 	src/slideshow/transition/NoTransition.ts \
+	$(shaders_js) \
 	src/slideshow/transition3d/SimpleTransition.ts \
 	src/slideshow/transition3d/CubeTransition.ts \
 	src/slideshow/transition3d/HelixTransition.ts \
@@ -985,6 +1019,11 @@ COOL_JS_LST =\
 	src/slideshow/transition3d/FlipTilesTransition.ts \
 	src/slideshow/transition3d/StaticNoiseTransition.ts \
 	src/slideshow/transition3d/AirplaneTransition.ts \
+	src/slideshow/transition3d/IrisTransition.ts \
+	src/slideshow/transition3d/RevolvingCirclesTransition.ts \
+	src/slideshow/transition3d/GlitterTransition.ts \
+	src/slideshow/transition3d/VortexTransition.ts \
+	src/slideshow/transition3d/HoneycombTransition.ts \
 	src/slideshow/transition3d/MicsShapeWipeTransition.ts \
 	src/slideshow/operation/RotateAndScaleDepth.ts \
 	src/slideshow/operation/SEllipseTranslate.ts \

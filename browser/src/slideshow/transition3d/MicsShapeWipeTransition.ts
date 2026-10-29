@@ -23,7 +23,7 @@ function MicsShapeWipeTransition(transitionParameters: TransitionParameters) {
 	} else if (transitionSubType == TransitionSubType.TOPTOBOTTOM) {
 		return SlideShow.TurnAroundTransition(transitionParameters);
 	} else if (transitionSubType == TransitionSubType.TOPLEFT) {
-		return new SlideShow.NoTransition(transitionParameters); // todo : iris transition
+		return SlideShow.IrisTransition(transitionParameters);
 	} else if (transitionSubType == TransitionSubType.TOPRIGHT) {
 		return SlideShow.TurnDownTransition(transitionParameters);
 	} else if (transitionSubType == TransitionSubType.BOTTOMRIGHT) {
@@ -39,19 +39,19 @@ function MicsShapeWipeTransition(transitionParameters: TransitionParameters) {
 	} else if (transitionSubType == TransitionSubType.CORNERSIN) {
 		return SlideShow.CubeTransition(transitionParameters, false);
 	} else if (transitionSubType == TransitionSubType.VERTICAL) {
-		return new SlideShow.NoTransition(transitionParameters); //  todo : Vortex transition
+		return SlideShow.VortexTransition(transitionParameters);
 	} else if (transitionSubType == TransitionSubType.HORIZONTAL) {
 		return SlideShow.RippleTransition(transitionParameters, false);
 	} else if (transitionSubType == TransitionSubType.CIRCLE) {
-		return new SlideShow.NoTransition(transitionParameters); //  todo: 3d circle transition (8,128)
+		return SlideShow.RevolvingCirclesTransition(transitionParameters, 8, 128);
 	} else if (transitionSubType == TransitionSubType.FANOUTHORIZONTAL) {
 		return SlideShow.makeHelixTransition(transitionParameters, 20);
 	} else if (transitionSubType == TransitionSubType.ACROSS) {
 		return SlideShow.makeFlipTilesTransition(transitionParameters, 8, 6);
 	} else if (transitionSubType == TransitionSubType.DIAMOND) {
-		return new SlideShow.NoTransition(transitionParameters); //  todo: glitter transition
+		return SlideShow.GlitterTransition(transitionParameters);
 	} else if (transitionSubType == TransitionSubType.HEART) {
-		return new SlideShow.NoTransition(transitionParameters); //  todo: honeycomb transition
+		return SlideShow.HoneycombTransition(transitionParameters);
 	} else if (transitionSubType == TransitionSubType.AIRPLANE) {
 		return SlideShow.AirplaneTransition(transitionParameters);
 	}

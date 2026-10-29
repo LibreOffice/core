@@ -12,6 +12,14 @@
 
 declare var SlideShow: any;
 
+/*
+ * SlideshowShaders maps a file name under src/slideshow/shaders to the source of that shader.
+ * The build generates it as plain JS from the .glsl files and bundles it, the same way as the
+ * backstage icons, because combining compiled TS with generated TS does not work in
+ * out-of-tree builds.
+ */
+declare const SlideshowShaders: Record<string, string>;
+
 class TransitionParameters3D extends TransitionParameters {
 	public leavingPrimitives: Primitive[] = [];
 	public enteringPrimitives: Primitive[] = [];
