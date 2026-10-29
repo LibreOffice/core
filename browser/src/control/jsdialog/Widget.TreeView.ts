@@ -1137,7 +1137,7 @@ class TreeViewControl {
 				});
 				// TODO: remove this hack
 			} else {
-				$(tr).dblclick(doubleClickFunction as any);
+				tr.addEventListener('dblclick', doubleClickFunction as any);
 			}
 		}
 
@@ -1154,10 +1154,10 @@ class TreeViewControl {
 			if (entry.ondemand) {
 				window.L.DomEvent.on(expander, 'click', expandFunction);
 			} else {
-				$(expander).click((e) => {
+				expander.onclick = function (e) {
 					if (entry.state && e.target === selectionElement) e.preventDefault(); // do not toggle on checkbox
-					toggleFunction(e.originalEvent);
-				});
+					toggleFunction(e);
+				};
 			}
 		}
 	}
