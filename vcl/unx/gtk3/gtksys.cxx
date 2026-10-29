@@ -91,8 +91,6 @@ struct GdkRectangleCoincident
 void
 GtkSalSystem::countScreenMonitors()
 {
-    maScreenMonitors.clear();
-    GdkScreen* const pScreen = gdk_display_get_default_screen(mpDisplay);
     int nMonitors = gdk_display_get_n_monitors(mpDisplay);
     if (nMonitors > 1)
     {
@@ -109,23 +107,15 @@ GtkSalSystem::countScreenMonitors()
             std::unique(aGeometries.begin(), aGeometries.end(), GdkRectangleCoincident()));
         nMonitors = std::distance(aGeometries.begin(), aUniqueEnd);
     }
-    maScreenMonitors.emplace_back(pScreen, nMonitors);
+    m_nScreenMonitors = nMonitors;
 }
 
 GdkScreen *
 GtkSalSystem::getScreenMonitorFromIdx (int nIdx, gint &nMonitor)
 {
-    GdkScreen *pScreen = nullptr;
-    for (auto const& screenMonitor : maScreenMonitors)
-    {
-        pScreen = screenMonitor.first;
-        if (!pScreen)
-            break;
-        if (nIdx >= screenMonitor.second)
-            nIdx -= screenMonitor.second;
-        else
-            break;
-    }
+    GdkScreen* pScreen = gdk_display_get_default_screen(mpDisplay);
+    if (pScreen && nIdx >= m_nScreenMonitors)
+        nIdx -= m_nScreenMonitors;
     nMonitor = nIdx;
 
     // handle invalid monitor indexes as non-existent screens
