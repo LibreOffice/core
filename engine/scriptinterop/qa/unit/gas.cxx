@@ -125,7 +125,7 @@ protected:
         std::u16string_view libraries)
     {
         OUString const script(
-            "var window = globalThis;\n$internal.runGasAddOn('scriptinterop_document_test', ["
+            "$internal.runGasAddOn('scriptinterop_document_test', ["
             + jsLiteral(read(url)) + "], ["
             + jsLiteral(url) + "], 'test', [], 'scriptinterop_test', [" + libraries + "]);");
         std::function<bool(std::string_view)> hook;
