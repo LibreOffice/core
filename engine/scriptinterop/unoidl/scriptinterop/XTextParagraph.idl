@@ -27,10 +27,10 @@ interface XTextParagraph : XBase
      */
     com::sun::star::beans::Optional<long> getIndex();
 
-    /** The range covers the text that was passed to appendParagraph, followed by the newline of
-        the paragraph. It does not grow when text is added to the paragraph later. For an empty
-        paragraph the range is a position in it, which stays inside the paragraph as text is
-        inserted there. The result is never null.
+    /** The range covers the whole paragraph as it is when this is called, followed by the
+        newline of the paragraph. For an empty paragraph the range is a position in it. The
+        paragraph is found by its position among the paragraphs of the text, so the result is
+        null once the text has fewer paragraphs than that.
 
         @gas Paragraph.getRange
      */

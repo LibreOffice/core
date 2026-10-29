@@ -316,6 +316,22 @@ CPPUNIT_TEST_FIXTURE(Test, testAppendParagraphAndBulletLevels)
     CPPUNIT_ASSERT_EQUAL(sal_Int16(3), nLevel);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testParagraphRangeFollowsTheParagraph)
+{
+    auto const xPresentation = loadPresentation();
+    auto const xSlide = xPresentation->appendSlide();
+    auto const xText = xSlide->insertTextBoxAt(u"first"_ustr, 36, 36, 288, 144)->getText();
+    // The range of a paragraph covers the text that was added to it after it was appended.
+    auto const xParagraph = xText->appendParagraph(u"a"_ustr);
+    xText->appendText(u"b"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"ab\n"_ustr, getValue(xParagraph->getRange())->asString());
+    auto const xEmpty = xText->appendParagraph(u""_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"\n"_ustr, getValue(xEmpty->getRange())->asString());
+    xText->appendText(u"c"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"c\n"_ustr, getValue(xEmpty->getRange())->asString());
+    CPPUNIT_ASSERT_EQUAL(u"ab\n"_ustr, getValue(xParagraph->getRange())->asString());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testGeometryValidation)
 {
     auto const xPresentation = loadPresentation();

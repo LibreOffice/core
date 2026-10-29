@@ -21,6 +21,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -898,17 +899,48 @@ private:
     cpo::uno::Reference<css::text::XTextRange> range_;
 };
 
+// The paragraphs of the text in a shape or table cell, in order:
+std::vector<cpo::uno::Reference<css::text::XTextRange>>
+paragraphsOf(cpo::uno::Reference<css::text::XText> const& text)
+{
+    std::vector<cpo::uno::Reference<css::text::XTextRange>> paragraphs;
+    cpo::uno::Reference<css::container::XEnumerationAccess> const access(text,
+                                                                         cpo::uno::UNO_QUERY);
+    if (!access.is())
+    {
+        return paragraphs;
+    }
+    for (auto const en = access->createEnumeration(); en->hasMoreElements();)
+    {
+        cpo::uno::Reference<css::text::XTextRange> const paragraph(en->nextElement(),
+                                                                   cpo::uno::UNO_QUERY);
+        if (paragraph.is())
+        {
+            paragraphs.push_back(paragraph);
+        }
+    }
+    return paragraphs;
+}
+
+// A paragraph is known by its position among the paragraphs of the text, and its range is
+// looked up again on each call, so it covers whatever the paragraph holds at that time.
 class TextParagraphImpl : public cppu::WeakImplHelper<scriptinterop::XTextParagraph>
 {
 public:
-    explicit TextParagraphImpl(cpo::uno::Reference<scriptinterop::XTextRange> const& range)
-        : range_(range)
+    TextParagraphImpl(cpo::uno::Reference<css::text::XText> const& text, std::size_t index)
+        : text_(text)
+        , index_(index)
     {
     }
 
     cpo::uno::Reference<cpo::uno::XInterface> getuno() override
     {
-        return range_->getuno();
+        auto const paragraph = paragraph_();
+        if (!paragraph.is())
+        {
+            throw cpo::uno::RuntimeException(u"getuno: the paragraph has been deleted"_ustr);
+        }
+        return paragraph;
     }
 
     css::beans::Optional<sal_Int32> getIndex() override
@@ -917,13 +949,17 @@ public:
     }
 
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XTextRange>> getRange()
-        override
-    {
-        return {range_.is(), range_};
-    }
+        override;
 
 private:
-    cpo::uno::Reference<scriptinterop::XTextRange> range_;
+    cpo::uno::Reference<css::text::XTextRange> paragraph_() const
+    {
+        auto const paragraphs = paragraphsOf(text_);
+        return index_ < paragraphs.size() ? paragraphs[index_] : nullptr;
+    }
+
+    cpo::uno::Reference<css::text::XText> text_;
+    std::size_t index_;
 };
 
 class TextRangeImpl : public cppu::WeakImplHelper<scriptinterop::XTextRange>
@@ -1154,16 +1190,9 @@ public:
         append->finishParagraph({});
         if (!text.isEmpty())
         {
-            // The appended run lands in the new last paragraph and covers exactly its text, so
-            // it doubles as the paragraph's range.
-            return new TextParagraphImpl(new TextRangeImpl(text_, appendRun(text), true));
+            appendRun(text);
         }
-        // With no text the new paragraph stays empty, so the paragraph's range is a cursor at
-        // the text end.  That cursor is a live position: the edit engine keeps it inside the
-        // last paragraph as text is inserted into it.
-        auto const cursor = text_->createTextCursor();
-        cursor->gotoEnd(false);
-        return new TextParagraphImpl(new TextRangeImpl(text_, cursor, true));
+        return new TextParagraphImpl(text_, paragraphsOf(text_).size() - 1);
     }
 
     cpo::uno::Reference<scriptinterop::XTextRange> setBulletLevel(sal_Int32 level)
@@ -1229,6 +1258,16 @@ private:
     cpo::uno::Reference<css::text::XTextRange> range_;
     bool paragraph_ = false;
 };
+
+css::beans::Optional<cpo::uno::Reference<scriptinterop::XTextRange>> TextParagraphImpl::getRange()
+{
+    auto const paragraph = paragraph_();
+    if (!paragraph.is())
+    {
+        return {false, {}};
+    }
+    return {true, new TextRangeImpl(text_, paragraph, true)};
+}
 
 class ShapeImpl : public PageElementCommon<scriptinterop::XShape>
 {
