@@ -11,8 +11,11 @@
 
 #pragma once
 
+#include <common/Common.hpp>
+
 #include <cstddef>
 #include <optional>
+#include <string>
 #include <string_view>
 #include <utility>
 #include <vector>
@@ -26,6 +29,19 @@ constexpr int MaxSide = 2048;
 
 /// The greatest number of thumbnails of one document.
 constexpr std::size_t MaxCount = 4;
+
+/// Returns the path of the thumbnail of the file at basePath, where size is the pixel size of
+/// the thumbnail as "<W>x<H>".
+inline std::string filePath(const std::string& basePath, const std::string& size)
+{
+    return basePath + THUMBNAIL_SUFFIX + size + ".png";
+}
+
+/// Returns the path of the thumbnail of the file at basePath that is width by height pixels.
+inline std::string filePath(const std::string& basePath, int width, int height)
+{
+    return filePath(basePath, std::to_string(width) + 'x' + std::to_string(height));
+}
 
 /// Parses the size of a box written as "<W>x<H>", with each side a decimal integer without
 /// leading zeros from MinSide to MaxSide. Returns the width and the height, or nothing when

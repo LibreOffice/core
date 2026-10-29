@@ -90,6 +90,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testLogCaptureCaller);
     CPPUNIT_TEST(testIsIso8601);
     CPPUNIT_TEST(testSaveResult);
+    CPPUNIT_TEST(testThumbnailPath);
     CPPUNIT_TEST(testFitPageInBox);
     CPPUNIT_TEST(testThumbnailParseSize);
     CPPUNIT_TEST(testThumbnailParseSizeList);
@@ -129,6 +130,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testLogCaptureCaller();
     void testIsIso8601();
     void testSaveResult();
+    void testThumbnailPath();
     void testFitPageInBox();
     void testThumbnailParseSize();
     void testThumbnailParseSizeList();
@@ -1489,6 +1491,21 @@ void WhiteBoxTests::testSaveResult()
     // An answer that does not say whether the save worked is a save with an unknown outcome.
     LOK_ASSERT_EQUAL(SaveResult::Outcome::Unknown,
                      parse(R"({ "commandName": ".uno:Save" })").outcome);
+}
+
+void WhiteBoxTests::testThumbnailPath()
+{
+    constexpr auto testname = __func__;
+
+    // A thumbnail is named after the file it belongs to, with its pixel size as given.
+    LOK_ASSERT_EQUAL(std::string("/tmp/user/docs/abc/file.odt.upload-thumbnail-256x256.png"),
+                     Thumbnail::filePath("/tmp/user/docs/abc/file.odt.upload", "256x256"));
+    LOK_ASSERT_EQUAL(std::string("file.odt.uploading-thumbnail-1000x500.png"),
+                     Thumbnail::filePath("file.odt.uploading", "1000x500"));
+
+    // The name from the two sides is the name from the size written as "<W>x<H>".
+    LOK_ASSERT_EQUAL(Thumbnail::filePath("file.odt.upload", "1000x500"),
+                     Thumbnail::filePath("file.odt.upload", 1000, 500));
 }
 
 void WhiteBoxTests::testFitPageInBox()

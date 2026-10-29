@@ -94,6 +94,8 @@ constexpr const char SETTING_IFRAME_END_POINT[] = "adminIntegratorSettings.html"
 constexpr const char TO_UPLOAD_SUFFIX[] = ".upload";
 /// The file suffix used to mark the file being uploaded.
 constexpr const char UPLOADING_SUFFIX[] = "ing";
+/// The suffix between the name of a file and the "<W>x<H>.png" of a thumbnail of it.
+constexpr const char THUMBNAIL_SUFFIX[] = "-thumbnail-";
 
 /// A shared threadname suffix in both the WSD and Kit processes
 /// is highly helpful for filtering the logs for the same document
