@@ -1822,8 +1822,8 @@ abstract class SelectionSection extends CanvasSectionObject {
 	private takeTheAnglesAway(kind: 'turn' | 'slant'): boolean {
 		const reached = new Map<number, cool.Matrix2D>();
 		const changes = new Map<number, cool.Matrix2D>();
-		for (const objectId of RenderGeometrySection.theOnesThatDraw(
-			RenderGeometrySection.standingFor(this.selectedObjects()),
+		for (const objectId of Interaction.context().theOnesAChangeNames(
+			this.selectedObjects(),
 		)) {
 			const mapping = RenderGeometrySection.transformOf(objectId);
 			if (!mapping) continue;
@@ -2640,15 +2640,10 @@ abstract class SelectionSection extends CanvasSectionObject {
 		if (!from) ShearingInteraction.forgetTheKeys();
 		TurningInteraction.forgetTheKeys();
 
-		/*
-			A group is named to the engine as the objects it holds. It has no mapping of its own
-			to be given - the drawing layer keeps only a rectangle for it, and hands a turn on to
-			what is inside it - so naming the group would lose the turn. Naming the objects
-			cannot: each of them has a mapping and takes it whole.
-		*/
+		// which objects the change is named by is up to where one stands
 		const reached = new Map<number, cool.Matrix2D>();
-		for (const objectId of RenderGeometrySection.theOnesThatDraw(
-			RenderGeometrySection.standingFor(objectIds),
+		for (const objectId of Interaction.context().theOnesAChangeNames(
+			objectIds,
 		)) {
 			const mapping =
 				from?.get(objectId) ?? RenderGeometrySection.transformOf(objectId);

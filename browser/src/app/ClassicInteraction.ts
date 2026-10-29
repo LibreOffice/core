@@ -26,6 +26,23 @@ abstract class ClassicContext implements InteractionContext {
 		return true;
 	}
 
+	/// A group is asked along with everything it holds, a diagram answers on its own.
+	public theOnesThatHaveASay(objectIds: number[]): number[] {
+		return RenderGeometrySection.theOnesThatHaveASay(objectIds);
+	}
+
+	/*
+		A group is named to the engine as the objects it holds. It has no mapping of its own to be
+		given - the drawing layer keeps only a rectangle for it, and hands a turn on to what is
+		inside it - so naming the group would lose the turn. Naming the objects cannot: each of
+		them has a mapping and takes it whole.
+	*/
+	public theOnesAChangeNames(objectIds: number[]): number[] {
+		return RenderGeometrySection.theOnesThatDraw(
+			RenderGeometrySection.standingFor(objectIds),
+		);
+	}
+
 	/*
 		Answers a press from the geometry the client holds, by naming the objects to the engine
 		instead of sending the press for it to hit test. A press that meets no object asks for no
@@ -856,6 +873,28 @@ class ClassicInPlaceContext implements InteractionContext {
 	// shapes with are not entered or taken apart one by one
 	public showsGroupBands(): boolean {
 		return false;
+	}
+
+	// a part of a chart answers on its own: the chart moves and resizes it with all it holds by
+	// its own rules. a shape added to the chart is asked as on the page
+	public theOnesThatHaveASay(objectIds: number[]): number[] {
+		return objectIds.flatMap((objectId: number) =>
+			RenderGeometrySection.objectOf(objectId)?.chartPart !== undefined
+				? [objectId]
+				: RenderGeometrySection.theOnesThatHaveASay([objectId]),
+		);
+	}
+
+	// a part of a chart is named as itself, the chart changes it as one with all it holds, in one
+	// step to undo. a shape added to the chart is named as on the page
+	public theOnesAChangeNames(objectIds: number[]): number[] {
+		return objectIds.flatMap((objectId: number) =>
+			RenderGeometrySection.objectOf(objectId)?.chartPart !== undefined
+				? [objectId]
+				: RenderGeometrySection.theOnesThatDraw(
+						RenderGeometrySection.standingFor([objectId]),
+					),
+		);
 	}
 
 	/*

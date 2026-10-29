@@ -74,6 +74,14 @@ interface InteractionContext {
 	/// them. Inside an object active in place its surround marks the level instead.
 	showsGroupBands(): boolean;
 
+	/// The objects that have a say in what may be done to these ones: they may be moved, resized,
+	/// sheared or turned only where every one of those allows it.
+	theOnesThatHaveASay(objectIds: number[]): number[];
+
+	/// The objects a change of these ones is named to the engine by, each with a mapping of its
+	/// own.
+	theOnesAChangeNames(objectIds: number[]): number[];
+
 	/// Ungroup, which takes apart what is selected. Answers whether it was run here; one that is
 	/// not goes to the engine.
 	ungroup(): boolean;

@@ -277,12 +277,12 @@ class ObjectHandles implements HandleSource {
 		them may be moved, and the same for the other two. The objects say it themselves, so a
 		selection of several is not one answer for all of them any more.
 
-		A group is asked about along with everything it holds. What may be done to it is what may
-		be done to all of them: a group holding one object whose place is held fast cannot be
-		moved, however little the group itself says about it.
+		Which objects are asked is up to where one stands: on the page and in a group, a group is
+		asked along with everything it holds, so a group holding one object whose place is held
+		fast cannot be moved; inside a chart, a part of it answers on its own.
 	*/
 	private static allOfThem(objectIds: number[]): number[] {
-		return RenderGeometrySection.theOnesThatHaveASay(objectIds);
+		return Interaction.context().theOnesThatHaveASay(objectIds);
 	}
 
 	public static canBeMoved(objectIds: number[]): boolean {
