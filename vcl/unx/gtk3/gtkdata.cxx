@@ -585,13 +585,8 @@ void GtkSalData::Init()
     gtk_style_context_add_provider_for_display(pGdkDisp, CreateStyleProvider(),
             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 #else
-    int nScreens = gdk_display_get_n_screens( pGdkDisp );
-    for( int n = 0; n < nScreens; n++ )
+    if (GdkScreen* pScreen = gdk_display_get_screen(pGdkDisp, 0))
     {
-        GdkScreen *pScreen = gdk_display_get_screen( pGdkDisp, n );
-        if (!pScreen)
-            continue;
-
         m_pDisplay->screenSizeChanged( pScreen );
         m_pDisplay->monitorsChanged( pScreen );
         // add signal handler to notify screen size changes

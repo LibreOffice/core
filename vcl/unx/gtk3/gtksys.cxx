@@ -92,29 +92,24 @@ void
 GtkSalSystem::countScreenMonitors()
 {
     maScreenMonitors.clear();
-    for (gint i = 0; i < gdk_display_get_n_screens(mpDisplay); i++)
+    GdkScreen* const pScreen = gdk_display_get_screen(mpDisplay, 0);
+    gint nMonitors(pScreen ? gdk_screen_get_n_monitors(pScreen) : 0);
+    if (nMonitors > 1)
     {
-        GdkScreen* const pScreen(gdk_display_get_screen(mpDisplay, i));
-        gint nMonitors(pScreen ? gdk_screen_get_n_monitors(pScreen) : 0);
-        if (nMonitors > 1)
+        std::vector<GdkRectangle> aGeometries;
+        aGeometries.reserve(nMonitors);
+        for (gint j(0); j != nMonitors; ++j)
         {
-            std::vector<GdkRectangle> aGeometries;
-            aGeometries.reserve(nMonitors);
-            for (gint j(0); j != nMonitors; ++j)
-            {
-                GdkRectangle aGeometry;
-                gdk_screen_get_monitor_geometry(pScreen, j, &aGeometry);
-                aGeometries.push_back(aGeometry);
-            }
-            std::sort(aGeometries.begin(), aGeometries.end(),
-                    GdkRectangleCoincidentLess());
-            const std::vector<GdkRectangle>::iterator aUniqueEnd(
-                    std::unique(aGeometries.begin(), aGeometries.end(),
-                    GdkRectangleCoincident()));
-            nMonitors = std::distance(aGeometries.begin(), aUniqueEnd);
+            GdkRectangle aGeometry;
+            gdk_screen_get_monitor_geometry(pScreen, j, &aGeometry);
+            aGeometries.push_back(aGeometry);
         }
-        maScreenMonitors.emplace_back(pScreen, nMonitors);
+        std::sort(aGeometries.begin(), aGeometries.end(), GdkRectangleCoincidentLess());
+        const std::vector<GdkRectangle>::iterator aUniqueEnd(
+            std::unique(aGeometries.begin(), aGeometries.end(), GdkRectangleCoincident()));
+        nMonitors = std::distance(aGeometries.begin(), aUniqueEnd);
     }
+    maScreenMonitors.emplace_back(pScreen, nMonitors);
 }
 
 GdkScreen *
