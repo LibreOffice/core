@@ -164,13 +164,13 @@ class PermTextureTransition extends SimpleTransition {
 			this.gl.getUniformLocation(this.program, 'enteringSlideTexture'),
 			1,
 		);
+		this.displayPermSlide_();
+
 		this.gl.drawArrays(
 			this.gl.TRIANGLE_STRIP,
 			0,
 			this.leavingPrimitives[0].vertices.length,
 		);
-
-		this.displayPermSlide_();
 	}
 }
 
