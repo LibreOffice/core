@@ -511,7 +511,8 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 	getHelpTab: function() {
 		let hasLatestUpdates = window.enableWelcomeMessage || window.mode.isCODesktop();
 		var hasFeedback = this.map.feedback;
-		var hasAccessibilitySupport = window.enableAccessibility;
+		var hasAccessibilitySupport = window.enableAccessibility &&
+			this.map.supportsScreenReading(this.map.getDocType());
 		var hasAccessibilityCheck = this.map.getDocType() === 'text';
 		const screenReadingPurpose =
 			_('Lets a screen reader follow the cursor and read the document');
