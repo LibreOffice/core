@@ -290,8 +290,6 @@ window.L.TextInput = window.L.Layer.extend({
 		onoff(this._textArea, 'keyup', this._onKeyUp, this);
 		onoff(this._textArea, 'copy cut paste', this._map._handleDOMEvent, this._map);
 
-		app.idleHandler.notifyActive();
-
 		if (ev.type === 'blur') {
 			this._textArea.setAttribute('aria-description', '');
 			this._a11yFocusDescription = '';

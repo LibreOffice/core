@@ -102,7 +102,8 @@ class IdleHandler {
 				}
 
 				if (this.isDimActive()) {
-					this.map.jsdialog.closeDialog(this.dimId, false);
+					const uiManager = this.map.uiManager;
+					uiManager.closeModal(uiManager.generateModalId(this.dimId));
 					return true;
 				}
 			} else {

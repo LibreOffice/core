@@ -1289,7 +1289,11 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		instance.startX = e.data.posx;
 		instance.startY = e.data.posy;
 		instance.updatePos = null;
-		instance.canHaveFocus = !instance.isSnackbar && instance.id !== 'busypopup' && !instance.isAutoCompletePopup;
+		// The idle popup covers a view that is asleep. It takes no focus, so a key pressed
+		// to come back still reaches the document, and the window it is in gains no focus
+		// from the popup itself.
+		instance.canHaveFocus = !instance.isSnackbar && instance.id !== 'busypopup' && !instance.isAutoCompletePopup
+			&& instance.id !== JSDialog.generateModalId(app.idleHandlerId);
 		instance.isDocumentAreaPopup = instance.popupParent === '_POPOVER_' && instance.posx !== undefined && instance.posy !== undefined;
 		instance.isPopup = instance.isModalPopUp || instance.isDocumentAreaPopup || instance.isSnackbar;
 		instance.isAutoPopup = instance.isDocumentAreaPopup && this.map._docLayer.isCalc();
