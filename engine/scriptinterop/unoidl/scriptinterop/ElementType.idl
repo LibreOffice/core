@@ -27,7 +27,8 @@ enum ElementType {
     FOOTNOTE_SECTION,
     TEXT,
     UNSUPPORTED,
-    DOCUMENT
+    DOCUMENT,
+    TABLE_OF_CONTENTS
 };
 
 };

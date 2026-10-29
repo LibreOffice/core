@@ -64,6 +64,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XParagraphAppend.hpp>
@@ -924,6 +925,10 @@ OUString elementTypeName(scriptinterop::ElementType type) {
         return u"TEXT"_ustr;
     case scriptinterop::ElementType_DOCUMENT:
         return u"DOCUMENT"_ustr;
+    case scriptinterop::ElementType_TABLE_OF_CONTENTS:
+        return u"TABLE_OF_CONTENTS"_ustr;
+    case scriptinterop::ElementType_UNSUPPORTED:
+        return u"UNSUPPORTED"_ustr;
     default:
         throw cpo::uno::RuntimeException(
             "unknown element type " + OUString::number(static_cast<sal_Int32>(type)));
@@ -2188,6 +2193,8 @@ template<typename T> cpo::uno::Reference<scriptinterop::XText> ElementImpl<T>::a
     case scriptinterop::ElementType_TABLE:
     case scriptinterop::ElementType_TABLE_CELL:
     case scriptinterop::ElementType_TABLE_ROW:
+    case scriptinterop::ElementType_TABLE_OF_CONTENTS:
+    case scriptinterop::ElementType_UNSUPPORTED:
         return new ContainerTextImpl(cpo::uno::Reference<scriptinterop::XContainerElement>(
             static_cast<T *>(this), cpo::uno::UNO_QUERY_THROW));
     default:
@@ -3322,6 +3329,116 @@ private:
     cpo::uno::Reference<css::text::XTextTable> table_;
 };
 
+// The table of contents or other index that a paragraph is part of, or null:
+cpo::uno::Reference<css::text::XTextContent> indexOf(
+    cpo::uno::Reference<css::text::XTextContent> const & paragraph)
+{
+    cpo::uno::Reference<css::beans::XPropertySet> const props(paragraph, cpo::uno::UNO_QUERY);
+    cpo::uno::Reference<css::text::XDocumentIndex> index;
+    if (props.is()) {
+        props->getPropertyValue(u"DocumentIndex"_ustr) >>= index;
+    }
+    return index;
+}
+
+// A table of contents, or another index, as one element whose children are its paragraphs. Writer
+// generates the text of these paragraphs from the rest of the document. GAS has no element type for
+// the other kinds of index, so they are UNSUPPORTED:
+class DocumentIndexImpl:
+    public ElementImpl<scriptinterop::XContainerElement>, public ContentsContainer {
+public:
+    DocumentIndexImpl(
+        std::shared_ptr<Model> const & model,
+        cpo::uno::Reference<scriptinterop::XElement> const & parent,
+        cpo::uno::Reference<css::text::XTextContent> const & index):
+        model_(model), parent_(parent), index_(index) {}
+
+    cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return index_; }
+
+    cpo::uno::Reference<scriptinterop::XContainerElement> clear() override {
+        throw cpo::uno::RuntimeException(
+            "clear: a " + elementTypeName(getType()) + " cannot be cleared yet");
+    }
+
+    cpo::uno::Reference<scriptinterop::XText> editAsText() override { return asText(); }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XRangeElement>> findText(
+        OUString const & searchPattern) override
+    { return asText()->findText(searchPattern); }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XRangeElement>> findTextFrom(
+        OUString const & searchPattern,
+        cpo::uno::Reference<scriptinterop::XRangeElement> const & from) override
+    { return asText()->findTextFrom(searchPattern, from); }
+
+    // TODO: return a detached deep copy, not this; mutations on the "copy" write back to the live
+    // element:
+    cpo::uno::Reference<scriptinterop::XElement> copy() override { return this; }
+
+    cpo::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
+        auto const & list = contents();
+        return index >= 0 && o3tl::make_unsigned(index) < list.size()
+            ? elementOf(model_, this, list[index]) : nullptr;
+    }
+
+    sal_Int32 getChildIndex(cpo::uno::Reference<scriptinterop::XElement> const & child) override
+    { return childIndexOf(*this, child); }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getNextSibling() override {
+        return maybe(siblingContent(model_, index_, parent_, true));
+    }
+
+    sal_Int32 getNumChildren() override { return contents().size(); }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getParent() override {
+        return maybe(parent_);
+    }
+
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getPreviousSibling() override
+    { return maybe(siblingContent(model_, index_, parent_, false)); }
+
+    OUString getText() override { return asText()->getText(); }
+
+    scriptinterop::ElementType getType() override {
+        cpo::uno::Reference<css::lang::XServiceInfo> const info(index_, cpo::uno::UNO_QUERY);
+        return info.is() && info->supportsService(u"com.sun.star.text.ContentIndex"_ustr)
+            ? scriptinterop::ElementType_TABLE_OF_CONTENTS : scriptinterop::ElementType_UNSUPPORTED;
+    }
+
+    cpo::uno::Reference<scriptinterop::XElement> removeFromParent() override {
+        removeContent(index_);
+        return this;
+    }
+
+    // The paragraphs of the text that holds the index which belong to the index:
+    std::vector<cpo::uno::Reference<css::text::XTextContent>> const & contents() override {
+        return contents_.get(model_->generation(), [this] {
+            std::vector<cpo::uno::Reference<css::text::XTextContent>> v;
+            auto const anchor = index_->getAnchor();
+            cpo::uno::Reference<css::container::XEnumerationAccess> const ea(
+                anchor.is() ? anchor->getText() : nullptr, cpo::uno::UNO_QUERY);
+            if (!ea.is()) {
+                return v;
+            }
+            auto const en = ea->createEnumeration();
+            while (en.is() && en->hasMoreElements()) {
+                cpo::uno::Reference<css::text::XTextContent> xtc;
+                en->nextElement() >>= xtc;
+                if (xtc.is() && indexOf(xtc) == index_) {
+                    v.push_back(xtc);
+                }
+            }
+            return v;
+        });
+    }
+
+private:
+    std::shared_ptr<Model> model_;
+    cpo::uno::Reference<scriptinterop::XElement> parent_;
+    cpo::uno::Reference<css::text::XTextContent> index_;
+    Cached<std::vector<cpo::uno::Reference<css::text::XTextContent>>> contents_;
+};
+
 std::vector<cpo::uno::Reference<css::text::XTextContent>> enumerateContents(
     cpo::uno::Reference<css::text::XText> const & text)
 {
@@ -3340,6 +3457,13 @@ std::vector<cpo::uno::Reference<css::text::XTextContent>> enumerateContents(
                 continue;
             }
             if (info->supportsService(u"com.sun.star.text.Paragraph"_ustr)) {
+                // The paragraphs of an index are one child, the index:
+                if (auto const index = indexOf(xtc); index.is()) {
+                    if (v.empty() || v.back() != index) {
+                        v.push_back(index);
+                    }
+                    continue;
+                }
                 v.push_back(xtc);
             } else if (info->supportsService(u"com.sun.star.text.TextTable"_ustr)) {
                 cpo::uno::Reference<css::text::XTextTable> const table(xtc, cpo::uno::UNO_QUERY);
@@ -3359,6 +3483,9 @@ cpo::uno::Reference<scriptinterop::XElement> elementOf(
 {
     if (cpo::uno::Reference<css::text::XTextTable> const table{content, cpo::uno::UNO_QUERY}) {
         return new TableImpl(model, parent, table);
+    }
+    if (cpo::uno::Reference<css::text::XDocumentIndex>(content, cpo::uno::UNO_QUERY).is()) {
+        return new DocumentIndexImpl(model, parent, content);
     }
     return new ParagraphImpl(model, parent, content);
 }
@@ -4891,13 +5018,13 @@ cpo::uno::Reference<scriptinterop::XParagraph> paragraphOf(
     std::shared_ptr<Model> const & model,
     cpo::uno::Reference<css::text::XTextContent> const & paragraph)
 {
-    return new ParagraphImpl(
+    auto parent = containerOf(
         model,
-        containerOf(
-            model,
-            cpo::uno::Reference<css::text::XTextRange>(paragraph, cpo::uno::UNO_QUERY_THROW)
-                ->getText()),
-        paragraph);
+        cpo::uno::Reference<css::text::XTextRange>(paragraph, cpo::uno::UNO_QUERY_THROW)->getText());
+    if (auto const index = indexOf(paragraph); index.is() && parent.is()) {
+        parent = elementOf(model, parent, index);
+    }
+    return new ParagraphImpl(model, parent, paragraph);
 }
 
 // The position of an element in the document, as the indices of the element and of its ancestors

@@ -376,6 +376,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTables) {
     runScript(createFileURL(u"tables-test.js"), {}, u"");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTableOfContents) {
+    loadActiveDocument(u"toc-test.rtf");
+    runScript(createFileURL(u"toc-test.js"), {}, u"");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testUtilities) {
     runScript(createFileURL(u"utilities-test.js"), {}, u"");
 }

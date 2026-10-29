@@ -75,7 +75,7 @@ $internal.installGasServices = function(uiStub, menuItems, pendingAlerts) {
             RICH_LINK: 'RICH_LINK',
             TABLE: uno.idl.scriptinterop.ElementType.TABLE,
             TABLE_CELL: uno.idl.scriptinterop.ElementType.TABLE_CELL,
-            TABLE_OF_CONTENTS: 'TABLE_OF_CONTENTS',
+            TABLE_OF_CONTENTS: uno.idl.scriptinterop.ElementType.TABLE_OF_CONTENTS,
             TABLE_ROW: uno.idl.scriptinterop.ElementType.TABLE_ROW,
             TEXT: uno.idl.scriptinterop.ElementType.TEXT,
             UNSUPPORTED: uno.idl.scriptinterop.ElementType.UNSUPPORTED
