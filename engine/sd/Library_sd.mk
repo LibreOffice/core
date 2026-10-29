@@ -414,7 +414,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/tools/PreviewRenderer \
 	sd/source/ui/tools/SdGlobalResourceContainer \
 	sd/source/ui/tools/SlideshowLayerRenderer \
-	sd/source/ui/tools/SlotStateListener \
 	sd/source/ui/tools/TimerBasedTaskExecution \
 	sd/source/ui/uitest/uiobject \
 	sd/source/ui/unoidl/DrawController \

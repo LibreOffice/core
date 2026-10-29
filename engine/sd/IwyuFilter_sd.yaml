@@ -166,9 +166,6 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/awt/XWindowListener.hpp
     - com/sun/star/view/XSelectionSupplier.hpp
-    sd/source/ui/inc/tools/SlotStateListener.hxx:
-    # base class has to be a complete type
-    - com/sun/star/frame/XStatusListener.hpp
     sd/source/ui/presenter/PresenterCanvas.hxx:
     # base class has to be a complete type
     - com/sun/star/rendering/XBitmap.hpp
