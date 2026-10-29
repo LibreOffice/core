@@ -99,6 +99,12 @@ class SelectionSnap {
 	): void {
 		this.forget();
 
+		// inside an object active in place nothing snaps, as in the chart's own drag
+		if (
+			Interaction.placeOf(GraphicSelection.selectedObjectIDs).kind === 'inPlace'
+		)
+			return;
+
 		// Alt turns the snap over against how it is set, for every kind of snap and for every
 		// action that snaps, so a grid that is on is left alone while Alt is held and one that is
 		// off is snapped to.

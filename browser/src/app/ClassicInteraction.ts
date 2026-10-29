@@ -859,30 +859,12 @@ class ClassicInPlaceContext implements InteractionContext {
 	}
 
 	/*
-		Tab goes through the parts of the active object as one list in paint order: the parts a
-		chart selects on its own and the shapes someone added to it, the groups the chart only
-		organises its shapes with left out. With none selected the first is taken, or going
-		backwards the last; from the last it goes round to the first.
+		Tab goes to the object active in place, which goes through its parts as it does in the
+		office: a chart takes the title first, round the parts of one level, Enter and F3 go down
+		a level. It reports the part it selected as its own selection.
 	*/
-	public tabKey(forwards: boolean): boolean {
-		const place = Interaction.placeOf(GraphicSelection.selectedObjectIDs);
-		if (place.kind !== 'inPlace') return false;
-
-		const parts = (RenderGeometrySection.currentPart()?.order ?? []).filter(
-			(objectId: number) =>
-				ClassicInPlaceContext.isAPart(objectId, place.object),
-		);
-		if (!parts.length) return false;
-
-		const at = parts.indexOf(GraphicSelection.selectedObjectIDs[0]);
-		const to =
-			at < 0
-				? forwards
-					? 0
-					: parts.length - 1
-				: (at + (forwards ? 1 : -1) + parts.length) % parts.length;
-		GraphicSelection.selectAndShow([parts[to]]);
-		return true;
+	public tabKey(_forwards: boolean): boolean {
+		return false;
 	}
 
 	public toAnEnd(_first: boolean): boolean {
