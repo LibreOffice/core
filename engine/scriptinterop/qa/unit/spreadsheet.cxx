@@ -1149,6 +1149,7 @@ CPPUNIT_TEST_FIXTURE(Test, testChartOutlivesItsSheetReference)
     // chart object.
     xChart->remove();
     CPPUNIT_ASSERT_THROW(xChart->setTitle(u"gone"_ustr), cpo::uno::RuntimeException);
+    CPPUNIT_ASSERT_THROW(xChart->remove(), cpo::uno::RuntimeException);
 }
 }
 

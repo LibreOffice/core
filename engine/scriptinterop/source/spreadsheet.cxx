@@ -1006,6 +1006,9 @@ public:
     {
         try
         {
+            // Unlike the one for pivot tables, this removeByName does nothing for a name that
+            // is gone.
+            tableChart();
             charts_->removeByName(name_);
         }
         catch (cpo::uno::Exception const& e)
