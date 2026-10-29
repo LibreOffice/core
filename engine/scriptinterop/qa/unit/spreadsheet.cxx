@@ -226,6 +226,21 @@ CPPUNIT_TEST_FIXTURE(Test, testSetValueRejectsUnsupportedType)
     CPPUNIT_ASSERT(!xRange->getValue().hasValue());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testSetValueNullClearsCell)
+{
+    auto const xSheet = loadSpreadsheet()->getActiveSheet();
+    auto const xRange = xSheet->getRange(u"A1:B1"_ustr);
+    xRange->setValue(cpo::uno::Any(1.0));
+    // A script's null arrives as a null interface reference and clears the cell, the same as
+    // undefined, which arrives as an empty value.
+    cpo::uno::Any const null(cpo::uno::Reference<cpo::uno::XInterface>{});
+    xRange->setValues(
+        cpo::uno::Sequence<cpo::uno::Sequence<cpo::uno::Any>>{ { null, cpo::uno::Any(2.0) } });
+    CPPUNIT_ASSERT(!xSheet->getRange(u"A1"_ustr)->getValue().hasValue());
+    xRange->setValue(null);
+    CPPUNIT_ASSERT(!xSheet->getRange(u"B1"_ustr)->getValue().hasValue());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFormulaErrorValue)
 {
     auto const xSheet = loadSpreadsheet()->getActiveSheet();

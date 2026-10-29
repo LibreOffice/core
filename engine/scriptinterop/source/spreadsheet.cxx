@@ -136,6 +136,17 @@ cpo::uno::Any cellValue(cpo::uno::Reference<css::table::XCell> const& cell)
     }
 }
 
+// True for a value that stands for a cleared cell: an empty value, which is how a script's
+// undefined arrives, or a null interface reference, which is how its null arrives.
+bool isEmptyValue(cpo::uno::Any const& value)
+{
+    if (!value.hasValue())
+        return true;
+    cpo::uno::Reference<cpo::uno::XInterface> ref;
+    return value.getValueTypeClass() == cpo::uno::TypeClass_INTERFACE && (value >>= ref)
+           && !ref.is();
+}
+
 // True for a value a cell can hold: a number, a boolean, a string, or an empty value, which
 // stands for a cleared cell. A value of any other type has no cell representation at all.
 bool isWritableValue(cpo::uno::Any const& value)
@@ -144,7 +155,7 @@ bool isWritableValue(cpo::uno::Any const& value)
     bool boolValue = false;
     OUString stringValue;
     return (value >>= numberValue) || (value >>= boolValue) || (value >>= stringValue)
-           || !value.hasValue();
+           || isEmptyValue(value);
 }
 
 // Writes a value the way typing it into the cell would: a string goes through setFormula, which
@@ -168,7 +179,7 @@ void setCellValue(cpo::uno::Reference<css::table::XCell> const& cell, cpo::uno::
     {
         cell->setFormula(stringValue);
     }
-    else if (!value.hasValue())
+    else if (isEmptyValue(value))
     {
         cell->setFormula(OUString());
     }
