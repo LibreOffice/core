@@ -55,6 +55,8 @@
 #endif
 
 #ifndef _WIN32
+#include <csignal>
+#include <poll.h>
 #include <sys/uio.h>
 #include <unistd.h>
 #include <dirent.h>
@@ -71,6 +73,15 @@
 
 #if defined __EMSCRIPTEN__
 #include <emscripten/console.h>
+#endif
+
+// The pidfd system calls have the same numbers on every architecture. Headers older than the calls
+// do not name them.
+#if defined(__linux__) && !defined(SYS_pidfd_open)
+#define SYS_pidfd_open 434
+#endif
+#if defined(__linux__) && !defined(SYS_pidfd_send_signal)
+#define SYS_pidfd_send_signal 424
 #endif
 
 #ifdef _WIN32
@@ -350,6 +361,68 @@ std::string Backtrace::toString() const
         }
     }
     return s;
+}
+
+ProcessHandle::ProcessHandle(pid_t pid)
+    : _pid(pid)
+    , _pidFd(-1)
+{
+    assert(_pid > 0 && "Invalid ProcessID");
+#if defined(__linux__) && defined(SYS_pidfd_open)
+    if (_pid > 0)
+    {
+        _pidFd = ::syscall(SYS_pidfd_open, _pid, 0);
+        if (_pidFd < 0)
+            LOG_DBG("No pidfd for process " << _pid << ", will refer to it by pid: "
+                                            << Util::symbolicErrno(errno));
+    }
+#endif
+}
+
+ProcessHandle::~ProcessHandle()
+{
+#ifndef _WIN32
+    if (_pidFd >= 0)
+        ::close(_pidFd);
+#endif
+}
+
+bool ProcessHandle::isAlive() const
+{
+#ifndef _WIN32
+    if (_pidFd >= 0)
+    {
+        // A pidfd becomes readable once the process exits.
+        pollfd pollDescriptor{ _pidFd, POLLIN, 0 };
+        const int result = ::poll(&pollDescriptor, 1, 0);
+        if (result < 0)
+        {
+            // The process counts as alive until its pidfd can be polled.
+            LOG_SYS("Failed to poll the pidfd of process [" << _pid << ']');
+            return true;
+        }
+
+        return result == 0;
+    }
+
+    return _pid > 0 && ::kill(_pid, 0) == 0;
+#else
+    return _pid > 0;
+#endif
+}
+
+bool ProcessHandle::signal(int signal) const
+{
+#if defined(__linux__) && defined(SYS_pidfd_send_signal)
+    if (_pidFd >= 0)
+        return ::syscall(SYS_pidfd_send_signal, _pidFd, signal, nullptr, 0) == 0 || errno == ESRCH;
+#endif
+#ifndef _WIN32
+    return _pid > 0 && (::kill(_pid, signal) == 0 || errno == ESRCH);
+#else
+    (void)signal;
+    return false;
+#endif
 }
 
 } // namespace ProcUtil

@@ -197,6 +197,7 @@ test_base_sources = \
 	LoggingWhiteBoxTests.cpp \
 	NetUtilWhiteBoxTests.cpp \
 	NumUtilWhiteBoxTests.cpp \
+	ProcessWhiteBoxTests.cpp \
 	RequestDetailsTests.cpp \
 	StringVectorTests.cpp \
 	TestGlobals.cpp \

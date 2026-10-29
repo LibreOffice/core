@@ -32,6 +32,35 @@ using ThreadId = long;
 /// Spawn a process.
 int spawnProcess(const std::string& cmd, const StringVector& args);
 
+/// Refers to a process, by a pidfd where the system has them. A pidfd stays bound to the
+/// process after it exits, even once its pid is given to a new process, so a check or a
+/// signal through it reaches only that process, and a process that has exited is gone,
+/// whether it was reaped yet or not. Otherwise, falls back to the pid.
+class ProcessHandle
+{
+public:
+    explicit ProcessHandle(pid_t pid);
+    ~ProcessHandle();
+
+    ProcessHandle(const ProcessHandle&) = delete;
+    ProcessHandle& operator=(const ProcessHandle&) = delete;
+
+    pid_t getPid() const { return _pid; }
+
+    /// Whether we refer to the process by a pidfd.
+    bool hasPidFd() const { return _pidFd >= 0; }
+
+    /// Whether the process is alive: it hasn't exited.
+    bool isAlive() const;
+
+    /// Sends the signal to the process. Returns true if sent, or if the process is gone.
+    bool signal(int signal) const;
+
+private:
+    const pid_t _pid;
+    int _pidFd; ///< -1 without a pidfd.
+};
+
 /// Returns the process PSS in KB (works only when we have perms for /proc/pid/smaps).
 size_t getMemoryUsagePSS(pid_t pid);
 
