@@ -49,14 +49,14 @@ bundles it.
 
 ## In the build
 
-A debug build applies a theme to `browser/dist` by itself: the desktop app builds
-(`--enable-macosapp`, `--enable-windowsapp`, `--enable-qtapp --disable-server`) get CODA,
-everything else gets CODE. A tree that builds the server and the qt app together gets
-CODE in `browser/dist`, and the qt app page loads `branding-app.js`, the script of the
-CODA theme, so that the server is CODE and the app is Collabora Office. The Android and
-iOS apps are Collabora Office in release builds too, so they get CODA by default; the
-iOS app bundles the theme from `ios/Mobile/Branding`, where the build generates it.
-Configure options:
+The build applies a theme to `browser/dist` by itself in two cases: in a debug build,
+and in every app build without the server (`--enable-macosapp`, `--enable-windowsapp`,
+`--enable-androidapp`, `--enable-iosapp`, `--enable-qtapp --disable-server`), release
+or debug, because the apps are Collabora Office. The app builds get CODA, everything
+else gets CODE. A tree that builds the server and the qt app together gets CODE in
+`browser/dist`, and the qt app page loads `branding-app.js`, the script of the CODA
+theme, so that the server is CODE and the app is Collabora Office. The iOS app bundles
+the theme from `ios/Mobile/Branding`, where the build generates it. Configure options:
 
 - `--disable-branding`: build an unbranded tree
 - `--enable-branding=CO-theme|CODE|CODA`: pick the theme, also in a release build

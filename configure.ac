@@ -280,10 +280,11 @@ AC_ARG_ENABLE([branding],
               AS_HELP_STRING([--enable-branding@<:@=THEME@:>@],
                              [Apply a theme from browser/branding to browser/dist: CO-theme (Collabora Online),
                               CODE (Collabora Online Development Edition) or CODA (Collabora Office). Without THEME,
-                              the desktop app builds get CODA and the rest CODE; a tree that builds the server and
-                              the qt app gets CODE for the server and CODA for the app. Enabled by default in debug
-                              builds and in the Android and iOS app builds, which are Collabora Office, but not for
-                              WASM or with --with-app-branding. --disable-branding builds an unbranded tree.]))
+                              the app builds get CODA and the rest CODE; a tree that builds the server and the
+                              qt app gets CODE for the server and CODA for the app. Enabled by default in debug
+                              builds and in every app build without the server, which is Collabora Office in
+                              release builds too, but not for WASM or with --with-app-branding. --disable-branding
+                              builds an unbranded tree.]))
 
 AC_ARG_WITH([app-branding-suffix],
               AS_HELP_STRING([--with-app-branding-suffix=<suffix>],
@@ -2662,8 +2663,9 @@ AM_CONDITIONAL([APP_HAS_BRANDING], [test "$APP_HAS_BRANDING" = "true"])
 # The theme from browser/branding. BRANDING_THEME is what browser/dist gets; when the
 # server and the qt app are built from the same tree, the server page is CODE and the
 # app page loads its own script, branding-app.js, generated from the CODA theme. The
-# Android and iOS apps are Collabora Office in release builds too, so they get the theme
-# by default; the iOS app bundles it from ios/Mobile/Branding.
+# apps are Collabora Office in release builds too, so every build without the server
+# gets the theme by default; the iOS app bundles it from ios/Mobile/Branding. A release
+# build of the server stays unbranded, the brand packages carry its theme.
 AC_MSG_CHECKING([for the theme from browser/branding])
 BRANDING_THEME=
 BRANDING_APP_JS=false
@@ -2675,7 +2677,7 @@ case "$enable_branding" in
         if test "$enable_branding" = yes; then
             branding_default=true
         elif test "$APP_HAS_BRANDING" != true -a "$host_os" != emscripten; then
-            if test "$ENABLE_DEBUG" = true -o "$enable_androidapp" = yes -o "$enable_iosapp" = yes; then
+            if test "$ENABLE_DEBUG" = true -o "$ENABLE_SERVER" != true; then
                 branding_default=true
             fi
         fi
