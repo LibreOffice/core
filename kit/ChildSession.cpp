@@ -1445,7 +1445,12 @@ bool ChildSession::loadDocument(const StringVector& tokens)
         }
 
         if (!Util::isMobileApp())
+        {
             copyForUpload(url);
+
+            // The thumbnails go with the copy that is uploaded, like after any other save.
+            renderThumbnails(Poco::URI(url).getPath() + TO_UPLOAD_SUFFIX);
+        }
     }
 
     getLOKitDocument()->setView(_viewId);
