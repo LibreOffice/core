@@ -201,6 +201,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 
     SCTAB nCountVisible = 0;
     const SCTAB nTabCount = rDoc.GetTableCount();
+    bool bAllSelected = true;
 
     SfxWhichIter    aIter(rSet);
     sal_uInt16          nWhich = aIter.FirstWhich();
@@ -558,9 +559,21 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 break;
 
             case FID_TAB_SELECTALL:
-                // tdf#173835 count visible and hidden sheets
-                if ( rDoc.GetTableCount() == rMark.GetSelectCount() )
-                    rSet.DisableItem( nWhich );  // disabled if all sheets are already selected
+                if ( officecfg::Office::Calc::Input::SelectHiddenSheets::get() )
+                {
+                    // tdf#173835 count visible and hidden sheets
+                    if ( nTabCount == rMark.GetSelectCount() )
+                        rSet.DisableItem( nWhich );  // disabled if all sheets are already selected
+                }
+                else // count only visible sheets
+                {
+                    for ( SCTAB i = 0; i < nTabCount && bAllSelected; i++ )
+                    {
+                        bAllSelected = !( rDoc.IsVisible(i) && !rMark.GetTableSelect(i) );
+                    }
+                    if ( bAllSelected )
+                        rSet.DisableItem( nWhich );  // disabled if all sheets are already selected
+                }
                 break;
 
             case FID_TOGGLEHIDDENCOLROW:

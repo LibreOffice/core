@@ -813,6 +813,13 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="SelectHiddenSheets" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>With Select All Sheets command, hidden sheets are selected in addition to visible sheets.</desc>
+          <label>Select hidden sheets with Select All Sheets command</label>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
     <group oor:name="Grid">
       <info>

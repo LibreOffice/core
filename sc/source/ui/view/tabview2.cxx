@@ -43,6 +43,7 @@
 #include <markdata.hxx>
 #include <inputopt.hxx>
 #include <comphelper/lok.hxx>
+#include <officecfg/Office/Calc.hxx>
 
 namespace {
 
@@ -1315,13 +1316,14 @@ void ScTabView::SelectAllTables()
     if (nCount>1)
     {
         SCTAB nHiddenSheetsCount = 0;
+        bool bSelectHiddenSheets = officecfg::Office::Calc::Input::SelectHiddenSheets::get();
         for (SCTAB i=0; i<nCount; i++)
         {
             if ( rDoc.IsVisible( i ) )
             {
                 rMark.SelectTable( i, true );
             }
-            else
+            else if ( bSelectHiddenSheets )
             {
                 rMark.SelectTable( i, true );
                 ++nHiddenSheetsCount;
