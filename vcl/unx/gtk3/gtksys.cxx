@@ -119,7 +119,7 @@ GtkSalSystem::getScreenMonitorFromIdx (int nIdx, gint &nMonitor)
     nMonitor = nIdx;
 
     // handle invalid monitor indexes as non-existent screens
-    if (nMonitor < 0 || (pScreen && nMonitor >= gdk_screen_get_n_monitors (pScreen)))
+    if (nMonitor < 0 || nMonitor >= gdk_display_get_n_monitors(mpDisplay))
         pScreen = nullptr;
 
     return pScreen;
