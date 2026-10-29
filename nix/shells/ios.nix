@@ -58,6 +58,7 @@ pkgs.mkShell {
     automake
     bison
     cacert
+    ccache
     curl
     flex
     git
