@@ -10,6 +10,7 @@
  */
 
 #include <algorithm>
+#include <optional>
 #include <string_view>
 #include <utility>
 #include <vector>
@@ -41,14 +42,15 @@
 #include <com/sun/star/sheet/XDataPilotTable.hpp>
 #include <com/sun/star/sheet/XDataPilotTables.hpp>
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
+#include <com/sun/star/sheet/XCellRangesQuery.hpp>
 #include <com/sun/star/sheet/XNamedRange.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
+#include <com/sun/star/sheet/XSheetCellRanges.hpp>
 #include <com/sun/star/sheet/XSheetOperation.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/sheet/XSpreadsheetView.hpp>
-#include <com/sun/star/sheet/XUsedAreaCursor.hpp>
 #include <com/sun/star/sheet/XViewFreezable.hpp>
 #include <com/sun/star/sheet/XViewSplitable.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -1109,7 +1111,10 @@ public:
 
     cpo::uno::Reference<scriptinterop::XRange> getDataRange() override
     {
-        auto const a = usedArea();
+        // Like SpreadsheetApp, start at A1 rather than at the first cell with content.
+        auto a = contentArea().value_or(css::table::CellRangeAddress());
+        a.StartColumn = 0;
+        a.StartRow = 0;
         // A cursor cannot take bulk value reads/writes; a genuine sub-range at the same address
         // can.
         cpo::uno::Reference<css::table::XCellRange> const sheetRange(sheet_,
@@ -1119,9 +1124,17 @@ public:
         return new RangeImpl(model_, range);
     }
 
-    sal_Int32 getLastRow() override { return usedArea().EndRow + 1; }
+    sal_Int32 getLastRow() override
+    {
+        auto const a = contentArea();
+        return a ? a->EndRow + 1 : 0;
+    }
 
-    sal_Int32 getLastColumn() override { return usedArea().EndColumn + 1; }
+    sal_Int32 getLastColumn() override
+    {
+        auto const a = contentArea();
+        return a ? a->EndColumn + 1 : 0;
+    }
 
     sal_Int32 getMaxRows() override { return columnRowRange()->getRows()->getCount(); }
 
@@ -1476,17 +1489,31 @@ private:
         return visibleExtent(columnRowRange()->getRows(), u"Height"_ustr, count);
     }
 
-    // The bounding box of every non-empty cell on the sheet.
-    css::table::CellRangeAddress usedArea()
+    // The bounding box of every cell with content, or nothing on a sheet without any. Unlike
+    // the sheet's used area, which also counts comments and visible formatting and is A1 on an
+    // empty sheet, this is what SpreadsheetApp measures.
+    std::optional<css::table::CellRangeAddress> contentArea()
     {
-        auto const cursor = sheet_->createCursor();
-        cpo::uno::Reference<css::sheet::XUsedAreaCursor> const used(cursor,
-                                                                    cpo::uno::UNO_QUERY_THROW);
-        used->gotoStartOfUsedArea(false);
-        used->gotoEndOfUsedArea(true);
-        cpo::uno::Reference<css::sheet::XCellRangeAddressable> const addr(
-            cursor, cpo::uno::UNO_QUERY_THROW);
-        return addr->getRangeAddress();
+        cpo::uno::Reference<css::sheet::XCellRangesQuery> const query(sheet_,
+                                                                      cpo::uno::UNO_QUERY_THROW);
+        auto const ranges
+            = query
+                  ->queryContentCells(css::sheet::CellFlags::VALUE
+                                      | css::sheet::CellFlags::DATETIME
+                                      | css::sheet::CellFlags::STRING
+                                      | css::sheet::CellFlags::FORMULA)
+                  ->getRangeAddresses();
+        if (!ranges.hasElements())
+            return {};
+        auto area = ranges[0];
+        for (auto const& r : ranges)
+        {
+            area.StartColumn = std::min(area.StartColumn, r.StartColumn);
+            area.StartRow = std::min(area.StartRow, r.StartRow);
+            area.EndColumn = std::max(area.EndColumn, r.EndColumn);
+            area.EndRow = std::max(area.EndRow, r.EndRow);
+        }
+        return area;
     }
 
     // The selection tracked by the controller belongs to the document, not to any one XSheet

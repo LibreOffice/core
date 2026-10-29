@@ -316,12 +316,13 @@ CPPUNIT_TEST_FIXTURE(Test, testDataRange)
     auto const xSheet = loadSpreadsheet()->getActiveSheet();
     xSheet->getRange(u"B2"_ustr)->setValue(cpo::uno::Any(1.0));
     xSheet->getRange(u"D5"_ustr)->setValue(cpo::uno::Any(2.0));
-    // The data range is the bounding box of every non-empty cell, not just the two written ones.
+    // The data range runs from A1 to the last row and column with content, as in SpreadsheetApp,
+    // not from the first cell with content.
     auto const xData = xSheet->getDataRange();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xData->getRow());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xData->getColumn());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xData->getNumRows());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xData->getNumColumns());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xData->getRow());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xData->getColumn());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xData->getNumRows());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xData->getNumColumns());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testMaxRowsColumns)
@@ -787,6 +788,24 @@ CPPUNIT_TEST_FIXTURE(Test, testGetLastRowAndColumn)
     xSheet->getRange(u"D5"_ustr)->setValue(cpo::uno::Any(2.0));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xSheet->getLastRow());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xSheet->getLastColumn());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testLastRowAndColumnCountOnlyContent)
+{
+    auto const xSheet = loadSpreadsheet()->getActiveSheet();
+    // An empty sheet has no last row or column, as in SpreadsheetApp.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xSheet->getLastRow());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xSheet->getLastColumn());
+    auto const xData = xSheet->getDataRange();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xData->getRow());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xData->getColumn());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xData->getNumRows());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xData->getNumColumns());
+    // Formatting alone does not make a cell count.
+    xSheet->getRange(u"B2"_ustr)->setValue(cpo::uno::Any(1.0));
+    xSheet->getRange(u"E7"_ustr)->setBackgroundColor(u"yellow"_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSheet->getLastRow());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSheet->getLastColumn());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testAutoResizeColumnsAndRows)
