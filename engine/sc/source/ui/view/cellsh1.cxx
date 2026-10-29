@@ -1503,7 +1503,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 pTabViewShell->CopyToClip( nullptr, false, false, true );
                 rReq.Done();
 
-                if (!comphelper::COKit::isActive() || !pTabViewShell->GetViewShell() || !pTabViewShell->GetViewShell()->IsKitReadOnlyView())
+                if (!pTabViewShell->GetViewShell() || !pTabViewShell->GetViewShell()->IsKitReadOnlyView())
                     GetViewData().SetPasteMode( ScPasteFlags::Mode | ScPasteFlags::Border );
 
                 pTabViewShell->ShowCursor();
@@ -1517,7 +1517,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 pTabViewShell->CutToClip();
                 rReq.Done();
 
-                if (!comphelper::COKit::isActive() || !pTabViewShell->GetViewShell() || !pTabViewShell->GetViewShell()->IsKitReadOnlyView())
+                if (!pTabViewShell->GetViewShell() || !pTabViewShell->GetViewShell()->IsKitReadOnlyView())
                     GetViewData().SetPasteMode( ScPasteFlags::Mode | ScPasteFlags::Border );
 
                 pTabViewShell->ShowCursor();

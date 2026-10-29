@@ -120,8 +120,7 @@ static OUString lcl_BuildTitleWithRedline( const SwRangeRedline *pRedline )
 
 static bool lcl_canUserModifyAnnotation(const SwView& rView, std::u16string_view sAuthor)
 {
-    return !comphelper::COKit::isActive() || !rView.IsKitReadOnlyView()
-           || sAuthor == rView.GetRedlineAuthor();
+    return !rView.IsKitReadOnlyView() || sAuthor == rView.GetRedlineAuthor();
 }
 
 static bool lcl_canUserModifyAnnotation(const SwView& rView,

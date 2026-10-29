@@ -1436,7 +1436,7 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
                         }
 
                         const SfxViewShell* pViewShell = SfxViewShell::Current();
-                        if (comphelper::COKit::isActive() && pViewShell && pViewShell->isKitDesktop())
+                        if (pViewShell && pViewShell->isKitDesktop())
                         {
                             tools::JsonWriter writer;
                             writer.put("type", "formulausage");
