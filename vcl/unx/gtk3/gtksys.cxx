@@ -92,8 +92,8 @@ void
 GtkSalSystem::countScreenMonitors()
 {
     maScreenMonitors.clear();
-    GdkScreen* const pScreen = gdk_display_get_screen(mpDisplay, 0);
-    gint nMonitors(pScreen ? gdk_screen_get_n_monitors(pScreen) : 0);
+    GdkScreen* const pScreen = gdk_display_get_default_screen(mpDisplay);
+    int nMonitors = gdk_display_get_n_monitors(mpDisplay);
     if (nMonitors > 1)
     {
         std::vector<GdkRectangle> aGeometries;
@@ -101,7 +101,7 @@ GtkSalSystem::countScreenMonitors()
         for (gint j(0); j != nMonitors; ++j)
         {
             GdkRectangle aGeometry;
-            gdk_screen_get_monitor_geometry(pScreen, j, &aGeometry);
+            gdk_monitor_get_geometry(gdk_display_get_monitor(mpDisplay, j), &aGeometry);
             aGeometries.push_back(aGeometry);
         }
         std::sort(aGeometries.begin(), aGeometries.end(), GdkRectangleCoincidentLess());
