@@ -884,6 +884,14 @@ const SdrObjList* membersOf(const SdrObject& rObject)
     return rObject.GetSubList();
 }
 
+std::optional<basegfx::B2DHomMatrix> chartMappingOf(const SdrObject& rObject)
+{
+    const Embedding* pEmbedding(embeddingOf(rObject));
+    if (!pEmbedding)
+        return std::nullopt;
+    return pEmbedding->maMapping;
+}
+
 const SdrObject* holderOf(const SdrObject& rObject)
 {
     if (const SdrObject* pParent = rObject.getParentSdrObjectFromSdrObject())

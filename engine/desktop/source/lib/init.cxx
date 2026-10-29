@@ -6944,6 +6944,57 @@ static bool lcl_mappingOf(const SdrObject& rObject, basegfx::B2DHomMatrix& rMapp
 }
 
 /*
+    A part of a chart active in place is moved and resized by the chart, as its own drag does it.
+    The chart gets the box the part has on the chart's page and the box the mapping wanted gives
+    it there, and changes what it marks for the part by the same move and resize. A change of
+    size of less than one unit comes from the way there and back and is no resize.
+*/
+static void lcl_changeChartPart(SfxViewShell& rViewShell, const SdrObject& rPart,
+                                const basegfx::B2DHomMatrix& rWanted)
+{
+    const std::optional<basegfx::B2DHomMatrix> oMapping(svx::vector::chartMappingOf(rPart));
+    if (!oMapping)
+        return;
+
+    basegfx::B2DHomMatrix aOfThePart;
+    basegfx::B2DPolyPolygon aOutline;
+    lcl_mappingOf(rPart, aOfThePart, aOutline);
+    basegfx::B2DHomMatrix aBack(*oMapping);
+    aBack.invert();
+
+    basegfx::B2DRange aFrom(0.0, 0.0, 1.0, 1.0);
+    aFrom.transform(aOfThePart);
+    basegfx::B2DRange aTo(0.0, 0.0, 1.0, 1.0);
+    aTo.transform(aBack * rWanted);
+
+    const sal_Int32 nFromWidth(basegfx::fround(aFrom.getWidth()));
+    const sal_Int32 nFromHeight(basegfx::fround(aFrom.getHeight()));
+    sal_Int32 nToWidth(basegfx::fround(aTo.getWidth()));
+    sal_Int32 nToHeight(basegfx::fround(aTo.getHeight()));
+    if (std::abs(nToWidth - nFromWidth) <= 1 && std::abs(nToHeight - nFromHeight) <= 1)
+    {
+        nToWidth = nFromWidth;
+        nToHeight = nFromHeight;
+    }
+
+    KitChartHelper aChart(&rViewShell);
+    if (!aChart.GetWindow())
+        return;
+    aChart.Dispatch(
+        u".uno:KitTransform"_ustr,
+        comphelper::InitPropertySequence({
+            { "PartFromX", cpo::uno::Any(sal_Int32(basegfx::fround(aFrom.getMinX()))) },
+            { "PartFromY", cpo::uno::Any(sal_Int32(basegfx::fround(aFrom.getMinY()))) },
+            { "PartFromWidth", cpo::uno::Any(nFromWidth) },
+            { "PartFromHeight", cpo::uno::Any(nFromHeight) },
+            { "PartToX", cpo::uno::Any(sal_Int32(basegfx::fround(aTo.getMinX()))) },
+            { "PartToY", cpo::uno::Any(sal_Int32(basegfx::fround(aTo.getMinY()))) },
+            { "PartToWidth", cpo::uno::Any(nToWidth) },
+            { "PartToHeight", cpo::uno::Any(nToHeight) },
+        }));
+}
+
+/*
     Moves one of the points a drawing object was given for a connector to tie itself to. The place
     is given on the object, 0 and 0 being its upper left corner and 1 and 1 its lower right one,
     which is how such a point travels to the client. The object holds it either as a share of its
@@ -7044,7 +7095,10 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
     // the copies are changed, as the office's drag with copy does
     // only where the option "copy when moving" of Impress or Draw is on, as in the office
     OString aWhat(pWhat ? pWhat : "");
-    const bool bCopy(aWhat.endsWith("+copy"_ostr, &aWhat)
+    // while an object is active in place, what is changed are its parts, which are not copied
+    SfxInPlaceClient* pInPlace(pViewShell->GetIPClient());
+    const bool bInPlace(pInPlace && pInPlace->IsObjectInPlaceActive());
+    const bool bCopy(aWhat.endsWith("+copy"_ostr, &aWhat) && !bInPlace
                      && (getDocumentType() == COKitDocumentType::DRAWING
                              ? officecfg::Office::Draw::Misc::CopyWhileMoving::get()
                              : officecfg::Office::Impress::Misc::CopyWhileMoving::get()));
@@ -7059,6 +7113,8 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
 
     SdrModel* pModel = nullptr;
     bool bBegun = false;
+    // a part of an object active in place, which that object changes itself
+    bool bPartChanged = false;
 
     /*
         The objects marked are the ones the client has selected. They are copied the way the office
@@ -7126,6 +7182,19 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
             }
 
             rNumber = o3tl::toDouble(o3tl::getToken(aOne, 0, ',', nField)) * fToModel;
+        }
+
+        if (bWholeMapping && bInPlace)
+        {
+            if (SdrObject* pPart = svx::vector::chartPartById(aId.toUInt64()))
+            {
+                bPartChanged = true;
+                lcl_changeChartPart(*pViewShell,
+                                    *pPart,
+                                    basegfx::B2DHomMatrix(aNumber[0], aNumber[2], aNumber[4],
+                                                          aNumber[1], aNumber[3], aNumber[5]));
+                continue;
+            }
         }
 
         SdrObject* pObject = bWholeMapping ? pPage->FindObjectByUniqueID(aId.toUInt64()) : nullptr;
@@ -7388,7 +7457,7 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
 
     if (bBegun)
         pModel->EndUndo();
-    else
+    else if (!bPartChanged)
         SetLastExceptionMsg(u"No object of those ids is on the page"_ustr);
 }
 

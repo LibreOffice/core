@@ -507,6 +507,11 @@ SVXCORE_DLLPUBLIC OUString chartPartNameAround(const SdrObject& rObject);
  */
 SVXCORE_DLLPUBLIC SdrObject* chartPartById(sal_uInt64 nId);
 
+/** The mapping from the page of a chart active in place onto the chart's window on the slide,
+    in the units of the model, for an object on that page. Nothing for any other object.
+ */
+SVXCORE_DLLPUBLIC std::optional<basegfx::B2DHomMatrix> chartMappingOf(const SdrObject& rObject);
+
 /** The object holding that one as the vector view takes it: its group, or for an object on the
     page of a chart active in place, that chart. Nothing for an object directly on the page.
  */

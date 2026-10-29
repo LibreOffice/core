@@ -29,6 +29,7 @@
 #include <ObjectNameProvider.hxx>
 #include <DiagramHelper.hxx>
 #include <CommonConverters.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include <svx/ActionDescriptionProvider.hxx>
 
 #include <svx/svxids.hrc>
@@ -125,6 +126,8 @@ void ChartController::executeDispatch_PositionAndSize(const ::cpo::uno::Sequence
         const SfxItemSet aMarkedItemSet(aItemSet);
         const bool bResizable = m_aSelection.isResizeableObjectSelected();
         const SfxItemSet* pOutItemSet = nullptr;
+        // a part changed in the vector view and resized there
+        bool bPartResized = false;
         if (!pArgs)
         {
             //prepare and open dialog
@@ -171,6 +174,50 @@ void ChartController::executeDispatch_PositionAndSize(const ::cpo::uno::Sequence
                     aItemSet.Put(SfxUInt32Item(SID_ATTR_TRANSFORM_HEIGHT, static_cast<sal_uInt32>(nValue)));
                 }
             }
+
+            /*
+                A part changed in the vector view comes as the box it has on the chart's page and
+                the box it gets there. What is marked for the part, the box the dialog shows, may
+                differ from that, the diagram marks its area without the axes, so it gets the same
+                move and resize, and keeps its size where the part is not resizable.
+            */
+            awt::Rectangle aPartFrom;
+            awt::Rectangle aPartTo;
+            for (const auto& aProp : *pArgs)
+            {
+                sal_Int32 nValue = 0;
+                aProp.Value >>= nValue;
+                if (aProp.Name == "PartFromX") aPartFrom.X = nValue;
+                else if (aProp.Name == "PartFromY") aPartFrom.Y = nValue;
+                else if (aProp.Name == "PartFromWidth") aPartFrom.Width = nValue;
+                else if (aProp.Name == "PartFromHeight") aPartFrom.Height = nValue;
+                else if (aProp.Name == "PartToX") aPartTo.X = nValue;
+                else if (aProp.Name == "PartToY") aPartTo.Y = nValue;
+                else if (aProp.Name == "PartToWidth") aPartTo.Width = nValue;
+                else if (aProp.Name == "PartToHeight") aPartTo.Height = nValue;
+            }
+            const bool bPartChanged = aPartFrom.Width > 0 && aPartFrom.Height > 0 && aPartTo.Width > 0
+                           && aPartTo.Height > 0;
+            if (bPartChanged)
+            {
+                awt::Rectangle aMarked;
+                lcl_getPositionAndSizeFromItemSet(aMarkedItemSet, aMarked, awt::Size());
+                const double fScaleX = double(aPartTo.Width) / aPartFrom.Width;
+                const double fScaleY = double(aPartTo.Height) / aPartFrom.Height;
+                bPartResized = bResizable
+                               && (aPartTo.Width != aPartFrom.Width || aPartTo.Height != aPartFrom.Height);
+                aItemSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_POS_X,
+                    aPartTo.X + basegfx::fround((aMarked.X - aPartFrom.X) * fScaleX)));
+                aItemSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_POS_Y,
+                    aPartTo.Y + basegfx::fround((aMarked.Y - aPartFrom.Y) * fScaleY)));
+                if (bPartResized)
+                {
+                    aItemSet.Put(SfxUInt32Item(SID_ATTR_TRANSFORM_WIDTH,
+                        static_cast<sal_uInt32>(std::max(basegfx::fround(aMarked.Width * fScaleX), sal_Int32(1)))));
+                    aItemSet.Put(SfxUInt32Item(SID_ATTR_TRANSFORM_HEIGHT,
+                        static_cast<sal_uInt32>(std::max(basegfx::fround(aMarked.Height * fScaleY), sal_Int32(1)))));
+                }
+            }
         }
 
         if(pOutItemSet || pArgs)
@@ -198,10 +245,10 @@ void ChartController::executeDispatch_PositionAndSize(const ::cpo::uno::Sequence
                 const sal_Int32 nMaxY = aPageSize.Height
                     - std::max(aOldObjectRect.Y + aOldObjectRect.Height - aMarkedRect.Y - aMarkedRect.Height, sal_Int32(0));
 
-                const bool bResize = bResizable && std::any_of(pArgs->begin(), pArgs->end(),
+                const bool bResize = bPartResized || (bResizable && std::any_of(pArgs->begin(), pArgs->end(),
                     [](const beans::PropertyValue& rProp) {
                         return rProp.Name == "TransformWidth" || rProp.Name == "TransformHeight";
-                    });
+                    }));
                 if (bResize)
                 {
                     const sal_Int32 nLeft = std::max(aNewObjectRect.X, nMinX);
