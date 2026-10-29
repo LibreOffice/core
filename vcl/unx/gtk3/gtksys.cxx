@@ -141,9 +141,7 @@ unsigned int GtkSalSystem::GetDisplayScreenCount()
 #if GTK_CHECK_VERSION(4, 0, 0)
     return g_list_model_get_n_items(gdk_display_get_monitors(mpDisplay));
 #else
-    gint nMonitor;
-    (void)getScreenMonitorFromIdx (G_MAXINT, nMonitor);
-    return G_MAXINT - nMonitor;
+    return m_nScreenMonitors;
 #endif
 }
 
