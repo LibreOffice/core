@@ -177,7 +177,11 @@ void PageSettings::importPageSetup( const Relations& rRelations, const Attribute
     maModel.mnPageOrder     = rAttribs.getToken( XML_pageOrder, XML_downThenOver );
     maModel.mnCellComments  = rAttribs.getToken( XML_cellComments, XML_none );
     maModel.mnPrintErrors   = rAttribs.getToken( XML_errors, XML_displayed );
-    maModel.mbValidSettings = rAttribs.getBool( XML_usePrinterDefaults, true );
+    // Calc wrote usePrinterDefaults="false" on every sheet until mid 2016, next to the page
+    // settings that it applied, so the word "false" keeps the settings valid, and only "0" marks
+    // the settings as not valid
+    maModel.mbValidSettings = rAttribs.getBool(XML_usePrinterDefaults, true)
+                              || rAttribs.getStringDefaulted(XML_usePrinterDefaults) == "false";
     maModel.mbUseFirstPage  = rAttribs.getBool( XML_useFirstPageNumber, false );
     maModel.mbBlackWhite    = rAttribs.getBool( XML_blackAndWhite, false );
     maModel.mbDraftQuality  = rAttribs.getBool( XML_draft, false );
