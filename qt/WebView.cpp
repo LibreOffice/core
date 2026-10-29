@@ -22,6 +22,7 @@
 #include <QUrlQuery>
 
 #include <qt/bridge.hpp>
+#include <qt/CODocumentBroker.hpp>
 #include <qt/CodaConfig.hpp>
 #include <qt/DBusService.hpp>
 #include <net/FakeSocket.hpp>
@@ -948,7 +949,13 @@ int WebView::millisecondsUntilViewSettled() const
     // page needs about a second of that to load and rejoin its document.
     constexpr qint64 settleMilliseconds = 5000;
     const qint64 remaining = settleMilliseconds - _viewLiveSince.elapsed();
-    return remaining <= 0 ? 0 : static_cast<int>(remaining);
+    if (remaining > 0)
+        return static_cast<int>(remaining);
+
+    // The server stops a document that is dropped before it has loaded.
+    const auto broker = std::dynamic_pointer_cast<CODocumentBroker>(
+        findBrokerByMobileAppDocId(_document._appDocId));
+    return broker && broker->hasLoaded() ? 0 : 1000;
 }
 
 bool WebView::requestSave(std::function<void()> onComplete)

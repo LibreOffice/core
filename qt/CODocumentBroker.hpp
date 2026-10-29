@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include <atomic>
 #include <chrono>
 #include <memory>
 #include <string>
@@ -35,6 +36,10 @@ public:
 
     void dumpState(std::ostream& os) override;
 
+    void setLoaded() override;
+
+    bool hasLoaded() const { return _hasLoaded; }
+
 private:
     void startExport(const std::shared_ptr<ClientSession>& session, const std::string& message);
 
@@ -44,6 +49,9 @@ private:
 
     /// When the in-flight export was started.
     std::chrono::steady_clock::time_point _exportStart;
+
+    /// True once the document has loaded. Read from the app's own thread.
+    std::atomic<bool> _hasLoaded = false;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

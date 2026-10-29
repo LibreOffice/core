@@ -144,6 +144,12 @@ bool CODocumentBroker::handleInput(const std::shared_ptr<Message>& message)
     return DocumentBroker::handleInput(message);
 }
 
+void CODocumentBroker::setLoaded()
+{
+    DocumentBroker::setLoaded();
+    _hasLoaded = true;
+}
+
 void CODocumentBroker::dumpState(std::ostream& os)
 {
     DocumentBroker::dumpState(os);
