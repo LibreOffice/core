@@ -98,6 +98,14 @@ StringMap jsonToStringMap(const char* pJSON)
     return aArgs;
 }
 
+/// Reads the data of a widget action that the client sent as a URI-encoded JSON object.
+static StringMap uriEncodedJsonToStringMap(const OUString& rData)
+{
+    OUString sDataJSON = rtl::Uri::decode(rData, rtl_UriDecodeMechanism::rtl_UriDecodeWithCharset,
+                                          RTL_TEXTENCODING_UTF8);
+    return jsonToStringMap(OUStringToOString(sDataJSON, RTL_TEXTENCODING_ASCII_US).getStr());
+}
+
 void SendNavigatorForView(const sal_uInt64 nShellId)
 {
     jsdialog::SendFullUpdate(OUString::number(nShellId) + "navigator", u"NavigatorPanel"_ustr);
@@ -635,11 +643,7 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
             {
                 if (sAction == "change")
                 {
-                    OUString sDataJSON = rtl::Uri::decode(
-                        rData.at(u"data"_ustr), rtl_UriDecodeMechanism::rtl_UriDecodeWithCharset,
-                        RTL_TEXTENCODING_UTF8);
-                    StringMap aMap(jsonToStringMap(
-                        OUStringToOString(sDataJSON, RTL_TEXTENCODING_ASCII_US).getStr()));
+                    StringMap aMap(uriEncodedJsonToStringMap(rData.at(u"data"_ustr)));
 
                     sal_Int32 nRow = o3tl::toInt32(aMap[u"row"_ustr]);
                     bool bValue = aMap[u"value"_ustr] == "true";
@@ -661,11 +665,7 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
                     // Data may be JSON {row:N,col:M} or a plain row number
                     if (sData.startsWith("%7B") || sData.startsWith("{"))
                     {
-                        OUString sDataJSON = rtl::Uri::decode(
-                            sData, rtl_UriDecodeMechanism::rtl_UriDecodeWithCharset,
-                            RTL_TEXTENCODING_UTF8);
-                        StringMap aMap(jsonToStringMap(
-                            OUStringToOString(sDataJSON, RTL_TEXTENCODING_ASCII_US).getStr()));
+                        StringMap aMap(uriEncodedJsonToStringMap(sData));
                         nAbsPos = o3tl::toInt32(aMap[u"row"_ustr]);
                         if (aMap.find(u"col"_ustr) != aMap.end())
                             nCol = o3tl::toInt32(aMap[u"col"_ustr]);
@@ -782,11 +782,7 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
                 }
                 else if (sAction == "editend")
                 {
-                    OUString sDataJSON = rtl::Uri::decode(
-                        rData.at(u"data"_ustr), rtl_UriDecodeMechanism::rtl_UriDecodeWithCharset,
-                        RTL_TEXTENCODING_UTF8);
-                    StringMap aMap(jsonToStringMap(
-                        OUStringToOString(sDataJSON, RTL_TEXTENCODING_ASCII_US).getStr()));
+                    StringMap aMap(uriEncodedJsonToStringMap(rData.at(u"data"_ustr)));
 
                     sal_Int32 nRow = o3tl::toInt32(aMap[u"row"_ustr]);
                     sal_Int32 nColumn = o3tl::toInt32(aMap[u"column"_ustr]);
@@ -803,11 +799,7 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
                 }
                 else if (sAction == "headernamechanged")
                 {
-                    OUString sDataJSON = rtl::Uri::decode(
-                        rData.at(u"data"_ustr), rtl_UriDecodeMechanism::rtl_UriDecodeWithCharset,
-                        RTL_TEXTENCODING_UTF8);
-                    StringMap aMap(jsonToStringMap(
-                        OUStringToOString(sDataJSON, RTL_TEXTENCODING_ASCII_US).getStr()));
+                    StringMap aMap(uriEncodedJsonToStringMap(rData.at(u"data"_ustr)));
 
                     sal_Int32 nColumn = o3tl::toInt32(aMap[u"column"_ustr]);
                     OUString sValue = aMap[u"value"_ustr];
@@ -872,11 +864,7 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
                     const OUString& rPosData = rData.at(u"data"_ustr);
                     if (rPosData.startsWith("%7B") || rPosData.startsWith("{"))
                     {
-                        OUString sDataJSON = rtl::Uri::decode(
-                            rPosData, rtl_UriDecodeMechanism::rtl_UriDecodeWithCharset,
-                            RTL_TEXTENCODING_UTF8);
-                        StringMap aMap(jsonToStringMap(
-                            OUStringToOString(sDataJSON, RTL_TEXTENCODING_ASCII_US).getStr()));
+                        StringMap aMap(uriEncodedJsonToStringMap(rPosData));
                         nPos = o3tl::toInt32(aMap[u"row"_ustr]);
                     }
 
