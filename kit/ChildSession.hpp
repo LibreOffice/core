@@ -298,6 +298,13 @@ private:
                               bool isCompressed);
     bool renderSlide(const StringVector& tokens);
     bool renderWindow(const StringVector& tokens);
+    /// Paints the area of the document given in twips into an image of the given pixel size and
+    /// encodes that image as PNG into png. The image is of the part with the identifier partId,
+    /// or of the part the view shows when partId is empty. preview is true when the image is a
+    /// small preview of the part rather than a tile of the editing viewport. Returns false when
+    /// the image could not be encoded.
+    bool renderToPng(int width, int height, int xTwips, int yTwips, int widthTwips, int heightTwips,
+                     const std::string& partId, bool preview, std::vector<char>& png);
     bool resizeWindow(const StringVector& tokens);
     bool resetSelection(const StringVector& tokens);
     bool saveAs(const StringVector& tokens);

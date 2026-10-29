@@ -562,13 +562,9 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         constexpr int offsetXTwips = 15 * 15; // start 15 pixels before the target to get a clearer thumbnail
         constexpr int offsetYTwips = 15 * 15;
 
-        const auto mode = getLOKitDocument()->getTileMode();
-
-        std::vector<unsigned char> thumbnail(width * height * 4);
-        getLOKitDocument()->paintTile(thumbnail, width, height, x - offsetXTwips, y - offsetYTwips, widthTwips, heightTwips);
-
         std::vector<char> pngThumbnail;
-        if (Png::encodeBufferToPNG(thumbnail.data(), width, height, pngThumbnail, mode))
+        if (renderToPng(width, height, x - offsetXTwips, y - offsetYTwips, widthTwips, heightTwips,
+                        std::string(), /*preview=*/false, pngThumbnail))
         {
             std::ostringstream oss;
             oss << "sendthumbnail:\n";
@@ -4783,6 +4779,22 @@ bool ChildSession::renderNextSlideLayer(SlideCompressor& scomp, const unsigned w
             LOG_TRC("Compressed slidelayer of size " << pixmap->size() << " to size " << compSize);
         });
     return true;
+}
+
+bool ChildSession::renderToPng(int width, int height, int xTwips, int yTwips, int widthTwips,
+                               int heightTwips, const std::string& partId, bool preview,
+                               std::vector<char>& png)
+{
+    std::vector<unsigned char> pixels(static_cast<std::size_t>(width) * height * 4);
+    if (partId.empty())
+        getLOKitDocument()->paintTile(pixels, width, height, xTwips, yTwips, widthTwips,
+                                      heightTwips);
+    else
+        getLOKitDocument()->paintPartTile(pixels, partId.c_str(), /*mode=*/0, width, height, xTwips,
+                                          yTwips, widthTwips, heightTwips, preview);
+
+    return Png::encodeBufferToPNG(pixels.data(), width, height, png,
+                                  getLOKitDocument()->getTileMode());
 }
 
 bool ChildSession::renderSlide(const StringVector& tokens)
