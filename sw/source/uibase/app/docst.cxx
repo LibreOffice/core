@@ -999,7 +999,7 @@ void SwDocShell::Edit(
         SwTableAutoFormat* pData = rTableStyles.FindAutoFormat(sOldName);
         if (pData)
         {
-            SwTableAutoFormat pOld(*pData);
+            SwTableAutoFormat aOld(*pData);
 
             if (!rParent.isEmpty())
                 pData->SetParent(rParent.toString());
@@ -1016,9 +1016,11 @@ void SwDocShell::Edit(
             }
             else
             {
-                rTableStyles.ReleaseAutoFormat(sOldName);
-                if (!bNew)
-                    rTableStyles.InsertAutoFormat(&pOld);
+
+                if (bNew)
+                    rTableStyles.ReleaseAutoFormat(sOldName);
+                else
+                    rTableStyles.InsertOrReplaceAutoFormat(aOld);
             }
             aDlg.getDialog()->set_modal(false);
         }
