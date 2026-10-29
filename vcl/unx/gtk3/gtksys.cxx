@@ -135,20 +135,6 @@ GtkSalSystem::getScreenMonitorFromIdx (int nIdx, gint &nMonitor)
     return pScreen;
 }
 
-int
-GtkSalSystem::getScreenIdxFromPtr (GdkScreen *pScreen)
-{
-    int nIdx = 0;
-    for (auto const& screenMonitor : maScreenMonitors)
-    {
-        if (screenMonitor.first == pScreen)
-            return nIdx;
-        nIdx += screenMonitor.second;
-    }
-    g_warning ("failed to find screen %p", pScreen);
-    return 0;
-}
-
 int GtkSalSystem::getScreenMonitorIdx (GdkScreen *pScreen,
                                        int nX, int nY)
 {
@@ -156,8 +142,7 @@ int GtkSalSystem::getScreenMonitorIdx (GdkScreen *pScreen,
     // monitors in mirror mode and one extra. Hopefully such
     // abominations are not used (or, even better, not possible) in
     // practice .-)
-    return getScreenIdxFromPtr (pScreen) +
-        gdk_screen_get_monitor_at_point (pScreen, nX, nY);
+    return gdk_screen_get_monitor_at_point(pScreen, nX, nY);
 }
 #endif
 
@@ -193,8 +178,7 @@ unsigned int GtkSalSystem::GetDisplayBuiltInScreen()
     return 0;
 #else // !GTK_CHECK_VERSION(4, 0, 0)
     GdkScreen *pDefault = gdk_display_get_default_screen (mpDisplay);
-    int idx = getScreenIdxFromPtr (pDefault);
-    return idx + gdk_screen_get_primary_monitor(pDefault);
+    return gdk_screen_get_primary_monitor(pDefault);
 #endif
 }
 

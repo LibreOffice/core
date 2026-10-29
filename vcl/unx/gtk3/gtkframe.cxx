@@ -941,7 +941,7 @@ void GtkSalFrame::updateScreenNumber()
     int nScreen = 0;
     GdkScreen *pScreen = gtk_widget_get_screen( m_pWindow );
     if( pScreen )
-        nScreen = getDisplay()->getSystem()->getScreenMonitorIdx( pScreen, maGeometry.x(), maGeometry.y() );
+        nScreen = GtkSalSystem::getScreenMonitorIdx(pScreen, maGeometry.x(), maGeometry.y());
     maGeometry.setScreen(nScreen);
 #endif
 }

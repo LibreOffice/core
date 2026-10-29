@@ -34,8 +34,7 @@ public:
 #if !GTK_CHECK_VERSION(4,0,0)
     void              countScreenMonitors();
     // We have a 'screen' number that is combined from screen-idx + monitor-idx
-    int        getScreenIdxFromPtr     (GdkScreen *pScreen);
-    int        getScreenMonitorIdx     (GdkScreen *pScreen, int nX, int nY);
+    static int getScreenMonitorIdx(GdkScreen* pScreen, int nX, int nY);
     GdkScreen *getScreenMonitorFromIdx (int nIdx, gint &nMonitor);
 #endif
 };
