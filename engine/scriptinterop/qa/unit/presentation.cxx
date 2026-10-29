@@ -58,6 +58,7 @@
 #include <scriptinterop/XTextRange.hpp>
 #include <scriptinterop/XTextStyle.hpp>
 #include <test/unoapi_test.hxx>
+#include <vcl/scheduler.hxx>
 
 namespace
 {
@@ -738,6 +739,42 @@ CPPUNIT_TEST_FIXTURE(Test, testSelectionRanges)
     // slide.
     aElements[0]->remove();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSlide->getShapes().getLength());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSelectionTextCursor)
+{
+    auto const xPresentation = loadPresentation();
+    // Loading leaves view setup pending, which would end the text edit below.
+    Scheduler::ProcessEventsToIdle();
+    auto const xSelection = getValue(xPresentation->getSelection());
+    auto const xSlide = xPresentation->getSlides()[0];
+    auto const xShape = xSlide->insertTextBoxAt(u"Hello"_ustr, 36, 36, 288, 72);
+    cpo::uno::Reference<css::frame::XModel> const xModel(xPresentation->getuno(),
+                                                         cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::view::XSelectionSupplier> const xSupplier(
+        xModel->getCurrentController(), cpo::uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xSupplier->select(cpo::uno::Any(xShape->getuno())));
+    // Editing the text of the shape with a cursor in it and nothing highlighted is a text
+    // selection, and its range is the empty range at the cursor, as in SlidesApp.
+    dispatchCommand(mxComponent, u".uno:Text"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(scriptinterop::SelectionType_TEXT, xSelection->getSelectionType());
+    auto const xRange = getValue(xSelection->getTextRange());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, xRange->asString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSelectionOutsideNormalView)
+{
+    auto const xPresentation = loadPresentation();
+    auto const xSelection = getValue(xPresentation->getSelection());
+    // The slide sorter and the outline view have no text of a shape that is being edited, so the
+    // selection holds no text range. The slide sorter selects the current slide, and the outline
+    // view selects nothing.
+    dispatchCommand(mxComponent, u".uno:DiaMode"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(scriptinterop::SelectionType_PAGE, xSelection->getSelectionType());
+    CPPUNIT_ASSERT(!xSelection->getTextRange().IsPresent);
+    dispatchCommand(mxComponent, u".uno:OutlineMode"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(scriptinterop::SelectionType_CURRENT_PAGE, xSelection->getSelectionType());
+    CPPUNIT_ASSERT(!xSelection->getTextRange().IsPresent);
 }
 }
 

@@ -124,6 +124,10 @@ Any SdUnoOutlineView::getFastPropertyValue (
         case DrawController::PROPERTY_VIEWOFFSET:
             break;
 
+        // The outline is no text of a shape, so the view has no text edit cursor:
+        case DrawController::PROPERTY_TEXT_EDIT_CURSOR:
+            break;
+
         default:
             throw beans::UnknownPropertyException( OUString::number(nHandle), static_cast<cppu::OWeakObject*>(this));
     }

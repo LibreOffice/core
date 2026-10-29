@@ -17,7 +17,7 @@ enum SelectionType
     UNSUPPORTED,
     /** Nothing is selected and no page is shown. */
     NONE,
-    /** Text is highlighted in a shape that is being edited. */
+    /** Text is being edited. */
     TEXT,
     TABLE_CELL,
     /** Pages are selected in the slide sorter. */

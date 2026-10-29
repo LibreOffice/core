@@ -376,6 +376,10 @@ Any SdUnoDrawView::getFastPropertyValue (
             aValue = getDrawViewMode();
             break;
 
+        case DrawController::PROPERTY_TEXT_EDIT_CURSOR:
+            mrView.getTextEditCursor(aValue);
+            break;
+
         default:
             throw beans::UnknownPropertyException( OUString::number(nHandle), static_cast<cppu::OWeakObject*>(this));
     }

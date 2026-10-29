@@ -146,7 +146,9 @@ void SdUnoSlideView::setFastPropertyValue (
 Any SdUnoSlideView::getFastPropertyValue (
     sal_Int32 nHandle)
 {
-    if( nHandle != DrawController::PROPERTY_VIEWOFFSET )
+    // The slide sorter edits no text, so it has no text edit cursor:
+    if( nHandle != DrawController::PROPERTY_VIEWOFFSET
+        && nHandle != DrawController::PROPERTY_TEXT_EDIT_CURSOR )
         throw beans::UnknownPropertyException( OUString::number(nHandle), static_cast<cppu::OWeakObject*>(this));
 
     return Any();

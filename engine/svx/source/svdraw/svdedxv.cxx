@@ -2926,6 +2926,18 @@ void SdrObjEditView::getTextSelection(cpo::uno::Any& rSelection)
     if (!(pOutlinerView && pOutlinerView->HasSelection()))
         return;
 
+    getTextEditCursor(rSelection);
+}
+
+void SdrObjEditView::getTextEditCursor(cpo::uno::Any& rCursor)
+{
+    if (!IsTextEdit())
+        return;
+
+    OutlinerView* pOutlinerView = GetTextEditOutlinerView();
+    if (!pOutlinerView)
+        return;
+
     SdrObject* pObj = GetTextEditObject();
 
     if (!pObj)
@@ -2937,7 +2949,7 @@ void SdrObjEditView::getTextSelection(cpo::uno::Any& rSelection)
         SvxUnoTextBase* pRange = comphelper::getFromUnoTunnel<SvxUnoTextBase>(xText);
         if (pRange)
         {
-            rSelection <<= pRange->createTextCursorBySelection(pOutlinerView->GetSelection());
+            rCursor <<= pRange->createTextCursorBySelection(pOutlinerView->GetSelection());
         }
     }
 }

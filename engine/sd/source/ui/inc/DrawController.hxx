@@ -87,6 +87,7 @@ public:
         PROPERTY_VIEWOFFSET = 8,
         PROPERTY_DRAWVIEWMODE = 9
         ,PROPERTY_PAGE_CHANGE = 10
+        ,PROPERTY_TEXT_EDIT_CURSOR = 11
     };
 
     /** Create a new DrawController object for the given ViewShellBase.

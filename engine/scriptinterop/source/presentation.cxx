@@ -2120,12 +2120,11 @@ public:
 
     scriptinterop::SelectionType getSelectionType() override
     {
-        auto const selection = currentSelection();
-        cpo::uno::Reference<css::text::XTextRange> text;
-        if (selection >>= text)
+        if (textSelection().is())
         {
             return scriptinterop::SelectionType_TEXT;
         }
+        auto const selection = currentSelection();
         cpo::uno::Reference<css::drawing::XShapes> shapes;
         if ((selection >>= shapes) && shapes->getCount() > 0)
         {
@@ -2149,8 +2148,8 @@ public:
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XTextRange>>
         getTextRange() override
     {
-        cpo::uno::Reference<css::text::XTextRange> cursor;
-        if (!(currentSelection() >>= cursor))
+        auto const cursor = textSelection();
+        if (!cursor.is())
         {
             return {false, {}};
         }
@@ -2166,6 +2165,25 @@ private:
         cpo::uno::Reference<css::view::XSelectionSupplier> const supplier(
             model_->getCurrentController(), cpo::uno::UNO_QUERY);
         return supplier.is() ? supplier->getSelection() : cpo::uno::Any();
+    }
+
+    // The highlighted text, or the cursor in a shape that is being edited with nothing
+    // highlighted, as a collapsed range. The drawing view reports only the former as its
+    // selection and the latter as its TextEditCursor property.
+    cpo::uno::Reference<css::text::XTextRange> textSelection()
+    {
+        cpo::uno::Reference<css::text::XTextRange> text;
+        if (currentSelection() >>= text)
+        {
+            return text;
+        }
+        cpo::uno::Reference<css::beans::XPropertySet> const props(
+            model_->getCurrentController(), cpo::uno::UNO_QUERY);
+        if (props.is() && props->getPropertySetInfo()->hasPropertyByName(u"TextEditCursor"_ustr))
+        {
+            props->getPropertyValue(u"TextEditCursor"_ustr) >>= text;
+        }
+        return text;
     }
 
     cpo::uno::Reference<css::frame::XModel> model_;

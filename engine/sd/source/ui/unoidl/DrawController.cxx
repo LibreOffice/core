@@ -38,6 +38,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/XDrawSubController.hpp>
 #include <com/sun/star/drawing/XLayer.hpp>
+#include <com/sun/star/text/XTextCursor.hpp>
 
 #include <slideshow.hxx>
 
@@ -611,6 +612,12 @@ void DrawController::FillPropertyTable (
             PROPERTY_PAGE_CHANGE,
             ::cppu::UnoType<sal_Int16>::get(),
             beans::PropertyAttribute::BOUND );
+    // The cursor in the text that is being edited, collapsed when no text is selected, and void
+    // when no text is being edited:
+    rProperties.emplace_back( u"TextEditCursor"_ustr,
+            PROPERTY_TEXT_EDIT_CURSOR,
+            ::cppu::UnoType<text::XTextCursor>::get(),
+            beans::PropertyAttribute::READONLY|beans::PropertyAttribute::MAYBEVOID );
 }
 
 IPropertyArrayHelper & DrawController::getInfoHelper()

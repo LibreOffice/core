@@ -48,11 +48,10 @@ interface XSlideSelection : XBase
      */
     com::sun::star::beans::Optional<XPageRange> getPageRange();
 
-    /** The result is TEXT while text is highlighted in a shape that is being edited,
-        PAGE_ELEMENT when page elements are selected, PAGE when pages are selected in the slide
-        sorter, CURRENT_PAGE when nothing is selected on the shown page, and NONE when there is no
-        current page. A shape that is being edited with nothing highlighted in it reports
-        PAGE_ELEMENT. TABLE_CELL is not reported yet.
+    /** The result is TEXT while text is being edited, PAGE_ELEMENT when page elements are
+        selected, PAGE when pages are selected in the slide sorter, CURRENT_PAGE when nothing is
+        selected on the shown page, and NONE when there is no current page. TABLE_CELL is not
+        reported yet.
 
         @gas Selection.getSelectionType
      */
@@ -66,10 +65,11 @@ interface XSlideSelection : XBase
      */
     com::sun::star::beans::Optional<XSlideTableCellRange> getTableCellRange();
 
-    /** Returns the text that is highlighted in the shape being edited.
+    /** Returns the text that is highlighted in the shape being edited, or the position of the
+        cursor in it as an empty range when nothing is highlighted.
 
         @returns
-            The highlighted text range, or null when no text is highlighted.
+            The text range, or null when no text is being edited.
 
         @gas Selection.getTextRange
      */

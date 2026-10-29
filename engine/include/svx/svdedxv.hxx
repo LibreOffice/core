@@ -337,6 +337,10 @@ public:
         Leaves the any untouched if there currently is no text selected */
     void getTextSelection( cpo::uno::Any& rSelection );
 
+    /** fills the given any with a XTextCursor for the cursor or the selection in the text that is
+        being edited. Leaves the any untouched if no text is being edited */
+    void getTextEditCursor( cpo::uno::Any& rCursor );
+
     virtual void MarkListHasChanged() override;
 
     const rtl::Reference< sdr::SelectionController >& getSelectionController() const { return mxSelectionController; }
