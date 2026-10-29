@@ -2943,6 +2943,35 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testAcceptRejectAllTrackedChanges)
     CPPUNIT_ASSERT(pDocSh->GetPendingChangeActions().empty());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testPasteIntoEmptyCellIsTrackedChange)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    // Given a document that records changes, with a typed value in A1:
+    dispatchCommand(mxComponent, u".uno:TraceChangeMode"_ustr, {});
+    ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
+    CPPUNIT_ASSERT(pChangeTrack);
+    insertStringToCell(u"A1"_ustr, u"hello");
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(1), pChangeTrack->GetActionMax());
+
+    // When A1 is copied and pasted into the empty cell C3:
+    goToCell(u"A1"_ustr);
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+    goToCell(u"C3"_ustr);
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u"hello"_ustr, pDoc->GetString(ScAddress(2, 2, 0)));
+
+    // Then the paste is recorded as a change of C3.
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 1
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(2), pChangeTrack->GetActionMax());
+    const ScChangeAction* pAction = pChangeTrack->GetLast();
+    CPPUNIT_ASSERT_EQUAL(SC_CAT_CONTENT, pAction->GetType());
+    CPPUNIT_ASSERT_EQUAL(ScAddress(2, 2, 0), pAction->GetBigRange().aStart.MakeAddress(*pDoc));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
