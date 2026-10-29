@@ -2811,20 +2811,26 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 else
                 {
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    ScopedVclPtr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aPageName, aDescr));
-                    aNameDlg->SetText( aTitle );
-                    aNameDlg->SetCheckNameHdl( LINK( this, DrawViewShell, RenameSlideHdl ) );
-                    aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
+                    VclPtr<AbstractSvxNameDialog> pNameDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aPageName, aDescr));
+                    pNameDlg->SetText( aTitle );
+                    pNameDlg->SetCheckNameHdl( LINK( this, DrawViewShell, RenameSlideHdl ) );
+                    pNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
 
-                    if( aNameDlg->Execute() == RET_OK )
-                    {
-                        OUString aNewName = aNameDlg->GetName();
-                        if (aNewName != aPageName)
+                    const sal_uInt16 nPageId = maTabControl->GetPageId(nPage);
+                    pNameDlg->StartExecuteAsync(
+                        [this, pNameDlg, nPageId, aPageName](sal_Int32 nResult)
                         {
-                            bool bResult = RenameSlide( maTabControl->GetPageId(nPage), aNewName );
-                            DBG_ASSERT( bResult, "Couldn't rename slide" );
-                        }
-                    }
+                            if (nResult == RET_OK)
+                            {
+                                OUString aNewName = pNameDlg->GetName();
+                                if (aNewName != aPageName)
+                                {
+                                    bool bResult = RenameSlide( nPageId, aNewName );
+                                    DBG_ASSERT( bResult, "Couldn't rename slide" );
+                                }
+                            }
+                            pNameDlg->disposeOnce();
+                        });
                 }
             }
             Cancel();

@@ -715,6 +715,14 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				class: 'unoDuplicatePage',
 				pos: 0,
 			});
+			entries.push({
+				id: 'renameslide',
+				type: 'comboboxentry',
+				text: _UNO(isPresentation ? '.uno:RenameSlide' : '.uno:RenamePage', 'presentation'),
+				img: 'renamemasterpage',
+				class: 'unoRenamePage',
+				pos: 0,
+			});
 			if (that._map._docLayer._parts > 1) {
 				entries.push({
 					id: 'delete',
@@ -818,6 +826,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 					break;
 				case 'duplicateslide':
 					that._map.duplicatePage();
+					break;
+				case 'renameslide':
+					app.socket.sendMessage('uno .uno:RenamePage');
 					break;
 				case 'delete':
 					app.dispatcher.dispatch('deletepage');

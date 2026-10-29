@@ -641,6 +641,7 @@ class Menubar extends window.L.Control {
 			{name: _UNO('.uno:SlideMenu', 'presentation'), id: 'slide', type: 'menu', accessibility: {combination: 'MS'}, menu: [
 				{name: _UNO('.uno:InsertSlide', 'presentation'), unoid: '.uno:InsertSlide', id: 'insertpage', type: 'action'},
 				{name: _UNO('.uno:DuplicateSlide', 'presentation'), unoid: '.uno:DuplicateSlide', id: 'duplicatepage', type: 'action'},
+				{name: _UNO('.uno:RenameSlide', 'presentation'), uno: '.uno:RenamePage'},
 				...(app.impress.isSlideImportSupported() ? [
 					{name: _('Insert Slides from File...'), id: 'importslides', type: 'action'}
 				] : []),
@@ -832,6 +833,7 @@ class Menubar extends window.L.Control {
 			{name: _UNO('.uno:PageMenu', 'presentation'), id: 'pagemenu', type: 'menu', accessibility: {combination: 'MP'}, menu: [
 				{name: _UNO('.uno:InsertPage', 'presentation'), unoid: '.uno:InsertPage', id: 'insertpage', type: 'action'},
 				{name: _UNO('.uno:DuplicatePage', 'presentation'), unoid: '.uno:DuplicatePage', id: 'duplicatepage', type: 'action'},
+				{name: _UNO('.uno:RenamePage', 'presentation'), uno: '.uno:RenamePage'},
 				{name: _UNO('.uno:DeletePage', 'presentation'), unoid: '.uno:DeletePage', id: 'deletepage', type: 'action'},
 				{name: _UNO('.uno:GotoPage', 'presentation'), uno: '.uno:GotoPage'}]
 			},
@@ -1291,6 +1293,7 @@ class Menubar extends window.L.Control {
 			{name: _UNO('.uno:SlideMenu', 'presentation'), id: 'slidemenu', type: 'menu', menu: [
 				{name: _UNO('.uno:InsertSlide', 'presentation'), unoid: '.uno:InsertSlide', id: 'insertpage', type: 'action'},
 				{name: _UNO('.uno:DuplicateSlide', 'presentation'), unoid: '.uno:DuplicateSlide', id: 'duplicatepage', type: 'action'},
+				{name: _UNO('.uno:RenameSlide', 'presentation'), uno: '.uno:RenamePage'},
 				{name: _UNO('.uno:DeleteSlide', 'presentation'), unoid: '.uno:DeleteSlide', id: 'deletepage', type: 'action'}]
 			},
 			{name: _UNO('.uno:RunMacro'), id: 'runmacro', uno: '.uno:RunMacro'},
@@ -1341,6 +1344,7 @@ class Menubar extends window.L.Control {
 			{name: _UNO('.uno:PageMenu', 'presentation'), id: 'pagemenu', type: 'menu', menu: [
 				{name: _UNO('.uno:InsertPage', 'presentation'), unoid: '.uno:InsertPage', id: 'insertpage', type: 'action'},
 				{name: _UNO('.uno:DuplicatePage', 'presentation'), unoid: '.uno:DuplicatePage', id: 'duplicatepage', type: 'action'},
+				{name: _UNO('.uno:RenamePage', 'presentation'), uno: '.uno:RenamePage'},
 				{name: _UNO('.uno:DeletePage', 'presentation'), unoid: '.uno:DeletePage', id: 'deletepage', type: 'action'}]
 			},
 			{name: _UNO('.uno:RunMacro'), id: 'runmacro', uno: '.uno:RunMacro'},

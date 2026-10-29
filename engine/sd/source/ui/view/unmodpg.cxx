@@ -64,7 +64,7 @@ ModifyPageUndoAction::ModifyPageUndoAction(
 
     if (!mpPage->IsMasterPage())
     {
-        maOldName = mpPage->GetName();
+        maOldName = mpPage->GetRealName();
         SdrLayerAdmin& rLayerAdmin = mrDoc.GetLayerAdmin();
         SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(sUNO_LayerName_background);
         SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(sUNO_LayerName_background_objects);
@@ -100,7 +100,7 @@ void ModifyPageUndoAction::Undo()
 
     if (!mpPage->IsMasterPage())
     {
-        if (mpPage->GetName() != maOldName)
+        if (mpPage->GetRealName() != maOldName)
         {
             mpPage->SetName(maOldName);
 
