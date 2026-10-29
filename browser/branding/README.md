@@ -7,6 +7,10 @@ under the Apache License, Version 2.0, see [LICENSE](LICENSE).
 The Nextcloud themes and the customer brands are not here, they are still in the
 online-branding repository.
 
+The Collabora name and logos are not to be used except in accordance with the
+[Trademark Policy](https://www.collaboraonline.com/trademark-policy/) and must
+be removed from custom builds.
+
 ## Layout
 
 - `brand.sh`: generates a theme into a `browser/dist` directory
