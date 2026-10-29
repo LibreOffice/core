@@ -662,11 +662,10 @@ GtkWidget* GtkSalMenu::AddButton(GtkWidget *pImage)
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
     gtk_button_set_relief(GTK_BUTTON(pButton), GTK_RELIEF_NONE);
-    gtk_button_set_focus_on_click(GTK_BUTTON(pButton), false);
 #else
     gtk_button_set_has_frame(GTK_BUTTON(pButton), false);
-    gtk_widget_set_focus_on_click(pButton, false);
 #endif
+    gtk_widget_set_focus_on_click(pButton, false);
 
     gtk_widget_set_can_focus(pButton, false);
 
