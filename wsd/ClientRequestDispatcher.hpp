@@ -40,6 +40,12 @@ findOrCreateDocBroker(DocumentBroker::ChildType type, const std::string& uri,
                       const std::string& docKey, const std::string& configId, const std::string& id,
                       const Poco::URI& uriPublic, unsigned mobileAppDocId);
 
+#if !MOBILEAPP
+/// Returns the JSON body of /hosting/capabilities: the features of this server, with
+/// convertToAvailable as the availability of the convert-to endpoint for the requester.
+std::string getCapabilitiesJson(bool convertToAvailable);
+#endif // !MOBILEAPP
+
 /// Handles incoming connections and dispatches to the appropriate handler.
 class CheckFileInfo;
 

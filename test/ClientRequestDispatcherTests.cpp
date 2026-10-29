@@ -11,6 +11,7 @@
 
 #include <config.h>
 
+#include <common/JsonUtil.hpp>
 #include <net/HttpRequest.hpp>
 #include <test/MockStreamSocket.hpp>
 #include <wsd/COOLWSD.hpp>
@@ -62,6 +63,7 @@ class ClientRequestDispatcherTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testJsonResultResponse);
     CPPUNIT_TEST(testHandleIncomingMessage_RobotsTxt);
     CPPUNIT_TEST(testHandleIncomingMessage_Capabilities);
+    CPPUNIT_TEST(testCapabilitiesJson);
 
     CPPUNIT_TEST(testHealthCheck_LivezOk);
     CPPUNIT_TEST(testHealthCheck_LivezVerbose);
@@ -367,6 +369,40 @@ private:
         LOK_ASSERT(response.find("HTTP/1.1 200") != std::string::npos);
         LOK_ASSERT(response.find("User-agent: *") != std::string::npos);
         LOK_ASSERT(response.find("Disallow: /") != std::string::npos);
+    }
+
+    /// The capabilities JSON names the CheckFileInfo extensions a host can rely on.
+    void testCapabilitiesJson()
+    {
+        constexpr std::string_view testname = __func__;
+
+        Poco::JSON::Object::Ptr capabilities;
+        LOK_ASSERT(JsonUtil::parseJSON(getCapabilitiesJson(true), capabilities));
+
+        // A boolean flag of the capabilities, false when it is missing.
+        const auto flag = [&capabilities](const std::string& name)
+        {
+            bool value = false;
+            JsonUtil::findJSONValue(capabilities, name, value);
+            return value;
+        };
+
+        LOK_ASSERT_EQUAL(true, flag("hasTemplateSource"));
+        LOK_ASSERT_EQUAL(true, flag("hasThumbnailSizes"));
+        LOK_ASSERT_EQUAL(false, flag("hasTemplateSaveAs"));
+
+        // The availability of convert-to is what the caller says it is.
+        Poco::JSON::Object::Ptr convertTo = capabilities->getObject("convert-to");
+        LOK_ASSERT(convertTo);
+        bool available = false;
+        JsonUtil::findJSONValue(convertTo, "available", available);
+        LOK_ASSERT_EQUAL(true, available);
+
+        LOK_ASSERT(JsonUtil::parseJSON(getCapabilitiesJson(false), capabilities));
+        convertTo = capabilities->getObject("convert-to");
+        LOK_ASSERT(convertTo);
+        JsonUtil::findJSONValue(convertTo, "available", available);
+        LOK_ASSERT_EQUAL(false, available);
     }
 
     void testHandleIncomingMessage_Capabilities()

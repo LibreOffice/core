@@ -3590,10 +3590,6 @@ void ClientRequestDispatcher::CleanupRequestVettingStations()
 
 #if !MOBILEAPP
 
-namespace
-{
-
-/// Create the /hosting/capabilities JSON and return as string.
 std::string getCapabilitiesJson(bool convertToAvailable)
 {
     // Can the convert-to be used?
@@ -3613,6 +3609,9 @@ std::string getCapabilitiesJson(bool convertToAvailable)
 
     // Supports the TemplateSource in CheckFileInfo?
     capabilities->set("hasTemplateSource", true);
+
+    // Supports the ThumbnailSizes in CheckFileInfo?
+    capabilities->set("hasThumbnailSizes", true);
 
     // Hint to encourage use on mobile devices
     capabilities->set("hasMobileSupport", true);
@@ -3674,6 +3673,9 @@ std::string getCapabilitiesJson(bool convertToAvailable)
     capabilities->stringify(ostrJSON);
     return ostrJSON.str();
 }
+
+namespace
+{
 
 /// Send the /hosting/capabilities JSON to socket
 void sendCapabilities(bool convertToAvailable, bool closeConnection,
