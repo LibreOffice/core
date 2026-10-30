@@ -85,7 +85,7 @@ private:
     std::unique_ptr<weld::RadioButton> mxRBPrimaryAxis;
     std::unique_ptr<weld::RadioButton> mxRBSecondaryAxis;
 
-    std::unique_ptr<weld::Widget> mxBoxLabelPlacement;
+    std::unique_ptr<weld::Label> mxFTLabelPlacement;
     std::unique_ptr<weld::ComboBox> mxLBLabelPlacement;
 
     std::unique_ptr<weld::Label> mxFTSeriesName;

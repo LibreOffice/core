@@ -281,7 +281,7 @@ ChartSeriesPanel::ChartSeriesPanel(
     , mxCBYError(m_xBuilder->weld_check_button(u"checkbutton_y_error"_ustr))
     , mxRBPrimaryAxis(m_xBuilder->weld_radio_button(u"radiobutton_primary_axis"_ustr))
     , mxRBSecondaryAxis(m_xBuilder->weld_radio_button(u"radiobutton_secondary_axis"_ustr))
-    , mxBoxLabelPlacement(m_xBuilder->weld_widget(u"datalabel_box"_ustr))
+    , mxFTLabelPlacement(m_xBuilder->weld_label(u"label_box"_ustr))
     , mxLBLabelPlacement(m_xBuilder->weld_combo_box(u"comboboxtext_label"_ustr))
     , mxFTSeriesName(m_xBuilder->weld_label(u"label_series_name"_ustr))
     , mxFTSeriesTemplate(m_xBuilder->weld_label(u"label_series_tmpl"_ustr))
@@ -305,7 +305,7 @@ ChartSeriesPanel::~ChartSeriesPanel()
     mxRBPrimaryAxis.reset();
     mxRBSecondaryAxis.reset();
 
-    mxBoxLabelPlacement.reset();
+    mxFTLabelPlacement.reset();
     mxLBLabelPlacement.reset();
 
     mxFTSeriesName.reset();
@@ -357,7 +357,8 @@ void ChartSeriesPanel::updateData()
     mxRBPrimaryAxis->set_active(bPrimaryAxis);
     mxRBSecondaryAxis->set_active(!bPrimaryAxis);
 
-    mxBoxLabelPlacement->set_sensitive(bLabelVisible);
+    mxFTLabelPlacement->set_sensitive(bLabelVisible);
+    mxLBLabelPlacement->set_sensitive(bLabelVisible);
     mxLBLabelPlacement->set_active(getDataLabelPlacement(mxModel, aCID));
 
     OUString aFrameLabel = mxFTSeriesTemplate->get_label();

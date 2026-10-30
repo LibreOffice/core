@@ -34,6 +34,20 @@
           </packing>
         </child>
         <child>
+          <object class="GtkLabel" id="label_box">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">start</property>
+            <property name="label" translatable="yes" context="sidebarseries|label_box">P_lacement:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic_widget">comboboxtext_label</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkCheckButton" id="checkbutton_label">
             <property name="label" translatable="yes" context="sidebarseries|checkbutton_label">Show data labels</property>
             <property name="visible">True</property>
@@ -44,7 +58,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
@@ -63,7 +77,7 @@
           </object>
           <packing>
             <property name="left-attach">1</property>
-            <property name="top-attach">1</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
@@ -78,7 +92,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
+            <property name="top-attach">3</property>
             <property name="width">2</property>
           </packing>
         </child>
@@ -96,7 +110,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">3</property>
+            <property name="top-attach">4</property>
             <property name="width">2</property>
           </packing>
         </child>
@@ -112,7 +126,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">4</property>
+            <property name="top-attach">5</property>
             <property name="width">2</property>
           </packing>
         </child>
@@ -128,7 +142,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">5</property>
+            <property name="top-attach">6</property>
             <property name="width">2</property>
           </packing>
         </child>
@@ -146,7 +160,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">6</property>
+            <property name="top-attach">7</property>
             <property name="width">2</property>
           </packing>
         </child>
@@ -158,7 +172,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">8</property>
+            <property name="top-attach">9</property>
             <property name="width">2</property>
           </packing>
         </child>
@@ -203,32 +217,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">7</property>
-            <property name="width">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="datalabel_box">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-start">12</property>
-            <child>
-              <object class="GtkLabel" id="label_box">
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="sidebarseries|label_box">P_lacement:</property>
-                <property name="use-underline">True</property>
-                <property name="mnemonic_widget">comboboxtext_label</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">9</property>
+            <property name="top-attach">8</property>
             <property name="width">2</property>
           </packing>
         </child>
