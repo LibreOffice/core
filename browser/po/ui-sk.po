@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-28 13:35+0100\n"
-"PO-Revision-Date: 2026-10-27 21:24+0000\n"
+"PO-Revision-Date: 2026-10-28 16:45+0000\n"
 "Last-Translator: Michal <mumintrol17812@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/sk/>\n"
-"Language: \n"
+"Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -535,14 +535,12 @@ msgid "Signature Certificate"
 msgstr "Podpisový certifikát"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:789
-#, fuzzy
 msgid "Signature Key"
-msgstr "Podpis"
+msgstr "Podpisový kľúč"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:790
-#, fuzzy
 msgid "Signature CA"
-msgstr "Podpis"
+msgstr "Podpis CA"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:791
 #: admin/src/integrator/AdminIntegratorSettings.ts:795
@@ -573,7 +571,7 @@ msgstr "Veľkosť obrázku"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:800
 msgid "Request timeout"
-msgstr ""
+msgstr "Žiadosť vypršala"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:803
 msgid "Client ID"
@@ -690,7 +688,6 @@ msgid "Show Grid"
 msgstr "Zobraziť mriežku"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:832
-#, fuzzy
 msgid "Snap to grid"
 msgstr "Zarovnať podľa mriežky"
 
@@ -752,7 +749,7 @@ msgstr "Brožúra"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:845
 msgid "Booklet front"
-msgstr ""
+msgstr "Font brožúry"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:846
 msgid "Booklet back"
@@ -2879,7 +2876,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2896
 msgid "Change rejected"
-msgstr ""
+msgstr "Zmena odmietnutá"
 
 #: src/control/Control.AIChatSidebar.ts:3004
 msgid "Use section: "
@@ -2989,7 +2986,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3877
 msgid "Do you want to send them?"
-msgstr ""
+msgstr "Chcete ich odoslať?"
 
 #: src/control/Control.AIChatSidebar.ts:3897
 msgid "I have a formula error in my spreadsheet."
