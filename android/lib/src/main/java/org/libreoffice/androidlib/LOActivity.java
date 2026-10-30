@@ -206,6 +206,9 @@ public class LOActivity extends AppCompatActivity {
     public static final int REQUEST_SAVEAS_XLS = 511;
     public static final int REQUEST_SAVEAS_EPUB = 512;
     public static final int REQUEST_EXPORT_FILE = 513;
+    public static final int REQUEST_SAVEAS_CSV = 514;
+    public static final int REQUEST_SAVEAS_HTML = 515;
+    public static final int REQUEST_SAVEAS_MD = 516;
     public static final int REQUEST_COPY = 600;
     public static final int REQUEST_ALL_FILES_ACCESS = 601;
 
@@ -1256,6 +1259,9 @@ public class LOActivity extends AppCompatActivity {
             case REQUEST_SAVEAS_PPT:
             case REQUEST_SAVEAS_XLS:
             case REQUEST_SAVEAS_EPUB:
+            case REQUEST_SAVEAS_CSV:
+            case REQUEST_SAVEAS_HTML:
+            case REQUEST_SAVEAS_MD:
                 if (intent == null) {
                     return;
                 }
@@ -1266,7 +1272,11 @@ public class LOActivity extends AppCompatActivity {
                     OutputStream outputStream = null;
                     try {
                         final File tempFile = File.createTempFile("CollaboraOffice", "." + format, this.getCacheDir());
-                        LOActivity.this.saveAs(tempFile.toURI().toString(), format, requestCopy ? "TakeOwnership" : null);
+                        String options = requestCopy ? "TakeOwnership" : null;
+                        // The HTML filter writes pictures as separate files unless embedded.
+                        if ("html".equals(format))
+                            options = options == null ? "EmbedImages" : options + ",EmbedImages";
+                        LOActivity.this.saveAs(tempFile.toURI().toString(), format, options);
 
                         inputStream = new FileInputStream(tempFile);
                         try {
@@ -1334,6 +1344,9 @@ public class LOActivity extends AppCompatActivity {
             case REQUEST_SAVEAS_PPT: return "ppt";
             case REQUEST_SAVEAS_XLS: return "xls";
             case REQUEST_SAVEAS_EPUB: return "epub";
+            case REQUEST_SAVEAS_CSV: return "csv";
+            case REQUEST_SAVEAS_HTML: return "html";
+            case REQUEST_SAVEAS_MD: return "md";
         }
         return null;
     }
@@ -1891,23 +1904,26 @@ public class LOActivity extends AppCompatActivity {
                 optionsMap.put(keyValue[0], keyValue[1]);
         }
         String format = optionsMap.get("format");
-        String mime = getMimeForFormat(format);
-        if (format != null && mime != null) {
-            String filename = optionsMap.get("name");
-            if (filename == null)
-                filename = "document." + format;
-            filename = getExportDisplayName(filename);
-            int requestID = getRequestIDForFormat(format);
-
-            Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-            intent.setType(mime);
-            intent.putExtra(Intent.EXTRA_TITLE, filename);
-            intent.putExtra(Intent.EXTRA_LOCAL_ONLY, false);
-            File folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
-            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Uri.fromFile(folder).toString());
-            intent.putExtra("android.content.extra.SHOW_ADVANCED", true);
-            startActivityForResult(intent, requestID);
+        String mime = format != null ? getMimeForFormat(format) : null;
+        if (mime == null) {
+            Log.e(TAG, "downloadas: no MIME type for format '" + format + "', not exporting");
+            return;
         }
+
+        String filename = optionsMap.get("name");
+        if (filename == null)
+            filename = "document." + format;
+        filename = getExportDisplayName(filename);
+        int requestID = getRequestIDForFormat(format);
+
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.setType(mime);
+        intent.putExtra(Intent.EXTRA_TITLE, filename);
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, false);
+        File folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Uri.fromFile(folder).toString());
+        intent.putExtra("android.content.extra.SHOW_ADVANCED", true);
+        startActivityForResult(intent, requestID);
     }
 
     private int getRequestIDForFormat(String format) {
@@ -1924,6 +1940,9 @@ public class LOActivity extends AppCompatActivity {
             case "ppt": return REQUEST_SAVEAS_PPT;
             case "xls": return REQUEST_SAVEAS_XLS;
             case "epub": return REQUEST_SAVEAS_EPUB;
+            case "csv": return REQUEST_SAVEAS_CSV;
+            case "html": return REQUEST_SAVEAS_HTML;
+            case "md": return REQUEST_SAVEAS_MD;
         }
         return 0;
     }
@@ -1942,6 +1961,9 @@ public class LOActivity extends AppCompatActivity {
             case "ppt": return "application/vnd.ms-powerpoint";
             case "xls": return "application/vnd.ms-excel";
             case "epub": return "application/epub+zip";
+            case "csv": return "text/csv";
+            case "html": return "text/html";
+            case "md": return "text/markdown";
         }
         return null;
     }
