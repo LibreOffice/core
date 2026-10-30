@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-28 13:35+0100\n"
-"PO-Revision-Date: 2026-10-20 17:01+0000\n"
+"PO-Revision-Date: 2026-10-30 00:06+0000\n"
 "Last-Translator: geonetor <geonetor@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/el/>\n"
-"Language: \n"
+"Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -445,6 +445,8 @@ msgstr ""
 #: src/control/Control.ServerAuditDialog.ts:107
 msgid "No WOPI host configured: trusting the first host that connected"
 msgstr ""
+"Δεν έχει διαμορφωθεί κεντρικός υπολογιστής WOPI: εμπιστεύεστε τον πρώτο "
+"κεντρικό υπολογιστή που συνδέθηκε"
 
 #: admin/src/AdminSocketServerAudit.js:55
 #: src/control/Control.ServerAuditDialog.ts:122
