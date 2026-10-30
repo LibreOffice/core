@@ -18,6 +18,22 @@ namespace cool {
 	/// loaded and registered, so it can be used for drawing.
 	export type FontLoadedLookup = (fontId: string) => boolean;
 
+	/// Colors that replace the ones of the primitives: area fill, line stroke
+	/// and text. An absent field keeps the primitive's own color.
+	export interface ColorOverride {
+		fill?: string;
+		stroke?: string;
+		text?: string;
+	}
+
+	/// Which paragraphs of a text to draw, counted from 0. only draws that
+	/// one paragraph and nothing else of the object. skip draws every
+	/// paragraph but the listed ones. Absent, every paragraph is drawn.
+	export interface ParagraphFilter {
+		only?: number;
+		skip?: number[];
+	}
+
 	/// Where a text run is drawn: the anchor in drawing units, the font size, the factor from an
 	/// advance in the parent space to drawing units, and the substring to paint.
 	interface TextFrame {
@@ -59,6 +75,14 @@ namespace cool {
 		// How many pictures enclose what is being drawn. A picture keeps
 		// the colors it has.
 		private _pictureDepth = 0;
+		// Colors drawn in place of the primitives' own, or null.
+		private _colorOverride: ColorOverride | null = null;
+		// Which paragraphs to draw, and the index of the next paragraph in the
+		// current text block.
+		private _paragraphFilter: ParagraphFilter | null = null;
+		private _paragraphIndex = 0;
+		// How many text blocks the renderer is inside.
+		private _textBlockDepth = 0;
 
 		constructor(
 			bitmapLookup?: BitmapLookup,
@@ -90,6 +114,27 @@ namespace cool {
 			this._editViewContentVisible = visible;
 		}
 
+		/// Draw the following primitives in these colors instead of their own.
+		/// Null restores their own colors.
+		setColorOverride(override: ColorOverride | null): void {
+			this._colorOverride = override;
+		}
+
+		/// Draw only some paragraphs of the following text. Null draws all of
+		/// them. Paragraphs count from 0 in each text block, so the copy in a
+		/// shadow is filtered like the text itself.
+		setParagraphFilter(filter: ParagraphFilter | null): void {
+			this._paragraphFilter = filter;
+			this._paragraphIndex = 0;
+		}
+
+		private _drawsParagraph(index: number): boolean {
+			const filter = this._paragraphFilter;
+			if (!filter) return true;
+			if (filter.only !== undefined) return filter.only === index;
+			return !filter.skip?.includes(index);
+		}
+
 		setDocumentBackground(color: string): void {
 			this._documentBackground = color;
 			this._documentBackgroundIsDark = VectorColors.isDark(color);
@@ -117,20 +162,24 @@ namespace cool {
 			return VectorColors.getDarkVariant(color, this._documentBackground);
 		}
 
-		private _fillColor(color: string): string {
-			return this._pictureDepth > 0 ? color : this._surfaceColor(color);
+		// An override stands in for the primitive's own color and follows
+		// the view the same way.
+		private _fillColor(color: string | undefined): string {
+			const own = this._colorOverride?.fill ?? color ?? '#000000';
+			return this._pictureDepth > 0 ? own : this._surfaceColor(own);
 		}
 
 		// On a dark view a dark line turns light, so it shows on the fills
 		// that turned dark.
-		private _lineColor(color: string): string {
+		private _lineColor(color: string | undefined): string {
+			const own = this._colorOverride?.stroke ?? color ?? '#000000';
 			if (
 				this._pictureDepth > 0 ||
 				!this._followsDarkView() ||
-				!VectorColors.isDark(color)
+				!VectorColors.isDark(own)
 			)
-				return color;
-			return VectorColors.getLightVariant(color);
+				return own;
+			return VectorColors.getLightVariant(own);
 		}
 
 		// The color a fill shows over what lies behind it, when it lets
@@ -175,6 +224,9 @@ namespace cool {
 		private _textColor(
 			primitive: TextSimplePortionPrimitive | TextDecoratedPortionPrimitive,
 		): string {
+			if (this._colorOverride?.text !== undefined)
+				return this._colorOverride.text;
+
 			const surface = this._textSurface(primitive);
 			const color = primitive.fontcolor;
 
@@ -216,14 +268,23 @@ namespace cool {
 			}
 		}
 
+		// A paragraph drawn alone is drawn without its object.
+		private _leavesOutObject(kind: { isObjectDrawing?: boolean }): boolean {
+			return (
+				this._paragraphFilter?.only !== undefined &&
+				this._textBlockDepth === 0 &&
+				kind.isObjectDrawing === true
+			);
+		}
+
 		renderPrimitive(
 			context: CanvasRenderingContext2D,
 			primitive: Primitive,
 		): void {
 			if (!primitive || !primitive.type) return;
-
 			switch (primitive.type) {
 				case BackgroundColorPrimitive.type:
+					if (this._leavesOutObject(BackgroundColorPrimitive)) return;
 					this._renderBackgroundColor(
 						context,
 						primitive as BackgroundColorPrimitive,
@@ -231,6 +292,7 @@ namespace cool {
 					break;
 				case PolyPolygonColorPrimitive.type:
 				case PolyPolygonRGBAPrimitive.type:
+					if (this._leavesOutObject(PolyPolygonColorPrimitive)) return;
 					this._renderPolyPolygonColor(
 						context,
 						primitive as PolyPolygonRGBAPrimitive,
@@ -238,30 +300,35 @@ namespace cool {
 					break;
 				case PolygonStrokePrimitive.type:
 				case PolyPolygonStrokePrimitive.type:
+					if (this._leavesOutObject(PolygonStrokePrimitive)) return;
 					this._renderPolygonStroke(
 						context,
 						primitive as PolygonStrokePrimitive,
 					);
 					break;
 				case PolygonHairlinePrimitive.type:
+					if (this._leavesOutObject(PolygonHairlinePrimitive)) return;
 					this._renderPolygonHairline(
 						context,
 						primitive as PolygonHairlinePrimitive,
 					);
 					break;
 				case FilledRectanglePrimitive.type:
+					if (this._leavesOutObject(FilledRectanglePrimitive)) return;
 					this._renderFilledRectangle(
 						context,
 						primitive as FilledRectanglePrimitive,
 					);
 					break;
 				case LineRectanglePrimitive.type:
+					if (this._leavesOutObject(LineRectanglePrimitive)) return;
 					this._renderLineRectangle(
 						context,
 						primitive as LineRectanglePrimitive,
 					);
 					break;
 				case SingleLinePrimitive.type:
+					if (this._leavesOutObject(SingleLinePrimitive)) return;
 					this._renderSingleLine(context, primitive as SingleLinePrimitive);
 					break;
 				case WrongSpellPrimitive.type:
@@ -272,21 +339,25 @@ namespace cool {
 					);
 					break;
 				case PointArrayPrimitive.type:
+					if (this._leavesOutObject(PointArrayPrimitive)) return;
 					this._renderPointArray(context, primitive as PointArrayPrimitive);
 					break;
 				case FillGradientPrimitive.type:
+					if (this._leavesOutObject(FillGradientPrimitive)) return;
 					this._gradients.renderFillGradient(
 						context,
 						primitive as FillGradientPrimitive,
 					);
 					break;
 				case PolyPolygonGradientPrimitive.type:
+					if (this._leavesOutObject(PolyPolygonGradientPrimitive)) return;
 					this._gradients.renderPolyPolygonGradient(
 						context,
 						primitive as PolyPolygonGradientPrimitive,
 					);
 					break;
 				case PolyPolygonAlphaGradientPrimitive.type:
+					if (this._leavesOutObject(PolyPolygonAlphaGradientPrimitive)) return;
 					this._gradients.renderPolyPolygonAlphaGradient(
 						context,
 						primitive as PolyPolygonAlphaGradientPrimitive,
@@ -306,30 +377,36 @@ namespace cool {
 					break;
 				case FillHatchPrimitive.type:
 				case PolyPolygonHatchPrimitive.type:
+					if (this._leavesOutObject(FillHatchPrimitive)) return;
 					this._renderHatch(context, primitive as FillHatchPrimitive);
 					break;
 				case FillGraphicPrimitive.type:
+					if (this._leavesOutObject(FillGraphicPrimitive)) return;
 					this._fillGraphics.renderFillGraphic(
 						context,
 						primitive as FillGraphicPrimitive,
 					);
 					break;
 				case PolyPolygonGraphicPrimitive.type:
+					if (this._leavesOutObject(PolyPolygonGraphicPrimitive)) return;
 					this._fillGraphics.renderPolyPolygonGraphic(
 						context,
 						primitive as PolyPolygonGraphicPrimitive,
 					);
 					break;
 				case BitmapPrimitive.type:
+					if (this._leavesOutObject(BitmapPrimitive)) return;
 					this._renderBitmap(context, primitive as BitmapPrimitive);
 					break;
 				case FormControlPrimitive.type:
 					this._formControls.render(context, primitive as FormControlPrimitive);
 					break;
 				case BitmapAlphaPrimitive.type:
+					if (this._leavesOutObject(BitmapAlphaPrimitive)) return;
 					this._renderBitmapAlpha(context, primitive as BitmapAlphaPrimitive);
 					break;
 				case GraphicPrimitive.type:
+					if (this._leavesOutObject(GraphicPrimitive)) return;
 					// The helper draws the children of a vector graphic
 					// itself, so return here to skip the recursion at the
 					// end of renderPrimitive.
@@ -347,14 +424,28 @@ namespace cool {
 						primitive as TextDecoratedPortionPrimitive,
 					);
 					break;
+				case TextHierarchyBlockPrimitive.type:
+					// Draws its children itself.
+					++this._textBlockDepth;
+					this._renderTextHierarchyBlock(
+						context,
+						primitive as TextHierarchyBlockPrimitive,
+					);
+					--this._textBlockDepth;
+					return;
+				case TextHierarchyParagraphPrimitive.type:
+					// Draws its children itself.
+					this._renderTextHierarchyParagraph(
+						context,
+						primitive as TextHierarchyParagraphPrimitive,
+					);
+					return;
 				case GroupPrimitive.type:
 				case ObjectInfoPrimitive.type:
 				case PolygonStrokeArrowPrimitive.type:
 				case CaptionTailPrimitive.type:
 				case TextHierarchyFieldPrimitive.type:
 				case TextHierarchyLinePrimitive.type:
-				case TextHierarchyParagraphPrimitive.type:
-				case TextHierarchyBlockPrimitive.type:
 				case TextHierarchyBulletPrimitive.type:
 				case TextHierarchyEmphasisMarkPrimitive.type:
 					// Pure container - recursion into children happens
@@ -383,6 +474,7 @@ namespace cool {
 					);
 					return;
 				case PatternFillPrimitive.type:
+					if (this._leavesOutObject(PatternFillPrimitive)) return;
 					// The children are one tile, and the pattern fill draws
 					// them once per tile itself.
 					this._renderPatternFill(context, primitive as PatternFillPrimitive);
@@ -394,9 +486,11 @@ namespace cool {
 					this._renderShadow(context, primitive as ShadowPrimitive);
 					return;
 				case GlowPrimitive.type:
+					if (this._leavesOutObject(GlowPrimitive)) return;
 					this._renderGlow(context, primitive as GlowPrimitive);
 					return;
 				case SoftEdgePrimitive.type:
+					if (this._leavesOutObject(SoftEdgePrimitive)) return;
 					this._renderSoftEdge(context, primitive as SoftEdgePrimitive);
 					return;
 				case ReflectionPrimitive.type:
@@ -409,6 +503,7 @@ namespace cool {
 					this._renderMask(context, primitive as MaskPrimitive);
 					return;
 				case PagePreviewPrimitive.type:
+					if (this._leavesOutObject(PagePreviewPrimitive)) return;
 					this._renderPagePreview(context, primitive as PagePreviewPrimitive);
 					return;
 				case HiddenGeometryPrimitive.type:
@@ -525,7 +620,7 @@ namespace cool {
 			const path = new Path2D(primitive.path);
 
 			context.save();
-			context.strokeStyle = this._lineColor(line.color ?? '#000000');
+			context.strokeStyle = this._lineColor(line.color);
 			// Width 0 means a hairline. Any other width is drawn as given,
 			// even when that is thinner than a device pixel.
 			const width = line.width ?? 0;
@@ -555,7 +650,7 @@ namespace cool {
 
 			const path = new Path2D(primitive.path);
 			context.save();
-			context.strokeStyle = this._lineColor(primitive.color ?? '#000000');
+			context.strokeStyle = this._lineColor(primitive.color);
 			context.lineWidth = this._hairlineWidth(context);
 			context.stroke(path);
 			context.restore();
@@ -569,7 +664,7 @@ namespace cool {
 			if (!bounds) return;
 
 			context.save();
-			context.fillStyle = this._fillColor(primitive.color ?? '#000000');
+			context.fillStyle = this._fillColor(primitive.color);
 			context.fillRect(bounds.minX, bounds.minY, bounds.width, bounds.height);
 			context.restore();
 		}
@@ -582,7 +677,7 @@ namespace cool {
 			if (!bounds) return;
 
 			context.save();
-			context.strokeStyle = this._lineColor(primitive.color ?? '#000000');
+			context.strokeStyle = this._lineColor(primitive.color);
 			context.lineWidth = this._hairlineWidth(context);
 			context.strokeRect(bounds.minX, bounds.minY, bounds.width, bounds.height);
 			context.restore();
@@ -598,7 +693,7 @@ namespace cool {
 			const endY = primitive.endY ?? 0;
 
 			context.save();
-			context.strokeStyle = this._lineColor(primitive.color ?? '#000000');
+			context.strokeStyle = this._lineColor(primitive.color);
 			context.lineWidth = this._hairlineWidth(context);
 			context.beginPath();
 			context.moveTo(startX, startY);
@@ -1004,6 +1099,29 @@ namespace cool {
 			return width;
 		}
 
+		// A block holds the paragraphs of one text, numbered from 0. The count
+		// of an enclosing text is restored afterwards.
+		private _renderTextHierarchyBlock(
+			context: CanvasRenderingContext2D,
+			primitive: TextHierarchyBlockPrimitive,
+		): void {
+			const outerIndex = this._paragraphIndex;
+			this._paragraphIndex = 0;
+			if (primitive.children)
+				this._renderPrimitives(context, primitive.children);
+			this._paragraphIndex = outerIndex;
+		}
+
+		private _renderTextHierarchyParagraph(
+			context: CanvasRenderingContext2D,
+			primitive: TextHierarchyParagraphPrimitive,
+		): void {
+			const index = this._paragraphIndex++;
+			if (!this._drawsParagraph(index)) return;
+			if (primitive.children)
+				this._renderPrimitives(context, primitive.children);
+		}
+
 		private _renderTextDecoratedPortion(
 			context: CanvasRenderingContext2D,
 			primitive: TextDecoratedPortionPrimitive,
@@ -1283,7 +1401,8 @@ namespace cool {
 			if (!primitive.points?.length) return;
 
 			context.save();
-			context.fillStyle = this._lineColor(primitive.color ?? '#000000');
+			// Points are line geometry, so they take the line color.
+			context.fillStyle = this._lineColor(primitive.color);
 			for (const point of primitive.points)
 				context.fillRect(point.x, point.y, 1, 1);
 			context.restore();
@@ -1630,7 +1749,7 @@ namespace cool {
 				Math.hypot(centerX - area.centerX, centerY - area.centerY);
 			const steps = Math.ceil(reach / spacing);
 
-			context.strokeStyle = this._lineColor(hatch.color ?? '#000000');
+			context.strokeStyle = this._lineColor(hatch.color);
 			context.lineWidth = 1 / pixels;
 			context.beginPath();
 			for (const lineAngle of angles) {

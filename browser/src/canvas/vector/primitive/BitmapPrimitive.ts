@@ -27,5 +27,7 @@ namespace cool {
 
 	export namespace BitmapPrimitive {
 		export const type = 'bitmap';
+		/// Draws the object itself, not its text.
+		export const isObjectDrawing = true;
 	}
 }

@@ -22,5 +22,7 @@ namespace cool {
 
 	export namespace FillHatchPrimitive {
 		export const type = 'fillHatch';
+		/// Draws the object itself, not its text.
+		export const isObjectDrawing = true;
 	}
 }

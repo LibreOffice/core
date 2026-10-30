@@ -25,5 +25,7 @@ namespace cool {
 
 	export namespace BitmapAlphaPrimitive {
 		export const type = 'bitmapAlpha';
+		/// Draws the object itself, not its text.
+		export const isObjectDrawing = true;
 	}
 }

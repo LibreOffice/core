@@ -21,5 +21,7 @@ namespace cool {
 
 	export namespace FillGraphicPrimitive {
 		export const type = 'fillGraphic';
+		/// Draws the object itself, not its text.
+		export const isObjectDrawing = true;
 	}
 }

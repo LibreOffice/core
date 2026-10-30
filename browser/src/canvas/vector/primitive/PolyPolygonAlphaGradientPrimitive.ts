@@ -21,5 +21,7 @@ namespace cool {
 
 	export namespace PolyPolygonAlphaGradientPrimitive {
 		export const type = 'polyPolygonAlphaGradient';
+		/// Draws the object itself, not its text.
+		export const isObjectDrawing = true;
 	}
 }

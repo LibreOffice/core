@@ -424,6 +424,8 @@ class VectorManager extends RenderManagerBase {
 			if (this._drawnElsewhere.has(id)) continue;
 			// The slide's copy of a master placeholder is drawn with the master.
 			if (obj.masterContent) continue;
+			const state = VectorManager._stateOf(data, id, options?.states);
+			if (state?.hidden) continue;
 			if (obj.primitives) {
 				const outside =
 					edited !== undefined &&
@@ -435,6 +437,7 @@ class VectorManager extends RenderManagerBase {
 					VectorManager._overlaps(obj, edited.box);
 				const pale = outside && options?.edited?.paleOutside === true;
 				if (pale || inFront) this._renderGhosted(context, obj, inFront, pale);
+				else if (state) this._renderInState(context, obj, state);
 				else
 					for (const primitive of obj.primitives) {
 						this._renderer.renderPrimitive(context, primitive);
@@ -443,6 +446,69 @@ class VectorManager extends RenderManagerBase {
 			// The master lies between the page's own background and its objects.
 			if (obj.kind === 'page') this._renderMaster(context, data);
 		}
+	}
+
+	// The state of the object, or else of the nearest group above it, since an effect on a
+	// group moves every member. Undefined when neither has one.
+	private static _stateOf(
+		data: cool.VectorPrimitivesData,
+		objectId: number,
+		states: Map<number, cool.ObjectRenderState> | undefined,
+	): cool.ObjectRenderState | undefined {
+		if (!states) return undefined;
+		for (
+			let at: number | undefined = objectId, guard = 0;
+			at !== undefined && guard < 100;
+			at = data.objects.get(at)?.parent, ++guard
+		) {
+			const state = states.get(at);
+			if (state) return state;
+		}
+		return undefined;
+	}
+
+	// Draw the object in its state, without the paragraphs that have a state of their own.
+	// Those follow right after, each in its own state, so they keep their place in the paint
+	// order.
+	private _renderInState(
+		context: CanvasRenderingContext2D,
+		object: cool.SlideObject,
+		state: cool.ObjectRenderState,
+	): void {
+		const paragraphs = state.paragraphs
+			? [...state.paragraphs.entries()].sort(
+					([first], [second]) => first - second,
+				)
+			: [];
+		this._renderUnder(
+			context,
+			object,
+			state,
+			paragraphs.length ? { skip: paragraphs.map(([index]) => index) } : null,
+		);
+		for (const [index, paragraphState] of paragraphs)
+			this._renderUnder(context, object, paragraphState, { only: index });
+	}
+
+	private _renderUnder(
+		context: CanvasRenderingContext2D,
+		object: cool.SlideObject,
+		state: cool.DrawState,
+		paragraphFilter: cool.ParagraphFilter | null,
+	): void {
+		if (state.hidden || !object.primitives) return;
+		context.save();
+		if (state.alpha !== undefined) context.globalAlpha = state.alpha;
+		const matrix = cool.Matrix2D.fromArray(state.transform);
+		if (matrix) matrix.applyTo(context);
+		this._renderer.setColorOverride(state.colorOverride ?? null);
+		this._renderer.setParagraphFilter(paragraphFilter);
+		for (const primitive of object.primitives) {
+			this._renderer.renderPrimitive(context, primitive);
+		}
+		this._renderer.setParagraphFilter(null);
+		this._renderer.setColorOverride(null);
+		context.restore();
 	}
 
 	// whether the object is the one edited or lies in it, a group, at any depth

@@ -23,5 +23,7 @@ namespace cool {
 
 	export namespace FillGradientPrimitive {
 		export const type = 'fillGradient';
+		/// Draws the object itself, not its text.
+		export const isObjectDrawing = true;
 	}
 }

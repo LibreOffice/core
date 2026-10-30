@@ -19,5 +19,7 @@ namespace cool {
 
 	export namespace SoftEdgePrimitive {
 		export const type = 'softEdge';
+		/// Draws the object itself, not its text.
+		export const isObjectDrawing = true;
 	}
 }

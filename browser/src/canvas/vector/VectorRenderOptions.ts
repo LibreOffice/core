@@ -10,6 +10,24 @@
  */
 
 namespace cool {
+	/// How an animation draws something: whether at all, the transform over
+	/// its own place as the six canvas matrix values in twips, the opacity
+	/// from 0 to 1, and the colors that replace its own. An absent field
+	/// leaves that part unchanged.
+	export interface DrawState {
+		hidden?: boolean;
+		transform?: number[];
+		alpha?: number;
+		colorOverride?: ColorOverride;
+	}
+
+	/// How an animation draws an object. paragraphs holds the paragraphs of
+	/// its text with a state of their own, by index. Each is drawn in that
+	/// state, and the object is drawn without them.
+	export interface ObjectRenderState extends DrawState {
+		paragraphs?: Map<number, DrawState>;
+	}
+
 	/// What a render of a part's primitive tree is for.
 	export interface VectorRenderOptions {
 		/// True when the render is the editable view of the document.
@@ -26,5 +44,9 @@ namespace cool {
 		/// fills, as x, y, width and height in twips, which is what it covers of the page while
 		/// its parts are drawn upright into it. Absent where no object is active in place.
 		activeInPlace?: { objectId: number; area: number[] };
+		/// The states of the animated objects, by object id. The members of
+		/// a group take the state of the group. Absent when nothing is
+		/// animated.
+		states?: Map<number, ObjectRenderState>;
 	}
 }

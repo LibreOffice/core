@@ -19,5 +19,7 @@ namespace cool {
 
 	export namespace PointArrayPrimitive {
 		export const type = 'pointArray';
+		/// Draws the object itself, not its text.
+		export const isObjectDrawing = true;
 	}
 }

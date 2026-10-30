@@ -2929,4 +2929,201 @@ describe('VectorPrimitiveRenderer', function () {
 			);
 		});
 	});
+
+	describe('Color override', function () {
+		const filledPolygon = {
+			type: 'polyPolygonColor',
+			path: 'M 0 0 L 10 0 L 10 10 Z',
+			color: '#112233',
+		};
+		const strokedPolygon = {
+			type: 'polygonStroke',
+			path: 'M 0 0 L 10 10',
+			line: { color: '#112233', width: 2 },
+		};
+		const textPortion = {
+			type: 'textSimplePortion',
+			text: 'Hi',
+			fontSize: 20,
+			matrix: [20, 0, 0, 20, 5, 7],
+			fontcolor: '#112233',
+			familyname: 'Liberation Sans',
+		};
+
+		it('fills an area in the override color', function () {
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+
+			renderer.setColorOverride({ fill: 'rgb(10,20,30)' });
+			renderer.renderPrimitive(recorder as any, filledPolygon);
+
+			nodeassert.strictEqual(
+				recorder.findCall('fill')?.properties.fillStyle,
+				'rgb(10,20,30)',
+			);
+		});
+
+		it('strokes a line in the override color', function () {
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+
+			renderer.setColorOverride({ stroke: 'rgb(10,20,30)' });
+			renderer.renderPrimitive(recorder as any, strokedPolygon);
+
+			nodeassert.strictEqual(
+				recorder.findCall('stroke')?.properties.strokeStyle,
+				'rgb(10,20,30)',
+			);
+		});
+
+		it('draws text in the override color', function () {
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+
+			renderer.setColorOverride({ text: 'rgb(10,20,30)' });
+			renderer.renderPrimitive(recorder as any, textPortion);
+
+			nodeassert.strictEqual(
+				recorder.findCall('fillText')?.properties.fillStyle,
+				'rgb(10,20,30)',
+			);
+		});
+
+		it('keeps the text color when only the area fill is overridden', function () {
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+
+			renderer.setColorOverride({ fill: 'rgb(10,20,30)' });
+			renderer.renderPrimitive(recorder as any, textPortion);
+
+			nodeassert.strictEqual(
+				recorder.findCall('fillText')?.properties.fillStyle,
+				textPortion.fontcolor,
+			);
+		});
+
+		it('draws the primitive colors again once the override is cleared', function () {
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+
+			renderer.setColorOverride({ fill: 'rgb(10,20,30)' });
+			renderer.setColorOverride(null);
+			renderer.renderPrimitive(recorder as any, filledPolygon);
+
+			nodeassert.strictEqual(
+				recorder.findCall('fill')?.properties.fillStyle,
+				filledPolygon.color,
+			);
+		});
+	});
+
+	describe('Paragraphs', function () {
+		// A text holds its paragraphs under a block node, and each paragraph
+		// holds the portions that carry the text.
+		function paragraph(text: string): any {
+			return {
+				type: 'textHierarchyParagraph',
+				bounds: [0, 0, 100, 20],
+				children: [
+					{
+						type: 'textSimplePortion',
+						text: text,
+						fontSize: 20,
+						matrix: [20, 0, 0, 20, 5, 7],
+						fontcolor: '#112233',
+						familyname: 'Liberation Sans',
+					},
+				],
+			};
+		}
+
+		function textObject(): any {
+			return {
+				type: 'textHierarchyBlock',
+				children: [paragraph('One'), paragraph('Two'), paragraph('Three')],
+			};
+		}
+
+		function drawnText(recorder: CanvasRecorder): string[] {
+			return recorder.callsOf('fillText').map((call) => call.args[0] as string);
+		}
+
+		it('draws every paragraph when no filter is set', function () {
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+
+			renderer.renderPrimitive(recorder as any, textObject());
+
+			nodeassert.deepStrictEqual(drawnText(recorder), ['One', 'Two', 'Three']);
+		});
+
+		it('draws one paragraph alone', function () {
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+
+			renderer.setParagraphFilter({ only: 1 });
+			renderer.renderPrimitive(recorder as any, textObject());
+
+			nodeassert.deepStrictEqual(drawnText(recorder), ['Two']);
+		});
+
+		it('leaves out the skipped paragraphs', function () {
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+
+			renderer.setParagraphFilter({ skip: [1] });
+			renderer.renderPrimitive(recorder as any, textObject());
+
+			nodeassert.deepStrictEqual(drawnText(recorder), ['One', 'Three']);
+		});
+
+		it('counts the paragraphs from the start of each text', function () {
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+
+			renderer.setParagraphFilter({ only: 0 });
+			renderer.renderPrimitive(recorder as any, textObject());
+			renderer.setParagraphFilter({ only: 0 });
+			renderer.renderPrimitive(recorder as any, textObject());
+
+			nodeassert.deepStrictEqual(drawnText(recorder), ['One', 'One']);
+		});
+
+		it('numbers the paragraphs of a shadow the same as the text', function () {
+			const recorder = new CanvasRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer();
+
+			renderer.setParagraphFilter({ only: 1 });
+			renderer.renderPrimitive(recorder as any, {
+				type: 'group',
+				children: [textObject(), textObject()],
+			});
+
+			nodeassert.deepStrictEqual(drawnText(recorder), ['Two', 'Two']);
+		});
+
+		it('finds the paragraphs of the text and not of its shadow', function () {
+			const shadowText = textObject();
+			shadowText.children[0].children[0].text = 'Shadow';
+			const paragraphs = cool.TextHierarchyParagraphPrimitive.collect([
+				{ type: 'shadow', children: [shadowText] },
+				textObject(),
+			]);
+
+			nodeassert.strictEqual(paragraphs.length, 3);
+			nodeassert.strictEqual((paragraphs[0] as any).children[0].text, 'One');
+		});
+
+		it('finds the paragraphs of a tree in the order of the text', function () {
+			const paragraphs = cool.TextHierarchyParagraphPrimitive.collect([
+				{ type: 'group', children: [textObject()] },
+			]);
+
+			nodeassert.strictEqual(paragraphs.length, 3);
+			nodeassert.deepStrictEqual(
+				paragraphs.map((paragraph: any) => paragraph.children[0].text),
+				['One', 'Two', 'Three'],
+			);
+		});
+	});
 });

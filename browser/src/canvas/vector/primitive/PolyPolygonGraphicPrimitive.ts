@@ -23,5 +23,7 @@ namespace cool {
 
 	export namespace PolyPolygonGraphicPrimitive {
 		export const type = 'polyPolygonGraphic';
+		/// Draws the object itself, not its text.
+		export const isObjectDrawing = true;
 	}
 }

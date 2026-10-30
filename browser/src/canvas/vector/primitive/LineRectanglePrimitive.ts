@@ -20,5 +20,7 @@ namespace cool {
 
 	export namespace LineRectanglePrimitive {
 		export const type = 'lineRectangle';
+		/// Draws the object itself, not its text.
+		export const isObjectDrawing = true;
 	}
 }

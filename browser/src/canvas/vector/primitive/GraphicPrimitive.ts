@@ -53,5 +53,7 @@ namespace cool {
 
 	export namespace GraphicPrimitive {
 		export const type = 'graphic';
+		/// Draws the object itself, not its text.
+		export const isObjectDrawing = true;
 	}
 }

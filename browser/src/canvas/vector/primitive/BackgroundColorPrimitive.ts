@@ -21,5 +21,7 @@ namespace cool {
 
 	export namespace BackgroundColorPrimitive {
 		export const type = 'backgroundcolor';
+		/// Draws the object itself, not its text.
+		export const isObjectDrawing = true;
 	}
 }

@@ -25,5 +25,7 @@ namespace cool {
 
 	export namespace PagePreviewPrimitive {
 		export const type = 'pagePreview';
+		/// Draws the object itself, not its text.
+		export const isObjectDrawing = true;
 	}
 }

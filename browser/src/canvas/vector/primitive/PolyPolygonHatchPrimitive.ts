@@ -23,5 +23,7 @@ namespace cool {
 
 	export namespace PolyPolygonHatchPrimitive {
 		export const type = 'polyPolygonHatch';
+		/// Draws the object itself, not its text.
+		export const isObjectDrawing = true;
 	}
 }

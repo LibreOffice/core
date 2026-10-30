@@ -34,16 +34,51 @@ namespace cool {
 		export const type = 'textHierarchyLine';
 	}
 
-	/// One paragraph of a text.
+	/// One paragraph of a text, with its lines and portions as children.
+	/// bounds is its rectangle as minX, minY, maxX and maxY, in slide twips.
 	export interface TextHierarchyParagraphPrimitive extends Primitive {
 		type: typeof TextHierarchyParagraphPrimitive.type;
+		bounds?: [number, number, number, number];
 	}
 
 	export namespace TextHierarchyParagraphPrimitive {
 		export const type = 'textHierarchyParagraph';
+
+		/// The paragraph nodes of the object's own text, in text order, or an
+		/// empty list. The copy in a shadow, hidden geometry and edit-view
+		/// content are passed over.
+		export function collect(
+			primitives: Primitive[] | undefined,
+		): TextHierarchyParagraphPrimitive[] {
+			const block = findBlock(primitives);
+			if (!block?.children) return [];
+			return block.children.filter(
+				(child) => child.type === type,
+			) as TextHierarchyParagraphPrimitive[];
+		}
+
+		function findBlock(
+			primitives: Primitive[] | undefined,
+		): TextHierarchyBlockPrimitive | undefined {
+			if (!primitives) return undefined;
+			for (const primitive of primitives) {
+				if (primitive.type === TextHierarchyBlockPrimitive.type)
+					return primitive as TextHierarchyBlockPrimitive;
+				if (
+					primitive.type === ShadowPrimitive.type ||
+					primitive.type === HiddenGeometryPrimitive.type ||
+					primitive.type === ExclusiveEditViewPrimitive.type
+				)
+					continue;
+				const found = findBlock(primitive.children);
+				if (found) return found;
+			}
+			return undefined;
+		}
 	}
 
-	/// The whole text of an object.
+	/// The whole text of an object, one paragraph node per paragraph, empty
+	/// ones included, in text order. A shadow holds a copy of the block.
 	export interface TextHierarchyBlockPrimitive extends Primitive {
 		type: typeof TextHierarchyBlockPrimitive.type;
 	}

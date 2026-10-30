@@ -2951,4 +2951,218 @@ describe('VectorManager', function () {
 			(RenderManager as any)._instance = originalInstance;
 		}
 	});
+
+	// An animation draws an object in a state of its own: left out, moved by
+	// a transform, faded, or in other colors. The members of a group follow
+	// the group, and a paragraph with a state of its own is drawn apart from
+	// its object.
+	describe('Draw states', function () {
+		const hairline = { type: 'polygonHairline', path: 'M0 0 L1 1' };
+		const filled = {
+			type: 'polyPolygonColor',
+			path: 'M 0 0 L 10 0 L 10 10 Z',
+			color: '#112233',
+		};
+		function paragraph(text: string): any {
+			return {
+				type: 'textHierarchyParagraph',
+				children: [
+					{
+						type: 'textSimplePortion',
+						text: text,
+						fontSize: 20,
+						matrix: [20, 0, 0, 20, 5, 7],
+						fontcolor: '#112233',
+						familyname: 'Liberation Sans',
+					},
+				],
+			};
+		}
+
+		function cachedPart(manager: VectorManager, objects: any[]): any {
+			manager.handleVectorPrimitivesResponse({ partId: 'S0', objects });
+			return manager.requestPart(0, cool.VectorMode.Slides);
+		}
+
+		it('leaves out a hidden object', function () {
+			const manager = new VectorManager();
+			const data = cachedPart(manager, [
+				{ id: 11, primitives: [hairline] },
+				{ id: 22, primitives: [hairline] },
+			]);
+
+			const recorder = new CanvasRecorder();
+			manager.renderInto(recorder as any, data, {
+				states: new Map([[22, { hidden: true }]]),
+			});
+
+			nodeassert.strictEqual(countCalls(recorder, 'stroke'), 1);
+		});
+
+		it('draws an object under its transform, opacity and colors', function () {
+			const manager = new VectorManager();
+			const data = cachedPart(manager, [{ id: 11, primitives: [filled] }]);
+
+			const recorder = new CanvasRecorder();
+			manager.renderInto(recorder as any, data, {
+				states: new Map([
+					[
+						11,
+						{
+							transform: [2, 0, 0, 2, 5, 7],
+							alpha: 0.5,
+							colorOverride: { fill: 'rgb(10,20,30)' },
+						},
+					],
+				]),
+			});
+
+			const fill = recorder.findCall('fill');
+			nodeassert.ok(fill);
+			nodeassert.strictEqual(fill.properties.fillStyle, 'rgb(10,20,30)');
+			nodeassert.strictEqual(fill.properties.globalAlpha, 0.5);
+			nodeassert.deepStrictEqual(
+				recorder.findCall('transform')?.args,
+				[2, 0, 0, 2, 5, 7],
+			);
+		});
+
+		it('draws the next object as it comes', function () {
+			const manager = new VectorManager();
+			const data = cachedPart(manager, [
+				{ id: 11, primitives: [filled] },
+				{ id: 22, primitives: [filled] },
+			]);
+
+			const recorder = new CanvasRecorder();
+			manager.renderInto(recorder as any, data, {
+				states: new Map([
+					[11, { alpha: 0.5, colorOverride: { fill: 'rgb(10,20,30)' } }],
+				]),
+			});
+
+			const fills = recorder.callsOf('fill');
+			nodeassert.strictEqual(fills.length, 2);
+			nodeassert.strictEqual(fills[1].properties.fillStyle, filled.color);
+		});
+
+		it('draws a paragraph that moves on its own without the object around it', function () {
+			const manager = new VectorManager();
+			const data = cachedPart(manager, [
+				{
+					id: 11,
+					primitives: [
+						filled,
+						{
+							type: 'textHierarchyBlock',
+							children: [paragraph('One'), paragraph('Two')],
+						},
+					],
+				},
+			]);
+
+			const recorder = new CanvasRecorder();
+			manager.renderInto(recorder as any, data, {
+				states: new Map([[11, { paragraphs: new Map([[1, { alpha: 0.5 }]]) }]]),
+			});
+
+			// The fill comes once, with the object, and the moving paragraph
+			// brings its text alone.
+			nodeassert.strictEqual(recorder.callsOf('fill').length, 1);
+			const texts = recorder.callsOf('fillText');
+			nodeassert.deepStrictEqual(
+				texts.map((call) => call.args[0]),
+				['One', 'Two'],
+			);
+			nodeassert.strictEqual(texts[1].properties.globalAlpha, 0.5);
+		});
+
+		it('moves the members of a group with the group', function () {
+			const manager = new VectorManager();
+			const data = cachedPart(manager, [
+				{ id: 11 },
+				{ id: 22, parent: 11, primitives: [filled] },
+				{ id: 33, primitives: [filled] },
+			]);
+
+			const recorder = new CanvasRecorder();
+			manager.renderInto(recorder as any, data, {
+				states: new Map([[11, { colorOverride: { fill: 'rgb(10,20,30)' } }]]),
+			});
+
+			const fills = recorder.callsOf('fill');
+			nodeassert.strictEqual(fills.length, 2);
+			nodeassert.strictEqual(fills[0].properties.fillStyle, 'rgb(10,20,30)');
+			nodeassert.strictEqual(fills[1].properties.fillStyle, filled.color);
+		});
+
+		it('draws an animated paragraph apart from its object', function () {
+			const manager = new VectorManager();
+			const data = cachedPart(manager, [
+				{
+					id: 11,
+					primitives: [
+						{
+							type: 'textHierarchyBlock',
+							children: [
+								paragraph('One'),
+								paragraph('Two'),
+								paragraph('Three'),
+							],
+						},
+					],
+				},
+			]);
+
+			const recorder = new CanvasRecorder();
+			manager.renderInto(recorder as any, data, {
+				states: new Map([
+					[
+						11,
+						{
+							paragraphs: new Map([
+								[1, { alpha: 0.5, colorOverride: { text: 'rgb(10,20,30)' } }],
+							]),
+						},
+					],
+				]),
+			});
+
+			const texts = recorder.callsOf('fillText');
+			nodeassert.deepStrictEqual(
+				texts.map((call) => call.args[0]),
+				['One', 'Three', 'Two'],
+			);
+			nodeassert.strictEqual(texts[0].properties.fillStyle, '#112233');
+			nodeassert.strictEqual(texts[2].properties.fillStyle, 'rgb(10,20,30)');
+			nodeassert.strictEqual(texts[2].properties.globalAlpha, 0.5);
+		});
+
+		it('leaves out a hidden paragraph and keeps the rest', function () {
+			const manager = new VectorManager();
+			const data = cachedPart(manager, [
+				{
+					id: 11,
+					primitives: [
+						{
+							type: 'textHierarchyBlock',
+							children: [paragraph('One'), paragraph('Two')],
+						},
+					],
+				},
+			]);
+
+			const recorder = new CanvasRecorder();
+			manager.renderInto(recorder as any, data, {
+				states: new Map([
+					[11, { paragraphs: new Map([[0, { hidden: true }]]) }],
+				]),
+			});
+
+			nodeassert.deepStrictEqual(
+				recorder.callsOf('fillText').map((call) => call.args[0]),
+				['Two'],
+			);
+		});
+	});
 });

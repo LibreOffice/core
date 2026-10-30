@@ -20,5 +20,7 @@ namespace cool {
 
 	export namespace PolygonHairlinePrimitive {
 		export const type = 'polygonHairline';
+		/// Draws the object itself, not its text.
+		export const isObjectDrawing = true;
 	}
 }

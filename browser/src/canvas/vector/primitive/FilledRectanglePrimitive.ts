@@ -19,5 +19,7 @@ namespace cool {
 
 	export namespace FilledRectanglePrimitive {
 		export const type = 'filledRectangle';
+		/// Draws the object itself, not its text.
+		export const isObjectDrawing = true;
 	}
 }

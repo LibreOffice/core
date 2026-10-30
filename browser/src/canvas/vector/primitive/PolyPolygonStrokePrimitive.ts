@@ -21,5 +21,7 @@ namespace cool {
 
 	export namespace PolyPolygonStrokePrimitive {
 		export const type = 'polyPolygonStroke';
+		/// Draws the object itself, not its text.
+		export const isObjectDrawing = true;
 	}
 }

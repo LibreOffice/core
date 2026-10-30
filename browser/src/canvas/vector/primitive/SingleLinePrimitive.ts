@@ -22,5 +22,7 @@ namespace cool {
 
 	export namespace SingleLinePrimitive {
 		export const type = 'singleLine';
+		/// Draws the object itself, not its text.
+		export const isObjectDrawing = true;
 	}
 }

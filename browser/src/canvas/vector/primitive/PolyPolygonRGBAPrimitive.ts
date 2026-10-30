@@ -21,5 +21,7 @@ namespace cool {
 
 	export namespace PolyPolygonRGBAPrimitive {
 		export const type = 'polyPolygonRGBA';
+		/// Draws the object itself, not its text.
+		export const isObjectDrawing = true;
 	}
 }

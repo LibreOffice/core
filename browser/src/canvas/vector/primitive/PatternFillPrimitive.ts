@@ -22,5 +22,7 @@ namespace cool {
 
 	export namespace PatternFillPrimitive {
 		export const type = 'patternFill';
+		/// Draws the object itself, not its text.
+		export const isObjectDrawing = true;
 	}
 }

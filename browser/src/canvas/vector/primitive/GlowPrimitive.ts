@@ -22,5 +22,7 @@ namespace cool {
 
 	export namespace GlowPrimitive {
 		export const type = 'glow';
+		/// Draws the object itself, not its text.
+		export const isObjectDrawing = true;
 	}
 }

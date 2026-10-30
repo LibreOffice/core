@@ -28,5 +28,7 @@ namespace cool {
 
 	export namespace PolygonStrokePrimitive {
 		export const type = 'polygonStroke';
+		/// Draws the object itself, not its text.
+		export const isObjectDrawing = true;
 	}
 }
