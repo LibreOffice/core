@@ -84,7 +84,6 @@ public:
 
     // static helper api
     static rtl::Reference< SlideShow > GetSlideShow( SdDrawDocument const * pDocument );
-    static rtl::Reference< SlideShow > GetSlideShow( SdDrawDocument const & rDocument );
     static rtl::Reference< SlideShow > GetSlideShow( ViewShellBase const & rBase );
 
     static css::uno::Reference< css::presentation::XSlideShowController > GetSlideShowController(ViewShellBase const & rBase );

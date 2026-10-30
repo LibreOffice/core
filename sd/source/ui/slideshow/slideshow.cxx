@@ -157,14 +157,9 @@ rtl::Reference< SlideShow > SlideShow::GetSlideShow( SdDrawDocument const * pDoc
     rtl::Reference< SlideShow > xRet;
 
     if( pDocument )
-        xRet = GetSlideShow( *pDocument );
+        xRet = pDocument->getSlideShow();
 
     return xRet;
-}
-
-rtl::Reference< SlideShow > SlideShow::GetSlideShow( SdDrawDocument const & rDocument )
-{
-    return rDocument.getSlideShow();
 }
 
 rtl::Reference< SlideShow > SlideShow::GetSlideShow( ViewShellBase const & rBase )
