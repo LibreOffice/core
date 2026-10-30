@@ -1018,15 +1018,18 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	min-height: var(--btn-size);
-	background-color: var(--color-primary);
+	min-height: 32px;
+	box-sizing: border-box;
+	background-color: var(--color-background-dark);
+	border: 1px solid var(--color-border-dark);
 	border-radius: var(--border-radius);
 	cursor: pointer;
 }
 
 #presentation-import-toolbar .unotoolbutton:focus-visible,
 #presentation-import-toolbar .unotoolbutton:hover {
-	background-color: var(--color-primary-dark);
+	background-color: var(--color-background-lighter);
+	border-color: var(--color-border-darker);
 }
 
 /* The icon-less button fills the whole pill as the click and keyboard
@@ -1045,14 +1048,18 @@
 	background: transparent;
 }
 
-#presentation-import-toolbar .unotoolbutton:focus-within {
-	outline: 2px solid var(--color-primary-darker);
-	outline-offset: 1px;
+#presentation-import-toolbar .unotoolbutton:has(.unobutton:focus-visible) {
+	outline: 2px solid rgb(var(--doc-type, 11, 135, 231));
+	outline-offset: 2px;
 }
 
 #presentation-import-toolbar .unotoolbutton .unolabel {
-	color: var(--color-primary-text);
+	color: var(--color-main-text);
 	cursor: pointer;
+}
+
+#presentation-import-toolbar .unotoolbutton:hover .unolabel {
+	color: var(--color-text-darker);
 }
 
 /* The toolbar over the slide on show when that slide is linked to another

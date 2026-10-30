@@ -1316,7 +1316,7 @@ class SlideImportPane {
         {this.renderSectionChoice()}
         <div class="slide-import-footer">
           <button
-            class="button slide-import-insert"
+            class="button button-primary slide-import-insert"
             data-cooltip={this.insertLandsText()}
             aria-description={this.insertLandsText()}
             disabled={session.selection.size === 0 || session.state !== 'ready'}
