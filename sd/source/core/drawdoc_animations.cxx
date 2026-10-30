@@ -19,10 +19,10 @@
 
 #include <sal/config.h>
 
-#include <createpresentation.hxx>
 #include <drawdoc.hxx>
 #include <cusshow.hxx>
 #include <customshowlist.hxx>
+#include <slideshow.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;
@@ -46,7 +46,8 @@ const rtl::Reference<sd::SlideShow>& SdDrawDocument::getSlideShow() const
 {
     if (!mpSlideShow.is())
     {
-        const_cast<SdDrawDocument*>(this)->mpSlideShow = CreatePresentation(*this);
+        const_cast<SdDrawDocument*>(this)->mpSlideShow
+            = sd::SlideShow::Create(const_cast<SdDrawDocument*>(this));
     }
     return mpSlideShow;
 }
