@@ -5240,6 +5240,37 @@ static void handleAccountRequest(int accountTabId, ICoreWebView2WebResourceReque
     }
 }
 
+static void handleEditorFrameMessage(int accountTabId,
+                                     ICoreWebView2WebMessageReceivedEventArgs* args)
+{
+    DocumentTab* account = findTab(accountTabId);
+    if (!account)
+    {
+        LOG_DBG("A message from an editor frame arrived after its account window closed");
+        return;
+    }
+
+    wil::unique_cotaskmem_string source;
+    args->get_Source(&source);
+    const Poco::URI sourceUri(Util::wide_string_to_string(source.get()));
+    if (!account->editorOrigins.contains(originOf(sourceUri)))
+    {
+        LOG_WRN("A message from the editor frame was refused: its page is not on a COOL server");
+        return;
+    }
+
+    wil::unique_cotaskmem_string message;
+    if (FAILED(args->TryGetWebMessageAsString(&message)))
+    {
+        LOG_WRN("A message from the editor frame was refused: it is not text");
+        return;
+    }
+
+    const std::wstring_view text(message.get());
+    const std::wstring kind(text.substr(0, text.find(L' ')));
+    LOG_DBG("The editor frame sent a " << Util::wide_string_to_string(kind) << " message");
+}
+
 static void putCodaPageIn(int accountTabId, ICoreWebView2Frame* frame, const std::string& address)
 {
     DocumentTab* account = findTab(accountTabId);
@@ -5302,6 +5333,17 @@ static void watchAccountFrame(int accountTabId, ICoreWebView2Frame* created)
                                     ICoreWebView2NavigationCompletedEventArgs*) -> HRESULT
             {
                 putCodaPageIn(accountTabId, sender, *address);
+                return S_OK;
+            })
+            .Get(),
+        &token);
+
+    frame->add_WebMessageReceived(
+        Microsoft::WRL::Callback<ICoreWebView2FrameWebMessageReceivedEventHandler>(
+            [accountTabId](ICoreWebView2Frame*, ICoreWebView2WebMessageReceivedEventArgs* args)
+                -> HRESULT
+            {
+                handleEditorFrameMessage(accountTabId, args);
                 return S_OK;
             })
             .Get(),
