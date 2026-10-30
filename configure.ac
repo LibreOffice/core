@@ -238,6 +238,13 @@ AC_ARG_WITH([iosapp-bundle-version],
                            [Set the bundle version for the iOS app. If not set, we will count up starting from 1]),
 ,)
 
+AC_ARG_WITH([iosapp-encryption-export-compliance-code],
+            AS_HELP_STRING([--with-iosapp-encryption-export-compliance-code=d0dfadb4-8ce3-4700-9caf-8fc3544563bd],
+                           [If you plan to upload the app to App Store Connect you must set the encryption export
+                            compliance code you got from Apple when submitting encryption compliance documentation.
+                            If not set, we will use our main app's key (which only works when uploading our app)]),
+,)
+
 AC_ARG_ENABLE([macosapp],
               AS_HELP_STRING([--enable-macosapp],
                              [Use on a Mac where you will build the macOS app.]))
@@ -1294,6 +1301,7 @@ AC_SUBST(INFO_URL)
 ENABLE_IOSAPP=
 IOSAPP_BUNDLE_SHORT_VERSION="$COOLWSD_VERSION_MAJOR$COOLWSD_VERSION_MINOR.$COOLWSD_VERSION_MICRO.$COOLWSD_VERSION_NANO"
 IOSAPP_BUNDLE_VERSION=
+IOSAPP_ENCRYPTION_EXPORT_COMPLIANCE_CODE=d0dfadb4-8ce3-4700-9caf-8fc3544563bd
 
 if test "$enable_iosapp" = "yes"; then
     ENABLE_IOSAPP=true
@@ -1311,6 +1319,10 @@ if test "$enable_iosapp" = "yes"; then
         IOSAPP_BUNDLE_VERSION=1
     fi
     echo $IOSAPP_BUNDLE_VERSION >BUNDLE-VERSION
+
+    if test -n "$with_iosapp_encryption_export_compliance_code" -a "$with_iosapp_encryption_export_compliance_code" != "no"; then
+        IOSAPP_ENCRYPTION_EXPORT_COMPLIANCE_CODE=$with_iosapp_encryption_export_compliance_code
+    fi
 fi
 
 # Space-separated source files to exclude from an iOS build - added to at various points later
@@ -1320,6 +1332,7 @@ AC_SUBST(ENABLE_IOSAPP)
 AM_CONDITIONAL([ENABLE_IOSAPP], [test "$ENABLE_IOSAPP" = "true"])
 AC_SUBST(IOSAPP_BUNDLE_SHORT_VERSION)
 AC_SUBST(IOSAPP_BUNDLE_VERSION)
+AC_SUBST(IOSAPP_ENCRYPTION_EXPORT_COMPLIANCE_CODE)
 AC_SUBST(IOSAPP_EXCLUDED_SOURCE_FILE_NAMES)
 
 # Check if we are on macOS (darwin) to define "MACOS" in config.h
