@@ -68,9 +68,8 @@ namespace {
           public PresenterScreenListenerInterfaceBase
     {
     public:
-        PresenterScreenListener (
-            css::uno::Reference<css::uno::XComponentContext> xContext,
-            css::uno::Reference<css::frame::XModel2> xModel);
+        PresenterScreenListener(css::uno::Reference<css::uno::XComponentContext> xContext,
+                                const rtl::Reference<SdXImpressDocument>& rpImpressDoc);
         PresenterScreenListener(const PresenterScreenListener&) = delete;
         PresenterScreenListener& operator=(const PresenterScreenListener&) = delete;
 
@@ -86,7 +85,7 @@ namespace {
         virtual void SAL_CALL disposing ( const css::lang::EventObject& rEvent) override;
 
     private:
-        css::uno::Reference<css::frame::XModel2 > mxModel;
+        rtl::Reference<SdXImpressDocument> mpImpressDoc;
         css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
         rtl::Reference<PresenterScreen> mpPresenterScreen;
     };
@@ -174,27 +173,23 @@ namespace {
 
 PresenterScreenListener::PresenterScreenListener (
     css::uno::Reference<css::uno::XComponentContext> xContext,
-    css::uno::Reference<css::frame::XModel2> xModel)
+    const rtl::Reference<SdXImpressDocument>& rpImpressDoc)
     : PresenterScreenListenerInterfaceBase(m_aMutex),
-      mxModel(std::move(xModel)),
+      mpImpressDoc(rpImpressDoc),
       mxComponentContext(std::move(xContext))
 {
+    assert(mpImpressDoc.is());
 }
 
 void PresenterScreenListener::Initialize()
 {
     Reference< document::XEventListener > xDocListener(this);
-    Reference< document::XEventBroadcaster > xDocBroadcaster( mxModel, UNO_QUERY );
-    if( xDocBroadcaster.is() )
-        xDocBroadcaster->addEventListener(xDocListener);
+    mpImpressDoc->addEventListener(xDocListener);
 }
 
 void SAL_CALL PresenterScreenListener::disposing()
 {
-    Reference< document::XEventBroadcaster > xDocBroadcaster( mxModel, UNO_QUERY );
-    if( xDocBroadcaster.is() )
-        xDocBroadcaster->removeEventListener(
-            Reference<document::XEventListener>(this) );
+    mpImpressDoc->removeEventListener(Reference<document::XEventListener>(this));
 
     if (mpPresenterScreen.is())
     {
@@ -216,7 +211,7 @@ void SAL_CALL PresenterScreenListener::notifyEvent( const css::document::EventOb
 
     if ( Event.EventName == "OnStartPresentation" )
     {
-        mpPresenterScreen = new PresenterScreen(mxComponentContext, mxModel);
+        mpPresenterScreen = new PresenterScreen(mxComponentContext, mpImpressDoc);
         if ( officecfg::Office::Impress::Misc::Start::EnablePresenterScreen::get() )
             mpPresenterScreen->InitializePresenterScreen();
     }
