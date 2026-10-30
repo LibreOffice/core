@@ -748,6 +748,62 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testTextSimplePortion)
     CPPUNIT_ASSERT_EQUAL(size_t(6), aJson.getSize("/primitives/0/matrix").value_or(0));
 }
 
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testTextHighlight)
+{
+    // A text with a fill color carries the area of its highlight, from above the baseline to
+    // below it, over the width of the advances.
+    basegfx::B2DHomMatrix aTextTransform;
+    aTextTransform.scale(20.0, 20.0);
+    aTextTransform.translate(50.0, 100.0);
+
+    drawinglayer::attribute::FontAttribute aFontAttr(u"Liberation Sans"_ustr, u""_ustr,
+                                                     WEIGHT_NORMAL);
+    css::lang::Locale aLocale(u"en"_ustr, u"US"_ustr, u""_ustr);
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+        aTextTransform, u"Hello"_ustr, 0, 5, std::vector<double>{ 10, 20, 30, 40, 50 }, {},
+        aFontAttr, aLocale, basegfx::BColor(0.0, 0.0, 0.0), COL_YELLOW));
+
+    auto aJson = writeReference(u"testTextHighlight", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/fillcolor", "#ffff00");
+    assertJsonPathExists(aJson, "/primitives/0/highlight/path");
+    auto oLeft = aJson.getDouble("/primitives/0/highlight/bounds/0");
+    auto oTop = aJson.getDouble("/primitives/0/highlight/bounds/1");
+    auto oRight = aJson.getDouble("/primitives/0/highlight/bounds/2");
+    auto oBottom = aJson.getDouble("/primitives/0/highlight/bounds/3");
+    CPPUNIT_ASSERT(oLeft);
+    CPPUNIT_ASSERT(oTop);
+    CPPUNIT_ASSERT(oRight);
+    CPPUNIT_ASSERT(oBottom);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(50.0, *oLeft, 1e-6);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(100.0, *oRight, 1e-6);
+    CPPUNIT_ASSERT_LESS(100.0, *oTop);
+    CPPUNIT_ASSERT_GREATER(100.0, *oBottom);
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testTextNoHighlight)
+{
+    // A text with no fill color has no highlight.
+    basegfx::B2DHomMatrix aTextTransform;
+    aTextTransform.scale(20.0, 20.0);
+
+    drawinglayer::attribute::FontAttribute aFontAttr(u"Liberation Sans"_ustr, u""_ustr,
+                                                     WEIGHT_NORMAL);
+    css::lang::Locale aLocale(u"en"_ustr, u"US"_ustr, u""_ustr);
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+        aTextTransform, u"Hello"_ustr, 0, 5, std::vector<double>{}, {}, aFontAttr, aLocale,
+        basegfx::BColor(0.0, 0.0, 0.0)));
+
+    auto aJson = writeReference(u"testTextNoHighlight", aPrimitives);
+
+    assertJsonPathMissing(aJson, "/primitives/0/fillcolor");
+    assertJsonPathMissing(aJson, "/primitives/0/highlight");
+}
+
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testTextDecoratedPortion)
 {
     // The same horizontal "Hello" as testTextSimplePortion, but

@@ -646,6 +646,22 @@ describe('VectorPrimitiveRenderer', function () {
 			nodeassert.ok(x > 0 && y > 0, 'the copy moves down and to the right');
 		});
 
+		it('fills the highlight behind the text', function () {
+			const recorder = drawRun({
+				fillcolor: '#FFFF00',
+				highlight: { path: 'M50 80h20v25h-20z' },
+			});
+
+			const fill = recorder.findCall('fill')!;
+			nodeassert.strictEqual(fill.properties.fillStyle, '#FFFF00');
+			nodeassert.strictEqual(fill.args[0].path, 'M50 80h20v25h-20z');
+			nodeassert.ok(
+				recorder.calls.indexOf(fill) <
+					recorder.calls.indexOf(recorder.findCall('fillText')!),
+				'the highlight lies behind the text',
+			);
+		});
+
 		it('outlines text with copies a pixel away in eight directions under white', function () {
 			const recorder = drawRun({ outline: true, fontcolor: '#0000FF' });
 

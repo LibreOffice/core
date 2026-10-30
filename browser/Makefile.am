@@ -545,6 +545,7 @@ COOL_JS_LST =\
 	src/canvas/vector/primitive/Primitive.ts \
 	src/canvas/vector/primitive/SingleLinePrimitive.ts \
 	src/canvas/vector/primitive/TextDecoratedPortionPrimitive.ts \
+	src/canvas/vector/primitive/TextHighlight.ts \
 	src/canvas/vector/primitive/TextSimplePortionPrimitive.ts \
 	src/canvas/vector/primitive/TransformPrimitive.ts \
 	src/canvas/vector/primitive/UnifiedTransparencePrimitive.ts \

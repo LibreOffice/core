@@ -68,6 +68,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/utils/bgradient.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 
@@ -98,6 +99,83 @@ OString textColorToJson(const basegfx::BColor& rColor)
         return "auto"_ostr;
 
     return colorToHex(rColor);
+}
+
+// The highlight behind a run of text, as the pixel processors paint the fill color of a text:
+// from the ascent above the baseline to the descent below it, over the width of the text, turned
+// and sheared with the text.
+basegfx::B2DPolygon textHighlightPolygon(const TextSimplePortionPrimitive2D& rPrimitive)
+{
+    TextLayouterDevice aTextLayouter;
+    rPrimitive.createTextLayouter(aTextLayouter);
+    const basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose aDecTrans(
+        rPrimitive.getTextTransform());
+
+    double fAscent = aTextLayouter.getFontAscent();
+    double fDescent = aTextLayouter.getFontDescent();
+
+    // An emphasis mark above or below the text takes a quarter of the text height more.
+    if (rPrimitive.getPrimitive2DID() == PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D)
+    {
+        const auto& rDecorated = static_cast<const TextDecoratedPortionPrimitive2D&>(rPrimitive);
+        if (rDecorated.getTextEmphasisMark() != TEXT_FONT_EMPHASIS_MARK_NONE)
+        {
+            if (rDecorated.getEmphasisMarkAbove())
+                fAscent += aTextLayouter.getTextHeight() * 0.25;
+            if (rDecorated.getEmphasisMarkBelow())
+                fDescent += aTextLayouter.getTextHeight() * 0.25;
+        }
+    }
+
+    const std::vector<double>& rDXArray = rPrimitive.getDXArray();
+    double fWidth = rDXArray.empty() ? aTextLayouter.getTextWidth(rPrimitive.getText(),
+                                                                  rPrimitive.getTextPosition(),
+                                                                  rPrimitive.getTextLength())
+                                     : rDXArray.back();
+
+    // A superscript or a subscript is highlighted at the height of the full size font around the
+    // line, and its trailing spaces are not.
+    const sal_Int32 nProportionalFontSize = rPrimitive.getProportionalFontSize();
+    if (nProportionalFontSize != 100 && nProportionalFontSize > 0)
+    {
+        const double fScale = 100.0 / nProportionalFontSize;
+        const double fEscapementOffset
+            = rPrimitive.getEscapement() / -100.0 * aDecTrans.getScale().getY() * fScale;
+        fAscent = fEscapementOffset + fAscent * fScale;
+        fDescent = fDescent * fScale - fEscapementOffset;
+
+        if (!rDXArray.empty())
+        {
+            const OUString& rText = rPrimitive.getText();
+            const sal_Int32 nFirst = rPrimitive.getTextPosition();
+            sal_Int32 nLast = nFirst + rPrimitive.getTextLength() - 1;
+            while (nLast >= nFirst && rText[nLast] == ' ')
+                nLast--;
+            const sal_Int32 nTrimmedLength = nLast - nFirst + 1;
+            if (nTrimmedLength <= 0)
+                fWidth = 0.0;
+            else if (nTrimmedLength < rPrimitive.getTextLength())
+                fWidth = rDXArray[nTrimmedLength - 1];
+        }
+    }
+
+    // The highlight of a line reaches no higher than the tallest ascent of the line.
+    const double fMaxAscentFraction = rPrimitive.getFillColorMaxAscentFraction();
+    if (fMaxAscentFraction > 0.0 && nProportionalFontSize == 100)
+    {
+        const double fMaxAscent = fMaxAscentFraction * aDecTrans.getScale().getY();
+        if (fAscent > fMaxAscent)
+        {
+            fDescent *= fMaxAscent / fAscent;
+            fAscent = fMaxAscent;
+        }
+    }
+
+    basegfx::B2DPolygon aRectangle(
+        basegfx::utils::createPolygonFromRect(basegfx::B2DRange(0.0, -fAscent, fWidth, fDescent)));
+    aRectangle.transform(basegfx::utils::createShearXRotateTranslateB2DHomMatrix(
+        aDecTrans.getShearX(), aDecTrans.getRotate(), aDecTrans.getTranslate()));
+    return aRectangle;
 }
 
 // A stroke with no line join fills each edge as an area of its own, with the caps only at the
@@ -659,6 +737,12 @@ void Primitive2dJsonProcessor::writeTextPortionScaled(
         mrWriter.put("textPosition", rPrimitive.getTextPosition());
         mrWriter.put("textLength", rPrimitive.getTextLength());
         writeTextStyleFields(mrWriter, rPrimitive, fFontScaleY);
+    }
+
+    if (!rPrimitive.getTextFillColor().IsTransparent())
+    {
+        auto aHighlightNode = mrWriter.startNode("highlight");
+        writePathScaled(basegfx::B2DPolyPolygon(textHighlightPolygon(rPrimitive)));
     }
 
     // The backdrop is the fill under the text, which an automatic text color is chosen against.

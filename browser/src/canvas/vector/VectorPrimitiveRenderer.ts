@@ -601,6 +601,7 @@ namespace cool {
 			context: CanvasRenderingContext2D,
 			primitive: TextSimplePortionPrimitive,
 		): void {
+			this._fillTextHighlight(context, primitive);
 			this._renderTextEffects(context, primitive, (color) =>
 				this._fillTextRun(
 					context,
@@ -608,6 +609,20 @@ namespace cool {
 					color ?? this._textColor(primitive),
 				),
 			);
+		}
+
+		// The highlight lies behind the text and casts no shadow.
+		private _fillTextHighlight(
+			context: CanvasRenderingContext2D,
+			primitive: TextSimplePortionPrimitive | TextDecoratedPortionPrimitive,
+		): void {
+			const path = primitive.highlight?.path;
+			const color = primitive.fillcolor;
+			if (!path || !color || !VectorColors.parse(color)) return;
+			context.save();
+			context.fillStyle = color;
+			context.fill(new Path2D(path));
+			context.restore();
 		}
 
 		// Fills the glyphs of a run in one color.
@@ -847,6 +862,7 @@ namespace cool {
 		): void {
 			const decorations = primitive.decorations;
 			const decorationsInTextColor = primitive.decorationsInTextColor;
+			this._fillTextHighlight(context, primitive);
 			this._renderTextEffects(context, primitive, (color) => {
 				const textColor = color ?? this._textColor(primitive);
 				this._fillTextRun(context, primitive, textColor);

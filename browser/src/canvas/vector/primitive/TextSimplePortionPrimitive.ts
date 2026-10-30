@@ -16,11 +16,12 @@ namespace cool {
 	///
 	/// fontSize is the Y-scale of the matrix in user units. fontcolor
 	/// is the text fill. fillcolor, when present, is a background
-	/// highlight behind the run. backdrop, when present, is the fill
-	/// right under the text, such as the fill of its shape or of its
-	/// table cell, and backdropTransparency the share of what lies
-	/// behind that fill that shows through, from 0 to 1, absent for a
-	/// fill that covers it fully. Without a backdrop the run sits on
+	/// highlight behind the run, and highlight the area it covers.
+	/// backdrop, when present, is the fill right under the text, such
+	/// as the fill of its shape or of its table cell, and
+	/// backdropTransparency the share of what lies behind that fill
+	/// that shows through, from 0 to 1, absent for a fill that covers
+	/// it fully. Without a backdrop the run sits on
 	/// whatever the page shows there.
 	///
 	/// Font shape: familyname, optional stylename, weight as a number
@@ -40,6 +41,7 @@ namespace cool {
 		fontSize?: number;
 		fontcolor?: string;
 		fillcolor?: string;
+		highlight?: TextHighlight;
 		backdrop?: string;
 		backdropTransparency?: number;
 		letterSpacing?: number;
