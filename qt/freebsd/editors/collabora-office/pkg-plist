@@ -4901,6 +4901,8 @@ share/coolwsd/browser/dist/images/dark/sl/lc_italic.svg
 share/coolwsd/browser/dist/images/dark/statusbarmenu.svg
 share/coolwsd/browser/dist/images/dark/symbol_SPIN_DOWN.svg
 share/coolwsd/browser/dist/images/dark/symbol_SPIN_UP.svg
+share/coolwsd/browser/dist/images/dark/template-favorite-off.svg
+share/coolwsd/browser/dist/images/dark/template-favorite-on.svg
 share/coolwsd/browser/dist/images/dark/tr/lc_italic.svg
 share/coolwsd/browser/dist/images/dark/unfold.svg
 share/coolwsd/browser/dist/images/dark/user.svg
@@ -6389,6 +6391,8 @@ share/coolwsd/browser/dist/images/tabstop-center.svg
 share/coolwsd/browser/dist/images/tabstop-decimal.svg
 share/coolwsd/browser/dist/images/tabstop-left.svg
 share/coolwsd/browser/dist/images/tabstop-right.svg
+share/coolwsd/browser/dist/images/template-favorite-off.svg
+share/coolwsd/browser/dist/images/template-favorite-on.svg
 share/coolwsd/browser/dist/images/templates/preview/blank_drawing.svg
 share/coolwsd/browser/dist/images/templates/preview/blank_presentation.svg
 share/coolwsd/browser/dist/images/templates/preview/blank_spreadsheet.svg

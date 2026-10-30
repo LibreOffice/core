@@ -38,6 +38,8 @@ class BackstageView extends window.L.Class {
 	private saveTabElement: HTMLElement | null = null;
 	private readonly isStarterMode: boolean;
 	private boundOnKeyDown: (e: KeyboardEvent) => void;
+	private snackbarElement: HTMLElement | null = null;
+	private snackbarTimer: ReturnType<typeof setTimeout> | null = null;
 
 	public isOpen(): boolean {
 		return this.isVisible;
@@ -773,7 +775,92 @@ class BackstageView extends window.L.Class {
 			onAddTemplate: () =>
 				this.showAddTemplateDialog(() => this.renderNewView()),
 			onManageTemplates: () => this.renderManageTemplatesView(),
+			favoriteState: (template) =>
+				this.favoriteState(template, () => this.updateTemplateSections()),
 		});
+	}
+
+	// The ids of the template cards that the user marked as favorites, in the order of marking.
+	private static readonly FAVORITES_KEY = 'templateFavorites';
+
+	private getFavoriteIds(): string[] {
+		try {
+			const ids = JSON.parse(
+				window.prefs.get(BackstageView.FAVORITES_KEY) || '[]',
+			);
+			return Array.isArray(ids)
+				? ids.filter((id) => typeof id === 'string')
+				: [];
+		} catch {
+			return [];
+		}
+	}
+
+	private setFavoriteIds(ids: string[]): void {
+		window.prefs.set(BackstageView.FAVORITES_KEY, JSON.stringify(ids));
+	}
+
+	private favoriteState(
+		template: TemplateData,
+		refresh: () => void,
+	): BackstageTemplates.TemplateFavoriteState {
+		return {
+			isFavorite: this.getFavoriteIds().includes(template.id),
+			onToggle: () => this.toggleFavorite(template, refresh),
+		};
+	}
+
+	private toggleFavorite(template: TemplateData, refresh: () => void): void {
+		const ids = this.getFavoriteIds();
+		const wasFavorite = ids.includes(template.id);
+		this.setFavoriteIds(
+			wasFavorite
+				? ids.filter((id) => id !== template.id)
+				: [...ids, template.id],
+		);
+		this.showSnackbar(
+			wasFavorite
+				? _('Template removed from favorites')
+				: _('Template added to favorites'),
+		);
+
+		// The refresh builds new cards. A star that the keyboard focused gives the focus to the
+		// star of the new card, and after a mouse click the new star has no focus.
+		const starHadKeyboardFocus = !!document.activeElement?.matches(
+			'.backstage-template-favorite:focus-visible',
+		);
+		refresh();
+		if (starHadKeyboardFocus)
+			this.contentArea
+				.querySelector<HTMLElement>(
+					'#' + CSS.escape(template.id) + ' .backstage-template-favorite',
+				)
+				?.focus();
+	}
+
+	private showSnackbar(text: string): void {
+		this.snackbarElement?.remove();
+		app.timerRegistry.clearTimeout(this.snackbarTimer);
+		const snackbar = BackstageTemplates.snackbar(text);
+		this.snackbarElement = snackbar;
+		this.container.appendChild(snackbar);
+		this.snackbarTimer = app.timerRegistry.setTimeout(
+			'backstagesnackbar',
+			() => {
+				// The bar fades out, then leaves the page.
+				snackbar.classList.add('is-leaving');
+				this.snackbarTimer = app.timerRegistry.setTimeout(
+					'backstagesnackbarfade',
+					() => {
+						snackbar.remove();
+						this.snackbarElement = null;
+						this.snackbarTimer = null;
+					},
+					window.L.DomUtil.getDurationMs('--duration-fast'),
+				);
+			},
+			10000,
+		);
 	}
 
 	// Only the Qt app keeps templates of the user so far.
@@ -898,7 +985,14 @@ class BackstageView extends window.L.Class {
 				onCancel: close,
 				onConfirm: async () => {
 					close();
-					await window.postMobileCall('REMOVEUSERTEMPLATE id=' + template.id);
+					if (
+						await window.postMobileCall('REMOVEUSERTEMPLATE id=' + template.id)
+					) {
+						const cardId = 'user-template-' + template.id;
+						this.setFavoriteIds(
+							this.getFavoriteIds().filter((id) => id !== cardId),
+						);
+					}
 					this.renderManageTemplatesView();
 				},
 			}),

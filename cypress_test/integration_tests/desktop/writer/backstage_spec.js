@@ -24,6 +24,7 @@ describe(['tagdesktop'], 'Backstage View Tests', { testIsolation: false }, funct
 		helper.setupAndLoadDocument('writer/help_dialog.odt');
 		cy.getFrameWindow().then((frameWindow) => {
 			win = frameWindow;
+			win.prefs.remove('templateFavorites');
 		});
 	});
 
@@ -168,6 +169,41 @@ describe(['tagdesktop'], 'Backstage View Tests', { testIsolation: false }, funct
 
 		cy.cGet('body').contains('.template-type-button', 'All').click();
 		cy.cGet('.template-grid-empty').should('not.exist');
+	});
+
+	it('Marks a template as a favorite with its star, without opening it', function() {
+		cy.then(() => {
+			ensureBackstage(win).show();
+		});
+
+		cy.cGet('#backstage-new').click();
+		cy.cGet('.backstage-template-sections .backstage-template-card').first().then(function(card) {
+			var id = card[0].id;
+			var star = '#' + id + ' .backstage-template-favorite';
+
+			// The star shows when the card has the keyboard focus.
+			cy.cGet(star).focus();
+			cy.cGet(star).should('be.visible').and('have.attr', 'aria-pressed', 'false');
+			cy.cGet(star).click();
+
+			cy.cGet('.backstage-snackbar').should('have.text', 'Template added to favorites');
+			cy.cGet('.backstage-view').should('not.have.class', 'hidden');
+			cy.cGet('#' + id).should('have.class', 'is-favorite');
+			cy.cGet(star).should('have.attr', 'aria-pressed', 'true');
+			// The star of a favorite stays visible without hover or focus.
+			cy.then(() => {
+				win.document.activeElement.blur();
+			});
+			cy.cGet(star).should('be.visible');
+			cy.then(() => {
+				expect(JSON.parse(win.prefs.get('templateFavorites'))).to.deep.equal([id]);
+			});
+
+			cy.cGet(star).click();
+			cy.cGet('.backstage-snackbar').should('have.text', 'Template removed from favorites');
+			cy.cGet('#' + id).should('not.have.class', 'is-favorite');
+			cy.cGet(star).should('have.attr', 'aria-pressed', 'false');
+		});
 	});
 
 	it('Shows no My templates section outside the Qt app', function() {

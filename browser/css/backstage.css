@@ -400,10 +400,11 @@
 }
 
 .backstage-template-card {
+	position: relative;
 	padding: var(--spacing-m) var(--spacing-s) var(--spacing-s);
 	cursor: pointer;
 	text-align: center;
-	transition: all var(--duration-normal) var(--ease-standard);
+	transition: background-color var(--duration-normal) var(--ease-standard);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -413,7 +414,77 @@
 
 .backstage-template-card:hover {
 	background-color: var(--color-background-dark);
-	box-shadow: 0 4px 8px var(--color-black-10);
+}
+
+/* The star shows on hover and on keyboard focus, and stays on a favorite. */
+#backstage-view .backstage-template-favorite {
+	position: absolute;
+	top: 0;
+	inset-inline-end: 0;
+	width: var(--btn-img-size);
+	height: var(--btn-img-size);
+	min-width: 0;
+	margin: 0;
+	padding: 0;
+	border: none;
+	border-radius: var(--border-radius);
+	background: url('images/template-favorite-off.svg') no-repeat center / 20px;
+	cursor: pointer;
+	opacity: 0;
+}
+
+#backstage-view .backstage-template-favorite[aria-pressed='true'] {
+	background-image: url('images/template-favorite-on.svg');
+}
+
+[data-theme='dark'] #backstage-view .backstage-template-favorite {
+	background-image: url('images/dark/template-favorite-off.svg');
+}
+
+[data-theme='dark'] #backstage-view .backstage-template-favorite[aria-pressed='true'] {
+	background-image: url('images/dark/template-favorite-on.svg');
+}
+
+#backstage-view .backstage-template-card:hover .backstage-template-favorite,
+#backstage-view .backstage-template-card:focus-within .backstage-template-favorite,
+#backstage-view .backstage-template-card.is-favorite .backstage-template-favorite {
+	opacity: 1;
+}
+
+/* The star has no border or background of its own. The desktop button hover colours in
+   device-desktop.css are !important. */
+#backstage-view .backstage-template-favorite:hover {
+	background-color: transparent !important;
+	border: none;
+}
+
+#backstage-view .backstage-template-favorite:focus-visible {
+	outline: 2px solid var(--doc-type-color);
+}
+
+.backstage-snackbar {
+	position: absolute;
+	bottom: var(--spacing-xl);
+	inset-inline: 0;
+	display: flex;
+	align-items: center;
+	box-sizing: border-box;
+	width: fit-content;
+	max-width: calc(100% - 2 * var(--spacing-xl));
+	min-height: 48px;
+	margin-inline: auto;
+	padding: var(--spacing-m) var(--spacing-l);
+	border-radius: var(--border-radius);
+	background-color: #323232;
+	color: white;
+	font-size: var(--header-font-size);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+	pointer-events: none;
+	animation: slide-up-in var(--duration-normal) var(--ease-out);
+}
+
+.backstage-snackbar.is-leaving {
+	animation: fade-out var(--duration-fast) var(--ease-in) forwards;
 }
 
 /* Page and landscape previews share one height, so the names of a row line up. */
@@ -436,7 +507,6 @@
 	display: block;
 	border: 1px solid var(--color-border);
 	border-radius: var(--border-radius-medium);
-	transition: all var(--duration-normal) var(--ease-standard);
 }
 
 /* The icon of the document type stands in for a missing preview, on a box of page size. */
@@ -446,10 +516,6 @@
 	padding: 33px 19px;
 	object-fit: contain;
 	background-color: var(--color-background-lighter);
-}
-
-.backstage-template-card:hover .template-thumbnail img {
-	border-color: var(--doc-type-color);
 }
 
 .template-name {

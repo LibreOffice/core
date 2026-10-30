@@ -36,10 +36,18 @@ namespace BackstageTemplates {
     onClick: (template: TemplateData) => void;
     onAddTemplate: () => void;
     onManageTemplates: () => void;
+    favoriteState: (template: TemplateData) => TemplateFavoriteState;
   }
 
   export interface TemplateCardOptions {
     isBlank?: boolean;
+    // Absent for a card that cannot be a favorite.
+    favorite?: TemplateFavoriteState;
+  }
+
+  export interface TemplateFavoriteState {
+    isFavorite: boolean;
+    onToggle: () => void;
   }
 
   export function templateCard(
@@ -47,7 +55,11 @@ namespace BackstageTemplates {
     onClick: () => void,
     options: TemplateCardOptions = {},
   ): HTMLElement {
-    const cls = ['backstage-template-card', options.isBlank ? 'is-blank' : '']
+    const cls = [
+      'backstage-template-card',
+      options.isBlank ? 'is-blank' : '',
+      options.favorite?.isFavorite ? 'is-favorite' : '',
+    ]
       .filter(Boolean)
       .join(' ');
 
@@ -69,7 +81,28 @@ namespace BackstageTemplates {
           />
         </div>
         <div class="template-name">{template.name}</div>
+        {options.favorite ? favoriteButton(options.favorite) : null}
       </div>
+    );
+  }
+
+  function favoriteButton(favorite: TemplateFavoriteState): HTMLElement {
+    const label = favorite.isFavorite
+      ? _('Remove from favorites')
+      : _('Add to favorites');
+    return (
+      <button
+        type="button"
+        class="backstage-template-favorite"
+        aria-pressed={String(favorite.isFavorite)}
+        aria-label={label}
+        title={label}
+        onClick={(event: Event) => {
+          // The star sits on the card, and the card opens the template.
+          event.stopPropagation();
+          favorite.onToggle();
+        }}
+      />
     );
   }
 
@@ -171,6 +204,7 @@ namespace BackstageTemplates {
               onTemplateClick: props.onClick,
               onAddClick: props.onAddTemplate,
               onManageClick: props.onManageTemplates,
+              favoriteState: props.favoriteState,
             })
           : null}
         <div class="backstage-template-section-header">
@@ -178,7 +212,12 @@ namespace BackstageTemplates {
             {_('Built-in templates')}
           </h4>
         </div>
-        {templateGrid(props.builtInTemplates, props.searchQuery, props.onClick)}
+        {templateGrid(
+          props.builtInTemplates,
+          props.searchQuery,
+          props.onClick,
+          props.favoriteState,
+        )}
       </div>
     );
   }
@@ -187,6 +226,7 @@ namespace BackstageTemplates {
     templates: TemplateData[],
     searchQuery: string,
     onClick: (t: TemplateData) => void,
+    favoriteState: (template: TemplateData) => TemplateFavoriteState,
   ): HTMLElement {
     let emptyText: string | null = null;
     if (!templates.length)
@@ -196,7 +236,9 @@ namespace BackstageTemplates {
     return (
       <div class="backstage-templates-grid">
         {emptyText ? <div class="template-grid-empty">{emptyText}</div> : null}
-        {templates.map((t) => templateCard(t, () => onClick(t)))}
+        {templates.map((t) =>
+          templateCard(t, () => onClick(t), { favorite: favoriteState(t) }),
+        )}
       </div>
     );
   }

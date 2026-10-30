@@ -59,6 +59,15 @@ namespace BackstageTemplates {
     return holder.firstElementChild;
   }
 
+  // A short note at the bottom of the backstage that confirms an action.
+  export function snackbar(text: string): HTMLElement {
+    return (
+      <div class="backstage-snackbar" role="status">
+        {text}
+      </div>
+    );
+  }
+
   export function emptyRecentDocs(): HTMLElement {
     return (
       <p class="backstage-content-description">

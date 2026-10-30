@@ -22,6 +22,7 @@ namespace BackstageTemplates {
     onTemplateClick: (template: TemplateData) => void;
     onAddClick: () => void;
     onManageClick: () => void;
+    favoriteState: (template: TemplateData) => TemplateFavoriteState;
   }
 
   export interface ManageTemplatesProps {
@@ -99,7 +100,9 @@ namespace BackstageTemplates {
         <div class="backstage-templates-grid backstage-my-templates-grid">
           {addTemplateCard(props.onAddClick)}
           {props.templates.map((template) =>
-            templateCard(template, () => props.onTemplateClick(template)),
+            templateCard(template, () => props.onTemplateClick(template), {
+              favorite: props.favoriteState(template),
+            }),
           )}
         </div>
       </>
