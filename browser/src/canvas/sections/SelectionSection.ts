@@ -615,9 +615,14 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 		Only a handle that has a name can be taken hold of. A nameless one is shown and no more,
 		as the points a connector could tie itself to are, and one of those sits exactly where the
-		end of a tied connector sits.
+		end of a tied connector sits. A deactivated one, shown grey, is found only where asked
+		for: it takes a press, which then does nothing, as in the office.
 	*/
-	private handleAt(x: number, y: number): SelectionHandle | undefined {
+	private handleAt(
+		x: number,
+		y: number,
+		deactivatedToo: boolean = false,
+	): SelectionHandle | undefined {
 		const usual = 0.5 * ShapeHandlesSection.handleSize();
 		const shown = this.handles();
 
@@ -627,7 +632,8 @@ abstract class SelectionSection extends CanvasSectionObject {
 			on the rim of the larger one around it takes the larger one.
 		*/
 		for (let at = shown.length - 1; at >= 0; --at) {
-			if (!shown[at].name || shown[at].deactivated) continue;
+			if (!shown[at].name || (shown[at].deactivated && !deactivatedToo))
+				continue;
 
 			const half = shown[at].larger
 				? usual + HandleLook.largerBy('shaping')
@@ -725,7 +731,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 		belongs to whatever is drawn there, so only the line itself counts.
 	*/
 	isHit(point: number[]): boolean {
-		if (this.handleAt(point[0], point[1]) !== undefined) return true;
+		if (this.handleAt(point[0], point[1], true) !== undefined) return true;
 
 		// The bar to the handle of the other mode belongs to the section while it is shown, so
 		// the mouse stays here on the way along it.
@@ -2832,6 +2838,16 @@ abstract class SelectionSection extends CanvasSectionObject {
 		this.pressedAHandle = handle !== undefined;
 		this.pressedHandle = handle ?? null;
 
+		// a press on a grey handle is taken and begins nothing, as in the office
+		if (!handle && this.handleAt(onCanvas[0], onCanvas[1], true)) {
+			this.pressedAHandle = true;
+			this.pressedGroup = null;
+			this.interaction = null;
+			this.stopPropagating();
+			e.stopPropagation();
+			return;
+		}
+
 		// The mouse control handles a press on the edited text.
 		this.pressedTheText = this.onTheEditedText(onCanvas);
 		if (this.pressedTheText) {
@@ -2920,13 +2936,15 @@ abstract class SelectionSection extends CanvasSectionObject {
 					'text';
 			this.context.canvas.style.cursor = over
 				? this.pointerOver(over)
-				: !onTheObject
-					? 'default'
-					: overText
-						? 'text'
-						: ObjectHandles.canBeMoved(this.selectedObjects())
-							? SelectionSection.grabPointer()
-							: 'default';
+				: this.handleAt(onCanvas[0], onCanvas[1], true)
+					? 'not-allowed'
+					: !onTheObject
+						? 'default'
+						: overText
+							? 'text'
+							: ObjectHandles.canBeMoved(this.selectedObjects())
+								? SelectionSection.grabPointer()
+								: 'default';
 
 			// The handle under the mouse is marked, so that it is plain which one a press would
 			// take hold of where several lie close together.
