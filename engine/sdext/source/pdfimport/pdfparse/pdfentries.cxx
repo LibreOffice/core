@@ -162,7 +162,7 @@ OUString PDFName::getFilteredName() const
     unsigned int nLen = m_aName.getLength();
     for( unsigned int i = 0; i < nLen; i++ )
     {
-        if( (i < nLen - 3) && pStr[i] == '#' )
+        if( (i + 2 < nLen) && pStr[i] == '#' )
         {
             aFilter.append(o3tl::convertToHex<char, 0>(pStr[i + 1], pStr[i + 2]));
             i += 2;
