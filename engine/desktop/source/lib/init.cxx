@@ -14,6 +14,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/svdoole2.hxx>
 #include <svx/svdglue.hxx>
 #include <svx/svdomeas.hxx>
 #include <svx/svdopath.hxx>
@@ -190,6 +191,7 @@
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <editeng/acorrcfg.hxx>
@@ -7155,6 +7157,8 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
     bool bBegun = false;
     // a part of an object active in place, which that object changes itself
     bool bPartChanged = false;
+    // a shape added to an object active in place, changed here
+    const SdrObject* pChanged = nullptr;
 
     /*
         The objects marked are the ones the client has selected. They are copied the way the office
@@ -7224,20 +7228,39 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
             rNumber = o3tl::toDouble(o3tl::getToken(aOne, 0, ',', nField)) * fToModel;
         }
 
+        /*
+            A part the chart names is changed by the chart. A shape someone added to it is a
+            drawing object on the chart's page, changed here as one on the slide, with the
+            mapping taken back from the chart's window onto that page.
+        */
+        SdrObject* pAdded = nullptr;
+        basegfx::B2DHomMatrix aOntoTheChart;
         if (bWholeMapping && bInPlace)
         {
             if (SdrObject* pPart = svx::vector::chartPartById(aId.toUInt64()))
             {
-                bPartChanged = true;
-                lcl_changeChartPart(*pViewShell,
-                                    *pPart,
-                                    basegfx::B2DHomMatrix(aNumber[0], aNumber[2], aNumber[4],
-                                                          aNumber[1], aNumber[3], aNumber[5]));
-                continue;
+                const std::optional<basegfx::B2DHomMatrix> oMapping(
+                    svx::vector::chartMappingOf(*pPart));
+                if (svx::vector::chartPartNameOf(*pPart).isEmpty() && oMapping)
+                {
+                    pAdded = pPart;
+                    aOntoTheChart = *oMapping;
+                    aOntoTheChart.invert();
+                }
+                else
+                {
+                    bPartChanged = true;
+                    lcl_changeChartPart(*pViewShell, *pPart,
+                                        basegfx::B2DHomMatrix(aNumber[0], aNumber[2], aNumber[4],
+                                                              aNumber[1], aNumber[3], aNumber[5]));
+                    continue;
+                }
             }
         }
 
-        SdrObject* pObject = bWholeMapping ? pPage->FindObjectByUniqueID(aId.toUInt64()) : nullptr;
+        SdrObject* pObject = pAdded;
+        if (!pObject && bWholeMapping)
+            pObject = pPage->FindObjectByUniqueID(aId.toUInt64());
         if (pObject && bCopy)
         {
             // an object without a copy, a connector tied to what is copied for one, is laid out
@@ -7248,8 +7271,12 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
         if (!pObject)
             continue;
 
-        const basegfx::B2DHomMatrix aWanted(aNumber[0], aNumber[2], aNumber[4], aNumber[1],
-                                            aNumber[3], aNumber[5]);
+        const basegfx::B2DHomMatrix aWanted(
+            aOntoTheChart
+            * basegfx::B2DHomMatrix(aNumber[0], aNumber[2], aNumber[4], aNumber[1], aNumber[3],
+                                    aNumber[5]));
+        if (pAdded)
+            pChanged = pAdded;
 
         basegfx::B2DHomMatrix aOfTheObject;
         basegfx::B2DPolyPolygon aOutline;
@@ -7499,6 +7526,17 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
         pModel->EndUndo();
     else if (!bPartChanged)
         SetLastExceptionMsg(u"No object of those ids is on the page"_ustr);
+
+    // the object that holds a shape changed here is told it changed, so it is kept and its parts
+    // are sent anew
+    if (const auto* pHolder
+        = dynamic_cast<const SdrOle2Obj*>(pChanged ? svx::vector::holderOf(*pChanged) : nullptr))
+    {
+        const cpo::uno::Reference<css::util::XModifiable> xModifiable(pHolder->getXModel(),
+                                                                      cpo::uno::UNO_QUERY);
+        if (xModifiable.is())
+            xModifiable->setModified(true);
+    }
 }
 
 /*
