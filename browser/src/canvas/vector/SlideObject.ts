@@ -373,6 +373,9 @@ namespace cool {
 			draggable?: boolean;
 			resizable?: boolean;
 			rotatable?: boolean;
+			/// A press on the part takes the part holding it, as the chart takes the diagram for
+			/// a press on its wall.
+			pressTakesHolder?: boolean;
 			/// For a part dragged its own way, a pie segment out of its pie: the way a drag of the
 			/// whole offset takes, across and down in twips, and the offset it stands at now, a
 			/// share between 0 and 1.

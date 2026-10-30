@@ -904,6 +904,8 @@ ObjectContent::ChartPart chartPartOf(std::u16string_view aName)
     aPart.mbDraggable = bTitle || bLegend || bDiagram || bDataLabel || bEquation || bDragsItsOwnWay;
     aPart.mbResizable = bDiagram || bWall || bLegend;
     aPart.mbRotatable = false;
+    // a press on the wall selects the diagram in the chart (Selection::adaptSelectionToNewPos)
+    aPart.mbPressTakesHolder = bWall;
     return aPart;
 }
 }
@@ -1433,6 +1435,8 @@ void writeEntryGeometry(tools::JsonWriter& rWriter, const ObjectContent& rConten
             rWriter.put("resizable", true);
         if (rPart.mbRotatable)
             rWriter.put("rotatable", true);
+        if (rPart.mbPressTakesHolder)
+            rWriter.put("pressTakesHolder", true);
         if (rPart.moDragAlong)
         {
             auto aArray = rWriter.startArray("dragAlong");

@@ -426,6 +426,9 @@ struct ObjectContent
         bool mbDraggable = false;
         bool mbResizable = false;
         bool mbRotatable = false;
+        /// A press on the part takes the part holding it, as the chart takes the diagram for a
+        /// press on its wall.
+        bool mbPressTakesHolder = false;
         /** The line a part dragged its own way goes along, a pie segment out of its pie: the way
             a drag of the whole offset takes, in a record on the slide in twips, and the offset
             the part stands at now, a share between 0 and 1. A drag goes along that way only,

@@ -1333,8 +1333,11 @@ class RenderGeometrySection extends CanvasSectionObject {
 			return undefined;
 		};
 
-		const part = partAbove(objectId);
+		let part = partAbove(objectId);
 		if (part === undefined) return undefined;
+		// a press on the wall takes the diagram, as in the chart
+		if (RenderGeometrySection.objectOf(part)?.chartPart?.pressTakesHolder)
+			part = partAbove(RenderGeometrySection.parentOf(part)) ?? part;
 		if (!RenderGeometrySection.objectOf(part)?.chartPart?.multiClick)
 			return part;
 
