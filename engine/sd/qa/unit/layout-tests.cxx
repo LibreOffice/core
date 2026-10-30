@@ -90,12 +90,12 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf135843)
     xmlDocUniquePtr pXmlDoc = parseLayout();
 
     // Without the fix, the test fails with:
-    // - Expected: 21165
+    // - Expected: 21167
     // - Actual  : 4218
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[1]", "x", u"21165");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[1]", "x", u"21167");
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[1]", "y", u"3866");
 
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[2]", "x", u"21165");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[2]", "x", u"21167");
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[2]", "y", u"5956");
 }
 

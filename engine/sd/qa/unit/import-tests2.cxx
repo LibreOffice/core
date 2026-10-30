@@ -24,6 +24,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/unoprnms.hxx>
 
+#include <com/sun/star/table/XTable.hpp>
 #include <svx/svdotable.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xfilluseslidebackgrounditem.hxx>
@@ -1032,6 +1033,31 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testPatternImport)
     CPPUNIT_ASSERT_MESSAGE("Pattern24 - Dark horizontal", checkPattern(23, aExpectedPatternLine12));
 
     // TODO: other patterns in the test document
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testColumnWidthIsTheNearestStep)
+{
+    // Each of the three columns is as wide as the document states, to the nearest step the model
+    // measures in, so the table keeps the width it was given as closely as it can be held.
+    createSdImpressDoc("pptx/tdf100926.pptx");
+    const SdrPage* pPage = GetPage(1);
+    CPPUNIT_ASSERT(pPage != nullptr);
+
+    sdr::table::SdrTableObj* pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pTableObj != nullptr);
+
+    uno::Reference<table::XTable> xTable(pTableObj->getTable());
+    uno::Reference<container::XIndexAccess> xColumns(xTable->getColumns(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xColumns->getCount());
+
+    for (sal_Int32 nColumn = 0; nColumn < 3; ++nColumn)
+    {
+        uno::Reference<beans::XPropertySet> xColumn(xColumns->getByIndex(nColumn),
+                                                    uno::UNO_QUERY_THROW);
+        sal_Int32 nWidth = 0;
+        xColumn->getPropertyValue(u"Width"_ustr) >>= nWidth;
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7526), nWidth);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf100926)

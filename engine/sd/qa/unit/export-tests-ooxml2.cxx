@@ -449,7 +449,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf123090)
     uno::Reference<css::table::XTableColumns> xColumns(xTable->getColumns(), uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xRefColumn(xColumns->getByIndex(1), uno::UNO_QUERY_THROW);
     xRefColumn->getPropertyValue(u"Width"_ustr) >>= nWidth;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(9136), nWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(9137), nWidth);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf126324)

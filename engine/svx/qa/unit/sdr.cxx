@@ -224,8 +224,8 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowAlignment)
         // - Expected: -5196
         // - Actual  : 0
         // - In<>, attribute 'xy13' of '//shadow/transform' incorrect value.
-        assertXPathDoubleValue(pDocument, "//shadow/transform", "xy13", -5196.45, 0.001);
-        assertXPathDoubleValue(pDocument, "//shadow/transform", "xy23", -2290.05, 0.001);
+        assertXPathDoubleValue(pDocument, "//shadow/transform", "xy13", -5196.75, 0.001);
+        assertXPathDoubleValue(pDocument, "//shadow/transform", "xy23", -2290.35, 0.001);
     }
 }
 

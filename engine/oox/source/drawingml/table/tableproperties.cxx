@@ -55,7 +55,8 @@ static void CreateTableRows( const uno::Reference< XTableRows >& xTableRows, con
     for (sal_Int32 n = 0; n < nCols; ++n)
     {
         Reference< XPropertySet > xPropSet( xIndexAccess->getByIndex( n ), UNO_QUERY_THROW );
-        xPropSet->setPropertyValue( u"Height"_ustr, Any( static_cast< sal_Int32 >( aTableRowIter->getHeight() / 360 ) ) );
+        xPropSet->setPropertyValue( u"Height"_ustr,
+                                    Any( convertEmuToHmm( aTableRowIter->getHeight() ) ) );
         ++aTableRowIter;
     }
 }
@@ -70,7 +71,7 @@ static void CreateTableColumns( const Reference< XTableColumns >& xTableColumns,
     for (sal_Int32 n = 0; n < nCols; ++n)
     {
         Reference< XPropertySet > xPropSet( xIndexAccess->getByIndex( n ), UNO_QUERY_THROW );
-        xPropSet->setPropertyValue( u"Width"_ustr, Any( static_cast< sal_Int32 >( *aTableGridIter++ / 360 ) ) );
+        xPropSet->setPropertyValue( u"Width"_ustr, Any( convertEmuToHmm( *aTableGridIter++ ) ) );
     }
 }
 

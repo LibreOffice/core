@@ -20,6 +20,7 @@
 #include <drawingml/table/tablecell.hxx>
 #include <drawingml/table/tableproperties.hxx>
 #include <basegfx/color/bcolor.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/drawingml/shapepropertymap.hxx>
 #include <drawingml/textbody.hxx>
 #include <drawingml/textcharacterproperties.hxx>
@@ -275,10 +276,14 @@ static void applyTableStylePart( const ::oox::core::XmlFilterBase& rFilterBase,
 static void applyTableCellProperties( const Reference < css::table::XCell >& rxCell, const TableCell& rTableCell )
 {
     Reference< XPropertySet > xPropSet( rxCell, UNO_QUERY_THROW );
-    xPropSet->setPropertyValue( u"TextUpperDistance"_ustr, Any( static_cast< sal_Int32 >( rTableCell.getTopMargin() / 360 ) ) );
-    xPropSet->setPropertyValue( u"TextRightDistance"_ustr, Any( static_cast< sal_Int32 >( rTableCell.getRightMargin() / 360 ) ) );
-    xPropSet->setPropertyValue( u"TextLeftDistance"_ustr, Any( static_cast< sal_Int32 >( rTableCell.getLeftMargin() / 360 ) ) );
-    xPropSet->setPropertyValue( u"TextLowerDistance"_ustr, Any( static_cast< sal_Int32 >( rTableCell.getBottomMargin() / 360 ) ) );
+    xPropSet->setPropertyValue( u"TextUpperDistance"_ustr,
+                                Any( convertEmuToHmm( rTableCell.getTopMargin() ) ) );
+    xPropSet->setPropertyValue( u"TextRightDistance"_ustr,
+                                Any( convertEmuToHmm( rTableCell.getRightMargin() ) ) );
+    xPropSet->setPropertyValue( u"TextLeftDistance"_ustr,
+                                Any( convertEmuToHmm( rTableCell.getLeftMargin() ) ) );
+    xPropSet->setPropertyValue( u"TextLowerDistance"_ustr,
+                                Any( convertEmuToHmm( rTableCell.getBottomMargin() ) ) );
 
     drawing::TextVerticalAdjust eVA;
     switch( rTableCell.getAnchorToken() )
