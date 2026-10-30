@@ -1569,6 +1569,40 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testTdf168943)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestCondformat, testCondFormatToLastColumn)
+{
+    // A format that runs to the last column covers every column to the right of its start,
+    // without a column being created for each of them.
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+    ScConditionalFormatList* pList = m_pDoc->GetCondFormList(0);
+
+    ScRangeList aRangeList(ScRange(10, 1, 0, m_pDoc->MaxCol(), 4, 0));
+    auto pFormat = std::make_unique<ScConditionalFormat>(1, *m_pDoc);
+    pFormat->SetRange(aRangeList);
+    pFormat->AddEntry(new ScCondFormatEntry(ScConditionMode::Direct, u"=1"_ustr, u""_ustr, *m_pDoc,
+                                            ScAddress(10, 1, 0), ScResId(STR_STYLENAME_RESULT)));
+    m_pDoc->AddCondFormatData(aRangeList, 0, 1);
+    pList->InsertNew(std::move(pFormat));
+
+    CPPUNIT_ASSERT(m_pDoc->GetCondFormat(10, 2, 0));
+    CPPUNIT_ASSERT(m_pDoc->GetCondFormat(1000, 2, 0));
+    CPPUNIT_ASSERT(m_pDoc->GetCondFormat(m_pDoc->MaxCol(), 4, 0));
+    CPPUNIT_ASSERT(!m_pDoc->GetCondFormat(4, 2, 0));
+    CPPUNIT_ASSERT(!m_pDoc->GetCondFormat(1000, 5, 0));
+    CPPUNIT_ASSERT_EQUAL(SCCOL(10), m_pDoc->GetAllocatedColumnsCount(0));
+
+    // A column created later inside the range still has the format.
+    m_pDoc->SetValue(ScAddress(2000, 3, 0), 1.0);
+    CPPUNIT_ASSERT(m_pDoc->GetCondFormat(2000, 3, 0));
+
+    m_pDoc->RemoveCondFormatData(aRangeList, 0, 1);
+    CPPUNIT_ASSERT(!m_pDoc->GetCondFormat(10, 2, 0));
+    CPPUNIT_ASSERT(!m_pDoc->GetCondFormat(2000, 3, 0));
+    CPPUNIT_ASSERT(!m_pDoc->GetCondFormat(5000, 2, 0));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
