@@ -124,16 +124,6 @@ GtkSalSystem::getScreenMonitorFromIdx (int nIdx, gint &nMonitor)
 
     return pScreen;
 }
-
-int GtkSalSystem::getScreenMonitorIdx (GdkScreen *pScreen,
-                                       int nX, int nY)
-{
-    // TODO: this will fail horribly for exotic combinations like two
-    // monitors in mirror mode and one extra. Hopefully such
-    // abominations are not used (or, even better, not possible) in
-    // practice .-)
-    return gdk_screen_get_monitor_at_point(pScreen, nX, nY);
-}
 #endif
 
 unsigned int GtkSalSystem::GetDisplayScreenCount()

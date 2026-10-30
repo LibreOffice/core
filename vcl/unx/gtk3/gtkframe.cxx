@@ -941,7 +941,13 @@ void GtkSalFrame::updateScreenNumber()
     int nScreen = 0;
     GdkScreen *pScreen = gtk_widget_get_screen( m_pWindow );
     if( pScreen )
-        nScreen = GtkSalSystem::getScreenMonitorIdx(pScreen, maGeometry.x(), maGeometry.y());
+    {
+        // TODO: this will fail horribly for exotic combinations like two
+        // monitors in mirror mode and one extra. Hopefully such
+        // abominations are not used (or, even better, not possible) in
+        // practice .-)
+        nScreen = gdk_screen_get_monitor_at_point(pScreen, maGeometry.x(), maGeometry.y());
+    }
     maGeometry.setScreen(nScreen);
 #endif
 }
