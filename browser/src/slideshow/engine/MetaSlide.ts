@@ -26,22 +26,65 @@ class MetaSlide {
 		if (this.hasTransition())
 			this._transitionHandler = new SlideTransition(slideInfo);
 
-		// The vector path draws slides as static content and does not
-		// drive shape effects yet, so the animation tree is built for
-		// the bitmap path only. Without the tree an effect dispatch
-		// falls through to the next slide.
-		if (slideInfo.animations && !RenderManager.isVectorRendering()) {
+		if (slideInfo.animations) {
 			this._animationsHandler = new SlideAnimations(
 				this._slideShowHandler.getContext(),
 				this,
 			);
 			this._animationsHandler.importAnimations(slideInfo.animations.root);
 			this._animationsHandler.parseInfo();
+			this.setInitialVisibilities(slideInfo.animations.root);
 			app.console.debug(
 				`\x1B[1mSlide ${this._info.index} Animation Tree\x1B[m\n` +
 					this._animationsHandler.info(true),
 			);
 		}
+	}
+
+	// A target starts the slide in the visibility of its first effect, where
+	// the engine resolved one. An effect is a node with a preset id, and its
+	// target the first named under it.
+	private setInitialVisibilities(aRoot: AnimationNodeInfo) {
+		const aSeenTargets = new Set<string>();
+		this.walkEffects(aRoot, (aEffect: AnimationNodeInfo) => {
+			const sTarget = MetaSlide.firstTargetUnder(aEffect);
+			if (!sTarget || aSeenTargets.has(sTarget)) return;
+			aSeenTargets.add(sTarget);
+
+			if (aEffect.initVisible === undefined) return;
+			const aElement = this._animationsHandler
+				.getAnimatedElementMap()
+				.get(sTarget);
+			if (aElement) aElement.setInitialVisibility(aEffect.initVisible);
+		});
+	}
+
+	private walkEffects(
+		aNode: AnimationNodeInfo,
+		onEffect: (aEffect: AnimationNodeInfo) => void,
+	) {
+		if (!aNode) return;
+		if (aNode.presetId) {
+			onEffect(aNode);
+			return;
+		}
+		const aChildren = (aNode as ContainerNodeInfo).children;
+		if (aChildren)
+			for (const aChild of aChildren) this.walkEffects(aChild, onEffect);
+	}
+
+	private static firstTargetUnder(
+		aNode: AnimationNodeInfo,
+	): string | undefined {
+		const sTarget = (aNode as AnimateNodeInfo).targetElement;
+		if (sTarget) return sTarget;
+		const aChildren = (aNode as ContainerNodeInfo).children;
+		if (aChildren)
+			for (const aChild of aChildren) {
+				const sFound = MetaSlide.firstTargetUnder(aChild);
+				if (sFound) return sFound;
+			}
+		return undefined;
 	}
 
 	public hasTransition(): boolean {

@@ -28,12 +28,10 @@ abstract class SlideRenderer {
 		this._canvas = canvas;
 	}
 
-	// Schedule on the window that owns the canvas. The slideshow can run in its
-	// own window while the document window is hidden behind it, and a hidden
-	// window's animation frames are paused, which would stop the slide drawing.
-	// At most one frame is pending, so the slide is drawn once per frame however
-	// many animations and videos ask for it.
-	protected requestRender(): void {
+	/// Schedule on the window that owns the canvas, since a hidden document
+	/// window pauses its animation frames. At most one frame is pending, so the
+	/// slide is drawn once per frame.
+	public requestRender(): void {
 		if (this._requestAnimationFrameId !== null) return;
 		const canvasWindow = this._canvas?.ownerDocument?.defaultView;
 		this._requestAnimationFrameId = (

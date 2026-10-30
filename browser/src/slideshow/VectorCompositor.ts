@@ -20,9 +20,8 @@
  * cache behind RenderManager. This compositor only reads that cache.
  * Fetching and caching of the trees is owned elsewhere.
  *
- * This first version renders and shows slides and lets transitions work.
- * Shape animations and video are not handled yet: the animation and video
- * methods return nothing.
+ * A shape effect redraws the slide from the primitive tree on every frame,
+ * each target in the state its element holds. Video is not handled yet.
  */
 
 /* global app RenderManager */
@@ -92,7 +91,7 @@ class VectorCompositor extends SlideCompositor {
 	}
 
 	public getAnimatedSlide(slideIndex: number): ImageBitmap {
-		// No per-shape animation yet, so this is the static slide.
+		// A frame of an effect and the slide itself compose the same way.
 		return this._composeSlide(slideIndex);
 	}
 
@@ -111,7 +110,13 @@ class VectorCompositor extends SlideCompositor {
 	/// any view, and the slide info names each slide by its id.
 	private _partIdForSlide(slideNumber: number): cool.VectorPartGuid | null {
 		const hash = this._metaPresentation.getSlideHash(slideNumber);
-		const info = hash ? this._metaPresentation.getSlideInfo(hash) : null;
+		return this._partIdForSlideHash(hash);
+	}
+
+	private _partIdForSlideHash(slideHash: string): cool.VectorPartGuid | null {
+		const info = slideHash
+			? this._metaPresentation.getSlideInfo(slideHash)
+			: null;
 		return info ? info.part : null;
 	}
 
@@ -130,6 +135,7 @@ class VectorCompositor extends SlideCompositor {
 
 	private _onDataChanged(): void {
 		if (this.disposed) return;
+		this._refreshShownSlide();
 		if (this.pendingReady === null) return;
 
 		const partId = this._partIdForSlide(this.pendingSlideNumber);
@@ -145,20 +151,27 @@ class VectorCompositor extends SlideCompositor {
 		ready();
 	}
 
+	// An element without a base takes it from the tree that arrived. Every
+	// slide is checked, since a transition enters a slide before it is the
+	// one drawn last.
+	private _refreshShownSlide(): void {
+		this._metaPresentation.getMetaSlides().forEach((_metaSlide, slideHash) => {
+			if (!this._drawableData(slideHash)) return;
+			this.getAnimatedElementMap(slideHash)?.forEach((element) =>
+				element.refreshContent(),
+			);
+		});
+		this._slideShowPresenter._slideRenderer?.requestRender();
+	}
+
 	// --- composing --------------------------------------------------
 
 	private _composeSlide(slideNumber: number): ImageBitmap {
 		if (this.disposed || !this.offscreenContext) return null;
 
-		const partId = this._partIdForSlide(slideNumber);
-		if (partId === null) return null;
-
-		// A slide is composed only once the master it draws under is cached
-		// too, since the master holds the slide's background and footers.
-		if (!RenderManager.isPartDrawableById(partId, cool.VectorMode.Slides))
-			return null;
-		const data = RenderManager.requestPartById(partId, cool.VectorMode.Slides);
-		if (!data || data.slideWidth <= 0 || data.slideHeight <= 0) return null;
+		const slideHash = this._metaPresentation.getSlideHash(slideNumber);
+		const data = this._drawableData(slideHash);
+		if (!data) return null;
 
 		const context = this.offscreenContext;
 		context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
@@ -176,14 +189,140 @@ class VectorCompositor extends SlideCompositor {
 		RenderManager.renderInto(
 			context as unknown as CanvasRenderingContext2D,
 			data,
-			{ authoredColors: true },
+			{ authoredColors: true, states: this._drawStates(slideHash, data) },
 		);
 		context.restore();
 
 		return this.offscreenCanvas.transferToImageBitmap();
 	}
 
-	// --- animation and video: not handled yet -----------------------
+	/// The cached tree of the slide, or null until the slide and its master,
+	/// which holds the background and footers, have arrived.
+	private _drawableData(slideHash: string): cool.VectorPrimitivesData | null {
+		const partId = this._partIdForSlideHash(slideHash);
+		if (partId === null) return null;
+		if (!RenderManager.isPartDrawableById(partId, cool.VectorMode.Slides))
+			return null;
+		const data = RenderManager.requestPartById(partId, cool.VectorMode.Slides);
+		if (!data || data.slideWidth <= 0 || data.slideHeight <= 0) return null;
+		return data;
+	}
+
+	// The state of every animated target by object id. A paragraph target
+	// is the shape id, an underscore and the paragraph position. A target
+	// without a base rectangle is drawn as it comes.
+	private _drawStates(
+		slideHash: string,
+		data: cool.VectorPrimitivesData,
+	): Map<number, cool.ObjectRenderState> | undefined {
+		const elements = this.getAnimatedElementMap(slideHash);
+		if (!elements || elements.size === 0) return undefined;
+
+		const states = new Map<number, cool.ObjectRenderState>();
+		elements.forEach((element, target) => {
+			if (!element.isValid()) return;
+			const { id: objectId, paragraph } = VectorCompositor._splitTarget(target);
+			if (!data.objects.has(objectId)) return;
+
+			let state = states.get(objectId);
+			if (!state) {
+				state = {};
+				states.set(objectId, state);
+			}
+			const drawState = VectorCompositor._drawState(element);
+			if (paragraph === undefined) {
+				Object.assign(state, drawState);
+			} else {
+				if (!state.paragraphs) state.paragraphs = new Map();
+				state.paragraphs.set(paragraph, drawState);
+			}
+		});
+		return states;
+	}
+
+	// How the target is drawn now: left out while hidden, else under the
+	// element's transform, opacity and colors, clipped to what the last
+	// filter shows.
+	private static _drawState(element: AnimatedElement): cool.DrawState {
+		if (!element.getVisibility()) return { hidden: true };
+
+		const state: cool.DrawState = {};
+		const transform = element.getTransformMatrix();
+		if (transform && !transform.isIdentity)
+			state.transform = [
+				transform.a,
+				transform.b,
+				transform.c,
+				transform.d,
+				transform.e,
+				transform.f,
+			];
+		let opacity = element.getOpacity() ?? 1;
+
+		// The filter's part is in the base box, before the transform.
+		const filterFrame = element.getTransitionFilterFrame();
+		if (filterFrame) {
+			const mask = new ShapeTransitionMask(filterFrame.info);
+			if (mask.hasArea()) {
+				const clip = mask.clipAt(filterFrame.time, element.getBaseBBox());
+				if (clip) state.clip = clip;
+			} else {
+				opacity *= mask.fadeAt(filterFrame.time);
+			}
+		}
+		if (opacity < 1) state.alpha = opacity;
+		const colorOverride = VectorCompositor._colorOverride(element);
+		if (colorOverride) state.colorOverride = colorOverride;
+		return state;
+	}
+
+	// The colors a color animation has moved, or undefined. A shape element
+	// carries fill and line, a text element its font color in the fill
+	// slot. Both are named once either moved, so only a color that differs
+	// from its base stands in.
+	private static _colorOverride(
+		element: AnimatedElement,
+	): cool.ColorOverride | undefined {
+		const colorMap = element.getColorMap();
+		const fillMoved =
+			colorMap.toFillColor &&
+			!(
+				colorMap.fromFillColor &&
+				colorMap.toFillColor.equal(colorMap.fromFillColor)
+			);
+		const lineMoved =
+			colorMap.toLineColor &&
+			!(
+				colorMap.fromLineColor &&
+				colorMap.toLineColor.equal(colorMap.fromLineColor)
+			);
+		if (!fillMoved && !lineMoved) return undefined;
+
+		// Interpolated colors are unclamped, the canvas needs them clamped.
+		if (element.isTextElement())
+			return { text: colorMap.toFillColor.toString(true) };
+
+		const override: cool.ColorOverride = {};
+		if (fillMoved) override.fill = colorMap.toFillColor.toString(true);
+		if (lineMoved) override.stroke = colorMap.toLineColor.toString(true);
+		return override;
+	}
+
+	// A shape target is its object id, a paragraph target the id, an
+	// underscore and the paragraph position.
+	private static _splitTarget(target: string): {
+		id: number;
+		paragraph: number | undefined;
+	} {
+		const separator = target.indexOf('_');
+		if (separator < 0) return { id: Number(target), paragraph: undefined };
+		return {
+			id: Number(target.substring(0, separator)),
+			paragraph: Number(target.substring(separator + 1)),
+		};
+	}
+
+	// --- animation and video ----------------------------------------
 
 	public createAnimatedElement(
 		sId: string,
@@ -191,10 +330,17 @@ class VectorCompositor extends SlideCompositor {
 		title: string,
 		slideWidth: number,
 		slideHeight: number,
-		_bIsTextElement: boolean,
+		bIsTextElement: boolean,
 	): AnimatedElement {
-		// The base element carries the engine state and draws nothing.
-		return new AnimatedElement(sId, slideHash, title, slideWidth, slideHeight);
+		return new AnimatedElementVector(
+			this,
+			sId,
+			slideHash,
+			title,
+			slideWidth,
+			slideHeight,
+			bIsTextElement,
+		);
 	}
 
 	public getAnimatedLayerInfo(
@@ -211,11 +357,98 @@ class VectorCompositor extends SlideCompositor {
 		return null;
 	}
 
+	/// The box of the shape or the bounds of the paragraph, in twips. Null
+	/// without a cached tree or such a target.
 	public getLayerBounds(
-		_slideHash: string,
-		_targetElement: string,
+		slideHash: string,
+		targetElement: string,
 	): BoundingBoxType {
-		return null;
+		const target = this._findTarget(slideHash, targetElement);
+		if (!target) return null;
+
+		if (target.paragraph) {
+			const bounds = target.paragraph.bounds;
+			if (!bounds) return null;
+			return new DOMRect(
+				bounds[0],
+				bounds[1],
+				bounds[2] - bounds[0],
+				bounds[3] - bounds[1],
+			);
+		}
+
+		const object = target.object;
+		if (object.x === undefined || object.width === undefined) return null;
+		return new DOMRect(object.x, object.y, object.width, object.height);
+	}
+
+	/// The target's colors as #rrggbb: the solid fill and line of the shape,
+	/// and the color of the first text run, of its own paragraph for a
+	/// paragraph target. Absent where there is none or it is automatic. Null
+	/// without a cached tree or such a target.
+	public getTargetColors(
+		slideHash: string,
+		targetElement: string,
+	): { fillColor?: string; lineColor?: string; fontColor?: string } | null {
+		const target = this._findTarget(slideHash, targetElement);
+		if (!target) return null;
+
+		const text = target.paragraph
+			? [target.paragraph]
+			: cool.TextHierarchyParagraphPrimitive.collect(target.object.primitives);
+		return {
+			fillColor: target.object.properties?.fillColor,
+			lineColor: target.object.properties?.lineColor,
+			fontColor: VectorCompositor._firstFontColor(target.data, text),
+		};
+	}
+
+	// The object the target names, its paragraph for a paragraph target,
+	// and the cached part. Null without a cached tree or such an object.
+	private _findTarget(
+		slideHash: string,
+		targetElement: string,
+	): {
+		data: cool.VectorPrimitivesData;
+		object: cool.SlideObject;
+		paragraph?: cool.TextHierarchyParagraphPrimitive;
+	} | null {
+		const partId = this._partIdForSlideHash(slideHash);
+		if (partId === null) return null;
+		const data = RenderManager.requestPartById(partId, cool.VectorMode.Slides);
+		if (!data) return null;
+
+		const { id, paragraph } = VectorCompositor._splitTarget(targetElement);
+		const object = data.objects.get(id);
+		if (!object) return null;
+		if (paragraph === undefined) return { data, object };
+
+		const paragraphNode = cool.TextHierarchyParagraphPrimitive.collect(
+			object.primitives,
+		)[paragraph];
+		return paragraphNode ? { data, object, paragraph: paragraphNode } : null;
+	}
+
+	// The color of the first text run, automatic resolved against the
+	// surface under it, or undefined without text.
+	private static _firstFontColor(
+		data: cool.VectorPrimitivesData,
+		primitives: cool.Primitive[] | undefined,
+	): string | undefined {
+		if (!primitives) return undefined;
+		for (const primitive of primitives) {
+			if (
+				primitive.type === cool.TextSimplePortionPrimitive.type ||
+				primitive.type === cool.TextDecoratedPortionPrimitive.type
+			)
+				return RenderManager.textColorOf(
+					data,
+					primitive as cool.TextSimplePortionPrimitive,
+				);
+			const found = VectorCompositor._firstFontColor(data, primitive.children);
+			if (found) return found;
+		}
+		return undefined;
 	}
 
 	public getLayerRendererContext(): RenderContext {

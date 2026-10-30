@@ -338,6 +338,13 @@ abstract class RenderManagerBase {
 		data: cool.VectorPrimitivesData,
 	): void;
 
+	abstract textColorOf(
+		data: cool.VectorPrimitivesData,
+		primitive:
+			| cool.TextSimplePortionPrimitive
+			| cool.TextDecoratedPortionPrimitive,
+	): string;
+
 	abstract setHiddenLayers(layers: unknown): void;
 
 	abstract drawnElsewhere(objectIds: number[]): void;

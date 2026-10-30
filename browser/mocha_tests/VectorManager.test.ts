@@ -852,6 +852,41 @@ describe('VectorManager', function () {
 		nodeassert.strictEqual(fillText?.properties.fillStyle, '#FFFFFF');
 	});
 
+	it('names automatic text by the color it is drawn in on its page', function () {
+		const manager = new VectorManager();
+		const text = {
+			type: 'textSimplePortion',
+			text: 'Hi',
+			fontSize: 20,
+			matrix: [20, 0, 0, 20, 5, 7],
+			fontcolor: cool.VectorColors.AUTOMATIC,
+			familyname: 'Liberation Sans',
+		};
+		manager.handleVectorPrimitivesResponse({
+			partId: 'S0',
+			mode: cool.VectorMode.Slides,
+			version: 1,
+			objects: [
+				{
+					id: 0,
+					kind: 'page',
+					width: 200,
+					height: 150,
+					backdrop: '#102030',
+					primitives: [],
+				},
+				{ id: 11, primitives: [text] },
+			],
+		});
+		const data: any = manager.requestPart(0, cool.VectorMode.Slides);
+
+		nodeassert.strictEqual(manager.textColorOf(data, text as any), '#FFFFFF');
+		nodeassert.strictEqual(
+			manager.textColorOf(data, { ...text, fontcolor: '#C9211E' } as any),
+			'#C9211E',
+		);
+	});
+
 	// The picture a drag shows of an object takes its colors from the page
 	// the object is on, even when another part was drawn before it.
 	it('draws a drag picture against the background of its own page', function () {
@@ -3136,6 +3171,78 @@ describe('VectorManager', function () {
 			nodeassert.strictEqual(texts[0].properties.fillStyle, '#112233');
 			nodeassert.strictEqual(texts[2].properties.fillStyle, 'rgb(10,20,30)');
 			nodeassert.strictEqual(texts[2].properties.globalAlpha, 0.5);
+		});
+
+		it('draws only the part of an object its clip names', function () {
+			const manager = new VectorManager();
+			const data = cachedPart(manager, [{ id: 11, primitives: [filled] }]);
+
+			const recorder = new CanvasRecorder();
+			manager.renderInto(recorder as any, data, {
+				states: new Map([
+					[
+						11,
+						{
+							clip: {
+								transform: [400, 0, 0, 200, 100, 50],
+								frame: [0, 0, 1, 1],
+								pieces: [{ rectangle: [0, 0, 0.5, 1] }],
+							},
+						},
+					],
+				]),
+			});
+
+			// The frame, then the pieces, both laid down in the clip's own
+			// coordinates, before the object draws.
+			const clips = recorder.callsOf('clip');
+			nodeassert.strictEqual(clips.length, 2);
+			nodeassert.deepStrictEqual(clips[1].args[0].calls, [
+				{ method: 'rect', args: [0, 0, 0.5, 1] },
+			]);
+			nodeassert.strictEqual(clips[1].args[1], 'nonzero');
+			nodeassert.deepStrictEqual(
+				recorder.findCall('transform')?.args,
+				[400, 0, 0, 200, 100, 50],
+			);
+			nodeassert.ok(
+				recorder.calls.indexOf(clips[1]) <
+					recorder.calls.indexOf(recorder.findCall('fill')!),
+			);
+
+			// The fill draws in the object's own coordinates again.
+			nodeassert.deepStrictEqual(recorder.findCall('setTransform')?.args, [
+				{ a: 1, b: 0, c: 0, d: 1, e: 0, f: 0 },
+			]);
+		});
+
+		it('draws the frame without the pieces of an inverted clip', function () {
+			const manager = new VectorManager();
+			const data = cachedPart(manager, [{ id: 11, primitives: [filled] }]);
+
+			const recorder = new CanvasRecorder();
+			manager.renderInto(recorder as any, data, {
+				states: new Map([
+					[
+						11,
+						{
+							clip: {
+								transform: [1, 0, 0, 1, 0, 0],
+								frame: [0, 0, 1, 1],
+								pieces: [{ ellipse: [0.5, 0.5, 0.2, 0.2] }],
+								inverted: true,
+							},
+						},
+					],
+				]),
+			});
+
+			const area = recorder.callsOf('clip')[1];
+			nodeassert.strictEqual(area.args[1], 'evenodd');
+			nodeassert.deepStrictEqual(
+				area.args[0].calls.map((call: any) => call.method),
+				['rect', 'moveTo', 'ellipse', 'closePath'],
+			);
 		});
 
 		it('leaves out a hidden paragraph and keeps the rest', function () {

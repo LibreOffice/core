@@ -334,6 +334,17 @@ class VectorManager extends RenderManagerBase {
 		this._renderer.setPageBackdrop(page?.backdrop, page?.backdropTransparency);
 	}
 
+	/// The color the text run is drawn in, with no animation color in its place.
+	textColorOf(
+		data: cool.VectorPrimitivesData,
+		primitive:
+			| cool.TextSimplePortionPrimitive
+			| cool.TextDecoratedPortionPrimitive,
+	): string {
+		this._setUpColors(data);
+		return this._renderer.ownTextColor(primitive);
+	}
+
 	/// The entry that stands for the page among the given objects, if any.
 	private static _pageEntryOf(
 		objects: Iterable<cool.SlideObject>,
@@ -501,6 +512,7 @@ class VectorManager extends RenderManagerBase {
 		if (state.alpha !== undefined) context.globalAlpha = state.alpha;
 		const matrix = cool.Matrix2D.fromArray(state.transform);
 		if (matrix) matrix.applyTo(context);
+		if (state.clip) VectorManager._clipTo(context, state.clip);
 		this._renderer.setColorOverride(state.colorOverride ?? null);
 		this._renderer.setParagraphFilter(paragraphFilter);
 		for (const primitive of object.primitives) {
@@ -509,6 +521,56 @@ class VectorManager extends RenderManagerBase {
 		this._renderer.setParagraphFilter(null);
 		this._renderer.setColorOverride(null);
 		context.restore();
+	}
+
+	/*
+		Clip what is drawn next to the clip's area. The clip's transform applies only while
+		its paths are built.
+	*/
+	private static _clipTo(
+		context: CanvasRenderingContext2D,
+		clip: cool.DrawClip,
+	): void {
+		const saved = context.getTransform();
+		cool.Matrix2D.fromArray(clip.transform)?.applyTo(context);
+
+		const [x, y, width, height] = clip.frame;
+		const frame = new Path2D();
+		frame.rect(x, y, width, height);
+		context.clip(frame);
+
+		// Frame and pieces in one even-odd path: the frame minus the pieces, which do not overlap.
+		const area = new Path2D();
+		if (clip.inverted) area.rect(x, y, width, height);
+		for (const piece of clip.pieces) VectorManager._addPiece(area, piece);
+		context.clip(area, clip.inverted ? 'evenodd' : 'nonzero');
+
+		context.setTransform(saved);
+	}
+
+	// Each piece is a figure of its own.
+	private static _addPiece(path: Path2D, piece: cool.AreaPiece): void {
+		if ('rectangle' in piece) {
+			const [x, y, width, height] = piece.rectangle;
+			path.rect(x, y, width, height);
+		} else if ('polygon' in piece) {
+			const corners = piece.polygon;
+			if (corners.length < 6) return;
+			path.moveTo(corners[0], corners[1]);
+			for (let at = 2; at + 1 < corners.length; at += 2)
+				path.lineTo(corners[at], corners[at + 1]);
+			path.closePath();
+		} else if ('ellipse' in piece) {
+			const [centerX, centerY, radiusX, radiusY] = piece.ellipse;
+			path.moveTo(centerX + radiusX, centerY);
+			path.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, 2 * Math.PI);
+			path.closePath();
+		} else {
+			const [centerX, centerY, radius, start, end] = piece.slice;
+			path.moveTo(centerX, centerY);
+			path.arc(centerX, centerY, radius, start, end);
+			path.closePath();
+		}
 	}
 
 	// whether the object is the one edited or lies in it, a group, at any depth

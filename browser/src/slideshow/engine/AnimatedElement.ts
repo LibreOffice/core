@@ -326,6 +326,12 @@ class TransitionFiltersManager {
 		return applied;
 	}
 
+	/// The last performed frame of a transition filter, or undefined.
+	public getLastFrame(): TransitionFilterFrameInfo | undefined {
+		const nodeId = this.filterQueue[this.filterQueue.length - 1];
+		return nodeId === undefined ? undefined : this.frameInfoMap.get(nodeId);
+	}
+
 	public clear() {
 		this.frameInfoMap.forEach((frameInfo) => {
 			frameInfo.animation.notifySlideEnd();
@@ -443,6 +449,8 @@ class AnimatedElement {
 	private aFontColor = AnimatedElement.DefaultColor;
 	private aDimColor = AnimatedElement.DefaultColor;
 	private bVisible: boolean;
+	// Hidden at slide start where the first effect brings the target in.
+	private bInitiallyVisible: boolean = true;
 	private aClipPath: SVGPathElement = null;
 	private runningAnimations: number = 0;
 
@@ -525,9 +533,23 @@ class AnimatedElement {
 		);
 	}
 
+	// Fetch the content again for an element that had none at slide start.
+	// The state starts over from the new base. True when there is content.
+	public refreshContent(): boolean {
+		if (this.bIsValid) return true;
+		this.updateContentInfo();
+		if (!this.bIsValid) return false;
+		this.resetProperties();
+		return true;
+	}
+
+	public setInitialVisibility(bVisible: boolean) {
+		this.bInitiallyVisible = bVisible;
+	}
+
 	// The visibility at slide start.
 	protected getInitialVisibility(): boolean {
-		return false;
+		return this.bInitiallyVisible;
 	}
 
 	// Take the content from a newly delivered shape layer. The base has none.
@@ -1113,6 +1135,19 @@ class AnimatedElement {
 		nT: number,
 	) {
 		this.transitionFiltersManager.add(aTransitionFilterAnimation, nT);
+	}
+
+	/// The last transition filter on the element and the time it reached,
+	/// 0 to 1, or undefined.
+	getTransitionFilterFrame():
+		| { info: TransitionFilterInfo; time: number }
+		| undefined {
+		const frame = this.transitionFiltersManager.getLastFrame();
+		if (!frame) return undefined;
+		return {
+			info: frame.animation.getTransitionFilterInfo(),
+			time: frame.time,
+		};
 	}
 
 	DBG(sMessage: string, nTime?: number) {

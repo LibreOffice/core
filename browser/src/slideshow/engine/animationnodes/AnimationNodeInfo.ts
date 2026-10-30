@@ -37,6 +37,10 @@ interface BaseNodeInfo {
 	presetClass?: string;
 	masterElement?: string;
 	groupId?: number;
+	// The target's visibility before the effect: false where the effect
+	// shows it, true where it hides it. Absent where the effect leaves it,
+	// and on a node that is no effect.
+	initVisible?: boolean;
 }
 
 interface ContainerNodeInfo extends BaseNodeInfo {

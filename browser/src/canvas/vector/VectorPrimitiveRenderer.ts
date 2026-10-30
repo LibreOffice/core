@@ -226,7 +226,14 @@ namespace cool {
 		): string {
 			if (this._colorOverride?.text !== undefined)
 				return this._colorOverride.text;
+			return this.ownTextColor(primitive);
+		}
 
+		/// The color the text run is drawn in. An automatic color resolves to
+		/// black or white for the surface under the run.
+		ownTextColor(
+			primitive: TextSimplePortionPrimitive | TextDecoratedPortionPrimitive,
+		): string {
 			const surface = this._textSurface(primitive);
 			const color = primitive.fontcolor;
 

@@ -2769,6 +2769,15 @@ class BitmapTileManager extends RenderManagerBase {
 		return layer === cool.calcLayerId('front');
 	}
 
+	public textColorOf(
+		_data: cool.VectorPrimitivesData,
+		primitive:
+			| cool.TextSimplePortionPrimitive
+			| cool.TextDecoratedPortionPrimitive,
+	): string {
+		return primitive.fontcolor;
+	}
+
 	public onVectorChanged(callback: VectorChangeListener): void {
 		if (!CalcVectorManager.isActive()) return;
 		CalcVectorManager.instance().onChanged(callback);

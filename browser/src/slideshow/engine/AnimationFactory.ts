@@ -278,6 +278,10 @@ class TransitionFilterAnimation extends AnimationBase {
 		return this.nNodeId;
 	}
 
+	getTransitionFilterInfo(): TransitionFilterInfo {
+		return this.aTransitionFilterInfo;
+	}
+
 	start(aAnimatableElement: AnimatedElement): void {
 		assert(
 			this.aAnimatableElement.getId() === aAnimatableElement.getId(),
@@ -289,7 +293,10 @@ class TransitionFilterAnimation extends AnimationBase {
 				this.aAnimatableElement,
 				this.aTransitionFilterInfo,
 			);
-			this.aTransition = this.createShapeTransition(transitionParameters);
+			// Without a rendering context there is no WebGL transition object.
+			// The frames are still recorded on the element.
+			if (transitionParameters.context)
+				this.aTransition = this.createShapeTransition(transitionParameters);
 		}
 
 		this.aAnimatableElement.notifyAnimationStart();

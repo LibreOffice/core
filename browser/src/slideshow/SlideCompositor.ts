@@ -37,19 +37,23 @@ abstract class SlideCompositor {
 		slideHash: string,
 		animatedElementHash: string,
 	): AnimatedElement {
+		return this.getAnimatedElementMap(slideHash)?.get(animatedElementHash);
+	}
+
+	/// The animated elements of the slide by target, or undefined without
+	/// animations.
+	public getAnimatedElementMap(
+		slideHash: string,
+	): Map<string, AnimatedElement> | undefined {
 		const metaSlide = this._metaPresentation.getMetaSlide(slideHash);
 		if (!metaSlide) {
 			window.app.console.log(
-				'SlideCompositor.getAnimatedElement: failed to retrieve meta slide for hash: ' +
+				'SlideCompositor.getAnimatedElementMap: failed to retrieve meta slide for hash: ' +
 					slideHash,
 			);
-			return;
+			return undefined;
 		}
-		if (metaSlide.animationsHandler) {
-			const animatedElementMap =
-				metaSlide.animationsHandler.getAnimatedElementMap();
-			return animatedElementMap.get(animatedElementHash);
-		}
+		return metaSlide.animationsHandler?.getAnimatedElementMap();
 	}
 
 	/// The animated element of the kind this compositor draws, for the target sId.

@@ -202,6 +202,7 @@
 
 #include <A11yObjectName.hxx>
 #include <Annotation.hxx>
+#include <CustomAnimationEffect.hxx>
 #include <CustomAnimationPreset.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -1108,6 +1109,13 @@ void AnimationsExporter::exportNodeImpl(const Reference<XAnimationNode>& xNode)
                 if (rValue.Value >>= aPresetId)
                 {
                     mrWriter.put("presetId", aPresetId);
+
+                    // The visibility before the effect: the opposite of what its set node sets.
+                    Any aVisibility = CustomAnimationEffect(xNode).getProperty(
+                        AnimationNodeType::SET, u"Visibility", EValue::To);
+                    if (aVisibility.hasValue())
+                        mrWriter.put("initVisible",
+                                     !anim::getVisibilityPropertyForAny(aVisibility));
 
                     if (mbAllyState)
                     {

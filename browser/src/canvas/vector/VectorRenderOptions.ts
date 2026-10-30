@@ -10,15 +10,37 @@
  */
 
 namespace cool {
-	/// How an animation draws something: whether at all, the transform over
-	/// its own place as the six canvas matrix values in twips, the opacity
-	/// from 0 to 1, and the colors that replace its own. An absent field
-	/// leaves that part unchanged.
+	/// One piece of an area, in clip coordinates. A rectangle is x, y, width
+	/// and height. A polygon is the x and y of each corner. An ellipse is its
+	/// center and two radii. A slice is its center, radius, and start and end
+	/// angle in radians clockwise from the x axis.
+	export type AreaPiece =
+		| { rectangle: number[] }
+		| { polygon: number[] }
+		| { ellipse: number[] }
+		| { slice: number[] };
+
+	/// The part drawn: the union of the pieces inside the frame, or with
+	/// inverted the rest of the frame. Frame and pieces are in their own
+	/// coordinates, which transform, the six canvas matrix values, maps onto
+	/// twips. The frame is x, y, width and height. No two pieces overlap.
+	export interface DrawClip {
+		transform: number[];
+		frame: number[];
+		pieces: AreaPiece[];
+		inverted?: boolean;
+	}
+
+	/// How an animation draws something: whether at all, the transform as
+	/// the six canvas matrix values in twips, the opacity 0 to 1, the colors
+	/// in place of its own, and the part drawn, before the transform. An
+	/// absent field changes nothing.
 	export interface DrawState {
 		hidden?: boolean;
 		transform?: number[];
 		alpha?: number;
 		colorOverride?: ColorOverride;
+		clip?: DrawClip;
 	}
 
 	/// How an animation draws an object. paragraphs holds the paragraphs of
