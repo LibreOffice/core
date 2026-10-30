@@ -738,6 +738,12 @@ class WindowsAppInitializer extends MobileAppInitializer {
 		window.postMobileDebug   = function(msg) { window.chrome.webview.postMessage('DBG ' + msg); };
 
 		window.userInterfaceMode = window.coolParams.get('userinterfacemode');
+
+		if (window.codaRemotePage) {
+			// The integrator around a remote page sends Host_PostmessageReady, as to a browser.
+			this._boundPostMessageHandler = this.postMessageHandler.bind(this);
+			window.addEventListener('message', this._boundPostMessageHandler, false);
+		}
 	}
 }
 
