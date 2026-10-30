@@ -138,7 +138,7 @@ public:
         return mSymKey;
     }
 
-    void setupEncryptContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv,
+    void setupEncryptContext(const std::vector<sal_uInt8>& key, const std::vector<sal_uInt8>& iv,
                              CryptoType type) override
     {
         setupCryptoContext(key, iv, type, CKA_ENCRYPT);

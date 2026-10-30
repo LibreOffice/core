@@ -68,7 +68,7 @@ public:
             EVP_CIPHER_CTX_cleanup(mpContext.get());
     }
 
-    void setupEncryptContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv,
+    void setupEncryptContext(const std::vector<sal_uInt8>& key, const std::vector<sal_uInt8>& iv,
                              CryptoType eType) override
     {
         mpContext.reset(EVP_CIPHER_CTX_new());

@@ -60,8 +60,8 @@ public:
     virtual void setupDecryptContext(const std::vector<sal_uInt8>& key,
                                      const std::vector<sal_uInt8>& iv, CryptoType eType)
         = 0;
-    virtual void setupEncryptContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv,
-                                     CryptoType type)
+    virtual void setupEncryptContext(const std::vector<sal_uInt8>& key,
+                                     const std::vector<sal_uInt8>& iv, CryptoType type)
         = 0;
     virtual void setupCryptoHashContext(std::vector<sal_uInt8>& rKey, CryptoHashType eType) = 0;
 
@@ -108,7 +108,7 @@ public:
      * key - encryption key, key size should be the same as block size
      * iv - init vector: it can be empty - will not be used (init vector will be 0)
      */
-    Encrypt(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, CryptoType type);
+    Encrypt(const std::vector<sal_uInt8>& key, const std::vector<sal_uInt8>& iv, CryptoType type);
 
     /** Encrypt the input and write into output
      *

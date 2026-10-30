@@ -46,7 +46,8 @@ sal_uInt32 Decrypt::aes128ecb(std::vector<sal_uInt8>& output, std::vector<sal_uI
 
 // ENCRYPT
 
-Encrypt::Encrypt(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, CryptoType type)
+Encrypt::Encrypt(const std::vector<sal_uInt8>& key, const std::vector<sal_uInt8>& iv,
+                 CryptoType type)
 {
     mpImpl->setupEncryptContext(key, iv, type);
 }

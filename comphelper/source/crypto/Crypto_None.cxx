@@ -22,8 +22,8 @@ public:
 
     virtual ~CryptoImplementationNone() {}
 
-    void setupEncryptContext(std::vector<sal_uInt8>& /*key*/, std::vector<sal_uInt8>& /*iv*/,
-                             CryptoType /*eType*/) override
+    void setupEncryptContext(const std::vector<sal_uInt8>& /*key*/,
+                             const std::vector<sal_uInt8>& /*iv*/, CryptoType /*eType*/) override
     {
     }
 
