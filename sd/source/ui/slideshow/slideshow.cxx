@@ -1238,7 +1238,7 @@ bool SlideShow::dependsOn( ViewShellBase const * pViewShellBase )
 
 Reference< presentation::XPresentation2 > CreatePresentation( const SdDrawDocument& rDocument )
 {
-    return Reference< presentation::XPresentation2 >( SlideShow::Create( const_cast< SdDrawDocument* >( &rDocument ) ) );
+    return SlideShow::Create(const_cast<SdDrawDocument*>(&rDocument));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
