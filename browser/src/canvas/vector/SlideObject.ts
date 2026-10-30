@@ -373,6 +373,10 @@ namespace cool {
 			draggable?: boolean;
 			resizable?: boolean;
 			rotatable?: boolean;
+			/// For a part dragged its own way, a pie segment out of its pie: the way a drag of the
+			/// whole offset takes, across and down in twips, and the offset it stands at now, a
+			/// share between 0 and 1.
+			dragAlong?: number[];
 		};
 		/** Where the chart's own keys go from a part of a chart active in place, by ids: next and
 		 * previous are the parts of its level going round, inside the first part a level down,

@@ -82,6 +82,10 @@ interface InteractionContext {
 	/// own.
 	theOnesAChangeNames(objectIds: number[]): number[];
 
+	/// How far a move of these objects by that much takes them, in twips, where a part goes a
+	/// way of its own.
+	heldToItsWay(objectIds: number[], by: cool.Point): cool.Point;
+
 	/// Ungroup, which takes apart what is selected. Answers whether it was run here; one that is
 	/// not goes to the engine.
 	ungroup(): boolean;

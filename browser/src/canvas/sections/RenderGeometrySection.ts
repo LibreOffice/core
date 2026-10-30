@@ -1310,8 +1310,9 @@ class RenderGeometrySection extends CanvasSectionObject {
 	/*
 		The part of a chart a press on that object takes hold of, standing inside the chart: the
 		nearest part up the chain that the chart selects on its own, and where that part is
-		reached by a second click only, the part holding it unless that one is selected already.
-		So the first click on a bar selects its series and the next the bar, as in the chart.
+		reached by a second click only, the part holding it unless that one or another part it
+		holds is selected already. So the first click on a bar selects its series and the next the
+		bar, and from there a click on another bar takes that bar, as in the chart.
 		Nothing where one does not stand inside a chart or the object is in no part of it.
 	*/
 	private static chartPartOf(
@@ -1339,7 +1340,19 @@ class RenderGeometrySection extends CanvasSectionObject {
 
 		const holder = partAbove(RenderGeometrySection.parentOf(part));
 		if (holder === undefined) return part;
-		return GraphicSelection.selectedObjectIDs.includes(holder) ? part : holder;
+
+		// the part itself where the part holding it is selected, or another part it holds, a
+		// segment of the same pie for one, as the chart takes it
+		const selected = GraphicSelection.selectedObjectIDs;
+		const takesThePart =
+			selected.includes(holder) ||
+			selected.some(
+				(objectId: number) =>
+					objectId !== holder &&
+					RenderGeometrySection.objectOf(objectId)?.chartPart?.multiClick &&
+					partAbove(RenderGeometrySection.parentOf(objectId)) === holder,
+			);
+		return takesThePart ? part : holder;
 	}
 
 	/*

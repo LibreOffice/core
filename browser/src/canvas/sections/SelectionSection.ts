@@ -2398,8 +2398,11 @@ abstract class SelectionSection extends CanvasSectionObject {
 		if (!ObjectHandles.canBeMoved(this.selectedObjects())) return;
 
 		const step = HandleTravel.stepFor(event);
-		const by = this.heldInsideTheLawn(
-			new cool.Point(towards.x * step, towards.y * step),
+		const by = Interaction.context().heldToItsWay(
+			this.selectedObjects(),
+			this.heldInsideTheLawn(
+				new cool.Point(towards.x * step, towards.y * step),
+			),
 		);
 		if (!by.x && !by.y) return;
 

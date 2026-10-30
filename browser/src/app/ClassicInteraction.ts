@@ -43,6 +43,11 @@ abstract class ClassicContext implements InteractionContext {
 		);
 	}
 
+	/// An object goes where the move takes it.
+	public heldToItsWay(_objectIds: number[], by: cool.Point): cool.Point {
+		return by;
+	}
+
 	/*
 		Answers a press from the geometry the client holds, by naming the objects to the engine
 		instead of sending the press for it to hit test. A press that meets no object asks for no
@@ -900,6 +905,28 @@ class ClassicInPlaceContext implements InteractionContext {
 				? [objectId]
 				: RenderGeometrySection.theOnesThatHaveASay([objectId]),
 		);
+	}
+
+	/*
+		a pie segment goes out of its pie along its own way only, as the chart drags it: the move
+		is laid onto that way, and held between no offset and the whole one
+	*/
+	public heldToItsWay(objectIds: number[], by: cool.Point): cool.Point {
+		const along =
+			objectIds.length === 1
+				? RenderGeometrySection.objectOf(objectIds[0])?.chartPart?.dragAlong
+				: undefined;
+		if (!along || along.length < 3) return by;
+
+		const [wayX, wayY, at] = along;
+		const length = wayX * wayX + wayY * wayY;
+		if (length <= 0) return by;
+
+		const share = Math.min(
+			Math.max((by.x * wayX + by.y * wayY) / length, -at),
+			1 - at,
+		);
+		return new cool.Point(wayX * share, wayY * share);
 	}
 
 	// a part of a chart is named as itself, the chart changes it as one with all it holds, in one
