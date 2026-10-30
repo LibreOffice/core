@@ -367,7 +367,7 @@ public:
 
         <p>Implemented in <code>drviews8.cxx</code>.</p>
      */
-    bool RenameSlide( sal_uInt16 nPageId, const OUString & rName );
+    SD_DLLPUBLIC bool RenameSlide( sal_uInt16 nPageId, const OUString & rName ); // export for unit test
 
     /** modifies the given layer with the given values */
     void ModifyLayer( SdrLayer* pLayer, const OUString& rLayerName, const OUString& rLayerTitle, const OUString& rLayerDesc, bool bIsVisible, bool bIsLocked, bool bIsPrintable );

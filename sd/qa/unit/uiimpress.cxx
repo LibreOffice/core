@@ -64,6 +64,7 @@
 #include <docmodel/theme/Theme.hxx>
 
 #include <drawdoc.hxx>
+#include <DrawViewShell.hxx>
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
 #include <OutlineView.hxx>
@@ -3008,6 +3009,29 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testReflectionCommands)
     auto pSize = dynamic_cast<const SfxUInt16Item*>(aResult.getItem());
     CPPUNIT_ASSERT(pSize);
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(70), pSize->GetValue());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testRenameDeletedSlide)
+{
+    createSdImpressDoc();
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    auto pViewShell
+        = dynamic_cast<sd::DrawViewShell*>(pImpressDocument->GetDocShell()->GetViewShell());
+    CPPUNIT_ASSERT(pViewShell);
+
+    dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
+    const sal_uInt16 nPageId = pDoc->GetSdPage(1, PageKind::Standard)->getPageId();
+
+    // The inserted slide is the current one, so it is the one deleted.
+    dispatchCommand(mxComponent, u".uno:DeletePage"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT(pDoc->GetSdPage(0, PageKind::Standard)->getPageId() != nPageId);
+
+    // A rename that arrives after its slide was deleted renames nothing.
+    CPPUNIT_ASSERT(!pViewShell->RenameSlide(nPageId, u"Renamed"_ustr));
+    CPPUNIT_ASSERT(pDoc->GetSdPage(0, PageKind::Standard)->GetRealName().isEmpty());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
