@@ -146,6 +146,8 @@ struct DocumentTab
     wil::com_ptr<ICoreWebView2Controller> webViewController;
     wil::com_ptr<ICoreWebView2> webView;
     std::thread app2js;
+    std::string editorForm;
+    std::string editorFormUrl;
 };
 
 // One top-level window. It holds its documents in the order the tab strip shows
@@ -4981,8 +4983,82 @@ static void openStarterWindow()
     openCOOLWindow({}, DocumentMode::STARTER);
 }
 
-// Nothing in the window is intercepted, so a document opens in the COOL server's editor, as in a
-// browser.
+/// 2 MiB. The form an integrator posts for a document is about 5 KB.
+constexpr size_t MAX_FORM_BYTES = 2 * 1024 * 1024;
+constexpr ULONG FORM_CHUNK_BYTES = 4096;
+
+// The integrator opens a document by posting a form with the token and settings into the iframe
+// that holds the editor. We save that form because we don't want the cool.html from the remote
+// coolwsd to load. Later we would inject a script with this form which can repost this from
+// the javascript world and get the cool.html and scrape the settings out of it.
+static void keepEditorForm(DocumentTab& account, ICoreWebView2WebResourceRequest* request,
+                           const std::string& url)
+{
+    wil::com_ptr<IStream> body;
+    if (FAILED(request->get_Content(&body)) || !body)
+    {
+        LOG_WRN("No form was kept: the form posted into an editor frame has no body");
+        return;
+    }
+
+    std::string form;
+    char chunk[FORM_CHUNK_BYTES];
+    while (form.size() <= MAX_FORM_BYTES)
+    {
+        ULONG read = 0;
+        const HRESULT readResult = body->Read(chunk, sizeof(chunk), &read);
+        if (FAILED(readResult) || read == 0)
+            break;
+        form.append(chunk, read);
+    }
+
+    // The request reads the form from the start when it goes on to coolwsd.
+    const LARGE_INTEGER start{};
+    body->Seek(start, STREAM_SEEK_SET, nullptr);
+
+    if (form.size() > MAX_FORM_BYTES)
+    {
+        LOG_WRN("No form was kept: the form posted into an editor frame is at least "
+                << form.size() << " bytes, over the limit of " << MAX_FORM_BYTES << " bytes");
+        return;
+    }
+
+    account.editorForm = std::move(form);
+    account.editorFormUrl = url;
+    LOG_DBG("Kept the " << account.editorForm.size() << "-byte form posted into an editor frame");
+}
+
+// WebView2 calls this for every request that matches one of the account window's filters.
+static void handleAccountRequest(int accountTabId, ICoreWebView2WebResourceRequestedEventArgs* args)
+{
+    DocumentTab* account = findTab(accountTabId);
+    if (!account)
+    {
+        LOG_DBG("A request of a closed account window goes on as it is");
+        return;
+    }
+
+    wil::com_ptr<ICoreWebView2WebResourceRequest> request;
+    wil::unique_cotaskmem_string address;
+    wil::unique_cotaskmem_string method;
+    COREWEBVIEW2_WEB_RESOURCE_CONTEXT context;
+    args->get_Request(&request);
+    request->get_Uri(&address);
+    request->get_Method(&method);
+    args->get_ResourceContext(&context);
+
+    const std::string url = Util::wide_string_to_string(address.get());
+    const Poco::URI uri(url);
+    const bool isPost = std::wstring_view(method.get()) == L"POST";
+    const bool isDocument = context == COREWEBVIEW2_WEB_RESOURCE_CONTEXT_DOCUMENT;
+    const bool isEditorPage = uri.getPath().ends_with("/cool.html");
+
+    if (isDocument && isEditorPage && isPost)
+    {
+        keepEditorForm(*account, request.get(), url);
+    }
+}
+
 static void openAccountWindow(const std::string& url)
 {
     int width, height;
@@ -5022,6 +5098,30 @@ static void openAccountWindow(const std::string& url)
                         controller->get_CoreWebView2(account->webView.put());
                         controller->put_Bounds(documentArea(*window));
                         controller->put_IsVisible(TRUE);
+
+                        auto webView22 = account->webView.try_query<ICoreWebView2_22>();
+                        if (!webView22)
+                        {
+                            LOG_ERR("The account window's web view cannot filter requests");
+                            return E_FAIL;
+                        }
+
+                        webView22->AddWebResourceRequestedFilterWithRequestSourceKinds(
+                            L"*/cool.html*", COREWEBVIEW2_WEB_RESOURCE_CONTEXT_DOCUMENT,
+                            COREWEBVIEW2_WEB_RESOURCE_REQUEST_SOURCE_KINDS_ALL);
+
+                        EventRegistrationToken token;
+                        account->webView->add_WebResourceRequested(
+                            Microsoft::WRL::Callback<ICoreWebView2WebResourceRequestedEventHandler>(
+                                [accountTabId](ICoreWebView2*,
+                                               ICoreWebView2WebResourceRequestedEventArgs* args)
+                                    -> HRESULT
+                                {
+                                    handleAccountRequest(accountTabId, args);
+                                    return S_OK;
+                                })
+                                .Get(),
+                            &token);
 
                         account->webView->Navigate(Util::string_to_wide_string(url).c_str());
                         return S_OK;
