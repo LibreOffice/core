@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-28 13:35+0100\n"
-"PO-Revision-Date: 2026-10-28 11:06+0000\n"
+"PO-Revision-Date: 2026-10-30 00:06+0000\n"
 "Last-Translator: Méven Car <meven@users.noreply.hosted.weblate.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/fr/>\n"
-"Language: \n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1479,11 +1479,12 @@ msgstr "Le premier qui est configuré"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5050
 msgid "Translating with {0}."
-msgstr ""
+msgstr "Traduire avec {0}."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5051
 msgid "No provider is set up: the Translate command is not offered."
 msgstr ""
+"Aucun fournisseur n'est défini : la commande Traduction n'est pas proposée."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5091
 msgid "API URL"
@@ -1836,39 +1837,39 @@ msgstr "Dupliquer le Style"
 
 #: src/app/Util.ts:319
 msgid "1 year"
-msgstr ""
+msgstr "1 an"
 
 #: src/app/Util.ts:320
 msgid "{count} years"
-msgstr ""
+msgstr "{count} années"
 
 #: src/app/Util.ts:322
 msgid "1 day"
-msgstr ""
+msgstr "1 jour"
 
 #: src/app/Util.ts:322
 msgid "{count} days"
-msgstr ""
+msgstr "{count} jours"
 
 #: src/app/Util.ts:323
 msgid "1 hour"
-msgstr ""
+msgstr "1 heure"
 
 #: src/app/Util.ts:323
 msgid "{count} hours"
-msgstr ""
+msgstr "{count} heures"
 
 #: src/app/Util.ts:324
 msgid "1 minute"
-msgstr ""
+msgstr "1 minute"
 
 #: src/app/Util.ts:324
 msgid "{count} minutes"
-msgstr ""
+msgstr "{count} minutes"
 
 #: src/app/Util.ts:339
 msgid "less than a minute"
-msgstr ""
+msgstr "moins d’une minute"
 
 #: src/canvas/sections/CommentListSection.ts:2261
 #: src/canvas/sections/CommentListSection.ts:2274
@@ -2910,21 +2911,20 @@ msgid "Reject action"
 msgstr "Rejeter l'action"
 
 #: src/control/Control.AIChatSidebar.ts:2845
-#, fuzzy
 msgid "Send"
-msgstr "Envoyé"
+msgstr "Envoyer"
 
 #: src/control/Control.AIChatSidebar.ts:2847
 msgid "Send these cells"
-msgstr ""
+msgstr "Envoyer ces cellules"
 
 #: src/control/Control.AIChatSidebar.ts:2853
 msgid "Do not send these cells"
-msgstr ""
+msgstr "Ne pas envoyer ces cellules"
 
 #: src/control/Control.AIChatSidebar.ts:2870
 msgid "Nothing was sent."
-msgstr ""
+msgstr "Rien n'a été envoyé."
 
 #: src/control/Control.AIChatSidebar.ts:2893
 msgid "Applying changes..."
@@ -3043,11 +3043,11 @@ msgstr "Diagnostic : erreur dans la formule"
 
 #: src/control/Control.AIChatSidebar.ts:3871
 msgid "To diagnose the error in %1, these cells will be sent to %2:"
-msgstr ""
+msgstr "Pour diagnostiquer l'erreur %1, ces cellules seront envoyées à %2 :"
 
 #: src/control/Control.AIChatSidebar.ts:3877
 msgid "Do you want to send them?"
-msgstr ""
+msgstr "Voulez-vous les envoyer ?"
 
 #: src/control/Control.AIChatSidebar.ts:3897
 msgid "I have a formula error in my spreadsheet."
@@ -3057,7 +3057,7 @@ msgstr "J'ai une erreur de formule dans ma feuille de calcul."
 #. TRANSLATORS: B5, {1} the name of its sheet
 #: src/control/Control.AIChatSidebar.ts:3901
 msgid "Cell {0} (Sheet: {1}) contains:"
-msgstr ""
+msgstr "Cellule {0} (Feuille {1}) contient :"
 
 #: src/control/Control.AIChatSidebar.ts:3906
 #: src/control/Control.FormulaBarJSDialog.js:116
@@ -3074,9 +3074,8 @@ msgstr "Cellules référencées"
 #. TRANSLATORS: Sent to the AI model. {0} is a Calc error code such
 #. TRANSLATORS: as #DIV/0!
 #: src/control/Control.AIChatSidebar.ts:3918
-#, fuzzy
 msgid "Please diagnose why this formula produces the {0} error."
-msgstr "Veuillez diagnostiquer pourquoi cette formule produit le"
+msgstr "Veuillez diagnostiquer pourquoi cette formule produit l'erreur {0}."
 
 #: src/control/Control.AIChatSidebar.ts:3922
 msgid "Explain the root cause and suggest how to fix it."
@@ -3092,16 +3091,15 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3942
 msgid "only the cells with errors"
-msgstr ""
+msgstr "seulement les cellules avec des erreurs"
 
 #: src/control/Control.AIChatSidebar.ts:3949
 msgid "another file, its name only"
-msgstr ""
+msgstr "un autre fichier, son nom seulement"
 
 #: src/control/Control.AIChatSidebar.ts:3979
-#, fuzzy
 msgid "formula"
-msgstr "Formule"
+msgstr "formule"
 
 #: src/control/Control.AIChatSidebar.ts:3981
 msgid "ERROR"
@@ -3112,18 +3110,16 @@ msgid "value"
 msgstr "valeur"
 
 #: src/control/Control.AIChatSidebar.ts:4005
-#, fuzzy
 msgid "text"
-msgstr "Texte"
+msgstr "texte"
 
 #: src/control/Control.AIChatSidebar.ts:4010
 msgid "empty"
 msgstr "Vide"
 
 #: src/control/Control.AIChatSidebar.ts:4012
-#, fuzzy
 msgid "range"
-msgstr "Plage"
+msgstr "plage"
 
 #: src/control/Control.AIChatSidebar.ts:4014
 msgid "errors in"
@@ -6274,9 +6270,8 @@ msgid "Paste"
 msgstr "Coller"
 
 #: src/control/Control.PartsPreview.js:761
-#, fuzzy
 msgid "Unlink Slide"
-msgstr "Diapositive vide"
+msgstr "Délier la Diapositive"
 
 #: src/control/Control.PartsPreview.js:783
 msgid "Add Section"
@@ -6311,9 +6306,8 @@ msgid "Slide %1, %3 is missing"
 msgstr "Diapo %1, %3 manquant"
 
 #: src/control/Control.PartsPreview.js:972
-#, fuzzy
 msgid "preview of page %1, not found in %3"
-msgstr "aperçu de la page %1, lié à %2 en %3"
+msgstr "aperçu de la page %1, introuvable dans %3"
 
 #: src/control/Control.PartsPreview.js:973
 msgid "Slide %1, not found in %3"
@@ -6344,9 +6338,8 @@ msgid "Slide %1, %2 changed in %3"
 msgstr "Diapositive %1, %2 modifiée dans %3"
 
 #: src/control/Control.PartsPreview.js:992
-#, fuzzy
 msgid "preview of page %1, changed in %3"
-msgstr "aperçu de la page %1, lié à %2 en %3"
+msgstr "aperçu de la page %1, changée dans %3"
 
 #: src/control/Control.PartsPreview.js:993
 msgid "Slide %1, changed in %3"
@@ -7108,9 +7101,8 @@ msgid "Insert connectors"
 msgstr "Insérer des connecteurs"
 
 #: src/control/Control.UIManager.ts:123
-#, fuzzy
 msgid "Main"
-msgstr "Min"
+msgstr "Principale"
 
 #: src/control/Control.UIManager.ts:255
 msgid "You are currently in View mode, press {0} to edit"
@@ -7346,9 +7338,8 @@ msgid "Updating citations"
 msgstr "Mise à jour des citations"
 
 #: src/control/Control.Zotero.js:1538
-#, fuzzy
 msgid "Unlinked citations"
-msgstr "Détacher les citations"
+msgstr "Citations détachées"
 
 #: src/control/Control.Zotero.js:1543
 msgid ""
@@ -7413,9 +7404,8 @@ msgid "Wrong password provided. Please try again."
 msgstr "Mot de passe fournit incorrect. Veuillez réessayer."
 
 #: src/control/Permission.js:193
-#, fuzzy
 msgid "Document requires a password to edit."
-msgstr "Le document requiert un mot de passe pour être affiché."
+msgstr "Le document requiert un mot de passe pour être modifié."
 
 #: src/control/Permission.js:430
 msgid "Edit locally"
@@ -7442,9 +7432,8 @@ msgid "Continue with your version"
 msgstr "Continuer avec votre version"
 
 #: src/control/Permission.js:470
-#, fuzzy
 msgid "Join collaborative editing"
-msgstr "Édition collaborative"
+msgstr "Rejoignez l'édition collaborative"
 
 #: src/control/Permission.js:496
 msgid "Waiting for changes to be saved..."
@@ -7792,19 +7781,16 @@ msgid "Tabloid"
 msgstr "Tabloïde"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1544
-#, fuzzy
 msgid "B6 (JIS)"
-msgstr "B6 (ISO)"
+msgstr "B6 (JIS)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1545
-#, fuzzy
 msgid "B5 (JIS)"
-msgstr "B5 (ISO)"
+msgstr "B5 (JIS)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1546
-#, fuzzy
 msgid "B4 (JIS)"
-msgstr "B4 (ISO)"
+msgstr "B4 (JIS)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1547
 msgid "16 Kai"
@@ -7843,9 +7829,8 @@ msgid "C4 Envelope"
 msgstr "Enveloppe C4"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1558
-#, fuzzy
 msgid "#6¾ Envelope"
-msgstr "Enveloppe C6"
+msgstr "Enveloppe #6¾"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1563
 msgid "#7¾ (Monarch) Envelope"
@@ -7920,14 +7905,12 @@ msgid "All users"
 msgstr "Tous les utilisateurs"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1917
-#, fuzzy
 msgid "Highlight cells with"
-msgstr "Mettre en évidence les cellules avec ..."
+msgstr "Mettre en évidence les cellules avec"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1948
-#, fuzzy
 msgid "Top/Bottom Rules"
-msgstr "Règles de premiers/derniers..."
+msgstr "Règles des premiers/derniers"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1984
 msgid "Color Scale"
@@ -8062,7 +8045,6 @@ msgid "Watermark"
 msgstr "Filigrane"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2433
-#, fuzzy
 msgid "Insert comment"
 msgstr "Ajouter un commentaire"
 
