@@ -156,6 +156,8 @@ public:
 
     const ScStyleSheet* GetStyle( SCROW nRow ) const;
     void        ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, const ScStyleSheet& rStyle );
+    void        AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex );
+    void        RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex );
 
     bool        HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) const;
     bool        HasAttrib( SCROW nRow, HasAttrFlags nMask, SCROW* nStartRow = nullptr, SCROW* nEndRow = nullptr ) const;
@@ -551,8 +553,6 @@ public:
     void        ApplyStyle( SCROW nRow, const ScStyleSheet* rStyle );
     void        ApplySelectionLineStyle( const ScMarkData& rMark,
                                     const ::editeng::SvxBorderLine* pLine, bool bColorOnly );
-    void        AddCondFormat(SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex );
-    void        RemoveCondFormat(SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex );
 
     const ScStyleSheet* GetSelectionStyle( const ScMarkData& rMark, bool& rFound ) const;
     const ScStyleSheet* GetAreaStyle( bool& rFound, SCROW nRow1, SCROW nRow2 ) const;
@@ -987,12 +987,12 @@ inline sal_uInt32 ScColumnData::GetNumberFormat( const ScInterpreterContext& rCo
     return pAttrArray->GetPattern( nRow )->GetNumberFormat( rContext );
 }
 
-inline void ScColumn::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex )
+inline void ScColumnData::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex )
 {
     pAttrArray->AddCondFormat( nStartRow, nEndRow, nIndex );
 }
 
-inline void ScColumn::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex )
+inline void ScColumnData::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex )
 {
     pAttrArray->RemoveCondFormat( nStartRow, nEndRow, nIndex );
 }

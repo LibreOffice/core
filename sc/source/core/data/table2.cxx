@@ -3060,6 +3060,14 @@ void ScTable::AddCondFormatData( const ScRangeList& rRangeList, sal_uInt32 nInde
         SCCOL nColEnd = rRange.aEnd.Col();
         SCROW nRowStart = rRange.aStart.Row();
         SCROW nRowEnd = rRange.aEnd.Row();
+        if (nColEnd == rDocument.MaxCol())
+        {
+            // The columns not created yet share the default column data. Create the ones left of
+            // the range before the default takes the format.
+            nColEnd = std::max(nColStart, aCol.size()) - 1;
+            CreateColumnIfNotExists(nColEnd);
+            aDefaultColData.AddCondFormat(nRowStart, nRowEnd, nIndex);
+        }
         for(SCCOL nCol = nColStart; nCol <= nColEnd; ++nCol)
         {
             CreateColumnIfNotExists(nCol).AddCondFormat(nRowStart, nRowEnd, nIndex);
@@ -3074,9 +3082,22 @@ void ScTable::RemoveCondFormatData( const ScRangeList& rRangeList, sal_uInt32 nI
     {
         const ScRange & rRange = rRangeList[i];
         SCCOL nColStart = rRange.aStart.Col();
-        SCCOL nColEnd = ClampToAllocatedColumns(rRange.aEnd.Col());
+        SCCOL nColEnd = rRange.aEnd.Col();
         SCROW nRowStart = rRange.aStart.Row();
         SCROW nRowEnd = rRange.aEnd.Row();
+        if (nColEnd >= aCol.size()
+            && aDefaultColData.HasAttrib(nRowStart, nRowEnd, HasAttrFlags::Conditional))
+        {
+            if (nColEnd == rDocument.MaxCol())
+            {
+                nColEnd = std::max(nColStart, aCol.size()) - 1;
+                CreateColumnIfNotExists(nColEnd);
+                aDefaultColData.RemoveCondFormat(nRowStart, nRowEnd, nIndex);
+            }
+            else
+                CreateColumnIfNotExists(nColEnd);
+        }
+        nColEnd = ClampToAllocatedColumns(nColEnd);
         for(SCCOL nCol = nColStart; nCol <= nColEnd; ++nCol)
         {
             aCol[nCol].RemoveCondFormat(nRowStart, nRowEnd, nIndex);
