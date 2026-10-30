@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include "sddllapi.h"
+
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -31,7 +33,6 @@
 #include <editeng/unoipset.hxx>
 
 #include <memory>
-#include <sddllapi.h>
 
 namespace com::sun::star {
     namespace drawing {

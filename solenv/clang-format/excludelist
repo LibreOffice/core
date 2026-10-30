@@ -9095,6 +9095,7 @@ sd/inc/sdpptwrp.hxx
 sd/inc/sdundo.hxx
 sd/inc/sdxmlwrp.hxx
 sd/inc/shapelist.hxx
+sd/inc/slideshow.hxx
 sd/inc/stlfamily.hxx
 sd/inc/stlpool.hxx
 sd/inc/stlsheet.hxx
@@ -9538,7 +9539,6 @@ sd/source/ui/inc/sdpreslt.hxx
 sd/source/ui/inc/sdtreelb.hxx
 sd/source/ui/inc/sdundogr.hxx
 sd/source/ui/inc/sdxfer.hxx
-sd/source/ui/inc/slideshow.hxx
 sd/source/ui/inc/tabtempl.hxx
 sd/source/ui/inc/tmplctrl.hxx
 sd/source/ui/inc/titledockwin.hxx
