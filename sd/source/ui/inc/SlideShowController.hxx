@@ -139,9 +139,9 @@ friend class SlideShow;
 friend class SlideShowView;
 
 public:
-    explicit SlideShowController(
-        const css::uno::Reference<css::presentation::XPresentation2>& xPresentation,
-        ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc, vcl::Window* pParentWindow);
+    explicit SlideShowController(const rtl::Reference<sd::SlideShow>& rpSlideShow,
+                                 ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc,
+                                 vcl::Window* pParentWindow);
 
     // css::presentation::XSlideShowController:
     virtual sal_Bool SAL_CALL getAlwaysOnTop() override;
@@ -372,7 +372,7 @@ private:
     ImplSVEvent * mnEventObjectRemoved;
     ImplSVEvent * mnEventPageOrderChange;
 
-    css::uno::Reference< css::presentation::XPresentation2 > mxPresentation;
+    rtl::Reference<sd::SlideShow> mpSlideShow;
     ::rtl::Reference< SlideShowListenerProxy > mxListenerProxy;
 
     // local variables to support preview for a running SlideShow IASS

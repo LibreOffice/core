@@ -531,7 +531,9 @@ constexpr OUString gsOnClick( u"OnClick"_ustr );
 constexpr OUString gsBookmark( u"Bookmark"_ustr );
 constexpr OUString gsVerb( u"Verb"_ustr );
 
-SlideShowController::SlideShowController( const Reference< XPresentation2 >& xPresentation, ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc, vcl::Window* pParentWindow )
+SlideShowController::SlideShowController(const rtl::Reference<sd::SlideShow>& rpSlideShow,
+                                         ViewShell* pViewSh, ::sd::View* pView,
+                                         SdDrawDocument* pDoc, vcl::Window* pParentWindow)
 : mxShow()
 , mxView()
 , mxModel(pDoc->getUnoModel())
@@ -575,7 +577,7 @@ SlideShowController::SlideShowController( const Reference< XPresentation2 >& xPr
 , mnEventObjectInserted(nullptr)
 , mnEventObjectRemoved(nullptr)
 , mnEventPageOrderChange(nullptr)
-, mxPresentation( xPresentation )
+, mpSlideShow(rpSlideShow)
 , mxListenerProxy()
 , mxShow2()
 , mxView2()
@@ -683,8 +685,8 @@ void SlideShowController::disposing(std::unique_lock<std::mutex>&)
     if( !mxShow.is() )
         return;
 
-    if( mxPresentation.is() )
-        mxPresentation->end();
+    if (mpSlideShow.is())
+        mpSlideShow->end();
 
     maUpdateTimer.Stop();
 
@@ -1637,8 +1639,8 @@ IMPL_LINK_NOARG(SlideShowController, endPresentationHdl, void*, void)
 
     stopSound();
 
-    if( mxPresentation.is() )
-        mxPresentation->end();
+    if (mpSlideShow.is())
+        mpSlideShow->end();
 }
 
 void SAL_CALL SlideShowController::pause()
