@@ -38,6 +38,28 @@ describe('Tooltip', function () {
 		);
 	}
 
+	// The tooltip takes no pointer events, so a move over it is aimed at what lies beneath.
+	function pointerOver(elem: HTMLElement, x: number, y: number): void {
+		elem.dispatchEvent(
+			new (window as any).MouseEvent('mousemove', {
+				clientX: x,
+				clientY: y,
+				bubbles: true,
+			}),
+		);
+	}
+
+	// A click inside the tooltip also goes to what lies beneath it.
+	function clickOn(elem: HTMLElement, x: number, y: number): void {
+		elem.dispatchEvent(
+			new (window as any).MouseEvent('click', {
+				clientX: x,
+				clientY: y,
+				bubbles: true,
+			}),
+		);
+	}
+
 	function press(key: string): void {
 		window.dispatchEvent(
 			new (window as any).KeyboardEvent('keydown', { key: key }),
@@ -129,6 +151,37 @@ describe('Tooltip', function () {
 		advanceClock(grace);
 
 		nodeassert.strictEqual(shown(), false);
+	});
+
+	it('stays while the pointer is on it over another widget', function () {
+		tooltip.show(trigger);
+		tooltip.beginHide();
+
+		pointerOver(neighbour, BOX.left + 10, BOX.top + 10);
+		advanceClock(grace * 10);
+
+		nodeassert.strictEqual(shown(), true);
+		nodeassert.strictEqual(container.textContent, 'Undo');
+	});
+
+	it('goes at once when the widget under it is clicked', function () {
+		tooltip.show(trigger);
+		tooltip.beginHide();
+		pointerOver(neighbour, BOX.left + 10, BOX.top + 10);
+
+		clickOn(neighbour, BOX.left + 10, BOX.top + 10);
+
+		nodeassert.strictEqual(shown(), false);
+		advanceClock(grace * 10);
+		nodeassert.strictEqual(shown(), false);
+	});
+
+	it('stays when a click lands outside it', function () {
+		tooltip.show(trigger);
+
+		clickOn(neighbour, BOX.left - 50, BOX.top - 50);
+
+		nodeassert.strictEqual(shown(), true);
 	});
 
 	it('closes on Escape without waiting', function () {

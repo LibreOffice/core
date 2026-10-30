@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require */
+/* global describe it cy beforeEach expect require */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
@@ -91,5 +91,64 @@ describe(['tagdesktop'], 'Context toolbar tests.', function() {
 
 		cy.cGet('#context-toolbar').should('have.class', 'hidden');
 		cy.cGet('#context-toolbar #context-switchtoedit').should('not.exist');
+	});
+});
+
+describe(['tagdesktop'], 'Context toolbar tooltip tests.', function() {
+
+	beforeEach(function() {
+		cy.viewport(1920, 1080);
+		helper.setupAndLoadDocument('writer/top_toolbar.odt', false, false, undefined,
+			'tooltips=true');
+		desktopHelper.switchUIToNotebookbar();
+	});
+
+	it('A tooltip over another button goes away when that button is clicked.', function() {
+		var missingFont = 'No Such Font Name';
+		var warning = 'The current font is not available and will be substituted.';
+
+		helper.getBlinkingCursorPosition('cursorPos');
+		helper.clickAt('cursorPos', true);
+
+		// The font name box has a tooltip only while the font of the text is one the server
+		// does not have.
+		cy.cGet('#Home-container #fontnamecombobox .ui-combobox-content')
+			.type('{selectall}{backspace}' + missingFont + '{enter}');
+		helper.waitForMapState('.uno:CharFontName', missingFont);
+
+		helper.clickAt('cursorPos', true);
+		cy.cGet('#context-toolbar').should('not.have.class', 'hidden');
+		cy.cGet('#context-toolbar #fontnamecombobox').should('have.attr', 'data-cooltip', warning);
+
+		// The tooltip of the font name box is drawn over the Bold button.
+		cy.cGet('#context-toolbar #fontnamecombobox').realHover();
+		cy.cGet('#cooltip').should('be.visible').and('have.text', warning);
+
+		cy.cGet('#context-toolbar [id^="home-bold"]').then(function(bold) {
+			cy.cGet('#cooltip').then(function(tooltip) {
+				var boldRect = bold[0].getBoundingClientRect();
+				var tooltipRect = tooltip[0].getBoundingClientRect();
+				var left = Math.max(boldRect.left, tooltipRect.left);
+				var right = Math.min(boldRect.right, tooltipRect.right);
+				var top = Math.max(boldRect.top, tooltipRect.top);
+				var bottom = Math.min(boldRect.bottom, tooltipRect.bottom);
+				expect(right, 'tooltip covers Bold horizontally').to.be.greaterThan(left);
+				expect(bottom, 'tooltip covers Bold vertically').to.be.greaterThan(top);
+				cy.wrap({ x: (left + right) / 2, y: (top + bottom) / 2 }).as('overlap');
+			});
+		});
+
+		// On the tooltip the pointer is reading it, so it stays although Bold is under it.
+		cy.get('@overlap').then(function(point) {
+			cy.cGet('body').realMouseMove(point.x, point.y);
+		});
+		cy.cGet('#cooltip').should('be.visible').and('have.text', warning);
+
+		// The click goes through the tooltip to Bold, and the tooltip goes away.
+		cy.get('@overlap').then(function(point) {
+			cy.cGet('body').realClick({ x: point.x, y: point.y });
+		});
+		cy.cGet('#cooltip').should('not.be.visible');
+		helper.waitForMapState('.uno:Bold', 'true');
 	});
 });

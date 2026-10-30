@@ -36,6 +36,12 @@ class Tooltip {
 		win.addEventListener('keydown', window.L.bind(this.keyDown, this), {
 			capture: true,
 		});
+		// The container does not take pointer events either, so a click on it lands on the
+		// widget it covers.
+		win.addEventListener('click', window.L.bind(this.clicked, this), {
+			capture: true,
+			passive: true,
+		});
 	}
 
 	beginShow(elem) {
@@ -228,17 +234,21 @@ class Tooltip {
 		this._current = null;
 	}
 
-	pointerMoved(e) {
-		if (this._disabled || !this._current) return;
-
+	// True when the pointer of the mouse event e is inside the rectangle of the tooltip.
+	isPointerOn(e) {
 		const box = this._container.getBoundingClientRect();
-		const on =
+		return (
 			e.clientX >= box.left &&
 			e.clientX <= box.right &&
 			e.clientY >= box.top &&
-			e.clientY <= box.bottom;
+			e.clientY <= box.bottom
+		);
+	}
 
-		if (on) this.mouseEnter();
+	pointerMoved(e) {
+		if (this._disabled || !this._current) return;
+
+		if (this.isPointerOn(e)) this.mouseEnter();
 		else if (this._cancel) this.mouseLeave();
 	}
 
@@ -255,6 +265,18 @@ class Tooltip {
 		if (this._disabled) return;
 		this._cancel = false;
 		this.beginHide();
+	}
+
+	// A click inside the tooltip goes to the widget under it, so the pointer is no longer
+	// reading the tooltip and it goes away at once.
+	clicked(e) {
+		if (this._disabled || this._locked || !this._current) return;
+		if (!this.isPointerOn(e)) return;
+
+		app.timerRegistry.clearTimeout(this._showTimeout);
+		app.timerRegistry.clearTimeout(this._hideTimeout);
+		this._cancel = false;
+		this.hide();
 	}
 
 	keyDown(e) {
