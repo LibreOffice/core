@@ -2878,4 +2878,34 @@ describe('VectorManager', function () {
 			});
 		});
 	});
+
+	// The render manager made before the document type is known draws bitmap tiles. A
+	// presentation that draws from vectors replaces it, and the work that waits for the first
+	// visuals runs once the first page arrives.
+	it('runs the work that waits for the first visuals once the first vector page arrives', function () {
+		const originalInstance = (RenderManager as any)._instance;
+		const originalIsEnabled = cool.VectorRenderingConfig.isEnabled;
+		try {
+			const provisional: any = new BitmapTileManager();
+			// The provisional manager holds no tiles, so it has nothing to release.
+			provisional.discardAllCache = function () {};
+			(RenderManager as any)._instance = provisional;
+
+			let runs = 0;
+			RenderManager.appendAfterVisualsReady(() => {
+				runs++;
+			});
+
+			(cool.VectorRenderingConfig as any).isEnabled = () => true;
+			const manager = (RenderManager as any).makeInstance('presentation');
+			nodeassert.ok(manager instanceof VectorManager);
+			nodeassert.strictEqual(runs, 0, 'nothing runs before the first page');
+
+			manager.handleVectorPrimitivesResponse({ partId: 'S0', objects: [] });
+			nodeassert.strictEqual(runs, 1, 'the work runs with the first page');
+		} finally {
+			(cool.VectorRenderingConfig as any).isEnabled = originalIsEnabled;
+			(RenderManager as any)._instance = originalInstance;
+		}
+	});
 });

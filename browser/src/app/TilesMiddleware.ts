@@ -31,10 +31,16 @@ class RenderManager {
 		if (!RenderManager._instance || wantVector !== haveVector) {
 			// The replaced manager releases everything it holds, such as
 			// the font faces it registered on the document.
-			if (RenderManager._instance) RenderManager._instance.discardAllCache();
+			const previous = RenderManager._instance;
+			if (previous) previous.discardAllCache();
 			RenderManager._instance = wantVector
 				? new VectorManager()
 				: new BitmapTileManager();
+			// The tasks that wait for the first visuals move to the new
+			// manager. The provisional manager made before the document type
+			// is known shows no content when the document draws from vectors.
+			if (previous)
+				RenderManager._instance.adoptAfterVisualsReadyTasks(previous);
 		}
 		return RenderManager._instance;
 	}

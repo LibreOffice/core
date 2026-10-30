@@ -63,6 +63,14 @@ abstract class RenderManagerBase {
 		else this.afterVisualsReadyTasks.push(task);
 	}
 
+	/// Takes over the tasks that another manager still holds for its first
+	/// visuals. They run once this manager has content to show.
+	adoptAfterVisualsReadyTasks(previous: RenderManagerBase): void {
+		for (const task of previous.afterVisualsReadyTasks)
+			this.appendAfterVisualsReady(task);
+		previous.afterVisualsReadyTasks = [];
+	}
+
 	protected setVisualsReady(): void {
 		this.visualsReady = true;
 		while (this.afterVisualsReadyTasks.length > 0) {
