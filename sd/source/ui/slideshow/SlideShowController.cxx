@@ -548,7 +548,7 @@ SlideShowController::SlideShowController( const Reference< XPresentation2 >& xPr
 , mnRestoreSlide(0)
 , maPopupMousePos()
 , maPresSize( -1, -1 )
-, meAnimationMode(ANIMATIONMODE_SHOW)
+, meAnimationMode(AnimationMode::Show)
 , maCharBuffer()
 , mpOldActiveWindow(nullptr)
 , maStarBASICGlobalErrorHdl()
@@ -746,7 +746,7 @@ void SlideShowController::disposing(std::unique_lock<std::mutex>&)
             mpShowWindow->Hide();
     }
 
-    if( meAnimationMode == ANIMATIONMODE_SHOW )
+    if (meAnimationMode == AnimationMode::Show)
     {
         mpDocSh->SetSlotFilter();
         mpDocSh->ApplySlotFilter();
@@ -761,12 +761,12 @@ void SlideShowController::disposing(std::unique_lock<std::mutex>&)
     // show current window again
     if( mpViewShell && dynamic_cast< PresentationViewShell *>( mpViewShell ) ==  nullptr)
     {
-        if( meAnimationMode == ANIMATIONMODE_SHOW )
+        if (meAnimationMode == AnimationMode::Show)
         {
             mpViewShell->GetViewShellBase().ShowUIControls (true);
             mpPaneHider.reset();
         }
-        else if( meAnimationMode == ANIMATIONMODE_PREVIEW )
+        else if (meAnimationMode == AnimationMode::Preview)
         {
             mpViewShell->ShowUIControls(true);
         }
@@ -778,7 +778,7 @@ void SlideShowController::disposing(std::unique_lock<std::mutex>&)
 
     if ( mpViewShell )
     {
-        if( meAnimationMode == ANIMATIONMODE_SHOW )
+        if (meAnimationMode == AnimationMode::Show)
         {
             ::sd::Window* pActWin = mpViewShell->GetActiveWindow();
 
@@ -838,7 +838,7 @@ void SlideShowController::startInteractivePreview(const Reference<XDrawPage>& xD
     // set DrawPage/AnimationNode
     mxPreviewDrawPage = xDrawPage;
     mxPreviewAnimationNode = xAnimationNode;
-    meAnimationMode = ANIMATIONMODE_PREVIEW;
+    meAnimationMode = AnimationMode::Preview;
 
     // set PresSettings for preview
     maPresSettings.mbAll = false;
@@ -951,7 +951,7 @@ bool SlideShowController::startPreview(const Reference<XDrawPage>& xDrawPage,
 
         mxPreviewDrawPage = xDrawPage;
         mxPreviewAnimationNode = xAnimationNode;
-        meAnimationMode = ANIMATIONMODE_PREVIEW;
+        meAnimationMode = AnimationMode::Preview;
 
         maPresSettings.mbAll = false;
         maPresSettings.mbEndless = false;
@@ -1029,7 +1029,7 @@ bool SlideShowController::startPreview(const Reference<XDrawPage>& xDrawPage,
 
         bRet = startShowImpl( aProperties );
 
-        if( mpShowWindow != nullptr && meAnimationMode == ANIMATIONMODE_PREVIEW )
+        if (mpShowWindow != nullptr && meAnimationMode == AnimationMode::Preview)
             mpShowWindow->SetPreviewMode();
 
     }
@@ -1108,7 +1108,7 @@ bool SlideShowController::startShow(PresentationSettingsEx const* pPresSettings)
                 maPresSettings.mbAll = !pStartPage->IsExcluded();
             }
 
-            if( meAnimationMode != ANIMATIONMODE_SHOW )
+            if (meAnimationMode != AnimationMode::Show)
             {
                 if( pStartPage->GetPageKind() == PageKind::Standard )
                 {
@@ -2045,7 +2045,7 @@ bool SlideShowController::keyInput(const KeyEvent& rKEvt)
             case KEY_SUBTRACT:
                 // in case the user cancels the presentation, switch to current slide
                 // in edit mode
-                if( mpSlideController && (ANIMATIONMODE_SHOW == meAnimationMode) )
+                if (mpSlideController && (AnimationMode::Show == meAnimationMode))
                 {
                     if( mpSlideController->getCurrentSlideNumber() != -1 )
                         mnRestoreSlide = mpSlideController->getCurrentSlideNumber();
@@ -2228,7 +2228,7 @@ IMPL_LINK(SlideShowController, EventListenerHdl, VclSimpleEvent&, rSimpleEvent, 
     case MediaCommand::Stop:
         // in case the user cancels the presentation, switch to current slide
         // in edit mode
-        if( mpSlideController && (ANIMATIONMODE_SHOW == meAnimationMode) )
+        if (mpSlideController && (AnimationMode::Show == meAnimationMode))
         {
             if( mpSlideController->getCurrentSlideNumber() != -1 )
                 mnRestoreSlide = mpSlideController->getCurrentSlideNumber();
@@ -2464,7 +2464,7 @@ void SlideShowController::ContextMenuSelectHdl(std::u16string_view rMenuId)
         // When in autoplay mode (pps/ppsx), offer editing of the presentation
         // Turn autostart off, else Impress will close when exiting the Presentation
         mpViewShell->GetDoc()->SetExitAfterPresenting(false);
-        if( mpSlideController && (ANIMATIONMODE_SHOW == meAnimationMode) )
+        if (mpSlideController && (AnimationMode::Show == meAnimationMode))
         {
             if( mpSlideController->getCurrentSlideNumber() != -1 )
             {
@@ -2477,7 +2477,7 @@ void SlideShowController::ContextMenuSelectHdl(std::u16string_view rMenuId)
     {
         // in case the user cancels the presentation, switch to current slide
         // in edit mode
-        if( mpSlideController && (ANIMATIONMODE_SHOW == meAnimationMode) )
+        if (mpSlideController && (AnimationMode::Show == meAnimationMode))
         {
             if( mpSlideController->getCurrentSlideNumber() != -1 )
             {
@@ -2585,7 +2585,7 @@ void SlideShowController::createSlideList(bool bAll, std::u16string_view rPresSl
     }
     else
     {
-        if( meAnimationMode != ANIMATIONMODE_SHOW && !rPresSlide.empty() )
+        if (meAnimationMode != AnimationMode::Show && !rPresSlide.empty())
         {
             sal_Int32 nSlide;
             for( nSlide = 0; nSlide < nSlideCount; nSlide++ )
@@ -2625,7 +2625,7 @@ void SlideShowController::hideChildWindows()
 {
     mnChildMask = 0;
 
-    if( ANIMATIONMODE_SHOW != meAnimationMode )
+    if (AnimationMode::Show != meAnimationMode)
         return;
 
     SfxViewFrame* pViewFrame = getViewFrame();
@@ -2647,7 +2647,7 @@ void SlideShowController::hideChildWindows()
 
 void SlideShowController::showChildWindows()
 {
-    if( ANIMATIONMODE_SHOW == meAnimationMode )
+    if (AnimationMode::Show == meAnimationMode)
     {
         SfxViewFrame* pViewFrame = getViewFrame();
         if( pViewFrame )
@@ -2740,7 +2740,7 @@ void SAL_CALL SlideShowController::activate()
 
     mbActive = true;
 
-    if( ANIMATIONMODE_SHOW == meAnimationMode )
+    if (AnimationMode::Show == meAnimationMode)
     {
         if( mbAutoSaveWasOn )
             setAutoSaveState( false );
@@ -2787,7 +2787,7 @@ IMPL_LINK_NOARG(SlideShowController, deactivateHdl, Timer*, void)
 
     pause();
 
-    if( ANIMATIONMODE_SHOW == meAnimationMode )
+    if (AnimationMode::Show == meAnimationMode)
     {
         if( mbAutoSaveWasOn )
             setAutoSaveState( true );
@@ -3097,7 +3097,7 @@ void SAL_CALL SlideShowController::gotoNextSlide()
         // if this is a show, ignore user inputs and
         // start 20ms timer to reenable inputs to filter
         // buffered inputs during slide transition
-        if( meAnimationMode == ANIMATIONMODE_SHOW )
+        if (meAnimationMode == AnimationMode::Show)
         {
             mbInputFreeze = true;
             maInputFreezeTimer.Start();
@@ -3113,7 +3113,7 @@ void SAL_CALL SlideShowController::gotoNextSlide()
             {
                 stopSound();
 
-                if( meAnimationMode == ANIMATIONMODE_PREVIEW )
+                if (meAnimationMode == AnimationMode::Preview)
                 {
                     endPresentation();
                 }

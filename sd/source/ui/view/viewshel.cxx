@@ -1178,7 +1178,8 @@ void ViewShell::ArrangeGUIElements()
     // The size of the window of the center pane is set differently from
     // that of the windows in the docking windows.
     bool bSlideShowActive = (xSlideShow.is() && xSlideShow->isRunning()) //IASS
-        && !xSlideShow->isFullScreen() && xSlideShow->getAnimationMode() == ANIMATIONMODE_SHOW;
+                            && !xSlideShow->isFullScreen()
+                            && xSlideShow->getAnimationMode() == AnimationMode::Show;
     if ( !bSlideShowActive)
     {
         OSL_ASSERT (GetViewShell()!=nullptr);

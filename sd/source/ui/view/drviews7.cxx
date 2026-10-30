@@ -1337,7 +1337,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetViewShellBase() ) );
     if( (xSlideshow.is() && xSlideshow->isRunning() && !xSlideshow->IsInteractiveSlideshow() // IASS
-        && (xSlideshow->getAnimationMode() != ANIMATIONMODE_PREVIEW) ) || GetDocSh()->IsPreview() )
+        && (xSlideshow->getAnimationMode() != AnimationMode::Preview) ) || GetDocSh()->IsPreview() )
     {
         // Own Slots
         rSet.DisableItem( SID_PRESENTATION );

@@ -1015,7 +1015,8 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
         }
 
         rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetDoc() ) );
-        if( !xSlideshow.is() || !xSlideshow->isRunning() || ( xSlideshow->getAnimationMode() != ANIMATIONMODE_SHOW ) )
+        if (!xSlideshow.is() || !xSlideshow->isRunning()
+            || (xSlideshow->getAnimationMode() != AnimationMode::Show))
         {
             // tighten VisArea, to possibly deactivate objects
             // !!! only if we are not in presentation mode (#96279) !!!

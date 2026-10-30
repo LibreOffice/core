@@ -497,7 +497,8 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sd
         if(xSlideshow.is() && xSlideshow->isRunning())
         {
             OutputDevice* pShowWindow = xSlideshow->getShowWindow();
-            if( (pShowWindow == pOutDev) || (xSlideshow->getAnimationMode() == ANIMATIONMODE_PREVIEW) )
+            if ((pShowWindow == pOutDev)
+                || (xSlideshow->getAnimationMode() == AnimationMode::Preview))
             {
                 if( pShowWindow == pOutDev && mpViewSh )
                     xSlideshow->paint();

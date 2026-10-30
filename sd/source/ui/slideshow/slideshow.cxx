@@ -755,7 +755,7 @@ void SAL_CALL SlideShow::end()
             // and the rehearsing will be updated
             pViewShell->Invalidate();
 
-            if( xController->meAnimationMode ==ANIMATIONMODE_SHOW )
+            if (xController->meAnimationMode == AnimationMode::Show)
             {
                 // switch to the previously visible Slide
                 DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>( pViewShell );
@@ -971,9 +971,9 @@ OutputDevice* SlideShow::getShowWindow()
     return mxController.is() ? mxController->mpShowWindow->GetOutDev() : nullptr;
 }
 
-int SlideShow::getAnimationMode() const
+AnimationMode SlideShow::getAnimationMode() const
 {
-    return mxController.is() ? mxController->meAnimationMode : ANIMATIONMODE_SHOW;
+    return mxController.is() ? mxController->meAnimationMode : AnimationMode::Show;
 }
 
 void SlideShow::jumpToPageIndex( sal_Int32 nPageIndex )

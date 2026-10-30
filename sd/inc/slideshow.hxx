@@ -68,10 +68,10 @@ class ViewShellBase;
 struct PresentationSettingsEx;
 class FrameView;
 
-enum AnimationMode
+enum class AnimationMode
 {
-    ANIMATIONMODE_SHOW,
-    ANIMATIONMODE_PREVIEW
+    Show,
+    Preview
 };
 
 typedef comphelper::WeakComponentImplHelper< css::presentation::XPresentation2, css::lang::XServiceInfo > SlideshowBase;
@@ -161,7 +161,7 @@ public:
     // settings
     bool isFullScreen() const;                          // a.k.a. FuSlideShow::IsFullScreen()
     OutputDevice* getShowWindow();                      // a.k.a. FuSlideShow::GetShowWindow()
-    int getAnimationMode() const;                       // a.k.a. FuSlideShow::GetAnimationMode()
+    AnimationMode getAnimationMode() const; // a.k.a. FuSlideShow::GetAnimationMode()
     sal_Int32 getCurrentPageNumber() const;             // a.k.a. FuSlideShow::GetCurrentPage()
 
     // events
