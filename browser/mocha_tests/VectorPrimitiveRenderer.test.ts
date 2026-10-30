@@ -507,9 +507,8 @@ describe('VectorPrimitiveRenderer', function () {
 
 		it('draws underline and strikeout for textDecoratedPortion', function () {
 			// textDecoratedPortion paints the same text as the simple
-			// portion and adds underline, overline and strikeout lines
-			// on top. Each decoration is one stroke at the right
-			// vertical offset from the text anchor.
+			// portion and the lines the engine built for its underline
+			// and strikeout on top.
 			const primitive = loadVectorRenderingReference('testTextDecoratedPortion')
 				.primitives[0];
 			nodeassert.strictEqual(primitive.type, 'textDecoratedPortion');
@@ -523,24 +522,140 @@ describe('VectorPrimitiveRenderer', function () {
 			// Text is still drawn.
 			nodeassert.ok(recorder.findCall('fillText'), 'fillText not called');
 
-			// One decoration stroke per decoration. The fixture sets
-			// underline and strikeout, so we expect two strokes.
+			// One stroke of an engine path per decoration, in black as the
+			// fixture paints them.
 			const strokes = recorder.callsOf('stroke');
 			nodeassert.strictEqual(strokes.length, 2);
-
-			// The fixture paints both decorations in black, so each
-			// stroke uses that colour.
-			for (const stroke of strokes)
+			for (const stroke of strokes) {
+				nodeassert.ok(stroke.args[0] instanceof Path2DRecorder);
 				nodeassert.strictEqual(stroke.properties.strokeStyle, '#000000');
+			}
+			nodeassert.strictEqual(recorder.callsOf('moveTo').length, 0);
+		});
 
-			// Both decoration lines are horizontal: each moveTo and
-			// lineTo share a y coordinate.
-			const moveTos = recorder.callsOf('moveTo');
-			const lineTos = recorder.callsOf('lineTo');
-			nodeassert.strictEqual(moveTos.length, 2);
-			nodeassert.strictEqual(lineTos.length, 2);
-			for (let i = 0; i < 2; i++)
-				nodeassert.strictEqual(moveTos[i].args[1], lineTos[i].args[1]);
+		// A decorated run of "ab" in automatic black text, with the given fields over those
+		// defaults.
+		function decoratedRun(fields: any): any {
+			return {
+				type: 'textDecoratedPortion',
+				text: 'ab',
+				textPosition: 0,
+				textLength: 2,
+				matrix: [24, 0, 0, 24, 50, 100],
+				fontSize: 24,
+				fontcolor: '#000000',
+				familyname: 'Arial',
+				underline: 1,
+				...fields,
+			};
+		}
+
+		const underlineStroke = (color: string): any => ({
+			type: 'polygonStroke',
+			path: 'M50 105h20',
+			line: { color: color, width: 2 },
+		});
+
+		it('draws the decorations of the engine in their own colors', function () {
+			const recorder = new CanvasRecorder();
+			new cool.VectorPrimitiveRenderer().renderPrimitive(
+				recorder as any,
+				decoratedRun({ decorations: [underlineStroke('#FF0000')] }),
+			);
+
+			const strokes = recorder.callsOf('stroke');
+			nodeassert.strictEqual(strokes.length, 1);
+			nodeassert.strictEqual(strokes[0].properties.strokeStyle, '#FF0000');
+			nodeassert.strictEqual(strokes[0].args[0].path, 'M50 105h20');
+		});
+
+		it('draws the decorations in the text color in the color the automatic text gets', function () {
+			const recorder = new CanvasRecorder();
+			new cool.VectorPrimitiveRenderer().renderPrimitive(
+				recorder as any,
+				decoratedRun({
+					fontcolor: 'auto',
+					backdrop: '#000000',
+					decorationsInTextColor: [underlineStroke('#000000')],
+				}),
+			);
+
+			// Automatic text on black is white, and so is its underline.
+			nodeassert.strictEqual(
+				recorder.findCall('fillText')!.properties.fillStyle,
+				'#FFFFFF',
+			);
+			const strokes = recorder.callsOf('stroke');
+			nodeassert.strictEqual(strokes.length, 1);
+			nodeassert.strictEqual(strokes[0].properties.strokeStyle, '#FFFFFF');
+		});
+
+		it('draws a light gray shadow a twenty-fourth of the font size under black text', function () {
+			const recorder = new CanvasRecorder();
+			new cool.VectorPrimitiveRenderer().renderPrimitive(
+				recorder as any,
+				decoratedRun({
+					shadow: true,
+					decorations: [underlineStroke('#000000')],
+				}),
+			);
+
+			const fills = recorder.callsOf('fillText');
+			nodeassert.strictEqual(fills.length, 2);
+			nodeassert.strictEqual(fills[0].properties.fillStyle, '#C0C0C0');
+			nodeassert.strictEqual(fills[1].properties.fillStyle, '#000000');
+			nodeassert.deepStrictEqual(recorder.findCall('translate')!.args, [1, 1]);
+
+			// The underline casts a shadow as well.
+			const strokes = recorder.callsOf('stroke');
+			nodeassert.strictEqual(strokes.length, 2);
+			nodeassert.strictEqual(strokes[0].properties.strokeStyle, '#C0C0C0');
+			nodeassert.strictEqual(strokes[1].properties.strokeStyle, '#000000');
+		});
+
+		it('draws engraved black text in white over a black copy up and to the left', function () {
+			const recorder = new CanvasRecorder();
+			new cool.VectorPrimitiveRenderer().renderPrimitive(
+				recorder as any,
+				decoratedRun({ relief: 2, shadow: true }),
+			);
+
+			// Relief leaves out the shadow.
+			const fills = recorder.callsOf('fillText');
+			nodeassert.strictEqual(fills.length, 2);
+			nodeassert.strictEqual(fills[0].properties.fillStyle, '#000000');
+			nodeassert.strictEqual(fills[1].properties.fillStyle, '#FFFFFF');
+			const [x, y] = recorder.findCall('translate')!.args;
+			nodeassert.ok(x < 0 && y < 0, 'the copy moves up and to the left');
+			nodeassert.ok(Math.abs(x + 1.1 / Math.SQRT2) < 1e-9);
+		});
+
+		it('draws colored text with relief over a light gray copy down and to the right', function () {
+			// Text in a color other than black gets this relief also when engraved.
+			const recorder = new CanvasRecorder();
+			new cool.VectorPrimitiveRenderer().renderPrimitive(
+				recorder as any,
+				decoratedRun({ relief: 2, fontcolor: '#0000FF' }),
+			);
+
+			const fills = recorder.callsOf('fillText');
+			nodeassert.strictEqual(fills.length, 2);
+			nodeassert.strictEqual(fills[0].properties.fillStyle, '#BFBFBF');
+			nodeassert.strictEqual(fills[1].properties.fillStyle, '#0000FF');
+			const [x, y] = recorder.findCall('translate')!.args;
+			nodeassert.ok(x > 0 && y > 0, 'the copy moves down and to the right');
+		});
+
+		it('outlines text with copies a pixel away in eight directions under white', function () {
+			const recorder = drawRun({ outline: true, fontcolor: '#0000FF' });
+
+			const fills = recorder.callsOf('fillText');
+			nodeassert.strictEqual(fills.length, 9);
+			for (let k = 0; k < 8; k++)
+				nodeassert.strictEqual(fills[k].properties.fillStyle, '#0000FF');
+			nodeassert.strictEqual(fills[8].properties.fillStyle, '#FFFFFF');
+			nodeassert.strictEqual(recorder.callsOf('strokeText').length, 0);
+			nodeassert.strictEqual(recorder.callsOf('translate').length, 8);
 		});
 
 		it('renders a bitmap at its declared bounds', function () {

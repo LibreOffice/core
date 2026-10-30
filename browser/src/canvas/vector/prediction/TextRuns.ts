@@ -43,6 +43,14 @@ namespace cool {
 		return (run.text ?? '').substring(start, start + length);
 	}
 
+	// The lines and marks the engine sends with a run fit the text and the place it sent. A run
+	// that changes drops them and is drawn with plain lines until the engine answers.
+	export function dropDecorations(run: TextSimplePortionPrimitive): void {
+		const decorated = run as Primitive as TextDecoratedPortionPrimitive;
+		delete decorated.decorations;
+		delete decorated.decorationsInTextColor;
+	}
+
 	/// Measures text in a run's font and scales it to the server's measure. Widths are sums of
 	/// single code points, so the parts of a text add up to the whole. Kerning is lost, and the
 	/// server's layout restores it.
@@ -155,6 +163,7 @@ namespace cool {
 
 		set text(text: string) {
 			this.primitive.text = text;
+			dropDecorations(this.primitive);
 		}
 
 		// The window of the buffer that the run shows, in UTF-16 units.
@@ -164,6 +173,7 @@ namespace cool {
 
 		set start(start: number) {
 			this.primitive.textPosition = start;
+			dropDecorations(this.primitive);
 		}
 
 		get length(): number {
@@ -172,6 +182,7 @@ namespace cool {
 
 		set length(length: number) {
 			this.primitive.textLength = length;
+			dropDecorations(this.primitive);
 		}
 
 		get end(): number {
@@ -211,6 +222,7 @@ namespace cool {
 					...steps.slice(cutTo, this.length),
 				];
 			else if (this.primitive.advances) this.primitive.advances = undefined;
+			dropDecorations(this.primitive);
 		}
 
 		// The local x before each character, from the advances or measured. The last entry
@@ -238,6 +250,7 @@ namespace cool {
 			const matrix = this.primitive.matrix;
 			if (matrix && matrix.length === 6)
 				matrix[4] += delta / (this.transform.a || 1);
+			dropDecorations(this.primitive);
 		}
 
 		// The text runs of a subtree, with their origins in slide twips. A bullet or a numbering

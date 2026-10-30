@@ -599,24 +599,146 @@ namespace cool {
 
 		private _renderTextSimplePortion(
 			context: CanvasRenderingContext2D,
+			primitive: TextSimplePortionPrimitive,
+		): void {
+			this._renderTextEffects(context, primitive, (color) =>
+				this._fillTextRun(
+					context,
+					primitive,
+					color ?? this._textColor(primitive),
+				),
+			);
+		}
+
+		// Fills the glyphs of a run in one color.
+		private _fillTextRun(
+			context: CanvasRenderingContext2D,
 			primitive: TextSimplePortionPrimitive | TextDecoratedPortionPrimitive,
+			color: string,
 		): void {
 			context.save();
 			const frame = this._setupTextFrame(context, primitive);
 			if (frame) {
-				const textColor = this._textColor(primitive);
-				context.fillStyle = textColor;
-				this._drawTextRun(context, primitive, frame, false);
-
-				if (primitive.outline) {
-					context.strokeStyle = textColor;
-					// Outline thickness scales with the font size so it stays
-					// visible on large text.
-					context.lineWidth = Math.max(1, frame.fontSize / 20);
-					this._drawTextRun(context, primitive, frame, true);
-				}
+				context.fillStyle = color;
+				this._drawTextRun(context, primitive, frame);
 			}
 			context.restore();
+		}
+
+		private static readonly _RELIEF_ENGRAVED = 2;
+
+		// Draws a run with its shadow, relief or outline, as the drawing layer
+		// builds them. drawBody draws the glyphs and the decorations in the
+		// color it is given, or in their own colors when it gets none. A run
+		// with relief has no shadow and no outline.
+		private _renderTextEffects(
+			context: CanvasRenderingContext2D,
+			primitive: TextSimplePortionPrimitive | TextDecoratedPortionPrimitive,
+			drawBody: (color: string | undefined) => void,
+		): void {
+			const decorated = primitive as TextDecoratedPortionPrimitive;
+			const relief = decorated.relief ?? 0;
+			if (!relief && !decorated.shadow && !primitive.outline) {
+				drawBody(undefined);
+				return;
+			}
+
+			const moved = (x: number, y: number, color: string | undefined): void => {
+				context.save();
+				context.translate(x, y);
+				drawBody(color);
+				context.restore();
+			};
+			const textColor = this._textColor(primitive);
+
+			if (!relief && decorated.shadow) {
+				// The shadow lies a twenty-fourth of the font size down and to the
+				// right, whatever way the text turns.
+				const offset = (primitive.fontSize ?? 12) / 24;
+				moved(
+					offset,
+					offset,
+					VectorPrimitiveRenderer._textShadowColor(textColor),
+				);
+			}
+
+			// The engine moves the copies by 1.1 device pixels along each axis.
+			const step = VectorPrimitiveRenderer._deviceStep(context, 1.1);
+			const diagonalX = step.x / Math.SQRT2;
+			const diagonalY = step.y / Math.SQRT2;
+
+			if (relief) {
+				// Black text gets a black copy under it in white, one step down and
+				// to the right when embossed, or up and to the left when engraved.
+				// Text in another color keeps it, over a light gray copy down and to
+				// the right. The step turns with the text.
+				const blackText = VectorPrimitiveRenderer._isBlack(textColor);
+				const sign =
+					blackText && relief === VectorPrimitiveRenderer._RELIEF_ENGRAVED
+						? -1
+						: 1;
+				const matrix = Matrix2D.fromArray(primitive.matrix);
+				const angle = matrix ? Math.atan2(matrix.b, matrix.a) : 0;
+				const cos = Math.cos(angle);
+				const sin = Math.sin(angle);
+				moved(
+					sign * (diagonalX * cos - diagonalY * sin),
+					sign * (diagonalX * sin + diagonalY * cos),
+					blackText ? '#000000' : '#BFBFBF',
+				);
+				drawBody(blackText ? '#FFFFFF' : undefined);
+				return;
+			}
+
+			if (primitive.outline) {
+				// The outline is the run in its own colors one step away in each of
+				// eight directions, under the run in white.
+				const directions = [
+					[step.x, 0],
+					[diagonalX, diagonalY],
+					[0, step.y],
+					[-diagonalX, diagonalY],
+					[-step.x, 0],
+					[-diagonalX, -diagonalY],
+					[0, -step.y],
+					[diagonalX, -diagonalY],
+				];
+				for (const [x, y] of directions) moved(x, y, undefined);
+				drawBody('#FFFFFF');
+				return;
+			}
+
+			drawBody(undefined);
+		}
+
+		// Light gray under black or nearly black text, else black. The
+		// luminance has the engine's weights.
+		private static _textShadowColor(textColor: string): string {
+			const rgb = VectorColors.parse(textColor);
+			const luminance = rgb ? rgb.r * 0.3 + rgb.g * 0.59 + rgb.b * 0.11 : 0;
+			return luminance < 8 / 255 ? '#C0C0C0' : '#000000';
+		}
+
+		private static _isBlack(color: string): boolean {
+			const rgb = VectorColors.parse(color);
+			return !!rgb && rgb.r === 0 && rgb.g === 0 && rgb.b === 0;
+		}
+
+		// A distance of the given number of device pixels along each device
+		// axis, in the current drawing units.
+		private static _deviceStep(
+			context: CanvasRenderingContext2D,
+			pixels: number,
+		): { x: number; y: number } {
+			if (typeof context.getTransform !== 'function')
+				return { x: pixels, y: pixels };
+			const { a, b, c, d } = context.getTransform();
+			const determinant = a * d - b * c;
+			if (!determinant) return { x: pixels, y: pixels };
+			return {
+				x: ((d - c) * pixels) / determinant,
+				y: ((a - b) * pixels) / determinant,
+			};
 		}
 
 		// Draws the run in one call when it has no usable advances or the
@@ -629,12 +751,9 @@ namespace cool {
 			context: CanvasRenderingContext2D,
 			primitive: TextSimplePortionPrimitive | TextDecoratedPortionPrimitive,
 			frame: TextFrame,
-			stroke: boolean,
 		): void {
-			const draw = (text: string, x: number, y: number): void => {
-				if (stroke) context.strokeText(text, x, y);
-				else context.fillText(text, x, y);
-			};
+			const draw = (text: string, x: number, y: number): void =>
+				context.fillText(text, x, y);
 
 			const text = frame.text;
 			const distances = VectorPrimitiveRenderer._advanceDistances(
@@ -726,10 +845,82 @@ namespace cool {
 			context: CanvasRenderingContext2D,
 			primitive: TextDecoratedPortionPrimitive,
 		): void {
-			// Paint the text body first. The decorations draw on
-			// top below.
-			this._renderTextSimplePortion(context, primitive);
+			const decorations = primitive.decorations;
+			const decorationsInTextColor = primitive.decorationsInTextColor;
+			this._renderTextEffects(context, primitive, (color) => {
+				const textColor = color ?? this._textColor(primitive);
+				this._fillTextRun(context, primitive, textColor);
+				if (decorations)
+					this._renderPrimitives(
+						context,
+						color ? this._recolored(decorations, color) : decorations,
+					);
+				if (decorationsInTextColor)
+					this._renderPrimitives(
+						context,
+						this._recolored(decorationsInTextColor, textColor),
+					);
+				if (!decorations && !decorationsInTextColor)
+					this._drawPlainDecorations(context, primitive, color);
+			});
+		}
 
+		// Copies of decoration subtrees in one color, by subtree and color.
+		private _recoloredDecorations = new WeakMap<
+			Primitive[],
+			Map<string, Primitive[]>
+		>();
+
+		private _recolored(primitives: Primitive[], color: string): Primitive[] {
+			let byColor = this._recoloredDecorations.get(primitives);
+			if (!byColor) {
+				byColor = new Map();
+				this._recoloredDecorations.set(primitives, byColor);
+			}
+			let recolored = byColor.get(color);
+			if (!recolored) {
+				recolored = VectorPrimitiveRenderer._withColor(primitives, color);
+				byColor.set(color, recolored);
+			}
+			return recolored;
+		}
+
+		// A copy of a subtree with the color of every stroke, fill and text
+		// replaced. The decorations of a run are made of these alone.
+		private static _withColor(
+			primitives: Primitive[],
+			color: string,
+		): Primitive[] {
+			return primitives.map((primitive) => {
+				const copy = { ...primitive } as Primitive & {
+					color?: string;
+					fontcolor?: string;
+					line?: { color?: string };
+				};
+				if (copy.line) copy.line = { ...copy.line, color };
+				else copy.color = color;
+				if (
+					copy.type === TextSimplePortionPrimitive.type ||
+					copy.type === TextDecoratedPortionPrimitive.type
+				)
+					copy.fontcolor = color;
+				if (copy.children)
+					copy.children = VectorPrimitiveRenderer._withColor(
+						copy.children,
+						color,
+					);
+				return copy;
+			});
+		}
+
+		// Plain lines for a run that carries no decorations of the engine,
+		// such as a run changed by typing before the engine answers. Each is
+		// one solid line placed by fractions of the font size.
+		private _drawPlainDecorations(
+			context: CanvasRenderingContext2D,
+			primitive: TextDecoratedPortionPrimitive,
+			color: string | undefined,
+		): void {
 			if (!primitive.underline && !primitive.overline && !primitive.strikeout)
 				return;
 
@@ -746,10 +937,10 @@ namespace cool {
 					? distances[frame.text.length - 1] * frame.advanceScale
 					: context.measureText(frame.text).width;
 				const lineWidth = Math.max(1, frame.fontSize / 20);
-				const textColor = this._textColor(primitive);
+				const textColor = color ?? this._textColor(primitive);
 
-				const drawLine = (lineY: number, color: string): void => {
-					context.strokeStyle = color;
+				const drawLine = (lineY: number, lineColor: string): void => {
+					context.strokeStyle = lineColor;
 					context.lineWidth = lineWidth;
 					context.beginPath();
 					context.moveTo(frame.x, lineY);
@@ -761,12 +952,12 @@ namespace cool {
 					const lineY = primitive.underlineAbove
 						? frame.y - frame.fontSize * 0.85
 						: frame.y + frame.fontSize * 0.15;
-					drawLine(lineY, primitive.underlineColor ?? textColor);
+					drawLine(lineY, color ?? primitive.underlineColor ?? textColor);
 				}
 				if (primitive.overline)
 					drawLine(
 						frame.y - frame.fontSize * 0.85,
-						primitive.overlineColor ?? textColor,
+						color ?? primitive.overlineColor ?? textColor,
 					);
 				if (primitive.strikeout)
 					drawLine(frame.y - frame.fontSize * 0.3, textColor);

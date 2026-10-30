@@ -17,6 +17,12 @@ namespace cool {
 	/// underline, overline, strikeout, emphasisMark and relief are
 	/// numeric line-style codes. Any non-zero value means the
 	/// decoration is present.
+	///
+	/// decorations holds the lines, the strikeout and the emphasis marks
+	/// of the run as primitives in its parent space, in every line style
+	/// and placed by the font metrics. decorationsInTextColor holds those
+	/// in the automatic color, which take the color the text gets. Neither
+	/// holds the text itself.
 	export interface TextDecoratedPortionPrimitive extends Omit<
 		TextSimplePortionPrimitive,
 		'type'
@@ -34,6 +40,8 @@ namespace cool {
 		relief?: number;
 		shadow?: boolean;
 		wordLineMode?: boolean;
+		decorations?: Primitive[];
+		decorationsInTextColor?: Primitive[];
 	}
 
 	export namespace TextDecoratedPortionPrimitive {

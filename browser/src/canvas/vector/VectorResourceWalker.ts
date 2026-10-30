@@ -46,6 +46,11 @@ namespace cool {
 			const transparence = (primitive as TransparencePrimitive).transparence;
 			if (Array.isArray(transparence)) this.walkPrimitives(transparence);
 			if (primitive.children) this.walkPrimitives(primitive.children);
+			// A strikeout with a character is text, among the decorations.
+			const decorated = primitive as TextDecoratedPortionPrimitive;
+			if (decorated.decorations) this.walkPrimitives(decorated.decorations);
+			if (decorated.decorationsInTextColor)
+				this.walkPrimitives(decorated.decorationsInTextColor);
 		}
 	}
 }

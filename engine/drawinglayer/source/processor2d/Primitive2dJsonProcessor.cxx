@@ -63,7 +63,9 @@
 #include <drawinglayer/primitive2d/softedgeprimitive2d.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
+#include <primitive2d/textlineprimitive2d.hxx>
 
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/utils/bgradient.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -1009,6 +1011,76 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
 
             if (rPrimitive.getWordLineMode())
                 mrWriter.put("wordLineMode", true);
+
+            // The lines, strikeout and emphasis marks as the drawing layer builds them, without
+            // the text, one set per word in word line mode. Those in an automatic color take the
+            // text color, so they are a list of their own.
+            Primitive2DContainer aDecorations;
+            Primitive2DContainer aDecorationsInTextColor;
+            const bool bAutomaticFontColor = rPrimitive.getFontColor().isAutomatic();
+            const auto appendDecorations = [this, &aDecorations, &aDecorationsInTextColor,
+                                            bAutomaticFontColor](
+                                               const TextDecoratedPortionPrimitive2D& rPortion) {
+                const basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose aDecTrans(
+                    rPortion.getTextTransform());
+                const Primitive2DContainer& rGeometry
+                    = rPortion.getOrCreateDecorationGeometryContent(
+                        aDecTrans, rPortion.getText(), rPortion.getTextPosition(),
+                        rPortion.getTextLength(), rPortion.getDXArray());
+                for (const Primitive2DReference& rDecoration : rGeometry)
+                {
+                    // A line and a strikeout travel as the strokes and the text they draw. The
+                    // strikeout with a character is text, which names an automatic color itself.
+                    const sal_uInt32 nId = rDecoration->getPrimitive2DID();
+                    bool bInTextColor = false;
+                    bool bDecompose = false;
+                    switch (nId)
+                    {
+                        case PRIMITIVE2D_ID_TEXTLINEPRIMITIVE2D:
+                            bInTextColor = static_cast<const TextLinePrimitive2D&>(*rDecoration)
+                                               .getLineColor()
+                                               .isAutomatic();
+                            bDecompose = true;
+                            break;
+                        case PRIMITIVE2D_ID_TEXTGEOMETRYSTRIKEOUTPRIMITIVE2D:
+                            bInTextColor = bAutomaticFontColor;
+                            bDecompose = true;
+                            break;
+                        case PRIMITIVE2D_ID_TEXTCHARACTERSTRIKEOUTPRIMITIVE2D:
+                            bDecompose = true;
+                            break;
+                        case PRIMITIVE2D_ID_TEXTHIERARCHYEMPHASISMARKPRIMITIVE2D:
+                            bInTextColor = bAutomaticFontColor;
+                            break;
+                        default:
+                            break;
+                    }
+                    Primitive2DContainer& rTarget
+                        = bInTextColor ? aDecorationsInTextColor : aDecorations;
+                    if (bDecompose)
+                        rDecoration->get2DDecomposition(rTarget, maViewInformation2D);
+                    else
+                        rTarget.push_back(rDecoration);
+                }
+            };
+            const Primitive2DContainer& rWords = rPrimitive.getOrCreateBrokenUpText();
+            if (rWords.empty())
+                appendDecorations(rPrimitive);
+            for (const Primitive2DReference& rWord : rWords)
+            {
+                if (rWord->getPrimitive2DID() == PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D)
+                    appendDecorations(static_cast<const TextDecoratedPortionPrimitive2D&>(*rWord));
+            }
+            if (!aDecorations.empty())
+            {
+                auto aDecorationArray = mrWriter.startArray("decorations");
+                decomposeAndWrite(aDecorations);
+            }
+            if (!aDecorationsInTextColor.empty())
+            {
+                auto aDecorationArray = mrWriter.startArray("decorationsInTextColor");
+                decomposeAndWrite(aDecorationsInTextColor);
+            }
         }
         break;
 

@@ -297,8 +297,8 @@ namespace cool {
 		): TextSimplePortionPrimitive {
 			const sourceMatrix =
 				Matrix2D.fromArray(source.matrix) ?? Matrix2D.IDENTITY;
-			// The font and decorations come from the source run.
-			return {
+			// The font and the kinds of decoration come from the source run.
+			const run: TextSimplePortionPrimitive = {
 				...source,
 				text: paragraphText,
 				textPosition: start,
@@ -307,6 +307,8 @@ namespace cool {
 				advances,
 				children: undefined,
 			};
+			dropDecorations(run);
+			return run;
 		}
 
 		// Splits a line into one span per source run, so each keeps its font.

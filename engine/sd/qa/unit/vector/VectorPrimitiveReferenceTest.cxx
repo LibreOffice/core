@@ -781,6 +781,73 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testTextDecoratedPortion)
                    sal_Int64(drawinglayer::primitive2d::TEXT_STRIKEOUT_SINGLE));
 }
 
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testTextDecoratedPortionDecorations)
+{
+    // An underline and a strikeout travel as the strokes the drawing layer builds for them, in
+    // their own fixed colors.
+    basegfx::B2DHomMatrix aTextTransform;
+    aTextTransform.scale(20.0, 20.0);
+    aTextTransform.translate(50.0, 100.0);
+
+    drawinglayer::attribute::FontAttribute aFontAttr(u"Liberation Sans"_ustr, u""_ustr,
+                                                     WEIGHT_NORMAL);
+    css::lang::Locale aLocale(u"en"_ustr, u"US"_ustr, u""_ustr);
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D(
+        aTextTransform, u"Hello"_ustr, 0, 5, std::vector<double>{ 10, 20, 30, 40, 50 }, {},
+        aFontAttr, aLocale, basegfx::BColor(0.0, 0.0, 0.0), COL_TRANSPARENT, 0, 100, 0, false,
+        basegfx::BColor(0.0, 0.0, 0.0), basegfx::BColor(1.0, 0.0, 0.0),
+        drawinglayer::primitive2d::TEXT_LINE_NONE, drawinglayer::primitive2d::TEXT_LINE_SINGLE,
+        false, drawinglayer::primitive2d::TEXT_STRIKEOUT_SINGLE));
+
+    auto aJson = writeReference(u"testTextDecoratedPortionDecorations", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "textDecoratedPortion");
+    assertJsonPathSize(aJson, "/primitives/0/decorations", 2);
+    assertJsonPath(aJson, "/primitives/0/decorations/0/type", "polygonStroke");
+    assertJsonPath(aJson, "/primitives/0/decorations/0/line/color", "#ff0000");
+    assertJsonPath(aJson, "/primitives/0/decorations/1/type", "polygonStroke");
+    assertJsonPath(aJson, "/primitives/0/decorations/1/line/color", "#000000");
+    assertJsonPathMissing(aJson, "/primitives/0/decorationsInTextColor");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testTextDecoratedPortionDecorationsInTextColor)
+{
+    // An underline in the automatic color takes the color the text gets, so it travels in the
+    // list of decorations drawn in the text color. The overline has a fixed color.
+    basegfx::B2DHomMatrix aTextTransform;
+    aTextTransform.scale(20.0, 20.0);
+    aTextTransform.translate(50.0, 100.0);
+
+    drawinglayer::attribute::FontAttribute aFontAttr(u"Liberation Sans"_ustr, u""_ustr,
+                                                     WEIGHT_NORMAL);
+    css::lang::Locale aLocale(u"en"_ustr, u"US"_ustr, u""_ustr);
+
+    basegfx::BColor aAutomatic(0.0, 0.0, 0.0);
+    aAutomatic.setAutomatic(true);
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D(
+        aTextTransform, u"Hello"_ustr, 0, 5, std::vector<double>{ 10, 20, 30, 40, 50 }, {},
+        aFontAttr, aLocale, aAutomatic, COL_TRANSPARENT, 0, 100, 0, false,
+        basegfx::BColor(0.0, 0.0, 1.0), aAutomatic, drawinglayer::primitive2d::TEXT_LINE_SINGLE,
+        drawinglayer::primitive2d::TEXT_LINE_DOUBLE));
+
+    auto aJson = writeReference(u"testTextDecoratedPortionDecorationsInTextColor", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/fontcolor", "auto");
+    assertJsonPathSize(aJson, "/primitives/0/decorations", 1);
+    assertJsonPath(aJson, "/primitives/0/decorations/0/line/color", "#0000ff");
+    // A double underline is a group of the stroke and the stroke moved down.
+    assertJsonPathSize(aJson, "/primitives/0/decorationsInTextColor", 1);
+    assertJsonPath(aJson, "/primitives/0/decorationsInTextColor/0/type", "group");
+    assertJsonPathSize(aJson, "/primitives/0/decorationsInTextColor/0/children", 2);
+    assertJsonPath(aJson, "/primitives/0/decorationsInTextColor/0/children/0/type",
+                   "polygonStroke");
+    assertJsonPath(aJson, "/primitives/0/decorationsInTextColor/0/children/1/type", "transform");
+}
+
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testBitmap)
 {
     // bitmap places a raster image through a 2D affine transform.
