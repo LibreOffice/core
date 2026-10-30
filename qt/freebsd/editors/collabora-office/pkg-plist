@@ -6389,9 +6389,10 @@ share/coolwsd/browser/dist/images/tabstop-center.svg
 share/coolwsd/browser/dist/images/tabstop-decimal.svg
 share/coolwsd/browser/dist/images/tabstop-left.svg
 share/coolwsd/browser/dist/images/tabstop-right.svg
-share/coolwsd/browser/dist/images/templates/preview/blank_presentation.png
-share/coolwsd/browser/dist/images/templates/preview/blank_spreadsheet.png
-share/coolwsd/browser/dist/images/templates/preview/blank_writer.png
+share/coolwsd/browser/dist/images/templates/preview/blank_drawing.svg
+share/coolwsd/browser/dist/images/templates/preview/blank_presentation.svg
+share/coolwsd/browser/dist/images/templates/preview/blank_spreadsheet.svg
+share/coolwsd/browser/dist/images/templates/preview/blank_writer.svg
 share/coolwsd/browser/dist/images/text-path_branding.svg
 share/coolwsd/browser/dist/images/toolbar-bg-logo-dark.svg
 share/coolwsd/browser/dist/images/toolbar-bg-logo-notebookbar.svg

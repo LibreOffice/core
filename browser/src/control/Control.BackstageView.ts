@@ -1184,20 +1184,20 @@ class BackstageView extends window.L.Class {
 		switch (type) {
 			case 'calc':
 				name = _('Blank Spreadsheet');
-				previewPath = 'images/templates/preview/blank_spreadsheet.png';
+				previewPath = 'images/templates/preview/blank_spreadsheet.svg';
 				break;
 			case 'impress':
 				name = _('Blank Presentation');
-				previewPath = 'images/templates/preview/blank_presentation.png';
+				previewPath = 'images/templates/preview/blank_presentation.svg';
 				break;
 			case 'draw':
 				name = _('Blank Drawing');
-				previewPath = 'images/templates/preview/blank_drawing.png';
+				previewPath = 'images/templates/preview/blank_drawing.svg';
 				break;
 			case 'writer':
 			default:
 				name = _('Blank Document');
-				previewPath = 'images/templates/preview/blank_writer.png';
+				previewPath = 'images/templates/preview/blank_writer.svg';
 				break;
 		}
 

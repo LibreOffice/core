@@ -1335,10 +1335,6 @@ $(TEMPLATE_MANIFEST): $(srcdir)/templates/templates.js
 	mkdir -p $(dir $@)
 	cp -r $(srcdir)/templates $(DIST_FOLDER)
 
-$(DIST_FOLDER)/images/templates/preview/%.png: $(srcdir)/images/templates/preview/%.png
-	@mkdir -p $(dir $@)
-	@cp $< $@
-
 $(DIST_FOLDER)/admin-bundle.js: $(COOL_ADMIN_DST) \
 	$(srcdir)/admin/main-admin.js $(srcdir)/js/plural.js \
 	$(INTERMEDIATE_DIR)/admin-src.js
