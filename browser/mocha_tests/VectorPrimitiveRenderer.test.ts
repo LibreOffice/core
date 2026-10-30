@@ -1809,6 +1809,142 @@ describe('VectorPrimitiveRenderer', function () {
 	// by the same pipeline a real Impress document would go through,
 	// so the renderer is exercised against a realistic primitive
 	// tree rather than a single isolated primitive.
+	describe('SVG gradients', function () {
+		// A rectangle from (100, 100) to (300, 200), its unit gradient spanning the width, red
+		// to half transparent blue.
+		function svgGradient(fields: any): any {
+			return {
+				type: 'svgLinearGradient',
+				path: 'M100 100h200v100h-200z',
+				bounds: [100, 100, 300, 200],
+				unitToObject: [200, 0, 0, 1, 100, 100],
+				spreadMethod: 'pad',
+				colorStops: [
+					{ offset: 0, color: '#ff0000' },
+					{ offset: 1, color: '#0000ff', opacity: 0.5 },
+				],
+				...fields,
+			};
+		}
+
+		function draw(primitive: any): CanvasRecorder {
+			const recorder = new CanvasRecorder(400, 300);
+			new cool.VectorPrimitiveRenderer().renderPrimitive(
+				recorder as any,
+				primitive,
+			);
+			return recorder;
+		}
+
+		it('fills a linear gradient across the shape in the unit gradient', function () {
+			const recorder = draw(svgGradient({}));
+
+			nodeassert.strictEqual(recorder.gradients.length, 1);
+			const ramp = recorder.gradients[0];
+			nodeassert.strictEqual(ramp.kind, 'linear');
+			nodeassert.deepStrictEqual(ramp.args, [0, 0, 1, 0]);
+			nodeassert.deepStrictEqual(ramp.sortedStops(), [
+				{ offset: 0, color: 'rgba(255,0,0,1)' },
+				{ offset: 1, color: 'rgba(0,0,255,0.5)' },
+			]);
+			nodeassert.ok(
+				recorder.findCall('clip'),
+				'the ramp shows through the path',
+			);
+			nodeassert.deepStrictEqual(
+				recorder.findCall('fillRect')!.args,
+				[0, 0, 1, 100],
+			);
+		});
+
+		it('starts the stops over in each unit of a repeating gradient', function () {
+			// The unit gradient is a quarter of the width, so the shape spans four units.
+			const recorder = draw(
+				svgGradient({
+					spreadMethod: 'repeat',
+					unitToObject: [50, 0, 0, 1, 100, 100],
+				}),
+			);
+
+			const ramp = recorder.gradients[0];
+			nodeassert.deepStrictEqual(ramp.args, [0, 0, 4, 0]);
+			// Each unit has its two stops and the colors of its ends.
+			nodeassert.strictEqual(ramp.stops.length, 16);
+			nodeassert.deepStrictEqual(ramp.stops[4], {
+				offset: 0.25,
+				color: 'rgba(255,0,0,1)',
+			});
+		});
+
+		it('runs every other unit backwards in a reflected gradient', function () {
+			const recorder = draw(
+				svgGradient({
+					spreadMethod: 'reflect',
+					unitToObject: [100, 0, 0, 1, 100, 100],
+				}),
+			);
+
+			const ramp = recorder.gradients[0];
+			nodeassert.deepStrictEqual(ramp.args, [0, 0, 2, 0]);
+			// The second unit starts with blue and ends with red.
+			nodeassert.strictEqual(ramp.stops[4].color, 'rgba(0,0,255,0.5)');
+			nodeassert.strictEqual(ramp.stops[7].color, 'rgba(255,0,0,1)');
+		});
+
+		it('fills a gradient with one stop with its color', function () {
+			const recorder = draw(
+				svgGradient({
+					unitToObject: undefined,
+					colorStops: [{ offset: 0.5, color: '#00ff00' }],
+				}),
+			);
+
+			nodeassert.strictEqual(recorder.gradients.length, 0);
+			const fill = recorder.findCall('fill')!;
+			nodeassert.strictEqual(fill.properties.fillStyle, 'rgba(0,255,0,1)');
+		});
+
+		it('draws nothing for a gradient without a mapping', function () {
+			const recorder = draw(svgGradient({ unitToObject: undefined }));
+
+			nodeassert.strictEqual(recorder.gradients.length, 0);
+			nodeassert.strictEqual(recorder.callsOf('fill').length, 0);
+			nodeassert.strictEqual(recorder.callsOf('fillRect').length, 0);
+		});
+
+		it('fills a radial gradient out to the farthest corner of the shape', function () {
+			// The unit circle has radius 100 around (100, 100), the top left corner, so the
+			// farthest corner is sqrt(2^2 + 1^2) units away.
+			const recorder = draw(
+				svgGradient({
+					type: 'svgRadialGradient',
+					unitToObject: [100, 0, 0, 100, 100, 100],
+				}),
+			);
+
+			const ramp = recorder.gradients[0];
+			nodeassert.strictEqual(ramp.kind, 'radial');
+			const reach = Math.sqrt(5);
+			nodeassert.deepStrictEqual(ramp.args, [0, 0, 0, 0, 0, reach]);
+			nodeassert.strictEqual(ramp.stops[1].offset, 1 / reach);
+		});
+
+		it('moves the small circles of a radial gradient towards the focal point', function () {
+			const recorder = draw(
+				svgGradient({
+					type: 'svgRadialGradient',
+					unitToObject: [100, 0, 0, 100, 100, 100],
+					focalStep: [0.1, 0],
+				}),
+			);
+
+			const reach = Math.sqrt(5);
+			const [x0, y0, r0, x1, y1, r1] = recorder.gradients[0].args;
+			nodeassert.ok(Math.abs(x0 - 0.1 * reach) < 1e-9);
+			nodeassert.deepStrictEqual([y0, r0, x1, y1, r1], [0, 0, 0, 0, reach]);
+		});
+	});
+
 	describe('Document references', function () {
 		// The page rectangle rides on the entry that stands for the page,
 		// which is the first object of a reply.

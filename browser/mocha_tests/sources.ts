@@ -144,6 +144,7 @@
 /// <reference path="../src/canvas/vector/primitive/PolyPolygonHatchPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/ShadowPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/SoftEdgePrimitive.ts" />
+/// <reference path="../src/canvas/vector/primitive/SvgGradientPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/TransparencePrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/SingleLinePrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/TextHighlight.ts" />

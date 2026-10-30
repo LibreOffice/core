@@ -92,6 +92,178 @@ namespace cool {
 			context.restore();
 		}
 
+		renderSvgLinearGradient(
+			context: CanvasRenderingContext2D,
+			primitive: SvgLinearGradientPrimitive,
+		): void {
+			this._paintSvgGradient(context, primitive, (unit) => {
+				const repeats = VectorGradientPrimitiveRenderer._repeats(primitive);
+				// The ramp spans the shape, in whole units for a repeating gradient.
+				const from = repeats ? Math.floor(unit.minX) : Math.min(unit.minX, 0);
+				const to = repeats ? Math.ceil(unit.maxX) : Math.max(unit.maxX, 1);
+				const ramp = context.createLinearGradient(from, 0, to, 0);
+				return VectorGradientPrimitiveRenderer._addSvgStops(
+					ramp,
+					primitive,
+					from,
+					to,
+				);
+			});
+		}
+
+		renderSvgRadialGradient(
+			context: CanvasRenderingContext2D,
+			primitive: SvgRadialGradientPrimitive,
+		): void {
+			this._paintSvgGradient(context, primitive, (unit) => {
+				// The gradient reaches the farthest corner of the shape.
+				const reach = Math.max(
+					Math.hypot(unit.minX, unit.minY),
+					Math.hypot(unit.maxX, unit.minY),
+					Math.hypot(unit.minX, unit.maxY),
+					Math.hypot(unit.maxX, unit.maxY),
+				);
+				if (!(reach > 0)) return null;
+				const to = VectorGradientPrimitiveRenderer._repeats(primitive)
+					? Math.ceil(reach)
+					: Math.max(reach, 1);
+				// The circle of radius r is centered at focalStep * (reach - r).
+				// Canvas moves the center linearly with the radius, so two circles
+				// describe it.
+				const stepX = primitive.focalStep?.[0] ?? 0;
+				const stepY = primitive.focalStep?.[1] ?? 0;
+				const ramp = context.createRadialGradient(
+					stepX * reach,
+					stepY * reach,
+					0,
+					stepX * (reach - to),
+					stepY * (reach - to),
+					to,
+				);
+				return VectorGradientPrimitiveRenderer._addSvgStops(
+					ramp,
+					primitive,
+					0,
+					to,
+				);
+			});
+		}
+
+		// Fill the path with the color of a single stop, or with the ramp laid
+		// out in the unit gradient over the range the shape covers.
+		private _paintSvgGradient(
+			context: CanvasRenderingContext2D,
+			primitive: SvgGradientPrimitive,
+			createRamp: (unit: Range2D) => CanvasGradient | null,
+		): void {
+			const stops = primitive.colorStops;
+			if (!primitive.path || !stops?.length) return;
+			const path = new Path2D(primitive.path);
+
+			if (stops.length === 1) {
+				context.save();
+				context.fillStyle = VectorGradientPrimitiveRenderer._svgStopColor(
+					stops[0],
+				);
+				context.fill(path, 'evenodd');
+				context.restore();
+				return;
+			}
+
+			const unitToObject = Matrix2D.fromArray(primitive.unitToObject);
+			const objectToUnit = unitToObject?.invert();
+			const bounds = Range2D.fromArray(primitive.bounds);
+			if (!unitToObject || !objectToUnit || !bounds) return;
+
+			const corners = [
+				objectToUnit.apply(bounds.minX, bounds.minY),
+				objectToUnit.apply(bounds.maxX, bounds.minY),
+				objectToUnit.apply(bounds.minX, bounds.maxY),
+				objectToUnit.apply(bounds.maxX, bounds.maxY),
+			];
+			const xs = corners.map((corner) => corner.x);
+			const ys = corners.map((corner) => corner.y);
+			const unit = new Range2D(
+				Math.min(...xs),
+				Math.min(...ys),
+				Math.max(...xs),
+				Math.max(...ys),
+			);
+
+			const ramp = createRamp(unit);
+			if (!ramp) return;
+
+			context.save();
+			context.clip(path, 'evenodd');
+			unitToObject.applyTo(context);
+			context.fillStyle = ramp;
+			context.fillRect(unit.minX, unit.minY, unit.width, unit.height);
+			context.restore();
+		}
+
+		// A gradient that repeats more often than this is padded, so a ramp
+		// has a few thousand stops at most.
+		private static readonly _SVG_MAXIMUM_REPEATS = 512;
+
+		private static _repeats(primitive: SvgGradientPrimitive): boolean {
+			return (
+				primitive.spreadMethod === 'repeat' ||
+				primitive.spreadMethod === 'reflect'
+			);
+		}
+
+		// Add the stops to a ramp that runs from gradient position from to to.
+		// Repeat starts the stops over at each whole position, and reflect
+		// runs every other unit backwards.
+		private static _addSvgStops(
+			ramp: CanvasGradient,
+			primitive: SvgGradientPrimitive,
+			from: number,
+			to: number,
+		): CanvasGradient {
+			const stops = primitive.colorStops ?? [];
+			let last = 0;
+			const place = (position: number, stop: SvgGradientStop): void => {
+				// Canvas offsets lie in 0..1 and never decrease.
+				const offset = Math.min(
+					Math.max((position - from) / (to - from), last),
+					1,
+				);
+				ramp.addColorStop(
+					offset,
+					VectorGradientPrimitiveRenderer._svgStopColor(stop),
+				);
+				last = offset;
+			};
+
+			if (
+				!VectorGradientPrimitiveRenderer._repeats(primitive) ||
+				to - from > VectorGradientPrimitiveRenderer._SVG_MAXIMUM_REPEATS
+			) {
+				for (const stop of stops) place(stop.offset, stop);
+				return ramp;
+			}
+
+			for (let unit = from; unit < to; unit++) {
+				const backwards =
+					primitive.spreadMethod === 'reflect' && Math.abs(unit % 2) === 1;
+				const ordered = backwards ? [...stops].reverse() : stops;
+				// Each unit starts and ends with its outermost stop colors.
+				place(unit, ordered[0]);
+				for (const stop of ordered)
+					place(unit + (backwards ? 1 - stop.offset : stop.offset), stop);
+				place(unit + 1, ordered[ordered.length - 1]);
+			}
+			return ramp;
+		}
+
+		private static _svgStopColor(stop: SvgGradientStop): string {
+			return VectorGradientPrimitiveRenderer._cssColor({
+				...VectorGradientPrimitiveRenderer._parseColor(stop.color),
+				alpha: stop.opacity ?? 1,
+			});
+		}
+
 		// Fill the clip with a color ramp, its transparency from an alpha
 		// ramp when there is one.
 		private _paintGradient(

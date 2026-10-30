@@ -208,6 +208,18 @@ namespace cool {
 						primitive as PolyPolygonAlphaGradientPrimitive,
 					);
 					break;
+				case SvgLinearGradientPrimitive.type:
+					this._gradients.renderSvgLinearGradient(
+						context,
+						primitive as SvgLinearGradientPrimitive,
+					);
+					break;
+				case SvgRadialGradientPrimitive.type:
+					this._gradients.renderSvgRadialGradient(
+						context,
+						primitive as SvgRadialGradientPrimitive,
+					);
+					break;
 				case FillHatchPrimitive.type:
 				case PolyPolygonHatchPrimitive.type:
 					this._renderHatch(context, primitive as FillHatchPrimitive);

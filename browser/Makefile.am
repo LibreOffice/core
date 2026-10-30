@@ -541,6 +541,7 @@ COOL_JS_LST =\
 	src/canvas/vector/primitive/PolyPolygonHatchPrimitive.ts \
 	src/canvas/vector/primitive/ShadowPrimitive.ts \
 	src/canvas/vector/primitive/SoftEdgePrimitive.ts \
+	src/canvas/vector/primitive/SvgGradientPrimitive.ts \
 	src/canvas/vector/primitive/TransparencePrimitive.ts \
 	src/canvas/vector/primitive/Primitive.ts \
 	src/canvas/vector/primitive/SingleLinePrimitive.ts \

@@ -306,6 +306,11 @@ void Primitive2dJsonProcessor::writeSvgGradientCommon(
 {
     writePathScaled(rGradient.getPolyPolygon());
 
+    // The unit gradient is the x axis from 0 to 1 for a linear gradient and the unit circle for a
+    // radial one. A single stop or an empty gradient has no mapping.
+    if (rGradient.getCreatesContent() && !rGradient.getSingleEntry())
+        writeMatrixScaled("unitToObject", rGradient.createUnitGradientToObjectTransformation());
+
     switch (rGradient.getSpreadMethod())
     {
         case SpreadMethod::Pad:
@@ -1557,6 +1562,13 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             {
                 mrWriter.put("focalX", rPrimitive.getFocal().getX() * mfScaleFactor);
                 mrWriter.put("focalY", rPrimitive.getFocal().getY() * mfScaleFactor);
+
+                // The circle of radius r in the unit gradient is centered at this step times
+                // (reach - r).
+                const basegfx::B2DVector aFocalStep(rPrimitive.getFocal() - rPrimitive.getStart());
+                auto aStepArray = mrWriter.startArray("focalStep");
+                mrWriter.putSimpleValue(aFocalStep.getX());
+                mrWriter.putSimpleValue(aFocalStep.getY());
             }
 
             writeSvgGradientCommon(rPrimitive);

@@ -13,6 +13,7 @@
 
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 
@@ -55,6 +56,7 @@
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
+#include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 
 #include <basegfx/color/bcolormodifier.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
@@ -287,6 +289,35 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolygonStrokeNoJoin)
                              || oPath->indexOf('q') >= 0 || oPath->indexOf('t') >= 0;
         CPPUNIT_ASSERT_EQUAL(nEdge != 1, bCurved);
     }
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testSvgLinearGradient)
+{
+    // A linear gradient carries its stops, its spread and a mapping that puts 0 at its start and
+    // 1 at its end.
+    const basegfx::B2DPolyPolygon aPolyPolygon(
+        basegfx::utils::createPolygonFromRect(basegfx::B2DRange(100.0, 100.0, 300.0, 200.0)));
+    SvgGradientEntryVector aEntries{
+        SvgGradientEntry(0.0, basegfx::BColor(1.0, 0.0, 0.0), 1.0),
+        SvgGradientEntry(1.0, basegfx::BColor(0.0, 0.0, 1.0), 0.5),
+    };
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new SvgLinearGradientPrimitive2D(
+        basegfx::B2DHomMatrix(), aPolyPolygon, std::move(aEntries), basegfx::B2DPoint(0.0, 0.0),
+        basegfx::B2DPoint(1.0, 0.0), false, SpreadMethod::Repeat));
+
+    auto aJson = writeReference(u"testSvgLinearGradient", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "svgLinearGradient");
+    assertJsonPath(aJson, "/primitives/0/spreadMethod", "repeat");
+    assertJsonPathSize(aJson, "/primitives/0/colorStops", 2);
+    assertJsonPathDouble(aJson, "/primitives/0/colorStops/1/opacity", 0.5, 1e-9);
+    assertJsonPathSize(aJson, "/primitives/0/unitToObject", 6);
+    // The unit gradient spans the width of the rectangle.
+    assertJsonPathDouble(aJson, "/primitives/0/unitToObject/0", 200.0, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/unitToObject/4", 100.0, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/unitToObject/5", 100.0, 1e-9);
 }
 
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolygonStrokeArrow)
