@@ -320,7 +320,8 @@ std::string ClientSession::getClipboardURI(bool encode)
 
 std::string ClientSession::createMediaURI(const std::string& subPath, const std::string& id)
 {
-    return createPublicURI(subPath, id, /*encode=*/false, "&MediaKey=" + _mediaKey);
+    return Uri::encode(createPublicURI(subPath, id, /*encode=*/false, "&MediaKey=" + _mediaKey),
+                       "&");
 }
 
 std::string ClientSession::createPublicURI(const std::string& subPath, const std::string& tag, bool encode,
@@ -3505,7 +3506,7 @@ bool ClientSession::handlePresentationInfo(const std::shared_ptr<Message>& paylo
         record.stringify(recordStr);
         docBroker->addEmbeddedMedia(id, recordStr.str());
 
-        return Uri::encode(createMediaURI("media", id), "&");
+        return createMediaURI("media", id);
     };
 
     Poco::JSON::Object::Ptr rootObject;
@@ -4060,10 +4061,8 @@ bool ClientSession::handleKitToClientMessage(const std::shared_ptr<Message>& pay
                         docBroker->addEmbeddedMedia(
                             id, json); // Capture the original message with internal URL.
 
-                        const std::string mediaUrl =
-                            Uri::encode(createMediaURI("media", id), "&");
-                        const std::string mediaVTT =
-                            Uri::encode(createMediaURI("mediavtt", id), "&");
+                        const std::string mediaUrl = createMediaURI("media", id);
+                        const std::string mediaVTT = createMediaURI("mediavtt", id);
                         object->set("url", mediaUrl); // Replace the url with the public one.
                         object->set("mimeType", "video/mp4"); //FIXME: get this from the source json
                         if (!mediaVTT.empty())
@@ -5474,8 +5473,7 @@ std::string ClientSession::processSVGContent(const std::string& svg)
         docBroker->addEmbeddedMedia(id, R"({ "action":"update","id":")" + id + R"(","url":")" +
                                             fileUrl + "\"}");
 
-        const std::string mediaUrl =
-            Uri::encode(createMediaURI("media", id), "&");
+        const std::string mediaUrl = createMediaURI("media", id);
         oss << "src=\"" << mediaUrl << '"';
         pos = end + 1;
     }

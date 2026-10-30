@@ -414,7 +414,8 @@ public:
     std::string createPublicURI(const std::string& subPath, const std::string& tag, bool encode,
                                 const std::string& query = std::string());
 
-    /// Create the unencoded public URI of the embedded media with the given id, for this view.
+    /// Create the public URI of the embedded media with the given id, for this view. The whole URI,
+    /// including the '&' between its query parameters, is encoded once more.
     std::string createMediaURI(const std::string& subPath, const std::string& id);
 
     /// Adds and/or modified the copied payload before sending on to the client.
