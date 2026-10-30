@@ -13,6 +13,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,box2d,$(BOX2D_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_add_patches,box2d, \
 	external/box2d/wasm.patch \
+	external/box2d/win32.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
