@@ -97,6 +97,26 @@ OString textColorToJson(const basegfx::BColor& rColor)
 
     return colorToHex(rColor);
 }
+
+// A stroke with no line join fills each edge as an area of its own, with the caps only at the
+// ends of an open line. Canvas has no such stroke.
+bool hasNoLineJoin(const drawinglayer::attribute::LineAttribute& rLineAttribute)
+{
+    return rLineAttribute.getLineJoin() == basegfx::B2DLineJoin::NONE
+           && !basegfx::fTools::equalZero(rLineAttribute.getWidth());
+}
+
+// A line join is drawn only where two edges meet, so a stroke of single edges looks the same
+// with any line join.
+bool hasCorner(const basegfx::B2DPolyPolygon& rPolyPolygon)
+{
+    for (const basegfx::B2DPolygon& rPolygon : rPolyPolygon)
+    {
+        if (rPolygon.count() > 2 || (rPolygon.isClosed() && rPolygon.count() > 1))
+            return true;
+    }
+    return false;
+}
 } // end anonymous namespace
 
 namespace drawinglayer
@@ -793,6 +813,15 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
 {
     sal_uInt32 nId = rBasePrimitive.getPrimitive2DID();
 
+    // The areas the drawing layer fills for the primitive, as a group.
+    const auto writeDecompositionAsGroup = [this, &rBasePrimitive]() {
+        mrWriter.put("type", "group");
+        Primitive2DContainer aContainer;
+        rBasePrimitive.get2DDecomposition(aContainer, maViewInformation2D);
+        auto aChildArray = mrWriter.startArray("children");
+        decomposeAndWrite(aContainer);
+    };
+
     switch (nId)
     {
         case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D:
@@ -986,6 +1015,12 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
         case PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D:
         {
             const auto& rPrimitive = static_cast<const PolygonStrokePrimitive2D&>(rBasePrimitive);
+            if (hasNoLineJoin(rPrimitive.getLineAttribute())
+                && hasCorner(basegfx::B2DPolyPolygon(rPrimitive.getB2DPolygon())))
+            {
+                writeDecompositionAsGroup();
+                break;
+            }
             mrWriter.put("type", "polygonStroke");
             const basegfx::B2DPolyPolygon aScaled
                 = scalePolyPolygon(basegfx::B2DPolyPolygon(rPrimitive.getB2DPolygon()));
@@ -999,6 +1034,12 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
         {
             const auto& rPrimitive
                 = static_cast<const PolyPolygonStrokePrimitive2D&>(rBasePrimitive);
+            if (hasNoLineJoin(rPrimitive.getLineAttribute())
+                && hasCorner(rPrimitive.getB2DPolyPolygon()))
+            {
+                writeDecompositionAsGroup();
+                break;
+            }
             mrWriter.put("type", "polyPolygonStroke");
             writePathScaled(rPrimitive.getB2DPolyPolygon());
             writeLineAttributeScaled(rPrimitive.getLineAttribute());

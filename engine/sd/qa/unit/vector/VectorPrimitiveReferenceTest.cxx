@@ -254,6 +254,41 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolygonStroke)
     assertJsonPathExists(aJson, "/primitives/0/path");
 }
 
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolygonStrokeNoJoin)
+{
+    // A stroke with no line join is written as the areas the drawing layer fills, one per edge.
+    // The round caps are only at the two ends of the line, so only the first and the last area
+    // have curves.
+    basegfx::B2DPolygon aPolygon;
+    aPolygon.append(basegfx::B2DPoint(0.0, 0.0));
+    aPolygon.append(basegfx::B2DPoint(100.0, 0.0));
+    aPolygon.append(basegfx::B2DPoint(100.0, 100.0));
+    aPolygon.append(basegfx::B2DPoint(200.0, 100.0));
+
+    drawinglayer::attribute::LineAttribute aLine(basegfx::BColor(0.0, 0.0, 0.0), 20.0,
+                                                 basegfx::B2DLineJoin::NONE,
+                                                 css::drawing::LineCap_ROUND);
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new PolygonStrokePrimitive2D(aPolygon, aLine));
+
+    auto aJson = writeReference(u"testPolygonStrokeNoJoin", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "group");
+    assertJsonPath(aJson, "/primitives/0/children/0/type", "group");
+    assertJsonPathSize(aJson, "/primitives/0/children/0/children", 3);
+    for (sal_Int32 nEdge = 0; nEdge < 3; ++nEdge)
+    {
+        const OString sEdge = "/primitives/0/children/0/children/" + OString::number(nEdge);
+        assertJsonPath(aJson, rtl::Concat2View(sEdge + "/type"), "polyPolygonColor");
+        const std::optional<OString> oPath = aJson.getString(rtl::Concat2View(sEdge + "/path"));
+        CPPUNIT_ASSERT(oPath.has_value());
+        const bool bCurved = oPath->indexOf('c') >= 0 || oPath->indexOf('s') >= 0
+                             || oPath->indexOf('q') >= 0 || oPath->indexOf('t') >= 0;
+        CPPUNIT_ASSERT_EQUAL(nEdge != 1, bCurved);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolygonStrokeArrow)
 {
     // An arrow goes out as a group of the line, cut back under the head, and the filled head.

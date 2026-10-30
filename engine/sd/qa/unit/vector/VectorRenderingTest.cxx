@@ -23,6 +23,8 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
+#include <com/sun/star/drawing/LineCap.hpp>
+#include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -40,6 +42,7 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdopath.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/svdotable.hxx>
@@ -50,7 +53,10 @@
 #include <svx/xflclit.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xlineit0.hxx>
+#include <svx/xlncapit.hxx>
 #include <svx/xlnclit.hxx>
+#include <svx/xlinjoit.hxx>
+#include <svx/xlnwtit.hxx>
 
 #include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>
@@ -72,7 +78,9 @@
 #include <fstream>
 #include <optional>
 #include <set>
+#include <string>
 #include <string_view>
+#include <vector>
 
 using namespace css;
 using namespace ::cpo;
@@ -536,6 +544,84 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testSingleRectangle)
     assertJsonPath(*oStroke, "type", "polygonStroke");
     assertJsonPath(*oStroke, "line/color", "#000000");
     assertJsonPathExists(*oStroke, "path");
+}
+
+/// The paths of the primitives of the given type in a subtree, in paint order.
+void collectPaths(const boost::property_tree::ptree& rTree, std::string_view sType,
+                  std::vector<std::string>& rPaths)
+{
+    if (rTree.get<std::string>("type", "") == sType)
+        rPaths.push_back(rTree.get<std::string>("path", ""));
+    for (const auto& rChild : rTree)
+        collectPaths(rChild.second, sType, rPaths);
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testStrokeNoLineJoin)
+{
+    // Thick strokes with no line join and round caps: an open zigzag, a closed triangle and a
+    // rectangle. Each edge is filled as an area of its own, and only the two ends of the open
+    // zigzag have a round cap, so only its first and its last area have curves. The outline of a
+    // rectangle starts in the middle of its bottom edge, so it has five edges.
+    createBlankDoc();
+    SdrPage* pPage = page(1);
+    SdrModel& rModel = pPage->getSdrModelFromSdrPage();
+    const auto addStroked = [pPage](SdrObject* pObject) {
+        pObject->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
+        pObject->SetMergedItem(XLineStyleItem(drawing::LineStyle_SOLID));
+        pObject->SetMergedItem(XLineColorItem(OUString(), Color(0x1f4e79)));
+        pObject->SetMergedItem(XLineWidthItem(500));
+        pObject->SetMergedItem(XLineJointItem(drawing::LineJoint_NONE));
+        pObject->SetMergedItem(XLineCapItem(drawing::LineCap_ROUND));
+        pPage->NbcInsertObject(pObject);
+    };
+
+    basegfx::B2DPolygon aZigzag;
+    aZigzag.append(basegfx::B2DPoint(1500, 6300));
+    aZigzag.append(basegfx::B2DPoint(3000, 3800));
+    aZigzag.append(basegfx::B2DPoint(4500, 6300));
+    aZigzag.append(basegfx::B2DPoint(6000, 3800));
+    aZigzag.append(basegfx::B2DPoint(7500, 6300));
+    rtl::Reference<SdrPathObj> pZigzag
+        = new SdrPathObj(rModel, SdrObjKind::PolyLine, basegfx::B2DPolyPolygon(aZigzag));
+    addStroked(pZigzag.get());
+
+    basegfx::B2DPolygon aTriangle;
+    aTriangle.append(basegfx::B2DPoint(11000, 6300));
+    aTriangle.append(basegfx::B2DPoint(12750, 3800));
+    aTriangle.append(basegfx::B2DPoint(14500, 6300));
+    aTriangle.setClosed(true);
+    rtl::Reference<SdrPathObj> pTriangle
+        = new SdrPathObj(rModel, SdrObjKind::Polygon, basegfx::B2DPolyPolygon(aTriangle));
+    addStroked(pTriangle.get());
+
+    rtl::Reference<SdrRectObj> pRectangle
+        = new SdrRectObj(rModel, tools::Rectangle(Point(18500, 3800), Size(4000, 2500)));
+    addStroked(pRectangle.get());
+
+    auto aJson = getVectorPrimitives(u"testStrokeNoLineJoin");
+
+    CPPUNIT_ASSERT_EQUAL(size_t(4), aJson.getSize("/objects").value_or(0));
+    const std::vector<std::vector<bool>> aCurvedEdges = { { true, false, false, true },
+                                                          { false, false, false },
+                                                          { false, false, false, false, false } };
+    for (size_t nObject = 0; nObject < aCurvedEdges.size(); ++nObject)
+    {
+        const auto oObject
+            = aJson.at(rtl::Concat2View("/objects/" + OString::number(sal_Int32(nObject + 1))));
+        CPPUNIT_ASSERT(oObject.has_value());
+        std::vector<std::string> aStrokes;
+        collectPaths(oObject->tree(), "polygonStroke", aStrokes);
+        CPPUNIT_ASSERT(aStrokes.empty());
+
+        std::vector<std::string> aAreas;
+        collectPaths(oObject->tree(), "polyPolygonColor", aAreas);
+        CPPUNIT_ASSERT_EQUAL(aCurvedEdges[nObject].size(), aAreas.size());
+        for (size_t nEdge = 0; nEdge < aAreas.size(); ++nEdge)
+        {
+            const bool bCurved = aAreas[nEdge].find_first_of("csqt") != std::string::npos;
+            CPPUNIT_ASSERT_EQUAL(bool(aCurvedEdges[nObject][nEdge]), bCurved);
+        }
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPartVersionRisesOnObjectChange)
