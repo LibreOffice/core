@@ -21,15 +21,12 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include "slideshow.hxx"
 
-namespace com::sun::star::presentation
-{
-class XPresentation2;
-}
+#include <rtl/ref.hxx>
+
 class SdDrawDocument;
 
-css::uno::Reference<css::presentation::XPresentation2>
-CreatePresentation(SdDrawDocument const& rDocument);
+rtl::Reference<sd::SlideShow> CreatePresentation(SdDrawDocument const& rDocument);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

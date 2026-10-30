@@ -1236,7 +1236,7 @@ bool SlideShow::dependsOn( ViewShellBase const * pViewShellBase )
     return mxController.is() && (pViewShellBase == mpCurrentViewShellBase) && mpFullScreenViewShellBase;
 }
 
-Reference< presentation::XPresentation2 > CreatePresentation( const SdDrawDocument& rDocument )
+rtl::Reference<sd::SlideShow> CreatePresentation(const SdDrawDocument& rDocument)
 {
     return SlideShow::Create(const_cast<SdDrawDocument*>(&rDocument));
 }
