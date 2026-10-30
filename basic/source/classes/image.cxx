@@ -210,7 +210,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                 if (SbiGood(r)
                     && (nLen > r.remainingSize()
                         || std::any_of(mvStringOffsets.begin(), mvStringOffsets.end(),
-                                       [nLen](sal_uInt32 nOff) { return nOff >= nLen; })))
+                                       [nLen](sal_uInt32 nOff_) { return nOff_ >= nLen; })))
                 {
                     SAL_WARN("basic", "Parsing error: string pool of " << nLen
                              << " does not fit the record or its string offsets");
