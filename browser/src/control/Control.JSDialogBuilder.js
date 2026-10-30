@@ -1913,7 +1913,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		switch (lookupId) {
 			case 'save':
 				$(elem).on('mouseenter', window.touch.mouseOnly(function() {
-					if (builder.map.tooltip)
+					if (builder.map.tooltip && !builder.map.tooltip.isPointerHeld())
 						builder.map.tooltip.show(elem, builder.map.getLastModDateValue()); // Show the tooltip with the correct content
 				}));
 

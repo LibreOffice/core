@@ -32,9 +32,13 @@ describe('Tooltip', function () {
 		return container.style.visibility === 'visible';
 	}
 
-	function pointerAt(x: number, y: number): void {
+	function pointerAt(x: number, y: number, buttons: number = 0): void {
 		document.dispatchEvent(
-			new (window as any).MouseEvent('mousemove', { clientX: x, clientY: y }),
+			new (window as any).MouseEvent('mousemove', {
+				clientX: x,
+				clientY: y,
+				buttons: buttons,
+			}),
 		);
 	}
 
@@ -55,6 +59,21 @@ describe('Tooltip', function () {
 			new (window as any).MouseEvent('click', {
 				clientX: x,
 				clientY: y,
+				bubbles: true,
+			}),
+		);
+	}
+
+	function pointerEvent(
+		type: string,
+		target: EventTarget,
+		buttons: number,
+	): void {
+		target.dispatchEvent(
+			new (window as any).MouseEvent(type, {
+				clientX: BOX.left - 50,
+				clientY: BOX.top - 50,
+				buttons: buttons,
 				bubbles: true,
 			}),
 		);
@@ -199,6 +218,67 @@ describe('Tooltip', function () {
 		tooltip.beginShow(trigger);
 
 		tooltip.dismiss();
+		advanceClock(showDelay);
+
+		nodeassert.strictEqual(shown(), false);
+	});
+
+	it('shows nothing for a widget the pointer crosses with a button held', function () {
+		pointerAt(BOX.left - 50, BOX.top - 50, 1);
+
+		tooltip.beginShow(trigger);
+		advanceClock(showDelay);
+
+		nodeassert.strictEqual(shown(), false);
+	});
+
+	it('drops a waiting show once a button is pressed and the pointer moves', function () {
+		tooltip.beginShow(trigger);
+		pointerAt(BOX.left - 50, BOX.top - 50, 1);
+
+		advanceClock(showDelay);
+
+		nodeassert.strictEqual(shown(), false);
+	});
+
+	it('shows tooltips again once the button is released', function () {
+		pointerAt(BOX.left - 50, BOX.top - 50, 1);
+		pointerAt(BOX.left - 50, BOX.top - 50, 0);
+
+		tooltip.beginShow(trigger);
+		advanceClock(showDelay);
+
+		nodeassert.strictEqual(shown(), true);
+		nodeassert.strictEqual(container.textContent, 'Undo');
+	});
+
+	it('knows the button is up when a hover starts before any move', function () {
+		pointerAt(BOX.left - 50, BOX.top - 50, 1);
+		pointerEvent('mouseover', trigger, 0);
+
+		tooltip.beginShow(trigger);
+		advanceClock(showDelay);
+
+		nodeassert.strictEqual(shown(), true);
+	});
+
+	it('shows the tooltip of the widget that a drag ends on', function () {
+		pointerAt(BOX.left - 50, BOX.top - 50, 1);
+		tooltip.beginShow(trigger);
+
+		pointerEvent('mouseup', trigger, 0);
+		advanceClock(showDelay);
+
+		nodeassert.strictEqual(shown(), true);
+		nodeassert.strictEqual(container.textContent, 'Undo');
+	});
+
+	it('shows nothing after a drag that only crossed a widget', function () {
+		pointerAt(BOX.left - 50, BOX.top - 50, 1);
+		tooltip.beginShow(trigger);
+		tooltip.beginHide();
+
+		pointerEvent('mouseup', document, 0);
 		advanceClock(showDelay);
 
 		nodeassert.strictEqual(shown(), false);

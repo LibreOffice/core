@@ -32,6 +32,18 @@ class Tooltip {
 			window.L.bind(this.pointerMoved, this),
 			{ capture: true, passive: true },
 		);
+		// mouseover comes before the mouseenter of the same step, so a hover that
+		// starts there already knows whether a button is held.
+		win.document.addEventListener(
+			'mouseover',
+			window.L.bind(this.buttonsChanged, this),
+			{ capture: true, passive: true },
+		);
+		win.document.addEventListener(
+			'mouseup',
+			window.L.bind(this.buttonsChanged, this),
+			{ capture: true, passive: true },
+		);
 
 		win.addEventListener('keydown', window.L.bind(this.keyDown, this), {
 			capture: true,
@@ -45,17 +57,31 @@ class Tooltip {
 	}
 
 	beginShow(elem) {
+		if (this._pointerHeld) {
+			// Shown once the button is released, if the pointer is still on it.
+			this._heldOver = elem;
+			return;
+		}
 		if (this._cancel || this._disabled) return;
 
 		app.timerRegistry.clearTimeout(this._showTimeout);
 		this._showTimeout = app.timerRegistry.setTimeout(
 			'tooltip',
-			window.L.bind(this.show, this, elem),
+			() => {
+				if (!this._pointerHeld) this.show(elem);
+			},
 			this._options.timeout,
 		);
 	}
 
+	// True while a mouse button is held down, as in a drag. The pointer then passes over
+	// widgets on its way somewhere else, so hovering them shows no tooltip.
+	isPointerHeld() {
+		return !!this._pointerHeld;
+	}
+
 	beginHide() {
+		this._heldOver = null;
 		if (this._cancel || this._disabled || this._locked) return;
 
 		app.timerRegistry.clearTimeout(this._showTimeout);
@@ -234,6 +260,18 @@ class Tooltip {
 		this._current = null;
 	}
 
+	// A drag that ends on a widget leaves the pointer resting there, so that widget
+	// gets the tooltip that its hover was refused during the drag.
+	buttonsChanged(e) {
+		const wasHeld = this._pointerHeld;
+		this._pointerHeld = !!e.buttons;
+		if (!wasHeld || this._pointerHeld || !this._heldOver) return;
+
+		const elem = this._heldOver;
+		this._heldOver = null;
+		this.beginShow(elem);
+	}
+
 	// True when the pointer of the mouse event e is inside the rectangle of the tooltip.
 	isPointerOn(e) {
 		const box = this._container.getBoundingClientRect();
@@ -246,6 +284,7 @@ class Tooltip {
 	}
 
 	pointerMoved(e) {
+		this.buttonsChanged(e);
 		if (this._disabled || !this._current) return;
 
 		if (this.isPointerOn(e)) this.mouseEnter();
