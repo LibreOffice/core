@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <comphelper/kit.hxx>
-
 #include <docmodel/theme/ColorSet.hxx>
 
 #include <editeng/colritem.hxx>
@@ -174,20 +172,17 @@ void updateSdrObject(model::ColorSet const& rColorSet, SdrObject* pObject, SdrVi
 void notifyKit(std::shared_ptr<model::ColorSet> const& pColorSet,
                const std::set<Color>& rDocumentColors)
 {
-    if (comphelper::COKit::isActive())
-    {
-        svx::ThemeColorPaletteManager aManager(pColorSet);
-        tools::JsonWriter aTree;
+    svx::ThemeColorPaletteManager aManager(pColorSet);
+    tools::JsonWriter aTree;
 
-        if (pColorSet)
-            aManager.generateJSON(aTree);
-        if (rDocumentColors.size())
-            PaletteManager::generateJSON(aTree, rDocumentColors);
+    if (pColorSet)
+        aManager.generateJSON(aTree);
+    if (rDocumentColors.size())
+        PaletteManager::generateJSON(aTree, rDocumentColors);
 
-        PaletteManager::generateColorNamesJSON(aTree);
+    PaletteManager::generateColorNamesJSON(aTree);
 
-        KitHelper::notifyAllViews(COKitCallbackType::COLOR_PALETTES, aTree.finishAndGetAsOString());
-    }
+    KitHelper::notifyAllViews(COKitCallbackType::COLOR_PALETTES, aTree.finishAndGetAsOString());
 }
 
 } // end svx::theme namespace

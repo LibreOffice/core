@@ -410,8 +410,6 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
             break;
         }
     }
-    if (m_pPanel && !comphelper::COKit::isActive())
-        m_pPanel->TriggerDeckLayouting();
 }
 
 void AreaPropertyPanelBase::FillStyleChanged(bool bUpdateModel)
@@ -705,9 +703,6 @@ void AreaPropertyPanelBase::FillStyleChanged(bool bUpdateModel)
     mxFillEffectBox->set_visible(bShowToolBoxColor || bShowLbFillAttr || bShowLbFillGradFrom);
 
     meLastXFS = static_cast<sal_uInt16>(nPos);
-
-    if (m_pPanel && !comphelper::COKit::isActive())
-        m_pPanel->TriggerDeckLayouting();
 }
 
 void AreaPropertyPanelBase::ImpUpdateTransparencies()

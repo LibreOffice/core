@@ -15,7 +15,6 @@
 #include <sfx2/viewsh.hxx>
 #include <unotools/datetime.hxx>
 #include <tools/datetimeutils.hxx>
-#include <comphelper/kit.hxx>
 #include <COKit/COKit.hxx>
 
 using namespace css;
@@ -61,18 +60,12 @@ protected:
 void KitCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewShell,
                       Annotation& rAnnotation)
 {
-    if (!comphelper::COKit::isActive())
-        return;
-
     OString aPayload = rAnnotation.ToJSON(nType);
     pViewShell->viewCallback(COKitCallbackType::COMMENT, aPayload);
 }
 
 void KitCommentNotifyAll(CommentNotificationType nType, Annotation& rAnnotation)
 {
-    if (!comphelper::COKit::isActive())
-        return;
-
     // The comment belongs to a single document. When several documents share
     // one process (like in case of CODA), other documents may have views on the
     // global view list, so only notify views whose drawing model is the one that

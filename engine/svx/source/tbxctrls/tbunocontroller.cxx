@@ -25,7 +25,6 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/unique_unlock.hxx>
-#include <comphelper/kit.hxx>
 #include <rtl/math.hxx>
 #include <utility>
 #include <vcl/event.hxx>
@@ -233,12 +232,7 @@ void SvxFontSizeBox_Base::statusChanged_Impl( tools::Long nPoint, bool bErase )
 {
     if ( !bErase )
     {
-        // convert the metric
-        tools::Long nVal = nPoint;
-
-        // changed => set new value
-        if (m_xWidget->get_value() != nVal || comphelper::COKit::isActive())
-            m_xWidget->set_value(nVal);
+        m_xWidget->set_value(nPoint);
     }
     else
     {

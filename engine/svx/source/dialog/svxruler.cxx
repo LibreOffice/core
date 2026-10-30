@@ -48,7 +48,6 @@
 #include <COKit/COKit.hxx>
 #include <tools/json_writer.hxx>
 #include <tools/UnitConversion.hxx>
-#include <comphelper/kit.hxx>
 #include "rlrcitem.hxx"
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -1242,8 +1241,6 @@ void SvxRuler::CreateJsonNotification(tools::JsonWriter& rJsonWriter)
 
 void SvxRuler::NotifyKit()
 {
-    if (!comphelper::COKit::isActive())
-        return;
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if (!pViewShell)
         return;

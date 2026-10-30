@@ -22,7 +22,6 @@
 #include <svx/sdprcitm.hxx>
 #include <svx/sdsxyitm.hxx>
 #include <svx/sdshcitm.hxx>
-#include <comphelper/kit.hxx>
 #include <svl/itemset.hxx>
 
 using namespace css;
@@ -106,11 +105,8 @@ IMPL_LINK_NOARG(ShadowPropertyPanel, ClickShadowHdl, weld::Toggleable&, void)
         GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_SHADOW,
                 SfxCallMode::SLOT, { &aItem });
 
-        if (comphelper::COKit::isActive())
-        {
-            mxShowShadow->set_state( TRISTATE_FALSE );
-            UpdateControls();
-        }
+        mxShowShadow->set_state( TRISTATE_FALSE );
+        UpdateControls();
     }
     else
     {
@@ -121,11 +117,8 @@ IMPL_LINK_NOARG(ShadowPropertyPanel, ClickShadowHdl, weld::Toggleable&, void)
         if (mxShadowDistance->get_value(FieldUnit::POINT) == 0)
             mxShadowDistance->set_value( 8, FieldUnit::POINT );
 
-        if (comphelper::COKit::isActive())
-        {
-            mxShowShadow->set_state( TRISTATE_TRUE );
-            UpdateControls();
-        }
+        mxShowShadow->set_state( TRISTATE_TRUE );
+        UpdateControls();
     }
 }
 

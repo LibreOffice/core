@@ -250,7 +250,6 @@ private:
     Size maBmpSize;
 
     DECL_LINK( ItemActivatedHdl, weld::IconView&, bool );
-    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
     void FillIconView();
 
     virtual void GrabFocus() override
@@ -282,14 +281,6 @@ SvxLineEndWindow::SvxLineEndWindow(SvxLineEndToolBoxControl* pControl, weld::Wid
     DBG_ASSERT( mpLineEndList.is(), "LineEndList not found" );
 
     mxLineEndIV->connect_item_activated( LINK( this, SvxLineEndWindow, ItemActivatedHdl ) );
-
-    // Avoid LibreOffice Kit crash: tooltip handlers cause segfault during JSDialog
-    // serialization when popup widgets are destroyed/recreated during character formatting resets.
-    // Tooltip event binding is not needed for LibreOffice Kit
-    if (!comphelper::COKit::isActive())
-    {
-        mxLineEndIV->connect_query_tooltip(LINK(this, SvxLineEndWindow, QueryTooltipHdl));
-    }
 
     // IconView fill with entries of LineEndList
     FillIconView();
@@ -352,44 +343,6 @@ IMPL_LINK_NOARG(SvxLineEndWindow, ItemActivatedHdl, weld::IconView&, bool)
     mxControl->EndPopupMode();
 
     return true;
-}
-
-IMPL_LINK(SvxLineEndWindow, QueryTooltipHdl, const weld::TreeIter&, rIter, OUString)
-{
-    OUString sId = mxLineEndIV->get_id(rIter);
-    if (sId.isEmpty())
-        return OUString();
-
-    sal_uInt16 nId = sId.toUInt32();
-
-    if (nId == 1 || nId == 2)
-    {
-        return SvxResId(RID_SVXSTR_NONE);
-    }
-
-    if (!mpLineEndList.is())
-        return OUString();
-
-    tools::Long nEntryIndex;
-    if (nId % 2) // beginning of line
-    {
-        nEntryIndex = (nId - 1) / 2 - 1;
-    }
-    else // end of line
-    {
-        nEntryIndex = nId / 2 - 2;
-    }
-
-    if (nEntryIndex >= 0 && nEntryIndex < mpLineEndList->Count())
-    {
-        const XLineEndEntry* pEntry = mpLineEndList->GetLineEnd(nEntryIndex);
-        if (pEntry)
-        {
-            return pEntry->GetName();
-        }
-    }
-
-    return OUString();
 }
 
 void SvxLineEndWindow::FillIconView()
@@ -558,14 +511,6 @@ SvxLineBox::SvxLineBox(SvxLineStyleToolBoxControl* pControl, weld::Widget* pPare
         mxLineStyleIV->select(nInitialIndex);
 
     mxLineStyleIV->connect_item_activated( LINK( this, SvxLineBox, ItemActivatedHdl ) );
-
-    // Avoid LibreOffice Kit crash: tooltip handlers cause segfault during JSDialog
-    // serialization when popup widgets are destroyed/recreated during character formatting resets.
-    // Tooltip event binding is not needed for LibreOffice Kit
-    if (!comphelper::COKit::isActive())
-    {
-        mxLineStyleIV->connect_query_tooltip(LINK(this, SvxLineBox, QueryTooltipHdl));
-    }
 }
 
 void SvxLineBox::GrabFocus()
@@ -679,51 +624,6 @@ IMPL_LINK_NOARG(SvxLineBox, ItemActivatedHdl, weld::IconView&, bool)
     mxControl->EndPopupMode();
 
     return true;
-}
-
-IMPL_LINK(SvxLineBox, QueryTooltipHdl, const weld::TreeIter&, rIter, OUString)
-{
-    OUString sId = mxLineStyleIV->get_id(rIter);
-    if (sId.isEmpty())
-        return OUString();
-
-    sal_Int32 nPos = sId.toUInt32();
-    --nPos; // Convert from 1-based ID to 0-based position
-
-    SfxObjectShell* pSh = SfxObjectShell::Current();
-    if (!pSh)
-        return OUString();
-
-    const SvxDashListItem* pItem = pSh->GetItem(SID_DASH_LIST);
-    if (!pItem)
-        return OUString();
-
-    XDashListRef pList = pItem->GetDashList();
-    if (!pList.is())
-        return OUString();
-
-    switch (nPos)
-    {
-        case 0:
-            return pList->GetStringForUiNoLine();
-        case 1:
-            return pList->GetStringForUiSolidLine();
-        default:
-        {
-            tools::Long nDashIndex = nPos - 2;
-            if (nDashIndex >= 0 && nDashIndex < pList->Count())
-            {
-                const XDashEntry* pEntry = pList->GetDash(nDashIndex);
-                if (pEntry)
-                {
-                    return pEntry->GetName();
-                }
-            }
-            break;
-        }
-    }
-
-    return OUString();
 }
 
 void SvxLineBox::FillControl()

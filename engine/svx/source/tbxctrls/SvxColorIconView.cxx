@@ -19,23 +19,11 @@
 
 #include <svx/SvxColorIconView.hxx>
 #include <svx/xtable.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bitmap.hxx>
 #include <osl/diagnose.h>
-#include <comphelper/kit.hxx>
 
-sal_uInt32 SvxColorIconView::getEntryEdgeLength()
-{
-    if (comphelper::COKit::isActive())
-    {
-        return 26;
-    }
-
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    return rStyleSettings.GetListBoxPreviewDefaultPixelSize().Height() + 1;
-}
+constexpr sal_uInt32 constEntryEdgeLength = 26;
 
 void SvxColorIconView::addEntriesForXColorList(weld::IconView& pIconView,
                                                const XColorList& rXColorList)
@@ -98,7 +86,7 @@ void SvxColorIconView::addEntriesForColorSet(weld::IconView& pIconView,
 // [-loplugin:scopedvclptr]
 VclPtr<VirtualDevice> SvxColorIconView::createColorDevice()
 {
-    const sal_uInt32 nEdgeLength = getEntryEdgeLength() - 2;
+    const sal_uInt32 nEdgeLength = constEntryEdgeLength - 2;
     VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
     const sal_Int32 nScaleFactor = pVDev->GetDPIScaleFactor();
     const sal_uInt32 nScaledEdge = nEdgeLength * nScaleFactor;

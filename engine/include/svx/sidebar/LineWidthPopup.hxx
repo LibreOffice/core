@@ -58,7 +58,6 @@ private:
     Size m_aPreviewSize;
 
     DECL_LINK(ItemActivatedHdl, weld::IconView&, bool);
-    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
     DECL_LINK(MFModifyHdl, weld::MetricSpinButton&, void);
 
     ScopedVclPtr<VirtualDevice> CreateLinePreview(sal_uInt16 nLineWidth, const OUString& rText);

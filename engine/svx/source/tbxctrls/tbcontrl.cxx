@@ -482,8 +482,6 @@ private:
     DECL_LINK( MouseReleaseHdl, const MouseEvent&, bool );
     DECL_LINK(KeyPressHdl, const KeyEvent&, bool);
     DECL_LINK(KeyReleaseHdl, const KeyEvent&, bool);
-    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
-    const OUString & GetBorderTypeTooltip(sal_uInt16 nBorderType) const;
 
 
     void SetDiagonalDownBorder(const SvxLineItem& dDownLineItem);
@@ -549,7 +547,6 @@ private:
         SvxBorderLineStyle GetSelectEntryStyle(std::u16string_view sId) const;
 
         void            UpdateEntries( weld::IconView& rIconView );
-        ImpLineListData* getBorderLineData(sal_Int32 nId);
 
         void            SetSourceUnit( FieldUnit eNewUnit ) { eSourceUnit = eNewUnit; }
 
@@ -720,19 +717,6 @@ private:
             maPaintCol = aNewCol;
     }
 
-    ImpLineListData* LineListBox::getBorderLineData(sal_Int32 nId)
-    {
-        SvxBorderLineStyle eStyle = static_cast<SvxBorderLineStyle>(nId);
-
-        for (auto& pData : m_vLineList)
-        {
-            if (pData->GetStyle() == eStyle)
-                return pData.get();
-        }
-
-        return nullptr;
-    }
-
     ScopedVclPtr<VirtualDevice> LineListBox::GetVirtualDevice(Image pImage)
     {
         constexpr tools::Long nMarginTopBottom = 5;
@@ -850,7 +834,6 @@ private:
     bool                m_bIsWriter;
 
     DECL_LINK( SelectHdl, weld::IconView&, bool );
-    DECL_LINK( QueryTooltipHdl, const weld::TreeIter&, OUString );
 
 public:
     SvxLineWindow_Impl(SvxFrameToolBoxControl* pControl, weld::Widget* pParent);
@@ -922,9 +905,7 @@ SvxStyleBox_Base::SvxStyleBox_Base(std::unique_ptr<weld::ComboBox> xWidget,
 IMPL_LINK(SvxStyleBox_Base, CustomGetSizeHdl, OutputDevice&, rArg, Size)
 {
     CalcOptimalExtraUserWidth(rArg);
-    if (comphelper::COKit::isActive())
-        return Size(m_nMaxUserDrawFontWidth * rArg.GetDPIX() / 96, ITEM_HEIGHT * rArg.GetDPIY() / 96);
-    return Size(m_nMaxUserDrawFontWidth, ITEM_HEIGHT);
+    return Size(m_nMaxUserDrawFontWidth * rArg.GetDPIX() / 96, ITEM_HEIGHT * rArg.GetDPIY() / 96);
 }
 
 SvxStyleBox_Impl::SvxStyleBox_Impl(vcl::Window* pParent,
@@ -1811,10 +1792,7 @@ void SvxFontNameBox_Base::Update( const css::awt::FontDescriptor* pFontDesc )
         aCurFont.SetPitch       ( FontPitch( pFontDesc->Pitch ) );
         aCurFont.SetCharSet     ( rtl_TextEncoding( pFontDesc->CharSet ) );
     }
-    OUString aCurName = aCurFont.GetFamilyName();
-    OUString aText = m_xWidget->get_active_text();
-    if (aText != aCurName || comphelper::COKit::isActive())
-        set_active_or_entry_text(aCurName);
+    set_active_or_entry_text(aCurFont.GetFamilyName());
 }
 
 void SvxFontNameBox_Base::set_active_or_entry_text(const OUString& rText)
@@ -2140,15 +2118,6 @@ ColorWindow::ColorWindow(OUString  rCommand,
     mxRecentColorIconView->connect_selection_changed(LINK(this, ColorWindow, SelectionChangedHdl));
     mxRecentColorIconView->connect_item_activated(LINK(this, ColorWindow, ItemActivatedHdl));
 
-    // Avoid LibreOffice Kit crash: tooltip handlers cause segfault during JSDialog
-    // serialization when popup widgets are destroyed/recreated during character formatting resets.
-    // Tooltip event binding is not needed for LibreOffice Kit
-    if (!comphelper::COKit::isActive())
-    {
-        mxColorIconView->connect_query_tooltip(LINK(this, ColorWindow, QueryColorIVTooltipHdl));
-        mxRecentColorIconView->connect_query_tooltip(LINK(this, ColorWindow, QueryRecentIVTooltipHdl));
-    }
-
     m_xTopLevel->set_help_id(HID_POPUP_COLOR);
     mxColorIconView->set_help_id(HID_POPUP_COLOR_CTRL);
 
@@ -2347,34 +2316,6 @@ IMPL_LINK_NOARG(ColorWindow, OpenPickerClickHdl, weld::Button&, void)
     maMenuButton.set_inactive();
 
     xPaletteManager->PopupColorPicker(pParentWindow, sCommand, nColor);
-}
-
-IMPL_LINK(ColorWindow, QueryColorIVTooltipHdl, const weld::TreeIter&, rIter, OUString)
-{
-    OUString sId = mxColorIconView->get_id(rIter);
-    return QueryTooltipHdl_Impl(mxColorIconView.get(), sId);
-}
-
-IMPL_LINK(ColorWindow, QueryRecentIVTooltipHdl, const weld::TreeIter&, rIter, OUString)
-{
-    OUString sId = mxRecentColorIconView->get_id(rIter);
-    return QueryTooltipHdl_Impl(mxRecentColorIconView.get(), sId);
-}
-
-OUString ColorWindow::QueryTooltipHdl_Impl(weld::IconView* pIconView, std::u16string_view sId)
-{
-    if (sId.empty())
-        return OUString();
-
-    const rtl::OUString aOUString(sId.data(), sId.length());
-    const sal_Int32 nPos = aOUString.toInt32();
-
-    // Return the name of the color at position nPos, if valid.
-    const auto colorList = GetColors(pIconView);
-    if (o3tl::make_unsigned(nPos) < colorList.size())
-        return colorList[nPos].m_aName;
-
-    return OUString();
 }
 
 const std::vector<NamedColor> & ColorWindow::GetColors(weld::IconView* pIconView)
@@ -2579,14 +2520,6 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld:
     mxFrameIV->connect_key_press(LINK(this, SvxFrameWindow_Impl, KeyPressHdl));
     mxFrameIV->connect_key_release(LINK(this, SvxFrameWindow_Impl, KeyReleaseHdl));
     mxFrameIV->connect_item_activated( LINK( this, SvxFrameWindow_Impl, SelectHdl ) );
-
-    // Avoid LibreOffice Kit crash: tooltip handlers cause segfault during JSDialog
-    // serialization when popup widgets are destroyed/recreated
-    // Tooltip event binding is not needed for LibreOffice Kit
-    if (!comphelper::COKit::isActive())
-    {
-        mxFrameIV->connect_query_tooltip(LINK(this, SvxFrameWindow_Impl, QueryTooltipHdl));
-    }
 
     mxFrameIV->set_help_id( HID_POPUP_FRAME );
     mxFrameIV->set_accessible_name( SvxResId(RID_SVXSTR_FRAME) );
@@ -2873,29 +2806,6 @@ ScopedVclPtr<VirtualDevice> SvxFrameWindow_Impl::GetVirtualDevice(Bitmap aPrevie
     return pVDev;
 }
 
-IMPL_LINK(SvxFrameWindow_Impl, QueryTooltipHdl, const weld::TreeIter&, iter, OUString)
-{
-    const OUString sId = mxFrameIV->get_id(iter);
-
-    if (!sId.isEmpty())
-    {
-        sal_uInt16 nBorderType = sId.toUInt32();
-        return GetBorderTypeTooltip(nBorderType);
-    }
-
-    return OUString();
-}
-
-const OUString & SvxFrameWindow_Impl::GetBorderTypeTooltip(sal_uInt16 nBorderType) const
-{
-    if (nBorderType > 0 && nBorderType <= aImgVec.size())
-    {
-        return aImgVec[nBorderType - 1].second;
-    }
-
-    return EMPTY_OUSTRING;
-}
-
 void SvxFrameWindow_Impl::SetDiagonalDownBorder(const SvxLineItem& dDownLineItem)
 {
     // apply diagonal down border
@@ -3055,14 +2965,6 @@ SvxLineWindow_Impl::SvxLineWindow_Impl(SvxFrameToolBoxControl* pControl, weld::W
 
     m_xLineStyleIV->connect_item_activated( LINK( this, SvxLineWindow_Impl, SelectHdl ) );
 
-    // Avoid LibreOffice Kit crash: tooltip handlers cause segfault during JSDialog
-    // serialization when popup widgets are destroyed/recreated during character formatting resets.
-    // Tooltip event binding is not needed for LibreOffice Kit
-    if (!comphelper::COKit::isActive())
-    {
-        m_xLineStyleIV->connect_query_tooltip(LINK(this, SvxLineWindow_Impl, QueryTooltipHdl));
-    }
-
     m_xContainer->set_help_id(HID_POPUP_LINE);
 }
 
@@ -3094,23 +2996,6 @@ IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl, weld::IconView&, bool)
     m_xControl->EndPopupMode();
 
     return true;
-}
-
-IMPL_LINK(SvxLineWindow_Impl, QueryTooltipHdl, const weld::TreeIter&, rIter, OUString)
-{
-    OUString sId = m_xLineStyleIV->get_id(rIter);
-    if (sId.isEmpty())
-        return OUString();
-
-    if (sId == "0")
-        return m_xLineStyleLb->m_sNone;
-
-    sal_Int32 nId = sId.toUInt32() - 1;
-    ImpLineListData* pData = m_xLineStyleLb->getBorderLineData(nId);
-    if (pData)
-        return SvtLineListBox::GetLineStyleName(pData->GetStyle());
-
-    return OUString();
 }
 
 SfxStyleControllerItem_Impl::SfxStyleControllerItem_Impl(
@@ -4465,12 +4350,9 @@ ColorListBox::ColorListBox(std::unique_ptr<weld::MenuButton> pControl,
 
 IMPL_LINK(ColorListBox, ToggleHdl, weld::Toggleable&, rButton, void)
 {
+    // The color popup is created when the button is opened the first time.
     if (rButton.get_active())
-    {
-        ColorWindow* pColorWindow = getColorWindow();
-        if (pColorWindow && !comphelper::COKit::isActive())
-            pColorWindow->GrabFocus();
-    }
+        getColorWindow();
 }
 
 ColorListBox::~ColorListBox()

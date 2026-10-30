@@ -23,7 +23,6 @@
 #include <com/sun/star/ui/XContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
-#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <sfx2/viewsh.hxx>
@@ -51,10 +50,7 @@ void ContextChangeEventMultiplexer::NotifyContextChange (
         xMultiplexer->broadcastContextChangeEvent(aEvent, rxController);
 
     // notify the COKit too after all the change have taken effect.
-    if (comphelper::COKit::isActive())
-    {
-        KitHelper::notifyContextChange(aEvent);
-    }
+    KitHelper::notifyContextChange(aEvent);
 }
 
 

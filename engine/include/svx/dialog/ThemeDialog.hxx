@@ -32,9 +32,6 @@ private:
 
     void runThemeColorEditDialog();
 
-protected:
-    void onColorSetActivated() override;
-
 public:
     ThemeDialog(weld::Window* pParent, model::Theme* pTheme);
     virtual ~ThemeDialog() override;

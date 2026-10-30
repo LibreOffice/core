@@ -27,7 +27,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <bitmaps.hlst>
-#include <comphelper/kit.hxx>
 #include <vcl/virdev.hxx>
 #include <i18nlangtag/mslangid.hxx>
 
@@ -71,14 +70,6 @@ LineWidthPopup::LineWidthPopup(weld::Widget* pParent, LinePropertyPanelBase& rPa
     PopulateIconView();
 
     m_xIVWidth->connect_item_activated(LINK(this, LineWidthPopup, ItemActivatedHdl));
-
-    // Avoid LibreOffice Kit crash: tooltip handlers cause segfault during JSDialog
-    // serialization when popup widgets are destroyed/recreated during character formatting resets.
-    // Tooltip event binding is not needed for LibreOffice Kit
-    if (!comphelper::COKit::isActive())
-    {
-        m_xIVWidth->connect_query_tooltip(LINK(this, LineWidthPopup, QueryTooltipHdl));
-    }
 
     m_xMFWidth->connect_value_changed(LINK(this, LineWidthPopup, MFModifyHdl));
 }
@@ -162,18 +153,6 @@ IMPL_LINK_NOARG(LineWidthPopup, MFModifyHdl, weld::MetricSpinButton&, void)
     sal_Int32 nNewWidth = static_cast<short>(m_xMFWidth->denormalize(nVal));
     XLineWidthItem aWidthItem(nNewWidth);
     m_rParent.setLineWidth(aWidthItem);
-}
-
-IMPL_LINK(LineWidthPopup, QueryTooltipHdl, const weld::TreeIter&, rIter, OUString)
-{
-    OUString sId = m_xIVWidth->get_id(rIter);
-    sal_uInt16 iPos = sId.toUInt32();
-    if (iPos >= 1 && iPos <= 8)
-        return maStrUnits[iPos - 1];
-    else if (iPos == 9)
-        return m_bCustom ? (OUString::number(static_cast<double>(m_nCustomWidth) / 10) + m_sPt)
-                         : maStrUnits[8];
-    return OUString();
 }
 
 void LineWidthPopup::SetWidthSelect(tools::Long lValue, bool bValuable, MapUnit eMapUnit)

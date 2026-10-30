@@ -36,7 +36,6 @@ class SvxLineBox final : public WeldToolbarPopup
     void Fill(const XDashListRef& pList);
 
     DECL_LINK(ItemActivatedHdl, weld::IconView&, bool);
-    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
 
     virtual void GrabFocus() override;
 

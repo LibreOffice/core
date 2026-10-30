@@ -28,7 +28,6 @@ class XColorList;
 class SVXCORE_DLLPUBLIC SvxColorIconView
 {
 public:
-    static sal_uInt32 getEntryEdgeLength();
     static void addEntriesForXColorList(weld::IconView& pIconView, const XColorList& rXColorList);
     static void addEntriesForColorSet(weld::IconView& pIconView, const std::set<Color>& rColorSet,
                                       std::u16string_view rNamePrefix);

@@ -103,9 +103,6 @@ private:
     DECL_DLLPRIVATE_LINK(SelectPaletteHdl, weld::ComboBox&, void);
     DECL_DLLPRIVATE_LINK(AutoColorClickHdl, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(OpenPickerClickHdl, weld::Button&, void);
-    DECL_DLLPRIVATE_LINK(QueryColorIVTooltipHdl, const weld::TreeIter&, OUString);
-    DECL_DLLPRIVATE_LINK(QueryRecentIVTooltipHdl, const weld::TreeIter&, OUString);
-    OUString QueryTooltipHdl_Impl(weld::IconView* pIconView, std::u16string_view);
 
     bool SelectIconViewEntry(weld::IconView* pIconView, const Color& rColor);
     NamedColor GetSelectEntryColor(weld::IconView* pIconView);

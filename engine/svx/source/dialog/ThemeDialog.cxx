@@ -12,7 +12,6 @@
 #include <docmodel/theme/Theme.hxx>
 #include <svx/ColorSets.hxx>
 #include <vcl/svapp.hxx>
-#include <comphelper/kit.hxx>
 #include <vcl/virdev.hxx>
 
 namespace svx
@@ -32,12 +31,6 @@ ThemeDialog::~ThemeDialog()
 {
     if (mxSubDialog)
         mxSubDialog->response(RET_CANCEL);
-}
-
-void ThemeDialog::onColorSetActivated()
-{
-    if (!comphelper::COKit::isActive())
-        m_xDialog->response(RET_OK);
 }
 
 void ThemeDialog::runThemeColorEditDialog()

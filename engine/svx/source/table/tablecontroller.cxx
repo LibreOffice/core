@@ -2502,8 +2502,8 @@ void SvxTableController::updateSelectionOverlay()
         }
     }
 
-    // If tiled rendering, emit callbacks for sdr table selection.
-    if (!(pOutDev && comphelper::COKit::isActive()))
+    // Emit callbacks for the sdr table selection.
+    if (!pOutDev)
         return;
 
     tools::Rectangle aSelection(a2DRange.getMinX(), a2DRange.getMinY(), a2DRange.getMaxX(), a2DRange.getMaxY());
@@ -2526,16 +2526,13 @@ void SvxTableController::destroySelectionOverlay()
 
     mpSelectionOverlay.reset();
 
-    if (comphelper::COKit::isActive())
+    // Clear the COKit text selection so far provided by this table.
+    if(SfxViewShell* pViewShell = SfxViewShell::Current())
     {
-        // Clear the COKit text selection so far provided by this table.
-        if(SfxViewShell* pViewShell = SfxViewShell::Current())
-        {
-            pViewShell->viewCallback(COKitCallbackType::CELL_SELECTION_AREA, "EMPTY"_ostr);
-            pViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION_START, "EMPTY"_ostr);
-            pViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION_END, "EMPTY"_ostr);
-            pViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION, "EMPTY"_ostr);
-        }
+        pViewShell->viewCallback(COKitCallbackType::CELL_SELECTION_AREA, "EMPTY"_ostr);
+        pViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION_START, "EMPTY"_ostr);
+        pViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION_END, "EMPTY"_ostr);
+        pViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION, "EMPTY"_ostr);
     }
 }
 

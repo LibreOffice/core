@@ -21,8 +21,6 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-#include <comphelper/kit.hxx>
-
 using namespace css;
 using namespace ::cpo::uno;
 
@@ -36,8 +34,7 @@ FontworkPropertyPanel::FontworkPropertyPanel(weld::Widget* pParent,
     , m_pToolbar(m_xBuilder->weld_toolbar(u"fontwork-toolbox"_ustr))
     , m_xToolbar(new ToolbarUnoDispatcher(*m_pToolbar, *m_xBuilder, rxFrame))
 {
-    if (comphelper::COKit::isActive())
-        m_pToolbar->set_item_visible(u".uno:ExtrusionToggle"_ustr, false);
+    m_pToolbar->set_item_visible(u".uno:ExtrusionToggle"_ustr, false);
 }
 
 std::unique_ptr<PanelLayout>

@@ -19,7 +19,6 @@
 
 #include <StylesPreviewWindow.hxx>
 
-#include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <utility>
@@ -848,14 +847,11 @@ void StylesPreviewWindow_Base::UpdateStylesList()
 
     m_xStylesView->freeze();
     m_xStylesView->clear();
-    // for online we can skip inserting the preview into the IconView and rely
-    // on DoJsonProperty to provide the image to clients
-    const bool bNeedInsertPreview = !comphelper::COKit::isActive();
+    // Fill the preview cache. The IconView entries themselves carry no image.
     for (const auto& rStyle : m_aAllStyles)
     {
-        Bitmap aPreview = GetCachedPreview(rStyle);
-        Bitmap* pPreview = bNeedInsertPreview ? &aPreview : nullptr;
-        m_xStylesView->append(rStyle.commonName, rStyle.translatedName, pPreview);
+        GetCachedPreview(rStyle);
+        m_xStylesView->append(rStyle.commonName, rStyle.translatedName, nullptr);
     }
     m_xStylesView->thaw();
 }
