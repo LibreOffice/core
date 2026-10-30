@@ -320,8 +320,7 @@ std::string ClientSession::getClipboardURI(bool encode)
 
 std::string ClientSession::createMediaURI(const std::string& subPath, const std::string& id)
 {
-    return Uri::encode(createPublicURI(subPath, id, /*encode=*/false, "&MediaKey=" + _mediaKey),
-                       "&");
+    return createPublicURI(subPath, id, /*encode=*/false, "&MediaKey=" + _mediaKey);
 }
 
 std::string ClientSession::createPublicURI(const std::string& subPath, const std::string& tag, bool encode,
@@ -5483,7 +5482,7 @@ std::string ClientSession::processSVGContent(const std::string& svg)
                                             fileUrl + "\"}");
 
         const std::string mediaUrl = createMediaURI("media", id);
-        oss << "src=\"" << mediaUrl << '"';
+        oss << "src=\"" << Util::replace(mediaUrl, "&", "&amp;") << '"';
         pos = end + 1;
     }
 

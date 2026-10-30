@@ -126,6 +126,7 @@ all_la_unit_tests = \
 	unit-wopi-renamefile.la \
 	unit-render-search-result.la \
 	unit-clipboard-close.la \
+	unit-media-uri.la \
 	unit-proxy.la \
 	unit-wopi-httpredirect.la \
 	unit-convert-to-password-protected.la \
@@ -296,6 +297,8 @@ unit_copy_paste_la_SOURCES = UnitCopyPaste.cpp
 unit_copy_paste_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_clipboard_close_la_SOURCES = UnitClipboardClose.cpp
 unit_clipboard_close_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
+unit_media_uri_la_SOURCES = UnitMediaURI.cpp
+unit_media_uri_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_copy_paste_writer_la_SOURCES = UnitCopyPasteWriter.cpp
 unit_copy_paste_writer_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_convert_la_SOURCES = UnitConvert.cpp

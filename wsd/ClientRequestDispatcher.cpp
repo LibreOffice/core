@@ -2859,8 +2859,7 @@ bool ClientRequestDispatcher::handleMediaRequest(const Poco::Net::HTTPRequest& r
 {
     assert(socket && "Must have a valid socket");
 
-    const std::string decoded = Uri::decode(request.getURI());
-    Poco::URI requestUri(decoded);
+    Poco::URI requestUri(request.getURI());
     Poco::URI::QueryParameters params = requestUri.getQueryParameters();
     std::string WOPISrc, serverId, viewId, tag, mime, mediaKey;
     for (const auto& it : params)
