@@ -33,6 +33,7 @@
 #include <optsitem.hxx>
 #include <sdabstdlg.hxx>
 #include <slideshow.hxx>
+#include <SlideShowController.hxx>
 #include <ViewShell.hxx>
 
 using namespace ::com::sun::star::uno;

@@ -86,7 +86,7 @@ public:
     static rtl::Reference< SlideShow > GetSlideShow( SdDrawDocument const * pDocument );
     static rtl::Reference< SlideShow > GetSlideShow( ViewShellBase const & rBase );
 
-    static css::uno::Reference< css::presentation::XSlideShowController > GetSlideShowController(ViewShellBase const & rBase );
+    static rtl::Reference<SlideShowController> GetSlideShowController(ViewShellBase const& rBase);
 
     static bool StartPreview( ViewShellBase const & rBase,
         const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage,
@@ -144,6 +144,8 @@ public:
     virtual void SAL_CALL startWithArguments(const css::uno::Sequence< css::beans::PropertyValue >& Arguments) override;
     virtual sal_Bool SAL_CALL isRunning(  ) override;
     virtual css::uno::Reference< css::presentation::XSlideShowController > SAL_CALL getController(  ) override;
+
+    rtl::Reference<SlideShowController> GetSlideShowController() const;
 
     // legacy api
 

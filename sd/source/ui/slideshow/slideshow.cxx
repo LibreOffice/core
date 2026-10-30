@@ -169,15 +169,14 @@ rtl::Reference< SlideShow > SlideShow::GetSlideShow( ViewShellBase const & rBase
     return GetSlideShow( rBase.GetDocument() );
 }
 
-css::uno::Reference< css::presentation::XSlideShowController > SlideShow::GetSlideShowController(ViewShellBase const & rBase )
+rtl::Reference<SlideShowController> SlideShow::GetSlideShowController(ViewShellBase const& rBase)
 {
     rtl::Reference< SlideShow > xSlideShow( GetSlideShow( rBase ) );
 
-    Reference< XSlideShowController > xRet;
     if( xSlideShow.is() )
-        xRet = xSlideShow->getController();
+        return xSlideShow->GetSlideShowController();
 
-    return xRet;
+    return {};
 }
 
 bool SlideShow::StartPreview( ViewShellBase const & rBase,
@@ -901,6 +900,11 @@ sal_Bool SAL_CALL SlideShow::isRunning(  )
 }
 
 Reference< XSlideShowController > SAL_CALL SlideShow::getController(  )
+{
+    return GetSlideShowController();
+}
+
+rtl::Reference<SlideShowController> SlideShow::GetSlideShowController() const
 {
     ThrowIfDisposed();
 

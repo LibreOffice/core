@@ -59,6 +59,7 @@
 #include <TextObjectBar.hxx>
 #include <GraphicObjectBar.hxx>
 #include <MediaObjectBar.hxx>
+#include <SlideShowController.hxx>
 #include <SlideSorter.hxx>
 #include <SlideSorterViewShell.hxx>
 #include <ViewShellManager.hxx>
