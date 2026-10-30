@@ -18,6 +18,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/vector/b2dvector.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -712,8 +713,9 @@ const Embedding* embeddingOf(const SdrObject& rObject)
 
 /*
     The name the chart gives a part it selects on its own (its CID), without what changes when the
-    part is dragged, or empty for any other object. The chart names its parts "CID/...", and a
-    dragged part carries "/DragParameter=..." last, which changes with the drag.
+    part is dragged, or empty for any other object. The chart names its parts "CID/...", and a part
+    dragged its own way, a pie segment, carries ":DragParameter=..." up to the next "/", which
+    changes with the drag.
 */
 OUString partNameOf(const SdrObject& rObject)
 {
@@ -722,8 +724,13 @@ OUString partNameOf(const SdrObject& rObject)
     OUString aName(rObject.GetName());
     if (!aName.startsWith("CID/"))
         return OUString();
-    const sal_Int32 nDragged(aName.indexOf("/DragParameter="));
-    return nDragged < 0 ? aName : aName.copy(0, nDragged);
+    const sal_Int32 nDragged(aName.indexOf("DragParameter="));
+    if (nDragged < 0)
+        return aName;
+    const sal_Int32 nFrom(nDragged > 0 && aName[nDragged - 1] == ':' ? nDragged - 1 : nDragged);
+    const sal_Int32 nTo(aName.indexOf('/', nDragged));
+    return OUString::Concat(aName.subView(0, nFrom))
+           + aName.subView(nTo < 0 ? aName.getLength() : nTo);
 }
 
 /// the ids kept for the parts of a chart page, by the part's name
@@ -873,7 +880,9 @@ std::map<sal_uInt64, ObjectContent::ChartKeys> keysOf(const SdrOle2Obj& rChart,
 ObjectContent::ChartPart chartPartOf(std::u16string_view aName)
 {
     ObjectContent::ChartPart aPart;
-    aPart.mbMultiClick = o3tl::starts_with(aName, u"CID/MultiClick/");
+    // "CID/MultiClick" is followed by "/" or, for a part dragged its own way, by ":"
+    aPart.mbMultiClick = o3tl::starts_with(aName, u"CID/MultiClick/")
+                         || o3tl::starts_with(aName, u"CID/MultiClick:");
     const bool bDragsItsOwnWay(aName.find(u"DragMethod=") != std::u16string_view::npos);
 
     size_t nLast(aName.rfind(':'));
@@ -1004,6 +1013,33 @@ std::optional<basegfx::B2DHomMatrix> chartMappingOf(const SdrObject& rObject)
     if (!pEmbedding)
         return std::nullopt;
     return pEmbedding->maMapping;
+}
+
+std::optional<ObjectContent::ChartPart::DragLine> chartDragLineOf(const SdrObject& rObject)
+{
+    // the full name carries "DragParameter=" with the offset in percent and the two places a
+    // drag point stands at with no offset and with the whole one
+    const OUString aName(rObject.GetName());
+    if (!embeddingOf(rObject) || aName.indexOf("DragMethod=PieSegmentDragging") < 0)
+        return std::nullopt;
+    const sal_Int32 nParameter(aName.indexOf("DragParameter="));
+    if (nParameter < 0)
+        return std::nullopt;
+
+    const sal_Int32 nFrom(nParameter + 14);
+    const sal_Int32 nTo(aName.indexOf('/', nFrom));
+    const std::u16string_view aParameter(
+        aName.subView(nFrom, (nTo < 0 ? aName.getLength() : nTo) - nFrom));
+    double aValue[5] = {};
+    sal_Int32 nAt = 0;
+    for (double& rValue : aValue)
+    {
+        if (nAt < 0)
+            return std::nullopt;
+        rValue = o3tl::toInt32(o3tl::getToken(aParameter, 0, ',', nAt));
+    }
+    return ObjectContent::ChartPart::DragLine{ aValue[3] - aValue[1], aValue[4] - aValue[2],
+                                               std::clamp(aValue[0] / 100.0, 0.0, 1.0) };
 }
 
 const SdrObject* holderOf(const SdrObject& rObject)
@@ -1319,6 +1355,15 @@ void describeObject(SdrObject& rObject, ObjectContent& rContent,
         rContent.mbCanBeTurned = rContent.moChartPart->mbRotatable;
         rContent.mbCanBeSheared = false;
         rContent.mbCanBeMirrored = false;
+        // the way along goes onto the slide by the mapping onto the window, without its move
+        if (auto oLine = chartDragLineOf(rObject); oLine && embeddingOf(rObject))
+        {
+            const basegfx::B2DVector aWay(embeddingOf(rObject)->maMapping
+                                          * basegfx::B2DVector(oLine->mfX, oLine->mfY));
+            oLine->mfX = aWay.getX() * constTwipConversionFactor;
+            oLine->mfY = aWay.getY() * constTwipConversionFactor;
+            rContent.moChartPart->moDragAlong = oLine;
+        }
     }
     if (const Embedding* pEmbedding = embeddingOf(rObject); pEmbedding && pEmbedding->moKeys)
     {
@@ -1388,6 +1433,13 @@ void writeEntryGeometry(tools::JsonWriter& rWriter, const ObjectContent& rConten
             rWriter.put("resizable", true);
         if (rPart.mbRotatable)
             rWriter.put("rotatable", true);
+        if (rPart.moDragAlong)
+        {
+            auto aArray = rWriter.startArray("dragAlong");
+            rWriter.putSimpleValue(rPart.moDragAlong->mfX);
+            rWriter.putSimpleValue(rPart.moDragAlong->mfY);
+            rWriter.putSimpleValue(rPart.moDragAlong->mfAt);
+        }
     }
 
     if (rContent.moChartKeys)

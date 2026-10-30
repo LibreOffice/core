@@ -6967,7 +6967,8 @@ static bool lcl_mappingOf(const SdrObject& rObject, basegfx::B2DHomMatrix& rMapp
     A part of a chart active in place is moved and resized by the chart, as its own drag does it.
     The chart gets the box the part has on the chart's page and the box the mapping wanted gives
     it there, and changes what it marks for the part by the same move and resize. A change of
-    size of less than one unit comes from the way there and back and is no resize.
+    size of less than one unit comes from the way there and back and is no resize. A pie segment
+    is given the offset out of its pie instead.
 */
 static void lcl_changeChartPart(SfxViewShell& rViewShell, const SdrObject& rPart,
                                 const basegfx::B2DHomMatrix& rWanted)
@@ -7000,6 +7001,25 @@ static void lcl_changeChartPart(SfxViewShell& rViewShell, const SdrObject& rPart
     KitChartHelper aChart(&rViewShell);
     if (!aChart.GetWindow())
         return;
+
+    // a pie segment goes out of its pie along its own line: the move of its box is laid onto
+    // that line, and the chart is given the offset that comes of it, between none and the whole
+    if (const auto oLine = svx::vector::chartDragLineOf(rPart))
+    {
+        const basegfx::B2DVector aWay(oLine->mfX, oLine->mfY);
+        const double fWayLength(aWay.scalar(aWay));
+        if (fWayLength <= 0.0)
+            return;
+        const basegfx::B2DVector aMoved(aTo.getCenter() - aFrom.getCenter());
+        const double fOffset(std::clamp(oLine->mfAt + aWay.scalar(aMoved) / fWayLength, 0.0, 1.0));
+        const sal_Int32 nPercent(basegfx::fround(fOffset * 100.0));
+        aChart.Dispatch(u".uno:KitTransform"_ustr,
+                        comphelper::InitPropertySequence(
+                            { { "Action", cpo::uno::Any(u"PieSegmentDragging"_ustr) },
+                              { "Offset", cpo::uno::Any(nPercent) } }));
+        return;
+    }
+
     aChart.Dispatch(
         u".uno:KitTransform"_ustr,
         comphelper::InitPropertySequence({

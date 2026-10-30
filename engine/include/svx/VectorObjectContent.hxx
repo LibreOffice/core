@@ -426,6 +426,20 @@ struct ObjectContent
         bool mbDraggable = false;
         bool mbResizable = false;
         bool mbRotatable = false;
+        /** The line a part dragged its own way goes along, a pie segment out of its pie: the way
+            a drag of the whole offset takes, in a record on the slide in twips, and the offset
+            the part stands at now, a share between 0 and 1. A drag goes along that way only,
+            and as far as an offset between 0 and 1 allows.
+         */
+        struct DragLine
+        {
+            double mfX = 0.0;
+            double mfY = 0.0;
+            double mfAt = 0.0;
+
+            bool operator==(const DragLine&) const = default;
+        };
+        std::optional<DragLine> moDragAlong;
 
         bool operator==(const ChartPart&) const = default;
     };
@@ -529,6 +543,13 @@ SVXCORE_DLLPUBLIC SdrObject* chartPartById(sal_uInt64 nId);
     in the units of the model, for an object on that page. Nothing for any other object.
  */
 SVXCORE_DLLPUBLIC std::optional<basegfx::B2DHomMatrix> chartMappingOf(const SdrObject& rObject);
+
+/** For a part of a chart active in place that is dragged its own way, a pie segment: the way a
+    drag of its whole offset takes on the chart's page, and the offset it stands at now. Nothing
+    for any other object.
+ */
+SVXCORE_DLLPUBLIC std::optional<ObjectContent::ChartPart::DragLine>
+chartDragLineOf(const SdrObject& rObject);
 
 /** The object holding that one as the vector view takes it: its group, or for an object on the
     page of a chart active in place, that chart. Nothing for an object directly on the page.

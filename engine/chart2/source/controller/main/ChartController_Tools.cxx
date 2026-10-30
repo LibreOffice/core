@@ -1342,7 +1342,16 @@ void ChartController::executeDispatch_KitPieSegmentDragging( int nOffset )
             Reference< beans::XPropertySet > xPointProperties(
                 ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ) );
             if( xPointProperties.is() )
+            {
+                // one step to undo, as the drag of the segment with the mouse makes
+                UndoGuard aUndoGuard(
+                    ActionDescriptionProvider::createDescription(
+                        ActionDescriptionProvider::ActionType::Move,
+                        ObjectNameProvider::getName( ObjectIdentifier::getObjectType( aCID ) ) ),
+                    m_xUndoManager );
                 xPointProperties->setPropertyValue( u"Offset"_ustr, cpo::uno::Any( nOffset / 100.0 ) );
+                aUndoGuard.commit();
+            }
         }
     }
     catch( const cpo::uno::Exception & )
