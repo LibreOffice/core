@@ -1672,11 +1672,28 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		switch (keyCode) {
 		case 27:
 			// ESC
-			var dialogKeys = Object.keys(this.dialogs);
-			if (dialogKeys.length) {
-				var lastKey = dialogKeys[dialogKeys.length - 1];
-				var sendCloseToServer = this.dialogs[lastKey].isDropdown !== true;
-				this.close(lastKey, sendCloseToServer);
+			var targetDialogId = null;
+			var activeElement = document.activeElement;
+			if (activeElement) {
+				for (var id in this.dialogs) {
+					var dialog = this.dialogs[id];
+					if (dialog && dialog.container && dialog.container.contains(activeElement)) {
+						targetDialogId = id;
+						break;
+					}
+				}
+			}
+
+			if (!targetDialogId) {
+				var dialogKeys = Object.keys(this.dialogs);
+				if (dialogKeys.length) {
+					targetDialogId = dialogKeys[dialogKeys.length - 1];
+				}
+			}
+
+			if (targetDialogId) {
+				var sendCloseToServer = this.dialogs[targetDialogId].isDropdown !== true;
+				this.close(targetDialogId, sendCloseToServer);
 				return true;
 			}
 			break;

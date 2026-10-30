@@ -91,6 +91,7 @@ function createMoreButton(
 	moreOptionsButton.addEventListener('click', (e) => {
 		e.stopPropagation();
 		e.preventDefault();
+		JSDialog.CloseDropdown('overflow-button-' + id);
 		if (more.command.startsWith('.uno:')) app.map.sendUnoCommand(more.command);
 		else app.dispatcher.dispatch(more.command);
 	});
@@ -252,57 +253,75 @@ function setupOverflowMenu(
 					menu.classList.add('ui-overflow-group-popup');
 
 					migrateItems(hiddenItems, menu);
-					menu.addEventListener('keydown', function (e: KeyboardEvent) {
-						let key;
-						if (e.key === 'Tab') {
-							key = e.shiftKey ? 'ArrowLeft' : 'ArrowRight';
-						} else {
-							key = e.key;
-						}
 
-						if (
-							['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(key)
-						) {
-							var currentElement = e.target as HTMLElement;
-							const isElementOfTypeInput =
-								currentElement.tagName === 'INPUT' ||
-								currentElement.tagName === 'TEXTAREA';
-
-							if (
-								!isElementOfTypeInput ||
-								(isElementOfTypeInput && e.key === 'Tab')
-							) {
-								const elementToFocus = JSDialog.FindNextElementInContainer(
-									menu,
-									currentElement,
-									key,
-								);
-								if (elementToFocus) {
-									elementToFocus.focus();
-								} else {
-									// When ray-casting reaches container boundaries
-									const forwardDir =
-										key === 'ArrowRight' || key === 'ArrowDown';
-									const focusables = JSDialog.GetFocusableElements(menu);
-									if (focusables && focusables.length > 0) {
-										const currentIndex = focusables.indexOf(currentElement);
-										let targetIndex = forwardDir
-											? currentIndex + 1
-											: currentIndex - 1;
-
-										if (targetIndex < 0) targetIndex = focusables.length - 1;
-										else if (targetIndex >= focusables.length) targetIndex = 0;
-
-										(focusables[targetIndex] as HTMLElement).focus();
-									}
-								}
-								// If we handled the event here, stop propagation and prevent default
-								// to avoid reaching to global notebookbar keyboard handling
+					menu.addEventListener(
+						'keydown',
+						function (e: KeyboardEvent) {
+							if (e.key === 'Escape') {
 								e.stopPropagation();
 								e.preventDefault();
+								JSDialog.CloseDropdown(dropdownId, true);
+								if (overflowMenuButton) {
+									overflowMenuButton.focus();
+								}
+								return;
 							}
-						}
-					});
+
+							let key;
+							if (e.key === 'Tab') {
+								key = e.shiftKey ? 'ArrowLeft' : 'ArrowRight';
+							} else {
+								key = e.key;
+							}
+
+							if (
+								['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(
+									key,
+								)
+							) {
+								var currentElement = e.target as HTMLElement;
+								const isElementOfTypeInput =
+									currentElement.tagName === 'INPUT' ||
+									currentElement.tagName === 'TEXTAREA';
+
+								if (
+									!isElementOfTypeInput ||
+									(isElementOfTypeInput && e.key === 'Tab')
+								) {
+									const elementToFocus = JSDialog.FindNextElementInContainer(
+										menu,
+										currentElement,
+										key,
+									);
+									if (elementToFocus) {
+										elementToFocus.focus();
+									} else {
+										// When ray-casting reaches container boundaries
+										const forwardDir =
+											key === 'ArrowRight' || key === 'ArrowDown';
+										const focusables = JSDialog.GetFocusableElements(menu);
+										if (focusables && focusables.length > 0) {
+											const currentIndex = focusables.indexOf(currentElement);
+											let targetIndex = forwardDir
+												? currentIndex + 1
+												: currentIndex - 1;
+
+											if (targetIndex < 0) targetIndex = focusables.length - 1;
+											else if (targetIndex >= focusables.length)
+												targetIndex = 0;
+
+											(focusables[targetIndex] as HTMLElement).focus();
+										}
+									}
+									// If we handled the event here, stop propagation and prevent default
+									// to avoid reaching to global notebookbar keyboard handling
+									e.stopPropagation();
+									e.preventDefault();
+								}
+							}
+						},
+						true,
+					);
 				});
 			});
 		} else {
