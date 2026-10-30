@@ -504,6 +504,9 @@ class InitializerBase {
 			}
 			window.prefs._bridgeReady = true;
 		});
+
+		window.bridgeReady = true;
+		window.dispatchEvent(new Event('bridgeready'));
 	}
 }
 
@@ -834,8 +837,8 @@ class QtAppInitializer extends MobileAppInitializer {
 				window.prefs._bridgeReady = true;
 			});
 
-			window.qtBridgeReady = true;
-			window.dispatchEvent(new Event('qtbridgeready'));
+			window.bridgeReady = true;
+			window.dispatchEvent(new Event('bridgeready'));
 			if (bridge.debug) {
 				bridge.debug("Qt bridge initialized");
 			}
@@ -896,8 +899,6 @@ class QtAppInitializer extends MobileAppInitializer {
 		window.userInterfaceMode = window.coolParams.get('userinterfacemode');
 
 		this.setUpRemoteBridge(send);
-		window.qtBridgeReady = true;
-		window.dispatchEvent(new Event('qtbridgeready'));
 	}
 }
 

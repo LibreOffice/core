@@ -112,8 +112,8 @@ app.showDropOverlay = function () { DropFileOverlay.show(); };
 app.hideDropOverlay = function () { DropFileOverlay.hide(); };
 
 if (window.coolParams.get('starterMode')) {
-	if (window.ThisIsTheQtApp && !window.qtBridgeReady) {
-		window.addEventListener('qtbridgeready', () => {
+	if (window.ThisIsTheQtApp && !window.bridgeReady) {
+		window.addEventListener('bridgeready', () => {
 			map.uiManager.initializeBackstageView();
 		}, { once: true });
 	} else {
@@ -402,10 +402,10 @@ if (window.ThisIsTheEmscriptenApp) {
 			});
 		});
 	};
-	if (window.qtBridgeReady)
+	if (window.bridgeReady)
 		_codaQtRemoteBootstrap();
 	else
-		window.addEventListener('qtbridgeready', _codaQtRemoteBootstrap);
+		window.addEventListener('bridgeready', _codaQtRemoteBootstrap);
 } else {
 	initUI();
 	map.loadDocument(global.socket);
