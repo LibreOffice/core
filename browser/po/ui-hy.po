@@ -8,12 +8,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-28 13:35+0100\n"
-"PO-Revision-Date: 2026-10-24 20:21+0000\n"
-"Last-Translator: Tigran Zargaryan "
-"<tigranflib@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-10-29 10:10+0000\n"
+"Last-Translator: tigran54 <tigran54@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Armenian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/hy/>\n"
-"Language: \n"
+"Language: hy\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1464,11 +1463,11 @@ msgstr "Առաջինը, որը տեղադրված է"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5050
 msgid "Translating with {0}."
-msgstr ""
+msgstr "Թարգմանում է {0}-ով։"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5051
 msgid "No provider is set up: the Translate command is not offered."
-msgstr ""
+msgstr "Մատակարարը կարգավորված չէ. Translate հրամանը չի առաջարկվում։"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5091
 msgid "API URL"
@@ -1816,39 +1815,39 @@ msgstr "Կրկնօրինակել ոճը"
 
 #: src/app/Util.ts:319
 msgid "1 year"
-msgstr ""
+msgstr "1 տարի"
 
 #: src/app/Util.ts:320
 msgid "{count} years"
-msgstr ""
+msgstr "{count} տարիներ"
 
 #: src/app/Util.ts:322
 msgid "1 day"
-msgstr ""
+msgstr "1 օր"
 
 #: src/app/Util.ts:322
 msgid "{count} days"
-msgstr ""
+msgstr "{count} օր"
 
 #: src/app/Util.ts:323
 msgid "1 hour"
-msgstr ""
+msgstr "1 ժամ"
 
 #: src/app/Util.ts:323
 msgid "{count} hours"
-msgstr ""
+msgstr "{count} ժամ"
 
 #: src/app/Util.ts:324
 msgid "1 minute"
-msgstr ""
+msgstr "1 րոպե"
 
 #: src/app/Util.ts:324
 msgid "{count} minutes"
-msgstr ""
+msgstr "{count} րոպեներ"
 
 #: src/app/Util.ts:339
 msgid "less than a minute"
-msgstr ""
+msgstr "մեկ րոպեից պակաս"
 
 #: src/canvas/sections/CommentListSection.ts:2261
 #: src/canvas/sections/CommentListSection.ts:2274
@@ -1897,7 +1896,6 @@ msgid "Reply"
 msgstr "Պատասխան"
 
 #: src/canvas/sections/CommentSection.ts:345
-#, fuzzy
 msgid "comment"
 msgstr "Մեկնաբանություն"
 
@@ -1907,7 +1905,7 @@ msgstr "Հրապարակելու համար սեղմեք Ctrl + Enter"
 
 #: src/canvas/sections/CommentSection.ts:583
 msgid "Reply to {0}"
-msgstr ""
+msgstr "Պատասխանել {0}-ին"
 
 #: src/canvas/sections/CommentSection.ts:653
 #: src/canvas/sections/CommentSection.ts:654
@@ -2021,11 +2019,11 @@ msgstr "Փաստաթուղթը պարունակում է չաջակցվող մե
 
 #: src/canvas/sections/SelectionSection.ts:1553
 msgid "Waiting for redo..."
-msgstr ""
+msgstr "Սպասում է կրկին անելուն..."
 
 #: src/canvas/sections/SelectionSection.ts:1554
 msgid "Waiting for undo..."
-msgstr ""
+msgstr "Սպասում է հետարկելուն..."
 
 #: src/canvas/sections/URLPopUpSection.ts:89
 #: src/control/Control.HyperlinkWizard.ts:41
@@ -2173,7 +2171,7 @@ msgstr "Պատահական"
 #. TRANSLATORS: such as "Formal" or a name that the user typed
 #: src/control/Control.AIChatSidebar.ts:309
 msgid "{0} tone"
-msgstr ""
+msgstr "{0} տոն"
 
 #: src/control/Control.AIChatSidebar.ts:419
 msgid "Best"
@@ -2251,27 +2249,27 @@ msgstr "Ի՞նչ կցանկանայիք անել այս փաստաթղթով։"
 
 #: src/control/Control.AIChatSidebar.ts:787
 msgid "Good morning, {0}!"
-msgstr ""
+msgstr "Բարի լույս, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:788
 msgid "Good morning!"
-msgstr ""
+msgstr "Բարի լույս!"
 
 #: src/control/Control.AIChatSidebar.ts:790
 msgid "Good afternoon, {0}!"
-msgstr ""
+msgstr "Բարի օր, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:791
 msgid "Good afternoon!"
-msgstr ""
+msgstr "Բարի օր!"
 
 #: src/control/Control.AIChatSidebar.ts:793
 msgid "Good evening, {0}!"
-msgstr ""
+msgstr "Բարի երեկո, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:794
 msgid "Good evening!"
-msgstr ""
+msgstr "Բարի երեկո!"
 
 #: src/control/Control.AIChatSidebar.ts:845
 #: src/control/Control.AIChatSidebar.ts:2288
@@ -2882,21 +2880,20 @@ msgid "Reject action"
 msgstr "Մերժել գործողությունը"
 
 #: src/control/Control.AIChatSidebar.ts:2845
-#, fuzzy
 msgid "Send"
-msgstr "Ուղարկված է"
+msgstr "Ուղարկել"
 
 #: src/control/Control.AIChatSidebar.ts:2847
 msgid "Send these cells"
-msgstr ""
+msgstr "Ուղարկել այս բջիջները"
 
 #: src/control/Control.AIChatSidebar.ts:2853
 msgid "Do not send these cells"
-msgstr ""
+msgstr "Մի ուղարկեք այս բջիջները"
 
 #: src/control/Control.AIChatSidebar.ts:2870
 msgid "Nothing was sent."
-msgstr ""
+msgstr "Ոչինչ չուղարկվեց։"
 
 #: src/control/Control.AIChatSidebar.ts:2893
 msgid "Applying changes..."
@@ -3012,11 +3009,11 @@ msgstr "Ախտորոշել բանաձևի սխալը սրանում"
 
 #: src/control/Control.AIChatSidebar.ts:3871
 msgid "To diagnose the error in %1, these cells will be sent to %2:"
-msgstr ""
+msgstr "%1-ում սխալը ախտորոշելու համար այս բջիջները կուղարկվեն %2-ին:"
 
 #: src/control/Control.AIChatSidebar.ts:3877
 msgid "Do you want to send them?"
-msgstr ""
+msgstr "Ուզու՞մ եք դրանք ուղարկել։"
 
 #: src/control/Control.AIChatSidebar.ts:3897
 msgid "I have a formula error in my spreadsheet."
@@ -3026,7 +3023,7 @@ msgstr "Իմ էլ․ աղյուսակում ես ունեմ բանաձևի սխ�
 #. TRANSLATORS: B5, {1} the name of its sheet
 #: src/control/Control.AIChatSidebar.ts:3901
 msgid "Cell {0} (Sheet: {1}) contains:"
-msgstr ""
+msgstr "Cell {0} (Sheet: {1}) պարունակում է:"
 
 #: src/control/Control.AIChatSidebar.ts:3906
 #: src/control/Control.FormulaBarJSDialog.js:116
@@ -3043,9 +3040,8 @@ msgstr "Հղված բջիջներ"
 #. TRANSLATORS: Sent to the AI model. {0} is a Calc error code such
 #. TRANSLATORS: as #DIV/0!
 #: src/control/Control.AIChatSidebar.ts:3918
-#, fuzzy
 msgid "Please diagnose why this formula produces the {0} error."
-msgstr "Խնդրում եմ ախտորոշել, թե ինչու է այս բանաձևը արտադրում"
+msgstr "Խնդրում եմ ախտորոշել, թե ինչու է այս բանաձևը արտադրում {0} սխալը։"
 
 #: src/control/Control.AIChatSidebar.ts:3922
 msgid "Explain the root cause and suggest how to fix it."
@@ -3061,11 +3057,11 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3942
 msgid "only the cells with errors"
-msgstr ""
+msgstr "միայն սխալներով բջիջները"
 
 #: src/control/Control.AIChatSidebar.ts:3949
 msgid "another file, its name only"
-msgstr ""
+msgstr "մեկ այլ նիշք, միայն նրա անունը"
 
 #: src/control/Control.AIChatSidebar.ts:3979
 msgid "formula"
@@ -3176,6 +3172,9 @@ msgid ""
 "The table shows what each cell displays. The \"Formulas:\" list below it "
 "gives the formula of each cell that has one."
 msgstr ""
+"Աղյուսակը ցույց է տալիս, թե յուրաքանչյուր բջիջ ինչ է ցուցադրում: Ստորև "
+"բերված «Բանաձևեր» ցանկը ցույց է տալիս յուրաքանչյուր բջիջի բանաձևը, որն ունի "
+"այդպիսի բանաձև:"
 
 #: src/control/Control.AIChatSidebar.ts:4203
 msgid ""
@@ -3443,7 +3442,7 @@ msgstr "Մաքրման ընթացքը"
 
 #: src/control/Control.CleanupSidebar.ts:913
 msgid "Stop Cleanup"
-msgstr ""
+msgstr "Դադարեցնել մաքրումը"
 
 #: src/control/Control.CleanupSidebar.ts:934
 msgid "Scan presentation"
@@ -4778,7 +4777,6 @@ msgstr "Առցանց օգնություն"
 #: src/control/Control.Menubar.ts:460 src/control/Control.Menubar.ts:677
 #: src/control/Control.Menubar.ts:848 src/control/Control.Menubar.ts:1176
 #: src/control/Control.NotebookbarWriter.js:529
-#, fuzzy
 msgid "Show Tour"
 msgstr "Ցույց տալ շրջագայությունը"
 
@@ -5423,7 +5421,7 @@ msgstr "Լցման գույն (միայն թափանցիկ նկարներ)"
 
 #: src/control/Control.Notebookbar.js:667
 msgid "Area"
-msgstr ""
+msgstr "Տարածք"
 
 #: src/control/Control.Notebookbar.js:682
 msgid "Line"
@@ -8123,11 +8121,11 @@ msgstr "Սյունակ {index}"
 
 #: src/control/jsdialog/Widget.EditEngine.ts:587
 msgid "%1 is editing"
-msgstr ""
+msgstr "%1-ը խմբագրում է"
 
 #: src/control/jsdialog/Widget.EditEngine.ts:588
 msgid "Another user is editing"
-msgstr ""
+msgstr "Մեկ այլ օգտատեր խմբագրում է"
 
 #: src/control/jsdialog/Widget.FormulabarEdit.js:460 src/map/Clipboard.js:1589
 msgid "Cut"
@@ -8135,7 +8133,7 @@ msgstr "Կտրել"
 
 #: src/control/jsdialog/Widget.FormulabarEdit.js:519
 msgid "Formula bar"
-msgstr ""
+msgstr "Բանաձևի տող"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:54
 msgid "Smileys"
@@ -8330,7 +8328,7 @@ msgstr "Նվազեցման արժեք"
 
 #: src/control/jsdialog/Widget.TabControl.tsx:229
 msgid "Add a fill to edit the {0}"
-msgstr ""
+msgstr "Ավելացրեք լրացում՝ {0}-ը խմբագրելու համար"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1836
 msgid "Cell value"
@@ -8607,12 +8605,16 @@ msgstr ""
 msgid ""
 "You no longer have access to this document. Its security label was changed."
 msgstr ""
+"Դուք այլևս չունեք այս փաստաթղթին մուտք գործելու հնարավորություն։ Դրա "
+"անվտանգության պիտակը փոխվել է։"
 
 #: src/errormessages.ts:38
 msgid ""
 "You can no longer edit this document. Its security label was changed. "
 "Please open it again to view it."
 msgstr ""
+"Դուք այլևս չեք կարող խմբագրել այս փաստաթուղթը։ Դրա անվտանգության պիտակը "
+"փոխվել է։ Խնդրում ենք այն կրկին բացել՝ այն դիտելու համար։"
 
 #: src/errormessages.ts:40
 msgid "Authorization error was: '{errormessage}'."
@@ -8751,7 +8753,7 @@ msgstr "Փաստաթուղթը հնարավոր չէ պահպանել։"
 
 #: src/errormessages.ts:90 src/errormessages.ts:109
 msgid "The storage refused to save the document."
-msgstr ""
+msgstr "Պահեստը հրաժարվեց պահպանել փաստաթուղթը։"
 
 #: src/errormessages.ts:91
 msgid "Document cannot be renamed."
@@ -8930,15 +8932,15 @@ msgstr "Առցանց խմբագրիչ"
 
 #: src/layer/tile/CanvasTileLayer.js:1396
 msgid "%1 started recording changes for all users."
-msgstr ""
+msgstr "%1-ը սկսեց գրանցել բոլոր օգտատերերի փոփոխությունները։"
 
 #: src/layer/tile/CanvasTileLayer.js:1397
 msgid "Recording changes was started for all users."
-msgstr ""
+msgstr "Փոփոխությունների գրանցումը սկսվել է բոլոր օգտատերերի համար։"
 
 #: src/layer/tile/CanvasTileLayer.js:1399
 msgid "Your changes are tracked now."
-msgstr ""
+msgstr "Ձեր փոփոխությունները հիմա հետևվվում են։"
 
 #: src/layer/tile/CanvasTileLayer.js:1485
 msgid "Functions"
