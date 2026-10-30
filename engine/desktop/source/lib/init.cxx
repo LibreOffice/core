@@ -6689,6 +6689,10 @@ void COKitDocumentImpl::selectObjects(const char* pObjectIds)
                     pPart->getUnoShape(), cpo::uno::UNO_QUERY)));
             return;
         }
+
+        // anything else, the active object itself included, is selected on the page, so the
+        // object stops being active in place first, as a press outside it ends it
+        pClient->DeactivateObject();
     }
 
     // The objects to mark are gathered first, so that putting the marks on can report the change

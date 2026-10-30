@@ -125,6 +125,9 @@ abstract class ClassicContext implements InteractionContext {
 		const objectId = RenderGeometrySection.outermostOf(hit, this.groupStoodIn);
 		if (objectId === hit) return false;
 		if (RenderGeometrySection.objectOf(objectId)?.isDiagram) return false;
+		// a chart that is not active holds no objects to enter, even where its parts are still
+		// here until the engine sends it as one again; the engine activates it
+		if (!RenderGeometrySection.holdsObjects(objectId)) return false;
 
 		GraphicSelection.selectObjects([
 			RenderGeometrySection.outermostOf(hit, objectId),
