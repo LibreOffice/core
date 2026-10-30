@@ -739,8 +739,6 @@ void ColorConfig_Impl::UpdateSettings()
     aStyleSettings.SetHelpTextColor(aColor);
     aStyleSettings.SetActiveTextColor(aColor);
 
-    aColor = GetColorValue(MENUBARHIGHLIGHTCOLOR, true).nColor;
-    aStyleSettings.SetListBoxWindowHighlightTextColor(aColor);
     aColor = GetColorValue(MENUBARTEXTCOLOR, true).nColor;
     aStyleSettings.SetMenuBarTextColor(aColor);
     aColor = GetColorValue(MENUTEXTCOLOR, true).nColor;
@@ -769,6 +767,7 @@ void ColorConfig_Impl::UpdateSettings()
     aStyleSettings.SetShadowColor(aColor);
 
     aColor = GetColorValue(MENUBARHIGHLIGHTTEXTCOLOR, true).nColor;
+    aStyleSettings.SetListBoxWindowHighlightTextColor(aColor);
     aStyleSettings.SetTabRolloverTextColor(aColor);
 
     aAllSettings.SetStyleSettings(aStyleSettings);
