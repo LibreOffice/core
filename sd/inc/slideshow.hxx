@@ -61,7 +61,7 @@ struct ImplSVEvent;
 namespace sd
 {
 
-class SlideshowImpl;
+class SlideShowController;
 class View;
 class ViewShell;
 class ViewShellBase;
@@ -200,7 +200,7 @@ private:
 
     SvxItemPropertySet  maPropSet;
 
-    rtl::Reference< SlideshowImpl > mxController;
+    rtl::Reference<SlideShowController> mxController;
     /** This flag is used together with mxController.is() to prevent
         multiple instances of the slide show for one document.  The flag
         covers the time before mxController is set.

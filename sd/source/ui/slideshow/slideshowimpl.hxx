@@ -81,7 +81,8 @@ class SlideShowListenerProxy :
         public ::cppu::WeakImplHelper< css::presentation::XSlideShowNavigationListener, css::presentation::XShapeEventListener >
 {
 public:
-    SlideShowListenerProxy( rtl::Reference< SlideshowImpl > xController, css::uno::Reference< css::presentation::XSlideShow > xSlideShow );
+    SlideShowListenerProxy(rtl::Reference<SlideShowController> xController,
+                           css::uno::Reference<css::presentation::XSlideShow> xSlideShow);
     virtual ~SlideShowListenerProxy() override;
 
     void addAsSlideShowListener();
@@ -119,19 +120,22 @@ public:
 private:
     std::mutex m_aMutex;
     ::comphelper::OInterfaceContainerHelper4<css::presentation::XSlideShowListener> maListeners;
-    rtl::Reference< SlideshowImpl > mxController;
+    rtl::Reference<SlideShowController> mxController;
     css::uno::Reference< css::presentation::XSlideShow > mxSlideShow;
 };
 
-typedef comphelper::WeakComponentImplHelper< css::presentation::XSlideShowController, css::container::XIndexAccess > SlideshowImplBase;
-
-class SlideshowImpl final : public SlideshowImplBase, public SfxListener
+class SlideShowController final
+    : public comphelper::WeakComponentImplHelper<css::presentation::XSlideShowController,
+                                                 css::container::XIndexAccess>,
+      public SfxListener
 {
 friend class SlideShow;
 friend class SlideShowView;
 
 public:
-    explicit SlideshowImpl( const css::uno::Reference< css::presentation::XPresentation2 >& xPresentation, ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc, vcl::Window* pParentWindow);
+    explicit SlideShowController(
+        const css::uno::Reference<css::presentation::XPresentation2>& xPresentation,
+        ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc, vcl::Window* pParentWindow);
 
     // css::presentation::XSlideShowController:
     virtual sal_Bool SAL_CALL getAlwaysOnTop() override;
@@ -207,10 +211,10 @@ public:
     void mouseButtonUp(const MouseEvent& rMEvt);
 
 private:
-    SlideshowImpl(SlideshowImpl const &) = delete;
-    void operator =(SlideshowImpl const &) = delete;
+    SlideShowController(SlideShowController const&) = delete;
+    void operator=(SlideShowController const&) = delete;
 
-    virtual ~SlideshowImpl() override;
+    virtual ~SlideShowController() override;
 
     // helper to check if given hint is associated with CurrentSlide
     bool isCurrentSlideInvolved(const SdrHint& rHint);

@@ -98,12 +98,12 @@ void SlideShowViewMouseMotionListeners::notify( std::unique_lock<std::mutex>& rG
 SlideShowView::SlideShowView( ShowWindow&     rOutputWindow,
                               SdDrawDocument* pDoc,
                               AnimationMode   eAnimationMode,
-                              SlideshowImpl*  pSlideShow,
+                              SlideShowController*  pSlideShowController,
                               bool            bFullScreen )
 :   mpCanvas( ::cppcanvas::VCLFactory::createSpriteCanvas( rOutputWindow ) ),
     mxWindow( VCLUnoHelper::GetInterface( &rOutputWindow ), uno::UNO_SET_THROW ),
     mxWindowPeer( mxWindow, uno::UNO_QUERY_THROW ),
-    mpSlideShow( pSlideShow ),
+    mpSlideShowController(pSlideShowController),
     mrOutputWindow( rOutputWindow ),
     mpDoc( pDoc ),
     mbIsMouseMotionListener( false ),
@@ -142,7 +142,7 @@ SlideShowView::SlideShowView( ShowWindow&     rOutputWindow,
 // Dispose all internal references
 void SlideShowView::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    mpSlideShow = nullptr;
+    mpSlideShowController = nullptr;
 
     // deregister listeners
     if( mxWindow.is() )
@@ -206,10 +206,10 @@ void SlideShowView::paint( const awt::PaintEvent& e )
     if( mbFirstPaint )
     {
         mbFirstPaint = false;
-        SlideshowImpl* pSlideShow = mpSlideShow;
+        SlideShowController* pSlideShowController = mpSlideShowController;
         aGuard.unlock();
-        if( pSlideShow )
-            pSlideShow->onFirstPaint();
+        if (pSlideShowController)
+            pSlideShowController->onFirstPaint();
     }
     else
     {
@@ -218,7 +218,7 @@ void SlideShowView::paint( const awt::PaintEvent& e )
         awt::PaintEvent aEvent( e );
         aEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
         maPaintListeners.notifyEach( aGuard, &css::awt::XPaintListener::windowPaint, aEvent );
-        updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
+        updateController(aGuard, mpSlideShowController); // warning: clears guard!
     }
 }
 
@@ -425,24 +425,25 @@ awt::Rectangle SAL_CALL SlideShowView::getCanvasArea(  )
     return aRectangle;
 }
 
-void SlideShowView::updateimpl( std::unique_lock<std::mutex>& rGuard, SlideshowImpl* pSlideShow )
+void SlideShowView::updateController(std::unique_lock<std::mutex>& rGuard,
+                                     SlideShowController* pSlideShowController)
 {
-    if( !pSlideShow )
+    if (!pSlideShowController)
         return;
 
-    ::rtl::Reference< SlideshowImpl > xKeepAlive( pSlideShow );
+    ::rtl::Reference<SlideShowController> xKeepAlive(pSlideShowController);
 
     if( mbFirstPaint )
     {
         mbFirstPaint = false;
-        SlideshowImpl* pTmpSlideShow = mpSlideShow;
+        SlideShowController* pTmpSlideShowController = mpSlideShowController;
         rGuard.unlock();
-        if( pTmpSlideShow )
-            pTmpSlideShow->onFirstPaint();
+        if (pTmpSlideShowController)
+            pTmpSlideShowController->onFirstPaint();
     } else
         rGuard.unlock();
 
-    pSlideShow->startUpdateTimer();
+    pSlideShowController->startUpdateTimer();
 }
 
 // XWindowListener methods
@@ -477,7 +478,7 @@ void SAL_CALL SlideShowView::windowResized( const awt::WindowEvent& e )
         }
     }
 
-    updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
+    updateController(aGuard, mpSlideShowController); // warning: clears guard!
 }
 
 void SAL_CALL SlideShowView::windowMoved( const awt::WindowEvent& )
@@ -502,7 +503,7 @@ void SAL_CALL SlideShowView::mousePressed( const awt::MouseEvent& e )
     if (m_bDisposed)
         return;
 
-    if( mpSlideShow && mpSlideShow->isInputFreezed() )
+    if (mpSlideShowController && mpSlideShowController->isInputFreezed())
     {
         mbMousePressedEaten = true;
     }
@@ -518,7 +519,7 @@ void SAL_CALL SlideShowView::mousePressed( const awt::MouseEvent& e )
         aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
         maMouseListeners.notify( aGuard, aEvent );
-        updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
+        updateController(aGuard, mpSlideShowController); // warning: clears guard!
     }
 }
 
@@ -533,7 +534,7 @@ void SAL_CALL SlideShowView::mouseReleased( const awt::MouseEvent& e )
         // if mouse button down was ignored, also ignore mouse button up
         mbMousePressedEaten = false;
     }
-    else if( mpSlideShow && !mpSlideShow->isInputFreezed() )
+    else if (mpSlideShowController && !mpSlideShowController->isInputFreezed())
     {
         // Change event source, to enable listeners to match event
         // with view
@@ -543,7 +544,7 @@ void SAL_CALL SlideShowView::mouseReleased( const awt::MouseEvent& e )
         aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
         maMouseListeners.notify( aGuard, aEvent );
-        updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
+        updateController(aGuard, mpSlideShowController); // warning: clears guard!
     }
 }
 
@@ -567,7 +568,7 @@ void SAL_CALL SlideShowView::mouseEntered( const awt::MouseEvent& e )
     aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
     maMouseListeners.notify( aGuard, aEvent );
-    updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
+    updateController(aGuard, mpSlideShowController); // warning: clears guard!
 }
 
 void SAL_CALL SlideShowView::mouseExited( const awt::MouseEvent& e )
@@ -584,7 +585,7 @@ void SAL_CALL SlideShowView::mouseExited( const awt::MouseEvent& e )
     aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
     maMouseListeners.notify( aGuard, aEvent );
-    updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
+    updateController(aGuard, mpSlideShowController); // warning: clears guard!
 }
 
 // XMouseMotionListener implementation
@@ -602,7 +603,7 @@ void SAL_CALL SlideShowView::mouseDragged( const awt::MouseEvent& e )
     aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
     maMouseMotionListeners.notify( aGuard, aEvent );
-    updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
+    updateController(aGuard, mpSlideShowController); // warning: clears guard!
 }
 
 void SAL_CALL SlideShowView::mouseMoved( const awt::MouseEvent& e )
@@ -619,7 +620,7 @@ void SAL_CALL SlideShowView::mouseMoved( const awt::MouseEvent& e )
     aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
     maMouseMotionListeners.notify( aGuard, aEvent );
-    updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
+    updateController(aGuard, mpSlideShowController); // warning: clears guard!
 }
 
 } // namespace ::sd

@@ -28,7 +28,7 @@
 
 namespace sd {
 
-class SlideshowImpl;
+class SlideShowController;
 
 #define SLIDE_NO_TIMEOUT SAL_MAX_INT32
 
@@ -46,7 +46,7 @@ class ShowWindow
 {
 
 public:
-    ShowWindow ( ::rtl::Reference< ::sd::SlideshowImpl > xController, vcl::Window* pParent );
+    ShowWindow(::rtl::Reference<::sd::SlideShowController> xController, vcl::Window* pParent);
     virtual ~ShowWindow() override;
     virtual void dispose() override;
 
@@ -101,7 +101,7 @@ private:
                     DECL_LINK(MouseTimeoutHdl, Timer *, void);
                     DECL_LINK( EventHdl, VclWindowEvent&, void );
 
-    ::rtl::Reference< SlideshowImpl > mxController;
+    rtl::Reference<SlideShowController> mxController;
 };
 
 } // end of namespace sd

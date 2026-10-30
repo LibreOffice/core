@@ -530,13 +530,13 @@ constexpr OUString gsOnClick( u"OnClick"_ustr );
 constexpr OUString gsBookmark( u"Bookmark"_ustr );
 constexpr OUString gsVerb( u"Verb"_ustr );
 
-SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc, vcl::Window* pParentWindow )
+SlideShowController::SlideShowController( const Reference< XPresentation2 >& xPresentation, ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc, vcl::Window* pParentWindow )
 : mxShow()
 , mxView()
 , mxModel(pDoc->getUnoModel())
-, maUpdateTimer("SlideShowImpl maUpdateTimer")
-, maInputFreezeTimer("SlideShowImpl maInputFreezeTimer")
-, maDeactivateTimer("SlideShowImpl maDeactivateTimer")
+, maUpdateTimer("SlideShowController maUpdateTimer")
+, maInputFreezeTimer("SlideShowController maInputFreezeTimer")
+, maDeactivateTimer("SlideShowController maDeactivateTimer")
 , mpView(pView)
 , mpViewShell(pViewSh)
 , mpDocSh(pDoc->GetDocSh())
@@ -588,21 +588,21 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
     if( mpViewShell )
         mpOldActiveWindow = mpViewShell->GetActiveWindow();
 
-    maUpdateTimer.SetInvokeHandler(LINK(this, SlideshowImpl, updateHdl));
+    maUpdateTimer.SetInvokeHandler(LINK(this, SlideShowController, updateHdl));
     // Priority must not be too high or we'll starve input handling etc.
     maUpdateTimer.SetPriority(TaskPriority::REPAINT);
 
-    maDeactivateTimer.SetInvokeHandler(LINK(this, SlideshowImpl, deactivateHdl));
+    maDeactivateTimer.SetInvokeHandler(LINK(this, SlideShowController, deactivateHdl));
     maDeactivateTimer.SetTimeout( 20 );
 
-    maInputFreezeTimer.SetInvokeHandler( LINK( this, SlideshowImpl, ReadyForNextInputHdl ) );
+    maInputFreezeTimer.SetInvokeHandler(LINK(this, SlideShowController, ReadyForNextInputHdl));
     maInputFreezeTimer.SetTimeout( 20 );
 
         // no autosave during show
     if (officecfg::Office::Recovery::AutoSave::Enabled::get())
         mbAutoSaveWasOn = true;
 
-    Application::AddEventListener( LINK( this, SlideshowImpl, EventListenerHdl ) );
+    Application::AddEventListener(LINK(this, SlideShowController, EventListenerHdl));
 
     mbUsePen = maPresSettings.mbMouseAsPen;
 
@@ -619,14 +619,14 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
         StartListening(*mpDoc);
 }
 
-SlideshowImpl::~SlideshowImpl()
+SlideShowController::~SlideShowController()
 {
     // stop listening to DrawModel (see above)
     if (nullptr != mpDoc)
         EndListening(*mpDoc);
 
     SdModule* pModule = SdModule::get();
-    //rhbz#806663 SlideshowImpl can outlive SdModule
+    //rhbz#806663 SlideShowController can outlive SdModule
     SdOptions* pOptions = pModule ?
         pModule->GetSdOptions(DocumentType::Impress) : nullptr;
     if( pOptions )
@@ -635,19 +635,19 @@ SlideshowImpl::~SlideshowImpl()
         pOptions->SetPresentationPenWidth(mdUserPaintStrokeWidth);
     }
 
-    Application::RemoveEventListener( LINK( this, SlideshowImpl, EventListenerHdl ) );
+    Application::RemoveEventListener(LINK(this, SlideShowController, EventListenerHdl));
 
     maDeactivateTimer.Stop();
 
     if( !mbDisposed )
     {
-        OSL_FAIL("SlideshowImpl::~SlideshowImpl(), component was not disposed!");
+        OSL_FAIL("SlideShowController::~SlideShowController(), component was not disposed!");
         std::unique_lock g(m_aMutex);
         disposing(g);
     }
 }
 
-void SlideshowImpl::disposing(std::unique_lock<std::mutex>&)
+void SlideShowController::disposing(std::unique_lock<std::mutex>&)
 {
 #ifdef ENABLE_SDREMOTE
     RemoteServer::presentationStopped();
@@ -706,7 +706,7 @@ void SlideshowImpl::disposing(std::unique_lock<std::mutex>&)
     }
     catch( Exception& )
     {
-        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::stop()" );
+        TOOLS_WARN_EXCEPTION("sd", "sd::SlideShowController::stop()");
     }
 
     mxShow.clear();
@@ -812,12 +812,13 @@ void SlideshowImpl::disposing(std::unique_lock<std::mutex>&)
     mbDisposed = true;
 }
 
-bool SlideshowImpl::isInteractiveSetup() const
+bool SlideShowController::isInteractiveSetup() const
 {
     return mbInterActiveSetup;
 }
 
-void SlideshowImpl::startInteractivePreview( const Reference< XDrawPage >& xDrawPage, const Reference< XAnimationNode >& xAnimationNode )
+void SlideShowController::startInteractivePreview(const Reference<XDrawPage>& xDrawPage,
+                                                  const Reference<XAnimationNode>& xAnimationNode)
 {
     // set flag that we are in IASS mode
     mbInterActiveSetup = true;
@@ -882,7 +883,7 @@ void SlideshowImpl::startInteractivePreview( const Reference< XDrawPage >& xDraw
     startShowImpl( aProperties );
 }
 
-void SlideshowImpl::endInteractivePreview()
+void SlideShowController::endInteractivePreview()
 {
     if (!mbInterActiveSetup)
         // not in use, nothing to do
@@ -903,7 +904,7 @@ void SlideshowImpl::endInteractivePreview()
     }
     catch( Exception& )
     {
-        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::stop()" );
+        TOOLS_WARN_EXCEPTION("sd", "sd::SlideShowController::stop()");
     }
     mxShow.clear();
     mxView.clear();
@@ -928,10 +929,9 @@ void SlideshowImpl::endInteractivePreview()
     mbInterActiveSetup = false;
 }
 
-bool SlideshowImpl::startPreview(
-        const Reference< XDrawPage >& xDrawPage,
-        const Reference< XAnimationNode >& xAnimationNode,
-        vcl::Window * pParent )
+bool SlideShowController::startPreview(const Reference<XDrawPage>& xDrawPage,
+                                       const Reference<XAnimationNode>& xAnimationNode,
+                                       vcl::Window* pParent)
 {
     bool bRet = false;
 
@@ -942,7 +942,7 @@ bool SlideshowImpl::startPreview(
             const Sequence<OUString> supportedServices(
                 xServiceInfo->getSupportedServiceNames() );
             if (comphelper::findValue(supportedServices, "com.sun.star.drawing.MasterPage") != -1) {
-                OSL_FAIL("sd::SlideshowImpl::startPreview() "
+                OSL_FAIL("sd::SlideShowController::startPreview() "
                           "not allowed on master page!");
                 return false;
             }
@@ -1007,7 +1007,7 @@ bool SlideshowImpl::startPreview(
         }
         else
         {
-            OSL_FAIL("sd::SlideshowImpl::startPreview(), I need either a parent window or a viewshell!");
+            OSL_FAIL("sd::SlideShowController::startPreview(), I need either a parent window or a viewshell!");
         }
         resize( maPresSize );
 
@@ -1034,21 +1034,22 @@ bool SlideshowImpl::startPreview(
     }
     catch( Exception& )
     {
-        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::startPreview()" );
+        TOOLS_WARN_EXCEPTION("sd", "sd::SlideShowController::startPreview()");
         bRet = false;
     }
 
     return bRet;
 }
 
-bool SlideshowImpl::startShow( PresentationSettingsEx const * pPresSettings )
+bool SlideShowController::startShow(PresentationSettingsEx const* pPresSettings)
 {
-    const rtl::Reference<SlideshowImpl> xKeepAlive(this);
+    const rtl::Reference<SlideShowController> xKeepAlive(this);
 
-    DBG_ASSERT( !mxShow.is(), "sd::SlideshowImpl::startShow(), called twice!" );
+    DBG_ASSERT(!mxShow.is(), "sd::SlideShowController::startShow(), called twice!");
     if( mxShow.is() )
         return true;
-    DBG_ASSERT( mpParentWindow!=nullptr, "sd::SlideshowImpl::startShow() called without parent window" );
+    DBG_ASSERT(mpParentWindow != nullptr,
+               "sd::SlideShowController::startShow() called without parent window");
     if (mpParentWindow == nullptr)
         return false;
 
@@ -1236,14 +1237,14 @@ bool SlideshowImpl::startShow( PresentationSettingsEx const * pPresSettings )
     }
     catch (const Exception&)
     {
-        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::startShow()" );
+        TOOLS_WARN_EXCEPTION("sd", "sd::SlideShowController::startShow()");
         bRet = false;
     }
 
     return bRet;
 }
 
-bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProperties )
+bool SlideShowController::startShowImpl(const Sequence<beans::PropertyValue>& aProperties)
 {
     try
     {
@@ -1378,14 +1379,14 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
     }
     catch( Exception& )
     {
-        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::startShowImpl()" );
+        TOOLS_WARN_EXCEPTION("sd", "sd::SlideShowController::startShowImpl()");
         return false;
     }
 }
 
 /** called only by the slideshow view when the first paint event occurs.
     This actually starts the slideshow. */
-void SlideshowImpl::onFirstPaint()
+void SlideShowController::onFirstPaint()
 {
     if( mpShowWindow )
     {
@@ -1401,7 +1402,7 @@ void SlideshowImpl::onFirstPaint()
     maUpdateTimer.Start();
 }
 
-void SlideshowImpl::paint()
+void SlideShowController::paint()
 {
     if( mxView.is() ) try
     {
@@ -1411,23 +1412,25 @@ void SlideshowImpl::paint()
     }
     catch( Exception& )
     {
-        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::paint()" );
+        TOOLS_WARN_EXCEPTION("sd", "sd::SlideShowController::paint()");
     }
 }
 
-void SAL_CALL SlideshowImpl::addSlideShowListener( const Reference< XSlideShowListener >& xListener )
+void SAL_CALL
+SlideShowController::addSlideShowListener(const Reference<XSlideShowListener>& xListener)
 {
     if( mxListenerProxy.is() )
         mxListenerProxy->addSlideShowListener( xListener );
 }
 
-void SAL_CALL SlideshowImpl::removeSlideShowListener( const Reference< XSlideShowListener >& xListener )
+void SAL_CALL
+SlideShowController::removeSlideShowListener(const Reference<XSlideShowListener>& xListener)
 {
     if( mxListenerProxy.is() )
         mxListenerProxy->removeSlideShowListener( xListener );
 }
 
-void SlideshowImpl::slideEnded(const bool bReverse)
+void SlideShowController::slideEnded(const bool bReverse)
 {
     if (bReverse)
         gotoPreviousSlide(true);
@@ -1435,7 +1438,7 @@ void SlideshowImpl::slideEnded(const bool bReverse)
         gotoNextSlide();
 }
 
-bool SlideshowImpl::swipe(const CommandGestureSwipeData &rSwipeData)
+bool SlideShowController::swipe(const CommandGestureSwipeData& rSwipeData)
 {
     if (mbUsePen || mnContextMenuEvent)
         return false;
@@ -1457,18 +1460,19 @@ bool SlideshowImpl::swipe(const CommandGestureSwipeData &rSwipeData)
     return true;
 }
 
-bool SlideshowImpl::longpress(const CommandGestureLongPressData &rLongPressData)
+bool SlideShowController::longpress(const CommandGestureLongPressData& rLongPressData)
 {
     if (mnContextMenuEvent)
         return false;
 
     maPopupMousePos = Point(rLongPressData.getX(), rLongPressData.getY());
-    mnContextMenuEvent = Application::PostUserEvent( LINK( this, SlideshowImpl, ContextMenuHdl ) );
+    mnContextMenuEvent
+        = Application::PostUserEvent(LINK(this, SlideShowController, ContextMenuHdl));
 
     return true;
 }
 
-void SlideshowImpl::removeShapeEvents()
+void SlideShowController::removeShapeEvents()
 {
     if( !(mxShow.is() && mxListenerProxy.is()) )
         return;
@@ -1485,11 +1489,11 @@ void SlideshowImpl::removeShapeEvents()
     }
     catch( Exception& )
     {
-        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::removeShapeEvents()" );
+        TOOLS_WARN_EXCEPTION("sd", "sd::SlideShowController::removeShapeEvents()");
     }
 }
 
-void SlideshowImpl::registerShapeEvents(sal_Int32 nSlideNumber)
+void SlideShowController::registerShapeEvents(sal_Int32 nSlideNumber)
 {
     if( nSlideNumber < 0 )
         return;
@@ -1515,11 +1519,11 @@ void SlideshowImpl::registerShapeEvents(sal_Int32 nSlideNumber)
     }
     catch( Exception& )
     {
-        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::registerShapeEvents()" );
+        TOOLS_WARN_EXCEPTION("sd", "sd::SlideShowController::registerShapeEvents()");
     }
 }
 
-void SlideshowImpl::registerShapeEvents( Reference< XShapes > const & xShapes )
+void SlideShowController::registerShapeEvents(Reference<XShapes> const& xShapes)
 {
     try
     {
@@ -1586,11 +1590,11 @@ void SlideshowImpl::registerShapeEvents( Reference< XShapes > const & xShapes )
     }
     catch( Exception& )
     {
-        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::registerShapeEvents()" );
+        TOOLS_WARN_EXCEPTION("sd", "sd::SlideShowController::registerShapeEvents()");
     }
 }
 
-void SlideshowImpl::displayCurrentSlide (const bool bSkipAllMainSequenceEffects)
+void SlideShowController::displayCurrentSlide(const bool bSkipAllMainSequenceEffects)
 {
     stopSound();
     removeShapeEvents();
@@ -1612,7 +1616,7 @@ void SlideshowImpl::displayCurrentSlide (const bool bSkipAllMainSequenceEffects)
     }
 }
 
-void SlideshowImpl::endPresentation()
+void SlideShowController::endPresentation()
 {
     if( maPresSettings.mbMouseAsPen)
     {
@@ -1622,10 +1626,11 @@ void SlideshowImpl::endPresentation()
     }
 
     if( !mnEndShowEvent )
-        mnEndShowEvent = Application::PostUserEvent( LINK(this, SlideshowImpl, endPresentationHdl) );
+        mnEndShowEvent
+            = Application::PostUserEvent(LINK(this, SlideShowController, endPresentationHdl));
 }
 
-IMPL_LINK_NOARG(SlideshowImpl, endPresentationHdl, void*, void)
+IMPL_LINK_NOARG(SlideShowController, endPresentationHdl, void*, void)
 {
     mnEndShowEvent = nullptr;
 
@@ -1635,7 +1640,7 @@ IMPL_LINK_NOARG(SlideshowImpl, endPresentationHdl, void*, void)
         mxPresentation->end();
 }
 
-void SAL_CALL SlideshowImpl::pause()
+void SAL_CALL SlideShowController::pause()
 {
     SolarMutexGuard aSolarGuard;
 
@@ -1655,11 +1660,11 @@ void SAL_CALL SlideshowImpl::pause()
     }
     catch( Exception& )
     {
-        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::pause()" );
+        TOOLS_WARN_EXCEPTION("sd", "sd::SlideShowController::pause()");
     }
 }
 
-void SAL_CALL SlideshowImpl::resume()
+void SAL_CALL SlideShowController::resume()
 {
     SolarMutexGuard aSolarGuard;
 
@@ -1684,20 +1689,20 @@ void SAL_CALL SlideshowImpl::resume()
     }
     catch( Exception& )
     {
-        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::resume()" );
+        TOOLS_WARN_EXCEPTION("sd", "sd::SlideShowController::resume()");
     }
 #ifdef ENABLE_SDREMOTE
     RemoteServer::presentationStarted( this );
 #endif
 }
 
-sal_Bool SAL_CALL SlideshowImpl::isPaused()
+sal_Bool SAL_CALL SlideShowController::isPaused()
 {
     SolarMutexGuard aSolarGuard;
     return mbIsPaused;
 }
 
-void SAL_CALL SlideshowImpl::blankScreen( sal_Int32 nColor )
+void SAL_CALL SlideShowController::blankScreen(sal_Int32 nColor)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -1712,7 +1717,7 @@ void SAL_CALL SlideshowImpl::blankScreen( sal_Int32 nColor )
 
 // XShapeEventListener
 
-void SlideshowImpl::click( const Reference< XShape >& xShape )
+void SlideShowController::click(const Reference<XShape>& xShape)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -1752,7 +1757,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape )
                 }
                 catch( uno::Exception& )
                 {
-                    TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::click()" );
+                    TOOLS_WARN_EXCEPTION("sd", "sd::SlideShowController::click()");
                 }
             }
         }
@@ -1847,7 +1852,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape )
     }
 }
 
-sal_Int32 SlideshowImpl::getSlideNumberForBookmark( const OUString& rStrBookmark )
+sal_Int32 SlideShowController::getSlideNumberForBookmark(const OUString& rStrBookmark)
 {
     bool bIsMasterPage;
     OUString aBookmark = getUiNameFromPageApiNameImpl( rStrBookmark );
@@ -1871,13 +1876,14 @@ sal_Int32 SlideshowImpl::getSlideNumberForBookmark( const OUString& rStrBookmark
     return ( nPgNum - 1) >> 1;
 }
 
-void SlideshowImpl::contextMenuShow(const css::awt::Point& point)
+void SlideShowController::contextMenuShow(const css::awt::Point& point)
 {
     maPopupMousePos = { point.X, point.Y };
-    mnContextMenuEvent = Application::PostUserEvent(LINK(this, SlideshowImpl, ContextMenuHdl));
+    mnContextMenuEvent
+        = Application::PostUserEvent(LINK(this, SlideShowController, ContextMenuHdl));
 }
 
-void SlideshowImpl::hyperLinkClicked( OUString const& aHyperLink )
+void SlideShowController::hyperLinkClicked(OUString const& aHyperLink)
 {
     OUString aBookmark( aHyperLink );
 
@@ -1893,7 +1899,7 @@ void SlideshowImpl::hyperLinkClicked( OUString const& aHyperLink )
     mpDocSh->OpenBookmark( aBookmark );
 }
 
-void SlideshowImpl::displaySlideNumber( sal_Int32 nSlideNumber )
+void SlideShowController::displaySlideNumber(sal_Int32 nSlideNumber)
 {
     if( mpSlideController )
     {
@@ -1905,7 +1911,7 @@ void SlideshowImpl::displaySlideNumber( sal_Int32 nSlideNumber )
 }
 
 /** nSlideIndex == -1 displays current slide again */
-void SlideshowImpl::displaySlideIndex( sal_Int32 nSlideIndex )
+void SlideShowController::displaySlideIndex(sal_Int32 nSlideIndex)
 {
     if( mpSlideController )
     {
@@ -1916,30 +1922,27 @@ void SlideshowImpl::displaySlideIndex( sal_Int32 nSlideIndex )
     }
 }
 
-void SlideshowImpl::jumpToBookmark( const OUString& sBookmark )
+void SlideShowController::jumpToBookmark(const OUString& sBookmark)
 {
     sal_Int32 nSlideNumber = getSlideNumberForBookmark( sBookmark );
     if( nSlideNumber != -1 )
         displaySlideNumber( nSlideNumber );
 }
 
-sal_Int32 SlideshowImpl::getCurrentSlideNumber() const
+sal_Int32 SlideShowController::getCurrentSlideNumber() const
 {
     return mpSlideController ? mpSlideController->getCurrentSlideNumber() : -1;
 }
 
-sal_Bool SAL_CALL SlideshowImpl::isEndless()
+sal_Bool SAL_CALL SlideShowController::isEndless()
 {
     SolarMutexGuard aSolarGuard;
     return maPresSettings.mbEndless;
 }
 
-void SlideshowImpl::update()
-{
-    startUpdateTimer();
-}
+void SlideShowController::update() { startUpdateTimer(); }
 
-void SlideshowImpl::startUpdateTimer()
+void SlideShowController::startUpdateTimer()
 {
     SolarMutexGuard aSolarGuard;
     maUpdateTimer.SetTimeout( 0 );
@@ -1950,24 +1953,21 @@ void SlideshowImpl::startUpdateTimer()
     This is used to unfreeze user input that was disabled after
     slide change to skip input that was buffered during slide
     transition preparation */
-IMPL_LINK_NOARG(SlideshowImpl, ReadyForNextInputHdl, Timer *, void)
-{
-    mbInputFreeze = false;
-}
+IMPL_LINK_NOARG(SlideShowController, ReadyForNextInputHdl, Timer*, void) { mbInputFreeze = false; }
 
 /** if I catch someone someday who calls this method by hand
     and not by using the timer, I will personally punish this
     person seriously, even if this person is me.
 */
-IMPL_LINK_NOARG(SlideshowImpl, updateHdl, Timer *, void)
+IMPL_LINK_NOARG(SlideShowController, updateHdl, Timer *, void)
 {
     updateSlideShow();
 }
 
-void SlideshowImpl::updateSlideShow()
+void SlideShowController::updateSlideShow()
 {
     // prevent me from deletion when recursing (App::EnableYieldMode does)
-    const rtl::Reference<SlideshowImpl> xKeepAlive(this);
+    const rtl::Reference<SlideShowController> xKeepAlive(this);
 
     Reference< XSlideShow > xShow( mxShow );
     if ( ! xShow.is())
@@ -2013,11 +2013,11 @@ void SlideshowImpl::updateSlideShow()
     }
     catch( Exception& )
     {
-        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::updateSlideShow()" );
+        TOOLS_WARN_EXCEPTION("sd", "sd::SlideShowController::updateSlideShow()");
     }
 }
 
-bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
+bool SlideShowController::keyInput(const KeyEvent& rKEvt)
 {
     if( !mxShow.is() || mbInputFreeze )
         return false;
@@ -2034,7 +2034,8 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
                 {
                     if( mpShowWindow )
                         maPopupMousePos = mpShowWindow->GetPointerState().maPos;
-                    mnContextMenuEvent = Application::PostUserEvent( LINK( this, SlideshowImpl, ContextMenuHdl ) );
+                    mnContextMenuEvent = Application::PostUserEvent(
+                        LINK(this, SlideShowController, ContextMenuHdl));
                 }
                 break;
 
@@ -2155,13 +2156,13 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
     catch( Exception& )
     {
         bRet = false;
-        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::keyInput()" );
+        TOOLS_WARN_EXCEPTION("sd", "sd::SlideShowController::keyInput()");
     }
 
     return bRet;
 }
 
-IMPL_LINK( SlideshowImpl, EventListenerHdl, VclSimpleEvent&, rSimpleEvent, void )
+IMPL_LINK(SlideShowController, EventListenerHdl, VclSimpleEvent&, rSimpleEvent, void)
 {
     if( !mxShow.is() || mbInputFreeze )
         return;
@@ -2184,7 +2185,8 @@ IMPL_LINK( SlideshowImpl, EventListenerHdl, VclSimpleEvent&, rSimpleEvent, void 
         {
             if( mpShowWindow )
                 maPopupMousePos = mpShowWindow->GetPointerState().maPos;
-            mnContextMenuEvent = Application::PostUserEvent( LINK( this, SlideshowImpl, ContextMenuHdl ) );
+            mnContextMenuEvent
+                = Application::PostUserEvent(LINK(this, SlideShowController, ContextMenuHdl));
         }
         break;
     case MediaCommand::VolumeDown:
@@ -2238,16 +2240,17 @@ IMPL_LINK( SlideshowImpl, EventListenerHdl, VclSimpleEvent&, rSimpleEvent, void 
     }
 }
 
-void SlideshowImpl::mouseButtonUp(const MouseEvent& rMEvt)
+void SlideShowController::mouseButtonUp(const MouseEvent& rMEvt)
 {
     if( rMEvt.IsRight() && !mnContextMenuEvent )
     {
         maPopupMousePos = rMEvt.GetPosPixel();
-        mnContextMenuEvent = Application::PostUserEvent( LINK( this, SlideshowImpl, ContextMenuHdl ) );
+        mnContextMenuEvent
+            = Application::PostUserEvent(LINK(this, SlideShowController, ContextMenuHdl));
     }
 }
 
-IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
+IMPL_LINK_NOARG(SlideShowController, ContextMenuHdl, void*, void)
 {
     mnContextMenuEvent = nullptr;
 
@@ -2362,7 +2365,7 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
         resume();
 }
 
-void SlideshowImpl::ContextMenuSelectHdl(std::u16string_view rMenuId)
+void SlideShowController::ContextMenuSelectHdl(std::u16string_view rMenuId)
 {
     if (rMenuId == u"prev")
     {
@@ -2498,7 +2501,7 @@ void SlideshowImpl::ContextMenuSelectHdl(std::u16string_view rMenuId)
     }
 }
 
-Reference< XSlideShow > SlideshowImpl::createSlideShow()
+Reference<XSlideShow> SlideShowController::createSlideShow()
 {
     Reference< XSlideShow > xShow;
 
@@ -2511,13 +2514,13 @@ Reference< XSlideShow > SlideshowImpl::createSlideShow()
     }
     catch( uno::Exception& )
     {
-        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::createSlideShow()" );
+        TOOLS_WARN_EXCEPTION("sd", "sd::SlideShowController::createSlideShow()");
     }
 
     return xShow;
 }
 
-void SlideshowImpl::createSlideList( bool bAll, std::u16string_view rPresSlide )
+void SlideShowController::createSlideList(bool bAll, std::u16string_view rPresSlide)
 {
     const sal_uInt16 nSlideCount = mpDoc->GetSdPageCount( PageKind::Standard );
 
@@ -2617,7 +2620,7 @@ const FncGetChildWindowId aShowChildren[] =
     &SfxInfoBarContainerChild::GetChildWindowId
 };
 
-void SlideshowImpl::hideChildWindows()
+void SlideShowController::hideChildWindows()
 {
     mnChildMask = 0;
 
@@ -2641,7 +2644,7 @@ void SlideshowImpl::hideChildWindows()
     }
 }
 
-void SlideshowImpl::showChildWindows()
+void SlideShowController::showChildWindows()
 {
     if( ANIMATIONMODE_SHOW == meAnimationMode )
     {
@@ -2657,22 +2660,22 @@ void SlideshowImpl::showChildWindows()
     }
 }
 
-SfxViewFrame* SlideshowImpl::getViewFrame() const
+SfxViewFrame* SlideShowController::getViewFrame() const
 {
     return mpViewShell ? mpViewShell->GetViewFrame() : nullptr;
 }
 
-SfxDispatcher* SlideshowImpl::getDispatcher() const
+SfxDispatcher* SlideShowController::getDispatcher() const
 {
     return (mpViewShell && mpViewShell->GetViewFrame()) ? mpViewShell->GetViewFrame()->GetDispatcher() : nullptr;
 }
 
-SfxBindings* SlideshowImpl::getBindings() const
+SfxBindings* SlideShowController::getBindings() const
 {
     return (mpViewShell && mpViewShell->GetViewFrame()) ? &mpViewShell->GetViewFrame()->GetBindings() : nullptr;
 }
 
-void SlideshowImpl::resize( const Size& rSize )
+void SlideShowController::resize(const Size& rSize)
 {
     maPresSize = rSize;
 
@@ -2689,11 +2692,11 @@ void SlideshowImpl::resize( const Size& rSize )
     }
     catch( Exception& )
     {
-        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::resize()" );
+        TOOLS_WARN_EXCEPTION("sd", "sd::SlideShowController::resize()");
     }
 }
 
-void SlideshowImpl::setActiveXToolbarsVisible( bool bVisible )
+void SlideShowController::setActiveXToolbarsVisible(bool bVisible)
 {
     // in case of ActiveX control the toolbars should not be visible if slide show runs in window mode
     // actually it runs always in window mode in case of ActiveX control
@@ -2725,7 +2728,7 @@ void SlideshowImpl::setActiveXToolbarsVisible( bool bVisible )
     {}
 }
 
-void SAL_CALL SlideshowImpl::activate()
+void SAL_CALL SlideShowController::activate()
 {
     SolarMutexGuard aSolarGuard;
 
@@ -2764,7 +2767,7 @@ void SAL_CALL SlideshowImpl::activate()
     resume();
 }
 
-void SAL_CALL SlideshowImpl::deactivate()
+void SAL_CALL SlideShowController::deactivate()
 {
     SolarMutexGuard aSolarGuard;
 
@@ -2774,7 +2777,7 @@ void SAL_CALL SlideshowImpl::deactivate()
     }
 }
 
-IMPL_LINK_NOARG(SlideshowImpl, deactivateHdl, Timer *, void)
+IMPL_LINK_NOARG(SlideShowController, deactivateHdl, Timer*, void)
 {
     if( !(mbActive && mxShow.is()) )
         return;
@@ -2795,13 +2798,13 @@ IMPL_LINK_NOARG(SlideshowImpl, deactivateHdl, Timer *, void)
     }
 }
 
-sal_Bool SAL_CALL SlideshowImpl::isActive()
+sal_Bool SAL_CALL SlideShowController::isActive()
 {
     SolarMutexGuard aSolarGuard;
     return mbActive;
 }
 
-void SlideshowImpl::setAutoSaveState( bool bOn)
+void SlideShowController::setAutoSaveState(bool bOn)
 {
     try
     {
@@ -2819,11 +2822,11 @@ void SlideshowImpl::setAutoSaveState( bool bOn)
     }
     catch( Exception& )
     {
-        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::setAutoSaveState()");
+        TOOLS_WARN_EXCEPTION("sd", "sd::SlideShowController::setAutoSaveState()");
     }
 }
 
-Reference< XDrawPage > SAL_CALL SlideshowImpl::getCurrentSlide()
+Reference<XDrawPage> SAL_CALL SlideShowController::getCurrentSlide()
 {
     SolarMutexGuard aSolarGuard;
 
@@ -2838,7 +2841,7 @@ Reference< XDrawPage > SAL_CALL SlideshowImpl::getCurrentSlide()
     return xSlide;
 }
 
-sal_Int32 SAL_CALL SlideshowImpl::getNextSlideIndex()
+sal_Int32 SAL_CALL SlideShowController::getNextSlideIndex()
 {
     SolarMutexGuard aSolarGuard;
 
@@ -2852,19 +2855,19 @@ sal_Int32 SAL_CALL SlideshowImpl::getNextSlideIndex()
     }
 }
 
-sal_Int32 SAL_CALL SlideshowImpl::getCurrentSlideIndex()
+sal_Int32 SAL_CALL SlideShowController::getCurrentSlideIndex()
 {
     return mpSlideController ? mpSlideController->getCurrentSlideIndex() : -1;
 }
 
 // css::presentation::XSlideShowController:
 
-::sal_Int32 SAL_CALL SlideshowImpl::getSlideCount()
+::sal_Int32 SAL_CALL SlideShowController::getSlideCount()
 {
     return mpSlideController ? mpSlideController->getSlideIndexCount() : 0;
 }
 
-Reference< XDrawPage > SAL_CALL SlideshowImpl::getSlideByIndex(::sal_Int32 Index)
+Reference<XDrawPage> SAL_CALL SlideShowController::getSlideByIndex(::sal_Int32 Index)
 {
     if ((mpSlideController == nullptr) || (Index < 0)
         || (Index >= mpSlideController->getSlideIndexCount()))
@@ -2873,13 +2876,13 @@ Reference< XDrawPage > SAL_CALL SlideshowImpl::getSlideByIndex(::sal_Int32 Index
     return mpSlideController->getSlideByNumber( mpSlideController->getSlideNumber( Index ) );
 }
 
-sal_Bool SAL_CALL SlideshowImpl::getAlwaysOnTop()
+sal_Bool SAL_CALL SlideShowController::getAlwaysOnTop()
 {
     SolarMutexGuard aSolarGuard;
     return maPresSettings.mbAlwaysOnTop;
 }
 
-void SAL_CALL SlideshowImpl::setAlwaysOnTop( sal_Bool bAlways )
+void SAL_CALL SlideShowController::setAlwaysOnTop(sal_Bool bAlways)
 {
     SolarMutexGuard aSolarGuard;
     if( maPresSettings.mbAlwaysOnTop != bool(bAlways) )
@@ -2889,19 +2892,19 @@ void SAL_CALL SlideshowImpl::setAlwaysOnTop( sal_Bool bAlways )
     }
 }
 
-sal_Bool SAL_CALL SlideshowImpl::isFullScreen()
+sal_Bool SAL_CALL SlideShowController::isFullScreen()
 {
     SolarMutexGuard aSolarGuard;
     return maPresSettings.mbFullScreen;
 }
 
-sal_Bool SAL_CALL SlideshowImpl::getMouseVisible()
+sal_Bool SAL_CALL SlideShowController::getMouseVisible()
 {
     SolarMutexGuard aSolarGuard;
     return maPresSettings.mbMouseVisible;
 }
 
-void SAL_CALL SlideshowImpl::setMouseVisible( sal_Bool bVisible )
+void SAL_CALL SlideShowController::setMouseVisible(sal_Bool bVisible)
 {
     SolarMutexGuard aSolarGuard;
     if( maPresSettings.mbMouseVisible != bool(bVisible) )
@@ -2912,13 +2915,13 @@ void SAL_CALL SlideshowImpl::setMouseVisible( sal_Bool bVisible )
     }
 }
 
-sal_Bool SAL_CALL SlideshowImpl::getUsePen()
+sal_Bool SAL_CALL SlideShowController::getUsePen()
 {
     SolarMutexGuard aSolarGuard;
     return mbUsePen;
 }
 
-void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen )
+void SAL_CALL SlideShowController::setUsePen(sal_Bool bMouseAsPen)
 {
     SolarMutexGuard aSolarGuard;
     mbUsePen = bMouseAsPen;
@@ -2951,37 +2954,37 @@ void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen )
     }
     catch( Exception& )
     {
-        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::setUsePen()" );
+        TOOLS_WARN_EXCEPTION("sd", "sd::SlideShowController::setUsePen()");
     }
 }
 
-double SAL_CALL SlideshowImpl::getPenWidth()
+double SAL_CALL SlideShowController::getPenWidth()
 {
     SolarMutexGuard aSolarGuard;
     return mdUserPaintStrokeWidth;
 }
 
-void SAL_CALL SlideshowImpl::setPenWidth( double dStrokeWidth )
+void SAL_CALL SlideShowController::setPenWidth(double dStrokeWidth)
 {
     SolarMutexGuard aSolarGuard;
     mdUserPaintStrokeWidth = dStrokeWidth;
     setUsePen( true ); // enable pen mode, update color and width
 }
 
-sal_Int32 SAL_CALL SlideshowImpl::getPenColor()
+sal_Int32 SAL_CALL SlideShowController::getPenColor()
 {
     SolarMutexGuard aSolarGuard;
     return mnUserPaintColor;
 }
 
-void SAL_CALL SlideshowImpl::setPenColor( sal_Int32 nColor )
+void SAL_CALL SlideShowController::setPenColor(sal_Int32 nColor)
 {
     SolarMutexGuard aSolarGuard;
     mnUserPaintColor = nColor;
     setUsePen( true ); // enable pen mode, update color
 }
 
-void SAL_CALL SlideshowImpl::setEraseAllInk(sal_Bool bEraseAllInk)
+void SAL_CALL SlideShowController::setEraseAllInk(sal_Bool bEraseAllInk)
 {
     if( !bEraseAllInk )
         return;
@@ -2999,18 +3002,18 @@ void SAL_CALL SlideshowImpl::setEraseAllInk(sal_Bool bEraseAllInk)
     }
     catch( Exception& )
     {
-        TOOLS_WARN_EXCEPTION( "sd.slideshow", "sd::SlideshowImpl::setEraseAllInk()" );
+        TOOLS_WARN_EXCEPTION("sd.slideshow", "sd::SlideShowController::setEraseAllInk()");
     }
 }
 
 // XSlideShowController Methods
-sal_Bool SAL_CALL SlideshowImpl::isRunning(  )
+sal_Bool SAL_CALL SlideShowController::isRunning()
 {
     SolarMutexGuard aSolarGuard;
     return mxShow.is();
 }
 
-void SAL_CALL SlideshowImpl::gotoNextEffect(  )
+void SAL_CALL SlideShowController::gotoNextEffect()
 {
     SolarMutexGuard aSolarGuard;
 
@@ -3036,7 +3039,7 @@ void SAL_CALL SlideshowImpl::gotoNextEffect(  )
     }
 }
 
-void SAL_CALL SlideshowImpl::gotoPreviousEffect(  )
+void SAL_CALL SlideShowController::gotoPreviousEffect()
 {
     SolarMutexGuard aSolarGuard;
 
@@ -3055,7 +3058,7 @@ void SAL_CALL SlideshowImpl::gotoPreviousEffect(  )
     }
 }
 
-void SAL_CALL SlideshowImpl::gotoFirstSlide(  )
+void SAL_CALL SlideShowController::gotoFirstSlide()
 {
     SolarMutexGuard aSolarGuard;
 
@@ -3076,7 +3079,7 @@ void SAL_CALL SlideshowImpl::gotoFirstSlide(  )
     }
 }
 
-void SAL_CALL SlideshowImpl::gotoNextSlide(  )
+void SAL_CALL SlideShowController::gotoNextSlide()
 {
     SolarMutexGuard aSolarGuard;
 
@@ -3147,12 +3150,12 @@ void SAL_CALL SlideshowImpl::gotoNextSlide(  )
     }
 }
 
-void SAL_CALL SlideshowImpl::gotoPreviousSlide(  )
+void SAL_CALL SlideShowController::gotoPreviousSlide(  )
 {
     gotoPreviousSlide(false);
 }
 
-void SlideshowImpl::gotoPreviousSlide (const bool bSkipAllMainSequenceEffects)
+void SlideShowController::gotoPreviousSlide(const bool bSkipAllMainSequenceEffects)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -3195,11 +3198,11 @@ void SlideshowImpl::gotoPreviousSlide (const bool bSkipAllMainSequenceEffects)
     }
     catch( Exception& )
     {
-        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::gotoPreviousSlide()" );
+        TOOLS_WARN_EXCEPTION("sd", "sd::SlideShowController::gotoPreviousSlide()");
     }
 }
 
-void SAL_CALL SlideshowImpl::gotoLastSlide()
+void SAL_CALL SlideShowController::gotoLastSlide()
 {
     SolarMutexGuard aSolarGuard;
 
@@ -3223,7 +3226,7 @@ void SAL_CALL SlideshowImpl::gotoLastSlide()
     }
 }
 
-void SAL_CALL SlideshowImpl::gotoBookmark( const OUString& rBookmark )
+void SAL_CALL SlideShowController::gotoBookmark(const OUString& rBookmark)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -3235,7 +3238,7 @@ void SAL_CALL SlideshowImpl::gotoBookmark( const OUString& rBookmark )
         displaySlideNumber( nSlideNumber );
 }
 
-void SAL_CALL SlideshowImpl::gotoSlide( const Reference< XDrawPage >& xSlide )
+void SAL_CALL SlideShowController::gotoSlide(const Reference<XDrawPage>& xSlide)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -3255,7 +3258,7 @@ void SAL_CALL SlideshowImpl::gotoSlide( const Reference< XDrawPage >& xSlide )
     }
 }
 
-void SAL_CALL SlideshowImpl::gotoSlideIndex( sal_Int32 nIndex )
+void SAL_CALL SlideShowController::gotoSlideIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -3265,7 +3268,7 @@ void SAL_CALL SlideshowImpl::gotoSlideIndex( sal_Int32 nIndex )
     displaySlideIndex( nIndex );
 }
 
-void SAL_CALL SlideshowImpl::stopSound(  )
+void SAL_CALL SlideShowController::stopSound()
 {
     SolarMutexGuard aSolarGuard;
 
@@ -3279,28 +3282,28 @@ void SAL_CALL SlideshowImpl::stopSound(  )
     }
     catch( Exception& )
     {
-        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::stopSound()" );
+        TOOLS_WARN_EXCEPTION("sd", "sd::SlideShowController::stopSound()");
     }
 }
 
 // XIndexAccess
 
-::sal_Int32 SAL_CALL SlideshowImpl::getCount(  )
+::sal_Int32 SAL_CALL SlideShowController::getCount(  )
 {
     return getSlideCount();
 }
 
-css::uno::Any SAL_CALL SlideshowImpl::getByIndex( ::sal_Int32 Index )
+css::uno::Any SAL_CALL SlideShowController::getByIndex(::sal_Int32 Index)
 {
     return Any( getSlideByIndex( Index ) );
 }
 
-css::uno::Type SAL_CALL SlideshowImpl::getElementType(  )
+css::uno::Type SAL_CALL SlideShowController::getElementType()
 {
     return cppu::UnoType<XDrawPage>::get();
 }
 
-sal_Bool SAL_CALL SlideshowImpl::hasElements(  )
+sal_Bool SAL_CALL SlideShowController::hasElements(  )
 {
     return getSlideCount() != 0;
 }
@@ -3312,18 +3315,18 @@ namespace
     public:
         struct AsyncUpdateSlideshowData
         {
-            SlideshowImpl* pSlideshowImpl;
+            SlideShowController* pSlideshowController;
             uno::Reference< css::drawing::XDrawPage > XCurrentSlide;
             SdrHintKind eHintKind;
         };
 
-        static ImplSVEvent* AsyncUpdateSlideshow(
-            SlideshowImpl* pSlideshowImpl,
-            const uno::Reference< css::drawing::XDrawPage >& rXCurrentSlide,
-            SdrHintKind eHintKind)
+        static ImplSVEvent*
+        AsyncUpdateSlideshow(SlideShowController* pSlideshowController,
+                             const uno::Reference<css::drawing::XDrawPage>& rXCurrentSlide,
+                             SdrHintKind eHintKind)
         {
             AsyncUpdateSlideshowData* pNew(new AsyncUpdateSlideshowData);
-            pNew->pSlideshowImpl = pSlideshowImpl;
+            pNew->pSlideshowController = pSlideshowController;
             pNew->XCurrentSlide = rXCurrentSlide;
             pNew->eHintKind = eHintKind;
             return Application::PostUserEvent(LINK(nullptr, AsyncUpdateSlideshow_Impl, Update), pNew);
@@ -3336,14 +3339,14 @@ namespace
     IMPL_STATIC_LINK(AsyncUpdateSlideshow_Impl, Update, void*, pData, void)
     {
         AsyncUpdateSlideshowData* pSlideData(static_cast<AsyncUpdateSlideshowData*>(pData));
-        pSlideData->pSlideshowImpl->AsyncNotifyEvent(pSlideData->XCurrentSlide, pSlideData->eHintKind);
+        pSlideData->pSlideshowController->AsyncNotifyEvent(pSlideData->XCurrentSlide,
+                                                           pSlideData->eHintKind);
         delete pSlideData;
     }
 }
 
-void SlideshowImpl::AsyncNotifyEvent(
-    const uno::Reference< css::drawing::XDrawPage >& rXCurrentSlide,
-    const SdrHintKind eHintKind)
+void SlideShowController::AsyncNotifyEvent(
+    const uno::Reference<css::drawing::XDrawPage>& rXCurrentSlide, const SdrHintKind eHintKind)
 {
     switch (eHintKind)
     {
@@ -3417,7 +3420,7 @@ void SlideshowImpl::AsyncNotifyEvent(
     }
 }
 
-bool SlideshowImpl::isCurrentSlideInvolved(const SdrHint& rHint)
+bool SlideShowController::isCurrentSlideInvolved(const SdrHint& rHint)
 {
     // get current slide
     uno::Reference< css::drawing::XDrawPage > XCurrentSlide(getCurrentSlide());
@@ -3445,7 +3448,7 @@ bool SlideshowImpl::isCurrentSlideInvolved(const SdrHint& rHint)
     return pHintPage == pCurrentSlide;
 }
 
-void SlideshowImpl::sendHintSlideChanged(const SdrPage* pChangedPage) const
+void SlideShowController::sendHintSlideChanged(const SdrPage* pChangedPage) const
 {
     if (nullptr == pChangedPage)
         return;
@@ -3460,7 +3463,7 @@ void SlideshowImpl::sendHintSlideChanged(const SdrPage* pChangedPage) const
             beans::PropertyState_DIRECT_VALUE ) );
 }
 
-void SlideshowImpl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
+void SlideShowController::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
     if (SfxHintId::ThisIsAnSdrHint != rHint.GetId())
         // nothing to do for non-SdrHints
@@ -3570,10 +3573,7 @@ void SlideshowImpl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
     }
 }
 
-Reference< XSlideShow > SAL_CALL SlideshowImpl::getSlideShow()
-{
-    return mxShow;
-}
+Reference<XSlideShow> SAL_CALL SlideShowController::getSlideShow() { return mxShow; }
 
 PresentationSettingsEx::PresentationSettingsEx( const PresentationSettingsEx& r )
 : PresentationSettings( r )
@@ -3691,7 +3691,7 @@ void PresentationSettingsEx::SetPropertyValue( std::u16string_view rProperty, co
 
 // XAnimationListener
 
-SlideShowListenerProxy::SlideShowListenerProxy( rtl::Reference< SlideshowImpl > xController, css::uno::Reference< css::presentation::XSlideShow > xSlideShow )
+SlideShowListenerProxy::SlideShowListenerProxy( rtl::Reference< SlideShowController > xController, css::uno::Reference< css::presentation::XSlideShow > xSlideShow )
 : mxController(std::move( xController ))
 , mxSlideShow(std::move( xSlideShow ))
 {

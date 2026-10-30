@@ -48,7 +48,7 @@ namespace sd {
 const sal_uInt64 HIDE_MOUSE_TIMEOUT = 10000;
 const sal_uInt64 SHOW_MOUSE_TIMEOUT = 1000;
 
-ShowWindow::ShowWindow( ::rtl::Reference< SlideshowImpl > xController, vcl::Window* pParent )
+ShowWindow::ShowWindow(::rtl::Reference<SlideShowController> xController, vcl::Window* pParent)
 : ::sd::Window( pParent )
 , maPauseTimer("sd ShowWindow maPauseTimer")
 , maMouseTimer("sd ShowWindow maMouseTimer")

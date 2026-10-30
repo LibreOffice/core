@@ -34,7 +34,7 @@ class ConfigurationController;
 namespace sd
 {
 class ViewShell;
-class SlideshowImpl;
+class SlideShowController;
 
 /** Hide the windows of the side panes and restore the original visibility
     later. Used by the in-window slide show in order to use the whole frame
@@ -46,7 +46,7 @@ public:
     /** The constructor hides all side panes that belong to the
         ViewShellBase of the given view shell.
     */
-    PaneHider(const ViewShell& rViewShell, SlideshowImpl* pSlideShow);
+    PaneHider(const ViewShell& rViewShell, SlideShowController* pSlideShow);
 
     /** Restore the original visibility of the side panes.
     */

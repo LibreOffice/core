@@ -89,7 +89,7 @@ public:
 
 // SlideShowView
 class ShowWindow;
-class SlideshowImpl;
+class SlideShowController;
 
 typedef comphelper::WeakComponentImplHelper< css::presentation::XSlideShowView,
                                             css::awt::XWindowListener,
@@ -99,11 +99,8 @@ typedef comphelper::WeakComponentImplHelper< css::presentation::XSlideShowView,
 class SlideShowView final : public SlideShowView_Base
 {
 public:
-    SlideShowView( ShowWindow&     rOutputWindow,
-                   SdDrawDocument* pDoc,
-                   AnimationMode   eAnimationMode,
-                   SlideshowImpl*  pSlideShow,
-                   bool            bFullScreen );
+    SlideShowView(ShowWindow& rOutputWindow, SdDrawDocument* pDoc, AnimationMode eAnimationMode,
+                  SlideShowController* pSlideShowController, bool bFullScreen);
 
     void ignoreNextMouseReleased();
 
@@ -152,7 +149,7 @@ protected:
     virtual ~SlideShowView() override {}
 
 private:
-    void updateimpl( std::unique_lock<std::mutex>& rGuard, SlideshowImpl* pSlideShow );
+    void updateController(std::unique_lock<std::mutex>& rGuard, SlideShowController* pSlideShow);
 
     void disposingImpl( std::unique_lock<std::mutex>& );
 
@@ -160,7 +157,7 @@ private:
     css::uno::Reference< css::awt::XWindow >              mxWindow;
     css::uno::Reference< css::awt::XWindowPeer >          mxWindowPeer;
     css::uno::Reference< css::awt::XPointer >             mxPointer;
-    SlideshowImpl*                          mpSlideShow;
+    SlideShowController* mpSlideShowController;
     ShowWindow&                             mrOutputWindow;
     std::vector< css::uno::WeakReference< css::util::XModifyListener > >
                                             maViewListeners;

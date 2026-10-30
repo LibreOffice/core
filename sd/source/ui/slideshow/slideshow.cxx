@@ -241,7 +241,7 @@ void SlideShow::CreateController(  ViewShell* pViewSh, ::sd::View* pView, vcl::W
 
     // Reset mbIsInStartup.  From here mxController.is() is used to prevent
     // multiple slide show instances for one document.
-    mxController.set(new SlideshowImpl(xThis, pViewSh, pView, mpDoc, pParentWindow));
+    mxController.set(new SlideShowController(xThis, pViewSh, pView, mpDoc, pParentWindow));
 
     mbIsInStartup = false;
 
@@ -670,7 +670,7 @@ void SAL_CALL SlideShow::end()
     // gone wrong.
     assert(!mbIsInStartup);
 
-    rtl::Reference< SlideshowImpl > xController( mxController );
+    rtl::Reference<SlideShowController> xController(mxController);
     if( !xController.is() )
         return;
 
