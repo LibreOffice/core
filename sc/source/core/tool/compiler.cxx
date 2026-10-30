@@ -3094,14 +3094,17 @@ bool ScCompiler::ParseOpCode( const OUString& rName, bool bInArray )
     // A built-in function passed as a value, rather than called in place, is
     // written with the _xleta. prefix in OOXML. Strip it so the plain function
     // name resolves.
-    if (mxSymbols->isOOXML() && rName.startsWithIgnoreAsciiCase(u"_xleta."))
+    const bool bFunctionValue
+        = mxSymbols->isOOXML() && rName.startsWithIgnoreAsciiCase(u"_xleta.");
+    if (bFunctionValue)
         aName = rName.copy(7);
     // Functions added to OOXML after its first edition carry the _xlfn. prefix, but some producers
-    // write them without it. A bare name that is called like a function and is known only with
-    // the prefix resolves as the prefixed one. Some, such as FILTER and SORT, carry _xlfn._xlws.
+    // write them without it, and _xleta. takes its place on a function passed as a value. A bare
+    // name that is called like a function or passed as a value, and is known only with the
+    // prefix, resolves as the prefixed one. Some, such as FILTER and SORT, carry _xlfn._xlws.
     if (mxSymbols->isOOXML() && !aName.startsWithIgnoreAsciiCase(u"_xlfn.")
         && mxSymbols->getHashMap().find(aName) == mxSymbols->getHashMap().end()
-        && lcl_ParenthesisFollows(aFormula.getStr() + nSrcPos))
+        && (bFunctionValue || lcl_ParenthesisFollows(aFormula.getStr() + nSrcPos)))
     {
         const OUString aUpperName(aName.toAsciiUpperCase());
         for (std::u16string_view aPrefix : { u"_XLFN.", u"_XLFN._XLWS." })

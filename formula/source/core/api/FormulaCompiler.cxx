@@ -69,6 +69,19 @@ bool isOperatorExpectingOperand(OpCode eOp)
            && eOp != ocSpill;
 }
 
+// True when the built-in function can be passed as a value, written as its
+// name without parentheses. TRUE and FALSE without parentheses are the
+// logical constants.
+bool isFunctionValueOpCode(OpCode eOp)
+{
+    if (eOp == ocTrue || eOp == ocFalse)
+        return false;
+    return (ocStartNoParameters <= eOp && eOp < ocStopNoParameters)
+           || (ocStartOneParameter <= eOp && eOp < ocStopOneParameter)
+           || (ocStartTwoParameters <= eOp && eOp < ocStopTwoParameters)
+           || eOp == ocAnd || eOp == ocOr;
+}
+
 SvNumFormatType lcl_GetRetFormat( OpCode eOpCode )
 {
     switch (eOpCode)
@@ -3002,7 +3015,17 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
     bool bCloseOptionalParam = false;
     const FormulaToken* t = pTokenP;
     OpCode eOp = t->GetOpCode();
-    if( eOp >= ocAnd && eOp <= ocOr )
+    // A built-in function without an opening parenthesis after it is passed
+    // as a value, not called. The iterator stands on the token only while
+    // the whole token array is written, so a token written on its own keeps
+    // its usual name.
+    bool bFunctionValue = false;
+    if (bAllowArrAdvance && FormulaGrammar::isOOXML(meGrammar) && isFunctionValueOpCode(eOp))
+    {
+        const FormulaToken* pNext = maArrIterator.PeekNextNoSpaces();
+        bFunctionValue = !pNext || pNext->GetOpCode() != ocOpen;
+    }
+    if( eOp >= ocAnd && eOp <= ocOr && !bFunctionValue )
     {
         // AND, OR infix?
         if ( bAllowArrAdvance )
@@ -3071,6 +3094,15 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
                     rBuffer.append( ' ');
             }
         }
+    }
+    else if (bFunctionValue)
+    {
+        // OOXML writes a function passed as a value with the _xleta. prefix in
+        // place of the _xlfn. prefix of a newer function.
+        OUString aName = mxSymbols->getSymbol(eOp);
+        aName.startsWith(u"_xlfn.", &aName);
+        aName.startsWith(u"_xlws.", &aName);
+        rBuffer.append(u"_xleta." + aName);
     }
     else if (eOp == ocTTT)
         rBuffer.append("TTT");

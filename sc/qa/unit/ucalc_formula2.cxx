@@ -43,6 +43,7 @@
 #include <functional>
 #include <set>
 #include <algorithm>
+#include <tuple>
 #include <vector>
 
 using namespace formula;
@@ -7401,6 +7402,43 @@ OUString resolveAndPrintAsOoxml(ScDocument& rDocument, const OUString& rFormula)
 }
 
 } // end anonymous namespace
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFunctionValueKeepsItsNameThroughOOXML)
+{
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // OOXML writes a function passed as a value with the _xleta. prefix, which takes the place of
+    // the _xlfn. prefix of a newer function. A called function keeps its usual name. Reading the
+    // OOXML formula back gives the same function.
+    const std::vector<std::tuple<OUString, OUString, OpCode>> aFormulas{
+        { u"BYCOL(A1:B4;SORT)"_ustr, u"_xlfn.BYCOL(A1:B4,_xleta.SORT)"_ustr, ocSort },
+    };
+    for (const auto & [ aNative, aOoxml, eFunction ] : aFormulas)
+    {
+        CPPUNIT_ASSERT_EQUAL(aOoxml, compileAndPrintAsOoxml(*m_pDoc, aNative));
+
+        const ScAddress aPosition(1, 0, 0);
+        ScCompiler aCompiler(*m_pDoc, aPosition, formula::FormulaGrammar::GRAM_OOXML);
+        std::unique_ptr<ScTokenArray> pCode = aCompiler.CompileString(aOoxml);
+        CPPUNIT_ASSERT(pCode);
+        CPPUNIT_ASSERT_MESSAGE(aOoxml.toUtf8().getStr(), pCode->HasOpCode(eFunction));
+        CPPUNIT_ASSERT_EQUAL(aOoxml, printAsOoxml(*m_pDoc, *pCode, aPosition));
+    }
+
+    // A function token written on its own, outside of its formula, is written with its usual
+    // name, as nothing tells a call from a value there.
+    {
+        ScTokenArray aEmptyCode(*m_pDoc);
+        ScCompiler aCompiler(*m_pDoc, ScAddress(1, 0, 0), aEmptyCode,
+                             formula::FormulaGrammar::GRAM_OOXML);
+        const formula::FormulaTokenRef xSum = new formula::FormulaByteToken(ocSum);
+        OUString aString;
+        aCompiler.CreateStringFromToken(aString, xSum.get());
+        CPPUNIT_ASSERT_EQUAL(u"SUM"_ustr, aString);
+    }
+
+    m_pDoc->DeleteTab(0);
+}
 
 CPPUNIT_TEST_FIXTURE(TestFormula2, testCallWithoutNameSavesAsErrorInOoxml)
 {
