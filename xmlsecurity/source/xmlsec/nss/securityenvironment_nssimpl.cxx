@@ -500,7 +500,7 @@ Reference< XCertificate > SecurityEnvironment_NssImpl::createCertificateFromAsci
     if (nRet >= 0 && certSize > 0)
     {
         Sequence< sal_Int8 > rawCert(certSize) ;
-        for (int i = 0 ; i < certSize; ++i)
+        for (decltype(certSize) i = 0 ; i < certSize; ++i)
             rawCert[i] = *( chCert + i ) ;
 
         xmlFree( chCert ) ;
