@@ -29,6 +29,14 @@ $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 	external/python3/0001-3.9-gh-133767-Fix-use-after-free-in-the-unicode-esca.patch.1 \
 	external/python3/0001-3.9-bpo-43757-Make-pathlib-use-os.path.realpath-to-r.patch.1 \
 	external/python3/0001-3.9-gh-135034-Normalize-link-targets-in-tarfile-add-.patch.1 \
+	external/python3/00478-cve-2026-4519.patch.1 \
+	external/python3/00480-cve-2026-4786.patch.1 \
+	external/python3/00492-cve-2026-11940.patch.1 \
+	external/python3/0001-3.8-gh-156293-Use-after-free-for-server-side-SSLCont.patch.1 \
+	external/python3/0001-3.8-gh-156793-Validate-SSLContext.wrap_bio-parameter.patch.1 \
+	external/python3/0001-3.8-gh-145986-Avoid-unbound-C-recursion-in-conv_cont.patch.1 \
+	external/python3/0001-3.8-gh-157190-Fix-tarfile-data-tar-filter-bypass-via.patch.1 \
+	external/python3/0001-3.8-gh-160040-Distrust-compromised-eMudhra-intermedi.patch.1 \
 ))
 
 ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD SOLARIS,$(OS)),)

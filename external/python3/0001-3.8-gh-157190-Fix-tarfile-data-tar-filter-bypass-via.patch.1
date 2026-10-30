@@ -1,0 +1,43 @@
+Subject: [PATCH] [3.8] gh-157190: Fix tarfile data/tar filter bypass via hard
+ link to a symlink (CVE-2026-82049)
+
+Backport of the upstream 3.10 commit
+197663d63afed27f66e10e23c194e8a634e60913.
+
+---
+ Lib/tarfile.py                                  |  6 +++++-
+ ...26-09-06-11-02-46.gh-issue-157190.tarhln.rst |  5 +++++
+ 2 files changed
+ create mode 100644 Misc/NEWS.d/next/Security/2026-09-06-11-02-46.gh-issue-157190.tarhln.rst
+
+diff --git a/Lib/tarfile.py b/Lib/tarfile.py
+index b5b55d5..3e938ce 100755
+--- a/Lib/tarfile.py
++++ b/Lib/tarfile.py
+@@ -2591,7 +2591,11 @@ class TarFile(object):
+                 return
+             else:
+                 if os.path.exists(tarinfo._link_target):
+-                    os.link(tarinfo._link_target, targetpath)
++                    # Resolve the target so the hard link points to the file
++                    # itself. Otherwise os.link() may duplicate a symlink to a
++                    # shallower location, where it's relative target escapes the
++                    # destination directory. (CVE-2026-82049)
++                    os.link(os.path.realpath(tarinfo._link_target), targetpath)
+                     return
+         except symlink_exception:
+             keyerror_to_extracterror = True
+diff --git a/Misc/NEWS.d/next/Security/2026-09-06-11-02-46.gh-issue-157190.tarhln.rst b/Misc/NEWS.d/next/Security/2026-09-06-11-02-46.gh-issue-157190.tarhln.rst
+new file mode 100644
+index 0000000..c3aac40
+--- /dev/null
++++ b/Misc/NEWS.d/next/Security/2026-09-06-11-02-46.gh-issue-157190.tarhln.rst
+@@ -0,0 +1,5 @@
++Fixed a vulnerability in the :mod:`tarfile` ``data`` and ``tar`` extraction
++filters where a crafted archive using a hard link to a symbolic link could
++change the permissions and modification time of a file outside the
++destination directory, and expose its contents inside the extracted tree.
++This addresses CVE 2026-82049.
+-- 
+2.56.0
+

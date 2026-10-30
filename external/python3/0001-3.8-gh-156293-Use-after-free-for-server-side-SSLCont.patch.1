@@ -1,0 +1,246 @@
+Subject: [PATCH] [3.8] gh-156293: Use-after-free for server-side SSLContext
+ with sni_callback (CVE-2026-19445)
+
+---
+ Doc/library/ssl.rst  | 11 ++++++
+ Lib/test/test_ssl.py | 80 ++++++++++++++++++++++++++++++++++++++++++++
+ Modules/_ssl.c       | 45 ++++++++++++++++++-------
+ 3 files changed
+
+diff --git a/Doc/library/ssl.rst b/Doc/library/ssl.rst
+index a58717c..5c9aa8e 100644
+--- a/Doc/library/ssl.rst
++++ b/Doc/library/ssl.rst
+@@ -1716,6 +1716,12 @@ to speed up repeated connections from the same clients.
+    :class:`SSLContext` representing a certificate chain that matches the server
+    name.
+ 
++   If the callback assigns a new context to :attr:`SSLSocket.context`, any
++   further ClientHello message on the same connection (for example after a
++   TLS 1.3 HelloRetryRequest) is dispatched to the new context's
++   *sni_callback*, if it has one; the original callback is not called again
++   for that connection.
++
+    Due to the early negotiation phase of the TLS connection, only limited
+    methods and attributes are usable like
+    :meth:`SSLSocket.selected_alpn_protocol` and :attr:`SSLSocket.context`.
+@@ -1739,6 +1745,11 @@ to speed up repeated connections from the same clients.
+ 
+    .. versionadded:: 3.7
+ 
++   .. versionchanged:: next
++      After the callback assigns a new :attr:`SSLSocket.context`, later
++      ClientHello messages on the connection are dispatched to the new
++      context's *sni_callback*.
++
+ .. attribute:: SSLContext.set_servername_callback(server_name_callback)
+ 
+    This is a legacy API retained for backwards compatibility. When possible,
+diff --git a/Lib/test/test_ssl.py b/Lib/test/test_ssl.py
+index e729c62..304ec8b 100644
+--- a/Lib/test/test_ssl.py
++++ b/Lib/test/test_ssl.py
+@@ -1972,6 +1972,86 @@ class SSLObjectTests(unittest.TestCase):
+         c_in.write(s_out.read())
+         client.unwrap()
+ 
++    def test_sni_callback_context_released_and_callback_raises(self):
++        # Variant of the test below without a HelloRetryRequest: the callback
++        # switches the connection to another context, drops the last
++        # references to the context that carries it, and raises.  The C
++        # callback must not touch that context after the Python callback
++        # returned.
++        client_ctx, server_ctx, hostname = testing_context()
++        leaf_ctx = server_ctx
++
++        def sni_cb(sslobj, server_name, ctx):
++            sslobj.context = leaf_ctx
++            del ctx
++            raise LookupError("no certificate for " + repr(server_name))
++
++        def make_server():
++            dispatch_ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
++            dispatch_ctx.load_cert_chain(SIGNED_CERTFILE)
++            dispatch_ctx.sni_callback = sni_cb
++            s_in, s_out = ssl.MemoryBIO(), ssl.MemoryBIO()
++            server = dispatch_ctx.wrap_bio(s_in, s_out, server_side=True)
++            return server, s_in, s_out
++
++        server, s_in, s_out = make_server()
++        c_in, c_out = ssl.MemoryBIO(), ssl.MemoryBIO()
++        client = client_ctx.wrap_bio(c_in, c_out, server_hostname=hostname)
++        with self.assertRaises(ssl.SSLWantReadError):
++            client.do_handshake()
++        s_in.write(c_out.read())
++        with support.catch_unraisable_exception() as cm:
++            with self.assertRaises(ssl.SSLError):
++                server.do_handshake()
++            self.assertIsInstance(cm.unraisable.exc_value, LookupError)
++        self.assertIs(server.context, leaf_ctx)
++
++    def test_sni_callback_context_released_before_second_client_hello(self):
++        # The SSLContext carrying sni_callback may be released by the
++        # application once the callback has switched the connection over to
++        # another context.  If the server then sends a HelloRetryRequest, the
++        # second ClientHello makes OpenSSL consult the original SSL_CTX's
++        # servername callback again; that must not use the deallocated
++        # SSLContext object.
++        client_ctx, leaf_ctx, hostname = testing_context()
++        calls = []
++
++        def make_server():
++            dispatch_ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
++            dispatch_ctx.load_cert_chain(SIGNED_CERTFILE)
++            # Force a HelloRetryRequest: the client offers an X25519 key
++            # share first, the server only accepts P-384.
++            dispatch_ctx.set_ecdh_curve("secp384r1")
++            def sni_cb(sslobj, server_name, ctx):
++                calls.append(server_name)
++                sslobj.context = leaf_ctx
++            dispatch_ctx.sni_callback = sni_cb
++            s_in, s_out = ssl.MemoryBIO(), ssl.MemoryBIO()
++            server = dispatch_ctx.wrap_bio(s_in, s_out, server_side=True)
++            return server, s_in, s_out, weakref.ref(dispatch_ctx)
++
++        # After this only the C-level SSL object references dispatch_ctx.
++        server, s_in, s_out, dispatch_ref = make_server()
++        c_in, c_out = ssl.MemoryBIO(), ssl.MemoryBIO()
++        client = client_ctx.wrap_bio(c_in, c_out, server_hostname=hostname)
++        for _ in range(10):
++            for obj, out, peer_in in ((client, c_out, s_in),
++                                      (server, s_out, c_in)):
++                try:
++                    obj.do_handshake()
++                except ssl.SSLWantReadError:
++                    pass
++                if out.pending:
++                    peer_in.write(out.read())
++        client.do_handshake()
++        server.do_handshake()
++        support.gc_collect()
++        self.assertIsNone(dispatch_ref())
++        self.assertGreaterEqual(len(calls), 1)
++        self.assertEqual(calls[0], hostname)
++        self.assertIs(server.context, leaf_ctx)
++        self.assertIsNotNone(client.cipher())
++
+ class SimpleBackgroundTests(unittest.TestCase):
+     """Tests that connect to a simple server running in the background"""
+ 
+diff --git a/Modules/_ssl.c b/Modules/_ssl.c
+index 25f92d9..0775009 100644
+--- a/Modules/_ssl.c
++++ b/Modules/_ssl.c
+@@ -3354,6 +3354,9 @@ context_dealloc(PySSLContext *self)
+     /* bpo-31095: UnTrack is needed before calling any callbacks */
+     PyObject_GC_UnTrack(self);
+     context_clear(self);
++    /* The SSL_CTX may outlive this object as the session_ctx of sockets that
++       were switched to another context; leave no Python callback behind. */
++    SSL_CTX_set_tlsext_servername_callback(self->ctx, NULL);
+     SSL_CTX_free(self->ctx);
+ #if HAVE_NPN
+     PyMem_FREE(self->npn_protocols);
+@@ -4542,27 +4545,40 @@ _ssl__SSLContext_set_ecdh_curve(PySSLContext *self, PyObject *name)
+ 
+ #if HAVE_SNI && !defined(OPENSSL_NO_TLSEXT)
+ static int
+-_servername_callback(SSL *s, int *al, void *args)
++_servername_callback(SSL *s, int *al, void *Py_UNUSED(args))
+ {
+     int ret;
+-    PySSLContext *ssl_ctx = (PySSLContext *) args;
++    PySSLContext *ssl_ctx;
+     PySSLSocket *ssl;
+     PyObject *result;
+     /* The high-level ssl.SSLSocket object */
+     PyObject *ssl_socket;
++    PyObject *sni_cb;
+     const char *servername = SSL_get_servername(s, TLSEXT_NAMETYPE_host_name);
+     PyGILState_STATE gstate = PyGILState_Ensure();
+ 
+-    if (ssl_ctx->set_sni_cb == NULL) {
+-        /* remove race condition in this the call back while if removing the
+-         * callback is in progress */
++    /* Do not use the SSL_CTX's servername arg to find the context: it is a
++       borrowed pointer to whichever _SSLContext installed the callback, and
++       that object may already be gone while OpenSSL still reaches this
++       callback through the connection's session_ctx (e.g. on the second
++       ClientHello after a HelloRetryRequest, once sni_callback has switched
++       the socket to another context).  The socket's current context is
++       always alive. */
++    ssl = SSL_get_app_data(s);
++    assert(ssl != NULL);
++    ssl_ctx = (PySSLContext *)ssl->ctx;
++    Py_INCREF(ssl_ctx);
++    assert(PySSLSocket_Check(ssl));
++
++    sni_cb = ssl_ctx->set_sni_cb;
++    Py_XINCREF(sni_cb);
++
++    if (sni_cb == NULL) {
++        Py_DECREF(ssl_ctx);
+         PyGILState_Release(gstate);
+         return SSL_TLSEXT_ERR_OK;
+     }
+ 
+-    ssl = SSL_get_app_data(s);
+-    assert(PySSLSocket_Check(ssl));
+-
+     /* The servername callback expects an argument that represents the current
+      * SSL connection and that has a .context attribute that can be changed to
+      * identify the requested hostname. Since the official API is the Python
+@@ -4583,7 +4599,7 @@ _servername_callback(SSL *s, int *al, void *args)
+         goto error;
+ 
+     if (servername == NULL) {
+-        result = PyObject_CallFunctionObjArgs(ssl_ctx->set_sni_cb, ssl_socket,
++        result = PyObject_CallFunctionObjArgs(sni_cb, ssl_socket,
+                                               Py_None, ssl_ctx, NULL);
+     }
+     else {
+@@ -4606,14 +4622,14 @@ _servername_callback(SSL *s, int *al, void *args)
+         }
+         Py_DECREF(servername_bytes);
+         result = PyObject_CallFunctionObjArgs(
+-            ssl_ctx->set_sni_cb, ssl_socket, servername_str,
++            sni_cb, ssl_socket, servername_str,
+             ssl_ctx, NULL);
+         Py_DECREF(servername_str);
+     }
+     Py_DECREF(ssl_socket);
+ 
+     if (result == NULL) {
+-        PyErr_WriteUnraisable(ssl_ctx->set_sni_cb);
++        PyErr_WriteUnraisable(sni_cb);
+         *al = SSL_AD_HANDSHAKE_FAILURE;
+         ret = SSL_TLSEXT_ERR_ALERT_FATAL;
+     }
+@@ -4634,11 +4650,15 @@ _servername_callback(SSL *s, int *al, void *args)
+         Py_DECREF(result);
+     }
+ 
++    Py_DECREF(sni_cb);
++    Py_DECREF(ssl_ctx);
+     PyGILState_Release(gstate);
+     return ret;
+ 
+ error:
+-    Py_DECREF(ssl_socket);
++    Py_XDECREF(ssl_socket);
++    Py_XDECREF(sni_cb);
++    Py_DECREF(ssl_ctx);
+     *al = SSL_AD_INTERNAL_ERROR;
+     ret = SSL_TLSEXT_ERR_ALERT_FATAL;
+     PyGILState_Release(gstate);
+@@ -4680,7 +4700,6 @@ set_sni_callback(PySSLContext *self, PyObject *arg, void *c)
+         Py_INCREF(arg);
+         self->set_sni_cb = arg;
+         SSL_CTX_set_tlsext_servername_callback(self->ctx, _servername_callback);
+-        SSL_CTX_set_tlsext_servername_arg(self->ctx, self);
+     }
+     return 0;
+ #else
+-- 
+2.56.0
+

@@ -1,0 +1,57 @@
+Subject: [PATCH] [3.8] gh-145986: Avoid unbound C recursion in
+ conv_content_model in pyexpat.c (CVE-2026-4224)
+
+from the upstream 3.10 commit af856a7177326ac25d9f66cc6dd28b554d914fee.
+
+---
+ ...-03-14-17-31-39.gh-issue-145986.ifSSr8.rst |  4 ++++
+ Modules/pyexpat.c                             |  8 +++++++-
+ 2 files changed
+ create mode 100644 Misc/NEWS.d/next/Security/2026-03-14-17-31-39.gh-issue-145986.ifSSr8.rst
+
+diff --git a/Misc/NEWS.d/next/Security/2026-03-14-17-31-39.gh-issue-145986.ifSSr8.rst b/Misc/NEWS.d/next/Security/2026-03-14-17-31-39.gh-issue-145986.ifSSr8.rst
+new file mode 100644
+index 0000000..cb9dbad
+--- /dev/null
++++ b/Misc/NEWS.d/next/Security/2026-03-14-17-31-39.gh-issue-145986.ifSSr8.rst
+@@ -0,0 +1,4 @@
++:mod:`xml.parsers.expat`: Fixed a crash caused by unbounded C recursion when
++converting deeply nested XML content models with
++:meth:`~xml.parsers.expat.xmlparser.ElementDeclHandler`.
++This addresses `CVE-2026-4224 <https://www.cve.org/CVERecord?id=CVE-2026-4224>`_.
+diff --git a/Modules/pyexpat.c b/Modules/pyexpat.c
+index 5665ed2..c018b32 100644
+--- a/Modules/pyexpat.c
++++ b/Modules/pyexpat.c
+@@ -515,6 +515,10 @@ static PyObject *
+ conv_content_model(XML_Content * const model,
+                    PyObject *(*conv_string)(const XML_Char *))
+ {
++    if (Py_EnterRecursiveCall(" in conv_content_model")) {
++        return NULL;
++    }
++
+     PyObject *result = NULL;
+     PyObject *children = PyTuple_New(model->numchildren);
+     int i;
+@@ -526,7 +530,7 @@ conv_content_model(XML_Content * const model,
+                                                  conv_string);
+             if (child == NULL) {
+                 Py_XDECREF(children);
+-                return NULL;
++                goto done;
+             }
+             PyTuple_SET_ITEM(children, i, child);
+         }
+@@ -534,6 +538,8 @@ conv_content_model(XML_Content * const model,
+                                model->type, model->quant,
+                                conv_string,model->name, children);
+     }
++done:
++    Py_LeaveRecursiveCall();
+     return result;
+ }
+ 
+-- 
+2.56.0
+
