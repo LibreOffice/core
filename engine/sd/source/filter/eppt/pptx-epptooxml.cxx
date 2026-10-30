@@ -97,6 +97,7 @@
 
 #include <oox/export/utils.hxx>
 #include <oox/export/ThemeExport.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include <docmodel/theme/Theme.hxx>
 #include <ModelTraverser.hxx>
 
@@ -1832,7 +1833,7 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
 
     AnimationSpeed animationSpeed = AnimationSpeed_MEDIUM;
     const char* speed = nullptr;
-    sal_Int32 advanceTiming = -1;
+    sal_Int32 advanceTiming = -1; // in milliseconds
     sal_Int32 changeType = 0;
 
     sal_Int32 nTransitionDuration = -1;
@@ -1894,9 +1895,11 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
     if (ImplGetPropertyValue(mXPagePropSet, u"Change"_ustr))
         mAny >>= changeType;
 
+    double fAdvanceSeconds = 0.0;
     // 1 means automatic, 2 half automatic - not sure what it means - at least I don't see it in UI
-    if (changeType == 1 && ImplGetPropertyValue(mXPagePropSet, u"Duration"_ustr))
-        mAny >>= advanceTiming;
+    if (changeType == 1 && ImplGetPropertyValue(mXPagePropSet, u"HighResDuration"_ustr)
+        && (mAny >>= fAdvanceSeconds))
+        advanceTiming = basegfx::fround(fAdvanceSeconds * 1000.0);
 
     // check if we resolved what transition to export, or a time or a sound is set
     if (!nPPTTransitionType && !bOOXmlSpecificTransition && !isNonDefaultTransitionDurationSet
@@ -2029,7 +2032,7 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
         {
             pFS->startElementNS(XML_p, XML_transition,
                 XML_spd, speed,
-                XML_advTm, OString::number(advanceTiming * 1000),
+                XML_advTm, OString::number(advanceTiming),
                 FSNS(XML_p14, XML_dur), OString::number(nTransitionDuration));
         }
         else if(isTransitionDurationSet)
@@ -2042,7 +2045,7 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
         {
             pFS->startElementNS(XML_p, XML_transition,
                 XML_spd, speed,
-                XML_advTm, OString::number(advanceTiming * 1000));
+                XML_advTm, OString::number(advanceTiming));
         }
         else
         {
@@ -2085,7 +2088,7 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
 
     pFS->startElementNS(XML_p, XML_transition,
         XML_spd, speed,
-        XML_advTm, sax_fastparser::UseIf(OString::number(advanceTiming * 1000), isAdvanceTimingSet));
+        XML_advTm, sax_fastparser::UseIf(OString::number(advanceTiming), isAdvanceTimingSet));
 
     if (nTransition)
     {
