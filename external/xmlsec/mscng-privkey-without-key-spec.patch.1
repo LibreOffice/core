@@ -1,0 +1,64 @@
+tdf#171018 mscng: find the private key of a cert without key properties
+
+Since 1.3.9 (b67dc62 "Added support for non-persistent PKCS12 keys")
+xmlSecMSCngKeyDataCertGetPrivkey() only calls
+CryptAcquireCertificatePrivateKey() if the certificate context already has
+CERT_KEY_SPEC_PROP_ID.
+
+When signing, the key cert may be the one decoded from the
+X509Certificate element (if the X509IssuerSerial lookup doesn't find the
+store cert), which has no properties. CryptAcquireCertificatePrivateKey()
+still finds its key via the key identifier, so call it unconditionally as
+1.3.8 did.
+
+--- xmlsec/src/mscng/certkeys.c.orig
++++ xmlsec/src/mscng/certkeys.c
+@@ -99,31 +99,24 @@
+         return(0);
+     }
+ 
+-    /* try persistent key */
+-    DWORD dwData = 0;
+-    DWORD dwDataLen = sizeof(dwData);
+-    if (CertGetCertificateContextProperty(cert, CERT_KEY_SPEC_PROP_ID, &dwData, &dwDataLen)) {
+-        DWORD keySpec = 0;
+-        BOOL fCallerFreeProvOrNCryptKey = FALSE;
+-        ret = CryptAcquireCertificatePrivateKey(
+-            cert,
+-            CRYPT_ACQUIRE_COMPARE_KEY_FLAG | CRYPT_ACQUIRE_ONLY_NCRYPT_KEY_FLAG,
+-            NULL,
+-            key,
+-            &keySpec,
+-            &fCallerFreeProvOrNCryptKey);
+-        if (ret == FALSE) {
+-            xmlSecMSCngLastError("CryptAcquireCertificatePrivateKey", NULL);
+-            return(-1);
+-        }
+-        (*needsFree) = TRUE;
+-        return(0);
++    /* try persistent key: don't require CERT_KEY_SPEC_PROP_ID, a certificate
++     * decoded from DER has no key properties, but the key can still be found
++     * via its key identifier */
++    DWORD keySpec = 0;
++    BOOL fCallerFreeProvOrNCryptKey = FALSE;
++    ret = CryptAcquireCertificatePrivateKey(
++        cert,
++        CRYPT_ACQUIRE_COMPARE_KEY_FLAG | CRYPT_ACQUIRE_ONLY_NCRYPT_KEY_FLAG,
++        NULL,
++        key,
++        &keySpec,
++        &fCallerFreeProvOrNCryptKey);
++    if (ret == FALSE) {
++        xmlSecMSCngLastError("CryptAcquireCertificatePrivateKey", NULL);
++        return(-1);
+     }
+-
+-
+-    /* no luck */
+-    xmlSecMSCngLastError("CertGetCertificateContextProperty(): cert doesn't have private key", NULL);
+-    return(-1);
++    (*needsFree) = TRUE;
++    return(0);
+ }
+ 
+ /**

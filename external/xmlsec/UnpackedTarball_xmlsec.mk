@@ -13,4 +13,8 @@ $(eval $(call gb_UnpackedTarball_set_tarball,xmlsec,$(XMLSEC_TARBALL),,xmlsec))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,xmlsec))
 
+$(eval $(call gb_UnpackedTarball_add_patches,xmlsec,\
+	external/xmlsec/mscng-privkey-without-key-spec.patch.1 \
+))
+
 # vim: set noet sw=4 ts=4:
