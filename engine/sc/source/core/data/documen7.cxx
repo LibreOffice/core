@@ -19,8 +19,12 @@
 
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <comphelper/kit.hxx>
+
+#include <map>
 
 #include <document.hxx>
+#include <docsh.hxx>
 #include <brdcst.hxx>
 #include <bcaslot.hxx>
 #include <formulacell.hxx>
@@ -540,6 +544,9 @@ void ScDocument::TrackFormulas( SfxHintId nHintId )
     {
         // outside the loop, check if any sheet has a "calculate" event script
         bool bCalcEvent = HasAnySheetEventScript( ScSheetEventId::CALCULATE, true );
+
+        const bool bCollectDirtyAreas = comphelper::COKit::isActive() && GetDocumentShell();
+        std::map<SCTAB, ScRange> aDirtyAreas;
         for( ScFormulaCell* pTrack = pFormulaTrack; pTrack != nullptr; pTrack = pTrack->GetNextTrack())
         {
             SCROW rowCount = 1;
@@ -551,6 +558,14 @@ void ScDocument::TrackFormulas( SfxHintId nHintId )
                     break;
                 ++rowCount;
                 pTrack = pNext;
+            }
+            if (bCollectDirtyAreas)
+            {
+                const ScRange aRange(address.Col(), address.Row(), address.Tab(), address.Col(),
+                                     address.Row() + rowCount - 1, address.Tab());
+                auto [it, bInserted] = aDirtyAreas.emplace(address.Tab(), aRange);
+                if (!bInserted)
+                    it->second.ExtendTo(aRange);
             }
             ScHint aHint( nHintId, address, rowCount );
             BroadcastHintInternal( aHint );
@@ -578,6 +593,12 @@ void ScDocument::TrackFormulas( SfxHintId nHintId )
             else
                 SetForcedFormulaPending( true );
         }
+
+        // A dirty formula cell shows a new result once it is calculated, on any sheet and in
+        // any view. Repainting its area makes every view invalidate it. The results
+        // are calculated when the tiles are painted.
+        for (const auto& rEntry : aDirtyAreas)
+            GetDocumentShell()->PostPaint(rEntry.second, PaintPartFlags::Grid, SC_PF_TESTMERGE);
     }
     OSL_ENSURE( nFormulaTrackCount==0, "TrackFormulas: nFormulaTrackCount!=0" );
 

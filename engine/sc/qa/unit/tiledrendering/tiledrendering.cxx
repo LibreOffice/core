@@ -1642,7 +1642,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
 
         // Create a 2nd view
         KitHelper::createView();
-        pModelObj->initializeForTiledRendering({});
+        pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
         ScTestViewCallback aView2;
 
         KitHelper::setView(nView1);
@@ -2790,6 +2790,50 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetChangeNoInvalidation)
     pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::PAGEDOWN | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(!aView1.m_bInvalidateTiles);
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFormulaResultChangeInvalidatesEveryView)
+{
+    // The 2nd sheet has formulas that depend on B1 in the first sheet.
+    ScModelObj* pModelObj = createDoc("two_sheets.ods");
+    pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 28050, 10605));
+    pModelObj->setClientZoom(256, 256, 1920, 1920);
+    ScTabViewShell* pView1 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView1);
+    int nView1 = KitHelper::getCurrentView();
+    ScTestViewCallback aView1;
+
+    // The second view shows the 2nd sheet and paints it, so its formula results are up to date
+    // on screen.
+    KitHelper::createView();
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 28050, 10605));
+    pModelObj->setClientZoom(256, 256, 1920, 1920);
+    ScTestViewCallback aView2;
+    pModelObj->setPart(1);
+    Scheduler::ProcessEventsToIdle();
+    tools::JsonWriter aJsonWriter;
+    pModelObj->getRowColumnHeaders(tools::Rectangle(0, 15, 19650, 5400), aJsonWriter);
+    aJsonWriter.finishAndGetAsOString();
+    Scheduler::ProcessEventsToIdle();
+    getTile(pModelObj, 0, 0, 3840, 3840);
+
+    // The first view, on the 1st sheet, changes B1.
+    KitHelper::setView(nView1);
+    aView1.ClearAllInvalids();
+    aView2.ClearAllInvalids();
+    typeCharsInCell("101", 1, 0, pView1, pModelObj);
+
+    // Any view can hold tiles of the 2nd sheet from an earlier visit. So the first view, on the
+    // 1st sheet, gets an invalidation of the 2nd sheet as well as the second view that shows it.
+    CPPUNIT_ASSERT_EQUAL(aView2.m_aInvalidations.size(), aView2.m_aInvalidationsParts.size());
+    CPPUNIT_ASSERT(std::find(aView2.m_aInvalidationsParts.begin(),
+                             aView2.m_aInvalidationsParts.end(), 1)
+                   != aView2.m_aInvalidationsParts.end());
+    CPPUNIT_ASSERT_EQUAL(aView1.m_aInvalidations.size(), aView1.m_aInvalidationsParts.size());
+    CPPUNIT_ASSERT(std::find(aView1.m_aInvalidationsParts.begin(),
+                             aView1.m_aInvalidationsParts.end(), 1)
+                   != aView1.m_aInvalidationsParts.end());
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertDeletePageInvalidation)
