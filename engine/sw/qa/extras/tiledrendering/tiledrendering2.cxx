@@ -2291,6 +2291,48 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yContextRowsPastTableWindow)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yContextEndsAtTable)
+{
+    // Given the cursor in the last row of a table, with a paragraph either side of the table:
+    createDoc();
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert(u"Before the table."_ustr);
+    pWrtShell->SplitNode();
+    pWrtShell->InsertTable(SwInsertTableOptions(SwInsertTableFlags::DefaultBorder, 0), 2, 2);
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Down(/*bSelect=*/false);
+    for (int i = 1; i <= 4; ++i)
+    {
+        pWrtShell->Insert("Cell " + OUString::number(i));
+        pWrtShell->GoNextCell(/*bAppendLine=*/false);
+    }
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->Insert(u"After the table."_ustr);
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    pWrtShell->Up(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(std::string("Cell 3"),
+                         aView.m_aA11yFocusedCell.get<std::string>("paragraph.content"));
+    const boost::property_tree::ptree& rAroundTable
+        = aView.m_aA11yFocusedCell.get_child("paragraph.before");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rAroundTable.size());
+    CPPUNIT_ASSERT_EQUAL(std::string("Before the table."),
+                         rAroundTable.begin()->second.get_value<std::string>());
+
+    // When the cursor leaves the table for the paragraph after it:
+    // Writer tells a paragraph it has the focus only while its window has it, lost on idle here.
+    pWrtShell->GetWin()->GrabFocus();
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the paragraphs before it end at the table, with none of its cells:
+    CPPUNIT_ASSERT_EQUAL(std::string("After the table."),
+                         aView.m_aA11yFocusedCell.get<std::string>("paragraph.content"));
+    const auto oBefore = aView.m_aA11yFocusedCell.get_child_optional("paragraph.before");
+    CPPUNIT_ASSERT(!oBefore || oBefore->empty());
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11ySplitTableWithRowAcrossPages)
 {
     // Given a table whose second row is split across two pages:

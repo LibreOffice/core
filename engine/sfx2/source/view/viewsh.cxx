@@ -1207,23 +1207,37 @@ void appendPiece(ContextParagraph& rParagraph, ContextParagraph&& rPiece)
     rParagraph.aTwips.Union(rPiece.aTwips);
 }
 
-// A paragraph of a cell covered by a merged one has the table for its parent, which does not list
-// it among its children.
-// A paragraph is skipped with its cell, and with every cell of a table skipped as a whole.
 bool isSkipped(const uno::Reference<accessibility::XAccessibleContext>& xContext,
                const std::vector<uno::Reference<accessibility::XAccessibleContext>>& rSkip)
 {
-    for (uno::Reference<accessibility::XAccessibleContext> xAncestor = xContext; xAncestor.is();
-         xAncestor = getParentContext(xAncestor))
+    return std::ranges::find(rSkip, xContext) != rSkip.end();
+}
+
+enum class InTable
+{
+    No,
+    Passed,
+    Ends
+};
+
+// The cells of a skipped table are walked past; any other table ends the paragraphs around the
+// caret. A paragraph of a cell covered by a merged one has the table for its parent.
+InTable tableAround(const uno::Reference<accessibility::XAccessibleContext>& xContext,
+                    const std::vector<uno::Reference<accessibility::XAccessibleContext>>& rSkip)
+{
+    InTable eIn = InTable::No;
+    for (uno::Reference<accessibility::XAccessibleContext> xAncestor = getParentContext(xContext);
+         xAncestor.is(); xAncestor = getParentContext(xAncestor))
     {
-        if (std::ranges::find(rSkip, xAncestor) != rSkip.end())
-            return true;
         const sal_Int16 nRole = xAncestor->getAccessibleRole();
-        if (xAncestor != xContext && nRole != accessibility::AccessibleRole::TABLE_CELL
+        if (nRole != accessibility::AccessibleRole::TABLE_CELL
             && nRole != accessibility::AccessibleRole::TABLE)
-            return false;
+            break;
+        if (isSkipped(xAncestor, rSkip))
+            return InTable::Passed;
+        eIn = InTable::Ends;
     }
-    return false;
+    return eIn;
 }
 
 void walkParagraphFlow(const SfxViewShell* pViewShell,
@@ -1243,6 +1257,9 @@ void walkParagraphFlow(const SfxViewShell* pViewShell,
     uno::Reference<accessibility::XAccessibleContext> xContext = flowNeighbour(xStart, eType);
     for (; xContext.is(); xPrevious = xContext, xContext = flowNeighbour(xContext, eType))
     {
+        const InTable eTable = tableAround(xContext, rSkip);
+        if (eTable == InTable::Ends)
+            break;
         // a paragraph split across pages is given whole, even past the window
         if (bAdjacent && continuesPreviousPiece(bBackward ? xPrevious : xContext))
         {
@@ -1268,7 +1285,8 @@ void walkParagraphFlow(const SfxViewShell* pViewShell,
         }
         else if (static_cast<sal_Int32>(rOut.size()) >= nRadius)
             break;
-        if (isSiblingParagraph(xContext, xParent) && !isSkipped(xContext, rSkip))
+        if (eTable == InTable::No && isSiblingParagraph(xContext, xParent)
+            && !isSkipped(xContext, rSkip))
         {
             rOut.push_back(contextParagraph(pViewShell, xContext, rOriginOnScreen));
             bAdjacent = true;
@@ -1435,7 +1453,8 @@ void collectParagraphWindow(
     walkParagraphFlow(pViewShell, xAnchor, true, xParent, aParentOnScreen, aOriginOnScreen, true,
                       nTop, nBottom, 0, rSkip, rOut);
     std::vector<ContextParagraph> aFollowing;
-    const bool bAnchorGiven = isSiblingParagraph(xAnchor, xParent) && !isSkipped(xAnchor, rSkip);
+    const bool bAnchorGiven = tableAround(xAnchor, rSkip) == InTable::No
+                              && isSiblingParagraph(xAnchor, xParent) && !isSkipped(xAnchor, rSkip);
     if (bAnchorGiven)
         aFollowing.push_back(contextParagraph(pViewShell, xAnchor, aOriginOnScreen));
     walkParagraphFlow(pViewShell, xAnchor, false, xParent, aParentOnScreen, aOriginOnScreen, true,
@@ -1627,7 +1646,6 @@ struct TableWindow
     sal_Int32 nRowCount = 0;
     sal_Int32 nColCount = 0;
     std::vector<TableRowText> aRows;
-    std::vector<uno::Reference<accessibility::XAccessibleContext>> aParagraphs;
     std::vector<uno::Reference<accessibility::XAccessibleContext>> aPieces;
     uno::Reference<accessibility::XAccessible> xCaretCell;
 };
@@ -1901,8 +1919,6 @@ void collectTableWindow(const uno::Reference<css::accessibility::XAccessibleText
                           : nullptr;
                 std::vector<uno::Reference<accessibility::XAccessibleContext>> aCellParagraphs;
                 OUString sText = getSplitCellText(xCell, xRestCell, aCellParagraphs);
-                rTable.aParagraphs.insert(rTable.aParagraphs.end(), aCellParagraphs.begin(),
-                                          aCellParagraphs.end());
                 aRow.aCells.push_back({ nCol, xPiece->getAccessibleRowExtentAt(nPieceRow, nCol),
                                         xPiece->getAccessibleColumnExtentAt(nPieceRow, nCol),
                                         std::move(sText), cellTwips(xCell, aOriginOnScreen), xCell,
@@ -2489,8 +2505,16 @@ void KitDocumentFocusListener::collectContextWindow(
     if (bCaretCellRefreshed && bSameArea)
         return;
     std::vector<uno::Reference<accessibility::XAccessibleContext>> aSkip = m_aList.aParagraphs;
-    aSkip.insert(aSkip.end(), m_aTable.aParagraphs.begin(), m_aTable.aParagraphs.end());
     aSkip.insert(aSkip.end(), m_aTable.aPieces.begin(), m_aTable.aPieces.end());
+    // a table nested in a cell has the caret in the outer table too
+    const uno::Reference<accessibility::XAccessibleContext> xCaret(xAccText, uno::UNO_QUERY);
+    for (uno::Reference<accessibility::XAccessibleContext> xAncestor
+         = xCaret.is() ? getParentContext(xCaret) : nullptr;
+         xAncestor.is(); xAncestor = getParentContext(xAncestor))
+    {
+        if (xAncestor->getAccessibleRole() == accessibility::AccessibleRole::TABLE)
+            aSkip.push_back(xAncestor);
+    }
     if (bCaretCellResized && bSameArea
         && refreshParagraphsAfter(m_pViewShell, xAccText, PARAGRAPH_WINDOW, aVisibleArea,
                                   m_aTable.aPieces.back(), aSkip, m_aParagraphsAfter))

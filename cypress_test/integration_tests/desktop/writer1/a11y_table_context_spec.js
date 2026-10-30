@@ -316,6 +316,7 @@ describe(['tagdesktop'], 'Writer table given to the reader', { testIsolation: fa
 		move('{ctrl}{end}{ctrl}{end}{ctrl}{end}');
 		editing('Paragraph below.');
 		cy.cGet('#a11y-context-table').should('be.empty');
-		cy.cGet('#a11y-context-before').should('contain.text', 'Pears');
+		// the paragraphs around the caret end at the table, which is right above it
+		cy.cGet('#a11y-context-before').should('be.empty');
 	});
 });
