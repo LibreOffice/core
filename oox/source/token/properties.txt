@@ -169,7 +169,6 @@ DisplayLabels
 DisplayUnits
 DrillDownOnDoubleClick
 Dropdown
-Duration
 EchoChar
 EnableVisible
 Enabled
@@ -300,6 +299,7 @@ HeaderIsShared
 Height
 HelpText
 HideInactiveSelection
+HighResDuration
 HighlightClick
 History
 HoriJustify

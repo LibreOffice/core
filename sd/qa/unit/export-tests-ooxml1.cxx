@@ -1576,6 +1576,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testArcTo)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testNarrationMimeType)
 {
     createSdImpressDoc("pptx/narration.pptx");
+
     save(TestFilter::PPTX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
@@ -1634,6 +1635,14 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testNarrationMimeType)
     // - ... no attribute 'isNarration' exist
     // i.e. <p:audio> was not a narration -> could not mass-remove narrations on the UI.
     assertXPath(pSlideDoc, "//p:childTnLst/p:audio", "isNarration", u"1");
+
+    // Unrelated check: the slide advances to the next one automatically after 2453 milliseconds
+    uno::Reference<beans::XPropertySet> xPage(getPage(0), uno::UNO_QUERY_THROW);
+    // Previously the time was truncated to whole seconds on import
+    CPPUNIT_ASSERT_EQUAL(2.453, xPage->getPropertyValue(u"HighResDuration"_ustr).get<double>());
+
+    assertXPath(pSlideDoc, "/p:sld/mc:AlternateContent/mc:Choice/p:transition", "advTm", u"2453");
+    assertXPath(pSlideDoc, "/p:sld/mc:AlternateContent/mc:Fallback/p:transition", "advTm", u"2453");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf150316)

@@ -83,7 +83,7 @@ namespace oox::ppt {
                 aProps.setProperty( PROP_TransitionDuration, mfTransitionDurationInSeconds);
             aProps.setProperty( PROP_TransitionFadeColor, mnTransitionFadeColor);
             if( mnAdvanceTime != -1 ) {
-                aProps.setProperty( PROP_Duration, mnAdvanceTime/1000);
+                aProps.setProperty( PROP_HighResDuration, mnAdvanceTime / 1000.0);
                 aProps.setProperty( PROP_Change, static_cast<sal_Int32>(1));
             }
         }
