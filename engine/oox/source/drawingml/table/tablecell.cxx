@@ -144,6 +144,17 @@ static void applyLineAttributes(const ::oox::core::XmlFilterBase& rFilterBase,
         aBorderLine.LineStyle = ::table::BorderLineStyle::NONE;
     }
 
+    // A line that is told to use no fill is not drawn, so the border it stands for is none at
+    // all, whatever the style around it says the line of that border looks like.
+    if (rLineProperties.maLineFill.moFillType.has_value()
+        && rLineProperties.maLineFill.moFillType.value() == XML_noFill)
+    {
+        aBorderLine.LineStyle = ::table::BorderLineStyle::NONE;
+        aBorderLine.LineWidth = 0;
+        aBorderLine.OuterLineWidth = 0;
+        aBorderLine.InnerLineWidth = 0;
+    }
+
     PropertySet aPropSet( rxPropSet );
     if (aPropSet.hasProperty(nPropId))
         aPropSet.setProperty( nPropId, aBorderLine );

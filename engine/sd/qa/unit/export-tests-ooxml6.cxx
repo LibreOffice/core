@@ -25,6 +25,9 @@
 #include <officecfg/Office/Common.hxx>
 #include <test/commontesttools.hxx>
 
+#include <com/sun/star/table/XCellRange.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/table/BorderLineStyle.hpp>
 #include <svx/xlineit0.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/svdograf.hxx>
@@ -895,6 +898,38 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testLinkWithoutAColourOfItsOwnKeepsTheT
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p[1]/a:r/a:rPr/a:solidFill/a:schemeClr", "val",
                 u"hlink");
+}
+
+// A table cell that states a border has no line of its own is drawn without that border, and
+// stays that way over a save.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testTableCellWithoutBordersKeepsNone)
+{
+    // Given a table that names a style and a cell that states no line on its left and top:
+    createSdImpressDoc("pptx/table-cell-that-states-no-line.pptx");
+
+    auto aLeftBorderOfTheFirstCell = [this]() {
+        const SdrPage* pPage = GetPage(1);
+        CPPUNIT_ASSERT(pPage != nullptr);
+        sdr::table::SdrTableObj* pTableObj
+            = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+        CPPUNIT_ASSERT(pTableObj != nullptr);
+        uno::Reference<table::XCellRange> xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xCell(xTable->getCellByPosition(0, 0),
+                                                  uno::UNO_QUERY_THROW);
+        table::BorderLine2 aBorderLine;
+        xCell->getPropertyValue(u"LeftBorder"_ustr) >>= aBorderLine;
+        return aBorderLine;
+    };
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(table::BorderLineStyle::NONE),
+                         aLeftBorderOfTheFirstCell().LineStyle);
+
+    saveAndReload(TestFilter::PPTX);
+
+    // The cell is still drawn without a border, because the save states again that the border
+    // has no line of its own.
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(table::BorderLineStyle::NONE),
+                         aLeftBorderOfTheFirstCell().LineStyle);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
