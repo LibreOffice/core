@@ -25,8 +25,11 @@
 #include "PresenterPaneFactory.hxx"
 #include "PresenterViewFactory.hxx"
 #include "PresenterWindowManager.hxx"
+
 #include <DrawController.hxx>
 #include <ResourceId.hxx>
+#include <unomodel.hxx>
+
 #include <framework/ConfigurationController.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -152,10 +155,13 @@ Any SAL_CALL PresenterScreenJob::execute(
     Reference< XServiceInfo > xInfo( xModel, UNO_QUERY );
     if( xInfo.is() && xInfo->supportsService(u"com.sun.star.presentation.PresentationDocument"_ustr) )
     {
+        rtl::Reference<SdXImpressDocument> pImpressDoc(dynamic_cast<SdXImpressDocument*>(xModel.get()));
+        assert(pImpressDoc);
+
         // Create a new listener that waits for the full screen presentation
         // to start and to end.  It takes care of its own lifetime.
         ::rtl::Reference<PresenterScreenListener> pListener (
-            new PresenterScreenListener(mxComponentContext, xModel));
+            new PresenterScreenListener(mxComponentContext, pImpressDoc));
         pListener->Initialize();
     }
 
