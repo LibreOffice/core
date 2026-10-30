@@ -85,7 +85,7 @@ public:
         EVP_CIPHER_CTX_set_padding(mpContext.get(), 0);
     }
 
-    void setupDecryptContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv,
+    void setupDecryptContext(const std::vector<sal_uInt8>& key, const std::vector<sal_uInt8>& iv,
                              CryptoType eType) override
     {
         mpContext.reset(EVP_CIPHER_CTX_new());

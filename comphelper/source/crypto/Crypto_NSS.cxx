@@ -144,13 +144,13 @@ public:
         setupCryptoContext(key, iv, type, CKA_ENCRYPT);
     }
 
-    void setupDecryptContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv,
+    void setupDecryptContext(const std::vector<sal_uInt8>& key, const std::vector<sal_uInt8>& iv,
                              CryptoType type) override
     {
         setupCryptoContext(key, iv, type, CKA_DECRYPT);
     }
 
-    void setupCryptoContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv,
+    void setupCryptoContext(const std::vector<sal_uInt8>& key, const std::vector<sal_uInt8>& iv,
                             CryptoType type, CK_ATTRIBUTE_TYPE operation)
     {
         CK_MECHANISM_TYPE mechanism = static_cast<CK_ULONG>(-1);
@@ -160,7 +160,7 @@ public:
         if (iv.empty())
             ivItem.data = nullptr;
         else
-            ivItem.data = iv.data();
+            ivItem.data = const_cast<unsigned char*>(iv.data());
         ivItem.len = iv.size();
 
         SECItem* pIvItem = nullptr;
@@ -190,7 +190,7 @@ public:
 
         SECItem keyItem;
         keyItem.type = siBuffer;
-        keyItem.data = key.data();
+        keyItem.data = const_cast<unsigned char*>(key.data());
         keyItem.len = key.size();
 
         mSymKey = ImportSymKey(mechanism, CKA_ENCRYPT, &keyItem);

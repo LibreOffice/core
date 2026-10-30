@@ -20,7 +20,8 @@ Crypto::~Crypto() = default;
 
 // DECRYPT
 
-Decrypt::Decrypt(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, CryptoType type)
+Decrypt::Decrypt(const std::vector<sal_uInt8>& key, const std::vector<sal_uInt8>& iv,
+                 CryptoType type)
 {
     mpImpl->setupDecryptContext(key, iv, type);
 }

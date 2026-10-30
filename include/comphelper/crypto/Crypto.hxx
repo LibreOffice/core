@@ -57,8 +57,8 @@ class ICryptoImplementation
 public:
     static std::shared_ptr<ICryptoImplementation> createInstance();
 
-    virtual void setupDecryptContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv,
-                                     CryptoType eType)
+    virtual void setupDecryptContext(const std::vector<sal_uInt8>& key,
+                                     const std::vector<sal_uInt8>& iv, CryptoType eType)
         = 0;
     virtual void setupEncryptContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv,
                                      CryptoType type)
@@ -90,7 +90,7 @@ public:
 class COMPHELPER_DLLPUBLIC Decrypt final : public Crypto
 {
 public:
-    Decrypt(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, CryptoType type);
+    Decrypt(const std::vector<sal_uInt8>& key, const std::vector<sal_uInt8>& iv, CryptoType type);
 
     sal_uInt32 update(std::vector<sal_uInt8>& output, std::vector<sal_uInt8>& input,
                       sal_uInt32 inputLength = 0);

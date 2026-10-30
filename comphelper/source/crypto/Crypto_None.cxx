@@ -27,8 +27,8 @@ public:
     {
     }
 
-    void setupDecryptContext(std::vector<sal_uInt8>& /*key*/, std::vector<sal_uInt8>& /*iv*/,
-                             CryptoType /*eType*/) override
+    void setupDecryptContext(const std::vector<sal_uInt8>& /*key*/,
+                             const std::vector<sal_uInt8>& /*iv*/, CryptoType /*eType*/) override
     {
     }
 
