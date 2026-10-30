@@ -460,6 +460,51 @@ class InitializerBase {
 			console.log('Received Host_PostmessageReady.');
 		}
 	}
+
+	// send(kind, msg) sends one message to native code and returns a promise of its reply.
+	setUpRemoteBridge(send) {
+		// main.js and the prefs call the Bridge's methods by name, on the object the web channel
+		// gives CODA's own window. Here each method sends its arguments as a JSON array, in a
+		// message of the method's kind, and calls back with native code's reply.
+		const call = (method, args, callback) => {
+			const sent = send(method, JSON.stringify(args));
+			if (callback)
+				sent.then(callback, () => callback(''));
+		};
+
+		// The frame has the remote document's values itself, so this needs no native code.
+		const remoteInfo = JSON.stringify({
+			wopiSrc: new URLSearchParams(location.search).get('WOPISrc'),
+			accessToken: window.codaRemotePage.serverVariables.accessToken,
+			coolServer: location.origin,
+			coolPath: location.pathname,
+		});
+
+		window.bridge = {
+			cool: (msg, callback) => send('cool', msg).then(callback),
+			error: (msg) => { send('error', msg); },
+			debug: (msg) => { send('debug', msg); },
+			getRemoteInfo: (callback) => callback(remoteInfo),
+			writeRemoteDocFile: (name, base64, callback) =>
+				call('writeRemoteDocFile', [name, base64], callback),
+			readLocalDocBytes: (callback) => call('readLocalDocBytes', [], callback),
+			checkFileInfo: (callback) =>
+				call('checkFileInfo', [window.codaRemotePage.serverVariables.accessToken], callback),
+			getAllPrefs: (callback) => call('getAllPrefs', [], callback),
+			setPref: (key, value) => call('setPref', [key, value]),
+			saveCompleted: () => call('saveCompleted', []),
+		};
+
+		window.bridge.getAllPrefs((prefsJson) => {
+			try {
+				for (const [key, value] of Object.entries(JSON.parse(prefsJson || '{}')))
+					window.prefs._localStorageCache[key] = value;
+			} catch (error) {
+				console.warn('getAllPrefs parse failed: ' + error);
+			}
+			window.prefs._bridgeReady = true;
+		});
+	}
 }
 
 class BrowserInitializer extends InitializerBase {
@@ -850,48 +895,7 @@ class QtAppInitializer extends MobileAppInitializer {
 		window.postMobileDebug   = (msg) => { send('debug', msg); };
 		window.userInterfaceMode = window.coolParams.get('userinterfacemode');
 
-		// main.js and the prefs call the Bridge's methods by name, on the object the web channel
-		// gives CODA's own window. Here each method sends its arguments as a JSON array, in a
-		// message of the method's kind, and calls back with native code's reply.
-		const call = (method, args, callback) => {
-			const sent = send(method, JSON.stringify(args));
-			if (callback)
-				sent.then(callback, () => callback(''));
-		};
-
-		// The frame has the remote document's values itself, so this needs no native code.
-		const remoteInfo = JSON.stringify({
-			wopiSrc: new URLSearchParams(location.search).get('WOPISrc'),
-			accessToken: window.codaRemotePage.serverVariables.accessToken,
-			coolServer: location.origin,
-			coolPath: location.pathname,
-		});
-
-		window.bridge = {
-			cool: (msg, callback) => send('cool', msg).then(callback),
-			error: (msg) => { send('error', msg); },
-			debug: (msg) => { send('debug', msg); },
-			getRemoteInfo: (callback) => callback(remoteInfo),
-			writeRemoteDocFile: (name, base64, callback) =>
-				call('writeRemoteDocFile', [name, base64], callback),
-			readLocalDocBytes: (callback) => call('readLocalDocBytes', [], callback),
-			checkFileInfo: (callback) =>
-				call('checkFileInfo', [window.codaRemotePage.serverVariables.accessToken], callback),
-			getAllPrefs: (callback) => call('getAllPrefs', [], callback),
-			setPref: (key, value) => call('setPref', [key, value]),
-			saveCompleted: () => call('saveCompleted', []),
-		};
-
-		window.bridge.getAllPrefs((prefsJson) => {
-			try {
-				for (const [key, value] of Object.entries(JSON.parse(prefsJson || '{}')))
-					window.prefs._localStorageCache[key] = value;
-			} catch (error) {
-				console.warn('getAllPrefs parse failed: ' + error);
-			}
-			window.prefs._bridgeReady = true;
-		});
-
+		this.setUpRemoteBridge(send);
 		window.qtBridgeReady = true;
 		window.dispatchEvent(new Event('qtbridgeready'));
 	}
