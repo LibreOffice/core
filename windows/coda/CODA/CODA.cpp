@@ -148,6 +148,7 @@ struct DocumentTab
     std::thread app2js;
     std::string editorForm;
     std::string editorFormUrl;
+    std::set<std::string> editorOrigins;
 };
 
 // One top-level window. It holds its documents in the order the tab strip shows
@@ -5063,8 +5064,37 @@ constexpr const char* PUT_CODA_PAGE_IN_SCRIPT = R"JS(
 )JS";
 
 // The injected script puts this path in front of the relative paths in CODA's page, so
-// "global.js" becomes "/coollocal/bundled/global.js" on the COOL server's origin.
+// "global.js" becomes "/coollocal/bundled/global.js" on the COOL server's origin. CODA answers the
+// requests under this path with the local files.
 constexpr std::string_view COOLLOCAL_BUNDLED_PATH = "/coollocal/bundled/";
+
+static std::wstring bundledContentType(const std::string& name)
+{
+    // The kinds of file in CODA's browser folder. The Windows registry often has
+    // no content type for .js, and a script without one does not run.
+    static const std::map<std::string, std::wstring> contentTypes = {
+        { "html", L"text/html; charset=utf-8" },
+        { "css", L"text/css" },
+        { "js", L"text/javascript" },
+        { "json", L"application/json" },
+        { "svg", L"image/svg+xml" },
+        { "png", L"image/png" },
+        { "gif", L"image/gif" },
+        { "ttf", L"font/ttf" },
+    };
+
+    const auto known = contentTypes.find(Poco::Path(name).getExtension());
+    if (known == contentTypes.end())
+        return L"application/octet-stream";
+    return known->second;
+}
+
+// The port is always written, so two addresses of one origin give the same text.
+static std::string originOf(const Poco::URI& uri)
+{
+    return uri.getScheme() + "://" + Util::toLower(uri.getHost()) + ':' +
+           std::to_string(uri.getPort());
+}
 
 // The integrator opens a document by posting a form with the token and settings into the iframe
 // that holds the editor. We save that form because we don't want the cool.html from the remote
@@ -5107,6 +5137,71 @@ static void keepEditorForm(DocumentTab& account, ICoreWebView2WebResourceRequest
     LOG_DBG("Kept the " << account.editorForm.size() << "-byte form posted into an editor frame");
 }
 
+// "/coollocal/bundled/global.js" gets global.js from CODA's browser folder.
+static void serveBundledFile(const DocumentTab& account,
+                             ICoreWebView2WebResourceRequestedEventArgs* args, const Poco::URI& uri)
+{
+    if (!account.editorOrigins.contains(originOf(uri)))
+    {
+        LOG_DBG("A request for a bundled file goes on unanswered: no editor form was posted to "
+                "its origin");
+        return;
+    }
+
+    // The path starts with the segments of COOLLOCAL_BUNDLED_PATH, "coollocal" and "bundled".
+    std::vector<std::string> segments;
+    uri.getPathSegments(segments);
+    segments.erase(segments.begin(), segments.begin() + 2);
+
+    std::string path = app_installation_path + "..\\cool";
+    bool isInFolder = !segments.empty();
+    for (const std::string& segment : segments)
+    {
+        const bool isHidden = segment.starts_with('.');
+        const bool hasSeparator = segment.find_first_of("\\:") != std::string::npos;
+        if (isHidden || hasSeparator)
+        {
+            isInFolder = false;
+            break;
+        }
+
+        path += '\\' + segment;
+    }
+
+    if (!isInFolder)
+    {
+        LOG_WRN("A request for a bundled file was refused: it leads out of the folder");
+        respondWithoutBody(webViewEnvironment.get(), args, 404, L"Not Found", L"");
+        return;
+    }
+
+    wil::com_ptr<IStream> file;
+    HRESULT hr = SHCreateStreamOnFileEx(Util::string_to_wide_string(path).c_str(),
+                                        STGM_READ | STGM_SHARE_DENY_NONE, FILE_ATTRIBUTE_NORMAL,
+                                        FALSE, nullptr, &file);
+    if (FAILED(hr))
+    {
+        const std::string name = uri.getPath().substr(COOLLOCAL_BUNDLED_PATH.size());
+        LOG_DBG("'" << name << "' was not found in CODA's bundled folder");
+        respondWithoutBody(webViewEnvironment.get(), args, 404, L"Not Found", L"");
+        return;
+    }
+
+    // no-store keeps the files out of the memory cache, which WebResourceRequested never sees.
+    const std::wstring headers = L"Content-Type: " + bundledContentType(segments.back()) +
+                                 L"\r\nCache-Control: no-store\r\n";
+    wil::com_ptr<ICoreWebView2WebResourceResponse> response;
+    hr = webViewEnvironment->CreateWebResourceResponse(file.get(), 200, L"OK", headers.c_str(),
+                                                       &response);
+    if (FAILED(hr))
+    {
+        LOG_ERR("CreateWebResourceResponse() failed");
+        return;
+    }
+
+    args->put_Response(response.get());
+}
+
 // WebView2 calls this for every request that matches one of the account window's filters.
 static void handleAccountRequest(int accountTabId, ICoreWebView2WebResourceRequestedEventArgs* args)
 {
@@ -5129,12 +5224,19 @@ static void handleAccountRequest(int accountTabId, ICoreWebView2WebResourceReque
     const std::string url = Util::wide_string_to_string(address.get());
     const Poco::URI uri(url);
     const bool isPost = std::wstring_view(method.get()) == L"POST";
+    const bool isGet = std::wstring_view(method.get()) == L"GET";
     const bool isDocument = context == COREWEBVIEW2_WEB_RESOURCE_CONTEXT_DOCUMENT;
     const bool isEditorPage = uri.getPath().ends_with("/cool.html");
+    const bool isBundledFile = uri.getPath().starts_with(COOLLOCAL_BUNDLED_PATH);
 
     if (isDocument && isEditorPage && isPost)
     {
+        account->editorOrigins.insert(originOf(uri));
         keepEditorForm(*account, request.get(), url);
+    }
+    else if (isBundledFile && isGet)
+    {
+        serveBundledFile(*account, args, uri);
     }
 }
 
@@ -5255,6 +5357,9 @@ static void openAccountWindow(const std::string& url)
 
                         webView22->AddWebResourceRequestedFilterWithRequestSourceKinds(
                             L"*/cool.html*", COREWEBVIEW2_WEB_RESOURCE_CONTEXT_DOCUMENT,
+                            COREWEBVIEW2_WEB_RESOURCE_REQUEST_SOURCE_KINDS_ALL);
+                        webView22->AddWebResourceRequestedFilterWithRequestSourceKinds(
+                            L"*/coollocal/bundled/*", COREWEBVIEW2_WEB_RESOURCE_CONTEXT_ALL,
                             COREWEBVIEW2_WEB_RESOURCE_REQUEST_SOURCE_KINDS_ALL);
 
                         EventRegistrationToken token;
