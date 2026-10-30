@@ -80,6 +80,9 @@ public:
     vcl::Window* GetWidgetWindow();
     const SfxViewShell* GetSmViewShell();
     tools::Rectangle GetBoundingBox() const;
+    /// A rectangle of the Math view in the coordinates of the document: the formula shows at the
+    /// scale its frame gives it, from the frame's upper left corner.
+    tools::Rectangle ToDocument(const tools::Rectangle& rInView) const;
 
     static const SfxViewShell* FindContainerViewShell(const SfxViewShell* pSmViewShell);
 

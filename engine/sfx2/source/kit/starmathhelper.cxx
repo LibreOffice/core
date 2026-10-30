@@ -9,6 +9,8 @@
 
 #include <sal/config.h>
 
+#include <cmath>
+
 #include <sfx2/ipclient.hxx>
 #include <sfx2/kit/componenthelpers.hxx>
 #include <sfx2/kit/helper.hxx>
@@ -188,16 +190,37 @@ tools::Rectangle KitStarMathHelper::GetBoundingBox() const
     return {};
 }
 
+tools::Rectangle KitStarMathHelper::ToDocument(const tools::Rectangle& rInView) const
+{
+    // the in-place client scales the formula's own area onto its frame, as the office shows it
+    const double fScaleX(mpIPClient ? mpIPClient->GetScaleWidth() : 1.0);
+    const double fScaleY(mpIPClient ? mpIPClient->GetScaleHeight() : 1.0);
+    const Point aTopLeft(GetBoundingBox().TopLeft());
+    return tools::Rectangle(
+        Point(aTopLeft.X() + std::round(rInView.Left() * fScaleX),
+              aTopLeft.Y() + std::round(rInView.Top() * fScaleY)),
+        Size(std::round(rInView.GetWidth() * fScaleX), std::round(rInView.GetHeight() * fScaleY)));
+}
+
 bool KitStarMathHelper::postMouseEvent(COKitMouseEventType eType, int nX, int nY, int nCount,
                                        int nButtons,
                                        int nModifier, double fPPTScaleX, double fPPTScaleY)
 {
-    const tools::Rectangle rBBox = GetBoundingBox();
+    // the area of the object is the formula's own size, which shows at the scale of its frame,
+    // and the frame takes the presses
+    const tools::Rectangle rBBox
+        = ToDocument(tools::Rectangle(Point(), GetBoundingBox().GetSize()));
     if (Point aMousePos(nX, nY); rBBox.Contains(aMousePos))
     {
         if (vcl::Window* pWindow = GetWidgetWindow())
         {
             aMousePos -= rBBox.TopLeft();
+
+            // the formula shows at the scale its frame gives it, its view is in its own size
+            if (mpIPClient && mpIPClient->GetScaleWidth() > 0.0
+                && mpIPClient->GetScaleHeight() > 0.0)
+                aMousePos = Point(std::round(aMousePos.X() / mpIPClient->GetScaleWidth()),
+                                  std::round(aMousePos.Y() / mpIPClient->GetScaleHeight()));
 
             // In Kit, Math does not convert coordinates (see SmGraphicWidget::SetDrawingArea,
             // which disables MapMode), and uses twips internally (see SmDocShell ctor and

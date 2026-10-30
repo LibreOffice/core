@@ -2217,11 +2217,14 @@ void SmViewShell::ZoomByItemSet(const SfxItemSet *pSet)
 
 namespace
 {
-// Offset from the coordinates of a Math view to those of the document
-Point GetInPlaceOffset(const SmViewShell& rViewShell, const SmGraphicWidget& rWidget)
+// A rectangle of a Math view in the coordinates of the document, where the formula shows at the
+// scale of its frame
+tools::Rectangle ToDocument(const SmViewShell& rViewShell, const SmGraphicWidget& rWidget,
+                            tools::Rectangle aInView)
 {
     KitStarMathHelper aHelper(KitStarMathHelper::FindContainerViewShell(&rViewShell));
-    return rWidget.GetFormulaDrawPos() + aHelper.GetBoundingBox().TopLeft();
+    aInView.Move(rWidget.GetFormulaDrawPos().X(), rWidget.GetFormulaDrawPos().Y());
+    return aHelper.ToDocument(aInView);
 }
 }
 
@@ -2236,10 +2239,8 @@ std::optional<OString> SmViewShell::getKitPayload(COKitCallbackType eType, int n
             {
                 SmCursor& rCursor = GetDoc()->GetCursor();
                 OutputDevice& rOutDev = const_cast<SmGraphicWidget&>(widget).GetOutputDevice();
-                tools::Rectangle aCaret = rCursor.GetCaretRectangle(rOutDev);
-                const Point aOffset = GetInPlaceOffset(*this, widget);
-                aCaret.Move(aOffset.X(), aOffset.Y());
-                sRectangle = aCaret.toString();
+                sRectangle
+                    = ToDocument(*this, widget, rCursor.GetCaretRectangle(rOutDev)).toString();
             }
             return KitHelper::makeVisCursorInvalidation(nViewId, sRectangle, false, {});
         }
@@ -2252,11 +2253,7 @@ std::optional<OString> SmViewShell::getKitPayload(COKitCallbackType eType, int n
                 OutputDevice& rOutDev = const_cast<SmGraphicWidget&>(widget).GetOutputDevice();
                 tools::Rectangle aSelection = rCursor.GetSelectionRectangle(rOutDev);
                 if (!aSelection.IsEmpty())
-                {
-                    const Point aOffset = GetInPlaceOffset(*this, widget);
-                    aSelection.Move(aOffset.X(), aOffset.Y());
-                    sRectangle = aSelection.toString();
-                }
+                    sRectangle = ToDocument(*this, widget, aSelection).toString();
             }
             return sRectangle;
         }
