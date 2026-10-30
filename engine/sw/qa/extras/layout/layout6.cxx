@@ -2873,6 +2873,18 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf138026)
                 "portion", u"Row 2");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf138026b)
+{
+    // A split row, its paragraph's second line on page 2. Without the fix, that line was taken back
+    // and forth until the loop control stopped it, leaving the cell's bottom alignment undone.
+    createSwDoc("tdf138026b.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page", 2);
+    static constexpr OString aCell = "/root/page[1]/body/tab/row[2]/cell[2]"_ostr;
+    assertXPath(pXmlDoc, aCell + "/txt/infos/bounds", "bottom",
+                getXPath(pXmlDoc, aCell + "/infos/bounds", "bottom"));
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

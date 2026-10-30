@@ -6999,6 +6999,8 @@ static SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrame& rSourceLine )
                     pTextFrame = const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pTmp->GetLower()));
                 pTextFrame->GetFormatted();
                 nTmpHeight = pTextFrame->FirstLineHeight();
+                if (pTextFrame->IsFollow()) // its first line gets line spacing in the master
+                    nTmpHeight += pTextFrame->GetLineSpace();
             }
 
             if (std::numeric_limits<SwTwips>::max() != nTmpHeight)
