@@ -4995,6 +4995,77 @@ if (window !== window.top && location.pathname.endsWith('/cool.html')) {
 }
 )JS";
 
+/// Builds CODA's editor page in the emptied editor iframe. It posts the integrator's form again to
+/// get coolwsd's settings, then loads CODA's page, scripts and styles from config.base.
+/// TODO: Share this and EMPTY_COOL_PAGE_SCRIPT with Qt's copies in qt/RemoteOpen.cpp.
+constexpr const char* PUT_CODA_PAGE_IN_SCRIPT = R"JS(
+(config) => {
+    if (window.codaRemotePage)
+        return;
+
+    window.codaRemotePage = { base: config.base };
+
+    const text = (response) => {
+        if (!response.ok)
+            throw new Error('a request returned ' + response.status);
+        return response.text();
+    };
+
+    const serverPage = fetch(config.formUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: config.formBody,
+    }).then(text);
+
+    const appPage = fetch(config.base + 'cool.html').then(text);
+
+    Promise.all([serverPage, appPage]).then(([serverHtml, appHtml]) => {
+        // coolwsd writes the values for its editor into these two elements.
+        const server = new DOMParser().parseFromString(serverHtml, 'text/html');
+        const variables = server.getElementById('initial-variables');
+        const cssVariables = server.getElementById('init-css-vars');
+
+        window.codaRemotePage.serverVariables = variables ? { ...variables.dataset } : {};
+        window.codaRemotePage.cssVariables = cssVariables ? cssVariables.value : '';
+
+        const app = new DOMParser().parseFromString(appHtml, 'text/html');
+        const isRelative = (address) => address && !address.includes(':');
+
+        for (const link of app.querySelectorAll('link[href]'))
+            if (isRelative(link.getAttribute('href')))
+                link.href = config.base + link.getAttribute('href');
+
+        // Remove the scripts from CODA's cool.html: moved scripts never run. We add them again
+        // later from config.base, so that they are loaded from CODA.
+        const scripts = Array.from(app.scripts);
+        scripts.forEach((script) => script.remove());
+        const sources = scripts.map((script) => script.getAttribute('src')).filter(isRelative);
+
+        // Replace the frame's empty <html>, left by EMPTY_COOL_PAGE_SCRIPT, with CODA's <html>.
+        document.documentElement.replaceWith(document.adoptNode(app.documentElement));
+
+        // The load event fired when the page was emptied, and CODA's start waits for it.
+        const loaded = () => window.dispatchEvent(new Event('load'));
+
+        // Add CODA's scripts again, from config.base. With async off, they load in parallel and
+        // run in order.
+        sources.forEach((source, index) => {
+            const script = document.createElement('script');
+            script.src = config.base + source;
+            script.async = false;
+            if (index === sources.length - 1)
+                script.addEventListener('load', loaded);
+
+            document.head.append(script);
+        });
+    }).catch((error) => console.error('CODA could not put its editor page in: ' + error.message));
+}
+)JS";
+
+// The injected script puts this path in front of the relative paths in CODA's page, so
+// "global.js" becomes "/coollocal/bundled/global.js" on the COOL server's origin.
+constexpr std::string_view COOLLOCAL_BUNDLED_PATH = "/coollocal/bundled/";
+
 // The integrator opens a document by posting a form with the token and settings into the iframe
 // that holds the editor. We save that form because we don't want the cool.html from the remote
 // coolwsd to load. Later we would inject a script with this form which can repost this from
@@ -5067,6 +5138,74 @@ static void handleAccountRequest(int accountTabId, ICoreWebView2WebResourceReque
     }
 }
 
+static void putCodaPageIn(int accountTabId, ICoreWebView2Frame* frame, const std::string& address)
+{
+    DocumentTab* account = findTab(accountTabId);
+    if (!account)
+    {
+        LOG_DBG("A frame loaded after its account window closed");
+        return;
+    }
+
+    if (account->editorForm.empty() || address != account->editorFormUrl)
+        return;
+
+    wil::com_ptr<ICoreWebView2Frame2> frame2;
+    if (FAILED(frame->QueryInterface(IID_PPV_ARGS(&frame2))))
+    {
+        LOG_ERR("The editor frame cannot run a script");
+        return;
+    }
+
+    Poco::JSON::Object::Ptr config = new Poco::JSON::Object();
+    config->set("formUrl", account->editorFormUrl);
+    config->set("formBody", account->editorForm);
+    config->set("base", std::string(COOLLOCAL_BUNDLED_PATH));
+    const std::string script =
+        std::string("(") + PUT_CODA_PAGE_IN_SCRIPT + ")(" + JsonUtil::jsonToString(config) + ")";
+
+    frame2->ExecuteScript(Util::string_to_wide_string(script).c_str(), nullptr);
+    LOG_DBG("Putting CODA's editor page into the editor frame");
+}
+
+// WebView2 does not say which frame a request is for. So each frame reports where it navigates,
+// and gets CODA's page once it has loaded the address the kept form was posted to.
+static void watchAccountFrame(int accountTabId, ICoreWebView2Frame* created)
+{
+    wil::com_ptr<ICoreWebView2Frame2> frame;
+    if (FAILED(created->QueryInterface(IID_PPV_ARGS(&frame))))
+    {
+        LOG_ERR("A frame of an account window has no navigation events");
+        return;
+    }
+
+    auto address = std::make_shared<std::string>();
+    EventRegistrationToken token;
+    frame->add_NavigationStarting(
+        Microsoft::WRL::Callback<ICoreWebView2FrameNavigationStartingEventHandler>(
+            [address](ICoreWebView2Frame*, ICoreWebView2NavigationStartingEventArgs* args)
+                -> HRESULT
+            {
+                wil::unique_cotaskmem_string uri;
+                args->get_Uri(&uri);
+                *address = Util::wide_string_to_string(uri.get());
+                return S_OK;
+            })
+            .Get(),
+        &token);
+
+    frame->add_NavigationCompleted(
+        Microsoft::WRL::Callback<ICoreWebView2FrameNavigationCompletedEventHandler>(
+            [accountTabId, address](ICoreWebView2Frame* sender,
+                                    ICoreWebView2NavigationCompletedEventArgs*) -> HRESULT
+            {
+                putCodaPageIn(accountTabId, sender, *address);
+                return S_OK;
+            })
+            .Get(),
+        &token);
+}
+
 static void openAccountWindow(const std::string& url)
 {
     int width, height;
@@ -5126,6 +5265,19 @@ static void openAccountWindow(const std::string& url)
                                     -> HRESULT
                                 {
                                     handleAccountRequest(accountTabId, args);
+                                    return S_OK;
+                                })
+                                .Get(),
+                            &token);
+
+                        webView22->add_FrameCreated(
+                            Microsoft::WRL::Callback<ICoreWebView2FrameCreatedEventHandler>(
+                                [accountTabId](ICoreWebView2*,
+                                               ICoreWebView2FrameCreatedEventArgs* args) -> HRESULT
+                                {
+                                    wil::com_ptr<ICoreWebView2Frame> frame;
+                                    args->get_Frame(&frame);
+                                    watchAccountFrame(accountTabId, frame.get());
                                     return S_OK;
                                 })
                                 .Get(),
