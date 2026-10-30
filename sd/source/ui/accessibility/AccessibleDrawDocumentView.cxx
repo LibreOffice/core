@@ -49,6 +49,7 @@
 #include <slideshow.hxx>
 #include <anminfo.hxx>
 #include <AccessiblePageShape.hxx>
+#include <SlideShowController.hxx>
 
 #include <strings.hrc>
 #include <sdresid.hxx>
@@ -343,10 +344,11 @@ void SAL_CALL
                 css::uno::Reference< drawing::XDrawPage > xSlide;
                 // MT IA2: Not used...
                 // sal_Int32 currentPageIndex = xSlideshow->getCurrentPageIndex();
-                css::uno::Reference< css::presentation::XSlideShowController > xSlideController = xSlideshow->getController();
-                if( xSlideController.is() )
+                rtl::Reference<sd::SlideShowController> pSlideController
+                    = xSlideshow->GetSlideShowController();
+                if (pSlideController.is())
                 {
-                    xSlide = xSlideController->getCurrentSlide();
+                    xSlide = pSlideController->getCurrentSlide();
                     if (xSlide.is())
                     {
                         mpChildrenManager->SetShapeList (xSlide);
