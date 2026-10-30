@@ -96,6 +96,13 @@ void ImplDeInitSVData()
     pSVData->maPaperNames.clear();
 }
 
+void ImplHideSplash()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if (pSVData->mpIntroWindow)
+        pSVData->mpIntroWindow->Hide();
+}
+
 namespace
 {
     typedef ::std::unordered_map< basegfx::SystemDependentData_SharedPtr, sal_uInt32 > EntryMap;

@@ -121,13 +121,6 @@ static bool ImplIsMnemonicCtrl( vcl::Window* pWindow )
     return false;
 }
 
-void ImplHideSplash()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    if( pSVData->mpIntroWindow )
-            pSVData->mpIntroWindow->Hide();
-}
-
 vcl::Window * nextLogicalChildOfParent(const vcl::Window *pTopLevel, const vcl::Window *pChild)
 {
     const vcl::Window *pLastChild = pChild;
