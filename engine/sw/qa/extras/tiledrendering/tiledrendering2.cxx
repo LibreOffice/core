@@ -3050,6 +3050,40 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yParagraphSplitOverPages)
     checkCaret("Right to the second page");
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yHeaderFooterFootnote)
+{
+    // Given a document with a header, a footer and a footnote, with screen reader support on:
+    createDoc("a11y-header-footer-footnote.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    Scheduler::ProcessEventsToIdle();
+
+    // the client has the paragraph of the cursor
+    auto checkParagraph = [&aView](const char* pStep, const char* pExpected) {
+        Scheduler::ProcessEventsToIdle();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(pStep, std::string(pExpected),
+                                     aView.m_aA11yFocusedParagraph.get<std::string>("content", ""));
+    };
+
+    // When the cursor moves into the header, the footer and the footnote, and back:
+    dispatchCommand(mxComponent, u".uno:JumpToHeader"_ustr, {});
+    // Without the fix, the client received no message
+    checkParagraph("Into the header", "Header text.");
+    dispatchCommand(mxComponent, u".uno:JumpToHeader"_ustr, {});
+    checkParagraph("Back from the header", "First paragraph.");
+    dispatchCommand(mxComponent, u".uno:JumpToFooter"_ustr, {});
+    checkParagraph("Into the footer", "Footer text.");
+    dispatchCommand(mxComponent, u".uno:JumpToFooter"_ustr, {});
+    checkParagraph("Back from the footer", "Last paragraph.");
+    dispatchCommand(mxComponent, u".uno:JumpToPrevFootnote"_ustr, {});
+    checkParagraph("Back to the anchor of the note", "Text with a note1 and more.");
+    dispatchCommand(mxComponent, u".uno:JumpToFootnoteOrAnchor"_ustr, {});
+    checkParagraph("Into the footnote", "The note text.");
+    dispatchCommand(mxComponent, u".uno:JumpToFootnoteOrAnchor"_ustr, {});
+    checkParagraph("Back from the footnote", "Text with a note1 and more.");
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yImageSelection)
 {
     for (const char* pFile : { "a11y-image.fodt", "a11y-image-at-paragraph.fodt" })

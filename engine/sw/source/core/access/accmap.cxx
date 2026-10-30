@@ -2358,8 +2358,9 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
     mbShapeSelected = bShapeSelected;
 
     // The context of a frame, created on the way when nothing has asked for it so far.
-    auto lcl_getOrCreateContext = [this](const SwFrame* pContextFrame) -> rtl::Reference<SwAccessibleContext>
-    {
+    auto lcl_getOrCreateContext
+        = [this](const auto& rSelf,
+                 const SwFrame* pContextFrame) -> rtl::Reference<SwAccessibleContext> {
         SwAccessibleContextMap::iterator aIter = maFrameMap.find(pContextFrame);
         if (aIter != maFrameMap.end())
             return (*aIter).second;
@@ -2378,7 +2379,16 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
         aIter = maFrameMap.find(pContextFrame);
         if (aIter != maFrameMap.end())
             return (*aIter).second;
-        return nullptr;
+
+        // a frame in a header, a footer or a footnote: the context of that area is created first
+        const SwFrame* pParent = SwAccessibleFrame::GetParent(SwAccessibleChild(pContextFrame),
+                                                              GetShell().IsPreview());
+        if (!pParent || maFrameMap.find(pParent) != maFrameMap.end())
+            return nullptr;
+        const rtl::Reference<SwAccessibleContext> xParent = rSelf(rSelf, pParent);
+        if (!xParent.is())
+            return nullptr;
+        return rSelf(rSelf, pContextFrame);
     };
 
     // The fly frames selected beside the first one. Each one that joined and each one that left
@@ -2397,7 +2407,8 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
         const std::vector<SwFlyFrame*> aFlyFrames = pFESh->GetSelectedFlyFrames();
         for (size_t i = 1; i < aFlyFrames.size(); ++i)
         {
-            rtl::Reference<SwAccessibleContext> xOther = lcl_getOrCreateContext(aFlyFrames[i]);
+            rtl::Reference<SwAccessibleContext> xOther
+                = lcl_getOrCreateContext(lcl_getOrCreateContext, aFlyFrames[i]);
             if (xOther.is())
             {
                 aOtherFlyAccs.push_back(xOther);
@@ -2409,7 +2420,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
     rtl::Reference <SwAccessibleContext> xAcc;
     if (pAccFrame)
     {
-        xAcc = lcl_getOrCreateContext(pAccFrame);
+        xAcc = lcl_getOrCreateContext(lcl_getOrCreateContext, pAccFrame);
 
         // For cells, some extra thoughts are necessary,
         // because invalidating the cursor for one cell
