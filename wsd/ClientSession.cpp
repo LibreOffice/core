@@ -3299,10 +3299,13 @@ void ClientSession::setReadOnly(bool val)
     sendTextFrame("perm: " + perm);
 }
 
-void ClientSession::sendFileMode(const bool readOnly, const bool editComments, bool manageRedlines)
+void ClientSession::sendFileMode(const bool readOnly, const bool editComments, bool manageRedlines,
+                                 bool readOnlyFile)
 {
     std::string result = "filemode:{\"readOnly\": ";
     result += readOnly ? "true": "false";
+    if (readOnlyFile)
+        result += ", \"readOnlyFile\": true";
     result += ", \"editComment\": ";
     result += editComments ? "true": "false";
     result += ", \"manageRedlines\": ";

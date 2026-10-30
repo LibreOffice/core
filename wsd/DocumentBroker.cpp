@@ -1415,16 +1415,26 @@ bool DocumentBroker::download(
                 }
                 else if (Util::isMobileApp())
                 {
-                    // Fix issue #5887 by assuming that documents are writable on iOS and Android
-                    // The iOS and Android app saves directly to local disk so, other than for
-                    // "view file extension" document types or other cases that
-                    // I am missing, we can assume the document is writable until
-                    // a write failure occurs.
-                    LOG_DBG("Setting session [" << sessionId
-                                                << "] to writable and allowing comments");
-                    session->setWritable(true);
-                    session->setReadOnly(false);
-                    session->setAllowChangeComments(true);
+                    if (localfileinfo->getUserCanWrite())
+                    {
+                        LOG_DBG("Setting session [" << sessionId
+                                                    << "] to writable and allowing comments");
+                        session->setWritable(true);
+                        session->setReadOnly(false);
+                        session->setAllowChangeComments(true);
+                    }
+                    else
+                    {
+                        // Open the file read-only rather than let the user edit work that
+                        // the first save cannot write.
+                        LOG_DBG("Setting session [" << sessionId
+                                                    << "] as readonly, the file cannot be written");
+                        session->setWritable(false);
+                        session->sendFileMode(session->isReadOnly(),
+                                              session->isAllowChangeComments(),
+                                              session->isAllowManageRedlines(),
+                                              /*readOnlyFile=*/true);
+                    }
                 }
 
                 session->setUserId(localfileinfo->getUserId());

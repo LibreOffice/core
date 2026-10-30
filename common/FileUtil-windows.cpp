@@ -201,12 +201,24 @@ namespace FileUtil
         return result;
     }
 
+    // Opens the file as the engine does at load, so permissions and locks count.
+    // A directory gives false.
     bool isWritable(const char* path)
     {
-        if (_waccess(Util::string_to_wide_string(path).c_str(), 0) == 0)
+        HANDLE handle = CreateFileW(Util::string_to_wide_string(path).c_str(),
+                                    GENERIC_READ | GENERIC_WRITE,
+                                    FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING,
+                                    FILE_ATTRIBUTE_NORMAL, nullptr);
+        if (handle != INVALID_HANDLE_VALUE)
+        {
+            CloseHandle(handle);
             return true;
+        }
 
-        LOG_INF("No write access to path [" << path << "]: " << strerror(errno));
+        // LOG_INF calls the system before it reads its arguments, and that
+        // resets the last error.
+        const DWORD error = GetLastError();
+        LOG_INF("No write access to path [" << path << "]: Win32 error " << error);
         return false;
     }
 

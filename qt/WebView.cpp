@@ -173,6 +173,14 @@ QString getDocumentsDirectory()
     return QDir::homePath();
 }
 
+/// A template copy keeps the template's permissions, and a file that cannot be written opens
+/// read-only.
+void makeOwnerWritable(const QString& path)
+{
+    if (!QFile::setPermissions(path, QFile::permissions(path) | QFileDevice::WriteOwner))
+        LOG_WRN("Cannot make the template copy " << path.toStdString() << " writable");
+}
+
 /// Resolve the template to copy.  pbUsedRequestedTemplate, when given, says
 /// whether the returned path is the requested template rather than the blank
 /// document this falls back to.
@@ -1358,6 +1366,7 @@ QString WebView::createNewDocumentFile(const std::string& templateType, const st
                     << " to " << newFilePath.toStdString());
             return {};
         }
+        makeOwnerWritable(newFilePath);
     }
 
     return newFilePath;
@@ -1409,6 +1418,7 @@ WebView* WebView::openTemplateAsNewDocument(QWebEngineProfile* profile,
                 << " to working copy " << workingCopyPath.toStdString());
         return nullptr;
     }
+    makeOwnerWritable(workingCopyPath);
 
     Poco::URI workingCopyURI(Poco::Path(workingCopyPath.toStdString()));
     TabbedWindow* window = TabbedWindow::getOrCreate(profile);

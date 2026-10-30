@@ -15,16 +15,20 @@ import {
 	existsSync,
 	mkdirSync,
 	readFileSync,
+	writeFileSync,
 } from 'fs';
 import { join } from 'path';
 import { openFixture } from '../lib/file-dialog.js';
+import * as webview from '../lib/webview.js';
 
 // A document whose file cannot be written must never lose its edits. Saving it
 // shows one prompt that offers Save As, and closing it stops at the same prompt
 // until the user picks what to do with the edits.
 //
-// The file is made read-only after it is open, so the document itself opens
-// editable and the failure only shows when the engine writes the file.
+// In the save cases the file is made read-only after it is open, so the
+// document itself opens editable and the failure only shows when the engine
+// writes the file. A file that is already read-only at the open gives a
+// read-only document, with a notice that points to Save As.
 
 const we = (): WebdriverIO.Browser & {
 	waitForCondition(
@@ -35,9 +39,10 @@ const we = (): WebdriverIO.Browser & {
 
 const PROMPT_ID = 'modal-dialog-savefailed';
 const EDIT_TEXT = 'lockededit';
-const SAVE_DIALOG_NAME =
+const NOTICE_TEXT = 'This file cannot be written';
+const FILE_DIALOG_NAME =
 	'//*[@accessibility-id="QApplication.QFileDialog.fileNameEdit"]';
-const SAVE_DIALOG_BUTTON =
+const FILE_DIALOG_BUTTON =
 	'//*[@accessibility-id="QApplication.QFileDialog.buttonBox.QPushButton"]';
 
 let copyCount = 0;
@@ -46,12 +51,44 @@ function documentPath(name: string): string {
 	return join(process.env.CODA_TEST_DOCUMENTS_DIR!, name);
 }
 
+function uniqueName(extension: string): string {
+	copyCount++;
+	return `save-failed-${process.pid}-${copyCount}.${extension}`;
+}
+
 // Opening a file that is already open activates its window instead of
 // creating a new one, so every case works on a copy of its own.
 function copyFixture(fixture: string): string {
-	copyCount++;
-	const name = `save-failed-${process.pid}-${copyCount}.odt`;
+	const name = uniqueName('odt');
 	copyFileSync(documentPath(fixture), documentPath(name));
+	return name;
+}
+
+// A one-page PDF with one line of text; the cross-reference offsets are
+// counted as the objects are written.
+function writePdf(): string {
+	const objects = [
+		'<< /Type /Catalog /Pages 2 0 R >>',
+		'<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
+		'<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R ' +
+			'/Resources << /Font << /F1 5 0 R >> >> >>',
+		'<< /Length 34 >>\nstream\nBT /F1 24 Tf 72 700 Td (pdf) Tj ET\nendstream',
+		'<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
+	];
+	let pdf = '%PDF-1.4\n';
+	const offsets: number[] = [];
+	objects.forEach((body, i) => {
+		offsets.push(pdf.length);
+		pdf += `${i + 1} 0 obj\n${body}\nendobj\n`;
+	});
+	const xref = pdf.length;
+	pdf += `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n`;
+	for (const offset of offsets)
+		pdf += `${String(offset).padStart(10, '0')} 00000 n \n`;
+	pdf += `trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\n`;
+	pdf += `startxref\n${xref}\n%%EOF\n`;
+	const name = uniqueName('pdf');
+	writeFileSync(documentPath(name), pdf);
 	return name;
 }
 
@@ -65,6 +102,24 @@ async function isModified(): Promise<boolean> {
 
 async function promptShown(): Promise<boolean> {
 	return we().execute((id) => document.getElementById(id) !== null, PROMPT_ID);
+}
+
+async function noticeCount(): Promise<number> {
+	return we().execute(
+		(text) =>
+			Array.from(
+				document.querySelectorAll<HTMLElement>('.snackbar #label-no-action'),
+			).filter(
+				(e) => e.offsetParent !== null && e.textContent!.startsWith(text),
+			).length,
+		NOTICE_TEXT,
+	);
+}
+
+// The notice shows soon after the load or not at all, so give it a moment.
+async function expectNoNotice(): Promise<void> {
+	await pause(4000);
+	expect(await noticeCount()).toBe(0);
 }
 
 // Existing documents open in the read-only view mode; switch to edit mode so
@@ -186,15 +241,20 @@ async function postUno(command: string): Promise<void> {
 	}, command);
 }
 
+// Type a path into the open or save dialog and accept it.
+async function acceptFileDialog(path: string): Promise<void> {
+	const nameEdit = await browser.native.$(FILE_DIALOG_NAME);
+	await nameEdit.waitForExist({ timeout: 10000 });
+	await nameEdit.setValue(path);
+	const acceptButton = await browser.native.$(FILE_DIALOG_BUTTON);
+	await acceptButton.waitForExist({ timeout: 5000 });
+	await acceptButton.click();
+}
+
 // The name is prefilled, so the path goes in with a leading slash; the
 // dialog folds the doubled slash.
 async function acceptSaveDialog(path: string): Promise<void> {
-	const nameEdit = await browser.native.$(SAVE_DIALOG_NAME);
-	await nameEdit.waitForExist({ timeout: 10000 });
-	await nameEdit.setValue('/' + path);
-	const saveButton = await browser.native.$(SAVE_DIALOG_BUTTON);
-	await saveButton.waitForExist({ timeout: 5000 });
-	await saveButton.click();
+	await acceptFileDialog('/' + path);
 }
 
 // Give the file its write access back and save; the document is clean after.
@@ -208,6 +268,23 @@ async function saveWritableFile(path: string): Promise<void> {
 		interval: 250,
 		timeoutMsg: 'the save to the writable file did not complete',
 	});
+}
+
+// Open a file whose load fails: the page shows up, the document never does.
+async function openFailing(name: string): Promise<string> {
+	const before = await we().getWindowHandles();
+	await postUno('.uno:Open');
+	await acceptFileDialog(documentPath(name));
+	return webview.switchToNewWebView(browser.webEngine, before);
+}
+
+async function switchToOtherDocument(handle: string): Promise<void> {
+	for (const other of await we().getWindowHandles()) {
+		if (other === handle) continue;
+		await we().switchToWindow(other);
+		if (await webview.isDocumentPage(browser.webEngine)) return;
+	}
+	throw new Error('no other document page is open');
 }
 
 async function isOffered(handle: string): Promise<boolean> {
@@ -624,5 +701,93 @@ describe('Saving a document whose file cannot be written', () => {
 
 		await postUno('.uno:CloseWin');
 		await waitGone(frontHandle);
+	});
+
+	it('opens a read-only file read-only, says so once, and still offers Save As', async function () {
+		this.timeout(120000);
+		const name = copyFixture('simple.odt');
+		chmodSync(documentPath(name), 0o444);
+		await openFixture(browser.webEngine, browser.native, name);
+
+		await we().waitUntil(async () => (await noticeCount()) === 1, {
+			timeout: 15000,
+			interval: 250,
+			timeoutMsg: 'the read-only notice did not show',
+		});
+		expect(await we().execute(() => (app as any).isReadOnly())).toBe(true);
+		expect(
+			await we().execute(() => {
+				const label = document.getElementById('readonlyMode');
+				return label !== null && label.offsetParent !== null;
+			}),
+		).toBe(true);
+		await pause(2000);
+		expect(await noticeCount()).toBe(1);
+
+		await postUno('.uno:SaveAs');
+		const nameEdit = await browser.native.$(FILE_DIALOG_NAME);
+		await nameEdit.waitForExist({ timeout: 10000 });
+		const cancelButton = await browser.native.$(
+			FILE_DIALOG_BUTTON + '[@name="Cancel"]',
+		);
+		await cancelButton.click();
+		await nameEdit.waitForExist({ timeout: 10000, reverse: true });
+	});
+
+	it('shows no read-only notice for a writable file', async function () {
+		this.timeout(120000);
+		await openFixture(
+			browser.webEngine,
+			browser.native,
+			copyFixture('simple.odt'),
+		);
+		await expectNoNotice();
+	});
+
+	it('shows no read-only notice for a PDF', async function () {
+		this.timeout(120000);
+		await openFixture(browser.webEngine, browser.native, writePdf());
+		await expectNoNotice();
+	});
+
+	it('shows no read-only notice when a read-only file fails to load', async function () {
+		this.timeout(120000);
+		// The load stops at the password: the page drops its connection and
+		// asks for one.
+		const name = uniqueName('ods');
+		copyFileSync(
+			join(process.cwd(), '../../test/data/password-protected.ods'),
+			documentPath(name),
+		);
+		chmodSync(documentPath(name), 0o444);
+		const handle = await openFailing(name);
+
+		await we().waitUntil(
+			async () =>
+				we().execute(
+					() => document.getElementById('modal-dialog-password-popup') !== null,
+				),
+			{
+				timeout: 30000,
+				interval: 250,
+				timeoutMsg: 'the password prompt did not show',
+			},
+		);
+		await expectNoNotice();
+
+		// With no document the tab closes at once, so give the driver time to
+		// move to another document first. The keeper may have no page by now:
+		// the app drops the page of a tab that stays long in the background.
+		await we().execute(() => {
+			setTimeout(() => {
+				window.postMobileMessage('uno .uno:CloseWin');
+			}, 2000);
+		});
+		await switchToOtherDocument(handle);
+		await we().waitUntil(async () => !(await isOffered(handle)), {
+			timeout: 15000,
+			interval: 250,
+			timeoutMsg: 'the document tab did not close',
+		});
 	});
 });

@@ -629,18 +629,23 @@ public:
     {
     public:
         LocalFileInfo(const std::string& userId,
-                      const std::string& username)
+                      const std::string& username,
+                      bool userCanWrite)
             : _userId(userId),
-              _username(username)
+              _username(username),
+              _userCanWrite(userCanWrite)
         {
         }
 
         const std::string& getUserId() const { return _userId; }
         const std::string& getUsername() const { return _username; }
+        /// Whether the file can be written, see getLocalFileInfo.
+        bool getUserCanWrite() const { return _userCanWrite; }
 
     private:
         std::string _userId;
         std::string _username;
+        bool _userCanWrite;
     };
 
     /// Returns the URI specific file data

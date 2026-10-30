@@ -295,7 +295,20 @@ std::unique_ptr<LocalStorage::LocalFileInfo> LocalStorage::getLocalFileInfo()
     if (userNameString.empty())
         userNameString = "LocalUser#" + userId;
 
-    return std::make_unique<LocalStorage::LocalFileInfo>("LocalUser" + userId, userNameString);
+#if defined(QTAPP) || defined(_WIN32)
+    // The desktop apps save to the user's own file, which the permissions can already
+    // forbid. Under the flatpak the document portal answers for the host file.
+    const bool userCanWrite = FileUtil::isWritable(path.toString());
+#else
+    // Fix issue #5887 by assuming that documents are writable on iOS and Android.
+    // The iOS and Android app saves directly to local disk so, other than for
+    // "view file extension" document types or other cases that I am missing, we
+    // can assume the document is writable until a write failure occurs.
+    const bool userCanWrite = true;
+#endif
+
+    return std::make_unique<LocalStorage::LocalFileInfo>("LocalUser" + userId, userNameString,
+                                                         userCanWrite);
 }
 
 std::string LocalStorage::downloadStorageFileToLocal(const Authorization& /*auth*/,

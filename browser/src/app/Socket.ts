@@ -2241,6 +2241,28 @@ class Socket {
 
 		app.setCommentEditingPermission(json.editComment); // May be allowed even in readonly mode.
 		app.setRedlineManagementAllowed(json.manageRedlines); // May be allowed even in readonly mode.
+
+		// The welcome slideshow loads from the app's own read-only files, and a
+		// document the user asked to open read-only needs no reason for it.
+		if (
+			json.readOnlyFile &&
+			!window.coolParams.get('welcome') &&
+			window.coolParams.get('permission') !== 'readonly'
+		) {
+			this._map.once('docloaded', (e: { status: boolean }) => {
+				if (!e.status) return;
+				this._map.uiManager.showSnackbar(
+					_(
+						'This file cannot be written, so the document opened read-only. Use Save As to keep your changes in a new file.',
+					),
+					null,
+					null,
+					-1,
+					false,
+					true,
+				);
+			});
+		}
 	}
 
 	// 'wopi:' message.

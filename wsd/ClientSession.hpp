@@ -65,7 +65,9 @@ public:
 
     void setReadOnly(bool value) override;
 
-    void sendFileMode(bool readOnly, bool editComments, bool manageRedlines);
+    /// readOnlyFile: the document is read-only because its file cannot be written.
+    void sendFileMode(bool readOnly, bool editComments, bool manageRedlines,
+                      bool readOnlyFile = false);
 
     void setLockFailed(const std::string& reason);
 
