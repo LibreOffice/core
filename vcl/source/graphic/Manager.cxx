@@ -83,6 +83,11 @@ void MemoryManager::registerObject(MemoryManaged* pMemoryManaged)
 {
     std::unique_lock aGuard(maMutex);
 
+    // make some space first: the swap-out timer never fires without an event
+    // loop (e.g. headless conversion), so don't rely on it alone
+    if (mnTotalSize > mnMemoryLimit)
+        reduceMemory(aGuard);
+
     // Insert and update the used size (bytes)
     assert(aGuard.owns_lock() && aGuard.mutex() == &maMutex);
     // coverity[missing_lock: FALSE] - as above assert

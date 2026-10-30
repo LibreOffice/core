@@ -307,4 +307,48 @@ CPPUNIT_TEST_FIXTURE(GraphicMemoryTest, testMemoryManagerX)
     CPPUNIT_ASSERT_EQUAL(sal_Int64(400), rManager.getTotalSize());
 }
 
+namespace
+{
+class ReducibleTestManaged : public TestManaged
+{
+public:
+    bool mbReduced = false;
+
+    ReducibleTestManaged(sal_Int64 nSize)
+        : TestManaged(true, nSize)
+    {
+        // idle for longer than any allowed idle time
+        maLastUsed -= std::chrono::hours(1);
+    }
+
+    bool canReduceMemory() const override { return true; }
+
+    bool reduceMemory() override
+    {
+        mbReduced = true;
+        swappedOut(0);
+        return true;
+    }
+};
+}
+
+CPPUNIT_TEST_FIXTURE(GraphicMemoryTest, testMemoryManager_ReduceOnRegister)
+{
+    // tdf#172902: without an event loop (headless conversion) the swap-out
+    // timer never fires, so registering a new object must reduce memory
+    // synchronously once the limit is exceeded
+    auto& rManager = vcl::graphic::MemoryManager::get();
+    CPPUNIT_ASSERT_EQUAL(size_t(0), rManager.getManagedObjects().size());
+
+    // larger than the memory limit
+    ReducibleTestManaged aIdle(sal_Int64(1'000'000'000));
+    CPPUNIT_ASSERT_EQUAL(false, aIdle.mbReduced);
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(1'000'000'000), rManager.getTotalSize());
+
+    TestManaged aNew(true, 100);
+    CPPUNIT_ASSERT_EQUAL(true, aIdle.mbReduced);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), rManager.getManagedObjects().size());
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(100), rManager.getTotalSize());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
