@@ -21,11 +21,12 @@ namespace cool {
 	/// square (0,0)-(1,1) to the destination bounds. The image
 	/// content is referenced by checksum, the decoded image lives in
 	/// a separate cache populated from a fetch. width and height are
-	/// the source pixel dimensions of the original image. SVG
-	/// graphics use the same shape and are decoded natively by
-	/// HTMLImageElement once the cache entry arrives.
+	/// the source pixel dimensions of the original image. An SVG
+	/// graphic has the same fields except width and height, and is
+	/// decoded natively by HTMLImageElement once the cache entry
+	/// arrives.
 	///
-	/// The raster case also carries optional rendering modifiers:
+	/// The raster and SVG cases also carry optional rendering modifiers:
 	/// an imageRect present when the graphic is cropped, naming the
 	/// rectangle the whole image maps onto in the frame's unit
 	/// square, alpha from 0 to 255 where 255 is opaque, rotation in

@@ -1113,23 +1113,15 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             const auto& rPrimitive = static_cast<const GraphicPrimitive2D&>(rBasePrimitive);
             const Graphic& rGraphic = rPrimitive.getGraphicObject().GetGraphic();
 
-            // Handle SVG images specially - send without conversion as native image data.
-            if (auto pVectorData = rGraphic.getVectorGraphicData())
-            {
-                if (pVectorData->getType() == VectorGraphicDataType::Svg)
-                {
-                    mrWriter.put("type", "graphic");
-                    writeMatrixScaled("matrix", rPrimitive.getTransform());
-                    writeGraphicColorModifiers(rPrimitive.getGraphicAttr());
-                    writeGraphicData(rGraphic);
-                    break;
-                }
-            }
+            // An SVG image travels as its own data and the browser draws it like a bitmap, with
+            // the same crop, alpha, rotation, mirror and color changes.
+            const auto& pVectorData = rGraphic.getVectorGraphicData();
+            const bool bSvg = pVectorData && pVectorData->getType() == VectorGraphicDataType::Svg;
 
             // Non-SVG vector graphics should be decomposed into primitives.
             // The decomposition already applies the graphic's transform matrix, so
             // children are in the same coordinate space as all other primitives.
-            if (rGraphic.GetType() == GraphicType::GdiMetafile || rGraphic.getVectorGraphicData())
+            if (!bSvg && (rGraphic.GetType() == GraphicType::GdiMetafile || pVectorData))
             {
                 mrWriter.put("type", "graphic");
                 mrWriter.put("vector", true);
@@ -1144,7 +1136,7 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
                 break;
             }
 
-            // Bitmap graphic: encode as image data
+            // Bitmap or SVG graphic: encode as image data
             mrWriter.put("type", "graphic");
             writeMatrixScaled("matrix", rPrimitive.getTransform());
 
@@ -1182,9 +1174,12 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
 
             writeGraphicColorModifiers(rAttributes);
 
-            const Size aSizePixel(rGraphic.GetSizePixel());
-            mrWriter.put("width", sal_Int64(aSizePixel.getWidth()));
-            mrWriter.put("height", sal_Int64(aSizePixel.getHeight()));
+            if (!bSvg)
+            {
+                const Size aSizePixel(rGraphic.GetSizePixel());
+                mrWriter.put("width", sal_Int64(aSizePixel.getWidth()));
+                mrWriter.put("height", sal_Int64(aSizePixel.getHeight()));
+            }
             writeGraphicData(rGraphic);
         }
         break;

@@ -1129,6 +1129,46 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphicSvgAdjusted)
     assertJsonPath(aJson, "/primitives/0/colorModifiers/1/modifier", "invert");
 }
 
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphicSvgCropRotateMirrorAlpha)
+{
+    // An SVG graphic carries the crop, rotation, mirror and alpha of a raster graphic, and no
+    // pixel size.
+    static constexpr OString sSvg
+        = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"10\" height=\"10\">"
+          "<rect width=\"10\" height=\"10\" fill=\"red\"/></svg>"_ostr;
+    SvMemoryStream aStream(const_cast<char*>(sSvg.getStr()), sSvg.getLength(), StreamMode::READ);
+    auto pVectorData = std::make_shared<VectorGraphicData>(
+        BinaryDataContainer(aStream, sSvg.getLength()), VectorGraphicDataType::Svg);
+    Graphic aGraphic(pVectorData);
+
+    basegfx::B2DHomMatrix aTransform;
+    aTransform.scale(100.0, 100.0);
+
+    GraphicObject aGraphicObject{ aGraphic };
+    GraphicAttr aAttribute;
+    aAttribute.SetCrop(10, 20, 30, 40);
+    aAttribute.SetRotation(Degree10(450));
+    aAttribute.SetMirrorFlags(BmpMirrorFlags::Horizontal);
+    aAttribute.SetAlpha(128);
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(
+        new drawinglayer::primitive2d::GraphicPrimitive2D(aTransform, aGraphicObject, aAttribute));
+
+    auto aJson = writeReference(u"testGraphicSvgCropRotateMirrorAlpha", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "graphic");
+    assertJsonPathMissing(aJson, "/primitives/0/vector");
+    assertJsonPathMissing(aJson, "/primitives/0/children");
+    assertJsonPathExists(aJson, "/primitives/0/checksum");
+    assertJsonPathExists(aJson, "/primitives/0/imageRect");
+    assertJsonPath(aJson, "/primitives/0/rotation", sal_Int64(450));
+    assertJsonPath(aJson, "/primitives/0/mirror", sal_Int64(1));
+    assertJsonPath(aJson, "/primitives/0/alpha", sal_Int64(128));
+    assertJsonPathMissing(aJson, "/primitives/0/width");
+    assertJsonPathMissing(aJson, "/primitives/0/height");
+}
+
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testGraphicEmf)
 {
     // An EMF-backed Graphic is decomposed by the writer. The wire
