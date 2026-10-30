@@ -8,12 +8,12 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-28 13:35+0100\n"
-"PO-Revision-Date: 2026-10-26 15:52+0000\n"
+"PO-Revision-Date: 2026-10-30 10:51+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin "
 "<aindriu80@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ga/>\n"
-"Language: \n"
+"Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1468,11 +1468,11 @@ msgstr "An chéad cheann atá socraithe"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5050
 msgid "Translating with {0}."
-msgstr ""
+msgstr "Ag aistriú le {0}."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5051
 msgid "No provider is set up: the Translate command is not offered."
-msgstr ""
+msgstr "Níl aon soláthraí socraithe: ní thairgtear an t-ordú Aistrigh."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5091
 msgid "API URL"
@@ -1824,39 +1824,39 @@ msgstr "Stíl Dhúblach"
 
 #: src/app/Util.ts:319
 msgid "1 year"
-msgstr ""
+msgstr "1 bhliain"
 
 #: src/app/Util.ts:320
 msgid "{count} years"
-msgstr ""
+msgstr "{count} bliain"
 
 #: src/app/Util.ts:322
 msgid "1 day"
-msgstr ""
+msgstr "1 lá"
 
 #: src/app/Util.ts:322
 msgid "{count} days"
-msgstr ""
+msgstr "{count} lá"
 
 #: src/app/Util.ts:323
 msgid "1 hour"
-msgstr ""
+msgstr "1 uair an chloig"
 
 #: src/app/Util.ts:323
 msgid "{count} hours"
-msgstr ""
+msgstr "{count} uair an chloig"
 
 #: src/app/Util.ts:324
 msgid "1 minute"
-msgstr ""
+msgstr "1 nóiméad"
 
 #: src/app/Util.ts:324
 msgid "{count} minutes"
-msgstr ""
+msgstr "{count} nóiméad"
 
 #: src/app/Util.ts:339
 msgid "less than a minute"
-msgstr ""
+msgstr "níos lú ná nóiméad"
 
 #: src/canvas/sections/CommentListSection.ts:2261
 #: src/canvas/sections/CommentListSection.ts:2274
@@ -1905,9 +1905,8 @@ msgid "Reply"
 msgstr "Freagair"
 
 #: src/canvas/sections/CommentSection.ts:345
-#, fuzzy
 msgid "comment"
-msgstr "Nóta Tráchta"
+msgstr "trácht"
 
 #: src/canvas/sections/CommentSection.ts:565
 msgid "Press Ctrl + Enter to post"
@@ -1915,7 +1914,7 @@ msgstr "Brúigh Ctrl + Enter le postáil"
 
 #: src/canvas/sections/CommentSection.ts:583
 msgid "Reply to {0}"
-msgstr ""
+msgstr "Freagair {0}"
 
 #: src/canvas/sections/CommentSection.ts:653
 #: src/canvas/sections/CommentSection.ts:654
@@ -2029,11 +2028,11 @@ msgstr "Tá meáin nach dtacaítear leo sa doiciméad"
 
 #: src/canvas/sections/SelectionSection.ts:1553
 msgid "Waiting for redo..."
-msgstr ""
+msgstr "Ag fanacht le hathdhéanamh..."
 
 #: src/canvas/sections/SelectionSection.ts:1554
 msgid "Waiting for undo..."
-msgstr ""
+msgstr "Ag fanacht leis an gcealú..."
 
 #: src/canvas/sections/URLPopUpSection.ts:89
 #: src/control/Control.HyperlinkWizard.ts:41
@@ -2183,7 +2182,7 @@ msgstr "Ócáideach"
 #. TRANSLATORS: such as "Formal" or a name that the user typed
 #: src/control/Control.AIChatSidebar.ts:309
 msgid "{0} tone"
-msgstr ""
+msgstr "{0} ton"
 
 #: src/control/Control.AIChatSidebar.ts:419
 msgid "Best"
@@ -2261,27 +2260,27 @@ msgstr "Cad ba mhaith leat a dhéanamh leis an doiciméad seo?"
 
 #: src/control/Control.AIChatSidebar.ts:787
 msgid "Good morning, {0}!"
-msgstr ""
+msgstr "Maidin mhaith, a {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:788
 msgid "Good morning!"
-msgstr ""
+msgstr "Maidin mhaith!"
 
 #: src/control/Control.AIChatSidebar.ts:790
 msgid "Good afternoon, {0}!"
-msgstr ""
+msgstr "Tráthnóna maith, a {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:791
 msgid "Good afternoon!"
-msgstr ""
+msgstr "Tráthnóna maith!"
 
 #: src/control/Control.AIChatSidebar.ts:793
 msgid "Good evening, {0}!"
-msgstr ""
+msgstr "Tráthnóna maith, a {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:794
 msgid "Good evening!"
-msgstr ""
+msgstr "Tráthnóna maith!"
 
 #: src/control/Control.AIChatSidebar.ts:845
 #: src/control/Control.AIChatSidebar.ts:2288
@@ -2927,21 +2926,20 @@ msgid "Reject action"
 msgstr "Diúltaigh gníomh"
 
 #: src/control/Control.AIChatSidebar.ts:2845
-#, fuzzy
 msgid "Send"
-msgstr "Seolta"
+msgstr "Seol"
 
 #: src/control/Control.AIChatSidebar.ts:2847
 msgid "Send these cells"
-msgstr ""
+msgstr "Seol na cealla seo"
 
 #: src/control/Control.AIChatSidebar.ts:2853
 msgid "Do not send these cells"
-msgstr ""
+msgstr "Ná seol na cealla seo"
 
 #: src/control/Control.AIChatSidebar.ts:2870
 msgid "Nothing was sent."
-msgstr ""
+msgstr "Níor seoladh aon rud."
 
 #: src/control/Control.AIChatSidebar.ts:2893
 msgid "Applying changes..."
@@ -3058,11 +3056,11 @@ msgstr "Diagnóisigh earráid foirmle i"
 
 #: src/control/Control.AIChatSidebar.ts:3871
 msgid "To diagnose the error in %1, these cells will be sent to %2:"
-msgstr ""
+msgstr "Chun an earráid i %1 a dhiagnóisiú, seolfar na cealla seo chuig %2:"
 
 #: src/control/Control.AIChatSidebar.ts:3877
 msgid "Do you want to send them?"
-msgstr ""
+msgstr "An bhfuil tú ag iarraidh iad a sheoladh?"
 
 #: src/control/Control.AIChatSidebar.ts:3897
 msgid "I have a formula error in my spreadsheet."
@@ -3072,7 +3070,7 @@ msgstr "Tá earráid foirmle i mo scarbhileog."
 #. TRANSLATORS: B5, {1} the name of its sheet
 #: src/control/Control.AIChatSidebar.ts:3901
 msgid "Cell {0} (Sheet: {1}) contains:"
-msgstr ""
+msgstr "Tá an méid seo a leanas i gcealla {0} (Bileog: {1}):"
 
 #: src/control/Control.AIChatSidebar.ts:3906
 #: src/control/Control.FormulaBarJSDialog.js:116
@@ -3089,9 +3087,10 @@ msgstr "Cealla tagartha"
 #. TRANSLATORS: Sent to the AI model. {0} is a Calc error code such
 #. TRANSLATORS: as #DIV/0!
 #: src/control/Control.AIChatSidebar.ts:3918
-#, fuzzy
 msgid "Please diagnose why this formula produces the {0} error."
-msgstr "Déan diagnóis le do thoil ar an gcúis a tháirgeann an fhoirmle seo"
+msgstr ""
+"Déan diagnóis, le do thoil, ar an gcúis go gcruthaíonn an fhoirmle seo an "
+"earráid {0}."
 
 #: src/control/Control.AIChatSidebar.ts:3922
 msgid "Explain the root cause and suggest how to fix it."
@@ -3107,11 +3106,11 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3942
 msgid "only the cells with errors"
-msgstr ""
+msgstr "na cealla a bhfuil earráidí iontu amháin"
 
 #: src/control/Control.AIChatSidebar.ts:3949
 msgid "another file, its name only"
-msgstr ""
+msgstr "comhad eile, a ainm amháin"
 
 #: src/control/Control.AIChatSidebar.ts:3979
 msgid "formula"
@@ -3224,6 +3223,8 @@ msgid ""
 "The table shows what each cell displays. The \"Formulas:\" list below it "
 "gives the formula of each cell that has one."
 msgstr ""
+"Léiríonn an tábla cad a thaispeánann gach cill. Tugann an liosta "
+"\"Foirmlí:\" thíos air sin an fhoirmle do gach cill a bhfuil ceann aici."
 
 #: src/control/Control.AIChatSidebar.ts:4203
 msgid ""
@@ -3499,7 +3500,7 @@ msgstr "Dul chun cinn na hoibre glantacháin"
 
 #: src/control/Control.CleanupSidebar.ts:913
 msgid "Stop Cleanup"
-msgstr ""
+msgstr "Stop an Glanadh"
 
 #: src/control/Control.CleanupSidebar.ts:934
 msgid "Scan presentation"
@@ -4841,9 +4842,8 @@ msgstr "Cabhair Ar Líne"
 #: src/control/Control.Menubar.ts:460 src/control/Control.Menubar.ts:677
 #: src/control/Control.Menubar.ts:848 src/control/Control.Menubar.ts:1176
 #: src/control/Control.NotebookbarWriter.js:529
-#, fuzzy
 msgid "Show Tour"
-msgstr "Taispeáin an turas"
+msgstr "Taispeáin Turas"
 
 #: src/control/Control.Menubar.ts:462 src/control/Control.Menubar.ts:679
 #: src/control/Control.Menubar.ts:850 src/control/Control.Menubar.ts:1178
@@ -5484,7 +5484,7 @@ msgstr "Dath Líonta (Pictiúir Thrédhearcacha Amháin)"
 
 #: src/control/Control.Notebookbar.js:667
 msgid "Area"
-msgstr ""
+msgstr "Limistéar"
 
 #: src/control/Control.Notebookbar.js:682
 msgid "Line"
@@ -8197,11 +8197,11 @@ msgstr "Colún {index}"
 
 #: src/control/jsdialog/Widget.EditEngine.ts:587
 msgid "%1 is editing"
-msgstr ""
+msgstr "Tá %1 ag cur in eagar"
 
 #: src/control/jsdialog/Widget.EditEngine.ts:588
 msgid "Another user is editing"
-msgstr ""
+msgstr "Tá úsáideoir eile ag cur eagar air"
 
 #: src/control/jsdialog/Widget.FormulabarEdit.js:460 src/map/Clipboard.js:1589
 msgid "Cut"
@@ -8209,7 +8209,7 @@ msgstr "Gearr"
 
 #: src/control/jsdialog/Widget.FormulabarEdit.js:519
 msgid "Formula bar"
-msgstr ""
+msgstr "Barra foirmlí"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:54
 msgid "Smileys"
@@ -8405,7 +8405,7 @@ msgstr "Laghdaigh luach"
 
 #: src/control/jsdialog/Widget.TabControl.tsx:229
 msgid "Add a fill to edit the {0}"
-msgstr ""
+msgstr "Cuir líonadh leis chun an {0} a chur in eagar"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1836
 msgid "Cell value"
@@ -8691,12 +8691,16 @@ msgstr ""
 msgid ""
 "You no longer have access to this document. Its security label was changed."
 msgstr ""
+"Níl rochtain agat a thuilleadh ar an doiciméad seo. Athraíodh a lipéad "
+"slándála."
 
 #: src/errormessages.ts:38
 msgid ""
 "You can no longer edit this document. Its security label was changed. "
 "Please open it again to view it."
 msgstr ""
+"Ní féidir leat an doiciméad seo a chur in eagar a thuilleadh. Athraíodh a "
+"lipéad slándála. Oscail arís é le do thoil chun é a fheiceáil."
 
 #: src/errormessages.ts:40
 msgid "Authorization error was: '{errormessage}'."
@@ -8839,7 +8843,7 @@ msgstr "Ní féidir an doiciméad a shábháil."
 
 #: src/errormessages.ts:90 src/errormessages.ts:109
 msgid "The storage refused to save the document."
-msgstr ""
+msgstr "Dhiúltaigh an stóras an doiciméad a shábháil."
 
 #: src/errormessages.ts:91
 msgid "Document cannot be renamed."
@@ -9024,15 +9028,15 @@ msgstr "Eagarthóir Ar Líne"
 
 #: src/layer/tile/CanvasTileLayer.js:1396
 msgid "%1 started recording changes for all users."
-msgstr ""
+msgstr "Thosaigh %1 ag taifeadadh athruithe do gach úsáideoir."
 
 #: src/layer/tile/CanvasTileLayer.js:1397
 msgid "Recording changes was started for all users."
-msgstr ""
+msgstr "Cuireadh tús le taifeadadh athruithe do gach úsáideoir."
 
 #: src/layer/tile/CanvasTileLayer.js:1399
 msgid "Your changes are tracked now."
-msgstr ""
+msgstr "Tá do chuid athruithe á rianú anois."
 
 #: src/layer/tile/CanvasTileLayer.js:1485
 msgid "Functions"
