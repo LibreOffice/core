@@ -8,12 +8,12 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-28 13:35+0100\n"
-"PO-Revision-Date: 2026-10-28 12:30+0000\n"
+"PO-Revision-Date: 2026-10-28 14:25+0000\n"
 "Last-Translator: bittin1ddc447d824349b2 "
 "<bittin1ddc447d824349b2@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/sv/>\n"
-"Language: \n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1463,11 +1463,11 @@ msgstr "Den första som är inställd"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5050
 msgid "Translating with {0}."
-msgstr ""
+msgstr "Översätter med {0}."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5051
 msgid "No provider is set up: the Translate command is not offered."
-msgstr ""
+msgstr "Ingen leverantör är konfigurerad: Översätt kommandot erbjuds inte."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5091
 msgid "API URL"
@@ -1814,39 +1814,39 @@ msgstr "Duplicera stil"
 
 #: src/app/Util.ts:319
 msgid "1 year"
-msgstr ""
+msgstr "1 år"
 
 #: src/app/Util.ts:320
 msgid "{count} years"
-msgstr ""
+msgstr "{count} år"
 
 #: src/app/Util.ts:322
 msgid "1 day"
-msgstr ""
+msgstr "1 dag"
 
 #: src/app/Util.ts:322
 msgid "{count} days"
-msgstr ""
+msgstr "{count} dagar"
 
 #: src/app/Util.ts:323
 msgid "1 hour"
-msgstr ""
+msgstr "1 timme"
 
 #: src/app/Util.ts:323
 msgid "{count} hours"
-msgstr ""
+msgstr "{count} timmar"
 
 #: src/app/Util.ts:324
 msgid "1 minute"
-msgstr ""
+msgstr "1 minut"
 
 #: src/app/Util.ts:324
 msgid "{count} minutes"
-msgstr ""
+msgstr "{count} minuter"
 
 #: src/app/Util.ts:339
 msgid "less than a minute"
-msgstr ""
+msgstr "mindre än en minut"
 
 #: src/canvas/sections/CommentListSection.ts:2261
 #: src/canvas/sections/CommentListSection.ts:2274
@@ -1895,9 +1895,8 @@ msgid "Reply"
 msgstr "Svara"
 
 #: src/canvas/sections/CommentSection.ts:345
-#, fuzzy
 msgid "comment"
-msgstr "Kommentar"
+msgstr "kommentar"
 
 #: src/canvas/sections/CommentSection.ts:565
 msgid "Press Ctrl + Enter to post"
@@ -1905,7 +1904,7 @@ msgstr "Tryck på Ctrl + Enter för att posta"
 
 #: src/canvas/sections/CommentSection.ts:583
 msgid "Reply to {0}"
-msgstr ""
+msgstr "Svar till {0}"
 
 #: src/canvas/sections/CommentSection.ts:653
 #: src/canvas/sections/CommentSection.ts:654
@@ -2019,11 +2018,11 @@ msgstr "Dokumentet innehåller video-format som inte stöds"
 
 #: src/canvas/sections/SelectionSection.ts:1553
 msgid "Waiting for redo..."
-msgstr ""
+msgstr "Väntar på att göra om..."
 
 #: src/canvas/sections/SelectionSection.ts:1554
 msgid "Waiting for undo..."
-msgstr ""
+msgstr "Väntar på ångra..."
 
 #: src/canvas/sections/URLPopUpSection.ts:89
 #: src/control/Control.HyperlinkWizard.ts:41
@@ -2171,7 +2170,7 @@ msgstr "Lättsamt"
 #. TRANSLATORS: such as "Formal" or a name that the user typed
 #: src/control/Control.AIChatSidebar.ts:309
 msgid "{0} tone"
-msgstr ""
+msgstr "{0} ton"
 
 #: src/control/Control.AIChatSidebar.ts:419
 msgid "Best"
@@ -2249,27 +2248,27 @@ msgstr "Vad skulle du vilja göra med detta dokument?"
 
 #: src/control/Control.AIChatSidebar.ts:787
 msgid "Good morning, {0}!"
-msgstr ""
+msgstr "God morgon, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:788
 msgid "Good morning!"
-msgstr ""
+msgstr "God morgon!"
 
 #: src/control/Control.AIChatSidebar.ts:790
 msgid "Good afternoon, {0}!"
-msgstr ""
+msgstr "God eftermiddag, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:791
 msgid "Good afternoon!"
-msgstr ""
+msgstr "God eftermiddag!"
 
 #: src/control/Control.AIChatSidebar.ts:793
 msgid "Good evening, {0}!"
-msgstr ""
+msgstr "God kväll, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:794
 msgid "Good evening!"
-msgstr ""
+msgstr "God kväll!"
 
 #: src/control/Control.AIChatSidebar.ts:845
 #: src/control/Control.AIChatSidebar.ts:2288
@@ -2878,21 +2877,20 @@ msgid "Reject action"
 msgstr "Avvisa åtgärden"
 
 #: src/control/Control.AIChatSidebar.ts:2845
-#, fuzzy
 msgid "Send"
-msgstr "Skickat"
+msgstr "Skicka"
 
 #: src/control/Control.AIChatSidebar.ts:2847
 msgid "Send these cells"
-msgstr ""
+msgstr "Skicka dessa celler"
 
 #: src/control/Control.AIChatSidebar.ts:2853
 msgid "Do not send these cells"
-msgstr ""
+msgstr "Skicka inte dessa celler"
 
 #: src/control/Control.AIChatSidebar.ts:2870
 msgid "Nothing was sent."
-msgstr ""
+msgstr "Ingenting skickades."
 
 #: src/control/Control.AIChatSidebar.ts:2893
 msgid "Applying changes..."
@@ -3010,10 +3008,11 @@ msgstr "Ge åtgärdsförslag för formelfelet i"
 #: src/control/Control.AIChatSidebar.ts:3871
 msgid "To diagnose the error in %1, these cells will be sent to %2:"
 msgstr ""
+"För att diagnostisera felet i %1 kommer dessa celler att skickas till %2:"
 
 #: src/control/Control.AIChatSidebar.ts:3877
 msgid "Do you want to send them?"
-msgstr ""
+msgstr "Vill du skicka dem?"
 
 #: src/control/Control.AIChatSidebar.ts:3897
 msgid "I have a formula error in my spreadsheet."
@@ -3023,7 +3022,7 @@ msgstr "Jag har ett formelfel i mitt kalkylblad."
 #. TRANSLATORS: B5, {1} the name of its sheet
 #: src/control/Control.AIChatSidebar.ts:3901
 msgid "Cell {0} (Sheet: {1}) contains:"
-msgstr ""
+msgstr "Cell {0} (Blad: {1}) innehåller:"
 
 #: src/control/Control.AIChatSidebar.ts:3906
 #: src/control/Control.FormulaBarJSDialog.js:116
@@ -3040,9 +3039,8 @@ msgstr "Refererade celler"
 #. TRANSLATORS: Sent to the AI model. {0} is a Calc error code such
 #. TRANSLATORS: as #DIV/0!
 #: src/control/Control.AIChatSidebar.ts:3918
-#, fuzzy
 msgid "Please diagnose why this formula produces the {0} error."
-msgstr "Analysera varför formeln ger"
+msgstr "Vänligen diagnostisera varför denna formel ger {0} felet."
 
 #: src/control/Control.AIChatSidebar.ts:3922
 msgid "Explain the root cause and suggest how to fix it."
@@ -3058,11 +3056,11 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3942
 msgid "only the cells with errors"
-msgstr ""
+msgstr "endast cellerna med fel"
 
 #: src/control/Control.AIChatSidebar.ts:3949
 msgid "another file, its name only"
-msgstr ""
+msgstr "en annan fil, endast dess namn"
 
 #: src/control/Control.AIChatSidebar.ts:3979
 msgid "formula"
@@ -3173,6 +3171,8 @@ msgid ""
 "The table shows what each cell displays. The \"Formulas:\" list below it "
 "gives the formula of each cell that has one."
 msgstr ""
+"Tabellen visar vad varje cell visar. Listan ”Formler:” nedanför anger "
+"formeln för varje cell som har en sådan."
 
 #: src/control/Control.AIChatSidebar.ts:4203
 msgid ""
@@ -3438,7 +3438,7 @@ msgstr "Rengöringsförlopp"
 
 #: src/control/Control.CleanupSidebar.ts:913
 msgid "Stop Cleanup"
-msgstr ""
+msgstr "Stoppa städning"
 
 #: src/control/Control.CleanupSidebar.ts:934
 msgid "Scan presentation"
@@ -4768,7 +4768,6 @@ msgstr "Uppkopplad hjälptext"
 #: src/control/Control.Menubar.ts:460 src/control/Control.Menubar.ts:677
 #: src/control/Control.Menubar.ts:848 src/control/Control.Menubar.ts:1176
 #: src/control/Control.NotebookbarWriter.js:529
-#, fuzzy
 msgid "Show Tour"
 msgstr "Visa rundtur"
 
@@ -5411,7 +5410,7 @@ msgstr "Fyllningsfärg (endast genomskinliga bilder)"
 
 #: src/control/Control.Notebookbar.js:667
 msgid "Area"
-msgstr ""
+msgstr "Område"
 
 #: src/control/Control.Notebookbar.js:682
 msgid "Line"
@@ -8099,11 +8098,11 @@ msgstr "Kolumn {index}"
 
 #: src/control/jsdialog/Widget.EditEngine.ts:587
 msgid "%1 is editing"
-msgstr ""
+msgstr "%1 redigerar"
 
 #: src/control/jsdialog/Widget.EditEngine.ts:588
 msgid "Another user is editing"
-msgstr ""
+msgstr "En annan användare redigerar"
 
 #: src/control/jsdialog/Widget.FormulabarEdit.js:460 src/map/Clipboard.js:1589
 msgid "Cut"
@@ -8111,7 +8110,7 @@ msgstr "Klipp ut"
 
 #: src/control/jsdialog/Widget.FormulabarEdit.js:519
 msgid "Formula bar"
-msgstr ""
+msgstr "Formelfält"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:54
 msgid "Smileys"
@@ -8305,7 +8304,7 @@ msgstr "Avtagande värde"
 
 #: src/control/jsdialog/Widget.TabControl.tsx:229
 msgid "Add a fill to edit the {0}"
-msgstr ""
+msgstr "Lägg till en fyllning för att redigera {0}"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1836
 msgid "Cell value"
@@ -8577,12 +8576,16 @@ msgstr ""
 msgid ""
 "You no longer have access to this document. Its security label was changed."
 msgstr ""
+"Du har inte längre åtkomst till det här dokumentet. Dess säkerhetsetikett "
+"har ändrats."
 
 #: src/errormessages.ts:38
 msgid ""
 "You can no longer edit this document. Its security label was changed. "
 "Please open it again to view it."
 msgstr ""
+"Du kan inte längre redigera det här dokumentet. Dess säkerhetsetikett har "
+"ändrats. Öppna det på nytt för att kunna se det."
 
 #: src/errormessages.ts:40
 msgid "Authorization error was: '{errormessage}'."
@@ -8716,7 +8719,7 @@ msgstr "Dokumentet kan inte sparas."
 
 #: src/errormessages.ts:90 src/errormessages.ts:109
 msgid "The storage refused to save the document."
-msgstr ""
+msgstr "Lagringen vägrade att spara dokumentet."
 
 #: src/errormessages.ts:91
 msgid "Document cannot be renamed."
@@ -8893,15 +8896,15 @@ msgstr "Online redigerare"
 
 #: src/layer/tile/CanvasTileLayer.js:1396
 msgid "%1 started recording changes for all users."
-msgstr ""
+msgstr "%1 började registrera ändringar för alla användare."
 
 #: src/layer/tile/CanvasTileLayer.js:1397
 msgid "Recording changes was started for all users."
-msgstr ""
+msgstr "Registrering av ändringar påbörjades för alla användare."
 
 #: src/layer/tile/CanvasTileLayer.js:1399
 msgid "Your changes are tracked now."
-msgstr ""
+msgstr "Dina ändringar spåras nu."
 
 #: src/layer/tile/CanvasTileLayer.js:1485
 msgid "Functions"
