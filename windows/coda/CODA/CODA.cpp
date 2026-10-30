@@ -141,6 +141,8 @@ struct DocumentTab
     // The page has parsed its document and its stylesheets, so the WebView2 has something
     // styled to put on the screen. It stays hidden until then.
     bool hasContent = false;
+    // The page agreed to the close, so the tab can go without asking it again.
+    bool readyToClose = false;
     wil::com_ptr<ICoreWebView2Controller> webViewController;
     wil::com_ptr<ICoreWebView2> webView;
     std::thread app2js;
@@ -170,6 +172,8 @@ struct WindowState
     LONG originalStyle;
     bool isFullScreen = false;
     bool isPresFullScreen = false;
+    // The window is closing: each tab that goes takes the next one with it.
+    bool closingAll = false;
 };
 
 // Both keep their entries at a fixed address: the WebView2 completion handlers
@@ -400,7 +404,7 @@ static std::wstring translate(const char* context, const char* source)
 
 static void processMessage(DocumentTab& tab, wil::unique_cotaskmem_string& message);
 
-static void closeTab(WindowState& window, int tabId);
+static void requestCloseTab(HWND hWnd, int tabId);
 
 static void activateAdjacentTab(WindowState& window, int direction);
 
@@ -828,10 +832,6 @@ static void do_bye_handling_things(const DocumentTab& data)
 
     // Close one end of the socket pair, that will wake up the forwarding thread above
     fakeSocketClose(data.closeNotificationPipeForForwardingThread[0]);
-
-    // For the welcome slideshow we need to close the window ourselves
-    if (data.mode == DocumentMode::WELCOME)
-        PostMessageW(data.hWnd, WM_CLOSE, 0, 0);
 }
 
 static void do_print(int appDocId)
@@ -2175,12 +2175,13 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
         case WM_CLOSE:
         {
             WindowState* window = findWindow(hWnd);
-            if (window)
+            if (window && !window->tabIds.empty())
             {
-                // Each document gets the goodbye it would get if it were the only one here. The
-                // list shrinks as they go, so always take the one at the front.
-                while (!window->tabIds.empty())
-                    closeTab(*window, window->tabIds.front());
+                // Each document gets the close it would get if it were the only one here, one
+                // after the other, and the last one takes the window with it.
+                window->closingAll = true;
+                requestCloseTab(hWnd, window->tabIds.front());
+                break;
             }
             DestroyWindow(hWnd);
             break;
@@ -2259,11 +2260,11 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
             WindowState* window = tab ? findWindow(tab->hWnd) : nullptr;
             if (!window)
                 break;
-            const HWND tabWindow = window->hWnd;
-            closeTab(*window, (int)wParam);
-            // The window is what is left of the last document, so it goes too.
-            if (window->tabIds.empty())
-                DestroyWindow(tabWindow);
+            // A close of some other document than the next one in line is not part of closing
+            // the whole window.
+            if (window->tabIds.empty() || window->tabIds.front() != (int)wParam)
+                window->closingAll = false;
+            requestCloseTab(window->hWnd, (int)wParam);
             break;
         }
 
@@ -3895,6 +3896,62 @@ static void closeTab(WindowState& window, int tabId)
     removeTabFromWindow(window, tabId);
 }
 
+// A document the user may have edited goes only once its page answers CLOSE_WINDOW.
+static void requestCloseTab(HWND hWnd, int tabId)
+{
+    WindowState* window = findWindow(hWnd);
+    DocumentTab* tab = findTab(tabId);
+    if (!window || !tab)
+        return;
+
+    // The starter, the welcome slideshow and the presenter console have nothing to save, and a
+    // page that has not shown its document yet cannot answer.
+    const bool pageAnswers = !tab->readyToClose && !tab->isConsole &&
+                             tab->mode != DocumentMode::STARTER &&
+                             tab->mode != DocumentMode::WELCOME && tab->app2js.joinable() &&
+                             tab->webView && tab->hasContent;
+    if (pageAnswers)
+    {
+        // A page that fails while it answers closes its tab too, and so does a page that
+        // cannot run the script at all, such as one whose renderer process died.
+        tab->webView->ExecuteScript(
+            L"try {"
+            L"  if (window.app && window.app.map"
+            L"      && typeof window.app.map._saveAndClose === 'function')"
+            L"    window.app.map._saveAndClose();"
+            L"  else window.postMobileMessage('CLOSE_WINDOW');"
+            L"} catch (e) { window.postMobileMessage('CLOSE_WINDOW'); }",
+            Microsoft::WRL::Callback<ICoreWebView2ExecuteScriptCompletedHandler>(
+                [tabId](HRESULT errorCode, LPCWSTR) -> HRESULT
+                {
+                    if (SUCCEEDED(errorCode))
+                        return S_OK;
+                    LOG_WRN("The page of tab " << tabId << " could not run its close script: "
+                                               << std::hex << errorCode);
+                    if (DocumentTab* closing = findTab(tabId))
+                    {
+                        closing->readyToClose = true;
+                        PostMessageW(closing->hWnd, CODA_WM_CLOSETAB, (WPARAM)tabId, 0);
+                    }
+                    return S_OK;
+                })
+                .Get());
+        return;
+    }
+
+    const bool closingAll = window->closingAll;
+    closeTab(*window, tabId);
+    // The window is what is left of the last document, so it goes too. That frees its state.
+    if (window->tabIds.empty())
+    {
+        DestroyWindow(hWnd);
+        return;
+    }
+    // Posted rather than called, so the next document's page gets its turn to answer.
+    if (closingAll)
+        PostMessageW(hWnd, CODA_WM_CLOSETAB, (WPARAM)window->tabIds.front(), 0);
+}
+
 // Take a document out of the tab order of its window. If it was the one on show, the one that
 // moves up into its place, or the last one, comes to the front instead.
 static void removeTabFromWindow(WindowState& window, int tabId)
@@ -5489,9 +5546,31 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             if (WindowState* window = findWindow(data.hWnd))
                 showDropOverlay(*window);
         }
-        else if (s == L"BYE")
+        else if (s == L"BYE" || s == L"CLOSE_WINDOW")
         {
-            do_bye_handling_things(data);
+            // The page is done with its document, so its tab goes. The close of the tab
+            // says the goodbye, once.
+            data.readyToClose = true;
+            PostMessageW(data.hWnd, CODA_WM_CLOSETAB, (WPARAM)data.tabId, 0);
+        }
+        else if (s == L"CLOSE_CANCELLED")
+        {
+            // The user kept the document, so the window it is in stays. Other windows that are
+            // closing still go.
+            if (WindowState* window = findWindow(data.hWnd))
+                window->closingAll = false;
+        }
+        else if (s == L"SAVECOMPLETED" || s == L"SAVEFAILED")
+        {
+            // Nothing here waits on a save; the message must just not reach wsd.
+        }
+        else if (s == L"SAVEFAILED prompt")
+        {
+            // The page is about to prompt about the failed save, and a hidden page shows no
+            // prompt.
+            WindowState* window = findWindow(data.hWnd);
+            if (window && window->activeTabId != data.tabId)
+                activateTab(*window, data.tabId);
         }
         else if (s == L"PRINT")
         {
@@ -5784,6 +5863,7 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             recentFiles.add(data.filenameAndUri.uri);
             data.docType = docTypeFromFilename(filename);
             data.isModified = false;
+            data.readyToClose = false;
 
             // Connect to COOLWSD
             int rc = fakeSocketConnect(data.fakeClientFd, coolwsd_server_socket_fd);
