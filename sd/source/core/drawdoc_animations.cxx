@@ -42,13 +42,13 @@ void SdDrawDocument::ReplacePageInCustomShows(const SdPage* pOldPage, const SdPa
     }
 }
 
-const Reference<XPresentation2>& SdDrawDocument::getPresentation() const
+const rtl::Reference<sd::SlideShow>& SdDrawDocument::getSlideShow() const
 {
-    if (!mxPresentation.is())
+    if (!mpSlideShow.is())
     {
-        const_cast<SdDrawDocument*>(this)->mxPresentation = CreatePresentation(*this);
+        const_cast<SdDrawDocument*>(this)->mpSlideShow = CreatePresentation(*this);
     }
-    return mxPresentation;
+    return mpSlideShow;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

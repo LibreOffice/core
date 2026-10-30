@@ -165,8 +165,7 @@ rtl::Reference< SlideShow > SlideShow::GetSlideShow( SdDrawDocument const * pDoc
 
 rtl::Reference< SlideShow > SlideShow::GetSlideShow( SdDrawDocument const & rDocument )
 {
-    return rtl::Reference< SlideShow >(
-        dynamic_cast< SlideShow* >( rDocument.getPresentation().get() ) );
+    return rDocument.getSlideShow();
 }
 
 rtl::Reference< SlideShow > SlideShow::GetSlideShow( ViewShellBase const & rBase )

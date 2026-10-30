@@ -41,7 +41,6 @@
 namespace com::sun::star::xml::dom { class XNode; }
 namespace editeng { class SvxFieldItemUpdater; }
 namespace vcl { class Font; }
-namespace com::sun::star::presentation { class XPresentation2; }
 class SdOutliner;
 class Timer;
 class SfxObjectShell;
@@ -78,6 +77,7 @@ class UndoManager;
 class ShapeList;
 class FrameView;
 class SlideSectionManager;
+class SlideShow;
 }
 
 class ImpDrawPageListWatcher;
@@ -372,7 +372,7 @@ private:
 
     sd::PresentationSettings maPresentationSettings;
 
-    css::uno::Reference< css::presentation::XPresentation2 > mxPresentation;
+    rtl::Reference<sd::SlideShow> mpSlideShow;
 
     bool                mbNewOrLoadCompleted;
 
@@ -830,7 +830,7 @@ public:
     SAL_DLLPRIVATE const sd::PresentationSettings& getPresentationSettings() const { return maPresentationSettings; }
     SAL_DLLPRIVATE sd::PresentationSettings& getPresentationSettings() { return maPresentationSettings; }
 
-    SAL_DLLPRIVATE const css::uno::Reference< css::presentation::XPresentation2 >& getPresentation() const;
+    SAL_DLLPRIVATE const rtl::Reference<sd::SlideShow>& getSlideShow() const;
 
     SAL_DLLPRIVATE void                SetSummationOfParagraphs( bool bOn = true ) { mbSummationOfParagraphs = bOn; }
     SAL_DLLPRIVATE bool            IsSummationOfParagraphs() const { return mbSummationOfParagraphs; }

@@ -1754,7 +1754,7 @@ namespace slideshowhelp
 {
     void ShowSlideShow(SfxRequest const & rReq, SdDrawDocument &rDoc)
     {
-        Reference< XPresentation2 > xPresentation( rDoc.getPresentation() );
+        Reference<XPresentation2> xPresentation(rDoc.getSlideShow());
         if( !xPresentation.is() )
             return;
 
@@ -1797,7 +1797,7 @@ namespace slideshowhelp
 
 void DrawViewShell::StopSlideShow()
 {
-    Reference< XPresentation2 > xPresentation( GetDoc()->getPresentation() );
+    Reference<XPresentation2> xPresentation(GetDoc()->getSlideShow());
     if(xPresentation.is() && xPresentation->isRunning())
     {
         if( mpDrawView->IsTextEdit() )

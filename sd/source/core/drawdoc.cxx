@@ -86,6 +86,7 @@
 #include <drawdoc.hxx>
 #include <SlideSectionManager.hxx>
 #include <sdpage.hxx>
+#include <slideshow.hxx>
 #include <anminfo.hxx>
 #include <svx/svditer.hxx>
 #include <strings.hrc>
