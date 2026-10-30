@@ -282,27 +282,36 @@ class BackstageView extends window.L.Class {
 		return featureFlags[feature] !== false;
 	}
 
-	private renderHomeView(): void {
+	private renderHomeView(userTemplatesLoaded: boolean = false): void {
+		// A favorite can be a template of the user, which other windows can remove.
+		if (this.hasUserTemplates() && !userTemplatesLoaded) {
+			this.afterUserTemplatesLoad(() => this.renderHomeView(true));
+			return;
+		}
+
 		this.setActiveTab('backstage-home');
 		this.clearContent();
 
 		this.contentArea.appendChild(
 			BackstageTemplates.sectionHeader(
 				_('Home'),
-				_('Start a new document from one of the following templates.'),
+				_('Start something new, or continue where you left off.'),
 			),
 		);
 
 		if (!this.templates) {
 			this.contentArea.appendChild(BackstageTemplates.templatesLoading());
 			this.loadTemplatesData().then(() => {
-				if (this.isVisible) this.renderHomeView();
+				if (this.isVisible) this.renderHomeView(true);
 			});
 			return;
 		}
 
 		this.contentArea.appendChild(
 			BackstageTemplates.homeTemplatesSection({
+				favoriteTemplates: this.getFavoriteTemplates(),
+				favoriteState: (template) =>
+					this.favoriteState(template, () => this.renderHomeView(true)),
 				blankTemplates: [
 					this.getBlankTemplate('writer'),
 					this.getBlankTemplate('calc'),
@@ -894,6 +903,20 @@ class BackstageView extends window.L.Class {
 			preview: template.preview,
 			searchText: [template.name, template.type].join(' ').toLowerCase(),
 		}));
+	}
+
+	// The favorite templates, in the order that the user marked them. A favorite whose template
+	// no longer exists is left out.
+	private getFavoriteTemplates(): TemplateData[] {
+		const templates = new Map<string, TemplateData>();
+		[
+			...(this.hasUserTemplates() ? this.getUserTemplateCards() : []),
+			...this.getIntroDocsData(),
+			...this.getTemplatesData(),
+		].forEach((template) => templates.set(template.id, template));
+		return this.getFavoriteIds()
+			.map((id) => templates.get(id))
+			.filter(Boolean);
 	}
 
 	private renderManageTemplatesView(

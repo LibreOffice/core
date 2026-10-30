@@ -340,15 +340,13 @@
 .backstage-home-more-templates {
 	display: flex;
 	align-items: center;
-	gap: 0.5rem;
-	margin-bottom: 48px;
-	margin-left: 12px;
-	margin-right: 12px;
+	gap: var(--spacing-xl);
+	margin-bottom: calc(var(--spacing-xl) + var(--spacing-m));
 }
 
 .backstage-home-divider {
 	flex: 1;
-	height: 2px;
+	height: 1px;
 	background-color: var(--color-toolbar-border);
 }
 

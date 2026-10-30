@@ -12,15 +12,17 @@
 /* global _ */
 
 /*
- * Home view: a row of starter templates, a "More Templates" link, and a
- * table of recently opened documents. The view passes in already-resolved
- * data plus click handlers; this file owns the structure.
+ * Home view: a row of the favorite templates and the blank documents, a "More templates" link,
+ * and a table of recently opened documents. The view passes in already-resolved data plus click
+ * handlers; this file owns the structure.
  */
 
 namespace BackstageTemplates {
   export interface HomeTemplatesProps {
+    favoriteTemplates: TemplateData[];
     blankTemplates: TemplateData[];
     onTemplateClick: (template: TemplateData) => void;
+    favoriteState: (template: TemplateData) => TemplateFavoriteState;
     onMoreTemplatesClick: () => void;
   }
 
@@ -36,23 +38,26 @@ namespace BackstageTemplates {
   export function homeTemplatesSection(props: HomeTemplatesProps): HTMLElement {
     return (
       <>
-        {props.blankTemplates.length > 0 ? (
-          <div class="backstage-home-templates-row">
-            {props.blankTemplates.map((t) =>
-              templateCard(t, () => props.onTemplateClick(t)),
-            )}
-          </div>
-        ) : null}
+        <div class="backstage-home-templates-row">
+          {props.favoriteTemplates.map((t) =>
+            templateCard(t, () => props.onTemplateClick(t), {
+              favorite: props.favoriteState(t),
+            }),
+          )}
+          {props.blankTemplates.map((t) =>
+            templateCard(t, () => props.onTemplateClick(t)),
+          )}
+        </div>
         <div class="backstage-home-more-templates">
           <div class="backstage-home-divider" />
           <div
             class="backstage-home-more-button"
             role="button"
             tabindex="0"
-            aria-label={_('More Templates')}
+            aria-label={_('More templates')}
             onClick={props.onMoreTemplatesClick}
           >
-            {_('More Templates')}
+            {_('More templates')}
           </div>
         </div>
       </>

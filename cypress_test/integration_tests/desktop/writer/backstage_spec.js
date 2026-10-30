@@ -206,6 +206,37 @@ describe(['tagdesktop'], 'Backstage View Tests', { testIsolation: false }, funct
 		});
 	});
 
+	it('Shows the favorite templates first on Home', function() {
+		cy.then(() => {
+			ensureBackstage(win).show();
+		});
+
+		cy.cGet('#backstage-new').click();
+		cy.cGet('.backstage-template-sections .backstage-template-card').first().then(function(card) {
+			var id = card[0].id;
+			cy.cGet('#' + id + ' .backstage-template-favorite').focus();
+			cy.cGet('#' + id + ' .backstage-template-favorite').click();
+			cy.cGet('#' + id).should('have.class', 'is-favorite');
+
+			cy.cGet('#backstage-home').click();
+			cy.cGet('.backstage-home-templates-row .backstage-template-card').should(function(cards) {
+				expect(cards.toArray().map(function(card) { return card.id; })).to.deep.equal([
+					id, 'blank-writer', 'blank-calc', 'blank-impress', 'blank-draw',
+				]);
+			});
+			cy.cGet('.backstage-home-templates-row .backstage-template-favorite').should('have.length', 1);
+
+			// The star on Home removes the favorite.
+			cy.cGet('#' + id + ' .backstage-template-favorite')
+				.should('be.visible')
+				.and('have.attr', 'aria-pressed', 'true')
+				.click();
+			cy.cGet('.backstage-snackbar').should('have.text', 'Template removed from favorites');
+			cy.cGet('#' + id).should('not.exist');
+			cy.cGet('.backstage-home-templates-row .backstage-template-card').should('have.length', 4);
+		});
+	});
+
 	it('Shows no My templates section outside the Qt app', function() {
 		cy.then(() => {
 			ensureBackstage(win).show();
