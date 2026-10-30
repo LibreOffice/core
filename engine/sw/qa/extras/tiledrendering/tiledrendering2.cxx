@@ -40,10 +40,12 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <sfx2/linkmgr.hxx>
 #include <svx/fillbitmaplink.hxx>
@@ -2501,6 +2503,42 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphTextFrame)
     CPPUNIT_ASSERT_EQUAL(std::string("Ending with a frame."),
                          aView.m_aA11yFocusedParagraph.get<std::string>("content"));
     CPPUNIT_ASSERT(!aView.m_aA11yFocusedParagraph.get_child_optional("images"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yRenamedFrames)
+{
+    // Given a text frame and an image without a title, in the paragraph of the cursor:
+    createDoc("a11y-renamed-frames.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // When they get new names, as from their Options dialog page, and the cursor comes back to
+    // their paragraph:
+    mxComponent.queryThrow<text::XTextFramesSupplier>()
+        ->getTextFrames()
+        ->getByName(u"Frame_One"_ustr)
+        .get<Reference<container::XNamed>>()
+        ->setName(u"Frame_Two"_ustr);
+    mxComponent.queryThrow<text::XTextGraphicObjectsSupplier>()
+        ->getGraphicObjects()
+        ->getByName(u"Image_One"_ustr)
+        .get<Reference<container::XNamed>>()
+        ->setName(u"Image_Two"_ustr);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Up(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then they are reported by their new names:
+    boost::property_tree::ptree aImages = aView.m_aA11yFocusedParagraph.get_child("images");
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aImages.size());
+    auto it = aImages.begin();
+    // Without the fix, the old names were reported
+    CPPUNIT_ASSERT_EQUAL(std::string("Frame_Two"), it->second.get<std::string>("name"));
+    ++it;
+    CPPUNIT_ASSERT_EQUAL(std::string("Image_Two"), it->second.get<std::string>("name"));
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphShapeAfterScroll)

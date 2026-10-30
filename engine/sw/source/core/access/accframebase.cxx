@@ -213,16 +213,17 @@ void SwAccessibleFrameBase::Notify(const SfxHint& rHint)
         auto rNameChanged = static_cast<const sw::NameChanged&>(rHint);
         const SwFrameFormat* pFrameFormat = pFlyFrame->GetFormat();
 
-        const OUString sOldName( GetName() );
-        assert( rNameChanged.m_sOld == sOldName);
+        // a title takes the place of the name
+        const OUString sOldAccessibleName = getAccessibleName();
 
         SetName( pFrameFormat->GetName().toString() );
         assert( rNameChanged.m_sNew == GetName());
 
-        if( sOldName != GetName() )
+        if (const OUString sNewAccessibleName = getAccessibleName();
+            sNewAccessibleName != sOldAccessibleName)
         {
-            FireAccessibleEvent(AccessibleEventId::NAME_CHANGED, cpo::uno::Any(sOldName),
-                                cpo::uno::Any(GetName()));
+            FireAccessibleEvent(AccessibleEventId::NAME_CHANGED, cpo::uno::Any(sOldAccessibleName),
+                                cpo::uno::Any(sNewAccessibleName));
         }
     }
 }

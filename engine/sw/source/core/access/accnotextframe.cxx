@@ -92,6 +92,7 @@ void SwAccessibleNoTextFrame::Notify(const SfxHint& rHint)
             EndListeningAll();
             return;
         default:
+            SwAccessibleFrameBase::Notify(rHint);
             return;
         case SfxHintId::SwTitleChanged:
             {
