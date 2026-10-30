@@ -1330,6 +1330,12 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		else {
 			app.console.debug('JSDialog: full dialog "' + (instance ? instance.id : '-') + '"');
 
+			// Only one dropdown may be open at a time, and none should stay open behind a dialog
+			if (!this.dialogs[instance.id]) {
+				if ((instance.isDropdown && !instance.isSubmenu) || instance.nonModal)
+					this.closeAllDropdowns();
+			}
+
 			// There is no action, so we create a new dialogue.
 			if (instance.isModalPopUp || instance.isDocumentAreaPopup)
 				this.getOrCreateOverlay(instance);
