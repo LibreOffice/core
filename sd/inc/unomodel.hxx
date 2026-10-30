@@ -196,7 +196,8 @@ public:
     virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL getHandoutMasterPage(  ) override;
 
     // XPresentationSupplier
-    virtual css::uno::Reference< css::presentation::XPresentation > SAL_CALL getPresentation(  ) override;
+    SD_DLLPUBLIC virtual css::uno::Reference<css::presentation::XPresentation>
+        SAL_CALL getPresentation() override;
 
     // XMultiServiceFactory ( SvxFmMSFactory )
     SD_DLLPUBLIC virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;

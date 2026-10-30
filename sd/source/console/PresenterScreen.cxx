@@ -254,11 +254,10 @@ void SAL_CALL PresenterScreenListener::disposing (const css::lang::EventObject&)
 
 //===== PresenterScreen =======================================================
 
-PresenterScreen::PresenterScreen (
-    const Reference<XComponentContext>& rxContext,
-    css::uno::Reference<css::frame::XModel2> xModel)
+PresenterScreen::PresenterScreen(const Reference<XComponentContext>& rxContext,
+                                 const rtl::Reference<SdXImpressDocument>& rpImpressDoc)
 : PresenterScreenInterfaceBase(m_aMutex)
-, mxModel(std::move(xModel))
+, mpImpressDoc(rpImpressDoc)
 , mxController()
 , mxContextWeak(rxContext)
 , mpPresenterController()
@@ -288,7 +287,7 @@ void SAL_CALL PresenterScreen::disposing()
     if (mxPaneFactory.is())
         mxPaneFactory->dispose();
 
-    mxModel = nullptr;
+    mpImpressDoc = nullptr;
 }
 
 //----- XEventListener --------------------------------------------------------
@@ -309,16 +308,15 @@ void PresenterScreen::InitializePresenterScreen()
     {
         mpPaneContainer = new PresenterPaneContainer();
 
-        Reference<XPresentationSupplier> xPS ( mxModel, UNO_QUERY_THROW);
-        Reference<XPresentation2> xPresentation(xPS->getPresentation(), UNO_QUERY_THROW);
+        Reference<XPresentation2> xPresentation(mpImpressDoc->getPresentation(), UNO_QUERY_THROW);
         Reference<presentation::XSlideShowController> xSlideShowController( xPresentation->getController() );
 
         if( !xSlideShowController.is() || !xSlideShowController->isFullScreen() )
             return;
 
         // find first controller that is not the current controller (the one with the slideshow
-        auto tmpController = mxModel->getCurrentController();
-        Reference< container::XEnumeration > xEnum( mxModel->getControllers() );
+        auto tmpController = mpImpressDoc->getCurrentController();
+        Reference<container::XEnumeration> xEnum(mpImpressDoc->getControllers());
         if( xEnum.is() )
         {
             while( xEnum->hasMoreElements() )
@@ -398,8 +396,7 @@ void PresenterScreen::InitializePresenterScreen()
 void PresenterScreen::SwitchMonitors()
 {
     try {
-        Reference<XPresentationSupplier> xPS ( mxModel, UNO_QUERY_THROW);
-        Reference<XPresentation2> xPresentation(xPS->getPresentation(), UNO_QUERY_THROW);
+        Reference<XPresentation2> xPresentation(mpImpressDoc->getPresentation(), UNO_QUERY_THROW);
 
         // Get the existing presenter console screen, we want to switch the
         // presentation to use that instead.

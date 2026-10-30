@@ -22,6 +22,9 @@
 
 #include "PresenterConfigurationAccess.hxx"
 #include "PresenterPaneContainer.hxx"
+
+#include <unomodel.hxx>
+
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/frame/XController.hpp>
@@ -98,9 +101,8 @@ class PresenterScreen
       public PresenterScreenInterfaceBase
 {
 public:
-    PresenterScreen (
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        css::uno::Reference<css::frame::XModel2> xModel);
+    PresenterScreen(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+                    const rtl::Reference<SdXImpressDocument>& rpImpressDoc);
     virtual ~PresenterScreen() override;
     PresenterScreen(const PresenterScreen&) = delete;
     PresenterScreen& operator=(const PresenterScreen&) = delete;
@@ -128,7 +130,7 @@ public:
     void CheckNextSlideUpdate(const css::uno::Reference<css::drawing::XShape>& rxShape);
 
 private:
-    css::uno::Reference<css::frame::XModel2 > mxModel;
+    rtl::Reference<SdXImpressDocument> mpImpressDoc;
     rtl::Reference<::sd::DrawController> mxController;
     unotools::WeakReference<::sd::framework::ConfigurationController>
         mxConfigurationControllerWeak;
