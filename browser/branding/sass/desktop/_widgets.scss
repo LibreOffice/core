@@ -99,18 +99,6 @@ form:not(.snackbar) > .lokdialog.ui-dialog-content.ui-widget-content {
 	border-top-left-radius: 0 !important;
 	border-top-right-radius: 0 !important;
 }
-.button-primary {
-	background-color: rgb(var(--doc-type, 40, 40, 40));
-	border-color: rgb(var(--doc-type));
-}
-.button-primary:hover {
-	background-color: rgba(var(--doc-type, 40, 40, 40),0.06) !important;
-	color: rgb(var(--doc-type)) !important;
-	border-color: rgb(var(--doc-type, 40, 40, 40));
-}
-html[data-theme=dark] .button-primary:hover {
-	background-color: rgba(0,0,0,0.3) !important;
-}
 .ui-treeview-entry.selected {
 	background-color: var(--color-background-dark);
 	border-color: var(--co-primary-element);
