@@ -186,6 +186,24 @@ describe('Tooltip', function () {
 		nodeassert.strictEqual(shown(), true);
 	});
 
+	it('goes at once when dismissed, even with the pointer on it', function () {
+		tooltip.show(trigger);
+		pointerAt(BOX.left + 10, BOX.top + 10);
+
+		tooltip.dismiss();
+
+		nodeassert.strictEqual(shown(), false);
+	});
+
+	it('does not come up later for a widget hovered just before a dismiss', function () {
+		tooltip.beginShow(trigger);
+
+		tooltip.dismiss();
+		advanceClock(showDelay);
+
+		nodeassert.strictEqual(shown(), false);
+	});
+
 	it('closes on Escape without waiting', function () {
 		tooltip.show(trigger);
 

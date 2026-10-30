@@ -267,6 +267,16 @@ class Tooltip {
 		this.beginHide();
 	}
 
+	// Take the tooltip down now, without the grace period, and drop a show that is still
+	// waiting for its delay.
+	dismiss() {
+		if (this._disabled) return;
+		app.timerRegistry.clearTimeout(this._showTimeout);
+		app.timerRegistry.clearTimeout(this._hideTimeout);
+		this._cancel = false;
+		this.hide();
+	}
+
 	// A click inside the tooltip goes to the widget under it, so the pointer is no longer
 	// reading the tooltip and it goes away at once.
 	clicked(e) {

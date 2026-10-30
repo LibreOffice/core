@@ -98,8 +98,11 @@ app.map = map;
 
 map.uiManager = new UIManager();
 map.addControl(map.uiManager);
-if (!window.L.Browser.cypressTest || global.coolParams.get('tooltips') === 'true')
+if (!window.L.Browser.cypressTest || global.coolParams.get('tooltips') === 'true') {
 	map.tooltip = window.L.control.tooltip();
+	// An open dropdown shows what its button offers, so the button's tooltip goes at once.
+	map.on('dropdownopen', function () { map.tooltip.dismiss(); });
+}
 
 app.idleHandler.map = map;
 
