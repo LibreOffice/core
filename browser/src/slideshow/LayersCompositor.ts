@@ -19,14 +19,9 @@ declare var SlideShow: any;
 
 class LayersCompositor extends SlideCompositor {
 	private layerDrawing: LayerDrawing; // setup in constructor
-	private metaPresentation: MetaPresentation;
 
-	constructor(
-		slideShowPresenter: SlideShowPresenter,
-		metaPresentation: MetaPresentation,
-	) {
-		super(slideShowPresenter, metaPresentation);
-		this.metaPresentation = metaPresentation;
+	constructor(slideShowPresenter: SlideShowPresenter) {
+		super(slideShowPresenter);
 	}
 
 	protected _addHooks() {
@@ -48,23 +43,23 @@ class LayersCompositor extends SlideCompositor {
 	}
 
 	public getSlideInfo(slideHash: string): SlideInfo {
-		return this.metaPresentation.getSlideInfo(slideHash);
+		return this._metaPresentation.getSlideInfo(slideHash);
 	}
 
 	public getDocWidth(): number {
-		return this.metaPresentation.getDocWidth();
+		return this._metaPresentation.getDocWidth();
 	}
 
 	public getDocHeight(): number {
-		return this.metaPresentation.getDocHeight();
+		return this._metaPresentation.getDocHeight();
 	}
 
 	public setDocWidth(slideWidth: number): void {
-		this.metaPresentation.setDocWidth(slideWidth);
+		this._metaPresentation.setDocWidth(slideWidth);
 	}
 
 	public setDocHeight(slideHeight: number): void {
-		this.metaPresentation.setDocHeight(slideHeight);
+		this._metaPresentation.setDocHeight(slideHeight);
 	}
 
 	public onUpdatePresentationInfo() {
@@ -74,31 +69,32 @@ class LayersCompositor extends SlideCompositor {
 	}
 
 	public getSlideHash(slideIndex: number) {
-		return this.metaPresentation.getSlideHash(slideIndex);
+		return this._metaPresentation.getSlideHash(slideIndex);
 	}
 
-	public getAnimatedElement(
+	public createAnimatedElement(
+		sId: string,
 		slideHash: string,
-		animatedElementHash: string,
+		title: string,
+		slideWidth: number,
+		slideHeight: number,
+		bIsTextElement: boolean,
 	): AnimatedElement {
-		const metaSlide = this.metaPresentation.getMetaSlide(slideHash);
-		if (!metaSlide) {
-			window.app.console.log(
-				'LayersCompositor.getAnimatedElement: failed to retrieve meta slide for hash: ' +
+		return bIsTextElement
+			? new AnimatedTextElement(sId, slideHash, title, slideWidth, slideHeight)
+			: new AnimatedElementBitmap(
+					sId,
 					slideHash,
-			);
-			return;
-		}
-		if (metaSlide.animationsHandler) {
-			const animElemMap = metaSlide.animationsHandler.getAnimatedElementMap();
-			return animElemMap.get(animatedElementHash);
-		}
+					title,
+					slideWidth,
+					slideHeight,
+				);
 	}
 
 	public getSlideSizePixel() {
 		return [
-			app.twipsToPixels * this.metaPresentation.getDocWidth(),
-			app.twipsToPixels * this.metaPresentation.getDocHeight(),
+			app.twipsToPixels * this._metaPresentation.getDocWidth(),
+			app.twipsToPixels * this._metaPresentation.getDocHeight(),
 		];
 	}
 

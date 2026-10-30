@@ -409,25 +409,20 @@ class AnimatedElement {
 		'rotate',
 	]);
 
-	private sId: string;
-	private slideHash: string;
+	protected sId: string;
+	protected slideHash: string;
 	private _title: string;
-	private slideWidth: number;
-	private slideHeight: number;
+	protected slideWidth: number;
+	protected slideHeight: number;
 	private canvasWidth: number;
 	private canvasHeight: number;
-	private bIsValid: boolean;
+	protected bIsValid: boolean;
 	private slideRenderer: SlideRenderer;
-	private animatedLayerInfo: AnimatedShapeInfo = null;
-	private aLayer: ImageBitmap = null;
-	private canvasScaleFactor: { x: number; y: number };
-	private aBaseBBox: BoundingBoxType = null;
-	private aBBoxInCanvas: BoundingBoxType;
-	private aBaseElement: AnimatedObjectType;
-	private nBaseCenterX: number = 0;
-	private nBaseCenterY: number = 0;
+	protected canvasScaleFactor: { x: number; y: number };
+	protected aBaseBBox: BoundingBoxType = null;
+	protected nBaseCenterX: number = 0;
+	protected nBaseCenterY: number = 0;
 	private aActiveBBox: BoundingBoxType;
-	private aActiveElement: AnimatedObjectType;
 	private eAdditiveMode = AdditiveMode.Replace;
 	private aStateSet = new Map<number, AnimatedElementState>();
 	private aStateOnNextEffectSet = new Map<number, AnimatedElementState>();
@@ -440,11 +435,11 @@ class AnimatedElement {
 	private nSkewY: number = 0;
 	private aTMatrix: DOMMatrix;
 	private nOpacity: number; // [0, 1]
-	private aBaseFillColor = AnimatedElement.DefaultColor;
+	protected aBaseFillColor = AnimatedElement.DefaultColor;
 	private aFillColor = AnimatedElement.DefaultColor;
-	private aBaseLineColor = AnimatedElement.DefaultColor;
+	protected aBaseLineColor = AnimatedElement.DefaultColor;
 	private aLineColor = AnimatedElement.DefaultColor;
-	private aBaseFontColor = AnimatedElement.DefaultColor;
+	protected aBaseFontColor = AnimatedElement.DefaultColor;
 	private aFontColor = AnimatedElement.DefaultColor;
 	private aDimColor = AnimatedElement.DefaultColor;
 	private bVisible: boolean;
@@ -455,9 +450,8 @@ class AnimatedElement {
 	// effect -> animation nodes
 	private activeAnimationNodes = new Map<number, Set<number>>();
 
-	private tfContext: RenderContextGl;
-	private transitionFiltersManager: TransitionFiltersManager;
-	private aSlideShowContext: SlideShowContext;
+	protected transitionFiltersManager: TransitionFiltersManager;
+	protected aSlideShowContext: SlideShowContext;
 
 	constructor(
 		sId: string,
@@ -492,57 +486,22 @@ class AnimatedElement {
 		return this._title;
 	}
 
-	private isGlSupported() {
-		return !this.tfContext.is2dGl();
-	}
-
 	public isTextElement() {
 		return false;
 	}
 
-	private cloneBBox(aBBox: BoundingBoxType): BoundingBoxType {
+	protected cloneBBox(aBBox: BoundingBoxType): BoundingBoxType {
 		if (!aBBox) return null;
 		return new DOMRect(aBBox.x, aBBox.y, aBBox.width, aBBox.height);
 	}
 
-	private createBaseElement(
-		layer: ImageBitmap,
-		bounds: BoundingBoxType,
-	): AnimatedObjectType {
-		if (!layer) {
-			window.app.console.error(
-				'AnimatedElement.createBaseElement: layer is null/undefined',
-			);
-			return null;
-		}
-		if (!bounds || bounds.width <= 0 || bounds.height <= 0) {
-			window.app.console.error(
-				`AnimatedElement.createBaseElement: invalid bounds: ${JSON.stringify(bounds)}`,
-			);
-			return null;
-		}
-		const canvas = new OffscreenCanvas(bounds.width, bounds.height);
-		const context = canvas.getContext('2d');
-		context.drawImage(
-			layer,
-			bounds.x,
-			bounds.y,
-			bounds.width,
-			bounds.height,
-			0,
-			0,
-			bounds.width,
-			bounds.height,
-		);
-		return canvas.transferToImageBitmap();
-	}
-
-	private clone(aElement: AnimatedObjectType): AnimatedObjectType {
-		if (!aElement) return null;
-		const canvas = new OffscreenCanvas(aElement.width, aElement.height);
-		const context = canvas.getContext('2d');
-		context.drawImage(aElement, 0, 0, canvas.width, canvas.height);
-		return canvas.transferToImageBitmap();
+	// The rectangle of the target on the slide, in twips. Every transform is
+	// relative to it.
+	protected setBaseBBox(aBounds: BoundingBoxType) {
+		this.aBaseBBox = this.cloneBBox(aBounds);
+		({ x: this.nBaseCenterX, y: this.nBaseCenterY } = getRectCenter(
+			this.aBaseBBox,
+		));
 	}
 
 	public updateCanvasSize(size: [number, number]) {
@@ -557,89 +516,32 @@ class AnimatedElement {
 		);
 	}
 
-	public updateAnimationInfo(animatedLayerInfo: AnimatedShapeInfo) {
-		if (!animatedLayerInfo) {
-			// create a dummy bounding box for not break animation engine
-			this.aBaseBBox = new DOMRect(0, 0, 1920, 1080);
-			window.app.console.log(
-				'AnimatedElement.updateAnimationInfo: passed info is not valid',
-			);
-			return;
-		}
-		this.animatedLayerInfo = animatedLayerInfo;
-
-		this.aLayer = (this.animatedLayerInfo.content as ImageInfo).data;
-		if (!this.aLayer) {
-			window.app.console.log(
-				'AnimatedElement.updateAnimationInfo: layer not valid',
-			);
-		}
-
-		this.aBaseBBox = this.cloneBBox(this.animatedLayerInfo.bounds);
-		({ x: this.nBaseCenterX, y: this.nBaseCenterY } = getRectCenter(
-			this.aBaseBBox,
-		));
-		this.aBBoxInCanvas = convert(this.canvasScaleFactor, this.aBaseBBox);
-		this.aBaseElement = this.createBaseElement(this.aLayer, this.aBBoxInCanvas);
-
-		if (this.animatedLayerInfo.fillColor) {
-			this.aBaseFillColor = colorParser(
-				this.animatedLayerInfo.fillColor,
-			) as RGBColor;
-		}
-		if (this.animatedLayerInfo.lineColor) {
-			this.aBaseLineColor = colorParser(
-				this.animatedLayerInfo.lineColor,
-			) as RGBColor;
-		}
-		if (this.animatedLayerInfo.fontColor) {
-			this.aBaseFontColor = colorParser(
-				this.animatedLayerInfo.fontColor,
-			) as RGBColor;
-		}
-
-		this.DBG(
-			'.updateAnimationInfo: ' +
-				`\n  aBaseBBox: ${BBoxToString(this.aBaseBBox)}` +
-				`\n  aBBoxInCanvas: ${BBoxToString(this.aBBoxInCanvas)}` +
-				`\n  base center: x: ${this.nBaseCenterX} y: ${this.nBaseCenterY}`,
+	// Fetch the base rectangle, base colors and content at slide start. The
+	// base has no content and keeps a placeholder rectangle.
+	protected updateContentInfo() {
+		this.aBaseBBox = new DOMRect(0, 0, 1920, 1080);
+		window.app.console.log(
+			'AnimatedElement.updateContentInfo: no content available',
 		);
-
-		this.bIsValid = true;
 	}
 
-	private getTextureFromElement(element: AnimatedObjectType) {
-		if (!element || element.width <= 0 || element.height <= 0) {
-			window.app.console.error(
-				`AnimatedElement.getTextureFromElement: invalid element (null or zero-sized)`,
-			);
-			return null;
-		}
-		return this.tfContext.loadTexture(element);
+	// The visibility at slide start.
+	protected getInitialVisibility(): boolean {
+		return false;
 	}
 
-	public setTransitionParameters(transitionParameters: TransitionParameters) {
-		if (!this.tfContext) {
-			const layerCompositor = this.getLayerCompositor();
-			if (!layerCompositor) {
-				window.app.console.error(
-					'AnimatedElement.setTransitionParameters: layer compositor is undefined',
-				);
-				return;
-			}
-			this.tfContext = layerCompositor.getLayerRendererContext();
-			if (!this.tfContext) {
-				window.app.console.error(
-					'AnimatedElement.setTransitionParameters: layer renderer context is undefined',
-				);
-				return;
-			}
-		}
+	// Take the content from a newly delivered shape layer. The base has none.
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	public updateAnimationInfo(_animatedLayerInfo: AnimatedShapeInfo) {}
 
-		transitionParameters.context = this.tfContext;
-		transitionParameters.current = null;
-		transitionParameters.next = this.getTextureFromElement(this.aBaseElement);
-	}
+	// Draw the current state into the layer compose. The base draws nothing.
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	public renderLayer(_renderer: LayerRenderer) {}
+
+	// Give a shape transition filter its rendering context and texture. The
+	// base has neither.
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	public setTransitionParameters(_transitionParameters: TransitionParameters) {}
 
 	private resetProperties() {
 		this.nCenterX = this.nBaseCenterX;
@@ -654,9 +556,7 @@ class AnimatedElement {
 		this.aFillColor = this.aBaseFillColor;
 		this.aLineColor = this.aBaseLineColor;
 		this.aFontColor = this.aBaseFontColor;
-		this.bVisible = this.animatedLayerInfo
-			? this.animatedLayerInfo.initVisible
-			: false;
+		this.bVisible = this.getInitialVisibility();
 		this.transitionFiltersManager.clear();
 		// this.aActiveBBox = this.cloneBBox(this.aBaseBBox);
 	}
@@ -685,103 +585,10 @@ class AnimatedElement {
 		this.aClipPath = null;
 	}
 
-	private getLayerCompositor(): SlideCompositor {
-		const presenter: SlideShowPresenter = app.map.slideShowPresenter;
-		if (presenter) {
-			return presenter._slideCompositor;
-		}
-		return null;
-	}
-
-	applyTransitionFilters(
-		properties?: AnimatedElementRenderProperties,
-	): boolean {
-		if (this.transitionFiltersManager.isEmpty() || !this.isGlSupported()) {
-			return false;
-		}
-		return this.transitionFiltersManager.apply(properties);
-	}
-
-	renderLayer(renderer: LayerRenderer) {
-		if (!this.bVisible) return;
-		if (renderer instanceof LayerRendererGl) this.renderLayerGl(renderer);
-		else if (renderer instanceof LayerRenderer2d) this.renderLayer2d(renderer);
-	}
-
-	renderLayer2d(renderer: LayerRenderer2d) {
-		if (renderer.isDisposed()) return;
-
-		const renderContext = renderer.getRenderContext();
-		const renderingContext = renderContext.get2dOffscreen();
-
-		renderingContext.save();
-		// renderingContext.scale(sf.x, sf.y);
-
-		// factor to convert from slide coordinate to canvas coordinate
-		const sf = this.canvasScaleFactor;
-
-		renderingContext.globalAlpha = this.nOpacity;
-
+	// The current state for a renderer: the transformed base rectangle in
+	// slide-relative unit coordinates, the opacity and the color map.
+	public getRenderProperties(): AnimatedElementRenderProperties {
 		const T = this.aTMatrix;
-		const transform = new DOMMatrix([
-			T.a,
-			T.b,
-			T.c,
-			T.d,
-			T.e * sf.x,
-			T.f * sf.y,
-		]);
-		renderingContext.setTransform(transform);
-
-		const aElement = this.aBaseElement;
-		app.console.debug(
-			`AnimatedElement(${this.sId}).renderLayer2d:
-				element width: ${aElement.width}
-				element height: ${aElement.height}
-				base center: (${this.nBaseCenterX}, ${this.nBaseCenterY})
-				actual center: (${this.nCenterX}, ${this.nCenterY})
-				transform: ${transform.toString()}`,
-		);
-
-		// renderingContext.drawImage(
-		// 	aElement,
-		// 	0,
-		// 	0,
-		// 	aElement.width,
-		// 	aElement.height,
-		// 	this.aBaseBBox.x,
-		// 	this.aBaseBBox.y,
-		// 	this.aBaseBBox.width,
-		// 	this.aBaseBBox.height,
-		// );
-
-		renderingContext.drawImage(
-			aElement,
-			0,
-			0,
-			aElement.width,
-			aElement.height,
-			this.aBBoxInCanvas.x,
-			this.aBBoxInCanvas.y,
-			aElement.width,
-			aElement.height,
-		);
-		renderingContext.restore();
-	}
-
-	renderLayerGl(renderer: LayerRendererGl) {
-		if (renderer.isDisposed()) return;
-
-		const T = this.aTMatrix;
-
-		app.console.debug(
-			`AnimatedElement(${this.sId}).renderLayerGl:
-				element width: ${this.aBaseElement.width}
-				element height: ${this.aBaseElement.height}
-				base center: (${this.nBaseCenterX}, ${this.nBaseCenterY})
-				actual center: (${this.nCenterX}, ${this.nCenterY})
-				transform: ${T.toString()}`,
-		);
 
 		const tl = new DOMPoint(this.aBaseBBox.x, this.aBaseBBox.y);
 		const br = new DOMPoint(
@@ -799,6 +606,16 @@ class AnimatedElement {
 			unitBounds.push(u);
 		}
 
+		return {
+			bounds: unitBounds as BoundsType,
+			alpha: this.nOpacity,
+			colorMap: this.getColorMap(),
+		};
+	}
+
+	// The colors a color animation changed, as pairs of base color and
+	// current color. Empty when none changed.
+	public getColorMap(): AnimatedElementColorMap {
 		// This color mapping solution doesn't work if fill and line colors have
 		// the same initial value. For a proper solution we would need separated
 		// layers for stroke and fill, at least when a color animation is involved.
@@ -822,16 +639,7 @@ class AnimatedElement {
 			colorMap.fromLineColor = this.aBaseLineColor;
 			colorMap.toLineColor = this.aLineColor;
 		}
-
-		const properties: AnimatedElementRenderProperties = {
-			bounds: unitBounds as BoundsType,
-			alpha: this.nOpacity,
-			colorMap: colorMap,
-		};
-
-		if (this.applyTransitionFilters(properties)) return;
-
-		renderer.drawBitmap(this.aBaseElement, properties);
+		return colorMap;
 	}
 
 	notifySlideStart(aSlideShowContext: SlideShowContext) {
@@ -847,14 +655,7 @@ class AnimatedElement {
 		this.nCurrentEffect = undefined;
 		this.aStateOnNextEffectSet.clear();
 
-		const aAnimatedLayerInfo =
-			this.aSlideShowContext.aSlideShowHandler.getAnimatedLayerInfo(
-				this.slideHash,
-				this.sId,
-			);
-		this.updateAnimationInfo(aAnimatedLayerInfo);
-
-		// this.aActiveElement = this.clone(this.aBaseElement);
+		this.updateContentInfo();
 
 		this.resetProperties();
 		this.DBG('.notifySlideStart invoked');
@@ -891,21 +692,6 @@ class AnimatedElement {
 	notifyNextEffectStart(nEffectIndex: number) {
 		this.nCurrentEffect = nEffectIndex;
 		this.activeAnimationNodes.set(this.nCurrentEffect, new Set());
-	}
-
-	// TODO remove it
-	setToElement(aElement: AnimatedObjectType) {
-		if (!aElement) {
-			window.app.console.log(
-				'AnimatedElement(' +
-					this.getId() +
-					').setToElement: element is not valid',
-			);
-			return false;
-		}
-
-		this.aActiveElement = this.clone(aElement);
-		return true;
 	}
 
 	/** saveState
@@ -1034,6 +820,11 @@ class AnimatedElement {
 
 	getBaseBBox() {
 		return this.aBaseBBox;
+	}
+
+	// The current transform, in slide coordinates, about the base center.
+	getTransformMatrix(): DOMMatrix {
+		return this.aTMatrix;
 	}
 
 	getBaseCenterX() {
@@ -1330,11 +1121,4 @@ class AnimatedElement {
 			nTime,
 		);
 	}
-}
-
-class AnimatedTextElement extends AnimatedElement {
-	public isTextElement() {
-		return true;
-	}
-	// TODO: to be implemented
 }

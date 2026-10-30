@@ -74,21 +74,17 @@ abstract class AnimationBaseNode extends BaseNode {
 				const slideWidth = this.aNodeContext._context.nSlideWidth;
 				const slideHeight = this.aNodeContext._context.nSlideHeight;
 
-				const aAnimatedElement = this.bIsTargetTextElement
-					? new AnimatedTextElement(
-							this.aTargetHash,
-							slideHash,
-							aNodeInfo.title || aNodeInfo.objectName,
-							slideWidth,
-							slideHeight,
-						)
-					: new AnimatedElement(
-							this.aTargetHash,
-							slideHash,
-							aNodeInfo.title || aNodeInfo.objectName,
-							slideWidth,
-							slideHeight,
-						);
+				// The compositor knows which kind of element it can draw.
+				const presenter: SlideShowPresenter = app.map.slideShowPresenter;
+				const aAnimatedElement =
+					presenter._slideCompositor.createAnimatedElement(
+						this.aTargetHash,
+						slideHash,
+						aNodeInfo.title || aNodeInfo.objectName,
+						slideWidth,
+						slideHeight,
+						this.bIsTargetTextElement,
+					);
 
 				this.aNodeContext.aAnimatedElementMap.set(
 					this.aTargetHash,

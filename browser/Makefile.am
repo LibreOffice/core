@@ -986,6 +986,7 @@ COOL_JS_LST =\
     src/slideshow/engine/animationnodes/NodeContext.ts \
     src/slideshow/engine/animationnodes/PropertyAnimationNode.ts \
     src/slideshow/engine/AnimatedElement.ts \
+    src/slideshow/engine/AnimatedElementBitmap.ts \
     src/slideshow/TransitionsInfo.ts \
     src/slideshow/Transition2d.ts \
     src/slideshow/Transition3d.ts \

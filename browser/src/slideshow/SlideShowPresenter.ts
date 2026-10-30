@@ -1579,6 +1579,16 @@ class SlideShowPresenter {
 
 		let skipTransition = false;
 
+		if (!this._slideCompositor) {
+			// A vector-rendered document draws the slides from the primitive
+			// cache instead of the server-rendered bitmap layers. The compositor
+			// comes first: the animation trees of the presentation ask it for
+			// their animated elements.
+			this._slideCompositor = RenderManager.isVectorRendering()
+				? new SlideShow.VectorCompositor(this)
+				: new SlideShow.LayersCompositor(this);
+		}
+
 		if (!this._metaPresentation) {
 			this._metaPresentation = new MetaPresentation(
 				data,
@@ -1625,15 +1635,7 @@ class SlideShowPresenter {
 			}
 		}
 
-		if (!this._slideCompositor) {
-			// When the document renders from vector primitives, draw the
-			// slides from the same primitive cache instead of the
-			// server-rendered bitmap layers.
-			this._slideCompositor = RenderManager.isVectorRendering()
-				? new SlideShow.VectorCompositor(this, this._metaPresentation)
-				: new SlideShow.LayersCompositor(this, this._metaPresentation);
-		}
-
+		this._slideCompositor.setMetaPresentation(this._metaPresentation);
 		this._slideCompositor.onUpdatePresentationInfo();
 		const canvasSize = this._slideCompositor.getCanvasSize();
 		this._slideShowCanvas.width = canvasSize[0];

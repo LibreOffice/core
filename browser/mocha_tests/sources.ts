@@ -483,6 +483,7 @@
 /// <reference path="../src/slideshow/engine/animationnodes/NodeContext.ts" />
 /// <reference path="../src/slideshow/engine/animationnodes/PropertyAnimationNode.ts" />
 /// <reference path="../src/slideshow/engine/AnimatedElement.ts" />
+/// <reference path="../src/slideshow/engine/AnimatedElementBitmap.ts" />
 /// <reference path="../src/slideshow/TransitionsInfo.ts" />
 /// <reference path="../src/slideshow/Transition2d.ts" />
 /// <reference path="../src/slideshow/Transition3d.ts" />

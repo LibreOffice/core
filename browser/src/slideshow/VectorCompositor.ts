@@ -44,11 +44,8 @@ class VectorCompositor extends SlideCompositor {
 	private pendingSlideNumber: number = null;
 	private pendingReady: VoidFunction = null;
 
-	constructor(
-		slideShowPresenter: SlideShowPresenter,
-		metaPresentation: MetaPresentation,
-	) {
-		super(slideShowPresenter, metaPresentation);
+	constructor(slideShowPresenter: SlideShowPresenter) {
+		super(slideShowPresenter);
 	}
 
 	protected _addHooks(): void {
@@ -187,6 +184,18 @@ class VectorCompositor extends SlideCompositor {
 	}
 
 	// --- animation and video: not handled yet -----------------------
+
+	public createAnimatedElement(
+		sId: string,
+		slideHash: string,
+		title: string,
+		slideWidth: number,
+		slideHeight: number,
+		_bIsTextElement: boolean,
+	): AnimatedElement {
+		// The base element carries the engine state and draws nothing.
+		return new AnimatedElement(sId, slideHash, title, slideWidth, slideHeight);
+	}
 
 	public getAnimatedLayerInfo(
 		_slideHash: string,

@@ -23,14 +23,44 @@ abstract class SlideCompositor {
 	_initialSlideNumber: number = 0;
 	_onGotSlideCallback: VoidFunction = null;
 
-	constructor(
-		slideShowPresenter: SlideShowPresenter,
-		metaPresentation: MetaPresentation,
-	) {
+	constructor(slideShowPresenter: SlideShowPresenter) {
 		this._slideShowPresenter = slideShowPresenter;
-		this._metaPresentation = metaPresentation;
 		this._addHooks();
 	}
+
+	// The presentation to draw. It is built after the compositor.
+	public setMetaPresentation(metaPresentation: MetaPresentation) {
+		this._metaPresentation = metaPresentation;
+	}
+
+	public getAnimatedElement(
+		slideHash: string,
+		animatedElementHash: string,
+	): AnimatedElement {
+		const metaSlide = this._metaPresentation.getMetaSlide(slideHash);
+		if (!metaSlide) {
+			window.app.console.log(
+				'SlideCompositor.getAnimatedElement: failed to retrieve meta slide for hash: ' +
+					slideHash,
+			);
+			return;
+		}
+		if (metaSlide.animationsHandler) {
+			const animatedElementMap =
+				metaSlide.animationsHandler.getAnimatedElementMap();
+			return animatedElementMap.get(animatedElementHash);
+		}
+	}
+
+	/// The animated element of the kind this compositor draws, for the target sId.
+	public abstract createAnimatedElement(
+		sId: string,
+		slideHash: string,
+		title: string,
+		slideWidth: number,
+		slideHeight: number,
+		bIsTextElement: boolean,
+	): AnimatedElement;
 
 	public computeLayerSize(width: number, height: number): [number, number] {
 		// compute the slide size in pixel with respect to the current resolution
