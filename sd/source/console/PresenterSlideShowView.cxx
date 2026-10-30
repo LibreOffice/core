@@ -48,18 +48,20 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 /** Return the slide show controller of a running presentation that has
-    the same document as the given framework controller.
+    the same document as the given DrawController.
     @return
         When no presentation is running this method returns an empty reference.
 */
-Reference<presentation::XSlideShowController> lcl_GetSlideShowController (
-    const Reference<frame::XController>& rxController)
+Reference<presentation::XSlideShowController>
+lcl_GetSlideShowController(const rtl::Reference<sd::DrawController>& rpController)
 {
     Reference<presentation::XSlideShowController> xSlideShowController;
 
-    if( rxController.is() ) try
+    if (rpController.is())
+        try
         {
-            Reference<css::presentation::XPresentationSupplier> xPS ( rxController->getModel(), UNO_QUERY_THROW);
+            Reference<css::presentation::XPresentationSupplier> xPS(rpController->getModel(),
+                                                                    UNO_QUERY_THROW);
 
             Reference<css::presentation::XPresentation2> xPresentation(xPS->getPresentation(), UNO_QUERY_THROW);
 
