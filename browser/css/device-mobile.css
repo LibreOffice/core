@@ -39,13 +39,13 @@ html[dir='rtl'] .sub-menu-arrow {
 	z-index: 1003;
 }
 .editmode-off {
-	background: url('images/lc_closedocmobile.svg') no-repeat center !important;
-}
-[data-theme='dark'] .editmode-off {
-	background-image: url('images/dark/lc_closedocmobile.svg') !important;
+	background: url('images/dark/lc_closedocmobile.svg') no-repeat center !important;
 }
 .editmode-on {
-	background: url('images/lc_listitem-selected.svg') no-repeat center / 28px !important;
+	background: url('images/lc_listitem-selected_mobile.svg') no-repeat center / 28px !important;
+}
+[data-theme='dark'] .editmode-on {
+	background: url('images/dark/lc_listitem-selected.svg') no-repeat center / 28px !important;
 }
 [data-close-button-enabled='false'] #toolbar-mobile-back.editmode-off {
 	display: none;
@@ -158,10 +158,26 @@ textarea.cool-annotation-textarea {
 #toolbar-up #redo.disabled, #toolbar-up #undo.disabled, #toolbar-up #mobile_wizard.disabled, #toolbar-up #insertion_mobile_wizard.disabled {
 	display: none;
 }
+#toolbar-up .unotoolbutton[disabled],
+#toolbar-up .unotoolbutton[disabled] *[disabled] {
+	opacity: 0.5;
+	background-color: transparent;
+}
 #toolbar-wrapper.mobile {
 	border-top: none;
 	z-index: auto !important;
 	flex-direction: column;
+}
+html:not([data-theme='dark']) #toolbar-wrapper.mobile #toolbar-row {
+	background-color: rgb(var(--doc-type));
+}
+html:not([data-theme='dark']) #toolbar-wrapper.mobile #toolbar-row .main-menu-btn-icon,
+html:not([data-theme='dark']) #toolbar-wrapper.mobile #toolbar-row .main-menu-btn-icon::before,
+html:not([data-theme='dark']) #toolbar-wrapper.mobile #toolbar-row .main-menu-btn-icon::after {
+	background: #fafafa;
+}
+html:not([data-theme='dark']) #toolbar-wrapper.mobile #toolbar-row .ui-badge {
+	color: #fafafa;
 }
 body > #formulabar-row {
 	z-index: 1001; /* above the sheet tabs */

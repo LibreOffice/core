@@ -24,8 +24,8 @@ class MobileTopBar extends JSDialog.Toolbar {
 		if (this.docType == 'text') {
 			return [
 				{type: 'toolitem', id: 'signstatus', command: '.uno:Signature', w2icon: '', text: _UNO('.uno:Signature'), visible: false},
-				{type: 'toolitem',  id: 'undo', text: _UNO('.uno:Undo'), command: '.uno:Undo', enabled: false},
-				{type: 'toolitem',  id: 'redo', text: _UNO('.uno:Redo'), command: '.uno:Redo', enabled: false},
+				{type: 'toolitem',  id: 'undo', text: _UNO('.uno:Undo'), command: '.uno:Undo', icon: 'lc_undo_mobile.svg', enabled: false},
+				{type: 'toolitem',  id: 'redo', text: _UNO('.uno:Redo'), command: '.uno:Redo', icon: 'lc_redo_mobile.svg', enabled: false},
 				{type: 'spacer', id: 'before-permissionmode'},
 				this._generateHtmlItem('permissionmode'),
 				{type: 'spacer', id: 'after-permissionmode'},
@@ -37,10 +37,10 @@ class MobileTopBar extends JSDialog.Toolbar {
 		} else if (this.docType == 'spreadsheet') {
 			return [
 				{type: 'toolitem', id: 'signstatus', command: '.uno:Signature', w2icon: '', text: _UNO('.uno:Signature'), visible: false},
-				{type: 'toolitem',  id: 'undo', text: _UNO('.uno:Undo'), command: '.uno:Undo', enabled: false},
-				{type: 'toolitem',  id: 'redo', text: _UNO('.uno:Redo'), command: '.uno:Redo', enabled: false},
-				{type: 'customtoolitem', visible: false, id: 'acceptformula', command: 'acceptformula', text: _('Accept')},
-				{type: 'customtoolitem', visible: false, id: 'cancelformula', command: 'cancelformula', text: _('Cancel')},
+				{type: 'toolitem',  id: 'undo', text: _UNO('.uno:Undo'), command: '.uno:Undo', icon: 'lc_undo_mobile.svg', enabled: false},
+				{type: 'toolitem',  id: 'redo', text: _UNO('.uno:Redo'), command: '.uno:Redo', icon: 'lc_redo_mobile.svg', enabled: false},
+				{type: 'customtoolitem', visible: false, id: 'acceptformula', command: 'acceptformula', icon: 'lc_ok_mobile.svg', text: _('Accept')},
+				{type: 'customtoolitem', visible: false, id: 'cancelformula', command: 'cancelformula', icon: 'lc_cancel_mobile.svg', text: _('Cancel')},
 				{type: 'spacer', id: 'before-PermissionMode'},
 				this._generateHtmlItem('permissionmode'),
 				{type: 'spacer', id: 'after-PermissionMode'},
@@ -52,8 +52,8 @@ class MobileTopBar extends JSDialog.Toolbar {
 		} else if (this.docType == 'presentation') {
 			return [
 				{type: 'toolitem', id: 'signstatus', command: '.uno:Signature', w2icon: '', text: _UNO('.uno:Signature'), visible: false},
-				{type: 'toolitem',  id: 'undo', text: _UNO('.uno:Undo'), command: '.uno:Undo', enabled: false},
-				{type: 'toolitem',  id: 'redo', text: _UNO('.uno:Redo'), command: '.uno:Redo', enabled: false},
+				{type: 'toolitem',  id: 'undo', text: _UNO('.uno:Undo'), command: '.uno:Undo', icon: 'lc_undo_mobile.svg', enabled: false},
+				{type: 'toolitem',  id: 'redo', text: _UNO('.uno:Redo'), command: '.uno:Redo', icon: 'lc_redo_mobile.svg', enabled: false},
 				{type: 'spacer', id: 'before-permissionmode'},
 				this._generateHtmlItem('permissionmode'),
 				{type: 'spacer', id: 'after-permissionmode'},
@@ -66,8 +66,8 @@ class MobileTopBar extends JSDialog.Toolbar {
 		} else if (this.docType == 'drawing') {
 			return [
 				{type: 'toolitem', id: 'signstatus', command: '.uno:Signature', w2icon: '', text: _UNO('.uno:Signature'), visible: false},
-				{type: 'toolitem',  id: 'undo', text: _UNO('.uno:Undo'), command: '.uno:Undo', enabled: false},
-				{type: 'toolitem',  id: 'redo', text: _UNO('.uno:Redo'), command: '.uno:Redo', enabled: false},
+				{type: 'toolitem',  id: 'undo', text: _UNO('.uno:Undo'), command: '.uno:Undo', icon: 'lc_undo_mobile.svg', enabled: false},
+				{type: 'toolitem',  id: 'redo', text: _UNO('.uno:Redo'), command: '.uno:Redo', icon: 'lc_redo_mobile.svg', enabled: false},
 				{type: 'spacer', id: 'before-PermissionMode'},
 				this._generateHtmlItem('permissionmode'),
 				{type: 'spacer', id: 'after-PermissionMode'},
