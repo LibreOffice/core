@@ -1240,7 +1240,7 @@ sd/source/ui/remotecontrol/Receiver.hxx:34
     sd::Receiver pTransmitter Transmitter *
 sd/source/ui/sidebar/MasterPageContainerProviders.hxx:144
     sd::sidebar::TemplatePreviewProvider msURL OUString
-sd/source/ui/slideshow/slideshowimpl.hxx:358
+sd/source/ui/slideshow/SlideShowController.hxx:358
     sd::SlideshowImpl mpPaneHider ::std::unique_ptr<PaneHider>
 sd/source/ui/slideshow/SlideShowRestarter.hxx:72
     sd::SlideShowRestarter mpSelf ::std::shared_ptr<SlideShowRestarter>

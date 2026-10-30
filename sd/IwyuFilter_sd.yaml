@@ -183,7 +183,7 @@ excludelist:
     sd/source/ui/sidebar/PanelFactory.hxx:
     # base class has to be a complete type
     - com/sun/star/ui/XUIElementFactory.hpp
-    sd/source/ui/slideshow/slideshowimpl.hxx:
+    sd/source/ui/slideshow/SlideShowController.hxx:
     # base class has to be a complete type
     - com/sun/star/presentation/XShapeEventListener.hpp
     - com/sun/star/presentation/XSlideShowController.hpp

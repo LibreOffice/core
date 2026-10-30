@@ -18,7 +18,7 @@
  */
 
 #include "slideshowviewimpl.hxx"
-#include "slideshowimpl.hxx"
+#include "SlideShowController.hxx"
 #include <sdpage.hxx>
 
 #include <vcl/svapp.hxx>

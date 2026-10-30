@@ -20,7 +20,7 @@
 #include <com/sun/star/awt/Key.hpp>
 
 #include "showwindow.hxx"
-#include "slideshowimpl.hxx"
+#include "SlideShowController.hxx"
 
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>

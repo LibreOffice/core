@@ -42,7 +42,7 @@
 #include <FrameView.hxx>
 #include <unomodel.hxx>
 #include <slideshow.hxx>
-#include "slideshowimpl.hxx"
+#include "SlideShowController.hxx"
 #include <sdattr.hrc>
 #include <sdmod.hxx>
 #include <FactoryIds.hxx>

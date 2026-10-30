@@ -366,7 +366,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/slideshow/SlideShowRestarter \
 	sd/source/ui/slideshow/showwin \
 	sd/source/ui/slideshow/slideshow \
-	sd/source/ui/slideshow/slideshowimpl \
+	sd/source/ui/slideshow/SlideShowController \
 	sd/source/ui/slideshow/slideshowviewimpl \
 	sd/source/ui/slidesorter/cache/SlsBitmapCache \
 	sd/source/ui/slidesorter/cache/SlsBitmapCompressor \

@@ -337,7 +337,7 @@ sd/source/ui/inc/TextObjectBar.hxx:53
 sd/source/ui/inc/unchss.hxx:34
     StyleSheetUndoAction mpStyleSheet SfxStyleSheet *
     SdStyleSheet
-sd/source/ui/slideshow/slideshowimpl.hxx:296
+sd/source/ui/slideshow/SlideShowController.hxx:296
     sd::SlideshowImpl mpViewShell ViewShell *
     sd::PresentationViewShell
 sd/source/ui/table/tableobjectbar.hxx:51

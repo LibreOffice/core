@@ -23,7 +23,7 @@
 #include <ViewShellBase.hxx>
 #include <DrawController.hxx>
 #include <ResourceId.hxx>
-#include "slideshowimpl.hxx"
+#include "SlideShowController.hxx"
 #include <framework/ConfigurationController.hxx>
 #include <framework/FrameworkHelper.hxx>
 
