@@ -231,17 +231,39 @@ button.jsdialog[disabled] img {
 }
 
 .button-primary {
-	background-color: var(--color-primary-dark);
-	border-color: var(--color-primary-darker);
+	background-color: rgb(var(--doc-type, 0, 99, 177));
+	border-color: rgb(var(--doc-type, 0, 99, 177));
 	color: var(--color-primary-text);
+}
+
+[data-theme='dark'] [data-doctype] .button-primary:not(:disabled) {
+	color: var(--color-main-background);
 }
 
 /* Primary hover: invert to a light fill with the primary color as text. */
 .button-primary:hover,
 .button-primary:focus-visible {
-	background-color: var(--color-btn-primary-hover-bg);
-	border-color: var(--color-primary-dark);
-	color: var(--color-primary-dark);
+	background-color: rgba(var(--doc-type, 0, 99, 177), 0.06);
+	border-color: rgb(var(--doc-type, 0, 99, 177));
+	color: rgb(var(--doc-type, 0, 99, 177));
+}
+
+[data-theme='dark'] [data-doctype] .button-primary:not(:disabled):hover,
+[data-theme='dark'] [data-doctype] .button-primary:not(:disabled):focus-visible {
+	background-color: rgba(0, 0, 0, 0.3);
+}
+
+.button-primary:disabled {
+	background-color: var(--color-background-lighter);
+	border-color: var(--color-border-dark);
+	color: var(--color-text-light);
+	cursor: default;
+}
+
+@media (forced-colors: active) {
+	.button-primary:not(:disabled) {
+		border: 2px solid ButtonText;
+	}
 }
 
 .button-danger {

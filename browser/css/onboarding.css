@@ -203,8 +203,8 @@
    focused primary button to a pale fill, and its border then reads as a second
    ring inside the outline. Here the fill stays and the ring is drawn outside
    the button in the text colour, which clears the card in both themes. The
-   fill is rgb(var(--doc-type)), the colour a primary button has under
-   branding and the accent of the tour, the same as the highlight ring and the
+   fill is rgb(var(--doc-type)), the colour of a primary button and
+   the accent of the tour, the same as the highlight ring and the
    current dot. The pointer over the button still gives the shared hover
    look. */
 #modal-dialog-onboarding-tour #onboarding-next-button.button-primary:focus-visible {
