@@ -5,7 +5,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 package org.libreoffice.androidlib;
-import android.net.Uri;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
@@ -83,8 +82,7 @@ public class COWebViewClient extends WebViewClient {
     }
 
     private WebResourceResponse handleMediaRequest(WebResourceRequest request) {
-        Uri uriDecoded = Uri.parse(Uri.decode(request.getUrl().toString())); // We have to do this weird-looking decoding step as presentation mode gives us a broken (i.e. parameters are encoded, including the & delimiter, etc.) URI
-        String tag = uriDecoded.getQueryParameter("Tag");
+        String tag = request.getUrl().getQueryParameter("Tag");
 
         if (tag == null) {
             return response(404, "Not Found");

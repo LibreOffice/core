@@ -69,15 +69,11 @@ final class CoolURLSchemeHandler: NSObject, WKURLSchemeHandler {
         // already finished by the time WebKit can ask for a stop.
     }
 
-    /// The value of the Tag query parameter. The server percent-encodes the "&" between the
-    /// parameters, so the query is decoded once before it is split.
+    /// The value of the Tag query parameter.
     private static func tag(in url: URL) -> String? {
-        guard let query = URLComponents(url: url, resolvingAgainstBaseURL: false)?
-                .percentEncodedQuery?.removingPercentEncoding else {
-            return nil
-        }
-        for parameter in query.split(separator: "&") where parameter.hasPrefix("Tag=") {
-            return String(parameter.dropFirst("Tag=".count))
+        let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems ?? []
+        for item in items where item.name == "Tag" {
+            return item.value
         }
         return nil
     }

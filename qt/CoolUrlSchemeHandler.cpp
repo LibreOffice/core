@@ -36,13 +36,10 @@ void CoolUrlSchemeHandler::requestStarted(QWebEngineUrlRequestJob* job)
     const QUrl url = job->requestUrl();
     const bool isVtt = (url.path() == QStringLiteral("/cool/mediavtt"));
 
-    // The server percent-encodes the '&' query separators (see
-    // ClientSession::createPublicURI), so decode once before parsing. Each value is then decoded
-    // in full, as the server does for a media request, and getDocKey decodes the WOPISrc once
-    // more. A file name with a space or parentheses is encoded once more than the rest of the
-    // WOPISrc, and only then matches the key of its DocumentBroker.
-    QUrlQuery query;
-    query.setQuery(QUrl::fromPercentEncoding(url.query(QUrl::FullyEncoded).toUtf8()));
+    // Each value is decoded in full, as the server does for a media request, and getDocKey decodes
+    // the WOPISrc once more. A file name with a space or parentheses is encoded once more than the
+    // rest of the WOPISrc, and only then matches the key of its DocumentBroker.
+    const QUrlQuery query(url.query(QUrl::FullyEncoded));
     const std::string wopiSrc = query.queryItemValue("WOPISrc", QUrl::FullyDecoded).toStdString();
     const std::string tag = query.queryItemValue("Tag", QUrl::FullyDecoded).toStdString();
 

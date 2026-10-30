@@ -2611,7 +2611,7 @@ static HRESULT webResourceRequestedHandler(ICoreWebView2Environment* env,
         return hr;
     }
 
-    std::string uri2 = Uri::decode(Util::wide_string_to_string(uri.get()));
+    std::string uri2 = Util::wide_string_to_string(uri.get());
     Poco::URI requestUri(uri2);
     Poco::URI::QueryParameters params = requestUri.getQueryParameters();
     std::string wopiSrc, tag;

@@ -140,7 +140,7 @@
     
 - (void)handleMediaTask:(id<WKURLSchemeTask>)urlSchemeTask {
     // Get tag from request
-    Poco::URI requestUri([[[urlSchemeTask.request.URL absoluteString] stringByRemovingPercentEncoding] UTF8String]);
+    Poco::URI requestUri([[urlSchemeTask.request.URL absoluteString] UTF8String]);
     Poco::URI::QueryParameters params = requestUri.getQueryParameters();
     std::string tag;
     
