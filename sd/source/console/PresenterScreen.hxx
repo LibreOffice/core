@@ -215,16 +215,15 @@ private:
             Returns -1 when the presenter screen can or shall not be
             displayed.
     */
-    static sal_Int32 GetPresenterScreenNumber (
-                const css::uno::Reference<css::presentation::XPresentation2>& rxPresentation);
+    static sal_Int32 GetPresenterScreenNumber(const rtl::Reference<sd::SlideShow>& rpSlideShow);
 
     static sal_Int32 GetPresenterScreenFromScreen( sal_Int32 nPresentationScreen );
 
     /** Create a resource id for the full screen background pane so that it
         is displayed on another screen than the full screen presentation.
     */
-    static rtl::Reference<sd::framework::ResourceId> GetMainPaneId (
-        const css::uno::Reference<css::presentation::XPresentation2>& rxPresentation);
+    static rtl::Reference<sd::framework::ResourceId>
+    GetMainPaneId(const rtl::Reference<sd::SlideShow>& rpSlideShow);
 };
 
 }

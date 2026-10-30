@@ -432,19 +432,19 @@ void PresenterScreen::CheckNextSlideUpdate(const Reference<drawing::XShape>& rxS
  * Return the real VCL screen number to show the presenter console
  * on or -1 to not show anything.
  */
-sal_Int32 PresenterScreen::GetPresenterScreenNumber (
-    const Reference<presentation::XPresentation2>& rxPresentation)
+sal_Int32
+PresenterScreen::GetPresenterScreenNumber(const rtl::Reference<sd::SlideShow>& rpSlideShow)
 {
     sal_Int32 nScreenNumber (0);
     try
     {
-        if ( ! rxPresentation.is())
+        if (!rpSlideShow.is())
             return -1;
 
         // Determine the screen on which the full screen presentation is being
         // displayed.
         sal_Int32 nDisplayNumber (-1);
-        if ( ! (rxPresentation->getPropertyValue(u"Display"_ustr) >>= nDisplayNumber))
+        if (!(rpSlideShow->getPropertyValue(u"Display"_ustr) >>= nDisplayNumber))
             return -1;
         if (nDisplayNumber == -1)
         {
@@ -523,12 +523,12 @@ sal_Int32 PresenterScreen::GetPresenterScreenFromScreen( sal_Int32 nPresentation
     return nPresenterScreenNumber;
 }
 
-rtl::Reference<sd::framework::ResourceId> PresenterScreen::GetMainPaneId (
-    const Reference<presentation::XPresentation2>& rxPresentation)
+rtl::Reference<sd::framework::ResourceId>
+PresenterScreen::GetMainPaneId(const rtl::Reference<sd::SlideShow>& rpSlideShow)
 {
     // A negative value means that the presentation spans all available
     // displays.  That leaves no room for the presenter.
-    const sal_Int32 nScreen(GetPresenterScreenNumber(rxPresentation));
+    const sal_Int32 nScreen(GetPresenterScreenNumber(rpSlideShow));
     if (nScreen < 0)
         return nullptr;
 
