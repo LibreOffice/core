@@ -90,6 +90,11 @@ public:
     static void SendCaret(const SfxViewShell& rSmViewShell);
 
     void Dispatch(const OUString& cmd, const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) const;
+    /// Dispatches the command to the formula, which tells the listener when it is done. Answers
+    /// whether the formula takes the command.
+    bool Dispatch(const OUString& cmd,
+                  const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments,
+                  const cpo::uno::Reference<css::frame::XDispatchResultListener>& xListener) const;
 
     bool postMouseEvent(COKitMouseEventType eType, int nX, int nY, int nCount, int nButtons,
                         int nModifier,

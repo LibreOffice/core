@@ -18,6 +18,7 @@
 #include <sfx2/viewsh.hxx>
 
 #include <comphelper/dispatchcommand.hxx>
+#include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/fract.hxx>
 #include <tools/UnitConversion.hxx>
@@ -62,6 +63,13 @@ void KitStarMathHelper::Dispatch(
 {
     if (mxFrame)
         comphelper::dispatchCommand(cmd, mxFrame, rArguments);
+}
+
+bool KitStarMathHelper::Dispatch(
+    const OUString& cmd, const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments,
+    const cpo::uno::Reference<css::frame::XDispatchResultListener>& xListener) const
+{
+    return mxFrame && comphelper::dispatchCommand(cmd, mxFrame, rArguments, xListener);
 }
 
 namespace
