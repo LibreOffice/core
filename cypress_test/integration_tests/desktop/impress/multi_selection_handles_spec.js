@@ -23,6 +23,22 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Handles of several selecte
 		cy.cGet('[id^="test-div-shape-handle-index"]').should('have.length', 16);
 	}
 
+	// A turning arrow stands over a rotation handle. The pointer then tells the user what a
+	// drag on the handle does.
+	it('The pointer over a rotation handle is a turning arrow.', function() {
+		selectBothShapes();
+
+		cy.cGet('#test-div-shape-handle-rotation').then(($handle) => {
+			const rect = $handle[0].getBoundingClientRect();
+			cy.cGet('body').realMouseMove(
+				rect.left + rect.width / 2, rect.top + rect.height / 2);
+
+			cy.cGet('#document-canvas').should(($canvas) => {
+				expect($canvas[0].style.cursor).to.contain('cursors/rotate.svg');
+			});
+		});
+	});
+
 	function getHandlesSection(win) {
 		return win.app.sectionContainer.getSectionWithName(
 			win.app.CSections.ShapeHandlesSection.name);

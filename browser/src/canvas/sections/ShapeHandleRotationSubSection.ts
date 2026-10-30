@@ -41,7 +41,12 @@ class ShapeHandleRotationSubSection extends ShapeHandleSubSection {
 		super(parentHandlerSection, sectionName, size, documentPosition, ownInfo);
 
 		this.sectionProperties.lastDraggingDistance = null;
-		this.sectionProperties.cursorStyle = 'pointer';
+		/*
+			A turning arrow tells the user what a drag on this handle does. Its hotspot is the
+			middle of the arrow, and a browser that will not take the picture shows the hand.
+		*/
+		this.sectionProperties.cursorStyle =
+			'url(' + app.LOUtil.getURL('images/cursors/rotate.svg') + ') 12 12, pointer';
 
 		app.events.on('TextCursorVisibility', this.onTextCursorVisibility.bind(this));
 	}
@@ -144,16 +149,22 @@ class ShapeHandleRotationSubSection extends ShapeHandleSubSection {
 	}
 
 	onMouseMove(position: cool.SimplePoint, distance: number[]) {
-		if (this.containerObject.isDraggingSomething()) {
-			this.sectionProperties.lastDraggingDistance = distance;
+		if (!this.containerObject.isDraggingSomething()) {
+			// Keep the rotate pointer while the mouse is over the handle, because other
+			// code may have replaced it.
+			if (this.context.canvas.style.cursor !== this.sectionProperties.cursorStyle)
+				this.context.canvas.style.cursor = this.sectionProperties.cursorStyle;
+			return;
+		}
 
-			if (this.containerObject.isDraggingSomething() && this.sectionProperties.parentHandlerSection.sectionProperties.svg) {
-				this.sectionProperties.parentHandlerSection.sectionProperties.svg.style.opacity = 0.5;
-				const angleDifference = -this.getAngleDifference() / 100;
-				this.sectionProperties.parentHandlerSection.sectionProperties.svg.style.transform = 'rotate(' + angleDifference + 'deg)';
-				this.containerObject.requestReDraw();
-				this.sectionProperties.parentHandlerSection.showSVG();
-			}
+		this.sectionProperties.lastDraggingDistance = distance;
+
+		if (this.sectionProperties.parentHandlerSection.sectionProperties.svg) {
+			this.sectionProperties.parentHandlerSection.sectionProperties.svg.style.opacity = 0.5;
+			const angleDifference = -this.getAngleDifference() / 100;
+			this.sectionProperties.parentHandlerSection.sectionProperties.svg.style.transform = 'rotate(' + angleDifference + 'deg)';
+			this.containerObject.requestReDraw();
+			this.sectionProperties.parentHandlerSection.showSVG();
 		}
 	}
 }
