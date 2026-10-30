@@ -1339,6 +1339,43 @@ class GraphicSelection {
 		}
 	}
 
+	private static followingTheFormula = false;
+
+	/*
+		A formula being edited grows and shrinks with what is typed, and the engine sends it anew
+		each time, with the frame it has then. Its window here follows that frame, so what is
+		typed is never drawn in the pale surround.
+	*/
+	private static followTheFormula(): void {
+		if (this.followingTheFormula) return;
+		this.followingTheFormula = true;
+
+		RenderManager.onVectorChanged(() => {
+			if (
+				!this.inPlaceMath ||
+				!this.inPlaceArea ||
+				this.inPlaceObject === undefined
+			)
+				return;
+			const formula = RenderGeometrySection.objectOf(this.inPlaceObject);
+			if (
+				!formula ||
+				formula.x === undefined ||
+				formula.y === undefined ||
+				formula.width === undefined ||
+				formula.height === undefined
+			)
+				return;
+
+			const area = [formula.x, formula.y, formula.width, formula.height];
+			if (area.every((value, at) => value === this.inPlaceArea[at])) return;
+
+			this.inPlaceArea = area;
+			this.showInPlaceFrame();
+			app.sectionContainer?.requestReDraw();
+		});
+	}
+
 	static showInPlaceFrame() {
 		const msgData: any[] = this.inPlaceArea.slice();
 		msgData[4] = 0;
@@ -1823,13 +1860,20 @@ class GraphicSelection {
 			try {
 				var msgData = this.parseMessage(textMsg);
 				const isMathObject = this.isMathSelection(msgData);
-				if (isMathObject && app.map._docLayer._docType !== 'text') {
+				// the tiles show a formula being edited as a selection that grows with it; the
+				// vector view stands in it as in any object active in place
+				if (
+					isMathObject &&
+					app.map._docLayer._docType !== 'text' &&
+					!RenderManager.isVectorRendering()
+				) {
 					this.inPlaceArea = null;
 					this.inPlaceActive = false;
 					this.inPlaceObject = undefined;
 					this.extractAndSetGraphicSelection(msgData.slice(0, 4));
 				} else if (msgData.length > 1) {
 					this.inPlaceMath = isMathObject;
+					if (isMathObject) this.followTheFormula();
 					this.inPlaceArea = msgData.slice(0, 4);
 					// the object that was selected is the one now active, and no press has left it
 					if (this.inPlaceObject === undefined) {
@@ -1864,6 +1908,11 @@ class GraphicSelection {
 				selected: those parts become the selection, with their handles, while the object
 				stays active. Any other report keeps the frame of the active object.
 			*/
+			// a formula grows and shrinks as it is typed, its window with it
+			if (this.inPlaceMath && RenderManager.isVectorRendering()) {
+				const reported = this.parseMessage(textMsg);
+				if (reported.length > 3) this.inPlaceArea = reported.slice(0, 4);
+			}
 			if (this.inPlaceActive && RenderManager.isVectorRendering()) {
 				const parts = this.selectedObjectIDsOf(
 					this.parseMessage(textMsg)[5],

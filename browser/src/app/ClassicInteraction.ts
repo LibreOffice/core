@@ -813,7 +813,7 @@ class ClassicInPlaceContext implements InteractionContext {
 	}
 
 	/// Whether the last press landed outside the upright rectangle of the object's window.
-	private static pressedOutside(): boolean {
+	protected static pressedOutside(): boolean {
 		const at = GraphicSelection.pressedAt;
 		const area = GraphicSelection.inPlaceArea;
 		if (!at || !area) return false;
@@ -993,11 +993,54 @@ class ClassicInPlaceContext implements InteractionContext {
 	}
 }
 
+/*
+	A formula active in place, edited in its own view the engine keeps: what is typed, a press
+	inside it and the keys that move in it are the formula's, so they all go to the engine. A
+	press outside leaves the formula as it leaves a chart, and so does Escape, which keeps the
+	formula selected. It has no parts of its own to select or to go through.
+*/
+class ClassicFormulaContext extends ClassicInPlaceContext {
+	public press(hit: number | undefined, modifier: number): boolean {
+		if (!ClassicInPlaceContext.pressedOutside()) return false;
+		return super.press(hit, modifier);
+	}
+
+	public takesHoldFor(hit: number, modifier: number): number | undefined {
+		if (!ClassicInPlaceContext.pressedOutside()) return undefined;
+		return super.takesHoldFor(hit, modifier);
+	}
+
+	public escape(): boolean {
+		const place = Interaction.placeOf(GraphicSelection.selectedObjectIDs);
+		if (place.kind !== 'inPlace') return false;
+
+		// selecting the formula itself ends its edit in the engine and keeps it selected
+		const object = place.object;
+		GraphicSelection.leaveInPlace();
+		GraphicSelection.selectAndShow([object]);
+		return true;
+	}
+
+	public tabKey(_forwards: boolean): boolean {
+		return false;
+	}
+
+	public enterKey(): boolean {
+		return false;
+	}
+
+	public leaveKey(): boolean {
+		return false;
+	}
+}
+
 class ClassicInteractionSet implements InteractionSet {
 	public contextFor(place: InteractionPlace): InteractionContext {
 		switch (place.kind) {
 			case 'inPlace':
-				return new ClassicInPlaceContext();
+				return GraphicSelection.inPlaceMath
+					? new ClassicFormulaContext()
+					: new ClassicInPlaceContext();
 			case 'group':
 				return new ClassicGroupContext(place.group);
 			case 'diagram':
