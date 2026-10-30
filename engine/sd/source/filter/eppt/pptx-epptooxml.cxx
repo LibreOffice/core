@@ -189,8 +189,6 @@ class PowerPointShapeExport : public ShapeExport
     bool                mbSlideMasterPart = false;
     /// How many placeholders of each name, such as title or body, the slideMaster part states
     std::map<OString, sal_Int32> maSlideMasterPlaceholders;
-    /// How many placeholders of each name this part has written, so the next one is the next
-    std::map<OString, sal_Int32> maWrittenPlaceholders;
 public:
     sal_Int32 CountStatedOnSlideMaster(std::string_view aType) const
     {
@@ -589,39 +587,25 @@ std::optional<sal_Int32> statedPlaceholderIndex(const Reference<css::drawing::XS
     }
 }
 
-/** Whether the document stated any text for the nth placeholder of this kind on this page.
+/** Whether the document stated any text for the area this shape stands for.
 
     Unknown where the import kept nothing, which is every document it did not read. */
-std::optional<bool> statedPlaceholderText(const Reference<css::drawing::XDrawPage>& rxPage,
-                                          const rtl::Reference<SdXImpressDocument>& rxModel,
-                                          std::string_view aModelName, sal_Int32 nOrdinal)
+std::optional<bool> statedPlaceholderText(const Reference<css::drawing::XShape>& rxShape)
 {
-    const OUString aPageKey = placeholderPageKey(rxPage);
-    if (aPageKey.isEmpty() || !rxModel.is()
-        || !rxModel->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
+    SdrObject* pObject = SdrObject::getSdrObjectFromXShape(rxShape);
+    if (!pObject)
         return {};
 
     try
     {
-        comphelper::SequenceAsHashMap aGrabBag(
-            rxModel->getPropertyValue(u"InteropGrabBag"_ustr));
-        const auto aEntry = aGrabBag.find(u"OOXPlaceholderTypes"_ustr);
-        if (aEntry == aGrabBag.end())
+        uno::Any aHeld;
+        pObject->GetGrabBagItem(aHeld);
+        comphelper::SequenceAsHashMap aGrabBag(aHeld);
+        const auto aEntry = aGrabBag.find(u"mso-ph-had-text"_ustr);
+        bool bStatedText = false;
+        if (aEntry == aGrabBag.end() || !(aEntry->second >>= bStatedText))
             return {};
-
-        comphelper::SequenceAsHashMap aPerPage(aEntry->second);
-        const auto aPage = aPerPage.find(aPageKey);
-        if (aPage == aPerPage.end())
-            return {};
-
-        comphelper::SequenceAsHashMap aOnPage(aPage->second);
-        const auto aList = aOnPage.find(
-            "text:" + OStringToOUString(aModelName, RTL_TEXTENCODING_UTF8));
-        uno::Sequence<sal_Int32> aStated;
-        if (aList == aOnPage.end() || !(aList->second >>= aStated)
-            || nOrdinal >= aStated.getLength())
-            return {};
-        return aStated[nOrdinal] != 0;
+        return bStatedText;
     }
     catch (const uno::Exception&)
     {
@@ -3612,10 +3596,6 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
         = ePlaceholder == Footer || ePlaceholder == DateAndTime || ePlaceholder == SlideNumber;
     OString aTypeName(getPlaceholderTypeName(ePlaceholder));
 
-    // How many of this kind this part has already written, which is what tells one of several
-    // areas of one kind from the next
-    const sal_Int32 nOrdinal = mbSlideMasterPart ? 0 : maWrittenPlaceholders[aTypeName]++;
-
     // The format knows more kinds of placeholder than the model does, so the name the document
     // gave this one is given back where the model still stands for the same thing. A master
     // states none of those names, and keeps the one it has.
@@ -3723,9 +3703,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
     bool bIsPrompt = bIsEmptyPresObj;
     if (mbMaster && !mbSlideMasterPart && !bIsPrompt)
     {
-        auto* pExport = static_cast<PowerPointExport*>(GetFB());
-        const std::optional<bool> oStatedText = statedPlaceholderText(
-            pExport->GetCurrentPage(), pExport->GetModel(), aTypeName, nOrdinal);
+        const std::optional<bool> oStatedText = statedPlaceholderText(xShape);
         bIsPrompt = oStatedText.has_value() && !*oStatedText;
     }
     // Field placeholders carry their field content.

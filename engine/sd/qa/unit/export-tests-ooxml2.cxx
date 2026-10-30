@@ -1524,6 +1524,61 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testLayoutTellsItsPlaceholdersApart)
     assertXPath(pLayout, aTree + "/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='body'][@idx='16']", 1);
 }
 
+// Each area of a layout keeps the answer about its own text, however the layout changes
+// around it.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testLayoutAreasKeepTheirOwnText)
+{
+    // Given a layout holding five areas for text, where the first two state text of their own
+    // and the last three state none:
+    createSdImpressDoc("pptx/tdf103477.pptx");
+    uno::Reference<drawing::XMasterPagesSupplier> xSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xMasters(xSupplier->getMasterPages(),
+                                                     uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xLayout;
+    for (sal_Int32 i = 0; i < xMasters->getCount(); ++i)
+    {
+        uno::Reference<container::XNamed> xNamed(xMasters->getByIndex(i), uno::UNO_QUERY);
+        if (xNamed.is() && xNamed->getName() == "Title 1 Top 3 Bottom")
+        {
+            xLayout.set(xNamed, uno::UNO_QUERY_THROW);
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(xLayout.is());
+
+    // When the first of those areas is taken away:
+    uno::Reference<drawing::XShape> xFirstArea;
+    for (sal_Int32 i = 0; i < xLayout->getCount(); ++i)
+    {
+        uno::Reference<drawing::XShape> xShape(xLayout->getByIndex(i), uno::UNO_QUERY_THROW);
+        if (xShape->getShapeType() == "com.sun.star.presentation.OutlinerShape")
+        {
+            xFirstArea = xShape;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(xFirstArea.is());
+    xLayout->remove(xFirstArea);
+
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pLayout = parseExport(u"ppt/slideLayouts/slideLayout6.xml"_ustr);
+    static constexpr OString aArea("/p:sldLayout/p:cSld/p:spTree/p:sp[p:nvSpPr/p:nvPr/p:ph"_ostr);
+
+    // The area that states text of its own keeps it.
+    CPPUNIT_ASSERT(countXPathNodes(pLayout, aArea + "[@idx='13']]/p:txBody//a:r") > 0);
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 7
+    // i.e. the areas were answered by counting, so each one that was left took the answer of
+    // the area before it, and the words a reader shows in an empty area were written to the
+    // file as though the document had stated them.
+    assertXPath(pLayout, aArea + "[@idx='15']]/p:txBody//a:r", 0);
+    assertXPath(pLayout, aArea + "[@idx='16']]/p:txBody//a:r", 0);
+    assertXPath(pLayout, aArea + "[@idx='17']]/p:txBody//a:r", 0);
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testCentredTitleKeepsItsName)
 {
     // The format has a name of its own for the title of a title slide, and the model has no kind

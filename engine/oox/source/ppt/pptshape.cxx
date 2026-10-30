@@ -266,26 +266,6 @@ OUString modelPlaceholderName(sal_Int32 nSubType)
     return oox::TokenMap::getUnicodeTokenName(nSubType);
 }
 
-/** The name the model writes a placeholder of this kind back under.
-
-    The names that stand for the text of a slide all read as that text, so they are written back
-    under the one name. A number tells them apart, which is why the numbers are kept in a list
-    rather than one for each name. */
-OUString writtenPlaceholderName(sal_Int32 nSubType)
-{
-    switch (nSubType)
-    {
-        case XML_obj:
-        case XML_chart:
-        case XML_dgm:
-        case XML_tbl:
-        case XML_clipArt:
-            return u"body"_ustr;
-        default:
-            return modelPlaceholderName(nSubType);
-    }
-}
-
 /** Keeps the number the document gives an area, on the shape that stands for it.
 
     A page may state several areas of one kind, and a slide names the one of its layout that it
@@ -336,7 +316,7 @@ void keepStatedPlaceholderIndex(const Reference<XShape>& rxShape,
 }
 
 /// Keeps what a document states about a placeholder that the model has no room for
-void keepStatedPlaceholder(const SlidePersist& rSlidePersist,
+void keepStatedPlaceholder(const SlidePersist& rSlidePersist, const Reference<XShape>& rxShape,
                            oox::core::XmlFilterBase& rFilterBase, sal_Int32 nSubType,
                            bool bHasText)
 {
@@ -346,6 +326,19 @@ void keepStatedPlaceholder(const SlidePersist& rSlidePersist,
     // found again under the name it has here. It takes what its layout kept on the way out.
     if (!rSlidePersist.isMasterPage())
         return;
+
+    // Whether the document stated any text of its own here. A page that states none shows the
+    // prompt of whoever reads it, and that prompt belongs to the reader, not to the document,
+    // so it is not written back as though the document had said it. The answer is about this
+    // one area, so it is kept on the shape that stands for it.
+    if (SdrObject* pObject = SdrObject::getSdrObjectFromXShape(rxShape))
+    {
+        Any aHeld;
+        pObject->GetGrabBagItem(aHeld);
+        comphelper::SequenceAsHashMap aShapeBag(aHeld);
+        aShapeBag[u"mso-ph-had-text"_ustr] <<= bHasText;
+        pObject->SetGrabBagItem(Any(aShapeBag.getAsConstPropertyValueList()));
+    }
 
     try
     {
@@ -372,19 +365,6 @@ void keepStatedPlaceholder(const SlidePersist& rSlidePersist,
         if (aStated != aModel)
             aOnPage[aModel] <<= aStated;
 
-        // Whether the document stated any text of its own here. A page that states none shows
-        // the prompt of whoever reads it, and that prompt belongs to the reader, not to the
-        // document, so it is not written back as though the document had said it.
-        {
-            const OUString aTextKey = "text:" + writtenPlaceholderName(nSubType);
-            cpo::uno::Sequence<sal_Int32> aHadText;
-            const auto aHeldText = aOnPage.find(aTextKey);
-            if (aHeldText != aOnPage.end())
-                aHeldText->second >>= aHadText;
-            aHadText.realloc(aHadText.getLength() + 1);
-            aHadText.getArray()[aHadText.getLength() - 1] = bHasText ? 1 : 0;
-            aOnPage[aTextKey] <<= aHadText;
-        }
         aPerPage[aPageKey] <<= aOnPage.getAsConstPropertyValueList();
         aGrabBag[aKey] <<= aPerPage.getAsConstPropertyValueList();
         xDocProps->setPropertyValue(u"InteropGrabBag"_ustr,
@@ -700,7 +680,7 @@ void PPTShape::addShape(
             // The format knows more kinds of placeholder than the model does, so a centred title
             // reads as a title and a chart or a diagram reads as the text of a slide. The name
             // the document gave it is kept beside the model, to be given back on the way out.
-            keepStatedPlaceholder(rSlidePersist, rFilterBase, mnSubType,
+            keepStatedPlaceholder(rSlidePersist, xShape, rFilterBase, mnSubType,
                                   getTextBody() && !getTextBody()->isEmpty());
             keepStatedPlaceholderIndex(xShape, rFilterBase, getSubTypeIndex());
 
