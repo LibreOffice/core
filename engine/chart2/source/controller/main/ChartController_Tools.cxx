@@ -356,13 +356,15 @@ void ChartController::executeDispatch_FontUnderline(
     OUString aPropName = u"CharUnderline"_ustr;
     sal_Int16 nFontUnderline = 0;
     sal_Int32 nFontUnderline32 = 0;
-    if (!(rArgs[0].Value >>= nFontUnderline) && (rArgs[0].Value >>= nFontUnderline32))
+    // the command comes with the underline to set, or without any, from a key, to toggle it
+    if (rArgs.hasElements() && !(rArgs[0].Value >>= nFontUnderline)
+        && (rArgs[0].Value >>= nFontUnderline32))
     {
         nFontUnderline = nFontUnderline32;
     }
     else
     {
-        if (lcl_arePropertiesSame(xProperties, aPropName))
+        if (!xProperties.empty() && lcl_arePropertiesSame(xProperties, aPropName))
         {
             xProperties[0]->getPropertyValue(aPropName) >>= nFontUnderline;
         }
