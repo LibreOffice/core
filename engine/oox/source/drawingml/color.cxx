@@ -408,6 +408,8 @@ void Color::setSchemeClr( sal_Int32 nToken )
     meMode = (nToken == XML_phClr) ? model::ColorType::Placeholder :
         model::ColorType::Theme;
     mnC1 = nToken;
+    // The name belongs to the slot the colour had before, so it goes with the old value.
+    msSchemeName.clear();
     if (meMode == model::ColorType::Theme)
         meThemeColorType = schemeTokenToThemeColorType(nToken);
 }
@@ -699,7 +701,13 @@ sal_Int16 Color::getLumOff() const
 
 model::ComplexColor Color::getComplexColor() const
 {
-    auto aComplexColor = model::ComplexColor::Theme(model::convertToThemeColorType(getSchemeColorIndex()));
+    // A colour read from a document names the slot of the theme it comes from, and one the
+    // filter makes up carries that slot as a value, so both kinds answer with the slot.
+    model::ThemeColorType eThemeType = model::convertToThemeColorType(getSchemeColorIndex());
+    if (eThemeType == model::ThemeColorType::Unknown)
+        eThemeType = getThemeColorType();
+
+    auto aComplexColor = model::ComplexColor::Theme(eThemeType);
 
     if (getTintOrShade() > 0)
     {

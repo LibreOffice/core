@@ -882,6 +882,21 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testEmptyParagraphAfterALinkStaysEmpty)
     assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p[2]//a:hlinkClick", 0);
 }
 
+// A link that states no colour of its own is saved stating the colour the theme gives links.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testLinkWithoutAColourOfItsOwnKeepsTheThemeColour)
+{
+    // Given a paragraph holding a link that states no colour:
+    createSdImpressDoc("pptx/empty-paragraph-after-a-link.pptx");
+
+    save(TestFilter::PPTX);
+
+    // The colour saved with the link is the one the theme holds for links, so the link reads
+    // the way the theme says and follows it when the theme changes.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p[1]/a:r/a:rPr/a:solidFill/a:schemeClr", "val",
+                u"hlink");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
