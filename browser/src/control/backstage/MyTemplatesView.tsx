@@ -26,11 +26,23 @@ namespace BackstageTemplates {
   }
 
   export interface ManageTemplatesProps {
-    templates: UserTemplate[];
+    // False when the user has added no template yet.
+    hasTemplates: boolean;
+    searchQuery: string;
+    filter: TemplateFilter;
+    // The part below the search field and the filter chips.
+    list: HTMLElement;
     onAdd: () => void;
+    onBack: () => void;
+    onSearchInput: (value: string) => void;
+    onFilterChange: (filter: TemplateFilter) => void;
+  }
+
+  export interface ManageTemplatesListProps {
+    templates: UserTemplate[];
+    searchQuery: string;
     onRename: (template: UserTemplate) => void;
     onRemove: (template: UserTemplate) => void;
-    onBack: () => void;
   }
 
   export interface AddTemplateDialogProps {
@@ -147,33 +159,60 @@ namespace BackstageTemplates {
             <span class="backstage-sidebar-back-icon" aria-hidden="true" />
           </button>
           <h2 class="backstage-content-title">{_('Manage templates')}</h2>
-        </div>
-        <p class="backstage-content-description">
-          {_(
-            "Rename or remove the templates you added. Built-in templates can't be changed.",
-          )}
-        </p>
-        <div class="backstage-manage-templates-actions">
           <button
             type="button"
-            class="button button-primary"
+            class="button backstage-manage-add-template-button"
             onClick={props.onAdd}
           >
-            {_('Add template')}
+            <span class="backstage-add-template-plus" aria-hidden="true" />
+            <span>{_('Add template')}</span>
           </button>
         </div>
-        {props.templates.length ? (
-          manageTemplatesTable(props)
+        <p class="backstage-content-description">
+          {props.hasTemplates
+            ? _(
+                "Rename or remove the templates you added. Built-in templates can't be changed.",
+              )
+            : _('Templates you add will appear here and in New.')}
+        </p>
+        {props.hasTemplates ? (
+          <>
+            <div class="template-search-bar">
+              {searchInput(
+                props.searchQuery,
+                _('Search my templates'),
+                props.onSearchInput,
+              )}
+              {filterChips(props.filter, props.onFilterChange)}
+            </div>
+            {props.list}
+          </>
         ) : (
-          <p class="backstage-content-description">
-            {_('You have not added any templates yet.')}
-          </p>
+          <div class="backstage-manage-templates-empty">
+            <h3 class="backstage-manage-templates-empty-title">
+              {_('No templates yet')}
+            </h3>
+            <p class="backstage-content-description">
+              {_('Add a template to start new documents from your own layout.')}
+            </p>
+          </div>
         )}
       </div>
     );
   }
 
-  function manageTemplatesTable(props: ManageTemplatesProps): HTMLElement {
+  // The table of the templates that match the search and the filter.
+  export function manageTemplatesList(
+    props: ManageTemplatesListProps,
+  ): HTMLElement {
+    if (!props.templates.length)
+      return (
+        <p class="template-grid-empty">
+          {props.searchQuery.trim()
+            ? _('No templates match your search.')
+            : _('No templates of this type.')}
+        </p>
+      );
     return (
       <table class="backstage-manage-templates-table">
         <thead>

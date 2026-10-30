@@ -122,7 +122,11 @@ namespace BackstageTemplates {
         {blankTemplatesRow(props.blankTemplates, props.onTemplateClick)}
         <h3 class="backstage-templates-heading">{_('Templates')}</h3>
         <div class="template-search-bar">
-          {searchInput(props.searchQuery, props.onSearchInput)}
+          {searchInput(
+            props.searchQuery,
+            _('Search templates'),
+            props.onSearchInput,
+          )}
           {filterChips(props.filter, props.onFilterChange)}
         </div>
         {props.sections}
@@ -153,7 +157,7 @@ namespace BackstageTemplates {
     return labels[type];
   }
 
-  function filterChips(
+  export function filterChips(
     active: TemplateFilter,
     onChange: (filter: TemplateFilter) => void,
   ): HTMLElement {
@@ -243,8 +247,9 @@ namespace BackstageTemplates {
     );
   }
 
-  function searchInput(
+  export function searchInput(
     query: string,
+    placeholder: string,
     onInput: (value: string) => void,
   ): HTMLElement {
     return (
@@ -253,7 +258,7 @@ namespace BackstageTemplates {
         <input
           type="search"
           class="template-search-input"
-          placeholder={_('Search templates')}
+          placeholder={placeholder}
           value={query}
           onInput={(e: Event) =>
             onInput((e.target as HTMLInputElement).value || '')

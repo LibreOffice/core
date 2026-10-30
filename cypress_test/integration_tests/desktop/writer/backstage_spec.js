@@ -257,6 +257,7 @@ describe(['tagdesktop'], 'Backstage View Tests', { testIsolation: false }, funct
 				if (message === 'GETUSERTEMPLATES')
 					return Promise.resolve([
 						{ id: 'A1', name: 'Invoice', type: 'calc', path: '/templates/A1/Invoice.ots', size: 2048 },
+						{ id: 'B2', name: 'Letter', type: 'writer', path: '/templates/B2/Letter.ott', size: 1024 },
 					]);
 				return Promise.resolve(undefined);
 			};
@@ -266,7 +267,7 @@ describe(['tagdesktop'], 'Backstage View Tests', { testIsolation: false }, funct
 		cy.cGet('#backstage-new').click();
 		cy.cGet('.backstage-my-templates-grid .backstage-template-card').should(function(cards) {
 			expect(cards.toArray().map(function(card) { return card.id; }))
-				.to.deep.equal(['', 'user-template-A1']);
+				.to.deep.equal(['', 'user-template-A1', 'user-template-B2']);
 		});
 		cy.cGet('.backstage-add-template-card').should('contain.text', 'Add template');
 
@@ -281,6 +282,19 @@ describe(['tagdesktop'], 'Backstage View Tests', { testIsolation: false }, funct
 		cy.cGet('#backstage-new').should('have.class', 'active');
 		cy.cGet('#backstage-user-template-A1 .backstage-manage-templates-name').should('have.text', 'Invoice');
 		cy.cGet('#backstage-user-template-A1 .backstage-template-type-tag').should('have.text', 'Spreadsheet');
+
+		// The search and the chips filter the list.
+		cy.cGet('.backstage-manage-templates .template-search-input').type('inv');
+		cy.cGet('#backstage-user-template-A1').should('exist');
+		cy.cGet('#backstage-user-template-B2').should('not.exist');
+		cy.cGet('.backstage-manage-templates .template-search-input').should('be.focused').clear();
+		cy.cGet('.backstage-manage-templates').contains('.template-type-button', 'Document').click();
+		cy.cGet('#backstage-user-template-A1').should('not.exist');
+		cy.cGet('#backstage-user-template-B2').should('exist');
+		cy.cGet('.backstage-manage-templates').contains('.template-type-button', 'Drawing').click();
+		cy.cGet('.backstage-manage-templates .template-grid-empty').should('have.text', 'No templates of this type.');
+		cy.cGet('.backstage-manage-templates').contains('.template-type-button', 'All').click();
+		cy.cGet('.backstage-manage-templates-row').should('have.length', 2);
 
 		cy.cGet('#backstage-user-template-A1 .backstage-remove-template-button').click();
 		cy.cGet('.backstage-modal-subtitle').should('contain.text', '"Invoice" will be removed');
@@ -314,6 +328,26 @@ describe(['tagdesktop'], 'Backstage View Tests', { testIsolation: false }, funct
 		cy.wrap(messages).should('deep.equal', [
 			'newdoc type=writer template=%2Ftemplates%2FB2%2FMonthly%20Letter.dotx basename=Monthly%20Letter',
 		]);
+	});
+
+	it('Shows an empty Manage templates view when the user has added no template', function() {
+		cy.then(() => {
+			var backstage = ensureBackstage(win);
+			backstage.hasUserTemplates = function() { return true; };
+			originalCall = win.postMobileCall;
+			win.postMobileCall = function(message) {
+				if (message === 'GETUSERTEMPLATES')
+					return Promise.resolve([]);
+				return Promise.resolve(undefined);
+			};
+			backstage.show();
+		});
+
+		cy.cGet('#backstage-new').click();
+		cy.cGet('.backstage-manage-templates-button').click();
+		cy.cGet('.backstage-manage-templates-empty-title').should('have.text', 'No templates yet');
+		cy.cGet('.backstage-manage-templates .template-search-input').should('not.exist');
+		cy.cGet('.backstage-manage-add-template-button').should('contain.text', 'Add template');
 	});
 
 	it('Closes via the sidebar back button', function() {

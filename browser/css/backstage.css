@@ -354,7 +354,11 @@
  * open "Add Cloud +" actions. Follows the canonical secondary button: 32px
  * tall via 8px/12px spacing tokens, --border-radius corners, default font. */
 #backstage-view .backstage-home-more-button,
-#backstage-view .backstage-open-add-cloud-button {
+#backstage-view .backstage-open-add-cloud-button,
+#backstage-view .backstage-manage-add-template-button,
+#backstage-view .backstage-manage-templates-button,
+#backstage-view .backstage-rename-template-button,
+#backstage-view .backstage-remove-template-button {
 	background: var(--color-accent-background);
 	border: 1px solid var(--color-border);
 	border-radius: var(--border-radius);
@@ -373,7 +377,13 @@
 #backstage-view .backstage-home-more-button:hover,
 #backstage-view .backstage-home-more-button:focus-visible,
 #backstage-view .backstage-open-add-cloud-button:hover,
-#backstage-view .backstage-open-add-cloud-button:focus-visible {
+#backstage-view .backstage-open-add-cloud-button:focus-visible,
+#backstage-view .backstage-manage-add-template-button:hover,
+#backstage-view .backstage-manage-add-template-button:focus-visible,
+#backstage-view .backstage-manage-templates-button:hover,
+#backstage-view .backstage-manage-templates-button:focus-visible,
+#backstage-view .backstage-rename-template-button:hover,
+#backstage-view .backstage-rename-template-button:focus-visible {
 	background-color: var(--color-background-dark);
 	border-color: var(--doc-type-color);
 	outline: none;
@@ -747,6 +757,30 @@
 	margin: 0;
 }
 
+.backstage-manage-add-template-button .backstage-add-template-plus {
+	width: 10px;
+	height: 10px;
+}
+
+.backstage-manage-templates .template-search-bar {
+	margin-bottom: var(--spacing-s);
+}
+
+.backstage-manage-templates-empty {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-top: 112px;
+	text-align: center;
+}
+
+.backstage-manage-templates-empty-title {
+	margin: 0 0 var(--spacing-m);
+	font-size: var(--header-font-size);
+	font-weight: 600;
+	color: var(--color-main-text);
+}
+
 #backstage-view .backstage-manage-templates-back {
 	display: inline-flex;
 	align-items: center;
@@ -765,19 +799,32 @@
 	background-color: var(--color-background-tabs-group);
 }
 
-.backstage-manage-templates-actions {
-	display: flex;
-	justify-content: flex-end;
-	margin-bottom: var(--spacing-l);
-}
-
-#backstage-view .backstage-manage-templates-actions .button,
+#backstage-view .backstage-manage-add-template-button,
 #backstage-view .backstage-manage-templates-row-actions .button {
 	display: inline-flex;
 	align-items: center;
 	gap: var(--spacing-s);
 	margin: 0;
 	line-height: normal;
+}
+
+#backstage-view .backstage-manage-add-template-button {
+	gap: calc(var(--spacing-m) + var(--spacing-xs));
+	margin-inline-start: auto;
+}
+
+#backstage-view .backstage-home-more-button,
+#backstage-view .backstage-manage-add-template-button,
+#backstage-view .backstage-manage-templates-button,
+#backstage-view .backstage-rename-template-button {
+	color: var(--doc-type-color);
+}
+
+[data-theme='dark'] #backstage-view .backstage-home-more-button,
+[data-theme='dark'] #backstage-view .backstage-manage-add-template-button,
+[data-theme='dark'] #backstage-view .backstage-manage-templates-button,
+[data-theme='dark'] #backstage-view .backstage-rename-template-button {
+	--doc-type-color: var(--color-main-text);
 }
 
 .backstage-template-action-icon {
@@ -870,9 +917,10 @@
 
 .backstage-template-type-tag {
 	display: inline-block;
-	padding: 5px;
+	padding: 2px 8px;
 	border-radius: var(--border-radius);
-	background-color: var(--color-background-darker);
+	background-color: var(--color-background-dark);
+	color: var(--color-text-dark);
 	font-size: var(--default-font-size);
 }
 

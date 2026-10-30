@@ -29,6 +29,9 @@ class BackstageView extends window.L.Class {
 	private templateSearchQuery: string = '';
 	private templateFilter: TemplateFilter = 'all';
 	private templateSectionsContainer: HTMLElement | null = null;
+	private manageSearchQuery: string = '';
+	private manageFilter: TemplateFilter = 'all';
+	private manageListContainer: HTMLElement | null = null;
 	private userTemplates: UserTemplate[] = [];
 	// Shows a dropped file in the open Add template dialog. Null while that dialog is closed.
 	private templateDropHandler: ((file: TemplateFileInfo) => void) | null = null;
@@ -931,16 +934,49 @@ class BackstageView extends window.L.Class {
 		this.clearContent();
 		this.templateSectionsContainer = null;
 
+		this.manageListContainer = this.buildManageTemplatesList();
 		this.contentArea.appendChild(
 			BackstageTemplates.manageTemplatesView({
-				templates: this.userTemplates,
+				hasTemplates: this.userTemplates.length > 0,
+				searchQuery: this.manageSearchQuery,
+				filter: this.manageFilter,
+				list: this.manageListContainer,
 				onAdd: () =>
 					this.showAddTemplateDialog(() => this.renderManageTemplatesView()),
-				onRename: (template) => this.showRenameTemplateDialog(template),
-				onRemove: (template) => this.showRemoveTemplateDialog(template),
 				onBack: () => this.renderNewView(),
+				onSearchInput: (value) => {
+					this.manageSearchQuery = value;
+					this.updateManageTemplatesList();
+				},
+				onFilterChange: (filter) => {
+					this.manageFilter = filter;
+					this.updateManageTemplatesList();
+				},
 			}),
 		);
+	}
+
+	private buildManageTemplatesList(): HTMLElement {
+		const query = this.manageSearchQuery.trim().toLowerCase();
+		return BackstageTemplates.manageTemplatesList({
+			templates: this.userTemplates.filter(
+				(template) =>
+					(this.manageFilter === 'all' ||
+						template.type === this.manageFilter) &&
+					(!query || template.name.toLowerCase().includes(query)),
+			),
+			searchQuery: this.manageSearchQuery,
+			onRename: (template) => this.showRenameTemplateDialog(template),
+			onRemove: (template) => this.showRemoveTemplateDialog(template),
+		});
+	}
+
+	// Only the list is rebuilt, so the search field keeps its focus.
+	private updateManageTemplatesList(): void {
+		if (!this.manageListContainer?.isConnected) return;
+		const list = this.buildManageTemplatesList();
+		this.manageListContainer.replaceWith(list);
+		this.manageListContainer = list;
 	}
 
 	private showAddTemplateDialog(onAdded: () => void): void {
