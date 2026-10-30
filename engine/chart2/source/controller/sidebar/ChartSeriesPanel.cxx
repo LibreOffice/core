@@ -33,6 +33,8 @@
 #include <RegressionCurveModel.hxx>
 #include <StatisticsHelper.hxx>
 #include <BaseCoordinateSystem.hxx>
+#include <ResId.hxx>
+#include <strings.hrc>
 
 #include <comphelper/processfactory.hxx>
 
@@ -284,7 +286,6 @@ ChartSeriesPanel::ChartSeriesPanel(
     , mxFTLabelPlacement(m_xBuilder->weld_label(u"label_box"_ustr))
     , mxLBLabelPlacement(m_xBuilder->weld_combo_box(u"comboboxtext_label"_ustr))
     , mxFTSeriesName(m_xBuilder->weld_label(u"label_series_name"_ustr))
-    , mxFTSeriesTemplate(m_xBuilder->weld_label(u"label_series_tmpl"_ustr))
     , mxModel(pController->getChartModel())
     , mxListener(new ChartSidebarModifyListener(this))
     , mxSelectionListener(new ChartSidebarSelectionListener(this, OBJECTTYPE_DATA_SERIES))
@@ -309,7 +310,6 @@ ChartSeriesPanel::~ChartSeriesPanel()
     mxLBLabelPlacement.reset();
 
     mxFTSeriesName.reset();
-    mxFTSeriesTemplate.reset();
 }
 
 void ChartSeriesPanel::Initialize()
@@ -361,7 +361,7 @@ void ChartSeriesPanel::updateData()
     mxLBLabelPlacement->set_sensitive(bLabelVisible);
     mxLBLabelPlacement->set_active(getDataLabelPlacement(mxModel, aCID));
 
-    OUString aFrameLabel = mxFTSeriesTemplate->get_label();
+    OUString aFrameLabel = SchResId(STR_DATA_SERIES_TITLE);
     aFrameLabel = aFrameLabel.replaceFirst("%1", getSeriesLabel(mxModel, aCID));
     mxFTSeriesName->set_label(aFrameLabel);
 }

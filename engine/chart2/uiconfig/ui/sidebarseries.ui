@@ -7,7 +7,7 @@
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <child>
-      <!-- n-columns=2 n-rows=10 -->
+      <!-- n-columns=2 n-rows=9 -->
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -161,18 +161,6 @@
           <packing>
             <property name="left-attach">0</property>
             <property name="top-attach">7</property>
-            <property name="width">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="label_series_tmpl">
-            <property name="can-focus">False</property>
-            <property name="halign">start</property>
-            <property name="label" translatable="yes" context="sidebarseries|label_series_tmpl">Data series '%1'</property>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">9</property>
             <property name="width">2</property>
           </packing>
         </child>

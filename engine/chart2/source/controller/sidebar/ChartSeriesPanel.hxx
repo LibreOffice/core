@@ -89,7 +89,6 @@ private:
     std::unique_ptr<weld::ComboBox> mxLBLabelPlacement;
 
     std::unique_ptr<weld::Label> mxFTSeriesName;
-    std::unique_ptr<weld::Label> mxFTSeriesTemplate;
 
     rtl::Reference<::chart::ChartModel> mxModel;
     cpo::uno::Reference<css::util::XModifyListener> mxListener;
