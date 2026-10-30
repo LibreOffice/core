@@ -39,6 +39,7 @@ $(eval $(call gb_CppunitTest_use_libraries,svgio,\
     test \
     unotest \
     tl \
+	utl \
     vcl \
 ))
 
