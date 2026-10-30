@@ -4987,6 +4987,14 @@ static void openStarterWindow()
 constexpr size_t MAX_FORM_BYTES = 2 * 1024 * 1024;
 constexpr ULONG FORM_CHUNK_BYTES = 4096;
 
+/// In the editor's iframe, replaces coolwsd's page with an empty document before it is parsed.
+constexpr const char* EMPTY_COOL_PAGE_SCRIPT = R"JS(
+if (window !== window.top && location.pathname.endsWith('/cool.html')) {
+    document.open();
+    document.close();
+}
+)JS";
+
 // The integrator opens a document by posting a form with the token and settings into the iframe
 // that holds the editor. We save that form because we don't want the cool.html from the remote
 // coolwsd to load. Later we would inject a script with this form which can repost this from
@@ -5122,6 +5130,18 @@ static void openAccountWindow(const std::string& url)
                                 })
                                 .Get(),
                             &token);
+
+                        account->webView->AddScriptToExecuteOnDocumentCreated(
+                            Util::string_to_wide_string(EMPTY_COOL_PAGE_SCRIPT).c_str(),
+                            Microsoft::WRL::Callback<
+                                ICoreWebView2AddScriptToExecuteOnDocumentCreatedCompletedHandler>(
+                                [](HRESULT result, LPCWSTR) -> HRESULT
+                                {
+                                    if (FAILED(result))
+                                        LOG_ERR("The script that empties coolwsd's page is not in");
+                                    return S_OK;
+                                })
+                                .Get());
 
                         account->webView->Navigate(Util::string_to_wide_string(url).c_str());
                         return S_OK;
