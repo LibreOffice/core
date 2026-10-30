@@ -39,4 +39,19 @@ public:
     virtual OUString GetComment() const override;
 };
 
+/// An edit made in the formula itself, as typed into the drawn formula: the text before and after
+class SmTextAction final : public SfxUndoAction
+{
+    SmDocShell* pDoc;
+    OUString aOldText;
+    OUString aNewText;
+
+public:
+    SmTextAction(SmDocShell* pDocSh, OUString aOld, OUString aNew);
+
+    virtual void Undo() override;
+    virtual void Redo() override;
+    virtual OUString GetComment() const override;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

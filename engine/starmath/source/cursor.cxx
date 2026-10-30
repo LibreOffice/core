@@ -7,12 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include <cursor.hxx>
+#include <action.hxx>
 #include <visitors.hxx>
 #include <document.hxx>
 #include <view.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/kit.hxx>
 #include <editeng/editeng.hxx>
+#include <editeng/editund2.hxx>
 #include <COKit/COKit.hxx>
 #include <osl/diagnose.h>
 #include <sfx2/kit/helper.hxx>
@@ -1323,6 +1325,7 @@ void SmCursor::BeginEdit(){
     mbIsEnabledSetModifiedSmDocShell = mpDocShell->IsEnableSetModified();
     if( mbIsEnabledSetModifiedSmDocShell )
         mpDocShell->EnableSetModified( false );
+    maTextBeforeEdit = mpDocShell->GetText();
 }
 
 void SmCursor::EndEdit(){
@@ -1353,8 +1356,22 @@ void SmCursor::EndEdit(){
     OUString formula;
     SmNodeToTextVisitor(mpTree, formula);
     mpDocShell->maText = formula;
-    mpDocShell->GetEditEngine().QuickInsertText(formula, ESelection::All());
-    mpDocShell->GetEditEngine().QuickFormatDoc();
+    // the command text follows, and the step the edit engine keeps for that goes again, as the
+    // edit gets one of its own below
+    EditEngine& rEditEngine = mpDocShell->GetEditEngine();
+    SfxUndoManager& rEngineUndo = rEditEngine.GetUndoManager();
+    const size_t nStepsBefore(rEngineUndo.GetUndoActionCount());
+    rEditEngine.QuickInsertText(formula, ESelection::All());
+    rEditEngine.QuickFormatDoc();
+    while (rEngineUndo.GetUndoActionCount() > nStepsBefore)
+        rEngineUndo.RemoveLastUndoAction();
+
+    // an edit in the drawn formula gets a step to undo of its own, as the command window's text
+    // has its own undo
+    if (formula != maTextBeforeEdit)
+        if (SfxUndoManager* pUndoManager = mpDocShell->GetUndoManager())
+            pUndoManager->AddUndoAction(
+                std::make_unique<SmTextAction>(mpDocShell, maTextBeforeEdit, formula));
 }
 
 void SmCursor::RequestRepaint()

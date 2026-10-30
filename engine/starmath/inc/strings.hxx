@@ -18,6 +18,7 @@
 #include <rtl/ustring.hxx>
 
 inline constexpr OUString RID_UNDOFORMATNAME = u"Format"_ustr;
+inline constexpr OUString RID_UNDOEDITNAME = u"Edit"_ustr;
 
 // clang-format off
 #define RID_PLUSX               u"+<?> "

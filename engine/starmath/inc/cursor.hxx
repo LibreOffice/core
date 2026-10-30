@@ -328,6 +328,8 @@ private:
     int mnEditSections;
     /** Holds data for BeginEdit() and EndEdit() */
     bool mbIsEnabledSetModifiedSmDocShell;
+    /** The text of the formula when the edit section began, for the step to undo it */
+    OUString maTextBeforeEdit;
     /** Begin edit section where the tree will be modified */
     void BeginEdit();
     /** End edit section where the tree will be modified */

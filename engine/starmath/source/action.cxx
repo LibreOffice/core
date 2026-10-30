@@ -20,6 +20,9 @@
 #include <action.hxx>
 #include <document.hxx>
 #include <strings.hxx>
+#include <view.hxx>
+#include <comphelper/kit.hxx>
+#include <editeng/editeng.hxx>
 
 SmFormatAction::SmFormatAction(SmDocShell *pDocSh,
                                const SmFormat& rOldFormat,
@@ -48,6 +51,38 @@ void SmFormatAction::Repeat(SfxRepeatTarget& rDocSh)
 OUString SmFormatAction::GetComment() const
 {
     return RID_UNDOFORMATNAME;
+}
+
+SmTextAction::SmTextAction(SmDocShell* pDocSh, OUString aOld, OUString aNew)
+    : pDoc(pDocSh)
+    , aOldText(std::move(aOld))
+    , aNewText(std::move(aNew))
+{
+}
+
+namespace
+{
+// the formula takes that text, and its command text follows, the undo manager keeps no step for
+// that while it undoes or redoes; the kit shows the caret of the formula it draws, which starts
+// anew with the text
+void lcl_setText(SmDocShell& rDoc, const OUString& rText)
+{
+    EditEngine& rEditEngine = rDoc.GetEditEngine();
+    rEditEngine.QuickInsertText(rText, ESelection::All());
+    rEditEngine.QuickFormatDoc();
+    rDoc.SetText(rText);
+    if (SmViewShell* pView = comphelper::COKit::isActive() ? SmGetActiveView() : nullptr)
+        pView->SendCaretToKit();
+}
+}
+
+void SmTextAction::Undo() { lcl_setText(*pDoc, aOldText); }
+
+void SmTextAction::Redo() { lcl_setText(*pDoc, aNewText); }
+
+OUString SmTextAction::GetComment() const
+{
+    return RID_UNDOEDITNAME;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

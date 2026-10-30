@@ -1031,10 +1031,20 @@ void SmDocShell::Execute(SfxRequest& rReq)
                     fnDo = &SfxUndoManager::Redo;
                 }
 
+                // the edit engine's undo needs a view of the command window, which a formula
+                // edited in the drawn formula has none of, so its steps are run as such then
+                const bool bWithoutView(GetEditEngine().GetViewCount() == 0);
                 try
                 {
                     for( ; nCnt && nCount; --nCnt, --nCount )
-                        (pTmpUndoMgr->*fnDo)();
+                    {
+                        if (!bWithoutView)
+                            (pTmpUndoMgr->*fnDo)();
+                        else if (SID_UNDO == rReq.GetSlot())
+                            pTmpUndoMgr->SfxUndoManager::Undo();
+                        else
+                            pTmpUndoMgr->SfxUndoManager::Redo();
+                    }
                 }
                 catch( const Exception& )
                 {
