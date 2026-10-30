@@ -43,6 +43,7 @@ $(eval $(call gb_CppunitTest_use_rdb,oox_drawingml,services))
 
 $(eval $(call gb_CppunitTest_use_custom_headers,oox_drawingml,\
 	officecfg/registry \
+	oox/generated \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,oox_drawingml))

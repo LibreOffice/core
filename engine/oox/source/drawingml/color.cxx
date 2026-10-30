@@ -352,6 +352,13 @@ void Color::setUnused()
     meMode = model::ColorType::Unused;
 }
 
+/** Forgets the slot of the theme the colour stood for, for a colour given a value of its own. */
+void Color::forgetTheThemeSlot()
+{
+    msSchemeName.clear();
+    meThemeColorType = model::ThemeColorType::Unknown;
+}
+
 void Color::setSrgbClr( ::Color nRgb )
 {
     setSrgbClr(sal_Int32(nRgb));
@@ -361,6 +368,7 @@ void Color::setSrgbClr( sal_Int32 nRgb )
 {
     OSL_ENSURE( (0 <= nRgb) && (nRgb <= 0xFFFFFF), "Color::setSrgbClr - invalid RGB value" );
     meMode = model::ColorType::RGB;
+    forgetTheThemeSlot();
     lclRgbToRgbComponents( mnC1, mnC2, mnC3, ::Color(ColorTransparency, nRgb) );
 }
 
@@ -370,6 +378,7 @@ void Color::setScrgbClr( sal_Int32 nR, sal_Int32 nG, sal_Int32 nB )
     OSL_ENSURE( (0 <= nG) && (nG <= MAX_PERCENT), "Color::setScrgbClr - invalid green value" );
     OSL_ENSURE( (0 <= nB) && (nB <= MAX_PERCENT), "Color::setScrgbClr - invalid blue value" );
     meMode = model::ColorType::CRGB;
+    forgetTheThemeSlot();
     mnC1 = getLimitedValue< sal_Int32, sal_Int32 >( nR, 0, MAX_PERCENT );
     mnC2 = getLimitedValue< sal_Int32, sal_Int32 >( nG, 0, MAX_PERCENT );
     mnC3 = getLimitedValue< sal_Int32, sal_Int32 >( nB, 0, MAX_PERCENT );
@@ -381,6 +390,7 @@ void Color::setHslClr( sal_Int32 nHue, sal_Int32 nSat, sal_Int32 nLum )
     OSL_ENSURE( (0 <= nSat) && (nSat <= MAX_PERCENT), "Color::setHslClr - invalid saturation value" );
     OSL_ENSURE( (0 <= nLum) && (nLum <= MAX_PERCENT), "Color::setHslClr - invalid luminance value" );
     meMode = model::ColorType::HSL;
+    forgetTheThemeSlot();
     mnC1 = getLimitedValue< sal_Int32, sal_Int32 >( nHue, 0, MAX_DEGREE );
     mnC2 = getLimitedValue< sal_Int32, sal_Int32 >( nSat, 0, MAX_PERCENT );
     mnC3 = getLimitedValue< sal_Int32, sal_Int32 >( nLum, 0, MAX_PERCENT );
@@ -418,6 +428,7 @@ void Color::setPaletteClr( sal_Int32 nPaletteIdx )
 {
     OSL_ENSURE( nPaletteIdx >= 0, "Color::setPaletteClr - invalid palette index" );
     meMode = model::ColorType::Palette;
+    forgetTheThemeSlot();
     mnC1 = nPaletteIdx;
 }
 
@@ -425,6 +436,7 @@ void Color::setSysClr( sal_Int32 nToken, sal_Int32 nLastRgb )
 {
     OSL_ENSURE( (-1 <= nLastRgb) && (nLastRgb <= 0xFFFFFF), "Color::setSysClr - invalid RGB value" );
     meMode = model::ColorType::System;
+    forgetTheThemeSlot();
     mnC1 = nToken;
     mnC2 = nLastRgb;
 }

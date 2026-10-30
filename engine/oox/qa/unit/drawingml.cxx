@@ -34,6 +34,8 @@
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 
+#include <oox/drawingml/color.hxx>
+#include <oox/token/tokens.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
 #include <docmodel/uno/UnoTheme.hxx>
@@ -1317,6 +1319,21 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testSmartArt_everyItemTakesItsOwnLineColo
         // the item laid out last decided the color of them all.
         CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage.getStr(), rColor, nLineColor);
     }
+}
+
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testColorGivenAValueForgetsItsThemeSlot)
+{
+    // A color that stands for a slot of the theme answers with that slot.
+    oox::drawingml::Color aColor;
+    aColor.setSchemeClr(oox::XML_accent1);
+    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1,
+                         aColor.getComplexColor().getThemeColorType());
+
+    // Once it is given a color of its own it stands for no slot, so what is written out is the
+    // color it holds and not the one the slot of the theme would give.
+    aColor.setSrgbClr(sal_Int32(0x112233));
+    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Unknown,
+                         aColor.getComplexColor().getThemeColorType());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

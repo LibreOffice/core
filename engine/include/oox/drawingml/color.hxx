@@ -137,6 +137,9 @@ public:
     bool operator==(const Color&) const;
 
 private:
+    /** Forgets the slot of the theme the color stood for. */
+    void                forgetTheThemeSlot();
+
     /** Internal helper for getColor(). */
     void                setResolvedRgb( ::Color nRgb ) const;
 
