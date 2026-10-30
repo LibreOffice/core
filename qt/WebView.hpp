@@ -145,6 +145,7 @@ class WebView : public QObject
 {
 public:
     using CloseRequestFn = std::function<void()>;
+    using CloseCancelledFn = std::function<void()>;
     using TitleChangeFn = std::function<void(const QString&)>;
     using UnmodifiedFn = std::function<void()>;
     using ModifiedStatusChangeFn = std::function<void(bool)>;
@@ -166,6 +167,8 @@ public:
 
     // The owner installs these; Bridge calls requestClose()/updateTitle().
     void setOnCloseRequest(CloseRequestFn cb) { _onCloseRequest = std::move(cb); }
+    // Runs when the user kept the document open from the page's close prompt.
+    void setOnCloseCancelled(CloseCancelledFn cb) { _onCloseCancelled = std::move(cb); }
     void setOnTitleChange(TitleChangeFn cb) { _onTitleChange = std::move(cb); }
     // Runs each time the document stops holding a change that is not on disk.
     void setOnUnmodified(UnmodifiedFn cb) { _onUnmodified = std::move(cb); }
@@ -173,6 +176,7 @@ public:
     // Runs each time the image of the document's current view changes.
     void setOnThumbnailChange(ThumbnailChangeFn cb) { _onThumbnailChange = std::move(cb); }
     void requestClose();
+    void closeCancelled();
     void updateTitle(const QString& title);
     /// The document reported that it holds no change that is not on disk.
     void onDocumentUnmodified();
@@ -217,10 +221,12 @@ public:
     /// changes" that are actually about to be saved.
     bool isSaveInFlight() const;
     /// Register a one-shot callback to run when the in-flight save
-    /// completes (success or failure).  Forwards to
+    /// completes, told whether it succeeded.  Forwards to
     /// Bridge::onSaveComplete; runs immediately if no save is in
     /// flight.
-    void onSaveComplete(std::function<void()> callback);
+    void onSaveComplete(std::function<void(bool)> callback);
+    /// A close waits for the save in flight, see Bridge::closeWaitsForSave.
+    void closeWaitsForSave(std::function<void(bool saved)> then);
     /// Run @script in the page on the GUI thread.  Forwards to
     /// Bridge::evalJS; no-op if no bridge is attached.
     void evalJS(const std::string& script);
@@ -266,8 +272,8 @@ public:
     int millisecondsUntilViewSettled() const;
 
     /// Ask the page to save the document, and run the callback when the save result comes
-    /// back, whether the save succeeded or not. Returns false when no save was asked for.
-    bool requestSave(std::function<void()> onComplete);
+    /// back, told whether the save succeeded. Returns false when no save was asked for.
+    bool requestSave(std::function<void(bool)> onComplete);
 
     bool isDocumentModified() const;
     void endPresentation();
@@ -314,6 +320,7 @@ private:
     std::unique_ptr<QTemporaryDir> _templateWorkingDir;
 
     CloseRequestFn _onCloseRequest;
+    CloseCancelledFn _onCloseCancelled;
     TitleChangeFn _onTitleChange;
     UnmodifiedFn _onUnmodified;
     ModifiedStatusChangeFn _onModifiedStatusChange;

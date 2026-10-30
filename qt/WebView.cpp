@@ -958,7 +958,7 @@ int WebView::millisecondsUntilViewSettled() const
     return broker && broker->hasLoaded() ? 0 : 1000;
 }
 
-bool WebView::requestSave(std::function<void()> onComplete)
+bool WebView::requestSave(std::function<void(bool)> onComplete)
 {
     return _bridge && _bridge->requestSave(std::move(onComplete));
 }
@@ -1043,6 +1043,12 @@ void WebView::requestClose()
     }
     if (_mainWindow)
         _mainWindow->close();
+}
+
+void WebView::closeCancelled()
+{
+    if (_onCloseCancelled)
+        _onCloseCancelled();
 }
 
 void WebView::updateTitle(const QString& docTitle)
@@ -1437,17 +1443,23 @@ void WebView::activateWindow()
         surfaceWindow(_mainWindow);
 }
 
+void WebView::closeWaitsForSave(std::function<void(bool)> then)
+{
+    if (_bridge)
+        _bridge->closeWaitsForSave(std::move(then));
+}
+
 bool WebView::isSaveInFlight() const
 {
     return _bridge && _bridge->isSaveInFlight();
 }
 
-void WebView::onSaveComplete(std::function<void()> callback)
+void WebView::onSaveComplete(std::function<void(bool)> callback)
 {
     if (_bridge)
         _bridge->onSaveComplete(std::move(callback));
     else if (callback)
-        callback();
+        callback(true);
 }
 
 bool WebView::isReadyToClose() const

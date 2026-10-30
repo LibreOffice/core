@@ -2383,7 +2383,13 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		if (!isCleanupEvent)
 			this._map.hideBusy();
-		this._map.fire('commandresult', {commandName: commandName, success: success, result: obj.result});
+		this._map.fire('commandresult', {
+			commandName: commandName,
+			success: success,
+			result: obj.result,
+			// Set by wsd on the result of a save it started on its own.
+			isAutosave: obj.isAutosave === true,
+		});
 		if (!isCleanupEvent && window.ThisIsTheMacOSApp) {
 			window.postMobileMessage('COMMANDRESULT ' + textMsg);
 		}

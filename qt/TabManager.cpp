@@ -431,7 +431,7 @@ void TabManager::requestSaveThenDiscard(Entry& e)
 
     QPointer<TabManager> self = this;
     const int tabId = e.id;
-    if (!e.webView->requestSave([self, tabId]() {
+    if (!e.webView->requestSave([self, tabId](bool) {
             if (!self)
                 return;
             auto entry = self->findTab(tabId);
@@ -470,6 +470,9 @@ int TabManager::registerTab(std::unique_ptr<WebView> wv, int insertAt)
         if (tid >= 0)
             closeTab(tid);
     });
+    // The user kept a document from the page's close prompt, so this window
+    // is not going away; abandon any close-everything chain.
+    raw->setOnCloseCancelled([this]() { _closingAll = false; });
     raw->setOnTitleChange([this, raw](const QString& title) { onWebViewTitleChanged(raw, title); });
     raw->setOnModifiedStatusChange([this](bool) { emitTabsChangedNow(); });
     raw->setOnThumbnailChange([this, raw](bool isFirstThumbnail)
@@ -515,6 +518,7 @@ std::unique_ptr<WebView> TabManager::detachAt(std::vector<Entry>::iterator it)
     _stack->removeWidget(stackWidget);
     delete placeholder;
     wv->setOnCloseRequest({});
+    wv->setOnCloseCancelled({});
     wv->setOnTitleChange({});
     wv->setOnModifiedStatusChange({});
     wv->setOnThumbnailChange({});
@@ -630,34 +634,22 @@ void TabManager::closeTab(int tabId)
             if (it->closeWaitsForSave)
                 return;
             it->closeWaitsForSave = true;
+            // The close callback replaces the callback of a drop that waits on this save.
+            // The limit may ask again when the save fails and the user keeps the tab.
+            it->dropWaitsForSave = false;
+            it->dropSaveAsked = false;
             LOG_TRC("TabManager::closeTab: save in flight, deferring close");
-            // Busy cursor for immediate feedback: the in-page busy modal
-            // paints with a delay and may never appear on a fast finish.
-            QApplication::setOverrideCursor(Qt::WaitCursor);
-            wv->evalJS(
-                "if (window.app && window.app.map)"
-                "  window.app.map.fire('showbusy',"
-                "    {label: window._('Saving...')});");
             QPointer<TabManager> self = this;
-            wv->onSaveComplete([self, tabId]() {
-                QApplication::restoreOverrideCursor();
+            wv->closeWaitsForSave([self, tabId](bool saved) {
                 if (!self)
                     return;
                 auto entry = self->findTab(tabId);
                 if (entry == self->_tabs.end())
                     return;
                 entry->closeWaitsForSave = false;
-                WebView* w = entry->webView.get();
-                // A re-entry that re-prompts (save failed, doc still
-                // modified) must not leave the busy modal hanging behind the
-                // prompt.
-                w->evalJS(
-                    "if (window.app && window.app.map)"
-                    "  window.app.map.fire('hidebusy');");
-                // The save we waited for is the one for this close; skip the
-                // redundant save-if-dirty round-trip on the re-entry.
-                w->markReadyToClose();
-                self->closeTab(tabId);
+                // The page shows its close prompt for a failed save.
+                if (saved)
+                    self->closeTab(tabId);
             });
             return;
         }

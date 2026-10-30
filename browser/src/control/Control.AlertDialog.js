@@ -21,6 +21,12 @@ window.L.Control.AlertDialog = window.L.Control.extend({
 	},
 
 	_onError: function(e) {
+		// An error that names no command and carries no message has nothing
+		// to show; the engine reports one after each failed save. Closing
+		// every dialog for it would take a prompt the user is answering.
+		if (!e.cmd && !e.msg)
+			return;
+
 		if (!this._map._fatal &&
 		    e.cmd !== 'notasync' &&
 		    e.type !== 'warn') {

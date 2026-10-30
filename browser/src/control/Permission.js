@@ -550,9 +550,11 @@ window.L.Map.include({
 	// Save what the user changed, for a native host that is waiting on the
 	// result.  A document with nothing to save is answered at once with
 	// nothingToSaveMessage, so the host hears back either way.  Answers
-	// whether a save was started.
+	// whether a save was started.  A dead session can never answer a save,
+	// and the page already showed its error for it.
 	_saveForNativeHost: function (nothingToSaveMessage) {
-		if (this._permission !== 'edit' || !this._everModified) {
+		if (this._permission !== 'edit' || !this._everModified ||
+			this._fatal || !app.socket.connected()) {
 			window.postMobileMessage(nothingToSaveMessage);
 			return false;
 		}
@@ -561,14 +563,137 @@ window.L.Map.include({
 		return true;
 	},
 
+	// The purpose of the save the page runs for the native host, or null:
+	// 'quiet' (the host asked on its own) or 'close'.
+	_pendingNativeSave: null,
+
+	// The open save-failed prompt, or null: what it shows, and whether a
+	// close waits on the user's choice.
+	_saveFailedPrompt: null,
+
 	// Save any local-edit changes and then close the window.  Mirrors
 	// _saveAndSwitchToServerMode but the post-save action is window
 	// close, signalled to the native host via a CLOSE_WINDOW message
-	// in main.js's commandresult handler once the save (and, for
-	// remote docs, the subsequent integrator upload) completes.
+	// once the save (and, for remote docs, the subsequent integrator
+	// upload) completes.
+	// A close joins the save that the page already runs, or the open prompt
+	// of the save that failed.
 	_saveAndClose: function () {
+		var prompt = this._saveFailedPrompt;
+		if (prompt) {
+			if (!prompt.closing)
+				this._showSaveFailedPrompt(prompt.errorDetail, prompt.fileName, true);
+			return;
+		}
+		if (this._pendingNativeSave) {
+			this._pendingNativeSave = 'close';
+			return;
+		}
 		if (this._saveForNativeHost('CLOSE_WINDOW'))
-			window._closeAfterSave = true;
+			this._pendingNativeSave = 'close';
+	},
+
+	// A save the native host asked for on its own, not the user.  It joins
+	// the save the page already runs, whose result answers the host too.
+	_saveQuietlyForNativeHost: function () {
+		if (this._pendingNativeSave)
+			return;
+		if (this._saveForNativeHost('SAVECOMPLETED'))
+			this._pendingNativeSave = 'quiet';
+	},
+
+	// A save wsd started on its own is nobody's: the document stays
+	// modified, so the next save or close answers for it.  wsd refuses
+	// a save while its own runs, without a word, so a save the page
+	// asked for in that time is asked again once wsd's save is done.
+	// Answers whether the result was wsd's own.
+	_takeAutosaveResult: function (autosave) {
+		if (!autosave)
+			return false;
+		var pending = this._pendingNativeSave;
+		if (pending) {
+			this._pendingNativeSave = null;
+			if (pending === 'close')
+				this._saveAndClose();
+			else
+				this._saveQuietlyForNativeHost();
+		}
+		return true;
+	},
+
+	_nativeSaveSucceeded: function (autosave) {
+		if (this._takeAutosaveResult(autosave))
+			return;
+		var pending = this._pendingNativeSave;
+		this._pendingNativeSave = null;
+		window.postMobileMessage('SAVECOMPLETED');
+		if (pending === 'close')
+			window.postMobileMessage('CLOSE_WINDOW');
+	},
+
+	_nativeSaveFailed: function (autosave, errorDetail) {
+		if (this._takeAutosaveResult(autosave))
+			return;
+		var pending = this._pendingNativeSave;
+		this._pendingNativeSave = null;
+		// A quiet save fails without a word. The host hears when a prompt
+		// follows, so it can bring a hidden tab to the front for it.
+		var prompts = pending !== 'quiet';
+		window.postMobileMessage(prompts ? 'SAVEFAILED prompt' : 'SAVEFAILED');
+		if (prompts)
+			this._showSaveFailedPrompt(errorDetail, undefined, pending === 'close');
+	},
+
+	// The desktop apps write the user's own file, which can be read-only
+	// or held open by another program. fileName names the file a Save As
+	// failed to write. With closing, the user's choice ends a close.
+	_showSaveFailedPrompt: function (errorDetail, fileName, closing) {
+		var dialogId = this.uiManager.generateModalId('savefailed');
+		if (this._saveFailedPrompt)
+			this.uiManager.closeModal(dialogId, true);
+		closing = !!closing;
+		this._saveFailedPrompt = {
+			errorDetail: errorDetail,
+			fileName: fileName,
+			closing: closing,
+		};
+
+		var that = this;
+		var decided = function (closeMessage) {
+			that._saveFailedPrompt = null;
+			if (closing)
+				window.postMobileMessage(closeMessage);
+		};
+		var cancel = function () { decided('CLOSE_CANCELLED'); };
+		var closeWithoutSaving = function () { decided('CLOSE_WINDOW'); };
+		var saveAs = function () {
+			decided('CLOSE_CANCELLED');
+			window.postMobileMessage('uno .uno:SaveAs');
+		};
+
+		var buttons = [{ id: 'savefailed-cancel', text: _('Cancel') }];
+		var callbacks = [
+			{ id: 'savefailed-cancel', func_: cancel },
+			{ id: '__POPOVER__', func: cancel },
+			// The X of the title bar.
+			{ id: '__DIALOG__', func: cancel },
+		];
+		if (closing) {
+			buttons.push({ id: 'savefailed-close', text: _('Close without saving') });
+			callbacks.push({ id: 'savefailed-close', func_: closeWithoutSaving });
+		}
+		buttons.push({ id: 'savefailed-saveas', text: _('Save As'), 'has_default': true });
+		callbacks.push({ id: 'savefailed-saveas', func_: saveAs });
+
+		if (!fileName)
+			fileName = this['wopi'].BaseFileName
+				|| decodeURIComponent(this.options.doc.split(/[?#]/)[0].split('/').pop());
+		var message = _('"%FILENAME" could not be written. The file may be read-only or in use by another program. You can save your changes to a different file.')
+			.replace('%FILENAME', fileName);
+
+		this.uiManager.showModalWithCustomButtons('savefailed',
+			_('Cannot Save Document'), message, false, buttons, callbacks, errorDetail,
+			'savefailed-saveas');
 	},
 
 	// Another user wants to start collaborative editing.  Save

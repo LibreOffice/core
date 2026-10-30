@@ -2515,6 +2515,30 @@ class Socket {
 			}
 
 			this._map.hideBusy();
+
+			// The desktop apps prompt with Save As from the result of a save.
+			// A Save As that the engine could not write has no result, so the
+			// prompt shows from here. A storage error keeps its dialog.
+			if (
+				(window.ThisIsTheQtApp || window.ThisIsTheWindowsApp) &&
+				command.errorKind === 'savefailed' &&
+				command.errorCmd === 'saveas'
+			) {
+				this._map._showSaveFailedPrompt(
+					command.errorDetail,
+					command.filename ? decodeURIComponent(command.filename) : undefined,
+				);
+				return true; // caller should exit immediately.
+			}
+			// The engine reports the same failed Save As again, and another
+			// error dialog would close the prompt.
+			if (
+				(window.ThisIsTheQtApp || window.ThisIsTheWindowsApp) &&
+				this._map._saveFailedPrompt &&
+				(command.errorCmd === 'saveas' || command.errorCmd === 'exportas')
+			)
+				return true; // caller should exit immediately.
+
 			let storageError: string | undefined = undefined;
 			let storageErrorDetail = command.errorDetail;
 			if (command.errorKind === 'savediskfull') {
@@ -2584,6 +2608,14 @@ class Socket {
 			}
 		} else if (textMsg.startsWith('error:') && command.errorCmd === 'save') {
 			this._map.saveState?.showSaveFailedStatus();
+			// A session that cannot write refuses the save and sends no result,
+			// so the refusal prompts in place of one. The engine's own report
+			// of a failed save has another kind.
+			if (window.ThisIsTheQtApp || window.ThisIsTheWindowsApp) {
+				if (command.errorKind === 'savefailed')
+					this._map._nativeSaveFailed(false);
+				return true; // caller should exit immediately.
+			}
 		} else if (
 			textMsg.startsWith('error:') &&
 			command.errorCmd === 'renamefile'

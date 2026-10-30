@@ -403,6 +403,7 @@
 /// <reference path="../src/control/Control.NotebookbarBuilder.js" />
 /// <reference path="../src/control/Control.FormulaBarJSDialog.js" />
 /// <reference path="../src/control/Control.TopToolbar.js" />
+/// <reference path="../src/control/Control.AlertDialog.js" />
 /// <reference path="../src/control/Permission.js" />
 /// <reference path="../src/control/Ruler.ts" />
 /// <reference path="../src/control/VRuler.ts" />

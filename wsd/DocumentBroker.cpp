@@ -3628,8 +3628,16 @@ void DocumentBroker::handleSaveResponse(const std::shared_ptr<ClientSession>& se
     {
         LOG_INF("Failed to save docKey [" << _docKey
                                           << "] as .uno:Save has failed in COKit. Notifying clients");
-        session->sendTextFrameAndLogError(
-            COOLProtocol::buildErrorFrame("storage", "savefailed", saveResult.text));
+#if defined(QTAPP) || defined(_WIN32)
+        // The desktop apps' page prompts from the save result itself, with Save As; the
+        // storage error would put a second dialog over it.
+        const bool pagePrompts = Util::isMobileApp();
+#else
+        const bool pagePrompts = false;
+#endif
+        if (!pagePrompts)
+            session->sendTextFrameAndLogError(
+                COOLProtocol::buildErrorFrame("storage", "savefailed", saveResult.text));
         broadcastSaveResult(false, "Could not save the document");
     }
 

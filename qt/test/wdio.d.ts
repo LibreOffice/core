@@ -45,6 +45,7 @@ declare const app: {
 			event: string,
 			handler: (e: { commandName: string }) => void,
 		): void;
+		fire(event: string, data?: unknown): void;
 		// part is the part index, how is 0 deselect / 1 select / 2 toggle.
 		selectPart(part: number, how: number, external: boolean): void;
 		setPart(part: number): void;

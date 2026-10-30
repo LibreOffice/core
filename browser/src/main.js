@@ -205,6 +205,46 @@ var _codaWireCollabNotifications = function() {
 	});
 };
 
+if (window.ThisIsTheQtApp || window.ThisIsTheWindowsApp) {
+	// A CODA-Q remote doc in local-edit mode uploads before the host hears the result.
+	map.on('commandresult', function(ev) {
+		if (ev.commandName !== '.uno:Save')
+			return;
+		// A save with nothing to write reports failure with this result.
+		var unmodified = ev.result && ev.result.value === 'unmodified';
+		if (!ev.success && !unmodified) {
+			// The engine puts the reason of a failed save in the result.
+			map._nativeSaveFailed(ev.isAutosave, ev.result && ev.result.value);
+			return;
+		}
+		var done = function() {
+			map._nativeSaveSucceeded(ev.isAutosave);
+		};
+		if (
+			unmodified ||
+			!window.bridge ||
+			!global.collabWs ||
+			global.collabWs.readyState !== WebSocket.OPEN
+		) {
+			done();
+			return;
+		}
+		new Promise(function(r) {
+			window.bridge.readLocalDocBytes(r);
+		}).then(function(b64) {
+			if (!b64) {
+				done();
+				return;
+			}
+			var bin = atob(b64);
+			var arr = new Uint8Array(bin.length);
+			for (var i = 0; i < bin.length; i++)
+				arr[i] = bin.charCodeAt(i);
+			_codaUploadOnSave(arr, 'CODA-Q').then(done, done);
+		}, done);
+	});
+}
+
 if (window.ThisIsTheEmscriptenApp) {
 	// Ensure the access token is available on the global object
 	// for switchToServerMode (MobileAppInitializer does not set
@@ -259,46 +299,6 @@ if (window.ThisIsTheEmscriptenApp) {
 	// so LOKit can load them through the standard fakesocket flow.
 	// Local-only docs take the default path: initUI + map.loadDocument.
 	var _codaQtRemoteBootstrap = function() {
-		// On every successful .uno:Save, tell the bridge the save
-		// round-trip is over so it can clear _saveInFlight (and run
-		// any deferred-close callback).  For a remote doc still in
-		// local-edit mode, additionally drive the integrator upload
-		// via global.collabWs (closed-over below).  Registered up
-		// front rather than inside the remote-doc branch so local-
-		// only docs also get _saveInFlight cleared.
-		map.on('commandresult', function(ev) {
-			if (ev.commandName !== '.uno:Save')
-				return;
-			var done = function() {
-				window.postMobileMessage('SAVECOMPLETED');
-				if (window._closeAfterSave) {
-					window._closeAfterSave = false;
-					window.postMobileMessage('CLOSE_WINDOW');
-				}
-			};
-			if (
-				!ev.success ||
-				!global.collabWs ||
-				global.collabWs.readyState !== WebSocket.OPEN
-			) {
-				done();
-				return;
-			}
-			new Promise(function(r) {
-				window.bridge.readLocalDocBytes(r);
-			}).then(function(b64) {
-				if (!b64) {
-					done();
-					return;
-				}
-				var bin = atob(b64);
-				var arr = new Uint8Array(bin.length);
-				for (var i = 0; i < bin.length; i++)
-					arr[i] = bin.charCodeAt(i);
-				_codaUploadOnSave(arr, 'CODA-Q').then(done, done);
-			}, done);
-		});
-
 		new Promise(function(resolve) {
 			window.bridge.getRemoteInfo(resolve);
 		}).then(function(infoJson) {
@@ -359,10 +359,6 @@ if (window.ThisIsTheEmscriptenApp) {
 					global.socket.onopen();
 					map.loadDocument(global.socket);
 					_codaWireCollabNotifications();
-					// (Save-completion handling - upload-when-collabWs-
-					// open or SAVECOMPLETED-when-not - is registered at
-					// the top of this bootstrap so it covers both local-
-					// only and remote-doc paths uniformly.)
 				});
 			}).catch(function(err) {
 				var msg = err && err.message ? err.message : String(err);

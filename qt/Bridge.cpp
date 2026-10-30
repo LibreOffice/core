@@ -499,7 +499,7 @@ QString Bridge::readLocalDocBytes()
 
 void Bridge::saveCompleted()
 {
-    finishSave();
+    finishSave(true);
 }
 
 void Bridge::promptSaveLocation(std::function<void(const std::string&, const std::string&)> callback)
@@ -621,32 +621,32 @@ void Bridge::promptSaveLocation(std::function<void(const std::string&, const std
     dialog->open();
 }
 
-void Bridge::finishSave()
+void Bridge::finishSave(bool saved)
 {
     _saveInFlight = false;
-    LOG_TRC_NOFILE("Bridge::finishSave: _saveInFlight=false");
+    LOG_TRC_NOFILE("Bridge::finishSave: _saveInFlight=false, saved=" << saved);
     if (_onSaveComplete)
     {
         // Move out before invoking so a handler that schedules a new
         // close (which re-checks isSaveInFlight) sees a clean slate.
         auto cb = std::move(_onSaveComplete);
         _onSaveComplete = nullptr;
-        cb();
+        cb(saved);
     }
 }
 
-void Bridge::onSaveComplete(std::function<void()> callback)
+void Bridge::onSaveComplete(std::function<void(bool)> callback)
 {
     if (!_saveInFlight)
     {
         if (callback)
-            callback();
+            callback(true);
         return;
     }
     _onSaveComplete = std::move(callback);
 }
 
-bool Bridge::requestSave(std::function<void()> onComplete)
+bool Bridge::requestSave(std::function<void(bool)> onComplete)
 {
     if (_saveInFlight || _onSaveComplete)
         return false;
@@ -657,13 +657,38 @@ bool Bridge::requestSave(std::function<void()> onComplete)
     // waits for this save instead of asking about unsaved changes.
     _saveInFlight = true;
     LOG_TRC_NOFILE("Bridge::requestSave: _saveInFlight=true");
-    // The page answers with SAVECOMPLETED either way, when the save finishes or at once
-    // when there is nothing to save, and the fallback answers for a page that has no map,
-    // so the callback always runs.
-    evalJS("if (window.app && window.app.map)"
-           "  window.app.map._saveForNativeHost('SAVECOMPLETED');"
+    // The page answers with SAVECOMPLETED or SAVEFAILED when the save finishes, or with
+    // SAVECOMPLETED at once when there is nothing to save, and the fallback answers for a
+    // page that has no map, so the callback always runs.
+    evalJS("if (window.app && window.app.map) window.app.map._saveQuietlyForNativeHost();"
            "else window.postMobileMessage('SAVECOMPLETED');");
     return true;
+}
+
+void Bridge::closeWaitsForSave(std::function<void(bool)> then)
+{
+    // A second wait would push a second override cursor that nothing ever pops.
+    if (_closeWaitsForSave)
+        return;
+    _closeWaitsForSave = true;
+    // Busy cursor for immediate feedback: the in-page busy modal paints with a delay and may
+    // never appear on a fast finish.
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    evalJS("if (window.app && window.app.map)"
+           "  window.app.map.fire('showbusy', {label: window._('Saving...')});");
+    saveAndClose();
+    onSaveComplete([self = QPointer<Bridge>(this), then = std::move(then)](bool saved) mutable {
+        QApplication::restoreOverrideCursor();
+        if (!self)
+            return;
+        self->_closeWaitsForSave = false;
+        // The busy modal must not hang behind the page's prompt for a failed save.
+        self->evalJS("if (window.app && window.app.map) window.app.map.fire('hidebusy');");
+        if (saved)
+            self->markReadyToClose();
+        // Deferred: a close in then destroys this bridge, which the save result runs in.
+        QTimer::singleShot(0, self.data(), [then = std::move(then), saved]() { then(saved); });
+    });
 }
 
 void Bridge::saveAndClose()
@@ -1350,6 +1375,19 @@ QVariant Bridge::cool(const QString& messageStr)
         // Clear _saveInFlight and release any close that has been
         // waiting on us.
         saveCompleted();
+    }
+    else if (tokens.equals(0, "SAVEFAILED"))
+    {
+        finishSave(false);
+        // The page is about to prompt, in a tab that may be hidden.
+        if (tokens.equals(1, "prompt"))
+            if (WebView* owner = _owner.data())
+                owner->activateWindow();
+    }
+    else if (tokens.equals(0, "CLOSE_CANCELLED"))
+    {
+        if (WebView* owner = _owner.data())
+            owner->closeCancelled();
     }
     else if (tokens.equals(0, "CLOSE_WINDOW"))
     {

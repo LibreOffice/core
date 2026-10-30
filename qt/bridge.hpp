@@ -49,9 +49,12 @@ class Bridge : public QObject
     // save is not actually finished.
     bool _saveInFlight = false;
     // One-shot callback to run when _saveInFlight transitions back to
-    // false.  Used by closeEvent paths to defer the window-close
-    // until the in-flight save has fully completed.
-    std::function<void()> _onSaveComplete;
+    // false, told whether the save succeeded.  Used by closeEvent paths
+    // to defer the window-close until the in-flight save has fully
+    // completed.
+    std::function<void(bool)> _onSaveComplete;
+    // A close waits on _onSaveComplete, see closeWaitsForSave.
+    bool _closeWaitsForSave = false;
 
     // Sticky flag set on the first close click: tells the next
     // re-entry of the host window's closeEvent that the save-if-dirty
@@ -82,7 +85,7 @@ class Bridge : public QObject
 
     /// Mark the current save as complete: clear _saveInFlight and
     /// invoke (then drop) any pending _onSaveComplete callback.
-    void finishSave();
+    void finishSave(bool saved);
 
 
 public:
@@ -113,15 +116,20 @@ public:
     bool isSaveInFlight() const { return _saveInFlight; }
 
     /// Register a one-shot callback to run when the in-flight save
-    /// completes (success or failure).  Replaces any previously
+    /// completes, told whether it succeeded.  Replaces any previously
     /// registered callback.  If no save is in flight, the callback
     /// is invoked immediately.
-    void onSaveComplete(std::function<void()> callback);
+    void onSaveComplete(std::function<void(bool)> callback);
 
     /// Ask the page to save the document and leave it open, and run the callback when the
     /// save result comes back, whether the save succeeded or not. Returns false when a save
     /// or a callback is already outstanding, in which case the callback is not taken.
-    bool requestSave(std::function<void()> onComplete);
+    bool requestSave(std::function<void(bool)> onComplete);
+
+    /// A close waits for the save in flight: the page shows its busy modal meanwhile, and its
+    /// close prompt when the save fails. Runs then with whether the save succeeded. A second
+    /// close while the first waits is dropped.
+    void closeWaitsForSave(std::function<void(bool saved)> then);
 
     /// Announce an orderly close to the per-document collab broker
     /// by asking the page's JS to send {"type":"bye"} on its
