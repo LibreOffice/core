@@ -767,13 +767,25 @@ class ClassicInPlaceContext implements InteractionContext {
 		return false;
 	}
 
-	/// A drag that begins on another object outside the object's window leaves it and carries
-	/// that object, as the page does; one in the window is the object's.
+	/*
+		A drag that begins on another object outside the object's window leaves it and carries
+		that object, as the page does. One in the window takes hold of the part a press there
+		takes, by the chart's rules, where that part may be moved, so the press, the outline under
+		the pointer and the drag all mean the same part. Any other drag in the window is the
+		object's.
+	*/
 	public takesHoldFor(hit: number, modifier: number): number | undefined {
-		if (!ClassicInPlaceContext.pressedOutside()) return undefined;
+		if (ClassicInPlaceContext.pressedOutside()) {
+			GraphicSelection.leaveInPlace();
+			return Interaction.context().takesHoldFor(hit, modifier);
+		}
 
-		GraphicSelection.leaveInPlace();
-		return Interaction.context().takesHoldFor(hit, modifier);
+		const place = Interaction.placeOf(GraphicSelection.selectedObjectIDs);
+		if (modifier !== 0 || place.kind !== 'inPlace') return undefined;
+
+		const part = RenderGeometrySection.outermostOf(hit, place.object);
+		if (!ClassicInPlaceContext.isAPart(part, place.object)) return undefined;
+		return ObjectHandles.canBeMoved([part]) ? part : undefined;
 	}
 
 	/*
