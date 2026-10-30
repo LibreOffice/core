@@ -13,12 +13,12 @@
 #include <vector>
 
 #include <osl/socket_decl.hxx>
+#include <rtl/ref.hxx>
 #include <salhelper/thread.hxx>
 
 #include <sddllapi.h>
 
 namespace osl { class Mutex; }
-namespace com::sun::star::presentation { class XSlideShowController; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 /**
@@ -30,6 +30,7 @@ namespace sd
 {
     class BufferedStreamSocket;
     class Communicator;
+    class SlideShowController;
 
     struct ClientInfo
     {
@@ -51,8 +52,8 @@ namespace sd
     {
         public:
             // For slideshowimpl to inform us.
-            static void presentationStarted( const css::uno::Reference<
-                css::presentation::XSlideShowController > &rController );
+            static void
+            presentationStarted(const rtl::Reference<SlideShowController>& rpController);
             static void presentationStopped();
 
             /// ensure that discoverability (eg. for Bluetooth) is enabled

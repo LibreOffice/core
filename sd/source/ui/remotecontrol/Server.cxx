@@ -35,6 +35,8 @@
 #include "Communicator.hxx"
 #include "BufferedStreamSocket.hxx"
 
+#include <SlideShowController.hxx>
+
 using namespace sd;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -187,15 +189,14 @@ void IPRemoteServer::setup()
     spServer->launch();
 }
 
-void RemoteServer::presentationStarted( const css::uno::Reference<
-                css::presentation::XSlideShowController > &rController )
+void RemoteServer::presentationStarted(const rtl::Reference<SlideShowController>& rpController)
 {
     // note this can be invoked even when there is no IPRemoteServer instance
     // but there are communicators belonging to a BluetoothServer
     MutexGuard aGuard( sDataMutex );
     for ( const auto& rpCommunicator : sCommunicators )
     {
-        rpCommunicator->presentationStarted( rController );
+        rpCommunicator->presentationStarted(rpController);
     }
 }
 void RemoteServer::presentationStopped()
