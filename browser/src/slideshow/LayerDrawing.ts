@@ -106,8 +106,7 @@ class LayerDrawing {
 	private offscreenCanvas: OffscreenCanvas = null;
 	private onSlideRenderingCompleteCallback: VoidFunction = null;
 	private layerRenderer: LayerRenderer;
-	private videoRenderers: Map<string, Array<AnimatedContentRenderer>> =
-		new Map();
+	private videos = new SlideVideos();
 	private gifRenderers: Map<string, Array<AnimatedContentRenderer>> = new Map();
 	private isTransitionActive: boolean = false;
 	private queuedLayers: any[] = [];
@@ -147,7 +146,7 @@ class LayerDrawing {
 		this.prefetchedSlideHash = null;
 		this.nextRequestedSlideHash = null;
 		this.nextPrefetchedSlideHash = null;
-		this.deleteVideosResources();
+		this.videos.deleteResources();
 		this.deleteGifsResources();
 		this.layerRenderer.dispose();
 		this.compressedSlideCache.clear();
@@ -212,98 +211,19 @@ class LayerDrawing {
 		this.drawMasterPage(slideHash);
 		this.drawTextField(slideHash);
 		this.drawDrawPage(slideHash);
-		this.drawVideos(slideHash);
+		this.videos.render(slideHash);
 		this.drawGifs(slideHash);
 	}
 
-	private handleVideos(slideHash: string) {
-		const slideInfo = this.getSlideInfo(slideHash);
-		const videosInfo = slideInfo.videos;
-		if (!videosInfo || videosInfo.length === 0) return;
-		this.videoRenderers.set(slideHash, []);
-
-		for (let i = 0; i < videosInfo.length; ++i) {
-			const videoInfo = videosInfo[i];
-			this.handleVideo(i, slideHash, videoInfo);
-		}
-	}
-
-	private handleVideo(index: number, slideHash: string, videoInfo: VideoInfo) {
-		const slideShowPresenter = app.map.slideShowPresenter;
-		const slideRenderer = slideShowPresenter._slideRenderer;
-		const metaPres = slideShowPresenter._metaPresentation;
-
-		const videoId = slideHash + index;
-		const videoRenderer = makeVideoRenderer(
-			videoId,
-			this.layerRenderer.getRenderContext(),
-			slideRenderer,
-		);
-		videoRenderer.prepare(videoInfo, metaPres.docWidth, metaPres.docHeight);
-
-		this.videoRenderers.get(slideHash).push(videoRenderer);
-	}
-
-	private drawVideos(slideHash: string) {
-		const videoRenderers = this.videoRenderers.get(slideHash);
-		if (!videoRenderers) return;
-
-		for (const videoRenderer of videoRenderers) {
-			videoRenderer.render();
-		}
-	}
-
-	public loadVideos(slideHash: string) {
-		const videoRenderers = this.videoRenderers.get(slideHash);
-		if (!videoRenderers) return;
-
-		for (const videoRenderer of videoRenderers) {
-			videoRenderer.load();
-		}
-	}
-
 	public pauseVideos(slideHash: string) {
-		const videoRenderers = this.videoRenderers.get(slideHash);
-		if (!videoRenderers) return;
-
-		for (const videoRenderer of videoRenderers) {
-			videoRenderer.pause();
-		}
-	}
-
-	// Play the videos of the slide that no command in the slide's animations starts or stops.
-	public playVideosWithoutCommands(slideHash: string) {
-		const slideInfo = this.getSlideInfo(slideHash);
-		const commandTargets = new Set<string>();
-		if (slideInfo.animations)
-			collectCommandTargets(slideInfo.animations.root, commandTargets);
-
-		for (const videoInfo of slideInfo.videos) {
-			if (commandTargets.has(videoInfo.hash)) continue;
-			this.getVideoRenderer(slideHash, videoInfo)?.play();
-		}
+		this.videos.pause(slideHash);
 	}
 
 	public getVideoRenderer(
 		slideHash: string,
 		videoInfo: VideoInfo,
 	): AnimatedContentRenderer {
-		const videoRenderers = this.videoRenderers.get(slideHash);
-		if (!videoRenderers) return null;
-
-		for (const videoRenderer of videoRenderers) {
-			if (videoRenderer.infoId === videoInfo.id) {
-				return videoRenderer;
-			}
-		}
-	}
-
-	private deleteVideosResources() {
-		this.videoRenderers.forEach((videoRenderers) => {
-			for (const videoRenderer of videoRenderers) {
-				videoRenderer.deleteResources();
-			}
-		});
+		return this.videos.get(slideHash, videoInfo);
 	}
 
 	private handleGifs(slideHash: string) {
@@ -408,7 +328,7 @@ class LayerDrawing {
 		this.cachedBackgrounds.clear();
 		this.cachedMasterPages.clear();
 		this.cachedDrawPages.clear();
-		this.videoRenderers.clear();
+		this.videos.clear();
 		this.compressedSlideCache.clear();
 	}
 
@@ -1053,16 +973,11 @@ class LayerDrawing {
 			this.onSlideLayerMsg(layer);
 		}
 
-		this.handleVideos(slideHash);
-		if (this.videoRenderers.has(slideHash)) {
-			this.loadVideos(slideHash);
-			// In our own Qt and macOS shells a video that no command controls starts
-			// playback on slide entry. A plain browser cannot guarantee sound without
-			// a user gesture, so there the video waits for a click.
-			if (window.ThisIsTheQtApp || window.ThisIsTheMacOSApp) {
-				this.playVideosWithoutCommands(slideHash);
-			}
-		}
+		this.videos.enterSlide(
+			slideHash,
+			this.getSlideInfo(slideHash),
+			this.layerRenderer.getRenderContext(),
+		);
 
 		this.handleGifs(slideHash);
 		if (this.gifRenderers.has(slideHash)) {

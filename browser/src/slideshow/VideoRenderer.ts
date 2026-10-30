@@ -92,8 +92,11 @@ class VideoRenderInfo extends AnimatedContentRenderInfo {
 		}
 	}
 
+	// Dropping the source stops the download and frees the buffer.
 	public deleteResources(context: RenderContext) {
 		this.pause();
+		this.videoElement.removeAttribute('src');
+		this.videoElement.load();
 		super.deleteResources(context);
 	}
 }

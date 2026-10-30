@@ -439,6 +439,7 @@
 /// <reference path="../src/app/GifFrameSource.ts" />
 /// <reference path="../src/slideshow/AnimatedContentRenderer.ts" />
 /// <reference path="../src/slideshow/VideoRenderer.ts" />
+/// <reference path="../src/slideshow/SlideVideos.ts" />
 /// <reference path="../src/slideshow/GifRenderer.ts" />
 /// <reference path="../src/slideshow/SlideRenderer.ts" />
 /// <reference path="../src/slideshow/SlideShowPresenter.ts" />

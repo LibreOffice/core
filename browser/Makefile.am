@@ -939,6 +939,7 @@ COOL_JS_LST =\
 	src/slideshow/VectorCompositor.ts \
 	src/slideshow/AnimatedContentRenderer.ts \
 	src/slideshow/VideoRenderer.ts \
+	src/slideshow/SlideVideos.ts \
 	src/slideshow/GifRenderer.ts \
 	src/slideshow/SlideRenderer.ts \
 	src/slideshow/SlideshowMiddleware.ts \

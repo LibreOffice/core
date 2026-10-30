@@ -21,7 +21,8 @@
  * Fetching and caching of the trees is owned elsewhere.
  *
  * A shape effect redraws the slide from the primitive tree on every frame,
- * each target in the state its element holds. Video is not handled yet.
+ * each target in the state its element holds. The videos of a slide draw
+ * over it once its transition has ended.
  */
 
 /* global app RenderManager */
@@ -31,6 +32,9 @@ declare var SlideShow: any;
 class VectorCompositor extends SlideCompositor {
 	private offscreenCanvas: OffscreenCanvas = null;
 	private offscreenContext: OffscreenCanvasRenderingContext2D = null;
+	// The 2d render context over the offscreen canvas.
+	private renderContext: RenderContext2d = null;
+	private videos = new SlideVideos();
 	private canvasWidth = 0;
 	private canvasHeight = 0;
 
@@ -61,12 +65,17 @@ class VectorCompositor extends SlideCompositor {
 	}
 
 	public onUpdatePresentationInfo(): void {
+		// The videos drew into the old canvas. Entering the slide makes them anew.
+		this.videos.deleteResources();
+		this.videos.clear();
+
 		[this.canvasWidth, this.canvasHeight] = this._computeCanvasSize();
 		this.offscreenCanvas = new OffscreenCanvas(
 			this.canvasWidth,
 			this.canvasHeight,
 		);
 		this.offscreenContext = this.offscreenCanvas.getContext('2d');
+		this.renderContext = new RenderContext2d(this.offscreenCanvas);
 
 		// The slideshow shows the whole deck, so request every slide's
 		// tree at the start.
@@ -192,6 +201,9 @@ class VectorCompositor extends SlideCompositor {
 			{ authoredColors: true, states: this._drawStates(slideHash, data) },
 		);
 		context.restore();
+
+		// The videos are placed on the canvas in pixels.
+		this.videos.render(slideHash);
 
 		return this.offscreenCanvas.transferToImageBitmap();
 	}
@@ -456,14 +468,14 @@ class VectorCompositor extends SlideCompositor {
 	}
 
 	public getVideoRenderer(
-		_slideHash: string,
-		_videoInfo: VideoInfo,
+		slideHash: string,
+		videoInfo: VideoInfo,
 	): AnimatedContentRenderer {
-		return null;
+		return this.videos.get(slideHash, videoInfo);
 	}
 
-	public pauseVideos(_slideHash: string): void {
-		// Video is not handled yet.
+	public pauseVideos(slideHash: string): void {
+		this.videos.pause(slideHash);
 	}
 
 	// --- transitions and lifecycle ----------------------------------
@@ -473,14 +485,22 @@ class VectorCompositor extends SlideCompositor {
 		// hold back while a transition runs.
 	}
 
-	public notifyTransitionEnd(_slideHash: string): void {
-		// No per-slide video to start once a transition ends yet.
+	public notifyTransitionEnd(slideHash: string): void {
+		if (this.disposed || !this.renderContext) return;
+		this.videos.enterSlide(
+			slideHash,
+			this._metaPresentation.getSlideInfo(slideHash),
+			this.renderContext,
+		);
 	}
 
 	public deleteResources(): void {
 		this.disposed = true;
+		this.videos.deleteResources();
+		this.videos.clear();
 		this.offscreenCanvas = null;
 		this.offscreenContext = null;
+		this.renderContext = null;
 		this.pendingReady = null;
 		this.pendingSlideNumber = null;
 	}
