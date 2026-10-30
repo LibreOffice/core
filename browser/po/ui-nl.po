@@ -8,12 +8,12 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-28 13:35+0100\n"
-"PO-Revision-Date: 2026-10-27 00:00+0000\n"
+"PO-Revision-Date: 2026-10-30 10:34+0000\n"
 "Last-Translator: Stephan Paternotte <stephan-"
 "p@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/nl/>\n"
-"Language: \n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1472,11 +1472,12 @@ msgstr "De eerste die is ingesteld"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5050
 msgid "Translating with {0}."
-msgstr ""
+msgstr "Vertalen met {0}."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5051
 msgid "No provider is set up: the Translate command is not offered."
 msgstr ""
+"Er is geen aanbieder ingesteld: de opdracht Vertalen wordt niet aangeboden."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5091
 msgid "API URL"
@@ -1828,39 +1829,39 @@ msgstr "Stijl dupliceren"
 
 #: src/app/Util.ts:319
 msgid "1 year"
-msgstr ""
+msgstr "1 jaar"
 
 #: src/app/Util.ts:320
 msgid "{count} years"
-msgstr ""
+msgstr "{count} jaren"
 
 #: src/app/Util.ts:322
 msgid "1 day"
-msgstr ""
+msgstr "1 dag"
 
 #: src/app/Util.ts:322
 msgid "{count} days"
-msgstr ""
+msgstr "{count} dagen"
 
 #: src/app/Util.ts:323
 msgid "1 hour"
-msgstr ""
+msgstr "1 uur"
 
 #: src/app/Util.ts:323
 msgid "{count} hours"
-msgstr ""
+msgstr "{count} uren"
 
 #: src/app/Util.ts:324
 msgid "1 minute"
-msgstr ""
+msgstr "1 minuut"
 
 #: src/app/Util.ts:324
 msgid "{count} minutes"
-msgstr ""
+msgstr "{count} minuten"
 
 #: src/app/Util.ts:339
 msgid "less than a minute"
-msgstr ""
+msgstr "minder dan een minuut"
 
 #: src/canvas/sections/CommentListSection.ts:2261
 #: src/canvas/sections/CommentListSection.ts:2274
@@ -1909,9 +1910,8 @@ msgid "Reply"
 msgstr "Beantwoorden"
 
 #: src/canvas/sections/CommentSection.ts:345
-#, fuzzy
 msgid "comment"
-msgstr "Commentaar"
+msgstr "commentaar"
 
 #: src/canvas/sections/CommentSection.ts:565
 msgid "Press Ctrl + Enter to post"
@@ -1919,7 +1919,7 @@ msgstr "Druk op Ctrl + Enter om te posten"
 
 #: src/canvas/sections/CommentSection.ts:583
 msgid "Reply to {0}"
-msgstr ""
+msgstr "Antwoord op {0}"
 
 #: src/canvas/sections/CommentSection.ts:653
 #: src/canvas/sections/CommentSection.ts:654
@@ -2033,11 +2033,11 @@ msgstr "Document bevat niet-ondersteunde media"
 
 #: src/canvas/sections/SelectionSection.ts:1553
 msgid "Waiting for redo..."
-msgstr ""
+msgstr "Opnieuw uitvoeren..."
 
 #: src/canvas/sections/SelectionSection.ts:1554
 msgid "Waiting for undo..."
-msgstr ""
+msgstr "Ongedaan maken..."
 
 #: src/canvas/sections/URLPopUpSection.ts:89
 #: src/control/Control.HyperlinkWizard.ts:41
@@ -2186,7 +2186,7 @@ msgstr "Informeel"
 #. TRANSLATORS: such as "Formal" or a name that the user typed
 #: src/control/Control.AIChatSidebar.ts:309
 msgid "{0} tone"
-msgstr ""
+msgstr "{0} toon"
 
 #: src/control/Control.AIChatSidebar.ts:419
 msgid "Best"
@@ -2264,27 +2264,27 @@ msgstr "Wat wilt u doen met dit document?"
 
 #: src/control/Control.AIChatSidebar.ts:787
 msgid "Good morning, {0}!"
-msgstr ""
+msgstr "Goedemorgen, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:788
 msgid "Good morning!"
-msgstr ""
+msgstr "Goedemorgen!"
 
 #: src/control/Control.AIChatSidebar.ts:790
 msgid "Good afternoon, {0}!"
-msgstr ""
+msgstr "Goedemiddag, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:791
 msgid "Good afternoon!"
-msgstr ""
+msgstr "Goedemiddag!"
 
 #: src/control/Control.AIChatSidebar.ts:793
 msgid "Good evening, {0}!"
-msgstr ""
+msgstr "Goedenavond, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:794
 msgid "Good evening!"
-msgstr ""
+msgstr "Goedenavond!"
 
 #: src/control/Control.AIChatSidebar.ts:845
 #: src/control/Control.AIChatSidebar.ts:2288
@@ -2901,21 +2901,20 @@ msgid "Reject action"
 msgstr "Actie afwijzen"
 
 #: src/control/Control.AIChatSidebar.ts:2845
-#, fuzzy
 msgid "Send"
-msgstr "Verzonden"
+msgstr "Verzenden"
 
 #: src/control/Control.AIChatSidebar.ts:2847
 msgid "Send these cells"
-msgstr ""
+msgstr "Deze cellen verzenden"
 
 #: src/control/Control.AIChatSidebar.ts:2853
 msgid "Do not send these cells"
-msgstr ""
+msgstr "Deze cellen niet verzenden"
 
 #: src/control/Control.AIChatSidebar.ts:2870
 msgid "Nothing was sent."
-msgstr ""
+msgstr "Er is niets verzonden."
 
 #: src/control/Control.AIChatSidebar.ts:2893
 msgid "Applying changes..."
@@ -3033,10 +3032,11 @@ msgstr "Stel een fout in de formule vast in"
 #: src/control/Control.AIChatSidebar.ts:3871
 msgid "To diagnose the error in %1, these cells will be sent to %2:"
 msgstr ""
+"Om de fout in %1 te diagnosticeren, worden deze cellen naar %2 verzonden:"
 
 #: src/control/Control.AIChatSidebar.ts:3877
 msgid "Do you want to send them?"
-msgstr ""
+msgstr "Wilt u ze verzenden?"
 
 #: src/control/Control.AIChatSidebar.ts:3897
 msgid "I have a formula error in my spreadsheet."
@@ -3046,7 +3046,7 @@ msgstr "Ik heb een formulefout in mijn werkblad."
 #. TRANSLATORS: B5, {1} the name of its sheet
 #: src/control/Control.AIChatSidebar.ts:3901
 msgid "Cell {0} (Sheet: {1}) contains:"
-msgstr ""
+msgstr "Cel {0} (Blad: {1}) bevat:"
 
 #: src/control/Control.AIChatSidebar.ts:3906
 #: src/control/Control.FormulaBarJSDialog.js:116
@@ -3063,9 +3063,8 @@ msgstr "Geciteerde cellen"
 #. TRANSLATORS: Sent to the AI model. {0} is a Calc error code such
 #. TRANSLATORS: as #DIV/0!
 #: src/control/Control.AIChatSidebar.ts:3918
-#, fuzzy
 msgid "Please diagnose why this formula produces the {0} error."
-msgstr "Kunt u nagaan waarom deze formule het resultaat oplevert"
+msgstr "Gelieve te diagnosticeren waarom deze formule de fout {0} veroorzaakt."
 
 #: src/control/Control.AIChatSidebar.ts:3922
 msgid "Explain the root cause and suggest how to fix it."
@@ -3083,11 +3082,11 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3942
 msgid "only the cells with errors"
-msgstr ""
+msgstr "alleen de cellen met fouten"
 
 #: src/control/Control.AIChatSidebar.ts:3949
 msgid "another file, its name only"
-msgstr ""
+msgstr "nog een bestand, alleen de naam"
 
 #: src/control/Control.AIChatSidebar.ts:3979
 msgid "formula"
@@ -3198,6 +3197,8 @@ msgid ""
 "The table shows what each cell displays. The \"Formulas:\" list below it "
 "gives the formula of each cell that has one."
 msgstr ""
+"De tabel laat zien wat elke cel weergeeft. De onderstaande lijst "
+"\"Formules:\" geeft de formule van elke cel die er een heeft."
 
 #: src/control/Control.AIChatSidebar.ts:4203
 msgid ""
@@ -3466,7 +3467,7 @@ msgstr "Opschoningsvoortgang"
 
 #: src/control/Control.CleanupSidebar.ts:913
 msgid "Stop Cleanup"
-msgstr ""
+msgstr "Opschoning stoppen"
 
 #: src/control/Control.CleanupSidebar.ts:934
 msgid "Scan presentation"
@@ -3503,7 +3504,7 @@ msgstr "Opschonen"
 
 #: src/control/Control.CleanupSidebar.ts:2447
 msgid "The cleanup did not answer. Please try again."
-msgstr "De opruiming reageerde niet. Probeer het nog eens."
+msgstr "De opschoning reageerde niet. Probeer het nog eens."
 
 #: src/control/Control.AlertDialog.js:55
 msgid "External link"
@@ -4763,7 +4764,7 @@ msgstr "Citaten bijwerken"
 #: src/control/Notebookbar.WriterReferencesTab.ts:279
 #: src/control/Control.Zotero.js:1542
 msgid "Unlink Citations"
-msgstr "Ontkoppel citaten"
+msgstr "Citaten loskoppelen"
 
 #: src/control/Control.Menubar.ts:380
 #: src/control/Notebookbar.WriterReferencesTab.ts:296
@@ -4804,7 +4805,6 @@ msgstr "Online hulp"
 #: src/control/Control.Menubar.ts:460 src/control/Control.Menubar.ts:677
 #: src/control/Control.Menubar.ts:848 src/control/Control.Menubar.ts:1176
 #: src/control/Control.NotebookbarWriter.js:529
-#, fuzzy
 msgid "Show Tour"
 msgstr "Rondleiding"
 
@@ -5447,8 +5447,9 @@ msgid "Fill Color (Transparent Pictures Only)"
 msgstr "Vulkleur (alleen transparante afbeeldingen)"
 
 #: src/control/Control.Notebookbar.js:667
+#, fuzzy
 msgid "Area"
-msgstr ""
+msgstr "Vlak"
 
 #: src/control/Control.Notebookbar.js:682
 msgid "Line"
@@ -5857,7 +5858,7 @@ msgstr "Draaitabel"
 #: src/control/Control.NotebookbarCalc.js:1849
 #: src/control/Control.NotebookbarCalc.js:1852
 msgid "Table styles are only available in .xlsx files"
-msgstr "Tabelopmaak is alleen beschikbaar in .xlsx-bestanden"
+msgstr "Tabelstijlen zijn alleen beschikbaar in .xlsx-bestanden"
 
 #: src/control/Control.NotebookbarCalc.js:1850
 msgid "Insert a styled table"
@@ -5865,8 +5866,7 @@ msgstr "Een opgemaakte tabel invoegen"
 
 #: src/control/Control.NotebookbarCalc.js:1853
 msgid "Select an editable cell range to insert a styled table"
-msgstr ""
-"Selecteer een bewerkbaar celbereik om een gestileerde tabel in te voegen"
+msgstr "Selecteer een bewerkbaar celbereik om een opgemaakte tabel in te voegen"
 
 #: src/control/Control.NotebookbarCalc.js:1862
 #: src/control/Control.NotebookbarDraw.js:1062
@@ -7243,11 +7243,11 @@ msgstr "Referenties laden"
 
 #: src/control/Control.Zotero.js:824
 msgid "Citation Style"
-msgstr "Citeerstijl"
+msgstr "Citaatstijl"
 
 #: src/control/Control.Zotero.js:829
 msgid "An error occurred while fetching style list"
-msgstr "Er is een fout opgetreden tijdens het ophalen van de stijlenlijst"
+msgstr "Er is een fout opgetreden bij het ophalen van de lijst met stijlen"
 
 #: src/control/Control.Zotero.js:837
 msgid "Failed to load styles"
@@ -7298,7 +7298,7 @@ msgstr "Citaten zijn bijgewerkt"
 
 #: src/control/Control.Zotero.js:1484
 msgid "Citations update failed"
-msgstr "Bijwerken citaten mislukt"
+msgstr "Citaten bijwerken is mislukt"
 
 #: src/control/Control.Zotero.js:1488
 msgid "Updating citations"
@@ -8143,11 +8143,11 @@ msgstr "Kolom {index}"
 
 #: src/control/jsdialog/Widget.EditEngine.ts:587
 msgid "%1 is editing"
-msgstr ""
+msgstr "%1 is aan het bewerken"
 
 #: src/control/jsdialog/Widget.EditEngine.ts:588
 msgid "Another user is editing"
-msgstr ""
+msgstr "Een andere gebruiker is bezig met bewerken"
 
 #: src/control/jsdialog/Widget.FormulabarEdit.js:460 src/map/Clipboard.js:1589
 msgid "Cut"
@@ -8155,7 +8155,7 @@ msgstr "Knippen"
 
 #: src/control/jsdialog/Widget.FormulabarEdit.js:519
 msgid "Formula bar"
-msgstr ""
+msgstr "Formulebalk"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:54
 msgid "Smileys"
@@ -8349,7 +8349,7 @@ msgstr "Waarde verlagen"
 
 #: src/control/jsdialog/Widget.TabControl.tsx:229
 msgid "Add a fill to edit the {0}"
-msgstr ""
+msgstr "Voeg een vulling toe om de {0} te bewerken"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1836
 msgid "Cell value"
@@ -8625,12 +8625,15 @@ msgstr ""
 msgid ""
 "You no longer have access to this document. Its security label was changed."
 msgstr ""
+"U hebt geen toegang meer tot dit document. Het veiligheidslabel is gewijzigd."
 
 #: src/errormessages.ts:38
 msgid ""
 "You can no longer edit this document. Its security label was changed. "
 "Please open it again to view it."
 msgstr ""
+"U kunt dit document niet meer bewerken. Het veiligheidslabel is gewijzigd. "
+"Open het opnieuw om het weer te geven."
 
 #: src/errormessages.ts:40
 msgid "Authorization error was: '{errormessage}'."
@@ -8772,7 +8775,7 @@ msgstr "Document kan niet worden opgeslagen."
 
 #: src/errormessages.ts:90 src/errormessages.ts:109
 msgid "The storage refused to save the document."
-msgstr ""
+msgstr "De opslag weigerde het document op te slaan."
 
 #: src/errormessages.ts:91
 msgid "Document cannot be renamed."
@@ -8951,14 +8954,15 @@ msgstr "Online Editor"
 #: src/layer/tile/CanvasTileLayer.js:1396
 msgid "%1 started recording changes for all users."
 msgstr ""
+"%1 is begonnen met het registreren van wijzigingen voor alle gebruikers."
 
 #: src/layer/tile/CanvasTileLayer.js:1397
 msgid "Recording changes was started for all users."
-msgstr ""
+msgstr "Registratie van wijzigingen is gestart voor alle gebruikers."
 
 #: src/layer/tile/CanvasTileLayer.js:1399
 msgid "Your changes are tracked now."
-msgstr ""
+msgstr "Uw wijzigingen worden nu bijgehouden."
 
 #: src/layer/tile/CanvasTileLayer.js:1485
 msgid "Functions"

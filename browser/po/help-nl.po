@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-28 13:35+0200\n"
-"PO-Revision-Date: 2026-10-25 11:17+0000\n"
+"PO-Revision-Date: 2026-10-30 00:06+0000\n"
 "Last-Translator: Stephan Paternotte <stephan-"
 "p@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.18.1\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -134,7 +134,7 @@ msgstr "ESC"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:28-38
 msgid "Focus to selected comment's menu"
-msgstr "Focus op het menu van geselecteerde opmerking"
+msgstr "Focus op het menu van het geselecteerde commentaar"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:28-97
 msgid ""
@@ -810,7 +810,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:112-218
 msgid "Like Alt, but only the active cell is modified"
-msgstr "Zoals Alt, maar alleen de actieve cel wordt bijgewerkt"
+msgstr "Zoals Alt, maar alleen de actieve cel wordt gewijzigd"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:113-38
 msgid ""
@@ -1332,7 +1332,7 @@ msgstr "Celopmaak"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:183-38
 msgid "Display comment"
-msgstr "Notitie weergeven"
+msgstr "Commentaar weergeven"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:183-80
 msgid ""
@@ -1596,8 +1596,8 @@ msgid ""
 "cursor, although others will see you with a different color."
 msgstr ""
 "Elke gebruiker krijgt een kleur toegewezen. De cursor van elke gebruiker "
-"wordt weergegeven in de toegewezen kleur. Let op: je ziet je eigen cursor "
-"als een zwarte, knipperende cursor, maar anderen zien je in een andere kleur."
+"wordt weergegeven in de toegewezen kleur. Let op: u ziet uw eigen cursor als "
+"een zwarte, knipperende cursor, maar anderen zien u in een andere kleur."
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:387-7
 msgid ""
@@ -2022,8 +2022,8 @@ msgid ""
 "kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
 "kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>"
 msgstr ""
-"Je kunt als onopgemaakte tekst plakken met de sneltoets: <kbd>Ctrl</kbd>"
-"<span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</kbd><span "
+"U kunt plakken als onopgemaakte tekst met de sneltoets: <kbd>Ctrl</kbd><span "
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</kbd><span "
 "class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.p:504-5
@@ -2041,7 +2041,7 @@ msgid ""
 "When you paste text from outside of the document (another browser window or "
 "a desktop application), it will be pasted as rich text."
 msgstr ""
-"Wanneer je tekst van buiten het document plakt (een ander browservenster of "
+"Wanneer u tekst van buiten het document plakt (een ander browservenster of "
 "een bureaubladtoepassing), wordt het geplakt als Rich Text."
 
 #: html/cool-help.html%2Bdiv.div.div.p:506-5
@@ -2178,7 +2178,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:535-5
 msgid "Comments in documents"
-msgstr "Commentaren in documenten"
+msgstr "Commentaar in documenten"
 
 #: html/cool-help.html%2Bdiv.div.div.p:536-5
 msgid ""
@@ -2186,8 +2186,8 @@ msgid ""
 "places that need special reader attention. Comments are displayed on the "
 "right and carry the name and date of the issuer."
 msgstr ""
-"Voeg opmerkingen toe in <span class=\"productname\">{productname}</span> op "
-"plaatsen die speciale aandacht van de lezer vereisen. Opmerkingen worden aan "
+"Voeg commentaar toe in <span class=\"productname\">{productname}</span> op "
+"plaatsen die speciale aandacht van de lezer vereisen. Commentaar wordt aan "
 "de rechterkant weergegeven en zijn voorzien van de naam en de datum van de "
 "auteur."
 
@@ -2196,8 +2196,8 @@ msgid ""
 "Comment box showing author name, date, and the comment text, displayed "
 "beside the document"
 msgstr ""
-"Een opmerkingenveld met de naam van de auteur, de datum en de tekst van de "
-"opmerking, weergegeven naast het document"
+"Een commentaarveld met de naam van de auteur, de datum en de tekst van het "
+"commentaar, weergegeven naast het document"
 
 #: html/cool-help.html%2Bdiv.div.div.p:538-5
 msgid ""
@@ -2205,7 +2205,7 @@ msgid ""
 "span>) icon to reply, move and delete comments."
 msgstr ""
 "Klik op het submenu (<span class=\"cool-annotation-menu icon-size\"></span>) "
-"pictogram om notities te beantwoorden, verplaatsen en verwijderen."
+"pictogram om commentaar te beantwoorden, verplaatsen en verwijderen."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:541-5
 msgid "Spellchecking"
@@ -2478,12 +2478,12 @@ msgid ""
 "dot shows on the top right corner of the cell when it has a comment. Hover "
 "the mouse on the cell to display comments."
 msgstr ""
-"<span class=\"def\">Opmerkingen:</span> In een spreadsheet kun je één "
-"opmerking per cel invoegen. Wanneer u <span class=\"ui\">Opmerking invoegen</"
-"span> selecteert, verschijnt er een pop-up waarmee u de inhoud voor de "
-"opmerking kunt schrijven. Er wordt een rode stip weergegeven in de "
-"rechterbovenhoek van de cel wanneer deze een opmerking bevat. Beweeg de muis "
-"over de cel om opmerkingen weer te geven."
+"<span class=\"def\">Commentaar:</span> In een spreadsheet kunt u één "
+"commentaar per cel invoegen. Wanneer u <span class=\"ui\">Commentaar "
+"invoegen</span> selecteert, verschijnt er een pop-up waarmee u de inhoud "
+"voor het commentaar kunt schrijven. Er wordt een rode stip weergegeven in de "
+"rechterbovenhoek van de cel wanneer deze commentaar bevat. Beweeg de muis "
+"over de cel om commentaar weer te geven."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:603-52
 msgid ""
@@ -2491,7 +2491,7 @@ msgid ""
 "text, and Save/Cancel buttons"
 msgstr ""
 "Een cel in een spreadsheet met een pop-upvenster waarin de auteur, de datum, "
-"de tekst van de opmerking en de knoppen ‘Opslaan’ en ‘Annuleren’ worden "
+"de tekst van het commentaar en de knoppen ‘Opslaan’ en ‘Annuleren’ worden "
 "weergegeven"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:606-5
@@ -2671,7 +2671,7 @@ msgid ""
 "Tracked change shown as a comment box beside the document with author name, "
 "date, and change description"
 msgstr ""
-"Wijzigingen worden weergegeven als een opmerkingenveld naast het document, "
+"Wijzigingen worden weergegeven als een commentaarveld naast het document, "
 "met de naam van de auteur, de datum en een beschrijving van de wijziging"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:647-5
@@ -2683,18 +2683,18 @@ msgstr ""
 "Wijzigingen die door verschillende mensen zijn aangebracht, worden in "
 "verschillende kleuren weergegeven en elke bijgehouden wijziging kan worden "
 "geaccepteerd of afgewezen met behulp van het vak dat aan de rechterkant "
-"verschijnt. U kunt daar ook een opmerking toevoegen."
+"verschijnt. U kunt daar ook commentaar toevoegen."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:650-5
 msgid "Other advanced features"
-msgstr "Andere geavanceerde functies"
+msgstr "Overige geavanceerde functies"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:651-5
 msgid ""
 "<span class=\"def\">Comments:</span> Comments are inserted in the text and "
 "displayed on the right side of the screen."
 msgstr ""
-"<span class=\"def\">Opmerkingen:</span> Opmerkingen worden in de tekst "
+"<span class=\"def\">Commentaar:</span> Commentaar wordt in de tekst "
 "ingevoegd en aan de rechterkant van het scherm weergegeven."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:652-5
@@ -3228,8 +3228,8 @@ msgid ""
 "All buttons"
 msgstr ""
 "Het dialoogvenster ‘Wijzigingen beheren’ met een lijst van bijgehouden "
-"wijzigingen, met kolommen voor actie, auteur, datum en opmerking, en knoppen "
-"voor ‘Accepteren’, ‘Afwijzen’, ‘Alles accepteren’ en ‘Alles afwijzen’"
+"wijzigingen, met kolommen voor actie, auteur, datum en commentaar, en "
+"knoppen voor ‘Accepteren’, ‘Afwijzen’, ‘Alles accepteren’ en ‘Alles afwijzen’"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:781-5
 msgid "How do I set the margins of the document?"
