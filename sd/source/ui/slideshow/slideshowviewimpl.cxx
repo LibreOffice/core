@@ -17,8 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "showwindow.hxx"
 #include "slideshowviewimpl.hxx"
-#include "SlideShowController.hxx"
+
+#include <SlideShowController.hxx>
 #include <sdpage.hxx>
 
 #include <vcl/svapp.hxx>

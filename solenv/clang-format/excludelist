@@ -9450,6 +9450,7 @@ sd/source/ui/inc/Ruler.hxx
 sd/source/ui/inc/SdUnoDrawView.hxx
 sd/source/ui/inc/SdUnoOutlineView.hxx
 sd/source/ui/inc/SdUnoSlideView.hxx
+sd/source/ui/inc/SlideShowController.hxx
 sd/source/ui/inc/SlideSorter.hxx
 sd/source/ui/inc/SlideSorterViewShell.hxx
 sd/source/ui/inc/SlideTransitionPane.hxx
@@ -9622,7 +9623,6 @@ sd/source/ui/slideshow/showwin.cxx
 sd/source/ui/slideshow/showwindow.hxx
 sd/source/ui/slideshow/slideshow.cxx
 sd/source/ui/slideshow/SlideShowController.cxx
-sd/source/ui/slideshow/SlideShowController.hxx
 sd/source/ui/slideshow/slideshowviewimpl.cxx
 sd/source/ui/slideshow/slideshowviewimpl.hxx
 sd/source/ui/slidesorter/cache/SlsBitmapCache.cxx

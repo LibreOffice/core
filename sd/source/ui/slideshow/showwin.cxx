@@ -20,14 +20,13 @@
 #include <com/sun/star/awt/Key.hpp>
 
 #include "showwindow.hxx"
-#include "SlideShowController.hxx"
 
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxsids.hrc>
 
-
+#include <SlideShowController.hxx>
 #include <slideshow.hxx>
 #include <ViewShell.hxx>
 #include <sdresid.hxx>

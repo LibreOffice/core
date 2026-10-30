@@ -23,6 +23,8 @@
 #include <sal/config.h>
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <vcl/timer.hxx>
+
 #include <comphelper/interfacecontainer4.hxx>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/XSlideShowNavigationListener.hpp>
@@ -30,8 +32,6 @@
 #include <com/sun/star/presentation/XShapeEventListener.hpp>
 
 #include <drawdoc.hxx>
-
-#include "showwindow.hxx"
 
 #include <slideshow.hxx>
 
@@ -50,6 +50,8 @@ namespace sd
 class SlideShowView;
 class AnimationSlideController;
 class PaneHider;
+class ShowWindow;
+class Window;
 
 struct PresentationSettingsEx : public PresentationSettings
 {

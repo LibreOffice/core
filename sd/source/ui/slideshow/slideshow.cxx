@@ -39,17 +39,19 @@
 #include <framework/ConfigurationChangeEvent.hxx>
 #include <comphelper/extract.hxx>
 
+#include "showwindow.hxx"
+#include "SlideShowRestarter.hxx"
+
 #include <FrameView.hxx>
 #include <unomodel.hxx>
 #include <slideshow.hxx>
-#include "SlideShowController.hxx"
 #include <sdattr.hrc>
 #include <sdmod.hxx>
 #include <FactoryIds.hxx>
 #include <DrawDocShell.hxx>
+#include <SlideShowController.hxx>
 #include <ViewShell.hxx>
 #include <ViewShellBase.hxx>
-#include "SlideShowRestarter.hxx"
 #include <DrawController.hxx>
 #include <PresentationViewShell.hxx>
 #include <customshowlist.hxx>

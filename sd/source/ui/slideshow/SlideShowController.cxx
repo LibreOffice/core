@@ -64,7 +64,8 @@
 #include <svx/unoapi.hxx>
 #include <AnimationChildWindow.hxx>
 #include <notifydocumentevent.hxx>
-#include "SlideShowController.hxx"
+#include <SlideShowController.hxx>
+#include "showwindow.hxx"
 #include "slideshowviewimpl.hxx"
 #include "PaneHider.hxx"
 
