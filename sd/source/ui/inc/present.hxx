@@ -87,7 +87,8 @@ private:
     DECL_LINK(ChangePauseHdl, weld::FormattedSpinButton&, void);
 
     void                InitMonitorSettings();
-    enum DisplayType {
+    enum class DisplayType
+    {
         EXTERNAL_IS_NUMBER,
         MONITOR_NORMAL,
         MONITOR_IS_EXTERNAL,

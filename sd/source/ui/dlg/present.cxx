@@ -231,16 +231,16 @@ OUString SdStartPresentationDlg::GetDisplayName( sal_Int32   nDisplay,
 
     switch ( eType )
     {
-    case EXTERNAL_IS_NUMBER:
-        aName = m_xExternal->get_label();
-        break;
-    case MONITOR_IS_EXTERNAL:
-        aName = m_xMonitorExternal->get_label();
-        break;
-    default:
-    case MONITOR_NORMAL:
-        aName = m_xMonitor->get_label();
-        break;
+        case DisplayType::EXTERNAL_IS_NUMBER:
+            aName = m_xExternal->get_label();
+            break;
+        case DisplayType::MONITOR_IS_EXTERNAL:
+            aName = m_xMonitorExternal->get_label();
+            break;
+        default:
+        case DisplayType::MONITOR_NORMAL:
+            aName = m_xMonitor->get_label();
+            break;
     }
     aName = aName.replaceFirst( "%1", OUString::number( nDisplay ) );
 
@@ -282,7 +282,7 @@ void SdStartPresentationDlg::InitMonitorSettings()
             sal_Int32 nInsertedEntry;
 
             // Initial entry - the auto-detected external monitor
-            OUString aName = GetDisplayName( nExternalIndex + 1, EXTERNAL_IS_NUMBER);
+            OUString aName = GetDisplayName(nExternalIndex + 1, DisplayType::EXTERNAL_IS_NUMBER);
             nInsertedEntry = InsertDisplayEntry( aName, 0 );
             if( nDefaultSelectedDisplay == 0)
                 nSelectedIndex = nInsertedEntry;
@@ -290,9 +290,9 @@ void SdStartPresentationDlg::InitMonitorSettings()
             // The user data contains the real setting
             for( sal_Int32 nDisplay = 0; nDisplay < mnMonitors; nDisplay++ )
             {
-                aName = GetDisplayName( nDisplay + 1,
-                                        nDisplay == nExternalIndex ?
-                                        MONITOR_IS_EXTERNAL : MONITOR_NORMAL );
+                aName = GetDisplayName(nDisplay + 1, nDisplay == nExternalIndex
+                                                         ? DisplayType::MONITOR_IS_EXTERNAL
+                                                         : DisplayType::MONITOR_NORMAL);
                 nInsertedEntry = InsertDisplayEntry( aName, nDisplay + 1 );
 
                 // Remember the index of the default selection.
