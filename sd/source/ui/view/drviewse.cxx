@@ -1754,19 +1754,19 @@ namespace slideshowhelp
 {
     void ShowSlideShow(SfxRequest const & rReq, SdDrawDocument &rDoc)
     {
-        Reference<XPresentation2> xPresentation(rDoc.getSlideShow());
-        if( !xPresentation.is() )
+        rtl::Reference<sd::SlideShow> pSlideShow = rDoc.getSlideShow();
+        if (!pSlideShow.is())
             return;
 
         sfx2::SfxNotebookBar::LockNotebookBar();
         if (SID_REHEARSE_TIMINGS == rReq.GetSlot())
-            xPresentation->rehearseTimings();
+            pSlideShow->rehearseTimings();
         else if (rDoc.getPresentationSettings().mbCustomShow)
         {
             //fdo#69975 if a custom show has been set, then
             //use it whether or not we've been asked to
             //start from the current or first slide
-            xPresentation->start();
+            pSlideShow->start();
 
             // if the custom show not set by default, only show it.
             if (rDoc.getPresentationSettings().mbStartCustomShow)
@@ -1776,7 +1776,7 @@ namespace slideshowhelp
         {
             //If there is no custom show set, start will automatically
             //start at the current page
-            xPresentation->start();
+            pSlideShow->start();
         }
         else
         {
@@ -1789,7 +1789,7 @@ namespace slideshowhelp
 
             Sequence< PropertyValue > aArguments{ comphelper::makePropertyValue(u"FirstPage"_ustr,
                                                                                 aStartingSlide) };
-            xPresentation->startWithArguments( aArguments );
+            pSlideShow->startWithArguments(aArguments);
         }
         sfx2::SfxNotebookBar::UnlockNotebookBar();
     }
