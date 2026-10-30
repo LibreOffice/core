@@ -41,7 +41,12 @@
 #include <map>
 #include <memory>
 
-namespace sd { class DrawController; }
+namespace sd
+{
+class DrawController;
+class SlideShowController;
+}
+
 namespace sd::framework { class ConfigurationController; }
 namespace sd::framework { class Pane; }
 
@@ -82,13 +87,12 @@ public:
     static ::rtl::Reference<PresenterController> Instance (
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    PresenterController (
-        unotools::WeakReference<PresenterScreen> xScreen,
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const rtl::Reference<::sd::DrawController>& rxController,
-        const css::uno::Reference<css::presentation::XSlideShowController>& rxSlideShowController,
-        rtl::Reference<PresenterPaneContainer> xPaneContainer,
-        const rtl::Reference<sd::framework::ResourceId>& rxMainPaneId);
+    PresenterController(unotools::WeakReference<PresenterScreen> xScreen,
+                        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+                        const rtl::Reference<::sd::DrawController>& rxController,
+                        const rtl::Reference<sd::SlideShowController>& rpSlideShowController,
+                        rtl::Reference<PresenterPaneContainer> xPaneContainer,
+                        const rtl::Reference<sd::framework::ResourceId>& rxMainPaneId);
     virtual ~PresenterController() override;
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
