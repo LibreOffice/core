@@ -1317,6 +1317,13 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
         createNew = false;
     }
 
+    if (createNew && !bEmptyWithSplitFly && !rLine.IsStop() && rLine.GetLineNr() == 1
+        && !rLine.GetPrev() && rLine.GetEnd() >= nStrLen && IsInTab())
+    {
+        // FindBreak() keeps the only line here anyway
+        createNew = false;
+    }
+
     // Dummy lines are created if text wrap does not provide enough space for the next content.
     // If the content supposedly doesn't fit anywhere on both the right and the left page,
     // then stop splitting and just force it to exist as best it can. (tdf#38575)

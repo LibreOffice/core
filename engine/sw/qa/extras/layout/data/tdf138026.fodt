@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:font-face-decls>
+  <style:font-face style:name="Liberation Serif" svg:font-family="'Liberation Serif'" style:font-family-generic="roman" style:font-pitch="variable"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="paragraph">
+   <style:paragraph-properties fo:margin-top="0mm" fo:margin-bottom="0mm"/>
+   <style:text-properties style:font-name="Liberation Serif" fo:font-size="10pt" style:font-name-asian="Liberation Serif" style:font-size-asian="10pt" style:font-name-complex="Liberation Serif" style:font-size-complex="10pt"/>
+  </style:default-style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="Table" style:family="table">
+   <style:table-properties style:width="80mm" table:align="left"/>
+  </style:style>
+  <style:style style:name="Col" style:family="table-column">
+   <style:table-column-properties style:column-width="40.000mm"/>
+  </style:style>
+  <style:style style:name="Row" style:family="table-row">
+   <style:table-row-properties style:min-row-height="5.3mm"/>
+  </style:style>
+  <style:style style:name="Cell" style:family="table-cell">
+   <style:table-cell-properties fo:padding="0mm" fo:border="0.5pt solid #000000" style:vertical-align="bottom"/>
+  </style:style>
+  <style:style style:name="P" style:family="paragraph">
+   <style:paragraph-properties fo:margin-bottom="2.8mm"/>
+  </style:style>
+  <style:style style:name="Filler" style:family="paragraph">
+   <style:paragraph-properties fo:line-height="73.5mm"/>
+  </style:style>
+  <style:page-layout style:name="PL">
+   <style:page-layout-properties fo:page-width="100mm" fo:page-height="100mm" fo:margin-top="10mm" fo:margin-bottom="10mm" fo:margin-left="10mm" fo:margin-right="10mm"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="PL"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <text:p text:style-name="Filler">Filler</text:p>
+   <table:table table:name="Table1" table:style-name="Table">
+    <table:table-column table:style-name="Col" table:number-columns-repeated="2"/>
+    <table:table-row table:style-name="Row"><table:table-cell table:style-name="Cell" table:number-rows-spanned="2" office:value-type="string"><text:p text:style-name="P">Span</text:p></table:table-cell><table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="P">Row 1</text:p></table:table-cell></table:table-row>
+    <table:table-row table:style-name="Row"><table:covered-table-cell/><table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="P">Row 2</text:p></table:table-cell></table:table-row>
+   </table:table>
+  </office:text>
+ </office:body>
+</office:document>

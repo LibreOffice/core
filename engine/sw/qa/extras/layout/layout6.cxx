@@ -2858,6 +2858,21 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf173897)
                 "expand", u"06.2026");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf138026)
+{
+    // A table near the page bottom, its first cell spanning both rows; neither row's one-line
+    // paragraph fits on page 1. Without the fix, the rows were split and joined again until the
+    // loop control stopped it, leaving part of the table on page 1.
+    createSwDoc("tdf138026.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page", 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab", 0);
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row", 2);
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row[1]/cell[1]", "rowspan", u"2");
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row[2]/cell[2]/txt/SwParaPortion/SwLineLayout",
+                "portion", u"Row 2");
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
