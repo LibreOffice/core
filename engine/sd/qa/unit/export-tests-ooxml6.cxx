@@ -955,6 +955,19 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testTableKeepsTheNameOfItsStyle)
     assertXPath(pStyles, "//a:tblStyleLst/a:tblStyle[@styleId='" + aStyleName.toUtf8() + "']", 1);
 }
 
+// A table cell that lets its text run on past its edge still says so after a save.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testTableCellKeepsLettingItsTextRunOn)
+{
+    // Given a table whose cells state that their text is not cut off at the edge of the cell:
+    createSdImpressDoc("pptx/n80340.pptx");
+
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:tbl/a:tr[1]/a:tc[1]/a:tcPr", "horzOverflow", u"overflow");
+    assertXPath(pXmlDoc, "//a:tbl/a:tr[1]/a:tc[2]/a:tcPr", "horzOverflow", u"overflow");
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testLayoutsOfOneMasterKeepDistinctNames)
 {
     // Given two slides with different layouts on one master named Cobalt, whose layouts are

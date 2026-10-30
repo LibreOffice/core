@@ -309,6 +309,26 @@ static void applyTableCellProperties( const Reference < css::table::XCell >& rxC
     xPropSet->setPropertyValue( u"TextVerticalAdjust"_ustr, Any( eVA ) );
 }
 
+/** Keeps beside a cell what the document says and the model has no room for. */
+static void keepForTheRoundTrip(const Reference<XPropertySet>& rxPropSet, const OUString& rName,
+                                const OUString& rValue)
+{
+    Sequence<PropertyValue> aGrabBag;
+    rxPropSet->getPropertyValue(u"CellInteropGrabBag"_ustr) >>= aGrabBag;
+    PropertyValue aPropertyValue = comphelper::makePropertyValue(rName, rValue);
+    if (aGrabBag.hasElements())
+    {
+        sal_Int32 nLength = aGrabBag.getLength();
+        aGrabBag.realloc(nLength + 1);
+        aGrabBag.getArray()[nLength] = std::move(aPropertyValue);
+    }
+    else
+    {
+        aGrabBag = { std::move(aPropertyValue) };
+    }
+    rxPropSet->setPropertyValue(u"CellInteropGrabBag"_ustr, Any(aGrabBag));
+}
+
 void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, const ::oox::drawingml::TextListStylePtr& pMasterTextListStyle,
     const cpo::uno::Reference < css::table::XCell >& rxCell, const TableProperties& rTableProperties,
     const TableStyle& rTableStyle, sal_Int32 nColumn, sal_Int32 nMaxColumn, sal_Int32 nRow, sal_Int32 nMaxRow )
@@ -664,22 +684,16 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
     }
     else if ( getVertToken() != XML_horz && getVertToken() != XML_eaVert )
     {
-        // put the vert value in the grab bag for roundtrip
-        const OUString aTokenName(TokenMap::getUnicodeTokenName(getVertToken()));
-        Sequence<PropertyValue> aGrabBag;
-        xPropSet->getPropertyValue(u"CellInteropGrabBag"_ustr) >>= aGrabBag;
-        PropertyValue aPropertyValue = comphelper::makePropertyValue(u"mso-tcPr-vert-value"_ustr, aTokenName);
-        if (aGrabBag.hasElements())
-        {
-            sal_Int32 nLength = aGrabBag.getLength();
-            aGrabBag.realloc(nLength + 1);
-            aGrabBag.getArray()[nLength] = std::move(aPropertyValue);
-        }
-        else
-        {
-            aGrabBag = { std::move(aPropertyValue) };
-        }
-        xPropSet->setPropertyValue(u"CellInteropGrabBag"_ustr, Any(aGrabBag));
+        keepForTheRoundTrip(xPropSet, u"mso-tcPr-vert-value"_ustr,
+                            TokenMap::getUnicodeTokenName(getVertToken()));
+    }
+
+    // A cell says whether the text it holds is cut off at its edge or runs on past it. The model
+    // keeps no answer of its own, so the one the document gives is kept beside the cell.
+    if ( getHorzOverflowToken() != XML_clip )
+    {
+        keepForTheRoundTrip(xPropSet, u"mso-tcPr-horzOverflow-value"_ustr,
+                            TokenMap::getUnicodeTokenName(getHorzOverflowToken()));
     }
 }
 

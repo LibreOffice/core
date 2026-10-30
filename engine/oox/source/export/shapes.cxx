@@ -2727,22 +2727,22 @@ void ShapeExport::WriteTableCellProperties(const Reference< XPropertySet>& xCell
     aRotateAngle >>= nRotateAngle;
     std::optional<OString> aTextVerticalValue = GetTextVerticalType(nRotateAngle);
 
+    std::optional<OString> aHorizontalOverflowValue;
     Sequence<PropertyValue> aGrabBag;
-    if( !aTextVerticalValue &&
-        (xCellPropSet->getPropertyValue(u"CellInteropGrabBag"_ustr) >>= aGrabBag) )
+    if (xCellPropSet->getPropertyValue(u"CellInteropGrabBag"_ustr) >>= aGrabBag)
     {
         for (auto const& rIt : aGrabBag)
         {
-            if (rIt.Name == "mso-tcPr-vert-value")
-            {
+            if (!aTextVerticalValue && rIt.Name == "mso-tcPr-vert-value")
                 aTextVerticalValue = rIt.Value.get<OUString>().toUtf8();
-                break;
-            }
+            else if (rIt.Name == "mso-tcPr-horzOverflow-value")
+                aHorizontalOverflowValue = rIt.Value.get<OUString>().toUtf8();
         }
     }
 
     mpFS->startElementNS(XML_a, XML_tcPr, XML_anchor, sVerticalAlignment,
     XML_vert, aTextVerticalValue,
+    XML_horzOverflow, aHorizontalOverflowValue,
     XML_marL, OString::number(oox::drawingml::convertHmmToEmu(nLeftMargin)),
     XML_marR, OString::number(oox::drawingml::convertHmmToEmu(nRightMargin)),
     XML_marT, OString::number(oox::drawingml::convertHmmToEmu(nTopMargin)),

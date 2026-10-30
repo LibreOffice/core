@@ -61,6 +61,7 @@ public:
     sal_Int32   getAnchorToken() const { return mnAnchorToken; };
     void        setAnchorToken( sal_Int32 nToken ){ mnAnchorToken = nToken; };
     void        setAnchorCtr( bool bAnchorCtr ){ mbAnchorCtr = bAnchorCtr; };
+    sal_Int32   getHorzOverflowToken() const { return mnHorzOverflowToken; };
     void        setHorzOverflowToken( sal_Int32 nToken ){ mnHorzOverflowToken = nToken; };
 
     void                        setTextBody( const oox::drawingml::TextBodyPtr& pTextBody ){ mpTextBody = pTextBody; };
