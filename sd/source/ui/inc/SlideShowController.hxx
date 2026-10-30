@@ -34,6 +34,7 @@
 #include <com/sun/star/presentation/XShapeEventListener.hpp>
 
 #include <drawdoc.hxx>
+#include <sddllapi.h>
 
 namespace com::sun::star::media { class XPlayer; }
 namespace sd { class DrawDocShell; }
@@ -130,7 +131,7 @@ private:
     css::uno::Reference< css::presentation::XSlideShow > mxSlideShow;
 };
 
-class SlideShowController final
+class SD_DLLPUBLIC SlideShowController final
     : public comphelper::WeakComponentImplHelper<css::presentation::XSlideShowController,
                                                  css::container::XIndexAccess>,
       public SfxListener

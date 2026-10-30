@@ -28,6 +28,7 @@
 
 #include <DrawController.hxx>
 #include <ResourceId.hxx>
+#include <SlideShowController.hxx>
 #include <slideshow.hxx>
 #include <unomodel.hxx>
 
@@ -310,10 +311,10 @@ void PresenterScreen::InitializePresenterScreen()
         mpPaneContainer = new PresenterPaneContainer();
 
         rtl::Reference<sd::SlideShow> pSlideShow = mpImpressDoc->getSlideShow();
-        Reference<presentation::XSlideShowController> xSlideShowController(
-            pSlideShow->getController());
+        rtl::Reference<sd::SlideShowController> pSlideShowController
+            = pSlideShow->GetSlideShowController();
 
-        if( !xSlideShowController.is() || !xSlideShowController->isFullScreen() )
+        if (!pSlideShowController.is() || !pSlideShowController->isFullScreen())
             return;
 
         // find first controller that is not the current controller (the one with the slideshow
@@ -368,7 +369,7 @@ void PresenterScreen::InitializePresenterScreen()
                     this,
                     xContext,
                     mxController,
-                    xSlideShowController,
+                    pSlideShowController,
                     mpPaneContainer,
                     xMainPaneId);
 
