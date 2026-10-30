@@ -274,29 +274,29 @@ SfxInterfaceId ViewShell::Implementation::GetViewId() const
 {
     switch (mrViewShell.GetShellType())
     {
-        case ViewShell::ST_IMPRESS:
-        case ViewShell::ST_NOTES:
-        case ViewShell::ST_HANDOUT:
+        case ViewShell::ShellType::Impress:
+        case ViewShell::ShellType::Notes:
+        case ViewShell::ShellType::Handout:
             return IMPRESS_FACTORY_ID;
 
-        case ViewShell::ST_DRAW:
+        case ViewShell::ShellType::Draw:
             return DRAW_FACTORY_ID;
 
-        case ViewShell::ST_OUTLINE:
+        case ViewShell::ShellType::Outline:
             return OUTLINE_FACTORY_ID;
 
-        case ViewShell::ST_SLIDE_SORTER:
+        case ViewShell::ShellType::SlideSorter:
             return SLIDE_SORTER_FACTORY_ID;
 
-        case ViewShell::ST_PRESENTATION:
+        case ViewShell::ShellType::Presentation:
             return PRESENTATION_FACTORY_ID;
 
         // Since we have to return a view id for every possible shell type
         // and there is not (yet) a proper ViewShellBase sub class for the
         // remaining types we chose the Impress factory as a fall back.
-        case ViewShell::ST_NOTESPANEL:
-        case ViewShell::ST_SIDEBAR:
-        case ViewShell::ST_NONE:
+        case ViewShell::ShellType::NotesPanel:
+        case ViewShell::ShellType::Sidebar:
+        case ViewShell::ShellType::None:
         default:
             return IMPRESS_FACTORY_ID;
     }

@@ -977,7 +977,7 @@ OutlinerView* Window::GetOutlinerView() const
 {
     OutlinerView *pOLV = nullptr;
     sd::View* pView = mpViewShell->GetView();
-    if (mpViewShell->GetShellType() == ViewShell::ST_OUTLINE)
+    if (mpViewShell->GetShellType() == ViewShell::ShellType::Outline)
     {
         if (OutlineView* pOView = dynamic_cast<OutlineView*>(pView))
             pOLV = pOView->GetViewByWindow(this);

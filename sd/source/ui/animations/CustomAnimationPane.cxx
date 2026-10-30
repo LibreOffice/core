@@ -294,7 +294,7 @@ IMPL_LINK(CustomAnimationPane,EventMultiplexerListener,
             // the event.
             if (auto pMainViewShell = mrBase.GetMainViewShell().get())
             {
-                if( pMainViewShell->GetShellType() == ViewShell::ST_IMPRESS )
+                if (pMainViewShell->GetShellType() == ViewShell::ShellType::Impress)
                 {
                     mxView = mrBase.GetDrawController();
                     onSelectionChanged();

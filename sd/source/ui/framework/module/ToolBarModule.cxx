@@ -151,7 +151,7 @@ void ToolBarModule::HandlePaneViewShellFocused(const rtl::Reference<sd::framewor
     switch(pViewShell->GetShellType())
     {
         // shells that override mainviewshell functionality when used in a pane
-        case ViewShell::ST_NOTESPANEL:
+        case ViewShell::ShellType::NotesPanel:
             mpBase->GetViewShellManager()->SetOverridingMainShell(pViewShell);
             UpdateToolbars(pViewShell.get());
             break;

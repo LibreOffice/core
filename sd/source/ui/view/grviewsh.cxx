@@ -46,7 +46,7 @@ GraphicViewShell::~GraphicViewShell()
 
 void GraphicViewShell::ConstructGraphicViewShell()
 {
-    meShellType = ST_DRAW;
+    meShellType = ShellType::Draw;
 
     mpLayerTabBar.reset (VclPtr<LayerTabBar>::Create(this, GetParentWindow()));
 

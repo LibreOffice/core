@@ -483,11 +483,11 @@ bool SdOutliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
         else
             switch (pShell->GetShellType())
             {
-                case sd::ViewShell::ST_DRAW:
-                case sd::ViewShell::ST_IMPRESS:
-                case sd::ViewShell::ST_NOTES:
-                case sd::ViewShell::ST_HANDOUT:
-                case sd::ViewShell::ST_OUTLINE:
+                case sd::ViewShell::ShellType::Draw:
+                case sd::ViewShell::ShellType::Impress:
+                case sd::ViewShell::ShellType::Notes:
+                case sd::ViewShell::ShellType::Handout:
+                case sd::ViewShell::ShellType::Outline:
                     bAbort = false;
                     break;
                 default:
@@ -2112,10 +2112,10 @@ void SdOutliner::Implementation::ProvideOutlinerView (
 
     switch (rpViewShell->GetShellType())
     {
-        case sd::ViewShell::ST_DRAW:
-        case sd::ViewShell::ST_IMPRESS:
-        case sd::ViewShell::ST_NOTES:
-        case sd::ViewShell::ST_HANDOUT:
+        case sd::ViewShell::ShellType::Draw:
+        case sd::ViewShell::ShellType::Impress:
+        case sd::ViewShell::ShellType::Notes:
+        case sd::ViewShell::ShellType::Handout:
         {
             // Create a new outline view to do the search on.
             bool bInsert = false;
@@ -2149,7 +2149,7 @@ void SdOutliner::Implementation::ProvideOutlinerView (
         }
         break;
 
-        case sd::ViewShell::ST_OUTLINE:
+        case sd::ViewShell::ShellType::Outline:
         {
             if (mpOutlineView!=nullptr && mbOwnOutlineView)
                 delete mpOutlineView;
@@ -2159,8 +2159,8 @@ void SdOutliner::Implementation::ProvideOutlinerView (
         break;
 
         default:
-        case sd::ViewShell::ST_NONE:
-        case sd::ViewShell::ST_PRESENTATION:
+        case sd::ViewShell::ShellType::None:
+        case sd::ViewShell::ShellType::Presentation:
             // Ignored
             break;
     }

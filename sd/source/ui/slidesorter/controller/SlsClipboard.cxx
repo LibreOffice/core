@@ -121,7 +121,7 @@ public:
     {
         if (mpDocument!=nullptr && mpDocument->IsUndoEnabled())
         {
-            if (mpMainViewShell && mpMainViewShell->GetShellType() == ViewShell::ST_DRAW)
+            if (mpMainViewShell && mpMainViewShell->GetShellType() == ViewShell::ShellType::Draw)
                 mpDocument->BegUndo(SdResId(STRING_DRAG_AND_DROP_PAGES));
             else
                 mpDocument->BegUndo(SdResId(STRING_DRAG_AND_DROP_SLIDES));
@@ -901,8 +901,8 @@ sal_Int8 Clipboard::ExecuteOrAcceptShapeDrop (
     pDrawViewShell = std::dynamic_pointer_cast<DrawViewShell>(
         mrSlideSorter.GetViewShell().GetViewShellBase().GetMainViewShell());
     if (pDrawViewShell != nullptr
-        && (pDrawViewShell->GetShellType() == ViewShell::ST_IMPRESS
-            || pDrawViewShell->GetShellType() == ViewShell::ST_DRAW))
+        && (pDrawViewShell->GetShellType() == ViewShell::ShellType::Impress
+            || pDrawViewShell->GetShellType() == ViewShell::ShellType::Draw))
     {
         // The drop is only accepted or executed when it takes place over a
         // page object.  Therefore we replace a missing page number by the

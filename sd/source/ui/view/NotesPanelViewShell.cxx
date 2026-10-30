@@ -141,7 +141,7 @@ NotesPanelViewShell::~NotesPanelViewShell()
 
 void NotesPanelViewShell::Construct()
 {
-    meShellType = ST_NOTESPANEL;
+    meShellType = ShellType::NotesPanel;
 
     Size aSize(29700, 21000);
     Point aWinPos(0, 0);

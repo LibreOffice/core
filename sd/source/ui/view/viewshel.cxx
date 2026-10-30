@@ -163,7 +163,7 @@ ViewShell::ViewShell( vcl::Window* pParentWindow, ViewShellBase& rViewShellBase)
     ,   mbStartShowWithDialog(false)
     ,   mnPrintedHandoutPageNum(1)
     ,   mnPrintedHandoutPageCount(0)
-    ,   meShellType(ST_NONE)
+    ,   meShellType(ShellType::None)
     ,   mpImpl(new Implementation(*this))
     ,   mpParentWindow(pParentWindow)
     ,   mpWindowUpdater(new ::sd::WindowUpdater())
@@ -1255,7 +1255,7 @@ SfxUndoManager* ViewShell::ImpGetUndoManager() const
     // check for text edit our outline view
     if( pView )
     {
-        if( pMainViewShell->GetShellType() == ViewShell::ST_OUTLINE )
+        if (pMainViewShell->GetShellType() == ViewShell::ShellType::Outline)
         {
             OutlineView* pOlView = dynamic_cast< OutlineView* >( pView );
             if( pOlView )

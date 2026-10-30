@@ -126,7 +126,7 @@ OutlinerView* SdUiImpressTest::createOutlineView(std::initializer_list<std::u16s
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pImpressDocument);
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
-    CPPUNIT_ASSERT_EQUAL(sd::ViewShell::ST_OUTLINE, pViewShell->GetShellType());
+    CPPUNIT_ASSERT_EQUAL(sd::ViewShell::ShellType::Outline, pViewShell->GetShellType());
     auto pView = static_cast<sd::SimpleOutlinerView*>(pViewShell->GetView());
     OutlinerView* pOutlinerView = pView->GetViewByWindow(pViewShell->GetActiveWindow());
     CPPUNIT_ASSERT(pOutlinerView);
@@ -2836,7 +2836,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testOutlineDeleteAcrossSlides)
 
     dispatchCommand(mxComponent, u".uno:OutlineMode"_ustr, {});
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
-    CPPUNIT_ASSERT_EQUAL(sd::ViewShell::ST_OUTLINE, pViewShell->GetShellType());
+    CPPUNIT_ASSERT_EQUAL(sd::ViewShell::ShellType::Outline, pViewShell->GetShellType());
     auto pView = static_cast<sd::SimpleOutlinerView*>(pViewShell->GetView());
     OutlinerView* pOutlinerView = pView->GetViewByWindow(pViewShell->GetActiveWindow());
     CPPUNIT_ASSERT(pOutlinerView);
@@ -2948,7 +2948,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testOutlineDropSlideDownIntoBody)
 
     dispatchCommand(mxComponent, u".uno:OutlineMode"_ustr, {});
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
-    CPPUNIT_ASSERT_EQUAL(sd::ViewShell::ST_OUTLINE, pViewShell->GetShellType());
+    CPPUNIT_ASSERT_EQUAL(sd::ViewShell::ShellType::Outline, pViewShell->GetShellType());
     auto pView = static_cast<sd::SimpleOutlinerView*>(pViewShell->GetView());
     OutlinerView* pOutlinerView = pView->GetViewByWindow(pViewShell->GetActiveWindow());
     CPPUNIT_ASSERT(pOutlinerView);

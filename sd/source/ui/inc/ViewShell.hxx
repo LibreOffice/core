@@ -92,17 +92,18 @@ class SAL_DLLPUBLIC_RTTI ViewShell
     : public SfxShell
 {
 public:
-    enum ShellType {
-        ST_NONE,
-        ST_DRAW,         // The Draw application.
-        ST_IMPRESS,      // Main view of the Impress application.
-        ST_NOTES,
-        ST_HANDOUT,
-        ST_OUTLINE,
-        ST_SLIDE_SORTER,
-        ST_PRESENTATION,
-        ST_SIDEBAR,
-        ST_NOTESPANEL
+    enum class ShellType
+    {
+        None,
+        Draw, // The Draw application.
+        Impress, // Main view of the Impress application.
+        Notes,
+        Handout,
+        Outline,
+        SlideSorter,
+        Presentation,
+        Sidebar,
+        NotesPanel
     };
     static const int MAX_HSPLIT_CNT = 1;
     static const int MAX_VSPLIT_CNT = 1;

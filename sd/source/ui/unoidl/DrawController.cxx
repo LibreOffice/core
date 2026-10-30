@@ -520,32 +520,32 @@ void DrawController::BroadcastContextChange() const
     EnumContext::Context eContext (EnumContext::Context::Unknown);
     switch (pViewShell->GetShellType())
     {
-        case ViewShell::ST_IMPRESS:
-        case ViewShell::ST_DRAW:
+        case ViewShell::ShellType::Impress:
+        case ViewShell::ShellType::Draw:
             if (mbMasterPageMode)
                 eContext = EnumContext::Context::MasterPage;
             else
                 eContext = EnumContext::Context::DrawPage;
             break;
 
-        case ViewShell::ST_NOTES:
+        case ViewShell::ShellType::Notes:
             eContext = EnumContext::Context::NotesPage;
             break;
 
-        case ViewShell::ST_HANDOUT:
+        case ViewShell::ShellType::Handout:
             eContext = EnumContext::Context::HandoutPage;
             break;
 
-        case ViewShell::ST_OUTLINE:
+        case ViewShell::ShellType::Outline:
             eContext = EnumContext::Context::OutlineText;
             break;
 
-        case ViewShell::ST_SLIDE_SORTER:
+        case ViewShell::ShellType::SlideSorter:
             eContext = EnumContext::Context::SlidesorterPage;
             break;
 
-        case ViewShell::ST_PRESENTATION:
-        case ViewShell::ST_NONE:
+        case ViewShell::ShellType::Presentation:
+        case ViewShell::ShellType::None:
         default:
             eContext = EnumContext::Context::Empty;
             break;

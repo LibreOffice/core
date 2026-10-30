@@ -734,9 +734,9 @@ void ViewShellBase::ReadUserDataSequence (
     // right view shell.
     switch (pShell->GetShellType())
     {
-        case ViewShell::ST_IMPRESS:
-        case ViewShell::ST_NOTES:
-        case ViewShell::ST_HANDOUT:
+        case ViewShell::ShellType::Impress:
+        case ViewShell::ShellType::Notes:
+        case ViewShell::ShellType::Handout:
         {
             OUString sViewURL;
             switch (dynamic_cast<DrawViewShell&>(*pShell).GetPageKind())

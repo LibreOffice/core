@@ -99,17 +99,17 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULL *
                     switch (framework::FrameworkHelper::GetViewId(sViewURL))
                     {
                         default:
-//                        case ViewShell::ST_IMPRESS:
-//                        case ViewShell::ST_NOTES:
-//                        case ViewShell::ST_HANDOUT:
+//                        case ViewShell::ShellType::Impress:
+//                        case ViewShell::ShellType::Notes:
+//                        case ViewShell::ShellType::Handout:
                             mnPresViewShellId = SID_VIEWSHELL0;
                             break;
 
-                        case ViewShell::ST_SLIDE_SORTER:
+                        case ViewShell::ShellType::SlideSorter:
                             mnPresViewShellId = SID_VIEWSHELL1;
                             break;
 
-                        case ViewShell::ST_OUTLINE:
+                        case ViewShell::ShellType::Outline:
                             mnPresViewShellId = SID_VIEWSHELL2;
                             break;
                     }
@@ -230,8 +230,8 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULL *
             mnDrawMode = bUseContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR;
         }
         mbIsNavigatorShowingAllShapes = true;
-        SetPreviousViewShellType (ViewShell::ST_NONE);
-        SetViewShellTypeOnLoad (ViewShell::ST_IMPRESS);
+        SetPreviousViewShellType(ViewShell::ShellType::None);
+        SetViewShellTypeOnLoad(ViewShell::ShellType::Impress);
 
         // get default for design mode
         bool bInitDesignMode = pDrawDoc->GetOpenInDesignMode();

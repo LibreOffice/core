@@ -923,11 +923,9 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     if( SfxItemState::DEFAULT == rSet.GetItemState( SID_DELETE_PAGE )
         || SfxItemState::DEFAULT == rSet.GetItemState( SID_DELETE_MASTER_PAGE ) )
     {
-        if (maTabControl->GetPageCount() == 1 ||
-            meEditMode == EditMode::MasterPage     ||
-            mePageKind == PageKind::Notes          ||
-            mePageKind == PageKind::Handout        ||
-            (GetShellType()!=ST_DRAW&&IsLayerModeActive()))
+        if (maTabControl->GetPageCount() == 1 || meEditMode == EditMode::MasterPage
+            || mePageKind == PageKind::Notes || mePageKind == PageKind::Handout
+            || (GetShellType() != ShellType::Draw && IsLayerModeActive()))
         {
             if (rSet.GetItemState(SID_DELETE_PAGE) == SfxItemState::DEFAULT)
                 rSet.DisableItem(SID_DELETE_PAGE);

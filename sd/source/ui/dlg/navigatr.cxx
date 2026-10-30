@@ -797,8 +797,8 @@ void SdNavigatorWin::HandleContextChange(const vcl::EnumContext& eContext)
         return;
 
     sd::ViewShell::ShellType eShellType = pDrawViewShell->GetShellType();
-    m_xContainer->set_visible(eShellType != sd::ViewShell::ST_OUTLINE
-            && eShellType != sd::ViewShell::ST_SLIDE_SORTER);
+    m_xContainer->set_visible(eShellType != sd::ViewShell::ShellType::Outline
+                              && eShellType != sd::ViewShell::ShellType::SlideSorter);
 }
 
 /**

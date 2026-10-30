@@ -64,7 +64,7 @@ PresentationViewShell::PresentationViewShell( ViewShellBase& rViewShellBase, vcl
 {
     if( GetDocSh() && GetDocSh()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
         maOldVisArea = GetDocSh()->GetVisArea( ASPECT_CONTENT );
-    meShellType = ST_PRESENTATION;
+    meShellType = ShellType::Presentation;
 }
 
 PresentationViewShell::~PresentationViewShell()

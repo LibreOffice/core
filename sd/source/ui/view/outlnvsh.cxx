@@ -131,7 +131,7 @@ void OutlineViewShell::Construct()
 {
     bool bModified = GetDoc()->IsChanged();
 
-    meShellType = ST_OUTLINE;
+    meShellType = ShellType::Outline;
     Size aSize(29700, 21000);
     Point aWinPos (0, 0);
     Point aViewOrigin(0, 0);

@@ -132,7 +132,7 @@ public:
     /** Remember the type of the view shell that was (or soon will be)
         previously associated with this frame view.
         @param eType
-            The type of the previous view shell or ViewShell::ST_NONE to
+            The type of the previous view shell or ViewShell::ShellType::None to
             indicate that there is no previous view shell.
     */
     void SetPreviousViewShellType (ViewShell::ShellType eType);
@@ -199,7 +199,7 @@ private:
     bool            mbIsNavigatorShowingAllShapes;
 
     /** The type of the previous view shell.  The (default) value
-        ViewShell::ST_NONE indicates that there was no previous view shell.
+        ViewShell::ShellType::None indicates that there was no previous view shell.
         Note that this value is used only temporarily and is not saved or
         restored.
     */

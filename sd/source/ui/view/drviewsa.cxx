@@ -257,15 +257,15 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     switch (mePageKind)
     {
         case PageKind::Standard:
-            meShellType = ST_IMPRESS;
+            meShellType = ShellType::Impress;
             break;
 
         case PageKind::Notes:
-            meShellType = ST_NOTES;
+            meShellType = ShellType::Notes;
             break;
 
         case PageKind::Handout:
-            meShellType = ST_HANDOUT;
+            meShellType = ShellType::Handout;
             break;
     }
 

@@ -81,13 +81,14 @@ void FuSearch::DoExecute( SfxRequest& )
     }
     else if ( dynamic_cast< const NotesPanelViewShell *>( &mrViewShell ) !=  nullptr )
     {
-        ViewShell::ShellType nShellType = mrViewShell.GetViewShellBase().GetMainViewShell()->GetShellType();
-        if( nShellType == ViewShell::ST_OUTLINE )
+        ViewShell::ShellType eShellType
+            = mrViewShell.GetViewShellBase().GetMainViewShell()->GetShellType();
+        if (eShellType == ViewShell::ShellType::Outline)
         {
             m_bOwnOutliner = false;
             m_pSdOutliner = mrDoc.GetOutliner();
         }
-        if( nShellType == ViewShell::ST_IMPRESS )
+        if (eShellType == ViewShell::ShellType::Impress)
         {
             m_bOwnOutliner = true;
             m_pSdOutliner = new SdOutliner( mrDoc, OutlinerMode::TextObject );

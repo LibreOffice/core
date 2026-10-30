@@ -468,7 +468,7 @@ void ToolBarManager::MainViewShellChanged ()
     if (mpImpl != nullptr)
     {
         mpImpl->ReleaseAllToolBarShells();
-        mpImpl->GetToolBarRules().MainViewShellChanged(ViewShell::ST_NONE);
+        mpImpl->GetToolBarRules().MainViewShellChanged(ViewShell::ShellType::None);
     }
 }
 
@@ -934,7 +934,7 @@ void ToolBarRules::Update (ViewShellBase const & rBase)
             SelectionHasChanged (*pMainViewShell, *pMainViewShell->GetView());
     }
     else
-        MainViewShellChanged(ViewShell::ST_NONE);
+        MainViewShellChanged(ViewShell::ShellType::None);
 }
 
 void ToolBarRules::MainViewShellChanged (ViewShell::ShellType nShellType)
@@ -946,10 +946,10 @@ void ToolBarRules::MainViewShellChanged (ViewShell::ShellType nShellType)
 
     switch(nShellType)
     {
-        case ::sd::ViewShell::ST_IMPRESS:
-        case ::sd::ViewShell::ST_NOTES:
-        case ::sd::ViewShell::ST_HANDOUT:
-        case ::sd::ViewShell::ST_DRAW:
+        case ::sd::ViewShell::ShellType::Impress:
+        case ::sd::ViewShell::ShellType::Notes:
+        case ::sd::ViewShell::ShellType::Handout:
+        case ::sd::ViewShell::ShellType::Draw:
             mpToolBarManager->AddToolBar(
                 ToolBarManager::ToolBarGroup::Permanent,
                 ToolBarManager::msToolBar);
@@ -961,12 +961,12 @@ void ToolBarRules::MainViewShellChanged (ViewShell::ShellType nShellType)
                 ToolBarManager::msViewerToolBar);
             break;
 
-        case ::sd::ViewShell::ST_NOTESPANEL:
+        case ::sd::ViewShell::ShellType::NotesPanel:
             mpToolBarManager->AddToolBarShell(ToolBarManager::ToolBarGroup::Permanent,
                                               ToolbarId::Draw_Text_Toolbox_Sd);
             break;
 
-        case ViewShell::ST_OUTLINE:
+        case ViewShell::ShellType::Outline:
             mpToolBarManager->AddToolBar(
                 ToolBarManager::ToolBarGroup::Permanent,
                 ToolBarManager::msOutlineToolBar);
@@ -977,7 +977,7 @@ void ToolBarRules::MainViewShellChanged (ViewShell::ShellType nShellType)
                 ToolBarManager::ToolBarGroup::Permanent, ToolbarId::Draw_Text_Toolbox_Sd);
             break;
 
-        case ViewShell::ST_SLIDE_SORTER:
+        case ViewShell::ShellType::SlideSorter:
             mpToolBarManager->AddToolBar(
                 ToolBarManager::ToolBarGroup::Permanent,
                 ToolBarManager::msViewerToolBar);
@@ -989,9 +989,9 @@ void ToolBarRules::MainViewShellChanged (ViewShell::ShellType nShellType)
                 ToolBarManager::msSlideSorterObjectBar);
             break;
 
-        case ViewShell::ST_NONE:
-        case ViewShell::ST_PRESENTATION:
-        case ViewShell::ST_SIDEBAR:
+        case ViewShell::ShellType::None:
+        case ViewShell::ShellType::Presentation:
+        case ViewShell::ShellType::Sidebar:
         default:
             break;
     }
@@ -1005,9 +1005,9 @@ void ToolBarRules::MainViewShellChanged (const ViewShell& rMainViewShell)
     MainViewShellChanged(rMainViewShell.GetShellType());
     switch(rMainViewShell.GetShellType())
     {
-        case ::sd::ViewShell::ST_IMPRESS:
-        case ::sd::ViewShell::ST_DRAW:
-        case ::sd::ViewShell::ST_NOTES:
+        case ::sd::ViewShell::ShellType::Impress:
+        case ::sd::ViewShell::ShellType::Draw:
+        case ::sd::ViewShell::ShellType::Notes:
         {
             const DrawViewShell* pDrawViewShell
                 = dynamic_cast<const DrawViewShell*>(&rMainViewShell);
@@ -1017,7 +1017,7 @@ void ToolBarRules::MainViewShellChanged (const ViewShell& rMainViewShell)
                     mpToolBarManager->AddToolBar(
                         ToolBarManager::ToolBarGroup::MasterMode,
                         ToolBarManager::msMasterViewToolBar);
-                else if ( rMainViewShell.GetShellType() != ::sd::ViewShell::ST_DRAW )
+                else if (rMainViewShell.GetShellType() != ::sd::ViewShell::ShellType::Draw)
                     mpToolBarManager->AddToolBar(
                         ToolBarManager::ToolBarGroup::CommonTask,
                         ToolBarManager::msCommonTaskToolBar);
@@ -1066,10 +1066,10 @@ void ToolBarRules::SelectionHasChanged (
             {
                 switch(rViewShell.GetShellType())
                 {
-                    case ::sd::ViewShell::ST_IMPRESS:
-                    case ::sd::ViewShell::ST_DRAW:
-                    case ::sd::ViewShell::ST_NOTES:
-                    case ::sd::ViewShell::ST_HANDOUT:
+                    case ::sd::ViewShell::ShellType::Impress:
+                    case ::sd::ViewShell::ShellType::Draw:
+                    case ::sd::ViewShell::ShellType::Notes:
+                    case ::sd::ViewShell::ShellType::Handout:
                         mpToolBarManager->SetToolBar(ToolBarManager::ToolBarGroup::Function,
                                                      ToolBarManager::msDrawingObjectToolBar);
                         mpToolBarManager->SetToolBar(ToolBarManager::ToolBarGroup::Permanent,

@@ -731,7 +731,7 @@ void SAL_CALL SlideShow::end()
             if( pFrameView && (pFrameView->GetPresentationViewShellId() != SID_VIEWSHELL0) )
             {
                 ViewShell::ShellType ePreviousType (pFrameView->GetPreviousViewShellType());
-                pFrameView->SetPreviousViewShellType(ViewShell::ST_NONE);
+                pFrameView->SetPreviousViewShellType(ViewShell::ShellType::None);
 
                 pFrameView->SetPresentationViewShellId(SID_VIEWSHELL0);
                 pFrameView->SetPreviousViewShellType(pViewShell->GetShellType());
@@ -1094,7 +1094,7 @@ void SlideShow::StartInPlacePresentation()
         // show has ended.  If there already is a saved shell type then that is
         // not overwritten.
 
-        ViewShell::ShellType eShell = ViewShell::ST_NONE;
+        ViewShell::ShellType eShell = ViewShell::ShellType::None;
 
         ::std::shared_ptr<FrameworkHelper> pHelper(FrameworkHelper::Instance(*mpCurrentViewShellBase));
         ::std::shared_ptr<ViewShell> pMainViewShell(pHelper->GetViewShell(FrameworkHelper::msCenterPaneURL));
@@ -1102,7 +1102,7 @@ void SlideShow::StartInPlacePresentation()
         if( pMainViewShell )
             eShell = pMainViewShell->GetShellType();
 
-        if( eShell != ViewShell::ST_IMPRESS )
+        if (eShell != ViewShell::ShellType::Impress)
         {
             // Switch temporary to a DrawViewShell which supports the in-place presentation.
 

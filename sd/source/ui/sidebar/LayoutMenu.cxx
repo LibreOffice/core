@@ -297,8 +297,8 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
         bool bMasterPageMode (false);
         switch (pMainViewShell->GetShellType())
         {
-            case ViewShell::ST_NOTES:
-            case ViewShell::ST_IMPRESS:
+            case ViewShell::ShellType::Notes:
+            case ViewShell::ShellType::Impress:
             {
                 DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pMainViewShell);
                 if (pDrawViewShell->GetEditMode() == EditMode::MasterPage)
@@ -323,9 +323,9 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
         SlideSorterViewShell* pSlideSorter = nullptr;
         switch (pMainViewShell->GetShellType())
         {
-            case ViewShell::ST_IMPRESS:
-            case ViewShell::ST_NOTES:
-            case ViewShell::ST_SLIDE_SORTER:
+            case ViewShell::ShellType::Impress:
+            case ViewShell::ShellType::Notes:
+            case ViewShell::ShellType::SlideSorter:
                 pSlideSorter = SlideSorterViewShell::GetSlideSorter(mrBase);
                 break;
             default:
