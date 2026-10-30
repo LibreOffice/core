@@ -21,6 +21,8 @@
 
 #include "PresenterCurrentSlideObserver.hxx"
 
+#include <SlideShowController.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -30,20 +32,20 @@ namespace sdext::presenter {
 
 PresenterCurrentSlideObserver::PresenterCurrentSlideObserver (
     ::rtl::Reference<PresenterController> xPresenterController,
-    const Reference<presentation::XSlideShowController>& rxSlideShowController)
+    const rtl::Reference<sd::SlideShowController>& rpSlideShowController)
     : PresenterCurrentSlideObserverInterfaceBase(m_aMutex),
       mpPresenterController(std::move(xPresenterController)),
-      mxSlideShowController(rxSlideShowController)
+      mpSlideShowController(rpSlideShowController)
 {
     if( mpPresenterController.is() )
     {
         mpPresenterController->addEventListener(this);
     }
 
-    if( mxSlideShowController.is() )
+    if( mpSlideShowController.is() )
     {
         // Listen for events from the slide show controller.
-        mxSlideShowController->addSlideShowListener(static_cast<XSlideShowListener*>(this));
+        mpSlideShowController->addSlideShowListener(static_cast<XSlideShowListener*>(this));
     }
 }
 
@@ -54,10 +56,10 @@ PresenterCurrentSlideObserver::~PresenterCurrentSlideObserver()
 void SAL_CALL PresenterCurrentSlideObserver::disposing()
 {
     // Disconnect from the slide show controller.
-    if(mxSlideShowController.is())
+    if(mpSlideShowController.is())
     {
-        mxSlideShowController->removeSlideShowListener(static_cast<XSlideShowListener*>(this));
-        mxSlideShowController = nullptr;
+        mpSlideShowController->removeSlideShowListener(static_cast<XSlideShowListener*>(this));
+        mpSlideShowController = nullptr;
     }
 
     if (mpPresenterController.is())
@@ -92,8 +94,8 @@ void SAL_CALL PresenterCurrentSlideObserver::slideEnded (sal_Bool bReverse)
     // Determine whether the new current slide (the one after the one that
     // just ended) is the slide past the last slide in the presentation,
     // i.e. the one that says something like "click to end presentation...".
-    if (mxSlideShowController.is() && !bReverse)
-        if (mxSlideShowController->getNextSlideIndex() < 0)
+    if (mpSlideShowController.is() && !bReverse)
+        if (mpSlideShowController->getNextSlideIndex() < 0)
             if( mpPresenterController.is() )
                 mpPresenterController->UpdateCurrentSlide(+1);
 }
@@ -123,8 +125,8 @@ void SAL_CALL PresenterCurrentSlideObserver::disposing (
 {
     if (rEvent.Source == Reference<XInterface>(static_cast<XWeak*>(mpPresenterController.get())))
         dispose();
-    else if (rEvent.Source == mxSlideShowController)
-        mxSlideShowController = nullptr;
+    else if (mpSlideShowController.is() && rEvent.Source == mpSlideShowController->getXWeak())
+        mpSlideShowController = nullptr;
 }
 
 } // end of namespace ::sdext::presenter

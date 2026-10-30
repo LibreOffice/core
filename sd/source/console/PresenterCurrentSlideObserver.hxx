@@ -21,7 +21,6 @@
 #define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERCURRENTSLIDEOBSERVER_HXX
 
 #include "PresenterController.hxx"
-#include <com/sun/star/presentation/XSlideShowController.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>
@@ -46,7 +45,7 @@ class PresenterCurrentSlideObserver
 public:
     PresenterCurrentSlideObserver (
         ::rtl::Reference<PresenterController> xPresenterController,
-        const css::uno::Reference<css::presentation::XSlideShowController>& rxSlideShowController);
+        const rtl::Reference<sd::SlideShowController>& rpSlideShowController);
     virtual ~PresenterCurrentSlideObserver() override;
 
     virtual void SAL_CALL disposing() override;
@@ -71,7 +70,7 @@ public:
 
 private:
     ::rtl::Reference<PresenterController> mpPresenterController;
-    css::uno::Reference<css::presentation::XSlideShowController> mxSlideShowController;
+    rtl::Reference<sd::SlideShowController> mpSlideShowController;
 };
 
 } // end of namespace ::sdext::presenter
