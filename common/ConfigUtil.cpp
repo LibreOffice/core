@@ -127,6 +127,7 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "feature_lock.locked_hosts.host[@read_only]", "false" },
     { "feature_lock.locked_hosts[@allow]", "false" },
     { "feature_lock.unlock_description", UNLOCK_DESCRIPTION },
+    { "feature_lock.unlock_image", "" },
     { "feature_lock.unlock_link", UNLOCK_LINK },
     { "feature_lock.unlock_title", UNLOCK_TITLE },
     { "feature_lock.writer_unlock_highlights", WRITER_UNLOCK_HIGHLIGHTS },
