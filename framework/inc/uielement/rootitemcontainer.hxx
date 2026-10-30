@@ -74,15 +74,15 @@ class RootItemContainer final : private cppu::BaseMutex,
         // XIndexContainer
         virtual void SAL_CALL insertByIndex( sal_Int32 Index, const css::uno::Any& Element ) override;
 
-        virtual void SAL_CALL removeByIndex( sal_Int32 Index ) override;
+        virtual FWI_DLLPUBLIC void SAL_CALL removeByIndex( sal_Int32 Index ) override;
 
         // XIndexReplace
-        virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const css::uno::Any& Element ) override;
+        virtual FWI_DLLPUBLIC void SAL_CALL replaceByIndex( sal_Int32 Index, const css::uno::Any& Element ) override;
 
         // XIndexAccess
-        virtual sal_Int32 SAL_CALL getCount() override;
+        virtual FWI_DLLPUBLIC sal_Int32 SAL_CALL getCount() override;
 
-        virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
+        virtual FWI_DLLPUBLIC css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
         // XElementAccess
         virtual css::uno::Type SAL_CALL getElementType() override
