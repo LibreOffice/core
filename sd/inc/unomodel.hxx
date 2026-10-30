@@ -65,6 +65,7 @@ class SdGenericDrawPage;
 namespace sd {
 class DrawDocShell;
 class DrawViewShell;
+class SlideShow;
 class SlideshowLayerRenderer;
 }
 
@@ -328,6 +329,8 @@ public:
         See also comments of issue 27847.
     */
     virtual void SAL_CALL dispose() override;
+
+    SD_DLLPUBLIC rtl::Reference<sd::SlideShow> getSlideShow();
 };
 
 /***********************************************************************

@@ -28,6 +28,7 @@
 
 #include <DrawController.hxx>
 #include <ResourceId.hxx>
+#include <slideshow.hxx>
 #include <unomodel.hxx>
 
 #include <framework/ConfigurationController.hxx>
@@ -308,8 +309,9 @@ void PresenterScreen::InitializePresenterScreen()
     {
         mpPaneContainer = new PresenterPaneContainer();
 
-        Reference<XPresentation2> xPresentation(mpImpressDoc->getPresentation(), UNO_QUERY_THROW);
-        Reference<presentation::XSlideShowController> xSlideShowController( xPresentation->getController() );
+        rtl::Reference<sd::SlideShow> pSlideShow = mpImpressDoc->getSlideShow();
+        Reference<presentation::XSlideShowController> xSlideShowController(
+            pSlideShow->getController());
 
         if( !xSlideShowController.is() || !xSlideShowController->isFullScreen() )
             return;
@@ -336,8 +338,7 @@ void PresenterScreen::InitializePresenterScreen()
         mxConfigurationControllerWeak = xCC.get();
 
         Reference<XComponentContext> xContext(mxContextWeak);
-        rtl::Reference<sd::framework::ResourceId> xMainPaneId(
-            GetMainPaneId(xPresentation));
+        rtl::Reference<sd::framework::ResourceId> xMainPaneId(GetMainPaneId(pSlideShow));
         // An empty reference means that the presenter screen can
         // not or must not be displayed.
         if ( ! xMainPaneId.is())
@@ -396,11 +397,11 @@ void PresenterScreen::InitializePresenterScreen()
 void PresenterScreen::SwitchMonitors()
 {
     try {
-        Reference<XPresentation2> xPresentation(mpImpressDoc->getPresentation(), UNO_QUERY_THROW);
+        rtl::Reference<sd::SlideShow> pSlideShow = mpImpressDoc->getSlideShow();
 
         // Get the existing presenter console screen, we want to switch the
         // presentation to use that instead.
-        sal_Int32 nNewScreen = GetPresenterScreenNumber (xPresentation);
+        sal_Int32 nNewScreen = GetPresenterScreenNumber(pSlideShow);
         if (nNewScreen < 0)
             return;
 
@@ -413,8 +414,7 @@ void PresenterScreen::SwitchMonitors()
             nNewScreen++; // otherwise we store screens offset by one.
 
         // Set the new presentation display
-        Reference<beans::XPropertySet> xProperties (xPresentation, UNO_QUERY_THROW);
-        xProperties->setPropertyValue(u"Display"_ustr, Any(nNewScreen));
+        pSlideShow->setPropertyValue(u"Display"_ustr, Any(nNewScreen));
     } catch (const uno::Exception &) {
     }
 }

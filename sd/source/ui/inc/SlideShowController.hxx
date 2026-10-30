@@ -23,22 +23,23 @@
 #include <sal/config.h>
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/timer.hxx>
 
 #include <comphelper/interfacecontainer4.hxx>
 #include <com/sun/star/presentation/ClickAction.hpp>
+#include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/presentation/XSlideShowNavigationListener.hpp>
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 #include <com/sun/star/presentation/XShapeEventListener.hpp>
 
 #include <drawdoc.hxx>
 
-#include <slideshow.hxx>
-
 namespace com::sun::star::media { class XPlayer; }
 namespace sd { class DrawDocShell; }
 namespace sd { class ViewShell; }
 
+struct ImplSVEvent;
 class SfxBindings;
 class SfxDispatcher;
 class SfxViewFrame;
@@ -47,10 +48,13 @@ class VclSimpleEvent;
 
 namespace sd
 {
+class SlideShowController;
 class SlideShowView;
+enum class AnimationMode;
 class AnimationSlideController;
 class PaneHider;
 class ShowWindow;
+class View;
 class Window;
 
 struct PresentationSettingsEx : public PresentationSettings

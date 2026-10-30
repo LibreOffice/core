@@ -21,6 +21,8 @@
 
 #include "sddllapi.h"
 
+#include <SlideShowController.hxx>
+
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -60,8 +62,6 @@ struct ImplSVEvent;
 
 namespace sd
 {
-
-class SlideShowController;
 class View;
 class ViewShell;
 class ViewShellBase;
@@ -76,7 +76,7 @@ enum class AnimationMode
 
 typedef comphelper::WeakComponentImplHelper< css::presentation::XPresentation2, css::lang::XServiceInfo > SlideshowBase;
 
-class SlideShow final : public SlideshowBase
+class SD_DLLPUBLIC SlideShow final : public SlideshowBase
 {
 public:
     /// used by the model to create a slideshow for it
