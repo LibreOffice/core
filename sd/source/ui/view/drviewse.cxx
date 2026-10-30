@@ -1797,13 +1797,13 @@ namespace slideshowhelp
 
 void DrawViewShell::StopSlideShow()
 {
-    Reference<XPresentation2> xPresentation(GetDoc()->getSlideShow());
-    if(xPresentation.is() && xPresentation->isRunning())
+    rtl::Reference<sd::SlideShow> pSlideShow = GetDoc()->getSlideShow();
+    if (pSlideShow.is() && pSlideShow->isRunning())
     {
         if( mpDrawView->IsTextEdit() )
             mpDrawView->SdrEndTextEdit();
 
-        xPresentation->end();
+        pSlideShow->end();
     }
 }
 
