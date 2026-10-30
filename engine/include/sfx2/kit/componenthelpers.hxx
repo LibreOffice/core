@@ -19,6 +19,7 @@
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::frame { class XDispatchResultListener; }
 namespace cpo::uno { template<class E> class Sequence; }
 
 class SfxInPlaceClient;
@@ -47,6 +48,11 @@ public:
     void Invalidate();
 
     void Dispatch(const OUString& cmd, const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) const;
+    /// Dispatches the command to the chart, which tells the listener when it is done. Answers
+    /// whether the chart takes the command.
+    bool Dispatch(const OUString& cmd,
+                  const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments,
+                  const cpo::uno::Reference<css::frame::XDispatchResultListener>& xListener) const;
 
     bool Hit(const Point& aPos);
     static bool HitAny(const Point& aPos);

@@ -22,6 +22,7 @@
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
 using namespace com::sun::star;
@@ -119,6 +120,13 @@ void KitChartHelper::Dispatch(const OUString& cmd,
                               const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) const
 {
     comphelper::dispatchCommand(cmd, GetXController(), rArguments);
+}
+
+bool KitChartHelper::Dispatch(
+    const OUString& cmd, const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments,
+    const cpo::uno::Reference<css::frame::XDispatchResultListener>& xListener) const
+{
+    return comphelper::dispatchCommand(cmd, GetXController(), rArguments, xListener);
 }
 
 void KitChartHelper::Invalidate()

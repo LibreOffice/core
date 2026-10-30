@@ -6366,7 +6366,16 @@ void COKitDocumentImpl::postUnoCommand(const char* pCommand, const char* pArgume
     {
         if (KitChartHelper aChartHelper(SfxViewShell::Current()); aChartHelper.GetWindow())
         {
-            aChartHelper.Dispatch(aCommand, comphelper::containerToSequence(aPropertyValuesVector));
+            // the chart tells when it is done where that is asked, as the document does
+            rtl::Reference<DispatchResultListener> xChartListener;
+            if (bNotifyWhenFinished && mpCallbackFlushHandlers.count(nView))
+                xChartListener = new DispatchResultListener(
+                    pCommand, mpCallbackFlushHandlers[nView], pDocSh && pDocSh->IsModified(),
+                    mxComponent);
+            if (!aChartHelper.Dispatch(
+                    aCommand, comphelper::containerToSequence(aPropertyValuesVector),
+                    cpo::uno::Reference<css::frame::XDispatchResultListener>(xChartListener)))
+                giveFailedResult(xChartListener, "Failed to dispatch " + aCommand);
             return;
         }
         if (KitStarMathHelper aMathHelper(SfxViewShell::Current()); aMathHelper.GetGraphicWindow())
