@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-28 13:35+0100\n"
-"PO-Revision-Date: 2026-10-27 16:28+0000\n"
+"PO-Revision-Date: 2026-10-28 14:25+0000\n"
 "Last-Translator: Andras Timar <timar@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/hu/>\n"
-"Language: \n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1465,11 +1465,11 @@ msgstr "Az első beállított"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5050
 msgid "Translating with {0}."
-msgstr ""
+msgstr "{0} a fordító."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5051
 msgid "No provider is set up: the Translate command is not offered."
-msgstr ""
+msgstr "Nincs beállított szolgáltató: a Fordítás parancs nem érhető el."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5091
 msgid "API URL"
@@ -1820,39 +1820,39 @@ msgstr "Stílus duplikálása"
 
 #: src/app/Util.ts:319
 msgid "1 year"
-msgstr ""
+msgstr "1 év"
 
 #: src/app/Util.ts:320
 msgid "{count} years"
-msgstr ""
+msgstr "{count} év"
 
 #: src/app/Util.ts:322
 msgid "1 day"
-msgstr ""
+msgstr "1 nap"
 
 #: src/app/Util.ts:322
 msgid "{count} days"
-msgstr ""
+msgstr "{count} nap"
 
 #: src/app/Util.ts:323
 msgid "1 hour"
-msgstr ""
+msgstr "1 óra"
 
 #: src/app/Util.ts:323
 msgid "{count} hours"
-msgstr ""
+msgstr "{count} óra"
 
 #: src/app/Util.ts:324
 msgid "1 minute"
-msgstr ""
+msgstr "1 perc"
 
 #: src/app/Util.ts:324
 msgid "{count} minutes"
-msgstr ""
+msgstr "{count} perc"
 
 #: src/app/Util.ts:339
 msgid "less than a minute"
-msgstr ""
+msgstr "kevesebb mint egy perc"
 
 #: src/canvas/sections/CommentListSection.ts:2261
 #: src/canvas/sections/CommentListSection.ts:2274
@@ -1901,9 +1901,8 @@ msgid "Reply"
 msgstr "Válasz"
 
 #: src/canvas/sections/CommentSection.ts:345
-#, fuzzy
 msgid "comment"
-msgstr "Megjegyzés"
+msgstr "megjegyzés"
 
 #: src/canvas/sections/CommentSection.ts:565
 msgid "Press Ctrl + Enter to post"
@@ -1911,7 +1910,7 @@ msgstr "A beküldéshez nyomja meg a Ctrl + Enter billentyűkombinációt"
 
 #: src/canvas/sections/CommentSection.ts:583
 msgid "Reply to {0}"
-msgstr ""
+msgstr "Válasz neki: {0}"
 
 #: src/canvas/sections/CommentSection.ts:653
 #: src/canvas/sections/CommentSection.ts:654
@@ -2027,11 +2026,11 @@ msgstr "A dokumentum nem támogatott médiát tartalmaz"
 
 #: src/canvas/sections/SelectionSection.ts:1553
 msgid "Waiting for redo..."
-msgstr ""
+msgstr "Várakozás az Újra műveletre..."
 
 #: src/canvas/sections/SelectionSection.ts:1554
 msgid "Waiting for undo..."
-msgstr ""
+msgstr "Várakozás a visszavonásra..."
 
 #: src/canvas/sections/URLPopUpSection.ts:89
 #: src/control/Control.HyperlinkWizard.ts:41
@@ -2178,7 +2177,7 @@ msgstr "Hétköznapi"
 #. TRANSLATORS: such as "Formal" or a name that the user typed
 #: src/control/Control.AIChatSidebar.ts:309
 msgid "{0} tone"
-msgstr ""
+msgstr "Hangnem: {0}"
 
 #: src/control/Control.AIChatSidebar.ts:419
 msgid "Best"
@@ -2256,27 +2255,27 @@ msgstr "Mit szeretne tenni ezzel a dokumentummal?"
 
 #: src/control/Control.AIChatSidebar.ts:787
 msgid "Good morning, {0}!"
-msgstr ""
+msgstr "Jó reggelt, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:788
 msgid "Good morning!"
-msgstr ""
+msgstr "Jó reggelt!"
 
 #: src/control/Control.AIChatSidebar.ts:790
 msgid "Good afternoon, {0}!"
-msgstr ""
+msgstr "Jó napot, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:791
 msgid "Good afternoon!"
-msgstr ""
+msgstr "Jó napot!"
 
 #: src/control/Control.AIChatSidebar.ts:793
 msgid "Good evening, {0}!"
-msgstr ""
+msgstr "Jó estét, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:794
 msgid "Good evening!"
-msgstr ""
+msgstr "Jó estét!"
 
 #: src/control/Control.AIChatSidebar.ts:845
 #: src/control/Control.AIChatSidebar.ts:2288
@@ -2887,21 +2886,20 @@ msgid "Reject action"
 msgstr "Művelet elutasítása"
 
 #: src/control/Control.AIChatSidebar.ts:2845
-#, fuzzy
 msgid "Send"
-msgstr "Elküldött"
+msgstr "Elküldés"
 
 #: src/control/Control.AIChatSidebar.ts:2847
 msgid "Send these cells"
-msgstr ""
+msgstr "Cellák elküldése"
 
 #: src/control/Control.AIChatSidebar.ts:2853
 msgid "Do not send these cells"
-msgstr ""
+msgstr "Ne küldje el a cellákat"
 
 #: src/control/Control.AIChatSidebar.ts:2870
 msgid "Nothing was sent."
-msgstr ""
+msgstr "Semmi sem lett elküldve."
 
 #: src/control/Control.AIChatSidebar.ts:2893
 msgid "Applying changes..."
@@ -3019,10 +3017,12 @@ msgstr "Képlethiba diagnosztizálása itt"
 #: src/control/Control.AIChatSidebar.ts:3871
 msgid "To diagnose the error in %1, these cells will be sent to %2:"
 msgstr ""
+"A(z) %1 cellában lévő hiba diagnosztizálásához a következő cellák lesznek "
+"elküldve ide: %2."
 
 #: src/control/Control.AIChatSidebar.ts:3877
 msgid "Do you want to send them?"
-msgstr ""
+msgstr "Elküldi őket?"
 
 #: src/control/Control.AIChatSidebar.ts:3897
 msgid "I have a formula error in my spreadsheet."
@@ -3032,7 +3032,7 @@ msgstr "Képlethiba van a táblázatomban."
 #. TRANSLATORS: B5, {1} the name of its sheet
 #: src/control/Control.AIChatSidebar.ts:3901
 msgid "Cell {0} (Sheet: {1}) contains:"
-msgstr ""
+msgstr "A(z) {0} cella ({1} munkalap) tartalma:"
 
 #: src/control/Control.AIChatSidebar.ts:3906
 #: src/control/Control.FormulaBarJSDialog.js:116
@@ -3049,9 +3049,8 @@ msgstr "Hivatkozott cellák"
 #. TRANSLATORS: Sent to the AI model. {0} is a Calc error code such
 #. TRANSLATORS: as #DIV/0!
 #: src/control/Control.AIChatSidebar.ts:3918
-#, fuzzy
 msgid "Please diagnose why this formula produces the {0} error."
-msgstr "Diagnosztizálja, miért adja ez a képlet a(z)"
+msgstr "Diagnosztizálja, miért adja ez a képlet a(z) {0} hibát."
 
 #: src/control/Control.AIChatSidebar.ts:3922
 msgid "Explain the root cause and suggest how to fix it."
@@ -3067,11 +3066,11 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3942
 msgid "only the cells with errors"
-msgstr ""
+msgstr "csak a hibás cellák"
 
 #: src/control/Control.AIChatSidebar.ts:3949
 msgid "another file, its name only"
-msgstr ""
+msgstr "másik fájl, csak a neve"
 
 #: src/control/Control.AIChatSidebar.ts:3979
 msgid "formula"
@@ -3183,6 +3182,8 @@ msgid ""
 "The table shows what each cell displays. The \"Formulas:\" list below it "
 "gives the formula of each cell that has one."
 msgstr ""
+"A táblázat azt mutatja, ami az egyes cellákban megjelenik. Az alatta lévő „"
+"Formulas:” lista a képletet tartalmazó cellák képleteit adja meg."
 
 #: src/control/Control.AIChatSidebar.ts:4203
 msgid ""
@@ -3450,7 +3451,7 @@ msgstr "Tisztítás folyamata"
 
 #: src/control/Control.CleanupSidebar.ts:913
 msgid "Stop Cleanup"
-msgstr ""
+msgstr "Tisztítás leállítása"
 
 #: src/control/Control.CleanupSidebar.ts:934
 msgid "Scan presentation"
@@ -4781,7 +4782,6 @@ msgstr "Online súgó"
 #: src/control/Control.Menubar.ts:460 src/control/Control.Menubar.ts:677
 #: src/control/Control.Menubar.ts:848 src/control/Control.Menubar.ts:1176
 #: src/control/Control.NotebookbarWriter.js:529
-#, fuzzy
 msgid "Show Tour"
 msgstr "Ismertető megjelenítése"
 
@@ -5426,7 +5426,7 @@ msgstr "Kitöltés színe (csak átlátszó képeknél)"
 
 #: src/control/Control.Notebookbar.js:667
 msgid "Area"
-msgstr ""
+msgstr "Terület"
 
 #: src/control/Control.Notebookbar.js:682
 msgid "Line"
@@ -8121,11 +8121,11 @@ msgstr "{index}. oszlop"
 
 #: src/control/jsdialog/Widget.EditEngine.ts:587
 msgid "%1 is editing"
-msgstr ""
+msgstr "%1 szerkeszti"
 
 #: src/control/jsdialog/Widget.EditEngine.ts:588
 msgid "Another user is editing"
-msgstr ""
+msgstr "Egy másik felhasználó szerkeszti"
 
 #: src/control/jsdialog/Widget.FormulabarEdit.js:460 src/map/Clipboard.js:1589
 msgid "Cut"
@@ -8133,7 +8133,7 @@ msgstr "Kivágás"
 
 #: src/control/jsdialog/Widget.FormulabarEdit.js:519
 msgid "Formula bar"
-msgstr ""
+msgstr "Képletsor"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:54
 msgid "Smileys"
@@ -8329,7 +8329,7 @@ msgstr "Érték csökkentése"
 
 #: src/control/jsdialog/Widget.TabControl.tsx:229
 msgid "Add a fill to edit the {0}"
-msgstr ""
+msgstr "Kitöltés hozzáadásával szerkeszthető: {0}"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1836
 msgid "Cell value"
@@ -8606,12 +8606,15 @@ msgstr ""
 msgid ""
 "You no longer have access to this document. Its security label was changed."
 msgstr ""
+"Már nem fér hozzá ehhez a dokumentumhoz, mert módosult a biztonsági címkéje."
 
 #: src/errormessages.ts:38
 msgid ""
 "You can no longer edit this document. Its security label was changed. "
 "Please open it again to view it."
 msgstr ""
+"Már nem szerkesztheti ezt a dokumentumot, mert módosult a biztonsági "
+"címkéje. A megtekintéshez nyissa meg újra."
 
 #: src/errormessages.ts:40
 msgid "Authorization error was: '{errormessage}'."
@@ -8749,7 +8752,7 @@ msgstr "A dokumentumot nem lehet menteni."
 
 #: src/errormessages.ts:90 src/errormessages.ts:109
 msgid "The storage refused to save the document."
-msgstr ""
+msgstr "A tárhely nem engedte menteni a dokumentumot."
 
 #: src/errormessages.ts:91
 msgid "Document cannot be renamed."
@@ -8928,15 +8931,15 @@ msgstr "Online szerkesztő"
 
 #: src/layer/tile/CanvasTileLayer.js:1396
 msgid "%1 started recording changes for all users."
-msgstr ""
+msgstr "%1 minden felhasználó számára bekapcsolta a változások követését."
 
 #: src/layer/tile/CanvasTileLayer.js:1397
 msgid "Recording changes was started for all users."
-msgstr ""
+msgstr "A változások követése minden felhasználó számára be lett kapcsolva."
 
 #: src/layer/tile/CanvasTileLayer.js:1399
 msgid "Your changes are tracked now."
-msgstr ""
+msgstr "A változásai mostantól követve vannak."
 
 #: src/layer/tile/CanvasTileLayer.js:1485
 msgid "Functions"
