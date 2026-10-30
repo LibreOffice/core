@@ -691,6 +691,28 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf144917)
     CPPUNIT_ASSERT_EQUAL(u"http://www.example.com/"_ustr, iter->second.get<OUString>());
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest, testLinkOnAShapeDeepInAGroup)
+{
+    // The shape carrying the link sits in a group that sits in another group, and the link is
+    // the one the document states for it.
+    createSdImpressDoc("pptx/link-on-a-shape-two-groups-deep.pptx");
+
+    uno::Reference<container::XIndexAccess> xOuterGroup(getShapeFromPage(0, 0),
+                                                        uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xInnerGroup(xOuterGroup->getByIndex(0),
+                                                        uno::UNO_QUERY_THROW);
+    uno::Reference<document::XEventsSupplier> xEventsSupplier(xInnerGroup->getByIndex(1),
+                                                              uno::UNO_QUERY_THROW);
+    uno::Reference<container::XNameAccess> xEvents(xEventsSupplier->getEvents());
+
+    cpo::uno::Sequence<beans::PropertyValue> aProperties;
+    xEvents->getByName(u"OnClick"_ustr) >>= aProperties;
+    comphelper::SequenceAsHashMap aMap(aProperties);
+    auto aIterator(aMap.find(u"Bookmark"_ustr));
+    CPPUNIT_ASSERT(aIterator != aMap.end());
+    CPPUNIT_ASSERT_EQUAL(u"http://www.example.com/"_ustr, aIterator->second.get<OUString>());
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTest, testHyperlinkOnImage)
 {
     createSdImpressDoc("pptx/hyperlinkOnImage.pptx");

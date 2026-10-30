@@ -375,6 +375,24 @@ void keepStatedPlaceholder(const SlidePersist& rSlidePersist, const Reference<XS
         SAL_WARN("oox.ppt", "keepStatedPlaceholderName: failed to keep the name");
     }
 }
+
+/// Gathers every shape of a group that states a link, however deep in the group it sits
+void gatherShapesWithALink(const std::vector<oox::drawingml::ShapePtr>& rShapes,
+                           std::vector<std::pair<OUString, Reference<XShape>>>& rLinkShapes)
+{
+    for (const oox::drawingml::ShapePtr& pShape : rShapes)
+    {
+        if (!pShape)
+            continue;
+
+        OUString sShapeURL;
+        pShape->getShapeProperties().getProperty(PROP_URL) >>= sShapeURL;
+        if (!sShapeURL.isEmpty())
+            rLinkShapes.push_back({ sShapeURL, pShape->getXShape() });
+
+        gatherShapesWithALink(pShape->getChildren(), rLinkShapes);
+    }
+}
 }
 
 void PPTShape::addShape(
@@ -752,15 +770,7 @@ void PPTShape::addShape(
                 // restore remembered setting
                 rFilterBase.setDiagramFontHeights(pDiagramFontHeights);
 
-                for (size_t i = 0; i < this->getChildren().size(); i++)
-                {
-                    this->getChildren()[i]->getShapeProperties().getProperty(PROP_URL) >>= sURL;
-                    if (!sURL.isEmpty())
-                    {
-                        Reference<XShape> xChild = this->getChildren()[i]->getXShape();
-                        aURLShapes.push_back({ sURL, xChild });
-                    }
-                }
+                gatherShapesWithALink(this->getChildren(), aURLShapes);
             }
 
             // Support advanced DiagramHelper
