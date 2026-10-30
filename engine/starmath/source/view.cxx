@@ -454,7 +454,9 @@ void SmGraphicWidget::LoseFocus()
     }
     if (!SmViewShell::IsInlineEditEnabled())
         return;
-    SetIsCursorVisible(false);
+    // the kit has no focus of its own for the view: the caret goes when the view goes
+    if (!comphelper::COKit::isActive())
+        SetIsCursorVisible(false);
     ShowLine(false);
     CaretBlinkStop();
     RepaintViewShellDoc();
@@ -2109,6 +2111,10 @@ void SmViewShell::Activate( bool bIsMDIActivate )
     {
         // In COKit, activate in-place editing
         GetGraphicWidget().GrabFocus();
+        // the focus event does not come in the kit, so the view takes the focus itself, which
+        // shows the caret
+        if (comphelper::COKit::isActive())
+            GetGraphicWidget().GetFocus();
     }
     else if (SmEditWindow *pEdit = GetEditWindow())
     {
