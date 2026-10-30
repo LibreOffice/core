@@ -80,8 +80,10 @@ void UndoElement::redo(  )
 
 // = ShapeUndoElement
 
-ShapeUndoElement::ShapeUndoElement( std::unique_ptr<SdrUndoAction> xSdrUndoAction )
+ShapeUndoElement::ShapeUndoElement( std::unique_ptr<SdrUndoAction> xSdrUndoAction,
+                                    const rtl::Reference<::chart::ChartModel>& rModel )
     :m_xAction( std::move(xSdrUndoAction) )
+    ,m_xModel( rModel )
 {
 }
 
@@ -101,6 +103,8 @@ void ShapeUndoElement::undo(  )
     if ( !m_xAction )
         throw DisposedException( OUString(), *this );
     m_xAction->Undo();
+    if ( const rtl::Reference<::chart::ChartModel> xModel = m_xModel.get() )
+        xModel->setModified( true );
 }
 
 void ShapeUndoElement::redo(  )
@@ -108,6 +112,8 @@ void ShapeUndoElement::redo(  )
     if ( !m_xAction )
         throw DisposedException( OUString(), *this );
     m_xAction->Redo();
+    if ( const rtl::Reference<::chart::ChartModel> xModel = m_xModel.get() )
+        xModel->setModified( true );
 }
 
 } //  namespace chart::impl

@@ -23,6 +23,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <comphelper/compbase.hxx>
+#include <unotools/weakref.hxx>
 
 #include <memory>
 
@@ -81,7 +82,9 @@ typedef comphelper::WeakComponentImplHelper< css::document::XUndoAction > ShapeU
 class ShapeUndoElement final : public ShapeUndoElement_TBase
 {
 public:
-    explicit ShapeUndoElement( std::unique_ptr<SdrUndoAction> xSdrUndoAction );
+    /// the chart's model is told it changed whenever the shape is changed back or again
+    ShapeUndoElement( std::unique_ptr<SdrUndoAction> xSdrUndoAction,
+                      const rtl::Reference<::chart::ChartModel>& rModel );
     virtual ~ShapeUndoElement() override;
 
     // XUndoAction
@@ -91,6 +94,7 @@ public:
 
 private:
     std::unique_ptr<SdrUndoAction> m_xAction;
+    unotools::WeakReference<::chart::ChartModel> m_xModel;
 };
 
 } // namespace impl

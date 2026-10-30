@@ -1763,7 +1763,7 @@ void ChartController::NotifyUndoActionHdl( std::unique_ptr<SdrUndoAction> pUndoA
     {
         rtl::Reference< ChartModel > xSuppUndo = getChartModel();
         const Reference< document::XUndoManager > xUndoManager( xSuppUndo->getUndoManager(), uno::UNO_SET_THROW );
-        const Reference< document::XUndoAction > xAction( new impl::ShapeUndoElement( std::move(pUndoAction) ) );
+        const Reference< document::XUndoAction > xAction( new impl::ShapeUndoElement( std::move(pUndoAction), xSuppUndo ) );
         xUndoManager->addUndoAction( xAction );
     }
     catch( const cpo::uno::Exception& )
