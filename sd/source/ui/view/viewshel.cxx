@@ -815,8 +815,9 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
 
         case CommandEventId::Wheel:
             {
-                Reference< XSlideShowController > xSlideShowController( SlideShow::GetSlideShowController(GetViewShellBase() ) );
-                if( xSlideShowController.is() )
+                rtl::Reference<SlideShowController> pSlideShowController
+                    = SlideShow::GetSlideShowController(GetViewShellBase());
+                if (pSlideShowController.is())
                 {
                     if(useInputForSlideShow()) //IASS
                     {
@@ -827,9 +828,9 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                         {
                             ::tools::Long nDelta = pData->GetDelta();
                             if( nDelta > 0 )
-                                xSlideShowController->gotoPreviousSlide();
+                                pSlideShowController->gotoPreviousSlide();
                             else if( nDelta < 0 )
-                                xSlideShowController->gotoNextEffect();
+                                pSlideShowController->gotoNextEffect();
                         }
                         break;
                     }
