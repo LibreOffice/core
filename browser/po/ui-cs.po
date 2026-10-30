@@ -12,11 +12,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-28 13:35+0100\n"
-"PO-Revision-Date: 2026-10-23 06:26+0000\n"
+"PO-Revision-Date: 2026-10-28 21:13+0000\n"
 "Last-Translator: Michal Várady <majkl82@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/cs/>\n"
-"Language: \n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1462,11 +1462,11 @@ msgstr "První nastavený"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5050
 msgid "Translating with {0}."
-msgstr ""
+msgstr "Překládá se pomocí {0}."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5051
 msgid "No provider is set up: the Translate command is not offered."
-msgstr ""
+msgstr "Není nastaven žádný poskytovatel: příkaz Přeložit není k dispozici."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5091
 msgid "API URL"
@@ -1813,39 +1813,39 @@ msgstr "Duplikovat styl"
 
 #: src/app/Util.ts:319
 msgid "1 year"
-msgstr ""
+msgstr "1 rok"
 
 #: src/app/Util.ts:320
 msgid "{count} years"
-msgstr ""
+msgstr "{count} r."
 
 #: src/app/Util.ts:322
 msgid "1 day"
-msgstr ""
+msgstr "1 den"
 
 #: src/app/Util.ts:322
 msgid "{count} days"
-msgstr ""
+msgstr "{count} d."
 
 #: src/app/Util.ts:323
 msgid "1 hour"
-msgstr ""
+msgstr "1 hodinu"
 
 #: src/app/Util.ts:323
 msgid "{count} hours"
-msgstr ""
+msgstr "{count} h"
 
 #: src/app/Util.ts:324
 msgid "1 minute"
-msgstr ""
+msgstr "1 minutu"
 
 #: src/app/Util.ts:324
 msgid "{count} minutes"
-msgstr ""
+msgstr "{count} min"
 
 #: src/app/Util.ts:339
 msgid "less than a minute"
-msgstr ""
+msgstr "méně než minutu"
 
 #: src/canvas/sections/CommentListSection.ts:2261
 #: src/canvas/sections/CommentListSection.ts:2274
@@ -1893,7 +1893,6 @@ msgid "Reply"
 msgstr "Odpovědět"
 
 #: src/canvas/sections/CommentSection.ts:345
-#, fuzzy
 msgid "comment"
 msgstr "Komentář"
 
@@ -1903,7 +1902,7 @@ msgstr "Stiskněte Ctrl + Enter pro odeslání"
 
 #: src/canvas/sections/CommentSection.ts:583
 msgid "Reply to {0}"
-msgstr ""
+msgstr "Odpověď uživateli: {0}"
 
 #: src/canvas/sections/CommentSection.ts:653
 #: src/canvas/sections/CommentSection.ts:654
@@ -2017,11 +2016,11 @@ msgstr "Dokument obsahuje nepodporovaná multimédia"
 
 #: src/canvas/sections/SelectionSection.ts:1553
 msgid "Waiting for redo..."
-msgstr ""
+msgstr "Čeká se na opakování..."
 
 #: src/canvas/sections/SelectionSection.ts:1554
 msgid "Waiting for undo..."
-msgstr ""
+msgstr "Čeká se na vrácení zpět..."
 
 #: src/canvas/sections/URLPopUpSection.ts:89
 #: src/control/Control.HyperlinkWizard.ts:41
@@ -2170,7 +2169,7 @@ msgstr "Neformální"
 #. TRANSLATORS: such as "Formal" or a name that the user typed
 #: src/control/Control.AIChatSidebar.ts:309
 msgid "{0} tone"
-msgstr ""
+msgstr "Tón: {0}"
 
 #: src/control/Control.AIChatSidebar.ts:419
 msgid "Best"
@@ -2245,27 +2244,27 @@ msgstr "Co chcete s tímto dokumentem udělat?"
 
 #: src/control/Control.AIChatSidebar.ts:787
 msgid "Good morning, {0}!"
-msgstr ""
+msgstr "Dobré ráno, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:788
 msgid "Good morning!"
-msgstr ""
+msgstr "Dobré ráno!"
 
 #: src/control/Control.AIChatSidebar.ts:790
 msgid "Good afternoon, {0}!"
-msgstr ""
+msgstr "Dobré odpoledne, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:791
 msgid "Good afternoon!"
-msgstr ""
+msgstr "Dobré odpoledne!"
 
 #: src/control/Control.AIChatSidebar.ts:793
 msgid "Good evening, {0}!"
-msgstr ""
+msgstr "Dobrý večer, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:794
 msgid "Good evening!"
-msgstr ""
+msgstr "Dobrý večer!"
 
 #: src/control/Control.AIChatSidebar.ts:845
 #: src/control/Control.AIChatSidebar.ts:2288
@@ -2897,21 +2896,20 @@ msgid "Reject action"
 msgstr "Odmítnout akci"
 
 #: src/control/Control.AIChatSidebar.ts:2845
-#, fuzzy
 msgid "Send"
-msgstr "Odeslané"
+msgstr "Odeslat"
 
 #: src/control/Control.AIChatSidebar.ts:2847
 msgid "Send these cells"
-msgstr ""
+msgstr "Odeslat tyto buňky"
 
 #: src/control/Control.AIChatSidebar.ts:2853
 msgid "Do not send these cells"
-msgstr ""
+msgstr "Neodesílat tyto buňky"
 
 #: src/control/Control.AIChatSidebar.ts:2870
 msgid "Nothing was sent."
-msgstr ""
+msgstr "Nic nebylo odesláno."
 
 #: src/control/Control.AIChatSidebar.ts:2893
 msgid "Applying changes..."
@@ -3027,11 +3025,11 @@ msgstr "Diagnostikovat chybu ve vzorci v"
 
 #: src/control/Control.AIChatSidebar.ts:3871
 msgid "To diagnose the error in %1, these cells will be sent to %2:"
-msgstr ""
+msgstr "Pro zjištění příčiny chyby v %1 budou tyto buňky odeslány modelu %2:"
 
 #: src/control/Control.AIChatSidebar.ts:3877
 msgid "Do you want to send them?"
-msgstr ""
+msgstr "Chcete je odeslat?"
 
 #: src/control/Control.AIChatSidebar.ts:3897
 msgid "I have a formula error in my spreadsheet."
@@ -3041,7 +3039,7 @@ msgstr "V sešitu mám chybu ve vzorci."
 #. TRANSLATORS: B5, {1} the name of its sheet
 #: src/control/Control.AIChatSidebar.ts:3901
 msgid "Cell {0} (Sheet: {1}) contains:"
-msgstr ""
+msgstr "Buňka {0} (list: {1}) obsahuje:"
 
 #: src/control/Control.AIChatSidebar.ts:3906
 #: src/control/Control.FormulaBarJSDialog.js:116
@@ -3058,9 +3056,8 @@ msgstr "Odkazované buňky"
 #. TRANSLATORS: Sent to the AI model. {0} is a Calc error code such
 #. TRANSLATORS: as #DIV/0!
 #: src/control/Control.AIChatSidebar.ts:3918
-#, fuzzy
 msgid "Please diagnose why this formula produces the {0} error."
-msgstr "Zjistěte, proč tento vzorec vrací"
+msgstr "Zjistěte, proč tento vzorec vrací chybu {0}."
 
 #: src/control/Control.AIChatSidebar.ts:3922
 msgid "Explain the root cause and suggest how to fix it."
@@ -3076,11 +3073,11 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3942
 msgid "only the cells with errors"
-msgstr ""
+msgstr "pouze buňky s chybami"
 
 #: src/control/Control.AIChatSidebar.ts:3949
 msgid "another file, its name only"
-msgstr ""
+msgstr "jiný soubor, pouze jeho název"
 
 #: src/control/Control.AIChatSidebar.ts:3979
 msgid "formula"
@@ -3191,6 +3188,8 @@ msgid ""
 "The table shows what each cell displays. The \"Formulas:\" list below it "
 "gives the formula of each cell that has one."
 msgstr ""
+"Tabulka ukazuje, co se zobrazuje v jednotlivých buňkách. Seznam „Formulas:“ "
+"pod ní uvádí vzorce všech buněk, které je obsahují."
 
 #: src/control/Control.AIChatSidebar.ts:4203
 msgid ""
@@ -3462,7 +3461,7 @@ msgstr "Průběh vyčištění"
 
 #: src/control/Control.CleanupSidebar.ts:913
 msgid "Stop Cleanup"
-msgstr ""
+msgstr "Zastavit vyčištění"
 
 #: src/control/Control.CleanupSidebar.ts:934
 msgid "Scan presentation"
@@ -4795,7 +4794,6 @@ msgstr "Nápověda pro Online"
 #: src/control/Control.Menubar.ts:460 src/control/Control.Menubar.ts:677
 #: src/control/Control.Menubar.ts:848 src/control/Control.Menubar.ts:1176
 #: src/control/Control.NotebookbarWriter.js:529
-#, fuzzy
 msgid "Show Tour"
 msgstr "Zobrazit průvodce"
 
@@ -5438,7 +5436,7 @@ msgstr "Barva výplně (pouze průhledné obrázky)"
 
 #: src/control/Control.Notebookbar.js:667
 msgid "Area"
-msgstr ""
+msgstr "Oblast"
 
 #: src/control/Control.Notebookbar.js:682
 msgid "Line"
@@ -8128,11 +8126,11 @@ msgstr "Sloupec {index}"
 
 #: src/control/jsdialog/Widget.EditEngine.ts:587
 msgid "%1 is editing"
-msgstr ""
+msgstr "Upravuje: %1"
 
 #: src/control/jsdialog/Widget.EditEngine.ts:588
 msgid "Another user is editing"
-msgstr ""
+msgstr "Upravuje jiný uživatel"
 
 #: src/control/jsdialog/Widget.FormulabarEdit.js:460 src/map/Clipboard.js:1589
 msgid "Cut"
@@ -8140,7 +8138,7 @@ msgstr "Vyjmout"
 
 #: src/control/jsdialog/Widget.FormulabarEdit.js:519
 msgid "Formula bar"
-msgstr ""
+msgstr "Lišta vzorců"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:54
 msgid "Smileys"
@@ -8334,7 +8332,7 @@ msgstr "Zmenšit hodnotu"
 
 #: src/control/jsdialog/Widget.TabControl.tsx:229
 msgid "Add a fill to edit the {0}"
-msgstr ""
+msgstr "Chcete-li upravit položku {0}, přidejte výplň"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1836
 msgid "Cell value"
@@ -8613,12 +8611,15 @@ msgstr ""
 msgid ""
 "You no longer have access to this document. Its security label was changed."
 msgstr ""
+"K tomuto dokumentu již nemáte přístup. Jeho bezpečnostní štítek byl změněn."
 
 #: src/errormessages.ts:38
 msgid ""
 "You can no longer edit this document. Its security label was changed. "
 "Please open it again to view it."
 msgstr ""
+"Tento dokument již nemůžete upravovat. Jeho bezpečnostní štítek byl změněn. "
+"Chcete-li jej zobrazit, znovu jej otevřete."
 
 #: src/errormessages.ts:40
 msgid "Authorization error was: '{errormessage}'."
@@ -8752,7 +8753,7 @@ msgstr "Dokument nelze uložit."
 
 #: src/errormessages.ts:90 src/errormessages.ts:109
 msgid "The storage refused to save the document."
-msgstr ""
+msgstr "Úložiště odmítlo dokument uložit."
 
 #: src/errormessages.ts:91
 msgid "Document cannot be renamed."
@@ -8933,15 +8934,15 @@ msgstr "Online editor"
 
 #: src/layer/tile/CanvasTileLayer.js:1396
 msgid "%1 started recording changes for all users."
-msgstr ""
+msgstr "Uživatel %1 zapnul zaznamenávání změn pro všechny uživatele."
 
 #: src/layer/tile/CanvasTileLayer.js:1397
 msgid "Recording changes was started for all users."
-msgstr ""
+msgstr "Bylo zapnuto zaznamenávání změn pro všechny uživatele."
 
 #: src/layer/tile/CanvasTileLayer.js:1399
 msgid "Your changes are tracked now."
-msgstr ""
+msgstr "Vaše změny se nyní sledují."
 
 #: src/layer/tile/CanvasTileLayer.js:1485
 msgid "Functions"
