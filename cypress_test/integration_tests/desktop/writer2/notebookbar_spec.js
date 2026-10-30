@@ -336,6 +336,42 @@ describe(['tagdesktop'], 'HideChangeTrackingControls mode tests.', function() {
 	});
 });
 
+describe(['tagdesktop'], 'Notebookbar of a document opened in compact view.', function() {
+	var USER = 'compact-view';
+
+	beforeEach(function() {
+		cy.viewport(1920,1080);
+		cy.task('writeUserSetting', { userId: USER, settings: { compactMode: 'true' } });
+		var newFilePath = helper.setupDocument('writer/notebookbar.odt');
+		helper.loadDocument(newFilePath, /*skipDocumentChecks*/ true, undefined, undefined, 'userid=' + USER);
+		cy.cGet('#map').should('have.class', 'initialized');
+		cy.cGet('body').should('have.attr', 'data-userInterfaceMode', 'classic');
+		cy.cGet('#busypopup-overlay').should('not.exist');
+		Cypress.env('USER_INTERFACE', 'notebookbar');
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
+	});
+
+	it('The selected tab expands the notebookbar again after the switch to tabbed view', function() {
+		helper.processToIdle(this.win);
+		cy.cGet('#menu-view').click();
+		cy.cGet('#menu-toggleuimode').click();
+		cy.cGet('.notebookbar-scroll-wrapper').should('have.class', 'initialized');
+		helper.processToIdle(this.win);
+
+		desktopHelper.selectNotebookbarTab('View');
+		desktopHelper.getNbItem('collapsenotebookbar', 'View').should('not.have.attr', 'disabled');
+		desktopHelper.getNbIcon('collapsenotebookbar', 'View').click();
+		cy.cGet('#document-container').should('have.class', 'tabs-collapsed');
+		cy.cGet('#View-container').should('not.be.visible');
+
+		cy.cGet('#View-tab-label').click();
+		cy.cGet('#document-container').should('not.have.class', 'tabs-collapsed');
+		cy.cGet('#View-container').should('be.visible');
+	});
+});
+
 describe(['tagdesktop'], 'Onboarding tour on a first visit.', function() {
 
 	beforeEach(function() {

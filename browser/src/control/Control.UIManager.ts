@@ -1576,7 +1576,7 @@ class UIManager extends window.L.Control {
 			}
 			$('#' + selectedTab).click();
 			this.makeSpaceForNotebookbar();
-			this.notebookbar._showNotebookbar = true;
+			this.notebookbar.impl._showNotebookbar = true;
 			this.notebookbar.showTabs();
 			$('#map').addClass('notebookbar-opened');
 			this.insertCustomButtons();
