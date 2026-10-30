@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-Class-Path:
-Main-Class: test/java/runner/Runner
-Sealed: true
-UNO-Type-Path:

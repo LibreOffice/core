@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-Class-Path:
-Sealed: true
-UNO-Type-Path:
-RegistrationClassName: test.java.javamain.JavaMain
