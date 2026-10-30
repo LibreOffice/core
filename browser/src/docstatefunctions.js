@@ -515,10 +515,14 @@ app.impress.isSlideSelected = function (index) {
 	} else return false;
 };
 
-// Slide import builds on the live links between documents. It is available
-// only when remote links are enabled in the server configuration.
+// Slide import builds on the live links between documents. It needs remote
+// links enabled in the server configuration and a storage that resolves the
+// persistent links.
 app.impress.isSlideImportSupported = function () {
-	return window.remoteLinksEnabled;
+	return (
+		!!window.remoteLinksEnabled &&
+		!!(app.map && app.map.wopi && app.map.wopi.SupportsLinkAccess)
+	);
 };
 
 app.enterRAF = function () {

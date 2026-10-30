@@ -100,6 +100,7 @@ interface MapInterface extends Evented {
 		UserCanWrite: boolean;
 		HideChangeTrackingControls: boolean;
 		EnableRemoteLinkPicker: boolean;
+		SupportsLinkAccess: boolean;
 		EnableRemoteSlideImport: boolean;
 		EnableInsertRemoteFile: boolean;
 		HideSaveOption: boolean;
