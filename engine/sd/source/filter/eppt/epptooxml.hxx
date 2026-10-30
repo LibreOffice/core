@@ -267,6 +267,9 @@ private:
 
     void WritePresentationProps();
 
+    /** Writes out again what the document said about the styles its tables are drawn in. */
+    void WriteTableStyles();
+
     /// If this is PPTM, output the VBA stream.
     void WriteVBA();
 

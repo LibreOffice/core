@@ -135,6 +135,10 @@ void TableProperties::pushToPropSet(const ::oox::core::XmlFilterBase& rFilterBas
     CreateTableColumns(xColumnRowRange->getColumns(), mvTableGrid);
     CreateTableRows(xColumnRowRange->getRows(), mvTableRows);
 
+    // The name of the style the document gives the table, so that a save states it again.
+    if (!getStyleId().isEmpty())
+        xPropSet->setPropertyValue(u"TableStyleName"_ustr, Any(getStyleId()));
+
     // a:tblPr flags all default to false, the svx table settings mostly to true
     xPropSet->setPropertyValue(u"UseFirstRowStyle"_ustr, Any(isFirstRow()));
     xPropSet->setPropertyValue(u"UseLastRowStyle"_ustr, Any(isLastRow()));

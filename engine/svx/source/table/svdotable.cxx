@@ -173,6 +173,7 @@ TableStyleSettings::TableStyleSettings( const TableStyleSettings& rStyle )
 
 TableStyleSettings& TableStyleSettings::operator=(const TableStyleSettings& rStyle)
 {
+    maStyleName = rStyle.maStyleName;
     mbUseFirstRow = rStyle.mbUseFirstRow;
     mbUseLastRow = rStyle.mbUseLastRow;
     mbUseFirstColumn = rStyle.mbUseFirstColumn;
@@ -185,6 +186,7 @@ TableStyleSettings& TableStyleSettings::operator=(const TableStyleSettings& rSty
 bool TableStyleSettings::operator==( const TableStyleSettings& rStyle ) const
 {
     return
+        (maStyleName == rStyle.maStyleName) &&
         (mbUseFirstRow == rStyle.mbUseFirstRow) &&
         (mbUseLastRow == rStyle.mbUseLastRow) &&
         (mbUseFirstColumn == rStyle.mbUseFirstColumn) &&

@@ -200,6 +200,7 @@
 #define OWN_ATTR_IS_DIAGRAM                     (OWN_ATTR_VALUE_START+111)
 #define OWN_ATTR_DIAGRAM_DATA                   (OWN_ATTR_VALUE_START+112)
 #define OWN_ATTR_MISC_OBJ_HORIZONTAL_RULE       (OWN_ATTR_VALUE_START+113)
+#define OWN_ATTR_TABLESTYLENAME                 (OWN_ATTR_VALUE_START+114)
 // ATTENTION: current maximum is OWN_ATTR_VALUE_START+120 svx; when adding values, update
 // OWN_ATTR_VALUE_END in include/svl/solar.hrc accordingly
 

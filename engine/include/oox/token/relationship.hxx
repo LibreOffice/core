@@ -74,6 +74,7 @@ enum class Relationship
     SLIDELAYOUT,
     SLIDEMASTER,
     STYLES,
+    TABLESTYLES,
     THEME,
     VBAPROJECT,
     VIDEO,

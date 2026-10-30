@@ -26,6 +26,7 @@
 
 #include <cpo/uno/Reference.hxx>
 #include <oox/core/filterbase.hxx>
+#include <com/sun/star/xml/dom/XDocument.hpp>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/ppt/slidepersist.hxx>
@@ -82,6 +83,9 @@ public:
 #endif
 
 private:
+    /** Keeps what the document says about the styles its tables are drawn in. */
+    void keepTableStyles(const cpo::uno::Reference<css::xml::dom::XDocument>& xDocument);
+
     virtual GraphicHelper* implCreateGraphicHelper() const override;
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const override;
     virtual OUString getImplementationName() override;

@@ -728,6 +728,7 @@ static std::span<SfxItemPropertyMapEntry const> ImplGetSvxTableShapePropertyMap(
         { u"Decorative"_ustr, OWN_ATTR_MISC_OBJ_DECORATIVE, ::cppu::UnoType<bool>::get(), 0,  0 },
         { u"Model"_ustr,                        OWN_ATTR_OLEMODEL               , cppu::UnoType<css::table::XTable>::get(), css::beans::PropertyAttribute::READONLY, 0},
         { u"TableTemplate"_ustr,                OWN_ATTR_TABLETEMPLATE          , cppu::UnoType<css::container::XIndexAccess>::get(), 0, 0},
+        { u"TableStyleName"_ustr,               OWN_ATTR_TABLESTYLENAME         , cppu::UnoType<OUString>::get(), 0, 0},
         { u"UseFirstRowStyle"_ustr,             OWN_ATTR_TABLETEMPLATE_FIRSTROW, cppu::UnoType<bool>::get(),0, 0},
         { u"UseLastRowStyle"_ustr,              OWN_ATTR_TABLETEMPLATE_LASTROW, cppu::UnoType<bool>::get(),0, 0},
         { u"UseFirstColumnStyle"_ustr,          OWN_ATTR_TABLETEMPLATE_FIRSTCOLUMN, cppu::UnoType<bool>::get(),0, 0},

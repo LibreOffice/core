@@ -2509,6 +2509,18 @@ void ShapeExport::WriteTable( const Reference< XShape >& rXShape  )
                              XML_bandRow, flag(u"UseBandingRowStyle"_ustr),
                              XML_bandCol, flag(u"UseBandingColumnStyle"_ustr));
         WriteShapeEffects(xPropSet);
+
+        // The table is shown in the style the document named for it, so that name is stated again.
+        OUString sStyleName;
+        if (xPropSet->getPropertySetInfo()->hasPropertyByName(u"TableStyleName"_ustr))
+            xPropSet->getPropertyValue(u"TableStyleName"_ustr) >>= sStyleName;
+        if (!sStyleName.isEmpty())
+        {
+            mpFS->startElementNS(XML_a, XML_tableStyleId);
+            mpFS->writeEscaped(sStyleName);
+            mpFS->endElementNS(XML_a, XML_tableStyleId);
+        }
+
         mpFS->endElementNS(XML_a, XML_tblPr);
 
         Reference< container::XIndexAccess > xColumns( xTable->getColumns(), UNO_QUERY_THROW );

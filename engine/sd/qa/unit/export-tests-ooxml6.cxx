@@ -932,6 +932,25 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testTableCellWithoutBordersKeepsNone)
                          aLeftBorderOfTheFirstCell().LineStyle);
 }
 
+// A table states again the name of the style the document draws it in, and the document keeps
+// what it says about that style.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testTableKeepsTheNameOfItsStyle)
+{
+    // Given a table that names a style the document holds:
+    createSdImpressDoc("pptx/bnc910045.pptx");
+
+    save(TestFilter::PPTX);
+
+    static constexpr OUString aStyleName = u"{69012ECD-51FC-41F1-AA8D-1B2483CD663E}"_ustr;
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPathContent(pXmlDoc, "//a:tbl/a:tblPr/a:tableStyleId", aStyleName);
+
+    // The part holding the styles is written out as well, so the name the table gives points at
+    // the style the document means.
+    xmlDocUniquePtr pStyles = parseExport(u"ppt/tableStyles.xml"_ustr);
+    assertXPath(pStyles, "//a:tblStyleLst/a:tblStyle[@styleId='" + aStyleName.toUtf8() + "']", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

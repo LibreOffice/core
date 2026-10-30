@@ -63,6 +63,22 @@ bool SvxTableShape::setPropertyValueImpl(
 
         return true;
     }
+    case OWN_ATTR_TABLESTYLENAME:
+    {
+        OUString aStyleName;
+        if( !(rValue >>= aStyleName) )
+            throw IllegalArgumentException();
+
+        if( HasSdrObject() )
+        {
+            sdr::table::SdrTableObj* pTable = static_cast< sdr::table::SdrTableObj* >( GetSdrObject() );
+            TableStyleSettings aSettings( pTable->getTableStyleSettings() );
+            aSettings.maStyleName = aStyleName;
+            pTable->setTableStyleSettings(aSettings);
+        }
+
+        return true;
+    }
     case OWN_ATTR_TABLETEMPLATE_FIRSTROW:
     case OWN_ATTR_TABLETEMPLATE_LASTROW:
     case OWN_ATTR_TABLETEMPLATE_FIRSTCOLUMN:
@@ -116,6 +132,15 @@ bool SvxTableShape::getPropertyValueImpl(
         if( HasSdrObject() )
         {
             rValue <<= static_cast< sdr::table::SdrTableObj* >( GetSdrObject() )->getTableStyle();
+        }
+        return true;
+    }
+    case OWN_ATTR_TABLESTYLENAME:
+    {
+        if( HasSdrObject() )
+        {
+            rValue <<= static_cast< sdr::table::SdrTableObj* >( GetSdrObject() )
+                           ->getTableStyleSettings().maStyleName;
         }
         return true;
     }

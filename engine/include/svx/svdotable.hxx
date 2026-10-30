@@ -68,6 +68,8 @@ struct CellPos
 /// TableStyleSettings
 struct TableStyleSettings
 {
+    /// The name the document gives the style of the table, empty where it names none.
+    OUString maStyleName;
     bool mbUseFirstRow;
     bool mbUseLastRow;
     bool mbUseFirstColumn;

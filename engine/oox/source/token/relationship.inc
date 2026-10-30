@@ -54,6 +54,7 @@
 {Relationship::SLIDELAYOUT, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout"},
 {Relationship::SLIDEMASTER, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster"},
 {Relationship::STYLES, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles"},
+{Relationship::TABLESTYLES, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/tableStyles"},
 {Relationship::THEME, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme"},
 {Relationship::VBAPROJECT, u"http://schemas.microsoft.com/office/2006/relationships/vbaProject"},
 {Relationship::VIDEO, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/video"},

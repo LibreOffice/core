@@ -30,6 +30,7 @@
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -294,10 +295,42 @@ oox::drawingml::table::TableStyleListPtr PowerPointImport::getTableStyles()
     if ( !mpTableStyleList && !maTableStyleListPath.isEmpty() )
     {
         mpTableStyleList = std::make_shared<oox::drawingml::table::TableStyleList>( );
+        Reference<xml::dom::XDocument> xDoc = importFragment(maTableStyleListPath);
         importFragment( new oox::drawingml::table::TableStyleListFragmentHandler(
-            *this, maTableStyleListPath, *mpTableStyleList ) );
+                            *this, maTableStyleListPath, *mpTableStyleList ),
+                        Reference<xml::sax::XFastSAXSerializable>(xDoc, UNO_QUERY_THROW) );
+        keepTableStyles(xDoc);
     }
     return mpTableStyleList;
+}
+
+/** Keeps what the document says about the styles its tables are drawn in, word for word, so that
+    a save can state the same again. */
+void PowerPointImport::keepTableStyles(const Reference<xml::dom::XDocument>& xDocument)
+{
+    if (!xDocument.is())
+        return;
+
+    try
+    {
+        Reference<beans::XPropertySet> xDocProps(getModel(), UNO_QUERY);
+        if (!xDocProps.is())
+            return;
+
+        static constexpr OUString aGrabBagName = u"InteropGrabBag"_ustr;
+        Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
+        if (!xPropsInfo.is() || !xPropsInfo->hasPropertyByName(aGrabBagName))
+            return;
+
+        comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(aGrabBagName));
+        aGrabBag[u"OOXTableStyles"_ustr] <<= xDocument;
+        xDocProps->setPropertyValue(aGrabBagName,
+                                    Any(aGrabBag.getAsConstPropertyValueList()));
+    }
+    catch (const Exception&)
+    {
+        SAL_WARN("oox.ppt", "PowerPointImport::keepTableStyles, failed to keep the table styles");
+    }
 }
 
 ::oox::drawingml::chart::ChartConverter* PowerPointImport::getChartConverter()
