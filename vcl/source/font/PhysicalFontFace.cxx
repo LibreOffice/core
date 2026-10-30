@@ -696,6 +696,15 @@ std::vector<ColorLayer> PhysicalFontFace::GetGlyphColorLayers(sal_GlyphId nGlyph
 
 bool PhysicalFontFace::HasColorBitmaps() const { return hb_ot_color_has_png(GetHbFace()); }
 
+bool PhysicalFontFace::HasOutlines() const
+{
+    if (!mxHasOutlines.has_value())
+        mxHasOutlines = !GetRawFontData(HB_TAG('g', 'l', 'y', 'f')).empty()
+                        || !GetRawFontData(HB_TAG('C', 'F', 'F', ' ')).empty()
+                        || !GetRawFontData(HB_TAG('C', 'F', 'F', '2')).empty();
+    return *mxHasOutlines;
+}
+
 RawFontData PhysicalFontFace::GetGlyphColorBitmap(sal_GlyphId nGlyphIndex,
                                                   tools::Rectangle& rRect) const
 {

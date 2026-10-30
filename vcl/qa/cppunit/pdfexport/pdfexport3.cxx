@@ -2245,6 +2245,34 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf171869)
     CPPUNIT_ASSERT_EQUAL(u"世솅"_ustr, aActualText);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf173919)
+{
+// The embedded font has a CBDT table and no glyf or CFF table. Windows and macOS reject such fonts.
+#if !defined MACOSX && !defined _WIN32
+    vcl::filter::PDFDocument aDocument;
+    loadFromFile(u"tdf173919-bitmap-font-space.fodt");
+    save(TestFilter::PDF);
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // The space has no bitmap, but it must still go into the Type 3 font with the emoji. Without
+    // the fix in place, the space would go into a TrueType font subset with no glyf table,
+    // which PDF readers fail to load.
+    int nFonts = 0;
+    for (auto* pObject : aDocument.GetObjects())
+    {
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        if (!pType || pType->GetValue() != "Font")
+            continue;
+        nFonts++;
+        auto pSubtype = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Subtype"_ostr));
+        CPPUNIT_ASSERT(pSubtype);
+        CPPUNIT_ASSERT_EQUAL("Type3"_ostr, pSubtype->GetValue());
+    }
+    CPPUNIT_ASSERT_EQUAL(1, nFonts);
+#endif
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf48707_1)
 {
     // Import the bugdoc and export as PDF.

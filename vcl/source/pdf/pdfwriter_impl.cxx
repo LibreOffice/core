@@ -5981,7 +5981,11 @@ void PDFWriterImpl::registerGlyph(const sal_GlyphId nFontGlyphId,
         tools::Rectangle aRect;
         auto aLayers = pFace->GetGlyphColorLayers(nFontGlyphId);
         auto aBitmap = pFace->GetGlyphColorBitmap(nFontGlyphId, aRect);
-        if (!aLayers.empty() || !aBitmap.empty())
+        // tdf#173919: Some color fonts (e.g. old Noto Color Emoji with CBDT) have no outlines, but
+        // only color bitmaps, so their glyphs without bitmaps (e.g. space) must also go into the
+        // Type 3 font, otherwise they will go into a regular font and we will create a subset with
+        // no outline tables, which will be rejected by PDF readers.
+        if (!aLayers.empty() || !aBitmap.empty() || !pFace->HasOutlines())
         {
             auto& rSubset = m_aType3Fonts[pFace];
             auto it = rSubset.m_aMapping.find(nFontGlyphId);

@@ -169,6 +169,8 @@ public:
     bool HasColorBitmaps() const;
     SAL_DLLPRIVATE RawFontData GetGlyphColorBitmap(sal_GlyphId, tools::Rectangle&) const;
 
+    SAL_DLLPRIVATE bool HasOutlines() const;
+
     OString GetGlyphName(sal_GlyphId, bool = false) const;
 
     uint32_t UnitsPerEm() const { return hb_face_get_upem(GetHbFace()); }
@@ -201,6 +203,7 @@ protected:
     mutable FontCharMapRef mxCharMap;
     mutable std::optional<vcl::FontCapabilities> mxFontCapabilities;
     mutable std::optional<std::vector<ColorPalette>> mxColorPalettes;
+    mutable std::optional<bool> mxHasOutlines;
     mutable std::optional<std::vector<vcl::font::Variation>> mxVariations;
     mutable std::optional<std::vector<vcl::font::VariationAxis>> mxVariationAxes;
 
