@@ -44,6 +44,11 @@ class SwPrintData;
 class SwPagePreviewLayout;
 struct PreviewPage;
 class SwTextFrame;
+
+/// The area the paint crops the horizontal rule pObj to: the frame area of the cell or the fly it
+/// sits in. None for any other object and for a rule in body text.
+std::optional<SwRect> getHorizontalRuleClip(const SdrObject* pObj);
+
 // --> OD #i76669#
 //namespace sdr::contact { class ViewObjectContactRedirector; }
 // <--

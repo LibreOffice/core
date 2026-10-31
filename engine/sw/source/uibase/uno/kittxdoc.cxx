@@ -76,6 +76,9 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #include <sax/tools/converter.hxx>
+#include <rootfrm.hxx>
+#include <VectorPart.hxx>
+#include <wrtsh.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::cpo;
@@ -1479,6 +1482,49 @@ void GetSections(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
 }
 }
 
+std::vector<OString> SwXTextDocument::getVectorPartIds()
+{
+    SwWrtShell* pShell = m_pDocShell ? m_pDocShell->GetWrtShell() : nullptr;
+    const SwRootFrame* pLayout = pShell ? pShell->GetLayout() : nullptr;
+    return pLayout ? sw::vector::partIdsOf(*pLayout) : std::vector<OString>();
+}
+
+void SwXTextDocument::getVectorCommandValues(tools::JsonWriter& rJsonWriter,
+                                             std::string_view rCommand)
+{
+    using namespace std::string_view_literals;
+    SwWrtShell* pShell = m_pDocShell ? m_pDocShell->GetWrtShell() : nullptr;
+    const SwRootFrame* pLayout = pShell ? pShell->GetLayout() : nullptr;
+    if (!pLayout)
+        return;
+
+    // The store holds the graphics and fonts of the pages it served, so it is made by the first
+    // request for a page.
+    if (o3tl::starts_with(rCommand, ".uno:VectorPrimitives"sv) && !m_pVectorParts)
+        m_pVectorParts = std::make_unique<sw::vector::PartStore>();
+    if (!m_pVectorParts)
+        return;
+
+    svx::vector::answerPartCommand(
+        rJsonWriter, rCommand, m_pVectorParts->getResources(),
+        [this, &rJsonWriter, pLayout](const svx::vector::PartRequest& rRequest) {
+            m_pVectorParts->write(rJsonWriter, *pLayout, rRequest.maPartId,
+                                  rRequest.mnSinceVersion, /*bPush=*/false);
+        });
+}
+
+void SwXTextDocument::pushVectorPrimitivesDelta(tools::JsonWriter& rJsonWriter,
+                                                std::string_view rPartId, int nMode)
+{
+    if (!m_pVectorParts || nMode != sw::vector::constModePrintLayout)
+        return;
+    SwWrtShell* pShell = m_pDocShell ? m_pDocShell->GetWrtShell() : nullptr;
+    const SwRootFrame* pLayout = pShell ? pShell->GetLayout() : nullptr;
+    if (!pLayout)
+        return;
+    m_pVectorParts->write(rJsonWriter, *pLayout, rPartId, /*nSinceVersion=*/-1, /*bPush=*/true);
+}
+
 bool SwXTextDocument::supportsCommand(std::u16string_view rCommand)
 {
     static const std::initializer_list<std::u16string_view> vForward
@@ -1496,7 +1542,8 @@ bool SwXTextDocument::supportsCommand(std::u16string_view rCommand)
             u"SecurityLabel",
             u"Headings" };
 
-    return std::find(vForward.begin(), vForward.end(), rCommand) != vForward.end();
+    return std::find(vForward.begin(), vForward.end(), rCommand) != vForward.end()
+           || svx::vector::isPartCommand(rCommand);
 }
 
 int SwXTextDocument::getEditMode()
@@ -1551,6 +1598,12 @@ void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::stri
     using namespace std::string_view_literals;
     std::map<OUString, OUString> aMap
         = KitHelper::parseCommandParameters(OUString::fromUtf8(rCommand));
+
+    if (o3tl::starts_with(rCommand, ".uno:Vector"sv))
+    {
+        getVectorCommandValues(rJsonWriter, rCommand);
+        return;
+    }
 
     if (o3tl::starts_with(rCommand, ".uno:TextFormFields"sv))
     {

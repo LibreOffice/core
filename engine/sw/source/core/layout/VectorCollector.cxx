@@ -24,17 +24,64 @@
 #include <sortedobjs.hxx>
 #include <tabfrm.hxx>
 #include <txtfrm.hxx>
+#include <viewimp.hxx>
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/VectorObjectContent.hxx>
 
 #include <algorithm>
 #include <cassert>
 
 namespace sw::vector
 {
+std::string_view nameOf(EntryKind eKind)
+{
+    switch (eKind)
+    {
+        case EntryKind::Page:
+            return "page";
+        case EntryKind::Header:
+            return "header";
+        case EntryKind::Footer:
+            return "footer";
+        case EntryKind::Body:
+            return "body";
+        case EntryKind::Column:
+            return "column";
+        case EntryKind::Section:
+            return "section";
+        case EntryKind::FootnoteContainer:
+            return "footnotecontainer";
+        case EntryKind::Footnote:
+            return "footnote";
+        case EntryKind::Table:
+            return "table";
+        case EntryKind::TableBorders:
+            return "tableborders";
+        case EntryKind::Borders:
+            return "borders";
+        case EntryKind::Row:
+            return "row";
+        case EntryKind::Cell:
+            return "cell";
+        case EntryKind::TextFrame:
+            return "textframe";
+        case EntryKind::NoTextFrame:
+            return "notextframe";
+        case EntryKind::Fly:
+            return "fly";
+        case EntryKind::Shape:
+            return "shape";
+    }
+    return "body";
+}
+
 EntryKind kindOf(const SwFrame& rFrame)
 {
     if (rFrame.IsPageFrame())
@@ -199,7 +246,10 @@ void addShape(Collector& rCollector, const SwAnchoredObject& rObject)
     if (!pObject)
         return;
 
-    const SwRect aBox(pObject->GetCurrentBoundRect());
+    SwRect aBox(pObject->GetCurrentBoundRect());
+    const std::optional<SwRect> oClip = getHorizontalRuleClip(pObject);
+    if (oClip)
+        aBox.Intersection(*oClip);
     if (!aBox.HasArea())
         return;
 
@@ -208,8 +258,22 @@ void addShape(Collector& rCollector, const SwAnchoredObject& rObject)
     if (aPrimitives.empty())
         return;
 
+    // A rule is cropped rather than shrunk, so a rule made of a picture keeps its scale.
+    if (oClip)
+    {
+        const basegfx::B2DRange aClip(oClip->Left(), oClip->Top(), oClip->Right(),
+                                      oClip->Bottom());
+        drawinglayer::primitive2d::Primitive2DReference xMask(
+            new drawinglayer::primitive2d::MaskPrimitive2D(
+                basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aClip)),
+                std::move(aPrimitives)));
+        aPrimitives = drawinglayer::primitive2d::Primitive2DContainer{ xMask };
+    }
+
     rCollector.open(entryIdOf(*pObject), EntryKind::Shape, aBox);
     rCollector.current().moAnchor = anchorOf(rObject);
+    svx::vector::decomposeForComparison(aPrimitives, rCollector.current().maDrawn,
+                                        drawinglayer::geometry::ViewInformation2D());
     rCollector.add(new drawinglayer::primitive2d::TransformPrimitive2D(
         basegfx::utils::createTranslateB2DHomMatrix(-aBox.Left(), -aBox.Top()),
         std::move(aPrimitives)));

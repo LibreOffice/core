@@ -534,8 +534,6 @@ void SwViewShellImp::FireAccessibleEvents()
 }
 #endif // ENABLE_WASM_STRIP_ACCESSIBILITY
 
-namespace
-{
 /** tdf#167714 area a horizontal rule is cropped to, if any
 
     The painted rule is cropped to the table cell or text frame that holds it, so a rule wider
@@ -560,7 +558,6 @@ std::optional<SwRect> getHorizontalRuleClip(const SdrObject* pObj)
             return pFrame->getFrameArea();
     }
     return {};
-}
 }
 
 void SwViewObjectContactRedirector::createRedirectedPrimitive2DSequence(

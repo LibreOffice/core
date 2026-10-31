@@ -81,6 +81,7 @@ class SwPrintUIOptions;
 class SwPrintData;
 class SwRenderData;
 class SwViewShell;
+namespace sw::vector { class PartStore; }
 class SfxItemPropertySet;
 class SwXTextTables;
 class SwXTextFrames;
@@ -218,6 +219,10 @@ private:
 
     std::unique_ptr<SwPrintUIOptions>               m_pPrintUIOptions;
     std::unique_ptr<SwRenderData>                   m_pRenderData;
+
+    /// What the clients that draw the pages from vector primitives were served. Made when the
+    /// first such client asks.
+    std::unique_ptr<sw::vector::PartStore> m_pVectorParts;
 
     void                    GetNumberFormatter();
 
@@ -502,11 +507,25 @@ public:
     /// @see vcl::ITiledRenderable::getCommandValues().
     void getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand) override;
 
+    /// The answers to the requests of a client that draws the pages from vector primitives: the
+    /// primitives of a page, a graphic, a font, and dropping what was served of a page.
+    void getVectorCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand);
+
     /// @see vcl::ITiledRenderable::getViewRenderState().
     OString getViewRenderState(const SfxViewShell* pViewShell = nullptr) override;
 
     /// @see vcl::ITiledRenderable::supportsCommand().
     bool supportsCommand(std::u16string_view rCommand) override;
+
+    /// @see vcl::ITiledRenderable::pushVectorPrimitivesDelta().
+    void pushVectorPrimitivesDelta(tools::JsonWriter& rJsonWriter, std::string_view rPartId,
+                                   int nMode) override;
+
+    /// The vector parts of the document, or nullptr while no client asked for one.
+    sw::vector::PartStore* getVectorParts() const { return m_pVectorParts.get(); }
+
+    /// @see vcl::ITiledRenderable::getVectorPartIds(). The ids are the page ids.
+    std::vector<OString> getVectorPartIds() override;
 
     /// @see vcl::ITiledRenderable::getEditMode().
     int getEditMode() override;

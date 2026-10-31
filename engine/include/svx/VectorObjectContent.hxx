@@ -577,9 +577,15 @@ SVXCORE_DLLPUBLIC void
 describeObject(SdrObject& rObject, ObjectContent& rContent,
                const drawinglayer::geometry::ViewInformation2D& rViewInformation);
 
-/// Fills in what the primitives of the content decompose to, which is what is compared. A
-/// primitive that decomposes to nothing is a leaf, a fill or a background color, and is drawn
-/// itself, so it is compared itself.
+/// Appends what rPrimitives decompose to onto rDrawn, which is what is compared. A primitive that
+/// decomposes to nothing is a leaf, a fill or a background color, and is drawn itself, so it is
+/// appended itself. The lengths stay in the units of the primitives.
+SVXCORE_DLLPUBLIC void
+decomposeForComparison(const drawinglayer::primitive2d::Primitive2DContainer& rPrimitives,
+                       drawinglayer::primitive2d::Primitive2DContainer& rDrawn,
+                       const drawinglayer::geometry::ViewInformation2D& rViewInformation);
+
+/// Fills in what the primitives of the content decompose to, which is what is compared.
 SVXCORE_DLLPUBLIC void
 decomposeForComparison(ObjectContent& rContent,
                        const drawinglayer::geometry::ViewInformation2D& rViewInformation);
@@ -611,6 +617,12 @@ SVXCORE_DLLPUBLIC tools::Rectangle rangeInTwips(const basegfx::B2DRange& rRange)
 /// The mapping of the unit rectangle onto an upright box, for an entry that has no
 /// transformation of its own.
 SVXCORE_DLLPUBLIC basegfx::B2DHomMatrix boxTransformation(const tools::Rectangle& rBox);
+
+/// Writes the box an entry paints in, in twips, as "x", "y", "width" and "height", and the mapping
+/// of the unit rectangle onto the entry as "transform", in the order a canvas takes it:
+/// x' = a * x + c * y + e and y' = b * x + d * y + f.
+SVXCORE_DLLPUBLIC void writeEntryBox(tools::JsonWriter& rWriter, const tools::Rectangle& rBox,
+                                     const basegfx::B2DHomMatrix& rTransformation);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

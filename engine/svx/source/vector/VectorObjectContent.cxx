@@ -551,10 +551,28 @@ basegfx::B2DHomMatrix boxTransformation(const tools::Rectangle& rBox)
     return aTransformation;
 }
 
-void decomposeForComparison(ObjectContent& rContent,
+void writeEntryBox(tools::JsonWriter& rWriter, const tools::Rectangle& rBox,
+                   const basegfx::B2DHomMatrix& rTransformation)
+{
+    rWriter.put("x", sal_Int64(rBox.Left()));
+    rWriter.put("y", sal_Int64(rBox.Top()));
+    rWriter.put("width", sal_Int64(rBox.GetWidth()));
+    rWriter.put("height", sal_Int64(rBox.GetHeight()));
+
+    auto aTransformArray = rWriter.startArray("transform");
+    rWriter.putSimpleValue(rTransformation.get(0, 0));
+    rWriter.putSimpleValue(rTransformation.get(1, 0));
+    rWriter.putSimpleValue(rTransformation.get(0, 1));
+    rWriter.putSimpleValue(rTransformation.get(1, 1));
+    rWriter.putSimpleValue(rTransformation.get(0, 2));
+    rWriter.putSimpleValue(rTransformation.get(1, 2));
+}
+
+void decomposeForComparison(const drawinglayer::primitive2d::Primitive2DContainer& rPrimitives,
+                            drawinglayer::primitive2d::Primitive2DContainer& rDrawn,
                             const drawinglayer::geometry::ViewInformation2D& rViewInformation)
 {
-    for (const auto& rPrimitive : rContent.maPrimitives)
+    for (const auto& rPrimitive : rPrimitives)
     {
         // A page preview shows another page, and a field inside it reads against that page
         // rather than against the one being drawn, so the preview names the page it shows
@@ -568,10 +586,16 @@ void decomposeForComparison(ObjectContent& rContent,
         drawinglayer::primitive2d::Primitive2DContainer aDecomposed;
         rPrimitive->get2DDecomposition(aDecomposed, aViewInformation);
         if (aDecomposed.empty())
-            rContent.maDrawn.push_back(rPrimitive);
+            rDrawn.push_back(rPrimitive);
         else
-            rContent.maDrawn.append(std::move(aDecomposed));
+            rDrawn.append(std::move(aDecomposed));
     }
+}
+
+void decomposeForComparison(ObjectContent& rContent,
+                            const drawinglayer::geometry::ViewInformation2D& rViewInformation)
+{
+    decomposeForComparison(rContent.maPrimitives, rContent.maDrawn, rViewInformation);
 }
 
 namespace
@@ -1454,11 +1478,7 @@ void describeObject(SdrObject& rObject, ObjectContent& rContent,
 void writeEntryGeometry(tools::JsonWriter& rWriter, const ObjectContent& rContent,
                         drawinglayer::Primitive2dJsonProcessor& rProcessor)
 {
-    const tools::Rectangle& rPainted = rContent.maPaintedBox;
-    rWriter.put("x", sal_Int64(rPainted.Left()));
-    rWriter.put("y", sal_Int64(rPainted.Top()));
-    rWriter.put("width", sal_Int64(rPainted.GetWidth()));
-    rWriter.put("height", sal_Int64(rPainted.GetHeight()));
+    writeEntryBox(rWriter, rContent.maPaintedBox, rContent.maTransformation);
 
     if (rContent.moMeasurement)
     {
@@ -1558,18 +1578,6 @@ void writeEntryGeometry(tools::JsonWriter& rWriter, const ObjectContent& rConten
             rWriter.put("fitLineLength", true);
         else
             rWriter.put("lineLength", rCaption.mfLineLength);
-    }
-
-    // In the order a canvas takes it: x' = a * x + c * y + e and y' = b * x + d * y + f.
-    {
-        const basegfx::B2DHomMatrix& rTransformation = rContent.maTransformation;
-        auto aTransformArray = rWriter.startArray("transform");
-        rWriter.putSimpleValue(rTransformation.get(0, 0));
-        rWriter.putSimpleValue(rTransformation.get(1, 0));
-        rWriter.putSimpleValue(rTransformation.get(0, 1));
-        rWriter.putSimpleValue(rTransformation.get(1, 1));
-        rWriter.putSimpleValue(rTransformation.get(0, 2));
-        rWriter.putSimpleValue(rTransformation.get(1, 2));
     }
 
     {

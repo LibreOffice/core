@@ -3327,21 +3327,10 @@ private:
                 rWriter.put("backdropTransparency", oSurface->fTransparency);
         }
 
-        const sal_Int64 nWidth = sal_Int64(pPage->GetWidth() * constTwipConversionFactor);
-        const sal_Int64 nHeight = sal_Int64(pPage->GetHeight() * constTwipConversionFactor);
-        rWriter.put("x", sal_Int64(0));
-        rWriter.put("y", sal_Int64(0));
-        rWriter.put("width", nWidth);
-        rWriter.put("height", nHeight);
-        {
-            auto aTransformArray = rWriter.startArray("transform");
-            rWriter.putSimpleValue(double(nWidth));
-            rWriter.putSimpleValue(0.0);
-            rWriter.putSimpleValue(0.0);
-            rWriter.putSimpleValue(double(nHeight));
-            rWriter.putSimpleValue(0.0);
-            rWriter.putSimpleValue(0.0);
-        }
+        const tools::Rectangle aBox(
+            Point(0, 0), Size(tools::Long(pPage->GetWidth() * constTwipConversionFactor),
+                              tools::Long(pPage->GetHeight() * constTwipConversionFactor)));
+        svx::vector::writeEntryBox(rWriter, aBox, svx::vector::boxTransformation(aBox));
 
         const drawinglayer::primitive2d::Primitive2DContainer& rContent
             = pageContent(pPage).maPrimitives;

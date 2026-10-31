@@ -504,14 +504,21 @@ public:
 
     /**
      * Writes the vector primitives delta of a part: the objects that changed since the part was
-     * last pushed, then moves that mark to the part's current version. rPartId names the part the
-     * way getPartId spells it and nMode the page list it sits in. Writes nothing when nothing
-     * changed since the last push or when no part carries that identifier.
+     * last pushed, then moves that mark to the part's current version. rPartId is the id the
+     * vector primitives of the part carry as their partId, and nMode the page list the part sits
+     * in. Writes nothing when nothing changed since the last push or when no part carries that
+     * id.
      */
     virtual void pushVectorPrimitivesDelta(tools::JsonWriter& /*rJsonWriter*/,
                                            std::string_view /*rPartId*/, int /*nMode*/)
     {
     }
+
+    /**
+     * The ids that the vector primitives of the parts carry as their partId, in the order the
+     * parts lie in the document.
+     */
+    virtual std::vector<OString> getVectorPartIds() { return {}; }
 
     /**
      * Returns an opaque string reflecting the render state of a component

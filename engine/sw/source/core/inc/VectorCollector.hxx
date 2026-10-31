@@ -51,6 +51,9 @@ enum class EntryKind
     Shape
 };
 
+/// The name of the kind in lower case, such as "textframe" or "tableborders".
+SW_DLLPUBLIC std::string_view nameOf(EntryKind eKind);
+
 /// The kind of entry a frame makes.
 SW_DLLPUBLIC EntryKind kindOf(const SwFrame& rFrame);
 
@@ -88,6 +91,11 @@ struct SW_DLLPUBLIC Entry
     SwRect maBox;
 
     drawinglayer::primitive2d::Primitive2DContainer maPrimitives;
+
+    /// For a drawing object: what its primitives decompose to, in document twips, with the
+    /// coordinates and the content of its model at the time of the decomposition. Empty for a
+    /// frame.
+    drawinglayer::primitive2d::Primitive2DContainer maDrawn;
 
     /// For a text frame: the paragraph started in an earlier frame and goes on here.
     bool mbIsFollow = false;

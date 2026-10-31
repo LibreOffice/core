@@ -10694,6 +10694,17 @@ std::string COKitDocumentImpl::getCommandValues(const char* pCommand)
     {
         return getAllPartSize(this);
     }
+    else if (aCommand == ".uno:VectorPartIds")
+    {
+        // The array is empty for a document that has no such ids.
+        tools::JsonWriter aJsonWriter;
+        {
+            auto aIds = aJsonWriter.startArray("ids");
+            for (const OString& rPartId : pDoc->getVectorPartIds())
+                aJsonWriter.putSimpleValue(OUString::fromUtf8(rPartId));
+        }
+        return aJsonWriter.finishAndGetAsStdString();
+    }
     else if (aCommand.starts_with(aViewRowColumnHeaders))
     {
         tools::Rectangle aRectangle;

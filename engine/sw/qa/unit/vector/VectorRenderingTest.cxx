@@ -43,6 +43,9 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/graph.hxx>
 
+#include <boost/property_tree/json_parser.hpp>
+#include <tools/json_writer.hxx>
+
 #include <IDocumentLayoutAccess.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
@@ -51,11 +54,15 @@
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <sw_primitivetypes2d.hxx>
+#include <unotxdoc.hxx>
 #include <VectorCollector.hxx>
+#include <VectorPart.hxx>
 #include <wrtsh.hxx>
 
 #include <algorithm>
 #include <cmath>
+#include <optional>
+#include <sstream>
 
 using namespace com::sun::star;
 using namespace ::cpo;
@@ -78,6 +85,47 @@ protected:
         const SwPageFrame* pPage = pLayout->GetLower()->DynCastPageFrame();
         CPPUNIT_ASSERT(pPage);
         return sw::vector::decomposePage(*pPage);
+    }
+
+    const SwPageFrame& firstPage()
+    {
+        SwRootFrame* pLayout = getSwDoc()->getIDocumentLayoutAccess().GetCurrentLayout();
+        return *pLayout->GetLower()->DynCastPageFrame();
+    }
+
+    /// The answer to a request for the primitives of the first page, as a client sends it.
+    boost::property_tree::ptree requestFirstPage(std::optional<sal_Int64> oSince = std::nullopt)
+    {
+        OString aCommand = ".uno:VectorPrimitives?partid=" + sw::vector::partIdOf(firstPage());
+        if (oSince)
+            aCommand += "&since=" + OString::number(*oSince) + "&epoch="
+                        + OString::number(getSwTextDoc()->getVectorParts()->getEpoch());
+        tools::JsonWriter aWriter;
+        getSwTextDoc()->getCommandValues(aWriter, aCommand);
+        return parse(aWriter.finishAndGetAsOString());
+    }
+
+    /// The delta the document pushes for the first page after a change all over it.
+    std::optional<boost::property_tree::ptree> pushFirstPage()
+    {
+        const SwPageFrame& rPage = firstPage();
+        SwRootFrame* pLayout = getSwDoc()->getIDocumentLayoutAccess().GetCurrentLayout();
+        getSwTextDoc()->getVectorParts()->invalidate(*pLayout, { rPage.getFrameArea() });
+        tools::JsonWriter aWriter;
+        getSwTextDoc()->pushVectorPrimitivesDelta(aWriter, sw::vector::partIdOf(rPage),
+                                                  sw::vector::constModePrintLayout);
+        const OString aJson = aWriter.finishAndGetAsOString();
+        if (aJson == tools::JsonWriter::EMPTY_DOCUMENT)
+            return std::nullopt;
+        return parse(aJson);
+    }
+
+    static boost::property_tree::ptree parse(const OString& rJson)
+    {
+        std::stringstream aStream((std::string(rJson)));
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+        return aTree;
     }
 
     /// Two paragraphs, the second one filled with red.
@@ -1027,6 +1075,225 @@ CPPUNIT_TEST_FIXTURE(Test, testVectorShapeIsAnEntryInItsOwnCoordinates)
     const basegfx::B2DRange aRange = rangeOf(*pShape);
     CPPUNIT_ASSERT_LESS(100.0, std::abs(aRange.getMinX()));
     CPPUNIT_ASSERT_LESS(100.0, std::abs(aRange.getMinY()));
+}
+
+namespace
+{
+/// The object with the id in a payload, or nullptr.
+const boost::property_tree::ptree* objectOf(const boost::property_tree::ptree& rPayload,
+                                            sal_uInt64 nId)
+{
+    for (const auto& rObject : rPayload.get_child("objects"))
+    {
+        if (rObject.second.get<sal_uInt64>("id") == nId)
+            return &rObject.second;
+    }
+    return nullptr;
+}
+}
+
+/// The first request for a page answers the whole page, with the page entry first and the
+/// coordinates of each entry relative to the entry.
+CPPUNIT_TEST_FIXTURE(Test, testVectorPageIsServedWhole)
+{
+    createSwDoc();
+    getSwDocShell()->GetWrtShell()->Insert(u"text"_ustr);
+    calcLayout();
+
+    boost::property_tree::ptree aPayload = requestFirstPage();
+
+    CPPUNIT_ASSERT_EQUAL(std::string("vectorprimitives"), aPayload.get<std::string>("type"));
+    CPPUNIT_ASSERT_EQUAL(std::string(sw::vector::partIdOf(firstPage())),
+                         aPayload.get<std::string>("partId"));
+    CPPUNIT_ASSERT_EQUAL(std::string("entry"), aPayload.get<std::string>("coordinates"));
+    CPPUNIT_ASSERT(aPayload.get<sal_Int64>("version") > 0);
+    const auto& rObjects = aPayload.get_child("objects");
+    CPPUNIT_ASSERT(!rObjects.empty());
+    const auto& rPage = rObjects.begin()->second;
+    CPPUNIT_ASSERT_EQUAL(std::string("page"), rPage.get<std::string>("kind"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(-1), rPage.get<sal_Int64>("parent"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(0), rPage.get<sal_Int64>("x"));
+    // Every entry of a whole page comes with what it draws.
+    for (const auto& rObject : rObjects)
+        CPPUNIT_ASSERT(rObject.second.get_child_optional("primitives"));
+}
+
+/// Typing in one paragraph gives a delta that carries that paragraph and no other.
+CPPUNIT_TEST_FIXTURE(Test, testVectorDeltaCarriesTheChangedParagraphOnly)
+{
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert(u"first"_ustr);
+    pWrtShell->SplitNode();
+    pWrtShell->Insert(u"second"_ustr);
+    calcLayout();
+    const sal_Int64 nServed = requestFirstPage().get<sal_Int64>("version");
+    std::vector<sw::vector::Entry> aEntries = decomposeFirstPage();
+    const sal_uInt64 nFirstId
+        = findEntry(aEntries, sw::vector::EntryKind::TextFrame)->mnId;
+    const sal_uInt64 nSecondId
+        = findEntry(aEntries, sw::vector::EntryKind::TextFrame, /*nSkip=*/1)->mnId;
+
+    // Typing at the end of the second paragraph changes it and nothing else.
+    pWrtShell->Insert(u" more"_ustr);
+    calcLayout();
+    std::optional<boost::property_tree::ptree> oDelta = pushFirstPage();
+
+    CPPUNIT_ASSERT(oDelta);
+    CPPUNIT_ASSERT_EQUAL(std::string("vectorprimitivesdelta"), oDelta->get<std::string>("type"));
+    CPPUNIT_ASSERT_EQUAL(nServed, oDelta->get<sal_Int64>("from"));
+    CPPUNIT_ASSERT_GREATER(nServed, oDelta->get<sal_Int64>("version"));
+    const boost::property_tree::ptree* pSecond = objectOf(*oDelta, nSecondId);
+    CPPUNIT_ASSERT(pSecond);
+    CPPUNIT_ASSERT(pSecond->get_child_optional("primitives"));
+    CPPUNIT_ASSERT(!objectOf(*oDelta, nFirstId));
+}
+
+/// A paragraph pushed down by a new one comes in the delta without its primitives, and the
+/// new order comes along.
+CPPUNIT_TEST_FIXTURE(Test, testVectorDeltaMovesAParagraphWithoutItsPrimitives)
+{
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert(u"first"_ustr);
+    pWrtShell->SplitNode();
+    pWrtShell->Insert(u"second"_ustr);
+    calcLayout();
+    requestFirstPage();
+    const sal_uInt64 nSecondId
+        = findEntry(decomposeFirstPage(), sw::vector::EntryKind::TextFrame, /*nSkip=*/1)->mnId;
+
+    // A paragraph added at the start pushes the second paragraph down.
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->SplitNode();
+    calcLayout();
+    std::optional<boost::property_tree::ptree> oDelta = pushFirstPage();
+
+    CPPUNIT_ASSERT(oDelta);
+    const boost::property_tree::ptree* pSecond = objectOf(*oDelta, nSecondId);
+    CPPUNIT_ASSERT(pSecond);
+    CPPUNIT_ASSERT(!pSecond->get_child_optional("primitives"));
+    // A new paragraph joined the page, so the delta holds the order.
+    CPPUNIT_ASSERT(oDelta->get_child_optional("order"));
+}
+
+/// A paragraph that only moves, outside the area of the change, comes without its primitives.
+CPPUNIT_TEST_FIXTURE(Test, testVectorDeltaMovesAParagraphOutsideTheChangedArea)
+{
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert(u"first"_ustr);
+    pWrtShell->SplitNode();
+    pWrtShell->Insert(u"second"_ustr);
+    calcLayout();
+    requestFirstPage();
+    std::vector<sw::vector::Entry> aEntries = decomposeFirstPage();
+    const SwRect aFirstBox = findEntry(aEntries, sw::vector::EntryKind::TextFrame)->maBox;
+    const sal_uInt64 nSecondId
+        = findEntry(aEntries, sw::vector::EntryKind::TextFrame, /*nSkip=*/1)->mnId;
+
+    // The change is in the area of the first paragraph, and the second one only moves down.
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->SplitNode();
+    calcLayout();
+    SwRootFrame* pLayout = getSwDoc()->getIDocumentLayoutAccess().GetCurrentLayout();
+    getSwTextDoc()->getVectorParts()->invalidate(*pLayout, { aFirstBox });
+    tools::JsonWriter aWriter;
+    getSwTextDoc()->pushVectorPrimitivesDelta(aWriter, sw::vector::partIdOf(firstPage()),
+                                              sw::vector::constModePrintLayout);
+    boost::property_tree::ptree aDelta = parse(aWriter.finishAndGetAsOString());
+
+    const boost::property_tree::ptree* pSecond = objectOf(aDelta, nSecondId);
+    CPPUNIT_ASSERT(pSecond);
+    CPPUNIT_ASSERT(!pSecond->get_child_optional("primitives"));
+}
+
+/// A push for a page that did not change writes nothing.
+CPPUNIT_TEST_FIXTURE(Test, testVectorPushWithoutChangeWritesNothing)
+{
+    createSwDoc();
+    getSwDocShell()->GetWrtShell()->Insert(u"text"_ustr);
+    calcLayout();
+    requestFirstPage();
+
+    CPPUNIT_ASSERT(!pushFirstPage());
+}
+
+/// A request since the version the client already holds answers a delta with no objects.
+CPPUNIT_TEST_FIXTURE(Test, testVectorPullSinceTheCurrentVersionIsEmpty)
+{
+    createSwDoc();
+    getSwDocShell()->GetWrtShell()->Insert(u"text"_ustr);
+    calcLayout();
+    const sal_Int64 nVersion = requestFirstPage().get<sal_Int64>("version");
+
+    boost::property_tree::ptree aDelta = requestFirstPage(nVersion);
+
+    CPPUNIT_ASSERT_EQUAL(std::string("vectorprimitivesdelta"), aDelta.get<std::string>("type"));
+    CPPUNIT_ASSERT_EQUAL(nVersion, aDelta.get<sal_Int64>("version"));
+    CPPUNIT_ASSERT(aDelta.get_child("objects").empty());
+}
+
+/// The part ids list one id per page, in page order.
+CPPUNIT_TEST_FIXTURE(Test, testVectorPageIdsFollowThePages)
+{
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->InsertPageBreak();
+    calcLayout();
+
+    const std::vector<OString> aPartIds = getSwTextDoc()->getVectorPartIds();
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aPartIds.size());
+    CPPUNIT_ASSERT_EQUAL(sw::vector::partIdOf(firstPage()), aPartIds[0]);
+    CPPUNIT_ASSERT(aPartIds[0] != aPartIds[1]);
+}
+
+/// Asking for the part ids does not make the store of served pages.
+CPPUNIT_TEST_FIXTURE(Test, testVectorPageIdsLeaveTheStoreUnmade)
+{
+    // A client that draws tiles gets the page ids with every status and needs no store.
+    createSwDoc();
+    getSwTextDoc()->getVectorPartIds();
+
+    CPPUNIT_ASSERT(!getSwTextDoc()->getVectorParts());
+}
+
+/// A push for a page that is gone writes the header alone, once, and the page is no longer
+/// served.
+CPPUNIT_TEST_FIXTURE(Test, testVectorPushForAGonePageWritesTheHeaderAlone)
+{
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->InsertPageBreak();
+    calcLayout();
+    const SwFrame* pSecondPage = firstPage().GetNext();
+    CPPUNIT_ASSERT(pSecondPage);
+    CPPUNIT_ASSERT(pSecondPage->IsPageFrame());
+    const OString aPartId
+        = sw::vector::partIdOf(static_cast<const SwPageFrame&>(*pSecondPage));
+    {
+        tools::JsonWriter aWriter;
+        getSwTextDoc()->getCommandValues(aWriter,
+                                         Concat2View(".uno:VectorPrimitives?partid=" + aPartId));
+        aWriter.finishAndGetAsOString();
+    }
+
+    pWrtShell->Undo();
+    calcLayout();
+    CPPUNIT_ASSERT(!firstPage().GetNext());
+
+    // The header alone tells the readers of the page that it is gone.
+    tools::JsonWriter aWriter;
+    getSwTextDoc()->pushVectorPrimitivesDelta(aWriter, aPartId, sw::vector::constModePrintLayout);
+    boost::property_tree::ptree aGone = parse(aWriter.finishAndGetAsOString());
+    CPPUNIT_ASSERT_EQUAL(std::string("vectorprimitives"), aGone.get<std::string>("type"));
+    CPPUNIT_ASSERT(!aGone.get_child_optional("objects"));
+    CPPUNIT_ASSERT(!getSwTextDoc()->getVectorParts()->isServed(aPartId));
+
+    // It is told once.
+    tools::JsonWriter aAgain;
+    getSwTextDoc()->pushVectorPrimitivesDelta(aAgain, aPartId, sw::vector::constModePrintLayout);
+    CPPUNIT_ASSERT_EQUAL(tools::JsonWriter::EMPTY_DOCUMENT, aAgain.finishAndGetAsOString());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

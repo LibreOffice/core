@@ -190,6 +190,7 @@
 #include <unoframe.hxx>
 #include <unoxstyle.hxx>
 #include <SwXTextDefaults.hxx>
+#include <VectorPart.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
