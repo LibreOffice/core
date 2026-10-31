@@ -35,6 +35,7 @@
 #include <common/SaveResult.hpp>
 #include <common/ServerPrivateInfo.hpp>
 #include <common/SettingsStorage.hpp>
+#include <common/Thumbnail.hpp>
 #include <common/TilePrioritizer.hpp>
 #include <common/TraceEvent.hpp>
 #include <common/Unit.hpp>
@@ -3596,6 +3597,7 @@ void DocumentBroker::handleSaveResponse(const std::shared_ptr<ClientSession>& se
             else
             {
                 LOG_TRC("Renamed [" << oldName << "] to [" << newName << ']');
+                renameThumbnailsForUpload(wroteNewVersion);
             }
         }
     }
@@ -3861,10 +3863,79 @@ void DocumentBroker::uploadAfterLoadingTemplate(const std::shared_ptr<ClientSess
         else
         {
             LOG_TRC("Renamed [" << oldName << "] to [" << newName << ']');
+            renameThumbnailsForUpload(/*wroteNewVersion=*/true);
         }
     }
 
     uploadToStorage(session, /*force=*/false);
+}
+
+void DocumentBroker::renameThumbnailsForUpload([[maybe_unused]] const bool wroteNewVersion)
+{
+#if !MOBILEAPP
+    // Thumbnails are rendered only for the sizes a WOPI host lists, so only a server has them.
+    // A new version makes the images of the save before out of date, so they go first. Without
+    // one, the .uploading copy is still the document those images show, and they stay for the
+    // upload that retries it.
+    const std::string uploading = _storage->getRootFilePathUploading();
+    if (wroteNewVersion)
+    {
+        for (const std::string& size : Thumbnail::listSizes(uploading))
+            FileUtil::removeFile(Thumbnail::filePath(uploading, size));
+    }
+
+    const std::string toUpload = _storage->getRootFilePathToUpload();
+    for (const std::string& size : Thumbnail::listSizes(toUpload))
+    {
+        const std::string oldName = Thumbnail::filePath(toUpload, size);
+        const std::string newName = Thumbnail::filePath(uploading, size);
+        if (::rename(oldName.c_str(), newName.c_str()) < 0)
+        {
+            LOG_SYS("Failed to rename [" << oldName << "] to [" << newName << ']');
+        }
+        else
+        {
+            LOG_TRC("Renamed [" << oldName << "] to [" << newName << ']');
+        }
+    }
+#endif // !MOBILEAPP
+}
+
+std::vector<DocumentBroker::UploadedThumbnail>
+DocumentBroker::listThumbnails([[maybe_unused]] const std::string& basePath)
+{
+    std::vector<UploadedThumbnail> thumbnails;
+#if !MOBILEAPP
+    // Thumbnails are rendered only for the sizes a WOPI host lists, so only a server has them.
+    for (const std::string& size : Thumbnail::listSizes(basePath))
+    {
+        const std::string path = Thumbnail::filePath(basePath, size);
+        const FileUtil::Stat stat(path);
+        thumbnails.push_back(UploadedThumbnail{ path, stat.inodeNumber(), stat.modifiedTimeUs() });
+    }
+#endif // !MOBILEAPP
+
+    return thumbnails;
+}
+
+void DocumentBroker::removeThumbnails(const std::vector<UploadedThumbnail>& thumbnails)
+{
+    for (const UploadedThumbnail& thumbnail : thumbnails)
+    {
+        const FileUtil::Stat stat(thumbnail.path);
+        if (!stat.exists())
+            continue;
+
+        // A file with another inode or modified time is the image of a later save.
+        if (stat.inodeNumber() != thumbnail.inode ||
+            stat.modifiedTimeUs() != thumbnail.modifiedTimeUs)
+        {
+            LOG_DBG("The thumbnail [" << thumbnail.path << "] is of a newer save and stays");
+            continue;
+        }
+
+        FileUtil::removeFile(thumbnail.path);
+    }
 }
 
 void DocumentBroker::uploadToStorageInternal(const std::shared_ptr<ClientSession>& session,
@@ -3948,8 +4019,22 @@ void DocumentBroker::uploadToStorageInternal(const std::shared_ptr<ClientSession
 
     LOG_DBG("Uploading [" << _docKey << "] after saving to URI [" << uriAnonym << ']');
 
+    // The thumbnails that go with the file. A rename and an export send none. A request made
+    // while an upload runs starts no upload of its own, so the thumbnails on record stay those
+    // of the upload that runs.
+    std::vector<UploadedThumbnail> thumbnails;
+    bool thumbnailsOfSaveAs = isSaveAs;
+    if (_uploadRequest && !_uploadRequest->isComplete() && isAsyncUploading())
+    {
+        thumbnails = _uploadRequest->thumbnails();
+        thumbnailsOfSaveAs = _uploadRequest->thumbnailsOfSaveAs();
+    }
+    else if (!isRename && !isExport)
+        thumbnails = listThumbnails(isSaveAs ? saveAsPath : _storage->getRootFilePathUploading());
+
     _uploadRequest = std::make_unique<UploadRequest>(uriAnonym, newFileModifiedTime, session,
-                                                     isSaveAs, isExport, isRename);
+                                                     isSaveAs, std::move(thumbnails),
+                                                     thumbnailsOfSaveAs, isExport, isRename);
 
     StorageBase::AsyncUploadCallback asyncUploadCallback =
         [this](const StorageBase::AsyncUpload& asyncUp)
@@ -3980,6 +4065,7 @@ void DocumentBroker::uploadToStorageInternal(const std::shared_ptr<ClientSession
             case StorageBase::AsyncUpload::State::None: // Unexpected: fallback.
             case StorageBase::AsyncUpload::State::Error:
                 _uploadRequest->setComplete();
+                removeFailedSaveAsThumbnails();
                 broadcastSaveResult(false, "Could not upload document to storage",
                                     asyncUp.result().getReason());
                 // [[fallthrough]]
@@ -4057,6 +4143,9 @@ void DocumentBroker::handleUploadToStorageSuccessful(const StorageBase::UploadRe
 {
     assert(_uploadRequest && "Expected to have a valid UploadRequest instance");
     LOG_DBG("Last upload result: OK");
+
+    // The host has these thumbnails now.
+    removeThumbnails(_uploadRequest->thumbnails());
 
     if (const auto session = _uploadRequest->session())
     {
@@ -4311,11 +4400,21 @@ void DocumentBroker::reportUploadToStorageFailed(std::string_view reason)
     }
 }
 
+void DocumentBroker::removeFailedSaveAsThumbnails()
+{
+    // A Save As writes to a directory of its own, and a retry of it to another, so its
+    // thumbnails have no upload to wait for. Those of the document stay for the retry.
+    if (_uploadRequest->thumbnailsOfSaveAs())
+        removeThumbnails(_uploadRequest->thumbnails());
+}
+
 void DocumentBroker::handleUploadToStorageFailed(const StorageBase::UploadResult& uploadResult)
 {
     assert(uploadResult.getResult() != StorageBase::UploadResult::Result::OK &&
            "Expected upload failure");
     assert(_uploadRequest && "Expected to have a valid UploadRequest instance");
+
+    removeFailedSaveAsThumbnails();
 
     if (_docState.activity() == DocumentState::Activity::Rename)
     {

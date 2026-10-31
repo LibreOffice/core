@@ -34,7 +34,8 @@
 
 /// After a save, a PNG thumbnail of the document lies next to the copy that is uploaded, one for
 /// each size the host listed, and after a Save As next to the new file. Each image fits in its
-/// box and keeps the shape of the page, or fills the box for a spreadsheet.
+/// box and keeps the shape of the page, or fills the box for a spreadsheet. Once the host has
+/// the file, the images are gone.
 class UnitWOPIThumbnailRender : public WopiTestServer
 {
 public:
@@ -96,6 +97,16 @@ public:
         return std::string();
     }
 
+    /// Checks that the file with the given base name has no thumbnails in the jail.
+    void checkNoThumbnails(const std::string& baseName)
+    {
+        for (const auto& [boxWidth, boxHeight] : Sizes)
+        {
+            const std::string name = Thumbnail::filePath(baseName, boxWidth, boxHeight);
+            LOK_ASSERT_MESSAGE("Leftover thumbnail " + name, findInJail(name).empty());
+        }
+    }
+
     /// Checks the thumbnails of the file with the given base name in the jail.
     void checkThumbnails(const std::string& baseName)
     {
@@ -127,11 +138,12 @@ public:
     {
         LOK_ASSERT_STATE(_phase, Phase::WaitSave);
 
-        // The upload is of the copy with the upload suffix, and the thumbnails are named after it.
-        checkThumbnails(_filename + TO_UPLOAD_SUFFIX);
+        // The upload is of the copy with the uploading suffix, and the thumbnails moved with it.
+        checkThumbnails(uploadingName());
+        checkNoThumbnails(_filename + TO_UPLOAD_SUFFIX);
 
         TRANSITION_STATE(_phase, Phase::WaitSaveAs);
-        WSD_CMD("saveas url=wopi:///path/renamed." + FileUtil::extractFileExtension(_filename));
+        WSD_CMD("saveas url=wopi:///path/" + saveAsName());
 
         return nullptr;
     }
@@ -140,11 +152,35 @@ public:
     {
         LOK_ASSERT_STATE(_phase, Phase::WaitSaveAs);
 
-        // The new file is uploaded from its own directory, with its thumbnails next to it.
-        checkThumbnails("renamed." + FileUtil::extractFileExtension(_filename));
+        // The new file is uploaded from its own directory, with its thumbnails next to it. The
+        // thumbnails of the upload before it went with that upload.
+        checkThumbnails(saveAsName());
+        checkNoThumbnails(uploadingName());
 
         TRANSITION_STATE(_phase, Phase::Done);
-        passTest("The thumbnails of the save and of the Save As are on disk");
+    }
+
+    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        // The client hears of the Save As once the host has the new file, and by then its
+        // thumbnails are gone too.
+        if (_phase == Phase::Done && message.starts_with("saveas: url="))
+        {
+            checkNoThumbnails(saveAsName());
+            passTest("The thumbnails are on disk while the host receives the file, then gone");
+        }
+
+        return false;
+    }
+
+    /// The name of the copy that a save uploads.
+    std::string uploadingName() const { return _filename + TO_UPLOAD_SUFFIX + UPLOADING_SUFFIX; }
+
+    /// The name of the file the Save As writes.
+    std::string saveAsName() const
+    {
+        return "renamed." + FileUtil::extractFileExtension(_filename);
     }
 
     void invokeWSDTest() override

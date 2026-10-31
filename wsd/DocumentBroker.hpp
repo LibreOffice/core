@@ -1171,6 +1171,31 @@ private:
     /// Handles the completion of successful uploading to storage.
     void handleUploadToStorageSuccessful(const StorageBase::UploadResult& uploadResult);
 
+    /// A thumbnail file as it was when an upload of it started: its path, and the inode
+    /// number and the modified time of the file then at that path.
+    struct UploadedThumbnail
+    {
+        std::string path;
+        ino_t inode;
+        int64_t modifiedTimeUs;
+    };
+
+    /// Renames the thumbnails the kit wrote next to the .upload copy to the .uploading names.
+    /// When wroteNewVersion is true, the .uploading copy is a new version of the document, and
+    /// the thumbnails of the version before are deleted first. Afterwards the thumbnails under
+    /// the .uploading names are those of the file under that name, or there are none.
+    void renameThumbnailsForUpload(bool wroteNewVersion);
+
+    /// The thumbnails next to the file at basePath, as they are on disk now.
+    static std::vector<UploadedThumbnail> listThumbnails(const std::string& basePath);
+
+    /// Deletes each of the given thumbnails whose file is still the one described, and leaves
+    /// a file that was written since.
+    static void removeThumbnails(const std::vector<UploadedThumbnail>& thumbnails);
+
+    /// Deletes the thumbnails of the current upload request when they are those of a Save As.
+    void removeFailedSaveAsThumbnails();
+
     /// Handles the completion of failed uploading to storage.
     void handleUploadToStorageFailed(const StorageBase::UploadResult& uploadResult);
 
@@ -1679,12 +1704,15 @@ private:
         UploadRequest(std::string uriAnonym,
                       std::chrono::system_clock::time_point newFileModifiedLocalTime,
                       const std::shared_ptr<class ClientSession>& session, bool isSaveAs,
+                      std::vector<UploadedThumbnail> thumbnails, bool thumbnailsOfSaveAs,
                       bool isExport, bool isRename)
             : _startTime(std::chrono::steady_clock::now())
             , _uriAnonym(std::move(uriAnonym))
             , _newFileModifiedLocalTime(newFileModifiedLocalTime)
             , _session(session)
             , _isSaveAs(isSaveAs)
+            , _thumbnails(std::move(thumbnails))
+            , _thumbnailsOfSaveAs(thumbnailsOfSaveAs)
             , _isExport(isExport)
             , _isRename(isRename)
             , _completed(false)
@@ -1701,6 +1729,12 @@ private:
 
         std::shared_ptr<class ClientSession> session() const { return _session.lock(); }
         bool isSaveAs() const { return _isSaveAs; }
+        /// The thumbnails the upload carries with the file, as they were when it started. Empty
+        /// when it carries none.
+        const std::vector<UploadedThumbnail>& thumbnails() const { return _thumbnails; }
+        /// True when the thumbnails lie next to the file of a Save As, and false when they lie
+        /// next to the .uploading copy of the document.
+        bool thumbnailsOfSaveAs() const { return _thumbnailsOfSaveAs; }
         bool isExport() const { return _isExport; }
         bool isRename() const { return _isRename; }
 
@@ -1714,6 +1748,8 @@ private:
         const std::chrono::system_clock::time_point _newFileModifiedLocalTime;
         const std::weak_ptr<class ClientSession> _session;
         const bool _isSaveAs;
+        const std::vector<UploadedThumbnail> _thumbnails;
+        const bool _thumbnailsOfSaveAs;
         const bool _isExport;
         const bool _isRename;
         bool _completed;
