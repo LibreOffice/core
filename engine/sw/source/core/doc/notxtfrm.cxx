@@ -65,6 +65,11 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
+#include <VectorCollector.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <vcl/gdimtf.hxx>
+#include <vcl/virdev.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/utils/b2dclipstate.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
@@ -72,6 +77,8 @@
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <osl/diagnose.h>
+
+#include <functional>
 
 // MM02 needed for VOC mechanism and getting the OC - may be moved to an own file
 #include <svx/sdrpagewindow.hxx>
@@ -100,7 +107,7 @@ static bool GetRealURL( const SwGrfNode& rNd, OUString& rText )
 
 static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
                            const SwViewShell &rSh, const SwNoTextFrame *pFrame,
-                           bool bDefect )
+                           bool bDefect, OutputDevice* pOut = nullptr)
 {
     static vcl::Font aFont = []()
     {
@@ -146,7 +153,8 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
 
     const Bitmap& rBmp = bDefect ? const_cast<SwViewShell&>(rSh).GetErrorBitmap()
                                  : const_cast<SwViewShell&>(rSh).GetReplacementBitmap();
-    Graphic::DrawEx(*rSh.GetOut(), rText, aFont, rBmp, rRect.Pos(), rRect.SSize());
+    Graphic::DrawEx(pOut ? *pOut : *rSh.GetOut(), rText, aFont, rBmp, rRect.Pos(),
+                    rRect.SSize());
 }
 
 SwNoTextFrame::SwNoTextFrame(SwNoTextNode * const pNode, SwFrame* pSib )
@@ -1359,7 +1367,7 @@ void SwNoTextFrame::ImplPaintPictureAnimate(vcl::RenderContext* pOut, const SwVi
 }
 
 void SwNoTextFrame::ImplPaintPictureReplacement(const GraphicObject& rGrfObj, const SwGrfNode* pGrfNd,
-        const SwRect& rAlignedGrfArea, const SwViewShell* pShell) const
+        const SwRect& rAlignedGrfArea, const SwViewShell* pShell, OutputDevice* pOut) const
 {
     TranslateId pResId;
 
@@ -1378,7 +1386,7 @@ void SwNoTextFrame::ImplPaintPictureReplacement(const GraphicObject& rGrfObj, co
     if (pResId)
         aText = SwResId(pResId);
 
-    ::lcl_PaintReplacement( rAlignedGrfArea, aText, *pShell, this, true );
+    ::lcl_PaintReplacement(rAlignedGrfArea, aText, *pShell, this, true, pOut);
 }
 
 void SwNoTextFrame::ImplPaintPictureBitmap( vcl::RenderContext* pOut,
@@ -1528,6 +1536,153 @@ bool SwNoTextFrame::HasAnimation() const
 {
     const SwGrfNode* pGrfNd = GetNode()->GetGrfNode();
     return pGrfNd && pGrfNd->IsAnimated();
+}
+
+void SwNoTextFrame::CreatePrimitives(sw::vector::Collector& rCollector) const
+{
+    if (!getFrameArea().HasArea())
+        return;
+
+    rCollector.open(*this);
+    const Point aOrigin(rCollector.origin());
+    rCollector.add(CreateBackgroundPrimitives(aOrigin));
+    rCollector.add(CreateContentPrimitives(aOrigin));
+    rCollector.close();
+}
+
+namespace
+{
+/// What rPaint draws on a device in twips within (0, 0) and rSize, as a picture stretched over
+/// rTargetRange.
+drawinglayer::primitive2d::Primitive2DReference
+createRecordedPicture(const Size& rSize, const basegfx::B2DRange& rTargetRange,
+                      const std::function<void(OutputDevice&)>& rPaint)
+{
+    ScopedVclPtrInstance<VirtualDevice> pDevice;
+    pDevice->SetMapMode(MapMode(MapUnit::MapTwip));
+    GDIMetaFile aRecording;
+    aRecording.Record(pDevice.get());
+    rPaint(*pDevice);
+    aRecording.Stop();
+    aRecording.WindStart();
+    aRecording.SetPrefMapMode(MapMode(MapUnit::MapTwip));
+    aRecording.SetPrefSize(rSize);
+    return new drawinglayer::primitive2d::GraphicPrimitive2D(
+        basegfx::utils::createScaleTranslateB2DHomMatrix(
+            rTargetRange.getWidth(), rTargetRange.getHeight(), rTargetRange.getMinX(),
+            rTargetRange.getMinY()),
+        GraphicObject(Graphic(aRecording)));
+}
+}
+
+drawinglayer::primitive2d::Primitive2DContainer
+SwNoTextFrame::CreateContentPrimitives(const Point& rOrigin) const
+{
+    drawinglayer::primitive2d::Primitive2DContainer aPrimitives;
+    const SwNoTextNode& rNoTNd = *static_cast<const SwNoTextNode*>(GetNode());
+    const SwViewShell* pShell = getRootFrame()->GetCurrShell();
+    const basegfx::B2DHomMatrix aToLocal(
+        basegfx::utils::createTranslateB2DHomMatrix(-rOrigin.X(), -rOrigin.Y()));
+    // The frame area relative to rOrigin. On a rotated frame it is the upright box around the
+    // rotated picture, and the paint draws replacement boxes and embedded objects upright in it.
+    const SwRect& rArea = getFrameArea();
+    const basegfx::B2DRange aTargetRange(
+        rArea.Left() - rOrigin.X(), rArea.Top() - rOrigin.Y(),
+        rArea.Left() + rArea.Width() - rOrigin.X(), rArea.Top() + rArea.Height() - rOrigin.Y());
+
+    // A linked picture that arrives while it is read here keeps the size of its frame, as during
+    // the paint, so the layout stays as it is while the pages are walked.
+    SwGrfNode* pGrfNd = const_cast<SwGrfNode*>(rNoTNd.GetGrfNode());
+    if (pGrfNd)
+        pGrfNd->SetFrameInPaint(true);
+    comphelper::ScopeGuard aFrameInPaintGuard([pGrfNd] {
+        if (pGrfNd)
+            pGrfNd->SetFrameInPaint(false);
+    });
+
+    if (pGrfNd)
+    {
+        const GraphicObject& rGraphicObject = pGrfNd->GetGrfObj();
+        if (!rGraphicObject.GetGraphic().IsSupportedGraphic())
+        {
+            // A picture that cannot be shown draws the box that says why, as printing does.
+            if (pShell)
+                aPrimitives.push_back(createRecordedPicture(
+                    rArea.SSize(), aTargetRange, [&](OutputDevice& rDevice) {
+                        ImplPaintPictureReplacement(rGraphicObject, pGrfNd,
+                                                    SwRect(Point(), rArea.SSize()), pShell,
+                                                    &rDevice);
+                    }));
+        }
+        else
+        {
+            // The picture fills the frame area, as it does when painted. Cropping, mirroring and
+            // the color adjustments are in the graphic attributes.
+            GraphicAttr aGraphicAttr;
+            pGrfNd->GetGraphicAttr(aGraphicAttr, this);
+            aPrimitives.push_back(new drawinglayer::primitive2d::GraphicPrimitive2D(
+                aToLocal * getFrameAreaTransformation(), rGraphicObject, aGraphicAttr));
+        }
+    }
+    // The embedded object loads its content and its replacement picture when asked for them,
+    // which changes the node.
+    else if (SwOLENode* pOLENd = const_cast<SwOLENode*>(rNoTNd.GetOLENode()))
+    {
+        // A chart gives its content as primitives, which keep their detail at any zoom.
+        if (pOLENd->GetOLEObj().GetObject().IsChart())
+        {
+            basegfx::B2DRange aSourceRange;
+            drawinglayer::primitive2d::Primitive2DContainer aChart(
+                pOLENd->GetOLEObj().tryToGetChartContentAsPrimitive2DSequence(
+                    aSourceRange, /*bSynchron=*/true));
+            if (!aChart.empty() && !aSourceRange.isEmpty())
+                aPrimitives.push_back(new drawinglayer::primitive2d::TransformPrimitive2D(
+                    basegfx::utils::createSourceRangeTargetRangeTransform(aSourceRange,
+                                                                          aTargetRange),
+                    std::move(aChart)));
+        }
+
+        // Any other embedded object shows its replacement picture, or the box with its name when
+        // it has none.
+        if (aPrimitives.empty())
+        {
+            const Graphic* pGraphic = pOLENd->GetGraphic();
+            if (pGraphic && pGraphic->GetType() != GraphicType::NONE)
+            {
+                aPrimitives.push_back(new drawinglayer::primitive2d::GraphicPrimitive2D(
+                    basegfx::utils::createScaleTranslateB2DHomMatrix(
+                        aTargetRange.getWidth(), aTargetRange.getHeight(),
+                        aTargetRange.getMinX(), aTargetRange.getMinY()),
+                    GraphicObject(*pGraphic)));
+            }
+            else
+            {
+                const OUString& rName = pOLENd->GetOLEObj().GetCurrentPersistName();
+                aPrimitives.push_back(createRecordedPicture(
+                    rArea.SSize(), aTargetRange, [&rName, &rArea](OutputDevice& rDevice) {
+                        svt::EmbeddedObjectRef::DrawPaintReplacement(
+                            tools::Rectangle(Point(), rArea.SSize()), rName, &rDevice);
+                    }));
+            }
+        }
+    }
+
+    // With contour wrap the content is cut at the contour, as when painted, unless the document
+    // asks for the whole content. Reading the contour needs the current shell.
+    const SwFlyFrame* pFly = FindFlyFrame();
+    tools::PolyPolygon aContour;
+    if (!aPrimitives.empty() && pShell && pFly && pFly->GetContour(aContour, /*_bForPaint=*/true)
+        && !rNoTNd.GetDoc().getIDocumentSettingAccess().get(
+            DocumentSettingId::NO_CLIPPING_WITH_WRAP_POLYGON))
+    {
+        basegfx::B2DPolyPolygon aMask(aContour.getB2DPolyPolygon());
+        aMask.transform(aToLocal);
+        aPrimitives = drawinglayer::primitive2d::Primitive2DContainer{
+            new drawinglayer::primitive2d::MaskPrimitive2D(std::move(aMask),
+                                                           std::move(aPrimitives))
+        };
+    }
+    return aPrimitives;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

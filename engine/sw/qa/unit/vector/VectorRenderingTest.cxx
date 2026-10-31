@@ -18,16 +18,20 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/ColumnSeparatorStyle.hpp>
+#include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
@@ -743,6 +747,140 @@ CPPUNIT_TEST_FIXTURE(Test, testVectorMovedParagraphKeepsItsText)
     CPPUNIT_ASSERT(pMoved);
     CPPUNIT_ASSERT_GREATER(pSecond->maBox.Top(), pMoved->maBox.Top());
     CPPUNIT_ASSERT(pMoved->maPrimitives.operator==(pSecond->maPrimitives));
+}
+
+/// The picture among the primitives of the entry, or nullptr when the entry draws none.
+static const drawinglayer::primitive2d::GraphicPrimitive2D*
+pictureOf(const sw::vector::Entry& rEntry)
+{
+    for (const drawinglayer::primitive2d::Primitive2DReference& rPrimitive : rEntry.maPrimitives)
+    {
+        if (auto pPicture
+            = dynamic_cast<const drawinglayer::primitive2d::GraphicPrimitive2D*>(rPrimitive.get()))
+            return pPicture;
+    }
+    return nullptr;
+}
+
+/// A small red bitmap, so that the picture has content to draw.
+static uno::Any redPicture()
+{
+    Bitmap aBitmap(Size(8, 8), vcl::PixelFormat::N24_BPP);
+    aBitmap.Erase(COL_LIGHTRED);
+    return uno::Any(Graphic(aBitmap).GetXGraphic());
+}
+
+/// A picture anchored at a paragraph is a fly entry that names the paragraph as its anchor,
+/// with the picture drawn inside the fly over the whole entry, cropped and mirrored as set.
+CPPUNIT_TEST_FIXTURE(Test, testVectorPictureIsAFlyAnchoredInItsParagraph)
+{
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xGraphic(
+        xFactory->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
+    xGraphic->setPropertyValue(u"AnchorType"_ustr,
+                               uno::Any(text::TextContentAnchorType_AT_PARAGRAPH));
+    xGraphic->setPropertyValue(u"Size"_ustr, uno::Any(awt::Size(2000, 1000)));
+    xGraphic->setPropertyValue(u"Graphic"_ustr, redPicture());
+    text::GraphicCrop aCrop;
+    aCrop.Left = 50;
+    xGraphic->setPropertyValue(u"GraphicCrop"_ustr, uno::Any(aCrop));
+    xGraphic->setPropertyValue(u"VertMirrored"_ustr, uno::Any(true));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    xText->insertTextContent(xText->createTextCursor(),
+                             uno::Reference<text::XTextContent>(xGraphic, uno::UNO_QUERY), false);
+    calcLayout();
+
+    std::vector<sw::vector::Entry> aEntries = decomposeFirstPage();
+
+    const sw::vector::Entry* pParagraph = findEntry(aEntries, sw::vector::EntryKind::TextFrame);
+    const sw::vector::Entry* pFly = findEntry(aEntries, sw::vector::EntryKind::Fly);
+    const sw::vector::Entry* pPicture = findEntry(aEntries, sw::vector::EntryKind::NoTextFrame);
+    CPPUNIT_ASSERT(pParagraph);
+    CPPUNIT_ASSERT(pFly);
+    CPPUNIT_ASSERT(pPicture);
+    CPPUNIT_ASSERT(pFly->moAnchor);
+    CPPUNIT_ASSERT_EQUAL(pParagraph->mnId, *pFly->moAnchor);
+    CPPUNIT_ASSERT(pPicture->moParent);
+    CPPUNIT_ASSERT_EQUAL(pFly->mnId, *pPicture->moParent);
+
+    // The picture covers the entry from its top left corner and keeps the crop and the mirroring.
+    const drawinglayer::primitive2d::GraphicPrimitive2D* pGraphic = pictureOf(*pPicture);
+    CPPUNIT_ASSERT(pGraphic);
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, pGraphic->getGraphicObject().GetType());
+    CPPUNIT_ASSERT_EQUAL(basegfx::utils::createScaleB2DHomMatrix(pPicture->maBox.Width(),
+                                                                 pPicture->maBox.Height()),
+                         pGraphic->getTransform());
+    CPPUNIT_ASSERT(pGraphic->getGraphicAttr().IsCropped());
+    CPPUNIT_ASSERT(pGraphic->getGraphicAttr().IsMirrored());
+}
+
+/// A picture that cannot be read on a rotated frame shows the box that says why upright over the
+/// whole entry, as the paint draws it.
+CPPUNIT_TEST_FIXTURE(Test, testVectorBrokenRotatedPictureShowsAnUprightBox)
+{
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xGraphic(
+        xFactory->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
+    xGraphic->setPropertyValue(u"AnchorType"_ustr,
+                               uno::Any(text::TextContentAnchorType_AT_PARAGRAPH));
+    xGraphic->setPropertyValue(u"Size"_ustr, uno::Any(awt::Size(2000, 1000)));
+    // A rotation of 30 degrees, in tenths of a degree.
+    xGraphic->setPropertyValue(u"GraphicRotation"_ustr, uno::Any(sal_Int16(300)));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    xText->insertTextContent(xText->createTextCursor(),
+                             uno::Reference<text::XTextContent>(xGraphic, uno::UNO_QUERY), false);
+    calcLayout();
+
+    std::vector<sw::vector::Entry> aEntries = decomposeFirstPage();
+
+    const sw::vector::Entry* pPicture = findEntry(aEntries, sw::vector::EntryKind::NoTextFrame);
+    CPPUNIT_ASSERT(pPicture);
+    // The frame is rotated, so its area is wider than the 1134 twips of the picture.
+    CPPUNIT_ASSERT_GREATER(tools::Long(1200), pPicture->maBox.Width());
+    const drawinglayer::primitive2d::GraphicPrimitive2D* pGraphic = pictureOf(*pPicture);
+    CPPUNIT_ASSERT(pGraphic);
+    CPPUNIT_ASSERT_EQUAL(GraphicType::GdiMetafile, pGraphic->getGraphicObject().GetType());
+    CPPUNIT_ASSERT_EQUAL(basegfx::utils::createScaleB2DHomMatrix(pPicture->maBox.Width(),
+                                                                 pPicture->maBox.Height()),
+                         pGraphic->getTransform());
+}
+
+/// A picture anchored as a character is drawn once, by its own fly, and the paragraph draws
+/// only its text.
+CPPUNIT_TEST_FIXTURE(Test, testVectorPictureAsCharacterIsNotDrawnByTheText)
+{
+    createSwDoc();
+    getSwDocShell()->GetWrtShell()->Insert(u"before "_ustr);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xGraphic(
+        xFactory->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
+    xGraphic->setPropertyValue(u"AnchorType"_ustr,
+                               uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+    xGraphic->setPropertyValue(u"Size"_ustr, uno::Any(awt::Size(2000, 1000)));
+    xGraphic->setPropertyValue(u"Graphic"_ustr, redPicture());
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xCursor->gotoEnd(false);
+    xText->insertTextContent(xCursor, uno::Reference<text::XTextContent>(xGraphic, uno::UNO_QUERY),
+                             false);
+    calcLayout();
+
+    std::vector<sw::vector::Entry> aEntries = decomposeFirstPage();
+
+    const sw::vector::Entry* pParagraph = findEntry(aEntries, sw::vector::EntryKind::TextFrame);
+    CPPUNIT_ASSERT(pParagraph);
+    CPPUNIT_ASSERT(!holds(pParagraph->maPrimitives, PRIMITIVE2D_ID_GRAPHICPRIMITIVE2D));
+    CPPUNIT_ASSERT(findEntry(aEntries, sw::vector::EntryKind::Fly));
+    const sw::vector::Entry* pPicture = findEntry(aEntries, sw::vector::EntryKind::NoTextFrame);
+    CPPUNIT_ASSERT(pPicture);
+    const drawinglayer::primitive2d::GraphicPrimitive2D* pGraphic = pictureOf(*pPicture);
+    CPPUNIT_ASSERT(pGraphic);
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, pGraphic->getGraphicObject().GetType());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

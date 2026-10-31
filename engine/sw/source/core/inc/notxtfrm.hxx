@@ -67,8 +67,11 @@ private:
             const SwRect& rAlignedGrfArea, SwViewShell* pShell ) const;
     void ImplPaintPictureAnimate(vcl::RenderContext* pOut, const SwViewShell* pShell,
             SwGrfNode* pGrfNd, const SwRect& rAlignedGrfArea) const;
+    /// Draws the box that says why the picture cannot be shown into rAlignedGrfArea, on pOut,
+    /// or on the device of pShell when pOut is null.
     void ImplPaintPictureReplacement(const GraphicObject& rGrfObj, const SwGrfNode* pGrfNd,
-            const SwRect& rAlignedGrfArea, const SwViewShell* pShell) const;
+            const SwRect& rAlignedGrfArea, const SwViewShell* pShell,
+            OutputDevice* pOut = nullptr) const;
 
 public:
     SwNoTextFrame( SwNoTextNode * const, SwFrame* );
@@ -82,6 +85,13 @@ public:
     virtual bool RightMargin(SwPaM *, bool bAPI = false) const override;
 
     virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&, PaintFrameMode mode = PAINT_ALL ) const override;
+    virtual void CreatePrimitives( sw::vector::Collector& rCollector ) const override;
+    /// The picture, chart or embedded object the frame shows, relative to rOrigin. A linked
+    /// picture that is not loaded yet shows what the node holds now. A picture that cannot be shown
+    /// gives the box with the text that says why, and an embedded object with no replacement
+    /// picture the box with its name. With contour wrap the content is cut at the contour.
+    drawinglayer::primitive2d::Primitive2DContainer
+    CreateContentPrimitives( const Point& rOrigin ) const;
     virtual bool GetCharRect( SwRect &, const SwPosition&,
                               SwCursorMoveState* = nullptr, bool bAllowFarAway = true ) const override;
     virtual bool GetModelPositionForViewPoint(SwPosition* pPos, Point& aPoint,
