@@ -6108,6 +6108,110 @@ static void readLocalDocBytes(const DocumentTab& data, int id)
     postReplyToCall(data.hWnd, data.tabId, id, Util::base64Encode(bytes));
 }
 
+// 1 MiB, the most a CheckFileInfo response can be.
+constexpr size_t MAX_FILE_INFO_BYTES = 1024 * 1024;
+
+constexpr int CHECK_FILE_INFO_TIMEOUT_SECONDS = 10;
+
+// The CheckFileInfo fields coolwsd passes on to the editor in its wopi: message.
+// TODO: qt/RemoteOpen.cpp has the same list. Move both to common/ with the request itself.
+const char* const EDITOR_FILE_INFO_FIELDS[] = {
+    "PostMessageOrigin", "BaseFileName", "BreadcrumbDocName", "TemplateSaveAs", "TemplateSource",
+    "HidePrintOption", "HideSaveOption", "HideExportOption", "HideRepairOption", "DisablePrint",
+    "DisableExport", "DisableCopy", "DisableInactiveMessages", "DownloadAsPostMessage",
+    "UserCanNotWriteRelative", "EnableInsertRemoteImage", "EnableInsertRemoteFile",
+    "DisableInsertLocalImage", "EnableRemoteLinkPicker", "EnableRemoteAIContent",
+    "DisableAISettings", "IsAnonymousUser", "EnableShare", "HideUserList", "SupportsRename",
+    "UserCanRename", "UserCanChangeSecurityLabel", "FileUrl", "UserCanWrite",
+    "HideChangeTrackingControls", "IsOwner", "PresentationLeader", "DisablePresentation",
+    "CommentAvatarUrl", "HostName",
+};
+
+static std::string editorFileInfo(const HttpResult& result)
+{
+    if (result.statusCode != 200)
+    {
+        LOG_WRN("CheckFileInfo failed with HTTP status " << result.statusCode);
+        return std::string();
+    }
+
+    if (result.body.size() > MAX_FILE_INFO_BYTES)
+    {
+        LOG_WRN("The CheckFileInfo response is " << result.body.size()
+                                                 << " bytes, over the limit of "
+                                                 << MAX_FILE_INFO_BYTES << " bytes");
+        return std::string();
+    }
+
+    Poco::JSON::Object::Ptr fileInfo;
+    try
+    {
+        fileInfo = Poco::JSON::Parser().parse(result.body).extract<Poco::JSON::Object::Ptr>();
+    }
+    catch (const Poco::Exception&)
+    {
+        LOG_WRN("The CheckFileInfo response is not a JSON object");
+        return std::string();
+    }
+
+    Poco::JSON::Object::Ptr editorFields = new Poco::JSON::Object();
+    for (const char* field : EDITOR_FILE_INFO_FIELDS)
+    {
+        if (fileInfo->has(field))
+            editorFields->set(field, fileInfo->get(field));
+    }
+
+    return JsonUtil::jsonToString(editorFields);
+}
+
+// Sends CheckFileInfo for the editor iframe's document and returns the fields an editor gets.
+static void checkFileInfo(const DocumentTab& data, int id, const std::string& arguments)
+{
+    std::string token;
+    try
+    {
+        const auto values = Poco::JSON::Parser().parse(arguments).extract<Poco::JSON::Array::Ptr>();
+        token = values->getElement<std::string>(0);
+    }
+    catch (const Poco::Exception&)
+    {
+        LOG_WRN("CheckFileInfo was not sent: the call has no token");
+        postReplyToCall(data.hWnd, data.tabId, id, std::string());
+        return;
+    }
+
+    std::string wopiSrc;
+    for (const auto& [key, value] : Poco::URI(data.editorFormUrl).getQueryParameters())
+    {
+        if (key == "WOPISrc")
+            wopiSrc = value;
+    }
+
+    if (wopiSrc.empty())
+    {
+        LOG_WRN("CheckFileInfo was not sent: the editor form's address has no WOPISrc");
+        postReplyToCall(data.hWnd, data.tabId, id, std::string());
+        return;
+    }
+
+    // TODO: Send CheckFileInfo only after comparing the scheme, host and port of
+    // wopiSrc with those of the cloud account's server.
+    Poco::URI url(wopiSrc);
+    url.setQueryParameters({ { "access_token", token } });
+
+    const HWND hWnd = data.hWnd;
+    const int tabId = data.tabId;
+    std::thread(
+        [url = url.toString(), hWnd, tabId, id]()
+        {
+            ProcUtil::setThreadName("checkfileinfo");
+            const HttpResult result = winHttpRequest(L"GET", url, std::string(), std::string(),
+                                                     CHECK_FILE_INFO_TIMEOUT_SECONDS);
+            postReplyToCall(hWnd, tabId, id, editorFileInfo(result));
+        })
+        .detach();
+}
+
 static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& message)
 {
     std::wstring s(message.get());
@@ -6711,6 +6815,12 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
         else if (s.starts_with(L"readLocalDocBytes "))
         {
             readLocalDocBytes(data, id);
+        }
+        else if (s.starts_with(L"checkFileInfo "))
+        {
+            const std::string arguments =
+                Util::wide_string_to_string(s.substr(strlen("checkFileInfo ")));
+            checkFileInfo(data, id, arguments);
         }
         else if (s.starts_with(L"saveCompleted "))
         {
