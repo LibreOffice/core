@@ -131,7 +131,9 @@ export const config = {
 	logLevel: 'info',
 	outputDir: './logs',
 	bail: 1,
-	specFileRetries: 1,
+	// coda-qt is started once per run and quits when the worker ends, so a
+	// retried worker would have no application to drive.
+	specFileRetries: 0,
 	waitforTimeout: 10000,
 	waitforInterval: 500,
 	connectionRetryTimeout: 30000,
