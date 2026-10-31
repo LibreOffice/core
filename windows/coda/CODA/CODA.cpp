@@ -149,6 +149,9 @@ struct DocumentTab
     std::string editorForm;
     std::string editorFormUrl;
     std::set<std::string> editorOrigins;
+    // The frame of an account window that shows CODA's editor
+    // page, null in any other window.
+    wil::com_ptr<ICoreWebView2Frame2> editorFrame;
 };
 
 // One top-level window. It holds its documents in the order the tab strip shows
@@ -5289,6 +5292,8 @@ static void putCodaPageIn(int accountTabId, ICoreWebView2Frame* frame, const std
         LOG_ERR("The editor frame cannot run a script");
         return;
     }
+
+    account->editorFrame = frame2;
 
     Poco::JSON::Object::Ptr config = new Poco::JSON::Object();
     config->set("formUrl", account->editorFormUrl);
