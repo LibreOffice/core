@@ -91,9 +91,6 @@ std::vector<std::string> cleanupJailPaths;
 /// The [subforkit pid -> subforkit id] map.
 std::map<pid_t, std::string> subForKitPids;
 
-/// The jail of a crashed kit is kept for this long before it is removed.
-constexpr int CrashedJailKeepSecs = 180;
-
 /// The Main polling main-loop of this (single threaded) process
 std::unique_ptr<SocketPoll> ForKitPoll;
 
@@ -449,14 +446,9 @@ void cleanupChildren()
         --i;
         const std::string path = cleanupJailPaths[i];
 
-        // Don't delete jails where there was a crash until it's ~3 minutes old.
-        const FileUtil::Stat noteStat(path + "/tmp/kit-crashed");
-        if (noteStat.good())
-        {
-            const time_t modifiedTimeSec = noteStat.modifiedTimeMs() / 1000;
-            if (time(nullptr) < modifiedTimeSec + CrashedJailKeepSecs)
-                continue;
-        }
+        // The jail of a crashed kit is kept for a while, so its crash note and dump can be collected.
+        if (JailUtil::isCrashedJailKept(path))
+            continue;
 
         JailUtil::tryRemoveJail(path);
         const FileUtil::Stat st(path);
@@ -1174,7 +1166,8 @@ int forkit_main(int argc, char** argv)
         // kept, so that jail is removed too.
         LOG_INF("SubForKit [" << ForKitIdent << "] waits for " << childJails.size()
                               << " kits to exit.");
-        const std::chrono::seconds maxWait(CrashedJailKeepSecs + 2 * POLL_FORKIT_TIMEOUT_SECS);
+        const std::chrono::seconds maxWait(JailUtil::CrashedJailKeepSeconds +
+                                           2 * POLL_FORKIT_TIMEOUT_SECS);
         const auto deadline = std::chrono::steady_clock::now() + maxWait;
         cleanupChildren();
         while ((!childJails.empty() || !cleanupJailPaths.empty()) && getppid() == parentPid &&

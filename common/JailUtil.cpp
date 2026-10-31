@@ -31,6 +31,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <ctime>
 #include <fcntl.h>
 #include <fstream>
 #include <string>
@@ -447,6 +448,14 @@ void removeAssocTmpOfJail(const std::string &root)
 }
 
 } // namespace
+
+bool isCrashedJailKept(const std::string& root)
+{
+    const FileUtil::Stat noteStat(root + "/tmp/kit-crashed");
+    return noteStat.good() &&
+           std::time(nullptr) < static_cast<std::time_t>(noteStat.modifiedTimeMs() / 1000) +
+                                    CrashedJailKeepSeconds;
+}
 
 bool tryRemoveJail(const std::string& root)
 {

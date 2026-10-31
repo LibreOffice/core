@@ -624,8 +624,8 @@ public:
 };
 
 /// When the subforkit of a configuration dies, or the forkit above it, the spare kits of that
-/// configuration exit. The kit of an open document of the same configuration keeps running, and
-/// the document still answers.
+/// configuration exit and their jails are removed. The kit of an open document of the same
+/// configuration keeps running, and the document still answers.
 class UnitSubForKitKilled : public WopiTestServer
 {
     using Base = WopiTestServer;
@@ -685,13 +685,16 @@ class UnitSubForKitKilled : public WopiTestServer
     }
 
     /// Answers with a description of what is still left of the spare kits, or an empty string
-    /// once they have exited.
+    /// once they have exited and their jails are removed.
     std::string spareKitsLeft() const
     {
         for (const Kit& kit : _spareKits)
         {
             if (ProcUtil::isRunning(kit.pid))
                 return "spare kit " + std::to_string(kit.pid) + " is still running";
+            if (FileUtil::Stat(kit.jailPath).exists())
+                return "the jail " + kit.jailPath + " of spare kit " + std::to_string(kit.pid) +
+                       " is still there";
         }
 
         return std::string();
@@ -744,7 +747,7 @@ public:
         if (_phase == Phase::WaitStatus && data.starts_with("status:"))
         {
             TRANSITION_STATE(_phase, Phase::Done);
-            passTest("The spare kits are gone, and the document still answers");
+            passTest("The spare kits are gone with their jails, and the document still answers");
         }
 
         return false;
@@ -823,6 +826,8 @@ public:
 
                 LOK_ASSERT_MESSAGE("The kit of the document has exited",
                                    ProcUtil::isRunning(_documentKitPid));
+                LOK_ASSERT_MESSAGE("The jail of the document was removed",
+                                   FileUtil::Stat(_documentJailPath).exists());
 
                 startPhase(Phase::WaitStatus);
                 WSD_CMD("status");

@@ -83,6 +83,13 @@ bool isJailCopied(const std::string& root);
 /// Remove the jail directory and all its contents.
 bool tryRemoveJail(const std::string& root);
 
+/// The jail of a kit that crashed is kept for this long, so its crash note and dump can be
+/// collected.
+constexpr int CrashedJailKeepSeconds = 180;
+
+/// True while the jail holds a crash note that is younger than CrashedJailKeepSeconds.
+bool isCrashedJailKept(const std::string& root);
+
 /// Remove all jails.
 void cleanupJails(const std::string& jailRoot);
 

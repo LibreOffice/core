@@ -692,6 +692,112 @@ static void orphanSpareKits(const std::string* configId)
     askSpareKitsToExit(std::move(orphans));
 }
 
+namespace
+{
+/// An attempt to remove the jail of an orphaned spare kit that has exited.
+struct JailRemoval
+{
+    /// The number of attempts that failed.
+    int failures = 0;
+    /// The earliest time of the next attempt.
+    std::chrono::steady_clock::time_point next;
+};
+} // namespace
+
+/// The jails to remove, by path.
+static std::mutex OrphanedJailsMutex;
+static std::map<std::string, JailRemoval> OrphanedJails;
+
+/// The most attempts to remove the jail of an orphaned spare kit.
+constexpr int MaxJailRemovalAttempts = 5;
+
+/// Queues the jail of a spare kit that has exited for removal, when the forkit or subforkit that
+/// forked it is gone: wsd orphaned the kit when it saw that, or the kit died before wsd learned of
+/// it and the forkit no longer runs. A forkit that runs reaps its kits and removes their jails
+/// itself, also one that wsd asked to exit, whose spare kits wsd closes without orphaning them.
+static void queueJailRemovalIfOrphaned(const ChildProcess& child)
+{
+    const pid_t forKitPid = child.getForKitPid();
+    if (!child.isOrphaned() && (forKitPid <= 0 || ProcUtil::isRunning(forKitPid)))
+        return;
+
+    std::lock_guard<std::mutex> lock(OrphanedJailsMutex);
+    OrphanedJails.emplace(COOLWSD::ChildRoot + child.getJailId(), JailRemoval());
+}
+
+/// The thread that removes the jails. Unmounting and deleting a jail takes a while, and the
+/// prisoner poll accepts new kits meanwhile. It is started when the first jail is due.
+static std::shared_ptr<TerminatingPoll> JailRemovalPoll;
+
+/// Removes the given jails. A jail that is still there afterwards is queued again, to be tried
+/// after a delay that grows by a second with each failure, until MaxJailRemovalAttempts attempts
+/// have failed. A jail with a fresh crash note is queued again for once the note is old enough.
+static void removeJails(std::map<std::string, JailRemoval>& jails)
+{
+    const auto now = std::chrono::steady_clock::now();
+    for (auto& [jailPath, removal] : jails)
+    {
+        if (JailUtil::isCrashedJailKept(jailPath))
+        {
+            LOG_INF("Keeping the jail [" << jailPath
+                                         << "] of a crashed spare kit, with its crash note.");
+            removal.next = now + std::chrono::seconds(JailUtil::CrashedJailKeepSeconds);
+        }
+        else
+        {
+            LOG_INF("Removing the jail [" << jailPath << "] of an orphaned spare kit.");
+            JailUtil::tryRemoveJail(jailPath);
+            if (!FileUtil::Stat(jailPath).exists())
+                continue;
+
+            if (++removal.failures >= MaxJailRemovalAttempts)
+            {
+                LOG_ERR("Could not remove the jail [" << jailPath << "] after "
+                                                      << removal.failures
+                                                      << " attempts. Giving up.");
+                continue;
+            }
+
+            LOG_WRN("Could not remove the jail [" << jailPath << "]. Will retry later.");
+            removal.next = now + std::chrono::seconds(removal.failures);
+        }
+
+        // The jail may have been queued again meanwhile, with a fresh count, so this one wins.
+        std::lock_guard<std::mutex> lock(OrphanedJailsMutex);
+        OrphanedJails.insert_or_assign(jailPath, removal);
+    }
+}
+
+/// Hands the queued jails whose next attempt is due to the jail removal thread.
+static void removeOrphanedJails()
+{
+    std::map<std::string, JailRemoval> dueJails;
+    {
+        std::lock_guard<std::mutex> lock(OrphanedJailsMutex);
+        const auto now = std::chrono::steady_clock::now();
+        for (auto it = OrphanedJails.begin(); it != OrphanedJails.end();)
+        {
+            if (now >= it->second.next)
+            {
+                dueJails.insert(OrphanedJails.extract(it++));
+            }
+            else
+                ++it;
+        }
+    }
+
+    if (dueJails.empty())
+        return;
+
+    if (!JailRemovalPoll)
+    {
+        JailRemovalPoll = std::make_shared<TerminatingPoll>("jail_removal_poll");
+        JailRemovalPoll->startThread();
+    }
+
+    JailRemovalPoll->addCallback([jails = std::move(dueJails)]() mutable { removeJails(jails); });
+}
+
 /// Cleans up dead children.
 static void cleanupChildren()
 {
@@ -706,6 +812,7 @@ static void cleanupChildren()
         if (!NewChildren[i]->isAlive())
         {
             LOG_WRN("Removing dead spare child [" << NewChildren[i]->getPid() << "].");
+            queueJailRemovalIfOrphaned(*NewChildren[i]);
             NewChildren.erase(NewChildren.begin() + i);
         }
     }
@@ -1142,6 +1249,10 @@ std::shared_ptr<ChildProcess> getNewChild_Blocks(const std::shared_ptr<SocketPol
 
         lock.lock();
 #if !MOBILEAPP
+        // The dead kit is out of NewChildren already, so its jail is queued here.
+        if (child)
+            queueJailRemovalIfOrphaned(*child);
+
         if (configId.empty() || SubForKitProcs.contains(configId))
             rebalanceChildren(configId, COOLWSD::NumPreSpawnedChildren + 1);
 #endif
@@ -3361,6 +3472,10 @@ void PrisonPoll::wakeupHook()
             // Make sure we have sufficient reserves.
             prespawnChildren();
         }
+
+#if !MOBILEAPP
+        removeOrphanedJails();
+#endif
     }
 
     std::unique_lock<std::mutex> docBrokersLock(DocBrokersMutex, std::defer_lock);
@@ -3659,6 +3774,9 @@ private:
             if (it != NewChildren.end())
             {
                 configId = (*it)->getConfigId();
+#if !MOBILEAPP
+                queueJailRemovalIfOrphaned(**it);
+#endif
                 NewChildren.erase(it);
             }
             else
@@ -3991,6 +4109,10 @@ void COOLWSDServer::startPrisoners()
 void COOLWSDServer::stopPrisoners()
 {
     PrisonerPoll->joinThread();
+#if !MOBILEAPP
+    if (JailRemovalPoll)
+        JailRemovalPoll->joinThread();
+#endif
 }
 
 void COOLWSDServer::start(std::shared_ptr<ServerSocket>&& serverSocket)
