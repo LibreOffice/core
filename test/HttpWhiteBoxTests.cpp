@@ -54,6 +54,7 @@ class HttpWhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testRequestParserChunkedPostComplete);
     CPPUNIT_TEST(testClipboardIsOwnFormat);
     CPPUNIT_TEST(testMultiPartDataParser);
+    CPPUNIT_TEST(testMultipartFormDataSource);
     CPPUNIT_TEST(testInsertFile);
     CPPUNIT_TEST(testGetFavicon);
     CPPUNIT_TEST(testPostWopi);
@@ -77,6 +78,7 @@ class HttpWhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testRequestParserChunkedPostComplete();
     void testClipboardIsOwnFormat();
     void testMultiPartDataParser();
+    void testMultipartFormDataSource();
     void testInsertFile();
     void testGetFavicon();
     void testPostWopi();
@@ -736,6 +738,93 @@ void HttpWhiteBoxTests::testMultiPartDataParser()
         LOK_ASSERT_EQUAL_STR(std::string(), multipartBody);
         LOK_ASSERT(multipart.isLast());
     }
+}
+
+void HttpWhiteBoxTests::testMultipartFormDataSource()
+{
+    constexpr std::string_view testname = __func__;
+
+    const std::string dir = FileUtil::createRandomTmpDir();
+    FileUtil::OwnedFile dirCleanup(dir, /*recursive=*/true);
+
+    const std::string document = "Hello, world";
+    const std::string documentPath = dir + "/document.odt";
+    std::ofstream(documentPath, std::ios::binary) << document;
+
+    // Longer than one block of the body writer, so this part spans several reads.
+    const std::string image(100 * 1024, 'x');
+    const std::string imagePath = dir + "/image.png";
+    std::ofstream(imagePath, std::ios::binary) << image;
+
+    http::MultipartFormDataSource source;
+    LOK_ASSERT(source.addFilePart("file", documentPath, "application/octet-stream",
+                                  "hello \"world\".odt"));
+    LOK_ASSERT(
+        source.addFilePart("thumbnail-256x256", imagePath, "image/png", "thumbnail-256x256.png"));
+    LOK_ASSERT(!source.addFilePart("missing", dir + "/missing.png", "image/png", "missing.png"));
+    LOK_ASSERT(!source.addFilePart("directory", dir, "image/png", "directory.png"));
+    LOK_ASSERT_EQUAL(2UL, source.partCount());
+
+    // The parts hold the files as they were when added: a newer file renamed over the image
+    // and the deletion of the document change nothing in the body.
+    std::ofstream(imagePath + ".new", std::ios::binary) << "newer";
+    LOK_ASSERT_EQUAL(0, ::rename((imagePath + ".new").c_str(), imagePath.c_str()));
+    FileUtil::removeFile(documentPath);
+
+    http::Request request("/wopi/files/0/contents", http::Request::VERB_POST);
+    source.applyTo(request);
+    LOK_ASSERT_EQUAL("multipart/form-data; boundary=" + source.boundary(),
+                     request.get("Content-Type"));
+    LOK_ASSERT_EQUAL(std::to_string(source.size()), request.get("Content-Length"));
+
+    // Serialize the request in small pieces, as a socket would.
+    Buffer out;
+    while (request.stage() != http::Request::Stage::Finished)
+    {
+        LOK_ASSERT(request.writeData(out, 4096));
+    }
+
+    const std::string data(out.data(), out.size());
+    const std::size_t headerEnd = data.find("\r\n\r\n");
+    LOK_ASSERT(headerEnd != std::string::npos);
+    const std::string body = data.substr(headerEnd + 4);
+    LOK_ASSERT_EQUAL(source.size(), static_cast<int64_t>(body.size()));
+
+    // The body parses back into the two parts, in the order they were added.
+    http::MultipartDataParser parser(source.boundary());
+    http::Header header;
+    std::string_view partBody;
+    int64_t consumed = parser.readPart(body, header, partBody);
+    LOK_ASSERT(consumed > 0);
+    LOK_ASSERT_EQUAL_STR("form-data; name=\"file\"; filename=\"hello %22world%22.odt\"",
+                         header.get("Content-Disposition"));
+    LOK_ASSERT_EQUAL_STR("application/octet-stream", header.getContentType());
+    LOK_ASSERT_EQUAL_STR(document, partBody);
+    LOK_ASSERT(!parser.isLast());
+
+    const std::string remaining = body.substr(static_cast<std::size_t>(consumed));
+    header = http::Header();
+    consumed = parser.readPart(remaining, header, partBody);
+    LOK_ASSERT(consumed > 0);
+    LOK_ASSERT_EQUAL_STR(
+        "form-data; name=\"thumbnail-256x256\"; filename=\"thumbnail-256x256.png\"",
+        header.get("Content-Disposition"));
+    LOK_ASSERT_EQUAL_STR("image/png", header.getContentType());
+    LOK_ASSERT_EQUAL_STR(image, partBody);
+    LOK_ASSERT(parser.isLast());
+
+    // A file cut short after its part was added cannot fill the part, so writing the body
+    // fails rather than sending fewer bytes than the header promised.
+    http::MultipartFormDataSource shortSource;
+    LOK_ASSERT(shortSource.addFilePart("file", imagePath, "image/png", "image.png"));
+    std::ofstream(imagePath, std::ios::binary | std::ios::trunc) << "x";
+    http::Request shortRequest("/wopi/files/0/contents", http::Request::VERB_POST);
+    shortSource.applyTo(shortRequest);
+    bool written = true;
+    Buffer shortOut;
+    while (written && shortRequest.stage() != http::Request::Stage::Finished)
+        written = shortRequest.writeData(shortOut, 4096);
+    LOK_ASSERT(!written);
 }
 
 void HttpWhiteBoxTests::testInsertFile()

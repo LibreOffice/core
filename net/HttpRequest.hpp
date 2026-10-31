@@ -42,6 +42,7 @@
 #include <sstream>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include <fcntl.h>
 #include <sys/types.h>
@@ -992,6 +993,59 @@ private:
     const std::string_view _boundary;
     /// The state of the parser.
     State _state;
+};
+
+/// Builds a multipart/form-data body (RFC 7578) out of files on disk and streams it as the
+/// body of a Request, reading each file in pieces as the body is written. Each file is opened
+/// when its part is added, so the body carries the bytes of the file as it was at that moment,
+/// whatever is done to its name afterwards. The body can be written once.
+class MultipartFormDataSource final
+{
+public:
+    MultipartFormDataSource()
+        : _boundary("----CoolFormBoundary" + Util::rng::getHexString(16))
+    {
+    }
+
+    /// The boundary that separates the parts.
+    const std::string& boundary() const { return _boundary; }
+
+    /// Adds a part named name whose bytes are the file at path, declared to the receiver with
+    /// the given Content-Type and filename. Returns false, and adds nothing, when the file
+    /// is not a regular file that can be opened for reading.
+    bool addFilePart(const std::string& name, const std::string& path,
+                     const std::string& contentType, const std::string& filename);
+
+    /// The number of parts added so far.
+    std::size_t partCount() const { return _parts.size(); }
+
+    /// The length of the whole body in bytes.
+    int64_t size() const;
+
+    /// Sets the Content-Type of request to multipart/form-data with the boundary, and its body
+    /// to the parts, with Content-Length set to size().
+    void applyTo(Request& request) const;
+
+private:
+    struct Part
+    {
+        /// From the boundary line to the empty line that ends the header of the part.
+        std::string header;
+        /// The file whose bytes follow the header, open and positioned at its start.
+        std::shared_ptr<std::ifstream> file;
+        /// The size of the file when the part was added.
+        int64_t size;
+    };
+
+    /// Produces the body one segment at a time: the header of a part, the bytes of its file,
+    /// the CRLF after them, and after the last part the closing boundary line.
+    class Reader;
+
+    /// The closing boundary line that ends the body.
+    std::string closing() const { return "--" + _boundary + "--\r\n"; }
+
+    const std::string _boundary;
+    std::vector<Part> _parts;
 };
 
 /// A server-side HTTP Request parser for incoming request.

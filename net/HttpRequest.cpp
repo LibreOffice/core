@@ -18,6 +18,7 @@
 
 #include "HttpRequest.hpp"
 
+#include <common/FileUtil.hpp>
 #include <common/HexUtil.hpp>
 #include <common/Log.hpp>
 #include <common/NumUtil.hpp>
@@ -28,12 +29,15 @@
 #include <Poco/Net/HTTPResponse.h>
 
 #include <cstdint>
+#include <cstring>
+#include <fstream>
 #include <memory>
 #include <stdexcept>
 #include <string>
 #include <string_view>
 #include <sys/types.h>
 #include <utility>
+#include <vector>
 
 namespace
 {
@@ -1123,6 +1127,171 @@ void Request::setBody(std::string body, std::string contentType)
             return iss->gcount();
         },
         bodySize);
+}
+
+class MultipartFormDataSource::Reader final
+{
+public:
+    Reader(std::vector<Part> parts, std::string closing)
+        : _parts(std::move(parts))
+        , _closing(std::move(closing))
+        , _textOffset(0)
+        , _fileRemaining(0)
+        , _next(0)
+        , _closingPending(true)
+    {
+    }
+
+    /// Fills buffer with up to length bytes of the body. Returns the number of bytes written, 0 at
+    /// the end of the body, and -1 when a file yields fewer bytes than when its part was added.
+    int64_t read(char* buffer, int64_t length)
+    {
+        int64_t total = 0;
+        while (total < length)
+        {
+            if (_textOffset < _text.size())
+            {
+                const int64_t count = std::min<int64_t>(length - total, _text.size() - _textOffset);
+                std::memcpy(buffer + total, _text.data() + _textOffset, count);
+                _textOffset += count;
+                total += count;
+            }
+            else if (_file)
+            {
+                if (_fileRemaining == 0)
+                {
+                    _file.reset();
+                    setText("\r\n");
+                    continue;
+                }
+
+                // The part is as long as its header promised, which is the size the file had
+                // when it was opened.
+                _file->read(buffer + total, std::min(length - total, _fileRemaining));
+                const int64_t count = _file->gcount();
+                if (count <= 0)
+                    return -1;
+
+                _fileRemaining -= count;
+                total += count;
+            }
+            else if (_next < _parts.size())
+            {
+                const Part& part = _parts[_next++];
+                setText(part.header);
+                _file = part.file;
+                _fileRemaining = part.size;
+            }
+            else if (_closingPending)
+            {
+                _closingPending = false;
+                setText(_closing);
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        return total;
+    }
+
+private:
+    void setText(std::string_view text)
+    {
+        _text = text;
+        _textOffset = 0;
+    }
+
+    const std::vector<Part> _parts;
+    const std::string _closing;
+    /// The text segment being produced: a part header, the CRLF after a file, or the closing.
+    std::string_view _text;
+    std::size_t _textOffset;
+    /// The file of the part being produced, null between parts.
+    std::shared_ptr<std::ifstream> _file;
+    int64_t _fileRemaining;
+    /// The index of the next part to produce.
+    std::size_t _next;
+    bool _closingPending;
+};
+
+namespace
+{
+/// Encodes a value for a quoted parameter of Content-Disposition the way RFC 7578 recommends:
+/// the quote, the percent sign and the line breaks become their percent-encoded forms.
+std::string encodeDispositionParameter(const std::string& value)
+{
+    std::string encoded;
+    encoded.reserve(value.size());
+    for (const char c : value)
+    {
+        switch (c)
+        {
+            case '"':
+                encoded += "%22";
+                break;
+            case '%':
+                encoded += "%25";
+                break;
+            case '\r':
+                encoded += "%0D";
+                break;
+            case '\n':
+                encoded += "%0A";
+                break;
+            default:
+                encoded += c;
+                break;
+        }
+    }
+
+    return encoded;
+}
+} // namespace
+
+bool MultipartFormDataSource::addFilePart(const std::string& name, const std::string& path,
+                                          const std::string& contentType,
+                                          const std::string& filename)
+{
+    if (!FileUtil::Stat(path).isFile())
+        return false;
+
+    auto file = std::make_shared<std::ifstream>(path, std::ios::binary);
+    if (!file->is_open())
+        return false;
+
+    // The size of the file that was opened, which stays the size of the part.
+    file->seekg(0, std::ios_base::end);
+    const int64_t size = file->tellg();
+    file->seekg(0, std::ios_base::beg);
+    if (size < 0)
+        return false;
+
+    std::string header = "--" + _boundary + "\r\n";
+    header += "Content-Disposition: form-data; name=\"" + encodeDispositionParameter(name) +
+              "\"; filename=\"" + encodeDispositionParameter(filename) + "\"\r\n";
+    header += "Content-Type: " + contentType + "\r\n\r\n";
+    _parts.emplace_back(Part{ std::move(header), std::move(file), size });
+    return true;
+}
+
+int64_t MultipartFormDataSource::size() const
+{
+    int64_t total = closing().size();
+    for (const Part& part : _parts)
+        total += part.header.size() + part.size + 2; // The CRLF after the file.
+
+    return total;
+}
+
+void MultipartFormDataSource::applyTo(Request& request) const
+{
+    request.setContentType("multipart/form-data; boundary=" + _boundary);
+
+    auto reader = std::make_shared<Reader>(_parts, closing());
+    request.setBodySource([reader](char* buffer, int64_t length)
+                          { return reader->read(buffer, length); }, size());
 }
 
 std::pair<std::string, std::string> Request::getBasicAuth() const
