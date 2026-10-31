@@ -946,10 +946,50 @@ std::size_t WopiStorage::uploadLocalFileToStorageAsync(
             }
         }
 
-        httpRequest.setContentType("application/octet-stream");
-        httpRequest.setContentLength(size);
+        // The thumbnails the kit wrote next to the file go with it. A rename sends none.
+        const std::vector<std::string> thumbnailSizes =
+            isRename ? std::vector<std::string>() : Thumbnail::listSizes(filePath);
 
-        httpRequest.setBodyFile(filePath);
+        bool bodySet = false;
+        if (!thumbnailSizes.empty())
+        {
+            // The document is the first part, so a host can read it before the thumbnails.
+            http::MultipartFormDataSource multipart;
+            if (multipart.addFilePart("file", filePath, "application/octet-stream",
+                                      isSaveAs ? saveAsFilename : getFileInfo().getFilename()))
+            {
+                for (const std::string& thumbnailSize : thumbnailSizes)
+                {
+                    const std::string thumbnailPath = Thumbnail::filePath(filePath, thumbnailSize);
+                    if (!multipart.addFilePart("thumbnail-" + thumbnailSize, thumbnailPath,
+                                               "image/png", "thumbnail-" + thumbnailSize + ".png"))
+                    {
+                        LOG_WRN(wopiLog << " cannot read the thumbnail ["
+                                        << Anonymizer::anonymizeUrl(thumbnailPath)
+                                        << "] to send it");
+                    }
+                }
+            }
+
+            // The header says there are thumbnail parts, so it goes out only with them.
+            if (multipart.partCount() > 1)
+            {
+                setWopiHeader(httpRequest, "HasThumbnails", "true");
+                multipart.applyTo(httpRequest);
+                bodySet = true;
+                LOG_DBG(wopiLog << " sends " << multipart.partCount() - 1
+                                << " thumbnails with the file, " << multipart.size()
+                                << " bytes in all");
+            }
+        }
+
+        if (!bodySet)
+        {
+            httpRequest.setContentType("application/octet-stream");
+            httpRequest.setContentLength(size);
+
+            httpRequest.setBodyFile(filePath);
+        }
 
         http::Session::FinishedCallback finishedCallback =
             [this, startTime, wopiLog,
