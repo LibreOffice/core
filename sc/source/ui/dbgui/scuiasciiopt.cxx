@@ -260,6 +260,8 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     , mnStreamInitPos(mnStreamPos)
     , mnRowPosCount(0)
     , mcTextSep(ScAsciiOptions::cDefaultTextSep)
+    // tdf#173159 - initialize encoding to always detect separators on import
+    , meEncoding(RTL_TEXTENCODING_DONTKNOW)
     , meDetectedEncoding(RTL_TEXTENCODING_DONTKNOW)
     , mbEncodingDetect(true)
     , meCall(eCall)
