@@ -120,6 +120,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/primitive2d/fillgraphicprimitive2d \
     drawinglayer/source/primitive2d/fillgradientprimitive2d \
     drawinglayer/source/primitive2d/fillhatchprimitive2d \
+    drawinglayer/source/primitive2d/fonttextprimitive \
     drawinglayer/source/primitive2d/glowprimitive2d \
     drawinglayer/source/primitive2d/GlowSoftEgdeShadowTools \
     drawinglayer/source/primitive2d/graphicprimitivehelper2d \

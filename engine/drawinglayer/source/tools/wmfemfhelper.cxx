@@ -43,6 +43,8 @@
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <primitive2d/wallpaperprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <drawinglayer/primitive2d/fonttextprimitive.hxx>
+#include <primitive2d/fontattributeandtransform.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <primitive2d/textlineprimitive2d.hxx>
 #include <primitive2d/textstrikeoutprimitive2d.hxx>
@@ -977,59 +979,15 @@ namespace wmfemfhelper
         }
     }
 
-    /** helper to decide UnderlineAbove for text primitives */
-    static bool isUnderlineAbove(const vcl::Font& rFont)
-    {
-        if(!rFont.IsVertical())
-        {
-            return false;
-        }
-
-        // the underline is right for Japanese only
-        return (LANGUAGE_JAPANESE == rFont.GetLanguage()) || (LANGUAGE_JAPANESE == rFont.GetCJKContextLanguage());
-    }
-
     static void createFontAttributeTransformAndAlignment(
         drawinglayer::attribute::FontAttribute& rFontAttribute,
         basegfx::B2DHomMatrix& rTextTransform,
         basegfx::B2DVector& rAlignmentOffset,
         PropertyHolder const & rProperty)
     {
-        const vcl::Font& rFont = rProperty.getFont();
-        basegfx::B2DVector aFontScaling;
-
-        rFontAttribute = drawinglayer::primitive2d::getFontAttributeFromVclFont(
-                            aFontScaling,
-                            rFont,
-                            bool(rProperty.getLayoutMode() & vcl::text::ComplexTextLayoutFlags::BiDiRtl),
-                            bool(rProperty.getLayoutMode() & vcl::text::ComplexTextLayoutFlags::BiDiStrong));
-
-        // add FontScaling
-        rTextTransform.scale(aFontScaling.getX(), aFontScaling.getY());
-
-        // take text align into account
-        if(ALIGN_BASELINE != rFont.GetAlignment())
-        {
-            drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
-            aTextLayouterDevice.setFont(rFont);
-
-            if(ALIGN_TOP == rFont.GetAlignment())
-            {
-                rAlignmentOffset.setY(aTextLayouterDevice.getFontAscent());
-            }
-            else // ALIGN_BOTTOM
-            {
-                rAlignmentOffset.setY(-aTextLayouterDevice.getFontDescent());
-            }
-
-            rTextTransform.translate(rAlignmentOffset.getX(), rAlignmentOffset.getY());
-        }
-
-        // add FontRotation (if used)
-        if(rFont.GetOrientation())
-        {
-            rTextTransform.rotate(-toRadians(rFont.GetOrientation()));
-        }
+        drawinglayer::primitive2d::createFontAttributeAndTransform(
+            rProperty.getFont(), rProperty.getLayoutMode(), rFontAttribute, rTextTransform,
+            rAlignmentOffset);
     }
 
     /** helper which takes complete care for creating the needed text primitives. It
@@ -1045,184 +1003,22 @@ namespace wmfemfhelper
         TargetHolder& rTarget,
         PropertyHolder const & rProperty)
     {
-        rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> pResult;
-        const vcl::Font& rFont = rProperty.getFont();
-        basegfx::B2DVector aAlignmentOffset(0.0, 0.0);
+        drawinglayer::primitive2d::TextDrawState aState;
+        aState.maTextColor = rProperty.getTextColor();
+        if (rProperty.getOverlineColorActive())
+            aState.moOverlineColor = rProperty.getOverlineColor();
+        if (rProperty.getTextLineColorActive())
+            aState.moTextLineColor = rProperty.getTextLineColor();
+        if (rProperty.getTextFillColorActive())
+            aState.moTextFillColor = rProperty.getTextFillColor();
+        aState.meLayoutMode = rProperty.getLayoutMode();
+        aState.meLanguage = rProperty.getLanguageType();
 
-        if(nTextLength)
-        {
-            drawinglayer::attribute::FontAttribute aFontAttribute;
-            basegfx::B2DHomMatrix aTextTransform;
-
-            // fill parameters derived from current font
-            createFontAttributeTransformAndAlignment(
-                aFontAttribute,
-                aTextTransform,
-                aAlignmentOffset,
-                rProperty);
-
-            // add TextStartPosition
-            aTextTransform.translate(rTextStartPosition.X(), rTextStartPosition.Y());
-
-            // prepare FontColor and Locale
-            const basegfx::BColor aFontColor(rProperty.getTextColor());
-            const Color aFillColor(rFont.GetFillColor());
-            css::lang::Locale aLocale(LanguageTag(rProperty.getLanguageType()).getLocale());
-            const bool bWordLineMode(rFont.IsWordLineMode());
-
-            const bool bDecoratedIsNeeded(
-                   LINESTYLE_NONE != rFont.GetOverline()
-                || LINESTYLE_NONE != rFont.GetUnderline()
-                || STRIKEOUT_NONE != rFont.GetStrikeout()
-                || FontEmphasisMark::NONE != (rFont.GetEmphasisMark() & FontEmphasisMark::Style)
-                || FontRelief::NONE != rFont.GetRelief()
-                || rFont.IsShadow()
-                || bWordLineMode);
-
-            if(bDecoratedIsNeeded)
-            {
-                // prepare overline, underline and strikeout data
-                const drawinglayer::primitive2d::TextLine eFontOverline(drawinglayer::primitive2d::mapFontLineStyleToTextLine(rFont.GetOverline()));
-                const drawinglayer::primitive2d::TextLine eFontLineStyle(drawinglayer::primitive2d::mapFontLineStyleToTextLine(rFont.GetUnderline()));
-                const drawinglayer::primitive2d::TextStrikeout eTextStrikeout(drawinglayer::primitive2d::mapFontStrikeoutToTextStrikeout(rFont.GetStrikeout()));
-
-                // check UndelineAbove
-                const bool bUnderlineAbove(drawinglayer::primitive2d::TEXT_LINE_NONE != eFontLineStyle && isUnderlineAbove(rFont));
-
-                // prepare emphasis mark data
-                drawinglayer::primitive2d::TextEmphasisMark eTextEmphasisMark(drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_NONE);
-
-                switch(rFont.GetEmphasisMark() & FontEmphasisMark::Style)
-                {
-                    case FontEmphasisMark::Dot : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_DOT; break;
-                    case FontEmphasisMark::Circle : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_CIRCLE; break;
-                    case FontEmphasisMark::Disc : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_DISC; break;
-                    case FontEmphasisMark::Accent : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_ACCENT; break;
-                    default: break;
-                }
-
-                const bool bEmphasisMarkAbove(rFont.GetEmphasisMark() & FontEmphasisMark::PosAbove);
-                const bool bEmphasisMarkBelow(rFont.GetEmphasisMark() & FontEmphasisMark::PosBelow);
-
-                // prepare font relief data
-                drawinglayer::primitive2d::TextRelief eTextRelief(drawinglayer::primitive2d::TEXT_RELIEF_NONE);
-
-                switch(rFont.GetRelief())
-                {
-                    case FontRelief::Embossed : eTextRelief = drawinglayer::primitive2d::TEXT_RELIEF_EMBOSSED; break;
-                    case FontRelief::Engraved : eTextRelief = drawinglayer::primitive2d::TEXT_RELIEF_ENGRAVED; break;
-                    default : break; // RELIEF_NONE, FontRelief_FORCE_EQUAL_SIZE
-                }
-
-                // prepare shadow/outline data
-                const bool bShadow(rFont.IsShadow());
-
-                // TextDecoratedPortionPrimitive2D is needed, create one
-                pResult = new drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D(
-
-                    // attributes for TextSimplePortionPrimitive2D
-                    aTextTransform,
-                    rText,
-                    nTextStart,
-                    nTextLength,
-                    std::vector(rDXArray),
-                    std::move(rKashidaArray),
-                    aFontAttribute,
-                    aLocale,
-                    aFontColor,
-                    aFillColor,
-                    rFont.GetFixKerning(),
-                    100, 0,
-                    rFont.GetOpticalSizing(),
-
-                    // attributes for TextDecoratedPortionPrimitive2D
-                    rProperty.getOverlineColorActive() ? rProperty.getOverlineColor() : aFontColor,
-                    rProperty.getTextLineColorActive() ? rProperty.getTextLineColor() : aFontColor,
-                    eFontOverline,
-                    eFontLineStyle,
-                    bUnderlineAbove,
-                    eTextStrikeout,
-                    bWordLineMode,
-                    eTextEmphasisMark,
-                    bEmphasisMarkAbove,
-                    bEmphasisMarkBelow,
-                    eTextRelief,
-                    bShadow);
-            }
-            else
-            {
-                // TextSimplePortionPrimitive2D is enough
-                pResult = new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-                    aTextTransform,
-                    rText,
-                    nTextStart,
-                    nTextLength,
-                    std::vector(rDXArray),
-                    std::move(rKashidaArray),
-                    std::move(aFontAttribute),
-                    std::move(aLocale),
-                    aFontColor,
-                    COL_TRANSPARENT,
-                    rFont.GetFixKerning(),
-                    100, 0,
-                    rFont.GetOpticalSizing());
-            }
-        }
-
-        if(pResult && rProperty.getTextFillColorActive())
-        {
-            // text background is requested, add and encapsulate both to new primitive
-            drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
-            aTextLayouterDevice.setFont(rFont);
-
-            // get text width
-            double fTextWidth(0.0);
-
-            if (rDXArray.empty())
-            {
-                fTextWidth = aTextLayouterDevice.getTextWidth(rText, nTextStart, nTextLength);
-            }
-            else
-            {
-                fTextWidth = rDXArray.back();
-            }
-
-            if (fTextWidth > 0.0 && !basegfx::fTools::equalZero(fTextWidth))
-            {
-                // build text range
-                const basegfx::B2DRange aTextRange(
-                    0.0, -aTextLayouterDevice.getFontAscent(),
-                    fTextWidth, aTextLayouterDevice.getFontDescent());
-
-                // create Transform
-                basegfx::B2DHomMatrix aTextTransform;
-
-                aTextTransform.translate(aAlignmentOffset.getX(), aAlignmentOffset.getY());
-
-                if(rFont.GetOrientation())
-                {
-                    aTextTransform.rotate(-toRadians(rFont.GetOrientation()));
-                }
-
-                aTextTransform.translate(rTextStartPosition.X(), rTextStartPosition.Y());
-
-                // prepare Primitive2DSequence, put text in foreground
-                drawinglayer::primitive2d::Primitive2DContainer aSequence(2);
-                aSequence[1] = pResult;
-
-                // prepare filled polygon
-                basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aTextRange));
-                aOutline.transform(aTextTransform);
-
-                aSequence[0] = drawinglayer::primitive2d::Primitive2DReference(
-                    new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                        basegfx::B2DPolyPolygon(aOutline),
-                        rProperty.getTextFillColor()));
-
-                // set as group at pResult
-                pResult = new drawinglayer::primitive2d::GroupPrimitive2D(std::move(aSequence));
-            }
-        }
+        const drawinglayer::primitive2d::Primitive2DReference pResult(
+            drawinglayer::primitive2d::createTextPrimitiveFromFont(
+                basegfx::B2DPoint(rTextStartPosition.X(), rTextStartPosition.Y()), rText,
+                nTextStart, nTextLength, std::move(rDXArray), std::move(rKashidaArray),
+                rProperty.getFont(), aState));
 
         if(!pResult)
             return;
