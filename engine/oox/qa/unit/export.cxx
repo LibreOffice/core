@@ -1653,19 +1653,73 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeEquationGuidesTrig)
     // When saving it to PPTX:
     save(TestFilter::PPTX);
 
-    // Then the angle equation is converted to 60000ths of a degree once and the sine and cosine
-    // take it from there
+    // Then the angle is stored in 60000ths of a degree, as the polar handle writes it back, the
+    // sine and cosine take it directly, and the handle sits at the end of the hand
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
-    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", "fmla", u"val 45");
-    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f0']", "fmla", u"*/ adj1 10800000 180");
-    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f1']", "fmla", u"cos 9000 f0");
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", "fmla", u"val 2700000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f0']", "fmla", u"cos 9000 adj1");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f1']", "fmla", u"+- 10800 f0 0");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f2']", "fmla", u"sin 9000 adj1");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f3']", "fmla", u"+- 10800 f2 0");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]/a:lnTo/a:pt", "x", u"f1");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]/a:lnTo/a:pt", "y", u"f3");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar", 1);
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar", "gdRefAng", u"adj1");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar", "minAng", u"0");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar", "maxAng", u"21599999");
+    assertXPathNoAttribute(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar", "gdRefR");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f4']", "fmla", u"cos 10800 adj1");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f5']", "fmla", u"sin 10800 adj1");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f6']", "fmla", u"+- 10800 f4 0");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f7']", "fmla", u"+- 10800 f5 0");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f8']", "fmla", u"*/ f6 w 21600");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f9']", "fmla", u"*/ f7 h 21600");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar/a:pos", "x", u"f8");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar/a:pos", "y", u"f9");
+
+    // and reading it back gives a handle that moves the angle again
+    loadFromURL(maTempFile.GetURL());
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    comphelper::SequenceAsHashMap aGeometry(xShape->getPropertyValue(u"CustomShapeGeometry"_ustr));
+    uno::Sequence<beans::PropertyValues> aHandles;
+    aGeometry[u"Handles"_ustr] >>= aHandles;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aHandles.getLength());
+    comphelper::SequenceAsHashMap aHandle(aHandles[0]);
+    sal_Int32 nRefAngle = -1;
+    aHandle[u"RefAngle"_ustr] >>= nRefAngle;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nRefAngle);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapePolarHandleWithRadius)
+{
+    // Given a polar handle that moves both the angle and the radius, with a radius range:
+    loadFromFile(u"custGeom_polarRadius.fodp");
+
+    // When saving it to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then the angle is in 60000ths, the radius a fraction of the smaller side, the range in
+    // the units of the radius, and the position is centre + radius * (cos, sin)
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd[@name='adj1']", "fmla", u"val 1800000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd[@name='adj2']", "fmla", u"val 33333");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar", 1);
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar", "gdRefR", u"adj2");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar", "minR", u"0");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar", "maxR", u"50000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar", "gdRefAng", u"adj1");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f0']", "fmla", u"*/ adj2 21600 100000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f1']", "fmla", u"cos f0 adj1");
+    // the position reuses the guides of the path: centre + radius * cos is the x of the hand
+    OUString aPosX = getXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar/a:pos", "x");
+    CPPUNIT_ASSERT(aPosX.startsWith("f"));
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='" + aPosX.toUtf8() + "']", "fmla",
+                u"*/ f2 w 21600");
     assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f2']", "fmla", u"+- 10800 f1 0");
-    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f3']", "fmla", u"sin 9000 f0");
-    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f4']", "fmla", u"+- 10800 f3 0");
     assertXPath(pXmlDoc, "//a:pathLst/a:path[2]/a:lnTo/a:pt", "x", u"f2");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]/a:lnTo/a:pt", "y", u"f4");
-    // the polar handle is not written yet
-    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/*", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCustomShapeSwitchedHandle)
@@ -1770,6 +1824,23 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeGluePointsFollowAdjustments)
                 u"*/ 21600 h 21600");
     // the handle is still there
     assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeAngleUsedAsCoordinateStaysPlain)
+{
+    // Given a clock hand whose angle adjustment also places a mark as a plain coordinate:
+    loadFromFile(u"custGeom_angleAsCoordinate.fodp");
+
+    // When saving it to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then the adjustment keeps its plain value, the angle equation converts it, the mark
+    // names it as it is, and no polar handle is written for it
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", "fmla", u"val 45");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f0']", "fmla", u"*/ adj1 10800000 180");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[3]/a:moveTo/a:pt", "x", u"adj1");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/*", 0);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

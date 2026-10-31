@@ -5134,6 +5134,20 @@ struct XYHandleOut
     OString aPosY;
 };
 
+// An <a:ahPolar> handle: the radius and angle adjustments it moves, their ranges, and the
+// guides that hold its position in the shape's EMU extent.
+struct PolarHandleOut
+{
+    OString aGdRefR;
+    OString aMinR;
+    OString aMaxR;
+    OString aGdRefAng;
+    OString aMinAng;
+    OString aMaxAng;
+    OString aPosX;
+    OString aPosY;
+};
+
 // Everything the custGeom writer needs, collected before the first element is written, so that
 // a shape whose conversion fails halfway can still take the plain path with resolved
 // coordinates.
@@ -5142,6 +5156,7 @@ struct CustomGeometryPlan
     std::vector<Guide> aAdjustments; // <a:avLst>
     std::vector<Guide> aGuides; // <a:gdLst>, in dependency order
     std::vector<XYHandleOut> aXYHandles; // <a:ahLst>
+    std::vector<PolarHandleOut> aPolarHandles;
     // Two entries (x, y) per pair of the path "Coordinates"; an empty entry means the resolved
     // number is written.
     std::vector<OString> aCoordTokens;
@@ -5316,6 +5331,9 @@ struct AdjustmentInfo
 {
     AdjustmentKind eKind = AdjustmentKind::Free;
     bool bConflict = false; // bound in two different ways, so no handle may drive it
+    // For an angle: the c of the X*(pi/c) idiom every use of it has, which makes it storable
+    // in 60000ths of a degree; 0 when it stays a plain value.
+    double fAngleConst = 0.0;
 };
 
 // The divisor that turns the stored 1/100000 fraction back into path units, or 0 for a plain
@@ -5723,36 +5741,46 @@ struct EquationGuideSet
 // if any equation uses a construct that cannot be expressed, so that the caller writes resolved
 // coordinates instead; a half-converted set would reference adjustments and guides that never
 // make it into the file, and Word refuses such a file.
-bool lcl_CreateOoxmlGuides(const EnhancedCustomShape2d& rCustomShape2d,
-                           const cpo::uno::Sequence<OUString>& rEquationStrings,
+// Parses the ODF "Equations" of a shape. Returns false when one of them does not parse.
+bool lcl_ParseEquations(const EnhancedCustomShape2d& rCustomShape2d,
+                        const cpo::uno::Sequence<OUString>& rEquationStrings,
+                        std::vector<std::shared_ptr<ExpressionNode>>& rNodes)
+{
+    rNodes.clear();
+    for (const OUString& rEquation : rEquationStrings)
+    {
+        try
+        {
+            rNodes.push_back(
+                EnhancedCustomShape::FunctionParser::parseFunction(rEquation, rCustomShape2d));
+        }
+        catch (...)
+        {
+            rNodes.clear();
+            return false;
+        }
+    }
+    return true;
+}
+
+bool lcl_CreateOoxmlGuides(const std::vector<std::shared_ptr<ExpressionNode>>& rNodes,
                            const std::set<sal_Int32>& rAngleAdjustments60000,
                            const std::vector<AdjustmentInfo>& rAdjustmentInfo,
                            sal_Int32 nViewBoxWidth, sal_Int32 nViewBoxHeight,
                            EquationGuideSet& rSet)
 {
     rSet = EquationGuideSet();
-    rSet.aEqNames.assign(rEquationStrings.getLength(), OString());
-    rSet.aEqIsAngle.assign(rEquationStrings.getLength(), false);
-    rSet.aNodes.assign(rEquationStrings.getLength(), std::shared_ptr<ExpressionNode>());
+    rSet.aEqNames.assign(rNodes.size(), OString());
+    rSet.aEqIsAngle.assign(rNodes.size(), false);
+    rSet.aNodes = rNodes;
     OoxmlEqContext aContext{ rSet.aGuides,    rSet.aUsedAdjustments,  rSet.aEqNames,
                              rSet.aEqIsAngle, rAngleAdjustments60000, rSet.aGuideByFormula };
     aContext.nViewBoxWidth = nViewBoxWidth;
     aContext.nViewBoxHeight = nViewBoxHeight;
     aContext.pAdjustmentInfo = &rAdjustmentInfo;
-    for (sal_Int32 i = 0; i < rEquationStrings.getLength(); ++i)
+    for (size_t i = 0; i < rNodes.size(); ++i)
     {
-        std::shared_ptr<ExpressionNode> pNode;
-        try
-        {
-            pNode = EnhancedCustomShape::FunctionParser::parseFunction(rEquationStrings[i],
-                                                                       rCustomShape2d);
-        }
-        catch (...)
-        {
-            rSet = EquationGuideSet();
-            return false;
-        }
-        rSet.aNodes[i] = pNode;
+        const std::shared_ptr<ExpressionNode>& pNode = rNodes[i];
         aContext.bFailed = false;
         // An equation that is itself an angle (X*pi/c) is converted to 60000ths of a degree and
         // remembered, so that trigonometric functions referencing it work.
@@ -5882,6 +5910,17 @@ struct XYHandleRaw
     std::optional<drawing::EnhancedCustomShapeParameter> aMaxY;
 };
 
+// An ODF polar handle: its centre, the radius parameter, the angle adjustment it drives and
+// the radius range.
+struct PolarHandleRaw
+{
+    drawing::EnhancedCustomShapeParameterPair aPolar;
+    drawing::EnhancedCustomShapeParameter aRadius;
+    sal_Int32 nAngleAdjust = -1;
+    std::optional<drawing::EnhancedCustomShapeParameter> aMinR;
+    std::optional<drawing::EnhancedCustomShapeParameter> aMaxR;
+};
+
 void lcl_ClassifyAdjustment(std::vector<AdjustmentInfo>& rInfo, sal_Int32 nIndex,
                             AdjustmentKind eKind)
 {
@@ -5903,12 +5942,14 @@ sal_Int32 lcl_AdjustmentIndexOf(const drawing::EnhancedCustomShapeParameter& rPa
     return -1;
 }
 
-// Reads the "Handles" of the shape: the xy handles go to rHandles, and every adjustment that a
-// handle drives is classified by the way it is driven. A switched handle swaps its axes when
-// the shape is taller than wide, as the shape does when it positions the handle.
-void lcl_CollectXYHandles(const cpo::uno::Sequence<beans::PropertyValues>& rHandleSeq,
-                          bool bTallerThanWide, std::vector<XYHandleRaw>& rHandles,
-                          std::vector<AdjustmentInfo>& rInfo)
+// Reads the "Handles" of the shape: the xy handles go to rHandles, the polar ones to
+// rPolarHandles, and every adjustment that a handle drives is classified by the way it is
+// driven. A switched handle swaps its axes when the shape is taller than wide, as the shape
+// does when it positions the handle.
+void lcl_CollectHandles(const cpo::uno::Sequence<beans::PropertyValues>& rHandleSeq,
+                        bool bTallerThanWide, std::vector<XYHandleRaw>& rHandles,
+                        std::vector<PolarHandleRaw>& rPolarHandles,
+                        std::vector<AdjustmentInfo>& rInfo)
 {
     for (const beans::PropertyValues& rProperties : rHandleSeq)
     {
@@ -5916,17 +5957,25 @@ void lcl_CollectXYHandles(const cpo::uno::Sequence<beans::PropertyValues>& rHand
         drawing::EnhancedCustomShapeParameterPair aPosition;
         if (!(aMap.getValue(u"Position"_ustr) >>= aPosition))
             continue;
+        drawing::EnhancedCustomShapeParameter aRange;
         if (aMap.find(u"Polar"_ustr) != aMap.end())
         {
+            PolarHandleRaw aPolar;
+            aMap.getValue(u"Polar"_ustr) >>= aPolar.aPolar;
+            aPolar.aRadius = aPosition.First;
+            aPolar.nAngleAdjust = lcl_AdjustmentIndexOf(aPosition.Second);
+            if (aMap.getValue(u"RadiusRangeMinimum"_ustr) >>= aRange)
+                aPolar.aMinR = aRange;
+            if (aMap.getValue(u"RadiusRangeMaximum"_ustr) >>= aRange)
+                aPolar.aMaxR = aRange;
             lcl_ClassifyAdjustment(rInfo, lcl_AdjustmentIndexOf(aPosition.First),
                                    AdjustmentKind::Radius);
-            lcl_ClassifyAdjustment(rInfo, lcl_AdjustmentIndexOf(aPosition.Second),
-                                   AdjustmentKind::Angle);
+            lcl_ClassifyAdjustment(rInfo, aPolar.nAngleAdjust, AdjustmentKind::Angle);
+            rPolarHandles.push_back(aPolar);
             continue;
         }
         XYHandleRaw aHandle;
         aHandle.aPosition = aPosition;
-        drawing::EnhancedCustomShapeParameter aRange;
         if (aMap.getValue(u"RangeXMinimum"_ustr) >>= aRange)
             aHandle.aMinX = aRange;
         if (aMap.getValue(u"RangeXMaximum"_ustr) >>= aRange)
@@ -6123,6 +6172,211 @@ void lcl_BuildXYHandles(const std::vector<XYHandleRaw>& rHandles,
     }
 }
 
+// How an adjustment is used across the equations when it should be an angle: as the X of the
+// idiom X*(pi/c) everywhere, with one and the same c.
+struct AdjustmentAngleUse
+{
+    bool bSeen = false;
+    bool bOnlyAngle = true;
+    double fConst = 0.0;
+};
+
+void lcl_ScanAdjustmentAngleUse(const ExpressionNode* pNode, sal_Int32 nIndex,
+                                AdjustmentAngleUse& rUse)
+{
+    if (!pNode)
+        return;
+    double fConst = 0.0;
+    const ExpressionNode* pAngleArg = lcl_GetAngleIdiomArg(pNode, fConst);
+    if (pAngleArg && pAngleArg->getType() == ExpressionFunct::EnumAdjustment
+        && pAngleArg->getIndex() == nIndex)
+    {
+        if (!rUse.bSeen)
+        {
+            rUse.fConst = fConst;
+            rUse.bSeen = true;
+        }
+        else if (rUse.fConst != fConst)
+            rUse.bOnlyAngle = false;
+        return;
+    }
+    if (pNode->getType() == ExpressionFunct::EnumAdjustment && pNode->getIndex() == nIndex)
+    {
+        rUse.bOnlyAngle = false;
+        return;
+    }
+    for (sal_Int32 i = 0; const ExpressionNode* pChild = pNode->getChild(i); ++i)
+        lcl_ScanAdjustmentAngleUse(pChild, nIndex, rUse);
+}
+
+// The adjustments that a path coordinate, a glue point or an xy handle uses as a plain value,
+// outside the equations. The angle parameters of the arc commands are left out: an angle in
+// 60000ths serves them as it is.
+void lcl_CollectDirectAdjustmentUses(
+    const cpo::uno::Sequence<drawing::EnhancedCustomShapeSegment>& rSegments,
+    const cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rPairs,
+    const cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rGluePoints,
+    const std::vector<XYHandleRaw>& rXYHandles, std::set<sal_Int32>& rDirect)
+{
+    sal_Int32 nPairIndex = 0;
+    for (const drawing::EnhancedCustomShapeSegment& rSegment : rSegments)
+    {
+        sal_Int32 nPairsPerCommand = 0;
+        sal_Int32 nAnglePair = -1; // the pair of the command that holds angles
+        switch (rSegment.Command)
+        {
+            case drawing::EnhancedCustomShapeSegmentCommand::MOVETO:
+            case drawing::EnhancedCustomShapeSegmentCommand::LINETO:
+            case drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTX:
+            case drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTY:
+                nPairsPerCommand = 1;
+                break;
+            case drawing::EnhancedCustomShapeSegmentCommand::CURVETO:
+                nPairsPerCommand = 3;
+                break;
+            case drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO:
+            case drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE:
+                nPairsPerCommand = 3;
+                nAnglePair = 2;
+                break;
+            case drawing::EnhancedCustomShapeSegmentCommand::QUADRATICCURVETO:
+                nPairsPerCommand = 2;
+                break;
+            case drawing::EnhancedCustomShapeSegmentCommand::ARCANGLETO:
+                nPairsPerCommand = 2;
+                nAnglePair = 1;
+                break;
+            case drawing::EnhancedCustomShapeSegmentCommand::ARCTO:
+            case drawing::EnhancedCustomShapeSegmentCommand::ARC:
+            case drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO:
+            case drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC:
+                nPairsPerCommand = 4;
+                break;
+            default:
+                break;
+        }
+        for (sal_Int32 k = 0; k < rSegment.Count; ++k)
+        {
+            for (sal_Int32 i = 0; i < nPairsPerCommand; ++i, ++nPairIndex)
+            {
+                if (i == nAnglePair || nPairIndex >= rPairs.getLength())
+                    continue;
+                for (const drawing::EnhancedCustomShapeParameter* pParam :
+                     { &rPairs[nPairIndex].First, &rPairs[nPairIndex].Second })
+                {
+                    const sal_Int32 nAdjustment = lcl_AdjustmentIndexOf(*pParam);
+                    if (nAdjustment >= 0)
+                        rDirect.insert(nAdjustment);
+                }
+            }
+        }
+    }
+    for (const drawing::EnhancedCustomShapeParameterPair& rGluePoint : rGluePoints)
+    {
+        for (const drawing::EnhancedCustomShapeParameter* pParam :
+             { &rGluePoint.First, &rGluePoint.Second })
+        {
+            const sal_Int32 nAdjustment = lcl_AdjustmentIndexOf(*pParam);
+            if (nAdjustment >= 0)
+                rDirect.insert(nAdjustment);
+        }
+    }
+    for (const XYHandleRaw& rHandle : rXYHandles)
+    {
+        for (const std::optional<drawing::EnhancedCustomShapeParameter>* pRange :
+             { &rHandle.aMinX, &rHandle.aMaxX, &rHandle.aMinY, &rHandle.aMaxY })
+        {
+            if (!*pRange)
+                continue;
+            const sal_Int32 nAdjustment = lcl_AdjustmentIndexOf(**pRange);
+            if (nAdjustment >= 0)
+                rDirect.insert(nAdjustment);
+        }
+    }
+}
+
+// Decides, from the parsed equations, which angle adjustments can be stored in 60000ths of a
+// degree: those every equation uses only as the X of X*(pi/c) with one c, and nothing uses as
+// a plain value (rDirect). Their c is recorded in rInfo and they are added to
+// rAngleAdjustments60000.
+void lcl_ResolveAngleAdjustments(const std::vector<std::shared_ptr<ExpressionNode>>& rNodes,
+                                 const std::set<sal_Int32>& rDirect,
+                                 std::vector<AdjustmentInfo>& rInfo,
+                                 std::set<sal_Int32>& rAngleAdjustments60000)
+{
+    for (size_t nIndex = 0; nIndex < rInfo.size(); ++nIndex)
+    {
+        if (rInfo[nIndex].eKind != AdjustmentKind::Angle || rInfo[nIndex].bConflict
+            || rDirect.count(static_cast<sal_Int32>(nIndex)) > 0)
+            continue;
+        AdjustmentAngleUse aUse;
+        for (const std::shared_ptr<ExpressionNode>& rNode : rNodes)
+            lcl_ScanAdjustmentAngleUse(rNode.get(), static_cast<sal_Int32>(nIndex), aUse);
+        if (!aUse.bSeen || !aUse.bOnlyAngle || aUse.fConst == 0.0
+            || std::fabs(aUse.fConst - std::round(aUse.fConst)) > 1e-7)
+            continue;
+        rInfo[nIndex].fAngleConst = aUse.fConst;
+        rAngleAdjustments60000.insert(static_cast<sal_Int32>(nIndex));
+    }
+}
+
+// Turns the polar handles into <a:ahPolar> records. Office measures the handle from the centre
+// of the shape, so only a handle whose centre is the centre of the viewBox is written; the
+// position is centre + radius * (cos, sin) of the angle, converted to the EMU extent.
+void lcl_BuildPolarHandles(const std::vector<PolarHandleRaw>& rHandles,
+                           const std::vector<AdjustmentInfo>& rInfo,
+                           const std::set<sal_Int32>& rFrozen, OoxmlEqContext& rCtx,
+                           std::vector<PolarHandleOut>& rOut)
+{
+    for (const PolarHandleRaw& rHandle : rHandles)
+    {
+        const sal_Int32 nAngle = rHandle.nAngleAdjust;
+        if (nAngle < 0 || o3tl::make_unsigned(nAngle) >= rInfo.size()
+            || rInfo[nAngle].eKind != AdjustmentKind::Angle || rInfo[nAngle].bConflict
+            || rInfo[nAngle].fAngleConst == 0.0 || rFrozen.count(nAngle) > 0)
+            continue;
+        // a centre given by an equation is not compared and the handle is dropped
+        const OString aCx = lcl_HandleParameterToken(rHandle.aPolar.First, rCtx);
+        const OString aCy = lcl_HandleParameterToken(rHandle.aPolar.Second, rCtx);
+        if (aCx.isEmpty() || aCy.isEmpty() || aCx.toInt64() * 2 != rCtx.nViewBoxWidth
+            || aCy.toInt64() * 2 != rCtx.nViewBoxHeight)
+            continue;
+        const sal_Int32 nRadius = lcl_AdjustmentIndexOf(rHandle.aRadius);
+        if (nRadius >= 0
+            && (o3tl::make_unsigned(nRadius) >= rInfo.size() || rFrozen.count(nRadius) > 0
+                || rInfo[nRadius].bConflict))
+            continue;
+        const OString aRadius = lcl_HandleParameterToken(rHandle.aRadius, rCtx);
+        if (aRadius.isEmpty())
+            continue;
+        PolarHandleOut aOut;
+        aOut.aGdRefAng = "adj" + OString::number(nAngle + 1);
+        rCtx.rUsedAdjustments.insert(nAngle);
+        aOut.aMinAng = "0"_ostr;
+        aOut.aMaxAng = "21599999"_ostr;
+        if (nRadius >= 0)
+        {
+            const sal_Int32 nScale = lcl_AdjustmentScale(AdjustmentKind::Radius, rCtx.nViewBoxWidth,
+                                                         rCtx.nViewBoxHeight);
+            aOut.aGdRefR = "adj" + OString::number(nRadius + 1);
+            rCtx.rUsedAdjustments.insert(nRadius);
+            aOut.aMinR
+                = rHandle.aMinR ? lcl_HandleRangeToken(*rHandle.aMinR, nScale, rCtx) : "0"_ostr;
+            aOut.aMaxR = rHandle.aMaxR ? lcl_HandleRangeToken(*rHandle.aMaxR, nScale, rCtx)
+                                       : "2147483647"_ostr;
+            if (aOut.aMinR.isEmpty() || aOut.aMaxR.isEmpty())
+                continue;
+        }
+        const OString aCos = rCtx.addGuide("cos " + aRadius + " " + aOut.aGdRefAng);
+        const OString aSin = rCtx.addGuide("sin " + aRadius + " " + aOut.aGdRefAng);
+        const OString aPx = rCtx.addGuide("+- " + aCx + " " + aCos + " 0");
+        const OString aPy = rCtx.addGuide("+- " + aCy + " " + aSin + " 0");
+        aOut.aPosX = rCtx.addGuide("*/ " + aPx + " w " + OString::number(rCtx.nViewBoxWidth));
+        aOut.aPosY = rCtx.addGuide("*/ " + aPy + " h " + OString::number(rCtx.nViewBoxHeight));
+        rOut.push_back(aOut);
+    }
+}
+
 // The glue points of a parametric shape: each coordinate, a number or an equation, is converted
 // to the EMU extent of the shape through the w and h built-ins, so that a connector attached in
 // Office follows the adjustment values like the rest of the geometry. Returns false when a glue
@@ -6162,18 +6416,26 @@ bool lcl_BuildParametricPlan(
     // The handles decide how each adjustment is stored.
     std::vector<AdjustmentInfo> aAdjustmentInfo(nAdjustmentCount);
     std::vector<XYHandleRaw> aXYHandlesRaw;
+    std::vector<PolarHandleRaw> aPolarHandlesRaw;
     const tools::Rectangle& rLogicRect = rCustomShape2d.GetLogicRect();
-    lcl_CollectXYHandles(rHandles, rLogicRect.GetHeight() > rLogicRect.GetWidth(), aXYHandlesRaw,
-                         aAdjustmentInfo);
+    lcl_CollectHandles(rHandles, rLogicRect.GetHeight() > rLogicRect.GetWidth(), aXYHandlesRaw,
+                       aPolarHandlesRaw, aAdjustmentInfo);
 
-    const std::set<sal_Int32> aNoAngleAdjustments;
-    EquationGuideSet aEquations;
-    if (!lcl_CreateOoxmlGuides(rCustomShape2d, rEquationStrings, aNoAngleAdjustments,
-                               aAdjustmentInfo, nViewBoxWidth, nViewBoxHeight, aEquations))
+    std::vector<std::shared_ptr<ExpressionNode>> aNodes;
+    if (!lcl_ParseEquations(rCustomShape2d, rEquationStrings, aNodes))
         return false;
-    OoxmlEqContext aContext{ aEquations.aGuides,  aEquations.aUsedAdjustments,
-                             aEquations.aEqNames, aEquations.aEqIsAngle,
-                             aNoAngleAdjustments, aEquations.aGuideByFormula };
+    std::set<sal_Int32> aDirectUses;
+    lcl_CollectDirectAdjustmentUses(rSegments, rPairs, rGluePoints, aXYHandlesRaw, aDirectUses);
+    std::set<sal_Int32> aAngleAdjustments60000;
+    lcl_ResolveAngleAdjustments(aNodes, aDirectUses, aAdjustmentInfo, aAngleAdjustments60000);
+
+    EquationGuideSet aEquations;
+    if (!lcl_CreateOoxmlGuides(aNodes, aAngleAdjustments60000, aAdjustmentInfo, nViewBoxWidth,
+                               nViewBoxHeight, aEquations))
+        return false;
+    OoxmlEqContext aContext{ aEquations.aGuides,     aEquations.aUsedAdjustments,
+                             aEquations.aEqNames,    aEquations.aEqIsAngle,
+                             aAngleAdjustments60000, aEquations.aGuideByFormula };
     aContext.nViewBoxWidth = nViewBoxWidth;
     aContext.nViewBoxHeight = nViewBoxHeight;
     aContext.pAdjustmentInfo = &aAdjustmentInfo;
@@ -6188,6 +6450,8 @@ bool lcl_BuildParametricPlan(
     std::set<sal_Int32> aFrozen;
     lcl_CollectFrozenAdjustments(rPairs, aPlan.aCoordTokens, aEquations, aFrozen);
     lcl_BuildXYHandles(aXYHandlesRaw, aAdjustmentInfo, aFrozen, aContext, aPlan.aXYHandles);
+    lcl_BuildPolarHandles(aPolarHandlesRaw, aAdjustmentInfo, aFrozen, aContext,
+                          aPlan.aPolarHandles);
     if (aContext.bFailed)
         return false;
 
@@ -6218,6 +6482,18 @@ bool lcl_BuildParametricPlan(
         const sal_Int32 nScale = lcl_AdjustmentScale(eKind, nViewBoxWidth, nViewBoxHeight);
         if (nScale != 0)
             fValue = fValue * 100000.0 / nScale;
+        else if (eKind == AdjustmentKind::Angle && aAngleAdjustments60000.count(nAdjustment) > 0)
+        {
+            // The angle in the unit the idiom's c gives becomes 60000ths of a degree, in
+            // [0, 21600000) as a polar handle writes it back.
+            const double f60000ths = fValue * 10800000.0 / aAdjustmentInfo[nAdjustment].fAngleConst;
+            if (std::fabs(f60000ths) > 2147483647.0)
+                return false;
+            sal_Int64 nNormalised = std::lround(f60000ths) % 21600000;
+            if (nNormalised < 0)
+                nNormalised += 21600000;
+            fValue = nNormalised;
+        }
         else if (std::fabs(fValue - std::round(fValue)) > 1e-7)
             return false;
         if (std::fabs(fValue) > 2147483647.0)
@@ -6258,19 +6534,23 @@ bool lcl_BuildParametricPlan(
             && aAdjustmentNames.find(aToken) == aAdjustmentNames.end())
             return false;
     }
+    std::vector<OString> aHandleTokens;
     for (const XYHandleOut& rHandle : aPlan.aXYHandles)
+        aHandleTokens.insert(aHandleTokens.end(),
+                             { rHandle.aGdRefX, rHandle.aMinX, rHandle.aMaxX, rHandle.aGdRefY,
+                               rHandle.aMinY, rHandle.aMaxY, rHandle.aPosX, rHandle.aPosY });
+    for (const PolarHandleOut& rHandle : aPlan.aPolarHandles)
+        aHandleTokens.insert(aHandleTokens.end(),
+                             { rHandle.aGdRefR, rHandle.aMinR, rHandle.aMaxR, rHandle.aGdRefAng,
+                               rHandle.aMinAng, rHandle.aMaxAng, rHandle.aPosX, rHandle.aPosY });
+    for (const OString& rToken : aHandleTokens)
     {
-        for (const OString& rToken :
-             { rHandle.aGdRefX, rHandle.aMinX, rHandle.aMaxX, rHandle.aGdRefY, rHandle.aMinY,
-               rHandle.aMaxY, rHandle.aPosX, rHandle.aPosY })
-        {
-            if (rToken.isEmpty() || rToken.toInt64() != 0 || rToken == "0")
-                continue;
-            const OUString aToken = OUString::fromUtf8(rToken);
-            if (aGuideNames.find(aToken) == aGuideNames.end()
-                && aAdjustmentNames.find(aToken) == aAdjustmentNames.end())
-                return false;
-        }
+        if (rToken.isEmpty() || rToken.toInt64() != 0 || rToken == "0")
+            continue;
+        const OUString aToken = OUString::fromUtf8(rToken);
+        if (aGuideNames.find(aToken) == aGuideNames.end()
+            && aAdjustmentNames.find(aToken) == aAdjustmentNames.end())
+            return false;
     }
 
     rPlan = aPlan;
@@ -6688,7 +6968,7 @@ void lcl_WriteCustomGeometryLists(const FSHelperPtr& rFS, const CustomGeometryPl
         }
         rFS->endElementNS(XML_a, XML_gdLst);
     }
-    if (rPlan.aXYHandles.empty())
+    if (rPlan.aXYHandles.empty() && rPlan.aPolarHandles.empty())
     {
         rFS->singleElementNS(XML_a, XML_ahLst);
     }
@@ -6714,6 +6994,23 @@ void lcl_WriteCustomGeometryLists(const FSHelperPtr& rFS, const CustomGeometryPl
             rFS->startElementNS(XML_a, XML_ahXY, xAttrs);
             rFS->singleElementNS(XML_a, XML_pos, XML_x, rHandle.aPosX, XML_y, rHandle.aPosY);
             rFS->endElementNS(XML_a, XML_ahXY);
+        }
+        for (const PolarHandleOut& rHandle : rPlan.aPolarHandles)
+        {
+            rtl::Reference<sax_fastparser::FastAttributeList> xAttrs
+                = sax_fastparser::FastSerializerHelper::createAttrList();
+            if (!rHandle.aGdRefR.isEmpty())
+            {
+                xAttrs->add(XML_gdRefR, rHandle.aGdRefR);
+                xAttrs->add(XML_minR, rHandle.aMinR);
+                xAttrs->add(XML_maxR, rHandle.aMaxR);
+            }
+            xAttrs->add(XML_gdRefAng, rHandle.aGdRefAng);
+            xAttrs->add(XML_minAng, rHandle.aMinAng);
+            xAttrs->add(XML_maxAng, rHandle.aMaxAng);
+            rFS->startElementNS(XML_a, XML_ahPolar, xAttrs);
+            rFS->singleElementNS(XML_a, XML_pos, XML_x, rHandle.aPosX, XML_y, rHandle.aPosY);
+            rFS->endElementNS(XML_a, XML_ahPolar);
         }
         rFS->endElementNS(XML_a, XML_ahLst);
     }
