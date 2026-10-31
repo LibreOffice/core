@@ -508,6 +508,18 @@ void WorksheetFragment::onCharacters( const OUString& rChars )
     }
 }
 
+void WorksheetFragment::onEndElement()
+{
+    if( getCurrentElement() == XLS_TOKEN( cols ) )
+        finalizeColumnFormats();
+}
+
+void WorksheetFragment::onEndRecord()
+{
+    if( getCurrentElement() == BIFF12_ID_COLS )
+        finalizeColumnFormats();
+}
+
 ContextHandlerRef WorksheetFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )

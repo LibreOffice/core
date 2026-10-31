@@ -470,6 +470,35 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testWholeRowBold)
                                  aFont.GetWeightMaybeAskConfig());
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testWholeSheetBoldWithColumnWidths)
+{
+    createScDoc();
+
+    {
+        ScDocument* pDoc = getScDoc();
+
+        // Make every column bold, and give two columns their own width, so the XLSX export writes
+        // the bold format in several col elements.
+        ScPatternAttr boldAttr(pDoc->getCellAttributeHelper());
+        boldAttr.ItemSetPut(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
+        pDoc->ApplyPatternAreaTab(0, 0, pDoc->MaxCol(), pDoc->MaxRow(), 0, boldAttr);
+        pDoc->SetColWidth(1000, 0, 3000);
+        pDoc->SetColWidth(2000, 0, 4000);
+    }
+
+    saveAndReload(TestFilter::XLSX);
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(SCCOL(INITIALCOLCOUNT), pDoc->GetAllocatedColumnsCount(0));
+    CPPUNIT_ASSERT(pDoc->GetColWidth(1000, 0) > pDoc->GetColWidth(1500, 0));
+    vcl::Font aFont;
+    pDoc->GetPattern(1500, 0, 0)->fillFontOnly(aFont);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD,
+                                 aFont.GetWeightMaybeAskConfig());
+    pDoc->GetPattern(pDoc->MaxCol(), 0, 0)->fillFontOnly(aFont);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD,
+                                 aFont.GetWeightMaybeAskConfig());
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest5, testXlsxRowsOrder)
 {
     createScDoc("xlsx/tdf58243.xlsx");

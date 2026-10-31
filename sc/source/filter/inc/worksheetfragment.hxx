@@ -121,8 +121,10 @@ public:
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual void        onCharacters( const OUString& rChars ) override;
+    virtual void        onEndElement() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
+    virtual void        onEndRecord() override;
 
     virtual const ::oox::core::RecordInfo* getRecordInfos() const override;
     virtual void        initializeImport() override;

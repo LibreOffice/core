@@ -250,9 +250,11 @@ public:
         width set with the setBaseColumnWidth() function. */
     void                setDefaultColumnWidth( double fWidth );
     /** Sets column settings for a specific range of columns.
-        @descr  Column default formatting is converted directly, other settings
-        are cached and converted in the finalizeWorksheetImport() call. */
+        @descr  Column default formatting is converted in the finalizeColumnFormats() call,
+        other settings are cached and converted in the finalizeWorksheetImport() call. */
     void                setColumnModel( const ColumnModel& rModel );
+    /** Converts the column default formatting of all column models set so far. */
+    void                finalizeColumnFormats();
 
     /** Sets default height and hidden state for all unused rows in the sheet. */
     void                setDefaultRowSettings(
