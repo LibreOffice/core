@@ -5120,6 +5120,20 @@ struct Guide
     OString sFormula;
 };
 
+// An <a:ahXY> handle: the adjustments it moves, their allowed range in adjustment units, and
+// the guides that hold its position in the shape's EMU extent.
+struct XYHandleOut
+{
+    OString aGdRefX;
+    OString aMinX;
+    OString aMaxX;
+    OString aGdRefY;
+    OString aMinY;
+    OString aMaxY;
+    OString aPosX;
+    OString aPosY;
+};
+
 // Everything the custGeom writer needs, collected before the first element is written, so that
 // a shape whose conversion fails halfway can still take the plain path with resolved
 // coordinates.
@@ -5127,6 +5141,7 @@ struct CustomGeometryPlan
 {
     std::vector<Guide> aAdjustments; // <a:avLst>
     std::vector<Guide> aGuides; // <a:gdLst>, in dependency order
+    std::vector<XYHandleOut> aXYHandles; // <a:ahLst>
     // Two entries (x, y) per pair of the path "Coordinates"; an empty entry means the resolved
     // number is written.
     std::vector<OString> aCoordTokens;
@@ -5282,6 +5297,45 @@ bool IsValidOOXMLFormula(std::u16string_view sFormula, const std::set<OUString>&
 using EnhancedCustomShape::ExpressionNode;
 using ExpressionFunct = EnhancedCustomShape::ExpressionFunct;
 
+// How an adjustment value is stored in <a:avLst>. The presets store a value that a handle moves
+// along x as a fraction of the width in 1/100000, along y as a fraction of the height, and a
+// radius as a fraction of the smaller side; PowerPoint writes back a dragged handle in these
+// units. A value that only equations use is stored like an x value, so that a fractional ODF
+// modifier keeps its precision. An angle stays a plain value until it is stored in 60000ths of a
+// degree for a polar handle.
+enum class AdjustmentKind
+{
+    Free,
+    BoundX,
+    BoundY,
+    Radius,
+    Angle
+};
+
+struct AdjustmentInfo
+{
+    AdjustmentKind eKind = AdjustmentKind::Free;
+    bool bConflict = false; // bound in two different ways, so no handle may drive it
+};
+
+// The divisor that turns the stored 1/100000 fraction back into path units, or 0 for a plain
+// value.
+sal_Int32 lcl_AdjustmentScale(AdjustmentKind eKind, sal_Int32 nViewBoxWidth,
+                              sal_Int32 nViewBoxHeight)
+{
+    switch (eKind)
+    {
+        case AdjustmentKind::BoundY:
+            return nViewBoxHeight;
+        case AdjustmentKind::Radius:
+            return std::min(nViewBoxWidth, nViewBoxHeight);
+        case AdjustmentKind::Angle:
+            return 0;
+        default:
+            return nViewBoxWidth;
+    }
+}
+
 // Carries the guides built so far while one expression tree is walked.
 struct OoxmlEqContext
 {
@@ -5300,6 +5354,28 @@ struct OoxmlEqContext
     sal_Int32 nViewBoxWidth = 0;
     sal_Int32 nViewBoxHeight = 0;
     bool bFailed = false;
+    // How each adjustment is stored in <a:avLst> (see AdjustmentKind); null for plain values.
+    const std::vector<AdjustmentInfo>* pAdjustmentInfo = nullptr;
+
+    // The path-space token of an adjustment: the guide that scales the stored 1/100000 fraction
+    // back to path units, or the bare adjustment for a plain value.
+    OString adjustmentToken(sal_Int32 nIndex)
+    {
+        if (nIndex < 0)
+        {
+            bFailed = true;
+            return "0"_ostr;
+        }
+        rUsedAdjustments.insert(nIndex);
+        const OString aName = "adj" + OString::number(nIndex + 1);
+        if (!pAdjustmentInfo || o3tl::make_unsigned(nIndex) >= pAdjustmentInfo->size())
+            return aName;
+        const sal_Int32 nScale
+            = lcl_AdjustmentScale((*pAdjustmentInfo)[nIndex].eKind, nViewBoxWidth, nViewBoxHeight);
+        if (nScale == 0)
+            return aName;
+        return addGuide("*/ " + aName + " " + OString::number(nScale) + " 100000");
+    }
 
     // Appends a guide for the formula and returns its name ("f<n>"). Guides are functional, so
     // an equal formula reuses the existing guide; as guides are built bottom-up this
@@ -5516,11 +5592,7 @@ OString lcl_EmitOoxmlNode(const ExpressionNode* pNode, OoxmlEqContext& rCtx)
     switch (pNode->getType())
     {
         case ExpressionFunct::EnumAdjustment:
-        {
-            const sal_Int32 nAdjustment = pNode->getIndex();
-            rCtx.rUsedAdjustments.insert(nAdjustment);
-            return "adj" + OString::number(nAdjustment + 1);
-        }
+            return rCtx.adjustmentToken(pNode->getIndex());
         case ExpressionFunct::EnumEquation:
         {
             // An equation that is an angle holds 60000ths of a degree here but radians in the
@@ -5644,6 +5716,7 @@ struct EquationGuideSet
     std::vector<OString> aEqNames;
     std::vector<bool> aEqIsAngle;
     std::map<OString, OString> aGuideByFormula;
+    std::vector<std::shared_ptr<ExpressionNode>> aNodes; // the parsed equations
 };
 
 // Converts all of a shape's ODF "Equations" to OOXML guides. Returns false, leaving rSet empty,
@@ -5653,16 +5726,19 @@ struct EquationGuideSet
 bool lcl_CreateOoxmlGuides(const EnhancedCustomShape2d& rCustomShape2d,
                            const cpo::uno::Sequence<OUString>& rEquationStrings,
                            const std::set<sal_Int32>& rAngleAdjustments60000,
+                           const std::vector<AdjustmentInfo>& rAdjustmentInfo,
                            sal_Int32 nViewBoxWidth, sal_Int32 nViewBoxHeight,
                            EquationGuideSet& rSet)
 {
     rSet = EquationGuideSet();
     rSet.aEqNames.assign(rEquationStrings.getLength(), OString());
     rSet.aEqIsAngle.assign(rEquationStrings.getLength(), false);
+    rSet.aNodes.assign(rEquationStrings.getLength(), std::shared_ptr<ExpressionNode>());
     OoxmlEqContext aContext{ rSet.aGuides,    rSet.aUsedAdjustments,  rSet.aEqNames,
                              rSet.aEqIsAngle, rAngleAdjustments60000, rSet.aGuideByFormula };
     aContext.nViewBoxWidth = nViewBoxWidth;
     aContext.nViewBoxHeight = nViewBoxHeight;
+    aContext.pAdjustmentInfo = &rAdjustmentInfo;
     for (sal_Int32 i = 0; i < rEquationStrings.getLength(); ++i)
     {
         std::shared_ptr<ExpressionNode> pNode;
@@ -5676,6 +5752,7 @@ bool lcl_CreateOoxmlGuides(const EnhancedCustomShape2d& rCustomShape2d,
             rSet = EquationGuideSet();
             return false;
         }
+        rSet.aNodes[i] = pNode;
         aContext.bFailed = false;
         // An equation that is itself an angle (X*pi/c) is converted to 60000ths of a degree and
         // remembered, so that trigonometric functions referencing it work.
@@ -5697,21 +5774,16 @@ bool lcl_CreateOoxmlGuides(const EnhancedCustomShape2d& rCustomShape2d,
 // The token for a path coordinate: the guide of an equation, or the adjustment itself. Returns
 // an empty string when the coordinate stays a resolved number.
 OString lcl_CoordinateToken(const drawing::EnhancedCustomShapeParameter& rParam,
-                            const EquationGuideSet& rEquations,
-                            std::set<sal_Int32>& rUsedAdjustments)
+                            OoxmlEqContext& rCtx)
 {
     sal_Int32 nIndex = -1;
     if (rParam.Type == drawing::EnhancedCustomShapeParameterType::EQUATION
         && (rParam.Value >>= nIndex) && nIndex >= 0
-        && o3tl::make_unsigned(nIndex) < rEquations.aEqNames.size()
-        && !rEquations.aEqIsAngle[nIndex])
-        return rEquations.aEqNames[nIndex];
+        && o3tl::make_unsigned(nIndex) < rCtx.rEqNames.size() && !rCtx.rEqIsAngle[nIndex])
+        return rCtx.rEqNames[nIndex];
     if (rParam.Type == drawing::EnhancedCustomShapeParameterType::ADJUSTMENT
         && (rParam.Value >>= nIndex) && nIndex >= 0)
-    {
-        rUsedAdjustments.insert(nIndex);
-        return "adj" + OString::number(nIndex + 1);
-    }
+        return rCtx.adjustmentToken(nIndex);
     return OString();
 }
 
@@ -5721,8 +5793,7 @@ OString lcl_CoordinateToken(const drawing::EnhancedCustomShapeParameter& rParam,
 void lcl_CollectCoordinateTokens(
     const cpo::uno::Sequence<drawing::EnhancedCustomShapeSegment>& rSegments,
     const cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rPairs,
-    const EquationGuideSet& rEquations, std::set<sal_Int32>& rUsedAdjustments,
-    CustomGeometryPlan& rPlan)
+    OoxmlEqContext& rCtx, CustomGeometryPlan& rPlan)
 {
     rPlan.aCoordTokens.assign(2 * rPairs.getLength(), OString());
     sal_Int32 nPairIndex = 0;
@@ -5773,9 +5844,9 @@ void lcl_CollectCoordinateTokens(
                 if (!bPoints || nPairIndex >= rPairs.getLength())
                     continue;
                 rPlan.aCoordTokens[2 * nPairIndex]
-                    = lcl_CoordinateToken(rPairs[nPairIndex].First, rEquations, rUsedAdjustments);
+                    = lcl_CoordinateToken(rPairs[nPairIndex].First, rCtx);
                 rPlan.aCoordTokens[2 * nPairIndex + 1]
-                    = lcl_CoordinateToken(rPairs[nPairIndex].Second, rEquations, rUsedAdjustments);
+                    = lcl_CoordinateToken(rPairs[nPairIndex].Second, rCtx);
             }
         }
     }
@@ -5800,6 +5871,258 @@ void lcl_CollectAdjustmentsOfFormula(const OString& rFormula, std::set<sal_Int32
     }
 }
 
+// An ODF handle that moves along x and/or y, with a switched handle already resolved for the
+// current extent of the shape.
+struct XYHandleRaw
+{
+    drawing::EnhancedCustomShapeParameterPair aPosition;
+    std::optional<drawing::EnhancedCustomShapeParameter> aMinX;
+    std::optional<drawing::EnhancedCustomShapeParameter> aMaxX;
+    std::optional<drawing::EnhancedCustomShapeParameter> aMinY;
+    std::optional<drawing::EnhancedCustomShapeParameter> aMaxY;
+};
+
+void lcl_ClassifyAdjustment(std::vector<AdjustmentInfo>& rInfo, sal_Int32 nIndex,
+                            AdjustmentKind eKind)
+{
+    if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= rInfo.size())
+        return;
+    AdjustmentInfo& rEntry = rInfo[nIndex];
+    if (rEntry.eKind == AdjustmentKind::Free)
+        rEntry.eKind = eKind;
+    else if (rEntry.eKind != eKind)
+        rEntry.bConflict = true;
+}
+
+sal_Int32 lcl_AdjustmentIndexOf(const drawing::EnhancedCustomShapeParameter& rParam)
+{
+    sal_Int32 nIndex = -1;
+    if (rParam.Type == drawing::EnhancedCustomShapeParameterType::ADJUSTMENT
+        && (rParam.Value >>= nIndex))
+        return nIndex;
+    return -1;
+}
+
+// Reads the "Handles" of the shape: the xy handles go to rHandles, and every adjustment that a
+// handle drives is classified by the way it is driven. A switched handle swaps its axes when
+// the shape is taller than wide, as the shape does when it positions the handle.
+void lcl_CollectXYHandles(const cpo::uno::Sequence<beans::PropertyValues>& rHandleSeq,
+                          bool bTallerThanWide, std::vector<XYHandleRaw>& rHandles,
+                          std::vector<AdjustmentInfo>& rInfo)
+{
+    for (const beans::PropertyValues& rProperties : rHandleSeq)
+    {
+        comphelper::SequenceAsHashMap aMap(rProperties);
+        drawing::EnhancedCustomShapeParameterPair aPosition;
+        if (!(aMap.getValue(u"Position"_ustr) >>= aPosition))
+            continue;
+        if (aMap.find(u"Polar"_ustr) != aMap.end())
+        {
+            lcl_ClassifyAdjustment(rInfo, lcl_AdjustmentIndexOf(aPosition.First),
+                                   AdjustmentKind::Radius);
+            lcl_ClassifyAdjustment(rInfo, lcl_AdjustmentIndexOf(aPosition.Second),
+                                   AdjustmentKind::Angle);
+            continue;
+        }
+        XYHandleRaw aHandle;
+        aHandle.aPosition = aPosition;
+        drawing::EnhancedCustomShapeParameter aRange;
+        if (aMap.getValue(u"RangeXMinimum"_ustr) >>= aRange)
+            aHandle.aMinX = aRange;
+        if (aMap.getValue(u"RangeXMaximum"_ustr) >>= aRange)
+            aHandle.aMaxX = aRange;
+        if (aMap.getValue(u"RangeYMinimum"_ustr) >>= aRange)
+            aHandle.aMinY = aRange;
+        if (aMap.getValue(u"RangeYMaximum"_ustr) >>= aRange)
+            aHandle.aMaxY = aRange;
+        bool bSwitched = false;
+        aMap.getValue(u"Switched"_ustr) >>= bSwitched;
+        if (bSwitched && bTallerThanWide)
+        {
+            std::swap(aHandle.aPosition.First, aHandle.aPosition.Second);
+            std::swap(aHandle.aMinX, aHandle.aMinY);
+            std::swap(aHandle.aMaxX, aHandle.aMaxY);
+        }
+        lcl_ClassifyAdjustment(rInfo, lcl_AdjustmentIndexOf(aHandle.aPosition.First),
+                               AdjustmentKind::BoundX);
+        lcl_ClassifyAdjustment(rInfo, lcl_AdjustmentIndexOf(aHandle.aPosition.Second),
+                               AdjustmentKind::BoundY);
+        rHandles.push_back(aHandle);
+    }
+}
+
+// Collects the adjustments an expression depends on, following references to other equations.
+void lcl_CollectAdjustmentsOfNode(const ExpressionNode* pNode, const EquationGuideSet& rSet,
+                                  std::set<sal_Int32>& rVisitedEquations,
+                                  std::set<sal_Int32>& rAdjustments)
+{
+    if (!pNode)
+        return;
+    if (pNode->getType() == ExpressionFunct::EnumAdjustment)
+    {
+        rAdjustments.insert(pNode->getIndex());
+        return;
+    }
+    if (pNode->getType() == ExpressionFunct::EnumEquation)
+    {
+        const sal_Int32 nEquation = pNode->getIndex();
+        if (nEquation >= 0 && o3tl::make_unsigned(nEquation) < rSet.aNodes.size()
+            && rVisitedEquations.insert(nEquation).second)
+            lcl_CollectAdjustmentsOfNode(rSet.aNodes[nEquation].get(), rSet, rVisitedEquations,
+                                         rAdjustments);
+        return;
+    }
+    for (sal_Int32 i = 0; const ExpressionNode* pChild = pNode->getChild(i); ++i)
+        lcl_CollectAdjustmentsOfNode(pChild, rSet, rVisitedEquations, rAdjustments);
+}
+
+// The adjustments that a path parameter written as a resolved number depends on. A handle that
+// drives one of them would move only part of the geometry, so no handle is written for them.
+void lcl_CollectFrozenAdjustments(
+    const cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rPairs,
+    const std::vector<OString>& rCoordTokens, const EquationGuideSet& rSet,
+    std::set<sal_Int32>& rFrozen)
+{
+    for (sal_Int32 i = 0; i < rPairs.getLength(); ++i)
+    {
+        for (sal_Int32 j = 0; j < 2; ++j)
+        {
+            const size_t nToken = 2 * static_cast<size_t>(i) + j;
+            if (nToken < rCoordTokens.size() && !rCoordTokens[nToken].isEmpty())
+                continue;
+            const drawing::EnhancedCustomShapeParameter& rParam
+                = j == 0 ? rPairs[i].First : rPairs[i].Second;
+            sal_Int32 nIndex = -1;
+            if (rParam.Type == drawing::EnhancedCustomShapeParameterType::ADJUSTMENT
+                && (rParam.Value >>= nIndex))
+                rFrozen.insert(nIndex);
+            else if (rParam.Type == drawing::EnhancedCustomShapeParameterType::EQUATION
+                     && (rParam.Value >>= nIndex) && nIndex >= 0
+                     && o3tl::make_unsigned(nIndex) < rSet.aNodes.size())
+            {
+                std::set<sal_Int32> aVisited;
+                lcl_CollectAdjustmentsOfNode(rSet.aNodes[nIndex].get(), rSet, aVisited, rFrozen);
+            }
+        }
+    }
+}
+
+// The path-space token of a handle parameter: a number, an adjustment (through its path-space
+// guide), the guide of an equation, or an edge of the box. Empty when it cannot be expressed.
+OString lcl_HandleParameterToken(const drawing::EnhancedCustomShapeParameter& rParam,
+                                 OoxmlEqContext& rCtx)
+{
+    sal_Int32 nIndex = -1;
+    double fValue = 0.0;
+    switch (rParam.Type)
+    {
+        case drawing::EnhancedCustomShapeParameterType::NORMAL:
+            if (rParam.Value >>= nIndex)
+                return OString::number(nIndex);
+            if (rParam.Value >>= fValue)
+                return OString::number(std::lround(fValue));
+            return OString();
+        case drawing::EnhancedCustomShapeParameterType::ADJUSTMENT:
+            if ((rParam.Value >>= nIndex) && nIndex >= 0)
+                return rCtx.adjustmentToken(nIndex);
+            return OString();
+        case drawing::EnhancedCustomShapeParameterType::EQUATION:
+            if ((rParam.Value >>= nIndex) && nIndex >= 0
+                && o3tl::make_unsigned(nIndex) < rCtx.rEqNames.size() && !rCtx.rEqIsAngle[nIndex])
+                return rCtx.rEqNames[nIndex];
+            return OString();
+        case drawing::EnhancedCustomShapeParameterType::LEFT:
+        case drawing::EnhancedCustomShapeParameterType::TOP:
+            return "0"_ostr;
+        case drawing::EnhancedCustomShapeParameterType::RIGHT:
+            return OString::number(rCtx.nViewBoxWidth);
+        case drawing::EnhancedCustomShapeParameterType::BOTTOM:
+            return OString::number(rCtx.nViewBoxHeight);
+        default:
+            return OString();
+    }
+}
+
+// A handle range in the units of the adjustment it limits: a number is scaled directly, anything
+// else through a guide.
+OString lcl_HandleRangeToken(const drawing::EnhancedCustomShapeParameter& rParam, sal_Int32 nScale,
+                             OoxmlEqContext& rCtx)
+{
+    if (rParam.Type == drawing::EnhancedCustomShapeParameterType::NORMAL)
+    {
+        sal_Int32 nValue = 0;
+        double fValue = 0.0;
+        if (rParam.Value >>= nValue)
+            fValue = nValue;
+        else if (!(rParam.Value >>= fValue))
+            return OString();
+        return OString::number(std::lround(fValue * 100000.0 / nScale));
+    }
+    const OString aToken = lcl_HandleParameterToken(rParam, rCtx);
+    if (aToken.isEmpty())
+        return OString();
+    return rCtx.addGuide("*/ " + aToken + " 100000 " + OString::number(nScale));
+}
+
+// Turns the xy handles into <a:ahXY> records: the adjustment a handle moves is named by gdRefX
+// and gdRefY, the ranges are given in the units of that adjustment (an axis without a range in
+// ODF is unlimited, which the presets spell as the extreme 32-bit values), and the position is
+// the handle's path-space position converted to the shape's EMU extent with the w and h
+// built-ins.
+void lcl_BuildXYHandles(const std::vector<XYHandleRaw>& rHandles,
+                        const std::vector<AdjustmentInfo>& rInfo,
+                        const std::set<sal_Int32>& rFrozen, OoxmlEqContext& rCtx,
+                        std::vector<XYHandleOut>& rOut)
+{
+    for (const XYHandleRaw& rHandle : rHandles)
+    {
+        XYHandleOut aOut;
+        const sal_Int32 nX = lcl_AdjustmentIndexOf(rHandle.aPosition.First);
+        const sal_Int32 nY = lcl_AdjustmentIndexOf(rHandle.aPosition.Second);
+        const bool bX = nX >= 0 && o3tl::make_unsigned(nX) < rInfo.size()
+                        && rInfo[nX].eKind == AdjustmentKind::BoundX && !rInfo[nX].bConflict
+                        && rFrozen.count(nX) == 0;
+        const bool bY = nY >= 0 && o3tl::make_unsigned(nY) < rInfo.size()
+                        && rInfo[nY].eKind == AdjustmentKind::BoundY && !rInfo[nY].bConflict
+                        && rFrozen.count(nY) == 0;
+        if (!bX && !bY)
+            continue;
+        if (bX)
+        {
+            const sal_Int32 nScale = lcl_AdjustmentScale(AdjustmentKind::BoundX, rCtx.nViewBoxWidth,
+                                                         rCtx.nViewBoxHeight);
+            aOut.aGdRefX = "adj" + OString::number(nX + 1);
+            rCtx.rUsedAdjustments.insert(nX);
+            aOut.aMinX = rHandle.aMinX ? lcl_HandleRangeToken(*rHandle.aMinX, nScale, rCtx)
+                                       : "-2147483647"_ostr;
+            aOut.aMaxX = rHandle.aMaxX ? lcl_HandleRangeToken(*rHandle.aMaxX, nScale, rCtx)
+                                       : "2147483647"_ostr;
+            if (aOut.aMinX.isEmpty() || aOut.aMaxX.isEmpty())
+                continue;
+        }
+        if (bY)
+        {
+            const sal_Int32 nScale = lcl_AdjustmentScale(AdjustmentKind::BoundY, rCtx.nViewBoxWidth,
+                                                         rCtx.nViewBoxHeight);
+            aOut.aGdRefY = "adj" + OString::number(nY + 1);
+            rCtx.rUsedAdjustments.insert(nY);
+            aOut.aMinY = rHandle.aMinY ? lcl_HandleRangeToken(*rHandle.aMinY, nScale, rCtx)
+                                       : "-2147483647"_ostr;
+            aOut.aMaxY = rHandle.aMaxY ? lcl_HandleRangeToken(*rHandle.aMaxY, nScale, rCtx)
+                                       : "2147483647"_ostr;
+            if (aOut.aMinY.isEmpty() || aOut.aMaxY.isEmpty())
+                continue;
+        }
+        const OString aPosX = lcl_HandleParameterToken(rHandle.aPosition.First, rCtx);
+        const OString aPosY = lcl_HandleParameterToken(rHandle.aPosition.Second, rCtx);
+        if (aPosX.isEmpty() || aPosY.isEmpty())
+            continue;
+        aOut.aPosX = rCtx.addGuide("*/ " + aPosX + " w " + OString::number(rCtx.nViewBoxWidth));
+        aOut.aPosY = rCtx.addGuide("*/ " + aPosY + " h " + OString::number(rCtx.nViewBoxHeight));
+        rOut.push_back(aOut);
+    }
+}
+
 // Builds the parametric part of the plan: equation guides, symbolic path coordinates and the
 // adjustment values they reference. Returns false, leaving rPlan as it was, when the shape
 // cannot be expressed that way; the caller then writes resolved coordinates as before.
@@ -5808,27 +6131,49 @@ bool lcl_BuildParametricPlan(
     const cpo::uno::Sequence<OUString>& rEquationStrings,
     const cpo::uno::Sequence<drawing::EnhancedCustomShapeSegment>& rSegments,
     const cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rPairs,
+    const cpo::uno::Sequence<beans::PropertyValues>& rHandles, sal_Int32 nAdjustmentCount,
     sal_Int32 nViewBoxWidth, sal_Int32 nViewBoxHeight, CustomGeometryPlan& rPlan)
 {
-    if (!rEquationStrings.hasElements())
-        return false;
+    // The handles decide how each adjustment is stored.
+    std::vector<AdjustmentInfo> aAdjustmentInfo(nAdjustmentCount);
+    std::vector<XYHandleRaw> aXYHandlesRaw;
+    const tools::Rectangle& rLogicRect = rCustomShape2d.GetLogicRect();
+    lcl_CollectXYHandles(rHandles, rLogicRect.GetHeight() > rLogicRect.GetWidth(), aXYHandlesRaw,
+                         aAdjustmentInfo);
 
     const std::set<sal_Int32> aNoAngleAdjustments;
     EquationGuideSet aEquations;
-    if (!lcl_CreateOoxmlGuides(rCustomShape2d, rEquationStrings, aNoAngleAdjustments, nViewBoxWidth,
-                               nViewBoxHeight, aEquations))
+    if (!lcl_CreateOoxmlGuides(rCustomShape2d, rEquationStrings, aNoAngleAdjustments,
+                               aAdjustmentInfo, nViewBoxWidth, nViewBoxHeight, aEquations))
         return false;
+    OoxmlEqContext aContext{ aEquations.aGuides,  aEquations.aUsedAdjustments,
+                             aEquations.aEqNames, aEquations.aEqIsAngle,
+                             aNoAngleAdjustments, aEquations.aGuideByFormula };
+    aContext.nViewBoxWidth = nViewBoxWidth;
+    aContext.nViewBoxHeight = nViewBoxHeight;
+    aContext.pAdjustmentInfo = &aAdjustmentInfo;
 
     CustomGeometryPlan aPlan = rPlan;
+    lcl_CollectCoordinateTokens(rSegments, rPairs, aContext, aPlan);
+    if (aContext.bFailed)
+        return false;
+
+    // A handle whose adjustment also feeds a coordinate that stays a number would move only
+    // part of the geometry.
+    std::set<sal_Int32> aFrozen;
+    lcl_CollectFrozenAdjustments(rPairs, aPlan.aCoordTokens, aEquations, aFrozen);
+    lcl_BuildXYHandles(aXYHandlesRaw, aAdjustmentInfo, aFrozen, aContext, aPlan.aXYHandles);
+    if (aContext.bFailed)
+        return false;
+
     std::set<sal_Int32> aDeclaredAdjustments = aEquations.aUsedAdjustments;
-    lcl_CollectCoordinateTokens(rSegments, rPairs, aEquations, aDeclaredAdjustments, aPlan);
     for (const Guide& rGuide : aPlan.aGuides)
         lcl_CollectAdjustmentsOfFormula(rGuide.sFormula, aDeclaredAdjustments);
     for (const Guide& rGuide : aEquations.aGuides)
         lcl_CollectAdjustmentsOfFormula(rGuide.sFormula, aDeclaredAdjustments);
 
-    // <a:avLst>: the current value of every referenced adjustment, which has to be a whole
-    // number in a guide.
+    // <a:avLst>: the current value of every referenced adjustment in its storage units; a plain
+    // value has to be a whole number.
     for (const sal_Int32 nAdjustment : aDeclaredAdjustments)
     {
         drawing::EnhancedCustomShapeParameter aParameter;
@@ -5836,11 +6181,24 @@ bool lcl_BuildParametricPlan(
         aParameter.Value <<= nAdjustment;
         double fValue = 0.0;
         rCustomShape2d.GetParameter(fValue, aParameter, false, false);
-        if (std::fabs(fValue - std::round(fValue)) > 1e-7)
+        const AdjustmentKind eKind
+            = nAdjustment >= 0 && o3tl::make_unsigned(nAdjustment) < aAdjustmentInfo.size()
+                  ? aAdjustmentInfo[nAdjustment].eKind
+                  : AdjustmentKind::Free;
+        const sal_Int32 nScale = lcl_AdjustmentScale(eKind, nViewBoxWidth, nViewBoxHeight);
+        if (nScale != 0)
+            fValue = fValue * 100000.0 / nScale;
+        else if (std::fabs(fValue - std::round(fValue)) > 1e-7)
+            return false;
+        if (std::fabs(fValue) > 2147483647.0)
             return false;
         aPlan.aAdjustments.push_back({ "adj" + OString::number(nAdjustment + 1),
                                        "val " + OString::number(std::lround(fValue)) });
     }
+
+    // A shape that neither equations nor adjustments drive stays as it is.
+    if (aPlan.aAdjustments.empty() && aEquations.aGuides.empty())
+        return false;
 
     // The equation guides follow the text-area guides, so that the latter keep their position
     // in the list.
@@ -5868,6 +6226,20 @@ bool lcl_BuildParametricPlan(
         if (aGuideNames.find(aToken) == aGuideNames.end()
             && aAdjustmentNames.find(aToken) == aAdjustmentNames.end())
             return false;
+    }
+    for (const XYHandleOut& rHandle : aPlan.aXYHandles)
+    {
+        for (const OString& rToken :
+             { rHandle.aGdRefX, rHandle.aMinX, rHandle.aMaxX, rHandle.aGdRefY, rHandle.aMinY,
+               rHandle.aMaxY, rHandle.aPosX, rHandle.aPosY })
+        {
+            if (rToken.isEmpty() || rToken.toInt64() != 0 || rToken == "0")
+                continue;
+            const OUString aToken = OUString::fromUtf8(rToken);
+            if (aGuideNames.find(aToken) == aGuideNames.end()
+                && aAdjustmentNames.find(aToken) == aAdjustmentNames.end())
+                return false;
+        }
     }
 
     rPlan = aPlan;
@@ -6285,7 +6657,35 @@ void lcl_WriteCustomGeometryLists(const FSHelperPtr& rFS, const CustomGeometryPl
         }
         rFS->endElementNS(XML_a, XML_gdLst);
     }
-    rFS->singleElementNS(XML_a, XML_ahLst);
+    if (rPlan.aXYHandles.empty())
+    {
+        rFS->singleElementNS(XML_a, XML_ahLst);
+    }
+    else
+    {
+        rFS->startElementNS(XML_a, XML_ahLst);
+        for (const XYHandleOut& rHandle : rPlan.aXYHandles)
+        {
+            rtl::Reference<sax_fastparser::FastAttributeList> xAttrs
+                = sax_fastparser::FastSerializerHelper::createAttrList();
+            if (!rHandle.aGdRefX.isEmpty())
+            {
+                xAttrs->add(XML_gdRefX, rHandle.aGdRefX);
+                xAttrs->add(XML_minX, rHandle.aMinX);
+                xAttrs->add(XML_maxX, rHandle.aMaxX);
+            }
+            if (!rHandle.aGdRefY.isEmpty())
+            {
+                xAttrs->add(XML_gdRefY, rHandle.aGdRefY);
+                xAttrs->add(XML_minY, rHandle.aMinY);
+                xAttrs->add(XML_maxY, rHandle.aMaxY);
+            }
+            rFS->startElementNS(XML_a, XML_ahXY, xAttrs);
+            rFS->singleElementNS(XML_a, XML_pos, XML_x, rHandle.aPosX, XML_y, rHandle.aPosY);
+            rFS->endElementNS(XML_a, XML_ahXY);
+        }
+        rFS->endElementNS(XML_a, XML_ahLst);
+    }
 
     if (!rPlan.aGuides.empty())
     {
@@ -6496,8 +6896,20 @@ bool DrawingML::WriteCustomGeometry(
     // Shapes imported from OOXML keep their equations in the shape's EMU space and their
     // viewBox is a substitute; they stay with resolved coordinates for now.
     if (bNominalViewBox && !bOOXML)
-        lcl_BuildParametricPlan(aCustomShape2d, aEquationSeq, aSegments, aPairs, nViewBoxWidth,
-                                nViewBoxHeight, aPlan);
+    {
+        cpo::uno::Sequence<beans::PropertyValues> aHandles;
+        cpo::uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues;
+        for (const beans::PropertyValue& rProp : *pGeometrySeq)
+        {
+            if (rProp.Name == "Handles")
+                rProp.Value >>= aHandles;
+            else if (rProp.Name == "AdjustmentValues")
+                rProp.Value >>= aAdjustmentValues;
+        }
+        lcl_BuildParametricPlan(aCustomShape2d, aEquationSeq, aSegments, aPairs, aHandles,
+                                aAdjustmentValues.getLength(), nViewBoxWidth, nViewBoxHeight,
+                                aPlan);
+    }
     prepareGluePoints(aPlan.aGuides, aEquationSeq, aGluePoints, bOOXML, nViewBoxWidth,
                       nViewBoxHeight);
     const std::vector<OString>* pCoordTokens

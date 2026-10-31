@@ -1233,15 +1233,17 @@ CPPUNIT_TEST_FIXTURE(Test, testFlipAndRotateCustomShape)
     assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path", "w", u"21600");
     assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path", "h", u"21600");
     // The shape (mso-spt89) is drawn by its three adjustment values, so they are declared in
-    // <a:avLst> and the coordinates that depend on them name an adjustment or a guide; a
-    // literal coordinate (the moveTo x) stays a plain number.
+    // <a:avLst> as fractions of the box (10062 of 21600 = 46583 of 100000), its two handles are
+    // written, and the coordinates that depend on an adjustment name a guide; a literal
+    // coordinate (the moveTo x) stays a plain number.
     assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", 3);
-    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd[1]", "fmla", u"val 10062");
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd[1]", "fmla", u"val 46583");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", 2);
     assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:moveTo/a:pt", "x", u"0");
     CPPUNIT_ASSERT(
         getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:moveTo/a:pt", "y").startsWith("f"));
-    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "x", u"adj3");
-    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "y", u"adj1");
+    CPPUNIT_ASSERT(
+        getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "x").startsWith("f"));
     // check path is closed
     assertXPath(pXmlDoc, "//a:close", 1);
 }
