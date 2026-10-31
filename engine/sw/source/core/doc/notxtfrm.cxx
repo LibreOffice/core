@@ -1540,7 +1540,7 @@ bool SwNoTextFrame::HasAnimation() const
 
 void SwNoTextFrame::CreatePrimitives(sw::vector::Collector& rCollector) const
 {
-    if (!getFrameArea().HasArea())
+    if (!getFrameArea().HasArea() || !rCollector.wants(GetPaintArea()))
         return;
 
     rCollector.open(*this);

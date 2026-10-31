@@ -2365,9 +2365,8 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
     bool bChgFntColor = false;
     bool bChgLineColor = false;
 
-    // Primitives go to any client, so they take no colors from the view that happens to be
-    // current.
-    const bool bForAnyView = GetPrimitiveSink() != nullptr;
+    // Primitives that go to any client keep the colors of the document, whatever the current view.
+    const bool bForAnyView = GetPrimitiveSink() && !GetPrimitiveSink()->isForView();
     const SwViewShell *pVSh = bForAnyView ? nullptr : GetShell();
     const bool bOutputToWindow(pVSh && (pVSh->GetWin() || pVSh->isOutputToWindow()));
 

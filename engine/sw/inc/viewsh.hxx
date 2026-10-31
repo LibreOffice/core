@@ -287,6 +287,9 @@ public:
         pOut, ie. starts in 0,0 and ends in width/height.
     */
     void PaintTile(VirtualDevice &rDevice, int contextWidth, int contextHeight, int tilePosX, int tilePosY, tools::Long tileWidth, tools::Long tileHeight);
+    /// Paints the layout in rRect, in document twips, from the primitive decomposition of the
+    /// pages.
+    void PaintFromPrimitives(OutputDevice& rDevice, const tools::Rectangle& rRect);
 
     bool IsPaintInProgress() const { return mbPaintInProgress; }
     bool IsDrawingLayerPaintInProgress() const { return !mPrePostPaintRegions.empty(); }

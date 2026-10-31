@@ -4372,7 +4372,7 @@ void SwTextFrame::UpdateOutlineContentVisibilityButton(SwWrtShell* pWrtSh) const
 void SwTextFrame::CreatePrimitives(sw::vector::Collector& rCollector) const
 {
     // A hidden paragraph takes no room and draws nothing.
-    if (!getFramePrintArea().HasArea() || IsHiddenNow())
+    if (!getFramePrintArea().HasArea() || IsHiddenNow() || !rCollector.wants(GetPaintArea()))
         return;
 
     rCollector.open(*this);
@@ -4381,8 +4381,8 @@ void SwTextFrame::CreatePrimitives(sw::vector::Collector& rCollector) const
     drawinglayer::primitive2d::Primitive2DContainer aBorders;
     rCollector.add(CreateShadowAndBorderPrimitives(aOrigin, aBorders));
     drawinglayer::primitive2d::Primitive2DContainer aOverObjects;
-    rCollector.add(CreateTextPrimitives(aOrigin, aOverObjects));
-    rCollector.add(CreateExtraDataPrimitives(aOrigin));
+    rCollector.add(CreateTextPrimitives(aOrigin, rCollector.isForView(), aOverObjects));
+    rCollector.add(CreateExtraDataPrimitives(aOrigin, rCollector.isForView()));
     // The entry of the border lines comes after the objects anchored as a character, so it also
     // holds what lies over them.
     aBorders.append(std::move(aOverObjects));

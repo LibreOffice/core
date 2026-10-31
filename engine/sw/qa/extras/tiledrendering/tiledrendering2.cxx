@@ -39,6 +39,9 @@
 #include <unotools/datetime.hxx>
 #include <vcl/virdev.hxx>
 #include <unotxdoc.hxx>
+#include <vcl/BitmapReadAccess.hxx>
+#include <VectorCollector.hxx>
+#include <itabenum.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -55,6 +58,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
@@ -5106,6 +5110,126 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testManageChangesListIgnoresOtherView
                                      rDialog.indexOf("writerchanges"));
     KitHelper::setView(nView1);
     pWrtShell1->GetView().GetViewFrame().SetChildWindow(FN_REDLINE_ACCEPT, false);
+}
+
+namespace
+{
+/// The tile at the top left of the first page, painted by the paint code of the frames or from
+/// the primitive decomposition of the page.
+Bitmap paintTopLeftTile(SwXTextDocument* pXTextDocument, bool bFromPrimitives)
+{
+    const bool bWasFromPrimitives = sw::vector::tilesFromPrimitives();
+    sw::vector::setTilesFromPrimitives(bFromPrimitives);
+    comphelper::ScopeGuard aGuard(
+        [bWasFromPrimitives] { sw::vector::setTilesFromPrimitives(bWasFromPrimitives); });
+    const tools::Long nSize = 512;
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
+    std::vector<unsigned char> aPixmap(nSize * nSize * 4, 0);
+    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+    pDevice->SetOutputSizePixelScaleOffsetAndKitBuffer(Size(nSize, nSize), 1.0, Point(),
+                                                        aPixmap.data());
+    pXTextDocument->paintTile(*pDevice, nSize, nSize, 0, 0, 7680, 7680);
+    pDevice->EnableMapMode(false);
+    return pDevice->GetBitmap(Point(0, 0), Size(nSize, nSize));
+}
+
+/// Whether two colors are within three eighths of the range of each other in every color channel.
+bool closeColors(const Color& rOne, const Color& rOther)
+{
+    return std::abs(rOne.GetRed() - rOther.GetRed()) <= 96
+           && std::abs(rOne.GetGreen() - rOther.GetGreen()) <= 96
+           && std::abs(rOne.GetBlue() - rOther.GetBlue()) <= 96;
+}
+
+/// Whether a pixel of rOther within nReach pixels of (nCenterX, nCenterY) has a color close to
+/// rColor.
+bool hasCloseNeighbor(const BitmapScopedReadAccess& rOther, const Size& rSize,
+                      tools::Long nCenterX, tools::Long nCenterY, const Color& rColor,
+                      tools::Long nReach)
+{
+    for (tools::Long nY = std::max<tools::Long>(nCenterY - nReach, 0);
+         nY <= std::min<tools::Long>(nCenterY + nReach, rSize.Height() - 1); ++nY)
+    {
+        for (tools::Long nX = std::max<tools::Long>(nCenterX - nReach, 0);
+             nX <= std::min<tools::Long>(nCenterX + nReach, rSize.Width() - 1); ++nX)
+        {
+            if (closeColors(rColor, Color(rOther->GetPixel(nY, nX))))
+                return true;
+        }
+    }
+    return false;
+}
+
+/// The share of the pixels where the color of one tile has no close match within nReach pixels
+/// in the other tile. The paint code snaps lines and text to whole pixels of the screen at 100%,
+/// which are 15 twips, and the primitives keep their exact positions. So the same content can lie
+/// up to 15 twips apart, and the anti-aliased edge of a line has other levels of gray when the
+/// line lies at another fraction of a pixel. nReach is the number of pixels of the tile that
+/// cover 15 twips: one at 100%, two at 200%.
+double differingShare(const Bitmap& rOne, const Bitmap& rOther, tools::Long nReach = 1)
+{
+    const Size aSize = rOne.GetSizePixel();
+    BitmapScopedReadAccess pOne(rOne);
+    BitmapScopedReadAccess pOther(rOther);
+    tools::Long nDiffering = 0;
+    for (tools::Long nY = 0; nY < aSize.Height(); ++nY)
+    {
+        for (tools::Long nX = 0; nX < aSize.Width(); ++nX)
+        {
+            const Color aOne(pOne->GetPixel(nY, nX));
+            const Color aOther(pOther->GetPixel(nY, nX));
+            if (closeColors(aOne, aOther))
+                continue;
+            if (!hasCloseNeighbor(pOther, aSize, nX, nY, aOne, nReach)
+                || !hasCloseNeighbor(pOne, aSize, nX, nY, aOther, nReach))
+                ++nDiffering;
+        }
+    }
+    return double(nDiffering) / (aSize.Width() * aSize.Height());
+}
+
+/// The number of pixels that are dark, as text on white paper is.
+tools::Long countDarkPixels(const Bitmap& rBitmap)
+{
+    const Size aSize = rBitmap.GetSizePixel();
+    BitmapScopedReadAccess pAccess(rBitmap);
+    tools::Long nDark = 0;
+    for (tools::Long nY = 0; nY < aSize.Height(); ++nY)
+    {
+        for (tools::Long nX = 0; nX < aSize.Width(); ++nX)
+        {
+            if (Color(pAccess->GetPixel(nY, nX)).IsDark())
+                ++nDark;
+        }
+    }
+    return nDark;
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTileFromPrimitivesLooksLikeThePaintedTile)
+{
+    // Text, a paragraph border and a table are the parts the decomposition builds on its own.
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert(u"The decomposition draws this text like the paint code does."_ustr);
+    table::BorderLine2 aBorder;
+    aBorder.OuterLineWidth = 50;
+    aBorder.LineWidth = 50;
+    uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
+    xParagraph->setPropertyValue(u"BottomBorder"_ustr, uno::Any(aBorder));
+    pWrtShell->SplitNode();
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/2);
+    Scheduler::ProcessEventsToIdle();
+
+    const Bitmap aPainted = paintTopLeftTile(pXTextDocument, /*bFromPrimitives=*/false);
+    const Bitmap aFromPrimitives = paintTopLeftTile(pXTextDocument, /*bFromPrimitives=*/true);
+
+    // The tile shows the text and the table lines, rather than paper alone.
+    CPPUNIT_ASSERT_GREATER(tools::Long(100), countDarkPixels(aFromPrimitives));
+    // The limit is 0.2% of the tile. One horizontal table line is about 0.33% of it, so a tile
+    // that lacks such a line is over the limit.
+    CPPUNIT_ASSERT_LESS(0.002, differingShare(aPainted, aFromPrimitives));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

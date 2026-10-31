@@ -4982,6 +4982,11 @@ void SwFrame::CreatePrimitives(sw::vector::Collector& rCollector) const
     // rows below it.
     if (!getFramePrintArea().HasArea() && !IsRowFrame() && !IsPageFrame())
         return;
+    if (!rCollector.wants(GetPaintArea()))
+        return;
+    // A covered cell lies under the cell that spans over it, which draws that area.
+    if (IsCoveredCell())
+        return;
 
     rCollector.open(*this);
     const Point aOrigin(rCollector.origin());

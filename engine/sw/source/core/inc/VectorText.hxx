@@ -41,14 +41,15 @@ class SW_DLLPUBLIC TextSink
 {
 public:
     /// rOrigin is the top left of the entry the text belongs to and rTextArea the area the lines
-    /// wrap in, both in document twips. The automatic text color stays automatic.
+    /// wrap in, both in document twips. With bForView set, the view being painted decides the
+    /// text colors. Otherwise the automatic text color stays automatic.
     TextSink(const Point& rOrigin, const SwRect& rTextArea,
-             drawinglayer::primitive2d::TextPortionAlign eAlign);
+             drawinglayer::primitive2d::TextPortionAlign eAlign, bool bForView);
 
     /// A sink for text drawn beside the paragraph, like line numbers. Its text is not tagged with
-    /// a line, and take() gives the primitives as they were added. rOrigin is as in the other
-    /// constructor.
-    TextSink(const Point& rOrigin);
+    /// a line, and take() gives the primitives as they were added. rOrigin and bForView are as in
+    /// the other constructor.
+    TextSink(const Point& rOrigin, bool bForView);
 
     /// Starts the next line. nLeft is where the line starts before alignment and nWidth how far
     /// it reaches, both in document twips.
@@ -109,6 +110,8 @@ public:
 
     const Point& origin() const { return maOrigin; }
 
+    bool isForView() const { return mbForView; }
+
     /// The block with the paragraph and its lines, empty when nothing was drawn. The sink is
     /// empty afterwards.
     drawinglayer::primitive2d::Primitive2DContainer take();
@@ -122,6 +125,7 @@ private:
 
     Point maOrigin;
     SwRect maTextArea;
+    bool mbForView;
     /// Whether the text is the one of the paragraph, tagged with its lines and grouped in a block.
     bool mbParagraph;
 

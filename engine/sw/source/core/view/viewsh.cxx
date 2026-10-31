@@ -86,6 +86,11 @@
 #include <sfx2/kit/helper.hxx>
 #include <hffrm.hxx>
 #include <VectorPart.hxx>
+#include <VectorCollector.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
 
 #if !HAVE_FEATURE_DESKTOP
 #include <vcl/sysdata.hxx>
@@ -1948,6 +1953,45 @@ void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     }
 }
 
+void SwViewShell::PaintFromPrimitives(OutputDevice& rDevice, const tools::Rectangle& rRect)
+{
+    const SwRootFrame* pLayout = GetLayout();
+    if (!pLayout)
+        return;
+
+    // The decomposition reads a layout that does not change under it, so nothing is drawn here
+    // while an action runs, while painting is locked or while another paint is in progress. In
+    // those states Paint keeps the area so that it is drawn later: as a rectangle of the shell, an
+    // invalidation of the window or an entry of the paint queue. So the area goes to Paint.
+    if (mnLockPaint || !mbPaintWorks || mnStartAction || mbPaintInProgress
+        || SwRootFrame::IsInPaint())
+    {
+        Paint(rDevice, rRect);
+        return;
+    }
+    mbPaintInProgress = true;
+    // The flag is cleared also when the decomposition throws, so later paints still draw.
+    comphelper::ScopeGuard aPaintInProgressGuard([this] { mbPaintInProgress = false; });
+    // The current shell is this view, whose settings decide the colors of the text.
+    CurrShell aCurr(this);
+
+    // The tile holds only what the pages draw, and the area between the pages stays empty.
+    const SwRect aArea(rRect);
+    const drawinglayer::primitive2d::Primitive2DContainer aPrimitives
+        = sw::vector::createAreaPrimitives(*pLayout, aArea, GetViewOptions()->GetDocColor());
+
+    drawinglayer::geometry::ViewInformation2D aViewInformation;
+    aViewInformation.setViewTransformation(rDevice.GetViewTransformation());
+    // The viewport covers the whole tile, up to the end of its last twip.
+    aViewInformation.setViewport(basegfx::B2DRange(aArea.Left(), aArea.Top(),
+                                                   aArea.Left() + aArea.Width(),
+                                                   aArea.Top() + aArea.Height()));
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor
+        = drawinglayer::processor2d::createProcessor2DFromOutputDevice(rDevice, aViewInformation);
+    if (pProcessor)
+        pProcessor->process(aPrimitives);
+}
+
 void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contextHeight, int tilePosX, int tilePosY, tools::Long tileWidth, tools::Long tileHeight)
 {
     // SwViewShell's output device setup
@@ -2005,7 +2049,10 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     CheckInvalidForPaint(SwRect(aOutRect));
 
     // draw - works in logic coordinates
-    Paint(rDevice, aOutRect);
+    if (sw::vector::tilesFromPrimitives())
+        PaintFromPrimitives(rDevice, aOutRect);
+    else
+        Paint(rDevice, aOutRect);
 
     SwPostItMgr* pPostItMgr = GetPostItMgr();
     if (GetViewOptions()->IsPostIts() && pPostItMgr)

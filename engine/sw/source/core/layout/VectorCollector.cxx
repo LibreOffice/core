@@ -28,6 +28,10 @@
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
+#include <rootfrm.hxx>
+#include <tools/color.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
@@ -37,6 +41,8 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdlib>
+#include <string_view>
 
 namespace sw::vector
 {
@@ -250,7 +256,7 @@ void addShape(Collector& rCollector, const SwAnchoredObject& rObject)
     const std::optional<SwRect> oClip = getHorizontalRuleClip(pObject);
     if (oClip)
         aBox.Intersection(*oClip);
-    if (!aBox.HasArea())
+    if (!aBox.HasArea() || !rCollector.wants(aBox))
         return;
 
     drawinglayer::primitive2d::Primitive2DContainer aPrimitives;
@@ -272,8 +278,10 @@ void addShape(Collector& rCollector, const SwAnchoredObject& rObject)
 
     rCollector.open(entryIdOf(*pObject), EntryKind::Shape, aBox);
     rCollector.current().moAnchor = anchorOf(rObject);
-    svx::vector::decomposeForComparison(aPrimitives, rCollector.current().maDrawn,
-                                        drawinglayer::geometry::ViewInformation2D());
+    // A view draws the entries right away and compares nothing, so it needs no decomposition.
+    if (!rCollector.isForView())
+        svx::vector::decomposeForComparison(aPrimitives, rCollector.current().maDrawn,
+                                            drawinglayer::geometry::ViewInformation2D());
     rCollector.add(new drawinglayer::primitive2d::TransformPrimitive2D(
         basegfx::utils::createTranslateB2DHomMatrix(-aBox.Left(), -aBox.Top()),
         std::move(aPrimitives)));
@@ -328,7 +336,7 @@ void addObjects(Collector& rCollector, const SwSortedObjs& rObjects,
     std::vector<const SwAnchoredObject*> aObjects;
     for (const SwAnchoredObject* pObject : rObjects)
     {
-        if (!isDrawn(*pObject, rAccess, /*bForView=*/false))
+        if (!isDrawn(*pObject, rAccess, rCollector.isForView()))
             continue;
         if (bAsCharacter
             && pObject->GetFrameFormat()->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
@@ -389,6 +397,60 @@ std::vector<Entry> decomposePage(const SwPageFrame& rPage)
     Collector aCollector;
     rPage.CreatePrimitives(aCollector);
     return aCollector.take();
+}
+
+namespace
+{
+bool& tilesFromPrimitivesFlag()
+{
+    // An empty value and "0" leave the switch off, as when the variable is not set.
+    static bool bFromPrimitives = [] {
+        const char* pValue = std::getenv("SW_TILES_FROM_PRIMITIVES");
+        return pValue && *pValue && std::string_view(pValue) != "0";
+    }();
+    return bFromPrimitives;
+}
+
+drawinglayer::primitive2d::Primitive2DReference colorFill(const SwRect& rArea, const Color& rColor)
+{
+    const basegfx::B2DRange aRange(rArea.Left(), rArea.Top(), rArea.Left() + rArea.Width(),
+                                   rArea.Top() + rArea.Height());
+    return new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+        basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aRange)),
+        rColor.getBColor());
+}
+}
+
+bool tilesFromPrimitives() { return tilesFromPrimitivesFlag(); }
+
+void setTilesFromPrimitives(bool bFromPrimitives) { tilesFromPrimitivesFlag() = bFromPrimitives; }
+
+drawinglayer::primitive2d::Primitive2DContainer
+createAreaPrimitives(const SwRootFrame& rLayout, const SwRect& rArea, const Color& rPaper)
+{
+    drawinglayer::primitive2d::Primitive2DContainer aPrimitives;
+    for (const SwFrame* pFrame = rLayout.Lower(); pFrame; pFrame = pFrame->GetNext())
+    {
+        if (!pFrame->IsPageFrame() || !pFrame->getFrameArea().Overlaps(rArea))
+            continue;
+
+        aPrimitives.push_back(colorFill(pFrame->getFrameArea(), rPaper));
+        // Every tile builds what it shows anew, so it builds only the frames and the objects
+        // that reach into its area.
+        Collector aCollector(/*bForView=*/true);
+        aCollector.setArea(rArea);
+        pFrame->CreatePrimitives(aCollector);
+        for (Entry& rEntry : aCollector.take())
+        {
+            if (rEntry.maPrimitives.empty())
+                continue;
+            aPrimitives.push_back(new drawinglayer::primitive2d::TransformPrimitive2D(
+                basegfx::utils::createTranslateB2DHomMatrix(rEntry.maBox.Left(),
+                                                            rEntry.maBox.Top()),
+                std::move(rEntry.maPrimitives)));
+        }
+    }
+    return aPrimitives;
 }
 }
 

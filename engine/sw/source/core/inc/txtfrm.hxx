@@ -435,16 +435,18 @@ public:
     /// and column on the way up narrows that area, and the lines are cut at its edges.
     bool IsCutByUpper() const;
     /// The text of the frame as primitives relative to rOrigin: one block holding the paragraph
-    /// and its lines. Empty for a frame that shows no text. The automatic text color stays
-    /// automatic. rOverObjects receives what lies over the objects anchored as a character in the frame,
+    /// and its lines. Empty for a frame that shows no text. With bForView set, the view being
+    /// painted decides the text colors. Otherwise the automatic text color stays automatic.
+    /// rOverObjects receives what lies over the objects anchored as a character in the frame,
     /// like the cross over a deleted picture, relative to rOrigin too.
     drawinglayer::primitive2d::Primitive2DContainer
-    CreateTextPrimitives( const Point& rOrigin,
+    CreateTextPrimitives( const Point& rOrigin, bool bForView,
                           drawinglayer::primitive2d::Primitive2DContainer& rOverObjects ) const;
     /// The line numbers and the change bars beside the lines of the frame, as primitives relative
-    /// to rOrigin. Empty when the frame has neither. The automatic text color stays automatic.
+    /// to rOrigin. Empty when the frame has neither. With bForView set, the view being painted
+    /// decides the text colors. Otherwise the automatic text color stays automatic.
     drawinglayer::primitive2d::Primitive2DContainer
-    CreateExtraDataPrimitives( const Point& rOrigin ) const;
+    CreateExtraDataPrimitives( const Point& rOrigin, bool bForView ) const;
 
     /**
      * Layout oriented cursor travelling:

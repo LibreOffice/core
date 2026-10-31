@@ -100,9 +100,10 @@ createMask(const SwRect& rArea, const Point& rOrigin,
 }
 
 TextSink::TextSink(const Point& rOrigin, const SwRect& rTextArea,
-                   drawinglayer::primitive2d::TextPortionAlign eAlign)
+                   drawinglayer::primitive2d::TextPortionAlign eAlign, bool bForView)
     : maOrigin(rOrigin)
     , maTextArea(rTextArea)
+    , mbForView(bForView)
     , mbParagraph(true)
 {
     // A text frame shows a single paragraph.
@@ -112,8 +113,9 @@ TextSink::TextSink(const Point& rOrigin, const SwRect& rTextArea,
     maLayout.mfTextAreaHeight = rTextArea.Height();
 }
 
-TextSink::TextSink(const Point& rOrigin)
+TextSink::TextSink(const Point& rOrigin, bool bForView)
     : maOrigin(rOrigin)
+    , mbForView(bForView)
     , mbParagraph(false)
 {
 }
@@ -155,7 +157,7 @@ void TextSink::addText(const OutputDevice& rDevice, const Point& rPosition, cons
     aState.maTextColor = rDevice.GetTextColor().getBColor();
     // Text left in the automatic color stays automatic, which means the color that reads on the
     // paper under it.
-    if (rDevice.GetFont().GetColor() == COL_AUTO)
+    if (!mbForView && rDevice.GetFont().GetColor() == COL_AUTO)
     {
         aState.maTextColor = basegfx::BColor();
         aState.maTextColor.setAutomatic(true);

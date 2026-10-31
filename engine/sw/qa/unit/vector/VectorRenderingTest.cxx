@@ -14,6 +14,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/style/GraphicLocation.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XTextTableCursor.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -495,6 +496,46 @@ CPPUNIT_TEST_FIXTURE(Test, testVectorFrameBehindTheTextLiesBetweenHeaderAndBody)
     CPPUNIT_ASSERT(aBodyIterator != aEntries.end());
     CPPUNIT_ASSERT(aHeaderIterator < aFlyIterator);
     CPPUNIT_ASSERT(aFlyIterator < aBodyIterator);
+}
+
+/// A cell covered by a cell merged down over it draws nothing: neither the cell nor its
+/// paragraph has an entry.
+CPPUNIT_TEST_FIXTURE(Test, testVectorCoveredCellHasNoEntry)
+{
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/2);
+    uno::Reference<text::XTextTablesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextTableCursor> xCursor(
+        xTable->createCursorByCellName(u"A1"_ustr));
+    xCursor->gotoCellByName(u"A2"_ustr, /*bExpand=*/true);
+    xCursor->mergeRange();
+    calcLayout();
+
+    std::vector<sw::vector::Entry> aEntries = decomposeFirstPage();
+
+    // A1 spans over A2, so A1, B1 and B2 are the cells drawn.
+    std::vector<sal_uInt64> aCellIds;
+    for (const sw::vector::Entry& rEntry : aEntries)
+    {
+        if (rEntry.meKind == sw::vector::EntryKind::Cell)
+            aCellIds.push_back(rEntry.mnId);
+    }
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aCellIds.size());
+    // Every paragraph drawn in the table sits in one of the cells drawn.
+    const sw::vector::Entry* pBody = findEntry(aEntries, sw::vector::EntryKind::Body);
+    CPPUNIT_ASSERT(pBody);
+    for (const sw::vector::Entry& rEntry : aEntries)
+    {
+        if (rEntry.meKind != sw::vector::EntryKind::TextFrame || !rEntry.moParent
+            || *rEntry.moParent == pBody->mnId)
+            continue;
+        CPPUNIT_ASSERT(std::find(aCellIds.begin(), aCellIds.end(), *rEntry.moParent)
+                       != aCellIds.end());
+    }
 }
 
 /// The text of a paragraph is drawn as text portions with the advances of the layout,

@@ -7255,7 +7255,7 @@ bool SwFrame::IsInCoveredCell() const
 
 void SwTabFrame::CreatePrimitives(sw::vector::Collector& rCollector) const
 {
-    if (!getFramePrintArea().HasArea())
+    if (!getFramePrintArea().HasArea() || !rCollector.wants(GetPaintArea()))
         return;
 
     rCollector.open(*this);
