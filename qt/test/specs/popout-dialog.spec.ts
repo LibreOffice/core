@@ -96,10 +96,13 @@ describe('Popped-out jsdialogs', () => {
 
 			// The dialog appears in the main document window itself.
 			await browser.webEngine.waitForCondition(
-				() => document.querySelector('.jsdialog-container') !== null,
+				() =>
+					document.querySelector(
+						'.jsdialog-container #HyperlinkInternetPage',
+					) !== null,
 				{
 					timeout: 10000,
-					timeoutMsg: 'No dialog container in the document window',
+					timeoutMsg: 'No Hyperlink dialog in the document window',
 				},
 			);
 
