@@ -5665,6 +5665,7 @@ static void addSharedPresetPaths(std::u16string_view rPresetsUrl)
     addOrganizationPath(u"Dictionary"_ustr, OUString::Concat(rPresetsUrl) + "/wordbook");
     // The templates sit in a group subdirectory of this directory, so this is the root.
     addOrganizationPath(u"Template"_ustr, OUString::Concat(rPresetsUrl) + "/template");
+    addOrganizationPath(u"DocumentTheme"_ustr, OUString::Concat(rPresetsUrl) + "/themes");
 
     // The dictionary list is a scan of the Dictionary path, so it has to be taken again now
     // that the path has one more root.

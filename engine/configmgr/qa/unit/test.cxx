@@ -543,9 +543,9 @@ cpo::uno::Reference< cpo::uno::XInterface > Test::createUpdateAccess(
         cpo::uno::Sequence< cpo::uno::Any >(&arg, 1));
 }
 
-/// Collabora Online puts the shared AutoText, Dictionary and Template directories into the
-/// configuration at run time, by handing an .xcu to XUpdate. That needs the "sharedext" layer
-/// to be declared in CONFIGURATION_LAYERS, and nothing says so out loud if it is not: the
+/// Collabora Online puts the shared AutoText, Dictionary, Template and DocumentTheme directories
+/// into the configuration at run time, by handing an .xcu to XUpdate. That needs the "sharedext"
+/// layer to be declared in CONFIGURATION_LAYERS, and nothing says so out loud if it is not: the
 /// caller only logs, so the paths quietly go missing. This test is what says so.
 void Test::testSharedOrganizationLayer()
 {

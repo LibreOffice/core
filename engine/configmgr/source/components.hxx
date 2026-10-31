@@ -157,8 +157,8 @@ private:
     ExternalServices externalServices_;
     rtl::Reference< WriteThread > writeThread_;
     // The "sharedext" layer. No extension exists any more; the layer now only
-    // carries the shared AutoText, Dictionary and Template preset paths that
-    // desktop/source/lib/init.cxx files into it at run time.
+    // carries the shared AutoText, Dictionary, Template and DocumentTheme preset
+    // paths that desktop/source/lib/init.cxx files into it at run time.
     int sharedExtensionLayer_;
     ModificationTarget modificationTarget_;
     OUString modificationFileUrl_;

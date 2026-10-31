@@ -88,6 +88,7 @@
 
 #include <lib/init.hxx>
 #include <vcl/ITiledRenderable.hxx>
+#include <svx/ColorSets.hxx>
 #include <svx/svxids.hrc>
 
 #include <cppunit/TestAssert.h>
@@ -235,6 +236,7 @@ public:
     void testWriterComments();
     void testTranslationProviders();
     void testAutoCorrectListFromHost();
+    void testSharedPresetThemes();
     void testUserSettingsPersistedCallback();
     void testUserSettingsPersistedOnlyForOwnerView();
     void testDictionaryStoredOnlyForOwnerView();
@@ -356,6 +358,7 @@ public:
     CPPUNIT_TEST(testWriterComments);
     CPPUNIT_TEST(testTranslationProviders);
     CPPUNIT_TEST(testAutoCorrectListFromHost);
+    CPPUNIT_TEST(testSharedPresetThemes);
     CPPUNIT_TEST(testUserSettingsPersistedCallback);
     CPPUNIT_TEST(testUserSettingsPersistedOnlyForOwnerView);
     CPPUNIT_TEST(testDictionaryStoredOnlyForOwnerView);
@@ -4186,6 +4189,55 @@ void DesktopKitTest::testAutoCorrectListFromHost()
     // the second word stayed zzqx: the language kept the list it had looked up
     // before the user's arrived.
     CPPUNIT_ASSERT_MESSAGE(aText.toUtf8().getStr(), aText.endsWith(" quartz "));
+}
+
+void DesktopKitTest::testSharedPresetThemes()
+{
+    // Given the shared presets of a configuration, holding a document theme:
+    COKitImpl aOffice;
+    utl::TempFileNamed aTempDir(nullptr, /*bDirectory=*/true);
+    aTempDir.EnableKillingFile();
+    const OUString aThemesDir = aTempDir.GetURL() + "/themes";
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, osl::Directory::create(aThemesDir));
+    const OUString aThemeFile = aThemesDir + "/Corporate.theme";
+    comphelper::ScopeGuard aRemoveTheme(
+        [&aThemeFile, &aThemesDir]
+        {
+            osl::File::remove(aThemeFile);
+            osl::Directory::remove(aThemesDir);
+        });
+    osl::File aFile(aThemeFile);
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None,
+                         aFile.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create));
+    const OString aTheme = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                           "<theme name=\"Corporate\"><theme-colors name=\"Corporate\">"
+                           "<color name=\"dark1\" color=\"#000000\"/>"
+                           "<color name=\"light1\" color=\"#FFFFFF\"/>"
+                           "<color name=\"dark2\" color=\"#1F1F1F\"/>"
+                           "<color name=\"light2\" color=\"#EEEEEE\"/>"
+                           "<color name=\"accent1\" color=\"#EE0000\"/>"
+                           "<color name=\"accent2\" color=\"#A30000\"/>"
+                           "<color name=\"accent3\" color=\"#5E40BE\"/>"
+                           "<color name=\"accent4\" color=\"#37A3A3\"/>"
+                           "<color name=\"accent5\" color=\"#F5921B\"/>"
+                           "<color name=\"accent6\" color=\"#63993D\"/>"
+                           "<color name=\"hyperlink\" color=\"#0066CC\"/>"
+                           "<color name=\"followed-hyperlink\" color=\"#6753AC\"/>"
+                           "</theme-colors></theme>"_ostr;
+    sal_uInt64 nWritten = 0;
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None,
+                         aFile.write(aTheme.getStr(), aTheme.getLength(), nWritten));
+    aFile.close();
+
+    // When the kit is told where the shared presets are:
+    aOffice.setOption("addsharedpresetpaths", aTempDir.GetURL().toUtf8().getStr());
+
+    // Then the theme is offered with the shipped ones:
+    svx::ColorSets& rColorSets = svx::ColorSets::get();
+    rColorSets.init();
+    // Without the accompanying fix in place, this test would have failed, as
+    // only the shipped and the user's own themes were found.
+    CPPUNIT_ASSERT(rColorSets.getColorSet(u"Corporate") != nullptr);
 }
 
 void DesktopKitTest::testUserSettingsPersistedCallback()

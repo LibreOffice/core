@@ -214,6 +214,7 @@ void RequestVettingStation::launchInstallPresets()
     std::string configIdPresets = Poco::Path(presetsPath, Uri::encode(configId)).toString();
     Poco::File(Poco::Path(configIdPresets, "autotext")).createDirectories();
     Poco::File(Poco::Path(configIdPresets, "wordbook")).createDirectories();
+    Poco::File(Poco::Path(configIdPresets, "themes")).createDirectories();
     Poco::Path sharedTemplates(configIdPresets, "template");
     sharedTemplates.makeDirectory();
     sharedTemplates.pushDirectory("presnt");

@@ -29,6 +29,7 @@ $(eval $(call gb_CppunitTest_use_libraries,desktop_lib, \
 	sofficeapp \
 	subsequenttest \
     svt \
+	svxcore \
 	sw \
 	test \
 	unotest \
@@ -63,6 +64,9 @@ $(eval $(call gb_CppunitTest_use_vcl,desktop_lib))
 $(eval $(call gb_CppunitTest_use_rdb,desktop_lib,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,desktop_lib))
+
+# The layer the kit adds the shared preset paths to, declared as in the product.
+$(eval $(call gb_CppunitTest__use_configuration,desktop_lib,sharedext,$(WORKDIR)/desktop-no-such-layer.ini))
 
 $(eval $(call gb_CppunitTest_use_custom_headers,desktop_lib,\
     officecfg/registry \
