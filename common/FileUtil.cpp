@@ -387,7 +387,7 @@ namespace FileUtil
     std::string findFileInJail(bool usingMountNamespaces, std::string localJailRoot,
                                std::string jailPath)
     {
-        const auto [localDir, localPath] =
+        auto [localDir, localPath] =
             localPathToJail(usingMountNamespaces, std::move(localJailRoot), std::move(jailPath));
         if (localPath.empty() || !Poco::File(localPath).exists())
             return std::string();

@@ -3641,7 +3641,7 @@ void ClientSession::recordSlideLinkSources(const std::shared_ptr<Message>& paylo
         // A linked section names its source too, and its slides stop naming that source once an
         // edit takes their own links off.
         Poco::JSON::Array::Ptr sections = rootObject->getArray("sections");
-        for (const Poco::JSON::Array::Ptr& list : { links, sections })
+        for (const Poco::JSON::Array::Ptr& list : { std::move(links), std::move(sections) })
         {
             for (std::size_t i = 0; !list.isNull() && i < list->size() && names.size() < MaxSources;
                  ++i)
