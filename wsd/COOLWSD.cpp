@@ -595,8 +595,6 @@ static void forkChildren(const std::string& configId, const int number)
 
     if (number > 0)
     {
-        COOLWSD::checkDiskSpaceAndWarnClients(false);
-
         const std::string message = "spawn " + std::to_string(number) + '\n';
         LOG_DBG("MasterToForKit: " << message.substr(0, message.length() - 1));
 
@@ -639,8 +637,6 @@ bool COOLWSD::ensureSubForKit(const std::string& configId)
         LOG_WRN("subForKit " << configId << " not responsive for " << durationMs
                              << " while spawning. Resetting.");
     }
-
-    COOLWSD::checkDiskSpaceAndWarnClients(false);
 
     OutstandingSubForKitSpawns.insert(configId);
     LastSubForKitSpawnRequestTimes[configId] = now;
@@ -3233,6 +3229,9 @@ void PrisonPoll::wakeupHook()
                                                 << TotalOutstandingForks << " kits forking");
         THREAD_UNSAFE_DUMP_END
 
+        // The alert to the users takes DocBrokersMutex, so the check runs where no lock is held.
+        COOLWSD::checkDiskSpaceAndWarnClients(false);
+
         if (!COOLWSD::checkAndRestoreForKit())
         {
             // No children have died.
@@ -3265,6 +3264,9 @@ bool COOLWSD::createForKit()
 
     // Creating a new forkit is always a slow process.
     ChildSpawnTimeoutMs = std::chrono::milliseconds(CHILD_SPAWN_TIMEOUT_MS);
+
+    // The alert to the users takes DocBrokersMutex, so the check runs before the lock is taken.
+    COOLWSD::checkDiskSpaceAndWarnClients(false);
 
     std::unique_lock<std::mutex> newChildrenLock(NewChildrenMutex);
 

@@ -204,6 +204,7 @@ void RequestVettingStation::launchInstallPresets()
         }
         else
         {
+            COOLWSD::checkDiskSpaceAndWarnClients(true);
             COOLWSD::ensureSubForKit(configId);
         }
         _asyncInstallTask.reset();
