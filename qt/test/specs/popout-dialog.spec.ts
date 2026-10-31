@@ -566,7 +566,10 @@ describe('Popped-out jsdialogs', () => {
 			);
 		});
 
-		await webview.switchToNewWebView(browser.webEngine, beforeHandles);
+		const modalHandle = await webview.switchToNewWebView(
+			browser.webEngine,
+			beforeHandles,
+		);
 		await browser.webEngine.waitForCondition(
 			() => document.querySelector('.jsdialog-container') !== null,
 			{ timeout: 10000, timeoutMsg: 'No modal container in child window' },
@@ -592,6 +595,14 @@ describe('Popped-out jsdialogs', () => {
 					(key) => key !== 'snackbar',
 				).length === 0,
 			{ timeout: 10000, timeoutMsg: 'Modal did not close' },
+		);
+
+		// The shell closes the window a few event-loop turns after the dialog
+		// leaves the registry.
+		await browser.webEngine.waitUntil(
+			async () =>
+				!(await browser.webEngine.getWindowHandles()).includes(modalHandle),
+			{ timeout: 10000, timeoutMsg: 'Modal window did not close' },
 		);
 	});
 
