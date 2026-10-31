@@ -1232,19 +1232,16 @@ CPPUNIT_TEST_FIXTURE(Test, testFlipAndRotateCustomShape)
     // point values depend on path size, values as of March 2022
     assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path", "w", u"21600");
     assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path", "h", u"21600");
-    // check the first few coordinates of the polygon
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        0, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:moveTo/a:pt", "x").toInt32(), 1);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        15831, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:moveTo/a:pt", "y").toInt32(), 1);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        6098, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "x").toInt32(), 1);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        10062, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "y").toInt32(), 1);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        13284, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[4]/a:pt", "x").toInt32(), 1);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        6098, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[4]/a:pt", "y").toInt32(), 1);
+    // The shape (mso-spt89) is drawn by its three adjustment values, so they are declared in
+    // <a:avLst> and the coordinates that depend on them name an adjustment or a guide; a
+    // literal coordinate (the moveTo x) stays a plain number.
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", 3);
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd[1]", "fmla", u"val 10062");
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:moveTo/a:pt", "x", u"0");
+    CPPUNIT_ASSERT(
+        getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:moveTo/a:pt", "y").startsWith("f"));
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "x", u"adj3");
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "y", u"adj1");
     // check path is closed
     assertXPath(pXmlDoc, "//a:close", 1);
 }

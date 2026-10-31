@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+    xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+    office:version="1.2"
+    office:mimetype="application/vnd.oasis.opendocument.presentation">
+  <office:body>
+    <office:presentation>
+      <draw:page draw:name="page1" draw:master-page-name="">
+        <draw:custom-shape draw:name="stretched" svg:width="6cm" svg:height="4cm" svg:x="2cm" svg:y="2cm">
+          <text:p/>
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="non-primitive" draw:modifiers="5400"
+              draw:path-stretchpoint-x="10800" draw:enhanced-path="M $0 0 L 21600 ?f1 ?f0 21600 0 21600 Z N">
+            <draw:equation draw:name="f0" draw:formula="21600-$0"/>
+            <draw:equation draw:name="f1" draw:formula="$0/2"/>
+            <draw:handle draw:handle-position="$0 0" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
+          </draw:enhanced-geometry>
+        </draw:custom-shape>
+      </draw:page>
+    </office:presentation>
+  </office:body>
+</office:document>

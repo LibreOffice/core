@@ -145,6 +145,7 @@
 #include <svx/svdtrans.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/EnhancedCustomShape2d.hxx>
+#include <svx/EnhancedCustomShapeFunctionParser.hxx>
 #include <drawingml/presetgeometrynames.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
 #include <svx/svdpage.hxx>
@@ -5273,6 +5274,606 @@ bool IsValidOOXMLFormula(std::u16string_view sFormula, const std::set<OUString>&
     return IsValidOOXMLFormula(sFormula, rGuideNames, aNoAdjustments);
 }
 
+// Converts a custom shape's ODF "Equations" to OOXML guide formulas from the parsed expression
+// tree (FunctionParser). At that level the structure of an equation is still intact, so the
+// angle-conversion idiom X*(pi/c) can be recognised and reconciled to the 60000ths of a degree
+// OOXML uses, and width/height/left/top/right/bottom can be written in the coordinate space of
+// the path.
+using EnhancedCustomShape::ExpressionNode;
+using ExpressionFunct = EnhancedCustomShape::ExpressionFunct;
+
+// Carries the guides built so far while one expression tree is walked.
+struct OoxmlEqContext
+{
+    std::vector<Guide>& rGuides; // <a:gdLst> guides, in dependency order
+    std::set<sal_Int32>& rUsedAdjustments; // adjustment indices referenced
+    const std::vector<OString>& rEqNames; // source equation index -> its OOXML token
+    const std::vector<bool>& rEqIsAngle; // source equation index -> token is an angle (60000ths)
+    // Adjustments that a polar handle drives as an angle. These are stored in OOXML 60000ths of
+    // a degree, not in ODF degrees, so the degree idiom that consumes them emits the bare
+    // adjustment instead of a conversion (see lcl_TryEmitAngle60000).
+    const std::set<sal_Int32>& rAngleAdjustments60000;
+    std::map<OString, OString>& rGuideByFormula; // formula -> guide name, to reuse equal guides
+    // The path coordinate space (<a:path w h>). ODF left/top/right/bottom/width/height are
+    // emitted as literals in this space, because the OOXML built-in guides l/t/r/b/w/h resolve
+    // to the shape's EMU extent, which is not the space the path coordinates are in.
+    sal_Int32 nViewBoxWidth = 0;
+    sal_Int32 nViewBoxHeight = 0;
+    bool bFailed = false;
+
+    // Appends a guide for the formula and returns its name ("f<n>"). Guides are functional, so
+    // an equal formula reuses the existing guide; as guides are built bottom-up this
+    // deduplicates whole sub-expressions.
+    OString addGuide(const OString& rFormula)
+    {
+        std::map<OString, OString>::const_iterator it = rGuideByFormula.find(rFormula);
+        if (it != rGuideByFormula.end())
+            return it->second;
+        OString aName = "f" + OString::number(rGuides.size());
+        rGuides.push_back({ aName, rFormula });
+        rGuideByFormula.emplace(rFormula, aName);
+        return aName;
+    }
+};
+
+OString lcl_EmitOoxmlNode(const ExpressionNode* pNode, OoxmlEqContext& rCtx);
+
+// A guide operand has to be an integer. A whole number is written as it is; any other value
+// fails, unless the caller can fold it into a "*/" as a fraction (see lcl_EmitMulDivByConstant).
+OString lcl_EmitConstant(double fValue, OoxmlEqContext& rCtx)
+{
+    const double fRounded = std::round(fValue);
+    if (std::fabs(fValue - fRounded) > 1e-7 || std::fabs(fRounded) > 2147483647.0)
+    {
+        rCtx.bFailed = true;
+        return "0"_ostr;
+    }
+    return OString::number(static_cast<sal_Int32>(fRounded));
+}
+
+// Writes fValue as the fraction rNumerator / rDenominator with integer parts, using the smallest
+// power of ten (up to 100000) as the denominator that represents the value exactly enough.
+// Returns false when the numerator does not fit a 32-bit integer.
+bool lcl_ConstantAsFraction(double fValue, sal_Int32& rNumerator, sal_Int32& rDenominator)
+{
+    sal_Int32 nDenominator = 1;
+    for (int i = 0; i < 5; ++i)
+    {
+        const double fScaled = fValue * nDenominator;
+        if (std::fabs(fScaled - std::round(fScaled)) < 1e-7)
+            break;
+        nDenominator *= 10;
+    }
+    const double fNumerator = std::round(fValue * nDenominator);
+    if (std::fabs(fNumerator) > 2147483647.0)
+        return false;
+    rNumerator = static_cast<sal_Int32>(fNumerator);
+    rDenominator = nDenominator;
+    return true;
+}
+
+// Is p the sub-expression "pi / <const>"? Returns the constant in rConst.
+bool lcl_IsPiOverConst(const ExpressionNode* p, double& rConst)
+{
+    if (p && p->getType() == ExpressionFunct::BinaryDiv)
+    {
+        const ExpressionNode* pNum = p->getChild(0);
+        const ExpressionNode* pDen = p->getChild(1);
+        if (pNum && pDen && pNum->getType() == ExpressionFunct::EnumPi && pDen->isConstant())
+        {
+            rConst = (*pDen)();
+            return true;
+        }
+    }
+    return false;
+}
+
+// If pArg is a radians angle of the form X*(pi/c) or (pi*X)/c, returns the angle argument X and
+// sets rConst = c; otherwise returns nullptr. This is the ODF idiom for an angle, the only form
+// OOXML can re-express.
+const ExpressionNode* lcl_GetAngleIdiomArg(const ExpressionNode* pArg, double& rConst)
+{
+    rConst = 0.0;
+    if (pArg && pArg->getType() == ExpressionFunct::BinaryMul)
+    {
+        if (lcl_IsPiOverConst(pArg->getChild(0), rConst))
+            return pArg->getChild(1);
+        if (lcl_IsPiOverConst(pArg->getChild(1), rConst))
+            return pArg->getChild(0);
+    }
+    else if (pArg && pArg->getType() == ExpressionFunct::BinaryDiv)
+    {
+        const ExpressionNode* pNum = pArg->getChild(0);
+        const ExpressionNode* pDen = pArg->getChild(1);
+        if (pNum && pDen && pDen->isConstant() && pNum->getType() == ExpressionFunct::BinaryMul)
+        {
+            const ExpressionNode* pA = pNum->getChild(0);
+            const ExpressionNode* pB = pNum->getChild(1);
+            const ExpressionNode* pX = nullptr;
+            if (pA && pA->getType() == ExpressionFunct::EnumPi)
+                pX = pB;
+            else if (pB && pB->getType() == ExpressionFunct::EnumPi)
+                pX = pA;
+            if (pX)
+            {
+                rConst = (*pDen)();
+                return pX;
+            }
+        }
+    }
+    return nullptr;
+}
+
+// If pArg is a radians angle of the form X*(pi/c) or (pi*X)/c, emits it converted to OOXML
+// 60000ths of a degree (X*10800000/c) and returns true; else returns false and leaves rCtx
+// untouched. OOXML guide formulas have no pi, so this is the only way to express an angle. Used
+// for standalone angle values and for trigonometric arguments alike.
+bool lcl_TryEmitAngle60000(const ExpressionNode* pArg, OoxmlEqContext& rCtx, OString& rResult)
+{
+    // A reference to an equation that is itself an angle is already in 60000ths.
+    if (pArg && pArg->getType() == ExpressionFunct::EnumEquation)
+    {
+        const sal_Int32 nEquation = pArg->getIndex();
+        if (nEquation >= 0 && o3tl::make_unsigned(nEquation) < rCtx.rEqIsAngle.size()
+            && rCtx.rEqIsAngle[nEquation] && !rCtx.rEqNames[nEquation].isEmpty())
+        {
+            rResult = rCtx.rEqNames[nEquation];
+            return true;
+        }
+        return false;
+    }
+    double fConst = 0.0;
+    const ExpressionNode* pX = lcl_GetAngleIdiomArg(pArg, fConst);
+    if (!pX || fConst == 0.0 || std::fabs(fConst - std::round(fConst)) > 1e-7
+        || std::fabs(fConst) > 2147483647.0)
+        return false;
+    // A constant angle is written as its value in 60000ths.
+    if (pX->isConstant())
+    {
+        rResult = lcl_EmitConstant((*pX)() * 10800000.0 / fConst, rCtx);
+        return true;
+    }
+    // An adjustment that a polar handle drives is already stored in 60000ths of a degree, so
+    // the conversion is the identity: the bare adjustment is the token the handle's gdRefAng
+    // writes back to.
+    if (pX->getType() == ExpressionFunct::EnumAdjustment
+        && rCtx.rAngleAdjustments60000.count(pX->getIndex()) > 0)
+    {
+        rCtx.rUsedAdjustments.insert(pX->getIndex());
+        rResult = "adj" + OString::number(pX->getIndex() + 1);
+        return true;
+    }
+    OString aX = lcl_EmitOoxmlNode(pX, rCtx);
+    rResult = rCtx.addGuide("*/ " + aX + " 10800000 "
+                            + OString::number(static_cast<sal_Int32>(std::lround(fConst))));
+    return true;
+}
+
+bool lcl_IsTrig(const ExpressionNode* p)
+{
+    const ExpressionFunct e = p->getType();
+    return e == ExpressionFunct::UnarySin || e == ExpressionFunct::UnaryCos
+           || e == ExpressionFunct::UnaryTan;
+}
+
+// Emits "sin|cos|tan <mul> <angle>"; pMul is the multiplier in "mul*sin(x)", or null for 1.
+OString lcl_EmitTrig(const ExpressionNode* pTrig, const ExpressionNode* pMul, OoxmlEqContext& rCtx)
+{
+    OString aAngle;
+    if (!lcl_TryEmitAngle60000(pTrig->getChild(0), rCtx, aAngle))
+    {
+        // The angle is not in the pi/const idiom (raw radians): not expressible.
+        rCtx.bFailed = true;
+        return "0"_ostr;
+    }
+    const char* pOp = pTrig->getType() == ExpressionFunct::UnarySin
+                          ? "sin"
+                          : (pTrig->getType() == ExpressionFunct::UnaryCos ? "cos" : "tan");
+    OString aMul = pMul ? lcl_EmitOoxmlNode(pMul, rCtx) : "1"_ostr;
+    return rCtx.addGuide(OString::Concat(pOp) + " " + aMul + " " + aAngle);
+}
+
+// Emits "a * c" or "a / c" for a constant c that may be fractional, as "*/ a p q".
+OString lcl_EmitMulDivByConstant(const ExpressionNode* pA, double fConst, bool bDivide,
+                                 OoxmlEqContext& rCtx)
+{
+    sal_Int32 nNumerator = 0;
+    sal_Int32 nDenominator = 1;
+    if (!lcl_ConstantAsFraction(fConst, nNumerator, nDenominator))
+    {
+        rCtx.bFailed = true;
+        return "0"_ostr;
+    }
+    if (bDivide)
+    {
+        if (nNumerator == 0)
+        {
+            rCtx.bFailed = true;
+            return "0"_ostr;
+        }
+        std::swap(nNumerator, nDenominator);
+        if (nDenominator < 0)
+        {
+            nNumerator = -nNumerator;
+            nDenominator = -nDenominator;
+        }
+    }
+    return rCtx.addGuide("*/ " + lcl_EmitOoxmlNode(pA, rCtx) + " " + OString::number(nNumerator)
+                         + " " + OString::number(nDenominator));
+}
+
+OString lcl_EmitOoxmlNode(const ExpressionNode* pNode, OoxmlEqContext& rCtx)
+{
+    if (!pNode)
+    {
+        rCtx.bFailed = true;
+        return "0"_ostr;
+    }
+    // A constant sub-expression collapses to its value, which has to be a whole number.
+    if (pNode->isConstant())
+        return lcl_EmitConstant((*pNode)(), rCtx);
+
+    switch (pNode->getType())
+    {
+        case ExpressionFunct::EnumAdjustment:
+        {
+            const sal_Int32 nAdjustment = pNode->getIndex();
+            rCtx.rUsedAdjustments.insert(nAdjustment);
+            return "adj" + OString::number(nAdjustment + 1);
+        }
+        case ExpressionFunct::EnumEquation:
+        {
+            // An equation that is an angle holds 60000ths of a degree here but radians in the
+            // shape; its only expressible uses, as a trigonometric argument or as an angle by
+            // itself, are served by lcl_TryEmitAngle60000 before this point.
+            const sal_Int32 nEquation = pNode->getIndex();
+            if (nEquation >= 0 && o3tl::make_unsigned(nEquation) < rCtx.rEqNames.size()
+                && !rCtx.rEqNames[nEquation].isEmpty() && !rCtx.rEqIsAngle[nEquation])
+                return rCtx.rEqNames[nEquation];
+            rCtx.bFailed = true;
+            return "0"_ostr;
+        }
+        case ExpressionFunct::EnumWidth:
+        case ExpressionFunct::EnumRight:
+            return OString::number(rCtx.nViewBoxWidth);
+        case ExpressionFunct::EnumHeight:
+        case ExpressionFunct::EnumBottom:
+            return OString::number(rCtx.nViewBoxHeight);
+        case ExpressionFunct::EnumLeft:
+        case ExpressionFunct::EnumTop:
+            return "0"_ostr;
+        case ExpressionFunct::BinaryPlus:
+        {
+            const OString aLeft = lcl_EmitOoxmlNode(pNode->getChild(0), rCtx);
+            const OString aRight = lcl_EmitOoxmlNode(pNode->getChild(1), rCtx);
+            return rCtx.addGuide("+- " + aLeft + " " + aRight + " 0");
+        }
+        case ExpressionFunct::BinaryMinus:
+        {
+            const OString aLeft = lcl_EmitOoxmlNode(pNode->getChild(0), rCtx);
+            const OString aRight = lcl_EmitOoxmlNode(pNode->getChild(1), rCtx);
+            return rCtx.addGuide("+- " + aLeft + " 0 " + aRight);
+        }
+        case ExpressionFunct::BinaryMul:
+        {
+            OString aAngle;
+            if (lcl_TryEmitAngle60000(pNode, rCtx, aAngle))
+                return aAngle; // X*(pi/c) used as a standalone angle value
+            const ExpressionNode* pA = pNode->getChild(0);
+            const ExpressionNode* pB = pNode->getChild(1);
+            if (!pA || !pB)
+            {
+                rCtx.bFailed = true;
+                return "0"_ostr;
+            }
+            if (lcl_IsTrig(pA))
+                return lcl_EmitTrig(pA, pB, rCtx);
+            if (lcl_IsTrig(pB))
+                return lcl_EmitTrig(pB, pA, rCtx);
+            if (pA->isConstant())
+                return lcl_EmitMulDivByConstant(pB, (*pA)(), false, rCtx);
+            if (pB->isConstant())
+                return lcl_EmitMulDivByConstant(pA, (*pB)(), false, rCtx);
+            const OString aLeft = lcl_EmitOoxmlNode(pA, rCtx);
+            const OString aRight = lcl_EmitOoxmlNode(pB, rCtx);
+            return rCtx.addGuide("*/ " + aLeft + " " + aRight + " 1");
+        }
+        case ExpressionFunct::BinaryDiv:
+        {
+            OString aAngle;
+            if (lcl_TryEmitAngle60000(pNode, rCtx, aAngle))
+                return aAngle; // (pi*X)/c used as a standalone angle value
+            const ExpressionNode* pA = pNode->getChild(0);
+            const ExpressionNode* pB = pNode->getChild(1);
+            if (!pA || !pB)
+            {
+                rCtx.bFailed = true;
+                return "0"_ostr;
+            }
+            if (pB->isConstant())
+                return lcl_EmitMulDivByConstant(pA, (*pB)(), true, rCtx);
+            const OString aLeft = lcl_EmitOoxmlNode(pA, rCtx);
+            const OString aRight = lcl_EmitOoxmlNode(pB, rCtx);
+            return rCtx.addGuide("*/ " + aLeft + " 1 " + aRight);
+        }
+        case ExpressionFunct::BinaryMin:
+        {
+            const OString aLeft = lcl_EmitOoxmlNode(pNode->getChild(0), rCtx);
+            const OString aRight = lcl_EmitOoxmlNode(pNode->getChild(1), rCtx);
+            return rCtx.addGuide("min " + aLeft + " " + aRight);
+        }
+        case ExpressionFunct::BinaryMax:
+        {
+            const OString aLeft = lcl_EmitOoxmlNode(pNode->getChild(0), rCtx);
+            const OString aRight = lcl_EmitOoxmlNode(pNode->getChild(1), rCtx);
+            return rCtx.addGuide("max " + aLeft + " " + aRight);
+        }
+        case ExpressionFunct::UnaryNeg:
+            return rCtx.addGuide("*/ " + lcl_EmitOoxmlNode(pNode->getChild(0), rCtx) + " -1 1");
+        case ExpressionFunct::UnaryAbs:
+            return rCtx.addGuide("abs " + lcl_EmitOoxmlNode(pNode->getChild(0), rCtx));
+        case ExpressionFunct::UnarySqrt:
+            return rCtx.addGuide("sqrt " + lcl_EmitOoxmlNode(pNode->getChild(0), rCtx));
+        case ExpressionFunct::TernaryIf:
+        {
+            const OString aCondition = lcl_EmitOoxmlNode(pNode->getChild(0), rCtx);
+            const OString aThen = lcl_EmitOoxmlNode(pNode->getChild(1), rCtx);
+            const OString aElse = lcl_EmitOoxmlNode(pNode->getChild(2), rCtx);
+            return rCtx.addGuide("?: " + aCondition + " " + aThen + " " + aElse);
+        }
+        case ExpressionFunct::UnarySin:
+        case ExpressionFunct::UnaryCos:
+        case ExpressionFunct::UnaryTan:
+            return lcl_EmitTrig(pNode, nullptr, rCtx);
+        default:
+            // atan, atan2, a bare pi, the stretch and has-fill/has-stroke flags, and logwidth
+            // and logheight (the shape's size in 1/100 mm, which has no counterpart in the
+            // path's coordinate space): not expressible.
+            rCtx.bFailed = true;
+            return "0"_ostr;
+    }
+}
+
+// The equation guides of one shape: the <a:gdLst> entries the equations became, the adjustments
+// they reference, and per source equation the token (guide name or literal) that holds its value
+// and whether that value is an angle in 60000ths of a degree.
+struct EquationGuideSet
+{
+    std::vector<Guide> aGuides;
+    std::set<sal_Int32> aUsedAdjustments;
+    std::vector<OString> aEqNames;
+    std::vector<bool> aEqIsAngle;
+    std::map<OString, OString> aGuideByFormula;
+};
+
+// Converts all of a shape's ODF "Equations" to OOXML guides. Returns false, leaving rSet empty,
+// if any equation uses a construct that cannot be expressed, so that the caller writes resolved
+// coordinates instead; a half-converted set would reference adjustments and guides that never
+// make it into the file, and Word refuses such a file.
+bool lcl_CreateOoxmlGuides(const EnhancedCustomShape2d& rCustomShape2d,
+                           const cpo::uno::Sequence<OUString>& rEquationStrings,
+                           const std::set<sal_Int32>& rAngleAdjustments60000,
+                           sal_Int32 nViewBoxWidth, sal_Int32 nViewBoxHeight,
+                           EquationGuideSet& rSet)
+{
+    rSet = EquationGuideSet();
+    rSet.aEqNames.assign(rEquationStrings.getLength(), OString());
+    rSet.aEqIsAngle.assign(rEquationStrings.getLength(), false);
+    OoxmlEqContext aContext{ rSet.aGuides,    rSet.aUsedAdjustments,  rSet.aEqNames,
+                             rSet.aEqIsAngle, rAngleAdjustments60000, rSet.aGuideByFormula };
+    aContext.nViewBoxWidth = nViewBoxWidth;
+    aContext.nViewBoxHeight = nViewBoxHeight;
+    for (sal_Int32 i = 0; i < rEquationStrings.getLength(); ++i)
+    {
+        std::shared_ptr<ExpressionNode> pNode;
+        try
+        {
+            pNode = EnhancedCustomShape::FunctionParser::parseFunction(rEquationStrings[i],
+                                                                       rCustomShape2d);
+        }
+        catch (...)
+        {
+            rSet = EquationGuideSet();
+            return false;
+        }
+        aContext.bFailed = false;
+        // An equation that is itself an angle (X*pi/c) is converted to 60000ths of a degree and
+        // remembered, so that trigonometric functions referencing it work.
+        OString aToken;
+        if (lcl_TryEmitAngle60000(pNode.get(), aContext, aToken))
+            rSet.aEqIsAngle[i] = true;
+        else
+            aToken = lcl_EmitOoxmlNode(pNode.get(), aContext);
+        if (aContext.bFailed)
+        {
+            rSet = EquationGuideSet();
+            return false;
+        }
+        rSet.aEqNames[i] = aToken;
+    }
+    return true;
+}
+
+// The token for a path coordinate: the guide of an equation, or the adjustment itself. Returns
+// an empty string when the coordinate stays a resolved number.
+OString lcl_CoordinateToken(const drawing::EnhancedCustomShapeParameter& rParam,
+                            const EquationGuideSet& rEquations,
+                            std::set<sal_Int32>& rUsedAdjustments)
+{
+    sal_Int32 nIndex = -1;
+    if (rParam.Type == drawing::EnhancedCustomShapeParameterType::EQUATION
+        && (rParam.Value >>= nIndex) && nIndex >= 0
+        && o3tl::make_unsigned(nIndex) < rEquations.aEqNames.size()
+        && !rEquations.aEqIsAngle[nIndex])
+        return rEquations.aEqNames[nIndex];
+    if (rParam.Type == drawing::EnhancedCustomShapeParameterType::ADJUSTMENT
+        && (rParam.Value >>= nIndex) && nIndex >= 0)
+    {
+        rUsedAdjustments.insert(nIndex);
+        return "adj" + OString::number(nIndex + 1);
+    }
+    return OString();
+}
+
+// Fills rPlan.aCoordTokens for the pairs that the moveTo, lnTo, cubicBezTo and quadBezTo
+// commands write as points. The other commands derive radii and angles from their pairs and
+// keep resolved numbers.
+void lcl_CollectCoordinateTokens(
+    const cpo::uno::Sequence<drawing::EnhancedCustomShapeSegment>& rSegments,
+    const cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rPairs,
+    const EquationGuideSet& rEquations, std::set<sal_Int32>& rUsedAdjustments,
+    CustomGeometryPlan& rPlan)
+{
+    rPlan.aCoordTokens.assign(2 * rPairs.getLength(), OString());
+    sal_Int32 nPairIndex = 0;
+    for (const drawing::EnhancedCustomShapeSegment& rSegment : rSegments)
+    {
+        sal_Int32 nPairsPerCommand = 0;
+        bool bPoints = false;
+        switch (rSegment.Command)
+        {
+            case drawing::EnhancedCustomShapeSegmentCommand::MOVETO:
+            case drawing::EnhancedCustomShapeSegmentCommand::LINETO:
+                nPairsPerCommand = 1;
+                bPoints = true;
+                break;
+            case drawing::EnhancedCustomShapeSegmentCommand::CURVETO:
+                nPairsPerCommand = 3;
+                bPoints = true;
+                break;
+            case drawing::EnhancedCustomShapeSegmentCommand::QUADRATICCURVETO:
+                nPairsPerCommand = 2;
+                bPoints = true;
+                break;
+            case drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO:
+            case drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE:
+                nPairsPerCommand = 3;
+                break;
+            case drawing::EnhancedCustomShapeSegmentCommand::ARCTO:
+            case drawing::EnhancedCustomShapeSegmentCommand::ARC:
+            case drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO:
+            case drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC:
+                nPairsPerCommand = 4;
+                break;
+            case drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTX:
+            case drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTY:
+                nPairsPerCommand = 1;
+                break;
+            case drawing::EnhancedCustomShapeSegmentCommand::ARCANGLETO:
+                nPairsPerCommand = 2;
+                break;
+            default:
+                nPairsPerCommand = 0;
+                break;
+        }
+        for (sal_Int32 k = 0; k < rSegment.Count; ++k)
+        {
+            for (sal_Int32 i = 0; i < nPairsPerCommand; ++i, ++nPairIndex)
+            {
+                if (!bPoints || nPairIndex >= rPairs.getLength())
+                    continue;
+                rPlan.aCoordTokens[2 * nPairIndex]
+                    = lcl_CoordinateToken(rPairs[nPairIndex].First, rEquations, rUsedAdjustments);
+                rPlan.aCoordTokens[2 * nPairIndex + 1]
+                    = lcl_CoordinateToken(rPairs[nPairIndex].Second, rEquations, rUsedAdjustments);
+            }
+        }
+    }
+}
+
+// Adds every adjustment named "adj<n>" inside a formula to rAdjustments (as 0-based index).
+void lcl_CollectAdjustmentsOfFormula(const OString& rFormula, std::set<sal_Int32>& rAdjustments)
+{
+    for (sal_Int32 nPos = rFormula.indexOf("adj"); nPos >= 0; nPos = rFormula.indexOf("adj", nPos))
+    {
+        nPos += 3;
+        sal_Int32 nNumber = 0;
+        bool bDigit = false;
+        while (nPos < rFormula.getLength() && rFormula[nPos] >= '0' && rFormula[nPos] <= '9')
+        {
+            nNumber = nNumber * 10 + (rFormula[nPos] - '0');
+            bDigit = true;
+            ++nPos;
+        }
+        if (bDigit && nNumber >= 1)
+            rAdjustments.insert(nNumber - 1);
+    }
+}
+
+// Builds the parametric part of the plan: equation guides, symbolic path coordinates and the
+// adjustment values they reference. Returns false, leaving rPlan as it was, when the shape
+// cannot be expressed that way; the caller then writes resolved coordinates as before.
+bool lcl_BuildParametricPlan(
+    const EnhancedCustomShape2d& rCustomShape2d,
+    const cpo::uno::Sequence<OUString>& rEquationStrings,
+    const cpo::uno::Sequence<drawing::EnhancedCustomShapeSegment>& rSegments,
+    const cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rPairs,
+    sal_Int32 nViewBoxWidth, sal_Int32 nViewBoxHeight, CustomGeometryPlan& rPlan)
+{
+    if (!rEquationStrings.hasElements())
+        return false;
+
+    const std::set<sal_Int32> aNoAngleAdjustments;
+    EquationGuideSet aEquations;
+    if (!lcl_CreateOoxmlGuides(rCustomShape2d, rEquationStrings, aNoAngleAdjustments, nViewBoxWidth,
+                               nViewBoxHeight, aEquations))
+        return false;
+
+    CustomGeometryPlan aPlan = rPlan;
+    std::set<sal_Int32> aDeclaredAdjustments = aEquations.aUsedAdjustments;
+    lcl_CollectCoordinateTokens(rSegments, rPairs, aEquations, aDeclaredAdjustments, aPlan);
+    for (const Guide& rGuide : aPlan.aGuides)
+        lcl_CollectAdjustmentsOfFormula(rGuide.sFormula, aDeclaredAdjustments);
+    for (const Guide& rGuide : aEquations.aGuides)
+        lcl_CollectAdjustmentsOfFormula(rGuide.sFormula, aDeclaredAdjustments);
+
+    // <a:avLst>: the current value of every referenced adjustment, which has to be a whole
+    // number in a guide.
+    for (const sal_Int32 nAdjustment : aDeclaredAdjustments)
+    {
+        drawing::EnhancedCustomShapeParameter aParameter;
+        aParameter.Type = drawing::EnhancedCustomShapeParameterType::ADJUSTMENT;
+        aParameter.Value <<= nAdjustment;
+        double fValue = 0.0;
+        rCustomShape2d.GetParameter(fValue, aParameter, false, false);
+        if (std::fabs(fValue - std::round(fValue)) > 1e-7)
+            return false;
+        aPlan.aAdjustments.push_back({ "adj" + OString::number(nAdjustment + 1),
+                                       "val " + OString::number(std::lround(fValue)) });
+    }
+
+    // The equation guides follow the text-area guides, so that the latter keep their position
+    // in the list.
+    aPlan.aGuides.insert(aPlan.aGuides.end(), aEquations.aGuides.begin(), aEquations.aGuides.end());
+
+    std::set<OUString> aGuideNames;
+    std::set<OUString> aAdjustmentNames;
+    for (const Guide& rGuide : aPlan.aAdjustments)
+        aAdjustmentNames.insert(OUString::fromUtf8(rGuide.sName));
+    for (const Guide& rGuide : aPlan.aGuides)
+    {
+        if (!IsValidOOXMLFormula(OUString::fromUtf8(rGuide.sFormula), aGuideNames,
+                                 aAdjustmentNames))
+        {
+            SAL_WARN("oox.shape", "custGeom guide not expressible: " << rGuide.sFormula);
+            return false;
+        }
+        aGuideNames.insert(OUString::fromUtf8(rGuide.sName));
+    }
+    for (const OString& rToken : aPlan.aCoordTokens)
+    {
+        if (rToken.isEmpty() || rToken.toInt64() != 0 || rToken == "0")
+            continue;
+        const OUString aToken = OUString::fromUtf8(rToken);
+        if (aGuideNames.find(aToken) == aGuideNames.end()
+            && aAdjustmentNames.find(aToken) == aAdjustmentNames.end())
+            return false;
+    }
+
+    rPlan = aPlan;
+    return true;
+}
+
 // A shape states its geometry as a list of equations, and one equation reaches the ones before
 // it by number. The OOXML grammar names a guide instead, so every equation a formula rests on
 // is written as a guide of its own and named from there.
@@ -5823,6 +6424,9 @@ bool DrawingML::WriteCustomGeometry(
     // triggered; same for height.
     sal_Int32 nViewBoxWidth(0);
     sal_Int32 nViewBoxHeight(0);
+    // The nominal viewBox starts at 0,0 and has a size, as the paths of a shape drawn by its
+    // equations expect; a substitute or a stretched one does not qualify.
+    bool bNominalViewBox = false;
     if (!aPathSize.hasElements())
     {
         bUseGlobalViewBox = true;
@@ -5839,6 +6443,8 @@ bool DrawingML::WriteCustomGeometry(
             {
                 nViewBoxWidth = aViewBox.Width;
                 nViewBoxHeight = aViewBox.Height;
+                bNominalViewBox = aViewBox.X == 0 && aViewBox.Y == 0 && aViewBox.Width > 0
+                                  && aViewBox.Height > 0 && !bReplaceGeoWidth && !bReplaceGeoHeight;
                 css::drawing::EnhancedCustomShapeParameter aECSP;
                 aECSP.Type = css::drawing::EnhancedCustomShapeParameterType::NORMAL;
                 aECSP.Value <<= nViewBoxWidth;
@@ -5887,6 +6493,11 @@ bool DrawingML::WriteCustomGeometry(
 
     CustomGeometryPlan aPlan;
     prepareTextArea(aCustomShape2d, aPlan.aGuides, aPlan.aTextAreaRect);
+    // Shapes imported from OOXML keep their equations in the shape's EMU space and their
+    // viewBox is a substitute; they stay with resolved coordinates for now.
+    if (bNominalViewBox && !bOOXML)
+        lcl_BuildParametricPlan(aCustomShape2d, aEquationSeq, aSegments, aPairs, nViewBoxWidth,
+                                nViewBoxHeight, aPlan);
     prepareGluePoints(aPlan.aGuides, aEquationSeq, aGluePoints, bOOXML, nViewBoxWidth,
                       nViewBoxHeight);
     const std::vector<OString>* pCoordTokens

@@ -8,9 +8,13 @@
  */
 
 #include <test/unoapixml_test.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -1527,6 +1531,120 @@ CPPUNIT_TEST_FIXTURE(Test, testUnderlineFillThemeColor)
     assertXPath(pXmlDoc, getRunProperties(5) + "/a:uFill/a:solidFill/a:srgbClr", "val", u"00FFFF");
     assertXPath(pXmlDoc, getRunProperties(6) + "/a:uFill/a:solidFill/a:srgbClr", "val", u"0000FF");
 }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeEquationGuides)
+{
+    // Given a shape drawn by two equations of one adjustment value:
+    loadFromFile(u"custGeom_xyHandle.fodp");
+
+    // When saving it to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then the equations become guides, the adjustment is declared, and the path points name
+    // them instead of baking their current value in
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", 1);
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", "name", u"adj1");
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", "fmla", u"val 5400");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f0']", "fmla", u"+- 21600 0 adj1");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f1']", "fmla", u"*/ adj1 1 2");
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path", "w", u"21600");
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path", "h", u"21600");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:moveTo/a:pt", "x", u"adj1");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:moveTo/a:pt", "y", u"0");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo[1]/a:pt", "x", u"21600");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo[1]/a:pt", "y", u"f1");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo[2]/a:pt", "x", u"f0");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo[2]/a:pt", "y", u"21600");
+
+    // and reading the file back gives a shape that still has its adjustment value and equations
+    loadFromURL(maTempFile.GetURL());
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    comphelper::SequenceAsHashMap aGeometry(xShape->getPropertyValue(u"CustomShapeGeometry"_ustr));
+    uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustments;
+    aGeometry[u"AdjustmentValues"_ustr] >>= aAdjustments;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aAdjustments.getLength());
+    sal_Int32 nValue = 0;
+    aAdjustments[0].Value >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5400), nValue);
+    uno::Sequence<OUString> aEquations;
+    aGeometry[u"Equations"_ustr] >>= aEquations;
+    CPPUNIT_ASSERT(aEquations.getLength() >= 2);
+    // and the path points are bound to the adjustment and the equations again, not numbers
+    comphelper::SequenceAsHashMap aPath(aGeometry[u"Path"_ustr]);
+    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
+    aPath[u"Coordinates"_ustr] >>= aCoordinates;
+    CPPUNIT_ASSERT(aCoordinates.getLength() >= 3);
+    CPPUNIT_ASSERT_EQUAL(drawing::EnhancedCustomShapeParameterType::ADJUSTMENT,
+                         aCoordinates[0].First.Type);
+    CPPUNIT_ASSERT_EQUAL(drawing::EnhancedCustomShapeParameterType::EQUATION,
+                         aCoordinates[1].Second.Type);
+    CPPUNIT_ASSERT_EQUAL(drawing::EnhancedCustomShapeParameterType::EQUATION,
+                         aCoordinates[2].First.Type);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeEquationGuidesStretch)
+{
+    // Given the same shape with a stretch point, whose path the export has to scale itself:
+    loadFromFile(u"custGeom_stretch.fodp");
+
+    // When saving it to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then the shape keeps resolved coordinates: no adjustment, no equation guide
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", 0);
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd", 0);
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "//a:pathLst/a:path/a:moveTo/a:pt", "x").toInt32() > 0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeEquationGuidesConstants)
+{
+    // Given equations with fractional constants and a constant trigonometric factor:
+    loadFromFile(u"custGeom_constants.fodp");
+
+    // When saving it to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then a fraction becomes a "*/" with whole numbers, and a constant angle is written in
+    // 60000ths of a degree
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", "fmla", u"val 7200");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f0']", "fmla", u"*/ adj1 5 10");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f1']", "fmla", u"*/ adj1 10 36");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f2']", "fmla", u"+- 21600 0 f0");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f3']", "fmla", u"+- f0 0 10800");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f4']", "fmla", u"cos f3 18900000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f5']", "fmla", u"+- f4 10800 0");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:moveTo/a:pt", "x", u"f0");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo[1]/a:pt", "y", u"f1");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo[2]/a:pt", "x", u"f2");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo[3]/a:pt", "y", u"f5");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeEquationGuidesTrig)
+{
+    // Given a clock hand whose angle is an adjustment in degrees, used through the pi/180 idiom:
+    loadFromFile(u"custGeom_trig.fodp");
+
+    // When saving it to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then the angle equation is converted to 60000ths of a degree once and the sine and cosine
+    // take it from there
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", "fmla", u"val 45");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f0']", "fmla", u"*/ adj1 10800000 180");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f1']", "fmla", u"cos 9000 f0");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f2']", "fmla", u"+- 10800 f1 0");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f3']", "fmla", u"sin 9000 f0");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f4']", "fmla", u"+- 10800 f3 0");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]/a:lnTo/a:pt", "x", u"f2");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]/a:lnTo/a:pt", "y", u"f4");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
