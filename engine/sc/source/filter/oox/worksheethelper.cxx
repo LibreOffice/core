@@ -333,9 +333,11 @@ public:
         width set with the setBaseColumnWidth() function. */
     void                setDefaultColumnWidth( double fWidth );
     /** Sets column settings for a specific column range.
-        @descr  Column default formatting is converted directly, other settings
-        are cached and converted in the finalizeImport() call. */
+        @descr  Column default formatting is converted in the finalizeColumnFormats() call,
+        other settings are cached and converted in the finalizeImport() call. */
     void                setColumnModel( const ColumnModel& rModel );
+    /** Converts the column default formatting of all column models set so far. */
+    void                finalizeColumnFormats();
     /** Converts column default cell formatting. */
     void convertColumnFormat( sal_Int32 nFirstCol, sal_Int32 nLastCol, sal_Int32 nXfId );
 
@@ -418,6 +420,8 @@ private:
     ScRange             maUsedArea;         /// Used area of the sheet, and sheet index of the sheet.
     ColumnModel         maDefColModel;      /// Default column formatting.
     ColumnModelRangeMap maColModels;        /// Ranges of columns sorted by first column index.
+    ValueRange          maFormatCols{ -1 }; /// Columns with column default formatting not yet converted, or -1.
+    sal_Int32           mnFormatXfId = -1;  /// Cell format of maFormatCols.
     RowModel            maDefRowModel;      /// Default row formatting.
     RowModelRangeMap    maRowModels;        /// Ranges of rows sorted by first row index.
     std::vector< HyperlinkModel > maHyperlinks;       /// Cell ranges containing hyperlinks.
@@ -859,9 +863,25 @@ void WorksheetGlobals::setColumnModel( const ColumnModel& rModel )
         // insert the column model, if it has not been merged with another
         if( bInsertModel )
             maColModels[ nFirstCol ] = ColumnModelRange( rModel, nLastCol );
-        // set column formatting directly
-        convertColumnFormat( nFirstCol, nLastCol, rModel.mnXfId );
+        // Neighbouring columns with the same cell format are converted as one range, so a run
+        // that reaches the last column applies to the columns not created yet as a whole.
+        if( (maFormatCols.mnFirst >= 0) && (maFormatCols.mnLast + 1 == nFirstCol) && (mnFormatXfId == rModel.mnXfId) )
+            maFormatCols.mnLast = nLastCol;
+        else
+        {
+            finalizeColumnFormats();
+            maFormatCols = ValueRange( nFirstCol, nLastCol );
+            mnFormatXfId = rModel.mnXfId;
+        }
     }
+}
+
+void WorksheetGlobals::finalizeColumnFormats()
+{
+    if( maFormatCols.mnFirst < 0 )
+        return;
+    convertColumnFormat( maFormatCols.mnFirst, maFormatCols.mnLast, mnFormatXfId );
+    maFormatCols = ValueRange( -1 );
 }
 
 void WorksheetGlobals::convertColumnFormat( sal_Int32 nFirstCol, sal_Int32 nLastCol, sal_Int32 nXfId )
@@ -1647,6 +1667,11 @@ void WorksheetHelper::setDefaultColumnWidth( double fWidth )
 void WorksheetHelper::setColumnModel( const ColumnModel& rModel )
 {
     mrSheetGlob.setColumnModel( rModel );
+}
+
+void WorksheetHelper::finalizeColumnFormats()
+{
+    mrSheetGlob.finalizeColumnFormats();
 }
 
 void WorksheetHelper::setDefaultRowSettings( double fHeight, bool bCustomHeight, bool bHidden, bool bThickTop, bool bThickBottom )
