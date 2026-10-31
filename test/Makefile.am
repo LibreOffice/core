@@ -113,6 +113,7 @@ all_la_unit_tests = \
 	unit-wopi-temp.la \
 	unit-wopi-thumbnail-sizes.la \
 	unit-wopi-thumbnail-render.la \
+	unit-wopi-thumbnails.la \
 	unit-wopi-transient-connect-fault.la \
 	unit-password-protected.la \
 	unit-password-to-modify.la \
@@ -390,6 +391,8 @@ unit_wopi_thumbnail_sizes_la_SOURCES = UnitWOPIThumbnailSizes.cpp
 unit_wopi_thumbnail_sizes_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_wopi_thumbnail_render_la_SOURCES = UnitWOPIThumbnailRender.cpp
 unit_wopi_thumbnail_render_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
+unit_wopi_thumbnails_la_SOURCES = UnitWOPIThumbnails.cpp
+unit_wopi_thumbnails_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_wopi_fileurl_la_SOURCES = UnitWOPIFileUrl.cpp
 unit_wopi_fileurl_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_wopi_httpredirect_la_SOURCES = UnitWOPIHttpRedirect.cpp
