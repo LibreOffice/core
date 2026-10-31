@@ -219,7 +219,7 @@ var _codaWireCollabNotifications = function() {
 	});
 };
 
-if (window.ThisIsTheQtApp || window.ThisIsTheWindowsApp) {
+if (window.ThisIsTheQtApp || window.ThisIsTheWindowsApp || window.codaRemotePage) {
 	// A CODA-Q remote doc in local-edit mode uploads before the host hears the result.
 	map.on('commandresult', function(ev) {
 		if (ev.commandName !== '.uno:Save')
@@ -258,6 +258,10 @@ if (window.ThisIsTheQtApp || window.ThisIsTheWindowsApp) {
 		}, done);
 	});
 }
+
+// Every Qt page has window.bridge over the web channel. On the other apps,
+// only a remote page in an integrator's editor frame has one.
+const opensThroughBridge = window.ThisIsTheQtApp || !!window.codaRemotePage;
 
 if (window.ThisIsTheEmscriptenApp) {
 	// Ensure the access token is available on the global object
@@ -303,7 +307,7 @@ if (window.ThisIsTheEmscriptenApp) {
 		// Local file, use directly
 		initEmscriptenModule('local', docURL);
 	}
-} else if (window.ThisIsTheQtApp) {
+} else if (opensThroughBridge) {
 	// The page opens its document through window.bridge. For a remote document, getRemoteInfo
 	// returns the WOPI values (wopiSrc, accessToken, coolServer, coolPath). The page fetches the
 	// file through /co/collab and hands the bytes to native code with writeRemoteDocFile, so the
