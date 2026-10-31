@@ -40,7 +40,6 @@ $(eval $(call gb_Library_use_libraries,vclcanvas,\
 	cppuhelper \
 	i18nlangtag \
 	sal \
-	svt \
 	tk \
 	tl \
 	vcl \
