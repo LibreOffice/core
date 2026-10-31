@@ -5391,7 +5391,16 @@ struct OoxmlEqContext
         const sal_Int32 nScale
             = lcl_AdjustmentScale((*pAdjustmentInfo)[nIndex].eKind, nViewBoxWidth, nViewBoxHeight);
         if (nScale == 0)
+        {
+            // An angle stored in 60000ths of a degree, used as a plain number: its value in
+            // the unit the idiom X*(pi/c) gives it.
+            if (rAngleAdjustments60000.count(nIndex) > 0)
+                return addGuide("*/ " + aName + " "
+                                + OString::number(static_cast<sal_Int32>(
+                                      std::lround((*pAdjustmentInfo)[nIndex].fAngleConst)))
+                                + " 10800000");
             return aName;
+        }
         return addGuide("*/ " + aName + " " + OString::number(nScale) + " 100000");
     }
 
@@ -6377,6 +6386,225 @@ void lcl_BuildPolarHandles(const std::vector<PolarHandleRaw>& rHandles,
     }
 }
 
+// An angle parameter of an arc command as a token in 60000ths of a degree: an equation that is
+// an angle holds that already, a number is in degrees, anything else is a value in degrees that
+// a guide scales. Empty when it cannot be expressed.
+OString lcl_ArcAngleToken(const drawing::EnhancedCustomShapeParameter& rParam, OoxmlEqContext& rCtx)
+{
+    sal_Int32 nIndex = -1;
+    // An equation that is an angle gives radians, which the shape reads as degrees here: the
+    // arc keeps its number in that case.
+    if (rParam.Type == drawing::EnhancedCustomShapeParameterType::EQUATION
+        && (rParam.Value >>= nIndex) && nIndex >= 0
+        && o3tl::make_unsigned(nIndex) < rCtx.rEqNames.size() && rCtx.rEqIsAngle[nIndex])
+        return OString();
+    // An adjustment stored in 60000ths of a degree is the arc angle as it is when the
+    // equations use it in degrees.
+    if (rParam.Type == drawing::EnhancedCustomShapeParameterType::ADJUSTMENT
+        && (rParam.Value >>= nIndex) && rCtx.rAngleAdjustments60000.count(nIndex) > 0
+        && rCtx.pAdjustmentInfo && o3tl::make_unsigned(nIndex) < rCtx.pAdjustmentInfo->size()
+        && (*rCtx.pAdjustmentInfo)[nIndex].fAngleConst == 180.0)
+    {
+        rCtx.rUsedAdjustments.insert(nIndex);
+        return "adj" + OString::number(nIndex + 1);
+    }
+    if (rParam.Type == drawing::EnhancedCustomShapeParameterType::NORMAL)
+    {
+        double fValue = 0.0;
+        if (rParam.Value >>= nIndex)
+            fValue = nIndex;
+        else if (!(rParam.Value >>= fValue))
+            return OString();
+        return lcl_EmitConstant(fValue * 60000.0, rCtx);
+    }
+    const OString aDegrees = lcl_HandleParameterToken(rParam, rCtx);
+    if (aDegrees.isEmpty())
+        return OString();
+    return rCtx.addGuide("*/ " + aDegrees + " 60000 1");
+}
+
+// The point where the ray at an angle (60000ths) from the centre meets the ellipse, as guides:
+// the presets build it the same way (blockArc).
+void lcl_ArcRayPoint(std::string_view rCx, std::string_view rCy, std::string_view rWR,
+                     std::string_view rHR, std::string_view rAngle, OoxmlEqContext& rCtx,
+                     OString& rX, OString& rY)
+{
+    const OString aWt = rCtx.addGuide(OString::Concat("sin ") + rWR + " " + rAngle);
+    const OString aHt = rCtx.addGuide(OString::Concat("cos ") + rHR + " " + rAngle);
+    const OString aDx = rCtx.addGuide(OString::Concat("cat2 ") + rWR + " " + aHt + " " + aWt);
+    const OString aDy = rCtx.addGuide(OString::Concat("sat2 ") + rHR + " " + aHt + " " + aWt);
+    rX = rCtx.addGuide(OString::Concat("+- ") + rCx + " " + aDx + " 0");
+    rY = rCtx.addGuide(OString::Concat("+- ") + rCy + " " + aDy + " 0");
+}
+
+// The swing from rStart to rEnd (60000ths) in the turning direction of the command: a clockwise
+// arc swings by a positive angle, a counter-clockwise one by a negative angle.
+OString lcl_ArcSwing(std::string_view rStart, std::string_view rEnd, bool bClockwise,
+                     OoxmlEqContext& rCtx)
+{
+    const OString aSwing = rCtx.addGuide(OString::Concat("+- ") + rEnd + " 0 " + rStart);
+    if (bClockwise)
+    {
+        // swing < 0: add a full turn
+        const OString aNegative = rCtx.addGuide("*/ " + aSwing + " -1 1");
+        const OString aPlusTurn = rCtx.addGuide("+- " + aSwing + " 21600000 0");
+        return rCtx.addGuide("?: " + aNegative + " " + aPlusTurn + " " + aSwing);
+    }
+    // swing > 0: take a full turn off
+    const OString aMinusTurn = rCtx.addGuide("+- " + aSwing + " 0 21600000");
+    return rCtx.addGuide("?: " + aSwing + " " + aMinusTurn + " " + aSwing);
+}
+
+// Fills the coordinate tokens of the arc commands whose parameters can all be expressed, so that
+// the segment writer emits arcTo with guides and the adjustments behind them stay live. The
+// slots of a command's pairs hold, in order: the start point of the arc, the radii, and the
+// start and swing angle (60000ths); a slot the writer does not read repeats a token, so that the
+// frozen-adjustment scan sees the pair as symbolic.
+void lcl_CollectArcTokens(
+    const cpo::uno::Sequence<drawing::EnhancedCustomShapeSegment>& rSegments,
+    const cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rPairs,
+    OoxmlEqContext& rCtx, CustomGeometryPlan& rPlan)
+{
+    sal_Int32 nPairIndex = 0;
+    for (const drawing::EnhancedCustomShapeSegment& rSegment : rSegments)
+    {
+        sal_Int32 nPairsPerCommand = 0;
+        switch (rSegment.Command)
+        {
+            case drawing::EnhancedCustomShapeSegmentCommand::MOVETO:
+            case drawing::EnhancedCustomShapeSegmentCommand::LINETO:
+            case drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTX:
+            case drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTY:
+                nPairsPerCommand = 1;
+                break;
+            case drawing::EnhancedCustomShapeSegmentCommand::CURVETO:
+            case drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO:
+            case drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE:
+                nPairsPerCommand = 3;
+                break;
+            case drawing::EnhancedCustomShapeSegmentCommand::QUADRATICCURVETO:
+            case drawing::EnhancedCustomShapeSegmentCommand::ARCANGLETO:
+                nPairsPerCommand = 2;
+                break;
+            case drawing::EnhancedCustomShapeSegmentCommand::ARCTO:
+            case drawing::EnhancedCustomShapeSegmentCommand::ARC:
+            case drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO:
+            case drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC:
+                nPairsPerCommand = 4;
+                break;
+            default:
+                break;
+        }
+        for (sal_Int32 k = 0; k < rSegment.Count; ++k, nPairIndex += nPairsPerCommand)
+        {
+            if (nPairIndex + nPairsPerCommand > rPairs.getLength())
+                break;
+            const drawing::EnhancedCustomShapeParameterPair* pPair = &rPairs[nPairIndex];
+            // an arc of plain numbers stays as it is
+            bool bDepends = false;
+            for (sal_Int32 i = 0; i < nPairsPerCommand; ++i)
+            {
+                for (const drawing::EnhancedCustomShapeParameter* pParam :
+                     { &pPair[i].First, &pPair[i].Second })
+                {
+                    if (pParam->Type == drawing::EnhancedCustomShapeParameterType::EQUATION
+                        || pParam->Type == drawing::EnhancedCustomShapeParameterType::ADJUSTMENT)
+                        bDepends = true;
+                }
+            }
+            if (!bDepends)
+                continue;
+            std::vector<OString> aTokens;
+            switch (rSegment.Command)
+            {
+                case drawing::EnhancedCustomShapeSegmentCommand::ARCANGLETO:
+                {
+                    const OString aWR = lcl_HandleParameterToken(pPair[0].First, rCtx);
+                    const OString aHR = lcl_HandleParameterToken(pPair[0].Second, rCtx);
+                    const OString aStart = lcl_ArcAngleToken(pPair[1].First, rCtx);
+                    const OString aSwing = lcl_ArcAngleToken(pPair[1].Second, rCtx);
+                    if (aWR.isEmpty() || aHR.isEmpty() || aStart.isEmpty() || aSwing.isEmpty())
+                        break;
+                    aTokens = { aWR, aHR, aStart, aSwing };
+                    break;
+                }
+                case drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO:
+                case drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE:
+                {
+                    const OString aCx = lcl_HandleParameterToken(pPair[0].First, rCtx);
+                    const OString aCy = lcl_HandleParameterToken(pPair[0].Second, rCtx);
+                    const OString aWR = lcl_HandleParameterToken(pPair[1].First, rCtx);
+                    const OString aHR = lcl_HandleParameterToken(pPair[1].Second, rCtx);
+                    const OString aStart = lcl_ArcAngleToken(pPair[2].First, rCtx);
+                    const OString aEnd = lcl_ArcAngleToken(pPair[2].Second, rCtx);
+                    if (aCx.isEmpty() || aCy.isEmpty() || aWR.isEmpty() || aHR.isEmpty()
+                        || aStart.isEmpty() || aEnd.isEmpty())
+                        break;
+                    OString aSx;
+                    OString aSy;
+                    lcl_ArcRayPoint(aCx, aCy, aWR, aHR, aStart, rCtx, aSx, aSy);
+                    aTokens
+                        = { aSx, aSy, aWR, aHR, aStart, lcl_ArcSwing(aStart, aEnd, true, rCtx) };
+                    break;
+                }
+                case drawing::EnhancedCustomShapeSegmentCommand::ARCTO:
+                case drawing::EnhancedCustomShapeSegmentCommand::ARC:
+                case drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO:
+                case drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC:
+                {
+                    const OString aX1 = lcl_HandleParameterToken(pPair[0].First, rCtx);
+                    const OString aY1 = lcl_HandleParameterToken(pPair[0].Second, rCtx);
+                    const OString aX2 = lcl_HandleParameterToken(pPair[1].First, rCtx);
+                    const OString aY2 = lcl_HandleParameterToken(pPair[1].Second, rCtx);
+                    const OString aX3 = lcl_HandleParameterToken(pPair[2].First, rCtx);
+                    const OString aY3 = lcl_HandleParameterToken(pPair[2].Second, rCtx);
+                    const OString aX4 = lcl_HandleParameterToken(pPair[3].First, rCtx);
+                    const OString aY4 = lcl_HandleParameterToken(pPair[3].Second, rCtx);
+                    if (aX1.isEmpty() || aY1.isEmpty() || aX2.isEmpty() || aY2.isEmpty()
+                        || aX3.isEmpty() || aY3.isEmpty() || aX4.isEmpty() || aY4.isEmpty())
+                        break;
+                    // the ellipse of the bounding box
+                    const OString aWR = rCtx.addGuide(
+                        "*/ " + rCtx.addGuide("abs " + rCtx.addGuide("+- " + aX2 + " 0 " + aX1))
+                        + " 1 2");
+                    const OString aHR = rCtx.addGuide(
+                        "*/ " + rCtx.addGuide("abs " + rCtx.addGuide("+- " + aY2 + " 0 " + aY1))
+                        + " 1 2");
+                    const OString aCx = rCtx.addGuide("+/ " + aX1 + " " + aX2 + " 2");
+                    const OString aCy = rCtx.addGuide("+/ " + aY1 + " " + aY2 + " 2");
+                    // the angles of the rays from the centre through the two points
+                    const OString aStartDX = rCtx.addGuide("+- " + aX3 + " 0 " + aCx);
+                    const OString aStartDY = rCtx.addGuide("+- " + aY3 + " 0 " + aCy);
+                    const OString aStart = rCtx.addGuide("at2 " + aStartDX + " " + aStartDY);
+                    const OString aEndDX = rCtx.addGuide("+- " + aX4 + " 0 " + aCx);
+                    const OString aEndDY = rCtx.addGuide("+- " + aY4 + " 0 " + aCy);
+                    const OString aEnd = rCtx.addGuide("at2 " + aEndDX + " " + aEndDY);
+                    const bool bClockwise
+                        = rSegment.Command
+                              == drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO
+                          || rSegment.Command
+                                 == drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC;
+                    OString aSx;
+                    OString aSy;
+                    lcl_ArcRayPoint(aCx, aCy, aWR, aHR, aStart, rCtx, aSx, aSy);
+                    const OString aSwing = lcl_ArcSwing(aStart, aEnd, bClockwise, rCtx);
+                    aTokens = { aSx, aSy, aWR, aHR, aStart, aSwing, aEnd, aEnd };
+                    break;
+                }
+                default:
+                    break;
+            }
+            if (aTokens.empty() || rCtx.bFailed)
+            {
+                rCtx.bFailed = false;
+                continue;
+            }
+            for (size_t i = 0; i < aTokens.size(); ++i)
+                rPlan.aCoordTokens[2 * nPairIndex + i] = aTokens[i];
+        }
+    }
+}
+
 // The glue points of a parametric shape: each coordinate, a number or an equation, is converted
 // to the EMU extent of the shape through the w and h built-ins, so that a connector attached in
 // Office follows the adjustment values like the rest of the geometry. Returns false when a glue
@@ -6444,6 +6672,7 @@ bool lcl_BuildParametricPlan(
     lcl_CollectCoordinateTokens(rSegments, rPairs, aContext, aPlan);
     if (aContext.bFailed)
         return false;
+    lcl_CollectArcTokens(rSegments, rPairs, aContext, aPlan);
 
     // A handle whose adjustment also feeds a coordinate that stays a number would move only
     // part of the geometry.
@@ -7463,24 +7692,36 @@ bool DrawingML::WriteCustomGeometrySegment(
             double fSy = 0.0;
             getEllipsePointFromViewAngle(fSx, fSy, fWR, fHR, fCx, fCy, fStartAngle);
 
+            // the tokens of the start point, the radii and the angles when the arc is symbolic
+            const OString* pSx = lcl_CoordToken(pCoordTokens, rnPairIndex, true);
+            const OString* pSy = lcl_CoordToken(pCoordTokens, rnPairIndex, false);
+            const OString* pWR = lcl_CoordToken(pCoordTokens, rnPairIndex + 1, true);
+            const OString* pHR = lcl_CoordToken(pCoordTokens, rnPairIndex + 1, false);
+            const OString* pStart = lcl_CoordToken(pCoordTokens, rnPairIndex + 2, true);
+            const OString* pSwing = lcl_CoordToken(pCoordTokens, rnPairIndex + 2, false);
+            const bool bSymbolic = pSx && pSy && pWR && pHR && pStart && pSwing;
+            const OString sSx = bSymbolic ? *pSx : OString::number(std::lround(fSx));
+            const OString sSy = bSymbolic ? *pSy : OString::number(std::lround(fSy));
+
             // write markup for going to start point
             // lnTo requires a valid current point
             if (eCommand == ANGLEELLIPSETO && rbCurrentValid)
             {
                 mpFS->startElementNS(XML_a, XML_lnTo);
-                mpFS->singleElementNS(XML_a, XML_pt, XML_x, OString::number(std::lround(fSx)),
-                                      XML_y, OString::number(std::lround(fSy)));
+                mpFS->singleElementNS(XML_a, XML_pt, XML_x, sSx, XML_y, sSy);
                 mpFS->endElementNS(XML_a, XML_lnTo);
             }
             else
             {
                 mpFS->startElementNS(XML_a, XML_moveTo);
-                mpFS->singleElementNS(XML_a, XML_pt, XML_x, OString::number(std::lround(fSx)),
-                                      XML_y, OString::number(std::lround(fSy)));
+                mpFS->singleElementNS(XML_a, XML_pt, XML_x, sSx, XML_y, sSy);
                 mpFS->endElementNS(XML_a, XML_moveTo);
             }
             // write markup for arcTo
-            if (!basegfx::fTools::equalZero(fWR) && !basegfx::fTools::equalZero(fHR))
+            if (bSymbolic)
+                mpFS->singleElement(FSNS(XML_a, XML_arcTo), XML_wR, *pWR, XML_hR, *pHR, XML_stAng,
+                                    *pStart, XML_swAng, *pSwing);
+            else if (!basegfx::fTools::equalZero(fWR) && !basegfx::fTools::equalZero(fHR))
                 mpFS->singleElement(
                     FSNS(XML_a, XML_arcTo), XML_wR, OString::number(std::lround(fWR)), XML_hR,
                     OString::number(std::lround(fHR)), XML_stAng, OString::number(nStartAng),
@@ -7533,20 +7774,28 @@ bool DrawingML::WriteCustomGeometrySegment(
             double fPy = 0.0;
             getEllipsePointAndAngleFromRayPoint(fStartAngle, fPx, fPy, fWR, fHR, fCx, fCy, fX3,
                                                 fY3);
+            // the tokens of the start point, the radii and the angles when the arc is symbolic
+            const OString* pSx = lcl_CoordToken(pCoordTokens, rnPairIndex, true);
+            const OString* pSy = lcl_CoordToken(pCoordTokens, rnPairIndex, false);
+            const OString* pWR = lcl_CoordToken(pCoordTokens, rnPairIndex + 1, true);
+            const OString* pHR = lcl_CoordToken(pCoordTokens, rnPairIndex + 1, false);
+            const OString* pStart = lcl_CoordToken(pCoordTokens, rnPairIndex + 2, true);
+            const OString* pSwing = lcl_CoordToken(pCoordTokens, rnPairIndex + 2, false);
+            const bool bSymbolic = pSx && pSy && pWR && pHR && pStart && pSwing;
+            const OString sPx = bSymbolic ? *pSx : OString::number(std::lround(fPx));
+            const OString sPy = bSymbolic ? *pSy : OString::number(std::lround(fPy));
             // markup for going to start point
             // lnTo requires a valid current point.
             if ((eCommand == ARCTO || eCommand == CLOCKWISEARCTO) && rbCurrentValid)
             {
                 mpFS->startElementNS(XML_a, XML_lnTo);
-                mpFS->singleElementNS(XML_a, XML_pt, XML_x, OString::number(std::lround(fPx)),
-                                      XML_y, OString::number(std::lround(fPy)));
+                mpFS->singleElementNS(XML_a, XML_pt, XML_x, sPx, XML_y, sPy);
                 mpFS->endElementNS(XML_a, XML_lnTo);
             }
             else
             {
                 mpFS->startElementNS(XML_a, XML_moveTo);
-                mpFS->singleElementNS(XML_a, XML_pt, XML_x, OString::number(std::lround(fPx)),
-                                      XML_y, OString::number(std::lround(fPy)));
+                mpFS->singleElementNS(XML_a, XML_pt, XML_x, sPx, XML_y, sPy);
                 mpFS->endElementNS(XML_a, XML_moveTo);
             }
             // calculate swing angle
@@ -7562,9 +7811,14 @@ bool DrawingML::WriteCustomGeometrySegment(
             // ToDo: write markup for case zero width or height of ellipse
             const sal_Int32 nStartAng(std::lround(fStartAngle * 60000));
             const sal_Int32 nSwingAng(std::lround(fSwingAngle * 60000));
-            mpFS->singleElement(FSNS(XML_a, XML_arcTo), XML_wR, OString::number(std::lround(fWR)),
-                                XML_hR, OString::number(std::lround(fHR)), XML_stAng,
-                                OString::number(nStartAng), XML_swAng, OString::number(nSwingAng));
+            if (bSymbolic)
+                mpFS->singleElement(FSNS(XML_a, XML_arcTo), XML_wR, *pWR, XML_hR, *pHR, XML_stAng,
+                                    *pStart, XML_swAng, *pSwing);
+            else
+                mpFS->singleElement(
+                    FSNS(XML_a, XML_arcTo), XML_wR, OString::number(std::lround(fWR)), XML_hR,
+                    OString::number(std::lround(fHR)), XML_stAng, OString::number(nStartAng),
+                    XML_swAng, OString::number(nSwingAng));
             rfCurrentX = fPx;
             rfCurrentY = fPy;
             rbCurrentValid = true;
@@ -7668,9 +7922,18 @@ bool DrawingML::WriteCustomGeometrySegment(
             double fSwingAng = 0.0;
             rCustomShape2d.GetParameter(fSwingAng, rPairs[rnPairIndex + 1].Second, false, false);
             sal_Int32 nSwingAng(std::lround(fSwingAng * 60000));
-            mpFS->singleElement(FSNS(XML_a, XML_arcTo), XML_wR, OString::number(std::lround(fWR)),
-                                XML_hR, OString::number(std::lround(fHR)), XML_stAng, OString::number(nStartAng),
-                                XML_swAng, OString::number(nSwingAng));
+            const OString* pWR = lcl_CoordToken(pCoordTokens, rnPairIndex, true);
+            const OString* pHR = lcl_CoordToken(pCoordTokens, rnPairIndex, false);
+            const OString* pStart = lcl_CoordToken(pCoordTokens, rnPairIndex + 1, true);
+            const OString* pSwing = lcl_CoordToken(pCoordTokens, rnPairIndex + 1, false);
+            if (pWR && pHR && pStart && pSwing)
+                mpFS->singleElement(FSNS(XML_a, XML_arcTo), XML_wR, *pWR, XML_hR, *pHR, XML_stAng,
+                                    *pStart, XML_swAng, *pSwing);
+            else
+                mpFS->singleElement(
+                    FSNS(XML_a, XML_arcTo), XML_wR, OString::number(std::lround(fWR)), XML_hR,
+                    OString::number(std::lround(fHR)), XML_stAng, OString::number(nStartAng),
+                    XML_swAng, OString::number(nSwingAng));
             double fPx = 0.0;
             double fPy = 0.0;
             getEllipsePointFromViewAngle(fPx, fPy, fWR, fHR, 0.0, 0.0, fStartAngle);

@@ -1419,10 +1419,22 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf157289CircularArrowExport)
     loadFromFile(u"tdf157289_circularArrow_export.fodp");
     save(TestFilter::PPTX);
 
-    // Verify the markup. Both wR and hR must be positive.
+    // Verify the markup. The arc now takes its radii from guides built from the bounding box
+    // of the B command; they are the half of the absolute width, so positive either way, and
+    // the adjustment that sizes them is declared.
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
-    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo[1]", "wR", u"6750");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo[1]", "hR", u"6750");
+    OUString aWR = getXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo[1]", "wR");
+    CPPUNIT_ASSERT(aWR.startsWith("f"));
+    CPPUNIT_ASSERT_EQUAL(aWR, getXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo[1]", "hR"));
+    OUString aHalf
+        = getXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='" + aWR.toUtf8() + "']", "fmla");
+    CPPUNIT_ASSERT(aHalf.startsWith("*/ "));
+    CPPUNIT_ASSERT(aHalf.endsWith(" 1 2"));
+    OUString aAbs = aHalf.copy(3, aHalf.getLength() - 7);
+    OUString aAbsFormula
+        = getXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='" + aAbs.toUtf8() + "']", "fmla");
+    CPPUNIT_ASSERT(aAbsFormula.startsWith("abs "));
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", 3);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf134401_ExportAutoGrowToTextWordWrap)
@@ -1745,21 +1757,86 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeSwitchedHandle)
     assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f3']", "fmla", u"*/ f0 h 21600");
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testCustomShapeArcHandleStaysStatic)
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeArcHandleFollowsEllipse)
 {
-    // Given a shape whose adjustment sizes an ellipse, which is still written with numbers:
+    // Given a shape whose adjustment sizes an ellipse drawn by the U command:
     loadFromFile(u"custGeom_arcHandle.fodp");
 
     // When saving it to PPTX:
     save(TestFilter::PPTX);
 
-    // Then the adjustment is declared but no handle drives it: a handle that moved only the
-    // guides and not the ellipse would tear the shape apart
+    // Then the ellipse takes its radii from the adjustment through guides, its start point is
+    // the point of the ellipse at the start angle, a full turn is the swing, and the handle
+    // that sizes it is written
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", 1);
     assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", "fmla", u"val 23148");
-    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/*", 0);
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]/a:arcTo", "wR", u"5000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f0']", "fmla", u"*/ adj1 21600 100000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f1']", "fmla", u"*/ f0 1 2");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]/a:arcTo", "wR", u"f0");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]/a:arcTo", "hR", u"f1");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]/a:arcTo", "stAng", u"0");
+    OUString aSwing = getXPath(pXmlDoc, "//a:pathLst/a:path[2]/a:arcTo", "swAng");
+    CPPUNIT_ASSERT(aSwing.startsWith("f"));
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f4']", "fmla", u"cat2 f0 f3 f2");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f5']", "fmla", u"sat2 f1 f3 f2");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]/a:moveTo/a:pt", "x", u"f6");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]/a:moveTo/a:pt", "y", u"f7");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", 1);
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", "gdRefX", u"adj1");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeArcByAngles)
+{
+    // Given a pie drawn by the G command from a polar handle's radius and angle:
+    loadFromFile(u"custGeom_arcAngleTo.fodp");
+
+    // When saving it to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then the arc takes its radius from the radius adjustment, its start angle is the angle
+    // adjustment itself (both are stored in the units arcTo wants), the swing is the constant
+    // in 60000ths, and the polar handle is written with its radius range
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd[@name='adj1']", "fmla", u"val 3600000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd[@name='adj2']", "fmla", u"val 33333");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo/a:pt", "x", u"f2");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo/a:pt", "y", u"f4");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "wR", u"f0");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "hR", u"f0");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "stAng", u"adj1");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "swAng", u"5400000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar", "gdRefR", u"adj2");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar", "minR", u"4630");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar", "maxR", u"50000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar", "gdRefAng", u"adj1");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeArcByPoints)
+{
+    // Given a wedge drawn by the B command whose end points follow an xy handle:
+    loadFromFile(u"custGeom_arcByPoints.fodp");
+
+    // When saving it to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then the radii and the centre come from the bounding box, the angles from at2 of the
+    // rays through the two points, the swing is turned counter-clockwise, and the handle stays
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "wR", u"f4");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "hR", u"f4");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f4']", "fmla", u"*/ f3 1 2");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f5']", "fmla", u"+/ 0 21600 2");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "stAng", u"f8");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f8']", "fmla", u"at2 f6 f7");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f11']", "fmla", u"at2 f9 f10");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "swAng", u"f20");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f18']", "fmla", u"+- f11 0 f8");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f19']", "fmla", u"+- f18 0 21600000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f20']", "fmla", u"?: f18 f19 f18");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:moveTo[2]/a:pt", "x", u"f16");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:moveTo[2]/a:pt", "y", u"f17");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCustomShapeFreeHandleIsUnlimited)
