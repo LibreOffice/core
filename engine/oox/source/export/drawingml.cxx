@@ -5119,6 +5119,32 @@ struct Guide
     OString sFormula;
 };
 
+// Everything the custGeom writer needs, collected before the first element is written, so that
+// a shape whose conversion fails halfway can still take the plain path with resolved
+// coordinates.
+struct CustomGeometryPlan
+{
+    std::vector<Guide> aAdjustments; // <a:avLst>
+    std::vector<Guide> aGuides; // <a:gdLst>, in dependency order
+    // Two entries (x, y) per pair of the path "Coordinates"; an empty entry means the resolved
+    // number is written.
+    std::vector<OString> aCoordTokens;
+    TextAreaRect aTextAreaRect;
+};
+
+// The token of the x (bX) or y coordinate of pair nPairIndex, or null when the resolved
+// number is written.
+const OString* lcl_CoordToken(const std::vector<OString>* pCoordTokens, sal_Int32 nPairIndex,
+                              bool bX)
+{
+    if (!pCoordTokens)
+        return nullptr;
+    size_t nIndex = 2 * static_cast<size_t>(nPairIndex) + (bX ? 0 : 1);
+    if (nIndex >= pCoordTokens->size() || (*pCoordTokens)[nIndex].isEmpty())
+        return nullptr;
+    return &(*pCoordTokens)[nIndex];
+}
+
 void prepareTextArea(const EnhancedCustomShape2d& rEnhancedCustomShape2d,
                      std::vector<Guide>& rGuideList, TextAreaRect& rTextAreaRect)
 {
@@ -5182,9 +5208,11 @@ void prepareTextArea(const EnhancedCustomShape2d& rEnhancedCustomShape2d,
     return;
 }
 
-// True when the formula states one operation of the OOXML grammar over pieces that are whole
-// numbers, the built-in measures of a shape, or guides written before it.
-bool IsValidOOXMLFormula(std::u16string_view sFormula, const std::set<OUString>& rGuideNames)
+// A guide formula as ECMA-376 21.1.2.2.2 defines it: an operator followed by its operands, where
+// an operand is an integer, a built-in variable, an already defined guide, or an adjustment
+// declared in <a:avLst>.
+bool IsValidOOXMLFormula(std::u16string_view sFormula, const std::set<OUString>& rGuideNames,
+                         const std::set<OUString>& rAdjustmentNames)
 {
     // Accepted Formulas
     // "val n1"
@@ -5192,38 +5220,57 @@ bool IsValidOOXMLFormula(std::u16string_view sFormula, const std::set<OUString>&
     // "sqrt n1"
     // "min n1 n2"
     // "max n1 n2"
+    // "sin n1 n2"
+    // "cos n1 n2"
+    // "tan n1 n2"
+    // "at2 n1 n2"
     // "*/ n1 n2 n3"
     // "+- n1 n2 n3"
+    // "+/ n1 n2 n3"
     // "?: n1 n2 n3"
+    // "cat2 n1 n2 n3"
+    // "sat2 n1 n2 n3"
+    // "pin n1 n2 n3"
+    // "mod n1 n2 n3"
 
     // Below vector contains validTokens for the 1st token based on the number of tokens in the formula. The order is: 2, 3, 4
     static const std::vector<std::set<OUString>> validTokens
-        = { { u"val"_ustr, u"abs"_ustr, u"sqrt"_ustr }, { u"min"_ustr, u"max"_ustr }, { u"*/"_ustr, u"+-"_ustr, u"?:"_ustr } };
+        = { { u"val"_ustr, u"abs"_ustr, u"sqrt"_ustr },
+            { u"min"_ustr, u"max"_ustr, u"sin"_ustr, u"cos"_ustr, u"tan"_ustr, u"at2"_ustr },
+            { u"*/"_ustr, u"+-"_ustr, u"+/"_ustr, u"?:"_ustr, u"cat2"_ustr, u"sat2"_ustr,
+              u"pin"_ustr, u"mod"_ustr } };
     static const std::set<OUString> builtInVariables = { u"w"_ustr, u"h"_ustr, u"t"_ustr, u"b"_ustr, u"l"_ustr, u"r"_ustr };
     const std::vector<OUString> strTokens = comphelper::string::split(sFormula, ' ');
     sal_uInt16 nSize = strTokens.size();
 
     if (nSize > 1 && nSize < 5)
     {
-        auto aTokens = validTokens[nSize - 2];
+        const std::set<OUString>& rTokens = validTokens[nSize - 2];
 
         // Check whether the 1st token is valid
-        if (aTokens.find(strTokens[0]) == aTokens.end())
+        if (rTokens.find(strTokens[0]) == rTokens.end())
             return false;
 
-        // Check that the remaining tokens are either numbers or buit-in variables
+        // Check that the remaining tokens are numbers, built-in variables, guides or adjustments
         for (sal_Int16 i = 1; i < nSize; i++)
         {
             OUString sVal = strTokens[i];
             sal_Int64 nVal = sVal.toInt64();
             if (builtInVariables.find(sVal) == builtInVariables.end()
                 && rGuideNames.find(sVal) == rGuideNames.end()
+                && rAdjustmentNames.find(sVal) == rAdjustmentNames.end()
                 && OUString::number(nVal) != sVal)
                 return false;
         }
         return true;
     }
     return false;
+}
+
+bool IsValidOOXMLFormula(std::u16string_view sFormula, const std::set<OUString>& rGuideNames)
+{
+    static const std::set<OUString> aNoAdjustments;
+    return IsValidOOXMLFormula(sFormula, rGuideNames, aNoAdjustments);
 }
 
 // A shape states its geometry as a list of equations, and one equation reaches the ones before
@@ -5602,6 +5649,67 @@ void prepareGluePoints(std::vector<Guide>& rGuideList,
         }
     }
 }
+
+// Writes <a:avLst>, <a:gdLst>, <a:ahLst>, <a:cxnLst> and <a:rect> of a <a:custGeom>.
+void lcl_WriteCustomGeometryLists(const FSHelperPtr& rFS, const CustomGeometryPlan& rPlan)
+{
+    if (rPlan.aAdjustments.empty())
+    {
+        rFS->singleElementNS(XML_a, XML_avLst);
+    }
+    else
+    {
+        rFS->startElementNS(XML_a, XML_avLst);
+        for (const Guide& rGuide : rPlan.aAdjustments)
+            rFS->singleElementNS(XML_a, XML_gd, XML_name, rGuide.sName, XML_fmla, rGuide.sFormula);
+        rFS->endElementNS(XML_a, XML_avLst);
+    }
+    if (rPlan.aGuides.empty())
+    {
+        rFS->singleElementNS(XML_a, XML_gdLst);
+    }
+    else
+    {
+        rFS->startElementNS(XML_a, XML_gdLst);
+        std::set<OUString> aGuideNames;
+        std::set<OUString> aAdjustmentNames;
+        for (const Guide& rGuide : rPlan.aAdjustments)
+            aAdjustmentNames.insert(OUString::fromUtf8(rGuide.sName));
+        for (const Guide& rGuide : rPlan.aGuides)
+        {
+            assert(IsValidOOXMLFormula(OUString::fromUtf8(rGuide.sFormula), aGuideNames,
+                                       aAdjustmentNames));
+            aGuideNames.insert(OUString::fromUtf8(rGuide.sName));
+            rFS->singleElementNS(XML_a, XML_gd, XML_name, rGuide.sName, XML_fmla, rGuide.sFormula);
+        }
+        rFS->endElementNS(XML_a, XML_gdLst);
+    }
+    rFS->singleElementNS(XML_a, XML_ahLst);
+
+    if (!rPlan.aGuides.empty())
+    {
+        rFS->startElementNS(XML_a, XML_cxnLst);
+        for (std::vector<Guide>::const_iterator it = rPlan.aGuides.begin();
+             it != rPlan.aGuides.end(); ++it)
+        {
+            std::vector<Guide>::const_iterator aNextIt = std::next(it);
+            if (aNextIt != rPlan.aGuides.end() && it->sName.startsWith("GluePoint")
+                && aNextIt->sName.startsWith("GluePoint"))
+            {
+                rFS->startElementNS(XML_a, XML_cxn, XML_ang, "0");
+                rFS->singleElementNS(XML_a, XML_pos, XML_x, it->sName, XML_y, aNextIt->sName);
+                rFS->endElementNS(XML_a, XML_cxn);
+
+                ++it;
+            }
+        }
+        rFS->endElementNS(XML_a, XML_cxnLst);
+    }
+
+    rFS->singleElementNS(XML_a, XML_rect, XML_l, rPlan.aTextAreaRect.left, XML_t,
+                         rPlan.aTextAreaRect.top, XML_r, rPlan.aTextAreaRect.right, XML_b,
+                         rPlan.aTextAreaRect.bottom);
+}
 }
 
 bool DrawingML::WriteCustomGeometry(
@@ -5777,51 +5885,14 @@ bool DrawingML::WriteCustomGeometry(
         // shift of the resulting path coordinates.
     }
 
-    TextAreaRect aTextAreaRect;
-    std::vector<Guide> aGuideList; // for now only for <a:rect>
-    prepareTextArea(aCustomShape2d, aGuideList, aTextAreaRect);
-    prepareGluePoints(aGuideList, aEquationSeq, aGluePoints, bOOXML, nViewBoxWidth, nViewBoxHeight);
+    CustomGeometryPlan aPlan;
+    prepareTextArea(aCustomShape2d, aPlan.aGuides, aPlan.aTextAreaRect);
+    prepareGluePoints(aPlan.aGuides, aEquationSeq, aGluePoints, bOOXML, nViewBoxWidth,
+                      nViewBoxHeight);
+    const std::vector<OString>* pCoordTokens
+        = aPlan.aCoordTokens.empty() ? nullptr : &aPlan.aCoordTokens;
     mpFS->startElementNS(XML_a, XML_custGeom);
-    mpFS->singleElementNS(XML_a, XML_avLst);
-    if (aGuideList.empty())
-    {
-        mpFS->singleElementNS(XML_a, XML_gdLst);
-    }
-    else
-    {
-        mpFS->startElementNS(XML_a, XML_gdLst);
-        std::set<OUString> aGuideNames;
-        for (auto const& elem : aGuideList)
-        {
-            assert(IsValidOOXMLFormula(OUString::fromUtf8(elem.sFormula), aGuideNames));
-            aGuideNames.insert(OUString::fromUtf8(elem.sName));
-            mpFS->singleElementNS(XML_a, XML_gd, XML_name, elem.sName, XML_fmla, elem.sFormula);
-        }
-        mpFS->endElementNS(XML_a, XML_gdLst);
-    }
-    mpFS->singleElementNS(XML_a, XML_ahLst);
-
-    if (!aGuideList.empty())
-    {
-        mpFS->startElementNS(XML_a, XML_cxnLst);
-        for (auto it = aGuideList.begin(); it != aGuideList.end(); ++it)
-        {
-            auto aNextIt = std::next(it);
-            if (aNextIt != aGuideList.end() && it->sName.startsWith("GluePoint")
-                && aNextIt->sName.startsWith("GluePoint"))
-            {
-                mpFS->startElementNS(XML_a, XML_cxn, XML_ang, "0");
-                mpFS->singleElementNS(XML_a, XML_pos, XML_x, it->sName, XML_y, aNextIt->sName);
-                mpFS->endElementNS(XML_a, XML_cxn);
-
-                ++it;
-            }
-        }
-        mpFS->endElementNS(XML_a, XML_cxnLst);
-    }
-
-    mpFS->singleElementNS(XML_a, XML_rect, XML_l, aTextAreaRect.left, XML_t, aTextAreaRect.top,
-                          XML_r, aTextAreaRect.right, XML_b, aTextAreaRect.bottom);
+    lcl_WriteCustomGeometryLists(mpFS, aPlan);
     mpFS->startElementNS(XML_a, XML_pathLst);
 
     // Iterate over subpaths
@@ -5897,7 +5968,8 @@ bool DrawingML::WriteCustomGeometry(
             {
                 bOK = WriteCustomGeometrySegment(rSegment.Command, k, aPairs, nPairIndex, fCurrentX,
                                                  fCurrentY, bCurrentValid, aCustomShape2d,
-                                                 bReplaceGeoWidth, bReplaceGeoHeight);
+                                                 bReplaceGeoWidth, bReplaceGeoHeight,
+                                                 pCoordTokens);
             }
         } // end loop over all commands of subpath
         // finish this subpath in any case
@@ -5922,7 +5994,7 @@ bool DrawingML::WriteCustomGeometrySegment(
     const cpo::uno::Sequence<css::drawing::EnhancedCustomShapeParameterPair>& rPairs,
     sal_Int32& rnPairIndex, double& rfCurrentX, double& rfCurrentY, bool& rbCurrentValid,
     const EnhancedCustomShape2d& rCustomShape2d, const bool bReplaceGeoWidth,
-    const bool bReplaceGeoHeight)
+    const bool bReplaceGeoHeight, const std::vector<OString>* pCoordTokens)
 {
     switch (eCommand)
     {
@@ -5933,7 +6005,9 @@ bool DrawingML::WriteCustomGeometrySegment(
 
             mpFS->startElementNS(XML_a, XML_moveTo);
             WriteCustomGeometryPoint(rPairs[rnPairIndex], rCustomShape2d, bReplaceGeoWidth,
-                                     bReplaceGeoHeight);
+                                     bReplaceGeoHeight,
+                                     lcl_CoordToken(pCoordTokens, rnPairIndex, true),
+                                     lcl_CoordToken(pCoordTokens, rnPairIndex, false));
             mpFS->endElementNS(XML_a, XML_moveTo);
             rCustomShape2d.GetParameter(rfCurrentX, rPairs[rnPairIndex].First, bReplaceGeoWidth,
                                         false);
@@ -5954,14 +6028,18 @@ bool DrawingML::WriteCustomGeometrySegment(
             {
                 mpFS->startElementNS(XML_a, XML_lnTo);
                 WriteCustomGeometryPoint(rPairs[rnPairIndex], rCustomShape2d, bReplaceGeoWidth,
-                                         bReplaceGeoHeight);
+                                         bReplaceGeoHeight,
+                                         lcl_CoordToken(pCoordTokens, rnPairIndex, true),
+                                         lcl_CoordToken(pCoordTokens, rnPairIndex, false));
                 mpFS->endElementNS(XML_a, XML_lnTo);
             }
             else
             {
                 mpFS->startElementNS(XML_a, XML_moveTo);
                 WriteCustomGeometryPoint(rPairs[rnPairIndex], rCustomShape2d, bReplaceGeoWidth,
-                                         bReplaceGeoHeight);
+                                         bReplaceGeoHeight,
+                                         lcl_CoordToken(pCoordTokens, rnPairIndex, true),
+                                         lcl_CoordToken(pCoordTokens, rnPairIndex, false));
                 mpFS->endElementNS(XML_a, XML_moveTo);
             }
             rCustomShape2d.GetParameter(rfCurrentX, rPairs[rnPairIndex].First, bReplaceGeoWidth,
@@ -5981,7 +6059,9 @@ bool DrawingML::WriteCustomGeometrySegment(
             for (sal_uInt8 i = 0; i <= 2; ++i)
             {
                 WriteCustomGeometryPoint(rPairs[rnPairIndex + i], rCustomShape2d, bReplaceGeoWidth,
-                                         bReplaceGeoHeight);
+                                         bReplaceGeoHeight,
+                                         lcl_CoordToken(pCoordTokens, rnPairIndex + i, true),
+                                         lcl_CoordToken(pCoordTokens, rnPairIndex + i, false));
             }
             mpFS->endElementNS(XML_a, XML_cubicBezTo);
             rCustomShape2d.GetParameter(rfCurrentX, rPairs[rnPairIndex + 2].First, bReplaceGeoWidth,
@@ -6187,7 +6267,9 @@ bool DrawingML::WriteCustomGeometrySegment(
                 // faulty path, but we continue with the target point
                 mpFS->startElementNS(XML_a, XML_moveTo);
                 WriteCustomGeometryPoint(rPairs[rnPairIndex], rCustomShape2d, bReplaceGeoWidth,
-                                         bReplaceGeoHeight);
+                                         bReplaceGeoHeight,
+                                         lcl_CoordToken(pCoordTokens, rnPairIndex, true),
+                                         lcl_CoordToken(pCoordTokens, rnPairIndex, false));
                 mpFS->endElementNS(XML_a, XML_moveTo);
             }
             rfCurrentX = fX;
@@ -6205,7 +6287,9 @@ bool DrawingML::WriteCustomGeometrySegment(
             for (sal_uInt8 i = 0; i < 2; ++i)
             {
                 WriteCustomGeometryPoint(rPairs[rnPairIndex + i], rCustomShape2d, bReplaceGeoWidth,
-                                         bReplaceGeoHeight);
+                                         bReplaceGeoHeight,
+                                         lcl_CoordToken(pCoordTokens, rnPairIndex + i, true),
+                                         lcl_CoordToken(pCoordTokens, rnPairIndex + i, false));
             }
             mpFS->endElementNS(XML_a, XML_quadBezTo);
             rCustomShape2d.GetParameter(rfCurrentX, rPairs[rnPairIndex + 1].First, bReplaceGeoWidth,
@@ -6255,14 +6339,16 @@ bool DrawingML::WriteCustomGeometrySegment(
 void DrawingML::WriteCustomGeometryPoint(
     const drawing::EnhancedCustomShapeParameterPair& rParamPair,
     const EnhancedCustomShape2d& rCustomShape2d, const bool bReplaceGeoWidth,
-    const bool bReplaceGeoHeight)
+    const bool bReplaceGeoHeight, const OString* pTokenX, const OString* pTokenY)
 {
-    sal_Int32 nX
-        = GetCustomGeometryPointValue(rParamPair.First, rCustomShape2d, bReplaceGeoWidth, false);
-    sal_Int32 nY
-        = GetCustomGeometryPointValue(rParamPair.Second, rCustomShape2d, false, bReplaceGeoHeight);
+    OString sX = pTokenX ? *pTokenX
+                         : OString::number(GetCustomGeometryPointValue(
+                               rParamPair.First, rCustomShape2d, bReplaceGeoWidth, false));
+    OString sY = pTokenY ? *pTokenY
+                         : OString::number(GetCustomGeometryPointValue(
+                               rParamPair.Second, rCustomShape2d, false, bReplaceGeoHeight));
 
-    mpFS->singleElementNS(XML_a, XML_pt, XML_x, OString::number(nX), XML_y, OString::number(nY));
+    mpFS->singleElementNS(XML_a, XML_pt, XML_x, sX, XML_y, sY);
 }
 
 void DrawingML::WriteEmptyCustomGeometry()
