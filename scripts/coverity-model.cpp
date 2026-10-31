@@ -56,6 +56,18 @@ extern "C" {
     void TYPELIB_DANGER_RELEASE(typelib_TypeDescription*) {}
 }
 
+/* The sal log functions read the timezone, backtrace and locale caches of sal. Every static
+ * object whose constructor or destructor can reach a log call is then reported as using another
+ * file's global. sal is its own library, which every other library loads first, so its caches
+ * outlive those objects. Model the log functions as doing nothing.
+ */
+extern "C" {
+    enum sal_detail_LogLevel { SAL_DETAIL_LOG_LEVEL_INFO };
+
+    void sal_detail_log(sal_detail_LogLevel, char const*, char const*, char const*, unsigned int) {}
+    void sal_detail_logFormat(sal_detail_LogLevel, char const*, char const*, char const*, ...) {}
+}
+
 namespace __gnu_cxx {
     /* libstdc++ throws from these when a pthread mutex call fails. Terminating is the acceptable
      * response, so model them as paths that do not return.
