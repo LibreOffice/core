@@ -29,26 +29,6 @@ module com { module sun { module star { module rendering {
  */
 interface XBufferController : ::com::sun::star::uno::XInterface
 {
-    /** Create the given number of background buffers.<p>
-
-        There's one buffer implicitly available, which is the canvas
-        surface itself. Thus, calling <code>createBuffers(1)</code>
-        creates a double-buffered object.<p>
-
-        @param nBuffers
-        The number of background&lt;buffers requested. Must be greater
-        than 0.
-
-        @return the number of actually generated buffers, which might
-        be between 0 (no double-buffering available) and nBuffers.
-
-        @throws com::sun::star::lang::IllegalArgumentException
-        if nBuffers is smaller than one.
-      */
-    long    createBuffers( [in] long nBuffers )
-        raises (com::sun::star::lang::IllegalArgumentException);
-
-
     /** Destroy all buffers generated via this object.
      */
     void    destroyBuffers();
