@@ -836,9 +836,11 @@ void SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter(SfxObjectShell* pObjec
     OUString sIndexes
         = aFactoryProps.getUnpackedValueOrDefault(u"ooSetupFactoryStyleFilter"_ustr, OUString());
 
-    auto vStyleIndexes = comphelper::string::split(sIndexes, ',');
+    auto vFamilySplit = comphelper::string::split(sIndexes, ';');
+    auto vStyleIndexes = comphelper::string::split(vFamilySplit[0], ',');
 
     // vStyleIndexes[0].toInt32() != 0xffff condition is for legacy purpose
+    // Hierarchical indicator is stored in the first entry
     if (!vStyleIndexes.empty() && vStyleIndexes[0].toInt32() != 0xffff)
     {
         m_aStyleList.m_bHierarchical = (vStyleIndexes[0].toUInt32() & 0x1000) != 0;
@@ -850,20 +852,27 @@ void SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter(SfxObjectShell* pObjec
         vStyleIndexes[0] = "0"; // All Visible Styles
     }
 
-    // fill active family selected filters set
-    if (SfxStyleFamilyItem* pFamilyItem = m_aStyleList.GetFamilyItem())
+    size_t i = 0;
+    for (SfxStyleFamilyItem& rFamilyItem : m_aStyleList.m_aStyleFamilies)
     {
+        if (i >= vFamilySplit.size())
+            break;
+
+        if (i > 0)
+            vStyleIndexes = comphelper::string::split(vFamilySplit[i], ',');
+
         auto& rFamilySelectedFiltersSet
-            = m_aStyleList.m_aFamilySelectedFiltersSet[pFamilyItem->GetFamily()];
+            = m_aStyleList.m_aFamilySelectedFiltersSet[rFamilyItem.GetFamily()];
         rFamilySelectedFiltersSet.clear();
-        size_t nFilterListSize = pFamilyItem->GetFilterList().size();
+        size_t nFilterListSize = rFamilyItem.GetFilterList().size();
         for (const auto& rsIndex : vStyleIndexes)
         {
             if (rsIndex.toUInt32() >= nFilterListSize)
                 continue;
-            const SfxFilterTuple& rFilterTuple = pFamilyItem->GetFilterList()[rsIndex.toUInt32()];
+            const SfxFilterTuple& rFilterTuple = rFamilyItem.GetFilterList()[rsIndex.toUInt32()];
             rFamilySelectedFiltersSet.insert(rFilterTuple.nFlags);
         }
+        i++;
     }
 
     m_aStyleList.m_aFamilyExpandedStyleEntriesSet.clear();
@@ -886,17 +895,23 @@ void SfxCommonTemplateDialog_Impl::SaveFactoryStyleFilter()
             if (m_aStyleList.m_aFamilySelectedFiltersSet[rFamilyItem.GetFamily()].contains(
                     rFilterTuple.nFlags))
             {
-                if (!sIndexes.isEmpty())
-                    sIndexes += "," + OUString::number(nIndex);
-                else
+                if (sIndexes.isEmpty())
                 {
-                    // store hierarchical flag in first index
+                    // store the hierarchical flag in the first index entry
                     sIndexes
                         += OUString::number(nIndex | (m_aStyleList.m_bHierarchical ? 0x1000 : 0));
                 }
+                else if (!sIndexes.endsWith(";"))
+                {
+                    sIndexes += "," + OUString::number(nIndex);
+                }
+                else
+                    sIndexes += OUString::number(nIndex);
             }
             nIndex++;
         }
+        sIndexes += ";";
+        nIndex = 0;
     }
 
     Sequence<PropertyValue> lProps{ comphelper::makePropertyValue(u"ooSetupFactoryStyleFilter"_ustr,
