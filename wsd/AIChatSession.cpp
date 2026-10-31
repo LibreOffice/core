@@ -1061,7 +1061,8 @@ void AIChatSession::postViaTransport(
         auto responseBroker = docBrokerWeak.lock();
         if (!responseBroker)
             return;
-        auto poll = responseBroker->getPoll().lock();
+        std::weak_ptr<SocketPoll> pollWeak = responseBroker->getPoll();
+        auto poll = pollWeak.lock();
         if (!poll)
             return;
         poll->addCallback(
