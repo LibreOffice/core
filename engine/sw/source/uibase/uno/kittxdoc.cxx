@@ -1501,7 +1501,10 @@ void SwXTextDocument::getVectorCommandValues(tools::JsonWriter& rJsonWriter,
     // The store holds the graphics and fonts of the pages it served, so it is made by the first
     // request for a page.
     if (o3tl::starts_with(rCommand, ".uno:VectorPrimitives"sv) && !m_pVectorParts)
+    {
         m_pVectorParts = std::make_unique<sw::vector::PartStore>();
+        m_pVectorParts->recordPageIds(*pLayout);
+    }
     if (!m_pVectorParts)
         return;
 

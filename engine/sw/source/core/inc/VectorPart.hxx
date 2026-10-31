@@ -78,6 +78,10 @@ public:
     /// Whether a client holds the part: it was served.
     bool isServed(std::string_view rPartId) const;
 
+    /// Records the part ids of the pages of rLayout in page order, and returns true when they
+    /// differ from the ones recorded before.
+    bool recordPageIds(const SwRootFrame& rLayout);
+
     drawinglayer::VectorResourceCache& getResources() { return maResources; }
     sal_Int32 getEpoch() const { return maResources.getEpoch(); }
 
@@ -124,6 +128,8 @@ private:
 
     std::unordered_map<OString, PartState> maParts;
     std::unordered_map<sal_uInt64, RecordedEntry> maEntries;
+    /// The part ids of the pages in page order, as they were last recorded.
+    std::vector<OString> maPageIds;
     drawinglayer::VectorResourceCache maResources;
 };
 }

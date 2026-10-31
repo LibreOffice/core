@@ -85,6 +85,7 @@
 #include <COKit/COKit.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <hffrm.hxx>
+#include <VectorPart.hxx>
 
 #if !HAVE_FEATURE_DESKTOP
 #include <vcl/sysdata.hxx>
@@ -728,6 +729,50 @@ void SwViewShell::InvalidateWindows( const SwRect &rRect )
     }
 }
 
+namespace
+{
+/// The size of the document with the border around it, in twips, as the payload of a document
+/// size change: "width, height".
+OString lcl_DocumentSizePayload(const SwViewShell& rShell)
+{
+    const Size aDocSize = rShell.GetDocSize();
+    return OString::number(aDocSize.Width() + 2 * DOCUMENTBORDER) + ", "
+           + OString::number(aDocSize.Height() + 2 * DOCUMENTBORDER);
+}
+
+/// Marks the pages that a vector client holds and that lie under rAreas as changed, and tells
+/// every view of the document that each of them changed. When the page ids changed, every view
+/// is also told the document size, without a tile invalidation.
+void lcl_NotifyVectorParts(const SwViewShell& rShell, const SwRegionRects& rAreas)
+{
+    SwDocShell* pDocShell = rShell.GetDoc()->GetDocShell();
+    const SwRootFrame* pLayout = rShell.GetLayout();
+    if (!pDocShell || !pLayout)
+        return;
+
+    const rtl::Reference<SwXTextDocument> xModel = pDocShell->GetBaseModel();
+    sw::vector::PartStore* pParts = xModel.is() ? xModel->getVectorParts() : nullptr;
+    if (!pParts)
+        return;
+
+    for (const OString& rPartId : pParts->invalidate(*pLayout, rAreas))
+        KitHelper::notifyVectorPartChanged(pDocShell, rPartId, sw::vector::constModePrintLayout);
+
+    // A new page frame can replace an old one and keep the document size. A change of the page ids
+    // still goes out to every view as a document size change, with no tile invalidation.
+    if (!pParts->recordPageIds(*pLayout))
+        return;
+    const OString sPayload = lcl_DocumentSizePayload(rShell);
+    for (SfxViewShell* pView = SfxViewShell::GetFirst(false); pView;
+         pView = SfxViewShell::GetNext(*pView, false))
+    {
+        if (pView->GetObjectShell() == pDocShell)
+            KitHelper::notifyDocumentSizeChanged(pView, sPayload, xModel.get(),
+                                                 /*bInvalidateAllParts=*/false);
+    }
+}
+}
+
 void SwViewShell::FlushPendingKitInvalidateTiles()
 {
     assert(comphelper::COKit::isActive());
@@ -740,6 +785,11 @@ void SwViewShell::FlushPendingKitInvalidateTiles()
     rects.Compress( SwRegionRects::CompressFuzzy );
     if(rects.empty())
         return;
+
+    // The model change reaches the views that draw from primitives here, whether or not they
+    // paint tiles.
+    lcl_NotifyVectorParts(*this, rects);
+
     // This is basically the loop from SwViewShell::InvalidateWindows().
     for(SwViewShell& rSh : GetRingContainer())
     {
@@ -1031,9 +1081,7 @@ static void lcl_NotifyKitDocumentSize(const SwViewShell& rShell)
     if (!pNotifySh)
         return;
 
-    Size aDocSize = rShell.GetDocSize();
-    OString sPayload = OString::number(aDocSize.Width() + 2 * DOCUMENTBORDER) +
-        ", " + OString::number(aDocSize.Height() + 2 * DOCUMENTBORDER);
+    OString sPayload = lcl_DocumentSizePayload(rShell);
 
     SwXTextDocument* pModel = comphelper::getFromUnoTunnel<SwXTextDocument>(pNotifySh->GetCurrentDocument());
     KitHelper::notifyDocumentSizeChanged(pNotifySh, sPayload, pModel);

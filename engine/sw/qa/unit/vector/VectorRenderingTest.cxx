@@ -1258,6 +1258,27 @@ CPPUNIT_TEST_FIXTURE(Test, testVectorPageIdsLeaveTheStoreUnmade)
     CPPUNIT_ASSERT(!getSwTextDoc()->getVectorParts());
 }
 
+/// The store sees a change of the page ids once: a new page changes them, and asking again
+/// does not.
+CPPUNIT_TEST_FIXTURE(Test, testVectorStoreSeesAChangeOfThePageIds)
+{
+    // The store made by the first request already knows the pages it was made for.
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert(u"text"_ustr);
+    calcLayout();
+    requestFirstPage();
+    SwRootFrame* pLayout = getSwDoc()->getIDocumentLayoutAccess().GetCurrentLayout();
+    sw::vector::PartStore* pParts = getSwTextDoc()->getVectorParts();
+    CPPUNIT_ASSERT(!pParts->recordPageIds(*pLayout));
+
+    // A new page changes the ids once.
+    pWrtShell->InsertPageBreak();
+    calcLayout();
+    CPPUNIT_ASSERT(pParts->recordPageIds(*pLayout));
+    CPPUNIT_ASSERT(!pParts->recordPageIds(*pLayout));
+}
+
 /// A push for a page that is gone writes the header alone, once, and the page is no longer
 /// served.
 CPPUNIT_TEST_FIXTURE(Test, testVectorPushForAGonePageWritesTheHeaderAlone)

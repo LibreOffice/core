@@ -268,6 +268,7 @@ public:
     void testNotificationCompression();
     void testPaintedAreaOutlivesTheLastView();
     void testVectorDeltaPushCoalescing();
+    void testWriterVectorDeltaPush();
     void testTileInvalidationCompression();
     void testPartInInvalidation();
     void testBinaryCallback();
@@ -395,6 +396,7 @@ public:
     CPPUNIT_TEST(testNotificationCompression);
     CPPUNIT_TEST(testPaintedAreaOutlivesTheLastView);
     CPPUNIT_TEST(testVectorDeltaPushCoalescing);
+    CPPUNIT_TEST(testWriterVectorDeltaPush);
     CPPUNIT_TEST(testTileInvalidationCompression);
     CPPUNIT_TEST(testPartInInvalidation);
     CPPUNIT_TEST(testBinaryCallback);
@@ -2358,6 +2360,42 @@ void DesktopKitTest::testPaintedAreaOutlivesTheLastView()
             ++nInvalidations;
     }
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), nInvalidations);
+}
+
+void DesktopKitTest::testWriterVectorDeltaPush()
+{
+    // A view that asked for the primitives of a Writer page is pushed what changed on that page
+    // after typing, without asking again.
+    COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
+    std::vector<std::tuple<int, std::string>> aNotificationList;
+    pDocument->registerCallback(callbackCompressionTest, &aNotificationList);
+
+    std::stringstream aIdsStream(pDocument->getCommandValues(".uno:VectorPartIds"));
+    boost::property_tree::ptree aIds;
+    boost::property_tree::read_json(aIdsStream, aIds);
+    const boost::property_tree::ptree& rIdList = aIds.get_child("ids");
+    CPPUNIT_ASSERT(!rIdList.empty());
+    const std::string aPartId = rIdList.begin()->second.get_value<std::string>();
+    CPPUNIT_ASSERT(!aPartId.empty());
+    pDocument->getCommandValues((".uno:VectorPrimitives?partid=" + aPartId).c_str());
+    Scheduler::ProcessEventsToIdle();
+    aNotificationList.clear();
+
+    pDocument->postKeyEvent(COKitKeyEventType::DOWN, 'x', 0);
+    pDocument->postKeyEvent(COKitKeyEventType::UP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    size_t nDeltaCount = 0;
+    for (const auto& [nType, rPayload] : aNotificationList)
+    {
+        if (nType != static_cast<int>(COKitCallbackType::VECTOR_PRIMITIVES_DELTA))
+            continue;
+        ++nDeltaCount;
+        // The payload names the page on its first line, and the delta follows.
+        CPPUNIT_ASSERT(rPayload.starts_with(aPartId + "\n{"));
+        CPPUNIT_ASSERT(rPayload.find("vectorprimitivesdelta") != std::string::npos);
+    }
+    CPPUNIT_ASSERT_EQUAL(size_t(1), nDeltaCount);
 }
 
 void DesktopKitTest::testVectorDeltaPushCoalescing()

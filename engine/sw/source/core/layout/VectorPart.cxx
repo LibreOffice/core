@@ -84,6 +84,15 @@ std::vector<OString> partIdsOf(const SwRootFrame& rLayout)
     return aPartIds;
 }
 
+bool PartStore::recordPageIds(const SwRootFrame& rLayout)
+{
+    std::vector<OString> aPageIds = partIdsOf(rLayout);
+    if (aPageIds == maPageIds)
+        return false;
+    maPageIds = std::move(aPageIds);
+    return true;
+}
+
 bool PartStore::isServed(std::string_view rPartId) const
 {
     auto aIterator = maParts.find(OString(rPartId));
