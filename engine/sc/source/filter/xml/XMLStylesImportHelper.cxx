@@ -24,6 +24,12 @@
 
 using namespace com::sun::star;
 
+namespace
+{
+/// The number of columns in a sheet of the programs that wrote ODS before 16384 columns.
+constexpr SCCOL OLD_MAXCOLCOUNT = 1024;
+}
+
 void ScMyStyleNumberFormats::AddStyleNumberFormat(const OUString& rStyleName, const sal_Int32 nNumberFormat)
 {
     aSet.insert(ScMyStyleNumberFormat(rStyleName, nNumberFormat));
@@ -315,6 +321,12 @@ void ScMyStylesImportHelper::SetAttributes(std::optional<OUString> pStyleNameP,
 
 void ScMyStylesImportHelper::AddRange(const ScRange& rRange)
 {
+    ScRange aRange(rRange);
+    // Columns that add up to exactly 1024 run to the edge of the sheet of the program that wrote
+    // the table, so a run of cells that reaches column 1023 covers the rest of the row.
+    if (aColDefaultStyles.size() == size_t(OLD_MAXCOLCOUNT) && aRange.aStart.Col() < OLD_MAXCOLCOUNT - 1
+        && aRange.aEnd.Col() == OLD_MAXCOLCOUNT - 1)
+        aRange.aEnd.SetCol(rImport.GetDocument()->MaxCol());
     if (!bPrevRangeAdded)
     {
         bool bAddRange(false);
@@ -322,23 +334,23 @@ void ScMyStylesImportHelper::AddRange(const ScRange& rRange)
             pStyleName == pPrevStyleName &&
             pCurrency == pPrevCurrency)
         {
-            if (rRange.aStart.Row() == aPrevRange.aStart.Row())
+            if (aRange.aStart.Row() == aPrevRange.aStart.Row())
             {
-                if (rRange.aEnd.Row() == aPrevRange.aEnd.Row() &&
-                    aPrevRange.aEnd.Col() + 1 == rRange.aStart.Col())
+                if (aRange.aEnd.Row() == aPrevRange.aEnd.Row() &&
+                    aPrevRange.aEnd.Col() + 1 == aRange.aStart.Col())
                 {
-                    aPrevRange.aEnd.SetCol(rRange.aEnd.Col());
+                    aPrevRange.aEnd.SetCol(aRange.aEnd.Col());
                 }
                 else
                     bAddRange = true;
             }
             else
             {
-                if (rRange.aStart.Col() == aPrevRange.aStart.Col() &&
-                    rRange.aEnd.Col() == aPrevRange.aEnd.Col() &&
-                    aPrevRange.aEnd.Row() + 1 == rRange.aStart.Row())
+                if (aRange.aStart.Col() == aPrevRange.aStart.Col() &&
+                    aRange.aEnd.Col() == aPrevRange.aEnd.Col() &&
+                    aPrevRange.aEnd.Row() + 1 == aRange.aStart.Row())
                 {
-                    aPrevRange.aEnd.SetRow(rRange.aEnd.Row());
+                    aPrevRange.aEnd.SetRow(aRange.aEnd.Row());
                 }
                 else
                     bAddRange = true;
@@ -349,12 +361,12 @@ void ScMyStylesImportHelper::AddRange(const ScRange& rRange)
         if (bAddRange)
         {
             AddRange();
-            aPrevRange = rRange;
+            aPrevRange = aRange;
         }
     }
     else
     {
-        aPrevRange = rRange;
+        aPrevRange = aRange;
         ResetAttributes();
         bPrevRangeAdded = false;
     }

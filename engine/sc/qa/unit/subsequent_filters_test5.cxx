@@ -1758,6 +1758,28 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testAutoFontColorRedBackground)
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, aComplexColor.getFinalColor());
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testColumnStyleToOldSheetWidth)
+{
+    // Sheet1 has columns that add up to 1024, the whole sheet of the program that wrote it, and
+    // a bold column style to the last of them. Sheet2 has columns that add up to 1000.
+    createScDoc("fods/column-style-old-sheet-width.fods");
+    ScDocument* pDoc = getScDoc();
+
+    vcl::Font aFont;
+    pDoc->GetPattern(1023, 1, 0)->fillFontOnly(aFont);
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, aFont.GetWeightMaybeAskConfig());
+    pDoc->GetPattern(5000, 1, 0)->fillFontOnly(aFont);
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, aFont.GetWeightMaybeAskConfig());
+    pDoc->GetPattern(0, 1, 0)->fillFontOnly(aFont);
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_NORMAL, aFont.GetWeightMaybeAskConfig());
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), pDoc->GetAllocatedColumnsCount(0));
+
+    pDoc->GetPattern(999, 1, 1)->fillFontOnly(aFont);
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, aFont.GetWeightMaybeAskConfig());
+    pDoc->GetPattern(1000, 1, 1)->fillFontOnly(aFont);
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_NORMAL, aFont.GetWeightMaybeAskConfig());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
