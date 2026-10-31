@@ -22,6 +22,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
@@ -881,6 +882,151 @@ CPPUNIT_TEST_FIXTURE(Test, testVectorPictureAsCharacterIsNotDrawnByTheText)
     const drawinglayer::primitive2d::GraphicPrimitive2D* pGraphic = pictureOf(*pPicture);
     CPPUNIT_ASSERT(pGraphic);
     CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, pGraphic->getGraphicObject().GetType());
+}
+
+/// The header and the footer are entries of the page, and the header text is a paragraph of
+/// the header.
+CPPUNIT_TEST_FIXTURE(Test, testVectorHeaderAndFooterAreEntriesOfThePage)
+{
+    createSwDoc();
+    uno::Reference<beans::XPropertySet> xStyle(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    xStyle->setPropertyValue(u"HeaderIsOn"_ustr, uno::Any(true));
+    xStyle->setPropertyValue(u"FooterIsOn"_ustr, uno::Any(true));
+    uno::Reference<text::XText> xHeader(xStyle->getPropertyValue(u"HeaderText"_ustr),
+                                        uno::UNO_QUERY);
+    xHeader->setString(u"header text"_ustr);
+    calcLayout();
+
+    std::vector<sw::vector::Entry> aEntries = decomposeFirstPage();
+
+    const sw::vector::Entry* pHeader = findEntry(aEntries, sw::vector::EntryKind::Header);
+    const sw::vector::Entry* pFooter = findEntry(aEntries, sw::vector::EntryKind::Footer);
+    CPPUNIT_ASSERT(pHeader);
+    CPPUNIT_ASSERT(pFooter);
+    CPPUNIT_ASSERT(pHeader->moParent);
+    CPPUNIT_ASSERT_EQUAL(sw::vector::constPageEntryId, *pHeader->moParent);
+    CPPUNIT_ASSERT(pFooter->moParent);
+    CPPUNIT_ASSERT_EQUAL(sw::vector::constPageEntryId, *pFooter->moParent);
+    auto aTextIterator = std::find_if(aEntries.begin(), aEntries.end(),
+                                      [pHeader](const auto& rEntry)
+                                      {
+                                          return rEntry.meKind == sw::vector::EntryKind::TextFrame
+                                                 && rEntry.moParent
+                                                 && *rEntry.moParent == pHeader->mnId;
+                                      });
+    CPPUNIT_ASSERT(aTextIterator != aEntries.end());
+    CPPUNIT_ASSERT_EQUAL(u"header text"_ustr, textOf(*aTextIterator));
+}
+
+/// A footnote is an entry of the footnote container, which draws the separator line.
+CPPUNIT_TEST_FIXTURE(Test, testVectorFootnoteIsAnEntryWithSeparatorLine)
+{
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XFootnote> xFootnote(
+        xFactory->createInstance(u"com.sun.star.text.Footnote"_ustr), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    xText->insertTextContent(xText->createTextCursor(), xFootnote, false);
+    uno::Reference<text::XText>(xFootnote, uno::UNO_QUERY_THROW)->setString(u"note"_ustr);
+    calcLayout();
+
+    std::vector<sw::vector::Entry> aEntries = decomposeFirstPage();
+
+    const sw::vector::Entry* pContainer
+        = findEntry(aEntries, sw::vector::EntryKind::FootnoteContainer);
+    CPPUNIT_ASSERT(pContainer);
+    CPPUNIT_ASSERT(holds(pContainer->maPrimitives, PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D));
+    const sw::vector::Entry* pFootnote = findEntry(aEntries, sw::vector::EntryKind::Footnote);
+    CPPUNIT_ASSERT(pFootnote);
+    CPPUNIT_ASSERT(pFootnote->moParent);
+    CPPUNIT_ASSERT_EQUAL(pContainer->mnId, *pFootnote->moParent);
+}
+
+/// A text frame holds its paragraphs, and its border lies over them in an entry after them.
+CPPUNIT_TEST_FIXTURE(Test, testVectorTextFrameHoldsItsParagraphs)
+{
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xFrame(
+        xFactory->createInstance(u"com.sun.star.text.TextFrame"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet>(xFrame, uno::UNO_QUERY_THROW)
+        ->setPropertyValue(u"Size"_ustr, uno::Any(awt::Size(4000, 2000)));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    xText->insertTextContent(xText->createTextCursor(), xFrame, false);
+    uno::Reference<text::XText>(xFrame, uno::UNO_QUERY_THROW)->setString(u"inside"_ustr);
+    calcLayout();
+
+    std::vector<sw::vector::Entry> aEntries = decomposeFirstPage();
+
+    const sw::vector::Entry* pFly = findEntry(aEntries, sw::vector::EntryKind::Fly);
+    CPPUNIT_ASSERT(pFly);
+    auto aTextIterator = std::find_if(aEntries.begin(), aEntries.end(), [pFly](const auto& rEntry) {
+        return rEntry.meKind == sw::vector::EntryKind::TextFrame && rEntry.moParent
+               && *rEntry.moParent == pFly->mnId;
+    });
+    CPPUNIT_ASSERT(aTextIterator != aEntries.end());
+    CPPUNIT_ASSERT_EQUAL(u"inside"_ustr, textOf(*aTextIterator));
+    // The default frame has a border, which lies over the content of the fly.
+    auto aBordersIterator = std::find_if(aEntries.begin(), aEntries.end(),
+                                         [pFly](const auto& rEntry)
+                                         {
+                                             return rEntry.meKind == sw::vector::EntryKind::Borders
+                                                    && rEntry.moParent
+                                                    && *rEntry.moParent == pFly->mnId;
+                                         });
+    CPPUNIT_ASSERT(aBordersIterator != aEntries.end());
+    CPPUNIT_ASSERT(aTextIterator < aBordersIterator);
+    CPPUNIT_ASSERT(holds(aBordersIterator->maPrimitives, PRIMITIVE2D_ID_SWBORDERRECTANGLERIMITIVE));
+}
+
+/// A text frame without a fill of its own is still filled, so it hides what is behind it.
+CPPUNIT_TEST_FIXTURE(Test, testVectorTextFrameWithoutFillHidesWhatIsBehind)
+{
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xFrame(
+        xFactory->createInstance(u"com.sun.star.text.TextFrame"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrameProperties(xFrame, uno::UNO_QUERY_THROW);
+    xFrameProperties->setPropertyValue(u"Size"_ustr, uno::Any(awt::Size(4000, 2000)));
+    xFrameProperties->setPropertyValue(u"FillStyle"_ustr, uno::Any(drawing::FillStyle_NONE));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    xText->insertTextContent(xText->createTextCursor(), xFrame, false);
+    calcLayout();
+
+    std::vector<sw::vector::Entry> aEntries = decomposeFirstPage();
+
+    // The fly is opaque although neither it nor the frames it is anchored in have a fill.
+    const sw::vector::Entry* pFly = findEntry(aEntries, sw::vector::EntryKind::Fly);
+    CPPUNIT_ASSERT(pFly);
+    CPPUNIT_ASSERT(holds(pFly->maPrimitives, PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D));
+}
+
+/// A shape is an entry whose geometry starts at the top left of its own box.
+CPPUNIT_TEST_FIXTURE(Test, testVectorShapeIsAnEntryInItsOwnCoordinates)
+{
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
+    xShape->setSize(awt::Size(3000, 2000));
+    uno::Reference<beans::XPropertySet>(xShape, uno::UNO_QUERY_THROW)
+        ->setPropertyValue(u"AnchorType"_ustr, uno::Any(text::TextContentAnchorType_AT_PARAGRAPH));
+    uno::Reference<drawing::XDrawPageSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    xSupplier->getDrawPage()->add(xShape);
+    calcLayout();
+
+    std::vector<sw::vector::Entry> aEntries = decomposeFirstPage();
+
+    const sw::vector::Entry* pShape = findEntry(aEntries, sw::vector::EntryKind::Shape);
+    CPPUNIT_ASSERT(pShape);
+    CPPUNIT_ASSERT(!pShape->maPrimitives.empty());
+    const basegfx::B2DRange aRange = rangeOf(*pShape);
+    CPPUNIT_ASSERT_LESS(100.0, std::abs(aRange.getMinX()));
+    CPPUNIT_ASSERT_LESS(100.0, std::abs(aRange.getMinY()));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
