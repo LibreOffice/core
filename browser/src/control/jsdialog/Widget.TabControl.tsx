@@ -387,10 +387,29 @@ JSDialog.tabControl = function (
         );
     }
 
+    function getFillCheckbox(
+      tabEl: HTMLButtonElement,
+    ): HTMLInputElement | null {
+      return document.getElementById(
+        tabEl.id + '-fill-input',
+      ) as HTMLInputElement | null;
+    }
+
     tabs.forEach(function (tab, index) {
       tab.addEventListener('click', function () {
         if (tab.getAttribute('aria-disabled') === 'true') return;
         openTab(index);
+      });
+
+      tab.addEventListener('keydown', function (e: KeyboardEvent) {
+        if (e.key === ' ' || e.key === 'Spacebar') {
+          const fillCheckbox = getFillCheckbox(tab);
+          if (fillCheckbox) {
+            e.preventDefault();
+            fillCheckbox.checked = !fillCheckbox.checked;
+            fillCheckbox.dispatchEvent(new Event('change'));
+          }
+        }
       });
     });
 

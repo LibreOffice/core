@@ -110,15 +110,17 @@ function handleTabKeydown(
 	switch (event.key) {
 		case prevTabKey:
 			moveFocusToPreviousTab(tabs, currentIndex);
+			event.preventDefault();
 			break;
 
 		case nextTabKey:
 			moveFocusToNextTab(tabs, currentIndex);
+			event.preventDefault();
 			break;
 
 		case enterPanelKey:
 		case 'PageDown':
-			moveFocusIntoTabPage(contentDivs, currentTab);
+			if (moveFocusIntoTabPage(contentDivs, currentTab)) event.preventDefault();
 			break;
 
 		case 'Tab':
@@ -132,6 +134,7 @@ function handleTabKeydown(
 			if (!isTabVisible(firstTab))
 				firstTab = findNextVisibleTab(tabs, firstIndex, false);
 			firstTab.focus();
+			event.preventDefault();
 			break;
 		}
 
@@ -141,6 +144,7 @@ function handleTabKeydown(
 			if (!isTabVisible(lastTab))
 				lastTab = findNextVisibleTab(tabs, lastIndex, true);
 			lastTab.focus();
+			event.preventDefault();
 			break;
 		}
 
