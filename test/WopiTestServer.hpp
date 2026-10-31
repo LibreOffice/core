@@ -41,6 +41,8 @@
 
 #include <cctype>
 #include <cstdlib>
+#include <cstring>
+#include <map>
 #include <functional>
 #include <sstream>
 #include <string_view>
@@ -132,6 +134,14 @@ private:
 /// 1 to 9 are considered special.
 class WopiTestServer : public UnitWSDClient
 {
+public:
+    /// A part of a multipart upload other than the document.
+    struct UploadPart
+    {
+        std::string contentType;
+        std::string content;
+    };
+
 private:
 
     enum class COOLStatusCode
@@ -141,6 +151,14 @@ private:
 
     /// Content of the file.
     std::string _fileContent;
+
+    /// The document of the last upload: the "file" part of a multipart body, or the whole of
+    /// a plain body.
+    std::string _uploadedDocument;
+
+    /// The parts of the last upload other than the document, by their name. Empty when the
+    /// last upload had a plain body.
+    std::map<std::string, UploadPart> _uploadedParts;
 
     /// The filename. TODO: Support multiple ones.
     std::string _filename;
@@ -220,6 +238,14 @@ protected:
     bool _dontSendJSONOnPutFile;
 
     const std::string& getFileContent() const { return _fileContent; }
+
+    /// The document of the last upload: the "file" part of a multipart body, or the whole of
+    /// a plain body.
+    const std::string& getUploadedDocument() const { return _uploadedDocument; }
+
+    /// The parts of the last upload other than the document, by their name. Empty when the
+    /// last upload had a plain body.
+    const std::map<std::string, UploadPart>& getUploadedParts() const { return _uploadedParts; }
 
     /// Sets the file content to a given value and update the last file modified time
     void setFileContent(const std::string& fileContent)
@@ -593,6 +619,69 @@ protected:
         return false;
     }
 
+    /// Reads the body of an upload request into the uploaded document and the uploaded parts:
+    /// a multipart body is split into the "file" part and the others, a plain body is the
+    /// document alone.
+    void readUploadBody(const Poco::Net::HTTPRequest& request, std::istream& message)
+    {
+        _uploadedDocument.clear();
+        _uploadedParts.clear();
+
+        const std::streamsize size = request.getContentLength();
+        std::string body(size > 0 ? size : 0, '\0');
+        message.read(body.data(), body.size());
+        body.resize(message.gcount());
+
+        const std::string contentType = request.getContentType();
+        if (!contentType.starts_with("multipart/form-data"))
+        {
+            _uploadedDocument = std::move(body);
+            return;
+        }
+
+        const std::size_t boundaryStart = contentType.find("boundary=");
+        LOK_ASSERT_MESSAGE("No boundary in the Content-Type: " + contentType,
+                           boundaryStart != std::string::npos);
+        std::string boundary = contentType.substr(boundaryStart + std::strlen("boundary="));
+        boundary = boundary.substr(0, boundary.find(';'));
+        if (boundary.size() >= 2 && boundary.front() == '"' && boundary.back() == '"')
+            boundary = boundary.substr(1, boundary.size() - 2);
+
+        http::MultipartDataParser parser(boundary);
+        std::string_view remaining(body);
+        while (!parser.isLast())
+        {
+            http::Header header;
+            std::string_view partBody;
+            const int64_t consumed = parser.readPart(remaining, header, partBody);
+            LOK_ASSERT_MESSAGE("Truncated multipart body", consumed > 0);
+            if (consumed <= 0)
+                break;
+
+            // The name parameter of form-data; name="..."; filename="..." and its value. The
+            // filename parameter has no space before it, so this finds the name alone.
+            const std::string disposition = header.get("Content-Disposition");
+            const std::size_t nameStart = disposition.find(" name=\"");
+            LOK_ASSERT_MESSAGE("Part without a name: " + disposition,
+                               nameStart != std::string::npos);
+            const std::size_t valueStart = nameStart + std::strlen(" name=\"");
+            const std::string name =
+                disposition.substr(valueStart, disposition.find('"', valueStart) - valueStart);
+
+            TST_LOG_SAFE("FakeWOPIHost: Upload part [" << name << "] of type ["
+                                                       << header.getContentType() << "] with "
+                                                       << partBody.size() << " bytes");
+            if (name == "file")
+                _uploadedDocument = std::string(partBody);
+            else
+            {
+                _uploadedParts[name] = UploadPart{ header.getContentType(), std::string(partBody) };
+            }
+
+            remaining = remaining.substr(static_cast<std::size_t>(consumed));
+        }
+    }
+
     virtual bool handleHttpPostRequest(const Poco::Net::HTTPRequest& request,
                                        std::istream& message,
                                        const std::shared_ptr<StreamSocket>& socket)
@@ -638,6 +727,8 @@ protected:
                 const std::string wopiURL =
                     helpers::getTestServerURI() +
                     "/something wopi/files/1?access_token=anything&reuse_cookies=cook=well";
+
+                readUploadBody(request, message);
 
                 std::string content;
                 if (request.get("X-WOPI-Override") == std::string("PUT_RELATIVE"))
@@ -690,6 +781,9 @@ protected:
                                   std::istream& message,
                                   const std::shared_ptr<StreamSocket>& socket)
     {
+        // The document and the parts on record are those of this upload, even when it conflicts.
+        readUploadBody(request, message);
+
         const std::string wopiTimestamp = request.get("X-COOL-WOPI-Timestamp", std::string());
         if (!wopiTimestamp.empty())
         {
@@ -719,12 +813,9 @@ protected:
         if (!response || response->statusLine().statusCategory() ==
                              http::StatusLine::StatusCodeClass::Successful)
         {
-            const std::streamsize size = request.getContentLength();
-            TST_LOG_SAFE("FakeWOPIHost: Writing document contents in storage (" << size
-                                                                                 << "bytes)");
-            std::vector<char> buffer(size);
-            message.read(buffer.data(), size);
-            setFileContent(Util::toString(buffer));
+            TST_LOG_SAFE("FakeWOPIHost: Writing document contents in storage ("
+                         << _uploadedDocument.size() << " bytes)");
+            setFileContent(_uploadedDocument);
         }
 
         const Poco::URI uriReq(request.getURI());
