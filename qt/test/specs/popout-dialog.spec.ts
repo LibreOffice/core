@@ -613,7 +613,10 @@ describe('Popped-out jsdialogs', () => {
 		await browser.webEngine.execute(() => {
 			app.map.sendUnoCommand('.uno:HyperlinkDialog');
 		});
-		await webview.switchToNewWebView(browser.webEngine, beforeHandles);
+		const dialogHandle = await webview.switchToNewWebView(
+			browser.webEngine,
+			beforeHandles,
+		);
 		await browser.webEngine.waitForCondition(
 			() => document.querySelector('.jsdialog-container') !== null,
 			{ timeout: 10000, timeoutMsg: 'No dialog container in child window' },
@@ -632,19 +635,10 @@ describe('Popped-out jsdialogs', () => {
 			{ timeout: 10000, timeoutMsg: 'closealldialogs left dialogs behind' },
 		);
 
-		// waitForCondition runs its predicate inside the page, so it cannot
-		// see the driver-side handle count computed here; poll from outside
-		// instead. The child WebView is gone once this returns.
-		for (let i = 0; i < 50; i++) {
-			if (
-				(await browser.webEngine.getWindowHandles()).length ===
-				beforeHandles.length
-			)
-				break;
-			await new Promise((resolve) => setTimeout(resolve, 200));
-		}
-		expect((await browser.webEngine.getWindowHandles()).length).toBe(
-			beforeHandles.length,
+		await browser.webEngine.waitUntil(
+			async () =>
+				!(await browser.webEngine.getWindowHandles()).includes(dialogHandle),
+			{ timeout: 10000, timeoutMsg: 'Dialog window did not close' },
 		);
 	});
 });
