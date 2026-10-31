@@ -61,7 +61,6 @@ namespace dxcanvas
             const css::uno::Reference< css::rendering::XGraphicDevice >&  rDevice,
             const css::geometry::IntegerSize2D&                                        size );
 
-        void        destroyBuffers(  );
         bool showBuffer( bool bIsVisible, bool bUpdateAll );
         bool switchBuffer( bool bIsVisible, bool bUpdateAll );
 

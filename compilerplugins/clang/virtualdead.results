@@ -10,9 +10,6 @@ basic/source/comp/codegen.cxx:540
 canvas/inc/base/bitmapcanvasbase.hxx:79
     unsigned char canvas::BitmapCanvasBase::hasAlpha()
     1
-canvas/inc/base/bufferedgraphicdevicebase.hxx:105
-    void canvas::BufferedGraphicDeviceBase::destroyBuffers()
-    empty
 canvas/inc/base/graphicdevicebase.hxx:234
     unsigned char canvas::GraphicDeviceBase::hasFullScreenMode()
     0

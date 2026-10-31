@@ -29,11 +29,6 @@ module com { module sun { module star { module rendering {
  */
 interface XBufferController : ::com::sun::star::uno::XInterface
 {
-    /** Destroy all buffers generated via this object.
-     */
-    void    destroyBuffers();
-
-
     /** Switch the display to show the specified buffer.<p>
 
         The method returns, when the switch is performed and the

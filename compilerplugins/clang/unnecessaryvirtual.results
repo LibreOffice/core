@@ -30,8 +30,6 @@ canvas/inc/base/bitmapcanvasbase.hxx:105
     void canvas::BitmapCanvasBase2::copyRect(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmapCanvas> &,const struct com::sun::star::geometry::RealRectangle2D &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const struct com::sun::star::geometry::RealRectangle2D &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
 canvas/inc/base/bufferedgraphicdevicebase.hxx:92
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XBufferController> canvas::BufferedGraphicDeviceBase::getBufferController()
-canvas/inc/base/bufferedgraphicdevicebase.hxx:105
-    void canvas::BufferedGraphicDeviceBase::destroyBuffers()
 canvas/inc/base/bufferedgraphicdevicebase.hxx:109
     unsigned char canvas::BufferedGraphicDeviceBase::showBuffer(unsigned char,)
 canvas/inc/base/bufferedgraphicdevicebase.hxx:116

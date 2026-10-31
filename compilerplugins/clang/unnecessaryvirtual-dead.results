@@ -1,7 +1,5 @@
 basic/source/comp/codegen.cxx:476
     void (anonymous namespace)::OffSetAccumulator::start(const unsigned char *,)
-canvas/inc/base/bufferedgraphicdevicebase.hxx:105
-    void canvas::BufferedGraphicDeviceBase::destroyBuffers()
 canvas/inc/base/graphicdevicebase.hxx:305
     void canvas::GraphicDeviceBase::removePropertyChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertyChangeListener> &,)
 canvas/inc/base/graphicdevicebase.hxx:318

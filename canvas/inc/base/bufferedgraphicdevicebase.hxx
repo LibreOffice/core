@@ -95,10 +95,6 @@ namespace canvas
         }
 
         // XBufferController
-        virtual void SAL_CALL destroyBuffers(  ) override
-        {
-        }
-
         virtual sal_Bool SAL_CALL showBuffer( sal_Bool bUpdateAll ) override
         {
             MutexType aGuard( BaseType::m_aMutex );
