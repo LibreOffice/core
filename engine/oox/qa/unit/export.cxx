@@ -1435,6 +1435,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf157289CircularArrowExport)
         = getXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='" + aAbs.toUtf8() + "']", "fmla");
     CPPUNIT_ASSERT(aAbsFormula.startsWith("abs "));
     assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", 3);
+
+    // The two angle adjustments are stored in 60000ths of a degree although one of them is
+    // also an equation of its own ($0) and the other appears in a sum (($1+45)*pi/180): a
+    // -45 degree start is 315 degrees, and both polar handles are written
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd[@name='adj1']", "fmla", u"val 18900000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd[@name='adj2']", "fmla", u"val 3600000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar", 2);
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar[1]", "gdRefAng", u"adj1");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar[2]", "gdRefAng", u"adj2");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar[2]", "gdRefR", u"adj3");
+    // the sum ($1+45) in 60000ths: the bare adjustment plus 45 degrees
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='+- adj2 2700000 0']", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf134401_ExportAutoGrowToTextWordWrap)

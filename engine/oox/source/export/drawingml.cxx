@@ -5507,6 +5507,60 @@ const ExpressionNode* lcl_GetAngleIdiomArg(const ExpressionNode* pArg, double& r
     return nullptr;
 }
 
+// Emits the X of the angle idiom X*(pi/c) in 60000ths of a degree. A sum or difference is
+// converted term by term, so that an adjustment stored in 60000ths stays the bare adjustment
+// (the token its polar handle writes back to) next to a constant that is scaled; anything else
+// is X*10800000/c.
+OString lcl_EmitAngleArgument(const ExpressionNode* pX, double fConst, OoxmlEqContext& rCtx)
+{
+    if (!pX)
+    {
+        rCtx.bFailed = true;
+        return "0"_ostr;
+    }
+    if (pX->isConstant())
+        return lcl_EmitConstant((*pX)() * 10800000.0 / fConst, rCtx);
+    switch (pX->getType())
+    {
+        case ExpressionFunct::EnumAdjustment:
+            if (rCtx.rAngleAdjustments60000.count(pX->getIndex()) > 0)
+            {
+                rCtx.rUsedAdjustments.insert(pX->getIndex());
+                return "adj" + OString::number(pX->getIndex() + 1);
+            }
+            break;
+        case ExpressionFunct::EnumEquation:
+        {
+            // an alias equation ($n) of such an adjustment holds 60000ths as well
+            const sal_Int32 nEquation = pX->getIndex();
+            if (nEquation >= 0 && o3tl::make_unsigned(nEquation) < rCtx.rEqIsAngle.size()
+                && rCtx.rEqIsAngle[nEquation] && !rCtx.rEqNames[nEquation].isEmpty())
+                return rCtx.rEqNames[nEquation];
+            break;
+        }
+        case ExpressionFunct::BinaryPlus:
+        {
+            const OString aLeft = lcl_EmitAngleArgument(pX->getChild(0), fConst, rCtx);
+            const OString aRight = lcl_EmitAngleArgument(pX->getChild(1), fConst, rCtx);
+            return rCtx.addGuide("+- " + aLeft + " " + aRight + " 0");
+        }
+        case ExpressionFunct::BinaryMinus:
+        {
+            const OString aLeft = lcl_EmitAngleArgument(pX->getChild(0), fConst, rCtx);
+            const OString aRight = lcl_EmitAngleArgument(pX->getChild(1), fConst, rCtx);
+            return rCtx.addGuide("+- " + aLeft + " 0 " + aRight);
+        }
+        case ExpressionFunct::UnaryNeg:
+            return rCtx.addGuide("*/ " + lcl_EmitAngleArgument(pX->getChild(0), fConst, rCtx)
+                                 + " -1 1");
+        default:
+            break;
+    }
+    const OString aX = lcl_EmitOoxmlNode(pX, rCtx);
+    return rCtx.addGuide("*/ " + aX + " 10800000 "
+                         + OString::number(static_cast<sal_Int32>(std::lround(fConst))));
+}
+
 // If pArg is a radians angle of the form X*(pi/c) or (pi*X)/c, emits it converted to OOXML
 // 60000ths of a degree (X*10800000/c) and returns true; else returns false and leaves rCtx
 // untouched. OOXML guide formulas have no pi, so this is the only way to express an angle. Used
@@ -5530,25 +5584,7 @@ bool lcl_TryEmitAngle60000(const ExpressionNode* pArg, OoxmlEqContext& rCtx, OSt
     if (!pX || fConst == 0.0 || std::fabs(fConst - std::round(fConst)) > 1e-7
         || std::fabs(fConst) > 2147483647.0)
         return false;
-    // A constant angle is written as its value in 60000ths.
-    if (pX->isConstant())
-    {
-        rResult = lcl_EmitConstant((*pX)() * 10800000.0 / fConst, rCtx);
-        return true;
-    }
-    // An adjustment that a polar handle drives is already stored in 60000ths of a degree, so
-    // the conversion is the identity: the bare adjustment is the token the handle's gdRefAng
-    // writes back to.
-    if (pX->getType() == ExpressionFunct::EnumAdjustment
-        && rCtx.rAngleAdjustments60000.count(pX->getIndex()) > 0)
-    {
-        rCtx.rUsedAdjustments.insert(pX->getIndex());
-        rResult = "adj" + OString::number(pX->getIndex() + 1);
-        return true;
-    }
-    OString aX = lcl_EmitOoxmlNode(pX, rCtx);
-    rResult = rCtx.addGuide("*/ " + aX + " 10800000 "
-                            + OString::number(static_cast<sal_Int32>(std::lround(fConst))));
+    rResult = lcl_EmitAngleArgument(pX, fConst, rCtx);
     return true;
 }
 
@@ -5792,9 +5828,17 @@ bool lcl_CreateOoxmlGuides(const std::vector<std::shared_ptr<ExpressionNode>>& r
         const std::shared_ptr<ExpressionNode>& pNode = rNodes[i];
         aContext.bFailed = false;
         // An equation that is itself an angle (X*pi/c) is converted to 60000ths of a degree and
-        // remembered, so that trigonometric functions referencing it work.
+        // remembered, so that trigonometric functions referencing it work; so is an equation
+        // that is nothing but an adjustment stored in 60000ths.
         OString aToken;
-        if (lcl_TryEmitAngle60000(pNode.get(), aContext, aToken))
+        if (pNode && pNode->getType() == ExpressionFunct::EnumAdjustment
+            && rAngleAdjustments60000.count(pNode->getIndex()) > 0)
+        {
+            aContext.rUsedAdjustments.insert(pNode->getIndex());
+            aToken = "adj" + OString::number(pNode->getIndex() + 1);
+            rSet.aEqIsAngle[i] = true;
+        }
+        else if (lcl_TryEmitAngle60000(pNode.get(), aContext, aToken))
             rSet.aEqIsAngle[i] = true;
         else
             aToken = lcl_EmitOoxmlNode(pNode.get(), aContext);
@@ -6190,15 +6234,52 @@ struct AdjustmentAngleUse
     double fConst = 0.0;
 };
 
+// Is pNode the adjustment nIndex, or an equation that is nothing but that adjustment?
+bool lcl_IsAdjustmentOrAlias(const ExpressionNode* pNode, sal_Int32 nIndex,
+                             const std::set<sal_Int32>& rAliases)
+{
+    if (!pNode)
+        return false;
+    if (pNode->getType() == ExpressionFunct::EnumAdjustment)
+        return pNode->getIndex() == nIndex;
+    return pNode->getType() == ExpressionFunct::EnumEquation
+           && rAliases.count(pNode->getIndex()) > 0;
+}
+
+// Walks the X of an idiom X*(pi/c): the adjustment may appear as a term of a sum or a
+// difference, which lcl_EmitAngleArgument converts term by term.
+void lcl_ScanAngleArgument(const ExpressionNode* pNode, sal_Int32 nIndex,
+                           const std::set<sal_Int32>& rAliases, double fConst,
+                           AdjustmentAngleUse& rUse);
+
 void lcl_ScanAdjustmentAngleUse(const ExpressionNode* pNode, sal_Int32 nIndex,
-                                AdjustmentAngleUse& rUse)
+                                const std::set<sal_Int32>& rAliases, AdjustmentAngleUse& rUse)
 {
     if (!pNode)
         return;
     double fConst = 0.0;
     const ExpressionNode* pAngleArg = lcl_GetAngleIdiomArg(pNode, fConst);
-    if (pAngleArg && pAngleArg->getType() == ExpressionFunct::EnumAdjustment
-        && pAngleArg->getIndex() == nIndex)
+    if (pAngleArg)
+    {
+        lcl_ScanAngleArgument(pAngleArg, nIndex, rAliases, fConst, rUse);
+        return;
+    }
+    if (lcl_IsAdjustmentOrAlias(pNode, nIndex, rAliases))
+    {
+        rUse.bOnlyAngle = false;
+        return;
+    }
+    for (sal_Int32 i = 0; const ExpressionNode* pChild = pNode->getChild(i); ++i)
+        lcl_ScanAdjustmentAngleUse(pChild, nIndex, rAliases, rUse);
+}
+
+void lcl_ScanAngleArgument(const ExpressionNode* pNode, sal_Int32 nIndex,
+                           const std::set<sal_Int32>& rAliases, double fConst,
+                           AdjustmentAngleUse& rUse)
+{
+    if (!pNode)
+        return;
+    if (lcl_IsAdjustmentOrAlias(pNode, nIndex, rAliases))
     {
         if (!rUse.bSeen)
         {
@@ -6209,13 +6290,16 @@ void lcl_ScanAdjustmentAngleUse(const ExpressionNode* pNode, sal_Int32 nIndex,
             rUse.bOnlyAngle = false;
         return;
     }
-    if (pNode->getType() == ExpressionFunct::EnumAdjustment && pNode->getIndex() == nIndex)
+    if (pNode->getType() == ExpressionFunct::BinaryPlus
+        || pNode->getType() == ExpressionFunct::BinaryMinus
+        || pNode->getType() == ExpressionFunct::UnaryNeg)
     {
-        rUse.bOnlyAngle = false;
+        for (sal_Int32 i = 0; const ExpressionNode* pChild = pNode->getChild(i); ++i)
+            lcl_ScanAngleArgument(pChild, nIndex, rAliases, fConst, rUse);
         return;
     }
-    for (sal_Int32 i = 0; const ExpressionNode* pChild = pNode->getChild(i); ++i)
-        lcl_ScanAdjustmentAngleUse(pChild, nIndex, rUse);
+    // any other use inside the argument is a plain use
+    lcl_ScanAdjustmentAngleUse(pNode, nIndex, rAliases, rUse);
 }
 
 // The adjustments that a path coordinate, a glue point or an xy handle uses as a plain value,
@@ -6318,9 +6402,23 @@ void lcl_ResolveAngleAdjustments(const std::vector<std::shared_ptr<ExpressionNod
         if (rInfo[nIndex].eKind != AdjustmentKind::Angle || rInfo[nIndex].bConflict
             || rDirect.count(static_cast<sal_Int32>(nIndex)) > 0)
             continue;
+        // the equations that are nothing but this adjustment
+        std::set<sal_Int32> aAliases;
+        for (size_t nEquation = 0; nEquation < rNodes.size(); ++nEquation)
+        {
+            const ExpressionNode* pNode = rNodes[nEquation].get();
+            if (pNode && pNode->getType() == ExpressionFunct::EnumAdjustment
+                && pNode->getIndex() == static_cast<sal_Int32>(nIndex))
+                aAliases.insert(static_cast<sal_Int32>(nEquation));
+        }
         AdjustmentAngleUse aUse;
-        for (const std::shared_ptr<ExpressionNode>& rNode : rNodes)
-            lcl_ScanAdjustmentAngleUse(rNode.get(), static_cast<sal_Int32>(nIndex), aUse);
+        for (size_t nEquation = 0; nEquation < rNodes.size(); ++nEquation)
+        {
+            if (aAliases.count(static_cast<sal_Int32>(nEquation)) > 0)
+                continue;
+            lcl_ScanAdjustmentAngleUse(rNodes[nEquation].get(), static_cast<sal_Int32>(nIndex),
+                                       aAliases, aUse);
+        }
         if (!aUse.bSeen || !aUse.bOnlyAngle || aUse.fConst == 0.0
             || std::fabs(aUse.fConst - std::round(aUse.fConst)) > 1e-7)
             continue;
