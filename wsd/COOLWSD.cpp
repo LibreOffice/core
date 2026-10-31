@@ -442,6 +442,7 @@ static bool isCurrentForKit(const std::string& configId, pid_t forKitPid)
     const auto it = SubForKitProcs.find(configId);
     return it != SubForKitProcs.end() && forKitPid == it->second->getPid();
 }
+static void terminateSubForKit(const std::shared_ptr<ForKitProcess>& subForKit);
 #endif
 
 namespace {
@@ -465,13 +466,9 @@ SubForKitMap::iterator dropSubForKit(SubForKitMap::iterator it, bool askToExit)
     LastSubForKitSpawnRequestTimes.erase(configId);
 #if !MOBILEAPP
     if (askToExit)
-    {
         closeSubForKit(configId, it->second);
-
-        const std::string sharedPresets =
-            Poco::Path(COOLWSD::ChildRoot, JailUtil::CHILDROOT_TMP_SHARED_PRESETS_PATH).toString();
-        FileUtil::removeFile(Poco::Path(sharedPresets, Uri::encode(configId)).toString(), true);
-    }
+    else
+        terminateSubForKit(it->second);
 #else
     (void)askToExit;
 #endif
@@ -1428,15 +1425,29 @@ static void closeSubForKit(const std::string& configId,
             ++it;
     }
 
-    // The sockets belong to the prisoner poll, so the messages are sent from its thread.
+    // The sockets belong to the prisoner poll, so the messages are sent from its thread. The shared
+    // settings of the configuration, a directory tree, are removed there too, holding no lock.
+    const std::string sharedPresets =
+        Poco::Path(COOLWSD::ChildRoot, JailUtil::CHILDROOT_TMP_SHARED_PRESETS_PATH).toString();
     PrisonerPoll->addCallback(
-        [spareKits = std::move(spareKits), subForKit]
+        [spareKits = std::move(spareKits), subForKit,
+         presetsPath = Poco::Path(sharedPresets, Uri::encode(configId)).toString()]
         {
             for (const std::shared_ptr<ChildProcess>& kit : spareKits)
                 kit->close();
 
             subForKit->close();
+            FileUtil::removeFile(presetsPath, true);
         });
+}
+
+/// Kills the subforkit on the prisoner poll, holding no lock, as killing it can wait for the
+/// process when there is no pidfd. The process object lives on in the callback until then. Without
+/// the prisoner poll, the last reference to the object kills the subforkit when it goes.
+static void terminateSubForKit(const std::shared_ptr<ForKitProcess>& subForKit)
+{
+    if (PrisonerPoll)
+        PrisonerPoll->addCallback([subForKit] { subForKit->terminate(); });
 }
 
 static void askSpareKitsToExit(std::vector<std::shared_ptr<ChildProcess>> spareKits)
