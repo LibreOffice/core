@@ -254,7 +254,7 @@ if (window.ThisIsTheQtApp || window.ThisIsTheWindowsApp) {
 			var arr = new Uint8Array(bin.length);
 			for (var i = 0; i < bin.length; i++)
 				arr[i] = bin.charCodeAt(i);
-			_codaUploadOnSave(arr, 'CODA-Q').then(done, done);
+			_codaUploadOnSave(arr, 'CODA').then(done, done);
 		}, done);
 	});
 }
@@ -304,15 +304,12 @@ if (window.ThisIsTheEmscriptenApp) {
 		initEmscriptenModule('local', docURL);
 	}
 } else if (window.ThisIsTheQtApp) {
-	// CODA-Q: for a remote doc, _document._remoteInfo (wopiSrc,
-	// accessToken, coolServer, coolPath) is set on the C++ side before
-	// cool.html loads.  Pull that via
-	// Bridge::getRemoteInfo once the QWebChannel bridge is ready; if
-	// non-empty, run the COWASM-style /co/collab fetch from JS, then
-	// hand the bytes back to native via Bridge::writeRemoteDocFile
-	// so LOKit can load them through the standard fakesocket flow.
-	// Local-only docs take the default path: initUI + map.loadDocument.
-	var _codaQtRemoteBootstrap = function() {
+	// The page opens its document through window.bridge. For a remote document, getRemoteInfo
+	// returns the WOPI values (wopiSrc, accessToken, coolServer, coolPath). The page fetches the
+	// file through /co/collab and hands the bytes to native code with writeRemoteDocFile, so the
+	// engine loads them through the standard fake socket. A local document takes the default
+	// path: initUI and map.loadDocument.
+	var _codaBridgeBootstrap = function() {
 		const remoteInfo = new Promise(function(resolve) {
 			window.bridge.getRemoteInfo(resolve);
 		});
@@ -342,10 +339,10 @@ if (window.ThisIsTheEmscriptenApp) {
 			// which rebuilds the cool-server /cool/ws URL from these
 			// values.
 			window._codaRemoteInfo = info;
-			window.app.console.log('CODA-Q: remote doc, wopiSrc=' + info.wopiSrc);
+			window.app.console.log('CODA: remote doc, wopiSrc=' + info.wopiSrc);
 			initUI();
 			global.collabFetchFile(info.wopiSrc, info.accessToken, info.coolServer).then(function(result) {
-				window.app.console.log('CODA-Q: fetch URL: ' + result.url);
+				window.app.console.log('CODA: fetch URL: ' + result.url);
 				if (result.filename) {
 					map['wopi'].BaseFileName = result.filename;
 					map['wopi'].BreadcrumbDocName = result.filename;
@@ -355,8 +352,7 @@ if (window.ThisIsTheEmscriptenApp) {
 						throw new Error('GET ' + result.url + ' returned ' + r.status);
 					return r.arrayBuffer();
 				}).then(function(buf) {
-					// QWebChannel does not marshal ArrayBuffer cleanly,
-					// so base64 the body across the JS<->Qt boundary.
+					// The bridge carries text, so the body crosses to native code as base64.
 					var bytes = new Uint8Array(buf);
 					var binary = '';
 					for (var i = 0; i < bytes.length; i++)
@@ -368,7 +364,7 @@ if (window.ThisIsTheEmscriptenApp) {
 				}).then(function(localPath) {
 					if (!localPath)
 						throw new Error('writeRemoteDocFile failed');
-					window.app.console.log('CODA-Q: wrote local temp file ' + localPath);
+					window.app.console.log('CODA: wrote local temp file ' + localPath);
 					// Point the FakeWebSocket's load message at the
 					// just-written file before opening the socket.
 					global.docURL = 'file://' + localPath;
@@ -392,7 +388,7 @@ if (window.ThisIsTheEmscriptenApp) {
 			}).catch(function(err) {
 				var msg = err && err.message ? err.message : String(err);
 				window.app.console.error(
-					'CODA-Q: remote bootstrap failed: ' + msg);
+					'CODA: remote bootstrap failed: ' + msg);
 				// Surface the failure as a native error dialog on the
 				// doc window rather than just a console message: the
 				// page has no visible affordance to report it, so the
@@ -403,9 +399,9 @@ if (window.ThisIsTheEmscriptenApp) {
 		});
 	};
 	if (window.bridgeReady)
-		_codaQtRemoteBootstrap();
+		_codaBridgeBootstrap();
 	else
-		window.addEventListener('bridgeready', _codaQtRemoteBootstrap);
+		window.addEventListener('bridgeready', _codaBridgeBootstrap);
 } else {
 	initUI();
 	map.loadDocument(global.socket);
