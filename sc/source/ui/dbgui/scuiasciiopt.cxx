@@ -879,24 +879,22 @@ void ScImportAsciiDlg::SeparatorHdl(const weld::Widget* pCtrl)
     OUString aOldFldSeps( maFieldSeparators);
     sal_Unicode cOldSep = mcTextSep;
     mcTextSep = lcl_CharFromCombo( *mxCbTextSep, SCSTR_TEXTSEP );
-    // Any separator change may result in completely different lines due to
-    // embedded line breaks.
     if (cOldSep != mcTextSep)
     {
         DetectCsvSeparators();
-
         SetupSeparatorCtrls();
-
-        maFieldSeparators = GetActiveSeparators();
-        if (aOldFldSeps != maFieldSeparators)
-        {
-            UpdateVertical();
-            mxTableBox->Refresh();
-            return;
-        }
     }
-    else
-        maFieldSeparators = GetActiveSeparators();
+    maFieldSeparators = GetActiveSeparators();
+
+    // Any separator change may result in completely different lines due to
+    // embedded line breaks.
+    // tdf#171106 - refresh rows if the text delimiter changed
+    if (cOldSep != mcTextSep || aOldFldSeps != maFieldSeparators)
+    {
+        UpdateVertical();
+        mxTableBox->Refresh();
+        return;
+    }
 
     mxTableBox->GetGrid().Execute( CSVCMD_NEWCELLTEXTS );
 }
