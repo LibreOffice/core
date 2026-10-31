@@ -293,17 +293,21 @@ namespace {
     /// handler asked for that while the lock was held.
     class PollWakeupsLock
     {
-        std::unique_lock<std::mutex> _lock;
+        std::mutex& _mutex;
 
     public:
         PollWakeupsLock()
-            : _lock(getPollWakeupsMutex())
+            : _mutex(getPollWakeupsMutex())
         {
+            _mutex.lock();
         }
+
+        PollWakeupsLock(const PollWakeupsLock&) = delete;
+        PollWakeupsLock& operator=(const PollWakeupsLock&) = delete;
 
         ~PollWakeupsLock()
         {
-            _lock.unlock();
+            _mutex.unlock();
             while (PendingWakeupWorld.exchange(false))
             {
                 std::lock_guard<std::mutex> lock(getPollWakeupsMutex());
