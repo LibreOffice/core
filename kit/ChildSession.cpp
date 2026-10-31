@@ -1350,7 +1350,7 @@ void ChildSession::parseLoadCommand(const StringVector& tokens, std::string& par
         {
             setLang(Uri::decode(value));
         }
-        else if (!applyBrowserLoadOption(name, value, part))
+        else if (!applyBrowserLoadOption(name, std::move(value), part))
         {
             LOG_WRN("Ignoring the unknown load option [" << name << ']');
         }

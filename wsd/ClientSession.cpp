@@ -2824,7 +2824,7 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
             }
 #endif
 
-            if (!applyBrowserLoadOption(name, value, loadPart))
+            if (!applyBrowserLoadOption(name, std::move(value), loadPart))
                 LOG_WRN("Ignoring the load option [" << name
                         << "]: a browser's load message does not carry it");
         }

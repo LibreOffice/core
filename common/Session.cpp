@@ -88,7 +88,7 @@ bool Session::sendBinaryFrame(const char *buffer, int length)
     return _protocol->sendBinaryMessage(std::string_view(buffer, length)) >= length;
 }
 
-bool Session::applyBrowserLoadOption(const std::string& name, std::string& value,
+bool Session::applyBrowserLoadOption(const std::string& name, std::string&& value,
                                      std::string& part)
 {
     if (name == "part")
