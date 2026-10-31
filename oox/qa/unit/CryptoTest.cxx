@@ -144,28 +144,28 @@ void CryptoTest::testAgileEncryptionVerifier()
     OUString aPassword(u"Password"_ustr);
 
     aEngine.setupEncryptionParameters(
-        { 100000, 16, 128, 20, 16, u"AES"_ustr, u"ChainingModeCBC"_ustr, u"SHA1"_ustr });
+        { 16, 128, 20, 16, u"AES"_ustr, u"ChainingModeCBC"_ustr, u"SHA1"_ustr });
 
     CPPUNIT_ASSERT_EQUAL(true, aEngine.generateAndEncryptVerifierHash(aPassword));
     CPPUNIT_ASSERT_EQUAL(false, aEngine.decryptAndCheckVerifierHash(u"Wrong"));
     CPPUNIT_ASSERT_EQUAL(true, aEngine.decryptAndCheckVerifierHash(aPassword));
 
     aEngine.setupEncryptionParameters(
-        { 100000, 16, 128, 48, 16, u"AES"_ustr, u"ChainingModeCBC"_ustr, u"SHA384"_ustr });
+        { 16, 128, 48, 16, u"AES"_ustr, u"ChainingModeCBC"_ustr, u"SHA384"_ustr });
 
     CPPUNIT_ASSERT_EQUAL(true, aEngine.generateAndEncryptVerifierHash(aPassword));
     CPPUNIT_ASSERT_EQUAL(false, aEngine.decryptAndCheckVerifierHash(u"Wrong"));
     CPPUNIT_ASSERT_EQUAL(true, aEngine.decryptAndCheckVerifierHash(aPassword));
 
     aEngine.setupEncryptionParameters(
-        { 100000, 16, 192, 48, 16, u"AES"_ustr, u"ChainingModeCBC"_ustr, u"SHA384"_ustr });
+        { 16, 192, 48, 16, u"AES"_ustr, u"ChainingModeCBC"_ustr, u"SHA384"_ustr });
 
     CPPUNIT_ASSERT_EQUAL(true, aEngine.generateAndEncryptVerifierHash(aPassword));
     CPPUNIT_ASSERT_EQUAL(false, aEngine.decryptAndCheckVerifierHash(u"Wrong"));
     CPPUNIT_ASSERT_EQUAL(true, aEngine.decryptAndCheckVerifierHash(aPassword));
 
     aEngine.setupEncryptionParameters(
-        { 100000, 16, 256, 64, 16, u"AES"_ustr, u"ChainingModeCBC"_ustr, u"SHA512"_ustr });
+        { 16, 256, 64, 16, u"AES"_ustr, u"ChainingModeCBC"_ustr, u"SHA512"_ustr });
 
     CPPUNIT_ASSERT_EQUAL(true, aEngine.generateAndEncryptVerifierHash(aPassword));
     CPPUNIT_ASSERT_EQUAL(false, aEngine.decryptAndCheckVerifierHash(u"Wrong"));
@@ -209,13 +209,13 @@ void CryptoTest::testAgileEncryptionInfoWritingAndParsing()
 
             oox::crypto::AgileEncryptionInfo& rInfo = aEngine.getInfo();
             CPPUNIT_ASSERT_EQUAL(sal_Int32(100000), rInfo.spinCount);
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(16), rInfo.saltSize);
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(128), rInfo.keyBits);
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(48), rInfo.hashSize);
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(16), rInfo.blockSize);
-            CPPUNIT_ASSERT_EQUAL(u"AES"_ustr, rInfo.cipherAlgorithm);
-            CPPUNIT_ASSERT_EQUAL(u"ChainingModeCBC"_ustr, rInfo.cipherChaining);
-            CPPUNIT_ASSERT_EQUAL(u"SHA384"_ustr, rInfo.hashAlgorithm);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(16), rInfo.keyData.saltSize);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(128), rInfo.keyData.keyBits);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(48), rInfo.keyData.hashSize);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(16), rInfo.keyData.blockSize);
+            CPPUNIT_ASSERT_EQUAL(u"AES"_ustr, rInfo.keyData.cipherAlgorithm);
+            CPPUNIT_ASSERT_EQUAL(u"ChainingModeCBC"_ustr, rInfo.keyData.cipherChaining);
+            CPPUNIT_ASSERT_EQUAL(u"SHA384"_ustr, rInfo.keyData.hashAlgorithm);
             CPPUNIT_ASSERT_EQUAL(toString(aKeyDataSalt), toString(rInfo.keyDataSalt));
 
             CPPUNIT_ASSERT_EQUAL(false, aEngine.decryptAndCheckVerifierHash(u"Wrong"));
@@ -254,13 +254,13 @@ void CryptoTest::testAgileEncryptionInfoWritingAndParsing()
 
             oox::crypto::AgileEncryptionInfo& rInfo = aEngine.getInfo();
             CPPUNIT_ASSERT_EQUAL(sal_Int32(100000), rInfo.spinCount);
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(16), rInfo.saltSize);
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(192), rInfo.keyBits);
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(48), rInfo.hashSize);
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(16), rInfo.blockSize);
-            CPPUNIT_ASSERT_EQUAL(u"AES"_ustr, rInfo.cipherAlgorithm);
-            CPPUNIT_ASSERT_EQUAL(u"ChainingModeCBC"_ustr, rInfo.cipherChaining);
-            CPPUNIT_ASSERT_EQUAL(u"SHA384"_ustr, rInfo.hashAlgorithm);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(16), rInfo.keyData.saltSize);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(192), rInfo.keyData.keyBits);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(48), rInfo.keyData.hashSize);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(16), rInfo.keyData.blockSize);
+            CPPUNIT_ASSERT_EQUAL(u"AES"_ustr, rInfo.keyData.cipherAlgorithm);
+            CPPUNIT_ASSERT_EQUAL(u"ChainingModeCBC"_ustr, rInfo.keyData.cipherChaining);
+            CPPUNIT_ASSERT_EQUAL(u"SHA384"_ustr, rInfo.keyData.hashAlgorithm);
             CPPUNIT_ASSERT_EQUAL(toString(aKeyDataSalt), toString(rInfo.keyDataSalt));
 
             CPPUNIT_ASSERT_EQUAL(false, aEngine.decryptAndCheckVerifierHash(u"Wrong"));
@@ -299,13 +299,13 @@ void CryptoTest::testAgileEncryptionInfoWritingAndParsing()
 
             oox::crypto::AgileEncryptionInfo& rInfo = aEngine.getInfo();
             CPPUNIT_ASSERT_EQUAL(sal_Int32(100000), rInfo.spinCount);
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(16), rInfo.saltSize);
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(256), rInfo.keyBits);
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(64), rInfo.hashSize);
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(16), rInfo.blockSize);
-            CPPUNIT_ASSERT_EQUAL(u"AES"_ustr, rInfo.cipherAlgorithm);
-            CPPUNIT_ASSERT_EQUAL(u"ChainingModeCBC"_ustr, rInfo.cipherChaining);
-            CPPUNIT_ASSERT_EQUAL(u"SHA512"_ustr, rInfo.hashAlgorithm);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(16), rInfo.keyData.saltSize);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(256), rInfo.keyData.keyBits);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(64), rInfo.keyData.hashSize);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(16), rInfo.keyData.blockSize);
+            CPPUNIT_ASSERT_EQUAL(u"AES"_ustr, rInfo.keyData.cipherAlgorithm);
+            CPPUNIT_ASSERT_EQUAL(u"ChainingModeCBC"_ustr, rInfo.keyData.cipherChaining);
+            CPPUNIT_ASSERT_EQUAL(u"SHA512"_ustr, rInfo.keyData.hashAlgorithm);
             CPPUNIT_ASSERT_EQUAL(toString(aKeyDataSalt), toString(rInfo.keyDataSalt));
 
             CPPUNIT_ASSERT_EQUAL(false, aEngine.decryptAndCheckVerifierHash(u"Wrong"));
@@ -474,13 +474,14 @@ void CryptoTest::testAgileSHA256AndKeySizes()
         {
             oox::crypto::AgileEngine aEngine;
 
-            aEngine.setupEncryptionParameters(
-                { 100000, 16, rParameters.nKeyBits, rParameters.nHashSize, 16, u"AES"_ustr,
-                  u"ChainingModeCBC"_ustr, rParameters.sHashAlgorithm });
+            aEngine.setupEncryptionParameters({ 16, rParameters.nKeyBits, rParameters.nHashSize, 16,
+                                                u"AES"_ustr, u"ChainingModeCBC"_ustr,
+                                                rParameters.sHashAlgorithm });
 
-            CPPUNIT_ASSERT_EQUAL(rParameters.nKeyBits, aEngine.getInfo().keyBits);
-            CPPUNIT_ASSERT_EQUAL(rParameters.nHashSize, aEngine.getInfo().hashSize);
-            CPPUNIT_ASSERT_EQUAL(rParameters.sHashAlgorithm, aEngine.getInfo().hashAlgorithm);
+            CPPUNIT_ASSERT_EQUAL(rParameters.nKeyBits, aEngine.getInfo().keyData.keyBits);
+            CPPUNIT_ASSERT_EQUAL(rParameters.nHashSize, aEngine.getInfo().keyData.hashSize);
+            CPPUNIT_ASSERT_EQUAL(rParameters.sHashAlgorithm,
+                                 aEngine.getInfo().keyData.hashAlgorithm);
 
             // Do not call setupEncryption() here: it resets the parameters
             // according to the engine's preset.
@@ -514,10 +515,10 @@ void CryptoTest::testAgileSHA256AndKeySizes()
             CPPUNIT_ASSERT(aEngine.readEncryptionInfo(xEncryptionInfo));
 
             const auto& rInfo = aEngine.getInfo();
-            CPPUNIT_ASSERT_EQUAL(rParameters.nKeyBits, rInfo.keyBits);
-            CPPUNIT_ASSERT_EQUAL(rParameters.nHashSize, rInfo.hashSize);
-            CPPUNIT_ASSERT_EQUAL(rParameters.sHashAlgorithm, rInfo.hashAlgorithm);
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(16), rInfo.blockSize);
+            CPPUNIT_ASSERT_EQUAL(rParameters.nKeyBits, rInfo.keyData.keyBits);
+            CPPUNIT_ASSERT_EQUAL(rParameters.nHashSize, rInfo.keyData.hashSize);
+            CPPUNIT_ASSERT_EQUAL(rParameters.sHashAlgorithm, rInfo.keyData.hashAlgorithm);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(16), rInfo.keyData.blockSize);
 
             CPPUNIT_ASSERT(aEngine.generateEncryptionKey(aPassword));
 
