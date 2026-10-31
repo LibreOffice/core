@@ -2259,7 +2259,10 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
         case CODA_WM_EXECUTESCRIPT:
         {
             DocumentTab* tab = findTab((int)lParam);
-            if (tab && tab->webView)
+            if (tab && tab->editorFrame)
+                tab->editorFrame->ExecuteScript(
+                    Util::string_to_wide_string(std::string((char*)wParam)).c_str(), nullptr);
+            else if (tab && tab->webView)
                 tab->webView->ExecuteScript(
                     Util::string_to_wide_string(std::string((char*)wParam)).c_str(),
                     Microsoft::WRL::Callback<ICoreWebView2ExecuteScriptCompletedHandler>(
@@ -2276,7 +2279,10 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
         case CODA_WM_POSTWEBMESSAGE:
         {
             DocumentTab* tab = findTab((int)lParam);
-            if (tab && tab->webView)
+            if (tab && tab->editorFrame)
+                tab->editorFrame->PostWebMessageAsJson(
+                    Util::string_to_wide_string(std::string((char*)wParam)).c_str());
+            else if (tab && tab->webView)
                 tab->webView->PostWebMessageAsJson(
                     Util::string_to_wide_string(std::string((char*)wParam)).c_str());
             std::free((char*)wParam);
