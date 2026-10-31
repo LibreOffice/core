@@ -187,6 +187,7 @@ check-qtapp: coda-qt $(TEST_DIR)/node_modules
 	@echo "Running WebdriverIO tests..."
 	cd $(TEST_DIR) && AT_SPI_DRIVER_PATH='@AT_SPI_DRIVER_PATH@' \
 	    CODA_QT_BINARY=$(abs_builddir)/coda-qt \
+	    CODA_APP_NAME='$(APP_NAME)' \
 	    ./run-tests.sh
 
 # Clean test artifacts

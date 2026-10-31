@@ -16,6 +16,8 @@
 # Environment:
 #   AT_SPI_DRIVER_PATH  (required) Path to selenium-webdriver-at-spi.py
 #   CODA_QT_BINARY      Path to coda-qt (default: ../coda-qt)
+#   CODA_APP_NAME       (required) The application name coda-qt was configured with, which names
+#                       its configuration directory, e.g. "Collabora Office".
 #   AT_SPI_VENV         Path to the AT-SPI driver virtualenv (default: <AT_SPI_DRIVER_PATH>/venv)
 #   CODA_QT_TEST_GUI    Set to 1 to run on the host display instead of a virtual Wayland compositor.
 #

@@ -33,6 +33,14 @@ if (!AT_SPI_DRIVER_PATH) {
 	);
 }
 
+const CODA_APP_NAME = process.env.CODA_APP_NAME;
+if (!CODA_APP_NAME) {
+	throw new Error(
+		'CODA_APP_NAME is not set.\n' +
+			'Set it to the application name coda-qt was configured with, e.g.:\n' +
+			"  export CODA_APP_NAME='Collabora Office'",
+	);
+}
 
 let QT_WEBENGINE_DRIVER: string;
 try {
@@ -114,6 +122,7 @@ export const config = {
 			webEngineDriver: QT_WEBENGINE_DRIVER,
 			webEngineDriverPort: WEBENGINE_DRIVER_PORT,
 			codaQtBinary: CODA_QT_BINARY,
+			appName: CODA_APP_NAME,
 			remoteDebuggingPort: REMOTE_DEBUGGING_PORT,
 			fixturesDir: join(__dirname, 'fixtures'),
 		}],

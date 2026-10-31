@@ -9,7 +9,16 @@
  */
 
 import { ChildProcess, spawn } from 'child_process';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, cpSync } from 'fs';
+import {
+	copyFileSync,
+	cpSync,
+	existsSync,
+	mkdirSync,
+	mkdtempSync,
+	readFileSync,
+	rmSync,
+	writeFileSync,
+} from 'fs';
 import http from 'http';
 import { homedir, tmpdir } from 'os';
 import { basename, join } from 'path';
@@ -23,6 +32,9 @@ interface CodaQtServiceOptions {
 	webEngineDriver: string;
 	webEngineDriverPort: number | string;
 	codaQtBinary: string;
+	// The application name coda-qt was configured with. Its configuration directory is
+	// named after it.
+	appName: string;
 	remoteDebuggingPort: number | string;
 	fixturesDir: string;
 }
@@ -78,11 +90,14 @@ async function waitForHttp(
  * HOME and reads the same user-dirs.dirs file, Qt expands the $HOME
  * placeholder to our test dir and uses the directory we created.
  */
-function getXdgDocumentsBasename(): string {
+function hostUserDirsPath(): string {
 	const configHome = process.env.XDG_CONFIG_HOME || join(homedir(), '.config');
-	const userDirsPath = join(configHome, 'user-dirs.dirs');
+	return join(configHome, 'user-dirs.dirs');
+}
+
+function getXdgDocumentsBasename(): string {
 	try {
-		const content = readFileSync(userDirsPath, 'utf8');
+		const content = readFileSync(hostUserDirsPath(), 'utf8');
 		const match = content.match(/^\s*XDG_DOCUMENTS_DIR="([^"]+)"\s*$/m);
 		if (match) {
 			const name = basename(match[1]);
@@ -126,6 +141,7 @@ export class CodaQtServiceLauncher {
 			webEngineDriver,
 			webEngineDriverPort,
 			codaQtBinary,
+			appName,
 			remoteDebuggingPort,
 			fixturesDir,
 		} = this.#options;
@@ -170,6 +186,22 @@ export class CodaQtServiceLauncher {
 		mkdirSync(documentsDir);
 		cpSync(fixturesDir, documentsDir, { recursive: true });
 		process.env.CODA_TEST_DOCUMENTS_DIR = documentsDir;
+
+		// coda-qt reads its configuration from the test HOME, with the host's
+		// user-dirs.dirs so that the documents directory above is the one it uses.
+		const configHome = join(this.#testHomeDir, '.config');
+		mkdirSync(join(configHome, appName), { recursive: true });
+		if (existsSync(hostUserDirsPath()))
+			copyFileSync(hostUserDirsPath(), join(configHome, 'user-dirs.dirs'));
+		// The tour for first-time users opens on its own as a modal dialog, which
+		// blocks every other dialog, so it is marked as seen for each document type.
+		const prefs: Record<string, string> = {};
+		for (const docType of ['text', 'spreadsheet', 'presentation', 'drawing'])
+			prefs[docType + '.onboardingTourSeen'] = 'true';
+		writeFileSync(
+			join(configHome, appName, 'coda-prefs.json'),
+			JSON.stringify(prefs),
+		);
 		process.env.CODA_PLATFORM = 'qt';
 
 		console.log('Starting coda-qt...');
@@ -177,6 +209,7 @@ export class CodaQtServiceLauncher {
 			env: {
 				...process.env,
 				HOME: this.#testHomeDir,
+				XDG_CONFIG_HOME: configHome,
 				QTWEBENGINE_REMOTE_DEBUGGING: remoteDebuggingPort.toString(),
 				QT_ACCESSIBILITY: '1',
 				QT_LINUX_ACCESSIBILITY_ALWAYS_ON: '1',
