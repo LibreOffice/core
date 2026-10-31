@@ -995,8 +995,9 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testHiddenEmptyColsODS)
     save(TestFilter::ODS);
     xmlDocUniquePtr pSheet = parseExport(u"content.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
-    assertXPath(pSheet, "//table:table/table:table-column[2]");
-    assertXPath(pSheet, "//table:table/table:table-column[2]", "number-columns-repeated", u"1017");
+    assertXPath(pSheet, "//table:table/table:table-column[@table:visibility='collapse']", 1);
+    assertXPath(pSheet, "//table:table/table:table-column[@table:visibility='collapse']",
+                "number-columns-repeated", u"1017");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testLandscapeOrientationXLSX)
