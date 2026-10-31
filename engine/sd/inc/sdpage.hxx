@@ -188,6 +188,9 @@ public:
     /** @return true if the given SdrObject is inside the presentation object list */
     bool            IsPresObj(const SdrObject* pObj);
 
+    /** @return true if the given SdrObject is a video or sound that covers the whole page */
+    SD_DLLPUBLIC bool IsBackgroundVideo(const SdrObject& rObj) const;
+
     /** removes the given SdrObject from the presentation object list */
     void            RemovePresObj(const SdrObject* pObj);
 

@@ -3292,6 +3292,36 @@ SfxVoidItem SelectBackground SID_SELECT_BACKGROUND
     GroupId = SfxGroupId::Options;
 ]
 
+SfxVoidItem InsertVideoBackground SID_INSERT_VIDEO_BACKGROUND
+(SfxStringItem FileName SID_INSERT_VIDEO_BACKGROUND)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Options;
+]
+
+SfxVoidItem RemoveVideoBackground SID_REMOVE_VIDEO_BACKGROUND
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Options;
+]
+
 SfxVoidItem SaveBackground SID_SAVE_BACKGROUND
 ()
 [

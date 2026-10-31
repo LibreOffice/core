@@ -1300,6 +1300,8 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"InsertPage", { PayloadType::EnabledPayload, true } },
         { u"DeletePage", { PayloadType::EnabledPayload, true } },
         { u"DuplicatePage", { PayloadType::EnabledPayload, true } },
+        { u"InsertVideoBackground", { PayloadType::EnabledPayload, true } },
+        { u"RemoveVideoBackground", { PayloadType::EnabledPayload, true } },
         { u"DeleteRows", { PayloadType::EnabledPayload, true } },
         { u"DeleteColumns", { PayloadType::EnabledPayload, true } },
         { u"DeleteCell", { PayloadType::EnabledPayload, true } },

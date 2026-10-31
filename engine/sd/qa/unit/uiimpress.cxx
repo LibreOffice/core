@@ -74,6 +74,7 @@
 #include <svx/svdhdl.hxx>
 #include <svx/svddrgmt.hxx>
 #include <svx/svdomedia.hxx>
+#include <avmedia/mediaitem.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xfillit0.hxx>
@@ -6985,6 +6986,94 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testInsertLargeVideoFitsInsideTheMargins)
         pPage->GetSize().Height() - pPage->GetUpperBorder() - pPage->GetLowerBorder(),
         aSize.Height());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(16.0 / 9.0, aspectRatio(aSize), 0.01);
+}
+
+namespace
+{
+std::vector<SdrMediaObj*> findBackgroundVideos(SdPage& rMasterPage)
+{
+    std::vector<SdrMediaObj*> aVideos;
+    for (const rtl::Reference<SdrObject>& pObj : rMasterPage)
+        if (rMasterPage.IsBackgroundVideo(*pObj))
+            aVideos.push_back(static_cast<SdrMediaObj*>(pObj.get()));
+    return aVideos;
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testVideoBackground)
+{
+    createSdImpressDoc();
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    SdPage& rMasterPage
+        = static_cast<SdPage&>(pDoc->GetSdPage(0, PageKind::Standard)->TRG_GetMasterPage());
+
+    // The video goes on the master page, under everything else, covering the whole page, and plays
+    // muted in a loop from a copy stored in the document.
+    dispatchCommand(
+        mxComponent, u".uno:InsertVideoBackground"_ustr,
+        { comphelper::makePropertyValue(u"FileName"_ustr, createFileURL(u"video-320x240.webm")) });
+    std::vector<SdrMediaObj*> aVideos = findBackgroundVideos(rMasterPage);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aVideos.size());
+    SdrMediaObj* pVideo = aVideos[0];
+    CPPUNIT_ASSERT_EQUAL(static_cast<SdrObject*>(pVideo), rMasterPage.GetObj(0));
+    CPPUNIT_ASSERT_EQUAL(::tools::Rectangle(Point(), rMasterPage.GetSize()),
+                         pVideo->GetLogicRect());
+    CPPUNIT_ASSERT(pVideo->getMediaProperties().isLoop());
+    CPPUNIT_ASSERT(pVideo->getMediaProperties().isMute());
+    CPPUNIT_ASSERT(pVideo->getURL().startsWith("vnd.sun.star.Package:"));
+    CPPUNIT_ASSERT(!findMediaObject(mxComponent));
+
+    // A second video replaces the first, and undo brings the first back.
+    dispatchCommand(mxComponent, u".uno:InsertVideoBackground"_ustr,
+                    { comphelper::makePropertyValue(u"FileName"_ustr,
+                                                    createFileURL(u"video-320x240-wide.webm")) });
+    aVideos = findBackgroundVideos(rMasterPage);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aVideos.size());
+    CPPUNIT_ASSERT(aVideos[0] != pVideo);
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    aVideos = findBackgroundVideos(rMasterPage);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aVideos.size());
+    CPPUNIT_ASSERT_EQUAL(pVideo, aVideos[0]);
+
+    dispatchCommand(mxComponent, u".uno:RemoveVideoBackground"_ustr, {});
+    CPPUNIT_ASSERT(findBackgroundVideos(rMasterPage).empty());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testVideoBackgroundFromAppFilePicker)
+{
+    // In a COKit app the command without a file asks the app's picker, and the picked video
+    // becomes the background.
+    createSdImpressDoc();
+    mxDesktop->setActiveFrame(uno::Reference<frame::XModel>(mxComponent, uno::UNO_QUERY_THROW)
+                                  ->getCurrentController()
+                                  ->getFrame());
+
+    static OString aPickedUrl;
+    aPickedUrl = createFileURL(u"video-320x240.webm").toUtf8();
+    COKitFilePickerProvider aProvider{};
+    aProvider.pick = [](const char*, const COKitFilePickerFilter*, size_t,
+                        void (*pfnPicked)(void*, const char*), void* pContext)
+    { pfnPicked(pContext, aPickedUrl.getStr()); };
+
+    comphelper::COKit::setActive(true);
+    sfx2::COKitFilePicker::installProvider(&aProvider);
+    comphelper::ScopeGuard aKitGuard(
+        []
+        {
+            sfx2::COKitFilePicker::installProvider(nullptr);
+            comphelper::COKit::setActive(false);
+        });
+
+    dispatchCommand(mxComponent, u".uno:InsertVideoBackground"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdPage& rMasterPage = static_cast<SdPage&>(
+        pImpressDocument->GetDoc()->GetSdPage(0, PageKind::Standard)->TRG_GetMasterPage());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), findBackgroundVideos(rMasterPage).size());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSecurityLabelFooterFitsMarking)

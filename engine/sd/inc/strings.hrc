@@ -30,6 +30,8 @@
 #define STR_UNDO_CUT                                    NC_("STR_UNDO_CUT", "Cut")
 #define STR_UNDO_REPLACE                                NC_("STR_UNDO_REPLACE", "Replace")
 #define STR_UNDO_DRAGDROP                               NC_("STR_UNDO_DRAGDROP", "Drag and Drop")
+#define STR_UNDO_INSERT_VIDEO_BACKGROUND                NC_("STR_UNDO_INSERT_VIDEO_BACKGROUND", "Set background video")
+#define STR_UNDO_REMOVE_VIDEO_BACKGROUND                NC_("STR_UNDO_REMOVE_VIDEO_BACKGROUND", "Remove background video")
 #define STR_INSERTGRAPHIC                               NC_("STR_INSERTGRAPHIC", "Insert Image")
 #define STR_UNDO_BEZCLOSE                               NC_("STR_UNDO_BEZCLOSE", "Close Polygon")
 #define STR_SLIDE_SORTER_MODE                           NC_("STR_SLIDE_SORTER_MODE", "Slide Sorter")

@@ -761,6 +761,25 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem(SID_SAVE_BACKGROUND);
     }
 
+    if (mePageKind != PageKind::Standard)
+    {
+        rSet.DisableItem(SID_INSERT_VIDEO_BACKGROUND);
+        rSet.DisableItem(SID_REMOVE_VIDEO_BACKGROUND);
+    }
+    else if (SfxItemState::DEFAULT == rSet.GetItemState(SID_REMOVE_VIDEO_BACKGROUND))
+    {
+        bool bHasVideoBackground = false;
+        if (SdPage* pPage = GetActualPage())
+        {
+            SdPage& rMasterPage
+                = pPage->IsMasterPage() ? *pPage : static_cast<SdPage&>(pPage->TRG_GetMasterPage());
+            for (const rtl::Reference<SdrObject>& pObj : rMasterPage)
+                bHasVideoBackground = bHasVideoBackground || rMasterPage.IsBackgroundVideo(*pObj);
+        }
+        if (!bHasVideoBackground)
+            rSet.DisableItem(SID_REMOVE_VIDEO_BACKGROUND);
+    }
+
     if (mePageKind == PageKind::Notes)
     {
         rSet.DisableItem(SID_INSERTPAGE);

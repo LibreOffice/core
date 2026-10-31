@@ -1510,6 +1510,19 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:InsertVideoBackground" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Set Background Video...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:RemoveVideoBackground" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Remove Background Video</value>
+        </prop>
+      </node>
       <node oor:name=".uno:SaveBackground" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Save Background Image...</value>

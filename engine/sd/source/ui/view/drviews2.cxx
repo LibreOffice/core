@@ -35,7 +35,9 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/character.hxx>
 
+#include <avmedia/mediaitem.hxx>
 #include <avmedia/mediaplayer.hxx>
+#include <avmedia/mediawindow.hxx>
 
 #include <basic/sberrors.hxx>
 #include <basic/sbstar.hxx>
@@ -70,6 +72,7 @@
 #include <sal/log.hxx>
 
 #include <sfx2/bindings.hxx>
+#include <sfx2/cokitfilepicker.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/msgpool.hxx>
@@ -95,6 +98,7 @@
 #include <svx/sdtagitm.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/svdomedia.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/svdpagv.hxx>
@@ -611,6 +615,44 @@ std::vector<DesignTemplateMaster> CollectDesignTemplateMasters(SdDrawDocument& r
 }
 
 namespace {
+
+SdPage& masterPageOf(SdPage& rPage)
+{
+    return rPage.IsMasterPage() ? rPage : static_cast<SdPage&>(rPage.TRG_GetMasterPage());
+}
+
+void removeVideoBackground(SdDrawDocument& rDoc, SdPage& rMasterPage)
+{
+    for (size_t nIndex = rMasterPage.GetObjCount(); nIndex > 0; --nIndex)
+    {
+        SdrObject* pObj = rMasterPage.GetObj(nIndex - 1);
+        if (!rMasterPage.IsBackgroundVideo(*pObj))
+            continue;
+        rDoc.AddUndo(rDoc.GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
+        rMasterPage.RemoveObject(nIndex - 1);
+    }
+}
+
+#if HAVE_FEATURE_AVMEDIA
+// The video covers the whole page under everything else on it, and plays muted in a loop.
+void insertVideoBackground(SdDrawDocument& rDoc, SdPage& rMasterPage, const OUString& rURL)
+{
+    OUString aEmbeddedURL;
+    if (!avmedia::EmbedMedia(rDoc.GetDocSh()->GetModel(), rURL, aEmbeddedURL))
+        return;
+
+    rtl::Reference<SdrMediaObj> xVideo
+        = new SdrMediaObj(rDoc, ::tools::Rectangle(Point(), rMasterPage.GetSize()));
+    xVideo->SetLayer(rDoc.GetLayerAdmin().GetLayerID(sUNO_LayerName_background_objects));
+    rMasterPage.InsertObject(xVideo.get(), 0);
+    rDoc.AddUndo(SdrUndoFactory::CreateUndoNewObject(*xVideo));
+    xVideo->setURL(aEmbeddedURL, OUString());
+
+    Reference<beans::XPropertySet> xProperties(xVideo->getUnoShape(), UNO_QUERY_THROW);
+    xProperties->setPropertyValue(u"Loop"_ustr, Any(true));
+    xProperties->setPropertyValue(u"Mute"_ustr, Any(true));
+}
+#endif
 
 /*
     The object a name, a title or a description is given to: the marked object, or for a diagram
@@ -3898,6 +3940,63 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             Broadcast (ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_END));
             Cancel();
             rReq.Done ();
+        }
+        break;
+
+        case SID_INSERT_VIDEO_BACKGROUND:
+        {
+#if HAVE_FEATURE_AVMEDIA
+            const SfxStringItem* pFileName
+                = rReq.GetArg<SfxStringItem>(SID_INSERT_VIDEO_BACKGROUND);
+            OUString aURL = pFileName ? pFileName->GetValue() : OUString();
+            // Without a file the app's own picker, when there is one, asks for it and runs the
+            // command again with the picked file.
+            const std::vector<sfx2::COKitFilePicker::Filter> aFilters{
+                { OUString(),
+                  sfx2::COKitFilePicker::joinWildcards(avmedia::MediaWindow::getMediaWildcards()) }
+            };
+            if (aURL.isEmpty()
+                && sfx2::COKitFilePicker::requestAndRedispatch(
+                    u".uno:InsertVideoBackground"_ustr, u"FileName"_ustr, aFilters,
+                    SdResId(STR_UNDO_INSERT_VIDEO_BACKGROUND)))
+            {
+                Cancel();
+                rReq.Done();
+                break;
+            }
+            SdPage* pPage = GetActualPage();
+            if (aURL.isEmpty() && pPage)
+                avmedia::MediaWindow::executeMediaURLDialog(GetFrameWeld(), aURL, nullptr);
+            if (!aURL.isEmpty() && pPage)
+            {
+                SdDrawDocument& rDoc = *GetDoc();
+                SdPage& rMasterPage = masterPageOf(*pPage);
+                rDoc.BegUndo(SdResId(STR_UNDO_INSERT_VIDEO_BACKGROUND));
+                removeVideoBackground(rDoc, rMasterPage);
+                insertVideoBackground(rDoc, rMasterPage, aURL);
+                rDoc.EndUndo();
+                rDoc.SetChanged();
+                GetViewFrame()->GetBindings().Invalidate(SID_REMOVE_VIDEO_BACKGROUND);
+            }
+#endif
+            Cancel();
+            rReq.Done();
+        }
+        break;
+
+        case SID_REMOVE_VIDEO_BACKGROUND:
+        {
+            if (SdPage* pPage = GetActualPage())
+            {
+                SdDrawDocument& rDoc = *GetDoc();
+                rDoc.BegUndo(SdResId(STR_UNDO_REMOVE_VIDEO_BACKGROUND));
+                removeVideoBackground(rDoc, masterPageOf(*pPage));
+                rDoc.EndUndo();
+                rDoc.SetChanged();
+                GetViewFrame()->GetBindings().Invalidate(SID_REMOVE_VIDEO_BACKGROUND);
+            }
+            Cancel();
+            rReq.Done();
         }
         break;
 

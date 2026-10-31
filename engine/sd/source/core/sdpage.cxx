@@ -2587,6 +2587,12 @@ bool SdPage::IsPresObj(const SdrObject* pObj)
     return pObj && maPresentationShapeList.hasShape( const_cast<SdrObject&>(*pObj) );
 }
 
+bool SdPage::IsBackgroundVideo(const SdrObject& rObj) const
+{
+    return rObj.GetObjIdentifier() == SdrObjKind::Media
+           && rObj.GetLogicRect().Contains(::tools::Rectangle(Point(), GetSize()));
+}
+
 void SdPage::RemovePresObj(const SdrObject* pObj)
 {
     if( pObj && maPresentationShapeList.hasShape(const_cast<SdrObject&>(*pObj)) )

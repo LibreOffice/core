@@ -450,5 +450,7 @@
 #define SID_REJECT_TEXT_EDIT_REQUEST        (SID_SD_START+470)
 #define SID_RETURN_TEXT_EDIT                (SID_SD_START+471)
 #define SID_CONVERT_TO_EDITABLE_SHAPE       (SID_SD_START+472)
+#define SID_INSERT_VIDEO_BACKGROUND         (SID_SD_START+473)
+#define SID_REMOVE_VIDEO_BACKGROUND         (SID_SD_START+474)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
