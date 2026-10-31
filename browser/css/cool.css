@@ -182,7 +182,7 @@ input, button {
 	top: -100em;
 }
 
-#selectbackground {
+#selectbackground, #videobackground {
 	position: fixed;
 	top: -100em;
 }

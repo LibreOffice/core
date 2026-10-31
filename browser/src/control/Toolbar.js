@@ -448,6 +448,10 @@ window.L.Map.include({
 		this.fire('selectbackground', {file: file});
 	},
 
+	videoBackground: function (file) {
+		this.fire('videobackground', {file: file});
+	},
+
 	compareDocuments: function (file) {
 		this.fire('comparedocuments', {file: file});
 	},

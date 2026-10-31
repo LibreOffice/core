@@ -1166,6 +1166,10 @@ class Dispatcher {
 			app.LOUtil.openFilePicker('selectbackground');
 		};
 
+		this.actionsMap['videobackground'] = function () {
+			VideoBackgroundDialog.show();
+		};
+
 		this.actionsMap['notesmode'] = function () {
 			if (app.impress.notesMode)
 				app.map.sendUnoCommand('.uno:NormalMultiPaneGUI');

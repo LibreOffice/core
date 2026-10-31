@@ -187,6 +187,7 @@ m4_ifelse(PREVIEW, [true],
       <input id="insertgraphic" aria-hidden="true" type="file" accept="image/*" tabindex="-1">
       <input id="insertmultimedia" aria-hidden="true" type="file" accept="audio/*, video/*" tabindex="-1">
       <input id="selectbackground" aria-hidden="true" type="file" accept="image/*" tabindex="-1">
+      <input id="videobackground" aria-hidden="true" type="file" accept="video/*" tabindex="-1">
       <input id="comparedocuments" aria-hidden="true" type="file" accept="application/*" tabindex="-1">
       <input id="filepicker" aria-hidden="true" type="file" tabindex="-1">
     ]

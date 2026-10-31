@@ -2091,6 +2091,13 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				'command': '.uno:SelectBackground',
 				'accessibility': { focusBack: true, combination: 'SB', de: null }
 			},
+			{
+				'id': 'design-videobackground',
+				'type': 'bigcustomtoolitem',
+				'text': _('Background Video'),
+				'command': 'videobackground',
+				'accessibility': { focusBack: true, combination: 'BV', de: null }
+			},
 		];
 
 		return this.getTabPage('Design', content);

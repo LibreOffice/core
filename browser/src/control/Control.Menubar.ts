@@ -553,6 +553,7 @@ class Menubar extends window.L.Control {
 				{name: _UNO('.uno:InsertGraphic', 'presentation'), unoid: '.uno:InsertGraphic', id: 'insertgraphicremote', type: 'action'},
 				{name: _('Local Multimedia...'), id: 'insertmultimedia', type: 'action'},
 				{name: _UNO('.uno:SelectBackground', 'presentation'), unoid: '.uno:SelectBackground', id: 'selectbackground', type: 'action'},
+				{name: _('Background Video...'), id: 'videobackground', type: 'action'},
 				{name: _UNO('.uno:InsertAnnotation', 'presentation'), unoid: '.uno:InsertAnnotation', id: 'insertcomment', type: 'action'},
 				{uno: '.uno:InsertObjectChart'},
 				{name: _('Shapes ...'), unoid: '.uno:ShapesMenu', id: 'insertshape', type: 'action'},
@@ -2739,6 +2740,8 @@ class Menubar extends window.L.Control {
 			});
 		} else if (id === 'selectbackground') {
 			app.dispatcher.dispatch('selectbackground');
+		} else if (id === 'videobackground') {
+			app.dispatcher.dispatch('videobackground');
 		} else if (id === 'zoomin' && this._map.getZoom() < this._map.getMaxZoom()) {
 			app.dispatcher.dispatch('zoomin');
 		} else if (id === 'showannotations') {

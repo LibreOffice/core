@@ -431,6 +431,7 @@ COOL_JS_LST =\
 	src/docdispatcher.ts \
 	src/app/TableStylesService.ts \
 	src/app/TableStyleGalleryService.ts \
+	src/control/VideoBackgroundDialog.ts \
 	src/core/geometry.ts \
 	src/core/TimerRegistry.ts \
 	src/core/DPIChangeListener.ts \
@@ -1796,6 +1797,7 @@ pot:
 		src/app/TableStylesService.ts \
 		src/app/TableStyleGalleryService.ts \
 		src/app/Util.ts \
+		src/control/VideoBackgroundDialog.ts \
 		src/canvas/sections/CommentListSection.ts \
 		src/canvas/sections/CommentSection.ts \
 		src/canvas/sections/CompareChangesLabelSection.ts \

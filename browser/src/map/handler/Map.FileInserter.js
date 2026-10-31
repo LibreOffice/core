@@ -18,6 +18,7 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 		this._toInsertMultimedia = {};
 		this._toInsertURL = {};
 		this._toInsertBackground = {};
+		this._toVideoBackground = {};
 		this._toCompareDocuments = {};
 		this._toFilePicker = {};
 		// The id of the engine's file request the next picked file answers, or null.
@@ -38,6 +39,7 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 		this._map.on('inserturl', this._onInsertURL, this);
 		this._map.on('childid', this._onChildIdMsg, this);
 		this._map.on('selectbackground', this._onSelectBackground, this);
+		this._map.on('videobackground', this._onVideoBackground, this);
 		this._map.on('comparedocuments', this._onCompareDocuments, this);
 		this._map.on('filepicker', this._onFilePickerRequest, this);
 		const input = document.getElementById('filepicker');
@@ -53,6 +55,7 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 		this._map.off('inserturl', this._onInsertURL, this);
 		this._map.off('childid', this._onChildIdMsg, this);
 		this._map.off('selectbackground', this._onSelectBackground, this);
+		this._map.off('videobackground', this._onVideoBackground, this);
 		this._map.off('comparedocuments', this._onCompareDocuments, this);
 		this._map.off('filepicker', this._onFilePickerRequest, this);
 		const input = document.getElementById('filepicker');
@@ -182,6 +185,16 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 		}
 	},
 
+	_onVideoBackground: function (e) {
+		if (!this._childId) {
+			app.socket.sendMessage('getchildid');
+			this._toVideoBackground[Date.now()] = e.file;
+		}
+		else {
+			this._sendFile(Date.now(), e.file, 'videobackground');
+		}
+	},
+
 	_onCompareDocuments: function (e) {
 		if (!this._childId) {
 			app.socket.sendMessage('getchildid');
@@ -216,6 +229,11 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 			this._sendFile(name, this._toInsertBackground[name], 'selectbackground');
 		}
 		this._toInsertBackground = {};
+
+		for (name in this._toVideoBackground) {
+			this._sendFile(name, this._toVideoBackground[name], 'videobackground');
+		}
+		this._toVideoBackground = {};
 
 		for (name in this._toCompareDocuments) {
 			this._sendFile(name, this._toCompareDocuments[name], 'comparedocuments');

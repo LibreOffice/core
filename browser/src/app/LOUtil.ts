@@ -162,6 +162,7 @@ class LOUtil {
 		insertgraphic: '.uno:InsertGraphic',
 		insertmultimedia: '.uno:InsertAVMedia',
 		selectbackground: '.uno:SelectBackground',
+		videobackground: '.uno:InsertVideoBackground',
 		comparedocuments: '.uno:CompareDocuments',
 	};
 
@@ -706,6 +707,8 @@ class LOUtil {
 			'sidebardeck.shapesdeck': 'basicshapes',
 			'file-saveas': 'saveas',
 			savegraphic: 'saveas',
+			videobackground: 'insertmultimedia',
+			insertvideobackground: 'insertmultimedia',
 			saveimagetowopi: 'saveasremote',
 			'home-search': 'recsearch',
 			searchdialog3finitialfocusreplace3abool3dtrue: 'searchreplace',

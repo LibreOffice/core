@@ -887,6 +887,17 @@ function onInsertMultimedia() {
 	return false;
 }
 
+function onVideoBackground() {
+	var videoBackground = window.L.DomUtil.get('videobackground');
+	if (videoBackground.files.length > 0)
+		map.videoBackground(videoBackground.files[0]);
+
+	// Set the value to null everytime so that onchange event is triggered,
+	// even if the same file is selected
+	videoBackground.value = null;
+	return false;
+}
+
 function onInsertBackground() {
 	var selectBackground = window.L.DomUtil.get('selectbackground');
 	if ('files' in selectBackground) {
@@ -1193,6 +1204,12 @@ document.addEventListener('DOMContentLoaded', function() {
 	if (selectbackground) {
 		selectbackground.accept = supportedGraphicMime;
 		selectbackground.addEventListener('change', onInsertBackground);
+	}
+
+	const videobackground = window.L.DomUtil.get('videobackground');
+	if (videobackground) {
+		videobackground.accept = supportedMediaMime;
+		videobackground.addEventListener('change', onVideoBackground);
 	}
 
 	const comparedocuments = window.L.DomUtil.get('comparedocuments');
