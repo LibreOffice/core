@@ -3921,6 +3921,15 @@ static void closeTab(WindowState& window, int tabId)
         else
             DocumentData::deallocate(tab->appDocId);
     }
+    else if (tab->mode == DocumentMode::CLOUD_ACCOUNT)
+    {
+        // The document of the editor iframe, once its page said hello.
+        if (tab->app2js.joinable())
+        {
+            do_bye_handling_things(*tab);
+            tab->app2js.join();
+        }
+    }
 
     if (tab->webViewController)
     {
@@ -6022,6 +6031,83 @@ void materialize_clipboard_formats()
     }
 }
 
+// Writes the remote document to a temporary file and returns its path.
+static void writeRemoteDocFile(DocumentTab& data, int id, const std::string& arguments)
+{
+    if (data.mode != DocumentMode::CLOUD_ACCOUNT)
+    {
+        LOG_WRN("A remote document was not written: the call is not from an account window");
+        postReplyToCall(data.hWnd, data.tabId, id, std::string());
+        return;
+    }
+
+    std::string name;
+    std::string base64;
+    try
+    {
+        const auto values = Poco::JSON::Parser().parse(arguments).extract<Poco::JSON::Array::Ptr>();
+        name = values->getElement<std::string>(0);
+        base64 = values->getElement<std::string>(1);
+    }
+    catch (const Poco::Exception&)
+    {
+        LOG_WRN("A remote document was not written: the call has no name and bytes");
+        postReplyToCall(data.hWnd, data.tabId, id, std::string());
+        return;
+    }
+
+    // The engine picks its import filter by the extension, which is
+    // the only part of the integrator's name that goes into the path.
+    const std::string extension = FileUtil::extractFileExtension(name);
+    const bool plainExtension = !extension.empty() &&
+                                std::all_of(extension.begin(), extension.end(),
+                                            [](unsigned char c) { return std::isalnum(c); });
+    if (!plainExtension)
+    {
+        LOG_WRN("A remote document was not written: its name has no plain extension");
+        postReplyToCall(data.hWnd, data.tabId, id, std::string());
+        return;
+    }
+
+    const std::string path = FileUtil::getSysTempDirectoryPath() + "\\coda-" +
+                             Util::rng::getFilename(6) + "." + extension;
+    const std::string bytes = Util::base64Decode(base64);
+    std::ofstream stream;
+
+    FileUtil::openFileToOFStream(path, stream, std::ios_base::out | std::ios_base::binary);
+    stream.write(bytes.data(), bytes.size());
+    stream.close();
+    if (!stream)
+    {
+        LOG_ERR("A remote document was not written: its local copy could not be written");
+        postReplyToCall(data.hWnd, data.tabId, id, std::string());
+        return;
+    }
+
+    data.fakeClientFd = fakeSocketSocket();
+    data.appDocId = generate_new_app_doc_id();
+    data.filenameAndUri = { name, Poco::URI(Poco::Path(path)).toString() };
+    postReplyToCall(data.hWnd, data.tabId, id, path);
+}
+
+// Returns the bytes of the document's local copy in base64.
+static void readLocalDocBytes(const DocumentTab& data, int id)
+{
+    std::ifstream stream;
+    FileUtil::openFileToIFStream(fileUriToWindowsPath(data.filenameAndUri.uri), stream,
+                                 std::ios_base::in | std::ios_base::binary);
+    if (!stream.is_open())
+    {
+        LOG_ERR("The local copy of a remote document cannot be read");
+        postReplyToCall(data.hWnd, data.tabId, id, std::string());
+        return;
+    }
+
+    const std::string bytes((std::istreambuf_iterator<char>(stream)),
+                            std::istreambuf_iterator<char>());
+    postReplyToCall(data.hWnd, data.tabId, id, Util::base64Encode(bytes));
+}
+
 static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& message)
 {
     std::wstring s(message.get());
@@ -6615,6 +6701,31 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
                     postReplyToCall(hWnd, tabId, id, result);
                 })
                 .detach();
+        }
+        else if (s.starts_with(L"writeRemoteDocFile "))
+        {
+            const std::string arguments =
+                Util::wide_string_to_string(s.substr(strlen("writeRemoteDocFile ")));
+            writeRemoteDocFile(data, id, arguments);
+        }
+        else if (s.starts_with(L"readLocalDocBytes "))
+        {
+            readLocalDocBytes(data, id);
+        }
+        else if (s.starts_with(L"saveCompleted "))
+        {
+            // CODA-W keeps no state for a save in flight, so there is nothing to clear.
+            postReplyToCall(data.hWnd, data.tabId, id, std::string());
+        }
+        else if (s.starts_with(L"getAllPrefs "))
+        {
+            // TODO: CODA-W has no store for the preferences yet.
+            postReplyToCall(data.hWnd, data.tabId, id, std::string("{}"));
+        }
+        else if (s.starts_with(L"setPref "))
+        {
+            LOG_DBG("A preference was not kept: CODA-W has no store for the preferences yet");
+            postReplyToCall(data.hWnd, data.tabId, id, std::string());
         }
         else
             LOG_ERR("Unhandled CALL message: " + Util::wide_string_to_string(s));
