@@ -6247,20 +6247,12 @@ void GtkSalFrame::startDrag(const css::datatransfer::dnd::DragGestureEvent& rEve
     // appropriate device to use.
     if (!aFakeEvent.button.device || !gdk_device_get_window_at_position(aFakeEvent.button.device, nullptr, nullptr))
     {
-        GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(getGdkDisplay());
-        GList* pDevices = gdk_device_manager_list_devices(pDeviceManager, GDK_DEVICE_TYPE_MASTER);
-        for (GList* pEntry = pDevices; pEntry; pEntry = pEntry->next)
+        GdkSeat* pSeat = gdk_display_get_default_seat(getGdkDisplay());
+        GdkDevice* pPointerDevice = gdk_seat_get_pointer(pSeat);
+        if (gdk_device_get_window_at_position(pPointerDevice, nullptr, nullptr))
         {
-            GdkDevice* pDevice = static_cast<GdkDevice*>(pEntry->data);
-            if (gdk_device_get_source(pDevice) == GDK_SOURCE_KEYBOARD)
-                continue;
-            if (gdk_device_get_window_at_position(pDevice, nullptr, nullptr))
-            {
-                aFakeEvent.button.device = pDevice;
-                break;
-            }
+            aFakeEvent.button.device = pPointerDevice;
         }
-        g_list_free(pDevices);
     }
 
     GdkDragContext *pDrag;
