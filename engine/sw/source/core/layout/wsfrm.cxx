@@ -54,6 +54,7 @@
 #include <tabfrm.hxx>
 #include <rowfrm.hxx>
 #include <flyfrm.hxx>
+#include <VectorCollector.hxx>
 #include <sectfrm.hxx>
 #include <fmtclds.hxx>
 #include <txtfrm.hxx>
@@ -4973,6 +4974,49 @@ void SwRootFrame::dumpAsXml(xmlTextWriterPtr writer) const
 
     if (bCreateWriter)
         lcl_freeWriter(writer);
+}
+
+void SwFrame::CreatePrimitives(sw::vector::Collector& rCollector) const
+{
+    // A hidden frame has no area and draws nothing. A row goes on, as its cells can span into the
+    // rows below it.
+    if (!getFramePrintArea().HasArea() && !IsRowFrame() && !IsPageFrame())
+        return;
+
+    rCollector.open(*this);
+    const Point aOrigin(rCollector.origin());
+    const bool bBorderLayer = IsPageFrame() || IsFlyFrame();
+    if (bBorderLayer)
+        rCollector.openBorderLayer();
+    rCollector.add(CreateBackgroundPrimitives(aOrigin));
+    drawinglayer::primitive2d::Primitive2DContainer aBorders;
+    rCollector.add(CreateShadowAndBorderPrimitives(aOrigin, aBorders));
+    rCollector.deferBorders(*this, std::move(aBorders));
+
+    // The page draws the objects behind the text before its content and the other objects
+    // after it. Flies are frames of their own, anchored somewhere else on the page.
+    if (IsPageFrame())
+        sw::vector::addObjects(rCollector, static_cast<const SwPageFrame&>(*this), true);
+
+    if (IsLayoutFrame())
+    {
+        const SwLayoutFrame& rLayout = static_cast<const SwLayoutFrame&>(*this);
+        rCollector.add(rLayout.CreateColumnLinePrimitives(aOrigin));
+        for (const SwFrame* pLower = rLayout.Lower(); pLower; pLower = pLower->GetNext())
+            pLower->CreatePrimitives(rCollector);
+    }
+
+    // The border lines lie over the content, and the objects in front of the text over them.
+    if (bBorderLayer)
+        rCollector.closeBorderLayer();
+
+    if (IsPageFrame())
+        sw::vector::addObjects(rCollector, static_cast<const SwPageFrame&>(*this), false);
+
+    if (IsFlyFrame())
+        rCollector.current().moAnchor = sw::vector::anchorOf(*static_cast<const SwFlyFrame*>(this));
+
+    rCollector.close();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

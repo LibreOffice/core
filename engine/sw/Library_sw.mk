@@ -377,6 +377,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/layout/tabfrm \
     sw/source/core/layout/trvlfrm \
     sw/source/core/layout/unusedf \
+    sw/source/core/layout/VectorCollector \
     sw/source/core/layout/virtoutp \
     sw/source/core/layout/wsfrm \
     sw/source/core/model/ModelTraverser \

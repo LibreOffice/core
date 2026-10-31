@@ -179,6 +179,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_core_draw \
     CppunitTest_sw_core_edit \
     CppunitTest_sw_uibase_fldui \
+    CppunitTest_sw_vector_rendering \
     CppunitTest_sw_core_view \
     CppunitTest_sw_core_attr \
     CppunitTest_sw_core_header_footer \

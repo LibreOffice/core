@@ -148,6 +148,10 @@ public:
     SwTabFrame* FindMaster( bool bFirstMaster = false ) const;
 
     virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&, PaintFrameMode mode = PAINT_ALL ) const override;
+    /// The lines of collapsing borders between and around the cells, relative to rOrigin
+    drawinglayer::primitive2d::Primitive2DContainer
+    CreateCollapsedBorderPrimitives(const Point& rOrigin) const;
+    virtual void CreatePrimitives(sw::vector::Collector& rCollector) const override;
     virtual void CheckDirection( bool bVert ) override;
 
     virtual void Cut() override;

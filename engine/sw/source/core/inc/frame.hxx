@@ -37,6 +37,7 @@
 #include <optional>
 
 namespace drawinglayer::processor2d { class BaseProcessor2D; }
+namespace sw::vector { class Collector; }
 
 class SwLayoutFrame;
 class SwRootFrame;
@@ -605,6 +606,35 @@ public:
 
     std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> CreateProcessor2D( ) const;
     void ProcessPrimitives( const drawinglayer::primitive2d::Primitive2DContainer& rSequence ) const;
+
+    /** The border lines of the frame along aRect as one primitive, relative to rOrigin, or empty
+        when it has none. The cell frames give the top and bottom lines of a cell whose own
+        attributes do not decide them. With bWithRedlineRenderMode set, a tracked fly takes the
+        border of the redline render mode of the current view.
+     */
+    drawinglayer::primitive2d::Primitive2DReference CreateBorderPrimitive(
+        const SwBorderAttrs& rAttrs, SwRect aRect, const SwFrame* pCellFrameForTopBorderAttrs,
+        const SwFrame* pCellFrameForBottomBorderAttrs, const Point& rOrigin = Point(),
+        bool bWithRedlineRenderMode = true) const;
+
+    /** The fill of the frame's own background, relative to rOrigin, without view shading or
+        tracked change colors. A text fly without a background takes the one of the frames it is
+        anchored in, or white. The current view still hides the page background when set to, and
+        aligns the area of a background graphic to its pixels during a paint or in browse mode.
+     */
+    drawinglayer::primitive2d::Primitive2DContainer
+    CreateBackgroundPrimitives(const Point& rOrigin) const;
+
+    /** The shadow of the frame, relative to rOrigin, or the separator line of a footnote
+        container. The border lines go to rBorders, as they lie over the content of the frame.
+     */
+    drawinglayer::primitive2d::Primitive2DContainer CreateShadowAndBorderPrimitives(
+        const Point& rOrigin, drawinglayer::primitive2d::Primitive2DContainer& rBorders) const;
+
+    /** Adds the entries of this frame and its lowers to rCollector. An entry holds what the frame
+        draws itself, relative to the top left of its frame area.
+     */
+    virtual void CreatePrimitives(sw::vector::Collector& rCollector) const;
 
     // retouch, not in the area of the given Rect!
     void Retouch( const SwPageFrame *pPage, const SwRect &rRect ) const;

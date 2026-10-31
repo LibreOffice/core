@@ -64,6 +64,8 @@ public:
         const SwBorderAttrs&) const override;
     virtual void PaintSubsidiaryLines( const SwPageFrame*, const SwRect& ) const override;
             void    PaintLine( const SwRect &, const SwPageFrame * ) const;
+    /// The area the separator line above the footnotes covers, none when it draws nothing
+    std::optional<SwRect> GetLineRect(const SwPageFrame *pPage) const;
 
     void dumpAsXml(xmlTextWriterPtr writer = nullptr) const override;
 };

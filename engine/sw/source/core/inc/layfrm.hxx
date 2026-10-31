@@ -23,6 +23,7 @@
 #include <swdllapi.h>
 
 #include <utility>
+#include <vector>
 
 class SwAnchoredObject;
 class SwContentFrame;
@@ -78,6 +79,11 @@ public:
     /// Paints the column separation line for the inner columns
     void PaintColLines( const SwRect &, const SwFormatCol &,
                         const SwPageFrame * ) const;
+    /// The areas the separation lines between the inner columns cover, one per gap, in order
+    std::vector<SwRect> GetColLineRects(const SwFormatCol& rCol) const;
+    /// The separation lines between the inner columns, relative to rOrigin
+    drawinglayer::primitive2d::Primitive2DContainer
+    CreateColumnLinePrimitives(const Point& rOrigin) const;
 
     virtual bool    FillSelection( SwSelectionList& rList, const SwRect& rRect ) const override;
 

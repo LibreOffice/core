@@ -49,6 +49,7 @@
 #include <fmtfsize.hxx>
 #include <swtblfmt.hxx>
 #include <tabfrm.hxx>
+#include <VectorCollector.hxx>
 #include <rowfrm.hxx>
 #include <cellfrm.hxx>
 #include <flyfrms.hxx>
@@ -7250,6 +7251,31 @@ bool SwFrame::IsInCoveredCell() const
         bRet = pThis->IsCoveredCell();
 
     return bRet;
+}
+
+void SwTabFrame::CreatePrimitives(sw::vector::Collector& rCollector) const
+{
+    if (!getFramePrintArea().HasArea())
+        return;
+
+    rCollector.open(*this);
+    rCollector.add(CreateBackgroundPrimitives(rCollector.origin()));
+    drawinglayer::primitive2d::Primitive2DContainer aBorders;
+    rCollector.add(CreateShadowAndBorderPrimitives(rCollector.origin(), aBorders));
+    rCollector.deferBorders(*this, std::move(aBorders));
+    for (const SwFrame* pLower = Lower(); pLower; pLower = pLower->GetNext())
+        pLower->CreatePrimitives(rCollector);
+
+    // Collapsing borders lie over the cells, so they are an entry of the table after its rows.
+    if (IsCollapsingBorders())
+    {
+        rCollector.open(sw::vector::tableBordersEntryIdOf(*this),
+                        sw::vector::EntryKind::TableBorders, getFrameArea());
+        rCollector.add(CreateCollapsedBorderPrimitives(rCollector.origin()));
+        rCollector.close();
+    }
+
+    rCollector.close();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
