@@ -159,6 +159,8 @@ std::condition_variable NewChildrenCV;
 std::vector<std::shared_ptr<ChildProcess>> NewChildren;
 
 std::atomic<int> TotalOutstandingForks(0);
+/// The bookkeeping of the forks asked for and of the subforkits, below, is read and changed under
+/// NewChildrenMutex. Where DocBrokersMutex is held too, it is taken first.
 std::map<std::string, int> OutstandingForks;
 std::map<std::string, std::chrono::steady_clock::time_point> LastForkRequestTimes;
 using SubForKitMap = std::map<std::string, std::shared_ptr<ForKitProcess>>;
@@ -433,6 +435,8 @@ namespace {
 /// it.
 SubForKitMap::iterator dropSubForKit(SubForKitMap::iterator it, bool askToExit)
 {
+    Util::assertIsLocked(NewChildrenMutex);
+
     // copy as it will be used after erase()
     std::string configId = it->first;
 
@@ -471,6 +475,7 @@ void COOLWSD::cleanupDocBrokers()
     std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
 
     std::set<std::string> activeConfigs;
+    std::vector<std::string> exitedConfigIds;
 
     for (auto it = DocBrokers.begin(); it != DocBrokers.end(); )
     {
@@ -482,7 +487,7 @@ void COOLWSD::cleanupDocBrokers()
         // Remove only when not alive.
         if (!docBroker->isAlive())
         {
-            LastSubForKitBrokerExitTimes[docBroker->getConfigId()] = now;
+            exitedConfigIds.push_back(docBroker->getConfigId());
             LOG_INF("Removing DocumentBroker for docKey ["
                     << it->first << "], " << docBroker.use_count() << " references");
             docBroker->dispose();
@@ -526,6 +531,10 @@ void COOLWSD::cleanupDocBrokers()
             }
             return value;
         }();
+
+        std::lock_guard<std::mutex> newChildrenLock(NewChildrenMutex);
+        for (const std::string& configId : exitedConfigIds)
+            LastSubForKitBrokerExitTimes[configId] = now;
 
         // idle candidates: pair of (idle duration, configId)
         std::vector<std::pair<std::chrono::steady_clock::duration, std::string>> idleCandidates;
@@ -616,6 +625,7 @@ bool COOLWSD::ensureSubForKit(const std::string& configId)
 
     LOG_TRC("Request forkit to spawn subForKit " << configId);
 
+    std::lock_guard<std::mutex> lock(NewChildrenMutex);
     auto it = SubForKitProcs.find(configId);
     if (it != SubForKitProcs.end())
     {
@@ -752,6 +762,11 @@ static size_t addNewChild(std::shared_ptr<ChildProcess> child)
         ++TotalOutstandingForks;
         ++OutstandingForks[configId];
     }
+
+    LOG_TRC("New child spawned after "
+            << std::chrono::duration_cast<std::chrono::milliseconds>(
+                   std::chrono::steady_clock::now() - LastForkRequestTimes[configId])
+            << " of requesting");
 
     if (COOLWSD::IsBindMountingEnabled)
     {
@@ -1317,11 +1332,12 @@ static void closeSubForKit(const std::string& configId,
     if (!PrisonerPoll)
         return;
 
+    Util::assertIsLocked(NewChildrenMutex);
+
     // The spare kits are taken now, so no document gets one of them, and the kits of a later
     // subforkit with the same configuration stay.
     std::vector<std::shared_ptr<ChildProcess>> spareKits;
     {
-        std::unique_lock<std::mutex> lock(NewChildrenMutex);
         for (auto it = NewChildren.begin(); it != NewChildren.end();)
         {
             if ((*it)->getConfigId() == configId)
@@ -3087,13 +3103,16 @@ bool COOLWSD::checkAndRestoreForKit()
 
                 // subforkits exit when their parent forkit, so we can
                 // immediately consider these obsolete
-                for (auto it = SubForKitProcs.begin(); it != SubForKitProcs.end(); )
                 {
-                    LOG_DBG("dropping subforkit " << it->first);
-                    it = dropSubForKit(it, /*askToExit=*/false);
+                    std::lock_guard<std::mutex> lock(NewChildrenMutex);
+                    for (auto it = SubForKitProcs.begin(); it != SubForKitProcs.end(); )
+                    {
+                        LOG_DBG("dropping subforkit " << it->first);
+                        it = dropSubForKit(it, /*askToExit=*/false);
+                    }
+                    OutstandingSubForKitSpawns.clear();
+                    LastSubForKitSpawnRequestTimes.clear();
                 }
-                OutstandingSubForKitSpawns.clear();
-                LastSubForKitSpawnRequestTimes.clear();
 
                 // Spawn a new forkit and try to dust it off and resume.
                 if (!SigUtil::getShutdownRequestFlag() && !createForKit())
@@ -3440,6 +3459,7 @@ bool COOLWSD::sendMessageToForKit(const std::string& message, const std::string&
         return true;
     }
 
+    Util::assertIsLocked(NewChildrenMutex);
     auto it = SubForKitProcs.find(configId);
     if (it == SubForKitProcs.end())
     {
@@ -3633,6 +3653,7 @@ private:
                 else
                 {
                     LOG_INF("subforkit [" << configId << "], seen as created.");
+                    std::unique_lock<std::mutex> lock(NewChildrenMutex);
                     auto [it, inserted] = SubForKitProcs.try_emplace(configId,
                         std::make_shared<ForKitProcess>(pid, socket, request));
                     if (!inserted)
@@ -3647,7 +3668,6 @@ private:
                     LOG_ASSERT_MSG(socket->getInBuffer().empty(), "Unexpected data in prisoner socket");
                     socket->getInBuffer().clear();
                     // created subforkit for a reason, create spare early
-                    std::unique_lock<std::mutex> lock(NewChildrenMutex);
                     rebalanceChildren(configId, COOLWSD::NumPreSpawnedChildren);
 
                     UNITWSD_CALL(newSubForKit(it->second, configId));
@@ -3660,10 +3680,6 @@ private:
                 LOG_ERR("Invalid incoming child URI [" << requestURI.getPath() << ']');
                 return;
             }
-
-            const auto duration = std::chrono::steady_clock::now() - LastForkRequestTimes[configId];
-            const auto durationMs = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
-            LOG_TRC("New child spawned after " << durationMs << " of requesting");
 
             // New Child is spawned.
             const Poco::URI::QueryParameters params = requestURI.getQueryParameters();
