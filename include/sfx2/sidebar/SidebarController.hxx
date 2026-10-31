@@ -239,7 +239,6 @@ private:
     css::uno::Reference<css::ui::XUIElement> CreateUIElement (
         const css::uno::Reference<css::awt::XWindow>& rxWindow,
         const OUString& rsImplementationURL,
-        const bool bWantsCanvas,
         const Context& rContext);
 
     void CreatePanels(

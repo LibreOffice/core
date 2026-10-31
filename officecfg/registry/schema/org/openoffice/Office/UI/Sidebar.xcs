@@ -226,12 +226,6 @@
         </info>
         <value>false</value>
       </prop>
-      <prop oor:name="WantsCanvas" oor:type="xs:boolean">
-        <info>
-          <desc>Experimental: Set to true when panel wants to paint its content via a XCanvas.</desc>
-        </info>
-        <value>false</value>
-      </prop>
       <prop oor:name="IsExperimental" oor:type="xs:boolean">
         <info>
           <desc>This flag controls whether the panel is experimental and is shown only when experimental mode is enabled.</desc>
@@ -240,8 +234,8 @@
       </prop>
       <prop oor:name="WantsAWT" oor:type="xs:boolean">
         <info>
-          <desc>This flag controls whether the panel requires a awt::XWindow parent. This option cannot be false if WantsCanvas
-          is also true. The default of true is suitable for third party sidebar panels, false is only useful for built-in
+          <desc>This flag controls whether the panel requires a awt::XWindow parent.
+          The default of true is suitable for third party sidebar panels, false is only useful for built-in
           internal panels.</desc>
         </info>
         <value>true</value>

@@ -65,7 +65,6 @@
 #include <com/sun/star/ui/ContextChangeEventObject.hpp>
 #include <com/sun/star/ui/theUIElementFactoryManager.hpp>
 #include <com/sun/star/util/URL.hpp>
-#include <com/sun/star/rendering/XSpriteCanvas.hpp>
 
 #include <bitmaps.hlst>
 
@@ -1002,7 +1001,6 @@ std::shared_ptr<Panel> SidebarController::CreatePanel (
     Reference<ui::XUIElement> xUIElement (CreateUIElement(
             xPanel->GetElementParentWindow(),
             xPanelDescriptor->msImplementationURL,
-            xPanelDescriptor->mbWantsCanvas,
             rContext));
     if (xUIElement.is())
     {
@@ -1020,7 +1018,6 @@ std::shared_ptr<Panel> SidebarController::CreatePanel (
 Reference<ui::XUIElement> SidebarController::CreateUIElement (
     const Reference<awt::XWindow>& rxWindow,
     const OUString& rsImplementationURL,
-    const bool bWantsCanvas,
     const Context& rContext)
 {
     try
@@ -1038,11 +1035,6 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
             aCreationArguments.put(u"SfxBindings"_ustr, Any(reinterpret_cast<sal_uInt64>(&pSfxDockingWindow->GetBindings())));
         aCreationArguments.put(u"Theme"_ustr, Theme::GetPropertySet());
         aCreationArguments.put(u"Sidebar"_ustr, Any(Reference<ui::XSidebar>(static_cast<ui::XSidebar*>(this))));
-        if (bWantsCanvas)
-        {
-            Reference<rendering::XSpriteCanvas> xCanvas (VCLUnoHelper::GetWindow(rxWindow)->GetOutDev()->GetSpriteCanvas());
-            aCreationArguments.put(u"Canvas"_ustr, Any(xCanvas));
-        }
 
         if (mxCurrentController.is())
         {

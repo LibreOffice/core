@@ -35,7 +35,6 @@ public:
     OUString msImplementationURL;
     sal_Int32 mnOrderIndex;
     bool mbShowForReadOnlyDocuments;
-    bool mbWantsCanvas;
     bool mbWantsAWT;
     bool mbExperimental;
 
