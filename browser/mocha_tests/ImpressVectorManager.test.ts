@@ -2202,16 +2202,22 @@ describe('ImpressVectorManager', function () {
 		});
 	});
 
-	// The manager measures text with a stub, so widths do not depend on a
-	// canvas. The document state is set up as during a text edit.
-	describe('predicted text edits', function () {
-		const measure: cool.TextRunMeasure = (_run, text) => text.length * 100;
-		class TestManager extends ImpressVectorManager {
-			protected _textMeasure(): cool.TextRunMeasure {
-				return measure;
-			}
+	// A manager that measures text with the stub of the prediction tests.
+	class TestManager extends ImpressVectorManager {
+		protected _textMeasure(): cool.TextRunMeasure {
+			return predictionTest.measure;
 		}
+	}
 
+	// The same for the pages of a text document.
+	class WriterTestManager extends WriterVectorManager {
+		protected _textMeasure(): cool.TextRunMeasure {
+			return predictionTest.measure;
+		}
+	}
+
+	// The document state is set up as during a text edit.
+	describe('predicted text edits', function () {
 		// One text box with id 5 at (1000, 2000) holding one run of text.
 		function textBox(text: string): any {
 			return {
@@ -3693,6 +3699,202 @@ describe('ImpressVectorManager', function () {
 				recorder.callsOf('fillText').map((call) => call.args[0]),
 				['Two'],
 			);
+		});
+	});
+
+	describe('predicted text edits on a text document page', function () {
+		// The page '7' lies at (284, 284) in the document. Its text frame 96 lies at
+		// (1000, 2000) on the page, and the frame's one line has its baseline 300 below the
+		// frame's top left, which the primitives of the frame are relative to.
+		const page = {
+			id: 0,
+			kind: 'page',
+			width: 12240,
+			height: 15840,
+			primitives: [],
+		};
+		function frame(text: string): any {
+			return {
+				id: 96,
+				kind: 'textframe',
+				x: 1000,
+				y: 2000,
+				width: 5000,
+				height: 400,
+				primitives: [
+					{
+						type: 'textSimplePortion',
+						text,
+						textPosition: 0,
+						textLength: text.length,
+						matrix: [1, 0, 0, 1, 0, 300],
+						fontSize: 360,
+						familyname: 'Arial',
+						paragraph: 0,
+						lineAscent: 288,
+						lineHeight: 400,
+						textAreaWidth: 5000,
+						align: 'left',
+					},
+				],
+			};
+		}
+
+		function textOf(manager: WriterVectorManager): string {
+			const data: any = manager.requestTextPage('7');
+			return data.objects.get(96).primitives[0].text;
+		}
+
+		let savedMap: any;
+		let savedSelections: any;
+		let savedCursor: any;
+		let savedSequence: number;
+		let savedWriter: any;
+		beforeEach(function () {
+			const anyApp = app as any;
+			savedMap = anyApp.map;
+			savedSelections = (window as any).TextSelections;
+			savedCursor = app.file.textCursor;
+			savedSequence = app.file.inputSequence;
+			savedWriter = app.file.writer;
+			anyApp.map = { _docLayer: { _onUpdateCursor: function () {} } };
+			(window as any).TextSelections = { isActive: () => false };
+			app.file.writer = {
+				pageRectangleList: [[284, 284, 12240, 15840]],
+				pageIds: ['7'],
+			};
+			// The caret is at the end of "Hello" in frame 96.
+			app.file.textCursor = {
+				visible: true,
+				rectangle: new cool.SimpleRectangle(1784, 2296, 0, 400),
+				logical: { paragraph: 0, index: 5 },
+				object: 96,
+			};
+			app.file.inputSequence = 10;
+			LocalCaret.forget();
+		});
+		afterEach(function () {
+			(app as any).map = savedMap;
+			(window as any).TextSelections = savedSelections;
+			app.file.textCursor = savedCursor;
+			app.file.inputSequence = savedSequence;
+			app.file.writer = savedWriter;
+			LocalCaret.forget();
+			cool.InputSequence.forget();
+		});
+
+		function managerWith(text: string): WriterVectorManager {
+			const manager = new WriterTestManager();
+			manager.handleVectorPrimitivesResponse({
+				partId: '7',
+				version: 1,
+				objects: [page, frame(text)],
+			});
+			return manager;
+		}
+
+		// Sends the edit predicted last, numbered as the next input.
+		function sendTheEdit(): void {
+			cool.InputSequence.stamp('textinput');
+		}
+
+		it('types into the text frame the caret names and puts the caret in document twips', function () {
+			const manager = managerWith('Hello');
+
+			nodeassert.strictEqual(manager.predictTextInsert('!'), true);
+
+			nodeassert.strictEqual(textOf(manager), 'Hello!');
+			// The caret is at the page offset plus the frame offset plus six characters of 100 twips.
+			nodeassert.strictEqual(
+				app.file.textCursor.rectangle?.x1,
+				284 + 1000 + 600,
+			);
+			nodeassert.strictEqual(
+				app.file.textCursor.rectangle?.y1,
+				284 + 2000 + 300 - 288,
+			);
+		});
+
+		it('deletes the character before the caret in the text frame', function () {
+			const manager = managerWith('Hello');
+
+			nodeassert.strictEqual(manager.predictTextDelete(1, 0), true);
+
+			nodeassert.strictEqual(textOf(manager), 'Hell');
+			nodeassert.strictEqual(
+				app.file.textCursor.rectangle?.x1,
+				284 + 1000 + 400,
+			);
+		});
+
+		it('leaves the text alone when no cached page holds the frame of the caret', function () {
+			const manager = managerWith('Hello');
+			app.file.textCursor.object = 97;
+
+			nodeassert.strictEqual(manager.predictTextInsert('!'), false);
+
+			nodeassert.strictEqual(textOf(manager), 'Hello');
+		});
+
+		it('leaves typing that wraps the paragraph to another line to the server', function () {
+			const manager = new WriterTestManager();
+			const narrow = frame('Hello world');
+			// The line holds eleven characters of 100 twips, so the frames below it stay where
+			// they are only while the paragraph keeps its one line.
+			narrow.primitives[0].textAreaWidth = 1100;
+			manager.handleVectorPrimitivesResponse({
+				partId: '7',
+				version: 1,
+				objects: [page, narrow],
+			});
+
+			nodeassert.strictEqual(manager.predictTextInsert('!'), false);
+
+			nodeassert.strictEqual(textOf(manager), 'Hello world');
+		});
+
+		it('leaves the text of a drawing object to the server', function () {
+			const manager = new WriterTestManager();
+			// A drawing object's entry id lies above the frame ids.
+			const shapeId = 4294967296 + 96;
+			manager.handleVectorPrimitivesResponse({
+				partId: '7',
+				version: 1,
+				objects: [
+					page,
+					frame('Hello'),
+					{ ...frame('Hello'), id: shapeId, kind: 'shape' },
+				],
+			});
+			app.file.textCursor.object = shapeId;
+
+			nodeassert.strictEqual(manager.predictTextInsert('!'), false);
+
+			nodeassert.strictEqual(textOf(manager), 'Hello');
+		});
+
+		it('keeps a typed character over a delta from before it, once', function () {
+			const manager = managerWith('Hello');
+			manager.predictTextInsert('!');
+			sendTheEdit();
+
+			// The delta answers input 10, so the character typed as input 11 is drawn again.
+			manager.handleVectorPrimitivesDelta({
+				partId: '7',
+				version: 2,
+				inputSequence: 10,
+				objects: [frame('Hello')],
+			});
+			nodeassert.strictEqual(textOf(manager), 'Hello!');
+
+			// This delta holds it, and it is not drawn twice.
+			manager.handleVectorPrimitivesDelta({
+				partId: '7',
+				version: 3,
+				inputSequence: 11,
+				objects: [frame('Hello!')],
+			});
+			nodeassert.strictEqual(textOf(manager), 'Hello!');
 		});
 	});
 });

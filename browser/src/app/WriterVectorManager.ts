@@ -147,12 +147,122 @@ class WriterVectorManager extends VectorPartManagerBase {
 		for (const partId of droppable) {
 			if (this._cache.size <= WriterVectorManager.textPageBudget) break;
 			// The pages kept are drawn already, so dropping the others needs no redraw.
-			this._dropCachedPart(partId as cool.VectorPartGuid);
-			this._textPageLastWanted.delete(partId);
-			// The session stops pushing changes of the page, which would only be dropped here.
-			app.socket.sendMessage(
-				'commandvalues command=.uno:VectorForgetPart?partid=' + partId,
-			);
+			this._forgetTextPage(partId as cool.VectorPartGuid);
 		}
+	}
+
+	// Drop the cached page, which tells the server to stop pushing its changes. The edits typed
+	// on the page get no more answers, so they go too.
+	private _forgetTextPage(partId: cool.VectorPartGuid): void {
+		this._dropCachedPart(partId);
+		this._typedEdits.forget((edit) => edit.partId === partId);
+	}
+
+	/// The wanted count of a dropped page goes with the page.
+	protected _dropCachedPart(partId: cool.VectorPartGuid): void {
+		super._dropCachedPart(partId);
+		this._textPageLastWanted.delete(partId);
+	}
+
+	/// The wanted counts go with the pages.
+	protected _dropAllCachedParts(): void {
+		super._dropAllCachedParts();
+		this._textPageLastWanted.clear();
+	}
+
+	/// The page list was replaced. A cached page that is not in it is gone from the document, and
+	/// its frames can be on other pages now, so it is dropped. The wanted counts are kept only for
+	/// the pages in the list.
+	partListChanged(): void {
+		for (const partId of Array.from(this._cache.keys()))
+			if (this._pageIndexOf(partId) === -1) this._forgetTextPage(partId);
+		for (const partId of Array.from(this._textPageLastWanted.keys()))
+			if (this._pageIndexOf(partId) === -1)
+				this._textPageLastWanted.delete(partId);
+		super.partListChanged();
+	}
+
+	// The caret of a text document lies in the text frame that the caret message names, which
+	// the logical caret alone finds a place in. The text of a drawing object, which the caret
+	// message names by the id of its entry, waits for the engine.
+	protected _caretTarget(): EditTarget | null {
+		const cursor = app.file.textCursor;
+		if (!cursor || !cursor.visible || !cursor.rectangle) return null;
+		const entryId = cursor.object;
+		if (entryId == null || !cursor.logical) return null;
+		const partId = this._textPageHolding(entryId);
+		const data = partId === undefined ? undefined : this._cache.get(partId);
+		if (!data || data.objects.get(entryId)?.kind !== 'textframe') return null;
+		return {
+			tree: this._treeOf(data),
+			caret: cursor.rectangle,
+			logical: cursor.logical,
+			entryId,
+		};
+	}
+
+	/// Each paragraph is a text frame, and the frames after it stay where the server placed
+	/// them.
+	protected _paragraphsKeepTheirLines(): boolean {
+		return true;
+	}
+
+	// The cached page of the page list that holds the entry, or undefined.
+	private _textPageHolding(entryId: number): cool.VectorPartGuid | undefined {
+		for (let page = 0; ; ++page) {
+			const partId = this.partIdAt(page);
+			if (partId === undefined) return undefined;
+			if (this._cache.get(partId)?.objects.has(entryId)) return partId;
+		}
+	}
+
+	/// An edit the engine applied changes the text frame it went into, and the delta that
+	/// answers it carries that frame with its content.
+	protected _answerCarriesEditedEntries(): boolean {
+		return true;
+	}
+
+	/// A text document has no page in the edit view. The caret's text frame names its page.
+	protected _selectedPartId(): cool.VectorPartGuid | undefined {
+		return undefined;
+	}
+
+	/// Apply a pushed delta. A caret placed here, while the engine has not answered it, stays on
+	/// its text frame when the delta moves the frame.
+	handleVectorPrimitivesDelta(values: cool.VectorPrimitivesResponse): void {
+		super.handleVectorPrimitivesDelta(values);
+		const entryId = app.file.textCursor.object;
+		if (entryId == null) return;
+		if (!values.objects?.some((object) => object.id === entryId)) return;
+		if (!LocalCaret.ahead() && !this._typedEdits.has()) return;
+		const target = this._caretTarget();
+		if (target) this._placeCaret(target, 0);
+	}
+
+	/// Show the caret placed here, and announce the new cursor position of the text document.
+	protected _setCaretRectangle(geometry: cool.CaretGeometry): void {
+		super._setCaretRectangle(geometry);
+		app.sectionContainer?.onCursorPositionChanged();
+	}
+
+	/// Where the twips of an entry start in document twips: the entry lies at its x and y on the
+	/// page, and the page at its rectangle in the document. Null when the page or the entry is
+	/// not known.
+	protected _entryOrigin(
+		data: cool.VectorPrimitivesData,
+		entryId: number | undefined,
+	): { x: number; y: number } | null {
+		const entry = entryId === undefined ? undefined : data.objects.get(entryId);
+		const pageOrigin = this._pageOriginOf(data.partId);
+		if (!entry || !pageOrigin) return null;
+		return {
+			x: pageOrigin.x + (entry.x ?? 0),
+			y: pageOrigin.y + (entry.y ?? 0),
+		};
+	}
+
+	/// The edits of a text document lie on the page of the newest one.
+	protected _editedPartId(): cool.VectorPartGuid | undefined {
+		return this._typedEdits.newest()?.partId;
 	}
 }

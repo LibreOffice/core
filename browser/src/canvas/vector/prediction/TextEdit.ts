@@ -95,6 +95,8 @@ namespace cool {
 			readonly measurer: TextMeasurer,
 			// The id of the run's object, when the tree has ids.
 			readonly objectId?: number,
+			// True when an edit keeps the paragraph to the lines it has.
+			readonly fixedLines: boolean = false,
 		) {}
 
 		/// True when the position ends its run, which at a line break also starts the next.
@@ -133,6 +135,13 @@ namespace cool {
 
 			const overflows =
 				paragraph !== null && paragraph.lineOverflows(this, advance);
+			// Text that takes the paragraph to another line is left to the server, which
+			// moves the text after the paragraph down.
+			if (
+				this.fixedLines &&
+				this.addsALine(paragraph, overflows, text, scale, advance)
+			)
+				return nothing;
 
 			this.insertIntoRun(text, scale);
 
@@ -186,6 +195,33 @@ namespace cool {
 				removedBefore: caret - from,
 				caretShift: 0 - beforeWidth - leftShare,
 			};
+		}
+
+		// True when inserting the text at the caret makes the paragraph wrap to more lines than
+		// it has. Without a paragraph that re-wraps, any text past the width of the caret's line
+		// does.
+		private addsALine(
+			paragraph: Paragraph | null,
+			overflows: boolean,
+			text: string,
+			scale: number,
+			advance: number,
+		): boolean {
+			if (!paragraph) {
+				const wrapWidth = this.run.primitive.lineWidth;
+				return (
+					wrapWidth !== undefined && this.lineExtent() + advance > wrapWidth
+				);
+			}
+			return (
+				overflows &&
+				paragraph.linesWith(
+					text,
+					this.run.start + this.offset,
+					this.run.primitive,
+					scale,
+				) > paragraph.lineCount
+			);
 		}
 
 		// The runs of the caret's paragraph on the caret's line.

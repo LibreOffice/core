@@ -27,6 +27,12 @@ class ImpressVectorManager extends VectorPartManagerBase {
 		return true;
 	}
 
+	/// The id of the slide in the edit view, or undefined while the slide list does not name it.
+	protected _selectedPartId(): cool.VectorPartGuid | undefined {
+		const entry = app.impress?.partList?.[this._docLayer._selectedPart];
+		return typeof entry?.part === 'string' ? entry.part : undefined;
+	}
+
 	// Previews waiting for a JSON primitive tree response, keyed by page id.
 	private _pendingPreviews: Map<cool.VectorPartGuid, cool.PendingPreview[]> =
 		new Map();

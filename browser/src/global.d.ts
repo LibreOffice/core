@@ -294,6 +294,9 @@ interface AppInterface {
 			// The other end of the selected text, in the same terms, or null
 			// when no text is selected.
 			anchor?: null | cool.LogicalCaret;
+			// The id of the text frame or the drawing object whose text holds
+			// the caret, or null when the cursor message names none.
+			object?: null | number;
 		};
 		fileBasedView: boolean;
 		writer: {

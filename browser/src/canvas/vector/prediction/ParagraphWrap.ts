@@ -167,6 +167,30 @@ namespace cool {
 			return position.lineExtent() + advance > wrapWidth;
 		}
 
+		/// The number of lines the paragraph wraps to with the text inserted at the paragraph
+		/// offset, in the font of source and scaled to the server's measure. The paragraph stays
+		/// as it is.
+		linesWith(
+			text: string,
+			offset: number,
+			source: TextSimplePortionPrimitive,
+			scale: number,
+		): number {
+			const characters = this.characters();
+			let at = characters.findIndex((entry) => entry.offset >= offset);
+			if (at < 0) at = characters.length;
+			const inserted: ParagraphCharacter[] = [];
+			for (const character of text)
+				inserted.push({
+					character,
+					source,
+					offset,
+					width: this.measurer.width(source, character) * scale,
+				});
+			characters.splice(at, 0, ...inserted);
+			return this.wrap(characters).length;
+		}
+
 		/// Re-wraps the paragraph and rebuilds it as one run per font span on each line.
 		reflow(): void {
 			const characters = this.characters();

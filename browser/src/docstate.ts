@@ -127,6 +127,7 @@
 			rectangle: null, // SimpleRectangle.
 			logical: null, // { paragraph, index } once a cursor message carries it.
 			anchor: null, // { paragraph, index } of the selection's other end.
+			object: null, // The id of the text frame or drawing object holding the caret.
 		},
 		// The sequence number of the newest input message, 0 before any. See cool.InputSequence.
 		inputSequence: 0,

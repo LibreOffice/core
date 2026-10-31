@@ -203,16 +203,25 @@ class ChangeOutbox {
 	/*
 		Takes a message on its way to the engine, if it is one the outbox holds to the engine's
 		pace, and answers whether it took it. It holds the changes of objects, the undos and
-		redos and the typed text, in a view that draws from the objects only. A change of objects
-		that it takes gets a ticket, which is added to the given tickets.
+		redos and the typed text in a view that draws slides from the objects. In a view that
+		draws the pages of a text document from primitives it holds only the typed text and the
+		deletions that show before the engine answers, whose numbers went to a ticket. A change
+		of objects that it takes gets a ticket, which is added to the given tickets.
 	*/
 	public static take(message: string, tickets?: cool.InputTicket[]): boolean {
 		// What the outbox sends itself comes through here too, and is not a new offer.
 		if (ChangeOutbox.sending) return false;
-		if (!RenderManager.isVectorRendering()) return false;
+		// The deltas of a view drawn from vector primitives answer what is in flight.
+		if (!RenderManager.drawsFromPrimitives()) return false;
 
 		const entry = ChangeOutbox.entryOf(message);
 		if (!entry) return false;
+		if (
+			!RenderManager.isVectorRendering() &&
+			((entry.kind !== 'text' && entry.kind !== 'remove') ||
+				!cool.InputSequence.hasTickets(message))
+		)
+			return false;
 
 		if (entry.kind === 'transform' || entry.kind === 'other') {
 			const ticket = new cool.InputTicket();

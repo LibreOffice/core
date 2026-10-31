@@ -381,6 +381,46 @@ describe('ChangeOutbox typed text', function () {
 		]);
 	});
 
+	it('holds the typed text of a view that draws text document pages', function () {
+		(RenderManager as any)._instance = new WriterVectorManager();
+
+		// Each edit shows before the engine answers.
+		cool.InputSequence.ticketForTheNextMessage();
+		nodeassert.ok(ChangeOutbox.take(typed('a')));
+		cool.InputSequence.ticketForTheNextMessage();
+		nodeassert.ok(ChangeOutbox.take(deleted(1, 0)));
+	});
+
+	it('lets the text of a text document page that shows nothing yet go out on its own', function () {
+		(RenderManager as any)._instance = new WriterVectorManager();
+
+		nodeassert.strictEqual(ChangeOutbox.take(typed('a')), false);
+		nodeassert.strictEqual(ChangeOutbox.take(deleted(1, 0)), false);
+	});
+
+	it('lets the typed text of a view drawn from bitmap tiles go out on its own', function () {
+		// A sheet whose cell edit shows the typing before the engine answers.
+		(RenderManager as any)._instance = {
+			drawsFromPrimitives: () => false,
+			isVectorRendering: () => false,
+		};
+
+		nodeassert.strictEqual(
+			ChangeOutbox.take('textinput id=0 text=a sequence=11'),
+			false,
+		);
+		nodeassert.strictEqual(
+			ChangeOutbox.take('removetextcontext id=0 before=1 after=0 sequence=12'),
+			false,
+		);
+	});
+
+	it('lets an undo of a view that draws text document pages go out on its own', function () {
+		(RenderManager as any)._instance = new WriterVectorManager();
+
+		nodeassert.strictEqual(ChangeOutbox.take('uno .uno:Undo'), false);
+	});
+
 	describe('with a caret moved here', function () {
 		let savedTimerRegistry: any;
 		beforeEach(function () {

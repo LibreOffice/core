@@ -1693,6 +1693,13 @@ invalidatecursor: <payload>
     While a drawing object's text is edited, object is the unique id of
     the object that holds the caret, as the vector primitives name it.
     For a shape in a group, it is the group member being edited.
+    In a text document, object is the id of the text frame that holds
+    the caret, as the vector primitives of its page name it, paragraph is
+    0 and index is the offset of the caret in the text of the frame's
+    paragraph, which the text portions of the frame index their text by.
+    A drawing object in a text document is named by the id of its entry
+    in the vector primitives of its page: its unique id plus 4294967296,
+    which lies above every frame id.
     While text is selected in an edit text, anchorParagraph and
     anchorIndex give the other end of the selection, in the same terms as
     the caret's paragraph and index.

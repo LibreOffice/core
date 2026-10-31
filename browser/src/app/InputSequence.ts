@@ -121,6 +121,16 @@ namespace cool {
 			return { message: parser.without('sequence'), tickets };
 		}
 
+		/// Whether the message is the one stamped last and its number went to a ticket.
+		public static hasTickets(message: string): boolean {
+			const sequence = new MessageParser(message).sequence;
+			return (
+				sequence !== undefined &&
+				sequence === app.file.inputSequence &&
+				InputSequence.lastTickets.length > 0
+			);
+		}
+
 		/// Drops the tickets waiting for the next message and those of the message stamped last.
 		public static forget(): void {
 			InputSequence.forTheNextMessage = [];

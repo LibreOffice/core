@@ -141,11 +141,14 @@ namespace cool {
 		return rightward;
 	}
 
-	/// A page's cached tree, where the prediction finds carets.
+	/// A page's cached tree, where the prediction finds carets. With fixedLines, the text after
+	/// each paragraph stays where the server placed it, so an edit keeps a paragraph to the
+	/// lines it has.
 	export class PredictionTree {
 		constructor(
 			readonly data: VectorPrimitivesData,
 			readonly measurer: TextMeasurer,
+			readonly fixedLines: boolean = false,
 		) {}
 
 		/// The position at a caret, or null. The rectangle picks the object, and the
@@ -219,6 +222,7 @@ namespace cool {
 				siblings,
 				this.measurer,
 				targetObjectId,
+				this.fixedLines,
 			);
 		}
 
@@ -241,6 +245,7 @@ namespace cool {
 				runs,
 				this.measurer,
 				objectId,
+				this.fixedLines,
 			);
 		}
 

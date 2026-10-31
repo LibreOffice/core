@@ -1929,6 +1929,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 				app.file.textCursor.logical = { paragraph: cursorParagraph, index: cursorIndex };
 			else
 				app.file.textCursor.logical = null;
+			const cursorObject = obj.object !== undefined ? parseInt(obj.object) : NaN;
+			app.file.textCursor.object = isNaN(cursorObject) ? null : cursorObject;
 
 			// The other end of the selected text, when text is selected.
 			const anchorParagraph = obj.anchorParagraph !== undefined ? parseInt(obj.anchorParagraph) : NaN;
