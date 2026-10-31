@@ -2,5 +2,5 @@
 host=gerrit.collaboraoffice.com
 port=29418
 project=core
-defaultremote=logerrit
+defaultremote=cogerrit
 defaultbranch=feature/cib_contract49d
