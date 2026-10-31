@@ -1006,16 +1006,26 @@ void KitHelper::notifyInvalidationViewsInMode(vcl::ITiledRenderable* pDoc, int n
 }
 
 OString KitHelper::makeVisCursorInvalidation(int nViewId, std::string_view rRectangle,
-    bool bMispelledWord, const OString& rHyperlink, int nEditorViewId, bool bDropPosition)
+    bool bMispelledWord, const OString& rHyperlink, int nEditorViewId, bool bDropPosition,
+    const std::optional<KitCaretTextPosition>& roTextPosition)
 {
     OString sHyperlink = rHyperlink.isEmpty() ? "{}"_ostr : rHyperlink;
+    OString sTextPosition;
+    if (roTextPosition)
+        sTextPosition = ", \"object\": \"" + OString::number(roTextPosition->mnObject) +
+            "\", \"paragraph\": \"" + OString::number(roTextPosition->mnParagraph) +
+            "\", \"index\": \"" + OString::number(roTextPosition->mnIndex) + "\"";
+    if (roTextPosition && roTextPosition->moAnchorIndex)
+        sTextPosition += ", \"anchorParagraph\": \""
+            + OString::number(roTextPosition->mnParagraph) +
+            "\", \"anchorIndex\": \"" + OString::number(*roTextPosition->moAnchorIndex) + "\"";
     // The dropPosition key is present only while the cursor marks a drop position.
     return OString::Concat("{ \"viewId\": \"") + OString::number(nViewId) +
         "\", \"editorViewId\": \"" + OString::number(nEditorViewId) +
         "\", \"rectangle\": \"" + rRectangle +
         "\", \"mispelledWord\": \"" +  OString::number(bMispelledWord ? 1 : 0) +
         (bDropPosition ? "\", \"dropPosition\": \"1" : "") +
-        "\", \"hyperlink\": " + sHyperlink + " }";
+        "\", \"hyperlink\": " + sHyperlink + sTextPosition + " }";
 }
 
 OString KitHelper::makeViewCursorInvalidation(const SfxViewShell* pThisView, int nViewId,

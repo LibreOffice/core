@@ -77,6 +77,10 @@ class SwDrawView final : public FmFormView
     // Create a local UndoManager
     std::unique_ptr<SdrUndoManager> createLocalTextUndoManager() override;
 
+    // The id of the entry of rObject in the vector primitives of its page, which is never equal
+    // to a frame id.
+    sal_uInt64 GetKitTextObjectId(const SdrTextObj& rObject) const override;
+
 public:
     SwDrawView(
         SwViewShellImp &rI,

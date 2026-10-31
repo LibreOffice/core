@@ -323,6 +323,37 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
     m_aTextCursor.Show();
 }
 
+namespace
+{
+/// The text frame that holds the point of the cursor, and the offset of the point in the text of
+/// the frame's paragraph. The vector primitives of a text frame hold one paragraph, the first,
+/// and index their text the same way. The other end of a selection is given when it lies in the
+/// same frame. None when the point lies in no text frame.
+std::optional<KitCaretTextPosition> lcl_GetCaretTextPosition(const SwCursorShell& rShell)
+{
+    const SwContentFrame* pFrame = rShell.GetCurrFrame(/*bCalcFrame=*/false);
+    if (!pFrame || !pFrame->IsTextFrame())
+        return std::nullopt;
+    const SwPaM& rCursor = *rShell.GetCursor();
+    const SwPosition& rPoint = *rCursor.GetPoint();
+    if (!rPoint.GetNode().IsTextNode())
+        return std::nullopt;
+    const SwTextFrame& rTextFrame = static_cast<const SwTextFrame&>(*pFrame);
+    KitCaretTextPosition aPosition{ sal_Int64(rTextFrame.GetFrameId()), 0,
+                                    sal_Int32(rTextFrame.MapModelToViewPos(rPoint)) };
+
+    if (rCursor.HasMark() && *rCursor.GetMark() != rPoint && !rShell.IsMultiSelection()
+        && !rShell.IsTableMode())
+    {
+        const SwPosition& rMark = *rCursor.GetMark();
+        const SwTextNode* pMarkNode = rMark.GetNode().GetTextNode();
+        if (pMarkNode && pMarkNode->getLayoutFrame(rShell.GetLayout(), &rMark) == pFrame)
+            aPosition.moAnchorIndex = sal_Int32(rTextFrame.MapModelToViewPos(rMark));
+    }
+    return aPosition;
+}
+}
+
 std::optional<OString> SwVisibleCursor::getKitPayload(COKitCallbackType eType, int nViewId) const
 {
     assert(eType == COKitCallbackType::INVALIDATE_VISIBLE_CURSOR || eType == COKitCallbackType::INVALIDATE_VIEW_CURSOR);
@@ -396,10 +427,13 @@ std::optional<OString> SwVisibleCursor::getKitPayload(COKitCallbackType eType, i
         }
 
         // A drop position without a rectangle tells the view that the dragged selection would
-        // land nowhere at the place where the drag is now.
+        // land nowhere at the place where the drag is now. A drop position is not where the
+        // caret is, so it carries no text position.
+        const bool bDropPosition = m_bIsDropPosition || m_bLeftDropPosition;
         return KitHelper::makeVisCursorInvalidation(
             nViewId, m_bLeftDropPosition ? "EMPTY"_ostr : sRect, bIsWrong, sHyperlink,
-            m_nLastKitCursorEditorViewId, m_bIsDropPosition || m_bLeftDropPosition);
+            m_nLastKitCursorEditorViewId, bDropPosition,
+            bDropPosition ? std::nullopt : lcl_GetCaretTextPosition(*m_pCursorShell));
     }
     else
         abort();

@@ -85,6 +85,18 @@ struct SFX2_DLLPUBLIC KitMouseEventData
     {}
 };
 
+/// Where a caret lies in text: the text frame or drawing object that holds it, the paragraph in
+/// that, and the offset of the caret in the text of the paragraph.
+struct KitCaretTextPosition
+{
+    sal_Int64 mnObject;
+    sal_Int32 mnParagraph;
+    sal_Int32 mnIndex;
+    /// The offset of the other end of the selection in the same paragraph, or none when no text
+    /// is selected there.
+    std::optional<sal_Int32> moAnchorIndex = std::nullopt;
+};
+
 namespace com::sun::star::ui { struct ContextChangeEventObject; };
 namespace tools { class JsonWriter; }
 namespace com::sun::star::beans { struct PropertyValue; };
@@ -280,10 +292,14 @@ public:
 
     static OString makePayloadJSON(const SfxViewShell* pThisView, int nViewId, std::string_view rKey, const OString& rPayload);
     /// Makes a COKitCallbackType::INVALIDATE_VISIBLE_CURSOR payload. bDropPosition is true when the
-    /// cursor marks where a dragged selection would be dropped.
+    /// cursor marks where a dragged selection would be dropped. roTextPosition adds the "object",
+    /// "paragraph" and "index" of the caret, and "anchorParagraph" and "anchorIndex" when text is
+    /// selected.
     static OString makeVisCursorInvalidation(int nViewId, std::string_view rRectangle,
                                              bool bMispelledWord = false, const OString& rHyperlink = ""_ostr,
-                                             int nEditorViewId = -1, bool bDropPosition = false);
+                                             int nEditorViewId = -1, bool bDropPosition = false,
+                                             const std::optional<KitCaretTextPosition>& roTextPosition
+                                                 = std::nullopt);
 
     static OString makeViewCursorInvalidation(const SfxViewShell* pThisView, int nViewId,
                                               std::string_view rRectangle, int nEditorViewId = -1);

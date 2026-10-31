@@ -146,6 +146,9 @@ protected:
     OutlinerView* ImpMakeOutlinerView(vcl::Window* pWin, OutlinerView* pGivenView, SfxViewShell* pViewShell = nullptr) const;
     // Tell the view's EditView which drawing object it edits the text of.
     void ImpSetKitTextObjectId(OutlinerView& rView) const;
+    // The id of rObject in the caret messages of a COKit client: its unique id, or the id of its
+    // entry where the document gives its drawing objects ids of their own.
+    virtual sal_uInt64 GetKitTextObjectId(const SdrTextObj& rObject) const;
     void ImpPaintOutlinerView(OutlinerView& rOutlView, const tools::Rectangle& rRect, OutputDevice& rTargetDevice) const;
     void ImpInvalidateOutlinerView(OutlinerView const & rOutlView) const;
 

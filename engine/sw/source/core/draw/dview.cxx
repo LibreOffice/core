@@ -24,6 +24,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
+#include <svx/svdotext.hxx>
 #include <svx/fmmodel.hxx>
 #include <sot/exchange.hxx>
 #include <svx/sdrundomanager.hxx>
@@ -54,6 +55,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <VectorCollector.hxx>
 
 #include <com/sun/star/embed/Aspects.hpp>
 
@@ -1065,6 +1067,11 @@ std::unique_ptr<SdrUndoManager> SwDrawView::createLocalTextUndoManager()
     std::unique_ptr<SdrUndoManager> pUndoManager(new SdrUndoManager);
     pUndoManager->SetDocShell(SfxObjectShell::Current());
     return pUndoManager;
+}
+
+sal_uInt64 SwDrawView::GetKitTextObjectId(const SdrTextObj& rObject) const
+{
+    return sw::vector::entryIdOf(rObject);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

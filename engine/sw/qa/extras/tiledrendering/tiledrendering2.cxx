@@ -74,6 +74,7 @@
 #include <ndtxt.hxx>
 #include <section.hxx>
 #include <txtfrm.hxx>
+#include <viscrs.hxx>
 #include <view.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
@@ -5114,9 +5115,10 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testManageChangesListIgnoresOtherView
 
 namespace
 {
-/// The tile at the top left of the first page, painted by the paint code of the frames or from
-/// the primitive decomposition of the page.
-Bitmap paintTopLeftTile(SwXTextDocument* pXTextDocument, bool bFromPrimitives)
+/// A tile of 512 pixels that shows nTileSize twips from (nTilePosX, nTilePosY), painted by the
+/// paint code of the frames or from the primitive decomposition of the pages.
+Bitmap paintOneTile(SwXTextDocument* pXTextDocument, bool bFromPrimitives, int nTilePosX,
+                    int nTilePosY, tools::Long nTileSize)
 {
     const bool bWasFromPrimitives = sw::vector::tilesFromPrimitives();
     sw::vector::setTilesFromPrimitives(bFromPrimitives);
@@ -5128,7 +5130,7 @@ Bitmap paintTopLeftTile(SwXTextDocument* pXTextDocument, bool bFromPrimitives)
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pDevice->SetOutputSizePixelScaleOffsetAndKitBuffer(Size(nSize, nSize), 1.0, Point(),
                                                         aPixmap.data());
-    pXTextDocument->paintTile(*pDevice, nSize, nSize, 0, 0, 7680, 7680);
+    pXTextDocument->paintTile(*pDevice, nSize, nSize, nTilePosX, nTilePosY, nTileSize, nTileSize);
     pDevice->EnableMapMode(false);
     return pDevice->GetBitmap(Point(0, 0), Size(nSize, nSize));
 }
@@ -5222,14 +5224,74 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTileFromPrimitivesLooksLikeThePai
     pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/2);
     Scheduler::ProcessEventsToIdle();
 
-    const Bitmap aPainted = paintTopLeftTile(pXTextDocument, /*bFromPrimitives=*/false);
-    const Bitmap aFromPrimitives = paintTopLeftTile(pXTextDocument, /*bFromPrimitives=*/true);
+    // The first two tiles show the top left of the first page at 100%.
+    const Bitmap aPainted = paintOneTile(pXTextDocument, /*bFromPrimitives=*/false, 0, 0, 7680);
+    const Bitmap aFromPrimitives
+        = paintOneTile(pXTextDocument, /*bFromPrimitives=*/true, 0, 0, 7680);
 
     // The tile shows the text and the table lines, rather than paper alone.
     CPPUNIT_ASSERT_GREATER(tools::Long(100), countDarkPixels(aFromPrimitives));
     // The limit is 0.2% of the tile. One horizontal table line is about 0.33% of it, so a tile
     // that lacks such a line is over the limit.
     CPPUNIT_ASSERT_LESS(0.002, differingShare(aPainted, aFromPrimitives));
+
+    // The next tiles start inside the page at 200% and still show the start of the text and of
+    // the table. They check that the offset and the scale of the tile apply to the primitives.
+    const Bitmap aPaintedZoomed
+        = paintOneTile(pXTextDocument, /*bFromPrimitives=*/false, 960, 960, 3840);
+    const Bitmap aZoomedFromPrimitives
+        = paintOneTile(pXTextDocument, /*bFromPrimitives=*/true, 960, 960, 3840);
+    CPPUNIT_ASSERT_GREATER(tools::Long(100), countDarkPixels(aZoomedFromPrimitives));
+    // At 200% a pixel is 7.5 twips, so the same content lies up to two pixels apart.
+    CPPUNIT_ASSERT_LESS(0.002, differingShare(aPaintedZoomed, aZoomedFromPrimitives, /*nReach=*/2));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCaretNamesItsTextFrameAndIndex)
+{
+    // The caret message says where the caret is in the text of the frame that holds it, the way
+    // the vector primitives of that frame index their text.
+    createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert(u"first"_ustr);
+    pWrtShell->SplitNode();
+    pWrtShell->Insert(u"abc"_ustr);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    const SwContentFrame* pFrame = pWrtShell->GetCurrFrame();
+    CPPUNIT_ASSERT(pFrame);
+    std::optional<OString> oPayload = pWrtShell->GetVisibleCursor()->getKitPayload(
+        COKitCallbackType::INVALIDATE_VISIBLE_CURSOR, /*nViewId=*/0);
+    CPPUNIT_ASSERT(oPayload);
+    std::stringstream aStream((std::string(*oPayload)));
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+
+    CPPUNIT_ASSERT_EQUAL(std::to_string(pFrame->GetFrameId()), aTree.get<std::string>("object"));
+    CPPUNIT_ASSERT_EQUAL(std::string("0"), aTree.get<std::string>("paragraph"));
+    CPPUNIT_ASSERT_EQUAL(std::string("2"), aTree.get<std::string>("index"));
+    // Nothing is selected, so there is no other end.
+    CPPUNIT_ASSERT(!aTree.get_child_optional("anchorIndex"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCaretNamesTheOtherEndOfASelectionInItsFrame)
+{
+    createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert(u"abcd"_ustr);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 3, /*bBasicCall=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    std::optional<OString> oPayload = pWrtShell->GetVisibleCursor()->getKitPayload(
+        COKitCallbackType::INVALIDATE_VISIBLE_CURSOR, /*nViewId=*/0);
+    CPPUNIT_ASSERT(oPayload);
+    std::stringstream aStream((std::string(*oPayload)));
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+
+    CPPUNIT_ASSERT_EQUAL(std::string("1"), aTree.get<std::string>("index"));
+    CPPUNIT_ASSERT_EQUAL(std::string("0"), aTree.get<std::string>("anchorParagraph"));
+    CPPUNIT_ASSERT_EQUAL(std::string("4"), aTree.get<std::string>("anchorIndex"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
