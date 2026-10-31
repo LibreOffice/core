@@ -63,8 +63,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
-#define TIMEOUT_FIRST       300
-#define TIMEOUT_UPDATING     20
+#define TIMEOUT_FIRST       0
+#define TIMEOUT_UPDATING    0
 
 struct SfxFoundCache_Impl
 {
@@ -1213,7 +1213,7 @@ IMPL_LINK( SfxBindings, NextJob, Timer *, pTimer, void )
 
 bool SfxBindings::NextJob_Impl(Timer const * pTimer)
 {
-    const unsigned MAX_INPUT_DELAY = 200;
+    const unsigned MAX_INPUT_DELAY = 0;
 
     if ( Application::GetLastInputInterval() < MAX_INPUT_DELAY && pTimer )
     {
