@@ -54,7 +54,7 @@ void lokit_main(
     const std::string& childRoot, const std::string& jailId, const std::string& configId,
     const std::string& sysTemplate, const std::string& loTemplate, bool noCapabilities,
     bool requireLandlock, bool noSeccomp, bool useMountNamespaces, bool queryVersionInfo,
-    bool displayVersion, bool sysTemplateIncomplete,
+    bool displayVersion, bool sysTemplateIncomplete, int forKitPid,
 #else
     int docBrokerSocket, const std::string& userInterface,
 #endif

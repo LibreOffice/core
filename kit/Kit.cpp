@@ -4195,6 +4195,7 @@ void lokit_main(
                 bool queryVersion,
                 bool displayVersion,
                 bool sysTemplateIncomplete,
+                int forKitPid,
 #else
                 int docBrokerSocket,
                 [[maybe_unused]] const std::string& userInterface,
@@ -4800,6 +4801,14 @@ void lokit_main(
 #endif
         }
 
+        // A spare kit exits with the forkit that forked it until it is connected to wsd. A change
+        // of the effective user or group clears this setting, so it is set after the jail setup.
+        if (!Util::isKitInProcess() && !SigUtil::dieOnParentDeath(forKitPid))
+        {
+            LOG_WRN("The forkit [" << forKitPid << "] of this spare kit has exited. Exiting.");
+            Util::forcedExit(EX_OK);
+        }
+
         rlimit rlim = { 0, 0 };
         if (getrlimit(RLIMIT_AS, &rlim) == 0)
             LOG_INF("RLIMIT_AS is " << Util::getHumanizedBytes(rlim.rlim_max) << " (" << rlim.rlim_max << " bytes)");
@@ -4838,6 +4847,11 @@ void lokit_main(
         {
             pathAndQuery.append("&configid=");
             pathAndQuery.append(configId);
+        }
+        if (forKitPid > 0)
+        {
+            pathAndQuery.append("&forkitpid=");
+            pathAndQuery.append(std::to_string(forKitPid));
         }
         if (queryVersion)
         {
@@ -5010,6 +5024,11 @@ void lokit_main(
             LOG_SFL("Failed to connect to WSD. Will exit.");
             Util::forcedExit(EX_SOFTWARE);
         }
+
+        // Once connected, the kit exits when wsd asks it to, or when the connection closes, so a
+        // document that it opens later stays open when its forkit dies.
+        if (!Util::isKitInProcess())
+            SigUtil::stopDyingOnParentDeath();
 #else
         bool fatalError =
             !mainKit->insertNewFakeSocket(docBrokerSocket, websocketHandler);

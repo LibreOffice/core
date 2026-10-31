@@ -570,19 +570,21 @@ int createCOKit(const std::string& childRoot, const std::string& sysTemplate,
             sleepForDebugger();
             lokit_main(childRoot, jailId, configId, sysTemplate, loTemplate, true,
                        false, true, false, queryVersion, DisplayVersion,
-                       sysTemplateIncomplete, spareKitId);
+                       sysTemplateIncomplete, /*forKitPid=*/0, spareKitId);
         })
             .detach();
     }
     else
     {
+        // The lambda is built here, before the fork, so forKitPid is the pid of this forkit.
         auto childFunc = [childRoot, jailId, configId, sysTemplate,
                           loTemplate, useMountNamespaces,
-                          queryVersion, sysTemplateIncomplete]()
+                          queryVersion, sysTemplateIncomplete, forKitPid = getpid()]()
         {
             lokit_main(childRoot, jailId, configId, sysTemplate, loTemplate,
                        NoCapsForKit, RequireLandlock, NoSeccomp, useMountNamespaces,
-                       queryVersion, DisplayVersion, sysTemplateIncomplete, spareKitId);
+                       queryVersion, DisplayVersion, sysTemplateIncomplete, forKitPid,
+                       spareKitId);
         };
 
         auto parentFunc = [childRoot, jailId = std::move(jailId)](int pid)

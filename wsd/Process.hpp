@@ -247,6 +247,9 @@ public:
     std::shared_ptr<DocumentBroker> getDocumentBroker() const { return _docBroker.lock(); }
     const std::string& getJailId() const { return _jailId; }
     const std::string& getConfigId() const { return _configId; }
+
+    void setForKitPid(pid_t forKitPid) { _forKitPid = forKitPid; }
+    pid_t getForKitPid() const { return _forKitPid; }
 #if !MOBILEAPP
     void setSMapsFD(int smapsFD)
     {
@@ -280,6 +283,8 @@ public:
 private:
     const std::string _jailId;
     const std::string _configId;
+    /// The pid of the forkit or subforkit that forked this kit, or 0 when it is not known.
+    pid_t _forKitPid = 0;
     std::weak_ptr<DocumentBroker> _docBroker;
     std::weak_ptr<StreamSocket> _urpFromKit;
     std::weak_ptr<StreamSocket> _urpToKit;

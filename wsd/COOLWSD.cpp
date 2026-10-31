@@ -3598,6 +3598,7 @@ private:
         {
             std::string jailId;
             std::string configId;
+            [[maybe_unused]] pid_t forKitPid = 0;
             std::map<std::string, std::string> admsProps;
 #if !MOBILEAPP
             LOG_TRC("Child connection with URI [" << Anonymizer::anonymizeUrl(request.getUrl())
@@ -3671,6 +3672,13 @@ private:
                     jailId = param.second;
                 else if (param.first == "configid")
                     configId = param.second;
+                else if (param.first == "forkitpid")
+                {
+                    std::size_t offset = 0;
+                    const auto [value, state] = NumUtil::parseStrToInt32(param.second, offset);
+                    if (state == NumUtil::StrToState::Complete && value > 0)
+                        forKitPid = value;
+                }
                 else if (param.first == "version")
                 {
                     COOLWSD::LOKitVersion = param.second;
@@ -3720,6 +3728,9 @@ private:
             LOG_TRC("Calling make_shared<ChildProcess>, for NewChildren?");
 
             auto child = std::make_shared<ChildProcess>(pid, jailId, configId, socket, request, admsProps);
+#if !MOBILEAPP
+            child->setForKitPid(forKitPid);
+#endif
 
             if (!Util::isMobileApp())
                 UNITWSD_CALL(newChild(child));
