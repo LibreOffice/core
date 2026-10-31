@@ -441,6 +441,8 @@ SubForKitMap::iterator dropSubForKit(SubForKitMap::iterator it, bool askToExit)
     std::string configId = it->first;
 
     LastSubForKitBrokerExitTimes.erase(configId);
+    if (const auto forks = OutstandingForks.find(configId); forks != OutstandingForks.end())
+        TotalOutstandingForks -= forks->second;
     OutstandingForks.erase(configId);
     OutstandingSubForKitSpawns.erase(configId);
     LastSubForKitSpawnRequestTimes.erase(configId);
@@ -3665,6 +3667,9 @@ private:
                     }
                     OutstandingSubForKitSpawns.erase(configId);
                     LastSubForKitSpawnRequestTimes.erase(configId);
+                    // The idle time of the subforkit counts from now, until a document of its
+                    // configuration exits.
+                    LastSubForKitBrokerExitTimes[configId] = std::chrono::steady_clock::now();
                     LOG_ASSERT_MSG(socket->getInBuffer().empty(), "Unexpected data in prisoner socket");
                     socket->getInBuffer().clear();
                     // created subforkit for a reason, create spare early
