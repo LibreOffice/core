@@ -2785,6 +2785,15 @@ void recordMasterChange(SdXImpressDocument::VectorPartState& rState)
     rState.mbPageDirty = true;
 }
 
+/// Drops everything recorded for the part but its versions, so the next write builds every entry
+/// anew while the versions count on.
+void keepVersionsOnly(SdXImpressDocument::VectorPartState& rState)
+{
+    SdXImpressDocument::VectorPartState aKept;
+    aKept.maVersions = rState.maVersions;
+    rState = std::move(aKept);
+}
+
 // A slide's presentation info changed, so tell every view of the document.
 // The payload names the reason and the changed part.
 void notifyViewsPresentationInfoChanged(const SfxObjectShell* pDocShell, sal_Int32 nPart)
@@ -3084,11 +3093,7 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     // where they were.
                     const auto aIterator = maVectorParts.find(vectorPartKeyOf(*pPage));
                     if (aIterator != maVectorParts.end())
-                    {
-                        SdXImpressDocument::VectorPartState aKept;
-                        aKept.maVersions = aIterator->second.maVersions;
-                        aIterator->second = std::move(aKept);
-                    }
+                        keepVersionsOnly(aIterator->second);
                 }
                 else if (pPage && pPage->IsMasterPage())
                 {
@@ -3255,7 +3260,8 @@ private:
     SdPage* resolvePageById()
     {
         const tools::Guid aGuid(std::string_view(maPartId.getStr(), maPartId.getLength()));
-        if (aGuid.isEmpty())
+        // A part id names a page in the one form the document writes it in.
+        if (aGuid.isEmpty() || aGuid.getString() != maPartId)
             return nullptr;
         SdPage* pPage = mpDocument->GetPageByGuid(aGuid);
         const auto oAddress = partAndModeOfPage(pPage);
@@ -4130,9 +4136,25 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
                 writeVectorPrimitives(rJsonWriter, rRequest.maPartId,
                                       rRequest.moMode.value_or(constVectorModeSlides),
                                       rRequest.mnSinceVersion, /*bPush*/ false);
+            },
+            [this](std::string_view rPartId)
+            {
+                // The versions count on, so a version a client held before names no content
+                // the part serves later.
+                // A part id names a page in the one form the document writes it in.
+                const tools::Guid aGuid(rPartId);
+                const OString aWritten = aGuid.getString();
+                if (std::string_view(aWritten) != rPartId)
+                    return;
+                const auto aIterator = maVectorParts.find(aGuid);
+                if (aIterator == maVectorParts.end())
+                    return;
+                keepVersionsOnly(aIterator->second);
+                aIterator->second.maVersions.forget();
             }))
+    {
         return;
-
+    }
     std::map<OUString, OUString> aMap
         = KitHelper::parseCommandParameters(OUString::fromUtf8(rCommand));
 

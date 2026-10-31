@@ -1485,7 +1485,7 @@ bool Document::destroyKeptView()
     return true;
 }
 
-void Document::onUnload(const ChildSession& session)
+void Document::onUnload(ChildSession& session)
 {
     // This is called when we receive 'child-??? disconnect'.
     // First, we _sessions.erase(), which destroys the ChildSession instance.
@@ -1543,6 +1543,10 @@ void Document::onUnload(const ChildSession& session)
 
     // Unload the view.
     _loKitDocument->setView(viewId);
+
+    // The session is already out of _sessions, so the engine forgets each part only it held.
+    releaseVectorParts(session, session.getVectorParts());
+
     _loKitDocument->registerCallback(nullptr, nullptr);
     if (_loKitDocument->getViewsCount() <= 1)
         _loKit->registerCallback(nullptr, nullptr);
@@ -3133,6 +3137,32 @@ void Document::deliverVectorDelta(const std::string& payload)
         if (!compressed)
             compressed = ChildSession::zstdFrame("", json.data(), json.size());
         session.sendVectorDelta(*compressed, json);
+    }
+}
+
+bool Document::isVectorPartHeld(const std::string& partId) const
+{
+    return std::any_of(_sessions.begin(), _sessions.end(),
+                       [&partId](const auto& it) { return it.second->holdsVectorPart(partId); });
+}
+
+void Document::releaseVectorParts(ChildSession& session, const std::set<std::string>& partIds)
+{
+    // The session takes each part out of the set it holds, which can be partIds itself, so the
+    // ids are walked in a copy.
+    const std::set<std::string> released(partIds);
+    bool isViewSet = false;
+    for (const std::string& partId : released)
+    {
+        if (!session.dropVectorPart(partId) || isVectorPartHeld(partId))
+            continue;
+
+        if (!isViewSet)
+        {
+            _loKitDocument->setView(session.getViewId());
+            isViewSet = true;
+        }
+        _loKitDocument->getCommandValues((".uno:VectorForgetPart?partid=" + partId).c_str());
     }
 }
 

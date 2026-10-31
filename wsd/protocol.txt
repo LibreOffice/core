@@ -1062,6 +1062,31 @@ commandvalues command=<UNOCommand>[?param1=value1&param2=value2...]
           - For values/strings: the cell value
         Maximum recursion depth: 10 levels. Maximum cells: 50.
 
+    .uno:VectorPrimitives?partid=<part id>[&mode=<mode>][&since=<version>&epoch=<epoch>]
+        Requests the vector primitives of a part: a slide of a presentation or
+        a drawing, or a page of a text document. A text document names its
+        pages by the ids in the pageids array of the status, in the order of
+        pagerectangles, and its primitives of each entry are relative to the
+        top left of the entry's box, which the answer says as
+        "coordinates": "entry". An entry of a delta without primitives only
+        moved, and the client keeps the primitives it holds for it. A
+        session that is served the part holds it from then on and is pushed
+        its deltas. When the page is gone, or the id names no part, the
+        answer, or a push, is the header alone, without "version" and
+        "objects". The client drops the page, and the session does not hold
+        it.
+        The command is known by its whole name, the text before the '?'.
+        The part id is given once and holds only ASCII letters, digits,
+        braces and hyphens. Any other request with this name is answered
+        with "error: cmd=commandvalues kind=syntax".
+
+    .uno:VectorForgetPart?partid=<part id>
+        The client dropped the part from its cache, so the session is pushed
+        no more deltas for it. Once no session holds the part, the document
+        stops tracking its changes. Nothing is answered. The part id follows
+        the rules of .uno:VectorPrimitives. A session that sends
+        .uno:DrawFromTiles forgets every part it held in the same way.
+
 completefunction name=<FunctionName>
 
     Requests the execution of a spreadsheet function in MobileWizard.Clients can request to complete a function name partially typed in the formula input box.
@@ -1490,17 +1515,17 @@ statusupdate: type=<typeName> parts=<numberOfParts> current=<currentPartNumber> 
     back has "reattached": true. The view still has its cursor, selection,
     part and dialogs in the kit.
 
-styles: {"styleFamily": ["styles in family"], etc. }
-
-statechanged: <key>=<value>
-
-    Notifies client of state changed events of <key>.
     For a text document the JSON payload has a pageids array: the id of
     each page as a string, in the order of pagerectangles. A page keeps its
     id while it exists, and .uno:VectorPrimitives names a page by it. When
     the ids change, also with the same document size, a new status goes
     out. A document that has no page ids leaves the field out.
 
+styles: {"styleFamily": ["styles in family"], etc. }
+
+statechanged: <key>=<value>
+
+    Notifies client of state changed events of <key>.
     Eg: 'statechanged: .uno:Undo=enabled'
 
     The security-label lifecycle event is a special statechanged whose value is a

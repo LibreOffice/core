@@ -550,6 +550,10 @@ std::optional<SCTAB> VectorContent::sheetOfPartId(std::u16string_view aPartId) c
     const sal_Int32 nTab = o3tl::toInt32(aPartId);
     if (nTab < 0 || nTab >= rDocument.GetTableCount() || !rDocument.HasTable(SCTAB(nTab)))
         return std::nullopt;
+    // A part id names a sheet in the one form the document writes it in, the decimal number.
+    const OUString aWritten = OUString::number(nTab);
+    if (aPartId != std::u16string_view(aWritten))
+        return std::nullopt;
     return SCTAB(nTab);
 }
 
@@ -661,9 +665,30 @@ VectorContent::~VectorContent() { mxChartListener->stop(); }
 
 void VectorContent::getCommandValues(tools::JsonWriter& rWriter, std::string_view rCommand)
 {
-    svx::vector::answerPartCommand(rWriter, rCommand, maResources,
-                                   [this, &rWriter](const svx::vector::PartRequest& rRequest)
-                                   { writeRequestedSheet(rWriter, rRequest); });
+    svx::vector::answerPartCommand(
+        rWriter, rCommand, maResources,
+        [this, &rWriter](const svx::vector::PartRequest& rRequest)
+        { writeRequestedSheet(rWriter, rRequest); },
+        [this](std::string_view rPartId) { forgetSheet(rPartId); });
+}
+
+void VectorContent::forgetSheet(std::string_view rPartId)
+{
+    const std::optional<SCTAB> oTab = sheetOfPartId(OUString::fromUtf8(rPartId));
+    if (!oTab)
+        return;
+    // The versions count on, so a version a client held before names no content the sheet
+    // serves later.
+    auto aIterator = maSheets.find(*oTab);
+    if (aIterator != maSheets.end())
+    {
+        svx::vector::PartVersions aVersions = aIterator->second.maVersions;
+        aVersions.forget();
+        maForgottenVersions[*oTab] = aVersions;
+        maSheets.erase(aIterator);
+    }
+    maSheetListeners.erase(*oTab);
+    maChangedTabs.erase(*oTab);
 }
 
 void VectorContent::writeRequestedSheet(tools::JsonWriter& rWriter,
@@ -712,15 +737,20 @@ void VectorContent::writeRequestedSheet(tools::JsonWriter& rWriter,
         } while (nIndex >= 0);
     }
 
-    // A held block version of another epoch, or of no named epoch, says nothing about the sheet.
-    if (!rRequest.mbSameEpoch)
+    // A held block version of another epoch, of no named epoch, or of content from before the
+    // sheet was last forgotten says nothing about the sheet.
+    SheetState& rState = sheetState(*oTab);
+    for (BlockRequest& rBlock : aBlocks)
     {
-        for (BlockRequest& rBlock : aBlocks)
+        if (rBlock.moHeldVersion
+            && (!rRequest.mbSameEpoch
+                || rState.maVersions.stepFrom(sal_Int64(*rBlock.moHeldVersion), /*bPush*/ false)
+                       < 0))
             rBlock.moHeldVersion.reset();
     }
 
     // A client can name its request, and the answer names it back.
-    writeVectorPrimitives(rWriter, sheetState(*oTab), nMode, aBlocks, rRequest.mnSinceVersion,
+    writeVectorPrimitives(rWriter, rState, nMode, aBlocks, rRequest.mnSinceVersion,
                           /*bPush*/ false, rRequest.moRequestId);
 }
 
@@ -749,7 +779,14 @@ void VectorContent::pushDelta(tools::JsonWriter& rWriter, std::string_view rPart
 
 VectorContent::SheetState& VectorContent::sheetState(SCTAB nTab)
 {
-    SheetState& rState = maSheets[nTab];
+    auto [aIterator, bNew] = maSheets.try_emplace(nTab);
+    SheetState& rState = aIterator->second;
+    auto aForgotten = bNew ? maForgottenVersions.find(nTab) : maForgottenVersions.end();
+    if (aForgotten != maForgottenVersions.end())
+    {
+        rState.maVersions = aForgotten->second;
+        maForgottenVersions.erase(aForgotten);
+    }
     rState.mnTab = nTab;
     listenToSheet(nTab);
     return rState;
@@ -2066,6 +2103,7 @@ void VectorContent::resetSheets()
     for (const auto& [nTab, rState] : maSheets)
         aServed.push_back(nTab);
     maSheets.clear();
+    maForgottenVersions.clear();
     maSheetListeners.clear();
     maChangedTabs.clear();
     maResources.renewEpoch();

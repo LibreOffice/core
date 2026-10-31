@@ -22,7 +22,7 @@ sal_Int64 PartVersions::stepFrom(sal_Int64 nSinceVersion, bool bPush) const
 {
     if (bPush)
         nSinceVersion = sal_Int64(mnLastSentVersion);
-    if (nSinceVersion > sal_Int64(mnVersion))
+    if (nSinceVersion > sal_Int64(mnVersion) || nSinceVersion < sal_Int64(mnFirstVersion))
         return -1;
     return nSinceVersion;
 }
@@ -36,6 +36,12 @@ void PartVersions::noteWritten(bool bPush)
         mbServed = true;
         mnLastSentVersion = mnVersion;
     }
+}
+
+void PartVersions::forget()
+{
+    mbServed = false;
+    mnFirstVersion = countUp();
 }
 
 void writeAnswerHeader(tools::JsonWriter& rWriter, bool bDelta, sal_Int32 nMode,

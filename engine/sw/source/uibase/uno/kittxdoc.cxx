@@ -1513,7 +1513,8 @@ void SwXTextDocument::getVectorCommandValues(tools::JsonWriter& rJsonWriter,
         [this, &rJsonWriter, pLayout](const svx::vector::PartRequest& rRequest) {
             m_pVectorParts->write(rJsonWriter, *pLayout, rRequest.maPartId,
                                   rRequest.mnSinceVersion, /*bPush=*/false);
-        });
+        },
+        [this](std::string_view rPartId) { m_pVectorParts->forget(rPartId); });
 }
 
 void SwXTextDocument::pushVectorPrimitivesDelta(tools::JsonWriter& rJsonWriter,

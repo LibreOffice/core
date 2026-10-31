@@ -1317,6 +1317,31 @@ CPPUNIT_TEST_FIXTURE(Test, testVectorPushForAGonePageWritesTheHeaderAlone)
     CPPUNIT_ASSERT_EQUAL(tools::JsonWriter::EMPTY_DOCUMENT, aAgain.finishAndGetAsOString());
 }
 
+/// A forgotten page is no longer served, and an edit on it makes no delta.
+CPPUNIT_TEST_FIXTURE(Test, testVectorForgottenPageGetsNoDeltas)
+{
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert(u"text"_ustr);
+    calcLayout();
+    requestFirstPage();
+    const OString aPartId = sw::vector::partIdOf(firstPage());
+
+    tools::JsonWriter aWriter;
+    getSwTextDoc()->getCommandValues(aWriter,
+                                     Concat2View(".uno:VectorForgetPart?partid=" + aPartId));
+    CPPUNIT_ASSERT_EQUAL(tools::JsonWriter::EMPTY_DOCUMENT, aWriter.finishAndGetAsOString());
+    CPPUNIT_ASSERT(!getSwTextDoc()->getVectorParts()->isServed(aPartId));
+
+    // An edit on the page no longer makes a delta for it.
+    pWrtShell->Insert(u" more"_ustr);
+    calcLayout();
+    SwRootFrame* pLayout = getSwDoc()->getIDocumentLayoutAccess().GetCurrentLayout();
+    CPPUNIT_ASSERT(
+        getSwTextDoc()->getVectorParts()->invalidate(*pLayout, { firstPage().getFrameArea() })
+            .empty());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

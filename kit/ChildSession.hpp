@@ -400,8 +400,16 @@ public:
     /// True when a vector primitives response served this session the part with the given id.
     bool holdsVectorPart(const std::string& partId) const
     {
-        return _isVectorRendering && _vectorParts.contains(partId);
+        return _vectorParts.contains(partId);
     }
+
+    /// Takes the part with the given id out of the parts this session holds. Returns true when
+    /// the session held it.
+    bool dropVectorPart(const std::string& partId) { return _vectorParts.erase(partId) != 0; }
+
+    /// The ids of the parts that vector primitives responses served this session and that it
+    /// has not forgotten since.
+    const std::set<std::string>& getVectorParts() const { return _vectorParts; }
 
     /// Sends a vector primitives delta: the compressed delta behind this session's own header
     /// line when there is one, otherwise the payload as a command values text frame.
@@ -490,7 +498,6 @@ public:
             << "\n\tisDocLoaded: " << _isDocLoaded
             << "\n\tisDocPasswordToModifyEntered: " << _isDocPasswordToModifyEntered
             << "\n\tisRestrictedUser: " << _isRestrictedUser
-            << "\n\tisVectorRendering: " << _isVectorRendering
             << "\n\tvectorParts: " << _vectorParts.size()
             << "\n\tinputSequence: " << _inputSequence
             << "\n\tdocType: " << _docType
@@ -545,10 +552,9 @@ private:
     /// Whether the user of this view is restricted, as the last blockingcommandstatus said.
     bool _isRestrictedUser = false;
 
-    /// True once this client has asked for vector primitives. Such a client draws the document
-    /// from them rather than from bitmap tiles.
-    bool _isVectorRendering = false;
-    /// The ids of the vector parts a primitives response served this session.
+    /// The ids of the vector parts a primitives response served this session. A client that
+    /// holds a part draws the document from primitives, and one that holds none draws it from
+    /// bitmap tiles.
     std::set<std::string> _vectorParts;
     /// The sequence number of the newest textinput, key, mouse, removetextcontext or textcursor
     /// message applied to the document, 0 before any.

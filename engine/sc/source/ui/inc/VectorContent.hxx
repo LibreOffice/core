@@ -278,6 +278,8 @@ private:
 
     /// Answer a request for the primitives of a sheet.
     void writeRequestedSheet(tools::JsonWriter& rWriter, const svx::vector::PartRequest& rRequest);
+    /// Drop the state of the sheet that rPartId names.
+    void forgetSheet(std::string_view rPartId);
 
     /// Write the answer or the push for the sheet. nMode is only named back in the header.
     void writeVectorPrimitives(tools::JsonWriter& rWriter, SheetState& rState, sal_Int32 nMode,
@@ -394,6 +396,9 @@ private:
     sal_uInt64 mnUseCount = 0;
     /// The most bytes of block JSON kept, constHeldContentBytes unless set otherwise.
     size_t mnHeldContentBudget = constHeldContentBytes;
+    /// The versions of each sheet that was forgotten and not asked for since. A sheet asked for
+    /// again counts on from them.
+    std::map<SCTAB, svx::vector::PartVersions> maForgottenVersions;
     /// An answer or a push is being written from a sheet state.
     bool mbWriting = false;
     /// The sheets have to be reset once the write in progress is done.

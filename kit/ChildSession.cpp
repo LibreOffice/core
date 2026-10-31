@@ -1779,11 +1779,38 @@ bool ChildSession::getCommandValues(const StringVector& tokens)
         return false;
     }
 
+    // The engine knows a command by its whole name, the text before the parameters.
+    const COOLProtocol::CommandParts parts = COOLProtocol::splitCommand(command);
+    const bool isForgetPart = parts.name == ".uno:VectorForgetPart";
+    const bool isPrimitives = parts.name == ".uno:VectorPrimitives";
+    const bool isFont = parts.name == ".uno:VectorRenderingFont";
+
+    // A part is named by one part id of letters, digits, braces and hyphens, which the kit and
+    // the engine read alike.
+    std::string partId;
+    if ((isForgetPart || isPrimitives)
+        && !COOLProtocol::readVectorPartId(parts.parameters, partId))
+    {
+        sendTextFrameAndLogError("error: cmd=commandvalues kind=syntax");
+        return false;
+    }
+
+    // The client dropped the part from its cache and gets no more deltas for it. The engine
+    // forgets the part too when no other session of the document holds it, through a command
+    // the kit builds from the checked id. Nothing is answered.
+    if (isForgetPart)
+    {
+        if (!partId.empty())
+            _docManager->releaseVectorParts(*this, { partId });
+        return true;
+    }
+
     getLOKitDocument()->setView(_viewId);
 
-    // A client that draws from tiles again says so, and is sent tiles from here on.
+    // A client that draws from tiles again says so, and is sent tiles from here on. It drops
+    // the parts it held with its cache, so the engine forgets the ones no other session holds.
     if (command == ".uno:DrawFromTiles")
-        _isVectorRendering = false;
+        _docManager->releaseVectorParts(*this, _vectorParts);
 
     if (command == ".uno:DocumentRepair")
     {
@@ -1799,34 +1826,22 @@ bool ChildSession::getCommandValues(const StringVector& tokens)
         insertUserNames(viewInfo, json);
         success = sendTextFrame("commandvalues: " + json);
     }
-    else if (command.rfind(".uno:VectorPrimitives", 0) == 0
-             || command.rfind(".uno:VectorRenderingFont", 0) == 0)
+    else if (isPrimitives || isFont)
     {
         // The primitive-tree JSON and font files are large, so compress
         // them with zstd. Fall back to an uncompressed text frame if
         // compression fails.
-        const bool isFont = command.rfind(".uno:VectorRenderingFont", 0) == 0;
-
-        // A client that asks for primitives draws the document from them from here on.
-        if (!isFont)
-            _isVectorRendering = true;
-
         std::string json(getLOKitDocument()->getCommandValues(command.c_str()));
         if (json.empty())
             json = "{}";
 
-        // The part the request names is one this client holds from here on. The response
-        // names the same part.
-        if (!isFont)
-        {
-            const std::size_t query = command.find('?');
-            std::string partId;
-            if (query != std::string::npos)
-                getTokenString(StringVector::tokenize(command.substr(query + 1), '&'), "partid",
-                               partId);
-            if (!partId.empty())
-                _vectorParts.insert(partId);
-        }
+        // The answer for a part of the document carries the version of the part, written after
+        // the header and the list of blocks asked for. The answer for an id that names no part
+        // is the header alone, a few short fields. The session holds the part from here on when
+        // the document served it, and a client that holds a part draws the document from
+        // primitives.
+        if (isPrimitives && !partId.empty() && json.find("\"version\"") != std::string::npos)
+            _vectorParts.insert(partId);
         // A primitive tree reflects every input applied so far, so it carries the input sequence.
         const std::string sequence = isFont ? std::string() : inputSequenceToken();
         const std::string header = isFont ? std::string("zstdvectorrenderingfont:\n")

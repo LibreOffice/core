@@ -372,6 +372,28 @@ namespace COOLProtocol
         return name.substr(0, name.find_first_of("?#."));
     }
 
+    /// A command split at its first '?'. The name is the text before it and the parameters are the
+    /// text after it. A command with no '?' is all name and has empty parameters.
+    struct CommandParts
+    {
+        std::string_view name;
+        std::string_view parameters;
+    };
+
+    inline CommandParts splitCommand(const std::string_view command)
+    {
+        const std::size_t query = command.find('?');
+        if (query == std::string_view::npos)
+            return { command, {} };
+        return { command.substr(0, query), command.substr(query + 1) };
+    }
+
+    /// Reads the part id in the parameters of a vector primitives command into partId, empty when
+    /// the parameters name none. Returns true when the parameters name at most one part and the
+    /// id is made of ASCII letters, digits, braces and hyphens. Part ids are page and sheet
+    /// numbers and page GUIDs, so such an id reads the same here and in the engine.
+    bool readVectorPartId(std::string_view parameters, std::string& partId);
+
     /// Whether the token at that index names a command that changes a drawing object.
     inline bool isObjectChange(const StringVector& tokens, std::size_t command)
     {

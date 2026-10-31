@@ -3199,8 +3199,16 @@ bool ClientSession::getCommandValues(const char *buffer, int length, const Strin
     if (tokens.size() != 2 || !getTokenString(tokens[1], "command", command))
         return sendTextFrameAndLogError("error: cmd=commandvalues kind=syntax");
 
-    if (command.starts_with(".uno:VectorPrimitives"))
-        _isVectorRendering = true;
+    // A request for primitives has this whole name and names at most one part, by an id of
+    // ASCII letters, digits, braces and hyphens. Such a request switches the session to drawing
+    // from primitives.
+    const COOLProtocol::CommandParts parts = COOLProtocol::splitCommand(command);
+    if (parts.name == ".uno:VectorPrimitives")
+    {
+        std::string partId;
+        if (COOLProtocol::readVectorPartId(parts.parameters, partId))
+            _isVectorRendering = true;
+    }
     else if (command == ".uno:DrawFromTiles")
         _isVectorRendering = false;
 

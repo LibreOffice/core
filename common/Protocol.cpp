@@ -165,6 +165,37 @@ namespace COOLProtocol
 
         return false;
     }
+
+    bool readVectorPartId(const std::string_view parameters, std::string& partId)
+    {
+        partId.clear();
+
+        // The engine names a parameter by the text before its first '=', or by the whole
+        // parameter when it has no '='.
+        static constexpr std::string_view name = "partid";
+        const StringVector tokens = StringVector::tokenize(std::string(parameters), '&');
+        std::size_t count = 0;
+        for (const auto& token : tokens)
+        {
+            const std::string parameter = tokens.getParam(token);
+            if (parameter.rfind(name, 0) != 0
+                || (parameter.size() > name.size() && parameter[name.size()] != '='))
+                continue;
+            ++count;
+            partId = parameter.size() > name.size() ? parameter.substr(name.size() + 1)
+                                                    : std::string();
+        }
+        if (count > 1)
+            return false;
+
+        return std::all_of(partId.begin(), partId.end(),
+                           [](char c)
+                           {
+                               return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
+                                      || (c >= '0' && c <= '9') || c == '{' || c == '}'
+                                      || c == '-';
+                           });
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -99,6 +99,24 @@ bool PartStore::isServed(std::string_view rPartId) const
     return aIterator != maParts.end() && aIterator->second.maVersions.isServed();
 }
 
+void PartStore::forget(std::string_view rPartId)
+{
+    auto aIterator = maParts.find(OString(rPartId));
+    if (aIterator == maParts.end())
+        return;
+
+    // An entry that moved to another page by now is kept for that page.
+    std::erase_if(maEntries,
+                  [&rPartId](const auto& rPair) { return rPair.second.maPartId == rPartId; });
+
+    // The versions go on counting from where they are, so a version a client held before names
+    // no content the part serves later.
+    PartState aKept;
+    aKept.maVersions = aIterator->second.maVersions;
+    aKept.maVersions.forget();
+    aIterator->second = std::move(aKept);
+}
+
 std::vector<OString> PartStore::invalidate(const SwRootFrame& rLayout,
                                            const std::vector<SwRect>& rAreas)
 {
@@ -311,8 +329,7 @@ void PartStore::write(tools::JsonWriter& rWriter, const SwRootFrame& rLayout,
         // A page that is gone is answered with the header alone, and the store drops it with its
         // versions. Every frame has an id of its own, so the part id names no page again.
         aWriteCommonHeader(/*bDelta=*/false);
-        std::erase_if(maEntries, [&rPartId](const auto& rPair)
-                      { return rPair.second.maPartId == rPartId; });
+        forget(rPartId);
         maParts.erase(OString(rPartId));
         return;
     }

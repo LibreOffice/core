@@ -73,7 +73,8 @@ public:
     /** The version an answer steps from, or -1 for an answer that carries the whole part. A push
         steps from the version the part was last pushed at, and a pull from nSinceVersion, the
         version the client holds. A version above the part's own comes from content the part
-        never served, so the part is sent whole.
+        never served, and a version from before the part was last forgotten comes from content
+        the part no longer knows, so in both cases the part is sent whole.
      */
     sal_Int64 stepFrom(sal_Int64 nSinceVersion, bool bPush) const;
 
@@ -91,11 +92,20 @@ public:
      */
     void noteWritten(bool bPush);
 
+    /** Marks the part as held by no client, once what was written for it is dropped. The version
+        counts up once, and a delta steps only from that version or a later one, so a client that
+        holds a version from before is sent the whole part. The next pull serves the part again.
+     */
+    void forget();
+
 private:
     sal_uInt64 mnVersion = 0;
     /// The version the part was last pushed at, or the one the first answer carried.
     sal_uInt64 mnLastSentVersion = 0;
     sal_uInt64 mnOrderVersion = 0;
+    /// The lowest version a delta can step from: the version the part took when it was last
+    /// forgotten, or 0 before it was forgotten.
+    sal_uInt64 mnFirstVersion = 0;
     bool mbServed = false;
 };
 

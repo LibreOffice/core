@@ -17,7 +17,10 @@
 #include <string>
 #include <vector>
 
+#include <Poco/JSON/Parser.h>
 #include <Poco/URI.h>
+
+#include <zstd.h>
 
 #include <common/Unit.hpp>
 #include <net/Socket.hpp>
@@ -37,6 +40,38 @@ std::vector<char> bodyOf(const std::vector<char>& frame)
         return {};
     return std::vector<char>(newline + 1, frame.end());
 }
+
+/// The JSON object that a zstd-compressed vector primitives frame carries, or nullptr when the
+/// frame holds none.
+Poco::JSON::Object::Ptr jsonOf(const std::vector<char>& frame)
+{
+    const std::vector<char> body = bodyOf(frame);
+    const unsigned long long size = ZSTD_getFrameContentSize(body.data(), body.size());
+    if (size == ZSTD_CONTENTSIZE_ERROR || size == ZSTD_CONTENTSIZE_UNKNOWN)
+        return nullptr;
+    std::string json(size, '\0');
+    const std::size_t length = ZSTD_decompress(json.data(), json.size(), body.data(), body.size());
+    if (ZSTD_isError(length))
+        return nullptr;
+    json.resize(length);
+    Poco::JSON::Parser parser;
+    return parser.parse(json).extract<Poco::JSON::Object::Ptr>();
+}
+
+/// The ids of the pages of a text document, as its status names them.
+std::vector<std::string> pageIdsOf(const std::string& status)
+{
+    Poco::JSON::Parser parser;
+    const Poco::JSON::Object::Ptr object
+        = parser.parse(status).extract<Poco::JSON::Object::Ptr>();
+    std::vector<std::string> ids;
+    if (const Poco::JSON::Array::Ptr pageIds = object->getArray("pageids"))
+    {
+        for (std::size_t i = 0; i < pageIds->size(); ++i)
+            ids.push_back(pageIds->get(i).toString());
+    }
+    return ids;
+}
 }
 
 /// Covers how the kit hands the vector primitives of a part to the sessions that hold it.
@@ -44,6 +79,13 @@ class UnitVectorPrimitives : public UnitWSD
 {
     TestResult testDeltaReachesEverySessionHoldingThePart();
     TestResult testMousePointerIsSentOnlyWhenWanted();
+    TestResult testTextPageDeltaStopsWhenForgotten();
+    TestResult testTextPageDeltaReachesTheSessionThatKeepsIt();
+    TestResult testTextPageIsForgottenWhenItsLastHolderLeaves();
+    TestResult testRequestForPrimitivesNamesOnePart();
+    TestResult testRequestForPrimitivesHasTheWholeCommandName();
+    TestResult testSessionHoldsThePartsTheDocumentServed();
+    TestResult testDrawingFromTilesForgetsTheParts();
 
 public:
     UnitVectorPrimitives();
@@ -172,6 +214,312 @@ UnitBase::TestResult UnitVectorPrimitives::testMousePointerIsSentOnlyWhenWanted(
     return TestResult::Ok;
 }
 
+// A session that asked for a page of a text document is pushed a delta when typing changes the
+// page. Once it says it forgot the page, typing brings it no more deltas.
+UnitBase::TestResult UnitVectorPrimitives::testTextPageDeltaStopsWhenForgotten()
+{
+    std::string documentPath;
+    std::string documentURL;
+    helpers::getDocumentPathAndURL("hello.odt", documentPath, documentURL, testname);
+    std::shared_ptr<SocketPoll> socketPoll = std::make_shared<SocketPoll>("TextPagePoll");
+    socketPoll->startThread();
+
+    std::shared_ptr<http::WebSocketSession> session = helpers::loadDocAndGetSession(
+        socketPoll, Poco::URI(helpers::getTestServerURI()), documentURL, testname);
+
+    helpers::sendTextFrame(session, "status", testname);
+    const std::string status = helpers::assertResponseString(session, "status:", testname);
+    const std::vector<std::string> pageIds = pageIdsOf(status.substr(7));
+    LOK_ASSERT(!pageIds.empty());
+
+    helpers::sendTextFrame(session,
+                           "commandvalues command=.uno:VectorPrimitives?partid=" + pageIds[0],
+                           testname);
+    const std::vector<char> answer =
+        helpers::getResponseMessage(session, "zstdvectorprimitives:", testname);
+    LOK_ASSERT_MESSAGE("no primitives were answered for the page", !answer.empty());
+
+    helpers::sendChar(session, 'x', helpers::SpecialKey::skNone, testname);
+    const std::vector<char> delta =
+        helpers::getResponseMessage(session, "zstdvectorprimitivesdelta:", testname);
+    LOK_ASSERT_MESSAGE("typing brought no delta for the page", !delta.empty());
+
+    helpers::sendTextFrame(session,
+                           "commandvalues command=.uno:VectorForgetPart?partid=" + pageIds[0],
+                           testname);
+    helpers::sendChar(session, 'y', helpers::SpecialKey::skNone, testname);
+    const std::vector<char> afterForget =
+        helpers::getResponseMessage(session, "zstdvectorprimitivesdelta:", testname, 2s);
+    LOK_ASSERT_MESSAGE("a forgotten page brought a delta", afterForget.empty());
+
+    socketPoll->joinThread();
+    return TestResult::Ok;
+}
+
+// Two sessions hold a page of a text document. When one forgets the page or leaves, the other
+// still gets the deltas of typing on it.
+UnitBase::TestResult UnitVectorPrimitives::testTextPageDeltaReachesTheSessionThatKeepsIt()
+{
+    std::string documentPath;
+    std::string documentURL;
+    helpers::getDocumentPathAndURL("hello.odt", documentPath, documentURL, testname);
+    std::shared_ptr<SocketPoll> socketPoll = std::make_shared<SocketPoll>("KeptPagePoll");
+    socketPoll->startThread();
+
+    std::shared_ptr<http::WebSocketSession> keeper = helpers::loadDocAndGetSession(
+        socketPoll, Poco::URI(helpers::getTestServerURI()), documentURL, testname);
+    std::shared_ptr<http::WebSocketSession> leaver = helpers::loadDocAndGetSession(
+        socketPoll, Poco::URI(helpers::getTestServerURI()), documentURL, testname);
+
+    helpers::sendTextFrame(keeper, "status", testname);
+    const std::string status = helpers::assertResponseString(keeper, "status:", testname);
+    const std::vector<std::string> pageIds = pageIdsOf(status.substr(7));
+    LOK_ASSERT(!pageIds.empty());
+
+    const std::string request = "commandvalues command=.uno:VectorPrimitives?partid=" + pageIds[0];
+    for (const auto& session : { keeper, leaver })
+    {
+        helpers::sendTextFrame(session, request, testname);
+        const std::vector<char> answer =
+            helpers::getResponseMessage(session, "zstdvectorprimitives:", testname);
+        LOK_ASSERT_MESSAGE("no primitives were answered for the page", !answer.empty());
+    }
+
+    // The page stays held by the keeper after the other session forgets it.
+    helpers::sendTextFrame(leaver,
+                           "commandvalues command=.uno:VectorForgetPart?partid=" + pageIds[0],
+                           testname);
+    helpers::sendChar(keeper, 'x', helpers::SpecialKey::skNone, testname);
+    const std::vector<char> afterForget =
+        helpers::getResponseMessage(keeper, "zstdvectorprimitivesdelta:", testname);
+    LOK_ASSERT_MESSAGE("the session that kept the page got no delta", !afterForget.empty());
+    const std::vector<char> toForgetter =
+        helpers::getResponseMessage(leaver, "zstdvectorprimitivesdelta:", testname, 2s);
+    LOK_ASSERT_MESSAGE("the session that forgot the page got a delta", toForgetter.empty());
+
+    // The other session holds the page again and then leaves the document.
+    helpers::sendTextFrame(leaver, request, testname);
+    const std::vector<char> again =
+        helpers::getResponseMessage(leaver, "zstdvectorprimitives:", testname);
+    LOK_ASSERT_MESSAGE("no primitives were answered for the page again", !again.empty());
+    leaver->asyncShutdown();
+    LOK_ASSERT(leaver->waitForDisconnection(10s));
+
+    helpers::sendChar(keeper, 'y', helpers::SpecialKey::skNone, testname);
+    const std::vector<char> afterLeave =
+        helpers::getResponseMessage(keeper, "zstdvectorprimitivesdelta:", testname);
+    LOK_ASSERT_MESSAGE("the session that stayed got no delta", !afterLeave.empty());
+
+    socketPoll->joinThread();
+    return TestResult::Ok;
+}
+
+// When the last session that holds a page of a text document leaves, the document forgets the
+// page. The version that session held is then unknown to the document, and a request since that
+// version is answered with the whole page.
+UnitBase::TestResult UnitVectorPrimitives::testTextPageIsForgottenWhenItsLastHolderLeaves()
+{
+    std::string documentPath;
+    std::string documentURL;
+    helpers::getDocumentPathAndURL("hello.odt", documentPath, documentURL, testname);
+    std::shared_ptr<SocketPoll> socketPoll = std::make_shared<SocketPoll>("LeftPagePoll");
+    socketPoll->startThread();
+
+    std::shared_ptr<http::WebSocketSession> stayer = helpers::loadDocAndGetSession(
+        socketPoll, Poco::URI(helpers::getTestServerURI()), documentURL, testname);
+    std::shared_ptr<http::WebSocketSession> leaver = helpers::loadDocAndGetSession(
+        socketPoll, Poco::URI(helpers::getTestServerURI()), documentURL, testname);
+
+    helpers::sendTextFrame(stayer, "status", testname);
+    const std::string status = helpers::assertResponseString(stayer, "status:", testname);
+    const std::vector<std::string> pageIds = pageIdsOf(status.substr(7));
+    LOK_ASSERT(!pageIds.empty());
+
+    const std::string request = "commandvalues command=.uno:VectorPrimitives?partid=" + pageIds[0];
+    helpers::sendTextFrame(leaver, request, testname);
+    const Poco::JSON::Object::Ptr served =
+        jsonOf(helpers::getResponseMessage(leaver, "zstdvectorprimitives:", testname));
+    LOK_ASSERT_MESSAGE("no primitives were answered for the page", !served.isNull());
+    const std::string version = served->get("version").toString();
+    const std::string epoch = served->get("epoch").toString();
+
+    // The view lists sent so far are taken, so the next one is the list without the leaver.
+    helpers::getAllResponsesTimed(stayer, "viewinfo:", testname, 1s);
+    leaver->asyncShutdown();
+    LOK_ASSERT(leaver->waitForDisconnection(10s));
+    LOK_ASSERT(!helpers::getResponseString(stayer, "viewinfo:", testname).empty());
+
+    helpers::sendTextFrame(stayer, request + "&since=" + version + "&epoch=" + epoch, testname);
+    const Poco::JSON::Object::Ptr answer =
+        jsonOf(helpers::getResponseMessage(stayer, "zstdvectorprimitives:", testname));
+    LOK_ASSERT_MESSAGE("no primitives were answered for the page", !answer.isNull());
+    LOK_ASSERT_EQUAL(std::string("vectorprimitives"), answer->get("type").toString());
+
+    socketPoll->joinThread();
+    return TestResult::Ok;
+}
+
+// A request for the primitives of a part names one part. A request of any other form is answered
+// with a syntax error and serves no primitives.
+UnitBase::TestResult UnitVectorPrimitives::testRequestForPrimitivesNamesOnePart()
+{
+    std::string documentPath;
+    std::string documentURL;
+    helpers::getDocumentPathAndURL("hello.odt", documentPath, documentURL, testname);
+    std::shared_ptr<SocketPoll> socketPoll = std::make_shared<SocketPoll>("OnePartPoll");
+    socketPoll->startThread();
+
+    std::shared_ptr<http::WebSocketSession> session = helpers::loadDocAndGetSession(
+        socketPoll, Poco::URI(helpers::getTestServerURI()), documentURL, testname);
+
+    helpers::sendTextFrame(session, "status", testname);
+    const std::string status = helpers::assertResponseString(session, "status:", testname);
+    const std::vector<std::string> pageIds = pageIdsOf(status.substr(7));
+    LOK_ASSERT(!pageIds.empty());
+
+    helpers::sendTextFrame(session,
+                           "commandvalues command=.uno:VectorPrimitives?partid=" + pageIds[0]
+                               + "&partid=" + pageIds[0],
+                           testname);
+    const std::string error = helpers::getResponseString(session, "error:", testname);
+    LOK_ASSERT_EQUAL(std::string("error: cmd=commandvalues kind=syntax"), error);
+    const std::vector<char> answer =
+        helpers::getResponseMessage(session, "zstdvectorprimitives:", testname, 2s);
+    LOK_ASSERT_MESSAGE("primitives were answered for the request", answer.empty());
+
+    socketPoll->joinThread();
+    return TestResult::Ok;
+}
+
+// A request for the primitives of a part has the whole command name before its parameters. A
+// command with a longer name is another command: it serves no primitives, and the session draws
+// from tiles as before, so typing brings it the tile that changed.
+UnitBase::TestResult UnitVectorPrimitives::testRequestForPrimitivesHasTheWholeCommandName()
+{
+    std::string documentPath;
+    std::string documentURL;
+    helpers::getDocumentPathAndURL("hello.odt", documentPath, documentURL, testname);
+    std::shared_ptr<SocketPoll> socketPoll = std::make_shared<SocketPoll>("WholeNamePoll");
+    socketPoll->startThread();
+
+    std::shared_ptr<http::WebSocketSession> session = helpers::loadDocAndGetSession(
+        socketPoll, Poco::URI(helpers::getTestServerURI()), documentURL, testname);
+
+    helpers::sendTextFrame(session, "status", testname);
+    const std::string status = helpers::assertResponseString(session, "status:", testname);
+    const std::vector<std::string> pageIds = pageIdsOf(status.substr(7));
+    LOK_ASSERT(!pageIds.empty());
+
+    // The session holds the tile at the top left of the document and says what it shows.
+    helpers::sendTextFrame(session,
+                           "tilecombine nviewid=0 part=0 width=256 height=256 "
+                           "tileposx=0 tileposy=0 tilewidth=3840 tileheight=3840",
+                           testname);
+    const std::vector<char> tile = helpers::getResponseMessage(session, "tile:", testname);
+    LOK_ASSERT_MESSAGE("no tile was answered", !tile.empty());
+    helpers::sendTextFrame(session, "clientvisiblearea x=-4005 y=0 width=50490 height=72300",
+                           testname);
+    helpers::sendTextFrame(
+        session,
+        "clientzoom tilepixelwidth=256 tilepixelheight=256 tiletwipwidth=3840 tiletwipheight=3840",
+        testname);
+
+    helpers::sendTextFrame(session,
+                           "commandvalues command=.uno:VectorPrimitivesOfPage?partid="
+                               + pageIds[0],
+                           testname);
+    const std::vector<char> answer =
+        helpers::getResponseMessage(session, "zstdvectorprimitives:", testname, 2s);
+    LOK_ASSERT_MESSAGE("primitives were answered for another command", answer.empty());
+
+    // Typing changes the tile, and the session is sent the change.
+    helpers::sendChar(session, 'x', helpers::SpecialKey::skNone, testname);
+    helpers::assertResponseString(session, "invalidatetiles:", testname);
+    helpers::assertResponseString(session, "delta:", testname);
+
+    helpers::sendChar(session, 'y', helpers::SpecialKey::skNone, testname);
+    const std::vector<char> delta =
+        helpers::getResponseMessage(session, "zstdvectorprimitivesdelta:", testname, 2s);
+    LOK_ASSERT_MESSAGE("a session that holds no page got a delta", delta.empty());
+
+    socketPoll->joinThread();
+    return TestResult::Ok;
+}
+
+// A session holds the parts the document served it. A request with an id that names no page is
+// answered with the header alone, without a version, and typing then brings the session no delta.
+UnitBase::TestResult UnitVectorPrimitives::testSessionHoldsThePartsTheDocumentServed()
+{
+    std::string documentPath;
+    std::string documentURL;
+    helpers::getDocumentPathAndURL("hello.odt", documentPath, documentURL, testname);
+    std::shared_ptr<SocketPoll> socketPoll = std::make_shared<SocketPoll>("ServedPartsPoll");
+    socketPoll->startThread();
+
+    std::shared_ptr<http::WebSocketSession> session = helpers::loadDocAndGetSession(
+        socketPoll, Poco::URI(helpers::getTestServerURI()), documentURL, testname);
+
+    helpers::sendTextFrame(session,
+                           "commandvalues command=.uno:VectorPrimitives?partid=nopage",
+                           testname);
+    const Poco::JSON::Object::Ptr answer =
+        jsonOf(helpers::getResponseMessage(session, "zstdvectorprimitives:", testname));
+    LOK_ASSERT_MESSAGE("no answer came for the request", !answer.isNull());
+    LOK_ASSERT_MESSAGE("the answer for no page carries a version", !answer->has("version"));
+
+    helpers::sendChar(session, 'x', helpers::SpecialKey::skNone, testname);
+    const std::vector<char> delta =
+        helpers::getResponseMessage(session, "zstdvectorprimitivesdelta:", testname, 2s);
+    LOK_ASSERT_MESSAGE("a session that holds no page got a delta", delta.empty());
+
+    socketPoll->joinThread();
+    return TestResult::Ok;
+}
+
+// A session that draws from tiles again forgets the pages it held. Typing brings it no more
+// deltas, and the document forgets a page no other session holds: the version the session held is
+// then unknown to the document, and a request since that version is answered with the whole page.
+UnitBase::TestResult UnitVectorPrimitives::testDrawingFromTilesForgetsTheParts()
+{
+    std::string documentPath;
+    std::string documentURL;
+    helpers::getDocumentPathAndURL("hello.odt", documentPath, documentURL, testname);
+    std::shared_ptr<SocketPoll> socketPoll = std::make_shared<SocketPoll>("FromTilesPoll");
+    socketPoll->startThread();
+
+    std::shared_ptr<http::WebSocketSession> session = helpers::loadDocAndGetSession(
+        socketPoll, Poco::URI(helpers::getTestServerURI()), documentURL, testname);
+
+    helpers::sendTextFrame(session, "status", testname);
+    const std::string status = helpers::assertResponseString(session, "status:", testname);
+    const std::vector<std::string> pageIds = pageIdsOf(status.substr(7));
+    LOK_ASSERT(!pageIds.empty());
+
+    const std::string request = "commandvalues command=.uno:VectorPrimitives?partid=" + pageIds[0];
+    helpers::sendTextFrame(session, request, testname);
+    const Poco::JSON::Object::Ptr served =
+        jsonOf(helpers::getResponseMessage(session, "zstdvectorprimitives:", testname));
+    LOK_ASSERT_MESSAGE("no primitives were answered for the page", !served.isNull());
+    const std::string version = served->get("version").toString();
+    const std::string epoch = served->get("epoch").toString();
+
+    helpers::sendTextFrame(session, "commandvalues command=.uno:DrawFromTiles", testname);
+    helpers::sendChar(session, 'x', helpers::SpecialKey::skNone, testname);
+    const std::vector<char> delta =
+        helpers::getResponseMessage(session, "zstdvectorprimitivesdelta:", testname, 2s);
+    LOK_ASSERT_MESSAGE("a session that draws from tiles got a delta", delta.empty());
+
+    helpers::sendTextFrame(session, request + "&since=" + version + "&epoch=" + epoch, testname);
+    const Poco::JSON::Object::Ptr answer =
+        jsonOf(helpers::getResponseMessage(session, "zstdvectorprimitives:", testname));
+    LOK_ASSERT_MESSAGE("no primitives were answered for the page", !answer.isNull());
+    LOK_ASSERT_EQUAL(std::string("vectorprimitives"), answer->get("type").toString());
+
+    socketPoll->joinThread();
+    return TestResult::Ok;
+}
+
+
 void UnitVectorPrimitives::invokeWSDTest()
 {
     UnitBase::TestResult result = testDeltaReachesEverySessionHoldingThePart();
@@ -179,6 +527,34 @@ void UnitVectorPrimitives::invokeWSDTest()
         exitTest(result);
 
     result = testMousePointerIsSentOnlyWhenWanted();
+    if (result != TestResult::Ok)
+        exitTest(result);
+
+    result = testTextPageDeltaStopsWhenForgotten();
+    if (result != TestResult::Ok)
+        exitTest(result);
+
+    result = testTextPageDeltaReachesTheSessionThatKeepsIt();
+    if (result != TestResult::Ok)
+        exitTest(result);
+
+    result = testTextPageIsForgottenWhenItsLastHolderLeaves();
+    if (result != TestResult::Ok)
+        exitTest(result);
+
+    result = testRequestForPrimitivesNamesOnePart();
+    if (result != TestResult::Ok)
+        exitTest(result);
+
+    result = testRequestForPrimitivesHasTheWholeCommandName();
+    if (result != TestResult::Ok)
+        exitTest(result);
+
+    result = testSessionHoldsThePartsTheDocumentServed();
+    if (result != TestResult::Ok)
+        exitTest(result);
+
+    result = testDrawingFromTilesForgetsTheParts();
     if (result != TestResult::Ok)
         exitTest(result);
 

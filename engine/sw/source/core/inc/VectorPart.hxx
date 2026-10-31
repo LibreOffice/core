@@ -75,8 +75,12 @@ public:
     /// holds is dropped.
     std::vector<OString> invalidate(const SwRootFrame& rLayout, const std::vector<SwRect>& rAreas);
 
-    /// Whether a client holds the part: it was served.
+    /// Whether a client holds the part: it was served, and not forgotten since.
     bool isServed(std::string_view rPartId) const;
+
+    /// Drops what was written for the entries of the part, and marks the part as held by no
+    /// client. Its versions go on counting, and the next request for the part serves it whole.
+    void forget(std::string_view rPartId);
 
     /// Records the part ids of the pages of rLayout in page order, and returns true when they
     /// differ from the ones recorded before.

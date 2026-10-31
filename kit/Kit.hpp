@@ -28,6 +28,7 @@
 #include <deque>
 #include <functional>
 #include <map>
+#include <set>
 #include <string>
 
 #if MOBILEAPP
@@ -344,7 +345,7 @@ public:
 
     /// Unload a client session, which unloads the document
     /// if it is the last and only.
-    void onUnload(const ChildSession& session);
+    void onUnload(ChildSession& session);
 
     /// Destroy the view kept alive with no session of its own, if there is one. The engine
     /// then has no view left and disposes of the document. Answers whether a view went.
@@ -563,6 +564,14 @@ public:
 #endif
 
     int getViewsCount() const;
+
+    /// Whether any session of the document holds the vector part.
+    bool isVectorPartHeld(const std::string& partId) const;
+
+    /// Takes each of partIds that the session holds out of the parts it holds. The engine then
+    /// forgets each of them that no session of the document holds, through a command built from
+    /// the id, in the view of the session.
+    void releaseVectorParts(ChildSession& session, const std::set<std::string>& partIds);
 
 private:
     void postForceModifiedCommand(bool modified);
