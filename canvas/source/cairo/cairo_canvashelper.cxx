@@ -322,7 +322,6 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
     /** surfaceFromXBitmap Create a surface from XBitmap
      * @param xBitmap bitmap image that will be used for the surface
      * @param rDevice reference to the device into which we want to draw
-     * @param data will be filled with alpha data, if xBitmap is alpha/transparent image
      * @param bHasAlpha will be set to true if resulting surface has alpha
      *
      * This function tries various methods for creating a surface from xBitmap. It also uses
@@ -330,13 +329,13 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
      *
      * @return created surface or NULL
      **/
-    static SurfaceSharedPtr surfaceFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap, const SurfaceProviderRef& rSurfaceProvider, unsigned char*& data, bool& bHasAlpha )
+    static SurfaceSharedPtr surfaceFromXBitmap(const uno::Reference<rendering::XBitmap>& xBitmap,
+                                               const SurfaceProviderRef& rSurfaceProvider,
+                                               bool& bHasAlpha)
     {
         bHasAlpha = xBitmap->hasAlpha();
         SurfaceSharedPtr pSurface = surfaceFromXBitmap( xBitmap );
-        if( pSurface )
-            data = nullptr;
-        else
+        if (!pSurface)
         {
             ::Bitmap aBitmap = bitmapFromXBitmap(xBitmap);
 
@@ -346,6 +345,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
             {
                 tools::Long nWidth;
                 tools::Long nHeight;
+                unsigned char* data = nullptr;
                 vcl::bitmap::CanvasCairoExtractBitmapData(aBitmap, data, bHasAlpha, nWidth, nHeight);
 
                 // both of the cairo formats use a 32-bit pixel
@@ -356,6 +356,9 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
                             bHasAlpha ? CAIRO_FORMAT_ARGB32 : CAIRO_FORMAT_RGB24,
                             nWidth, nHeight, nWidth*4 ),
                         &cairo_surface_destroy) );
+
+                if (data)
+                    free(data);
 
                 SAL_INFO( "canvas.cairo","image: " << nWidth << " x " << nHeight << " alpha: " << bHasAlpha);
             }
@@ -458,9 +461,8 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
                     const css::rendering::Texture& aTexture ( (*pTextures)[0] );
                     if( aTexture.Bitmap.is() )
                     {
-                        unsigned char* data = nullptr;
                         bool bHasAlpha = false;
-                        SurfaceSharedPtr pSurface = surfaceFromXBitmap( (*pTextures)[0].Bitmap, pDevice, data, bHasAlpha );
+                        SurfaceSharedPtr pSurface = surfaceFromXBitmap((*pTextures)[0].Bitmap, pDevice, bHasAlpha);
 
                         if( pSurface )
                         {
@@ -519,9 +521,6 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
 
                             cairo_pattern_destroy( pPattern );
                         }
-
-                        if( data )
-                            free( data );
                     }
                     else if( aTexture.Gradient.is() )
                     {
@@ -1206,18 +1205,12 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
 #endif
 
         uno::Reference< rendering::XCachedPrimitive > rv;
-        unsigned char* data = nullptr;
         bool bHasAlpha = false;
-        SurfaceSharedPtr pSurface = surfaceFromXBitmap( xBitmap, mpSurfaceProvider, data, bHasAlpha );
+        SurfaceSharedPtr pSurface = surfaceFromXBitmap(xBitmap, mpSurfaceProvider, bHasAlpha);
         geometry::IntegerSize2D aSize = xBitmap->getSize();
 
         if( pSurface )
-        {
             rv = implDrawBitmapSurface( pCanvas, pSurface, viewState, renderState, aSize, false, bHasAlpha );
-
-            if( data )
-                free( data );
-        }
         else
             rv.clear();
 
@@ -1239,18 +1232,12 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
 #endif
 
         uno::Reference< rendering::XCachedPrimitive > rv;
-        unsigned char* data = nullptr;
         bool bHasAlpha = false;
-        SurfaceSharedPtr pSurface = surfaceFromXBitmap( xBitmap, mpSurfaceProvider, data, bHasAlpha );
+        SurfaceSharedPtr pSurface = surfaceFromXBitmap(xBitmap, mpSurfaceProvider, bHasAlpha);
         geometry::IntegerSize2D aSize = xBitmap->getSize();
 
         if( pSurface )
-        {
             rv = implDrawBitmapSurface( pCanvas, pSurface, viewState, renderState, aSize, true, bHasAlpha );
-
-            if( data )
-                free( data );
-        }
         else
             rv.clear();
 
