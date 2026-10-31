@@ -5275,9 +5275,7 @@ static void handleEditorFrameMessage(int accountTabId,
         return;
     }
 
-    const std::wstring_view text(message.get());
-    const std::wstring kind(text.substr(0, text.find(L' ')));
-    LOG_DBG("The editor frame sent a " << Util::wide_string_to_string(kind) << " message");
+    processMessage(*account, message);
 }
 
 static void putCodaPageIn(int accountTabId, ICoreWebView2Frame* frame, const std::string& address)
