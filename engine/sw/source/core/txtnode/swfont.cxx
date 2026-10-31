@@ -51,6 +51,7 @@
 #include <charatr.hxx>
 #include <viewsh.hxx>
 #include <swfont.hxx>
+#include <VectorText.hxx>
 #include <fntcache.hxx>
 #include <txtfrm.hxx>
 #include <scriptinfo.hxx>
@@ -1318,10 +1319,10 @@ void SwSubFont::DrawStretchText_( SwDrawTextInfo &rInf )
         }
 
         if ( !IsCaseMap() )
-            rInf.GetOut().DrawStretchText( aPos, rInf.GetWidth(),
+            sw::vector::drawStretchText(rInf, aPos, rInf.GetWidth(),
                 rInf.GetText(), sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
         else
-            rInf.GetOut().DrawStretchText( aPos, rInf.GetWidth(),
+            sw::vector::drawStretchText(rInf, aPos, rInf.GetWidth(),
                     CalcCaseMap(rInf.GetText()),
                     sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
     }

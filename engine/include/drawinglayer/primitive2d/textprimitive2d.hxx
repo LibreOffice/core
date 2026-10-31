@@ -53,6 +53,31 @@ enum class TextPortionAlign
     Block
 };
 
+/** Where a text portion lies in the text it was laid out in: its paragraph and the alignment of
+    that, the line it sits on, and the area the text wraps in. The lengths are in the units of the
+    portion, and a length of zero is one that is not known.
+ */
+struct TextPortionLayout
+{
+    /// Zero-based paragraph, or -1 when the portion is not part of laid-out paragraph text.
+    sal_Int32 mnParagraph = -1;
+    TextPortionAlign meAlign = TextPortionAlign::Unknown;
+    /// The full height of the line, from one baseline to the next.
+    double mfLineHeight = 0.0;
+    /// The distance from the top of the line to the baseline.
+    double mfLineAscent = 0.0;
+    /// The x in the text area where the line starts before alignment, which is the paragraph
+    /// indent plus the first-line indent or the bullet on a first line, and the width the line
+    /// wraps at after the indents on both sides.
+    double mfLineIndent = 0.0;
+    double mfLineWidth = 0.0;
+    /// The size of the area that the lines wrap in.
+    double mfTextAreaWidth = 0.0;
+    double mfTextAreaHeight = 0.0;
+
+    bool operator==(const TextPortionLayout&) const = default;
+};
+
 /** TextSimplePortionPrimitive2D class
 
     This is the basic primitive for representing a text portion. It contains
@@ -162,37 +187,8 @@ private:
     /// Fill color background ascent as fraction of font height (0.0 = unconstrained)
     double mfFillColorMaxAscentFraction{ 0.0 };
 
-    /// Zero-based paragraph this portion belongs to, or -1 when the portion is
-    /// not part of laid-out paragraph text.
-    sal_Int32 mnParagraph{ -1 };
-
-    /// Paragraph alignment of this portion.
-    TextPortionAlign meAlign{ TextPortionAlign::Unknown };
-
-    /// Full height of the line this portion sits on, measured from one baseline
-    /// to the next. Zero when no line geometry is known.
-    double mfLineHeight{ 0.0 };
-
-    /// Distance from the top of the line to the baseline. Zero when no line
-    /// geometry is known.
-    double mfLineAscent{ 0.0 };
-
-    /// Width of the area the text is laid out within. This is the boundary at
-    /// which lines wrap. Zero when no such area is known.
-    double mfTextAreaWidth{ 0.0 };
-
-    /// Height of the area the text is laid out within. Zero when no such area
-    /// is known.
-    double mfTextAreaHeight{ 0.0 };
-
-    /// The x in the text area where this portion's line starts before
-    /// alignment: the paragraph indent, plus the first-line indent or the
-    /// bullet on a first line. Zero means the line geometry is unknown.
-    double mfLineIndent{ 0.0 };
-
-    /// The width this portion's line wraps at, after the indents on both sides.
-    /// Zero means the line geometry is unknown.
-    double mfLineWidth{ 0.0 };
+    /// Where the portion lies in the text it was laid out in.
+    TextPortionLayout maLayout;
 
 protected:
     /// local decomposition.
@@ -238,28 +234,8 @@ public:
     short getLetterSpacing() const { return mnLetterSpacing; }
     sal_Int32 getProportionalFontSize() const { return mnProportionalFontSize; }
     sal_Int32 getEscapement() const { return mnEscapement; }
-    sal_Int32 getParagraph() const { return mnParagraph; }
-    void setParagraph(sal_Int32 nParagraph) { mnParagraph = nParagraph; }
-    TextPortionAlign getAlign() const { return meAlign; }
-    void setAlign(TextPortionAlign eAlign) { meAlign = eAlign; }
-    double getLineHeight() const { return mfLineHeight; }
-    void setLineHeight(double fLineHeight) { mfLineHeight = fLineHeight; }
-    double getLineAscent() const { return mfLineAscent; }
-    void setLineAscent(double fLineAscent) { mfLineAscent = fLineAscent; }
-    double getTextAreaWidth() const { return mfTextAreaWidth; }
-    double getTextAreaHeight() const { return mfTextAreaHeight; }
-    double getLineIndent() const { return mfLineIndent; }
-    double getLineWidth() const { return mfLineWidth; }
-    void setLineArea(double fIndent, double fWidth)
-    {
-        mfLineIndent = fIndent;
-        mfLineWidth = fWidth;
-    }
-    void setTextArea(double fWidth, double fHeight)
-    {
-        mfTextAreaWidth = fWidth;
-        mfTextAreaHeight = fHeight;
-    }
+    const TextPortionLayout& getLayout() const { return maLayout; }
+    void setLayout(const TextPortionLayout& rLayout) { maLayout = rLayout; }
     bool getOpticalSizing() const { return mbOpticalSizing; }
     double getFillColorMaxAscentFraction() const { return mfFillColorMaxAscentFraction; }
 

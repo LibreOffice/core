@@ -35,6 +35,7 @@
 #include <SwPortionHandler.hxx>
 #include "porlay.hxx"
 #include "porfld.hxx"
+#include <VectorText.hxx>
 #include "inftxt.hxx"
 #include <fmtornt.hxx>
 #include <frmatr.hxx>
@@ -1017,7 +1018,8 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
 
     bool bDraw = true;
 
-    if ( IsAnimated() )
+    // Primitives show the first picture of an animation, as a print does.
+    if (IsAnimated() && !rInf.GetPrimitiveSink())
     {
         bDraw = !rInf.GetOpt().IsGraphic();
         if( !m_nId )
@@ -1083,7 +1085,12 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
         rFrame.SwitchLTRtoRTL( aRepaint );
     }
 
-    if( bDraw && aTmp.HasArea() )
+    if (bDraw && aTmp.HasArea() && rInf.GetPrimitiveSink())
+    {
+        if (const GraphicObject* pGraphic = m_pBrush->GetGraphicObject())
+            rInf.GetPrimitiveSink()->addGraphic(aTmp, *pGraphic);
+    }
+    else if (bDraw && aTmp.HasArea())
     {
         const OutputDevice* pOut = rInf.GetOut();
         assert(pOut);

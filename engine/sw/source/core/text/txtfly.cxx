@@ -549,7 +549,8 @@ void SwTextFly::DrawTextOpaque( SwDrawTextInfo &rInf ) const
     const Point aOldPos(rInf.GetPos());
     rInf.SetPos( aPos );
 
-    if( !bOpaque )
+    // A sink takes the text once. The opaque flies come after it and cover it there.
+    if (!bOpaque || rInf.GetPrimitiveSink())
     {
         if( rInf.GetKern() )
             rInf.GetFont()->DrawStretchText_( rInf );

@@ -49,6 +49,7 @@ class SwAttrIter;
 struct SwMultiCreator;
 class SwMultiPortion;
 namespace sw { class WrongListIterator; }
+namespace sw::vector { class TextSink; }
 
 #define ARROW_WIDTH 200
 #define DIR_LEFT2RIGHT 0
@@ -372,6 +373,8 @@ class SwTextPaintInfo : public SwTextSizeInfo
 
     sal_uInt16 m_nSpaceIdx;
     SwLineInfo const* m_pLineInfo{nullptr}; // hack: need this to get line props
+    /// Takes what the text draws as primitives in place of the output device, when set.
+    sw::vector::TextSink* m_pPrimitiveSink = nullptr;
     bool m_bOmitPaint = false;
     bool m_bInsertColorPaint = false;
     bool m_bDeleteColorPaint = false;
@@ -404,6 +407,14 @@ public:
     const SvxBrushItem *GetBrushItem() const { return m_pBrushItem; }
 
     SwTextPaintInfo( SwTextFrame *pFrame, const SwRect &rPaint );
+
+    /** Paint info that draws into rSink. It measures on the reference device and, as when
+        printing, leaves out the marks of the view on a window (spelling, shadings, formatting
+        marks).
+     */
+    SwTextPaintInfo( SwTextFrame *pFrame, const SwRect &rPaint, sw::vector::TextSink& rSink );
+
+    sw::vector::TextSink* GetPrimitiveSink() const { return m_pPrimitiveSink; }
 
     SwTwips X() const { return m_aPos.X(); }
     void X( const tools::Long nNew ) { m_aPos.setX(nNew); }

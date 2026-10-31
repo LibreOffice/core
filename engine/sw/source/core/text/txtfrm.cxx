@@ -77,6 +77,7 @@
 #include <view.hxx>
 #include <edtwin.hxx>
 #include <FrameControlsManager.hxx>
+#include <VectorCollector.hxx>
 
 namespace sw {
 
@@ -4361,6 +4362,30 @@ void SwTextFrame::UpdateOutlineContentVisibilityButton(SwWrtShell* pWrtSh) const
         SwFrameControlsManager& rMngr = rEditWin.GetFrameControlsManager();
         rMngr.SetOutlineContentVisibilityButton(this);
     }
+}
+
+void SwTextFrame::CreatePrimitives(sw::vector::Collector& rCollector) const
+{
+    // A hidden paragraph takes no room and draws nothing.
+    if (!getFramePrintArea().HasArea() || IsHiddenNow())
+        return;
+
+    rCollector.open(*this);
+    const Point aOrigin(rCollector.origin());
+    rCollector.add(CreateBackgroundPrimitives(aOrigin));
+    drawinglayer::primitive2d::Primitive2DContainer aBorders;
+    rCollector.add(CreateShadowAndBorderPrimitives(aOrigin, aBorders));
+    drawinglayer::primitive2d::Primitive2DContainer aOverObjects;
+    rCollector.add(CreateTextPrimitives(aOrigin, aOverObjects));
+    rCollector.add(CreateExtraDataPrimitives(aOrigin));
+    // The entry of the border lines comes after the objects anchored as a character, so it also
+    // holds what lies over them.
+    aBorders.append(std::move(aOverObjects));
+    rCollector.deferBorders(*this, std::move(aBorders));
+    // The objects anchored as a character are entries of their own inside the paragraph, so they
+    // move with it, and the text leaves them out.
+    sw::vector::addCharacterObjects(rCollector, *this);
+    rCollector.close();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

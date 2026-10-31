@@ -57,6 +57,8 @@
 #include <sectfrm.hxx>
 #include <rootfrm.hxx>
 #include "inftxt.hxx"
+#include <VectorText.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <noteurl.hxx>
 #include "porfly.hxx"
 #include "porftn.hxx"
@@ -545,6 +547,7 @@ SwTextPaintInfo::SwTextPaintInfo( const SwTextPaintInfo &rInf, const OUString* p
       m_aPaintRect( rInf.GetPaintRect() ),
       m_nSpaceIdx( rInf.GetSpaceIdx() )
     , m_pLineInfo(rInf.m_pLineInfo)
+    , m_pPrimitiveSink(rInf.m_pPrimitiveSink)
 { }
 
 SwTextPaintInfo::SwTextPaintInfo( const SwTextPaintInfo &rInf )
@@ -561,11 +564,20 @@ SwTextPaintInfo::SwTextPaintInfo( const SwTextPaintInfo &rInf )
       m_aPaintRect( rInf.GetPaintRect() ),
       m_nSpaceIdx( rInf.GetSpaceIdx() )
     , m_pLineInfo(rInf.m_pLineInfo)
+    , m_pPrimitiveSink(rInf.m_pPrimitiveSink)
 { }
 
 SwTextPaintInfo::SwTextPaintInfo( SwTextFrame *pFrame, const SwRect &rPaint )
 {
     CtorInitTextPaintInfo( pFrame->getRootFrame()->GetCurrShell()->GetOut(), pFrame, rPaint );
+}
+
+SwTextPaintInfo::SwTextPaintInfo( SwTextFrame *pFrame, const SwRect &rPaint,
+                                  sw::vector::TextSink& rSink )
+{
+    CtorInitTextPaintInfo( &pFrame->getRootFrame()->GetCurrShell()->GetRefDev(), pFrame, rPaint );
+    m_pPrimitiveSink = &rSink;
+    SetOnWin( false );
 }
 
 namespace
@@ -701,6 +713,7 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
                             nLength, rPor.GetLayoutContext(), rPor.Width(), bBullet);
 
     aDrawInf.SetUnderFnt( m_pUnderFnt );
+    aDrawInf.SetPrimitiveSink( m_pPrimitiveSink );
 
     // tdf#171959: a hole portion carries the trailing blank that hangs outside the line, so it
     // takes no part in the justification of the line's content
@@ -780,7 +793,8 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
 
     // Handle semi-transparent text if necessary.
     std::unique_ptr<SwTransparentTextGuard, o3tl::default_delete<SwTransparentTextGuard>> pTransparentText;
-    if (m_pFnt->GetColor() != COL_AUTO && m_pFnt->GetColor().IsTransparent())
+    // A primitive sink keeps the transparency of the text itself.
+    if (m_pFnt->GetColor() != COL_AUTO && m_pFnt->GetColor().IsTransparent() && !m_pPrimitiveSink)
     {
         // if drawing to a backend that supports transparency for text color, then we don't need to use this
         if (!m_bOnWin || !m_pOut->SupportsOperation(OutDevSupportType::TransparentText) || m_pOut->GetConnectMetaFile())
@@ -1073,6 +1087,15 @@ static void lcl_DrawSpecial( const SwTextPaintInfo& rTextPaintInfo, const SwLine
 
 void SwTextPaintInfo::DrawRect( const SwRect &rRect, bool bRetouche ) const
 {
+    if ( m_pPrimitiveSink )
+    {
+        // A retouche paints the background over what a window showed before. The primitives
+        // of a frame start from an empty entry, so the sink takes only the other fills.
+        if ( !bRetouche && m_pOut->IsFillColor() )
+            m_pPrimitiveSink->addFill( rRect, m_pOut->GetFillColor() );
+        return;
+    }
+
     if ( OnWin() || !bRetouche )
     {
         if( m_aTextFly.IsOn() )
@@ -1242,6 +1265,19 @@ void SwTextPaintInfo::DrawCheckBox(const SwFieldFormCheckboxPortion &rPor, bool 
     }
     const int delta = 25;
     tools::Rectangle r(aIntersect.Left()+delta, aIntersect.Top()+delta, aIntersect.Right()-delta, aIntersect.Bottom()-delta);
+    if (m_pPrimitiveSink)
+    {
+        const basegfx::B2DRange aBox(r.Left(), r.Top(), r.Right(), r.Bottom());
+        basegfx::B2DPolyPolygon aLines(basegfx::utils::createPolygonFromRect(aBox));
+        if (bChecked)
+        {
+            aLines.append(basegfx::B2DPolygon{ aBox.getMinimum(), aBox.getMaximum() });
+            aLines.append(basegfx::B2DPolygon{ basegfx::B2DPoint(aBox.getMaxX(), aBox.getMinY()),
+                                               basegfx::B2DPoint(aBox.getMinX(), aBox.getMaxY()) });
+        }
+        m_pPrimitiveSink->addLines(aLines, COL_BLACK);
+        return;
+    }
     auto popIt = m_pOut->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
     m_pOut->SetLineColor( Color(0, 0, 0));
     m_pOut->SetFillColor();
@@ -1341,7 +1377,14 @@ void SwTextPaintInfo::DrawBorder( const SwLinePortion &rPor ) const
 {
     SwRect aDrawArea;
     CalcRect( rPor, &aDrawArea );
-    if ( aDrawArea.HasArea() )
+    if ( aDrawArea.HasArea() && m_pPrimitiveSink )
+    {
+        m_pPrimitiveSink->add(CreateCharacterBorderPrimitives(
+            *m_pFnt, aDrawArea, GetTextFrame()->IsVertical(), GetTextFrame()->IsVertLRBT(),
+            rPor.GetJoinBorderWithPrev(), rPor.GetJoinBorderWithNext(),
+            m_pPrimitiveSink->origin()));
+    }
+    else if ( aDrawArea.HasArea() )
     {
         PaintCharacterBorder(*m_pFnt, aDrawArea, GetTextFrame()->IsVertical(),
                              GetTextFrame()->IsVertLRBT(), rPor.GetJoinBorderWithPrev(),
@@ -1387,7 +1430,8 @@ void SwTextPaintInfo::DrawCSDFHighlighting(const SwLinePortion &rPor) const
     // Don't use GetActiveView() as it does not work as expected when there are multiple open
     // documents.
     SwView* pView = SwTextFrame::GetView();
-    if (!pView)
+    // The spotlight belongs to one view, and primitives go to every client.
+    if (!pView || m_pPrimitiveSink)
         return;
 
     if (!pView->IsSpotlightCharStyles() && !pView->IsSpotlightCharDF())

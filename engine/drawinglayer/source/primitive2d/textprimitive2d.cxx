@@ -279,11 +279,7 @@ bool TextSimplePortionPrimitive2D::operator==(const BasePrimitive2D& rPrimitive)
                 && maTextFillColor == rCompare.maTextFillColor
                 && getProportionalFontSize() == rCompare.getProportionalFontSize()
                 && getEscapement() == rCompare.getEscapement()
-                && getParagraph() == rCompare.getParagraph() && getAlign() == rCompare.getAlign()
-                && getLineHeight() == rCompare.getLineHeight()
-                && getLineAscent() == rCompare.getLineAscent()
-                && getTextAreaWidth() == rCompare.getTextAreaWidth()
-                && getTextAreaHeight() == rCompare.getTextAreaHeight()
+                && getLayout() == rCompare.getLayout()
                 && getFillColorMaxAscentFraction() == rCompare.getFillColorMaxAscentFraction());
     }
 

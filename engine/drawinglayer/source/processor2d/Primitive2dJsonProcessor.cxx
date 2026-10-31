@@ -914,13 +914,15 @@ void Primitive2dJsonProcessor::writeTextPortionScaled(
         }
     }
 
+    const drawinglayer::primitive2d::TextPortionLayout& rLayout = rPrimitive.getLayout();
+
     // The zero-based index of the paragraph this portion belongs to.
-    if (rPrimitive.getParagraph() >= 0)
-        mrWriter.put("paragraph", sal_Int64(rPrimitive.getParagraph()));
+    if (rLayout.mnParagraph >= 0)
+        mrWriter.put("paragraph", sal_Int64(rLayout.mnParagraph));
 
     // The paragraph alignment of this portion.
     const char* pAlign = nullptr;
-    switch (rPrimitive.getAlign())
+    switch (rLayout.meAlign)
     {
         case drawinglayer::primitive2d::TextPortionAlign::Left:
             pAlign = "left";
@@ -941,24 +943,24 @@ void Primitive2dJsonProcessor::writeTextPortionScaled(
         mrWriter.put("align", pAlign);
 
     // The height and ascent of the line this portion sits on.
-    if (rPrimitive.getLineHeight() > 0.0)
-        mrWriter.put("lineHeight", rPrimitive.getLineHeight() * mfScaleFactor);
-    if (rPrimitive.getLineAscent() > 0.0)
-        mrWriter.put("lineAscent", rPrimitive.getLineAscent() * mfScaleFactor);
+    if (rLayout.mfLineHeight > 0.0)
+        mrWriter.put("lineHeight", rLayout.mfLineHeight * mfScaleFactor);
+    if (rLayout.mfLineAscent > 0.0)
+        mrWriter.put("lineAscent", rLayout.mfLineAscent * mfScaleFactor);
 
     // The size of the area the text is laid out within. Lines wrap at the
     // width.
-    if (rPrimitive.getTextAreaWidth() > 0.0)
-        mrWriter.put("textAreaWidth", rPrimitive.getTextAreaWidth() * mfScaleFactor);
-    if (rPrimitive.getTextAreaHeight() > 0.0)
-        mrWriter.put("textAreaHeight", rPrimitive.getTextAreaHeight() * mfScaleFactor);
+    if (rLayout.mfTextAreaWidth > 0.0)
+        mrWriter.put("textAreaWidth", rLayout.mfTextAreaWidth * mfScaleFactor);
+    if (rLayout.mfTextAreaHeight > 0.0)
+        mrWriter.put("textAreaHeight", rLayout.mfTextAreaHeight * mfScaleFactor);
 
     // Where this portion's line starts in the text area before alignment, and
     // the width it wraps at.
-    if (rPrimitive.getLineWidth() > 0.0)
+    if (rLayout.mfLineWidth > 0.0)
     {
-        mrWriter.put("lineIndent", rPrimitive.getLineIndent() * mfScaleFactor);
-        mrWriter.put("lineWidth", rPrimitive.getLineWidth() * mfScaleFactor);
+        mrWriter.put("lineIndent", rLayout.mfLineIndent * mfScaleFactor);
+        mrWriter.put("lineWidth", rLayout.mfLineWidth * mfScaleFactor);
     }
 }
 

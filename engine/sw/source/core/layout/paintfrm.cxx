@@ -5333,6 +5333,87 @@ editeng::SvxBorderLine const * get_ptr(std::optional<editeng::SvxBorderLine> con
 
 }
 
+namespace
+{
+/// The sides of a character border that are drawn. A side joined with the portion before or after
+/// it is left out, and which side that is depends on the text direction.
+struct CharacterBorderSides
+{
+    bool mbTop = true;
+    bool mbBottom = true;
+    bool mbLeft = true;
+    bool mbRight = true;
+};
+
+CharacterBorderSides lcl_CharacterBorderSides(const SwFont& rFont, const bool bVerticalLayout,
+                                              const bool bVerticalLayoutLRBT,
+                                              const bool bJoinWithPrev, const bool bJoinWithNext)
+{
+    CharacterBorderSides aSides;
+    switch (rFont.GetOrientation(bVerticalLayout, bVerticalLayoutLRBT).get())
+    {
+        case 0 :
+            aSides.mbLeft = !bJoinWithPrev;
+            aSides.mbRight = !bJoinWithNext;
+            break;
+        case 900 :
+            aSides.mbBottom = !bJoinWithPrev;
+            aSides.mbTop = !bJoinWithNext;
+            break;
+        case 1800 :
+            aSides.mbRight = !bJoinWithPrev;
+            aSides.mbLeft = !bJoinWithNext;
+            break;
+        case 2700 :
+            aSides.mbTop = !bJoinWithPrev;
+            aSides.mbBottom = !bJoinWithNext;
+            break;
+    }
+    return aSides;
+}
+
+SvxShadowItem lcl_CharacterShadow(const SwFont& rFont, const bool bVerticalLayout,
+                                  const bool bVerticalLayoutLRBT)
+{
+    return SvxShadowItem(0, &rFont.GetShadowColor(), rFont.GetShadowWidth(),
+                         rFont.GetAbsShadowLocation(bVerticalLayout, bVerticalLayoutLRBT));
+}
+
+/// The border lines of a character border along rRect, the area that is left beside the shadow.
+drawinglayer::primitive2d::Primitive2DReference
+lcl_CreateCharacterBorder(const SwFont& rFont, const SwRect& rRect,
+                          const CharacterBorderSides& rSides, const bool bVerticalLayout,
+                          const bool bVerticalLayoutLRBT)
+{
+    const basegfx::B2DHomMatrix aBorderTransform(
+        basegfx::utils::createScaleTranslateB2DHomMatrix(
+            rRect.Width(), rRect.Height(),
+            rRect.Left(), rRect.Top()));
+    const svx::frame::Style aStyleTop(
+        rSides.mbTop ? get_ptr(rFont.GetAbsTopBorder(bVerticalLayout, bVerticalLayoutLRBT))
+                     : nullptr,
+        1.0);
+    const svx::frame::Style aStyleRight(
+        rSides.mbRight ? get_ptr(rFont.GetAbsRightBorder(bVerticalLayout, bVerticalLayoutLRBT))
+                       : nullptr,
+        1.0);
+    const svx::frame::Style aStyleBottom(
+        rSides.mbBottom ? get_ptr(rFont.GetAbsBottomBorder(bVerticalLayout, bVerticalLayoutLRBT))
+                        : nullptr,
+        1.0);
+    const svx::frame::Style aStyleLeft(
+        rSides.mbLeft ? get_ptr(rFont.GetAbsLeftBorder(bVerticalLayout, bVerticalLayoutLRBT))
+                      : nullptr,
+        1.0);
+    return new drawinglayer::primitive2d::SwBorderRectanglePrimitive2D(
+                aBorderTransform,
+                aStyleTop,
+                aStyleRight,
+                aStyleBottom,
+                aStyleLeft);
+}
+}
+
 void PaintCharacterBorder(
     const SwFont& rFont,
     const SwRect& rPaintArea,
@@ -5344,71 +5425,63 @@ void PaintCharacterBorder(
     SwRect aAlignedRect(rPaintArea);
     SwAlignRect(aAlignedRect, gProp.pSGlobalShell, gProp.pSGlobalShell->GetOut());
 
-    bool bTop = true;
-    bool bBottom = true;
-    bool bLeft = true;
-    bool bRight = true;
-
-    switch (rFont.GetOrientation(bVerticalLayout, bVerticalLayoutLRBT).get())
-    {
-        case 0 :
-            bLeft = !bJoinWithPrev;
-            bRight = !bJoinWithNext;
-            break;
-        case 900 :
-            bBottom = !bJoinWithPrev;
-            bTop = !bJoinWithNext;
-            break;
-        case 1800 :
-            bRight = !bJoinWithPrev;
-            bLeft = !bJoinWithNext;
-            break;
-        case 2700 :
-            bTop = !bJoinWithPrev;
-            bBottom = !bJoinWithNext;
-            break;
-    }
+    const CharacterBorderSides aSides = lcl_CharacterBorderSides(
+        rFont, bVerticalLayout, bVerticalLayoutLRBT, bJoinWithPrev, bJoinWithNext);
 
     // Paint shadow (reduce painting rect)
     {
         const SvxShadowItem aShadow(
-            0, &rFont.GetShadowColor(), rFont.GetShadowWidth(),
-            rFont.GetAbsShadowLocation(bVerticalLayout, bVerticalLayoutLRBT));
+            lcl_CharacterShadow(rFont, bVerticalLayout, bVerticalLayoutLRBT));
 
         if( aShadow.GetLocation() != SvxShadowLocation::NONE )
         {
             lcl_PaintShadow( rPaintArea, aAlignedRect, aShadow,
-                             false, bTop, bBottom, bLeft, bRight, gProp);
+                             false, aSides.mbTop, aSides.mbBottom, aSides.mbLeft, aSides.mbRight,
+                             gProp);
         }
     }
 
-    const basegfx::B2DHomMatrix aBorderTransform(
-        basegfx::utils::createScaleTranslateB2DHomMatrix(
-            aAlignedRect.Width(), aAlignedRect.Height(),
-            aAlignedRect.Left(), aAlignedRect.Top()));
-    const svx::frame::Style aStyleTop(
-        bTop ? get_ptr(rFont.GetAbsTopBorder(bVerticalLayout, bVerticalLayoutLRBT)) : nullptr,
-        1.0);
-    const svx::frame::Style aStyleRight(
-        bRight ? get_ptr(rFont.GetAbsRightBorder(bVerticalLayout, bVerticalLayoutLRBT)) : nullptr,
-        1.0);
-    const svx::frame::Style aStyleBottom(
-        bBottom ? get_ptr(rFont.GetAbsBottomBorder(bVerticalLayout, bVerticalLayoutLRBT))
-                : nullptr,
-        1.0);
-    const svx::frame::Style aStyleLeft(
-        bLeft ? get_ptr(rFont.GetAbsLeftBorder(bVerticalLayout, bVerticalLayoutLRBT)) : nullptr,
-        1.0);
     drawinglayer::primitive2d::Primitive2DContainer aBorderLineTarget;
-
-    aBorderLineTarget.append(
-            new drawinglayer::primitive2d::SwBorderRectanglePrimitive2D(
-                aBorderTransform,
-                aStyleTop,
-                aStyleRight,
-                aStyleBottom,
-                aStyleLeft));
+    aBorderLineTarget.append(lcl_CreateCharacterBorder(rFont, aAlignedRect, aSides,
+                                                       bVerticalLayout, bVerticalLayoutLRBT));
     gProp.pBLines->AddBorderLines(std::move(aBorderLineTarget));
+}
+
+drawinglayer::primitive2d::Primitive2DContainer CreateCharacterBorderPrimitives(
+    const SwFont& rFont, const SwRect& rArea, const bool bVerticalLayout,
+    const bool bVerticalLayoutLRBT, const bool bJoinWithPrev, const bool bJoinWithNext,
+    const Point& rOrigin)
+{
+    drawinglayer::primitive2d::Primitive2DContainer aPrimitives;
+    SwRect aRect(rArea);
+    aRect.Pos(aRect.Pos() - rOrigin);
+
+    const CharacterBorderSides aSides = lcl_CharacterBorderSides(
+        rFont, bVerticalLayout, bVerticalLayoutLRBT, bJoinWithPrev, bJoinWithNext);
+
+    const SvxShadowItem aShadow(lcl_CharacterShadow(rFont, bVerticalLayout, bVerticalLayoutLRBT));
+    if (aShadow.GetLocation() != SvxShadowLocation::NONE)
+    {
+        const SwRects aRegion = ::lcl_CalcShadowRegion(
+            aRect, aShadow, false, aSides.mbTop, aSides.mbBottom, aSides.mbLeft, aSides.mbRight,
+            aShadow.GetWidth(), aShadow.GetWidth());
+        basegfx::B2DPolyPolygon aShadowArea;
+        for (const SwRect& rShadowRect : aRegion)
+        {
+            if (rShadowRect.HasArea())
+                aShadowArea.append(basegfx::utils::createPolygonFromRect(basegfx::B2DRange(
+                    rShadowRect.Left(), rShadowRect.Top(),
+                    rShadowRect.Left() + rShadowRect.Width(),
+                    rShadowRect.Top() + rShadowRect.Height())));
+        }
+        if (aShadowArea.count() && !aShadow.GetColor().IsFullyTransparent())
+            aPrimitives.push_back(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                std::move(aShadowArea), aShadow.GetColor().getBColor()));
+    }
+
+    aPrimitives.push_back(lcl_CreateCharacterBorder(rFont, aRect, aSides, bVerticalLayout,
+                                                    bVerticalLayoutLRBT));
+    return aPrimitives;
 }
 
 /// #i15844#

@@ -250,12 +250,16 @@ buildTextPortionPrimitive(const DrawPortionInfo& rInfo, const OUString& rText,
     {
         auto* pPortion = static_cast<drawinglayer::primitive2d::TextSimplePortionPrimitive2D*>(
             pNewPrimitive.get());
-        pPortion->setParagraph(rInfo.mnPara);
-        pPortion->setAlign(eAlign);
-        pPortion->setLineHeight(rInfo.mnLineHeight);
-        pPortion->setLineAscent(rInfo.mnLineAscent);
-        pPortion->setLineArea(rInfo.mnLineIndent, rInfo.mnLineWidth);
-        pPortion->setTextArea(rTextArea.Width(), rTextArea.Height());
+        drawinglayer::primitive2d::TextPortionLayout aLayout;
+        aLayout.mnParagraph = rInfo.mnPara;
+        aLayout.meAlign = eAlign;
+        aLayout.mfLineHeight = rInfo.mnLineHeight;
+        aLayout.mfLineAscent = rInfo.mnLineAscent;
+        aLayout.mfLineIndent = rInfo.mnLineIndent;
+        aLayout.mfLineWidth = rInfo.mnLineWidth;
+        aLayout.mfTextAreaWidth = rTextArea.Width();
+        aLayout.mfTextAreaHeight = rTextArea.Height();
+        pPortion->setLayout(aLayout);
     }
 
     return pNewPrimitive;

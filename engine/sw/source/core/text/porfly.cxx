@@ -37,6 +37,8 @@
 #include "porfly.hxx"
 #include "porlay.hxx"
 #include "inftxt.hxx"
+#include <VectorText.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 
 #include <sortedobjs.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -218,6 +220,29 @@ TextFrameIndex SwTextFrame::CalcFlyPos( SwFrameFormat const * pSearch )
 
 void sw::FlyContentPortion::Paint(const SwTextPaintInfo& rInf) const
 {
+    // The fly is an entry of its own on the page, so the text that holds it draws only the cross
+    // over a deleted fly, which lies over the fly.
+    if (sw::vector::TextSink* pSink = rInf.GetPrimitiveSink())
+    {
+        const SwFrame* pLower = m_pFly->Lower();
+        SwViewShell* pShell = m_pFly->getRootFrame()->GetCurrShell();
+        if (GetAuthor() != std::string::npos && IsDeleted() && pLower && pShell
+            && rInf.GetOpt().GetRedlineRenderMode() == SwRedlineRenderMode::Standard
+            && SwFlyFrame::IsPaint(m_pFly->GetVirtDrawObj(), *pShell))
+        {
+            const SwRect aArea(pLower->GetPaintArea());
+            basegfx::B2DPolyPolygon aCross;
+            aCross.append(
+                basegfx::B2DPolygon{ basegfx::B2DPoint(aArea.Left(), aArea.Top()),
+                                     basegfx::B2DPoint(aArea.Right(), aArea.Bottom()) });
+            aCross.append(
+                basegfx::B2DPolygon{ basegfx::B2DPoint(aArea.Left(), aArea.Bottom()),
+                                     basegfx::B2DPoint(aArea.Right(), aArea.Top()) });
+            pSink->addLinesOverObjects(aCross, SwPostItMgr::GetColorAnchor(GetAuthor()));
+        }
+        return;
+    }
+
     // Baseline output
     // Re-paint everything at a CompletePaint call
     SwRect aRepaintRect(rInf.GetPaintRect());

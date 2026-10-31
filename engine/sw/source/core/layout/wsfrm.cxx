@@ -4991,27 +4991,55 @@ void SwFrame::CreatePrimitives(sw::vector::Collector& rCollector) const
     rCollector.add(CreateBackgroundPrimitives(aOrigin));
     drawinglayer::primitive2d::Primitive2DContainer aBorders;
     rCollector.add(CreateShadowAndBorderPrimitives(aOrigin, aBorders));
+    // The separator lines between the columns lie over the content of the columns, as the border
+    // lines do, and come before the border lines of that content.
+    if (IsLayoutFrame())
+    {
+        drawinglayer::primitive2d::Primitive2DContainer aColumnLines(
+            static_cast<const SwLayoutFrame*>(this)->CreateColumnLinePrimitives(aOrigin));
+        aColumnLines.append(std::move(aBorders));
+        aBorders = std::move(aColumnLines);
+    }
     rCollector.deferBorders(*this, std::move(aBorders));
 
     // The page draws the objects behind the text before its content and the other objects
     // after it. Flies are frames of their own, anchored somewhere else on the page.
-    if (IsPageFrame())
-        sw::vector::addObjects(rCollector, static_cast<const SwPageFrame&>(*this), true);
+    const SwPageFrame* pPage = IsPageFrame() ? static_cast<const SwPageFrame*>(this) : nullptr;
+    if (pPage)
+        sw::vector::addPageObjects(rCollector, *pPage, sw::vector::ObjectPlace::BehindText);
 
     if (IsLayoutFrame())
     {
         const SwLayoutFrame& rLayout = static_cast<const SwLayoutFrame&>(*this);
-        rCollector.add(rLayout.CreateColumnLinePrimitives(aOrigin));
+        // When the document paints the objects behind the text over the header and the footer,
+        // the page draws its header and footer first, then those objects, then the body.
+        const bool bHeaderFooterFirst
+            = pPage
+              && pPage->GetFormat()->getIDocumentSettingAccess().get(
+                  DocumentSettingId::PAINT_HELL_OVER_HEADER_FOOTER);
+        if (bHeaderFooterFirst)
+        {
+            for (const SwFrame* pLower = rLayout.Lower(); pLower; pLower = pLower->GetNext())
+            {
+                if (pLower->IsHeaderFrame() || pLower->IsFooterFrame())
+                    pLower->CreatePrimitives(rCollector);
+            }
+            sw::vector::addPageObjects(rCollector, *pPage,
+                                       sw::vector::ObjectPlace::BehindBodyText);
+        }
         for (const SwFrame* pLower = rLayout.Lower(); pLower; pLower = pLower->GetNext())
-            pLower->CreatePrimitives(rCollector);
+        {
+            if (!bHeaderFooterFirst || !(pLower->IsHeaderFrame() || pLower->IsFooterFrame()))
+                pLower->CreatePrimitives(rCollector);
+        }
     }
 
     // The border lines lie over the content, and the objects in front of the text over them.
     if (bBorderLayer)
         rCollector.closeBorderLayer();
 
-    if (IsPageFrame())
-        sw::vector::addObjects(rCollector, static_cast<const SwPageFrame&>(*this), false);
+    if (pPage)
+        sw::vector::addPageObjects(rCollector, *pPage, sw::vector::ObjectPlace::InFrontOfText);
 
     if (IsFlyFrame())
         rCollector.current().moAnchor = sw::vector::anchorOf(*static_cast<const SwFlyFrame*>(this));

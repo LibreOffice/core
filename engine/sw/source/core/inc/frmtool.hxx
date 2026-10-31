@@ -129,6 +129,15 @@ void PaintCharacterBorder(const SwFont& rFont, const SwRect& rPaintArea, const b
                           const bool bVerticalLayoutLRBT, const bool bJoinWithPrev,
                           const bool bJoinWithNext);
 
+/// The shadow and the lines of a character border around rArea, relative to rOrigin, with no view
+/// in reach. A border that joins the one of the portion before or after it has no line on that
+/// side.
+drawinglayer::primitive2d::Primitive2DContainer
+CreateCharacterBorderPrimitives(const SwFont& rFont, const SwRect& rArea,
+                                const bool bVerticalLayout, const bool bVerticalLayoutLRBT,
+                                const bool bJoinWithPrev, const bool bJoinWithNext,
+                                const Point& rOrigin);
+
 // get Fly, if no List is given use the current shell
 // Implementation in feshview.cxx
 SwFlyFrame *GetFlyFromMarked( const SdrMarkList *pLst, SwViewShell *pSh );

@@ -15,8 +15,10 @@
 #include <anchoredobject.hxx>
 #include <doc.hxx>
 #include <flyfrm.hxx>
+#include <fmtanchr.hxx>
 #include <frmatr.hxx>
 #include <frmfmt.hxx>
+#include <ndtxt.hxx>
 #include <layfrm.hxx>
 #include <pagefrm.hxx>
 #include <sortedobjs.hxx>
@@ -213,28 +215,61 @@ void addShape(Collector& rCollector, const SwAnchoredObject& rObject)
         std::move(aPrimitives)));
     rCollector.close();
 }
+
+/// Where the paint draws the objects on the layer nLayer, against the text.
+ObjectPlace placeOf(SdrLayerID nLayer, const IDocumentDrawModelAccess& rAccess)
+{
+    if (nLayer == rAccess.GetHellId())
+        return ObjectPlace::BehindText;
+    if (nLayer == rAccess.GetHeaderFooterHellId())
+        return ObjectPlace::BehindBodyText;
+    return ObjectPlace::InFrontOfText;
 }
 
-void addObjects(Collector& rCollector, const SwPageFrame& rPage, bool bBehindText)
+/// Whether the paint draws rObject, judged from the layout and the document alone. The object
+/// has to be visible and on a visible layer, and set to print unless bForView is set, since a
+/// view also shows what is not printed. A fly has to overlap its page, a drawing object needs a
+/// valid position of the frame it is anchored at, and an object anchored in a fly is drawn only
+/// when that fly is.
+bool isDrawn(const SwAnchoredObject& rObject, const IDocumentDrawModelAccess& rAccess,
+             bool bForView)
 {
-    const SwSortedObjs* pObjects = rPage.GetSortedObjs();
-    if (!pObjects)
-        return;
+    const SdrObject* pDrawObject = rObject.GetDrawObj();
+    if (!pDrawObject || !rAccess.IsVisibleLayerId(pDrawObject->GetLayer())
+        || !pDrawObject->IsVisible())
+        return false;
+    if (!bForView && !rObject.GetFrameFormat()->GetPrint().GetValue())
+        return false;
 
-    const IDocumentDrawModelAccess& rAccess
-        = rPage.GetFormat()->GetDoc().getIDocumentDrawModelAccess();
-
-    std::vector<const SwAnchoredObject*> aObjects;
-    for (const SwAnchoredObject* pObject : *pObjects)
+    const SwFrame* pAnchor = rObject.GetAnchorFrame();
+    if (const SwFlyFrame* pFly = rObject.DynCastFlyFrame())
     {
-        const SdrObject* pDrawObject = pObject->GetDrawObj();
-        if (!pDrawObject || !rAccess.IsVisibleLayerId(pDrawObject->GetLayer()))
+        const SwPageFrame* pPage = pFly->FindPageFrame();
+        if (!pPage || !pPage->getFrameArea().Overlaps(pFly->getFrameArea()))
+            return false;
+    }
+    else if (!pAnchor || !pAnchor->isFrameAreaPositionValid())
+        return false;
+
+    if (const SwFlyFrame* pAnchorFly = pAnchor ? pAnchor->FindFlyFrame() : nullptr)
+        return isDrawn(*pAnchorFly, rAccess, bForView);
+    return true;
+}
+
+/// Adds the entries of the objects in rObjects that are drawn at ePlace, in paint order. With
+/// bAsCharacter set, only objects anchored as a character are added.
+void addObjects(Collector& rCollector, const SwSortedObjs& rObjects,
+                const IDocumentDrawModelAccess& rAccess, ObjectPlace ePlace, bool bAsCharacter)
+{
+    std::vector<const SwAnchoredObject*> aObjects;
+    for (const SwAnchoredObject* pObject : rObjects)
+    {
+        if (!isDrawn(*pObject, rAccess, /*bForView=*/false))
             continue;
-        if (!pDrawObject->IsVisible() || !pObject->GetFrameFormat()->GetPrint().GetValue())
+        if (bAsCharacter
+            && pObject->GetFrameFormat()->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
             continue;
-        // The hell layer is drawn behind the text, every other visible layer in front of it.
-        const bool bInHell = pDrawObject->GetLayer() == rAccess.GetHellId();
-        if (bInHell == bBehindText)
+        if (placeOf(pObject->GetDrawObj()->GetLayer(), rAccess) == ePlace)
             aObjects.push_back(pObject);
     }
 
@@ -261,6 +296,28 @@ void addObjects(Collector& rCollector, const SwPageFrame& rPage, bool bBehindTex
         else
             addShape(rCollector, *pObject);
     }
+}
+}
+
+void addPageObjects(Collector& rCollector, const SwPageFrame& rPage, ObjectPlace ePlace)
+{
+    if (const SwSortedObjs* pObjects = rPage.GetSortedObjs())
+        addObjects(rCollector, *pObjects,
+                   rPage.GetFormat()->GetDoc().getIDocumentDrawModelAccess(), ePlace,
+                   /*bAsCharacter=*/false);
+}
+
+void addCharacterObjects(Collector& rCollector, const SwTextFrame& rFrame)
+{
+    const SwSortedObjs* pObjects = rFrame.GetDrawObjs();
+    if (!pObjects)
+        return;
+
+    const IDocumentDrawModelAccess& rAccess
+        = rFrame.GetTextNodeFirst()->GetDoc().getIDocumentDrawModelAccess();
+    for (const ObjectPlace ePlace :
+         { ObjectPlace::BehindText, ObjectPlace::BehindBodyText, ObjectPlace::InFrontOfText })
+        addObjects(rCollector, *pObjects, rAccess, ePlace, /*bAsCharacter=*/true);
 }
 
 std::vector<Entry> decomposePage(const SwPageFrame& rPage)

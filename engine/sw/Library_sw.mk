@@ -438,6 +438,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/text/txtinit \
     sw/source/core/text/txtpaint \
     sw/source/core/text/txttab \
+    sw/source/core/text/VectorText \
     sw/source/core/text/widorp \
     sw/source/core/text/wrong \
     sw/source/core/text/xmldump \

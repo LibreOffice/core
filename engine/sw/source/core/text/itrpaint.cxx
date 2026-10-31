@@ -32,6 +32,7 @@
 #include <txtfrm.hxx>
 #include <swfont.hxx>
 #include "txtpaint.hxx"
+#include <VectorText.hxx>
 #include "porfld.hxx"
 #include "porfly.hxx"
 #include "portab.hxx"
@@ -365,6 +366,24 @@ void SwTextPainter::DrawTextLine(const SwRect& rPaint, SwSaveClip& rClip, const 
         else
             rClip.ChgClip( aLineRect, m_pFrame );
         bClip = false;
+
+        // A primitive sink cuts the line to the same rectangle as a window does, turned into
+        // document coordinates.
+        sw::vector::TextSink* pSink = GetInfo().GetPrimitiveSink();
+        if (pSink && aLineRect.HasArea())
+        {
+            SwRect aClipArea(aLineRect);
+            if (m_pFrame->IsRightToLeft())
+                m_pFrame->SwitchLTRtoRTL(aClipArea);
+            if (m_pFrame->IsVertical())
+                m_pFrame->SwitchHorizontalToVertical(aClipArea);
+            if (rFrame.IsInTab())
+            {
+                aClipArea.SubTop(std::max<SwTwips>(rFrame.GetTopMargin(), 0));
+                aClipArea.AddBottom(std::max<SwTwips>(rFrame.GetBottomMargin(), 0));
+            }
+            pSink->startClip(aClipArea);
+        }
     }
 
     if( !pPor && !bEndPor )
@@ -416,6 +435,10 @@ void SwTextPainter::DrawTextLine(const SwRect& rPaint, SwSaveClip& rClip, const 
     const SwDoc& rDoc = GetInfo().GetTextFrame()->GetDoc();
     const IDocumentRedlineAccess& rIDRA = rDoc.getIDocumentRedlineAccess();
     const SwRedlineTable& rRedlineTable = rIDRA.GetRedlineTable();
+    sw::vector::TextSink* const pSink = GetInfo().GetPrimitiveSink();
+    // Where the numbering label of the line starts, while the portions of the label and a tab
+    // after it are painted.
+    std::optional<SwTwips> oLabelStart;
     while( pPor )
     {
         bool bSeeked = true;
@@ -532,11 +555,13 @@ void SwTextPainter::DrawTextLine(const SwRect& rPaint, SwSaveClip& rClip, const 
         }
 
         // multiple numbering portions are possible :(
+        // The PDF structure tags belong to an output device, so they open and close without a sink.
         if ((pPor->InNumberGrp() // also footnote label
                 // weird special case, bullet with soft hyphen
              || (pPor->InHyphGrp() && pNext && pNext->InNumberGrp()))
             && !GetInfo().GetTextFrame()->GetTextNodeForParaProps()->IsOutline()
-            && !roTaggedLabel) // note: CalcPaintOfst may skip some portions
+            && !roTaggedLabel // note: CalcPaintOfst may skip some portions
+            && !pSink)
         {
             assert(isPDFTaggingEnabled);
             Por_Info aPorInfo(*pPor, *this, 1); // open Lbl
@@ -549,6 +574,32 @@ void SwTextPainter::DrawTextLine(const SwRect& rPaint, SwSaveClip& rClip, const 
             // #i16816# tagged pdf support
             Por_Info aPorInfo(*pPor, *this, 0);
             SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, &aPorInfo, *pOut );
+
+            // The primitives of a numbering label, with a tab after it, and of a field are
+            // grouped as such. The text of the paragraph starts where the label ends.
+            std::optional<sw::vector::TextSink::PortionGroup> oGroup;
+            if (pSink)
+            {
+                if (pPor->InNumberGrp() || (oLabelStart && pPor->InTabGrp()))
+                {
+                    if (!oLabelStart)
+                        oLabelStart = GetInfo().X();
+                    oGroup = sw::vector::TextSink::PortionGroup::Label;
+                }
+                else
+                {
+                    if (oLabelStart)
+                    {
+                        pSink->shiftLineStart(GetInfo().X() - *oLabelStart);
+                        oLabelStart.reset();
+                    }
+                    if (pPor->InFieldGrp() || pPor->GetWhichPor() == PortionType::ContentControl
+                        || pPor->GetWhichPor() == PortionType::FieldFormCheckbox)
+                        oGroup = sw::vector::TextSink::PortionGroup::Field;
+                }
+                if (oGroup)
+                    pSink->startGroup();
+            }
 
             if( pPor->IsMultiPortion() )
                 PaintMultiPortion( rPaint, static_cast<SwMultiPortion&>(*pPor) );
@@ -574,10 +625,13 @@ void SwTextPainter::DrawTextLine(const SwRect& rPaint, SwSaveClip& rClip, const 
                 }
                 pPor->Paint( GetInfo() );
             }
+
+            if (oGroup)
+                pSink->endGroup(*oGroup);
         }
 
         // lazy open LBody and paragraph tag after num portions have been painted to Lbl
-        if (pPor->InNumberGrp() // also footnote label
+        if (!pSink && pPor->InNumberGrp() // also footnote label
             // note: numbering portion may be split if it has multiple scripts
             && !static_cast<SwNumberPortion const*>(pPor)->HasFollow()) // so wait for the last one
         {
@@ -756,7 +810,11 @@ void SwTextPainter::DrawTextLine(const SwRect& rPaint, SwSaveClip& rClip, const 
     }
 
     if( m_pCurr->IsClipping() )
+    {
         rClip.ChgClip( rPaint, m_pFrame );
+        if (pSink)
+            pSink->endClip();
+    }
 }
 
 void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,

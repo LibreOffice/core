@@ -26,6 +26,7 @@
 
 #include <fntcache.hxx>
 #include <swfont.hxx>
+#include <VectorText.hxx>
 #include <breakit.hxx>
 #include <txtfrm.hxx>
 #include <scriptinfo.hxx>
@@ -313,7 +314,7 @@ void SwDoDrawCapital::DrawSpace( Point &rPos )
     if ( nDiff )
     {
         m_rInf.ApplyAutoColor();
-        GetOut().DrawStretchText( aPos, nDiff,
+        sw::vector::drawStretchText(m_rInf, aPos, nDiff,
             u"  "_ustr, 0, 2 );
     }
     rPos.setX( m_rInf.GetPos().X() + m_rInf.GetWidth() );
@@ -463,10 +464,10 @@ void SwDoDrawStretchCapital::Do()
 
         // Optimise:
         if (TextFrameIndex(1) >= m_rInf.GetLen())
-            GetOut().DrawText(aPos, m_rInf.GetText(), sal_Int32(m_rInf.GetIdx()),
+            sw::vector::drawText(m_rInf, aPos, m_rInf.GetText(), sal_Int32(m_rInf.GetIdx()),
                 sal_Int32(m_rInf.GetLen()));
         else
-            GetOut().DrawStretchText(aPos, nPartWidth, m_rInf.GetText(),
+            sw::vector::drawStretchText(m_rInf, aPos, nPartWidth, m_rInf.GetText(),
                     sal_Int32(m_rInf.GetIdx()), sal_Int32(m_rInf.GetLen()));
     }
     const_cast<Point&>(m_rInf.GetPos()).AdjustX(nPartWidth );

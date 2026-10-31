@@ -23,6 +23,7 @@ class SdrObject;
 class SwAnchoredObject;
 class SwFrame;
 class SwPageFrame;
+class SwTextFrame;
 
 /// The content of a Writer page as a client that draws vector primitives receives it.
 namespace sw::vector
@@ -154,10 +155,28 @@ private:
 /// The frame the object is anchored in and moves with, or none when that frame is the page.
 std::optional<sal_uInt64> anchorOf(const SwAnchoredObject& rObject);
 
-/// Adds the entries of the objects on rPage behind the text when bBehindText is set, or in front
-/// of it otherwise, in paint order. Only objects that printing shows are added: visible ones on a
-/// visible layer that are set to print.
-void addObjects(Collector& rCollector, const SwPageFrame& rPage, bool bBehindText);
+/// Where the objects on a layer of the drawing are drawn, against the text of the page.
+enum class ObjectPlace
+{
+    /// Behind all the text: the hell layer.
+    BehindText,
+    /// Over the header and the footer and behind the body text: the layer of the objects behind
+    /// the text when the document paints them over the header and the footer.
+    BehindBodyText,
+    /// In front of all the text: the heaven layer and the controls.
+    InFrontOfText
+};
+
+/// Adds the entries of the objects anchored on rPage that are drawn at ePlace, in paint order.
+/// The page holds every object but the ones anchored as a character. An object is added when it
+/// is visible, on a visible layer and placed where the paint draws it. When the collector is not
+/// for a view, it also has to be set to print.
+void addPageObjects(Collector& rCollector, const SwPageFrame& rPage, ObjectPlace ePlace);
+
+/// Adds the entries of the objects anchored as a character in rFrame, in the order of their
+/// places: behind the text, behind the body text, then in front of the text. The page holds
+/// every other object.
+void addCharacterObjects(Collector& rCollector, const SwTextFrame& rFrame);
 
 /// The entries of rPage in paint order, the page first.
 SW_DLLPUBLIC std::vector<Entry> decomposePage(const SwPageFrame& rPage);

@@ -33,6 +33,7 @@ class SwTextFrame;
 class SwViewShell;
 class SwScriptInfo;
 namespace sw { class WrongListIterator; }
+namespace sw::vector { class TextSink; }
 class SwFont;
 namespace vcl {
     class Font;
@@ -59,6 +60,8 @@ class SW_DLLPUBLIC SwDrawTextInfo
     Size m_aSize;
     SwFont* m_pFnt = nullptr;
     SwUnderlineFont* m_pUnderFnt = nullptr;
+    /// Takes what is drawn as primitives in place of the output device, when set.
+    sw::vector::TextSink* m_pPrimitiveSink = nullptr;
     TextFrameIndex* m_pHyphPos = nullptr;
     tools::Long m_nKanaDiff = 0;
     gfx::Length m_nExtraAscent = 0_emu;
@@ -662,6 +665,9 @@ public:
     // as argument, the change if made to the font otherwise the font at the
     // output device is changed returns if the font has been changed
     bool ApplyAutoColor( vcl::Font* pFnt = nullptr );
+
+    void SetPrimitiveSink(sw::vector::TextSink* pSink) { m_pPrimitiveSink = pSink; }
+    sw::vector::TextSink* GetPrimitiveSink() const { return m_pPrimitiveSink; }
 
     void SetOmitPaint(bool bOmitPaint) { m_bOmitPaint = bOmitPaint; }
     bool GetOmitPaint() const { return m_bOmitPaint; }

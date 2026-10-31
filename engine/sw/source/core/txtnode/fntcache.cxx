@@ -39,6 +39,7 @@
 #include <viewsh.hxx>
 #include <viewopt.hxx>
 #include <fntcache.hxx>
+#include <VectorText.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <swfont.hxx>
 #include <wrong.hxx>
@@ -856,11 +857,20 @@ static void GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo
                  rInf.GetLayoutContext(), nMaxAscent, nMaxDescent, bCaret, rInf.GetVclCache());
 }
 
-static void DrawTextArray(OutputDevice& rOutputDevice, const Point& rStartPt, const OUString& rStr,
+static void DrawTextArray(SwDrawTextInfo& rInf, const Point& rStartPt, const OUString& rStr,
                           KernArray& aKernArray, std::span<const bool> pKashidaAry,
                           sal_Int32 nIndex, sal_Int32 nLen,
                           std::optional<SwLinePortionLayoutContext> nLayoutContext)
 {
+    // A primitive is shaped from its own range of the text alone, so ligatures and the joining
+    // of letters across the ends of the range can differ from what the device draws.
+    if (rInf.GetPrimitiveSink())
+    {
+        sw::vector::drawTextArray(rInf, rStartPt, rStr, aKernArray, pKashidaAry, nIndex, nLen);
+        return;
+    }
+
+    OutputDevice& rOutputDevice = rInf.GetOut();
     if (nLayoutContext.has_value())
     {
         auto nStrEnd = nIndex + nLen;
@@ -1039,7 +1049,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     }
 
     Point aTextOriginPos( rInf.GetPos() );
-    if( !bPrt )
+    // Text starts one device pixel to the right of the layout position, except in a right-to-left
+    // frame or on a printer that the layout was formatted for. A primitive starts at the layout
+    // position.
+    if (!bPrt && !rInf.GetPrimitiveSink())
     {
         static tools::DeleteOnDeinit< VclPtr<OutputDevice> > s_pFntObjPixOut {};
         if( rInf.GetpOut() != *s_pFntObjPixOut.get() || rInf.GetOut().GetMapMode() != *s_pPixMap )
@@ -1140,7 +1153,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             if ( bSwitchH2V )
                 rInf.GetFrame()->SwitchHorizontalToVertical( aTextOriginPos );
 
-            DrawTextArray(rInf.GetOut(), aTextOriginPos, rInf.GetText(), aKernArray, {},
+            DrawTextArray(rInf, aTextOriginPos, rInf.GetText(), aKernArray, {},
                           sal_Int32{ rInf.GetIdx() }, sal_Int32{ rInf.GetLen() },
                           rInf.GetLayoutContext());
 
@@ -1302,20 +1315,20 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     if (TextFrameIndex(1) == rInf.GetLen())
                     {
                         aKernArray[0] = rInf.GetWidth() + nSpaceAdd;
-                        rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
+                        sw::vector::drawTextArray(rInf, aTextOriginPos, rInf.GetText(),
                              aKernArray, aKashidaArray, sal_Int32(rInf.GetIdx()), 1 );
                     }
                     else
                     {
                         sal_Int32 nIndex(sal_Int32(rInf.GetLen()) - 2);
                         aKernArray[nIndex] += nSpaceAdd;
-                        DrawTextArray(rInf.GetOut(), aTextOriginPos, rInf.GetText(), aKernArray,
+                        DrawTextArray(rInf, aTextOriginPos, rInf.GetText(), aKernArray,
                                       aKashidaArray, sal_Int32{ rInf.GetIdx() },
                                       sal_Int32{ rInf.GetLen() }, rInf.GetLayoutContext());
                     }
                 }
                 else {
-                    DrawTextArray(rInf.GetOut(), aTextOriginPos, rInf.GetText(), aKernArray,
+                    DrawTextArray(rInf, aTextOriginPos, rInf.GetText(), aKernArray,
                                   aKashidaArray, sal_Int32{ rInf.GetIdx() },
                                   sal_Int32{ rInf.GetLen() }, rInf.GetLayoutContext());
                 }
@@ -1331,7 +1344,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     {
                         nKernSum += nSpaceAdd;
                         if( j < i )
-                            rInf.GetOut().DrawText( aTmpPos, rInf.GetText(),
+                            sw::vector::drawText(rInf, aTmpPos, rInf.GetText(),
                                         sal_Int32(rInf.GetIdx()) + j, i - j);
                         j = i + 1;
                         SwTwips nAdd = aKernArray[ i ] + nKernSum;
@@ -1341,7 +1354,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     }
                 }
                 if( j < i )
-                    rInf.GetOut().DrawText( aTmpPos, rInf.GetText(),
+                    sw::vector::drawText(rInf, aTmpPos, rInf.GetText(),
                                 sal_Int32(rInf.GetIdx()) + j, i - j);
             }
         }
@@ -1350,7 +1363,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             tools::Long nTmpWidth = rInf.GetWidth();
             if( rInf.GetKern() && rInf.GetLen() && nTmpWidth > rInf.GetKern() )
                 nTmpWidth -= rInf.GetKern();
-            rInf.GetOut().DrawStretchText( aTextOriginPos, nTmpWidth,
+            sw::vector::drawStretchText(rInf, aTextOriginPos, nTmpWidth,
                        rInf.GetText(),
                        sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
         }
@@ -1368,12 +1381,12 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 pTmpFont->SetColor( aSaveColor );
             }
 
-            rInf.GetOut().DrawStretchText( aTextOriginPos, nTmpWidth,
+            sw::vector::drawStretchText(rInf, aTextOriginPos, nTmpWidth,
                     rInf.GetText(),
                     sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
         }
         else
-            rInf.GetOut().DrawText( aTextOriginPos, rInf.GetText(),
+            sw::vector::drawText(rInf, aTextOriginPos, rInf.GetText(),
                     sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
     }
 
@@ -1557,10 +1570,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             if ( bSwitchH2V )
                 rInf.GetFrame()->SwitchHorizontalToVertical( aTextOriginPos );
 
-            rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
+            sw::vector::drawTextArray(rInf, aTextOriginPos, rInf.GetText(),
                          aKernArray, aKashidaArray, sal_Int32(rInf.GetIdx()), 1 );
             if( bBullet )
-                rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(), aKernArray, {},
+                sw::vector::drawTextArray(rInf, aTextOriginPos, rInf.GetText(), aKernArray, {},
                                              sal_Int32(rInf.GetIdx()), 1 );
         }
         else
@@ -1675,7 +1688,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     rInf.GetFrame()->SwitchHorizontalToVertical( aTextOriginPos );
 
                 sal_Int32 nIdx = sal_Int32(rInf.GetIdx());
-                DrawTextArray(rInf.GetOut(), aTextOriginPos, rInf.GetText(), aKernArray,
+                DrawTextArray(rInf, aTextOriginPos, rInf.GetText(), aKernArray,
                               aKashidaArray, nIdx, nLen, rInf.GetLayoutContext());
                 if (bBullet)
                 {
@@ -1712,7 +1725,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                                 aKernArray[i - 1] += -nAdd;
                         }
                     }
-                    rInf.GetOut().DrawTextArray( aTextOriginPos, aBulletOverlay, aKernArray,
+                    sw::vector::drawTextArray(rInf, aTextOriginPos, aBulletOverlay, aKernArray,
                                                  {}, 0, nLen );
                     pTmpFont->SetColor( aPreviousColor );
 
@@ -2352,7 +2365,10 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
     bool bChgFntColor = false;
     bool bChgLineColor = false;
 
-    const SwViewShell *pVSh = GetShell();
+    // Primitives go to any client, so they take no colors from the view that happens to be
+    // current.
+    const bool bForAnyView = GetPrimitiveSink() != nullptr;
+    const SwViewShell *pVSh = bForAnyView ? nullptr : GetShell();
     const bool bOutputToWindow(pVSh && (pVSh->GetWin() || pVSh->isOutputToWindow()));
 
     if (pVSh && !bOutputToWindow && pVSh->GetViewOptions()->IsBlackFont())
@@ -2419,7 +2435,13 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
 
             // no user defined color at paragraph or font background
             if ( ! pCol )
+            {
+                // The text keeps the automatic color, and each client picks black or white for the
+                // paper it draws.
+                if (bForAnyView)
+                    return false;
                 pCol = aGlobalRetoucheColor;
+            }
 
             if (pVSh && bOutputToWindow)
             {
@@ -2434,7 +2456,8 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
             }
 
             // change painting color depending of dark/bright background
-            if ((pVSh && !pVSh->GetWin()) || // ie. IsPrinting, see SwViewShell::GetWin()
+            if (bForAnyView ||
+                (pVSh && !pVSh->GetWin()) || // ie. IsPrinting, see SwViewShell::GetWin()
                 svtools::ColorConfig().GetColorValue(svtools::FONTCOLOR, false).nColor == COL_AUTO) // GetFontColor() uses the smart flag
             {
                 if ( pCol->IsDark() )

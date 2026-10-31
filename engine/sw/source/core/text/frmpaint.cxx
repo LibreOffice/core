@@ -18,7 +18,9 @@
  */
 
 #include <memory>
+#include <optional>
 #include <com/sun/star/text/HoriOrientation.hpp>
+#include <editeng/adjustitem.hxx>
 #include <editeng/pgrditem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <tgrditem.hxx>
@@ -33,6 +35,8 @@
 #include <viewopt.hxx>
 #include <frmatr.hxx>
 #include <txtfrm.hxx>
+#include <ndtxt.hxx>
+#include "inftxt.hxx"
 #include "itrpaint.hxx"
 #include "txtpaint.hxx"
 #include <flyfrm.hxx>
@@ -44,6 +48,11 @@
 #include <wrong.hxx>
 #include <vcl/lineinfo.hxx>
 #include <officecfg/Office/Writer.hxx>
+#include <frmtool.hxx>
+#include <VectorText.hxx>
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 
 #include <EnhancedPDFExportHelper.hxx>
 
@@ -66,6 +75,10 @@ class SwExtraPainter
     SwRect m_aRect;
     const SwTextFrame* m_pTextFrame;
     SwViewShell *m_pSh;
+    /// The device the text is measured on, and drawn on when there is no sink.
+    OutputDevice& m_rOut;
+    /// Takes what is drawn as primitives in place of m_rOut, when set.
+    sw::vector::TextSink* m_pSink;
     std::unique_ptr<SwFont> m_pFnt;
     const SwLineNumberInfo &m_rLineInf;
     SwTwips m_nX;
@@ -79,8 +92,8 @@ class SwExtraPainter
     SwExtraPainter& operator=(const SwExtraPainter&) = delete;
 
 public:
-    SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
-        const SwLineNumberInfo &rLnInf, const SwRect &rRct,
+    SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh, OutputDevice& rOut,
+        sw::vector::TextSink* pSink, const SwLineNumberInfo &rLnInf, const SwRect &rRct,
         sal_Int16 eHor, bool bLnNm );
     SwFont* GetFont() const { return m_pFnt.get(); }
     void IncLineNr() { ++m_nLineNr; }
@@ -104,12 +117,15 @@ public:
 }
 
 SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
+                                OutputDevice& rOut, sw::vector::TextSink* pSink,
                                 const SwLineNumberInfo &rLnInf, const SwRect &rRct,
                                 sal_Int16 eHor, bool bLineNum )
-    : m_aClip( pVwSh->GetWin() || pFrame->IsUndersized() ? pVwSh->GetOut() : nullptr )
+    : m_aClip( !pSink && ( pVwSh->GetWin() || pFrame->IsUndersized() ) ? pVwSh->GetOut() : nullptr )
     , m_aRect( rRct )
     , m_pTextFrame( pFrame )
     , m_pSh( pVwSh )
+    , m_rOut( rOut )
+    , m_pSink( pSink )
     , m_rLineInf( rLnInf )
     , m_nX(0)
     , m_nRedX(0)
@@ -140,7 +156,7 @@ SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
         assert(pFormat && "PaintExtraData without CharFormat");
         m_pFnt.reset( new SwFont(&pFormat->GetAttrSet(), &pFrame->GetDoc().getIDocumentSettingAccess()) );
         m_pFnt->Invalidate();
-        m_pFnt->ChgPhysFnt( m_pSh, *m_pSh->GetOut() );
+        m_pFnt->ChgPhysFnt(m_pSh, m_rOut);
         m_pFnt->SetVertical( 0_deg10, pFrame->IsVertical() );
     }
 
@@ -215,7 +231,8 @@ void SwExtraPainter::PaintExtra( SwTwips nY, tools::Long nAsc, tools::Long nMax,
         m_pFnt->SetSize( Size( 0, 200), m_pFnt->GetActual() );
     }
 
-    SwDrawTextInfo aDrawInf( m_pSh, *m_pSh->GetOut(), aTmp, 0, aTmp.getLength() );
+    SwDrawTextInfo aDrawInf(m_pSh, m_rOut, aTmp, 0, aTmp.getLength());
+    aDrawInf.SetPrimitiveSink(m_pSink);
     aDrawInf.SetSpace( 0 );
     aDrawInf.SetWrong( nullptr );
     aDrawInf.SetGrammarCheck( nullptr );
@@ -226,7 +243,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, tools::Long nAsc, tools::Long nMax,
     aDrawInf.SetIgnoreFrameRTL( true );
 
     bool bTooBig = m_pFnt->GetSize( m_pFnt->GetActual() ).Height() > nMax &&
-                m_pFnt->GetHeight( m_pSh, *m_pSh->GetOut() ) > nMax;
+                m_pFnt->GetHeight(m_pSh, m_rOut) > nMax;
     SwFont* pTmpFnt;
     if( bTooBig )
     {
@@ -255,7 +272,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, tools::Long nAsc, tools::Long nMax,
             aTmpPos.AdjustX( -(aSize.Width()) );
         // calculate rectangle containing the line number
         SwRect aRct( Point( aTmpPos.X(),
-                         aTmpPos.Y() - pTmpFnt->GetAscent( m_pSh, *m_pSh->GetOut() )
+                         aTmpPos.Y() - pTmpFnt->GetAscent(m_pSh, m_rOut)
                           ), aSize );
         if( !m_aRect.Contains( aRct ) )
         {
@@ -297,6 +314,17 @@ void SwExtraPainter::PaintRedline( SwTwips nY, tools::Long nMax, sal_Int16 nWord
             m_aClip.ChgClip( m_aRect, m_pTextFrame );
         }
     }
+
+    if ( m_pSink )
+    {
+        // With a sink, every line drawn here is a change bar.
+        m_pSink->addLines( basegfx::B2DPolyPolygon( basegfx::B2DPolygon{
+                               basegfx::B2DPoint( aStart.X(), aStart.Y() ),
+                               basegfx::B2DPoint( aEnd.X(), aEnd.Y() ) } ),
+                           SwModule::get()->GetRedlineMarkColor() );
+        return;
+    }
+
     auto popIt = m_pSh->GetOut()->ScopedPush(vcl::PushFlags::LINECOLOR);
     m_pSh->GetOut()->SetLineColor(nWordSpacing ? COL_LIGHTRED : SwModule::get()->GetRedlineMarkColor());
 
@@ -318,7 +346,38 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
         return;
 
     PaintOutlineContentVisibilityButton();
+    DrawExtraData( rRect, nullptr );
+}
 
+drawinglayer::primitive2d::Primitive2DContainer
+SwTextFrame::CreateExtraDataPrimitives( const Point& rOrigin ) const
+{
+    drawinglayer::primitive2d::Primitive2DContainer aPrimitives;
+    if ( !getRootFrame()->GetCurrShell() || !::IsExtraData( GetDoc() ) )
+        return aPrimitives;
+
+    // The paragraphs the page gives line numbers or change bars to.
+    const SwLineNumberInfo &rLineInfo = GetDoc().GetLineNumberInfo();
+    const bool bLineInBody = rLineInfo.IsPaintLineNumbers();
+    const bool bLineInFly = bLineInBody && rLineInfo.IsCountInFlys();
+    const bool bRedLine = static_cast<sal_Int16>(SwModule::get()->GetRedlineMarkPos())
+                          != text::HoriOrientation::NONE;
+    if ( !bRedLine
+         && ( IsInTab() || !( ( bLineInBody && IsInDocBody() ) || ( bLineInFly && IsInFly() ) ) ) )
+        return aPrimitives;
+
+    // The marks of every line are drawn: the area to draw covers the page and the frame.
+    SwRect aDrawArea( getFrameArea() );
+    if ( const SwPageFrame* pPage = FindPageFrame() )
+        aDrawArea.Union( pPage->getFrameArea() );
+
+    sw::vector::TextSink aSink( rOrigin );
+    DrawExtraData( aDrawArea, &aSink );
+    return aSink.take();
+}
+
+void SwTextFrame::DrawExtraData( const SwRect &rRect, sw::vector::TextSink* pSink ) const
+{
     SwDoc const& rDoc(GetDoc());
     const IDocumentRedlineAccess& rIDRA = rDoc.getIDocumentRedlineAccess();
     const SwLineNumberInfo &rLineInf = rDoc.GetLineNumberInfo();
@@ -340,7 +399,10 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
 
     sal_Int16 eHor = static_cast<sal_Int16>(SwModule::get()->GetRedlineMarkPos());
     SwViewShell *pSh = getRootFrame()->GetCurrShell();
-    bool bWordSpacingIndicator = officecfg::Office::Writer::Content::Display::ShowWordSpacingIndicator::get()
+    // A primitive sink takes the marks that every view shows. The word spacing indicator is a
+    // formatting mark of one view.
+    bool bWordSpacingIndicator = !pSink
+        && officecfg::Office::Writer::Content::Display::ShowWordSpacingIndicator::get()
         && pSh->GetViewOptions()->IsViewMetaChars();
     if (eHor != text::HoriOrientation::NONE
         && !bWordSpacingIndicator
@@ -362,13 +424,20 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
     if ( IsVertical() )
         SwitchVerticalToHorizontal( const_cast<SwRect&>(rRect) );
 
-    SwLayoutModeModifier aLayoutModeModifier( *pSh->GetOut() );
+    // A sink takes the marks as they are measured on the reference device, like the text.
+    OutputDevice& rOut = pSink ? pSh->GetRefDev() : *pSh->GetOut();
+    SwLayoutModeModifier aLayoutModeModifier( rOut );
     aLayoutModeModifier.Modify( false );
+    // The paint info of the lines below sets the layout mode of the device of the view. With a
+    // sink that device is not rOut, so its own layout mode is put back on return as well.
+    std::optional<SwLayoutModeModifier> oViewLayoutMode;
+    if ( pSink && pSh->GetOut() )
+        oViewLayoutMode.emplace( *pSh->GetOut() );
 
     // #i16816# tagged pdf support
-    SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, nullptr, *pSh->GetOut() );
+    SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, nullptr, rOut );
 
-    SwExtraPainter aExtra( this, pSh, rLineInf, rRect, eHor, bLineNum );
+    SwExtraPainter aExtra( this, pSh, rOut, pSink, rLineInf, rRect, eHor, bLineNum );
 
     if( HasPara() )
     {
@@ -456,7 +525,7 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
             ( aExtra.HasNumber() || aExtra.HasDivider() ) )
         {
             aExtra.PaintExtra( getFrameArea().Top()+getFramePrintArea().Top(), aExtra.GetFont()
-                ->GetAscent( pSh, *pSh->GetOut() ), getFramePrintArea().Height(), bRedLine );
+                ->GetAscent( pSh, rOut ), getFramePrintArea().Height(), bRedLine );
         }
         else if( bRedLine )
             aExtra.PaintRedline( getFrameArea().Top()+getFramePrintArea().Top(), getFramePrintArea().Height() );
@@ -464,6 +533,17 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
 
     const_cast<SwRect&>(rRect) = rOldRect;
 
+}
+
+bool SwTextFrame::IsCutByUpper() const
+{
+    // The content reaches as far as the union frame, which is the frame widened by a negative
+    // indent.
+    SwRectFnSet aRectFnSet(*this);
+    const SwRect aPaintArea(GetPaintArea());
+    const SwRect aReach(UnionFrame());
+    return aRectFnSet.XDiff(aRectFnSet.GetLeft(aPaintArea), aRectFnSet.GetLeft(aReach)) > 0
+           || aRectFnSet.XDiff(aRectFnSet.GetRight(aReach), aRectFnSet.GetRight(aPaintArea)) > 0;
 }
 
 SwRect SwTextFrame::GetPaintSwRect()
@@ -742,18 +822,8 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
     OSL_ENSURE( ! IsSwapped(), "A frame is swapped before Paint" );
     SwRect aOldRect( rRect );
 
-    // Whether the rect to paint in ends before the content may reach. It is narrowed by every cell,
-    // fly and column on the way up (SwFrame::GetPaintArea), while the content goes as far as the
-    // union frame - the frame widened by a negative indent. Read before the frame is swapped.
-    bool bCutByUpper;
-    {
-        SwRectFnSet aRectFnSet(*this);
-        const SwRect aPaintArea(GetPaintArea());
-        const SwRect aReach(UnionFrame());
-        bCutByUpper
-            = aRectFnSet.XDiff(aRectFnSet.GetLeft(aPaintArea), aRectFnSet.GetLeft(aReach)) > 0
-              || aRectFnSet.XDiff(aRectFnSet.GetRight(aReach), aRectFnSet.GetRight(aPaintArea)) > 0;
-    }
+    // Read before the frame is swapped.
+    const bool bCutByUpper = IsCutByUpper();
 
     {
         SwSwapIfNotSwapped swap(const_cast<SwTextFrame *>(this));
@@ -825,6 +895,131 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
 
     assert(!oTaggedLabel); // must have been closed if opened
     assert(!isPDFTaggingEnabled || oTaggedParagraph || rRect.GetIntersection(getFrameArea()) != getFrameArea()); // must have been created during complete paint (PDF export is always complete paint)
+}
+
+namespace
+{
+drawinglayer::primitive2d::TextPortionAlign alignOf(const SwTextFrame& rFrame)
+{
+    switch (rFrame.GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust().GetAdjust())
+    {
+        case SvxAdjust::Right:
+            return drawinglayer::primitive2d::TextPortionAlign::Right;
+        case SvxAdjust::Center:
+            return drawinglayer::primitive2d::TextPortionAlign::Center;
+        case SvxAdjust::Block:
+            return drawinglayer::primitive2d::TextPortionAlign::Block;
+        default:
+            return drawinglayer::primitive2d::TextPortionAlign::Left;
+    }
+}
+}
+
+drawinglayer::primitive2d::Primitive2DContainer
+SwTextFrame::CreateTextPrimitives(
+    const Point& rOrigin, drawinglayer::primitive2d::Primitive2DContainer& rOverObjects) const
+{
+    drawinglayer::primitive2d::Primitive2DContainer aPrimitives;
+    SwViewShell* pShell = getRootFrame()->GetCurrShell();
+    if (!pShell || IsLocked() || IsEmpty())
+        return aPrimitives;
+
+    SwTextFrame* pThis = const_cast<SwTextFrame*>(this);
+    if (!HasPara())
+    {
+        pThis->GetFormatted(true);
+        if (IsEmpty() || !HasPara())
+            return aPrimitives;
+    }
+
+    TextFrameLockGuard aLock(pThis);
+
+    // The lines are drawn whole: the area to draw covers the page and the frame, which can reach
+    // past the page.
+    SwRect aDrawArea(getFrameArea());
+    aDrawArea.Union(UnionFrame());
+    if (const SwPageFrame* pPage = FindPageFrame())
+        aDrawArea.Union(pPage->getFrameArea());
+
+    // Where the area the frame is painted in ends before the lines may reach, the lines are cut
+    // at its edges, as when painting. A frame too small for its lines cuts them on every side,
+    // and an upper narrower than the frame cuts them on the left and on the right.
+    const bool bUndersized = IsUndersized();
+    const bool bCutByUpper = IsCutByUpper();
+    SwRect aMaskArea(aDrawArea);
+    if (bUndersized)
+        aMaskArea = GetPaintArea();
+    else if (bCutByUpper)
+    {
+        SwRectFnSet aRectFnSet(*this);
+        const SwRect aPaintArea(GetPaintArea());
+        aRectFnSet.SetLeft(aMaskArea, aRectFnSet.GetLeft(aPaintArea));
+        aRectFnSet.SetRight(aMaskArea, aRectFnSet.GetRight(aPaintArea));
+    }
+
+    {
+        SwSwapIfNotSwapped aSwap(pThis);
+
+        if (IsVertical())
+            SwitchVerticalToHorizontal(aDrawArea);
+        if (IsRightToLeft())
+            SwitchRTLtoLTR(aDrawArea);
+
+        // The area the lines wrap in, as the line iterator measures it.
+        SwRect aTextArea(getFramePrintArea());
+        aTextArea.Pos(aTextArea.Pos() + getFrameArea().Pos());
+
+        sw::vector::TextSink aSink(rOrigin, aTextArea, alignOf(*this));
+        SwTextPaintInfo aInfo(pThis, aDrawArea, aSink);
+        aInfo.GetTextFly().SetTopRule();
+
+        SwTextPainter aLine(pThis, &aInfo);
+        aInfo.GetTextFly().Relax();
+
+        SwSaveClip aClip(nullptr);
+        std::optional<SwTaggedPDFHelper> oTaggedLabel;
+        std::optional<SwTaggedPDFHelper> oTaggedParagraph;
+
+        aLine.TwipsToLine(aDrawArea.Top() + 1);
+        const SwTwips nBottom = aDrawArea.Bottom();
+        // The drop cap is a part of the first line that holds text.
+        bool bDropLineSeen = false;
+        bool bDropDrawn = false;
+        do
+        {
+            aSink.startLine(aLine.GetLeftMargin(), aLine.GetLineWidth(),
+                            aLine.GetCurr()->GetAscent(), aLine.GetCurr()->Height());
+            aLine.DrawTextLine(aDrawArea, aClip, bUndersized, bCutByUpper, oTaggedLabel,
+                               oTaggedParagraph, /*isPDFTaggingEnabled=*/false);
+            if (!bDropLineSeen && aLine.GetLength())
+            {
+                bDropLineSeen = true;
+                if (aLine.IsPaintDrop())
+                {
+                    // Drawing the drop cap moves the walk to the line of the drop cap, so the
+                    // walk goes back to the line it drew last.
+                    const SwLineLayout* pDrawn = aLine.GetCurr();
+                    aLine.PaintDropPortion();
+                    bDropDrawn = true;
+                    aLine.Top();
+                    while (aLine.GetCurr() != pDrawn && aLine.Next())
+                        ;
+                }
+            }
+        } while (aLine.Next() && aLine.Y() <= nBottom);
+
+        if (aLine.IsPaintDrop() && !bDropDrawn)
+            aLine.PaintDropPortion();
+
+        aPrimitives = aSink.take();
+        rOverObjects = aSink.takeOverObjects();
+    }
+
+    if ((bUndersized || bCutByUpper) && !aPrimitives.empty())
+        aPrimitives = drawinglayer::primitive2d::Primitive2DContainer{ sw::vector::createMask(
+            aMaskArea, rOrigin, std::move(aPrimitives)) };
+
+    return aPrimitives;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
