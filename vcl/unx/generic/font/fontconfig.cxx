@@ -167,19 +167,24 @@ typedef std::pair<FcChar8*, FcChar8*> lang_and_element;
 class FontCfgWrapper
 {
     FcFontSet* m_pFontSet;
+    FcFontSet* m_pTempDevFontSet;
     bool m_bRestrictFontSetToApplicationFonts;
 
     FontCfgWrapper();
     ~FontCfgWrapper();
 
+    static void addFontSet( FcFontSet*, FcSetName, int nFirstFont = 0 );
+
 public:
     static FontCfgWrapper& get();
     static void release();
 
-    void addFontSet( FcSetName );
+    void addTempDevFont(const OString& rFileName);
+    void removeTempDevFont(std::string_view aFileName);
 
     FcFontSet* getFontSet();
     void replaceFontSet(FcFontSet* pFilteredFontSet);
+    FcPattern* match(FcConfig* pConfig, FcPattern* pPattern, FcResult* pResult);
 
     void clear();
 
@@ -205,6 +210,7 @@ private:
 
 FontCfgWrapper::FontCfgWrapper()
     : m_pFontSet(nullptr)
+    , m_pTempDevFontSet(nullptr)
     , m_bRestrictFontSetToApplicationFonts(false)
 {
     FcInit();
@@ -214,7 +220,7 @@ FontCfgWrapper::FontCfgWrapper()
 #define FC_FONT_WRAPPER "fontwrapper"
 #endif
 
-void FontCfgWrapper::addFontSet( FcSetName eSetName )
+void FontCfgWrapper::addFontSet( FcFontSet* pFontSet, FcSetName eSetName, int nFirstFont )
 {
     // Add only acceptable fonts to our config, for future fontconfig use.
     FcFontSet* pOrig = FcConfigGetFonts( FcConfigGetCurrent(), eSetName );
@@ -222,7 +228,7 @@ void FontCfgWrapper::addFontSet( FcSetName eSetName )
         return;
 
     // filter the font sets to remove obsolete faces
-    for( int i = 0; i < pOrig->nfont; ++i )
+    for( int i = nFirstFont; i < pOrig->nfont; ++i )
     {
         FcPattern* pPattern = pOrig->fonts[i];
         // #i115131# ignore non-scalable fonts
@@ -246,10 +252,16 @@ void FontCfgWrapper::addFontSet( FcSetName eSetName )
             continue;
 
         FcPatternReference( pPattern );
-        FcFontSetAdd( m_pFontSet, pPattern );
+        FcFontSetAdd( pFontSet, pPattern );
     }
 
     // TODO?: FcFontSetDestroy( pOrig );
+}
+
+FcPattern* FontCfgWrapper::match(FcConfig* pConfig, FcPattern* pPattern, FcResult* pResult)
+{
+    FcFontSet* aFontSets[] = { getFontSet(), m_pTempDevFontSet };
+    return FcFontSetMatch(pConfig, aFontSets, 2, pPattern, pResult);
 }
 
 namespace
@@ -355,9 +367,9 @@ FcFontSet* FontCfgWrapper::getFontSet()
         // available system-wide or bundled with our application, then we
         // prefer via stable-sort the first one we see. Load application fonts
         // first to prefer the one we bundle in the application in that case.
-        addFontSet( FcSetApplication );
+        addFontSet( m_pFontSet, FcSetApplication );
         if (!m_bRestrictFontSetToApplicationFonts)
-            addFontSet( FcSetSystem );
+            addFontSet( m_pFontSet, FcSetSystem );
 
         std::stable_sort(m_pFontSet->fonts,m_pFontSet->fonts+m_pFontSet->nfont,SortFont());
     }
@@ -514,6 +526,11 @@ void FontCfgWrapper::clear()
     {
         FcFontSetDestroy( m_pFontSet );
         m_pFontSet = nullptr;
+    }
+    if (m_pTempDevFontSet)
+    {
+        FcFontSetDestroy(m_pTempDevFontSet);
+        m_pTempDevFontSet = nullptr;
     }
     m_pLanguageTag.reset();
 }
@@ -805,8 +822,12 @@ void FontConfigManager::addFontconfigDir( const OString& rDirName )
     }
 }
 
-void FontConfigManager::addFontconfigFile( const OString& rFileName )
+void FontCfgWrapper::addTempDevFont( const OString& rFileName )
 {
+    // fontconfig appends the fonts of the file to its application font set
+    FcFontSet* pAppFonts = FcConfigGetFonts(FcConfigGetCurrent(), FcSetApplication);
+    const int nFirstFont = pAppFonts ? pAppFonts->nfont : 0;
+
     const char* pFileName = rFileName.getStr();
     bool bFileOk = (FcConfigAppFontAddFile(FcConfigGetCurrent(), reinterpret_cast<FcChar8 const *>(pFileName) ) == FcTrue);
 
@@ -815,13 +836,17 @@ void FontConfigManager::addFontconfigFile( const OString& rFileName )
     if( !bFileOk )
         return;
 
-    // FIXME: we want to add only the newly added font not re-add the whole
-    // application font set.
-    FontCfgWrapper& rWrapper = FontCfgWrapper::get();
-    rWrapper.addFontSet( FcSetApplication );
+    if (!m_pTempDevFontSet)
+        m_pTempDevFontSet = FcFontSetCreate();
+    addFontSet(m_pTempDevFontSet, FcSetApplication, nFirstFont);
 }
 
-void FontConfigManager::removeFontconfigFile(std::string_view aFileName)
+void FontConfigManager::addFontconfigFile( const OString& rFileName )
+{
+    FontCfgWrapper::get().addTempDevFont(rFileName);
+}
+
+void FontCfgWrapper::removeTempDevFont(std::string_view aFileName)
 {
     FcFontSet* pOrig = FcConfigGetFonts(FcConfigGetCurrent(), FcSetApplication);
     if (!pOrig)
@@ -850,8 +875,26 @@ void FontConfigManager::removeFontconfigFile(std::string_view aFileName)
                                reinterpret_cast<FcChar8 const*>(thisFilename.getStr()));
     }
 
-    FontCfgWrapper& rWrapper = FontCfgWrapper::get();
-    rWrapper.addFontSet( FcSetApplication );
+    if (!m_pTempDevFontSet)
+        return;
+
+    int nKept = 0;
+    for (int i = 0; i < m_pTempDevFontSet->nfont; ++i)
+    {
+        FcPattern* pPattern = m_pTempDevFontSet->fonts[i];
+        FcChar8* file = nullptr;
+        if (FcPatternGetString(pPattern, FC_FILE, 0, &file) == FcResultMatch
+            && aFileName == reinterpret_cast<char*>(file))
+            FcPatternDestroy(pPattern);
+        else
+            m_pTempDevFontSet->fonts[nKept++] = pPattern;
+    }
+    m_pTempDevFontSet->nfont = nKept;
+}
+
+void FontConfigManager::removeFontconfigFile(std::string_view aFileName)
+{
+    FontCfgWrapper::get().removeTempDevFont(aFileName);
 }
 
 static void addtopattern(FcPattern *pPattern,
@@ -1146,8 +1189,7 @@ void FontConfigManager::Substitute(vcl::font::FontSelectPattern &rPattern, OUStr
 
     // process the result of the fontconfig query
     FcResult eResult = FcResultNoMatch;
-    FcFontSet* pFontSet = rWrapper.getFontSet();
-    FcPattern* pResult = FcFontSetMatch(FcConfigGetCurrent(), &pFontSet, 1, pPattern, &eResult);
+    FcPattern* pResult = rWrapper.match(FcConfigGetCurrent(), pPattern, &eResult);
     FcPatternDestroy( pPattern );
 
     FcFontSet*  pSet = nullptr;
@@ -1377,8 +1419,7 @@ std::unique_ptr<FontConfigFontOptions> FontConfigManager::getFontOptions(const F
     FcDefaultSubstitute(pPattern);
 
     FcResult eResult = FcResultNoMatch;
-    FcFontSet* pFontSet = rWrapper.getFontSet();
-    if (FcPattern* pResult = FcFontSetMatch(pConfig, &pFontSet, 1, pPattern, &eResult))
+    if (FcPattern* pResult = rWrapper.match(pConfig, pPattern, &eResult))
     {
         rWrapper.m_aCachedFontOptions.cache(aKey, pResult);
         pOptions.reset(new FontConfigFontOptions(pResult));
@@ -1414,8 +1455,7 @@ bool FontConfigManager::matchFont(FontAttributes& rDFA, const css::lang::Locale&
     FcConfigSubstitute(pConfig, pPattern, FcMatchPattern);
     FcDefaultSubstitute(pPattern);
     FcResult eResult = FcResultNoMatch;
-    FcFontSet *pFontSet = rWrapper.getFontSet();
-    FcPattern* pResult = FcFontSetMatch(pConfig, &pFontSet, 1, pPattern, &eResult);
+    FcPattern* pResult = rWrapper.match(pConfig, pPattern, &eResult);
     if( pResult )
     {
         FcFontSet* pSet = FcFontSetCreate();
