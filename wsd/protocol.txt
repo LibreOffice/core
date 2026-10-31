@@ -207,6 +207,10 @@ insertfile name=<name> type=<type>
 
         type = 'comparedocuments': The file has been previously uploaded using insertfile POST
 
+        type = 'videobackground': The file has been previously uploaded using insertfile POST.
+                                  It becomes the looping, muted video background of the master
+                                  slide of the current slide, replacing any it had.
+
         type = 'comparedocumentsurl': The file is downloaded from the URL provided in 'name'.
                                       coolwsd downloads a URL on the WOPI host of the document
                                       itself, with the WOPI proof headers, and the core gets the

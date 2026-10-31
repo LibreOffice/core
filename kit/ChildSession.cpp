@@ -3190,6 +3190,15 @@ void ChildSession::postInsertCommand(const std::string& type, const std::string&
             "}"
         "}";
     }
+    else if (type == "videobackground")
+    {
+        command = ".uno:InsertVideoBackground";
+        arguments = "{"
+            "\"FileName\":{"
+                "\"type\":\"string\","
+                "\"value\":\"" + escapedUrl + "\""
+            "}}";
+    }
     else if (type == "comparedocuments" || type == "comparedocumentsurl")
     {
         command = ".uno:CompareDocuments";
@@ -3467,6 +3476,7 @@ bool ChildSession::insertFile(const StringVector& tokens)
     if (type == "graphic" ||
         type == "graphicurl" ||
         type == "selectbackground" ||
+        type == "videobackground" ||
         type == "comparedocuments" ||
         type == "comparedocumentsurl" ||
         type == "multimedia" ||
@@ -3476,8 +3486,8 @@ bool ChildSession::insertFile(const StringVector& tokens)
 
         if (!Util::isMobileApp())
         {
-            if (type == "graphic" || type == "selectbackground" || type == "multimedia" ||
-                type == "comparedocuments")
+            if (type == "graphic" || type == "selectbackground" || type == "videobackground" ||
+                type == "multimedia" || type == "comparedocuments")
             {
                 std::string jailDoc = getJailDocRoot();
                 url = "file://" + jailDoc + "insertfile/" + name;
@@ -3503,7 +3513,7 @@ bool ChildSession::insertFile(const StringVector& tokens)
         else
         {
             assert(type == "graphic" || type == "multimedia" || type == "selectbackground" ||
-                   type == "comparedocuments");
+                   type == "videobackground" || type == "comparedocuments");
             std::string binaryData;
             macaron::Base64::Decode(data, binaryData);
 
