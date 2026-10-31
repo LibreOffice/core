@@ -900,6 +900,10 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
         SwNodes::GoNext(rTmp.GetPoint());
     }
 
+    const OUString sAutoName = pTAFormat ? pTAFormat->SvxAutoFormatData::GetName() : "";
+    if (!sAutoName.isEmpty() && sAutoName != SvxResId(RID_SVXSTR_TBLAFMT_NONE))
+        rNdTable.SetTableStyleName(TableStyleName(sAutoName));
+
     if( pUndo )
     {
         GetIDocumentUndoRedo().EndUndo( SwUndoId::TEXTTOTABLE, nullptr );
