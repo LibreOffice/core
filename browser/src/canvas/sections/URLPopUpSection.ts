@@ -296,10 +296,11 @@ class URLPopUpSection extends HTMLObjectSection {
     }
 
     public static closeURLPopUp() {
-		if (!URLPopUpSection.isOpen())
+		const section = URLPopUpSection.getCurrent();
+		if (!section)
 			return;
 		// the focus would stay on a removed element, out of the keyboard's reach
-		const popup = URLPopUpSection.getCurrent().getHTMLObject();
+		const popup = section.getHTMLObject();
 		const hadFocus = popup.contains(document.activeElement);
 		app.sectionContainer.removeSection(URLPopUpSection.sectionName);
 		if (hadFocus)
