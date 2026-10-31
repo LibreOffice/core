@@ -219,11 +219,8 @@ void ScCsvGrid::ApplyLayout( const ScCsvLayoutData& rOldData )
 
 void ScCsvGrid::SetFirstImportedLine( sal_Int32 nLine )
 {
-    ImplDrawFirstLineSep( false );
     mnFirstImpLine = nLine;
-    ImplDrawFirstLineSep( true );
-    ImplDrawGridDev();
-    Repaint();
+    Repaint(true);
 }
 
 sal_Int32 ScCsvGrid::GetNoScrollCol( sal_Int32 nPos ) const
@@ -1130,10 +1127,11 @@ void ScCsvGrid::ImplDrawColumnHeader( OutputDevice& rOutDev, sal_uInt32 nColInde
     rOutDev.DrawLine( Point( nX2, 0 ), Point( nX2, nHdrHt ) );
 }
 
-void ScCsvGrid::ImplDrawCellText( const Point& rPos, const OUString& rText )
+void ScCsvGrid::ImplDrawCellText( const Point& rPos, const OUString& rText, const Color& rTextColor )
 {
     OUString aPlainText = rText.replaceAll( "\t", " " );
     aPlainText = aPlainText.replaceAll( "\n", " " );
+    mpEditEngine->SetDefaultItem(SvxColorItem(rTextColor, EE_CHAR_COLOR));
     mpEditEngine->SetPaperSize( maEdEngSize );
     mpEditEngine->SetTextCurrentDefaults(aPlainText);
     mpEditEngine->DrawText_ToPosition(*mpBackgrDev, rPos);
@@ -1144,8 +1142,7 @@ void ScCsvGrid::ImplDrawCellText( const Point& rPos, const OUString& rText )
         sal_Int32 nX1 = rPos.X() + GetCharWidth() * nCharIx;
         sal_Int32 nX2 = nX1 + GetCharWidth() - 2;
         sal_Int32 nY = rPos.Y() + GetLineHeight() / 2;
-        Color aColor( maTextColor );
-        mpBackgrDev->SetLineColor( aColor );
+        mpBackgrDev->SetLineColor(rTextColor);
         mpBackgrDev->DrawLine( Point( nX1, nY ), Point( nX2, nY ) );
         mpBackgrDev->DrawLine( Point( nX2 - 2, nY - 2 ), Point( nX2, nY ) );
         mpBackgrDev->DrawLine( Point( nX2 - 2, nY + 2 ), Point( nX2, nY ) );
@@ -1157,8 +1154,7 @@ void ScCsvGrid::ImplDrawCellText( const Point& rPos, const OUString& rText )
         sal_Int32 nX1 = rPos.X() + GetCharWidth() * nCharIx;
         sal_Int32 nX2 = nX1 + GetCharWidth() - 2;
         sal_Int32 nY = rPos.Y() + GetLineHeight() / 2;
-        Color aColor( maTextColor );
-        mpBackgrDev->SetLineColor( aColor );
+        mpBackgrDev->SetLineColor(rTextColor);
         mpBackgrDev->DrawLine( Point( nX1, nY ), Point( nX2, nY ) );
         mpBackgrDev->DrawLine( Point( nX1 + 2, nY - 2 ), Point( nX1, nY ) );
         mpBackgrDev->DrawLine( Point( nX1 + 2, nY + 2 ), Point( nX1, nY ) );
@@ -1200,7 +1196,9 @@ void ScCsvGrid::ImplDrawColumnBackgr( sal_uInt32 nColIndex )
     ImplDrawFirstLineSep( true );
 
     // cell texts
-    mpEditEngine->SetDefaultItem( SvxColorItem( maTextColor, EE_CHAR_COLOR ) );
+    Color aSkippedTextColor(maTextColor);
+    // tdf#163639 - draw rows above the first imported line with a dimmed text color
+    aSkippedTextColor.Merge(maBackColor, 128);
     size_t nLineCount = ::std::min( static_cast< size_t >( GetLastVisLine() - GetFirstVisLine() + 1 ), maTexts.size() );
     // #i67432# cut string to avoid edit engine performance problems with very large strings
     sal_Int32 nFirstVisPos = ::std::max( GetColumnPos( nColIndex ), GetFirstVisPos() );
@@ -1215,7 +1213,9 @@ void ScCsvGrid::ImplDrawColumnBackgr( sal_uInt32 nColIndex )
         {
             const OUString& rStr = rStrVec[ nColIndex ];
             OUString aText = rStr.copy( nStrPos, ::std::min( nStrLen, rStr.getLength() - nStrPos) );
-            ImplDrawCellText( Point( nStrX, GetY( GetFirstVisLine() + nLine ) ), aText );
+            const sal_Int32 nGridLine = GetFirstVisLine() + nLine;
+            ImplDrawCellText(Point(nStrX, GetY(nGridLine)), aText,
+                             nGridLine < mnFirstImpLine ? aSkippedTextColor : maTextColor);
         }
     }
 

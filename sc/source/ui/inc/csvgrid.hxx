@@ -282,7 +282,7 @@ private:
     void                        ImplDrawColumnHeader( OutputDevice& rOutDev, sal_uInt32 nColIndex, Color aFillColor );
 
     /** Draws the text at the specified position to maBackgrDev. */
-    void                        ImplDrawCellText( const Point& rPos, const OUString& rText );
+    void                        ImplDrawCellText( const Point& rPos, const OUString& rText, const Color& rTextColor );
     /** Draws the "first imported line" separator to maBackgrDev (or erases, if bSet is false). */
     void                        ImplDrawFirstLineSep( bool bSet );
     /** Draws the column with index nColIndex to maBackgrDev. */
