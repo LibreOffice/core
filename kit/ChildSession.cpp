@@ -5451,8 +5451,9 @@ bool ChildSession::moveSelectedClientParts(const StringVector& tokens)
     // Optional: re-anchor the named section to the first moved slide so
     // the dragged slide becomes that section's new first slide.
     int intoSection = -1;
-    for (size_t i = 2; i < tokens.size(); ++i)
-        getTokenInteger(tokens[i], "intoSection", intoSection);
+    int value;
+    if (getTokenInteger(tokens, "intoSection", value))
+        intoSection = value;
 
     getLOKitDocument()->setView(_viewId);
 
