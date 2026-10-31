@@ -1458,6 +1458,12 @@ styles: {"styleFamily": ["styles in family"], etc. }
 statechanged: <key>=<value>
 
     Notifies client of state changed events of <key>.
+    For a text document the JSON payload has a pageids array: the id of
+    each page as a string, in the order of pagerectangles. A page keeps its
+    id while it exists, and .uno:VectorPrimitives names a page by it. When
+    the ids change, also with the same document size, a new status goes
+    out. A document that has no page ids leaves the field out.
+
     Eg: 'statechanged: .uno:Undo=enabled'
 
     The security-label lifecycle event is a special statechanged whose value is a

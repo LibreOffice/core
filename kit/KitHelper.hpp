@@ -229,6 +229,22 @@ namespace LOKitHelper
         if (type == COKitDocumentType::SPREADSHEET || type == COKitDocumentType::PRESENTATION || type == COKitDocumentType::DRAWING)
             fetchPartsData(loKitDocument, resultInfo, partsCount, mode);
 
+        // The ids that the vector primitives name the parts by, in the order of the parts, as
+        // pageids. An id names its part for as long as the part exists. The answer holds them as
+        // the array "ids", which is empty for a document that has none.
+        const std::string partIds(loKitDocument->getCommandValues(".uno:VectorPartIds"));
+        Poco::JSON::Object::Ptr partIdsObject;
+        if (JsonUtil::parseJSON(partIds, partIdsObject) && partIdsObject)
+        {
+            const Poco::JSON::Array::Ptr ids = partIdsObject->getArray("ids");
+            if (ids && ids->size() > 0)
+            {
+                std::ostringstream os;
+                ids->stringify(os);
+                resultInfo["pageids"] = os.str();
+            }
+        }
+
         resultInfo["mode"] = std::to_string(mode);
         resultInfo["partHasComments"] = std::move(hasComments);
 
