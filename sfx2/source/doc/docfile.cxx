@@ -2063,11 +2063,37 @@ uno::Reference< embed::XStorage > const & SfxMedium::GetZipStorageToSign_Impl( b
                     ZIP_STORAGE_FORMAT_STRING, pImpl->xStream, css::embed::ElementModes::READWRITE,
                     {}, IsRepairPackage());
             }
-            else if ( pImpl->xInputStream.is() )
+            else
             {
-                pImpl->m_xZipStorage
-                    = ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
-                        ZIP_STORAGE_FORMAT_STRING, pImpl->xInputStream, {}, IsRepairPackage());
+                uno::Reference<io::XStream> xDecryptedPackage;
+                uno::Any aComponentData = pImpl->m_aArgs[u"ComponentData"_ustr];
+
+                if (aComponentData.hasValue())
+                {
+                    comphelper::SequenceAsHashMap aComponentDataMap(
+                        aComponentData.get<uno::Sequence<beans::NamedValue>>());
+
+                    uno::Any aDecryptedPackage =
+                        aComponentDataMap[u"DecryptedPackage"_ustr];
+
+                    aDecryptedPackage >>= xDecryptedPackage;
+                }
+
+                if (xDecryptedPackage.is())
+                {
+                    pImpl->m_xZipStorage =
+                        ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
+                            ZIP_STORAGE_FORMAT_STRING,
+                            xDecryptedPackage->getInputStream(),
+                            {}, IsRepairPackage());
+                }
+                else if (pImpl->xInputStream.is())
+                {
+                    pImpl->m_xZipStorage =
+                        ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
+                            ZIP_STORAGE_FORMAT_STRING, pImpl->xInputStream,
+                            {}, IsRepairPackage());
+                }
             }
         }
         catch( const uno::Exception& )
