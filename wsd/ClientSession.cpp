@@ -79,6 +79,7 @@
 #include <ios>
 #include <map>
 #include <memory>
+#include <numeric>
 #include <sstream>
 #include <string>
 #include <string_view>
@@ -2701,14 +2702,16 @@ void ClientSession::sendLastViewPosition(const std::shared_ptr<DocumentBroker>& 
     sendTextFrame(oss.str());
 }
 
+// The ends the kit reports are thin upright bars, and a corner of one can fall on the next
+// character, so selecttext aims at the middle of the height.
+static int middleY(const Util::Rectangle& rectangle)
+{
+    return std::midpoint(rectangle.getTop(), rectangle.getBottom());
+}
+
 void ClientSession::restoreLastViewSelection(const std::shared_ptr<DocumentBroker>& docBroker)
 {
     const DocumentBroker::ViewPosition& position = docBroker->getLastViewPosition();
-
-    // The ends the kit reports are thin upright bars, and a corner of one can fall on the
-    // next character, so selecttext aims at the middle of the height.
-    const auto middleY = [](const Util::Rectangle& r)
-    { return r.getTop() + r.getHeight() / 2; };
 
     if (position.hasCellAddress())
     {
