@@ -45,3 +45,31 @@
  	}
  
  	int contactIdCount = b2GetIdCount( &world->contactIdPool );
+--- box2d/src/platform.h	2026-10-31 11:42:32.045443968 +0100
++++ box2d/src/platform.h	2026-10-31 11:43:31.553106304 +0100
+@@ -296,11 +296,6 @@
+ 	return index;
+ }
+ 
+-static inline int b2PopCount64( uint64_t block )
+-{
+-	return (int)__popcnt64( block );
+-}
+-
+ #else
+ 
+ static inline uint32_t b2CTZ32( uint32_t block )
+--- box2d/src/table.c	2026-11-02 14:27:38.249418541 +0100
++++ box2d/src/table.c	2026-11-02 14:28:03.489289541 +0100
+@@ -228,11 +228,5 @@
+ int b2CountSetBits( b2BitSet* bitSet )
+ {
+ 	int popCount = 0;
+-	uint32_t blockCount = bitSet->blockCount;
+-	for ( uint32_t i = 0; i < blockCount; ++i )
+-	{
+-		popCount += b2PopCount64( bitSet->bits[i] );
+-	}
+-
+ 	return popCount;
+ }
