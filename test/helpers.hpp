@@ -148,15 +148,6 @@ private:
     std::vector<Part> _parts;
 };
 
-// Sets read / write timeout for the given file descriptor.
-void setSocketTimeOut(int socketFD, int timeMS);
-
-// Sets socket's blocking mode. true for blocking, false for non blocking.
-void setSocketBlockingMode(int socketFD, bool blocking);
-
-// Creates a socket and connects it to a local server. Returns the file descriptor.
-int connectToLocalServer(int portNumber, int socketTimeOutMS, bool blocking);
-
 /// Returns true iff built with SSL and it is successfully initialized.
 bool haveSsl();
 
