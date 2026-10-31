@@ -96,10 +96,10 @@ std::string genRandomString(const size_t size)
 {
     std::string text;
     text.reserve(size);
-    for (size_t i = 0; i < size; ++i)
+    while (text.size() < size)
     {
         // Sensible characters only, avoiding 0x7f DEL
-        char c = static_cast<char>('!' + Util::rng::getNext() % 94);
+        const char c = static_cast<char>('!' + Util::rng::getNext() % 94);
 
         // remove markdown-indicators for now
         switch (c)
@@ -125,7 +125,6 @@ std::string genRandomString(const size_t size)
             case '>':
             // table
             case '|':
-                i--;
                 break;
             default:
                 text += c;
