@@ -53,7 +53,7 @@ ScAttrArray::ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument& rDoc, ScAttr
     nTab( nNewTab ),
     rDocument( rDoc )
 {
-    if ( nCol == -1 || !pDefaultColAttrArray || pDefaultColAttrArray->mvData.empty() )
+    if ( !pDefaultColAttrArray || pDefaultColAttrArray->mvData.empty() )
         return;
 
     ScAddress aAdrStart( nCol, 0, nTab );
@@ -63,6 +63,8 @@ ScAttrArray::ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument& rDoc, ScAttr
     {
         mvData[nIdx].nEndRow = pDefaultColAttrArray->mvData[nIdx].nEndRow;
         mvData[nIdx].setScPatternAttr(pDefaultColAttrArray->mvData[nIdx].getScPatternAttr());
+        if ( nCol == -1 )
+            continue;
         bool bNumFormatChanged = false;
         if ( ScGlobal::CheckWidthInvalidate( bNumFormatChanged,
              mvData[nIdx].getScPatternAttr()->GetItemSet(),

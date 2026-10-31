@@ -31,6 +31,8 @@
 #include <funcdesc.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
+#include <stlpool.hxx>
+#include <stlsheet.hxx>
 
 #include <columniterator.hxx>
 #include <scopetools.hxx>
@@ -1539,6 +1541,59 @@ CPPUNIT_TEST_FIXTURE(Test, testLastChangedColFlagsWidth)
     CPPUNIT_ASSERT_EQUAL(INITIALCOLCOUNT, m_pDoc->GetAllocatedColumnsCount(0));
     // But the flags are changed.
     CPPUNIT_ASSERT_EQUAL(m_pDoc->MaxCol(), m_pDoc->GetLastChangedColFlagsWidth(0));
+
+    m_pDoc->DeleteTab(0);
+}
+
+namespace {
+
+FontWeight getFontWeight(const ScDocument& rDoc, SCCOL nCol, SCROW nRow)
+{
+    vcl::Font aFont;
+    rDoc.GetPattern(nCol, nRow, 0)->fillFontOnly(aFont);
+    return aFont.GetWeightMaybeAskConfig();
+}
+
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testUnallocatedColumnsFollowStyleChanges)
+{
+    m_pDoc->InsertTab(0, u"Tab1"_ustr);
+    ScStyleSheetPool* pPool = m_pDoc->GetStyleSheetPool();
+    pPool->CreateStandardStyles();
+    m_pDoc->getCellAttributeHelper().UpdateAllStyleSheets(*m_pDoc);
+    auto pDefault = static_cast<ScStyleSheet*>(
+        pPool->Find(ScResId(STR_STYLENAME_STANDARD), SfxStyleFamily::Para));
+    CPPUNIT_ASSERT(pDefault);
+
+    // Columns that already have the default style keep it without being allocated.
+    m_pDoc->ApplyStyleAreaTab(0, 0, 1024, m_pDoc->MaxRow(), 0, *pDefault);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectTable(0, true);
+    aMark.SetMarkArea(ScRange(0, 0, 0, 1024, m_pDoc->MaxRow(), 0));
+    m_pDoc->ApplySelectionStyle(*pDefault, aMark);
+    m_pDoc->ApplyPatternAreaTab(0, 0, 1024, m_pDoc->MaxRow(), 0,
+                                ScPatternAttr(m_pDoc->getCellAttributeHelper()));
+    CPPUNIT_ASSERT_EQUAL(INITIALCOLCOUNT, m_pDoc->GetAllocatedColumnsCount(0));
+
+    // A style with no attributes of its own is still a different style.
+    auto& rPlain = static_cast<ScStyleSheet&>(
+        pPool->Make(u"Plain"_ustr, SfxStyleFamily::Para, SfxStyleSearchBits::UserDefined));
+    m_pDoc->ApplyStyleAreaTab(0, 1, 9, 1, 0, rPlain);
+    aMark.SetMarkArea(ScRange(0, 2, 0, 9, 2, 0));
+    m_pDoc->ApplySelectionStyle(rPlain, aMark);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(10), m_pDoc->GetAllocatedColumnsCount(0));
+
+    // Editing a style reaches both allocated and unallocated columns that have it.
+    pDefault->GetItemSet().Put(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, getFontWeight(*m_pDoc, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, getFontWeight(*m_pDoc, 1000, 0));
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, getFontWeight(*m_pDoc, 5000, 0));
+
+    rPlain.GetItemSet().Put(SvxWeightItem(WEIGHT_LIGHT, ATTR_FONT_WEIGHT));
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_LIGHT, getFontWeight(*m_pDoc, 9, 1));
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_LIGHT, getFontWeight(*m_pDoc, 9, 2));
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, getFontWeight(*m_pDoc, 10, 1));
 
     m_pDoc->DeleteTab(0);
 }

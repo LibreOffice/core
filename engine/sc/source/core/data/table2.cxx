@@ -3047,6 +3047,11 @@ void ScTable::ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol,
         return;
     PutInOrder(nStartCol, nEndCol);
     PutInOrder(nStartRow, nEndRow);
+    nEndCol = LastChangedCol(nEndCol, nStartRow, nEndRow,
+                             [&rAttr](ScColumnData& applyTo, SCROW nTop, SCROW nBottom)
+                             { applyTo.ApplyPatternArea(nTop, nBottom, rAttr, nullptr, nullptr); });
+    if (nEndCol < nStartCol)
+        return;
     SCCOL maxCol = nEndCol;
     if( nEndCol == GetDoc().MaxCol())
     {
@@ -3198,6 +3203,11 @@ void ScTable::ApplyStyleArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, S
 
     PutInOrder(nStartCol, nEndCol);
     PutInOrder(nStartRow, nEndRow);
+    nEndCol = LastChangedCol(nEndCol, nStartRow, nEndRow,
+                             [&rStyle](ScColumnData& applyTo, SCROW nTop, SCROW nBottom)
+                             { applyTo.ApplyStyleArea(nTop, nBottom, rStyle); });
+    if (nEndCol < nStartCol)
+        return;
     if ( nEndCol == rDocument.MaxCol() )
     {
         if ( nStartCol < aCol.size() )
