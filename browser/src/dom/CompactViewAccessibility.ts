@@ -374,6 +374,13 @@ class CompactViewAccessibility {
 
 	public onDocumentKeyDown(event: KeyboardEvent): void {
 		if (document.body.dataset.userinterfacemode !== 'classic') return;
+		if (
+			app.map &&
+			app.map.backstageView &&
+			app.map.backstageView.isOpen &&
+			app.map.backstageView.isOpen()
+		)
+			return;
 
 		this.mayShowInfoBoxes = event.key.toUpperCase() === 'ALT';
 	}
@@ -386,6 +393,14 @@ class CompactViewAccessibility {
 
 	public onDocumentKeyUp(event: KeyboardEvent): void {
 		if (document.body.dataset.userinterfacemode !== 'classic') return;
+
+		if (
+			app.map &&
+			app.map.backstageView &&
+			app.map.backstageView.isOpen &&
+			app.map.backstageView.isOpen()
+		)
+			return;
 
 		if (app.map && app.map.jsdialog && app.map.jsdialog.hasDialogOpened())
 			return;

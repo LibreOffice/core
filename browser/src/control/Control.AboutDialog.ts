@@ -224,6 +224,7 @@ class AboutDialog {
 			.getElementById(aboutDialogId)
 			.cloneNode(true) as HTMLElement;
 		content.style.display = 'block';
+		content.removeAttribute('tabindex');
 		const elements = AboutDialog.createAboutDialogContent(content);
 
 		AboutDialog.populateAboutDialog(content, elements);
@@ -263,6 +264,23 @@ class AboutDialog {
 		innerDiv.appendChild(content);
 
 		var form = document.getElementById('about-dialog-box');
+
+		const dialogWindow = box.closest('.jsdialog-window') || form;
+		dialogWindow.addEventListener('keydown', (e: KeyboardEvent) => {
+			if (e.key === 'Escape') {
+				e.preventDefault();
+				e.stopPropagation();
+				app.map.uiManager.closeModal('modal-dialog-about-dialog-box');
+			} else if (e.key === 'Enter') {
+				const active = document.activeElement;
+				if (active && (active.tagName === 'A' || active.tagName === 'BUTTON')) {
+					return;
+				}
+				e.preventDefault();
+				e.stopPropagation();
+				app.map.uiManager.closeModal('modal-dialog-about-dialog-box');
+			}
+		});
 
 		form.addEventListener('click', this.aboutDialogClickHandler.bind(this));
 		form.addEventListener('keyup', this.aboutDialogKeyHandler.bind(this));

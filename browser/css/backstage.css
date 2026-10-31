@@ -166,6 +166,12 @@
 	padding-bottom: 1rem;
 }
 
+.backstage-sidebar-back:focus-visible {
+	outline: 2px solid var(--doc-type-color, #0b87e7);
+	outline-offset: 2px;
+	border-radius: var(--border-radius);
+}
+
 .backstage-sidebar-back-icon::before {
 	background-image: url('images/arrow-left.svg');
 }
@@ -201,6 +207,12 @@
 
 .backstage-sidebar-item:hover {
 	background-color: var(--color-background-dark);
+}
+
+.backstage-sidebar-item:focus-visible {
+	background-color: var(--color-background-dark);
+	outline: 2px solid var(--doc-type-color, #0b87e7);
+	outline-offset: -2px;
 }
 
 .backstage-sidebar-item.disabled {

@@ -31,6 +31,9 @@ namespace BackstageTemplates {
     return (
       <div
         class="backstage-modal-overlay"
+        ref={(el: HTMLElement) => {
+          if (el) (el as any).onDismiss = props.onDismiss;
+        }}
         onClick={(e: Event) => {
           if (e.target === e.currentTarget) props.onDismiss();
         }}
@@ -136,7 +139,11 @@ namespace BackstageTemplates {
             : null}
 
           <div class="backstage-modal-actions">
-            <button type="button" class="button" onClick={props.onCancel}>
+            <button
+              type="button"
+              class="button backstage-modal-cancel"
+              onClick={props.onCancel}
+            >
               {_('Cancel')}
             </button>
             <button type="submit" class="button button-primary">
@@ -227,7 +234,11 @@ namespace BackstageTemplates {
             })}
           </div>
           <div class="backstage-modal-actions">
-            <button type="button" class="button" onClick={props.onClose}>
+            <button
+              type="button"
+              class="button backstage-modal-cancel"
+              onClick={props.onClose}
+            >
               {_('Close')}
             </button>
             <button
@@ -279,7 +290,7 @@ namespace BackstageTemplates {
           <div class="backstage-modal-actions">
             <button
               type="button"
-              class="button"
+              class="button backstage-modal-cancel"
               onClick={props.onCancel}
               ref={(el: HTMLButtonElement) => {
                 cancelBtn = el;
@@ -378,6 +389,7 @@ namespace BackstageTemplates {
         onKeydown={(e: KeyboardEvent) => {
           if (e.key === 'Escape' && isOpen) {
             e.preventDefault();
+            e.stopPropagation();
             close();
             toggleEl.focus();
           }

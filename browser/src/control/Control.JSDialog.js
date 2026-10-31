@@ -480,6 +480,7 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			title.innerText = instance.title;
 			instance.form.setAttribute('aria-labelledby', title.id);
 			instance.titleCloseButton = window.L.DomUtil.create('button', 'ui-button ui-corner-all ui-widget ui-button-icon-only ui-dialog-titlebar-close', instance.titlebar);
+			instance.titleCloseButton.setAttribute('type', 'button');
 			const titleCloseButtonText = _('Close dialog');
 			instance.titleCloseButton.setAttribute('aria-label', titleCloseButtonText);
 			instance.titleCloseButton.setAttribute('title', titleCloseButtonText);

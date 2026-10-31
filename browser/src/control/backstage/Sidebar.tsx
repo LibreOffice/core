@@ -49,7 +49,7 @@ namespace BackstageTemplates {
       : 'backstage-view hidden';
 
     return (
-      <div class={containerClass} id="backstage-view">
+      <div class={containerClass} id="backstage-view" tabindex="-1">
         {header({
           isStarterMode: props.isStarterMode,
           closeButtonEnabled: props.closeButtonEnabled,
@@ -84,6 +84,8 @@ namespace BackstageTemplates {
     return (
       <div
         class="backstage-header-close"
+        role="button"
+        tabindex="0"
         aria-label={_('Close backstage')}
         title={_('Close backstage')}
         onClick={onClose}
@@ -95,7 +97,7 @@ namespace BackstageTemplates {
 
   export function sidebar(props: SidebarProps): HTMLElement {
     return (
-      <div class="backstage-sidebar">
+      <div class="backstage-sidebar" role="tablist">
         {props.isStarterMode ? null : backButton(props.onBackClick)}
         <div class="backstage-sidebar-tabs">
           {props.tabs
@@ -110,6 +112,8 @@ namespace BackstageTemplates {
     return (
       <div
         class="backstage-sidebar-back"
+        role="button"
+        tabindex="0"
         aria-label={_('Back to document')}
         title={_('Back to document')}
         onClick={onClick}
@@ -123,14 +127,17 @@ namespace BackstageTemplates {
     config: BackstageTabConfig,
     props: SidebarProps,
   ): HTMLElement {
+    const isSeparator = config.type === 'separator';
     return (
       <div
-        class="backstage-sidebar-item"
+        class={`backstage-sidebar-item${isSeparator ? ' separator' : ''}`}
         id={`backstage-${config.id}`}
+        role={isSeparator ? 'separator' : 'button'}
+        tabindex={isSeparator ? undefined : '0'}
         ref={(el) => {
           if (config.id === 'save') props.saveTabRef(el);
         }}
-        onClick={() => props.onTabClick(config)}
+        onClick={() => !isSeparator && props.onTabClick(config)}
       >
         {config.icon ? (
           <span class="backstage-sidebar-icon" aria-hidden="true">

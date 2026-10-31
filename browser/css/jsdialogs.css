@@ -350,6 +350,12 @@ div#autoFillPreviewTooltip .lokdialog.ui-dialog-content.ui-widget-content {
 	filter: invert(1);
 }
 
+.ui-dialog-titlebar-close:focus-visible {
+	outline: 2px solid var(--color-primary, #005a9c);
+	outline-offset: 1px;
+	border-radius: 2px;
+}
+
 .jsdialog-container .ui-dialog-content {
 	max-height: calc(0.9 * var(--dialog-available-height) - 34px);
 	overflow-y: auto !important;

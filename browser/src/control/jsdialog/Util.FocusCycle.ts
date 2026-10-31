@@ -66,6 +66,28 @@ const focusableSelector = [
 	enabled('[role="listbox"] [role="option"]'),
 ].join(', ');
 
+if (typeof Element !== 'undefined' && !Element.prototype.checkVisibility) {
+	Element.prototype.checkVisibility = function (
+		options?: CheckVisibilityOptions,
+	): boolean {
+		const htmlElem = this as HTMLElement;
+		if (
+			htmlElem.offsetWidth === 0 &&
+			htmlElem.offsetHeight === 0 &&
+			htmlElem.getClientRects().length === 0
+		) {
+			return false;
+		}
+		if (options?.visibilityProperty) {
+			const style = window.getComputedStyle(this);
+			if (style.visibility === 'hidden' || style.visibility === 'collapse') {
+				return false;
+			}
+		}
+		return true;
+	};
+}
+
 function isVisibleWidget(elem: HTMLElement): boolean {
 	if (
 		elem.classList.contains('jsdialog-begin-marker') ||
@@ -73,10 +95,19 @@ function isVisibleWidget(elem: HTMLElement): boolean {
 	)
 		return false;
 
-	return elem.checkVisibility({
-		visibilityProperty: true,
-		contentVisibilityAuto: true,
-	});
+	if (typeof elem.checkVisibility === 'function') {
+		return elem.checkVisibility({
+			visibilityProperty: true,
+			contentVisibilityAuto: true,
+		});
+	}
+
+	return (
+		(elem.offsetWidth > 0 ||
+			elem.offsetHeight > 0 ||
+			elem.getClientRects().length > 0) &&
+		window.getComputedStyle(elem).visibility !== 'hidden'
+	);
 }
 
 function isTabbable(elem: HTMLElement): boolean {

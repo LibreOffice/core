@@ -33,6 +33,11 @@ class BackstageView extends window.L.Class {
 	private templateSearchContainer: HTMLElement | null = null;
 	private saveTabElement: HTMLElement | null = null;
 	private readonly isStarterMode: boolean;
+	private boundOnKeyDown: (e: KeyboardEvent) => void;
+
+	public isOpen(): boolean {
+		return this.isVisible;
+	}
 
 	private actionHandlers: Record<string, () => void> = {
 		open: () => this.executeOpen(),
@@ -64,6 +69,8 @@ class BackstageView extends window.L.Class {
 			},
 			this,
 		);
+		this.boundOnKeyDown = (e: KeyboardEvent) => this.onKeyDown(e);
+		document.addEventListener('keydown', this.boundOnKeyDown);
 	}
 
 	private createContainer(): HTMLElement {
@@ -532,9 +539,28 @@ class BackstageView extends window.L.Class {
 	}
 
 	private mountDialog(build: (close: () => void) => HTMLElement): void {
+		const opener = document.activeElement as HTMLElement | null;
 		const ref: { overlay?: HTMLElement } = {};
-		const close = () => ref.overlay?.remove();
+		const close = () => {
+			ref.overlay?.remove();
+			if (
+				opener &&
+				document.contains(opener) &&
+				typeof opener.focus === 'function'
+			) {
+				opener.focus();
+			} else {
+				const activeTab =
+					this.container.querySelector<HTMLElement>(
+						'.backstage-sidebar-item.active',
+					) ||
+					this.getSidebarNavItems()[0] ||
+					this.container;
+				activeTab?.focus();
+			}
+		};
 		ref.overlay = build(close);
+		(ref.overlay as any).onDismiss = close;
 		this.container.appendChild(ref.overlay);
 	}
 
@@ -1297,7 +1323,6 @@ class BackstageView extends window.L.Class {
 			$(this.container).removeClass('hidden');
 			this.hideDocumentContainer();
 			this.updateSaveButtonState();
-			this.container.focus();
 			this.fireMapEvent('backstageshow');
 		}
 
@@ -1305,6 +1330,16 @@ class BackstageView extends window.L.Class {
 			this.renderNewView();
 		} else {
 			this.renderHomeView();
+		}
+
+		const activeTab =
+			this.container.querySelector<HTMLElement>(
+				'.backstage-sidebar-item.active',
+			) ||
+			this.getSidebarNavItems()[0] ||
+			this.container;
+		if (activeTab) {
+			activeTab.focus();
 		}
 	}
 
@@ -1374,6 +1409,138 @@ class BackstageView extends window.L.Class {
 			'disabled',
 			!this.isDocumentModified(),
 		);
+	}
+
+	private getSidebarNavItems(): HTMLElement[] {
+		const sidebar = this.container.querySelector('.backstage-sidebar');
+		if (!sidebar) return [];
+		const items = Array.from(
+			sidebar.querySelectorAll<HTMLElement>(
+				'.backstage-sidebar-back, .backstage-sidebar-item:not(.separator):not(.disabled)',
+			),
+		);
+		return items.filter((el) => el.offsetParent !== null);
+	}
+
+	private onKeyDown(e: KeyboardEvent): void {
+		if (!this.isVisible) return;
+
+		if (
+			(this.map?.uiManager && this.map.uiManager.isAnyDialogOpen()) ||
+			(this.map?.jsdialog && this.map.jsdialog.hasDialogOpened())
+		) {
+			return;
+		}
+
+		const activeEl = document.activeElement as HTMLElement;
+		if (
+			activeEl &&
+			activeEl !== document.body &&
+			!this.container.contains(activeEl)
+		) {
+			return;
+		}
+
+		const overlays = this.container.querySelectorAll<HTMLElement>(
+			'.backstage-modal-overlay',
+		);
+		const modalOverlay = overlays[overlays.length - 1];
+		if (modalOverlay) {
+			if (e.key === 'Escape') {
+				e.stopPropagation();
+				e.preventDefault();
+				const onDismiss = (modalOverlay as any).onDismiss;
+				if (typeof onDismiss === 'function') {
+					onDismiss();
+				} else {
+					const cancelBtn = modalOverlay.querySelector<HTMLElement>(
+						'.backstage-modal-cancel',
+					);
+					if (cancelBtn) {
+						cancelBtn.click();
+					} else {
+						modalOverlay.remove();
+					}
+				}
+			}
+			return;
+		}
+
+		if (e.key === 'Escape') {
+			e.stopPropagation();
+			e.preventDefault();
+			if (!this.isStarterMode) {
+				this.hide();
+			}
+			return;
+		}
+
+		const items = this.getSidebarNavItems();
+		if (!items.length) return;
+
+		const currentIndex = items.indexOf(activeEl);
+		const sidebar = this.container.querySelector('.backstage-sidebar');
+		const inSidebar =
+			currentIndex !== -1 ||
+			(sidebar && sidebar.contains(activeEl)) ||
+			activeEl === this.container;
+
+		const isTextInput =
+			activeEl instanceof HTMLInputElement ||
+			activeEl instanceof HTMLTextAreaElement ||
+			activeEl.isContentEditable;
+
+		if (e.key === 'ArrowDown' || (e.key === 'Tab' && !e.shiftKey)) {
+			if (inSidebar) {
+				e.stopPropagation();
+				e.preventDefault();
+				const nextIndex =
+					currentIndex === -1 ? 0 : (currentIndex + 1) % items.length;
+				items[nextIndex].focus();
+				return;
+			}
+		} else if (e.key === 'ArrowUp' || (e.key === 'Tab' && e.shiftKey)) {
+			if (inSidebar) {
+				e.stopPropagation();
+				e.preventDefault();
+				const prevIndex =
+					currentIndex <= 0 ? items.length - 1 : currentIndex - 1;
+				items[prevIndex].focus();
+				return;
+			}
+		} else if (e.key === 'Enter' || e.key === ' ') {
+			if (currentIndex !== -1) {
+				e.stopPropagation();
+				e.preventDefault();
+				items[currentIndex].click();
+				return;
+			}
+		} else if (e.key === 'ArrowRight' && inSidebar) {
+			const firstContentFocusable = this.contentArea.querySelector<HTMLElement>(
+				'button:not([disabled]), input:not([disabled]), a[href], [tabindex="0"]',
+			);
+			if (firstContentFocusable) {
+				e.stopPropagation();
+				e.preventDefault();
+				firstContentFocusable.focus();
+				return;
+			}
+		} else if (
+			e.key === 'ArrowLeft' &&
+			!isTextInput &&
+			this.contentArea.contains(activeEl)
+		) {
+			const activeTab =
+				this.container.querySelector<HTMLElement>(
+					'.backstage-sidebar-item.active',
+				) || items[0];
+			if (activeTab) {
+				e.stopPropagation();
+				e.preventDefault();
+				activeTab.focus();
+				return;
+			}
+		}
 	}
 }
 
