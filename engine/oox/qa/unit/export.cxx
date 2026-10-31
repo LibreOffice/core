@@ -1746,6 +1746,32 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeFreeHandleIsUnlimited)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-2147483647), nValue);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeGluePointsFollowAdjustments)
+{
+    // Given a parametric shape whose glue points are placed by an equation, by the adjustment
+    // itself and by numbers:
+    loadFromFile(u"custGeom_gluePoints.fodp");
+
+    // When saving it to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then the connection sites are guides built from the same tokens as the path, converted
+    // to the shape's extent, so a connector attached in Office follows the adjustment
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:custGeom/a:cxnLst/a:cxn", 3);
+    assertXPath(pXmlDoc, "//a:custGeom/a:cxnLst/a:cxn[1]/a:pos", "x", u"GluePoint1X");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='GluePoint1X']", "fmla",
+                u"*/ f1 w 21600");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='GluePoint1Y']", "fmla",
+                u"*/ 10800 h 21600");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='GluePoint2X']", "fmla",
+                u"*/ f0 w 21600");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='GluePoint3Y']", "fmla",
+                u"*/ 21600 h 21600");
+    // the handle is still there
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

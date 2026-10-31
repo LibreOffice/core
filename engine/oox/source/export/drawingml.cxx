@@ -6123,6 +6123,30 @@ void lcl_BuildXYHandles(const std::vector<XYHandleRaw>& rHandles,
     }
 }
 
+// The glue points of a parametric shape: each coordinate, a number or an equation, is converted
+// to the EMU extent of the shape through the w and h built-ins, so that a connector attached in
+// Office follows the adjustment values like the rest of the geometry. Returns false when a glue
+// point cannot be expressed.
+bool lcl_BuildGluePointGuides(
+    const cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rGluePoints,
+    OoxmlEqContext& rCtx, std::vector<Guide>& rGuides)
+{
+    sal_Int32 nIndex = 0;
+    for (const drawing::EnhancedCustomShapeParameterPair& rGluePoint : rGluePoints)
+    {
+        ++nIndex;
+        const OString aX = lcl_HandleParameterToken(rGluePoint.First, rCtx);
+        const OString aY = lcl_HandleParameterToken(rGluePoint.Second, rCtx);
+        if (aX.isEmpty() || aY.isEmpty())
+            return false;
+        rGuides.push_back({ "GluePoint" + OString::number(nIndex) + "X",
+                            "*/ " + aX + " w " + OString::number(rCtx.nViewBoxWidth) });
+        rGuides.push_back({ "GluePoint" + OString::number(nIndex) + "Y",
+                            "*/ " + aY + " h " + OString::number(rCtx.nViewBoxHeight) });
+    }
+    return true;
+}
+
 // Builds the parametric part of the plan: equation guides, symbolic path coordinates and the
 // adjustment values they reference. Returns false, leaving rPlan as it was, when the shape
 // cannot be expressed that way; the caller then writes resolved coordinates as before.
@@ -6132,6 +6156,7 @@ bool lcl_BuildParametricPlan(
     const cpo::uno::Sequence<drawing::EnhancedCustomShapeSegment>& rSegments,
     const cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rPairs,
     const cpo::uno::Sequence<beans::PropertyValues>& rHandles, sal_Int32 nAdjustmentCount,
+    const cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rGluePoints,
     sal_Int32 nViewBoxWidth, sal_Int32 nViewBoxHeight, CustomGeometryPlan& rPlan)
 {
     // The handles decide how each adjustment is stored.
@@ -6164,6 +6189,11 @@ bool lcl_BuildParametricPlan(
     lcl_CollectFrozenAdjustments(rPairs, aPlan.aCoordTokens, aEquations, aFrozen);
     lcl_BuildXYHandles(aXYHandlesRaw, aAdjustmentInfo, aFrozen, aContext, aPlan.aXYHandles);
     if (aContext.bFailed)
+        return false;
+
+    // The glue points follow the equation guides they refer to.
+    std::vector<Guide> aGluePointGuides;
+    if (!lcl_BuildGluePointGuides(rGluePoints, aContext, aGluePointGuides) || aContext.bFailed)
         return false;
 
     std::set<sal_Int32> aDeclaredAdjustments = aEquations.aUsedAdjustments;
@@ -6201,8 +6231,9 @@ bool lcl_BuildParametricPlan(
         return false;
 
     // The equation guides follow the text-area guides, so that the latter keep their position
-    // in the list.
+    // in the list, and the glue points come last.
     aPlan.aGuides.insert(aPlan.aGuides.end(), aEquations.aGuides.begin(), aEquations.aGuides.end());
+    aPlan.aGuides.insert(aPlan.aGuides.end(), aGluePointGuides.begin(), aGluePointGuides.end());
 
     std::set<OUString> aGuideNames;
     std::set<OUString> aAdjustmentNames;
@@ -6893,6 +6924,7 @@ bool DrawingML::WriteCustomGeometry(
 
     CustomGeometryPlan aPlan;
     prepareTextArea(aCustomShape2d, aPlan.aGuides, aPlan.aTextAreaRect);
+    bool bParametric = false;
     // Shapes imported from OOXML keep their equations in the shape's EMU space and their
     // viewBox is a substitute; they stay with resolved coordinates for now.
     if (bNominalViewBox && !bOOXML)
@@ -6906,12 +6938,13 @@ bool DrawingML::WriteCustomGeometry(
             else if (rProp.Name == "AdjustmentValues")
                 rProp.Value >>= aAdjustmentValues;
         }
-        lcl_BuildParametricPlan(aCustomShape2d, aEquationSeq, aSegments, aPairs, aHandles,
-                                aAdjustmentValues.getLength(), nViewBoxWidth, nViewBoxHeight,
-                                aPlan);
+        bParametric = lcl_BuildParametricPlan(aCustomShape2d, aEquationSeq, aSegments, aPairs,
+                                              aHandles, aAdjustmentValues.getLength(), aGluePoints,
+                                              nViewBoxWidth, nViewBoxHeight, aPlan);
     }
-    prepareGluePoints(aPlan.aGuides, aEquationSeq, aGluePoints, bOOXML, nViewBoxWidth,
-                      nViewBoxHeight);
+    if (!bParametric)
+        prepareGluePoints(aPlan.aGuides, aEquationSeq, aGluePoints, bOOXML, nViewBoxWidth,
+                          nViewBoxHeight);
     const std::vector<OString>* pCoordTokens
         = aPlan.aCoordTokens.empty() ? nullptr : &aPlan.aCoordTokens;
     mpFS->startElementNS(XML_a, XML_custGeom);
