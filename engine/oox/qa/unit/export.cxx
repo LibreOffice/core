@@ -2016,6 +2016,39 @@ CPPUNIT_TEST_FIXTURE(Test, testRoundRectangleTallerThanWide)
     assertXPath(pXmlDoc, "//a:prstGeom/a:avLst/a:gd", "fmla", u"val 16667");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeForwardReference)
+{
+    // Given a brace whose equations refer to a later one (?f2 = ?f4 - $0, with f4 = $1):
+    loadFromFile(u"custGeom_forwardReference.fodp");
+
+    // When saving it to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then the later equation is emitted first, so that every guide is defined before its use,
+    // and both handles are written
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", 2);
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", 2);
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY[1]", "gdRefY", u"adj1");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY[2]", "gdRefY", u"adj2");
+    // the guide of f2 names the guide of f4, which precedes it
+    OUString aF2 = getXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo[1]/a:pt", "y");
+    OUString aFormula = getXPath(
+        pXmlDoc, OString("//a:custGeom/a:gdLst/a:gd[@name='" + aF2.toUtf8() + "']"), "fmla");
+    CPPUNIT_ASSERT(aFormula.startsWith("+- "));
+    OUString aF4 = aFormula.getToken(1, ' ');
+    CPPUNIT_ASSERT(aF4.startsWith("f"));
+    sal_Int32 nF2
+        = getXPathContent(pXmlDoc, OString("count(//a:custGeom/a:gdLst/a:gd[@name='" + aF2.toUtf8()
+                                           + "']/preceding-sibling::a:gd)"))
+              .toInt32();
+    sal_Int32 nF4
+        = getXPathContent(pXmlDoc, OString("count(//a:custGeom/a:gdLst/a:gd[@name='" + aF4.toUtf8()
+                                           + "']/preceding-sibling::a:gd)"))
+              .toInt32();
+    CPPUNIT_ASSERT(nF4 < nF2);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testCustomShapeFromOOXMLKeepsOnlyUsedGuides)
 {
     // Given a shape that came from a pptx whose points are numbers and whose guides serve a

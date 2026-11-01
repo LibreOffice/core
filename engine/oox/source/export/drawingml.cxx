@@ -5375,8 +5375,8 @@ struct OoxmlEqContext
 {
     std::vector<Guide>& rGuides; // <a:gdLst> guides, in dependency order
     std::set<sal_Int32>& rUsedAdjustments; // adjustment indices referenced
-    const std::vector<OString>& rEqNames; // source equation index -> its OOXML token
-    const std::vector<bool>& rEqIsAngle; // source equation index -> token is an angle (60000ths)
+    std::vector<OString>& rEqNames; // source equation index -> its OOXML token
+    std::vector<bool>& rEqIsAngle; // source equation index -> token is an angle (60000ths)
     // Adjustments that a polar handle drives as an angle. These are stored in OOXML 60000ths of
     // a degree, not in ODF degrees, so the degree idiom that consumes them emits the bare
     // adjustment instead of a conversion (see lcl_TryEmitAngle60000).
@@ -5405,6 +5405,10 @@ struct OoxmlEqContext
     bool bRawAdjustments = false;
     // The parsed equations, so that an arc can look at the shape of an angle equation.
     const std::vector<std::shared_ptr<ExpressionNode>>* pNodes = nullptr;
+    // While the guides of the equations are created: 0 for an equation not yet emitted, 1 for
+    // one being emitted, 2 for one that is done, so that a reference to a later equation emits
+    // it first.
+    std::vector<sal_Int8>* pEqState = nullptr;
 
     // The path-space token of an adjustment: the guide that scales the stored 1/100000 fraction
     // back to path units, or the bare adjustment for a plain value.
@@ -5453,6 +5457,7 @@ struct OoxmlEqContext
 
 OString lcl_EmitOoxmlNode(const ExpressionNode* pNode, OoxmlEqContext& rCtx);
 OString lcl_PlainTokenOfEquation(sal_Int32 nEquation, OoxmlEqContext& rCtx);
+void lcl_EmitEquation(sal_Int32 nEquation, OoxmlEqContext& rCtx);
 
 // Writes fValue as the fraction rNumerator / rDenominator with integer parts, using the smallest
 // power of ten (up to 100000) as the denominator that represents the value exactly enough, or
@@ -5606,6 +5611,7 @@ OString lcl_EmitAngleArgument(const ExpressionNode* pX, double fConst, OoxmlEqCo
         {
             // an alias equation ($n) of such an adjustment holds 60000ths as well
             const sal_Int32 nEquation = pX->getIndex();
+            lcl_EmitEquation(nEquation, rCtx);
             const ExpressionNode* pAlias
                 = rCtx.pNodes && nEquation >= 0 && o3tl::make_unsigned(nEquation) < rCtx.pNodes->size()
                       ? (*rCtx.pNodes)[nEquation].get()
@@ -5649,6 +5655,7 @@ bool lcl_TryEmitAngle60000(const ExpressionNode* pArg, OoxmlEqContext& rCtx, OSt
     if (pArg && pArg->getType() == ExpressionFunct::EnumEquation)
     {
         const sal_Int32 nEquation = pArg->getIndex();
+        lcl_EmitEquation(nEquation, rCtx);
         if (nEquation >= 0 && o3tl::make_unsigned(nEquation) < rCtx.rEqIsAngle.size()
             && rCtx.rEqIsAngle[nEquation] && !rCtx.rEqNames[nEquation].isEmpty())
         {
@@ -5722,10 +5729,11 @@ OString lcl_EmitMulDivByConstant(const ExpressionNode* pA, double fConst, bool b
 
 // The token of an equation used as a plain value. An equation that is an angle holds 60000ths
 // of a degree here: an alias of an adjustment stored that way gives the value the adjustment
-// has in the shape, any other angle equation gives its radians back. Empty for a forward
+// has in the shape, any other angle equation gives its radians back. Empty for a circular
 // reference.
 OString lcl_PlainTokenOfEquation(sal_Int32 nEquation, OoxmlEqContext& rCtx)
 {
+    lcl_EmitEquation(nEquation, rCtx);
     if (nEquation < 0 || o3tl::make_unsigned(nEquation) >= rCtx.rEqNames.size()
         || rCtx.rEqNames[nEquation].isEmpty())
         return OString();
@@ -5763,7 +5771,7 @@ OString lcl_EmitOoxmlNode(const ExpressionNode* pNode, OoxmlEqContext& rCtx)
             const OString aToken = lcl_PlainTokenOfEquation(pNode->getIndex(), rCtx);
             if (aToken.isEmpty())
             {
-                rCtx.fail("forward reference to an equation");
+                rCtx.fail("reference to an equation that cannot be emitted");
                 return "0"_ostr;
             }
             return aToken;
@@ -5911,10 +5919,6 @@ struct EquationGuideSet
     std::vector<std::shared_ptr<ExpressionNode>> aNodes; // the parsed equations
 };
 
-// Converts all of a shape's ODF "Equations" to OOXML guides. Returns false, leaving rSet empty,
-// if any equation uses a construct that cannot be expressed, so that the caller writes resolved
-// coordinates instead; a half-converted set would reference adjustments and guides that never
-// make it into the file, and Word refuses such a file.
 // Parses the ODF "Equations" of a shape. Returns false when one of them does not parse.
 bool lcl_ParseEquations(const EnhancedCustomShape2d& rCustomShape2d,
                         const cpo::uno::Sequence<OUString>& rEquationStrings,
@@ -5937,6 +5941,45 @@ bool lcl_ParseEquations(const EnhancedCustomShape2d& rCustomShape2d,
     return true;
 }
 
+// Emits the guides of equation nEquation and records its token, unless that is done already.
+// An equation that is itself an angle (X*pi/c) is converted to 60000ths of a degree and
+// remembered, so that trigonometric functions referencing it work; so is an equation that is
+// nothing but an adjustment stored in 60000ths.
+void lcl_EmitEquation(sal_Int32 nEquation, OoxmlEqContext& rCtx)
+{
+    if (!rCtx.pEqState || !rCtx.pNodes || nEquation < 0
+        || o3tl::make_unsigned(nEquation) >= rCtx.pEqState->size())
+        return;
+    sal_Int8& rState = (*rCtx.pEqState)[nEquation];
+    if (rState == 2)
+        return;
+    if (rState == 1)
+    {
+        rCtx.fail("circular reference between equations");
+        return;
+    }
+    rState = 1;
+    const ExpressionNode* pNode = (*rCtx.pNodes)[nEquation].get();
+    OString aToken;
+    if (pNode && pNode->getType() == ExpressionFunct::EnumAdjustment
+        && rCtx.rAngleAdjustments60000.count(pNode->getIndex()) > 0)
+    {
+        rCtx.rUsedAdjustments.insert(pNode->getIndex());
+        aToken = "adj" + OString::number(pNode->getIndex() + 1);
+        rCtx.rEqIsAngle[nEquation] = true;
+    }
+    else if (lcl_TryEmitAngle60000(pNode, rCtx, aToken))
+        rCtx.rEqIsAngle[nEquation] = true;
+    else
+        aToken = lcl_EmitOoxmlNode(pNode, rCtx);
+    rCtx.rEqNames[nEquation] = aToken;
+    rState = 2;
+}
+
+// Converts all of a shape's ODF "Equations" to OOXML guides. Returns false, leaving rSet empty,
+// if any equation uses a construct that cannot be expressed, so that the caller writes resolved
+// coordinates instead; a half-converted set would reference adjustments and guides that never
+// make it into the file, and Word refuses such a file.
 bool lcl_CreateOoxmlGuides(const std::vector<std::shared_ptr<ExpressionNode>>& rNodes,
                            const std::set<sal_Int32>& rAngleAdjustments60000,
                            const std::vector<AdjustmentInfo>& rAdjustmentInfo,
@@ -5954,26 +5997,11 @@ bool lcl_CreateOoxmlGuides(const std::vector<std::shared_ptr<ExpressionNode>>& r
     aContext.pAdjustmentInfo = &rAdjustmentInfo;
     aContext.bRawAdjustments = bRawAdjustments;
     aContext.pNodes = &rSet.aNodes;
+    std::vector<sal_Int8> aState(rNodes.size(), 0);
+    aContext.pEqState = &aState;
     for (size_t i = 0; i < rNodes.size(); ++i)
     {
-        const std::shared_ptr<ExpressionNode>& pNode = rNodes[i];
-        aContext.bFailed = false;
-        aContext.aFailure.clear();
-        // An equation that is itself an angle (X*pi/c) is converted to 60000ths of a degree and
-        // remembered, so that trigonometric functions referencing it work; so is an equation
-        // that is nothing but an adjustment stored in 60000ths.
-        OString aToken;
-        if (pNode && pNode->getType() == ExpressionFunct::EnumAdjustment
-            && rAngleAdjustments60000.count(pNode->getIndex()) > 0)
-        {
-            aContext.rUsedAdjustments.insert(pNode->getIndex());
-            aToken = "adj" + OString::number(pNode->getIndex() + 1);
-            rSet.aEqIsAngle[i] = true;
-        }
-        else if (lcl_TryEmitAngle60000(pNode.get(), aContext, aToken))
-            rSet.aEqIsAngle[i] = true;
-        else
-            aToken = lcl_EmitOoxmlNode(pNode.get(), aContext);
+        lcl_EmitEquation(static_cast<sal_Int32>(i), aContext);
         if (aContext.bFailed)
         {
             SAL_INFO("oox.shape.custgeom",
@@ -5981,7 +6009,6 @@ bool lcl_CreateOoxmlGuides(const std::vector<std::shared_ptr<ExpressionNode>>& r
             rSet = EquationGuideSet();
             return false;
         }
-        rSet.aEqNames[i] = aToken;
     }
     return true;
 }

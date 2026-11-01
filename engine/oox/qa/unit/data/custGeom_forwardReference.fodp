@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+    xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+    office:version="1.2"
+    office:mimetype="application/vnd.oasis.opendocument.presentation">
+  <office:body>
+    <office:presentation>
+      <draw:page draw:name="page1" draw:master-page-name="">
+        <draw:custom-shape draw:name="brace" svg:width="3cm" svg:height="6cm" svg:x="2cm" svg:y="2cm">
+          <text:p/>
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="non-primitive" draw:modifiers="1800 10800"
+              draw:enhanced-path="M 21600 0 C 16200 0 10800 ?f0 10800 ?f1 L 10800 ?f2 C 10800 ?f3 5400 ?f4 0 ?f4 5400 ?f4 10800 ?f5 10800 ?f6 L 10800 ?f7 C 10800 ?f8 16200 21600 21600 21600 N">
+            <draw:equation draw:name="f0" draw:formula="$0/2"/>
+            <draw:equation draw:name="f1" draw:formula="$0"/>
+            <draw:equation draw:name="f2" draw:formula="?f4-$0"/>
+            <draw:equation draw:name="f3" draw:formula="?f4-?f0"/>
+            <draw:equation draw:name="f4" draw:formula="$1"/>
+            <draw:equation draw:name="f5" draw:formula="?f4+?f0"/>
+            <draw:equation draw:name="f6" draw:formula="?f4+$0"/>
+            <draw:equation draw:name="f7" draw:formula="21600-$0"/>
+            <draw:equation draw:name="f8" draw:formula="21600-?f0"/>
+            <draw:handle draw:handle-position="10800 $0" draw:handle-range-y-minimum="0" draw:handle-range-y-maximum="5400"/>
+            <draw:handle draw:handle-position="left $1" draw:handle-range-y-minimum="0" draw:handle-range-y-maximum="21600"/>
+          </draw:enhanced-geometry>
+        </draw:custom-shape>
+      </draw:page>
+    </office:presentation>
+  </office:body>
+</office:document>
