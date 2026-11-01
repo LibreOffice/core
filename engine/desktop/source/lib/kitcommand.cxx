@@ -20,10 +20,12 @@
 #include <sfx2/viewsh.hxx>
 #include <svx/VectorObjectContent.hxx>
 #include <svx/svdview.hxx>
+#include <vcl/ITiledRenderable.hxx>
 
 namespace kitcommand
 {
-void setTextCursor(SfxViewShell& rViewShell, std::u16string_view aCommand)
+bool setTextCursor(SfxViewShell& rViewShell, vcl::ITiledRenderable* pDocument,
+                   std::u16string_view aCommand)
 {
     const std::map<OUString, OUString> aParameters = KitHelper::parseCommandParameters(aCommand);
     const auto aObjectIterator = aParameters.find(u"object"_ustr);
@@ -31,14 +33,18 @@ void setTextCursor(SfxViewShell& rViewShell, std::u16string_view aCommand)
     const auto aIndexIterator = aParameters.find(u"index"_ustr);
     if (aObjectIterator == aParameters.end() || aParagraphIterator == aParameters.end()
         || aIndexIterator == aParameters.end())
-        return;
+        return false;
 
+    const sal_uInt64 nObject = aObjectIterator->second.toUInt64();
     const sal_Int32 nParagraph = aParagraphIterator->second.toInt32();
     const sal_Int32 nIndex = aIndexIterator->second.toInt32();
     const auto aAnchorParagraphIterator = aParameters.find(u"anchorparagraph"_ustr);
     const auto aAnchorIndexIterator = aParameters.find(u"anchorindex"_ustr);
     const bool bHasAnchor = aAnchorParagraphIterator != aParameters.end()
                             && aAnchorIndexIterator != aParameters.end();
+    const sal_Int32 nAnchorParagraph
+        = bHasAnchor ? aAnchorParagraphIterator->second.toInt32() : nParagraph;
+    const sal_Int32 nAnchorIndex = bHasAnchor ? aAnchorIndexIterator->second.toInt32() : nIndex;
 
     // An object active in place, such as a chart, runs its text edit in a view of its own.
     SdrObjEditView* pDrawView = rViewShell.GetDrawView();
@@ -49,12 +55,17 @@ void setTextCursor(SfxViewShell& rViewShell, std::u16string_view aCommand)
     }
 
     // The states that follow the caret, such as its font, are computed again.
-    if (pDrawView
-        && pDrawView->SetKitTextCursor(
-               aObjectIterator->second.toUInt64(), nParagraph, nIndex,
-               bHasAnchor ? aAnchorParagraphIterator->second.toInt32() : nParagraph,
-               bHasAnchor ? aAnchorIndexIterator->second.toInt32() : nIndex))
+    if ((pDrawView
+         && pDrawView->SetKitTextCursor(nObject, nParagraph, nIndex, nAnchorParagraph,
+                                        nAnchorIndex))
+        || (pDocument
+            && pDocument->setKitTextCursor(rViewShell, nObject, nParagraph, nIndex,
+                                           nAnchorParagraph, nAnchorIndex)))
+    {
         rViewShell.GetViewFrame().GetBindings().InvalidateAll(false);
+        return true;
+    }
+    return false;
 }
 }
 

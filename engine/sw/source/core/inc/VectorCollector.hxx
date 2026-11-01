@@ -209,6 +209,12 @@ void addPageObjects(Collector& rCollector, const SwPageFrame& rPage, ObjectPlace
 /// every other object.
 void addCharacterObjects(Collector& rCollector, const SwTextFrame& rFrame);
 
+/// The frame of rLayout with the frame id nId, in the flow of the pages or in a fly, or nullptr
+/// when there is none. With pNear, a page of rLayout, the pages are searched outward from pNear,
+/// the nearest first.
+SW_DLLPUBLIC const SwFrame* frameOf(const SwRootFrame& rLayout, sal_uInt64 nId,
+                                    const SwPageFrame* pNear = nullptr);
+
 /// The entries of rPage in paint order, the page first.
 SW_DLLPUBLIC std::vector<Entry> decomposePage(const SwPageFrame& rPage);
 

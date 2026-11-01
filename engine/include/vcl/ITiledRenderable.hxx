@@ -497,6 +497,19 @@ public:
     /// Decides if it's OK to call getCommandValues(rCommand).
     virtual bool supportsCommand(std::u16string_view /*rCommand*/) { return false; }
 
+    /**
+     * Puts the caret of rViewShell at the offset nIndex in paragraph nParagraph of the
+     * text that nObject names, and selects the text from the offset nAnchorIndex in paragraph
+     * nAnchorParagraph to it. An anchor at the caret selects nothing. Returns false when the
+     * document holds no such text or rViewShell is not a view of the document.
+     */
+    virtual bool setKitTextCursor(SfxViewShell& /*rViewShell*/, sal_uInt64 /*nObject*/,
+                                  sal_Int32 /*nParagraph*/, sal_Int32 /*nIndex*/,
+                                  sal_Int32 /*nAnchorParagraph*/, sal_Int32 /*nAnchorIndex*/)
+    {
+        return false;
+    }
+
     /// Returns a json mapping of the possible values for the given command.
     virtual void getCommandValues(tools::JsonWriter& /*rJsonWriter*/, std::string_view /*rCommand*/)
     {

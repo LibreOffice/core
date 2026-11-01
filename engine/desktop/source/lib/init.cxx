@@ -1827,6 +1827,14 @@ void CallbackFlushHandler::dumpState(rtl::OStringBuffer &rState)
     }
 }
 
+void CallbackFlushHandler::resendVisibleCursor()
+{
+    std::unique_lock<std::recursive_mutex> lock(m_mutex);
+    // A caret equal to the one sent last is dropped at the flush, so the record of that one is
+    // reset to the value it starts with.
+    m_states[COKitCallbackType::INVALIDATE_VISIBLE_CURSOR] = "NIL"_ostr;
+}
+
 void CallbackFlushHandler::viewAddPendingInvalidateTiles()
 {
     // Invoke() will call flushPendingKitInvalidateTiles(), so just make sure the timer is active.
@@ -6185,7 +6193,16 @@ void COKitDocumentImpl::postUnoCommand(const char* pCommand, const char* pArgume
 
     if (aCommand.startsWith(".uno:SetTextCursor?"))
     {
-        kitcommand::setTextCursor(*pViewShell, aCommand);
+        // The client shows the caret where it asked for it. When the caret cannot go there, the
+        // view sends where its caret is, also when that did not change.
+        if (!kitcommand::setTextCursor(*pViewShell, getTiledRenderable(this), aCommand))
+        {
+            const auto aHandler = mpCallbackFlushHandlers.find(pViewShell->GetViewShellId().get());
+            if (aHandler != mpCallbackFlushHandlers.end() && aHandler->second)
+                aHandler->second->resendVisibleCursor();
+            KitHelper::notifyUpdatePerViewId(*pViewShell,
+                                             COKitCallbackType::INVALIDATE_VISIBLE_CURSOR);
+        }
         return;
     }
 

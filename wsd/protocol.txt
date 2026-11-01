@@ -1224,6 +1224,10 @@ textcursor object=<objectId> paragraph=<paragraph> index=<index> [anchorparagrap
       the selection, in the same terms as the caret.
     - sequence=<sequence> : Optional input sequence number, see the key message.
 
+    When the caret cannot be put there, for example because the object is
+    not there any more, the view sends invalidatecursor with the caret where
+    it is, also when that is the caret it sent last.
+
 browsersetting action=update [upload=false] json=<JSON>
 
     Changes the user's browser settings. The server keeps a copy of the
@@ -1512,15 +1516,15 @@ statusupdate: type=<typeName> parts=<numberOfParts> current=<currentPartNumber> 
     GUID, and each entry of the parts array carries its page's
     identifier as part, in document order.
 
-    The first status: after a reconnect that gave the client its old view
-    back has "reattached": true. The view still has its cursor, selection,
-    part and dialogs in the kit.
-
     For a text document the JSON payload has a pageids array: the id of
     each page as a string, in the order of pagerectangles. A page keeps its
     id while it exists, and .uno:VectorPrimitives names a page by it. When
     the ids change, also with the same document size, a new status goes
     out. A document that has no page ids leaves the field out.
+
+    The first status: after a reconnect that gave the client its old view
+    back has "reattached": true. The view still has its cursor, selection,
+    part and dialogs in the kit.
 
 styles: {"styleFamily": ["styles in family"], etc. }
 

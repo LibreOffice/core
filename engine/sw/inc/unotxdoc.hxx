@@ -517,6 +517,12 @@ public:
     /// @see vcl::ITiledRenderable::supportsCommand().
     bool supportsCommand(std::u16string_view rCommand) override;
 
+    /// @see vcl::ITiledRenderable::setKitTextCursor(). nObject is the frame id of a text frame,
+    /// which holds one paragraph, the first.
+    bool setKitTextCursor(SfxViewShell& rViewShell, sal_uInt64 nObject, sal_Int32 nParagraph,
+                          sal_Int32 nIndex, sal_Int32 nAnchorParagraph,
+                          sal_Int32 nAnchorIndex) override;
+
     /// @see vcl::ITiledRenderable::pushVectorPrimitivesDelta().
     void pushVectorPrimitivesDelta(tools::JsonWriter& rJsonWriter, std::string_view rPartId,
                                    int nMode) override;

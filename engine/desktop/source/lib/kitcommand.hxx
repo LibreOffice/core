@@ -14,14 +14,20 @@
 #include <string_view>
 
 class SfxViewShell;
+namespace vcl
+{
+class ITiledRenderable;
+}
 
 namespace kitcommand
 {
-// Puts the caret of the running text edit at the object, paragraph and index that a
+// Puts the caret at the object, paragraph and index that a
 // .uno:SetTextCursor?object=...&paragraph=...&index=... command names, with the text from the
-// optional anchorparagraph and anchorindex selected. A command without the three parameters
-// does nothing.
-void setTextCursor(SfxViewShell& rViewShell, std::u16string_view aCommand);
+// optional anchorparagraph and anchorindex selected: in the running text edit of a drawing
+// object, or else in the text of pDocument. A command without the three parameters does nothing.
+// Returns true when the caret was placed.
+bool setTextCursor(SfxViewShell& rViewShell, vcl::ITiledRenderable* pDocument,
+                   std::u16string_view aCommand);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

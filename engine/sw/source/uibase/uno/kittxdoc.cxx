@@ -19,6 +19,7 @@
 
 #include <unotxdoc.hxx>
 
+#include <algorithm>
 #include <map>
 #include <utility>
 #include <vector>
@@ -28,6 +29,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/sequence.hxx>
 #include <o3tl/string_view.hxx>
+#include <rtl/character.hxx>
 #include <tools/json_writer.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
@@ -38,7 +40,9 @@
 #include <IDocumentOutlineNodes.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <svx/seclabel/SecLabelStore.hxx>
+#include <svx/svdview.hxx>
 #include <doc.hxx>
+#include <edtwin.hxx>
 #include <docsh.hxx>
 #include <fmtrfmrk.hxx>
 #include <ndarr.hxx>
@@ -77,7 +81,11 @@
 
 #include <sax/tools/converter.hxx>
 #include <rootfrm.hxx>
+#include <txtfrm.hxx>
+#include <VectorCollector.hxx>
 #include <VectorPart.hxx>
+#include <view.hxx>
+#include <viscrs.hxx>
 #include <wrtsh.hxx>
 
 using namespace ::com::sun::star;
@@ -1527,6 +1535,87 @@ void SwXTextDocument::pushVectorPrimitivesDelta(tools::JsonWriter& rJsonWriter,
     if (!pLayout)
         return;
     m_pVectorParts->write(rJsonWriter, *pLayout, rPartId, /*nSinceVersion=*/-1, /*bPush=*/true);
+}
+
+bool SwXTextDocument::setKitTextCursor(SfxViewShell& rViewShell, sal_uInt64 nObject,
+                                       sal_Int32 nParagraph, sal_Int32 nIndex,
+                                       sal_Int32 nAnchorParagraph, sal_Int32 nAnchorIndex)
+{
+    SolarMutexGuard aGuard;
+    SwView* pView = dynamic_cast<SwView*>(&rViewShell);
+    if (!m_pDocShell || !pView || pView->GetDocShell() != m_pDocShell || nParagraph != 0
+        || nAnchorParagraph != 0)
+        return false;
+
+    // While a format, a style or a color is waiting to be applied with the mouse, the release of
+    // the mouse button applies it. The caret stays, and the answer tells the client so.
+    if (pView->GetEditWin().GetApplyTemplate())
+        return false;
+
+    SwWrtShell& rShell = pView->GetWrtShell();
+    // The frame is most likely near the caret, so the search starts at the page of the caret.
+    const SwContentFrame* pCaretFrame = rShell.GetCurrFrame(/*bCalcFrame=*/false);
+    const SwFrame* pFrame = sw::vector::frameOf(
+        *rShell.GetLayout(), nObject, pCaretFrame ? pCaretFrame->FindPageFrame() : nullptr);
+    if (!pFrame || !pFrame->IsTextFrame())
+        return false;
+
+    // The frame shows its paragraph from its own offset up to the offset of its follow. An offset
+    // outside that range means its nearest end, and an offset between the two halves of a
+    // surrogate pair means the start of the pair.
+    const SwTextFrame& rFrame = static_cast<const SwTextFrame&>(*pFrame);
+    const OUString& rText = rFrame.GetText();
+    const TextFrameIndex nStart = rFrame.GetOffset();
+    const TextFrameIndex nEnd = rFrame.GetFollow() ? rFrame.GetFollow()->GetOffset()
+                                                   : TextFrameIndex(rText.getLength());
+    auto aPositionAt = [&rFrame, &rText, nStart, nEnd](sal_Int32 nOffset) {
+        TextFrameIndex nAt = std::clamp(TextFrameIndex(nOffset), nStart, nEnd);
+        if (nAt > nStart && sal_Int32(nAt) < rText.getLength()
+            && rtl::isLowSurrogate(rText[sal_Int32(nAt)])
+            && rtl::isHighSurrogate(rText[sal_Int32(nAt) - 1]))
+            --nAt;
+        return rFrame.MapViewToModelPos(nAt);
+    };
+    SwPaM aSelection(aPositionAt(nIndex));
+    if (nAnchorIndex != nIndex)
+    {
+        aSelection.SetMark();
+        *aSelection.GetMark() = aPositionAt(nAnchorIndex);
+    }
+
+    // The caret goes into the text as for a click there: a running edit of the text of a shape
+    // ends, and a selected frame or drawing object is left.
+    const SdrView* pDrawView = rShell.GetDrawView();
+    const bool bWasTextEdit = pDrawView && pDrawView->IsTextEdit();
+    rShell.AssureStdMode();
+    // A paragraph of a header or a footer has a frame on each page, and the cursor goes to the
+    // frame nearest to its point when the action ends. The point lies in the middle of rFrame
+    // then, so the caret goes to the frame the client named.
+    rShell.StartAction();
+    SwShellCursor* pCursor = rShell.GetCursor_();
+    const SwPosition aOldPoint(*pCursor->GetPoint());
+    bool bAllowed = false;
+    {
+        // The new place is checked as the place of a click is: a hidden section and, unless the
+        // cursor may stand in protected text, a protected section moves the caret to the text
+        // next to it, and a selection includes no protected section.
+        SwCursorSaveState aSaveState(*pCursor);
+        rShell.SetSelection(aSelection);
+        bAllowed = !pCursor->IsSelOvr(SwCursorSelOverFlags::ChangePos);
+    }
+    if (!bAllowed)
+    {
+        pCursor->DeleteMark();
+        *pCursor->GetPoint() = aOldPoint;
+    }
+    else if (*pCursor->GetPoint() == *aSelection.GetPoint())
+        pCursor->GetPtPos() = rFrame.getFrameArea().Center();
+    // The end of the action moves a caret that stands in a protected frame to text that takes it.
+    rShell.EndAction();
+    if (bWasTextEdit)
+        pView->AttrChangedNotify(nullptr);
+    // False tells that the caret is at another place than the one asked for.
+    return *rShell.GetCursor_()->GetPoint() == *aSelection.GetPoint();
 }
 
 bool SwXTextDocument::supportsCommand(std::u16string_view rCommand)

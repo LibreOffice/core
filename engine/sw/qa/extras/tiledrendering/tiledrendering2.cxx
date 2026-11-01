@@ -5294,6 +5294,66 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCaretNamesTheOtherEndOfASelection
     CPPUNIT_ASSERT_EQUAL(std::string("4"), aTree.get<std::string>("anchorIndex"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTextCursorGoesToAnIndexOfATextFrame)
+{
+    // A client that moved the caret itself names the text frame and the offsets in its text.
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert(u"first"_ustr);
+    pWrtShell->SplitNode();
+    pWrtShell->Insert(u"abcd"_ustr);
+    const sal_uInt64 nSecond = pWrtShell->GetCurrFrame()->GetFrameId();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(pXTextDocument->setKitTextCursor(pWrtShell->GetView(), nSecond, 0, 1, 0, 3));
+
+    CPPUNIT_ASSERT_EQUAL(nSecond, sal_uInt64(pWrtShell->GetCurrFrame()->GetFrameId()));
+    CPPUNIT_ASSERT_EQUAL(u"bc"_ustr, pWrtShell->GetSelText());
+    // A frame that does not exist moves nothing.
+    CPPUNIT_ASSERT(
+        !pXTextDocument->setKitTextCursor(pWrtShell->GetView(), nSecond + 1000, 0, 0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"bc"_ustr, pWrtShell->GetSelText());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTextCursorBeforeTheTextStaysAtItsStart)
+{
+    // An offset before the start of the text frame puts the caret at the start of its text.
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert(u"abcd"_ustr);
+    const sal_uInt64 nFrame = pWrtShell->GetCurrFrame()->GetFrameId();
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(pXTextDocument->setKitTextCursor(pWrtShell->GetView(), nFrame, 0, -5, 0, 2));
+
+    CPPUNIT_ASSERT_EQUAL(u"ab"_ustr, pWrtShell->GetSelText());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pWrtShell->GetCursor()->GetPoint()->GetContentIndex());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTextCursorMovesTheCaretOfTheViewThatSentIt)
+{
+    // The caret of the view named with the text frame moves, while the current view is another.
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwTestViewCallback aView1;
+    int nView1 = KitHelper::getCurrentView();
+    SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell1->Insert(u"abcd"_ustr);
+    const sal_uInt64 nFrame = pWrtShell1->GetCurrFrame()->GetFrameId();
+    KitHelper::createView();
+    SwTestViewCallback aView2;
+    SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell2->SttEndDoc(/*bStt=*/true);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(nView1 != KitHelper::getCurrentView());
+
+    CPPUNIT_ASSERT(pXTextDocument->setKitTextCursor(pWrtShell1->GetView(), nFrame, 0, 1, 0, 3));
+
+    CPPUNIT_ASSERT_EQUAL(u"bc"_ustr, pWrtShell1->GetSelText());
+    CPPUNIT_ASSERT(!pWrtShell2->HasSelection());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pWrtShell2->GetCursor()->GetPoint()->GetContentIndex());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

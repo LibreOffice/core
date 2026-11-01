@@ -138,6 +138,9 @@ namespace desktop {
             m_aVectorRenderingModes.clear();
         }
 
+        /// The next flush sends the caret of the view, also when it is the caret sent last.
+        void resendVisibleCursor();
+
         DESKTOP_DLLPUBLIC void tilePainted(const OString& rPart, int nMode,
                                            const tools::Rectangle& rRectangle);
         const OString& getViewRenderState() const { return m_aViewRenderState; }

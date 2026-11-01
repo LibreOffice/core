@@ -392,6 +392,62 @@ void addCharacterObjects(Collector& rCollector, const SwTextFrame& rFrame)
         addObjects(rCollector, *pObjects, rAccess, ePlace, /*bAsCharacter=*/true);
 }
 
+namespace
+{
+const SwFrame* frameIn(const SwFrame& rFrame, sal_uInt64 nId)
+{
+    if (rFrame.GetFrameId() == nId)
+        return &rFrame;
+    // Every fly is among the objects of the frame it is anchored at.
+    if (const SwSortedObjs* pObjects = rFrame.GetDrawObjs())
+    {
+        for (const SwAnchoredObject* pObject : *pObjects)
+        {
+            const SwFlyFrame* pFly = pObject->DynCastFlyFrame();
+            if (const SwFrame* pFound = pFly ? frameIn(*pFly, nId) : nullptr)
+                return pFound;
+        }
+    }
+    if (rFrame.IsLayoutFrame())
+    {
+        for (const SwFrame* pLower = static_cast<const SwLayoutFrame&>(rFrame).Lower(); pLower;
+             pLower = pLower->GetNext())
+        {
+            if (const SwFrame* pFound = frameIn(*pLower, nId))
+                return pFound;
+        }
+    }
+    return nullptr;
+}
+}
+
+const SwFrame* frameOf(const SwRootFrame& rLayout, sal_uInt64 nId, const SwPageFrame* pNear)
+{
+    if (!pNear || rLayout.GetFrameId() == nId)
+        return frameIn(rLayout, nId);
+
+    // The root frame holds the pages and nothing else, so the walk outward from pNear visits
+    // every frame the whole walk visits.
+    const SwFrame* pAfter = pNear;
+    const SwFrame* pBefore = pNear->GetPrev();
+    while (pAfter || pBefore)
+    {
+        if (pAfter)
+        {
+            if (const SwFrame* pFound = frameIn(*pAfter, nId))
+                return pFound;
+            pAfter = pAfter->GetNext();
+        }
+        if (pBefore)
+        {
+            if (const SwFrame* pFound = frameIn(*pBefore, nId))
+                return pFound;
+            pBefore = pBefore->GetPrev();
+        }
+    }
+    return nullptr;
+}
+
 std::vector<Entry> decomposePage(const SwPageFrame& rPage)
 {
     Collector aCollector;
