@@ -2010,6 +2010,24 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeFromOOXMLDraggedHandle)
     assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeAliasUsedAsCoordinateStaysPlain)
+{
+    // Given a clock hand whose angle adjustment has an alias equation (?f0 = $0) that places a
+    // mark as a plain coordinate:
+    loadFromFile(u"custGeom_aliasAsCoordinate.fodp");
+
+    // When saving it to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then the adjustment keeps its plain value, the mark names it through the alias, the
+    // angle equation converts it, and no polar handle is written for it
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", "fmla", u"val 45");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f0']", "fmla", u"*/ adj1 10800000 180");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[3]/a:moveTo/a:pt", "x", u"adj1");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/*", 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

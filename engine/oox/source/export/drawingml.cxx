@@ -6065,6 +6065,15 @@ sal_Int32 lcl_AdjustmentIndexOf(const drawing::EnhancedCustomShapeParameter& rPa
     return -1;
 }
 
+sal_Int32 lcl_EquationIndexOf(const drawing::EnhancedCustomShapeParameter& rParam)
+{
+    sal_Int32 nIndex = -1;
+    if (rParam.Type == drawing::EnhancedCustomShapeParameterType::EQUATION
+        && (rParam.Value >>= nIndex))
+        return nIndex;
+    return -1;
+}
+
 // Reads the "Handles" of the shape: the xy handles go to rHandles, the polar ones to
 // rPolarHandles, and every adjustment that a handle drives is classified by the way it is
 // driven. A switched handle swaps its axes when the shape is taller than wide, as the shape
@@ -6424,7 +6433,8 @@ void lcl_CollectDirectAdjustmentUses(
     const cpo::uno::Sequence<drawing::EnhancedCustomShapeSegment>& rSegments,
     const cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rPairs,
     const cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rGluePoints,
-    const std::vector<XYHandleRaw>& rXYHandles, std::set<sal_Int32>& rDirect)
+    const std::vector<XYHandleRaw>& rXYHandles, std::set<sal_Int32>& rDirect,
+    std::set<sal_Int32>& rDirectEquations)
 {
     sal_Int32 nPairIndex = 0;
     for (const drawing::EnhancedCustomShapeSegment& rSegment : rSegments)
@@ -6475,6 +6485,9 @@ void lcl_CollectDirectAdjustmentUses(
                     const sal_Int32 nAdjustment = lcl_AdjustmentIndexOf(*pParam);
                     if (nAdjustment >= 0)
                         rDirect.insert(nAdjustment);
+                    const sal_Int32 nEquation = lcl_EquationIndexOf(*pParam);
+                    if (nEquation >= 0)
+                        rDirectEquations.insert(nEquation);
                 }
             }
         }
@@ -6487,6 +6500,9 @@ void lcl_CollectDirectAdjustmentUses(
             const sal_Int32 nAdjustment = lcl_AdjustmentIndexOf(*pParam);
             if (nAdjustment >= 0)
                 rDirect.insert(nAdjustment);
+            const sal_Int32 nEquation = lcl_EquationIndexOf(*pParam);
+            if (nEquation >= 0)
+                rDirectEquations.insert(nEquation);
         }
     }
     for (const XYHandleRaw& rHandle : rXYHandles)
@@ -6499,6 +6515,9 @@ void lcl_CollectDirectAdjustmentUses(
             const sal_Int32 nAdjustment = lcl_AdjustmentIndexOf(**pRange);
             if (nAdjustment >= 0)
                 rDirect.insert(nAdjustment);
+            const sal_Int32 nEquation = lcl_EquationIndexOf(**pRange);
+            if (nEquation >= 0)
+                rDirectEquations.insert(nEquation);
         }
     }
 }
@@ -6509,6 +6528,7 @@ void lcl_CollectDirectAdjustmentUses(
 // rAngleAdjustments60000.
 void lcl_ResolveAngleAdjustments(const std::vector<std::shared_ptr<ExpressionNode>>& rNodes,
                                  const std::set<sal_Int32>& rDirect,
+                                 const std::set<sal_Int32>& rDirectEquations,
                                  std::vector<AdjustmentInfo>& rInfo,
                                  std::set<sal_Int32>& rAngleAdjustments60000)
 {
@@ -6526,6 +6546,13 @@ void lcl_ResolveAngleAdjustments(const std::vector<std::shared_ptr<ExpressionNod
                 && pNode->getIndex() == static_cast<sal_Int32>(nIndex))
                 aAliases.insert(static_cast<sal_Int32>(nEquation));
         }
+        // an alias used as a plain value somewhere keeps the angle plain as well
+        bool bAliasUsedDirectly = false;
+        for (const sal_Int32 nAlias : aAliases)
+            if (rDirectEquations.count(nAlias) > 0)
+                bAliasUsedDirectly = true;
+        if (bAliasUsedDirectly)
+            continue;
         AdjustmentAngleUse aUse;
         for (size_t nEquation = 0; nEquation < rNodes.size(); ++nEquation)
         {
@@ -6931,9 +6958,12 @@ bool lcl_BuildParametricPlan(
     if (!lcl_ParseEquations(rCustomShape2d, rEquationStrings, aNodes))
         return false;
     std::set<sal_Int32> aDirectUses;
-    lcl_CollectDirectAdjustmentUses(rSegments, rPairs, rGluePoints, aXYHandlesRaw, aDirectUses);
+    std::set<sal_Int32> aDirectEquations;
+    lcl_CollectDirectAdjustmentUses(rSegments, rPairs, rGluePoints, aXYHandlesRaw, aDirectUses,
+                                    aDirectEquations);
     std::set<sal_Int32> aAngleAdjustments60000;
-    lcl_ResolveAngleAdjustments(aNodes, aDirectUses, aAdjustmentInfo, aAngleAdjustments60000);
+    lcl_ResolveAngleAdjustments(aNodes, aDirectUses, aDirectEquations, aAdjustmentInfo,
+                                aAngleAdjustments60000);
 
     EquationGuideSet aEquations;
     if (!lcl_CreateOoxmlGuides(aNodes, aAngleAdjustments60000, aAdjustmentInfo, nViewBoxWidth,
