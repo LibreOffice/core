@@ -5181,6 +5181,9 @@ struct CustomGeometryPlan
     // The arc of each elliptical quadrant, by the index of its pair: the guides of its radii
     // and of its start and swing angles.
     std::map<sal_Int32, std::array<OString, 4>> aQuadrantArcs;
+    // The path is in the extent of the shape (no w and h on <a:path>): every coordinate is a
+    // guide in EMU, as a shape with stretch points needs.
+    bool bPathInExtent = false;
 };
 
 // The token of the x (bX) or y coordinate of pair nPairIndex, or null when the resolved
@@ -5290,7 +5293,8 @@ bool IsValidOOXMLFormula(std::u16string_view sFormula, const std::set<OUString>&
             { u"min"_ustr, u"max"_ustr, u"sin"_ustr, u"cos"_ustr, u"tan"_ustr, u"at2"_ustr },
             { u"*/"_ustr, u"+-"_ustr, u"+/"_ustr, u"?:"_ustr, u"cat2"_ustr, u"sat2"_ustr,
               u"pin"_ustr, u"mod"_ustr } };
-    static const std::set<OUString> builtInVariables = { u"w"_ustr, u"h"_ustr, u"t"_ustr, u"b"_ustr, u"l"_ustr, u"r"_ustr };
+    static const std::set<OUString> builtInVariables
+        = { u"w"_ustr, u"h"_ustr, u"t"_ustr, u"b"_ustr, u"l"_ustr, u"r"_ustr, u"ss"_ustr };
     const std::vector<OUString> strTokens = comphelper::string::split(sFormula, ' ');
     sal_uInt16 nSize = strTokens.size();
 
@@ -5413,6 +5417,43 @@ struct OoxmlEqContext
     // one being emitted, 2 for one that is done, so that a reference to a later equation emits
     // it first.
     std::vector<sal_Int8>* pEqState = nullptr;
+    // A shape with a stretch point on an axis is scaled on that axis by its shorter side (the
+    // built-in ss) instead of by w or h, and a coordinate at the far edge of the view box moves
+    // to the far edge of the shape; the path is then written in the extent of the shape.
+    bool bStretched = false;
+    OString aScaleX = "w"_ostr;
+    OString aScaleY = "h"_ostr;
+    // The formula of a length in the path's space as EMU of the shape.
+    OString extentFormula(std::string_view rToken, bool bX) const
+    {
+        return OString::Concat("*/ ") + rToken + " " + (bX ? aScaleX : aScaleY) + " "
+               + OString::number(bX ? nViewBoxWidth : nViewBoxHeight);
+    }
+    OString extentToken(std::string_view rToken, bool bX)
+    {
+        return addGuide(extentFormula(rToken, bX));
+    }
+    // The far edge of the view box, in the path's space, for a stretched axis: w scaled back
+    // by the shorter side, as the engine evaluates right and bottom.
+    OString edgeFormula(bool bX) const
+    {
+        return OString::Concat("*/ ") + std::string_view(bX ? "w " : "h ")
+               + OString::number(bX ? nViewBoxWidth : nViewBoxHeight) + " ss";
+    }
+    OString edgeToken(bool bX)
+    {
+        if ((bX ? aScaleX : aScaleY) != "ss")
+            return OString::number(bX ? nViewBoxWidth : nViewBoxHeight);
+        return addGuide(edgeFormula(bX));
+    }
+    // Whether a token is the guide of the far edge of a stretched axis.
+    bool isEdgeToken(std::string_view rToken, bool bX) const
+    {
+        if ((bX ? aScaleX : aScaleY) != "ss")
+            return false;
+        std::map<OString, OString>::const_iterator it = rGuideByFormula.find(edgeFormula(bX));
+        return it != rGuideByFormula.end() && it->second == rToken;
+    }
 
     // The path-space token of an adjustment: the guide that scales the stored 1/100000 fraction
     // back to path units, or the bare adjustment for a plain value.
@@ -5465,6 +5506,8 @@ void lcl_EmitEquation(sal_Int32 nEquation, OoxmlEqContext& rCtx);
 OString lcl_HandleParameterToken(const drawing::EnhancedCustomShapeParameter& rParam,
                                  OoxmlEqContext& rCtx);
 bool lcl_IsNumberToken(std::string_view rToken);
+OString lcl_PathUnitToken(const drawing::EnhancedCustomShapeParameter& rParam, bool bX,
+                          OoxmlEqContext& rCtx);
 
 // Writes fValue as the fraction rNumerator / rDenominator with integer parts, using the smallest
 // power of ten (up to 100000) as the denominator that represents the value exactly enough, or
@@ -5784,11 +5827,13 @@ OString lcl_EmitOoxmlNode(const ExpressionNode* pNode, OoxmlEqContext& rCtx)
             return aToken;
         }
         case ExpressionFunct::EnumWidth:
-        case ExpressionFunct::EnumRight:
             return OString::number(rCtx.nViewBoxWidth);
+        case ExpressionFunct::EnumRight:
+            return rCtx.edgeToken(true);
         case ExpressionFunct::EnumHeight:
-        case ExpressionFunct::EnumBottom:
             return OString::number(rCtx.nViewBoxHeight);
+        case ExpressionFunct::EnumBottom:
+            return rCtx.edgeToken(false);
         case ExpressionFunct::EnumLeft:
         case ExpressionFunct::EnumTop:
             return "0"_ostr;
@@ -5991,7 +6036,7 @@ bool lcl_CreateOoxmlGuides(const std::vector<std::shared_ptr<ExpressionNode>>& r
                            const std::set<sal_Int32>& rAngleAdjustments60000,
                            const std::vector<AdjustmentInfo>& rAdjustmentInfo,
                            sal_Int32 nViewBoxWidth, sal_Int32 nViewBoxHeight, bool bRawAdjustments,
-                           EquationGuideSet& rSet)
+                           bool bStretchX, bool bStretchY, EquationGuideSet& rSet)
 {
     rSet = EquationGuideSet();
     rSet.aEqNames.assign(rNodes.size(), OString());
@@ -6003,6 +6048,12 @@ bool lcl_CreateOoxmlGuides(const std::vector<std::shared_ptr<ExpressionNode>>& r
     aContext.nViewBoxHeight = nViewBoxHeight;
     aContext.pAdjustmentInfo = &rAdjustmentInfo;
     aContext.bRawAdjustments = bRawAdjustments;
+    // right and bottom in the equations are the far edges of a stretched shape
+    aContext.bStretched = bStretchX || bStretchY;
+    if (bStretchX)
+        aContext.aScaleX = "ss"_ostr;
+    if (bStretchY)
+        aContext.aScaleY = "ss"_ostr;
     aContext.pNodes = &rSet.aNodes;
     std::vector<sal_Int8> aState(rNodes.size(), 0);
     aContext.pEqState = &aState;
@@ -6020,11 +6071,36 @@ bool lcl_CreateOoxmlGuides(const std::vector<std::shared_ptr<ExpressionNode>>& r
     return true;
 }
 
+// A path coordinate in the path's space: a number of the view box that the engine replaces by
+// the far edge of a stretched axis gets the edge token.
+OString lcl_PathUnitToken(const drawing::EnhancedCustomShapeParameter& rParam, bool bX,
+                          OoxmlEqContext& rCtx)
+{
+    sal_Int32 nValue = 0;
+    if (rCtx.bStretched && rParam.Type == drawing::EnhancedCustomShapeParameterType::NORMAL
+        && (rParam.Value >>= nValue) && nValue == (bX ? rCtx.nViewBoxWidth : rCtx.nViewBoxHeight))
+        return rCtx.edgeToken(bX);
+    return lcl_HandleParameterToken(rParam, rCtx);
+}
+
 // The token for a path coordinate: the guide of an equation, or the adjustment itself. Returns
-// an empty string when the coordinate stays a resolved number.
-OString lcl_CoordinateToken(const drawing::EnhancedCustomShapeParameter& rParam,
+// an empty string when the coordinate stays a resolved number. Every coordinate is a guide in
+// the extent of a stretched shape, and the far edge of a stretched axis is w or h itself.
+OString lcl_CoordinateToken(const drawing::EnhancedCustomShapeParameter& rParam, bool bX,
                             OoxmlEqContext& rCtx)
 {
+    if (rCtx.bStretched)
+    {
+        const OString aUnit = lcl_PathUnitToken(rParam, bX, rCtx);
+        if (aUnit.isEmpty())
+        {
+            rCtx.fail("coordinate not expressible");
+            return OString();
+        }
+        if (rCtx.isEdgeToken(aUnit, bX))
+            return bX ? "w"_ostr : "h"_ostr;
+        return rCtx.extentToken(aUnit, bX);
+    }
     sal_Int32 nIndex = -1;
     if (rParam.Type == drawing::EnhancedCustomShapeParameterType::EQUATION
         && (rParam.Value >>= nIndex))
@@ -6114,16 +6190,24 @@ void lcl_CollectCoordinateTokens(
                     // order; all of them are guides when either point is one. The arc starts
                     // along x or along y by turns, from the command.
                     // a target the guides cannot express is an empty token, which leaves the
-                    // arc to the numbers
-                    const OString aX = lcl_HandleParameterToken(rPair.First, rCtx);
-                    const OString aY = lcl_HandleParameterToken(rPair.Second, rCtx);
+                    // arc to the numbers; a path in the extent of the shape cannot have them
+                    const OString aX = lcl_PathUnitToken(rPair.First, true, rCtx);
+                    const OString aY = lcl_PathUnitToken(rPair.Second, false, rCtx);
+                    if (rCtx.bStretched && (aX.isEmpty() || aY.isEmpty()))
+                    {
+                        rCtx.fail("quadrant not expressible");
+                        return;
+                    }
                     if (!aX.isEmpty() && !aY.isEmpty() && !aCurrentX.isEmpty()
                         && !aCurrentY.isEmpty()
-                        && !(lcl_IsNumberToken(aX) && lcl_IsNumberToken(aY)
-                             && lcl_IsNumberToken(aCurrentX) && lcl_IsNumberToken(aCurrentY)))
+                        && (rCtx.bStretched
+                            || !(lcl_IsNumberToken(aX) && lcl_IsNumberToken(aY)
+                                 && lcl_IsNumberToken(aCurrentX) && lcl_IsNumberToken(aCurrentY))))
                     {
-                        rPlan.aCoordTokens[2 * nPairIndex] = aX;
-                        rPlan.aCoordTokens[2 * nPairIndex + 1] = aY;
+                        rPlan.aCoordTokens[2 * nPairIndex]
+                            = lcl_CoordinateToken(rPair.First, true, rCtx);
+                        rPlan.aCoordTokens[2 * nPairIndex + 1]
+                            = lcl_CoordinateToken(rPair.Second, false, rCtx);
                         const OString aDX = rCtx.addGuide("+- " + aX + " 0 " + aCurrentX);
                         const OString aDY = rCtx.addGuide("+- " + aY + " 0 " + aCurrentY);
                         const OString aProduct = rCtx.addGuide("*/ " + aDX + " " + aDY + " 1");
@@ -6149,22 +6233,30 @@ void lcl_CollectCoordinateTokens(
                                   ? rCtx.addGuide("?: " + aProduct + " 5400000 -5400000")
                                   : rCtx.addGuide("?: " + rCtx.addGuide("*/ " + aProduct + " -1 1")
                                                   + " 5400000 -5400000");
-                        rPlan.aQuadrantArcs[nPairIndex]
-                            = { rCtx.addGuide("abs " + aDX), rCtx.addGuide("abs " + aDY), aStart,
-                                aSwing };
+                        OString aWR = rCtx.addGuide("abs " + aDX);
+                        OString aHR = rCtx.addGuide("abs " + aDY);
+                        if (rCtx.bStretched)
+                        {
+                            aWR = rCtx.extentToken(aWR, true);
+                            aHR = rCtx.extentToken(aHR, false);
+                        }
+                        rPlan.aQuadrantArcs[nPairIndex] = { aWR, aHR, aStart, aSwing };
+                    }
+                    else if (rCtx.bStretched)
+                    {
+                        rCtx.fail("quadrant without a current point");
+                        return;
                     }
                     aCurrentX = aX;
                     aCurrentY = aY;
                     continue;
                 }
-                rPlan.aCoordTokens[2 * nPairIndex] = lcl_CoordinateToken(rPair.First, rCtx);
-                rPlan.aCoordTokens[2 * nPairIndex + 1] = lcl_CoordinateToken(rPair.Second, rCtx);
-                aCurrentX = rPlan.aCoordTokens[2 * nPairIndex].isEmpty()
-                                ? lcl_HandleParameterToken(rPair.First, rCtx)
-                                : rPlan.aCoordTokens[2 * nPairIndex];
-                aCurrentY = rPlan.aCoordTokens[2 * nPairIndex + 1].isEmpty()
-                                ? lcl_HandleParameterToken(rPair.Second, rCtx)
-                                : rPlan.aCoordTokens[2 * nPairIndex + 1];
+                rPlan.aCoordTokens[2 * nPairIndex] = lcl_CoordinateToken(rPair.First, true, rCtx);
+                rPlan.aCoordTokens[2 * nPairIndex + 1]
+                    = lcl_CoordinateToken(rPair.Second, false, rCtx);
+                // the current point in the path's space
+                aCurrentX = lcl_PathUnitToken(rPair.First, true, rCtx);
+                aCurrentY = lcl_PathUnitToken(rPair.Second, false, rCtx);
             }
         }
     }
@@ -6541,9 +6633,8 @@ void lcl_BuildXYHandles(const std::vector<XYHandleRaw>& rHandles,
         }
         else
         {
-            aOut.aPosX = rCtx.addGuide("*/ " + aPosX + " w " + OString::number(rCtx.nViewBoxWidth));
-            aOut.aPosY
-                = rCtx.addGuide("*/ " + aPosY + " h " + OString::number(rCtx.nViewBoxHeight));
+            aOut.aPosX = rCtx.extentToken(aPosX, true);
+            aOut.aPosY = rCtx.extentToken(aPosY, false);
         }
         rOut.push_back(aOut);
     }
@@ -6762,8 +6853,8 @@ void lcl_BuildPolarHandles(const std::vector<PolarHandleRaw>& rHandles,
         }
         else
         {
-            aOut.aPosX = rCtx.addGuide("*/ " + aPx + " w " + OString::number(rCtx.nViewBoxWidth));
-            aOut.aPosY = rCtx.addGuide("*/ " + aPy + " h " + OString::number(rCtx.nViewBoxHeight));
+            aOut.aPosX = rCtx.extentToken(aPx, true);
+            aOut.aPosY = rCtx.extentToken(aPy, false);
         }
         rOut.push_back(aOut);
     }
@@ -6868,6 +6959,56 @@ OString lcl_ArcSwing(std::string_view rStart, std::string_view rEnd, bool bClock
     return rCtx.addGuide("?: " + aSwing + " " + aMinusTurn + " " + aSwing);
 }
 
+// A length of an arc in the space the arc is written in: the path's, or the extent of a
+// stretched shape.
+OString lcl_ArcLength(const OString& rToken, bool bX, OoxmlEqContext& rCtx)
+{
+    return rCtx.bStretched ? rCtx.extentToken(rToken, bX) : rToken;
+}
+
+// An angle of an arc, in 60000ths of a degree, in the space the arc is written in. The engine
+// takes the angle on the unscaled ellipse and scales the point; when the two axes of a stretched
+// shape are scaled differently, the ray through that point has another angle in the extent:
+// its tangent grows by the ratio of the two scales, each the extent of its axis over the size
+// of the view box on that axis. The legs are the extent of y and the extent of x brought to
+// the view box of y, so that they stay in the magnitude of the extent.
+OString lcl_ArcAngle(const OString& rToken, OoxmlEqContext& rCtx)
+{
+    if (!rCtx.bStretched)
+        return rToken;
+    OString aLegX = rCtx.aScaleX;
+    if (rCtx.nViewBoxWidth != rCtx.nViewBoxHeight)
+        aLegX = rCtx.addGuide("*/ " + rCtx.aScaleX + " " + OString::number(rCtx.nViewBoxHeight)
+                              + " " + OString::number(rCtx.nViewBoxWidth));
+    const OString aCos = rCtx.addGuide("cos " + aLegX + " " + rToken);
+    const OString aSin = rCtx.addGuide("sin " + rCtx.aScaleY + " " + rToken);
+    return rCtx.addGuide("at2 " + aCos + " " + aSin);
+}
+
+// The swing from one transformed angle to another, in the direction of the original swing. The
+// transformed angles of a full turn are the same angle, so a turn is decided from the original
+// swing, which the path gives exactly: a swing of a full turn stays one, in its direction.
+OString lcl_ArcSwingLike(std::string_view rStart, std::string_view rEnd, std::string_view rSwing,
+                         OoxmlEqContext& rCtx)
+{
+    const OString aDelta = rCtx.addGuide(OString::Concat("+- ") + rEnd + " 0 " + rStart);
+    const OString aForward = rCtx.addGuide("?: " + aDelta + " " + aDelta + " "
+                                           + rCtx.addGuide("+- " + aDelta + " 21600000 0"));
+    const OString aNegative = rCtx.addGuide("*/ " + aDelta + " -1 1");
+    const OString aMinusTurn = rCtx.addGuide("+- " + aDelta + " 0 21600000");
+    const OString aBackward
+        = rCtx.addGuide("?: " + aNegative + " " + aDelta + " " + aMinusTurn);
+    const OString aSigned
+        = rCtx.addGuide(OString::Concat("?: ") + rSwing + " " + aForward + " " + aBackward);
+    const OString aSize = rCtx.addGuide(OString::Concat("abs ") + rSwing);
+    const OString aOffTurn = rCtx.addGuide("+- 21600000 0 " + aSize);
+    const OString aTurn
+        = rCtx.addGuide(OString::Concat("?: ") + rSwing + " 21600000 -21600000");
+    const OString aNonZero
+        = rCtx.addGuide("?: " + aOffTurn + " " + aSigned + " " + aTurn);
+    return rCtx.addGuide("?: " + aSize + " " + aNonZero + " 0");
+}
+
 // Fills the coordinate tokens of the arc commands whose parameters can all be expressed, so that
 // the segment writer emits arcTo with guides and the adjustments behind them stay live. The
 // slots of a command's pairs hold, in order: the start point of the arc, the radii, and the
@@ -6913,8 +7054,18 @@ void lcl_CollectArcTokens(
             if (nPairIndex + nPairsPerCommand > rPairs.getLength())
                 break;
             const drawing::EnhancedCustomShapeParameterPair* pPair = &rPairs[nPairIndex];
-            // an arc of plain numbers stays as it is
-            bool bDepends = false;
+            const bool bArc
+                = rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::ARCANGLETO
+                  || rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO
+                  || rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE
+                  || rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::ARCTO
+                  || rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::ARC
+                  || rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO
+                  || rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC;
+            if (!bArc)
+                continue;
+            // an arc of plain numbers stays as it is, unless the path is in the extent
+            bool bDepends = rCtx.bStretched;
             for (sal_Int32 i = 0; i < nPairsPerCommand; ++i)
             {
                 for (const drawing::EnhancedCustomShapeParameter* pParam :
@@ -6938,26 +7089,51 @@ void lcl_CollectArcTokens(
                     const OString aSwing = lcl_ArcAngleToken(pPair[1].Second, rCtx);
                     if (aWR.isEmpty() || aHR.isEmpty() || aStart.isEmpty() || aSwing.isEmpty())
                         break;
+                    if (rCtx.bStretched)
+                    {
+                        const OString aStart2 = lcl_ArcAngle(aStart, rCtx);
+                        const OString aEnd2 = lcl_ArcAngle(
+                            rCtx.addGuide("+- " + aStart + " " + aSwing + " 0"), rCtx);
+                        aTokens = { lcl_ArcLength(aWR, true, rCtx), lcl_ArcLength(aHR, false, rCtx),
+                                    aStart2, lcl_ArcSwingLike(aStart2, aEnd2, aSwing, rCtx) };
+                        break;
+                    }
                     aTokens = { aWR, aHR, aStart, aSwing };
                     break;
                 }
                 case drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO:
                 case drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE:
                 {
-                    const OString aCx = lcl_HandleParameterToken(pPair[0].First, rCtx);
-                    const OString aCy = lcl_HandleParameterToken(pPair[0].Second, rCtx);
-                    const OString aWR = lcl_HandleParameterToken(pPair[1].First, rCtx);
-                    const OString aHR = lcl_HandleParameterToken(pPair[1].Second, rCtx);
-                    const OString aStart = lcl_ArcAngleToken(pPair[2].First, rCtx);
-                    const OString aEnd = lcl_ArcAngleToken(pPair[2].Second, rCtx);
-                    if (aCx.isEmpty() || aCy.isEmpty() || aWR.isEmpty() || aHR.isEmpty()
-                        || aStart.isEmpty() || aEnd.isEmpty())
+                    const OString aCxPath = lcl_PathUnitToken(pPair[0].First, true, rCtx);
+                    const OString aCyPath = lcl_PathUnitToken(pPair[0].Second, false, rCtx);
+                    const OString aWRPath = lcl_PathUnitToken(pPair[1].First, true, rCtx);
+                    const OString aHRPath = lcl_PathUnitToken(pPair[1].Second, false, rCtx);
+                    const OString aStartPath = lcl_ArcAngleToken(pPair[2].First, rCtx);
+                    const OString aEndPath = lcl_ArcAngleToken(pPair[2].Second, rCtx);
+                    if (aCxPath.isEmpty() || aCyPath.isEmpty() || aWRPath.isEmpty()
+                        || aHRPath.isEmpty() || aStartPath.isEmpty() || aEndPath.isEmpty())
                         break;
+                    const OString aCx = lcl_ArcLength(aCxPath, true, rCtx);
+                    const OString aCy = lcl_ArcLength(aCyPath, false, rCtx);
+                    const OString aWR = lcl_ArcLength(aWRPath, true, rCtx);
+                    const OString aHR = lcl_ArcLength(aHRPath, false, rCtx);
+                    const OString aStart = lcl_ArcAngle(aStartPath, rCtx);
+                    const OString aEnd = lcl_ArcAngle(aEndPath, rCtx);
                     OString aSx;
                     OString aSy;
                     lcl_ArcRayPoint(aCx, aCy, aWR, aHR, aStart, rCtx, aSx, aSy);
-                    aTokens
-                        = { aSx, aSy, aWR, aHR, aStart, lcl_ArcSwing(aStart, aEnd, true, rCtx) };
+                    OString aSwing = lcl_ArcSwing(aStart, aEnd, true, rCtx);
+                    if (rCtx.bStretched)
+                    {
+                        // a full turn, which the transformed angles cannot tell from none,
+                        // stays a full turn: the angles of the path are a turn apart
+                        const OString aPathDelta = rCtx.addGuide(
+                            "abs " + rCtx.addGuide("+- " + aEndPath + " 0 " + aStartPath));
+                        const OString aOffTurn = rCtx.addGuide(
+                            "abs " + rCtx.addGuide("+- " + aPathDelta + " 0 21600000"));
+                        aSwing = rCtx.addGuide("?: " + aOffTurn + " " + aSwing + " 21600000");
+                    }
+                    aTokens = { aSx, aSy, aWR, aHR, aStart, aSwing };
                     break;
                 }
                 case drawing::EnhancedCustomShapeSegmentCommand::ARCTO:
@@ -6965,17 +7141,27 @@ void lcl_CollectArcTokens(
                 case drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO:
                 case drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC:
                 {
-                    const OString aX1 = lcl_HandleParameterToken(pPair[0].First, rCtx);
-                    const OString aY1 = lcl_HandleParameterToken(pPair[0].Second, rCtx);
-                    const OString aX2 = lcl_HandleParameterToken(pPair[1].First, rCtx);
-                    const OString aY2 = lcl_HandleParameterToken(pPair[1].Second, rCtx);
-                    const OString aX3 = lcl_HandleParameterToken(pPair[2].First, rCtx);
-                    const OString aY3 = lcl_HandleParameterToken(pPair[2].Second, rCtx);
-                    const OString aX4 = lcl_HandleParameterToken(pPair[3].First, rCtx);
-                    const OString aY4 = lcl_HandleParameterToken(pPair[3].Second, rCtx);
-                    if (aX1.isEmpty() || aY1.isEmpty() || aX2.isEmpty() || aY2.isEmpty()
-                        || aX3.isEmpty() || aY3.isEmpty() || aX4.isEmpty() || aY4.isEmpty())
+                    // in the space the arc is written in, so that the rays keep their angles
+                    std::array<OString, 4> aXPath;
+                    std::array<OString, 4> aYPath;
+                    bool bExpressible = true;
+                    for (size_t i = 0; i < 4; ++i)
+                    {
+                        aXPath[i] = lcl_PathUnitToken(pPair[i].First, true, rCtx);
+                        aYPath[i] = lcl_PathUnitToken(pPair[i].Second, false, rCtx);
+                        if (aXPath[i].isEmpty() || aYPath[i].isEmpty())
+                            bExpressible = false;
+                    }
+                    if (!bExpressible)
                         break;
+                    const OString aX1 = lcl_ArcLength(aXPath[0], true, rCtx);
+                    const OString aY1 = lcl_ArcLength(aYPath[0], false, rCtx);
+                    const OString aX2 = lcl_ArcLength(aXPath[1], true, rCtx);
+                    const OString aY2 = lcl_ArcLength(aYPath[1], false, rCtx);
+                    const OString aX3 = lcl_ArcLength(aXPath[2], true, rCtx);
+                    const OString aY3 = lcl_ArcLength(aYPath[2], false, rCtx);
+                    const OString aX4 = lcl_ArcLength(aXPath[3], true, rCtx);
+                    const OString aY4 = lcl_ArcLength(aYPath[3], false, rCtx);
                     // the ellipse of the bounding box
                     const OString aWR = rCtx.addGuide(
                         "*/ " + rCtx.addGuide("abs " + rCtx.addGuide("+- " + aX2 + " 0 " + aX1))
@@ -7009,6 +7195,11 @@ void lcl_CollectArcTokens(
             }
             if (aTokens.empty() || rCtx.bFailed)
             {
+                if (rCtx.bStretched)
+                {
+                    rCtx.fail("arc not expressible");
+                    return;
+                }
                 rCtx.bFailed = false;
                 continue;
             }
@@ -7039,8 +7230,8 @@ bool lcl_BuildGluePointGuides(
     for (const drawing::EnhancedCustomShapeParameterPair& rGluePoint : rGluePoints)
     {
         ++nIndex;
-        const OString aX = lcl_HandleParameterToken(rGluePoint.First, rCtx);
-        const OString aY = lcl_HandleParameterToken(rGluePoint.Second, rCtx);
+        const OString aX = lcl_PathUnitToken(rGluePoint.First, true, rCtx);
+        const OString aY = lcl_PathUnitToken(rGluePoint.Second, false, rCtx);
         if (aX.isEmpty() || aY.isEmpty())
             return false;
         // A glue point of a shape that came from OOXML is in the extent of the shape unless it
@@ -7049,11 +7240,9 @@ bool lcl_BuildGluePointGuides(
         const bool bXInExtent = rCtx.bRawAdjustments && aX.toInt64() == 0 && aX != "0";
         const bool bYInExtent = rCtx.bRawAdjustments && aY.toInt64() == 0 && aY != "0";
         const OString aFormulaX
-            = bXInExtent ? lcl_FormulaOfToken(aX, rCtx)
-                         : OString("*/ " + aX + " w " + OString::number(rCtx.nViewBoxWidth));
+            = bXInExtent ? lcl_FormulaOfToken(aX, rCtx) : rCtx.extentFormula(aX, true);
         const OString aFormulaY
-            = bYInExtent ? lcl_FormulaOfToken(aY, rCtx)
-                         : OString("*/ " + aY + " h " + OString::number(rCtx.nViewBoxHeight));
+            = bYInExtent ? lcl_FormulaOfToken(aY, rCtx) : rCtx.extentFormula(aY, false);
         rGuides.push_back({ "GluePoint" + OString::number(nIndex) + "X", aFormulaX });
         rGuides.push_back({ "GluePoint" + OString::number(nIndex) + "Y", aFormulaY });
     }
@@ -7123,7 +7312,8 @@ bool lcl_BuildParametricPlan(
     const cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rPairs,
     const cpo::uno::Sequence<beans::PropertyValues>& rHandles, sal_Int32 nAdjustmentCount,
     const cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rGluePoints,
-    sal_Int32 nViewBoxWidth, sal_Int32 nViewBoxHeight, bool bFromOOXML, CustomGeometryPlan& rPlan)
+    sal_Int32 nViewBoxWidth, sal_Int32 nViewBoxHeight, bool bFromOOXML, bool bStretchX,
+    bool bStretchY, CustomGeometryPlan& rPlan)
 {
     // The handles decide how each adjustment is stored.
     std::vector<AdjustmentInfo> aAdjustmentInfo(nAdjustmentCount);
@@ -7144,7 +7334,7 @@ bool lcl_BuildParametricPlan(
 
     EquationGuideSet aEquations;
     if (!lcl_CreateOoxmlGuides(aNodes, aAngleAdjustments60000, aAdjustmentInfo, nViewBoxWidth,
-                               nViewBoxHeight, bFromOOXML, aEquations))
+                               nViewBoxHeight, bFromOOXML, bStretchX, bStretchY, aEquations))
         return false;
     OoxmlEqContext aContext{ aEquations.aGuides,     aEquations.aUsedAdjustments,
                              aEquations.aEqNames,    aEquations.aEqIsAngle,
@@ -7153,9 +7343,15 @@ bool lcl_BuildParametricPlan(
     aContext.nViewBoxHeight = nViewBoxHeight;
     aContext.pAdjustmentInfo = &aAdjustmentInfo;
     aContext.bRawAdjustments = bFromOOXML;
+    aContext.bStretched = bStretchX || bStretchY;
+    if (bStretchX)
+        aContext.aScaleX = "ss"_ostr;
+    if (bStretchY)
+        aContext.aScaleY = "ss"_ostr;
     aContext.pNodes = &aEquations.aNodes;
 
     CustomGeometryPlan aPlan = rPlan;
+    aPlan.bPathInExtent = aContext.bStretched;
     lcl_CollectCoordinateTokens(rSegments, rPairs, aContext, aPlan);
     if (aContext.bFailed)
     {
@@ -7163,6 +7359,11 @@ bool lcl_BuildParametricPlan(
         return false;
     }
     lcl_CollectArcTokens(rSegments, rPairs, aContext, aPlan);
+    if (aContext.bFailed)
+    {
+        SAL_INFO("oox.shape.custgeom", "not parametric: arcs: " << aContext.aFailure);
+        return false;
+    }
 
     // A handle whose adjustment also feeds a coordinate that stays a number would move only
     // part of the geometry.
@@ -7277,7 +7478,8 @@ bool lcl_BuildParametricPlan(
             continue;
         const OUString aToken = OUString::fromUtf8(rToken);
         if (aGuideNames.find(aToken) == aGuideNames.end()
-            && aAdjustmentNames.find(aToken) == aAdjustmentNames.end())
+            && aAdjustmentNames.find(aToken) == aAdjustmentNames.end() && aToken != u"w"
+            && aToken != u"h")
         {
             SAL_INFO("oox.shape.custgeom", "not parametric: token not declared: " << rToken);
             return false;
@@ -7298,7 +7500,8 @@ bool lcl_BuildParametricPlan(
             continue;
         const OUString aToken = OUString::fromUtf8(rToken);
         if (aGuideNames.find(aToken) == aGuideNames.end()
-            && aAdjustmentNames.find(aToken) == aAdjustmentNames.end())
+            && aAdjustmentNames.find(aToken) == aAdjustmentNames.end() && aToken != u"w"
+            && aToken != u"h")
         {
             SAL_INFO("oox.shape.custgeom", "not parametric: token not declared: " << rToken);
             return false;
@@ -7913,6 +8116,10 @@ bool DrawingML::WriteCustomGeometry(
     // The nominal viewBox starts at 0,0 and has a size, as the paths of a shape drawn by its
     // equations expect; a substitute or a stretched one does not qualify.
     bool bNominalViewBox = false;
+    bool bViewBoxAtOrigin = false;
+    // the size of the view box before the stretch ratio is applied to it
+    sal_Int32 nPlainViewBoxWidth(0);
+    sal_Int32 nPlainViewBoxHeight(0);
     if (!aPathSize.hasElements())
     {
         bUseGlobalViewBox = true;
@@ -7926,8 +8133,11 @@ bool DrawingML::WriteCustomGeometry(
         {
             nViewBoxWidth = aViewBox.Width;
             nViewBoxHeight = aViewBox.Height;
-            bNominalViewBox = aViewBox.X == 0 && aViewBox.Y == 0 && aViewBox.Width > 0
-                              && aViewBox.Height > 0 && !bReplaceGeoWidth && !bReplaceGeoHeight;
+            nPlainViewBoxWidth = aViewBox.Width;
+            nPlainViewBoxHeight = aViewBox.Height;
+            bViewBoxAtOrigin = aViewBox.X == 0 && aViewBox.Y == 0;
+            bNominalViewBox = bViewBoxAtOrigin && aViewBox.Width > 0 && aViewBox.Height > 0
+                              && !bReplaceGeoWidth && !bReplaceGeoHeight;
             css::drawing::EnhancedCustomShapeParameter aECSP;
             aECSP.Type = css::drawing::EnhancedCustomShapeParameterType::NORMAL;
             aECSP.Value <<= nViewBoxWidth;
@@ -7982,7 +8192,12 @@ bool DrawingML::WriteCustomGeometry(
     const bool bFromOOXML = bOOXML && !bUseGlobalViewBox && aPathSize.hasElements()
                             && aPathSize[0].Width > 0 && aPathSize[0].Height > 0
                             && !bReplaceGeoWidth && !bReplaceGeoHeight;
-    if ((bNominalViewBox && !bOOXML) || bFromOOXML)
+    // A shape with stretch points is scaled by its shorter side on the stretched axes; it is
+    // written in its extent, with the built-in ss.
+    const bool bStretchedBox = !bOOXML && bUseGlobalViewBox && !bNominalViewBox
+                               && nPlainViewBoxWidth > 0 && nPlainViewBoxHeight > 0
+                               && bViewBoxAtOrigin && (bReplaceGeoWidth || bReplaceGeoHeight);
+    if ((bNominalViewBox && !bOOXML) || bFromOOXML || bStretchedBox)
     {
         cpo::uno::Sequence<beans::PropertyValues> aHandles;
         cpo::uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues;
@@ -7993,11 +8208,14 @@ bool DrawingML::WriteCustomGeometry(
             else if (rProp.Name == "AdjustmentValues")
                 rProp.Value >>= aAdjustmentValues;
         }
-        bParametric = lcl_BuildParametricPlan(aCustomShape2d, aEquationSeq, aSegments, aPairs,
-                                              aHandles, aAdjustmentValues.getLength(), aGluePoints,
-                                              bFromOOXML ? aPathSize[0].Width : nViewBoxWidth,
-                                              bFromOOXML ? aPathSize[0].Height : nViewBoxHeight,
-                                              bFromOOXML, aPlan);
+        bParametric = lcl_BuildParametricPlan(
+            aCustomShape2d, aEquationSeq, aSegments, aPairs, aHandles,
+            aAdjustmentValues.getLength(), aGluePoints,
+            bFromOOXML ? aPathSize[0].Width : (bStretchedBox ? nPlainViewBoxWidth : nViewBoxWidth),
+            bFromOOXML ? aPathSize[0].Height
+                       : (bStretchedBox ? nPlainViewBoxHeight : nViewBoxHeight),
+            bFromOOXML, bStretchedBox && bReplaceGeoWidth, bStretchedBox && bReplaceGeoHeight,
+            aPlan);
     }
     if (!bParametric)
     {
@@ -8064,11 +8282,16 @@ bool DrawingML::WriteCustomGeometry(
             sStroke = "0"_ostr;
 
         // Write a:path start element
-        mpFS->startElementNS(
-            XML_a, XML_path, XML_fill, sFill, XML_stroke, sStroke, XML_w,
-            OString::number(bUseGlobalViewBox ? nViewBoxWidth : aPathSize[nPathSizeIndex].Width),
-            XML_h,
-            OString::number(bUseGlobalViewBox ? nViewBoxHeight : aPathSize[nPathSizeIndex].Height));
+        if (aPlan.bPathInExtent)
+            mpFS->startElementNS(XML_a, XML_path, XML_fill, sFill, XML_stroke, sStroke);
+        else
+            mpFS->startElementNS(
+                XML_a, XML_path, XML_fill, sFill, XML_stroke, sStroke, XML_w,
+                OString::number(bUseGlobalViewBox ? nViewBoxWidth
+                                                  : aPathSize[nPathSizeIndex].Width),
+                XML_h,
+                OString::number(bUseGlobalViewBox ? nViewBoxHeight
+                                                  : aPathSize[nPathSizeIndex].Height));
 
         // Arcs drawn by commands ELLIPTICALQUADRANTX and ELLIPTICALQUADRANTY depend on the position
         // of the target point in regard to the current point. Therefore we need to track the

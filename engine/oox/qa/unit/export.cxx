@@ -738,28 +738,16 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148784StretchXY)
     // Verify the markup.
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
 
-    // x-position of last segment should be same as path width. It was 21600 without fix.
-    sal_Int32 nWidth
-        = getXPathContent(pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/@w")
-              .toInt32();
-    sal_Int32 nPosX
-        = getXPathContent(
-              pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo[4]/a:pt/@x")
-              .toInt32();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("StretchX", nWidth, nPosX);
+    // The path is in the extent of the shape; the x-position of the last segment is the far edge
+    // of the shape, w.
+    assertXPathNoAttribute(pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path", "w");
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo[4]/a:pt",
+                "x", u"w");
 
-    // y-position of last segment should be same as path height. It was 21600 without fix.
-    sal_Int32 nHeight
-        = getXPathContent(pXmlDoc, "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/@h")
-              .toInt32();
-    sal_Int32 nPosY
-        = getXPathContent(
-              pXmlDoc, "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo[4]/a:pt/@y")
-              .toInt32();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("StretchY", nHeight, nPosY);
-
-    // The test reflects the state of Apr 2022. It needs to be adapted when export of handles and
-    // guides is implemented.
+    // the y-position of the last segment is the far edge of the shape, h
+    assertXPathNoAttribute(pXmlDoc, "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path", "h");
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo[4]/a:pt",
+                "y", u"h");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf148784StretchCommandQ)
@@ -774,30 +762,17 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148784StretchCommandQ)
     // Verify the markup.
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
 
-    // x-position of second quadBezTo control should be same as path width. It was 21600 without fix.
-    sal_Int32 nWidth
-        = getXPathContent(pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/@w")
-              .toInt32();
-    sal_Int32 nPosX
-        = getXPathContent(
-              pXmlDoc,
-              "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/a:quadBezTo[2]/a:pt/@x")
-              .toInt32();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("StretchX", nWidth, nPosX);
+    // The path is in the extent of the shape; the x-position of the second quadBezTo control
+    // is the far edge of the shape, w.
+    assertXPathNoAttribute(pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path", "w");
+    assertXPath(pXmlDoc,
+                "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/a:quadBezTo[2]/a:pt[1]", "x",
+                u"w");
 
-    // y-position of third quadBezTo control should be same as path height. It was 21600 without fix.
-    sal_Int32 nHeight
-        = getXPathContent(pXmlDoc, "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/@h")
-              .toInt32();
-    sal_Int32 nPosY
-        = getXPathContent(
-              pXmlDoc,
-              "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/a:quadBezTo[3]/a:pt/@y")
-              .toInt32();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("StretchY", nHeight, nPosY);
-
-    // The test reflects the state of Apr 2022. It needs to be adapted when export of handles and
-    // guides is implemented.
+    // the y-position of the third quadBezTo control is the far edge of the shape, h
+    assertXPath(pXmlDoc,
+                "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/a:quadBezTo[3]/a:pt[1]", "y",
+                u"h");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf148784StretchCommandVW)
@@ -813,27 +788,33 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148784StretchCommandVW)
     // Verify the markup.
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
 
-    // wR of first ArcTo in first shape should be same as path width/2. It was 10800 without fix.
-    sal_Int32 nHalfWidth
-        = getXPathContent(pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/@w")
-              .toInt32()
-          / 2;
-    sal_Int32 nWR
-        = getXPathContent(pXmlDoc,
-                          "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/a:arcTo[1]/@wR")
-              .toInt32();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("StretchX", nHalfWidth, nWR);
+    // The path is in the extent of the shape; wR of the first arcTo of the first shape is a
+    // guide: half of the box of the arc, whose far edge is w, in the extent.
+    assertXPathNoAttribute(pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path", "w");
+    OUString aWR = getXPath(
+        pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/a:arcTo[1]", "wR");
+    CPPUNIT_ASSERT(aWR.startsWith("f"));
+    OUString aFormula = getXPath(
+        pXmlDoc,
+        OString("//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:gdLst/a:gd[@name='" + aWR.toUtf8() + "']"),
+        "fmla");
+    CPPUNIT_ASSERT(aFormula.startsWith("*/ f"));
+    CPPUNIT_ASSERT(aFormula.endsWith(" 1 2"));
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:gdLst/a:gd[@fmla='*/ w 21600 ss']",
+                1);
 
-    // hR of first ArcTo in second shape should be same as path height /2. It was 10800 without fix.
-    sal_Int32 nHalfHeight
-        = getXPathContent(pXmlDoc, "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/@h")
-              .toInt32()
-          / 2;
-    sal_Int32 nHR
-        = getXPathContent(pXmlDoc,
-                          "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/a:arcTo[1]/@hR")
-              .toInt32();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("StretchY", nHalfHeight, nHR);
+    // hR of the first arcTo of the second shape the same way with h
+    OUString aHR = getXPath(
+        pXmlDoc, "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/a:arcTo[1]", "hR");
+    CPPUNIT_ASSERT(aHR.startsWith("f"));
+    aFormula = getXPath(
+        pXmlDoc,
+        OString("//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:gdLst/a:gd[@name='" + aHR.toUtf8() + "']"),
+        "fmla");
+    CPPUNIT_ASSERT(aFormula.startsWith("*/ f"));
+    CPPUNIT_ASSERT(aFormula.endsWith(" 1 2"));
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:gdLst/a:gd[@fmla='*/ h 21600 ss']",
+                1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf149551VertPadding)
@@ -1636,11 +1617,21 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeEquationGuidesStretch)
     // When saving it to PPTX:
     save(TestFilter::PPTX);
 
-    // Then the shape keeps resolved coordinates: no adjustment, no equation guide
+    // Then the path is in the extent of the shape: x through the shorter side (ss), y through
+    // h, the far edge of x is w, and the adjustment with its handle is kept
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
-    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", 0);
-    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd", 0);
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "//a:pathLst/a:path/a:moveTo/a:pt", "x").toInt32() > 0);
+    assertXPathNoAttribute(pXmlDoc, "//a:pathLst/a:path", "w");
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", "fmla", u"val 25000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", 1);
+    OUString aX = getXPath(pXmlDoc, "//a:pathLst/a:path/a:moveTo/a:pt", "x");
+    OUString aFormula = getXPath(
+        pXmlDoc, OString("//a:custGeom/a:gdLst/a:gd[@name='" + aX.toUtf8() + "']"), "fmla");
+    CPPUNIT_ASSERT(aFormula.endsWith(" ss 21600"));
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo[1]/a:pt", "x", u"w");
+    OUString aY = getXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo[1]/a:pt", "y");
+    aFormula = getXPath(pXmlDoc, OString("//a:custGeom/a:gdLst/a:gd[@name='" + aY.toUtf8() + "']"),
+                        "fmla");
+    CPPUNIT_ASSERT(aFormula.endsWith(" h 21600"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCustomShapeEquationGuidesConstants)
@@ -2108,6 +2099,147 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeQuadrants)
     assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", "fmla", u"val 16667");
     assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", 1);
     assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", "gdRefX", u"adj1");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeStretched)
+{
+    // Given a rounded rectangle with stretch points on both axes, twice as wide as tall:
+    loadFromFile(u"custGeom_stretched.fodp");
+
+    // When saving it to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then the path is in the extent of the shape, scaled by the shorter side on both axes, the
+    // far edges are w and h, right in the equations is w brought back into the view box, and
+    // the corner handle is kept
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPathNoAttribute(pXmlDoc, "//a:pathLst/a:path", "w");
+    assertXPathNoAttribute(pXmlDoc, "//a:pathLst/a:path", "h");
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", "fmla", u"val 16667");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", 1);
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='*/ w 21600 ss']", 1);
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='*/ h 21600 ss']", 1);
+    // right-$0 and bottom-$0 are two guides, each from its own edge
+    OUString aRight = getXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='*/ w 21600 ss']", "name");
+    OUString aBottom
+        = getXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='*/ h 21600 ss']", "name");
+    OUString aCorner
+        = getXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='*/ adj1 21600 100000']", "name");
+    assertXPath(pXmlDoc,
+                OString("//a:custGeom/a:gdLst/a:gd[@fmla='+- " + aRight.toUtf8() + " 0 "
+                        + aCorner.toUtf8() + "']"),
+                1);
+    assertXPath(pXmlDoc,
+                OString("//a:custGeom/a:gdLst/a:gd[@fmla='+- " + aBottom.toUtf8() + " 0 "
+                        + aCorner.toUtf8() + "']"),
+                1);
+    OUString aX = getXPath(pXmlDoc, "//a:pathLst/a:path/a:moveTo/a:pt", "x");
+    OUString aFormula = getXPath(
+        pXmlDoc, OString("//a:custGeom/a:gdLst/a:gd[@name='" + aX.toUtf8() + "']"), "fmla");
+    CPPUNIT_ASSERT(aFormula.endsWith(" ss 21600"));
+    // "L 21600 ?f8" is the third lnTo of the path
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo[3]/a:pt", "x", u"w");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", 4);
+    OUString aWR = getXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo[1]", "wR");
+    aFormula = getXPath(pXmlDoc, OString("//a:custGeom/a:gdLst/a:gd[@name='" + aWR.toUtf8() + "']"),
+                        "fmla");
+    CPPUNIT_ASSERT(aFormula.endsWith(" ss 21600"));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeStretchedArc)
+{
+    // Given a shape with stretch points, twice as tall as wide, with an arc by angles (a G
+    // command) whose radii an adjustment sets, and a glue point on the far edge:
+    loadFromFile(u"custGeom_stretchedArc.fodp");
+
+    // When saving it to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then the radii of the arc are in the extent of the shape, its angles are angles of the
+    // extent, the handle is kept, and the glue point on the far edge is w
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPathNoAttribute(pXmlDoc, "//a:pathLst/a:path", "h");
+    OUString aWR = getXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "wR");
+    OUString aFormula = getXPath(
+        pXmlDoc, OString("//a:custGeom/a:gdLst/a:gd[@name='" + aWR.toUtf8() + "']"), "fmla");
+    CPPUNIT_ASSERT(aFormula.endsWith(" ss 21600"));
+    OUString aHR = getXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "hR");
+    aFormula = getXPath(pXmlDoc, OString("//a:custGeom/a:gdLst/a:gd[@name='" + aHR.toUtf8() + "']"),
+                        "fmla");
+    CPPUNIT_ASSERT(aFormula.endsWith(" ss 21600"));
+    // the angles are transformed with the scales of the two axes, both ss here
+    OUString aStart = getXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "stAng");
+    aFormula = getXPath(
+        pXmlDoc, OString("//a:custGeom/a:gdLst/a:gd[@name='" + aStart.toUtf8() + "']"), "fmla");
+    CPPUNIT_ASSERT(aFormula.startsWith("at2 f"));
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='cos ss 10800000']", 1);
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='sin ss 10800000']", 1);
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "swAng").startsWith("f"));
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", "gdRefY", u"adj1");
+    OUString aRight = getXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='*/ w 21600 ss']", "name");
+    OUString aBottom
+        = getXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='*/ h 21600 ss']", "name");
+    OUString aGlueX = "*/ " + aRight + " ss 21600";
+    OUString aGlueY = "*/ " + aBottom + " ss 21600";
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='GluePoint1X']", "fmla", aGlueX);
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='GluePoint2Y']", "fmla", aGlueY);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeStretchedTallArcs)
+{
+    // Given a shape stretched on x only and twice as tall as wide, so that x is scaled by w and
+    // y by h, with an arc by angles from 30 to 150 degrees and an arc through two points:
+    loadFromFile(u"custGeom_stretchedTallArcs.fodp");
+
+    // When saving it to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then the angle of the arc by angles is transformed with the two scales (at2 of its cosine
+    // by the x scale and its sine by the y scale), and the arc through two points takes its
+    // angles from the points in the extent
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", 1);
+    OUString aStart = getXPath(pXmlDoc, "//a:pathLst/a:path[2]/a:arcTo", "stAng");
+    OUString aFormula = getXPath(
+        pXmlDoc, OString("//a:custGeom/a:gdLst/a:gd[@name='" + aStart.toUtf8() + "']"), "fmla");
+    CPPUNIT_ASSERT(aFormula.startsWith("at2 f"));
+    // the legs of the angle: its cosine by the extent of x (ss, the view box being square), its
+    // sine by the extent of y (h)
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='cos ss 1800000']", 1);
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='sin h 1800000']", 1);
+    OUString aWR = getXPath(pXmlDoc, "//a:pathLst/a:path[3]/a:arcTo", "wR");
+    aFormula = getXPath(pXmlDoc, OString("//a:custGeom/a:gdLst/a:gd[@name='" + aWR.toUtf8() + "']"),
+                        "fmla");
+    CPPUNIT_ASSERT(aFormula.startsWith("*/ f"));
+    OUString aStart3 = getXPath(pXmlDoc, "//a:pathLst/a:path[3]/a:arcTo", "stAng");
+    aFormula = getXPath(
+        pXmlDoc, OString("//a:custGeom/a:gdLst/a:gd[@name='" + aStart3.toUtf8() + "']"), "fmla");
+    CPPUNIT_ASSERT(aFormula.startsWith("at2 f"));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeStretchedWideBox)
+{
+    // Given a shape with a view box twice as wide as tall, stretched on x only, with an arc by
+    // angles and a full ellipse:
+    loadFromFile(u"custGeom_stretchedWideBox.fodp");
+
+    // When saving it to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then the legs of the angle transform are the extent of y and the extent of x brought to
+    // the view box of y (ss by 10800 over 21600), and the full ellipse keeps its turn
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='*/ ss 10800 21600']", 1);
+    OUString aLegX
+        = getXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='*/ ss 10800 21600']", "name");
+    OUString aCos = "cos " + aLegX + " 1800000";
+    assertXPath(pXmlDoc, OString("//a:custGeom/a:gdLst/a:gd[@fmla='" + aCos.toUtf8() + "']"), 1);
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='sin h 1800000']", 1);
+    OUString aSwing = getXPath(pXmlDoc, "//a:pathLst/a:path[3]/a:arcTo", "swAng");
+    OUString aFormula = getXPath(
+        pXmlDoc, OString("//a:custGeom/a:gdLst/a:gd[@name='" + aSwing.toUtf8() + "']"), "fmla");
+    CPPUNIT_ASSERT(aFormula.startsWith("?: f"));
+    CPPUNIT_ASSERT(aFormula.endsWith(" 21600000"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCustomShapeFromOOXMLKeepsOnlyUsedGuides)
