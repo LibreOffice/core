@@ -437,7 +437,7 @@ class VectorManager extends RenderManagerBase {
 			if (this._drawnElsewhere.has(id)) continue;
 			// The slide's copy of a master placeholder is drawn with the master.
 			if (obj.masterContent) continue;
-			const state = VectorManager._stateOf(data, id, options?.states);
+			const state = VectorManager.stateOf(data, id, options?.states);
 			if (state?.hidden) continue;
 			if (obj.primitives) {
 				const outside =
@@ -486,7 +486,7 @@ class VectorManager extends RenderManagerBase {
 
 	// The state of the object, or else of the nearest group above it, since an effect on a
 	// group moves every member. Undefined when neither has one.
-	private static _stateOf(
+	static stateOf(
 		data: cool.VectorPrimitivesData,
 		objectId: number,
 		states: Map<number, cool.ObjectRenderState> | undefined,
@@ -537,7 +537,7 @@ class VectorManager extends RenderManagerBase {
 		if (state.alpha !== undefined) context.globalAlpha = state.alpha;
 		const matrix = cool.Matrix2D.fromArray(state.transform);
 		if (matrix) matrix.applyTo(context);
-		if (state.clip) VectorManager._clipTo(context, state.clip);
+		if (state.clip) VectorManager.clipTo(context, state.clip);
 		this._renderer.setColorOverride(state.colorOverride ?? null);
 		this._renderer.setTextOverride(state.textOverride ?? null);
 		this._renderer.setParagraphFilter(paragraphFilter);
@@ -554,10 +554,7 @@ class VectorManager extends RenderManagerBase {
 		Clip what is drawn next to the clip's area. The clip's transform applies only while
 		its paths are built.
 	*/
-	private static _clipTo(
-		context: CanvasRenderingContext2D,
-		clip: cool.DrawClip,
-	): void {
+	static clipTo(context: CanvasRenderingContext2D, clip: cool.DrawClip): void {
 		const saved = context.getTransform();
 		cool.Matrix2D.fromArray(clip.transform)?.applyTo(context);
 

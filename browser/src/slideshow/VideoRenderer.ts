@@ -134,6 +134,15 @@ class VideoRenderer2d extends AnimatedContentRenderer2d {
 	protected getDrawable(): CanvasImageSource | null {
 		return (this.info as VideoRenderInfo).videoElement;
 	}
+
+	// A video shows a frame once it holds the picture of its current time.
+	public currentFrame(): ContentFrame | null {
+		const video = this.info as VideoRenderInfo;
+		if (!video) return null;
+		const element = video.videoElement;
+		if (element.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return null;
+		return { source: element, edges: video.pos2d, mirror: video.mirror };
+	}
 }
 
 class VideoRendererGl extends AnimatedContentRendererGl {

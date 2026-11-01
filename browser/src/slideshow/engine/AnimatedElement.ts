@@ -684,6 +684,87 @@ class AnimatedElement {
 		};
 	}
 
+	/// How the target is drawn now: left out while hidden, else under the
+	/// element's transform, opacity, colors and text look, clipped by the
+	/// last transition filter.
+	public getDrawState(): cool.DrawState {
+		if (!this.getVisibility()) return { hidden: true };
+
+		const state: cool.DrawState = {};
+		const transform = this.getTransformMatrix();
+		if (transform && !transform.isIdentity)
+			state.transform = [
+				transform.a,
+				transform.b,
+				transform.c,
+				transform.d,
+				transform.e,
+				transform.f,
+			];
+		let opacity = this.getOpacity() ?? 1;
+
+		// The filter's part is in the base box, before the transform.
+		const filterFrame = this.getTransitionFilterFrame();
+		if (filterFrame) {
+			const mask = new ShapeTransitionMask(filterFrame.info);
+			if (mask.hasArea()) {
+				const clip = mask.clipAt(filterFrame.time, this.getBaseBBox());
+				if (clip) state.clip = clip;
+			} else {
+				opacity *= mask.fadeAt(filterFrame.time);
+			}
+		}
+		if (opacity < 1) state.alpha = opacity;
+		const colorOverride = this.getColorOverride();
+		if (colorOverride) state.colorOverride = colorOverride;
+		const textOverride = this.getTextOverride();
+		if (textOverride) state.textOverride = textOverride;
+		return state;
+	}
+
+	// The text look of a font animation on the target, or undefined.
+	private getTextOverride(): cool.TextOverride | undefined {
+		const look = this.getFontLook();
+		const override: cool.TextOverride = {};
+		if (look.scale !== 1) override.sizeScale = look.scale;
+		const weight = Number(look.weight);
+		if (look.weight !== '' && Number.isFinite(weight)) override.weight = weight;
+		if (look.posture) override.italic = look.posture !== 'normal';
+		if (look.underline) override.underline = look.underline !== 'none';
+		if (look.name) override.family = look.name;
+		return Object.keys(override).length ? override : undefined;
+	}
+
+	// The colors a color animation has moved, or undefined. A shape element
+	// carries fill and line, a text element its font color in the fill
+	// slot. Both are named once either moved, so only a color that differs
+	// from its base stands in.
+	private getColorOverride(): cool.ColorOverride | undefined {
+		const colorMap = this.getColorMap();
+		const fillMoved =
+			colorMap.toFillColor &&
+			!(
+				colorMap.fromFillColor &&
+				colorMap.toFillColor.equal(colorMap.fromFillColor)
+			);
+		const lineMoved =
+			colorMap.toLineColor &&
+			!(
+				colorMap.fromLineColor &&
+				colorMap.toLineColor.equal(colorMap.fromLineColor)
+			);
+		if (!fillMoved && !lineMoved) return undefined;
+
+		// Interpolated colors are unclamped, the canvas needs them clamped.
+		if (this.isTextElement())
+			return { text: colorMap.toFillColor.toString(true) };
+
+		const override: cool.ColorOverride = {};
+		if (fillMoved) override.fill = colorMap.toFillColor.toString(true);
+		if (lineMoved) override.stroke = colorMap.toLineColor.toString(true);
+		return override;
+	}
+
 	// The colors a color animation changed, as pairs of base color and
 	// current color. Empty when none changed.
 	public getColorMap(): AnimatedElementColorMap {

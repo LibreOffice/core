@@ -204,38 +204,87 @@ class VectorCompositor extends SlideCompositor {
 			this.canvasWidth / data.slideWidth,
 			this.canvasHeight / data.slideHeight,
 		);
+		const states = this._drawStates(slideHash, data);
 		// A slideshow shows the document in its own colors.
 		RenderManager.renderInto(
 			context as unknown as CanvasRenderingContext2D,
 			data,
-			{ authoredColors: true, states: this._drawStates(slideHash, data) },
+			{ authoredColors: true, states },
 		);
 		context.restore();
 
-		// The videos are placed on the canvas in pixels.
-		this.videos.render(slideHash);
+		// The videos are placed on the canvas in pixels, each in the state
+		// of its shape.
+		this.videos.render(slideHash, (shapeId) =>
+			this._videoLook(data, states, shapeId),
+		);
 
 		return this.offscreenCanvas.transferToImageBitmap();
 	}
 
+	// How the video of the shape is drawn: in the state of the shape.
+	// Undefined where no animation moves the shape.
+	private _videoLook(
+		data: cool.VectorPrimitivesData,
+		states: Map<number, cool.ObjectRenderState> | undefined,
+		shapeId: number,
+	): AnimatedContentLook | undefined {
+		if (!states) return undefined;
+		const state = VectorManager.stateOf(data, shapeId, states);
+		if (!state) return undefined;
+		return {
+			state,
+			slideWidth: data.slideWidth,
+			slideHeight: data.slideHeight,
+		};
+	}
+
 	// The object id of each animation target of the slide, with the positions
-	// of the paragraphs of its text that an animation moves on their own.
+	// of the paragraphs of its text that an animation moves on their own. A
+	// video counts as a target, so its frame draws in its place in the paint
+	// order, unless a group above it is a target and its run holds the video.
 	private _animatedTargets(
 		slideHash: string,
 		data: cool.VectorPrimitivesData,
 	): Map<number, number[]> {
 		const targets = new Map<number, number[]>();
 		const elements = this.getAnimatedElementMap(slideHash);
-		if (!elements) return targets;
-
-		for (const target of elements.keys()) {
-			const { id, paragraph } = VectorCompositor._splitTarget(target);
-			if (!data.objects.has(id)) continue;
-			if (!targets.has(id)) targets.set(id, []);
-			if (paragraph !== undefined) targets.get(id).push(paragraph);
+		if (elements) {
+			for (const target of elements.keys()) {
+				const { id, paragraph } = VectorCompositor._splitTarget(target);
+				if (!data.objects.has(id)) continue;
+				if (!targets.has(id)) targets.set(id, []);
+				if (paragraph !== undefined) targets.get(id).push(paragraph);
+			}
 		}
 		targets.forEach((paragraphs) => paragraphs.sort((a, b) => a - b));
+
+		for (const video of this._metaPresentation.getSlideInfo(slideHash)
+			?.videos ?? []) {
+			const id = video.id;
+			if (!data.objects.has(id) || targets.has(id)) continue;
+			let above = data.objects.get(id)?.parent;
+			while (above !== undefined && !targets.has(above))
+				above = data.objects.get(above)?.parent;
+			if (above === undefined) targets.set(id, []);
+		}
 		return targets;
+	}
+
+	// The frame each video shows now, by the object id of its shape. A video
+	// without a frame yet leaves its placeholder showing.
+	private _videoFrames(
+		slideHash: string,
+		data: cool.VectorPrimitivesData,
+	): Map<number, ContentFrame> {
+		const frames = new Map<number, ContentFrame>();
+		for (const video of this._metaPresentation.getSlideInfo(slideHash)
+			?.videos ?? []) {
+			if (!data.objects.has(video.id)) continue;
+			const frame = this.videos.get(slideHash, video)?.currentFrame();
+			if (frame) frames.set(video.id, frame);
+		}
+		return frames;
 	}
 
 	public drawsFrames(): boolean {
@@ -250,9 +299,6 @@ class VectorCompositor extends SlideCompositor {
 		if (this.disposed || context.isDisposed()) return false;
 
 		const slideHash = this._metaPresentation.getSlideHash(slideIndex);
-		// The videos draw into the 2D canvas of the composed frame.
-		if (this._metaPresentation.getSlideInfo(slideHash)?.videos?.length)
-			return false;
 		const data = this._drawableData(slideHash);
 		if (!data) return false;
 
@@ -271,7 +317,11 @@ class VectorCompositor extends SlideCompositor {
 				this.canvasWidth,
 				this.canvasHeight,
 			);
-		return this.layers.draw(this._drawStates(slideHash, data), texture);
+		return this.layers.draw(
+			this._drawStates(slideHash, data),
+			texture,
+			this._videoFrames(slideHash, data),
+		);
 	}
 
 	/// The cached tree of the slide, or null until the slide and its master,
@@ -307,7 +357,7 @@ class VectorCompositor extends SlideCompositor {
 				state = {};
 				states.set(objectId, state);
 			}
-			const drawState = VectorCompositor._drawState(element);
+			const drawState = element.getDrawState();
 			if (paragraph === undefined) {
 				Object.assign(state, drawState);
 			} else {
@@ -316,91 +366,6 @@ class VectorCompositor extends SlideCompositor {
 			}
 		});
 		return states;
-	}
-
-	// How the target is drawn now: left out while hidden, else under the
-	// element's transform, opacity, colors and text look, clipped by the
-	// last filter.
-	private static _drawState(element: AnimatedElement): cool.DrawState {
-		if (!element.getVisibility()) return { hidden: true };
-
-		const state: cool.DrawState = {};
-		const transform = element.getTransformMatrix();
-		if (transform && !transform.isIdentity)
-			state.transform = [
-				transform.a,
-				transform.b,
-				transform.c,
-				transform.d,
-				transform.e,
-				transform.f,
-			];
-		let opacity = element.getOpacity() ?? 1;
-
-		// The filter's part is in the base box, before the transform.
-		const filterFrame = element.getTransitionFilterFrame();
-		if (filterFrame) {
-			const mask = new ShapeTransitionMask(filterFrame.info);
-			if (mask.hasArea()) {
-				const clip = mask.clipAt(filterFrame.time, element.getBaseBBox());
-				if (clip) state.clip = clip;
-			} else {
-				opacity *= mask.fadeAt(filterFrame.time);
-			}
-		}
-		if (opacity < 1) state.alpha = opacity;
-		const colorOverride = VectorCompositor._colorOverride(element);
-		if (colorOverride) state.colorOverride = colorOverride;
-		const textOverride = VectorCompositor._textOverride(element);
-		if (textOverride) state.textOverride = textOverride;
-		return state;
-	}
-
-	// The text look of a font animation on the target, or undefined.
-	private static _textOverride(
-		element: AnimatedElement,
-	): cool.TextOverride | undefined {
-		const look = element.getFontLook();
-		const override: cool.TextOverride = {};
-		if (look.scale !== 1) override.sizeScale = look.scale;
-		const weight = Number(look.weight);
-		if (look.weight !== '' && Number.isFinite(weight)) override.weight = weight;
-		if (look.posture) override.italic = look.posture !== 'normal';
-		if (look.underline) override.underline = look.underline !== 'none';
-		if (look.name) override.family = look.name;
-		return Object.keys(override).length ? override : undefined;
-	}
-
-	// The colors a color animation has moved, or undefined. A shape element
-	// carries fill and line, a text element its font color in the fill
-	// slot. Both are named once either moved, so only a color that differs
-	// from its base stands in.
-	private static _colorOverride(
-		element: AnimatedElement,
-	): cool.ColorOverride | undefined {
-		const colorMap = element.getColorMap();
-		const fillMoved =
-			colorMap.toFillColor &&
-			!(
-				colorMap.fromFillColor &&
-				colorMap.toFillColor.equal(colorMap.fromFillColor)
-			);
-		const lineMoved =
-			colorMap.toLineColor &&
-			!(
-				colorMap.fromLineColor &&
-				colorMap.toLineColor.equal(colorMap.fromLineColor)
-			);
-		if (!fillMoved && !lineMoved) return undefined;
-
-		// Interpolated colors are unclamped, the canvas needs them clamped.
-		if (element.isTextElement())
-			return { text: colorMap.toFillColor.toString(true) };
-
-		const override: cool.ColorOverride = {};
-		if (fillMoved) override.fill = colorMap.toFillColor.toString(true);
-		if (lineMoved) override.stroke = colorMap.toLineColor.toString(true);
-		return override;
 	}
 
 	// A shape target is its object id, a paragraph target the id, an

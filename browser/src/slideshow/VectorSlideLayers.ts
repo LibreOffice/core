@@ -15,7 +15,8 @@
  * split in paint order into layers: runs of untargeted objects, runs of one animation target,
  * and a layer per paragraph that an animation moves on its own. Each layer is drawn once into a
  * texture over the rectangle it covers, and again only when its stand-in colors or text look
- * change. A frame draws the textures as quads in the state the animation gives them.
+ * change. A frame draws the textures as quads in the state the animation gives them. The current
+ * frame of a video is uploaded on every frame and drawn over the layer that holds its shape.
  *
  * Canvas positions are in pixels of the slideshow canvas, with the slide filling it.
  */
@@ -78,6 +79,8 @@ class VectorSlideLayers {
 	// Whether this context can draw into a texture with a stencil buffer, null until the first
 	// texture target is made.
 	private targetsComplete: boolean | null = null;
+	// The texture of the current frame of each video, by the object id of its shape.
+	private videoTextures = new Map<number, WebGLTexture | null>();
 
 	constructor(context: RenderContextGl) {
 		this.context = context;
@@ -219,6 +222,7 @@ class VectorSlideLayers {
 	public draw(
 		states: Map<number, cool.ObjectRenderState> | undefined,
 		texture?: WebGLTexture | null,
+		videos?: Map<number, ContentFrame>,
 	): boolean {
 		const data = this.data;
 		if (this.context.isDisposed() || !data) return false;
@@ -263,7 +267,9 @@ class VectorSlideLayers {
 				);
 				this._paint(layer, data, state);
 			}
-			this._drawLayer(layer, state);
+			this._drawQuad(layer.texture, layer.pixels, state);
+			if (videos?.size && layer.paragraph === undefined)
+				this._drawVideos(layer, data, videos, state);
 		}
 
 		gl.disable(gl.BLEND);
@@ -370,7 +376,9 @@ class VectorSlideLayers {
 		if (!this.context.isDisposed()) {
 			const gl = this.context.getGl();
 			for (const layer of this.layers) gl.deleteTexture(layer.texture);
+			this.videoTextures.forEach((texture) => gl.deleteTexture(texture));
 		}
+		this.videoTextures.clear();
 		this.layers = [];
 		this.slideHash = null;
 		this.data = null;
@@ -606,8 +614,66 @@ class VectorSlideLayers {
 		gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
 	}
 
-	private _drawLayer(
+	// Draw the current frame of each video whose shape is in the layer's run, over the layer in
+	// its state.
+	private _drawVideos(
 		layer: SlideLayer,
+		data: cool.VectorPrimitivesData,
+		videos: Map<number, ContentFrame>,
+		state: cool.DrawState | undefined,
+	): void {
+		for (let position = layer.run.start; position < layer.run.end; ++position) {
+			const objectId = data.order[position];
+			const frame = videos.get(objectId);
+			if (!frame) continue;
+
+			const [left, right, top, bottom] = frame.edges;
+			let x = left * this.canvasWidth;
+			let y = top * this.canvasHeight;
+			let width = (right - left) * this.canvasWidth;
+			let height = (bottom - top) * this.canvasHeight;
+			// A flipped frame covers the same rectangle from its other edge.
+			if (frame.mirror & 1) {
+				x += width;
+				width = -width;
+			}
+			if (frame.mirror & 2) {
+				y += height;
+				height = -height;
+			}
+			this._drawQuad(
+				this._videoTexture(objectId, frame.source),
+				[x, y, width, height],
+				state,
+			);
+		}
+	}
+
+	// The video texture of the object, holding the frame given.
+	private _videoTexture(
+		objectId: number,
+		source: TexImageSource,
+	): WebGLTexture | null {
+		const gl = this.context.getGl();
+		let texture = this.videoTextures.get(objectId);
+		if (!texture) {
+			texture = gl.createTexture();
+			gl.bindTexture(gl.TEXTURE_2D, texture);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+			this.videoTextures.set(objectId, texture);
+		}
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source);
+		return texture;
+	}
+
+	// Draw the texture over the rectangle, in canvas pixels, in the state given.
+	private _drawQuad(
+		texture: WebGLTexture | null,
+		rectangle: number[],
 		state: cool.DrawState | undefined,
 	): void {
 		const gl = this.context.getGl();
@@ -619,7 +685,7 @@ class VectorSlideLayers {
 		gl.useProgram(this.quadProgram);
 		gl.bindVertexArray(this.quadArray);
 		gl.activeTexture(gl.TEXTURE0);
-		gl.bindTexture(gl.TEXTURE_2D, layer.texture);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.uniform1i(gl.getUniformLocation(this.quadProgram, 'u_texture'), 0);
 		gl.uniform1f(
 			gl.getUniformLocation(this.quadProgram, 'u_alpha'),
@@ -627,10 +693,10 @@ class VectorSlideLayers {
 		);
 		gl.uniform4f(
 			gl.getUniformLocation(this.quadProgram, 'u_rect'),
-			layer.pixels[0],
-			layer.pixels[1],
-			layer.pixels[2],
-			layer.pixels[3],
+			rectangle[0],
+			rectangle[1],
+			rectangle[2],
+			rectangle[3],
 		);
 		gl.uniformMatrix3fv(
 			gl.getUniformLocation(this.quadProgram, 'u_transform'),

@@ -70,11 +70,17 @@ class SlideVideos {
 		}
 	}
 
-	public render(slideHash: string): void {
+	/// Draw the videos of the slide. lookOf gives how an animation draws
+	/// the video of a shape id, undefined for the video as it comes.
+	public render(
+		slideHash: string,
+		lookOf?: (shapeId: number) => AnimatedContentLook | undefined,
+	): void {
 		const videoRenderers = this.renderers.get(slideHash);
 		if (!videoRenderers) return;
 
-		for (const videoRenderer of videoRenderers) videoRenderer.render();
+		for (const videoRenderer of videoRenderers)
+			videoRenderer.render(lookOf?.(videoRenderer.infoId));
 	}
 
 	public pause(slideHash: string): void {

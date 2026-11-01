@@ -211,7 +211,9 @@ class LayerDrawing {
 		this.drawMasterPage(slideHash);
 		this.drawTextField(slideHash);
 		this.drawDrawPage(slideHash);
-		this.videos.render(slideHash);
+		this.videos.render(slideHash, (shapeId) =>
+			this.videoLook(slideHash, shapeId),
+		);
 		this.drawGifs(slideHash);
 	}
 
@@ -773,6 +775,24 @@ class LayerDrawing {
 			this.drawBitmap(imageInfo);
 		}
 		return true;
+	}
+
+	// How the video of the shape is drawn: in the state of the shape's
+	// animated element. Undefined where no animation targets the shape.
+	private videoLook(
+		slideHash: string,
+		shapeId: number,
+	): AnimatedContentLook | undefined {
+		const animatedElement = this.helper.getAnimatedElement(
+			slideHash,
+			String(shapeId),
+		);
+		if (!animatedElement || !animatedElement.isValid()) return undefined;
+		return {
+			state: animatedElement.getDrawState(),
+			slideWidth: this.getDocWidth(),
+			slideHeight: this.getDocHeight(),
+		};
 	}
 
 	private drawDrawPageLayer(slideHash: string, layer: LayerEntry) {

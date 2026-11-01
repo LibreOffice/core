@@ -86,11 +86,29 @@ abstract class AnimatedContentRenderInfo {
 	}
 }
 
+/// How an animation draws content over the slide: the draw state of its shape, in slide units,
+/// and the size of the slide in those units.
+interface AnimatedContentLook {
+	state: cool.DrawState;
+	slideWidth: number;
+	slideHeight: number;
+}
+
+/// The frame content shows now, and where: edges are its left, right, top and bottom as shares
+/// of the slide's width and height, and mirror flips it across its width with bit 1 and across
+/// its height with bit 2.
+interface ContentFrame {
+	source: TexImageSource;
+	edges: number[];
+	mirror: number;
+}
+
 abstract class AnimatedContentRenderer {
 	protected sId: string;
 	protected _context: RenderContext;
 	protected _slideRenderer: SlideRenderer;
 	protected info: AnimatedContentRenderInfo | null = null;
+	// The id of the shape that shows the content.
 	public infoId!: number;
 
 	constructor(
@@ -156,15 +174,40 @@ abstract class AnimatedContentRenderer {
 		if (this.info) this.info.deleteResources(this._context);
 	}
 
-	public abstract render(): void;
+	public abstract render(look?: AnimatedContentLook): void;
+
+	/// The frame shown now, null while there is none.
+	public currentFrame(): ContentFrame | null {
+		return null;
+	}
 }
 
 abstract class AnimatedContentRenderer2d extends AnimatedContentRenderer {
 	protected abstract getDrawable(): CanvasImageSource | null;
 
-	public render(): void {
+	// Apply the shape's draw state to the canvas as the shape itself is drawn: opacity,
+	// transform, and the part a clip shows. The state is in slide units, the content in pixels.
+	private static applyLook(
+		context: CanvasRenderingContext2D,
+		look: AnimatedContentLook,
+		width: number,
+		height: number,
+	): void {
+		const state = look.state;
+		if (state.alpha !== undefined) context.globalAlpha = state.alpha;
+		const scaleX = width / look.slideWidth;
+		const scaleY = height / look.slideHeight;
+		context.scale(scaleX, scaleY);
+		const matrix = cool.Matrix2D.fromArray(state.transform);
+		if (matrix) matrix.applyTo(context);
+		if (state.clip) VectorManager.clipTo(context, state.clip);
+		context.scale(1 / scaleX, 1 / scaleY);
+	}
+
+	public render(look?: AnimatedContentLook): void {
 		if (this.isDisposed()) return;
 		if (!this.info) return;
+		if (look?.state.hidden) return;
 
 		// The content is drawn into the slide layer canvas, which is an OffscreenCanvas.
 		const ctx = this._context.get2dGl() ?? this._context.get2dOffscreen();
@@ -188,6 +231,13 @@ abstract class AnimatedContentRenderer2d extends AnimatedContentRenderer {
 
 		// Drawing about the centre keeps the flipped frame on the same area.
 		ctx.save();
+		if (look)
+			AnimatedContentRenderer2d.applyLook(
+				ctx as unknown as CanvasRenderingContext2D,
+				look,
+				width,
+				height,
+			);
 		ctx.translate(left + boxWidth / 2, top + boxHeight / 2);
 		ctx.scale(mirror & 1 ? -1 : 1, mirror & 2 ? -1 : 1);
 		ctx.drawImage(drawable, -boxWidth / 2, -boxHeight / 2, boxWidth, boxHeight);
@@ -212,10 +262,12 @@ abstract class AnimatedContentRendererGl extends AnimatedContentRenderer {
 		return `#version 300 es
 				in vec4 a_position;
 				in vec2 a_texCoord;
+				uniform mat3 u_transform;
 				out vec2 v_texCoord;
 
 				void main() {
-					gl_Position = a_position;
+					vec3 at = u_transform * vec3(a_position.xy, 1.0);
+					gl_Position = vec4(at.xy, a_position.z, 1.0);
 					v_texCoord = a_texCoord;
 				}
 				`;
@@ -226,12 +278,13 @@ abstract class AnimatedContentRendererGl extends AnimatedContentRenderer {
 				precision mediump float;
 
 				uniform sampler2D slideTexture;
+				uniform float u_alpha;
 
 				in vec2 v_texCoord;
 				out vec4 outColor;
 
 				void main() {
-					outColor = texture(slideTexture, v_texCoord);
+					outColor = texture(slideTexture, v_texCoord) * u_alpha;
 				}
 				`;
 	}
@@ -377,9 +430,12 @@ abstract class AnimatedContentRendererGl extends AnimatedContentRenderer {
 		);
 	}
 
-	public render() {
+	// The shape's state gives the frame its opacity and transform. The context has no stencil
+	// buffer, so a clip leaves the frame whole.
+	public render(look?: AnimatedContentLook) {
 		if (this.isDisposed()) return;
 		if (!this.info) return;
+		if (look?.state.hidden) return;
 
 		if (!this._program) {
 			app.console.log('AnimatedContentRenderer: program is not valid');
@@ -396,7 +452,46 @@ abstract class AnimatedContentRendererGl extends AnimatedContentRenderer {
 		gl.bindVertexArray(this.info.getVao());
 		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 		this.updateTexture(this.info.getTexture(), drawable);
+
+		const alpha = look?.state.alpha ?? 1;
+		gl.uniform1f(gl.getUniformLocation(this._program, 'u_alpha'), alpha);
+		gl.uniformMatrix3fv(
+			gl.getUniformLocation(this._program, 'u_transform'),
+			false,
+			AnimatedContentRendererGl.clipSpaceTransform(look),
+		);
+		// The frame is multiplied by its opacity, so it blends premultiplied, like the layers of
+		// the slide. The blend state stays set.
+		gl.enable(gl.BLEND);
+		gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+	}
+
+	// The slide unit transform of the state as a clip space matrix in GLSL column order. Clip
+	// space runs from -1 to 1 across the slide, with y upwards.
+	private static clipSpaceTransform(
+		look: AnimatedContentLook | undefined,
+	): Float32Array {
+		const transform = look?.state.transform;
+		if (!look || !transform)
+			return new Float32Array([1, 0, 0, 0, 1, 0, 0, 0, 1]);
+		const toClipSpace = new DOMMatrix()
+			.translate(-1, 1)
+			.scale(2 / look.slideWidth, -2 / look.slideHeight);
+		const matrix = toClipSpace
+			.multiply(new DOMMatrix(transform))
+			.multiply(toClipSpace.inverse());
+		return new Float32Array([
+			matrix.a,
+			matrix.b,
+			0,
+			matrix.c,
+			matrix.d,
+			0,
+			matrix.e,
+			matrix.f,
+			1,
+		]);
 	}
 }
