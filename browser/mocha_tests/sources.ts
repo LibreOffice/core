@@ -499,6 +499,7 @@
 /// <reference path="../src/slideshow/engine/AnimatedElementVector.ts" />
 /// <reference path="../src/slideshow/TransitionsInfo.ts" />
 /// <reference path="../src/slideshow/ShapeTransitionMask.ts" />
+/// <reference path="../src/slideshow/VectorSlideLayers.ts" />
 /// <reference path="../src/slideshow/Transition2d.ts" />
 /// <reference path="../src/slideshow/Transition3d.ts" />
 /// <reference path="../src/slideshow/transition/ClippingTransition.ts" />

@@ -187,10 +187,13 @@ class SlideRenderer2d extends SlideRenderer {
 class SlideRendererGl extends SlideRenderer {
 	private readonly _program: WebGLProgram = null;
 	private readonly _vao: WebGLVertexArrayObject = null;
+	// True when the canvas shows a newer frame than the slide texture holds.
+	private _slideTextureOutdated = false;
 
 	constructor(canvas: HTMLCanvasElement) {
 		super(canvas);
-		this._context = new RenderContextGl(canvas);
+		// A compositor that draws its frames into this context clips with the stencil buffer.
+		this._context = new RenderContextGl(canvas, { stencil: true });
 
 		const vertexShader = this._context.createVertexShader(
 			this.getVertexShader(),
@@ -304,6 +307,23 @@ class SlideRendererGl extends SlideRenderer {
 	public deleteCurrentSlideTexture(): void {
 		this._context.deleteTexture(this._slideTexture);
 		this._slideTexture = null;
+		this._slideTextureOutdated = false;
+	}
+
+	public getSlideTexture(): WebGLTexture {
+		if (this._slideTextureOutdated && this._slideTexture) {
+			this._slideTextureOutdated = false;
+			const presenter: SlideShowPresenter = app.map.slideShowPresenter;
+			if (
+				!presenter._slideCompositor.drawFrameInto(
+					this._context as RenderContextGl,
+					this._renderedSlideIndex,
+					this._slideTexture,
+				)
+			)
+				this.getNextTexture();
+		}
+		return this._slideTexture;
 	}
 
 	public deleteResources(): void {
@@ -315,6 +335,21 @@ class SlideRendererGl extends SlideRenderer {
 
 	protected render() {
 		if (this.isDisposed()) return;
+
+		// A frame drawn straight into the context leaves no image of it, so the image path
+		// stays in use while something listens for the image of each frame.
+		const presenter: SlideShowPresenter = app.map.slideShowPresenter;
+		if (
+			!app.map.listens('newslideshowframe') &&
+			presenter._slideCompositor.drawFrameInto(
+				this._context as RenderContextGl,
+				this._renderedSlideIndex,
+			)
+		) {
+			this._slideTextureOutdated = true;
+			if (this.isAnyAnimationPlaying()) this.requestRender();
+			return;
+		}
 
 		const gl = this._context.getGl();
 		gl.viewport(0, 0, this._canvas.width, this._canvas.height);

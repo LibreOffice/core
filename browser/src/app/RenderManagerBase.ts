@@ -333,6 +333,14 @@ abstract class RenderManagerBase {
 		primitives: cool.Primitive[],
 	): void;
 
+	abstract renderObjectParagraph(
+		context: CanvasRenderingContext2D,
+		data: cool.VectorPrimitivesData,
+		objectId: number,
+		paragraph: number,
+		colorOverride?: cool.ColorOverride,
+	): void;
+
 	abstract renderPlaceholderAids(
 		context: CanvasRenderingContext2D,
 		data: cool.VectorPrimitivesData,

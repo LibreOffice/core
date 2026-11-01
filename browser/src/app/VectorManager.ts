@@ -424,9 +424,11 @@ class VectorManager extends RenderManagerBase {
 							: undefined,
 					)
 				: undefined;
+		const range = options?.paintRange;
 		let index = -1;
 		for (const id of data.order) {
 			++index;
+			if (range && (index < range.start || index >= range.end)) continue;
 			const obj = data.objects.get(id);
 			if (!obj) continue;
 			if (obj.layer !== undefined && this._hiddenLayers.has(obj.layer))
@@ -457,6 +459,24 @@ class VectorManager extends RenderManagerBase {
 			// The master lies between the page's own background and its objects.
 			if (obj.kind === 'page') this._renderMaster(context, data);
 		}
+	}
+
+	/// Draw one paragraph of the text of an object of the part alone, with the colors given
+	/// standing in for its own. The paragraph is its position in the object's text. The caller
+	/// sets up the context transform that maps the part's twips to the target pixels.
+	renderObjectParagraph(
+		context: CanvasRenderingContext2D,
+		data: cool.VectorPrimitivesData,
+		objectId: number,
+		paragraph: number,
+		colorOverride?: cool.ColorOverride,
+	): void {
+		const object = data.objects.get(objectId);
+		if (!object) return;
+		this._renderer.setSlideBounds(data.slideWidth, data.slideHeight);
+		this._renderer.setEditViewContentVisible(false);
+		this._setUpColors(data);
+		this._renderUnder(context, object, { colorOverride }, { only: paragraph });
 	}
 
 	// The state of the object, or else of the nearest group above it, since an effect on a

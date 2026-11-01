@@ -389,6 +389,22 @@ class RenderManager {
 		RenderManager.ensureInstance().renderPrimitives(context, data, primitives);
 	}
 
+	static renderObjectParagraph(
+		context: CanvasRenderingContext2D,
+		data: cool.VectorPrimitivesData,
+		objectId: number,
+		paragraph: number,
+		colorOverride?: cool.ColorOverride,
+	): void {
+		RenderManager.ensureInstance().renderObjectParagraph(
+			context,
+			data,
+			objectId,
+			paragraph,
+			colorOverride,
+		);
+	}
+
 	static renderPlaceholderAids(
 		context: CanvasRenderingContext2D,
 		data: cool.VectorPrimitivesData,

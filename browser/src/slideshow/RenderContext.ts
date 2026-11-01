@@ -21,9 +21,21 @@ abstract class RenderContext {
 		| OffscreenCanvasRenderingContext2D;
 
 	protected disposed = false;
+	// The textures that sample between their mipmap levels.
+	private readonly mipMappedTextures = new WeakSet<WebGLTexture>();
 
 	constructor(canvas: HTMLCanvasElement | OffscreenCanvas) {
 		this.canvas = canvas;
+	}
+
+	/// The texture samples between its mipmap levels, so drawing into it makes the levels anew.
+	/// Asking the texture for its filter would wait for the GPU process.
+	public markMipMapped(texture: WebGLTexture): void {
+		this.mipMappedTextures.add(texture);
+	}
+
+	public isMipMapped(texture: WebGLTexture): boolean {
+		return this.mipMappedTextures.has(texture);
 	}
 
 	public getGl(): WebGL2RenderingContext {
@@ -87,10 +99,14 @@ abstract class RenderContext {
 }
 
 class RenderContextGl extends RenderContext {
-	constructor(canvas: HTMLCanvasElement | OffscreenCanvas) {
+	constructor(
+		canvas: HTMLCanvasElement | OffscreenCanvas,
+		attributes: WebGLContextAttributes = {},
+	) {
 		super(canvas);
 		this.gl = this.canvas.getContext('webgl2', {
 			failIfMajorPerformanceCaveat: true,
+			...attributes,
 		}) as WebGL2RenderingContext;
 		if (!this.gl) {
 			app.console.error('WebGL2 not supported');
@@ -138,6 +154,7 @@ class RenderContextGl extends RenderContext {
 				gl.TEXTURE_MIN_FILTER,
 				gl.LINEAR_MIPMAP_LINEAR,
 			);
+			this.markMipMapped(texture);
 		} else {
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, filter);
 		}

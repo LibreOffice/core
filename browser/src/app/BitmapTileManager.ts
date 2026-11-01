@@ -2724,6 +2724,15 @@ class BitmapTileManager extends RenderManagerBase {
 		CalcVectorManager.instance().renderPrimitives(context, primitives);
 	}
 
+	public renderObjectParagraph(
+		_context: CanvasRenderingContext2D,
+		_data: cool.VectorPrimitivesData,
+		_objectId: number,
+		_paragraph: number,
+		_colorOverride?: cool.ColorOverride,
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+	): void {}
+
 	public renderPlaceholderAids(
 		_context: CanvasRenderingContext2D,
 		_data: cool.VectorPrimitivesData,

@@ -3019,6 +3019,36 @@ describe('VectorManager', function () {
 			return manager.requestPart(0, cool.VectorMode.Slides);
 		}
 
+		it('draws only the objects in the paint range, the page with the first', function () {
+			const manager = new VectorManager();
+			const data = cachedPart(manager, [
+				{
+					id: 0,
+					kind: 'page',
+					width: 100,
+					height: 100,
+					primitives: [hairline],
+				},
+				{ id: 11, primitives: [hairline] },
+				{ id: 22, primitives: [filled] },
+				{ id: 33, primitives: [hairline] },
+			]);
+
+			const below = new CanvasRecorder();
+			manager.renderInto(below as any, data, {
+				paintRange: { start: 0, end: 2 },
+			});
+			nodeassert.strictEqual(countCalls(below, 'stroke'), 2);
+			nodeassert.strictEqual(countCalls(below, 'fill'), 0);
+
+			const above = new CanvasRecorder();
+			manager.renderInto(above as any, data, {
+				paintRange: { start: 2, end: 4 },
+			});
+			nodeassert.strictEqual(countCalls(above, 'stroke'), 1);
+			nodeassert.strictEqual(countCalls(above, 'fill'), 1);
+		});
+
 		it('leaves out a hidden object', function () {
 			const manager = new VectorManager();
 			const data = cachedPart(manager, [

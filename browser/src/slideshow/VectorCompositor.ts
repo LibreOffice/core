@@ -47,6 +47,10 @@ class VectorCompositor extends SlideCompositor {
 	private pendingSlideNumber: number = null;
 	private pendingReady: VoidFunction = null;
 
+	// The layers of the slide on the GPU, in the WebGL context of the slideshow canvas, for
+	// the frames drawn straight into it.
+	private layers: VectorSlideLayers = null;
+
 	constructor(slideShowPresenter: SlideShowPresenter) {
 		super(slideShowPresenter);
 	}
@@ -76,6 +80,7 @@ class VectorCompositor extends SlideCompositor {
 		);
 		this.offscreenContext = this.offscreenCanvas.getContext('2d');
 		this.renderContext = new RenderContext2d(this.offscreenCanvas);
+		this.layers?.invalidate();
 		// A compositor whose slideshow was closed draws the next one.
 		this.disposed = false;
 
@@ -145,6 +150,9 @@ class VectorCompositor extends SlideCompositor {
 	}
 
 	private _onDataChanged(): void {
+		// A tree or an embedded bitmap that arrives can change what a layer
+		// of the slide shows.
+		this.layers?.invalidate();
 		if (this.disposed) return;
 		this._refreshShownSlide();
 		if (this.pendingReady === null) return;
@@ -208,6 +216,58 @@ class VectorCompositor extends SlideCompositor {
 		this.videos.render(slideHash);
 
 		return this.offscreenCanvas.transferToImageBitmap();
+	}
+
+	// The object id of each animation target of the slide, with the positions
+	// of the paragraphs of its text that an animation moves on their own.
+	private _animatedTargets(
+		slideHash: string,
+		data: cool.VectorPrimitivesData,
+	): Map<number, number[]> {
+		const targets = new Map<number, number[]>();
+		const elements = this.getAnimatedElementMap(slideHash);
+		if (!elements) return targets;
+
+		for (const target of elements.keys()) {
+			const { id, paragraph } = VectorCompositor._splitTarget(target);
+			if (!data.objects.has(id)) continue;
+			if (!targets.has(id)) targets.set(id, []);
+			if (paragraph !== undefined) targets.get(id).push(paragraph);
+		}
+		targets.forEach((paragraphs) => paragraphs.sort((a, b) => a - b));
+		return targets;
+	}
+
+	public drawFrameInto(
+		context: RenderContextGl,
+		slideIndex: number,
+		texture?: WebGLTexture | null,
+	): boolean {
+		if (this.disposed || context.isDisposed()) return false;
+
+		const slideHash = this._metaPresentation.getSlideHash(slideIndex);
+		// The videos draw into the 2D canvas of the composed frame.
+		if (this._metaPresentation.getSlideInfo(slideHash)?.videos?.length)
+			return false;
+		const data = this._drawableData(slideHash);
+		if (!data) return false;
+
+		if (this.layers && this.layers.context !== context) {
+			this.layers.dispose();
+			this.layers = null;
+		}
+		if (!this.layers) this.layers = new VectorSlideLayers(context);
+		if (
+			!this.layers.holds(slideHash, data, this.canvasWidth, this.canvasHeight)
+		)
+			this.layers.build(
+				slideHash,
+				data,
+				this._animatedTargets(slideHash, data),
+				this.canvasWidth,
+				this.canvasHeight,
+			);
+		return this.layers.draw(this._drawStates(slideHash, data), texture);
 	}
 
 	/// The cached tree of the slide, or null until the slide and its master,
@@ -503,6 +563,8 @@ class VectorCompositor extends SlideCompositor {
 		this.offscreenCanvas = null;
 		this.offscreenContext = null;
 		this.renderContext = null;
+		this.layers?.dispose();
+		this.layers = null;
 		this.pendingReady = null;
 		this.pendingSlideNumber = null;
 	}

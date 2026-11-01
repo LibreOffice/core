@@ -256,7 +256,11 @@ SLIDESHOW_SHADER_NAMES = \
 	GlitterTransition.frag.glsl \
 	VortexTransition.vert.glsl \
 	HoneycombTransition.vert.glsl \
-	HoneycombTransition.frag.glsl
+	HoneycombTransition.frag.glsl \
+	VectorSlideLayersQuad.vert.glsl \
+	VectorSlideLayersQuad.frag.glsl \
+	VectorSlideLayersStencil.vert.glsl \
+	VectorSlideLayersStencil.frag.glsl
 
 SLIDESHOW_SHADERS = $(addprefix $(shaders_dir)/,$(SLIDESHOW_SHADER_NAMES))
 
@@ -1001,6 +1005,7 @@ COOL_JS_LST =\
     src/slideshow/engine/AnimatedElementVector.ts \
     src/slideshow/TransitionsInfo.ts \
     src/slideshow/ShapeTransitionMask.ts \
+    src/slideshow/VectorSlideLayers.ts \
     src/slideshow/Transition2d.ts \
     src/slideshow/Transition3d.ts \
     src/slideshow/transition/ClippingTransition.ts \

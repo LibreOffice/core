@@ -70,5 +70,9 @@ namespace cool {
 		/// a group take the state of the group. Absent when nothing is
 		/// animated.
 		states?: Map<number, ObjectRenderState>;
+		/// The positions in the paint order of the part that are drawn, from
+		/// start up to but not including end. The page entry is at position
+		/// 0, and the master draws with it. Absent where the whole order is.
+		paintRange?: { start: number; end: number };
 	}
 }
