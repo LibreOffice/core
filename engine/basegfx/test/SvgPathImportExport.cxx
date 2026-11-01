@@ -229,8 +229,31 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
+    void testExportOpenSubpaths()
+    {
+        // A relative move after an open subpath starts from the last point of that subpath, so
+        // the second line starts where the first one ends and the path reads back unchanged.
+        B2DPolygon aFirst;
+        aFirst.append(B2DPoint(0, 0));
+        aFirst.append(B2DPoint(10, 0));
+        B2DPolygon aSecond;
+        aSecond.append(B2DPoint(10, 0));
+        aSecond.append(B2DPoint(10, 10));
+        B2DPolyPolygon aPoly;
+        aPoly.append(aFirst);
+        aPoly.append(aSecond);
+
+        const OUString aExport = utils::exportToSvgD(aPoly, true, true, false);
+        CPPUNIT_ASSERT_EQUAL(u"m0 0h10m0 0v10"_ustr, aExport);
+
+        B2DPolyPolygon aImported;
+        CPPUNIT_ASSERT(utils::importFromSvgD(aImported, aExport, false, nullptr));
+        CPPUNIT_ASSERT_EQUAL(aPoly, aImported);
+    }
+
     CPPUNIT_TEST_SUITE(SvgPathImportExport);
     CPPUNIT_TEST(testImportExport);
+    CPPUNIT_TEST(testExportOpenSubpaths);
     CPPUNIT_TEST_SUITE_END();
 };
 

@@ -909,10 +909,11 @@ namespace basegfx::utils
                         putCommandChar(aResult, aLastSVGCommand, 'E', bUseRelativeCoordinates, bOOXMLMotionPath);
                     }
 
-                    if(!bHandleRelativeNextPointCompatible)
+                    if(aPolygon.isClosed() && !bHandleRelativeNextPointCompatible)
                     {
-                        // SVG defines that "the next subpath starts at the same initial point as the current subpath",
-                        // so set aCurrentSVGPosition to the 1st point of the current, now ended and written path
+                        // SVG starts the subpath after a closepath at the initial point of the closed
+                        // one, so set aCurrentSVGPosition to the 1st point of the written path. After an
+                        // open subpath the current point stays at its last point.
                         aCurrentSVGPosition = aPolygon.getB2DPoint(0);
                     }
                 }
