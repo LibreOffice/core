@@ -701,7 +701,60 @@ static bool detectHasAdditionalStreams(const OUString& rSysUPath)
     return bAdditionalStreams;
 }
 
-uno::Reference< io::XStream > getAdditionalStream( const OUString&                          rInPDFFileURL,
+// Our PDF export has always written the embedded document as "stream\n", then /Length raw bytes,
+// then "\nendstream". Its dictionary has no filter, and /Length refers to an object that holds
+// the byte count.
+static bool isExportedHybridStream(const pdfparse::PDFFile& rFile,
+                                   const pdfparse::PDFObject& rObject,
+                                   pdfparse::EmitContext& rContext)
+{
+    const pdfparse::PDFStream* pStream = rObject.m_pStream;
+    if (!pStream || !pStream->m_pDict)
+        return false;
+
+    const pdfparse::PDFDict::Map& rMap = pStream->m_pDict->m_aMap;
+    for (const auto& [rKey, pValue] : rMap)
+    {
+        if (rKey == "Type")
+        {
+            const pdfparse::PDFName* pType = dynamic_cast<const pdfparse::PDFName*>(pValue);
+            if (!pType || pType->m_aName != "EmbeddedFile")
+                return false;
+        }
+        else if (rKey != "Length" && rKey != "Subtype" && rKey != "Params")
+            return false;
+    }
+
+    auto it = rMap.find("Length"_ostr);
+    if (it == rMap.end())
+        return false;
+    const pdfparse::PDFObjectRef* pLengthRef
+        = dynamic_cast<const pdfparse::PDFObjectRef*>(it->second);
+    if (!pLengthRef)
+        return false;
+    const pdfparse::PDFObject* pLengthObject = rFile.findObject(pLengthRef);
+    if (!pLengthObject || pLengthObject->m_pStream)
+        return false;
+    const pdfparse::PDFNumber* pLength
+        = dynamic_cast<const pdfparse::PDFNumber*>(pLengthObject->m_pObject);
+    if (!pLength)
+        return false;
+
+    // The span runs from the start of "stream" to the end of "endstream".
+    constexpr unsigned int nFrame = sizeof("stream\n\nendstream") - 1;
+    const unsigned int nSpan = pStream->m_nEndOffset - pStream->m_nBeginOffset;
+    if (nSpan <= nFrame || pLength->m_fValue != static_cast<double>(nSpan - nFrame))
+        return false;
+
+    char cAfterKeyword = 0;
+    char cBeforeEnd = 0;
+    if (rContext.readOrigBytes(pStream->m_nBeginOffset + 6, 1, &cAfterKeyword) != 1
+        || rContext.readOrigBytes(pStream->m_nEndOffset - 10, 1, &cBeforeEnd) != 1)
+        return false;
+    return cAfterKeyword == '\n' && cBeforeEnd == '\n';
+}
+
+uno::Reference< io::XStream > getAdditionalStream(const OUString&                          rInPDFFileURL,
                                                    OUString&                                rOutMimetype,
                                                    OUString&                                io_rPwd,
                                                    const uno::Reference<uno::XComponentContext>& xContext,
@@ -768,7 +821,7 @@ uno::Reference< io::XStream > getAdditionalStream( const OUString&              
                     SAL_WARN_IF( !pMimeType, "sdext.pdfimport", "error: no mimetype element" );
                     SAL_WARN_IF( !pStreamRef, "sdext.pdfimport", "error: no stream ref element" );
 
-                    if( pMimeType && pStreamRef )
+                    if( pMimeType && pStreamRef && pStreamRef->m_nGeneration == 0 )
                     {
                         pdfparse::PDFObject* pObject = pPDFFile->findObject( pStreamRef->m_nNumber, pStreamRef->m_nGeneration );
                         SAL_WARN_IF( !pObject, "sdext.pdfimport", "object not found" );
@@ -813,10 +866,12 @@ uno::Reference< io::XStream > getAdditionalStream( const OUString&              
                                 if( ! bAuthenticated )
                                     continue;
                             }
-                            rOutMimetype = pMimeType->getFilteredName();
                             FileEmitContext aContext( rInPDFFileURL,
                                                       xContext,
                                                       pPDFFile );
+                            if (!isExportedHybridStream(*pPDFFile, *pObject, aContext))
+                                continue;
+                            rOutMimetype = pMimeType->getFilteredName();
                             aContext.m_bDecrypt = pPDFFile->isEncrypted();
                             pObject->writeStream( aContext, pPDFFile );
                             xEmbed = aContext.getContextStream();
