@@ -4960,40 +4960,6 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoVideoLoop)
     CPPUNIT_ASSERT(!rVideo.get<bool>("mute"));
 }
 
-static const boost::property_tree::ptree* findCommandNode(const boost::property_tree::ptree& rNode)
-{
-    if (rNode.get<std::string>("nodeName", "") == "Command")
-        return &rNode;
-    auto aChildren = rNode.find("children");
-    if (aChildren == rNode.not_found())
-        return nullptr;
-    for (const auto& rChild : aChildren->second)
-    {
-        if (const boost::property_tree::ptree* pCommand = findCommandNode(rChild.second))
-            return pCommand;
-    }
-    return nullptr;
-}
-
-// A video set to start automatically has a play command in the slide's animations, aimed at
-// that video.
-CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoVideoPlayCommand)
-{
-    SdXImpressDocument* pXImpressDocument = createDoc("video-loop.pptx");
-    Scheduler::ProcessEventsToIdle();
-
-    boost::property_tree::ptree aTree;
-    readJSON(aTree, pXImpressDocument->getPresentationInfo());
-
-    const boost::property_tree::ptree& rSlide = child_at(aTree, "slides", 0);
-    const boost::property_tree::ptree* pCommand
-        = findCommandNode(rSlide.get_child("animations").get_child("root"));
-    CPPUNIT_ASSERT(pCommand);
-    CPPUNIT_ASSERT_EQUAL(std::string("Play"), pCommand->get<std::string>("command"));
-    CPPUNIT_ASSERT_EQUAL(child_at(rSlide, "videos", 0).get<std::string>("hash"),
-                         pCommand->get<std::string>("targetElement"));
-}
-
 // The node of an effect that plays letter by letter names its target and the title of the target,
 // and gives the delay between the letters in seconds.
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoIterate)
@@ -5041,6 +5007,56 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoFontEffects)
     CPPUNIT_ASSERT_EQUAL(std::string("solid"), aValues["CharUnderline"]);
     CPPUNIT_ASSERT_EQUAL(std::string("Liberation Serif"), aValues["CharFontName"]);
     CPPUNIT_ASSERT_EQUAL(std::string("1.5"), aValues["CharHeight"]);
+}
+
+// An effect that pauses or resumes a video carries its command and target.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoCommand)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("PresentationInfoCommand.fodp");
+    Scheduler::ProcessEventsToIdle();
+
+    boost::property_tree::ptree aTree;
+    readJSON(aTree, pXImpressDocument->getPresentationInfo());
+
+    const boost::property_tree::ptree& rRoot
+        = child_at(aTree, "slides", 0).get_child("animations").get_child("root");
+    const boost::property_tree::ptree* pCommand = findAnimationNode(rRoot, "Command");
+    CPPUNIT_ASSERT(pCommand);
+    CPPUNIT_ASSERT_EQUAL(std::string("TogglePause"), pCommand->get<std::string>("command"));
+
+    SdPage* pSlide = pXImpressDocument->GetDoc()->GetSdPage(0, PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(std::to_string(pSlide->GetObj(0)->GetUniqueID()),
+                         pCommand->get<std::string>("targetElement"));
+}
+
+// A video carries the id of its shape, the target of an effect on it. A play command carries
+// its start time.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoVideoId)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("video-loop.pptx");
+    Scheduler::ProcessEventsToIdle();
+
+    boost::property_tree::ptree aTree;
+    readJSON(aTree, pXImpressDocument->getPresentationInfo());
+
+    SdPage* pSlide = pXImpressDocument->GetDoc()->GetSdPage(0, PageKind::Standard);
+    SdrObject* pMedia = nullptr;
+    for (size_t nObject = 0; nObject < pSlide->GetObjCount(); ++nObject)
+        if (pSlide->GetObj(nObject)->GetObjIdentifier() == SdrObjKind::Media)
+            pMedia = pSlide->GetObj(nObject);
+    CPPUNIT_ASSERT(pMedia);
+    const std::string aId(std::to_string(pMedia->GetUniqueID()));
+
+    const boost::property_tree::ptree& rVideo = child_at(child_at(aTree, "slides", 0), "videos", 0);
+    CPPUNIT_ASSERT_EQUAL(aId, rVideo.get<std::string>("id"));
+
+    const boost::property_tree::ptree& rRoot
+        = child_at(aTree, "slides", 0).get_child("animations").get_child("root");
+    const boost::property_tree::ptree* pPlay = findAnimationNode(rRoot, "Command");
+    CPPUNIT_ASSERT(pPlay);
+    CPPUNIT_ASSERT_EQUAL(std::string("Play"), pPlay->get<std::string>("command"));
+    CPPUNIT_ASSERT_EQUAL(aId, pPlay->get<std::string>("targetElement"));
+    CPPUNIT_ASSERT_EQUAL(0.0, pPlay->get<double>("mediaTime"));
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testA11yPresentationInfo)

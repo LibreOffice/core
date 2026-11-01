@@ -82,6 +82,16 @@ class VideoRenderInfo extends AnimatedContentRenderInfo {
 		this.videoElement.pause();
 	}
 
+	public stop(): void {
+		this.pause();
+		this.videoElement.currentTime = 0;
+	}
+
+	public playFrom(seconds: number): void {
+		this.videoElement.currentTime = seconds;
+		this.videoElement.play();
+	}
+
 	public handleClick(): void {
 		if (this.playing) {
 			this.pause();

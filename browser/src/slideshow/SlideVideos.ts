@@ -64,7 +64,7 @@ class SlideVideos {
 			if (slideInfo.animations)
 				collectCommandTargets(slideInfo.animations.root, commandTargets);
 			for (let i = 0; i < videosInfo.length; ++i) {
-				if (commandTargets.has(videosInfo[i].hash)) continue;
+				if (commandTargets.has(String(videosInfo[i].id))) continue;
 				videoRenderers[i].play();
 			}
 		}

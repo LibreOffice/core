@@ -1556,11 +1556,25 @@ void AnimationsExporter::exportContainer(const Reference<XTimeContainer>& xConta
 
 void AnimationsExporter::exportCommand(const Reference<XCommand>& xCommand)
 {
-    mrWriter.put("targetElement", getAnimationTargetName(xCommand->getTarget()));
+    Any aTarget(xCommand->getTarget());
+    if (aTarget.hasValue())
+        exportTarget(aTarget);
 
     OStringBuffer sTmp;
     convertEnum(sTmp, xCommand->getCommand(), constCommandToString);
     mrWriter.put("command", sTmp.makeStringAndClear());
+
+    // A play command from PPTX can start the media at a time, in seconds.
+    Sequence<NamedValue> aParameters;
+    if (xCommand->getParameter() >>= aParameters)
+    {
+        for (const NamedValue& rParameter : aParameters)
+        {
+            double fMediaTime = 0;
+            if (rParameter.Name == "MediaTime" && (rParameter.Value >>= fMediaTime))
+                mrWriter.put("mediaTime", fMediaTime);
+        }
+    }
 }
 
 void AnimationsExporter::exportTarget(const Any& rTarget)
@@ -7541,8 +7555,6 @@ std::string SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                             auto const& rRectangle = pMediaObject->GetLogicRect();
                             auto aRectangle = o3tl::convert(rRectangle, o3tl::Length::mm100, o3tl::Length::twip);
                             aJsonWriter.put("id", pMediaObject->GetUniqueID());
-                            aJsonWriter.put("hash",
-                                            getAnimationTargetName(Any(pMediaObject->getUnoShape())));
                             aJsonWriter.put("url", pMediaObject->getTempURL());
                             const avmedia::MediaItem& rMediaItem = pMediaObject->getMediaProperties();
                             aJsonWriter.put("loop", rMediaItem.isLoop());

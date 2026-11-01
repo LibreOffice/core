@@ -67,6 +67,15 @@ abstract class AnimatedContentRenderInfo {
 		// Nothing to pause.
 	}
 
+	public stop(): void {
+		this.pause();
+	}
+
+	/// Play from the given second. Content without a timeline just plays.
+	public playFrom(_seconds: number): void {
+		this.play();
+	}
+
 	public handleClick(): void {
 		// Content ignores clicks.
 	}
@@ -129,6 +138,14 @@ abstract class AnimatedContentRenderer {
 
 	public pause(): void {
 		if (this.info) this.info.pause();
+	}
+
+	public stop(): void {
+		if (this.info) this.info.stop();
+	}
+
+	public playFrom(seconds: number): void {
+		if (this.info) this.info.playFrom(seconds);
 	}
 
 	public handleClick(): void {

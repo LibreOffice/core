@@ -36,7 +36,7 @@ function getNodeChildren(aNode: ContainerNodeInfo): Array<AnimationNodeInfo> {
 	return aNode.children || [];
 }
 
-// Collect the hashes of the shapes that a command node somewhere under aNodeInfo acts on.
+// Collect the targets of the command nodes under aNodeInfo, by object id.
 function collectCommandTargets(
 	aNodeInfo: AnimationNodeInfo,
 	aTargets: Set<string>,

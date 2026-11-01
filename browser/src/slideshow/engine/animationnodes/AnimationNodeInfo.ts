@@ -93,9 +93,12 @@ interface TransitionFilterNodeInfo extends AnimateNodeInfo {
 	transitionFadeColor?: string;
 }
 
+/// A command on the video of the target: Play, TogglePause, Stop, StopAudio, Verb or Custom.
+/// mediaTime is the second a play starts at, absent for the beginning.
 interface CommandNodeInfo extends BaseNodeInfo {
 	targetElement?: string;
 	command?: string;
+	mediaTime?: number;
 }
 
 type AnimationNodeInfo =

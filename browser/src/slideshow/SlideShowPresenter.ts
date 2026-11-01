@@ -18,8 +18,8 @@
 declare var SlideShow: any;
 
 interface VideoInfo {
+	// The id of the video's shape, which an effect on the video names as its target.
 	id: number;
-	hash: string;
 	url: string;
 	loop: boolean;
 	mute: boolean;
