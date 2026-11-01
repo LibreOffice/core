@@ -106,8 +106,13 @@ describe('Popped-out jsdialogs', () => {
 				},
 			);
 
+			// Pages left from earlier specs can go away meanwhile, so look for an added
+			// handle rather than comparing the counts.
 			const afterHandles = await browser.webEngine.getWindowHandles();
-			expect(afterHandles.length).toBe(beforeHandles.length);
+			const addedHandles = afterHandles.filter(
+				(handle) => !beforeHandles.includes(handle),
+			);
+			expect(addedHandles).toEqual([]);
 		} finally {
 			// The rest of the suite tests the separate-window path, so put
 			// the flag back even when this test fails part way through.
