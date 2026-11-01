@@ -5388,6 +5388,14 @@ struct OoxmlEqContext
     sal_Int32 nViewBoxWidth = 0;
     sal_Int32 nViewBoxHeight = 0;
     bool bFailed = false;
+    // why, for the log
+    OString aFailure{};
+    void fail(const char* pWhy)
+    {
+        bFailed = true;
+        if (aFailure.isEmpty())
+            aFailure = OString(pWhy);
+    }
     // How each adjustment is stored in <a:avLst> (see AdjustmentKind); null for plain values.
     const std::vector<AdjustmentInfo>* pAdjustmentInfo = nullptr;
     // A shape that came from OOXML keeps what Office gave it: its adjustment values are
@@ -5404,7 +5412,7 @@ struct OoxmlEqContext
     {
         if (nIndex < 0)
         {
-            bFailed = true;
+            fail("adjustment without index");
             return "0"_ostr;
         }
         rUsedAdjustments.insert(nIndex);
@@ -5457,7 +5465,7 @@ OString lcl_EmitConstant(double fValue, OoxmlEqContext& rCtx)
     const double fRounded = std::round(fValue);
     if (std::fabs(fRounded) > 2147483647.0)
     {
-        rCtx.bFailed = true;
+        rCtx.fail("constant too large");
         return "0"_ostr;
     }
     if (std::fabs(fValue - fRounded) <= 1e-7)
@@ -5466,7 +5474,7 @@ OString lcl_EmitConstant(double fValue, OoxmlEqContext& rCtx)
     sal_Int32 nDenominator = 1;
     if (!lcl_ConstantAsFraction(fValue, nNumerator, nDenominator))
     {
-        rCtx.bFailed = true;
+        rCtx.fail("constant is not a fraction of whole numbers");
         return "0"_ostr;
     }
     return rCtx.addGuide("*/ " + OString::number(nNumerator) + " 1 "
@@ -5551,7 +5559,7 @@ OString lcl_EmitAngleArgument(const ExpressionNode* pX, double fConst, OoxmlEqCo
 {
     if (!pX)
     {
-        rCtx.bFailed = true;
+        rCtx.fail("trigonometric function without argument");
         return "0"_ostr;
     }
     if (pX->isConstant())
@@ -5638,7 +5646,7 @@ OString lcl_EmitTrig(const ExpressionNode* pTrig, const ExpressionNode* pMul, Oo
     if (!lcl_TryEmitAngle60000(pTrig->getChild(0), rCtx, aAngle))
     {
         // The angle is not in the pi/const idiom (raw radians): not expressible.
-        rCtx.bFailed = true;
+        rCtx.fail("angle in raw radians");
         return "0"_ostr;
     }
     const char* pOp = pTrig->getType() == ExpressionFunct::UnarySin
@@ -5656,14 +5664,14 @@ OString lcl_EmitMulDivByConstant(const ExpressionNode* pA, double fConst, bool b
     sal_Int32 nDenominator = 1;
     if (!lcl_ConstantAsFraction(fConst, nNumerator, nDenominator))
     {
-        rCtx.bFailed = true;
+        rCtx.fail("angle constant is not a fraction of whole numbers");
         return "0"_ostr;
     }
     if (bDivide)
     {
         if (nNumerator == 0)
         {
-            rCtx.bFailed = true;
+            rCtx.fail("angle constant is zero");
             return "0"_ostr;
         }
         std::swap(nNumerator, nDenominator);
@@ -5681,7 +5689,7 @@ OString lcl_EmitOoxmlNode(const ExpressionNode* pNode, OoxmlEqContext& rCtx)
 {
     if (!pNode)
     {
-        rCtx.bFailed = true;
+        rCtx.fail("missing node");
         return "0"_ostr;
     }
     // A constant sub-expression collapses to its value, which has to be a whole number.
@@ -5701,7 +5709,7 @@ OString lcl_EmitOoxmlNode(const ExpressionNode* pNode, OoxmlEqContext& rCtx)
             if (nEquation >= 0 && o3tl::make_unsigned(nEquation) < rCtx.rEqNames.size()
                 && !rCtx.rEqNames[nEquation].isEmpty() && !rCtx.rEqIsAngle[nEquation])
                 return rCtx.rEqNames[nEquation];
-            rCtx.bFailed = true;
+            rCtx.fail("angle equation used as a value, or a forward reference");
             return "0"_ostr;
         }
         case ExpressionFunct::EnumWidth:
@@ -5716,12 +5724,12 @@ OString lcl_EmitOoxmlNode(const ExpressionNode* pNode, OoxmlEqContext& rCtx)
         case ExpressionFunct::EnumLogWidth:
             if (rCtx.bRawAdjustments)
                 return "w"_ostr;
-            rCtx.bFailed = true;
+            rCtx.fail("logwidth");
             return "0"_ostr;
         case ExpressionFunct::EnumLogHeight:
             if (rCtx.bRawAdjustments)
                 return "h"_ostr;
-            rCtx.bFailed = true;
+            rCtx.fail("logheight");
             return "0"_ostr;
         case ExpressionFunct::BinaryPlus:
         {
@@ -5744,7 +5752,7 @@ OString lcl_EmitOoxmlNode(const ExpressionNode* pNode, OoxmlEqContext& rCtx)
             const ExpressionNode* pB = pNode->getChild(1);
             if (!pA || !pB)
             {
-                rCtx.bFailed = true;
+                rCtx.fail("missing operand");
                 return "0"_ostr;
             }
             if (lcl_IsTrig(pA))
@@ -5768,7 +5776,7 @@ OString lcl_EmitOoxmlNode(const ExpressionNode* pNode, OoxmlEqContext& rCtx)
             const ExpressionNode* pB = pNode->getChild(1);
             if (!pA || !pB)
             {
-                rCtx.bFailed = true;
+                rCtx.fail("missing operand");
                 return "0"_ostr;
             }
             // a*b/c is one guide, as the presets write it
@@ -5827,7 +5835,7 @@ OString lcl_EmitOoxmlNode(const ExpressionNode* pNode, OoxmlEqContext& rCtx)
             // expressible. logwidth and logheight, the shape's size in 1/100 mm, have no
             // counterpart in the path's space; a shape that came from OOXML read them from the
             // built-ins w and h, which it gets back.
-            rCtx.bFailed = true;
+            rCtx.fail("function without a counterpart");
             return "0"_ostr;
     }
 }
@@ -5891,6 +5899,7 @@ bool lcl_CreateOoxmlGuides(const std::vector<std::shared_ptr<ExpressionNode>>& r
     {
         const std::shared_ptr<ExpressionNode>& pNode = rNodes[i];
         aContext.bFailed = false;
+        aContext.aFailure.clear();
         // An equation that is itself an angle (X*pi/c) is converted to 60000ths of a degree and
         // remembered, so that trigonometric functions referencing it work; so is an equation
         // that is nothing but an adjustment stored in 60000ths.
@@ -5908,6 +5917,8 @@ bool lcl_CreateOoxmlGuides(const std::vector<std::shared_ptr<ExpressionNode>>& r
             aToken = lcl_EmitOoxmlNode(pNode.get(), aContext);
         if (aContext.bFailed)
         {
+            SAL_INFO("oox.shape.custgeom",
+                     "not parametric: equation " << i << ": " << aContext.aFailure);
             rSet = EquationGuideSet();
             return false;
         }
@@ -6294,7 +6305,12 @@ void lcl_BuildXYHandles(const std::vector<XYHandleRaw>& rHandles,
                         && rInfo[nY].eKind == AdjustmentKind::BoundY && !rInfo[nY].bConflict
                         && rFrozen.count(nY) == 0;
         if (!bX && !bY)
+        {
+            SAL_INFO("oox.shape.custgeom", "xy handle dropped: adjustments "
+                                               << nX << " and " << nY
+                                               << " are not bound to one axis each, or are frozen");
             continue;
+        }
         if (bX)
         {
             const sal_Int32 nScale = lcl_AdjustmentScale(AdjustmentKind::BoundX, rCtx.nViewBoxWidth,
@@ -6312,7 +6328,10 @@ void lcl_BuildXYHandles(const std::vector<XYHandleRaw>& rHandles,
             else if (!rCtx.bRawAdjustments)
                 aOut.aMaxX = "2147483647"_ostr;
             if ((rHandle.aMinX && aOut.aMinX.isEmpty()) || (rHandle.aMaxX && aOut.aMaxX.isEmpty()))
+            {
+                SAL_INFO("oox.shape.custgeom", "xy handle dropped: x range not expressible");
                 continue;
+            }
         }
         if (bY)
         {
@@ -6329,12 +6348,18 @@ void lcl_BuildXYHandles(const std::vector<XYHandleRaw>& rHandles,
             else if (!rCtx.bRawAdjustments)
                 aOut.aMaxY = "2147483647"_ostr;
             if ((rHandle.aMinY && aOut.aMinY.isEmpty()) || (rHandle.aMaxY && aOut.aMaxY.isEmpty()))
+            {
+                SAL_INFO("oox.shape.custgeom", "xy handle dropped: y range not expressible");
                 continue;
+            }
         }
         const OString aPosX = lcl_HandleParameterToken(rHandle.aPosition.First, rCtx);
         const OString aPosY = lcl_HandleParameterToken(rHandle.aPosition.Second, rCtx);
         if (aPosX.isEmpty() || aPosY.isEmpty())
+        {
+            SAL_INFO("oox.shape.custgeom", "xy handle dropped: position not expressible");
             continue;
+        }
         if (rCtx.bRawAdjustments)
         {
             aOut.aPosX = aPosX;
@@ -6595,12 +6620,20 @@ void lcl_BuildPolarHandles(const std::vector<PolarHandleRaw>& rHandles,
             || rInfo[nAngle].eKind != AdjustmentKind::Angle || rInfo[nAngle].bConflict
             || (rInfo[nAngle].fAngleConst == 0.0 && !rCtx.bRawAdjustments)
             || rFrozen.count(nAngle) > 0)
+        {
+            SAL_INFO("oox.shape.custgeom", "polar handle dropped: adjustment "
+                                               << nAngle << " is not an angle, or is frozen");
             continue;
+        }
         const sal_Int32 nRadius = rHandle.nRadiusAdjust;
         if (nRadius >= 0
             && (o3tl::make_unsigned(nRadius) >= rInfo.size() || rFrozen.count(nRadius) > 0
                 || rInfo[nRadius].bConflict))
+        {
+            SAL_INFO("oox.shape.custgeom", "polar handle dropped: radius adjustment "
+                                               << nRadius << " is frozen or in conflict");
             continue;
+        }
         OString aCx;
         OString aCy;
         OString aRadius;
@@ -6618,10 +6651,17 @@ void lcl_BuildPolarHandles(const std::vector<PolarHandleRaw>& rHandles,
             aCy = lcl_HandleParameterToken(rHandle.aPolar.Second, rCtx);
             if (aCx.isEmpty() || aCy.isEmpty() || aCx.toInt64() * 2 != rCtx.nViewBoxWidth
                 || aCy.toInt64() * 2 != rCtx.nViewBoxHeight)
+            {
+                SAL_INFO("oox.shape.custgeom",
+                         "polar handle dropped: centre is not the centre of the view box");
                 continue;
+            }
             aRadius = lcl_HandleParameterToken(rHandle.aRadius, rCtx);
             if (aRadius.isEmpty())
+            {
+                SAL_INFO("oox.shape.custgeom", "polar handle dropped: radius not expressible");
                 continue;
+            }
         }
         PolarHandleOut aOut;
         aOut.aGdRefAng = "adj" + OString::number(nAngle + 1);
@@ -6643,7 +6683,10 @@ void lcl_BuildPolarHandles(const std::vector<PolarHandleRaw>& rHandles,
             else if (!rCtx.bRawAdjustments)
                 aOut.aMaxR = "2147483647"_ostr;
             if ((rHandle.aMinR && aOut.aMinR.isEmpty()) || (rHandle.aMaxR && aOut.aMaxR.isEmpty()))
+            {
+                SAL_INFO("oox.shape.custgeom", "polar handle dropped: radius range not expressible");
                 continue;
+            }
         }
         OString aPx = aCx;
         OString aPy = aCy;
@@ -7031,7 +7074,10 @@ bool lcl_BuildParametricPlan(
 
     std::vector<std::shared_ptr<ExpressionNode>> aNodes;
     if (!lcl_ParseEquations(rCustomShape2d, rEquationStrings, aNodes))
+    {
+        SAL_INFO("oox.shape.custgeom", "not parametric: an equation does not parse");
         return false;
+    }
     std::set<sal_Int32> aDirectUses;
     std::set<sal_Int32> aDirectEquations;
     lcl_CollectDirectAdjustmentUses(rSegments, rPairs, rGluePoints, aXYHandlesRaw, aDirectUses,
@@ -7056,7 +7102,10 @@ bool lcl_BuildParametricPlan(
     CustomGeometryPlan aPlan = rPlan;
     lcl_CollectCoordinateTokens(rSegments, rPairs, aContext, aPlan);
     if (aContext.bFailed)
+    {
+        SAL_INFO("oox.shape.custgeom", "not parametric: coordinates: " << aContext.aFailure);
         return false;
+    }
     lcl_CollectArcTokens(rSegments, rPairs, aContext, aPlan);
 
     // A handle whose adjustment also feeds a coordinate that stays a number would move only
@@ -7067,12 +7116,18 @@ bool lcl_BuildParametricPlan(
     lcl_BuildPolarHandles(aPolarHandlesRaw, aAdjustmentInfo, aFrozen, aContext,
                           aPlan.aPolarHandles);
     if (aContext.bFailed)
+    {
+        SAL_INFO("oox.shape.custgeom", "not parametric: handles: " << aContext.aFailure);
         return false;
+    }
 
     // The glue points follow the equation guides they refer to.
     std::vector<Guide> aGluePointGuides;
     if (!lcl_BuildGluePointGuides(rGluePoints, aContext, aGluePointGuides) || aContext.bFailed)
+    {
+        SAL_INFO("oox.shape.custgeom", "not parametric: glue points: " << aContext.aFailure);
         return false;
+    }
 
     std::set<sal_Int32> aDeclaredAdjustments = aEquations.aUsedAdjustments;
     for (const Guide& rGuide : aPlan.aGuides)
@@ -7108,23 +7163,36 @@ bool lcl_BuildParametricPlan(
             // [0, 21600000) as a polar handle writes it back.
             const double f60000ths = fValue * 10800000.0 / aAdjustmentInfo[nAdjustment].fAngleConst;
             if (std::fabs(f60000ths) > 2147483647.0)
+            {
+                SAL_INFO("oox.shape.custgeom", "not parametric: angle value too large");
                 return false;
+            }
             sal_Int64 nNormalised = std::lround(f60000ths) % 21600000;
             if (nNormalised < 0)
                 nNormalised += 21600000;
             fValue = nNormalised;
         }
         else if (std::fabs(fValue - std::round(fValue)) > 1e-7)
+        {
+            SAL_INFO("oox.shape.custgeom", "not parametric: adjustment " << nAdjustment
+                                               << " is a plain value that is not whole");
             return false;
+        }
         if (std::fabs(fValue) > 2147483647.0)
+        {
+            SAL_INFO("oox.shape.custgeom", "not parametric: adjustment value too large");
             return false;
+        }
         aPlan.aAdjustments.push_back({ "adj" + OString::number(nAdjustment + 1),
                                        "val " + OString::number(std::lround(fValue)) });
     }
 
     // A shape that neither equations nor adjustments drive stays as it is.
     if (aPlan.aAdjustments.empty() && aEquations.aGuides.empty())
+    {
+        SAL_INFO("oox.shape.custgeom", "not parametric: no equations and no adjustments");
         return false;
+    }
 
     // The equation guides follow the text-area guides, so that the latter keep their position
     // in the list, and the glue points come last.
@@ -7153,7 +7221,10 @@ bool lcl_BuildParametricPlan(
         const OUString aToken = OUString::fromUtf8(rToken);
         if (aGuideNames.find(aToken) == aGuideNames.end()
             && aAdjustmentNames.find(aToken) == aAdjustmentNames.end())
+        {
+            SAL_INFO("oox.shape.custgeom", "not parametric: token not declared: " << rToken);
             return false;
+        }
     }
     std::vector<OString> aHandleTokens;
     for (const XYHandleOut& rHandle : aPlan.aXYHandles)
@@ -7171,7 +7242,10 @@ bool lcl_BuildParametricPlan(
         const OUString aToken = OUString::fromUtf8(rToken);
         if (aGuideNames.find(aToken) == aGuideNames.end()
             && aAdjustmentNames.find(aToken) == aAdjustmentNames.end())
+        {
+            SAL_INFO("oox.shape.custgeom", "not parametric: token not declared: " << rToken);
             return false;
+        }
     }
 
     rPlan = aPlan;
@@ -7845,6 +7919,7 @@ bool DrawingML::WriteCustomGeometry(
     CustomGeometryPlan aPlan;
     prepareTextArea(aCustomShape2d, aPlan.aGuides, aPlan.aTextAreaRect);
     bool bParametric = false;
+    SAL_INFO("oox.shape.custgeom", "custom shape '" << rSdrObjCustomShape.GetName() << "'");
     // A shape that came from OOXML carries the size of its path and its guides are in that
     // space; one without that size, or a stretched one, keeps resolved coordinates.
     const bool bFromOOXML = bOOXML && !bUseGlobalViewBox && aPathSize.hasElements()
@@ -7868,9 +7943,18 @@ bool DrawingML::WriteCustomGeometry(
                                               bFromOOXML, aPlan);
     }
     if (!bParametric)
+    {
+        SAL_INFO("oox.shape.custgeom",
+                 "resolved coordinates"
+                     << (bOOXML && !bFromOOXML ? ": shape from OOXML without a path size" : "")
+                     << (!bOOXML && !bNominalViewBox ? ": no nominal view box" : "")
+                     << (bReplaceGeoWidth || bReplaceGeoHeight ? ": stretched" : "")
+                     << (!bUseGlobalViewBox && !bFromOOXML ? ": subpaths have their own size"
+                                                             : ""));
         prepareGluePoints(aPlan.aGuides, aEquationSeq, aGluePoints, bOOXML,
                           bUseGlobalViewBox ? nViewBoxWidth : aPathSize[0].Width,
                           bUseGlobalViewBox ? nViewBoxHeight : aPathSize[0].Height);
+    }
     const std::vector<OString>* pCoordTokens
         = aPlan.aCoordTokens.empty() ? nullptr : &aPlan.aCoordTokens;
     mpFS->startElementNS(XML_a, XML_custGeom);
