@@ -36,6 +36,9 @@ EmbeddedFontListContext::~EmbeddedFontListContext() = default;
 oox::core::ContextHandlerRef
 EmbeddedFontListContext::onCreateContext(sal_Int32 aElementToken, const AttributeList& rAttributes)
 {
+    if (aElementToken != PPT_TOKEN(embeddedFont) && !moCurrentFont)
+        return this;
+
     switch (aElementToken)
     {
         case PPT_TOKEN(embeddedFont):
