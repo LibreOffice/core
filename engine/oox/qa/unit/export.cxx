@@ -2049,6 +2049,67 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeForwardReference)
     CPPUNIT_ASSERT(nF4 < nF2);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeQuadrants)
+{
+    // Given a rounded rectangle drawn with elliptical quadrants (X and Y commands) whose
+    // corners an adjustment sizes:
+    loadFromFile(u"custGeom_quadrant.fodp");
+
+    // When saving it to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then each quadrant is an arc whose radii are guides built from the current point and
+    // the target, so the handle is not frozen
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", 4);
+    OUString aWR = getXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo[1]", "wR");
+    CPPUNIT_ASSERT(aWR.startsWith("f"));
+    OUString aRadius = getXPath(
+        pXmlDoc, OString("//a:custGeom/a:gdLst/a:gd[@name='" + aWR.toUtf8() + "']"), "fmla");
+    CPPUNIT_ASSERT(aRadius.startsWith("abs f"));
+    // the radius is the distance from the current point, which the adjustment places
+    OUString aDistance = getXPath(
+        pXmlDoc, OString("//a:custGeom/a:gdLst/a:gd[@name='" + aRadius.copy(4).toUtf8() + "']"),
+        "fmla");
+    CPPUNIT_ASSERT(aDistance.startsWith("+- "));
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='*/ adj1 21600 100000']", 1);
+    // the direction follows the two points: the first quadrant starts along x at 270 degrees
+    // (the target is below the current point) and turns counter-clockwise
+    OUString aStart = getXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo[1]", "stAng");
+    OUString aFormula = getXPath(
+        pXmlDoc, OString("//a:custGeom/a:gdLst/a:gd[@name='" + aStart.toUtf8() + "']"), "fmla");
+    CPPUNIT_ASSERT(aFormula.startsWith("?: f"));
+    CPPUNIT_ASSERT(aFormula.endsWith(" 5400000 16200000"));
+    OUString aSwing = getXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo[1]", "swAng");
+    aFormula = getXPath(
+        pXmlDoc, OString("//a:custGeom/a:gdLst/a:gd[@name='" + aSwing.toUtf8() + "']"), "fmla");
+    CPPUNIT_ASSERT(aFormula.endsWith(" 5400000 -5400000"));
+    // its condition is the product of the two differences
+    OUString aProduct = getXPath(
+        pXmlDoc,
+        OString("//a:custGeom/a:gdLst/a:gd[@name='" + aFormula.getToken(1, ' ').toUtf8() + "']"),
+        "fmla");
+    CPPUNIT_ASSERT(aProduct.startsWith("*/ f"));
+    CPPUNIT_ASSERT(aProduct.endsWith(" 1"));
+    // the second quadrant (a Y command) starts along y: at 0 degrees when the target is to the
+    // left, else at 180, and turns clockwise when the product is negative
+    aStart = getXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo[2]", "stAng");
+    aFormula = getXPath(
+        pXmlDoc, OString("//a:custGeom/a:gdLst/a:gd[@name='" + aStart.toUtf8() + "']"), "fmla");
+    CPPUNIT_ASSERT(aFormula.endsWith(" 0 10800000"));
+    aSwing = getXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo[2]", "swAng");
+    aFormula = getXPath(
+        pXmlDoc, OString("//a:custGeom/a:gdLst/a:gd[@name='" + aSwing.toUtf8() + "']"), "fmla");
+    OUString aNegated = getXPath(
+        pXmlDoc,
+        OString("//a:custGeom/a:gdLst/a:gd[@name='" + aFormula.getToken(1, ' ').toUtf8() + "']"),
+        "fmla");
+    CPPUNIT_ASSERT(aNegated.endsWith(" -1 1"));
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", "fmla", u"val 16667");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", 1);
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", "gdRefX", u"adj1");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testCustomShapeFromOOXMLKeepsOnlyUsedGuides)
 {
     // Given a shape that came from a pptx whose points are numbers and whose guides serve a

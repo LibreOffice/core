@@ -20,6 +20,7 @@
 #ifndef INCLUDED_OOX_EXPORT_DRAWINGML_HXX
 #define INCLUDED_OOX_EXPORT_DRAWINGML_HXX
 
+#include <array>
 #include <map>
 #include <stack>
 #include <string_view>
@@ -393,9 +394,9 @@ protected:
         const sal_Int16 eCommand, const sal_Int32 nCount,
         const cpo::uno::Sequence<css::drawing::EnhancedCustomShapeParameterPair>& rPairs,
         sal_Int32& rnPairIndex, double& rfCurrentX, double& rfCurrentY, bool& rbCurrentValid,
-        const EnhancedCustomShape2d& rCustomShape2d,
-        const bool bReplaceGeoWidth, const bool bReplaceGeoHeight,
-        const std::vector<OString>* pCoordTokens = nullptr);
+        const EnhancedCustomShape2d& rCustomShape2d, const bool bReplaceGeoWidth,
+        const bool bReplaceGeoHeight, const std::vector<OString>* pCoordTokens = nullptr,
+        const std::map<sal_Int32, std::array<OString, 4>>* pQuadrantArcs = nullptr);
 
 public:
     OOX_DLLPUBLIC DrawingML(::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = nullptr);

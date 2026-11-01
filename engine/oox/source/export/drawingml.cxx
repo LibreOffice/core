@@ -52,6 +52,7 @@
 #include <map>
 #include <optional>
 #include <string_view>
+#include <array>
 #include <set>
 
 #include <com/sun/star/awt/CharSet.hpp>
@@ -5177,6 +5178,9 @@ struct CustomGeometryPlan
     // number is written.
     std::vector<OString> aCoordTokens;
     TextAreaRect aTextAreaRect;
+    // The arc of each elliptical quadrant, by the index of its pair: the guides of its radii
+    // and of its start and swing angles.
+    std::map<sal_Int32, std::array<OString, 4>> aQuadrantArcs;
 };
 
 // The token of the x (bX) or y coordinate of pair nPairIndex, or null when the resolved
@@ -5458,6 +5462,9 @@ struct OoxmlEqContext
 OString lcl_EmitOoxmlNode(const ExpressionNode* pNode, OoxmlEqContext& rCtx);
 OString lcl_PlainTokenOfEquation(sal_Int32 nEquation, OoxmlEqContext& rCtx);
 void lcl_EmitEquation(sal_Int32 nEquation, OoxmlEqContext& rCtx);
+OString lcl_HandleParameterToken(const drawing::EnhancedCustomShapeParameter& rParam,
+                                 OoxmlEqContext& rCtx);
+bool lcl_IsNumberToken(std::string_view rToken);
 
 // Writes fValue as the fraction rNumerator / rDenominator with integer parts, using the smallest
 // power of ten (up to 100000) as the denominator that represents the value exactly enough, or
@@ -6038,10 +6045,15 @@ void lcl_CollectCoordinateTokens(
 {
     rPlan.aCoordTokens.assign(2 * rPairs.getLength(), OString());
     sal_Int32 nPairIndex = 0;
+    // The current point, as the elliptical quadrants need it: a number or a guide for each
+    // coordinate, known after a point command, unknown after an arc.
+    OString aCurrentX;
+    OString aCurrentY;
     for (const drawing::EnhancedCustomShapeSegment& rSegment : rSegments)
     {
         sal_Int32 nPairsPerCommand = 0;
         bool bPoints = false;
+        bool bQuadrant = false;
         switch (rSegment.Command)
         {
             case drawing::EnhancedCustomShapeSegmentCommand::MOVETO:
@@ -6070,6 +6082,7 @@ void lcl_CollectCoordinateTokens(
             case drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTX:
             case drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTY:
                 nPairsPerCommand = 1;
+                bQuadrant = true;
                 break;
             case drawing::EnhancedCustomShapeSegmentCommand::ARCANGLETO:
                 nPairsPerCommand = 2;
@@ -6078,16 +6091,80 @@ void lcl_CollectCoordinateTokens(
                 nPairsPerCommand = 0;
                 break;
         }
+        // an arc moves the current point to where the numbers say, a new subpath starts without
+        // one; the fill and stroke commands and the closing of the subpath leave it alone
+        if (nPairsPerCommand > 0
+                ? !bPoints && !bQuadrant
+                : rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH)
+        {
+            aCurrentX.clear();
+            aCurrentY.clear();
+        }
         for (sal_Int32 k = 0; k < rSegment.Count; ++k)
         {
             for (sal_Int32 i = 0; i < nPairsPerCommand; ++i, ++nPairIndex)
             {
-                if (!bPoints || nPairIndex >= rPairs.getLength())
+                if ((!bPoints && !bQuadrant) || nPairIndex >= rPairs.getLength())
                     continue;
-                rPlan.aCoordTokens[2 * nPairIndex]
-                    = lcl_CoordinateToken(rPairs[nPairIndex].First, rCtx);
-                rPlan.aCoordTokens[2 * nPairIndex + 1]
-                    = lcl_CoordinateToken(rPairs[nPairIndex].Second, rCtx);
+                const drawing::EnhancedCustomShapeParameterPair& rPair = rPairs[nPairIndex];
+                if (bQuadrant)
+                {
+                    // The quadrant is an arc from the current point to its target: its radii
+                    // are the distances between the two, and its direction follows their
+                    // order; all of them are guides when either point is one. The arc starts
+                    // along x or along y by turns, from the command.
+                    // a target the guides cannot express is an empty token, which leaves the
+                    // arc to the numbers
+                    const OString aX = lcl_HandleParameterToken(rPair.First, rCtx);
+                    const OString aY = lcl_HandleParameterToken(rPair.Second, rCtx);
+                    if (!aX.isEmpty() && !aY.isEmpty() && !aCurrentX.isEmpty()
+                        && !aCurrentY.isEmpty()
+                        && !(lcl_IsNumberToken(aX) && lcl_IsNumberToken(aY)
+                             && lcl_IsNumberToken(aCurrentX) && lcl_IsNumberToken(aCurrentY)))
+                    {
+                        rPlan.aCoordTokens[2 * nPairIndex] = aX;
+                        rPlan.aCoordTokens[2 * nPairIndex + 1] = aY;
+                        const OString aDX = rCtx.addGuide("+- " + aX + " 0 " + aCurrentX);
+                        const OString aDY = rCtx.addGuide("+- " + aY + " 0 " + aCurrentY);
+                        const OString aProduct = rCtx.addGuide("*/ " + aDX + " " + aDY + " 1");
+                        const bool bHorizontal
+                            = (rSegment.Command
+                               == drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTX)
+                              == (k % 2 == 0);
+                        // Along x the arc starts at 90 degrees when the target is above the
+                        // current point, else at 270, and turns clockwise when the target is
+                        // below to the right or above to the left; along y it starts at 0 when
+                        // the target is to the left, else at 180, and turns clockwise when the
+                        // target is below to the left or above to the right.
+                        const OString aStart
+                            = bHorizontal
+                                  ? rCtx.addGuide("?: "
+                                                  + rCtx.addGuide("+- " + aCurrentY + " 0 " + aY)
+                                                  + " 5400000 16200000")
+                                  : rCtx.addGuide("?: "
+                                                  + rCtx.addGuide("+- " + aCurrentX + " 0 " + aX)
+                                                  + " 0 10800000");
+                        const OString aSwing
+                            = bHorizontal
+                                  ? rCtx.addGuide("?: " + aProduct + " 5400000 -5400000")
+                                  : rCtx.addGuide("?: " + rCtx.addGuide("*/ " + aProduct + " -1 1")
+                                                  + " 5400000 -5400000");
+                        rPlan.aQuadrantArcs[nPairIndex]
+                            = { rCtx.addGuide("abs " + aDX), rCtx.addGuide("abs " + aDY), aStart,
+                                aSwing };
+                    }
+                    aCurrentX = aX;
+                    aCurrentY = aY;
+                    continue;
+                }
+                rPlan.aCoordTokens[2 * nPairIndex] = lcl_CoordinateToken(rPair.First, rCtx);
+                rPlan.aCoordTokens[2 * nPairIndex + 1] = lcl_CoordinateToken(rPair.Second, rCtx);
+                aCurrentX = rPlan.aCoordTokens[2 * nPairIndex].isEmpty()
+                                ? lcl_HandleParameterToken(rPair.First, rCtx)
+                                : rPlan.aCoordTokens[2 * nPairIndex];
+                aCurrentY = rPlan.aCoordTokens[2 * nPairIndex + 1].isEmpty()
+                                ? lcl_HandleParameterToken(rPair.Second, rCtx)
+                                : rPlan.aCoordTokens[2 * nPairIndex + 1];
             }
         }
     }
@@ -7006,6 +7083,9 @@ void lcl_PruneUnreferencedGuides(CustomGeometryPlan& rPlan)
     for (const OString& rToken : rPlan.aCoordTokens)
         if (!rToken.isEmpty())
             aReferenced.insert(rToken);
+    for (const std::pair<const sal_Int32, std::array<OString, 4>>& rArc : rPlan.aQuadrantArcs)
+        for (const OString& rToken : rArc.second)
+            aReferenced.insert(rToken);
     for (const XYHandleOut& rHandle : rPlan.aXYHandles)
         for (const OString* pField :
              { &rHandle.aGdRefX, &rHandle.aMinX, &rHandle.aMaxX, &rHandle.aGdRefY, &rHandle.aMinY,
@@ -7188,7 +7268,10 @@ bool lcl_BuildParametricPlan(
         }
         aGuideNames.insert(OUString::fromUtf8(rGuide.sName));
     }
-    for (const OString& rToken : aPlan.aCoordTokens)
+    std::vector<OString> aPlanTokens = aPlan.aCoordTokens;
+    for (const std::pair<const sal_Int32, std::array<OString, 4>>& rArc : aPlan.aQuadrantArcs)
+        aPlanTokens.insert(aPlanTokens.end(), rArc.second.begin(), rArc.second.end());
+    for (const OString& rToken : aPlanTokens)
     {
         if (rToken.isEmpty() || rToken.toInt64() != 0 || rToken == "0")
             continue;
@@ -8006,10 +8089,10 @@ bool DrawingML::WriteCustomGeometry(
             }
             for (sal_Int32 k = 0; k < rSegment.Count && bOK; ++k)
             {
-                bOK = WriteCustomGeometrySegment(rSegment.Command, k, aPairs, nPairIndex, fCurrentX,
-                                                 fCurrentY, bCurrentValid, aCustomShape2d,
-                                                 bReplaceGeoWidth, bReplaceGeoHeight,
-                                                 pCoordTokens);
+                bOK = WriteCustomGeometrySegment(
+                    rSegment.Command, k, aPairs, nPairIndex, fCurrentX, fCurrentY, bCurrentValid,
+                    aCustomShape2d, bReplaceGeoWidth, bReplaceGeoHeight, pCoordTokens,
+                    aPlan.aQuadrantArcs.empty() ? nullptr : &aPlan.aQuadrantArcs);
             }
         } // end loop over all commands of subpath
         // finish this subpath in any case
@@ -8034,7 +8117,8 @@ bool DrawingML::WriteCustomGeometrySegment(
     const cpo::uno::Sequence<css::drawing::EnhancedCustomShapeParameterPair>& rPairs,
     sal_Int32& rnPairIndex, double& rfCurrentX, double& rfCurrentY, bool& rbCurrentValid,
     const EnhancedCustomShape2d& rCustomShape2d, const bool bReplaceGeoWidth,
-    const bool bReplaceGeoHeight, const std::vector<OString>* pCoordTokens)
+    const bool bReplaceGeoHeight, const std::vector<OString>* pCoordTokens,
+    const std::map<sal_Int32, std::array<OString, 4>>* pQuadrantArcs)
 {
     switch (eCommand)
     {
@@ -8322,10 +8406,22 @@ bool DrawingML::WriteCustomGeometrySegment(
                 }
                 sal_Int32 nStartAng(std::lround(fStartAngle * 60000));
                 sal_Int32 nSwingAng(std::lround(fSwingAngle * 60000));
-                mpFS->singleElement(
-                    FSNS(XML_a, XML_arcTo), XML_wR, OString::number(std::lround(fWR)), XML_hR,
-                    OString::number(std::lround(fHR)), XML_stAng, OString::number(nStartAng),
-                    XML_swAng, OString::number(nSwingAng));
+                const std::array<OString, 4>* pArc = nullptr;
+                if (pQuadrantArcs)
+                {
+                    std::map<sal_Int32, std::array<OString, 4>>::const_iterator aArc
+                        = pQuadrantArcs->find(rnPairIndex);
+                    if (aArc != pQuadrantArcs->end())
+                        pArc = &aArc->second;
+                }
+                if (pArc)
+                    mpFS->singleElement(FSNS(XML_a, XML_arcTo), XML_wR, (*pArc)[0], XML_hR,
+                                        (*pArc)[1], XML_stAng, (*pArc)[2], XML_swAng, (*pArc)[3]);
+                else
+                    mpFS->singleElement(
+                        FSNS(XML_a, XML_arcTo), XML_wR, OString::number(std::lround(fWR)), XML_hR,
+                        OString::number(std::lround(fHR)), XML_stAng, OString::number(nStartAng),
+                        XML_swAng, OString::number(nSwingAng));
             }
             else
             {
