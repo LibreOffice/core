@@ -33,7 +33,6 @@ $(eval $(call gb_CppunitTest_use_libraries,desktop_lok_init, \
     sal \
     sofficeapp \
     vcl \
-    $(gb_UWINAPI) \
 ))
 
 ifeq ($(OS),LINUX)
