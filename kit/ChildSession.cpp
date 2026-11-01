@@ -5290,18 +5290,21 @@ bool ChildSession::saveAs(const StringVector& tokens)
 
     getLOKitDocument()->setView(_viewId);
 
-    std::string encodedURL;
-    if (encodeURL)
-        Poco::URI::encode(url, "", encodedURL);
-    else
-        // url is already encoded
-        encodedURL = url;
+    // The URL as the engine takes it, encoded here unless it came encoded.
+    const auto encodeUrl = [encodeURL](const std::string& text)
+    {
+        std::string encoded;
+        if (encodeURL)
+            Poco::URI::encode(text, "", encoded);
+        else
+            encoded = text;
+        return encoded;
+    };
+
+    std::string encodedURL = encodeUrl(url);
 
     if (!Util::isMobileApp())
         consistencyCheckJail();
-
-    std::string encodedWopiFilename;
-    Poco::URI::encode(wopiFilename, "", encodedWopiFilename);
 
     // The desktop apps give no filename token, so a failure names the file from the URL.
     std::string encodedTargetName;
@@ -5331,6 +5334,7 @@ bool ChildSession::saveAs(const StringVector& tokens)
                     << "], Filter Options: ["
                     << (filterOptions.empty() ? "(nullptr)" : filterOptions.c_str()) << ']');
 
+            encodedURL = encodeUrl(url);
             success = getLOKitDocument()->saveAs(
                 encodedURL.c_str(), format.empty() ? nullptr : format.c_str(),
                 filterOptions.empty() ? nullptr : filterOptions.c_str());
@@ -5338,7 +5342,11 @@ bool ChildSession::saveAs(const StringVector& tokens)
     }
 
     if (success)
+    {
+        std::string encodedWopiFilename;
+        Poco::URI::encode(wopiFilename, "", encodedWopiFilename);
         sendTextFrame("saveas: url=" + encodedURL + " filename=" + encodedWopiFilename);
+    }
     else
         sendTextFrameAndLogError("error: cmd=saveas kind=savefailed filename=" +
                                  encodedTargetName);

@@ -148,10 +148,66 @@ public:
     }
 };
 
+/// A Save As to a name without an extension gets the extension of the document's own format,
+/// and the new file is uploaded under that name.
+class UnitWOPISaveAsWithoutExtension : public WopiTestServer
+{
+    STATE_ENUM(Phase, LoadAndSaveAs, WaitUpload, Done)
+    _phase;
+
+public:
+    UnitWOPISaveAsWithoutExtension()
+        : WopiTestServer("UnitWOPISaveAsWithoutExtension")
+        , _phase(Phase::LoadAndSaveAs)
+    {
+    }
+
+    void assertPutRelativeFileRequest(const Poco::Net::HTTPRequest& request) override
+    {
+        LOK_ASSERT_STATE(_phase, Phase::WaitUpload);
+        LOK_ASSERT_EQUAL_STR("/path/to/renamed.odt", request.get("X-WOPI-SuggestedTarget"));
+        LOK_ASSERT(std::stoul(request.get("X-WOPI-Size")) > 0);
+        TRANSITION_STATE(_phase, Phase::Done);
+    }
+
+    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /* code */,
+                                      const bool /* flush */, int& /*unitReturn*/) override
+    {
+        // The client hears of the new file under the name the host gave it.
+        if (_phase == Phase::Done && message.starts_with("saveas: url=") &&
+            message.find(helpers::getTestServerURI()) != std::string::npos)
+        {
+            passTest("The new file has the extension of the document's format");
+        }
+
+        return false;
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::LoadAndSaveAs:
+            {
+                initWebsocket("/wopi/files/0?access_token=anything");
+
+                WSD_CMD("load url=" + getWopiSrc());
+                WSD_CMD("saveas url=wopi:///path/to/renamed");
+
+                TRANSITION_STATE(_phase, Phase::WaitUpload);
+                break;
+            }
+            case Phase::WaitUpload:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* []
-    { new UnitWOPISaveAs(), new UnitWOPISaveAsWithEncodedFileName(), nullptr };
+    return new UnitBase*[4]{ new UnitWOPISaveAs(), new UnitWOPISaveAsWithEncodedFileName(),
+                             new UnitWOPISaveAsWithoutExtension(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
