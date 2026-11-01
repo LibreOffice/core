@@ -683,8 +683,10 @@ bool PDFObject::getDeflatedStream( std::unique_ptr<char[]>& rpStream, unsigned i
         char* pStream = rpStream.get();
         if( pStream[0] == 's' )
             pStream += 6; // skip "stream"
-        // skip line end after "stream"
-        while( *pStream == '\r' || *pStream == '\n' )
+        // "stream" is followed by CR LF or by LF alone, and the data starts after that
+        if( *pStream == '\r' )
+            pStream++;
+        if( *pStream == '\n' )
             pStream++;
         // get the compressed length
         *pBytes = m_pStream->getDictLength( pObjectContainer );
