@@ -2242,6 +2242,44 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeStretchedWideBox)
     CPPUNIT_ASSERT(aFormula.endsWith(" 21600000"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeAtanAndLogwidth)
+{
+    // Given a shape whose equations use atan2, atan, logwidth and logheight:
+    loadFromFile(u"custGeom_atanLogwidth.fodp");
+
+    // When saving it to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then the angles come from at2 scaled to radians, the sizes from w and h in 1/100 mm, and
+    // the handle is kept
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", 1);
+    OUString aScaled
+        = getXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='*/ adj1 21600 100000']", "name");
+    assertXPath(pXmlDoc,
+                OString("//a:custGeom/a:gdLst/a:gd[@fmla='at2 10800 " + aScaled.toUtf8() + "']"),
+                1);
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[starts-with(@fmla, 'at2 1 ')]", 1);
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[contains(@fmla, ' 10 34377468')]", 2);
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='*/ w 1 360']", 1);
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='*/ h 1 360']", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeLogwidthInWriter)
+{
+    // Given a text document whose shape uses logwidth, which Writer measures in twips:
+    loadFromFile(u"custGeom_logwidthWriter.fodt");
+
+    // When saving it to DOCX:
+    save(TestFilter::DOCX);
+
+    // Then logwidth is w in twips, 635 EMU each
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='*/ w 1 635']", 1);
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='*/ w 1 360']", 0);
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testCustomShapeFromOOXMLKeepsOnlyUsedGuides)
 {
     // Given a shape that came from a pptx whose points are numbers and whose guides serve a

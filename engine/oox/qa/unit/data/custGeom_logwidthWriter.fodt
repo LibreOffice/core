@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+    office:version="1.2"
+    office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:body>
+    <office:text>
+      <text:p>
+        <draw:custom-shape text:anchor-type="paragraph" draw:name="notched" svg:width="6cm" svg:height="4cm" svg:x="1cm" svg:y="1cm">
+          <text:p/>
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="non-primitive" draw:modifiers="5400"
+              draw:enhanced-path="M 0 0 L ?f0 0 21600 10800 ?f0 21600 0 21600 $0 10800 Z N">
+            <draw:equation draw:name="f0" draw:formula="21600-logwidth/10"/>
+            <draw:handle draw:handle-position="$0 10800" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
+          </draw:enhanced-geometry>
+        </draw:custom-shape>
+      </text:p>
+    </office:text>
+  </office:body>
+</office:document>

@@ -142,6 +142,7 @@
 #include <editeng/escapementitem.hxx>
 #include <editeng/unonrule.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
+#include <svx/svdmodel.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdtrans.hxx>
@@ -5413,6 +5414,9 @@ struct OoxmlEqContext
     bool bRawAdjustments = false;
     // The parsed equations, so that an arc can look at the shape of an angle equation.
     const std::vector<std::shared_ptr<ExpressionNode>>* pNodes = nullptr;
+    // The EMU of one unit of the shape's logical size (logwidth, logheight): 360 for 1/100 mm,
+    // 635 for the twips of a text document.
+    sal_Int32 nEmuPerLogicUnit = 360;
     // While the guides of the equations are created: 0 for an equation not yet emitted, 1 for
     // one being emitted, 2 for one that is done, so that a reference to a later equation emits
     // it first.
@@ -5840,15 +5844,15 @@ OString lcl_EmitOoxmlNode(const ExpressionNode* pNode, OoxmlEqContext& rCtx)
         case ExpressionFunct::EnumPi:
             return lcl_EmitConstant(M_PI, rCtx);
         case ExpressionFunct::EnumLogWidth:
+            // a shape that came from OOXML read it from w; otherwise it is the width of the
+            // shape in its logical unit, from the EMU of w
             if (rCtx.bRawAdjustments)
                 return "w"_ostr;
-            rCtx.fail("logwidth");
-            return "0"_ostr;
+            return rCtx.addGuide("*/ w 1 " + OString::number(rCtx.nEmuPerLogicUnit));
         case ExpressionFunct::EnumLogHeight:
             if (rCtx.bRawAdjustments)
                 return "h"_ostr;
-            rCtx.fail("logheight");
-            return "0"_ostr;
+            return rCtx.addGuide("*/ h 1 " + OString::number(rCtx.nEmuPerLogicUnit));
         case ExpressionFunct::BinaryPlus:
         {
             const OString aLeft = lcl_EmitOoxmlNode(pNode->getChild(0), rCtx);
@@ -5937,6 +5941,18 @@ OString lcl_EmitOoxmlNode(const ExpressionNode* pNode, OoxmlEqContext& rCtx)
             return rCtx.addGuide("abs " + lcl_EmitOoxmlNode(pNode->getChild(0), rCtx));
         case ExpressionFunct::UnarySqrt:
             return rCtx.addGuide("sqrt " + lcl_EmitOoxmlNode(pNode->getChild(0), rCtx));
+        case ExpressionFunct::UnaryAtan:
+            // at2 gives 60000ths of a degree of y/x; the shape reads radians
+            return rCtx.addGuide(
+                "*/ " + rCtx.addGuide("at2 1 " + lcl_EmitOoxmlNode(pNode->getChild(0), rCtx))
+                + " 10 34377468");
+        case ExpressionFunct::BinaryAtan2:
+        {
+            // atan2(a, b) of the shape is the angle of a/b, at2 b a
+            const OString aX = lcl_EmitOoxmlNode(pNode->getChild(1), rCtx);
+            const OString aY = lcl_EmitOoxmlNode(pNode->getChild(0), rCtx);
+            return rCtx.addGuide("*/ " + rCtx.addGuide("at2 " + aX + " " + aY) + " 10 34377468");
+        }
         case ExpressionFunct::TernaryIf:
         {
             const OString aCondition = lcl_EmitOoxmlNode(pNode->getChild(0), rCtx);
@@ -5949,10 +5965,7 @@ OString lcl_EmitOoxmlNode(const ExpressionNode* pNode, OoxmlEqContext& rCtx)
         case ExpressionFunct::UnaryTan:
             return lcl_EmitTrig(pNode, nullptr, rCtx);
         default:
-            // atan, atan2, a bare pi, the stretch and has-fill/has-stroke flags: not
-            // expressible. logwidth and logheight, the shape's size in 1/100 mm, have no
-            // counterpart in the path's space; a shape that came from OOXML read them from the
-            // built-ins w and h, which it gets back.
+            // the stretch and has-fill/has-stroke flags: not expressible
             rCtx.fail("function without a counterpart");
             return "0"_ostr;
     }
@@ -6036,7 +6049,8 @@ bool lcl_CreateOoxmlGuides(const std::vector<std::shared_ptr<ExpressionNode>>& r
                            const std::set<sal_Int32>& rAngleAdjustments60000,
                            const std::vector<AdjustmentInfo>& rAdjustmentInfo,
                            sal_Int32 nViewBoxWidth, sal_Int32 nViewBoxHeight, bool bRawAdjustments,
-                           bool bStretchX, bool bStretchY, EquationGuideSet& rSet)
+                           bool bStretchX, bool bStretchY, sal_Int32 nEmuPerLogicUnit,
+                           EquationGuideSet& rSet)
 {
     rSet = EquationGuideSet();
     rSet.aEqNames.assign(rNodes.size(), OString());
@@ -6048,6 +6062,7 @@ bool lcl_CreateOoxmlGuides(const std::vector<std::shared_ptr<ExpressionNode>>& r
     aContext.nViewBoxHeight = nViewBoxHeight;
     aContext.pAdjustmentInfo = &rAdjustmentInfo;
     aContext.bRawAdjustments = bRawAdjustments;
+    aContext.nEmuPerLogicUnit = nEmuPerLogicUnit;
     // right and bottom in the equations are the far edges of a stretched shape
     aContext.bStretched = bStretchX || bStretchY;
     if (bStretchX)
@@ -7313,7 +7328,7 @@ bool lcl_BuildParametricPlan(
     const cpo::uno::Sequence<beans::PropertyValues>& rHandles, sal_Int32 nAdjustmentCount,
     const cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rGluePoints,
     sal_Int32 nViewBoxWidth, sal_Int32 nViewBoxHeight, bool bFromOOXML, bool bStretchX,
-    bool bStretchY, CustomGeometryPlan& rPlan)
+    bool bStretchY, sal_Int32 nEmuPerLogicUnit, CustomGeometryPlan& rPlan)
 {
     // The handles decide how each adjustment is stored.
     std::vector<AdjustmentInfo> aAdjustmentInfo(nAdjustmentCount);
@@ -7334,7 +7349,8 @@ bool lcl_BuildParametricPlan(
 
     EquationGuideSet aEquations;
     if (!lcl_CreateOoxmlGuides(aNodes, aAngleAdjustments60000, aAdjustmentInfo, nViewBoxWidth,
-                               nViewBoxHeight, bFromOOXML, bStretchX, bStretchY, aEquations))
+                               nViewBoxHeight, bFromOOXML, bStretchX, bStretchY, nEmuPerLogicUnit,
+                               aEquations))
         return false;
     OoxmlEqContext aContext{ aEquations.aGuides,     aEquations.aUsedAdjustments,
                              aEquations.aEqNames,    aEquations.aEqIsAngle,
@@ -7343,6 +7359,7 @@ bool lcl_BuildParametricPlan(
     aContext.nViewBoxHeight = nViewBoxHeight;
     aContext.pAdjustmentInfo = &aAdjustmentInfo;
     aContext.bRawAdjustments = bFromOOXML;
+    aContext.nEmuPerLogicUnit = nEmuPerLogicUnit;
     aContext.bStretched = bStretchX || bStretchY;
     if (bStretchX)
         aContext.aScaleX = "ss"_ostr;
@@ -8215,6 +8232,8 @@ bool DrawingML::WriteCustomGeometry(
             bFromOOXML ? aPathSize[0].Height
                        : (bStretchedBox ? nPlainViewBoxHeight : nViewBoxHeight),
             bFromOOXML, bStretchedBox && bReplaceGeoWidth, bStretchedBox && bReplaceGeoHeight,
+            rSdrObjCustomShape.getSdrModelFromSdrObject().GetScaleUnit() == MapUnit::MapTwip ? 635
+                                                                                             : 360,
             aPlan);
     }
     if (!bParametric)
