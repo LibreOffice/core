@@ -912,10 +912,10 @@ $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : CXXOBJECTS :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : YACCOBJECT :=
-$(call gb_LinkTarget_get_target,$(1)) : T_YACCFLAGS := $$(gb_LinkTarget_YYACFLAGS) $(YACCFLAGS)
+$(call gb_LinkTarget_get_target,$(1)) : T_YACCFLAGS := $(YACCFLAGS)
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : LEXOBJECT :=
-$(call gb_LinkTarget_get_target,$(1)) : T_LEXFLAGS := $$(gb_LinkTarget_LEXFLAGS) $(LEXFLAGS)
+$(call gb_LinkTarget_get_target,$(1)) : T_LEXFLAGS := $(LEXFLAGS)
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : OBJCOBJECTS :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
