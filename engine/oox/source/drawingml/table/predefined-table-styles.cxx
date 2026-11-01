@@ -228,6 +228,11 @@ void insertBorderLine(TableStylePart& aTableStylePart, sal_Int32 nToken,
 
 std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
 {
+    // Only the ids in mStyleIdMap have a predefined style
+    const auto it = mStyleIdMap.find(styleId);
+    if (it == mStyleIdMap.end())
+        return nullptr;
+
     std::unique_ptr<TableStyle> pTableStyle;
     pTableStyle.reset(new TableStyle());
 
@@ -424,7 +429,6 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
 
     // Start to handle all style groups.
 
-    auto it = mStyleIdMap.find(styleId);
     OUString style_name = it->second.first;
     OUString accent_name = it->second.second;
 

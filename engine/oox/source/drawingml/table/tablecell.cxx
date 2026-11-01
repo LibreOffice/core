@@ -180,9 +180,12 @@ static void applyBorder( const ::oox::core::XmlFilterBase& rFilterBase, TableSty
         rLineProperties.assignUsed( *aIter->second );
     else if (rLineStyleRef.mnThemedIdx != 0)
     {
-        if (const Theme* pTheme = rFilterBase.getCurrentTheme())
+        const Theme* pTheme = rFilterBase.getCurrentTheme();
+        const LineProperties* pLineStyle
+            = pTheme ? pTheme->getLineStyle(rLineStyleRef.mnThemedIdx) : nullptr;
+        if (pLineStyle)
         {
-            rLineProperties.assignUsed( *pTheme->getLineStyle(rLineStyleRef.mnThemedIdx) );
+            rLineProperties.assignUsed( *pLineStyle );
             ::Color nPhClr = rLineStyleRef.maPhClr.getColor( rFilterBase.getGraphicHelper() );
             rLineProperties.maLineFill.maFillColor.setSrgbClr( nPhClr );
         }
@@ -214,9 +217,11 @@ static void applyTableStylePart( const ::oox::core::XmlFilterBase& rFilterBase,
     {
         ::oox::drawingml::ShapeStyleRef& rFillStyleRef = rTableStylePart.getStyleRefs()[ XML_fillRef ];
         const Theme* pTheme = rFilterBase.getCurrentTheme();
-        if (pTheme && rFillStyleRef.mnThemedIdx != 0 )
+        const FillProperties* pFillStyle = ( pTheme && rFillStyleRef.mnThemedIdx != 0 )
+            ? pTheme->getFillStyle( rFillStyleRef.mnThemedIdx ) : nullptr;
+        if ( pFillStyle )
         {
-            rFillProperties.assignUsed( *pTheme->getFillStyle( rFillStyleRef.mnThemedIdx ) );
+            rFillProperties.assignUsed( *pFillStyle );
             ::Color nPhClr = rFillStyleRef.maPhClr.getColor( rFilterBase.getGraphicHelper() );
             rFillProperties.maFillColor.setSrgbClr( nPhClr );
         }
@@ -584,9 +589,12 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
         aBgColor = rBackgroundFillPropertiesPtr->getBestSolidColor();
     else if (rBackgroundFillStyle.mnThemedIdx != 0)
     {
-        if (const Theme* pTheme = rFilterBase.getCurrentTheme())
+        const Theme* pTheme = rFilterBase.getCurrentTheme();
+        const FillProperties* pFillStyle
+            = pTheme ? pTheme->getFillStyle(rBackgroundFillStyle.mnThemedIdx) : nullptr;
+        if (pFillStyle)
         {
-            aBgColor = pTheme->getFillStyle(rBackgroundFillStyle.mnThemedIdx)->getBestSolidColor();
+            aBgColor = pFillStyle->getBestSolidColor();
             nPhClr = rBackgroundFillStyle.maPhClr.getColor(rFilterBase.getGraphicHelper());
         }
     }

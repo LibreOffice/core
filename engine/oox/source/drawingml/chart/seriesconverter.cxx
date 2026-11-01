@@ -263,7 +263,8 @@ void importFillProperties( PropertySet& rPropSet, Shape& rShape, const GraphicHe
         auto xComplexColor = model::color::createXComplexColor(aComplexColor);
         rPropSet.setProperty(PROP_LabelFillComplexColor, cpo::uno::Any(xComplexColor));
     }
-    else if(rFillProperties.moFillType.has_value() && rFillProperties.moFillType.value() == XML_pattFill)
+    else if(rFillProperties.moFillType.has_value() && rFillProperties.moFillType.value() == XML_pattFill
+            && rFillProperties.maPatternProps.moPattPreset.has_value())
     {
         rPropSet.setProperty(PROP_LabelFillStyle, drawing::FillStyle_HATCH);
         rPropSet.setProperty(PROP_LabelFillBackground, true);
@@ -987,7 +988,7 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
         {
             // Use number format code from Value series
             DataSourceModel* pValues = mrModel.maSources.get( DataSourceType::NUM_VAL ).get();
-            if( pValues )
+            if( pValues && pValues->mxDataSeq.is() )
                 xLabels->maNumberFormat.maFormatCode = pValues->mxDataSeq->maFormatCode;
         }
         DataLabelsConverter aLabelsConv( *this, *xLabels );

@@ -575,7 +575,7 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel,
         mrModel.maTypeGroups[0]->mnTypeId != mrModel.maTypeGroups[1]->mnTypeId;
 
     // convert all axes sets, and check which axis is attached to the first maTypeGroups
-    sal_Int32 nStartAxesSetIdx = bIsCombinedChart ? ((rValAxisIds.size() > 1 && aAxesSets.size() > 0 && aAxesSets[0]->maAxes.count( API_Y_AXIS )
+    sal_Int32 nStartAxesSetIdx = bIsCombinedChart ? ((rValAxisIds.size() > 1 && aAxesSets.size() > 0 && aAxesSets[0]->maAxes.has( API_Y_AXIS )
             && aAxesSets[0]->maAxes[ API_Y_AXIS ]->mnAxisId != rValAxisIds[0] ) ? 1 : 0)
             : 0;
     sal_Int32 nAxesSetIdx = nStartAxesSetIdx;
