@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+    xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+    office:version="1.2"
+    office:mimetype="application/vnd.oasis.opendocument.presentation">
+  <office:body>
+    <office:presentation>
+      <draw:page draw:name="page1" draw:master-page-name="">
+        <draw:custom-shape draw:name="sinus wave" svg:width="6cm" svg:height="6cm" svg:x="2cm" svg:y="2cm">
+          <text:p/>
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:text-areas="0 0 21600 21600" draw:type="non-primitive" draw:modifiers="15714.1245834401 0 4390.87413483722 21600" draw:enhanced-path="M 0 ?f5 C ?f12 ?f13 ?f14 ?f15 ?f16 ?f17 ?f24 ?f25 ?f26 ?f27 ?f28 ?f29 ?f36 ?f37 ?f38 ?f39 ?f40 ?f41 ?f48 ?f49 ?f50 ?f51 ?f52 ?f53 ?f60 ?f61 ?f62 ?f63 ?f64 ?f65 ?f72 ?f73 ?f74 ?f75 ?f76 ?f77 ?f84 ?f85 ?f86 ?f87 ?f88 ?f89 ?f96 ?f97 ?f98 ?f99 ?f100 ?f101 ?f108 ?f109 ?f110 ?f111 ?f112 ?f113 ?f120 ?f121 ?f122 ?f123 ?f124 ?f125 ?f132 ?f133 ?f134 ?f135 ?f136 ?f137 ?f144 ?f145 ?f146 ?f147 ?f148 ?f149 F N">
+      <draw:equation draw:name="f0" draw:formula="$0/21600*2*pi-pi"/>
+      <draw:equation draw:name="f1" draw:formula="(1-$2/21600)*(3/2-1/8)+1/8"/>
+      <draw:equation draw:name="f2" draw:formula="4*pi/12"/>
+      <draw:equation draw:name="f3" draw:formula="?f2/3"/>
+      <draw:equation draw:name="f4" draw:formula="sin(?f1*(0-?f0))"/>
+      <draw:equation draw:name="f5" draw:formula="10800*(1-?f4)"/>
+      <draw:equation draw:name="f6" draw:formula="1*?f2"/>
+      <draw:equation draw:name="f7" draw:formula="sin(?f1*(?f6-?f0))"/>
+      <draw:equation draw:name="f8" draw:formula="0+?f3"/>
+      <draw:equation draw:name="f9" draw:formula="?f4+?f3*cos(?f1*(0-?f0))*?f1"/>
+      <draw:equation draw:name="f10" draw:formula="?f6-?f3"/>
+      <draw:equation draw:name="f11" draw:formula="?f7-?f3*cos(?f1*(?f6-?f0))*?f1"/>
+      <draw:equation draw:name="f12" draw:formula="?f8/pi*5400"/>
+      <draw:equation draw:name="f13" draw:formula="10800*(1-?f9)"/>
+      <draw:equation draw:name="f14" draw:formula="?f10/pi*5400"/>
+      <draw:equation draw:name="f15" draw:formula="10800*(1-?f11)"/>
+      <draw:equation draw:name="f16" draw:formula="?f6/pi*5400"/>
+      <draw:equation draw:name="f17" draw:formula="10800*(1-?f7)"/>
+      <draw:equation draw:name="f18" draw:formula="2*?f2"/>
+      <draw:equation draw:name="f19" draw:formula="sin(?f1*(?f18-?f0))"/>
+      <draw:equation draw:name="f20" draw:formula="?f6+?f3"/>
+      <draw:equation draw:name="f21" draw:formula="?f7+?f3*cos(?f1*(?f6-?f0))*?f1"/>
+      <draw:equation draw:name="f22" draw:formula="?f18-?f3"/>
+      <draw:equation draw:name="f23" draw:formula="?f19-?f3*cos(?f1*(?f18-?f0))*?f1"/>
+      <draw:equation draw:name="f24" draw:formula="?f20/pi*5400"/>
+      <draw:equation draw:name="f25" draw:formula="10800*(1-?f21)"/>
+      <draw:equation draw:name="f26" draw:formula="?f22/pi*5400"/>
+      <draw:equation draw:name="f27" draw:formula="10800*(1-?f23)"/>
+      <draw:equation draw:name="f28" draw:formula="?f18/pi*5400"/>
+      <draw:equation draw:name="f29" draw:formula="10800*(1-?f19)"/>
+      <draw:equation draw:name="f30" draw:formula="3*?f2"/>
+      <draw:equation draw:name="f31" draw:formula="sin(?f1*(?f30-?f0))"/>
+      <draw:equation draw:name="f32" draw:formula="?f18+?f3"/>
+      <draw:equation draw:name="f33" draw:formula="?f19+?f3*cos(?f1*(?f18-?f0))*?f1"/>
+      <draw:equation draw:name="f34" draw:formula="?f30-?f3"/>
+      <draw:equation draw:name="f35" draw:formula="?f31-?f3*cos(?f1*(?f30-?f0))*?f1"/>
+      <draw:equation draw:name="f36" draw:formula="?f32/pi*5400"/>
+      <draw:equation draw:name="f37" draw:formula="10800*(1-?f33)"/>
+      <draw:equation draw:name="f38" draw:formula="?f34/pi*5400"/>
+      <draw:equation draw:name="f39" draw:formula="10800*(1-?f35)"/>
+      <draw:equation draw:name="f40" draw:formula="?f30/pi*5400"/>
+      <draw:equation draw:name="f41" draw:formula="10800*(1-?f31)"/>
+      <draw:equation draw:name="f42" draw:formula="4*?f2"/>
+      <draw:equation draw:name="f43" draw:formula="sin(?f1*(?f42-?f0))"/>
+      <draw:equation draw:name="f44" draw:formula="?f30+?f3"/>
+      <draw:equation draw:name="f45" draw:formula="?f31+?f3*cos(?f1*(?f30-?f0))*?f1"/>
+      <draw:equation draw:name="f46" draw:formula="?f42-?f3"/>
+      <draw:equation draw:name="f47" draw:formula="?f43-?f3*cos(?f1*(?f42-?f0))*?f1"/>
+      <draw:equation draw:name="f48" draw:formula="?f44/pi*5400"/>
+      <draw:equation draw:name="f49" draw:formula="10800*(1-?f45)"/>
+      <draw:equation draw:name="f50" draw:formula="?f46/pi*5400"/>
+      <draw:equation draw:name="f51" draw:formula="10800*(1-?f47)"/>
+      <draw:equation draw:name="f52" draw:formula="?f42/pi*5400"/>
+      <draw:equation draw:name="f53" draw:formula="10800*(1-?f43)"/>
+      <draw:equation draw:name="f54" draw:formula="5*?f2"/>
+      <draw:equation draw:name="f55" draw:formula="sin(?f1*(?f54-?f0))"/>
+      <draw:equation draw:name="f56" draw:formula="?f42+?f3"/>
+      <draw:equation draw:name="f57" draw:formula="?f43+?f3*cos(?f1*(?f42-?f0))*?f1"/>
+      <draw:equation draw:name="f58" draw:formula="?f54-?f3"/>
+      <draw:equation draw:name="f59" draw:formula="?f55-?f3*cos(?f1*(?f54-?f0))*?f1"/>
+      <draw:equation draw:name="f60" draw:formula="?f56/pi*5400"/>
+      <draw:equation draw:name="f61" draw:formula="10800*(1-?f57)"/>
+      <draw:equation draw:name="f62" draw:formula="?f58/pi*5400"/>
+      <draw:equation draw:name="f63" draw:formula="10800*(1-?f59)"/>
+      <draw:equation draw:name="f64" draw:formula="?f54/pi*5400"/>
+      <draw:equation draw:name="f65" draw:formula="10800*(1-?f55)"/>
+      <draw:equation draw:name="f66" draw:formula="6*?f2"/>
+      <draw:equation draw:name="f67" draw:formula="sin(?f1*(?f66-?f0))"/>
+      <draw:equation draw:name="f68" draw:formula="?f54+?f3"/>
+      <draw:equation draw:name="f69" draw:formula="?f55+?f3*cos(?f1*(?f54-?f0))*?f1"/>
+      <draw:equation draw:name="f70" draw:formula="?f66-?f3"/>
+      <draw:equation draw:name="f71" draw:formula="?f67-?f3*cos(?f1*(?f66-?f0))*?f1"/>
+      <draw:equation draw:name="f72" draw:formula="?f68/pi*5400"/>
+      <draw:equation draw:name="f73" draw:formula="10800*(1-?f69)"/>
+      <draw:equation draw:name="f74" draw:formula="?f70/pi*5400"/>
+      <draw:equation draw:name="f75" draw:formula="10800*(1-?f71)"/>
+      <draw:equation draw:name="f76" draw:formula="?f66/pi*5400"/>
+      <draw:equation draw:name="f77" draw:formula="10800*(1-?f67)"/>
+      <draw:equation draw:name="f78" draw:formula="7*?f2"/>
+      <draw:equation draw:name="f79" draw:formula="sin(?f1*(?f78-?f0))"/>
+      <draw:equation draw:name="f80" draw:formula="?f66+?f3"/>
+      <draw:equation draw:name="f81" draw:formula="?f67+?f3*cos(?f1*(?f66-?f0))*?f1"/>
+      <draw:equation draw:name="f82" draw:formula="?f78-?f3"/>
+      <draw:equation draw:name="f83" draw:formula="?f79-?f3*cos(?f1*(?f78-?f0))*?f1"/>
+      <draw:equation draw:name="f84" draw:formula="?f80/pi*5400"/>
+      <draw:equation draw:name="f85" draw:formula="10800*(1-?f81)"/>
+      <draw:equation draw:name="f86" draw:formula="?f82/pi*5400"/>
+      <draw:equation draw:name="f87" draw:formula="10800*(1-?f83)"/>
+      <draw:equation draw:name="f88" draw:formula="?f78/pi*5400"/>
+      <draw:equation draw:name="f89" draw:formula="10800*(1-?f79)"/>
+      <draw:equation draw:name="f90" draw:formula="8*?f2"/>
+      <draw:equation draw:name="f91" draw:formula="sin(?f1*(?f90-?f0))"/>
+      <draw:equation draw:name="f92" draw:formula="?f78+?f3"/>
+      <draw:equation draw:name="f93" draw:formula="?f79+?f3*cos(?f1*(?f78-?f0))*?f1"/>
+      <draw:equation draw:name="f94" draw:formula="?f90-?f3"/>
+      <draw:equation draw:name="f95" draw:formula="?f91-?f3*cos(?f1*(?f90-?f0))*?f1"/>
+      <draw:equation draw:name="f96" draw:formula="?f92/pi*5400"/>
+      <draw:equation draw:name="f97" draw:formula="10800*(1-?f93)"/>
+      <draw:equation draw:name="f98" draw:formula="?f94/pi*5400"/>
+      <draw:equation draw:name="f99" draw:formula="10800*(1-?f95)"/>
+      <draw:equation draw:name="f100" draw:formula="?f90/pi*5400"/>
+      <draw:equation draw:name="f101" draw:formula="10800*(1-?f91)"/>
+      <draw:equation draw:name="f102" draw:formula="9*?f2"/>
+      <draw:equation draw:name="f103" draw:formula="sin(?f1*(?f102-?f0))"/>
+      <draw:equation draw:name="f104" draw:formula="?f90+?f3"/>
+      <draw:equation draw:name="f105" draw:formula="?f91+?f3*cos(?f1*(?f90-?f0))*?f1"/>
+      <draw:equation draw:name="f106" draw:formula="?f102-?f3"/>
+      <draw:equation draw:name="f107" draw:formula="?f103-?f3*cos(?f1*(?f102-?f0))*?f1"/>
+      <draw:equation draw:name="f108" draw:formula="?f104/pi*5400"/>
+      <draw:equation draw:name="f109" draw:formula="10800*(1-?f105)"/>
+      <draw:equation draw:name="f110" draw:formula="?f106/pi*5400"/>
+      <draw:equation draw:name="f111" draw:formula="10800*(1-?f107)"/>
+      <draw:equation draw:name="f112" draw:formula="?f102/pi*5400"/>
+      <draw:equation draw:name="f113" draw:formula="10800*(1-?f103)"/>
+      <draw:equation draw:name="f114" draw:formula="10*?f2"/>
+      <draw:equation draw:name="f115" draw:formula="sin(?f1*(?f114-?f0))"/>
+      <draw:equation draw:name="f116" draw:formula="?f102+?f3"/>
+      <draw:equation draw:name="f117" draw:formula="?f103+?f3*cos(?f1*(?f102-?f0))*?f1"/>
+      <draw:equation draw:name="f118" draw:formula="?f114-?f3"/>
+      <draw:equation draw:name="f119" draw:formula="?f115-?f3*cos(?f1*(?f114-?f0))*?f1"/>
+      <draw:equation draw:name="f120" draw:formula="?f116/pi*5400"/>
+      <draw:equation draw:name="f121" draw:formula="10800*(1-?f117)"/>
+      <draw:equation draw:name="f122" draw:formula="?f118/pi*5400"/>
+      <draw:equation draw:name="f123" draw:formula="10800*(1-?f119)"/>
+      <draw:equation draw:name="f124" draw:formula="?f114/pi*5400"/>
+      <draw:equation draw:name="f125" draw:formula="10800*(1-?f115)"/>
+      <draw:equation draw:name="f126" draw:formula="11*?f2"/>
+      <draw:equation draw:name="f127" draw:formula="sin(?f1*(?f126-?f0))"/>
+      <draw:equation draw:name="f128" draw:formula="?f114+?f3"/>
+      <draw:equation draw:name="f129" draw:formula="?f115+?f3*cos(?f1*(?f114-?f0))*?f1"/>
+      <draw:equation draw:name="f130" draw:formula="?f126-?f3"/>
+      <draw:equation draw:name="f131" draw:formula="?f127-?f3*cos(?f1*(?f126-?f0))*?f1"/>
+      <draw:equation draw:name="f132" draw:formula="?f128/pi*5400"/>
+      <draw:equation draw:name="f133" draw:formula="10800*(1-?f129)"/>
+      <draw:equation draw:name="f134" draw:formula="?f130/pi*5400"/>
+      <draw:equation draw:name="f135" draw:formula="10800*(1-?f131)"/>
+      <draw:equation draw:name="f136" draw:formula="?f126/pi*5400"/>
+      <draw:equation draw:name="f137" draw:formula="10800*(1-?f127)"/>
+      <draw:equation draw:name="f138" draw:formula="12*?f2"/>
+      <draw:equation draw:name="f139" draw:formula="sin(?f1*(?f138-?f0))"/>
+      <draw:equation draw:name="f140" draw:formula="?f126+?f3"/>
+      <draw:equation draw:name="f141" draw:formula="?f127+?f3*cos(?f1*(?f126-?f0))*?f1"/>
+      <draw:equation draw:name="f142" draw:formula="?f138-?f3"/>
+      <draw:equation draw:name="f143" draw:formula="?f139-?f3*cos(?f1*(?f138-?f0))*?f1"/>
+      <draw:equation draw:name="f144" draw:formula="?f140/pi*5400"/>
+      <draw:equation draw:name="f145" draw:formula="10800*(1-?f141)"/>
+      <draw:equation draw:name="f146" draw:formula="?f142/pi*5400"/>
+      <draw:equation draw:name="f147" draw:formula="10800*(1-?f143)"/>
+      <draw:equation draw:name="f148" draw:formula="?f138/pi*5400"/>
+      <draw:equation draw:name="f149" draw:formula="10800*(1-?f139)"/>
+      <draw:handle draw:handle-position="$0 $1" draw:handle-range-x-minimum="-21600" draw:handle-range-x-maximum="43200" draw:handle-range-y-minimum="0" draw:handle-range-y-maximum="0"/>
+      <draw:handle draw:handle-position="$2 $3" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="21600" draw:handle-range-y-minimum="21600" draw:handle-range-y-maximum="21600"/>
+     </draw:enhanced-geometry>
+        </draw:custom-shape>
+      </draw:page>
+    </office:presentation>
+  </office:body>
+</office:document>

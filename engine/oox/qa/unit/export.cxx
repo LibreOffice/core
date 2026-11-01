@@ -1938,6 +1938,44 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeWithoutViewBox)
     assertXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo[2]/a:pt", "y", u"14400");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeSinusWave)
+{
+    // Given a sinus wave drawn from equations in radians, with pi, trigonometric functions of
+    // computed angles and an angle step used as a plain value, and two handles:
+    loadFromFile(u"custGeom_sinusWave.fodp");
+
+    // When saving it to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then the shape keeps its four adjustments and both handles, the angles are converted to
+    // 60000ths of a degree for sin and cos
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", 4);
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", 2);
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY[1]", "gdRefX", u"adj1");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY[1]", "minX", u"-100000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY[1]", "maxX", u"200000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY[2]", "gdRefX", u"adj3");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[starts-with(@fmla, 'sin 1 ')]", 13);
+    // pi as the closest fraction, every angle in radians scaled by 10800000/pi
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='*/ 103993 1 33102']", 1);
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[contains(@fmla, ' 34377468 10')]", 13);
+    // the first point is on the curve: y = 10800*(1-sin(...)) in path space, a guide
+    OUString aY = getXPath(pXmlDoc, "//a:pathLst/a:path/a:moveTo/a:pt", "y");
+    CPPUNIT_ASSERT(aY.startsWith("f"));
+
+    // and reading it back gives the shape its handles again
+    loadFromURL(maTempFile.GetURL());
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    comphelper::SequenceAsHashMap aGeometry(xShape->getPropertyValue(u"CustomShapeGeometry"_ustr));
+    uno::Sequence<beans::PropertyValues> aHandles;
+    aGeometry[u"Handles"_ustr] >>= aHandles;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aHandles.getLength());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testCustomShapeFromOOXMLKeepsOnlyUsedGuides)
 {
     // Given a shape that came from a pptx whose points are numbers and whose guides serve a

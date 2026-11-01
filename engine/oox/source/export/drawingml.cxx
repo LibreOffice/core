@@ -5454,8 +5454,9 @@ struct OoxmlEqContext
 OString lcl_EmitOoxmlNode(const ExpressionNode* pNode, OoxmlEqContext& rCtx);
 
 // Writes fValue as the fraction rNumerator / rDenominator with integer parts, using the smallest
-// power of ten (up to 100000) as the denominator that represents the value exactly enough.
-// Returns false when the numerator does not fit a 32-bit integer.
+// power of ten (up to 100000) as the denominator that represents the value exactly enough, or
+// the closest fraction with a denominator of at most a million for a value that is no decimal
+// fraction. Returns false when the numerator does not fit a 32-bit integer.
 bool lcl_ConstantAsFraction(double fValue, sal_Int32& rNumerator, sal_Int32& rDenominator);
 
 // A guide operand has to be an integer. A whole number is written as it is; any other value
@@ -5491,7 +5492,34 @@ bool lcl_ConstantAsFraction(double fValue, sal_Int32& rNumerator, sal_Int32& rDe
             break;
         nDenominator *= 10;
     }
-    const double fNumerator = std::round(fValue * nDenominator);
+    double fNumerator = std::round(fValue * nDenominator);
+    if (std::fabs(fNumerator / nDenominator - fValue) > 1e-9 * std::max(1.0, std::fabs(fValue)))
+    {
+        // Not a decimal fraction, pi for one: the continued fraction of the value gives the
+        // closest fraction with a denominator of at most a million.
+        double fRest = std::fabs(fValue);
+        sal_Int64 nP0 = 0, nQ0 = 1, nP1 = 1, nQ1 = 0;
+        for (int i = 0; i < 40; ++i)
+        {
+            const double fTerm = std::floor(fRest);
+            if (fTerm > 2147483647.0 || (nQ1 > 0 && fTerm > 1000000.0))
+                break;
+            const sal_Int64 nP2 = static_cast<sal_Int64>(fTerm) * nP1 + nP0;
+            const sal_Int64 nQ2 = static_cast<sal_Int64>(fTerm) * nQ1 + nQ0;
+            if (nQ2 > 1000000 || nP2 > 2147483647)
+                break;
+            nP0 = nP1; nQ0 = nQ1; nP1 = nP2; nQ1 = nQ2;
+            const double fFraction = fRest - fTerm;
+            if (fFraction < 1e-12
+                || std::fabs(static_cast<double>(nP1) / nQ1 - std::fabs(fValue)) < 1e-9)
+                break;
+            fRest = 1.0 / fFraction;
+        }
+        if (nQ1 == 0)
+            return false;
+        fNumerator = fValue < 0 ? -static_cast<double>(nP1) : static_cast<double>(nP1);
+        nDenominator = static_cast<sal_Int32>(nQ1);
+    }
     if (std::fabs(fNumerator) > 2147483647.0)
         return false;
     rNumerator = static_cast<sal_Int32>(fNumerator);
@@ -5577,7 +5605,12 @@ OString lcl_EmitAngleArgument(const ExpressionNode* pX, double fConst, OoxmlEqCo
         {
             // an alias equation ($n) of such an adjustment holds 60000ths as well
             const sal_Int32 nEquation = pX->getIndex();
-            if (nEquation >= 0 && o3tl::make_unsigned(nEquation) < rCtx.rEqIsAngle.size()
+            const ExpressionNode* pAlias
+                = rCtx.pNodes && nEquation >= 0 && o3tl::make_unsigned(nEquation) < rCtx.pNodes->size()
+                      ? (*rCtx.pNodes)[nEquation].get()
+                      : nullptr;
+            if (pAlias && pAlias->getType() == ExpressionFunct::EnumAdjustment
+                && o3tl::make_unsigned(nEquation) < rCtx.rEqIsAngle.size()
                 && rCtx.rEqIsAngle[nEquation] && !rCtx.rEqNames[nEquation].isEmpty())
                 return rCtx.rEqNames[nEquation];
             break;
@@ -5645,9 +5678,10 @@ OString lcl_EmitTrig(const ExpressionNode* pTrig, const ExpressionNode* pMul, Oo
     OString aAngle;
     if (!lcl_TryEmitAngle60000(pTrig->getChild(0), rCtx, aAngle))
     {
-        // The angle is not in the pi/const idiom (raw radians): not expressible.
-        rCtx.fail("angle in raw radians");
-        return "0"_ostr;
+        // The angle is not in the pi/c idiom: it is a value in radians, which Office reads
+        // in 60000ths of a degree, so a guide scales it by 10800000/pi.
+        const OString aRadians = lcl_EmitOoxmlNode(pTrig->getChild(0), rCtx);
+        aAngle = rCtx.addGuide("*/ " + aRadians + " 34377468 10");
     }
     const char* pOp = pTrig->getType() == ExpressionFunct::UnarySin
                           ? "sin"
@@ -5703,13 +5737,17 @@ OString lcl_EmitOoxmlNode(const ExpressionNode* pNode, OoxmlEqContext& rCtx)
         case ExpressionFunct::EnumEquation:
         {
             // An equation that is an angle holds 60000ths of a degree here but radians in the
-            // shape; its only expressible uses, as a trigonometric argument or as an angle by
-            // itself, are served by lcl_TryEmitAngle60000 before this point.
+            // shape; its uses as a trigonometric argument or as an angle by itself are served
+            // by lcl_TryEmitAngle60000 before this point, any other use gets the radians back.
             const sal_Int32 nEquation = pNode->getIndex();
             if (nEquation >= 0 && o3tl::make_unsigned(nEquation) < rCtx.rEqNames.size()
-                && !rCtx.rEqNames[nEquation].isEmpty() && !rCtx.rEqIsAngle[nEquation])
+                && !rCtx.rEqNames[nEquation].isEmpty())
+            {
+                if (rCtx.rEqIsAngle[nEquation])
+                    return rCtx.addGuide("*/ " + rCtx.rEqNames[nEquation] + " 10 34377468");
                 return rCtx.rEqNames[nEquation];
-            rCtx.fail("angle equation used as a value, or a forward reference");
+            }
+            rCtx.fail("forward reference to an equation");
             return "0"_ostr;
         }
         case ExpressionFunct::EnumWidth:
@@ -5721,6 +5759,8 @@ OString lcl_EmitOoxmlNode(const ExpressionNode* pNode, OoxmlEqContext& rCtx)
         case ExpressionFunct::EnumLeft:
         case ExpressionFunct::EnumTop:
             return "0"_ostr;
+        case ExpressionFunct::EnumPi:
+            return lcl_EmitConstant(M_PI, rCtx);
         case ExpressionFunct::EnumLogWidth:
             if (rCtx.bRawAdjustments)
                 return "w"_ostr;
@@ -5895,6 +5935,7 @@ bool lcl_CreateOoxmlGuides(const std::vector<std::shared_ptr<ExpressionNode>>& r
     aContext.nViewBoxHeight = nViewBoxHeight;
     aContext.pAdjustmentInfo = &rAdjustmentInfo;
     aContext.bRawAdjustments = bRawAdjustments;
+    aContext.pNodes = &rSet.aNodes;
     for (size_t i = 0; i < rNodes.size(); ++i)
     {
         const std::shared_ptr<ExpressionNode>& pNode = rNodes[i];
