@@ -76,6 +76,8 @@ class VectorCompositor extends SlideCompositor {
 		);
 		this.offscreenContext = this.offscreenCanvas.getContext('2d');
 		this.renderContext = new RenderContext2d(this.offscreenCanvas);
+		// A compositor whose slideshow was closed draws the next one.
+		this.disposed = false;
 
 		// The slideshow shows the whole deck, so request every slide's
 		// tree at the start.
