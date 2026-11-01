@@ -444,6 +444,7 @@
 /// <reference path="../src/slideshow/SlideRenderer.ts" />
 /// <reference path="../src/slideshow/SlideShowPresenter.ts" />
 /// <reference path="../src/slideshow/SimpleTextureRenderer.ts" />
+/// <reference path="../src/slideshow/SlideMirror.ts" />
 /// <reference path="../src/slideshow/StaticTextRenderer.ts" />
 /// <reference path="../src/slideshow/PauseTimer.ts" />
 /// <reference path="../src/slideshow/TransitionFactory.ts" />

@@ -299,8 +299,19 @@ class PresenterConsole {
 		this._currentSlideCanvas = this._proxyPresenter.document.querySelector(
 			'#current-presentation',
 		);
-		this._currentSlideContext =
-			this._currentSlideCanvas.getContext('bitmaprenderer');
+		this._slideMirror = this._createSlideMirror(this._currentSlideCanvas);
+		this._mirroredFrames = 0;
+		if (this._slideMirror) {
+			this._presenter.slideMirrors.add(this._slideMirror);
+		} else {
+			// A canvas keeps the first context made on it, and a mirror that failed after it made
+			// its WebGL context leaves that one on the canvas. A fresh canvas in its place takes
+			// the image context.
+			const canvas = this._currentSlideCanvas.cloneNode(false);
+			this._currentSlideCanvas.replaceWith(canvas);
+			this._currentSlideCanvas = canvas;
+			this._currentSlideContext = canvas.getContext('bitmaprenderer');
+		}
 
 		this._boundOnResize = this._onResize.bind(this);
 		this._proxyPresenter.addEventListener('resize', this._boundOnResize);
@@ -1503,6 +1514,12 @@ class PresenterConsole {
 		this._active = false;
 		app.map.slideShowPresenter._presentToAllInProgress = false;
 
+		if (this._slideMirror) {
+			this._presenter.slideMirrors.delete(this._slideMirror);
+			this._slideMirror.dispose();
+			delete this._slideMirror;
+		}
+
 		delete this._proxyPresenter;
 		delete this._currentIndex;
 		delete this._lastIndex;
@@ -1818,7 +1835,25 @@ class PresenterConsole {
 		return offscreen.convertToBlob({ type: 'image/png' });
 	}
 
+	// The current slide takes its frames from a context of its own when the canvas has WebGL2.
+	_createSlideMirror(canvas) {
+		try {
+			return new SlideShow.SlideMirror(canvas);
+		} catch (error) {
+			app.console.debug(
+				'PresenterConsole: the current slide shows images of the frames: ' +
+					error,
+			);
+			return null;
+		}
+	}
+
 	_onNextFrame(e) {
+		if (e.mirrored) {
+			++this._mirroredFrames;
+			return;
+		}
+
 		const bitmap = e.frame;
 		if (!bitmap) {
 			return;
@@ -1831,18 +1866,32 @@ class PresenterConsole {
 		// on older versions (like 115) the frame is cropped wrt. the canvas size
 		// on newer versions (like 121) the canvas is automatically resized to
 		// frame size, the latter case can lead to worse performance.
+		const mirroredFrames = this._mirroredFrames;
 		createImageBitmap(bitmap, {
 			resizeWidth: this._currentSlideCanvas.width,
 			resizeHeight: this._currentSlideCanvas.height,
 		}).then(
 			function (image) {
-				if (this._proxyPresenter) {
+				if (!this._proxyPresenter) {
+					image.close();
+					return;
+				}
+				if (!this._slideMirror) {
 					this._proxyPresenter.requestAnimationFrame(
 						function (context, image) {
 							context.transferFromImageBitmap(image);
 						}.bind(null, this._currentSlideContext, image),
 					);
+					return;
 				}
+				this._proxyPresenter.requestAnimationFrame(
+					function (mirror, image) {
+						// A frame that the mirror drew after the image was taken is newer.
+						if (mirroredFrames === this._mirroredFrames)
+							mirror.drawImage(image);
+						image.close();
+					}.bind(this, this._slideMirror, image),
+				);
 			}.bind(this),
 		);
 	}

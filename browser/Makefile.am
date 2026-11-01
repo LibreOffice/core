@@ -950,6 +950,7 @@ COOL_JS_LST =\
 	src/slideshow/SlideShowPresenter.ts \
 	src/slideshow/PresenterConsole.js \
 	src/slideshow/SimpleTextureRenderer.ts \
+	src/slideshow/SlideMirror.ts \
 	src/slideshow/StaticTextRenderer.ts \
 	src/slideshow/PauseTimer.ts \
 	src/slideshow/TransitionFactory.ts \

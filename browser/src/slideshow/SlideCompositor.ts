@@ -113,9 +113,10 @@ abstract class SlideCompositor {
 
 	public abstract getAnimatedSlide(slideIndex: number): ImageBitmap;
 
-	/// Draw the current frame of the slide straight into the WebGL context of the slideshow
-	/// canvas, filling it, or into texture when one is given. False when the compositor does
-	/// not draw the frame.
+	/// Draw the current frame of the slide straight into a WebGL context, filling its canvas, or
+	/// into texture when one is given. The context is the one of the slideshow canvas, or of a
+	/// canvas that shows the frames in another window. False when the compositor does not draw
+	/// the frame.
 	public drawFrameInto(
 		_context: RenderContextGl,
 		_slideIndex: number,

@@ -47,9 +47,10 @@ class VectorCompositor extends SlideCompositor {
 	private pendingSlideNumber: number = null;
 	private pendingReady: VoidFunction = null;
 
-	// The layers of the slide on the GPU, in the WebGL context of the slideshow canvas, for
-	// the frames drawn straight into it.
-	private layers: VectorSlideLayers = null;
+	// The layers of the slide on the GPU, for each WebGL context that frames are drawn straight
+	// into: the one of the slideshow canvas, and the ones of the canvases that show the frames in
+	// other windows.
+	private layers = new Map<RenderContextGl, VectorSlideLayers>();
 
 	constructor(slideShowPresenter: SlideShowPresenter) {
 		super(slideShowPresenter);
@@ -80,7 +81,7 @@ class VectorCompositor extends SlideCompositor {
 		);
 		this.offscreenContext = this.offscreenCanvas.getContext('2d');
 		this.renderContext = new RenderContext2d(this.offscreenCanvas);
-		this.layers?.invalidate();
+		this.layers.forEach((layers) => layers.invalidate());
 		// A compositor whose slideshow was closed draws the next one.
 		this.disposed = false;
 
@@ -158,7 +159,7 @@ class VectorCompositor extends SlideCompositor {
 	private _onDataChanged(): void {
 		// A tree or an embedded bitmap that arrives can change what a layer
 		// of the slide shows.
-		this.layers?.invalidate();
+		this.layers.forEach((layers) => layers.invalidate());
 		if (this.disposed) return;
 		this._refreshShownSlide();
 		if (this.pendingReady === null) return;
@@ -308,22 +309,31 @@ class VectorCompositor extends SlideCompositor {
 		const data = this._drawableData(slideHash);
 		if (!data) return false;
 
-		if (this.layers && this.layers.context !== context) {
-			this.layers.dispose();
-			this.layers = null;
+		// The layers of a context that is gone are freed with it.
+		this.layers.forEach((layers, owner) => {
+			if (!owner.isDisposed()) return;
+			layers.dispose();
+			this.layers.delete(owner);
+		});
+		let layers = this.layers.get(context);
+		if (!layers) {
+			layers = new VectorSlideLayers(context);
+			this.layers.set(context, layers);
 		}
-		if (!this.layers) this.layers = new VectorSlideLayers(context);
-		if (
-			!this.layers.holds(slideHash, data, this.canvasWidth, this.canvasHeight)
-		)
-			this.layers.build(
+		// The layers are drawn at the size of the canvas of the context, so the text on a smaller
+		// canvas is drawn for its own size.
+		const width = context.canvas.width;
+		const height = context.canvas.height;
+		if (width <= 0 || height <= 0) return false;
+		if (!layers.holds(slideHash, data, width, height))
+			layers.build(
 				slideHash,
 				data,
 				this._animatedTargets(slideHash, data),
-				this.canvasWidth,
-				this.canvasHeight,
+				width,
+				height,
 			);
-		return this.layers.draw(
+		return layers.draw(
 			this._drawStates(slideHash, data),
 			texture,
 			this._videoFrames(slideHash, data),
@@ -555,8 +565,8 @@ class VectorCompositor extends SlideCompositor {
 		this.offscreenCanvas = null;
 		this.offscreenContext = null;
 		this.renderContext = null;
-		this.layers?.dispose();
-		this.layers = null;
+		this.layers.forEach((layers) => layers.dispose());
+		this.layers.clear();
 		this.pendingReady = null;
 		this.pendingSlideNumber = null;
 	}

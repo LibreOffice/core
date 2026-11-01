@@ -141,6 +141,8 @@ class SlideShowPresenter {
 	_slideShowInSeparateWindow: boolean = false;
 	_windowCloseInterval: ReturnType<typeof setInterval> = null;
 	_slideRenderer: SlideRenderer = null;
+	// The canvases in other windows that show each frame of the slideshow.
+	readonly slideMirrors = new Set<SlideMirror>();
 	_canvasLoader: CanvasLoader | null = null;
 	_progressBarContainer: HTMLDivElement | null = null;
 	_slideNavContainer: HTMLDivElement | null = null;

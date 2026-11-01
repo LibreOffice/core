@@ -120,6 +120,24 @@ abstract class SimpleTextureRenderer {
 		}
 	}
 
+	/// Draw the texture over the whole canvas, through the sampler uniform of the given name.
+	protected drawTextureOverCanvas(
+		texture: WebGLTexture,
+		samplerName: string,
+	): void {
+		if (this.context.isDisposed()) return;
+		const gl = this.gl;
+		gl.viewport(0, 0, this.context.canvas.width, this.context.canvas.height);
+		gl.clearColor(0.0, 0.0, 0.0, 1.0);
+		gl.clear(gl.COLOR_BUFFER_BIT);
+		gl.useProgram(this.program);
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.uniform1i(gl.getUniformLocation(this.program, samplerName), 0);
+		gl.bindVertexArray(this.vao);
+		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+	}
+
 	public abstract render(nT: number): void;
 }
 

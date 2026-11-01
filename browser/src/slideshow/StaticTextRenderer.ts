@@ -107,30 +107,7 @@ class StaticTextRenderer extends TextureAnimationBase {
 	}
 
 	public render(): void {
-		if (this.context.isDisposed()) return;
-
-		this.gl.viewport(
-			0,
-			0,
-			this.context.canvas.width,
-			this.context.canvas.height,
-		);
-		this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
-		this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-
-		this.gl.useProgram(this.program);
-
-		this.gl.activeTexture(this.gl.TEXTURE0);
-		this.gl.bindTexture(this.gl.TEXTURE_2D, this.textTexture);
-
-		const textureLocation = this.gl.getUniformLocation(
-			this.program,
-			'u_texture',
-		);
-		this.gl.uniform1i(textureLocation, 0);
-
-		this.gl.bindVertexArray(this.vao);
-		this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4);
+		this.drawTextureOverCanvas(this.textTexture, 'u_texture');
 	}
 
 	public getFragmentShader(): string {

@@ -29,6 +29,7 @@ describe(['tagdesktop'], 'Presenter Console.', function() {
 			this._slideCompositor = new FakeCompositor();
 			// fake window
 			this._slideShowWindowProxy = new FakeWindowProxy();
+			this.slideMirrors = new Set();
 			this.notes = 'test notes\nbullet one';
 			this.notesHtml = '<p>test notes</p>\r\n<ul>\r\n<li>bullet one</li>\r\n</ul>\r\n';
 		}

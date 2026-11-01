@@ -340,9 +340,7 @@ class SlideRendererGl extends SlideRenderer {
 		slideIndex: number,
 		isMipMapEnable: boolean,
 	): WebGLTexture | ImageBitmap | null {
-		// While something listens for the image of each frame, the frames are composed in 2D
-		// and the layers that the compositor builds here would stay unused.
-		if (this.isDisposed() || app.map.listens('newslideshowframe')) return null;
+		if (this.isDisposed()) return null;
 		const presenter: SlideShowPresenter = app.map.slideShowPresenter;
 		if (!presenter._slideCompositor.drawsFrames()) return null;
 
@@ -399,17 +397,21 @@ class SlideRendererGl extends SlideRenderer {
 	protected render() {
 		if (this.isDisposed()) return;
 
-		// A frame drawn straight into the context leaves no image of it, so the image path
-		// stays in use while something listens for the image of each frame.
 		const presenter: SlideShowPresenter = app.map.slideShowPresenter;
 		if (
-			!app.map.listens('newslideshowframe') &&
 			presenter._slideCompositor.drawFrameInto(
 				this._context as RenderContextGl,
 				this._renderedSlideIndex,
 			)
 		) {
 			this._slideTextureOutdated = true;
+			// A mirror draws the frame into its own context. The event says whether every mirror
+			// shows the frame. The canvas holds the frame only until it is shown.
+			let mirrored = presenter.slideMirrors.size > 0;
+			presenter.slideMirrors.forEach((mirror) => {
+				if (!mirror.drawSlide(this._renderedSlideIndex)) mirrored = false;
+			});
+			app.map.fire('newslideshowframe', { frame: this._canvas, mirrored });
 			if (this.isAnyAnimationPlaying()) this.requestRender();
 			return;
 		}
