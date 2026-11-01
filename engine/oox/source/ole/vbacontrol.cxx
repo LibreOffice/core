@@ -466,6 +466,8 @@ void VbaFormControl::importStorage( StorageBase& rStrg, const AxClassTable& rCla
             AxArrayString::iterator itCaption = sCaptions.begin();
             for ( const auto& rCtrlId : pMultiPage->mnIDs )
             {
+                if ( itCaption == sCaptions.end() )
+                    break;
                 IdToPageMap::iterator iter = idToPage.find( rCtrlId );
                 if ( iter != idToPage.end() )
                 {
@@ -473,6 +475,8 @@ void VbaFormControl::importStorage( StorageBase& rStrg, const AxClassTable& rCla
 
                     pPage->importProperty( XML_Caption, *itCaption );
                     maControls.push_back( iter->second );
+                    // Make sure a page is only listed once, at its first id
+                    idToPage.erase( iter );
                 }
                 ++itCaption;
             }
