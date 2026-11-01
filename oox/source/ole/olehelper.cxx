@@ -313,7 +313,11 @@ bool OleHelper::importStdPic( StreamDataSequence& orGraphicData, BinaryInputStre
     nStdPicId = rInStrm.readuInt32();
     nBytes = rInStrm.readInt32();
     OSL_ENSURE( nStdPicId == OLE_STDPIC_ID, "OleHelper::importStdPic - unexpected header version" );
-    return !rInStrm.isEof() && (nStdPicId == OLE_STDPIC_ID) && (nBytes > 0) && (rInStrm.readData( orGraphicData, nBytes ) == nBytes);
+    // Take at most the bytes that are left in the stream, when the stream knows its size
+    sal_Int64 nRemaining = rInStrm.getRemaining();
+    sal_Int32 nReadSize = ((nRemaining >= 0) && (nRemaining < nBytes)) ?
+        static_cast< sal_Int32 >( nRemaining ) : nBytes;
+    return !rInStrm.isEof() && (nStdPicId == OLE_STDPIC_ID) && (nBytes > 0) && (rInStrm.readData( orGraphicData, nReadSize ) == nBytes);
 }
 
 static Reference< css::frame::XFrame > lcl_getFrame( const  Reference< css::frame::XModel >& rxModel )
