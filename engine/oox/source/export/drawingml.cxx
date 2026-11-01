@@ -22,6 +22,7 @@
 #include <oox/drawingml/diagram/diagramhelper_oox.hxx>
 #include <config_folders.h>
 #include <rtl/bootstrap.hxx>
+#include <rtl/character.hxx>
 #include <sal/log.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/export/drawingml.hxx>
@@ -6958,6 +6959,56 @@ bool lcl_BuildGluePointGuides(
     return true;
 }
 
+// Adds the operands of a formula that are names to rNames.
+void lcl_CollectNamesOfFormula(std::string_view rFormula, std::set<OString>& rNames)
+{
+    std::size_t nPos = 0;
+    while (nPos != std::string_view::npos)
+    {
+        const std::string_view aToken = o3tl::getToken(rFormula, ' ', nPos);
+        if (!aToken.empty() && !rtl::isAsciiDigit(static_cast<unsigned char>(aToken[0]))
+            && aToken[0] != '-')
+            rNames.insert(OString(aToken));
+    }
+}
+
+// Drops the guides that nothing refers to: not a coordinate, a handle, the text rectangle, a
+// connection site or a guide that is kept. A shape that came from OOXML with its points as
+// numbers has such guides, as its equations serve only the connection sites, which repeat
+// them.
+void lcl_PruneUnreferencedGuides(CustomGeometryPlan& rPlan)
+{
+    std::set<OString> aReferenced;
+    for (const OString& rToken : rPlan.aCoordTokens)
+        if (!rToken.isEmpty())
+            aReferenced.insert(rToken);
+    for (const XYHandleOut& rHandle : rPlan.aXYHandles)
+        for (const OString* pField :
+             { &rHandle.aGdRefX, &rHandle.aMinX, &rHandle.aMaxX, &rHandle.aGdRefY, &rHandle.aMinY,
+               &rHandle.aMaxY, &rHandle.aPosX, &rHandle.aPosY })
+            aReferenced.insert(*pField);
+    for (const PolarHandleOut& rHandle : rPlan.aPolarHandles)
+        for (const OString* pField :
+             { &rHandle.aGdRefR, &rHandle.aMinR, &rHandle.aMaxR, &rHandle.aGdRefAng,
+               &rHandle.aMinAng, &rHandle.aMaxAng, &rHandle.aPosX, &rHandle.aPosY })
+            aReferenced.insert(*pField);
+    for (const OString* pField : { &rPlan.aTextAreaRect.left, &rPlan.aTextAreaRect.top,
+                                   &rPlan.aTextAreaRect.right, &rPlan.aTextAreaRect.bottom })
+        aReferenced.insert(*pField);
+    // A guide is defined before its use, so one pass from the end finds every dependency.
+    for (std::vector<Guide>::reverse_iterator it = rPlan.aGuides.rbegin();
+         it != rPlan.aGuides.rend(); ++it)
+    {
+        if (it->sName.startsWith("GluePoint"))
+            aReferenced.insert(it->sName);
+        if (aReferenced.count(it->sName) > 0)
+            lcl_CollectNamesOfFormula(it->sFormula, aReferenced);
+    }
+    std::erase_if(rPlan.aGuides, [&aReferenced](const Guide& rGuide) {
+        return aReferenced.count(rGuide.sName) == 0;
+    });
+}
+
 // Builds the parametric part of the plan: equation guides, symbolic path coordinates and the
 // adjustment values they reference. Returns false, leaving rPlan as it was, when the shape
 // cannot be expressed that way; the caller then writes resolved coordinates as before.
@@ -7079,6 +7130,7 @@ bool lcl_BuildParametricPlan(
     // in the list, and the glue points come last.
     aPlan.aGuides.insert(aPlan.aGuides.end(), aEquations.aGuides.begin(), aEquations.aGuides.end());
     aPlan.aGuides.insert(aPlan.aGuides.end(), aGluePointGuides.begin(), aGluePointGuides.end());
+    lcl_PruneUnreferencedGuides(aPlan);
 
     std::set<OUString> aGuideNames;
     std::set<OUString> aAdjustmentNames;

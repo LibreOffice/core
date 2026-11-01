@@ -18,6 +18,7 @@
               draw:enhanced-path="M $0 0 L 21600 ?f1 ?f0 21600 0 21600 Z N">
             <draw:equation draw:name="f0" draw:formula="21600-$0"/>
             <draw:equation draw:name="f1" draw:formula="$0/2"/>
+            <draw:equation draw:name="f2" draw:formula="$0*3"/>
             <draw:handle draw:handle-position="$0 0" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
           </draw:enhanced-geometry>
         </draw:custom-shape>

@@ -1913,6 +1913,33 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeGluePointsFollowAdjustments)
                 u"*/ 21600 h 21600");
     // the handle is still there
     assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", 1);
+    // the equation nothing refers to, third after the guide of the adjustment, is not written
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f2']", "fmla", u"*/ f0 1 2");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f3']", 0);
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd", 11);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeFromOOXMLKeepsOnlyUsedGuides)
+{
+    // Given a shape that came from a pptx whose points are numbers and whose guides serve a
+    // connection site, with one guide nothing refers to:
+    loadFromFile(u"custGeom_ooxmlConnectionSites.pptx");
+
+    // When saving it to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then the connection site repeats its guides and nothing else is written
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:custGeom/a:cxnLst/a:cxn", 1);
+    assertXPath(pXmlDoc, "//a:custGeom/a:cxnLst/a:cxn/a:pos", "x", u"GluePoint1X");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='GluePoint1X']", "fmla",
+                u"*/ 21600 w 43200");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='GluePoint1Y']", "fmla",
+                u"*/ 0 h 43200");
+    // the text rectangle's guides stay, no equation guide is written
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[starts-with(@name, 'f')]", 0);
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[starts-with(@name, 'GluePoint')]", 2);
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "x", u"21600");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCustomShapeAngleUsedAsCoordinateStaysPlain)
