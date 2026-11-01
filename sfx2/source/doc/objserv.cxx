@@ -2049,7 +2049,12 @@ SfxObjectShell::GetDocumentSignatureInformation(
             }
             else
             {
-                if (GetMedium()->GetStorage(false).is())
+                uno::Reference<embed::XStorage> xStorage = GetMedium()->GetStorage(false);
+
+                if (!xStorage.is())
+                    xStorage = GetMedium()->GetZipStorageToSign_Impl();
+
+                if (xStorage.is())
                 {
                     // Something ZIP-based.
                     // Only call into xmlsecurity if we see a signature stream,
