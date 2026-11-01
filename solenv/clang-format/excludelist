@@ -10031,7 +10031,6 @@ sfx2/source/doc/objcont.cxx
 sfx2/source/doc/objembed.cxx
 sfx2/source/doc/objitem.cxx
 sfx2/source/doc/objmisc.cxx
-sfx2/source/doc/objserv.cxx
 sfx2/source/doc/objstor.cxx
 sfx2/source/doc/objxtor.cxx
 sfx2/source/doc/oleprops.cxx
