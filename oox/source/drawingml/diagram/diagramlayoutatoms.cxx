@@ -968,7 +968,8 @@ void SnakeAlg::layoutShapeChildren(const SmartArtDiagram& rDgm, const AlgAtom& r
                     continue;
                 if (rConstraint.msForName == aSteps.front()->getInternalName())
                     fStepOfWidth = rConstraint.mfFactor;
-                else if (rConstraint.msForName == aBetween.front()->getInternalName())
+                else if (!aBetween.empty()
+                         && rConstraint.msForName == aBetween.front()->getInternalName())
                     fBetweenOfWidth = rConstraint.mfFactor;
             }
             // Without transitions among the children, Step_Down_Process's are empty groups

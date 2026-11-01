@@ -172,7 +172,7 @@ ContextHandlerRef EffectStyleListContext::onCreateContext( sal_Int32 nElement, c
         }
         case A_TOKEN( effectLst ):  // CT_EffectList
         {
-            if( mrEffectStyleList.back() )
+            if( !mrEffectStyleList.empty() && mrEffectStyleList.back() )
                 return new EffectPropertiesContext(*this, *mrEffectStyleList.back(), mpEffectStyle);
         }
         break;

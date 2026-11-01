@@ -456,7 +456,7 @@ void Shape::addShape(
                 }
             }
 
-            if (isInWordprocessingCanvas() && !isWPGChild())
+            if (isInWordprocessingCanvas() && !isWPGChild() && !getChildren().empty())
             {
                 // This is a drawing canvas. In case the canvas has no fill and no stroke, Word does
                 // not render shadow or glow, even if it is set for the canvas. Thus we disable shadow

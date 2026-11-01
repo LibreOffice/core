@@ -228,7 +228,8 @@ void insertBorderLine(TableStylePart& aTableStylePart, sal_Int32 nToken,
 
 std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
 {
-    auto it = mStyleIdMap.find(styleId);
+    // Only the ids in mStyleIdMap have a predefined style
+    const auto it = mStyleIdMap.find(styleId);
     if (it == mStyleIdMap.end())
         return nullptr;
 

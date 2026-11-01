@@ -329,6 +329,8 @@ ContextHandlerRef ColorsFragment::onCreateContext(sal_Int32 nElement, const Attr
 
                 case CS_TOKEN(variation):
                     // "variation"s presumably apply to the preceding color entry
+                    if (mrModel.maColors.empty())
+                        return nullptr;
                     return new VariationContext(*this, &mrModel.maColors.back(),
                                                 &mrModel.maComplexColors.back());
             }
