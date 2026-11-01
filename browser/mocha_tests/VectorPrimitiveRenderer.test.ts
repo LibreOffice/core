@@ -1945,6 +1945,57 @@ describe('VectorPrimitiveRenderer', function () {
 		});
 	});
 
+	describe('Spell-check marks', function () {
+		// A mark under a word 20 twips high, along a line 80 twips long.
+		function drawWrongSpell(zoom: number, fontHeight = 20): CanvasRecorder {
+			const recorder = new CanvasRecorder(400, 300);
+			recorder.scale(zoom, zoom);
+			new cool.VectorPrimitiveRenderer().renderPrimitive(
+				recorder as any,
+				{
+					type: 'wrongSpell',
+					color: '#ff0000',
+					fontHeight,
+					startX: 0,
+					startY: 0,
+					endX: 80,
+					endY: 0,
+				} as any,
+			);
+			return recorder;
+		}
+
+		it('draws a red hairline wave with one curve every 8 device pixels', function () {
+			const recorder = drawWrongSpell(1);
+
+			const stroke = recorder.findCall('stroke')!;
+			nodeassert.strictEqual(stroke.properties.strokeStyle, '#ff0000');
+			nodeassert.strictEqual(stroke.properties.lineWidth, 1);
+			const curves = recorder.callsOf('bezierCurveTo');
+			nodeassert.strictEqual(curves.length, 10);
+			// The first wave rises 4 pixels to the side and ends 8 pixels along.
+			nodeassert.deepStrictEqual(curves[0].args, [4, 4, 4, -4, 8, 0]);
+		});
+
+		it('keeps the wave the same size on screen at another zoom', function () {
+			const recorder = drawWrongSpell(2);
+
+			nodeassert.strictEqual(
+				recorder.findCall('stroke')!.properties.lineWidth,
+				0.5,
+			);
+			const curves = recorder.callsOf('bezierCurveTo');
+			nodeassert.strictEqual(curves.length, 20);
+			nodeassert.deepStrictEqual(curves[0].args, [2, 2, 2, -2, 4, 0]);
+		});
+
+		it('draws nothing under a word smaller than 5 device pixels', function () {
+			const recorder = drawWrongSpell(1, 4);
+
+			nodeassert.strictEqual(recorder.callsOf('stroke').length, 0);
+		});
+	});
+
 	describe('Document references', function () {
 		// The page rectangle rides on the entry that stands for the page,
 		// which is the first object of a reply.

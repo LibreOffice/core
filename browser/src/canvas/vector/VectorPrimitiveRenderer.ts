@@ -187,6 +187,13 @@ namespace cool {
 				case SingleLinePrimitive.type:
 					this._renderSingleLine(context, primitive as SingleLinePrimitive);
 					break;
+				case WrongSpellPrimitive.type:
+					VectorWrongSpellPrimitiveRenderer.render(
+						context,
+						primitive as WrongSpellPrimitive,
+						this._hairlineWidth(context),
+					);
+					break;
 				case PointArrayPrimitive.type:
 					this._renderPointArray(context, primitive as PointArrayPrimitive);
 					break;

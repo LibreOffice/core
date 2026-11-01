@@ -549,11 +549,13 @@ COOL_JS_LST =\
 	src/canvas/vector/primitive/TextHighlight.ts \
 	src/canvas/vector/primitive/TextSimplePortionPrimitive.ts \
 	src/canvas/vector/primitive/TransformPrimitive.ts \
+	src/canvas/vector/primitive/WrongSpellPrimitive.ts \
 	src/canvas/vector/primitive/UnifiedTransparencePrimitive.ts \
 	src/canvas/vector/VectorColors.ts \
 	src/canvas/vector/VectorFillGraphicPrimitiveRenderer.ts \
 	src/canvas/vector/VectorGradientFrame.ts \
 	src/canvas/vector/VectorGradientPrimitiveRenderer.ts \
+	src/canvas/vector/VectorWrongSpellPrimitiveRenderer.ts \
 	src/canvas/vector/VectorColorModifiers.ts \
 	src/canvas/vector/VectorColorFilters.ts \
 	src/canvas/vector/VectorModifiedImages.ts \

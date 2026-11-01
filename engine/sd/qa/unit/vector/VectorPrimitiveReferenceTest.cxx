@@ -30,6 +30,7 @@
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/BitmapAlphaPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
+#include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 
 #include <tools/stream.hxx>
 #include <vcl/bitmap.hxx>
@@ -63,6 +64,7 @@
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/linestartendattribute.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
@@ -722,6 +724,28 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testSingleLine)
     assertJsonPathDouble(aJson, "/primitives/0/startY", 20.0, 1e-9);
     assertJsonPathDouble(aJson, "/primitives/0/endX", 110.0, 1e-9);
     assertJsonPathDouble(aJson, "/primitives/0/endY", 70.0, 1e-9);
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testWrongSpell)
+{
+    // The line under a misspelled word in text 200 high, from x 0 to 2 in text units. It is
+    // written as the line 3% of the font height below the baseline and the font height, with no
+    // wave.
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new WrongSpellPrimitive2D(
+        basegfx::utils::createScaleTranslateB2DHomMatrix(200.0, 200.0, 100.0, 500.0), 0.0, 2.0,
+        basegfx::BColor(1.0, 0.0, 0.0)));
+
+    auto aJson = writeReference(u"testWrongSpell", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "wrongSpell");
+    assertJsonPath(aJson, "/primitives/0/color", "#ff0000");
+    assertJsonPathMissing(aJson, "/primitives/0/children");
+    assertJsonPathDouble(aJson, "/primitives/0/fontHeight", 200.0, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/startX", 100.0, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/startY", 506.0, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/endX", 500.0, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/endY", 506.0, 1e-9);
 }
 
 CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolygonStrokeDashed)

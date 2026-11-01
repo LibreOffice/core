@@ -63,6 +63,7 @@
 #include <drawinglayer/primitive2d/softedgeprimitive2d.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
+#include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <primitive2d/textlineprimitive2d.hxx>
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -1655,6 +1656,32 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             mrWriter.put("startY", rPrimitive.getStart().getY() * mfScaleFactor);
             mrWriter.put("endX", rPrimitive.getEnd().getX() * mfScaleFactor);
             mrWriter.put("endY", rPrimitive.getEnd().getY() * mfScaleFactor);
+        }
+        break;
+
+        case PRIMITIVE2D_ID_WRONGSPELLPRIMITIVE2D:
+        {
+            // The wave under a misspelled word is sized in device pixels, so what travels is the
+            // line it follows and the font height.
+            const auto& rPrimitive = static_cast<const WrongSpellPrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "wrongSpell");
+            mrWriter.put("color", colorToHex(rPrimitive.getColor()));
+
+            basegfx::B2DVector aScale, aTranslate;
+            double fRotate, fShearX;
+            rPrimitive.getTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
+            mrWriter.put("fontHeight", aScale.getY() * mfScaleFactor);
+
+            // The line runs 3% of the font height below the baseline.
+            const double fDistance = basegfx::fTools::equalZero(aScale.getY()) ? 0.0 : 0.03;
+            const basegfx::B2DPoint aStart(rPrimitive.getTransformation()
+                                           * basegfx::B2DPoint(rPrimitive.getStart(), fDistance));
+            const basegfx::B2DPoint aStop(rPrimitive.getTransformation()
+                                          * basegfx::B2DPoint(rPrimitive.getStop(), fDistance));
+            mrWriter.put("startX", aStart.getX() * mfScaleFactor);
+            mrWriter.put("startY", aStart.getY() * mfScaleFactor);
+            mrWriter.put("endX", aStop.getX() * mfScaleFactor);
+            mrWriter.put("endY", aStop.getY() * mfScaleFactor);
         }
         break;
 
