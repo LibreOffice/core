@@ -1919,6 +1919,25 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeGluePointsFollowAdjustments)
     assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd", 11);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeWithoutViewBox)
+{
+    // Given a parametric shape whose geometry has no svg:viewBox, which the engine renders in
+    // 0 0 21600 21600, with a path that stays above 14400 in y:
+    loadFromFile(u"custGeom_noViewBox.fodp");
+
+    // When saving it to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then the path takes the size the shape is rendered in, not the extent of its points, and
+    // the shape keeps its adjustment and handle
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path", "w", u"21600");
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path", "h", u"21600");
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", "fmla", u"val 25000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", 1);
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo[2]/a:pt", "y", u"14400");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testCustomShapeFromOOXMLKeepsOnlyUsedGuides)
 {
     // Given a shape that came from a pptx whose points are numbers and whose guides serve a

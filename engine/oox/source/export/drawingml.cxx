@@ -7785,36 +7785,32 @@ bool DrawingML::WriteCustomGeometry(
     if (!aPathSize.hasElements())
     {
         bUseGlobalViewBox = true;
-        // If draw:viewBox is missing in draw:enhancedGeometry, then import sets
-        // viewBox="0 0 21600 21600". Missing ViewBox can only occur, if user has manipulated
-        // current file via macro. Author of macro has to fix it.
+        // A shape without svg:viewBox in its draw:enhanced-geometry has no ViewBox property; the
+        // shape is rendered in 0 0 21600 21600 then, and is exported the same way.
         auto pProp = std::find_if(
             std::cbegin(*pGeometrySeq), std::cend(*pGeometrySeq),
             [](const beans::PropertyValue& rGeomProp) { return rGeomProp.Name == "ViewBox"; });
-        if (pProp != std::cend(*pGeometrySeq))
+        css::awt::Rectangle aViewBox(0, 0, 21600, 21600);
+        if (pProp == std::cend(*pGeometrySeq) || (pProp->Value >>= aViewBox))
         {
-            css::awt::Rectangle aViewBox;
-            if (pProp->Value >>= aViewBox)
-            {
-                nViewBoxWidth = aViewBox.Width;
-                nViewBoxHeight = aViewBox.Height;
-                bNominalViewBox = aViewBox.X == 0 && aViewBox.Y == 0 && aViewBox.Width > 0
-                                  && aViewBox.Height > 0 && !bReplaceGeoWidth && !bReplaceGeoHeight;
-                css::drawing::EnhancedCustomShapeParameter aECSP;
-                aECSP.Type = css::drawing::EnhancedCustomShapeParameterType::NORMAL;
-                aECSP.Value <<= nViewBoxWidth;
-                double fRetValue;
-                aCustomShape2d.GetParameter(fRetValue, aECSP, true, false);
-                nViewBoxWidth = basegfx::fround(fRetValue);
-                aECSP.Value <<= nViewBoxHeight;
-                aCustomShape2d.GetParameter(fRetValue, aECSP, false, true);
-                nViewBoxHeight = basegfx::fround(fRetValue);
-            }
+            nViewBoxWidth = aViewBox.Width;
+            nViewBoxHeight = aViewBox.Height;
+            bNominalViewBox = aViewBox.X == 0 && aViewBox.Y == 0 && aViewBox.Width > 0
+                              && aViewBox.Height > 0 && !bReplaceGeoWidth && !bReplaceGeoHeight;
+            css::drawing::EnhancedCustomShapeParameter aECSP;
+            aECSP.Type = css::drawing::EnhancedCustomShapeParameterType::NORMAL;
+            aECSP.Value <<= nViewBoxWidth;
+            double fRetValue;
+            aCustomShape2d.GetParameter(fRetValue, aECSP, true, false);
+            nViewBoxWidth = basegfx::fround(fRetValue);
+            aECSP.Value <<= nViewBoxHeight;
+            aCustomShape2d.GetParameter(fRetValue, aECSP, false, true);
+            nViewBoxHeight = basegfx::fround(fRetValue);
         }
         // Import from oox or documents, which are imported from oox and saved to strict ODF, might
         // have no subViewSize but viewBox="0 0 0 0". We need to generate width and height in those
         // cases. Even if that is fixed, we need the substitute for old documents.
-        if ((nViewBoxWidth == 0 && nViewBoxHeight == 0) || pProp == std::cend(*pGeometrySeq))
+        if (nViewBoxWidth == 0 && nViewBoxHeight == 0)
         {
             // Generate a substitute based on point coordinates
             sal_Int32 nXMin(0);
