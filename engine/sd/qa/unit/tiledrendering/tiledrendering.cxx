@@ -19,6 +19,7 @@
 #include <svx/svdlayer.hxx>
 #include <cmath>
 #include <functional>
+#include <map>
 #include <optional>
 #include <set>
 #include <string_view>
@@ -5010,6 +5011,36 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoIterate)
     CPPUNIT_ASSERT(!pIterate->get<std::string>("targetElement").empty());
     CPPUNIT_ASSERT_EQUAL(std::string("Iterated text"), pIterate->get<std::string>("title"));
     CPPUNIT_ASSERT_EQUAL(std::string("0.1s"), pIterate->get<std::string>("iterateInterval"));
+}
+
+// An effect on a font attribute carries its value: the weight as the FontWeight number, the
+// slant and underline by name, the family name, and the size relative to the text's.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoFontEffects)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("PresentationInfoFontEffects.fodp");
+    Scheduler::ProcessEventsToIdle();
+
+    boost::property_tree::ptree aTree;
+    readJSON(aTree, pXImpressDocument->getPresentationInfo());
+
+    const boost::property_tree::ptree& rRoot
+        = child_at(aTree, "slides", 0).get_child("animations").get_child("root");
+    std::map<std::string, std::string> aValues;
+    std::function<void(const boost::property_tree::ptree&)> collectValues
+        = [&](const boost::property_tree::ptree& rNode) {
+              if (auto oAttribute = rNode.get_optional<std::string>("attributeName"))
+                  aValues[*oAttribute] = rNode.get<std::string>("to", "");
+              if (auto oChildren = rNode.get_child_optional("children"))
+                  for (const auto& rChild : *oChildren)
+                      collectValues(rChild.second);
+          };
+    collectValues(rRoot);
+
+    CPPUNIT_ASSERT_EQUAL(std::string("8"), aValues["CharWeight"]);
+    CPPUNIT_ASSERT_EQUAL(std::string("italic"), aValues["CharPosture"]);
+    CPPUNIT_ASSERT_EQUAL(std::string("solid"), aValues["CharUnderline"]);
+    CPPUNIT_ASSERT_EQUAL(std::string("Liberation Serif"), aValues["CharFontName"]);
+    CPPUNIT_ASSERT_EQUAL(std::string("1.5"), aValues["CharHeight"]);
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testA11yPresentationInfo)

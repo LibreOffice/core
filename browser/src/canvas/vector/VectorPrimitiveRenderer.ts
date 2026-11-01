@@ -26,6 +26,18 @@ namespace cool {
 		text?: string;
 	}
 
+	/// A text look in place of the runs' own, each value present replacing
+	/// theirs. family is a font family name. sizeScale is relative to the
+	/// text's size, 1 as is. weight is a FontWeight number from 0 to 10.
+	/// italic and underline turn the slant and a single underline on or off.
+	export interface TextOverride {
+		family?: string;
+		sizeScale?: number;
+		weight?: number;
+		italic?: boolean;
+		underline?: boolean;
+	}
+
 	/// Which paragraphs of a text to draw, counted from 0. only draws that
 	/// one paragraph and nothing else of the object. skip draws every
 	/// paragraph but the listed ones. Absent, every paragraph is drawn.
@@ -77,6 +89,8 @@ namespace cool {
 		private _pictureDepth = 0;
 		// Colors drawn in place of the primitives' own, or null.
 		private _colorOverride: ColorOverride | null = null;
+		// The text look drawn in place of the runs' own, or null.
+		private _textOverride: TextOverride | null = null;
 		// Which paragraphs to draw, and the index of the next paragraph in the
 		// current text block.
 		private _paragraphFilter: ParagraphFilter | null = null;
@@ -118,6 +132,11 @@ namespace cool {
 		/// Null restores their own colors.
 		setColorOverride(override: ColorOverride | null): void {
 			this._colorOverride = override;
+		}
+
+		/// Draw the following text in this look. Null restores its own.
+		setTextOverride(override: TextOverride | null): void {
+			this._textOverride = override;
 		}
 
 		/// Draw only some paragraphs of the following text. Null draws all of
@@ -420,10 +439,17 @@ namespace cool {
 					this._renderGraphic(context, primitive as GraphicPrimitive);
 					return;
 				case TextSimplePortionPrimitive.type:
-					this._renderTextSimplePortion(
-						context,
-						primitive as TextSimplePortionPrimitive,
-					);
+					// A run gains an underline only through an override.
+					if (this._textOverride?.underline)
+						this._renderTextDecoratedPortion(
+							context,
+							primitive as TextSimplePortionPrimitive,
+						);
+					else
+						this._renderTextSimplePortion(
+							context,
+							primitive as TextSimplePortionPrimitive,
+						);
 					break;
 				case TextDecoratedPortionPrimitive.type:
 					this._renderTextDecoratedPortion(
@@ -740,11 +766,12 @@ namespace cool {
 			return primitive.familyname ?? 'sans-serif';
 		}
 
-		/// The CSS font string for a run's style, weight and size with the
-		/// given family.
+		/// The CSS font string of a run with the given family. The override's
+		/// slant and weight replace the run's own where given.
 		static cssFont(
 			primitive: TextSimplePortionPrimitive | TextDecoratedPortionPrimitive,
 			family: string,
+			override?: TextOverride | null,
 		): string {
 			let style = primitive.italic ? 'italic' : 'normal';
 			let weight =
@@ -759,6 +786,12 @@ namespace cool {
 				if (!primitive.syntheticItalic) style = 'normal';
 				if (!primitive.syntheticBold) weight = 400;
 			}
+			// The browser synthesizes an overridden slant or weight on any face.
+			if (override?.italic !== undefined)
+				style = override.italic ? 'italic' : 'normal';
+			if (override?.weight !== undefined)
+				weight =
+					VectorPrimitiveRenderer._FONT_WEIGHT_CSS[override.weight] ?? 400;
 			return `${style} ${weight} ${primitive.fontSize ?? 12}px "${family}"`;
 		}
 
@@ -783,11 +816,14 @@ namespace cool {
 			const matrix =
 				Matrix2D.fromArray(primitive.matrix) ??
 				new Matrix2D(fontSize, 0, 0, fontSize, 0, 0);
-			const family = VectorPrimitiveRenderer.resolveFontFamily(
+			const family =
+				this._textOverride?.family ??
+				VectorPrimitiveRenderer.resolveFontFamily(primitive, this._fontLoaded);
+			context.font = VectorPrimitiveRenderer.cssFont(
 				primitive,
-				this._fontLoaded,
+				family,
+				this._textOverride,
 			);
-			context.font = VectorPrimitiveRenderer.cssFont(primitive, family);
 			// The anchor is the start of the run on its baseline. The context is
 			// shared with sections that set their own alignment and baseline.
 			context.textAlign = 'left';
@@ -1114,9 +1150,47 @@ namespace cool {
 		): void {
 			const outerIndex = this._paragraphIndex;
 			this._paragraphIndex = 0;
+			const scale = this._textOverride?.sizeScale;
+			const center =
+				scale !== undefined && scale !== 1
+					? this._drawnParagraphsCenter(primitive)
+					: null;
+			// The text keeps its lines, so a larger size grows it about the
+			// middle of its paragraphs.
+			if (center && scale !== undefined) {
+				context.save();
+				context.translate(center[0], center[1]);
+				context.scale(scale, scale);
+				context.translate(-center[0], -center[1]);
+			}
 			if (primitive.children)
 				this._renderPrimitives(context, primitive.children);
+			if (center) context.restore();
 			this._paragraphIndex = outerIndex;
+		}
+
+		// The middle of the drawn paragraphs of the block, or null when none
+		// has bounds.
+		private _drawnParagraphsCenter(
+			block: TextHierarchyBlockPrimitive,
+		): [number, number] | null {
+			let left = Infinity;
+			let top = Infinity;
+			let right = -Infinity;
+			let bottom = -Infinity;
+			let index = 0;
+			for (const child of block.children ?? []) {
+				if (child.type !== TextHierarchyParagraphPrimitive.type) continue;
+				if (!this._drawsParagraph(index++)) continue;
+				const bounds = (child as TextHierarchyParagraphPrimitive).bounds;
+				if (!bounds) continue;
+				left = Math.min(left, bounds[0]);
+				top = Math.min(top, bounds[1]);
+				right = Math.max(right, bounds[2]);
+				bottom = Math.max(bottom, bounds[3]);
+			}
+			if (left > right || top > bottom) return null;
+			return [(left + right) / 2, (top + bottom) / 2];
 		}
 
 		private _renderTextHierarchyParagraph(
@@ -1131,14 +1205,28 @@ namespace cool {
 
 		private _renderTextDecoratedPortion(
 			context: CanvasRenderingContext2D,
-			primitive: TextDecoratedPortionPrimitive,
+			run: TextSimplePortionPrimitive | TextDecoratedPortionPrimitive,
 		): void {
+			const primitive = run as TextDecoratedPortionPrimitive;
 			const decorations = primitive.decorations;
 			const decorationsInTextColor = primitive.decorationsInTextColor;
+			// An underline turned on is a plain line over the engine's decorations. One turned
+			// off cannot be taken out of them, so such a run draws every line plainly.
+			const underlineOverride = this._textOverride?.underline;
+			const underlineChanges =
+				underlineOverride !== undefined &&
+				underlineOverride !== !!primitive.underline;
+			const plain =
+				(!decorations && !decorationsInTextColor) ||
+				(underlineChanges && !underlineOverride);
 			this._fillTextHighlight(context, primitive);
 			this._renderTextEffects(context, primitive, (color) => {
 				const textColor = color ?? this._textColor(primitive);
 				this._fillTextRun(context, primitive, textColor);
+				if (plain) {
+					this._drawPlainDecorations(context, primitive, color, false);
+					return;
+				}
 				if (decorations)
 					this._renderPrimitives(
 						context,
@@ -1149,8 +1237,8 @@ namespace cool {
 						context,
 						this._recolored(decorationsInTextColor, textColor),
 					);
-				if (!decorations && !decorationsInTextColor)
-					this._drawPlainDecorations(context, primitive, color);
+				if (underlineChanges)
+					this._drawPlainDecorations(context, primitive, color, true);
 			});
 		}
 
@@ -1202,16 +1290,19 @@ namespace cool {
 			});
 		}
 
-		// Plain lines for a run that carries no decorations of the engine,
-		// such as a run changed by typing before the engine answers. Each is
-		// one solid line placed by fractions of the font size.
+		// Plain lines for a run without the engine's decorations: one solid
+		// line each, placed by fractions of the font size. With underlineOnly
+		// the overline and strikeout are left to the engine.
 		private _drawPlainDecorations(
 			context: CanvasRenderingContext2D,
 			primitive: TextDecoratedPortionPrimitive,
 			color: string | undefined,
+			underlineOnly: boolean,
 		): void {
-			if (!primitive.underline && !primitive.overline && !primitive.strikeout)
-				return;
+			const underline = this._textOverride?.underline ?? primitive.underline;
+			const overline = !underlineOnly && primitive.overline;
+			const strikeout = !underlineOnly && primitive.strikeout;
+			if (!underline && !overline && !strikeout) return;
 
 			context.save();
 			const frame = this._setupTextFrame(context, primitive);
@@ -1243,19 +1334,18 @@ namespace cool {
 					context.stroke();
 				};
 
-				if (primitive.underline) {
+				if (underline) {
 					const lineY = primitive.underlineAbove
 						? frame.y - frame.fontSize * 0.85
 						: frame.y + frame.fontSize * 0.15;
 					drawLine(lineY, lineColor(primitive.underlineColor));
 				}
-				if (primitive.overline)
+				if (overline)
 					drawLine(
 						frame.y - frame.fontSize * 0.85,
 						lineColor(primitive.overlineColor),
 					);
-				if (primitive.strikeout)
-					drawLine(frame.y - frame.fontSize * 0.3, textColor);
+				if (strikeout) drawLine(frame.y - frame.fontSize * 0.3, textColor);
 			}
 			context.restore();
 		}

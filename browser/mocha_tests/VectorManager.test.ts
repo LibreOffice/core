@@ -3203,6 +3203,76 @@ describe('VectorManager', function () {
 			nodeassert.strictEqual(texts[2].properties.globalAlpha, 0.5);
 		});
 
+		it('draws the text of an object in the font look its state gives', function () {
+			const manager = new VectorManager();
+			const data = cachedPart(manager, [
+				{
+					id: 11,
+					primitives: [
+						{ type: 'textHierarchyBlock', children: [paragraph('One')] },
+					],
+				},
+			]);
+
+			const recorder = new CanvasRecorder();
+			manager.renderInto(recorder as any, data, {
+				states: new Map([
+					[
+						11,
+						{
+							textOverride: {
+								family: 'Liberation Serif',
+								weight: 8,
+								italic: true,
+								underline: true,
+							},
+						},
+					],
+				]),
+			});
+
+			const texts = recorder.callsOf('fillText');
+			nodeassert.strictEqual(texts.length, 1);
+			nodeassert.strictEqual(
+				texts[0].properties.font,
+				'italic 700 20px "Liberation Serif"',
+			);
+			// The run has no underline of its own, so the line comes from the look.
+			nodeassert.strictEqual(recorder.callsOf('stroke').length, 1);
+		});
+
+		it('grows the text of an object about the middle of its paragraphs', function () {
+			const manager = new VectorManager();
+			const first = paragraph('One');
+			first.bounds = [0, 0, 100, 20];
+			const second = paragraph('Two');
+			second.bounds = [0, 20, 100, 40];
+			const data = cachedPart(manager, [
+				{
+					id: 11,
+					primitives: [
+						{ type: 'textHierarchyBlock', children: [first, second] },
+					],
+				},
+			]);
+
+			const recorder = new CanvasRecorder();
+			manager.renderInto(recorder as any, data, {
+				states: new Map([[11, { textOverride: { sizeScale: 2 } }]]),
+			});
+
+			const firstText = recorder.calls.indexOf(recorder.callsOf('fillText')[0]);
+			const steps = recorder.calls
+				.slice(0, firstText)
+				.filter((call) => ['translate', 'scale'].includes(call.method))
+				.map((call) => [call.method, ...call.args]);
+			nodeassert.deepStrictEqual(steps, [
+				['translate', 50, 20],
+				['scale', 2, 2],
+				['translate', -50, -20],
+			]);
+		});
+
 		it('draws only the part of an object its clip names', function () {
 			const manager = new VectorManager();
 			const data = cachedPart(manager, [{ id: 11, primitives: [filled] }]);

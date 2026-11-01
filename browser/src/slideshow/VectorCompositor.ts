@@ -319,8 +319,8 @@ class VectorCompositor extends SlideCompositor {
 	}
 
 	// How the target is drawn now: left out while hidden, else under the
-	// element's transform, opacity and colors, clipped to what the last
-	// filter shows.
+	// element's transform, opacity, colors and text look, clipped by the
+	// last filter.
 	private static _drawState(element: AnimatedElement): cool.DrawState {
 		if (!element.getVisibility()) return { hidden: true };
 
@@ -351,7 +351,24 @@ class VectorCompositor extends SlideCompositor {
 		if (opacity < 1) state.alpha = opacity;
 		const colorOverride = VectorCompositor._colorOverride(element);
 		if (colorOverride) state.colorOverride = colorOverride;
+		const textOverride = VectorCompositor._textOverride(element);
+		if (textOverride) state.textOverride = textOverride;
 		return state;
+	}
+
+	// The text look of a font animation on the target, or undefined.
+	private static _textOverride(
+		element: AnimatedElement,
+	): cool.TextOverride | undefined {
+		const look = element.getFontLook();
+		const override: cool.TextOverride = {};
+		if (look.scale !== 1) override.sizeScale = look.scale;
+		const weight = Number(look.weight);
+		if (look.weight !== '' && Number.isFinite(weight)) override.weight = weight;
+		if (look.posture) override.italic = look.posture !== 'normal';
+		if (look.underline) override.underline = look.underline !== 'none';
+		if (look.name) override.family = look.name;
+		return Object.keys(override).length ? override : undefined;
 	}
 
 	// The colors a color animation has moved, or undefined. A shape element

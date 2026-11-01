@@ -339,6 +339,7 @@ abstract class RenderManagerBase {
 		objectId: number,
 		paragraph: number,
 		colorOverride?: cool.ColorOverride,
+		textOverride?: cool.TextOverride,
 	): void;
 
 	abstract renderPlaceholderAids(

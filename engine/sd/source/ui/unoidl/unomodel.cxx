@@ -28,6 +28,8 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -107,6 +109,7 @@
 #include <sfx2/viewsh.hxx>
 #include <svl/cryptosign.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/unohelp.hxx>
 #include <rtl/strbuf.hxx>
 #include <Outliner.hxx>
 #include <COKit/COKit.hxx>
@@ -1446,20 +1449,43 @@ void AnimationsExporter::convertValue(XMLTokenEnum eAttributeName, OStringBuffer
                     convertEnum(sTmp, *aValue, constLineStyleToString);
                 }
                 break;
-            case XML_FONTSIZE:
-                if (auto aValue = o3tl::tryAccess<double>(rValue))
-                {
-                    double fValue = *aValue * 100;
-                    fValue += fValue > 0 ? 0.5 : -0.5;
-                    auto nValue = static_cast<sal_Int32>(fValue);
-                    sTmp.append(nValue); // percent
-                }
+            case XML_FONT_SIZE:
+                // The size relative to the text's, 1 as is. PPTX import stores a float, so the
+                // value goes through a conversion.
+                if (double fValue = 0; rValue >>= fValue)
+                    convertDouble(sTmp, fValue);
                 break;
             case XML_FONT_WEIGHT:
+                // The weight as the FontWeight number of the text portions.
+                if (auto aValue = o3tl::tryAccess<float>(rValue))
+                    sTmp.append(static_cast<sal_Int32>(vcl::unohelper::ConvertFontWeight(*aValue)));
+                break;
             case XML_FONT_STYLE:
+                if (auto aValue = o3tl::tryAccess<awt::FontSlant>(rValue))
+                {
+                    switch (*aValue)
+                    {
+                        case awt::FontSlant_ITALIC:
+                        case awt::FontSlant_REVERSE_ITALIC:
+                            sTmp.append("italic");
+                            break;
+                        case awt::FontSlant_OBLIQUE:
+                        case awt::FontSlant_REVERSE_OBLIQUE:
+                            sTmp.append("oblique");
+                            break;
+                        default:
+                            sTmp.append("normal");
+                            break;
+                    }
+                }
+                break;
             case XML_TEXT_UNDERLINE:
-                SAL_WARN("sd", "AnimationsExporter::convertValue(): value type "
-                                   << GetXMLToken(eAttributeName) << " not supported");
+                if (auto aValue = o3tl::tryAccess<sal_Int16>(rValue))
+                    sTmp.append(*aValue == awt::FontUnderline::NONE ? "none" : "solid");
+                break;
+            case XML_FONT_FAMILY:
+                if (auto aValue = o3tl::tryAccess<OUString>(rValue))
+                    sTmp.append(aValue->toUtf8());
                 break;
             case XML_VISIBILITY:
                 if (auto aValue = o3tl::tryAccess<bool>(rValue))

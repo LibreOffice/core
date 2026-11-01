@@ -32,14 +32,15 @@ namespace cool {
 	}
 
 	/// How an animation draws something: whether at all, the transform as
-	/// the six canvas matrix values in twips, the opacity 0 to 1, the colors
-	/// in place of its own, and the part drawn, before the transform. An
-	/// absent field changes nothing.
+	/// six canvas matrix values in twips, the opacity 0 to 1, the colors and
+	/// text look in place of its own, and the part drawn. An absent field
+	/// changes nothing.
 	export interface DrawState {
 		hidden?: boolean;
 		transform?: number[];
 		alpha?: number;
 		colorOverride?: ColorOverride;
+		textOverride?: TextOverride;
 		clip?: DrawClip;
 	}
 

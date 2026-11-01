@@ -461,22 +461,27 @@ class VectorManager extends RenderManagerBase {
 		}
 	}
 
-	/// Draw one paragraph of the text of an object of the part alone, with the colors given
-	/// standing in for its own. The paragraph is its position in the object's text. The caller
-	/// sets up the context transform that maps the part's twips to the target pixels.
+	/// Draw one paragraph of an object's text alone, in the colors and text look given. The
+	/// context transform maps the part's twips to the target pixels.
 	renderObjectParagraph(
 		context: CanvasRenderingContext2D,
 		data: cool.VectorPrimitivesData,
 		objectId: number,
 		paragraph: number,
 		colorOverride?: cool.ColorOverride,
+		textOverride?: cool.TextOverride,
 	): void {
 		const object = data.objects.get(objectId);
 		if (!object) return;
 		this._renderer.setSlideBounds(data.slideWidth, data.slideHeight);
 		this._renderer.setEditViewContentVisible(false);
 		this._setUpColors(data);
-		this._renderUnder(context, object, { colorOverride }, { only: paragraph });
+		this._renderUnder(
+			context,
+			object,
+			{ colorOverride, textOverride },
+			{ only: paragraph },
+		);
 	}
 
 	// The state of the object, or else of the nearest group above it, since an effect on a
@@ -534,11 +539,13 @@ class VectorManager extends RenderManagerBase {
 		if (matrix) matrix.applyTo(context);
 		if (state.clip) VectorManager._clipTo(context, state.clip);
 		this._renderer.setColorOverride(state.colorOverride ?? null);
+		this._renderer.setTextOverride(state.textOverride ?? null);
 		this._renderer.setParagraphFilter(paragraphFilter);
 		for (const primitive of object.primitives) {
 			this._renderer.renderPrimitive(context, primitive);
 		}
 		this._renderer.setParagraphFilter(null);
+		this._renderer.setTextOverride(null);
 		this._renderer.setColorOverride(null);
 		context.restore();
 	}

@@ -14,8 +14,8 @@
  * Draws the frames of a vector slide in the WebGL context of the slideshow canvas. The slide is
  * split in paint order into layers: runs of untargeted objects, runs of one animation target,
  * and a layer per paragraph that an animation moves on its own. Each layer is drawn once into a
- * texture over the rectangle it covers, and again only when its stand-in colors change. A frame
- * draws the textures as quads in the state the animation gives them.
+ * texture over the rectangle it covers, and again only when its stand-in colors or text look
+ * change. A frame draws the textures as quads in the state the animation gives them.
  *
  * Canvas positions are in pixels of the slideshow canvas, with the slide filling it.
  */
@@ -35,9 +35,11 @@ interface SlideLayer {
 	paragraph?: number;
 	// The rectangle the texture covers, in canvas pixels.
 	pixels: number[];
+	// The rectangle the layer covers with its text at its own size.
+	ownPixels: number[];
 	texture: WebGLTexture | null;
-	// The stand-in colors the texture is drawn with, as JSON. "null" for its own colors.
-	colors: string;
+	// The stand-in colors and text look the texture is drawn with, as JSON.
+	look: string;
 }
 
 /// A framebuffer with the texture as its color and a stencil buffer of the same size.
@@ -252,10 +254,14 @@ class VectorSlideLayers {
 			)
 				continue;
 
-			const colors = JSON.stringify(state?.colorOverride ?? null);
-			if (colors !== layer.colors) {
-				layer.colors = colors;
-				this._paint(layer, data, state?.colorOverride);
+			const look = VectorSlideLayers._lookOf(state);
+			if (look !== layer.look) {
+				layer.look = look;
+				layer.pixels = this._grownPixels(
+					layer.ownPixels,
+					state?.textOverride?.sizeScale,
+				);
+				this._paint(layer, data, state);
 			}
 			this._drawLayer(layer, state);
 		}
@@ -472,6 +478,43 @@ class VectorSlideLayers {
 		];
 	}
 
+	// The stand-in colors and text look of a state, as JSON.
+	private static _lookOf(state: cool.DrawState | undefined): string {
+		return JSON.stringify([
+			state?.colorOverride ?? null,
+			state?.textOverride ?? null,
+		]);
+	}
+
+	// The rectangle of a layer with its text at sizeScale times its size. The text grows about
+	// a point inside, so the rectangle grows about its middle by twice the growth of the text,
+	// within one canvas size around the canvas.
+	private _grownPixels(
+		pixels: number[],
+		sizeScale: number | undefined,
+	): number[] {
+		if (sizeScale === undefined || sizeScale <= 1) return pixels;
+		const [x, y, width, height] = pixels;
+		const factor = 2 * sizeScale - 1;
+		const grownWidth = Math.ceil(width * factor);
+		const grownHeight = Math.ceil(height * factor);
+		const grown = [
+			Math.floor(x - (grownWidth - width) / 2),
+			Math.floor(y - (grownHeight - height) / 2),
+			grownWidth,
+			grownHeight,
+		];
+		return (
+			this._cut(
+				grown,
+				-this.canvasWidth,
+				-this.canvasHeight,
+				2 * this.canvasWidth,
+				2 * this.canvasHeight,
+			) ?? pixels
+		);
+	}
+
 	private _cut(
 		pixels: number[],
 		left: number,
@@ -496,8 +539,9 @@ class VectorSlideLayers {
 			run,
 			paragraph,
 			pixels,
+			ownPixels: pixels,
 			texture: gl.createTexture(),
-			colors: 'null',
+			look: VectorSlideLayers._lookOf(undefined),
 		};
 		gl.bindTexture(gl.TEXTURE_2D, layer.texture);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -508,13 +552,15 @@ class VectorSlideLayers {
 	}
 
 	// Draw the layer with the primitive renderer and upload it into its texture. A run is drawn
-	// with the colors given, without the paragraphs that have layers of their own. The run that
-	// starts with the page is drawn over white.
+	// with the colors and text look of the state given, without the paragraphs that have layers
+	// of their own. The run that starts with the page is drawn over white.
 	private _paint(
 		layer: SlideLayer,
 		data: cool.VectorPrimitivesData,
-		colorOverride: cool.ColorOverride | undefined,
+		state: cool.DrawState | undefined,
 	): void {
+		const colorOverride = state?.colorOverride;
+		const textOverride = state?.textOverride;
 		const [x, y, width, height] = layer.pixels;
 		const canvas = new OffscreenCanvas(width, height);
 		const context = canvas.getContext(
@@ -540,6 +586,7 @@ class VectorSlideLayers {
 				owner,
 				layer.paragraph,
 				colorOverride,
+				textOverride,
 			);
 		} else {
 			const paragraphs = new Map<number, cool.DrawState>();
@@ -548,7 +595,7 @@ class VectorSlideLayers {
 					paragraphs.set(other.paragraph, { hidden: true });
 			RenderManager.renderInto(target, data, {
 				paintRange: { start: layer.run.start, end: layer.run.end },
-				states: new Map([[owner, { colorOverride, paragraphs }]]),
+				states: new Map([[owner, { colorOverride, textOverride, paragraphs }]]),
 			});
 		}
 

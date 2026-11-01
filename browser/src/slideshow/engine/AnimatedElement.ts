@@ -266,6 +266,36 @@ const aPropertyGetterSetterMap = {
 		set: 'setFontColor',
 	},
 
+	charheight: {
+		type: PropertyValueType.Number,
+		get: 'getFontScale',
+		set: 'setFontScale',
+	},
+
+	charweight: {
+		type: PropertyValueType.String,
+		get: 'getFontWeight',
+		set: 'setFontWeight',
+	},
+
+	charposture: {
+		type: PropertyValueType.String,
+		get: 'getFontPosture',
+		set: 'setFontPosture',
+	},
+
+	charunderline: {
+		type: PropertyValueType.String,
+		get: 'getFontUnderline',
+		set: 'setFontUnderline',
+	},
+
+	charfontname: {
+		type: PropertyValueType.String,
+		get: 'getFontName',
+		set: 'setFontName',
+	},
+
 	dimcolor: {
 		type: PropertyValueType.Color,
 		get: 'getDimColor',
@@ -366,8 +396,20 @@ interface AnimatedElementState {
 	aFillColor: RGBColor;
 	aLineColor: RGBColor;
 	aFontColor: RGBColor;
+	aFontLook: AnimatedElementFontLook;
 	bVisible: boolean;
 	transitionFiltersState: TransitionFiltersState;
+}
+
+/// The text look a font animation gives the target. scale is relative to the text's size, 1 as
+/// is. weight is a FontWeight number from 0 to 10 as text, posture is normal, italic or oblique,
+/// underline is none or solid, and name is a font family. An empty string keeps the text's own.
+interface AnimatedElementFontLook {
+	scale: number;
+	weight: string;
+	posture: string;
+	underline: string;
+	name: string;
 }
 
 type BoundsType = [DOMPoint, DOMPoint, DOMPoint, DOMPoint];
@@ -406,6 +448,11 @@ class AnimatedElement {
 		'fillcolor',
 		'linecolor',
 		'charcolor',
+		'charheight',
+		'charweight',
+		'charposture',
+		'charunderline',
+		'charfontname',
 		'dimcolor',
 	]);
 
@@ -448,6 +495,7 @@ class AnimatedElement {
 	protected aBaseFontColor = AnimatedElement.DefaultColor;
 	private aFontColor = AnimatedElement.DefaultColor;
 	private aDimColor = AnimatedElement.DefaultColor;
+	private aFontLook: AnimatedElementFontLook = AnimatedElement.ownFontLook();
 	private bVisible: boolean;
 	// Hidden at slide start where the first effect brings the target in.
 	private bInitiallyVisible: boolean = true;
@@ -578,6 +626,7 @@ class AnimatedElement {
 		this.aFillColor = this.aBaseFillColor;
 		this.aLineColor = this.aBaseLineColor;
 		this.aFontColor = this.aBaseFontColor;
+		this.aFontLook = AnimatedElement.ownFontLook();
 		this.bVisible = this.getInitialVisibility();
 		this.transitionFiltersManager.clear();
 		// this.aActiveBBox = this.cloneBBox(this.aBaseBBox);
@@ -744,6 +793,7 @@ class AnimatedElement {
 			aFillColor: this.aFillColor,
 			aLineColor: this.aLineColor,
 			aFontColor: this.aFontColor,
+			aFontLook: { ...this.aFontLook },
 			bVisible: this.bVisible,
 			transitionFiltersState: this.transitionFiltersManager.getState(),
 		};
@@ -827,6 +877,7 @@ class AnimatedElement {
 			this.aFillColor = aState.aFillColor;
 			this.aLineColor = aState.aLineColor;
 			this.aFontColor = aState.aFontColor;
+			this.aFontLook = { ...aState.aFontLook };
 			this.bVisible = aState.bVisible;
 			this.transitionFiltersManager.setState(aState.transitionFiltersState);
 		}
@@ -1073,6 +1124,54 @@ class AnimatedElement {
 			'AnimatedElement.setFontColor(' + aRGBValue.toString() + ')',
 		);
 		this.aFontColor = aRGBValue;
+	}
+
+	private static ownFontLook(): AnimatedElementFontLook {
+		return { scale: 1, weight: '', posture: '', underline: '', name: '' };
+	}
+
+	public getFontLook(): AnimatedElementFontLook {
+		return this.aFontLook;
+	}
+
+	getFontScale(): number {
+		return this.aFontLook.scale;
+	}
+
+	setFontScale(nValue: number) {
+		this.aFontLook.scale = nValue;
+	}
+
+	getFontWeight(): string {
+		return this.aFontLook.weight;
+	}
+
+	setFontWeight(sValue: string) {
+		this.aFontLook.weight = sValue ?? '';
+	}
+
+	getFontPosture(): string {
+		return this.aFontLook.posture;
+	}
+
+	setFontPosture(sValue: string) {
+		this.aFontLook.posture = sValue ?? '';
+	}
+
+	getFontUnderline(): string {
+		return this.aFontLook.underline;
+	}
+
+	setFontUnderline(sValue: string) {
+		this.aFontLook.underline = sValue ?? '';
+	}
+
+	getFontName(): string {
+		return this.aFontLook.name;
+	}
+
+	setFontName(sValue: string) {
+		this.aFontLook.name = sValue ?? '';
 	}
 
 	setDefaultDimColor(aRGBValue: RGBColor) {

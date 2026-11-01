@@ -395,6 +395,7 @@ class RenderManager {
 		objectId: number,
 		paragraph: number,
 		colorOverride?: cool.ColorOverride,
+		textOverride?: cool.TextOverride,
 	): void {
 		RenderManager.ensureInstance().renderObjectParagraph(
 			context,
@@ -402,6 +403,7 @@ class RenderManager {
 			objectId,
 			paragraph,
 			colorOverride,
+			textOverride,
 		);
 	}
 

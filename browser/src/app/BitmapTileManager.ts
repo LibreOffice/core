@@ -2730,6 +2730,7 @@ class BitmapTileManager extends RenderManagerBase {
 		_objectId: number,
 		_paragraph: number,
 		_colorOverride?: cool.ColorOverride,
+		_textOverride?: cool.TextOverride,
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
 	): void {}
 
