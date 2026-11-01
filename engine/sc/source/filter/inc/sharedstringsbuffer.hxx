@@ -20,6 +20,7 @@
 #pragma once
 
 #include "richstring.hxx"
+#include <vcl/throwawaymemory.hxx>
 
 namespace oox::xls {
 
@@ -39,6 +40,10 @@ public:
     RichStringRef       getString( sal_Int32 nStringId ) const;
 
 private:
+#if defined __cpp_lib_memory_resource
+    /** The strings and their portions, which last only as long as the import. */
+    ThrowawayMemory     maMemory;
+#endif
     typedef RefVector< RichString > StringVector;
     StringVector        maStrings;
 };

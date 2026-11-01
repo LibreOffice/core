@@ -28,7 +28,12 @@ SharedStringsBuffer::SharedStringsBuffer( const WorkbookHelper& rHelper ) :
 
 RichStringRef SharedStringsBuffer::createRichString()
 {
+#if defined __cpp_lib_memory_resource
+    RichStringRef xString = std::allocate_shared<RichString>(
+        std::pmr::polymorphic_allocator<RichString>(&maMemory), maMemory);
+#else
     RichStringRef xString = std::make_shared<RichString>();
+#endif
     maStrings.push_back( xString );
     return xString;
 }

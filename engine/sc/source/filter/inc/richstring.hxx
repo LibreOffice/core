@@ -20,6 +20,10 @@
 #pragma once
 
 #include <oox/helper/refvector.hxx>
+#include <version>
+#if defined __cpp_lib_memory_resource
+#include <memory_resource>
+#endif
 #include "stylesbuffer.hxx"
 
 class EditTextObject;
@@ -206,6 +210,11 @@ private:
 class RichString
 {
 public:
+    RichString() = default;
+#if defined __cpp_lib_memory_resource
+    /** A string whose list of portions is allocated from rMemory. */
+    explicit RichString(std::pmr::memory_resource& rMemory) : maTextPortions(&rMemory) {}
+#endif
 
     /** Appends and returns an index of a portion object for a plain string (t element). */
     sal_Int32 importText(const AttributeList& rAttribs);
@@ -257,7 +266,12 @@ private:
 private:
     typedef RefVector< RichStringPhonetic > PhoneticVector;
 
-    std::vector<RichStringPortion>  maTextPortions; /// String portions with font data.
+#if defined __cpp_lib_memory_resource
+    typedef std::pmr::vector<RichStringPortion> PortionVector;
+#else
+    typedef std::vector<RichStringPortion> PortionVector;
+#endif
+    PortionVector       maTextPortions; /// String portions with font data.
     std::unique_ptr<PhoneticSettings> mxPhonSettings; /// Phonetic settings for this string.
     PhoneticVector      maPhonPortions; /// Phonetic text portions.
     bool mbPreserveSpace = false;
