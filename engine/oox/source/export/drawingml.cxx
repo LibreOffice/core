@@ -6507,6 +6507,14 @@ void lcl_CollectDirectAdjustmentUses(
     }
     for (const XYHandleRaw& rHandle : rXYHandles)
     {
+        // the position of the handle, too: a fixed coordinate given by an alias is a plain use
+        for (const drawing::EnhancedCustomShapeParameter* pParam :
+             { &rHandle.aPosition.First, &rHandle.aPosition.Second })
+        {
+            const sal_Int32 nEquation = lcl_EquationIndexOf(*pParam);
+            if (nEquation >= 0)
+                rDirectEquations.insert(nEquation);
+        }
         for (const std::optional<drawing::EnhancedCustomShapeParameter>* pRange :
              { &rHandle.aMinX, &rHandle.aMaxX, &rHandle.aMinY, &rHandle.aMaxY })
         {
@@ -6666,11 +6674,27 @@ OString lcl_ArcAngleToken(const drawing::EnhancedCustomShapeParameter& rParam, O
 {
     sal_Int32 nIndex = -1;
     // An equation that is an angle gives radians, which the shape reads as degrees here: the
-    // arc keeps its number in that case.
+    // arc keeps its number in that case. An alias of an adjustment stored in 60000ths holds
+    // the degrees the shape reads, and its token is the bare adjustment.
     if (rParam.Type == drawing::EnhancedCustomShapeParameterType::EQUATION
         && (rParam.Value >>= nIndex) && nIndex >= 0
         && o3tl::make_unsigned(nIndex) < rCtx.rEqNames.size() && rCtx.rEqIsAngle[nIndex])
+    {
+        const ExpressionNode* pNode
+            = rCtx.pNodes && o3tl::make_unsigned(nIndex) < rCtx.pNodes->size()
+                  ? (*rCtx.pNodes)[nIndex].get()
+                  : nullptr;
+        if (pNode && pNode->getType() == ExpressionFunct::EnumAdjustment && rCtx.pAdjustmentInfo
+            && pNode->getIndex() >= 0
+            && o3tl::make_unsigned(pNode->getIndex()) < rCtx.pAdjustmentInfo->size()
+            && rCtx.rAngleAdjustments60000.count(pNode->getIndex()) > 0
+            && (*rCtx.pAdjustmentInfo)[pNode->getIndex()].fAngleConst == 180.0)
+        {
+            rCtx.rUsedAdjustments.insert(pNode->getIndex());
+            return rCtx.rEqNames[nIndex];
+        }
         return OString();
+    }
     // An equation that is a number of degrees, or the X/60000 the importer writes for an
     // angle it read in 60000ths, gives the 60000ths directly.
     if (rParam.Type == drawing::EnhancedCustomShapeParameterType::EQUATION && rCtx.pNodes

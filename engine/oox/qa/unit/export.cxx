@@ -2028,6 +2028,24 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeAliasUsedAsCoordinateStaysPlain)
     assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/*", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeArcAngleByAlias)
+{
+    // Given a pie whose arc takes its start angle from an alias equation of the angle:
+    loadFromFile(u"custGeom_arcByAlias.fodp");
+
+    // When saving it to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then the alias is the bare adjustment in 60000ths, the arc uses it as it is, and the polar
+    // handle is written
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", "fmla", u"val 3600000");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "stAng", u"adj1");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "swAng", u"5400000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar", 1);
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar", "gdRefAng", u"adj1");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
