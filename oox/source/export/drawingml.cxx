@@ -2067,12 +2067,15 @@ void DrawingML::WriteXGraphicStretch(uno::Reference<beans::XPropertySet> const &
         {
             Graphic aGraphic(rxGraphic);
             Size aOriginalSize(aGraphic.GetPrefSize());
-            mpFS->singleElementNS(XML_a, XML_fillRect,
-                XML_l, OString::number(((aGraphicCropStruct.Left)   * 100000) / aOriginalSize.Width()),
-                XML_t, OString::number(((aGraphicCropStruct.Top)    * 100000) / aOriginalSize.Height()),
-                XML_r, OString::number(((aGraphicCropStruct.Right)  * 100000) / aOriginalSize.Width()),
-                XML_b, OString::number(((aGraphicCropStruct.Bottom) * 100000) / aOriginalSize.Height()));
-            bCrop = true;
+            if (aOriginalSize.Width() != 0 && aOriginalSize.Height() != 0)
+            {
+                mpFS->singleElementNS(XML_a, XML_fillRect,
+                    XML_l, OString::number(static_cast<sal_Int64>(aGraphicCropStruct.Left)   * 100000 / aOriginalSize.Width()),
+                    XML_t, OString::number(static_cast<sal_Int64>(aGraphicCropStruct.Top)    * 100000 / aOriginalSize.Height()),
+                    XML_r, OString::number(static_cast<sal_Int64>(aGraphicCropStruct.Right)  * 100000 / aOriginalSize.Width()),
+                    XML_b, OString::number(static_cast<sal_Int64>(aGraphicCropStruct.Bottom) * 100000 / aOriginalSize.Height()));
+                bCrop = true;
+            }
         }
     }
 
