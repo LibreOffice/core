@@ -54,18 +54,16 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf165670)
     // without the fix in place, this test would have failed with
     // - Expected: "*/ 690465 w 2407298"
     // - Actual  : "*/ 1917.97586131837 w 5236"
-    assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:gdLst/a:gd[5]", "name",
-                u"GluePoint1X");
-    assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:gdLst/a:gd[5]", "fmla",
-                u"*/ 690465 w 2407298");
+    assertXPath(pXmlDoc1,
+                "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:gdLst/a:gd[@name='GluePoint1X']",
+                "fmla", u"*/ 690465 w 2407298");
 
     // without the fix in place, this test would have failed with
     // - Expected: "*/ 802433 h 1884784"
     // - Actual  : "*/ 2229.18869642357 h 6687"
-    assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:gdLst/a:gd[6]", "name",
-                u"GluePoint1Y");
-    assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:gdLst/a:gd[6]", "fmla",
-                u"*/ 802433 h 1884784");
+    assertXPath(pXmlDoc1,
+                "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:gdLst/a:gd[@name='GluePoint1Y']",
+                "fmla", u"*/ 802433 h 1884784");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf165262)

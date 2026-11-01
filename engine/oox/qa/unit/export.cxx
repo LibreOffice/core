@@ -1932,6 +1932,84 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeAngleUsedAsCoordinateStaysPlain)
     assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/*", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeFromOOXMLKeepsHandle)
+{
+    // Given a shape that came from a pptx with its own geometry, an adjustment in Office's
+    // units, guides over w and a handle bound to the adjustment:
+    loadFromFile(u"custGeom_ooxmlHandle.pptx");
+
+    // When saving it to PPTX again:
+    save(TestFilter::PPTX);
+
+    // Then the adjustment value is written as it came, its guides reach the file with the
+    // shape's size standing in for logwidth, the path point names its guide, and the handle
+    // names the adjustment at the position the engine has for it
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", 1);
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", "fmla", u"val 20139");
+    // pin 0 adj 100000, as the importer spells it: if(0-$0, 0, if(100000-$0, $0, 100000))
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f0']", "fmla", u"+- 0 0 adj1");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f1']", "fmla", u"+- 100000 0 adj1");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f2']", "fmla", u"?: f1 adj1 100000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f3']", "fmla", u"?: f0 0 f2");
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path", "w", u"43200");
+    OUString aCorner = getXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo[1]/a:pt", "x");
+    CPPUNIT_ASSERT(aCorner.startsWith("f"));
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", 1);
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", "gdRefX", u"adj1");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", "maxX", u"100000");
+    // the file had no minX, and gets none back
+    assertXPathNoAttribute(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", "minX");
+    // the position is the guide the file had (*/ w a 100000), with w the built-in again, and
+    // the corner is that position brought into the path's space (*/ xPos 43200 w)
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f4']", "fmla", u"*/ w f3 100000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY/a:pos", "x", u"f4");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f5']", "fmla", u"*/ f4 43200 w");
+    CPPUNIT_ASSERT_EQUAL(u"f5"_ustr, aCorner);
+
+    // and reading it back gives the handle bound to the adjustment again
+    loadFromURL(maTempFile.GetURL());
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    comphelper::SequenceAsHashMap aGeometry(xShape->getPropertyValue(u"CustomShapeGeometry"_ustr));
+    uno::Sequence<beans::PropertyValues> aHandles;
+    aGeometry[u"Handles"_ustr] >>= aHandles;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aHandles.getLength());
+    comphelper::SequenceAsHashMap aHandle(aHandles[0]);
+    sal_Int32 nRefX = -1;
+    aHandle[u"RefX"_ustr] >>= nRefX;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nRefX);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeFromOOXMLDraggedHandle)
+{
+    // Given a shape that came from a pptx whose handle was moved in the engine, which leaves a
+    // fraction of Office's units in the adjustment value:
+    loadFromFile(u"custGeom_ooxmlHandle.pptx");
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    comphelper::SequenceAsHashMap aGeometry(xShape->getPropertyValue(u"CustomShapeGeometry"_ustr));
+    uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustments;
+    aGeometry[u"AdjustmentValues"_ustr] >>= aAdjustments;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aAdjustments.getLength());
+    aAdjustments.getArray()[0].Value <<= 30000.4;
+    aGeometry[u"AdjustmentValues"_ustr] <<= aAdjustments;
+    xShape->setPropertyValue(u"CustomShapeGeometry"_ustr,
+                             uno::Any(aGeometry.getAsConstPropertyValueList()));
+
+    // When saving it to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then the value is rounded to Office's whole units and the handle is kept
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", "fmla", u"val 30000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
