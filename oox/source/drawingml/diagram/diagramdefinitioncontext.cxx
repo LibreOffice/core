@@ -69,6 +69,7 @@ DiagramDefinitionContext::onCreateContext( ::sal_Int32 aElement,
         break;
     case DGM_TOKEN( layoutNode ):
     {
+        mpLayout->getLayoutAtomMap().clear();
         LayoutNodePtr pNode = std::make_shared<LayoutNode>();
         mpLayout->getNode() = pNode;
         pNode->setChildOrder( rAttribs.getToken( XML_chOrder, XML_b ) );
