@@ -2280,6 +2280,22 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeLogwidthInWriter)
     assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeBrokenEquation)
+{
+    // Given a shape with an equation that does not parse (*sqrt(2)/2, as some files have it),
+    // which the engine evaluates as 0, used as a coordinate:
+    loadFromFile(u"custGeom_brokenEquation.fodp");
+
+    // When saving it to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then that coordinate is 0 and the rest of the shape keeps its guides and handle
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo[3]/a:pt", "x", u"0");
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", "fmla", u"val 25000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testCustomShapeFromOOXMLKeepsOnlyUsedGuides)
 {
     // Given a shape that came from a pptx whose points are numbers and whose guides serve a

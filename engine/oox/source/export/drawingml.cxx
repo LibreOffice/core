@@ -5984,7 +5984,8 @@ struct EquationGuideSet
     std::vector<std::shared_ptr<ExpressionNode>> aNodes; // the parsed equations
 };
 
-// Parses the ODF "Equations" of a shape. Returns false when one of them does not parse.
+// Parses the ODF "Equations" of a shape. An equation that does not parse is a null node, which
+// is emitted as 0, as the engine evaluates it. Returns false when the parser fails in another way.
 bool lcl_ParseEquations(const EnhancedCustomShape2d& rCustomShape2d,
                         const cpo::uno::Sequence<OUString>& rEquationStrings,
                         std::vector<std::shared_ptr<ExpressionNode>>& rNodes)
@@ -5996,6 +5997,13 @@ bool lcl_ParseEquations(const EnhancedCustomShape2d& rCustomShape2d,
         {
             rNodes.push_back(
                 EnhancedCustomShape::FunctionParser::parseFunction(rEquation, rCustomShape2d));
+        }
+        catch (const EnhancedCustomShape::ParseError&)
+        {
+            // the engine evaluates such an equation as 0
+            SAL_INFO("oox.shape.custgeom",
+                     "equation " << rNodes.size() << " does not parse, taken as 0: " << rEquation);
+            rNodes.push_back(nullptr);
         }
         catch (...)
         {
@@ -6026,8 +6034,10 @@ void lcl_EmitEquation(sal_Int32 nEquation, OoxmlEqContext& rCtx)
     rState = 1;
     const ExpressionNode* pNode = (*rCtx.pNodes)[nEquation].get();
     OString aToken;
-    if (pNode && pNode->getType() == ExpressionFunct::EnumAdjustment
-        && rCtx.rAngleAdjustments60000.count(pNode->getIndex()) > 0)
+    if (!pNode)
+        aToken = "0"_ostr; // an equation that did not parse
+    else if (pNode->getType() == ExpressionFunct::EnumAdjustment
+             && rCtx.rAngleAdjustments60000.count(pNode->getIndex()) > 0)
     {
         rCtx.rUsedAdjustments.insert(pNode->getIndex());
         aToken = "adj" + OString::number(pNode->getIndex() + 1);
@@ -7341,7 +7351,7 @@ bool lcl_BuildParametricPlan(
     std::vector<std::shared_ptr<ExpressionNode>> aNodes;
     if (!lcl_ParseEquations(rCustomShape2d, rEquationStrings, aNodes))
     {
-        SAL_INFO("oox.shape.custgeom", "not parametric: an equation does not parse");
+        SAL_INFO("oox.shape.custgeom", "not parametric: the equations cannot be parsed");
         return false;
     }
     std::set<sal_Int32> aAngleAdjustments60000;
