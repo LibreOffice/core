@@ -1411,9 +1411,9 @@ public:
         Scroll Lock.  Use the following mask to retrieve the state of each
         indicator:
 
-            KeyIndicatorState::CAPS_LOCK
-            KeyIndicatorState::NUM_LOCK
-            KeyIndicatorState::SCROLL_LOCK
+            KeyIndicatorState::CAPSLOCK
+            KeyIndicatorState::NUMLOCK
+            KeyIndicatorState::SCROLLLOCK
       */
     KeyIndicatorState GetIndicatorState() const;
 
