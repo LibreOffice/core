@@ -296,7 +296,7 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
         bNewBreak=true;
     }
 
-    if (!(bNewBreak || icuBI->mpValue->maICUText.pData != rText.pData))
+    if (!(bNewBreak || icuBI->mpValue->maICUText != rText))
         return;
 
     const UChar *pText = reinterpret_cast<const UChar *>(rText.getStr());
