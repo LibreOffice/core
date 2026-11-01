@@ -163,6 +163,15 @@ public:
         return nullptr;
     }
 
+    /** The cached item of the column when its cell is the one directly above rPos. */
+    Item* getAbove( const ScAddress& rPos )
+    {
+        ColCacheType::iterator it = maCache.find(rPos.Col());
+        if (it == maCache.end() || it->second->mnRow + 1 != rPos.Row())
+            return nullptr;
+        return it->second.get();
+    }
+
     void store( const ScAddress& rPos, ScFormulaCell* pCell )
     {
         ColCacheType::iterator it = maCache.find(rPos.Col());
@@ -334,6 +343,17 @@ void applySharedFormulas(
     }
 }
 
+/** A new cell at rPos in the formula group of rAbove, the cell directly above it. */
+ScFormulaCell* joinGroupAbove( ScDocumentImport& rDoc, const ScAddress& rPos, ScFormulaCell& rAbove )
+{
+    ScFormulaCellGroupRef xGroup = rAbove.GetCellGroup();
+    if (!xGroup)
+        // The cell above is not grouped yet. Start a new group.
+        xGroup = rAbove.CreateCellGroup(1, false);
+    ++xGroup->mnLength;
+    return new ScFormulaCell(rDoc.getDoc(), rPos, xGroup);
+}
+
 void applyCellFormulas(
     ScDocumentImport& rDoc, CachedTokenArray& rCache,
     const Sequence<ExternalLinkInfo>& rExternalLinks,
@@ -351,17 +371,8 @@ void applyCellFormulas(
             if (p->mnRow + 1 == aPos.Row())
             {
                 // Put them in the same formula group.
-                ScFormulaCell& rPrev = *p->mpCell;
-                ScFormulaCellGroupRef xGroup = rPrev.GetCellGroup();
-                if (!xGroup)
-                {
-                    // Last cell is not grouped yet. Start a new group.
-                    assert(rPrev.aPos.Row() == p->mnRow);
-                    xGroup = rPrev.CreateCellGroup(1, false);
-                }
-                ++xGroup->mnLength;
-
-                pCell = new ScFormulaCell(rDoc.getDoc(), aPos, xGroup);
+                assert(p->mpCell->aPos.Row() == p->mnRow);
+                pCell = joinGroupAbove(rDoc, aPos, *p->mpCell);
             }
             else
                 pCell = new ScFormulaCell(rDoc.getDoc(), aPos, p->mpCell->GetCode()->Clone());
@@ -399,7 +410,16 @@ void applyCellFormulas(
             ScFormulaCell::ResolveImplicitIntersection(*pCode, rDoc.getDoc(), aPos);
         }
 
-        ScFormulaCell* pCell = new ScFormulaCell(rDoc.getDoc(), aPos, std::move(pCode));
+        // An equivalent formula can be written differently from the text the cache predicts, for
+        // example FALSE where the prediction has FALSE(), so the compiled tokens are compared with
+        // the formula directly above, and an equal formula joins its group.
+        std::unique_ptr<ScFormulaCell> pCompiled(new ScFormulaCell(rDoc.getDoc(), aPos, std::move(pCode)));
+        CachedTokenArray::Item* pAbove = rCache.getAbove(aPos);
+        ScFormulaCell* pCell;
+        if (pAbove && pCompiled->CompareByTokenArray(*pAbove->mpCell) == ScFormulaCell::EqualRelativeRef)
+            pCell = joinGroupAbove(rDoc, aPos, *pAbove->mpCell);
+        else
+            pCell = pCompiled.release();
         if (rItem.mbDynamicArrayMaster)
             pCell->SetDynamicArrayMaster(true);
         rDoc.setFormulaCell(aPos, pCell);
