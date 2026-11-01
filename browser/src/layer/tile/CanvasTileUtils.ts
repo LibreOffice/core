@@ -44,6 +44,14 @@ namespace cool {
 		private static readonly littleEndian =
 			new Uint8Array(new Uint32Array([1]).buffer)[0] === 1;
 
+		// The image before a delta chunk, which its row copies read from. Kept
+		// between calls to avoid allocating a tile-sized buffer per chunk.
+		private static previousImage: Uint8Array | null = null;
+
+		// Spans up to this many bytes are copied byte by byte, because set() on a
+		// subarray costs more than the loop for them.
+		private static readonly smallSpanBytes = 32;
+
 		// Cairo (and therefore the server's tile buffers) uses premultiplied alpha,
 		// but ImageData / 2D-canvas compositing expects straight alpha. We convert
 		// the changed pixels back as deltas are applied. A lookup table keyed by
@@ -173,8 +181,10 @@ namespace cool {
 					);
 				}
 
-				// copy old data to work from:
-				const oldData = new Uint8Array(imageData);
+				// Row copies read the image as it was before this chunk.
+				const oldData = this.hasRowCopy(delta)
+					? this.snapshot(imageData)
+					: imageData;
 
 				if (debug)
 					console.debug(
@@ -200,6 +210,24 @@ namespace cool {
 
 				offset += len;
 			}
+		}
+
+		// Whether the chunk, which ends at 't', has a row copy ('c'). Spans ('d')
+		// are skipped by their length.
+		private static hasRowCopy(delta: Uint8Array): boolean {
+			for (let i = 0; i < delta.length; ) {
+				if (delta[i] === 99) return true;
+				if (delta[i] !== 100) return false;
+				i += 4 + delta[i + 3] * 4;
+			}
+			return false;
+		}
+
+		private static snapshot(image: Uint8Array): Uint8Array {
+			if (!this.previousImage || this.previousImage.length !== image.length)
+				this.previousImage = new Uint8Array(image.length);
+			this.previousImage.set(image);
+			return this.previousImage;
 		}
 
 		private static applyDeltaChunk(
@@ -244,13 +272,13 @@ namespace cool {
 									destRow,
 							);
 						i += 4;
-						for (let cnt = 0; cnt < count; ++cnt) {
-							const src = (srcRow + cnt) * width * 4;
-							const dest = (destRow + cnt) * width * 4;
-							for (let j = 0; j < width * 4; ++j) {
-								imgData[dest + j] = oldData[src + j];
-							}
-						}
+						const rowBytes = width * 4;
+						const rows = Math.min(count, height - destRow);
+						if (rows > 0)
+							imgData.set(
+								oldData.subarray(srcRow * rowBytes, (srcRow + rows) * rowBytes),
+								destRow * rowBytes,
+							);
 						break;
 					}
 					case 100: {
@@ -275,7 +303,9 @@ namespace cool {
 						i += 4;
 						span *= 4;
 						this.unpremultiply(delta, span, i);
-						for (let j = 0; j < span; ++j) imgData[offset++] = delta[i + j];
+						if (span <= this.smallSpanBytes || offset + span > imgData.length)
+							for (let j = 0; j < span; ++j) imgData[offset++] = delta[i + j];
+						else imgData.set(delta.subarray(i, i + span), offset);
 						i += span;
 						// imgData.data[offset - 2] = 256; // debug - blue terminator
 						break;

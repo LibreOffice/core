@@ -49,6 +49,28 @@ describe('CanvasTileUtils', function () {
 		return [count & 0xff, count >> 8, ...maskRow, ...pixels];
 	}
 
+	const size = 256;
+
+	// A 256x256 tile of opaque runs of varying length, so both mask bits and
+	// new pixels appear in every mask byte, plus a transparent stretch.
+	function testTile(seed: number): Uint8Array {
+		const pixels = new Uint8Array(size * size * 4);
+		for (let y = 0; y < size; ++y) {
+			let x = 0;
+			while (x < size) {
+				seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+				const run = 1 + (seed % 13);
+				const transparent = y % 32 === 5 && x < 64;
+				const pixel = transparent
+					? [0, 0, 0, 0]
+					: [seed & 0xff, (seed >> 8) & 0xff, (seed >> 16) & 0xff, 255];
+				for (let i = 0; i < run && x < size; ++i, ++x)
+					pixels.set(pixel, (y * size + x) * 4);
+			}
+		}
+		return pixels;
+	}
+
 	describe('unrle', function () {
 		it('expands repeated pixels and restarts each row from transparent', function () {
 			// Row 0: red, repeat, blue, repeat. Row 1: repeat (transparent), green, repeat, repeat.
@@ -127,24 +149,7 @@ describe('CanvasTileUtils', function () {
 		});
 
 		it('decodes a full tile back to the pixels it was encoded from', function () {
-			const size = 256;
-			const pixels = new Uint8Array(size * size * 4);
-			// Opaque runs of varying length, so both mask bits and new pixels
-			// appear in every mask byte, plus a transparent stretch.
-			let seed = 7;
-			for (let y = 0; y < size; ++y) {
-				let x = 0;
-				while (x < size) {
-					seed = (seed * 1103515245 + 12345) & 0x7fffffff;
-					const run = 1 + (seed % 13);
-					const transparent = y % 32 === 5 && x < 64;
-					const pixel = transparent
-						? [0, 0, 0, 0]
-						: [seed & 0xff, (seed >> 8) & 0xff, (seed >> 16) & 0xff, 255];
-					for (let i = 0; i < run && x < size; ++i, ++x)
-						pixels.set(pixel, (y * size + x) * 4);
-				}
-			}
+			const pixels = testTile(7);
 			const data = encodeKeyframe(pixels, size, size);
 			const output = new Uint8Array(size * size * 4);
 
@@ -152,6 +157,190 @@ describe('CanvasTileUtils', function () {
 
 			assert.strictEqual(consumed, data.length);
 			assert.deepStrictEqual(output, pixels);
+		});
+	});
+
+	describe('updateImageFromDeltas', function () {
+		const end = 116; // 't'
+
+		function copyRows(count: number, src: number, dest: number): number[] {
+			return [99, count, src, dest];
+		}
+
+		function span(y: number, x: number, pixels: number[][]): number[] {
+			return [100, y, x, pixels.length, ...pixels.flat()];
+		}
+
+		// A 4x4 image where each pixel holds its row and column.
+		function smallImage(): Uint8Array {
+			const image = new Uint8Array(4 * 4 * 4);
+			for (let y = 0; y < 4; ++y)
+				for (let x = 0; x < 4; ++x) image.set([y, x, 9, 255], (y * 4 + x) * 4);
+			return image;
+		}
+
+		function rowOf(image: Uint8Array, y: number): number[] {
+			return Array.from(image.subarray(y * 16, (y + 1) * 16));
+		}
+
+		it('copies rows from the image as it was before the delta', function () {
+			const old = smallImage();
+			const image = smallImage();
+
+			// Scroll up by one row: rows 1-3 move to rows 0-2.
+			cool.CanvasTileUtils.updateImageFromDeltas(
+				image,
+				new Uint8Array([...copyRows(3, 1, 0), end]),
+				0,
+				4,
+			);
+
+			assert.deepStrictEqual(rowOf(image, 0), rowOf(old, 1));
+			assert.deepStrictEqual(rowOf(image, 1), rowOf(old, 2));
+			assert.deepStrictEqual(rowOf(image, 2), rowOf(old, 3));
+			assert.deepStrictEqual(rowOf(image, 3), rowOf(old, 3));
+		});
+
+		it('writes spans of new pixels as straight alpha', function () {
+			const image = smallImage();
+			const expected = smallImage();
+			expected.set([128, 64, 0, 128, 1, 2, 3, 255], (2 * 4 + 1) * 4);
+
+			cool.CanvasTileUtils.updateImageFromDeltas(
+				image,
+				new Uint8Array([
+					...span(2, 1, [
+						[64, 32, 0, 128],
+						[1, 2, 3, 255],
+					]),
+					end,
+				]),
+				0,
+				4,
+			);
+
+			assert.deepStrictEqual(image, expected);
+		});
+
+		it('copies a row as it was before the delta, after a span changed it', function () {
+			const old = smallImage();
+			const image = smallImage();
+			const red = [255, 0, 0, 255];
+
+			cool.CanvasTileUtils.updateImageFromDeltas(
+				image,
+				new Uint8Array([
+					...span(0, 0, [red, red, red, red]),
+					...copyRows(1, 0, 1),
+					end,
+				]),
+				0,
+				4,
+			);
+
+			assert.deepStrictEqual(rowOf(image, 0), [red, red, red, red].flat());
+			assert.deepStrictEqual(rowOf(image, 1), rowOf(old, 0));
+		});
+
+		it('applies the deltas after the keyframe in order', function () {
+			const image = smallImage();
+			const red = [255, 0, 0, 255];
+			const keyframe = [1, 2, 3, 4, 5];
+
+			cool.CanvasTileUtils.updateImageFromDeltas(
+				image,
+				new Uint8Array([
+					...keyframe,
+					...span(0, 0, [red, red, red, red]),
+					end,
+					...copyRows(1, 0, 3),
+					end,
+				]),
+				keyframe.length,
+				4,
+			);
+
+			// The second delta copies the row that the first one painted.
+			assert.deepStrictEqual(rowOf(image, 0), [red, red, red, red].flat());
+			assert.deepStrictEqual(rowOf(image, 3), rowOf(image, 0));
+		});
+
+		// Encode the change from prev to cur the way kit/Delta.hpp does:
+		// unchanged rows are skipped, a row found elsewhere in prev is copied,
+		// and other rows get spans of changed pixels, at least 3 and at most
+		// 254 pixels long.
+		function encodeDelta(prev: Uint8Array, cur: Uint8Array): Uint8Array {
+			const rowBytes = size * 4;
+			const sameRow = (a: number, b: number) =>
+				prev
+					.subarray(a * rowBytes, (a + 1) * rowBytes)
+					.every((v, i) => v === cur[b * rowBytes + i]);
+			const samePixel = (o: number) =>
+				prev[o] === cur[o] &&
+				prev[o + 1] === cur[o + 1] &&
+				prev[o + 2] === cur[o + 2] &&
+				prev[o + 3] === cur[o + 3];
+			const out: number[] = [];
+			let lastCopy = -1;
+			for (let y = 0; y < size; ++y) {
+				if (sameRow(y, y)) continue;
+				let match = -1;
+				for (let m = 0; m < size && match < 0; ++m)
+					if (sameRow(m, y)) match = m;
+				if (match >= 0) {
+					const count = lastCopy >= 0 ? out[lastCopy + 1] : 0;
+					if (
+						lastCopy >= 0 &&
+						out[lastCopy + 2] + count === match &&
+						out[lastCopy + 3] + count === y
+					)
+						out[lastCopy + 1]++;
+					else {
+						lastCopy = out.length;
+						out.push(...copyRows(1, match, y));
+					}
+					continue;
+				}
+				lastCopy = -1;
+				for (let x = 0; x < size; ) {
+					while (x < size && samePixel((y * size + x) * 4)) ++x;
+					const pixels: number[][] = [];
+					while (
+						x + pixels.length < size &&
+						pixels.length < 254 &&
+						(pixels.length < 3 ||
+							!samePixel((y * size + x + pixels.length) * 4))
+					) {
+						const o = (y * size + x + pixels.length) * 4;
+						pixels.push(Array.from(cur.subarray(o, o + 4)));
+					}
+					if (pixels.length) out.push(...span(y, x, pixels));
+					x += pixels.length;
+				}
+			}
+			out.push(end);
+			return new Uint8Array(out);
+		}
+
+		it('turns a full tile into the scrolled and edited one', function () {
+			const prev = testTile(7);
+			// Scrolled up by 40 rows, with new rows at the bottom and an edit.
+			const cur = new Uint8Array(prev.length);
+			cur.set(prev.subarray(40 * size * 4));
+			cur.set(testTile(11).subarray(0, 40 * size * 4), (size - 40) * size * 4);
+			for (let y = 100; y < 114; ++y)
+				for (let x = 60; x < 80; ++x)
+					cur.set([0, 0, 0, 255], (y * size + x) * 4);
+			const image = new Uint8Array(prev);
+
+			cool.CanvasTileUtils.updateImageFromDeltas(
+				image,
+				encodeDelta(prev, cur),
+				0,
+				size,
+			);
+
+			assert.deepStrictEqual(image, cur);
 		});
 	});
 });
