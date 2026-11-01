@@ -39,7 +39,10 @@ namespace cool {
 	}
 
 	export abstract class CanvasTileUtils {
-		private static lastPixel = new Uint8Array(4);
+		// A DataView reads in an explicit byte order, a Uint32Array writes in the
+		// platform's, so pixels are read in the platform's order to copy their bytes as-is.
+		private static readonly littleEndian =
+			new Uint8Array(new Uint32Array([1]).buffer)[0] === 1;
 
 		// Cairo (and therefore the server's tile buffers) uses premultiplied alpha,
 		// but ImageData / 2D-canvas compositing expects straight alpha. We convert
@@ -80,6 +83,9 @@ namespace cool {
 			}
 		}
 
+		// output.byteOffset + outputOffset must be a multiple of 4, and output must
+		// hold width * height * 4 bytes from outputOffset. Decoding stops at the
+		// first row that does not fit in data, and leaves the rows below as they were.
 		public static unrle(
 			data: Uint8Array,
 			width: number,
@@ -87,46 +93,49 @@ namespace cool {
 			output: Uint8Array,
 			outputOffset: number = 0,
 		): number {
-			// Byte bashing fun
-			var offset = 0;
-			for (var y = 0; y < height; ++y) {
-				var rleSize = data[offset] + data[offset + 1] * 256;
+			// Pixels are copied as 32-bit words.
+			const output32 = new Uint32Array(
+				output.buffer,
+				output.byteOffset + outputOffset,
+				width * height,
+			);
+			const input = new DataView(data.buffer, data.byteOffset, data.byteLength);
+			const littleEndian = this.littleEndian;
+			let offset = 0;
+			const rleMaskSizeBytes = 256 / 8;
+			for (let y = 0; y < height; ++y) {
+				if (offset + 2 + rleMaskSizeBytes > data.length) return data.length;
+				const rleSize = data[offset] + data[offset + 1] * 256;
+				if (offset + 2 + rleMaskSizeBytes + rleSize * 4 > data.length)
+					return data.length;
 				offset += 2;
 
-				var rleMask = offset;
-				const rleMaskSizeBytes = 256 / 8;
+				const rleMask = offset;
 
 				offset += rleMaskSizeBytes;
 
 				if (rleSize > 0) this.unpremultiply(data, rleSize * 4, offset);
 
-				// It would be rather nice to have real 64bit types [!]
-				this.lastPixel.fill(0);
-				var lastMask = 0;
-				var bitToCheck = 256;
-				var rleMaskOffset = rleMask;
+				let lastPixel = 0;
+				let lastMask = 0;
+				let bitToCheck = 256;
+				let rleMaskOffset = rleMask;
 
-				var pixOffset = y * width * 4 + outputOffset;
-				var pixSrc = offset;
+				let pixOffset = y * width;
+				let pixSrc = offset;
 
-				for (var x = 0; x < width; ++x) {
+				for (let x = 0; x < width; ++x) {
 					if (bitToCheck > 128) {
 						bitToCheck = 1;
 						lastMask = data[rleMaskOffset++];
 					}
 					if (!(lastMask & bitToCheck)) {
-						// subarray has a significant overhead on Firefox
-						//this.lastPixel.set(data.subarray(pixSrc, pixSrc + 4));
-						this.lastPixel[0] = data[pixSrc];
-						this.lastPixel[1] = data[pixSrc + 1];
-						this.lastPixel[2] = data[pixSrc + 2];
-						this.lastPixel[3] = data[pixSrc + 3];
+						lastPixel = input.getUint32(pixSrc, littleEndian);
 						pixSrc += 4;
 					}
 					bitToCheck = bitToCheck << 1;
 
-					output.set(this.lastPixel, pixOffset);
-					pixOffset += 4;
+					output32[pixOffset++] = lastPixel;
 				}
 
 				offset += rleSize * 4;
