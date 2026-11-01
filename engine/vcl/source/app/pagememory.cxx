@@ -75,6 +75,16 @@ void release(void* pAddress, std::size_t nSize)
     VirtualFree(pAddress, 0, MEM_RELEASE);
 #endif
 }
+
+void makeInaccessible(void* pAddress, std::size_t nSize)
+{
+#if defined SAL_UNX
+    mprotect(pAddress, nSize, PROT_NONE);
+#elif defined _WIN32
+    DWORD nOldProtect;
+    VirtualProtect(pAddress, nSize, PAGE_NOACCESS, &nOldProtect);
+#endif
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

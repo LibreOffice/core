@@ -13,6 +13,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_app_test, \
 	vcl/qa/cppunit/app/test_IconThemeInfo \
 	vcl/qa/cppunit/app/test_IconThemeScanner \
 	vcl/qa/cppunit/app/test_IconThemeSelector \
+	vcl/qa/cppunit/app/test_ThrowawayMemory \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,vcl_app_test,\

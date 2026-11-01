@@ -26,6 +26,10 @@ void* allocate(std::size_t& rSize);
 
 /** Returns to the system pages that allocate returned, with the size it set. */
 void release(void* pAddress, std::size_t nSize);
+
+/** Makes pages that allocate returned inaccessible instead of returning them, so that any later
+    access faults. They stay mapped for the life of the process. */
+void makeInaccessible(void* pAddress, std::size_t nSize);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

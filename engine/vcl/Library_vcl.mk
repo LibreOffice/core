@@ -468,6 +468,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/app/pagememory \
     vcl/source/app/svcache \
     vcl/source/app/svdata \
+    vcl/source/app/throwawaymemory \
     vcl/source/app/svmain \
     vcl/source/app/timer \
     vcl/source/app/unohelp2 \
