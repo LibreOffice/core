@@ -98,7 +98,10 @@ class LayersCompositor extends SlideCompositor {
 		];
 	}
 
-	public computeLayerResolution(width: number, height: number) {
+	public computeLayerResolution(
+		width: number,
+		height: number,
+	): [number, number] {
 		width *= 1.2;
 		height *= 1.2;
 		let resolutionWidth = 960;

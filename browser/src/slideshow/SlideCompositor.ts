@@ -66,6 +66,12 @@ abstract class SlideCompositor {
 		bIsTextElement: boolean,
 	): AnimatedElement;
 
+	/// The resolution of a layer that is shown in an area of the given size in CSS pixels.
+	public abstract computeLayerResolution(
+		width: number,
+		height: number,
+	): [number, number];
+
 	public computeLayerSize(width: number, height: number): [number, number] {
 		// compute the slide size in pixel with respect to the current resolution
 		const slideWidth = this._metaPresentation.getDocWidth();

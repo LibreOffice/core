@@ -95,10 +95,16 @@ class VectorCompositor extends SlideCompositor {
 
 	public fetchAndRun(slideNumber: number, callback: VoidFunction): void {
 		super.fetchAndRun(slideNumber, callback);
-		this._runWhenReady(slideNumber, () => {
-			const done = this._onGotSlideCallback;
-			this._onGotSlideCallback = null;
-			if (done) done.call(this);
+		// The slide starts once the running code has returned, also when its primitives are
+		// cached, so every listener of the presentation info is set up before the first slide
+		// starts.
+		queueMicrotask(() => {
+			if (this.disposed) return;
+			this._runWhenReady(slideNumber, () => {
+				const done = this._onGotSlideCallback;
+				this._onGotSlideCallback = null;
+				if (done) done.call(this);
+			});
 		});
 	}
 
@@ -557,14 +563,22 @@ class VectorCompositor extends SlideCompositor {
 
 	// --- canvas sizing ----------------------------------------------
 
-	// Primitives render at any scale, so the canvas takes the display
-	// resolution directly, fitted to the slide aspect ratio.
-	private _computeCanvasSize(): [number, number] {
+	// Primitives render at any scale, so the resolution is the requested size in device pixels.
+	public computeLayerResolution(
+		width: number,
+		height: number,
+	): [number, number] {
 		const devicePixelRatio = window.devicePixelRatio || 1;
-		return this.computeLayerSize(
-			window.screen.width * devicePixelRatio,
-			window.screen.height * devicePixelRatio,
+		return [width * devicePixelRatio, height * devicePixelRatio];
+	}
+
+	// The canvas takes the display resolution, fitted to the slide aspect ratio.
+	private _computeCanvasSize(): [number, number] {
+		const [width, height] = this.computeLayerResolution(
+			window.screen.width,
+			window.screen.height,
 		);
+		return this.computeLayerSize(width, height);
 	}
 }
 
