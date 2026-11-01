@@ -24,8 +24,20 @@ interface TimerEntry {
 	cancelled: boolean;
 }
 
+interface FrameEntry {
+	tag: string;
+	type: 'frame';
+	id: number;
+	fireCount: number;
+	cancelled: boolean;
+	// The window whose animation frame the callback waits for.
+	owner: Window;
+}
+
 class TimerRegistry {
 	private timers: Map<ReturnType<typeof setTimeout>, TimerEntry> = new Map();
+	// Animation frames count their ids on their own, so an id can equal the id of a timer.
+	private frames: Map<number, FrameEntry> = new Map();
 
 	setTimeout(
 		tag: string,
@@ -77,6 +89,41 @@ class TimerRegistry {
 		return id;
 	}
 
+	requestAnimationFrame(
+		tag: string,
+		callback: () => void,
+		owner: Window = window,
+	): number {
+		const id = owner.requestAnimationFrame(() => {
+			const entry = this.frames.get(id);
+			if (entry) {
+				entry.fireCount++;
+			}
+			callback();
+			this.frames.delete(id);
+		});
+
+		this.frames.set(id, {
+			tag,
+			type: 'frame',
+			id,
+			fireCount: 0,
+			cancelled: false,
+			owner,
+		});
+
+		return id;
+	}
+
+	cancelAnimationFrame(id: number): void {
+		const entry = this.frames.get(id);
+		if (entry) {
+			entry.cancelled = true;
+			entry.owner.cancelAnimationFrame(id);
+			this.frames.delete(id);
+		}
+	}
+
 	clearTimeout(id: ReturnType<typeof setTimeout>): void {
 		const entry = this.timers.get(id);
 		if (entry) {
@@ -97,7 +144,7 @@ class TimerRegistry {
 
 	// For testing: check if all active timers with the given tag have fired at least once
 	hasFired(tag: string): boolean {
-		for (const entry of this.timers.values()) {
+		for (const entry of this.entries()) {
 			if (entry.tag === tag && entry.fireCount === 0) {
 				return false;
 			}
@@ -107,7 +154,7 @@ class TimerRegistry {
 
 	// For testing: check if there are any active (not cancelled) timers with the given tag
 	hasActive(tag: string): boolean {
-		for (const entry of this.timers.values()) {
+		for (const entry of this.entries()) {
 			if (entry.tag === tag) {
 				return true;
 			}
@@ -118,12 +165,16 @@ class TimerRegistry {
 	// For testing: get the number of times timers with the given tag have fired
 	getFireCount(tag: string): number {
 		let count = 0;
-		for (const entry of this.timers.values()) {
+		for (const entry of this.entries()) {
 			if (entry.tag === tag) {
 				count += entry.fireCount;
 			}
 		}
 		return count;
+	}
+
+	private entries(): (TimerEntry | FrameEntry)[] {
+		return [...this.timers.values(), ...this.frames.values()];
 	}
 }
 

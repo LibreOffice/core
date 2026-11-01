@@ -23,20 +23,42 @@ abstract class SlideRenderer {
 	private _activeLayers: Set<string> = new Set();
 	private _playingVideos: Set<string> = new Set();
 	private _playingGifs: Set<string> = new Set();
+	// True while a slide transition draws into the canvas, until the next slide is rendered.
+	private _paused = false;
 
 	protected constructor(canvas: HTMLCanvasElement) {
 		this._canvas = canvas;
 	}
 
-	/// Schedule on the window that owns the canvas, since a hidden document
-	/// window pauses its animation frames. At most one frame is pending, so the
-	/// slide is drawn once per frame.
+	/// The window that owns the canvas. A hidden document window pauses its
+	/// animation frames, so the slideshow's frames wait for this window.
+	public get canvasWindow(): Window {
+		return this._canvas?.ownerDocument?.defaultView || window;
+	}
+
+	/// Draw the slide on the next animation frame. At most one frame is
+	/// pending, so the slide is drawn once per frame.
 	public requestRender(): void {
-		if (this._requestAnimationFrameId !== null) return;
-		const canvasWindow = this._canvas?.ownerDocument?.defaultView;
-		this._requestAnimationFrameId = (
-			canvasWindow || window
-		).requestAnimationFrame(this.renderFrameHandler);
+		if (this._paused || this._requestAnimationFrameId !== null) return;
+		this._requestAnimationFrameId = this.canvasWindow.requestAnimationFrame(
+			this.renderFrameHandler,
+		);
+	}
+
+	/// Draw the pending frame now, when there is one.
+	public renderPendingFrame(): void {
+		if (this._requestAnimationFrameId === null) return;
+		this.canvasWindow.cancelAnimationFrame(this._requestAnimationFrameId);
+		this.renderFrame();
+	}
+
+	/// Stop drawing while a slide transition draws into the canvas. Drawing goes on when the
+	/// next slide is rendered.
+	public pauseRendering(): void {
+		this._paused = true;
+		if (this._requestAnimationFrameId === null) return;
+		this.canvasWindow.cancelAnimationFrame(this._requestAnimationFrameId);
+		this._requestAnimationFrameId = null;
 	}
 
 	private renderFrame(): void {
@@ -73,6 +95,7 @@ abstract class SlideRenderer {
 		this._activeLayers.clear();
 		this._renderedSlideIndex = slideInfo.indexInSlideShow;
 		this._slideTexture = currentSlideTexture;
+		this._paused = false;
 		this.requestRender();
 	}
 
@@ -86,6 +109,15 @@ abstract class SlideRenderer {
 	protected abstract render(): void;
 
 	public createEmptyTexture(): WebGLTexture | ImageBitmap {
+		return null;
+	}
+
+	/// A texture of the slide in the state its elements hold, drawn by the compositor on the
+	/// GPU. Null when the compositor does not draw the slide that way.
+	public createSlideTexture(
+		_slideIndex: number,
+		_isMipMapEnable: boolean,
+	): WebGLTexture | ImageBitmap | null {
 		return null;
 	}
 
@@ -302,6 +334,37 @@ class SlideRendererGl extends SlideRenderer {
 
 	public createEmptyTexture(): WebGLTexture | ImageBitmap {
 		return this._context.createEmptySlide();
+	}
+
+	public createSlideTexture(
+		slideIndex: number,
+		isMipMapEnable: boolean,
+	): WebGLTexture | ImageBitmap | null {
+		// While something listens for the image of each frame, the frames are composed in 2D
+		// and the layers that the compositor builds here would stay unused.
+		if (this.isDisposed() || app.map.listens('newslideshowframe')) return null;
+		const presenter: SlideShowPresenter = app.map.slideShowPresenter;
+		if (!presenter._slideCompositor.drawsFrames()) return null;
+
+		const gl = this._context.getGl();
+		const texture = gl.createTexture();
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+		gl.texParameteri(
+			gl.TEXTURE_2D,
+			gl.TEXTURE_MIN_FILTER,
+			isMipMapEnable ? gl.LINEAR_MIPMAP_LINEAR : gl.LINEAR,
+		);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		gl.bindTexture(gl.TEXTURE_2D, null);
+		const context = this._context as RenderContextGl;
+		if (isMipMapEnable) context.markMipMapped(texture);
+
+		if (presenter._slideCompositor.drawFrameInto(context, slideIndex, texture))
+			return texture;
+		gl.deleteTexture(texture);
+		return null;
 	}
 
 	public deleteCurrentSlideTexture(): void {

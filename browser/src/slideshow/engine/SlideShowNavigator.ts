@@ -119,17 +119,12 @@ class SlideShowNavigator {
 		);
 		this.lastClickTime = currentTime;
 
-		if (timeDiff < this.RAPID_CLICK_THRESHOLD && timeDiff > 0) {
-			const bRet = this.slideShowHandler.skipPlayingOrNextEffect();
-			if (!bRet) {
-				this.switchSlide(1, true);
-			}
-			return;
-		}
-
+		// Every press skips the transition or the effects that are playing. A rapid press also
+		// skips the transition into the next slide.
+		const bRapid = timeDiff < this.RAPID_CLICK_THRESHOLD && timeDiff > 0;
 		const bRet = this.slideShowHandler.nextEffect();
 		if (!bRet) {
-			this.switchSlide(1, false);
+			this.switchSlide(1, bRapid);
 		}
 	}
 

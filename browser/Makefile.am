@@ -964,7 +964,6 @@ COOL_JS_LST =\
     src/slideshow/engine/ElapsedTime.ts \
     src/slideshow/engine/EventMultiplexer.ts \
     src/slideshow/engine/Event.ts \
-    src/slideshow/engine/FrameSynchronization.ts \
     src/slideshow/engine/InteractiveAnimationSequence.ts \
     src/slideshow/engine/MetaPresentation.ts \
     src/slideshow/engine/MetaSlide.ts \

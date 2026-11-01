@@ -22,12 +22,10 @@ abstract class ISlideChangeBase {
 function SlideChangeTemplate<T extends AGConstructor<any>>(BaseType: T) {
 	abstract class SlideChangeBase extends BaseType implements ISlideChangeBase {
 		private isFinished: boolean;
-		protected requestAnimationFrameId: number;
 		protected transitionParameters: TransitionParameters;
 		protected leavingSlide: WebGLTexture | ImageBitmap;
 		protected enteringSlide: WebGLTexture | ImageBitmap;
 		protected time: number;
-		protected isLastFrame: boolean;
 
 		constructor(...args: any[]) {
 			assert(
@@ -41,32 +39,24 @@ function SlideChangeTemplate<T extends AGConstructor<any>>(BaseType: T) {
 			this.leavingSlide = transitionParameters.current;
 			this.enteringSlide = transitionParameters.next;
 			this.isFinished = false;
-			this.requestAnimationFrameId = null;
 			this.time = null;
-			this.isLastFrame = false;
 		}
 
 		public abstract start(): void;
 
 		public end(): void {
 			if (this.isFinished) return;
-			// end() can be invoked before last render() execution
-			if (this.requestAnimationFrameId !== null) {
-				app.console.debug('SlideChangeBase.end: render() not yet executed');
-				this.requestAnimationFrameId = null;
-				setTimeout(this.end.bind(this), 100);
-				return;
-			}
 			this.isFinished = true;
 			this.endTransition();
 		}
 
 		protected abstract endTransition(): void;
 
-		public perform(nT: number, last: boolean = false): void {
+		// Each step of the transition is drawn as soon as it is performed.
+		public perform(nT: number, _last: boolean = false): void {
 			if (this.isFinished) return;
 			this.time = nT;
-			this.isLastFrame = last;
+			if (nT > 0.0) this.render(nT);
 		}
 
 		public renderFrame(
@@ -76,16 +66,6 @@ function SlideChangeTemplate<T extends AGConstructor<any>>(BaseType: T) {
 			if (nT !== null && nT >= 0.0) {
 				this.render(nT, properties);
 			}
-		}
-
-		protected animate() {
-			if (this.time !== null && this.time > 0.0) {
-				this.render(this.time);
-			}
-			if (!this.isLastFrame)
-				this.requestAnimationFrameId = requestAnimationFrame(
-					this.animate.bind(this),
-				);
 		}
 
 		protected abstract render(

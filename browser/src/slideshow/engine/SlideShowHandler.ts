@@ -51,15 +51,15 @@ class SlideShowHandler {
 		1.0 / SlideShowHandler.MAXIMUM_FRAME_COUNT;
 	public static readonly MAXIMUM_TIMEOUT: number = 4.0;
 	public static readonly MINIMUM_FRAMES_PER_SECONDS: number = 10;
-	public static readonly PREFERRED_FRAMES_PER_SECONDS: number = 60;
-	public static readonly PREFERRED_FRAME_RATE: number =
-		1.0 / SlideShowHandler.PREFERRED_FRAMES_PER_SECONDS;
 
 	private theMetaPres: MetaPresentation;
 	private slideShowNavigator: SlideShowNavigator;
 	private presenter: SlideShowPresenter;
 	private aTimer: ElapsedTime;
-	private aFrameSynchronization: FrameSynchronization;
+	// The pending call of update, an animation frame or a timeout, null when there is none.
+	private nNextUpdateFrame: number = null;
+	private nNextUpdateTimeout: ReturnType<typeof setTimeout> = null;
+	private readonly updateHandler = this.update.bind(this);
 	private aTimerEventQueue: TimerEventQueue;
 	private aActivityQueue: ActivityQueue;
 	private aNextEffectEventArray: NextEffectEventArray;
@@ -129,9 +129,6 @@ class SlideShowHandler {
 		this.presenter = presenter;
 
 		this.aTimer = new ElapsedTime();
-		this.aFrameSynchronization = new FrameSynchronization(
-			SlideShowHandler.PREFERRED_FRAME_RATE,
-		);
 		this.aTimerEventQueue = new TimerEventQueue(this.aTimer);
 		this.aActivityQueue = new ActivityQueue(this.aTimer);
 		this.aNextEffectEventArray = null;
@@ -1078,6 +1075,7 @@ class SlideShowHandler {
 
 						if (aTransitionActivity) {
 							this.bIsTransitionRunning = true;
+							this.slideRenderer.pauseRendering();
 							this.aActivityQueue.addActivity(aTransitionActivity);
 							this.update();
 							this.presenter.stopLoader();
@@ -1110,40 +1108,54 @@ class SlideShowHandler {
 		// process queues
 		this.aTimerEventQueue.process();
 		this.aActivityQueue.process();
-
-		if (!this.bIsTransitionRunning) this.aFrameSynchronization.synchronize();
-
 		this.aActivityQueue.processDequeued();
 
 		this.aTimer.releaseTimer();
 
 		const bActivitiesLeft = !this.aActivityQueue.isEmpty();
 		const bTimerEventsLeft = !this.aTimerEventQueue.isEmpty();
-		const bEventsLeft = bActivitiesLeft || bTimerEventsLeft;
 
-		if (bEventsLeft) {
-			let nNextTimeout;
-			if (bActivitiesLeft) {
+		// An event that the queues fire can call update itself. This call has seen the queues
+		// after it, so the next call it plans replaces the one planned there.
+		this.cancelNextUpdate();
+		const renderer = this.slideRenderer;
+		if (bActivitiesLeft) {
+			// The activities read the clock, so one update per animation frame shows each
+			// frame where the effect is by then, and leaves the main thread free in between.
+			this.bIsIdle = false;
+			this.nNextUpdateFrame = app.timerRegistry.requestAnimationFrame(
+				'slideshowupdate',
+				this.updateHandler,
+				renderer ? renderer.canvasWindow : window,
+			);
+		} else if (bTimerEventsLeft) {
+			let nNextTimeout = this.aTimerEventQueue.nextTimeout();
+			if (nNextTimeout < SlideShowHandler.MINIMUM_TIMEOUT)
 				nNextTimeout = SlideShowHandler.MINIMUM_TIMEOUT;
-				this.aFrameSynchronization.activate();
-			} else {
-				nNextTimeout = this.aTimerEventQueue.nextTimeout();
-				if (nNextTimeout < SlideShowHandler.MINIMUM_TIMEOUT)
-					nNextTimeout = SlideShowHandler.MINIMUM_TIMEOUT;
-				else if (nNextTimeout > SlideShowHandler.MAXIMUM_TIMEOUT)
-					nNextTimeout = SlideShowHandler.MAXIMUM_TIMEOUT;
-				this.aFrameSynchronization.deactivate();
-			}
+			else if (nNextTimeout > SlideShowHandler.MAXIMUM_TIMEOUT)
+				nNextTimeout = SlideShowHandler.MAXIMUM_TIMEOUT;
 
 			this.bIsIdle = false;
-			app.timerRegistry.setTimeout(
+			this.nNextUpdateTimeout = app.timerRegistry.setTimeout(
 				'slideshowupdate',
-				this.update.bind(this),
+				this.updateHandler,
 				nNextTimeout * 1000,
 			);
 		} else {
 			this.bIsIdle = true;
 		}
+
+		// The frame that the activities asked for shows the state they have just set.
+		if (renderer) renderer.renderPendingFrame();
+	}
+
+	private cancelNextUpdate() {
+		if (this.nNextUpdateFrame !== null)
+			app.timerRegistry.cancelAnimationFrame(this.nNextUpdateFrame);
+		if (this.nNextUpdateTimeout !== null)
+			app.timerRegistry.clearTimeout(this.nNextUpdateTimeout);
+		this.nNextUpdateFrame = null;
+		this.nNextUpdateTimeout = null;
 	}
 
 	dispose() {
@@ -1190,12 +1202,6 @@ class SlideShowHandler {
 		nSlideIndex: number,
 		transitionFilterInfo?: TransitionFilterInfo,
 	): WebGLTexture | ImageBitmap | null {
-		const slideImage = this.slideCompositor.getSlide(nSlideIndex);
-		if (!slideImage) {
-			app.console.error('SlideShowHandler: cannot get texture');
-			return null;
-		}
-
 		// added check for mipmap texture
 		let isMipMapEnable = false;
 		if (
@@ -1204,6 +1210,20 @@ class SlideShowHandler {
 			transitionFilterInfo.transitionSubtype
 		) {
 			isMipMapEnable = this.isMipMapsEnable(transitionFilterInfo);
+		}
+
+		// A texture drawn on the GPU leaves the compositor ready to draw the frames of the
+		// slide that follow.
+		const slideTexture = this.slideRenderer.createSlideTexture(
+			nSlideIndex,
+			isMipMapEnable,
+		);
+		if (slideTexture) return slideTexture;
+
+		const slideImage = this.slideCompositor.getSlide(nSlideIndex);
+		if (!slideImage) {
+			app.console.error('SlideShowHandler: cannot get texture');
+			return null;
 		}
 		return this.slideRenderer.createTexture(slideImage, isMipMapEnable);
 	}

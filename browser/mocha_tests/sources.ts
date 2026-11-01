@@ -458,7 +458,6 @@
 /// <reference path="../src/slideshow/engine/ElapsedTime.ts" />
 /// <reference path="../src/slideshow/engine/EventMultiplexer.ts" />
 /// <reference path="../src/slideshow/engine/Event.ts" />
-/// <reference path="../src/slideshow/engine/FrameSynchronization.ts" />
 /// <reference path="../src/slideshow/engine/InteractiveAnimationSequence.ts" />
 /// <reference path="../src/slideshow/engine/MetaPresentation.ts" />
 /// <reference path="../src/slideshow/engine/MetaSlide.ts" />

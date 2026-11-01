@@ -118,6 +118,11 @@ abstract class SlideCompositor {
 		return false;
 	}
 
+	/// True when the compositor draws the frames of the slides straight into a WebGL context.
+	public drawsFrames(): boolean {
+		return false;
+	}
+
 	public abstract getAnimatedLayerInfo(
 		slideHash: string,
 		targetElement: string,

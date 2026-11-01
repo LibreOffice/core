@@ -238,6 +238,10 @@ class VectorCompositor extends SlideCompositor {
 		return targets;
 	}
 
+	public drawsFrames(): boolean {
+		return !this.disposed;
+	}
+
 	public drawFrameInto(
 		context: RenderContextGl,
 		slideIndex: number,
