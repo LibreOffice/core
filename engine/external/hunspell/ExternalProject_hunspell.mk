@@ -13,7 +13,7 @@ $(eval $(call gb_ExternalProject_register_targets,hunspell,\
 	build \
 ))
 
-hunspell_CPPCLAGS=$(CPPFLAGS)
+hunspell_CPPFLAGS:=$(CPPFLAGS)
 
 hunspell_CPPFLAGS+=$(gb_COMPILERDEFS_STDLIB_DEBUG)
 
