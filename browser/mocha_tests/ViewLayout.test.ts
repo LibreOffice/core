@@ -59,6 +59,7 @@ describe('ViewLayout', function () {
 				'_partTilePreFetcher',
 				'_adjacentTilePreFetcher',
 				'shrinkCurrentId',
+				'idleTrimTimer',
 			];
 			for (const field of timeouts) {
 				clearTimeout(tileManager[field]);

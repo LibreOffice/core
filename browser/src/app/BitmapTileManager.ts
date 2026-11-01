@@ -76,6 +76,14 @@ class BitmapTileManager extends RenderManagerBase {
 	// Set when a reclaim drops a key from tileImageCache that the workers still hold.
 	private workerImageCachesStale: boolean = false;
 	private workerImageCachesTrimQueued: boolean = false;
+	// Milliseconds without view updates or decoded tiles before the decoded
+	// images of off-screen tiles are released. Their compressed deltas stay.
+	private idleTrimDelayMs: number = 30000;
+	private idleTrimTimer: any = null;
+	private lastTileActivity: number = 0;
+	// Batches of bitmaps that the main thread is still creating, when there are
+	// no decode workers.
+	private nPendingBitmaps: number = 0;
 
 	//private static _debugTime: any = {}; Reserved for future.
 
@@ -344,6 +352,7 @@ class BitmapTileManager extends RenderManagerBase {
 
 		this.garbageCollect();
 		this.trimWorkerImageCaches();
+		this.noteTileActivity();
 	}
 
 	private createTileBitmap(
@@ -949,18 +958,24 @@ class BitmapTileManager extends RenderManagerBase {
 
 	private reclaimTileBitmapMemory(tile: Tile) {
 		if (tile.image) {
-			tile.image.close();
-			tile.image = null;
-			this.tileImageCache.delete(tile.coords.toString());
-			this.markWorkerImageCachesStale();
-
-			tile.decompressedId = 0;
-			tile.lastPendingId = 0;
+			this.releaseTileImage(tile);
 
 			const n = this.tileBitmapList.findIndex((it) => it == tile);
 			if (n !== -1) this.tileBitmapList.splice(n, 1);
 			this.notifyTileStateChanged();
 		}
+	}
+
+	// Close the image of the tile and drop its decoded pixels. The caller
+	// removes the tile from tileBitmapList.
+	private releaseTileImage(tile: Tile) {
+		tile.image.close();
+		tile.image = null;
+		this.tileImageCache.delete(tile.coords.toString());
+		this.markWorkerImageCachesStale();
+
+		tile.decompressedId = 0;
+		tile.lastPendingId = 0;
 	}
 
 	private initPreFetchPartTiles() {
@@ -1955,7 +1970,56 @@ class BitmapTileManager extends RenderManagerBase {
 			});
 	}
 
+	// Called on each view update and each decoded batch. One timer runs at a
+	// time, and when it fires it waits again for the time left since the last call.
+	private noteTileActivity() {
+		this.lastTileActivity = Date.now();
+		if (!this.idleTrimTimer) this.startIdleTrim(this.idleTrimDelayMs);
+	}
+
+	private startIdleTrim(delay: number) {
+		this.idleTrimTimer = app.timerRegistry.setTimeout(
+			'tileIdleTrim',
+			() => {
+				this.idleTrimTimer = null;
+				const left = this.lastTileActivity + this.idleTrimDelayMs - Date.now();
+				if (left > 0) this.startIdleTrim(left);
+				else if (this.isDecoding()) this.startIdleTrim(this.idleTrimDelayMs);
+				else this.trimOffscreenTiles();
+			},
+			delay,
+		);
+	}
+
+	private stopIdleTrim() {
+		if (!this.idleTrimTimer) return;
+		app.timerRegistry.clearTimeout(this.idleTrimTimer);
+		this.idleTrimTimer = null;
+	}
+
+	private isDecoding(): boolean {
+		return this.nPendingWorkerTasks !== 0 || this.nPendingBitmaps !== 0;
+	}
+
+	// Release the decoded images of the tiles outside the area that the last view
+	// update made current, which includes a margin around the visible tiles.
+	// Scrolling back decodes them again from their compressed deltas, without a
+	// server request.
+	private trimOffscreenTiles() {
+		let released = false;
+		for (const tile of this.tileBitmapList) {
+			if (tile.distanceFromView === 0) continue;
+			this.releaseTileImage(tile);
+			released = true;
+		}
+		if (!released) return;
+
+		this.tileBitmapList = this.tileBitmapList.filter((tile) => tile.image);
+		this.notifyTileStateChanged();
+	}
+
 	public discardAllCache() {
+		this.stopIdleTrim();
 		this.updateAllTileDistances();
 		this.garbageCollect(true);
 		this.reclaimGraphicsMemory();
@@ -1990,6 +2054,8 @@ class BitmapTileManager extends RenderManagerBase {
 		) {
 			return;
 		}
+
+		this.noteTileActivity();
 
 		// Calc: do not set view area too early after load and before we get the cursor position.
 		if (app.map._docLayer.isCalc() && !app.map._docLayer._gotFirstCellCursor)
@@ -2169,10 +2235,13 @@ class BitmapTileManager extends RenderManagerBase {
 			// producing a bitmap): still run the resume/callback/GC path so
 			// coherency-paused drawing resumes.
 			this.endTransactionHandleBitmaps([], []);
-		if (bitmapPromises.length)
+		if (bitmapPromises.length) {
+			++this.nPendingBitmaps;
 			Promise.all(bitmapPromises).then((bitmaps) => {
+				--this.nPendingBitmaps;
 				this.endTransactionHandleBitmaps(pendingDeltas, bitmaps);
 			});
+		}
 	}
 
 	public onWorkerError(e: any) {
