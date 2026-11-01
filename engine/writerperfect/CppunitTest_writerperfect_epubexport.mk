@@ -26,7 +26,6 @@ $(eval $(call gb_CppunitTest_use_libraries,writerperfect_epubexport, \
 	unotest \
 	utl \
 	wpftwriter \
-	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,writerperfect_epubexport,\
