@@ -28,7 +28,7 @@ $(call gb_ExternalProject_get_state_target,cppunit,build) :
 	$(call gb_Trace_EndRange,cppunit,EXTERNAL)
 else
 
-cppunit_CXXFLAGS=$(CXXFLAGS) $(gb_EMSCRIPTEN_CXXFLAGS)
+cppunit_CXXFLAGS=$(CXXFLAGS)
 
 cppunit_CXXFLAGS+=$(gb_COMPILERDEFS_STDLIB_DEBUG)
 

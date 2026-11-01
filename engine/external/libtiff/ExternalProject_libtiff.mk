@@ -52,7 +52,7 @@ $(call gb_ExternalProject_get_state_target,libtiff,build) :
 			--without-x \
 			$(gb_CONFIGURE_DEPENDENCY_TRACKING) \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
-			CFLAGS="$(CFLAGS) $(gb_LTOFLAGS) $(call gb_ExternalProject_get_build_flags,libtiff) $(gb_EMSCRIPTEN_CFLAGS)" \
+			CFLAGS="$(CFLAGS) $(gb_LTOFLAGS) $(call gb_ExternalProject_get_build_flags,libtiff)" \
 			$(if $(SYSTEM_ZLIB),,--with-zlib-include-dir="$(gb_UnpackedTarball_workdir)/zlib") \
 			$(if $(SYSTEM_ZLIB),,--with-zlib-lib-dir="$(gb_StaticLibrary_WORKDIR)") \
 			$(if $(SYSTEM_LIBJPEG),,--with-jpeg-include-dir="$(gb_UnpackedTarball_workdir)/libjpeg-turbo/src") \
