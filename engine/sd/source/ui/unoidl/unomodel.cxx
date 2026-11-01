@@ -716,6 +716,7 @@ private:
 
     void exportAnimate(const Reference<XAnimate>& xAnimate);
     void exportCommand(const Reference<XCommand>& xCommand);
+    void exportTarget(const Any& rTarget);
 
     void convertValue(XMLTokenEnum eAttributeName, OStringBuffer& sTmp, const Any& rValue) const;
     void convertTiming(OStringBuffer& sTmp, const Any& rValue);
@@ -1486,9 +1487,7 @@ void AnimationsExporter::exportContainer(const Reference<XTimeContainer>& xConta
 
             Any aTemp(xIter->getTarget());
             if (aTemp.hasValue())
-            {
-                mrWriter.put("targetElement", getAnimationTargetName(aTemp));
-            }
+                exportTarget(aTemp);
             sal_Int16 nTemp = xIter->getSubItem();
             if (nTemp)
             {
@@ -1504,9 +1503,11 @@ void AnimationsExporter::exportContainer(const Reference<XTimeContainer>& xConta
             double fTemp = xIter->getIterateInterval();
             if (fTemp != 0)
             {
-                OUStringBuffer buf;
-                ::sax::Converter::convertDuration(buf, fTemp / (24 * 60 * 60));
-                mrWriter.put("iterateInterval", sTmp.makeStringAndClear());
+                // In seconds, as the durations of the other nodes are.
+                OStringBuffer aInterval;
+                convertDouble(aInterval, fTemp);
+                aInterval.append('s');
+                mrWriter.put("iterateInterval", aInterval.makeStringAndClear());
             }
         }
 
@@ -1536,6 +1537,18 @@ void AnimationsExporter::exportCommand(const Reference<XCommand>& xCommand)
     mrWriter.put("command", sTmp.makeStringAndClear());
 }
 
+void AnimationsExporter::exportTarget(const Any& rTarget)
+{
+    mrWriter.put("targetElement", getAnimationTargetName(rTarget));
+    SdrObject* pObject = getTargetObject(rTarget);
+    if (!pObject)
+        return;
+
+    mrWriter.put("title", pObject->GetTitle());
+    if (mbAllyState)
+        mrWriter.put("objectName", sd::GetA11yObjectName(*pObject));
+}
+
 void AnimationsExporter::exportAnimate(const Reference<XAnimate>& xAnimate)
 {
     try
@@ -1548,17 +1561,7 @@ void AnimationsExporter::exportAnimate(const Reference<XAnimate>& xAnimate)
 
         Any aTemp(xAnimate->getTarget());
         if (aTemp.hasValue())
-        {
-            mrWriter.put("targetElement", getAnimationTargetName(aTemp));
-            SdrObject* pObject = getTargetObject(aTemp);
-            if (pObject)
-            {
-                mrWriter.put("title", pObject->GetTitle());
-
-                if (mbAllyState)
-                    mrWriter.put("objectName", sd::GetA11yObjectName(*pObject));
-            }
-        }
+            exportTarget(aTemp);
         nTemp = xAnimate->getSubItem();
         if (nTemp)
         {

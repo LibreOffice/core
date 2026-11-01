@@ -4567,6 +4567,22 @@ bool has_child(boost::property_tree::ptree const& rTree, std::string_view aName)
     return rTree.count(std::string(aName)) > 0;
 }
 
+// The first node of an exported animation tree with the given node name, rNode itself or one
+// under it, or null when there is none.
+const boost::property_tree::ptree* findAnimationNode(const boost::property_tree::ptree& rNode,
+                                                     std::string_view aNodeName)
+{
+    if (rNode.get<std::string>("nodeName", "") == aNodeName)
+        return &rNode;
+    auto aChildren = rNode.get_child_optional("children");
+    if (!aChildren)
+        return nullptr;
+    for (const auto& rChild : *aChildren)
+        if (const boost::property_tree::ptree* pFound = findAnimationNode(rChild.second, aNodeName))
+            return pFound;
+    return nullptr;
+}
+
 void readJSON(boost::property_tree::ptree& rTree, std::string const& rJson)
 {
     std::stringstream aStream(rJson);
@@ -4975,6 +4991,25 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoVideoPlayCommand)
     CPPUNIT_ASSERT_EQUAL(std::string("Play"), pCommand->get<std::string>("command"));
     CPPUNIT_ASSERT_EQUAL(child_at(rSlide, "videos", 0).get<std::string>("hash"),
                          pCommand->get<std::string>("targetElement"));
+}
+
+// The node of an effect that plays letter by letter names its target and the title of the target,
+// and gives the delay between the letters in seconds.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoIterate)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("PresentationInfoIterate.fodp");
+    Scheduler::ProcessEventsToIdle();
+
+    boost::property_tree::ptree aTree;
+    readJSON(aTree, pXImpressDocument->getPresentationInfo());
+
+    const boost::property_tree::ptree& rRoot
+        = child_at(aTree, "slides", 0).get_child("animations").get_child("root");
+    const boost::property_tree::ptree* pIterate = findAnimationNode(rRoot, "Iterate");
+    CPPUNIT_ASSERT(pIterate);
+    CPPUNIT_ASSERT(!pIterate->get<std::string>("targetElement").empty());
+    CPPUNIT_ASSERT_EQUAL(std::string("Iterated text"), pIterate->get<std::string>("title"));
+    CPPUNIT_ASSERT_EQUAL(std::string("0.1s"), pIterate->get<std::string>("iterateInterval"));
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testA11yPresentationInfo)

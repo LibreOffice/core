@@ -89,6 +89,7 @@
 /// <reference path="./VectorManager.test.ts" />
 /// <reference path="./ShapeTransitionMask.test.ts" />
 /// <reference path="./VectorSlideLayers.test.ts" />
+/// <reference path="./SlideAnimations.test.ts" />
 /// <reference path="./MessageParser.test.ts" />
 /// <reference path="./CalcObjectView.test.ts" />
 /// <reference path="./CalcBlockUpdate.test.ts" />

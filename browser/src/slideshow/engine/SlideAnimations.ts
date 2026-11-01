@@ -50,6 +50,23 @@ function collectCommandTargets(
 	}
 }
 
+// An iterate container holds the target and the sub item of its effect, and the nodes under it
+// name none of their own. Give them the ones of the container.
+function inheritIterateTarget(
+	aNode: ContainerNodeInfo,
+	sTarget: string,
+	sSubItem: string,
+) {
+	for (const aChild of getNodeChildren(aNode)) {
+		const aAnimate = aChild as AnimateNodeInfo;
+		if (!aAnimate.targetElement) {
+			aAnimate.targetElement = sTarget;
+			if (!aAnimate.subItem) aAnimate.subItem = sSubItem;
+		}
+		inheritIterateTarget(aChild, aAnimate.targetElement, aAnimate.subItem);
+	}
+}
+
 function isAttributeSupported(aNodeInfo: AnimateNodeInfo) {
 	if (!aNodeInfo.attributeName) {
 		console.error('slideshow: missing attributeName');
@@ -98,9 +115,23 @@ function createAnimationNode(
 				aNodeContext,
 			);
 			break;
-		case AnimationNodeType.Iterate:
-			window.app.console.log('createAnimationNode: Iterate not implemented');
-			return null;
+		case AnimationNodeType.Iterate: {
+			// The effect plays on the whole target at once, with all its letters, words or
+			// paragraphs together.
+			const aIterateInfo = aNodeInfo as IterateNodeInfo;
+			if (aIterateInfo.targetElement)
+				inheritIterateTarget(
+					aIterateInfo,
+					aIterateInfo.targetElement,
+					aIterateInfo.subItem,
+				);
+			aCreatedNode = aCreatedContainer = new ParallelTimeContainer(
+				aNodeInfo,
+				aParentNode,
+				aNodeContext,
+			);
+			break;
+		}
 		case AnimationNodeType.Seq:
 			aCreatedNode = aCreatedContainer = new SequentialTimeContainer(
 				aNodeInfo,
