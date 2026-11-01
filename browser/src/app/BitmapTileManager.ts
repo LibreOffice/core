@@ -73,6 +73,9 @@ class BitmapTileManager extends RenderManagerBase {
 	private thumbnailSawPendingTiles: boolean = false;
 	private dehydratedCurrentTiles: string[] = [];
 	private shrinkCurrentId: any = null;
+	// Set when a reclaim drops a key from tileImageCache that the workers still hold.
+	private workerImageCachesStale: boolean = false;
+	private workerImageCachesTrimQueued: boolean = false;
 
 	//private static _debugTime: any = {}; Reserved for future.
 
@@ -340,6 +343,7 @@ class BitmapTileManager extends RenderManagerBase {
 				this.transactionCallbacks.pop()();
 
 		this.garbageCollect();
+		this.trimWorkerImageCaches();
 	}
 
 	private createTileBitmap(
@@ -948,6 +952,7 @@ class BitmapTileManager extends RenderManagerBase {
 			tile.image.close();
 			tile.image = null;
 			this.tileImageCache.delete(tile.coords.toString());
+			this.markWorkerImageCachesStale();
 
 			tile.decompressedId = 0;
 			tile.lastPendingId = 0;
@@ -1920,6 +1925,34 @@ class BitmapTileManager extends RenderManagerBase {
 		}
 		if (this.dehydratedCurrentTiles.length)
 			app.sectionContainer.deferDrawing(this.rehydrateCurrentTiles.bind(this));
+	}
+
+	// The workers keep their own copy of each decoded tile image, and drop the
+	// ones that tileImageCache no longer lists at their next transaction or on a
+	// trimImageCache message. Each worker gets one message per task, however many
+	// tiles were reclaimed in it.
+	private markWorkerImageCachesStale() {
+		this.workerImageCachesStale = true;
+		if (this.workerImageCachesTrimQueued) return;
+
+		this.workerImageCachesTrimQueued = true;
+		queueMicrotask(() => {
+			this.workerImageCachesTrimQueued = false;
+			this.trimWorkerImageCaches();
+		});
+	}
+
+	private trimWorkerImageCaches() {
+		// A transaction in flight may add images that tileImageCache does not list
+		// yet. The end of the last transaction in flight calls this again.
+		if (!this.workerImageCachesStale || this.nPendingWorkerTasks !== 0) return;
+
+		this.workerImageCachesStale = false;
+		for (const worker of window.app.socket.getTaskWorkers())
+			worker.postMessage({
+				message: 'trimImageCache',
+				cachedTiles: this.tileImageCache,
+			});
 	}
 
 	public discardAllCache() {

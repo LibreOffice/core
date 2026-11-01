@@ -25,13 +25,21 @@ if ('undefined' === typeof window) {
 
 	console.info('TaskWorker initialised');
 
+	// Drop the images of the tiles that the main thread no longer caches.
+	function syncImageCache(cachedTiles) {
+		for (const key of Array.from(tileImageCache.keys())) {
+			if (!cachedTiles.has(key)) tileImageCache.delete(key);
+		}
+	}
+
 	function onMessage(e) {
 		switch (e.data.message) {
+			case 'trimImageCache':
+				syncImageCache(e.data.cachedTiles);
+				break;
+
 			case 'endTransaction': {
-				// Update tile image cache
-				for (const key of Array.from(tileImageCache.keys())) {
-					if (!e.data.cachedTiles.has(key)) tileImageCache.delete(key);
-				}
+				syncImageCache(e.data.cachedTiles);
 
 				const bitmaps = []; // Promise<ImageBitmap>[]
 				const tilesWithBitmaps = [];

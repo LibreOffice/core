@@ -207,6 +207,8 @@ describe('ViewLayout', function () {
 			// app.socket.sendMessage. Provide both.
 			(app.tile.size as any) = { x: 3840, y: 3840 };
 			app.socket.sendMessage = function () {};
+			// No decode workers: a reclaimed tile has no worker copy to free.
+			(app.socket as any).getTaskWorkers = () => [];
 
 			// The tile grid is enumerated in steps of window.tileSize pixels. The
 			// browser sets this from the server; tests fix it at 256 pixels, which
