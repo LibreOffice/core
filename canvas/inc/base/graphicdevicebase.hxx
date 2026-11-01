@@ -103,8 +103,6 @@ namespace canvas
         typedef Base              BaseType;
         typedef Mutex             MutexType;
 
-        typedef ::rtl::Reference< GraphicDeviceBase > Reference;
-
         GraphicDeviceBase() :
             maDeviceHelper(),
             mbDumpScreenContent(false)
