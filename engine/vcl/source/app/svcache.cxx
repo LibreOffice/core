@@ -20,19 +20,9 @@
 #include <config_fuzzers.h>
 
 #include <vcl/dropcache.hxx>
+#include <pagememory.hxx>
 #include <svcache.hxx>
 #include <svdata.hxx>
-#if defined SAL_UNX
-#include <unistd.h>
-#include <string.h>
-#include <errno.h>
-#include <sys/mman.h>
-#elif defined _WIN32
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#else
-#error Unsupported platform
-#endif
 
 CacheOwner::CacheOwner()
 {
@@ -58,18 +48,11 @@ void* CacheMemory::allocPages(rtl_arena_type* arena, sal_Size* size)
 {
     CacheMemory* pCacheMemory = reinterpret_cast<CacheMemory*>(arena);
 
-    std::size_t n = MEMORY_ALIGN(*size, pCacheMemory->mnPageSize);
-    void* p;
-#if defined SAL_UNX
-    p = mmap(nullptr, n, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
-    if (p == MAP_FAILED)
-        p = nullptr;
-#elif defined _WIN32
-    p = VirtualAlloc(nullptr, n, MEM_COMMIT, PAGE_READWRITE);
-#endif
+    std::size_t n = *size;
+    void* p = vcl::pagememory::allocate(n);
     if (p != nullptr)
     {
-        pCacheMemory->mnAllocatedPages += (n / pCacheMemory->mnPageSize);
+        pCacheMemory->mnAllocatedPages += (n / vcl::pagememory::pageSize());
         pCacheMemory->mnMaxAllocatedPages
             = std::max(pCacheMemory->mnMaxAllocatedPages, pCacheMemory->mnAllocatedPages);
         *size = n;
@@ -80,13 +63,8 @@ void* CacheMemory::allocPages(rtl_arena_type* arena, sal_Size* size)
 void CacheMemory::freePages(rtl_arena_type* arena, void* address, sal_Size size)
 {
     CacheMemory* pCacheMemory = reinterpret_cast<CacheMemory*>(arena);
-#if defined SAL_UNX
-    munmap(address, size);
-#elif defined _WIN32
-    (void)size; // unused
-    VirtualFree(address, 0, MEM_RELEASE);
-#endif
-    pCacheMemory->mnAllocatedPages -= (size / pCacheMemory->mnPageSize);
+    vcl::pagememory::release(address, size);
+    pCacheMemory->mnAllocatedPages -= (size / vcl::pagememory::pageSize());
 }
 
 CacheMemory::CacheMemory()
@@ -96,19 +74,6 @@ CacheMemory::CacheMemory()
     , mnAllocatedPages(0)
     , mnMaxAllocatedPages(0)
 {
-#if defined SAL_UNX
-#if defined FREEBSD || defined NETBSD || defined OPENBSD || defined DRAGONFLY || defined HAIKU
-    mnPageSize = getpagesize();
-#else
-    mnPageSize = sysconf(_SC_PAGESIZE);
-#endif
-#elif defined _WIN32
-    SYSTEM_INFO info;
-    GetSystemInfo(&info);
-    mnPageSize = info.dwPageSize;
-#else
-#error Unsupported platform
-#endif
 }
 
 size_t CacheMemory::GetAllocatedPages() const { return mnAllocatedPages; }

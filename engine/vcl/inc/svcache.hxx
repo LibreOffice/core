@@ -36,7 +36,6 @@ private:
     std::array<rtl_arena_type*, nAlignments> maCacheArenas;
     size_t mnSmallest;
     size_t mnLargest;
-    size_t mnPageSize;
     size_t mnAllocatedPages;
     size_t mnMaxAllocatedPages;
 
