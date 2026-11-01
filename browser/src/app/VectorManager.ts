@@ -1901,6 +1901,10 @@ class VectorManager extends RenderManagerBase {
 		if (!parts) return;
 		for (const partId of parts) {
 			this._redrawRenderedPreviews(partId);
+			// A page draws the objects of its master too, so it shows what the master uses.
+			for (const [pageId, data] of this._cache) {
+				if (data.masterPartId === partId) this._redrawRenderedPreviews(pageId);
+			}
 		}
 	}
 

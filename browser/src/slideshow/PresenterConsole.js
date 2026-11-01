@@ -129,6 +129,13 @@ class PresenterConsole {
 			`;
 	}
 
+	// Each slide has a preview id of its own, so a preview that is drawn again later, for example
+	// once one of its images arrives, still names its slide. The ids start above the ones that the
+	// slide sorter of the document uses, which are the slide indexes.
+	_previewId(slideIndex) {
+		return 2000 + slideIndex;
+	}
+
 	_getSlidesCount() {
 		return this._presenter._getSlidesCount();
 	}
@@ -1172,7 +1179,7 @@ class PresenterConsole {
 	_resizePreviews(width, height) {
 		let preview;
 		let previews = this._slides.querySelector('#slides-preview');
-		let size = this._map.getPreview(2000, 0, width, height, {
+		let size = this._map.getPreview(this._previewId(0), 0, width, height, {
 			fetchThumbnail: false,
 			autoUpdate: false,
 		});
@@ -1185,10 +1192,16 @@ class PresenterConsole {
 				width !== size.width ||
 				height !== size.height
 			) {
-				this._map.getPreview(2000, preview._index, size.width, size.height, {
-					autoUpdate: false,
-					slideshow: true,
-				});
+				this._map.getPreview(
+					this._previewId(preview._index),
+					preview._index,
+					size.width,
+					size.height,
+					{
+						autoUpdate: false,
+						slideshow: true,
+					},
+				);
 			}
 		}
 	}
@@ -1443,15 +1456,27 @@ class PresenterConsole {
 			return;
 		}
 
-		let size = this._map.getPreview(2000, 0, rect.width, rect.height, {
-			fetchThumbnail: false,
-			autoUpdate: false,
-		});
+		let size = this._map.getPreview(
+			this._previewId(0),
+			0,
+			rect.width,
+			rect.height,
+			{
+				fetchThumbnail: false,
+				autoUpdate: false,
+			},
+		);
 
-		this._map.getPreview(2000, index, size.width, size.height, {
-			autoUpdate: false,
-			slideshow: true,
-		});
+		this._map.getPreview(
+			this._previewId(index),
+			index,
+			size.width,
+			size.height,
+			{
+				autoUpdate: false,
+				slideshow: true,
+			},
+		);
 	}
 
 	_onWindowClose() {
@@ -1526,7 +1551,7 @@ class PresenterConsole {
 		);
 		let rect = container.getBoundingClientRect();
 		let size = this._map.getPreview(
-			2000,
+			this._previewId(0),
 			0,
 			rect.width,
 			this._heightLeftForPreview(container, slideView),
@@ -1714,10 +1739,16 @@ class PresenterConsole {
 			return;
 		}
 
-		let size = this._map.getPreview(2000, 0, rect.width, rect.height, {
-			fetchThumbnail: false,
-			autoUpdate: false,
-		});
+		let size = this._map.getPreview(
+			this._previewId(0),
+			0,
+			rect.width,
+			rect.height,
+			{
+				fetchThumbnail: false,
+				autoUpdate: false,
+			},
+		);
 
 		const nextSlideIndex = this._getNextVisibleSlide(this._currentIndex);
 		if (nextSlideIndex >= this._getSlidesCount()) {
@@ -1739,10 +1770,16 @@ class PresenterConsole {
 		}
 
 		if (!preview || rect.width !== size.width || rect.height !== size.height) {
-			this._map.getPreview(2000, nextSlideIndex, size.width, size.height, {
-				autoUpdate: false,
-				slideshow: true,
-			});
+			this._map.getPreview(
+				this._previewId(nextSlideIndex),
+				nextSlideIndex,
+				size.width,
+				size.height,
+				{
+					autoUpdate: false,
+					slideshow: true,
+				},
+			);
 			elem.style.width = size.width + 'px';
 			elem.style.height = size.height + 'px';
 		}
@@ -1819,7 +1856,9 @@ class PresenterConsole {
 			return;
 		}
 
-		if (e.id !== '2000') {
+		// A preview rendered on the server names its id as a string, one rendered from vector
+		// primitives keeps the number it was asked with.
+		if (Number(e.id) !== this._previewId(e.partIndex)) {
 			return;
 		}
 
