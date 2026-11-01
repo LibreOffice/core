@@ -12,7 +12,9 @@
 #pragma once
 
 #include <common/Common.hpp>
+#include <common/FileUtil.hpp>
 
+#include <algorithm>
 #include <cstddef>
 #include <optional>
 #include <string>
@@ -95,6 +97,36 @@ inline std::vector<std::pair<int, int>> parseSizeList(std::string_view list)
             sizes.push_back(*size);
     }
 
+    return sizes;
+}
+
+/// Returns the sizes, each as "<W>x<H>", of the thumbnails of the file at basePath that are on
+/// disk: the regular files whose names are what filePath gives for a size that parseSize reads.
+/// The sizes come in the order of the names.
+inline std::vector<std::string> listSizes(const std::string& basePath)
+{
+    const std::size_t slash = basePath.rfind('/');
+    const std::string directory = slash == std::string::npos ? "." : basePath.substr(0, slash);
+    const std::string prefix =
+        (slash == std::string::npos ? basePath : basePath.substr(slash + 1)) + THUMBNAIL_SUFFIX;
+    static constexpr std::string_view Extension = ".png";
+
+    std::vector<std::string> sizes;
+    for (const std::string& name : FileUtil::getDirEntries(directory))
+    {
+        if (name.size() <= prefix.size() + Extension.size() || !name.starts_with(prefix) ||
+            !name.ends_with(Extension))
+        {
+            continue;
+        }
+
+        const std::string size =
+            name.substr(prefix.size(), name.size() - prefix.size() - Extension.size());
+        if (parseSize(size) && FileUtil::Stat(directory + '/' + name).isFile())
+            sizes.push_back(size);
+    }
+
+    std::sort(sizes.begin(), sizes.end());
     return sizes;
 }
 

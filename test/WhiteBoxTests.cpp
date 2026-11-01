@@ -47,6 +47,7 @@
 #include <cstddef>
 #include <cstdlib>
 #include <ctime>
+#include <filesystem>
 #include <fstream>
 #include <sstream>
 #include <unistd.h>
@@ -91,6 +92,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testIsIso8601);
     CPPUNIT_TEST(testSaveResult);
     CPPUNIT_TEST(testThumbnailPath);
+    CPPUNIT_TEST(testThumbnailListSizes);
     CPPUNIT_TEST(testFitPageInBox);
     CPPUNIT_TEST(testThumbnailParseSize);
     CPPUNIT_TEST(testThumbnailParseSizeList);
@@ -131,6 +133,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testIsIso8601();
     void testSaveResult();
     void testThumbnailPath();
+    void testThumbnailListSizes();
     void testFitPageInBox();
     void testThumbnailParseSize();
     void testThumbnailParseSizeList();
@@ -1506,6 +1509,52 @@ void WhiteBoxTests::testThumbnailPath()
     // The name from the two sides is the name from the size written as "<W>x<H>".
     LOK_ASSERT_EQUAL(Thumbnail::filePath("file.odt.upload", "1000x500"),
                      Thumbnail::filePath("file.odt.upload", 1000, 500));
+}
+
+void WhiteBoxTests::testThumbnailListSizes()
+{
+    constexpr auto testname = __func__;
+
+    const std::string dir = FileUtil::createRandomTmpDir();
+    FileUtil::OwnedFile dirCleanup(dir, /*recursive=*/true);
+    const auto touch = [&dir](const std::string& name)
+    { std::ofstream(dir + '/' + name, std::ios::binary) << "png"; };
+
+    // The sizes as one string, separated by commas.
+    const auto sizes = [](const std::string& basePath)
+    {
+        std::string joined;
+        for (const std::string& size : Thumbnail::listSizes(basePath))
+            joined += (joined.empty() ? "" : ",") + size;
+        return joined;
+    };
+
+    const std::string basePath = dir + "/file.odt.upload";
+
+    // A file with no thumbnails next to it has no sizes, and so has a missing directory.
+    LOK_ASSERT_EQUAL(std::string(), sizes(basePath));
+    LOK_ASSERT_EQUAL(std::string(), sizes(dir + "/missing/file.odt"));
+
+    // The sizes of the thumbnails of the file, in the order of the names, and nothing else:
+    // the thumbnails of another file, a file without a size the kit writes, a file with
+    // another extension, and a directory with the name of a thumbnail are not listed.
+    touch("file.odt.upload-thumbnail-256x256.png");
+    touch("file.odt.upload-thumbnail-100x60.png");
+    touch("file.odt.uploading-thumbnail-256x256.png");
+    touch("file.odt.upload-thumbnail-large.png");
+    touch("file.odt.upload-thumbnail-2049x256.png");
+    touch("file.odt.upload-thumbnail-256x256.png.tmp");
+    touch("file.odt.upload-thumbnail-.png");
+    touch("file.odt.upload-thumbnail-");
+    std::filesystem::create_directory(dir + "/file.odt.upload-thumbnail-512x512.png");
+    LOK_ASSERT_EQUAL(std::string("100x60,256x256"), sizes(basePath));
+
+    // Each size names the file it was read from.
+    for (const std::string& size : Thumbnail::listSizes(basePath))
+        LOK_ASSERT(FileUtil::Stat(Thumbnail::filePath(basePath, size)).isFile());
+
+    // The thumbnails of the other file are listed under its own name.
+    LOK_ASSERT_EQUAL(std::string("256x256"), sizes(dir + "/file.odt.uploading"));
 }
 
 void WhiteBoxTests::testFitPageInBox()
