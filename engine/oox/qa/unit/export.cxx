@@ -2001,6 +2001,21 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeHandleRangeOfWidth)
     CPPUNIT_ASSERT(aFormula.endsWith(" 100000 100"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testRoundRectangleTallerThanWide)
+{
+    // Given a round-rectangle that is taller than wide, whose switched handle has an x range
+    // only:
+    loadFromFile(u"custGeom_roundRectTall.fodp");
+
+    // When saving it to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then it is the roundRect preset with its corner as the adjustment
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:prstGeom", "prst", u"roundRect");
+    assertXPath(pXmlDoc, "//a:prstGeom/a:avLst/a:gd", "fmla", u"val 16667");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testCustomShapeFromOOXMLKeepsOnlyUsedGuides)
 {
     // Given a shape that came from a pptx whose points are numbers and whose guides serve a

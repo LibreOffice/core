@@ -1368,7 +1368,17 @@ bool DMLPresetShapeExporter::WriteShapeWithAVlist()
                 auto aPointY = GetAdjustmentPointYValue(0);
                 if (!aPointY.nCurrVal.has_value() || !aPointY.nMaxVal.has_value()
                     || !aPointY.nMinVal.has_value())
-                    return false;
+                {
+                    // The preset's handle has a range for x only; the corner is a fraction
+                    // of the shorter side in both orientations, so that range serves y too.
+                    XAdjustmentValue aPointX = GetAdjustmentPointXValue(0);
+                    if (!aPointX.nCurrVal.has_value() || !aPointX.nMaxVal.has_value()
+                        || !aPointX.nMinVal.has_value())
+                        return false;
+                    aPointY.nCurrVal = aPointX.nCurrVal;
+                    aPointY.nMaxVal = aPointX.nMaxVal;
+                    aPointY.nMinVal = aPointX.nMinVal;
+                }
                 nVal1 = std::lround(*aPointY.nCurrVal / (*aPointY.nMaxVal - *aPointY.nMinVal)
                                     * 50000);
             }
