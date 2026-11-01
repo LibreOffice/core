@@ -1437,9 +1437,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf157289CircularArrowExport)
     assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", 3);
 
     // The two angle adjustments are stored in 60000ths of a degree although one of them is
-    // also an equation of its own ($0) and the other appears in a sum (($1+45)*pi/180): a
-    // -45 degree start is 315 degrees, and both polar handles are written
-    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd[@name='adj1']", "fmla", u"val 18900000");
+    // also an equation of its own ($0) and the other appears in a sum (($1+45)*pi/180): the
+    // -45 degree start stays signed, and both polar handles are written
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd[@name='adj1']", "fmla", u"val -2700000");
     assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd[@name='adj2']", "fmla", u"val 3600000");
     assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar", 2);
     assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar[1]", "gdRefAng", u"adj1");
@@ -2039,7 +2039,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeFromOOXMLKeepsOnlyUsedGuides)
     assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "x", u"21600");
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testCustomShapeAngleUsedAsCoordinateStaysPlain)
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeAngleUsedAsCoordinateKeepsHandle)
 {
     // Given a clock hand whose angle adjustment also places a mark as a plain coordinate:
     loadFromFile(u"custGeom_angleAsCoordinate.fodp");
@@ -2047,13 +2047,14 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeAngleUsedAsCoordinateStaysPlain)
     // When saving it to PPTX:
     save(TestFilter::PPTX);
 
-    // Then the adjustment keeps its plain value, the angle equation converts it, the mark
-    // names it as it is, and no polar handle is written for it
+    // Then the adjustment is stored in 60000ths of a degree for its polar handle, and the
+    // mark gets the degrees back through a guide
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
-    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", "fmla", u"val 45");
-    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f0']", "fmla", u"*/ adj1 10800000 180");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[3]/a:moveTo/a:pt", "x", u"adj1");
-    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/*", 0);
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", "fmla", u"val 2700000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar", "gdRefAng", u"adj1");
+    OUString aMark = getXPath(pXmlDoc, "//a:pathLst/a:path[3]/a:moveTo/a:pt", "x");
+    assertXPath(pXmlDoc, OString("//a:custGeom/a:gdLst/a:gd[@name='" + aMark.toUtf8() + "']"),
+                "fmla", u"*/ adj1 180 10800000");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCustomShapeFromOOXMLKeepsHandle)
@@ -2134,7 +2135,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeFromOOXMLDraggedHandle)
     assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", 1);
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testCustomShapeAliasUsedAsCoordinateStaysPlain)
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeAliasUsedAsCoordinateKeepsHandle)
 {
     // Given a clock hand whose angle adjustment has an alias equation (?f0 = $0) that places a
     // mark as a plain coordinate:
@@ -2143,13 +2144,14 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeAliasUsedAsCoordinateStaysPlain)
     // When saving it to PPTX:
     save(TestFilter::PPTX);
 
-    // Then the adjustment keeps its plain value, the mark names it through the alias, the
-    // angle equation converts it, and no polar handle is written for it
+    // Then the adjustment is stored in 60000ths of a degree for its polar handle, and the
+    // mark gets the degrees back through the alias
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
-    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", "fmla", u"val 45");
-    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@name='f0']", "fmla", u"*/ adj1 10800000 180");
-    assertXPath(pXmlDoc, "//a:pathLst/a:path[3]/a:moveTo/a:pt", "x", u"adj1");
-    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/*", 0);
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", "fmla", u"val 2700000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar", "gdRefAng", u"adj1");
+    OUString aMark = getXPath(pXmlDoc, "//a:pathLst/a:path[3]/a:moveTo/a:pt", "x");
+    assertXPath(pXmlDoc, OString("//a:custGeom/a:gdLst/a:gd[@name='" + aMark.toUtf8() + "']"),
+                "fmla", u"*/ adj1 180 10800000");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCustomShapeArcAngleByAlias)

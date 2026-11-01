@@ -5452,6 +5452,7 @@ struct OoxmlEqContext
 };
 
 OString lcl_EmitOoxmlNode(const ExpressionNode* pNode, OoxmlEqContext& rCtx);
+OString lcl_PlainTokenOfEquation(sal_Int32 nEquation, OoxmlEqContext& rCtx);
 
 // Writes fValue as the fraction rNumerator / rDenominator with integer parts, using the smallest
 // power of ten (up to 100000) as the denominator that represents the value exactly enough, or
@@ -5719,6 +5720,27 @@ OString lcl_EmitMulDivByConstant(const ExpressionNode* pA, double fConst, bool b
                          + " " + OString::number(nDenominator));
 }
 
+// The token of an equation used as a plain value. An equation that is an angle holds 60000ths
+// of a degree here: an alias of an adjustment stored that way gives the value the adjustment
+// has in the shape, any other angle equation gives its radians back. Empty for a forward
+// reference.
+OString lcl_PlainTokenOfEquation(sal_Int32 nEquation, OoxmlEqContext& rCtx)
+{
+    if (nEquation < 0 || o3tl::make_unsigned(nEquation) >= rCtx.rEqNames.size()
+        || rCtx.rEqNames[nEquation].isEmpty())
+        return OString();
+    if (!rCtx.rEqIsAngle[nEquation])
+        return rCtx.rEqNames[nEquation];
+    // without the parsed equations an alias cannot be told from an angle in radians
+    if (!rCtx.pNodes || o3tl::make_unsigned(nEquation) >= rCtx.pNodes->size())
+        return OString();
+    const ExpressionNode* pNode = (*rCtx.pNodes)[nEquation].get();
+    if (pNode && pNode->getType() == ExpressionFunct::EnumAdjustment
+        && rCtx.rAngleAdjustments60000.count(pNode->getIndex()) > 0)
+        return rCtx.adjustmentToken(pNode->getIndex());
+    return rCtx.addGuide("*/ " + rCtx.rEqNames[nEquation] + " 10 34377468");
+}
+
 OString lcl_EmitOoxmlNode(const ExpressionNode* pNode, OoxmlEqContext& rCtx)
 {
     if (!pNode)
@@ -5736,19 +5758,15 @@ OString lcl_EmitOoxmlNode(const ExpressionNode* pNode, OoxmlEqContext& rCtx)
             return rCtx.adjustmentToken(pNode->getIndex());
         case ExpressionFunct::EnumEquation:
         {
-            // An equation that is an angle holds 60000ths of a degree here but radians in the
-            // shape; its uses as a trigonometric argument or as an angle by itself are served
-            // by lcl_TryEmitAngle60000 before this point, any other use gets the radians back.
-            const sal_Int32 nEquation = pNode->getIndex();
-            if (nEquation >= 0 && o3tl::make_unsigned(nEquation) < rCtx.rEqNames.size()
-                && !rCtx.rEqNames[nEquation].isEmpty())
+            // the uses of an angle equation as a trigonometric argument or as an angle by
+            // itself are served by lcl_TryEmitAngle60000 before this point
+            const OString aToken = lcl_PlainTokenOfEquation(pNode->getIndex(), rCtx);
+            if (aToken.isEmpty())
             {
-                if (rCtx.rEqIsAngle[nEquation])
-                    return rCtx.addGuide("*/ " + rCtx.rEqNames[nEquation] + " 10 34377468");
-                return rCtx.rEqNames[nEquation];
+                rCtx.fail("forward reference to an equation");
+                return "0"_ostr;
             }
-            rCtx.fail("forward reference to an equation");
-            return "0"_ostr;
+            return aToken;
         }
         case ExpressionFunct::EnumWidth:
         case ExpressionFunct::EnumRight:
@@ -5975,9 +5993,8 @@ OString lcl_CoordinateToken(const drawing::EnhancedCustomShapeParameter& rParam,
 {
     sal_Int32 nIndex = -1;
     if (rParam.Type == drawing::EnhancedCustomShapeParameterType::EQUATION
-        && (rParam.Value >>= nIndex) && nIndex >= 0
-        && o3tl::make_unsigned(nIndex) < rCtx.rEqNames.size() && !rCtx.rEqIsAngle[nIndex])
-        return rCtx.rEqNames[nIndex];
+        && (rParam.Value >>= nIndex))
+        return lcl_PlainTokenOfEquation(nIndex, rCtx);
     if (rParam.Type == drawing::EnhancedCustomShapeParameterType::ADJUSTMENT
         && (rParam.Value >>= nIndex) && nIndex >= 0)
         return rCtx.adjustmentToken(nIndex);
@@ -6113,15 +6130,6 @@ sal_Int32 lcl_AdjustmentIndexOf(const drawing::EnhancedCustomShapeParameter& rPa
 {
     sal_Int32 nIndex = -1;
     if (rParam.Type == drawing::EnhancedCustomShapeParameterType::ADJUSTMENT
-        && (rParam.Value >>= nIndex))
-        return nIndex;
-    return -1;
-}
-
-sal_Int32 lcl_EquationIndexOf(const drawing::EnhancedCustomShapeParameter& rParam)
-{
-    sal_Int32 nIndex = -1;
-    if (rParam.Type == drawing::EnhancedCustomShapeParameterType::EQUATION
         && (rParam.Value >>= nIndex))
         return nIndex;
     return -1;
@@ -6285,9 +6293,8 @@ OString lcl_HandleParameterToken(const drawing::EnhancedCustomShapeParameter& rP
                 return rCtx.adjustmentToken(nIndex);
             return OString();
         case drawing::EnhancedCustomShapeParameterType::EQUATION:
-            if ((rParam.Value >>= nIndex) && nIndex >= 0
-                && o3tl::make_unsigned(nIndex) < rCtx.rEqNames.size() && !rCtx.rEqIsAngle[nIndex])
-                return rCtx.rEqNames[nIndex];
+            if (rParam.Value >>= nIndex)
+                return lcl_PlainTokenOfEquation(nIndex, rCtx);
             return OString();
         case drawing::EnhancedCustomShapeParameterType::LEFT:
         case drawing::EnhancedCustomShapeParameterType::TOP:
@@ -6443,7 +6450,7 @@ void lcl_BuildXYHandles(const std::vector<XYHandleRaw>& rHandles,
 struct AdjustmentAngleUse
 {
     bool bSeen = false;
-    bool bOnlyAngle = true;
+    bool bOneConst = true; // every use in the idiom has the same c
     double fConst = 0.0;
 };
 
@@ -6477,11 +6484,9 @@ void lcl_ScanAdjustmentAngleUse(const ExpressionNode* pNode, sal_Int32 nIndex,
         lcl_ScanAngleArgument(pAngleArg, nIndex, rAliases, fConst, rUse);
         return;
     }
+    // a plain use of the adjustment gets the value scaled back from 60000ths
     if (lcl_IsAdjustmentOrAlias(pNode, nIndex, rAliases))
-    {
-        rUse.bOnlyAngle = false;
         return;
-    }
     for (sal_Int32 i = 0; const ExpressionNode* pChild = pNode->getChild(i); ++i)
         lcl_ScanAdjustmentAngleUse(pChild, nIndex, rAliases, rUse);
 }
@@ -6500,7 +6505,7 @@ void lcl_ScanAngleArgument(const ExpressionNode* pNode, sal_Int32 nIndex,
             rUse.bSeen = true;
         }
         else if (rUse.fConst != fConst)
-            rUse.bOnlyAngle = false;
+            rUse.bOneConst = false;
         return;
     }
     if (pNode->getType() == ExpressionFunct::BinaryPlus
@@ -6515,124 +6520,17 @@ void lcl_ScanAngleArgument(const ExpressionNode* pNode, sal_Int32 nIndex,
     lcl_ScanAdjustmentAngleUse(pNode, nIndex, rAliases, rUse);
 }
 
-// The adjustments that a path coordinate, a glue point or an xy handle uses as a plain value,
-// outside the equations. The angle parameters of the arc commands are left out: an angle in
-// 60000ths serves them as it is.
-void lcl_CollectDirectAdjustmentUses(
-    const cpo::uno::Sequence<drawing::EnhancedCustomShapeSegment>& rSegments,
-    const cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rPairs,
-    const cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rGluePoints,
-    const std::vector<XYHandleRaw>& rXYHandles, std::set<sal_Int32>& rDirect,
-    std::set<sal_Int32>& rDirectEquations)
-{
-    sal_Int32 nPairIndex = 0;
-    for (const drawing::EnhancedCustomShapeSegment& rSegment : rSegments)
-    {
-        sal_Int32 nPairsPerCommand = 0;
-        sal_Int32 nAnglePair = -1; // the pair of the command that holds angles
-        switch (rSegment.Command)
-        {
-            case drawing::EnhancedCustomShapeSegmentCommand::MOVETO:
-            case drawing::EnhancedCustomShapeSegmentCommand::LINETO:
-            case drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTX:
-            case drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTY:
-                nPairsPerCommand = 1;
-                break;
-            case drawing::EnhancedCustomShapeSegmentCommand::CURVETO:
-                nPairsPerCommand = 3;
-                break;
-            case drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO:
-            case drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE:
-                nPairsPerCommand = 3;
-                nAnglePair = 2;
-                break;
-            case drawing::EnhancedCustomShapeSegmentCommand::QUADRATICCURVETO:
-                nPairsPerCommand = 2;
-                break;
-            case drawing::EnhancedCustomShapeSegmentCommand::ARCANGLETO:
-                nPairsPerCommand = 2;
-                nAnglePair = 1;
-                break;
-            case drawing::EnhancedCustomShapeSegmentCommand::ARCTO:
-            case drawing::EnhancedCustomShapeSegmentCommand::ARC:
-            case drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO:
-            case drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC:
-                nPairsPerCommand = 4;
-                break;
-            default:
-                break;
-        }
-        for (sal_Int32 k = 0; k < rSegment.Count; ++k)
-        {
-            for (sal_Int32 i = 0; i < nPairsPerCommand; ++i, ++nPairIndex)
-            {
-                if (i == nAnglePair || nPairIndex >= rPairs.getLength())
-                    continue;
-                for (const drawing::EnhancedCustomShapeParameter* pParam :
-                     { &rPairs[nPairIndex].First, &rPairs[nPairIndex].Second })
-                {
-                    const sal_Int32 nAdjustment = lcl_AdjustmentIndexOf(*pParam);
-                    if (nAdjustment >= 0)
-                        rDirect.insert(nAdjustment);
-                    const sal_Int32 nEquation = lcl_EquationIndexOf(*pParam);
-                    if (nEquation >= 0)
-                        rDirectEquations.insert(nEquation);
-                }
-            }
-        }
-    }
-    for (const drawing::EnhancedCustomShapeParameterPair& rGluePoint : rGluePoints)
-    {
-        for (const drawing::EnhancedCustomShapeParameter* pParam :
-             { &rGluePoint.First, &rGluePoint.Second })
-        {
-            const sal_Int32 nAdjustment = lcl_AdjustmentIndexOf(*pParam);
-            if (nAdjustment >= 0)
-                rDirect.insert(nAdjustment);
-            const sal_Int32 nEquation = lcl_EquationIndexOf(*pParam);
-            if (nEquation >= 0)
-                rDirectEquations.insert(nEquation);
-        }
-    }
-    for (const XYHandleRaw& rHandle : rXYHandles)
-    {
-        // the position of the handle, too: a fixed coordinate given by an alias is a plain use
-        for (const drawing::EnhancedCustomShapeParameter* pParam :
-             { &rHandle.aPosition.First, &rHandle.aPosition.Second })
-        {
-            const sal_Int32 nEquation = lcl_EquationIndexOf(*pParam);
-            if (nEquation >= 0)
-                rDirectEquations.insert(nEquation);
-        }
-        for (const std::optional<drawing::EnhancedCustomShapeParameter>* pRange :
-             { &rHandle.aMinX, &rHandle.aMaxX, &rHandle.aMinY, &rHandle.aMaxY })
-        {
-            if (!*pRange)
-                continue;
-            const sal_Int32 nAdjustment = lcl_AdjustmentIndexOf(**pRange);
-            if (nAdjustment >= 0)
-                rDirect.insert(nAdjustment);
-            const sal_Int32 nEquation = lcl_EquationIndexOf(**pRange);
-            if (nEquation >= 0)
-                rDirectEquations.insert(nEquation);
-        }
-    }
-}
-
 // Decides, from the parsed equations, which angle adjustments can be stored in 60000ths of a
-// degree: those every equation uses only as the X of X*(pi/c) with one c, and nothing uses as
-// a plain value (rDirect). Their c is recorded in rInfo and they are added to
+// degree: those the equations use as the X of X*(pi/c) with one and the same c; a plain use
+// elsewhere gets the value scaled back. Their c is recorded in rInfo and they are added to
 // rAngleAdjustments60000.
 void lcl_ResolveAngleAdjustments(const std::vector<std::shared_ptr<ExpressionNode>>& rNodes,
-                                 const std::set<sal_Int32>& rDirect,
-                                 const std::set<sal_Int32>& rDirectEquations,
                                  std::vector<AdjustmentInfo>& rInfo,
                                  std::set<sal_Int32>& rAngleAdjustments60000)
 {
     for (size_t nIndex = 0; nIndex < rInfo.size(); ++nIndex)
     {
-        if (rInfo[nIndex].eKind != AdjustmentKind::Angle || rInfo[nIndex].bConflict
-            || rDirect.count(static_cast<sal_Int32>(nIndex)) > 0)
+        if (rInfo[nIndex].eKind != AdjustmentKind::Angle || rInfo[nIndex].bConflict)
             continue;
         // the equations that are nothing but this adjustment
         std::set<sal_Int32> aAliases;
@@ -6643,13 +6541,6 @@ void lcl_ResolveAngleAdjustments(const std::vector<std::shared_ptr<ExpressionNod
                 && pNode->getIndex() == static_cast<sal_Int32>(nIndex))
                 aAliases.insert(static_cast<sal_Int32>(nEquation));
         }
-        // an alias used as a plain value somewhere keeps the angle plain as well
-        bool bAliasUsedDirectly = false;
-        for (const sal_Int32 nAlias : aAliases)
-            if (rDirectEquations.count(nAlias) > 0)
-                bAliasUsedDirectly = true;
-        if (bAliasUsedDirectly)
-            continue;
         AdjustmentAngleUse aUse;
         for (size_t nEquation = 0; nEquation < rNodes.size(); ++nEquation)
         {
@@ -6658,7 +6549,7 @@ void lcl_ResolveAngleAdjustments(const std::vector<std::shared_ptr<ExpressionNod
             lcl_ScanAdjustmentAngleUse(rNodes[nEquation].get(), static_cast<sal_Int32>(nIndex),
                                        aAliases, aUse);
         }
-        if (!aUse.bSeen || !aUse.bOnlyAngle || aUse.fConst == 0.0
+        if (!aUse.bSeen || !aUse.bOneConst || aUse.fConst == 0.0
             || std::fabs(aUse.fConst - std::round(aUse.fConst)) > 1e-7)
             continue;
         rInfo[nIndex].fAngleConst = aUse.fConst;
@@ -7141,13 +7032,8 @@ bool lcl_BuildParametricPlan(
         SAL_INFO("oox.shape.custgeom", "not parametric: an equation does not parse");
         return false;
     }
-    std::set<sal_Int32> aDirectUses;
-    std::set<sal_Int32> aDirectEquations;
-    lcl_CollectDirectAdjustmentUses(rSegments, rPairs, rGluePoints, aXYHandlesRaw, aDirectUses,
-                                    aDirectEquations);
     std::set<sal_Int32> aAngleAdjustments60000;
-    lcl_ResolveAngleAdjustments(aNodes, aDirectUses, aDirectEquations, aAdjustmentInfo,
-                                aAngleAdjustments60000);
+    lcl_ResolveAngleAdjustments(aNodes, aAdjustmentInfo, aAngleAdjustments60000);
 
     EquationGuideSet aEquations;
     if (!lcl_CreateOoxmlGuides(aNodes, aAngleAdjustments60000, aAdjustmentInfo, nViewBoxWidth,
@@ -7222,18 +7108,16 @@ bool lcl_BuildParametricPlan(
             fValue = fValue * 100000.0 / nScale;
         else if (eKind == AdjustmentKind::Angle && aAngleAdjustments60000.count(nAdjustment) > 0)
         {
-            // The angle in the unit the idiom's c gives becomes 60000ths of a degree, in
-            // [0, 21600000) as a polar handle writes it back.
+            // The angle in the unit the idiom's c gives becomes 60000ths of a degree, as it
+            // is: a plain use of it reads the number the shape has, negative or beyond a turn
+            // included.
             const double f60000ths = fValue * 10800000.0 / aAdjustmentInfo[nAdjustment].fAngleConst;
             if (std::fabs(f60000ths) > 2147483647.0)
             {
                 SAL_INFO("oox.shape.custgeom", "not parametric: angle value too large");
                 return false;
             }
-            sal_Int64 nNormalised = std::lround(f60000ths) % 21600000;
-            if (nNormalised < 0)
-                nNormalised += 21600000;
-            fValue = nNormalised;
+            fValue = std::lround(f60000ths);
         }
         else if (std::fabs(fValue - std::round(fValue)) > 1e-7)
         {
