@@ -302,6 +302,18 @@ abstract class RenderManagerBase {
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	endTextDrag(): void {}
 
+	/// True when (x, y), in document twips, lies outside the text where the running drag that
+	/// selects text started. The selection made here stays inside that text.
+	textDragLeavesItsText(_x: number, _y: number): boolean {
+		return false;
+	}
+
+	/// The text frame at (x, y), in document twips, on a text document page drawn from vector
+	/// primitives, or undefined.
+	textFrameAt(_x: number, _y: number): number | undefined {
+		return undefined;
+	}
+
 	// Puts the caret where a click lands in the edited text, without the server. True when it
 	// moved.
 	placeCaretAt(_x: number, _y: number, _hitId: number | undefined): boolean {

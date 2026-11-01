@@ -1217,6 +1217,12 @@ textcursor object=<objectId> paragraph=<paragraph> index=<index> [anchorparagrap
     - object=<objectId> : The unique id of the drawing object being edited,
       as the invalidatecursor payload reports it in its object field. When
       another object or none is being edited, the caret stays where it is.
+      In a text document it is the id of a text frame, as the vector
+      primitives of its page name it, and the caret goes to that frame
+      whatever text the caret was in. The paragraph is then 0, and the
+      offsets are in the text of the frame's paragraph. A drawing object
+      being edited there is named by the id of its entry, as the
+      invalidatecursor payload reports it.
     - paragraph=<paragraph> : The paragraph, counted from 0.
     - index=<index> : The offset in UTF-16 units from the start of the
       paragraph. An offset past the end puts the caret at the end.

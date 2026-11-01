@@ -27,6 +27,13 @@ interface PredictedTextEdit extends cool.UnansweredEdit {
 	objectId: number;
 }
 
+/// Where a press puts the caret: the edit target, the entry and the logical caret in it.
+interface CaretPress {
+	target: EditTarget;
+	entryId: number;
+	logical: cool.LogicalCaret;
+}
+
 /// The cached tree and caret that a predicted edit works on.
 interface EditTarget {
 	tree: cool.PredictionTree;
@@ -647,7 +654,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	// nothing changed it here.
 	private _objectText: { entryId: number; text: cool.ObjectText } | null = null;
 
-	private _textOf(
+	protected _textOf(
 		tree: cool.PredictionTree,
 		entryId: number,
 	): cool.ObjectText | null {
@@ -904,15 +911,11 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 
 	// The edited part, the entry and the caret where a press at (x, y) on the object hitId
 	// lands, or null when the press is for the server.
-	private _pressAt(
+	protected _pressAt(
 		x: number,
 		y: number,
 		hitId: number | undefined,
-	): {
-		target: EditTarget;
-		entryId: number;
-		logical: cool.LogicalCaret;
-	} | null {
+	): CaretPress | null {
 		const target = this._caretTarget();
 		if (!target) return null;
 		const entryId = this._pressedEntry(target, hitId, x, y);
@@ -1000,7 +1003,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	}
 
 	// The entry and the caret where a drag that selects text started.
-	private _dragStart: { entryId: number; anchor: cool.LogicalCaret } | null =
+	protected _dragStart: { entryId: number; anchor: cool.LogicalCaret } | null =
 		null;
 
 	/// Start a drag that selects text from a press at (x, y), in document twips. hitId is the
@@ -1021,10 +1024,13 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	dragTextTo(x: number, y: number): void {
 		const start = this._dragStart;
 		const target = this._caretTarget();
-		if (!start || !target) return;
+		const origin = target
+			? this._entryOrigin(target.tree.data, start?.entryId)
+			: null;
+		if (!start || !target || !origin) return;
 		const logical = this._textOf(target.tree, start.entryId)?.caretNearPoint(
-			x,
-			y,
+			x - origin.x,
+			y - origin.y,
 		);
 		if (logical) this._moveCaret(target, start.entryId, logical, start.anchor);
 	}
@@ -1041,7 +1047,10 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		logical: cool.LogicalCaret,
 		anchor: cool.LogicalCaret | null,
 	): boolean {
-		const geometry = target.tree.caretIn(entryId, logical)?.geometry();
+		const local = target.tree.caretIn(entryId, logical)?.geometry();
+		const geometry = local
+			? this._inDocument(target.tree.data, entryId, local)
+			: null;
 		if (!geometry) return false;
 		// An anchor at the caret selects nothing.
 		if (anchor && cool.compareCarets(anchor, logical) === 0) anchor = null;
@@ -1057,10 +1066,15 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		});
 		app.file.textCursor.logical = { ...logical };
 		app.file.textCursor.anchor = anchor ? { ...anchor } : null;
+		this._caretMovedTo(entryId);
 		this._setCaretRectangle(geometry);
 		this._showSelection(target.tree, entryId, anchor, logical);
 		return true;
 	}
+
+	/// The caret moved here into the entry. On a slide the edited object stays the same.
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	protected _caretMovedTo(_entryId: number): void {}
 
 	// Draw the selection from the anchor to the caret, or remove it without an anchor.
 	private _showSelection(
@@ -1074,13 +1088,18 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 			if (TextSelections.isActive()) documentLayer.showTextSelection([]);
 			return;
 		}
+		const origin = this._entryOrigin(tree.data, entryId);
+		if (!origin) return;
 		const rectangles =
 			this._textOf(tree, entryId)?.selectionRectangles(anchor, logical) ?? [];
 		documentLayer.showTextSelection(
 			rectangles.map((rectangle) =>
-				[rectangle.x, rectangle.y, rectangle.width, rectangle.height].map(
-					Math.round,
-				),
+				[
+					rectangle.x + origin.x,
+					rectangle.y + origin.y,
+					rectangle.width,
+					rectangle.height,
+				].map(Math.round),
 			),
 		);
 
@@ -1090,7 +1109,10 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 				? [anchor, logical]
 				: [logical, anchor];
 		const handle = (caret: cool.LogicalCaret): cool.SimpleRectangle | null => {
-			const geometry = tree.caretIn(entryId, caret)?.geometry();
+			const local = tree.caretIn(entryId, caret)?.geometry();
+			const geometry = local
+				? this._inDocument(tree.data, entryId, local)
+				: null;
 			return geometry
 				? new cool.SimpleRectangle(
 						Math.round(geometry.x),

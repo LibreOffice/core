@@ -39,6 +39,7 @@
 /// <reference path="./helper/CanvasRecorder.ts"/>
 /// <reference path="./helper/ScratchCanvasStub.ts"/>
 /// <reference path="./helper/Path2DRecorder.ts"/>
+/// <reference path="./helper/HitTestContext.ts"/>
 /// <reference path="./helper/ImageRecorder.ts"/>
 /// <reference path="./helper/VectorRenderingReference.ts"/>
 /// <reference path="./helper/aiChat.ts"/>

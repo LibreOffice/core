@@ -1029,9 +1029,9 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		return true;
 	},
 
-	// Moves the caret here for an arrow key, in a document drawn from objects. Left and Right
-	// with the word modifier move one word, and with Shift the keys select text to the caret.
-	// True when the caret moved.
+	// Moves the caret here for an arrow key, in a document drawn from vector primitives. Left
+	// and Right with the word modifier move one word, and with Shift the keys select text to
+	// the caret. True when the caret moved.
 	_moveCaretHere: function (ev, keyCode) {
 		if (ev.type !== 'keydown' || ev.isComposing)
 			return false;
@@ -1042,7 +1042,7 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		const others = this.modifier & ~shift;
 		if (others && others !== wordModifier)
 			return false;
-		if (!RenderManager.isVectorRendering() || this._map.getWinId() !== 0)
+		if (!RenderManager.drawsFromPrimitives() || this._map.getWinId() !== 0)
 			return false;
 		// With accessibility support the browser moves the caret of the text area on these
 		// keys.

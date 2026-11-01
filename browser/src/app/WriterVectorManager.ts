@@ -261,8 +261,126 @@ class WriterVectorManager extends VectorPartManagerBase {
 		};
 	}
 
+	/// The text frame on top at (x, y), in document twips, on a cached page. Undefined off the
+	/// pages, and where a picture, a fly or a shape covers the text.
+	textFrameAt(x: number, y: number): number | undefined {
+		const top = this._textFrameBoxAt(x, y);
+		if (!top) return undefined;
+		// A field, a content control, a form field and a numbering label take a click of their
+		// own in the engine, as a box that toggles, a list that opens or a field that is
+		// selected whole.
+		const hit = cool.VectorHitTest.hit(top.entry.primitives, {
+			x: top.x - (top.entry.x ?? 0),
+			y: top.y - (top.entry.y ?? 0),
+			toleranceX: 0,
+			toleranceY: 0,
+		});
+		return hit?.field ? undefined : top.id;
+	}
+
+	// The text frame whose box is on top at (x, y), in document twips, on a cached page, with
+	// the point in the twips of the page. Undefined off the pages, and where the box of a
+	// picture, a fly or a shape covers the text.
+	private _textFrameBoxAt(
+		x: number,
+		y: number,
+	): { id: number; entry: cool.SlideObject; x: number; y: number } | undefined {
+		const page = this._pageIndexAt(x, y);
+		const partId = this.partIdAt(page);
+		const data = partId === undefined ? undefined : this._cache.get(partId);
+		const origin = partId === undefined ? null : this._pageOriginOf(partId);
+		if (!data || !origin) return undefined;
+		const pageX = x - origin.x;
+		const pageY = y - origin.y;
+		let found: number | undefined;
+		let foundKind: string | undefined;
+		for (const id of data.order) {
+			const entry = data.objects.get(id);
+			if (
+				entry?.kind !== undefined &&
+				WriterVectorManager.drawnOverText.has(entry.kind) &&
+				entry.x !== undefined &&
+				entry.y !== undefined &&
+				entry.width !== undefined &&
+				entry.height !== undefined &&
+				pageX >= entry.x &&
+				pageX <= entry.x + entry.width &&
+				pageY >= entry.y &&
+				pageY <= entry.y + entry.height
+			) {
+				found = id;
+				foundKind = entry.kind;
+			}
+		}
+		if (foundKind !== 'textframe' || found === undefined) return undefined;
+		const entry = data.objects.get(found);
+		return entry ? { id: found, entry, x: pageX, y: pageY } : undefined;
+	}
+
+	// The kinds of page entries that draw content of their own over a point, rather than
+	// holding other entries.
+	private static readonly drawnOverText: Set<string> = new Set([
+		'textframe',
+		'notextframe',
+		'fly',
+		'shape',
+	]);
+
 	/// The edits of a text document lie on the page of the newest one.
 	protected _editedPartId(): cool.VectorPartGuid | undefined {
 		return this._typedEdits.newest()?.partId;
+	}
+
+	// Any text frame on a page takes the caret where it is pressed, as the edit goes on there.
+	protected _pressAt(
+		x: number,
+		y: number,
+		hitId: number | undefined,
+	): CaretPress | null {
+		if (hitId === undefined) return null;
+		const partId = this._textPageHolding(hitId);
+		const data = partId === undefined ? undefined : this._cache.get(partId);
+		const origin = data ? this._entryOrigin(data, hitId) : null;
+		if (!data || !origin) return null;
+		const tree = this._treeOf(data);
+		const logical = this._textOf(tree, hitId)?.caretAtPoint(
+			x - origin.x,
+			y - origin.y,
+		);
+		const cursor = app.file.textCursor;
+		return logical && cursor.rectangle
+			? {
+					target: {
+						tree,
+						caret: cursor.rectangle,
+						logical: cursor.logical,
+						entryId: hitId,
+					},
+					entryId: hitId,
+					logical,
+				}
+			: null;
+	}
+
+	/// Each paragraph of a text document is a text frame of its own, so a drag that selects
+	/// text leaves its text where it leaves the box of the text frame it started in. A field
+	/// in the frame is text of the frame, which the drag selects over.
+	textDragLeavesItsText(x: number, y: number): boolean {
+		const start = this._dragStart;
+		return start !== null && this._textFrameBoxAt(x, y)?.id !== start.entryId;
+	}
+
+	/// A triple click in a text document selects a sentence, which the engine finds.
+	selectParagraphAt(
+		_x: number,
+		_y: number,
+		_hitId: number | undefined,
+	): boolean {
+		return false;
+	}
+
+	/// The caret can go to another text frame, which the cursor names as its object.
+	protected _caretMovedTo(entryId: number): void {
+		app.file.textCursor.object = entryId;
 	}
 }

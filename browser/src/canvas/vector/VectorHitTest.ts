@@ -30,6 +30,9 @@ namespace cool {
 		edge: boolean;
 		/// The text that answered is a hyperlink.
 		link: boolean;
+		/// The text that answered is a field, or the bullet or the numbering label of a
+		/// paragraph: text that the document makes rather than text typed in.
+		field: boolean;
 		/*
 			The geometry that answered, in the coordinates the primitives were asked in. It is the
 			outline of a fill, the line of a stroke, the box of a text portion or the area of an
@@ -48,6 +51,8 @@ namespace cool {
 		editView: boolean;
 		/// What is walked is the text of a hyperlink field.
 		link: boolean;
+		/// What is walked is the text of a field, a bullet or a numbering label.
+		field: boolean;
 		/*
 			Maps what is walked now onto the coordinates the walk was asked in. The point travels
 			the other way, through the inverse, so this is what puts the geometry that answers back
@@ -392,6 +397,13 @@ namespace cool {
 						link:
 							walk.link ||
 							(primitive as TextHierarchyFieldPrimitive).fieldType === 'url',
+						field: true,
+					});
+
+				case TextHierarchyBulletPrimitive.type:
+					return VectorHitTest.hit(primitive.children, position, range, {
+						...walk,
+						field: true,
 					});
 
 				default:
@@ -535,6 +547,7 @@ namespace cool {
 				editView: walk.editView,
 				edge: false,
 				link: kind === 'text' && walk.link,
+				field: kind === 'text' && walk.field,
 				path: VectorHitTest.pathThrough(path, walk.matrix),
 			};
 		}
@@ -552,6 +565,7 @@ namespace cool {
 				editView: walk.editView,
 				edge: where === 'edge',
 				link: false,
+				field: false,
 				path: VectorHitTest.pathThrough(path, walk.matrix),
 			};
 		}
@@ -563,6 +577,7 @@ namespace cool {
 				hidden: false,
 				editView: false,
 				link: false,
+				field: false,
 				matrix: Matrix2D.IDENTITY,
 			};
 		}

@@ -15,32 +15,7 @@ describe('VectorHitTest', function () {
 	let originalPath2D: any;
 	let originalContext: any;
 
-	// Node has no drawing context. This stand-in answers from what the path
-	// recorder holds: rectangles, and paths added through a transform.
-	function isPointInPath(path: any, x: number, y: number): boolean {
-		return path.calls.some((call: any) => {
-			if (call.method === 'rect') {
-				const [left, top, width, height] = call.args;
-				return x >= left && x <= left + width && y >= top && y <= top + height;
-			}
-			if (call.method === 'addPath') {
-				const [inner, m] = call.args;
-				const back = new cool.Matrix2D(m.a, m.b, m.c, m.d, m.e, m.f).invert();
-				if (!back) return false;
-				const at = back.apply(x, y);
-				return isPointInPath(inner, at.x, at.y);
-			}
-			return false;
-		});
-	}
-
-	const fakeContext = {
-		isPointInPath: (path: any, x: number, y: number) =>
-			isPointInPath(path, x, y),
-		isPointInStroke: () => false,
-		save: () => {},
-		restore: () => {},
-	};
+	const fakeContext = new HitTestContext();
 
 	before(function () {
 		originalPath2D = (globalThis as any).Path2D;

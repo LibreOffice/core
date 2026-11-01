@@ -551,6 +551,7 @@ class RenderGeometrySection extends CanvasSectionObject {
 							editView: false,
 							edge: false,
 							link: false,
+							field: false,
 						}
 					: undefined);
 			if (!hit) continue;

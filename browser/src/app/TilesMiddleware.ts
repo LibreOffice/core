@@ -426,6 +426,14 @@ class RenderManager {
 		RenderManager.ensureInstance().endTextDrag();
 	}
 
+	static textDragLeavesItsText(x: number, y: number): boolean {
+		return RenderManager.ensureInstance().textDragLeavesItsText(x, y);
+	}
+
+	static textFrameAt(x: number, y: number): number | undefined {
+		return RenderManager.ensureInstance().textFrameAt(x, y);
+	}
+
 	static placeCaretAt(
 		x: number,
 		y: number,

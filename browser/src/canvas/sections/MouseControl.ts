@@ -500,8 +500,12 @@ class MouseControl extends CanvasSectionObject {
 				app.idleHandler.notifyActive();
 				return;
 			}
-			// A drag that starts in the text being edited selects the text here.
-			else if (this.selectingText || this.startSelectingText()) {
+			// A drag that starts in the text being edited selects the text here, while it stays
+			// in that text.
+			else if (
+				(this.selectingText || this.startSelectingText()) &&
+				this.keepsSelectingText()
+			) {
 				point.pX += this.position[0];
 				point.pY += this.position[1];
 				app.map.fire('handleautoscroll', {
@@ -749,8 +753,24 @@ class MouseControl extends CanvasSectionObject {
 	public onNewDocumentTopLeft(): void {
 		if (this.selectingText && this.lastDragLocalPoint) {
 			this.refreshPosition(this.lastDragLocalPoint);
-			RenderManager.dragTextTo(this.currentPosition.x, this.currentPosition.y);
-			return;
+			if (this.keepsSelectingText()) {
+				RenderManager.dragTextTo(
+					this.currentPosition.x,
+					this.currentPosition.y,
+				);
+				return;
+			}
+			// The engine handles the whole drag, starting with the press of the button.
+			if (this.positionOnMouseDown) {
+				this.postCoreMouseEvent(
+					'buttondown',
+					this.positionOnMouseDown,
+					1,
+					app.LOButtons.left,
+					this.modifierOnMouseDown,
+				);
+				this.mouseDownSent = true;
+			}
 		}
 
 		// a selection frame keeps its corner at the mouse while the view scrolls under it
@@ -949,8 +969,40 @@ class MouseControl extends CanvasSectionObject {
 	/// holds.
 	private static editsTextHere(): boolean {
 		return (
-			app.file.textCursor.visible && RenderGeometrySection.answersPointer()
+			app.file.textCursor.visible &&
+			(RenderGeometrySection.answersPointer() || MouseControl.drawsTextPages())
 		);
+	}
+
+	// The commands whose state is 'true' while the engine applies something to the text where
+	// the mouse button comes up: Clone Formatting applies the copied format, and the
+	// highlighting mode, which choosing a highlighting color without a selection turns on,
+	// applies that color.
+	private static readonly appliedOnRelease: string[] = [
+		'.uno:FormatPaintbrush',
+		'.uno:CharBackgroundExt',
+	];
+
+	// True when the pages of a text document are drawn from vector primitives, whose text
+	// frames the caret can go to here. While a command that applies on release is on, the
+	// presses go to the engine.
+	private static drawsTextPages(): boolean {
+		return (
+			RenderManager.drawsFromPrimitives() &&
+			!RenderManager.isVectorRendering() &&
+			!MouseControl.appliedOnRelease.some(
+				(command) =>
+					app.map.stateChangeHandler?.getItemValue(command) === 'true',
+			)
+		);
+	}
+
+	// The text that a press at (x, y), in document twips, may put the caret in: the object of a
+	// slide, or the text frame of a text document page.
+	private static textAt(x: number, y: number): number | undefined {
+		return MouseControl.drawsTextPages()
+			? RenderManager.textFrameAt(x, y)
+			: RenderGeometrySection.objectIdAt(x, y);
 	}
 
 	/// Starts a drag that selects text here when a plain left press landed in the edited text.
@@ -963,7 +1015,7 @@ class MouseControl extends CanvasSectionObject {
 		this.selectingText = RenderManager.startTextDrag(
 			press.x,
 			press.y,
-			RenderGeometrySection.objectIdAt(press.x, press.y),
+			MouseControl.textAt(press.x, press.y),
 		);
 		return this.selectingText;
 	}
@@ -1044,6 +1096,16 @@ class MouseControl extends CanvasSectionObject {
 		return true;
 	}
 
+	/// True while the drag that selects text here stays in the text it started in. Once it
+	/// leaves, the drag stops here, and the engine handles it, starting with the press of the
+	/// button. The caret and the selection made here go to the engine first.
+	private keepsSelectingText(): boolean {
+		const point = this.currentPosition;
+		if (!RenderManager.textDragLeavesItsText(point.x, point.y)) return true;
+		this.stopSelectingText();
+		return false;
+	}
+
 	private stopSelectingText(): void {
 		if (!this.selectingText) return;
 		this.selectingText = false;
@@ -1065,7 +1127,7 @@ class MouseControl extends CanvasSectionObject {
 		return RenderManager.placeCaretAt(
 			point.x,
 			point.y,
-			RenderGeometrySection.objectIdAt(point.x, point.y),
+			MouseControl.textAt(point.x, point.y),
 		);
 	}
 
@@ -1084,7 +1146,7 @@ class MouseControl extends CanvasSectionObject {
 			return false;
 		if (!MouseControl.editsTextHere()) return false;
 		const point = clickInfo.sendingPosition;
-		const hitId = RenderGeometrySection.objectIdAt(point.x, point.y);
+		const hitId = MouseControl.textAt(point.x, point.y);
 		if (count === 2) return RenderManager.selectWordAt(point.x, point.y, hitId);
 		if (count === 3)
 			return RenderManager.selectParagraphAt(point.x, point.y, hitId);
