@@ -1976,6 +1976,31 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeSinusWave)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aHandles.getLength());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeHandleRangeOfWidth)
+{
+    // Given a shape whose handle ranges are given by the box (width) and by an equation:
+    loadFromFile(u"custGeom_rangeWidth.fodp");
+
+    // When saving it to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then the ranges are written in adjustment units, the box as the full range
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", 1);
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", "gdRefX", u"adj1");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", "minX", u"48000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", "maxX", u"100000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", "gdRefY", u"adj2");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", "minY", u"48000");
+    OUString aMaxY = getXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", "maxY");
+    CPPUNIT_ASSERT(aMaxY.startsWith("f"));
+    // the equation (0.5*height = 50) scaled into the units of the adjustment
+    OUString aFormula = getXPath(
+        pXmlDoc, OString("//a:custGeom/a:gdLst/a:gd[@name='" + aMaxY.toUtf8() + "']"), "fmla");
+    CPPUNIT_ASSERT(aFormula.startsWith("*/ f"));
+    CPPUNIT_ASSERT(aFormula.endsWith(" 100000 100"));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testCustomShapeFromOOXMLKeepsOnlyUsedGuides)
 {
     // Given a shape that came from a pptx whose points are numbers and whose guides serve a

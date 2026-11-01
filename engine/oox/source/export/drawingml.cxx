@@ -6293,16 +6293,25 @@ OString lcl_HandleParameterToken(const drawing::EnhancedCustomShapeParameter& rP
         case drawing::EnhancedCustomShapeParameterType::TOP:
             return "0"_ostr;
         case drawing::EnhancedCustomShapeParameterType::RIGHT:
+        case drawing::EnhancedCustomShapeParameterType::WIDTH:
             return OString::number(rCtx.nViewBoxWidth);
         case drawing::EnhancedCustomShapeParameterType::BOTTOM:
+        case drawing::EnhancedCustomShapeParameterType::HEIGHT:
             return OString::number(rCtx.nViewBoxHeight);
         default:
             return OString();
     }
 }
 
-// A handle range in the units of the adjustment it limits: a number is scaled directly, anything
-// else through a guide.
+// A token that is a number rather than the name of a guide or an adjustment.
+bool lcl_IsNumberToken(std::string_view rToken)
+{
+    return !rToken.empty()
+           && (rtl::isAsciiDigit(static_cast<unsigned char>(rToken[0])) || rToken[0] == '-');
+}
+
+// A handle range in the units of the adjustment it limits: a number, a side of the box or a
+// constant equation is scaled directly, anything else through a guide.
 OString lcl_HandleRangeToken(const drawing::EnhancedCustomShapeParameter& rParam, sal_Int32 nScale,
                              OoxmlEqContext& rCtx)
 {
@@ -6321,6 +6330,9 @@ OString lcl_HandleRangeToken(const drawing::EnhancedCustomShapeParameter& rParam
     const OString aToken = lcl_HandleParameterToken(rParam, rCtx);
     if (aToken.isEmpty() || rCtx.bRawAdjustments)
         return aToken;
+    // a side of the box, or an equation that is a constant, is a number in the path's space
+    if (lcl_IsNumberToken(aToken))
+        return OString::number(std::lround(aToken.toDouble() * 100000.0 / nScale));
     return rCtx.addGuide("*/ " + aToken + " 100000 " + OString::number(nScale));
 }
 
@@ -6356,6 +6368,11 @@ void lcl_BuildXYHandles(const std::vector<XYHandleRaw>& rHandles,
         {
             const sal_Int32 nScale = lcl_AdjustmentScale(AdjustmentKind::BoundX, rCtx.nViewBoxWidth,
                                                          rCtx.nViewBoxHeight);
+            if (nScale <= 0)
+            {
+                SAL_INFO("oox.shape.custgeom", "xy handle dropped: the box has no width");
+                continue;
+            }
             aOut.aGdRefX = "adj" + OString::number(nX + 1);
             rCtx.rUsedAdjustments.insert(nX);
             // an axis the engine's handle does not limit is unlimited; a handle that came from
@@ -6378,6 +6395,11 @@ void lcl_BuildXYHandles(const std::vector<XYHandleRaw>& rHandles,
         {
             const sal_Int32 nScale = lcl_AdjustmentScale(AdjustmentKind::BoundY, rCtx.nViewBoxWidth,
                                                          rCtx.nViewBoxHeight);
+            if (nScale <= 0)
+            {
+                SAL_INFO("oox.shape.custgeom", "xy handle dropped: the box has no height");
+                continue;
+            }
             aOut.aGdRefY = "adj" + OString::number(nY + 1);
             rCtx.rUsedAdjustments.insert(nY);
             if (rHandle.aMinY)
