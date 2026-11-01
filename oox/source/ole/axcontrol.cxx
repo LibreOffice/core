@@ -2526,7 +2526,10 @@ void AxMultiPageModel::importPageAndMultiPageProperties( BinaryInputStream& rInS
     // IDs
     for ( sal_uInt32 count = 0; count < nPageCount; ++count )
     {
-        mnIDs.push_back( rInStrm.readInt32() );
+        sal_Int32 nId = rInStrm.readInt32();
+        if ( rInStrm.isEof() )
+            break;
+        mnIDs.push_back( nId );
     }
 }
 
