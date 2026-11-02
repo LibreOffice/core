@@ -9,6 +9,8 @@
 
 #include <tools/XPath.hxx>
 
+#include <utility>
+
 namespace tools
 {
 namespace
@@ -65,7 +67,7 @@ XPath::XPath(xmlDocPtr pDocPtr)
 
 XPath::XPath(xmlDocPtr pDocPtr, std::function<void(xmlXPathContextPtr)> funcRegisterNamespaces)
     : mpXmlDocPtr(pDocPtr)
-    , mFuncRegisterNamespaces(funcRegisterNamespaces)
+    , mFuncRegisterNamespaces(std::move(funcRegisterNamespaces))
 {
 }
 
