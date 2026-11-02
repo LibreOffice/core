@@ -36,6 +36,7 @@
 
 #include <set>
 #include <memory>
+#include <optional>
 #include <vector>
 
 class ScDocument;
@@ -189,6 +190,9 @@ private:
     void            RemoveRangeFinder();
     void            RebuildRangeFinder();
     void            DeleteRangeFinder();
+    /// The range finder entry with this range and text span.
+    std::optional<size_t> FindRangeFinderEntry( const ScRange& rRange,
+                                                const ESelection& rSelection ) const;
     void            UpdateParenthesis();
     void            UpdateAutoCorrFlag();
     void            ResetAutoPar();
@@ -322,6 +326,12 @@ public:
     void            UpdateKitReferenceMarks(bool bSendWhenEmpty = false);
     /// The picked reference, while its text is the selection of the edited formula.
     bool            GetActiveReference( ScRange& rRange ) const;
+    /// True while the picked reference is selected.
+    bool            HasActiveReference() const;
+    /// The range finder entry nearest to the edit selection, unset when none has a corner to move.
+    std::optional<size_t> GetActiveRangeFinderEntry() const;
+    /// Moves a corner of the active reference to the cell. False when none is active.
+    bool            MoveActiveReferenceCorner( bool bStartCorner, SCCOL nCol, SCROW nRow );
     static void     SendReferenceMarks( const SfxViewShell* pViewShell,
                          const std::vector<ReferenceMark>& rReferenceMarks );
 

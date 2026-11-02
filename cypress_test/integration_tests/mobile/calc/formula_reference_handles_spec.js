@@ -59,13 +59,32 @@ describe(['tagmobile', 'tagnextcloud'], 'Cell handles on a formula reference.', 
 		});
 	}
 
-	function expectHandleOnCorner(win, column, row) {
-		cy.cGet('#test-div-cell_selection_handle_end').should(function($handle) {
+	var referenceEndHandle = '#test-div-reference_handle_end_0';
+
+	function expectHandleOnCorner(win, handle, column, row) {
+		cy.cGet(handle).should(function($handle) {
 			// Read inside the retried check, so a scroll in between is seen.
 			var cell = cellClientRectangle(win, column, row);
 			var center = handleCenter($handle);
 			expect(center[0]).to.be.closeTo(cell.right, 3);
 			expect(center[1]).to.be.closeTo(cell.bottom, 3);
+		});
+	}
+
+	// Drags the end handle down over the rows firstRow to lastRow, into the row after lastRow.
+	function dragEndHandleDown(win, handle, column, firstRow, lastRow) {
+		cy.cGet(handle).then(function($handle) {
+			var start = handleCenter($handle);
+			var sheetGeometry = win.app.map._docLayer.sheetGeometry;
+			var rows = 0;
+			for (var row = firstRow; row <= lastRow; row++)
+				rows += sheetGeometry.getCellSimpleRectangle(column, row).pHeight;
+			var endX = start[0] - 4;
+			var endY = start[1] + Math.round(rows / win.app.dpiScale) - 4;
+
+			cy.cGet('body').realMouseDown({ x: start[0], y: start[1] });
+			cy.cGet('body').realMouseMove(endX, endY);
+			cy.cGet('body').realMouseUp({ x: endX, y: endY });
 		});
 	}
 
@@ -76,7 +95,8 @@ describe(['tagmobile', 'tagnextcloud'], 'Cell handles on a formula reference.', 
 		tapOnCell(win, 1, 1);
 		cy.cGet(formulaText).should('have.text', '=SUM(B2)');
 
-		expectHandleOnCorner(win, 1, 1);
+		expectHandleOnCorner(win, referenceEndHandle, 1, 1);
+		cy.cGet('#test-div-cell_selection_handle_end').should('not.exist');
 
 		cy.cGet('#test-div-selection_start_handle').should('not.exist');
 		cy.cGet('#test-div-selection_end_handle').should('not.exist');
@@ -91,22 +111,11 @@ describe(['tagmobile', 'tagnextcloud'], 'Cell handles on a formula reference.', 
 		});
 
 		// The handle sits on the far corner of B2, so this lands inside B4.
-		cy.cGet('#test-div-cell_selection_handle_end').then(function($handle) {
-			var start = handleCenter($handle);
-			var sheetGeometry = win.app.map._docLayer.sheetGeometry;
-			var rows = sheetGeometry.getCellSimpleRectangle(1, 2).pHeight +
-				sheetGeometry.getCellSimpleRectangle(1, 3).pHeight;
-			var endX = start[0] - 4;
-			var endY = start[1] + Math.round(rows / win.app.dpiScale) - 4;
-
-			cy.cGet('body').realMouseDown({ x: start[0], y: start[1] });
-			cy.cGet('body').realMouseMove(endX, endY);
-			cy.cGet('body').realMouseUp({ x: endX, y: endY });
-		});
+		dragEndHandleDown(win, referenceEndHandle, 1, 2, 3);
 
 		cy.cGet(formulaText).should('have.text', '=SUM(B2:B4)');
 
-		expectHandleOnCorner(win, 1, 3);
+		expectHandleOnCorner(win, referenceEndHandle, 1, 3);
 
 		cy.then(function() {
 			expect(closings.count).to.equal(0);
@@ -121,12 +130,71 @@ describe(['tagmobile', 'tagnextcloud'], 'Cell handles on a formula reference.', 
 			helper.typeIntoInputField(helper.addressInputSelector, address);
 			cy.cGet(formulaText).should('have.text', '=SUM(B2:B4)');
 
-			expectHandleOnCorner(win, address.charCodeAt(0) - 'A'.charCodeAt(0),
-				parseInt(address.substring(1)) - 1);
+			expectHandleOnCorner(win, '#test-div-cell_selection_handle_end',
+				address.charCodeAt(0) - 'A'.charCodeAt(0), parseInt(address.substring(1)) - 1);
+			cy.cGet(referenceEndHandle).should('not.exist');
 		});
 	});
 
-	it('The handles return to the edited cell when typing continues', function() {
+	it('The handles sit on the reference of an opened formula', function() {
+		var win = this.win;
+
+		calcHelper.clickOnFirstCell();
+		helper.typeIntoInputField(helper.addressInputSelector, 'A2');
+		calcHelper.typeIntoFormulabar('=SUM(B2:B4){enter}');
+
+		// Close the function list that typing opened.
+		mobileHelper.closeMobileWizardWithBackButton();
+
+		// Keep the caret at the end: behind the "B" it would open the function list.
+		helper.typeIntoInputField(helper.addressInputSelector, 'A2');
+		cy.cGet(formulaText).should('have.text', '=SUM(B2:B4)');
+		cy.cGet(formulaText).click();
+		cy.cGet('#sc_input_window.formulabar').should('have.class', 'focused');
+		helper.typeIntoDocument('{end}');
+		expectHandleOnCorner(win, referenceEndHandle, 1, 3);
+		cy.cGet('#mobile-wizard').should('not.be.visible');
+
+		helper.processToIdle(win);
+
+		dragEndHandleDown(win, referenceEndHandle, 1, 4, 4);
+
+		cy.cGet(formulaText).should('have.text', '=SUM(B2:B5)');
+		expectHandleOnCorner(win, referenceEndHandle, 1, 4);
+	});
+
+	it('Each reference of an opened formula has its own handles', function() {
+		var win = this.win;
+		var secondEndHandle = '#test-div-reference_handle_end_1';
+
+		calcHelper.clickOnFirstCell();
+		helper.typeIntoInputField(helper.addressInputSelector, 'A2');
+		// C4 shares no corner with B2.
+		calcHelper.typeIntoFormulabar('=B2+C4{enter}');
+
+		// Close the function list that typing opened.
+		mobileHelper.closeMobileWizardWithBackButton();
+
+		helper.typeIntoInputField(helper.addressInputSelector, 'A2');
+		cy.cGet(formulaText).should('have.text', '=B2+C4');
+		cy.cGet(formulaText).click();
+		cy.cGet('#sc_input_window.formulabar').should('have.class', 'focused');
+		helper.typeIntoDocument('{end}');
+		expectHandleOnCorner(win, referenceEndHandle, 1, 1);
+		expectHandleOnCorner(win, secondEndHandle, 2, 3);
+		cy.cGet('#test-div-cell_selection_handle_end').should('not.exist');
+		cy.cGet('#mobile-wizard').should('not.be.visible');
+
+		helper.processToIdle(win);
+
+		dragEndHandleDown(win, referenceEndHandle, 1, 2, 2);
+
+		cy.cGet(formulaText).should('have.text', '=B2:B3+C4');
+		expectHandleOnCorner(win, referenceEndHandle, 1, 2);
+		expectHandleOnCorner(win, secondEndHandle, 2, 3);
+	});
+
+	it('The handles stay on the reference when typing continues', function() {
 		var win = this.win;
 
 		calcHelper.clickOnFirstCell();
@@ -136,11 +204,20 @@ describe(['tagmobile', 'tagnextcloud'], 'Cell handles on a formula reference.', 
 
 		tapOnCell(win, 1, 1);
 		cy.cGet(formulaText).should('have.text', '=2*B2');
-		expectHandleOnCorner(win, 1, 1);
+		expectHandleOnCorner(win, referenceEndHandle, 1, 1);
 
 		helper.typeIntoDocument('+1');
 		cy.cGet(formulaText).should('have.text', '=2*B2+1');
-		expectHandleOnCorner(win, 0, 1);
+		expectHandleOnCorner(win, referenceEndHandle, 1, 1);
+
+		helper.processToIdle(win);
+
+		// The picked range moves along, so no second mark appears.
+		dragEndHandleDown(win, referenceEndHandle, 1, 2, 2);
+
+		cy.cGet(formulaText).should('have.text', '=2*B2:B3+1');
+		expectHandleOnCorner(win, referenceEndHandle, 1, 2);
+		cy.cGet('#test-div-reference_handle_end_1').should('not.exist');
 	});
 
 	// Scrolls A2, the edited cell, out of the view and taps a cell in view into the formula.
@@ -190,7 +267,7 @@ describe(['tagmobile', 'tagnextcloud'], 'Cell handles on a formula reference.', 
 			tapOnCell(win, 1, row);
 		});
 		cy.then(function() {
-			expectHandleOnCorner(win, 1, row);
+			expectHandleOnCorner(win, referenceEndHandle, 1, row);
 		});
 		expectViewKept(textAfterTap);
 		mobileHelper.relayoutForKeyboard(win, function() {

@@ -248,6 +248,11 @@ class FormulaBar {
 		window.L.DomUtil.addClass(this.getInputField(), 'focused');
 	}
 
+	// Selects the span "start;end;startPara;endPara" of the formula text.
+	selectText(selection) {
+		this.callback('edit', 'textselection', { id: 'sc_input_window' }, selection, this.builder);
+	}
+
 	blurField() {
 		window.L.DomUtil.removeClass(this.getInputField(), 'focused');
 	}

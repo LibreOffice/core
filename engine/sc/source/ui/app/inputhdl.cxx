@@ -356,6 +356,12 @@ void ScInputHandler::SendReferenceMarks( const SfxViewShell* pViewShell,
                    << "\"";
             }
 
+            if ( rReferenceMarks[i].bPicked )
+                ss << ", \"picked\": \"true\"";
+
+            if ( rReferenceMarks[i].bStructured )
+                ss << ", \"structured\": \"true\"";
+
             ss << " } ";
 
             bSend = true;
@@ -675,8 +681,112 @@ bool ScInputHandler::GetActiveReference( ScRange& rRange ) const
     if (!bSelIsRef || !aSelectedReference.IsValid())
         return false;
 
+    // The pick lasts while its text is the selection.
+    const EditView* pActiveView = pTopView ? pTopView : pTableView;
+    if (pRangeFindList && !pRangeFindList->IsHidden() && pActiveView)
+    {
+        ESelection aSelection = pActiveView->GetSelection();
+        aSelection.Adjust();
+        if (!FindRangeFinderEntry( aSelectedReference, aSelection ))
+            return false;
+    }
+
     rRange = aSelectedReference;
     return true;
+}
+
+bool ScInputHandler::HasActiveReference() const
+{
+    ScRange aReference;
+    return GetActiveReference( aReference );
+}
+
+std::optional<size_t> ScInputHandler::FindRangeFinderEntry( const ScRange& rRange,
+                                                            const ESelection& rSelection ) const
+{
+    if (!pRangeFindList)
+        return std::nullopt;
+
+    ScRange aRange = rRange;
+    aRange.PutInOrder();
+    ESelection aSelection = rSelection;
+    aSelection.Adjust();
+    // The same range can stand in the text more than once, so the span tells the entries apart.
+    for (size_t i = 0; i < pRangeFindList->Count(); ++i)
+    {
+        const ScRangeFindData& rData = pRangeFindList->GetObject( i );
+        ScRange aRef = rData.aRef;
+        aRef.PutInOrder();
+        ESelection aSpan = rData.maSel;
+        aSpan.Adjust();
+        if (aRef == aRange && aSpan == aSelection)
+            return i;
+    }
+    return std::nullopt;
+}
+
+std::optional<size_t> ScInputHandler::GetActiveRangeFinderEntry() const
+{
+    if (!pRangeFindList || pRangeFindList->IsHidden() || !pActiveViewSh)
+        return std::nullopt;
+
+    if (pRangeFindList->GetDocName() != pActiveViewSh->GetViewData().GetDocShell()->GetTitle())
+        return std::nullopt;
+
+    const EditView* pActiveView = pTopView ? pTopView : pTableView;
+    if (!pActiveView)
+        return std::nullopt;
+
+    ESelection aSelection = pActiveView->GetSelection();
+    aSelection.Adjust();
+
+    // A toggled reference has no picked range and is found by its text.
+    ScRange aPicked;
+    if (GetActiveReference( aPicked ))
+    {
+        if (std::optional<size_t> oPicked = FindRangeFinderEntry( aPicked, aSelection ))
+            return oPicked;
+    }
+
+    std::optional<size_t> oBefore;
+    EPaM aBeforeEnd;
+    std::optional<size_t> oAfter;
+    EPaM aAfterStart;
+    for (size_t i = 0; i < pRangeFindList->Count(); ++i)
+    {
+        const ScRangeFindData& rData = pRangeFindList->GetObject( i );
+        ESelection aSpan = rData.maSel;
+        aSpan.Adjust();
+        // A caret right behind the reference counts as inside it.
+        const bool bInside = !(aSelection.start < aSpan.start) && !(aSpan.end < aSelection.end);
+
+        // A structured reference has no corner to move, and nothing nearer either.
+        if (rData.bTableRef)
+        {
+            if (bInside)
+                return std::nullopt;
+            continue;
+        }
+
+        if (bInside)
+            return i;
+
+        if (aSpan.start < aSelection.end)
+        {
+            if (!oBefore || aBeforeEnd < aSpan.end)
+            {
+                oBefore = i;
+                aBeforeEnd = aSpan.end;
+            }
+        }
+        else if (!oAfter || aSpan.start < aAfterStart)
+        {
+            oAfter = i;
+            aAfterStart = aSpan.start;
+        }
+    }
+
+    return oBefore ? oBefore : oAfter;
 }
 
 void ScInputHandler::UpdateKitReferenceMarks(bool bSendWhenEmpty)
@@ -706,8 +816,8 @@ void ScInputHandler::UpdateKitReferenceMarks(bool bSendWhenEmpty)
 
     std::vector<ReferenceMark> aReferenceMarks;
 
-    ScRange aActiveRange;
-    const bool bHasActiveRange = GetActiveReference( aActiveRange );
+    const bool bHasActiveRange = HasActiveReference();
+    const std::optional<size_t> oActiveEntry = GetActiveRangeFinderEntry();
 
     ScRange aRefRange( ScAddress::INITIALIZE_INVALID );
 
@@ -731,40 +841,26 @@ void ScInputHandler::UpdateKitReferenceMarks(bool bSendWhenEmpty)
         aReferenceMarks.push_back( ScInputHandler::GetReferenceMark( rViewData, *pDocSh,
                                                                      nX1, nX2, nY1, nY2,
                                                                      nTab, aRefColor ) );
-        // The view keeps the ref range after the pick, so it is active only while its text
-        // is still selected.
+        // The ref range outlives the pick. It is picked only while its text is selected.
         aReferenceMarks.back().bActive = bHasActiveRange;
+        aReferenceMarks.back().bPicked = bHasActiveRange;
     }
 
     if ( pRangeFinder && !pRangeFinder->IsHidden() &&
          pRangeFinder->GetDocName() == pDocSh->GetTitle() )
     {
-        // The picked range is in the text as well, its mark takes the colour and span of that entry
+        // The picked range is in the text too, so its entry lends the mark its colour and span.
+        // After the pick, the first entry with that range stands for it.
         std::optional<size_t> oPickedEntry;
-        if (bRefMark)
+        if (bRefMark && bHasActiveRange && oActiveEntry)
+            oPickedEntry = oActiveEntry;
+        else if (bRefMark)
         {
-            std::optional<ESelection> oPickedSelection;
-            EditView* pActiveView = pTopView ? pTopView : pTableView;
-            if (bHasActiveRange && pActiveView)
+            for (size_t i = 0; i < pRangeFinder->Count() && !oPickedEntry; i++)
             {
-                ESelection aSelection = pActiveView->GetSelection();
-                aSelection.Adjust();
-                oPickedSelection = aSelection;
-            }
-
-            for (size_t i = 0; i < pRangeFinder->Count(); i++)
-            {
-                const ScRangeFindData& rData = pRangeFinder->GetObject( i );
-                ScRange aRef = rData.aRef;
+                ScRange aRef = pRangeFinder->GetObject( i ).aRef;
                 aRef.PutInOrder();
-                if (aRef != aRefRange)
-                    continue;
-                if (oPickedSelection && rData.maSel == *oPickedSelection)
-                {
-                    oPickedEntry = i;
-                    break;
-                }
-                if (!oPickedEntry)
+                if (aRef == aRefRange)
                     oPickedEntry = i;
             }
         }
@@ -779,13 +875,16 @@ void ScInputHandler::UpdateKitReferenceMarks(bool bSendWhenEmpty)
             {
                 aReferenceMarks[0].aColor = rData.nColor;
                 aReferenceMarks[0].oTextSelection = rData.maSel;
+                if (oActiveEntry == i)
+                    aReferenceMarks[0].bActive = true;
                 continue;
             }
 
             ReferenceMark aMark = ScInputHandler::GetReferenceMark(
                 rViewData, *pDocSh, aRef.aStart.Col(), aRef.aEnd.Col(), aRef.aStart.Row(),
                 aRef.aEnd.Row(), aRef.aStart.Tab(), rData.nColor );
-            aMark.bActive = !bRefMark && bHasActiveRange && aRef == aActiveRange;
+            aMark.bActive = oActiveEntry == i;
+            aMark.bStructured = rData.bTableRef;
             aMark.oTextSelection = rData.maSel;
             aReferenceMarks.push_back( aMark );
         }
@@ -873,6 +972,86 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
     {
         OSL_FAIL("UpdateRange: we're missing something");
     }
+}
+
+bool ScInputHandler::MoveActiveReferenceCorner( bool bStartCorner, SCCOL nCol, SCROW nRow )
+{
+    ScTabViewShell* pDocView = pRefViewSh ? pRefViewSh : pActiveViewSh;
+    if (!pDocView)
+        return false;
+
+    ScRange aReference;
+    std::optional<size_t> oEntry;
+    if (!GetActiveReference( aReference ))
+    {
+        oEntry = GetActiveRangeFinderEntry();
+        if (!oEntry)
+            return false;
+        aReference = pRangeFindList->GetObject( *oEntry ).aRef;
+    }
+
+    ScViewData& rViewData = pDocView->GetViewData();
+    const SCTAB nTab = rViewData.CurrentTabForData();
+    if (aReference.aStart.Tab() != nTab || aReference.aEnd.Tab() != nTab)
+        return false;
+
+    // The dragged corner keeps moving past the other one, which stays the anchor. Only the text
+    // is written in order.
+    ScAddress& rCorner = bStartCorner ? aReference.aStart : aReference.aEnd;
+    if (rCorner.Col() == nCol && rCorner.Row() == nRow)
+        return true;
+
+    rCorner.SetCol( nCol );
+    rCorner.SetRow( nRow );
+
+    if (!oEntry)
+    {
+        // Keep the ref range of the view in step with the picked reference.
+        rViewData.SetRefStart( aReference.aStart.Col(), aReference.aStart.Row(),
+                               aReference.aStart.Tab() );
+        rViewData.SetRefEnd( aReference.aEnd.Col(), aReference.aEnd.Row(),
+                             aReference.aEnd.Tab() );
+        ScRange aOrdered = aReference;
+        aOrdered.PutInOrder();
+        SetReference( aOrdered, rViewData.GetDocument() );
+        aSelectedReference = aReference;
+        UpdateKitReferenceMarks();
+        return true;
+    }
+
+    const sal_uInt16 nEntry = static_cast<sal_uInt16>( *oEntry );
+    ScRange aOld = pRangeFindList->GetObject( nEntry ).aRef;
+    aOld.PutInOrder();
+    UpdateRange( nEntry, aReference );
+
+    // The ref range of a finished pick moves along with its entry.
+    if (rViewData.IsRefMode())
+    {
+        ScRange aRefRange( rViewData.GetRefStartX(), rViewData.GetRefStartY(),
+                           rViewData.GetRefStartZ(), rViewData.GetRefEndX(),
+                           rViewData.GetRefEndY(), rViewData.GetRefEndZ() );
+        aRefRange.PutInOrder();
+        if (aRefRange == aOld)
+        {
+            rViewData.SetRefStart( aReference.aStart.Col(), aReference.aStart.Row(),
+                                   aReference.aStart.Tab() );
+            rViewData.SetRefEnd( aReference.aEnd.Col(), aReference.aEnd.Row(),
+                                 aReference.aEnd.Tab() );
+        }
+    }
+
+    // Keep the rewritten text selected, as after a pick.
+    EditView* pActiveView = pTopView ? pTopView : pTableView;
+    if (pActiveView)
+    {
+        pActiveView->SetSelection( pRangeFindList->GetObject( nEntry ).maSel );
+        InputSelection( pActiveView );
+    }
+
+    ScDocShell* pDocSh = rViewData.GetDocShell();
+    pDocSh->PostPaint( aOld, PaintPartFlags::Grid );
+    pDocSh->Broadcast( ScIndexHint( SfxHintId::ScShowRangeFinder, nEntry ) );
+    return true;
 }
 
 void ScInputHandler::DeleteRangeFinder()
@@ -3412,6 +3591,11 @@ void ScInputHandler::SetMode(ScInputMode eNewMode, const OUString* pInitText, Sc
     }
 
     UpdateActiveView();
+    // The range finder is built before the views, so resend the marks now that a selection
+    // exists.
+    if (eOldMode == SC_INPUT_NONE && pRangeFindList)
+        UpdateKitReferenceMarks();
+
     if (eMode==SC_INPUT_TABLE || eMode==SC_INPUT_TYPE)
     {
         if (pTableView)
@@ -4506,6 +4690,10 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
             DataChanged(false, bSetModified); // also calls UpdateParenthesis()
             bInRangeUpdate = false;
 
+            // Cursor keys do not rebuild the range finder, so resend the marks for the new caret.
+            if (bCursorKey && pRangeFindList)
+                UpdateKitReferenceMarks();
+
             // In the COKit case, we want to set the document modified state
             // right away at the start of the edit, so that the content is
             // saved even when the user leaves the document before hitting
@@ -4979,6 +5167,9 @@ void ScInputHandler::InputSelection( const EditView* pView )
         EditView* pActiveView = pTopView ? pTopView : pTableView;
         ESelection aSel = pActiveView ? pActiveView->GetSelection() : ESelection();
         pActiveViewSh->KitSendFormulabarUpdate(pActiveView, GetEditString(), aSel);
+
+        if (pRangeFindList)
+            UpdateKitReferenceMarks();
     }
 }
 

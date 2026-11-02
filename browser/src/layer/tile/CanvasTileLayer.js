@@ -2557,9 +2557,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		}
 	},
 
-	// Build the list of {mark, part, rectangle, active} references from the marks array of a
-	// referencemarks payload. Each mark becomes a CPolygon that fills the cell range with a
-	// translucent highlight. Active is set on the reference selected in the edited formula.
+	// Build the list of references from the marks array of a referencemarks payload. Each mark
+	// becomes a CPolygon that fills the cell range with a translucent highlight. The selection
+	// is the text span in the formula as "start;end;startPara;endPara".
 	_marksToReferences: function (marks) {
 		var references = [];
 
@@ -2597,32 +2597,51 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 					opacity: 0.25});
 
 				references.push({mark: reference, part: part, rectangle: rectangle,
-					active: marks[mark].active === 'true'});
+					selection: marks[mark].selection || null,
+					active: marks[mark].active === 'true',
+					picked: marks[mark].picked === 'true',
+					structured: marks[mark].structured === 'true'});
 			}
 		}
 
 		return references;
 	},
 
-	_activeReference: function () {
+	isPickingFormulaReference: function () {
 		if (!this._referencesAll)
-			return null;
+			return false;
 
 		for (var i = 0; i < this._referencesAll.length; i++) {
-			if (this._referencesAll[i].active)
-				return this._referencesAll[i];
+			if (this._referencesAll[i].picked)
+				return true;
 		}
 
-		return null;
+		return false;
 	},
 
-	getActiveReferenceRectangle: function () {
-		var reference = this._activeReference();
-		return reference && reference.part === this._selectedPart ? reference.rectangle : null;
-	},
+	getReferencesOnSheet: function () {
+		var references = [];
+		if (!this._referencesAll)
+			return references;
 
-	isPickingFormulaReference: function () {
-		return this._activeReference() !== null;
+		for (var i = 0; i < this._referencesAll.length; i++) {
+			var reference = this._referencesAll[i];
+			if (reference.part !== this._selectedPart)
+				continue;
+
+			// Handles need text to select: a span in the formula, or the pick itself.
+			if (reference.selection === null && !reference.picked)
+				continue;
+
+			// A structured reference has no corner to drag.
+			if (reference.structured)
+				continue;
+
+			references.push({rectangle: reference.rectangle, selection: reference.selection,
+				active: reference.active});
+		}
+
+		return references;
 	},
 
 	_onReferencesMsg: function (textMsg) {

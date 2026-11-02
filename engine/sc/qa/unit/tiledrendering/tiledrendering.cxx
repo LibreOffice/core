@@ -50,6 +50,7 @@
 #include <tabvwsh.hxx>
 #include <dbdocfun.hxx>
 #include <dbdata.hxx>
+#include <docfunc.hxx>
 #include <subtotalparam.hxx>
 #include <sortparam.hxx>
 #include <queryparam.hxx>
@@ -3069,6 +3070,7 @@ int countOccurrences(std::string_view aText, std::string_view aPart)
 }
 
 constexpr OString aActiveMark = "\"active\": \"true\""_ostr;
+constexpr OString aPickedMark = "\"picked\": \"true\""_ostr;
 
 OString markWith(std::string_view aMarks, std::string_view aPart)
 {
@@ -3091,10 +3093,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testActiveReferenceMark)
     startFormulaWithReferenceToA1(pModelObj, pViewShell);
     CPPUNIT_ASSERT_EQUAL("=A1"_ostr, aView1.m_sCellFormula);
     CPPUNIT_ASSERT(aView1.m_sReferenceMarks.indexOf(aActiveMark) >= 0);
+    CPPUNIT_ASSERT_EQUAL(1, countOccurrences(aView1.m_sReferenceMarks, aPickedMark));
 
+    // Typing ends the pick, but the reference stays the nearest one to the caret.
     typeText(pModelObj, u"+");
     CPPUNIT_ASSERT_EQUAL("=A1+"_ostr, aView1.m_sCellFormula);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aView1.m_sReferenceMarks.indexOf("\"active\""));
+    CPPUNIT_ASSERT_EQUAL(1, countOccurrences(aView1.m_sReferenceMarks, aActiveMark));
+    CPPUNIT_ASSERT_EQUAL(0, countOccurrences(aView1.m_sReferenceMarks, aPickedMark));
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testReferenceMarksFollowTyping)
@@ -3197,9 +3202,77 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDragActiveReferenceCorner)
     CPPUNIT_ASSERT(aView1.m_sReferenceMarks.indexOf(aActiveMark) >= 0);
 }
 
-CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testToggledReferenceIsNotActive)
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDragPickedReferenceAfterTyping)
 {
-    // The toggle selects a typed reference, not a picked one, so a handle drag leaves it alone.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScTestViewCallback aView1;
+
+    startFormulaWithReferenceToA1(pModelObj, pViewShell);
+    typeText(pModelObj, u"+");
+    CPPUNIT_ASSERT_EQUAL("=A1+"_ostr, aView1.m_sCellFormula);
+    CPPUNIT_ASSERT_EQUAL(1, countOccurrences(aView1.m_sReferenceMarks, "rectangle"));
+
+    const Point aB3 = cellMiddleTwips(*pViewData, 1, 2);
+    pModelObj->setTextSelection(COKitSetTextSelectionType::END, aB3.X(), aB3.Y());
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL("=A1:B3+"_ostr, aView1.m_sCellFormula);
+    CPPUNIT_ASSERT_EQUAL(1, countOccurrences(aView1.m_sReferenceMarks, "rectangle"));
+    CPPUNIT_ASSERT_EQUAL(1, countOccurrences(aView1.m_sReferenceMarks, aActiveMark));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testReferenceAtCaretIsActive)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(SfxObjectShell::Current());
+    CPPUNIT_ASSERT(pDocSh);
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScTestViewCallback aView1;
+
+    pDocSh->GetDocument().SetString(2, 0, 0, u"=A1+B2"_ustr);
+    pViewShell->SetCursor(2, 0);
+    pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::F2);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL("=A1+B2"_ostr, aView1.m_sCellFormula);
+    CPPUNIT_ASSERT_EQUAL(1, countOccurrences(aView1.m_sReferenceMarks, aActiveMark));
+
+    const Point aC3 = cellMiddleTwips(*pViewData, 2, 2);
+    pModelObj->setTextSelection(COKitSetTextSelectionType::END, aC3.X(), aC3.Y());
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL("=A1+B2:C3"_ostr, aView1.m_sCellFormula);
+    CPPUNIT_ASSERT_EQUAL(1, countOccurrences(aView1.m_sReferenceMarks, aActiveMark));
+
+    const Point aC4 = cellMiddleTwips(*pViewData, 2, 3);
+    pModelObj->setTextSelection(COKitSetTextSelectionType::END, aC4.X(), aC4.Y());
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL("=A1+B2:C4"_ostr, aView1.m_sCellFormula);
+    CPPUNIT_ASSERT_EQUAL(1, countOccurrences(aView1.m_sReferenceMarks, aActiveMark));
+
+    // Six steps left put the caret behind the A1.
+    for (int i = 0; i < 6; ++i)
+    {
+        pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::LEFT);
+        pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::LEFT);
+    }
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(1, countOccurrences(aView1.m_sReferenceMarks, aActiveMark));
+
+    const Point aA4 = cellMiddleTwips(*pViewData, 0, 3);
+    pModelObj->setTextSelection(COKitSetTextSelectionType::END, aA4.X(), aA4.Y());
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL("=A1:A4+B2:C4"_ostr, aView1.m_sCellFormula);
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDragToggledReferenceCorner)
+{
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     CPPUNIT_ASSERT(pViewShell);
@@ -3216,7 +3289,124 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testToggledReferenceIsNotActive)
     pModelObj->setTextSelection(COKitSetTextSelectionType::END, aB3.X(), aB3.Y());
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aView1.m_sCellFormula.indexOf("B3"));
+    CPPUNIT_ASSERT_EQUAL("=A1+$B$3:$C$3"_ostr, aView1.m_sCellFormula);
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDraggedPickCornerKeepsAnchor)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScTestViewCallback aView1;
+
+    startFormulaWithReferenceToA1(pModelObj, pViewShell);
+    CPPUNIT_ASSERT_EQUAL("=A1"_ostr, aView1.m_sCellFormula);
+
+    const Point aB2 = cellMiddleTwips(*pViewData, 1, 1);
+    pModelObj->setTextSelection(COKitSetTextSelectionType::START, aB2.X(), aB2.Y());
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL("=A1:B2"_ostr, aView1.m_sCellFormula);
+
+    const Point aC3 = cellMiddleTwips(*pViewData, 2, 2);
+    pModelObj->setTextSelection(COKitSetTextSelectionType::START, aC3.X(), aC3.Y());
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL("=A1:C3"_ostr, aView1.m_sCellFormula);
+    CPPUNIT_ASSERT_EQUAL(1, countOccurrences(aView1.m_sReferenceMarks, "rectangle"));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDraggedEntryCornerKeepsAnchor)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScTestViewCallback aView1;
+
+    openFormulaInA3(pModelObj, pViewShell, u"=B2:B4"_ustr);
+    CPPUNIT_ASSERT_EQUAL("=B2:B4"_ostr, aView1.m_sCellFormula);
+
+    const Point aB1 = cellMiddleTwips(*pViewData, 1, 0);
+    pModelObj->setTextSelection(COKitSetTextSelectionType::END, aB1.X(), aB1.Y());
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL("=B1:B2"_ostr, aView1.m_sCellFormula);
+
+    const Point aC1 = cellMiddleTwips(*pViewData, 2, 0);
+    pModelObj->setTextSelection(COKitSetTextSelectionType::END, aC1.X(), aC1.Y());
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL("=B1:C2"_ostr, aView1.m_sCellFormula);
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testStructuredReferenceHasNoCorner)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(SfxObjectShell::Current());
+    CPPUNIT_ASSERT(pDocSh);
+    ScDocument& rDoc = pDocSh->GetDocument();
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScTestViewCallback aView1;
+
+    ScDBData* pData = new ScDBData(u"Table1"_ustr, /*nTab*/ 0, 0, 0, 1, 3,
+                                   /*bByRow*/ true, /*bHasHeader*/ true);
+    CPPUNIT_ASSERT(rDoc.GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pData)));
+    rDoc.SetString(0, 0, 0, u"Name"_ustr);
+    rDoc.SetString(1, 0, 0, u"Number"_ustr);
+    for (SCROW nRow = 1; nRow <= 3; ++nRow)
+        rDoc.SetValue(1, nRow, 0, static_cast<double>(nRow));
+    pData->RefreshTableColumnNames(&rDoc);
+
+    rDoc.SetString(3, 0, 0, u"=A2+SUM(Table1[Number])"_ustr);
+    pViewShell->SetCursor(3, 0);
+    pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::F2);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL("=A2+SUM(Table1[Number])"_ostr, aView1.m_sCellFormula);
+    CPPUNIT_ASSERT_EQUAL(1, countOccurrences(aView1.m_sReferenceMarks, "\"structured\": \"true\""));
+
+    // Two steps left put the caret inside the column name.
+    for (int i = 0; i < 2; ++i)
+    {
+        pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::LEFT);
+        pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::LEFT);
+    }
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(0, countOccurrences(aView1.m_sReferenceMarks, aActiveMark));
+
+    const Point aB3 = cellMiddleTwips(*pViewData, 1, 2);
+    pModelObj->setTextSelection(COKitSetTextSelectionType::END, aB3.X(), aB3.Y());
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL("=A2+SUM(Table1[Number])"_ostr, aView1.m_sCellFormula);
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testReferenceOnOtherSheetKeepsText)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(SfxObjectShell::Current());
+    CPPUNIT_ASSERT(pDocSh);
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScTestViewCallback aView1;
+
+    CPPUNIT_ASSERT(pDocSh->GetDocFunc().InsertTable(1, u"Sheet2"_ustr, false, true));
+    pDocSh->GetDocument().SetString(0, 1, 0, u"=$Sheet2.A1"_ustr);
+    pViewShell->SetCursor(0, 1);
+    pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::F2);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL("=$Sheet2.A1"_ostr, aView1.m_sCellFormula);
+    CPPUNIT_ASSERT(aView1.m_sReferenceMarks.indexOf("\"part\": \"1\"") >= 0);
+
+    const Point aB3 = cellMiddleTwips(*pViewData, 1, 2);
+    pModelObj->setTextSelection(COKitSetTextSelectionType::END, aB3.X(), aB3.Y());
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL("=$Sheet2.A1"_ostr, aView1.m_sCellFormula);
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSelectColumnCursorStaysInView)

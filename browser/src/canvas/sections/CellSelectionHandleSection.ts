@@ -15,10 +15,16 @@ class CellSelectionHandle extends CanvasSectionObject {
 	drawingOrder: number = app.CSections.DefaultForDocumentObjects.drawingOrder;
 	zIndex: number = app.CSections.DefaultForDocumentObjects.zIndex;
 	documentObject: boolean = true;
+	// Text span of the formula reference under the handle, or null on the cell selection.
+	textSelection: string | null = null;
+	// True on the reference nearest to the formula selection.
+	active: boolean = false;
+	private readonly isStart: boolean;
 
-	constructor (name: string) {
+	constructor (name: string, isStart: boolean) {
         super(name);
 
+		this.isStart = isStart;
 		this.sectionProperties.circleRadius = 10 * app.dpiScale;
 		this.size = [this.sectionProperties.circleRadius * 2, this.sectionProperties.circleRadius * 2];
 	}
@@ -36,7 +42,7 @@ class CellSelectionHandle extends CanvasSectionObject {
 	}
 
 	private sharedOnDragAndEnd(point: cool.SimplePoint) {
-		const type = this.name === 'cell_selection_handle_start' ? 'start' : 'end';
+		const type = this.isStart ? 'start' : 'end';
 		app.map._docLayer._postSelectTextEvent(type, point.x, point.y);
 	}
 
@@ -73,6 +79,9 @@ class CellSelectionHandle extends CanvasSectionObject {
 	onMouseDown(point: cool.SimplePoint, e: MouseEvent): void {
 		e.stopPropagation();
 		this.stopPropagating();
+		// The engine drags the active reference, so select any other one first.
+		if (this.textSelection !== null && !this.active && app.map.formulabar)
+			app.map.formulabar.selectText(this.textSelection);
 	}
 
 	onMouseUp(point: cool.SimplePoint, e: MouseEvent): void {

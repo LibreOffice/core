@@ -112,8 +112,12 @@ struct ReferenceMark {
     tools::Long nHeight;
     tools::Long nTab;
     Color aColor;
-    /// True for the reference whose text is selected in the formula being edited.
+    /// True for the reference nearest to the selection of the formula being edited.
     bool bActive = false;
+    /// True for the picked range while its text is still selected.
+    bool bPicked = false;
+    /// True for a structured reference (a table column), which has no corner of its own.
+    bool bStructured = false;
     /// Where the reference stands in the formula text. Unset for a range picked for a dialog.
     std::optional<ESelection> oTextSelection;
 

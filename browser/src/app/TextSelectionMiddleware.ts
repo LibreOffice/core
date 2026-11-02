@@ -59,13 +59,13 @@ class TextSelections {
 		this.refreshHandles();
 	}
 
-	// While a formula reference is active the cell handles stand in for the text handles.
+	// Cell handles on a formula reference stand in for the text handles.
 	private static handlesWanted(): boolean {
 		return (
 			this.active &&
 			this.startRectangle !== null &&
 			this.endRectangle !== null &&
-			app.map._docLayer.getActiveReferenceRectangle() === null
+			app.map._docLayer.getReferencesOnSheet().length === 0
 		);
 	}
 
