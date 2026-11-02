@@ -51,10 +51,9 @@ namespace cairocanvas
                                              css::beans::XPropertySet,
                                              css::lang::XServiceName,
                                              css::lang::XServiceInfo >  GraphicDeviceBase_Base;
-    typedef ::canvas::GraphicDeviceBase< ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >,
-                                                 DeviceHelper,
-                                                 ::osl::MutexGuard,
-                                                 ::cppu::OWeakObject > CanvasBase_Base;
+    typedef ::canvas::GraphicDeviceBase<::canvas::BaseMutexHelper<GraphicDeviceBase_Base>,
+                                        DeviceHelper, ::osl::MutexGuard>
+        CanvasBase_Base;
 
     /** Mixin SurfaceProvider
 

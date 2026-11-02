@@ -66,11 +66,10 @@ namespace canvas
     is left.
  */
 template <class Base, class DeviceHelper, class MutexType = ::osl::MutexGuard>
-class BufferedGraphicDeviceBase
-    : public GraphicDeviceBase<Base, DeviceHelper, MutexType, cppu::OWeakObject>
+class BufferedGraphicDeviceBase : public GraphicDeviceBase<Base, DeviceHelper, MutexType>
 {
 public:
-    typedef GraphicDeviceBase<Base, DeviceHelper, MutexType, cppu::OWeakObject> BaseType;
+    typedef GraphicDeviceBase<Base, DeviceHelper, MutexType> BaseType;
 
     BufferedGraphicDeviceBase()
         : mbIsVisible(false)

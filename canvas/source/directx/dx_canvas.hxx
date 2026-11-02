@@ -55,10 +55,9 @@ namespace dxcanvas
                                              css::beans::XPropertySet,
                                              css::lang::XServiceName,
                                              css::lang::XServiceInfo>    GraphicDeviceBase1_Base;
-    typedef ::canvas::GraphicDeviceBase< ::canvas::BaseMutexHelper< GraphicDeviceBase1_Base >,
-                                           DeviceHelper,
-                                           ::osl::MutexGuard,
-                                           ::cppu::OWeakObject >    CanvasBase1_Base;
+    typedef ::canvas::GraphicDeviceBase<::canvas::BaseMutexHelper<GraphicDeviceBase1_Base>,
+                                        DeviceHelper, ::osl::MutexGuard>
+        CanvasBase1_Base;
     typedef ::canvas::CanvasBase<CanvasBase1_Base, CanvasHelper, ::osl::MutexGuard> CanvasBaseT;
 
     /** Product of this component's factory.
@@ -111,10 +110,9 @@ namespace dxcanvas
                                              css::beans::XPropertySet,
                                              css::lang::XServiceName,
                                              css::lang::XServiceInfo >    GraphicDeviceBase2_Base;
-    typedef ::canvas::GraphicDeviceBase< ::canvas::BaseMutexHelper< GraphicDeviceBase2_Base >,
-                                           DeviceHelper,
-                                           ::osl::MutexGuard,
-                                           ::cppu::OWeakObject >    CanvasBase2_Base;
+    typedef ::canvas::GraphicDeviceBase<::canvas::BaseMutexHelper<GraphicDeviceBase2_Base>,
+                                        DeviceHelper, ::osl::MutexGuard>
+        CanvasBase2_Base;
     typedef ::canvas::IntegerBitmapBase<
         canvas::BitmapCanvasBase2<CanvasBase2_Base, BitmapCanvasHelper, ::osl::MutexGuard>>
         BitmapCanvasBaseT;
