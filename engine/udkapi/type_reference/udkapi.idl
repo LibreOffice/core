@@ -1110,7 +1110,6 @@ module com {
      ::cpo::uno::XInterface activate([in] string implementationName, [in] string implementationLoaderUrl, [in] string locationUrl, [in] ::com::sun::star::registry::XRegistryKey xKey) raises (::com::sun::star::loader::CannotActivateFactoryException);
      boolean writeRegistryInfo([in] ::com::sun::star::registry::XRegistryKey xKey, [in] string implementationLoaderUrl, [in] string locationUrl) raises (::com::sun::star::registry::CannotRegisterImplementationException);
     };
-    published service Dynamic: ::com::sun::star::loader::XImplementationLoader;
     published service Java: ::com::sun::star::loader::XImplementationLoader;
     /** @deprecated */ published service Java2 {
      interface ::com::sun::star::loader::XImplementationLoader;

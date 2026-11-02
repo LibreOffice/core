@@ -52,7 +52,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,com/sun/star/lang,\
 	ServiceManager \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,com/sun/star/loader,\
-	Dynamic \
 	Java \
 	Java2 \
 	SharedLibrary \
