@@ -74,6 +74,7 @@
 #include <tabvwsh.hxx>
 #include <dbdata.hxx>
 #include <CellTextAlignment.hxx>
+#include <CellTextFit.hxx>
 
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/string.hxx>
@@ -88,9 +89,6 @@ using namespace com::sun::star;
 //! Merge Autofilter width with column.cxx
 #define DROPDOWN_BITMAP_SIZE        18
 
-#define DRAWTEXT_MAX    32767
-
-const sal_uInt16 SC_SHRINKAGAIN_MAX = 7;
 constexpr auto HMM_PER_TWIPS = o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::mm100);
 
 class ScDrawStringsVars
@@ -530,8 +528,8 @@ bool ScDrawStringsVars::SetText( const ScRefCellValue& rCell )
                 nRepeatPos = -1;
                 nRepeatChar = 0x0;
             }
-            if (aString.getLength() > DRAWTEXT_MAX)
-                aString = aString.copy(0, DRAWTEXT_MAX);
+            if (aString.getLength() > sc::constMaxDrawTextLength)
+                aString = aString.copy(0, sc::constMaxDrawTextLength);
 
             if ( pColor && !pOutput->mbSyntaxMode && !( pOutput->mbUseStyleColor && pOutput->mbForceAutoColor ) )
             {
@@ -564,40 +562,21 @@ void ScDrawStringsVars::SetHashText()
 
 void ScDrawStringsVars::RepeatToFill( tools::Long nColWidth )
 {
-    if ( nRepeatPos == -1 || nRepeatPos > aString.getLength() )
-        return;
-
-    // Measuring a string containing a single copy of the repeat char is inaccurate.
-    // To increase accuracy, start with a representative sample of a padding sequence.
-    constexpr sal_Int32 nSampleSize = 20;
-    OUStringBuffer aFill(nSampleSize);
-    comphelper::string::padToLength(aFill, nSampleSize, nRepeatChar);
-
-    tools::Long nSampleWidth = GetFmtTextWidth(aFill.makeStringAndClear());
-    double nAvgCharWidth = static_cast<double>(nSampleWidth) / static_cast<double>(nSampleSize);
-
-    // Intentionally truncate to round toward zero
-    auto nCharWidth = static_cast<tools::Long>(nAvgCharWidth);
-    if ( nCharWidth < 1 || (bPixelToLogic && nCharWidth < pOutput->mpRefDevice->PixelToLogic(Size(1,0)).Width()) )
-        return;
-
-    // Are there restrictions on the cell type we should filter out here ?
     tools::Long nTextWidth = aTextSize.Width();
+    double fMinWidth = 1.0;
     if ( bPixelToLogic )
     {
         nColWidth = pOutput->mpRefDevice->PixelToLogic(Size(nColWidth,0)).Width();
         nTextWidth = pOutput->mpRefDevice->PixelToLogic(Size(nTextWidth,0)).Width();
+        fMinWidth = pOutput->mpRefDevice->PixelToLogic(Size(1,0)).Width();
     }
 
-    tools::Long nSpaceToFill = nColWidth - nTextWidth;
-    if ( nSpaceToFill <= nCharWidth )
+    std::optional<OUString> oFilled = sc::fillWithRepeatCharacter(
+        aString, nRepeatPos, nRepeatChar, nColWidth - nTextWidth, fMinWidth,
+        [this](const OUString& rText) { return double(GetFmtTextWidth(rText)); });
+    if (!oFilled)
         return;
-
-    // Intentionally truncate to round toward zero
-    auto nCharsToInsert = static_cast<sal_Int32>(static_cast<double>(nSpaceToFill) / nAvgCharWidth);
-    aFill.ensureCapacity(nCharsToInsert);
-    comphelper::string::padToLength(aFill, nCharsToInsert, nRepeatChar);
-    aString = aString.replaceAt( nRepeatPos, 0, aFill );
+    aString = *oFilled;
     TextChanged();
 }
 
@@ -607,101 +586,28 @@ bool ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, tools::Long
     if (bPixelToLogic)
         nWidth = pOutput->mpRefDevice->PixelToLogic(Size(nWidth,0)).Width();
 
-    CellType eType = rCell.getType();
-    if (eType != CELLTYPE_VALUE && eType != CELLTYPE_FORMULA)
-        // must be a value or formula cell.
-        return false;
-
-    if (eType == CELLTYPE_FORMULA)
+    const sc::NumberWidths aWidths{ [this] { return double(GetMaxDigitWidth()); },
+                                    [this] { return double(GetSignWidth()); },
+                                    [this] { return double(GetDotWidth()); },
+                                    [this] { return double(GetExpWidth()); } };
+    OUString aText(aString);
+    switch (sc::fitNumberToWidth(
+        rCell, GetResultValueFormat(), pOutput->mbShowFormulas, *pOutput->mpDoc, nWidth, aWidths,
+        [this](const OUString& rText) { return double(GetFmtTextWidth(rText)); }, aText))
     {
-        ScFormulaCell* pFCell = rCell.getFormula();
-        if (pFCell->GetErrCode() != FormulaError::NONE || pOutput->mbShowFormulas)
-        {
-            SetHashText();      // If the error string doesn't fit, always use "###". Also for "display formulas" (#i116691#)
+        case sc::NumberFit::Unchanged:
+            return false;
+        case sc::NumberFit::Failed:
+            aString = aText;
+            return false;
+        case sc::NumberFit::Hash:
+            SetHashText();
             return true;
-        }
-        // If it's formula, the result must be a value.
-        if (!pFCell->IsValue())
-            return false;
+        case sc::NumberFit::Fits:
+            break;
     }
 
-    sal_uLong nFormat = GetResultValueFormat();
-    if ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
-    {
-        // Not 'General' number format.  Set hash text and bail out.
-        SetHashText();
-        return true;
-    }
-
-    double fVal = rCell.getValue();
-
-    const SvNumberformat* pNumFormat = pOutput->mpDoc->GetFormatTable()->GetEntry(nFormat);
-    if (!pNumFormat)
-        return false;
-
-    tools::Long nMaxDigit = GetMaxDigitWidth();
-    if (!nMaxDigit)
-        return false;
-
-    sal_uInt16 nNumDigits = static_cast<sal_uInt16>(nWidth / nMaxDigit);
-    {
-        OUString sTempOut(aString);
-        if (!pNumFormat->GetOutputString(fVal, nNumDigits, sTempOut, pOutput->mpDoc->GetFormatTable()->GetNatNum()))
-        {
-            aString = sTempOut;
-            // Failed to get output string.  Bail out.
-            return false;
-        }
-        aString = sTempOut;
-    }
-    sal_uInt8 nSignCount = 0, nDecimalCount = 0, nExpCount = 0;
-    sal_Int32 nLen = aString.getLength();
-    sal_Unicode cDecSep = ScGlobal::getLocaleData().getLocaleItem().decimalSeparator[0];
-    for( sal_Int32 i = 0; i < nLen; ++i )
-    {
-        sal_Unicode c = aString[i];
-        if (c == '-')
-            ++nSignCount;
-        else if (c == cDecSep)
-            ++nDecimalCount;
-        else if (c == 'E')
-            ++nExpCount;
-    }
-
-    // #i112250# A small value might be formatted as "0" when only counting the digits,
-    // but fit into the column when considering the smaller width of the decimal separator.
-    if (aString == "0" && fVal != 0.0)
-        nDecimalCount = 1;
-
-    if (nDecimalCount)
-        nWidth += (nMaxDigit - GetDotWidth()) * nDecimalCount;
-    if (nSignCount)
-        nWidth += (nMaxDigit - GetSignWidth()) * nSignCount;
-    if (nExpCount)
-        nWidth += (nMaxDigit - GetExpWidth()) * nExpCount;
-
-    if (nDecimalCount || nSignCount || nExpCount)
-    {
-        // Re-calculate.
-        nNumDigits = static_cast<sal_uInt16>(nWidth / nMaxDigit);
-        OUString sTempOut(aString);
-        if (!pNumFormat->GetOutputString(fVal, nNumDigits, sTempOut, pOutput->mpDoc->GetFormatTable()->GetNatNum()))
-        {
-            aString = sTempOut;
-            // Failed to get output string.  Bail out.
-            return false;
-        }
-        aString = sTempOut;
-    }
-
-    tools::Long nActualTextWidth = GetFmtTextWidth(aString);
-    if (nActualTextWidth > nWidth)
-    {
-        // Even after the decimal adjustment the text doesn't fit.  Give up.
-        SetHashText();
-        return true;
-    }
-
+    aString = aText;
     TextChanged();
     maLastCell.clear();   // #i113022# equal cell and format in another column may give different string
     return false;
@@ -813,29 +719,7 @@ void ScDrawStringsVars::TextChanged()
 
 bool ScDrawStringsVars::HasEditCharacters() const
 {
-    for (sal_Int32 nIdx = 0; nIdx < aString.getLength(); ++nIdx)
-    {
-        switch(aString[nIdx])
-        {
-            case CHAR_NBSP:
-                // tdf#122676: Ignore CHAR_NBSP (this is thousand separator in any number)
-                // if repeat character is set
-                if (nRepeatPos < 0)
-                    return true;
-                break;
-            case CHAR_SHY:
-            case CHAR_ZWSP:
-            case CHAR_LRM:
-            case CHAR_RLM:
-            case CHAR_NBHY:
-            case CHAR_WJ:
-                return true;
-            default:
-                break;
-        }
-    }
-
-    return false;
+    return sc::hasEditCharacters(aString, nRepeatPos >= 0);
 }
 
 double ScOutputData::GetStretch() const
@@ -1111,13 +995,6 @@ static void lcl_CreateInterpretProgress( bool& bProgress, ScDocument* pDoc,
     }
 }
 
-static bool IsAmbiguousScript( SvtScriptType nScript )
-{
-    return ( nScript != SvtScriptType::LATIN &&
-             nScript != SvtScriptType::ASIAN &&
-             nScript != SvtScriptType::COMPLEX );
-}
-
 bool ScOutputData::IsEmptyCellText( const RowInfo* pThisRowInfo, SCCOL nX, SCROW nY )
 {
     // pThisRowInfo may be NULL
@@ -1136,25 +1013,9 @@ bool ScOutputData::IsEmptyCellText( const RowInfo* pThisRowInfo, SCCOL nX, SCROW
         //  for the range mnX1..mnX2 in RowInfo, cell protection attribute is already evaluated
         //  into bEmptyCellText in ScDocument::FillInfo / lcl_HidePrint (printfun)
 
-        bool bIsPrint = ( meType == OUTTYPE_PRINTER );
-
-        if ( bIsPrint || mbTabProtected )
-        {
-            const ScProtectionAttr* pAttr =
-                    mpDoc->GetEffItem( nX, nY, mnTab, ATTR_PROTECTION );
-            if ( bIsPrint && pAttr->GetHidePrint() )
-                bEmpty = true;
-            else if ( mbTabProtected )
-            {
-                if ( pAttr->GetHideCell() )
-                    bEmpty = true;
-                else if ( mbShowFormulas && pAttr->GetHideFormula() )
-                {
-                    if (mpDoc->GetCellType(ScAddress(nX, nY, mnTab)) == CELLTYPE_FORMULA)
-                        bEmpty = true;
-                }
-            }
-        }
+        if ( sc::isCellContentHidden( *mpDoc, ScAddress( nX, nY, mnTab ), mbTabProtected,
+                                      mbShowFormulas, meType == OUTTYPE_PRINTER ) )
+            bEmpty = true;
     }
     return bEmpty;
 }
@@ -1171,14 +1032,8 @@ bool ScOutputData::IsAvailable( SCCOL nX, SCROW nY )
     //  apply the same logic here as in DrawStrings/DrawEdit:
     //  Stop at non-empty or merged or overlapped cell,
     //  where a note is empty as well as a cell that's hidden by protection settings
-
-    ScRefCellValue aCell(*mpDoc, ScAddress(nX, nY, mnTab));
-    if (!aCell.isEmpty() && !IsEmptyCellText(nullptr, nX, nY))
-        return false;
-
-    const ScPatternAttr* pPattern = mpDoc->GetPattern( nX, nY, mnTab );
-    return !(pPattern->GetItem(ATTR_MERGE).IsMerged() ||
-         pPattern->GetItem(ATTR_MERGE_FLAG).IsOverlapped());
+    return sc::isAvailableForOverflow( *mpDoc, ScAddress( nX, nY, mnTab ), mbTabProtected,
+                                       mbShowFormulas, meType == OUTTYPE_PRINTER );
 }
 
 // nX, nArrY:       loop variables from DrawStrings / DrawEdit
@@ -1767,7 +1622,7 @@ void ScOutputData::LayoutStringsImpl(bool const bPixelToLogic, RowInfo* const pT
 
         //  use edit engine for rotated, stacked or mixed-script text
         if ( aVars.GetOrient() == SvxCellOrientation::Stacked ||
-             aVars.IsRotated() || IsAmbiguousScript(nScript) )
+             aVars.IsRotated() || sc::isAmbiguousScript(nScript) )
             bUseEditEngine = true;
     }
     if (bDoCell && !bUseEditEngine)
@@ -1835,24 +1690,21 @@ void ScOutputData::LayoutStringsImpl(bool const bPixelToLogic, RowInfo* const pT
                 if ( nAvailable > 0 && nScaleSize > 0 )       // 0 if the text is empty (formulas, number formats)
                 {
                     tools::Long nScale = ( nAvailable * 100 ) / nScaleSize;
-
-                    aVars.SetShrinkScale( nScale, nOldScript );
-                    tools::Long nNewSize = aVars.GetTextSize().Width();
-
-                    sal_uInt16 nShrinkAgain = 0;
-                    while ( nNewSize > nAvailable && nShrinkAgain < SC_SHRINKAGAIN_MAX )
+                    auto shrinkTo = [&aVars, &nScale, nOldScript]()
                     {
-                        // If the text is still too large, reduce the scale again by 10%, until it fits,
-                        // at most 7 times (it's less than 50% of the calculated scale then).
-
-                        nScale = ( nScale * 9 ) / 10;
                         aVars.SetShrinkScale( nScale, nOldScript );
-                        nNewSize = aVars.GetTextSize().Width();
-                        ++nShrinkAgain;
-                    }
+                        return double( aVars.GetTextSize().Width() );
+                    };
+                    const bool bFits = sc::shrinkToFit( nAvailable, shrinkTo,
+                                                        [&nScale, &shrinkTo]()
+                                                        {
+                                                            nScale = ( nScale * 9 ) / 10;
+                                                            return shrinkTo();
+                                                        } );
+
                     // If even at half the size the font still isn't rendered smaller,
                     // fall back to normal clipping (showing ### for numbers).
-                    if ( nNewSize <= nAvailable )
+                    if ( bFits )
                     {
                         // Reset relevant parameters.
                         aAreaParam.mbLeftClip = aAreaParam.mbRightClip = false;
@@ -1867,39 +1719,14 @@ void ScOutputData::LayoutStringsImpl(bool const bPixelToLogic, RowInfo* const pT
         if ( bRepeat && !aAreaParam.mbLeftClip && !aAreaParam.mbRightClip )
         {
             tools::Long nAvailable = aAreaParam.maAlignRect.GetWidth() - nTotalMargin;
-            double fRepeatSize = aVars.GetTextSize().Width(); // without margin
-            const OUString& aCellStr = aVars.GetString();
-
-            // Measuring a string containing a single copy of a short repeat string is inaccurate.
-            // To increase accuracy, start with a representative sample of the repeated sequence.
-            constexpr sal_Int32 nSampleSize = 20;
-            const size_t nLen = aCellStr.getLength();
-            if (nLen && nLen < nSampleSize)
-            {
-                OUStringBuffer aFill(aCellStr);
-                aFill.ensureCapacity(nSampleSize);
-                while (aFill.getLength() < nSampleSize)
-                    aFill.append(aCellStr);
-                fRepeatSize
-                    = aVars.GetFmtTextWidth(aFill.copy(0, nSampleSize).makeStringAndClear());
-                fRepeatSize = fRepeatSize * nLen / nSampleSize;
-            }
-
             // When formatting for the printer, the text sizes don't always add up.
             // Round down (too few repetitions) rather than exceeding the cell size then:
-            if ( pFmtDevice != mpRefDevice )
-                ++fRepeatSize;
-            if (fRepeatSize > 0)
-            {
-                const tools::Long nRepeatCount = nAvailable / fRepeatSize;
-                if ( nRepeatCount > 1 )
-                {
-                    OUStringBuffer aRepeated(aCellStr);
-                    for ( tools::Long nRepeat = 1; nRepeat < nRepeatCount; nRepeat++ )
-                        aRepeated.append(aCellStr);
-                    aVars.SetAutoText( aRepeated.makeStringAndClear() );
-                }
-            }
+            const double fExtraWidth = pFmtDevice != mpRefDevice ? 1.0 : 0.0;
+            std::optional<OUString> oRepeated = sc::repeatToWidth(
+                aVars.GetString(), aVars.GetTextSize().Width(), nAvailable, fExtraWidth,
+                [&aVars](const OUString& rText) { return double(aVars.GetFmtTextWidth(rText)); });
+            if ( oRepeated )
+                aVars.SetAutoText( *oRepeated );
         }
 
         //  use edit engine if automatic line breaks are needed
@@ -2446,22 +2273,15 @@ void ScOutputData::ShrinkEditEngine( EditEngine& rEngine, const tools::Rectangle
         bool bSwap = ( nOrient == SvxCellOrientation::TopBottom || nOrient == SvxCellOrientation::BottomUp );
         tools::Long nAvailable = rAlignRect.GetHeight() - nTopM - nBottomM;
         tools::Long nScale = ( nAvailable * 100 ) / nScaleSize;
-
-        lcl_ScaleFonts( rEngine, nScale );
-        rEngineHeight = lcl_GetEditSize( rEngine, false, bSwap, nAttrRotate );
-        tools::Long nNewSize = bPixelToLogic ?
-            mpRefDevice->LogicToPixel(Size(0,rEngineHeight)).Height() : rEngineHeight;
-
-        sal_uInt16 nShrinkAgain = 0;
-        while ( nNewSize > nAvailable && nShrinkAgain < SC_SHRINKAGAIN_MAX )
+        auto measureHeight = [&]()
         {
-            // further reduce, like in DrawStrings
-            lcl_ScaleFonts( rEngine, 90 );     // reduce by 10%
             rEngineHeight = lcl_GetEditSize( rEngine, false, bSwap, nAttrRotate );
-            nNewSize = bPixelToLogic ?
-                mpRefDevice->LogicToPixel(Size(0,rEngineHeight)).Height() : rEngineHeight;
-            ++nShrinkAgain;
-        }
+            return double( bPixelToLogic ?
+                mpRefDevice->LogicToPixel(Size(0,rEngineHeight)).Height() : rEngineHeight );
+        };
+        sc::shrinkToFit( nAvailable,
+            [&]() { lcl_ScaleFonts( rEngine, nScale ); return measureHeight(); },
+            [&]() { lcl_ScaleFonts( rEngine, 90 ); return measureHeight(); } );
 
         // sizes for further processing (alignment etc):
         rEngineWidth = lcl_GetEditSize( rEngine, true, bSwap, nAttrRotate );
@@ -2480,23 +2300,17 @@ void ScOutputData::ShrinkEditEngine( EditEngine& rEngine, const tools::Rectangle
             return;
 
         tools::Long nScale = ( nAvailable * 100 ) / nScaleSize;
-
-        lcl_ScaleFonts( rEngine, nScale );
-        rEngineWidth = lcl_GetEditSize( rEngine, true, false, nAttrRotate );
-        tools::Long nNewSize = bPixelToLogic ?
-            mpRefDevice->LogicToPixel(Size(rEngineWidth,0)).Width() : rEngineWidth;
-
-        sal_uInt16 nShrinkAgain = 0;
-        while ( nNewSize > nAvailable && nShrinkAgain < SC_SHRINKAGAIN_MAX )
+        tools::Long nNewSize = 0;
+        auto measureWidth = [&]()
         {
-            // further reduce, like in DrawStrings
-            lcl_ScaleFonts( rEngine, 90 );     // reduce by 10%
             rEngineWidth = lcl_GetEditSize( rEngine, true, false, nAttrRotate );
             nNewSize = bPixelToLogic ?
                 mpRefDevice->LogicToPixel(Size(rEngineWidth,0)).Width() : rEngineWidth;
-            ++nShrinkAgain;
-        }
-        if ( nNewSize <= nAvailable )
+            return double( nNewSize );
+        };
+        if ( sc::shrinkToFit( nAvailable,
+                 [&]() { lcl_ScaleFonts( rEngine, nScale ); return measureWidth(); },
+                 [&]() { lcl_ScaleFonts( rEngine, 90 ); return measureWidth(); } ) )
             rLeftClip = rRightClip = false;
 
         // sizes for further processing (alignment etc):

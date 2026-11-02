@@ -15,6 +15,8 @@
 #include <editeng/svxenum.hxx>
 #include <rtl/ustring.hxx>
 
+#include <string_view>
+
 class ScDocument;
 class ScPatternAttr;
 class SfxItemSet;
@@ -32,6 +34,12 @@ SvxCellHorJustify getAlignmentFromContext(SvxCellHorJustify eInHorJust, bool bCe
 
 /// Whether the number format of the cell is a text format.
 bool isNumberFormatText(const ScDocument& rDocument, SCCOL nColumn, SCROW nRow, SCTAB nTab);
+
+/** Whether the text holds characters that only the EditEngine lays out: soft hyphen, zero width
+    space, direction marks, no-break hyphen and word joiner. The no-break space counts only without
+    a repeat character, because it is the thousands separator of some number formats.
+ */
+bool hasEditCharacters(std::u16string_view rText, bool bHasRepeatCharacter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

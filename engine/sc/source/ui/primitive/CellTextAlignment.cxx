@@ -104,6 +104,31 @@ bool isNumberFormatText(const ScDocument& rDocument, SCCOL nColumn, SCROW nRow, 
     SvNumberFormatter* pNumberFormatter = rDocument.GetFormatTable();
     return pNumberFormatter->GetType(nCurrentNumberFormat) == SvNumFormatType::TEXT;
 }
+
+bool hasEditCharacters(std::u16string_view rText, bool bHasRepeatCharacter)
+{
+    for (const sal_Unicode cCharacter : rText)
+    {
+        switch (cCharacter)
+        {
+            case CHAR_NBSP:
+                // tdf#122676: CHAR_NBSP is a thousands separator of some number formats.
+                if (!bHasRepeatCharacter)
+                    return true;
+                break;
+            case CHAR_SHY:
+            case CHAR_ZWSP:
+            case CHAR_LRM:
+            case CHAR_RLM:
+            case CHAR_NBHY:
+            case CHAR_WJ:
+                return true;
+            default:
+                break;
+        }
+    }
+    return false;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
