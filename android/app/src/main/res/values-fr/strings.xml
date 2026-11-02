@@ -90,7 +90,7 @@
     <string name="storage_permission_required">Une autorisation de stockage est requise</string>
     <string name="file_creation_failed">La création du fichier a échoué</string>
     <string name="file_exists_warning">Un fichier du même nom existe déjà et il sera écrasé.</string>
-    <string name="temp_file_saving_disabled">Ce fichier est en lecture seule, l\'enregistrement est désactivé.</string>
+    <string name="temp_file_saving_disabled">Partagé en lecture seule par l’application source. Utilisez \"Modifier une copie\" pour apporter des modifications.</string>
     <string name="no_items">Aucun élément</string>
     <string name="no_recent_items">Ouvrez un fichier en utilisant l\'icône de dossier dans la barre d\'outils.</string>
     <string name="app_vendor">Cette version est fournie par $VENDOR.</string>
@@ -110,5 +110,5 @@
     <string name="pref_user_name">Nom d\'utilisateur</string>
     <string name="pref_user_name_info">Utilisé lors de l\'ajout d\'un commentaire</string>
     <string name="pref_user_name_guest">Utilisateur invité</string>
-    <string name="app_version_and_hash">Version: %1$s\ngit-hash: %2$s</string>
+    <string name="app_version_and_hash">Version : %1$s\ngit-hash : %2$s</string>
 </resources>
