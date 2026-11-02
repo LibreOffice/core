@@ -1126,6 +1126,49 @@ abstract class SelectionSection extends CanvasSectionObject {
 	}
 
 	/*
+		The object under the chart's mark at that point of the document, of the part of an object
+		active in place that is selected alone. A mark stands on the middle of each object the
+		part holds where the part has one mark for each of them, so the object is the one whose
+		middle lies nearest to the mark. Nothing off the marks, and nothing for marks that stand
+		on the points of a line.
+	*/
+	private partMarkedAt(at: cool.SimplePoint): number | undefined {
+		const objects = this.selectedObjects();
+		if (objects.length !== 1) return undefined;
+		if (
+			Interaction.placeOf(GraphicSelection.selectedObjectIDs).kind !== 'inPlace'
+		)
+			return undefined;
+
+		const marks =
+			RenderGeometrySection.objectOf(objects[0])?.chartPart?.marks ?? [];
+		const held = RenderGeometrySection.heldBy(objects[0]);
+		if (!marks.length || marks.length !== held.length) return undefined;
+
+		const half = HandleLook.widthOf('pathPoint') / 2;
+		const mark = marks.find((one: { x: number; y: number }) => {
+			const drawn = new cool.SimplePoint(one.x, one.y);
+			return (
+				Math.abs(drawn.vX - at.vX) <= half && Math.abs(drawn.vY - at.vY) <= half
+			);
+		});
+		if (!mark) return undefined;
+
+		let nearest: number | undefined;
+		let nearestDistance = Infinity;
+		for (const objectId of held) {
+			const box = RenderGeometrySection.boxOf(objectId);
+			if (!box) continue;
+			const distance = Math.hypot(box.centerX - mark.x, box.centerY - mark.y);
+			if (distance < nearestDistance) {
+				nearest = objectId;
+				nearestDistance = distance;
+			}
+		}
+		return nearest;
+	}
+
+	/*
 		The objects the bands go round, from the outermost one inwards: every group the selection
 		sits inside, and every selected object that holds others. Each of them takes a band, so how
 		deep in a hierarchy of groups the selection sits is there to be seen, and which of several
@@ -2980,13 +3023,15 @@ abstract class SelectionSection extends CanvasSectionObject {
 				? this.pointerOver(over)
 				: this.handleAt(onCanvas[0], onCanvas[1], true)
 					? 'not-allowed'
-					: !onTheObject
-						? 'default'
-						: overText
-							? 'text'
-							: ObjectHandles.canBeMoved(this.selectedObjects())
-								? SelectionSection.grabPointer()
-								: 'default';
+					: this.partMarkedAt(inTheDocument) !== undefined
+						? 'pointer'
+						: !onTheObject
+							? 'default'
+							: overText
+								? 'text'
+								: ObjectHandles.canBeMoved(this.selectedObjects())
+									? SelectionSection.grabPointer()
+									: 'default';
 
 			// The handle under the mouse is marked, so that it is plain which one a press would
 			// take hold of where several lie close together.
@@ -3183,6 +3228,16 @@ abstract class SelectionSection extends CanvasSectionObject {
 			on the selected part keeps it as it is.
 		*/
 		if (modifier === 0 && RenderGeometrySection.answersPointer()) {
+			// a click on a mark of the chart takes the object the mark stands on
+			const marked = this.partMarkedAt(at);
+			if (
+				marked !== undefined &&
+				Interaction.context().press(marked, modifier)
+			) {
+				GraphicSelection.updateSelectionSection();
+				return;
+			}
+
 			const hit = RenderGeometrySection.objectIdAt(at.x, at.y);
 			const selected = this.selectedObjects();
 			const own = selected.concat(
