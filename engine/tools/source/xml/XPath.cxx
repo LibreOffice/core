@@ -17,13 +17,9 @@ namespace
 {
 OUString convert(xmlChar const* sXmlString)
 {
-    OUString sString;
-    rtl_convertStringToUString(&sString.pData, reinterpret_cast<char const*>(sXmlString),
-                               xmlStrlen(sXmlString), RTL_TEXTENCODING_UTF8,
-                               RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
-                                   | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
-                                   | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR);
-    return sString;
+    if (!sXmlString)
+        return OUString();
+    return OUString::fromUtf8(reinterpret_cast<char const*>(sXmlString));
 }
 }
 
