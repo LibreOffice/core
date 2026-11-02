@@ -447,7 +447,9 @@ void COOLWSD::checkDiskSpaceAndWarnClients(const bool cacheLastCheck)
 #if !MOBILEAPP
 static void closeSubForKit(const std::string& configId,
                            const std::shared_ptr<ForKitProcess>& subForKit);
+static void terminateSubForKit(const std::shared_ptr<ForKitProcess>& subForKit);
 static void askSpareKitsToExit(std::vector<std::shared_ptr<ChildProcess>> spareKits);
+static void killOnceGracePeriodIsOver(const std::shared_ptr<ChildProcess>& child, pid_t pid);
 
 /// True when forKitPid is the pid of the process that forks the kits of configId now: the forkit
 /// for the default configuration, or the subforkit of configId. A subforkit connects to wsd right
@@ -464,7 +466,6 @@ static bool isCurrentForKit(const std::string& configId, pid_t forKitPid)
     const auto it = SubForKitProcs.find(configId);
     return it != SubForKitProcs.end() && forKitPid == it->second->getPid();
 }
-static void terminateSubForKit(const std::shared_ptr<ForKitProcess>& subForKit);
 #endif
 
 namespace {
@@ -931,6 +932,7 @@ static size_t addNewChild(std::shared_ptr<ChildProcess> child)
     {
         child->setOrphaned();
         child->requestTermination();
+        killOnceGracePeriodIsOver(child, pid);
     }
 #endif
 
@@ -1091,9 +1093,9 @@ std::unique_ptr<TraceFileWriter> COOLWSD::TraceDumper;
 #if !MOBILEAPP
 namespace
 {
-/// A Kit that was asked to exit as its document closed, and the time by which it has to have
-/// exited. A Kit whose main thread is stuck never reads the request, so one that still runs at that
-/// time is killed.
+/// A Kit that was asked to exit, as its document closed or as it was orphaned, and the time by
+/// which it has to have exited. A Kit whose main thread is stuck never reads the request, so one
+/// that still runs at that time is killed.
 struct ExitingKit
 {
     std::shared_ptr<ChildProcess> kit;
@@ -1102,8 +1104,8 @@ struct ExitingKit
 };
 } // namespace
 
-/// The Kits that were asked to exit as their document closed, in the order they were asked, until
-/// each has exited or is killed.
+/// The Kits that were asked to exit, in the order they were asked, until each has exited or is
+/// killed.
 static std::mutex ExitingKitsMutex;
 static std::vector<ExitingKit> ExitingKits;
 
@@ -1688,7 +1690,8 @@ void COOLWSD::requestTerminateSpareKits()
 }
 
 /// Ask the spare kits of a configuration to exit, then its subforkit. The subforkit is still their
-/// parent, so it reaps them and removes their jails before it exits itself.
+/// parent, so it reaps them and removes their jails before it exits itself. A kit that does not
+/// exit is killed once the grace period is over, as the Kit of a closing document is.
 static void closeSubForKit(const std::string& configId,
                            const std::shared_ptr<ForKitProcess>& subForKit)
 {
@@ -1721,7 +1724,7 @@ static void closeSubForKit(const std::string& configId,
          presetsPath = Poco::Path(sharedPresets, Uri::encode(configId)).toString()]
         {
             for (const std::shared_ptr<ChildProcess>& kit : spareKits)
-                kit->close();
+                COOLWSD::closeOrKillChild(kit);
 
             subForKit->close();
             FileUtil::removeFile(presetsPath, true);
@@ -1747,7 +1750,10 @@ static void askSpareKitsToExit(std::vector<std::shared_ptr<ChildProcess>> spareK
         [spareKits = std::move(spareKits)]
         {
             for (const std::shared_ptr<ChildProcess>& kit : spareKits)
+            {
                 kit->requestTermination();
+                killOnceGracePeriodIsOver(kit, kit->getPid());
+            }
         });
 }
 
