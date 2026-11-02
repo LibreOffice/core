@@ -819,6 +819,12 @@ private:
     bool mbValue;
 };
 
+void setEntryTextIfChanged(weld::ComboBox & rComboBox, OUString const & rText) {
+    if (rComboBox.get_active_text() != rText) {
+        rComboBox.set_entry_text(rText);
+    }
+}
+
 }
 
 void SvxSearchDialog::Init_Impl( bool bSearchPattern )
@@ -1025,9 +1031,9 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
         {
             if (!(m_pSearchItem->GetSearchString().isEmpty()) && bSetSearch)
             {
-                m_xSearchLB->set_entry_text(m_pSearchItem->GetSearchString());
+                setEntryTextIfChanged(*m_xSearchLB, m_pSearchItem->GetSearchString());
                 if (bSetReplace)
-                    m_xReplaceLB->set_entry_text(m_pSearchItem->GetReplaceString());
+                    setEntryTextIfChanged(*m_xReplaceLB, m_pSearchItem->GetReplaceString());
             }
             else if (!m_aSearchStrings.empty())
             {
@@ -1035,7 +1041,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
                                     || (m_pReplaceList && m_pReplaceList->Count()));
 
                 if ( bSetSearch && !bAttributes )
-                    m_xSearchLB->set_entry_text(m_aSearchStrings[0]);
+                    setEntryTextIfChanged(*m_xSearchLB, m_aSearchStrings[0]);
 
                 OUString aReplaceTxt = m_pSearchItem->GetReplaceString();
 
@@ -1043,7 +1049,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
                     aReplaceTxt = m_aReplaceStrings[0];
 
                 if ( bSetReplace && !bAttributes )
-                    m_xReplaceLB->set_entry_text( aReplaceTxt );
+                    setEntryTextIfChanged(*m_xReplaceLB, aReplaceTxt);
             }
         }
 
