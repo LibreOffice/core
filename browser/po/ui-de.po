@@ -12,12 +12,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-30 13:34+0100\n"
-"PO-Revision-Date: 2026-10-30 09:44+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@users.noreply.hosted.weblate.org>"
-"\n"
+"PO-Revision-Date: 2026-11-02 11:18+0000\n"
+"Last-Translator: Mr-Update <mr-update@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/de/>\n"
-"Language: \n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1869,10 +1868,10 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: src/app/Util.ts:325
-#, fuzzy
 msgid "%n minute"
 msgid_plural "%n minutes"
 msgstr[0] "1 Minute"
+msgstr[1] "%n Minuten"
 
 #: src/app/Util.ts:339
 msgid "less than a minute"
@@ -3088,9 +3087,8 @@ msgstr "Referenzierte Zellen"
 #. TRANSLATORS: Sent to the AI model. {0} is a Calc error code such
 #. TRANSLATORS: as #DIV/0!
 #: src/control/Control.AIChatSidebar.ts:3918
-#, fuzzy
 msgid "Please diagnose why this formula produces the {0} error."
-msgstr "Bitte ermitteln Sie, warum diese Formel erzeugt den"
+msgstr "Bitte ermitteln Sie, warum diese Formel den Fehler {0} erzeugt."
 
 #: src/control/Control.AIChatSidebar.ts:3922
 msgid "Explain the root cause and suggest how to fix it."
@@ -3277,7 +3275,7 @@ msgstr ""
 #: src/control/Control.CleanupSidebar.ts:207
 msgid "Images stored at more than %1 DPI, more detail than a slide can show"
 msgstr ""
-"Bilder, die mit mehr als %1 DPI gespeichert sind, enthalten mehr Details, "
+"Bilder, die mit mehr als %1 dpi gespeichert sind, enthalten mehr Details, "
 "als eine Folie darstellen kann"
 
 #: src/control/Control.CleanupSidebar.ts:224
@@ -3323,7 +3321,7 @@ msgstr "Zurückgelassene Bilder"
 
 #: src/control/Control.CleanupSidebar.ts:361
 msgid "%1 DPI, quality %2 %"
-msgstr "%1 DPI, Qualität %2 %"
+msgstr "%1 dpi, Qualität %2 %"
 
 #: src/control/Control.CleanupSidebar.ts:374
 msgid "%1 can be cleaned up"
@@ -3399,11 +3397,11 @@ msgstr ""
 
 #: src/control/Control.CleanupSidebar.ts:587
 msgid "%1 DPI"
-msgstr "%1 DPI"
+msgstr "%1 dpi"
 
 #: src/control/Control.CleanupSidebar.ts:589
 msgid "%1 at %2 DPI"
-msgstr "%1 bei %2 DPI"
+msgstr "%1 bei %2 dpi"
 
 #: src/control/Control.CleanupSidebar.ts:594
 #, javascript-format
@@ -3420,19 +3418,19 @@ msgstr "Bilder in Ruhe lassen"
 
 #: src/control/Control.CleanupSidebar.ts:664
 msgid "96 DPI"
-msgstr "96 DPI"
+msgstr "96 dpi"
 
 #: src/control/Control.CleanupSidebar.ts:665
 msgid "150 DPI"
-msgstr "150 DPI"
+msgstr "150 dpi"
 
 #: src/control/Control.CleanupSidebar.ts:666
 msgid "220 DPI"
-msgstr "220 DPI"
+msgstr "220 dpi"
 
 #: src/control/Control.CleanupSidebar.ts:667
 msgid "300 DPI"
-msgstr "300 DPI"
+msgstr "300 dpi"
 
 #: src/control/Control.CleanupSidebar.ts:691
 msgid "Scanning..."
@@ -4524,7 +4522,7 @@ msgstr "Quadratisch"
 
 #: src/control/Control.JSDialogBuilder.js:446
 msgid "Square"
-msgstr "Rechteckig"
+msgstr "Quadrat"
 
 #: src/control/Control.JSDialogBuilder.js:449
 msgid "Fixed size"
@@ -6876,14 +6874,12 @@ msgid "Unlinking the slide failed."
 msgstr "Das Entlinken der Folie ist fehlgeschlagen."
 
 #: src/slideimport/SlideLinks.ts:1105
-#, fuzzy
 msgid "Unlinking the section failed."
-msgstr "Das Entlinken der Folie ist fehlgeschlagen."
+msgstr "Das Entlinken des Abschnitts ist fehlgeschlagen."
 
 #: src/slideimport/SlideLinks.ts:1122
-#, fuzzy
 msgid "Updating the section from {0} failed."
-msgstr "Die Aktualisierung der Folien von {0} ist fehlgeschlagen."
+msgstr "Die Aktualisierung des Abschnitts aus {0} ist fehlgeschlagen."
 
 #: src/slideimport/SlideLinks.ts:1123 src/slideimport/SlideLinks.ts:1182
 msgid "Updating the slides of {0} failed."
@@ -7477,7 +7473,7 @@ msgstr "Aktualisiere Zitate"
 
 #: src/control/Control.Zotero.js:1538
 msgid "Unlinked citations"
-msgstr "Nicht-referenzierte Zitate"
+msgstr "Zitate ohne Verlinkung"
 
 #: src/control/Control.Zotero.js:1543
 msgid ""
