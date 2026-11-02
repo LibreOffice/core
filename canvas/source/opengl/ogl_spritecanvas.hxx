@@ -44,10 +44,9 @@ namespace oglcanvas
                                              css::beans::XPropertySet,
                                              css::lang::XServiceName >    WindowGraphicDeviceBase_Base;
     typedef ::canvas::BufferedGraphicDeviceBase<
-        ::canvas::DisambiguationHelper< WindowGraphicDeviceBase_Base >,
-        SpriteDeviceHelper,
-        ::osl::MutexGuard,
-        ::cppu::OWeakObject >  SpriteCanvasDeviceBaseT;
+        ::canvas::DisambiguationHelper<WindowGraphicDeviceBase_Base>, SpriteDeviceHelper,
+        ::osl::MutexGuard>
+        SpriteCanvasDeviceBaseT;
 
     typedef ::canvas::CanvasBase<SpriteCanvasDeviceBaseT, CanvasHelper, ::osl::MutexGuard>
         SpriteCanvasBaseT;

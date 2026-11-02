@@ -55,10 +55,10 @@ namespace cairocanvas
                                              css::beans::XPropertySet,
                                              css::lang::XServiceName,
                                              css::lang::XServiceInfo >  WindowGraphicDeviceBase_Base;
-    typedef ::canvas::BufferedGraphicDeviceBase< ::canvas::DisambiguationHelper< WindowGraphicDeviceBase_Base >,
-                                                 SpriteDeviceHelper,
-                                                 ::osl::MutexGuard,
-                                                 ::cppu::OWeakObject > SpriteCanvasBase_Base;
+    typedef ::canvas::BufferedGraphicDeviceBase<
+        ::canvas::DisambiguationHelper<WindowGraphicDeviceBase_Base>, SpriteDeviceHelper,
+        ::osl::MutexGuard>
+        SpriteCanvasBase_Base;
     /** Mixin SpriteSurface
 
         Have to mixin the SpriteSurface before deriving from

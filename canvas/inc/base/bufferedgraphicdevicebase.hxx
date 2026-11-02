@@ -64,20 +64,13 @@ namespace canvas
     entered, an object of type MutexType is created with m_aMutex as
     the sole parameter, and destroyed again when the method scope
     is left.
-
-    @tpl UnambiguousBase
-    Optional unambiguous base class for XInterface of Base. It's
-    sometimes necessary to specify this parameter, e.g. if Base
-    derives from multiple UNO interface (were each provides its
-    own version of XInterface, making the conversion ambiguous)
  */
-template <class Base, class DeviceHelper, class MutexType = ::osl::MutexGuard,
-          class UnambiguousBase = css::uno::XInterface>
+template <class Base, class DeviceHelper, class MutexType = ::osl::MutexGuard>
 class BufferedGraphicDeviceBase
-    : public GraphicDeviceBase<Base, DeviceHelper, MutexType, UnambiguousBase>
+    : public GraphicDeviceBase<Base, DeviceHelper, MutexType, cppu::OWeakObject>
 {
 public:
-    typedef GraphicDeviceBase<Base, DeviceHelper, MutexType, UnambiguousBase> BaseType;
+    typedef GraphicDeviceBase<Base, DeviceHelper, MutexType, cppu::OWeakObject> BaseType;
 
     BufferedGraphicDeviceBase()
         : mbIsVisible(false)

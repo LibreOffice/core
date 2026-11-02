@@ -58,10 +58,10 @@ namespace vclcanvas
                                              css::beans::XPropertySet,
                                              css::lang::XServiceName,
                                              css::lang::XServiceInfo >    WindowGraphicDeviceBase_Base;
-    typedef ::canvas::BufferedGraphicDeviceBase< ::canvas::DisambiguationHelper< WindowGraphicDeviceBase_Base >,
-                                                 SpriteDeviceHelper,
-                                                 vclcanvastools::LocalGuard,
-                                                 ::cppu::OWeakObject >  SpriteCanvasBase_Base;
+    typedef ::canvas::BufferedGraphicDeviceBase<
+        ::canvas::DisambiguationHelper<WindowGraphicDeviceBase_Base>, SpriteDeviceHelper,
+        vclcanvastools::LocalGuard>
+        SpriteCanvasBase_Base;
 
     /** Mixin SpriteSurface
 
