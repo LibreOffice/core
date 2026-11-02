@@ -2691,6 +2691,21 @@ bool ChildSession::downloadAsBackground([[maybe_unused]] const DownloadAsRequest
         const std::string path = request._path.absolutePath;
         const std::string format = request._format;
         const std::string filterOptions = request._filterOptions;
+
+        const std::weak_ptr<ChildSession> weakSelf =
+            std::static_pointer_cast<ChildSession>(shared_from_this());
+        BackgroundExportHandlers handlers;
+        handlers.finished = [weakSelf](bool success)
+        {
+            if (const std::shared_ptr<ChildSession> self = weakSelf.lock())
+                self->sendBackgroundDownloadAsResult(success);
+        };
+        handlers.runInForeground = [weakSelf]
+        {
+            if (const std::shared_ptr<ChildSession> self = weakSelf.lock())
+                self->downloadAsInForeground();
+        };
+
         if (_docManager->forkToSave(
                 [this, path, format, filterOptions]
                 {
@@ -2702,11 +2717,11 @@ bool ChildSession::downloadAsBackground([[maybe_unused]] const DownloadAsRequest
                     // answered before it acts on the result.
                     _docManager->drainCallbacks();
 
-                    sendTextFrame(std::string("downloadresult: success=") +
+                    sendTextFrame(std::string("exportresult: success=") +
                                   (success ? "true" : "false"));
                     SigUtil::addActivity("async download process exiting");
                 },
-                getViewId(), BackgroundForkPurpose::Export))
+                getViewId(), BackgroundForkPurpose::Export, handlers))
         {
             _downloadAs = request;
             return true;

@@ -20,6 +20,7 @@
 #include <Poco/JSON/Object.h>
 
 #include <cstdint>
+#include <functional>
 #include <memory>
 #include <string>
 
@@ -31,6 +32,7 @@ class KitSocketPoll;
 struct COKit;
 
 enum class BackgroundForkPurpose : std::uint8_t;
+struct BackgroundExportHandlers;
 
 class KitWebSocketHandler final : public WebSocketHandler
 {
@@ -99,12 +101,16 @@ class BgSaveParentWebSocketHandler final : public WebSocketHandler
     std::shared_ptr<Document> _document;
     std::shared_ptr<ChildSession> _session;
     BackgroundForkPurpose _purpose;
+    /// The parent's part once an export ends, empty for a save. See BackgroundExportHandlers.
+    std::function<void(bool success)> _exportFinished;
+    std::function<void()> _exportInForeground;
 
 public:
     BgSaveParentWebSocketHandler(const std::string& socketName, const pid_t childPid,
                                  std::shared_ptr<Document> document,
                                  const std::shared_ptr<ChildSession>& session,
-                                 BackgroundForkPurpose purpose);
+                                 BackgroundForkPurpose purpose,
+                                 const BackgroundExportHandlers& exportHandlers);
 
     ~BgSaveParentWebSocketHandler();
 
@@ -134,6 +140,9 @@ protected:
 
     // let the client know the work the child was forked for did not happen
     void reportFailure(const std::string &reason);
+
+    // Hand the end of an export to the parent's handler, once, whichever way it ended.
+    void finishExport(bool success);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

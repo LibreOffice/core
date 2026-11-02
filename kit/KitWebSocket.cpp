@@ -265,7 +265,8 @@ BgSaveChildWebSocketHandler::~BgSaveChildWebSocketHandler()
 
 BgSaveParentWebSocketHandler::BgSaveParentWebSocketHandler(
     const std::string& socketName, const pid_t childPid, std::shared_ptr<Document> document,
-    const std::shared_ptr<ChildSession>& session, BackgroundForkPurpose purpose)
+    const std::shared_ptr<ChildSession>& session, BackgroundForkPurpose purpose,
+    const BackgroundExportHandlers& exportHandlers)
     : WebSocketHandler(/* isClient = */ false, /* isMasking */ false)
     , _childPid(childPid)
     , _saveCompleted(false)
@@ -273,6 +274,8 @@ BgSaveParentWebSocketHandler::BgSaveParentWebSocketHandler(
     , _document(std::move(document))
     , _session(session)
     , _purpose(purpose)
+    , _exportFinished(exportHandlers.finished)
+    , _exportInForeground(exportHandlers.runInForeground)
 {
     _document->bgSaveStarted();
 }
@@ -301,8 +304,8 @@ void BgSaveParentWebSocketHandler::terminateExportForForeground(const std::strin
     // Nothing more is expected of the child, so its going is not a failure.
     _saveCompleted = true;
 
-    if (_session)
-        _session->downloadAsInForeground();
+    if (_exportInForeground)
+        _exportInForeground();
 }
 
 void BgSaveParentWebSocketHandler::reportFailure(const std::string &reason)
@@ -310,13 +313,22 @@ void BgSaveParentWebSocketHandler::reportFailure(const std::string &reason)
     if (_purpose == BackgroundForkPurpose::Export)
     {
         LOG_WRN("Background export failed " << reason);
-        if (_session)
-            _session->sendBackgroundDownloadAsResult(false);
-        _saveCompleted = true;
+        finishExport(false);
         return;
     }
 
     reportFailedSave(reason);
+}
+
+void BgSaveParentWebSocketHandler::finishExport(bool success)
+{
+    // A child can crash after it has reported, and the export then has its answer already.
+    if (_saveCompleted)
+        return;
+
+    _saveCompleted = true;
+    if (_exportFinished)
+        _exportFinished(success);
 }
 
 std::string BgSaveParentWebSocketHandler::buildFailedSaveResult(const std::string& reason)
@@ -378,7 +390,7 @@ void BgSaveParentWebSocketHandler::handleMessage(const std::vector<char>& data)
         tokens[1] != "progress:" &&
         tokens[1] != "traceevent:" &&
         tokens[1] != "forcedtraceevent:" &&
-        tokens[1] != "downloadresult:" &&
+        tokens[1] != "exportresult:" &&
         tokens[1] != "unocommandresult:")
     {
         LOG_TRC("Ignore un-wanted message from bg child: " <<
@@ -389,16 +401,14 @@ void BgSaveParentWebSocketHandler::handleMessage(const std::vector<char>& data)
     LOG_DBG(_socketName << ": recv from bg child [" <<
             COOLProtocol::getAbbreviatedMessage(data));
 
-    if (tokens[1] == "downloadresult:")
+    if (tokens[1] == "exportresult:")
     {
-        // The reply the client waits for names a jail path only the parent kept,
+        // The reply the client waits for depends on what the parent kept of the request,
         // so the parent sends it rather than forwarding this on.
         std::string success;
         if (tokens.size() > 2)
             COOLProtocol::getTokenString(tokens[2], "success", success);
-        _saveCompleted = true;
-        if (_session)
-            _session->sendBackgroundDownloadAsResult(success == "true");
+        finishExport(success == "true");
         return;
     }
 

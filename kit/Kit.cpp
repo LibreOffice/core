@@ -1689,7 +1689,8 @@ void Document::finishBackgroundForkProcess()
 
 // need to hold a reference on session in case it exits during async save
 bool Document::forkToSave(const std::function<void()>& childSave, int viewId,
-                          BackgroundForkPurpose purpose)
+                          BackgroundForkPurpose purpose,
+                          const BackgroundExportHandlers& exportHandlers)
 {
     if (Util::isMobileApp())
         return false;
@@ -1872,7 +1873,7 @@ bool Document::forkToSave(const std::function<void()>& childSave, int viewId,
 
         auto bgSaveChild = std::make_shared<BgSaveParentWebSocketHandler>(
             "bgsv_kit_ws", pid, shared_from_this(),
-            findSessionByViewId(viewId), purpose);
+            findSessionByViewId(viewId), purpose, exportHandlers);
         childSocket->setHandler(bgSaveChild);
         childSocket->setWebSocket(); // avoid http upgrade.
         KitSocketPoll::getMainPoll()->insertNewSocket(childSocket);

@@ -188,6 +188,7 @@ public:
         std::string _filterOptions;
     };
 
+private:
     /// Reply to the client for the export that ran in a forked process.
     void sendBackgroundDownloadAsResult(bool success);
 
@@ -195,7 +196,6 @@ public:
     /// the person something that only this process can put in front of them.
     void downloadAsInForeground();
 
-private:
     /// Parses the "load" command as coolwsd writes it for the kit.
     void parseLoadCommand(const StringVector& tokens, std::string& part);
     bool loadDocument(const StringVector& tokens);

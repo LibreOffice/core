@@ -25,6 +25,7 @@
 
 #include <Poco/Util/XMLConfiguration.h>
 
+#include <functional>
 #include <map>
 #include <string>
 
@@ -237,6 +238,18 @@ enum class BackgroundForkPurpose : std::uint8_t
     Export
 };
 
+/// What the parent Kit does when an export that runs in a forked child ends. The parent calls
+/// one of the two, once, on its own main thread.
+struct BackgroundExportHandlers
+{
+    /// The child is done: success is true when it wrote the copy and false when it failed,
+    /// crashed or was stopped.
+    std::function<void(bool success)> finished;
+    /// The export put a question to the person, which only the parent can show, so the
+    /// parent runs the export itself.
+    std::function<void()> runInForeground;
+};
+
 /// A document container.
 /// Owns LOKitDocument instance and connections.
 /// Manages the lifetime of a document.
@@ -390,8 +403,10 @@ public:
     bool joinThreads();
     void startThreads();
 
-    bool forkToSave(const std::function<void()> &childSave, int viewId,
-                    BackgroundForkPurpose purpose);
+    /// exportHandlers is used for BackgroundForkPurpose::Export only.
+    bool forkToSave(const std::function<void()>& childSave, int viewId,
+                    BackgroundForkPurpose purpose,
+                    const BackgroundExportHandlers& exportHandlers = {});
 
     void handleSaveMessage(const std::string &msg);
 
