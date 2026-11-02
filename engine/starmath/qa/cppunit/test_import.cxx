@@ -10,6 +10,8 @@
 #include <sal/config.h>
 #include <test/unoapi_test.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+
 #include <sfx2/sfxbasemodel.hxx>
 
 #include <document.hxx>
@@ -28,9 +30,11 @@ public:
     }
 
     void testFontStyles();
+    void testFormatChangeSurvivesPropertySet();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testFontStyles);
+    CPPUNIT_TEST(testFormatChangeSurvivesPropertySet);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -82,6 +86,35 @@ void Test::testFontStyles()
     CPPUNIT_ASSERT_EQUAL(WEIGHT_NORMAL, aFormat.GetFont(FNT_FIXED).GetWeight());
     CPPUNIT_ASSERT_EQUAL(aFormat.GetBaseSize().Height(),
                          aFormat.GetFont(FNT_FIXED).GetFontSize().Height());
+}
+
+void Test::testFormatChangeSurvivesPropertySet()
+{
+    // A formula that names its fonts in the settings, changed afterwards in the Font Size and the
+    // Fonts dialogs, which set the format directly
+    loadFromFile(u"font-styles.odf");
+    SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
+
+    SmFormat aFormat = pDocShell->GetFormat();
+    Size aSize = aFormat.GetBaseSize();
+    aSize.setHeight(aSize.Height() * 2);
+    aFormat.SetBaseSizeAndFonts(aSize);
+    SmFace aVariable(aFormat.GetFont(FNT_VARIABLE));
+    aVariable.SetItalic(ITALIC_NONE);
+    aFormat.SetFont(FNT_VARIABLE, aVariable);
+    pDocShell->SetFormat(aFormat);
+
+    // Saving the formula sets the window state on the model
+    auto xProps = mxComponent.queryThrow<beans::XPropertySet>();
+    xProps->setPropertyValue(u"WindowState"_ustr, cpo::uno::Any(OUString()));
+
+    const SmFormat& rFormat = pDocShell->GetFormat();
+    // Without the fix in place, this was the font size from the file, half the base size
+    CPPUNIT_ASSERT_EQUAL(aSize.Height(), rFormat.GetFont(FNT_MATH).GetFontSize().Height());
+    CPPUNIT_ASSERT_EQUAL(aSize.Height(), rFormat.GetFont(FNT_VARIABLE).GetFontSize().Height());
+    // Without the fix in place, the italic from the file came back
+    CPPUNIT_ASSERT_EQUAL(ITALIC_NONE, rFormat.GetFont(FNT_VARIABLE).GetItalic());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

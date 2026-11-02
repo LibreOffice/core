@@ -413,6 +413,14 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
 
     SmFormat aFormat = pDocSh->GetFormat();
 
+    // A font with a name is already in the format. The dialogs may have changed the format since,
+    // so take the font from there, or the merge below puts back the font as this model last saw it.
+    for (sal_uInt16 nFont = FNT_BEGIN; nFont <= FNT_END; nFont++)
+    {
+        if (!maFonts[nFont].GetFamilyName().isEmpty())
+            maFonts[nFont] = aFormat.GetFont(nFont);
+    }
+
     for (; *ppEntries; ppEntries++, pValues++ )
     {
         if ((*ppEntries)->mnAttributes & PropertyAttribute::READONLY)
@@ -483,7 +491,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                 aSize.setHeight(o3tl::convert(nVal, o3tl::Length::pt, SmO3tlLengthUnit()));
                 aFormat.SetBaseSizeAndFonts(aSize);
 
-                // A font that this same call names is merged in below, from a copy that
+                // A font whose name comes in a later call is merged in from maFonts, which
                 // needs the new size too.
                 for (sal_uInt16 nFont = FNT_BEGIN; nFont <= FNT_END; nFont++)
                     maFonts[nFont].SetSize(aSize);
