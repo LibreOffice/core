@@ -3805,7 +3805,7 @@ tools::Long ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double 
                     SCROW nSegmentEnd = std::min( nLastRow, aSegmentIter.getLastPos() );
 
                     // round-down a single height value, multiply resulting (pixel) values
-                    tools::Long nOneHeight = static_cast<tools::Long>( nRowVal * fScale );
+                    tools::Long nOneHeight = ScGlobal::TwipsToPixel( nRowVal, fScale );
                     nHeight += nOneHeight * ( nSegmentEnd + 1 - nRow );
 
                     nRow = nSegmentEnd + 1;
@@ -4519,15 +4519,6 @@ SCROW ScTable::GetRowForHeight(tools::Long nHeight) const
     return -1;
 }
 
-// same as the one in viewdata.hxx
-static tools::Long ToPixel( sal_uInt16 nTwips, double nFactor )
-{
-    tools::Long nRet = static_cast<tools::Long>( nTwips * nFactor );
-    if ( !nRet && nTwips )
-        nRet = 1;
-    return nRet;
-}
-
 SCROW ScTable::GetRowForHeightPixels(SCROW nStartRow, tools::Long& rStartRowHeightPx, tools::Long nHeightPx, double fPPTY) const
 {
     assert(nStartRow >= -1);
@@ -4580,7 +4571,7 @@ SCROW ScTable::GetRowForHeightPixels(SCROW nStartRow, tools::Long& rStartRowHeig
         SCROW nLastCommon = std::min(aHiddenRange.mnRow2, aRowHeightRange.mnRow2);
         SCROW nCommonRows = nLastCommon - nRow + 1;
         // height of common span
-        tools::Long nRowHeightPx = ToPixel(aRowHeightRange.mnValue, fPPTY);
+        tools::Long nRowHeightPx = ScGlobal::TwipsToPixel(aRowHeightRange.mnValue, fPPTY);
         tools::Long nCommonPixels = nRowHeightPx * nCommonRows;
 
         // is the target height inside the common span ?

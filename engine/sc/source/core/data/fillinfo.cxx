@@ -213,8 +213,9 @@ void initRowInfo(const ScDocument* pDoc, RowInfo* pRowInfo, const SCSIZE nMaxRow
             // pThisRowInfo->pCellInfo is set below using allocCellInfo()
 
             sal_uInt16 nHeight = static_cast<sal_uInt16>(
-                std::clamp(
-                    nDocHeight * fRowScale, 1.0, double(std::numeric_limits<sal_uInt16>::max())));
+                std::clamp<tools::Long>(
+                    ScGlobal::TwipsToPixel(nDocHeight, fRowScale), 1,
+                    std::numeric_limits<sal_uInt16>::max()));
 
             rRowLookup.insert({nY, rArrRow});
             pThisRowInfo->nRowNo        = nY;               //TODO: case < 0 ?
@@ -271,7 +272,8 @@ void initColWidths(RowInfo* pRowInfo, const ScDocument* pDoc, double fColScale, 
         {
             if (!pDoc->ColHidden(nCol, nTab))
             {
-                sal_uInt16 nThisWidth = static_cast<sal_uInt16>(pDoc->GetColWidth( nCol, nTab ) * fColScale);
+                sal_uInt16 nThisWidth = static_cast<sal_uInt16>(
+                    ScGlobal::TwipsToPixel(pDoc->GetColWidth( nCol, nTab ), fColScale));
                 if (!nThisWidth)
                     nThisWidth = 1;
 
@@ -488,7 +490,7 @@ void ScDocument::FillInfo(
             if (!bColHidden)
             {
                 sal_uInt16 nColWidth = GetColWidth( nCol, nTab, false ); // false=no need to check for hidden, checked above
-                sal_uInt16 nThisWidth = static_cast<sal_uInt16>(std::clamp(nColWidth * fColScale, 1.0, double(std::numeric_limits<sal_uInt16>::max())));
+                sal_uInt16 nThisWidth = static_cast<sal_uInt16>(std::clamp<tools::Long>(ScGlobal::TwipsToPixel(nColWidth, fColScale), 1, std::numeric_limits<sal_uInt16>::max()));
 
                 pRowInfo[0].basicCellInfo(nCol).nWidth = nThisWidth;           //TODO: this should be enough
 
@@ -1122,7 +1124,7 @@ void ScDocument::FillInfo(
                 {
                     tools::Long nSize = 0;
                     for( SCCOL nDocCol = nFirstRealDocCol; nDocCol < nFirstDocCol; ++nDocCol )
-                        nSize += std::max( tools::Long(GetColWidth( nDocCol, nTab ) * fColScale), tools::Long(1) );
+                        nSize += std::max( ScGlobal::TwipsToPixel(GetColWidth( nDocCol, nTab ), fColScale), tools::Long(1) );
                     rArray.SetAddMergedLeftSize( nX, nRow, nSize );
                 }
                 // additional space after last column
@@ -1130,7 +1132,7 @@ void ScDocument::FillInfo(
                 {
                     tools::Long nSize = 0;
                     for( SCCOL nDocCol = nLastDocCol + 1; nDocCol <= nLastRealDocCol; ++nDocCol )
-                        nSize += std::max( tools::Long(GetColWidth( nDocCol, nTab ) * fColScale), tools::Long(1) );
+                        nSize += std::max( ScGlobal::TwipsToPixel(GetColWidth( nDocCol, nTab ), fColScale), tools::Long(1) );
                     rArray.SetAddMergedRightSize( nX, nRow, nSize );
                 }
                 // additional space above first row
@@ -1138,7 +1140,7 @@ void ScDocument::FillInfo(
                 {
                     tools::Long nSize = 0;
                     for( SCROW nDocRow = nFirstRealDocRow; nDocRow < nFirstDocRow; ++nDocRow )
-                        nSize += std::max( tools::Long(GetRowHeight( nDocRow, nTab ) * fRowScale), tools::Long(1) );
+                        nSize += std::max( ScGlobal::TwipsToPixel(GetRowHeight( nDocRow, nTab ), fRowScale), tools::Long(1) );
                     rArray.SetAddMergedTopSize( nX, nRow, nSize );
                 }
                 // additional space beyond last row
@@ -1146,7 +1148,7 @@ void ScDocument::FillInfo(
                 {
                     tools::Long nSize = 0;
                     for( SCROW nDocRow = nLastDocRow + 1; nDocRow <= nLastRealDocRow; ++nDocRow )
-                        nSize += std::max( tools::Long(GetRowHeight( nDocRow, nTab ) * fRowScale), tools::Long(1) );
+                        nSize += std::max( ScGlobal::TwipsToPixel(GetRowHeight( nDocRow, nTab ), fRowScale), tools::Long(1) );
                     rArray.SetAddMergedBottomSize( nX, nRow, nSize );
                 }
 

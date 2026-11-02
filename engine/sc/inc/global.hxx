@@ -616,6 +616,19 @@ public:
     /// Vertical pixel per twips factor.
     SC_DLLPUBLIC static double              nScreenPPTY;
 
+    /** Converts a size in twips to whole pixels, rounding down.
+
+        The pixels per twip factor is not exact, so a size of exactly 256 pixels can come out as
+        255.99999999999997. A tiny margin is added before rounding down, so such a size becomes the
+        whole number. Any other size is much further from a whole number than the margin. A size
+        that is not zero is at least 1 pixel, so a narrow column or row is still drawn.
+     */
+    static tools::Long TwipsToPixel( tools::Long nTwips, double fPixelsPerTwip )
+    {
+        const tools::Long nPixels = static_cast<tools::Long>( nTwips * fPixelsPerTwip + 1E-9 );
+        return ( nPixels == 0 && nTwips != 0 ) ? 1 : nPixels;
+    }
+
     static rtl::Reference<ScDocShell> xDrawClipDocShellRef;
 
     static sal_uInt16           nDefFontHeight;

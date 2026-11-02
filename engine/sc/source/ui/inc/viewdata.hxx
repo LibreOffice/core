@@ -20,6 +20,7 @@
 
 #include <tools/fract.hxx>
 #include <sfx2/zoomitem.hxx>
+#include <global.hxx>
 #include <rangelst.hxx>
 #include <scdllapi.h>
 #include <viewopti.hxx>
@@ -759,10 +760,7 @@ public:
 
 inline tools::Long ScViewData::ToPixel( sal_uInt16 nTwips, double nFactor )
 {
-    tools::Long nRet = static_cast<tools::Long>( nTwips * nFactor );
-    if ( !nRet && nTwips )
-        nRet = 1;
-    return nRet;
+    return ScGlobal::TwipsToPixel( nTwips, nFactor );
 }
 
 inline void ScViewData::GetMoveCursor( SCCOL& rCurX, SCROW& rCurY )

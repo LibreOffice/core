@@ -29,6 +29,8 @@
 #include <svx/svdpage.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/BitmapReadAccess.hxx>
+#include <editeng/brushitem.hxx>
 #include <tools/json_writer.hxx>
 
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -37,6 +39,8 @@
 
 #include <sc.hrc>
 #include <postit.hxx>
+#include <scitems.hxx>
+#include <patattr.hxx>
 #include <document.hxx>
 #include <docuno.hxx>
 #include <drwlayer.hxx>
@@ -3165,6 +3169,74 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSelectRowCursorStaysInView)
     constexpr SCROW nRow = 9;
     CPPUNIT_ASSERT_EQUAL(nLeftColumn, pViewData->GetCurX());
     CPPUNIT_ASSERT_EQUAL(nRow, pViewData->GetCurY());
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellSizeIsWholePixelCount)
+{
+    // At 150% zoom a 256 pixel tile covers 2667 twips, so a column or a row 2667 twips long is
+    // exactly 256 pixels. The client draws the grid with that size. Core painted each such column
+    // and row one pixel shorter, so the cell content drifted one pixel further from the grid with
+    // every column and row.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScDocument& rDoc = pViewData->GetDocument();
+
+    constexpr sal_uInt16 nSize = 2667;
+    rDoc.SetColWidth(0, 0, nSize);
+    rDoc.SetColWidth(1, 0, nSize);
+    rDoc.SetRowHeightRange(0, 1, 0, nSize);
+    rDoc.SetManualHeight(0, 1, 0, true);
+
+    // A1 is red, and the cells to its right and below it are blue.
+    ScPatternAttr aRed(rDoc.getCellAttributeHelper());
+    aRed.ItemSetPut(SvxBrushItem(COL_LIGHTRED, ATTR_BACKGROUND));
+    rDoc.ApplyPattern(0, 0, 0, aRed);
+    ScPatternAttr aBlue(rDoc.getCellAttributeHelper());
+    aBlue.ItemSetPut(SvxBrushItem(COL_LIGHTBLUE, ATTR_BACKGROUND));
+    rDoc.ApplyPattern(1, 0, 0, aBlue);
+    rDoc.ApplyPattern(0, 1, 0, aBlue);
+
+    // Paint the top left tile, which A1 fills exactly.
+    constexpr int nTileSize = 256;
+    std::vector<unsigned char> aPixmap(nTileSize * nTileSize * 4, 0);
+    ScopedVclPtrInstance<VirtualDevice> xDevice(DeviceFormat::WITHOUT_ALPHA);
+    xDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+    xDevice->SetOutputSizePixelScaleOffsetAndKitBuffer(Size(nTileSize, nTileSize), 1.0, Point(),
+                                                       aPixmap.data());
+    pModelObj->paintTile(*xDevice, nTileSize, nTileSize, 0, 0, nSize, nSize);
+    xDevice->EnableMapMode(false);
+    Bitmap aBitmap = xDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
+    BitmapScopedReadAccess pAccess(aBitmap);
+
+    // A cell's background starts on the pixel of the grid line before it, so B1 and A2 begin on
+    // the last column and the last row of pixels in the tile, and A1 fills the rest. Without the
+    // fix A1 ended one pixel earlier.
+    constexpr int nMiddle = nTileSize / 2;
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(pAccess->GetPixel(nMiddle, nTileSize - 2)));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, Color(pAccess->GetPixel(nMiddle, nTileSize - 1)));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(pAccess->GetPixel(nTileSize - 2, nMiddle)));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, Color(pAccess->GetPixel(nTileSize - 1, nMiddle)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowShorterThanPixelIsOnePixel)
+{
+    // A row of 10 twips is about two thirds of a pixel at 100% zoom. Every row is at least one
+    // pixel, so summing a range of rows gives the same position as adding them one by one.
+    createDoc("empty.ods");
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScDocument& rDoc = pViewData->GetDocument();
+
+    constexpr SCROW nRows = 100;
+    rDoc.SetRowHeightRange(0, nRows - 1, 0, 10);
+    rDoc.SetManualHeight(0, nRows - 1, 0, true);
+
+    // Without the fix the summed range was 0 pixels high.
+    const tools::Long nSummed = pViewData->GetScrPos(0, nRows, SC_SPLIT_TOPLEFT, true).Y();
+    const tools::Long nOneByOne = pViewData->GetScrPos(0, nRows, SC_SPLIT_TOPLEFT, false).Y();
+    CPPUNIT_ASSERT_EQUAL(tools::Long(nRows), nOneByOne);
+    CPPUNIT_ASSERT_EQUAL(nOneByOne, nSummed);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
