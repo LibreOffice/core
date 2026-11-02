@@ -178,7 +178,9 @@ inline std::string stringifyHexLine(const T& buffer, std::size_t offset,
     for (std::size_t i = 0; i < width; i++)
     {
         if ((offset + i) < buffer.size())
-            str.push_back(::isprint(buffer[offset + i]) ? buffer[offset + i] : '.');
+            str.push_back(::isprint(static_cast<unsigned char>(buffer[offset + i]))
+                              ? buffer[offset + i]
+                              : '.');
         else
             str.push_back(' '); // Leave blank if we are out of data.
     }

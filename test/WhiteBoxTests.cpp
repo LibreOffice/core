@@ -1174,6 +1174,12 @@ void WhiteBoxTests::testStringCompare()
     LOK_ASSERT(!Util::iequal("abc", "abcd"));
 
     LOK_ASSERT(!Util::iequal("abc", 3, "abcd", 4));
+
+    // Bytes outside ASCII, which are negative where char is signed, are compared and lower-cased
+    // as they are: the UTF-8 bytes of 'É' and 'é' differ, and neither changes.
+    LOK_ASSERT(Util::iequal("caf\xC3\xA9", "CAF\xC3\xA9"));
+    LOK_ASSERT(!Util::iequal("\xC3\x89", "\xC3\xA9"));
+    LOK_ASSERT_EQUAL_STR("caf\xC3\x89\xFF", Util::toLower("CAF\xC3\x89\xFF"));
 }
 
 void WhiteBoxTests::testJsonUtilEscapeJSONValue()

@@ -1137,7 +1137,8 @@ int main(int argc, char**argv)
     /// Converts in-place and returns the argument to lower-case.
     inline std::string& toLowerInplace(std::string& s)
     {
-        std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+        std::transform(s.begin(), s.end(), s.begin(),
+                       [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
         return s;
     }
     /// Converts and returns a copy of the argument in lower-case.
@@ -1149,7 +1150,8 @@ int main(int argc, char**argv)
     {
         return ((lhs_len == rhs_len)
                 && std::equal(lhs, lhs + lhs_len, rhs, [](const char lch, const char rch) {
-                       return std::tolower(lch) == std::tolower(rch);
+                       return std::tolower(static_cast<unsigned char>(lch)) ==
+                              std::tolower(static_cast<unsigned char>(rch));
                    }));
     }
 

@@ -213,7 +213,7 @@ namespace FileUtil
     std::string fixPocoURIgetPathReturnValue(const std::string& path)
     {
         if (path.length() > 4 && path[0] == '/' &&
-            std::isalpha(path[1]) && path[2] == ':' && path[3] == '/')
+            std::isalpha(static_cast<unsigned char>(path[1])) && path[2] == ':' && path[3] == '/')
             return path.substr(1);
         return path;
     }

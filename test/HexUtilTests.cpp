@@ -69,6 +69,12 @@ void HexUtilTests::testStringifyHexLine()
     std::string result2("68 65 72 65 0A 74  | here.t");
     LOK_ASSERT_EQUAL(result1, HexUtil::stringifyHexLine(test, 0));
     LOK_ASSERT_EQUAL(result2, HexUtil::stringifyHexLine(test, 6, 6));
+
+    // Bytes outside ASCII, which are negative where char is signed, are not printable.
+    const std::string nonAscii("a\xE9\xFF"
+                               "b");
+    LOK_ASSERT_EQUAL(std::string("61 E9 FF 62  | a..b"),
+                     HexUtil::stringifyHexLine(nonAscii, 0, 4));
 }
 
 void HexUtilTests::testHexify()
