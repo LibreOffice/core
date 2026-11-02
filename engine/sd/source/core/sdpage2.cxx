@@ -227,6 +227,13 @@ void SdPage::SetPresentationLayout(std::u16string_view rLayoutName,
                     pOPO->ChangeStyleSheets( rRepl.aName, rRepl.nFamily, rRepl.aNewName, rRepl.nNewFamily );
                 }
             }
+
+            // The object itself takes the style of the first outline level of the new layout,
+            // as the title and the other placeholders do below. Its frame attributes, such as
+            // the vertical alignment of the text, come from that style. Each paragraph keeps the
+            // style of its own outline level.
+            if (!aOutlineStyles.empty() && aOutlineStyles.front())
+                pObj->SetStyleSheet(static_cast<SfxStyleSheet*>(aOutlineStyles.front()), true);
         }
         else if (pObj->GetObjInventor() == SdrInventor::Default &&
                  pObj->GetObjIdentifier() == SdrObjKind::TitleText)

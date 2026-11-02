@@ -76,6 +76,7 @@
 #include <svx/svdomedia.hxx>
 #include <avmedia/mediaitem.hxx>
 #include <svx/svdotable.hxx>
+#include <svx/sdtaitm.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflhtit.hxx>
@@ -630,6 +631,53 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureApplyTemplate)
     // it.
     for (sal_uInt16 i = 0; i < pDoc->GetMasterSdPageCount(PageKind::Standard); ++i)
         CPPUNIT_ASSERT(pDoc->GetMasterSdPage(i, PageKind::Standard)->GetName() != aBeforeMaster);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureIntentMasterBodyFrame)
+{
+    // A slide moved onto another master takes that master's style for its body text frame, not
+    // only for the paragraphs in it, so the frame settings match the ones the slide has after a
+    // save and reload. The quote master of the bundled Mint template centres the quote
+    // vertically, where the body master it starts from puts text at the top.
+    createSdImpressDoc();
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+
+    static constexpr OUString aJson = uR"json(
+{
+    "Transforms": {
+        "SlideCommands": [
+            {"ApplyTemplate": "Mint"},
+            {"ChangeLayoutByName": "AUTOLAYOUT_TITLE_CONTENT"},
+            {"SetText.0": "Source"},
+            {"SetText.1": "A quote"},
+            {"SetSlidePart": "body"},
+            {"SetSlideIntent": "quote"}
+        ]
+    }
+}
+)json"_ustr;
+
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                    { comphelper::makePropertyValue(u"DataJson"_ustr, aJson) });
+
+    auto checkBodyFrame = [this]() {
+        SdDrawDocument* pDoc
+            = dynamic_cast<SdXImpressDocument*>(mxComponent.get())->GetDoc();
+        SdPage* pPage = pDoc->GetSdPage(0, PageKind::Standard);
+        CPPUNIT_ASSERT_EQUAL(u"MintQuote"_ustr,
+                             static_cast<SdPage&>(pPage->TRG_GetMasterPage()).GetName());
+        SdrObject* pBody = pPage->GetPresObj(PresObjKind::Outline);
+        CPPUNIT_ASSERT(pBody);
+        CPPUNIT_ASSERT(pBody->GetStyleSheet());
+        CPPUNIT_ASSERT_EQUAL(OUString(pPage->GetLayoutName() + " 1"),
+                             pBody->GetStyleSheet()->GetName());
+        CPPUNIT_ASSERT_EQUAL(SDRTEXTVERTADJUST_CENTER,
+                             pBody->GetMergedItem(SDRATTR_TEXT_VERTADJUST).GetValue());
+    };
+    checkBodyFrame();
+    saveAndReload(TestFilter::ODP);
+    checkBodyFrame();
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDesignMasterRoleFromName)
