@@ -15,7 +15,9 @@
 #include "CellTextFlags.hxx"
 #include <address.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <editeng/svxenum.hxx>
+#include <tools/degree.hxx>
 #include <fillinfo.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
@@ -163,6 +165,52 @@ struct CellText
     std::optional<Color> moSurface;
 };
 
+/** The text of a cell laid out by the EditEngine: rich, wrapped, stacked, vertical or rotated
+    text. The content is the laid out text from the top-left corner of the engine page, in 1/100
+    mm, and not placed. The sizes are in twips.
+ */
+struct CellEditText
+{
+    SCCOL mnColumn;
+    SCROW mnRow;
+    /// The last cell of the merged area, or the cell itself.
+    SCCOL mnEndColumn;
+    SCROW mnEndRow;
+    CellTextArea maArea;
+    /// The alignment the text shows, which can be justified.
+    SvxCellHorJustify meHorJust;
+    /// The alignment the box of the text takes in the cell, left, right or centered.
+    SvxCellHorJustify meBoxHorJust;
+    SvxCellVerJustify meVerJust;
+    SvxCellOrientation meOrient;
+    Degree100 mnRotate;
+    /// The text wraps into lines.
+    bool mbBreak;
+    /// Wrapped text taller than the cell starts at the top of the cell.
+    bool mbStartAtTop;
+    /// The text is cut off at the sides of the cells it paints into.
+    bool mbClipHorizontally;
+    CellTextFlags meFlags;
+    /// The arrows that mark text cut off at the left or the right.
+    bool mbLeftClipMark;
+    bool mbRightClipMark;
+    /// The margins of the cell. The horizontal ones include the indent.
+    double mfLeftMargin;
+    double mfRightMargin;
+    double mfTopMargin;
+    double mfBottomMargin;
+    /// The size of the laid out text, and the extent it takes in the cell, turned for vertical
+    /// text.
+    double mfEngineWidth;
+    double mfEngineHeight;
+    double mfExtentX;
+    double mfExtentY;
+    drawinglayer::primitive2d::Primitive2DContainer maContent;
+    /// The fill of the cell, when it has one, against which an automatic font color is chosen.
+    /// Set when the font colors stay automatic.
+    std::optional<Color> moSurface;
+};
+
 /** What the cells of a range show, by cell address and without positions. A CellGeometry places
     it. Each list is in the order of the rows, and of the columns within a row. The borders are not
     here: the border array of ScTableInfo (svx::frame::Array) holds the style of each cell edge by
@@ -180,6 +228,7 @@ struct CellContent
     std::vector<CellMergedArea> maMergedAreas;
     /// The text of the cells, in the order it is laid out.
     std::vector<CellText> maTexts;
+    std::vector<CellEditText> maEditTexts;
 };
 }
 

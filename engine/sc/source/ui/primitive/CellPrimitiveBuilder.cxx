@@ -132,31 +132,6 @@ primitive2d::TextRelief mapRelief(FontRelief eRelief)
     }
 }
 
-/// The horizontal room a text takes and the cells it may use, in twips.
-struct OutputArea
-{
-    /// The cell or the merged area, which the text is aligned in.
-    basegfx::B2DRange maAlignRange;
-    /// The cells the text may paint into.
-    basegfx::B2DRange maClipRange;
-    /// The width of the cell or the merged area.
-    double mfColumnWidth = 0.0;
-    bool mbLeftClip = false;
-    bool mbRightClip = false;
-    /// The first and the last column the text paints into.
-    SCCOL mnLeftColumn = 0;
-    SCCOL mnRightColumn = 0;
-
-    /// Takes the room of the arrows that mark cut text off the clip range.
-    void reserveClipMarks(bool bLeft, bool bRight)
-    {
-        maClipRange = basegfx::B2DRange(maClipRange.getMinX() + (bLeft ? SC_CLIPMARK_SIZE : 0.0),
-                                        maClipRange.getMinY(),
-                                        maClipRange.getMaxX() - (bRight ? SC_CLIPMARK_SIZE : 0.0),
-                                        maClipRange.getMaxY());
-    }
-};
-
 /// The sizes of the cells that the layout of a text is decided with, in twips. Only sizes, so the
 /// layout does not depend on where the cells are.
 struct TextSizes
@@ -263,11 +238,10 @@ private:
     void placeTextArea(SCCOL nColumn, SCROW nRow, SCCOL nEndColumn, SCROW nEndRow,
                        const CellTextArea& rArea, basegfx::B2DRange& rAlign,
                        basegfx::B2DRange& rClip) const;
-    void computeOutputArea(const CellSource& rSource, double fNeeded, SvxCellHorJustify eHorJust,
-                           bool bNoOverflow, bool bBreak, OutputArea& rArea) const;
     bool addSimpleText(const CellSource& rSource);
     void placeText(const CellText& rText);
     void addEditText(const CellSource& rSource);
+    void placeEditText(const CellEditText& rText);
     void addClipMarks(SCROW nRow, SCROW nEndRow, SCCOL nLeftColumn, SCCOL nRightColumn, bool bLeft,
                       bool bRight);
     void addOverflowCover(SCCOL nColumn, SCCOL nEndColumn, SCROW nRow, SCCOL nLeftColumn,
@@ -983,23 +957,6 @@ void CellPrimitiveBuilder::Impl::placeTextArea(SCCOL nColumn, SCROW nRow, SCCOL 
     rClip = basegfx::B2DRange(fLeft, rAlign.getMinY(), fRight, rAlign.getMaxY());
 }
 
-void CellPrimitiveBuilder::Impl::computeOutputArea(const CellSource& rSource, double fNeeded,
-                                                   SvxCellHorJustify eHorJust, bool bNoOverflow,
-                                                   bool bBreak, OutputArea& rArea) const
-{
-    TextSizes aSizes;
-    const CellTextArea aArea
-        = decideTextArea(rSource, fNeeded, eHorJust, bNoOverflow, bBreak, aSizes);
-    placeTextArea(rSource.mnColumn, rSource.mnRow, rSource.mnColumn + rSource.mnMergeColumns - 1,
-                  rSource.mnRow + rSource.mnMergeRows - 1, aArea, rArea.maAlignRange,
-                  rArea.maClipRange);
-    rArea.mfColumnWidth = aSizes.mfColumnWidth;
-    rArea.mbLeftClip = aArea.mbLeftClip;
-    rArea.mbRightClip = aArea.mbRightClip;
-    rArea.mnLeftColumn = aArea.mnLeftColumn;
-    rArea.mnRightColumn = aArea.mnRightColumn;
-}
-
 void CellPrimitiveBuilder::Impl::addClipMarks(SCROW nRow, SCROW nEndRow, SCCOL nLeftColumn,
                                               SCCOL nRightColumn, bool bLeft, bool bRight)
 {
@@ -1667,14 +1624,15 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
     if (bBreak)
         eFlags |= CellTextFlags::Wrap;
 
-    OutputArea aArea;
+    TextSizes aSizes;
     const bool bShrink = !bBreak && rPattern.GetItem(ATTR_SHRINKTOFIT, pCondSet).GetValue()
                          && eHorJustAttr != SvxCellHorJustify::Repeat;
     // A number, a text that shrinks to fit and vertical or rotated text stay inside their cell.
     const bool bNoOverflow = bCellIsValue || bShrink || bVertical || nRotate != 0_deg100;
     // Wrapped lines take no width of their own, the way the engine size of the window counts them.
     const double fNeededWidth = (bBreak && !bStacked ? 0.0 : fExtentX) + fLeftMargin + fRightMargin;
-    computeOutputArea(rSource, fNeededWidth, eHorJustContext, bNoOverflow, bBreak, aArea);
+    CellTextArea aArea
+        = decideTextArea(rSource, fNeededWidth, eHorJustContext, bNoOverflow, bBreak, aSizes);
 
     if (bShrink && (aArea.mbLeftClip || aArea.mbRightClip || fExtentY > fInnerHeight))
     {
@@ -1719,8 +1677,13 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
         eFlags |= CellTextFlags::HashFill;
         bClipLeftMark = eHorJustContext != SvxCellHorJustify::Left;
         bClipRightMark = eHorJustContext != SvxCellHorJustify::Right;
-        aArea.reserveClipMarks(bClipLeftMark, bClipRightMark);
-        if (fExtentX + fLeftMargin + fRightMargin <= aArea.maClipRange.getWidth())
+        // A number never overflows, so no room was taken for the arrows yet.
+        assert(!aArea.mbLeftMarkRoom && !aArea.mbRightMarkRoom);
+        aArea.mbLeftMarkRoom = bClipLeftMark;
+        aArea.mbRightMarkRoom = bClipRightMark;
+        aSizes.mfClipWidth -= (bClipLeftMark ? SC_CLIPMARK_SIZE : 0.0)
+                              + (bClipRightMark ? SC_CLIPMARK_SIZE : 0.0);
+        if (fExtentX + fLeftMargin + fRightMargin <= aSizes.mfClipWidth)
             aArea.mbLeftClip = aArea.mbRightClip = false;
     }
     else if (!bNoOverflow)
@@ -1743,59 +1706,20 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
         fExtentY = fEngineHeight;
     }
 
-    const basegfx::B2DRange& rAlign = aArea.maAlignRange;
-    const double fAlignInnerWidth = rAlign.getWidth() - fLeftMargin - fRightMargin;
-    const double fAlignInnerHeight = rAlign.getHeight() - fTopMargin - fBottomMargin;
+    // Wrapped text taller than the cell starts at the top; text taller than the cell is cut.
+    const double fAlignInnerHeight = aSizes.mfAlignHeight - fTopMargin - fBottomMargin;
+    const bool bStartAtTop
+        = fExtentY > fAlignInnerHeight && bBreak && eVerJust == SvxCellVerJustify::Standard;
+    if (fExtentY > fAlignInnerHeight + 1)
+        eFlags |= CellTextFlags::ClippedBottom;
+    if (aArea.mbLeftClip)
+        eFlags |= CellTextFlags::ClippedLeft;
+    if (aArea.mbRightClip)
+        eFlags |= CellTextFlags::ClippedRight;
+    const bool bClipHorizontally
+        = aArea.mbLeftClip || aArea.mbRightClip || bWrapFields || (bBreak && !bVertical);
 
-    // The box the text takes in the cell.
-    double fBoxLeft = rAlign.getMinX() + fLeftMargin;
-    if (!bBreak || bVertical)
-    {
-        if (eHorJustContext == SvxCellHorJustify::Right)
-            fBoxLeft = rAlign.getMaxX() - fRightMargin - fExtentX;
-        else if (eHorJustContext == SvxCellHorJustify::Center)
-            fBoxLeft = rAlign.getMinX() + fLeftMargin + (fAlignInnerWidth - fExtentX) / 2;
-    }
-    double fBoxTop = rAlign.getMinY() + fTopMargin;
-    if (eVerJust == SvxCellVerJustify::Bottom || eVerJust == SvxCellVerJustify::Standard)
-        fBoxTop += fAlignInnerHeight - fExtentY;
-    else if (eVerJust == SvxCellVerJustify::Center)
-        fBoxTop += (fAlignInnerHeight - fExtentY) / 2;
-
-    // Text that does not fit the height of a wrapped cell starts at the top.
-    if (fExtentY > fAlignInnerHeight && bBreak && eVerJust == SvxCellVerJustify::Standard)
-        fBoxTop = rAlign.getMinY() + fTopMargin;
-
-    // The engine lays out from (0, 0) in 1/100 mm. The transformation scales to twips and rotates.
-    basegfx::B2DHomMatrix aTransform
-        = basegfx::utils::createScaleB2DHomMatrix(constTwipsPerMm100, constTwipsPerMm100);
-    if (eOrient == SvxCellOrientation::BottomUp)
-    {
-        aTransform *= basegfx::utils::createRotateB2DHomMatrix(-M_PI / 2);
-        aTransform *= basegfx::utils::createTranslateB2DHomMatrix(fBoxLeft, fBoxTop + fExtentY);
-    }
-    else if (eOrient == SvxCellOrientation::TopBottom)
-    {
-        aTransform *= basegfx::utils::createRotateB2DHomMatrix(M_PI / 2);
-        aTransform *= basegfx::utils::createTranslateB2DHomMatrix(fBoxLeft + fExtentX, fBoxTop);
-    }
-    else if (nRotate != 0_deg100)
-    {
-        // Rising text starts at the bottom-left of the cell and falling text at the top-left. Both
-        // overflow the cell like rotated text in the window.
-        const double fAngle = toRadians(nRotate);
-        aTransform *= basegfx::utils::createRotateB2DHomMatrix(-fAngle);
-        const bool bRising = std::sin(fAngle) > 0;
-        const double fStartY
-            = bRising ? rAlign.getMaxY() - fBottomMargin - fEngineHeight * std::cos(fAngle)
-                      : rAlign.getMinY() + fTopMargin;
-        aTransform *= basegfx::utils::createTranslateB2DHomMatrix(
-            rAlign.getMinX() + fLeftMargin + std::max(0.0, -std::sin(fAngle) * fEngineHeight),
-            fStartY);
-    }
-    else
-        aTransform *= basegfx::utils::createTranslateB2DHomMatrix(fBoxLeft, fBoxTop);
-
+    // The engine lays out from (0, 0) in 1/100 mm.
     TextHierarchyBreakup aHelper;
     rEngine.StripPortions(aHelper);
     rEngine.setScalingParameters({});
@@ -1803,34 +1727,122 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
     if (aContent.empty())
         return;
 
+    maContent.maEditTexts.push_back(CellEditText{ nColumn,
+                                                  nRow,
+                                                  SCCOL(nColumn + rSource.mnMergeColumns - 1),
+                                                  SCROW(nRow + rSource.mnMergeRows - 1),
+                                                  aArea,
+                                                  eHorJust,
+                                                  eHorJustContext,
+                                                  eVerJust,
+                                                  eOrient,
+                                                  nRotate,
+                                                  bBreak,
+                                                  bStartAtTop,
+                                                  bClipHorizontally,
+                                                  eFlags,
+                                                  bClipLeftMark,
+                                                  bClipRightMark,
+                                                  fLeftMargin,
+                                                  fRightMargin,
+                                                  fTopMargin,
+                                                  fBottomMargin,
+                                                  fEngineWidth,
+                                                  fEngineHeight,
+                                                  fExtentX,
+                                                  fExtentY,
+                                                  std::move(aContent),
+                                                  maSettings.mbAutomaticColors
+                                                      ? cellSurface(rPattern, pCondSet)
+                                                      : std::optional<Color>() });
+    placeEditText(maContent.maEditTexts.back());
+}
+
+void CellPrimitiveBuilder::Impl::placeEditText(const CellEditText& rText)
+{
+    basegfx::B2DRange aAlign;
+    basegfx::B2DRange aClipArea;
+    placeTextArea(rText.mnColumn, rText.mnRow, rText.mnEndColumn, rText.mnEndRow, rText.maArea,
+                  aAlign, aClipArea);
+    const double fAlignInnerWidth = aAlign.getWidth() - rText.mfLeftMargin - rText.mfRightMargin;
+    const double fAlignInnerHeight = aAlign.getHeight() - rText.mfTopMargin - rText.mfBottomMargin;
+    const bool bVertical = rText.meOrient == SvxCellOrientation::TopBottom
+                           || rText.meOrient == SvxCellOrientation::BottomUp;
+
+    // The box the text takes in the cell.
+    double fBoxLeft = aAlign.getMinX() + rText.mfLeftMargin;
+    if (!rText.mbBreak || bVertical)
+    {
+        if (rText.meBoxHorJust == SvxCellHorJustify::Right)
+            fBoxLeft = aAlign.getMaxX() - rText.mfRightMargin - rText.mfExtentX;
+        else if (rText.meBoxHorJust == SvxCellHorJustify::Center)
+            fBoxLeft = aAlign.getMinX() + rText.mfLeftMargin
+                       + (fAlignInnerWidth - rText.mfExtentX) / 2;
+    }
+    double fBoxTop = aAlign.getMinY() + rText.mfTopMargin;
+    if (rText.meVerJust == SvxCellVerJustify::Bottom
+        || rText.meVerJust == SvxCellVerJustify::Standard)
+        fBoxTop += fAlignInnerHeight - rText.mfExtentY;
+    else if (rText.meVerJust == SvxCellVerJustify::Center)
+        fBoxTop += (fAlignInnerHeight - rText.mfExtentY) / 2;
+    if (rText.mbStartAtTop)
+        fBoxTop = aAlign.getMinY() + rText.mfTopMargin;
+
+    // The transformation scales the engine page to twips and turns it.
+    basegfx::B2DHomMatrix aTransform
+        = basegfx::utils::createScaleB2DHomMatrix(constTwipsPerMm100, constTwipsPerMm100);
+    if (rText.meOrient == SvxCellOrientation::BottomUp)
+    {
+        aTransform *= basegfx::utils::createRotateB2DHomMatrix(-M_PI / 2);
+        aTransform
+            *= basegfx::utils::createTranslateB2DHomMatrix(fBoxLeft, fBoxTop + rText.mfExtentY);
+    }
+    else if (rText.meOrient == SvxCellOrientation::TopBottom)
+    {
+        aTransform *= basegfx::utils::createRotateB2DHomMatrix(M_PI / 2);
+        aTransform
+            *= basegfx::utils::createTranslateB2DHomMatrix(fBoxLeft + rText.mfExtentX, fBoxTop);
+    }
+    else if (rText.mnRotate != 0_deg100)
+    {
+        // Rising text starts at the bottom-left of the cell and falling text at the top-left. Both
+        // overflow the cell like rotated text in the window.
+        const double fAngle = toRadians(rText.mnRotate);
+        aTransform *= basegfx::utils::createRotateB2DHomMatrix(-fAngle);
+        const bool bRising = std::sin(fAngle) > 0;
+        const double fStartY = bRising ? aAlign.getMaxY() - rText.mfBottomMargin
+                                             - rText.mfEngineHeight * std::cos(fAngle)
+                                       : aAlign.getMinY() + rText.mfTopMargin;
+        aTransform *= basegfx::utils::createTranslateB2DHomMatrix(
+            aAlign.getMinX() + rText.mfLeftMargin
+                + std::max(0.0, -std::sin(fAngle) * rText.mfEngineHeight),
+            fStartY);
+    }
+    else
+        aTransform *= basegfx::utils::createTranslateB2DHomMatrix(fBoxLeft, fBoxTop);
+
     primitive2d::Primitive2DContainer aText{ new primitive2d::TransformPrimitive2D(
-        aTransform, std::move(aContent)) };
+        aTransform, primitive2d::Primitive2DContainer(rText.maContent)) };
 
-    const bool bVerticalClip = fExtentY > fAlignInnerHeight + 1;
-    const bool bHorizontalClip
-        = aArea.mbLeftClip || aArea.mbRightClip || bWrapFields || (bBreak && !bVertical);
-    const bool bRotatedOut = nRotate != 0_deg100;
-    if (bVerticalClip)
-        eFlags |= CellTextFlags::ClippedBottom;
-    if (aArea.mbLeftClip)
-        eFlags |= CellTextFlags::ClippedLeft;
-    if (aArea.mbRightClip)
-        eFlags |= CellTextFlags::ClippedRight;
-
+    const bool bVerticalClip = bool(rText.meFlags & CellTextFlags::ClippedBottom);
+    const bool bHorizontalClip = rText.mbClipHorizontally;
+    const bool bRotatedOut = rText.mnRotate != 0_deg100;
     const double fHuge = 1e9;
     const bool bClip = !bRotatedOut && (bHorizontalClip || bVerticalClip);
-    const basegfx::B2DRange aClip(bHorizontalClip ? aArea.maClipRange.getMinX() : -fHuge,
-                                  bVerticalClip ? aArea.maClipRange.getMinY() : -fHuge,
-                                  bHorizontalClip ? aArea.maClipRange.getMaxX() : fHuge,
-                                  bVerticalClip ? aArea.maClipRange.getMaxY() : fHuge);
+    const basegfx::B2DRange aClip(bHorizontalClip ? aClipArea.getMinX() : -fHuge,
+                                  bVerticalClip ? aClipArea.getMinY() : -fHuge,
+                                  bHorizontalClip ? aClipArea.getMaxX() : fHuge,
+                                  bVerticalClip ? aClipArea.getMaxY() : fHuge);
 
-    rowLayers(nRow).maText.push_back(new CellTextPrimitive2D(nColumn, nRow, aArea.maAlignRange,
-                                                             aClip, bClip, eHorJust, eVerJust,
-                                                             eFlags, std::move(aText)));
-    addOverflowCover(rSource.mnColumn, rSource.mnColumn + rSource.mnMergeColumns - 1, rSource.mnRow,
-                     aArea.mnLeftColumn, aArea.mnRightColumn);
-    addClipMarks(rSource.mnRow, rSource.mnRow + rSource.mnMergeRows - 1, aArea.mnLeftColumn,
-                 aArea.mnRightColumn, bClipLeftMark, bClipRightMark);
+    rowLayers(rText.mnRow)
+        .maText.push_back(new CellTextPrimitive2D(rText.mnColumn, rText.mnRow, aAlign, aClip,
+                                                  bClip, rText.meHorJust, rText.meVerJust,
+                                                  rText.meFlags, std::move(aText),
+                                                  basegfx::B2DRange(), rText.moSurface));
+    addOverflowCover(rText.mnColumn, rText.mnEndColumn, rText.mnRow, rText.maArea.mnLeftColumn,
+                     rText.maArea.mnRightColumn);
+    addClipMarks(rText.mnRow, rText.mnEndRow, rText.maArea.mnLeftColumn,
+                 rText.maArea.mnRightColumn, rText.mbLeftClipMark, rText.mbRightClipMark);
 }
 
 void CellPrimitiveBuilder::Impl::buildText(const ScTableInfo& rInfo)
