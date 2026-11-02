@@ -22,6 +22,7 @@
 #include <svx/svditer.hxx>
 #include <svx/EnhancedCustomShape2d.hxx>
 #include <oox/export/shapes.hxx>
+#include <oox/export/vmlexport.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/relationship.hxx>
 #include <textboxhelper.hxx>
@@ -1632,17 +1633,13 @@ void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj,
     bool bDMLAndVMLDrawingOpen = m_pImpl->getDMLAndVMLDrawingOpen();
     m_pImpl->setDMLAndVMLDrawingOpen(true);
 
-    // Depending on the shape type, we actually don't write the shape as DML.
-    OUString sShapeType;
-    ShapeFlag nMirrorFlags = ShapeFlag::NONE;
     uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(sdrObj)->getUnoShape());
 
-    MSO_SPT eShapeType
-        = EscherPropertyContainer::GetCustomShapeType(xShape, nMirrorFlags, sShapeType);
-
+    // A text watermark is a Fontwork shape in the header that Word looks for as VML, by its name.
+    const bool bTextWatermark
+        = sdrObj->IsTextPath() && oox::vml::VMLExport::IsWaterMarkShape(sdrObj->GetName());
     // In case we are already inside a DML block, then write the shape only as VML, turn out that's allowed to do.
-    // A common service created in util to check for VML shapes which are allowed to have textbox in content
-    if ((msfilter::util::HasTextBoxContent(eShapeType)) && Impl::isSupportedDMLShape(xShape, sdrObj)
+    if (!bTextWatermark && Impl::isSupportedDMLShape(xShape, sdrObj)
         && (!bDMLAndVMLDrawingOpen || lcl_isLockedCanvas(xShape))) // Locked canvas is OK inside DML
     {
         m_pImpl->getSerializer()->startElementNS(XML_mc, XML_AlternateContent);

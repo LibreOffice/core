@@ -116,13 +116,6 @@ MSFILTER_DLLPUBLIC OString GetOOXMLPresetGeometry( std::u16string_view rShapeTyp
 MSFILTER_DLLPUBLIC MSO_SPT GETVMLShapeType(std::u16string_view aType);
 
 /**
- * The following function checks if a MSO shapetype is allowed to have textboxcontent.
- *
- * @param nShapeType shape to check
- */
-MSFILTER_DLLPUBLIC bool HasTextBoxContent(sal_uInt32 nShapeType);
-
-/**
  * Convert the input color value to an ico value (0..16)
  *
  * @param[in]   rCol       input color for conversion

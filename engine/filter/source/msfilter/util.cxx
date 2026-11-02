@@ -1277,19 +1277,6 @@ MSO_SPT GETVMLShapeType(std::u16string_view aType)
     return i == aDMLToVMLMap.end() ? mso_sptNil : i->second;
 }
 
-bool HasTextBoxContent(sal_uInt32 nShapeType)
-{
-    switch (nShapeType)
-    {
-    case ESCHER_ShpInst_TextPlainText:
-    case ESCHER_ShpInst_TextSlantUp:
-    case ESCHER_ShpInst_TextDeflateInflateDeflate:
-        return false;
-    default:
-        return true;
-    }
-}
-
 namespace
 {
 

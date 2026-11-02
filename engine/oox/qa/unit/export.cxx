@@ -1080,6 +1080,30 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkThemeColor)
                 u"40000");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFontworkPlainTextIsDML)
+{
+    // Given plain-text, slant-up and deflate-inflate-deflate Fontwork shapes in the body, and a
+    // plain-text Fontwork named as a watermark in the header:
+    loadFromFile(u"fontwork-dml-plain-slant-deflate.fodt");
+
+    // When saving to DOCX:
+    save(TestFilter::DOCX);
+
+    // Then the three shapes of the body are WordArt text boxes with a VML fallback, under their
+    // names, and the watermark stays a VML shape
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    OString sBodyPr = "//w:body//mc:AlternateContent/mc:Choice//wps:wsp/wps:bodyPr/a:prstTxWarp"_ostr;
+    assertXPath(pXmlDoc, sBodyPr, 3);
+    assertXPath(pXmlDoc, sBodyPr + "[@prst='textPlain']", 1);
+    assertXPath(pXmlDoc, sBodyPr + "[@prst='textSlantUp']", 1);
+    assertXPath(pXmlDoc, sBodyPr + "[@prst='textDeflateInflateDeflate']", 1);
+    assertXPath(pXmlDoc, "//w:body//mc:AlternateContent/mc:Fallback//v:shape/v:textpath", 3);
+    assertXPath(pXmlDoc, "//w:body//mc:AlternateContent/mc:Choice//wp:docPr[@name='Plain']", 1);
+    xmlDocUniquePtr pXmlHeader = parseExport(u"word/header1.xml"_ustr);
+    assertXPath(pXmlHeader, "//mc:AlternateContent", 0);
+    assertXPath(pXmlHeader, "//w:pict/v:shape/v:textpath", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFontworkDistance)
 {
     // LO ignores 'Spacing to Borders' of the 'Text Attributes' for Fontwork shapes. Word interprets
