@@ -17,22 +17,22 @@ button { padding: 6px 14px; border: none; border-radius: 4px; cursor: pointer; f
 </head>
 <body>
 
-<label>Live document state:</label>
-<p class="help">
-  Counters maintained from <code>cool.document.on*</code> events.  Modify the document,
-  click around to change the selection, or add/edit/remove a comment in the sidebar.
+<label data-l10n="Live document state:">Live document state:</label>
+<p class="help" data-l10n="Counters maintained from the cool.document.on* events. Modify the document, click around to change the selection, or add, edit or remove a comment in the sidebar.">
+  Counters maintained from the cool.document.on* events. Modify the document,
+  click around to change the selection, or add, edit or remove a comment in the sidebar.
 </p>
 <div class="state">
-  <span class="key">Modifications:</span>
+  <span class="key" data-l10n="Modifications:">Modifications:</span>
   <span class="val" id="modCount">0</span>
-  <span class="key">Selection changes:</span>
+  <span class="key" data-l10n="Selection changes:">Selection changes:</span>
   <span class="val" id="selCount">0</span>
-  <span class="key">Active comments:</span>
+  <span class="key" data-l10n="Active comments:">Active comments:</span>
   <span class="val" id="commentCount">0</span>
-  <span class="key">Last comment activity:</span>
+  <span class="key" data-l10n="Last comment activity:">Last comment activity:</span>
   <span class="val" id="lastComment">-</span>
 </div>
-<button onclick="resetState()">Reset counters</button>
+<button onclick="resetState()" data-l10n="Reset counters">Reset counters</button>
 
 <script>
 let modCount = 0;
@@ -53,12 +53,13 @@ function resetState() {
   refreshState();
 }
 
-function describeComment(verb, c) {
+// wording has %1 for the author, e.g. cool._('added by %1')
+function describeComment(wording, c) {
   const author = c.author || '?';
   const snippet = (c.text || '').slice(0, 40)
     + ((c.text || '').length > 40 ? '...' : '');
   document.getElementById('lastComment').textContent
-    = verb + ' by ' + author + (snippet ? ': ' + JSON.stringify(snippet) : '');
+    = wording.replace('%1', author) + (snippet ? ': ' + JSON.stringify(snippet) : '');
 }
 
 cool.document.onModified = function () {
@@ -71,17 +72,17 @@ cool.document.onSelectionChanged = function () {
 };
 cool.document.onCommentAdded = function (c) {
   activeComments.add(c.id);
-  describeComment('added', c);
+  describeComment(cool._('added by %1'), c);
   refreshState();
 };
 cool.document.onCommentChanged = function (c) {
   activeComments.add(c.id);
-  describeComment('changed', c);
+  describeComment(cool._('changed by %1'), c);
   refreshState();
 };
 cool.document.onCommentRemoved = function (c) {
   activeComments.delete(c.id);
-  describeComment('removed', c);
+  describeComment(cool._('removed by %1'), c);
   refreshState();
 };
 </script>

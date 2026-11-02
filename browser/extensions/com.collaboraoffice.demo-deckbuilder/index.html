@@ -25,7 +25,7 @@ button:disabled { background: #999; cursor: default; }
 </head>
 <body>
 
-<label for="outline">Outline (# title, - bullet, indent to nest, **bold**, *italic*, ~~strike~~):</label>
+<label for="outline" data-l10n="Outline (# title, - bullet, indent to nest, **bold**, *italic*, ~~strike~~):">Outline (# title, - bullet, indent to nest, **bold**, *italic*, ~~strike~~):</label>
 <textarea id="outline" spellcheck="false"># Quarterly review
 - **Wins** and losses
 - Numbers at a glance
@@ -35,16 +35,16 @@ button:disabled { background: #999; cursor: default; }
 - ~~Last quarter's goals~~ owners and dates</textarea>
 
 <div class="theme-row">
-  <button onclick="chooseTheme()">Choose theme...</button>
+  <button onclick="chooseTheme()" data-l10n="Choose theme...">Choose theme...</button>
   <span id="themeLabel"></span>
 </div>
 
 <div id="preview" class="preview" hidden></div>
-<div id="previewEmpty" class="preview-empty">nothing to preview yet</div>
+<div id="previewEmpty" class="preview-empty" data-l10n="nothing to preview yet">nothing to preview yet</div>
 
 <div class="divider"></div>
 
-<button id="build" onclick="buildSlides()">Build slides</button>
+<button id="build" onclick="buildSlides()" data-l10n="Build slides">Build slides</button>
 <div id="buildResult" class="result"></div>
 
 <script>
@@ -186,7 +186,7 @@ function renderThemeLabel() {
 async function chooseTheme() {
   const outcome = await cool.dialog.open({
     url: 'themes.html',
-    title: 'Choose a theme',
+    title: cool._('Choose a theme'),
     width: 320,
   });
   if (outcome.cancelled) return;
@@ -202,7 +202,7 @@ function buildSlides() {
   resultEl.classList.remove('error');
   if (slides.length === 0) {
     resultEl.classList.add('error');
-    resultEl.textContent = 'the outline is empty';
+    resultEl.textContent = cool._('the outline is empty');
     return;
   }
   resultEl.textContent = '...';
@@ -264,9 +264,11 @@ function buildSlides() {
       }
       built++;
     }
-    return 'built ' + built + ' slides, now ' + p.getSlides().length + ' total';
-  }, slides, theme).then(function (text) {
-    resultEl.textContent = text;
+    return { built: built, total: p.getSlides().length };
+  }, slides, theme).then(function (counts) {
+    resultEl.textContent = cool._n('built %1 slide, now %2 in total',
+      'built %1 slides, now %2 in total', counts.built)
+      .replace('%1', counts.built).replace('%2', counts.total);
   }).catch(function (err) {
     resultEl.classList.add('error');
     resultEl.textContent = err.message || String(err);
@@ -276,7 +278,11 @@ function buildSlides() {
 }
 
 document.getElementById('outline').addEventListener('input', renderPreview);
-renderThemeLabel();
+// The theme label shows a theme name, which is translated.
+cool.l10n.ready.then(function () {
+  theme.name = cool._('Daylight');
+  renderThemeLabel();
+});
 renderPreview();
 </script>
 </body>

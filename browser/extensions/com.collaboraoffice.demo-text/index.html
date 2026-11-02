@@ -20,27 +20,27 @@ button { padding: 6px 14px; border: none; border-radius: 4px; cursor: pointer; f
 </head>
 <body>
 
-<label for="greeting">Greeting:</label>
+<label for="greeting" data-l10n="Greeting:">Greeting:</label>
 <input id="greeting" type="text" value="Hello!">
 
 <div class="checkbox-row">
   <input id="colorize" type="checkbox" checked>
-  <label for="colorize">Colorize paragraphs</label>
+  <label for="colorize" data-l10n="Colorize paragraphs">Colorize paragraphs</label>
 </div>
 
-<button onclick="apply()">Apply</button>
+<button onclick="apply()" data-l10n="Apply">Apply</button>
 
 <div class="divider"></div>
 
-<label for="paraN">Paragraph number (1-based):</label>
+<label for="paraN" data-l10n="Paragraph number (1-based):">Paragraph number (1-based):</label>
 <input id="paraN" type="number" min="1" value="1">
-<button onclick="readNthParagraph()">Read Nth paragraph</button>
+<button onclick="readNthParagraph()" data-l10n="Read Nth paragraph">Read Nth paragraph</button>
 <div id="readResult" class="result"></div>
 
 <div class="divider"></div>
 
-<button onclick="pickAndColorize()">Pick paragraph color...</button>
-<div id="colorResult" class="result">no color picked yet</div>
+<button onclick="pickAndColorize()" data-l10n="Pick paragraph color...">Pick paragraph color...</button>
+<div id="colorResult" class="result" data-l10n="no color picked yet">no color picked yet</div>
 
 <script>
 function apply() {
@@ -66,12 +66,12 @@ function apply() {
 async function pickAndColorize() {
   const outcome = await cool.dialog.open({
     url: 'picker.html',
-    title: 'Pick a color',
+    title: cool._('Pick a color'),
     width: 320,
   });
   const el = document.getElementById('colorResult');
   if (outcome.cancelled) {
-    el.textContent = 'cancelled';
+    el.textContent = cool._('cancelled');
     return;
   }
   const picked = outcome.value;
@@ -80,7 +80,8 @@ async function pickAndColorize() {
   s.className = 'swatch';
   s.style.background = picked.color;
   el.appendChild(s);
-  el.appendChild(document.createTextNode('applying ' + picked.name + ' (' + picked.color + ')...'));
+  el.appendChild(document.createTextNode(
+    cool._('applying %1 (%2)...').replace('%1', picked.name).replace('%2', picked.color)));
   await cool.callRemote(function (color) {
     for (const para of DocumentApp.getActiveDocument().getBody().getChildren()) {
       try {
@@ -90,7 +91,8 @@ async function pickAndColorize() {
       }
     }
   }, picked.color);
-  el.lastChild.textContent = picked.name + ' (' + picked.color + ') applied';
+  el.lastChild.textContent
+    = cool._('%1 (%2) applied').replace('%1', picked.name).replace('%2', picked.color);
 }
 
 function readNthParagraph() {

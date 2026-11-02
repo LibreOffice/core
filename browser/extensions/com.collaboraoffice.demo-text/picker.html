@@ -18,27 +18,30 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; f
 <div class="grid" id="swatches"></div>
 
 <script>
-const colors = [
-    { name: 'red',     color: '#dc2626' },
-    { name: 'orange',  color: '#ea580c' },
-    { name: 'yellow',  color: '#eab308' },
-    { name: 'green',   color: '#16a34a' },
-    { name: 'blue',    color: '#2563eb' },
-    { name: 'indigo',  color: '#4f46e5' },
-    { name: 'violet',  color: '#7c3aed' },
-    { name: 'black',   color: '#111827' },
-];
+// Built once the catalog is in, so that the names are translated.
+cool.l10n.ready.then(function () {
+    const colors = [
+        { name: cool._('red'),     color: '#dc2626' },
+        { name: cool._('orange'),  color: '#ea580c' },
+        { name: cool._('yellow'),  color: '#eab308' },
+        { name: cool._('green'),   color: '#16a34a' },
+        { name: cool._('blue'),    color: '#2563eb' },
+        { name: cool._('indigo'),  color: '#4f46e5' },
+        { name: cool._('violet'),  color: '#7c3aed' },
+        { name: cool._('black'),   color: '#111827' },
+    ];
 
-const grid = document.getElementById('swatches');
-colors.forEach(function (c) {
-    const swatch = document.createElement('div');
-    swatch.className = 'swatch';
-    swatch.style.background = c.color;
-    const label = document.createElement('span');
-    label.textContent = c.name;
-    swatch.appendChild(label);
-    swatch.onclick = function () { cool.dialog.close(c); };
-    grid.appendChild(swatch);
+    const grid = document.getElementById('swatches');
+    colors.forEach(function (c) {
+        const swatch = document.createElement('div');
+        swatch.className = 'swatch';
+        swatch.style.background = c.color;
+        const label = document.createElement('span');
+        label.textContent = c.name;
+        swatch.appendChild(label);
+        swatch.onclick = function () { cool.dialog.close(c); };
+        grid.appendChild(swatch);
+    });
 });
 </script>
 </body>
