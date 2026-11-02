@@ -116,6 +116,7 @@ int main()
         }
         sal_Unicode cEnd = c;
         printf("    if (c < 0x%x)\n", c);
+        // coverity[negative_returns : FALSE] - the first character tested always has a converter
         printf("        return %s;\n", aConverters[nMostCapable].getName());
         while(c < 0xFFFF)
         {
