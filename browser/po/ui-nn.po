@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-30 13:34+0100\n"
-"PO-Revision-Date: 2026-10-23 07:11+0000\n"
+"PO-Revision-Date: 2026-11-01 10:12+0000\n"
 "Last-Translator: Roy-Magne Mo <gaupe@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Norwegian Nynorsk <https://hosted.weblate.org/projects/"
 "collabora-online/collabora-ui/nn/>\n"
-"Language: \n"
+"Language: nn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1457,11 +1457,12 @@ msgstr "Den første som er sett opp"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5054
 msgid "Translating with {0}."
-msgstr ""
+msgstr "Omset med {0}."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5055
 msgid "No provider is set up: the Translate command is not offered."
 msgstr ""
+"Ingen leverandør er sett opp, så kommandoen Omset er ikkje tilgjengeleg."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5095
 msgid "API URL"
@@ -1571,6 +1572,8 @@ msgid ""
 "This file is a spelling dictionary, not a wordbook. Upload a list of words "
 "with one word per line."
 msgstr ""
+"Denne fila er ei staveordbok, ikkje ei ordliste. Last opp ei liste med eitt "
+"ord per linje."
 
 #: admin/src/integrator/WordBook.ts:471
 msgid "Invalid dictionary format. Please check the file."
@@ -1815,30 +1818,30 @@ msgstr "Dupliser stil"
 #: src/app/Util.ts:319
 msgid "%n year"
 msgid_plural "%n years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n år"
+msgstr[1] "%n år"
 
 #: src/app/Util.ts:321
 msgid "%n day"
 msgid_plural "%n days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n dag"
+msgstr[1] "%n dagar"
 
 #: src/app/Util.ts:322
 msgid "%n hour"
 msgid_plural "%n hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n time"
+msgstr[1] "%n timar"
 
 #: src/app/Util.ts:325
 msgid "%n minute"
 msgid_plural "%n minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n minutt"
+msgstr[1] "%n minutt"
 
 #: src/app/Util.ts:339
 msgid "less than a minute"
-msgstr ""
+msgstr "under eit minutt"
 
 #: src/canvas/sections/CommentListSection.ts:2261
 #: src/canvas/sections/CommentListSection.ts:2274
@@ -1887,9 +1890,8 @@ msgid "Reply"
 msgstr "Svar"
 
 #: src/canvas/sections/CommentSection.ts:345
-#, fuzzy
 msgid "comment"
-msgstr "Merknad"
+msgstr "merknad"
 
 #: src/canvas/sections/CommentSection.ts:565
 msgid "Press Ctrl + Enter to post"
@@ -1897,7 +1899,7 @@ msgstr "Trykk Ctrl + Enter for å senda"
 
 #: src/canvas/sections/CommentSection.ts:583
 msgid "Reply to {0}"
-msgstr ""
+msgstr "Svar til {0}"
 
 #: src/canvas/sections/CommentSection.ts:653
 #: src/canvas/sections/CommentSection.ts:654
@@ -2011,11 +2013,11 @@ msgstr "Dokumentet inneheld medium som ikkje er støtta"
 
 #: src/canvas/sections/SelectionSection.ts:1556
 msgid "Waiting for redo..."
-msgstr ""
+msgstr "Ventar på å gjera om..."
 
 #: src/canvas/sections/SelectionSection.ts:1557
 msgid "Waiting for undo..."
-msgstr ""
+msgstr "Ventar på å angra..."
 
 #: src/canvas/sections/URLPopUpSection.ts:89
 #: src/control/Control.HyperlinkWizard.ts:41
@@ -2162,7 +2164,7 @@ msgstr "Uformell"
 #. TRANSLATORS: such as "Formal" or a name that the user typed
 #: src/control/Control.AIChatSidebar.ts:309
 msgid "{0} tone"
-msgstr ""
+msgstr "{0} tonefall"
 
 #: src/control/Control.AIChatSidebar.ts:419
 msgid "Best"
@@ -2236,27 +2238,27 @@ msgstr "Kva vil du gjere med dette dokumentet?"
 
 #: src/control/Control.AIChatSidebar.ts:787
 msgid "Good morning, {0}!"
-msgstr ""
+msgstr "God morgon, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:788
 msgid "Good morning!"
-msgstr ""
+msgstr "God morgon!"
 
 #: src/control/Control.AIChatSidebar.ts:790
 msgid "Good afternoon, {0}!"
-msgstr ""
+msgstr "God ettermiddag, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:791
 msgid "Good afternoon!"
-msgstr ""
+msgstr "God ettermiddag!"
 
 #: src/control/Control.AIChatSidebar.ts:793
 msgid "Good evening, {0}!"
-msgstr ""
+msgstr "God kveld, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:794
 msgid "Good evening!"
-msgstr ""
+msgstr "God kveld!"
 
 #: src/control/Control.AIChatSidebar.ts:845
 #: src/control/Control.AIChatSidebar.ts:2288
@@ -2864,21 +2866,20 @@ msgid "Reject action"
 msgstr "Avvis handlinga"
 
 #: src/control/Control.AIChatSidebar.ts:2845
-#, fuzzy
 msgid "Send"
-msgstr "Sendt"
+msgstr "Send"
 
 #: src/control/Control.AIChatSidebar.ts:2847
 msgid "Send these cells"
-msgstr ""
+msgstr "Send desse cellene"
 
 #: src/control/Control.AIChatSidebar.ts:2853
 msgid "Do not send these cells"
-msgstr ""
+msgstr "Ikkje send desse cellene"
 
 #: src/control/Control.AIChatSidebar.ts:2870
 msgid "Nothing was sent."
-msgstr ""
+msgstr "Ingenting vart sendt."
 
 #: src/control/Control.AIChatSidebar.ts:2893
 msgid "Applying changes..."
@@ -2994,11 +2995,11 @@ msgstr "Diagnostiser formelfeil i"
 
 #: src/control/Control.AIChatSidebar.ts:3871
 msgid "To diagnose the error in %1, these cells will be sent to %2:"
-msgstr ""
+msgstr "For å diagnostisera feilen i %1, vert desse cellene sendt til %2:"
 
 #: src/control/Control.AIChatSidebar.ts:3877
 msgid "Do you want to send them?"
-msgstr ""
+msgstr "Vil du senda dei?"
 
 #: src/control/Control.AIChatSidebar.ts:3897
 msgid "I have a formula error in my spreadsheet."
@@ -3008,7 +3009,7 @@ msgstr "Eg har ein formelfeil i reknearket mitt."
 #. TRANSLATORS: B5, {1} the name of its sheet
 #: src/control/Control.AIChatSidebar.ts:3901
 msgid "Cell {0} (Sheet: {1}) contains:"
-msgstr ""
+msgstr "Celle {0} (Ark: {1}) inneheld:"
 
 #: src/control/Control.AIChatSidebar.ts:3906
 #: src/control/Control.FormulaBarJSDialog.js:116
@@ -3025,9 +3026,8 @@ msgstr "Refererte celler"
 #. TRANSLATORS: Sent to the AI model. {0} is a Calc error code such
 #. TRANSLATORS: as #DIV/0!
 #: src/control/Control.AIChatSidebar.ts:3918
-#, fuzzy
 msgid "Please diagnose why this formula produces the {0} error."
-msgstr "Finn ut kvifor denne formelen gjev"
+msgstr "Ver venleg og finn ut kvifor denne formelen gjev feilen {0}."
 
 #: src/control/Control.AIChatSidebar.ts:3922
 msgid "Explain the root cause and suggest how to fix it."
@@ -3043,11 +3043,11 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3942
 msgid "only the cells with errors"
-msgstr ""
+msgstr "berre cellene med feil"
 
 #: src/control/Control.AIChatSidebar.ts:3949
 msgid "another file, its name only"
-msgstr ""
+msgstr "ei anna fil, berre namnet"
 
 #: src/control/Control.AIChatSidebar.ts:3979
 msgid "formula"
@@ -3157,6 +3157,8 @@ msgid ""
 "The table shows what each cell displays. The \"Formulas:\" list below it "
 "gives the formula of each cell that has one."
 msgstr ""
+"Tabellen viser det kvar celle viser. Lista «Formlar:» under gjev formelen "
+"til kvar celle som har ein."
 
 #: src/control/Control.AIChatSidebar.ts:4203
 msgid ""
@@ -3423,7 +3425,7 @@ msgstr "Framdrift for opprydding"
 
 #: src/control/Control.CleanupSidebar.ts:913
 msgid "Stop Cleanup"
-msgstr ""
+msgstr "Stopp reingjering"
 
 #: src/control/Control.CleanupSidebar.ts:934
 msgid "Scan presentation"
@@ -4759,7 +4761,6 @@ msgstr "Hjelp på nettet"
 #: src/control/Control.Menubar.ts:460 src/control/Control.Menubar.ts:678
 #: src/control/Control.Menubar.ts:850 src/control/Control.Menubar.ts:1178
 #: src/control/Control.NotebookbarWriter.js:530
-#, fuzzy
 msgid "Show Tour"
 msgstr "Vis omvising"
 
@@ -5401,7 +5402,7 @@ msgstr "Fyllfarge (berre gjennomsiktige bilete)"
 
 #: src/control/Control.Notebookbar.js:673
 msgid "Area"
-msgstr ""
+msgstr "Område"
 
 #: src/control/Control.Notebookbar.js:688
 msgid "Line"
@@ -6294,19 +6295,19 @@ msgstr "Lysbilete %1, lenkja til %2"
 
 #: src/control/Control.PartsPreview.js:1241
 msgid "Linked to a section of %1 that is missing"
-msgstr ""
+msgstr "Lenkja til ein bolk i %1 som manglar"
 
 #: src/control/Control.PartsPreview.js:1243
 msgid "Linked to a section of %1 that has changed"
-msgstr ""
+msgstr "Lenkja til ein bolk av %1 som har endra seg"
 
 #: src/control/Control.PartsPreview.js:1245
 msgid "Linked to a section of %1, disconnected"
-msgstr ""
+msgstr "Lenkja til ein bolk av %1, fråkopla"
 
 #: src/control/Control.PartsPreview.js:1246
 msgid "Linked to a section of %1"
-msgstr ""
+msgstr "Lenkja til ein bolk i %1"
 
 #: src/control/Control.PartsPreview.js:1390
 #: src/control/Control.PartsPreview.js:1557
@@ -6331,15 +6332,15 @@ msgstr "Flytt bolken ned"
 
 #: src/control/Control.PartsPreview.js:1434
 msgid "Update Section"
-msgstr ""
+msgstr "Oppdater bolk"
 
 #: src/control/Control.PartsPreview.js:1442
 msgid "Unlink Section"
-msgstr ""
+msgstr "Fjern lenkja frå bolk"
 
 #: src/control/Control.PartsPreview.js:1449
 msgid "Unlink Section & Slides"
-msgstr ""
+msgstr "Fjern lenkja frå bolk og lysbilete"
 
 #: src/control/Control.PartsPreview.js:1458
 msgid "Collapse All Sections"
@@ -6473,7 +6474,7 @@ msgstr "Set inn lysbilete"
 
 #: src/control/Control.SlideImportPane.tsx:904
 msgid "Insert section \"{0}\""
-msgstr ""
+msgstr "Set inn bolk «{0}»"
 
 #: src/control/Control.SlideImportPane.tsx:912
 msgid "Insert {0} from {1}"
@@ -6489,19 +6490,20 @@ msgstr "Set inn {0} lysbilete"
 
 #: src/control/Control.SlideImportPane.tsx:972
 msgid "How the section goes in"
-msgstr ""
+msgstr "Korleis bolken vert lagt inn"
 
 #: src/control/Control.SlideImportPane.tsx:977
 msgid "Insert as section \"{0}\""
-msgstr ""
+msgstr "Set inn som bolk «{0}»"
 
 #: src/control/Control.SlideImportPane.tsx:983
 msgid "Insert as separate slides"
-msgstr ""
+msgstr "Set inn som eigne lysbilete"
 
 #: src/control/Control.SlideImportPane.tsx:989
 msgid "Linked to its section in {0}. Update Links brings in later changes."
 msgstr ""
+"Lenkja til sin bolk i {0}. Oppdater lenkjer hentar inn seinare endringar."
 
 #: src/control/Control.SlideImportPane.tsx:1038
 msgid "{0} of {1}"
@@ -6643,7 +6645,7 @@ msgstr "Lenkja til {0} i {1}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:120
 msgid "In a section linked to {0}"
-msgstr ""
+msgstr "I ein bolk lenkja til {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:145
 msgid "Hide the actions for this linked slide"
@@ -6660,7 +6662,7 @@ msgstr "Fjern lenkja"
 #: src/control/Control.SlideLinkToolbar.tsx:176
 #: src/slideimport/SlideLinks.ts:467
 msgid "Update section"
-msgstr ""
+msgstr "Oppdater bolk"
 
 #: src/control/Control.SlideLinkToolbar.tsx:190
 msgid "Not available"
@@ -6689,24 +6691,29 @@ msgstr "Ingen lysbilete i denne presentasjonen er lenkja til ei anna fil."
 
 #: src/slideimport/SlideLinks.ts:425
 msgid "The section cannot be updated, because its source is not available."
-msgstr ""
+msgstr "Bolken kan ikkje oppdaterast, fordi kjelda ikkje er tilgjengeleg."
 
 #: src/slideimport/SlideLinks.ts:447
 msgid ""
 "One linked section cannot be updated, because its source is not available."
 msgstr ""
+"Éin lenkja bolk kan ikkje oppdaterast, fordi kjelda ikkje er tilgjengeleg."
 
 #: src/slideimport/SlideLinks.ts:450
 msgid ""
 "{0} linked sections cannot be updated, because their sources are not "
 "available."
 msgstr ""
+"{0} lenkja bolkar kan ikkje oppdaterast, fordi kjeldene deira ikkje er "
+"tilgjengelege."
 
 #: src/slideimport/SlideLinks.ts:459
 msgid ""
 "The section will hold the slides that its section in {0} holds now. Changes "
 "made to these slides in this presentation will be lost."
 msgstr ""
+"Bolken vil få dei lysbileta som bolken i {0} har no. Endringar som vert "
+"gjorde på desse lysbileta i denne presentasjonen går tapt."
 
 #: src/slideimport/SlideLinks.ts:462
 msgid ""
@@ -6714,10 +6721,13 @@ msgid ""
 "files hold now. Changes made to these slides in this presentation will be "
 "lost."
 msgstr ""
+"{0} lenkja bolkar vil få dei lysbileta som bolkane deira i kjeldefilene har "
+"no. Endringar som vert gjorde på desse lysbileta i denne presentasjonen går "
+"tapt."
 
 #: src/slideimport/SlideLinks.ts:467
 msgid "Update sections"
-msgstr ""
+msgstr "Oppdater bolkane"
 
 #: src/slideimport/SlideLinks.ts:534
 msgid "This slide is not linked to another file."
@@ -6738,7 +6748,7 @@ msgstr "{0} kunne ikkje lesast."
 
 #: src/slideimport/SlideLinks.ts:742
 msgid "You do not have access to {0}, so the section cannot be updated."
-msgstr ""
+msgstr "Du har ikkje tilgang til {0}, så bolken kan ikkje oppdaterast."
 
 #: src/slideimport/SlideLinks.ts:745
 msgid "You do not have access to {0}, so its pages cannot be refreshed."
@@ -6755,11 +6765,11 @@ msgstr "Lysbileta i {0} kunne ikkje lesast inn i denne presentasjonen."
 
 #: src/slideimport/SlideLinks.ts:919
 msgid "The section was updated from {0}."
-msgstr ""
+msgstr "Bolken vart oppdatert frå {0}."
 
 #: src/slideimport/SlideLinks.ts:1059
 msgid "Cannot update the section: {0} no longer holds its source section."
-msgstr ""
+msgstr "Kan ikkje oppdatera bolken: {0} held ikkje lenger kjeldebolken sin."
 
 #: src/slideimport/SlideLinks.ts:1085
 msgid "Cannot update slide {0}: the source lacks matching slide"
@@ -6771,14 +6781,12 @@ msgid "Unlinking the slide failed."
 msgstr "Klarte ikkje fjerna lenkja til lysbiletet."
 
 #: src/slideimport/SlideLinks.ts:1105
-#, fuzzy
 msgid "Unlinking the section failed."
-msgstr "Klarte ikkje fjerna lenkja til lysbiletet."
+msgstr "Klarte ikkje fjerna lenkja frå bolken."
 
 #: src/slideimport/SlideLinks.ts:1122
-#, fuzzy
 msgid "Updating the section from {0} failed."
-msgstr "Klarte ikkje oppdatera lysbileta i {0}."
+msgstr "Klarte ikkje oppdatera bolken frå {0}."
 
 #: src/slideimport/SlideLinks.ts:1123 src/slideimport/SlideLinks.ts:1182
 msgid "Updating the slides of {0} failed."
@@ -8197,11 +8205,11 @@ msgstr "Kolonne {index}"
 
 #: src/control/jsdialog/Widget.EditEngine.ts:601
 msgid "%1 is editing"
-msgstr ""
+msgstr "%1 redigerer"
 
 #: src/control/jsdialog/Widget.EditEngine.ts:602
 msgid "Another user is editing"
-msgstr ""
+msgstr "Ein annan brukar redigerer"
 
 #: src/control/jsdialog/Widget.FormulabarEdit.js:460 src/map/Clipboard.js:1589
 msgid "Cut"
@@ -8209,7 +8217,7 @@ msgstr "Klipp ut"
 
 #: src/control/jsdialog/Widget.FormulabarEdit.js:519
 msgid "Formula bar"
-msgstr ""
+msgstr "Formelbar"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:54
 msgid "Smileys"
@@ -8403,7 +8411,7 @@ msgstr "Minka verdien"
 
 #: src/control/jsdialog/Widget.TabControl.tsx:229
 msgid "Add a fill to edit the {0}"
-msgstr ""
+msgstr "Legg til ei utfylling for å redigera {0}"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1836
 msgid "Cell value"
@@ -8675,12 +8683,16 @@ msgstr ""
 msgid ""
 "You no longer have access to this document. Its security label was changed."
 msgstr ""
+"Du har ikkje lenger tilgang til dette dokumentet. Tryggleiksmerket vart "
+"endra."
 
 #: src/errormessages.ts:38
 msgid ""
 "You can no longer edit this document. Its security label was changed. "
 "Please open it again to view it."
 msgstr ""
+"Du kan ikkje lenger redigera dette dokumentet. Tryggleiksmerket vart endra. "
+"Opna det på nytt for å sjå det."
 
 #: src/errormessages.ts:40
 msgid "Authorization error was: '{errormessage}'."
@@ -8810,7 +8822,7 @@ msgstr "Dokumentet kan ikkje lagrast."
 
 #: src/errormessages.ts:90 src/errormessages.ts:109
 msgid "The storage refused to save the document."
-msgstr ""
+msgstr "Lagringsstaden nekta å lagra dokumentet."
 
 #: src/errormessages.ts:91
 msgid "Document cannot be renamed."
@@ -8985,15 +8997,15 @@ msgstr "Nettredigerar"
 
 #: src/layer/tile/CanvasTileLayer.js:1398
 msgid "%1 started recording changes for all users."
-msgstr ""
+msgstr "%1 starta sporing av endringar for alle brukarar."
 
 #: src/layer/tile/CanvasTileLayer.js:1399
 msgid "Recording changes was started for all users."
-msgstr ""
+msgstr "Sporing av endringar vart starta for alle brukarar."
 
 #: src/layer/tile/CanvasTileLayer.js:1401
 msgid "Your changes are tracked now."
-msgstr ""
+msgstr "Endringane dine vert no spora."
 
 #: src/layer/tile/CanvasTileLayer.js:1487
 msgid "Functions"
