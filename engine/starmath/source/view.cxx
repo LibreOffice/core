@@ -386,6 +386,14 @@ bool SmGraphicWidget::MouseButtonDown(const MouseEvent& rMEvt)
 
     if (SmViewShell::IsInlineEditEnabled()) {
         GetCursor().MoveTo(&rDevice, aPos, !rMEvt.IsShift());
+        // A click on a placeholder selects it, so that the next input replaces it, as a click on
+        // it selects its text in the command window
+        if (!rMEvt.IsShift())
+        {
+            const SmNode* pNode = pTree->FindRectClosestTo(aPos);
+            if (pNode && pNode->GetType() == SmNodeType::Place && pNode->IsInsideRect(aPos))
+                GetCursor().SelectPlace(pNode);
+        }
         GetView().InvalidateSlots();
         // 'on grab' window events are missing in lok, do it explicitly
         if (comphelper::COKit::isActive())
@@ -1556,7 +1564,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
             if (IsInlineEditEnabled())
             {
-                GetDoc()->GetCursor().InsertCommandText(rItem.GetValue());
+                GetDoc()->GetCursor().InsertCommandText(rItem.GetValue(), true);
                 GetGraphicWidget().GrabFocus();
             }
             else if (pWin)

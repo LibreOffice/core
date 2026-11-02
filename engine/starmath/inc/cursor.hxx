@@ -12,6 +12,7 @@
 #include "caret.hxx"
 
 #include <list>
+#include <vector>
 
 /** Factor to multiple the squared horizontal distance with
  * Used for Up and Down movement.
@@ -92,6 +93,12 @@ public:
     /** Move to the caret position closest to a given point */
     void MoveTo(OutputDevice* pDev, const Point& pos, bool bMoveAnchor);
 
+    /** Select the placeholder pPlace, so that the next input replaces it
+     *
+     * @returns false if pPlace has no caret position, like the name of a func
+     */
+    bool SelectPlace(const SmNode* pPlace);
+
     /** Delete the current selection or do nothing */
     void Delete();
 
@@ -114,8 +121,11 @@ public:
      * Will not work for commands such as newline or ##, if position is in a matrix.
      * This will work for stuff like "A intersection B". But stuff spanning multiple lines
      * or dependent on the context which position is placed in will not work!
+     *
+     * If bCaretInFirstPlace is set, the first placeholder of the inserted command text is
+     * selected, so the next input replaces it.
      */
-    void InsertCommandText(const OUString& aCommandText);
+    void InsertCommandText(const OUString& aCommandText, bool bCaretInFirstPlace = false);
 
     /** Insert a special node created from aString
      *
@@ -264,8 +274,12 @@ private:
     /** Build pGraph over caret positions */
     void BuildGraph();
 
-    /** Insert new nodes in the tree after position */
-    void InsertNodes(SmNodeList&& pNewNodes);
+    /** Insert new nodes in the tree after position
+     *
+     * @param pTrackedPlaces If set, a placeholder that is removed while patching the line is
+     *                       also removed from this list, before it is deleted.
+     */
+    void InsertNodes(SmNodeList&& pNewNodes, std::vector<const SmNode*>* pTrackedPlaces = nullptr);
 
     /** tries to set position to a specific SmCaretPos
      *
@@ -301,10 +315,13 @@ private:
      * If there's an, in the context, inappropriate SmPlaceNode before or after aIter it will also be
      * removed.
      *
+     * If pTrackedPlaces is set, a removed SmPlaceNode is also removed from that list.
+     *
      * @returns A caret position equivalent to one selecting the node before aIter, the method returns
      *          an invalid SmCaretPos to indicate placement in front of the line.
      */
-    static SmCaretPos PatchLineList(SmNodeList& rLineList, SmNodeList::iterator aIter);
+    static SmCaretPos PatchLineList(SmNodeList& rLineList, SmNodeList::iterator aIter,
+                                    std::vector<const SmNode*>* pTrackedPlaces = nullptr);
 
     /** Take selected nodes from a list
      *

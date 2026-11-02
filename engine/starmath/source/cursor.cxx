@@ -21,6 +21,8 @@
 #include <vcl/transfer.hxx>
 #include <vcl/unohelp2.hxx>
 
+#include <vector>
+
 void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMoveAnchor){
     SmCaretPosGraphEntry* NewPos = nullptr;
     switch(direction)
@@ -154,6 +156,24 @@ void SmCursor::BuildGraph(){
     assert(mpAnchor);
     OSL_ENSURE(mpPosition->CaretPos.IsValid(), "Position must be valid");
     OSL_ENSURE(mpAnchor->CaretPos.IsValid(), "Anchor must be valid");
+}
+
+bool SmCursor::SelectPlace(const SmNode* pPlace)
+{
+    //The selection goes from the position before the placeholder to the one after it. A
+    //placeholder alone in its line has the start of the line before it, which is a caret position
+    //on the placeholder too, with index 0.
+    for (const auto& pEntry : *mpGraph)
+    {
+        if (pEntry->CaretPos.pSelectedNode != pPlace || pEntry->CaretPos.nIndex != 1)
+            continue;
+        mpPosition = pEntry.get();
+        mpAnchor = pEntry->Left ? pEntry->Left : pEntry.get();
+        AnnotateSelection();
+        RequestRepaint();
+        return true;
+    }
+    return false;
 }
 
 bool SmCursor::SetCaretPosition(SmCaretPos pos){
@@ -308,7 +328,7 @@ void SmCursor::Delete(){
     FinishEdit(std::move(aLineList), pLineParent, nLineOffset, PosAfterDelete);
 }
 
-void SmCursor::InsertNodes(SmNodeList&& rNewNodes){
+void SmCursor::InsertNodes(SmNodeList&& rNewNodes, std::vector<const SmNode*>* pTrackedPlaces){
     if(rNewNodes.empty()){
         return;
     }
@@ -346,8 +366,8 @@ void SmCursor::InsertNodes(SmNodeList&& rNewNodes){
             patchIt = insIt;
     }
     //Patch the places we've changed stuff
-    PatchLineList(aLineList, patchIt);
-    SmCaretPos PosAfterInsert = PatchLineList(aLineList, it);
+    PatchLineList(aLineList, patchIt, pTrackedPlaces);
+    SmCaretPos PosAfterInsert = PatchLineList(aLineList, it, pTrackedPlaces);
     //Release list, we've taken the nodes
     rNewNodes.clear();
 
@@ -389,7 +409,8 @@ SmNodeList::iterator SmCursor::FindPositionInLineList(SmNodeList& rLineList,
     return rLineList.begin();
 }
 
-SmCaretPos SmCursor::PatchLineList(SmNodeList& rLineList, SmNodeList::iterator aIter) {
+SmCaretPos SmCursor::PatchLineList(SmNodeList& rLineList, SmNodeList::iterator aIter,
+                                   std::vector<const SmNode*>* pTrackedPlaces) {
     //The nodes we should consider merging
     SmNode *prev = nullptr,
            *next = nullptr;
@@ -422,6 +443,8 @@ SmCaretPos SmCursor::PatchLineList(SmNodeList& rLineList, SmNodeList::iterator a
     if(prev && next && prev->GetType() == SmNodeType::Place && !SmNodeListParser::IsOperator(next->GetToken())){
         --aIter;
         aIter = rLineList.erase(aIter);
+        if (pTrackedPlaces)
+            std::erase(*pTrackedPlaces, prev);
         delete prev;
         //Return caret pos in front of aIter
         if(aIter != rLineList.begin())
@@ -432,6 +455,8 @@ SmCaretPos SmCursor::PatchLineList(SmNodeList& rLineList, SmNodeList::iterator a
     }
     if(prev && next && next->GetType() == SmNodeType::Place && !SmNodeListParser::IsOperator(prev->GetToken())){
         aIter = rLineList.erase(aIter);
+        if (pTrackedPlaces)
+            std::erase(*pTrackedPlaces, next);
         delete next;
         return SmCaretPos::GetPosAfter(prev);
     }
@@ -1030,12 +1055,32 @@ void SmCursor::InsertSpecial(std::u16string_view _aString)
     EndEdit();
 }
 
-void SmCursor::InsertCommandText(const OUString& aCommandText) {
+namespace
+{
+/** Collect the placeholders below pNode in the order they appear in the command text */
+void lcl_CollectPlaceNodes(const SmNode* pNode, std::vector<const SmNode*>& rPlaceNodes)
+{
+    if (!pNode)
+        return;
+    if (pNode->GetType() == SmNodeType::Place)
+        rPlaceNodes.push_back(pNode);
+    for (size_t i = 0; i < pNode->GetNumSubNodes(); ++i)
+        lcl_CollectPlaceNodes(pNode->GetSubNode(i), rPlaceNodes);
+}
+}
+
+void SmCursor::InsertCommandText(const OUString& aCommandText, bool bCaretInFirstPlace) {
     //Parse the sub expression
     auto xSubExpr = mpDocShell->GetParser()->ParseExpression(aCommandText);
 
     //Prepare the subtree
     xSubExpr->Prepare(mpDocShell->GetFormat(), *mpDocShell, 0);
+
+    //Remember the placeholders, PatchLineList removes from this list the ones it deletes at the
+    //edges of the line, so every pointer left in it stays valid
+    std::vector<const SmNode*> aPlaceNodes;
+    if (bCaretInFirstPlace)
+        lcl_CollectPlaceNodes(xSubExpr.get(), aPlaceNodes);
 
     //Convert subtree to list
     SmNode* pSubExpr = xSubExpr.release();
@@ -1048,7 +1093,16 @@ void SmCursor::InsertCommandText(const OUString& aCommandText) {
     Delete();
 
     //Insert it
-    InsertNodes(std::move(aLineList));
+    InsertNodes(std::move(aLineList), bCaretInFirstPlace ? &aPlaceNodes : nullptr);
+
+    //Select the first placeholder that is still in the formula, so the next input replaces it
+    //like in the command window, where SmEditTextWindow::InsertText() selects it. Only selecting
+    //it replaces it before an operator too, as PatchLineList keeps a placeholder there.
+    for (const SmNode* pPlace : aPlaceNodes)
+    {
+        if (SelectPlace(pPlace))
+            break;
+    }
 
     EndEdit();
 }
