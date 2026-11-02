@@ -135,6 +135,22 @@ function openMobileWizard() {
 	cy.log('<< openMobileWizard - end');
 }
 
+// Presses the wizard back button until its content is gone.
+function closeMobileWizardWithBackButton() {
+	cy.log('>> closeMobileWizardWithBackButton - start');
+
+	cy.waitUntil(function() {
+		cy.cGet('#mobile-wizard-back').click();
+
+		return cy.cGet('#mobile-wizard-content')
+			.then(function(wizardContent) {
+				return !Cypress.dom.isVisible(wizardContent[0]);
+			});
+	});
+
+	cy.log('<< closeMobileWizardWithBackButton - end');
+}
+
 function closeMobileWizard() {
 	cy.log('>> closeMobileWizard - start');
 
@@ -464,6 +480,7 @@ module.exports.selectAnnotationMenuItem = selectAnnotationMenuItem;
 module.exports.closeHamburgerMenu = closeHamburgerMenu;
 module.exports.openMobileWizard = openMobileWizard;
 module.exports.closeMobileWizard = closeMobileWizard;
+module.exports.closeMobileWizardWithBackButton = closeMobileWizardWithBackButton;
 module.exports.openInsertionWizard = openInsertionWizard;
 module.exports.closeInsertionWizard = closeInsertionWizard;
 module.exports.selectFromColorPalette = selectFromColorPalette;

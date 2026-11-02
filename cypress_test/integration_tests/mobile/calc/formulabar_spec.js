@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require expect Cypress*/
+/* global describe it cy beforeEach require expect */
 
 var helper = require('../../common/helper');
 var calcHelper = require('../../common/calc_helper');
@@ -232,14 +232,7 @@ describe(['tagmobile', 'tagnextcloud'], 'Formula bar tests.', function() {
 		cy.cGet('#acceptformula').click();
 
 		// Close mobile wizard with formulas.
-		cy.waitUntil(function() {
-			cy.cGet('#mobile-wizard-back').click();
-
-			return cy.cGet('#mobile-wizard-content')
-				.then(function(wizardContent) {
-					return !Cypress.dom.isVisible(wizardContent[0]);
-				});
-		});
+		mobileHelper.closeMobileWizardWithBackButton();
 
 		cy.cGet('#mobile-wizard-content').should('not.be.visible');
 		calcHelper.selectEntireSheet();
