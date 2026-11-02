@@ -930,11 +930,23 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 
 		window.L.DomEvent.stop(ev);
 		let target = paragraph;
-		if (paragraph.tagName !== 'TD' && (ev.key === 'ArrowDown' || ev.key === 'ArrowUp')) {
+		if (paragraph.tagName === 'TD' && (ev.key === 'ArrowDown' || ev.key === 'ArrowUp')) {
+			const down = ev.key === 'ArrowDown';
+			target = this._cellBeside(paragraph, down)
+				|| (down ? this._contextAfter.firstElementChild : this._contextBefore.lastElementChild) || paragraph;
+		} else if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') {
 			const down = ev.key === 'ArrowDown';
 			const paragraphs = Array.from(this._contextBefore.children).concat(
 				Array.from(this._contextList.querySelectorAll('li')), Array.from(this._contextAfter.children));
 			const next = paragraphs[paragraphs.indexOf(paragraph) + (down ? 1 : -1)];
+			const rows = this._contextTable.querySelectorAll('tr');
+			const entry = rows.length ? (down ? rows[0] : rows[rows.length - 1]).firstElementChild : null;
+			// in a table the caret's paragraph is one of its cells
+			if (entry && (paragraph.parentNode === this._contextBefore) === down
+				&& (!next || next.parentNode !== paragraph.parentNode)) {
+				this._jumpToCell(entry, false);
+				return;
+			}
 			// in a list the caret's paragraph is one of its items; otherwise it sits between the regions
 			if (!this._contextList.firstChild && (paragraph.parentNode === this._contextBefore) === down
 				&& (!next || next.parentNode !== paragraph.parentNode)) {
@@ -945,6 +957,24 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 				target = next;
 		}
 		this._jumpToContext(target);
+	},
+
+	// The cell in the next or previous row that covers the column the cell starts in.
+	_cellBeside: function(cell, down) {
+		const col = parseInt(cell.getAttribute('aria-colindex'));
+		let row = cell.parentNode;
+		for (let i = 1; down && i < cell.rowSpan && row; i++)
+			row = row.nextElementSibling;
+		for (row = row && (down ? row.nextElementSibling : row.previousElementSibling); row;
+			row = down ? row.nextElementSibling : row.previousElementSibling) {
+			const beside = Array.from(row.children).find(function (td) {
+				const start = parseInt(td.getAttribute('aria-colindex'));
+				return start <= col && col < start + td.colSpan;
+			});
+			if (beside)
+				return beside;
+		}
+		return null;
 	},
 
 	_jumpToContext: function(element) {
