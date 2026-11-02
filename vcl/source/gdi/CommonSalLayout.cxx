@@ -789,7 +789,20 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                         // tdf#126111: fallback is meaningless for PUA codepoints
                         if (u_charType(aCurrChar) != U_PRIVATE_USE_CHAR)
                         {
-                            aFallbackRuns.AddPos(nOrigCharPos, bRightToLeft);
+                            // tdf#174298: SetNeedFallback() extends the request to whole
+                            // graphemes, but a shaping cluster can have more than one grapheme, so
+                            // request fallback for the whole shaping cluster.
+                            int32_t nClusterEnd = nEndRunPos;
+                            for (int j = i; j >= 0 && j < nRunGlyphCount; j += bRightToLeft ? -1 : 1)
+                            {
+                                if (pHbGlyphInfos[j].cluster != pHbGlyphInfos[i].cluster)
+                                {
+                                    nClusterEnd = pHbGlyphInfos[j].cluster;
+                                    break;
+                                }
+                            }
+                            for (int32_t nPos = nCharPos; nPos < nClusterEnd; ++nPos)
+                                aFallbackRuns.AddPos(nPos, bRightToLeft);
                             if (SalLayoutFlags::ForFallback & rArgs.mnFlags)
                                 continue;
                         }

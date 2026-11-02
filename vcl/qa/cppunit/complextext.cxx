@@ -625,6 +625,78 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf107612)
 #endif
 }
 
+#if HAVE_MORE_FONTS
+namespace
+{
+std::vector<sal_Int32> getFallbackPositions(SalLayout& rLayout)
+{
+    auto pMultiLayout = dynamic_cast<MultiSalLayout*>(&rLayout);
+    CPPUNIT_ASSERT(pMultiLayout);
+
+    ImplLayoutRuns aFallbackRuns = *pMultiLayout->GetFallbackRuns();
+    std::vector<sal_Int32> aPositions;
+    bool bRTL;
+    int nCharPos = -1;
+    while (aFallbackRuns.GetNextPos(&nCharPos, &bRTL))
+        aPositions.push_back(nCharPos);
+    std::sort(aPositions.begin(), aPositions.end());
+    return aPositions;
+}
+}
+#endif
+
+CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf174298)
+{
+#if HAVE_MORE_FONTS
+    OUString aStr = u"مَ​ٰن"_ustr;
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
+    pOutDev->SetFont(vcl::Font(u"Liberation Sans"_ustr, u"Regular"_ustr, Size(0, 72)));
+    pOutDev->ForceFallbackFont(vcl::Font(u"DejaVu Sans"_ustr, u"Book"_ustr, Size(0, 72)));
+
+    // Liberation Sans has no Arabic, so the whole text must use the fallback font, including the
+    // zero width space and the mark that follows it.
+    auto pLayout = pOutDev->ImplLayout(aStr, 0, aStr.getLength());
+
+    // Without the fix this fails with:
+    // - Expected: { 0, 1, 2, 3, 4 }
+    // - Actual  : { 0, 1, 2, 4 }
+    std::vector<sal_Int32> aExpectedFallbacks{ 0, 1, 2, 3, 4 };
+    CPPUNIT_ASSERT_EQUAL(aExpectedFallbacks, getFallbackPositions(*pLayout));
+#endif
+}
+
+CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf174298Partial)
+{
+#if HAVE_MORE_FONTS
+    OUString aStr = u"مَ​ٰن"_ustr;
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
+    pOutDev->SetFont(vcl::Font(u"Liberation Sans"_ustr, u"Regular"_ustr, Size(0, 72)));
+    pOutDev->ForceFallbackFont(vcl::Font(u"DejaVu Sans"_ustr, u"Book"_ustr, Size(0, 72)));
+
+    // Writer draws the zero width space and the mark that follows it separately. Drawing only
+    // from the mark on must still use the fallback font, without any missing glyphs.
+    auto pLayout = pOutDev->ImplLayout(aStr, 0, aStr.getLength(), Point(0, 0), 0, {}, {},
+                                       SalLayoutFlags::UnclusteredGlyphs, nullptr, nullptr,
+                                       /*nDrawOriginCluster*/ 3, /*nDrawMinCharPos*/ 3,
+                                       /*nDrawEndCharPos*/ 5);
+
+    int nMissingGlyphs = 0;
+    const GlyphItem* pGlyph = nullptr;
+    basegfx::B2DPoint aPos;
+    int nStart = 0;
+    while (pLayout->GetNextGlyph(&pGlyph, aPos, nStart))
+    {
+        if (!pGlyph->glyphId())
+            ++nMissingGlyphs;
+    }
+
+    // Without the fix this fails with:
+    // - Expected: 0
+    // - Actual  : 1
+    CPPUNIT_ASSERT_EQUAL(0, nMissingGlyphs);
+#endif
+}
+
 CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testPartialKoreanJamoComposition)
 {
     ScopedVclPtrInstance<VirtualDevice> pOutDev;
