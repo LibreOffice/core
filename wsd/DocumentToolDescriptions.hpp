@@ -129,6 +129,8 @@ constexpr const char* DECK_SLIDE_SHAPE =
 - "image": only for the "image" intent, {"brief": "a description to generate an image from", "alt": "short alt text"}.
 - "notes": optional speaker notes for the slide. Put depth in the notes and keep the slide text scannable.
 
+Keep each bullet item to one short line, a phrase rather than a full sentence, and give a slide five items or fewer where you can. The explanation goes in the notes.
+
 Inside bullet items and text blocks you may emphasise words with **bold** and *italic*. No other markdown is supported. Some designs set body text in bold, so *italic* is the emphasis that always shows.
 
 Which blocks each intent expects:
@@ -139,6 +141,10 @@ Which blocks each intent expects:
 - big-number: exactly one text block that holds only the figure, on one line and at most 12 characters, such as "40%" or "4,210". The title says what the figure means, such as "Support tickets fell by 40% this year".
 - image: no blocks; supply an "image" instead.
 - section: a title only, no blocks.)";
+
+/// Advice on choosing the intents across a deck, so it mixes several kinds of slide.
+constexpr const char* DECK_VARIETY =
+    R"(Vary the slides, and do not put more than two bullets slides in a row. Show a single striking figure as a big-number slide, a contrast as a comparison with a heading on each column, a memorable sentence as a quote, and the plan of the talk as an agenda.)";
 
 /// The propose_outline description without its trailing slide-count sentence.
 /// The caller appends "Give at most N slides. ..." with N from the live budgets,

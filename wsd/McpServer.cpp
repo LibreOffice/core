@@ -470,13 +470,15 @@ std::string makeCreatePresentationDescription()
                "Build a new presentation from a description of its slides and return it. Pass "
                "\"spec\" as an object with a \"slides\" array. Each slide describes what it is "
                "about rather than how to draw it, and the server lays it out.\n\n") +
-           DocumentToolDescriptions::DECK_SLIDE_SHAPE +
+           DocumentToolDescriptions::DECK_SLIDE_SHAPE + "\n\n" +
+           DocumentToolDescriptions::DECK_VARIETY +
            "\n\nThe \"image\" intent needs a picture generator, which this tool does not have, so "
            "a slide asking for one is refused. Set \"design\" to a name from "
            "list_design_templates to style the deck; the limits that design declares are the ones "
            "the deck is checked against.\n\nThe result also carries a picture of every slide, "
-           "laid out in rows, so the deck can be checked by eye and sent again with changes. When "
-           "the picture cannot be painted, a note says so and the deck is still returned." +
+           "laid out in rows. Look at it before you finish, and if a slide is crowded or mostly "
+           "empty, change that slide and send the deck again. When the picture cannot be "
+           "painted, a note says so and the deck is still returned." +
            OutputDescription;
 }
 

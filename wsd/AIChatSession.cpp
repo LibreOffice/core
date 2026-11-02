@@ -499,7 +499,8 @@ Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions(const std::string& do
     if (docType == "presentation")
         tools->add(makeAITool(
             std::string(AIToolNames::ProposeOutline),
-            std::string(DocumentToolDescriptions::PROPOSE_OUTLINE_HEAD) + "Give at most " +
+            std::string(DocumentToolDescriptions::PROPOSE_OUTLINE_HEAD) +
+                DocumentToolDescriptions::DECK_VARIETY + "\n\nGive at most " +
                 std::to_string(budgets.maxSlides) +
                 DocumentToolDescriptions::PROPOSE_OUTLINE_TAIL_OPEN_CLOSE,
             makeParamSchema(
