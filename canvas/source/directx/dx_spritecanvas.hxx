@@ -86,10 +86,9 @@ namespace dxcanvas
     {
     };
 
-    typedef ::canvas::SpriteCanvasBase< SpriteCanvasBaseSpriteSurface_Base,
-                                        SpriteCanvasHelper,
-                                        ::osl::MutexGuard,
-                                        ::cppu::OWeakObject >           SpriteCanvasBaseT;
+    typedef ::canvas::SpriteCanvasBase<SpriteCanvasBaseSpriteSurface_Base, SpriteCanvasHelper,
+                                       ::osl::MutexGuard>
+        SpriteCanvasBaseT;
 
     /** Product of this component's factory.
 

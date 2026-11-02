@@ -21,6 +21,7 @@
 
 #include <rtl/ref.hxx>
 #include <com/sun/star/rendering/InterpolationMode.hpp>
+#include <cppuhelper/weak.hxx>
 #include <base/integerbitmapbase.hxx>
 #include <base/bitmapcanvasbase.hxx>
 #include <sal/log.hxx>
@@ -58,23 +59,16 @@ namespace canvas
         the sole parameter, and destroyed again when the method scope
         is left.
 
-        @tpl UnambiguousBase
-        Optional unambiguous base class for XInterface of Base. It's
-        sometimes necessary to specify this parameter, e.g. if Base
-        derives from multiple UNO interface (were each provides its
-        own version of XInterface, making the conversion ambiguous)
-
         @see CanvasBase for further contractual requirements towards
         the CanvasHelper type, and some examples.
      */
     template< class Base,
               class CanvasHelper,
-              class Mutex=::osl::MutexGuard,
-              class UnambiguousBase = css::uno::XInterface > class SpriteCanvasBase :
-        public IntegerBitmapBase< BitmapCanvasBase<Base, CanvasHelper, Mutex, UnambiguousBase> >
+              class Mutex=::osl::MutexGuard> class SpriteCanvasBase :
+        public IntegerBitmapBase<BitmapCanvasBase<Base, CanvasHelper, Mutex, cppu::OWeakObject>>
     {
     public:
-        typedef IntegerBitmapBase< BitmapCanvasBase<Base, CanvasHelper, Mutex, UnambiguousBase> > BaseType;
+        typedef IntegerBitmapBase<BitmapCanvasBase<Base, CanvasHelper, Mutex, cppu::OWeakObject>> BaseType;
         typedef ::rtl::Reference< SpriteCanvasBase >                            Reference;
 
         SpriteCanvasBase() :

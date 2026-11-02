@@ -85,10 +85,9 @@ namespace vclcanvas
     {
     };
 
-    typedef ::canvas::SpriteCanvasBase< SpriteCanvasBaseSpriteSurface_Base,
-                                        SpriteCanvasHelper,
-                                        vclcanvastools::LocalGuard,
-                                        ::cppu::OWeakObject >           SpriteCanvasBaseT;
+    typedef ::canvas::SpriteCanvasBase<SpriteCanvasBaseSpriteSurface_Base, SpriteCanvasHelper,
+                                       vclcanvastools::LocalGuard>
+        SpriteCanvasBaseT;
 
     /** Product of this component's factory.
 
