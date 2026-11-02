@@ -7,18 +7,17 @@ get their bounding box from CFX_Face::GetGlyphBBox() directly.
 diff -ru pdfium.orig/core/fxge/cfx_face.cpp pdfium/core/fxge/cfx_face.cpp
 --- pdfium.orig/core/fxge/cfx_face.cpp
 +++ pdfium/core/fxge/cfx_face.cpp
-@@ -68,10 +68,6 @@
+@@ -58,9 +58,6 @@
  
- constexpr int kMaxGlyphDimension = 2048;
+ namespace {
  
 -// Boundary value to avoid integer overflow when adding 1/64th of the value.
 -constexpr int kMaxRectTop = 2114445437;
 -
--
- int FTPosToCBoxInt(FT_Pos pos) {
-   // Boundary values to avoid integer overflow when multiplied by 1000.
-   static constexpr FT_Pos kMinCBox = -2147483;
-@@ -1209,11 +1209,6 @@
+ #if defined(PDF_ENABLE_FREETYPE)
+ constexpr int kThousandthMinInt = std::numeric_limits<int>::min() / 1000;
+ constexpr int kThousandthMaxInt = std::numeric_limits<int>::max() / 1000;
+@@ -1678,11 +1675,6 @@
      int err = LoadGlyph(glyph_index, /*scale=*/false);
      if (err == 0) {
        rect = GetGlyphBBox(glyph_index);
@@ -29,4 +28,4 @@ diff -ru pdfium.orig/core/fxge/cfx_face.cpp pdfium/core/fxge/cfx_face.cpp
 -      }
      }
    }
-   return rect;
+ #endif  // defined(PDF_ENABLE_FREETYPE)

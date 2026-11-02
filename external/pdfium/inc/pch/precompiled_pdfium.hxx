@@ -13,8 +13,8 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2026-09-24 17:32:45 using:
- ./bin/update_pch external/pdfium pdfium --cutoff=1 --exclude:system --include:module --include:local
+ Generated on 2026-11-02 18:32:54 using:
+ bin/update_pch external/pdfium pdfium --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./external/pdfium/inc/pch/precompiled_pdfium.hxx "make external/pdfium.build" --find-conflicts
@@ -31,7 +31,9 @@
 #include <agg_vcgen_stroke.h>
 #include <algorithm>
 #include <array>
+#include <atomic>
 #include <bit>
+#include <chrono>
 #include <cmath>
 #include <cstdlib>
 #include <ctype.h>
@@ -51,11 +53,14 @@
 #include <optional>
 #include <ostream>
 #include <queue>
+#include <ratio>
 #include <set>
 #include <sstream>
 #include <stack>
+#include <stdarg.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <string>
@@ -362,6 +367,7 @@
 #include <core/fxcrt/ptr_util.h>
 #include <core/fxcrt/raw_span.h>
 #include <core/fxcrt/retain_ptr.h>
+#include <core/fxcrt/scoped_locale.h>
 #include <core/fxcrt/scoped_set_insertion.h>
 #include <core/fxcrt/span.h>
 #include <core/fxcrt/span_io.h>
@@ -418,9 +424,12 @@
 #include <core/fxge/dib/cfx_imagestretcher.h>
 #include <core/fxge/dib/cfx_imagetransformer.h>
 #include <core/fxge/dib/cfx_scanlinecompositor.h>
+#include <core/fxge/dib/cfx_scanlinecompositor_hwy.h>
 #include <core/fxge/dib/cstretchengine.h>
+#include <core/fxge/dib/cstretchengine_hwy.h>
 #include <core/fxge/dib/fx_dib.h>
 #include <core/fxge/dib/scanlinecomposer_iface.h>
+#include <core/fxge/display_list_device_driver.h>
 #include <core/fxge/fontdata/chromefontdata/chromefontdata.h>
 #include <core/fxge/freetype/fx_freetype.h>
 #include <core/fxge/fx_font.h>
@@ -443,6 +452,7 @@
 #include <fpdfsdk/cpdfsdk_pauseadapter.h>
 #include <fpdfsdk/cpdfsdk_renderpage.h>
 #include <fpdfsdk/cpdfsdk_widget.h>
+#include <fpdfsdk/display_list_renderer.h>
 #include <fpdfsdk/formfiller/cffl_button.h>
 #include <fpdfsdk/formfiller/cffl_checkbox.h>
 #include <fpdfsdk/formfiller/cffl_combobox.h>
@@ -473,6 +483,20 @@
 #include <fxjs/cjs_runtimestub.h>
 #include <fxjs/ijs_event_context.h>
 #include <fxjs/ijs_runtime.h>
+#include <hwy/abort.h>
+#include <hwy/aligned_allocator.h>
+#include <hwy/base.h>
+#include <hwy/detect_compiler_arch.h>
+#include <hwy/detect_targets.h>
+#include <hwy/foreach_target.h>
+#include <hwy/highway.h>
+#include <hwy/per_target.h>
+#include <hwy/print.h>
+#include <hwy/robust_statistics.h>
+#include <hwy/stats.h>
+#include <hwy/targets.h>
+#include <hwy/timer.h>
+#include <hwy/x86_cpuid.h>
 #include <public/fpdf_annot.h>
 #include <public/fpdf_attachment.h>
 #include <public/fpdf_catalog.h>
@@ -492,6 +516,7 @@
 #include <public/fpdf_text.h>
 #include <public/fpdf_transformpage.h>
 #include <public/fpdfview.h>
+#include <third_party/abseil-cpp/absl/container/flat_hash_set.h>
 #include <third_party/agg23/agg_clip_liang_barsky.h>
 #include <third_party/agg23/agg_conv_dash.h>
 #include <third_party/agg23/agg_conv_stroke.h>
@@ -501,6 +526,8 @@
 #include <third_party/agg23/agg_rasterizer_scanline_aa.h>
 #include <third_party/agg23/agg_renderer_scanline.h>
 #include <third_party/agg23/agg_scanline_u.h>
+#include <third_party/highway/src/hwy/foreach_target.h>
+#include <third_party/highway/src/hwy/highway.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #endif // PCH_LEVEL >= 4
