@@ -318,20 +318,26 @@ double GenericSalLayout::FillDXArray( std::vector<double>* pCharWidths, const OU
     return GetTextWidth();
 }
 
+// Strip excess characters from the array.
+static void StripPartialDXArray(std::vector<double>& rCharWidths, sal_Int32 skipStart,
+                                sal_Int32 amt)
+{
+    const sal_Int32 nSize = rCharWidths.size();
+    if (skipStart < nSize)
+    {
+        std::copy(rCharWidths.begin() + skipStart, rCharWidths.end(), rCharWidths.begin());
+    }
+
+    rCharWidths.resize(amt, 0.0);
+}
+
 double GenericSalLayout::FillPartialDXArray(std::vector<double>* pCharWidths, const OUString& rStr,
                                             sal_Int32 skipStart, sal_Int32 amt) const
 {
     if (pCharWidths)
     {
         GetCharWidths(*pCharWidths, rStr);
-
-        // Strip excess characters from the array
-        if (skipStart < static_cast<sal_Int32>(pCharWidths->size()))
-        {
-            std::copy(pCharWidths->begin() + skipStart, pCharWidths->end(), pCharWidths->begin());
-        }
-
-        pCharWidths->resize(amt, 0.0);
+        StripPartialDXArray(*pCharWidths, skipStart, amt);
     }
 
     return GetPartialTextWidth(skipStart, amt);
@@ -1209,14 +1215,7 @@ double MultiSalLayout::FillPartialDXArray(std::vector<double>* pCharWidths, cons
     if (pCharWidths)
     {
         FillDXArray(pCharWidths, rStr);
-
-        // Strip excess characters from the array
-        if (skipStart < static_cast<sal_Int32>(pCharWidths->size()))
-        {
-            std::copy(pCharWidths->begin() + skipStart, pCharWidths->end(), pCharWidths->begin());
-        }
-
-        pCharWidths->resize(amt);
+        StripPartialDXArray(*pCharWidths, skipStart, amt);
     }
 
     return GetPartialTextWidth(skipStart, amt);
