@@ -87,8 +87,7 @@ typedef ::canvas::IntegerBitmapBase<
 class Canvas : public CanvasBaseT, public RepaintTarget
 {
 public:
-    Canvas(const css::uno::Sequence<css::uno::Any>& aArguments,
-           const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    Canvas(const css::uno::Sequence<css::uno::Any>& aArguments);
 
     void initialize();
 

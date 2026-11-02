@@ -35,8 +35,7 @@ using namespace ::com::sun::star;
 
 namespace cairocanvas
 {
-Canvas::Canvas(const uno::Sequence<uno::Any>& aArguments,
-               const uno::Reference<uno::XComponentContext>& /*rxContext*/)
+Canvas::Canvas(const uno::Sequence<uno::Any>& aArguments)
     : maArguments(aArguments)
 {
 }
@@ -157,9 +156,9 @@ OutputDevice* Canvas::getOutputDevice() { return maDeviceHelper.getOutputDevice(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_rendering_Canvas_Cairo_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+    css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const& args)
 {
-    rtl::Reference<cairocanvas::Canvas> p = new cairocanvas::Canvas(args, context);
+    rtl::Reference<cairocanvas::Canvas> p = new cairocanvas::Canvas(args);
     try
     {
         p->initialize();
