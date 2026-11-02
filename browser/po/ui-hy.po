@@ -8,11 +8,12 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-30 13:34+0100\n"
-"PO-Revision-Date: 2026-10-29 10:10+0000\n"
-"Last-Translator: tigran54 <tigran54@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-10-31 07:45+0000\n"
+"Last-Translator: Tigran Zargaryan "
+"<tigranflib@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Armenian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/hy/>\n"
-"Language: \n"
+"Language: hy\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1577,6 +1578,8 @@ msgid ""
 "This file is a spelling dictionary, not a wordbook. Upload a list of words "
 "with one word per line."
 msgstr ""
+"Այս նիշքը ուղղագրության բառարան է, այլ ոչ թե բառացանկ։ Բեռնեք բառերի ցանկ՝ "
+"յուրաքանչյուր տողում մեկ բառով։"
 
 #: admin/src/integrator/WordBook.ts:471
 msgid "Invalid dictionary format. Please check the file."
@@ -1822,26 +1825,26 @@ msgstr "Կրկնօրինակել ոճը"
 #: src/app/Util.ts:319
 msgid "%n year"
 msgid_plural "%n years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n տարի"
+msgstr[1] "%n տարիներ"
 
 #: src/app/Util.ts:321
 msgid "%n day"
 msgid_plural "%n days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n օր"
+msgstr[1] "%n օրեր"
 
 #: src/app/Util.ts:322
 msgid "%n hour"
 msgid_plural "%n hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n ժամ"
+msgstr[1] "%n ժամեր"
 
 #: src/app/Util.ts:325
-#, fuzzy
 msgid "%n minute"
 msgid_plural "%n minutes"
-msgstr[0] "1 րոպե"
+msgstr[0] "%n րոպե"
+msgstr[1] "%n րոպեներ"
 
 #: src/app/Util.ts:339
 msgid "less than a minute"
@@ -6314,19 +6317,19 @@ msgstr "Սահիկ %1, կապված %2-ի հետ"
 
 #: src/control/Control.PartsPreview.js:1241
 msgid "Linked to a section of %1 that is missing"
-msgstr ""
+msgstr "Կապված է %1-ի բացակայող բաժնի հետ"
 
 #: src/control/Control.PartsPreview.js:1243
 msgid "Linked to a section of %1 that has changed"
-msgstr ""
+msgstr "Կապված է %1-ի փոփոխված բաժնի հետ"
 
 #: src/control/Control.PartsPreview.js:1245
 msgid "Linked to a section of %1, disconnected"
-msgstr ""
+msgstr "Կապված է %1-ի բաժնի հետ, անջատված է"
 
 #: src/control/Control.PartsPreview.js:1246
 msgid "Linked to a section of %1"
-msgstr ""
+msgstr "Կապված է %1-ի բաժնի հետ"
 
 #: src/control/Control.PartsPreview.js:1390
 #: src/control/Control.PartsPreview.js:1557
@@ -6351,15 +6354,15 @@ msgstr "Բաժինը տեղափոխել ներքև"
 
 #: src/control/Control.PartsPreview.js:1434
 msgid "Update Section"
-msgstr ""
+msgstr "Թարմացնել բաժինը"
 
 #: src/control/Control.PartsPreview.js:1442
 msgid "Unlink Section"
-msgstr ""
+msgstr "Անջատել բաժնի հղումը"
 
 #: src/control/Control.PartsPreview.js:1449
 msgid "Unlink Section & Slides"
-msgstr ""
+msgstr "ԱՆջատել բաժնի և սահիկների հղումները"
 
 #: src/control/Control.PartsPreview.js:1458
 msgid "Collapse All Sections"
@@ -6493,7 +6496,7 @@ msgstr "Զետեղեք սահիկներ"
 
 #: src/control/Control.SlideImportPane.tsx:904
 msgid "Insert section \"{0}\""
-msgstr ""
+msgstr "Զետեղեք \"{0}\" բաժինը"
 
 #: src/control/Control.SlideImportPane.tsx:912
 msgid "Insert {0} from {1}"
@@ -6509,19 +6512,21 @@ msgstr "Զետեղեք {0} սահիկ"
 
 #: src/control/Control.SlideImportPane.tsx:972
 msgid "How the section goes in"
-msgstr ""
+msgstr "Ինչպես է բաժինը մտնում"
 
 #: src/control/Control.SlideImportPane.tsx:977
 msgid "Insert as section \"{0}\""
-msgstr ""
+msgstr "Զետեղեք որպես \"{0}\" բաժին"
 
 #: src/control/Control.SlideImportPane.tsx:983
 msgid "Insert as separate slides"
-msgstr ""
+msgstr "Զետեղեք որպես առանձին սահիկներ"
 
 #: src/control/Control.SlideImportPane.tsx:989
 msgid "Linked to its section in {0}. Update Links brings in later changes."
 msgstr ""
+"Կապված է {0}-ի իր բաժնի հետ։ «Թարմացնել հղումները» ներառում է ավելի ուշ "
+"կատարված փոփոխությունները։"
 
 #: src/control/Control.SlideImportPane.tsx:1038
 msgid "{0} of {1}"
@@ -6663,7 +6668,7 @@ msgstr "Կապված է {0}-ի հետ {1}-ում"
 
 #: src/control/Control.SlideLinkToolbar.tsx:120
 msgid "In a section linked to {0}"
-msgstr ""
+msgstr "{0}-ին կապված բաժնում"
 
 #: src/control/Control.SlideLinkToolbar.tsx:145
 msgid "Hide the actions for this linked slide"
@@ -6680,7 +6685,7 @@ msgstr "Հանել կապը"
 #: src/control/Control.SlideLinkToolbar.tsx:176
 #: src/slideimport/SlideLinks.ts:467
 msgid "Update section"
-msgstr ""
+msgstr "Թարմացնել բաժինը"
 
 #: src/control/Control.SlideLinkToolbar.tsx:190
 msgid "Not available"
@@ -6709,24 +6714,29 @@ msgstr "Այս ներկայացման ոչ մի սահիկ կապված չէ ա�
 
 #: src/slideimport/SlideLinks.ts:425
 msgid "The section cannot be updated, because its source is not available."
-msgstr ""
+msgstr "Բաժինը չի կարող թարմացվել, քանի որ դրա աղբյուրը հասանելի չէ։"
 
 #: src/slideimport/SlideLinks.ts:447
 msgid ""
 "One linked section cannot be updated, because its source is not available."
 msgstr ""
+"Մեկ կապակցված բաժինը չի կարող թարմացվել, քանի որ դրա աղբյուրը հասանելի չէ։"
 
 #: src/slideimport/SlideLinks.ts:450
 msgid ""
 "{0} linked sections cannot be updated, because their sources are not "
 "available."
 msgstr ""
+"{0} կապակցված բաժինները չեն կարող թարմացվել, քանի որ դրանց աղբյուրները "
+"հասանելի չեն։"
 
 #: src/slideimport/SlideLinks.ts:459
 msgid ""
 "The section will hold the slides that its section in {0} holds now. Changes "
 "made to these slides in this presentation will be lost."
 msgstr ""
+"Բաժինը կպահի այն սահիկները, որոնք այժմ պահում է {0}-ում գտնվող իր բաժինը։ "
+"Այս ներկայացման այս սահիկներում կատարված փոփոխությունները կկորչեն։"
 
 #: src/slideimport/SlideLinks.ts:462
 msgid ""
@@ -6734,10 +6744,13 @@ msgid ""
 "files hold now. Changes made to these slides in this presentation will be "
 "lost."
 msgstr ""
+"{0} կապակցված բաժինները կպահեն այն սահիկները, որոնք այժմ պահվում են "
+"սկզբնաղբյուր նիշքերում գտնվող իրենց բաժիններում: Այս ներկայացման այս "
+"սահիկներում կատարված փոփոխությունները կկորչեն:"
 
 #: src/slideimport/SlideLinks.ts:467
 msgid "Update sections"
-msgstr ""
+msgstr "Թարմացնել բաժինները"
 
 #: src/slideimport/SlideLinks.ts:534
 msgid "This slide is not linked to another file."
@@ -6759,6 +6772,8 @@ msgstr "{0}-ը հնարավոր չէր կարդալ։"
 #: src/slideimport/SlideLinks.ts:742
 msgid "You do not have access to {0}, so the section cannot be updated."
 msgstr ""
+"Դուք չունեք {0}-ին մուտք գործելու հնարավորություն, ուստի բաժինը չի կարող "
+"թարմացվել։"
 
 #: src/slideimport/SlideLinks.ts:745
 msgid "You do not have access to {0}, so its pages cannot be refreshed."
@@ -6778,11 +6793,13 @@ msgstr "{0}-ի սահիկները հնարավոր չէ կարդալ այս նե
 
 #: src/slideimport/SlideLinks.ts:919
 msgid "The section was updated from {0}."
-msgstr ""
+msgstr "Բաժինը թարմացվել է {0}-ից։"
 
 #: src/slideimport/SlideLinks.ts:1059
 msgid "Cannot update the section: {0} no longer holds its source section."
 msgstr ""
+"Հնարավոր չէ թարմացնել բաժինը: {0}-ը այլևս չի պարունակում իր սկզբնաղբյուր "
+"բաժինը։"
 
 #: src/slideimport/SlideLinks.ts:1085
 msgid "Cannot update slide {0}: the source lacks matching slide"
@@ -6793,14 +6810,12 @@ msgid "Unlinking the slide failed."
 msgstr "Սահիկի կապի հանումը ձախողվեց։"
 
 #: src/slideimport/SlideLinks.ts:1105
-#, fuzzy
 msgid "Unlinking the section failed."
-msgstr "Սահիկի կապի հանումը ձախողվեց։"
+msgstr "Բաժնի կապի հանումը ձախողվեց։"
 
 #: src/slideimport/SlideLinks.ts:1122
-#, fuzzy
 msgid "Updating the section from {0} failed."
-msgstr "{0} սահիկների թարմացումը ձախողվեց։"
+msgstr "{0} բաժնի թարմացումը ձախողվեց։"
 
 #: src/slideimport/SlideLinks.ts:1123 src/slideimport/SlideLinks.ts:1182
 msgid "Updating the slides of {0} failed."
