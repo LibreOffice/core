@@ -17,11 +17,14 @@
 #pragma once
 
 #include <common/FileUtil.hpp>
+#include <common/ProcUtil.hpp>
+#include <common/Util.hpp>
 #include <net/WebSocketHandler.hpp>
 
 #include <atomic>
 #include <chrono>
 #include <csignal>
+#include <memory>
 #include <string>
 
 class ChildProcess;
@@ -43,6 +46,12 @@ public:
         , _pid(pid)
     {
         LOG_INF(_name << " ctor [" << _pid << "].");
+#if !MOBILEAPP
+        // A Kit is ForKit's child, not ours: once it is gone, ForKit reaps it and its pid can
+        // be reused. A pidfd stays bound to this process, so it reaches only this process.
+        if (_pid > 0)
+            _process = std::make_unique<ProcUtil::ProcessHandle>(_pid);
+#endif
     }
 
     WSProcess(WSProcess&& other) = delete;
@@ -98,31 +107,60 @@ public:
         }
     }
 
-    /// Kill or abandon the child.
-    void terminate()
+    /// Kill or abandon the child, with the given signal.
+    void terminate(int signal = TerminationSignal)
     {
         if (_pid < 0)
             return;
 
+        killIfRunning(signal);
+        _pid = -1;
+    }
+
+    /// Kills the process of this child if it still runs. The process stays known after close() has
+    /// detached the child, so a child that was asked to exit and did not, as one whose main thread
+    /// is stuck, can still be ended. The given signal ends it.
+    void killIfRunning([[maybe_unused]] int signal = TerminationSignal)
+    {
 #if !MOBILEAPP
-        if (::kill(_pid, 0) == 0)
+        if (!isProcessRunning())
+            return;
+
+        const pid_t pid = _process->getPid();
+        LOG_INF("Killing child [" << pid << "].");
+        // A pidfd reaches only this process. Without one, SigUtil also waits for the
+        // process to go when it can't kill it.
+        const bool killed = _process->hasPidFd() ? Util::isFuzzing() || _process->signal(signal)
+                                                 : SigUtil::killChild(pid, signal);
+        if (!killed)
         {
-            LOG_INF("Killing child [" << _pid << "].");
-#if CODE_COVERAGE || VALGRIND_COOLFORKIT
-            constexpr auto signal = SIGTERM;
-#else
-            constexpr auto signal = SIGKILL;
-#endif
-            if (!SigUtil::killChild(_pid, signal))
-            {
-                LOG_ERR("Cannot terminate lokit [" << _pid << "]. Abandoning.");
-            }
+            LOG_ERR("Cannot terminate lokit [" << pid << "]. Abandoning.");
         }
 #else
-            // What to do? Throw some unique exception that the outermost call in the thread catches and
-            // exits from the thread?
+        // What to do? Throw some unique exception that the outermost call in the thread catches and
+        // exits from the thread?
 #endif
-        _pid = -1;
+    }
+
+    /// True when the process of this child runs. Unlike isAlive(), this holds after close() has
+    /// detached the child, so a child that was asked to exit can be checked on.
+    bool isProcessRunning() const
+    {
+#if !MOBILEAPP
+        return _process && _process->isAlive();
+#else
+        return false;
+#endif
+    }
+
+    /// True when this child is referred to by a pidfd, which reaches only its process.
+    bool hasProcessPidFd() const
+    {
+#if !MOBILEAPP
+        return _process && _process->hasPidFd();
+#else
+        return false;
+#endif
     }
 
     pid_t getPid() const { return _pid; }
@@ -161,14 +199,14 @@ public:
     }
 
     /// Check whether this child is alive and socket not in error.
-    /// Note: zombies will show as alive, and sockets have waiting
-    /// time after the other end-point closes. So this isn't accurate.
+    /// Note: without a pidfd, zombies will show as alive, and sockets have
+    /// waiting time after the other end-point closes. So this isn't accurate.
     virtual bool isAlive() const
     {
 #if !MOBILEAPP
         try
         {
-            return _pid > 1 && _ws && ::kill(_pid, 0) == 0;
+            return _pid > 1 && _ws && _process && _process->isAlive();
         }
         catch (const std::exception&)
         {
@@ -189,6 +227,19 @@ private:
     std::shared_ptr<WebSocketHandler> _ws; // FIXME: should be weak ? ...
     std::weak_ptr<StreamSocket> _socket;
     std::atomic<pid_t> _pid; ///< The process-id, which can be access from different threads.
+    std::unique_ptr<ProcUtil::ProcessHandle> _process; ///< Refers to the process; never reused.
+
+    /// The signal that ends a child that doesn't exit by itself. Coverage and valgrind builds send
+    /// SIGTERM instead of SIGKILL, so that the child writes its data out first. A mobile app runs
+    /// its Kits in its own process and signals none, and some of its platforms have no SIGKILL, so
+    /// there the value is 0.
+#if MOBILEAPP
+    static constexpr int TerminationSignal = 0;
+#elif CODE_COVERAGE || VALGRIND_COOLFORKIT
+    static constexpr int TerminationSignal = SIGTERM;
+#else
+    static constexpr int TerminationSignal = SIGKILL;
+#endif
 };
 
 /// A ChildProcess object represents a Kit process that hosts a document and manipulates the
