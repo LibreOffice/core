@@ -3009,6 +3009,13 @@ void COOLWSD::setLokitEnvironmentVariables(const Poco::Util::LayeredConfiguratio
             // also disable host verification for allowed hosts
             ::setenv("KIT_HOST_ALLOWLIST_EXEMPT_VERIFY_HOST", "1", true);
         }
+        else
+            ::unsetenv("KIT_HOST_ALLOWLIST_EXEMPT_VERIFY_HOST");
+    }
+    else
+    {
+        ::unsetenv("KIT_HOST_ALLOWLIST");
+        ::unsetenv("KIT_HOST_ALLOWLIST_EXEMPT_VERIFY_HOST");
     }
 
     setenv("KIT_ALLOWED_EXTREF_PATHS", "", true);
