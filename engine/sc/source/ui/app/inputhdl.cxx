@@ -307,6 +307,14 @@ ScTypedCaseStrSet::const_iterator findTextAll(
     return rDataSet.end(); // no matching text found
 }
 
+// "start index;end index;start paragraph;end paragraph"
+OUString lcl_SelectionString( sal_Int32 nStartIndex, sal_Int32 nEndIndex,
+                              sal_Int32 nStartPara, sal_Int32 nEndPara )
+{
+    return OUString::number(nStartIndex) + ";" + OUString::number(nEndIndex) + ";" +
+           OUString::number(nStartPara) + ";" + OUString::number(nEndPara);
+}
+
 }
 
 void ScInputHandler::SendReferenceMarks( const SfxViewShell* pViewShell,
@@ -338,6 +346,15 @@ void ScInputHandler::SendReferenceMarks( const SfxViewShell* pViewShell,
 
             if ( rReferenceMarks[i].bActive )
                 ss << ", \"active\": \"true\"";
+
+            if ( rReferenceMarks[i].oTextSelection )
+            {
+                const ESelection& rSelection = *rReferenceMarks[i].oTextSelection;
+                ss << ", \"selection\": \""
+                   << lcl_SelectionString( rSelection.start.nIndex, rSelection.end.nIndex,
+                                           rSelection.start.nPara, rSelection.end.nPara )
+                   << "\"";
+            }
 
             ss << " } ";
 
@@ -722,7 +739,7 @@ void ScInputHandler::UpdateKitReferenceMarks(bool bSendWhenEmpty)
     if ( pRangeFinder && !pRangeFinder->IsHidden() &&
          pRangeFinder->GetDocName() == pDocSh->GetTitle() )
     {
-        // The picked range is in the text as well, its mark takes the colour of that entry
+        // The picked range is in the text as well, its mark takes the colour and span of that entry
         std::optional<size_t> oPickedEntry;
         if (bRefMark)
         {
@@ -761,6 +778,7 @@ void ScInputHandler::UpdateKitReferenceMarks(bool bSendWhenEmpty)
             if (oPickedEntry == i)
             {
                 aReferenceMarks[0].aColor = rData.nColor;
+                aReferenceMarks[0].oTextSelection = rData.maSel;
                 continue;
             }
 
@@ -768,6 +786,7 @@ void ScInputHandler::UpdateKitReferenceMarks(bool bSendWhenEmpty)
                 rViewData, *pDocSh, aRef.aStart.Col(), aRef.aEnd.Col(), aRef.aStart.Row(),
                 aRef.aEnd.Row(), aRef.aStart.Tab(), rData.nColor );
             aMark.bActive = !bRefMark && bHasActiveRange && aRef == aActiveRange;
+            aMark.oTextSelection = rData.maSel;
             aReferenceMarks.push_back( aMark );
         }
     }
@@ -2022,14 +2041,14 @@ void ScTabViewShell::KitSendFormulabarUpdate(const EditView* pActiveView,
     OUString aSelection;
     if (pActiveView)
     {
-        aSelection = OUString::number(pActiveView->GetPosWithField(0, rSelection.start.nIndex)) + ";" +
-            OUString::number(pActiveView->GetPosWithField(0, rSelection.end.nIndex)) + ";" +
-            OUString::number(rSelection.start.nPara) + ";" + OUString::number(rSelection.end.nPara);
+        aSelection = lcl_SelectionString( pActiveView->GetPosWithField(0, rSelection.start.nIndex),
+                                          pActiveView->GetPosWithField(0, rSelection.end.nIndex),
+                                          rSelection.start.nPara, rSelection.end.nPara );
     }
     else
     {
-        aSelection = OUString::number(rSelection.start.nIndex) + ";" + OUString::number(rSelection.end.nIndex) + ";" +
-            OUString::number(rSelection.start.nPara) + ";" + OUString::number(rSelection.end.nPara);
+        aSelection = lcl_SelectionString( rSelection.start.nIndex, rSelection.end.nIndex,
+                                          rSelection.start.nPara, rSelection.end.nPara );
     }
 
     sal_uInt64 nCurrentShellId = reinterpret_cast<sal_uInt64>(this);

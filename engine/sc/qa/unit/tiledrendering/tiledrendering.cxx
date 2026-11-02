@@ -3069,6 +3069,16 @@ int countOccurrences(std::string_view aText, std::string_view aPart)
 }
 
 constexpr OString aActiveMark = "\"active\": \"true\""_ostr;
+
+OString markWith(std::string_view aMarks, std::string_view aPart)
+{
+    const size_t nPart = aMarks.find(aPart);
+    if (nPart == std::string_view::npos)
+        return OString();
+    const size_t nStart = aMarks.rfind('{', nPart);
+    const size_t nEnd = aMarks.find('}', nPart);
+    return OString(aMarks.substr(nStart, nEnd + 1 - nStart));
+}
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testActiveReferenceMark)
@@ -3097,12 +3107,16 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testReferenceMarksFollowTyping)
     openFormulaInA3(pModelObj, pViewShell, u"=A1+B1:B2"_ustr);
     CPPUNIT_ASSERT_EQUAL("=A1+B1:B2"_ostr, aView1.m_sCellFormula);
     CPPUNIT_ASSERT_EQUAL(2, countOccurrences(aView1.m_sReferenceMarks, "rectangle"));
+    CPPUNIT_ASSERT(aView1.m_sReferenceMarks.indexOf("\"selection\": \"1;3;0;0\"") >= 0);
+    CPPUNIT_ASSERT(aView1.m_sReferenceMarks.indexOf("\"selection\": \"4;9;0;0\"") >= 0);
     const OString aMarksBefore = aView1.m_sReferenceMarks;
 
     typeText(pModelObj, u"1");
     CPPUNIT_ASSERT_EQUAL("=A1+B1:B21"_ostr, aView1.m_sCellFormula);
     CPPUNIT_ASSERT_EQUAL(2, countOccurrences(aView1.m_sReferenceMarks, "rectangle"));
     CPPUNIT_ASSERT(aView1.m_sReferenceMarks != aMarksBefore);
+    CPPUNIT_ASSERT(aView1.m_sReferenceMarks.indexOf("\"selection\": \"1;3;0;0\"") >= 0);
+    CPPUNIT_ASSERT(aView1.m_sReferenceMarks.indexOf("\"selection\": \"4;10;0;0\"") >= 0);
 
     for (int i = 0; i < 9; ++i)
         pressKey(pModelObj, awt::Key::BACKSPACE);
@@ -3121,6 +3135,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPickedReferenceHasOneMark)
     CPPUNIT_ASSERT_EQUAL("=A1"_ostr, aView1.m_sCellFormula);
     CPPUNIT_ASSERT_EQUAL(1, countOccurrences(aView1.m_sReferenceMarks, "rectangle"));
     CPPUNIT_ASSERT(aView1.m_sReferenceMarks.indexOf(aActiveMark) >= 0);
+    CPPUNIT_ASSERT(aView1.m_sReferenceMarks.indexOf("\"selection\": \"1;3;0;0\"") >= 0);
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoTypingInFormulaWithReference)
@@ -3158,6 +3173,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPickedReferenceRepeatedInText)
     CPPUNIT_ASSERT_EQUAL("=A2+A2"_ostr, aView1.m_sCellFormula);
     CPPUNIT_ASSERT_EQUAL(2, countOccurrences(aView1.m_sReferenceMarks, "rectangle"));
     CPPUNIT_ASSERT_EQUAL(1, countOccurrences(aView1.m_sReferenceMarks, "\"active\""));
+    CPPUNIT_ASSERT(aView1.m_sReferenceMarks.indexOf("\"selection\": \"1;3;0;0\"") >= 0);
+    const OString aActive = markWith(aView1.m_sReferenceMarks, aActiveMark);
+    CPPUNIT_ASSERT(aActive.indexOf("\"selection\": \"4;6;0;0\"") >= 0);
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDragActiveReferenceCorner)

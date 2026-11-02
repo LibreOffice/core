@@ -292,6 +292,11 @@ class FormulaBar {
 		return window.L.DomUtil.hasClass(input, 'focused');
 	}
 
+	setReferenceMarks(marks) {
+		const input = this.getInputField();
+		if (input && input.setReferenceMarks) input.setReferenceMarks(marks);
+	}
+
 	isInEditMode() {
 		var acceptButton = this.parentContainer.querySelector('#acceptformula');
 		if (acceptButton)

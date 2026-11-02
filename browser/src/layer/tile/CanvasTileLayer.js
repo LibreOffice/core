@@ -2630,6 +2630,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		var marks = JSON.parse(textMsg);
 		this._referencesAll = this._marksToReferences(marks.marks);
 		this._updateReferenceMarks();
+		if (this._map.formulabar)
+			this._map.formulabar.setReferenceMarks(marks.marks);
 		CellSelectionMarkers.update();
 		TextSelections.refreshHandles();
 	},

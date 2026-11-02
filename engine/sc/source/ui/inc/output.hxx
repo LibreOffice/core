@@ -25,6 +25,7 @@
 #include <tools/color.hxx>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
+#include <editeng/editdata.hxx>
 #include <editeng/svxenum.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pdfwriter.hxx>
@@ -113,6 +114,8 @@ struct ReferenceMark {
     Color aColor;
     /// True for the reference whose text is selected in the formula being edited.
     bool bActive = false;
+    /// Where the reference stands in the formula text. Unset for a range picked for a dialog.
+    std::optional<ESelection> oTextSelection;
 
     ReferenceMark()
         : nX( 0 )

@@ -529,6 +529,53 @@ function _formulabarEditControl(parentContainer, data, builder) {
 		});
 	});
 
+	// Text spans of the references, "startX;endX;startY;endY" like the selection.
+	let referenceMarks = [];
+
+	const isInsideMark = function (mark, line, column) {
+		const afterStart =
+			line > mark.startY || (line === mark.startY && column >= mark.startX);
+		const beforeEnd =
+			line < mark.endY || (line === mark.endY && column < mark.endX);
+		return afterStart && beforeEnd;
+	};
+
+	// One span per character, a br per line break.
+	const applyReferenceMarks = function () {
+		let line = 0;
+		let column = 0;
+		for (const node of textLayer.childNodes) {
+			if (node.tagName === 'BR') {
+				line++;
+				column = 0;
+				continue;
+			}
+			if (node.nodeType === Node.ELEMENT_NODE) {
+				const mark = referenceMarks.find((candidate) =>
+					isInsideMark(candidate, line, column),
+				);
+				node.style.color = mark ? '#' + mark.color : '';
+			}
+			column += node.textContent.length;
+		}
+	};
+
+	container.setReferenceMarks = function (marks) {
+		referenceMarks = [];
+		for (const mark of marks) {
+			if (!mark.selection) continue;
+			const parts = mark.selection.split(';').map(Number);
+			referenceMarks.push({
+				startX: parts[0],
+				endX: parts[1],
+				startY: parts[2],
+				endY: parts[3],
+				color: mark.color,
+			});
+		}
+		applyReferenceMarks();
+	};
+
 	container.setText = function(text, selection) {
 		var newTextLayer = document.createDocumentFragment();
 		for (var c = 0; c < text.length; c++) {
@@ -540,6 +587,7 @@ function _formulabarEditControl(parentContainer, data, builder) {
 
 		textLayer.textContent = '';
 		textLayer.appendChild(newTextLayer);
+		applyReferenceMarks();
 
 		var startX = parseInt(selection[0]);
 		var endX = parseInt(selection[1]);

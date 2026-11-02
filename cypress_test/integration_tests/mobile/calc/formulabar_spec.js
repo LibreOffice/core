@@ -34,6 +34,40 @@ describe(['tagmobile', 'tagnextcloud'], 'Formula bar tests.', function() {
 		cy.cGet('#test-div-cell_selection_handle_start').should('exist');
 	});
 
+	it('Reference text takes the colour of its mark on the sheet', function() {
+		var formulaText = '#sc_input_window.formulabar .ui-custom-textarea-text-layer';
+		var blue = 'rgb(0, 0, 255)';
+
+		calcHelper.clickOnFirstCell();
+		helper.typeIntoInputField(helper.addressInputSelector, 'A2');
+		calcHelper.typeIntoFormulabar('=SUM(B2:B4){enter}');
+
+		helper.typeIntoInputField(helper.addressInputSelector, 'A2');
+		cy.cGet(formulaText).should('have.text', '=SUM(B2:B4)');
+		cy.cGet(formulaText).click();
+		cy.cGet('#sc_input_window.formulabar').should('have.class', 'focused');
+
+		// "B2:B4" is characters 5 to 9.
+		cy.cGet(formulaText + ' span').should(function(spans) {
+			expect(spans.eq(5).css('color')).to.equal(blue);
+			expect(spans.eq(9).css('color')).to.equal(blue);
+			expect(spans.eq(4).css('color')).to.not.equal(blue);
+			expect(spans.eq(10).css('color')).to.not.equal(blue);
+		});
+
+		// A new reference gets its own colour.
+		helper.typeIntoDocument('{end}+C1');
+		cy.cGet(formulaText).should('have.text', '=SUM(B2:B4)+C1');
+		cy.cGet(formulaText + ' span').should(function(spans) {
+			var plain = spans.eq(0).css('color');
+			expect(spans.eq(5).css('color')).to.equal(blue);
+			expect(spans.eq(11).css('color')).to.equal(plain);
+			expect(spans.eq(12).css('color')).to.not.equal(plain);
+			expect(spans.eq(12).css('color')).to.not.equal(blue);
+			expect(spans.eq(13).css('color')).to.equal(spans.eq(12).css('color'));
+		});
+	});
+
 	it.skip('Check input field content', function() {
 		// First cell has some long content
 		calcHelper.clickOnFirstCell();
