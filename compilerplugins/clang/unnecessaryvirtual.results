@@ -142,8 +142,6 @@ canvas/inc/base/graphicdevicebase.hxx:229
     class com::sun::star::uno::Reference<class com::sun::star::lang::XMultiServiceFactory> canvas::GraphicDeviceBase::getParametricPolyPolygonFactory()
 canvas/inc/base/graphicdevicebase.hxx:234
     unsigned char canvas::GraphicDeviceBase::hasFullScreenMode()
-canvas/inc/base/graphicdevicebase.hxx:239
-    unsigned char canvas::GraphicDeviceBase::enterFullScreenMode(unsigned char,)
 canvas/inc/base/graphicdevicebase.hxx:245
     class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> canvas::GraphicDeviceBase::createInstance(const class rtl::OUString &,)
 canvas/inc/base/graphicdevicebase.hxx:253

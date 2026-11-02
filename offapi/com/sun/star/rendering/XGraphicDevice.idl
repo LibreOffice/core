@@ -227,16 +227,6 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
         i.e. whether a window can cover the whole screen exclusively.
      */
     boolean                         hasFullScreenMode();
-
-
-    /** Enter or leave the fullscreen mode, if possible. The return
-        value denotes the success of the operation.
-
-        @attention depending on the underlying operating system,
-        fullscreen mode can be left without an enterFullScreenMode(
-        false ) call.
-     */
-    boolean                         enterFullScreenMode( [in] boolean bEnter );
 };
 
 }; }; }; };

@@ -190,10 +190,6 @@ include/canvas/base/graphicdevicebase.hxx:213
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XVolatileBitmap> canvas::GraphicDeviceBase::createVolatileAlphaBitmap(const struct com::sun::star::geometry::IntegerSize2D &,)
 include/canvas/base/graphicdevicebase.hxx:224
     class com::sun::star::uno::Reference<class com::sun::star::lang::XMultiServiceFactory> canvas::GraphicDeviceBase::getParametricPolyPolygonFactory()
-include/canvas/base/graphicdevicebase.hxx:229
-    unsigned char canvas::GraphicDeviceBase::hasFullScreenMode()
-include/canvas/base/graphicdevicebase.hxx:234
-    unsigned char canvas::GraphicDeviceBase::enterFullScreenMode(unsigned char,)
 include/canvas/base/graphicdevicebase.hxx:240
     class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> canvas::GraphicDeviceBase::createInstance(const class rtl::OUString &,)
 include/canvas/base/graphicdevicebase.hxx:248

@@ -37,9 +37,6 @@ canvas/inc/base/bufferedgraphicdevicebase.hxx:227
 canvas/inc/base/bufferedgraphicdevicebase.hxx:234
     void canvas::BufferedGraphicDeviceBase::windowHidden(const struct com::sun::star::lang::EventObject &,)
     0
-canvas/inc/base/graphicdevicebase.hxx:239
-    unsigned char canvas::GraphicDeviceBase::enterFullScreenMode(unsigned char,)
-    0
 canvas/inc/base/graphicdevicebase.hxx:305
     void canvas::GraphicDeviceBase::removePropertyChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertyChangeListener> &,)
     00
