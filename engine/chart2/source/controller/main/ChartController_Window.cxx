@@ -1534,9 +1534,11 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
         }
     }
 
-    // text edit
+    // text edit, by F2, or by Return on a title, which has nothing below it to go to, as Return
+    // starts the edit of a text object in a drawing
     if( ! bReturn &&
-        nCode == KEY_F2 )
+        ( nCode == KEY_F2
+          || ( nCode == KEY_RETURN && !aKeyCode.GetModifier() && !pDrawViewWrapper->IsTextEdit() ) ) )
     {
         if( eObjectType == OBJECTTYPE_TITLE )
         {
