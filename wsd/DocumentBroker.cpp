@@ -5449,7 +5449,7 @@ std::size_t DocumentBroker::removeSession(const std::shared_ptr<ClientSession>& 
             // lingers in WAIT_DISCONNECT until the 'disconnected' handshake,
             // leaving time for the getclipboard response to arrive and cache.
             LOG_TRC("request/rescue clipboard on disconnect for " << session->getId());
-            forwardToChild(session, "getclipboard name=shutdown");
+            forwardToChild(session, "getclipboard name=shutdown-" + session->getId());
         }
 #endif
 
