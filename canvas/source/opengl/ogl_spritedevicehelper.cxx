@@ -327,12 +327,6 @@ namespace oglcanvas
         return true;
     }
 
-    bool SpriteDeviceHelper::switchBuffer( bool bIsVisible, bool bUpdateAll )
-    {
-        // no difference for VCL canvas
-        return showBuffer( bIsVisible, bUpdateAll );
-    }
-
     uno::Any SpriteDeviceHelper::isAccelerated() const
     {
         return css::uno::Any(false);

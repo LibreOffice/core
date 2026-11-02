@@ -70,7 +70,6 @@ namespace oglcanvas
             const css::geometry::IntegerSize2D&                                        size );
 
         bool  showBuffer( bool bIsVisible, bool bUpdateAll );
-        bool  switchBuffer( bool bIsVisible, bool bUpdateAll );
 
         css::uno::Any isAccelerated() const;
         css::uno::Any getDeviceHandle() const;

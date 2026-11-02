@@ -52,36 +52,6 @@ interface XBufferController : ::com::sun::star::uno::XInterface
         if nBuffer is outside the permissible range.
      */
     boolean showBuffer( [in] boolean bUpdateAll );
-
-
-    /** Schedule the display of the specified buffer.<p>
-
-        The method returns, when the switching of the buffer is
-        successfully scheduled, or immediately when an error
-        occurs. If the switch was successful, subsequent render
-        operations will be directed to the new backbuffer. Note that,
-        if the buffer switching is exceedingly slow, or the frequency
-        of switchBuffer() is exceedingly high, the buffer scheduled
-        for display here might become the current render target
-        <em>before</em> it is fully displayed on screen. In this case,
-        any rendering operation to this buffer will block, until it is
-        safe to perform the operation without visible cluttering.<p>
-
-        Use this method if you favor maximal render speed, but don't
-        necessarily require your screen display to be in sync with
-        other things, e.g. sound playback.<p>
-
-        @param bUpdateAll
-        When `TRUE`, update the whole screen. When `FALSE`,
-        implementation is permitted to restrict update to areas the
-        canvas itself changed (e.g. because of render operations, or
-        changes on the sprites). The former is useful for updates
-        after window expose events, the latter for animation display.
-
-        @return whether the switch was performed successfully.
-     */
-    boolean switchBuffer( [in] boolean bUpdateAll );
-
 };
 
 }; }; }; };

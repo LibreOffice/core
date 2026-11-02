@@ -47,7 +47,6 @@ namespace cairocanvas
 
         // XWindowGraphicDevice
         bool  showBuffer( bool, bool );
-        bool  switchBuffer( bool, bool bUpdateAll );
 
         css::uno::Any isAccelerated() const;
         css::uno::Any getDeviceHandle() const;

@@ -87,13 +87,6 @@ public:
         return BaseType::maDeviceHelper.showBuffer(mbIsVisible, bUpdateAll);
     }
 
-    virtual sal_Bool SAL_CALL switchBuffer(sal_Bool bUpdateAll) override
-    {
-        MutexType aGuard(BaseType::m_aMutex);
-
-        return BaseType::maDeviceHelper.switchBuffer(mbIsVisible, bUpdateAll);
-    }
-
     /** Set corresponding canvas window
 
             Use this method to set the window this canvas displays

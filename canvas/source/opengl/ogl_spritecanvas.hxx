@@ -79,7 +79,6 @@ namespace oglcanvas
 
         // XBufferController (partial)
         virtual sal_Bool SAL_CALL showBuffer( sal_Bool bUpdateAll ) override;
-        virtual sal_Bool SAL_CALL switchBuffer( sal_Bool bUpdateAll ) override;
 
         // XSpriteCanvas
         virtual css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL createSpriteFromAnimation( const css::uno::Reference< css::rendering::XAnimation >& animation ) override;

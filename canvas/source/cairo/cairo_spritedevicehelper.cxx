@@ -65,12 +65,6 @@ namespace cairocanvas
         return false;
     }
 
-    bool SpriteDeviceHelper::switchBuffer( bool, bool )
-    {
-        SAL_WARN("canvas.cairo", "showBuffer Not supposed to be called, handled by SpriteCanvas");
-        return false;
-    }
-
     uno::Any SpriteDeviceHelper::isAccelerated() const
     {
         return css::uno::Any(true);

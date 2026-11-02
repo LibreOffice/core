@@ -53,12 +53,6 @@ namespace vclcanvas
         return false;
     }
 
-    bool SpriteDeviceHelper::switchBuffer( bool, bool )
-    {
-        OSL_FAIL("Not supposed to be called, handled by SpriteCanvas");
-        return false;
-    }
-
     void SpriteDeviceHelper::disposing()
     {
         // release all references

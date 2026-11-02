@@ -116,7 +116,6 @@ namespace cairocanvas
 
         // XBufferController (partial)
         virtual sal_Bool SAL_CALL showBuffer( sal_Bool bUpdateAll ) override;
-        virtual sal_Bool SAL_CALL switchBuffer( sal_Bool bUpdateAll ) override;
 
         // XSpriteCanvas (partial)
         virtual sal_Bool SAL_CALL updateScreen( sal_Bool bUpdateAll ) override;

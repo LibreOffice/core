@@ -32,8 +32,6 @@ canvas/inc/base/bufferedgraphicdevicebase.hxx:92
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XBufferController> canvas::BufferedGraphicDeviceBase::getBufferController()
 canvas/inc/base/bufferedgraphicdevicebase.hxx:109
     unsigned char canvas::BufferedGraphicDeviceBase::showBuffer(unsigned char,)
-canvas/inc/base/bufferedgraphicdevicebase.hxx:116
-    unsigned char canvas::BufferedGraphicDeviceBase::switchBuffer(unsigned char,)
 canvas/inc/base/bufferedgraphicdevicebase.hxx:160
     void canvas::BufferedGraphicDeviceBase::disposeThis()
 canvas/inc/base/bufferedgraphicdevicebase.hxx:207

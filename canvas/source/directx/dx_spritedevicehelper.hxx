@@ -62,7 +62,6 @@ namespace dxcanvas
             const css::geometry::IntegerSize2D&                                        size );
 
         bool showBuffer( bool bIsVisible, bool bUpdateAll );
-        bool switchBuffer( bool bIsVisible, bool bUpdateAll );
 
         const IDXRenderModuleSharedPtr& getRenderModule() const { return mpRenderModule; }
         const DXSurfaceBitmapSharedPtr& getBackBuffer() const { return mpBackBuffer; }

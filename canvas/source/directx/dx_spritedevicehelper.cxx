@@ -162,12 +162,6 @@ namespace dxcanvas
         return false;
     }
 
-    bool SpriteDeviceHelper::switchBuffer( bool, bool )
-    {
-        SAL_WARN("canvas.directx", "Not supposed to be called, handled by SpriteCanvas");
-        return false;
-    }
-
     uno::Any SpriteDeviceHelper::isAccelerated() const
     {
         return css::uno::Any(true);
