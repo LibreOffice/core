@@ -254,6 +254,7 @@
         android:layout_gravity="start"
         android:theme="@style/LibreOfficeTheme.Base"
         app:headerLayout="@layout/navigation_header"
+        app:topInsetScrimEnabled="false"
         app:menu="@menu/navigation_menu"/>
 
 

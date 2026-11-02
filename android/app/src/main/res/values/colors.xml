@@ -40,5 +40,7 @@
 
     <color name="toolbar_background">#ffffff</color>
 
+    <color name="drawer_header_background">#5C2983</color>
+
 </resources>
 

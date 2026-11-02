@@ -251,6 +251,15 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     public void setupNavigationDrawer() {
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationDrawer = findViewById(R.id.navigation_drawer);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            navigationDrawer.getHeaderView(0).setOnApplyWindowInsetsListener((v, windowInsets) -> {
+                Insets insets = windowInsets.getInsets(WindowInsets.Type.systemBars());
+
+                v.setPadding(0, insets.top, 0, 0);
+
+                return windowInsets;
+            });
+        }
         navigationDrawer.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -275,7 +284,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 boolean lightMode = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_YES) == 0;
 
-                if (lightMode) { // Even in light mode, the status bar still has a dark background when opened... the navigation bar is unaffected
+                if (lightMode) { // Even in light mode, the drawer header colour is under the status bar when opened... the navigation bar is unaffected
                     boolean lightStatusBar = slideOffset < 0.5;
                     WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView()).setAppearanceLightStatusBars(lightStatusBar);
                 }

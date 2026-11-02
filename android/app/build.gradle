@@ -28,11 +28,16 @@ android {
         resValue "string", "vendor", "${coVendor}"
         resValue "string", "info_url", "${coInfoURL}"
         resValue "string", "version_hash", "${coVersionHash}"
-        // copyBrandFiles copies the branded header only at execution time, check its source
+        // copyBrandFiles copies the branded header files only at execution time, check its source
         if (coHasBranding == "true" && file("${coBrandingDir}/android/drawable/drawer_header${coBrandingSuffix}.png").exists()) {
             resValue "string", "image_draw_header", "@drawable/drawer_header${coBrandingSuffix}"
         } else {
             resValue "string", "image_draw_header", "@drawable/drawer_header"
+        }
+        if (coHasBranding == "true" && file("${coBrandingDir}/android/values/drawer_header_background${coBrandingSuffix}.xml").exists()) {
+            resValue "color", "color_draw_header", "@color/drawer_header_background${coBrandingSuffix}"
+        } else {
+            resValue "color", "color_draw_header", "@color/drawer_header_background"
         }
         if (coHasBranding == "true" && file("${coBrandingDir}/android/mipmap-anydpi-v26/ic_launcher${coBrandingSuffix}.xml").exists()) {
             manifestPlaceholders = [ appIcon: "${coLauncherIcon}" ]
