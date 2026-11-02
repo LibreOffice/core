@@ -26,6 +26,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <base/integerbitmapbase.hxx>
 #include <base/bitmapcanvasbase.hxx>
+#include <cppuhelper/weak.hxx>
 
 namespace com::sun::star::rendering { class XPolyPolygon2D; }
 
@@ -58,24 +59,17 @@ namespace canvas
         the sole parameter, and destroyed again when the method scope
         is left.
 
-        @tpl UnambiguousBase
-        Optional unambiguous base class for XInterface of Base. It's
-        sometimes necessary to specify this parameter, e.g. if Base
-        derives from multiple UNO interface (were each provides its
-        own version of XInterface, making the conversion ambiguous)
-
         @see CanvasCustomSpriteHelper for further contractual
         requirements towards the SpriteHelper type, and some examples.
      */
     template< class Base,
               class SpriteHelper,
               class CanvasHelper,
-              class Mutex=::osl::MutexGuard,
-              class UnambiguousBase = css::uno::XInterface > class CanvasCustomSpriteBase :
-        public IntegerBitmapBase< BitmapCanvasBase2<Base, CanvasHelper, Mutex, UnambiguousBase> >
+              class Mutex=::osl::MutexGuard> class CanvasCustomSpriteBase :
+        public IntegerBitmapBase<BitmapCanvasBase2<Base, CanvasHelper, Mutex, cppu::OWeakObject>>
     {
     public:
-        typedef IntegerBitmapBase< BitmapCanvasBase2<Base, CanvasHelper, Mutex, UnambiguousBase> > BaseType;
+        typedef IntegerBitmapBase<BitmapCanvasBase2<Base, CanvasHelper, Mutex, cppu::OWeakObject>> BaseType;
 
         CanvasCustomSpriteBase() :
             maSpriteHelper()

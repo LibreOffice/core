@@ -70,11 +70,9 @@ namespace dxcanvas
     {
     };
 
-    typedef ::canvas::CanvasCustomSpriteBase< CanvasCustomSpriteSpriteBase_Base,
-                                              SpriteHelper,
-                                              BitmapCanvasHelper,
-                                              ::osl::MutexGuard,
-                                              ::cppu::OWeakObject >                     CanvasCustomSpriteBaseT;
+    typedef ::canvas::CanvasCustomSpriteBase<CanvasCustomSpriteSpriteBase_Base, SpriteHelper,
+                                             BitmapCanvasHelper, ::osl::MutexGuard>
+        CanvasCustomSpriteBaseT;
 
     /* Definition of CanvasCustomSprite class */
 

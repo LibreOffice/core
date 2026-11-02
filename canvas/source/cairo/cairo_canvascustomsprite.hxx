@@ -70,11 +70,9 @@ namespace cairocanvas
     {
     };
 
-    typedef ::canvas::CanvasCustomSpriteBase< CanvasCustomSpriteSpriteBase_Base,
-                                              SpriteHelper,
-                                              CanvasHelper,
-                                              ::osl::MutexGuard,
-                                              ::cppu::OWeakObject >                     CanvasCustomSpriteBaseT;
+    typedef ::canvas::CanvasCustomSpriteBase<CanvasCustomSpriteSpriteBase_Base, SpriteHelper,
+                                             CanvasHelper, ::osl::MutexGuard>
+        CanvasCustomSpriteBaseT;
 
     /* Definition of CanvasCustomSprite class */
 
