@@ -190,6 +190,41 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         }
     }
 
+    // coolwsd's policy lets images in as data: URLs, so the app's images, about 15 MB, are kept
+    // in a map like "images/lc_save.svg": "data:image/svg+xml;base64,...".
+    private static let appImages = readAppImages()
+
+    private static func readAppImages() -> [String: String] {
+        guard let resources = Bundle.main.resourceURL else {
+            return [:]
+        }
+
+        let folder = resources.appendingPathComponent("images")
+        let mimeTypes = [
+            "svg": "image/svg+xml",
+            "png": "image/png",
+            "gif": "image/gif"
+        ]
+
+        let files = FileManager.default.enumerator(
+            at: folder,
+            includingPropertiesForKeys: nil
+        )
+
+        var images: [String: String] = [:]
+
+        while let file = files?.nextObject() as? URL {
+            guard let mimeType = mimeTypes[file.pathExtension], let data = try? Data(contentsOf: file) else {
+                continue
+            }
+
+            let path = String(file.path.dropFirst(resources.path.count + 1))
+            images[path] = "data:\(mimeType);base64," + data.base64EncodedString()
+        }
+
+        return images
+    }
+
     // coolwsd's policy refuses a <style> element, but not a style sheet made in script.
     private func adoptStyleSheets(_ paths: [String], in frameInfo: WKFrameInfo) {
         var sheets: [String] = []
@@ -203,17 +238,23 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
             sheets.append(css)
         }
 
+        // Each url(images/...) in a style sheet would load from coolwsd, so the script replaces it
+        // with that image's data: URL from appImages. The quotes around the path are optional.
         let script = """
+            const imageUrl = /url\\((['"]?)(images\\/[^'")]+)\\1\\)/g;
+            const withImages = (css) => css.replace(imageUrl, (url, quote, path) =>
+                images[path] ? `url("${images[path]}")` : url);
+
             document.adoptedStyleSheets = sheets.map((css) => {
                 const sheet = new CSSStyleSheet();
-                sheet.replaceSync(css);
+                sheet.replaceSync(withImages(css));
                 return sheet;
             });
             """
 
         webView.callAsyncJavaScript(
             script,
-            arguments: ["sheets": sheets],
+            arguments: ["sheets": sheets, "images": Self.appImages],
             in: frameInfo,
             in: .page
         ) { result in
