@@ -100,10 +100,19 @@ window.L.Map.include({
 		var commands = this._extractCommand(item);
 
 		for (var i in commands) {
-			if (this.Locking.lockedCommandList.indexOf(commands[i]) >= 0)
+			if (this._isListedCommand(this.Locking.lockedCommandList, commands[i]))
 				return true;
 		}
 		return false;
+	},
+
+	// A listed command name covers the command with any arguments after '?', and a listed command
+	// with arguments covers that exact form.
+	_isListedCommand: function(commandList, command) {
+		var nameEnd = command.indexOf('?');
+		if (nameEnd >= 0 && commandList.indexOf(command.substring(0, nameEnd)) >= 0)
+			return true;
+		return commandList.indexOf(command) >= 0;
 	},
 
 	isLockedUser: function() {
@@ -136,7 +145,7 @@ window.L.Map.include({
 		var commands = this._extractCommand(item);
 
 		for (var i in commands) {
-			if (this.Restriction.restrictedCommandList.indexOf(commands[i]) >= 0)
+			if (this._isListedCommand(this.Restriction.restrictedCommandList, commands[i]))
 				return true;
 		}
 		return false;
