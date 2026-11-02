@@ -7027,7 +7027,8 @@ static void lcl_changeChartPart(SfxViewShell& rViewShell, const SdrObject& rPart
         return;
 
     // a pie segment goes out of its pie along its own line: the move of its box is laid onto
-    // that line, and the chart is given the offset that comes of it, between none and the whole
+    // that line, and the chart is given what that changes of the offset, as a share of the whole
+    // way; the chart adds it to the offset it holds
     if (const auto oLine = svx::vector::chartDragLineOf(rPart))
     {
         const basegfx::B2DVector aWay(oLine->mfX, oLine->mfY);
@@ -7035,12 +7036,13 @@ static void lcl_changeChartPart(SfxViewShell& rViewShell, const SdrObject& rPart
         if (fWayLength <= 0.0)
             return;
         const basegfx::B2DVector aMoved(aTo.getCenter() - aFrom.getCenter());
-        const double fOffset(std::clamp(oLine->mfAt + aWay.scalar(aMoved) / fWayLength, 0.0, 1.0));
-        const sal_Int32 nPercent(basegfx::fround(fOffset * 100.0));
+        const double fOffsetBy(aWay.scalar(aMoved) / fWayLength);
+        if (fOffsetBy == 0.0)
+            return;
         aChart.Dispatch(u".uno:KitTransform"_ustr,
                         comphelper::InitPropertySequence(
                             { { u"Action"_ustr, cpo::uno::Any(u"PieSegmentDragging"_ustr) },
-                              { u"Offset"_ustr, cpo::uno::Any(nPercent) } }));
+                              { u"OffsetBy"_ustr, cpo::uno::Any(fOffsetBy) } }));
         return;
     }
 

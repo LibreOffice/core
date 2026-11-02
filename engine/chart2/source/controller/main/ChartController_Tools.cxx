@@ -81,6 +81,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/UnitConversion.hxx>
 
+#include <algorithm>
 #include <memory>
 
 using namespace ::com::sun::star;
@@ -1333,7 +1334,7 @@ void ChartController::executeDispatch_KitSetTextSelection(COKitSetTextSelectionT
     }
 }
 
-void ChartController::executeDispatch_KitPieSegmentDragging( int nOffset )
+void ChartController::executeDispatch_KitPieSegmentDragging( double fOffsetBy )
 {
     try
     {
@@ -1351,7 +1352,12 @@ void ChartController::executeDispatch_KitPieSegmentDragging( int nOffset )
                         ActionDescriptionProvider::ActionType::Move,
                         ObjectNameProvider::getName( ObjectIdentifier::getObjectType( aCID ) ) ),
                     m_xUndoManager );
-                xPointProperties->setPropertyValue( u"Offset"_ustr, cpo::uno::Any( nOffset / 100.0 ) );
+                // the change is added to the offset as it is, which stays between none and the
+                // whole way
+                double fOffset = 0.0;
+                xPointProperties->getPropertyValue( u"Offset"_ustr ) >>= fOffset;
+                xPointProperties->setPropertyValue(
+                    u"Offset"_ustr, cpo::uno::Any( std::clamp( fOffset + fOffsetBy, 0.0, 1.0 ) ) );
                 aUndoGuard.commit();
             }
         }

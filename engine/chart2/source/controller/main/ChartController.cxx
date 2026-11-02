@@ -1098,12 +1098,12 @@ void ChartController::dispatch(
             OUString sAction;
             if ((rArgs[0].Value >>= sAction) && sAction == "PieSegmentDragging")
             {
-                if (rArgs[1].Name == "Offset")
+                if (rArgs[1].Name == "OffsetBy")
                 {
-                    sal_Int32 nOffset;
-                    if (rArgs[1].Value >>= nOffset)
+                    double fOffsetBy;
+                    if (rArgs[1].Value >>= fOffsetBy)
                     {
-                        this->executeDispatch_KitPieSegmentDragging(nOffset);
+                        this->executeDispatch_KitPieSegmentDragging(fOffsetBy);
                     }
                 }
             }

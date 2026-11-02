@@ -537,7 +537,7 @@ private:
     void executeDispatch_ToggleGridVertical();
 
     void executeDispatch_KitSetTextSelection(COKitSetTextSelectionType eType, int nX, int nY);
-    void executeDispatch_KitPieSegmentDragging(int nOffset);
+    void executeDispatch_KitPieSegmentDragging(double fOffsetBy);
     void executeDispatch_FillColor(const cpo::uno::Any& rColor);
     void executeDispatch_FillGradient(std::u16string_view sJSONGradient);
     void executeDispatch_LineColor(const cpo::uno::Any& rColor);
