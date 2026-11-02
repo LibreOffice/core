@@ -313,4 +313,54 @@ describe(['tagdesktop', 'tagnextcloud'], 'Clipboard operations.', function() {
 
 		cy.cGet('#info-modal-label1').should('have.text', 'Copying from the document has been disabled by your administrator');
 	});
+
+	it('Merge Formatting paste keeps bold but drops the source color.', function() {
+		// Given a HTML that contains both an explicit red color and bold:
+		helper.setupAndLoadDocument('writer/copy_paste.odt');
+		helper.clearAllText();
+
+		cy.getFrameWindow().then(function(win) {
+			const clip = win.app.map._clip;
+			const html = '<p><font color="#ff0000"><b>bold</b></font></p>';
+			const clipboardItem = {
+				types: ['text/html'],
+				getType: function(type) {
+					return {
+						then: function(resolve, reject) {
+							if (type === 'text/html') {
+								resolve(new Blob([html]));
+							} else {
+								reject({ message: 'no ' + type });
+							}
+						},
+					};
+				},
+			};
+			clip._dummyClipboard = {
+				read: function() {
+					return {
+						then: function(resolve) {
+							resolve([clipboardItem]);
+						},
+					};
+				},
+			};
+
+			// When triggering the "Merge Formatting" menu entry:
+			win.app.dispatcher.dispatch('paste-merged');
+		});
+
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
+		helper.selectAllText();
+		helper.setDummyClipboardForCopy();
+		helper.copy();
+
+		// Then bold survives the paste, but font should be black:
+		cy.cGet('#copy-paste-container b').should('exist');
+		// Without the accompanying fix in place, this test would have failed,
+		// the font color was red.
+		cy.cGet('#copy-paste-container font[color="#ff0000"]').should('not.exist');
+	});
 });

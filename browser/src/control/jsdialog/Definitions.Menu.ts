@@ -1825,6 +1825,14 @@ menuDefinitions.set('PasteMenu', [
 			'.uno:PasteSpecial',
 		),
 	},
+	{
+		text: _('Merge Formatting'),
+		action: 'paste-merged',
+		// Merged paste is implemented only for Writer; hide the entry elsewhere.
+		get hidden() {
+			return app.map.getDocType() !== 'text';
+		},
+	},
 ] as Array<MenuDefinition>);
 
 menuDefinitions.set('ViewChangesMenu', [

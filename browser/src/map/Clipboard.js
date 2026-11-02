@@ -399,8 +399,11 @@ window.L.Clipboard = window.L.Class.extend({
 				const pasteCommand = this._checkAndDisablePasteSpecial()
 					? '.uno:PasteSpecial'
 					: '.uno:Paste';
+				const pasteParams = pasteCommand === '.uno:Paste'
+					? this._createPasteParams()
+					: undefined;
 				window.app.console.log('up-load done, now ' + pasteCommand);
-				await this._sendCommandAndWaitForCompletion(pasteCommand);
+				await this._sendCommandAndWaitForCompletion(pasteCommand, pasteParams);
 			} catch (_error) {
 				window.app.console.error('Clipboard: failed to download - error');
 				const uploadErrorMessage = _('Failed to upload the clipboard');
@@ -975,6 +978,12 @@ window.L.Clipboard = window.L.Class.extend({
 		}
 	},
 
+	_createPasteParams: function() {
+		if (!this._pasteMergedRequested) return undefined;
+		this._pasteMergedRequested = false;
+		return { Merged: { type: 'boolean', value: true } };
+	},
+
 	_sendCommandAndWaitForCompletion: function(command, params) {
 		if (command !== '.uno:Copy' && command !== '.uno:Cut' && command !== '.uno:CopyHyperlinkLocation' && command !== '.uno:CopySlide' && command !== '.uno:Paste' && command !== '.uno:PasteSpecial') {
 			console.error(`_sendCommandAndWaitForCompletion was called with '${command}', but anything except Copy/Cut/Paste will never complete`);
@@ -986,8 +995,9 @@ window.L.Clipboard = window.L.Class.extend({
 			return null;
 		}
 
-		if (!params) app.socket.sendMessage('uno ' + command);
-		else app.map.sendUnoCommand(command, params);
+		// Use sendMessage(), this needs sending while a popup may be shown.
+		var paramsStr = params ? ' ' + JSON.stringify(params) : '';
+		app.socket.sendMessage('uno ' + command + paramsStr);
 
 		return new Promise((resolve, reject) => {
 			window.app.console.log('New ' + command + ' promise');
@@ -1352,7 +1362,9 @@ window.L.Clipboard = window.L.Class.extend({
 			app.socket.sendMessage('uno .uno:PasteSpecial');
 		} else {
 			// paste into document
-			app.socket.sendMessage('uno .uno:Paste');
+			const pasteParams = this._createPasteParams();
+			const paramsStr = pasteParams ? ' ' + JSON.stringify(pasteParams) : '';
+			app.socket.sendMessage('uno .uno:Paste' + paramsStr);
 		}
 	},
 

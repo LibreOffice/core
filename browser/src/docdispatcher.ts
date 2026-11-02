@@ -1626,6 +1626,12 @@ class Dispatcher {
 			return;
 		}
 
+		if (action === 'paste-merged') {
+			app.map._clip._pasteMergedRequested = true;
+			app.map._clip.filterExecCopyPaste('.uno:Paste');
+			return;
+		}
+
 		if (
 			action === '.uno:Copy' ||
 			action === '.uno:Cut' ||
