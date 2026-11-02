@@ -22,7 +22,7 @@ interface XTableRow;
 interface XText;
 
 /** An element of a text document: the body, a paragraph, a text, a table, a row or cell of it, an
-    inline image, a footnote or a footnote section.
+    inline image, a footnote, a footnote section or a table of contents.
 
     getType() says which one it is. As in Apps Script, each of the as methods returns this element
     when it is of that type, and throws for any other type. The text from editAsText also casts
@@ -57,6 +57,9 @@ interface XElement: XBase {
 
     /** @gas Element.asTableRow */
     XTableRow asTableRow();
+
+    /** @gas Element.asTableOfContents */
+    XContainerElement asTableOfContents();
 
     /** Returns this element as a text.
 

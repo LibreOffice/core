@@ -40,6 +40,22 @@ function test() {
     console.assert(body.getChildIndex(toc) === 1);
     console.assert(body.getChild(4).getText().startsWith('Term'));
 
+    // Only the table of contents, and the text for editing it, cast to a table of contents:
+    console.assert(toc.asTableOfContents().getNumChildren() === 1);
+    console.assert(toc.editAsText().asTableOfContents().getNumChildren() === 1);
+    for (const [element, message] of [
+        [body.getChild(0), "PARAGRAPH can't be cast to TABLE_OF_CONTENTS."],
+        [body.getChild(4), "UNSUPPORTED can't be cast to TABLE_OF_CONTENTS."],
+    ]) {
+        let caught = null;
+        try {
+            element.asTableOfContents();
+        } catch (e) {
+            caught = e.message;
+        }
+        console.assert(caught === message);
+    }
+
     // The text of the body and its text for editing include the entry, so an offset found in one
     // is the same place in the other:
     console.assert(body.getText() === body.editAsText().getText());

@@ -974,6 +974,11 @@ public:
         return cast<scriptinterop::XTableRow>(scriptinterop::ElementType_TABLE_ROW);
     }
 
+    cpo::uno::Reference<scriptinterop::XContainerElement> asTableOfContents() override {
+        return cast<scriptinterop::XContainerElement>(
+            scriptinterop::ElementType_TABLE_OF_CONTENTS);
+    }
+
     cpo::uno::Reference<scriptinterop::XText> asText() override;
 
 private:
@@ -1775,6 +1780,10 @@ public:
 
     cpo::uno::Reference<scriptinterop::XTableRow> asTableRow() override {
         return container_->asTableRow();
+    }
+
+    cpo::uno::Reference<scriptinterop::XContainerElement> asTableOfContents() override {
+        return container_->asTableOfContents();
     }
 
     cpo::uno::Reference<scriptinterop::XText> asText() override { return this; }
