@@ -27,15 +27,17 @@
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::geometry { class XMapping2D; }
-namespace com::sun::star::rendering { class XBitmap; }
-namespace com::sun::star::rendering { class XCachedPrimitive; }
-namespace com::sun::star::rendering { class XCanvasFont; }
-namespace com::sun::star::rendering { class XGraphicDevice; }
-namespace com::sun::star::rendering { class XPolyPolygon2D; }
-namespace com::sun::star::rendering { class XTextLayout; }
-namespace com::sun::star::rendering { struct FontInfo; }
-namespace com::sun::star::rendering { struct StringContext; }
-
+namespace com::sun::star::rendering
+{
+class XBitmap;
+class XCachedPrimitive;
+class XCanvasFont;
+class XGraphicDevice;
+class XPolyPolygon2D;
+class XTextLayout;
+struct FontInfo;
+struct StringContext;
+}
 
 namespace canvas
 {
