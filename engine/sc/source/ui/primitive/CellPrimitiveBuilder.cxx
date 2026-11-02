@@ -11,6 +11,7 @@
 
 #include <CellPrimitiveBuilder.hxx>
 
+#include <CellContent.hxx>
 #include <CellGeometry.hxx>
 #include <CellMarkPrimitive2D.hxx>
 #include <CellTextAlignment.hxx>
@@ -210,7 +211,8 @@ private:
     CellPrimitiveLayers& rowLayers(SCROW nRow) { return maRowLayers[nRow]; }
     static void computeInkRange(CellPrimitiveLayers& rLayers);
 
-    void buildBackground(const ScTableInfo& rInfo);
+    void collectBackground(const ScTableInfo& rInfo);
+    void placeBackground();
     void addDataBar(const ScDataBarInfo& rDataBar, const basegfx::B2DRange& rCell, SCROW nRow);
     void addIconSet(const ScIconSetInfo& rIconSet, const basegfx::B2DRange& rCell, SCROW nRow);
     void buildShadows(const ScTableInfo& rInfo);
@@ -251,6 +253,8 @@ private:
     SCROW mnFirstContentRow = 0;
     SCROW mnLastContentRow = 0;
 
+    /// What the cells of the range show, by address, before the geometry places it.
+    CellContent maContent;
     /// The shadows and borders, which are built for the whole range at once.
     CellPrimitiveLayers maRangeLayers;
     /// The other layers, for each row of the cells they belong to.
@@ -338,6 +342,7 @@ void CellPrimitiveBuilder::Impl::collect(SCCOL nStartColumn, SCROW nStartRow, SC
     mnEndRow = nEndRow;
     mnFirstContentRow = nFirstContentRow;
     mnLastContentRow = nLastContentRow;
+    maContent = CellContent();
     maRangeLayers = CellPrimitiveLayers();
     maRowLayers.clear();
     maCoverAreas.clear();
@@ -360,7 +365,8 @@ void CellPrimitiveBuilder::Impl::collect(SCCOL nStartColumn, SCROW nStartRow, SC
     if (mrDocument.IsLayoutRTL(mnTab))
         aInfo.maArray.MirrorSelfX();
 
-    buildBackground(aInfo);
+    collectBackground(aInfo);
+    placeBackground();
     buildShadows(aInfo);
     buildBorders(aInfo, nStartColumn, nEndColumn);
     buildText(aInfo);
@@ -369,40 +375,37 @@ void CellPrimitiveBuilder::Impl::collect(SCCOL nStartColumn, SCROW nStartRow, SC
     buildGridCover(aInfo);
 }
 
-void CellPrimitiveBuilder::Impl::buildBackground(const ScTableInfo& rInfo)
+void CellPrimitiveBuilder::Impl::collectBackground(const ScTableInfo& rInfo)
 {
+    // Whether a column is hidden is looked up once for the range, not for every cell.
+    std::vector<bool> aHidden(mnEndColumn - mnStartColumn + 1);
+    for (SCCOL nColumn = mnStartColumn; nColumn <= mnEndColumn; ++nColumn)
+        aHidden[nColumn - mnStartColumn] = mrDocument.ColHidden(nColumn, mnTab);
+
     const RowInfo* pRowInfo = rInfo.mpRowInfo.get();
     for (SCSIZE nArrY = 1; nArrY + 1 < rInfo.mnArrCount; ++nArrY)
     {
         const RowInfo& rRow = pRowInfo[nArrY];
-        if (rRow.bEmptyBack)
-            continue;
-
-        // A row gets one fill primitive per color, made of all the rectangles of that color.
-        std::map<Color, basegfx::B2DPolyPolygon> aFills;
         const SCROW nRow = rRow.nRowNo;
-        if (!isContentRow(nRow))
+        if (rRow.bEmptyBack || !isContentRow(nRow))
             continue;
-        const double fTop = mrGeometry.getRowStart(nRow);
-        const double fBottom = fTop + mrGeometry.getRowHeight(nRow);
 
+        // Neighbors with the same fill make one run. A hidden column neither ends a run nor
+        // starts one.
         std::optional<Color> oRunColor;
-        double fRunStart = 0.0;
-        double fRunEnd = 0.0;
+        SCCOL nRunStart = 0;
+        SCCOL nRunEnd = 0;
         auto flushRun = [&]()
         {
-            if (oRunColor && fRunEnd > fRunStart)
-                aFills[*oRunColor].append(
-                    rectangle(basegfx::B2DRange(fRunStart, fTop, fRunEnd, fBottom)));
+            if (oRunColor)
+                maContent.maFills.push_back(CellFill{ nRow, nRunStart, nRunEnd, *oRunColor });
             oRunColor.reset();
         };
 
         for (SCCOL nColumn = mnStartColumn; nColumn <= mnEndColumn; ++nColumn)
         {
-            const double fWidth = mrGeometry.getColumnWidth(nColumn);
-            if (fWidth <= 0.0)
+            if (aHidden[nColumn - mnStartColumn])
                 continue;
-            const double fLeft = mrGeometry.getColumnStart(nColumn);
             const ScCellInfo& rCell = rRow.cellInfo(nColumn);
 
             std::optional<Color> oColor;
@@ -421,19 +424,80 @@ void CellPrimitiveBuilder::Impl::buildBackground(const ScTableInfo& rInfo)
             {
                 flushRun();
                 oRunColor = oColor;
-                fRunStart = fLeft;
+                nRunStart = nColumn;
             }
-            fRunEnd = fLeft + fWidth;
+            nRunEnd = nColumn;
 
-            const basegfx::B2DRange aCell(fLeft, fTop, fLeft + fWidth, fBottom);
             if (rCell.pDataBar)
-                addDataBar(*rCell.pDataBar, aCell, nRow);
+                maContent.maDataBars.push_back(CellDataBar{ nColumn, nRow, *rCell.pDataBar });
             if (rCell.pIconSet)
-                addIconSet(*rCell.pIconSet, aCell, nRow);
+                maContent.maIconSets.push_back(CellIconSet{ nColumn, nRow, *rCell.pIconSet });
         }
         flushRun();
+    }
+}
 
-        // The fills go below the data bars and icons collected while walking the cells.
+void CellPrimitiveBuilder::Impl::placeBackground()
+{
+    const std::vector<CellFill>& rFills = maContent.maFills;
+    const std::vector<CellDataBar>& rBars = maContent.maDataBars;
+    const std::vector<CellIconSet>& rIcons = maContent.maIconSets;
+    size_t nFill = 0;
+    size_t nBar = 0;
+    size_t nIcon = 0;
+    while (nFill < rFills.size() || nBar < rBars.size() || nIcon < rIcons.size())
+    {
+        SCROW nRow = mrDocument.MaxRow();
+        if (nFill < rFills.size())
+            nRow = std::min(nRow, rFills[nFill].mnRow);
+        if (nBar < rBars.size())
+            nRow = std::min(nRow, rBars[nBar].mnRow);
+        if (nIcon < rIcons.size())
+            nRow = std::min(nRow, rIcons[nIcon].mnRow);
+        const double fTop = mrGeometry.getRowStart(nRow);
+        const double fBottom = fTop + mrGeometry.getRowHeight(nRow);
+        auto cellRange = [&](SCCOL nColumn)
+        {
+            const double fLeft = mrGeometry.getColumnStart(nColumn);
+            return basegfx::B2DRange(fLeft, fTop, fLeft + mrGeometry.getColumnWidth(nColumn),
+                                     fBottom);
+        };
+
+        // The data bars and icons of the row, cell by cell, the bar of a cell below its icon.
+        for (;;)
+        {
+            const bool bBar = nBar < rBars.size() && rBars[nBar].mnRow == nRow;
+            const bool bIcon = nIcon < rIcons.size() && rIcons[nIcon].mnRow == nRow;
+            if (bBar && (!bIcon || rBars[nBar].mnColumn <= rIcons[nIcon].mnColumn))
+            {
+                addDataBar(rBars[nBar].maInfo, cellRange(rBars[nBar].mnColumn), nRow);
+                ++nBar;
+            }
+            else if (bIcon)
+            {
+                addIconSet(rIcons[nIcon].maInfo, cellRange(rIcons[nIcon].mnColumn), nRow);
+                ++nIcon;
+            }
+            else
+                break;
+        }
+
+        // A row gets one fill primitive per color, made of all the rectangles of that color.
+        std::map<Color, basegfx::B2DPolyPolygon> aFills;
+        for (; nFill < rFills.size() && rFills[nFill].mnRow == nRow; ++nFill)
+        {
+            const CellFill& rFill = rFills[nFill];
+            const double fLeft = mrGeometry.getColumnStart(rFill.mnStartColumn);
+            const double fRight = mrGeometry.getColumnStart(rFill.mnEndColumn)
+                                  + mrGeometry.getColumnWidth(rFill.mnEndColumn);
+            if (fRight > fLeft)
+                aFills[rFill.maColor].append(
+                    rectangle(basegfx::B2DRange(fLeft, fTop, fRight, fBottom)));
+        }
+
+        // The fills go below the data bars and icons.
+        if (aFills.empty())
+            continue;
         CellPrimitiveLayers& rLayers = rowLayers(nRow);
         primitive2d::Primitive2DContainer aBackground;
         for (auto& [rColor, rPolyPolygon] : aFills)
