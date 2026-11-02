@@ -21,6 +21,9 @@
 #include <numeric>
 #include <txtfrm.hxx>
 #include <flyfrm.hxx>
+#include <ftnfrm.hxx>
+#include <txtftn.hxx>
+#include <fmtftn.hxx>
 #include <mdiexp.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
@@ -3400,6 +3403,35 @@ std::vector<SfxParagraphComment> SwAccessibleParagraph::GetComments()
     });
     std::ranges::stable_sort(aComments, {}, &SfxParagraphComment::nStart);
     return aComments;
+}
+
+SfxParagraphArea SwAccessibleParagraph::GetArea() const
+{
+    SolarMutexGuard aGuard;
+
+    const SwFrame* pFrame = GetTextFrame();
+    while (pFrame)
+    {
+        if (pFrame->IsHeaderFrame())
+            return SfxParagraphArea::Header;
+        if (pFrame->IsFooterFrame())
+            return SfxParagraphArea::Footer;
+        if (pFrame->IsFootnoteFrame())
+        {
+            const SwTextFootnote* pFootnote
+                = static_cast<const SwFootnoteFrame*>(pFrame)->GetAttr();
+            return pFootnote && pFootnote->GetFootnote().IsEndNote() ? SfxParagraphArea::Endnote
+                                                                     : SfxParagraphArea::Footnote;
+        }
+        if (pFrame->GetUpper())
+            pFrame = pFrame->GetUpper();
+        // a text frame is in the area of its anchor
+        else if (pFrame->IsFlyFrame())
+            pFrame = static_cast<const SwFlyFrame*>(pFrame)->GetAnchorFrame();
+        else
+            break;
+    }
+    return SfxParagraphArea::Body;
 }
 
 std::vector<SfxParagraphContentControl> SwAccessibleParagraph::GetContentControls()

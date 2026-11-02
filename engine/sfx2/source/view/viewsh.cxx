@@ -714,6 +714,25 @@ sal_Int32 getHeadingLevel(const uno::Reference<css::accessibility::XAccessibleTe
     return std::max<sal_Int32>(0, sLevel.toInt32());
 }
 
+// the area as the client of the Kit reads it, empty for the body text
+std::string_view getAreaName(SfxParagraphArea eArea)
+{
+    switch (eArea)
+    {
+        case SfxParagraphArea::Header:
+            return "header";
+        case SfxParagraphArea::Footer:
+            return "footer";
+        case SfxParagraphArea::Footnote:
+            return "footnote";
+        case SfxParagraphArea::Endnote:
+            return "endnote";
+        case SfxParagraphArea::Body:
+            break;
+    }
+    return {};
+}
+
 struct ParagraphLink
 {
     sal_Int32 nStart;
@@ -2010,6 +2029,7 @@ class KitDocumentFocusListener :
     sal_Int32 m_nSelectionEnd;
     sal_Int32 m_nListPrefixLength;
     sal_Int32 m_nHeadingLevel;
+    SfxParagraphArea m_eArea;
     std::vector<ParagraphLink> m_aFocusedLinks;
     std::vector<ParagraphFormat> m_aFocusedFormats;
     std::vector<ParagraphImage> m_aFocusedImages;
@@ -2138,6 +2158,7 @@ KitDocumentFocusListener::KitDocumentFocusListener(const SfxViewShell* pViewShel
     , m_nSelectionEnd(0)
     , m_nListPrefixLength(0)
     , m_nHeadingLevel(0)
+    , m_eArea(SfxParagraphArea::Body)
     , m_bIsEditingCell(false)
     , m_bIsEditingInSelection(false)
 {
@@ -2154,6 +2175,8 @@ void KitDocumentFocusListener::paragraphPropertiesToTree(boost::property_tree::p
         aPayloadTree.put("listPrefixLength", m_nListPrefixLength);
     if (m_nHeadingLevel > 0)
         aPayloadTree.put("headingLevel", m_nHeadingLevel);
+    if (m_eArea != SfxParagraphArea::Body)
+        aPayloadTree.put("area", std::string(getAreaName(m_eArea)));
     if (!m_aFocusedLinks.empty())
         aPayloadTree.add_child("links", makeLinksTree(m_aFocusedLinks));
     if (!m_aFocusedFormats.empty())
@@ -2713,6 +2736,8 @@ bool KitDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::acc
         m_nSelectionEnd = xAccText->getSelectionEnd();
         m_nListPrefixLength = getListPrefixSize(xAccText);
         const sal_Int32 nHeadingLevel = getHeadingLevel(xAccText);
+        const SfxParagraphArea eArea
+            = m_pViewShell ? m_pViewShell->getKitParagraphArea(xAccText) : SfxParagraphArea::Body;
 
         // Inside a text shape when there is no selection, selection-start and selection-end are
         // set to current caret position instead of -1. Moreover, inside a text shape pressing
@@ -2743,13 +2768,14 @@ bool KitDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::acc
         std::vector<SfxParagraphContentControl> aContentControls
             = m_pViewShell ? m_pViewShell->getKitParagraphContentControls(xAccText)
                            : std::vector<SfxParagraphContentControl>();
-        if (m_sFocusedParagraph != sText || m_nHeadingLevel != nHeadingLevel
+        if (m_sFocusedParagraph != sText || m_nHeadingLevel != nHeadingLevel || m_eArea != eArea
             || m_aFocusedLinks != aLinks || m_aFocusedImages != aImages
             || m_aFocusedComments != aComments || m_aFocusedContentControls != aContentControls
             || m_aFocusedFormats != aFormats)
         {
             m_sFocusedParagraph = sText;
             m_nHeadingLevel = nHeadingLevel;
+            m_eArea = eArea;
             m_aFocusedLinks = std::move(aLinks);
             m_aFocusedFormats = std::move(aFormats);
             m_aFocusedImages = std::move(aImages);
@@ -2789,6 +2815,7 @@ void KitDocumentFocusListener::resetParagraphInfo()
     m_nSelectionEnd = -1;
     m_nListPrefixLength = 0;
     m_nHeadingLevel = 0;
+    m_eArea = SfxParagraphArea::Body;
     m_aFocusedLinks.clear();
     m_aFocusedFormats.clear();
     m_aFocusedImages.clear();

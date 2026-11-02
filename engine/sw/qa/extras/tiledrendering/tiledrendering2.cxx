@@ -3210,6 +3210,68 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yHeaderFooterFootnote)
     checkParagraph("Back from the footnote", "Text with a note1 and more.");
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yParagraphArea)
+{
+    // Given a document with a text frame in the header, a table in the footer, a footnote and an
+    // endnote, with screen reader support on:
+    SwXTextDocument* pXTextDocument = createDoc("a11y-paragraph-area.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    Scheduler::ProcessEventsToIdle();
+
+    // the client has the paragraph of the cursor and the area holding it
+    auto checkArea = [&aView](const char* pStep, const char* pContent, const char* pArea) {
+        Scheduler::ProcessEventsToIdle();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(pStep, std::string(pContent),
+                                     aView.m_aA11yFocusedParagraph.get<std::string>("content", ""));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(pStep, std::string(pArea),
+                                     aView.m_aA11yFocusedParagraph.get<std::string>("area", ""));
+    };
+
+    // When the cursor moves into each area and back to the body text:
+    const char* const pBody = "Text with a footnote1 and an endnotei.";
+    dispatchCommand(mxComponent, u".uno:JumpToHeader"_ustr, {});
+    // Without the fix, the message specified no area
+    checkArea("Into the header", "Header text.", "header");
+    dispatchCommand(mxComponent, u".uno:JumpToHeader"_ustr, {});
+    checkArea("Back from the header", pBody, "");
+    // Writer fires FOCUSED for a paragraph only while its window has the focus, lost on idle here
+    pWrtShell->GetWin()->GrabFocus();
+    dispatchCommand(mxComponent, u".uno:JumpToFooter"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    // a paragraph in a table cell is in the area holding the table
+    CPPUNIT_ASSERT_EQUAL(std::string("Footer cell."),
+                         aView.m_aA11yFocusedCell.get<std::string>("paragraph.content", ""));
+    CPPUNIT_ASSERT_EQUAL(std::string("footer"),
+                         aView.m_aA11yFocusedCell.get<std::string>("paragraph.area", ""));
+    pWrtShell->GetWin()->GrabFocus();
+    dispatchCommand(mxComponent, u".uno:JumpToFooter"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    // leaving the table is reported as a cell change
+    CPPUNIT_ASSERT_EQUAL(std::string(pBody),
+                         aView.m_aA11yFocusedCell.get<std::string>("paragraph.content", ""));
+    CPPUNIT_ASSERT_EQUAL(std::string(""),
+                         aView.m_aA11yFocusedCell.get<std::string>("paragraph.area", ""));
+    pWrtShell->EndOfSection();
+    dispatchCommand(mxComponent, u".uno:JumpToPrevFootnote"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:JumpToFootnoteOrAnchor"_ustr, {});
+    checkArea("Into the endnote", "The endnote text.", "endnote");
+    dispatchCommand(mxComponent, u".uno:JumpToFootnoteOrAnchor"_ustr, {});
+    checkArea("Back from the endnote", pBody, "");
+    dispatchCommand(mxComponent, u".uno:JumpToPrevFootnote"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:JumpToFootnoteOrAnchor"_ustr, {});
+    checkArea("Into the footnote", "The footnote text.", "footnote");
+    dispatchCommand(mxComponent, u".uno:JumpToFootnoteOrAnchor"_ustr, {});
+    checkArea("Back from the footnote", pBody, "");
+    dispatchCommand(mxComponent, u".uno:JumpToHeader"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:JumpToNextFrame"_ustr, {});
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, KEY_RETURN, KEY_RETURN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, KEY_RETURN, KEY_RETURN);
+    // a text frame is in the area holding its anchor
+    checkArea("Into the frame in the header", "Header frame text.", "header");
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yImageSelection)
 {
     for (const char* pFile : { "a11y-image.fodt", "a11y-image-at-paragraph.fodt" })

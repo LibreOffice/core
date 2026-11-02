@@ -2178,6 +2178,12 @@ std::vector<SfxParagraphComment> SwView::getKitParagraphComments(
     return SwAccessibleMap::GetParagraphComments(xText);
 }
 
+SfxParagraphArea
+SwView::getKitParagraphArea(const uno::Reference<css::accessibility::XAccessibleText>& xText) const
+{
+    return SwAccessibleMap::GetParagraphArea(xText);
+}
+
 std::vector<SfxParagraphContentControl> SwView::getKitParagraphContentControls(
     const uno::Reference<css::accessibility::XAccessibleText>& xText) const
 {

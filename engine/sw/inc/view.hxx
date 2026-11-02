@@ -750,6 +750,8 @@ public:
     virtual tools::Rectangle getKitVisibleArea() const override;
     virtual std::vector<SfxParagraphComment> getKitParagraphComments(
         const cpo::uno::Reference<css::accessibility::XAccessibleText>& xText) const override;
+    virtual SfxParagraphArea getKitParagraphArea(
+        const cpo::uno::Reference<css::accessibility::XAccessibleText>& xText) const override;
     virtual std::vector<SfxParagraphContentControl> getKitParagraphContentControls(
         const cpo::uno::Reference<css::accessibility::XAccessibleText>& xText) const override;
     virtual std::optional<SfxContentControl> getKitObjectContentControl(

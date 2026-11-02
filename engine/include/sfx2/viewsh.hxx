@@ -164,6 +164,16 @@ template<class T> bool checkSfxViewShell(const SfxViewShell& pShell)
 
 typedef std::unordered_map<OUString, std::pair<Color, int>> StylesSpotlightColorMap;
 
+/// The part of a page holding a paragraph
+enum class SfxParagraphArea
+{
+    Body,
+    Header,
+    Footer,
+    Footnote,
+    Endnote
+};
+
 /// A comment on a paragraph, by its range in the accessible text of the paragraph
 struct SfxParagraphComment
 {
@@ -579,6 +589,13 @@ public:
     getKitParagraphComments(const cpo::uno::Reference<css::accessibility::XAccessibleText>&) const
     {
         return {};
+    }
+    /// The part of the page holding an accessible paragraph of this view, which the accessibility
+    /// tree lacks for a paragraph in a text frame
+    virtual SfxParagraphArea
+    getKitParagraphArea(const cpo::uno::Reference<css::accessibility::XAccessibleText>&) const
+    {
+        return SfxParagraphArea::Body;
     }
     /// The content controls in an accessible paragraph of this view, which the accessibility API
     /// lacks

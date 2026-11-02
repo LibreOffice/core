@@ -1855,6 +1855,13 @@ SwAccessibleMap::GetParagraphComments(const uno::Reference<XAccessibleText>& xTe
     return {};
 }
 
+SfxParagraphArea SwAccessibleMap::GetParagraphArea(const uno::Reference<XAccessibleText>& xText)
+{
+    if (auto pParagraph = dynamic_cast<SwAccessibleParagraph*>(xText.get()))
+        return pParagraph->GetArea();
+    return SfxParagraphArea::Body;
+}
+
 std::vector<SfxParagraphContentControl>
 SwAccessibleMap::GetParagraphContentControls(const uno::Reference<XAccessibleText>& xText)
 {

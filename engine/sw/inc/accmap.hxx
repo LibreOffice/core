@@ -57,6 +57,7 @@ class XAccessible;
 class XAccessibleContext;
 class XAccessibleText;
 }
+enum class SfxParagraphArea;
 struct SfxParagraphComment;
 struct SfxContentControl;
 struct SfxParagraphContentControl;
@@ -188,6 +189,10 @@ public:
     /// The comments on an accessible paragraph, see SfxViewShell::getKitParagraphComments()
     static std::vector<SfxParagraphComment>
     GetParagraphComments(const cpo::uno::Reference<css::accessibility::XAccessibleText>& xText);
+    /// The part of the page holding an accessible paragraph, see
+    /// SfxViewShell::getKitParagraphArea()
+    static SfxParagraphArea
+    GetParagraphArea(const cpo::uno::Reference<css::accessibility::XAccessibleText>& xText);
     /// The content controls in an accessible paragraph, see
     /// SfxViewShell::getKitParagraphContentControls()
     static std::vector<SfxParagraphContentControl> GetParagraphContentControls(

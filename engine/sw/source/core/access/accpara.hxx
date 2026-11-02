@@ -42,6 +42,7 @@ class SwRangeRedline;
 class SwXTextPortion;
 class SwParaChangeTrackingInfo; //#i108125#
 class SwContentControl;
+enum class SfxParagraphArea;
 struct SfxParagraphComment;
 struct SfxContentControl;
 struct SfxParagraphContentControl;
@@ -167,6 +168,8 @@ public:
     static bool IsParagraphRole(sal_Int16 nRole);
     /// the comments on this paragraph, by positions in its accessible text
     std::vector<SfxParagraphComment> GetComments();
+    /// the part of the page holding this paragraph
+    SfxParagraphArea GetArea() const;
     /// the content controls in this paragraph, by positions in its accessible text
     std::vector<SfxParagraphContentControl> GetContentControls();
     /// a content control, as the client of the Kit reads it
