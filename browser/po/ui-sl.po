@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Collabora Online UI\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 13:34+0100\n"
+"POT-Creation-Date: 2026-11-02 12:35+0100\n"
 "PO-Revision-Date: 2026-10-26 15:52+0000\n"
 "Last-Translator: Martin Srebotnjak <filmsi@users.noreply.hosted.weblate.org>"
 "\n"
@@ -28,8 +28,8 @@ msgstr "Nadzorna konzola"
 msgid "Settings"
 msgstr "Nastavitve"
 
-#: admin/admin.strings.js:17 src/control/Control.StatusBar.js:304
-#: src/control/Control.StatusBar.js:305
+#: admin/admin.strings.js:17 src/control/Control.StatusBar.js:307
+#: src/control/Control.StatusBar.js:308
 #: src/control/jsdialog/Widget.NewSlideLayoutEntry.ts:39
 msgid "Overview"
 msgstr "Pregled"
@@ -170,10 +170,10 @@ msgstr "Grafikon rabe omrežja"
 #: admin/src/integrator/AdminIntegratorSettings.ts:2325
 #: admin/src/integrator/AdminIntegratorSettings.ts:6082
 #: admin/src/integrator/WordBook.ts:394 admin/src/integrator/Xcu.ts:684
-#: src/canvas/sections/CommentListSection.ts:942
+#: src/canvas/sections/CommentListSection.ts:944
 #: src/canvas/sections/CommentSection.ts:207
 #: src/canvas/sections/CommentSection.ts:760
-#: src/canvas/sections/CommentSection.ts:1917
+#: src/canvas/sections/CommentSection.ts:1926
 #: src/control/Control.BackstageView.ts:161
 #: src/control/Control.Notebookbar.js:884
 #: src/control/Control.NotebookbarBuilder.js:213
@@ -256,7 +256,7 @@ msgstr "Filter kanala:"
 #: src/app/TableStylesService.ts:284 src/app/TableStylesService.ts:516
 #: src/control/Control.CleanupSidebar.ts:1177
 #: src/control/Control.JSDialogBuilder.js:424
-#: src/control/Control.StatusBar.js:244 src/control/Control.StatusBar.js:249
+#: src/control/Control.StatusBar.js:247 src/control/Control.StatusBar.js:252
 msgid "None"
 msgstr "Brez"
 
@@ -275,7 +275,7 @@ msgstr "Ravni beleženja"
 #: src/control/Control.MobileWizardWindow.js:244
 #: src/control/Control.UIManager.ts:3390 src/control/Control.Zotero.js:191
 #: src/control/jsdialog/Widget.SidebarContainers.tsx:71 src/app/Socket.ts:1024
-#: src/app/Socket.ts:2829 src/app/Socket.ts:2840
+#: src/app/Socket.ts:2833 src/app/Socket.ts:2844
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.div.button:52-8
 msgid "Close"
 msgstr "Zapri"
@@ -335,32 +335,32 @@ msgstr "Opozorilo"
 #: admin/src/AdminSocketBase.js:74 admin/src/AdminSocketOverview.js:108
 #: admin/src/AdminSocketOverview.js:434 admin/src/AdminSocketSettings.js:47
 #: admin/src/integrator/AdminIntegratorSettings.ts:6225 src/app/Debug.ts:1952
-#: src/canvas/sections/CommentListSection.ts:2263
+#: src/canvas/sections/CommentListSection.ts:2275
 #: src/control/Control.AboutDialog.ts:240
 #: src/control/Control.AlertDialog.js:56
 #: src/control/Control.DocumentNameInput.js:58
 #: src/control/Control.DocumentRepair.js:77
 #: src/control/Control.ESignatureDialog.ts:132
 #: src/control/Control.LanguageDialog.js:120
-#: src/control/Control.PartsPreview.js:1509
-#: src/control/Control.PartsPreview.js:1560
+#: src/control/Control.PartsPreview.js:1521
+#: src/control/Control.PartsPreview.js:1572
 #: src/control/Control.ServerAuditDialog.ts:383
 #: src/control/Control.Tabs.js:724 src/control/Control.Tabs.js:733
 #: src/control/Control.Tabs.js:772 src/control/Control.Tabs.js:776
 #: src/control/Control.Zotero.js:365 src/control/Control.Zotero.js:411
 #: src/control/Parts.js:662 src/control/Permission.js:113
 #: src/control/Permission.js:123 src/control/Permission.js:214
-#: src/control/Toolbar.js:822 src/app/Socket.ts:1090 src/app/Socket.ts:1980
-#: src/app/Socket.ts:2148 src/app/Socket.ts:2739 src/app/Socket.ts:2754
-#: src/app/Socket.ts:2886 src/main.js:137 src/main.js:140 src/main.js:409
+#: src/control/Toolbar.js:822 src/app/Socket.ts:1090 src/app/Socket.ts:1984
+#: src/app/Socket.ts:2152 src/app/Socket.ts:2743 src/app/Socket.ts:2758
+#: src/app/Socket.ts:2890 src/main.js:137 src/main.js:140 src/main.js:409
 #: src/map/Clipboard.js:1527 src/map/handler/Map.Feedback.js:96
 #: src/map/handler/Map.SlideShow.js:60 src/map/handler/Map.SlideShow.js:177
 #: src/map/handler/Map.SlideShow.js:305 src/map/handler/Map.SlideShow.js:316
-#: src/map/handler/Map.WOPI.js:934 src/map/handler/Map.WOPI.js:1042
-#: src/slideshow/SlideShowPresenter.ts:1448
-#: src/slideshow/SlideShowPresenter.ts:1463
-#: src/slideshow/SlideShowPresenter.ts:1478
-#: src/slideshow/SlideShowPresenter.ts:1504
+#: src/map/handler/Map.WOPI.js:936 src/map/handler/Map.WOPI.js:1044
+#: src/slideshow/SlideShowPresenter.ts:1450
+#: src/slideshow/SlideShowPresenter.ts:1465
+#: src/slideshow/SlideShowPresenter.ts:1480
+#: src/slideshow/SlideShowPresenter.ts:1506
 #: src/control/Control.Extension.ts:2099
 msgid "OK"
 msgstr "V redu"
@@ -368,11 +368,11 @@ msgstr "V redu"
 #: admin/src/AdminClusterOverview.js:561 admin/src/AdminSocketOverview.js:109
 #: admin/src/AdminSocketOverview.js:435 admin/src/AdminSocketSettings.js:48
 #: admin/src/integrator/WordBook.ts:386
-#: src/canvas/sections/CommentListSection.ts:937
+#: src/canvas/sections/CommentListSection.ts:939
 #: src/canvas/sections/CommentSection.ts:206
 #: src/canvas/sections/CommentSection.ts:209
-#: src/canvas/sections/CommentSection.ts:1918
-#: src/canvas/sections/CommentSection.ts:1923
+#: src/canvas/sections/CommentSection.ts:1927
+#: src/canvas/sections/CommentSection.ts:1932
 #: src/control/Control.AIChatSidebar.ts:1526
 #: src/control/Control.AIChatSidebar.ts:1528
 #: src/control/Control.AIChatSidebar.ts:1613
@@ -386,7 +386,7 @@ msgstr "V redu"
 #: src/control/Control.UIManager.ts:2823 src/control/Control.UIManager.ts:2918
 #: src/control/Control.UIManager.ts:3082 src/control/Control.UIManager.ts:3174
 #: src/control/Control.UIManager.ts:3357 src/control/Control.Zotero.js:360
-#: src/control/Parts.js:657 src/app/Socket.ts:1911
+#: src/control/Parts.js:657 src/app/Socket.ts:1915
 #: src/map/handler/Map.Settings.ts:240 src/control/Control.Extension.ts:2100
 msgid "Cancel"
 msgstr "Prekliči"
@@ -479,7 +479,7 @@ msgstr ""
 
 #: admin/src/AdminSocketServerAudit.js:99
 #: admin/src/integrator/AdminIntegratorSettings.ts:6213
-#: src/control/Control.AIChatSidebar.ts:3907 src/map/handler/Map.WOPI.js:934
+#: src/control/Control.AIChatSidebar.ts:3907 src/map/handler/Map.WOPI.js:936
 msgid "Error"
 msgstr "Napaka"
 
@@ -774,7 +774,7 @@ msgstr "Ime strani"
 #: src/control/Control.NotebookbarCalc.js:862
 #: src/control/Control.NotebookbarWriter.js:1737
 #: src/control/Control.Zotero.js:1154 src/control/Control.Zotero.js:1615
-#: src/layer/marker/TextInput.js:533
+#: src/layer/marker/TextInput.js:531
 msgid "Date"
 msgstr "Datum"
 
@@ -797,7 +797,7 @@ msgid "Presentation"
 msgstr "Predstavitev"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:853
-#: src/control/Control.StatusBar.js:307 src/control/Control.StatusBar.js:308
+#: src/control/Control.StatusBar.js:310 src/control/Control.StatusBar.js:311
 #: src/control/Control.Zotero.js:1342 src/slideshow/PresenterConsole.js:36
 msgid "Notes"
 msgstr "Opombe"
@@ -1058,14 +1058,14 @@ msgid "Something went wrong while uploading the file. Please try again."
 msgstr "Nekaj je narobe pri nalaganju datoteke na strežnik. Poskusite znova."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3043
-#: src/canvas/sections/CommentSection.ts:1827
-#: src/canvas/sections/CommentSection.ts:1832
+#: src/canvas/sections/CommentSection.ts:1836
+#: src/canvas/sections/CommentSection.ts:1841
 #: src/control/Control.AIChatSidebar.ts:1620
 #: src/control/backstage/CloudDialogs.tsx:193
-#: src/control/Control.PartsPreview.js:1506
+#: src/control/Control.PartsPreview.js:1518
 #: src/control/jsdialog/Control.ContextMenu.ts:375
 #: src/control/jsdialog/Definitions.DialogModification.ts:185
-#: src/docdispatcher.ts:1042
+#: src/docdispatcher.ts:1049
 msgid "Delete"
 msgstr "Izbriši"
 
@@ -1633,7 +1633,7 @@ msgstr " min"
 msgid " s"
 msgstr " s"
 
-#: js/global.js:2149
+#: js/global.js:2148
 msgid ""
 "The system is currently adjusting resources. Please wait a moment while we "
 "retry your request..."
@@ -1641,13 +1641,13 @@ msgstr ""
 "Sistem trenutno prilagaja vire. Počakajte trenutek, da bo vaš zahtevek znova "
 "obdelan ..."
 
-#: js/global.js:2151
+#: js/global.js:2150
 msgid "The document is being migrated to a new server. Retrying shortly..."
 msgstr ""
 "Dokument je v postopku migracije na nov strežnik. Ponovni poskus sledi v "
 "kratkem ..."
 
-#: js/global.js:2153
+#: js/global.js:2152
 msgid "Failed to get RouteToken from controller"
 msgstr "Pridobivanje RouteToken od kontrolnika je spodletelo"
 
@@ -1843,30 +1843,30 @@ msgstr[3] ""
 msgid "less than a minute"
 msgstr ""
 
-#: src/canvas/sections/CommentListSection.ts:2261
-#: src/canvas/sections/CommentListSection.ts:2274
+#: src/canvas/sections/CommentListSection.ts:2273
+#: src/canvas/sections/CommentListSection.ts:2286
 msgid "Comments Updated"
 msgstr "Komentarji posodobljeni"
 
-#: src/canvas/sections/CommentListSection.ts:2262
+#: src/canvas/sections/CommentListSection.ts:2274
 msgid "Another user has removed this comment."
 msgstr "Drug uporabnik je odstranil ta komentar."
 
-#: src/canvas/sections/CommentListSection.ts:2275
+#: src/canvas/sections/CommentListSection.ts:2287
 msgid ""
 "Another user has updated the comment. Would you like to overwrite those "
 "changes?"
 msgstr ""
 "Drug uporabnik je posodobil ta komentar. Ali želite prepisati te spremembe?"
 
-#: src/canvas/sections/CommentListSection.ts:2276 src/control/Styles.js:39
-#: src/app/Socket.ts:1915
+#: src/canvas/sections/CommentListSection.ts:2288 src/control/Styles.js:39
+#: src/app/Socket.ts:1919
 msgid "Overwrite"
 msgstr "Prepiši"
 
-#: src/canvas/sections/CommentListSection.ts:2277
-#: src/control/Control.SlideLinkToolbar.tsx:166
-#: src/slideimport/SlideLinks.ts:469
+#: src/canvas/sections/CommentListSection.ts:2289
+#: src/control/Control.SlideLinkToolbar.tsx:169
+#: src/slideimport/SlideLinks.ts:477
 msgid "Update"
 msgstr "Posodobi"
 
@@ -1885,7 +1885,7 @@ msgstr "Odpri meni"
 #: src/canvas/sections/CommentSection.ts:210
 #: src/canvas/sections/CommentSection.ts:764
 #: src/canvas/sections/CommentSection.ts:1354
-#: src/canvas/sections/CommentSection.ts:1922
+#: src/canvas/sections/CommentSection.ts:1931
 msgid "Reply"
 msgstr "Odgovori"
 
@@ -1922,7 +1922,7 @@ msgstr "Odstranjeno"
 
 #: src/canvas/sections/CommentSection.ts:1341
 #: src/control/jsdialog/Widget.Comment.ts:177
-#: src/layer/marker/TextInput.js:497 src/layer/tile/CanvasTileLayer.js:3825
+#: src/layer/marker/TextInput.js:495 src/layer/tile/CanvasTileLayer.js:3825
 #: src/layer/tile/CanvasTileLayer.js:3836
 msgid "Comment"
 msgstr "Komentar"
@@ -1974,12 +1974,12 @@ msgstr "Odpri v polnem pogledu"
 msgid "Show in navigator"
 msgstr "Pokaži v Krmarju"
 
-#: src/canvas/sections/CommentSection.ts:1797
+#: src/canvas/sections/CommentSection.ts:1806
 msgid "Press Ctrl + Enter to post, or %1 to discard"
 msgstr ""
 
-#: src/canvas/sections/CommentSection.ts:1826
-#: src/canvas/sections/CommentSection.ts:1831
+#: src/canvas/sections/CommentSection.ts:1835
+#: src/canvas/sections/CommentSection.ts:1840
 #: src/control/Control.SaveState.tsx:196
 msgid "Saved"
 msgstr "Shranjeno"
@@ -2008,15 +2008,15 @@ msgstr "Trenutna različica"
 msgid "%n more"
 msgstr "%n več"
 
-#: src/canvas/sections/ShapeHandlesSection.ts:605
+#: src/canvas/sections/ShapeHandlesSection.ts:606
 msgid "Document contains unsupported media"
 msgstr "Dokument vsebuje nepodprto medijsko datoteko"
 
-#: src/canvas/sections/SelectionSection.ts:1556
+#: src/canvas/sections/SelectionSection.ts:1562
 msgid "Waiting for redo..."
 msgstr ""
 
-#: src/canvas/sections/SelectionSection.ts:1557
+#: src/canvas/sections/SelectionSection.ts:1563
 msgid "Waiting for undo..."
 msgstr ""
 
@@ -2377,12 +2377,12 @@ msgid "Emojify"
 msgstr "Čustvenčkiziraj"
 
 #: src/control/Control.AIChatSidebar.ts:1233
-#: src/control/Control.StatusBar.js:183
+#: src/control/Control.StatusBar.js:186
 msgid "On"
 msgstr "Vključeno"
 
 #: src/control/Control.AIChatSidebar.ts:1233
-#: src/control/Control.StatusBar.js:185
+#: src/control/Control.StatusBar.js:188
 #: src/control/jsdialog/Definitions.Menu.ts:1856
 msgid "Off"
 msgstr "Izključeno"
@@ -3036,7 +3036,7 @@ msgstr ""
 #: src/control/Control.FormulaBarJSDialog.js:116
 #: src/control/Control.NotebookbarWriter.js:155
 #: src/control/Control.NotebookbarWriter.js:1677
-#: src/layer/marker/TextInput.js:546
+#: src/layer/marker/TextInput.js:544
 msgid "Formula"
 msgstr "Formula"
 
@@ -3321,7 +3321,7 @@ msgid "Master slide, image %1"
 msgstr ""
 
 #: src/control/Control.CleanupSidebar.ts:557
-#: src/control/Control.PartsPreview.js:967
+#: src/control/Control.PartsPreview.js:955 src/slideimport/SlideLinks.ts:998
 msgid "Slide %1"
 msgstr "Prosojnica %1"
 
@@ -3492,7 +3492,7 @@ msgstr ""
 msgid "External link"
 msgstr "Zunanja povezava"
 
-#: src/control/Control.AlertDialog.js:56 src/slideshow/PresenterConsole.js:831
+#: src/control/Control.AlertDialog.js:56 src/slideshow/PresenterConsole.js:834
 msgid "Open link"
 msgstr "Odpri povezavo"
 
@@ -3978,7 +3978,7 @@ msgstr "Ime dokumenta"
 msgid "A document name cannot contain a slash or a backslash."
 msgstr ""
 
-#: src/control/Control.DocumentNameInput.js:42 src/app/Socket.ts:2594
+#: src/control/Control.DocumentNameInput.js:42 src/app/Socket.ts:2598
 msgid "Please enter a valid document name."
 msgstr ""
 
@@ -4046,7 +4046,7 @@ msgstr "Prenašanje vsebine odložišča"
 
 #: src/control/Control.DownloadProgress.js:87
 #: src/control/Control.DownloadProgress.js:112
-#: src/control/Control.PartsPreview.js:688
+#: src/control/Control.PartsPreview.js:693
 #: src/control/jsdialog/Widget.FormulabarEdit.js:461 src/map/Clipboard.js:1589
 msgid "Copy"
 msgstr "Kopiraj"
@@ -4522,7 +4522,7 @@ msgstr "Vstavi tabelo"
 #: src/control/Control.LanguageDialog.js:64 src/control/Control.Menubar.ts:433
 #: src/control/Control.Menubar.ts:435 src/control/Control.Menubar.ts:437
 #: src/control/Control.Menubar.ts:668 src/control/Control.Menubar.ts:844
-#: src/control/Control.Menubar.ts:1168 src/control/Control.StatusBar.js:766
+#: src/control/Control.Menubar.ts:1168 src/control/Control.StatusBar.js:771
 msgid "None (Do not check spelling)"
 msgstr "Brez (ne preverjaj črkovanja)"
 
@@ -4531,7 +4531,7 @@ msgid "Select language"
 msgstr "Izberite jezik"
 
 #: src/control/Control.LanguageDialog.js:103
-#: src/control/Control.StatusBar.js:289
+#: src/control/Control.StatusBar.js:292
 msgid "Language"
 msgstr "Jezik"
 
@@ -4617,7 +4617,7 @@ msgstr "Primerjaj spremembe"
 #: src/control/Control.NotebookbarCalc.js:1625
 #: src/control/Control.NotebookbarDraw.js:474
 #: src/control/Control.NotebookbarImpress.js:653
-#: src/control/Control.StatusBar.js:313
+#: src/control/Control.StatusBar.js:316
 msgid "Reset zoom"
 msgstr "Ponastavi povečavo"
 
@@ -4632,7 +4632,7 @@ msgstr "Preklopi med načini vmesnika"
 
 #: src/control/Control.Menubar.ts:196
 #: src/control/Control.NotebookbarWriter.js:1853
-#: src/control/Control.StatusBar.js:298 src/control/Control.StatusBar.js:299
+#: src/control/Control.StatusBar.js:301 src/control/Control.StatusBar.js:302
 msgid "Multi Page View"
 msgstr "Pogled več strani"
 
@@ -4881,7 +4881,7 @@ msgstr "Predstavi trenutno prosojnico"
 
 #: src/control/Control.Menubar.ts:658
 #: src/control/Control.NotebookbarImpress.js:561
-#: src/slideshow/PresenterConsole.js:287
+#: src/slideshow/PresenterConsole.js:290
 msgid "Presenter View"
 msgstr "Pogled govorca"
 
@@ -5004,7 +5004,7 @@ msgstr "Določi območje tiskanja"
 msgid "Remove print area"
 msgstr "Odstrani območje tiskanja"
 
-#: src/control/Control.Menubar.ts:1733 src/control/Control.StatusBar.js:765
+#: src/control/Control.Menubar.ts:1733 src/control/Control.StatusBar.js:770
 msgid "Reset to Default Language"
 msgstr "Ponastavi na privzeti jezik"
 
@@ -5489,7 +5489,7 @@ msgstr "Pregled"
 #: src/control/Control.NotebookbarDraw.js:108
 #: src/control/Control.NotebookbarImpress.js:136
 #: src/control/Control.NotebookbarWriter.js:114
-#: src/layer/marker/TextInput.js:544
+#: src/layer/marker/TextInput.js:542
 msgid "Shape"
 msgstr "Lik"
 
@@ -5498,7 +5498,7 @@ msgstr "Lik"
 #: src/control/Control.NotebookbarImpress.js:143
 #: src/control/Control.NotebookbarWriter.js:121
 #: src/control/Control.NotebookbarWriter.js:1729
-#: src/layer/marker/TextInput.js:535
+#: src/layer/marker/TextInput.js:533
 msgid "Picture"
 msgstr "Slika"
 
@@ -5506,7 +5506,7 @@ msgstr "Slika"
 #: src/control/Control.NotebookbarDraw.js:122
 #: src/control/Control.NotebookbarImpress.js:150
 #: src/control/Control.NotebookbarWriter.js:128
-#: src/layer/marker/TextInput.js:548
+#: src/layer/marker/TextInput.js:546
 msgid "Chart"
 msgstr "Grafikon"
 
@@ -5772,7 +5772,7 @@ msgstr "Zamrzni"
 #: src/control/Control.NotebookbarDraw.js:453
 #: src/control/Control.NotebookbarImpress.js:639
 #: src/control/Control.NotebookbarWriter.js:1760
-#: src/control/Control.StatusBar.js:155
+#: src/control/Control.StatusBar.js:158
 msgid "Zoom"
 msgstr "Povečava"
 
@@ -6030,7 +6030,7 @@ msgid "Starts a slideshow on every viewer's screen"
 msgstr "Začne projekcijo na zaslonih vseh gledalcev"
 
 #: src/control/Control.NotebookbarImpress.js:601
-#: src/slideshow/SlideShowPresenter.ts:1703
+#: src/slideshow/SlideShowPresenter.ts:1705
 msgid "Follow Presenter"
 msgstr "Sledi govorcu"
 
@@ -6193,25 +6193,25 @@ msgstr "Preklopi na urejanje"
 msgid "Link"
 msgstr "Črta"
 
-#: src/control/Control.PartsPreview.js:456
+#: src/control/Control.PartsPreview.js:461
 msgid "Show everyone on this slide"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:622
-#: src/control/Control.PartsPreview.js:697
+#: src/control/Control.PartsPreview.js:627
+#: src/control/Control.PartsPreview.js:702
 #: src/control/jsdialog/Widget.FormulabarEdit.js:462 src/map/Clipboard.js:1589
 msgid "Paste"
 msgstr "Prilepi"
 
-#: src/control/Control.PartsPreview.js:769
+#: src/control/Control.PartsPreview.js:774
 msgid "Unlink Slide"
 msgstr "Razveži prosojnico"
 
-#: src/control/Control.PartsPreview.js:791
+#: src/control/Control.PartsPreview.js:796
 msgid "Add Section"
 msgstr "Dodaj odsek"
 
-#: src/control/Control.PartsPreview.js:911
+#: src/control/Control.PartsPreview.js:916
 msgid "with 1 other"
 msgid_plural "with %n others"
 msgstr[0] ""
@@ -6219,11 +6219,11 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: src/control/Control.PartsPreview.js:921
+#: src/control/Control.PartsPreview.js:926
 msgid "with %1"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:922
+#: src/control/Control.PartsPreview.js:927
 msgid "with %1 and 1 other"
 msgid_plural "with %1 and %n others"
 msgstr[0] ""
@@ -6231,140 +6231,140 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: src/control/Control.PartsPreview.js:963
+#: src/control/Control.PartsPreview.js:971
 msgid "preview of page %1"
 msgstr "Predogled strani %1"
 
-#: src/control/Control.PartsPreview.js:978
+#: src/control/Control.PartsPreview.js:990
 msgid "preview of page %1, %3 is missing"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:979
-msgid "Slide %1, %3 is missing"
+#: src/control/Control.PartsPreview.js:991
+msgid "%1, %3 is missing"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:983
+#: src/control/Control.PartsPreview.js:995
 msgid "preview of page %1, not found in %3"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:984
-msgid "Slide %1, not found in %3"
-msgstr ""
-
-#: src/control/Control.PartsPreview.js:988
-msgid "preview of page %1, no access to %3"
-msgstr ""
-
-#: src/control/Control.PartsPreview.js:989
-msgid "Slide %1, no access to %3"
-msgstr ""
-
-#: src/control/Control.PartsPreview.js:993
-msgid "preview of page %1, could not open %3"
-msgstr ""
-
-#: src/control/Control.PartsPreview.js:994
-msgid "Slide %1, could not open %3"
-msgstr ""
-
-#: src/control/Control.PartsPreview.js:999
-msgid "preview of page %1, %2 changed in %3"
+#: src/control/Control.PartsPreview.js:996
+msgid "%1, not found in %3"
 msgstr ""
 
 #: src/control/Control.PartsPreview.js:1000
-msgid "Slide %1, %2 changed in %3"
+msgid "preview of page %1, no access to %3"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1003
+#: src/control/Control.PartsPreview.js:1001
+msgid "%1, no access to %3"
+msgstr ""
+
+#: src/control/Control.PartsPreview.js:1005
+msgid "preview of page %1, could not open %3"
+msgstr ""
+
+#: src/control/Control.PartsPreview.js:1006
+msgid "%1, could not open %3"
+msgstr ""
+
+#: src/control/Control.PartsPreview.js:1011
+msgid "preview of page %1, %2 changed in %3"
+msgstr ""
+
+#: src/control/Control.PartsPreview.js:1012
+msgid "%1, %2 changed in %3"
+msgstr ""
+
+#: src/control/Control.PartsPreview.js:1015
 msgid "preview of page %1, changed in %3"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1004
-msgid "Slide %1, changed in %3"
+#: src/control/Control.PartsPreview.js:1016
+msgid "%1, changed in %3"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1008
+#: src/control/Control.PartsPreview.js:1020
 msgid "preview of page %1, %3 is disconnected"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1009
-msgid "Slide %1, %3 is disconnected"
+#: src/control/Control.PartsPreview.js:1021
+msgid "%1, %3 is disconnected"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1013
+#: src/control/Control.PartsPreview.js:1025
 msgid "preview of page %1, linked to %2 in %3"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1014
-msgid "Slide %1, linked to %2 in %3"
+#: src/control/Control.PartsPreview.js:1026
+msgid "%1, linked to %2 in %3"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1017
+#: src/control/Control.PartsPreview.js:1029
 msgid "preview of page %1, linked to %2"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1018
-msgid "Slide %1, linked to %2"
+#: src/control/Control.PartsPreview.js:1030
+msgid "%1, linked to %2"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1241
+#: src/control/Control.PartsPreview.js:1253
 msgid "Linked to a section of %1 that is missing"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1243
+#: src/control/Control.PartsPreview.js:1255
 msgid "Linked to a section of %1 that has changed"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1245
+#: src/control/Control.PartsPreview.js:1257
 msgid "Linked to a section of %1, disconnected"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1246
+#: src/control/Control.PartsPreview.js:1258
 msgid "Linked to a section of %1"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1390
-#: src/control/Control.PartsPreview.js:1557
+#: src/control/Control.PartsPreview.js:1402
+#: src/control/Control.PartsPreview.js:1569
 msgid "Rename Section"
 msgstr "Preimenuj odsek"
 
-#: src/control/Control.PartsPreview.js:1397
+#: src/control/Control.PartsPreview.js:1409
 msgid "Remove Section"
 msgstr "Odstrani odsek"
 
-#: src/control/Control.PartsPreview.js:1405
+#: src/control/Control.PartsPreview.js:1417
 msgid "Remove Section & Slides"
 msgstr "Odstrani odseke in prosojnice"
 
-#: src/control/Control.PartsPreview.js:1414
+#: src/control/Control.PartsPreview.js:1426
 msgid "Move Section Up"
 msgstr "Premakni odsek navzgor"
 
-#: src/control/Control.PartsPreview.js:1423
+#: src/control/Control.PartsPreview.js:1435
 msgid "Move Section Down"
 msgstr "Premakni odsek navzdol"
 
-#: src/control/Control.PartsPreview.js:1434
+#: src/control/Control.PartsPreview.js:1446
 msgid "Update Section"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1442
+#: src/control/Control.PartsPreview.js:1454
 msgid "Unlink Section"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1449
+#: src/control/Control.PartsPreview.js:1461
 msgid "Unlink Section & Slides"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1458
+#: src/control/Control.PartsPreview.js:1470
 msgid "Collapse All Sections"
 msgstr "Strni vse odseke"
 
-#: src/control/Control.PartsPreview.js:1466
+#: src/control/Control.PartsPreview.js:1478
 msgid "Expand All Sections"
 msgstr "Razširi vse odseke"
 
-#: src/control/Control.PartsPreview.js:1500 src/docdispatcher.ts:1023
+#: src/control/Control.PartsPreview.js:1512 src/docdispatcher.ts:1030
 msgid "Delete section \"%1\" and its %n slide?"
 msgid_plural "Delete section \"%1\" and its %n slides?"
 msgstr[0] "Ali želite izbrisati odsek »%1« in njegovih %n prosojnic?"
@@ -6372,7 +6372,7 @@ msgstr[1] "Ali želite izbrisati odsek »%1« in njegovo %n prosojnico?"
 msgstr[2] "Ali želite izbrisati odsek »%1« in njegovi %n prosojnici?"
 msgstr[3] "Ali želite izbrisati odsek »%1« in njegove %n prosojnice?"
 
-#: src/control/Control.PartsPreview.js:1558
+#: src/control/Control.PartsPreview.js:1570
 msgid "Enter new section name:"
 msgstr "Vnesite ime novega odseka:"
 
@@ -6385,12 +6385,12 @@ msgid "Checking..."
 msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:711
-#: src/control/Control.SlideLinkToolbar.tsx:194
+#: src/control/Control.SlideLinkToolbar.tsx:197
 msgid "Missing"
 msgstr "Manjka"
 
 #: src/control/Control.SlideImportPane.tsx:713
-#: src/control/Control.SlideLinkToolbar.tsx:192
+#: src/control/Control.SlideLinkToolbar.tsx:195
 msgid "No access"
 msgstr "Ni dostopa"
 
@@ -6407,7 +6407,7 @@ msgid "Disconnected"
 msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:725
-#: src/control/Control.SlideLinkToolbar.tsx:134
+#: src/control/Control.SlideLinkToolbar.tsx:137
 msgid "Linked"
 msgstr "Povezano"
 
@@ -6646,32 +6646,36 @@ msgstr ""
 msgid "Select the slides of {0}"
 msgstr ""
 
-#: src/control/Control.SlideLinkToolbar.tsx:117
+#: src/control/Control.SlideLinkToolbar.tsx:119
 msgid "Linked to {0} in {1}"
 msgstr ""
 
-#: src/control/Control.SlideLinkToolbar.tsx:120
+#: src/control/Control.SlideLinkToolbar.tsx:122
+msgid "Linked to {0}"
+msgstr ""
+
+#: src/control/Control.SlideLinkToolbar.tsx:123
 msgid "In a section linked to {0}"
 msgstr ""
 
-#: src/control/Control.SlideLinkToolbar.tsx:145
+#: src/control/Control.SlideLinkToolbar.tsx:148
 msgid "Hide the actions for this linked slide"
 msgstr ""
 
-#: src/control/Control.SlideLinkToolbar.tsx:146
+#: src/control/Control.SlideLinkToolbar.tsx:149
 msgid "Show the actions for this linked slide"
 msgstr ""
 
-#: src/control/Control.SlideLinkToolbar.tsx:156
+#: src/control/Control.SlideLinkToolbar.tsx:159
 msgid "Unlink"
 msgstr ""
 
-#: src/control/Control.SlideLinkToolbar.tsx:176
-#: src/slideimport/SlideLinks.ts:467
+#: src/control/Control.SlideLinkToolbar.tsx:179
+#: src/slideimport/SlideLinks.ts:475
 msgid "Update section"
 msgstr ""
 
-#: src/control/Control.SlideLinkToolbar.tsx:190
+#: src/control/Control.SlideLinkToolbar.tsx:193
 msgid "Not available"
 msgstr ""
 
@@ -6692,118 +6696,118 @@ msgstr ""
 msgid "Importing slides failed."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:370
+#: src/slideimport/SlideLinks.ts:378
 msgid "No slide of this presentation is linked to another file."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:425
+#: src/slideimport/SlideLinks.ts:433
 msgid "The section cannot be updated, because its source is not available."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:447
+#: src/slideimport/SlideLinks.ts:455
 msgid ""
 "One linked section cannot be updated, because its source is not available."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:450
+#: src/slideimport/SlideLinks.ts:458
 msgid ""
 "{0} linked sections cannot be updated, because their sources are not "
 "available."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:459
+#: src/slideimport/SlideLinks.ts:467
 msgid ""
 "The section will hold the slides that its section in {0} holds now. Changes "
 "made to these slides in this presentation will be lost."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:462
+#: src/slideimport/SlideLinks.ts:470
 msgid ""
 "{0} linked sections will hold the slides that their sections in the source "
 "files hold now. Changes made to these slides in this presentation will be "
 "lost."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:467
+#: src/slideimport/SlideLinks.ts:475
 msgid "Update sections"
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:534
+#: src/slideimport/SlideLinks.ts:542
 msgid "This slide is not linked to another file."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:712 src/slideimport/SlideLinks.ts:1164
+#: src/slideimport/SlideLinks.ts:720 src/slideimport/SlideLinks.ts:1181
 msgid ""
 "{0} is not one of the documents this one is related to, so the server "
 "cannot read it."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:737 src/slideimport/SlideLinks.ts:999
-#: src/slideimport/SlideLinks.ts:1167
+#: src/slideimport/SlideLinks.ts:745 src/slideimport/SlideLinks.ts:1015
+#: src/slideimport/SlideLinks.ts:1184
 msgid "{0} could not be read."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:742
+#: src/slideimport/SlideLinks.ts:750
 msgid "You do not have access to {0}, so the section cannot be updated."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:745
+#: src/slideimport/SlideLinks.ts:753
 msgid "You do not have access to {0}, so its pages cannot be refreshed."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:860
+#: src/slideimport/SlideLinks.ts:868
 msgid "Cannot update the slides of {0}: source lacks the matching slides"
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:863 src/slideimport/SlideLinks.ts:1170
+#: src/slideimport/SlideLinks.ts:871 src/slideimport/SlideLinks.ts:1187
 msgid "The slides of {0} could not be read into this presentation."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:919
+#: src/slideimport/SlideLinks.ts:927
 msgid "The section was updated from {0}."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:1059
+#: src/slideimport/SlideLinks.ts:1076
 msgid "Cannot update the section: {0} no longer holds its source section."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:1085
+#: src/slideimport/SlideLinks.ts:1102
 msgid "Cannot update slide {0}: the source lacks matching slide"
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:1100
+#: src/slideimport/SlideLinks.ts:1117
 msgid "Unlinking the slide failed."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:1105
+#: src/slideimport/SlideLinks.ts:1122
 msgid "Unlinking the section failed."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:1122
+#: src/slideimport/SlideLinks.ts:1139
 msgid "Updating the section from {0} failed."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:1123 src/slideimport/SlideLinks.ts:1182
+#: src/slideimport/SlideLinks.ts:1140 src/slideimport/SlideLinks.ts:1199
 msgid "Updating the slides of {0} failed."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:1136
+#: src/slideimport/SlideLinks.ts:1153
 msgid "No slide of {0} was updated."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:1140
+#: src/slideimport/SlideLinks.ts:1157
 msgid "1 slide updated from {0}."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:1144
+#: src/slideimport/SlideLinks.ts:1161
 msgid "{0} slides updated from {1}."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:1173
+#: src/slideimport/SlideLinks.ts:1190
 msgid "No slide of this presentation is linked to {0}."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:1179
+#: src/slideimport/SlideLinks.ts:1196
 msgid "Another update is still running. Ask for {0} again in a moment."
 msgstr ""
 
@@ -6951,42 +6955,42 @@ msgstr "Vstavi delovni list"
 msgid "Show sheet list"
 msgstr "Pokaži seznam delovnih listov"
 
-#: src/control/Control.StatusBar.js:237
+#: src/control/Control.StatusBar.js:240
 #: src/control/jsdialog/Definitions.Menu.ts:184
 msgid "Average"
 msgstr "Povprečno"
 
-#: src/control/Control.StatusBar.js:238
+#: src/control/Control.StatusBar.js:241
 msgid "CountA"
 msgstr "ŠtevecA"
 
-#: src/control/Control.StatusBar.js:239
+#: src/control/Control.StatusBar.js:242
 #: src/control/jsdialog/Definitions.Menu.ts:187
 msgid "Count"
 msgstr "Števec"
 
-#: src/control/Control.StatusBar.js:240
+#: src/control/Control.StatusBar.js:243
 msgid "Maximum"
 msgstr "Največ"
 
-#: src/control/Control.StatusBar.js:241
+#: src/control/Control.StatusBar.js:244
 msgid "Minimum"
 msgstr "Najmanj"
 
-#: src/control/Control.StatusBar.js:242
+#: src/control/Control.StatusBar.js:245
 #: src/control/jsdialog/Definitions.Menu.ts:183
 msgid "Sum"
 msgstr "Vsota"
 
-#: src/control/Control.StatusBar.js:243
+#: src/control/Control.StatusBar.js:246
 msgid "Selection count"
 msgstr "Seštevek izbora"
 
-#: src/control/Control.StatusBar.js:311
+#: src/control/Control.StatusBar.js:314
 msgid "Zoom to Fit Slide"
 msgstr "Prilagodi pogled velikosti prosojnice"
 
-#: src/control/Control.StatusBar.js:312
+#: src/control/Control.StatusBar.js:315
 msgid ""
 "Fit the page to the window width. Smart Zoom on open can be toggled in "
 "Options under File tab."
@@ -6994,19 +6998,19 @@ msgstr ""
 "Umeri stran na širino okna. Pametno povečavo ob odprtju lahko preklopite v "
 "Možnostih na zavihku Datoteka."
 
-#: src/control/Control.StatusBar.js:312
+#: src/control/Control.StatusBar.js:315
 msgid "Fit the page to the window width."
 msgstr ""
 
-#: src/control/Control.StatusBar.js:317
+#: src/control/Control.StatusBar.js:320
 msgid "Status Bar Menu"
 msgstr "Meni vrstice stanja"
 
-#: src/control/Control.StatusBar.js:613
+#: src/control/Control.StatusBar.js:618
 msgid "The document is probably locked and has been opened as view-only"
 msgstr "Dokument je verjetno zaklenjen in je odprt samo za ogledovanje"
 
-#: src/control/Control.StatusBar.js:622
+#: src/control/Control.StatusBar.js:627
 msgid ""
 "To prevent accidental changes, the author has set this file to open as view-"
 "only"
@@ -7014,23 +7018,23 @@ msgstr ""
 "Da bi preprečil neželene spremembe, je avtor datoteko nastavil tako, da se "
 "odpre samo za ogled"
 
-#: src/control/Control.StatusBar.js:687
+#: src/control/Control.StatusBar.js:692
 msgid "Select multiple cells"
 msgstr "Izberi več celic"
 
-#: src/control/Control.StatusBar.js:704
+#: src/control/Control.StatusBar.js:709
 msgid "Selection mode: inactive"
 msgstr "Izbirni način: nedejaven"
 
-#: src/control/Control.StatusBar.js:782
+#: src/control/Control.StatusBar.js:787
 msgid "Set Language for All text"
 msgstr "Določi jezik celotnega besedila"
 
-#: src/control/Control.StatusBar.js:785
+#: src/control/Control.StatusBar.js:790
 msgid "Set Language for Paragraph"
 msgstr "Določi jezik odstavka"
 
-#: src/control/Control.StatusBar.js:786
+#: src/control/Control.StatusBar.js:791
 msgid "Set Language for Selection"
 msgstr "Določi jezik izbora"
 
@@ -7245,7 +7249,7 @@ msgstr ""
 "API-ja. Povzroči lahko nekatere težave pri urejanju citatov ali "
 "bibliografije."
 
-#: src/control/Control.Zotero.js:246 src/app/Socket.ts:3043
+#: src/control/Control.Zotero.js:246 src/app/Socket.ts:3047
 msgid "Loading..."
 msgstr "Nalaganje ..."
 
@@ -7431,7 +7435,7 @@ msgstr "Strežnik je posredoval naslednji razlog:"
 msgid "The document could not be locked."
 msgstr "Dokumenta ni mogoče zakleniti."
 
-#: src/control/Permission.js:192 src/app/Socket.ts:2673
+#: src/control/Permission.js:192 src/app/Socket.ts:2677
 msgid "Wrong password provided. Please try again."
 msgstr "Vnesli ste napačno geslo. Poskusite znova."
 
@@ -8203,11 +8207,11 @@ msgstr "Številka vrstice"
 msgid "Column {index}"
 msgstr "Stolpec {index}"
 
-#: src/control/jsdialog/Widget.EditEngine.ts:601
+#: src/control/jsdialog/Widget.EditEngine.ts:632
 msgid "%1 is editing"
 msgstr ""
 
-#: src/control/jsdialog/Widget.EditEngine.ts:602
+#: src/control/jsdialog/Widget.EditEngine.ts:633
 msgid "Another user is editing"
 msgstr ""
 
@@ -8463,27 +8467,27 @@ msgstr "Izvoženo v shrambo"
 msgid "Successfully exported: "
 msgstr "Uspešno izvoženo: "
 
-#: src/app/Socket.ts:1230
+#: src/app/Socket.ts:1234
 msgid "This document has links to external content."
 msgstr "Ta dokument vsebuje povezave na zunanjo vsebino."
 
-#: src/app/Socket.ts:1231
+#: src/app/Socket.ts:1235
 msgid "Allow"
 msgstr "Dovoli"
 
-#: src/app/Socket.ts:1914
+#: src/app/Socket.ts:1918
 msgid "Discard"
 msgstr "Zavrzi"
 
-#: src/app/Socket.ts:1932
+#: src/app/Socket.ts:1936
 msgid "Save to new file"
 msgstr "Shrani v novo datoteko"
 
-#: src/app/Socket.ts:1945
+#: src/app/Socket.ts:1949
 msgid "Document has been changed"
 msgstr "Dokument je spremenjen"
 
-#: src/app/Socket.ts:1947
+#: src/app/Socket.ts:1951
 msgid ""
 "Document has been changed in storage. What would you like to do with your "
 "unsaved changes?"
@@ -8491,89 +8495,89 @@ msgstr ""
 "Dokument je bil spremenjen v shrambi. Kaj želite storiti z neshranjenimi "
 "spremembami?"
 
-#: src/app/Socket.ts:2106
+#: src/app/Socket.ts:2110
 msgid "Server is now reachable. We have to refresh the page now."
 msgstr "Strežnik je zdaj dosegljiv. Zdaj moramo osvežiti stran."
 
-#: src/app/Socket.ts:2109
+#: src/app/Socket.ts:2113
 msgid "Server is now reachable..."
 msgstr "Strežnik je zdaj dosegljiv ..."
 
-#: src/app/Socket.ts:2117
+#: src/app/Socket.ts:2121
 msgid "RELOAD"
 msgstr "PONOVNO NALOŽI"
 
-#: src/app/Socket.ts:2145
+#: src/app/Socket.ts:2149
 msgid "Cluster configuration warning"
 msgstr "Opozorilo o konfiguraciji gruče"
 
-#: src/app/Socket.ts:2154
+#: src/app/Socket.ts:2158
 msgid "Wrong server, reconnecting..."
 msgstr "Napačen strežnik, poteka ponovno povezovanje ..."
 
-#: src/app/Socket.ts:2176
+#: src/app/Socket.ts:2180
 msgid "Unsupported version."
 msgstr "Nepodprta različica."
 
-#: src/app/Socket.ts:2177
+#: src/app/Socket.ts:2181
 msgid "Unsupported server version."
 msgstr "Nepodprta različica strežnika."
 
-#: src/app/Socket.ts:2367
+#: src/app/Socket.ts:2371
 msgid "Document is getting migrated"
 msgstr "Dokument je v postopku migracije"
 
-#: src/app/Socket.ts:2665
+#: src/app/Socket.ts:2669
 msgid "Document requires password to view."
 msgstr "Za ogled dokumenta je potrebno geslo."
 
-#: src/app/Socket.ts:2667
+#: src/app/Socket.ts:2671
 msgid "Document requires password to modify."
 msgstr "Za spreminjanje dokumenta je potrebno geslo."
 
-#: src/app/Socket.ts:2669
+#: src/app/Socket.ts:2673
 msgid "Hit Cancel to open in view-only mode."
 msgstr "Pritisnite Prekliči za odpiranje v oglednem načinu."
 
-#: src/app/Socket.ts:2738
+#: src/app/Socket.ts:2742
 msgid "Only the document owner can change the password."
 msgstr "Le lastnik dokumenta lahko spremeni geslo."
 
-#: src/app/Socket.ts:2752
+#: src/app/Socket.ts:2756
 msgid "You do not have permission to edit this document."
 msgstr ""
 
-#: src/app/Socket.ts:2753
+#: src/app/Socket.ts:2757
 msgid "The document could not be made editable."
 msgstr ""
 
-#: src/app/Socket.ts:2826 src/app/Socket.ts:2837
+#: src/app/Socket.ts:2830 src/app/Socket.ts:2841
 msgid "Missing Fonts"
 msgstr "Manjkajoče pisave"
 
-#: src/app/Socket.ts:2875
+#: src/app/Socket.ts:2879
 msgid "Someone"
 msgstr "Nekdo"
 
-#: src/app/Socket.ts:2877
+#: src/app/Socket.ts:2881
 msgid "{username} saved this document as {filename}. Do you want to join?"
 msgstr ""
 "{username} je shranil/a dokument kot {filename}. Ali se želite pridružiti?"
 
-#: src/app/Socket.ts:2900
+#: src/app/Socket.ts:2904
 msgid "The document is being renamed and will reload shortly"
 msgstr "Dokument je v postopku preimenovanja in se bo v kratkem ponovno naložil"
 
-#: src/app/Socket.ts:2903
+#: src/app/Socket.ts:2907
 msgid "The document is switching to Offline mode and will reload shortly"
 msgstr ""
 "Dokument se preklaplja v nepovezan način in se bo v kratkem znova naložil"
 
-#: src/app/Socket.ts:3043
+#: src/app/Socket.ts:3047
 msgid "Connecting..."
 msgstr "Povezovanje ..."
 
-#: src/app/Socket.ts:3059
+#: src/app/Socket.ts:3063
 msgid "Server is shutting down"
 msgstr "Strežnik se izklaplja"
 
@@ -8581,16 +8585,16 @@ msgstr "Strežnik se izklaplja"
 msgid "AI is not configured, contact your administrator"
 msgstr ""
 
-#: src/docdispatcher.ts:1021
+#: src/docdispatcher.ts:1028
 msgid "Delete section"
 msgstr ""
 
-#: src/docdispatcher.ts:1028
+#: src/docdispatcher.ts:1035
 #, fuzzy
 msgid "Delete slides"
 msgstr "izbriši %n prosojnic"
 
-#: src/docdispatcher.ts:1029
+#: src/docdispatcher.ts:1036
 #, fuzzy
 msgid "Delete %n slide?"
 msgid_plural "Delete %n slides?"
@@ -8599,11 +8603,11 @@ msgstr[1] "izbriši %n prosojnico"
 msgstr[2] "izbriši %n prosojnici"
 msgstr[3] "izbriši %n prosojnice"
 
-#: src/docdispatcher.ts:1033
+#: src/docdispatcher.ts:1040
 msgid "Delete pages"
 msgstr ""
 
-#: src/docdispatcher.ts:1034
+#: src/docdispatcher.ts:1041
 #, fuzzy
 msgid "Delete %n page?"
 msgid_plural "Delete %n pages?"
@@ -8894,11 +8898,11 @@ msgstr ""
 msgid "Heading level {0}"
 msgstr ""
 
-#: src/layer/marker/A11yTextInput.js:1122
+#: src/layer/marker/A11yTextInput.js:1140
 msgid "Out of table"
 msgstr "Izven tabele"
 
-#: src/layer/marker/A11yTextInput.js:1127
+#: src/layer/marker/A11yTextInput.js:1145
 msgid "%n row"
 msgid_plural "%n rows"
 msgstr[0] "%n vrstic"
@@ -8906,7 +8910,7 @@ msgstr[1] "%n vrstico"
 msgstr[2] "%n vrstici"
 msgstr[3] "%n vrstice"
 
-#: src/layer/marker/A11yTextInput.js:1128
+#: src/layer/marker/A11yTextInput.js:1146
 msgid "%n column"
 msgid_plural "%n columns"
 msgstr[0] "%n stolpcev"
@@ -8916,93 +8920,93 @@ msgstr[3] "%n stolpce"
 
 #. TRANSLATORS: {0} is a row count, {1} a column count, both already
 #. TRANSLATORS: in their plural form, e.g. "3 rows" and "1 column"
-#: src/layer/marker/A11yTextInput.js:1131
+#: src/layer/marker/A11yTextInput.js:1149
 msgid "Table with {0} and {1}"
 msgstr "Tabela ima {0} in {1}"
 
-#: src/layer/marker/A11yTextInput.js:1136
+#: src/layer/marker/A11yTextInput.js:1154
 msgid "Row {0} through {1}"
 msgstr "Vrstice od {0} do {1}"
 
-#: src/layer/marker/A11yTextInput.js:1139
+#: src/layer/marker/A11yTextInput.js:1157
 msgid "Row {0}"
 msgstr "Vrstica {0}"
 
-#: src/layer/marker/A11yTextInput.js:1147
+#: src/layer/marker/A11yTextInput.js:1165
 msgid "Column {0} through {1}"
 msgstr "Stolpci od {0} do {1}"
 
-#: src/layer/marker/A11yTextInput.js:1150
+#: src/layer/marker/A11yTextInput.js:1168
 msgid "Column {0}"
 msgstr "Stolpec {0}"
 
-#: src/layer/marker/A11yTextInput.js:1188
+#: src/layer/marker/A11yTextInput.js:1206
 msgid "Editing activated. "
 msgstr "Urejanje aktivirano. "
 
-#: src/layer/marker/A11yTextInput.js:1213
+#: src/layer/marker/A11yTextInput.js:1231
 msgid "{0} selected"
 msgstr "Izbrano: {0}"
 
-#: src/layer/marker/A11yTextInput.js:1215
+#: src/layer/marker/A11yTextInput.js:1233
 msgid "Has text: "
 msgstr "Vsebuje besedilo: "
 
-#: src/layer/marker/A11yTextInput.js:1221
+#: src/layer/marker/A11yTextInput.js:1239
 msgid "{0} unselected"
 msgstr "Ni izbrano: {0}"
 
-#: src/layer/marker/A11yTextInput.js:1226
+#: src/layer/marker/A11yTextInput.js:1244
 msgid "{0} deleted"
 msgstr "Izbrisano: {0}"
 
-#: src/layer/marker/TextInput.js:521
+#: src/layer/marker/TextInput.js:519
 #, fuzzy
 msgid "Placeholder"
 msgstr "Ograde"
 
-#: src/layer/marker/TextInput.js:529
+#: src/layer/marker/TextInput.js:527
 msgid "Drop-down list"
 msgstr ""
 
-#: src/layer/marker/TextInput.js:531
+#: src/layer/marker/TextInput.js:529
 msgid "Combo box"
 msgstr ""
 
-#: src/layer/marker/TextInput.js:537
+#: src/layer/marker/TextInput.js:535
 msgid "Content control"
 msgstr ""
 
-#: src/layer/marker/TextInput.js:550
+#: src/layer/marker/TextInput.js:548
 #, fuzzy
 msgid "Object"
 msgstr "Predmeti"
 
-#: src/layer/marker/TextInput.js:552
+#: src/layer/marker/TextInput.js:550
 msgid "Frame"
 msgstr ""
 
-#: src/layer/marker/TextInput.js:744
+#: src/layer/marker/TextInput.js:742
 msgid "Screen reader support for text content is disabled. "
 msgstr "Podpora bralnika zaslona za besedila je onemogočena. "
 
-#: src/layer/marker/TextInput.js:745
+#: src/layer/marker/TextInput.js:743
 msgid "You need to enable it both at server level and in the UI. "
 msgstr "Omogočiti jo je potrebno na ravni strežnika in na ravnin vmesnika. "
 
-#: src/layer/marker/TextInput.js:746
+#: src/layer/marker/TextInput.js:744
 msgid "Look for the accessibility section in coolwsd.xml for server setting. "
 msgstr "Poiščite razdelek accessibility v coolwsd.xml za nastavitev strežnika. "
 
-#: src/layer/marker/TextInput.js:747
+#: src/layer/marker/TextInput.js:745
 msgid "Also check the voice over toggle under {parentControl}."
 msgstr "Preverite tudi preklop funkcije nareka pod {parentControl}."
 
-#: src/layer/marker/TextInput.js:749
+#: src/layer/marker/TextInput.js:747
 msgid "the Help tab"
 msgstr "zavihek Pomoč"
 
-#: src/layer/marker/TextInput.js:749
+#: src/layer/marker/TextInput.js:747
 msgid "the View menu"
 msgstr "meni Pogled"
 
@@ -9163,22 +9167,22 @@ msgid "Print dialog"
 msgstr "pogovorno okno Natisni"
 
 #: src/map/handler/Map.SlideShow.js:59
-#: src/slideshow/SlideShowPresenter.ts:1445
+#: src/slideshow/SlideShowPresenter.ts:1447
 msgid "Empty Slide Show"
 msgstr "Prazna projekcija"
 
 #: src/map/handler/Map.SlideShow.js:60
-#: src/slideshow/SlideShowPresenter.ts:1446
+#: src/slideshow/SlideShowPresenter.ts:1448
 msgid "All slides are hidden!"
 msgstr "Vse prosojnice so skrite!"
 
 #: src/map/handler/Map.SlideShow.js:175
-#: src/slideshow/SlideShowPresenter.ts:1473
+#: src/slideshow/SlideShowPresenter.ts:1475
 msgid "Windowed Presentation Blocked"
 msgstr "Predstavitev v oknu je blokirana"
 
 #: src/map/handler/Map.SlideShow.js:176
-#: src/slideshow/SlideShowPresenter.ts:1475
+#: src/slideshow/SlideShowPresenter.ts:1477
 msgid ""
 "Presentation was blocked. Please allow pop-ups in your browser. This lets "
 "slide shows to be displayed in separated windows, allowing for easy screen "
@@ -9193,12 +9197,12 @@ msgid "Windowed Presentation: "
 msgstr "Predstavitev v oknu: "
 
 #: src/map/handler/Map.SlideShow.js:210
-#: src/slideshow/SlideShowPresenter.ts:1281
+#: src/slideshow/SlideShowPresenter.ts:1283
 msgid "Presenting in another window"
 msgstr "Predstavljanje v drugem oknu"
 
 #: src/map/handler/Map.SlideShow.js:211
-#: src/slideshow/SlideShowPresenter.ts:1282
+#: src/slideshow/SlideShowPresenter.ts:1284
 msgid "Close Presentation"
 msgstr "Zapri predstavitev"
 
@@ -9211,22 +9215,22 @@ msgid "End Presentation"
 msgstr "Končaj predstavitev"
 
 #: src/map/handler/Map.SlideShow.js:303
-#: src/slideshow/SlideShowPresenter.ts:1460
+#: src/slideshow/SlideShowPresenter.ts:1462
 msgid "Already presenting"
 msgstr "Predstavitev že poteka"
 
 #: src/map/handler/Map.SlideShow.js:304
-#: src/slideshow/SlideShowPresenter.ts:1461
+#: src/slideshow/SlideShowPresenter.ts:1463
 msgid "You are already presenting this document"
 msgstr "Dokument že predstavljate"
 
 #: src/map/handler/Map.SlideShow.js:314
-#: src/slideshow/SlideShowPresenter.ts:1501
+#: src/slideshow/SlideShowPresenter.ts:1503
 msgid "Presentation disabled"
 msgstr "Predstavitev je onemogočena"
 
 #: src/map/handler/Map.SlideShow.js:315
-#: src/slideshow/SlideShowPresenter.ts:1502
+#: src/slideshow/SlideShowPresenter.ts:1504
 msgid "Presentation mode has been disabled for this document"
 msgstr "Način predstavitve je za ta dokument onemogočena"
 
@@ -9240,23 +9244,23 @@ msgstr ""
 "Vaš strežnik Collabora Online potrebuje posodobitev. Na voljo je različica "
 "{0}."
 
-#: src/map/handler/Map.WOPI.js:234
+#: src/map/handler/Map.WOPI.js:236
 msgid "Creating new file from template..."
 msgstr "Ustvarjanje nove datoteke iz predloge ..."
 
-#: src/map/handler/Map.WOPI.js:336
+#: src/map/handler/Map.WOPI.js:338
 msgid "Compare Document..."
 msgstr "Primerjaj dokument ..."
 
-#: src/map/handler/Map.WOPI.js:934
+#: src/map/handler/Map.WOPI.js:936
 msgid "File name should contain an extension."
 msgstr "Ime datoteke mora vsebovati končnico."
 
-#: src/map/handler/Map.WOPI.js:1042
+#: src/map/handler/Map.WOPI.js:1044
 msgid "Enter a file name"
 msgstr "Vnesite ime datoteke"
 
-#: src/map/handler/Map.WOPI.js:1061
+#: src/map/handler/Map.WOPI.js:1063
 msgid "Creating copy..."
 msgstr "Ustvarjanje kopije ..."
 
@@ -9333,7 +9337,7 @@ msgstr "Premor ... (%SECONDS%)"
 msgid "Current Slide"
 msgstr "Trenutna prosojnica"
 
-#: src/slideshow/PresenterConsole.js:35 src/slideshow/PresenterConsole.js:1200
+#: src/slideshow/PresenterConsole.js:35 src/slideshow/PresenterConsole.js:1203
 #: src/slideshow/SlideShowPresenter.ts:972
 #: src/slideshow/SlideShowPresenter.ts:985
 msgid "Disable Animations"
@@ -9388,28 +9392,28 @@ msgstr "Predogled naslednje prosojnice"
 msgid "Preview Slide {1}"
 msgstr "Predogled prosojnice {1}"
 
-#: src/slideshow/PresenterConsole.js:825
+#: src/slideshow/PresenterConsole.js:828
 msgid "You are leaving the presentation."
 msgstr "Zapuščate predstavitev."
 
-#: src/slideshow/PresenterConsole.js:826
+#: src/slideshow/PresenterConsole.js:829
 msgid "The link is not valid."
 msgstr "Povezava ni veljavna."
 
-#: src/slideshow/PresenterConsole.js:1199
+#: src/slideshow/PresenterConsole.js:1202
 #: src/slideshow/SlideShowPresenter.ts:984
 msgid "Enable Animations"
 msgstr "Omogoči animacije"
 
-#: src/slideshow/PresenterConsole.js:1593
+#: src/slideshow/PresenterConsole.js:1596
 msgid "Slide {0} of {1}"
 msgstr "Prosojnica {0} od {1}"
 
-#: src/slideshow/PresenterConsole.js:1664
+#: src/slideshow/PresenterConsole.js:1667
 msgid "No Notes"
 msgstr "Brez opomb"
 
-#: src/slideshow/PresenterConsole.js:1764
+#: src/slideshow/PresenterConsole.js:1767
 msgid "Repeat in %n second"
 msgid_plural "Repeat in %n seconds"
 msgstr[0] "Ponovi čez {0} sekund"
@@ -9417,7 +9421,7 @@ msgstr[1] "Ponovi čez {0} sekundo"
 msgstr[2] "Ponovi čez {0} sekundi"
 msgstr[3] "Ponovi čez {0} sekunde"
 
-#: src/slideshow/PresenterConsole.js:1771
+#: src/slideshow/PresenterConsole.js:1774
 #: src/slideshow/SlideShowPresenter.ts:728
 msgid "Click to exit presentation..."
 msgstr "Kliknite za izhod iz predstavitve ..."
@@ -9430,7 +9434,7 @@ msgstr "Ste na prvi prosojnici"
 msgid "Waiting for presenter to advance"
 msgstr "Čakanje na govorca, da se pomakne naprej"
 
-#: src/slideshow/SlideShowPresenter.ts:1698
+#: src/slideshow/SlideShowPresenter.ts:1700
 msgid "Stop Following"
 msgstr "Nehaj slediti"
 

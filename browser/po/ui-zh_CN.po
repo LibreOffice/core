@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 13:34+0100\n"
+"POT-Creation-Date: 2026-11-02 12:35+0100\n"
 "PO-Revision-Date: 2026-09-25 21:45+0000\n"
 "Last-Translator: QuietCedar47 <quietcedar47@users.noreply.hosted.weblate.org>"
 "\n"
@@ -28,8 +28,8 @@ msgstr "管理控制台"
 msgid "Settings"
 msgstr "设置"
 
-#: admin/admin.strings.js:17 src/control/Control.StatusBar.js:304
-#: src/control/Control.StatusBar.js:305
+#: admin/admin.strings.js:17 src/control/Control.StatusBar.js:307
+#: src/control/Control.StatusBar.js:308
 #: src/control/jsdialog/Widget.NewSlideLayoutEntry.ts:39
 msgid "Overview"
 msgstr "预览"
@@ -170,10 +170,10 @@ msgstr "网络图"
 #: admin/src/integrator/AdminIntegratorSettings.ts:2325
 #: admin/src/integrator/AdminIntegratorSettings.ts:6082
 #: admin/src/integrator/WordBook.ts:394 admin/src/integrator/Xcu.ts:684
-#: src/canvas/sections/CommentListSection.ts:942
+#: src/canvas/sections/CommentListSection.ts:944
 #: src/canvas/sections/CommentSection.ts:207
 #: src/canvas/sections/CommentSection.ts:760
-#: src/canvas/sections/CommentSection.ts:1917
+#: src/canvas/sections/CommentSection.ts:1926
 #: src/control/Control.BackstageView.ts:161
 #: src/control/Control.Notebookbar.js:884
 #: src/control/Control.NotebookbarBuilder.js:213
@@ -252,7 +252,7 @@ msgstr "信道筛选器："
 #: src/app/TableStylesService.ts:284 src/app/TableStylesService.ts:516
 #: src/control/Control.CleanupSidebar.ts:1177
 #: src/control/Control.JSDialogBuilder.js:424
-#: src/control/Control.StatusBar.js:244 src/control/Control.StatusBar.js:249
+#: src/control/Control.StatusBar.js:247 src/control/Control.StatusBar.js:252
 msgid "None"
 msgstr "无"
 
@@ -271,7 +271,7 @@ msgstr "日志级别"
 #: src/control/Control.MobileWizardWindow.js:244
 #: src/control/Control.UIManager.ts:3390 src/control/Control.Zotero.js:191
 #: src/control/jsdialog/Widget.SidebarContainers.tsx:71 src/app/Socket.ts:1024
-#: src/app/Socket.ts:2829 src/app/Socket.ts:2840
+#: src/app/Socket.ts:2833 src/app/Socket.ts:2844
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.div.button:52-8
 msgid "Close"
 msgstr "关闭"
@@ -330,32 +330,32 @@ msgstr "注意"
 #: admin/src/AdminSocketBase.js:74 admin/src/AdminSocketOverview.js:108
 #: admin/src/AdminSocketOverview.js:434 admin/src/AdminSocketSettings.js:47
 #: admin/src/integrator/AdminIntegratorSettings.ts:6225 src/app/Debug.ts:1952
-#: src/canvas/sections/CommentListSection.ts:2263
+#: src/canvas/sections/CommentListSection.ts:2275
 #: src/control/Control.AboutDialog.ts:240
 #: src/control/Control.AlertDialog.js:56
 #: src/control/Control.DocumentNameInput.js:58
 #: src/control/Control.DocumentRepair.js:77
 #: src/control/Control.ESignatureDialog.ts:132
 #: src/control/Control.LanguageDialog.js:120
-#: src/control/Control.PartsPreview.js:1509
-#: src/control/Control.PartsPreview.js:1560
+#: src/control/Control.PartsPreview.js:1521
+#: src/control/Control.PartsPreview.js:1572
 #: src/control/Control.ServerAuditDialog.ts:383
 #: src/control/Control.Tabs.js:724 src/control/Control.Tabs.js:733
 #: src/control/Control.Tabs.js:772 src/control/Control.Tabs.js:776
 #: src/control/Control.Zotero.js:365 src/control/Control.Zotero.js:411
 #: src/control/Parts.js:662 src/control/Permission.js:113
 #: src/control/Permission.js:123 src/control/Permission.js:214
-#: src/control/Toolbar.js:822 src/app/Socket.ts:1090 src/app/Socket.ts:1980
-#: src/app/Socket.ts:2148 src/app/Socket.ts:2739 src/app/Socket.ts:2754
-#: src/app/Socket.ts:2886 src/main.js:137 src/main.js:140 src/main.js:409
+#: src/control/Toolbar.js:822 src/app/Socket.ts:1090 src/app/Socket.ts:1984
+#: src/app/Socket.ts:2152 src/app/Socket.ts:2743 src/app/Socket.ts:2758
+#: src/app/Socket.ts:2890 src/main.js:137 src/main.js:140 src/main.js:409
 #: src/map/Clipboard.js:1527 src/map/handler/Map.Feedback.js:96
 #: src/map/handler/Map.SlideShow.js:60 src/map/handler/Map.SlideShow.js:177
 #: src/map/handler/Map.SlideShow.js:305 src/map/handler/Map.SlideShow.js:316
-#: src/map/handler/Map.WOPI.js:934 src/map/handler/Map.WOPI.js:1042
-#: src/slideshow/SlideShowPresenter.ts:1448
-#: src/slideshow/SlideShowPresenter.ts:1463
-#: src/slideshow/SlideShowPresenter.ts:1478
-#: src/slideshow/SlideShowPresenter.ts:1504
+#: src/map/handler/Map.WOPI.js:936 src/map/handler/Map.WOPI.js:1044
+#: src/slideshow/SlideShowPresenter.ts:1450
+#: src/slideshow/SlideShowPresenter.ts:1465
+#: src/slideshow/SlideShowPresenter.ts:1480
+#: src/slideshow/SlideShowPresenter.ts:1506
 #: src/control/Control.Extension.ts:2099
 msgid "OK"
 msgstr "确定"
@@ -363,11 +363,11 @@ msgstr "确定"
 #: admin/src/AdminClusterOverview.js:561 admin/src/AdminSocketOverview.js:109
 #: admin/src/AdminSocketOverview.js:435 admin/src/AdminSocketSettings.js:48
 #: admin/src/integrator/WordBook.ts:386
-#: src/canvas/sections/CommentListSection.ts:937
+#: src/canvas/sections/CommentListSection.ts:939
 #: src/canvas/sections/CommentSection.ts:206
 #: src/canvas/sections/CommentSection.ts:209
-#: src/canvas/sections/CommentSection.ts:1918
-#: src/canvas/sections/CommentSection.ts:1923
+#: src/canvas/sections/CommentSection.ts:1927
+#: src/canvas/sections/CommentSection.ts:1932
 #: src/control/Control.AIChatSidebar.ts:1526
 #: src/control/Control.AIChatSidebar.ts:1528
 #: src/control/Control.AIChatSidebar.ts:1613
@@ -381,7 +381,7 @@ msgstr "确定"
 #: src/control/Control.UIManager.ts:2823 src/control/Control.UIManager.ts:2918
 #: src/control/Control.UIManager.ts:3082 src/control/Control.UIManager.ts:3174
 #: src/control/Control.UIManager.ts:3357 src/control/Control.Zotero.js:360
-#: src/control/Parts.js:657 src/app/Socket.ts:1911
+#: src/control/Parts.js:657 src/app/Socket.ts:1915
 #: src/map/handler/Map.Settings.ts:240 src/control/Control.Extension.ts:2100
 msgid "Cancel"
 msgstr "取消"
@@ -465,7 +465,7 @@ msgstr ""
 
 #: admin/src/AdminSocketServerAudit.js:99
 #: admin/src/integrator/AdminIntegratorSettings.ts:6213
-#: src/control/Control.AIChatSidebar.ts:3907 src/map/handler/Map.WOPI.js:934
+#: src/control/Control.AIChatSidebar.ts:3907 src/map/handler/Map.WOPI.js:936
 msgid "Error"
 msgstr "错误"
 
@@ -761,7 +761,7 @@ msgstr "页面名称"
 #: src/control/Control.NotebookbarCalc.js:862
 #: src/control/Control.NotebookbarWriter.js:1737
 #: src/control/Control.Zotero.js:1154 src/control/Control.Zotero.js:1615
-#: src/layer/marker/TextInput.js:533
+#: src/layer/marker/TextInput.js:531
 msgid "Date"
 msgstr "宣传册 / 手册"
 
@@ -784,7 +784,7 @@ msgid "Presentation"
 msgstr "读取文件错误"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:853
-#: src/control/Control.StatusBar.js:307 src/control/Control.StatusBar.js:308
+#: src/control/Control.StatusBar.js:310 src/control/Control.StatusBar.js:311
 #: src/control/Control.Zotero.js:1342 src/slideshow/PresenterConsole.js:36
 msgid "Notes"
 msgstr "注释"
@@ -1037,14 +1037,14 @@ msgid "Something went wrong while uploading the file. Please try again."
 msgstr "上传文件时出现一些错误，请重试。"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3043
-#: src/canvas/sections/CommentSection.ts:1827
-#: src/canvas/sections/CommentSection.ts:1832
+#: src/canvas/sections/CommentSection.ts:1836
+#: src/canvas/sections/CommentSection.ts:1841
 #: src/control/Control.AIChatSidebar.ts:1620
 #: src/control/backstage/CloudDialogs.tsx:193
-#: src/control/Control.PartsPreview.js:1506
+#: src/control/Control.PartsPreview.js:1518
 #: src/control/jsdialog/Control.ContextMenu.ts:375
 #: src/control/jsdialog/Definitions.DialogModification.ts:185
-#: src/docdispatcher.ts:1042
+#: src/docdispatcher.ts:1049
 msgid "Delete"
 msgstr "删除"
 
@@ -1609,17 +1609,17 @@ msgstr " 分钟"
 msgid " s"
 msgstr " 秒"
 
-#: js/global.js:2149
+#: js/global.js:2148
 msgid ""
 "The system is currently adjusting resources. Please wait a moment while we "
 "retry your request..."
 msgstr "系统正在调整资源。请稍候片刻，我们正在重试您的请求..."
 
-#: js/global.js:2151
+#: js/global.js:2150
 msgid "The document is being migrated to a new server. Retrying shortly..."
 msgstr "文档正在迁移到新服务器。正在短期内重试..."
 
-#: js/global.js:2153
+#: js/global.js:2152
 msgid "Failed to get RouteToken from controller"
 msgstr "无法从控制器获取 RouteToken"
 
@@ -1803,29 +1803,29 @@ msgstr[0] ""
 msgid "less than a minute"
 msgstr ""
 
-#: src/canvas/sections/CommentListSection.ts:2261
-#: src/canvas/sections/CommentListSection.ts:2274
+#: src/canvas/sections/CommentListSection.ts:2273
+#: src/canvas/sections/CommentListSection.ts:2286
 msgid "Comments Updated"
 msgstr "批注已更新"
 
-#: src/canvas/sections/CommentListSection.ts:2262
+#: src/canvas/sections/CommentListSection.ts:2274
 msgid "Another user has removed this comment."
 msgstr "其他用户已经移除该批注。"
 
-#: src/canvas/sections/CommentListSection.ts:2275
+#: src/canvas/sections/CommentListSection.ts:2287
 msgid ""
 "Another user has updated the comment. Would you like to overwrite those "
 "changes?"
 msgstr "其他用户已经更新该批注。您想要覆盖这些修改吗？"
 
-#: src/canvas/sections/CommentListSection.ts:2276 src/control/Styles.js:39
-#: src/app/Socket.ts:1915
+#: src/canvas/sections/CommentListSection.ts:2288 src/control/Styles.js:39
+#: src/app/Socket.ts:1919
 msgid "Overwrite"
 msgstr "覆盖"
 
-#: src/canvas/sections/CommentListSection.ts:2277
-#: src/control/Control.SlideLinkToolbar.tsx:166
-#: src/slideimport/SlideLinks.ts:469
+#: src/canvas/sections/CommentListSection.ts:2289
+#: src/control/Control.SlideLinkToolbar.tsx:169
+#: src/slideimport/SlideLinks.ts:477
 msgid "Update"
 msgstr "更新"
 
@@ -1844,7 +1844,7 @@ msgstr "打开菜单"
 #: src/canvas/sections/CommentSection.ts:210
 #: src/canvas/sections/CommentSection.ts:764
 #: src/canvas/sections/CommentSection.ts:1354
-#: src/canvas/sections/CommentSection.ts:1922
+#: src/canvas/sections/CommentSection.ts:1931
 msgid "Reply"
 msgstr "回复"
 
@@ -1881,7 +1881,7 @@ msgstr "已删除"
 
 #: src/canvas/sections/CommentSection.ts:1341
 #: src/control/jsdialog/Widget.Comment.ts:177
-#: src/layer/marker/TextInput.js:497 src/layer/tile/CanvasTileLayer.js:3825
+#: src/layer/marker/TextInput.js:495 src/layer/tile/CanvasTileLayer.js:3825
 #: src/layer/tile/CanvasTileLayer.js:3836
 msgid "Comment"
 msgstr "批注"
@@ -1933,12 +1933,12 @@ msgstr "全屏查看"
 msgid "Show in navigator"
 msgstr "在导航器中显示"
 
-#: src/canvas/sections/CommentSection.ts:1797
+#: src/canvas/sections/CommentSection.ts:1806
 msgid "Press Ctrl + Enter to post, or %1 to discard"
 msgstr ""
 
-#: src/canvas/sections/CommentSection.ts:1826
-#: src/canvas/sections/CommentSection.ts:1831
+#: src/canvas/sections/CommentSection.ts:1835
+#: src/canvas/sections/CommentSection.ts:1840
 #: src/control/Control.SaveState.tsx:196
 msgid "Saved"
 msgstr "已保存"
@@ -1967,15 +1967,15 @@ msgstr "当前版本"
 msgid "%n more"
 msgstr "还有 %n 个"
 
-#: src/canvas/sections/ShapeHandlesSection.ts:605
+#: src/canvas/sections/ShapeHandlesSection.ts:606
 msgid "Document contains unsupported media"
 msgstr "文档包含不支持的视频"
 
-#: src/canvas/sections/SelectionSection.ts:1556
+#: src/canvas/sections/SelectionSection.ts:1562
 msgid "Waiting for redo..."
 msgstr ""
 
-#: src/canvas/sections/SelectionSection.ts:1557
+#: src/canvas/sections/SelectionSection.ts:1563
 msgid "Waiting for undo..."
 msgstr ""
 
@@ -2331,12 +2331,12 @@ msgid "Emojify"
 msgstr "表情化"
 
 #: src/control/Control.AIChatSidebar.ts:1233
-#: src/control/Control.StatusBar.js:183
+#: src/control/Control.StatusBar.js:186
 msgid "On"
 msgstr "开启"
 
 #: src/control/Control.AIChatSidebar.ts:1233
-#: src/control/Control.StatusBar.js:185
+#: src/control/Control.StatusBar.js:188
 #: src/control/jsdialog/Definitions.Menu.ts:1856
 msgid "Off"
 msgstr "关闭"
@@ -2949,7 +2949,7 @@ msgstr ""
 #: src/control/Control.FormulaBarJSDialog.js:116
 #: src/control/Control.NotebookbarWriter.js:155
 #: src/control/Control.NotebookbarWriter.js:1677
-#: src/layer/marker/TextInput.js:546
+#: src/layer/marker/TextInput.js:544
 msgid "Formula"
 msgstr "公式"
 
@@ -3217,7 +3217,7 @@ msgid "Master slide, image %1"
 msgstr "母版幻灯片，图像 %1"
 
 #: src/control/Control.CleanupSidebar.ts:557
-#: src/control/Control.PartsPreview.js:967
+#: src/control/Control.PartsPreview.js:955 src/slideimport/SlideLinks.ts:998
 msgid "Slide %1"
 msgstr "幻灯片 %1"
 
@@ -3386,7 +3386,7 @@ msgstr ""
 msgid "External link"
 msgstr "外部链接"
 
-#: src/control/Control.AlertDialog.js:56 src/slideshow/PresenterConsole.js:831
+#: src/control/Control.AlertDialog.js:56 src/slideshow/PresenterConsole.js:834
 msgid "Open link"
 msgstr "打开链接"
 
@@ -3871,7 +3871,7 @@ msgstr "文档名称"
 msgid "A document name cannot contain a slash or a backslash."
 msgstr "文档名称不能包含正斜杠或反斜杠。"
 
-#: src/control/Control.DocumentNameInput.js:42 src/app/Socket.ts:2594
+#: src/control/Control.DocumentNameInput.js:42 src/app/Socket.ts:2598
 msgid "Please enter a valid document name."
 msgstr "请输入有效的文档名称。"
 
@@ -3937,7 +3937,7 @@ msgstr "下载剪切板内容"
 
 #: src/control/Control.DownloadProgress.js:87
 #: src/control/Control.DownloadProgress.js:112
-#: src/control/Control.PartsPreview.js:688
+#: src/control/Control.PartsPreview.js:693
 #: src/control/jsdialog/Widget.FormulabarEdit.js:461 src/map/Clipboard.js:1589
 msgid "Copy"
 msgstr "复制"
@@ -4411,7 +4411,7 @@ msgstr "插入表格"
 #: src/control/Control.LanguageDialog.js:64 src/control/Control.Menubar.ts:433
 #: src/control/Control.Menubar.ts:435 src/control/Control.Menubar.ts:437
 #: src/control/Control.Menubar.ts:668 src/control/Control.Menubar.ts:844
-#: src/control/Control.Menubar.ts:1168 src/control/Control.StatusBar.js:766
+#: src/control/Control.Menubar.ts:1168 src/control/Control.StatusBar.js:771
 msgid "None (Do not check spelling)"
 msgstr "无（不检查拼写）"
 
@@ -4420,7 +4420,7 @@ msgid "Select language"
 msgstr "选择语言"
 
 #: src/control/Control.LanguageDialog.js:103
-#: src/control/Control.StatusBar.js:289
+#: src/control/Control.StatusBar.js:292
 msgid "Language"
 msgstr "语言"
 
@@ -4506,7 +4506,7 @@ msgstr "比较更改"
 #: src/control/Control.NotebookbarCalc.js:1625
 #: src/control/Control.NotebookbarDraw.js:474
 #: src/control/Control.NotebookbarImpress.js:653
-#: src/control/Control.StatusBar.js:313
+#: src/control/Control.StatusBar.js:316
 msgid "Reset zoom"
 msgstr "重置缩放"
 
@@ -4521,7 +4521,7 @@ msgstr "切换界面模式"
 
 #: src/control/Control.Menubar.ts:196
 #: src/control/Control.NotebookbarWriter.js:1853
-#: src/control/Control.StatusBar.js:298 src/control/Control.StatusBar.js:299
+#: src/control/Control.StatusBar.js:301 src/control/Control.StatusBar.js:302
 msgid "Multi Page View"
 msgstr "多页面视图"
 
@@ -4770,7 +4770,7 @@ msgstr "从当前幻灯片开始演示"
 
 #: src/control/Control.Menubar.ts:658
 #: src/control/Control.NotebookbarImpress.js:561
-#: src/slideshow/PresenterConsole.js:287
+#: src/slideshow/PresenterConsole.js:290
 msgid "Presenter View"
 msgstr "演示者视图"
 
@@ -4893,7 +4893,7 @@ msgstr "自定义打印区域"
 msgid "Remove print area"
 msgstr "删除打印区域"
 
-#: src/control/Control.Menubar.ts:1733 src/control/Control.StatusBar.js:765
+#: src/control/Control.Menubar.ts:1733 src/control/Control.StatusBar.js:770
 msgid "Reset to Default Language"
 msgstr "重置为默认语言"
 
@@ -5382,7 +5382,7 @@ msgstr "审阅"
 #: src/control/Control.NotebookbarDraw.js:108
 #: src/control/Control.NotebookbarImpress.js:136
 #: src/control/Control.NotebookbarWriter.js:114
-#: src/layer/marker/TextInput.js:544
+#: src/layer/marker/TextInput.js:542
 msgid "Shape"
 msgstr "形状"
 
@@ -5391,7 +5391,7 @@ msgstr "形状"
 #: src/control/Control.NotebookbarImpress.js:143
 #: src/control/Control.NotebookbarWriter.js:121
 #: src/control/Control.NotebookbarWriter.js:1729
-#: src/layer/marker/TextInput.js:535
+#: src/layer/marker/TextInput.js:533
 msgid "Picture"
 msgstr "图片"
 
@@ -5399,7 +5399,7 @@ msgstr "图片"
 #: src/control/Control.NotebookbarDraw.js:122
 #: src/control/Control.NotebookbarImpress.js:150
 #: src/control/Control.NotebookbarWriter.js:128
-#: src/layer/marker/TextInput.js:548
+#: src/layer/marker/TextInput.js:546
 msgid "Chart"
 msgstr "图表"
 
@@ -5663,7 +5663,7 @@ msgstr "冻结"
 #: src/control/Control.NotebookbarDraw.js:453
 #: src/control/Control.NotebookbarImpress.js:639
 #: src/control/Control.NotebookbarWriter.js:1760
-#: src/control/Control.StatusBar.js:155
+#: src/control/Control.StatusBar.js:158
 msgid "Zoom"
 msgstr "缩放"
 
@@ -5919,7 +5919,7 @@ msgid "Starts a slideshow on every viewer's screen"
 msgstr "在每个观看者的屏幕上启动幻灯片放映"
 
 #: src/control/Control.NotebookbarImpress.js:601
-#: src/slideshow/SlideShowPresenter.ts:1703
+#: src/slideshow/SlideShowPresenter.ts:1705
 msgid "Follow Presenter"
 msgstr "跟随演示者"
 
@@ -6082,180 +6082,181 @@ msgstr "切换到编辑模式"
 msgid "Link"
 msgstr "链接"
 
-#: src/control/Control.PartsPreview.js:456
+#: src/control/Control.PartsPreview.js:461
 msgid "Show everyone on this slide"
 msgstr "显示此幻灯片上的所有人"
 
-#: src/control/Control.PartsPreview.js:622
-#: src/control/Control.PartsPreview.js:697
+#: src/control/Control.PartsPreview.js:627
+#: src/control/Control.PartsPreview.js:702
 #: src/control/jsdialog/Widget.FormulabarEdit.js:462 src/map/Clipboard.js:1589
 msgid "Paste"
 msgstr "粘贴"
 
-#: src/control/Control.PartsPreview.js:769
+#: src/control/Control.PartsPreview.js:774
 msgid "Unlink Slide"
 msgstr "取消链接幻灯片"
 
-#: src/control/Control.PartsPreview.js:791
+#: src/control/Control.PartsPreview.js:796
 msgid "Add Section"
 msgstr "添加节"
 
-#: src/control/Control.PartsPreview.js:911
+#: src/control/Control.PartsPreview.js:916
 msgid "with 1 other"
 msgid_plural "with %n others"
 msgstr[0] "与另外 %n 人一起"
 
-#: src/control/Control.PartsPreview.js:921
+#: src/control/Control.PartsPreview.js:926
 msgid "with %1"
 msgstr "与 %1 一起"
 
-#: src/control/Control.PartsPreview.js:922
+#: src/control/Control.PartsPreview.js:927
 msgid "with %1 and 1 other"
 msgid_plural "with %1 and %n others"
 msgstr[0] "与 %1 和另外 %n 人一起"
 
-#: src/control/Control.PartsPreview.js:963
+#: src/control/Control.PartsPreview.js:971
 msgid "preview of page %1"
 msgstr "页面预览 %1"
 
-#: src/control/Control.PartsPreview.js:978
+#: src/control/Control.PartsPreview.js:990
 msgid "preview of page %1, %3 is missing"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:979
-msgid "Slide %1, %3 is missing"
+#: src/control/Control.PartsPreview.js:991
+msgid "%1, %3 is missing"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:983
+#: src/control/Control.PartsPreview.js:995
 #, fuzzy
 msgid "preview of page %1, not found in %3"
 msgstr "页面 %1 的预览，已链接到 %3 中的 %2"
 
-#: src/control/Control.PartsPreview.js:984
-msgid "Slide %1, not found in %3"
+#: src/control/Control.PartsPreview.js:996
+msgid "%1, not found in %3"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:988
+#: src/control/Control.PartsPreview.js:1000
 msgid "preview of page %1, no access to %3"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:989
-msgid "Slide %1, no access to %3"
+#: src/control/Control.PartsPreview.js:1001
+msgid "%1, no access to %3"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:993
+#: src/control/Control.PartsPreview.js:1005
 msgid "preview of page %1, could not open %3"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:994
-msgid "Slide %1, could not open %3"
+#: src/control/Control.PartsPreview.js:1006
+msgid "%1, could not open %3"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:999
+#: src/control/Control.PartsPreview.js:1011
 #, fuzzy
 msgid "preview of page %1, %2 changed in %3"
 msgstr "页面 %1 的预览，已链接到 %2"
 
-#: src/control/Control.PartsPreview.js:1000
-msgid "Slide %1, %2 changed in %3"
+#: src/control/Control.PartsPreview.js:1012
+msgid "%1, %2 changed in %3"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1003
+#: src/control/Control.PartsPreview.js:1015
 #, fuzzy
 msgid "preview of page %1, changed in %3"
 msgstr "页面 %1 的预览，已链接到 %2"
 
-#: src/control/Control.PartsPreview.js:1004
-msgid "Slide %1, changed in %3"
+#: src/control/Control.PartsPreview.js:1016
+msgid "%1, changed in %3"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1008
+#: src/control/Control.PartsPreview.js:1020
 msgid "preview of page %1, %3 is disconnected"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1009
-msgid "Slide %1, %3 is disconnected"
+#: src/control/Control.PartsPreview.js:1021
+msgid "%1, %3 is disconnected"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1013
+#: src/control/Control.PartsPreview.js:1025
 msgid "preview of page %1, linked to %2 in %3"
 msgstr "页面 %1 的预览，已链接到 %3 中的 %2"
 
-#: src/control/Control.PartsPreview.js:1014
-msgid "Slide %1, linked to %2 in %3"
+#: src/control/Control.PartsPreview.js:1026
+#, fuzzy
+msgid "%1, linked to %2 in %3"
 msgstr "幻灯片 %1，已链接到 %3 中的 %2"
 
-#: src/control/Control.PartsPreview.js:1017
+#: src/control/Control.PartsPreview.js:1029
 msgid "preview of page %1, linked to %2"
 msgstr "页面 %1 的预览，已链接到 %2"
 
-#: src/control/Control.PartsPreview.js:1018
-msgid "Slide %1, linked to %2"
-msgstr "幻灯片 %1，已链接到 %2"
+#: src/control/Control.PartsPreview.js:1030
+msgid "%1, linked to %2"
+msgstr ""
 
-#: src/control/Control.PartsPreview.js:1241
+#: src/control/Control.PartsPreview.js:1253
 msgid "Linked to a section of %1 that is missing"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1243
+#: src/control/Control.PartsPreview.js:1255
 msgid "Linked to a section of %1 that has changed"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1245
+#: src/control/Control.PartsPreview.js:1257
 msgid "Linked to a section of %1, disconnected"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1246
+#: src/control/Control.PartsPreview.js:1258
 msgid "Linked to a section of %1"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1390
-#: src/control/Control.PartsPreview.js:1557
+#: src/control/Control.PartsPreview.js:1402
+#: src/control/Control.PartsPreview.js:1569
 msgid "Rename Section"
 msgstr "重命名节"
 
-#: src/control/Control.PartsPreview.js:1397
+#: src/control/Control.PartsPreview.js:1409
 msgid "Remove Section"
 msgstr "删除节"
 
-#: src/control/Control.PartsPreview.js:1405
+#: src/control/Control.PartsPreview.js:1417
 msgid "Remove Section & Slides"
 msgstr "删除分区和幻灯片"
 
-#: src/control/Control.PartsPreview.js:1414
+#: src/control/Control.PartsPreview.js:1426
 msgid "Move Section Up"
 msgstr "上移节"
 
-#: src/control/Control.PartsPreview.js:1423
+#: src/control/Control.PartsPreview.js:1435
 msgid "Move Section Down"
 msgstr "下移节"
 
-#: src/control/Control.PartsPreview.js:1434
+#: src/control/Control.PartsPreview.js:1446
 msgid "Update Section"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1442
+#: src/control/Control.PartsPreview.js:1454
 msgid "Unlink Section"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1449
+#: src/control/Control.PartsPreview.js:1461
 msgid "Unlink Section & Slides"
 msgstr ""
 
-#: src/control/Control.PartsPreview.js:1458
+#: src/control/Control.PartsPreview.js:1470
 msgid "Collapse All Sections"
 msgstr "折叠所有节"
 
-#: src/control/Control.PartsPreview.js:1466
+#: src/control/Control.PartsPreview.js:1478
 msgid "Expand All Sections"
 msgstr "展开所有节"
 
-#: src/control/Control.PartsPreview.js:1500 src/docdispatcher.ts:1023
+#: src/control/Control.PartsPreview.js:1512 src/docdispatcher.ts:1030
 msgid "Delete section \"%1\" and its %n slide?"
 msgid_plural "Delete section \"%1\" and its %n slides?"
 msgstr[0] "删除分区“%1”及其 %n 张幻灯片？"
 
-#: src/control/Control.PartsPreview.js:1558
+#: src/control/Control.PartsPreview.js:1570
 msgid "Enter new section name:"
 msgstr "输入新节名称："
 
@@ -6268,12 +6269,12 @@ msgid "Checking..."
 msgstr "正在检查……"
 
 #: src/control/Control.SlideImportPane.tsx:711
-#: src/control/Control.SlideLinkToolbar.tsx:194
+#: src/control/Control.SlideLinkToolbar.tsx:197
 msgid "Missing"
 msgstr "缺失"
 
 #: src/control/Control.SlideImportPane.tsx:713
-#: src/control/Control.SlideLinkToolbar.tsx:192
+#: src/control/Control.SlideLinkToolbar.tsx:195
 msgid "No access"
 msgstr "无访问权限"
 
@@ -6290,7 +6291,7 @@ msgid "Disconnected"
 msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:725
-#: src/control/Control.SlideLinkToolbar.tsx:134
+#: src/control/Control.SlideLinkToolbar.tsx:137
 msgid "Linked"
 msgstr "已链接"
 
@@ -6529,32 +6530,36 @@ msgstr "按幻灯片编号定位"
 msgid "Select the slides of {0}"
 msgstr "选择 {0} 中的幻灯片"
 
-#: src/control/Control.SlideLinkToolbar.tsx:117
+#: src/control/Control.SlideLinkToolbar.tsx:119
 msgid "Linked to {0} in {1}"
 msgstr "已链接到 {1} 中的 {0}"
 
-#: src/control/Control.SlideLinkToolbar.tsx:120
+#: src/control/Control.SlideLinkToolbar.tsx:122
+msgid "Linked to {0}"
+msgstr ""
+
+#: src/control/Control.SlideLinkToolbar.tsx:123
 msgid "In a section linked to {0}"
 msgstr ""
 
-#: src/control/Control.SlideLinkToolbar.tsx:145
+#: src/control/Control.SlideLinkToolbar.tsx:148
 msgid "Hide the actions for this linked slide"
 msgstr "隐藏此链接幻灯片的操作"
 
-#: src/control/Control.SlideLinkToolbar.tsx:146
+#: src/control/Control.SlideLinkToolbar.tsx:149
 msgid "Show the actions for this linked slide"
 msgstr "显示此链接幻灯片的操作"
 
-#: src/control/Control.SlideLinkToolbar.tsx:156
+#: src/control/Control.SlideLinkToolbar.tsx:159
 msgid "Unlink"
 msgstr "取消链接"
 
-#: src/control/Control.SlideLinkToolbar.tsx:176
-#: src/slideimport/SlideLinks.ts:467
+#: src/control/Control.SlideLinkToolbar.tsx:179
+#: src/slideimport/SlideLinks.ts:475
 msgid "Update section"
 msgstr ""
 
-#: src/control/Control.SlideLinkToolbar.tsx:190
+#: src/control/Control.SlideLinkToolbar.tsx:193
 msgid "Not available"
 msgstr "不可用"
 
@@ -6575,120 +6580,120 @@ msgstr "插入幻灯片失败。"
 msgid "Importing slides failed."
 msgstr "导入幻灯片失败。"
 
-#: src/slideimport/SlideLinks.ts:370
+#: src/slideimport/SlideLinks.ts:378
 msgid "No slide of this presentation is linked to another file."
 msgstr "此演示文稿中没有幻灯片链接到其他文件。"
 
-#: src/slideimport/SlideLinks.ts:425
+#: src/slideimport/SlideLinks.ts:433
 msgid "The section cannot be updated, because its source is not available."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:447
+#: src/slideimport/SlideLinks.ts:455
 msgid ""
 "One linked section cannot be updated, because its source is not available."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:450
+#: src/slideimport/SlideLinks.ts:458
 msgid ""
 "{0} linked sections cannot be updated, because their sources are not "
 "available."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:459
+#: src/slideimport/SlideLinks.ts:467
 msgid ""
 "The section will hold the slides that its section in {0} holds now. Changes "
 "made to these slides in this presentation will be lost."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:462
+#: src/slideimport/SlideLinks.ts:470
 msgid ""
 "{0} linked sections will hold the slides that their sections in the source "
 "files hold now. Changes made to these slides in this presentation will be "
 "lost."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:467
+#: src/slideimport/SlideLinks.ts:475
 msgid "Update sections"
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:534
+#: src/slideimport/SlideLinks.ts:542
 msgid "This slide is not linked to another file."
 msgstr "此幻灯片未链接到其他文件。"
 
-#: src/slideimport/SlideLinks.ts:712 src/slideimport/SlideLinks.ts:1164
+#: src/slideimport/SlideLinks.ts:720 src/slideimport/SlideLinks.ts:1181
 msgid ""
 "{0} is not one of the documents this one is related to, so the server "
 "cannot read it."
 msgstr "{0} 不是此文档关联的文档之一，因此服务器无法读取它。"
 
-#: src/slideimport/SlideLinks.ts:737 src/slideimport/SlideLinks.ts:999
-#: src/slideimport/SlideLinks.ts:1167
+#: src/slideimport/SlideLinks.ts:745 src/slideimport/SlideLinks.ts:1015
+#: src/slideimport/SlideLinks.ts:1184
 msgid "{0} could not be read."
 msgstr "无法读取 {0}。"
 
-#: src/slideimport/SlideLinks.ts:742
+#: src/slideimport/SlideLinks.ts:750
 msgid "You do not have access to {0}, so the section cannot be updated."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:745
+#: src/slideimport/SlideLinks.ts:753
 msgid "You do not have access to {0}, so its pages cannot be refreshed."
 msgstr "您没有 {0} 的访问权限，因此无法刷新其页面。"
 
-#: src/slideimport/SlideLinks.ts:860
+#: src/slideimport/SlideLinks.ts:868
 msgid "Cannot update the slides of {0}: source lacks the matching slides"
 msgstr "无法更新 {0} 的幻灯片：源文件缺少匹配的幻灯片"
 
-#: src/slideimport/SlideLinks.ts:863 src/slideimport/SlideLinks.ts:1170
+#: src/slideimport/SlideLinks.ts:871 src/slideimport/SlideLinks.ts:1187
 msgid "The slides of {0} could not be read into this presentation."
 msgstr "无法将 {0} 的幻灯片读取到此演示文稿中。"
 
-#: src/slideimport/SlideLinks.ts:919
+#: src/slideimport/SlideLinks.ts:927
 msgid "The section was updated from {0}."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:1059
+#: src/slideimport/SlideLinks.ts:1076
 msgid "Cannot update the section: {0} no longer holds its source section."
 msgstr ""
 
-#: src/slideimport/SlideLinks.ts:1085
+#: src/slideimport/SlideLinks.ts:1102
 msgid "Cannot update slide {0}: the source lacks matching slide"
 msgstr "无法更新幻灯片 {0}：源文件缺少匹配的幻灯片"
 
-#: src/slideimport/SlideLinks.ts:1100
+#: src/slideimport/SlideLinks.ts:1117
 msgid "Unlinking the slide failed."
-msgstr "取消幻灯片链接失败。"
-
-#: src/slideimport/SlideLinks.ts:1105
-#, fuzzy
-msgid "Unlinking the section failed."
 msgstr "取消幻灯片链接失败。"
 
 #: src/slideimport/SlideLinks.ts:1122
 #, fuzzy
+msgid "Unlinking the section failed."
+msgstr "取消幻灯片链接失败。"
+
+#: src/slideimport/SlideLinks.ts:1139
+#, fuzzy
 msgid "Updating the section from {0} failed."
 msgstr "更新 {0} 的幻灯片失败。"
 
-#: src/slideimport/SlideLinks.ts:1123 src/slideimport/SlideLinks.ts:1182
+#: src/slideimport/SlideLinks.ts:1140 src/slideimport/SlideLinks.ts:1199
 msgid "Updating the slides of {0} failed."
 msgstr "更新 {0} 的幻灯片失败。"
 
-#: src/slideimport/SlideLinks.ts:1136
+#: src/slideimport/SlideLinks.ts:1153
 msgid "No slide of {0} was updated."
 msgstr "{0} 中的幻灯片无需更新。"
 
-#: src/slideimport/SlideLinks.ts:1140
+#: src/slideimport/SlideLinks.ts:1157
 msgid "1 slide updated from {0}."
 msgstr "已从 {0} 更新 1 张幻灯片。"
 
-#: src/slideimport/SlideLinks.ts:1144
+#: src/slideimport/SlideLinks.ts:1161
 msgid "{0} slides updated from {1}."
 msgstr "已从 {1} 更新 {0} 张幻灯片。"
 
-#: src/slideimport/SlideLinks.ts:1173
+#: src/slideimport/SlideLinks.ts:1190
 msgid "No slide of this presentation is linked to {0}."
 msgstr "此演示文稿中没有幻灯片链接到 {0}。"
 
-#: src/slideimport/SlideLinks.ts:1179
+#: src/slideimport/SlideLinks.ts:1196
 msgid "Another update is still running. Ask for {0} again in a moment."
 msgstr "另一项更新仍在进行中。请稍后再尝试更新 {0}。"
 
@@ -6833,82 +6838,82 @@ msgstr "插入工作表"
 msgid "Show sheet list"
 msgstr "显示工作表列表"
 
-#: src/control/Control.StatusBar.js:237
+#: src/control/Control.StatusBar.js:240
 #: src/control/jsdialog/Definitions.Menu.ts:184
 msgid "Average"
 msgstr "平均值"
 
-#: src/control/Control.StatusBar.js:238
+#: src/control/Control.StatusBar.js:241
 msgid "CountA"
 msgstr "计数 A"
 
-#: src/control/Control.StatusBar.js:239
+#: src/control/Control.StatusBar.js:242
 #: src/control/jsdialog/Definitions.Menu.ts:187
 msgid "Count"
 msgstr "计数"
 
-#: src/control/Control.StatusBar.js:240
+#: src/control/Control.StatusBar.js:243
 msgid "Maximum"
 msgstr "最大值"
 
-#: src/control/Control.StatusBar.js:241
+#: src/control/Control.StatusBar.js:244
 msgid "Minimum"
 msgstr "最小值"
 
-#: src/control/Control.StatusBar.js:242
+#: src/control/Control.StatusBar.js:245
 #: src/control/jsdialog/Definitions.Menu.ts:183
 msgid "Sum"
 msgstr "求和"
 
-#: src/control/Control.StatusBar.js:243
+#: src/control/Control.StatusBar.js:246
 msgid "Selection count"
 msgstr "选中范围计数"
 
-#: src/control/Control.StatusBar.js:311
+#: src/control/Control.StatusBar.js:314
 msgid "Zoom to Fit Slide"
 msgstr "缩放以适合幻灯片"
 
-#: src/control/Control.StatusBar.js:312
+#: src/control/Control.StatusBar.js:315
 msgid ""
 "Fit the page to the window width. Smart Zoom on open can be toggled in "
 "Options under File tab."
 msgstr "将页面适配到窗口宽度。打开时的智能缩放可在“文件”选项卡下的“选项”中切换。"
 
-#: src/control/Control.StatusBar.js:312
+#: src/control/Control.StatusBar.js:315
 msgid "Fit the page to the window width."
 msgstr "使页面适合窗口宽度。"
 
-#: src/control/Control.StatusBar.js:317
+#: src/control/Control.StatusBar.js:320
 msgid "Status Bar Menu"
 msgstr "状态栏菜单"
 
-#: src/control/Control.StatusBar.js:613
+#: src/control/Control.StatusBar.js:618
 msgid "The document is probably locked and has been opened as view-only"
 msgstr "文档可能已被锁定，已以只读方式打开"
 
-#: src/control/Control.StatusBar.js:622
+#: src/control/Control.StatusBar.js:627
 msgid ""
 "To prevent accidental changes, the author has set this file to open as view-"
 "only"
 msgstr "为防止意外的修改，作者已将文件设置为只读"
 
-#: src/control/Control.StatusBar.js:687
+#: src/control/Control.StatusBar.js:692
 msgid "Select multiple cells"
 msgstr "选择多个单元格"
 
-#: src/control/Control.StatusBar.js:704
+#: src/control/Control.StatusBar.js:709
 msgid "Selection mode: inactive"
 msgstr "选择模式：未激活"
 
-#: src/control/Control.StatusBar.js:782
+#: src/control/Control.StatusBar.js:787
 msgid "Set Language for All text"
 msgstr "为所有文本设置语言"
 
-#: src/control/Control.StatusBar.js:785
+#: src/control/Control.StatusBar.js:790
 msgid "Set Language for Paragraph"
 msgstr "为段落设置语言"
 
-#: src/control/Control.StatusBar.js:786
+#: src/control/Control.StatusBar.js:791
 msgid "Set Language for Selection"
 msgstr "为选中部分设置语言"
 
@@ -7118,7 +7123,7 @@ msgstr ""
 "该文档包含一些可能无法通过 Web API 访问的引用。 编辑引文或参考书目时可能会导"
 "致一些问题。"
 
-#: src/control/Control.Zotero.js:246 src/app/Socket.ts:3043
+#: src/control/Control.Zotero.js:246 src/app/Socket.ts:3047
 msgid "Loading..."
 msgstr "正在载入…"
 
@@ -7298,7 +7303,7 @@ msgstr "服务器返回的原因为："
 msgid "The document could not be locked."
 msgstr "无法锁定文档。"
 
-#: src/control/Permission.js:192 src/app/Socket.ts:2673
+#: src/control/Permission.js:192 src/app/Socket.ts:2677
 msgid "Wrong password provided. Please try again."
 msgstr "密码错误。请重试。"
 
@@ -8060,11 +8065,11 @@ msgstr "行号"
 msgid "Column {index}"
 msgstr "列 {index}"
 
-#: src/control/jsdialog/Widget.EditEngine.ts:601
+#: src/control/jsdialog/Widget.EditEngine.ts:632
 msgid "%1 is editing"
 msgstr ""
 
-#: src/control/jsdialog/Widget.EditEngine.ts:602
+#: src/control/jsdialog/Widget.EditEngine.ts:633
 msgid "Another user is editing"
 msgstr ""
 
@@ -8320,113 +8325,113 @@ msgstr "导出到存储"
 msgid "Successfully exported: "
 msgstr "成功导出： "
 
-#: src/app/Socket.ts:1230
+#: src/app/Socket.ts:1234
 msgid "This document has links to external content."
 msgstr "此文档包含指向外部内容的链接。"
 
-#: src/app/Socket.ts:1231
+#: src/app/Socket.ts:1235
 msgid "Allow"
 msgstr "允许"
 
-#: src/app/Socket.ts:1914
+#: src/app/Socket.ts:1918
 msgid "Discard"
 msgstr "丢弃"
 
-#: src/app/Socket.ts:1932
+#: src/app/Socket.ts:1936
 msgid "Save to new file"
 msgstr "保存为新文档"
 
-#: src/app/Socket.ts:1945
+#: src/app/Socket.ts:1949
 msgid "Document has been changed"
 msgstr "文档已被修改"
 
-#: src/app/Socket.ts:1947
+#: src/app/Socket.ts:1951
 msgid ""
 "Document has been changed in storage. What would you like to do with your "
 "unsaved changes?"
 msgstr "文档已在存储位置被更改。对于您尚未保存更改的文档，您打算怎么做？"
 
-#: src/app/Socket.ts:2106
+#: src/app/Socket.ts:2110
 msgid "Server is now reachable. We have to refresh the page now."
 msgstr "服务器现在可以访问。页面必须立即刷新。"
 
-#: src/app/Socket.ts:2109
+#: src/app/Socket.ts:2113
 msgid "Server is now reachable..."
 msgstr "服务器现在可以访问…"
 
-#: src/app/Socket.ts:2117
+#: src/app/Socket.ts:2121
 msgid "RELOAD"
 msgstr "重新加载"
 
-#: src/app/Socket.ts:2145
+#: src/app/Socket.ts:2149
 msgid "Cluster configuration warning"
 msgstr "集群配置警告"
 
-#: src/app/Socket.ts:2154
+#: src/app/Socket.ts:2158
 msgid "Wrong server, reconnecting..."
 msgstr "服务器错误，正在重连…"
 
-#: src/app/Socket.ts:2176
+#: src/app/Socket.ts:2180
 msgid "Unsupported version."
 msgstr "不支持的版本。"
 
-#: src/app/Socket.ts:2177
+#: src/app/Socket.ts:2181
 msgid "Unsupported server version."
 msgstr "不被支持的服务器版本。"
 
-#: src/app/Socket.ts:2367
+#: src/app/Socket.ts:2371
 msgid "Document is getting migrated"
 msgstr "文档正在迁移"
 
-#: src/app/Socket.ts:2665
+#: src/app/Socket.ts:2669
 msgid "Document requires password to view."
 msgstr "文档需要密码才能查看。"
 
-#: src/app/Socket.ts:2667
+#: src/app/Socket.ts:2671
 msgid "Document requires password to modify."
 msgstr "文档需要密码才能修改。"
 
-#: src/app/Socket.ts:2669
+#: src/app/Socket.ts:2673
 msgid "Hit Cancel to open in view-only mode."
 msgstr "点击“取消”在只读模式下打开。"
 
-#: src/app/Socket.ts:2738
+#: src/app/Socket.ts:2742
 msgid "Only the document owner can change the password."
 msgstr "只有文档作者可以修改密码。"
 
-#: src/app/Socket.ts:2752
+#: src/app/Socket.ts:2756
 msgid "You do not have permission to edit this document."
 msgstr "您没有编辑此文档的权限。"
 
-#: src/app/Socket.ts:2753
+#: src/app/Socket.ts:2757
 msgid "The document could not be made editable."
 msgstr "无法将此文档设为可编辑。"
 
-#: src/app/Socket.ts:2826 src/app/Socket.ts:2837
+#: src/app/Socket.ts:2830 src/app/Socket.ts:2841
 msgid "Missing Fonts"
 msgstr "缺失字体"
 
-#: src/app/Socket.ts:2875
+#: src/app/Socket.ts:2879
 msgid "Someone"
 msgstr "某人"
 
-#: src/app/Socket.ts:2877
+#: src/app/Socket.ts:2881
 msgid "{username} saved this document as {filename}. Do you want to join?"
 msgstr "{username} 将此文档保存为 {filename}。你想要加入吗？"
 
-#: src/app/Socket.ts:2900
+#: src/app/Socket.ts:2904
 msgid "The document is being renamed and will reload shortly"
 msgstr "文档正被重命名，即将重新加载"
 
-#: src/app/Socket.ts:2903
+#: src/app/Socket.ts:2907
 msgid "The document is switching to Offline mode and will reload shortly"
 msgstr "文档正切换到脱机模式，即将重新加载"
 
-#: src/app/Socket.ts:3043
+#: src/app/Socket.ts:3047
 msgid "Connecting..."
 msgstr "正在连接…"
 
-#: src/app/Socket.ts:3059
+#: src/app/Socket.ts:3063
 msgid "Server is shutting down"
 msgstr "服务器正在关闭"
 
@@ -8434,26 +8439,26 @@ msgstr "服务器正在关闭"
 msgid "AI is not configured, contact your administrator"
 msgstr "未配置 AI，请联系管理员"
 
-#: src/docdispatcher.ts:1021
+#: src/docdispatcher.ts:1028
 msgid "Delete section"
 msgstr ""
 
-#: src/docdispatcher.ts:1028
+#: src/docdispatcher.ts:1035
 #, fuzzy
 msgid "Delete slides"
 msgstr "删除%n个幻灯片"
 
-#: src/docdispatcher.ts:1029
+#: src/docdispatcher.ts:1036
 #, fuzzy
 msgid "Delete %n slide?"
 msgid_plural "Delete %n slides?"
 msgstr[0] "删除%n个幻灯片"
 
-#: src/docdispatcher.ts:1033
+#: src/docdispatcher.ts:1040
 msgid "Delete pages"
 msgstr ""
 
-#: src/docdispatcher.ts:1034
+#: src/docdispatcher.ts:1041
 #, fuzzy
 msgid "Delete %n page?"
 msgid_plural "Delete %n pages?"
@@ -8709,109 +8714,109 @@ msgstr ""
 msgid "Heading level {0}"
 msgstr ""
 
-#: src/layer/marker/A11yTextInput.js:1122
+#: src/layer/marker/A11yTextInput.js:1140
 msgid "Out of table"
 msgstr "表格外"
 
-#: src/layer/marker/A11yTextInput.js:1127
+#: src/layer/marker/A11yTextInput.js:1145
 msgid "%n row"
 msgid_plural "%n rows"
 msgstr[0] "%n 行"
 
-#: src/layer/marker/A11yTextInput.js:1128
+#: src/layer/marker/A11yTextInput.js:1146
 msgid "%n column"
 msgid_plural "%n columns"
 msgstr[0] "%n 列"
 
 #. TRANSLATORS: {0} is a row count, {1} a column count, both already
 #. TRANSLATORS: in their plural form, e.g. "3 rows" and "1 column"
-#: src/layer/marker/A11yTextInput.js:1131
+#: src/layer/marker/A11yTextInput.js:1149
 msgid "Table with {0} and {1}"
 msgstr "包含 {0} 与 {1} 的表格"
 
-#: src/layer/marker/A11yTextInput.js:1136
+#: src/layer/marker/A11yTextInput.js:1154
 msgid "Row {0} through {1}"
 msgstr "第{0}行到第{1}行"
 
-#: src/layer/marker/A11yTextInput.js:1139
+#: src/layer/marker/A11yTextInput.js:1157
 msgid "Row {0}"
 msgstr "第{0}行"
 
-#: src/layer/marker/A11yTextInput.js:1147
+#: src/layer/marker/A11yTextInput.js:1165
 msgid "Column {0} through {1}"
 msgstr "第{0}列到第{1}列"
 
-#: src/layer/marker/A11yTextInput.js:1150
+#: src/layer/marker/A11yTextInput.js:1168
 msgid "Column {0}"
 msgstr "第{0}列"
 
-#: src/layer/marker/A11yTextInput.js:1188
+#: src/layer/marker/A11yTextInput.js:1206
 msgid "Editing activated. "
 msgstr "已激活编辑。 "
 
-#: src/layer/marker/A11yTextInput.js:1213
+#: src/layer/marker/A11yTextInput.js:1231
 msgid "{0} selected"
 msgstr "已选择{0}个"
 
-#: src/layer/marker/A11yTextInput.js:1215
+#: src/layer/marker/A11yTextInput.js:1233
 msgid "Has text: "
 msgstr "包含文本： "
 
-#: src/layer/marker/A11yTextInput.js:1221
+#: src/layer/marker/A11yTextInput.js:1239
 msgid "{0} unselected"
 msgstr "未选择{0}个"
 
-#: src/layer/marker/A11yTextInput.js:1226
+#: src/layer/marker/A11yTextInput.js:1244
 msgid "{0} deleted"
 msgstr "已删除{0}个"
 
-#: src/layer/marker/TextInput.js:521
+#: src/layer/marker/TextInput.js:519
 #, fuzzy
 msgid "Placeholder"
 msgstr "占位符"
 
-#: src/layer/marker/TextInput.js:529
+#: src/layer/marker/TextInput.js:527
 msgid "Drop-down list"
 msgstr ""
 
-#: src/layer/marker/TextInput.js:531
+#: src/layer/marker/TextInput.js:529
 msgid "Combo box"
 msgstr ""
 
-#: src/layer/marker/TextInput.js:537
+#: src/layer/marker/TextInput.js:535
 msgid "Content control"
 msgstr ""
 
-#: src/layer/marker/TextInput.js:550
+#: src/layer/marker/TextInput.js:548
 #, fuzzy
 msgid "Object"
 msgstr "物品"
 
-#: src/layer/marker/TextInput.js:552
+#: src/layer/marker/TextInput.js:550
 msgid "Frame"
 msgstr ""
 
-#: src/layer/marker/TextInput.js:744
+#: src/layer/marker/TextInput.js:742
 msgid "Screen reader support for text content is disabled. "
 msgstr "屏幕阅读器对文本内容的支持已关闭。 "
 
-#: src/layer/marker/TextInput.js:745
+#: src/layer/marker/TextInput.js:743
 msgid "You need to enable it both at server level and in the UI. "
 msgstr "您需要同时在服务器和UI中启用它。 "
 
-#: src/layer/marker/TextInput.js:746
+#: src/layer/marker/TextInput.js:744
 msgid "Look for the accessibility section in coolwsd.xml for server setting. "
 msgstr "请在 coolwsd.xml 文件的辅助功能设置部分查找服务器设置。 "
 
-#: src/layer/marker/TextInput.js:747
+#: src/layer/marker/TextInput.js:745
 msgid "Also check the voice over toggle under {parentControl}."
 msgstr "还要检查{parentControl}下的语音朗读开关。"
 
-#: src/layer/marker/TextInput.js:749
+#: src/layer/marker/TextInput.js:747
 msgid "the Help tab"
 msgstr "帮助选项卡"
 
-#: src/layer/marker/TextInput.js:749
+#: src/layer/marker/TextInput.js:747
 msgid "the View menu"
 msgstr "视图菜单"
 
@@ -8963,22 +8968,22 @@ msgid "Print dialog"
 msgstr "打印对话框"
 
 #: src/map/handler/Map.SlideShow.js:59
-#: src/slideshow/SlideShowPresenter.ts:1445
+#: src/slideshow/SlideShowPresenter.ts:1447
 msgid "Empty Slide Show"
 msgstr "空白演示文稿"
 
 #: src/map/handler/Map.SlideShow.js:60
-#: src/slideshow/SlideShowPresenter.ts:1446
+#: src/slideshow/SlideShowPresenter.ts:1448
 msgid "All slides are hidden!"
 msgstr "所有幻灯片均已隐藏！"
 
 #: src/map/handler/Map.SlideShow.js:175
-#: src/slideshow/SlideShowPresenter.ts:1473
+#: src/slideshow/SlideShowPresenter.ts:1475
 msgid "Windowed Presentation Blocked"
 msgstr "演示窗口被阻止"
 
 #: src/map/handler/Map.SlideShow.js:176
-#: src/slideshow/SlideShowPresenter.ts:1475
+#: src/slideshow/SlideShowPresenter.ts:1477
 msgid ""
 "Presentation was blocked. Please allow pop-ups in your browser. This lets "
 "slide shows to be displayed in separated windows, allowing for easy screen "
@@ -8992,12 +8997,12 @@ msgid "Windowed Presentation: "
 msgstr "演示窗口： "
 
 #: src/map/handler/Map.SlideShow.js:210
-#: src/slideshow/SlideShowPresenter.ts:1281
+#: src/slideshow/SlideShowPresenter.ts:1283
 msgid "Presenting in another window"
 msgstr "正在另一个窗口中演示"
 
 #: src/map/handler/Map.SlideShow.js:211
-#: src/slideshow/SlideShowPresenter.ts:1282
+#: src/slideshow/SlideShowPresenter.ts:1284
 msgid "Close Presentation"
 msgstr "关闭演示"
 
@@ -9010,22 +9015,22 @@ msgid "End Presentation"
 msgstr "结束演示"
 
 #: src/map/handler/Map.SlideShow.js:303
-#: src/slideshow/SlideShowPresenter.ts:1460
+#: src/slideshow/SlideShowPresenter.ts:1462
 msgid "Already presenting"
 msgstr "已在演示中"
 
 #: src/map/handler/Map.SlideShow.js:304
-#: src/slideshow/SlideShowPresenter.ts:1461
+#: src/slideshow/SlideShowPresenter.ts:1463
 msgid "You are already presenting this document"
 msgstr "您已经在演示此文档"
 
 #: src/map/handler/Map.SlideShow.js:314
-#: src/slideshow/SlideShowPresenter.ts:1501
+#: src/slideshow/SlideShowPresenter.ts:1503
 msgid "Presentation disabled"
 msgstr "演示已禁用"
 
 #: src/map/handler/Map.SlideShow.js:315
-#: src/slideshow/SlideShowPresenter.ts:1502
+#: src/slideshow/SlideShowPresenter.ts:1504
 msgid "Presentation mode has been disabled for this document"
 msgstr "该文档演示模式已被禁用"
 
@@ -9037,23 +9042,23 @@ msgstr ""
 msgid "Your Collabora Online server needs updating. Version {0} is available."
 msgstr "您的Collabora Online版本需要更新。{0}版本可用。"
 
-#: src/map/handler/Map.WOPI.js:234
+#: src/map/handler/Map.WOPI.js:236
 msgid "Creating new file from template..."
 msgstr "使用模版创建新文件…"
 
-#: src/map/handler/Map.WOPI.js:336
+#: src/map/handler/Map.WOPI.js:338
 msgid "Compare Document..."
 msgstr "比较文档..."
 
-#: src/map/handler/Map.WOPI.js:934
+#: src/map/handler/Map.WOPI.js:936
 msgid "File name should contain an extension."
 msgstr "文件名应当包含扩展名。"
 
-#: src/map/handler/Map.WOPI.js:1042
+#: src/map/handler/Map.WOPI.js:1044
 msgid "Enter a file name"
 msgstr "输入文件名"
 
-#: src/map/handler/Map.WOPI.js:1061
+#: src/map/handler/Map.WOPI.js:1063
 msgid "Creating copy..."
 msgstr "正在创建副本…"
 
@@ -9127,7 +9132,7 @@ msgstr "暂停…（%SECONDS%）"
 msgid "Current Slide"
 msgstr "当前幻灯片"
 
-#: src/slideshow/PresenterConsole.js:35 src/slideshow/PresenterConsole.js:1200
+#: src/slideshow/PresenterConsole.js:35 src/slideshow/PresenterConsole.js:1203
 #: src/slideshow/SlideShowPresenter.ts:972
 #: src/slideshow/SlideShowPresenter.ts:985
 msgid "Disable Animations"
@@ -9182,33 +9187,33 @@ msgstr "下一张幻灯片的预览"
 msgid "Preview Slide {1}"
 msgstr "预览幻灯片 {1}"
 
-#: src/slideshow/PresenterConsole.js:825
+#: src/slideshow/PresenterConsole.js:828
 msgid "You are leaving the presentation."
 msgstr "您正在离开演示文稿。"
 
-#: src/slideshow/PresenterConsole.js:826
+#: src/slideshow/PresenterConsole.js:829
 msgid "The link is not valid."
 msgstr "该链接无效。"
 
-#: src/slideshow/PresenterConsole.js:1199
+#: src/slideshow/PresenterConsole.js:1202
 #: src/slideshow/SlideShowPresenter.ts:984
 msgid "Enable Animations"
 msgstr "启用动画"
 
-#: src/slideshow/PresenterConsole.js:1593
+#: src/slideshow/PresenterConsole.js:1596
 msgid "Slide {0} of {1}"
 msgstr "第{0}张幻灯片，共{1}张"
 
-#: src/slideshow/PresenterConsole.js:1664
+#: src/slideshow/PresenterConsole.js:1667
 msgid "No Notes"
 msgstr "无备注"
 
-#: src/slideshow/PresenterConsole.js:1764
+#: src/slideshow/PresenterConsole.js:1767
 msgid "Repeat in %n second"
 msgid_plural "Repeat in %n seconds"
 msgstr[0] "%n 秒后重复"
 
-#: src/slideshow/PresenterConsole.js:1771
+#: src/slideshow/PresenterConsole.js:1774
 #: src/slideshow/SlideShowPresenter.ts:728
 msgid "Click to exit presentation..."
 msgstr "点击以退出演示…"
@@ -9221,7 +9226,7 @@ msgstr "您在第一张幻灯片上"
 msgid "Waiting for presenter to advance"
 msgstr "等待演示者前进"
 
-#: src/slideshow/SlideShowPresenter.ts:1698
+#: src/slideshow/SlideShowPresenter.ts:1700
 msgid "Stop Following"
 msgstr "停止跟随"
 
@@ -9439,6 +9444,9 @@ msgstr ""
 "translate=\"true\">1</a> <a id=\"slide-2-indicator\" href=\"#slide-2\" data-"
 "translate=\"true\">2</a> <a id=\"slide-3-indicator\" href=\"#slide-3\" data-"
 "translate=\"true\">3</a>"
+
+#~ msgid "Slide %1, linked to %2"
+#~ msgstr "幻灯片 %1，已链接到 %2"
 
 #~ msgid "tone"
 #~ msgstr "语气"

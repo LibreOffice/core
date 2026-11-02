@@ -7,13 +7,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 13:34+0100\n"
+"POT-Creation-Date: 2026-11-02 12:35+0100\n"
 "PO-Revision-Date: 2026-11-01 11:12+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin "
 "<aindriu80@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ga/>\n"
-"Language: ga\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -29,8 +29,8 @@ msgstr "Consól riaracháin"
 msgid "Settings"
 msgstr "Socruithe"
 
-#: admin/admin.strings.js:17 src/control/Control.StatusBar.js:304
-#: src/control/Control.StatusBar.js:305
+#: admin/admin.strings.js:17 src/control/Control.StatusBar.js:307
+#: src/control/Control.StatusBar.js:308
 #: src/control/jsdialog/Widget.NewSlideLayoutEntry.ts:39
 msgid "Overview"
 msgstr "Foramharc"
@@ -171,10 +171,10 @@ msgstr "Graf Líonra"
 #: admin/src/integrator/AdminIntegratorSettings.ts:2325
 #: admin/src/integrator/AdminIntegratorSettings.ts:6082
 #: admin/src/integrator/WordBook.ts:394 admin/src/integrator/Xcu.ts:684
-#: src/canvas/sections/CommentListSection.ts:942
+#: src/canvas/sections/CommentListSection.ts:944
 #: src/canvas/sections/CommentSection.ts:207
 #: src/canvas/sections/CommentSection.ts:760
-#: src/canvas/sections/CommentSection.ts:1917
+#: src/canvas/sections/CommentSection.ts:1926
 #: src/control/Control.BackstageView.ts:161
 #: src/control/Control.Notebookbar.js:884
 #: src/control/Control.NotebookbarBuilder.js:213
@@ -254,7 +254,7 @@ msgstr "Scagaire Cainéil:"
 #: src/app/TableStylesService.ts:284 src/app/TableStylesService.ts:516
 #: src/control/Control.CleanupSidebar.ts:1177
 #: src/control/Control.JSDialogBuilder.js:424
-#: src/control/Control.StatusBar.js:244 src/control/Control.StatusBar.js:249
+#: src/control/Control.StatusBar.js:247 src/control/Control.StatusBar.js:252
 msgid "None"
 msgstr "Ceann ar bith"
 
@@ -273,7 +273,7 @@ msgstr "Leibhéil Logála"
 #: src/control/Control.MobileWizardWindow.js:244
 #: src/control/Control.UIManager.ts:3390 src/control/Control.Zotero.js:191
 #: src/control/jsdialog/Widget.SidebarContainers.tsx:71 src/app/Socket.ts:1024
-#: src/app/Socket.ts:2829 src/app/Socket.ts:2840
+#: src/app/Socket.ts:2833 src/app/Socket.ts:2844
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.div.button:52-8
 msgid "Close"
 msgstr "Dún"
@@ -332,32 +332,32 @@ msgstr "Rabhadh"
 #: admin/src/AdminSocketBase.js:74 admin/src/AdminSocketOverview.js:108
 #: admin/src/AdminSocketOverview.js:434 admin/src/AdminSocketSettings.js:47
 #: admin/src/integrator/AdminIntegratorSettings.ts:6225 src/app/Debug.ts:1952
-#: src/canvas/sections/CommentListSection.ts:2263
+#: src/canvas/sections/CommentListSection.ts:2275
 #: src/control/Control.AboutDialog.ts:240
 #: src/control/Control.AlertDialog.js:56
 #: src/control/Control.DocumentNameInput.js:58
 #: src/control/Control.DocumentRepair.js:77
 #: src/control/Control.ESignatureDialog.ts:132
 #: src/control/Control.LanguageDialog.js:120
-#: src/control/Control.PartsPreview.js:1509
-#: src/control/Control.PartsPreview.js:1560
+#: src/control/Control.PartsPreview.js:1521
+#: src/control/Control.PartsPreview.js:1572
 #: src/control/Control.ServerAuditDialog.ts:383
 #: src/control/Control.Tabs.js:724 src/control/Control.Tabs.js:733
 #: src/control/Control.Tabs.js:772 src/control/Control.Tabs.js:776
 #: src/control/Control.Zotero.js:365 src/control/Control.Zotero.js:411
 #: src/control/Parts.js:662 src/control/Permission.js:113
 #: src/control/Permission.js:123 src/control/Permission.js:214
-#: src/control/Toolbar.js:822 src/app/Socket.ts:1090 src/app/Socket.ts:1980
-#: src/app/Socket.ts:2148 src/app/Socket.ts:2739 src/app/Socket.ts:2754
-#: src/app/Socket.ts:2886 src/main.js:137 src/main.js:140 src/main.js:409
+#: src/control/Toolbar.js:822 src/app/Socket.ts:1090 src/app/Socket.ts:1984
+#: src/app/Socket.ts:2152 src/app/Socket.ts:2743 src/app/Socket.ts:2758
+#: src/app/Socket.ts:2890 src/main.js:137 src/main.js:140 src/main.js:409
 #: src/map/Clipboard.js:1527 src/map/handler/Map.Feedback.js:96
 #: src/map/handler/Map.SlideShow.js:60 src/map/handler/Map.SlideShow.js:177
 #: src/map/handler/Map.SlideShow.js:305 src/map/handler/Map.SlideShow.js:316
-#: src/map/handler/Map.WOPI.js:934 src/map/handler/Map.WOPI.js:1042
-#: src/slideshow/SlideShowPresenter.ts:1448
-#: src/slideshow/SlideShowPresenter.ts:1463
-#: src/slideshow/SlideShowPresenter.ts:1478
-#: src/slideshow/SlideShowPresenter.ts:1504
+#: src/map/handler/Map.WOPI.js:936 src/map/handler/Map.WOPI.js:1044
+#: src/slideshow/SlideShowPresenter.ts:1450
+#: src/slideshow/SlideShowPresenter.ts:1465
+#: src/slideshow/SlideShowPresenter.ts:1480
+#: src/slideshow/SlideShowPresenter.ts:1506
 #: src/control/Control.Extension.ts:2099
 msgid "OK"
 msgstr "Ceart go leor"
@@ -365,11 +365,11 @@ msgstr "Ceart go leor"
 #: admin/src/AdminClusterOverview.js:561 admin/src/AdminSocketOverview.js:109
 #: admin/src/AdminSocketOverview.js:435 admin/src/AdminSocketSettings.js:48
 #: admin/src/integrator/WordBook.ts:386
-#: src/canvas/sections/CommentListSection.ts:937
+#: src/canvas/sections/CommentListSection.ts:939
 #: src/canvas/sections/CommentSection.ts:206
 #: src/canvas/sections/CommentSection.ts:209
-#: src/canvas/sections/CommentSection.ts:1918
-#: src/canvas/sections/CommentSection.ts:1923
+#: src/canvas/sections/CommentSection.ts:1927
+#: src/canvas/sections/CommentSection.ts:1932
 #: src/control/Control.AIChatSidebar.ts:1526
 #: src/control/Control.AIChatSidebar.ts:1528
 #: src/control/Control.AIChatSidebar.ts:1613
@@ -383,7 +383,7 @@ msgstr "Ceart go leor"
 #: src/control/Control.UIManager.ts:2823 src/control/Control.UIManager.ts:2918
 #: src/control/Control.UIManager.ts:3082 src/control/Control.UIManager.ts:3174
 #: src/control/Control.UIManager.ts:3357 src/control/Control.Zotero.js:360
-#: src/control/Parts.js:657 src/app/Socket.ts:1911
+#: src/control/Parts.js:657 src/app/Socket.ts:1915
 #: src/map/handler/Map.Settings.ts:240 src/control/Control.Extension.ts:2100
 msgid "Cancel"
 msgstr "Cealaigh"
@@ -475,7 +475,7 @@ msgstr ""
 
 #: admin/src/AdminSocketServerAudit.js:99
 #: admin/src/integrator/AdminIntegratorSettings.ts:6213
-#: src/control/Control.AIChatSidebar.ts:3907 src/map/handler/Map.WOPI.js:934
+#: src/control/Control.AIChatSidebar.ts:3907 src/map/handler/Map.WOPI.js:936
 msgid "Error"
 msgstr "Earráid"
 
@@ -770,7 +770,7 @@ msgstr "Ainm leathanaigh"
 #: src/control/Control.NotebookbarCalc.js:862
 #: src/control/Control.NotebookbarWriter.js:1737
 #: src/control/Control.Zotero.js:1154 src/control/Control.Zotero.js:1615
-#: src/layer/marker/TextInput.js:533
+#: src/layer/marker/TextInput.js:531
 msgid "Date"
 msgstr "Dáta"
 
@@ -793,7 +793,7 @@ msgid "Presentation"
 msgstr "Cur i láthair"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:853
-#: src/control/Control.StatusBar.js:307 src/control/Control.StatusBar.js:308
+#: src/control/Control.StatusBar.js:310 src/control/Control.StatusBar.js:311
 #: src/control/Control.Zotero.js:1342 src/slideshow/PresenterConsole.js:36
 msgid "Notes"
 msgstr "Nótaí"
@@ -1059,14 +1059,14 @@ msgid "Something went wrong while uploading the file. Please try again."
 msgstr "Tharla fadhb agus an comhad á uaslódáil. Déan iarracht arís."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3043
-#: src/canvas/sections/CommentSection.ts:1827
-#: src/canvas/sections/CommentSection.ts:1832
+#: src/canvas/sections/CommentSection.ts:1836
+#: src/canvas/sections/CommentSection.ts:1841
 #: src/control/Control.AIChatSidebar.ts:1620
 #: src/control/backstage/CloudDialogs.tsx:193
-#: src/control/Control.PartsPreview.js:1506
+#: src/control/Control.PartsPreview.js:1518
 #: src/control/jsdialog/Control.ContextMenu.ts:375
 #: src/control/jsdialog/Definitions.DialogModification.ts:185
-#: src/docdispatcher.ts:1042
+#: src/docdispatcher.ts:1049
 msgid "Delete"
 msgstr "Scrios"
 
@@ -1655,7 +1655,7 @@ msgstr " nóim"
 msgid " s"
 msgstr " s"
 
-#: js/global.js:2149
+#: js/global.js:2148
 msgid ""
 "The system is currently adjusting resources. Please wait a moment while we "
 "retry your request..."
@@ -1663,12 +1663,12 @@ msgstr ""
 "Tá an córas ag coigeartú acmhainní faoi láthair. Fan nóiméad le do thoil "
 "agus muid ag iarraidh d’iarratas arís..."
 
-#: js/global.js:2151
+#: js/global.js:2150
 msgid "The document is being migrated to a new server. Retrying shortly..."
 msgstr ""
 "Tá an doiciméad á aistriú chuig freastalaí nua. Ag iarraidh arís go luath..."
 
-#: js/global.js:2153
+#: js/global.js:2152
 msgid "Failed to get RouteToken from controller"
 msgstr "Theip ar RouteToken a fháil ón rialaitheoir"
 
@@ -1870,16 +1870,16 @@ msgstr[4] "%n nóiméad"
 msgid "less than a minute"
 msgstr "níos lú ná nóiméad"
 
-#: src/canvas/sections/CommentListSection.ts:2261
-#: src/canvas/sections/CommentListSection.ts:2274
+#: src/canvas/sections/CommentListSection.ts:2273
+#: src/canvas/sections/CommentListSection.ts:2286
 msgid "Comments Updated"
 msgstr "Tuairimí Nuashonraithe"
 
-#: src/canvas/sections/CommentListSection.ts:2262
+#: src/canvas/sections/CommentListSection.ts:2274
 msgid "Another user has removed this comment."
 msgstr "Bhain úsáideoir eile an trácht seo."
 
-#: src/canvas/sections/CommentListSection.ts:2275
+#: src/canvas/sections/CommentListSection.ts:2287
 msgid ""
 "Another user has updated the comment. Would you like to overwrite those "
 "changes?"
@@ -1887,14 +1887,14 @@ msgstr ""
 "Tá úsáideoir eile tar éis an trácht a nuashonrú. Ar mhaith leat na "
 "hathruithe sin a fhorscríobh?"
 
-#: src/canvas/sections/CommentListSection.ts:2276 src/control/Styles.js:39
-#: src/app/Socket.ts:1915
+#: src/canvas/sections/CommentListSection.ts:2288 src/control/Styles.js:39
+#: src/app/Socket.ts:1919
 msgid "Overwrite"
 msgstr "Forscríobh"
 
-#: src/canvas/sections/CommentListSection.ts:2277
-#: src/control/Control.SlideLinkToolbar.tsx:166
-#: src/slideimport/SlideLinks.ts:469
+#: src/canvas/sections/CommentListSection.ts:2289
+#: src/control/Control.SlideLinkToolbar.tsx:169
+#: src/slideimport/SlideLinks.ts:477
 msgid "Update"
 msgstr "Nuashonrú"
 
@@ -1913,7 +1913,7 @@ msgstr "Oscail roghchlár"
 #: src/canvas/sections/CommentSection.ts:210
 #: src/canvas/sections/CommentSection.ts:764
 #: src/canvas/sections/CommentSection.ts:1354
-#: src/canvas/sections/CommentSection.ts:1922
+#: src/canvas/sections/CommentSection.ts:1931
 msgid "Reply"
 msgstr "Freagair"
 
@@ -1949,7 +1949,7 @@ msgstr "Bainte"
 
 #: src/canvas/sections/CommentSection.ts:1341
 #: src/control/jsdialog/Widget.Comment.ts:177
-#: src/layer/marker/TextInput.js:497 src/layer/tile/CanvasTileLayer.js:3825
+#: src/layer/marker/TextInput.js:495 src/layer/tile/CanvasTileLayer.js:3825
 #: src/layer/tile/CanvasTileLayer.js:3836
 msgid "Comment"
 msgstr "Nóta Tráchta"
@@ -2001,12 +2001,12 @@ msgstr "Oscail i radharc iomlán"
 msgid "Show in navigator"
 msgstr "Taispeáin sa loingseoir"
 
-#: src/canvas/sections/CommentSection.ts:1797
+#: src/canvas/sections/CommentSection.ts:1806
 msgid "Press Ctrl + Enter to post, or %1 to discard"
 msgstr "Brúigh Ctrl + Enter chun postáil, nó %1 chun a chur i leataobh"
 
-#: src/canvas/sections/CommentSection.ts:1826
-#: src/canvas/sections/CommentSection.ts:1831
+#: src/canvas/sections/CommentSection.ts:1835
+#: src/canvas/sections/CommentSection.ts:1840
 #: src/control/Control.SaveState.tsx:196
 msgid "Saved"
 msgstr "Sábháilte"
@@ -2035,15 +2035,15 @@ msgstr "Leagan Reatha"
 msgid "%n more"
 msgstr "%n níos mó"
 
-#: src/canvas/sections/ShapeHandlesSection.ts:605
+#: src/canvas/sections/ShapeHandlesSection.ts:606
 msgid "Document contains unsupported media"
 msgstr "Tá meáin nach dtacaítear leo sa doiciméad"
 
-#: src/canvas/sections/SelectionSection.ts:1556
+#: src/canvas/sections/SelectionSection.ts:1562
 msgid "Waiting for redo..."
 msgstr "Ag fanacht le hathdhéanamh..."
 
-#: src/canvas/sections/SelectionSection.ts:1557
+#: src/canvas/sections/SelectionSection.ts:1563
 msgid "Waiting for undo..."
 msgstr "Ag fanacht leis an gcealú..."
 
@@ -2408,12 +2408,12 @@ msgid "Emojify"
 msgstr "Emojify"
 
 #: src/control/Control.AIChatSidebar.ts:1233
-#: src/control/Control.StatusBar.js:183
+#: src/control/Control.StatusBar.js:186
 msgid "On"
 msgstr "Ar"
 
 #: src/control/Control.AIChatSidebar.ts:1233
-#: src/control/Control.StatusBar.js:185
+#: src/control/Control.StatusBar.js:188
 #: src/control/jsdialog/Definitions.Menu.ts:1856
 msgid "Off"
 msgstr "As"
@@ -3089,7 +3089,7 @@ msgstr "Tá an méid seo a leanas i gcealla {0} (Bileog: {1}):"
 #: src/control/Control.FormulaBarJSDialog.js:116
 #: src/control/Control.NotebookbarWriter.js:155
 #: src/control/Control.NotebookbarWriter.js:1677
-#: src/layer/marker/TextInput.js:546
+#: src/layer/marker/TextInput.js:544
 msgid "Formula"
 msgstr "Foirmle"
 
@@ -3384,7 +3384,7 @@ msgid "Master slide, image %1"
 msgstr "Máistir-sleamhnán, íomhá %1"
 
 #: src/control/Control.CleanupSidebar.ts:557
-#: src/control/Control.PartsPreview.js:967
+#: src/control/Control.PartsPreview.js:955 src/slideimport/SlideLinks.ts:998
 msgid "Slide %1"
 msgstr "Sleamhnán %1"
 
@@ -3559,7 +3559,7 @@ msgstr "Níor fhreagair an glanadh. Déan iarracht arís, le do thoil."
 msgid "External link"
 msgstr "Nasc seachtrach"
 
-#: src/control/Control.AlertDialog.js:56 src/slideshow/PresenterConsole.js:831
+#: src/control/Control.AlertDialog.js:56 src/slideshow/PresenterConsole.js:834
 msgid "Open link"
 msgstr "Oscail nasc"
 
@@ -4061,7 +4061,7 @@ msgstr "Ainm an doiciméid"
 msgid "A document name cannot contain a slash or a backslash."
 msgstr "Ní féidir le hainm doiciméid slais ná drochshlais a bheith ann."
 
-#: src/control/Control.DocumentNameInput.js:42 src/app/Socket.ts:2594
+#: src/control/Control.DocumentNameInput.js:42 src/app/Socket.ts:2598
 msgid "Please enter a valid document name."
 msgstr "Cuir isteach ainm bailí doiciméid, le do thoil."
 
@@ -4129,7 +4129,7 @@ msgstr "Ábhar na gearrthaisce á íosluchtú"
 
 #: src/control/Control.DownloadProgress.js:87
 #: src/control/Control.DownloadProgress.js:112
-#: src/control/Control.PartsPreview.js:688
+#: src/control/Control.PartsPreview.js:693
 #: src/control/jsdialog/Widget.FormulabarEdit.js:461 src/map/Clipboard.js:1589
 msgid "Copy"
 msgstr "Cóip"
@@ -4609,7 +4609,7 @@ msgstr "Ionsáigh Tábla"
 #: src/control/Control.LanguageDialog.js:64 src/control/Control.Menubar.ts:433
 #: src/control/Control.Menubar.ts:435 src/control/Control.Menubar.ts:437
 #: src/control/Control.Menubar.ts:668 src/control/Control.Menubar.ts:844
-#: src/control/Control.Menubar.ts:1168 src/control/Control.StatusBar.js:766
+#: src/control/Control.Menubar.ts:1168 src/control/Control.StatusBar.js:771
 msgid "None (Do not check spelling)"
 msgstr "Ceann ar bith (Ná seiceáil litriú)"
 
@@ -4618,7 +4618,7 @@ msgid "Select language"
 msgstr "Roghnaigh teanga"
 
 #: src/control/Control.LanguageDialog.js:103
-#: src/control/Control.StatusBar.js:289
+#: src/control/Control.StatusBar.js:292
 msgid "Language"
 msgstr "Teanga"
 
@@ -4704,7 +4704,7 @@ msgstr "Déan Comparáid idir Athruithe"
 #: src/control/Control.NotebookbarCalc.js:1625
 #: src/control/Control.NotebookbarDraw.js:474
 #: src/control/Control.NotebookbarImpress.js:653
-#: src/control/Control.StatusBar.js:313
+#: src/control/Control.StatusBar.js:316
 msgid "Reset zoom"
 msgstr "Athshocraigh súmáil"
 
@@ -4719,7 +4719,7 @@ msgstr "Scoránaigh mód chomhéadain"
 
 #: src/control/Control.Menubar.ts:196
 #: src/control/Control.NotebookbarWriter.js:1853
-#: src/control/Control.StatusBar.js:298 src/control/Control.StatusBar.js:299
+#: src/control/Control.StatusBar.js:301 src/control/Control.StatusBar.js:302
 msgid "Multi Page View"
 msgstr "Amharc Il-Leathanaigh"
 
@@ -4968,7 +4968,7 @@ msgstr "Cuir an sleamhnán reatha i láthair"
 
 #: src/control/Control.Menubar.ts:658
 #: src/control/Control.NotebookbarImpress.js:561
-#: src/slideshow/PresenterConsole.js:287
+#: src/slideshow/PresenterConsole.js:290
 msgid "Presenter View"
 msgstr "Radharc Láithreora"
 
@@ -5091,7 +5091,7 @@ msgstr "Sainmhínigh an limistéar priontála"
 msgid "Remove print area"
 msgstr "Bain an limistéar priontála"
 
-#: src/control/Control.Menubar.ts:1733 src/control/Control.StatusBar.js:765
+#: src/control/Control.Menubar.ts:1733 src/control/Control.StatusBar.js:770
 msgid "Reset to Default Language"
 msgstr "Athshocraigh go Teanga Réamhshocraithe"
 
@@ -5576,7 +5576,7 @@ msgstr "Athbhreithniú"
 #: src/control/Control.NotebookbarDraw.js:108
 #: src/control/Control.NotebookbarImpress.js:136
 #: src/control/Control.NotebookbarWriter.js:114
-#: src/layer/marker/TextInput.js:544
+#: src/layer/marker/TextInput.js:542
 msgid "Shape"
 msgstr "Cruth"
 
@@ -5585,7 +5585,7 @@ msgstr "Cruth"
 #: src/control/Control.NotebookbarImpress.js:143
 #: src/control/Control.NotebookbarWriter.js:121
 #: src/control/Control.NotebookbarWriter.js:1729
-#: src/layer/marker/TextInput.js:535
+#: src/layer/marker/TextInput.js:533
 msgid "Picture"
 msgstr "Pictiúr"
 
@@ -5593,7 +5593,7 @@ msgstr "Pictiúr"
 #: src/control/Control.NotebookbarDraw.js:122
 #: src/control/Control.NotebookbarImpress.js:150
 #: src/control/Control.NotebookbarWriter.js:128
-#: src/layer/marker/TextInput.js:548
+#: src/layer/marker/TextInput.js:546
 msgid "Chart"
 msgstr "Cairt"
 
@@ -5859,7 +5859,7 @@ msgstr "Reoigh"
 #: src/control/Control.NotebookbarDraw.js:453
 #: src/control/Control.NotebookbarImpress.js:639
 #: src/control/Control.NotebookbarWriter.js:1760
-#: src/control/Control.StatusBar.js:155
+#: src/control/Control.StatusBar.js:158
 msgid "Zoom"
 msgstr "Zúmáil"
 
@@ -6117,7 +6117,7 @@ msgid "Starts a slideshow on every viewer's screen"
 msgstr "Tosaíonn sé seo taispeántas sleamhnán ar scáileán gach lucht féachana"
 
 #: src/control/Control.NotebookbarImpress.js:601
-#: src/slideshow/SlideShowPresenter.ts:1703
+#: src/slideshow/SlideShowPresenter.ts:1705
 msgid "Follow Presenter"
 msgstr "Lean an Láithreoir"
 
@@ -6281,25 +6281,25 @@ msgstr "Athraigh go dtí an modh eagarthóireachta"
 msgid "Link"
 msgstr "Nasc"
 
-#: src/control/Control.PartsPreview.js:456
+#: src/control/Control.PartsPreview.js:461
 msgid "Show everyone on this slide"
 msgstr "Taispeáin gach duine ar an sleamhnán seo"
 
-#: src/control/Control.PartsPreview.js:622
-#: src/control/Control.PartsPreview.js:697
+#: src/control/Control.PartsPreview.js:627
+#: src/control/Control.PartsPreview.js:702
 #: src/control/jsdialog/Widget.FormulabarEdit.js:462 src/map/Clipboard.js:1589
 msgid "Paste"
 msgstr "Greamaigh"
 
-#: src/control/Control.PartsPreview.js:769
+#: src/control/Control.PartsPreview.js:774
 msgid "Unlink Slide"
 msgstr "Dínasc an Sleamhnán"
 
-#: src/control/Control.PartsPreview.js:791
+#: src/control/Control.PartsPreview.js:796
 msgid "Add Section"
 msgstr "Cuir Roinn leis"
 
-#: src/control/Control.PartsPreview.js:911
+#: src/control/Control.PartsPreview.js:916
 msgid "with 1 other"
 msgid_plural "with %n others"
 msgstr[0] "le duine amháin eile"
@@ -6308,11 +6308,11 @@ msgstr[2] "le %n duine eile"
 msgstr[3] "le %n duine eile"
 msgstr[4] "le %n duine eile"
 
-#: src/control/Control.PartsPreview.js:921
+#: src/control/Control.PartsPreview.js:926
 msgid "with %1"
 msgstr "leis an %1"
 
-#: src/control/Control.PartsPreview.js:922
+#: src/control/Control.PartsPreview.js:927
 msgid "with %1 and 1 other"
 msgid_plural "with %1 and %n others"
 msgstr[0] "le %1 agus duine amháin eile"
@@ -6321,140 +6321,146 @@ msgstr[2] "le %1 agus %n duine eile"
 msgstr[3] "le %1 agus %n duine eile"
 msgstr[4] "le %1 agus %n duine eile"
 
-#: src/control/Control.PartsPreview.js:963
+#: src/control/Control.PartsPreview.js:971
 msgid "preview of page %1"
 msgstr "réamhamharc ar leathanach %1"
 
-#: src/control/Control.PartsPreview.js:978
+#: src/control/Control.PartsPreview.js:990
 msgid "preview of page %1, %3 is missing"
 msgstr "réamhamharc ar leathanach %1, tá %3 ar iarraidh"
 
-#: src/control/Control.PartsPreview.js:979
-msgid "Slide %1, %3 is missing"
-msgstr "Sleamhnán %1, tá %3 ar iarraidh"
+#: src/control/Control.PartsPreview.js:991
+msgid "%1, %3 is missing"
+msgstr ""
 
-#: src/control/Control.PartsPreview.js:983
+#: src/control/Control.PartsPreview.js:995
 msgid "preview of page %1, not found in %3"
 msgstr "réamhamharc ar leathanach %1, nár aimsíodh i %3"
 
-#: src/control/Control.PartsPreview.js:984
-msgid "Slide %1, not found in %3"
+#: src/control/Control.PartsPreview.js:996
+#, fuzzy
+msgid "%1, not found in %3"
 msgstr "Sleamhnán %1, gan a bheith le fáil i %3"
 
-#: src/control/Control.PartsPreview.js:988
+#: src/control/Control.PartsPreview.js:1000
 msgid "preview of page %1, no access to %3"
 msgstr "réamhamharc ar leathanach %1, gan rochtain ar %3"
 
-#: src/control/Control.PartsPreview.js:989
-msgid "Slide %1, no access to %3"
+#: src/control/Control.PartsPreview.js:1001
+#, fuzzy
+msgid "%1, no access to %3"
 msgstr "Sleide %1, gan rochtain ar %3"
 
-#: src/control/Control.PartsPreview.js:993
+#: src/control/Control.PartsPreview.js:1005
 msgid "preview of page %1, could not open %3"
 msgstr "réamhamharc ar leathanach %1, níorbh fhéidir %3 a oscailt"
 
-#: src/control/Control.PartsPreview.js:994
-msgid "Slide %1, could not open %3"
+#: src/control/Control.PartsPreview.js:1006
+#, fuzzy
+msgid "%1, could not open %3"
 msgstr "Sleide %1, níorbh fhéidir %3 a oscailt"
 
-#: src/control/Control.PartsPreview.js:999
+#: src/control/Control.PartsPreview.js:1011
 msgid "preview of page %1, %2 changed in %3"
 msgstr "réamhamharc ar leathanach %1, %2 athraithe i %3"
 
-#: src/control/Control.PartsPreview.js:1000
-msgid "Slide %1, %2 changed in %3"
+#: src/control/Control.PartsPreview.js:1012
+#, fuzzy
+msgid "%1, %2 changed in %3"
 msgstr "Sleideanna %1, %2 athraithe i %3"
 
-#: src/control/Control.PartsPreview.js:1003
+#: src/control/Control.PartsPreview.js:1015
 msgid "preview of page %1, changed in %3"
 msgstr "réamhamharc ar leathanach %1, athraithe i %3"
 
-#: src/control/Control.PartsPreview.js:1004
-msgid "Slide %1, changed in %3"
-msgstr "Sleamhnán %1, athraithe i %3"
+#: src/control/Control.PartsPreview.js:1016
+msgid "%1, changed in %3"
+msgstr ""
 
-#: src/control/Control.PartsPreview.js:1008
+#: src/control/Control.PartsPreview.js:1020
 msgid "preview of page %1, %3 is disconnected"
 msgstr "réamhamharc ar leathanach %1, tá %3 dícheangailte"
 
-#: src/control/Control.PartsPreview.js:1009
-msgid "Slide %1, %3 is disconnected"
+#: src/control/Control.PartsPreview.js:1021
+#, fuzzy
+msgid "%1, %3 is disconnected"
 msgstr "Sleamhnán %1, tá %3 dícheangailte"
 
-#: src/control/Control.PartsPreview.js:1013
+#: src/control/Control.PartsPreview.js:1025
 msgid "preview of page %1, linked to %2 in %3"
 msgstr "Réamhamharc ar leathanach %1, nasctha le %2 i %3"
 
-#: src/control/Control.PartsPreview.js:1014
-msgid "Slide %1, linked to %2 in %3"
+#: src/control/Control.PartsPreview.js:1026
+#, fuzzy
+msgid "%1, linked to %2 in %3"
 msgstr "Sleamhnán %1, nasctha le %2 i %3"
 
-#: src/control/Control.PartsPreview.js:1017
+#: src/control/Control.PartsPreview.js:1029
 msgid "preview of page %1, linked to %2"
 msgstr "Réamhamharc ar leathanach %1, nasctha le %2"
 
-#: src/control/Control.PartsPreview.js:1018
-msgid "Slide %1, linked to %2"
-msgstr "Sleamhnán %1, nasctha le %2"
+#: src/control/Control.PartsPreview.js:1030
+msgid "%1, linked to %2"
+msgstr ""
 
-#: src/control/Control.PartsPreview.js:1241
+#: src/control/Control.PartsPreview.js:1253
 msgid "Linked to a section of %1 that is missing"
 msgstr "Nasctha le cuid de %1 atá ar iarraidh"
 
-#: src/control/Control.PartsPreview.js:1243
+#: src/control/Control.PartsPreview.js:1255
 msgid "Linked to a section of %1 that has changed"
 msgstr "Nasctha le cuid de %1 atá athraithe"
 
-#: src/control/Control.PartsPreview.js:1245
+#: src/control/Control.PartsPreview.js:1257
 msgid "Linked to a section of %1, disconnected"
 msgstr "Ceangailte le cuid de %1, dícheangailte"
 
-#: src/control/Control.PartsPreview.js:1246
+#: src/control/Control.PartsPreview.js:1258
 msgid "Linked to a section of %1"
 msgstr "Nasctha le cuid de %1"
 
-#: src/control/Control.PartsPreview.js:1390
-#: src/control/Control.PartsPreview.js:1557
+#: src/control/Control.PartsPreview.js:1402
+#: src/control/Control.PartsPreview.js:1569
 msgid "Rename Section"
 msgstr "Athainmnigh an Rannóg"
 
-#: src/control/Control.PartsPreview.js:1397
+#: src/control/Control.PartsPreview.js:1409
 msgid "Remove Section"
 msgstr "Bain an Roinn"
 
-#: src/control/Control.PartsPreview.js:1405
+#: src/control/Control.PartsPreview.js:1417
 msgid "Remove Section & Slides"
 msgstr "Bain an Rannóg & Sleamhnáin"
 
-#: src/control/Control.PartsPreview.js:1414
+#: src/control/Control.PartsPreview.js:1426
 msgid "Move Section Up"
 msgstr "Bog an Roinn Suas"
 
-#: src/control/Control.PartsPreview.js:1423
+#: src/control/Control.PartsPreview.js:1435
 msgid "Move Section Down"
 msgstr "Bog an Roinn Síos"
 
-#: src/control/Control.PartsPreview.js:1434
+#: src/control/Control.PartsPreview.js:1446
 msgid "Update Section"
 msgstr "Rannán Nuashonraithe"
 
-#: src/control/Control.PartsPreview.js:1442
+#: src/control/Control.PartsPreview.js:1454
 msgid "Unlink Section"
 msgstr "Dícheangail Rannán"
 
-#: src/control/Control.PartsPreview.js:1449
+#: src/control/Control.PartsPreview.js:1461
 msgid "Unlink Section & Slides"
 msgstr "Dínasc an Rannáin agus na Sleamhnán"
 
-#: src/control/Control.PartsPreview.js:1458
+#: src/control/Control.PartsPreview.js:1470
 msgid "Collapse All Sections"
 msgstr "Laghdaigh Gach Roinn"
 
-#: src/control/Control.PartsPreview.js:1466
+#: src/control/Control.PartsPreview.js:1478
 msgid "Expand All Sections"
 msgstr "Leathnaigh Gach Roinn"
 
-#: src/control/Control.PartsPreview.js:1500 src/docdispatcher.ts:1023
+#: src/control/Control.PartsPreview.js:1512 src/docdispatcher.ts:1030
 msgid "Delete section \"%1\" and its %n slide?"
 msgid_plural "Delete section \"%1\" and its %n slides?"
 msgstr[0] "Scrios an chuid \"%1\" agus a %n sleamhnán?"
@@ -6463,7 +6469,7 @@ msgstr[2] "Scrios an chuid \"%1\" agus a %n shleamhnán?"
 msgstr[3] "Scrios an chuid \"%1\" agus a %n sleamhnán?"
 msgstr[4] "Scrios an chuid \"%1\" agus a %n sleamhnán?"
 
-#: src/control/Control.PartsPreview.js:1558
+#: src/control/Control.PartsPreview.js:1570
 msgid "Enter new section name:"
 msgstr "Cuir isteach ainm nua na rannóige:"
 
@@ -6476,12 +6482,12 @@ msgid "Checking..."
 msgstr "Ag seiceáil..."
 
 #: src/control/Control.SlideImportPane.tsx:711
-#: src/control/Control.SlideLinkToolbar.tsx:194
+#: src/control/Control.SlideLinkToolbar.tsx:197
 msgid "Missing"
 msgstr "Ar iarraidh"
 
 #: src/control/Control.SlideImportPane.tsx:713
-#: src/control/Control.SlideLinkToolbar.tsx:192
+#: src/control/Control.SlideLinkToolbar.tsx:195
 msgid "No access"
 msgstr "Gan rochtain"
 
@@ -6498,7 +6504,7 @@ msgid "Disconnected"
 msgstr "Dícheangailte"
 
 #: src/control/Control.SlideImportPane.tsx:725
-#: src/control/Control.SlideLinkToolbar.tsx:134
+#: src/control/Control.SlideLinkToolbar.tsx:137
 msgid "Linked"
 msgstr "Nasctha"
 
@@ -6747,32 +6753,36 @@ msgstr "Lean uimhir an tsleamhnáin"
 msgid "Select the slides of {0}"
 msgstr "Roghnaigh na sleamhnáin de {0}"
 
-#: src/control/Control.SlideLinkToolbar.tsx:117
+#: src/control/Control.SlideLinkToolbar.tsx:119
 msgid "Linked to {0} in {1}"
 msgstr "Nasctha le {0} i {1}"
 
-#: src/control/Control.SlideLinkToolbar.tsx:120
+#: src/control/Control.SlideLinkToolbar.tsx:122
+msgid "Linked to {0}"
+msgstr ""
+
+#: src/control/Control.SlideLinkToolbar.tsx:123
 msgid "In a section linked to {0}"
 msgstr "I rannóg atá nasctha le {0}"
 
-#: src/control/Control.SlideLinkToolbar.tsx:145
+#: src/control/Control.SlideLinkToolbar.tsx:148
 msgid "Hide the actions for this linked slide"
 msgstr "Folaigh na gníomhartha don sleamhnán nasctha seo"
 
-#: src/control/Control.SlideLinkToolbar.tsx:146
+#: src/control/Control.SlideLinkToolbar.tsx:149
 msgid "Show the actions for this linked slide"
 msgstr "Taispeáin na gníomhartha don sleamhnán nasctha seo"
 
-#: src/control/Control.SlideLinkToolbar.tsx:156
+#: src/control/Control.SlideLinkToolbar.tsx:159
 msgid "Unlink"
 msgstr "Dícheangail"
 
-#: src/control/Control.SlideLinkToolbar.tsx:176
-#: src/slideimport/SlideLinks.ts:467
+#: src/control/Control.SlideLinkToolbar.tsx:179
+#: src/slideimport/SlideLinks.ts:475
 msgid "Update section"
 msgstr "Rannán nuashonraithe"
 
-#: src/control/Control.SlideLinkToolbar.tsx:190
+#: src/control/Control.SlideLinkToolbar.tsx:193
 msgid "Not available"
 msgstr "Níl sé ar fáil"
 
@@ -6793,20 +6803,20 @@ msgstr "Theip ar chur isteach na sleamhnán."
 msgid "Importing slides failed."
 msgstr "Theip ar allmhairiú na sleamhnán."
 
-#: src/slideimport/SlideLinks.ts:370
+#: src/slideimport/SlideLinks.ts:378
 msgid "No slide of this presentation is linked to another file."
 msgstr "Níl aon sleamhnán den chur i láthair seo nasctha le comhad eile."
 
-#: src/slideimport/SlideLinks.ts:425
+#: src/slideimport/SlideLinks.ts:433
 msgid "The section cannot be updated, because its source is not available."
 msgstr "Ní féidir an rannán a nuashonrú, mar níl a fhoinse ar fáil."
 
-#: src/slideimport/SlideLinks.ts:447
+#: src/slideimport/SlideLinks.ts:455
 msgid ""
 "One linked section cannot be updated, because its source is not available."
 msgstr "Ní féidir rannóg nasctha amháin a nuashonrú, mar níl a fhoinse ar fáil."
 
-#: src/slideimport/SlideLinks.ts:450
+#: src/slideimport/SlideLinks.ts:458
 msgid ""
 "{0} linked sections cannot be updated, because their sources are not "
 "available."
@@ -6814,7 +6824,7 @@ msgstr ""
 "Ní féidir na rannóga nasctha {0} a nuashonrú, toisc nach bhfuil a gcuid "
 "foinsí ar fáil."
 
-#: src/slideimport/SlideLinks.ts:459
+#: src/slideimport/SlideLinks.ts:467
 msgid ""
 "The section will hold the slides that its section in {0} holds now. Changes "
 "made to these slides in this presentation will be lost."
@@ -6823,7 +6833,7 @@ msgstr ""
 "comhfhreagrach i {0}. Caillfear aon athruithe a dhéantar ar na sleamhnáin "
 "seo sa chur i láthair seo."
 
-#: src/slideimport/SlideLinks.ts:462
+#: src/slideimport/SlideLinks.ts:470
 msgid ""
 "{0} linked sections will hold the slides that their sections in the source "
 "files hold now. Changes made to these slides in this presentation will be "
@@ -6833,15 +6843,15 @@ msgstr ""
 "sna rannóga comhfhreagracha sna comhaid fhoinse. Caillfear aon athruithe a "
 "dhéantar ar na sleamhnáin seo sa chur i láthair seo."
 
-#: src/slideimport/SlideLinks.ts:467
+#: src/slideimport/SlideLinks.ts:475
 msgid "Update sections"
 msgstr "Nuashonraigh rannáin"
 
-#: src/slideimport/SlideLinks.ts:534
+#: src/slideimport/SlideLinks.ts:542
 msgid "This slide is not linked to another file."
 msgstr "Níl an sleamhnán seo nasctha le comhad eile."
 
-#: src/slideimport/SlideLinks.ts:712 src/slideimport/SlideLinks.ts:1164
+#: src/slideimport/SlideLinks.ts:720 src/slideimport/SlideLinks.ts:1181
 msgid ""
 "{0} is not one of the documents this one is related to, so the server "
 "cannot read it."
@@ -6849,77 +6859,77 @@ msgstr ""
 "Ní ceann de na doiciméid a bhfuil baint ag an gceann seo leo é {0}, mar sin "
 "ní féidir leis an bhfreastalaí é a léamh."
 
-#: src/slideimport/SlideLinks.ts:737 src/slideimport/SlideLinks.ts:999
-#: src/slideimport/SlideLinks.ts:1167
+#: src/slideimport/SlideLinks.ts:745 src/slideimport/SlideLinks.ts:1015
+#: src/slideimport/SlideLinks.ts:1184
 msgid "{0} could not be read."
 msgstr "Níorbh fhéidir {0} a léamh."
 
-#: src/slideimport/SlideLinks.ts:742
+#: src/slideimport/SlideLinks.ts:750
 msgid "You do not have access to {0}, so the section cannot be updated."
 msgstr "Níl rochtain agat ar {0}, mar sin ní féidir an rannán a nuashonrú."
 
-#: src/slideimport/SlideLinks.ts:745
+#: src/slideimport/SlideLinks.ts:753
 msgid "You do not have access to {0}, so its pages cannot be refreshed."
 msgstr "Níl rochtain agat ar {0}, mar sin ní féidir a leathanaigh a athnuachan."
 
-#: src/slideimport/SlideLinks.ts:860
+#: src/slideimport/SlideLinks.ts:868
 msgid "Cannot update the slides of {0}: source lacks the matching slides"
 msgstr ""
 "Ní féidir sleamhnáin {0} a nuashonrú: tá na sleamhnáin chomhfhreagracha ar "
 "iarraidh ón bhfoinse"
 
-#: src/slideimport/SlideLinks.ts:863 src/slideimport/SlideLinks.ts:1170
+#: src/slideimport/SlideLinks.ts:871 src/slideimport/SlideLinks.ts:1187
 msgid "The slides of {0} could not be read into this presentation."
 msgstr "Níorbh fhéidir sleamhnáin {0} a léamh isteach sa chur i láthair seo."
 
-#: src/slideimport/SlideLinks.ts:919
+#: src/slideimport/SlideLinks.ts:927
 msgid "The section was updated from {0}."
 msgstr "Nuashonraíodh an chuid ó {0}."
 
-#: src/slideimport/SlideLinks.ts:1059
+#: src/slideimport/SlideLinks.ts:1076
 msgid "Cannot update the section: {0} no longer holds its source section."
 msgstr ""
 "Ní féidir an rannán a nuashonrú: níl a rannán foinse ag {0} a thuilleadh."
 
-#: src/slideimport/SlideLinks.ts:1085
+#: src/slideimport/SlideLinks.ts:1102
 msgid "Cannot update slide {0}: the source lacks matching slide"
 msgstr ""
 "Ní féidir an sleamhnán {0} a nuashonrú: níl sleamhnán comhfhreagrach ag an "
 "bhfoinse"
 
-#: src/slideimport/SlideLinks.ts:1100
+#: src/slideimport/SlideLinks.ts:1117
 msgid "Unlinking the slide failed."
 msgstr "Theip ar dhícheangal an tsleamhnáin."
 
-#: src/slideimport/SlideLinks.ts:1105
+#: src/slideimport/SlideLinks.ts:1122
 msgid "Unlinking the section failed."
 msgstr "Theip ar dhícheangal na rannóige."
 
-#: src/slideimport/SlideLinks.ts:1122
+#: src/slideimport/SlideLinks.ts:1139
 msgid "Updating the section from {0} failed."
 msgstr "Theip ar nuashonrú na rannóige ó {0}."
 
-#: src/slideimport/SlideLinks.ts:1123 src/slideimport/SlideLinks.ts:1182
+#: src/slideimport/SlideLinks.ts:1140 src/slideimport/SlideLinks.ts:1199
 msgid "Updating the slides of {0} failed."
 msgstr "Theip ar nuashonrú na sleamhnán de {0}."
 
-#: src/slideimport/SlideLinks.ts:1136
+#: src/slideimport/SlideLinks.ts:1153
 msgid "No slide of {0} was updated."
 msgstr "Níor nuashonraíodh aon sleamhnán de {0}."
 
-#: src/slideimport/SlideLinks.ts:1140
+#: src/slideimport/SlideLinks.ts:1157
 msgid "1 slide updated from {0}."
 msgstr "1 shleamhnán nuashonraithe ó {0}."
 
-#: src/slideimport/SlideLinks.ts:1144
+#: src/slideimport/SlideLinks.ts:1161
 msgid "{0} slides updated from {1}."
 msgstr "{0} sleamhnáin nuashonraithe ó {1}."
 
-#: src/slideimport/SlideLinks.ts:1173
+#: src/slideimport/SlideLinks.ts:1190
 msgid "No slide of this presentation is linked to {0}."
 msgstr "Níl aon sleamhnán den chur i láthair seo nasctha le {0}."
 
-#: src/slideimport/SlideLinks.ts:1179
+#: src/slideimport/SlideLinks.ts:1196
 msgid "Another update is still running. Ask for {0} again in a moment."
 msgstr "Tá nuashonrú eile ar siúl fós. Iarr {0} arís i gceann nóiméid."
 
@@ -7068,42 +7078,42 @@ msgstr "Ionsáigh bileog"
 msgid "Show sheet list"
 msgstr "Taispeáin liosta bileog"
 
-#: src/control/Control.StatusBar.js:237
+#: src/control/Control.StatusBar.js:240
 #: src/control/jsdialog/Definitions.Menu.ts:184
 msgid "Average"
 msgstr "Meán"
 
-#: src/control/Control.StatusBar.js:238
+#: src/control/Control.StatusBar.js:241
 msgid "CountA"
 msgstr "CountaName"
 
-#: src/control/Control.StatusBar.js:239
+#: src/control/Control.StatusBar.js:242
 #: src/control/jsdialog/Definitions.Menu.ts:187
 msgid "Count"
 msgstr "Comhaireamh"
 
-#: src/control/Control.StatusBar.js:240
+#: src/control/Control.StatusBar.js:243
 msgid "Maximum"
 msgstr "Uasmhéid"
 
-#: src/control/Control.StatusBar.js:241
+#: src/control/Control.StatusBar.js:244
 msgid "Minimum"
 msgstr "Íosmhéid"
 
-#: src/control/Control.StatusBar.js:242
+#: src/control/Control.StatusBar.js:245
 #: src/control/jsdialog/Definitions.Menu.ts:183
 msgid "Sum"
 msgstr "Suim"
 
-#: src/control/Control.StatusBar.js:243
+#: src/control/Control.StatusBar.js:246
 msgid "Selection count"
 msgstr "Líon na roghanna"
 
-#: src/control/Control.StatusBar.js:311
+#: src/control/Control.StatusBar.js:314
 msgid "Zoom to Fit Slide"
 msgstr "Zúmáil chun an Sleamhnán a Oiriúnú"
 
-#: src/control/Control.StatusBar.js:312
+#: src/control/Control.StatusBar.js:315
 msgid ""
 "Fit the page to the window width. Smart Zoom on open can be toggled in "
 "Options under File tab."
@@ -7111,21 +7121,21 @@ msgstr ""
 "Oiriúnaigh an leathanach do leithead na fuinneoige. Is féidir Zúmáil Chliste "
 "a athrú nuair a osclaítear é i Roghanna faoin táb Comhad."
 
-#: src/control/Control.StatusBar.js:312
+#: src/control/Control.StatusBar.js:315
 msgid "Fit the page to the window width."
 msgstr "Cuir an leathanach i bhfeistiú ar leithead na fuinneoige."
 
-#: src/control/Control.StatusBar.js:317
+#: src/control/Control.StatusBar.js:320
 msgid "Status Bar Menu"
 msgstr "Roghchlár Barra Stádais"
 
-#: src/control/Control.StatusBar.js:613
+#: src/control/Control.StatusBar.js:618
 msgid "The document is probably locked and has been opened as view-only"
 msgstr ""
 "Is dócha go bhfuil an doiciméad faoi ghlas agus gur osclaíodh é mar radharc "
 "amháin"
 
-#: src/control/Control.StatusBar.js:622
+#: src/control/Control.StatusBar.js:627
 msgid ""
 "To prevent accidental changes, the author has set this file to open as view-"
 "only"
@@ -7133,23 +7143,23 @@ msgstr ""
 "Chun athruithe de thaisme a chosc, shocraigh an t-údar an comhad seo a "
 "oscailt mar amharc amháin"
 
-#: src/control/Control.StatusBar.js:687
+#: src/control/Control.StatusBar.js:692
 msgid "Select multiple cells"
 msgstr "Roghnaigh ilchealla"
 
-#: src/control/Control.StatusBar.js:704
+#: src/control/Control.StatusBar.js:709
 msgid "Selection mode: inactive"
 msgstr "Mód roghnaithe: neamhghníomhach"
 
-#: src/control/Control.StatusBar.js:782
+#: src/control/Control.StatusBar.js:787
 msgid "Set Language for All text"
 msgstr "Socraigh Teanga do Gach téacs"
 
-#: src/control/Control.StatusBar.js:785
+#: src/control/Control.StatusBar.js:790
 msgid "Set Language for Paragraph"
 msgstr "Socraigh Teanga don Alt"
 
-#: src/control/Control.StatusBar.js:786
+#: src/control/Control.StatusBar.js:791
 msgid "Set Language for Selection"
 msgstr "Socraigh Teanga don Roghnúchán"
 
@@ -7365,7 +7375,7 @@ msgstr ""
 "gréasáin. D'fhéadfadh sé roinnt fadhbanna a chruthú agus eagarthóireacht á "
 "déanamh ar luanna nó leabharliosta."
 
-#: src/control/Control.Zotero.js:246 src/app/Socket.ts:3043
+#: src/control/Control.Zotero.js:246 src/app/Socket.ts:3047
 msgid "Loading..."
 msgstr "Á Luchtú..."
 
@@ -7553,7 +7563,7 @@ msgstr "Chuir an freastalaí an chúis seo ar ais:"
 msgid "The document could not be locked."
 msgstr "Níorbh fhéidir an cháipéis a chur faoi ghlas."
 
-#: src/control/Permission.js:192 src/app/Socket.ts:2673
+#: src/control/Permission.js:192 src/app/Socket.ts:2677
 msgid "Wrong password provided. Please try again."
 msgstr "Pasfhocal mícheart curtha ar fáil. Bain triail eile as."
 
@@ -8329,11 +8339,11 @@ msgstr "Uimhir líne"
 msgid "Column {index}"
 msgstr "Colún {index}"
 
-#: src/control/jsdialog/Widget.EditEngine.ts:601
+#: src/control/jsdialog/Widget.EditEngine.ts:632
 msgid "%1 is editing"
 msgstr "Tá %1 ag cur in eagar"
 
-#: src/control/jsdialog/Widget.EditEngine.ts:602
+#: src/control/jsdialog/Widget.EditEngine.ts:633
 msgid "Another user is editing"
 msgstr "Tá úsáideoir eile ag cur eagar air"
 
@@ -8595,27 +8605,27 @@ msgstr "Easpórtáilte chuig stóráil"
 msgid "Successfully exported: "
 msgstr "D' éirigh le heaspórtáil: "
 
-#: src/app/Socket.ts:1230
+#: src/app/Socket.ts:1234
 msgid "This document has links to external content."
 msgstr "Tá naisc chuig ábhar seachtrach sa cháipéis seo."
 
-#: src/app/Socket.ts:1231
+#: src/app/Socket.ts:1235
 msgid "Allow"
 msgstr "Ceadaigh"
 
-#: src/app/Socket.ts:1914
+#: src/app/Socket.ts:1918
 msgid "Discard"
 msgstr "Ná Sábháil"
 
-#: src/app/Socket.ts:1932
+#: src/app/Socket.ts:1936
 msgid "Save to new file"
 msgstr "Sábháil go comhad nua"
 
-#: src/app/Socket.ts:1945
+#: src/app/Socket.ts:1949
 msgid "Document has been changed"
 msgstr "Athraíodh an cháipéis"
 
-#: src/app/Socket.ts:1947
+#: src/app/Socket.ts:1951
 msgid ""
 "Document has been changed in storage. What would you like to do with your "
 "unsaved changes?"
@@ -8623,91 +8633,91 @@ msgstr ""
 "Athraíodh an doiciméad sa stóráil. Cad ba mhaith leat a dhéanamh le do chuid "
 "athruithe gan sábháil?"
 
-#: src/app/Socket.ts:2106
+#: src/app/Socket.ts:2110
 msgid "Server is now reachable. We have to refresh the page now."
 msgstr ""
 "Tá an freastalaí inrochtana anois. Caithfimid an leathanach a athnuachan "
 "anois."
 
-#: src/app/Socket.ts:2109
+#: src/app/Socket.ts:2113
 msgid "Server is now reachable..."
 msgstr "Is féidir an freastalaí a bhaint amach anois..."
 
-#: src/app/Socket.ts:2117
+#: src/app/Socket.ts:2121
 msgid "RELOAD"
 msgstr "ATHLUCHTAIGH"
 
-#: src/app/Socket.ts:2145
+#: src/app/Socket.ts:2149
 msgid "Cluster configuration warning"
 msgstr "Rabhadh cumraíochta braisle"
 
-#: src/app/Socket.ts:2154
+#: src/app/Socket.ts:2158
 msgid "Wrong server, reconnecting..."
 msgstr "Freastalaí mícheart, ag athcheangal..."
 
-#: src/app/Socket.ts:2176
+#: src/app/Socket.ts:2180
 msgid "Unsupported version."
 msgstr "Leagan gan tacaíocht."
 
-#: src/app/Socket.ts:2177
+#: src/app/Socket.ts:2181
 msgid "Unsupported server version."
 msgstr "Leagan freastalaí gan tacaíocht."
 
-#: src/app/Socket.ts:2367
+#: src/app/Socket.ts:2371
 msgid "Document is getting migrated"
 msgstr "Tá an cháipéis ag dul ar imirce"
 
-#: src/app/Socket.ts:2665
+#: src/app/Socket.ts:2669
 msgid "Document requires password to view."
 msgstr "Tá pasfhocal de dhíth ar an gcáipéis le hamharc air."
 
-#: src/app/Socket.ts:2667
+#: src/app/Socket.ts:2671
 msgid "Document requires password to modify."
 msgstr "Tá pasfhocal de dhíth ar an gcáipéis le mionathrú."
 
-#: src/app/Socket.ts:2669
+#: src/app/Socket.ts:2673
 msgid "Hit Cancel to open in view-only mode."
 msgstr "Buail Cealaigh le hoscailt i mód amhairc amháin."
 
-#: src/app/Socket.ts:2738
+#: src/app/Socket.ts:2742
 msgid "Only the document owner can change the password."
 msgstr "Ní féidir ach le húinéir an doiciméid an pasfhocal a athrú."
 
-#: src/app/Socket.ts:2752
+#: src/app/Socket.ts:2756
 msgid "You do not have permission to edit this document."
 msgstr "Níl cead agat an doiciméad seo a chur in eagar."
 
-#: src/app/Socket.ts:2753
+#: src/app/Socket.ts:2757
 msgid "The document could not be made editable."
 msgstr "Níorbh fhéidir an doiciméad a dhéanamh in-eagarthóireachta."
 
-#: src/app/Socket.ts:2826 src/app/Socket.ts:2837
+#: src/app/Socket.ts:2830 src/app/Socket.ts:2841
 msgid "Missing Fonts"
 msgstr "Clónna ar iarraidh"
 
-#: src/app/Socket.ts:2875
+#: src/app/Socket.ts:2879
 msgid "Someone"
 msgstr "Duine éigin"
 
-#: src/app/Socket.ts:2877
+#: src/app/Socket.ts:2881
 msgid "{username} saved this document as {filename}. Do you want to join?"
 msgstr ""
 "Shábháil {username} an doiciméad seo mar {filename}. An bhfuil fonn ort "
 "páirt a ghlacadh?"
 
-#: src/app/Socket.ts:2900
+#: src/app/Socket.ts:2904
 msgid "The document is being renamed and will reload shortly"
 msgstr "Tá an doiciméad á athainmniú agus athluchtófar é go luath"
 
-#: src/app/Socket.ts:2903
+#: src/app/Socket.ts:2907
 msgid "The document is switching to Offline mode and will reload shortly"
 msgstr "Tá an doiciméad ag athrú go mód as líne agus athluchtóidh sé go luath"
 
-#: src/app/Socket.ts:3043
+#: src/app/Socket.ts:3047
 msgid "Connecting..."
 msgstr "Ag ceangal..."
 
-#: src/app/Socket.ts:3059
+#: src/app/Socket.ts:3063
 msgid "Server is shutting down"
 msgstr "Tá an freastalaí ag múchadh"
 
@@ -8715,15 +8725,15 @@ msgstr "Tá an freastalaí ag múchadh"
 msgid "AI is not configured, contact your administrator"
 msgstr "Níl an AI cumraithe; déan teagmháil le do riarthóir"
 
-#: src/docdispatcher.ts:1021
+#: src/docdispatcher.ts:1028
 msgid "Delete section"
 msgstr "Scrios an rannán"
 
-#: src/docdispatcher.ts:1028
+#: src/docdispatcher.ts:1035
 msgid "Delete slides"
 msgstr "Scrios sleamhnáin"
 
-#: src/docdispatcher.ts:1029
+#: src/docdispatcher.ts:1036
 msgid "Delete %n slide?"
 msgid_plural "Delete %n slides?"
 msgstr[0] "Scrios %n sleamhnán?"
@@ -8732,11 +8742,11 @@ msgstr[2] "Scrios %n shleamhnán?"
 msgstr[3] "Scrios %n sleamhnáin?"
 msgstr[4] "Scrios %n sleamhnáin?"
 
-#: src/docdispatcher.ts:1033
+#: src/docdispatcher.ts:1040
 msgid "Delete pages"
 msgstr "Scrios leathanaigh"
 
-#: src/docdispatcher.ts:1034
+#: src/docdispatcher.ts:1041
 msgid "Delete %n page?"
 msgid_plural "Delete %n pages?"
 msgstr[0] "Scrios %n leathanach?"
@@ -9041,11 +9051,11 @@ msgstr "Trácht ó {0}: {1}"
 msgid "Heading level {0}"
 msgstr "Leibhéal ceannteidil {0}"
 
-#: src/layer/marker/A11yTextInput.js:1122
+#: src/layer/marker/A11yTextInput.js:1140
 msgid "Out of table"
 msgstr "As tábla"
 
-#: src/layer/marker/A11yTextInput.js:1127
+#: src/layer/marker/A11yTextInput.js:1145
 msgid "%n row"
 msgid_plural "%n rows"
 msgstr[0] "%n sraith"
@@ -9054,7 +9064,7 @@ msgstr[2] "%n sraitheanna"
 msgstr[3] "%n sraitheanna"
 msgstr[4] "%n sraitheanna"
 
-#: src/layer/marker/A11yTextInput.js:1128
+#: src/layer/marker/A11yTextInput.js:1146
 msgid "%n column"
 msgid_plural "%n columns"
 msgstr[0] "%n colún"
@@ -9065,94 +9075,94 @@ msgstr[4] "%n colún"
 
 #. TRANSLATORS: {0} is a row count, {1} a column count, both already
 #. TRANSLATORS: in their plural form, e.g. "3 rows" and "1 column"
-#: src/layer/marker/A11yTextInput.js:1131
+#: src/layer/marker/A11yTextInput.js:1149
 msgid "Table with {0} and {1}"
 msgstr "Tábla le {0} agus {1}"
 
-#: src/layer/marker/A11yTextInput.js:1136
+#: src/layer/marker/A11yTextInput.js:1154
 msgid "Row {0} through {1}"
 msgstr "Líne {0} go dtí {1}"
 
-#: src/layer/marker/A11yTextInput.js:1139
+#: src/layer/marker/A11yTextInput.js:1157
 msgid "Row {0}"
 msgstr "Ró {0}"
 
-#: src/layer/marker/A11yTextInput.js:1147
+#: src/layer/marker/A11yTextInput.js:1165
 msgid "Column {0} through {1}"
 msgstr "Colún {0} go dtí {1}"
 
-#: src/layer/marker/A11yTextInput.js:1150
+#: src/layer/marker/A11yTextInput.js:1168
 msgid "Column {0}"
 msgstr "Colún {0}"
 
-#: src/layer/marker/A11yTextInput.js:1188
+#: src/layer/marker/A11yTextInput.js:1206
 msgid "Editing activated. "
 msgstr "Cuireadh an eagarthóireacht i ngníomh. "
 
-#: src/layer/marker/A11yTextInput.js:1213
+#: src/layer/marker/A11yTextInput.js:1231
 msgid "{0} selected"
 msgstr "{0} roghnaithe"
 
-#: src/layer/marker/A11yTextInput.js:1215
+#: src/layer/marker/A11yTextInput.js:1233
 msgid "Has text: "
 msgstr "Tá téacs: "
 
-#: src/layer/marker/A11yTextInput.js:1221
+#: src/layer/marker/A11yTextInput.js:1239
 msgid "{0} unselected"
 msgstr "{0} neamhroghnaithe"
 
-#: src/layer/marker/A11yTextInput.js:1226
+#: src/layer/marker/A11yTextInput.js:1244
 msgid "{0} deleted"
 msgstr "{0} scriosta"
 
-#: src/layer/marker/TextInput.js:521
+#: src/layer/marker/TextInput.js:519
 msgid "Placeholder"
 msgstr "Áitshealbhóir"
 
-#: src/layer/marker/TextInput.js:529
+#: src/layer/marker/TextInput.js:527
 msgid "Drop-down list"
 msgstr "Liosta anuas"
 
-#: src/layer/marker/TextInput.js:531
+#: src/layer/marker/TextInput.js:529
 msgid "Combo box"
 msgstr "Bosca teaglaim"
 
-#: src/layer/marker/TextInput.js:537
+#: src/layer/marker/TextInput.js:535
 msgid "Content control"
 msgstr "Rialú ábhair"
 
-#: src/layer/marker/TextInput.js:550
+#: src/layer/marker/TextInput.js:548
 msgid "Object"
 msgstr "Réad"
 
-#: src/layer/marker/TextInput.js:552
+#: src/layer/marker/TextInput.js:550
 msgid "Frame"
 msgstr "Fráma"
 
-#: src/layer/marker/TextInput.js:744
+#: src/layer/marker/TextInput.js:742
 msgid "Screen reader support for text content is disabled. "
 msgstr "Díchumasaítear tacaíocht léitheoir scáileáin le haghaidh ábhar téacs. "
 
-#: src/layer/marker/TextInput.js:745
+#: src/layer/marker/TextInput.js:743
 msgid "You need to enable it both at server level and in the UI. "
 msgstr ""
 "Ní mór duit é a chumasú ag leibhéal an fhreastalaí agus san Chomhéadain. "
 
-#: src/layer/marker/TextInput.js:746
+#: src/layer/marker/TextInput.js:744
 msgid "Look for the accessibility section in coolwsd.xml for server setting. "
 msgstr ""
 "Cuardaigh an rannán inrochtaineachta in coolwsd.xml le haghaidh socrú an "
 "fhreastalaí. "
 
-#: src/layer/marker/TextInput.js:747
+#: src/layer/marker/TextInput.js:745
 msgid "Also check the voice over toggle under {parentControl}."
 msgstr "Seiceáil freisin an scoránaigh gutha faoi {parentControl}."
 
-#: src/layer/marker/TextInput.js:749
+#: src/layer/marker/TextInput.js:747
 msgid "the Help tab"
 msgstr "an cluaisín Cabhair"
 
-#: src/layer/marker/TextInput.js:749
+#: src/layer/marker/TextInput.js:747
 msgid "the View menu"
 msgstr "an roghchlár Amharc"
 
@@ -9319,22 +9329,22 @@ msgid "Print dialog"
 msgstr "Dialóg priontála"
 
 #: src/map/handler/Map.SlideShow.js:59
-#: src/slideshow/SlideShowPresenter.ts:1445
+#: src/slideshow/SlideShowPresenter.ts:1447
 msgid "Empty Slide Show"
 msgstr "Taispeántas Sleamhnán Folamh"
 
 #: src/map/handler/Map.SlideShow.js:60
-#: src/slideshow/SlideShowPresenter.ts:1446
+#: src/slideshow/SlideShowPresenter.ts:1448
 msgid "All slides are hidden!"
 msgstr "Tá na sleamhnáin go léir i bhfolach!"
 
 #: src/map/handler/Map.SlideShow.js:175
-#: src/slideshow/SlideShowPresenter.ts:1473
+#: src/slideshow/SlideShowPresenter.ts:1475
 msgid "Windowed Presentation Blocked"
 msgstr "Cur i Láthair Fuinneog Coiscthe"
 
 #: src/map/handler/Map.SlideShow.js:176
-#: src/slideshow/SlideShowPresenter.ts:1475
+#: src/slideshow/SlideShowPresenter.ts:1477
 msgid ""
 "Presentation was blocked. Please allow pop-ups in your browser. This lets "
 "slide shows to be displayed in separated windows, allowing for easy screen "
@@ -9349,12 +9359,12 @@ msgid "Windowed Presentation: "
 msgstr "Léiriú Fuinneog: "
 
 #: src/map/handler/Map.SlideShow.js:210
-#: src/slideshow/SlideShowPresenter.ts:1281
+#: src/slideshow/SlideShowPresenter.ts:1283
 msgid "Presenting in another window"
 msgstr "Ag cur i láthair i bhfuinneog eile"
 
 #: src/map/handler/Map.SlideShow.js:211
-#: src/slideshow/SlideShowPresenter.ts:1282
+#: src/slideshow/SlideShowPresenter.ts:1284
 msgid "Close Presentation"
 msgstr "Dún Léiriú"
 
@@ -9367,22 +9377,22 @@ msgid "End Presentation"
 msgstr "Críoch Léiriú"
 
 #: src/map/handler/Map.SlideShow.js:303
-#: src/slideshow/SlideShowPresenter.ts:1460
+#: src/slideshow/SlideShowPresenter.ts:1462
 msgid "Already presenting"
 msgstr "Cheana féin i láthair"
 
 #: src/map/handler/Map.SlideShow.js:304
-#: src/slideshow/SlideShowPresenter.ts:1461
+#: src/slideshow/SlideShowPresenter.ts:1463
 msgid "You are already presenting this document"
 msgstr "Tá an doiciméad seo á chur i láthair agat cheana féin"
 
 #: src/map/handler/Map.SlideShow.js:314
-#: src/slideshow/SlideShowPresenter.ts:1501
+#: src/slideshow/SlideShowPresenter.ts:1503
 msgid "Presentation disabled"
 msgstr "Díchumasaíodh an cur i láthair"
 
 #: src/map/handler/Map.SlideShow.js:315
-#: src/slideshow/SlideShowPresenter.ts:1502
+#: src/slideshow/SlideShowPresenter.ts:1504
 msgid "Presentation mode has been disabled for this document"
 msgstr "Díchumasaíodh mód léirithe don doiciméad seo"
 
@@ -9396,23 +9406,23 @@ msgid "Your Collabora Online server needs updating. Version {0} is available."
 msgstr ""
 "Ní mór do fhreastalaí Collabora Ar Líne a nuashonrú. Tá leagan {0} ar fáil."
 
-#: src/map/handler/Map.WOPI.js:234
+#: src/map/handler/Map.WOPI.js:236
 msgid "Creating new file from template..."
 msgstr "Comhad nua á chruthú as teimpléad..."
 
-#: src/map/handler/Map.WOPI.js:336
+#: src/map/handler/Map.WOPI.js:338
 msgid "Compare Document..."
 msgstr "Déan comparáid idir an Doiciméad..."
 
-#: src/map/handler/Map.WOPI.js:934
+#: src/map/handler/Map.WOPI.js:936
 msgid "File name should contain an extension."
 msgstr "Ba cheart go mbeadh iarmhír san ainm comhaid."
 
-#: src/map/handler/Map.WOPI.js:1042
+#: src/map/handler/Map.WOPI.js:1044
 msgid "Enter a file name"
 msgstr "Iontráil ainm comhaid"
 
-#: src/map/handler/Map.WOPI.js:1061
+#: src/map/handler/Map.WOPI.js:1063
 msgid "Creating copy..."
 msgstr "Ag cruthú cóipe..."
 
@@ -9486,7 +9496,7 @@ msgstr "Cuir ar sos... ( %SECONDS% )"
 msgid "Current Slide"
 msgstr "Sleamhnán Reatha"
 
-#: src/slideshow/PresenterConsole.js:35 src/slideshow/PresenterConsole.js:1200
+#: src/slideshow/PresenterConsole.js:35 src/slideshow/PresenterConsole.js:1203
 #: src/slideshow/SlideShowPresenter.ts:972
 #: src/slideshow/SlideShowPresenter.ts:985
 msgid "Disable Animations"
@@ -9541,28 +9551,28 @@ msgstr "Réamhamharc ar an sleamhnán seo chugainn"
 msgid "Preview Slide {1}"
 msgstr "Réamhamharc ar an Sleamhnán {1}"
 
-#: src/slideshow/PresenterConsole.js:825
+#: src/slideshow/PresenterConsole.js:828
 msgid "You are leaving the presentation."
 msgstr "Tá tú ag fágáil an chur i láthair."
 
-#: src/slideshow/PresenterConsole.js:826
+#: src/slideshow/PresenterConsole.js:829
 msgid "The link is not valid."
 msgstr "Níl an nasc bailí."
 
-#: src/slideshow/PresenterConsole.js:1199
+#: src/slideshow/PresenterConsole.js:1202
 #: src/slideshow/SlideShowPresenter.ts:984
 msgid "Enable Animations"
 msgstr "Cumasaigh Beochana"
 
-#: src/slideshow/PresenterConsole.js:1593
+#: src/slideshow/PresenterConsole.js:1596
 msgid "Slide {0} of {1}"
 msgstr "Sleamhnán {0} de {1}"
 
-#: src/slideshow/PresenterConsole.js:1664
+#: src/slideshow/PresenterConsole.js:1667
 msgid "No Notes"
 msgstr "Uimh Nótaí"
 
-#: src/slideshow/PresenterConsole.js:1764
+#: src/slideshow/PresenterConsole.js:1767
 msgid "Repeat in %n second"
 msgid_plural "Repeat in %n seconds"
 msgstr[0] "Déan arís i %n soicind"
@@ -9571,7 +9581,7 @@ msgstr[2] "Déan arís i %n soicind"
 msgstr[3] "Déan arís i %n soicind"
 msgstr[4] "Déan arís i %n soicind"
 
-#: src/slideshow/PresenterConsole.js:1771
+#: src/slideshow/PresenterConsole.js:1774
 #: src/slideshow/SlideShowPresenter.ts:728
 msgid "Click to exit presentation..."
 msgstr "Cliceáil chun an cur i láthair a fhágáil..."
@@ -9584,7 +9594,7 @@ msgstr "Tá tú ar an gcéad sleamhnán"
 msgid "Waiting for presenter to advance"
 msgstr "Ag fanacht leis an láithreoir dul ar aghaidh"
 
-#: src/slideshow/SlideShowPresenter.ts:1698
+#: src/slideshow/SlideShowPresenter.ts:1700
 msgid "Stop Following"
 msgstr "Stop ag Leanúint"
 
@@ -9806,6 +9816,15 @@ msgstr ""
 "translate=\"true\">1</a> <a id=\"slide-2-indicator\" href=\"#slide-2\" data-"
 "translate=\"true\">2</a> <a id=\"slide-3-indicator\" href=\"#slide-3\" data-"
 "translate=\"true\">3</a>"
+
+#~ msgid "Slide %1, %3 is missing"
+#~ msgstr "Sleamhnán %1, tá %3 ar iarraidh"
+
+#~ msgid "Slide %1, changed in %3"
+#~ msgstr "Sleamhnán %1, athraithe i %3"
+
+#~ msgid "Slide %1, linked to %2"
+#~ msgstr "Sleamhnán %1, nasctha le %2"
 
 #~ msgid "1 year"
 #~ msgstr "1 bhliain"
