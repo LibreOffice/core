@@ -68,6 +68,17 @@ extern "C" {
     void sal_detail_logFormat(sal_detail_LogLevel, char const*, char const*, char const*, ...) {}
 }
 
+/* rtl_math_approxEqual returns false early when either argument is exactly zero. The derived model
+ * keeps that test, so after a false result the second argument may be zero, even when the code
+ * has already checked it against zero. Model the result as unknown, with no test of either
+ * argument.
+ */
+extern "C" {
+    bool coverity_unknown_bool();
+
+    bool rtl_math_approxEqual(double, double) { return coverity_unknown_bool(); }
+}
+
 namespace __gnu_cxx {
     /* libstdc++ throws from these when a pthread mutex call fails. Terminating is the acceptable
      * response, so model them as paths that do not return.
