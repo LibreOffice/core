@@ -3667,6 +3667,105 @@ public:
     }
 };
 
+/// A view subscribes to a source its token sees watermarked. The source hands out no copies
+/// of its slides to that user, so the link is refused on the source's side and the view is
+/// told the source is missing, with no slides to show.
+class UnitRemoteDocumentNoExport : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitMissing, Done) _phase;
+
+    std::string remoteWopiSrc() const
+    {
+        return getWopiHostURI() + "/wopi/files/slide-link-source.odp";
+    }
+
+    std::string encodedRemoteWopiSrc() const { return Uri::encode(remoteWopiSrc()); }
+
+public:
+    UnitRemoteDocumentNoExport()
+        : WopiTestServer("UnitRemoteDocumentNoExport", "slide-link-source.odp")
+        , _phase(Phase::Load)
+    {
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+        config.setBool("remote_links.enable", true);
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& request,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        // The source is watermarked for the token the subscription holds. The subscribing
+        // document itself loads with its own token and no watermark.
+        if (request.getURI().find("access_token=remotetoken") != std::string::npos)
+            fileInfo->set("WatermarkText", "Confidential");
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+
+        if (_phase == Phase::WaitLoadStatus)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitMissing);
+            registerRemoteLink(socketPoll(), getWopiHostURI() + "/wopi/files/consumer.odp",
+                               "anything", remoteWopiSrc(), "remotetoken",
+                               [this](unsigned status)
+                               {
+                                   LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::OK),
+                                                    status);
+                                   WSD_CMD("remotedocsubscribe source=" +
+                                           encodedRemoteWopiSrc());
+                               });
+        }
+
+        return true;
+    }
+
+    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        if (!message.starts_with("remotelinks:") || _phase != Phase::WaitMissing)
+            return false;
+
+        TST_LOG("Got: [" << message << ']');
+
+        // The source never connects for this user: neither its preview index nor its live
+        // link gives the view anything.
+        LOK_ASSERT_MESSAGE("A watermarked source must not connect",
+                           message.find("\"state\":\"connected\"") == std::string_view::npos);
+
+        if (message.find("\"state\":\"missing\"") != std::string_view::npos)
+        {
+            TRANSITION_STATE(_phase, Phase::Done);
+            passTest("A source watermarked for the user is reported missing, not linked");
+        }
+
+        return false;
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
+
+                initWebsocket("/wopi/files/consumer.odp?access_token=anything");
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
     return new UnitBase* []
@@ -3680,7 +3779,7 @@ UnitBase** unit_create_wsd_multi(void)
             new UnitRemoteDocumentChain(), new UnitLinkPostPersistentLink(),
             new UnitLinkAccessResolve(), new UnitLinkAccessNotFound(), new UnitLinkAccessPerView(),
             new UnitLinkAccessBatch(), new UnitLinkAccessOneByOne(), new UnitLinkAccessDefaults(),
-            new UnitRemoteDocumentPreview(), nullptr
+            new UnitRemoteDocumentPreview(), new UnitRemoteDocumentNoExport(), nullptr
     };
 }
 

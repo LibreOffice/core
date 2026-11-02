@@ -120,6 +120,14 @@ void PreviewSession::attach(DocumentBroker& docBroker, const std::string& id,
 {
     docBroker.assertCorrectThread();
 
+    if (wopiFileInfo && !wopiFileInfo->allowsCleanExport())
+    {
+        LOG_WRN("Preview view of [" << docBroker.getDocKey()
+                                    << "] refused: the host allows no export for this user");
+        fail(http::StatusCode::Forbidden, "the host allows no export of this document");
+        return;
+    }
+
     try
     {
         _docBroker = docBroker.shared_from_this();

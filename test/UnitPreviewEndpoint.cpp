@@ -49,6 +49,8 @@ namespace
 constexpr auto GoodToken = "previewsecret";
 constexpr auto RefusedToken = "refusedsecret";
 constexpr auto MissingToken = "missingsecret";
+/// A token the storage accepts, with a watermark over the document for its user.
+constexpr auto WatermarkedToken = "watermarkedsecret";
 
 constexpr auto PngSignature = "\x89PNG\r\n\x1a\n";
 
@@ -139,6 +141,14 @@ public:
         return response;
     }
 
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& request,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        if (request.getURI().find(std::string("access_token=") + WatermarkedToken) !=
+            std::string::npos)
+            fileInfo->set("WatermarkText", "Confidential");
+    }
+
     void onDocBrokerAddSession(const std::string& docKey,
                                const std::shared_ptr<ClientSession>& session) override
     {
@@ -217,6 +227,11 @@ public:
         LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::Unauthorized), status);
         getIndex(MissingToken, status);
         LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::Unauthorized), status);
+
+        // A token whose user sees the document watermarked gets no pictures of it: the
+        // request is refused before any view is opened.
+        getIndex(WatermarkedToken, status);
+        LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::Forbidden), status);
         LOK_ASSERT_EQUAL(0U, _readOnlyViewsAdded.load());
 
         // The index of a token the storage accepts.
@@ -447,6 +462,12 @@ public:
         // A token the storage refuses is refused, though the cache has the file.
         getIndex(RefusedToken, status);
         LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::Unauthorized), status);
+
+        // A token whose user sees the document watermarked is refused too: the cache holds
+        // pictures without a watermark, and none of them is handed out for that token.
+        getIndex(WatermarkedToken, status);
+        LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::Forbidden), status);
+        LOK_ASSERT_EQUAL(1U, _brokersCreated.load());
 
         // A changed file is loaded again.
         setFileContent(getFileContent());

@@ -647,9 +647,7 @@ private:
     /// or when a watermark must stay over it.
     bool allowsCleanExport() const
     {
-        return !_wopiFileInfo ||
-               (!_wopiFileInfo->getDisableExport() && !_wopiFileInfo->getDisableCopy() &&
-                _wopiFileInfo->getWatermarkText().empty());
+        return !_wopiFileInfo || _wopiFileInfo->allowsCleanExport();
     }
 
     /// Whether the session may run extension scripts. Extensions are off when experimental

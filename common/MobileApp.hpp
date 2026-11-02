@@ -86,6 +86,7 @@ public:
     bool getIsUserRestricted() const { return false; }
     std::string getRestrictedCommands() const { return std::string(); }
     std::string getWatermarkText() const { return std::string(); }
+    bool allowsCleanExport() const { return true; }
 
     TriState getDisableChangeTrackingShow() const { return TriState::Unset; }
     TriState getDisableChangeTrackingRecord() const { return TriState::Unset; }

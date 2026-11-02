@@ -73,6 +73,10 @@ public:
     bool getDisablePrint() const { return _disablePrint; }
     bool getDisableExport() const { return _disableExport; }
     bool getDisableCopy() const { return _disableCopy; }
+    bool allowsCleanExport() const
+    {
+        return !_disableExport && !_disableCopy && _watermarkText.empty();
+    }
     bool getDisableInactiveMessages() const { return _disableInactiveMessages; }
     bool getDownloadAsPostMessage() const { return _downloadAsPostMessage; }
     bool getUserCanNotWriteRelative() const { return _userCanNotWriteRelative; }

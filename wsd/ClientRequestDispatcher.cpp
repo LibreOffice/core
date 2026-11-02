@@ -2366,6 +2366,16 @@ bool ClientRequestDispatcher::handlePreviewIndexRequest(const Poco::Net::HTTPReq
         std::unique_ptr<WopiStorage::WOPIFileInfo> fileInfo =
             checkFileInfo.wopiFileInfo(documentUri);
 
+        if (fileInfo && !fileInfo->allowsCleanExport())
+        {
+            LOG_WRN_S("Preview index request for [" << docKey
+                                                    << "] refused: the host allows no export "
+                                                       "for this user");
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::Forbidden, requestSocket,
+                                             "the host allows no export of this document");
+            return;
+        }
+
         // The cache holds the previews of this version of the file, so the file is not opened.
         Poco::JSON::Object::Ptr cached =
             fileInfo ? PreviewCache::lookup(docKey, fileInfo->getLastModifiedServerTimeString(),

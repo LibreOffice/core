@@ -2825,6 +2825,20 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
                         << "]: a browser's load message does not carry it");
         }
 
+#if !MOBILEAPP
+        // Another document reads this one through a headless session to show its slides and
+        // take copies of them. The host's answer for the token names what may leave the
+        // document: with a watermark, or export or copy disabled, nothing may, so the
+        // session is not loaded at all.
+        if (_isRemoteDocumentConnection && !allowsCleanExport())
+        {
+            LOG_WRN("Refusing to load a headless view of [" << docBroker->getDocKey()
+                    << "]: the host allows no export for this user");
+            sendTextFrameAndLogError("error: cmd=load kind=noexport");
+            return false;
+        }
+#endif
+
         disableSpellCheckIfReadOnly();
         overrideDocOption();
 
