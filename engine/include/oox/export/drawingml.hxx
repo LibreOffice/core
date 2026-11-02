@@ -22,6 +22,7 @@
 
 #include <array>
 #include <map>
+#include <optional>
 #include <stack>
 #include <string_view>
 #include <unordered_map>
@@ -325,6 +326,10 @@ protected:
 
     /// True when exporting presentation placeholder shape.
     bool mbPlaceholder;
+
+    /// The alignment of the paragraphs of a Fontwork shape, which the engine takes from the shape,
+    /// not from the paragraphs; set while the text of such a shape is written.
+    std::optional<css::style::ParagraphAdjust> moFontworkParaAdjust;
 
     /// True when DiagramReplacementVisualization is exported
     bool mbDiagaramExport;

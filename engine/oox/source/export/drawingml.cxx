@@ -52,6 +52,7 @@
 #include <functional>
 #include <map>
 #include <optional>
+#include <comphelper/scopeguard.hxx>
 #include <string_view>
 #include <array>
 #include <set>
@@ -3600,6 +3601,9 @@ const char* DrawingML::GetAlignment( style::ParagraphAdjust nAlignment, bool bPl
         case style::ParagraphAdjust_BLOCK:
             sAlignment = "just";
             break;
+        case style::ParagraphAdjust_STRETCH:
+            sAlignment = "dist";
+            break;
         case style::ParagraphAdjust_LEFT:
         case style::ParagraphAdjust_START:
             if (bPlaceHolder) // in case of PPTX placeholder objects, "l" is necessary for MSO
@@ -3681,6 +3685,8 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
     if (GetProperty(rXPropSet, u"ParaAdjust"_ustr))
         mAny >>= nTmp;
     style::ParagraphAdjust nAlignment = static_cast<style::ParagraphAdjust>(nTmp);
+    if (moFontworkParaAdjust)
+        nAlignment = *moFontworkParaAdjust;
 
     bool bHasLinespacing = false;
     LineSpacing aLineSpacing;
@@ -4756,6 +4762,103 @@ void DrawingML::WriteTextlessParagraph(const Reference<XInterface>& rXIface)
     mpFS->endElementNS(XML_a, XML_p);
 }
 
+// The alignment of a Fontwork text as the engine draws it: the shape's horizontal text anchor,
+// and the stretch of its fit-to-size setting, which the paragraphs do not carry.
+static std::optional<style::ParagraphAdjust>
+lcl_FontworkParagraphAdjust(const Reference<XPropertySet>& rXPropSet)
+{
+    drawing::TextHorizontalAdjust eAdjust = drawing::TextHorizontalAdjust_CENTER;
+    if (!(rXPropSet->getPropertyValue(u"TextHorizontalAdjust"_ustr) >>= eAdjust))
+        return std::nullopt;
+    switch (eAdjust)
+    {
+        case drawing::TextHorizontalAdjust_LEFT:
+            return style::ParagraphAdjust_LEFT;
+        case drawing::TextHorizontalAdjust_RIGHT:
+            return style::ParagraphAdjust_RIGHT;
+        case drawing::TextHorizontalAdjust_BLOCK:
+        {
+            drawing::TextFitToSizeType eFit = drawing::TextFitToSizeType_NONE;
+            rXPropSet->getPropertyValue(u"TextFitToSize"_ustr) >>= eFit;
+            if (eFit == drawing::TextFitToSizeType_ALLLINES
+                || eFit == drawing::TextFitToSizeType_PROPORTIONAL)
+                return style::ParagraphAdjust_STRETCH;
+            return style::ParagraphAdjust_BLOCK;
+        }
+        default:
+            return style::ParagraphAdjust_CENTER;
+    }
+}
+
+// The alignment of a paragraph of a Writer text: ParaAdjust, and ParaLastLineAdjust, which
+// makes a justified paragraph a distributed one.
+namespace
+{
+struct ParaAdjustPair
+{
+    sal_Int16 nAdjust = sal_Int16(style::ParagraphAdjust_LEFT);
+    sal_Int16 nLastLine = sal_Int16(style::ParagraphAdjust_LEFT);
+};
+}
+
+// The alignment of every paragraph of a text, in order.
+static std::vector<ParaAdjustPair> lcl_CollectParaAdjust(const Reference<text::XText>& rXText)
+{
+    std::vector<ParaAdjustPair> aOut;
+    Reference<container::XEnumerationAccess> xParaAccess(rXText, UNO_QUERY);
+    if (!xParaAccess.is())
+        return aOut;
+    Reference<container::XEnumeration> xParaEnum(xParaAccess->createEnumeration());
+    while (xParaEnum->hasMoreElements())
+    {
+        Reference<XPropertySet> xPara(xParaEnum->nextElement(), UNO_QUERY);
+        ParaAdjustPair aPair;
+        if (xPara.is())
+        {
+            xPara->getPropertyValue(u"ParaAdjust"_ustr) >>= aPair.nAdjust;
+            xPara->getPropertyValue(u"ParaLastLineAdjust"_ustr) >>= aPair.nLastLine;
+        }
+        aOut.push_back(aPair);
+    }
+    return aOut;
+}
+
+// Sets the alignment of every paragraph of a text from the collected values.
+static void lcl_ApplyParaAdjust(const Reference<text::XText>& rXText,
+                                const std::vector<ParaAdjustPair>& rValues)
+{
+    Reference<container::XEnumerationAccess> xParaAccess(rXText, UNO_QUERY);
+    if (!xParaAccess.is())
+        return;
+    Reference<container::XEnumeration> xParaEnum(xParaAccess->createEnumeration());
+    size_t nIndex = 0;
+    while (xParaEnum->hasMoreElements() && nIndex < rValues.size())
+    {
+        Reference<XPropertySet> xPara(xParaEnum->nextElement(), UNO_QUERY);
+        if (xPara.is())
+        {
+            xPara->setPropertyValue(u"ParaAdjust"_ustr, Any(rValues[nIndex].nAdjust));
+            xPara->setPropertyValue(u"ParaLastLineAdjust"_ustr, Any(rValues[nIndex].nLastLine));
+        }
+        ++nIndex;
+    }
+}
+
+// The paragraph alignment a Writer text box gets for the alignment of a Fontwork: the stretched
+// alignment is a justified paragraph with a justified last line, which Word distributes.
+static ParaAdjustPair lcl_WriterParaAdjustOfFontwork(style::ParagraphAdjust eAdjust)
+{
+    ParaAdjustPair aPair;
+    if (eAdjust == style::ParagraphAdjust_STRETCH)
+    {
+        aPair.nAdjust = sal_Int16(style::ParagraphAdjust_BLOCK);
+        aPair.nLastLine = sal_Int16(style::ParagraphAdjust_BLOCK);
+    }
+    else
+        aPair.nAdjust = sal_Int16(eAdjust);
+    return aPair;
+}
+
 void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bool bText,
                           sal_Int32 nXmlNamespace, bool bWritePropertiesAsLstStyles,
                           const Reference<XPropertySet>& rXListStyle)
@@ -4769,6 +4872,9 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     uno::Reference<XPropertySet> rXPropSet(rXIface, UNO_QUERY);
 
     bool bIsFontworkShape(IsFontworkShape(rXPropSet));
+    if (bIsFontworkShape)
+        moFontworkParaAdjust = lcl_FontworkParagraphAdjust(rXPropSet);
+    comphelper::ScopeGuard aParaAdjustGuard([this]() { moFontworkParaAdjust.reset(); });
 
     sal_Int32 nLeft = mconstDefaultLeftRightInset;
     sal_Int32 nRight = mconstDefaultLeftRightInset;
@@ -4858,8 +4964,18 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     if (pTxtObj && mpTextExport)
     {
         std::vector<beans::PropertyValue> aOldCharFillPropVec;
+        std::vector<ParaAdjustPair> aOldParaAdjust;
         if (bIsFontworkShape)
         {
+            // Word aligns the text of a WordArt by its paragraphs; the engine aligns a Fontwork
+            // by the shape. The paragraphs take the shape's alignment while they are written.
+            if (moFontworkParaAdjust)
+            {
+                aOldParaAdjust = lcl_CollectParaAdjust(xXText);
+                lcl_ApplyParaAdjust(xXText, std::vector<ParaAdjustPair>(
+                                                aOldParaAdjust.size(),
+                                                lcl_WriterParaAdjustOfFontwork(*moFontworkParaAdjust)));
+            }
             // Users may have set the character fill properties for more convenient editing.
             // Save the properties before changing them for Fontwork export.
             FontworkHelpers::collectCharColorProps(xXText, aOldCharFillPropVec);
@@ -4899,7 +5015,10 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         }
 
         if (bIsFontworkShape)
+        {
             FontworkHelpers::applyPropsToRuns(aOldCharFillPropVec, xXText);
+            lcl_ApplyParaAdjust(xXText, aOldParaAdjust);
+        }
         return;
     }
 

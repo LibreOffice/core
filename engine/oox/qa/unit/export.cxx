@@ -16,6 +16,8 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
+#include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
@@ -1134,6 +1136,76 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkLegacyTextTypes)
     uno::Reference<beans::XPropertySet> xArch(xPage->getByIndex(1), uno::UNO_QUERY_THROW);
     aGeometry = comphelper::SequenceAsHashMap(xArch->getPropertyValue(u"CustomShapeGeometry"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"fontwork-arch-up-curve"_ustr, aGeometry[u"Type"_ustr].get<OUString>());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFontworkAlignment)
+{
+    // Given five plain-text Fontwork shapes aligned by the shape: left, centre, right, justified,
+    // and justified with the text fitted to the shape (stretch):
+    loadFromFile(u"fontwork-alignment.fodp");
+
+    // When saving to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then every paragraph is aligned as the shape is
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//p:sp[1]//a:p/a:pPr[@algn]", 0);
+    assertXPath(pXmlDoc, "//p:sp[2]//a:p/a:pPr", "algn", u"ctr");
+    assertXPath(pXmlDoc, "//p:sp[3]//a:p/a:pPr", "algn", u"r");
+    assertXPath(pXmlDoc, "//p:sp[4]//a:p/a:pPr", "algn", u"just");
+    assertXPath(pXmlDoc, "//p:sp[5]//a:p/a:pPr", "algn", u"dist");
+
+    // and reading the file back gives the shapes their alignment and the stretch its fit
+    loadFromURL(maTempFile.GetURL());
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY_THROW);
+    drawing::TextHorizontalAdjust eAdjust = drawing::TextHorizontalAdjust_CENTER;
+    uno::Reference<beans::XPropertySet> xRight(xPage->getByIndex(2), uno::UNO_QUERY_THROW);
+    xRight->getPropertyValue(u"TextHorizontalAdjust"_ustr) >>= eAdjust;
+    CPPUNIT_ASSERT_EQUAL(drawing::TextHorizontalAdjust_RIGHT, eAdjust);
+    uno::Reference<beans::XPropertySet> xJustify(xPage->getByIndex(3), uno::UNO_QUERY_THROW);
+    xJustify->getPropertyValue(u"TextHorizontalAdjust"_ustr) >>= eAdjust;
+    CPPUNIT_ASSERT_EQUAL(drawing::TextHorizontalAdjust_BLOCK, eAdjust);
+    uno::Reference<beans::XPropertySet> xStretch(xPage->getByIndex(4), uno::UNO_QUERY_THROW);
+    xStretch->getPropertyValue(u"TextHorizontalAdjust"_ustr) >>= eAdjust;
+    CPPUNIT_ASSERT_EQUAL(drawing::TextHorizontalAdjust_BLOCK, eAdjust);
+    drawing::TextFitToSizeType eFit = drawing::TextFitToSizeType_NONE;
+    xStretch->getPropertyValue(u"TextFitToSize"_ustr) >>= eFit;
+    CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_ALLLINES, eFit);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFontworkAlignmentWriter)
+{
+    // Given the same five Fontwork shapes in a Writer document:
+    loadFromFile(u"fontwork-alignment.fodt");
+
+    // When saving to DOCX:
+    save(TestFilter::DOCX);
+
+    // Then the paragraphs of the WordArt text boxes are aligned as the shapes are
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    OString sPara = "//mc:Choice//wps:wsp/wps:txbx/w:txbxContent/w:p/w:pPr/w:jc"_ostr;
+    assertXPath(pXmlDoc, "(//mc:Choice//wps:wsp)[2]//w:txbxContent/w:p/w:pPr/w:jc", "val", u"center");
+    assertXPath(pXmlDoc, "(//mc:Choice//wps:wsp)[3]//w:txbxContent/w:p/w:pPr/w:jc", "val", u"end");
+    assertXPath(pXmlDoc, "(//mc:Choice//wps:wsp)[4]//w:txbxContent/w:p/w:pPr/w:jc", "val", u"both");
+    assertXPath(pXmlDoc, "(//mc:Choice//wps:wsp)[5]//w:txbxContent/w:p/w:pPr/w:jc", "val",
+                u"distribute");
+    assertXPath(pXmlDoc, "(//mc:Choice//wps:wsp)[1]//w:txbxContent/w:p/w:pPr/w:jc", "val", u"start");
+    assertXPath(pXmlDoc, sPara, 5);
+
+    // and reading the file back gives the shapes their alignment and the stretch its fit
+    loadFromURL(maTempFile.GetURL());
+    uno::Reference<drawing::XDrawPageSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPage());
+    drawing::TextHorizontalAdjust eAdjust = drawing::TextHorizontalAdjust_CENTER;
+    uno::Reference<beans::XPropertySet> xJustify(xPage->getByIndex(3), uno::UNO_QUERY_THROW);
+    xJustify->getPropertyValue(u"TextHorizontalAdjust"_ustr) >>= eAdjust;
+    CPPUNIT_ASSERT_EQUAL(drawing::TextHorizontalAdjust_BLOCK, eAdjust);
+    uno::Reference<beans::XPropertySet> xStretch(xPage->getByIndex(4), uno::UNO_QUERY_THROW);
+    drawing::TextFitToSizeType eFit = drawing::TextFitToSizeType_NONE;
+    xStretch->getPropertyValue(u"TextFitToSize"_ustr) >>= eFit;
+    CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_ALLLINES, eFit);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFontworkDistance)

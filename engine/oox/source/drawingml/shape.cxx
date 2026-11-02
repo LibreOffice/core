@@ -85,6 +85,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
@@ -132,6 +133,7 @@
 #include <vcl/wmfexternal.hxx>
 #include <sal/log.hxx>
 #include <svx/sdtaitm.hxx>
+#include <svx/sdtfsitm.hxx>
 #include <oox/drawingml/diagram/diagram.hxx>
 #include <docmodel/theme/Theme.hxx>
 #include <docmodel/uno/UnoBlurEffect.hxx>
@@ -781,6 +783,8 @@ static SdrTextHorzAdjust lcl_convertAdjust( ParagraphAdjust eAdjust )
         return SDRTEXTHORZADJUST_RIGHT;
     else if (eAdjust == ParagraphAdjust_CENTER)
         return SDRTEXTHORZADJUST_CENTER;
+    else if (eAdjust == ParagraphAdjust_BLOCK || eAdjust == ParagraphAdjust_STRETCH)
+        return SDRTEXTHORZADJUST_BLOCK;
     return SDRTEXTHORZADJUST_LEFT;
 }
 
@@ -1004,6 +1008,9 @@ static void lcl_copyCharPropsToShape(const uno::Reference<drawing::XShape>& xSha
             assert(pShape);
             SdrTextHorzAdjust eHorzAdjust = lcl_convertAdjust(eAdjust);
             pShape->SetMergedItem(SdrTextHorzAdjustItem(eHorzAdjust));
+            // distributed text is the stretched Fontwork alignment: justified and fitted
+            if (eAdjust == ParagraphAdjust_STRETCH)
+                pShape->SetMergedItem(SdrTextFitToSizeTypeItem(drawing::TextFitToSizeType_ALLLINES));
         }
     }
 

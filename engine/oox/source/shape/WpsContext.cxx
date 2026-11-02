@@ -36,6 +36,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -470,6 +471,12 @@ void lcl_setTextAnchorFromTextProps(const uno::Reference<beans::XPropertySet>& x
     auto eHorzAdjust(drawing::TextHorizontalAdjust_CENTER);
     sal_Int16 nParaAlign = sal_Int16(drawing::TextHorizontalAdjust_CENTER);
     aTextPropMap.getValue(u"ParaAdjust"_ustr) >>= nParaAlign;
+    // a justified paragraph with a justified last line is Word's distributed text
+    sal_Int16 nLastLine = sal_Int16(style::ParagraphAdjust_LEFT);
+    aTextPropMap.getValue(u"ParaLastLineAdjust"_ustr) >>= nLastLine;
+    if (nParaAlign == sal_Int16(style::ParagraphAdjust_BLOCK)
+        && nLastLine == sal_Int16(style::ParagraphAdjust_BLOCK))
+        nParaAlign = sal_Int16(style::ParagraphAdjust_STRETCH);
     switch (nParaAlign)
     {
         case sal_Int16(style::ParagraphAdjust_LEFT):
@@ -477,6 +484,15 @@ void lcl_setTextAnchorFromTextProps(const uno::Reference<beans::XPropertySet>& x
             break;
         case sal_Int16(style::ParagraphAdjust_RIGHT):
             eHorzAdjust = drawing::TextHorizontalAdjust_RIGHT;
+            break;
+        case sal_Int16(style::ParagraphAdjust_BLOCK):
+            eHorzAdjust = drawing::TextHorizontalAdjust_BLOCK;
+            break;
+        case sal_Int16(style::ParagraphAdjust_STRETCH):
+            // distributed text is the stretched Fontwork alignment: justified and fitted
+            eHorzAdjust = drawing::TextHorizontalAdjust_BLOCK;
+            xShapePropertySet->setPropertyValue(
+                u"TextFitToSize"_ustr, cpo::uno::Any(drawing::TextFitToSizeType_ALLLINES));
             break;
         default:
             eHorzAdjust = drawing::TextHorizontalAdjust_CENTER;
