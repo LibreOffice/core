@@ -19,6 +19,26 @@
             <property name="can-focus">True</property>
             <property name="toolbar-style">icons</property>
             <property name="show-arrow">False</property>
+            <child>
+              <object class="GtkMenuToolButton" id=".uno:DefaultBullet">
+                <property name="visible">True</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuToolButton" id=".uno:DefaultNumbering">
+                <property name="visible">True</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">False</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>

@@ -1125,11 +1125,13 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 								'type': 'container',
 								'children': [
 									{
+										'id': 'WeldedToolbar', // has to match core .ui file toolbox id!
 										'type': 'toolbox',
 										'children': [
 											{
 												'id': 'home-default-bullet',
 												'type': 'toolitem',
+												'dropdown': true,
 												'text': _UNO('.uno:DefaultBullet'),
 												'command': '.uno:DefaultBullet',
 												'accessibility': { focusBack: true, combination: 'DB', de: null }
@@ -1137,10 +1139,16 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 											{
 												'id': 'home-default-numbering',
 												'type': 'toolitem',
+												'dropdown': true,
 												'text': _UNO('.uno:DefaultNumbering'),
 												'command': '.uno:DefaultNumbering',
 												'accessibility': { focusBack: true, combination: 'DN', de: null }
-											},
+											}
+										]
+									},
+									{
+										'type': 'toolbox',
+										'children': [
 											{
 												'id': 'home-increment-indent',
 												'type': 'toolitem',

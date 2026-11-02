@@ -12,7 +12,7 @@
  * JSDialog.TopToolbar - component of top toolbar in compact mode
  */
 
-/* global $ JSDialog _ _UNO app */
+/* global $ JSDialog _ _UNO app WindowId */
 class TopToolbar extends JSDialog.Toolbar {
 	constructor(map) {
 		super(map, 'TopToolbar', 'toolbar-up');
@@ -94,6 +94,16 @@ class TopToolbar extends JSDialog.Toolbar {
 				return 'focusHandled';
 			}
 			return;
+		}
+
+		// The compact toolbar has no window in core. Events of the toolbox that mirrors the
+		// notebookbar toolbox go to the notebookbar window, which holds that toolbox.
+		if (objectType === 'toolbox' && object.id === 'WeldedToolbar') {
+			const notebookbarBuilder = Object.create(builder, {
+				windowId: { value: WindowId.Notebookbar },
+			});
+			return this.builder._defaultCallbackHandler(
+				objectType, eventType, object, data, notebookbarBuilder);
 		}
 
 		if (object.id === 'documentmenu' && eventType === 'select') {
@@ -245,6 +255,12 @@ class TopToolbar extends JSDialog.Toolbar {
 		var otherGroup = [
 			{type: 'toolitem',  id: 'defaultnumbering', text: _UNO('.uno:DefaultNumbering', '', true), visible: false, command: '.uno:DefaultNumbering', icon: 'compact_defaultnumbering.svg', accessibility: { focusBack: true, combination: 'OL' }},
 			{type: 'toolitem',  id: 'defaultbullet', text: _UNO('.uno:DefaultBullet', '', true), visible: false, command: '.uno:DefaultBullet', icon: 'compact_defaultbullet.svg', accessibility: { focusBack: true, combination: 'UL' }},
+			// The presentation list buttons open the bullet and numbering popups of core. Core
+			// opens them from the toolbox of the same id in its notebookbar.
+			{type: 'toolbox', id: 'WeldedToolbar', children: [
+				{type: 'toolitem',  id: 'defaultnumbering-presentation', visible: false, dropdown: true, text: _UNO('.uno:DefaultNumbering', '', true), command: '.uno:DefaultNumbering', icon: 'compact_defaultnumbering.svg', accessibility: { focusBack: true, combination: 'OL' }},
+				{type: 'toolitem',  id: 'defaultbullet-presentation', visible: false, dropdown: true, text: _UNO('.uno:DefaultBullet', '', true), command: '.uno:DefaultBullet', icon: 'compact_defaultbullet.svg', accessibility: { focusBack: true, combination: 'UL' }},
+			]},
 			{type: 'separator', orientation: 'vertical', id: 'breakbullet', visible: false},
 			{type: 'toolitem',  id: 'incrementindent', text: _UNO('.uno:IncrementIndent', '', true), command: '.uno:IncrementIndent', visible: false, icon: 'compact_leftindent.svg', accessibility: { focusBack: true, combination: 'II' }},
 			{type: 'toolitem',  id: 'decrementindent', text: _UNO('.uno:DecrementIndent', '', true), command: '.uno:DecrementIndent', visible: false, icon: 'compact_decrementindent.svg', accessibility: { focusBack: true, combination: 'DI' }},
@@ -480,7 +496,7 @@ class TopToolbar extends JSDialog.Toolbar {
 				['resetimpress', 'breaksidebar', 'modifypage',
 					'leftpara', 'centerpara', 'rightpara', 'justifypara', 'breakpara', 'linespacing',
 					'gridvisible', 'griduse','changelayout',
-					'breakspacing', 'defaultbullet', 'defaultnumbering', 'breakbullet', 'inserttextbox', 'inserttable',  'insertannotation', 'backcolor',
+					'breakspacing', 'defaultbullet-presentation', 'defaultnumbering-presentation', 'breakbullet', 'inserttextbox', 'inserttable',  'insertannotation', 'backcolor',
 					'breaksidebar', 'modifypage', 'slidechangewindow', 'customanimation', 'masterslidespanel', 'navigator'
 				].forEach((id) => {
 					this.showItem(id, true);
