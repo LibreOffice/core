@@ -333,6 +333,24 @@ bool SfxObjectShell::IsModified() const
 }
 
 
+// Also true if the document has no view, for example while it loads.
+static bool lcl_anyViewCanEdit( const SfxObjectShell& rShell )
+{
+    bool bHasView = false;
+    for ( SfxViewShell* pViewShell = SfxViewShell::GetFirst( false ); pViewShell;
+          pViewShell = SfxViewShell::GetNext( *pViewShell, false ) )
+    {
+        if ( pViewShell->GetObjectShell() != &rShell )
+            continue;
+        if ( !pViewShell->IsKitReadOnlyView() || pViewShell->IsAllowChangeComments()
+             || pViewShell->IsAllowManageRedlines() )
+            return true;
+        bHasView = true;
+    }
+    return !bHasView;
+}
+
+
 void SfxObjectShell::SetModified( bool bModifiedP )
 {
     SAL_INFO_IF( !bModifiedP && !IsEnableSetModified(), "sfx",
@@ -340,6 +358,17 @@ void SfxObjectShell::SetModified( bool bModifiedP )
 
     if( !IsEnableSetModified() )
         return;
+
+    // While no view can edit, only an explicit request marks the document modified. Other changes
+    // wait until a view can edit.
+    if ( comphelper::COKit::isActive() && bModifiedP && !pImpl->m_bModifiedOnRequest
+         && !lcl_anyViewCanEdit( *this ) )
+    {
+        pImpl->m_bModifiedPending = true;
+        return;
+    }
+
+    pImpl->m_bModifiedPending = false;
 
     if( pImpl->m_bIsModified != bModifiedP )
     {

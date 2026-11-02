@@ -58,6 +58,7 @@
 #include <tools/json_writer.hxx>
 #include <svl/cryptosign.hxx>
 #include <tools/urlobj.hxx>
+#include <objshimp.hxx>
 
 #include <boost/property_tree/json_parser.hpp>
 
@@ -438,6 +439,9 @@ void KitHelper::setViewReadOnly(int nId, bool readOnly)
             // the readonly flag is set and can be checked correctly.
             SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScAreasChanged));
             pViewShell->KitReadOnlyViewChanged();
+            SfxObjectShell* pObjectShell = pViewShell->GetObjectShell();
+            if (!readOnly && pObjectShell && pObjectShell->Get_Impl()->m_bModifiedPending)
+                pObjectShell->SetModified(true);
         }
     }
 }

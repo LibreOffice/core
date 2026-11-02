@@ -15,6 +15,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/sheet/XAreaLinks.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/sheet/XSubTotalCalculatable.hpp>
@@ -24,6 +25,7 @@
 #include <com/sun/star/sheet/XSheetOutline.hpp>
 #include <com/sun/star/table/TableOrientation.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
+#include <com/sun/star/util/XRefreshable.hpp>
 
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -4322,6 +4324,35 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSpellDialogAfterReadOnlyView)
     Scheduler::ProcessEventsToIdle();
     // Without the fix, no spelling dialog opened until another dispatcher update
     CPPUNIT_ASSERT(pFrame->GetChildWindow(SID_SPELL_DIALOG));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLinkedRangeRefreshInReadOnlyView)
+{
+    // A linked range that refreshes in a read-only view shows the new data. The document is marked
+    // modified once the view can edit.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocSh);
+    ScDocument& rDoc = pDocSh->GetDocument();
+    pDocSh->GetEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
+    uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XAreaLinks> xAreaLinks(xPropertySet->getPropertyValue(u"AreaLinks"_ustr),
+                                                 uno::UNO_QUERY_THROW);
+    xAreaLinks->insertAtPosition(table::CellAddress(0, 0, 0), createFileURL(u"link-source.fods"),
+                                 u"data"_ustr, u"OpenDocument Spreadsheet Flat XML"_ustr, u""_ustr);
+    uno::Reference<util::XRefreshable> xAreaLink(xAreaLinks->getByIndex(0), uno::UNO_QUERY_THROW);
+
+    rDoc.SetValue(ScAddress(0, 0, 0), 42.0);
+    pModelObj->setModified(false);
+    const int nView = KitHelper::getCurrentView();
+    KitHelper::setViewReadOnly(nView, true);
+
+    xAreaLink->refresh();
+    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT(!pDocSh->IsModified());
+
+    KitHelper::setViewReadOnly(nView, false);
+    CPPUNIT_ASSERT(pDocSh->IsModified());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

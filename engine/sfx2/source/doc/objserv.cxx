@@ -1832,7 +1832,9 @@ void SfxObjectShell::ExecProps_Impl(SfxRequest &rReq)
     {
         case SID_MODIFIED:
         {
+            pImpl->m_bModifiedOnRequest = true;
             SetModified( rReq.GetArgs()->Get(SID_MODIFIED).GetValue() );
+            pImpl->m_bModifiedOnRequest = false;
             rReq.Done();
             break;
         }

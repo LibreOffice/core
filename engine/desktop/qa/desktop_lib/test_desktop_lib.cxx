@@ -902,7 +902,10 @@ void DesktopKitTest::testSaveFromReadOnlyView()
     // even for a save that may skip an unchanged document.
     SfxObjectShell* pShell = SfxObjectShell::GetShellFromComponent(pDocument->mxComponent);
     CPPUNIT_ASSERT(pShell);
+    // Only a view that can edit marks the document modified.
+    KitHelper::setViewReadOnly(pDocument->getView(), false);
     pShell->SetModified(true);
+    KitHelper::setViewReadOnly(pDocument->getView(), true);
     aTree = postSaveAndReadResult(pDocument, pSkipUnmodified);
     CPPUNIT_ASSERT_EQUAL(false, aTree.get_child("success").get_value<bool>());
     CPPUNIT_ASSERT(!aTree.get_child_optional("result"));
