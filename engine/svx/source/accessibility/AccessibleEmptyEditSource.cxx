@@ -101,6 +101,7 @@ namespace accessibility
         SfxItemSet      GetParaAttribs( sal_Int32 /*nPara*/ ) const override { return GetAttribs(ESelection()); }
         void            SetParaAttribs( sal_Int32 /*nPara*/, const SfxItemSet& /*rSet*/ ) override {}
         void            RemoveAttribs( const ESelection& /*rSelection*/ ) override {}
+        void            RemoveAttribs( const ESelection& /*rSelection*/, sal_uInt16 /*nWhich*/ ) override {}
         void            GetPortions( sal_Int32 /*nPara*/, std::vector<sal_Int32>& /*rList*/ ) const override {}
 
         OUString    GetStyleSheet(sal_Int32 /*nPara*/) const override { return OUString(); }

@@ -365,6 +365,7 @@ public:
     virtual SfxItemSet GetParaAttribs(sal_Int32 nPara) const override;
     virtual void SetParaAttribs(sal_Int32 nPara, const SfxItemSet& rSet) override;
     virtual void RemoveAttribs(const ESelection& rSelection) override;
+    virtual void RemoveAttribs(const ESelection& rSelection, sal_uInt16 nWhich) override;
     virtual void GetPortions(sal_Int32 nPara, std::vector<sal_Int32>& rList) const override;
 
     virtual OUString GetStyleSheet(sal_Int32 nPara) const override;
@@ -962,6 +963,13 @@ void WeldTextForwarder::RemoveAttribs(const ESelection& rSelection)
     EditEngine* pEditEngine = m_rEditAcc.GetEditEngine();
     if (pEditEngine)
         pEditEngine->RemoveAttribs(rSelection, false /*bRemoveParaAttribs*/, 0);
+}
+
+void WeldTextForwarder::RemoveAttribs(const ESelection& rSelection, sal_uInt16 nWhich)
+{
+    EditEngine* pEditEngine = m_rEditAcc.GetEditEngine();
+    if (pEditEngine)
+        pEditEngine->RemoveAttribs(rSelection, false /*bRemoveParaAttribs*/, nWhich);
 }
 
 void WeldTextForwarder::GetPortions(sal_Int32 nPara, std::vector<sal_Int32>& rList) const

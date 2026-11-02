@@ -150,6 +150,8 @@ public:
     virtual SfxItemSet  GetParaAttribs( sal_Int32 nPara ) const = 0;
     virtual void        SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet ) = 0;
     virtual void        RemoveAttribs( const ESelection& rSelection ) = 0;
+    /// Removes one character attribute from the selection.
+    virtual void        RemoveAttribs( const ESelection& rSelection, sal_uInt16 nWhich ) = 0;
     virtual void        GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList ) const = 0;
 
     virtual OUString    GetStyleSheet(sal_Int32 nPara) const = 0;

@@ -174,6 +174,11 @@ void SvxOutlinerForwarder::RemoveAttribs( const ESelection& rSelection )
     rOutliner.RemoveAttribs( rSelection, false/*bRemoveParaAttribs*/, 0 );
 }
 
+void SvxOutlinerForwarder::RemoveAttribs( const ESelection& rSelection, sal_uInt16 nWhich )
+{
+    rOutliner.RemoveAttribs( rSelection, false/*bRemoveParaAttribs*/, nWhich );
+}
+
 SfxItemPool* SvxOutlinerForwarder::GetPool() const
 {
     return rOutliner.GetEmptyItemSet().GetPool();

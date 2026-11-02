@@ -60,6 +60,7 @@ public:
     virtual SfxItemSet  GetParaAttribs( sal_Int32 nPara ) const override final;
     virtual void        SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet ) override final;
     virtual void        RemoveAttribs( const ESelection& rSelection ) override final;
+    virtual void        RemoveAttribs( const ESelection& rSelection, sal_uInt16 nWhich ) override final;
     virtual void        GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList ) const override final;
 
     virtual OUString    GetStyleSheet(sal_Int32 nPara) const override;

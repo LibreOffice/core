@@ -1332,7 +1332,15 @@ void SvxUnoTextRangeBase::_setPropertyToDefault(SvxTextForwarder* pForwarder, co
         if(nPara != -1)
             pForwarder->SetParaAttribs( nPara, aSet );
         else
-            pForwarder->QuickSetAttribs( aSet, GetSelection() );
+        {
+            // The edit engine applies the items of a set that are set; an invalidated character
+            // item is the removal of that attribute from the selection.
+            for( sal_uInt16 nWhich = EE_CHAR_START; nWhich <= EE_CHAR_END; nWhich++ )
+            {
+                if( aSet.GetItemState( nWhich, false ) == SfxItemState::INVALID )
+                    pForwarder->RemoveAttribs( GetSelection(), nWhich );
+            }
+        }
 
         GetEditSource()->UpdateData();
 
@@ -2404,6 +2412,10 @@ void SvxDummyTextSource::SetParaAttribs( sal_Int32, const SfxItemSet& )
 }
 
 void SvxDummyTextSource::RemoveAttribs( const ESelection& )
+{
+}
+
+void SvxDummyTextSource::RemoveAttribs( const ESelection&, sal_uInt16 )
 {
 }
 

@@ -36,6 +36,7 @@
 #include <editeng/numitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/unofield.hxx>
+#include <editeng/unofored.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/section.hxx>
@@ -129,6 +130,8 @@ public:
 
     /// Clearing direct formatting drops other attributes but keeps the link.
     void testHyperlinkSpanKeptOnClearFormatting();
+    /// The text forwarder removes one attribute from a selection, part of a span included.
+    void testForwarderRemovesOneAttribute();
 
     /// A hyperlink span wraps like ordinary text, a legacy wrap span moves to the next line whole.
     void testHyperlinkSpanNoWrapInside();
@@ -266,6 +269,7 @@ public:
     CPPUNIT_TEST(testHyperlinkSpanCopyPaste);
     CPPUNIT_TEST(testHyperlinkInsertAsSpan);
     CPPUNIT_TEST(testHyperlinkSpanKeptOnClearFormatting);
+    CPPUNIT_TEST(testForwarderRemovesOneAttribute);
     CPPUNIT_TEST(testHyperlinkSpanNoWrapInside);
     CPPUNIT_TEST(testHyperlinkSpanLegacyCellBreak);
     CPPUNIT_TEST(testHyperlinkSpanLegacyLineEndsAfterLink);
@@ -878,6 +882,39 @@ void Test::testHyperlinkInsertAsSpan()
     CPPUNIT_ASSERT(aSpan.pAttr);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aSpan.nStart);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aSpan.nEnd);
+}
+
+void Test::testForwarderRemovesOneAttribute()
+{
+    // Given a text whose second word is bold:
+    EditEngine aEditEngine(mpItemPool.get());
+    aEditEngine.SetText(u"Hello World"_ustr);
+    SfxItemSet aSet(aEditEngine.GetEmptyItemSet());
+    aSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT));
+    aEditEngine.QuickSetAttribs(aSet, ESelection(0, 6, 0, 11));
+    SvxEditEngineForwarder aForwarder(aEditEngine);
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::SET,
+                         aForwarder.GetItemState(ESelection(0, 6, 0, 11), EE_CHAR_WEIGHT));
+
+    // When removing the weight from the first two letters of that word:
+    aForwarder.RemoveAttribs(ESelection(0, 6, 0, 8), EE_CHAR_WEIGHT);
+
+    // Then those letters have no weight of their own and the rest of the word keeps its bold
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT,
+                         aForwarder.GetItemState(ESelection(0, 6, 0, 8), EE_CHAR_WEIGHT));
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::SET,
+                         aForwarder.GetItemState(ESelection(0, 8, 0, 11), EE_CHAR_WEIGHT));
+
+    // and removing it from the rest leaves the paragraph without a weight attribute
+    aForwarder.RemoveAttribs(ESelection(0, 8, 0, 11), EE_CHAR_WEIGHT);
+    std::vector<EECharAttrib> aAttribs;
+    aEditEngine.GetCharAttribs(0, aAttribs);
+    bool bHasWeight = false;
+    for (const EECharAttrib& rAttrib : aAttribs)
+        if (rAttrib.pAttr->Which() == EE_CHAR_WEIGHT)
+            bHasWeight = true;
+    CPPUNIT_ASSERT(!bHasWeight);
+    CPPUNIT_ASSERT_EQUAL(u"Hello World"_ustr, aEditEngine.GetText(0));
 }
 
 void Test::testHyperlinkSpanKeptOnClearFormatting()

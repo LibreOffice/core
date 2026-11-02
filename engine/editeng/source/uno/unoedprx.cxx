@@ -526,6 +526,19 @@ void SvxAccessibleTextAdapter::RemoveAttribs( const ESelection& )
 {
 }
 
+void SvxAccessibleTextAdapter::RemoveAttribs( const ESelection& rSel, sal_uInt16 nWhich )
+{
+    assert(mpTextForwarder && "SvxAccessibleTextAdapter: no forwarder");
+
+    SvxAccessibleTextIndex aStartIndex;
+    SvxAccessibleTextIndex aEndIndex;
+
+    aStartIndex.SetIndex( rSel.start.nPara, rSel.start.nIndex, *this );
+    aEndIndex.SetIndex( rSel.end.nPara, rSel.end.nIndex, *this );
+
+    mpTextForwarder->RemoveAttribs( MakeEESelection(aStartIndex, aEndIndex), nWhich );
+}
+
 void SvxAccessibleTextAdapter::GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList ) const
 {
     assert(mpTextForwarder && "SvxAccessibleTextAdapter: no forwarder");

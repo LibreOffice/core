@@ -41,6 +41,7 @@ public:
     virtual SfxItemSet      GetParaAttribs( sal_Int32 nPara ) const override;
     virtual void            SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet ) override;
     virtual void            RemoveAttribs( const ESelection& rSelection ) override;
+    virtual void            RemoveAttribs( const ESelection& rSelection, sal_uInt16 nWhich ) override;
     virtual void            GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList ) const override;
 
     sal_Int32               CalcEditEngineIndex( sal_Int32 nPara, sal_Int32 nLogicalIndex );

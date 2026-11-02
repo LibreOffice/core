@@ -114,6 +114,11 @@ void SvxEditEngineForwarder::RemoveAttribs( const ESelection& rSelection )
     rEditEngine.RemoveAttribs( rSelection, false/*bRemoveParaAttribs*/, 0 );
 }
 
+void SvxEditEngineForwarder::RemoveAttribs( const ESelection& rSelection, sal_uInt16 nWhich )
+{
+    rEditEngine.RemoveAttribs( rSelection, false/*bRemoveParaAttribs*/, nWhich );
+}
+
 SfxItemPool* SvxEditEngineForwarder::GetPool() const
 {
     return rEditEngine.GetEmptyItemSet().GetPool();
