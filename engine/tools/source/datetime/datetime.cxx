@@ -285,7 +285,7 @@ TOOLS_DLLPUBLIC std::ostream & operator <<(
     std::ostream & stream, const DateTime& datetime)
 {
     stream << datetime.GetYear() << '-';
-    stream.fill('0');
+    const char cOldFill = stream.fill('0');
     stream.width(2);
     stream << datetime.GetMonth() << '-';
     stream.width(2);
@@ -297,7 +297,9 @@ TOOLS_DLLPUBLIC std::ostream & operator <<(
     stream.width(2);
     stream << datetime.GetSec() << ".";
     stream.width(9);
-    return stream << datetime.GetNanoSec();
+    stream << datetime.GetNanoSec();
+    stream.fill(cOldFill);
+    return stream;
 }
 
 
