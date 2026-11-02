@@ -30,6 +30,10 @@
 class ChildProcess;
 class DocumentBroker;
 
+/// How long a Kit has to exit by itself once asked to, before it is killed. A healthy Kit exits as
+/// soon as it reads the request, so this only holds up a Kit that is stuck.
+constexpr std::chrono::seconds KitExitGracePeriod(30);
+
 // A WSProcess object in the WSD process represents a descendant process, either the direct child
 // process ForKit or a grandchild Kit process, with which the WSD process communicates through a
 // WebSocket.

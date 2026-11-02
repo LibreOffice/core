@@ -120,6 +120,7 @@ all_la_unit_tests = \
 	unit-prefork.la \
 	unit-landlock.la \
 	unit-kit-memory.la \
+	unit-kit-stuck.la \
 	unit-any-input.la \
 	unit-save.la \
 	unit-wopi-saveas.la \
@@ -333,6 +334,8 @@ unit_landlock_la_SOURCES = UnitLandlock.cpp
 unit_landlock_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_kit_memory_la_SOURCES = UnitKitMemory.cpp
 unit_kit_memory_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
+unit_kit_stuck_la_SOURCES = UnitKitStuck.cpp
+unit_kit_stuck_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 # unit_tilecache_la_SOURCES = UnitTileCache.cpp
 # unit_tilecache_la_LIBADD = $(CPPUNIT_LIBS)
 unit_oauth_la_SOURCES = UnitOAuth.cpp

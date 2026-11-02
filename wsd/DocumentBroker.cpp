@@ -7754,7 +7754,7 @@ void DocumentBroker::terminateChild(const std::string_view closeReason)
     {
         LOG_INF("Terminating child [" << getPid() << "] of doc [" << _docKey << ']');
 
-        _childProcess->close();
+        COOLWSD::closeOrKillChild(_childProcess);
     }
     stop(closeReason);
 }

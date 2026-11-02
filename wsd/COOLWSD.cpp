@@ -1088,6 +1088,99 @@ static std::string UnitTestLibrary;
 unsigned int COOLWSD::NumPreSpawnedChildren = 0;
 std::unique_ptr<TraceFileWriter> COOLWSD::TraceDumper;
 
+#if !MOBILEAPP
+namespace
+{
+/// A Kit that was asked to exit as its document closed, and the time by which it has to have
+/// exited. A Kit whose main thread is stuck never reads the request, so one that still runs at that
+/// time is killed.
+struct ExitingKit
+{
+    std::shared_ptr<ChildProcess> kit;
+    pid_t pid;
+    std::chrono::steady_clock::time_point deadline;
+};
+} // namespace
+
+/// The Kits that were asked to exit as their document closed, in the order they were asked, until
+/// each has exited or is killed.
+static std::mutex ExitingKitsMutex;
+static std::vector<ExitingKit> ExitingKits;
+
+/// How long until the grace period of the next exiting Kit is over. The poll timeout when no Kit
+/// is exiting.
+static std::chrono::microseconds timeUntilNextKitDeadline()
+{
+    std::lock_guard<std::mutex> lock(ExitingKitsMutex);
+    if (ExitingKits.empty())
+        return SocketPoll::DefaultPollTimeoutMicroS;
+
+    const auto now = std::chrono::steady_clock::now();
+    const auto& first = ExitingKits.front();
+    if (first.deadline <= now)
+        return std::chrono::microseconds::zero();
+
+    return std::min(SocketPoll::DefaultPollTimeoutMicroS,
+                    std::chrono::duration_cast<std::chrono::microseconds>(first.deadline - now));
+}
+
+/// Forgets the exiting Kits that have exited, and kills the ones that still run once their grace
+/// period is over. The kill can take a while when the signal is refused, so it is done after the
+/// list is released.
+static void killKitsPastGracePeriod()
+{
+    std::vector<ExitingKit> kitsToKill;
+    {
+        std::lock_guard<std::mutex> lock(ExitingKitsMutex);
+        const auto now = std::chrono::steady_clock::now();
+        std::erase_if(ExitingKits,
+                      [now, &kitsToKill](const ExitingKit& exiting)
+                      {
+                          if (!exiting.kit->isProcessRunning())
+                          {
+                              LOG_DBG("Kit [" << exiting.pid << "] exited as asked to.");
+                              return true;
+                          }
+
+                          if (now < exiting.deadline)
+                              return false;
+
+                          kitsToKill.push_back(exiting);
+                          return true;
+                      });
+    }
+
+    for (const ExitingKit& exiting : kitsToKill)
+    {
+        LOG_ERR("Kit [" << exiting.pid << "] still runs " << KitExitGracePeriod
+                        << " after it was asked to exit. Killing it.");
+        // A Kit that did not read the request to exit for the whole grace period does not read
+        // SIGTERM either, so coverage builds send SIGKILL too.
+        exiting.kit->killIfRunning(SIGKILL);
+    }
+}
+
+/// Kills the exiting Kits that still run and forgets them all. WSD is shutting down, and no poll
+/// is left to wait out their grace period.
+static void killExitingKits()
+{
+    std::vector<ExitingKit> exitingKits;
+    {
+        std::lock_guard<std::mutex> lock(ExitingKitsMutex);
+        exitingKits.swap(ExitingKits);
+    }
+
+    for (const ExitingKit& exiting : exitingKits)
+    {
+        if (exiting.kit->isProcessRunning())
+        {
+            LOG_WRN("Kit [" << exiting.pid << "] still runs as WSD shuts down. Killing it.");
+            exiting.kit->killIfRunning(SIGKILL);
+        }
+    }
+}
+#endif
+
 namespace {
 
 class PrisonPoll : public TerminatingPoll
@@ -1097,6 +1190,21 @@ public:
 
     /// Check prisoners are still alive and balanced.
     void wakeupHook() override;
+
+#if !MOBILEAPP
+    /// Polls until the next grace period of an exiting Kit is over, with the usual poll timeout
+    /// when no Kit is exiting, and then kills the Kits whose grace period is over. The poll calls
+    /// wakeupHook() only when its wakeup pipe fires, not when the timeout passes, so the kill is
+    /// done here.
+    void pollingThread() override
+    {
+        while (continuePolling())
+        {
+            poll(timeUntilNextKitDeadline());
+            killKitsPastGracePeriod();
+        }
+    }
+#endif
 
 #if !MOBILEAPP
     // Resets the forkit process object
@@ -1171,6 +1279,40 @@ private:
 /// This thread listens for and accepts prisoner kit processes.
 /// And also cleans up and balances the correct number of children.
 static std::shared_ptr<PrisonPoll> PrisonerPoll;
+
+#if !MOBILEAPP
+/// Kills the child once KitExitGracePeriod is over, if it still runs then. The child was asked to
+/// exit already, and one whose main thread is stuck never reads the request. The prisoner poll
+/// keeps the time and does the killing, so the caller goes on at once.
+static void killOnceGracePeriodIsOver(const std::shared_ptr<ChildProcess>& child, pid_t pid)
+{
+    // An in-process Kit runs in this very process, and a fuzzed one has no process of its own, so
+    // neither is killed. A child that has exited already has nothing left to kill. Without a pidfd
+    // the pid may be another process's by the time the grace period is over, so there is no kill.
+    if (Util::isKitInProcess() || Util::isFuzzing() || !child->hasProcessPidFd() ||
+        !child->isProcessRunning())
+        return;
+
+#if VALGRIND_COOLFORKIT
+    // A Kit under valgrind checks for leaks as it exits, which can take longer than the grace
+    // period, so it is left to finish.
+    return;
+#endif
+
+    bool wasEmpty = false;
+    {
+        std::lock_guard<std::mutex> lock(ExitingKitsMutex);
+        wasEmpty = ExitingKits.empty();
+        ExitingKits.push_back(
+            ExitingKit{ child, pid, std::chrono::steady_clock::now() + KitExitGracePeriod });
+    }
+
+    // The prisoner poll sleeps until the earliest deadline. A new deadline is the latest, so the
+    // poll has to be woken only when it had none to sleep towards.
+    if (wasEmpty && PrisonerPoll)
+        PrisonerPoll->wakeup();
+}
+#endif
 
 std::shared_ptr<ChildProcess> getNewChild_Blocks(const std::shared_ptr<SocketPoll>& destPoll,
                                                  const std::string& configId,
@@ -1501,6 +1643,16 @@ COOLWSD::~COOLWSD()
         // We won't have a valid UnitWSD::get() when not testing.
         UNITWSD_CALL(setWSD(nullptr));
     }
+}
+
+void COOLWSD::closeOrKillChild(const std::shared_ptr<ChildProcess>& child)
+{
+    [[maybe_unused]] const pid_t pid = child->getPid();
+    child->close();
+
+#if !MOBILEAPP
+    killOnceGracePeriodIsOver(child, pid);
+#endif
 }
 
 #if !MOBILEAPP
@@ -4178,6 +4330,7 @@ void COOLWSDServer::stopPrisoners()
 {
     PrisonerPoll->joinThread();
 #if !MOBILEAPP
+    killExitingKits();
     if (JailRemovalPoll)
         JailRemovalPoll->joinThread();
 #endif

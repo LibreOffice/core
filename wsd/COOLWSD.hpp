@@ -223,6 +223,10 @@ public:
     /// Terminates spare kits that aren't assigned a document yet.
     static void requestTerminateSpareKits();
 
+    /// Asks the child to exit, and kills it if it still runs once KitExitGracePeriod is over. The
+    /// caller goes on at once: the prisoner poll keeps the time and does the killing.
+    static void closeOrKillChild(const std::shared_ptr<ChildProcess>& child);
+
     // Request creation of a subForKit if it doesn't already exist
     static bool ensureSubForKit(const std::string& id);
 
