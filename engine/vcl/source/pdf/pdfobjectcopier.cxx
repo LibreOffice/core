@@ -499,16 +499,22 @@ sal_Int32 PDFObjectCopier::copyPageStreams(std::vector<filter::PDFObjectElement*
 
                         if (nPos != std::string_view::npos)
                         {
+                            // Skip the operator and the whitespace byte after it. The stream can
+                            // end right after the operator, so the skip stops at the end of the
+                            // stream.
                             if (nPos == nPosBMC)
-                                aStreamView.remove_prefix(nPos + sBMC.size() + 1);
+                                aStreamView.remove_prefix(
+                                    std::min(nPos + sBMC.size() + 1, aStreamView.size()));
                             else
-                                aStreamView.remove_prefix(nPos + sBDC.size() + 1);
+                                aStreamView.remove_prefix(
+                                    std::min(nPos + sBDC.size() + 1, aStreamView.size()));
 
                             std::size_t nPosEMC = aStreamView.find(sEMC);
                             if (nPosEMC != std::string_view::npos)
                             {
                                 aTmpStream.WriteOString(aStreamView.substr(0, nPosEMC));
-                                aStreamView.remove_prefix(nPosEMC + sEMC.size() + 1);
+                                aStreamView.remove_prefix(
+                                    std::min(nPosEMC + sEMC.size() + 1, aStreamView.size()));
                             }
                         }
 

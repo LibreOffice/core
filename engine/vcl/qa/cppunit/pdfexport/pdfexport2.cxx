@@ -5344,6 +5344,35 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testRexportResourceItemReference)
     CPPUNIT_ASSERT(pFontWidths);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testRexportArtifactAtStreamEnd)
+{
+    // The compressed content stream ends with the EMC operator of an /Artifact section, with no
+    // byte after it.
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { u"UseTaggedPDF"_ustr, cpo::uno::Any(true) } }));
+    comphelper::SequenceAsHashMap aMediaDescriptor;
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+    loadFromFile(u"artifact-at-stream-end.pdf");
+    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT(pPdfDocument);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT(pPdfPage);
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pTextPage);
+
+    OUStringBuffer aText;
+    for (int i = 0; i < pTextPage->countChars(); ++i)
+        aText.appendUtf32(pTextPage->getUnicode(i));
+    OUString aPageText = aText.makeStringAndClear();
+
+    // Both the text outside and the text inside the /Artifact section are kept.
+    CPPUNIT_ASSERT_MESSAGE(aPageText.toUtf8().getStr(), aPageText.indexOf("Visible") >= 0);
+    CPPUNIT_ASSERT_MESSAGE(aPageText.toUtf8().getStr(), aPageText.indexOf("Decoration") >= 0);
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152246)
 {
     // Import the bugdoc and export as PDF.
