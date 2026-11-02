@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require  */
+/* global describe it cy beforeEach require expect */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
@@ -32,5 +32,37 @@ describe(['tagdesktop', 'tagnextcloud', 'tagscreenshot'], 'Manage Changes Dialog
 		cy.cGet('#writerchanges .ui-treeview-header-sort-icon').should('be.visible');
 		cy.cGet('#sortbycombobox option:selected').should('have.text', 'Author');
 		cy.cGet('#writerchanges').compareSnapshot('writer_manage_changes_tree_sorted', 0.1);
+	});
+});
+
+describe(['tagdesktop'], 'Manage Changes Dialog comments', function () {
+
+	beforeEach(function () {
+		helper.setupAndLoadDocument('writer/writer-edit.fodt');
+		desktopHelper.switchUIToNotebookbar();
+		cy.getFrameWindow().then(function (win) {
+			this.win = win;
+		}.bind(this));
+	});
+
+	it('A change comment of several paragraphs shows on one line', function () {
+		cy.cGet('.notebookbar #Review-tab-label').click();
+		desktopHelper.getNbIconArrow('TrackChanges', 'Review').click();
+		desktopHelper.getNbIcon('AcceptTrackedChanges', 'Review').click();
+		cy.cGet('#AcceptRejectChangesDialog').should('be.visible');
+		helper.processToIdle(this.win);
+
+		// The comment of this change is "Comment deleted" followed by empty paragraphs.
+		cy.cGet('#writerchanges .ui-treeview-cell-text-content')
+			.should('have.length.greaterThan', 0)
+			.should(function ($cells) {
+				var comment = Array.from($cells).find(function (cell) {
+					return cell.textContent.startsWith('Comment deleted');
+				});
+				expect(comment, 'comment cell').to.exist;
+				Array.from($cells).forEach(function (cell) {
+					expect(cell.querySelector('br'), cell.textContent).to.be.null;
+				});
+			});
 	});
 });

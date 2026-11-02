@@ -770,7 +770,7 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
             rTreeView.set_image(*xChild, sImage, -1);
             rTreeView.set_text(*xChild, sAuthor, 1);
             rTreeView.set_text(*xChild, sDateEntry, 2);
-            rTreeView.set_text(*xChild, sComment, 3);
+            rTreeView.set_text(*xChild, sComment.replace('\n', ' '), 3);
 
             pRedlineChild->xTLBChild = std::move(xChild);
             if (!bValidParent)
@@ -1054,7 +1054,7 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
         rTreeView.set_image(*xParent, sImage, -1);
         rTreeView.set_text(*xParent, sAuthor, 1);
         rTreeView.set_text(*xParent, sDateEntry, 2);
-        rTreeView.set_text(*xParent, sComment, 3);
+        rTreeView.set_text(*xParent, pRedlineParent->sComment, 3);
 
         pRedlineParent->xTLBParent = std::move(xParent);
 
