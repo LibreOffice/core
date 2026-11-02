@@ -227,6 +227,40 @@ describe(['tagdesktop'], 'Writer table given to the reader', { testIsolation: fa
 		backInTheEditable(ROWS[2][1]);
 	});
 
+	[
+		{ from: ROWS[1][1], key: 'ArrowDown', keyCode: 40, to: ROWS[2][0] },
+		{ from: ROWS[2][0], key: 'ArrowUp', keyCode: 38, to: ROWS[1][1] },
+		{ from: ROWS[1][0], key: 'ArrowDown', keyCode: 40, to: ROWS[3][0] },
+		{ from: ROWS[3][0], key: 'ArrowUp', keyCode: 38, to: ROWS[1][0] },
+		{ from: ROWS[0][0], key: 'ArrowUp', keyCode: 38, to: 'Paragraph above.' },
+		{ from: ROWS[4][2], key: 'ArrowDown', keyCode: 40, to: 'Paragraph below.' },
+	].forEach(function (step) {
+		it('a key reaching the page from ' + step.from + ' moves the caret to ' + step.to, function () {
+			toFirstCell();
+			keyFromThePage(step.from, step.key, step.keyCode);
+			editing(step.to);
+			backInTheEditable(step.to);
+		});
+	});
+
+	it('Down from the paragraph above the table moves the caret to its first cell', function () {
+		toFirstCell();
+		move('{downarrow}');
+		editing(ROWS[1][0]);
+		cy.then(function () {
+			const above = Array.from(win.document.querySelectorAll('#a11y-context-before > span')).pop();
+			win.document.activeElement.blur();
+			win.getSelection().collapse(above.firstChild, 1);
+			win.document.body.dispatchEvent(new win.KeyboardEvent('keydown',
+				{ key: 'ArrowDown', code: 'ArrowDown', keyCode: 40, bubbles: true, cancelable: true }));
+		});
+		cy.then(function () {
+			return a11yHelper.processToIdleWithA11yContext(win);
+		});
+		editing(ROWS[0][0]);
+		backInTheEditable(ROWS[0][0]);
+	});
+
 	it('inside a nested table the reader is given that table', function () {
 		toFirstCell();
 		move('{downarrow}');
