@@ -220,14 +220,9 @@ class PresentationBar {
 		if (this.map.getDocType() !== 'presentation')
 			return;
 
-		if (!app.impress.isSlideHidden(this.map.getCurrentPartNumber())) {
-			this.showItem('showslide', false);
-			this.showItem('hideslide', false);
-		}
-		else {
-			this.showItem('showslide', true);
-			this.showItem('hideslide', true);
-		}
+		const isHidden = app.impress.isSlideHidden(this.map.getCurrentPartNumber());
+		this.showItem('showslide', isHidden);
+		this.showItem('hideslide', !isHidden);
 	}
 }
 
