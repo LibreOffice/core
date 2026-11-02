@@ -20,6 +20,8 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
     private static var openWindows: [String: CloudAccountWindow] = [:]
 
     private let accountId: String
+    private let webView: WKWebView
+    private var blockedOrigins: Set<String> = []
     private var editorForm: Data?
     private var editorFormUrl: URL?
 
@@ -48,7 +50,7 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         let configuration = WKWebViewConfiguration()
         configuration.applicationNameForUserAgent = "Version/\(Self.safariVersion) Safari/605.1.15"
 
-        let webView = WKWebView(frame: .zero, configuration: configuration)
+        webView = WKWebView(frame: .zero, configuration: configuration)
 #if DEBUG
         webView.isInspectable = true
 #endif
@@ -104,15 +106,59 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
             return
         }
 
+        blockCoolServerFiles(of: url) { decisionHandler(.allow) }
+
         guard let form = request.httpBody else {
             COWrapper.LOG_DBG("No form was kept: the form posted into an editor frame has no body")
-            decisionHandler(.allow)
             return
         }
 
         editorForm = form
         editorFormUrl = url
         COWrapper.LOG_DBG("Kept the \(form.count)-byte form posted into an editor frame")
-        decisionHandler(.allow)
+    }
+
+    // CODA puts its own editor into the iframe, so coolwsd's scripts, style sheets, images and
+    // fonts must not load there. WebKit checks these rules before it looks in its caches, so
+    // cached copies are refused too. A worker's script counts as "other", not "script".
+    // Fetches and WebSockets stay open, for /co/collab.
+    private func blockCoolServerFiles(of url: URL, then proceed: @escaping () -> Void) {
+        guard let scheme = url.scheme, let host = url.host else {
+            COWrapper.LOG_ERR("coolwsd's files were not blocked: the editor's address has no host")
+            proceed()
+            return
+        }
+
+        var origin = scheme + "://" + host
+        if let port = url.port {
+            origin += ":\(port)"
+        }
+
+        if blockedOrigins.contains(origin) {
+            proceed()
+            return
+        }
+
+        let trigger: [String: Any] = [
+            "url-filter": "^" + NSRegularExpression.escapedPattern(for: origin + "/"),
+            "resource-type": ["script", "style-sheet", "image", "font", "other"],
+        ]
+
+        let rules = [["trigger": trigger, "action": ["type": "block"]]]
+        let json = String(data: try! JSONSerialization.data(withJSONObject: rules), encoding: .utf8)!
+
+        // The navigation waits for the rules, so they are in place before the iframe loads.
+        let store = WKContentRuleListStore.default()!
+        let identifier = "CoolServerFiles " + origin
+        store.compileContentRuleList(forIdentifier: identifier, encodedContentRuleList: json) { list, _ in
+            defer { proceed() }
+            guard let list else {
+                COWrapper.LOG_ERR("coolwsd's files were not blocked: the content rules did not compile")
+                return
+            }
+
+            self.webView.configuration.userContentController.add(list)
+            self.blockedOrigins.insert(origin)
+        }
     }
 }
