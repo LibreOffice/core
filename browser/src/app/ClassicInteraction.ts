@@ -939,10 +939,12 @@ class ClassicInPlaceContext implements InteractionContext {
 		return undefined;
 	}
 
-	/// Selects that part here at once and names it to the engine; nothing for no part.
+	/// Selects that part here at once and names it to the engine; nothing for no part. A part the
+	/// client holds no record of, one inside a 3D scene, takes the key and keeps the selection.
 	private static goTo(part: number | undefined): boolean {
 		if (part === undefined) return false;
-		GraphicSelection.selectAndShow([part]);
+		if (RenderGeometrySection.objectOf(part))
+			GraphicSelection.selectAndShow([part]);
 		return true;
 	}
 
