@@ -395,6 +395,25 @@ std::string validateBlocks(const Poco::JSON::Object::Ptr& slide, unsigned index,
         if (kind == "bullets")
         {
             ++bulletsBlocks;
+            if (block->has("heading"))
+            {
+                if (intent != "two-column" && intent != "comparison")
+                    return prefix + "only a two-column or comparison slide takes a \"heading\" "
+                                    "on its bullets blocks.";
+                const Poco::Dynamic::Var headingVar = block->get("heading");
+                if (!headingVar.isString())
+                    return prefix + "a column \"heading\" must be a string.";
+                const std::string rawHeading = headingVar.extract<std::string>();
+                if (exceedsRawLength(rawHeading, DeckSpec::MaxHeadingLength))
+                    return prefix + "a column \"heading\" exceeds " +
+                           std::to_string(DeckSpec::MaxHeadingLength) + " characters.";
+                const std::string heading = parseEmphasis(rawHeading).plain;
+                if (heading.empty() || heading.find('\n') != std::string::npos)
+                    return prefix + "a column \"heading\" must be one non-empty line.";
+                if (static_cast<int>(utf16Length(heading)) > DeckSpec::MaxHeadingLength)
+                    return prefix + "a column \"heading\" exceeds " +
+                           std::to_string(DeckSpec::MaxHeadingLength) + " characters.";
+            }
             Poco::JSON::Array::Ptr items = block->getArray("items");
             if (!items || items->size() == 0)
                 return prefix + "a bullets block needs a non-empty \"items\" array.";
@@ -506,6 +525,26 @@ void pushEditTextObject(Poco::JSON::Array::Ptr& cmds, int slot, const std::strin
     cmds->add(cmd);
 }
 
+/// Push an EditTextObject command that selects one paragraph of placeholder slot
+/// and applies one UNO formatting command to it.
+void pushEditTextObject(Poco::JSON::Array::Ptr& commands, int slot, int paragraph,
+                        const std::string& unoCommand)
+{
+    Poco::JSON::Array::Ptr steps = new Poco::JSON::Array();
+
+    Poco::JSON::Object::Ptr select = new Poco::JSON::Object();
+    select->set("SelectParagraph", paragraph);
+    steps->add(select);
+
+    Poco::JSON::Object::Ptr uno = new Poco::JSON::Object();
+    uno->set("UnoCommand", unoCommand);
+    steps->add(uno);
+
+    Poco::JSON::Object::Ptr command = new Poco::JSON::Object();
+    command->set("EditTextObject." + std::to_string(slot), steps);
+    commands->add(command);
+}
+
 /// Push an EditTextObject command that applies the paragraph-level emphasis runs
 /// to placeholder slot: each run selects its text and toggles bold and/or italic.
 /// Emits nothing when there are no runs.
@@ -585,6 +624,7 @@ void emitSlideCommands(Poco::JSON::Array::Ptr& cmds, const Poco::JSON::Object::P
     // items and text-block paragraphs may carry bold and italic emphasis, so each
     // slot's SetText gets the stripped text followed by the emphasis runs.
     std::vector<int> bulletSlots;
+    std::vector<int> headingSlots;
     int slot = 1;
     Poco::JSON::Array::Ptr blocks = slide->getArray("blocks");
     for (std::size_t b = 0; blocks && b < blocks->size(); ++b)
@@ -595,7 +635,16 @@ void emitSlideCommands(Poco::JSON::Array::Ptr& cmds, const Poco::JSON::Object::P
         const std::string kind = getString(block, "kind");
         if (kind == "bullets")
         {
-            const SlotText slotText = buildSlotText(collectItems(block->getArray("items")));
+            // A column heading is the first paragraph of the slot, ahead of the items. It
+            // carries no emphasis of its own, because it is set in bold as a whole.
+            std::vector<std::string> paragraphs = collectItems(block->getArray("items"));
+            const std::string heading = parseEmphasis(getString(block, "heading")).plain;
+            if (!heading.empty())
+            {
+                paragraphs.insert(paragraphs.begin(), heading);
+                headingSlots.push_back(slot);
+            }
+            const SlotText slotText = buildSlotText(paragraphs);
             pushCommand(cmds, "SetText." + std::to_string(slot), slotText.plain);
             pushEmphasis(cmds, slot, slotText.ranges);
             bulletSlots.push_back(slot);
@@ -654,6 +703,15 @@ void emitSlideCommands(Poco::JSON::Array::Ptr& cmds, const Poco::JSON::Object::P
     // deck turns bullet markers on for its bullet slots.
     for (int bulletSlot : bulletSlots)
         pushEditTextObject(cmds, bulletSlot, ".uno:DefaultBullet");
+
+    // A column heading drops the marker the command above gave it and is set in bold. The weight
+    // is given outright, so a heading on a master whose body text is already bold stays bold.
+    for (int headingSlot : headingSlots)
+    {
+        pushEditTextObject(cmds, headingSlot, 0, ".uno:DefaultBullet");
+        pushEditTextObject(cmds, headingSlot, 0,
+                           R"(.uno:Bold {"Bold":{"type":"boolean","value":"true"}})");
+    }
 
     pushCommand(cmds, "SetSlidePart", part);
     // The intent is a finer label than the part, and a template manifest may map

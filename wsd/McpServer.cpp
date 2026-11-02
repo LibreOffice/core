@@ -397,6 +397,9 @@ Poco::JSON::Object::Ptr makeSlideBlockSchema()
     items->set("description", "The bullet items of a \"bullets\" block, one string for each.");
     properties->set("items", items);
 
+    addStringProperty(properties, "heading",
+                      "The label above the items of a \"bullets\" block, on a two-column or "
+                      "comparison slide.");
     addStringProperty(properties, "text", "The text of a \"text\" block.");
     return makeObjectSchema(properties);
 }

@@ -53,6 +53,7 @@ class DeckSpecTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testCompileNotes);
     CPPUNIT_TEST(testRejectNotes);
     CPPUNIT_TEST(testCompileEmphasis);
+    CPPUNIT_TEST(testCompileColumnHeading);
     CPPUNIT_TEST(testEmphasisVisibleLength);
     CPPUNIT_TEST(testTextLongInBytesAndShortOnScreenIsRefused);
     CPPUNIT_TEST(testCompileSlideSpecFirst);
@@ -78,6 +79,7 @@ class DeckSpecTests : public CPPUNIT_NS::TestFixture
     void testCompileNotes();
     void testRejectNotes();
     void testCompileEmphasis();
+    void testCompileColumnHeading();
     void testEmphasisVisibleLength();
     void testTextLongInBytesAndShortOnScreenIsRefused();
     void testCompileSlideSpecFirst();
@@ -206,6 +208,13 @@ void DeckSpecTests::testValidateSlideAccepts()
                            std::string(DeckSpec::MaxBigNumberLength, '9') + R"("}]})")
                    .has_value());
 
+    // Each column of a two-column or comparison slide may carry a heading.
+    LOK_ASSERT(!slideError(
+                    R"({"part":"body","intent":"comparison","title":"Then and now",
+                        "blocks":[{"kind":"bullets","heading":"Then","items":["a"]},
+                                  {"kind":"bullets","heading":"Now","items":["b"]}]})")
+                    .has_value());
+
     // An image slide needs an image brief and no content blocks.
     LOK_ASSERT(!slideError(
                     R"({"part":"body","intent":"image","title":"Chart",
@@ -278,6 +287,32 @@ void DeckSpecTests::testValidateSlideRejects()
         LOK_ASSERT(figureErr.has_value());
         LOK_ASSERT(figureErr->find("slide title") != std::string::npos);
     }
+
+    // A column heading is one line of text within its length limit, on a slide with columns.
+    for (const std::string& slide :
+         { std::string(R"({"part":"body","intent":"bullets","title":"X",
+               "blocks":[{"kind":"bullets","heading":"H","items":["a"]}]})"),
+           std::string(R"({"part":"body","intent":"two-column","title":"X",
+               "blocks":[{"kind":"bullets","heading":7,"items":["a"]},
+                         {"kind":"bullets","items":["b"]}]})"),
+           std::string(R"({"part":"body","intent":"two-column","title":"X",
+               "blocks":[{"kind":"bullets","heading":"","items":["a"]},
+                         {"kind":"bullets","items":["b"]}]})"),
+           std::string(R"({"part":"body","intent":"two-column","title":"X",
+               "blocks":[{"kind":"bullets","heading":"two\nlines","items":["a"]},
+                         {"kind":"bullets","items":["b"]}]})"),
+           R"({"part":"body","intent":"two-column","title":"X",)"
+           R"("blocks":[{"kind":"bullets","heading":")" +
+               std::string(DeckSpec::MaxHeadingLength + 1, 'h') +
+               R"(","items":["a"]},{"kind":"bullets","items":["b"]}]})" })
+    {
+        auto headingErr = errorFor(slide);
+        LOK_ASSERT(headingErr.has_value());
+        LOK_ASSERT(headingErr->find("heading") != std::string::npos);
+    }
+    LOK_ASSERT(std::string(DocumentToolDescriptions::DECK_SLIDE_SHAPE)
+                   .find("one line of at most " + std::to_string(DeckSpec::MaxHeadingLength) +
+                         " characters") != std::string::npos);
 
     // The tool description states the same length the validator enforces.
     LOK_ASSERT(std::string(DocumentToolDescriptions::DECK_SLIDE_SHAPE)
@@ -630,6 +665,32 @@ void DeckSpecTests::testCompileEmphasis()
     LOK_ASSERT_EQUAL(expectedEmoji, DeckSpec::compileSlideSpec(parse(emoji), 0, kWithTemplate));
 }
 
+void DeckSpecTests::testCompileColumnHeading()
+{
+    constexpr std::string_view testname = __func__;
+
+    // A column heading is the first paragraph of its column, without a list marker and in
+    // bold. A column without a heading holds its items alone.
+    const std::string slide =
+        R"({"part":"body","intent":"two-column","title":"T",
+            "blocks":[{"kind":"bullets","heading":"Before","items":["a"]},
+                      {"kind":"bullets","items":["b"]}]})";
+    const std::string expected =
+        R"({"Transforms":{"SlideCommands":[)"
+        R"({"ChangeLayoutByName":"AUTOLAYOUT_TITLE_2CONTENT"},)"
+        R"({"SetText.0":"T"},)"
+        R"({"SetText.1":"Before\na"},)"
+        R"({"SetText.2":"b"},)"
+        R"({"EditTextObject.1":[{"SelectText":[]},{"UnoCommand":".uno:DefaultBullet"}]},)"
+        R"({"EditTextObject.2":[{"SelectText":[]},{"UnoCommand":".uno:DefaultBullet"}]},)"
+        R"({"EditTextObject.1":[{"SelectParagraph":0},{"UnoCommand":".uno:DefaultBullet"}]},)"
+        R"({"EditTextObject.1":[{"SelectParagraph":0},)"
+        R"({"UnoCommand":".uno:Bold {\"Bold\":{\"type\":\"boolean\",\"value\":\"true\"}}"}]},)"
+        R"({"SetSlidePart":"body"},)"
+        R"({"SetSlideIntent":"two-column"}]}})";
+    LOK_ASSERT_EQUAL(expected, DeckSpec::compileSlideSpec(parse(slide), 0, kWithTemplate));
+}
+
 void DeckSpecTests::testEmphasisVisibleLength()
 {
     constexpr std::string_view testname = __func__;
@@ -681,6 +742,15 @@ void DeckSpecTests::testTextLongInBytesAndShortOnScreenIsRefused()
     const std::optional<std::string> quoteError =
         DeckSpec::validateSlideSpec(quote, 0, kDefaultBudgets);
     LOK_ASSERT(quoteError && quoteError->find("text block exceeds") != std::string::npos);
+
+    Poco::JSON::Object::Ptr columns =
+        parse(R"({"part":"body","intent":"comparison","title":"X",
+                  "blocks":[{"kind":"bullets","items":["a"]},{"kind":"bullets","items":["b"]}]})");
+    columns->getArray("blocks")->getObject(0)->set(
+        "heading", longInBytes(DeckSpec::MaxHeadingLength * 3 / 4));
+    const std::optional<std::string> columnsError =
+        DeckSpec::validateSlideSpec(columns, 0, kDefaultBudgets);
+    LOK_ASSERT(columnsError && columnsError->find("heading\" exceeds") != std::string::npos);
 }
 
 void DeckSpecTests::testUnreadableSlideCapGivesTheDefault()

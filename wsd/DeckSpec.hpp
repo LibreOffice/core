@@ -41,6 +41,9 @@ constexpr int MaxItemLength = 200;
 /// The largest length, in characters, of the figure on a big-number slide. The figure is one line,
 /// such as "40%" or "4,210", and the slide title says what it means.
 constexpr int MaxBigNumberLength = 12;
+/// The largest length, in characters, of the heading of a column on a two-column or comparison
+/// slide.
+constexpr int MaxHeadingLength = 60;
 /// The largest length, in characters, of a slide title.
 constexpr int MaxTitleLength = 200;
 /// The largest length, in characters, of a slide's one or two sentence outline
