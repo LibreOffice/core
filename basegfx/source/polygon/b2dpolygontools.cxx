@@ -752,7 +752,7 @@ namespace basegfx::utils
                                         }
                                     }
 
-                                    if(!bDone)
+                                    if(!bDone && fEdgeLength != 0)
                                     {
                                         const double fRelValue((fFrom - fPositionOfStart) / fEdgeLength);
                                         aRetval.append(interpolate(aStart, aEnd, fRelValue));
@@ -810,7 +810,7 @@ namespace basegfx::utils
                                     }
                                 }
 
-                                if(!bDone)
+                                if(!bDone && fEdgeLength != 0)
                                 {
                                     const double fRelValue((fTo - fPositionOfStart) / fEdgeLength);
                                     aRetval.append(interpolate(aStart, aEnd, fRelValue));
