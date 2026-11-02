@@ -251,12 +251,17 @@ SdrPageView* SdrObjEditView::ShowSdrPage(SdrPage* pPage)
             // shell of pView.
             // The cursor and the text selection of that edit belong to pView, so this
             // outliner view reports neither of them to the view shell of this draw view.
-            OutlinerView* pOutlinerView
-                = new OutlinerView(*pView->GetTextEditOutliner(), pOutDev->GetOwnerWindow());
+            vcl::Window* pWin = pOutDev->GetOwnerWindow();
+            OutlinerView* pOutlinerView = new OutlinerView(*pView->GetTextEditOutliner(), pWin);
             pOutlinerView->GetEditView().SuppressKitMessages(true);
-            pView->ImpMakeOutlinerView(pOutDev->GetOwnerWindow(), pOutlinerView,
-                                       GetSfxViewShell());
+            // Setting the output area shows the cursor of the new outliner view, which puts
+            // that cursor on the window. The outliner view goes away when pView ends its text
+            // edit, so a text edit of this draw view must not find that cursor on the window
+            // and restore it at its end.
+            vcl::Cursor* pOldCursor = pWin->GetCursor();
+            pView->ImpMakeOutlinerView(pWin, pOutlinerView, GetSfxViewShell());
             pOutlinerView->HideCursor();
+            pWin->SetCursor(pOldCursor);
             pView->GetTextEditOutliner()->InsertView(pOutlinerView);
         });
     }

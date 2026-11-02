@@ -57,6 +57,7 @@
 #include <SlideSectionManager.hxx>
 #include <View.hxx>
 #include <ViewShell.hxx>
+#include <Window.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <sdresid.hxx>
@@ -2253,6 +2254,42 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testA11yNumberedParagraphPrefix)
                          aView.m_aA11yFocusedParagraph.get<std::string>("content"));
     // Without the fix, it was 6, the length of the first formatting run.
     CPPUNIT_ASSERT_EQUAL(0, aView.m_aA11yFocusedParagraph.get<int>("listPrefixLength", 0));
+}
+
+// A view that shows the slide of another view's text edit keeps the cursor of its window. The
+// outliner view that follows that text edit in this view goes away with the text edit, so a text
+// edit of this view must not find the cursor of that outliner view on the window and restore it at
+// its end.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShowPageKeepsWindowCursor)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("2slides.odp");
+    const int nView1 = KitHelper::getCurrentView();
+    KitHelper::createView();
+    pXImpressDocument->initializeForTiledRendering({});
+    const int nView2 = KitHelper::getCurrentView();
+    pXImpressDocument->setPart(1);
+    Scheduler::ProcessEventsToIdle();
+
+    // The first view edits the title of the first slide.
+    KitHelper::setView(nView1);
+    sd::ViewShell* pViewShell1 = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView1 = pViewShell1->GetView();
+    pView1->SdrBeginTextEdit(pViewShell1->GetActualPage()->GetObj(0));
+    CPPUNIT_ASSERT(pView1->GetTextEditObject());
+
+    // The second view goes to the first slide.
+    KitHelper::setView(nView2);
+    sd::ViewShell* pViewShell2 = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell1 != pViewShell2);
+    vcl::Window* pWindow2 = pViewShell2->GetActiveWindow();
+    vcl::Cursor* pCursor2 = pWindow2->GetCursor();
+    pXImpressDocument->setPart(0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(0, pXImpressDocument->getPart());
+
+    // Without the fix in place, the window of the second view showed the cursor of the outliner
+    // view that the first view's text edit deletes when it ends.
+    CPPUNIT_ASSERT_EQUAL(pCursor2, pWindow2->GetCursor());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
