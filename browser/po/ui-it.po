@@ -12,16 +12,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-30 13:34+0100\n"
-"PO-Revision-Date: 2026-07-07 23:28+0000\n"
-"Last-Translator: Sleepy Sandy <r.thomas092103@gmail.com>\n"
+"PO-Revision-Date: 2026-11-01 07:07+0000\n"
+"Last-Translator: Francesco Saltori <fs00@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/it/>\n"
-"Language: \n"
+"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.1.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -930,12 +930,12 @@ msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
 msgstr ""
-"Carica temi personalizzati (.theme). Questi includono delle palettes di "
+"Carica temi personalizzati (.theme). Questi includono delle palette di "
 "colori disponibili sotto Formato > Tema."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1664
 msgid "Upload Theme"
-msgstr "Carica Tema"
+msgstr "Carica tema"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1670
 #: src/control/Control.Menubar.ts:457 src/control/Control.Menubar.ts:675
@@ -952,10 +952,12 @@ msgid ""
 "Upload a packaged extension as a .zip; its contents (manifest.json, ...) "
 "are unpacked on the server."
 msgstr ""
+"Carica un'estensione sotto forma di pacchetto .zip. I suoi contenuti "
+"(manifest.json, ...) vengono estratti sul server."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1678
 msgid "Upload Extension"
-msgstr ""
+msgstr "Carica estensione"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1685
 msgid "Security policies"
@@ -1107,27 +1109,28 @@ msgid ""
 "your "
 msgstr ""
 "Per usare Zotero, specifica la tua chiave API qui. Puoi creare la tua chiave "
-"API nel tuo "
+"API nelle "
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3164
 msgid "Zotero account API settings"
-msgstr "Impostazioni API account Zotero"
+msgstr "impostazioni dell'API del tuo account Zotero"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3189
 msgid "Zotero Settings"
-msgstr ""
+msgstr "Impostazioni di Zotero"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3258
 #: admin/src/integrator/AdminIntegratorSettings.ts:3286
-#, fuzzy
 msgid "Electronic Signature"
-msgstr "Firma elettronica..."
+msgstr "Firma elettronica"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3261
 msgid ""
 "Credentials for the electronic signature service. They are shared by "
 "everyone on this server."
 msgstr ""
+"Credenziali del servizio di firma elettronica, condivise da tutti gli utenti "
+"di questo server."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3313
 #: admin/src/integrator/AdminIntegratorSettings.ts:5709
@@ -1144,7 +1147,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3338
 msgid "Document Signing Settings"
-msgstr ""
+msgstr "Impostazioni di firma dei documenti"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3380
 #: admin/src/integrator/AdminIntegratorSettings.ts:3412
@@ -1494,7 +1497,7 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:5267
 #: admin/src/integrator/AdminIntegratorSettings.ts:5928
 msgid "Enter {0}"
-msgstr ""
+msgstr "Inserisci {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5392
 msgid ""
@@ -1978,7 +1981,7 @@ msgstr "Mostra nel navigatore"
 
 #: src/canvas/sections/CommentSection.ts:1797
 msgid "Press Ctrl + Enter to post, or %1 to discard"
-msgstr ""
+msgstr "Premi Ctrl + Invio per pubblicare, o %1 per scartare"
 
 #: src/canvas/sections/CommentSection.ts:1826
 #: src/canvas/sections/CommentSection.ts:1831
@@ -4350,7 +4353,7 @@ msgstr "Fornitore:"
 #: src/control/Control.ESignatureDialog.ts:175
 #: src/control/Control.ESignatureDialog.ts:176
 msgid "Insert Electronic Signature"
-msgstr "Inserisci Firma Elettronica"
+msgstr "Inserisci firma elettronica"
 
 #: src/control/Control.FormulaBarJSDialog.js:18
 msgid "Expand Formula Bar"
@@ -6804,20 +6807,19 @@ msgstr "Scorri in basso le annotazioni"
 
 #: src/control/Control.ServerAuditDialog.ts:63
 msgid "No problems with SSL verification detected"
-msgstr "Non sono riscontrati problemi nella verifica SSL"
+msgstr "Non sono stati rilevati problemi nella verifica SSL"
 
 #: src/control/Control.ServerAuditDialog.ts:78
-#, fuzzy
 msgid "Each document is securely contained (landlock)"
-msgstr "Ogni documento è isolato in modo sicuro"
+msgstr "I documenti sono isolati in modo sicuro (landlock)"
 
 #: src/control/Control.ServerAuditDialog.ts:83
 msgid "Each document is securely contained (Linux namespaces)"
-msgstr ""
+msgstr "I documenti sono isolati in modo sicuro (namespace Linux)"
 
 #: src/control/Control.ServerAuditDialog.ts:88
 msgid "Each document is securely contained (capabilities and chroot)"
-msgstr ""
+msgstr "I documenti sono isolati in modo sicuro (capability e chroot)"
 
 #: src/control/Control.ServerAuditDialog.ts:102
 msgid "System call security filtering enabled"
@@ -6838,6 +6840,8 @@ msgstr "Bind mounting veloce della sandbox Kit abilitato"
 #: src/control/Control.ServerAuditDialog.ts:146
 msgid "Fast kit jail setup with landlock, nothing to copy or mount"
 msgstr ""
+"Configurazione veloce della sandbox Kit con landlock, nulla da copiare o "
+"montare"
 
 #: src/control/Control.ServerAuditDialog.ts:159
 msgid "Poorly performing proxying of all network requests."
