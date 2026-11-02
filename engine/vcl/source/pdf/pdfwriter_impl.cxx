@@ -8845,11 +8845,21 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
         }
 
         std::vector<filter::PDFObjectElement*> aContentStreams;
-        if (filter::PDFObjectElement* pContentStream = pPage->LookupObject("Contents"_ostr))
-            aContentStreams.push_back(pContentStream);
-        else if (auto pArray = dynamic_cast<filter::PDFArrayElement*>(pPage->Lookup("Contents"_ostr)))
+        filter::PDFArrayElement* pContentsArray = nullptr;
+        if (filter::PDFObjectElement* pContents = pPage->LookupObject("Contents"_ostr))
         {
-            for (const auto pElement : pArray->GetElements())
+            // The referenced object is either a single content stream or an array of references to
+            // content streams.
+            pContentsArray = pContents->GetArray();
+            if (!pContentsArray)
+                aContentStreams.push_back(pContents);
+        }
+        else
+            pContentsArray = dynamic_cast<filter::PDFArrayElement*>(pPage->Lookup("Contents"_ostr));
+
+        if (pContentsArray)
+        {
+            for (const auto pElement : pContentsArray->GetElements())
             {
                 auto pReference = dynamic_cast<filter::PDFReferenceElement*>(pElement);
                 if (!pReference)

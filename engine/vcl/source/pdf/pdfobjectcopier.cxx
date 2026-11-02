@@ -442,6 +442,11 @@ sal_Int32 PDFObjectCopier::copyPageStreams(std::vector<filter::PDFObjectElement*
             continue;
         }
 
+        // The end of each content stream also ends the last token in it, so a line break keeps
+        // that token apart from the first token of the next stream.
+        if (rStream.Tell() > 0)
+            rStream.WriteChar('\n');
+
         SvMemoryStream& rPageStream = pPageStream->GetMemory();
 
         auto pFilter = dynamic_cast<filter::PDFNameElement*>(pContent->Lookup("Filter"_ostr));

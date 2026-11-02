@@ -5344,6 +5344,73 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testRexportResourceItemReference)
     CPPUNIT_ASSERT(pFontWidths);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testRexportContentsArrayObject)
+{
+    // The page's /Contents refers to a separate object holding an array of three content streams,
+    // each drawing one word.
+    loadFromFile(u"contents-array-object.pdf");
+    save(TestFilter::PDF_WRITER);
+
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT(pPdfDocument);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT(pPdfPage);
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pTextPage);
+
+    OUStringBuffer aText;
+    for (int i = 0; i < pTextPage->countChars(); ++i)
+        aText.appendUtf32(pTextPage->getUnicode(i));
+    OUString aPageText = aText.makeStringAndClear();
+
+    // Without the fix in place, the exported page was empty.
+    CPPUNIT_ASSERT_MESSAGE(aPageText.toUtf8().getStr(), aPageText.indexOf("First") >= 0);
+    CPPUNIT_ASSERT_MESSAGE(aPageText.toUtf8().getStr(), aPageText.indexOf("Second") >= 0);
+    CPPUNIT_ASSERT_MESSAGE(aPageText.toUtf8().getStr(), aPageText.indexOf("Third") >= 0);
+
+    // The copied streams keep the operator that ends one stream apart from the operator that
+    // starts the next, which a reader stricter than pdfium needs.
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
+    vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources"_ostr);
+    CPPUNIT_ASSERT(pResources);
+    auto pXObjects
+        = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pResources->Lookup("XObject"_ostr));
+    CPPUNIT_ASSERT(pXObjects);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pXObjects->GetItems().size());
+    vcl::filter::PDFObjectElement* pXObject
+        = pXObjects->LookupObject(pXObjects->GetItems().begin()->first);
+    CPPUNIT_ASSERT(pXObject);
+    auto pXObjectResources
+        = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pXObject->Lookup("Resources"_ostr));
+    CPPUNIT_ASSERT(pXObjectResources);
+    auto pXObjectForms = dynamic_cast<vcl::filter::PDFDictionaryElement*>(
+        pXObjectResources->LookupElement("XObject"_ostr));
+    CPPUNIT_ASSERT(pXObjectForms);
+    vcl::filter::PDFObjectElement* pForm
+        = pXObjectForms->LookupObject(pXObjectForms->GetItems().begin()->first);
+    CPPUNIT_ASSERT(pForm);
+    vcl::filter::PDFStreamElement* pFormStream = pForm->GetStream();
+    CPPUNIT_ASSERT(pFormStream);
+    SvMemoryStream& rFormStream = pFormStream->GetMemory();
+    SvMemoryStream aUncompressed;
+    ZCodec aZCodec;
+    aZCodec.BeginCompression();
+    rFormStream.Seek(0);
+    aZCodec.Decompress(rFormStream, aUncompressed);
+    CPPUNIT_ASSERT(aZCodec.EndCompression());
+    std::string_view aFormContent(static_cast<const char*>(aUncompressed.GetData()),
+                                  aUncompressed.GetSize());
+    CPPUNIT_ASSERT_MESSAGE(std::string(aFormContent),
+                           aFormContent.find("(First) Tj ET\nBT") != std::string_view::npos);
+    CPPUNIT_ASSERT_MESSAGE(std::string(aFormContent),
+                           aFormContent.find("(Second) Tj ET\nBT") != std::string_view::npos);
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testRexportArtifactAtStreamEnd)
 {
     // The compressed content stream ends with the EMC operator of an /Artifact section, with no
