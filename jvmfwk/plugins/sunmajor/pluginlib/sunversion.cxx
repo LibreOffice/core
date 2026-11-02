@@ -45,6 +45,13 @@ SunVersion::SunVersion(const char * szVer):
 
 const size_t nMaxParts = 8;
 
+SunVersion::SunVersion(std::vector<int> aParts, PreRelease ePreRelease, char nUpdateSpecial):
+    m_arVersionParts(aParts), m_nUpdateSpecial(nUpdateSpecial), m_preRelease(ePreRelease)
+{
+    assert(aParts.size() <= nMaxParts);
+    m_bValid = true;
+}
+
 // Converts the first characters of a string to an int >= 0 and returns it, or returns -1
 // if any of the characters were not digits. The number of characters consumed are
 // passed back via nConsumed.

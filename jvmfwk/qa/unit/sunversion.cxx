@@ -51,6 +51,38 @@ CPPUNIT_TEST_FIXTURE(TestSunVersion, testGoodVersions)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(TestSunVersion, testVersionParts)
+{
+    static const std::map< const char *, std::tuple<std::vector<int>, jfw_plugin::SunVersion::PreRelease, char> > aReleases{
+        { "10.0",         { { 10, 0 }, jfw_plugin::SunVersion::Rel_NONE, 0 } },
+        { "1.4.0",        { { 1, 4, 0 }, jfw_plugin::SunVersion::Rel_NONE, 0 } },
+        { "1.4.1",        { { 1, 4, 1 }, jfw_plugin::SunVersion::Rel_NONE, 0 } },
+        { "111.0.999",    { { 111, 0, 999 }, jfw_plugin::SunVersion::Rel_NONE, 0 } },
+        { "1.4.1_01",     { { 1, 4, 1, 1 }, jfw_plugin::SunVersion::Rel_NONE, 0 } },
+        { "1.4.1_99",     { { 1, 4, 1, 99 }, jfw_plugin::SunVersion::Rel_NONE, 0 } },
+        { "1.4.1_00a",    { { 1, 4, 1, 0 }, jfw_plugin::SunVersion::Rel_NONE, 'a' } },
+        { "1.4.1-ea",     { { 1, 4, 1 }, jfw_plugin::SunVersion::Rel_EA, 0 } },
+        { "1.4.1-beta",   { { 1, 4, 1 }, jfw_plugin::SunVersion::Rel_BETA, 0 } },
+        { "1.4.1-rc1",    { { 1, 4, 1 }, jfw_plugin::SunVersion::Rel_RC1, 0 } },
+        { "1.5.0_01-ea",  { { 1, 5, 0, 1 }, jfw_plugin::SunVersion::Rel_EA, 0 } },
+        { "1.5.0_01-rc2", { { 1, 5, 0, 1 }, jfw_plugin::SunVersion::Rel_RC2, 0 } },
+        { "1.5.0_010",    { { 1, 5, 0, 10 }, jfw_plugin::SunVersion::Rel_NONE, 0 } },
+        { "27.0.1.0.2",   { { 27, 0, 1, 0, 2 }, jfw_plugin::SunVersion::Rel_NONE, 0 } },
+        { "1.5.0-p27",    { { 1, 5, 0 }, jfw_plugin::SunVersion::Rel_FreeBSD, 127 } },
+    };
+
+    for (auto & rRelease : aReleases)
+    {
+        jfw_plugin::SunVersion ver(rRelease.first);
+        jfw_plugin::SunVersion compare(std::get<0>(rRelease.second),
+            std::get<1>(rRelease.second), std::get<2>(rRelease.second));
+
+        CPPUNIT_ASSERT_MESSAGE(
+            OString(OString::Concat("\"") + rRelease.first + "\" == aReleases element").getStr(),
+            ver.operator ==(compare));
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(TestSunVersion, testBadVersions)
 {
     static char const * badVersions[] = {".4.0", "..1", "", "10.10.0.", "10.10.0-", "10.10.0.",
