@@ -13,6 +13,7 @@
 
 #include "CellMarkKind.hxx"
 #include <address.hxx>
+#include <editeng/svxenum.hxx>
 #include <fillinfo.hxx>
 #include <tools/color.hxx>
 
@@ -49,6 +50,19 @@ struct CellIconSet
     ScIconSetInfo maInfo;
 };
 
+/// The part of a shadow that falls onto a cell. The shadow belongs to this cell or to a cell or
+/// merged area next to it.
+struct CellShadow
+{
+    SCCOL mnColumn;
+    SCROW mnRow;
+    ScShadowPart mePart;
+    SvxShadowLocation meLocation;
+    /// The width of the shadow in twips.
+    tools::Long mnSize;
+    Color maColor;
+};
+
 /// The sparkline of a cell, drawn into the cell or into the merged area that starts there.
 struct CellSparkline
 {
@@ -82,13 +96,17 @@ struct CellMergedArea
 };
 
 /** What the cells of a range show, by cell address and without positions. A CellGeometry places
-    it. Each list is in the order of the rows, and of the columns within a row.
+    it. Each list is in the order of the rows, and of the columns within a row. The borders are not
+    here: the border array of ScTableInfo (svx::frame::Array) holds the style of each cell edge by
+    address already, after the conflicts between neighbors are resolved.
  */
 struct CellContent
 {
     std::vector<CellFill> maFills;
     std::vector<CellDataBar> maDataBars;
     std::vector<CellIconSet> maIconSets;
+    /// The horizontal part of a cell comes before its vertical part.
+    std::vector<CellShadow> maShadows;
     std::vector<CellSparkline> maSparklines;
     std::vector<CellMark> maMarks;
     std::vector<CellMergedArea> maMergedAreas;

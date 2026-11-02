@@ -216,8 +216,9 @@ private:
     void placeBackground();
     void addDataBar(const ScDataBarInfo& rDataBar, const basegfx::B2DRange& rCell, SCROW nRow);
     void addIconSet(const ScIconSetInfo& rIconSet, const basegfx::B2DRange& rCell, SCROW nRow);
-    void buildShadows(const ScTableInfo& rInfo);
-    void buildBorders(ScTableInfo& rInfo, SCCOL nStartColumn, SCCOL nEndColumn);
+    void collectShadows(const ScTableInfo& rInfo);
+    void placeShadows();
+    void placeBorders(ScTableInfo& rInfo, SCCOL nStartColumn, SCCOL nEndColumn);
     void buildText(const ScTableInfo& rInfo);
     void collectSparklines(const ScTableInfo& rInfo);
     void placeSparklines();
@@ -387,8 +388,10 @@ void CellPrimitiveBuilder::Impl::collect(SCCOL nStartColumn, SCROW nStartRow, SC
 
     collectBackground(aInfo);
     placeBackground();
-    buildShadows(aInfo);
-    buildBorders(aInfo, nStartColumn, nEndColumn);
+    collectShadows(aInfo);
+    placeShadows();
+    // The border array of the info holds the borders by address; only their placing is left.
+    placeBorders(aInfo, nStartColumn, nEndColumn);
     buildText(aInfo);
     collectSparklines(aInfo);
     placeSparklines();
@@ -609,88 +612,92 @@ void CellPrimitiveBuilder::Impl::addIconSet(const ScIconSetInfo& rIconSet,
         basegfx::B2DPolyPolygon(rectangle(rCell)), std::move(aIcon)));
 }
 
-void CellPrimitiveBuilder::Impl::buildShadows(const ScTableInfo& rInfo)
+void CellPrimitiveBuilder::Impl::collectShadows(const ScTableInfo& rInfo)
 {
     const RowInfo* pRowInfo = rInfo.mpRowInfo.get();
     for (SCSIZE nArrY = 1; nArrY + 1 < rInfo.mnArrCount; ++nArrY)
     {
         const RowInfo& rRow = pRowInfo[nArrY];
         const SCROW nRow = rRow.nRowNo;
-        const double fTop = mrGeometry.getRowStart(nRow);
-        const double fRowHeight = mrGeometry.getRowHeight(nRow);
-
         for (SCCOL nColumn = mnStartColumn; nColumn <= mnEndColumn; ++nColumn)
         {
-            const double fWidth = mrGeometry.getColumnWidth(nColumn);
-            if (fWidth <= 0.0)
+            if (isColumnHidden(nColumn))
                 continue;
             const ScCellInfo& rCell = rRow.cellInfo(nColumn);
-
             for (int nPass = 0; nPass < 2; ++nPass) // horizontal, then vertical
             {
                 const SvxShadowItem* pShadow = nPass ? rCell.pVShadowOrigin : rCell.pHShadowOrigin;
                 if (!pShadow)
                     continue;
-                const ScShadowPart ePart = nPass ? rCell.eVShadowPart : rCell.eHShadowPart;
-
-                const double fLeft = mrGeometry.getColumnStart(nColumn);
-                double fShadowLeft = fLeft;
-                double fShadowRight = fLeft + fWidth;
-                double fShadowTop = fTop;
-                double fShadowBottom = fTop + fRowHeight;
-
-                const double fSize = pShadow->GetWidth();
-                const double fSizeX = std::min(fSize, fWidth);
-                const double fSizeY = std::min(fSize, fRowHeight);
-                const SvxShadowLocation eLocation = pShadow->GetLocation();
-                const bool bTop = eLocation == SvxShadowLocation::TopLeft
-                                  || eLocation == SvxShadowLocation::TopRight;
-                const bool bLeftSide = eLocation == SvxShadowLocation::TopLeft
-                                       || eLocation == SvxShadowLocation::BottomLeft;
-
-                if (ePart == SC_SHADOW_HORIZ || ePart == SC_SHADOW_HSTART
-                    || ePart == SC_SHADOW_CORNER)
-                {
-                    if (bTop)
-                        fShadowTop = fShadowBottom - fSizeY;
-                    else
-                        fShadowBottom = fShadowTop + fSizeY;
-                }
-                if (ePart == SC_SHADOW_VERT || ePart == SC_SHADOW_VSTART
-                    || ePart == SC_SHADOW_CORNER)
-                {
-                    if (bLeftSide)
-                        fShadowLeft = fShadowRight - fSizeX;
-                    else
-                        fShadowRight = fShadowLeft + fSizeX;
-                }
-                if (ePart == SC_SHADOW_HSTART)
-                {
-                    if (bLeftSide)
-                        fShadowRight -= fSizeX;
-                    else
-                        fShadowLeft += fSizeX;
-                }
-                if (ePart == SC_SHADOW_VSTART)
-                {
-                    if (bTop)
-                        fShadowBottom -= fSizeY;
-                    else
-                        fShadowTop += fSizeY;
-                }
-
-                const basegfx::B2DRange aShadow(fShadowLeft, fShadowTop, fShadowRight,
-                                                fShadowBottom);
-                if (!aShadow.isEmpty())
-                    maRangeLayers.maBorders.push_back(new primitive2d::PolyPolygonColorPrimitive2D(
-                        basegfx::B2DPolyPolygon(rectangle(aShadow)),
-                        pShadow->GetColor().getBColor()));
+                maContent.maShadows.push_back(
+                    CellShadow{ nColumn, nRow, nPass ? rCell.eVShadowPart : rCell.eHShadowPart,
+                                pShadow->GetLocation(), pShadow->GetWidth(),
+                                pShadow->GetColor() });
             }
         }
     }
 }
 
-void CellPrimitiveBuilder::Impl::buildBorders(ScTableInfo& rInfo, SCCOL nStartColumn,
+void CellPrimitiveBuilder::Impl::placeShadows()
+{
+    for (const CellShadow& rShadow : maContent.maShadows)
+    {
+        const double fTop = mrGeometry.getRowStart(rShadow.mnRow);
+        const double fRowHeight = mrGeometry.getRowHeight(rShadow.mnRow);
+        const double fLeft = mrGeometry.getColumnStart(rShadow.mnColumn);
+        const double fWidth = mrGeometry.getColumnWidth(rShadow.mnColumn);
+        double fShadowLeft = fLeft;
+        double fShadowRight = fLeft + fWidth;
+        double fShadowTop = fTop;
+        double fShadowBottom = fTop + fRowHeight;
+
+        const double fSize = rShadow.mnSize;
+        const double fSizeX = std::min(fSize, fWidth);
+        const double fSizeY = std::min(fSize, fRowHeight);
+        const SvxShadowLocation eLocation = rShadow.meLocation;
+        const bool bTop
+            = eLocation == SvxShadowLocation::TopLeft || eLocation == SvxShadowLocation::TopRight;
+        const bool bLeftSide = eLocation == SvxShadowLocation::TopLeft
+                               || eLocation == SvxShadowLocation::BottomLeft;
+
+        const ScShadowPart ePart = rShadow.mePart;
+        if (ePart == SC_SHADOW_HORIZ || ePart == SC_SHADOW_HSTART || ePart == SC_SHADOW_CORNER)
+        {
+            if (bTop)
+                fShadowTop = fShadowBottom - fSizeY;
+            else
+                fShadowBottom = fShadowTop + fSizeY;
+        }
+        if (ePart == SC_SHADOW_VERT || ePart == SC_SHADOW_VSTART || ePart == SC_SHADOW_CORNER)
+        {
+            if (bLeftSide)
+                fShadowLeft = fShadowRight - fSizeX;
+            else
+                fShadowRight = fShadowLeft + fSizeX;
+        }
+        if (ePart == SC_SHADOW_HSTART)
+        {
+            if (bLeftSide)
+                fShadowRight -= fSizeX;
+            else
+                fShadowLeft += fSizeX;
+        }
+        if (ePart == SC_SHADOW_VSTART)
+        {
+            if (bTop)
+                fShadowBottom -= fSizeY;
+            else
+                fShadowTop += fSizeY;
+        }
+
+        const basegfx::B2DRange aShadow(fShadowLeft, fShadowTop, fShadowRight, fShadowBottom);
+        if (!aShadow.isEmpty())
+            maRangeLayers.maBorders.push_back(new primitive2d::PolyPolygonColorPrimitive2D(
+                basegfx::B2DPolyPolygon(rectangle(aShadow)), rShadow.maColor.getBColor()));
+    }
+}
+
+void CellPrimitiveBuilder::Impl::placeBorders(ScTableInfo& rInfo, SCCOL nStartColumn,
                                               SCCOL nEndColumn)
 {
     svx::frame::Array& rArray = rInfo.maArray;
