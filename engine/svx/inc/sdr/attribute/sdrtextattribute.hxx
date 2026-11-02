@@ -80,7 +80,8 @@ namespace drawinglayer::attribute
             bool operator==(const SdrTextAttribute& rCandidate) const;
 
             // data read access
-            const SdrText& getSdrText() const;
+            /// the text object, nothing once it is gone
+            const SdrText* getSdrText() const;
             const OutlinerParaObject& getOutlinerParaObject() const;
             bool isContour() const;
             bool isFitToSize() const;

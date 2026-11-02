@@ -23,6 +23,7 @@
 #include <svx/svdotext.hxx>
 #include <editeng/outlobj.hxx>
 #include <svx/sdr/properties/properties.hxx>
+#include <unotools/weakref.hxx>
 
 
 namespace drawinglayer::attribute
@@ -30,9 +31,9 @@ namespace drawinglayer::attribute
         class ImpSdrTextAttribute
         {
         public:
-            // all-text attributes. The SdrText itself and a copy
-            // of the OPO
-            const SdrText*                      mpSdrText;
+            // all-text attributes. The SdrText itself, held weakly as it may go before the
+            // attribute, and a copy of the OPO
+            unotools::WeakReference<SdrText>    mxSdrText;
             std::shared_ptr<OutlinerParaObject> mxOutlinerParaObject;
 
             // Set when it's a FormText; contains all FormText attributes
@@ -85,7 +86,7 @@ namespace drawinglayer::attribute
                 bool bFixedCellHeight,
                 bool bWrongSpell,
                 bool bChainable)
-            :   mpSdrText(pSdrText),
+            :   mxSdrText(const_cast<SdrText*>(pSdrText)),
                 mxOutlinerParaObject(std::make_shared<OutlinerParaObject>(rOutlinerParaObject)),
                 maTextLeftDistance(aTextLeftDistance),
                 maTextUpperDistance(aTextUpperDistance),
@@ -122,8 +123,7 @@ namespace drawinglayer::attribute
             }
 
             ImpSdrTextAttribute()
-            :   mpSdrText(nullptr),
-                maTextLeftDistance(0),
+            :   maTextLeftDistance(0),
                 maTextUpperDistance(0),
                 maTextRightDistance(0),
                 maTextLowerDistance(0),
@@ -144,11 +144,7 @@ namespace drawinglayer::attribute
             }
 
             // data read access
-            const SdrText& getSdrText() const
-            {
-                assert(mpSdrText && "Access to text of default version of ImpSdrTextAttribute (!)");
-                return *mpSdrText;
-            }
+            const SdrText* getSdrText() const { return mxSdrText.get().get(); }
 
             const OutlinerParaObject& getOutlinerParaObject() const
             {
@@ -206,7 +202,7 @@ namespace drawinglayer::attribute
                 return (
                        // the text is decomposed from its object, the same text of another one is
                        // not equal
-                       mpSdrText == rCandidate.mpSdrText
+                       mxSdrText.get() == rCandidate.mxSdrText.get()
                     && getSdrFormTextAttribute() == rCandidate.getSdrFormTextAttribute()
                     && getTextLeftDistance() == rCandidate.getTextLeftDistance()
                     && getTextUpperDistance() == rCandidate.getTextUpperDistance()
@@ -313,7 +309,7 @@ namespace drawinglayer::attribute
             return rCandidate.mpSdrTextAttribute == mpSdrTextAttribute;
         }
 
-        const SdrText& SdrTextAttribute::getSdrText() const
+        const SdrText* SdrTextAttribute::getSdrText() const
         {
             return mpSdrTextAttribute->getSdrText();
         }
@@ -406,17 +402,17 @@ namespace drawinglayer::attribute
 
         void SdrTextAttribute::getBlinkTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList) const
         {
-            if(isBlink())
+            if(isBlink() && getSdrText())
             {
-                getSdrText().GetObject().impGetBlinkTextTiming(rAnimList);
+                getSdrText()->GetObject().impGetBlinkTextTiming(rAnimList);
             }
         }
 
         void SdrTextAttribute::getScrollTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList, double fFrameLength, double fTextLength) const
         {
-            if(isScroll())
+            if(isScroll() && getSdrText())
             {
-                getSdrText().GetObject().impGetScrollTextTiming(rAnimList, fFrameLength, fTextLength);
+                getSdrText()->GetObject().impGetScrollTextTiming(rAnimList, fFrameLength, fTextLength);
             }
         }
 

@@ -618,7 +618,7 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
 
                     // create with unit polygon
                     pNew = new SdrContourTextPrimitive2D(
-                        &rText.getSdrText(),
+                        rText.getSdrText(),
                         rText.getOutlinerParaObject(),
                         std::move(aScaledUnitPolyPolygon),
                         rObjectTransform);
@@ -627,7 +627,7 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                 {
                     // create with unit polygon
                     pNew = new SdrContourTextPrimitive2D(
-                        &rText.getSdrText(),
+                        rText.getSdrText(),
                         rText.getOutlinerParaObject(),
                         rUnitPolyPolygon,
                         rObjectTransform);
@@ -639,7 +639,7 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                 basegfx::B2DPolyPolygon aScaledPolyPolygon(rUnitPolyPolygon);
                 aScaledPolyPolygon.transform(rObjectTransform);
                 pNew = new SdrPathTextPrimitive2D(
-                    &rText.getSdrText(),
+                    rText.getSdrText(),
                     rText.getOutlinerParaObject(),
                     std::move(aScaledPolyPolygon),
                     rText.getSdrFormTextAttribute());
@@ -683,7 +683,7 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                 {
                     // stretched text in range
                     pNew = new SdrStretchTextPrimitive2D(
-                        &rText.getSdrText(),
+                        rText.getSdrText(),
                         rText.getOutlinerParaObject(),
                         aAnchorTransform,
                         rText.isFixedCellHeight());
@@ -692,7 +692,7 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                 {
                     // isotropically scaled text in range
                     pNew = new SdrAutoFitTextPrimitive2D(
-                                    &rText.getSdrText(),
+                                    rText.getSdrText(),
                                     rText.getOutlinerParaObject(),
                                     aAnchorTransform,
                                     bWordWrap,
@@ -701,7 +701,7 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                 else if( rText.isChainable() && !rText.isInEditMode() )
                 {
                     pNew = new SdrChainedTextPrimitive2D(
-                                    &rText.getSdrText(),
+                                    rText.getSdrText(),
                                     rText.getOutlinerParaObject(),
                                     aAnchorTransform );
                 }
@@ -709,7 +709,7 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                 {
                     // build new primitive
                     pNew = new SdrBlockTextPrimitive2D(
-                        &rText.getSdrText(),
+                        rText.getSdrText(),
                         rText.getOutlinerParaObject(),
                         aAnchorTransform,
                         rText.getSdrTextHorzAdjust(),
@@ -750,7 +750,10 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                 if(rText.getSdrFormTextAttribute().isDefault())
                 {
                     // get scroll direction
-                    const SdrTextAniDirection eDirection(rText.getSdrText().GetObject().GetTextAniDirection());
+                    // a text whose object is gone scrolls to the left, the default
+                    const SdrText* pSdrText(rText.getSdrText());
+                    const SdrTextAniDirection eDirection(pSdrText ? pSdrText->GetObject().GetTextAniDirection()
+                                                                  : SdrTextAniDirection::Left);
                     const bool bHorizontal(SdrTextAniDirection::Left == eDirection || SdrTextAniDirection::Right == eDirection);
 
                     // decompose to get separated values for the scroll box

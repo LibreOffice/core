@@ -121,7 +121,7 @@ namespace drawinglayer::primitive2d
 
                 // create primitive and get text range
                 xBlockText = new SdrBlockTextPrimitive2D(
-                    &rTextAttribute.getSdrText(),
+                    rTextAttribute.getSdrText(),
                     rTextAttribute.getOutlinerParaObject(),
                     aTextMatrix,
                     SDRTEXTHORZADJUST_CENTER,
