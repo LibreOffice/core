@@ -33,8 +33,12 @@ FontworkPropertyPanel::FontworkPropertyPanel(weld::Widget* pParent,
     : PanelLayout(pParent, u"FontworkPropertyPanel"_ustr, u"svx/ui/sidebarfontwork.ui"_ustr)
     , m_pToolbar(m_xBuilder->weld_toolbar(u"fontwork-toolbox"_ustr))
     , m_xToolbar(new ToolbarUnoDispatcher(*m_pToolbar, *m_xBuilder, rxFrame))
+    , m_pExtrusionTiltToolbar(m_xBuilder->weld_toolbar(u"extrusion-tilt-toolbox"_ustr))
+    , m_xExtrusionTiltToolbar(
+          new ToolbarUnoDispatcher(*m_pExtrusionTiltToolbar, *m_xBuilder, rxFrame))
+    , m_pExtrusionToolbar(m_xBuilder->weld_toolbar(u"extrusion-toolbox"_ustr))
+    , m_xExtrusionToolbar(new ToolbarUnoDispatcher(*m_pExtrusionToolbar, *m_xBuilder, rxFrame))
 {
-    m_pToolbar->set_item_visible(u".uno:ExtrusionToggle"_ustr, false);
 }
 
 std::unique_ptr<PanelLayout>

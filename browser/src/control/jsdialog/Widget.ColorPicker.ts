@@ -260,7 +260,9 @@ function createAutoColorButton(
 	label.htmlFor = 'transparent-color-button';
 
 	const hasTransparent =
-		data.command !== '.uno:FontColor' && data.command !== '.uno:Color';
+		data.command !== '.uno:FontColor' &&
+		data.command !== '.uno:Color' &&
+		data.command !== '.uno:Extrusion3DColor';
 	const buttonText = hasTransparent ? _('No fill') : _('Automatic');
 	const autoButton = window.L.DomUtil.create(
 		'button',

@@ -39,6 +39,10 @@ public:
 private:
     std::unique_ptr<weld::Toolbar> m_pToolbar;
     std::unique_ptr<ToolbarUnoDispatcher> m_xToolbar;
+    std::unique_ptr<weld::Toolbar> m_pExtrusionTiltToolbar;
+    std::unique_ptr<ToolbarUnoDispatcher> m_xExtrusionTiltToolbar;
+    std::unique_ptr<weld::Toolbar> m_pExtrusionToolbar;
+    std::unique_ptr<ToolbarUnoDispatcher> m_xExtrusionToolbar;
 };
 }
 } // end of namespace svx::sidebar

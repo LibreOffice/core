@@ -298,6 +298,10 @@ describe(['taglighthouse'], 'Accessibility Writer Dialog Tests', { testIsolation
         helper.typeIntoDocument('{esc}');
     });
 
+    it('Extrusion Depth dialog', function () {
+        a11yHelper.testExtrusionDepthDialog(win);
+    });
+
     it('Line dialog', function () {
         cy.then(() => {
             win.app.map.sendUnoCommand('.uno:Line');

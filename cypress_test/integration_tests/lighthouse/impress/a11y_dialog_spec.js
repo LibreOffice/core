@@ -343,6 +343,10 @@ describe(['taglighthouse'], 'Accessibility Impress Dialog Tests', { testIsolatio
         helper.typeIntoDocument('{esc}');
     });
 
+    it('Extrusion Depth dialog', function () {
+        a11yHelper.testExtrusionDepthDialog(win);
+    });
+
     it('Custom Animation dialog', function () {
         // afterEach left us inside a table cell on slide 1. Escape out so
         // BasicShapes.octagon adds a shape at slide level rather than

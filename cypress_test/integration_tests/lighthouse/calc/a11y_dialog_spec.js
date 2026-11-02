@@ -222,6 +222,10 @@ describe(['taglighthouse'], 'Accessibility Calc Dialog Tests', { testIsolation: 
         helper.typeIntoDocument('{esc}');
     });
 
+    it('Extrusion Depth dialog', function () {
+        a11yHelper.testExtrusionDepthDialog(win);
+    });
+
     it('Sparkline data range dialog', function () {
         cy.cGet('#spreadsheet-tab4').click();
         helper.typeIntoInputField(helper.addressInputSelector, 'B1');

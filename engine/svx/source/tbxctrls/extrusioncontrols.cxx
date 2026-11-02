@@ -275,6 +275,12 @@ void ExtrusionDirectionControl::initialize( const cpo::uno::Sequence< cpo::uno::
 {
     svt::PopupWindowController::initialize( aArguments );
 
+    if (m_pToolbar)
+    {
+        mxPopoverContainer.reset(new ToolbarPopupContainer(m_pToolbar));
+        m_pToolbar->set_item_popover(m_aCommandURL, mxPopoverContainer->getTopLevel());
+    }
+
     ToolBox* pToolBox = nullptr;
     ToolBoxItemId nId;
     if ( getToolboxId( nId, &pToolBox ) )
@@ -555,6 +561,12 @@ void ExtrusionDepthController::initialize( const cpo::uno::Sequence< cpo::uno::A
 {
     svt::PopupWindowController::initialize( aArguments );
 
+    if (m_pToolbar)
+    {
+        mxPopoverContainer.reset(new ToolbarPopupContainer(m_pToolbar));
+        m_pToolbar->set_item_popover(m_aCommandURL, mxPopoverContainer->getTopLevel());
+    }
+
     ToolBox* pToolBox = nullptr;
     ToolBoxItemId nId;
     if ( getToolboxId( nId, &pToolBox ) )
@@ -788,6 +800,12 @@ void ExtrusionLightingControl::initialize( const cpo::uno::Sequence< cpo::uno::A
 {
     svt::PopupWindowController::initialize( aArguments );
 
+    if (m_pToolbar)
+    {
+        mxPopoverContainer.reset(new ToolbarPopupContainer(m_pToolbar));
+        m_pToolbar->set_item_popover(m_aCommandURL, mxPopoverContainer->getTopLevel());
+    }
+
     ToolBox* pToolBox = nullptr;
     ToolBoxItemId nId;
     if ( getToolboxId( nId, &pToolBox ) )
@@ -933,6 +951,12 @@ VclPtr<vcl::Window> ExtrusionSurfaceControl::createVclPopupWindow( vcl::Window* 
 void ExtrusionSurfaceControl::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     svt::PopupWindowController::initialize( aArguments );
+
+    if (m_pToolbar)
+    {
+        mxPopoverContainer.reset(new ToolbarPopupContainer(m_pToolbar));
+        m_pToolbar->set_item_popover(m_aCommandURL, mxPopoverContainer->getTopLevel());
+    }
 
     ToolBox* pToolBox = nullptr;
     ToolBoxItemId nId;

@@ -31,6 +31,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svx/xsflclit.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/svdoashp.hxx>
@@ -653,16 +654,21 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest const & rReq, SfxBindi
                 double fDepth = pDepthItem->GetValue();
                 FieldUnit eUnit = static_cast<FieldUnit>(pMetricItem->GetValue());
 
-                ExtrusionDepthDialog aDlg(rReq.GetFrameWeld(), fDepth, eUnit);
-                sal_uInt16 nRet = aDlg.run();
-                if (nRet == RET_OK)
-                {
-                    fDepth = aDlg.getDepth();
+                std::shared_ptr<ExtrusionDepthDialog> xDlg
+                    = std::make_shared<ExtrusionDepthDialog>(rReq.GetFrameWeld(), fDepth, eUnit);
+                weld::DialogController::runAsync(xDlg, [xDlg](sal_Int32 nResult) {
+                    if (nResult != RET_OK)
+                        return;
 
-                    SvxDoubleItem aItem( fDepth, SID_EXTRUSION_DEPTH );
+                    // the view that ran the command may be gone by now
+                    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+                    if (!pViewFrame)
+                        return;
+
+                    SvxDoubleItem aItem(xDlg->getDepth(), SID_EXTRUSION_DEPTH);
                     const SfxPoolItem* aItems[] = { &aItem, nullptr };
-                    rBindings.Execute( SID_EXTRUSION_DEPTH, aItems );
-                }
+                    pViewFrame->GetBindings().Execute(SID_EXTRUSION_DEPTH, aItems);
+                });
             }
             break;
         }

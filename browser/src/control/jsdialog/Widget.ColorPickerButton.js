@@ -40,6 +40,8 @@ function parseHexColor(color) {
 function getDefaultColorForCommand(command) {
 	if (command == '.uno:CharBackColor') return -1;
 	else if (command == '.uno:BackgroundColor') return -1;
+	// automatic: the extrusion takes the fill color
+	else if (command == '.uno:Extrusion3DColor') return -1;
 	return 0;
 }
 

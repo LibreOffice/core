@@ -1270,6 +1270,7 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"FrameLineColor", { PayloadType::ColorPayload, true } },
         { u"GlowColor", { PayloadType::ColorPayload, false } },
         { u"FillColor", { PayloadType::ColorOrDisabledPayload, true } },
+        { u"Extrusion3DColor", { PayloadType::ColorOrDisabledPayload, true } },
 
         { u"Undo", { PayloadType::UndoRedoPayload, true } },
         { u"Redo", { PayloadType::UndoRedoPayload, true } },

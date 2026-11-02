@@ -182,6 +182,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		this._toolitemHandlers['.uno:FrameLineColor'] = JSDialog.colorPickerButton;
 		this._toolitemHandlers['.uno:Color'] = JSDialog.colorPickerButton;
 		this._toolitemHandlers['.uno:FillColor'] = JSDialog.colorPickerButton;
+		this._toolitemHandlers['.uno:Extrusion3DColor'] = JSDialog.colorPickerButton;
 
 		this._toolitemHandlers['.uno:InsertFormula'] = function () {};
 

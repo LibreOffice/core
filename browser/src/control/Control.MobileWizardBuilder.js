@@ -51,10 +51,14 @@ window.L.Control.MobileWizardBuilder = window.L.Control.JSDialogBuilder.extend({
 		this._toolitemHandlers['.uno:FrameLineColor'] = this._colorControl;
 		this._toolitemHandlers['.uno:Color'] = this._colorControl;
 		this._toolitemHandlers['.uno:FillColor'] = this._colorControl;
+		this._toolitemHandlers['.uno:Extrusion3DColor'] = this._colorControl;
 
 		this._toolitemHandlers['.uno:FontworkAlignmentFloater'] = function () { return false; };
 		this._toolitemHandlers['.uno:FontworkCharacterSpacingFloater'] = function () { return false; };
-		this._toolitemHandlers['.uno:ExtrusionToggle'] = function () { return false; };
+		this._toolitemHandlers['.uno:ExtrusionDepthFloater'] = function () { return false; };
+		this._toolitemHandlers['.uno:ExtrusionDirectionFloater'] = function () { return false; };
+		this._toolitemHandlers['.uno:ExtrusionLightingFloater'] = function () { return false; };
+		this._toolitemHandlers['.uno:ExtrusionSurfaceFloater'] = function () { return false; };
 		this._toolitemHandlers['.uno:Grow'] = function () { return false; };
 		this._toolitemHandlers['.uno:Shrink'] = function () { return false; };
 		this._toolitemHandlers['.uno:StyleUpdateByExampleimg'] = function () { return false; };
@@ -626,8 +630,8 @@ window.L.Control.MobileWizardBuilder = window.L.Control.JSDialogBuilder.extend({
 		updateFunction(null);
 
 		var iconPath = app.LOUtil.getIconNameOfCommand(data.command);
-		var noColorControl = (data.command !== '.uno:FontColor' && data.command !== '.uno:Color');
-		var autoColorControl = (data.command === '.uno:FontColor' || data.command === '.uno:Color');
+		const autoColorControl = (data.command === '.uno:FontColor' || data.command === '.uno:Color' || data.command === '.uno:Extrusion3DColor');
+		const noColorControl = !autoColorControl;
 
 		var callback = function(color) {
 			JSDialog.sendColorCommand(builder, data, color);

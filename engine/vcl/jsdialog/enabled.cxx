@@ -418,6 +418,7 @@ constexpr auto OtherDialogList
         // svx
         { u"svx/ui/acceptrejectchangesdialog.ui" },
         { u"svx/ui/compressgraphicdialog.ui" },
+        { u"svx/ui/extrustiondepthdialog.ui" },
         { u"svx/ui/findreplacedialog.ui" },
         { u"svx/ui/fontworkgallerydialog.ui" },
         { u"svx/ui/gotopagedialog.ui" },
@@ -473,6 +474,8 @@ constexpr auto PopupList
         // svx
         { u"svx/ui/colorwindow.ui" },
         { u"svx/ui/currencywindow.ui" },
+        { u"svx/ui/depthwindow.ui" },
+        { u"svx/ui/directionwindow.ui" },
         { u"svx/ui/floatingareastyle.ui" },
         { u"svx/ui/floatingframeborder.ui" },
         { u"svx/ui/floatinglineend.ui" },
@@ -480,8 +483,10 @@ constexpr auto PopupList
         { u"svx/ui/floatinglinestyle.ui" },
         { u"svx/ui/fontworkalignmentcontrol.ui" },
         { u"svx/ui/fontworkcharacterspacingcontrol.ui" },
+        { u"svx/ui/lightingwindow.ui" },
         { u"svx/ui/numberingwindow.ui" },
         { u"svx/ui/paralinespacingcontrol.ui" },
+        { u"svx/ui/surfacewindow.ui" },
         { u"svx/ui/textcharacterspacingcontrol.ui" },
         { u"svx/ui/textunderlinecontrol.ui" }
     });

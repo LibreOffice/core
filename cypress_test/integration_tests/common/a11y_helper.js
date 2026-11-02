@@ -570,6 +570,27 @@ function needsLinguisticData(command) {
 	return needLinguisticDataDialogs.includes(command);
 }
 
+// The Extrusion Depth dialog works on the selected extruded shape. The Depth
+// popup of the Fontwork sidebar opens it from Custom..., with these arguments.
+function testExtrusionDepthDialog(win) {
+	cy.then(() => {
+		win.app.map.sendUnoCommand('.uno:BasicShapes.octagon');
+	});
+	cy.cGet('#test-div-shapeHandlesSection').should('exist');
+
+	cy.then(() => {
+		win.app.map.sendUnoCommand('.uno:ExtrusionToggle');
+		win.app.map.sendUnoCommand('.uno:ExtrusionDepthDialog', {
+			Depth: { type: 'float', value: 1270 },
+			Metric: { type: 'unsigned short', value: 2 },
+		});
+	});
+	handleDialog(win, 1, '.uno:ExtrusionDepthDialog');
+
+	// exit shape mode
+	helper.typeIntoDocument('{esc}');
+}
+
 /**
  * Test the PDF export warning dialog by exporting with conflicting options.
  * @param {Object} win - The frame window object
@@ -1219,6 +1240,7 @@ module.exports.testDialog = testDialog;
 module.exports.allCommonDialogs = allCommonDialogs;
 module.exports.needsLinguisticData = needsLinguisticData;
 module.exports.testPDFExportWarningDialog = testPDFExportWarningDialog;
+module.exports.testExtrusionDepthDialog = testExtrusionDepthDialog;
 module.exports.sidebarTabOrder = sidebarTabOrder;
 module.exports.describeFocusable = describeFocusable;
 module.exports.openSidebarPropertyDeck = openSidebarPropertyDeck;
