@@ -403,7 +403,7 @@ protected:
             return "he%llo.txt";
         }
 
-        if (filename.size() == 1 && std::isdigit(filename[0]))
+        if (filename.size() == 1 && std::isdigit(static_cast<unsigned char>(filename[0])))
         {
             const auto number = NumUtil::stoi(filename);
             if (number >= 1 && number <= 9)
