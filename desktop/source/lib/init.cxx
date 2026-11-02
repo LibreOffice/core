@@ -3755,7 +3755,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         // Check if watermark for pdf is passed by filteroptions...
         // It is not a real filter option so it must be filtered out.
         OUString watermarkText;
-        std::u16string_view sFullSheetPreview;
+        bool bFullSheetPreview = false;
         int aIndex = -1;
         if ((aIndex = aFilterOptions.indexOf(",Watermark=")) >= 0)
         {
@@ -3767,11 +3767,9 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         if ((aIndex = aFilterOptions.indexOf(",FullSheetPreview=")) >= 0)
         {
             int bIndex = aFilterOptions.indexOf("FULLSHEETPREVEND");
-            sFullSheetPreview = aFilterOptions.subView(aIndex+18, bIndex-(aIndex+18));
+            bFullSheetPreview = aFilterOptions.subView(aIndex+18, bIndex-(aIndex+18)) == u"true";
             aFilterOptions = OUString::Concat(aFilterOptions.subView(0, aIndex)) + aFilterOptions.subView(bIndex+16);
         }
-
-        bool bFullSheetPreview = sFullSheetPreview == u"true";
 
         OUString filePassword;
         if ((aIndex = aFilterOptions.indexOf(",Password=")) >= 0)
@@ -3797,7 +3795,6 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         {
             int bIndex = aFilterOptions.indexOf("PDFVEREND");
             std::u16string_view sPdfVer = aFilterOptions.subView(aIndex+8, bIndex-(aIndex+8));
-            aFilterOptions = OUString::Concat(aFilterOptions.subView(0, aIndex)) + aFilterOptions.subView(bIndex+9);
 
             if (o3tl::equalsIgnoreAsciiCase(sPdfVer, u"PDF/A-1b"))
                 pdfVer = 1;
@@ -3820,6 +3817,8 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
                 SetLastExceptionMsg(u"wrong PDF version"_ustr);
                 return false;
             }
+
+            aFilterOptions = OUString::Concat(aFilterOptions.subView(0, aIndex)) + aFilterOptions.subView(bIndex+9);
         }
 
         // 'TakeOwnership' == this is a 'real' SaveAs (that is, the document
