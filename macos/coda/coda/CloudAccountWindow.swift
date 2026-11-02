@@ -12,8 +12,10 @@ import Cocoa
 import WebKit
 
 /// A window that shows the integrator's site for one cloud account, as a browser would.
-final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigationDelegate {
+final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigationDelegate,
+                                WKScriptMessageHandler {
     private static let defaultSize = NSSize(width: 1200, height: 800)
+    private static let world = WKContentWorld.world(name: "coda")
     private static let firstMacOSWithSafariVersion = 26
     private static let safariVersionsAheadOfMacOS = 3
 
@@ -24,6 +26,7 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
     private var blockedOrigins: Set<String> = []
     private var editorForm: Data?
     private var editorFormUrl: URL?
+    private var editorFrameInfo: WKFrameInfo?
 
     static func open(accountId: String, url: URL) {
         if let controller = openWindows[accountId] {
@@ -50,6 +53,17 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         let configuration = WKWebViewConfiguration()
         configuration.applicationNameForUserAgent = "Version/\(Self.safariVersion) Safari/605.1.15"
 
+        let frameLoaded = WKUserScript(
+            source: "window.webkit.messageHandlers.frameLoaded.postMessage(null)",
+            injectionTime: .atDocumentEnd,
+            forMainFrameOnly: false,
+            in: Self.world
+        )
+
+        // WebKit tells us when the main page has loaded, but not when an
+        // iframe has, so every frame reports the end of its load itself.
+        configuration.userContentController.addUserScript(frameLoaded)
+
         webView = WKWebView(frame: .zero, configuration: configuration)
 #if DEBUG
         webView.isInspectable = true
@@ -59,6 +73,11 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         super.init(window: window)
         window.delegate = self
         webView.navigationDelegate = self
+        webView.configuration.userContentController.add(
+            self,
+            contentWorld: Self.world,
+            name: "frameLoaded"
+        )
 
         webView.load(URLRequest(url: url))
     }
@@ -85,7 +104,26 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
     }
 
     func windowWillClose(_ notification: Notification) {
+        webView.configuration.userContentController.removeScriptMessageHandler(
+            forName: "frameLoaded",
+            contentWorld: Self.world
+        )
+
         Self.openWindows[accountId] = nil
+    }
+
+    // WebKit fills in frameInfo, so a page cannot pass itself off as another frame.
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        let frameInfo = message.frameInfo
+        let isEditorFrame = !frameInfo.isMainFrame && frameInfo.request.url == editorFormUrl
+
+        if !isEditorFrame {
+            COWrapper.LOG_TRC("A frame other than the editor frame loaded")
+            return
+        }
+
+        editorFrameInfo = frameInfo
+        COWrapper.LOG_DBG("The editor frame loaded")
     }
 
     // The integrator opens a document by posting a form with the token and settings into the
