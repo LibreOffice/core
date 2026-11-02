@@ -4505,7 +4505,7 @@ bool ChildSession::unoCommand(const StringVector& tokens)
         || tokens.equals(1, ".uno:Cut") || tokens.equals(1, ".uno:CopySlide"))
         _copyToClipboard = true;
 
-    if (tokens.size() == 2 && tokens.equals(1, ".uno:fakeDiskFull"))
+    if (tokens.size() == 2 && tokens.equals(1, ".uno:fakeDiskFull") && Util::isDebugEnabled())
     {
         _docManager->alertAllUsers("internal", "diskfull");
         return true;
