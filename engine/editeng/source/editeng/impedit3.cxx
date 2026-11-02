@@ -3583,7 +3583,10 @@ Point ImpEditEngine::MoveToNextLine(
         = getYOverflowDirectionAware(rMovePos, tools::Rectangle::Normalize(Point(0, 0), aOtherCorner));
     if (pnHeightNeededToNotWrap)
         *pnHeightNeededToNotWrap = nNeeded;
-    if (nNeeded && rColumn < mnColumns)
+    // A single column has nothing to wrap into. Fitted text leaves the space below its last line
+    // out of mnCurTextHeight, so that line would otherwise end up past the only column, where
+    // GetPortionAndLine() never finds it.
+    if (nNeeded && mnColumns > 1 && rColumn < mnColumns)
     {
         ++rColumn;
         // If we didn't fit into the last column, indicate that only by setting the column number

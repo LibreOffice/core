@@ -240,6 +240,7 @@ public:
     void testKeyInDeletedParagraph();
     void testOutlinerKeyInDeletedParagraph();
     void testCursorReachesTheSameDepthBelowTheBaseline();
+    void testPositionInTheOnlyLineOfFittedText();
 
     // Fills rOutliner's edit engine so that paragraph 0 holds one URL field
     // long enough to wrap onto several sublines, with rTailText supplying
@@ -316,6 +317,7 @@ public:
     CPPUNIT_TEST(testKeyInDeletedParagraph);
     CPPUNIT_TEST(testOutlinerKeyInDeletedParagraph);
     CPPUNIT_TEST(testCursorReachesTheSameDepthBelowTheBaseline);
+    CPPUNIT_TEST(testPositionInTheOnlyLineOfFittedText);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3750,6 +3752,35 @@ void Test::testCursorReachesTheSameDepthBelowTheBaseline()
     CPPUNIT_ASSERT_EQUAL(nSingle, depthBelowBaseline(200));
 
     aEditEngine.RemoveView(&aEditView);
+}
+
+/*
+ * Fitted text leaves the space below its last line out of the text height. In a single column,
+ * that must not put the last line into a column of its own: a point on that line found no line at
+ * all, and a click there left the view with a selection in no paragraph.
+ */
+void Test::testPositionInTheOnlyLineOfFittedText()
+{
+    EditEngine aEditEngine(mpItemPool.get());
+    aEditEngine.SetFixedCellHeight(true);
+    aEditEngine.setTextFitting(EETextFitting::Body);
+    aEditEngine.SetPaperSize(Size(10000, 10000));
+    aEditEngine.SetText(u"A x B x C x 0 x E = 0"_ustr);
+
+    SfxItemSet aSet(aEditEngine.GetEmptyItemSet());
+    SvxLineSpacingItem aLineSpacing(LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL);
+    aLineSpacing.SetPropLineSpace(150);
+    aSet.Put(aLineSpacing);
+    aEditEngine.QuickSetAttribs(aSet, ESelection(0, 0, 0, 21));
+    aEditEngine.QuickFormatDoc();
+
+    // The text height leaves out part of the line.
+    const tools::Long nTextHeight = aEditEngine.GetTextHeight();
+    CPPUNIT_ASSERT_LESS(tools::Long(aEditEngine.GetLineHeight(0)), nTextHeight);
+
+    // Without the fix in place, this was EPaM::NotFound().
+    const EPaM aPos = aEditEngine.FindDocPosition(Point(0, nTextHeight / 2));
+    CPPUNIT_ASSERT_EQUAL(EPaM(0, 0), aPos);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
