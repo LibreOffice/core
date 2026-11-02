@@ -39,7 +39,7 @@ class B2DPolyPolygon;
 
 namespace cairocanvas
 {
-enum Operation
+enum class Operation
 {
     Stroke,
     Fill,

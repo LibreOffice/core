@@ -128,7 +128,7 @@ namespace cairocanvas
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(
                     rClip ));
 
-            doPolyPolygonImplementation( aClipPoly, Clip, pCairo.get(),
+            doPolyPolygonImplementation( aClipPoly, Operation::Clip, pCairo.get(),
                                          nullptr, SurfaceProviderRef(mpSpriteCanvas),
                                          rClip->getFillRule() );
         }

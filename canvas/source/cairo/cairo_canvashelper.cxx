@@ -128,7 +128,7 @@ void CanvasHelper::useStates(const rendering::ViewState& viewState,
         aViewMatrix.x0 = basegfx::fround(aViewMatrix.x0);
         aViewMatrix.y0 = basegfx::fround(aViewMatrix.y0);
         cairo_set_matrix(mpCairo.get(), &aViewMatrix);
-        doPolyPolygonPath(viewState.Clip, Clip);
+        doPolyPolygonPath(viewState.Clip, Operation::Clip);
     }
 
     aCombinedMatrix.x0 = basegfx::fround(aCombinedMatrix.x0);
@@ -139,7 +139,7 @@ void CanvasHelper::useStates(const rendering::ViewState& viewState,
     {
         SAL_INFO("canvas.cairo", "render clip BEGIN");
 
-        doPolyPolygonPath(renderState.Clip, Clip);
+        doPolyPolygonPath(renderState.Clip, Operation::Clip);
         SAL_INFO("canvas.cairo", "render clip END");
     }
 
@@ -437,7 +437,7 @@ static void doOperation(Operation aOperation, cairo_t* pCairo,
 {
     switch (aOperation)
     {
-        case Fill:
+        case Operation::Fill:
             /* TODO: multitexturing */
             if (pTextures)
             {
@@ -607,11 +607,11 @@ static void doOperation(Operation aOperation, cairo_t* pCairo,
                 cairo_fill(pCairo);
             SAL_INFO("canvas.cairo", "fill");
             break;
-        case Stroke:
+        case Operation::Stroke:
             cairo_stroke(pCairo);
             SAL_INFO("canvas.cairo", "stroke");
             break;
-        case Clip:
+        case Operation::Clip:
             cairo_clip(pCairo);
             SAL_INFO("canvas.cairo", "clip");
             break;
@@ -685,13 +685,13 @@ void doPolyPolygonImplementation(const ::basegfx::B2DPolyPolygon& aPolyPolygon,
                 nY = aP.getY();
                 cairo_matrix_transform_point(&aOrigMatrix, &nX, &nY);
 
-                if (!bIsBezier && aOperation == Clip)
+                if (!bIsBezier && aOperation == Operation::Clip)
                 {
                     nX = basegfx::fround(nX);
                     nY = basegfx::fround(nY);
                 }
 
-                if (aOperation == Stroke)
+                if (aOperation == Operation::Stroke)
                 {
                     nX += 0.5;
                     nY += 0.5;
@@ -717,7 +717,7 @@ void doPolyPolygonImplementation(const ::basegfx::B2DPolyPolygon& aPolyPolygon,
                         cairo_matrix_transform_point(&aOrigMatrix, &nAX, &nAY);
                         cairo_matrix_transform_point(&aOrigMatrix, &nBX, &nBY);
 
-                        if (aOperation == Stroke)
+                        if (aOperation == Operation::Stroke)
                         {
                             nAX += 0.5;
                             nAY += 0.5;
@@ -761,8 +761,8 @@ void doPolyPolygonImplementation(const ::basegfx::B2DPolyPolygon& aPolyPolygon,
         }
         else
         {
-            SAL_INFO("canvas.cairo", "empty polygon for op: " << aOperation);
-            if (aOperation == Clip)
+            SAL_INFO("canvas.cairo", "empty polygon for op: " << static_cast<int>(aOperation));
+            if (aOperation == Operation::Clip)
             {
                 clipNULL(pCairo);
 
@@ -771,19 +771,19 @@ void doPolyPolygonImplementation(const ::basegfx::B2DPolyPolygon& aPolyPolygon,
         }
     }
 
-    if (aOperation == Fill && pTextures)
+    if (aOperation == Operation::Fill && pTextures)
     {
         cairo_set_matrix(pCairo, &aOrigMatrix);
         doOperation(aOperation, pCairo, pTextures, pDevice, aPolyPolygon.getB2DRange());
         cairo_set_matrix(pCairo, &aIdentityMatrix);
     }
 
-    if (bOpToDo && (aOperation != Fill || !pTextures))
+    if (bOpToDo && (aOperation != Operation::Fill || !pTextures))
         doOperation(aOperation, pCairo, pTextures, pDevice, aPolyPolygon.getB2DRange());
 
     cairo_set_matrix(pCairo, &aOrigMatrix);
 
-    if (aPolyPolygon.count() == 0 && aOperation == Clip)
+    if (aPolyPolygon.count() == 0 && aOperation == Operation::Clip)
         clipNULL(pCairo);
 }
 
@@ -796,7 +796,7 @@ void CanvasHelper::doPolyPolygonPath(const uno::Reference<rendering::XPolyPolygo
 
     cairo_t* pCairo = mpCairo.get();
 
-    if (bNoLineJoin && aOperation == Stroke)
+    if (bNoLineJoin && aOperation == Operation::Stroke)
     {
         // emulate rendering::PathJoinType::NONE by painting single edges
         for (sal_uInt32 a(0); a < aPolyPoly.count(); a++)
@@ -851,7 +851,7 @@ uno::Reference<rendering::XCachedPrimitive> CanvasHelper::drawPolyPolygon(
         cairo_set_line_width(mpCairo.get(), 1);
 
         useStates(viewState, renderState, true);
-        doPolyPolygonPath(xPolyPolygon, Stroke);
+        doPolyPolygonPath(xPolyPolygon, Operation::Stroke);
 
         cairo_restore(mpCairo.get());
     }
@@ -937,7 +937,7 @@ uno::Reference<rendering::XCachedPrimitive> CanvasHelper::strokePolyPolygon(
 
         // TODO(rodo) use LineArray of strokeAttributes
 
-        doPolyPolygonPath(xPolyPolygon, Stroke, bNoLineJoin);
+        doPolyPolygonPath(xPolyPolygon, Operation::Stroke, bNoLineJoin);
 
         cairo_restore(mpCairo.get());
     }
@@ -996,7 +996,7 @@ uno::Reference<rendering::XCachedPrimitive> CanvasHelper::fillPolyPolygon(
         cairo_save(mpCairo.get());
 
         useStates(viewState, renderState, true);
-        doPolyPolygonPath(xPolyPolygon, Fill);
+        doPolyPolygonPath(xPolyPolygon, Operation::Fill);
 
         cairo_restore(mpCairo.get());
     }
@@ -1020,7 +1020,7 @@ uno::Reference<rendering::XCachedPrimitive> CanvasHelper::fillTexturedPolyPolygo
         cairo_save(mpCairo.get());
 
         useStates(viewState, renderState, true);
-        doPolyPolygonPath(xPolyPolygon, Fill, false, &textures);
+        doPolyPolygonPath(xPolyPolygon, Operation::Fill, false, &textures);
 
         cairo_restore(mpCairo.get());
     }
