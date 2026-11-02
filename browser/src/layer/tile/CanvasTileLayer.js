@@ -2760,12 +2760,17 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 					scrollY = newSelection.pY1 - viewedRectangle.pY1 - spacingY;
 			}
 
-			if (!this._map.wholeColumnSelected && !this._map.wholeRowSelected) {
-				const address = document.querySelector('#addressInput input').value;
-				if (!this._isWholeColumnSelected(address) && !this._isWholeRowSelected(address)) {
-					app.activeDocument.activeLayout.scroll(scrollX, scrollY);
-				}
-			}
+			// A whole row reaches the last column and a whole column reaches the last row, so
+			// that edge is never in view. Scroll only along the other direction, which keeps
+			// the view following the selection as whole rows or columns are added to it.
+			const address = document.querySelector('#addressInput input').value;
+			if (this._map.wholeRowSelected || this._isWholeRowSelected(address))
+				scrollX = 0;
+			if (this._map.wholeColumnSelected || this._isWholeColumnSelected(address))
+				scrollY = 0;
+
+			if (scrollX !== 0 || scrollY !== 0)
+				app.activeDocument.activeLayout.scroll(scrollX, scrollY);
 		}
 	},
 
