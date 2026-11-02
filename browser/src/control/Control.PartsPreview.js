@@ -746,6 +746,21 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				class: 'slideproperties',
 				pos: 0,
 			});
+			if (isPresentation && !(app.impress.hasOverviewPage && that._map._docLayer._selectedPart === 0)) {
+				// The layout grid of the Change Layout toolbar button, without the separator
+				// entry that only gives that button its dropdown arrow.
+				const layoutMenu = JSDialog.MenuDefinitions.get('ChangeSlideLayoutMenu').filter(
+					function (item) { return item.type !== 'separator'; });
+				entries.push({
+					id: 'changelayout',
+					type: 'comboboxentry',
+					text: _('Layout'),
+					img: 'changelayout',
+					class: 'changelayout',
+					pos: 0,
+					items: layoutMenu,
+				});
+			}
 			if (isPresentation && app.impress.isSlideHidden(partIndex)) {
 				entries.push({
 					id: 'showslide',
@@ -800,12 +815,25 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				});
 			}
 
-			// In read-only mode the slide cannot be changed, but copying it is
-			// still allowed, so keep only Copy and drop the editing entries. The
-			// system menu is already suppressed, so when nothing is left (for
-			// example the overview page, which has no Copy entry) just close out.
+			if (isPresentation) {
+				entries.push({
+					id: 'startfromcurrent',
+					type: 'comboboxentry',
+					text: _('Start Slideshow from This Slide'),
+					img: 'presentation-currentslide',
+					class: 'startfromcurrent',
+					pos: 0,
+				});
+			}
+
+			// In read-only mode the slide cannot be changed, but copying it and
+			// presenting are still allowed, so drop only the editing entries. The
+			// system menu is already suppressed, so when nothing is left just
+			// close out.
 			if (app.map.isReadOnlyMode())
-				entries = entries.filter(function(entry) { return entry.id === 'copy'; });
+				entries = entries.filter(function(entry) {
+					return entry.id === 'copy' || entry.id === 'startfromcurrent';
+				});
 			if (entries.length === 0)
 				return;
 
@@ -815,6 +843,13 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			menuPosEl.style.top = (e.clientY - rect.top) + 'px';
 
 			var callback = function(objectType, eventType, object, data, entry) {
+				// A click on a cell of the layout grid in the Layout submenu.
+				if (objectType === 'toolbutton' && eventType === 'click' &&
+					typeof data === 'string' && data.indexOf('.uno:') === 0) {
+					that._map.sendUnoCommand(data);
+					JSDialog.CloseAllDropdowns();
+					return true;
+				}
 				if (eventType !== 'selected')
 					return false;
 				switch (entry.id) {
@@ -852,6 +887,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 					break;
 				case 'unlinkslide':
 					that._map.slideLinks.breakLink(img._part);
+					break;
+				case 'startfromcurrent':
+					app.dispatcher.dispatch('presentation-currentslide', { startSlideNumber: partIndex });
 					break;
 				}
 				JSDialog.CloseAllDropdowns();

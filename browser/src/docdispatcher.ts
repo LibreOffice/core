@@ -944,8 +944,12 @@ class Dispatcher {
 			} else app.map.fire('fullscreen');
 		};
 
-		this.actionsMap['presentation-currentslide'] = () => {
-			const startSlideNumber = app.map.getCurrentPartNumber();
+		// The slideshow starts at data.startSlideNumber when given, otherwise at the current slide.
+		this.actionsMap['presentation-currentslide'] = (data?: any) => {
+			const startSlideNumber =
+				data && data.startSlideNumber !== undefined
+					? data.startSlideNumber
+					: app.map.getCurrentPartNumber();
 			if (window.canvasSlideshowEnabled) {
 				if (app.map.uiManager.shouldShowPresenterConsole())
 					app.map.fire('newpresentinconsole', { startSlideNumber });
