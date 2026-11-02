@@ -1672,13 +1672,46 @@ private:
     std::optional<OUString> run_;
 };
 
+// The whole text of an element. An index is no text range itself, but its anchor spans all of its
+// paragraphs:
+cpo::uno::Reference<css::text::XTextRange> wholeRangeOf(
+    cpo::uno::Reference<scriptinterop::XElement> const & element)
+{
+    auto const uno = element->getuno();
+    if (cpo::uno::Reference<css::text::XDocumentIndex> const index{uno, cpo::uno::UNO_QUERY}) {
+        return index->getAnchor();
+    }
+    return cpo::uno::Reference<css::text::XTextRange>(uno, cpo::uno::UNO_QUERY);
+}
+
+// Whether the element is a table of contents or another index:
+bool isIndex(cpo::uno::Reference<scriptinterop::XElement> const & element) {
+    return cpo::uno::Reference<css::text::XDocumentIndex>(element->getuno(), cpo::uno::UNO_QUERY)
+        .is();
+}
+
+// Whether the element lies in a table of contents or another index:
+bool inIndex(cpo::uno::Reference<scriptinterop::XElement> const & element) {
+    for (auto parent = element->getParent(); parent.IsPresent; parent = parent.Value->getParent())
+    {
+        if (isIndex(parent.Value)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 cpo::uno::Reference<css::text::XTextRange> textRangeOf(
     cpo::uno::Reference<scriptinterop::XText> const & text)
 {
     if (auto const impl = dynamic_cast<TextImpl *>(text.get())) {
         return impl->wholeRange();
     }
-    return cpo::uno::Reference<css::text::XTextRange>(text->getuno(), cpo::uno::UNO_QUERY_THROW);
+    auto const range = wholeRangeOf(text);
+    if (!range.is()) {
+        throw cpo::uno::RuntimeException(u"the text has no range in the document"_ustr);
+    }
+    return range;
 }
 
 sal_Int32 childIndexOf(
@@ -3895,16 +3928,17 @@ private:
 // Walk the host XText and push one RangeElementImpl per paragraph that the raw range overlaps.
 // The sub-range for each paragraph is the intersection of the raw range with the paragraph's
 // extent, so a paragraph that lies fully inside the raw range becomes a non-partial element and
-// the first and last paragraphs become partial ones.  A table that lies fully inside the raw
-// range becomes a whole element, and an empty piece at either end, as when the raw range ends at
-// the start of the paragraph after a table, is dropped unless it is the only one (and a whole
-// paragraph in partial, as for a text given with offsets, is split at its inline images like a
-// partial one):
+// the first and last paragraphs become partial ones.  A table or an index that lies fully inside
+// the raw range becomes a whole element, and an empty piece at either end, as when the raw range
+// ends at the start of the paragraph after a table, is dropped unless it is the only one (and a
+// whole paragraph in partial, as for a text given with offsets, is split at its inline images like
+// a partial one).  With wholeIndexes false, the paragraphs of an index are always paragraphs:
 void splitAtParagraphBoundaries(
     std::shared_ptr<Model> const & model,
     cpo::uno::Reference<css::text::XTextRange> const & range,
     std::vector<cpo::uno::Reference<scriptinterop::XRangeElement>> & out,
-    std::set<cpo::uno::Reference<cpo::uno::XInterface>> const & partial = {})
+    std::set<cpo::uno::Reference<cpo::uno::XInterface>> const & partial = {},
+    bool wholeIndexes = true)
 {
     assert(range.is());
     auto host = range->getText();
@@ -3950,6 +3984,7 @@ void splitAtParagraphBoundaries(
         host, cpo::uno::UNO_QUERY_THROW);
     std::vector<cpo::uno::Reference<scriptinterop::XRangeElement>> pieces;
     std::vector<bool> empty;
+    cpo::uno::Reference<css::text::XTextContent> wholeIndex;
     auto const en = ea->createEnumeration();
     while (en.is() && en->hasMoreElements()) {
         cpo::uno::Reference<css::text::XTextContent> xtc;
@@ -3983,6 +4018,22 @@ void splitAtParagraphBoundaries(
             continue;
         }
         try {
+            // The paragraphs of an index that lies fully inside the raw range are that one index:
+            if (auto const index = wholeIndexes ? indexOf(xtc) : nullptr; index.is()) {
+                if (index == wholeIndex) {
+                    continue;
+                }
+                auto const anchor = index->getAnchor();
+                if (anchor.is() && cmp->compareRegionStarts(rStart, anchor) >= 0
+                    && cmp->compareRegionEnds(anchor, rEnd) >= 0)
+                {
+                    wholeIndex = index;
+                    pieces.emplace_back(new WholeElementRangeElementImpl(
+                        elementOf(model, containerOf(model, host), index)));
+                    empty.push_back(false);
+                    continue;
+                }
+            }
             if (cmp->compareRegionStarts(pRange->getEnd(), rStart) > 0) {
                 continue;
             }
@@ -5122,9 +5173,7 @@ cpo::uno::Reference<scriptinterop::XRangeBuilder> RangeBuilderImpl::addElement(
         break;
     }
     cpo::uno::Reference<scriptinterop::XText> const text(element, cpo::uno::UNO_QUERY);
-    auto const range = text.is()
-        ? textRangeOf(text)
-        : cpo::uno::Reference<css::text::XTextRange>(element->getuno(), cpo::uno::UNO_QUERY);
+    auto const range = text.is() ? textRangeOf(text) : wholeRangeOf(element);
     if (!range.is()) {
         throw cpo::uno::RuntimeException(
             u"addElement: only text elements can be added to a range"_ustr);
@@ -5477,11 +5526,16 @@ cpo::uno::Reference<scriptinterop::XSelection> RangeBuilderImpl::build() {
                 if (added.offsets) {
                     partial.emplace(findContainingParagraph(added.range), cpo::uno::UNO_QUERY);
                 }
-                splitAtParagraphBoundaries(model_, added.range, elements, partial);
+                // As in GAS, a paragraph of an index that is added is that paragraph, also when it
+                // is all of the index:
+                splitAtParagraphBoundaries(
+                    model_, added.range, elements, partial, !inIndex(added.element));
             }
             for (auto const & element: elements) {
                 auto position = pathOf(element->getElement());
-                if (element->getElement()->getType() == scriptinterop::ElementType_INLINE_IMAGE) {
+                if (element->getElement()->getType() == scriptinterop::ElementType_INLINE_IMAGE
+                    || isIndex(element->getElement()))
+                {
                     pieces.push_back({element, std::move(position), false});
                 } else if (element->isPartial()) {
                     auto const child = position.back();
@@ -5559,18 +5613,22 @@ cpo::uno::Reference<scriptinterop::XSelection> RangeBuilderImpl::build() {
             || type == scriptinterop::ElementType_TABLE_ROW
             || type == scriptinterop::ElementType_TABLE_CELL;
     };
+    // An index is selected as its text:
+    auto const isText = [](Piece const & p) { return p.text || isIndex(p.element->getElement()); };
     cpo::uno::Reference<cpo::uno::XInterface> uno;
-    if (std::any_of(kept.begin(), kept.end(), [](Piece const & p) { return p.text; })
-        && std::all_of(kept.begin(), kept.end(), [&isTable, &isImage](Piece const & p) {
-               return p.text || isTable(p) || isImage(p);
+    if (std::any_of(kept.begin(), kept.end(), isText)
+        && std::all_of(kept.begin(), kept.end(), [&isText, &isTable, &isImage](Piece const & p) {
+               return isText(p) || isTable(p) || isImage(p);
            }))
     {
-        auto const boundary = [&isImage](Piece const & piece, bool start)
+        auto const boundary = [&isText, &isImage](Piece const & piece, bool start)
             -> cpo::uno::Reference<css::text::XTextRange>
         {
-            if (piece.text) {
-                cpo::uno::Reference<css::text::XTextRange> const range(
-                    piece.element->getuno(), cpo::uno::UNO_QUERY_THROW);
+            if (isText(piece)) {
+                auto const range = piece.text
+                    ? cpo::uno::Reference<css::text::XTextRange>(
+                        piece.element->getuno(), cpo::uno::UNO_QUERY_THROW)
+                    : wholeRangeOf(piece.element->getElement());
                 return start ? range->getStart() : range->getEnd();
             }
             // An inline image takes up the one step of its anchor:
@@ -5614,7 +5672,11 @@ cpo::uno::Reference<scriptinterop::XSelection> RangeBuilderImpl::build() {
                     partial.insert(piece.paragraph);
                 }
             }
-            splitAtParagraphBoundaries(model_, cursor, whole, partial);
+            splitAtParagraphBoundaries(
+                model_, cursor, whole, partial,
+                std::none_of(kept.begin(), kept.end(), [](Piece const & p) {
+                    return inIndex(p.element->getElement());
+                }));
             // An empty paragraph at either end of the range, which Writer cannot tell from the
             // boundary of the text next to it, is left out as when splitting (unlike one that holds
             // only inline images):
@@ -5656,12 +5718,14 @@ cpo::uno::Reference<scriptinterop::XSelection> RangeBuilderImpl::build() {
             }
         }
         // Texts that Writer cannot select as one range are selected as one range for each text:
-        if (!uno.is()
-            && std::all_of(kept.begin(), kept.end(), [](Piece const & p) { return p.text; }))
-        {
+        if (!uno.is() && std::all_of(kept.begin(), kept.end(), isText)) {
             std::vector<cpo::uno::Reference<css::text::XTextRange>> ranges;
             for (auto const & piece: kept) {
-                ranges.emplace_back(piece.element->getuno(), cpo::uno::UNO_QUERY_THROW);
+                if (piece.text) {
+                    ranges.emplace_back(piece.element->getuno(), cpo::uno::UNO_QUERY_THROW);
+                } else {
+                    ranges.push_back(wholeRangeOf(piece.element->getElement()));
+                }
             }
             uno = static_cast<cppu::OWeakObject *>(new TextRangesIndex(std::move(ranges)));
         }
@@ -5912,8 +5976,10 @@ public:
                 + OUString::number(n) + " children");
         }
         if (offset == n) {
-            cpo::uno::Reference<css::text::XTextRange> const whole(
-                element->getuno(), cpo::uno::UNO_QUERY_THROW);
+            auto const whole = wholeRangeOf(element);
+            if (!whole.is()) {
+                throw cpo::uno::RuntimeException(u"newPosition: the element has no end"_ustr);
+            }
             return new CursorImpl(model_, whole->getEnd(), element, offset);
         }
         auto const childElement = container->getChild(offset);

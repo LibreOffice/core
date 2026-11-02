@@ -56,6 +56,39 @@ function test() {
         console.assert(caught === message);
     }
 
+    // A range holds a whole table of contents as one element, and an entry that is added on its own
+    // as a paragraph:
+    const doc = DocumentApp.getActiveDocument();
+    const describe = range => range.getRangeElements().map(
+        e => String(e.getElement().getType()) + (e.isPartial() ? '-partial' : '')).join(',');
+    console.assert(describe(doc.newRange().addElement(toc).build()) === 'TABLE_OF_CONTENTS');
+    console.assert(
+        describe(doc.newRange().addElement(toc.editAsText()).build()) === 'TABLE_OF_CONTENTS');
+    console.assert(describe(doc.newRange().addElement(toc.getChild(0)).build()) === 'PARAGRAPH');
+    console.assert(describe(doc.newRange().addElement(body.getChild(4)).build()) === 'UNSUPPORTED');
+    console.assert(
+        describe(doc.newRange().addElementRange(toc.editAsText(), 0, 3).build())
+        === 'TEXT-partial');
+    const between = doc.newRange().addElementsBetween(body.getChild(0), body.getChild(3)).build();
+    console.assert(describe(between) === 'PARAGRAPH,TABLE_OF_CONTENTS,PARAGRAPH,PARAGRAPH');
+    console.assert(between.getRangeElements()[1].getElement().getText().startsWith('Heading'));
+    console.assert(
+        describe(doc.newRange().addElementsBetween(toc.getChild(0), body.getChild(3)).build())
+        === 'PARAGRAPH,PARAGRAPH,PARAGRAPH');
+
+    // The view selects the whole table of contents, and the selection keeps it as one element:
+    doc.setSelection(doc.newRange().addElement(toc).build());
+    console.assert(describe(doc.getSelection()) === 'TABLE_OF_CONTENTS');
+    doc.setSelection(between);
+    console.assert(
+        describe(doc.getSelection()) === 'PARAGRAPH,TABLE_OF_CONTENTS,PARAGRAPH,PARAGRAPH');
+
+    // A position can be at the end of a table of contents:
+    doc.setCursor(doc.newPosition(toc, 1));
+    console.assert(
+        doc.getCursor().getElement().getType() === DocumentApp.ElementType.TABLE_OF_CONTENTS);
+    console.assert(doc.getCursor().getOffset() === 1);
+
     // The text of the body and its text for editing include the entry, so an offset found in one
     // is the same place in the other:
     console.assert(body.getText() === body.editAsText().getText());

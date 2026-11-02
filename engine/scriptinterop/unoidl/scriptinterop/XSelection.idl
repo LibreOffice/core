@@ -14,8 +14,8 @@ module scriptinterop {
 /** A selected range of the document: the user's selection from XDocument.getSelection, or a range
     built with XDocument.newRange.
 
-    It holds text, which can span several ranges and paragraphs, whole tables, table rows or table
-    cells, or a single inline image.
+    It holds text, which can span several ranges and paragraphs, whole tables, table rows, table
+    cells or tables of contents, or a single inline image.
 
     @gas Range
  */
@@ -23,8 +23,8 @@ interface XSelection : XBase
 {
     /** Returns the parts of the selection in document order.
 
-        Text gives one part per paragraph that it touches. A whole table, table row, table cell or
-        inline image gives one part of its own.
+        Text gives one part per paragraph that it touches. A whole table, table row, table cell,
+        table of contents or inline image gives one part of its own.
 
         @throws RuntimeException
             if the selection holds something other than text.

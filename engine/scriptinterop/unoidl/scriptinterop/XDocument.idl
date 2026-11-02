@@ -72,8 +72,8 @@ interface XDocument : XBase
         @param element
             The element that the position is in: an element of type TEXT, such as a child of a
             paragraph, the text that editAsText returns for a paragraph, or a paragraph, list item,
-            table cell, body or footnote section. The text that editAsText returns for the body is
-            not accepted, and neither are a table and a table row.
+            table cell, table of contents, body or footnote section. The text that editAsText
+            returns for the body is not accepted, and neither are a table and a table row.
         @param offset
             For an element of type TEXT, the character offset, from 0 to the length of getText()
             and counted as in XText. For any other element, the 0-based index of the child that

@@ -14,7 +14,7 @@ module scriptinterop {
 /** Builds a selection range, to pass to XDocument.setSelection.
 
     The built range holds the added elements in document order, each one once. An element that lies
-    inside an added table, table row or table cell is left out.
+    inside an added table, table row, table cell or table of contents is left out.
 
     @gas RangeBuilder
  */
@@ -22,8 +22,9 @@ interface XRangeBuilder {
     /** Adds the whole of the given element to the range.
 
         @param element
-            A text element such as a paragraph or the body, a table, a table row, a table cell or
-            an inline image. The text of a container stands for the container.
+            A text element such as a paragraph or the body, a table, a table row, a table cell, a
+            table of contents or an inline image. The text of a container stands for the
+            container.
         @throws RuntimeException
             if element is null or has no text in the document, such as a footnote.
 
