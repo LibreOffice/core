@@ -100,6 +100,7 @@ namespace basegfx
         if(mnEdgeCount == 1)
         {
             // not a bezier, linear edge
+            // coverity[divide_by_zero : FALSE] - a zero length returns early above
             return fDistance / fLength;
         }
 
