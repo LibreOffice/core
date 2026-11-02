@@ -26,11 +26,9 @@ namespace oglcanvas
 {
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XCustomSprite,
                                              css::rendering::XCanvas > CanvasCustomSpriteBase_Base;
-    typedef ::canvas::CanvasBase<
-         ::canvas::BaseMutexHelper< CanvasCustomSpriteBase_Base >,
-         CanvasHelper,
-         ::osl::MutexGuard,
-         ::cppu::OWeakObject >                          CanvasCustomSpriteBaseT;
+    typedef ::canvas::CanvasBase<::canvas::BaseMutexHelper<CanvasCustomSpriteBase_Base>,
+                                 CanvasHelper, ::osl::MutexGuard>
+        CanvasCustomSpriteBaseT;
 
     /* Definition of CanvasCustomSprite class */
 

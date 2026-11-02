@@ -110,9 +110,8 @@ namespace canvas
                         const css::rendering::ViewState&                                   viewState,
                         const css::rendering::RenderState&                                 renderState ) override
         {
-            canvastools::verifyArgs(xBitmap, viewState, renderState,
-                              __func__,
-                              static_cast< typename BaseType::UnambiguousBaseType* >(this));
+            canvastools::verifyArgs(xBitmap, viewState, renderState, __func__,
+                                    static_cast<cppu::OWeakObject*>(this));
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -145,9 +144,8 @@ namespace canvas
                                     const css::rendering::ViewState&   viewState,
                                     const css::rendering::RenderState& renderState ) override
         {
-            canvastools::verifyArgs(aNewPos, viewState, renderState,
-                              __func__,
-                              static_cast< typename BaseType::UnambiguousBaseType* >(this));
+            canvastools::verifyArgs(aNewPos, viewState, renderState, __func__,
+                                    static_cast<cppu::OWeakObject*>(this));
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -156,9 +154,8 @@ namespace canvas
 
         virtual void SAL_CALL transform( const css::geometry::AffineMatrix2D& aTransformation ) override
         {
-            canvastools::verifyArgs(aTransformation,
-                              __func__,
-                              static_cast< typename BaseType::UnambiguousBaseType* >(this));
+            canvastools::verifyArgs(aTransformation, __func__,
+                                    static_cast<cppu::OWeakObject*>(this));
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 

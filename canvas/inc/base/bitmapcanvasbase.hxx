@@ -59,10 +59,10 @@ namespace canvas
     the CanvasHelper type, and some examples.
  */
 template <class Base, class CanvasHelper, class Mutex = ::osl::MutexGuard>
-class BitmapCanvasBase : public CanvasBase<Base, CanvasHelper, Mutex, cppu::OWeakObject>
+class BitmapCanvasBase : public CanvasBase<Base, CanvasHelper, Mutex>
 {
 public:
-    typedef CanvasBase<Base, CanvasHelper, Mutex, cppu::OWeakObject> BaseType;
+    typedef CanvasBase<Base, CanvasHelper, Mutex> BaseType;
 
     // XBitmap
     virtual css::geometry::IntegerSize2D SAL_CALL getSize() override

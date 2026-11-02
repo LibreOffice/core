@@ -59,10 +59,7 @@ namespace dxcanvas
                                            DeviceHelper,
                                            ::osl::MutexGuard,
                                            ::cppu::OWeakObject >    CanvasBase1_Base;
-    typedef ::canvas::CanvasBase< CanvasBase1_Base,
-                                  CanvasHelper,
-                                  ::osl::MutexGuard,
-                                  ::cppu::OWeakObject >     CanvasBaseT;
+    typedef ::canvas::CanvasBase<CanvasBase1_Base, CanvasHelper, ::osl::MutexGuard> CanvasBaseT;
 
     /** Product of this component's factory.
 

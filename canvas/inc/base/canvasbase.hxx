@@ -22,6 +22,8 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/rendering/TextDirection.hpp>
+
+#include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
 #include <verifyinput.hxx>
 
@@ -102,20 +104,13 @@ namespace canvas
     entered, an object of type Mutex is created with m_aMutex as
     the sole parameter, and destroyed again when the method scope
     is left.
-
-    @tpl UnambiguousBase
-    Optional unambiguous base class for XInterface of Base. It's
-    sometimes necessary to specify this parameter, e.g. if Base
-    derives from multiple UNO interface (were each provides its
-    own version of XInterface, making the conversion ambiguous)
 */
-template <class BaseType, class CanvasHelper, class Mutex = ::osl::MutexGuard,
-          class UnambiguousBase = css::uno::XInterface>
+template <std::derived_from<cppu::OWeakObject> BaseType, class CanvasHelper,
+          class Mutex = ::osl::MutexGuard>
 class CanvasBase : public BaseType
 {
 public:
     typedef Mutex MutexType;
-    typedef UnambiguousBase UnambiguousBaseType;
 
     /** Create CanvasBase
          */
@@ -150,7 +145,7 @@ public:
                                     const css::rendering::RenderState& renderState) override
     {
         canvastools::verifyArgs(aPoint, viewState, renderState, __func__,
-                                static_cast<UnambiguousBaseType*>(this));
+                                static_cast<cppu::OWeakObject*>(this));
 
         MutexType aGuard(BaseType::m_aMutex);
 
@@ -163,7 +158,7 @@ public:
                                    const css::rendering::RenderState& renderState) override
     {
         canvastools::verifyArgs(aStartPoint, aEndPoint, viewState, renderState, __func__,
-                                static_cast<UnambiguousBaseType*>(this));
+                                static_cast<cppu::OWeakObject*>(this));
 
         MutexType aGuard(BaseType::m_aMutex);
 
@@ -178,7 +173,7 @@ public:
                                      const css::rendering::RenderState& renderState) override
     {
         canvastools::verifyArgs(aBezierSegment, aEndPoint, viewState, renderState, __func__,
-                                static_cast<UnambiguousBaseType*>(this));
+                                static_cast<cppu::OWeakObject*>(this));
 
         MutexType aGuard(BaseType::m_aMutex);
 
@@ -193,7 +188,7 @@ public:
                     const css::rendering::RenderState& renderState) override
     {
         canvastools::verifyArgs(xPolyPolygon, viewState, renderState, __func__,
-                                static_cast<UnambiguousBaseType*>(this));
+                                static_cast<cppu::OWeakObject*>(this));
 
         MutexType aGuard(BaseType::m_aMutex);
 
@@ -208,7 +203,7 @@ public:
         const css::rendering::StrokeAttributes& strokeAttributes) override
     {
         canvastools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes, __func__,
-                                static_cast<UnambiguousBaseType*>(this));
+                                static_cast<cppu::OWeakObject*>(this));
 
         MutexType aGuard(BaseType::m_aMutex);
 
@@ -227,7 +222,7 @@ public:
             const css::rendering::StrokeAttributes& strokeAttributes) override
     {
         canvastools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes, __func__,
-                                static_cast<UnambiguousBaseType*>(this));
+                                static_cast<cppu::OWeakObject*>(this));
 
         MutexType aGuard(BaseType::m_aMutex);
 
@@ -247,8 +242,7 @@ public:
             const css::rendering::StrokeAttributes& strokeAttributes) override
     {
         canvastools::verifyArgs(xPolyPolygon, viewState, renderState, textures, xMapping,
-                                strokeAttributes, __func__,
-                                static_cast<UnambiguousBaseType*>(this));
+                                strokeAttributes, __func__, static_cast<cppu::OWeakObject*>(this));
 
         MutexType aGuard(BaseType::m_aMutex);
 
@@ -264,7 +258,7 @@ public:
         const css::rendering::StrokeAttributes& strokeAttributes) override
     {
         canvastools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes, __func__,
-                                static_cast<UnambiguousBaseType*>(this));
+                                static_cast<cppu::OWeakObject*>(this));
 
         MutexType aGuard(BaseType::m_aMutex);
 
@@ -280,7 +274,7 @@ public:
                     const css::rendering::RenderState& renderState) override
     {
         canvastools::verifyArgs(xPolyPolygon, viewState, renderState, __func__,
-                                static_cast<UnambiguousBaseType*>(this));
+                                static_cast<cppu::OWeakObject*>(this));
 
         MutexType aGuard(BaseType::m_aMutex);
 
@@ -295,7 +289,7 @@ public:
         const css::uno::Sequence<css::rendering::Texture>& textures) override
     {
         canvastools::verifyArgs(xPolyPolygon, viewState, renderState, textures, __func__,
-                                static_cast<UnambiguousBaseType*>(this));
+                                static_cast<cppu::OWeakObject*>(this));
 
         MutexType aGuard(BaseType::m_aMutex);
 
@@ -314,7 +308,7 @@ public:
             const css::uno::Reference<css::geometry::XMapping2D>& xMapping) override
     {
         canvastools::verifyArgs(xPolyPolygon, viewState, renderState, textures, xMapping, __func__,
-                                static_cast<UnambiguousBaseType*>(this));
+                                static_cast<cppu::OWeakObject*>(this));
 
         MutexType aGuard(BaseType::m_aMutex);
 
@@ -332,7 +326,7 @@ public:
         canvastools::verifyArgs(fontRequest,
                                 // dummy, to keep argPos in sync
                                 fontRequest, fontMatrix, __func__,
-                                static_cast<UnambiguousBaseType*>(this));
+                                static_cast<cppu::OWeakObject*>(this));
 
         MutexType aGuard(BaseType::m_aMutex);
 
@@ -343,7 +337,7 @@ public:
         const css::rendering::FontInfo& aFilter,
         const css::uno::Sequence<css::beans::PropertyValue>& aFontProperties) override
     {
-        canvastools::verifyArgs(aFilter, __func__, static_cast<UnambiguousBaseType*>(this));
+        canvastools::verifyArgs(aFilter, __func__, static_cast<cppu::OWeakObject*>(this));
 
         MutexType aGuard(BaseType::m_aMutex);
 
@@ -358,7 +352,7 @@ public:
                           sal_Int8 textDirection) override
     {
         canvastools::verifyArgs(xFont, viewState, renderState, __func__,
-                                static_cast<UnambiguousBaseType*>(this));
+                                static_cast<cppu::OWeakObject*>(this));
         canvastools::verifyRange(textDirection, css::rendering::TextDirection::WEAK_LEFT_TO_RIGHT,
                                  css::rendering::TextDirection::STRONG_RIGHT_TO_LEFT);
 
@@ -375,7 +369,7 @@ public:
                                 const css::rendering::RenderState& renderState) override
     {
         canvastools::verifyArgs(laidOutText, viewState, renderState, __func__,
-                                static_cast<UnambiguousBaseType*>(this));
+                                static_cast<cppu::OWeakObject*>(this));
 
         MutexType aGuard(BaseType::m_aMutex);
 
@@ -390,7 +384,7 @@ public:
                             const css::rendering::RenderState& renderState) override
     {
         canvastools::verifyArgs(xBitmap, viewState, renderState, __func__,
-                                static_cast<UnambiguousBaseType*>(this));
+                                static_cast<cppu::OWeakObject*>(this));
 
         MutexType aGuard(BaseType::m_aMutex);
 
@@ -405,7 +399,7 @@ public:
                                      const css::rendering::RenderState& renderState) override
     {
         canvastools::verifyArgs(xBitmap, viewState, renderState, __func__,
-                                static_cast<UnambiguousBaseType*>(this));
+                                static_cast<cppu::OWeakObject*>(this));
 
         MutexType aGuard(BaseType::m_aMutex);
 

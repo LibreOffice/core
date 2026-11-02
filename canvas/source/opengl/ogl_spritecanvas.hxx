@@ -49,10 +49,8 @@ namespace oglcanvas
         ::osl::MutexGuard,
         ::cppu::OWeakObject >  SpriteCanvasDeviceBaseT;
 
-    typedef ::canvas::CanvasBase< SpriteCanvasDeviceBaseT,
-                                  CanvasHelper,
-                                  ::osl::MutexGuard,
-                                  ::cppu::OWeakObject >         SpriteCanvasBaseT;
+    typedef ::canvas::CanvasBase<SpriteCanvasDeviceBaseT, CanvasHelper, ::osl::MutexGuard>
+        SpriteCanvasBaseT;
 
     /** Product of this component's factory.
 

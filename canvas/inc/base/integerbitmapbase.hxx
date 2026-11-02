@@ -22,6 +22,7 @@
 #include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
 #include <verifyinput.hxx>
 
+#include <cppuhelper/weak.hxx>
 
 namespace canvas
 {
@@ -35,7 +36,7 @@ namespace canvas
         Either BitmapCanvasBase (just XBitmap) or BitmapCanvasBase2 (XBitmap and
         XBitmapCanvas).
      */
-    template< class Base > class IntegerBitmapBase :
+    template<std::derived_from<cppu::OWeakObject> Base > class IntegerBitmapBase :
         public Base
     {
     public:
@@ -43,9 +44,7 @@ namespace canvas
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getData( css::rendering::IntegerBitmapLayout&     bitmapLayout,
                                                                               const css::geometry::IntegerRectangle2D& rect ) override
         {
-            canvastools::verifyArgs(rect,
-                              __func__,
-                              static_cast< typename Base::UnambiguousBaseType* >(this));
+            canvastools::verifyArgs(rect, __func__, static_cast<cppu::OWeakObject*>(this));
             canvastools::verifyIndexRange(rect, Base::getSize() );
 
             typename Base::MutexType aGuard( Base::m_aMutex );
@@ -58,9 +57,8 @@ namespace canvas
                                        const css::rendering::IntegerBitmapLayout& bitmapLayout,
                                        const css::geometry::IntegerRectangle2D&   rect ) override
         {
-            canvastools::verifyArgs(bitmapLayout, rect,
-                              __func__,
-                              static_cast< typename Base::UnambiguousBaseType* >(this));
+            canvastools::verifyArgs(bitmapLayout, rect, __func__,
+                                    static_cast<cppu::OWeakObject*>(this));
             canvastools::verifyIndexRange(rect, Base::getSize() );
 
             typename Base::MutexType aGuard( Base::m_aMutex );
@@ -72,9 +70,8 @@ namespace canvas
                                         const css::rendering::IntegerBitmapLayout& bitmapLayout,
                                         const css::geometry::IntegerPoint2D&       pos ) override
         {
-            canvastools::verifyArgs(bitmapLayout, pos,
-                              __func__,
-                              static_cast< typename Base::UnambiguousBaseType* >(this));
+            canvastools::verifyArgs(bitmapLayout, pos, __func__,
+                                    static_cast<cppu::OWeakObject*>(this));
             canvastools::verifyIndexRange(pos, Base::getSize() );
 
             typename Base::MutexType aGuard( Base::m_aMutex );
@@ -85,9 +82,7 @@ namespace canvas
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout,
                                                                   const css::geometry::IntegerPoint2D& pos ) override
         {
-            canvastools::verifyArgs(pos,
-                              __func__,
-                              static_cast< typename Base::UnambiguousBaseType* >(this));
+            canvastools::verifyArgs(pos, __func__, static_cast<cppu::OWeakObject*>(this));
             canvastools::verifyIndexRange(pos, Base::getSize() );
 
             typename Base::MutexType aGuard( Base::m_aMutex );

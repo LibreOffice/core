@@ -89,9 +89,7 @@ namespace canvas
         // XSpriteCanvas
         virtual css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL createSpriteFromAnimation( const css::uno::Reference< css::rendering::XAnimation >& animation ) override
         {
-            canvastools::verifyArgs(animation,
-                              __func__,
-                              static_cast< typename BaseType::UnambiguousBaseType* >(this));
+            canvastools::verifyArgs(animation, __func__, static_cast<cppu::OWeakObject*>(this));
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -101,9 +99,8 @@ namespace canvas
         virtual css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL createSpriteFromBitmaps( const css::uno::Sequence< css::uno::Reference< css::rendering::XBitmap > >& animationBitmaps,
                                                                                                                                    sal_Int8                                                                                                           interpolationMode ) override
         {
-            canvastools::verifyArgs(animationBitmaps,
-                              __func__,
-                              static_cast< typename BaseType::UnambiguousBaseType* >(this));
+            canvastools::verifyArgs(animationBitmaps, __func__,
+                                    static_cast<cppu::OWeakObject*>(this));
             canvastools::verifyRange( interpolationMode,
                                 css::rendering::InterpolationMode::NEAREST_NEIGHBOR,
                                 css::rendering::InterpolationMode::BEZIERSPLINE4 );
@@ -115,9 +112,8 @@ namespace canvas
 
         virtual css::uno::Reference< css::rendering::XCustomSprite > SAL_CALL createCustomSprite( const css::geometry::RealSize2D& spriteSize ) override
         {
-            canvastools::verifySpriteSize(spriteSize,
-                                    __func__,
-                                    static_cast< typename BaseType::UnambiguousBaseType* >(this));
+            canvastools::verifySpriteSize(spriteSize, __func__,
+                                          static_cast<cppu::OWeakObject*>(this));
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -126,9 +122,7 @@ namespace canvas
 
         virtual css::uno::Reference< css::rendering::XSprite > SAL_CALL createClonedSprite( const css::uno::Reference< css::rendering::XSprite >& original ) override
         {
-            canvastools::verifyArgs(original,
-                              __func__,
-                              static_cast< typename BaseType::UnambiguousBaseType* >(this));
+            canvastools::verifyArgs(original, __func__, static_cast<cppu::OWeakObject*>(this));
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
