@@ -740,7 +740,11 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			}
 		}
 
-		if (firstFocusableElement && document.activeElement !== firstFocusableElement && !instance.isAutoCompletePopup) {
+		// A dialog that cannot have focus, such as a snackbar, moves the focus only to the element it
+		// names for it, so text typed into the document keeps going there.
+		const mayTakeFocus = instance.canHaveFocus || !!instance.init_focus_id;
+		if (firstFocusableElement && document.activeElement !== firstFocusableElement && !instance.isAutoCompletePopup
+			&& mayTakeFocus) {
 			// for tab control case we have more then 1 element that can be focusable so select the first tab for the list
 			if (Array.isArray(firstFocusableElement))
 				firstFocusableElement = firstFocusableElement[0];

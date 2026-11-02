@@ -194,6 +194,83 @@ describe(['tagdesktop'], 'JSDialog unit test', { testIsolation: false }, functio
 		cy.cGet('#snackbar').should('not.exist');
 	});
 
+	// The feedback prompt appears on its own after a while, so someone may be typing when it
+	// shows. Their next key presses still go into the document, and an Enter does not open the
+	// feedback form.
+	it('Feedback prompt leaves the keyboard focus in the document', function() {
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.focus();
+		});
+		cy.cGet('div.clipboard').should('have.focus');
+
+		cy.getFrameWindow().then(function(win) {
+			const feedback = Object.create(win.L.Map.Feedback.prototype);
+			feedback._map = win.app.map;
+			feedback.askForFeedbackDialog();
+		});
+		cy.cGet('#snackbar').should('be.visible');
+		cy.cGet('#snackbar').should('contain.text', 'feedback');
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
+		// Read the focus once while the snackbar is still up. A retrying assertion would also
+		// pass once the snackbar times out and gives the focus back.
+		cy.getFrameWindow().then(function(win) {
+			expect(win.document.getElementById('snackbar'), 'snackbar').to.exist;
+			expect(win.document.activeElement.id, 'focused element').to.equal('clipboard-area');
+		});
+
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.uiManager.closeSnackbar();
+			helper.processToIdle(win);
+		});
+		cy.cGet('#snackbar').should('not.exist');
+	});
+
+	it('Snackbar with only a dismiss button leaves the keyboard focus in the document', function() {
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.focus();
+		});
+		cy.cGet('div.clipboard').should('have.focus');
+
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.uiManager.showSnackbar('dismissable notification', null, null, -1, false, true);
+		});
+		cy.cGet('#snackbar').should('be.visible');
+		cy.cGet('#snackbar-dismiss-button').should('exist');
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
+		// Read the focus once while the snackbar is still up. A retrying assertion would also
+		// pass once the snackbar times out and gives the focus back.
+		cy.getFrameWindow().then(function(win) {
+			expect(win.document.getElementById('snackbar'), 'snackbar').to.exist;
+			expect(win.document.activeElement.id, 'focused element').to.equal('clipboard-area');
+		});
+
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.uiManager.closeSnackbar();
+			helper.processToIdle(win);
+		});
+		cy.cGet('#snackbar').should('not.exist');
+	});
+
+	// A snackbar the user asked for, such as the one that finishes a copy, takes the focus on its
+	// action, so the key press that confirms it lands there.
+	it('Snackbar with an action takes the keyboard focus on its button', function() {
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.uiManager.showSnackbar('ready to confirm', 'Confirm', null, -1);
+		});
+		cy.cGet('#snackbar').should('be.visible');
+		cy.cGet('#snackbar #button button, #snackbar button#button-button').should('have.focus');
+
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.uiManager.closeSnackbar();
+			helper.processToIdle(win);
+		});
+		cy.cGet('#snackbar').should('not.exist');
+	});
+
 	it('Snackbar without an action is announced through the live region', function() {
 		cy.getFrameWindow().then(function(win) {
 			win.app.map.uiManager.showSnackbar('announced notification', null, null, -1);

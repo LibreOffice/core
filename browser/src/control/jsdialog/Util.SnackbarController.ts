@@ -24,6 +24,8 @@ type SnackbarData = {
 	hasProgress: boolean | undefined;
 	withDismiss: boolean | undefined;
 	infinite: boolean | undefined;
+	// True when the action button takes the keyboard focus as the snackbar appears.
+	focusAction: boolean;
 };
 
 class SnackbarController {
@@ -134,6 +136,7 @@ class SnackbarController {
 		hasProgress: boolean | undefined,
 		withDismiss: boolean | undefined,
 		infinite: boolean | undefined,
+		focusAction: boolean = true,
 	) {
 		if (!app.socket) return;
 
@@ -145,6 +148,7 @@ class SnackbarController {
 			hasProgress: hasProgress,
 			withDismiss: withDismiss,
 			infinite: infinite,
+			focusAction: focusAction,
 		});
 
 		this.scheduleSnackbar();
@@ -188,7 +192,8 @@ class SnackbarController {
 			jsontype: 'dialog',
 			type: 'snackbar',
 			timeout: this.extractTimeout(snackbarData),
-			init_focus_id: snackbarData.action ? buttonId : undefined,
+			init_focus_id:
+				snackbarData.action && snackbarData.focusAction ? buttonId : undefined,
 			children: [
 				{
 					id: snackbarData.hasProgress

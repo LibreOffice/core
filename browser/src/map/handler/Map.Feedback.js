@@ -91,10 +91,13 @@ window.L.Map.Feedback = window.L.Handler.extend({
 	},
 
 	askForFeedbackDialog: function () {
+		// The prompt appears on its own while the user may be typing, so the
+		// keyboard focus stays in the document.
 		this._map.uiManager.showSnackbar(
 			_('Please send us your feedback'),
 			_('OK'),
-			this.showFeedbackDialog.bind(this));
+			this.showFeedbackDialog.bind(this),
+			undefined, false, false, /*focusAction=*/false);
 	},
 
 	showFeedbackDialog: function () {
