@@ -217,11 +217,6 @@ namespace canvas
             return this;
         }
 
-        virtual sal_Bool SAL_CALL hasFullScreenMode(  ) override
-        {
-            return false;
-        }
-
         // XMultiServiceFactory
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override
         {

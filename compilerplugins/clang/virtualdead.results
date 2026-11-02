@@ -10,9 +10,6 @@ basic/source/comp/codegen.cxx:540
 canvas/inc/base/bitmapcanvasbase.hxx:79
     unsigned char canvas::BitmapCanvasBase::hasAlpha()
     1
-canvas/inc/base/graphicdevicebase.hxx:234
-    unsigned char canvas::GraphicDeviceBase::hasFullScreenMode()
-    0
 canvas/inc/base/graphicdevicebase.hxx:305
     void canvas::GraphicDeviceBase::removePropertyChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertyChangeListener> &,)
     empty

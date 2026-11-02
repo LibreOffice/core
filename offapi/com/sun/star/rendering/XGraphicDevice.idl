@@ -22,11 +22,6 @@ module com { module sun { module star { module rendering {
 interface XBitmap;
 interface XVolatileBitmap;
 
-/* TODO: There's obviously a concept called window missing here, where
-   methods such as fullscreen mode etc . belong
-   to. But see below
- */
-
 /** This interface provides access to a graphic device, such as a
     printer, or a screen device. Every canvas (@see XCanvas) has
     exactly one associated graphic device, into which its output is
@@ -221,12 +216,6 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
             directions.
      */
     com::sun::star::lang::XMultiServiceFactory getParametricPolyPolygonFactory();
-
-
-    /** Tells whether this graphic device has a full screen mode,
-        i.e. whether a window can cover the whole screen exclusively.
-     */
-    boolean                         hasFullScreenMode();
 };
 
 }; }; }; };
