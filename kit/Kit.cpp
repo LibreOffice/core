@@ -459,7 +459,7 @@ namespace
             const char *vers;
             if ((vers = strstr(path, ".so."))) // .so.[digit]+
             {
-                for(int i = sizeof (".so."); vers[i] != '\0'; ++i)
+                for(int i = strlen(".so."); vers[i] != '\0'; ++i)
                     if (!isdigit(static_cast<unsigned char>(vers[i])) && vers[i] != '.')
                         return true;
                 return false;
