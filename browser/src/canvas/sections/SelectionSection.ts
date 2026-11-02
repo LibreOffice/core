@@ -3177,7 +3177,10 @@ abstract class SelectionSection extends CanvasSectionObject {
 		/*
 			A plain click on another object than the selected ones, one lying in their area,
 			selects that object here and draws it at once, as a click beside the selection does.
-			A click on what is selected goes on to the engine.
+			A click on what is selected goes on to the engine. Inside an object active in place
+			the click counts by the part it takes, so a part lying in the selected one, a point of
+			a selected series or a line in a selected diagram, is selected here too, and a click
+			on the selected part keeps it as it is.
 		*/
 		if (modifier === 0 && RenderGeometrySection.answersPointer()) {
 			const hit = RenderGeometrySection.objectIdAt(at.x, at.y);
@@ -3185,14 +3188,23 @@ abstract class SelectionSection extends CanvasSectionObject {
 			const own = selected.concat(
 				RenderGeometrySection.theOnesThatDraw(selected),
 			);
+			const inPlace =
+				Interaction.placeOf(GraphicSelection.selectedObjectIDs).kind ===
+				'inPlace';
+			const another =
+				hit !== undefined &&
+				(inPlace
+					? !selected.includes(RenderGeometrySection.whatAPressTakes(hit))
+					: !own.includes(hit));
 			if (
 				hit !== undefined &&
-				!own.includes(hit) &&
+				another &&
 				Interaction.context().press(hit, modifier)
 			) {
 				GraphicSelection.updateSelectionSection();
 				return;
 			}
+			if (hit !== undefined && inPlace) return;
 		}
 
 		this.pendingClick = app.timerRegistry.setTimeout(
