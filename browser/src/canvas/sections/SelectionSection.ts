@@ -584,16 +584,20 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 	/// Takes in every handle with the box it is drawn as, so that a press on one arrives here.
 	private coverTheHandles(): void {
+		// a selection without handles, a part of a chart held in place, still draws its frame
 		const shown = this.handles();
-		if (!shown.length) {
+		const handlesOrObjects = shown.length
+			? cool.Range2D.fromPoints(
+					shown.map((handle: SelectionHandle) => HandleLook.drawnAt(handle)),
+				)
+			: this.boxOfTheObjects();
+		if (!handlesOrObjects) {
 			this.size = [0, 0];
 			return;
 		}
 
 		const box = ShapeHandlesSection.handleSize() * app.pixelsToTwips;
-		const covered = cool.Range2D.fromPoints(
-			shown.map((handle: SelectionHandle) => HandleLook.drawnAt(handle)),
-		).expand(box, box);
+		const covered = handlesOrObjects.expand(box, box);
 		const area = new cool.SimpleRectangle(
 			covered.minX,
 			covered.minY,
@@ -670,20 +674,27 @@ abstract class SelectionSection extends CanvasSectionObject {
 			});
 	}
 
+	/// The box the selected objects take up, in twips. Nothing where the client holds no box for
+	/// one of them.
+	private boxOfTheObjects(): cool.Range2D | null {
+		let box: cool.Range2D | null = null;
+		for (const objectId of this.selectedObjects()) {
+			const one = RenderGeometrySection.boxOf(objectId);
+			if (!one) return null;
+
+			box = box ? box.union(one) : one;
+		}
+
+		return box;
+	}
+
 	/*
 		The four corners of the box the selected objects take up, for a selection that is framed
 		by no handles: a connector is offered its own points alone, and the box is then what says
 		where the selection is and what a press on it lands on.
 	*/
 	private boxInView(): cool.Point[] {
-		let box: cool.Range2D | null = null;
-		for (const objectId of this.selectedObjects()) {
-			const one = RenderGeometrySection.boxOf(objectId);
-			if (!one) return [];
-
-			box = box ? box.union(one) : one;
-		}
-
+		const box = this.boxOfTheObjects();
 		if (!box) return [];
 
 		const upperLeft = new cool.SimplePoint(box.minX, box.minY);
@@ -1061,8 +1072,13 @@ abstract class SelectionSection extends CanvasSectionObject {
 	*/
 	private drawTheFrame(): void {
 		// The line follows the eight. A selection they do not frame - a connector, which is
-		// offered its own points alone - is marked by those points and nothing else.
-		const corners = this.framingCorners();
+		// offered its own points alone - is marked by those points and nothing else. A part of a
+		// chart held in place has no eight and is framed by its box.
+		const objects = this.selectedObjects();
+		const corners =
+			objects.length === 1 && ObjectHandles.isAChartPartHeldInPlace(objects[0])
+				? this.boxInView()
+				: this.framingCorners();
 		if (corners.length !== 4) return;
 
 		this.context.save();
@@ -1081,6 +1097,31 @@ abstract class SelectionSection extends CanvasSectionObject {
 		this.context.closePath();
 		this.context.stroke();
 		this.context.setLineDash([]);
+		this.context.restore();
+	}
+
+	/*
+		Draws the marks the chart shows on a part of it that is held in place, a small square on
+		each data point of a series or on each label of its data labels, as the chart does.
+	*/
+	private drawTheChartMarks(): void {
+		const objects = this.selectedObjects();
+		if (objects.length !== 1) return;
+		const marks =
+			RenderGeometrySection.objectOf(objects[0])?.chartPart?.marks ?? [];
+		if (!marks.length) return;
+
+		const size = HandleLook.widthOf('pathPoint');
+		this.context.save();
+		this.context.setTransform(1, 0, 0, 1, 0, 0);
+		this.context.fillStyle = HandleLook.colorOfTheKind.pathPoint;
+		this.context.strokeStyle = HandleLook.outlineColour;
+		this.context.lineWidth = 1;
+		for (const mark of marks) {
+			const at = new cool.SimplePoint(mark.x, mark.y);
+			this.context.fillRect(at.vX - size / 2, at.vY - size / 2, size, size);
+			this.context.strokeRect(at.vX - size / 2, at.vY - size / 2, size, size);
+		}
 		this.context.restore();
 	}
 
@@ -1421,6 +1462,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 		this.snap.draw(this);
 		this.drawTheSurrounds();
 		this.drawTheFrame();
+		this.drawTheChartMarks();
 
 		this.context.save();
 		this.context.setTransform(1, 0, 0, 1, 0, 0);

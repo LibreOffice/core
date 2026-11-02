@@ -515,6 +515,13 @@ class ObjectHandles implements HandleSource {
 		);
 	}
 
+	/// Whether the object of that id is a part of a chart that can be neither moved nor resized,
+	/// a series, an axis or a grid.
+	public static isAChartPartHeldInPlace(objectId: number): boolean {
+		const part = RenderGeometrySection.objectOf(objectId)?.chartPart;
+		return part !== undefined && !part.draggable && !part.resizable;
+	}
+
 	/// Whether what is selected is one connector that is tied to an object.
 	private isATiedConnector(): boolean {
 		return (
@@ -539,11 +546,13 @@ class ObjectHandles implements HandleSource {
 			turning it leads nowhere: it is offered the points along its way alone, and neither
 			the eight nor the handle that turns them, which is made from the eight. An object
 			that is shaped by its own handles alone, a measurement, is offered those alone too.
+			A part of a chart held in place shows the chart's own marks.
 		*/
 		if (
 			objectIds.length === 1 &&
 			(ObjectHandles.isATiedConnector(objectIds[0]) ||
-				ObjectHandles.hasHandlesOfItsOwnOnly(objectIds[0]))
+				ObjectHandles.hasHandlesOfItsOwnOnly(objectIds[0]) ||
+				ObjectHandles.isAChartPartHeldInPlace(objectIds[0]))
 		)
 			return undefined;
 

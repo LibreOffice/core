@@ -867,6 +867,15 @@ std::map<sal_uInt64, ObjectContent::ChartKeys> keysOf(const SdrOle2Obj& rChart,
     return aKeys;
 }
 
+/// the kind of a part of a chart is the last piece of its name, after the last ":" or "/"
+std::u16string_view kindOf(std::u16string_view aName)
+{
+    size_t nLast(aName.rfind(':'));
+    if (nLast == std::u16string_view::npos)
+        nLast = aName.rfind('/');
+    return nLast == std::u16string_view::npos ? aName : aName.substr(nLast + 1);
+}
+
 /*
     What a part of a chart allows, from its name, as the chart decides it for its own selection
     (ObjectIdentifier::getObjectType, isDragableObject, isRotateableObject and
@@ -884,12 +893,7 @@ ObjectContent::ChartPart chartPartOf(std::u16string_view aName)
     aPart.mbMultiClick = o3tl::starts_with(aName, u"CID/MultiClick/")
                          || o3tl::starts_with(aName, u"CID/MultiClick:");
     const bool bDragsItsOwnWay(aName.find(u"DragMethod=") != std::u16string_view::npos);
-
-    size_t nLast(aName.rfind(':'));
-    if (nLast == std::u16string_view::npos)
-        nLast = aName.rfind('/');
-    const std::u16string_view aKind(nLast == std::u16string_view::npos ? aName
-                                                                         : aName.substr(nLast + 1));
+    const std::u16string_view aKind(kindOf(aName));
 
     const bool bTitle(o3tl::starts_with(aKind, u"Title"));
     const bool bLegend(o3tl::starts_with(aKind, u"Legend")
@@ -907,6 +911,61 @@ ObjectContent::ChartPart chartPartOf(std::u16string_view aName)
     // a press on the wall selects the diagram in the chart (Selection::adaptSelectionToNewPos)
     aPart.mbPressTakesHolder = bWall;
     return aPart;
+}
+
+/// the object a part of a chart marks itself with, one named "MarkHandles" or "HandlesOnly", it
+/// is looked for through the objects with no name only
+const SdrObject* markObjectIn(const SdrObject& rObject)
+{
+    const OUString& rName(rObject.GetName());
+    if (rName.startsWith("MarkHandles") || rName.startsWith("HandlesOnly"))
+        return &rObject;
+    if (!rName.isEmpty())
+        return nullptr;
+    if (const SdrObjList* pList = rObject.GetSubList())
+        for (const rtl::Reference<SdrObject>& pChild : *pList)
+            if (const SdrObject* pMark = markObjectIn(*pChild))
+                return pMark;
+    return nullptr;
+}
+
+/*
+    The marks the chart shows for a part as it selects it (SelectionHelper::getMarkHandles in
+    chart2), in the chart's own place: the points of the path the part marks itself with, else
+    the middle of each object the part holds, for a series only where all of them are its data
+    points. A data point, a single data label, a legend entry and the unit label of an axis have
+    none, as has a part with no objects in it or a mark object that is no path.
+*/
+std::vector<basegfx::B2DPoint> chartMarksOf(const SdrObject& rObject)
+{
+    std::vector<basegfx::B2DPoint> aMarks;
+    const SdrObjList* pList(rObject.GetSubList());
+    if (!pList)
+        return aMarks;
+
+    for (const rtl::Reference<SdrObject>& pChild : *pList)
+        if (const SdrObject* pMark = markObjectIn(*pChild))
+        {
+            if (const auto* pPath = dynamic_cast<const SdrPathObj*>(pMark))
+                for (const auto& rPolygon : pPath->GetPathPoly())
+                    for (sal_uInt32 nPoint = 0; nPoint < rPolygon.count(); ++nPoint)
+                        aMarks.push_back(rPolygon.getB2DPoint(nPoint));
+            return aMarks;
+        }
+
+    const std::u16string_view aKind(kindOf(rObject.GetName()));
+    if (o3tl::starts_with(aKind, u"Point") || o3tl::starts_with(aKind, u"LegendEntry")
+        || o3tl::starts_with(aKind, u"AxisUnitLabel")
+        || (o3tl::starts_with(aKind, u"DataLabel") && !o3tl::starts_with(aKind, u"DataLabels")))
+        return aMarks;
+    const bool bSeries(o3tl::starts_with(aKind, u"Series"));
+    for (const rtl::Reference<SdrObject>& pChild : *pList)
+    {
+        if (bSeries && !o3tl::starts_with(kindOf(pChild->GetName()), u"Point"))
+            return {};
+        aMarks.push_back(vcl::unotools::b2DPointFromPoint(pChild->GetCurrentBoundRect().Center()));
+    }
+    return aMarks;
 }
 }
 
@@ -1366,6 +1425,12 @@ void describeObject(SdrObject& rObject, ObjectContent& rContent,
             oLine->mfY = aWay.getY() * constTwipConversionFactor;
             rContent.moChartPart->moDragAlong = oLine;
         }
+        // a part the chart holds still shows the chart's marks, mapped onto the slide
+        if (!rContent.mbCanBeMoved && !rContent.mbCanBeResized)
+            if (const Embedding* pEmbedding = embeddingOf(rObject))
+                for (const basegfx::B2DPoint& rMark : chartMarksOf(rObject))
+                    rContent.moChartPart->maMarks.push_back(pEmbedding->maMapping * rMark
+                                                            * constTwipConversionFactor);
     }
     if (const Embedding* pEmbedding = embeddingOf(rObject); pEmbedding && pEmbedding->moKeys)
     {
@@ -1443,6 +1508,16 @@ void writeEntryGeometry(tools::JsonWriter& rWriter, const ObjectContent& rConten
             rWriter.putSimpleValue(rPart.moDragAlong->mfX);
             rWriter.putSimpleValue(rPart.moDragAlong->mfY);
             rWriter.putSimpleValue(rPart.moDragAlong->mfAt);
+        }
+        if (!rPart.maMarks.empty())
+        {
+            auto aArray = rWriter.startArray("marks");
+            for (const basegfx::B2DPoint& rMark : rPart.maMarks)
+            {
+                auto aOneNode = rWriter.startStruct();
+                rWriter.put("x", rMark.getX());
+                rWriter.put("y", rMark.getY());
+            }
         }
     }
 

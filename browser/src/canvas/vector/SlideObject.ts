@@ -380,6 +380,10 @@ namespace cool {
 			/// whole offset takes, across and down in twips, and the offset it stands at now, a
 			/// share between 0 and 1.
 			dragAlong?: number[];
+			/// For a part that can be neither moved nor resized, the places the chart marks it
+			/// with, the data points of a series or the single labels of its data labels, in
+			/// twips. Absent where the chart marks the part by its frame.
+			marks?: { x: number; y: number }[];
 		};
 		/** Where the chart's own keys go from a part of a chart active in place, by ids: next and
 		 * previous are the parts of its level going round, inside the first part a level down,

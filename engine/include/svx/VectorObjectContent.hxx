@@ -443,6 +443,10 @@ struct ObjectContent
             bool operator==(const DragLine&) const = default;
         };
         std::optional<DragLine> moDragAlong;
+        /// The places the chart marks a part with that can be neither moved nor resized, the
+        /// data points of a series or the single labels of its data labels, on the slide in
+        /// twips. Empty where the chart marks the part by its frame.
+        std::vector<basegfx::B2DPoint> maMarks;
 
         bool operator==(const ChartPart&) const = default;
     };
