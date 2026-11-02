@@ -8,12 +8,12 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-30 13:34+0100\n"
-"PO-Revision-Date: 2026-10-28 14:25+0000\n"
+"PO-Revision-Date: 2026-11-02 11:18+0000\n"
 "Last-Translator: bittin1ddc447d824349b2 "
 "<bittin1ddc447d824349b2@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/sv/>\n"
-"Language: \n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1577,6 +1577,8 @@ msgid ""
 "This file is a spelling dictionary, not a wordbook. Upload a list of words "
 "with one word per line."
 msgstr ""
+"Den här filen är en stavningsordbok, inte en ordbok. Ladda upp en lista med "
+"ord med ett ord per rad."
 
 #: admin/src/integrator/WordBook.ts:471
 msgid "Invalid dictionary format. Please check the file."
@@ -1821,26 +1823,26 @@ msgstr "Duplicera stil"
 #: src/app/Util.ts:319
 msgid "%n year"
 msgid_plural "%n years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n år"
+msgstr[1] "%n flera år"
 
 #: src/app/Util.ts:321
 msgid "%n day"
 msgid_plural "%n days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n dag"
+msgstr[1] "%n dagar"
 
 #: src/app/Util.ts:322
 msgid "%n hour"
 msgid_plural "%n hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n timme"
+msgstr[1] "%n timmar"
 
 #: src/app/Util.ts:325
-#, fuzzy
 msgid "%n minute"
 msgid_plural "%n minutes"
-msgstr[0] "1 minut"
+msgstr[0] "%n minut"
+msgstr[1] "%n minuter"
 
 #: src/app/Util.ts:339
 msgid "less than a minute"
@@ -6302,19 +6304,19 @@ msgstr "Bild %1, länkad till %2"
 
 #: src/control/Control.PartsPreview.js:1241
 msgid "Linked to a section of %1 that is missing"
-msgstr ""
+msgstr "Länkad till en sektion av %1 som saknas"
 
 #: src/control/Control.PartsPreview.js:1243
 msgid "Linked to a section of %1 that has changed"
-msgstr ""
+msgstr "Länkad till en sektion av %1 som har ändrats"
 
 #: src/control/Control.PartsPreview.js:1245
 msgid "Linked to a section of %1, disconnected"
-msgstr ""
+msgstr "Länkad till en sektion av %1, frånkopplad"
 
 #: src/control/Control.PartsPreview.js:1246
 msgid "Linked to a section of %1"
-msgstr ""
+msgstr "Länkad till en sektion av %1"
 
 #: src/control/Control.PartsPreview.js:1390
 #: src/control/Control.PartsPreview.js:1557
@@ -6339,15 +6341,15 @@ msgstr "Flytta avsnittet neråt"
 
 #: src/control/Control.PartsPreview.js:1434
 msgid "Update Section"
-msgstr ""
+msgstr "Uppdatera sektion"
 
 #: src/control/Control.PartsPreview.js:1442
 msgid "Unlink Section"
-msgstr ""
+msgstr "Avlänka sektion"
 
 #: src/control/Control.PartsPreview.js:1449
 msgid "Unlink Section & Slides"
-msgstr ""
+msgstr "Avlänka sektion & bilder"
 
 #: src/control/Control.PartsPreview.js:1458
 msgid "Collapse All Sections"
@@ -6481,7 +6483,7 @@ msgstr "Infoga bilder"
 
 #: src/control/Control.SlideImportPane.tsx:904
 msgid "Insert section \"{0}\""
-msgstr ""
+msgstr "Infoga sektion \"{0}\""
 
 #: src/control/Control.SlideImportPane.tsx:912
 msgid "Insert {0} from {1}"
@@ -6497,19 +6499,20 @@ msgstr "Infoga {0} bilder"
 
 #: src/control/Control.SlideImportPane.tsx:972
 msgid "How the section goes in"
-msgstr ""
+msgstr "Hur sektionen går in"
 
 #: src/control/Control.SlideImportPane.tsx:977
 msgid "Insert as section \"{0}\""
-msgstr ""
+msgstr "Infoga som sektion \"{0}\""
 
 #: src/control/Control.SlideImportPane.tsx:983
 msgid "Insert as separate slides"
-msgstr ""
+msgstr "Infoga som separata bilder"
 
 #: src/control/Control.SlideImportPane.tsx:989
 msgid "Linked to its section in {0}. Update Links brings in later changes."
 msgstr ""
+"Länkad till dess sektion i {0}. Uppdatera länkar hämtar in senare ändringar."
 
 #: src/control/Control.SlideImportPane.tsx:1038
 msgid "{0} of {1}"
@@ -6651,7 +6654,7 @@ msgstr "Länkad till {0} i {1}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:120
 msgid "In a section linked to {0}"
-msgstr ""
+msgstr "I en sektion länkad till {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:145
 msgid "Hide the actions for this linked slide"
@@ -6668,7 +6671,7 @@ msgstr "Avlänka"
 #: src/control/Control.SlideLinkToolbar.tsx:176
 #: src/slideimport/SlideLinks.ts:467
 msgid "Update section"
-msgstr ""
+msgstr "Uppdatera sektion"
 
 #: src/control/Control.SlideLinkToolbar.tsx:190
 msgid "Not available"
@@ -6697,24 +6700,31 @@ msgstr "Ingen bild i denna presentation är länkad till en annan fil."
 
 #: src/slideimport/SlideLinks.ts:425
 msgid "The section cannot be updated, because its source is not available."
-msgstr ""
+msgstr "Sektionen kan inte uppdateras eftersom dess källa inte är tillgänglig."
 
 #: src/slideimport/SlideLinks.ts:447
 msgid ""
 "One linked section cannot be updated, because its source is not available."
 msgstr ""
+"En länkad sektion kan inte uppdateras eftersom dess källa inte är "
+"tillgänglig."
 
 #: src/slideimport/SlideLinks.ts:450
 msgid ""
 "{0} linked sections cannot be updated, because their sources are not "
 "available."
 msgstr ""
+"{0} länkade sektioner kan inte uppdateras, eftersom deras källor inte är "
+"tillgängliga."
 
 #: src/slideimport/SlideLinks.ts:459
 msgid ""
 "The section will hold the slides that its section in {0} holds now. Changes "
 "made to these slides in this presentation will be lost."
 msgstr ""
+"Denna sektion kommer att innehålla de bildspel som dess motsvarighet i {0} "
+"innehåller nu. Ändringar som görs i dessa bildspel i den här presentationen "
+"kommer att gå förlorade."
 
 #: src/slideimport/SlideLinks.ts:462
 msgid ""
@@ -6722,10 +6732,13 @@ msgid ""
 "files hold now. Changes made to these slides in this presentation will be "
 "lost."
 msgstr ""
+"{0} länkade sektioner kommer att innehålla de bildspel som deras "
+"motsvarigheter i källfilerna innehåller nu. Ändringar som görs i dessa "
+"bildspel i den här presentationen kommer att gå förlorade."
 
 #: src/slideimport/SlideLinks.ts:467
 msgid "Update sections"
-msgstr ""
+msgstr "Uppdatera sektioner"
 
 #: src/slideimport/SlideLinks.ts:534
 msgid "This slide is not linked to another file."
@@ -6746,7 +6759,7 @@ msgstr "{0} kunde inte läsas."
 
 #: src/slideimport/SlideLinks.ts:742
 msgid "You do not have access to {0}, so the section cannot be updated."
-msgstr ""
+msgstr "Du har inte åtkomst till {0}, så sektionen kan inte uppdateras."
 
 #: src/slideimport/SlideLinks.ts:745
 msgid "You do not have access to {0}, so its pages cannot be refreshed."
@@ -6763,11 +6776,12 @@ msgstr "Bilderna från {0} kunde inte läsas in i denna presentation."
 
 #: src/slideimport/SlideLinks.ts:919
 msgid "The section was updated from {0}."
-msgstr ""
+msgstr "Denna sektion uppdaterades från {0}."
 
 #: src/slideimport/SlideLinks.ts:1059
 msgid "Cannot update the section: {0} no longer holds its source section."
 msgstr ""
+"Kan inte uppdatera sektionen: {0} innehåller inte längre sin källsektion."
 
 #: src/slideimport/SlideLinks.ts:1085
 msgid "Cannot update slide {0}: the source lacks matching slide"
@@ -6778,14 +6792,12 @@ msgid "Unlinking the slide failed."
 msgstr "Det gick inte att ta bort länken till bilden."
 
 #: src/slideimport/SlideLinks.ts:1105
-#, fuzzy
 msgid "Unlinking the section failed."
-msgstr "Det gick inte att ta bort länken till bilden."
+msgstr "Avlänking av sektion misslyckades."
 
 #: src/slideimport/SlideLinks.ts:1122
-#, fuzzy
 msgid "Updating the section from {0} failed."
-msgstr "Uppdateringen av bilderna för {0} misslyckades."
+msgstr "Uppdateringen av sektion från {0} misslyckades."
 
 #: src/slideimport/SlideLinks.ts:1123 src/slideimport/SlideLinks.ts:1182
 msgid "Updating the slides of {0} failed."
