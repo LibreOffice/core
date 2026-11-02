@@ -65,10 +65,10 @@ namespace canvas
     template< class Base,
               class CanvasHelper,
               class Mutex=::osl::MutexGuard> class SpriteCanvasBase :
-        public IntegerBitmapBase<BitmapCanvasBase<Base, CanvasHelper, Mutex, cppu::OWeakObject>>
+        public IntegerBitmapBase<BitmapCanvasBase<Base, CanvasHelper, Mutex>>
     {
     public:
-        typedef IntegerBitmapBase<BitmapCanvasBase<Base, CanvasHelper, Mutex, cppu::OWeakObject>> BaseType;
+        typedef IntegerBitmapBase<BitmapCanvasBase<Base, CanvasHelper, Mutex>> BaseType;
         typedef ::rtl::Reference< SpriteCanvasBase >                            Reference;
 
         SpriteCanvasBase() :

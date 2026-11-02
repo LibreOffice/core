@@ -66,10 +66,10 @@ namespace canvas
               class SpriteHelper,
               class CanvasHelper,
               class Mutex=::osl::MutexGuard> class CanvasCustomSpriteBase :
-        public IntegerBitmapBase<BitmapCanvasBase2<Base, CanvasHelper, Mutex, cppu::OWeakObject>>
+        public IntegerBitmapBase<BitmapCanvasBase2<Base, CanvasHelper, Mutex>>
     {
     public:
-        typedef IntegerBitmapBase<BitmapCanvasBase2<Base, CanvasHelper, Mutex, cppu::OWeakObject>> BaseType;
+        typedef IntegerBitmapBase<BitmapCanvasBase2<Base, CanvasHelper, Mutex>> BaseType;
 
         CanvasCustomSpriteBase() :
             maSpriteHelper()

@@ -20,6 +20,8 @@
 #pragma once
 
 #include <base/canvasbase.hxx>
+#include <cppuhelper/weak.hxx>
+
 #include <com/sun/star/geometry/IntegerSize2D.hpp>
 
 namespace com::sun::star::rendering
@@ -53,21 +55,14 @@ namespace canvas
     the sole parameter, and destroyed again when the method scope
     is left.
 
-    @tpl UnambiguousBase
-    Optional unambiguous base class for XInterface of Base. It's
-    sometimes necessary to specify this parameter, e.g. if Base
-    derives from multiple UNO interface (were each provides its
-    own version of XInterface, making the conversion ambiguous)
-
     @see CanvasBase for further contractual requirements towards
     the CanvasHelper type, and some examples.
  */
-template <class Base, class CanvasHelper, class Mutex = ::osl::MutexGuard,
-          class UnambiguousBase = css::uno::XInterface>
-class BitmapCanvasBase : public CanvasBase<Base, CanvasHelper, Mutex, UnambiguousBase>
+template <class Base, class CanvasHelper, class Mutex = ::osl::MutexGuard>
+class BitmapCanvasBase : public CanvasBase<Base, CanvasHelper, Mutex, cppu::OWeakObject>
 {
 public:
-    typedef CanvasBase<Base, CanvasHelper, Mutex, UnambiguousBase> BaseType;
+    typedef CanvasBase<Base, CanvasHelper, Mutex, cppu::OWeakObject> BaseType;
 
     // XBitmap
     virtual css::geometry::IntegerSize2D SAL_CALL getSize() override
@@ -88,11 +83,10 @@ public:
     }
 };
 
-template <class Base, class CanvasHelper, class Mutex = ::osl::MutexGuard,
-          class UnambiguousBase = css::uno::XInterface>
-class BitmapCanvasBase2 : public BitmapCanvasBase<Base, CanvasHelper, Mutex, UnambiguousBase>
+template <class Base, class CanvasHelper, class Mutex = ::osl::MutexGuard>
+class BitmapCanvasBase2 : public BitmapCanvasBase<Base, CanvasHelper, Mutex>
 {
-    typedef BitmapCanvasBase<Base, CanvasHelper, Mutex, UnambiguousBase> BaseType;
+    typedef BitmapCanvasBase<Base, CanvasHelper, Mutex> BaseType;
 
 public:
     // XBitmapCanvas
@@ -107,7 +101,7 @@ public:
     {
         canvastools::verifyArgs(sourceCanvas, sourceRect, sourceViewState, sourceRenderState,
                                 destRect, destViewState, destRenderState, __func__,
-                                static_cast<typename BaseType::UnambiguousBaseType*>(this));
+                                static_cast<cppu::OWeakObject*>(this));
 
         typename BaseType::BaseType::MutexType aGuard(BaseType::m_aMutex);
 

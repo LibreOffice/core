@@ -28,12 +28,9 @@ namespace oglcanvas
 {
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XBitmapCanvas,
                                              css::rendering::XIntegerBitmap > CanvasBitmapBase_Base;
-    typedef ::canvas::IntegerBitmapBase<
-        canvas::BitmapCanvasBase2<
-            ::canvas::BaseMutexHelper< CanvasBitmapBase_Base >,
-            BitmapCanvasHelper,
-            ::osl::MutexGuard,
-            ::cppu::OWeakObject> > CanvasBitmapBaseT;
+    typedef ::canvas::IntegerBitmapBase<canvas::BitmapCanvasBase2<
+        ::canvas::BaseMutexHelper<CanvasBitmapBase_Base>, BitmapCanvasHelper, ::osl::MutexGuard>>
+        CanvasBitmapBaseT;
 
     class CanvasBitmap : public CanvasBitmapBaseT
     {

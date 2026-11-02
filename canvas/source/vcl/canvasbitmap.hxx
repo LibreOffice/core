@@ -46,11 +46,9 @@ namespace vclcanvas
                                              css::lang::XServiceInfo,
                                              css::beans::XFastPropertySet >    CanvasBitmapBase_Base;
     typedef ::canvas::IntegerBitmapBase<
-        canvas::BitmapCanvasBase2<
-            ::canvas::BaseMutexHelper< CanvasBitmapBase_Base >,
-            CanvasBitmapHelper,
-            vclcanvastools::LocalGuard,
-            ::cppu::OWeakObject> > CanvasBitmap_Base;
+        canvas::BitmapCanvasBase2<::canvas::BaseMutexHelper<CanvasBitmapBase_Base>,
+                                  CanvasBitmapHelper, vclcanvastools::LocalGuard>>
+        CanvasBitmap_Base;
 
     class CanvasBitmap : public CanvasBitmap_Base,
                          public RepaintTarget

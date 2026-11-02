@@ -44,12 +44,9 @@ namespace dxcanvas
                                              css::rendering::XIntegerBitmap,
                                              css::lang::XServiceInfo,
                                              css::beans::XFastPropertySet >      CanvasBitmapBase_Base;
-    typedef ::canvas::IntegerBitmapBase<
-        canvas::BitmapCanvasBase2<
-            ::canvas::BaseMutexHelper< CanvasBitmapBase_Base >,
-            BitmapCanvasHelper,
-            ::osl::MutexGuard,
-            ::cppu::OWeakObject> > CanvasBitmap_Base;
+    typedef ::canvas::IntegerBitmapBase<canvas::BitmapCanvasBase2<
+        ::canvas::BaseMutexHelper<CanvasBitmapBase_Base>, BitmapCanvasHelper, ::osl::MutexGuard>>
+        CanvasBitmap_Base;
 
     class CanvasBitmap : public CanvasBitmap_Base, public BitmapProvider
     {

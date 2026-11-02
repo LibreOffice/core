@@ -119,11 +119,8 @@ namespace dxcanvas
                                            ::osl::MutexGuard,
                                            ::cppu::OWeakObject >    CanvasBase2_Base;
     typedef ::canvas::IntegerBitmapBase<
-        canvas::BitmapCanvasBase2<
-            CanvasBase2_Base,
-            BitmapCanvasHelper,
-            ::osl::MutexGuard,
-            ::cppu::OWeakObject> > BitmapCanvasBaseT;
+        canvas::BitmapCanvasBase2<CanvasBase2_Base, BitmapCanvasHelper, ::osl::MutexGuard>>
+        BitmapCanvasBaseT;
 
     /** Product of this component's factory.
 

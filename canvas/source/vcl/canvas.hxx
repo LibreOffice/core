@@ -56,11 +56,8 @@ namespace vclcanvas
                                            vclcanvastools::LocalGuard,
                                            ::cppu::OWeakObject >    CanvasBase_Base;
     typedef ::canvas::IntegerBitmapBase<
-        canvas::BitmapCanvasBase2<
-            CanvasBase_Base,
-            CanvasHelper,
-            vclcanvastools::LocalGuard,
-            ::cppu::OWeakObject> > CanvasBaseT;
+        canvas::BitmapCanvasBase2<CanvasBase_Base, CanvasHelper, vclcanvastools::LocalGuard>>
+        CanvasBaseT;
 
     /** Product of this component's factory.
 

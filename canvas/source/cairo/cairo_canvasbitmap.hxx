@@ -50,11 +50,8 @@ namespace cairocanvas
     };
 
     typedef ::canvas::IntegerBitmapBase<
-        canvas::BitmapCanvasBase2<
-            CanvasBitmapSpriteSurface_Base,
-            CanvasHelper,
-            ::osl::MutexGuard,
-            ::cppu::OWeakObject> > CanvasBitmap_Base;
+        canvas::BitmapCanvasBase2<CanvasBitmapSpriteSurface_Base, CanvasHelper, ::osl::MutexGuard>>
+        CanvasBitmap_Base;
 
     class CanvasBitmap : public CanvasBitmap_Base,
                          public RepaintTarget
