@@ -124,6 +124,68 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
 
         editorFrameInfo = frameInfo
         COWrapper.LOG_DBG("The editor frame loaded")
+        putCodaPageIn(frameInfo)
+    }
+
+    // WebKit cannot reply to a request in place of coolwsd, as WebView2 can, and
+    // coolwsd's policy refuses scripts from an app scheme. So CODA's page goes in as text.
+    private static let putCodaPageInScript = """
+        window.codaRemotePage = {};
+
+        // coolwsd writes the values for its editor into these two elements.
+        const variables = document.getElementById('initial-variables');
+        const cssVariables = document.getElementById('init-css-vars');
+
+        window.codaRemotePage.serverVariables = variables ? { ...variables.dataset } : {};
+        window.codaRemotePage.cssVariables = cssVariables ? cssVariables.value : '';
+
+        const codaPage = new DOMParser().parseFromString(codaHtml, 'text/html');
+        const scripts = Array.from(codaPage.scripts, (script) => script.getAttribute('src'));
+        const styleLinks = codaPage.querySelectorAll('link[rel="stylesheet"]');
+        const styles = Array.from(styleLinks, (link) => link.getAttribute('href'));
+        codaPage.querySelectorAll('script, link[rel="stylesheet"]').forEach((element) => element.remove());
+
+        document.documentElement.replaceWith(document.adoptNode(codaPage.documentElement));
+        return { scripts, styles };
+        """
+
+    // As on Qt and Windows, a path may not leave the app's resources or name a hidden file.
+    private static func appFile(_ path: String) -> String? {
+        for segment in path.split(separator: "/", omittingEmptySubsequences: false) {
+            let isHidden = segment.hasPrefix(".")
+            let hasSeparator = segment.contains("\\") || segment.contains(":")
+            if segment.isEmpty || isHidden || hasSeparator {
+                COWrapper.LOG_ERR("A file from CODA's page was refused: its path leads out of the folder")
+                return nil
+            }
+        }
+
+        guard let resources = Bundle.main.resourceURL else {
+            return nil
+        }
+
+        return try? String(contentsOf: resources.appendingPathComponent(path), encoding: .utf8)
+    }
+
+    private func putCodaPageIn(_ frameInfo: WKFrameInfo) {
+        guard let codaHtml = Self.appFile("cool.html") else {
+            COWrapper.LOG_ERR("CODA's page was not put in: the app has no cool.html")
+            return
+        }
+
+        webView.callAsyncJavaScript(
+            Self.putCodaPageInScript,
+            arguments: ["codaHtml": codaHtml],
+            in: frameInfo,
+            in: .page
+        ) { result in
+            guard case .success = result else {
+                COWrapper.LOG_ERR("CODA's page was not put in the editor frame")
+                return
+            }
+
+            COWrapper.LOG_DBG("CODA's page is in the editor frame")
+        }
     }
 
     // The integrator opens a document by posting a form with the token and settings into the
