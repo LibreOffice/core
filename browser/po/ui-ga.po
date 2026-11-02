@@ -8,12 +8,12 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-30 13:34+0100\n"
-"PO-Revision-Date: 2026-10-30 10:51+0000\n"
+"PO-Revision-Date: 2026-11-01 11:12+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin "
 "<aindriu80@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ga/>\n"
-"Language: \n"
+"Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1584,6 +1584,8 @@ msgid ""
 "This file is a spelling dictionary, not a wordbook. Upload a list of words "
 "with one word per line."
 msgstr ""
+"Is foclóir litrithe é an comhad seo, ní leabhar focal. Uaslódáil liosta "
+"focal, le focal amháin ar gach líne."
 
 #: admin/src/integrator/WordBook.ts:471
 msgid "Invalid dictionary format. Please check the file."
@@ -1831,35 +1833,38 @@ msgstr "Stíl Dhúblach"
 #: src/app/Util.ts:319
 msgid "%n year"
 msgid_plural "%n years"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
+msgstr[0] "%n bliain"
+msgstr[1] "%n bhliain"
+msgstr[2] "%n bliana"
+msgstr[3] "%n mbliana"
+msgstr[4] "%n bliain"
 
 #: src/app/Util.ts:321
 msgid "%n day"
 msgid_plural "%n days"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
+msgstr[0] "%n lá"
+msgstr[1] "%n lá"
+msgstr[2] "%n lá"
+msgstr[3] "%n lá"
+msgstr[4] "%n lá"
 
 #: src/app/Util.ts:322
 msgid "%n hour"
 msgid_plural "%n hours"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
+msgstr[0] "%n uair an chloig"
+msgstr[1] "%n uair an chloig"
+msgstr[2] "%n uair an chloig"
+msgstr[3] "%n uair an chloig"
+msgstr[4] "%n uair an chloig"
 
 #: src/app/Util.ts:325
-#, fuzzy
 msgid "%n minute"
 msgid_plural "%n minutes"
 msgstr[0] "1 nóiméad"
+msgstr[1] "%n nóiméad"
+msgstr[2] "%n nóiméad"
+msgstr[3] "%n nóiméad"
+msgstr[4] "%n nóiméad"
 
 #: src/app/Util.ts:339
 msgid "less than a minute"
@@ -6394,19 +6399,19 @@ msgstr "Sleamhnán %1, nasctha le %2"
 
 #: src/control/Control.PartsPreview.js:1241
 msgid "Linked to a section of %1 that is missing"
-msgstr ""
+msgstr "Nasctha le cuid de %1 atá ar iarraidh"
 
 #: src/control/Control.PartsPreview.js:1243
 msgid "Linked to a section of %1 that has changed"
-msgstr ""
+msgstr "Nasctha le cuid de %1 atá athraithe"
 
 #: src/control/Control.PartsPreview.js:1245
 msgid "Linked to a section of %1, disconnected"
-msgstr ""
+msgstr "Ceangailte le cuid de %1, dícheangailte"
 
 #: src/control/Control.PartsPreview.js:1246
 msgid "Linked to a section of %1"
-msgstr ""
+msgstr "Nasctha le cuid de %1"
 
 #: src/control/Control.PartsPreview.js:1390
 #: src/control/Control.PartsPreview.js:1557
@@ -6431,15 +6436,15 @@ msgstr "Bog an Roinn Síos"
 
 #: src/control/Control.PartsPreview.js:1434
 msgid "Update Section"
-msgstr ""
+msgstr "Rannán Nuashonraithe"
 
 #: src/control/Control.PartsPreview.js:1442
 msgid "Unlink Section"
-msgstr ""
+msgstr "Dícheangail Rannán"
 
 #: src/control/Control.PartsPreview.js:1449
 msgid "Unlink Section & Slides"
-msgstr ""
+msgstr "Dínasc an Rannáin agus na Sleamhnán"
 
 #: src/control/Control.PartsPreview.js:1458
 msgid "Collapse All Sections"
@@ -6576,7 +6581,7 @@ msgstr "Cuir sleamhnáin isteach"
 
 #: src/control/Control.SlideImportPane.tsx:904
 msgid "Insert section \"{0}\""
-msgstr ""
+msgstr "Cuir an rannán \"{0}\" isteach"
 
 #: src/control/Control.SlideImportPane.tsx:912
 msgid "Insert {0} from {1}"
@@ -6592,19 +6597,21 @@ msgstr "Cuir isteach {0} sleamhnán"
 
 #: src/control/Control.SlideImportPane.tsx:972
 msgid "How the section goes in"
-msgstr ""
+msgstr "An chaoi a gcuirtear an chuid isteach"
 
 #: src/control/Control.SlideImportPane.tsx:977
 msgid "Insert as section \"{0}\""
-msgstr ""
+msgstr "Cuir isteach mar rannán \"{0}\""
 
 #: src/control/Control.SlideImportPane.tsx:983
 msgid "Insert as separate slides"
-msgstr ""
+msgstr "Cuir isteach mar shleamhnáin ar leith"
 
 #: src/control/Control.SlideImportPane.tsx:989
 msgid "Linked to its section in {0}. Update Links brings in later changes."
 msgstr ""
+"Nasctha lena chuid in {0}. Tugann 'Nuashonraigh na Naisc' athruithe níos "
+"déanaí isteach."
 
 #: src/control/Control.SlideImportPane.tsx:1038
 msgid "{0} of {1}"
@@ -6746,7 +6753,7 @@ msgstr "Nasctha le {0} i {1}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:120
 msgid "In a section linked to {0}"
-msgstr ""
+msgstr "I rannóg atá nasctha le {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:145
 msgid "Hide the actions for this linked slide"
@@ -6763,7 +6770,7 @@ msgstr "Dícheangail"
 #: src/control/Control.SlideLinkToolbar.tsx:176
 #: src/slideimport/SlideLinks.ts:467
 msgid "Update section"
-msgstr ""
+msgstr "Rannán nuashonraithe"
 
 #: src/control/Control.SlideLinkToolbar.tsx:190
 msgid "Not available"
@@ -6792,24 +6799,29 @@ msgstr "Níl aon sleamhnán den chur i láthair seo nasctha le comhad eile."
 
 #: src/slideimport/SlideLinks.ts:425
 msgid "The section cannot be updated, because its source is not available."
-msgstr ""
+msgstr "Ní féidir an rannán a nuashonrú, mar níl a fhoinse ar fáil."
 
 #: src/slideimport/SlideLinks.ts:447
 msgid ""
 "One linked section cannot be updated, because its source is not available."
-msgstr ""
+msgstr "Ní féidir rannóg nasctha amháin a nuashonrú, mar níl a fhoinse ar fáil."
 
 #: src/slideimport/SlideLinks.ts:450
 msgid ""
 "{0} linked sections cannot be updated, because their sources are not "
 "available."
 msgstr ""
+"Ní féidir na rannóga nasctha {0} a nuashonrú, toisc nach bhfuil a gcuid "
+"foinsí ar fáil."
 
 #: src/slideimport/SlideLinks.ts:459
 msgid ""
 "The section will hold the slides that its section in {0} holds now. Changes "
 "made to these slides in this presentation will be lost."
 msgstr ""
+"Beidh na sleamhnáin sa rannán seo atá le fáil faoi láthair sa rannán "
+"comhfhreagrach i {0}. Caillfear aon athruithe a dhéantar ar na sleamhnáin "
+"seo sa chur i láthair seo."
 
 #: src/slideimport/SlideLinks.ts:462
 msgid ""
@@ -6817,10 +6829,13 @@ msgid ""
 "files hold now. Changes made to these slides in this presentation will be "
 "lost."
 msgstr ""
+"Beidh na sleamhnáin chéanna sna rannóga nasctha {0} atá le fáil faoi láthair "
+"sna rannóga comhfhreagracha sna comhaid fhoinse. Caillfear aon athruithe a "
+"dhéantar ar na sleamhnáin seo sa chur i láthair seo."
 
 #: src/slideimport/SlideLinks.ts:467
 msgid "Update sections"
-msgstr ""
+msgstr "Nuashonraigh rannáin"
 
 #: src/slideimport/SlideLinks.ts:534
 msgid "This slide is not linked to another file."
@@ -6841,7 +6856,7 @@ msgstr "Níorbh fhéidir {0} a léamh."
 
 #: src/slideimport/SlideLinks.ts:742
 msgid "You do not have access to {0}, so the section cannot be updated."
-msgstr ""
+msgstr "Níl rochtain agat ar {0}, mar sin ní féidir an rannán a nuashonrú."
 
 #: src/slideimport/SlideLinks.ts:745
 msgid "You do not have access to {0}, so its pages cannot be refreshed."
@@ -6859,11 +6874,12 @@ msgstr "Níorbh fhéidir sleamhnáin {0} a léamh isteach sa chur i láthair seo
 
 #: src/slideimport/SlideLinks.ts:919
 msgid "The section was updated from {0}."
-msgstr ""
+msgstr "Nuashonraíodh an chuid ó {0}."
 
 #: src/slideimport/SlideLinks.ts:1059
 msgid "Cannot update the section: {0} no longer holds its source section."
 msgstr ""
+"Ní féidir an rannán a nuashonrú: níl a rannán foinse ag {0} a thuilleadh."
 
 #: src/slideimport/SlideLinks.ts:1085
 msgid "Cannot update slide {0}: the source lacks matching slide"
@@ -6876,14 +6892,12 @@ msgid "Unlinking the slide failed."
 msgstr "Theip ar dhícheangal an tsleamhnáin."
 
 #: src/slideimport/SlideLinks.ts:1105
-#, fuzzy
 msgid "Unlinking the section failed."
-msgstr "Theip ar dhícheangal an tsleamhnáin."
+msgstr "Theip ar dhícheangal na rannóige."
 
 #: src/slideimport/SlideLinks.ts:1122
-#, fuzzy
 msgid "Updating the section from {0} failed."
-msgstr "Theip ar nuashonrú na sleamhnán de {0}."
+msgstr "Theip ar nuashonrú na rannóige ó {0}."
 
 #: src/slideimport/SlideLinks.ts:1123 src/slideimport/SlideLinks.ts:1182
 msgid "Updating the slides of {0} failed."
