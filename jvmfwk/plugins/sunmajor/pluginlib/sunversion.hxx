@@ -54,6 +54,7 @@ namespace jfw_plugin
  */
 class SunVersion final
 {
+public:
     enum PreRelease
     {
         Rel_NONE,
@@ -73,16 +74,9 @@ class SunVersion final
         Rel_FreeBSD
     };
 
-    // contains major,minor,micro,update,minor-update,etc
-    std::vector<int> m_arVersionParts;
-    // The update can be followed by a char, e.g. 1.4.1_01a
-    char m_nUpdateSpecial;
-
-    PreRelease m_preRelease;
-
-public:
     explicit SunVersion(const char* szVer);
     explicit SunVersion(std::u16string_view usVer);
+    explicit SunVersion(std::vector<int> aParts, PreRelease ePreRelease, char nUpdateSpecial);
 
     /**
        Pre-release versions are taken into account.
@@ -97,6 +91,13 @@ public:
     operator bool() { return m_bValid; }
 
 private:
+    // contains major,minor,micro,update,minor-update,etc
+    std::vector<int> m_arVersionParts;
+    // The update can be followed by a char, e.g. 1.4.1_01a
+    char m_nUpdateSpecial;
+
+    PreRelease m_preRelease;
+
     bool init(const char* szVer);
 
     bool m_bValid;
