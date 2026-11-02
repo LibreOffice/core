@@ -459,6 +459,19 @@ void DateTest::testGetDayOfWeek()
         Date aDate(6, 5, 2018);
         CPPUNIT_ASSERT_EQUAL(eExpectedDay, aDate.GetDayOfWeek());
     }
+
+    // Dates before the year 1
+    {
+        DayOfWeek eExpectedDay = DayOfWeek::SATURDAY;
+        Date aDate(1, 1, -1);
+        CPPUNIT_ASSERT_EQUAL(eExpectedDay, aDate.GetDayOfWeek());
+    }
+
+    {
+        DayOfWeek eExpectedDay = DayOfWeek::SUNDAY;
+        Date aDate(31, 12, -1);
+        CPPUNIT_ASSERT_EQUAL(eExpectedDay, aDate.GetDayOfWeek());
+    }
 }
 
 void DateTest::testGetDaysInMonth()

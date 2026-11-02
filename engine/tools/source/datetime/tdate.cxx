@@ -189,7 +189,7 @@ void Date::AddMonths( sal_Int32 nAddMonths )
 
 DayOfWeek Date::GetDayOfWeek() const
 {
-    return static_cast<DayOfWeek>((GetAsNormalizedDays()-1) % 7);
+    return static_cast<DayOfWeek>(((GetAsNormalizedDays() - 1) % 7 + 7) % 7);
 }
 
 sal_uInt16 Date::GetDayOfYear() const
