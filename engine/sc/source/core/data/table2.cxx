@@ -1969,6 +1969,13 @@ std::shared_ptr<sc::Sparkline> ScTable::GetSparkline(SCCOL nCol, SCROW nRow)
     return pSparklineCell->getSparkline();
 }
 
+bool ScTable::HasSparklines(SCCOL nCol, SCROW nRow1, SCROW nRow2) const
+{
+    if (!ValidCol(nCol) || nCol >= GetAllocatedColumnsCount())
+        return false;
+    return !aCol[nCol].IsSparklinesEmptyBlock(nRow1, nRow2);
+}
+
 sc::Sparkline* ScTable::CreateSparkline(SCCOL nCol, SCROW nRow, std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup)
 {
     if (!ValidCol(nCol))

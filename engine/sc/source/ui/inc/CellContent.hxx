@@ -11,14 +11,18 @@
 
 #pragma once
 
+#include "CellMarkKind.hxx"
 #include <address.hxx>
 #include <fillinfo.hxx>
 #include <tools/color.hxx>
 
+#include <memory>
 #include <vector>
 
 namespace sc
 {
+class Sparkline;
+
 /// Neighboring cells of one row with the same fill: a background color or a color of a color
 /// scale. Hidden columns inside the run belong to it.
 struct CellFill
@@ -45,6 +49,38 @@ struct CellIconSet
     ScIconSetInfo maInfo;
 };
 
+/// The sparkline of a cell, drawn into the cell or into the merged area that starts there.
+struct CellSparkline
+{
+    SCCOL mnColumn;
+    SCROW mnRow;
+    SCCOL mnEndColumn;
+    SCROW mnEndRow;
+    std::shared_ptr<Sparkline> mpSparkline;
+};
+
+/// A formula mark, a formula error mark or a drop-down button of a cell, in the corner of the
+/// cell or of the merged area that starts there.
+struct CellMark
+{
+    SCCOL mnColumn;
+    SCROW mnRow;
+    SCCOL mnEndColumn;
+    SCROW mnEndRow;
+    CellMarkKind meKind;
+    /// The filter of a drop-down button is active.
+    bool mbFilterActive;
+};
+
+/// A merged area, which hides the grid lines inside it.
+struct CellMergedArea
+{
+    SCCOL mnColumn;
+    SCROW mnRow;
+    SCCOL mnEndColumn;
+    SCROW mnEndRow;
+};
+
 /** What the cells of a range show, by cell address and without positions. A CellGeometry places
     it. Each list is in the order of the rows, and of the columns within a row.
  */
@@ -53,6 +89,9 @@ struct CellContent
     std::vector<CellFill> maFills;
     std::vector<CellDataBar> maDataBars;
     std::vector<CellIconSet> maIconSets;
+    std::vector<CellSparkline> maSparklines;
+    std::vector<CellMark> maMarks;
+    std::vector<CellMergedArea> maMergedAreas;
 };
 }
 

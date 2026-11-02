@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include "CellMarkKind.hxx"
 #include <address.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
@@ -18,23 +19,6 @@
 
 namespace sc
 {
-/// The kinds of small marks that Calc draws on a cell.
-enum class CellMarkKind : sal_uInt8
-{
-    /// The cell holds a formula. Drawn in the bottom-left corner.
-    Formula,
-    /// The formula of the cell gives an error. Drawn in the top-left corner.
-    FormulaError,
-    /// Text of the cell is cut off at the left edge.
-    ClipLeft,
-    /// Text of the cell is cut off at the right edge.
-    ClipRight,
-    /// The cell holds the drop-down button of an autofilter.
-    AutoFilter,
-    /// The cell holds the drop-down button of a pivot table field.
-    PivotButton,
-};
-
 /** A mark on one cell, such as the formula indicator or the drop-down button of an autofilter.
 
     The cell range is in twips. The mark size is in pixels, and the pixel size is the twips per

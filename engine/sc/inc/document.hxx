@@ -1482,6 +1482,9 @@ public:
     /** Returns sparkline at the address if it exists */
     SC_DLLPUBLIC std::shared_ptr<sc::Sparkline> GetSparkline(ScAddress const & rPosition);
     SC_DLLPUBLIC bool HasSparkline(ScAddress const & rPosition);
+    /// Whether a cell of the column from nRow1 to nRow2 has a sparkline. Cheaper than asking
+    /// for each cell, because the sparklines of a column are kept in blocks.
+    bool HasSparklines(SCCOL nCol, SCROW nRow1, SCROW nRow2, SCTAB nTab) const;
     SC_DLLPUBLIC sc::Sparkline* CreateSparkline(ScAddress const & rPosition, std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup);
     SC_DLLPUBLIC sc::SparklineList* GetSparklineList(SCTAB nTab);
     SC_DLLPUBLIC bool DeleteSparkline(ScAddress const& rPosition);

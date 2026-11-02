@@ -6795,6 +6795,13 @@ bool ScDocument::HasSparkline(ScAddress const & rPosition)
     return bool(GetSparkline(rPosition));
 }
 
+bool ScDocument::HasSparklines(SCCOL nCol, SCROW nRow1, SCROW nRow2, SCTAB nTab) const
+{
+    if (const ScTable* pTable = FetchTable(nTab))
+        return pTable->HasSparklines(nCol, nRow1, nRow2);
+    return false;
+}
+
 sc::Sparkline* ScDocument::CreateSparkline(ScAddress const& rPosition, std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup)
 {
     SCTAB nTab = rPosition.Tab();

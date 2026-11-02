@@ -511,6 +511,8 @@ public:
     // Sparklines
 
     std::shared_ptr<sc::Sparkline> GetSparkline(SCCOL nCol, SCROW nRow);
+    /// Whether a cell of the column from nRow1 to nRow2 has a sparkline.
+    bool HasSparklines(SCCOL nCol, SCROW nRow1, SCROW nRow2) const;
     sc::Sparkline* CreateSparkline(SCCOL nCol, SCROW nRow, std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup);
     bool DeleteSparkline(SCCOL nCol, SCROW nRow);
 

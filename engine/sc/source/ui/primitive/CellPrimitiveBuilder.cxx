@@ -219,9 +219,13 @@ private:
     void buildShadows(const ScTableInfo& rInfo);
     void buildBorders(ScTableInfo& rInfo, SCCOL nStartColumn, SCCOL nEndColumn);
     void buildText(const ScTableInfo& rInfo);
-    void buildMarks(const ScTableInfo& rInfo);
-    void buildSparklines(const ScTableInfo& rInfo);
-    void buildGridCover(const ScTableInfo& rInfo);
+    void collectSparklines(const ScTableInfo& rInfo);
+    void placeSparklines();
+    void collectMarks(const ScTableInfo& rInfo);
+    void placeMarks();
+    void collectMergedAreas(const ScTableInfo& rInfo);
+    void placeGridCover();
+    bool isColumnHidden(SCCOL nColumn) const { return maHiddenColumns[nColumn - mnStartColumn]; }
 
     bool isCellTextHidden(SCCOL nColumn, SCROW nRow) const;
     bool isAvailable(SCCOL nColumn, SCROW nRow) const;
@@ -256,6 +260,8 @@ private:
 
     /// What the cells of the range show, by address, before the geometry places it.
     CellContent maContent;
+    /// Whether each column of the range is hidden, looked up once for the range.
+    std::vector<bool> maHiddenColumns;
     /// The shadows and borders, which are built for the whole range at once.
     CellPrimitiveLayers maRangeLayers;
     /// The other layers, for each row of the cells they belong to.
@@ -375,23 +381,25 @@ void CellPrimitiveBuilder::Impl::collect(SCCOL nStartColumn, SCROW nStartRow, SC
     }
     ScTableInfo& aInfo = *pInfo;
 
+    maHiddenColumns.assign(nEndColumn - nStartColumn + 1, false);
+    for (SCCOL nColumn = nStartColumn; nColumn <= nEndColumn; ++nColumn)
+        maHiddenColumns[nColumn - nStartColumn] = mrDocument.ColHidden(nColumn, mnTab);
+
     collectBackground(aInfo);
     placeBackground();
     buildShadows(aInfo);
     buildBorders(aInfo, nStartColumn, nEndColumn);
     buildText(aInfo);
-    buildSparklines(aInfo);
-    buildMarks(aInfo);
-    buildGridCover(aInfo);
+    collectSparklines(aInfo);
+    placeSparklines();
+    collectMarks(aInfo);
+    placeMarks();
+    collectMergedAreas(aInfo);
+    placeGridCover();
 }
 
 void CellPrimitiveBuilder::Impl::collectBackground(const ScTableInfo& rInfo)
 {
-    // Whether a column is hidden is looked up once for the range, not for every cell.
-    std::vector<bool> aHidden(mnEndColumn - mnStartColumn + 1);
-    for (SCCOL nColumn = mnStartColumn; nColumn <= mnEndColumn; ++nColumn)
-        aHidden[nColumn - mnStartColumn] = mrDocument.ColHidden(nColumn, mnTab);
-
     const RowInfo* pRowInfo = rInfo.mpRowInfo.get();
     for (SCSIZE nArrY = 1; nArrY + 1 < rInfo.mnArrCount; ++nArrY)
     {
@@ -414,7 +422,7 @@ void CellPrimitiveBuilder::Impl::collectBackground(const ScTableInfo& rInfo)
 
         for (SCCOL nColumn = mnStartColumn; nColumn <= mnEndColumn; ++nColumn)
         {
-            if (aHidden[nColumn - mnStartColumn])
+            if (isColumnHidden(nColumn))
                 continue;
             const ScCellInfo& rCell = rRow.cellInfo(nColumn);
 
@@ -1754,10 +1762,24 @@ void CellPrimitiveBuilder::Impl::buildText(const ScTableInfo& rInfo)
         addCellText(nColumn, nRow, nullptr);
 }
 
-void CellPrimitiveBuilder::Impl::buildSparklines(const ScTableInfo& rInfo)
+void CellPrimitiveBuilder::Impl::collectSparklines(const ScTableInfo& rInfo)
 {
-    SparklineRenderer aRenderer(mrDocument);
-    const double fSparklineScale = constPixelTwips / maSettings.mfPixelSize;
+    // The sparklines of a column are kept in blocks, so a column without any in the rows of the
+    // range costs one look-up, and only the other columns are asked cell by cell.
+    const SCROW nFirstRow = std::max(mnStartRow, mnFirstContentRow);
+    const SCROW nLastRow = std::min(mnEndRow, mnLastContentRow);
+    if (nFirstRow > nLastRow)
+        return;
+    std::vector<SCCOL> aColumns;
+    for (SCCOL nColumn = mnStartColumn; nColumn <= mnEndColumn; ++nColumn)
+    {
+        if (!isColumnHidden(nColumn)
+            && mrDocument.HasSparklines(nColumn, nFirstRow, nLastRow, mnTab))
+            aColumns.push_back(nColumn);
+    }
+    if (aColumns.empty())
+        return;
+
     const RowInfo* pRowInfo = rInfo.mpRowInfo.get();
     for (SCSIZE nArrY = 1; nArrY + 1 < rInfo.mnArrCount; ++nArrY)
     {
@@ -1765,11 +1787,10 @@ void CellPrimitiveBuilder::Impl::buildSparklines(const ScTableInfo& rInfo)
         const SCROW nRow = rRow.nRowNo;
         if (!isContentRow(nRow))
             continue;
-        for (SCCOL nColumn = mnStartColumn; nColumn <= mnEndColumn; ++nColumn)
+        for (const SCCOL nColumn : aColumns)
         {
             const ScCellInfo& rCell = rRow.cellInfo(nColumn);
-            if (rCell.bHOverlapped || rCell.bVOverlapped
-                || mrGeometry.getColumnWidth(nColumn) <= 0.0)
+            if (rCell.bHOverlapped || rCell.bVOverlapped)
                 continue;
 
             std::shared_ptr<sc::Sparkline> pSparkline
@@ -1785,28 +1806,47 @@ void CellPrimitiveBuilder::Impl::buildSparklines(const ScTableInfo& rInfo)
                 nEndColumn += std::max<SCCOL>(1, rMerge.GetColMerge()) - 1;
                 nEndRow += std::max<SCROW>(1, rMerge.GetRowMerge()) - 1;
             }
-            const basegfx::B2DRange aRange
-                = mrGeometry.getRange(nColumn, nRow, nEndColumn, nEndRow);
-
-            // A line weight in points is as many pixels at 100% zoom, so lines and markers grow
-            // with the zoom like in the window. The free border keeps its size in pixels.
-            primitive2d::Primitive2DContainer aContent = aRenderer.createPrimitives(
-                pSparkline, aRange, maSettings.mfPixelSize, maSettings.mfPixelSize, fSparklineScale,
-                fSparklineScale);
-            if (aContent.empty())
-                continue;
-
-            OString aGroupId;
-            if (auto pGroup = pSparkline->getSparklineGroup())
-                aGroupId = pGroup->getID().getString();
-            rowLayers(nRow).maExtras.push_back(new SparklinePrimitive2D(
-                nColumn, nRow, aRange, std::move(aGroupId), std::move(aContent)));
+            maContent.maSparklines.push_back(
+                CellSparkline{ nColumn, nRow, nEndColumn, nEndRow, std::move(pSparkline) });
         }
     }
 }
 
-void CellPrimitiveBuilder::Impl::buildMarks(const ScTableInfo& rInfo)
+void CellPrimitiveBuilder::Impl::placeSparklines()
 {
+    if (maContent.maSparklines.empty())
+        return;
+
+    SparklineRenderer aRenderer(mrDocument);
+    const double fSparklineScale = constPixelTwips / maSettings.mfPixelSize;
+    for (const CellSparkline& rSparkline : maContent.maSparklines)
+    {
+        const basegfx::B2DRange aRange = mrGeometry.getRange(
+            rSparkline.mnColumn, rSparkline.mnRow, rSparkline.mnEndColumn, rSparkline.mnEndRow);
+
+        // A line weight in points is as many pixels at 100% zoom, so lines and markers grow with
+        // the zoom like in the window. The free border keeps its size in pixels.
+        primitive2d::Primitive2DContainer aContent = aRenderer.createPrimitives(
+            rSparkline.mpSparkline, aRange, maSettings.mfPixelSize, maSettings.mfPixelSize,
+            fSparklineScale, fSparklineScale);
+        if (aContent.empty())
+            continue;
+
+        OString aGroupId;
+        if (auto pGroup = rSparkline.mpSparkline->getSparklineGroup())
+            aGroupId = pGroup->getID().getString();
+        rowLayers(rSparkline.mnRow)
+            .maExtras.push_back(new SparklinePrimitive2D(rSparkline.mnColumn, rSparkline.mnRow,
+                                                         aRange, std::move(aGroupId),
+                                                         std::move(aContent)));
+    }
+}
+
+void CellPrimitiveBuilder::Impl::collectMarks(const ScTableInfo& rInfo)
+{
+    if (!maSettings.mbFormulaMarks && !maSettings.mbFormulaErrorMarks && !maSettings.mbButtons)
+        return;
+
     const RowInfo* pRowInfo = rInfo.mpRowInfo.get();
     for (SCSIZE nArrY = 1; nArrY + 1 < rInfo.mnArrCount; ++nArrY)
     {
@@ -1816,9 +1856,28 @@ void CellPrimitiveBuilder::Impl::buildMarks(const ScTableInfo& rInfo)
             continue;
         for (SCCOL nColumn = mnStartColumn; nColumn <= mnEndColumn; ++nColumn)
         {
+            if (isColumnHidden(nColumn))
+                continue;
             const ScCellInfo& rCell = rRow.cellInfo(nColumn);
-            if (rCell.bHOverlapped || rCell.bVOverlapped
-                || mrGeometry.getColumnWidth(nColumn) <= 0.0)
+            if (rCell.bHOverlapped || rCell.bVOverlapped)
+                continue;
+
+            // Most cells show no mark, so that is found out before anything else is looked up.
+            const bool bFormula = rCell.maCell.getType() == CELLTYPE_FORMULA;
+            const bool bFormulaMark = bFormula && maSettings.mbFormulaMarks;
+            const bool bErrorMark = bFormula && maSettings.mbFormulaErrorMarks
+                                    && rCell.maCell.getFormula()->GetRawError()
+                                           != FormulaError::NONE;
+            std::optional<CellMarkKind> oButton;
+            if (maSettings.mbButtons)
+            {
+                if (rCell.bAutoFilter)
+                    oButton = CellMarkKind::AutoFilter;
+                else if (rCell.bPivotButton || rCell.bPivotPopupButton
+                         || rCell.bPivotPopupButtonMulti)
+                    oButton = CellMarkKind::PivotButton;
+            }
+            if (!bFormulaMark && !bErrorMark && !oButton)
                 continue;
 
             SCCOL nEndColumn = nColumn;
@@ -1829,39 +1888,38 @@ void CellPrimitiveBuilder::Impl::buildMarks(const ScTableInfo& rInfo)
                 nEndColumn += std::max<SCCOL>(1, rMerge.GetColMerge()) - 1;
                 nEndRow += std::max<SCROW>(1, rMerge.GetRowMerge()) - 1;
             }
-            const basegfx::B2DRange aRange
-                = mrGeometry.getRange(nColumn, nRow, nEndColumn, nEndRow);
-
-            if (rCell.maCell.getType() == CELLTYPE_FORMULA)
-            {
-                if (maSettings.mbFormulaMarks)
-                    rowLayers(nRow).maMarks.push_back(
-                        new CellMarkPrimitive2D(CellMarkKind::Formula, nColumn, nRow, aRange,
-                                                constFormulaMarkColor, maSettings.mfPixelSize));
-                if (maSettings.mbFormulaErrorMarks
-                    && rCell.maCell.getFormula()->GetRawError() != FormulaError::NONE)
-                    rowLayers(nRow).maMarks.push_back(new CellMarkPrimitive2D(
-                        CellMarkKind::FormulaError, nColumn, nRow, aRange,
-                        constFormulaErrorMarkColor, maSettings.mfPixelSize));
-            }
-
-            if (maSettings.mbButtons)
-            {
-                if (rCell.bAutoFilter)
-                    rowLayers(nRow).maMarks.push_back(new CellMarkPrimitive2D(
-                        CellMarkKind::AutoFilter, nColumn, nRow, aRange, COL_LIGHTBLUE,
-                        maSettings.mfPixelSize, rCell.bFilterActive));
-                else if (rCell.bPivotButton || rCell.bPivotPopupButton
-                         || rCell.bPivotPopupButtonMulti)
-                    rowLayers(nRow).maMarks.push_back(new CellMarkPrimitive2D(
-                        CellMarkKind::PivotButton, nColumn, nRow, aRange, COL_LIGHTBLUE,
-                        maSettings.mfPixelSize, rCell.bFilterActive));
-            }
+            if (bFormulaMark)
+                maContent.maMarks.push_back(CellMark{ nColumn, nRow, nEndColumn, nEndRow,
+                                                      CellMarkKind::Formula, false });
+            if (bErrorMark)
+                maContent.maMarks.push_back(CellMark{ nColumn, nRow, nEndColumn, nEndRow,
+                                                      CellMarkKind::FormulaError, false });
+            if (oButton)
+                maContent.maMarks.push_back(CellMark{ nColumn, nRow, nEndColumn, nEndRow,
+                                                      *oButton, rCell.bFilterActive });
         }
     }
 }
 
-void CellPrimitiveBuilder::Impl::buildGridCover(const ScTableInfo& rInfo)
+void CellPrimitiveBuilder::Impl::placeMarks()
+{
+    for (const CellMark& rMark : maContent.maMarks)
+    {
+        const basegfx::B2DRange aRange
+            = mrGeometry.getRange(rMark.mnColumn, rMark.mnRow, rMark.mnEndColumn, rMark.mnEndRow);
+        Color aColor = COL_LIGHTBLUE;
+        if (rMark.meKind == CellMarkKind::Formula)
+            aColor = constFormulaMarkColor;
+        else if (rMark.meKind == CellMarkKind::FormulaError)
+            aColor = constFormulaErrorMarkColor;
+        rowLayers(rMark.mnRow)
+            .maMarks.push_back(new CellMarkPrimitive2D(rMark.meKind, rMark.mnColumn, rMark.mnRow,
+                                                       aRange, aColor, maSettings.mfPixelSize,
+                                                       rMark.mbFilterActive));
+    }
+}
+
+void CellPrimitiveBuilder::Impl::collectMergedAreas(const ScTableInfo& rInfo)
 {
     // Merged areas whose first cell is in the range hide the grid lines inside them.
     const RowInfo* pRowInfo = rInfo.mpRowInfo.get();
@@ -1881,11 +1939,18 @@ void CellPrimitiveBuilder::Impl::buildGridCover(const ScTableInfo& rInfo)
             const SCROW nEndRow = nRow + std::max<SCROW>(1, rMerge.GetRowMerge()) - 1;
             if (nEndColumn == nColumn && nEndRow == nRow)
                 continue;
-            maCoverAreas[nRow].push_back(
-                { nColumn, nRow, nEndColumn, nEndRow,
-                  mrGeometry.getRange(nColumn, nRow, nEndColumn, nEndRow) });
+            maContent.maMergedAreas.push_back(CellMergedArea{ nColumn, nRow, nEndColumn, nEndRow });
         }
     }
+}
+
+void CellPrimitiveBuilder::Impl::placeGridCover()
+{
+    for (const CellMergedArea& rArea : maContent.maMergedAreas)
+        maCoverAreas[rArea.mnRow].push_back(
+            { rArea.mnColumn, rArea.mnRow, rArea.mnEndColumn, rArea.mnEndRow,
+              mrGeometry.getRange(rArea.mnColumn, rArea.mnRow, rArea.mnEndColumn,
+                                  rArea.mnEndRow) });
 }
 
 CellPrimitiveBuilder::CellPrimitiveBuilder(ScDocument& rDocument, SCTAB nTab,
