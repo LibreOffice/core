@@ -11,6 +11,9 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Chart tests.', function() {
 		mobileHelper.enableEditingMobile();
 		calcHelper.selectFirstColumn();
 		insertChart();
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
 	});
 
 	function insertChart() {
@@ -84,7 +87,9 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Chart tests.', function() {
 
 	it('Give the chart a title.', function() {
 		cy.cGet('.mobile-wizard .ui-tab').contains('Elements').click();
-		cy.cGet('.mobile-wizard #maintitle-input').type('Hello{enter}');
+		// Core enables the title box in its answer to the tab switch.
+		helper.processToIdle(this.win);
+		cy.cGet('.mobile-wizard #maintitle-input').should('be.enabled').type('Hello{enter}');
 		closeChartDialog();
 		cy.cGet('svg .OLE2').should('exist');
 		cy.cGet('svg .OLE2 text').contains('Hello').should('exist');
