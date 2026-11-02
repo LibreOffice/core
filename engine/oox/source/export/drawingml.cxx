@@ -2558,6 +2558,12 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
 {
     Reference< XPropertySet > rXPropSet = rRun;
     Reference< XPropertyState > rXPropState( rRun, UNO_QUERY );
+    // The Fontwork renderer draws every run with the character attributes of the shape; the
+    // runs are written with them, so that Office shows what the engine draws.
+    const bool bFontwork = IsFontworkShape(rRunInput.xShapePropSet);
+    Reference<XPropertySet> xCharAttrSource = rRun;
+    if (bFontwork)
+        xCharAttrSource = rRunInput.xShapePropSet;
     OUString usLanguage;
     bool bComplex = (rRunInput.nScriptType ==  css::i18n::ScriptType::COMPLEX);
     const char* bold = "0";
@@ -2574,7 +2580,7 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
     {
         nSize = rRunInput.nCharHeight;
     }
-    else if (GetProperty(rXPropSet, u"CharHeight"_ustr))
+    else if (GetProperty(xCharAttrSource, u"CharHeight"_ustr))
     {
         nSize = static_cast<sal_Int32>(100*(*o3tl::doAccess<float>(mAny)));
         if ( nElement == XML_rPr || nElement == XML_defRPr )
@@ -2584,7 +2590,7 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
         }
     }
 
-    if (GetProperty(rXPropSet, u"CharKerning"_ustr))
+    if (GetProperty(xCharAttrSource, u"CharKerning"_ustr))
         nCharKerning = static_cast<sal_Int32>(*o3tl::doAccess<sal_Int16>(mAny));
     /**  While setting values in propertymap,
     *    CharKerning converted using GetTextSpacingPoint
@@ -2594,15 +2600,16 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
     **/
     nCharKerning = toTextSpacingPoint(nCharKerning);
 
-    if ((bComplex && GetProperty(rXPropSet, u"CharWeightComplex"_ustr))
-        || GetProperty(rXPropSet, u"CharWeight"_ustr))
+    // the Fontwork renderer uses the Western weight and posture for every script
+    if ((bComplex && !bFontwork && GetProperty(xCharAttrSource, u"CharWeightComplex"_ustr))
+        || GetProperty(xCharAttrSource, u"CharWeight"_ustr))
     {
         if ( *o3tl::doAccess<float>(mAny) >= awt::FontWeight::SEMIBOLD )
             bold = "1";
     }
 
-    if ((bComplex && GetProperty(rXPropSet, u"CharPostureComplex"_ustr))
-        || GetProperty(rXPropSet, u"CharPosture"_ustr))
+    if ((bComplex && !bFontwork && GetProperty(xCharAttrSource, u"CharPostureComplex"_ustr))
+        || GetProperty(xCharAttrSource, u"CharPosture"_ustr))
         switch ( *o3tl::doAccess<awt::FontSlant>(mAny) )
         {
             case awt::FontSlant_OBLIQUE :
@@ -2783,7 +2790,7 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
 
     // Fontwork-shapes in LO have text outline and fill from shape stroke and shape fill
     // PowerPoint has this as run properties
-    if (IsFontworkShape(rRunInput.xShapePropSet))
+    if (bFontwork)
     {
         WriteOutline(rRunInput.xShapePropSet);
         WriteBlipOrNormalFill(rRunInput.xShapePropSet, u"Graphic"_ustr);
@@ -2905,7 +2912,7 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
         }
     }
 
-    if (GetProperty(rXPropSet, u"CharFontName"_ustr))
+    if (GetProperty(xCharAttrSource, u"CharFontName"_ustr))
     {
         const char* const pitch = nullptr;
         const char* const charset = nullptr;
@@ -2926,9 +2933,14 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
                                XML_charset, charset );
     }
 
-    if (rRunInput.bCheckDirect
-        && GetDirectProperty(rXPropSet, rXPropState,
-                             bComplex ? u"CharFontNameComplex"_ustr : u"CharFontNameAsian"_ustr))
+    // the Asian and complex fonts of a Fontwork are the shape's as well
+    if (bFontwork
+            ? GetProperty(xCharAttrSource,
+                          bComplex ? u"CharFontNameComplex"_ustr : u"CharFontNameAsian"_ustr)
+            : (rRunInput.bCheckDirect
+               && GetDirectProperty(rXPropSet, rXPropState,
+                                    bComplex ? u"CharFontNameComplex"_ustr
+                                             : u"CharFontNameAsian"_ustr)))
     {
         const char* const pitch = nullptr;
         const char* const charset = nullptr;
@@ -4964,6 +4976,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     if (pTxtObj && mpTextExport)
     {
         std::vector<beans::PropertyValue> aOldCharFillPropVec;
+        std::vector<FontworkHelpers::RunProps> aOldRunAttrs;
         std::vector<ParaAdjustPair> aOldParaAdjust;
         if (bIsFontworkShape)
         {
@@ -4986,6 +4999,13 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
             std::vector<beans::PropertyValue> aExportCharFillPropVec;
             FontworkHelpers::createCharFillPropsFromShape(rXPropSet, aExportCharFillPropVec);
             FontworkHelpers::applyPropsToRuns(aExportCharFillPropVec, xXText);
+            // The Fontwork renderer draws every run with the character attributes of the shape;
+            // the runs take them while they are written, and get their own back afterwards.
+            FontworkHelpers::collectRunProps(xXText, FontworkHelpers::aFontworkCharAttrNames,
+                                             aOldRunAttrs);
+            std::vector<beans::PropertyValue> aShapeCharAttrVec;
+            FontworkHelpers::createCharAttrPropsFromShape(rXPropSet, aShapeCharAttrVec);
+            FontworkHelpers::applyPropsToRuns(aShapeCharAttrVec, xXText);
             // Import has converted some items from CharInteropGrabBag to fill and line
             // properties of the shape. For export we convert them back because users might have
             // changed them. And we create them in case we come from an odt document.
@@ -5016,6 +5036,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
 
         if (bIsFontworkShape)
         {
+            FontworkHelpers::applyRunProps(aOldRunAttrs);
             FontworkHelpers::applyPropsToRuns(aOldCharFillPropVec, xXText);
             lcl_ApplyParaAdjust(xXText, aOldParaAdjust);
         }

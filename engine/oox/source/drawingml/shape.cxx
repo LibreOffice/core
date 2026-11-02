@@ -875,6 +875,12 @@ static void lcl_copyCharPropsToShape(const uno::Reference<drawing::XShape>& xSha
                 sal_Int32 nHeight = rCharProps.moHeight.value() / 100;
                 xSet->setPropertyValue(UNO_NAME_CHAR_HEIGHT, cpo::uno::Any(nHeight));
             }
+            if (rCharProps.moSpacing.has_value())
+            {
+                sal_Int16 nKerning
+                    = static_cast<sal_Int16>(GetTextSpacingPoint(rCharProps.moSpacing.value()));
+                xSet->setPropertyValue(u"CharKerning"_ustr, cpo::uno::Any(nKerning));
+            }
 
             // Put theme fonts into shape properties
             OUString sFontName;

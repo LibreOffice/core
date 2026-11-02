@@ -40,6 +40,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/DashStyle.hpp>
@@ -865,6 +866,83 @@ void FontworkHelpers::collectCharColorProps(const uno::Reference<text::XText>& r
             }
             return;
         }
+    }
+}
+
+void FontworkHelpers::collectRunProps(const uno::Reference<text::XText>& rXText,
+                                      std::span<const std::u16string_view> rNames,
+                                      std::vector<RunProps>& rRunProps)
+{
+    rRunProps.clear();
+    uno::Reference<container::XEnumerationAccess> paraEnumAccess(rXText, uno::UNO_QUERY);
+    if (!paraEnumAccess.is())
+        return;
+    uno::Reference<container::XEnumeration> paraEnum(paraEnumAccess->createEnumeration());
+    while (paraEnum->hasMoreElements())
+    {
+        uno::Reference<text::XTextRange> xParagraph(paraEnum->nextElement(), uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> runEnumAccess(xParagraph, uno::UNO_QUERY);
+        if (!runEnumAccess.is())
+            continue;
+        uno::Reference<container::XEnumeration> runEnum = runEnumAccess->createEnumeration();
+        while (runEnum->hasMoreElements())
+        {
+            uno::Reference<text::XTextRange> xRun(runEnum->nextElement(), uno::UNO_QUERY);
+            if (xRun->getString().isEmpty())
+                continue;
+            uno::Reference<beans::XPropertySet> xRunPropSet(xRun, uno::UNO_QUERY);
+            if (!xRunPropSet.is())
+                continue;
+            uno::Reference<beans::XPropertySetInfo> xInfo = xRunPropSet->getPropertySetInfo();
+            uno::Reference<beans::XPropertyState> xState(xRun, uno::UNO_QUERY);
+            RunProps aRun;
+            aRun.xRun = xRunPropSet;
+            for (const std::u16string_view& sName : rNames)
+            {
+                OUString aPropertyName(sName);
+                if (!xInfo.is() || !xInfo->hasPropertyByName(aPropertyName))
+                    continue;
+                if (xState.is()
+                    && xState->getPropertyState(aPropertyName) != beans::PropertyState_DIRECT_VALUE)
+                    aRun.aInherited.push_back(aPropertyName);
+                else
+                    aRun.aDirect.push_back(comphelper::makePropertyValue(
+                        aPropertyName, xRunPropSet->getPropertyValue(aPropertyName)));
+            }
+            rRunProps.push_back(std::move(aRun));
+        }
+    }
+}
+
+void FontworkHelpers::applyRunProps(const std::vector<RunProps>& rRunProps)
+{
+    for (const RunProps& rRun : rRunProps)
+    {
+        if (!rRun.xRun.is())
+            continue;
+        for (const beans::PropertyValue& rProp : rRun.aDirect)
+            rRun.xRun->setPropertyValue(rProp.Name, rProp.Value);
+        uno::Reference<beans::XPropertyState> xState(rRun.xRun, uno::UNO_QUERY);
+        if (!xState.is())
+            continue;
+        for (const OUString& rName : rRun.aInherited)
+            xState->setPropertyToDefault(rName);
+    }
+}
+
+void FontworkHelpers::createCharAttrPropsFromShape(
+    const uno::Reference<beans::XPropertySet>& rXPropSet,
+    std::vector<beans::PropertyValue>& rCharPropVec)
+{
+    if (!rXPropSet.is())
+        return;
+    uno::Reference<beans::XPropertySetInfo> xInfo = rXPropSet->getPropertySetInfo();
+    for (const std::u16string_view& sName : aFontworkCharAttrNames)
+    {
+        OUString aPropertyName(sName);
+        if (xInfo.is() && xInfo->hasPropertyByName(aPropertyName))
+            rCharPropVec.push_back(comphelper::makePropertyValue(
+                aPropertyName, rXPropSet->getPropertyValue(aPropertyName)));
     }
 }
 

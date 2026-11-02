@@ -11,6 +11,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
@@ -18,6 +19,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
@@ -1206,6 +1208,114 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkAlignmentWriter)
     drawing::TextFitToSizeType eFit = drawing::TextFitToSizeType_NONE;
     xStretch->getPropertyValue(u"TextFitToSize"_ustr) >>= eFit;
     CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_ALLLINES, eFit);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFontworkShapeAttributes)
+{
+    // Given a Fontwork whose shape draws its text in Impact 24pt bold italic with letter spacing
+    // and 150% character width, while the span of its text says Liberation Sans 12pt regular:
+    loadFromFile(u"fontwork-shape-attributes.fodp");
+
+    // When saving to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then the run is written with the attributes the shape draws
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p/a:r/a:rPr", "sz", u"2400");
+    assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p/a:r/a:rPr", "b", u"1");
+    assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p/a:r/a:rPr", "i", u"1");
+    assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p/a:r/a:rPr", "spc", u"283");
+    assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p/a:r/a:rPr/a:latin", "typeface", u"Impact");
+
+    // and reading the file back gives the shape those attributes
+    loadFromURL(maTempFile.GetURL());
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(u"Impact"_ustr,
+                         xShape->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(24.0f, xShape->getPropertyValue(u"CharHeight"_ustr).get<float>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100),
+                         xShape->getPropertyValue(u"CharKerning"_ustr).get<sal_Int16>());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFontworkShapeAttributesWriter)
+{
+    // Given the same Fontwork in a Writer document, with the states of the attributes of its two
+    // spans as they are:
+    loadFromFile(u"fontwork-shape-attributes.fodt");
+    beans::PropertyState eFirstFontState = beans::PropertyState_DIRECT_VALUE;
+    beans::PropertyState eSecondWidthState = beans::PropertyState_DIRECT_VALUE;
+    {
+        uno::Reference<drawing::XDrawPageSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xShape(xDoc->getDrawPage()->getByIndex(0),
+                                                   uno::UNO_QUERY_THROW);
+        uno::Reference<container::XEnumerationAccess> xParas(xShape, uno::UNO_QUERY_THROW);
+        uno::Reference<container::XEnumerationAccess> xRuns(
+            xParas->createEnumeration()->nextElement(), uno::UNO_QUERY_THROW);
+        uno::Reference<container::XEnumeration> xRunEnum = xRuns->createEnumeration();
+        uno::Reference<beans::XPropertyState> xFirst(xRunEnum->nextElement(), uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertyState> xSecond(xRunEnum->nextElement(), uno::UNO_QUERY_THROW);
+        eFirstFontState = xFirst->getPropertyState(u"CharFontName"_ustr);
+        eSecondWidthState = xSecond->getPropertyState(u"CharScaleWidth"_ustr);
+        // the first span's font is its own, the second span's width is inherited
+        CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, eFirstFontState);
+        CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE, eSecondWidthState);
+    }
+
+    // When saving to DOCX:
+    save(TestFilter::DOCX);
+
+    // Then the runs of the WordArt text box are written with the attributes the shape draws, the
+    // character width among them; the two spans of the text, bold and regular, are one run
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    OString sRun = "//mc:Choice//wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/"_ostr;
+    assertXPath(pXmlDoc, "//mc:Choice//wps:wsp/wps:txbx/w:txbxContent/w:p/w:r", 1);
+    assertXPath(pXmlDoc, sRun + "w:rFonts", "ascii", u"Impact");
+    assertXPath(pXmlDoc, sRun + "w:sz", "val", u"48");
+    assertXPath(pXmlDoc, sRun + "w:b", 1);
+    assertXPath(pXmlDoc, sRun + "w:i", 1);
+    assertXPath(pXmlDoc, sRun + "w:w", "val", u"150");
+
+    // and the document's own text keeps its two spans after the save: the second is regular
+    {
+        uno::Reference<drawing::XDrawPageSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xShape(xDoc->getDrawPage()->getByIndex(0),
+                                                   uno::UNO_QUERY_THROW);
+        uno::Reference<container::XEnumerationAccess> xParas(xShape, uno::UNO_QUERY_THROW);
+        uno::Reference<container::XEnumerationAccess> xRuns(
+            xParas->createEnumeration()->nextElement(), uno::UNO_QUERY_THROW);
+        uno::Reference<container::XEnumeration> xRunEnum = xRuns->createEnumeration();
+        uno::Reference<beans::XPropertySet> xFirst(xRunEnum->nextElement(), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xRunEnum->hasMoreElements());
+        uno::Reference<beans::XPropertySet> xSecond(xRunEnum->nextElement(), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD,
+                             xFirst->getPropertyValue(u"CharWeight"_ustr).get<float>());
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL,
+                             xSecond->getPropertyValue(u"CharWeight"_ustr).get<float>());
+        // and the attributes of the spans are what they were, the inherited width included
+        uno::Reference<beans::XPropertyState> xFirstState(xFirst, uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(eFirstFontState, xFirstState->getPropertyState(u"CharFontName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Liberation Sans"_ustr,
+                             xFirst->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
+        uno::Reference<beans::XPropertyState> xSecondState(xSecond, uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(eSecondWidthState,
+                             xSecondState->getPropertyState(u"CharScaleWidth"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(100),
+                             xSecond->getPropertyValue(u"CharScaleWidth"_ustr).get<sal_Int16>());
+    }
+
+    // and reading the file back gives the shape those attributes
+    loadFromURL(maTempFile.GetURL());
+    uno::Reference<drawing::XDrawPageSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPage());
+    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(u"Impact"_ustr,
+                         xShape->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(24.0f, xShape->getPropertyValue(u"CharHeight"_ustr).get<float>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(150),
+                         xShape->getPropertyValue(u"CharScaleWidth"_ustr).get<sal_Int16>());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFontworkDistance)

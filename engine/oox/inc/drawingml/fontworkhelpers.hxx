@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <array>
+#include <span>
 #include <docmodel/color/ComplexColor.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -62,6 +64,37 @@ void collectCharColorProps(const cpo::uno::Reference<css::text::XText>& rXText,
     rXText.*/
 void applyPropsToRuns(const std::vector<css::beans::PropertyValue>& rTextPropVec,
                       const cpo::uno::Reference<css::text::XText>& rXText);
+
+/** The character attributes a Fontwork is drawn with: "CharHeight", "CharWeight", "CharPosture",
+    "CharFontName", "CharFontNameAsian", "CharFontNameComplex" and "CharScaleWidth", and
+    "CharKerning", which the renderer does not draw and the import puts on the shape. */
+inline constexpr std::array<std::u16string_view, 8> aFontworkCharAttrNames
+    = { u"CharHeight",        u"CharWeight",          u"CharPosture", u"CharFontName",
+        u"CharFontNameAsian", u"CharFontNameComplex", u"CharKerning", u"CharScaleWidth" };
+
+/** A run of a text with the properties it had: the values set directly on it, and the names of
+    the ones it inherited. The run keeps its range, so that the properties can be given back to
+    it after the runs of the text were changed and merged. */
+struct RunProps
+{
+    cpo::uno::Reference<css::beans::XPropertySet> xRun;
+    std::vector<css::beans::PropertyValue> aDirect;
+    std::vector<OUString> aInherited;
+};
+
+/** Collects the given properties of every non-empty run of rXText, in order. */
+void collectRunProps(const cpo::uno::Reference<css::text::XText>& rXText,
+                     std::span<const std::u16string_view> rNames,
+                     std::vector<RunProps>& rRunProps);
+
+/** Gives the collected runs their properties back: the direct values are set, the inherited
+    ones set to their default. */
+void applyRunProps(const std::vector<RunProps>& rRunProps);
+
+/** Reads the character attributes of aFontworkCharAttrNames from the shape and puts them into
+    rCharPropVec, so that they can be applied to the runs of its text. */
+void createCharAttrPropsFromShape(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet,
+                                  std::vector<css::beans::PropertyValue>& rCharPropVec);
 
 /** Generates the properties "CharColor", "CharLumMod", "CharLumOff", "CharColorTheme",
     "CharComplexColor" and "CharTransparence" from the shape properties "FillColor",
