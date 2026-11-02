@@ -21,7 +21,6 @@
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <algorithm>
-#include <cassert>
 
 namespace basegfx
 {
@@ -91,14 +90,10 @@ namespace basegfx
 
         const double fLength(getLength());
 
-        if(fTools::moreOrEqual(fDistance, fLength))
+        if(fLength == 0.0 || fTools::moreOrEqual(fDistance, fLength))
         {
             return 1.0;
         }
-
-        // fDistance is >= fLength. For fLength to be zero, then fDistance has
-        // to be <= 0.0, but we return early in that case.
-        assert(fLength != 0 && "help coverity see it's not zero");
 
         // fDistance is in ]0.0 .. fLength[
 
