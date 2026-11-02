@@ -398,8 +398,8 @@ const sal_Unicode * skipComment(const sal_Unicode * pBegin,
 
     if (pBegin != pEnd && *pBegin == '(')
     {
-        sal_uInt32 nLevel = 0;
-        for (const sal_Unicode * p = pBegin; p != pEnd;)
+        sal_uInt32 nLevel = 1;
+        for (const sal_Unicode * p = pBegin + 1; p != pEnd;)
             switch (*p++)
             {
                 case '(':
