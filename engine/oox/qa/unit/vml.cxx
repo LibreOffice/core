@@ -11,6 +11,9 @@
 
 #include <test/unoapi_test.hxx>
 
+#include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/awt/FontSlant.hpp>
+#include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
@@ -220,6 +223,27 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testWriterFontworkTrimTrue)
     // Without the fix the test would have failed with expected 4999 actual 1732.
     awt::Size aSize = xShape->getSize();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(4999, aSize.Height, 2);
+}
+
+CPPUNIT_TEST_FIXTURE(OoxVmlTest, testVMLTextpathStyle)
+{
+    // Given a docx of an older Office with a VML WordArt whose textpath style says bold, italic,
+    // a character width of 120 % (v-text-spacing 78643f) and letters of the same height:
+    loadFromFile(u"fontwork-vml-textpath-style.docx");
+
+    // Then the Fontwork shape carries those attributes
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPageSupplier->getDrawPage()->getByIndex(0),
+                                               uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"Impact"_ustr, xShape->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, xShape->getPropertyValue(u"CharWeight"_ustr).get<float>());
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
+                         xShape->getPropertyValue(u"CharPosture"_ustr).get<awt::FontSlant>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(120),
+                         xShape->getPropertyValue(u"CharScaleWidth"_ustr).get<sal_Int16>());
+    comphelper::SequenceAsHashMap aGeometry(xShape->getPropertyValue(u"CustomShapeGeometry"_ustr));
+    comphelper::SequenceAsHashMap aTextPath(aGeometry[u"TextPath"_ustr]);
+    CPPUNIT_ASSERT_EQUAL(true, aTextPath[u"SameLetterHeights"_ustr].get<bool>());
 }
 
 CPPUNIT_TEST_FIXTURE(OoxVmlTest, testVMLDetectWordArtOnImport)

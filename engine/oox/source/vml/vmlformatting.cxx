@@ -19,16 +19,20 @@
 
 #include <sal/config.h>
 
+#include <cmath>
 #include <cstdlib>
 
 #include <oox/vml/vmlformatting.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/text/WritingMode.hpp>
 
 #include <o3tl/float_int_conversion.hxx>
 #include <o3tl/unit_conversion.hxx>
@@ -966,13 +970,13 @@ TextpathModel::TextpathModel()
 {
 }
 
-static beans::PropertyValue lcl_createTextpathProps()
+static beans::PropertyValue lcl_createTextpathProps(bool bSameLetterHeights)
 {
     cpo::uno::Sequence<beans::PropertyValue> aTextpathPropSeq( comphelper::InitPropertySequence({
             { u"TextPath"_ustr, cpo::uno::Any(true) },
             { u"TextPathMode"_ustr, cpo::uno::Any(drawing::EnhancedCustomShapeTextPathMode_SHAPE) },
             { u"ScaleX"_ustr, cpo::uno::Any(false) },
-            { u"SameLetterHeights"_ustr, cpo::uno::Any(false) }
+            { u"SameLetterHeights"_ustr, cpo::uno::Any(bSameLetterHeights) }
         }));
 
     beans::PropertyValue aRet;
@@ -984,6 +988,59 @@ static beans::PropertyValue lcl_createTextpathProps()
 void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Reference<drawing::XShape>& xShape, const GraphicHelper& rGraphicHelper) const
 {
     OUString sFont = u""_ustr;
+
+    // The style of the text path carries, besides the font, the weight, the posture, the
+    // character width (v-text-spacing, in 1/65536), whether every letter is as tall as the
+    // tallest and whether the letters are turned for a vertical text.
+    bool bSameLetterHeights = false;
+    bool bRotateLetters = false;
+    std::vector<std::pair<OUString, cpo::uno::Any>> aStyleProps;
+    if (moStyle.has_value())
+    {
+        OUString aStyle = moStyle.value();
+        sal_Int32 nStyleIndex = 0;
+        while (nStyleIndex >= 0)
+        {
+            std::u16string_view aName, aValue;
+            if (!ConversionHelper::separatePair(aName, aValue, o3tl::getToken(aStyle, 0, ';', nStyleIndex), ':'))
+                continue;
+            if (aName == u"font-family")
+            {
+                // remove " (first, and last character)
+                if (aValue.size() > 2)
+                    aValue = aValue.substr(1, aValue.size() - 2);
+                sFont = aValue;
+                aStyleProps.emplace_back(u"CharFontName"_ustr, cpo::uno::Any(sFont));
+            }
+            else if (aName == u"font-size")
+            {
+                std::optional<OUString> aOptString {OUString(aValue)};
+                float nSize = drawingml::convertEmuToPoints(lclGetEmu(rGraphicHelper, aOptString, 1));
+                aStyleProps.emplace_back(u"CharHeight"_ustr, cpo::uno::Any(nSize));
+            }
+            else if (aName == u"font-weight")
+                aStyleProps.emplace_back(u"CharWeight"_ustr,
+                    cpo::uno::Any(aValue == u"bold" || aValue == u"bolder" || o3tl::toInt32(aValue) >= 600
+                                      ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL));
+            else if (aName == u"font-style")
+                aStyleProps.emplace_back(u"CharPosture"_ustr,
+                    cpo::uno::Any(aValue == u"italic" || aValue == u"oblique"
+                                      ? awt::FontSlant_ITALIC : awt::FontSlant_NONE));
+            else if (aName == u"v-text-spacing")
+            {
+                // a fraction of the normal width: as a 16.16 number ("78643f"), a percentage or a
+                // plain fraction
+                double fSpacing = ConversionHelper::decodePercent(aValue, 1.0);
+                if (fSpacing > 0.0 && fSpacing < 10.0)
+                    aStyleProps.emplace_back(u"CharScaleWidth"_ustr,
+                        cpo::uno::Any(static_cast<sal_Int16>(std::lround(fSpacing * 100.0))));
+            }
+            else if (aName == u"v-same-letter-heights")
+                bSameLetterHeights = aValue == u"t" || aValue == u"true";
+            else if (aName == u"v-rotate-letters")
+                bRotateLetters = aValue == u"t" || aValue == u"true";
+        }
+    }
 
     if (moString.has_value())
     {
@@ -998,47 +1055,25 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
             if (rProp.Name == "TextPath")
             {
                 bFound = true;
-                rProp = lcl_createTextpathProps();
+                rProp = lcl_createTextpathProps(bSameLetterHeights);
             }
         }
         if (!bFound)
         {
             sal_Int32 nSize = aGeomPropSeq.getLength();
             aGeomPropSeq.realloc(nSize+1);
-            aGeomPropSeq.getArray()[nSize] = lcl_createTextpathProps();
+            aGeomPropSeq.getArray()[nSize] = lcl_createTextpathProps(bSameLetterHeights);
         }
         rPropMap.setAnyProperty(PROP_CustomShapeGeometry, cpo::uno::Any(aGeomPropSeq));
     }
-    if (moStyle.has_value())
+    if (!aStyleProps.empty() || bRotateLetters)
     {
-        OUString aStyle = moStyle.value_or(OUString());
-
-        sal_Int32 nIndex = 0;
-        while( nIndex >= 0 )
-        {
-            std::u16string_view aName, aValue;
-            if (ConversionHelper::separatePair(aName, aValue, o3tl::getToken(aStyle, 0, ';', nIndex), ':'))
-            {
-                if (aName == u"font-family")
-                {
-                    // remove " (first, and last character)
-                    if (aValue.size() > 2)
-                        aValue = aValue.substr(1, aValue.size() - 2);
-
-                    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-                    xPropertySet->setPropertyValue(u"CharFontName"_ustr, cpo::uno::Any(OUString(aValue)));
-                    sFont = aValue;
-                }
-                else if (aName == u"font-size")
-                {
-                    std::optional<OUString> aOptString {OUString(aValue)};
-                    float nSize = drawingml::convertEmuToPoints(lclGetEmu(rGraphicHelper, aOptString, 1));
-
-                    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-                    xPropertySet->setPropertyValue(u"CharHeight"_ustr, cpo::uno::Any(nSize));
-                }
-            }
-        }
+        uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+        for (const std::pair<OUString, cpo::uno::Any>& rProp : aStyleProps)
+            xPropertySet->setPropertyValue(rProp.first, rProp.second);
+        if (bRotateLetters)
+            xPropertySet->setPropertyValue(u"TextWritingMode"_ustr,
+                                           cpo::uno::Any(text::WritingMode_TB_RL));
     }
     if (moTrim.has_value() && moTrim.value())
         return;
