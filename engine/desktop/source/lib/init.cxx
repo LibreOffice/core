@@ -3854,7 +3854,7 @@ static bool doc_saveAs(COKitDocument* pThis, const char* sUrl, const char* pForm
         if ((aIndex = aFilterOptions.indexOf(",PasswordToModify=")) >= 0)
         {
             int bIndex = aFilterOptions.indexOf("PASSWORDTOMODIFYEND");
-            filePassword = aFilterOptions.subView(aIndex + 18, bIndex - (aIndex + 18));
+            filePasswordToModify = aFilterOptions.subView(aIndex + 18, bIndex - (aIndex + 18));
             aFilterOptions = OUString::Concat(aFilterOptions.subView(0, aIndex))
                              + aFilterOptions.subView(bIndex + 19);
         }
