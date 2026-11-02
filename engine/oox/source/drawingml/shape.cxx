@@ -1001,7 +1001,25 @@ static void lcl_copyCharPropsToShape(const uno::Reference<drawing::XShape>& xSha
                 xSet->setPropertyValue(rProp.Name, rProp.Value);
             }
 
-            // ToDo: Import WordArt glow and simple shadow effects. They are available in LO.
+            // The glow and the shadow of the run, which the export puts on every run of a Fontwork,
+            // are effects of the shape in the engine.
+            const EffectProperties& rRunEffects = rCharProps.getEffectProperties();
+            if (rRunEffects.maGlow.moGlowRad.has_value())
+            {
+                xSet->setPropertyValue(u"GlowEffectRadius"_ustr,
+                                       Any(convertEmuToHmm(rRunEffects.maGlow.moGlowRad.value())));
+                xSet->setPropertyValue(u"GlowEffectColor"_ustr,
+                                       Any(rRunEffects.maGlow.moGlowColor.getColor(rFilter.getGraphicHelper())));
+                xSet->setPropertyValue(u"GlowEffectTransparency"_ustr,
+                                       Any(rRunEffects.maGlow.moGlowColor.getTransparency()));
+            }
+            if (rRunEffects.maShadow.moShadowDist.has_value())
+            {
+                oox::drawingml::ShapePropertyMap aShadowProps(rFilter.getModelObjectHelper());
+                rRunEffects.pushToPropMap(aShadowProps, rFilter.getGraphicHelper());
+                for (const beans::PropertyValue& rProp : aShadowProps.makePropertyValueSequence())
+                    xSet->setPropertyValue(rProp.Name, rProp.Value);
+            }
         }
 
         // LO does not evaluate paragraph alignment in text path mode. Use text area anchor instead.

@@ -18,6 +18,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -1401,6 +1402,65 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkRunColoursWriter)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xff0000),
                          xShape->getPropertyValue(u"FillColor"_ustr).get<sal_Int32>());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0000ff), lcl_PortionColor(xShape, u"Blue"));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFontworkGlowShadowRoundTrip)
+{
+    // Given a Fontwork with a glow of 3 mm and a shadow of 2 mm:
+    loadFromFile(u"fontwork-glow-shadow.fodp");
+
+    // When saving to PPTX, where the effects go on the runs of the WordArt:
+    save(TestFilter::PPTX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p/a:r/a:rPr/a:effectLst/a:glow", "rad", u"108000");
+    assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p/a:r/a:rPr/a:effectLst/a:outerShdw", 1);
+
+    // Then reading the file back gives the shape its glow and shadow
+    loadFromURL(maTempFile.GetURL());
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(300),
+                         xShape->getPropertyValue(u"GlowEffectRadius"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00ff00),
+                         xShape->getPropertyValue(u"GlowEffectColor"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(true, xShape->getPropertyValue(u"Shadow"_ustr).get<bool>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(200),
+                         xShape->getPropertyValue(u"ShadowXDistance"_ustr).get<sal_Int32>());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFontworkArchScaleXWriter)
+{
+    // Given two arch Fontworks anchored at the bottom, one with the text scaled to the path, one
+    // stretched to the shape:
+    loadFromFile(u"fontwork-arch-scalex.fodt");
+
+    // When saving to DOCX:
+    save(TestFilter::DOCX);
+
+    // Then only the stretched one is a WordArt of the legacy kind, and both anchor at the bottom
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "(//mc:Choice//wps:wsp/wps:bodyPr)[1]", "fromWordArt", u"1");
+    assertXPathNoAttribute(pXmlDoc, "(//mc:Choice//wps:wsp/wps:bodyPr)[2]", "fromWordArt");
+    assertXPath(pXmlDoc, "(//mc:Choice//wps:wsp/wps:bodyPr)[1]", "anchor", u"b");
+
+    // and reading the file back gives each its scaling and the anchor
+    loadFromURL(maTempFile.GetURL());
+    uno::Reference<drawing::XDrawPageSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPage());
+    for (sal_Int32 i = 0; i < 2; ++i)
+    {
+        // the first arch keeps its text scaled to the path, the second stretched to the shape
+        const bool bScaleX = i == 1;
+        uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(i), uno::UNO_QUERY_THROW);
+        comphelper::SequenceAsHashMap aGeometry(xShape->getPropertyValue(u"CustomShapeGeometry"_ustr));
+        comphelper::SequenceAsHashMap aTextPath(aGeometry[u"TextPath"_ustr]);
+        CPPUNIT_ASSERT_EQUAL(bScaleX, aTextPath[u"ScaleX"_ustr].get<bool>());
+        drawing::TextVerticalAdjust eAdjust = drawing::TextVerticalAdjust_TOP;
+        xShape->getPropertyValue(u"TextVerticalAdjust"_ustr) >>= eAdjust;
+        CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_BOTTOM, eAdjust);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFontworkDistance)

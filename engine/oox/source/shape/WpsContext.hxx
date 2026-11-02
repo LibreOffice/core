@@ -38,6 +38,9 @@ public:
 private:
     cpo::uno::Reference<css::drawing::XShape> mxShape;
     bool m_bHasWPGParent;
+    /// The fromWordArt attribute of the body properties: the text of a legacy WordArt is
+    /// stretched to the shape, not scaled.
+    bool m_bFromWordArt = false;
 };
 }
 

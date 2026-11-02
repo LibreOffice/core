@@ -27,6 +27,7 @@
 #include <oox/drawingml/shapepropertymap.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
+#include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <svx/svdoashp.hxx>
 
@@ -471,7 +472,8 @@ void lcl_applyShapePropsToShape(const uno::Reference<beans::XPropertySet>& xShap
 void lcl_setTextAnchorFromTextProps(const uno::Reference<beans::XPropertySet>& xShapePropertySet,
                                     const comphelper::SequenceAsHashMap& aTextPropMap)
 {
-    // Fontwork does not evaluate paragraph alignment but uses text anchor instead
+    // Fontwork does not evaluate paragraph alignment but uses text anchor instead; the vertical
+    // anchor is the one the body properties gave the shape
     auto eHorzAdjust(drawing::TextHorizontalAdjust_CENTER);
     sal_Int16 nParaAlign = sal_Int16(drawing::TextHorizontalAdjust_CENTER);
     aTextPropMap.getValue(u"ParaAdjust"_ustr) >>= nParaAlign;
@@ -502,8 +504,6 @@ void lcl_setTextAnchorFromTextProps(const uno::Reference<beans::XPropertySet>& x
             eHorzAdjust = drawing::TextHorizontalAdjust_CENTER;
     }
     xShapePropertySet->setPropertyValue(u"TextHorizontalAdjust"_ustr, cpo::uno::Any(eHorzAdjust));
-    xShapePropertySet->setPropertyValue(u"TextVerticalAdjust"_ustr,
-                                        cpo::uno::Any(drawing::TextVerticalAdjust_TOP));
 }
 
 void lcl_setTextPropsToShape(const uno::Reference<beans::XPropertySet>& xShapePropertySet,
@@ -742,6 +742,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
 
                 uno::Reference<lang::XServiceInfo> xServiceInfo(mxShape, uno::UNO_QUERY);
                 uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
+                m_bFromWordArt = rAttribs.getBool(XML_fromWordArt, false);
                 sal_Int32 nVert = rAttribs.getToken(XML_vert, XML_horz);
                 if (nVert == XML_eaVert)
                 {
@@ -947,6 +948,8 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 mpShapePtr->setWPGChild(true);
                 oox::drawingml::TextBodyPtr pTextBody;
                 pTextBody.reset(new oox::drawingml::TextBody());
+                pTextBody->getTextProperties().maPropertyMap.setProperty(
+                    PROP_FromWordArt, rAttribs.getBool(XML_fromWordArt, false));
 
                 if (rAttribs.hasAttribute(XML_anchor))
                 {
@@ -1123,11 +1126,11 @@ void WpsContext::onEndElement()
     // Setting the property "TextBox" to false includes removing the attached frame from the shape.
     xShapePropertySet->setPropertyValue(u"TextBox"_ustr, cpo::uno::Any(false));
 
-    // Set the shape into text path mode, so that the text is drawn as Fontwork. Word renders a legacy
-    // "text on path" without the legacy stretching, therefore use false for bFromWordArt.
+    // Set the shape into text path mode, so that the text is drawn as Fontwork; a WordArt of the
+    // legacy kind (fromWordArt) keeps its text unscaled, as the export wrote it.
     mpShapePtr->getCustomShapeProperties()->setShapeTypeOverride(true);
     FontworkHelpers::putCustomShapeIntoTextPathMode(mxShape, getShape()->getCustomShapeProperties(),
-                                                    sMSPresetType, /*bFromWordArt*/ false);
+                                                    sMSPresetType, m_bFromWordArt);
 
     // Apply the text props to the fontwork shape
     lcl_setTextPropsToShape(xShapePropertySet, aTextPropVec); // includes e.g. FontName
