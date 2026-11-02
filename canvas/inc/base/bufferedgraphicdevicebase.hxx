@@ -79,13 +79,6 @@ public:
             PropertySetHelper::MakeMap("Window", [this]() { return this->getXWindow(); }));
     }
 
-    // XGraphicDevice
-    virtual css::uno::Reference<css::rendering::XBufferController>
-        SAL_CALL getBufferController() override
-    {
-        return this;
-    }
-
     // XBufferController
     virtual sal_Bool SAL_CALL showBuffer(sal_Bool bUpdateAll) override
     {

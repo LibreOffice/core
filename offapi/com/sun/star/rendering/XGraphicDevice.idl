@@ -21,10 +21,9 @@ module com { module sun { module star { module rendering {
 
 interface XBitmap;
 interface XVolatileBitmap;
-interface XBufferController;
 
 /* TODO: There's obviously a concept called window missing here, where
-   methods such as bufferController, fullscreen mode etc . belong
+   methods such as fullscreen mode etc . belong
    to. But see below
  */
 
@@ -45,15 +44,6 @@ interface XBufferController;
  */
 interface XGraphicDevice : ::com::sun::star::uno::XInterface
 {
-    /** Query the controller for multi buffering functionality on this
-        graphic device.
-
-        If there is no such functionality available, the NULL
-        reference is returned.
-     */
-    XBufferController                           getBufferController();
-
-
     /** Query the color space interface for this graphic device.
 
         This is to be used when interpreting or setting device color

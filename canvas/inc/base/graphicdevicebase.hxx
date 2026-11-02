@@ -134,11 +134,6 @@ namespace canvas
         }
 
         // XGraphicDevice
-        virtual css::uno::Reference< css::rendering::XBufferController > SAL_CALL getBufferController(  ) override
-        {
-            return css::uno::Reference< css::rendering::XBufferController >();
-        }
-
         virtual css::uno::Reference< css::rendering::XColorSpace > SAL_CALL getDeviceColorSpace(  ) override
         {
             MutexType aGuard( BaseType::m_aMutex );
