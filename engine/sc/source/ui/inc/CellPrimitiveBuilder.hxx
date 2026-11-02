@@ -46,6 +46,10 @@ struct CellPrimitiveSettings
     /// Text of cells outside the range that overflows into it, or whose merged area reaches into
     /// it, is built too.
     bool mbTextFromOutside = false;
+    /// The font colors stay automatic, and each text names the fill of its cell, so a client
+    /// chooses the color for its own view. Otherwise the colors are chosen here, against the
+    /// document color, for the one view that is painted.
+    bool mbAutomaticColors = false;
     /// The size of one device pixel in twips. Marks and buttons keep a size in pixels.
     double mfPixelSize = 15.0;
     /// The background of the document, against which an automatic font color is chosen.

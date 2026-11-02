@@ -143,8 +143,6 @@ struct OutputArea
     double mfColumnWidth = 0.0;
     bool mbLeftClip = false;
     bool mbRightClip = false;
-    double mfLeftClipLength = 0.0;
-    double mfRightClipLength = 0.0;
     /// The first and the last column the text paints into.
     SCCOL mnLeftColumn = 0;
     SCCOL mnRightColumn = 0;
@@ -159,7 +157,30 @@ struct OutputArea
     }
 };
 
+/// The sizes of the cells that the layout of a text is decided with, in twips. Only sizes, so the
+/// layout does not depend on where the cells are.
+struct TextSizes
+{
+    /// The width of the cell or the merged area.
+    double mfColumnWidth = 0.0;
+    /// The width that the text is aligned in, without the room of an autofilter button.
+    double mfAlignWidth = 0.0;
+    /// The width of the cells that the text may paint into, without the room of clip arrows.
+    double mfClipWidth = 0.0;
+    /// The height of the cell or the merged area.
+    double mfAlignHeight = 0.0;
+};
+
 /// What the content of one cell is drawn from.
+/// The fill of the cell, against which an automatic font color is chosen, when it has one.
+std::optional<Color> cellSurface(const ScPatternAttr& rPattern, const SfxItemSet* pCondSet)
+{
+    const Color aFill = rPattern.GetItem(ATTR_BACKGROUND, pCondSet).GetColor();
+    if (aFill.IsFullyTransparent())
+        return std::nullopt;
+    return aFill;
+}
+
 struct CellSource
 {
     SCCOL mnColumn = 0;
@@ -236,12 +257,21 @@ private:
     /// the first that gives an icon set on the icon set.
     bool isValueHiddenByConditionalFormat(const CellSource& rSource) const;
     void addCellText(SCCOL nColumn, SCROW nRow, const ScCellInfo* pInfo);
+    CellTextArea decideTextArea(const CellSource& rSource, double fNeeded,
+                                SvxCellHorJustify eHorJust, bool bNoOverflow, bool bBreak,
+                                TextSizes& rSizes) const;
+    void placeTextArea(SCCOL nColumn, SCROW nRow, SCCOL nEndColumn, SCROW nEndRow,
+                       const CellTextArea& rArea, basegfx::B2DRange& rAlign,
+                       basegfx::B2DRange& rClip) const;
     void computeOutputArea(const CellSource& rSource, double fNeeded, SvxCellHorJustify eHorJust,
                            bool bNoOverflow, bool bBreak, OutputArea& rArea) const;
     bool addSimpleText(const CellSource& rSource);
+    void placeText(const CellText& rText);
     void addEditText(const CellSource& rSource);
-    void addClipMarks(const CellSource& rSource, const OutputArea& rArea, bool bLeft, bool bRight);
-    void addOverflowCover(const CellSource& rSource, const OutputArea& rArea);
+    void addClipMarks(SCROW nRow, SCROW nEndRow, SCCOL nLeftColumn, SCCOL nRightColumn, bool bLeft,
+                      bool bRight);
+    void addOverflowCover(SCCOL nColumn, SCCOL nEndColumn, SCROW nRow, SCCOL nLeftColumn,
+                          SCCOL nRightColumn);
 
     ScFieldEditEngine& getEditEngine();
     primitive2d::TextLayouterDevice& getTextLayouter();
@@ -829,24 +859,27 @@ bool CellPrimitiveBuilder::Impl::isValueHiddenByConditionalFormat(const CellSour
     return false;
 }
 
-void CellPrimitiveBuilder::Impl::computeOutputArea(const CellSource& rSource, double fNeeded,
-                                                   SvxCellHorJustify eHorJust, bool bNoOverflow,
-                                                   bool bBreak, OutputArea& rArea) const
+CellTextArea CellPrimitiveBuilder::Impl::decideTextArea(const CellSource& rSource, double fNeeded,
+                                                        SvxCellHorJustify eHorJust,
+                                                        bool bNoOverflow, bool bBreak,
+                                                        TextSizes& rSizes) const
 {
     const SCCOL nColumn = rSource.mnColumn;
     const SCROW nRow = rSource.mnRow;
     const bool bMerged = rSource.mnMergeColumns > 1 || rSource.mnMergeRows > 1;
 
-    rArea.maAlignRange = mrGeometry.getRange(nColumn, nRow, nColumn + rSource.mnMergeColumns - 1,
-                                             nRow + rSource.mnMergeRows - 1);
-    rArea.maClipRange = rArea.maAlignRange;
-    rArea.mfColumnWidth = rArea.maAlignRange.getWidth();
-    rArea.mnLeftColumn = nColumn;
-    rArea.mnRightColumn = nColumn + rSource.mnMergeColumns - 1;
-    rArea.mbLeftClip = rArea.mbRightClip = false;
-    rArea.mfLeftClipLength = rArea.mfRightClipLength = 0.0;
+    CellTextArea aArea;
+    aArea.mnLeftColumn = nColumn;
+    aArea.mnRightColumn = nColumn + rSource.mnMergeColumns - 1;
 
-    const double fWidth = rArea.maAlignRange.getWidth();
+    // Only the sizes of the cells decide, not where the cells are.
+    const basegfx::B2DRange aCell = mrGeometry.getRange(nColumn, nRow, aArea.mnRightColumn,
+                                                        nRow + rSource.mnMergeRows - 1);
+    const double fWidth = aCell.getWidth();
+    rSizes.mfColumnWidth = fWidth;
+    rSizes.mfAlignWidth = fWidth;
+    rSizes.mfClipWidth = fWidth;
+    rSizes.mfAlignHeight = aCell.getHeight();
     if (fNeeded <= fWidth)
     {
         // Text that also fits beside the autofilter button is aligned and clipped beside it, which
@@ -857,13 +890,12 @@ void CellPrimitiveBuilder::Impl::computeOutputArea(const CellSource& rSource, do
             const double fButton = constDropDownPixels * maSettings.mfPixelSize;
             if (fNeeded + fButton <= fWidth)
             {
-                rArea.maAlignRange = basegfx::B2DRange(
-                    rArea.maAlignRange.getMinX(), rArea.maAlignRange.getMinY(),
-                    rArea.maAlignRange.getMaxX() - fButton, rArea.maAlignRange.getMaxY());
-                rArea.maClipRange = rArea.maAlignRange;
+                aArea.mbBesideButton = true;
+                rSizes.mfAlignWidth = fWidth - fButton;
+                rSizes.mfClipWidth = rSizes.mfAlignWidth;
             }
         }
-        return;
+        return aArea;
     }
 
     double fMissing = fNeeded - fWidth;
@@ -885,83 +917,115 @@ void CellPrimitiveBuilder::Impl::computeOutputArea(const CellSource& rSource, do
             break;
     }
 
-    double fClipLeft = rArea.maClipRange.getMinX();
-    double fClipRight = rArea.maClipRange.getMaxX();
     if (!bMerged && !bNoOverflow && !bBreak)
     {
         // The text overflows into empty neighbors as far as it needs.
-        SCCOL nRightColumn = rArea.mnRightColumn;
+        SCCOL nRightColumn = aArea.mnRightColumn;
         while (fRightMissing > 0 && nRightColumn < mrDocument.MaxCol()
                && isAvailable(nRightColumn + 1, nRow))
         {
             ++nRightColumn;
             const double fAdd = mrGeometry.getColumnWidth(nRightColumn);
             fRightMissing -= fAdd;
-            fClipRight += fAdd;
+            rSizes.mfClipWidth += fAdd;
         }
-        SCCOL nLeftColumn = rArea.mnLeftColumn;
+        SCCOL nLeftColumn = aArea.mnLeftColumn;
         while (fLeftMissing > 0 && nLeftColumn > 0 && isAvailable(nLeftColumn - 1, nRow))
         {
             --nLeftColumn;
             const double fAdd = mrGeometry.getColumnWidth(nLeftColumn);
             fLeftMissing -= fAdd;
-            fClipLeft -= fAdd;
+            rSizes.mfClipWidth += fAdd;
         }
-        rArea.mnLeftColumn = nLeftColumn;
-        rArea.mnRightColumn = nRightColumn;
+        aArea.mnLeftColumn = nLeftColumn;
+        aArea.mnRightColumn = nRightColumn;
     }
 
     // Text that is still cut off leaves room for the arrow that marks it.
     if (fRightMissing > 0 && maSettings.mbClipMarks && !bBreak && !bNoOverflow)
-        fClipRight -= SC_CLIPMARK_SIZE;
+    {
+        aArea.mbRightMarkRoom = true;
+        rSizes.mfClipWidth -= SC_CLIPMARK_SIZE;
+    }
     if (fLeftMissing > 0 && maSettings.mbClipMarks && !bBreak && !bNoOverflow)
-        fClipLeft += SC_CLIPMARK_SIZE;
+    {
+        aArea.mbLeftMarkRoom = true;
+        rSizes.mfClipWidth -= SC_CLIPMARK_SIZE;
+    }
 
-    rArea.maClipRange = basegfx::B2DRange(fClipLeft, rArea.maClipRange.getMinY(), fClipRight,
-                                          rArea.maClipRange.getMaxY());
-    rArea.mbLeftClip = fLeftMissing > 0;
-    rArea.mbRightClip = fRightMissing > 0;
-    rArea.mfLeftClipLength = std::max(0.0, fLeftMissing);
-    rArea.mfRightClipLength = std::max(0.0, fRightMissing);
+    aArea.mbLeftClip = fLeftMissing > 0;
+    aArea.mbRightClip = fRightMissing > 0;
+    return aArea;
 }
 
-void CellPrimitiveBuilder::Impl::addClipMarks(const CellSource& rSource, const OutputArea& rArea,
-                                              bool bLeft, bool bRight)
+void CellPrimitiveBuilder::Impl::placeTextArea(SCCOL nColumn, SCROW nRow, SCCOL nEndColumn,
+                                               SCROW nEndRow, const CellTextArea& rArea,
+                                               basegfx::B2DRange& rAlign,
+                                               basegfx::B2DRange& rClip) const
+{
+    rAlign = mrGeometry.getRange(nColumn, nRow, nEndColumn, nEndRow);
+    if (rArea.mbBesideButton)
+        rAlign = basegfx::B2DRange(rAlign.getMinX(), rAlign.getMinY(),
+                                   rAlign.getMaxX() - constDropDownPixels * maSettings.mfPixelSize,
+                                   rAlign.getMaxY());
+
+    double fLeft = rAlign.getMinX();
+    double fRight = rAlign.getMaxX();
+    if (rArea.mnLeftColumn < nColumn)
+        fLeft = mrGeometry.getColumnStart(rArea.mnLeftColumn);
+    if (rArea.mnRightColumn > nEndColumn)
+        fRight = mrGeometry.getColumnStart(rArea.mnRightColumn)
+                 + mrGeometry.getColumnWidth(rArea.mnRightColumn);
+    if (rArea.mbLeftMarkRoom)
+        fLeft += SC_CLIPMARK_SIZE;
+    if (rArea.mbRightMarkRoom)
+        fRight -= SC_CLIPMARK_SIZE;
+    rClip = basegfx::B2DRange(fLeft, rAlign.getMinY(), fRight, rAlign.getMaxY());
+}
+
+void CellPrimitiveBuilder::Impl::computeOutputArea(const CellSource& rSource, double fNeeded,
+                                                   SvxCellHorJustify eHorJust, bool bNoOverflow,
+                                                   bool bBreak, OutputArea& rArea) const
+{
+    TextSizes aSizes;
+    const CellTextArea aArea
+        = decideTextArea(rSource, fNeeded, eHorJust, bNoOverflow, bBreak, aSizes);
+    placeTextArea(rSource.mnColumn, rSource.mnRow, rSource.mnColumn + rSource.mnMergeColumns - 1,
+                  rSource.mnRow + rSource.mnMergeRows - 1, aArea, rArea.maAlignRange,
+                  rArea.maClipRange);
+    rArea.mfColumnWidth = aSizes.mfColumnWidth;
+    rArea.mbLeftClip = aArea.mbLeftClip;
+    rArea.mbRightClip = aArea.mbRightClip;
+    rArea.mnLeftColumn = aArea.mnLeftColumn;
+    rArea.mnRightColumn = aArea.mnRightColumn;
+}
+
+void CellPrimitiveBuilder::Impl::addClipMarks(SCROW nRow, SCROW nEndRow, SCCOL nLeftColumn,
+                                              SCCOL nRightColumn, bool bLeft, bool bRight)
 {
     if (!maSettings.mbClipMarks)
         return;
 
-    const SCROW nRow = rSource.mnRow;
-    const SCROW nEndRow = nRow + rSource.mnMergeRows - 1;
     if (bRight)
-    {
-        const SCCOL nColumn = rArea.mnRightColumn;
         rowLayers(nRow).maMarks.push_back(
-            new CellMarkPrimitive2D(CellMarkKind::ClipRight, nColumn, nRow,
-                                    mrGeometry.getRange(nColumn, nRow, nColumn, nEndRow),
+            new CellMarkPrimitive2D(CellMarkKind::ClipRight, nRightColumn, nRow,
+                                    mrGeometry.getRange(nRightColumn, nRow, nRightColumn, nEndRow),
                                     maSettings.maClipMarkColor, maSettings.mfPixelSize));
-    }
     if (bLeft)
-    {
-        const SCCOL nColumn = rArea.mnLeftColumn;
         rowLayers(nRow).maMarks.push_back(
-            new CellMarkPrimitive2D(CellMarkKind::ClipLeft, nColumn, nRow,
-                                    mrGeometry.getRange(nColumn, nRow, nColumn, nEndRow),
+            new CellMarkPrimitive2D(CellMarkKind::ClipLeft, nLeftColumn, nRow,
+                                    mrGeometry.getRange(nLeftColumn, nRow, nLeftColumn, nEndRow),
                                     maSettings.maClipMarkColor, maSettings.mfPixelSize));
-    }
 }
 
-void CellPrimitiveBuilder::Impl::addOverflowCover(const CellSource& rSource,
-                                                  const OutputArea& rArea)
+void CellPrimitiveBuilder::Impl::addOverflowCover(SCCOL nColumn, SCCOL nEndColumn, SCROW nRow,
+                                                  SCCOL nLeftColumn, SCCOL nRightColumn)
 {
-    if (rArea.mnLeftColumn == rSource.mnColumn
-        && rArea.mnRightColumn == rSource.mnColumn + rSource.mnMergeColumns - 1)
+    if (nLeftColumn == nColumn && nRightColumn == nEndColumn)
         return;
 
-    maCoverAreas[rSource.mnRow].push_back(
-        { rArea.mnLeftColumn, rSource.mnRow, rArea.mnRightColumn, rSource.mnRow,
-          mrGeometry.getRange(rArea.mnLeftColumn, rSource.mnRow, rArea.mnRightColumn,
-                              rSource.mnRow) });
+    maCoverAreas[nRow].push_back({ nLeftColumn, nRow, nRightColumn, nRow,
+                                   mrGeometry.getRange(nLeftColumn, nRow, nRightColumn, nRow) });
 }
 
 void CellPrimitiveBuilder::Impl::addCellText(SCCOL nColumn, SCROW nRow, const ScCellInfo* pInfo)
@@ -1068,8 +1132,11 @@ bool CellPrimitiveBuilder::Impl::addSimpleText(const CellSource& rSource)
         return false;
 
     vcl::Font aFont;
-    rPattern.fillFont(aFont, ScAutoFontColorMode::Display, nullptr, nullptr, pCondSet, pTableSet,
-                      nScript, &maSettings.maDocumentColor, &maSettings.maFontColor);
+    rPattern.fillFont(aFont,
+                      maSettings.mbAutomaticColors ? ScAutoFontColorMode::Raw
+                                                   : ScAutoFontColorMode::Display,
+                      nullptr, nullptr, pCondSet, pTableSet, nScript, &maSettings.maDocumentColor,
+                      &maSettings.maFontColor);
     aFont.SetAlignment(ALIGN_BASELINE);
     aFont.SetKerning(FontKerning::NONE);
     if (pFormatColor)
@@ -1107,15 +1174,16 @@ bool CellPrimitiveBuilder::Impl::addSimpleText(const CellSource& rSource)
     // A number, a repeated text and a text that shrinks to fit stay inside their cell.
     const bool bNoOverflow = bCellIsValue || bRepeat || bShrink;
     double fTextWidth = measure(aString);
-    OutputArea aArea;
-    computeOutputArea(rSource, fTextWidth + fTotalMargin, eHorJust, bNoOverflow, false, aArea);
+    TextSizes aSizes;
+    CellTextArea aArea
+        = decideTextArea(rSource, fTextWidth + fTotalMargin, eHorJust, bNoOverflow, false, aSizes);
 
     CellTextFlags eFlags = CellTextFlags::NONE;
 
     // Fill the room of the cell with the repeat character of the number format.
     if (std::optional<OUString> oFilled
         = fillWithRepeatCharacter(aString, nRepeatPosition, cRepeat,
-                                  aArea.mfColumnWidth - fTotalMargin - fTextWidth, 1.0, measure))
+                                  aSizes.mfColumnWidth - fTotalMargin - fTextWidth, 1.0, measure))
     {
         aString = *oFilled;
         fTextWidth = measure(aString);
@@ -1123,7 +1191,7 @@ bool CellPrimitiveBuilder::Impl::addSimpleText(const CellSource& rSource)
 
     if (bShrink && (aArea.mbLeftClip || aArea.mbRightClip))
     {
-        const double fAvailable = aArea.maAlignRange.getWidth() - fTotalMargin;
+        const double fAvailable = aSizes.mfAlignWidth - fTotalMargin;
         if (fAvailable > 0 && fTextWidth > 0)
         {
             double fScale = fAvailable / fTextWidth;
@@ -1142,7 +1210,6 @@ bool CellPrimitiveBuilder::Impl::addSimpleText(const CellSource& rSource)
                             }))
             {
                 aArea.mbLeftClip = aArea.mbRightClip = false;
-                aArea.mfLeftClipLength = aArea.mfRightClipLength = 0.0;
                 eFlags |= CellTextFlags::Shrink;
             }
         }
@@ -1151,7 +1218,7 @@ bool CellPrimitiveBuilder::Impl::addSimpleText(const CellSource& rSource)
     if (bRepeat && !aArea.mbLeftClip && !aArea.mbRightClip)
     {
         if (std::optional<OUString> oRepeated = repeatToWidth(
-                aString, fTextWidth, aArea.maAlignRange.getWidth() - fTotalMargin, 0.0, measure))
+                aString, fTextWidth, aSizes.mfAlignWidth - fTotalMargin, 0.0, measure))
         {
             aString = *oRepeated;
             fTextWidth = measure(aString);
@@ -1184,7 +1251,7 @@ bool CellPrimitiveBuilder::Impl::addSimpleText(const CellSource& rSource)
             = maSettings.mbShowFormulas
                   ? NumberFit::Hash
                   : fitNumberToWidth(rCell, nFormat, false, mrDocument,
-                                     aArea.mfColumnWidth - fTotalMargin, aWidths, measure, aShort);
+                                     aSizes.mfColumnWidth - fTotalMargin, aWidths, measure, aShort);
         if (eFit == NumberFit::Fits || eFit == NumberFit::Failed)
             aString = aShort;
         const bool bHash = eFit == NumberFit::Hash;
@@ -1198,137 +1265,200 @@ bool CellPrimitiveBuilder::Impl::addSimpleText(const CellSource& rSource)
                 bClipLeftMark = true;
             else
                 bClipLeftMark = bClipRightMark = true;
-            aArea.reserveClipMarks(bClipLeftMark, bClipRightMark);
+            // A number never overflows, so no room was taken for the arrows yet.
+            assert(!aArea.mbLeftMarkRoom && !aArea.mbRightMarkRoom);
+            aArea.mbLeftMarkRoom = bClipLeftMark;
+            aArea.mbRightMarkRoom = bClipRightMark;
+            aSizes.mfClipWidth -= (bClipLeftMark ? SC_CLIPMARK_SIZE : 0.0)
+                                  + (bClipRightMark ? SC_CLIPMARK_SIZE : 0.0);
         }
         fTextWidth = measure(aString);
-        if (fTextWidth + fTotalMargin <= aArea.maClipRange.getWidth())
-        {
+        if (fTextWidth + fTotalMargin <= aSizes.mfClipWidth)
             aArea.mbLeftClip = aArea.mbRightClip = false;
-            aArea.mfLeftClipLength = aArea.mfRightClipLength = 0.0;
-        }
     }
 
     const double fAscent = rLayouter.getFontAscent();
     const double fDescent = rLayouter.getFontDescent();
-    const double fTextHeight = fAscent + fDescent;
 
-    const basegfx::B2DRange& rAlign = aArea.maAlignRange;
-    double fX = rAlign.getMinX();
-    switch (eHorJust)
-    {
-        case SvxCellHorJustify::Left:
-            fX += fLeftTotal;
-            break;
-        case SvxCellHorJustify::Right:
-            fX += rAlign.getWidth() - fTextWidth - fRightTotal;
-            break;
-        case SvxCellHorJustify::Center:
-            fX += (rAlign.getWidth() - fTextWidth + fLeftTotal - rMargin.GetRightMargin()) / 2;
-            break;
-        default:
-            break;
-    }
-
-    double fY = rAlign.getMinY();
-    double fNeededHeight = fTextHeight;
+    // Text taller than the cell is cut off at the bottom.
+    double fNeededHeight = fAscent + fDescent;
     switch (eVerJust)
     {
         case SvxCellVerJustify::Top:
         case SvxCellVerJustify::Block:
-            fY += rMargin.GetTopMargin();
             fNeededHeight += rMargin.GetTopMargin();
             break;
         case SvxCellVerJustify::Center:
-            fY += (rAlign.getHeight() + rMargin.GetTopMargin() - fTextHeight
-                   - rMargin.GetBottomMargin())
-                  / 2;
             fNeededHeight += std::abs(rMargin.GetTopMargin() - rMargin.GetBottomMargin());
             break;
         default:
-            fY += rAlign.getHeight() - fTextHeight - rMargin.GetBottomMargin();
             fNeededHeight += rMargin.GetBottomMargin();
             break;
     }
-
-    const bool bHorizontalClip = aArea.mbLeftClip || aArea.mbRightClip;
-    const bool bVerticalClip = fNeededHeight > rAlign.getHeight();
-    if (bVerticalClip)
+    if (fNeededHeight > aSizes.mfAlignHeight)
         eFlags |= CellTextFlags::ClippedBottom;
     if (aArea.mbLeftClip)
         eFlags |= CellTextFlags::ClippedLeft;
     if (aArea.mbRightClip)
         eFlags |= CellTextFlags::ClippedRight;
 
-    // Only the dimension that is cut off is clipped, so text that fits is drawn whole.
-    const double fHuge = 1e9;
-    const basegfx::B2DRange aClip(bHorizontalClip ? aArea.maClipRange.getMinX() : -fHuge,
-                                  bVerticalClip ? aArea.maClipRange.getMinY() : -fHuge,
-                                  bHorizontalClip ? aArea.maClipRange.getMaxX() : fHuge,
-                                  bVerticalClip ? aArea.maClipRange.getMaxY() : fHuge);
-
-    primitive2d::Primitive2DContainer aText;
-    basegfx::B2DRange aTextRange;
+    CellText aText{ nColumn,
+                    nRow,
+                    SCCOL(nColumn + rSource.mnMergeColumns - 1),
+                    SCROW(nRow + rSource.mnMergeRows - 1),
+                    aArea,
+                    eHorJust,
+                    eVerJust,
+                    eFlags,
+                    bClipLeftMark,
+                    bClipRightMark,
+                    fLeftTotal,
+                    fRightTotal,
+                    double(rMargin.GetRightMargin()),
+                    double(rMargin.GetTopMargin()),
+                    double(rMargin.GetBottomMargin()),
+                    aString,
+                    aFont,
+                    {},
+                    fTextWidth,
+                    fAscent,
+                    fDescent,
+                    false,
+                    {},
+                    aFont.GetColor(),
+                    aFont.GetColor(),
+                    maSettings.mbAutomaticColors ? cellSurface(rPattern, pCondSet)
+                                                 : std::optional<Color>() };
     if (!aString.isEmpty())
     {
-        basegfx::B2DVector aFontSize;
-        const attribute::FontAttribute aFontAttribute
-            = primitive2d::getFontAttributeFromVclFont(aFontSize, aFont, false, false);
-        std::vector<double> aDXArray
-            = aMeasuredText == aString ? std::move(aMeasuredAdvances)
-                                       : rLayouter.getTextArray(aString, 0, aString.getLength());
-        const basegfx::B2DHomMatrix aTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(
-            aFontSize.getX(), aFontSize.getY(), fX, fY + fAscent));
-        const css::lang::Locale aLocale(LanguageTag::convertToLocale(aFont.GetLanguage()));
-        const basegfx::BColor aFontColor(aFont.GetColor().getBColor());
-
-        const bool bDecorated
+        aText.maAdvances = aMeasuredText == aString
+                               ? std::move(aMeasuredAdvances)
+                               : rLayouter.getTextArray(aString, 0, aString.getLength());
+        aText.mbDecorated
             = aFont.GetUnderline() != LINESTYLE_NONE || aFont.GetOverline() != LINESTYLE_NONE
               || aFont.GetStrikeout() != STRIKEOUT_NONE
               || (aFont.GetEmphasisMark() & FontEmphasisMark::Style) != FontEmphasisMark::NONE
               || aFont.GetRelief() != FontRelief::NONE || aFont.IsShadow();
-        if (bDecorated)
+        if (aText.mbDecorated)
         {
-            Color aUnderlineColor = rPattern.GetItem(ATTR_FONT_UNDERLINE, pCondSet).GetColor();
-            if (aUnderlineColor == COL_AUTO)
-                aUnderlineColor = aFont.GetColor();
-            Color aOverlineColor = rPattern.GetItem(ATTR_FONT_OVERLINE, pCondSet).GetColor();
-            if (aOverlineColor == COL_AUTO)
-                aOverlineColor = aFont.GetColor();
-            const FontEmphasisMark eEmphasis = aFont.GetEmphasisMark();
-            aText.push_back(new primitive2d::TextDecoratedPortionPrimitive2D(
-                aTransform, aString, 0, aString.getLength(), std::move(aDXArray), {},
-                aFontAttribute, aLocale, aFontColor, COL_TRANSPARENT, 0, 100, 0, false,
-                aOverlineColor.getBColor(), aUnderlineColor.getBColor(),
-                primitive2d::mapFontLineStyleToTextLine(aFont.GetOverline()),
-                primitive2d::mapFontLineStyleToTextLine(aFont.GetUnderline()), false,
-                primitive2d::mapFontStrikeoutToTextStrikeout(aFont.GetStrikeout()),
-                aFont.IsWordLineMode(), mapEmphasisMark(eEmphasis),
-                bool(eEmphasis & FontEmphasisMark::PosAbove),
-                bool(eEmphasis & FontEmphasisMark::PosBelow), mapRelief(aFont.GetRelief()),
-                aFont.IsShadow()));
+            const Color aUnderline = rPattern.GetItem(ATTR_FONT_UNDERLINE, pCondSet).GetColor();
+            if (aUnderline != COL_AUTO)
+                aText.maUnderlineColor = aUnderline;
+            const Color aOverline = rPattern.GetItem(ATTR_FONT_OVERLINE, pCondSet).GetColor();
+            if (aOverline != COL_AUTO)
+                aText.maOverlineColor = aOverline;
         }
         else
         {
             // The glyphs are measured in the font the text is laid out in, from its baseline.
-            aTextRange = rLayouter.getTextBoundRect(aString, 0, aString.getLength());
-            aTextRange.transform(basegfx::utils::createTranslateB2DHomMatrix(fX, fY + fAscent));
+            aText.maInkBounds = rLayouter.getTextBoundRect(aString, 0, aString.getLength());
+        }
+    }
+    maContent.maTexts.push_back(std::move(aText));
+    placeText(maContent.maTexts.back());
+    return true;
+}
+
+void CellPrimitiveBuilder::Impl::placeText(const CellText& rText)
+{
+    basegfx::B2DRange aAlign;
+    basegfx::B2DRange aClipArea;
+    placeTextArea(rText.mnColumn, rText.mnRow, rText.mnEndColumn, rText.mnEndRow, rText.maArea,
+                  aAlign, aClipArea);
+
+    double fX = aAlign.getMinX();
+    switch (rText.meHorJust)
+    {
+        case SvxCellHorJustify::Left:
+            fX += rText.mfLeftIndent;
+            break;
+        case SvxCellHorJustify::Right:
+            fX += aAlign.getWidth() - rText.mfWidth - rText.mfRightIndent;
+            break;
+        case SvxCellHorJustify::Center:
+            fX += (aAlign.getWidth() - rText.mfWidth + rText.mfLeftIndent - rText.mfRightMargin)
+                  / 2;
+            break;
+        default:
+            break;
+    }
+    const double fTextHeight = rText.mfAscent + rText.mfDescent;
+    double fY = aAlign.getMinY();
+    switch (rText.meVerJust)
+    {
+        case SvxCellVerJustify::Top:
+        case SvxCellVerJustify::Block:
+            fY += rText.mfTopMargin;
+            break;
+        case SvxCellVerJustify::Center:
+            fY += (aAlign.getHeight() + rText.mfTopMargin - fTextHeight - rText.mfBottomMargin) / 2;
+            break;
+        default:
+            fY += aAlign.getHeight() - fTextHeight - rText.mfBottomMargin;
+            break;
+    }
+
+    const bool bHorizontalClip
+        = bool(rText.meFlags & (CellTextFlags::ClippedLeft | CellTextFlags::ClippedRight));
+    const bool bVerticalClip = bool(rText.meFlags & CellTextFlags::ClippedBottom);
+    // Only the dimension that is cut off is clipped, so text that fits is drawn whole.
+    const double fHuge = 1e9;
+    const basegfx::B2DRange aClip(bHorizontalClip ? aClipArea.getMinX() : -fHuge,
+                                  bVerticalClip ? aClipArea.getMinY() : -fHuge,
+                                  bHorizontalClip ? aClipArea.getMaxX() : fHuge,
+                                  bVerticalClip ? aClipArea.getMaxY() : fHuge);
+
+    primitive2d::Primitive2DContainer aText;
+    basegfx::B2DRange aTextRange;
+    if (!rText.maText.isEmpty())
+    {
+        const vcl::Font& rFont = rText.maFont;
+        basegfx::B2DVector aFontSize;
+        const attribute::FontAttribute aFontAttribute
+            = primitive2d::getFontAttributeFromVclFont(aFontSize, rFont, false, false);
+        const basegfx::B2DHomMatrix aTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(
+            aFontSize.getX(), aFontSize.getY(), fX, fY + rText.mfAscent));
+        const css::lang::Locale aLocale(LanguageTag::convertToLocale(rFont.GetLanguage()));
+        const basegfx::BColor aFontColor(rFont.GetColor().getBColor());
+        std::vector<double> aDXArray(rText.maAdvances);
+
+        if (rText.mbDecorated)
+        {
+            const FontEmphasisMark eEmphasis = rFont.GetEmphasisMark();
+            aText.push_back(new primitive2d::TextDecoratedPortionPrimitive2D(
+                aTransform, rText.maText, 0, rText.maText.getLength(), std::move(aDXArray), {},
+                aFontAttribute, aLocale, aFontColor, COL_TRANSPARENT, 0, 100, 0, false,
+                rText.maOverlineColor.getBColor(), rText.maUnderlineColor.getBColor(),
+                primitive2d::mapFontLineStyleToTextLine(rFont.GetOverline()),
+                primitive2d::mapFontLineStyleToTextLine(rFont.GetUnderline()), false,
+                primitive2d::mapFontStrikeoutToTextStrikeout(rFont.GetStrikeout()),
+                rFont.IsWordLineMode(), mapEmphasisMark(eEmphasis),
+                bool(eEmphasis & FontEmphasisMark::PosAbove),
+                bool(eEmphasis & FontEmphasisMark::PosBelow), mapRelief(rFont.GetRelief()),
+                rFont.IsShadow()));
+        }
+        else
+        {
+            aTextRange = rText.maInkBounds;
+            aTextRange.transform(basegfx::utils::createTranslateB2DHomMatrix(fX, fY + rText.mfAscent));
             aText.push_back(new primitive2d::TextSimplePortionPrimitive2D(
-                aTransform, aString, 0, aString.getLength(), std::move(aDXArray), {},
+                aTransform, rText.maText, 0, rText.maText.getLength(), std::move(aDXArray), {},
                 aFontAttribute, aLocale, aFontColor));
         }
     }
 
     if (!aText.empty())
     {
-        CellPrimitiveLayers& rLayers = rowLayers(rSource.mnRow);
+        CellPrimitiveLayers& rLayers = rowLayers(rText.mnRow);
         rLayers.maText.push_back(new CellTextPrimitive2D(
-            rSource.mnColumn, rSource.mnRow, aArea.maAlignRange, aClip,
-            bHorizontalClip || bVerticalClip, eHorJust, eVerJust, eFlags, std::move(aText),
-            aTextRange));
-        addOverflowCover(rSource, aArea);
+            rText.mnColumn, rText.mnRow, aAlign, aClip, bHorizontalClip || bVerticalClip,
+            rText.meHorJust, rText.meVerJust, rText.meFlags, std::move(aText), aTextRange,
+            rText.moSurface));
+        addOverflowCover(rText.mnColumn, rText.mnEndColumn, rText.mnRow,
+                         rText.maArea.mnLeftColumn, rText.maArea.mnRightColumn);
     }
-    addClipMarks(rSource, aArea, bClipLeftMark, bClipRightMark);
-    return true;
+    addClipMarks(rText.mnRow, rText.mnEndRow, rText.maArea.mnLeftColumn,
+                 rText.maArea.mnRightColumn, rText.mbLeftClipMark, rText.mbRightClipMark);
 }
 
 ScFieldEditEngine& CellPrimitiveBuilder::Impl::getEditEngine()
@@ -1697,8 +1827,10 @@ void CellPrimitiveBuilder::Impl::addEditText(const CellSource& rSource)
     rowLayers(nRow).maText.push_back(new CellTextPrimitive2D(nColumn, nRow, aArea.maAlignRange,
                                                              aClip, bClip, eHorJust, eVerJust,
                                                              eFlags, std::move(aText)));
-    addOverflowCover(rSource, aArea);
-    addClipMarks(rSource, aArea, bClipLeftMark, bClipRightMark);
+    addOverflowCover(rSource.mnColumn, rSource.mnColumn + rSource.mnMergeColumns - 1, rSource.mnRow,
+                     aArea.mnLeftColumn, aArea.mnRightColumn);
+    addClipMarks(rSource.mnRow, rSource.mnRow + rSource.mnMergeRows - 1, aArea.mnLeftColumn,
+                 aArea.mnRightColumn, bClipLeftMark, bClipRightMark);
 }
 
 void CellPrimitiveBuilder::Impl::buildText(const ScTableInfo& rInfo)
@@ -1736,7 +1868,7 @@ void CellPrimitiveBuilder::Impl::buildText(const ScTableInfo& rInfo)
                 }
                 continue;
             }
-            if (mrGeometry.getColumnWidth(nColumn) <= 0.0)
+            if (isColumnHidden(nColumn))
                 continue;
             if (rRow.basicCellInfo(nColumn).bEmptyCellText)
                 continue;

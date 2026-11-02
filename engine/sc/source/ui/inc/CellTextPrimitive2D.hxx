@@ -11,45 +11,13 @@
 
 #pragma once
 
+#include "CellTextFlags.hxx"
 #include <address.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <tools/color.hxx>
 #include <editeng/svxenum.hxx>
-#include <o3tl/typed_flags_set.hxx>
-
-namespace sc
-{
-/// How the text of a cell was laid out and cut.
-enum class CellTextFlags : sal_uInt16
-{
-    NONE = 0x0000,
-    /// The text was laid out by the EditEngine: rich text, wrapped or rotated text and the like.
-    EditEngine = 0x0001,
-    /// A number that does not fit is shown as "###".
-    HashFill = 0x0002,
-    /// The font was made smaller so the text fits the cell.
-    Shrink = 0x0004,
-    /// The text is repeated to fill the cell.
-    Repeat = 0x0008,
-    /// Text is cut off at the left edge of the clip range.
-    ClippedLeft = 0x0010,
-    /// Text is cut off at the right edge of the clip range.
-    ClippedRight = 0x0020,
-    /// Text is cut off at the bottom of the cell.
-    ClippedBottom = 0x0040,
-    /// The text wraps into lines at the width of the cell.
-    Wrap = 0x0080,
-};
-}
-
-namespace o3tl
-{
-template <> struct typed_flags<sc::CellTextFlags> : is_typed_flags<sc::CellTextFlags, 0x00ff>
-{
-};
-}
 
 #include <optional>
 
