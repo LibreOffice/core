@@ -501,6 +501,17 @@ function testDialog(win, commandSpec) {
 	const command = typeof commandSpec === 'string' ? commandSpec : commandSpec.command;
 	const args = typeof commandSpec === 'string' ? undefined : commandSpec.args;
 
+	if (command == '.uno:Signature') {
+		// A modified document gets a "save before sign" prompt instead of the dialog.
+		cy.then(() => {
+			const stateHandler = win.app.map['stateChangeHandler'];
+			if (stateHandler.getItemValue('.uno:ModifiedStatus') === 'true') {
+				win.app.map.save(false, false);
+				helper.waitUntilDocumentSaved();
+			}
+		});
+	}
+
 	cy.then(() => {
 		win.app.map.sendUnoCommand(command, args);
 	});
@@ -509,9 +520,8 @@ function testDialog(win, commandSpec) {
 }
 
 const allCommonDialogs = [
-	// .uno:Signature must run first: it shows a "save before sign" prompt
-	// when the document is modified, which aborts the dialog flow. Running
-	// before any other dialog dirties the doc keeps that prompt out of the way.
+	// testDialog saves the document before .uno:Signature, so the dialog opens
+	// without a "save before sign" prompt.
 	'.uno:Signature',
 	'.uno:AcceptTrackedChanges',
 	'.uno:AutoCorrectDlg',
