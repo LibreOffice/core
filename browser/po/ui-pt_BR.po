@@ -12,11 +12,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-30 13:34+0100\n"
-"PO-Revision-Date: 2026-10-26 15:52+0000\n"
+"PO-Revision-Date: 2026-11-02 11:18+0000\n"
 "Last-Translator: H2Oufoe <regularwater@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "collabora-online/collabora-ui/pt_BR/>\n"
-"Language: \n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -93,7 +93,7 @@ msgstr "Documentos abertos"
 #: admin/admin.strings.js:30 admin/src/AdminSocketOverview.js:82
 #: admin/src/AdminSocketOverview.js:131 admin/src/AdminSocketOverview.js:360
 msgid " user(s)."
-msgstr " Usuário(s)."
+msgstr " usuário(s)."
 
 #: admin/admin.strings.js:31 admin/src/AdminSocketOverview.js:216
 #: admin/src/AdminSocketOverview.js:377
@@ -1327,6 +1327,8 @@ msgid ""
 "Checkers that run on a server. The text of the document is sent there to be "
 "checked."
 msgstr ""
+"Verificadores que são executados em um servidor. O texto do documento é "
+"enviado para ser verificado."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4730
 #: admin/src/integrator/AdminIntegratorSettings.ts:5080
@@ -1350,51 +1352,51 @@ msgstr "Verifique o certificado do servidor"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4784
 msgid "Enabled on this server for: {0}"
-msgstr ""
+msgstr "Ativado neste servidor para: {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4799
 msgid "Checking level"
-msgstr ""
+msgstr "Nível de verificação"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4802
 msgid "Single words"
-msgstr ""
+msgstr "Palavras únicas"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4803
 msgid "Spelling"
-msgstr ""
+msgstr "Ortografia"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4804
 msgid "Spelling and grammar"
-msgstr ""
+msgstr "Ortografia e gramática"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4814
 msgid "German spelling"
-msgstr ""
+msgstr "Ortografia alemã"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4816
 msgid "Duden recommendation"
-msgstr ""
+msgstr "Recomendação do Duden"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4817
 msgid "Conservative"
-msgstr ""
+msgstr "Conservador"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4818
 msgid "Progressive"
-msgstr ""
+msgstr "Progressivo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4819
 msgid "Tolerant"
-msgstr ""
+msgstr "Tolerante"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4820
 msgid "Press agencies"
-msgstr ""
+msgstr "Agências de imprensa"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4830
 msgid "Explanations"
-msgstr ""
+msgstr "Explicações"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4833
 #: src/control/Control.AIChatSidebar.ts:167
@@ -1407,11 +1409,11 @@ msgstr "Longo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4835
 msgid "Long, with an example"
-msgstr ""
+msgstr "Longo, com um exemplo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4845
 msgid "Correction profiles"
-msgstr ""
+msgstr "Perfis de correção"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4855
 msgid "Dictionaries"
@@ -1419,39 +1421,39 @@ msgstr "Dicionários"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4862
 msgid "Foreign words with a German equivalent"
-msgstr ""
+msgstr "Palavras estrangeiras com um equivalente alemão"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4863
 msgid "Archaic words"
-msgstr ""
+msgstr "Palavras arcaicas"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4864
 msgid "Regional words"
-msgstr ""
+msgstr "Palavras regionais"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4865
 msgid "Colloquial and vulgar words"
-msgstr ""
+msgstr "Palavras coloquiais e vulgares"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4866
 msgid "Filler words"
-msgstr ""
+msgstr "Palavras de preenchimento"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4867
 msgid "Offensive wording"
-msgstr ""
+msgstr "Redação ofensiva"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4868
 msgid "Gender-inclusive wording"
-msgstr ""
+msgstr "Redação inclusiva de gênero"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4869
 msgid "Complex sentences"
-msgstr ""
+msgstr "Frases complexas"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4891
 msgid "Style checks (German only)"
-msgstr ""
+msgstr "Verificações de estilo (apenas em alemão)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5015
 msgid "Translation"
@@ -1462,34 +1464,38 @@ msgid ""
 "Machine translation of the document text with the Translate command. The "
 "text is sent to the provider to be translated."
 msgstr ""
+"Tradução automática do texto do documento com o comando Traduzir. O texto é "
+"enviado ao provedor para ser traduzido."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5032
 msgid "The first one that is set up"
-msgstr ""
+msgstr "O primeiro que está configurado"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5054
 msgid "Translating with {0}."
-msgstr ""
+msgstr "Traduzindo com {0}."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5055
 msgid "No provider is set up: the Translate command is not offered."
 msgstr ""
+"Nenhum provedor está configurado: o comando Traduzir não está sendo "
+"oferecido."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5095
 msgid "API URL"
-msgstr ""
+msgstr "Link da API"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5104
 msgid "Authentication key"
-msgstr ""
+msgstr "Chave de autenticação"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5146
 msgid "Set up on this server."
-msgstr ""
+msgstr "Configurado neste servidor."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5147
 msgid "Enabled on this server, but not set up."
-msgstr ""
+msgstr "Ativado neste servidor, mas não configurado."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5204
 msgid "Use the default settings"
@@ -1497,11 +1503,11 @@ msgstr "Usar as configurações padrão"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5205
 msgid "Use the settings set on the server"
-msgstr ""
+msgstr "Usar as configurações definidas no servidor"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5213
 msgid "Your own settings are dropped when you save."
-msgstr ""
+msgstr "Suas próprias configurações são descartadas quando você salva."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5267
 #: admin/src/integrator/AdminIntegratorSettings.ts:5928
@@ -1585,6 +1591,8 @@ msgid ""
 "This file is a spelling dictionary, not a wordbook. Upload a list of words "
 "with one word per line."
 msgstr ""
+"Este arquivo é um dicionário de ortografia, não um livro de palavras. Faça o "
+"upload de uma lista de palavras com uma palavra por linha."
 
 #: admin/src/integrator/WordBook.ts:471
 msgid "Invalid dictionary format. Please check the file."
@@ -1833,30 +1841,30 @@ msgstr "Duplicar estilo"
 #: src/app/Util.ts:319
 msgid "%n year"
 msgid_plural "%n years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n ano"
+msgstr[1] "%n anos"
 
 #: src/app/Util.ts:321
 msgid "%n day"
 msgid_plural "%n days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n dia"
+msgstr[1] "%n dias"
 
 #: src/app/Util.ts:322
 msgid "%n hour"
 msgid_plural "%n hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n hora"
+msgstr[1] "%n horas"
 
 #: src/app/Util.ts:325
 msgid "%n minute"
 msgid_plural "%n minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n minuto"
+msgstr[1] "%n minutos"
 
 #: src/app/Util.ts:339
 msgid "less than a minute"
-msgstr ""
+msgstr "menos de um minuto"
 
 #: src/canvas/sections/CommentListSection.ts:2261
 #: src/canvas/sections/CommentListSection.ts:2274
@@ -1905,9 +1913,8 @@ msgid "Reply"
 msgstr "Responder"
 
 #: src/canvas/sections/CommentSection.ts:345
-#, fuzzy
 msgid "comment"
-msgstr "Comentário"
+msgstr "comentário"
 
 #: src/canvas/sections/CommentSection.ts:565
 msgid "Press Ctrl + Enter to post"
@@ -1915,7 +1922,7 @@ msgstr "Pressione Ctrl + Enter para postar"
 
 #: src/canvas/sections/CommentSection.ts:583
 msgid "Reply to {0}"
-msgstr ""
+msgstr "Responder a {0}"
 
 #: src/canvas/sections/CommentSection.ts:653
 #: src/canvas/sections/CommentSection.ts:654
@@ -1991,7 +1998,7 @@ msgstr "Mostrar no navegador"
 
 #: src/canvas/sections/CommentSection.ts:1797
 msgid "Press Ctrl + Enter to post, or %1 to discard"
-msgstr ""
+msgstr "Pressione Ctrl + Enter para postar, ou % 1 para descartar"
 
 #: src/canvas/sections/CommentSection.ts:1826
 #: src/canvas/sections/CommentSection.ts:1831
@@ -2029,11 +2036,11 @@ msgstr "O documento contém mídia não suportada"
 
 #: src/canvas/sections/SelectionSection.ts:1556
 msgid "Waiting for redo..."
-msgstr ""
+msgstr "Esperando por refazer..."
 
 #: src/canvas/sections/SelectionSection.ts:1557
 msgid "Waiting for undo..."
-msgstr ""
+msgstr "Esperando por desfazer..."
 
 #: src/canvas/sections/URLPopUpSection.ts:89
 #: src/control/Control.HyperlinkWizard.ts:41
@@ -2052,7 +2059,7 @@ msgstr "Remover link"
 
 #: src/canvas/sections/GroupButtonSection.ts:66
 msgid "Edit Diagram"
-msgstr ""
+msgstr "Editar Diagrama"
 
 #: src/canvas/sections/FormFieldButton.ts:106
 msgid "Unfold"
@@ -2183,7 +2190,7 @@ msgstr "Casual"
 #. TRANSLATORS: such as "Formal" or a name that the user typed
 #: src/control/Control.AIChatSidebar.ts:309
 msgid "{0} tone"
-msgstr ""
+msgstr "{0} tom"
 
 #: src/control/Control.AIChatSidebar.ts:419
 msgid "Best"
@@ -2245,43 +2252,43 @@ msgstr "Nova conversa"
 
 #: src/control/Control.AIChatSidebar.ts:754
 msgid "What would you like to do with this spreadsheet?"
-msgstr ""
+msgstr "O que você gostaria de fazer com essa planilha?"
 
 #: src/control/Control.AIChatSidebar.ts:756
 msgid "What would you like to do with this presentation?"
-msgstr ""
+msgstr "O que você gostaria de fazer com essa apresentação?"
 
 #: src/control/Control.AIChatSidebar.ts:758
 msgid "What would you like to do with this drawing?"
-msgstr ""
+msgstr "O que gostaria de fazer com este desenho?"
 
 #: src/control/Control.AIChatSidebar.ts:760
 msgid "What would you like to do with this document?"
-msgstr ""
+msgstr "O que gostaria de fazer com este documento?"
 
 #: src/control/Control.AIChatSidebar.ts:787
 msgid "Good morning, {0}!"
-msgstr ""
+msgstr "Bom dia, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:788
 msgid "Good morning!"
-msgstr ""
+msgstr "Bom dia!"
 
 #: src/control/Control.AIChatSidebar.ts:790
 msgid "Good afternoon, {0}!"
-msgstr ""
+msgstr "Boa tarde, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:791
 msgid "Good afternoon!"
-msgstr ""
+msgstr "Boa tarde!"
 
 #: src/control/Control.AIChatSidebar.ts:793
 msgid "Good evening, {0}!"
-msgstr ""
+msgstr "Boa noite, {0}!"
 
 #: src/control/Control.AIChatSidebar.ts:794
 msgid "Good evening!"
-msgstr ""
+msgstr "Boa noite!"
 
 #: src/control/Control.AIChatSidebar.ts:845
 #: src/control/Control.AIChatSidebar.ts:2288
@@ -2892,21 +2899,20 @@ msgid "Reject action"
 msgstr "Rejeitar ação"
 
 #: src/control/Control.AIChatSidebar.ts:2845
-#, fuzzy
 msgid "Send"
-msgstr "Enviado"
+msgstr "Enviar"
 
 #: src/control/Control.AIChatSidebar.ts:2847
 msgid "Send these cells"
-msgstr ""
+msgstr "Envie essas células"
 
 #: src/control/Control.AIChatSidebar.ts:2853
 msgid "Do not send these cells"
-msgstr ""
+msgstr "Não enviar essas células"
 
 #: src/control/Control.AIChatSidebar.ts:2870
 msgid "Nothing was sent."
-msgstr ""
+msgstr "Nada foi enviado."
 
 #: src/control/Control.AIChatSidebar.ts:2893
 msgid "Applying changes..."
@@ -3023,11 +3029,11 @@ msgstr "Diagnosticar erro de fórmula em"
 
 #: src/control/Control.AIChatSidebar.ts:3871
 msgid "To diagnose the error in %1, these cells will be sent to %2:"
-msgstr ""
+msgstr "Para diagnosticar o erro em % 1, essas células serão enviadas para % 2:"
 
 #: src/control/Control.AIChatSidebar.ts:3877
 msgid "Do you want to send them?"
-msgstr ""
+msgstr "Você quer enviá-los?"
 
 #: src/control/Control.AIChatSidebar.ts:3897
 msgid "I have a formula error in my spreadsheet."
@@ -3037,7 +3043,7 @@ msgstr "Tenho um erro de fórmula na minha planilha."
 #. TRANSLATORS: B5, {1} the name of its sheet
 #: src/control/Control.AIChatSidebar.ts:3901
 msgid "Cell {0} (Sheet: {1}) contains:"
-msgstr ""
+msgstr "A célula {0} (Planilha: {1}) contém:"
 
 #: src/control/Control.AIChatSidebar.ts:3906
 #: src/control/Control.FormulaBarJSDialog.js:116
@@ -3054,9 +3060,8 @@ msgstr "Células referenciadas"
 #. TRANSLATORS: Sent to the AI model. {0} is a Calc error code such
 #. TRANSLATORS: as #DIV/0!
 #: src/control/Control.AIChatSidebar.ts:3918
-#, fuzzy
 msgid "Please diagnose why this formula produces the {0} error."
-msgstr "Por favor, diagnostique por que esta fórmula produz o"
+msgstr "Por favor, dê o diagnostico por que esta fórmula produz o erro {0}."
 
 #: src/control/Control.AIChatSidebar.ts:3922
 msgid "Explain the root cause and suggest how to fix it."
@@ -3072,11 +3077,11 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3942
 msgid "only the cells with errors"
-msgstr ""
+msgstr "apenas as células com erros"
 
 #: src/control/Control.AIChatSidebar.ts:3949
 msgid "another file, its name only"
-msgstr ""
+msgstr "outro arquivo, seu nome apenas"
 
 #: src/control/Control.AIChatSidebar.ts:3979
 msgid "formula"
@@ -3187,6 +3192,8 @@ msgid ""
 "The table shows what each cell displays. The \"Formulas:\" list below it "
 "gives the formula of each cell that has one."
 msgstr ""
+"A tabela mostra o que cada célula exibe. A lista \"Fórmulas:\" abaixo dá a "
+"fórmula de cada célula que tem uma."
 
 #: src/control/Control.AIChatSidebar.ts:4203
 msgid ""
@@ -3455,7 +3462,7 @@ msgstr "Progresso de limpeza"
 
 #: src/control/Control.CleanupSidebar.ts:913
 msgid "Stop Cleanup"
-msgstr ""
+msgstr "Parar com a Limpeza"
 
 #: src/control/Control.CleanupSidebar.ts:934
 msgid "Scan presentation"
@@ -4710,7 +4717,7 @@ msgstr "Tudo"
 #: src/control/Control.NotebookbarImpress.js:1746
 #: src/control/Control.NotebookbarWriter.js:1457
 msgid "Smart Picker"
-msgstr "Selecionador inteligente"
+msgstr "Seletor inteligente"
 
 #: src/control/Control.Menubar.ts:291
 msgid "Text orientation"
@@ -4791,9 +4798,8 @@ msgstr "Ajuda Online"
 #: src/control/Control.Menubar.ts:460 src/control/Control.Menubar.ts:678
 #: src/control/Control.Menubar.ts:850 src/control/Control.Menubar.ts:1178
 #: src/control/Control.NotebookbarWriter.js:530
-#, fuzzy
 msgid "Show Tour"
-msgstr "Mostrar tour"
+msgstr "Mostrar Tour"
 
 #: src/control/Control.Menubar.ts:462 src/control/Control.Menubar.ts:680
 #: src/control/Control.Menubar.ts:852 src/control/Control.Menubar.ts:1180
@@ -5208,7 +5214,7 @@ msgstr "Gere imagem"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:208
 msgid "Generate Speaker Notes"
-msgstr ""
+msgstr "Gerar Notas do Apresentador"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:215
 msgid "Create Formula"
@@ -5216,27 +5222,27 @@ msgstr "Criar Fórmula"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:222
 msgid "Explain Formula"
-msgstr ""
+msgstr "Explicar Fórmula"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:224
 msgid "Explain the formula in the selected cell."
-msgstr ""
+msgstr "Explique a fórmula na célula selecionada."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:229
 msgid "Fix Formula Error"
-msgstr ""
+msgstr "Consertar o erro na fórmula"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:236
 msgid "Clean Up Data"
-msgstr ""
+msgstr "Limpar Dados"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:243
 msgid "Suggest Chart"
-msgstr ""
+msgstr "Sugerir Gráfico"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:245
 msgid "Suggest a chart for the selected data."
-msgstr ""
+msgstr "Sugerir um gráfico para os dados selecionados."
 
 #: src/control/Notebookbar.CalcTableTab.ts:45
 #: src/control/Notebookbar.TableDesignTabBase.ts:54
@@ -5433,11 +5439,11 @@ msgstr "Animações"
 #: src/control/Control.Notebookbar.js:663
 #: src/control/Control.NotebookbarWriter.js:3135
 msgid "Fill Color (Transparent Pictures Only)"
-msgstr ""
+msgstr "Preencher a cor (apenas imagens transparentes)"
 
 #: src/control/Control.Notebookbar.js:673
 msgid "Area"
-msgstr ""
+msgstr "Área"
 
 #: src/control/Control.Notebookbar.js:688
 msgid "Line"
@@ -5449,11 +5455,11 @@ msgstr "Largura da linha"
 
 #: src/control/Control.Notebookbar.js:764
 msgid "Transparency:"
-msgstr ""
+msgstr "Transparência:"
 
 #: src/control/Control.Notebookbar.js:783
 msgid "Thickness:"
-msgstr ""
+msgstr "Grossura:"
 
 #: src/control/Control.NotebookbarBuilder.js:204
 #: src/control/Control.NotebookbarBuilder.js:609
@@ -6081,7 +6087,7 @@ msgstr "Encaixar na grade"
 
 #: src/control/Control.NotebookbarImpress.js:823
 msgid "Shapes Sidebar"
-msgstr ""
+msgstr "Formas na Barra lateral"
 
 #: src/control/Control.NotebookbarImpress.js:924
 #: src/control/Control.NotebookbarImpress.js:2003
@@ -6211,7 +6217,7 @@ msgstr "Ver alterações"
 
 #: src/control/Control.NotebookbarWriter.js:2714
 msgid "Element categories"
-msgstr ""
+msgstr "Categorias de elementos"
 
 #: src/control/Control.ContextToolbar.ts:166
 msgid "Switch to Editing"
@@ -6261,11 +6267,11 @@ msgstr "visualização da página %1"
 
 #: src/control/Control.PartsPreview.js:978
 msgid "preview of page %1, %3 is missing"
-msgstr ""
+msgstr "visualização da página % 1, %3 está faltando"
 
 #: src/control/Control.PartsPreview.js:979
 msgid "Slide %1, %3 is missing"
-msgstr ""
+msgstr "O slide %1, %3 está faltando"
 
 #: src/control/Control.PartsPreview.js:983
 msgid "preview of page %1, not found in %3"
@@ -6273,32 +6279,31 @@ msgstr "visualização da página % 1, não encontrada em % 3"
 
 #: src/control/Control.PartsPreview.js:984
 msgid "Slide %1, not found in %3"
-msgstr ""
+msgstr "Slide %1, não foi encontrado em %3"
 
 #: src/control/Control.PartsPreview.js:988
 msgid "preview of page %1, no access to %3"
-msgstr ""
+msgstr "visualização da página %1, sem acesso a %3"
 
 #: src/control/Control.PartsPreview.js:989
 msgid "Slide %1, no access to %3"
-msgstr ""
+msgstr "Slide %1, sem acesso a %3"
 
 #: src/control/Control.PartsPreview.js:993
 msgid "preview of page %1, could not open %3"
-msgstr ""
+msgstr "visualização da página %1, não foi possível abrir %3"
 
 #: src/control/Control.PartsPreview.js:994
 msgid "Slide %1, could not open %3"
-msgstr ""
+msgstr "O slide %1, não pôde abrir o %3"
 
 #: src/control/Control.PartsPreview.js:999
-#, fuzzy
 msgid "preview of page %1, %2 changed in %3"
-msgstr "visualização da página % 1, mudado em %3"
+msgstr "visualização da página % 1, %2 mudado em %3"
 
 #: src/control/Control.PartsPreview.js:1000
 msgid "Slide %1, %2 changed in %3"
-msgstr ""
+msgstr "O slide %1, %2 mudou em %3"
 
 #: src/control/Control.PartsPreview.js:1003
 msgid "preview of page %1, changed in %3"
@@ -6306,15 +6311,15 @@ msgstr "visualização da página % 1, mudado em %3"
 
 #: src/control/Control.PartsPreview.js:1004
 msgid "Slide %1, changed in %3"
-msgstr ""
+msgstr "Slide %1, alterado em %3"
 
 #: src/control/Control.PartsPreview.js:1008
 msgid "preview of page %1, %3 is disconnected"
-msgstr ""
+msgstr "visualização da página %1, %3 está desconectada"
 
 #: src/control/Control.PartsPreview.js:1009
 msgid "Slide %1, %3 is disconnected"
-msgstr ""
+msgstr "Slide %1, %3 está desconectado"
 
 #: src/control/Control.PartsPreview.js:1013
 msgid "preview of page %1, linked to %2 in %3"
@@ -6334,19 +6339,19 @@ msgstr "Slide % 1, conectado a % 2"
 
 #: src/control/Control.PartsPreview.js:1241
 msgid "Linked to a section of %1 that is missing"
-msgstr ""
+msgstr "Ligado a uma seção de %1 que está faltando"
 
 #: src/control/Control.PartsPreview.js:1243
 msgid "Linked to a section of %1 that has changed"
-msgstr ""
+msgstr "Ligado a uma seção de %1 que foi mudado"
 
 #: src/control/Control.PartsPreview.js:1245
 msgid "Linked to a section of %1, disconnected"
-msgstr ""
+msgstr "Ligado a uma seção de %1, desconectado"
 
 #: src/control/Control.PartsPreview.js:1246
 msgid "Linked to a section of %1"
-msgstr ""
+msgstr "Ligado a uma seção de %1"
 
 #: src/control/Control.PartsPreview.js:1390
 #: src/control/Control.PartsPreview.js:1557
@@ -6371,15 +6376,15 @@ msgstr "Mover a seção para baixo"
 
 #: src/control/Control.PartsPreview.js:1434
 msgid "Update Section"
-msgstr ""
+msgstr "Atualizar seção"
 
 #: src/control/Control.PartsPreview.js:1442
 msgid "Unlink Section"
-msgstr ""
+msgstr "Desvincular seção"
 
 #: src/control/Control.PartsPreview.js:1449
 msgid "Unlink Section & Slides"
-msgstr ""
+msgstr "Desvincular seção e slides"
 
 #: src/control/Control.PartsPreview.js:1458
 msgid "Collapse All Sections"
@@ -6427,7 +6432,7 @@ msgstr "{0} mudaram"
 
 #: src/control/Control.SlideImportPane.tsx:724
 msgid "Disconnected"
-msgstr ""
+msgstr "Desconectado"
 
 #: src/control/Control.SlideImportPane.tsx:725
 #: src/control/Control.SlideLinkToolbar.tsx:134
@@ -6446,19 +6451,23 @@ msgstr "Lendo os slides..."
 
 #: src/control/Control.SlideImportPane.tsx:773
 msgid "Looking for the file..."
-msgstr ""
+msgstr "Procurando pelo arquivo..."
 
 #: src/control/Control.SlideImportPane.tsx:776
 msgid ""
 "The slides are in this presentation. You do not have permission to open the "
 "file they came from."
 msgstr ""
+"Os slides estão nesta apresentação. Você não tem permissão para abrir o "
+"arquivo de onde eles vieram."
 
 #: src/control/Control.SlideImportPane.tsx:780
 msgid ""
 "The slides are in this presentation. Looking for the file they came from "
 "did not work this time."
 msgstr ""
+"Os slides estão nesta apresentação. Procurando o arquivo de onde vieram não "
+"funcionou desta vez."
 
 #: src/control/Control.SlideImportPane.tsx:783
 msgid ""
@@ -6479,7 +6488,7 @@ msgstr "Este arquivo não pôde ser lido desta vez."
 #: src/control/Control.SlideImportPane.tsx:800
 #: src/control/Control.SlideImportPane.tsx:1417
 msgid "Look again"
-msgstr ""
+msgstr "Procurar novamente"
 
 #: src/control/Control.SlideImportPane.tsx:805
 #: src/control/Control.SlideImportPane.tsx:1422
@@ -6509,7 +6518,7 @@ msgstr "Inserir slides"
 
 #: src/control/Control.SlideImportPane.tsx:904
 msgid "Insert section \"{0}\""
-msgstr ""
+msgstr "Inserir a seção \"{0}\""
 
 #: src/control/Control.SlideImportPane.tsx:912
 msgid "Insert {0} from {1}"
@@ -6525,19 +6534,20 @@ msgstr "Inserir {0} slides"
 
 #: src/control/Control.SlideImportPane.tsx:972
 msgid "How the section goes in"
-msgstr ""
+msgstr "Como a seção entra"
 
 #: src/control/Control.SlideImportPane.tsx:977
 msgid "Insert as section \"{0}\""
-msgstr ""
+msgstr "Inserir como a seção \"{0}\""
 
 #: src/control/Control.SlideImportPane.tsx:983
 msgid "Insert as separate slides"
-msgstr ""
+msgstr "Insira como slides separados"
 
 #: src/control/Control.SlideImportPane.tsx:989
 msgid "Linked to its section in {0}. Update Links brings in later changes."
 msgstr ""
+"Vinculado à sua secção em {0}. Atualizar links traz alterações posteriores."
 
 #: src/control/Control.SlideImportPane.tsx:1038
 msgid "{0} of {1}"
@@ -6679,7 +6689,7 @@ msgstr "Vinculado o {0} com {1}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:120
 msgid "In a section linked to {0}"
-msgstr ""
+msgstr "Numa seção vinculada a {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:145
 msgid "Hide the actions for this linked slide"
@@ -6696,7 +6706,7 @@ msgstr "Desvincular"
 #: src/control/Control.SlideLinkToolbar.tsx:176
 #: src/slideimport/SlideLinks.ts:467
 msgid "Update section"
-msgstr ""
+msgstr "Atualizar seção"
 
 #: src/control/Control.SlideLinkToolbar.tsx:190
 msgid "Not available"
@@ -6725,24 +6735,30 @@ msgstr "Nenhum slide dessa apresentação está vinculado a outro arquivo."
 
 #: src/slideimport/SlideLinks.ts:425
 msgid "The section cannot be updated, because its source is not available."
-msgstr ""
+msgstr "A seção não pode ser atualizada, porque a fonte não está disponível."
 
 #: src/slideimport/SlideLinks.ts:447
 msgid ""
 "One linked section cannot be updated, because its source is not available."
 msgstr ""
+"Uma seção vinculada não pode ser atualizada, porque sua fonte não está "
+"disponível."
 
 #: src/slideimport/SlideLinks.ts:450
 msgid ""
 "{0} linked sections cannot be updated, because their sources are not "
 "available."
 msgstr ""
+"{0} seções vinculadas não podem ser atualizadas, porque suas fontes não "
+"estão disponíveis."
 
 #: src/slideimport/SlideLinks.ts:459
 msgid ""
 "The section will hold the slides that its section in {0} holds now. Changes "
 "made to these slides in this presentation will be lost."
 msgstr ""
+"A seção irá segurar os slides que sua seção em {0} mantém agora. As "
+"alterações feitas nesses slides nesta apresentação serão perdidas."
 
 #: src/slideimport/SlideLinks.ts:462
 msgid ""
@@ -6750,10 +6766,13 @@ msgid ""
 "files hold now. Changes made to these slides in this presentation will be "
 "lost."
 msgstr ""
+"{0} seções vinculadas irá segurar os slides que suas seções nos arquivos de "
+"origem seguram agora. As alterações feitas nesses slides nesta apresentação "
+"serão perdidas."
 
 #: src/slideimport/SlideLinks.ts:467
 msgid "Update sections"
-msgstr ""
+msgstr "Atualizar seções"
 
 #: src/slideimport/SlideLinks.ts:534
 msgid "This slide is not linked to another file."
@@ -6774,7 +6793,7 @@ msgstr "{0} não pôde ser lido."
 
 #: src/slideimport/SlideLinks.ts:742
 msgid "You do not have access to {0}, so the section cannot be updated."
-msgstr ""
+msgstr "Você não tem acesso a {0}, portanto, a seção não pode ser atualizada."
 
 #: src/slideimport/SlideLinks.ts:745
 msgid "You do not have access to {0}, so its pages cannot be refreshed."
@@ -6793,11 +6812,12 @@ msgstr "Os slides de {0} não puderam ser lidos nesta apresentação."
 
 #: src/slideimport/SlideLinks.ts:919
 msgid "The section was updated from {0}."
-msgstr ""
+msgstr "A seção foi atualizada a partir de {0}."
 
 #: src/slideimport/SlideLinks.ts:1059
 msgid "Cannot update the section: {0} no longer holds its source section."
 msgstr ""
+"Não é possível atualizar a seção: {0} não contém mais sua seção de origem."
 
 #: src/slideimport/SlideLinks.ts:1085
 msgid "Cannot update slide {0}: the source lacks matching slide"
@@ -6810,14 +6830,12 @@ msgid "Unlinking the slide failed."
 msgstr "Desvincular o slide falhou."
 
 #: src/slideimport/SlideLinks.ts:1105
-#, fuzzy
 msgid "Unlinking the section failed."
-msgstr "Desvincular o slide falhou."
+msgstr "Desvincular a seção falhou."
 
 #: src/slideimport/SlideLinks.ts:1122
-#, fuzzy
 msgid "Updating the section from {0} failed."
-msgstr "Atualizando os slides de {0} falhou."
+msgstr "Atualizando a seção de {0} falhou."
 
 #: src/slideimport/SlideLinks.ts:1123 src/slideimport/SlideLinks.ts:1182
 msgid "Updating the slides of {0} failed."
@@ -6851,7 +6869,7 @@ msgstr "Maximize para a grade"
 
 #: src/control/Control.PaneExpander.ts:115
 msgid "Exit grid"
-msgstr ""
+msgstr "Fechar grade"
 
 #: src/control/Control.PaneSplitter.tsx:70
 msgid "Resize panels"
@@ -6875,39 +6893,40 @@ msgstr "Cada documento está contido com segurança (landlock)"
 
 #: src/control/Control.ServerAuditDialog.ts:83
 msgid "Each document is securely contained (Linux namespaces)"
-msgstr ""
+msgstr "Cada documento está contido de forma segura (Linux namespaces)"
 
 #: src/control/Control.ServerAuditDialog.ts:88
 msgid "Each document is securely contained (capabilities and chroot)"
-msgstr ""
+msgstr "Cada documento é contido de forma segura (capacidades e chroot)"
 
 #: src/control/Control.ServerAuditDialog.ts:102
 msgid "System call security filtering enabled"
-msgstr ""
+msgstr "Filtragem de segurança de chamada do sistema habilitada"
 
 #: src/control/Control.ServerAuditDialog.ts:112
 msgid "The trusted WOPI hosts are configured"
-msgstr ""
+msgstr "Os hosts WOPI confiáveis estão configurados"
 
 #: src/control/Control.ServerAuditDialog.ts:128
 msgid "Hardware resources are sufficient for optimal performance"
-msgstr ""
+msgstr "Recursos de hardware são suficientes para um ótimo desempenho"
 
 #: src/control/Control.ServerAuditDialog.ts:141
 msgid "Fast kit jail bind mounting enabled"
-msgstr ""
+msgstr "Montagem rápida de ligação de cadeia de kit habilitada"
 
 #: src/control/Control.ServerAuditDialog.ts:146
 msgid "Fast kit jail setup with landlock, nothing to copy or mount"
 msgstr ""
+"Configuração rápida da prisão do kit com sede, nada para copiar ou montar"
 
 #: src/control/Control.ServerAuditDialog.ts:159
 msgid "Poorly performing proxying of all network requests."
-msgstr ""
+msgstr "Desempenho ruim de proxy de todas as solicitações de rede."
 
 #: src/control/Control.ServerAuditDialog.ts:163
 msgid "Direct network connection"
-msgstr ""
+msgstr "Conexão de rede direta"
 
 #: src/control/Control.ServerAuditDialog.ts:169
 msgid ""
@@ -6919,29 +6938,31 @@ msgstr ""
 
 #: src/control/Control.ServerAuditDialog.ts:175
 msgid "Connected with the compact WebSocket URL form"
-msgstr ""
+msgstr "Conectado com o formulário de URL compacto do WebSocket"
 
 #: src/control/Control.ServerAuditDialog.ts:184
 msgid "The IsAdminUser property is not set by integration"
-msgstr ""
+msgstr "A propriedade IsAdminUser não está definida por integração"
 
 #: src/control/Control.ServerAuditDialog.ts:190
 msgid ""
 "Used deprecated is_admin field, integration should use IsAdminUser property "
 "instead"
 msgstr ""
+"Usou o campo is_admin que é descontinuado, a integração deve usar a "
+"propriedade IsAdminUser em vez disso"
 
 #: src/control/Control.ServerAuditDialog.ts:196
 msgid "The IsAdminUser user property is set by integration"
-msgstr ""
+msgstr "A propriedade de usuário do IsAdminUser está definida por integração"
 
 #: src/control/Control.ServerAuditDialog.ts:204
 msgid "PostMessage API is initialized"
-msgstr ""
+msgstr "A API do PostMessage está inicializada"
 
 #: src/control/Control.ServerAuditDialog.ts:209
 msgid "Integrator is not ready for PostMessage calls"
-msgstr ""
+msgstr "Integrator não está pronto para chamadas do PostMessage"
 
 #: src/control/Control.ServerAuditDialog.ts:289
 msgid "Document container started in {1} ms"
@@ -7606,9 +7627,8 @@ msgid "Title Only"
 msgstr ""
 
 #: src/control/Styles.js:23 src/control/jsdialog/Definitions.Menu.ts:2265
-#, fuzzy
 msgid "Blank Slide"
-msgstr "Desvincular slide"
+msgstr "Slide em branco"
 
 #: src/control/Styles.js:24 src/control/jsdialog/Definitions.Menu.ts:2270
 msgid "Centered Text"
@@ -8452,7 +8472,7 @@ msgstr "Categoria e objetos que você adicionar ao documento aparecerá aqui"
 
 #: src/control/jsdialog/Widget.TreeView.ts:2690
 msgid "Search items"
-msgstr ""
+msgstr "Procurar Itens"
 
 #: src/app/Socket.ts:340
 msgid "Oops, there is a problem connecting to {productname}: "
@@ -8466,7 +8486,7 @@ msgstr "Ocorreu um erro de conexão com seu documento. Tente novamente."
 
 #: src/app/Socket.ts:699
 msgid "The connection to the document has been lost."
-msgstr ""
+msgstr "A conexão com o documento foi perdida."
 
 #: src/app/Socket.ts:700
 msgid "The server has been disconnected."
@@ -8486,11 +8506,11 @@ msgstr "Exportado com sucesso: "
 
 #: src/app/Socket.ts:1230
 msgid "This document has links to external content."
-msgstr ""
+msgstr "Esse documento tem links para conteúdo externo."
 
 #: src/app/Socket.ts:1231
 msgid "Allow"
-msgstr ""
+msgstr "Permitir"
 
 #: src/app/Socket.ts:1914
 msgid "Discard"
@@ -8534,7 +8554,7 @@ msgstr "Servidor errado, reconectando..."
 
 #: src/app/Socket.ts:2176
 msgid "Unsupported version."
-msgstr ""
+msgstr "Versão não suportada."
 
 #: src/app/Socket.ts:2177
 msgid "Unsupported server version."
@@ -8562,7 +8582,7 @@ msgstr "Apenas o proprietário do documento pode alterar a senha."
 
 #: src/app/Socket.ts:2752
 msgid "You do not have permission to edit this document."
-msgstr ""
+msgstr "Você não tem permissão para editar este documento."
 
 #: src/app/Socket.ts:2753
 msgid "The document could not be made editable."
@@ -8616,7 +8636,7 @@ msgstr[1] "Apagar %n slides?"
 
 #: src/docdispatcher.ts:1033
 msgid "Delete pages"
-msgstr ""
+msgstr "Excluir páginas"
 
 #: src/docdispatcher.ts:1034
 msgid "Delete %n page?"
@@ -9289,19 +9309,16 @@ msgstr ""
 
 #: src/slideshow/engine/SlideShowHandler.ts:120
 #: src/slideshow/PresenterConsole.js:32
-#, fuzzy
 msgid "Next Slide"
 msgstr "Próximo slide"
 
 #: src/slideshow/engine/SlideShowHandler.ts:121
-#, fuzzy
 msgid "Previous Slide"
 msgstr "Slide anterior"
 
 #: src/slideshow/engine/SlideShowHandler.ts:122
-#, fuzzy
 msgid "Last Slide"
-msgstr "Colar Slide"
+msgstr "Último slide"
 
 #: src/slideshow/engine/SlideShowHandler.ts:123
 #: src/slideshow/SlideShowPresenter.ts:936
@@ -9360,14 +9377,12 @@ msgid "Resume"
 msgstr ""
 
 #: src/slideshow/PresenterConsole.js:42
-#, fuzzy
 msgid "Present to all"
 msgstr "Apresentar a todos"
 
 #: src/slideshow/PresenterConsole.js:43
-#, fuzzy
 msgid "Exit"
-msgstr "Editar"
+msgstr "Sair"
 
 #: src/slideshow/PresenterConsole.js:44
 msgid "Go Back"
@@ -9434,7 +9449,6 @@ msgid "Waiting for presenter to advance"
 msgstr ""
 
 #: src/slideshow/SlideShowPresenter.ts:1698
-#, fuzzy
 msgid "Stop Following"
 msgstr "Pare de seguir"
 
@@ -9519,9 +9533,8 @@ msgid "Inspiration"
 msgstr ""
 
 #: templates/templates.js:186 templates/templates.js:190
-#, fuzzy
 msgid "Lights"
-msgstr "Reduzido"
+msgstr "Luzes"
 
 #: templates/templates.js:196 templates/templates.js:200
 msgid "Metropolis"
@@ -9625,7 +9638,6 @@ msgid "https://www.collaboraoffice.org/"
 msgstr "https://www.collaboraonline.org/"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:50-7
-#, fuzzy
 msgid ""
 "Are you interested in contributing but don’t know where to start? Head over "
 "to the <a target=\"_blank\" rel=\"noopener\" href=\"https://"
@@ -9637,15 +9649,14 @@ msgid ""
 "\">filing a bug report</a> with all the essential steps on how to reproduce "
 "it."
 msgstr ""
-"Você está interessado em contribuir, mas não sabe por onde começar? Acesse "
-"às <a target=\"_blank\" rel=\"noopener\" href=\"https://"
-"collaboraonline.github.io/post/build-code/\">instruções passo a passo</a> e "
-"construa CODE a partir do zero. Você também pode ajudar com <a "
-"target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraonline.org/"
-"post/translate/\">traduções</a> ou <a target=\"_blank\" rel=\"noopener\" "
-"href=\"https://www.collaboraonline.org/post/filebugs/\">preenchendo "
-"relatórios de erros</a> com todos os passos essenciais sobre como reproduzi-"
-"los."
+"Você está interessado em contribuir, mas não sabe por onde começar? Vá até o "
+"<a target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraoffice.org/"
+"post/build-code/\">passo-a-passo</a> e configure o CODE do zero. Você também "
+"pode ajudar com as <a target=\"_blank\" rel=\"noopener\" href=\"https://"
+"www.collaboraoffice.org/post/translate/\">traduções</a> ou para <a "
+"target=\"_blank\" rel=\"noopener\" href=\"https://www.collaboraoffice.org/"
+"post/filebugs/\">enviando um relatório de bugs</a> com todos os passos "
+"essenciais sobre como reproduzi-lo."
 
 #: welcome/welcome.html%2Bhtml.body.div.div:55-5
 msgid ""
