@@ -227,6 +227,31 @@ describe(['tagdesktop'], 'JSDialog unit test', { testIsolation: false }, functio
 		cy.cGet('#snackbar').should('not.exist');
 	});
 
+	// The prompt asks at most once every 5 days and 15 documents, whether or not the user
+	// answers it.
+	it('Feedback prompt waits before asking again when it is left to time out', function() {
+		cy.getFrameWindow().then(function(win) {
+			win.prefs.set('WSDFeedbackCount', 20);
+			win.prefs.remove('WSDFeedbackLaterDate');
+
+			const feedback = Object.create(win.L.Map.Feedback.prototype);
+			feedback._map = win.app.map;
+			feedback.askForFeedbackDialog();
+		});
+		cy.cGet('#snackbar').should('be.visible');
+
+		cy.getFrameWindow().then(function(win) {
+			const askedAt = win.prefs.getNumber('WSDFeedbackLaterDate');
+			expect(Date.now() - askedAt, 'time since the prompt').to.be.within(0, 60000);
+			expect(win.prefs.getNumber('WSDFeedbackCount', 0), 'documents since the prompt')
+				.to.equal(0);
+
+			win.app.map.uiManager.closeSnackbar();
+			helper.processToIdle(win);
+		});
+		cy.cGet('#snackbar').should('not.exist');
+	});
+
 	it('Snackbar with only a dismiss button leaves the keyboard focus in the document', function() {
 		cy.getFrameWindow().then(function(win) {
 			win.app.map.focus();

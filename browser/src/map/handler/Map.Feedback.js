@@ -91,6 +91,11 @@ window.L.Map.Feedback = window.L.Handler.extend({
 	},
 
 	askForFeedbackDialog: function () {
+		// Showing the prompt counts as asking, as a click on 'later' in the
+		// form does, so the next prompt waits again even when the prompt is
+		// left to time out.
+		this.postponeFeedback();
+
 		// The prompt appears on its own while the user may be typing, so the
 		// keyboard focus stays in the document.
 		this._map.uiManager.showSnackbar(
@@ -98,6 +103,12 @@ window.L.Map.Feedback = window.L.Handler.extend({
 			_('OK'),
 			this.showFeedbackDialog.bind(this),
 			undefined, false, false, /*focusAction=*/false);
+	},
+
+	// The next prompt comes after 5 days and another 15 documents, counted from now.
+	postponeFeedback: function () {
+		window.prefs.set('WSDFeedbackLaterDate', new Date().getTime());
+		window.prefs.remove('WSDFeedbackCount');
 	},
 
 	showFeedbackDialog: function () {
@@ -154,10 +165,8 @@ window.L.Map.Feedback = window.L.Handler.extend({
 			window.prefs.remove('WSDFeedbackCount');
 			this.removeIframe();
 		} else if (data == 'feedback-later') {
-			var currentDate = new Date();
 			this.removeIframe();
-			window.prefs.set('WSDFeedbackLaterDate', currentDate.getTime());
-			window.prefs.remove('WSDFeedbackCount');
+			this.postponeFeedback();
 		} else if (data == 'feedback-submit') {
 			window.prefs.set('WSDFeedbackEnabled', false);
 			window.prefs.remove('WSDFeedbackCount');
