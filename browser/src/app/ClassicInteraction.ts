@@ -984,14 +984,17 @@ class ClassicInPlaceContext implements InteractionContext {
 
 	/*
 		a pie segment goes out of its pie along its own way only, as the chart drags it: the move
-		is laid onto that way, and held between no offset and the whole one
+		is laid onto that way, and held between no offset and the whole one. anything else moved
+		inside the chart, a shape added to it too, stays inside it, as the chart holds a part on
+		its page
 	*/
 	public heldToItsWay(objectIds: number[], by: cool.Point): cool.Point {
 		const along =
 			objectIds.length === 1
 				? RenderGeometrySection.objectOf(objectIds[0])?.chartPart?.dragAlong
 				: undefined;
-		if (!along || along.length < 3) return by;
+		if (!along || along.length < 3)
+			return ClassicInPlaceContext.heldInsideTheChart(objectIds, by);
 
 		const [wayX, wayY, at] = along;
 		const length = wayX * wayX + wayY * wayY;
@@ -1002,6 +1005,39 @@ class ClassicInPlaceContext implements InteractionContext {
 			1 - at,
 		);
 		return new cool.Point(wayX * share, wayY * share);
+	}
+
+	/*
+		how far objects inside the chart go of that move, so that their box stays inside the box
+		of the chart. a move that brings an object lying outside back in is not held
+	*/
+	private static heldInsideTheChart(
+		objectIds: number[],
+		by: cool.Point,
+	): cool.Point {
+		const place = Interaction.placeOf(GraphicSelection.selectedObjectIDs);
+		if (
+			place.kind !== 'inPlace' ||
+			!objectIds.length ||
+			objectIds.includes(place.object)
+		)
+			return by;
+
+		const chart = RenderGeometrySection.boxOf(place.object);
+		let box: cool.Range2D | undefined;
+		for (const objectId of objectIds) {
+			const one = RenderGeometrySection.boxOf(objectId);
+			if (!one) return by;
+			box = box ? box.union(one) : one;
+		}
+		if (!chart || !box) return by;
+
+		const held = (move: number, low: number, high: number): number =>
+			Math.min(Math.max(move, Math.min(low, 0)), Math.max(high, 0));
+		return new cool.Point(
+			held(by.x, chart.minX - box.minX, chart.maxX - box.maxX),
+			held(by.y, chart.minY - box.minY, chart.maxY - box.maxY),
+		);
 	}
 
 	// a part of a chart is named as itself, the chart changes it as one with all it holds, in one
