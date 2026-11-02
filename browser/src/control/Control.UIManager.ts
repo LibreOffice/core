@@ -1275,12 +1275,67 @@ class UIManager extends window.L.Control {
 
 	initializeNotesPanel(): void {
 		if (this.notesPanelOpenedOnLoad) return;
-		if (!this.map.notesPanel || !window.mode.isDesktop()) return;
+		if (!this.canOpenNotesPanelOnLoad()) return;
 
-		if (!this.map.isEditMode() || (app.impress && app.impress.notesMode)) return;
 		this.notesPanelOpenedOnLoad = true;
 		if (this.getBooleanDocTypePref('ShowNotesPanel', true))
 			this.map.notesPanel.setOpen(true);
+	}
+
+	/// The notes pane opens on load on a desktop, in edit mode, while the view shows slides
+	/// rather than the handout page.
+	private canOpenNotesPanelOnLoad(): boolean {
+		if (!this.map.notesPanel || !window.mode.isDesktop()) return false;
+		return this.map.isEditMode() && !(app.impress && app.impress.notesMode);
+	}
+
+	/**
+	 * Whether the stored preferences have the engine open the sidebar as the
+	 * document loads, on the properties deck or on a deck saved as open.
+	 */
+	private sidebarOpensOnLoad(): boolean {
+		if (!window.mode.isDesktop() || window.mode.isInteractivePreview()) return false;
+		if (app.file.disableSidebar || this.map.isReadOnlyMode()) return false;
+		if (!this.getBooleanDocTypePref('ShowSidebar', true)) return false;
+
+		return this.getBooleanDocTypePref('PropertyDeck', true)
+			|| !!this.storedSidebarDeckCommand();
+	}
+
+	/**
+	 * The command of the deck that the stored preferences of the document type
+	 * reopen as the document loads, besides the properties deck. Empty when
+	 * they name no such deck.
+	 */
+	private storedSidebarDeckCommand(): string {
+		const decks: [string, string][] = this.map.getDocType() === 'presentation'
+			? [['SdSlideTransitionDeck', '.uno:SlideChangeWindow'],
+				['SdCustomAnimationDeck', '.uno:CustomAnimation'],
+				['SdMasterPagesDeck', '.uno:MasterSlidesPanel']]
+			: [['StyleListDeck', '.uno:SidebarDeck.StyleListDeck']];
+		const found = decks.find(([pref]) => this.getBooleanDocTypePref(pref, false));
+		return found ? found[1] : '';
+	}
+
+	/**
+	 * Opens the sidebar and the notes pane of a presentation empty, at their
+	 * final size, when the stored preferences will have the engine fill them.
+	 * The canvas then takes its final size before the first slide is drawn,
+	 * and the engine content arrives later into panes that already have it.
+	 */
+	reservePanesForLoad(): void {
+		if (this.map.getDocType() !== 'presentation') return;
+
+		const reserveSidebar = !!this.map.sidebar && this.sidebarOpensOnLoad();
+		const reserveNotes = this.canOpenNotesPanelOnLoad()
+			&& this.getBooleanDocTypePref('ShowNotesPanel', true);
+		if (!reserveSidebar && !reserveNotes) return;
+
+		app.layoutingService.appendLayoutingTask(() => {
+			if (reserveSidebar && !this.map.sidebar.isVisible())
+				this.map.sidebar.showSidebar();
+			if (reserveNotes) this.map.notesPanel.reserveSpace();
+		});
 	}
 
 	/**
@@ -1313,24 +1368,11 @@ class UIManager extends window.L.Control {
 				this.map.sidebar.setAsInitialized();
 			}
 
-			if (showSidebar && this.map.getDocType() === 'presentation') {
-				if (this.getBooleanDocTypePref('SdSlideTransitionDeck', false)) {
-					requestSidebar();
-					app.socket.sendMessage('uno .uno:SlideChangeWindow');
-					this.map.sidebar.setupTargetDeck('.uno:SlideChangeWindow');
-				} else if (this.getBooleanDocTypePref('SdCustomAnimationDeck', false)) {
-					requestSidebar();
-					app.socket.sendMessage('uno .uno:CustomAnimation');
-					this.map.sidebar.setupTargetDeck('.uno:CustomAnimation');
-				} else if (this.getBooleanDocTypePref('SdMasterPagesDeck', false)) {
-					requestSidebar();
-					app.socket.sendMessage('uno .uno:MasterSlidesPanel');
-					this.map.sidebar.setupTargetDeck('.uno:MasterSlidesPanel');
-				}
-			} else if (showSidebar && this.getBooleanDocTypePref('StyleListDeck', false)) {
+			const deckCommand = showSidebar ? this.storedSidebarDeckCommand() : '';
+			if (deckCommand) {
 				requestSidebar();
-				app.socket.sendMessage('uno .uno:SidebarDeck.StyleListDeck');
-				this.map.sidebar.setupTargetDeck('.uno:SidebarDeck.StyleListDeck');
+				app.socket.sendMessage('uno ' + deckCommand);
+				this.map.sidebar.setupTargetDeck(deckCommand);
 			}
 
 			if (showSidebar)

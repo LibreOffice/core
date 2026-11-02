@@ -29,6 +29,8 @@ interface ViewSetting {
 class ServerConnectionService {
 	// True once sidebar initialization has finished.
 	private sidebarSettled: boolean = false;
+	// True once the side panes have been opened for the first load.
+	private panesReserved: boolean = false;
 
 	public constructor() {
 		RenderManager.appendAfterVisualsReady(this.onVisualsReady.bind(this));
@@ -161,6 +163,14 @@ class ServerConnectionService {
 	/// see _appLoadedConditions in Map.Wopi.js
 	public onDocumentLoaded() {
 		app.console.debug('ServerConnectionService: onDocumentLoaded');
+
+		// This runs before the first tiles are requested, so the canvas takes the size left by
+		// the side panes before the first slide is drawn. A reconnect loads again and keeps the
+		// panes as the user left them.
+		if (!this.panesReserved) {
+			this.panesReserved = true;
+			app.map.uiManager.reservePanesForLoad();
+		}
 
 		if (!app.map._extensions) {
 			// Mark synchronously so a re-entry of onDocumentLoaded doesn't

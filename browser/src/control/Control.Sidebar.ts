@@ -295,8 +295,9 @@ class Sidebar extends SidebarBase {
 						if (target && (isCurrent === 'false' || !isCurrent)) {
 							this.changeDeck(target);
 							// A closed sidebar opens on the last deck core showed. It stays
-							// closed until the requested deck arrives, so only that deck is seen.
-							if (!this.isVisible()) return;
+							// closed, or empty when its space is reserved, until the requested
+							// deck arrives, so only that deck is seen.
+							if (!this.isVisible() || !this.container.firstChild) return;
 						}
 					} else {
 						this.changeDeck(target);

@@ -135,6 +135,15 @@ class NotesPanel extends JSDialogComponent {
 		});
 	}
 
+	/// Opens the pane empty at its stored height, so the layout has its final size before the
+	/// engine sends the content. The command state and the stored preference stay as they are.
+	public reserveSpace() {
+		if (!this.wrapper) return;
+
+		this.wrapper.classList.add('visible');
+		if (this.column) this.column.classList.add('notes-visible');
+	}
+
 	/// Asks the engine to open or close the notes pane.
 	public setOpen(open: boolean) {
 		this.map.sendUnoCommand(
