@@ -252,10 +252,17 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationDrawer = findViewById(R.id.navigation_drawer);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            int itemHorizontalPadding = navigationDrawer.getItemHorizontalPadding();
             navigationDrawer.getHeaderView(0).setOnApplyWindowInsetsListener((v, windowInsets) -> {
-                Insets insets = windowInsets.getInsets(WindowInsets.Type.systemBars());
+                Insets insets = windowInsets.getInsets(WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout());
+                boolean drawerOnRight = getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
+                int left = drawerOnRight ? 0 : insets.left;
+                int right = drawerOnRight ? insets.right : 0;
 
+                // We don't need to add horizontal padding to the header, since as it can go under the insets just fine as long as scrims are disabled...
                 v.setPadding(0, insets.top, 0, 0);
+                // ...but we do need the menu items to be inset away from buttons, cutouts, etc.
+                navigationDrawer.setItemHorizontalPadding(itemHorizontalPadding + left + right);
 
                 return windowInsets;
             });

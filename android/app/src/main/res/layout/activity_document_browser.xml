@@ -255,6 +255,8 @@
         android:theme="@style/LibreOfficeTheme.Base"
         app:headerLayout="@layout/navigation_header"
         app:topInsetScrimEnabled="false"
+        app:startInsetScrimEnabled="false"
+        app:endInsetScrimEnabled="false"
         app:menu="@menu/navigation_menu"/>
 
 
