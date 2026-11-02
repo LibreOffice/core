@@ -3043,6 +3043,12 @@ button.has-img img {
 	display: flex;
 }
 
+/* sub-toolbar in a popup, e.g. Fontwork Shape: rows instead of one long line */
+.modalpopup .jsdialog.toolbox#managedtoolbar {
+	display: grid;
+	grid-template-columns: repeat(6, auto);
+}
+
 .jsdialog.ui-spacer {
 	display: flex;
 	flex-grow: 1;

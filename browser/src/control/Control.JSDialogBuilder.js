@@ -323,7 +323,14 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		if (objectType == 'toolbutton' && eventType == 'click' && data.indexOf('.uno:') >= 0) {
 			// encode spaces
 			var encodedCommand = data.replace(' ', '%20');
-			builder.map.sendUnoCommand(encodedCommand);
+			// A button in a popup, for example a sub-toolbar, picks a command
+			// the popup is open for: run it, then close the popup.
+			const popup = builder.map.jsdialog ? builder.map.jsdialog.dialogs[builder.windowId] : null;
+			if (popup && popup.isModalPopUp && !popup.isDropdown) {
+				builder.map.sendUnoCommand(encodedCommand, null, true);
+				builder.map.jsdialog.closePopover(builder.windowId, true);
+			} else
+				builder.map.sendUnoCommand(encodedCommand);
 		} else if (object) {
 			// CSV and Macro Security Warning Dialogs are shown before the document load
 			// In that state the document is not really loaded and closing or cancelling it

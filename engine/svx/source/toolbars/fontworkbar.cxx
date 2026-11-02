@@ -321,12 +321,14 @@ static void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem
     static constexpr OUString sEquations( u"Equations"_ustr );
     static constexpr OUString sHandles( u"Handles"_ustr );
     static constexpr OUString sPath( u"Path"_ustr );
+    static constexpr OUString sViewBox( u"ViewBox"_ustr );
     rGeometryItem.ClearPropertyValue( sAdjustmentValues );
     rGeometryItem.ClearPropertyValue( sCoordinateOrigin );
     rGeometryItem.ClearPropertyValue( sCoordinateSize );
     rGeometryItem.ClearPropertyValue( sEquations );
     rGeometryItem.ClearPropertyValue( sHandles );
     rGeometryItem.ClearPropertyValue( sPath );
+    rGeometryItem.ClearPropertyValue( sViewBox );
 
     /* SJ: CustomShapes that are available in the gallery are having the highest
        priority, so we will take a look there before taking the internal default */
@@ -400,6 +402,13 @@ static void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem
                     if ( pAny )
                     {
                         aPropVal_.Name = sPath;
+                        aPropVal_.Value = *pAny;
+                        rGeometryItem.SetPropertyValue( aPropVal_ );
+                    }
+                    pAny = rSourceGeometry.GetPropertyValueByName( sViewBox );
+                    if ( pAny )
+                    {
+                        aPropVal_.Name = sViewBox;
                         aPropVal_.Value = *pAny;
                         rGeometryItem.SetPropertyValue( aPropVal_ );
                     }

@@ -29,6 +29,7 @@ constexpr auto IgnoredList
         { u"sfx/ui/infobar.ui" },
         { u"sfx/ui/tabbar.ui" },
         { u"sfx/ui/tabbarcontents.ui" },
+        { u"svt/ui/managedtoolbar.ui" },
         { u"svt/ui/scrollbars.ui" },
         { u"svt/ui/tabbuttons.ui" }, // Calc -> sheet tabs on the bottom
         { u"svt/ui/tabbuttonsmirrored.ui" }, // as above
@@ -471,6 +472,7 @@ constexpr auto PopupList
         // svt
         { u"svt/ui/datewindow.ui" },
         { u"svt/ui/linewindow.ui" },
+        { u"svt/ui/subtoolbar.ui" },
         // svx
         { u"svx/ui/colorwindow.ui" },
         { u"svx/ui/currencywindow.ui" },

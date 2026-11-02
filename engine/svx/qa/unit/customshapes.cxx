@@ -196,6 +196,43 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf146866_GeomItemHash)
     dispatchCommand(mxComponent, u".uno:ExtrusionToggle"_ustr, {});
 }
 
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testFontworkShapeTypeOwnViewBox)
+{
+    // The Fontwork has its own path with svg:viewBox="0 0 34 21".
+    loadFromFile(u"FontworkOwnViewBox.fodg");
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    SdrObjCustomShape* pSdrCustomShape(
+        static_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape)));
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
+    SdrView* pSdrView = pViewShell->GetDrawView();
+    pSdrView->MarkObj(pSdrCustomShape, pSdrView->GetSdrPageView());
+
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        { { "FontworkShapeType", uno::Any(u"fontwork-wave"_ustr) } }));
+    dispatchCommand(mxComponent, u".uno:FontworkShapeType"_ustr, aArgs);
+
+    const SdrCustomShapeGeometryItem& rGeometryItem(
+        pSdrCustomShape->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY));
+    const uno::Any* pType = rGeometryItem.GetPropertyValueByName(u"Type"_ustr);
+    CPPUNIT_ASSERT(pType);
+    OUString sType;
+    *pType >>= sType;
+    CPPUNIT_ASSERT_EQUAL(u"fontwork-wave"_ustr, sType);
+
+    // The wave path uses the coordinates of the preset. Without the fix the view box of the
+    // own path stayed and scaled the wave far outside the shape, so no text was visible.
+    const uno::Any* pViewBox = rGeometryItem.GetPropertyValueByName(u"ViewBox"_ustr);
+    if (pViewBox)
+    {
+        awt::Rectangle aViewBox;
+        *pViewBox >>= aViewBox;
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(21600), aViewBox.Width);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(21600), aViewBox.Height);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145700_3D_NonUI)
 {
     // The document contains first light soft, no ambient color, no second light and shininess 6.
