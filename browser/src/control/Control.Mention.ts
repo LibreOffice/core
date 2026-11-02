@@ -190,7 +190,7 @@ class Mention extends AutoCompletePopup {
 		return {
 			id: this.popupId + 'fixedtext',
 			type: 'fixedtext',
-			text: _('No search results found!'),
+			text: _('No search results found'),
 			enabled: true,
 		} as TextWidget;
 	}
@@ -271,7 +271,7 @@ class Mention extends AutoCompletePopup {
 		// Anything the user actually types stays part of the mention: names may
 		// contain punctuation ('*', '.', '-', "'") and non-Latin letters, so a
 		// special character must not dismiss the popup, it only narrows the
-		// search and may end up showing 'No search results found!'.
+		// search and may end up showing 'No search results found'.
 		// Only non-textual input (Enter, paste, tabs, other control characters)
 		// ends the mention.
 		// eslint-disable-next-line no-control-regex

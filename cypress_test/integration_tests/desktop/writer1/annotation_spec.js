@@ -1518,7 +1518,7 @@ describe(['tagdesktop'], 'Annotation with @mention', function() {
 		// the popup covers the comment textarea, so keep typing with force
 		// a special character only narrows the search, it must not dismiss the popup
 		cy.cGet('#annotation-modify-textarea-new').type('*', {force: true});
-		cy.cGet('#mentionPopupfixedtext').should('be.visible').should('have.text', 'No search results found!');
+		cy.cGet('#mentionPopupfixedtext').should('be.visible').should('have.text', 'No search results found');
 
 		// ... and further special characters keep it up as well
 		cy.cGet('#annotation-modify-textarea-new').type('#', {force: true});

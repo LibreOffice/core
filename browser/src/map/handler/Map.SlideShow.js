@@ -57,7 +57,7 @@ window.L.Map.SlideShow = window.L.Handler.extend({
 
 		if (app.impress.areAllSlidesHidden()) {
 			this._map.uiManager.showInfoModal('allslidehidden-modal', _('Empty Slide Show'),
-					_('All slides are hidden!'), '', _('OK'), function () { }, false, 'allslidehidden-modal-response');
+					_('All slides are hidden.'), '', _('OK'), function () { }, false, 'allslidehidden-modal-response');
 			return;
 		}
 

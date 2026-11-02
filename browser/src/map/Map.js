@@ -1127,7 +1127,7 @@ window.L.Map = window.L.Evented.extend({
 			{
 			case 'start':
 				// e.text translated by Core
-				this.showBusy(e.text ? e.text : _('Please wait!'));
+				this.showBusy(e.text ? e.text : _('Please wait...'));
 				if (e.forceid)
 					this._progressBar.forceid = e.forceid;
 				break;

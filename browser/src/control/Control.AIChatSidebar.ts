@@ -784,14 +784,14 @@ namespace cool {
 			let withName: string;
 			let withoutName: string;
 			if (hour >= 5 && hour < 12) {
-				withName = _('Good morning, {0}!');
-				withoutName = _('Good morning!');
+				withName = _('Good morning, {0}');
+				withoutName = _('Good morning');
 			} else if (hour >= 12 && hour < 18) {
-				withName = _('Good afternoon, {0}!');
-				withoutName = _('Good afternoon!');
+				withName = _('Good afternoon, {0}');
+				withoutName = _('Good afternoon');
 			} else {
-				withName = _('Good evening, {0}!');
-				withoutName = _('Good evening!');
+				withName = _('Good evening, {0}');
+				withoutName = _('Good evening');
 			}
 			const escape = app.LOUtil.escapeHtml;
 			if (!name) return escape(withoutName);
