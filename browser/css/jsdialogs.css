@@ -77,12 +77,7 @@ div.ui-treeview-icon-column {
 	text-align: right;
 }
 
-#AcceptRejectChangesDialog {
-	width: max-content;
-	max-width: 1000px;
-}
-
-#AcceptRejectChangesDialog #writerchanges {
+#AcceptRejectChangesDialog .ui-treeview {
 	padding-top: 0;
 }
 
@@ -159,36 +154,12 @@ div.ui-treeview-icon-column {
 }
 
 #AcceptRejectChangesDialog .ui-treeview-headers {
-	grid-template-columns: 120px 120px 150px 130px;
 	position: sticky;
 	top: 0;
 	background-color: var(--color-background-lighter) !important;
 	z-index: 1;
 }
 
-#AcceptRejectChangesDialog .jsdialog.ui-treeview-entry {
-	padding: 0 !important;
-	height: 26px;
-}
-
-/* treeview that has an expander column */
-#AcceptRejectChangesDialog .jsdialog.ui-treeview-entry:has(> .ui-treeview-expander-column) {
-	grid-template-columns: 20px 100px 120px 150px 130px;
-}
-
-/* treeview that does not have an expander column */
-#AcceptRejectChangesDialog .jsdialog.ui-treeview-entry:not(:has(> .ui-treeview-expander-column)) {
-	grid-template-columns: 120px 120px 150px 130px;
-}
-
-#AcceptRejectChangesDialog .jsdialog.ui-treeview-entry .ui-treeview-icon-column + div,
-#AcceptRejectChangesDialog .ui-treeview-headers .ui-treeview-icon-column {
-	display: none;
-}
-
-#AcceptRejectChangesDialog #writerchanges.ui-treeview {
-	max-height: 300px;
-}
 
 /* New Table Style dialog: the online layout does not apply the .ui size hints,
    so size the region list to show all its rows, widen the picker column so its
@@ -213,26 +184,6 @@ div.ui-treeview-icon-column {
 	column-gap: 12px;
 }
 
-#writerchanges.ui-treeview .jsdialog.ui-treeview-entry[aria-level='2'] .ui-treeview-expander-column,
-#writerchanges.ui-treeview .jsdialog.ui-treeview-entry[aria-level='2'] .ui-treeview-icon-column {
-	padding-left: 2.5ch;
-}
-
-#writerchanges.ui-treeview .jsdialog.ui-treeview-entry[aria-level='3'] .ui-treeview-expander-column,
-#writerchanges.ui-treeview .jsdialog.ui-treeview-entry[aria-level='3'] .ui-treeview-icon-column {
-	padding-left: 4.5ch;
-}
-
-#writerchanges.ui-treeview .jsdialog.ui-treeview-entry[aria-level='4'] .ui-treeview-expander-column,
-#writerchanges.ui-treeview .jsdialog.ui-treeview-entry[aria-level='4'] .ui-treeview-icon-column {
-	padding-left: 6.5ch;
-}
-
-#writerchanges.ui-treeview .jsdialog.ui-treeview-entry[aria-level='5'] .ui-treeview-expander-column,
-#writerchanges.ui-treeview .jsdialog.ui-treeview-entry[aria-level='5'] .ui-treeview-icon-column {
-	padding-left: 8.5ch;
-}
-
 /* Certificate dialogs: size columns to their content and keep headers aligned
    with rows via subgrid (as the Chart Data table does). min-content (not auto)
    tracks so empty/unused columns collapse and stretch can't inflate them. */
@@ -253,11 +204,6 @@ div.ui-treeview-icon-column {
    shrink and scroll horizontally. */
 #SelectCertificateDialog #signatures.ui-treeview {
 	min-width: 0;
-}
-
-#SelectCertificateDialog .ui-treeview-headers,
-#DigitalSignaturesDialog .ui-treeview-headers {
-	grid-template-columns: subgrid;
 }
 
 /* Trailing space so adjacent columns (esp. header labels) don't touch... */
@@ -1111,8 +1057,21 @@ body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton
 	border-radius: initial;
 }
 
+/* Only in dialogs. A list is as tall as the rows core asks for, plus its header if it has one.
+   It takes at most 40% of the window, so in a small window the list scrolls rather than the
+   dialog, down to 150px. */
 .jsdialog:not(.sidebar).ui-treeview {
-	max-height: 150px; /* only in dialogs */
+	--treeview-header-rows: 0;
+	--treeview-requested-height: calc(
+		(var(--treeview-height-rows, 0) + var(--treeview-header-rows)) *
+		(var(--default-height) + 2px)
+	);
+	--treeview-list-height: clamp(150px, var(--treeview-requested-height), 40vh);
+	max-height: var(--treeview-list-height);
+}
+
+.jsdialog:not(.sidebar).ui-treeview:has(> .ui-treeview-headers) {
+	--treeview-header-rows: 1;
 }
 
 .ui-treeview.disabled,
@@ -1141,7 +1100,8 @@ body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton
 }
 
 /* real tree requires spacing - inline-flex, headers require synchronized grid */
-.ui-treeview:not(.ui-treeview-tree) .ui-treeview-entry {
+.ui-treeview:not(.ui-treeview-tree) .ui-treeview-entry,
+.ui-treeview:not(.ui-treeview-tree) .ui-treeview-expanded-content {
 	display: grid;
 	grid-template-columns: subgrid;
 }
@@ -1209,9 +1169,13 @@ body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton
 	/* grid-column: '1 / ' + (this._columns + 1) - set inside JS */
 }
 
-/* A heading over a column of checkboxes has to line up with them */
-.ui-treeview.ui-treeview-toggle-columns > .ui-treeview-headers {
+/* Each heading sits over its own column, with a gap between the columns */
+.ui-treeview:not(.ui-treeview-tree) > .ui-treeview-headers {
 	grid-template-columns: subgrid;
+}
+
+.ui-treeview:not(.ui-treeview-tree):has(> .ui-treeview-headers) {
+	column-gap: var(--spacing-m);
 }
 
 .ui-treeview-toggle-columns .ui-treeview-toggle-column {
@@ -1224,11 +1188,6 @@ body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton
 .ui-treeview-toggle-columns .ui-treeview-entry > div.ui-treeview-toggle-column {
 	width: 100%;
 	justify-content: center;
-}
-
-/* ChartDataDialog uses subgrid so headers align with data columns */
-#ChartDataDialog .ui-treeview-headers {
-	grid-template-columns: subgrid;
 }
 
 #ServerAuditDialog .ui-treeview-headers {
@@ -1390,6 +1349,38 @@ input[type='checkbox']:checked.autofilter, .jsdialog input[type='checkbox']:chec
 .ui-treeview div[aria-level='5'] + .ui-treeview-expanded-content > .ui-treeview-entry {
 	padding-left: 6.5ch;
 	width: auto;
+}
+
+/* A tree with headers keeps a nested row on the columns of the headers. The row is indented
+   inside its first column, and its expander moves by as much past the narrow expander column,
+   drawn over the indent of the first column. */
+.ui-treeview:has(> .ui-treeview-headers) div.ui-treeview-expanded-content > div.ui-treeview-entry {
+	padding-left: 0;
+}
+
+.ui-treeview:has(> .ui-treeview-headers) .ui-treeview-entry[aria-level='2'] {
+	--treeview-indent: 2.5ch;
+}
+
+.ui-treeview:has(> .ui-treeview-headers) .ui-treeview-entry[aria-level='3'] {
+	--treeview-indent: 4.5ch;
+}
+
+.ui-treeview:has(> .ui-treeview-headers) .ui-treeview-entry[aria-level='4'] {
+	--treeview-indent: 6.5ch;
+}
+
+.ui-treeview:has(> .ui-treeview-headers) .ui-treeview-entry[aria-level='5'] {
+	--treeview-indent: 8.5ch;
+}
+
+.ui-treeview:has(> .ui-treeview-headers) .ui-treeview-entry > .ui-treeview-expander-column {
+	position: relative;
+	left: var(--treeview-indent, 0);
+}
+
+.ui-treeview:has(> .ui-treeview-headers) .ui-treeview-entry > .ui-treeview-expander-column + div {
+	padding-left: var(--treeview-indent, 0);
 }
 
 .ui-treeview div.ui-treeview-expander {
@@ -4052,12 +4043,6 @@ kbd,
 	width: 100%;
 }
 
-/* manage changes dialog */
-
-.jsdialog #writerchanges tbody {
-	min-height: 300px;
-}
-
 /* Insert hyperlink dialog */
 
 #HyperlinkDocPage,
@@ -5327,6 +5312,37 @@ img#collab-choice-avatar {
 .jsdialog-popout:not(.jsdialog-popout-measuring)
 .single-child-grid:has(> .jsdialog-vexpand) {
 	display: flex;
+}
+
+/* A dialog sized by its content gives every tab page the height of the tallest one. A list
+   core marks to take the spare height grows into that height, down to the rows core asks
+   for. */
+.ui-tabpage.jsdialog:has(.jsdialog-vexpand:not(.hidden)),
+.ui-tabpage
+.jsdialog:has(
+	.jsdialog-vexpand:not(.hidden)
+):not(.ui-grid):not(.ui-tabs-content):not(.ui-tabs-root) {
+	display: flex;
+	flex-direction: column;
+}
+
+.ui-tabpage .jsdialog:has(.jsdialog-vexpand:not(.hidden)) {
+	flex: 1 1 auto;
+	align-self: stretch;
+}
+
+.ui-tabpage .single-child-grid:has(> .jsdialog-vexpand:not(.hidden)) {
+	display: flex;
+}
+
+/* The list starts at the height of any dialog list. Inside a column flexbox it grows from that
+   height into the spare height of the page. */
+.ui-tabpage .jsdialog.ui-treeview.jsdialog-vexpand {
+	flex: 1 1 auto;
+	align-self: stretch;
+	height: var(--treeview-list-height);
+	min-height: var(--treeview-list-height);
+	max-height: none;
 }
 
 /* The widget takes what the dialog's own window gives it, not the fraction of

@@ -193,6 +193,13 @@ void SvTabListBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 
     rJsonWriter.put("singleclickactivate", GetActivateOnSingleClick());
 
+    // The height the dialog asked for, counted in rows, as the client draws its rows at its own
+    // height.
+    const sal_Int32 nHeightRequest = get_height_request();
+    const short nRowHeight = GetEntryHeight();
+    if (nHeightRequest > 0 && nRowHeight > 0)
+        rJsonWriter.put("heightRows", nHeightRequest / nRowHeight);
+
     switch (m_eRole)
     {
         case SvTabListBoxRole::Unknown:

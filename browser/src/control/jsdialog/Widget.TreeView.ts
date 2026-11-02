@@ -77,6 +77,9 @@ class TreeViewControl {
 	_maxColumnsIncludingState: number = 0;
 	_gridModeCache: boolean | undefined;
 	_hasState: boolean;
+	// A tree with headers puts the expander of each row in a column of the grid
+	// that the headers share.
+	_hasExpanderColumn: boolean;
 	_hasIcon: boolean;
 	_toggleColumns: Set<number> = new Set<number>();
 	_isNavigator: boolean;
@@ -572,8 +575,7 @@ class TreeViewControl {
 					: 'row';
 		tr.setAttribute('role', rowRole);
 
-		let dummyColumns = 0;
-		if (this._hasState) dummyColumns++;
+		const dummyColumns = this.getLeadingColumns();
 		tr.style.gridColumn = '1 / ' + (this._columns + dummyColumns + 1);
 		if (this._columns + dummyColumns + 1 > this._maxColumnsIncludingState) {
 			this._maxColumnsIncludingState = this._columns + dummyColumns + 1;
@@ -2553,6 +2555,12 @@ class TreeViewControl {
 		});
 	}
 
+	// The grid columns ahead of the columns of an entry: one for the checkbox
+	// and one for the expander, when the tree has them.
+	getLeadingColumns(): number {
+		return (this._hasState ? 1 : 0) + (this._hasExpanderColumn ? 1 : 0);
+	}
+
 	fillHeaders(
 		data: TreeWidgetJSON,
 		headers: Array<TreeHeaderJSON>,
@@ -2568,30 +2576,44 @@ class TreeViewControl {
 
 		this._thead.setAttribute('role', 'row');
 
-		let dummyColumns = 0;
 		let dummyCells = this._columns - headers.length;
-		if (this._hasState) {
-			dummyCells++;
-			dummyColumns++;
-		}
-		this._thead.style.gridColumn = '1 / ' + (this._columns + dummyColumns + 1);
+		if (this._hasState) dummyCells++;
+		this._thead.style.gridColumn =
+			'1 / ' + (this._columns + this.getLeadingColumns() + 1);
 
-		for (let index = 0; index < dummyCells; index++) {
+		// Empty header cells over the cells that come before the headed columns:
+		// the checkbox, the expander and the columns without a header.
+		if (this._hasState) {
 			this.fillHeader({ text: '', sortable: false }, builder);
-			if (index === 0 && this._hasState)
-				window.L.DomUtil.addClass(
-					this._thead.lastChild,
-					'ui-treeview-state-column',
-				);
-			else
+			window.L.DomUtil.addClass(
+				this._thead.lastChild,
+				'ui-treeview-state-column',
+			);
+		}
+		if (this._hasExpanderColumn) {
+			this.fillHeader({ text: '', sortable: false }, builder);
+			window.L.DomUtil.addClass(
+				this._thead.lastChild,
+				'ui-treeview-expander-column',
+			);
+		}
+		// An icon column without a heading of its own shares a column with the text after it
+		// in the dialog description, so the first heading spans both.
+		const iconCells = this._columns - headers.length;
+		if (!headers.length)
+			for (let index = 0; index < iconCells; index++) {
+				this.fillHeader({ text: '', sortable: false }, builder);
 				window.L.DomUtil.addClass(
 					this._thead.lastChild,
 					'ui-treeview-icon-column',
 				);
-		}
+			}
 
 		for (const index in headers) {
 			this.fillHeader(headers[index], builder, data, parseInt(index));
+			if (index === '0' && iconCells > 0)
+				(this._thead.lastChild as HTMLElement).style.gridColumn =
+					'span ' + (iconCells + 1);
 			const column = parseInt(index) + this._columns - headers.length;
 			if (this._toggleColumns.has(column))
 				window.L.DomUtil.addClass(
@@ -2741,8 +2763,7 @@ class TreeViewControl {
 				subGrid.setAttribute('role', 'rowgroup');
 			entryElements.push(subGrid);
 
-			let dummyColumns = 0;
-			if (this._hasState) dummyColumns++;
+			const dummyColumns = this.getLeadingColumns();
 			subGrid.style.gridColumn = '1 / ' + (this._columns + dummyColumns + 1);
 			if (this._columns + dummyColumns + 1 > this._maxColumnsIncludingState) {
 				this._maxColumnsIncludingState = this._columns + dummyColumns + 1;
@@ -2908,6 +2929,8 @@ class TreeViewControl {
 		this._isListbox = TreeViewControl.isListbox(data);
 		this._columns = TreeViewControl.countColumns(data);
 		this._hasState = TreeViewControl.hasState(data);
+		this._hasExpanderColumn =
+			this._isRealTree && !!data.headers && data.headers.length > 0;
 		this._hasIcon = TreeViewControl.hasIcon(data);
 		this._toggleColumns = TreeViewControl.getToggleColumns(data);
 		this._isNavigator = this.isNavigator(data);
@@ -2941,6 +2964,11 @@ class TreeViewControl {
 		this.setupFocusOutHandler();
 
 		this._container.setAttribute('role', this._containerRole);
+		if (data.heightRows)
+			this._container.style.setProperty(
+				'--treeview-height-rows',
+				String(data.heightRows),
+			);
 		if (this._isRealTree && (!data.headers || data.headers.length === 0))
 			window.L.DomUtil.addClass(this._container, 'ui-treeview-tree');
 		// A column of checkboxes is as wide as a checkbox or its header, and
@@ -2949,6 +2977,7 @@ class TreeViewControl {
 			window.L.DomUtil.addClass(this._container, 'ui-treeview-toggle-columns');
 			const tracks = [];
 			if (this._hasState) tracks.push('auto');
+			if (this._hasExpanderColumn) tracks.push('auto');
 			for (let index = 0; index < this._columns; index++)
 				tracks.push(this._toggleColumns.has(index) ? 'min-content' : 'auto');
 			this._container.style.gridTemplateColumns = tracks.join(' ');
