@@ -78,12 +78,12 @@ namespace canvas
     };
     </pre>
 
-    @tpl Base
+    @tpl BaseType
     Base class to use, most probably the
     WeakComponentImplHelper template with the appropriate
     interfaces. At least XCanvas should be among them (why else
-    would you use this template, then?). Base class must have an
-    Base( const Mutex& ) constructor (like the
+    would you use this template, then?). Base class must have a
+    BaseType(const Mutex&) constructor (like the
     WeakComponentImplHelper template has). As the very least,
     the base class must be derived from uno::XInterface, as some
     error reporting mechanisms rely on that.
@@ -109,12 +109,11 @@ namespace canvas
     derives from multiple UNO interface (were each provides its
     own version of XInterface, making the conversion ambiguous)
 */
-template <class Base, class CanvasHelper, class Mutex = ::osl::MutexGuard,
+template <class BaseType, class CanvasHelper, class Mutex = ::osl::MutexGuard,
           class UnambiguousBase = css::uno::XInterface>
-class CanvasBase : public Base
+class CanvasBase : public BaseType
 {
 public:
-    typedef Base BaseType;
     typedef Mutex MutexType;
     typedef UnambiguousBase UnambiguousBaseType;
 
