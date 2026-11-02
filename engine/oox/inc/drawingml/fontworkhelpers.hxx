@@ -20,6 +20,7 @@
 #pragma once
 
 #include <array>
+#include <optional>
 #include <span>
 #include <docmodel/color/ComplexColor.hxx>
 #include <rtl/ustring.hxx>
@@ -54,16 +55,51 @@ void putCustomShapeIntoTextPathMode(
     it returns an empty string.*/
 OString GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType);
 
-/** Collects the properties "CharColor", "CharLumMod", "CharLumOff", "CharColorTheme",
-    "CharComplexColor" and "CharTransparence" from the first non-empty run in rXText and puts
-    them into rCharPropVec.*/
-void collectCharColorProps(const cpo::uno::Reference<css::text::XText>& rXText,
-                           std::vector<css::beans::PropertyValue>& rCharPropVec);
+/** The colour properties of a run that the Fontwork export replaces by the shape's fill:
+    "CharColor", "CharLumMod", "CharLumOff", "CharColorTheme", "CharComplexColor",
+    "CharTransparence". */
+inline constexpr std::array<std::u16string_view, 7> aFontworkCharColorNames
+    = { u"CharColor",      u"CharLumMod",       u"CharLumOff",       u"CharColorTheme",
+        u"CharComplexColor", u"CharTransparence", u"CharInteropGrabBag" };
 
-/** Applies all properties in rTextPropVec excluding "CharInteropGrabBag" to all non-empty runs in
-    rXText.*/
-void applyPropsToRuns(const std::vector<css::beans::PropertyValue>& rTextPropVec,
-                      const cpo::uno::Reference<css::text::XText>& rXText);
+/** Whether the colours of the runs of rXText follow the shape: the shape has a solid fill and the
+    first non-empty run has that colour set directly, which is what the import of a WordArt leaves
+    behind. The engine draws a Fontwork with the fill of the shape, so the colours of the runs are
+    only meaningful when they are in step with it. */
+bool runColorsFollowShape(const cpo::uno::Reference<css::text::XText>& rXText,
+                          const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet);
+
+/** The colour of a run that differs from the solid fill of the shape: a directly set CharColor
+    that is not automatic and not the fill colour. Nothing when the run has no colour of its own.
+    Whether such a colour counts is decided by runColorsFollowShape. */
+std::optional<sal_Int32>
+ownColorOfRun(const cpo::uno::Reference<css::beans::XPropertySet>& rXRun,
+              const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet);
+
+/** A non-empty run of a Fontwork text, and whether it has a colour of its own. The run keeps its
+    range, so that the runs can be written to after they were changed and merged. */
+struct FontworkRun
+{
+    cpo::uno::Reference<css::beans::XPropertySet> xRun;
+    bool bOwnColor = false;
+};
+
+/** The non-empty runs of rXText, in order, with their own-colour flag; a run has a colour of its
+    own only when the run colours follow the shape (see runColorsFollowShape). */
+void collectFontworkRuns(const cpo::uno::Reference<css::text::XText>& rXText,
+                         const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet,
+                         std::vector<FontworkRun>& rRuns);
+
+/** Applies the properties to the collected runs; a run with a colour of its own is left out when
+    bSkipOwnColor is set. */
+void applyPropsToFontworkRuns(const std::vector<css::beans::PropertyValue>& rTextPropVec,
+                              const std::vector<FontworkRun>& rRuns, bool bSkipOwnColor);
+
+/** Puts the updates into the "CharInteropGrabBag" of the collected runs. A run with a colour of
+    its own gets the updates that are not about the text fill (the outline among them), and loses
+    the text fill entries its grab bag holds, so that its colour is what Word shows. */
+void applyUpdatesToFontworkRunGrabBags(const std::vector<css::beans::PropertyValue>& rUpdatePropVec,
+                                       const std::vector<FontworkRun>& rRuns);
 
 /** The character attributes a Fontwork is drawn with: "CharHeight", "CharWeight", "CharPosture",
     "CharFontName", "CharFontNameAsian", "CharFontNameComplex" and "CharScaleWidth", and
@@ -109,11 +145,6 @@ void createCharFillPropsFromShape(const cpo::uno::Reference<css::beans::XPropert
 void createCharInteropGrabBagUpdatesFromShapeProps(
     const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet,
     std::vector<css::beans::PropertyValue>& rUpdatePropVec);
-
-/** Puts all properties in rUpdatePropVec into the "CharInteropGrabBag" of all non-empty runs in rXText.
-    Existing properties are overwritten.*/
-void applyUpdatesToCharInteropGrabBag(const std::vector<css::beans::PropertyValue>& rUpdatePropVec,
-                                      const cpo::uno::Reference<css::text::XText>& rXText);
 
 // ToDo: This is essentially the same as contained in method DrawingML::WriteOutline. Change it
 // there to use this method too, perhaps move this method to a common location.

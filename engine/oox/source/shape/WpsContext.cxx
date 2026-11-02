@@ -45,6 +45,10 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 
+#include <array>
+#include <utility>
+#include <rtl/ustrbuf.hxx>
+#include <algorithm>
 #include <optional>
 
 using namespace com::sun::star;
@@ -520,6 +524,119 @@ void lcl_setTextPropsToShape(const uno::Reference<beans::XPropertySet>& xShapePr
     }
 }
 
+// The properties a portion of a WordArt text keeps through the copy to the Fontwork shape.
+constexpr std::array<std::u16string_view, 14> aPortionPropNames
+    = { u"CharColor",      u"CharComplexColor",  u"CharTransparence", u"CharWeight",
+        u"CharPosture",    u"CharHeight",        u"CharFontName",     u"CharFontNameAsian",
+        u"CharFontNameComplex", u"CharKerning",  u"CharScaleWidth",   u"CharUnderline",
+        u"CharStrikeout",  u"CharInteropGrabBag" };
+
+// The portions of the frame text, per paragraph: the text of each portion and the properties it
+// sets directly.
+void lcl_collectFrameTextPortions(
+    const uno::Reference<text::XText>& xText,
+    std::vector<std::vector<std::pair<OUString, std::vector<beans::PropertyValue>>>>& rPortions)
+{
+    rPortions.clear();
+    uno::Reference<container::XEnumerationAccess> xParaAccess(xText, uno::UNO_QUERY);
+    if (!xParaAccess.is())
+        return;
+    uno::Reference<container::XEnumeration> xParaEnum(xParaAccess->createEnumeration());
+    while (xParaEnum->hasMoreElements())
+    {
+        std::vector<std::pair<OUString, std::vector<beans::PropertyValue>>> aParagraph;
+        uno::Reference<text::XTextRange> xParagraph(xParaEnum->nextElement(), uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> xRunAccess(xParagraph, uno::UNO_QUERY);
+        if (xRunAccess.is())
+        {
+            uno::Reference<container::XEnumeration> xRunEnum = xRunAccess->createEnumeration();
+            while (xRunEnum->hasMoreElements())
+            {
+                uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+                uno::Reference<beans::XPropertySet> xRunProps(xRun, uno::UNO_QUERY);
+                uno::Reference<beans::XPropertyState> xRunState(xRun, uno::UNO_QUERY);
+                if (!xRun.is() || !xRunProps.is())
+                    continue;
+                std::vector<beans::PropertyValue> aProps;
+                uno::Reference<beans::XPropertySetInfo> xInfo = xRunProps->getPropertySetInfo();
+                for (const std::u16string_view& rName : aPortionPropNames)
+                {
+                    OUString aName(rName);
+                    if (!xInfo.is() || !xInfo->hasPropertyByName(aName))
+                        continue;
+                    if (xRunState.is()
+                        && xRunState->getPropertyState(aName) != beans::PropertyState_DIRECT_VALUE)
+                        continue;
+                    aProps.push_back(
+                        comphelper::makePropertyValue(aName, xRunProps->getPropertyValue(aName)));
+                }
+                aParagraph.emplace_back(xRun->getString(), std::move(aProps));
+            }
+        }
+        rPortions.push_back(std::move(aParagraph));
+    }
+}
+
+// The text of the portions, paragraph by paragraph, joined by newlines.
+OUString lcl_joinFrameTextPortions(
+    const std::vector<std::vector<std::pair<OUString, std::vector<beans::PropertyValue>>>>&
+        rPortions)
+{
+    OUStringBuffer aJoined;
+    for (size_t nPara = 0; nPara < rPortions.size(); ++nPara)
+    {
+        if (nPara > 0)
+            aJoined.append('\n');
+        for (const std::pair<OUString, std::vector<beans::PropertyValue>>& rPortion : rPortions[nPara])
+            aJoined.append(rPortion.first);
+    }
+    return aJoined.makeStringAndClear();
+}
+
+// Gives the portions of the shape text, which was set as one string, their properties back: one
+// cursor walks the whole text, portion by portion and over the paragraph ends, the way the string
+// was taken apart into paragraphs. Nothing is applied when the portions do not add up to the
+// string the text was set from.
+void lcl_applyFrameTextPortions(
+    const uno::Reference<text::XText>& xText, std::u16string_view rFrameContent,
+    const std::vector<std::vector<std::pair<OUString, std::vector<beans::PropertyValue>>>>&
+        rPortions)
+{
+    if (lcl_joinFrameTextPortions(rPortions) != rFrameContent)
+        return;
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xCursor->gotoStart(false);
+    uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySetInfo> xInfo
+        = xCursorProps.is() ? xCursorProps->getPropertySetInfo() : nullptr;
+    for (size_t nPara = 0; nPara < rPortions.size(); ++nPara)
+    {
+        if (nPara > 0)
+        {
+            xCursor->collapseToEnd();
+            xCursor->goRight(1, false);
+        }
+        for (const std::pair<OUString, std::vector<beans::PropertyValue>>& rPortion : rPortions[nPara])
+        {
+            sal_Int32 nLength = rPortion.first.getLength();
+            if (nLength == 0)
+                continue;
+            xCursor->collapseToEnd();
+            while (nLength > 0)
+            {
+                const sal_Int16 nStep = static_cast<sal_Int16>(std::min<sal_Int32>(nLength, SAL_MAX_INT16));
+                xCursor->goRight(nStep, true);
+                nLength -= nStep;
+            }
+            if (!xInfo.is())
+                continue;
+            for (const beans::PropertyValue& rProp : rPortion.second)
+                if (xInfo->hasPropertyByName(rProp.Name))
+                    xCursorProps->setPropertyValue(rProp.Name, rProp.Value);
+        }
+    }
+}
+
 void lcl_applyUsedTextPropsToAllTextRuns(const uno::Reference<text::XText>& xText,
                                          const std::vector<beans::PropertyValue>& aTextPropVec)
 {
@@ -991,9 +1108,16 @@ void WpsContext::onEndElement()
         return;
     comphelper::SequenceAsHashMap aTextPropMap(comphelper::containerToSequence(aTextPropVec));
 
-    // Copy text content from frame to shape. Since Fontwork uses simple text anyway, we can use
-    // a string.
-    OUString sFrameContent(xText->getString());
+    // Copy the text from the frame to the shape: the string first, then the properties of every
+    // portion, so that a text coloured run by run in Word keeps that for the way back; the engine
+    // draws the whole Fontwork with the attributes of the shape.
+    std::vector<std::vector<std::pair<OUString, std::vector<beans::PropertyValue>>>> aPortions;
+    lcl_collectFrameTextPortions(xText, aPortions);
+    // the string the shape is set from is the portions joined by newlines, which is what the
+    // paragraphs are split on again; the frame's own string may end its lines otherwise
+    OUString sFrameContent = lcl_joinFrameTextPortions(aPortions);
+    if (aPortions.empty())
+        sFrameContent = xText->getString();
     pCustomShape->NbcSetText(sFrameContent);
 
     // Setting the property "TextBox" to false includes removing the attached frame from the shape.
@@ -1030,10 +1154,13 @@ void WpsContext::onEndElement()
     lcl_applyShapePropsToShape(xShapePropertySet, aFillShapeProps);
 
     // Copying the text content from frame to shape as string has lost the styles. Apply the used text
-    // properties back to all runs in the text.
+    // properties back to all runs in the text, then every portion gets its own back.
     uno::Reference<text::XText> xNewText(pCustomShape->getUnoShape(), uno::UNO_QUERY);
     if (xNewText.is())
+    {
         lcl_applyUsedTextPropsToAllTextRuns(xNewText, aTextPropVec);
+        lcl_applyFrameTextPortions(xNewText, sFrameContent, aPortions);
+    }
 
     // Fontwork stretches the text to the given path. So adapt shape size to text is nonsensical.
     xShapePropertySet->setPropertyValue(u"TextAutoGrowHeight"_ustr, cpo::uno::Any(false));

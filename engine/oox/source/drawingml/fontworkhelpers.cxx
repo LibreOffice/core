@@ -58,6 +58,7 @@
 #include <com/sun/star/util/XComplexColor.hpp>
 
 #include <array>
+#include <optional>
 #include <map>
 
 using namespace com::sun::star;
@@ -822,17 +823,42 @@ OString FontworkHelpers::GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType)
     return i == aTypeToMarkupMap.end() ? OString() : i->second;
 }
 
-void FontworkHelpers::collectCharColorProps(const uno::Reference<text::XText>& rXText,
-                                            std::vector<beans::PropertyValue>& rCharPropVec)
+namespace
 {
-    if (!rXText.is())
-        return;
-    uno::Reference<text::XTextCursor> rXTextCursor = rXText->createTextCursor();
-    rXTextCursor->gotoStart(false);
-    rXTextCursor->gotoEnd(true);
+// The solid fill colour of a shape, or nullopt when its fill is not solid.
+std::optional<sal_Int32> lcl_SolidFillOfShape(const uno::Reference<beans::XPropertySet>& rXPropSet)
+{
+    drawing::FillStyle eFillStyle = drawing::FillStyle_NONE;
+    sal_Int32 nFillColor = 0;
+    if (!rXPropSet.is() || !(rXPropSet->getPropertyValue(u"FillStyle"_ustr) >>= eFillStyle)
+        || eFillStyle != drawing::FillStyle_SOLID)
+        return std::nullopt;
+    rXPropSet->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
+    return nFillColor & 0xffffff;
+}
+
+// The directly set colour of a run, or nullopt when the run has none or it is automatic.
+std::optional<sal_Int32> lcl_DirectColorOfRun(const uno::Reference<beans::XPropertySet>& rXRun)
+{
+    uno::Reference<beans::XPropertyState> xState(rXRun, uno::UNO_QUERY);
+    if (!xState.is() || !rXRun.is()
+        || xState->getPropertyState(u"CharColor"_ustr) != beans::PropertyState_DIRECT_VALUE)
+        return std::nullopt;
+    sal_Int32 nColor = 0;
+    rXRun->getPropertyValue(u"CharColor"_ustr) >>= nColor;
+    if (static_cast<sal_uInt32>(nColor) == sal_uInt32(COL_AUTO))
+        return std::nullopt;
+    return nColor & 0xffffff;
+}
+
+// The non-empty runs of a text, in order.
+std::vector<uno::Reference<beans::XPropertySet>>
+lcl_NonEmptyRuns(const uno::Reference<text::XText>& rXText)
+{
+    std::vector<uno::Reference<beans::XPropertySet>> aRuns;
     uno::Reference<container::XEnumerationAccess> paraEnumAccess(rXText, uno::UNO_QUERY);
     if (!paraEnumAccess.is())
-        return;
+        return aRuns;
     uno::Reference<container::XEnumeration> paraEnum(paraEnumAccess->createEnumeration());
     while (paraEnum->hasMoreElements())
     {
@@ -844,30 +870,124 @@ void FontworkHelpers::collectCharColorProps(const uno::Reference<text::XText>& r
         while (runEnum->hasMoreElements())
         {
             uno::Reference<text::XTextRange> xRun(runEnum->nextElement(), uno::UNO_QUERY);
-            if (xRun->getString().isEmpty())
+            if (!xRun.is() || xRun->getString().isEmpty())
                 continue;
             uno::Reference<beans::XPropertySet> xRunPropSet(xRun, uno::UNO_QUERY);
-            if (!xRunPropSet.is())
-                continue;
-            auto xRunPropSetInfo = xRunPropSet->getPropertySetInfo();
-            if (!xRunPropSetInfo.is())
-                continue;
+            if (xRunPropSet.is())
+                aRuns.push_back(xRunPropSet);
+        }
+    }
+    return aRuns;
+}
+}
 
-            // We have found a non-empty run. Collect its simple color properties.
-            static constexpr auto aNamesArray = std::to_array<std::u16string_view>(
-                { u"CharColor", u"CharLumMod", u"CharLumOff", u"CharColorTheme",
-                  u"CharComplexColor", u"CharTransparence" });
-            for (const auto& sName : aNamesArray)
-            {
-                OUString aPropertyName(sName);
-                if (xRunPropSetInfo->hasPropertyByName(aPropertyName))
-                    rCharPropVec.push_back(comphelper::makePropertyValue(
-                        aPropertyName, xRunPropSet->getPropertyValue(aPropertyName)));
-            }
-            return;
+bool FontworkHelpers::runColorsFollowShape(const uno::Reference<text::XText>& rXText,
+                                           const uno::Reference<beans::XPropertySet>& rXPropSet)
+{
+    std::optional<sal_Int32> oFill = lcl_SolidFillOfShape(rXPropSet);
+    if (!oFill)
+        return false;
+    std::vector<uno::Reference<beans::XPropertySet>> aRuns = lcl_NonEmptyRuns(rXText);
+    if (aRuns.empty())
+        return false;
+    std::optional<sal_Int32> oFirst = lcl_DirectColorOfRun(aRuns.front());
+    return oFirst && *oFirst == *oFill;
+}
+
+std::optional<sal_Int32>
+FontworkHelpers::ownColorOfRun(const uno::Reference<beans::XPropertySet>& rXRun,
+                               const uno::Reference<beans::XPropertySet>& rXPropSet)
+{
+    std::optional<sal_Int32> oFill = lcl_SolidFillOfShape(rXPropSet);
+    std::optional<sal_Int32> oOwn = lcl_DirectColorOfRun(rXRun);
+    if (!oFill || !oOwn || *oOwn == *oFill)
+        return std::nullopt;
+    return oOwn;
+}
+
+void FontworkHelpers::collectFontworkRuns(const uno::Reference<text::XText>& rXText,
+                                          const uno::Reference<beans::XPropertySet>& rXPropSet,
+                                          std::vector<FontworkRun>& rRuns)
+{
+    rRuns.clear();
+    const bool bFollow = runColorsFollowShape(rXText, rXPropSet);
+    for (const uno::Reference<beans::XPropertySet>& rXRun : lcl_NonEmptyRuns(rXText))
+    {
+        FontworkRun aRun;
+        aRun.xRun = rXRun;
+        aRun.bOwnColor = bFollow && ownColorOfRun(rXRun, rXPropSet).has_value();
+        rRuns.push_back(aRun);
+    }
+}
+
+void FontworkHelpers::applyPropsToFontworkRuns(const std::vector<beans::PropertyValue>& rTextPropVec,
+                                               const std::vector<FontworkRun>& rRuns,
+                                               bool bSkipOwnColor)
+{
+    for (const FontworkRun& rRun : rRuns)
+    {
+        if (!rRun.xRun.is() || (bSkipOwnColor && rRun.bOwnColor))
+            continue;
+        uno::Reference<beans::XPropertySetInfo> xInfo = rRun.xRun->getPropertySetInfo();
+        if (!xInfo.is())
+            continue;
+        for (const beans::PropertyValue& rProp : rTextPropVec)
+        {
+            if (xInfo->hasPropertyByName(rProp.Name)
+                && !(xInfo->getPropertyByName(rProp.Name).Attributes
+                     & beans::PropertyAttribute::READONLY)
+                && rProp.Name != u"CharInteropGrabBag")
+                rRun.xRun->setPropertyValue(rProp.Name, rProp.Value);
         }
     }
 }
+
+namespace
+{
+// The grab bag entries about the text fill, which a run with a colour of its own does without.
+bool lcl_IsTextFillEntry(std::u16string_view rName)
+{
+    return rName == u"CharTextFillTextEffect" || rName == u"CharThemeColor"
+           || rName == u"CharThemeColorShade" || rName == u"CharThemeColorTint"
+           || rName == u"CharThemeOriginalColor";
+}
+}
+
+void FontworkHelpers::applyUpdatesToFontworkRunGrabBags(
+    const std::vector<beans::PropertyValue>& rUpdatePropVec, const std::vector<FontworkRun>& rRuns)
+{
+    for (const FontworkRun& rRun : rRuns)
+    {
+        if (!rRun.xRun.is())
+            continue;
+        uno::Reference<beans::XPropertySetInfo> xInfo = rRun.xRun->getPropertySetInfo();
+        if (!xInfo.is() || !xInfo->hasPropertyByName(u"CharInteropGrabBag"_ustr))
+            continue;
+        cpo::uno::Sequence<beans::PropertyValue> aGrabBagSeq;
+        rRun.xRun->getPropertyValue(u"CharInteropGrabBag"_ustr) >>= aGrabBagSeq;
+        comphelper::SequenceAsHashMap aGrabBagMap(aGrabBagSeq);
+        if (rRun.bOwnColor)
+        {
+            for (comphelper::SequenceAsHashMap::iterator it = aGrabBagMap.begin();
+                 it != aGrabBagMap.end();)
+            {
+                if (lcl_IsTextFillEntry(it->first.maString))
+                    it = aGrabBagMap.erase(it);
+                else
+                    ++it;
+            }
+        }
+        for (const beans::PropertyValue& rProp : rUpdatePropVec)
+        {
+            if (rRun.bOwnColor && lcl_IsTextFillEntry(rProp.Name))
+                continue;
+            aGrabBagMap[rProp.Name] = rProp.Value;
+        }
+        rRun.xRun->setPropertyValue(u"CharInteropGrabBag"_ustr,
+                                    cpo::uno::Any(aGrabBagMap.getAsConstPropertyValueList()));
+    }
+}
+
 
 void FontworkHelpers::collectRunProps(const uno::Reference<text::XText>& rXText,
                                       std::span<const std::u16string_view> rNames,
@@ -946,48 +1066,6 @@ void FontworkHelpers::createCharAttrPropsFromShape(
     }
 }
 
-void FontworkHelpers::applyPropsToRuns(const std::vector<beans::PropertyValue>& rTextPropVec,
-                                       const uno::Reference<text::XText>& rXText)
-{
-    if (!rXText.is())
-        return;
-    uno::Reference<text::XTextCursor> xTextCursor = rXText->createTextCursor();
-    xTextCursor->gotoStart(false);
-    xTextCursor->gotoEnd(true);
-    uno::Reference<container::XEnumerationAccess> paraEnumAccess(rXText, uno::UNO_QUERY);
-    if (!paraEnumAccess.is())
-        return;
-    uno::Reference<container::XEnumeration> paraEnum(paraEnumAccess->createEnumeration());
-    while (paraEnum->hasMoreElements())
-    {
-        uno::Reference<text::XTextRange> xParagraph(paraEnum->nextElement(), uno::UNO_QUERY);
-        uno::Reference<container::XEnumerationAccess> runEnumAccess(xParagraph, uno::UNO_QUERY);
-        if (!runEnumAccess.is())
-            continue;
-        uno::Reference<container::XEnumeration> runEnum = runEnumAccess->createEnumeration();
-        while (runEnum->hasMoreElements())
-        {
-            uno::Reference<text::XTextRange> xRun(runEnum->nextElement(), uno::UNO_QUERY);
-            uno::Reference<beans::XPropertySet> xRunPropSet(xRun, uno::UNO_QUERY);
-            if (!xRunPropSet.is())
-                continue;
-            auto xRunPropSetInfo = xRunPropSet->getPropertySetInfo();
-            if (!xRunPropSetInfo.is())
-                continue;
-
-            for (const beans::PropertyValue& rProp : rTextPropVec)
-            {
-                if (xRunPropSetInfo->hasPropertyByName(rProp.Name)
-                    && !(xRunPropSetInfo->getPropertyByName(rProp.Name).Attributes
-                         & beans::PropertyAttribute::READONLY)
-                    && rProp.Name != u"CharInteropGrabBag")
-                {
-                    xRunPropSet->setPropertyValue(rProp.Name, rProp.Value);
-                }
-            }
-        }
-    }
-}
 namespace
 {
 constexpr auto aCharPropNames = std::to_array<std::u16string_view>(
@@ -1698,54 +1776,6 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
     ::Color aColor(ColorTransparency, nFillColor);
     aCharThemeOriginalColor.Value <<= aColor.AsRGBHEXString();
     rUpdatePropVec.push_back(aCharThemeOriginalColor);
-}
-
-void FontworkHelpers::applyUpdatesToCharInteropGrabBag(
-    const std::vector<beans::PropertyValue>& rUpdatePropVec,
-    const uno::Reference<text::XText>& rXText)
-{
-    if (!rXText.is())
-        return;
-    uno::Reference<text::XTextCursor> rXTextCursor = rXText->createTextCursor();
-    rXTextCursor->gotoStart(false);
-    rXTextCursor->gotoEnd(true);
-    uno::Reference<container::XEnumerationAccess> paraEnumAccess(rXText, uno::UNO_QUERY);
-    if (!paraEnumAccess.is())
-        return;
-    uno::Reference<container::XEnumeration> paraEnum(paraEnumAccess->createEnumeration());
-    while (paraEnum->hasMoreElements())
-    {
-        uno::Reference<text::XTextRange> xParagraph(paraEnum->nextElement(), uno::UNO_QUERY);
-        uno::Reference<container::XEnumerationAccess> runEnumAccess(xParagraph, uno::UNO_QUERY);
-        if (!runEnumAccess.is())
-            continue;
-        uno::Reference<container::XEnumeration> runEnum = runEnumAccess->createEnumeration();
-        while (runEnum->hasMoreElements())
-        {
-            uno::Reference<text::XTextRange> xRun(runEnum->nextElement(), uno::UNO_QUERY);
-            if (xRun->getString().isEmpty())
-                continue;
-            uno::Reference<beans::XPropertySet> xRunPropSet(xRun, uno::UNO_QUERY);
-            if (!xRunPropSet.is())
-                continue;
-            auto xRunPropSetInfo = xRunPropSet->getPropertySetInfo();
-            if (!xRunPropSetInfo.is())
-                continue;
-
-            // Now apply the updates to the CharInteropGrabBag of this run
-            cpo::uno::Sequence<beans::PropertyValue> aCharInteropGrabBagSeq;
-            if (xRunPropSetInfo->hasPropertyByName(u"CharInteropGrabBag"_ustr))
-                xRunPropSet->getPropertyValue(u"CharInteropGrabBag"_ustr)
-                    >>= aCharInteropGrabBagSeq;
-            comphelper::SequenceAsHashMap aGrabBagMap(aCharInteropGrabBagSeq);
-            for (const auto& rProp : rUpdatePropVec)
-            {
-                aGrabBagMap[rProp.Name] = rProp.Value; // [] inserts if not exists
-            }
-            xRunPropSet->setPropertyValue(u"CharInteropGrabBag"_ustr,
-                                          cpo::uno::Any(aGrabBagMap.getAsConstPropertyValueList()));
-        }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -2793,7 +2793,26 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
     if (bFontwork)
     {
         WriteOutline(rRunInput.xShapePropSet);
-        WriteBlipOrNormalFill(rRunInput.xShapePropSet, u"Graphic"_ustr);
+        // A run with a colour of its own, a directly set colour that differs from the solid fill
+        // of the shape, keeps that colour, so that a WordArt coloured run by run in Office comes
+        // back as it went.
+        std::optional<sal_Int32> oOwnColor;
+        if (mbFontworkRunColorsFollowShape)
+            oOwnColor = FontworkHelpers::ownColorOfRun(rXPropSet, rRunInput.xShapePropSet);
+        if (oOwnColor)
+        {
+            // WriteSolidFill() handles MAX_PERCENT as "no transparency".
+            sal_Int32 nAlpha = MAX_PERCENT;
+            if (rXPropSet->getPropertySetInfo()->hasPropertyByName(u"CharTransparence"_ustr))
+            {
+                sal_Int32 nTransparency = 0;
+                rXPropSet->getPropertyValue(u"CharTransparence"_ustr) >>= nTransparency;
+                nAlpha = MAX_PERCENT - (nTransparency * PER_PERCENT);
+            }
+            WriteSolidFill(::Color(ColorTransparency, *oOwnColor), nAlpha);
+        }
+        else
+            WriteBlipOrNormalFill(rRunInput.xShapePropSet, u"Graphic"_ustr);
         WriteShapeEffects(rRunInput.xShapePropSet);
     }
     else
@@ -4885,8 +4904,14 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
 
     bool bIsFontworkShape(IsFontworkShape(rXPropSet));
     if (bIsFontworkShape)
+    {
         moFontworkParaAdjust = lcl_FontworkParagraphAdjust(rXPropSet);
-    comphelper::ScopeGuard aParaAdjustGuard([this]() { moFontworkParaAdjust.reset(); });
+        mbFontworkRunColorsFollowShape = FontworkHelpers::runColorsFollowShape(xXText, rXPropSet);
+    }
+    comphelper::ScopeGuard aParaAdjustGuard([this]() {
+        moFontworkParaAdjust.reset();
+        mbFontworkRunColorsFollowShape = false;
+    });
 
     sal_Int32 nLeft = mconstDefaultLeftRightInset;
     sal_Int32 nRight = mconstDefaultLeftRightInset;
@@ -4975,9 +5000,10 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     const SdrTextObj* pTxtObj = DynCastSdrTextObj( pSdrObject );
     if (pTxtObj && mpTextExport)
     {
-        std::vector<beans::PropertyValue> aOldCharFillPropVec;
+        std::vector<FontworkHelpers::RunProps> aOldRunColors;
         std::vector<FontworkHelpers::RunProps> aOldRunAttrs;
         std::vector<ParaAdjustPair> aOldParaAdjust;
+        std::vector<FontworkHelpers::FontworkRun> aFontworkRuns;
         if (bIsFontworkShape)
         {
             // Word aligns the text of a WordArt by its paragraphs; the engine aligns a Fontwork
@@ -4990,28 +5016,34 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                                                 lcl_WriterParaAdjustOfFontwork(*moFontworkParaAdjust)));
             }
             // Users may have set the character fill properties for more convenient editing.
-            // Save the properties before changing them for Fontwork export.
-            FontworkHelpers::collectCharColorProps(xXText, aOldCharFillPropVec);
+            // Save the properties of every run before changing them for Fontwork export.
+            FontworkHelpers::collectRunProps(xXText, FontworkHelpers::aFontworkCharColorNames,
+                                             aOldRunColors);
             // Word has properties for abc-transform in the run properties of the text of the shape.
             // Writer has the Fontwork properties as shape properties. Create the character fill
-            // properties needed for export from the shape fill properties
-            // and apply them to all runs.
+            // properties needed for export from the shape fill properties and apply them to all
+            // runs, except a run with a colour of its own, which keeps it. The runs are taken
+            // once, before anything changes them, since equal runs merge.
+            FontworkHelpers::collectFontworkRuns(xXText, rXPropSet, aFontworkRuns);
             std::vector<beans::PropertyValue> aExportCharFillPropVec;
             FontworkHelpers::createCharFillPropsFromShape(rXPropSet, aExportCharFillPropVec);
-            FontworkHelpers::applyPropsToRuns(aExportCharFillPropVec, xXText);
+            FontworkHelpers::applyPropsToFontworkRuns(aExportCharFillPropVec, aFontworkRuns,
+                                                      /*bSkipOwnColor*/ true);
+            // Import has converted some items from CharInteropGrabBag to fill and line
+            // properties of the shape. For export we convert them back because users might have
+            // changed them. And we create them in case we come from an odt document. A run with
+            // a colour of its own keeps the outline and does without the text fill.
+            std::vector<beans::PropertyValue> aUpdatePropVec;
+            FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(rXPropSet, aUpdatePropVec);
+            FontworkHelpers::applyUpdatesToFontworkRunGrabBags(aUpdatePropVec, aFontworkRuns);
             // The Fontwork renderer draws every run with the character attributes of the shape;
             // the runs take them while they are written, and get their own back afterwards.
             FontworkHelpers::collectRunProps(xXText, FontworkHelpers::aFontworkCharAttrNames,
                                              aOldRunAttrs);
             std::vector<beans::PropertyValue> aShapeCharAttrVec;
             FontworkHelpers::createCharAttrPropsFromShape(rXPropSet, aShapeCharAttrVec);
-            FontworkHelpers::applyPropsToRuns(aShapeCharAttrVec, xXText);
-            // Import has converted some items from CharInteropGrabBag to fill and line
-            // properties of the shape. For export we convert them back because users might have
-            // changed them. And we create them in case we come from an odt document.
-            std::vector<beans::PropertyValue> aUpdatePropVec;
-            FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(rXPropSet, aUpdatePropVec);
-            FontworkHelpers::applyUpdatesToCharInteropGrabBag(aUpdatePropVec, xXText);
+            FontworkHelpers::applyPropsToFontworkRuns(aShapeCharAttrVec, aFontworkRuns,
+                                                      /*bSkipOwnColor*/ false);
         }
 
         std::optional<OutlinerParaObject> pParaObj;
@@ -5037,7 +5069,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         if (bIsFontworkShape)
         {
             FontworkHelpers::applyRunProps(aOldRunAttrs);
-            FontworkHelpers::applyPropsToRuns(aOldCharFillPropVec, xXText);
+            FontworkHelpers::applyRunProps(aOldRunColors);
             lcl_ApplyParaAdjust(xXText, aOldParaAdjust);
         }
         return;

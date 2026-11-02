@@ -330,6 +330,9 @@ protected:
     /// The alignment of the paragraphs of a Fontwork shape, which the engine takes from the shape,
     /// not from the paragraphs; set while the text of such a shape is written.
     std::optional<css::style::ParagraphAdjust> moFontworkParaAdjust;
+    /// True while the text of a Fontwork is written whose run colours follow the shape, so that
+    /// a run with a colour of its own is written with it.
+    bool mbFontworkRunColorsFollowShape = false;
 
     /// True when DiagramReplacementVisualization is exported
     bool mbDiagaramExport;

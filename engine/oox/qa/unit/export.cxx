@@ -1318,6 +1318,91 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkShapeAttributesWriter)
                          xShape->getPropertyValue(u"CharScaleWidth"_ustr).get<sal_Int16>());
 }
 
+// The colour of the portion with the given text in the first paragraph of a shape's text.
+sal_Int32 lcl_PortionColor(const uno::Reference<beans::XPropertySet>& xShape,
+                           std::u16string_view rText)
+{
+    uno::Reference<container::XEnumerationAccess> xParas(xShape, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XEnumerationAccess> xRuns(xParas->createEnumeration()->nextElement(),
+                                                        uno::UNO_QUERY_THROW);
+    uno::Reference<container::XEnumeration> xRunEnum = xRuns->createEnumeration();
+    while (xRunEnum->hasMoreElements())
+    {
+        uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY_THROW);
+        if (xRun->getString() != rText)
+            continue;
+        uno::Reference<beans::XPropertySet> xProps(xRun, uno::UNO_QUERY_THROW);
+        sal_Int32 nColor = 0;
+        xProps->getPropertyValue(u"CharColor"_ustr) >>= nColor;
+        return nColor;
+    }
+    CPPUNIT_FAIL("portion not found");
+    return 0;
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFontworkRunColours)
+{
+    // Given a red, stroked Fontwork whose text has a red span, a span without a colour and a
+    // blue span, as the import of a WordArt coloured run by run leaves it:
+    loadFromFile(u"fontwork-run-colours.fodp");
+
+    // When saving to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then the red and the uncoloured words take the fill of the shape and "Blue" keeps its blue,
+    // with the outline of the shape on every run (the runs are what the engine's text gives: the
+    // uncoloured word may share a run with a red one)
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    OString sRun = "//p:sp/p:txBody/a:p/a:r"_ostr;
+    assertXPath(pXmlDoc, sRun + "[starts-with(a:t,'Red')]/a:rPr/a:solidFill/a:srgbClr", "val",
+                u"FF0000");
+    assertXPath(pXmlDoc, sRun + "[contains(a:t,'Green')]/a:rPr/a:solidFill/a:srgbClr", "val",
+                u"FF0000");
+    assertXPath(pXmlDoc, sRun + "[a:t='Blue']/a:rPr/a:solidFill/a:srgbClr", "val", u"0000FF");
+    assertXPath(pXmlDoc, sRun + "[a:t='Blue']/a:rPr/a:ln/a:solidFill/a:srgbClr", "val", u"000000");
+
+    // and reading the file back gives a red shape with a blue third portion
+    loadFromURL(maTempFile.GetURL());
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xff0000),
+                         xShape->getPropertyValue(u"FillColor"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0000ff), lcl_PortionColor(xShape, u"Blue"));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFontworkRunColoursWriter)
+{
+    // Given the same Fontwork in a Writer document:
+    loadFromFile(u"fontwork-run-colours.fodt");
+
+    // When saving to DOCX:
+    save(TestFilter::DOCX);
+
+    // Then the first two runs take the fill of the shape and the third keeps its blue, as its
+    // colour and without the text fill of the shape, with the outline of the shape on every run
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    OString sRuns = "//mc:Choice//wps:wsp/wps:txbx/w:txbxContent/w:p/w:r"_ostr;
+    assertXPath(pXmlDoc, sRuns + "[starts-with(w:t,'Red')]/w:rPr/w14:textFill/w14:solidFill/w14:srgbClr",
+                "val", u"ff0000");
+    assertXPath(pXmlDoc, sRuns + "[contains(w:t,'Green')]/w:rPr/w14:textFill/w14:solidFill/w14:srgbClr",
+                "val", u"ff0000");
+    assertXPath(pXmlDoc, sRuns + "[w:t='Blue']/w:rPr/w:color", "val", u"0000FF");
+    assertXPath(pXmlDoc, sRuns + "[w:t='Blue']/w:rPr/w14:textFill", 0);
+    assertXPath(pXmlDoc, sRuns + "[w:t='Blue']/w:rPr/w14:textOutline", 1);
+    assertXPath(pXmlDoc, sRuns + "[starts-with(w:t,'Red')]/w:rPr/w14:textOutline", 1);
+
+    // and reading the file back gives a red shape with a blue third portion
+    loadFromURL(maTempFile.GetURL());
+    uno::Reference<drawing::XDrawPageSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPage());
+    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xff0000),
+                         xShape->getPropertyValue(u"FillColor"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0000ff), lcl_PortionColor(xShape, u"Blue"));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFontworkDistance)
 {
     // LO ignores 'Spacing to Borders' of the 'Text Attributes' for Fontwork shapes. Word interprets
