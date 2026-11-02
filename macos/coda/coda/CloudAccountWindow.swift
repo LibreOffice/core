@@ -12,7 +12,7 @@ import Cocoa
 import WebKit
 
 /// A window that shows the integrator's site for one cloud account, as a browser would.
-final class CloudAccountWindow: NSWindowController, NSWindowDelegate {
+final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigationDelegate {
     private static let defaultSize = NSSize(width: 1200, height: 800)
     private static let firstMacOSWithSafariVersion = 26
     private static let safariVersionsAheadOfMacOS = 3
@@ -20,6 +20,8 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate {
     private static var openWindows: [String: CloudAccountWindow] = [:]
 
     private let accountId: String
+    private var editorForm: Data?
+    private var editorFormUrl: URL?
 
     static func open(accountId: String, url: URL) {
         if let controller = openWindows[accountId] {
@@ -54,6 +56,7 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate {
 
         super.init(window: window)
         window.delegate = self
+        webView.navigationDelegate = self
 
         webView.load(URLRequest(url: url))
     }
@@ -81,5 +84,35 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate {
 
     func windowWillClose(_ notification: Notification) {
         Self.openWindows[accountId] = nil
+    }
+
+    // The integrator opens a document by posting a form with the token and settings into the
+    // iframe that holds the editor. WebKit gives us the form's body here, and we keep a copy.
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction,
+                 decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        let request = navigationAction.request
+        guard let url = request.url else {
+            decisionHandler(.allow)
+            return
+        }
+
+        let isFrame = navigationAction.targetFrame?.isMainFrame == false
+        let isPost = request.httpMethod == "POST"
+        let isEditorPage = url.path.hasSuffix("/cool.html")
+        if !isFrame || !isPost || !isEditorPage {
+            decisionHandler(.allow)
+            return
+        }
+
+        guard let form = request.httpBody else {
+            COWrapper.LOG_DBG("No form was kept: the form posted into an editor frame has no body")
+            decisionHandler(.allow)
+            return
+        }
+
+        editorForm = form
+        editorFormUrl = url
+        COWrapper.LOG_DBG("Kept the \(form.count)-byte form posted into an editor frame")
+        decisionHandler(.allow)
     }
 }
