@@ -1163,6 +1163,10 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(
             // fallback from the base layout, but then GenericSalLayout::LayoutText()
             // would not know to call SetNeedFallback()).
             assert(glyphsImpl->GetFlags() & SalLayoutFlags::GlyphItemsOnly);
+            // Only glyphs from nDrawMinCharPos to nDrawEndCharPos may be reused
+            for (const GlyphItem& rGlyph : *glyphsImpl)
+                assert(rGlyph.origCharPos() >= nDrawMinCharPos.value_or(SAL_MIN_INT32)
+                       && rGlyph.origCharPos() < nDrawEndCharPos.value_or(SAL_MAX_INT32));
         }
     }
 #endif
