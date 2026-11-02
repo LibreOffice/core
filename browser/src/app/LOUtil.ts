@@ -399,6 +399,15 @@ class LOUtil {
 	public static getURL(path: string): string {
 		if (path === '') return '';
 		const customWindow = window as any;
+
+		// A remote page can carry the images in a map keyed by path, such as
+		// "images/lc_save.svg": "data:image/svg+xml;base64,...".
+		const images = customWindow.codaRemotePage?.images;
+		if (images) {
+			const relativePath = path.startsWith('/') ? path.substring(1) : path;
+			if (images[relativePath]) return images[relativePath];
+		}
+
 		if (customWindow.host === '' && customWindow.serviceRoot === '') {
 			// Mobile / desktop app: return a relative path so it resolves
 			// against the page's file:// origin rather than the filesystem root.

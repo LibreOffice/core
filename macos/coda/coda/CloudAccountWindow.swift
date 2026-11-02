@@ -241,6 +241,8 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         // Each url(images/...) in a style sheet would load from coolwsd, so the script replaces it
         // with that image's data: URL from appImages. The quotes around the path are optional.
         let script = """
+            window.codaRemotePage.images = images;
+
             const imageUrl = /url\\((['"]?)(images\\/[^'")]+)\\1\\)/g;
             const withImages = (css) => css.replace(imageUrl, (url, quote, path) =>
                 images[path] ? `url("${images[path]}")` : url);
