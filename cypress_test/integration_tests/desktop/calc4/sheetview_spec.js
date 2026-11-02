@@ -2,6 +2,7 @@
 
 var helper = require('../../common/helper');
 var calcHelper = require('../../common/calc_helper');
+var desktopHelper = require('../../common/desktop_helper');
 
 // Counts the pixels of the document canvas that are not the plain white of an
 // empty grid, over a fixed region at the top left of the sheet. Two sheets that
@@ -57,6 +58,10 @@ function settledInk(name, counts) {
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Calc sheet view tests', function() {
 	beforeEach(function() {
 		helper.setupAndLoadDocument('calc/sheetview.fods');
+		desktopHelper.switchUIToNotebookbar();
+		cy.getFrameWindow().then(function(win) {
+			this.win = win;
+		}.bind(this));
 	});
 
 	it('A sheet view created a second time shows its own sheet', function() {
@@ -104,5 +109,68 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Calc sheet view tests', fu
 		cy.then(function() {
 			expect(counts.sheetView).to.equal(counts.firstSheet);
 		});
+	});
+
+	it('A comment added on a sheet view shows when the pointer is over its cell', function() {
+		var win = this.win;
+
+		function commentList() {
+			return win.app.sectionContainer.getSectionWithName(win.app.CSections.CommentList.name)
+				.sectionProperties.commentList;
+		}
+
+		// Adds a comment to the cell the way the Save button of a new comment does, then waits
+		// until the comment has reached the comments of the selected sheet.
+		function addComment(address, text) {
+			calcHelper.enterCellAddressAndConfirm(win, address);
+			cy.then(function() {
+				win.app.map.sendUnoCommand('.uno:InsertAnnotation', {
+					Text: { type: 'string', value: text }
+				}, true);
+				return helper.processToIdle(win);
+			});
+			cy.getFrameWindow().should(function(frameWindow) {
+				var selectedPart = frameWindow.app.map._docLayer._selectedPart;
+				var found = commentList().some(function(comment) {
+					return comment.sectionProperties.data.text === text
+						&& parseInt(comment.sectionProperties.data.tab) === selectedPart;
+				});
+				expect(found).to.equal(true);
+			});
+		}
+
+		// Moves the pointer onto the cell, to the right of its middle, where the comment of the
+		// cell takes the mouse.
+		function hoverCell(address) {
+			calcHelper.enterCellAddressAndConfirm(win, address);
+			cy.cGet('#test-div-OwnCellCursor').then(function(items) {
+				var rectangle = items[0].getBoundingClientRect();
+				var x = Math.round(rectangle.left + rectangle.width * 0.7);
+				var y = Math.round(rectangle.top + rectangle.height * 0.5);
+				cy.cGet('body').realMouseMove(x, y);
+			});
+		}
+
+		addComment('C1', 'Comment on C1');
+
+		cy.then(function() {
+			win.app.map.sendUnoCommand('.uno:NewSheetView');
+			return helper.processToIdle(win);
+		});
+		cy.getFrameWindow().should(function(frameWindow) {
+			var selectedPart = frameWindow.app.map._docLayer._selectedPart;
+			expect(frameWindow.app.calc.isPartSheetView(selectedPart)).to.equal(true);
+		});
+
+		addComment('C3', 'Comment on C3');
+
+		// The comment made before the sheet view existed pops up.
+		hoverCell('C1');
+		cy.cGet('.cool-annotation-content:visible').should('contain', 'Comment on C1');
+
+		// The comment made on the sheet view pops up too, and replaces the first one.
+		hoverCell('C3');
+		cy.cGet('.cool-annotation-content:visible').should('contain', 'Comment on C3');
+		cy.cGet('.cool-annotation-content:visible').should('not.contain', 'Comment on C1');
 	});
 });

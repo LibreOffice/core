@@ -878,7 +878,9 @@ export class Comment extends CanvasSectionObject {
 				const sizeX = cellPos[2];
 				startX += sizeX;  // but adjust for width of the cell.
 			}
-			this.setShowSection(true);
+			// A comment on another sheet sits at the same cell position as one on this sheet. Only
+			// a comment on the selected sheet is shown, so it is the one that receives the mouse.
+			this.setShowSection(parseInt(this.sectionProperties.data.tab) === app.map._docLayer._selectedPart);
 			var position: Array<number> = [Math.round((cellPos[0] + cellPos[2]) * app.twipsToPixels - this.size[0]), Math.round(cellPos[1] * app.twipsToPixels)];
 
 			this.setPosition(position[0], position[1]);
