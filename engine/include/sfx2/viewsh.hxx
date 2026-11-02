@@ -295,6 +295,8 @@ public:
 
     void                        SetKitReadOnlyView(bool readOnlyView) { kitReadOnlyView = readOnlyView; };
     bool                        IsKitReadOnlyView() const { return kitReadOnlyView; };
+    /// Called after the COKit read-only state of this view changed.
+    virtual void                KitReadOnlyViewChanged() {}
     void                        SetAllowChangeComments(bool allow) { allowChangeComments = allow; }
     bool                        IsAllowChangeComments() const { return allowChangeComments; }
     void                        SetAllowManageRedlines(bool allow) { allowManageRedlines = allow; }

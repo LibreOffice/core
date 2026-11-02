@@ -131,7 +131,7 @@ void NotesPanelView::FillOutliner()
     SdrTextObj* pNotesTextObj = getNotesTextObj();
     if (!pNotesTextObj)
     {
-        maOutlinerView.SetReadOnly(false);
+        maOutlinerView.SetReadOnly(isViewReadOnly());
         if (bWasInFocus)
             refreshViews(pPreviousNotesObj, this);
         return;
@@ -143,10 +143,10 @@ void NotesPanelView::FillOutliner()
 
     // Notes that another view is editing are only shown here. A view that comes to them with the
     // focus, for example on a slide change, stops editing.
-    const bool bLocked = isLocked();
-    if (bLocked)
+    const bool bReadOnly = isLocked() || isViewReadOnly();
+    if (bReadOnly)
         mbInFocus = false;
-    maOutlinerView.SetReadOnly(bLocked);
+    maOutlinerView.SetReadOnly(bReadOnly);
 
     if (mbInFocus)
         clearPlaceholder();
@@ -183,6 +183,11 @@ bool NotesPanelView::isLocked()
         return true;
     SdrTextObj* pNotesTextObj = getEditedNotesObj();
     return pNotesTextObj && pNotesTextObj->IsInEditMode();
+}
+
+bool NotesPanelView::isViewReadOnly()
+{
+    return mrNotesPanelViewShell.GetViewShellBase().IsKitReadOnlyView();
 }
 
 sal_Int32 NotesPanelView::getLockingViewId()
@@ -337,7 +342,7 @@ void NotesPanelView::onResize()
 void NotesPanelView::onGrabFocus()
 {
     // Notes that another view is editing stay as they are until that view leaves them.
-    if (mbInFocus || isLocked())
+    if (mbInFocus || isLocked() || isViewReadOnly())
         return;
 
     // The notes object can change without this view being told, for example by an undo in
@@ -460,6 +465,11 @@ IMPL_LINK(NotesPanelView, EventMultiplexerListener, sdtools::EventMultiplexerEve
         case EventMultiplexerEventId::MainViewAdded:
             FillOutliner();
             onResize();
+            break;
+        case EventMultiplexerEventId::KitReadOnlyViewChanged:
+            // Keep the typing done before the switch.
+            onLoseFocus();
+            FillOutliner();
             break;
         default:
             break;

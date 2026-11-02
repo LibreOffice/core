@@ -428,6 +428,7 @@ void KitHelper::setViewReadOnly(int nId, bool readOnly)
             // is established. Broadcast ScAreasChanged so it rebuilds now that
             // the readonly flag is set and can be checked correctly.
             SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScAreasChanged));
+            pViewShell->KitReadOnlyViewChanged();
         }
     }
 }

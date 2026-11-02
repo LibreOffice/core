@@ -996,6 +996,44 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 		});
 		cy.cGet(editEngine).should('have.focus');
 	});
+
+	it('switching to viewing mode while typing makes the notes read-only', function () {
+		var editEngine = '#notespanel-container .ui-editengine';
+		var paragraph = editEngine + ' .ui-editengine-paragraph';
+
+		openNotesPane();
+		cy.cGet(editEngine).click();
+		cy.cGet(editEngine).type('Before viewing');
+		cy.cGet(paragraph).should('have.text', 'Before viewing');
+
+		cy.getFrameWindow().then(function (win) {
+			win.app.map.setPermission('readonly');
+			helper.processToIdle(win);
+		});
+		cy.cGet(editEngine).should('have.attr', 'contenteditable', 'false');
+		cy.cGet(editEngine).should('not.have.focus');
+		cy.cGet(paragraph).should('have.text', 'Before viewing');
+
+		// Text sent for the notes anyway leaves them as they are.
+		cy.getFrameWindow().then(function (win) {
+			var editable = win.document.querySelector(editEngine);
+			editable.dispatchEvent(new win.InputEvent('beforeinput', {
+				inputType: 'insertText', data: 'x',
+				bubbles: true, cancelable: true
+			}));
+			helper.processToIdle(win);
+		});
+		cy.cGet(paragraph).should('have.text', 'Before viewing');
+
+		cy.getFrameWindow().then(function (win) {
+			win.app.map.setPermission('edit');
+			helper.processToIdle(win);
+		});
+		cy.cGet(editEngine).should('have.attr', 'contenteditable', 'true');
+		cy.cGet(editEngine).click();
+		cy.cGet(editEngine).type('{end} again');
+		cy.cGet(paragraph).should('have.text', 'Before viewing again');
+	});
 });
 
 describe(['tagdesktop'], 'Impress speaker notes pane on load', function () {

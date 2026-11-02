@@ -118,6 +118,10 @@ enum class EventMultiplexerEventId
     /** Focus shifted between views.
      */
     FocusShifted,
+
+    /** The COKit read-only state of the view changed.
+     */
+    KitReadOnlyViewChanged,
 };
 
 namespace sdtools

@@ -67,6 +67,7 @@ class NotesPanel extends JSDialogComponent {
 		this.setupContainer();
 
 		this.map.on('notespanel', this.onNotesPanel, this);
+		app.events.on('updatepermission', this.onUpdatePermission);
 		this.registerMessageHandlers();
 
 		this.applyStoredHeight();
@@ -75,8 +76,19 @@ class NotesPanel extends JSDialogComponent {
 
 	onRemove() {
 		this.map.off('notespanel', this.onNotesPanel, this);
+		app.events.off('updatepermission', this.onUpdatePermission);
 		this.unregisterMessageHandlers();
 	}
+
+	/// Leave the notes while the view is still editable, so the engine saves the typing.
+	private onUpdatePermission = (e: CustomEvent): void => {
+		if (e.detail.perm !== 'readonly' || !this.container) return;
+		const focused = document.activeElement;
+		if (!(focused instanceof HTMLElement) || !this.container.contains(focused))
+			return;
+		focused.blur();
+		this.map.focus();
+	};
 
 	/// The engine sends the whole tree when the notes view shell appears, and single widget
 	/// updates after that. Arrival of the tree is what opens the pane.

@@ -985,6 +985,11 @@ void ViewShellBase::textEditContentChanged()
         xModel->notifyTextEditChanged(*pEdited);
 }
 
+void ViewShellBase::KitReadOnlyViewChanged()
+{
+    GetEventMultiplexer()->MultiplexEvent(EventMultiplexerEventId::KitReadOnlyViewChanged, nullptr);
+}
+
 const SdViewOptions& ViewShellBase::GetViewOptions() const
 {
     return mpImpl->maViewOptions;

@@ -99,6 +99,9 @@ public:
 
     /// @see SfxViewShell::textEditContentChanged().
     virtual void textEditContentChanged() override;
+
+    /// @see SfxViewShell::KitReadOnlyViewChanged().
+    virtual void KitReadOnlyViewChanged() override;
     SdDrawDocument* GetDocument() const { return mpDocument;}
 
     /** Callback function for general slot calls.  At the moment these are

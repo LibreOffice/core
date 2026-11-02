@@ -54,6 +54,7 @@ class NotesPanelView final : public ::sd::SimpleOutlinerView
     void commitNotes();
     void invalidateUndoState();
     bool isLocked();
+    bool isViewReadOnly();
 
 public:
     NotesPanelView(DrawDocShell& rDocSh, vcl::Window* pWindow,
