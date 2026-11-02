@@ -15,6 +15,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <cwchar>
+#include <cwctype>
 #include <deque>
 #include <filesystem>
 #include <fstream>
@@ -278,7 +279,8 @@ static RecentFiles recentFiles;
 
 static FilenameAndUri fileSaveDialog(const std::string& name,
                                      const std::string& folder,
-                                     const std::vector<COMDLG_FILTERSPEC>& extensions);
+                                     const std::vector<COMDLG_FILTERSPEC>& extensions,
+                                     size_t defaultTypeIndex = 0);
 
 static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mode);
 
@@ -1347,7 +1349,8 @@ static std::vector<COMDLG_FILTERSPEC>getSaveAsFormats(COKitDocumentType docType)
 
 static FilenameAndUri fileSaveDialog(const std::string& name,
                                      const std::string& folder,
-                                     const std::vector<COMDLG_FILTERSPEC>& extensions)
+                                     const std::vector<COMDLG_FILTERSPEC>& extensions,
+                                     size_t defaultTypeIndex)
 {
     IFileSaveDialog* dialog;
 
@@ -1367,11 +1370,22 @@ static FilenameAndUri fileSaveDialog(const std::string& name,
 
     if (extensions.size() > 0)
     {
-        if (!SUCCEEDED(dialog->SetDefaultExtension(extensions[0].pszSpec)))
+        if (defaultTypeIndex >= extensions.size())
+            defaultTypeIndex = 0;
+
+        // The default extension is given without the leading "*." of the filter pattern.
+        std::wstring defaultExtension = extensions[defaultTypeIndex].pszSpec;
+        if (defaultExtension.starts_with(L"*."))
+            defaultExtension = defaultExtension.substr(2);
+        if (!SUCCEEDED(dialog->SetDefaultExtension(defaultExtension.c_str())))
             fatal("dialog->SetDefaultExtension() failed");
 
         if (!SUCCEEDED(dialog->SetFileTypes(extensions.size(), extensions.data())))
             fatal("dialog->SetFileTypes() failed");
+
+        // The file type index of the dialog starts at 1.
+        if (!SUCCEEDED(dialog->SetFileTypeIndex(static_cast<UINT>(defaultTypeIndex + 1))))
+            fatal("dialog->SetFileTypeIndex() failed");
     }
 
     if (name != "" && !SUCCEEDED(dialog->SetFileName(Util::string_to_wide_string(name).c_str())))
@@ -5823,8 +5837,31 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
         {
             auto loKitDoc = DocumentData::get(data.appDocId).loKitDocument;
             const COKitDocumentType docType = loKitDoc->getDocumentType();
-            const auto formats = getSaveAsFormats(docType);
-            auto filenameAndUri = fileSaveDialog("", "", formats);
+            auto formats = getSaveAsFormats(docType);
+
+            // The dialog starts with the name and the file type of the document. A type that
+            // is not in the list for this kind of document is added to the end of it.
+            const std::string& currentName = data.filenameAndUri.filename;
+            const auto currentDot = currentName.find_last_of('.');
+            std::wstring currentLabel, currentPattern;
+            size_t typeIndex = 0;
+            if (currentDot != std::string::npos && currentDot < currentName.length() - 1)
+            {
+                const std::string extension = Util::toLower(currentName.substr(currentDot + 1));
+                currentPattern = Util::string_to_wide_string("*." + extension);
+                const auto match = std::find_if(formats.begin(), formats.end(),
+                                                [&](const COMDLG_FILTERSPEC& format)
+                                                { return currentPattern == format.pszSpec; });
+                typeIndex = match - formats.begin();
+                if (match == formats.end())
+                {
+                    currentLabel = Util::string_to_wide_string(extension);
+                    for (wchar_t& c : currentLabel)
+                        c = std::towupper(c);
+                    formats.push_back({ currentLabel.c_str(), currentPattern.c_str() });
+                }
+            }
+            auto filenameAndUri = fileSaveDialog(currentName, "", formats, typeIndex);
 
             if (filenameAndUri.filename != "")
             {
