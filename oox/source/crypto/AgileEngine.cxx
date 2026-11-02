@@ -324,7 +324,8 @@ void AgileEngine::calculateBlock(const AgileEncryptionParameters& rParams,
 
     std::copy_n(hash.begin(), keySize, key.begin());
 
-    comphelper::Decrypt aDecryptor(key, rSalt, cryptoType(rParams));
+    std::vector<sal_uInt8> salt(rSalt);
+    comphelper::Decrypt aDecryptor(key, salt, cryptoType(rParams));
     aDecryptor.update(rOutput, rInput);
 }
 
@@ -350,7 +351,8 @@ void AgileEngine::encryptBlock(const AgileEncryptionParameters& rParams,
 
     std::copy_n(hash.begin(), keySize, key.begin());
 
-    comphelper::Encrypt aEncryptor(key, rSalt, cryptoType(rParams));
+    std::vector<sal_uInt8> salt(rSalt);
+    comphelper::Encrypt aEncryptor(key, salt, cryptoType(rParams));
 
     aEncryptor.update(rOutput, rInput);
 }
