@@ -44,6 +44,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextFramesSupplier.hpp>
+#include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <rtl/strbuf.hxx>
 #include <utility>
@@ -1708,6 +1710,86 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testAccessibleEventForImageJoiningSelecti
     CPPUNIT_ASSERT_EQUAL(xRightImage.get(), xListener->m_aSelectedChildren[1].get());
 
     xBroadcaster->removeAccessibleEventListener(xListener);
+}
+
+// Collects the old and new values of NAME_CHANGED events.
+class NameEventListener : public cppu::WeakImplHelper<accessibility::XAccessibleEventListener>
+{
+public:
+    std::vector<std::pair<OUString, OUString>> m_aNameChanges;
+
+    void notifyEvent(const accessibility::AccessibleEventObject& rEvent) override
+    {
+        if (rEvent.EventId != accessibility::AccessibleEventId::NAME_CHANGED)
+            return;
+        m_aNameChanges.emplace_back(rEvent.OldValue.get<OUString>(),
+                                    rEvent.NewValue.get<OUString>());
+    }
+
+    void disposing(const lang::EventObject&) override {}
+};
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testAccessibleNameEventForFrameTitle)
+{
+    // Given a text frame and an image without a title, so that their names are their accessible
+    // names:
+    createSwDoc("a11y-frame-titles.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    uno::Reference<accessibility::XAccessibleContext> xDocumentContext
+        = pWrtShell->GetView().GetEditWin().GetAccessible()->getAccessibleContext();
+    uno::Reference<accessibility::XAccessibleContext> xFrameContext;
+    uno::Reference<accessibility::XAccessibleContext> xImageContext;
+    for (sal_Int64 nIndex = 0; nIndex < xDocumentContext->getAccessibleChildCount(); ++nIndex)
+    {
+        uno::Reference<accessibility::XAccessibleContext> xChild
+            = xDocumentContext->getAccessibleChild(nIndex)->getAccessibleContext();
+        if (xChild->getAccessibleRole() == accessibility::AccessibleRole::TEXT_FRAME)
+            xFrameContext = xChild;
+        else if (xChild->getAccessibleRole() == accessibility::AccessibleRole::GRAPHIC)
+            xImageContext = xChild;
+    }
+    CPPUNIT_ASSERT(xFrameContext.is());
+    CPPUNIT_ASSERT(xImageContext.is());
+    CPPUNIT_ASSERT_EQUAL(u"Frame1"_ustr, xFrameContext->getAccessibleName());
+    CPPUNIT_ASSERT_EQUAL(u"Image1"_ustr, xImageContext->getAccessibleName());
+
+    const uno::Reference<beans::XPropertySet> xFrame
+        = mxComponent.queryThrow<text::XTextFramesSupplier>()
+              ->getTextFrames()
+              ->getByName(u"Frame1"_ustr)
+              .queryThrow<beans::XPropertySet>();
+    const uno::Reference<beans::XPropertySet> xImage
+        = mxComponent.queryThrow<text::XTextGraphicObjectsSupplier>()
+              ->getGraphicObjects()
+              ->getByName(u"Image1"_ustr)
+              .queryThrow<beans::XPropertySet>();
+
+    auto checkTitleEvents = [](const uno::Reference<accessibility::XAccessibleContext>& xContext,
+                               const uno::Reference<beans::XPropertySet>& xProperties,
+                               const OUString& rName) {
+        rtl::Reference<NameEventListener> xListener(new NameEventListener);
+        const uno::Reference<accessibility::XAccessibleEventBroadcaster> xBroadcaster
+            = xContext.queryThrow<accessibility::XAccessibleEventBroadcaster>();
+        xBroadcaster->addAccessibleEventListener(xListener);
+
+        // When a title equal to the name is given, replaced, and removed:
+        xProperties->setPropertyValue(u"Title"_ustr, uno::Any(rName));
+        xProperties->setPropertyValue(u"Title"_ustr, uno::Any(u"Caption"_ustr));
+        xProperties->setPropertyValue(u"Title"_ustr, uno::Any(OUString()));
+        Scheduler::ProcessEventsToIdle();
+        xBroadcaster->removeAccessibleEventListener(xListener);
+
+        // Then the name changes carry the accessible names, one per change of the accessible name:
+        // Without the fix, the old name of the first change and the new name of the last one were
+        // empty
+        CPPUNIT_ASSERT_EQUAL(size_t(2), xListener->m_aNameChanges.size());
+        CPPUNIT_ASSERT_EQUAL(rName, xListener->m_aNameChanges[0].first);
+        CPPUNIT_ASSERT_EQUAL(u"Caption"_ustr, xListener->m_aNameChanges[0].second);
+        CPPUNIT_ASSERT_EQUAL(u"Caption"_ustr, xListener->m_aNameChanges[1].first);
+        CPPUNIT_ASSERT_EQUAL(rName, xListener->m_aNameChanges[1].second);
+    };
+    checkTitleEvents(xFrameContext, xFrame, u"Frame1"_ustr);
+    checkTitleEvents(xImageContext, xImage, u"Image1"_ustr);
 }
 
 } // end of anonymous namespace

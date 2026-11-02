@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:font-face-decls>
+  <style:font-face style:name="Liberation Serif" svg:font-family="'Liberation Serif'"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="paragraph">
+   <style:text-properties style:font-name="Liberation Serif" fo:font-size="12pt"/>
+  </style:default-style>
+ </office:styles>
+ <office:body>
+  <office:text>
+   <text:p><draw:frame draw:name="Frame1" text:anchor-type="paragraph" svg:x="0cm" svg:y="1cm" svg:width="4cm"><draw:text-box fo:min-height="0.5cm"><text:p>Inside.</text:p></draw:text-box></draw:frame><draw:frame draw:name="Image1" text:anchor-type="paragraph" svg:x="6cm" svg:y="1cm" svg:width="1cm" svg:height="1cm"><draw:image draw:mime-type="image/png"><office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC</office:binary-data></draw:image></draw:frame>Text.</text:p>
+  </office:text>
+ </office:body>
+</office:document>

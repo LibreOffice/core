@@ -79,9 +79,16 @@ void SwAccessibleTextFrame::Notify(const SfxHint& rHint)
         case SfxHintId::SwTitleChanged:
         {
             auto rTitleChanged = static_cast<const sw::TitleChanged&>(rHint);
+            // a title takes the place of the name
+            const OUString sOldAccessibleName = getAccessibleName();
             msTitle = rTitleChanged.m_sNew;
-            FireAccessibleEvent(AccessibleEventId::NAME_CHANGED, cpo::uno::Any(rTitleChanged.m_sOld),
-                                cpo::uno::Any(msTitle));
+            if (const OUString sNewAccessibleName = getAccessibleName();
+                sNewAccessibleName != sOldAccessibleName)
+            {
+                FireAccessibleEvent(AccessibleEventId::NAME_CHANGED,
+                                    cpo::uno::Any(sOldAccessibleName),
+                                    cpo::uno::Any(sNewAccessibleName));
+            }
             if(!pFlyFrameFormat || !pFlyFrameFormat->GetObjDescription().isEmpty())
                 break;
             [[fallthrough]];
