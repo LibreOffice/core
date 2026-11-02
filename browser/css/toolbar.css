@@ -1796,3 +1796,9 @@ menu-entry-with-icon.padding-left + menu-entry-icon.width */
 	outline: 2px solid var(--color-primary);
 	outline-offset: 2px;
 }
+
+.slidelayout-button img {
+	width: 16px;
+	height: 16px;
+	margin-inline-end: var(--spacing-s);
+}

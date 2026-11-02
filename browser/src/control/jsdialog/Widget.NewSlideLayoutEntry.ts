@@ -12,10 +12,21 @@
 /**
  * Widget.NewSlideLayoutEntry.ts
  *
- * A JSDialog "json" widget for rendering the slide layout presets
- * and the "New Slide Layout" link.
+ * A JSDialog "json" widget for rendering the slide layout presets,
+ * the "Overview" button and, when slide import is available, the
+ * "Import your slides" button.
  */
 declare var JSDialog: any;
+
+function createSlideLayoutButton(id: string, label: string): HTMLElement {
+	const button = document.createElement('div');
+	button.className = 'slidelayout-button';
+	button.id = id;
+	button.textContent = label;
+	button.setAttribute('role', 'button');
+	button.setAttribute('tabindex', '0');
+	return button;
+}
 
 function createSlideLayoutEntryWidget(
 	data: NewSlideLayoutEntryWidgetJSON,
@@ -33,17 +44,29 @@ function createSlideLayoutEntryWidget(
 	hr.className = 'jsdialog ui-separator horizontal';
 	container.appendChild(hr);
 
-	const button = document.createElement('div');
-	button.className = 'slidelayout-button';
-	button.id = 'newcanvasslide';
-	button.textContent = _('Overview');
-	button.setAttribute('role', 'button');
-	button.setAttribute('tabindex', '0');
-	button.addEventListener('click', () => {
+	const overview = createSlideLayoutButton('newcanvasslide', _('Overview'));
+	overview.addEventListener('click', () => {
 		builder.map.sendUnoCommand('.uno:InsertCanvasSlide'); // or your command
 		builder.callback('dialog', 'close', { id: data.id }, null);
 	});
-	container.appendChild(button);
+	container.appendChild(overview);
+
+	if (app.impress.isSlideImportSupported()) {
+		const importSlides = createSlideLayoutButton(
+			'importslides-entry',
+			_('Import your slides'),
+		);
+		const icon = document.createElement('img');
+		icon.alt = '';
+		app.LOUtil.setImage(icon, 'plus.svg', builder.map);
+		importSlides.prepend(icon);
+		importSlides.addEventListener('click', () => {
+			builder.callback('dialog', 'close', { id: data.id }, null);
+			app.dispatcher.dispatch('importslides');
+		});
+		container.appendChild(importSlides);
+	}
+
 	return container;
 }
 

@@ -396,7 +396,7 @@ interface GridWidgetJSON extends ContainerWidgetJSON {
 }
 
 // the slide layout presets shown in the "New Slide" dropdown: a grid of
-// layout choices plus the extra Overview button
+// layout choices plus the extra Overview and Import your slides buttons
 interface NewSlideLayoutEntryWidgetJSON extends WidgetJSON {
 	gridContent: GridWidgetJSON; // the grid of layout presets
 }
