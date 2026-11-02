@@ -203,6 +203,16 @@ static DocumentTab* activeTabOf(const WindowState& window)
     return findTab(window.activeTabId);
 }
 
+// Settings for automated tests, from the environment. Each is empty when its variable is not set.
+
+// CODA_TEST_REMOTE_DEBUGGING_PORT: the port on which the WebView2 browser takes DevTools Protocol
+// connections, for all web views of all windows. Decimal digits only.
+static std::wstring testRemoteDebuggingPort;
+
+// CODA_TEST_DOCUMENTS_DIR: the folder for new documents, in place of the Documents folder of the
+// user.
+static std::wstring testDocumentsDir;
+
 static HINSTANCE appInstance;
 static int appShowMode;
 
@@ -440,8 +450,14 @@ static FilenameAndUri generate_new_copy(const std::wstring& templateSourcePath,
                                         const std::wstring& templateBasename,
                                         const std::wstring& templateExtension)
 {
-    PWSTR documents;
-    SHGetKnownFolderPath(FOLDERID_Documents, 0, NULL, &documents);
+    std::wstring documents = testDocumentsDir;
+    if (documents.empty())
+    {
+        PWSTR documentsFolder;
+        SHGetKnownFolderPath(FOLDERID_Documents, 0, NULL, &documentsFolder);
+        documents = documentsFolder;
+        CoTaskMemFree(documentsFolder);
+    }
 
     int counter = 0;
     std::wstring templateCopyPath;
@@ -451,8 +467,7 @@ static FilenameAndUri generate_new_copy(const std::wstring& templateSourcePath,
         std::wstring number = L"";
         if (counter > 0)
             number = L" (" + std::to_wstring(counter) + L")";
-        templateCopyPath = std::wstring(documents) + L"\\" + templateBasename + number + L"." +
-            templateExtension;
+        templateCopyPath = documents + L"\\" + templateBasename + number + L"." + templateExtension;
         counter++;
     } while (std::filesystem::exists(std::filesystem::path(templateCopyPath)));
 
@@ -832,6 +847,15 @@ static void do_bye_handling_things(const DocumentTab& data)
 
     // Close one end of the socket pair, that will wake up the forwarding thread above
     fakeSocketClose(data.closeNotificationPipeForForwardingThread[0]);
+}
+
+static void quit_application()
+{
+    // Ask each window to close, the same way the window's own close button does. The messages are
+    // queued, so the windows are all still up when this returns. The application exits when the
+    // last one has gone.
+    for (const auto& entry : windows)
+        PostMessageW(entry.first, WM_CLOSE, 0, 0);
 }
 
 static void do_print(int appDocId)
@@ -3051,6 +3075,8 @@ static void withWebView2Environment(std::function<void(ICoreWebView2Environment*
     // Required for instantiating new Web Workers, which otherwise fail with a
     // cross-origin SecurityError because file:// gets origin 'null'.
     std::wstring additionalArgs = L"--allow-file-access-from-files";
+    if (!testRemoteDebuggingPort.empty())
+        additionalArgs += L" --remote-debugging-port=" + testRemoteDebuggingPort;
 
     auto options = Microsoft::WRL::Make<CoreWebView2EnvironmentOptions>();
     options->put_AdditionalBrowserArguments(additionalArgs.c_str());
@@ -5572,6 +5598,12 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             if (window && window->activeTabId != data.tabId)
                 activateTab(*window, data.tabId);
         }
+        else if (s == L"EXIT_TEST")
+        {
+            // The end of an automated test run. Every window closes, as for File > Quit, and the
+            // application exits.
+            quit_application();
+        }
         else if (s == L"PRINT")
         {
             do_print(data.appDocId);
@@ -5964,11 +5996,7 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
         }
         else if (s == L"uno .uno:Quit")
         {
-            // Ask each window to close, the same way the window's own close button does. The
-            // messages are queued, so the windows are all still up when this returns. The
-            // application exits when the last one has gone.
-            for (const auto& entry : windows)
-                PostMessageW(entry.first, WM_CLOSE, 0, 0);
+            quit_application();
         }
         else if (s.starts_with(L"newdoc "))
         {
@@ -6211,6 +6239,26 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int showWindowMode)
     SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, NULL, &appDataFolder);
     localAppData = Util::wide_string_to_string(std::wstring(appDataFolder) + L"\\" + appName);
     CoTaskMemFree(appDataFolder);
+
+    // CODA_TEST_DATA_DIR is a folder for the settings, the recent files list and the WebView2
+    // profile, in place of the folder under LocalAppData. A test run then starts from nothing and
+    // leaves the data of the user alone.
+    if (const wchar_t* testDataDir = _wgetenv(L"CODA_TEST_DATA_DIR"))
+    {
+        std::error_code ec;
+        std::filesystem::create_directories(testDataDir, ec);
+        localAppData = Util::wide_string_to_string(testDataDir);
+    }
+
+    if (const wchar_t* testDocuments = _wgetenv(L"CODA_TEST_DOCUMENTS_DIR"))
+        testDocumentsDir = testDocuments;
+
+    if (const wchar_t* testPort = _wgetenv(L"CODA_TEST_REMOTE_DEBUGGING_PORT"))
+    {
+        const std::wstring port = testPort;
+        if (!port.empty() && port.find_first_not_of(L"0123456789") == std::wstring::npos)
+            testRemoteDebuggingPort = port;
+    }
 
     // Wire up the ODF IFilter into Windows Search and the FullDetails /
     // PreviewDetails strings the Properties dialog needs, both under
