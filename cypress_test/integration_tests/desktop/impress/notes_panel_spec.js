@@ -930,6 +930,72 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 		});
 		cy.cGet(paragraph).should('contain.text', 'Click to add Notes');
 	});
+
+	function notesTextStyle($paragraph, property) {
+		var span = $paragraph.find('span');
+		var element = span.length ? span[0] : $paragraph[0];
+		return element.ownerDocument.defaultView.getComputedStyle(element)[property];
+	}
+
+	it('a font color chosen from the notebookbar applies to the notes and the notes keep the focus', function () {
+		var editEngine = '#notespanel-container .ui-editengine';
+		var paragraph = editEngine + ' .ui-editengine-paragraph';
+
+		// The Character group folds into an overflow menu at the default width.
+		cy.viewport(1920, 1080);
+		cy.getFrameWindow().then((win) => { helper.processToIdle(win); });
+
+		openNotesPane();
+		cy.cGet(editEngine).click();
+		cy.cGet(editEngine).type('Demo');
+		cy.cGet(paragraph).should('have.text', 'Demo');
+
+		cy.getFrameWindow().then(function (win) {
+			win.app.map.sendUnoCommand('.uno:SelectAll');
+			helper.processToIdle(win);
+		});
+
+		// The split button is addressed by the class its notebookbar entry declares.
+		var fontColorButton = '#Home-container .unospan-FontColor.has-colorpicker';
+		cy.cGet(fontColorButton).should('not.have.attr', 'disabled');
+		cy.cGet(fontColorButton + ' .arrowbackground').click();
+		desktopHelper.selectColorFromPalette('FFFF00');
+		cy.getFrameWindow().then((win) => { helper.processToIdle(win); });
+
+		cy.cGet(paragraph).should(function ($paragraph) {
+			expect(notesTextStyle($paragraph, 'color')).to.equal('rgb(255, 255, 0)');
+		});
+		cy.cGet(editEngine).should('have.focus');
+	});
+
+	it('a font family chosen from the notebookbar applies to the notes and the notes keep the focus', function () {
+		var editEngine = '#notespanel-container .ui-editengine';
+		var paragraph = editEngine + ' .ui-editengine-paragraph';
+
+		// The Character group folds into an overflow menu at the default width.
+		cy.viewport(1920, 1080);
+		cy.getFrameWindow().then((win) => { helper.processToIdle(win); });
+
+		openNotesPane();
+		cy.cGet(editEngine).click();
+		cy.cGet(editEngine).type('Demo');
+		cy.cGet(paragraph).should('have.text', 'Demo');
+
+		cy.getFrameWindow().then(function (win) {
+			win.app.map.sendUnoCommand('.uno:SelectAll');
+			helper.processToIdle(win);
+		});
+
+		// The sidebar carries a font box of the same id, so the one in the notebookbar is named.
+		cy.cGet('#Home-container #fontnamecombobox .ui-combobox-button').click();
+		desktopHelper.selectFromListbox('Liberation Mono');
+		cy.getFrameWindow().then((win) => { helper.processToIdle(win); });
+
+		cy.cGet(paragraph).should(function ($paragraph) {
+			expect(notesTextStyle($paragraph, 'fontFamily')).to.contain('Liberation Mono');
+		});
+		cy.cGet(editEngine).should('have.focus');
+	});
 });
 
 describe(['tagdesktop'], 'Impress speaker notes pane on load', function () {

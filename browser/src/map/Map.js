@@ -902,6 +902,9 @@ window.L.Map = window.L.Evented.extend({
 	// @acceptInput (only on "mobile" (= mobile phone) or on iOS and Android in general) true if we want to
 	// accept key input, and show the virtual keyboard.
 	focus: function (acceptInput) {
+		// A control hands the focus back to the notes text, which the engine still edits.
+		if (JSDialog.focusEditEngineHoldingFocus && JSDialog.focusEditEngineHoldingFocus())
+			return;
 		if (this._textInput)
 			this._textInput.focus(acceptInput);
 	},

@@ -42,6 +42,8 @@ interface EditEngineContainer extends HTMLElement {
 	onEditEngineMenu?: (open: boolean) => void;
 	// True while a context menu for this widget is open. The menu holds the focus then.
 	editEngineMenuOpen?: boolean;
+	// The engine still counts the widget as focused while a control holds the focus.
+	editEngineFocusOnControl?: boolean;
 	// The point of the last mouse press in viewport pixels, or undefined when a key was pressed
 	// after it.
 	editEngineMousePoint?: { x: number; y: number };
@@ -55,8 +57,11 @@ interface EditEngineContainer extends HTMLElement {
 
 const EDITENGINE_PARAGRAPH_CLASS = 'ui-editengine-paragraph';
 
-/// The name of the highlight that marks the selection while a context menu holds the focus.
+/// The name of the highlight that marks the selection while another element holds the focus.
 const EDITENGINE_MENU_HIGHLIGHT = 'editengine-menu-selection';
+
+let editEngineControlHolder: EditEngineContainer | null = null;
+let editEngineDocumentListenersAttached = false;
 
 /// One outline level indents by this much.
 const EDITENGINE_DEPTH_INDENT_PX = 24;
@@ -429,6 +434,45 @@ function editEngineBlurAfterContextMenu(container: EditEngineContainer): void {
 	container.ownerDocument.addEventListener('focusin', onFocusIn);
 }
 
+/// Popups can be attached inside the document container, so they are matched by class.
+function editEngineIsCommandControl(target: EventTarget | null): boolean {
+	if (!(target instanceof Element)) return false;
+	if (
+		target.closest(
+			'#toolbar-wrapper, #sidebar-dock-wrapper, .modalpopup, .jsdialog-window, .jsdialog-overlay',
+		)
+	)
+		return true;
+	const content = document.getElementById('main-document-content');
+	return !!content && !content.contains(target);
+}
+
+/// A press on the slide moves the focus to the body, which fires no focusin, so the press itself
+/// releases the text before map.focus() could hand the focus back to it.
+function editEngineAttachDocumentListeners(): void {
+	if (editEngineDocumentListenersAttached) return;
+	editEngineDocumentListenersAttached = true;
+	const leaveFor = (target: EventTarget | null) => {
+		const holder = editEngineControlHolder;
+		if (
+			!holder ||
+			(target instanceof Node && holder.contains(target)) ||
+			editEngineIsCommandControl(target)
+		)
+			return;
+		editEngineControlHolder = null;
+		holder.editEngineFocusOnControl = false;
+		editEngineHighlightSelection(holder, null);
+		editEngineSendAction(holder, 'blur', {});
+	};
+	document.addEventListener('focusin', (e: FocusEvent) => leaveFor(e.target));
+	document.addEventListener(
+		'pointerdown',
+		(e: PointerEvent) => leaveFor(e.target),
+		true,
+	);
+}
+
 function editEngineAttachHandlers(container: EditEngineContainer): void {
 	container.addEventListener('keydown', (e: KeyboardEvent) => {
 		container.editEngineMousePoint = undefined;
@@ -444,21 +488,35 @@ function editEngineAttachHandlers(container: EditEngineContainer): void {
 	// The widget shows no selection while it lacks the focus, so the engine's selection comes
 	// back with the focus. A click that gives the focus places its own caret after this.
 	container.addEventListener('focus', () => {
+		const engineHasFocus = container.editEngineFocusOnControl;
+		container.editEngineFocusOnControl = false;
+		if (editEngineControlHolder === container) editEngineControlHolder = null;
 		// With the focus, the document selection shows the selection, so the highlight goes.
 		editEngineHighlightSelection(container, null);
 		if (container.editEngineLastSelection)
 			editEngineApplySelection(container, container.editEngineLastSelection);
-		editEngineSendAction(container, 'focus', {});
+		if (!engineHasFocus) editEngineSendAction(container, 'focus', {});
 	});
 
 	// The text stays in editing while the context menu opened on it holds the focus, as it does on
 	// desktop, so empty text under the menu shows no placeholder. The blur goes out when the focus
 	// leaves the menu for anywhere other than this widget.
+	// The engine also keeps the text in editing while a control applies its command to it.
 	container.addEventListener('blur', (e: FocusEvent) => {
 		if (editEngineIsInContextMenu(e.relatedTarget))
 			editEngineBlurAfterContextMenu(container);
-		else editEngineSendBlur(container);
+		else if (editEngineIsCommandControl(e.relatedTarget)) {
+			container.editEngineFocusOnControl = true;
+			editEngineControlHolder = container;
+			editEngineHighlightSelection(
+				container,
+				container.editEngineLastSelection || null,
+			);
+			editEngineRestoreClipboardState(container);
+		} else editEngineSendBlur(container);
 	});
+
+	editEngineAttachDocumentListeners();
 
 	container.addEventListener('compositionend', (e: CompositionEvent) => {
 		if (e.data) editEngineSendAction(container, 'text', { text: e.data });
@@ -685,7 +743,7 @@ function editEngineUpdateInPlace(
 
 	// An open context menu acts on the selection, so the selection stays marked while the menu is
 	// open. The menu can open while the widget still has the focus.
-	if (container.editEngineMenuOpen)
+	if (container.editEngineMenuOpen || container.editEngineFocusOnControl)
 		editEngineHighlightSelection(container, selection);
 
 	// The engine owns the caret, so its selection is applied as given. The container stays in the
@@ -776,6 +834,19 @@ JSDialog.editEngine = function (
 	builder: JSBuilder,
 ): boolean {
 	return _editEngineControl(parentContainer, data, builder);
+};
+
+JSDialog.focusEditEngineHoldingFocus = function (): boolean {
+	const active = document.activeElement;
+	if (active instanceof Element && active.classList.contains('ui-editengine'))
+		return true;
+	const holder = editEngineControlHolder;
+	if (!holder || !holder.isConnected) {
+		editEngineControlHolder = null;
+		return false;
+	}
+	holder.focus();
+	return true;
 };
 
 // TODO: editengine might become regular widget, not a custom one
