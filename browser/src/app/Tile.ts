@@ -65,6 +65,11 @@ class Tile {
 		this.allowFastRequest();
 	}
 
+	/// The server has no newer content for this tile, so the tile is up to date again.
+	clearInvalidation() {
+		this.invalidFrom = 0;
+	}
+
 	/// Avoid continually re-requesting tiles for eg. preloading
 	requestingTooFast(now: Date): boolean {
 		const tooFast: boolean =

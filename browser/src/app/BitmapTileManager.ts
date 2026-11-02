@@ -1855,10 +1855,16 @@ class BitmapTileManager extends RenderManagerBase {
 		tile.viewId = tileMsgObj.nviewid;
 		// update monotonic timestamp
 		tile.wireId = +tileMsgObj.wireId;
-		if (tile.invalidFrom == tile.wireId)
-			window.app.console.debug('Nasty - updated wireId matches old one');
 
 		var hasContent = img != null && img.rawData.length > 0;
+
+		// No content at the wire id of the invalidation means the server has nothing newer, so
+		// the tile is up to date again. That is the normal answer after a browser-side
+		// invalidation, which marks the tile with its own wire id.
+		if (tile.invalidFrom === tile.wireId) {
+			if (!hasContent) tile.clearInvalidation();
+			else window.app.console.debug('Nasty - updated wireId matches old one');
+		}
 
 		// obscure case: we could have garbage collected the
 		// keyframe content in JS but coolwsd still thinks we have
@@ -2321,8 +2327,16 @@ class BitmapTileManager extends RenderManagerBase {
 
 			if (!tile) tile = this.createTile(currentCoordList[i]);
 
-			if (tile.needsFetch()) tileCombineQueue.push(currentCoordList[i]);
-			else this.makeTileCurrent(tile);
+			if (tile.needsFetch()) {
+				tileCombineQueue.push(currentCoordList[i]);
+				// Show the last content of the tile until the new one arrives, and keep its
+				// request wait.
+				this.rehydrateTile(tile, false);
+			} else {
+				// Up to date, so decode it too and clear its request wait: no request is waiting
+				// for this tile.
+				this.makeTileCurrent(tile);
+			}
 		}
 
 		// Prefetching algorithm etc doesn't need this function to send tile combine request.
