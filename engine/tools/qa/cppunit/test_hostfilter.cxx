@@ -270,7 +270,7 @@ void TestHostFilter::testUrl()
     HostFilter::setAllowedHosts("localhost");
     CPPUNIT_ASSERT(!HostFilter::isUrlForbidden(u"https://localhost/doc.ods"_ustr));
     CPPUNIT_ASSERT(HostFilter::isUrlForbidden(u"https://evil.example/doc.ods"_ustr));
-    HostFilter::setAllowedHosts("");
+    HostFilter::setAllowedHosts(nullptr);
 
     HostFilter::setAllowedExtRefPaths("/tmp/docs");
     CPPUNIT_ASSERT(!HostFilter::isUrlForbidden(u"file:///tmp/docs/sheet.ods"_ustr));
@@ -283,7 +283,7 @@ void TestHostFilter::testUrl()
     CPPUNIT_ASSERT(HostFilter::isUrlForbidden(u"file://evil.example/tmp/docs/sheet.ods"_ustr));
     CPPUNIT_ASSERT(!HostFilter::isUrlForbidden(u"https://localhost/doc.ods"_ustr));
     CPPUNIT_ASSERT(HostFilter::isUrlForbidden(u"https://evil.example/doc.ods"_ustr));
-    HostFilter::setAllowedHosts("");
+    HostFilter::setAllowedHosts(nullptr);
     HostFilter::resetAllowedExtRefPaths();
 }
 

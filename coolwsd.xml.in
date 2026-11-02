@@ -260,7 +260,7 @@
         <host desc="Carrier-grade NAT range used as the pod network">100.64.0.0/10</host>
         -->
       </post_allow>
-      <lok_allow desc="Allowed hosts as an external data source inside edited files. Each entry is either a network in CIDR notation or a regular expression matched against the host of the URL. All allowed post_allow.host and storage.wopi entries are also considered to be allowed as a data source. Used for example in: PostMessage Action_InsertGraphic, =WEBSERVICE() function, external reference in the cell.">
+      <lok_allow desc="Allowed hosts as an external data source inside edited files. Each entry is either a network in CIDR notation or a regular expression matched against the host of the URL. All allowed post_allow.host and storage.wopi entries are also considered to be allowed as a data source. Used for example in: PostMessage Action_InsertGraphic, =WEBSERVICE() function, external reference in the cell. If this section is present but no host ends up allowed, every host is denied. Without this section every host is allowed.">
         <host desc="The IPv4 private 192.168.0.0/16 block.">192.168.0.0/16</host>
         <host desc="The IPv4 loopback (localhost) address.">127.0.0.1/32</host>
         <host desc="The IPv6 loopback (localhost) address.">::1/128</host>
