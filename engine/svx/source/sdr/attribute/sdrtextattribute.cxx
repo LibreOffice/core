@@ -204,7 +204,10 @@ namespace drawinglayer::attribute
                 }
 
                 return (
-                       getSdrFormTextAttribute() == rCandidate.getSdrFormTextAttribute()
+                       // the text is decomposed from its object, the same text of another one is
+                       // not equal
+                       mpSdrText == rCandidate.mpSdrText
+                    && getSdrFormTextAttribute() == rCandidate.getSdrFormTextAttribute()
                     && getTextLeftDistance() == rCandidate.getTextLeftDistance()
                     && getTextUpperDistance() == rCandidate.getTextUpperDistance()
                     && getTextRightDistance() == rCandidate.getTextRightDistance()

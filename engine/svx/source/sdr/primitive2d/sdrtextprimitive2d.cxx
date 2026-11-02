@@ -149,8 +149,12 @@ namespace drawinglayer::primitive2d
 
                 return (
 
+                    // the decomposition reads the text it was made for, so the same text of
+                    // another object is not equal
+                    getSdrText() == rCompare.getSdrText()
+
                     // compare OPO and content, but not WrongList
-                    getOutlinerParaObject() == rCompare.getOutlinerParaObject()
+                    && getOutlinerParaObject() == rCompare.getOutlinerParaObject()
 
                     // also compare WrongList (not-persistent data, but visualized)
                     && getOutlinerParaObject().isWrongListEqual(rCompare.getOutlinerParaObject()));
@@ -295,6 +299,10 @@ namespace drawinglayer::primitive2d
 
         Primitive2DReference SdrContourTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
+            // a text whose object is gone gives nothing
+            if(!getSdrText())
+                return nullptr;
+
             Primitive2DContainer aRetval;
             getSdrText()->GetObject().impDecomposeContourTextPrimitive(aRetval, *this, aViewInformation);
 
@@ -344,6 +352,10 @@ namespace drawinglayer::primitive2d
 
         Primitive2DReference SdrPathTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
+            // a text whose object is gone gives nothing
+            if(!getSdrText())
+                return nullptr;
+
             Primitive2DContainer aRetval;
             getSdrText()->GetObject().impDecomposePathTextPrimitive(aRetval, *this, aViewInformation);
 
@@ -396,6 +408,10 @@ namespace drawinglayer::primitive2d
 
         Primitive2DReference SdrBlockTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
+            // a text whose object is gone gives nothing
+            if(!getSdrText())
+                return nullptr;
+
             Primitive2DContainer aRetval;
             getSdrText()->GetObject().impDecomposeBlockTextPrimitive(aRetval, *this, aViewInformation);
 
@@ -465,6 +481,10 @@ namespace drawinglayer::primitive2d
 
          Primitive2DReference SdrAutoFitTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
          {
+             // a text whose object is gone gives nothing
+             if(!getSdrText())
+                 return nullptr;
+
              Primitive2DContainer aRetval;
              getSdrText()->GetObject().impDecomposeAutoFitTextPrimitive(aRetval, *this, aViewInformation);
 
@@ -527,6 +547,10 @@ namespace drawinglayer::primitive2d
 
         Primitive2DReference SdrChainedTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
+            // a text whose object is gone gives nothing
+            if(!getSdrText())
+                return nullptr;
+
             Primitive2DContainer aRetval;
             getSdrText()->GetObject().impDecomposeChainedTextPrimitive(aRetval, *this, aViewInformation);
 
@@ -559,6 +583,10 @@ namespace drawinglayer::primitive2d
 
         Primitive2DReference SdrStretchTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
+            // a text whose object is gone gives nothing
+            if(!getSdrText())
+                return nullptr;
+
             Primitive2DContainer aRetval;
             getSdrText()->GetObject().impDecomposeStretchTextPrimitive(aRetval, *this, aViewInformation);
 
