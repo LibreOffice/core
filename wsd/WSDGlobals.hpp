@@ -21,9 +21,14 @@
 #include <wsd/FileServer.hpp>
 
 #if !MOBILEAPP
+#include <wsd/Admin.hpp>
+
 std::unique_ptr<ClipboardCache> COOLWSD::SavedClipboards;
 
 std::unique_ptr<FileServerRequestHandler> COOLWSD::FileRequestHandler;
+
+// Defined before COOLWSDServer::Instance, so it is destroyed after it.
+std::unique_ptr<Admin> Admin::Instance;
 #endif
 
 std::shared_ptr<TerminatingPoll> COOLWSDServer::WebServerPoll;

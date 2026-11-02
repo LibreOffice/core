@@ -545,8 +545,6 @@ bool AdminSocketHandler::handleInitialRequest(
     return false;
 }
 
-std::unique_ptr<Admin> Admin::Instance;
-
 /// An admin command processor.
 Admin::Admin()
     : SocketPoll("admin")
