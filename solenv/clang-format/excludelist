@@ -447,9 +447,6 @@ canvas/source/cairo/cairo_canvascustomsprite.cxx
 canvas/source/cairo/cairo_canvascustomsprite.hxx
 canvas/source/cairo/cairo_canvasfont.cxx
 canvas/source/cairo/cairo_canvasfont.hxx
-canvas/source/cairo/cairo_canvashelper.cxx
-canvas/source/cairo/cairo_canvashelper.hxx
-canvas/source/cairo/cairo_canvashelper_text.cxx
 canvas/source/cairo/cairo_devicehelper.cxx
 canvas/source/cairo/cairo_devicehelper.hxx
 canvas/source/cairo/cairo_repainttarget.hxx
