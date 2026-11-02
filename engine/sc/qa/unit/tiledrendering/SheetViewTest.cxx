@@ -4415,6 +4415,180 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_FillAuto_DefaultAndSheetView)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testFillDownOnSheetViewFillsBothViews)
+{
+    // Fill Down (Ctrl+D) over C3:C5 in a sheet view copies C3 into C4:C5, in the sheet view and
+    // in the default view.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    rDocument.SetValue(ScAddress(2, 0, 0), 1.0);
+    rDocument.SetValue(ScAddress(2, 1, 0), 2.0);
+    rDocument.SetValue(ScAddress(2, 2, 0), 3.0);
+
+    setupViews();
+    switchToSheetView();
+    createNewSheetViewInCurrentView();
+
+    SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+    SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+    CPPUNIT_ASSERT(nDefaultViewTab != nSheetViewTab);
+
+    gotoCell(u"C3:C5");
+    dispatchCommand(mxComponent, u".uno:FillDown"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"1", u"2", u"3", u"3", u"3" }),
+                         getValues(&rDocument, 2, 0, 4, nSheetViewTab));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"1", u"2", u"3", u"3", u"3" }),
+                         getValues(&rDocument, 2, 0, 4, nDefaultViewTab));
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testAutoFillOnSheetViewFillsBothViews)
+{
+    // Dragging the fill handle of C3 down to C5 in a sheet view continues the series into C4:C5,
+    // in the sheet view and in the default view.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    rDocument.SetValue(ScAddress(2, 0, 0), 1.0);
+    rDocument.SetValue(ScAddress(2, 1, 0), 2.0);
+    rDocument.SetValue(ScAddress(2, 2, 0), 3.0);
+
+    setupViews();
+    switchToSheetView();
+    createNewSheetViewInCurrentView();
+
+    SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+    SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+    CPPUNIT_ASSERT(nDefaultViewTab != nSheetViewTab);
+
+    gotoCell(u"C3");
+    // The fill handle drag fills the two cells below the source cell C3.
+    mpTabViewSheetView->FillAuto(FILL_TO_BOTTOM, 2, 2, 2, 2, 2);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"1", u"2", u"3", u"4", u"5" }),
+                         getValues(&rDocument, 2, 0, 4, nSheetViewTab));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"1", u"2", u"3", u"4", u"5" }),
+                         getValues(&rDocument, 2, 0, 4, nDefaultViewTab));
+
+    // Undo in the sheet view empties C4:C5 again in both views.
+    undo();
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"1", u"2", u"3", u"", u"" }),
+                         getValues(&rDocument, 2, 0, 4, nSheetViewTab));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"1", u"2", u"3", u"", u"" }),
+                         getValues(&rDocument, 2, 0, 4, nDefaultViewTab));
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testFillSeriesOnSheetViewFillsBothViews)
+{
+    // Fill Series over C1:C5 in a sheet view, with start 10 and step 10, writes 10 to 50 into
+    // C1:C5, in the sheet view and in the default view.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    setupViews();
+    switchToSheetView();
+    createNewSheetViewInCurrentView();
+
+    SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+    SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+    CPPUNIT_ASSERT(nDefaultViewTab != nSheetViewTab);
+
+    // Pass the selection of the sheet view, as the Fill Series dialog does.
+    gotoCell(u"C1:C5");
+    const ScMarkData& rMark = mpTabViewSheetView->GetViewData().GetMarkData();
+    CPPUNIT_ASSERT(pDocShell->GetDocFunc().FillSeries(
+        ScRange(2, 0, nSheetViewTab, 2, 4, nSheetViewTab), &rMark, FILL_TO_BOTTOM, FILL_LINEAR,
+        FILL_DAY, 10.0, 10.0, MAXDOUBLE, false));
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"10", u"20", u"30", u"40", u"50" }),
+                         getValues(&rDocument, 2, 0, 4, nSheetViewTab));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"10", u"20", u"30", u"40", u"50" }),
+                         getValues(&rDocument, 2, 0, 4, nDefaultViewTab));
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testAutoFormatOnSheetViewFormatsBothViews)
+{
+    // AutoFormat over C1:C4 in a sheet view gives C1 the header background, C2:C3 the body
+    // background and C4 the total row background, in the sheet view and in the default view.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    rDocument.SetValue(ScAddress(2, 0, 0), 1.0);
+    rDocument.SetValue(ScAddress(2, 1, 0), 2.0);
+    rDocument.SetValue(ScAddress(2, 2, 0), 3.0);
+    rDocument.SetValue(ScAddress(2, 3, 0), 4.0);
+
+    setupViews();
+    switchToSheetView();
+    createNewSheetViewInCurrentView();
+
+    SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+    SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+    CPPUNIT_ASSERT(nDefaultViewTab != nSheetViewTab);
+
+    // Pass the selection of the sheet view, as the AutoFormat dialog does.
+    gotoCell(u"C1:C4");
+    const ScMarkData& rMark = mpTabViewSheetView->GetViewData().GetMarkData();
+    CPPUNIT_ASSERT(pDocShell->GetDocFunc().AutoFormat(
+        ScRange(2, 0, nSheetViewTab, 2, 3, nSheetViewTab), &rMark, 0, false));
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"000080", u"ffffff", u"ffffff", u"cccccc" }),
+                         getBackgroundColor(&rDocument, 2, 0, 3, nSheetViewTab));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"000080", u"ffffff", u"ffffff", u"cccccc" }),
+                         getBackgroundColor(&rDocument, 2, 0, 3, nDefaultViewTab));
+
+    // The values stay as they were.
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"1", u"2", u"3", u"4" }),
+                         getValues(&rDocument, 2, 0, 3, nSheetViewTab));
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testEnterMatrixOnSheetViewFillsBothViews)
+{
+    // An array formula entered over E1:E3 in a sheet view doubles C1:C3 into E1:E3, in the sheet
+    // view and in the default view.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    rDocument.SetValue(ScAddress(2, 0, 0), 1.0);
+    rDocument.SetValue(ScAddress(2, 1, 0), 2.0);
+    rDocument.SetValue(ScAddress(2, 2, 0), 3.0);
+
+    setupViews();
+    switchToSheetView();
+    createNewSheetViewInCurrentView();
+
+    SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+    SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+    CPPUNIT_ASSERT(nDefaultViewTab != nSheetViewTab);
+
+    // Pass the selection of the sheet view, as Ctrl+Shift+Enter in the cell does.
+    gotoCell(u"E1:E3");
+    const ScMarkData& rMark = mpTabViewSheetView->GetViewData().GetMarkData();
+    CPPUNIT_ASSERT(pDocShell->GetDocFunc().EnterMatrix(
+        ScRange(4, 0, nSheetViewTab, 4, 2, nSheetViewTab), &rMark, nullptr, u"=C1:C3*2"_ustr,
+        false, true, OUString(), formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX));
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"2", u"4", u"6" }),
+                         getValues(&rDocument, 4, 0, 2, nSheetViewTab));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"2", u"4", u"6" }),
+                         getValues(&rDocument, 4, 0, 2, nDefaultViewTab));
+}
+
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_TransliterateText_DefaultAndSheetView)
 {
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter_Extended.ods");

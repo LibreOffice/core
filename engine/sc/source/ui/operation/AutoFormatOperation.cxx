@@ -64,7 +64,7 @@ bool AutoFormatOperation::runImplementation()
 
     ScMarkData aMark(rDoc.GetSheetLimits());
     if (mpTabMark)
-        aMark = *mpTabMark;
+        aMark = convertMark(*mpTabMark);
     else
     {
         for (SCTAB nTab = nStartTab; nTab <= nEndTab; nTab++)
