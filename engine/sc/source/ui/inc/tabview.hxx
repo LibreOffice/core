@@ -255,18 +255,6 @@ private:
     void            SkipCursorHorizontal(SCCOL& rCurX, SCROW& rCurY, SCCOL nOldX, SCCOL nMovX);
     void            SkipCursorVertical(SCCOL& rCurX, SCROW& rCurY, SCROW nOldY, SCROW nMovY);
 
-    /**
-     *
-     *  @brief Update marks for a selected Range. This is a helper function
-     *  for PaintRangeFinder.
-     *
-     *  @param pData: Range to update for painting.
-     *  @param nTab: Current tab.
-     *
-     **/
-
-    void            PaintRangeFinderEntry (const ScRangeFindData* pData, SCTAB nTab);
-
     void            SetZoomPercentFromCommand(sal_uInt16 nZoomPercent);
 
     DECL_STATIC_LINK(ScTabView, InstallKitNotifierHdl, void*, vcl::ICOKitNotifier*);
@@ -519,6 +507,7 @@ public:
     bool            NeedsRepaint();
 
     void            PaintRangeFinder( tools::Long nNumber );
+    void            PaintRangeFinderEntry (const ScRangeFindData* pData, SCTAB nTab);
     void            AddHighlightRange( const ScRange& rRange, const Color& rColor );
     void            ClearHighlightRanges();
 

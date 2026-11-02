@@ -3015,6 +3015,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testReferenceMarksClearedAfterEdit)
 
 namespace
 {
+void pressKey(ScModelObj* pModelObj, sal_uInt16 nKeyCode)
+{
+    pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, nKeyCode);
+    pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, nKeyCode);
+    Scheduler::ProcessEventsToIdle();
+}
+
 /// Starts a formula in A2 and picks A1 with the Up key.
 void startFormulaWithReferenceToA1(ScModelObj* pModelObj, ScTabViewShell* pViewShell)
 {
@@ -3022,9 +3029,16 @@ void startFormulaWithReferenceToA1(ScModelObj* pModelObj, ScTabViewShell* pViewS
     pModelObj->postKeyEvent(COKitKeyEventType::DOWN, '=', 0);
     pModelObj->postKeyEvent(COKitKeyEventType::UP, '=', 0);
     Scheduler::ProcessEventsToIdle();
-    pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::UP);
-    pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::UP);
-    Scheduler::ProcessEventsToIdle();
+    pressKey(pModelObj, awt::Key::UP);
+}
+
+void openFormulaInA3(ScModelObj* pModelObj, ScTabViewShell* pViewShell, const OUString& rFormula)
+{
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(SfxObjectShell::Current());
+    CPPUNIT_ASSERT(pDocSh);
+    pDocSh->GetDocument().SetString(0, 2, 0, rFormula);
+    pViewShell->SetCursor(0, 2);
+    pressKey(pModelObj, awt::Key::F2);
 }
 
 void typeText(ScModelObj* pModelObj, std::u16string_view aText)
@@ -3045,6 +3059,15 @@ Point cellMiddleTwips(ScViewData& rViewData, SCCOL nColumn, SCROW nRow)
                  (aStart.Y() + aEnd.Y()) / 2 / rViewData.GetPPTY());
 }
 
+int countOccurrences(std::string_view aText, std::string_view aPart)
+{
+    int nCount = 0;
+    for (size_t nPos = aText.find(aPart); nPos != std::string_view::npos;
+         nPos = aText.find(aPart, nPos + 1))
+        ++nCount;
+    return nCount;
+}
+
 constexpr OString aActiveMark = "\"active\": \"true\""_ostr;
 }
 
@@ -3062,6 +3085,79 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testActiveReferenceMark)
     typeText(pModelObj, u"+");
     CPPUNIT_ASSERT_EQUAL("=A1+"_ostr, aView1.m_sCellFormula);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aView1.m_sReferenceMarks.indexOf("\"active\""));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testReferenceMarksFollowTyping)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    ScTestViewCallback aView1;
+
+    openFormulaInA3(pModelObj, pViewShell, u"=A1+B1:B2"_ustr);
+    CPPUNIT_ASSERT_EQUAL("=A1+B1:B2"_ostr, aView1.m_sCellFormula);
+    CPPUNIT_ASSERT_EQUAL(2, countOccurrences(aView1.m_sReferenceMarks, "rectangle"));
+    const OString aMarksBefore = aView1.m_sReferenceMarks;
+
+    typeText(pModelObj, u"1");
+    CPPUNIT_ASSERT_EQUAL("=A1+B1:B21"_ostr, aView1.m_sCellFormula);
+    CPPUNIT_ASSERT_EQUAL(2, countOccurrences(aView1.m_sReferenceMarks, "rectangle"));
+    CPPUNIT_ASSERT(aView1.m_sReferenceMarks != aMarksBefore);
+
+    for (int i = 0; i < 9; ++i)
+        pressKey(pModelObj, awt::Key::BACKSPACE);
+    CPPUNIT_ASSERT_EQUAL("="_ostr, aView1.m_sCellFormula);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aView1.m_sReferenceMarks.indexOf("rectangle"));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPickedReferenceHasOneMark)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    ScTestViewCallback aView1;
+
+    startFormulaWithReferenceToA1(pModelObj, pViewShell);
+    CPPUNIT_ASSERT_EQUAL("=A1"_ostr, aView1.m_sCellFormula);
+    CPPUNIT_ASSERT_EQUAL(1, countOccurrences(aView1.m_sReferenceMarks, "rectangle"));
+    CPPUNIT_ASSERT(aView1.m_sReferenceMarks.indexOf(aActiveMark) >= 0);
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoTypingInFormulaWithReference)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    ScTestViewCallback aView1;
+
+    openFormulaInA3(pModelObj, pViewShell, u"=A1+B1:B2"_ustr);
+    CPPUNIT_ASSERT_EQUAL("=A1+B1:B2"_ostr, aView1.m_sCellFormula);
+
+    typeText(pModelObj, u"1");
+    CPPUNIT_ASSERT_EQUAL("=A1+B1:B21"_ostr, aView1.m_sCellFormula);
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL("=A1+B1:B2"_ostr, aView1.m_sCellFormula);
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPickedReferenceRepeatedInText)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    ScTestViewCallback aView1;
+
+    // From A3, UP picks A2. After the plus, UP picks A1 and DOWN moves that pick to A2.
+    pViewShell->SetCursor(0, 2);
+    typeText(pModelObj, u"=");
+    pressKey(pModelObj, awt::Key::UP);
+    typeText(pModelObj, u"+");
+    pressKey(pModelObj, awt::Key::UP);
+    pressKey(pModelObj, awt::Key::DOWN);
+    CPPUNIT_ASSERT_EQUAL("=A2+A2"_ostr, aView1.m_sCellFormula);
+    CPPUNIT_ASSERT_EQUAL(2, countOccurrences(aView1.m_sReferenceMarks, "rectangle"));
+    CPPUNIT_ASSERT_EQUAL(1, countOccurrences(aView1.m_sReferenceMarks, "\"active\""));
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDragActiveReferenceCorner)

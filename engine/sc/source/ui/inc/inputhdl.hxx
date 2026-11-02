@@ -185,7 +185,9 @@ private:
     void            PasteManualTip();
     EditView*       GetFuncEditView();
     void            RemoveAdjust();
+    void            RemoveRangeFinderColors();
     void            RemoveRangeFinder();
+    void            RebuildRangeFinder();
     void            DeleteRangeFinder();
     void            UpdateParenthesis();
     void            UpdateAutoCorrFlag();
@@ -269,7 +271,8 @@ public:
     EditView*       GetTopView()        { return pTopView; }
 
     bool            DataChanging( sal_Unicode cTyped = 0, bool bFromCommand = false );
-    void            DataChanged( bool bFromTopNotify = false, bool bSetModified = true );
+    void            DataChanged( bool bFromTopNotify = false, bool bSetModified = true,
+                                 bool bReferencePicked = false );
 
     bool            TakesReturn() const     { return ( nTipVisible != nullptr ); }
 
@@ -314,9 +317,9 @@ public:
     Size            GetTextSize();      // in 1/100mm
 
                     // actually private, public for SID_INPUT_SUM
-    void            InitRangeFinder(const OUString& rFormula);
+    void            InitRangeFinder(const OUString& rFormula, bool bPaint = true);
 
-    void            UpdateKitReferenceMarks();
+    void            UpdateKitReferenceMarks(bool bSendWhenEmpty = false);
     /// The picked reference, while its text is the selection of the edited formula.
     bool            GetActiveReference( ScRange& rRange ) const;
     static void     SendReferenceMarks( const SfxViewShell* pViewShell,

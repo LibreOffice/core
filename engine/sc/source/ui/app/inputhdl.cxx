@@ -19,6 +19,7 @@
 
 #include <iterator>
 #include <memory>
+#include <optional>
 #include <string_view>
 
 #include <inputhdl.hxx>
@@ -440,11 +441,16 @@ static bool lcl_ResolveTableRef( ScDocument& rDoc, const ScAddress& rPos,
     return false;
 }
 
-void ScInputHandler::InitRangeFinder( const OUString& rFormula )
+void ScInputHandler::InitRangeFinder( const OUString& rFormula, bool bPaint )
 {
     DeleteRangeFinder();
     if (!pActiveViewSh || !ScModule::get()->GetInputOptions().GetRangeFinder())
         return;
+
+    // The colours are no undo steps
+    const EEControlBits nControlWord = mpEditEngine->GetControlWord();
+    mpEditEngine->SetControlWord( nControlWord & ~EEControlBits::UNDOATTRIBS );
+
     ScDocShell* pDocSh = pActiveViewSh->GetViewData().GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
     const sal_Unicode cSheetSep = rDoc.GetSheetSeparator();
@@ -579,13 +585,16 @@ handle_r1c1:
         // Do not skip last separator; could be a quote (?)
     }
 
+    mpEditEngine->SetControlWord( nControlWord );
+
     UpdateKitReferenceMarks();
 
     if (nCount)
     {
         mpEditEngine->SetUpdateLayout( true );
 
-        pDocSh->Broadcast( SfxHint( SfxHintId::ScShowRangeFinder ) );
+        if (bPaint)
+            pDocSh->Broadcast( SfxHint( SfxHintId::ScShowRangeFinder ) );
     }
 }
 
@@ -653,7 +662,7 @@ bool ScInputHandler::GetActiveReference( ScRange& rRange ) const
     return true;
 }
 
-void ScInputHandler::UpdateKitReferenceMarks()
+void ScInputHandler::UpdateKitReferenceMarks(bool bSendWhenEmpty)
 {
     if ( !comphelper::COKit::isActive())
         return;
@@ -672,18 +681,21 @@ void ScInputHandler::UpdateKitReferenceMarks()
     const bool bRefMark = rViewData.IsRefMode() && rViewData.GetRefType() != SC_REFTYPE_FILL;
 
     if (!pRangeFinder && !bRefMark)
+    {
+        if (bSendWhenEmpty)
+            SendReferenceMarks(pShell, std::vector<ReferenceMark>());
         return;
+    }
 
-    sal_uInt16 nAdditionalMarks = 0;
-    std::vector<ReferenceMark> aReferenceMarks( 1 );
+    std::vector<ReferenceMark> aReferenceMarks;
 
     ScRange aActiveRange;
     const bool bHasActiveRange = GetActiveReference( aActiveRange );
 
+    ScRange aRefRange( ScAddress::INITIALIZE_INVALID );
+
     if (bRefMark)
     {
-        nAdditionalMarks = 1;
-
         const svtools::ColorConfig& rColorCfg = ScModule::get()->GetColorConfig();
         Color aRefColor( rColorCfg.GetColorValue( svtools::CALCREFERENCE ).nColor );
         tools::Long nX1 = rViewData.GetRefStartX();
@@ -698,53 +710,69 @@ void ScInputHandler::UpdateKitReferenceMarks()
         PutInOrder(nX1, nX2);
         PutInOrder(nY1, nY2);
 
-        aReferenceMarks[0] = ScInputHandler::GetReferenceMark( rViewData, *pDocSh,
-                                                   nX1, nX2, nY1, nY2,
-                                                   nTab, aRefColor );
+        aRefRange = ScRange( nX1, nY1, nTab, nX2, nY2, nTab );
+        aReferenceMarks.push_back( ScInputHandler::GetReferenceMark( rViewData, *pDocSh,
+                                                                     nX1, nX2, nY1, nY2,
+                                                                     nTab, aRefColor ) );
         // The view keeps the ref range after the pick, so it is active only while its text
         // is still selected.
-        aReferenceMarks[0].bActive = bHasActiveRange;
+        aReferenceMarks.back().bActive = bHasActiveRange;
     }
 
-    sal_uInt16 nCount = pRangeFinder ?
-        ( static_cast<sal_uInt16>( pRangeFinder->Count() ) + nAdditionalMarks ) : nAdditionalMarks;
-    aReferenceMarks.resize( nCount );
-
-    if ( nCount && pRangeFinder && !pRangeFinder->IsHidden() &&
+    if ( pRangeFinder && !pRangeFinder->IsHidden() &&
          pRangeFinder->GetDocName() == pDocSh->GetTitle() )
     {
-        for (sal_uInt16 i = 0; i < nCount - nAdditionalMarks; i++)
+        // The picked range is in the text as well, its mark takes the colour of that entry
+        std::optional<size_t> oPickedEntry;
+        if (bRefMark)
+        {
+            std::optional<ESelection> oPickedSelection;
+            EditView* pActiveView = pTopView ? pTopView : pTableView;
+            if (bHasActiveRange && pActiveView)
+            {
+                ESelection aSelection = pActiveView->GetSelection();
+                aSelection.Adjust();
+                oPickedSelection = aSelection;
+            }
+
+            for (size_t i = 0; i < pRangeFinder->Count(); i++)
+            {
+                const ScRangeFindData& rData = pRangeFinder->GetObject( i );
+                ScRange aRef = rData.aRef;
+                aRef.PutInOrder();
+                if (aRef != aRefRange)
+                    continue;
+                if (oPickedSelection && rData.maSel == *oPickedSelection)
+                {
+                    oPickedEntry = i;
+                    break;
+                }
+                if (!oPickedEntry)
+                    oPickedEntry = i;
+            }
+        }
+
+        for (size_t i = 0; i < pRangeFinder->Count(); i++)
         {
             ScRangeFindData& rData = pRangeFinder->GetObject( i );
             ScRange aRef = rData.aRef;
             aRef.PutInOrder();
 
-            tools::Long nX1 = aRef.aStart.Col();
-            tools::Long nX2 = aRef.aEnd.Col();
-            tools::Long nY1 = aRef.aStart.Row();
-            tools::Long nY2 = aRef.aEnd.Row();
-            tools::Long nTab = aRef.aStart.Tab();
+            if (oPickedEntry == i)
+            {
+                aReferenceMarks[0].aColor = rData.nColor;
+                continue;
+            }
 
-            aReferenceMarks[i + nAdditionalMarks] = ScInputHandler::GetReferenceMark( rViewData, *pDocSh,
-                                                                          nX1, nX2, nY1, nY2,
-                                                                          nTab, rData.nColor );
-
-            aReferenceMarks[i + nAdditionalMarks].bActive =
-                !bRefMark && bHasActiveRange && aRef == aActiveRange;
-
-            ScInputHandler::SendReferenceMarks( pShell, aReferenceMarks );
+            ReferenceMark aMark = ScInputHandler::GetReferenceMark(
+                rViewData, *pDocSh, aRef.aStart.Col(), aRef.aEnd.Col(), aRef.aStart.Row(),
+                aRef.aEnd.Row(), aRef.aStart.Tab(), rData.nColor );
+            aMark.bActive = !bRefMark && bHasActiveRange && aRef == aActiveRange;
+            aReferenceMarks.push_back( aMark );
         }
     }
-    else if ( nCount )
-    {
-        ScInputHandler::SendReferenceMarks( pShell, aReferenceMarks );
-    }
-    else
-    {
-        // Clear
-        aReferenceMarks.clear();
-        ScInputHandler::SendReferenceMarks( pShell, aReferenceMarks );
-    }
+
+    ScInputHandler::SendReferenceMarks( pShell, aReferenceMarks );
 }
 
 void ScInputHandler::SetDocumentDisposing( bool b )
@@ -2651,9 +2679,8 @@ void ScInputHandler::RemoveAdjust()
 
 }
 
-void ScInputHandler::RemoveRangeFinder()
+void ScInputHandler::RemoveRangeFinderColors()
 {
-    // Delete pRangeFindList and colors
     mpEditEngine->SetUpdateLayout(false);
     sal_Int32 nCount = mpEditEngine->GetParagraphCount(); // Could just have been inserted
     for (sal_Int32 i=0; i<nCount; i++)
@@ -2662,8 +2689,65 @@ void ScInputHandler::RemoveRangeFinder()
 
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     pActiveView->ShowCursor( false );
+}
 
+void ScInputHandler::RemoveRangeFinder()
+{
+    // Delete pRangeFindList and colors
+    RemoveRangeFinderColors();
     DeleteRangeFinder(); // Deletes the list and the labels on the table
+}
+
+void ScInputHandler::RebuildRangeFinder()
+{
+    std::unique_ptr<ScRangeFindList> pOldList = std::move(pRangeFindList);
+    if (pOldList)
+        RemoveRangeFinderColors();
+
+    const OUString aFormula = GetEditText(mpEditEngine.get());
+    if (StartsLikeFormula(aFormula))
+        InitRangeFinder(aFormula, /*bPaint*/ false);
+
+    auto hasEntry = [](ScRangeFindList* pList, const ScRangeFindData& rData)
+    {
+        if (!pList)
+            return false;
+        ScRange aRef = rData.aRef;
+        aRef.PutInOrder();
+        for (size_t i = 0; i < pList->Count(); ++i)
+        {
+            const ScRangeFindData& rOther = pList->GetObject(i);
+            ScRange aOtherRef = rOther.aRef;
+            aOtherRef.PutInOrder();
+            if (aOtherRef == aRef && rOther.nColor == rData.nColor)
+                return true;
+        }
+        return false;
+    };
+
+    // Paint only the ranges that changed
+    const SCTAB nTab = pActiveViewSh->GetViewData().CurrentTabForData();
+    if (pOldList)
+    {
+        for (size_t i = 0; i < pOldList->Count(); ++i)
+        {
+            const ScRangeFindData& rOld = pOldList->GetObject(i);
+            if (!hasEntry(pRangeFindList.get(), rOld))
+                pActiveViewSh->PaintRangeFinderEntry(&rOld, nTab);
+        }
+    }
+    if (pRangeFindList)
+    {
+        for (size_t i = 0; i < pRangeFindList->Count(); ++i)
+        {
+            const ScRangeFindData& rNew = pRangeFindList->GetObject(i);
+            if (!hasEntry(pOldList.get(), rNew))
+                pActiveViewSh->PaintRangeFinderEntry(&rNew, nTab);
+        }
+    }
+
+    if (pOldList && !pRangeFindList)
+        UpdateKitReferenceMarks(/*bSendWhenEmpty*/ true);
 }
 
 bool ScInputHandler::StartTable(sal_Unicode cTyped, bool bFromCommand, bool bInputActivated,
@@ -2979,7 +3063,7 @@ bool ScInputHandler::DataChanging( sal_Unicode cTyped, bool bFromCommand )
         return false;
 }
 
-void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
+void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified, bool bReferencePicked )
 {
     ImplCreateEditEngine();
 
@@ -3000,11 +3084,19 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
 
     if (bSetModified)
         bModified = true;
-    bSelIsRef = false;
-    // The edited text is no longer the picked reference.
-    aSelectedReference = ScRange( ScAddress::INITIALIZE_INVALID );
+    if (!bReferencePicked)
+    {
+        bSelIsRef = false;
+        // The edited text is no longer the picked reference.
+        aSelectedReference = ScRange( ScAddress::INITIALIZE_INVALID );
+    }
 
-    if ( pRangeFindList && !bInRangeUpdate )
+    // Under the kit the range finder follows the typed text
+    const bool bRebuild = comphelper::COKit::isActive() && !bInRangeUpdate && pActiveViewSh &&
+                          !bCreatingFuncView;
+    if (bRebuild)
+        RebuildRangeFinder();
+    else if ( pRangeFindList && !bInRangeUpdate )
         RemoveRangeFinder(); // Delete attributes and labels
 
     UpdateParenthesis(); // Highlight parentheses anew
@@ -4029,6 +4121,10 @@ void ScInputHandler::SetReference( const ScRange& rRef, const ScDocument& rDoc )
     if(comphelper::COKit::isActive() && pRefViewSh->GetViewData().GetRefTabNo() != pRefViewSh->GetViewData().CurrentTabForData())
         bLOKShowSelect = false;
 
+    bSelIsRef = true;
+    // A reference into another document has no range in this one.
+    aSelectedReference = bOtherDoc ? ScRange( ScAddress::INITIALIZE_INVALID ) : rRef;
+
     if (pTableView || pTopView)
     {
         if (pTableView)
@@ -4036,12 +4132,8 @@ void ScInputHandler::SetReference( const ScRange& rRef, const ScDocument& rDoc )
         if (pTopView)
             pTopView->InsertText( aRefStr, true, bLOKShowSelect );
 
-        DataChanged();
+        DataChanged( false, true, /*bReferencePicked*/ true );
     }
-
-    bSelIsRef = true;
-    // A reference into another document has no range in this one.
-    aSelectedReference = bOtherDoc ? ScRange( ScAddress::INITIALIZE_INVALID ) : rRef;
 }
 
 void ScInputHandler::InsertFunction( const OUString& rFuncName, bool bAddPar )
