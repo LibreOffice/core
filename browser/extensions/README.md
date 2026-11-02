@@ -280,7 +280,7 @@ Files:
   `cool._()` / `cool._n()` calls in JS files.
 - `po/<lang>.po` are the translations, maintained on Weblate like `browser/po`
   (language codes as there: `de`, `pt_BR`, `zh_CN`, `ca_valencia`). Do not edit
-  them by hand.
+  them by hand; `make l10n` updates them to the regenerated template.
 - `l10n/<lang>.json` is what runs. The build makes it from the po files with
   `util/po2json.py` when it installs the extension; an integrator shipping a
   zip includes these JSON files directly. The lookup tries `pt_BR` then `pt`

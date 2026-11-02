@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.collaboraoffice.demo-wordcloud\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-04 19:00+0000\n"
+"POT-Creation-Date: 2026-11-02 11:43+0000\n"
 "PO-Revision-Date: 2026-09-04 19:00+0000\n"
 "Last-Translator: Collabora Online contributors\n"
 "Language-Team: Hungarian\n"
@@ -14,65 +14,66 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Translate Toolkit 3.18.1\n"
+
+#: index.html:36
+msgid "Generate & insert"
+msgstr "Létrehozás és beszúrás"
+
+#: index.html:33
+msgid "Insert width (cm):"
+msgstr "Beszúrási szélesség (cm):"
+
+#: index.html:30
+msgid "Maximum words:"
+msgstr "Legfeljebb ennyi szó:"
+
+#: index.html:27
+msgid "Selection"
+msgstr "Kijelölés"
+
+#: index.html:24
+msgid "Source:"
+msgstr "Forrás:"
+
+#: index.html:26
+msgid "Whole document"
+msgstr "Teljes dokumentum"
 
 #: manifest.json:name
 msgid "Word cloud"
 msgstr "Szófelhő"
 
-#: index.html
-msgid "Source:"
-msgstr "Forrás:"
-
-#: index.html
-msgid "Whole document"
-msgstr "Teljes dokumentum"
-
-#: index.html
-msgid "Selection"
-msgstr "Kijelölés"
-
-#: index.html
-msgid "Maximum words:"
-msgstr "Legfeljebb ennyi szó:"
-
-#: index.html
-msgid "Insert width (cm):"
-msgstr "Beszúrási szélesség (cm):"
-
-#: index.html
-msgid "Generate & insert"
-msgstr "Létrehozás és beszúrás"
-
-#: index.html
-msgid "no cloud yet"
-msgstr "még nincs szófelhő"
-
-#: index.html
-msgid "gathering text..."
-msgstr "szöveg összegyűjtése…"
-
-#: index.html
-msgid "no text selected"
-msgstr "nincs kijelölt szöveg"
-
-#: index.html
+#: index.html:173
 msgid "document is empty"
 msgstr "a dokumentum üres"
 
-#: index.html
-msgid "no words left after filtering"
-msgstr "a szűrés után nem maradt szó"
+#: index.html:161
+msgid "gathering text..."
+msgstr "szöveg összegyűjtése…"
 
-#: index.html
-msgid "nothing fit on the canvas"
-msgstr "semmi nem fért el a vászonra"
-
-#: index.html
-msgid "inserting %1 / %2 words..."
-msgstr "%1 / %2 szó beszúrása…"
-
-#: index.html
+#: index.html:225
 msgid "inserted %1 word"
 msgid_plural "inserted %1 words"
 msgstr[0] "%1 szó beszúrva"
 msgstr[1] "%1 szó beszúrva"
+
+#: index.html:193
+msgid "inserting %1 / %2 words..."
+msgstr "%1 / %2 szó beszúrása…"
+
+#: index.html:38
+msgid "no cloud yet"
+msgstr "még nincs szófelhő"
+
+#: index.html:172
+msgid "no text selected"
+msgstr "nincs kijelölt szöveg"
+
+#: index.html:180
+msgid "no words left after filtering"
+msgstr "a szűrés után nem maradt szó"
+
+#: index.html:187
+msgid "nothing fit on the canvas"
+msgstr "semmi nem fért el a vászonra"

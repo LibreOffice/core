@@ -1942,6 +1942,7 @@ l10n: pot
 	for i in po/ui-*.po; do pot2po --input=po/templates/cool-ui.pot --template=$$i --output=$$i.new; mv $$i.new $$i;done
 	for i in po/help-*.po; do pot2po --input=po/templates/cool-help.pot --template=$$i --output=$$i.new; mv $$i.new $$i;done
 	for i in po/descriptions-*.po; do pot2po --input=po/templates/descriptions.pot --template=$$i --output=$$i.new; mv $$i.new $$i;done
+	for pot in extensions/*/po/*.pot; do for i in $${pot%/*}/*.po; do test -f "$$i" || continue; pot2po --input=$$pot --template=$$i --output=$$i.new; mv $$i.new $$i; done; done
 
 clean-local:
 	@rm -rf $(DIST_FOLDER)

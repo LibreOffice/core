@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.collaboraoffice.librelogo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-05 18:08+0000\n"
+"POT-Creation-Date: 2026-11-02 11:43+0000\n"
 "PO-Revision-Date: 2026-09-04 20:00+0000\n"
 "Last-Translator: Collabora Online contributors\n"
 "Language-Team: Hungarian\n"
@@ -14,16 +14,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Translate Toolkit 3.18.1\n"
 
-#: panel.js:444
+#: panel.js:443
 msgid "%1 has no embedded LibreLogo program."
 msgstr "A(z) %1 nem tartalmaz beágyazott LibreLogo-programot."
 
-#: panel.js:439
+#: panel.js:438
 msgid "%1 is not a valid SVG file."
 msgstr "A(z) %1 nem érvényes SVG-fájl."
 
-#: panel.js:414
+#: panel.js:413
 msgid "Animation"
 msgstr "Animáció"
 
@@ -31,11 +32,11 @@ msgstr "Animáció"
 msgid "Back"
 msgstr "Hátra"
 
-#: panel.js:415
+#: panel.js:414
 msgid "Beaver"
 msgstr "Hód"
 
-#: index.html:67
+#: index.html:66
 msgid "Cancel"
 msgstr "Mégse"
 
@@ -47,47 +48,47 @@ msgstr "Rajzlap"
 msgid "Clear Screen"
 msgstr "Rajz törlése"
 
-#: index.html:39
+#: index.html:38
 msgid "Command line"
 msgstr "Parancssor"
 
-#: index.html:47
+#: index.html:46
 msgid "Copy the document text (or the selection) into the editor"
 msgstr "A dokumentum szövegének (vagy a kijelölésnek) másolása a szerkesztőbe"
 
-#: panel.js:376
+#: panel.js:375
 msgid "Could not insert the drawing: %1"
 msgstr "A rajz beszúrása nem sikerült: %1"
 
-#: panel.js:451
+#: panel.js:450
 msgid "Could not read %1: %2"
 msgstr "A(z) %1 nem olvasható: %2"
 
-#: panel.js:390
+#: panel.js:389
 msgid "Could not save %1: %2"
 msgstr "%1 mentése nem sikerült: %2"
 
-#: panel.js:481
+#: panel.js:485
 msgid "Could not start LibreLogo: %1"
 msgstr "A LibreLogo indítása nem sikerült: %1"
 
-#: panel.js:387
+#: panel.js:386
 msgid "Downloaded %1"
 msgstr "Letöltve: %1"
 
-#: panel.js:186
+#: panel.js:188
 msgid "Drawing removed from the document."
 msgstr "A rajz eltávolítva a dokumentumból."
 
-#: index.html:59
+#: index.html:58
 msgid "Empty: the Writer document (or the selected text) is the program."
 msgstr "Üresen a Writer-dokumentum (vagy a kijelölt szöveg) a program."
 
-#: index.html:54
+#: index.html:53
 msgid "Examples"
 msgstr "Példák"
 
-#: index.html:41
+#: index.html:40
 msgid "Execute the command line (Enter)"
 msgstr "A parancssor végrehajtása (Enter)"
 
@@ -95,11 +96,11 @@ msgstr "A parancssor végrehajtása (Enter)"
 msgid "Forward"
 msgstr "Előre"
 
-#: index.html:49
+#: index.html:48
 msgid "From SVG"
 msgstr "SVG-ből"
 
-#: index.html:47
+#: index.html:46
 msgid "From document"
 msgstr "Dokumentumból"
 
@@ -107,11 +108,11 @@ msgstr "Dokumentumból"
 msgid "Home"
 msgstr "Kezdőpont"
 
-#: index.html:73
+#: index.html:72
 msgid "Insert the drawing into the document after each run"
 msgstr "A rajz beszúrása a dokumentumba minden futtatás után"
 
-#: panel.js:115
+#: panel.js:117
 msgid "Internal error: %1"
 msgstr "Belső hiba: %1"
 
@@ -123,19 +124,19 @@ msgstr "Balra"
 msgid "LibreLogo"
 msgstr "LibreLogo"
 
-#: index.html:56
+#: index.html:55
 msgid "Load an example…"
 msgstr "Példa betöltése…"
 
-#: panel.js:459
+#: panel.js:458
 msgid "Loaded the document text."
 msgstr "A dokumentum szövege betöltve."
 
-#: panel.js:449
+#: panel.js:448
 msgid "Loaded the program from %1."
 msgstr "A program betöltve innen: %1."
 
-#: panel.js:459
+#: panel.js:458
 msgid "Loaded the selected text."
 msgstr "A kijelölt szöveg betöltve."
 
@@ -143,39 +144,39 @@ msgstr "A kijelölt szöveg betöltve."
 msgid "Logo"
 msgstr "Logo"
 
-#: index.html:35
+#: index.html:34
 msgid "Logo language: commands are read in this language and in English"
 msgstr "Logo nyelv: a parancsok ezen a nyelven és angolul is érthetők"
 
-#: panel.js:186
+#: panel.js:188
 msgid "No LibreLogo drawing in the document."
 msgstr "Nincs LibreLogo rajz a dokumentumban."
 
-#: index.html:66
+#: index.html:65
 msgid "OK"
 msgstr "OK"
 
-#: index.html:72
+#: index.html:71
 msgid "Options"
 msgstr "Beállítások"
 
-#: index.html:74
+#: index.html:73
 msgid "Place it"
 msgstr "Elhelyezés"
 
-#: ui.json:notebookbar.group.logoProgram index.html:45
+#: ui.json:notebookbar.group.logoProgram index.html:44
 msgid "Program"
 msgstr "Program"
 
-#: panel.js:473
+#: panel.js:477
 msgid "Program written to the document."
 msgstr "A program beírva a dokumentumba."
 
-#: index.html:49
+#: index.html:48
 msgid "Recover the program embedded in an exported .svg file"
 msgstr "Az exportált .svg fájlba ágyazott program visszaállítása"
 
-#: index.html:81
+#: index.html:80
 msgid "Remove the drawing from the document"
 msgstr "A rajz eltávolítása a dokumentumból"
 
@@ -183,11 +184,11 @@ msgstr "A rajz eltávolítása a dokumentumból"
 msgid "Right"
 msgstr "Jobbra"
 
-#: panel.js:412
+#: panel.js:411
 msgid "Rosette"
 msgstr "Rozetta"
 
-#: index.html:21
+#: index.html:20
 msgid "Run"
 msgstr "Futtatás"
 
@@ -195,53 +196,56 @@ msgstr "Futtatás"
 msgid "Run Logo Program"
 msgstr "Logo program futtatása"
 
-#: index.html:21
+#: index.html:20
 msgid "Run the Logo program (Ctrl+Enter)"
 msgstr "A Logo program futtatása (Ctrl+Enter)"
 
-#: panel.js:253
+#: panel.js:255
 msgid "Running the document text."
 msgstr "A dokumentum szövegének futtatása."
 
-#: panel.js:253
+#: panel.js:255
 msgid "Running the selected text."
 msgstr "A kijelölt szöveg futtatása."
 
-#: panel.js:388
+#: panel.js:387
 msgid "Saved %1"
 msgstr "Mentve: %1"
 
-#: index.html:80
+#: index.html:79
 msgid "Show the turtle in the inserted drawing"
 msgstr "A teknőc megjelenítése a beszúrt rajzon"
 
-#: panel.js:411
+#: panel.js:410
 msgid "Square spiral"
 msgstr "Négyzetes spirál"
 
-#: panel.js:410
+#: panel.js:409
 msgid "Star"
 msgstr "Csillag"
 
-#: ui.json:commands.stop index.html:22
+#: ui.json:commands.stop index.html:21
 msgid "Stop"
 msgstr "Leállítás"
 
-#: index.html:22
+#: index.html:21
 msgid "Stop the program"
 msgstr "A program leállítása"
 
-#: panel.js:250
+#: panel.js:252
 msgid ""
 "The document is empty. Type a program in the editor or in the document."
-msgstr ""
-"A dokumentum üres. Írjon programot a szerkesztőbe vagy a dokumentumba."
+msgstr "A dokumentum üres. Írjon programot a szerkesztőbe vagy a dokumentumba."
 
-#: index.html:48
+#: panel.js:467
+msgid "The editor is empty, so there is no program to write to the document."
+msgstr ""
+
+#: index.html:47
 msgid "To document"
 msgstr "Dokumentumba"
 
-#: panel.js:413
+#: panel.js:412
 msgid "Tree"
 msgstr "Fa"
 
@@ -249,22 +253,27 @@ msgstr "Fa"
 msgid "Turtle"
 msgstr "Teknőc"
 
-#: index.html:34
+#: index.html:33
 msgid "Turtle canvas"
 msgstr "Teknőc rajzlap"
 
-#: panel.js:88
+#: panel.js:90
 msgid "Using A4 page size: %1"
 msgstr "A4 oldalméret használata: %1"
 
-#: index.html:48
-msgid "Write the editor's program to the end of the document"
-msgstr "A szerkesztő programjának beírása a dokumentum végére"
+#: index.html:47
+msgid ""
+"Write the editor's program into the document, over the selection or at the "
+"cursor"
+msgstr ""
 
-#: index.html:77
+#: index.html:76
 msgid "at the cursor, as an inline image"
 msgstr "a kurzornál, beágyazott képként"
 
-#: index.html:76
+#: index.html:75
 msgid "on the page where the turtle drew"
 msgstr "az oldalon, ahol a teknőc rajzolt"
+
+#~ msgid "Write the editor's program to the end of the document"
+#~ msgstr "A szerkesztő programjának beírása a dokumentum végére"
