@@ -82,6 +82,12 @@ xmlSecKeyPtr CreateKeyFromCertificate(cpo::uno::Reference<css::security::XCertif
     assert(pCertificate);
     // xmlsec will take ownership of "signKey"
     pCertificate = CERT_DupCertificate(const_cast<CERTCertificate *>(pCertificate));
+    // NSS keeps the reference count of a certificate in its NSSCertificate, so a certificate that
+    // still has none after CERT_DupCertificate has no reference of its own to hand to xmlsec:
+    if (!pCertificate->nssCertificate)
+    {
+        return nullptr;
+    }
 
     xmlSecKeyDataPtr const pValue{xmlSecNssX509CertGetKey(const_cast<CERTCertificate *>(pCertificate))};
     xmlSecKeyPtr const pKey{pValue ? xmlSecKeyCreate() : nullptr};
