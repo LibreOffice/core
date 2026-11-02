@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Impress-Intro-Template.odp\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-10-24 04:08+0000\n"
+"PO-Revision-Date: 2026-10-31 09:17+0000\n"
 "Last-Translator: Michal Várady <majkl82@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/collabora-online/"
 "desktop-apps/impress-intro-template/cs/>\n"
@@ -95,7 +95,7 @@ msgstr "<1>➜</1><2>Vyzkoušejte si:</2>"
 
 #. content.xml (slide 'page2')
 msgid "Add a new slide clicking “New” in Notebook bar."
-msgstr "Přidejte nový snímek klepnutím na „Nový“ na liště karet."
+msgstr "Přidejte nový snímek kliknutím na „Nový“ na liště karet."
 
 #. content.xml (slide 'page2')
 msgid "Choose a layout for it from the layout chooser."
@@ -147,11 +147,11 @@ msgstr "Na liště karet otevřete kartu Zobrazit."
 
 #. content.xml (slide 'page3')
 msgid "Click “Master View” and edit your master design."
-msgstr "Klepněte na „Zobrazení předlohy“ a upravte vzhled předlohy."
+msgstr "Klikněte na „Zobrazení předlohy“ a upravte vzhled předlohy."
 
 #. content.xml (slide 'page3')
 msgid "Once your master design is ready, click \"Close Master View\"."
-msgstr "Až bude vzhled předlohy hotový, klepněte na „Zavřít předlohu“."
+msgstr "Až bude vzhled předlohy hotový, klikněte na „Zavřít předlohu“."
 
 #. content.xml (slide 'page3')
 msgid "Now your master is set and ready to use across all slides."
@@ -195,7 +195,7 @@ msgstr ""
 msgid ""
 "Click on it to select it, then resize and reposition it to fit your layout."
 msgstr ""
-"Klepnutím jej vyberte a pak změňte jeho velikost a polohu tak, aby zapadl do "
+"Kliknutím jej vyberte a pak změňte jeho velikost a polohu tak, aby zapadl do "
 "rozvržení."
 
 #. content.xml (slide 'page4')
@@ -231,7 +231,7 @@ msgstr ""
 
 #. content.xml (slide 'page5')
 msgid "Click Transition tab in Notebook bar."
-msgstr "Na liště karet klepněte na kartu Přechod."
+msgstr "Na liště karet klikněte na kartu Přechod."
 
 #. content.xml (slide 'page5')
 msgid "Pick a transition style you would like to use."
@@ -248,7 +248,7 @@ msgstr ""
 #. content.xml (slide 'page5')
 msgid "Click \"Apply to All Slides\" to use the same transition across your deck."
 msgstr ""
-"Klepnutím na „Použít na všechny obrazovky“ použijete stejný přechod v celé "
+"Kliknutím na „Použít na všechny obrazovky“ použijete stejný přechod v celé "
 "prezentaci."
 
 #. content.xml (slide 'page5')
@@ -317,7 +317,7 @@ msgid ""
 "to share your document with your colleagues.</3>"
 msgstr ""
 "<1>Spolupracujte v reálném čase. Stejnou prezentaci může současně upravovat "
-"více lidí. Klepněte na </1><2>tlačítko Sdílet</2><3> vpravo nahoře a "
+"více lidí. Klikněte na </1><2>tlačítko Sdílet</2><3> vpravo nahoře a "
 "sdílejte dokument s kolegy.</3>"
 
 #. content.xml (slide 'page7')

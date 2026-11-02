@@ -12,11 +12,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-30 13:34+0100\n"
-"PO-Revision-Date: 2026-10-28 21:13+0000\n"
+"PO-Revision-Date: 2026-11-01 07:06+0000\n"
 "Last-Translator: Michal Várady <majkl82@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/cs/>\n"
-"Language: \n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1576,6 +1576,8 @@ msgid ""
 "This file is a spelling dictionary, not a wordbook. Upload a list of words "
 "with one word per line."
 msgstr ""
+"Tento soubor je pravopisný slovník, nikoli uživatelský slovník. Nahrajte "
+"seznam slov s jedním slovem na řádku."
 
 #: admin/src/integrator/WordBook.ts:471
 msgid "Invalid dictionary format. Please check the file."
@@ -1820,32 +1822,34 @@ msgstr "Duplikovat styl"
 #: src/app/Util.ts:319
 msgid "%n year"
 msgid_plural "%n years"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%n rok"
+msgstr[1] "%n roky"
+msgstr[2] "%n roku"
+msgstr[3] "%n let"
 
 #: src/app/Util.ts:321
 msgid "%n day"
 msgid_plural "%n days"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%n den"
+msgstr[1] "%n dny"
+msgstr[2] "%n dne"
+msgstr[3] "%n dní"
 
 #: src/app/Util.ts:322
 msgid "%n hour"
 msgid_plural "%n hours"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%n hodinu"
+msgstr[1] "%n hodiny"
+msgstr[2] "%n hodiny"
+msgstr[3] "%n hodin"
 
 #: src/app/Util.ts:325
-#, fuzzy
 msgid "%n minute"
 msgid_plural "%n minutes"
-msgstr[0] "1 minutu"
+msgstr[0] "%n minutu"
+msgstr[1] "%n minuty"
+msgstr[2] "%n minuty"
+msgstr[3] "%n minut"
 
 #: src/app/Util.ts:339
 msgid "less than a minute"
@@ -3074,7 +3078,7 @@ msgid ""
 "link: [A1](cell://A1)."
 msgstr ""
 "Při odkazování na konkrétní buňky formátujte každou adresu buňky jako odkaz, "
-"na který lze klepnout: [A1](cell://A1)."
+"na který lze kliknout: [A1](cell://A1)."
 
 #: src/control/Control.AIChatSidebar.ts:3942
 msgid "only the cells with errors"
@@ -3202,7 +3206,7 @@ msgid ""
 "(cell://B2)."
 msgstr ""
 "Při odkazování na konkrétní buňky formátujte každou buňku jako odkaz, na "
-"který lze klepnout: [B2](cell://B2)."
+"který lze kliknout: [B2](cell://B2)."
 
 #: src/control/Control.AIChatSidebar.ts:4209
 msgid "Sanity check the following spreadsheet data."
@@ -5614,7 +5618,7 @@ msgstr "Schránka"
 #: src/control/Control.NotebookbarWriter.js:744
 #: src/control/Control.TopToolbar.js:190
 msgid "Clone Formatting (double click to keep active)"
-msgstr "Štěteček formátu (dvojitým klepnutím zůstane aktivní)"
+msgstr "Štěteček formátu (dvojitým kliknutím zůstane aktivní)"
 
 #: src/control/Control.NotebookbarCalc.js:508
 msgid ""
@@ -5622,7 +5626,7 @@ msgid ""
 "press Esc to exit)"
 msgstr ""
 "Štěteček formátu je aktivní (použijete ho stisknutím klávesy Enter v buňce; "
-"ukončíte ho dalším klepnutím nebo klávesou Esc)"
+"ukončíte ho dalším kliknutím nebo klávesou Esc)"
 
 #: src/control/Control.NotebookbarCalc.js:544
 #: src/control/Control.NotebookbarDraw.js:720
@@ -6002,7 +6006,7 @@ msgstr "Pravítka"
 #: src/control/Control.TopToolbar.js:190
 msgid "Clone Formatting is active (click again or press Esc to exit)"
 msgstr ""
-"Štěteček formátu je aktivní (ukončíte ho dalším klepnutím nebo klávesou Esc)"
+"Štěteček formátu je aktivní (ukončíte ho dalším kliknutím nebo klávesou Esc)"
 
 #: src/control/Control.NotebookbarDraw.js:948
 #: src/control/Control.NotebookbarImpress.js:1118
@@ -6338,19 +6342,19 @@ msgstr "Snímek %1, propojený s %2"
 
 #: src/control/Control.PartsPreview.js:1241
 msgid "Linked to a section of %1 that is missing"
-msgstr ""
+msgstr "Propojeno se sekcí s chybějícím zdrojem: %1"
 
 #: src/control/Control.PartsPreview.js:1243
 msgid "Linked to a section of %1 that has changed"
-msgstr ""
+msgstr "Propojeno se sekcí ze změněného zdroje: %1"
 
 #: src/control/Control.PartsPreview.js:1245
 msgid "Linked to a section of %1, disconnected"
-msgstr ""
+msgstr "Propojeno se sekcí ze zdroje %1, připojení přerušeno"
 
 #: src/control/Control.PartsPreview.js:1246
 msgid "Linked to a section of %1"
-msgstr ""
+msgstr "Propojeno se sekcí ze zdroje %1"
 
 #: src/control/Control.PartsPreview.js:1390
 #: src/control/Control.PartsPreview.js:1557
@@ -6375,15 +6379,15 @@ msgstr "Posunout sekci dolů"
 
 #: src/control/Control.PartsPreview.js:1434
 msgid "Update Section"
-msgstr ""
+msgstr "Aktualizovat sekci"
 
 #: src/control/Control.PartsPreview.js:1442
 msgid "Unlink Section"
-msgstr ""
+msgstr "Zrušit propojení sekce"
 
 #: src/control/Control.PartsPreview.js:1449
 msgid "Unlink Section & Slides"
-msgstr ""
+msgstr "Zrušit propojení sekce a snímků"
 
 #: src/control/Control.PartsPreview.js:1458
 msgid "Collapse All Sections"
@@ -6518,7 +6522,7 @@ msgstr "Vložit snímky"
 
 #: src/control/Control.SlideImportPane.tsx:904
 msgid "Insert section \"{0}\""
-msgstr ""
+msgstr "Vložit sekci „{0}“"
 
 #: src/control/Control.SlideImportPane.tsx:912
 msgid "Insert {0} from {1}"
@@ -6534,19 +6538,21 @@ msgstr "Vložit snímky (celkem: {0})"
 
 #: src/control/Control.SlideImportPane.tsx:972
 msgid "How the section goes in"
-msgstr ""
+msgstr "Způsob vložení sekce"
 
 #: src/control/Control.SlideImportPane.tsx:977
 msgid "Insert as section \"{0}\""
-msgstr ""
+msgstr "Vložit jako sekci „{0}“"
 
 #: src/control/Control.SlideImportPane.tsx:983
 msgid "Insert as separate slides"
-msgstr ""
+msgstr "Vložit jako samostatné snímky"
 
 #: src/control/Control.SlideImportPane.tsx:989
 msgid "Linked to its section in {0}. Update Links brings in later changes."
 msgstr ""
+"Propojeno se zdrojovou sekcí v dokumentu {0}. Pozdější změny načtete "
+"příkazem Aktualizovat odkazy."
 
 #: src/control/Control.SlideImportPane.tsx:1038
 msgid "{0} of {1}"
@@ -6688,7 +6694,7 @@ msgstr "Propojeno s {0} v {1}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:120
 msgid "In a section linked to {0}"
-msgstr ""
+msgstr "V sekci propojené s dokumentem {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:145
 msgid "Hide the actions for this linked slide"
@@ -6705,7 +6711,7 @@ msgstr "Zrušit propojení"
 #: src/control/Control.SlideLinkToolbar.tsx:176
 #: src/slideimport/SlideLinks.ts:467
 msgid "Update section"
-msgstr ""
+msgstr "Aktualizovat sekci"
 
 #: src/control/Control.SlideLinkToolbar.tsx:190
 msgid "Not available"
@@ -6734,24 +6740,30 @@ msgstr "Žádný snímek této prezentace není propojen s jiným souborem."
 
 #: src/slideimport/SlideLinks.ts:425
 msgid "The section cannot be updated, because its source is not available."
-msgstr ""
+msgstr "Sekci nelze aktualizovat, protože její zdroj není dostupný."
 
 #: src/slideimport/SlideLinks.ts:447
 msgid ""
 "One linked section cannot be updated, because its source is not available."
 msgstr ""
+"Jednu propojenou sekci nelze aktualizovat, protože její zdroj není dostupný."
 
 #: src/slideimport/SlideLinks.ts:450
 msgid ""
 "{0} linked sections cannot be updated, because their sources are not "
 "available."
 msgstr ""
+"Propojené sekce (počet: {0}) nelze aktualizovat, protože jejich zdroje "
+"nejsou dostupné."
 
 #: src/slideimport/SlideLinks.ts:459
 msgid ""
 "The section will hold the slides that its section in {0} holds now. Changes "
 "made to these slides in this presentation will be lost."
 msgstr ""
+"Sekce bude obsahovat snímky, které nyní obsahuje její zdrojová sekce v "
+"dokumentu {0}. Změny provedené v těchto snímcích v této prezentaci budou "
+"ztraceny."
 
 #: src/slideimport/SlideLinks.ts:462
 msgid ""
@@ -6759,10 +6771,13 @@ msgid ""
 "files hold now. Changes made to these slides in this presentation will be "
 "lost."
 msgstr ""
+"Propojené sekce (počet: {0}) budou obsahovat snímky, které nyní obsahují "
+"jejich sekce ve zdrojových souborech. Změny provedené v těchto snímcích v "
+"této prezentaci budou ztraceny."
 
 #: src/slideimport/SlideLinks.ts:467
 msgid "Update sections"
-msgstr ""
+msgstr "Aktualizovat sekce"
 
 #: src/slideimport/SlideLinks.ts:534
 msgid "This slide is not linked to another file."
@@ -6783,7 +6798,7 @@ msgstr "Dokument {0} se nepodařilo načíst."
 
 #: src/slideimport/SlideLinks.ts:742
 msgid "You do not have access to {0}, so the section cannot be updated."
-msgstr ""
+msgstr "Nemáte přístup k dokumentu {0}, proto sekci nelze aktualizovat."
 
 #: src/slideimport/SlideLinks.ts:745
 msgid "You do not have access to {0}, so its pages cannot be refreshed."
@@ -6801,11 +6816,12 @@ msgstr "Snímky z dokumentu {0} se nepodařilo načíst do této prezentace."
 
 #: src/slideimport/SlideLinks.ts:919
 msgid "The section was updated from {0}."
-msgstr ""
+msgstr "Sekce byla aktualizována z dokumentu {0}."
 
 #: src/slideimport/SlideLinks.ts:1059
 msgid "Cannot update the section: {0} no longer holds its source section."
 msgstr ""
+"Sekci nelze aktualizovat: dokument {0} již neobsahuje její zdrojovou sekci."
 
 #: src/slideimport/SlideLinks.ts:1085
 msgid "Cannot update slide {0}: the source lacks matching slide"
@@ -6816,14 +6832,12 @@ msgid "Unlinking the slide failed."
 msgstr "Propojení snímku se nepodařilo zrušit."
 
 #: src/slideimport/SlideLinks.ts:1105
-#, fuzzy
 msgid "Unlinking the section failed."
-msgstr "Propojení snímku se nepodařilo zrušit."
+msgstr "Propojení sekce se nepodařilo zrušit."
 
 #: src/slideimport/SlideLinks.ts:1122
-#, fuzzy
 msgid "Updating the section from {0} failed."
-msgstr "Aktualizace snímků z dokumentu {0} se nezdařila."
+msgstr "Aktualizace sekce z dokumentu {0} se nezdařila."
 
 #: src/slideimport/SlideLinks.ts:1123 src/slideimport/SlideLinks.ts:1182
 msgid "Updating the slides of {0} failed."
@@ -7432,8 +7446,8 @@ msgstr "Před"
 #: src/control/HRuler.ts:404
 msgid "Double-click to insert a tab stop. Right-click for more options."
 msgstr ""
-"Dvojitým klepnutím vložíte zarážku tabulátoru. Další možnosti zobrazíte "
-"klepnutím pravým tlačítkem."
+"Dvojitým kliknutím vložíte zarážku tabulátoru. Další možnosti zobrazíte "
+"kliknutím pravým tlačítkem."
 
 #: src/control/HRuler.ts:788 src/control/HRuler.ts:953
 msgid "Left Margin"
@@ -9272,7 +9286,7 @@ msgstr "Režim prezentace byl pro tento dokument zakázán"
 #: src/map/handler/Map.StateChanges.js:204
 msgid "Editing slide %1 - click outside or press Esc to finish"
 msgstr ""
-"Úpravy snímku %1 – dokončete je klepnutím mimo snímek nebo stisknutím Esc"
+"Úpravy snímku %1 – dokončete je kliknutím mimo snímek nebo stisknutím Esc"
 
 #: src/map/handler/Map.VersionBar.js:50
 msgid "Your Collabora Online server needs updating. Version {0} is available."
