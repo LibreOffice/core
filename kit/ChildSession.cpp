@@ -6955,7 +6955,7 @@ std::string ChildSession::getZoomPercent(const std::string &payload)
         return std::string();
 
     size_t i = eq + 1;
-    while (i < payload.size() && std::isdigit(payload[i]))
+    while (i < payload.size() && std::isdigit(static_cast<unsigned char>(payload[i])))
         ++i;
 
     return payload.substr(eq + 1, i - (eq + 1));
