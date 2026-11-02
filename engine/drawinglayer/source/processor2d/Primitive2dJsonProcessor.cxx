@@ -1121,10 +1121,9 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
                 {
                     // A line and a strikeout travel as the strokes and the text they draw. The
                     // strikeout with a character is text, which names an automatic color itself.
-                    const sal_uInt32 nId = rDecoration->getPrimitive2DID();
                     bool bInTextColor = false;
                     bool bDecompose = false;
-                    switch (nId)
+                    switch (rDecoration->getPrimitive2DID())
                     {
                         case PRIMITIVE2D_ID_TEXTLINEPRIMITIVE2D:
                             bInTextColor = static_cast<const TextLinePrimitive2D&>(*rDecoration)
