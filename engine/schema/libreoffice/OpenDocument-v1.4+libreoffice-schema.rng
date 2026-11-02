@@ -3043,6 +3043,15 @@ xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
     </rng:optional>
   </rng:define>
 
+    <!-- TODO no proposal for the number format of a pivot field's results -->
+  <rng:define name="table-data-pilot-field-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="coext:data-style-name">
+        <rng:ref name="styleNameRef"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
     <!-- TODO no proposal -->
   <rng:define name="table-data-pilot-table-attlist" combine="interleave">
     <rng:optional>

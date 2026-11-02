@@ -69,6 +69,8 @@
 #include <datatransformation.hxx>
 #include "SparklineGroupsExport.hxx"
 #include <SparklineList.hxx>
+#include <dpobject.hxx>
+#include <dpsave.hxx>
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
@@ -2650,6 +2652,27 @@ void ScXMLExport::collectAutoStyles()
     if (getExportFlags() & SvXMLExportFlags::MASTERSTYLES)
         // tdf#154445 - export all page styles even if they are not in use
         GetPageExport()->collectAutoStyles(false);
+
+    // A pivot field may hold a format for the results it shows. The field is written further
+    // down the document than the formats are, so the format is named here while they are
+    // still being gathered.
+    if (ScDocument* pDoc = GetDocument())
+    {
+        if (const ScDPCollection* pDPs = pDoc->GetDPCollection())
+        {
+            for (size_t nDP = 0; nDP < pDPs->GetCount(); ++nDP)
+            {
+                const ScDPSaveData* pSaveData = (*pDPs)[nDP].GetSaveData();
+                if (!pSaveData)
+                    continue;
+                for (const auto& rxDim : pSaveData->GetDimensions())
+                {
+                    if (rxDim->GetNumberFormat())
+                        addDataStyle(*rxDim->GetNumberFormat());
+                }
+            }
+        }
+    }
 
     mbAutoStylesCollected = true;
 }

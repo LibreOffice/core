@@ -33,6 +33,8 @@
 #include <generalfunction.hxx>
 
 #include "pivotsource.hxx"
+#include "xmlstyli.hxx"
+#include <xmloff/xmlnumfi.hxx>
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
@@ -856,6 +858,7 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
     bool bDataLayout = false;
     bool bIgnoreSelectedPage = false;
     OUString aDisplayName;
+    OUString aDataStyleName;
     if ( rAttrList.is() )
     {
         for (auto &aIter : *rAttrList)
@@ -892,6 +895,9 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
                 case XML_ELEMENT( CALC_EXT, XML_FORMULA ):
                     maCalcFieldFormula = aIter.toString();
                 break;
+                case XML_ELEMENT( CO_EXT, XML_DATA_STYLE_NAME ):
+                    aDataStyleName = aIter.toString();
+                break;
             }
         }
     }
@@ -905,6 +911,26 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
         xDim.reset(new ScDPSaveDimension(sName, bDataLayout));
         if (!aDisplayName.isEmpty())
             xDim->SetLayoutName(aDisplayName);
+
+        // The format the document gives the results of this field, named the way a cell names
+        // the format it is shown in.
+        if (!aDataStyleName.isEmpty())
+        {
+            // A format of the document sits with the automatic styles, one of a template with
+            // the styles, so both are asked for the name.
+            const SvXMLNumFormatContext* pStyle = nullptr;
+            for (SvXMLStylesContext* pStyles :
+                 { GetScImport().GetAutoStyles(), GetScImport().GetStyles() })
+            {
+                if (!pStyles || pStyle)
+                    continue;
+                pStyle = static_cast<const SvXMLNumFormatContext*>(
+                    pStyles->FindStyleChildContext(XmlStyleFamily::DATA_STYLE, aDataStyleName,
+                                                   true));
+            }
+            if (pStyle)
+                xDim->SetNumberFormat(const_cast<SvXMLNumFormatContext*>(pStyle)->GetKey());
+        }
     }
 }
 

@@ -697,6 +697,16 @@ void ScXMLExportDataPilot::WriteDimension(const ScDPSaveDimension* pDim,
     sValueStr = ScXMLConverter::GetStringFromFunction( static_cast<sal_Int16>(pDim->GetFunction()) );
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FUNCTION, sValueStr);
 
+    // The format the document gives the results of this field, named the way a cell names the
+    // format it is shown in. The format itself is written with the other formats of the document.
+    if (pDim->GetNumberFormat()
+        && (rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED))
+    {
+        const OUString aStyleName = rExport.getDataStyleName(*pDim->GetNumberFormat());
+        if (!aStyleName.isEmpty())
+            rExport.AddAttribute(XML_NAMESPACE_CO_EXT, XML_DATA_STYLE_NAME, aStyleName);
+    }
+
     if (eOrientation == sheet::DataPilotFieldOrientation_PAGE)
     {
         if (rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)

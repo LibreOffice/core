@@ -1188,6 +1188,19 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableDataFieldKeepsItsNum
 
     // The one cell the document gives a format of its own keeps the one it gives.
     CPPUNIT_ASSERT_EQUAL(u"1"_ustr, pDoc->GetString(ScAddress(1, 4, 0)));
+
+    // The format survives a save to ODF and a load of what was saved.
+    saveAndReload(TestFilter::ODS);
+    pDoc = getScDoc();
+    ScDPCollection* pReloaded = pDoc->GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pReloaded->GetCount());
+    ScDPSaveData* pReloadedSave = (*pReloaded)[0].GetSaveData();
+    CPPUNIT_ASSERT(pReloadedSave);
+    ScDPSaveDimension* pReloadedDim = pReloadedSave->GetExistingDimensionByName(u"Price");
+    CPPUNIT_ASSERT(pReloadedDim);
+    CPPUNIT_ASSERT(pReloadedDim->GetNumberFormat().has_value());
+    CPPUNIT_ASSERT_EQUAL(u" less"_ustr, pDoc->GetString(ScAddress(2, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(u" much"_ustr, pDoc->GetString(ScAddress(3, 4, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableMedianODS)
