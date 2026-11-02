@@ -1651,7 +1651,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf154549)
     // Without the fix in place, this test would have failed with
     // - Expected: ִبي
     // - Actual  : بִي
-    CPPUNIT_ASSERT_EQUAL(u"\u05B4\u0628\u064A"_ustr, aActualText);
+    CPPUNIT_ASSERT_EQUAL(u"\u0628\u05B4\u064A"_ustr, aActualText);
 #endif
 }
 

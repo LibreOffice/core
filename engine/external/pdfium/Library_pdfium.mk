@@ -33,9 +33,10 @@ $(eval $(call gb_Library_set_include,pdfium,\
     -I$(gb_UnpackedTarball_workdir)/pdfium \
     -I$(gb_UnpackedTarball_workdir)/pdfium/third_party \
     -I$(gb_UnpackedTarball_workdir)/pdfium/third_party/agg23 \
+    -I$(gb_UnpackedTarball_workdir)/pdfium/third_party/highway/src \
     $(if $(filter TRUE,$(SYSTEM_ABSEIL)),$(ABSEIL_CFLAGS),-I$(gb_UnpackedTarball_workdir)/pdfium/third_party/abseil-cpp) \
     $(if $(filter TRUE,$(SYSTEM_FAST_FLOAT)),$(FAST_FLOAT_CFLAGS),-I$(gb_UnpackedTarball_workdir)/pdfium/third_party/fast_float) \
-    $(if $(filter TRUE,$(SYSTEM_OPENJPEG2)),$(OPENJPEG2_CFLAGS)) \
+    $(if $(filter TRUE,$(SYSTEM_OPENJPEG2)),$(OPENJPEG2_CFLAGS),-I$(gb_UnpackedTarball_workdir)/pdfium/third_party/libopenjpeg) \
     $$(INCLUDE) \
 ))
 
@@ -50,6 +51,7 @@ $(eval $(call gb_Library_add_defs,pdfium,\
     -DWIN32_LEAN_AND_MEAN \
     -DCOMPONENT_BUILD \
     -DPDF_USE_AGG \
+    -DPDF_ENABLE_FREETYPE \
 ))
 ifeq ($(SYSTEM_OPENJPEG2),TRUE)
 $(eval $(call gb_Library_add_defs,pdfium,\
@@ -110,6 +112,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_interactiveform \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_renderpage \
     UnpackedTarball/pdfium/fpdfsdk/fpdf_signature \
+    UnpackedTarball/pdfium/fpdfsdk/display_list_renderer \
 ))
 
 # fdrm
@@ -131,7 +134,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_textfield \
     UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_button \
     UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_textobject \
-    UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_fieldaction \
     UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_perwindowdata \
 ))
 
@@ -459,6 +461,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcrt/bytestring_pool \
     UnpackedTarball/pdfium/core/fxcrt/cfx_bidi_resolver \
     UnpackedTarball/pdfium/core/fxcrt/stream_write_utils \
+    UnpackedTarball/pdfium/core/fxcrt/scoped_locale \
 ))
 
 ifneq ($(OS),WNT)
@@ -478,6 +481,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/dib/cstretchengine \
     UnpackedTarball/pdfium/core/fxge/dib/fx_dib \
     UnpackedTarball/pdfium/core/fxge/dib/blend \
+    UnpackedTarball/pdfium/core/fxge/dib/cfx_scanlinecompositor_hwy \
+    UnpackedTarball/pdfium/core/fxge/dib/cstretchengine_hwy \
     UnpackedTarball/pdfium/core/fxge/fontdata/chromefontdata/FoxitDingbats \
     UnpackedTarball/pdfium/core/fxge/fontdata/chromefontdata/FoxitFixed \
     UnpackedTarball/pdfium/core/fxge/fontdata/chromefontdata/FoxitFixedBold \
@@ -524,6 +529,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/cfx_cttgsubtable \
     UnpackedTarball/pdfium/core/fxge/cfx_cttnametable \
     UnpackedTarball/pdfium/core/fxge/cfx_standardfont \
+    UnpackedTarball/pdfium/core/fxge/display_list_device_driver \
 ))
 
 # javascript, build with pdf_enable_v8 disabled.
@@ -564,27 +570,26 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
 ifneq ($(SYSTEM_OPENJPEG2),TRUE)
 # third_party/fx_libopenjpeg
 $(eval $(call gb_Library_add_generated_cobjects,pdfium,\
-    UnpackedTarball/pdfium/third_party/libopenjpeg/bio \
-    UnpackedTarball/pdfium/third_party/libopenjpeg/cio \
-    UnpackedTarball/pdfium/third_party/libopenjpeg/dwt \
-    UnpackedTarball/pdfium/third_party/libopenjpeg/event \
-    UnpackedTarball/pdfium/third_party/libopenjpeg/function_list \
-    UnpackedTarball/pdfium/third_party/libopenjpeg/image \
-    UnpackedTarball/pdfium/third_party/libopenjpeg/invert \
-    UnpackedTarball/pdfium/third_party/libopenjpeg/j2k \
-    UnpackedTarball/pdfium/third_party/libopenjpeg/jp2 \
-    UnpackedTarball/pdfium/third_party/libopenjpeg/mct \
-    UnpackedTarball/pdfium/third_party/libopenjpeg/mqc \
-    UnpackedTarball/pdfium/third_party/libopenjpeg/openjpeg \
-    UnpackedTarball/pdfium/third_party/libopenjpeg/opj_clock \
-    UnpackedTarball/pdfium/third_party/libopenjpeg/pi \
-    UnpackedTarball/pdfium/third_party/libopenjpeg/thread \
-    UnpackedTarball/pdfium/third_party/libopenjpeg/t1 \
-    UnpackedTarball/pdfium/third_party/libopenjpeg/t2 \
-    UnpackedTarball/pdfium/third_party/libopenjpeg/tcd \
-    UnpackedTarball/pdfium/third_party/libopenjpeg/tgt \
-    UnpackedTarball/pdfium/third_party/libopenjpeg/sparse_array \
-    UnpackedTarball/pdfium/third_party/libopenjpeg/ht_dec \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/src/bio \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/src/cio \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/src/dwt \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/src/event \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/src/function_list \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/src/image \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/src/invert \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/src/j2k \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/src/jp2 \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/src/mct \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/src/mqc \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/src/openjpeg \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/src/pi \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/src/thread \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/src/t1 \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/src/t2 \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/src/tcd \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/src/tgt \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/src/sparse_array \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/src/ht_dec \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
@@ -595,8 +600,23 @@ endif
 ifneq ($(SYSTEM_ABSEIL),TRUE)
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/third_party/abseil-cpp/absl/base/throw_delegate \
+    UnpackedTarball/pdfium/third_party/abseil-cpp/absl/container/internal/raw_hash_set \
+    UnpackedTarball/pdfium/third_party/abseil-cpp/absl/base/internal/raw_logging \
+    UnpackedTarball/pdfium/third_party/abseil-cpp/absl/hash/internal/hash \
+    UnpackedTarball/pdfium/third_party/abseil-cpp/absl/hash/internal/city \
 ))
 endif
+
+# third_party/highway
+$(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
+    UnpackedTarball/pdfium/third_party/highway/src/hwy/abort \
+    UnpackedTarball/pdfium/third_party/highway/src/hwy/aligned_allocator \
+    UnpackedTarball/pdfium/third_party/highway/src/hwy/per_target \
+    UnpackedTarball/pdfium/third_party/highway/src/hwy/print \
+    UnpackedTarball/pdfium/third_party/highway/src/hwy/stats \
+    UnpackedTarball/pdfium/third_party/highway/src/hwy/targets \
+    UnpackedTarball/pdfium/third_party/highway/src/hwy/timer \
+))
 
 $(eval $(call gb_Library_use_externals,pdfium,\
     libjpeg \
