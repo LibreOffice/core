@@ -1768,7 +1768,10 @@ bool SvMemoryStream::ReAllocateMemory( tools::Long nDiff )
             {
                 memcpy( pNewBuf, pBuf, nSize );
             }
-            memset(pNewBuf + nSize, 0x00, nNewSize - nSize);
+            if (nNewSize > nSize)
+            {
+                memset(pNewBuf + nSize, 0x00, nNewSize - nSize);
+            }
         }
 
         FreeMemory();
