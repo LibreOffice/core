@@ -15,7 +15,7 @@
     <string name="exiting">Afsluiten...</string>
     <string name="ask_for_copy">Dit document is alleen-lezen. Wilt u een kopie maken om te bewerken?</string>
     <string name="edit_copy">Bewerk een kopie</string>
-    <string name="view_only">Alleen bekijken</string>
+    <string name="view_only">Alleen weergeven</string>
     <string name="restarting">Opnieuw starten...</string>
     <string name="file_chromeos_read_only">Het bestand kan op deze locatie niet worden bewaard; het wordt alleen-lezen geopend. Verplaats het naar Play-bestanden voor volledige lees- en schrijftoegang.</string>
     <string name="use_text">Gebruik Tekst-opmaak</string>

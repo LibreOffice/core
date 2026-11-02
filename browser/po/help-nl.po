@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-30 13:34+0200\n"
-"PO-Revision-Date: 2026-10-30 00:06+0000\n"
+"PO-Revision-Date: 2026-11-01 07:06+0000\n"
 "Last-Translator: Stephan Paternotte <stephan-"
 "p@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.18.1\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -2085,7 +2085,7 @@ msgid ""
 "Chart Wizard dialog with chart type list on the left, chart style previews, "
 "3D and shape options"
 msgstr ""
-"Het dialoogvenster Grafiekwizard met links een lijst met grafiektypen, "
+"Het dialoogvenster Diagram-assistent met links een lijst met grafiektypen, "
 "voorbeelden van grafiekstijlen en opties voor 3D en vormen"
 
 #: html/cool-help.html%2Bdiv.div.div.ol.li:520-7
@@ -2275,8 +2275,8 @@ msgid ""
 "Formula bar showing cell reference B1, function wizard icon, and the "
 "formula =SIN(PI()*A1/10)"
 msgstr ""
-"Formulebalk met celverwijzing B1, het pictogram van de functie-wizard en de "
-"formule =SIN(PI()*A1/10)"
+"Formulebalk met celverwijzing B1, het pictogram van de Functie-assistent en "
+"de formule =SIN(PI()*A1/10)"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:559-5
 msgid ""
@@ -3518,7 +3518,7 @@ msgstr "presentatie"
 #: html/cool-help.html%2Bdiv.div.div.div.h4:873-5
 msgid "How can I change the line, area and position of a shape in my slides?"
 msgstr ""
-"Hoe kan ik de lijn, het gebied en de positie van een vorm in mijn dia's "
+"Hoe kan ik de lijn, het oppervlak en de positie van een vorm in mijn dia's "
 "wijzigen?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:875-7

@@ -8,12 +8,12 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-30 13:34+0100\n"
-"PO-Revision-Date: 2026-10-30 10:34+0000\n"
+"PO-Revision-Date: 2026-11-01 10:12+0000\n"
 "Last-Translator: Stephan Paternotte <stephan-"
 "p@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/nl/>\n"
-"Language: \n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1589,6 +1589,8 @@ msgid ""
 "This file is a spelling dictionary, not a wordbook. Upload a list of words "
 "with one word per line."
 msgstr ""
+"Dit bestand is een woordenlijst, geen (verklarend) woordboek. Upload een "
+"lijst met woorden met één woord per regel."
 
 #: admin/src/integrator/WordBook.ts:471
 msgid "Invalid dictionary format. Please check the file."
@@ -1836,26 +1838,26 @@ msgstr "Stijl dupliceren"
 #: src/app/Util.ts:319
 msgid "%n year"
 msgid_plural "%n years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n jaar"
+msgstr[1] "%n jaren"
 
 #: src/app/Util.ts:321
 msgid "%n day"
 msgid_plural "%n days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n dag"
+msgstr[1] "%n dagen"
 
 #: src/app/Util.ts:322
 msgid "%n hour"
 msgid_plural "%n hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n uur"
+msgstr[1] "%n uren"
 
 #: src/app/Util.ts:325
-#, fuzzy
 msgid "%n minute"
 msgid_plural "%n minutes"
 msgstr[0] "1 minuut"
+msgstr[1] "%n minuten"
 
 #: src/app/Util.ts:339
 msgid "less than a minute"
@@ -2067,7 +2069,7 @@ msgstr "Hulp bij deze foutmelding"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:103
 msgid "Inspect with Function Wizard"
-msgstr "Controleer met de Functiewizard"
+msgstr "Inspecteren met de Functie-assistent"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:108
 msgid "Edit in Formula Bar"
@@ -2118,7 +2120,7 @@ msgstr "Ondersteund door: "
 
 #: src/control/Control.AboutDialog.ts:177
 msgid "View widgets"
-msgstr "Widgets bekijken"
+msgstr "Widgets weergeven"
 
 #: src/control/Control.AboutDialog.ts:212
 msgid "\"Slow Proxy\""
@@ -5060,7 +5062,7 @@ msgstr "Compacte weergave gebruiken"
 
 #: src/control/Control.Menubar.ts:2336
 msgid "Use Tabbed view"
-msgstr "Tabbladen weergave"
+msgstr "Tabbladweergave gebruiken"
 
 #: src/control/Control.Menubar.ts:2622
 msgid "Insert Shape"
@@ -5446,9 +5448,8 @@ msgid "Fill Color (Transparent Pictures Only)"
 msgstr "Vulkleur (alleen transparante afbeeldingen)"
 
 #: src/control/Control.Notebookbar.js:673
-#, fuzzy
 msgid "Area"
-msgstr "Vlak"
+msgstr "Gebied"
 
 #: src/control/Control.Notebookbar.js:688
 msgid "Line"
@@ -5521,7 +5522,7 @@ msgstr "Gegevens"
 #: src/control/Control.NotebookbarImpress.js:116
 #: src/control/Control.NotebookbarWriter.js:94
 msgid "Review"
-msgstr "Beoordelen"
+msgstr "Beoordeling"
 
 #: src/control/Control.NotebookbarCalc.js:78
 #: src/control/Control.NotebookbarDraw.js:108
@@ -5553,13 +5554,13 @@ msgstr "Grafiek"
 #: src/control/Control.NotebookbarImpress.js:166
 #: src/control/Control.NotebookbarWriter.js:137
 msgid "View"
-msgstr "Weergave"
+msgstr "Beeld"
 
 #: src/control/Control.NotebookbarCalc.js:107
 #: src/control/Control.NotebookbarCalc.js:1875
 #: src/control/Control.NotebookbarCalc.js:3029
 msgid "Sparkline"
-msgstr "Vonklijn"
+msgstr "Sparkline"
 
 #: src/control/Control.NotebookbarCalc.js:121
 #: src/control/Control.NotebookbarDraw.js:141
@@ -6341,19 +6342,19 @@ msgstr "Dia %1, gekoppeld aan %2"
 
 #: src/control/Control.PartsPreview.js:1241
 msgid "Linked to a section of %1 that is missing"
-msgstr ""
+msgstr "Gekoppeld aan een ontbrekende sectie van %1"
 
 #: src/control/Control.PartsPreview.js:1243
 msgid "Linked to a section of %1 that has changed"
-msgstr ""
+msgstr "Gekoppeld aan een gewijzigde sectie van %1"
 
 #: src/control/Control.PartsPreview.js:1245
 msgid "Linked to a section of %1, disconnected"
-msgstr ""
+msgstr "Gekoppeld aan een niet verbonden sectie van %1"
 
 #: src/control/Control.PartsPreview.js:1246
 msgid "Linked to a section of %1"
-msgstr ""
+msgstr "Gekoppeld aan een sectie van %1"
 
 #: src/control/Control.PartsPreview.js:1390
 #: src/control/Control.PartsPreview.js:1557
@@ -6378,15 +6379,15 @@ msgstr "Sectie omlaag verplaatsen"
 
 #: src/control/Control.PartsPreview.js:1434
 msgid "Update Section"
-msgstr ""
+msgstr "Sectie bijwerken"
 
 #: src/control/Control.PartsPreview.js:1442
 msgid "Unlink Section"
-msgstr ""
+msgstr "Sectie loskoppelen"
 
 #: src/control/Control.PartsPreview.js:1449
 msgid "Unlink Section & Slides"
-msgstr ""
+msgstr "Secties & dia's loskoppelen"
 
 #: src/control/Control.PartsPreview.js:1458
 msgid "Collapse All Sections"
@@ -6520,7 +6521,7 @@ msgstr "Dia's invoegen"
 
 #: src/control/Control.SlideImportPane.tsx:904
 msgid "Insert section \"{0}\""
-msgstr ""
+msgstr "Sectie \"{0}\" invoegen"
 
 #: src/control/Control.SlideImportPane.tsx:912
 msgid "Insert {0} from {1}"
@@ -6536,19 +6537,21 @@ msgstr "Voeg {0} dia's in"
 
 #: src/control/Control.SlideImportPane.tsx:972
 msgid "How the section goes in"
-msgstr ""
+msgstr "Hoe de sectie wordt ingevoegd"
 
 #: src/control/Control.SlideImportPane.tsx:977
 msgid "Insert as section \"{0}\""
-msgstr ""
+msgstr "Invoegen als sectie \"{0}\""
 
 #: src/control/Control.SlideImportPane.tsx:983
 msgid "Insert as separate slides"
-msgstr ""
+msgstr "Invoegen als afzonderlijke dia's"
 
 #: src/control/Control.SlideImportPane.tsx:989
 msgid "Linked to its section in {0}. Update Links brings in later changes."
 msgstr ""
+"Gekoppeld aan de sectie in {0}. 'Koppelingen bijwerken' synchroniseert "
+"latere wijzigingen."
 
 #: src/control/Control.SlideImportPane.tsx:1038
 msgid "{0} of {1}"
@@ -6690,7 +6693,7 @@ msgstr "Gekoppeld naar {0} in {1}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:120
 msgid "In a section linked to {0}"
-msgstr ""
+msgstr "In een sectie gekoppeld aan {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:145
 msgid "Hide the actions for this linked slide"
@@ -6707,7 +6710,7 @@ msgstr "Koppeling verbreken"
 #: src/control/Control.SlideLinkToolbar.tsx:176
 #: src/slideimport/SlideLinks.ts:467
 msgid "Update section"
-msgstr ""
+msgstr "Sectie bijwerken"
 
 #: src/control/Control.SlideLinkToolbar.tsx:190
 msgid "Not available"
@@ -6738,23 +6741,30 @@ msgstr ""
 #: src/slideimport/SlideLinks.ts:425
 msgid "The section cannot be updated, because its source is not available."
 msgstr ""
+"De sectie kan niet worden bijgewerkt, omdat de bron niet beschikbaar is."
 
 #: src/slideimport/SlideLinks.ts:447
 msgid ""
 "One linked section cannot be updated, because its source is not available."
 msgstr ""
+"Eén gekoppelde sectie kan niet worden bijgewerkt, omdat de bron ervan niet "
+"beschikbaar is."
 
 #: src/slideimport/SlideLinks.ts:450
 msgid ""
 "{0} linked sections cannot be updated, because their sources are not "
 "available."
 msgstr ""
+"{0} gekoppelde secties kunnen niet worden bijgewerkt, omdat hun bronnen niet "
+"beschikbaar zijn."
 
 #: src/slideimport/SlideLinks.ts:459
 msgid ""
 "The section will hold the slides that its section in {0} holds now. Changes "
 "made to these slides in this presentation will be lost."
 msgstr ""
+"De sectie bevat de dia's die de sectie in {0} nu bevat. Wijzigingen in deze "
+"dia's in deze presentatie gaan verloren."
 
 #: src/slideimport/SlideLinks.ts:462
 msgid ""
@@ -6762,10 +6772,12 @@ msgid ""
 "files hold now. Changes made to these slides in this presentation will be "
 "lost."
 msgstr ""
+"{0} gekoppelde secties bevatten de dia's die hun secties in de bronbestanden "
+"nu bevatten. Wijzigingen in deze dia's in deze presentatie gaan verloren."
 
 #: src/slideimport/SlideLinks.ts:467
 msgid "Update sections"
-msgstr ""
+msgstr "Secties bijwerken"
 
 #: src/slideimport/SlideLinks.ts:534
 msgid "This slide is not linked to another file."
@@ -6786,7 +6798,7 @@ msgstr "{0} kon niet worden gelezen."
 
 #: src/slideimport/SlideLinks.ts:742
 msgid "You do not have access to {0}, so the section cannot be updated."
-msgstr ""
+msgstr "U heeft geen toegang tot {0}, dus de sectie kan niet worden bijgewerkt."
 
 #: src/slideimport/SlideLinks.ts:745
 msgid "You do not have access to {0}, so its pages cannot be refreshed."
@@ -6804,11 +6816,11 @@ msgstr "De dia's van {0} konden niet in deze presentatie worden ingelezen."
 
 #: src/slideimport/SlideLinks.ts:919
 msgid "The section was updated from {0}."
-msgstr ""
+msgstr "De sectie is bijgewerkt vanaf {0}."
 
 #: src/slideimport/SlideLinks.ts:1059
 msgid "Cannot update the section: {0} no longer holds its source section."
-msgstr ""
+msgstr "Kan de sectie niet bijwerken: {0} bevat niet langer de bronsectie."
 
 #: src/slideimport/SlideLinks.ts:1085
 msgid "Cannot update slide {0}: the source lacks matching slide"
@@ -6820,14 +6832,12 @@ msgid "Unlinking the slide failed."
 msgstr "Het loskoppelen van de dia is mislukt."
 
 #: src/slideimport/SlideLinks.ts:1105
-#, fuzzy
 msgid "Unlinking the section failed."
-msgstr "Het loskoppelen van de dia is mislukt."
+msgstr "Het loskoppelen van de sectie is mislukt."
 
 #: src/slideimport/SlideLinks.ts:1122
-#, fuzzy
 msgid "Updating the section from {0} failed."
-msgstr "Het bijwerken van de dia's van {0} is mislukt."
+msgstr "Het bijwerken van de sectie van {0} is mislukt."
 
 #: src/slideimport/SlideLinks.ts:1123 src/slideimport/SlideLinks.ts:1182
 msgid "Updating the slides of {0} failed."
@@ -7753,7 +7763,7 @@ msgstr "Weergeven"
 
 #: src/control/PermissionMode.ts:468
 msgid "Reviewing"
-msgstr "Beoordelen"
+msgstr "Beoordeling"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:394
 msgid "Save Image to Server"
@@ -7798,11 +7808,11 @@ msgstr "Max"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1468
 msgid "Edit Single Sparkline"
-msgstr "Enkele vonklijn bewerken"
+msgstr "Enkele sparkline bewerken"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1479
 msgid "Delete Single Sparkline"
-msgstr "Enkele vonklijn verwijderen"
+msgstr "Enkele sparkline verwijderen"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1517
 msgid "Portrait"
@@ -9030,7 +9040,7 @@ msgstr "Object"
 
 #: src/layer/marker/TextInput.js:552
 msgid "Frame"
-msgstr "Frame"
+msgstr "Kader"
 
 #: src/layer/marker/TextInput.js:744
 msgid "Screen reader support for text content is disabled. "

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Impress-Intro-Template.odp\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-10-30 00:06+0000\n"
+"PO-Revision-Date: 2026-11-01 07:07+0000\n"
 "Last-Translator: Stephan Paternotte <stephan-"
 "p@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
@@ -36,7 +36,7 @@ msgstr ""
 #. content.xml (slide 'page1'); styles.xml (master page
 #. 'Introduction_20_slide')
 msgid "Next Chapter: 🖼 Slides & Layouts"
-msgstr "Volgens hoofdstuk: 🖼 Dia's & Indelingen"
+msgstr "Volgend hoofdstuk: 🖼 Dia's & Indelingen"
 
 #. content.xml (slide 'page1')
 msgid "Here's what you'll discover"
@@ -101,7 +101,7 @@ msgstr "Voeg een nieuwe dia toe door op “Nieuw” te klikken in de notebookbal
 
 #. content.xml (slide 'page2')
 msgid "Choose a layout for it from the layout chooser."
-msgstr "Kies een indeling voor in de indelingkiezer."
+msgstr "Kies er een indeling voor in de indelingkiezer."
 
 #. content.xml (slide 'page2')
 msgid "Start editing your slide."
