@@ -143,7 +143,9 @@ all_la_unit_tests = \
 	unit-hosting.la \
 	unit-legacy-uno-api-warning.la \
 	unit-legacy-uno-api-warning-suppressed.la \
-	unit-bg-download.la
+	unit-bg-download.la \
+	unit-bg-export-slides.la \
+	unit-bg-export-slides-crash.la
 #	unit-admin.la
 #	unit-tilecache.la # Empty test.
 else
@@ -417,6 +419,10 @@ unit_save_torture_la_SOURCES = UnitSaveTorture.cpp
 unit_save_torture_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_bg_download_la_SOURCES = UnitBgDownload.cpp
 unit_bg_download_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
+unit_bg_export_slides_la_SOURCES = UnitBgExportSlides.cpp
+unit_bg_export_slides_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
+unit_bg_export_slides_crash_la_SOURCES = UnitBgExportSlidesCrash.cpp
+unit_bg_export_slides_crash_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_synthetic_lok_la_SOURCES = UnitSyntheticLok.cpp
 unit_synthetic_lok_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_invalidation_la_SOURCES = UnitInvalidation.cpp

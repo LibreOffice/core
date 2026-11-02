@@ -25,6 +25,7 @@
 
 #include <Poco/Util/XMLConfiguration.h>
 
+#include <deque>
 #include <functional>
 #include <map>
 #include <string>
@@ -530,6 +531,11 @@ public:
     void bgSaveStarted() { _bgSavesOngoing++; }
     void bgSaveEnded();
 
+    /// Writes the given pages of the document out for session and sends them to it, in a forked
+    /// child where one can be had. One slide export runs in a child at a time, and the others
+    /// wait for it in the order they came.
+    void queueSlideExport(const std::shared_ptr<ChildSession>& session, const std::string& pages);
+
     /// Are we currently performing a load ?
     bool isLoadOngoing() const { return _duringLoad > 0; }
 
@@ -669,6 +675,21 @@ private:
     const unsigned _mobileAppDocId;
     int _duringLoad;
     int _bgSavesOngoing;
+
+    /// A slide export that waits for its turn: the session it answers, and the pages it writes.
+    struct WaitingSlideExport
+    {
+        std::weak_ptr<ChildSession> _session;
+        std::string _pages;
+    };
+
+    /// Starts the waiting slide exports in order, until one of them runs in a forked child.
+    void startWaitingSlideExports();
+
+    /// The slide exports that wait for the one in a forked child to end.
+    std::deque<WaitingSlideExport> _waitingSlideExports;
+    /// Whether a slide export runs in a forked child now.
+    bool _slideExportInChild;
 
     LogUiCmd logUiCmd;
 };

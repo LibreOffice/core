@@ -188,6 +188,16 @@ public:
         std::string _filterOptions;
     };
 
+    /// Writes the given pages of this document out here and sends them to the client in an
+    /// exportslides frame. pages is a list of part ids or of slide identifiers, and an empty
+    /// list writes every page.
+    bool exportSlidesHere(const std::string& pages);
+
+    /// Writes the given pages out in a forked child and sends them once it is done. Returns
+    /// false when no child could be forked, and the export has then not started. ended runs
+    /// in this process once the export is over, whichever way it ended.
+    bool exportSlidesBackground(const std::string& pages, const std::function<void()>& ended);
+
 private:
     /// Reply to the client for the export that ran in a forked process.
     void sendBackgroundDownloadAsResult(bool success);
@@ -311,6 +321,15 @@ private:
     bool insertFile(const StringVector& tokens);
     /// Writes the given pages of this document out as a presentation staged in its own jail.
     bool exportSlides(const StringVector& tokens);
+    /// A new directory for one slide export to write in, or an empty string when none could be
+    /// made.
+    std::string createSlideExportDirectory();
+    /// Writes the pages out to the presentation file in directory. Returns whether it was
+    /// written.
+    bool writeSlides(const std::string& pages, const std::string& directory);
+    /// Sends the presentation in directory to the client, or the failure when written is false
+    /// or the file is no answer, and removes the directory.
+    bool sendWrittenSlides(bool written, const std::string& directory);
     bool slideImportInsert(const StringVector& tokens);
     bool slideLink(const StringVector& tokens);
     bool slideLinkList();

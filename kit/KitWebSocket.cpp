@@ -295,6 +295,12 @@ void BgSaveParentWebSocketHandler::terminateSave(const std::string &reason)
 
 void BgSaveParentWebSocketHandler::terminateExportForForeground(const std::string& reason)
 {
+    if (_saveCompleted)
+    {
+        LOG_DBG("Forked export is already completed: " << reason);
+        return;
+    }
+
     LOG_TRC("Taking the export back from the forked process: " << reason);
 
     // Hard terminate the child: the copy it wrote is of no use now.

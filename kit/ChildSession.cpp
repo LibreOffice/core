@@ -3658,6 +3658,12 @@ std::string joinPartIdList(const std::vector<std::string>& parts)
     return list.str();
 }
 
+/// The file a slide export writes, in the directory of its own that the export uses.
+std::string slideExportPath(const std::string& directory)
+{
+    return directory + "/sourceslides.odp";
+}
+
 /// Minimal validation of a value recorded about the source, such as its time or the identifier
 /// and the name of a source section
 bool isRecordableSourceString(const std::string& value)
@@ -3717,6 +3723,18 @@ bool ChildSession::exportSlides(const StringVector& tokens)
         return sendTextFrame("exportslides: {\"status\":\"failed\",\"kind\":\"syntax\"}");
     }
 
+    const std::string pages =
+        guids.empty() ? joinPartIdList(slides) : joinSlideGuidList(guids);
+
+    // Writing the pages out holds the document for as long as it takes, so it runs in a forked
+    // child where one can be had, and the other views go on working meanwhile.
+    _docManager->queueSlideExport(std::static_pointer_cast<ChildSession>(shared_from_this()),
+                                  pages);
+    return true;
+}
+
+std::string ChildSession::createSlideExportDirectory()
+{
     // The presentation is written in a directory of this document's own and travels back as
     // the answer, so that whoever asked for it reads no file of this jail and needs to be on
     // no particular machine to have it.
@@ -3727,59 +3745,138 @@ bool ChildSession::exportSlides(const StringVector& tokens)
         // shared system temp root unchanged, and writing the presentation there and removing
         // it again would reach every file this jail keeps in it.
         LOG_ERR("exportslides: there is no directory of this document's own to write in");
-        return sendTextFrame("exportslides: {\"status\":\"failed\",\"kind\":\"failed\"}");
+        return std::string();
     }
 
-    const std::string path = directory + "/sourceslides.odp";
+    return directory;
+}
 
+bool ChildSession::writeSlides(const std::string& pages, const std::string& directory)
+{
     SigUtil::addActivity(getId(), "exportslides");
 
     getLOKitDocument()->setView(_viewId);
 
-    const std::string url = Poco::URI(Poco::Path(path)).toString();
-    const std::string pages =
-        guids.empty() ? joinPartIdList(slides) : joinSlideGuidList(guids);
-    const bool written = getLOKitDocument()->exportPages(pages.c_str(), url.c_str());
+    const std::string url = Poco::URI(Poco::Path(slideExportPath(directory))).toString();
+    return getLOKitDocument()->exportPages(pages.c_str(), url.c_str());
+}
 
-    // Currently the presentation travels as one frame, limit the max size
-    constexpr std::size_t MaxExportSize = 100 * 1024 * 1024;
-
-    std::vector<char> answer;
-    bool tooLarge = false;
-    if (written)
+bool ChildSession::sendWrittenSlides(bool written, const std::string& directory)
+{
+    try
     {
-        const FileUtil::Stat exported(path);
-        tooLarge = exported.exists() && exported.size() > MaxExportSize;
+        const std::string path = slideExportPath(directory);
+
+        // Currently the presentation travels as one frame, limit the max size
+        constexpr std::size_t MaxExportSize = 100 * 1024 * 1024;
+
+        std::vector<char> answer;
+        bool tooLarge = false;
+        if (written)
+        {
+            const FileUtil::Stat exported(path);
+            tooLarge = exported.exists() && exported.size() > MaxExportSize;
+            if (tooLarge)
+            {
+                LOG_ERR("exportslides: the pages of this document come to "
+                        << exported.size() << " bytes, over the " << MaxExportSize
+                        << " one export carries");
+            }
+            else
+            {
+                static constexpr std::string_view Header =
+                    "exportslides: {\"status\":\"written\"}\n";
+                answer.assign(Header.begin(), Header.end());
+                // A presentation that could not be read back, or that holds nothing, is no answer.
+                if (FileUtil::readFile(path, answer, static_cast<int>(MaxExportSize)) <= 0)
+                    answer.clear();
+            }
+        }
+
+        FileUtil::removeFile(directory, true);
+
         if (tooLarge)
+            return sendTextFrame("exportslides: {\"status\":\"failed\",\"kind\":\"toolarge\"}");
+
+        if (answer.empty())
         {
-            LOG_ERR("exportslides: the pages of this document come to "
-                    << exported.size() << " bytes, over the " << MaxExportSize
-                    << " one export carries");
+            // The pages could not be written, which is what a document holding none of the slides
+            // that were asked for by identifier comes to.
+            LOG_ERR("exportslides: the pages of this document were not written");
+            return sendTextFrame("exportslides: {\"status\":\"failed\",\"kind\":\"failed\"}");
         }
-        else
-        {
-            static constexpr std::string_view Header = "exportslides: {\"status\":\"written\"}\n";
-            answer.assign(Header.begin(), Header.end());
-            // A presentation that could not be read back, or that holds nothing, is no answer.
-            if (FileUtil::readFile(path, answer, static_cast<int>(MaxExportSize)) <= 0)
-                answer.clear();
-        }
+
+        return sendBinaryFrame(answer.data(), answer.size());
     }
-
-    FileUtil::removeFile(directory, true);
-
-    if (tooLarge)
-        return sendTextFrame("exportslides: {\"status\":\"failed\",\"kind\":\"toolarge\"}");
-
-    if (answer.empty())
+    catch (const std::exception& exc)
     {
-        // The pages could not be written, which is what a document holding none of the slides
-        // that were asked for by identifier comes to.
-        LOG_ERR("exportslides: the pages of this document were not written");
+        LOG_ERR("exportslides: the written pages could not be sent: " << exc.what());
+        FileUtil::removeFile(directory, true);
         return sendTextFrame("exportslides: {\"status\":\"failed\",\"kind\":\"failed\"}");
     }
+}
 
-    return sendBinaryFrame(answer.data(), answer.size());
+bool ChildSession::exportSlidesHere(const std::string& pages)
+{
+    const std::string directory = createSlideExportDirectory();
+    if (directory.empty())
+        return sendTextFrame("exportslides: {\"status\":\"failed\",\"kind\":\"failed\"}");
+
+    return sendWrittenSlides(writeSlides(pages, directory), directory);
+}
+
+bool ChildSession::exportSlidesBackground([[maybe_unused]] const std::string& pages,
+                                          [[maybe_unused]] const std::function<void()>& ended)
+{
+    if constexpr (!Util::isMobileAppBuild())
+    {
+        // The directory is made here, so that this process knows where the child writes and
+        // reads the presentation from there once the child is done.
+        const std::string directory = createSlideExportDirectory();
+        if (directory.empty())
+            return false;
+
+        const std::weak_ptr<ChildSession> weakSelf =
+            std::static_pointer_cast<ChildSession>(shared_from_this());
+        BackgroundExportHandlers handlers;
+        handlers.finished = [weakSelf, directory, ended](bool success)
+        {
+            if (const std::shared_ptr<ChildSession> self = weakSelf.lock())
+                self->sendWrittenSlides(success, directory);
+            else
+                FileUtil::removeFile(directory, true);
+            ended();
+        };
+        handlers.runInForeground = [weakSelf, directory, pages, ended]
+        {
+            FileUtil::removeFile(directory, true);
+            if (const std::shared_ptr<ChildSession> self = weakSelf.lock())
+                self->exportSlidesHere(pages);
+            ended();
+        };
+
+        if (_docManager->forkToSave(
+                [this, pages, directory]
+                {
+                    // This runs in the forked process, and writes the pages out.
+                    const bool written = writeSlides(pages, directory);
+
+                    // Whatever core raised on the way goes out ahead of the result, so the
+                    // parent has seen any question the export needs answered before it acts
+                    // on the result.
+                    _docManager->drainCallbacks();
+
+                    sendTextFrame(std::string("exportresult: success=") +
+                                  (written ? "true" : "false"));
+                    SigUtil::addActivity("async slide export process exiting");
+                },
+                getViewId(), BackgroundForkPurpose::Export, handlers))
+            return true;
+
+        FileUtil::removeFile(directory, true);
+    }
+
+    return false;
 }
 
 bool ChildSession::slideImportInsert(const StringVector& tokens)

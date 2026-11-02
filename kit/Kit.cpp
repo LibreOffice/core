@@ -879,6 +879,7 @@ Document::Document(const std::shared_ptr<COKit>& loKit, const std::string& jailI
     , _mobileAppDocId(mobileAppDocId)
     , _duringLoad(0)
     , _bgSavesOngoing(0)
+    , _slideExportInChild(false)
 {
     LOG_INF("Document ctor for [" << _docKey <<
             "] url [" << anonymizeUrl(_url) << "] on child [" << _jailId <<
@@ -1910,6 +1911,45 @@ void Document::reapZombieChildren()
 }
 
 #endif // !MOBILEAPP
+
+void Document::queueSlideExport(const std::shared_ptr<ChildSession>& session,
+                                const std::string& pages)
+{
+    _waitingSlideExports.push_back(WaitingSlideExport{ session, pages });
+    startWaitingSlideExports();
+}
+
+void Document::startWaitingSlideExports()
+{
+    // A forked child serves the one export it was made for, and the parent starts the others.
+    if (_isBgSaveProcess)
+        return;
+
+    while (!_slideExportInChild && !_waitingSlideExports.empty())
+    {
+        const WaitingSlideExport next = std::move(_waitingSlideExports.front());
+        _waitingSlideExports.pop_front();
+
+        const std::shared_ptr<ChildSession> session = next._session.lock();
+        if (!session)
+            continue;
+
+        // The end of the export is reported from inside the poll, so this only marks the child
+        // as gone. The next waiting export starts once the poll has returned, outside any socket
+        // handler, where a fork comes back to a known place.
+        const std::weak_ptr<Document> weakSelf = weak_from_this();
+        const auto ended = [weakSelf]
+        {
+            if (const std::shared_ptr<Document> self = weakSelf.lock())
+                self->_slideExportInChild = false;
+        };
+
+        if (session->exportSlidesBackground(next._pages, ended))
+            _slideExportInChild = true;
+        else
+            session->exportSlidesHere(next._pages);
+    }
+}
 
 namespace
 {
@@ -3160,6 +3200,10 @@ void Document::drainQueue()
         if (hasCallbacks())
             drainCallbacks();
 
+        // Start the slide exports that wait for the forked child to end.
+        if (processInputEnabled())
+            startWaitingSlideExports();
+
         if (hasQueueItems())
             LOG_TRC("drainQueue with " << _queue->size() <<
                     " items: " << (processInputEnabled() ? "processing" : "blocked") );
@@ -3410,6 +3454,8 @@ void Document::dumpState(std::ostream& oss)
         << "\n\tbgSaveProc: " << _isBgSaveProcess << "\n\tbgSaveDisabled: " << _isBgSaveDisabled;
     if (!_isBgSaveProcess)
         oss << "\n\tbgSavesOnging: "<< _bgSavesOngoing;
+    oss << "\n\tslideExportInChild: " << _slideExportInChild
+        << "\n\twaitingSlideExports: " << _waitingSlideExports.size();
 
     std::string smap;
     if (const ssize_t size = FileUtil::readFile("/proc/self/smaps_rollup", smap); size <= 0)
