@@ -278,6 +278,14 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 		} else {
 			tabs[t].removeAttribute('data-cooltip');
 		}
+
+		// A press on the tab moves the focus to the tab button before the click arrives, so the
+		// element that held the focus is noted here, while it still has it.
+		var focusBeforePress = null;
+		tabs[t].addEventListener('pointerdown', function() {
+			focusBeforePress = document.activeElement;
+		});
+
 		return function(event) {
 			if (isFileTabForCoda) {
 				if (builder.map.backstageView) {
@@ -330,7 +338,17 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 			if (!tabs[t].enterPressed) {
 				// don't lose focus on tab change
 				event.preventDefault();
-				if (!JSDialog.IsAnyInputFocused())
+				// Text being typed in an edit engine widget, such as the slide notes in the
+				// bottom panel, gets the focus back so typing goes on there. Anything else
+				// returns the focus to the document.
+				var editEngineBeforePress = focusBeforePress instanceof HTMLElement
+					&& focusBeforePress.isConnected
+					&& focusBeforePress.classList.contains('ui-editengine')
+					&& focusBeforePress.isContentEditable ? focusBeforePress : null;
+				focusBeforePress = null;
+				if (editEngineBeforePress)
+					editEngineBeforePress.focus();
+				else if (!JSDialog.IsAnyInputFocused())
 					builder.map.focus();
 				t.enterPressed = false;
 			}
