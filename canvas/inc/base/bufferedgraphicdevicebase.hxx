@@ -58,10 +58,10 @@ namespace canvas
     basically gets forwarded all XGraphicDevice API calls that
     could not be handled generically.
 
-    @tpl Mutex
+    @tpl MutexType
     Lock strategy to use. Defaults to using the
     BaseMutex-provided lock.  Every time one of the methods is
-    entered, an object of type Mutex is created with m_aMutex as
+    entered, an object of type MutexType is created with m_aMutex as
     the sole parameter, and destroyed again when the method scope
     is left.
 
@@ -71,14 +71,13 @@ namespace canvas
     derives from multiple UNO interface (were each provides its
     own version of XInterface, making the conversion ambiguous)
  */
-template <class Base, class DeviceHelper, class Mutex = ::osl::MutexGuard,
+template <class Base, class DeviceHelper, class MutexType = ::osl::MutexGuard,
           class UnambiguousBase = css::uno::XInterface>
 class BufferedGraphicDeviceBase
-    : public GraphicDeviceBase<Base, DeviceHelper, Mutex, UnambiguousBase>
+    : public GraphicDeviceBase<Base, DeviceHelper, MutexType, UnambiguousBase>
 {
 public:
-    typedef GraphicDeviceBase<Base, DeviceHelper, Mutex, UnambiguousBase> BaseType;
-    typedef Mutex MutexType;
+    typedef GraphicDeviceBase<Base, DeviceHelper, MutexType, UnambiguousBase> BaseType;
 
     BufferedGraphicDeviceBase()
         : mbIsVisible(false)
