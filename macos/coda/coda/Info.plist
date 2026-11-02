@@ -773,32 +773,6 @@
                 <key>UTTypeIconFile</key>
                 <string>oasis-database.icns</string>
             </dict>
-
-            <!-- Extensions -->
-            <dict>
-                <key>UTTypeIdentifier</key>
-                <string>org.openoffice.extension</string>
-                <key>UTTypeDescription</key>
-                <string>Collabora Office Extension</string>
-                <key>UTTypeConformsTo</key>
-                <array>
-                    <string>public.data</string>
-                    <string>public.content</string>
-                </array>
-                <key>UTTypeTagSpecification</key>
-                <dict>
-                    <key>public.filename-extension</key>
-                    <array>
-                        <string>oxt</string>
-                    </array>
-                    <key>public.mime-type</key>
-                    <array>
-                        <string>application/vnd.openofficeorg.extension</string>
-                    </array>
-                </dict>
-                <key>UTTypeIconFile</key>
-                <string>generic-extension.icns</string>
-            </dict>
         </array>
 
         <key>UTImportedTypeDeclarations</key>
@@ -1954,20 +1928,6 @@
                 <key>NSDocumentClass</key>
                 <string>$(PRODUCT_MODULE_NAME).Document</string>
 
-            </dict>
-            <dict>
-                <key>CFBundleTypeName</key>
-                <string>Collabora Office Extension</string>
-                <key>CFBundleTypeRole</key>
-                <string>Editor</string>
-                <key>LSHandlerRank</key>
-                <string>Owner</string>
-                <key>LSItemContentTypes</key>
-                <array>
-                    <string>org.openoffice.extension</string>
-                </array>
-                <key>NSDocumentClass</key>
-                <string>$(PRODUCT_MODULE_NAME).Document</string>
             </dict>
             <dict>
                 <key>CFBundleTypeName</key>
