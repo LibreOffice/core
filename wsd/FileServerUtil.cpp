@@ -80,7 +80,9 @@ PreProcessedFile::PreProcessedFile(std::string filename, const std::string& data
             std::size_t varend = varstart + 1;
             while (varend < endpos)
             {
-                if (data[varend] == '%' || (!std::isalpha(data[varend]) && data[varend] != '_'))
+                if (data[varend] == '%' ||
+                    (!std::isalpha(static_cast<unsigned char>(data[varend])) &&
+                     data[varend] != '_'))
                     break;
 
                 ++varend;
@@ -111,7 +113,9 @@ PreProcessedFile::PreProcessedFile(std::string filename, const std::string& data
             std::size_t varend = newpos + 1;
             while (varend < _size)
             {
-                if (data[varend] == '%' || (!std::isalpha(data[varend]) && data[varend] != '_'))
+                if (data[varend] == '%' ||
+                    (!std::isalpha(static_cast<unsigned char>(data[varend])) &&
+                     data[varend] != '_'))
                     break;
 
                 ++varend;

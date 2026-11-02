@@ -182,7 +182,9 @@ public:
     static bool IsViewFileExtension(const std::string& extension)
     {
         std::string lowerCaseExtension = extension;
-        std::transform(lowerCaseExtension.begin(), lowerCaseExtension.end(), lowerCaseExtension.begin(), ::tolower);
+        std::transform(lowerCaseExtension.begin(), lowerCaseExtension.end(),
+                       lowerCaseExtension.begin(),
+                       [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
         if (Util::isMobileApp())
         {
             if (lowerCaseExtension == "pdf")

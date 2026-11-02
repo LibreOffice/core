@@ -2878,7 +2878,8 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
 #ifdef _WIN32
         // See comment in RequestDetails::sanitizeURI()
         auto p = publicUri.getPath();
-        if (p.length() > 3 && isalpha(p[0]) && p[1] == ':' && p[2] == '/')
+        if (p.length() > 3 && isalpha(static_cast<unsigned char>(p[0])) && p[1] == ':' &&
+            p[2] == '/')
             publicUri.setPath("/" + p);
 #endif
 
