@@ -834,8 +834,24 @@ class ClassicInPlaceContext implements InteractionContext {
 		return false;
 	}
 
-	public arrowKey(_towards: cool.Point, _event: KeyboardEvent): boolean {
-		return false;
+	/*
+		an arrow key moves a part that may be moved as one on the page is moved, by the same steps
+		and here at once, a pie segment along its way; anything else selected inside leaves the
+		key to the object
+	*/
+	public arrowKey(towards: cool.Point, event: KeyboardEvent): boolean {
+		const selected = GraphicSelection.selectedObjectIDs;
+		const place = Interaction.placeOf(selected);
+		if (
+			place.kind !== 'inPlace' ||
+			!selected.length ||
+			selected.includes(place.object) ||
+			!ObjectHandles.canBeMoved(selected)
+		)
+			return false;
+
+		GraphicSelection.selectionSection?.moveByKey(towards, event);
+		return true;
 	}
 
 	/*
