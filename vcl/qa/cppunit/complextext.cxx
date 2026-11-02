@@ -980,8 +980,8 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf163761)
 
     // tdf#163761 caused failure to remove dropped glyphs from the base layout.
     // Without the fix, the base layout will contain an errant copy of char 0.
-    //                              { 1, 0, 9, 7, 6, 5, 4, 3, 2, 0 }
-    std::vector<int> aRefCharIndices{ 1, 9, 7, 6, 5, 4, 3, 2, 0 };
+    //                              { 8, 1, 0, 9, 7, 6, 5, 4, 3, 2, 0 }
+    std::vector<int> aRefCharIndices{ 8, 1, 9, 7, 6, 5, 4, 3, 2, 0 };
 
     CPPUNIT_ASSERT_EQUAL(aRefCharIndices.size(), aCharIndices.size());
     for (size_t i = 0; i < aRefCharIndices.size(); ++i)

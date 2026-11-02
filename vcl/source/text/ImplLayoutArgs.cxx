@@ -115,18 +115,11 @@ static bool IsControlChar(sal_Unicode cChar)
     // C0 control characters
     if ((0x0001 <= cChar) && (cChar <= 0x001F))
         return true;
-    // formatting characters
-    if ((0x200E <= cChar) && (cChar <= 0x200F))
+    // line and paragraph separators
+    if ((0x2028 <= cChar) && (cChar <= 0x2029))
         return true;
-    if ((0x2028 <= cChar) && (cChar <= 0x202E))
-        return true;
-    // deprecated formatting characters
-    if ((0x206A <= cChar) && (cChar <= 0x206F))
-        return true;
-    if (0x2060 == cChar)
-        return true;
-    // byte order markers and invalid unicode
-    if ((cChar == 0xFEFF) || (cChar == 0xFFFE) || (cChar == 0xFFFF))
+    // invalid unicode
+    if ((cChar == 0xFFFE) || (cChar == 0xFFFF))
         return true;
     // drop null character too, broken documents may contain it (ofz34898-1.doc)
     if (cChar == 0)
