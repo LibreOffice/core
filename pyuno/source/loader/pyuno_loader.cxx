@@ -199,6 +199,16 @@ void pythonInit() {
     if ( Py_IsInitialized()) // may be inited by getComponentContext() already
         return;
 
+#if defined _WIN32
+    // tdf#173297 tell python to not change the locale, we set the activeCodepage to UTF-8 via
+    // a manifest since 0b35782617f09914a9e6bd01941ee249446cc135 and python setting locale to C
+    // results in a UTF-8 locale and that in turn recreates the earlier problem from tdf#157135
+    PyPreConfig preconfig;
+    PyPreConfig_InitPythonConfig(&preconfig);
+    preconfig.configure_locale = 0;
+    Py_PreInitialize(&preconfig);
+#endif
+
 #if PY_VERSION_HEX >= 0x03080000
     PyConfig config;
 #endif
