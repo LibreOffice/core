@@ -186,6 +186,7 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
 
             COWrapper.LOG_DBG("CODA's page is in the editor frame")
             self.adoptStyleSheets(files["styles"] ?? [], in: frameInfo)
+            self.runScripts(files["scripts"] ?? [], in: frameInfo)
         }
     }
 
@@ -220,6 +221,31 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
                 COWrapper.LOG_ERR("CODA's style sheets were not attached in the editor frame")
             }
         }
+    }
+
+    private func runScripts(_ paths: [String], in frameInfo: WKFrameInfo) {
+        for path in paths {
+            guard let source = Self.appFile(path) else {
+                COWrapper.LOG_DBG("Script not found: \(path)")
+                continue
+            }
+
+            // "void 0": the script ends on undefined, which WebKit can pass back.
+            // "sourceURL": names the script in the Web Inspector.
+            let program = source + "\n;void 0\n//# sourceURL=" + path
+            webView.evaluateJavaScript(program, in: frameInfo, in: .page) { result in
+                if case .failure = result {
+                    COWrapper.LOG_ERR("Script failed: \(path)")
+                }
+            }
+        }
+
+        // Both events fired before the editor's scripts ran, so fire them again.
+        let pageLoaded = """
+            document.dispatchEvent(new Event('DOMContentLoaded'));
+            window.dispatchEvent(new Event('load'));
+        """
+        webView.evaluateJavaScript(pageLoaded, in: frameInfo, in: .page)
     }
 
     // The integrator opens a document by posting a form with the token and settings into the
