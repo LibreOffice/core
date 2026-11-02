@@ -198,8 +198,6 @@ static DocumentTab* activeTabOf(const WindowState& window)
     return findTab(window.activeTabId);
 }
 
-static bool enableWebDriver = false;
-
 static HINSTANCE appInstance;
 static int appShowMode;
 
@@ -3038,8 +3036,6 @@ static void withWebView2Environment(std::function<void(ICoreWebView2Environment*
     // Required for instantiating new Web Workers, which otherwise fail with a
     // cross-origin SecurityError because file:// gets origin 'null'.
     std::wstring additionalArgs = L"--allow-file-access-from-files";
-    if (enableWebDriver)
-        additionalArgs += L" --remote-debugging-port=9222";
 
     auto options = Microsoft::WRL::Make<CoreWebView2EnvironmentOptions>();
     options->put_AdditionalBrowserArguments(additionalArgs.c_str());
@@ -6161,9 +6157,6 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int showWindowMode)
                                           hInstance, NULL);
         ShowWindow(hiddenOwnerWindow, SW_HIDE);
     }
-
-    if (std::getenv("CODA_ENABLE_WEBDRIVER"))
-        enableWebDriver = true;
 
     DocumentMode mode = DocumentMode::EDIT;
     if (__argc == 1 || wcscmp(__wargv[1], L"--disable-background-networking") == 0)
