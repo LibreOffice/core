@@ -29,6 +29,20 @@
 
 declare var JSDialog: any;
 
+// The command that starts change recording for this view in review mode.
+const reviewRecordingCommand = '.uno:TrackChangesInThisView';
+// The command that stops change recording. It takes an argument because swriter.sdi gives
+// TrackChangesInThisView none and core treats that as on.
+const reviewStopCommand = '.uno:TrackChanges?TrackChanges:bool=false';
+
+function isCommandLocked(map: MapInterface, command: string): boolean {
+	return map.isLockedUser() && map.isLockedItem(command);
+}
+
+function isCommandRestricted(map: MapInterface, command: string): boolean {
+	return map.isRestrictedUser() && map.isRestrictedItem(command);
+}
+
 // Review mode is editing with change recording on. One value names the situation the view is in.
 enum ReviewModeState {
 	// Core has not yet reported whether recording is on. Not reviewing.
@@ -64,16 +78,20 @@ function reviewModeTransitions(
 		map.uiManager.notebookbar?.selectTab('Review');
 	};
 	const startRecording = () => {
-		map.sendUnoCommand('.uno:TrackChangesInThisView');
+		map.sendUnoCommand(reviewRecordingCommand);
 	};
 	const startRecordingAndShowTab = () => {
 		startRecording();
 		showReviewTab();
 	};
-	// The command takes an argument because swriter.sdi gives TrackChangesInThisView none and
-	// core treats that as on.
+	// Viewing mode does not need recording off, so a user who may not stop recording still
+	// switches to it.
 	const stopRecording = () => {
-		map.sendUnoCommand('.uno:TrackChanges?TrackChanges:bool=false');
+		if (
+			!isCommandLocked(map, reviewStopCommand) &&
+			!isCommandRestricted(map, reviewStopCommand)
+		)
+			map.sendUnoCommand(reviewStopCommand);
 	};
 
 	return [
@@ -254,27 +272,27 @@ class PermissionViewMode extends JSDialogComponent {
 		visible: boolean,
 	): MenuButtonWidgetJSON {
 		const isReview = this.reviewMode.isReviewing();
-		const menu: Array<MenuDefinition> = [
-			{
-				id: 'view',
-				text: _('Viewing Mode'),
-				type: 'action',
-				selected: !this.map.isEditMode(),
-			},
-			{
-				id: 'edit',
-				text: _('Editing Mode'),
-				type: 'action',
-				selected: this.map.isEditMode() && !isReview,
-			},
-		];
-		if (this.map.getDocType() === 'text')
+		const menu: Array<MenuDefinition> = [];
+		// A restricted user does not see a mode whose command is blocked, and a locked user sees
+		// it locked.
+		const addMode = (id: string, modeText: string, selected: boolean) => {
+			const command = this.modeCommand(id);
+			if (command && isCommandRestricted(this.map, command)) return;
 			menu.push({
-				id: 'review',
-				text: _('Review Mode'),
+				id: id,
+				text: modeText,
 				type: 'action',
-				selected: this.map.isEditMode() && isReview,
+				selected: selected,
+				class:
+					command && isCommandLocked(this.map, command)
+						? 'locking-disabled'
+						: undefined,
 			});
+		};
+		addMode('view', _('Viewing Mode'), !this.map.isEditMode());
+		addMode('edit', _('Editing Mode'), this.map.isEditMode() && !isReview);
+		if (this.map.getDocType() === 'text')
+			addMode('review', _('Review Mode'), this.map.isEditMode() && isReview);
 
 		return {
 			type: 'menubutton',
@@ -330,7 +348,27 @@ class PermissionViewMode extends JSDialogComponent {
 		}
 	}
 
+	// The recording command that picking this mode sends, if any. Review mode starts recording
+	// unless it is already on, and editing mode stops it when leaving review mode.
+	private modeCommand(mode: string): string | null {
+		const isReview = this.reviewMode.isReviewing();
+		if (mode === 'review' && !isReview && !this.reviewMode.isRecording())
+			return reviewRecordingCommand;
+		if (mode === 'edit' && isReview) return reviewStopCommand;
+		return null;
+	}
+
 	handleModeSelection(mode: string): void {
+		const command = this.modeCommand(mode);
+		if (
+			command &&
+			(isCommandLocked(this.map, command) ||
+				isCommandRestricted(this.map, command))
+		) {
+			this.map.openUnlockPopup(command);
+			return;
+		}
+
 		const currentPermission = this.map._permission;
 		const editing = currentPermission === 'edit';
 		const state = this.reviewMode.state;

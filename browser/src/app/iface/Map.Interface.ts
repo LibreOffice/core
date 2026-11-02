@@ -131,6 +131,7 @@ interface MapInterface extends Evented {
 	hideRestrictedItems(it: any, item: any, button: any): void;
 	disableLockedItem(it: any, item: any, button: any): void;
 	isLockedItem(data: any): boolean;
+	isRestrictedItem(data: any): boolean;
 	openUnlockPopup(cmd: ControlCommand): void;
 	isLockedUser(): boolean;
 	isRestrictedUser(): boolean;
