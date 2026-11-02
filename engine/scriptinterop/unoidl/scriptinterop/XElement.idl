@@ -14,6 +14,7 @@ module scriptinterop {
 interface XBody;
 interface XContainerElement;
 interface XFootnote;
+interface XIndex;
 interface XInlineImage;
 interface XParagraph;
 interface XTable;
@@ -22,7 +23,7 @@ interface XTableRow;
 interface XText;
 
 /** An element of a text document: the body, a paragraph, a text, a table, a row or cell of it, an
-    inline image, a footnote, a footnote section or a table of contents.
+    inline image, a footnote, a footnote section, a table of contents or another index.
 
     getType() says which one it is. As in Apps Script, each of the as methods returns this element
     when it is of that type, and throws for any other type. The text from editAsText also casts
@@ -39,6 +40,9 @@ interface XElement: XBase {
 
     /** @gas Element.asFootnoteSection */
     XContainerElement asFootnoteSection();
+
+    /** Returns this element as an index, if it is of type INDEX. */
+    XIndex asIndex();
 
     /** @gas Element.asInlineImage */
     XInlineImage asInlineImage();

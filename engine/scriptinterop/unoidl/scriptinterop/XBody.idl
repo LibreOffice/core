@@ -48,8 +48,7 @@ interface XBody: XContainerElement {
     /** Returns the paragraphs and tables of the body, in document order.
 
         Sections are not listed, but the paragraphs inside them are. A table of contents is listed
-        as one element of type TABLE_OF_CONTENTS, and any other index as one element of type
-        UNSUPPORTED.
+        as one element of type TABLE_OF_CONTENTS, and any other index as one element of type INDEX.
      */
     sequence<XElement> getChildren();
 

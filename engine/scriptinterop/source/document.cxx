@@ -113,6 +113,7 @@
 #include <scriptinterop/GlyphType.hpp>
 #include <scriptinterop/HorizontalAlignment.hpp>
 #include <scriptinterop/ImageOptions.hpp>
+#include <scriptinterop/IndexKind.hpp>
 #include <scriptinterop/ParagraphHeading.hpp>
 #include <scriptinterop/TextAlignment.hpp>
 #include <scriptinterop/XBlob.hpp>
@@ -122,6 +123,7 @@
 #include <scriptinterop/XDocument.hpp>
 #include <scriptinterop/XElement.hpp>
 #include <scriptinterop/XFootnote.hpp>
+#include <scriptinterop/XIndex.hpp>
 #include <scriptinterop/XInlineImage.hpp>
 #include <scriptinterop/XParagraph.hpp>
 #include <scriptinterop/XPositionedImage.hpp>
@@ -929,6 +931,8 @@ OUString elementTypeName(scriptinterop::ElementType type) {
         return u"TABLE_OF_CONTENTS"_ustr;
     case scriptinterop::ElementType_UNSUPPORTED:
         return u"UNSUPPORTED"_ustr;
+    case scriptinterop::ElementType_INDEX:
+        return u"INDEX"_ustr;
     default:
         throw cpo::uno::RuntimeException(
             "unknown element type " + OUString::number(static_cast<sal_Int32>(type)));
@@ -948,6 +952,10 @@ public:
 
     cpo::uno::Reference<scriptinterop::XContainerElement> asFootnoteSection() override {
         return cast<scriptinterop::XContainerElement>(scriptinterop::ElementType_FOOTNOTE_SECTION);
+    }
+
+    cpo::uno::Reference<scriptinterop::XIndex> asIndex() override {
+        return cast<scriptinterop::XIndex>(scriptinterop::ElementType_INDEX);
     }
 
     cpo::uno::Reference<scriptinterop::XInlineImage> asInlineImage() override {
@@ -1793,6 +1801,8 @@ public:
         return container_->asFootnoteSection();
     }
 
+    cpo::uno::Reference<scriptinterop::XIndex> asIndex() override { return container_->asIndex(); }
+
     cpo::uno::Reference<scriptinterop::XInlineImage> asInlineImage() override {
         return container_->asInlineImage();
     }
@@ -2236,7 +2246,7 @@ template<typename T> cpo::uno::Reference<scriptinterop::XText> ElementImpl<T>::a
     case scriptinterop::ElementType_TABLE_CELL:
     case scriptinterop::ElementType_TABLE_ROW:
     case scriptinterop::ElementType_TABLE_OF_CONTENTS:
-    case scriptinterop::ElementType_UNSUPPORTED:
+    case scriptinterop::ElementType_INDEX:
         return new ContainerTextImpl(cpo::uno::Reference<scriptinterop::XContainerElement>(
             static_cast<T *>(this), cpo::uno::UNO_QUERY_THROW));
     default:
@@ -3385,9 +3395,8 @@ cpo::uno::Reference<css::text::XTextContent> indexOf(
 
 // A table of contents, or another index, as one element whose children are its paragraphs. Writer
 // generates the text of these paragraphs from the rest of the document. GAS has no element type for
-// the other kinds of index, so they are UNSUPPORTED:
-class DocumentIndexImpl:
-    public ElementImpl<scriptinterop::XContainerElement>, public ContentsContainer {
+// the other kinds of index, so they are of the type INDEX, which is not in GAS:
+class DocumentIndexImpl: public ElementImpl<scriptinterop::XIndex>, public ContentsContainer {
 public:
     DocumentIndexImpl(
         std::shared_ptr<Model> const & model,
@@ -3441,10 +3450,27 @@ public:
 
     OUString getText() override { return asText()->getText(); }
 
-    scriptinterop::ElementType getType() override {
+    scriptinterop::IndexKind getIndexKind() override {
+        static constexpr std::pair<std::u16string_view, scriptinterop::IndexKind> kinds[] = {
+            {u"com.sun.star.text.ContentIndex", scriptinterop::IndexKind_CONTENTS},
+            {u"com.sun.star.text.DocumentIndex", scriptinterop::IndexKind_ALPHABETICAL},
+            {u"com.sun.star.text.Bibliography", scriptinterop::IndexKind_BIBLIOGRAPHY},
+            {u"com.sun.star.text.IllustrationsIndex", scriptinterop::IndexKind_ILLUSTRATIONS},
+            {u"com.sun.star.text.ObjectIndex", scriptinterop::IndexKind_OBJECTS},
+            {u"com.sun.star.text.TableIndex", scriptinterop::IndexKind_TABLES}};
         cpo::uno::Reference<css::lang::XServiceInfo> const info(index_, cpo::uno::UNO_QUERY);
-        return info.is() && info->supportsService(u"com.sun.star.text.ContentIndex"_ustr)
-            ? scriptinterop::ElementType_TABLE_OF_CONTENTS : scriptinterop::ElementType_UNSUPPORTED;
+        for (auto const & [service, kind]: kinds) {
+            if (info.is() && info->supportsService(OUString(service))) {
+                return kind;
+            }
+        }
+        // Writer reports any other index as a user-defined one:
+        return scriptinterop::IndexKind_USER;
+    }
+
+    scriptinterop::ElementType getType() override {
+        return getIndexKind() == scriptinterop::IndexKind_CONTENTS
+            ? scriptinterop::ElementType_TABLE_OF_CONTENTS : scriptinterop::ElementType_INDEX;
     }
 
     cpo::uno::Reference<scriptinterop::XElement> removeFromParent() override {

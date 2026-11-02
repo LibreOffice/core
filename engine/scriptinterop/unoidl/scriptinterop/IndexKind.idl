@@ -1,0 +1,36 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * Copyright the Collabora Office contributors.
+ *
+ * SPDX-License-Identifier: MPL-2.0
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+module scriptinterop {
+
+/** The kind of an index in a text document.
+
+    Apps Script has no such kinds, as its only index is the table of contents.
+ */
+enum IndexKind {
+    /** An alphabetical index of the terms that are marked in the text. */
+    ALPHABETICAL,
+    /** A list of the bibliography entries that the text cites. */
+    BIBLIOGRAPHY,
+    /** A table of contents, which is an element of type TABLE_OF_CONTENTS. */
+    CONTENTS,
+    /** A list of the images and other illustrations. */
+    ILLUSTRATIONS,
+    /** A list of the embedded objects. */
+    OBJECTS,
+    /** A list of the tables. */
+    TABLES,
+    /** An index of the entries that are marked for a user-defined index. */
+    USER
+};
+
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

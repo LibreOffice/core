@@ -41,6 +41,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     HorizontalAlignment \
     HttpResponse \
     ImageOptions \
+    IndexKind \
     LineCategory \
     LineFillType \
     LineType \
@@ -88,6 +89,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     XFootnote \
     XGroup \
     XImage \
+    XIndex \
     XInlineImage \
     XLayout \
     XLine \

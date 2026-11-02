@@ -78,8 +78,12 @@ $internal.installGasServices = function(uiStub, menuItems, pendingAlerts) {
             TABLE_OF_CONTENTS: uno.idl.scriptinterop.ElementType.TABLE_OF_CONTENTS,
             TABLE_ROW: uno.idl.scriptinterop.ElementType.TABLE_ROW,
             TEXT: uno.idl.scriptinterop.ElementType.TEXT,
-            UNSUPPORTED: uno.idl.scriptinterop.ElementType.UNSUPPORTED
+            UNSUPPORTED: uno.idl.scriptinterop.ElementType.UNSUPPORTED,
+            // Not in GAS:
+            INDEX: uno.idl.scriptinterop.ElementType.INDEX
         },
+        // Not in GAS, which has no index other than the table of contents:
+        IndexKind: uno.idl.scriptinterop.IndexKind,
         TextAlignment: uno.idl.scriptinterop.TextAlignment,
         HorizontalAlignment: uno.idl.scriptinterop.HorizontalAlignment,
         VerticalAlignment: { TOP: 'TOP', MIDDLE: 'MIDDLE', BOTTOM: 'BOTTOM' },

@@ -19,14 +19,15 @@ function test() {
 
     // The body holds "Before", a table of contents with the one entry "Heading", the heading
     // itself, "After", and an alphabetical index with the one entry "Term". The table of contents
-    // is one child, which holds the entry, and so is the index, which GAS has no type for:
+    // is one child, which holds the entry, and so is the index, of the type INDEX that is not in
+    // GAS:
     const types = [];
     for (let i = 0; i !== body.getNumChildren(); ++i) {
         types.push(String(body.getChild(i).getType()));
     }
     console.assert(
         JSON.stringify(types)
-        === '["PARAGRAPH","TABLE_OF_CONTENTS","PARAGRAPH","PARAGRAPH","UNSUPPORTED"]');
+        === '["PARAGRAPH","TABLE_OF_CONTENTS","PARAGRAPH","PARAGRAPH","INDEX"]');
     const toc = body.getChild(1);
     console.assert(toc.getType() === DocumentApp.ElementType.TABLE_OF_CONTENTS);
     console.assert(toc.getNumChildren() === 1);
@@ -38,14 +39,19 @@ function test() {
     console.assert(toc.getPreviousSibling().getText() === 'Before');
     console.assert(toc.getNextSibling().getText() === 'Heading');
     console.assert(body.getChildIndex(toc) === 1);
-    console.assert(body.getChild(4).getText().startsWith('Term'));
+    const index = body.getChild(4);
+    console.assert(index.getText().startsWith('Term'));
+    console.assert(index.asIndex().getIndexKind() === DocumentApp.IndexKind.ALPHABETICAL);
+    console.assert(index.getNumChildren() === 1);
+    console.assert(index.getChild(0).getParent().getType() === DocumentApp.ElementType.INDEX);
+    console.assert(index.getPreviousSibling().getText() === 'After');
 
-    // Only the table of contents, and the text for editing it, cast to a table of contents:
+    // Each index, and the text for editing it, casts to its own type only:
     console.assert(toc.asTableOfContents().getNumChildren() === 1);
     console.assert(toc.editAsText().asTableOfContents().getNumChildren() === 1);
     for (const [element, message] of [
         [body.getChild(0), "PARAGRAPH can't be cast to TABLE_OF_CONTENTS."],
-        [body.getChild(4), "UNSUPPORTED can't be cast to TABLE_OF_CONTENTS."],
+        [index, "INDEX can't be cast to TABLE_OF_CONTENTS."],
     ]) {
         let caught = null;
         try {
@@ -55,6 +61,13 @@ function test() {
         }
         console.assert(caught === message);
     }
+    let caught = null;
+    try {
+        toc.asIndex();
+    } catch (e) {
+        caught = e.message;
+    }
+    console.assert(caught === "TABLE_OF_CONTENTS can't be cast to INDEX.");
 
     // A range holds a whole table of contents as one element, and an entry that is added on its own
     // as a paragraph:
@@ -65,7 +78,7 @@ function test() {
     console.assert(
         describe(doc.newRange().addElement(toc.editAsText()).build()) === 'TABLE_OF_CONTENTS');
     console.assert(describe(doc.newRange().addElement(toc.getChild(0)).build()) === 'PARAGRAPH');
-    console.assert(describe(doc.newRange().addElement(body.getChild(4)).build()) === 'UNSUPPORTED');
+    console.assert(describe(doc.newRange().addElement(index).build()) === 'INDEX');
     console.assert(
         describe(doc.newRange().addElementRange(toc.editAsText(), 0, 3).build())
         === 'TEXT-partial');

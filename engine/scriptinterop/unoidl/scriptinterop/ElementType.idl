@@ -35,10 +35,14 @@ enum ElementType {
     FOOTNOTE_SECTION,
     /** A run of text in a paragraph, between its ends and its inline images. */
     TEXT,
-    /** An element that has no type of its own, such as an index other than a table of contents. */
+    /** No element has this type yet. */
     UNSUPPORTED,
     DOCUMENT,
-    TABLE_OF_CONTENTS
+    TABLE_OF_CONTENTS,
+    /** An index other than a table of contents, such as an alphabetical index. Apps Script has no
+        such type.
+     */
+    INDEX
 };
 
 };

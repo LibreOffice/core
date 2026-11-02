@@ -1,0 +1,26 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * Copyright the Collabora Office contributors.
+ *
+ * SPDX-License-Identifier: MPL-2.0
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+module scriptinterop {
+
+/** An index other than a table of contents, such as an alphabetical index or a bibliography, as an
+    element of type INDEX.
+
+    Writer generates the paragraphs of an index from the rest of the document. They are the
+    children of the index.
+ */
+interface XIndex: XContainerElement {
+    /** Returns which kind of index this is. */
+    IndexKind getIndexKind();
+};
+
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
