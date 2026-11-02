@@ -162,7 +162,10 @@ OUString XPathObject::content()
                 return sError;
 
             xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-            return convert(xmlNodeGetContent(pXmlNode));
+            xmlChar* pContent = xmlNodeGetContent(pXmlNode);
+            OUString sContent = convert(pContent);
+            xmlFree(pContent);
+            return sContent;
         }
         case XPATH_BOOLEAN:
         {
