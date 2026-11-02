@@ -421,7 +421,6 @@ bridges/source/jni_uno/jniunoenvironmentdata.hxx
 bridges/source/jni_uno/nativethreadpool.cxx
 canvas/inc/base/basemutexhelper.hxx
 canvas/inc/base/bitmapcanvasbase.hxx
-canvas/inc/base/bufferedgraphicdevicebase.hxx
 canvas/inc/base/cachedprimitivebase.hxx
 canvas/inc/base/canvasbase.hxx
 canvas/inc/base/canvascustomspritebase.hxx
