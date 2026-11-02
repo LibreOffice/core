@@ -43,6 +43,7 @@
 #include <hb-icu.h>
 #include <hb-aat.h>
 
+#include <algorithm>
 #include <map>
 #include <memory>
 #include <set>
@@ -94,6 +95,21 @@ struct UnclusteredGlyphData
     {
     }
 };
+
+// Whether nCharPos is inside a shaping cluster (but not at its start)
+bool IsInsideCluster(hb_buffer_t* pHbBuffer, const SubRun& rSubRun, int nCharPos)
+{
+    // Positions outside of/at the ends of the run are not inside any of its clusters.
+    if (nCharPos <= rSubRun.mnMin || nCharPos >= rSubRun.mnEnd)
+        return false;
+
+    // Any other position that is not the start of a cluster is inside one.
+    unsigned int nGlyphCount = 0;
+    const hb_glyph_info_t* pGlyphInfos = hb_buffer_get_glyph_infos(pHbBuffer, &nGlyphCount);
+    return std::none_of(pGlyphInfos, pGlyphInfos + nGlyphCount,
+                        [nCharPos](const hb_glyph_info_t& rInfo)
+                        { return static_cast<int>(rInfo.cluster) == nCharPos; });
+}
 
 // This is a helper class to enable correct styling and glyph placement when a grapheme cluster is
 // split across multiple adjoining layouts.
@@ -162,7 +178,8 @@ public:
 
     void ShapeSubRun(const sal_Unicode* pStr, const int nLength, const SubRun& aSubRun,
                      hb_font_t* pHbFont, const std::vector<hb_feature_t>& maFeatures,
-                     hb_language_t oHbLanguage)
+                     hb_language_t oHbLanguage, hb_buffer_t* pClusteredBuffer,
+                     int nDrawOriginCluster, int nDrawMinCharPos, int nDrawEndCharPos)
     {
         if (!m_bEnable)
         {
@@ -170,6 +187,14 @@ public:
         }
 
         m_aGlyphs.clear();
+
+        // Remapping is needed only when a boundary is inside a cluster, not at its start
+        if (!IsInsideCluster(pClusteredBuffer, aSubRun, nDrawOriginCluster)
+            && !IsInsideCluster(pClusteredBuffer, aSubRun, nDrawMinCharPos)
+            && !IsInsideCluster(pClusteredBuffer, aSubRun, nDrawEndCharPos))
+        {
+            return;
+        }
 
         hb_buffer_clear_contents(m_pHbBuffer);
 
@@ -615,7 +640,9 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
             }
 
             // Populate glyph cluster remapping data
-            stClusterMapper.ShapeSubRun(pStr, nLength, aSubRun, pHbFont, maFeatures, oHbLanguage);
+            stClusterMapper.ShapeSubRun(pStr, nLength, aSubRun, pHbFont, maFeatures, oHbLanguage,
+                                        pHbBuffer, rArgs.mnDrawOriginCluster,
+                                        rArgs.mnDrawMinCharPos, rArgs.mnDrawEndCharPos);
 
             int nRunGlyphCount = hb_buffer_get_length(pHbBuffer);
             hb_glyph_info_t *pHbGlyphInfos = hb_buffer_get_glyph_infos(pHbBuffer, nullptr);
