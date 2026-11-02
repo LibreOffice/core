@@ -909,6 +909,26 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
             onClose?()
             return (nil, nil)
         }
+        else if body.hasPrefix("openremote ") {
+            // The message is "openremote <server> account=<id>".
+            let messageBodyItems = body.components(separatedBy: " ")
+            let address = messageBodyItems[1]
+            var accountId: String?
+
+            for item in messageBodyItems[2...] {
+                if item.hasPrefix("account=") {
+                    accountId = String(item.dropFirst("account=".count))
+                }
+            }
+
+            guard let accountId, let url = URL(string: address) else {
+                COWrapper.LOG_DBG("openremote: the message has no account id or no valid address")
+                return (nil, nil)
+            }
+
+            CloudAccountWindow.open(accountId: accountId, url: url)
+            return (nil, nil)
+        }
         else if body == "uno .uno:Open" {
             // FIXME A real message would be preferred over intercepting a uno command; but this is what the backstage currently uses
             (NSDocumentController.shared as? DocumentController)?.focusOrPresentOpenPanel(onPick: onOpened)

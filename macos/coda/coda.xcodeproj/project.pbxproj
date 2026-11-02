@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C0011A000000000000000007 /* CloudAccountWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0011A000000000000000006 /* CloudAccountWindow.swift */; };
 		AD01AD01AD01AD01AD010101 /* adminIntegratorSettings.html in Resources */ = {isa = PBXBuildFile; fileRef = AD01AD01AD01AD01AD010001 /* adminIntegratorSettings.html */; };
 		AD01AD01AD01AD01AD010102 /* admin-bundle.js in Resources */ = {isa = PBXBuildFile; fileRef = AD01AD01AD01AD01AD010002 /* admin-bundle.js */; };
 		AD01AD01AD01AD01AD010103 /* l10n-settings.js in Resources */ = {isa = PBXBuildFile; fileRef = AD01AD01AD01AD01AD010003 /* l10n-settings.js */; };
@@ -127,6 +128,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C0011A000000000000000006 /* CloudAccountWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudAccountWindow.swift; sourceTree = "<group>"; };
 		6EC5603A58ED809E2702789D /* ProcUtil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ProcUtil.hpp; path = ProcUtil.hpp; sourceTree = "<group>"; };
 		BE16C9EF2CD51F58005E5960 /* hello.odt */ = {isa = PBXFileReference; lastKnownFileType = file; name = hello.odt; path = ../../test/data/hello.odt; sourceTree = "<group>"; };
 		BE178EE92E5C756000A1FCBF /* Log-common.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "Log-common.cpp"; path = "Log-common.cpp"; sourceTree = "<group>"; };
@@ -495,6 +497,7 @@
 				BE70D2012FC4F13200FA34B8 /* coda-debug.entitlements */,
 				BE70D2012FC4F13200FA34B7 /* coda.entitlements */,
 				55B946906E4C40B99E712470 /* CoolURLSchemeHandler.swift */,
+				C0011A000000000000000006 /* CloudAccountWindow.swift */,
 				BE70D2022FC4F13200FA34B7 /* COWrapper.h */,
 				BE70D2032FC4F13200FA34B7 /* COWrapper.mm */,
 				BE70D2042FC4F13200FA34B7 /* Document.swift */,
@@ -1020,6 +1023,7 @@
 				BE70D2752FC4F13200FA34B7 /* AppDelegate.swift in Sources */,
 				BE70D2762FC4F13200FA34B7 /* BackstageViewController.swift in Sources */,
 				6C9C9A30313542C9BBE8FE26 /* CoolURLSchemeHandler.swift in Sources */,
+				C0011A000000000000000007 /* CloudAccountWindow.swift in Sources */,
 				BE70D2772FC4F13200FA34B7 /* COWrapper.mm in Sources */,
 				BE70D2782FC4F13200FA34B7 /* Document.swift in Sources */,
 				BE70D2792FC4F13200FA34B7 /* DocumentController.swift in Sources */,
