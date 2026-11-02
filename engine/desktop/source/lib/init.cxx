@@ -442,7 +442,7 @@ constexpr ExtensionMap aImpressExtensionMap[] =
     { "potx",  u"Impress MS PowerPoint 2007 XML Template"_ustr },
     { "pot",   u"MS PowerPoint 97 Vorlage"_ustr },
     { "pptm",  u"Impress MS PowerPoint 2007 XML VBA"_ustr },
-    { "ppts",  u"Impress MS PowerPoint 2007 XML AutoPlay"_ustr },
+    { "ppsx",  u"Impress MS PowerPoint 2007 XML AutoPlay"_ustr },
     { "pptx",  u"Impress MS PowerPoint 2007 XML"_ustr },
     { "pps",   u"MS PowerPoint 97 AutoPlay"_ustr },
     { "ppt",   u"MS PowerPoint 97"_ustr },
