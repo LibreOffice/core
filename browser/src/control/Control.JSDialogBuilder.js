@@ -1759,6 +1759,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 				arrowbackground = window.L.DomUtil.create('button', 'arrowbackground', div);
 
 				const buttonText = data.aria && data.aria.label ? data.aria.label : builder._cleanText(data.text);
+				// TRANSLATORS: keep {name} as it is, untranslated: it is replaced with the name of the control
 				const dropdownAriaLabelText = _('Open {name}').replace('{name}', buttonText);
 				arrowbackground.setAttribute('aria-label', dropdownAriaLabelText);
 

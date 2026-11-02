@@ -286,6 +286,7 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 			const name = JSDialog.GetA11yLabelText(parentContainer, content, data, builder) ||
 				(data.aria && data.aria.label ? data.aria.label : '');
 			button.setAttribute('aria-label', name
+				// TRANSLATORS: keep {name} as it is, untranslated: it is replaced with the name of the control
 				? _('Open {name}').replace('{name}', name)
 				: _('Open list'));
 		});
