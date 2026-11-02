@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <string_view>
+
 #include <xepivotxml.hxx>
 #include <dpcache.hxx>
 #include <pivot/PivotTableFormats.hxx>
@@ -19,12 +21,15 @@
 #include <dputil.hxx>
 #include <document.hxx>
 #include <generalfunction.hxx>
+#include <global.hxx>
+#include <xestream.hxx>
 #include <unonames.hxx>
 #include <xestyle.hxx>
 #include <xeroot.hxx>
 
 #include <o3tl/temporary.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/token/namespaces.hxx>
 #include <sal/log.hxx>
@@ -106,6 +111,30 @@ const char* toOOXMLAxisType( sheet::DataPilotFieldOrientation eOrient )
     }
 
     return "";
+}
+
+/** The name the format gives the error this text stands for.
+
+    A cache built from the cells of the document keeps an error as the text it is shown as, which
+    is the text of the language the document is read in, while the format names every error the
+    same way in every language. A cache that a file brings along without its source data holds the
+    name of the format already, so a text of either kind is taken. */
+const char* lcl_GetErrorName(std::u16string_view rText)
+{
+    static const FormulaError aErrors[]
+        = { FormulaError::DivisionByZero, FormulaError::NotAvailable, FormulaError::NoName,
+            FormulaError::NoCode,         FormulaError::IllegalFPOperation,
+            FormulaError::NoRef,          FormulaError::NoValue,
+            FormulaError::Spill };
+
+    for (const FormulaError eError : aErrors)
+    {
+        const char* pName = XclXmlUtils::GetErrorName(eError);
+        if (ScGlobal::GetErrorString(eError) == rText || o3tl::equalsAscii(rText, pName))
+            return pName;
+    }
+
+    return XclXmlUtils::GetErrorName(FormulaError::NotAvailable);
 }
 
 const char* toOOXMLSubtotalType(ScGeneralFunction eFunc)
@@ -607,7 +636,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
                     break;
                     case ScDPItemData::Error:
                         pDefStrm->singleElement(XML_e,
-                            XML_v, rItem.GetString().toUtf8());
+                            XML_v, lcl_GetErrorName(rItem.GetString()));
                     break;
                     case ScDPItemData::GroupValue: // Should not happen here!
                     case ScDPItemData::RangeStart:

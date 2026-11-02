@@ -27,10 +27,13 @@
 #include <scresid.hxx>
 #include <queryentry.hxx>
 #include <queryparam.hxx>
+#include <compiler.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <rtl/string.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
+#include <com/sun/star/sheet/FormulaLanguage.hpp>
 
 using namespace ::com::sun::star;
 
@@ -3313,6 +3316,19 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableInvalidCacheReadsShe
     CPPUNIT_ASSERT_EQUAL(u"109"_ustr, pDoc->GetString(ScAddress(1, 5, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotCacheNamesAnErrorTheWayTheFormatDoesXLSX)
+{
+    // One cell of the source data holds an error, which the cache of the table keeps.
+    createScDoc("xlsx/pivot-table/error-in-the-source-data.xlsx");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pCache = parseExport(u"xl/pivotCache/pivotCacheDefinition1.xml"_ustr);
+    CPPUNIT_ASSERT(pCache);
+
+    // The name the format gives the error, which is the same name in every language.
+    assertXPath(pCache, "//x:cacheField[@name='Err']/x:sharedItems/x:e", "v", u"#N/A");
+}
+
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableWithoutSourceDataXLSX)
 {
     // The source range A1:C7 on the first sheet is empty, only the saved cache records hold the
@@ -3357,6 +3373,37 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableWithoutSourceDataXLS
     const ScDPCache* pCacheAfter
         = pDPs->GetSheetCaches().getExistingCache(ScRange(0, 0, 0, 2, 6, 0));
     CPPUNIT_ASSERT_EQUAL(pCache, pCacheAfter);
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotCacheKeepsTheErrorOfAFileXLSX)
+{
+    // The error names of a localized formula language, as German has #WERT! for #VALUE!. The
+    // first document takes the formula options, so that the one loaded below keeps these names.
+    createScDoc();
+    ScCompiler aComp(*getScDoc(), ScAddress());
+    const ScCompiler::OpCodeMapPtr xNative
+        = aComp.GetOpCodeMap(css::sheet::FormulaLanguage::NATIVE);
+    auto xLocalized = std::make_shared<formula::FormulaCompiler::OpCodeMap>(
+        xNative->getSymbolCount(), false, xNative->getGrammar());
+    for (sal_uInt16 i = 1; i < xNative->getSymbolCount(); ++i)
+    {
+        const OpCode eOp = static_cast<OpCode>(i);
+        const OUString aSymbol = eOp == ocErrValue ? u"#WERT!"_ustr : xNative->getSymbol(eOp);
+        if (!aSymbol.isEmpty())
+            xLocalized->putOpCode(aSymbol, eOp, nullptr);
+    }
+    ScCompiler::SetNativeSymbols(xLocalized);
+    comphelper::ScopeGuard aGuard([] { ScCompiler::ResetNativeSymbols(); });
+    CPPUNIT_ASSERT_EQUAL(u"#WERT!"_ustr, ScCompiler::GetNativeSymbol(ocErrValue));
+
+    // The source range of the table is empty, so the cache is read from the file, which names
+    // the error #VALUE! whatever the language of whoever reads it.
+    createScDoc("xlsx/pivot-table/error-in-the-cache-only.xlsx");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pCache = parseExport(u"xl/pivotCache/pivotCacheDefinition1.xml"_ustr);
+    CPPUNIT_ASSERT(pCache);
+    assertXPath(pCache, "//x:cacheField[@name='Err']/x:sharedItems/x:e", "v", u"#VALUE!");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

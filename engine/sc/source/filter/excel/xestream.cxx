@@ -651,7 +651,7 @@ void XclExpBiff8Encrypter::EncryptBytes( SvStream& rStrm, std::vector<sal_uInt8>
     mnOldPos = nStrmPos;
 }
 
-static const char* lcl_GetErrorString( FormulaError nScErrCode )
+const char* XclXmlUtils::GetErrorName( FormulaError nScErrCode )
 {
     sal_uInt8 nXclErrCode = XclTools::GetXclErrorCode( nScErrCode );
     switch( nXclErrCode )
@@ -679,7 +679,7 @@ void XclXmlUtils::GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& rsT
     {
         case sc::FormulaResultValue::Error:
             rsType = "e";
-            rsValue = ToOUString(lcl_GetErrorString(aResValue.mnError));
+            rsValue = ToOUString(GetErrorName(aResValue.mnError));
         break;
         case sc::FormulaResultValue::Value:
             rsType = rCell.GetFormatType() == SvNumFormatType::LOGICAL

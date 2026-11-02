@@ -257,6 +257,8 @@ public:
     XclXmlUtils& operator=(const XclXmlUtils&) = delete;
 
     static void                     GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& sType, OUString& rValue);
+    /** Returns the name the format gives this error, which is the same in every language. */
+    static const char*              GetErrorName( FormulaError nScErrCode );
     static OUString          GetStreamName( const char* sStreamDir, const char* sStream, sal_Int32 nId );
 
     static OString ToOString( const Color& rColor );
