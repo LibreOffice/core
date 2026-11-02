@@ -179,12 +179,46 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
             in: frameInfo,
             in: .page
         ) { result in
-            guard case .success = result else {
+            guard case .success(let value) = result, let files = value as? [String: [String]] else {
                 COWrapper.LOG_ERR("CODA's page was not put in the editor frame")
                 return
             }
 
             COWrapper.LOG_DBG("CODA's page is in the editor frame")
+            self.adoptStyleSheets(files["styles"] ?? [], in: frameInfo)
+        }
+    }
+
+    // coolwsd's policy refuses a <style> element, but not a style sheet made in script.
+    private func adoptStyleSheets(_ paths: [String], in frameInfo: WKFrameInfo) {
+        var sheets: [String] = []
+
+        for path in paths {
+            guard let css = Self.appFile(path) else {
+                COWrapper.LOG_DBG("Style sheet not found: \(path)")
+                continue
+            }
+
+            sheets.append(css)
+        }
+
+        let script = """
+            document.adoptedStyleSheets = sheets.map((css) => {
+                const sheet = new CSSStyleSheet();
+                sheet.replaceSync(css);
+                return sheet;
+            });
+            """
+
+        webView.callAsyncJavaScript(
+            script,
+            arguments: ["sheets": sheets],
+            in: frameInfo,
+            in: .page
+        ) { result in
+            if case .failure = result {
+                COWrapper.LOG_ERR("CODA's style sheets were not attached in the editor frame")
+            }
         }
     }
 
