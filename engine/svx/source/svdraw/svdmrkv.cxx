@@ -1001,8 +1001,12 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
         // A shape is selected, so the text selection this view showed before belongs to
         // nothing now and goes away with it. A view that is editing text keeps the text it
         // selected: the shape reported here is the frame around that very edit, and the edit
-        // reports its own selection as it changes.
-        if (pViewShell && !static_cast<SdrView*>(this)->IsTextEdit())
+        // reports its own selection as it changes. A view that edits an object in place, such as
+        // a formula, keeps its text selection too: the shape is the frame of that object, and the
+        // object reports the selection inside it.
+        const SfxInPlaceClient* pIPClient = pViewShell ? pViewShell->GetIPClient() : nullptr;
+        const bool bObjectInPlaceActive = pIPClient && pIPClient->IsObjectInPlaceActive();
+        if (pViewShell && !static_cast<SdrView*>(this)->IsTextEdit() && !bObjectInPlaceActive)
             pViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION, ""_ostr);
     }
 

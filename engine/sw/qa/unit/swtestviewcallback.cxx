@@ -119,6 +119,7 @@ void SwTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
         case COKitCallbackType::TEXT_SELECTION:
         {
             m_bOwnSelectionSet = true;
+            m_aOwnSelection = OString(pPayload);
         }
         break;
         case COKitCallbackType::TEXT_VIEW_SELECTION:

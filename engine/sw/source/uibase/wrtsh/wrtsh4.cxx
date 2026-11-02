@@ -23,6 +23,8 @@
 #include <COKit/COKit.hxx>
 #include <comphelper/string.hxx>
 #include <sfx2/kit/helper.hxx>
+#include <sfx2/ipclient.hxx>
+#include <sfx2/viewsh.hxx>
 
 // Private methods, which move the cursor over search.
 // The removal of the selection must be made on the level above.
@@ -266,7 +268,15 @@ std::optional<OString> SwWrtShell::getKitPayload(COKitCallbackType eType, int nV
             }
             OString sRect = comphelper::string::join("; ", aAllRects);
             if (eType == COKitCallbackType::TEXT_SELECTION)
+            {
+                // A view that edits an object in place, such as a formula, shows the selection
+                // that the object reports. An empty selection of the text around the object is not
+                // sent, so it leaves that one as it is.
+                const SfxInPlaceClient* pIPClient = GetSfxViewShell()->GetIPClient();
+                if (sRect.isEmpty() && pIPClient && pIPClient->IsObjectInPlaceActive())
+                    return {};
                 return sRect;
+            }
             else // COKitCallbackType::TEXT_VIEW_SELECTION
                 return KitHelper::makePayloadJSON(GetSfxViewShell(), nViewId, "selection", sRect);
         }

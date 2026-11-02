@@ -85,6 +85,9 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
+#include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
+#include <sfx2/ipclient.hxx>
 
 using namespace css;
 using namespace ::cpo;
@@ -3360,6 +3363,52 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInsertPageHeaderStateUserPageStyl
     CPPUNIT_ASSERT_EQUAL(aStyleName.toString(), rList[0]);
 }
 
+}
+
+namespace
+{
+/// The controller of the first embedded object of a text document, which is a formula here.
+uno::Reference<frame::XController>
+getFormulaController(const uno::Reference<lang::XComponent>& xComponent)
+{
+    uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(xComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xObjects(xSupplier->getEmbeddedObjects(),
+                                                     uno::UNO_QUERY);
+    uno::Reference<document::XEmbeddedObjectSupplier> xObject(xObjects->getByIndex(0),
+                                                              uno::UNO_QUERY);
+    uno::Reference<frame::XModel> xModel(xObject->getEmbeddedObject(), uno::UNO_QUERY);
+    return xModel->getCurrentController();
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testFormulaSelectionSurvivesFrameResize)
+{
+    // Given a formula that is edited in place, holding the letter a:
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwTestViewCallback aView;
+    dispatchCommand(mxComponent, u".uno:InsertObjectStarMath"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    // Leave the formula at the end, so that its view closes before the callback it reports to.
+    comphelper::ScopeGuard aLeaveFormula([this] {
+        getSwDocShell()->GetView()->GetIPClient()->DeactivateObject();
+        Scheduler::ProcessEventsToIdle();
+    });
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 'a', 0);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 'a', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // When the addition element is inserted, which selects its second placeholder and makes the
+    // formula wider:
+    aView.m_aOwnSelection.clear();
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "Text", uno::Any(u"<?> + <?> "_ustr) } }));
+    comphelper::dispatchCommand(u".uno:InsertCommandText"_ustr, getFormulaController(mxComponent),
+                                aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the view still shows the selected placeholder. Without the fix, the frame of the
+    // formula was reported again after it grew, together with an empty text selection.
+    CPPUNIT_ASSERT(!aView.m_aOwnSelection.isEmpty());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

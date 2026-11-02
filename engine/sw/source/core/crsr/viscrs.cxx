@@ -1023,7 +1023,12 @@ void SwShellCursor::Show(SfxViewShell const * pViewShell)
             return;
         }
 
-        pSfxViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION, sRect);
+        // A view that edits an object in place, such as a formula, shows the selection that the
+        // object reports. An empty selection of the text around the object leaves that one as it is.
+        const SfxInPlaceClient* pIPClient = pSfxViewShell->GetIPClient();
+        const bool bObjectInPlaceActive = pIPClient && pIPClient->IsObjectInPlaceActive();
+        if (!sRect.isEmpty() || !bObjectInPlaceActive)
+            pSfxViewShell->viewCallback(COKitCallbackType::TEXT_SELECTION, sRect);
         KitHelper::notifyOtherViews(pSfxViewShell, COKitCallbackType::TEXT_VIEW_SELECTION, "selection", sRect);
     }
 }

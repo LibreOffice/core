@@ -36,6 +36,8 @@ public:
     int m_nViewCursorMovedBy;
     tools::Rectangle m_aViewCursor;
     bool m_bOwnSelectionSet;
+    /// The rectangles of the last text selection of this view, empty when nothing is selected.
+    OString m_aOwnSelection;
     bool m_bViewSelectionSet;
     OString m_aViewSelection;
     OString m_aViewRenderState;
