@@ -770,6 +770,54 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testPartialArabicComposition)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(nCompleteWidth, nPartialWidth, /*delta*/ 0.01);
 }
 
+CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testPartialSpacingMark)
+{
+#if HAVE_MORE_FONTS
+    OUString aStr = u"का"_ustr;
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
+    pOutDev->SetFont(vcl::Font(u"Noto Sans"_ustr, u"Regular"_ustr, Size(0, 2048)));
+
+    // The consonant and the vowel sign are one grapheme cluster, but each must get only the width
+    // of its own glyph when they are measured as separate parts, e.g. because of different colors
+    std::vector<double> aExpectedWidths{ 1573, 530 };
+    for (sal_Int32 i = 0; i < 2; ++i)
+    {
+        KernArray aWidths;
+        auto nWidth = pOutDev->GetPartialTextArray(aStr, &aWidths, /*nIndex*/ 0, /*nLen*/ 2,
+                                                   /*nPartIndex*/ i, /*nPartLen*/ 1);
+
+        // Without the fix this fails with:
+        // - Expected: 1573
+        // - Actual  : 2103
+        CPPUNIT_ASSERT_EQUAL(size_t{ 1 }, aWidths.size());
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(aExpectedWidths[i], aWidths[0], /*delta*/ 0.01);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(aExpectedWidths[i], nWidth, /*delta*/ 0.01);
+    }
+#endif
+}
+
+CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf157562)
+{
+#if HAVE_MORE_FONTS
+    OUString aStr = u"क​ा"_ustr;
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
+    pOutDev->SetFont(vcl::Font(u"Noto Sans"_ustr, u"Regular"_ustr, Size(0, 2048)));
+
+    // HarfBuzz puts the vowel sign, and a dotted circle, in the cluster of the zero width space.
+    // The vowel sign must still get the width of both glyphs when measured as a separate part.
+    KernArray aWidths;
+    auto nWidth = pOutDev->GetPartialTextArray(aStr, &aWidths, /*nIndex*/ 0, /*nLen*/ 3,
+                                               /*nPartIndex*/ 2, /*nPartLen*/ 1);
+
+    // Without the fix this fails with:
+    // - Expected: 1747
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(size_t{ 1 }, aWidths.size());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1747.0, aWidths[0], /*delta*/ 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1747.0, nWidth, /*delta*/ 0.01);
+#endif
+}
+
 CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf163215)
 {
     OUString aStr = u"ببببب"_ustr;

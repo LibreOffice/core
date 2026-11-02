@@ -50,7 +50,6 @@ public:
     SAL_DLLPRIVATE void            DrawText(SalGraphics&) const override;
     SAL_DLLPRIVATE sal_Int32       GetTextBreak(double nMaxWidth, double nCharExtra, int nFactor) const override;
     SAL_DLLPRIVATE double          GetTextWidth() const final override;
-    SAL_DLLPRIVATE double GetPartialTextWidth(sal_Int32 skipStart, sal_Int32 amt) const override;
     SAL_DLLPRIVATE double          FillDXArray(std::vector<double>* pDXArray, const OUString& rStr) const override;
     SAL_DLLPRIVATE double FillPartialDXArray(std::vector<double>* pDXArray, const OUString& rStr,
                                              sal_Int32 skipStart, sal_Int32 amt) const override;
@@ -112,7 +111,6 @@ public:
 
     // used by upper layers
     double          GetTextWidth() const final override;
-    double GetPartialTextWidth(sal_Int32 skipStart, sal_Int32 amt) const final override;
     double          FillDXArray(std::vector<double>* pDXArray, const OUString& rStr) const final override;
     double FillPartialDXArray(std::vector<double>* pDXArray, const OUString& rStr,
                               sal_Int32 skipStart, sal_Int32 amt) const final override;

@@ -41,6 +41,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <numeric>
 
 #include <impglyphitem.hxx>
 
@@ -323,12 +324,17 @@ static void StripPartialDXArray(std::vector<double>& rCharWidths, sal_Int32 skip
                                 sal_Int32 amt)
 {
     const sal_Int32 nSize = rCharWidths.size();
+    double nWidthBefore = 0.0;
     if (skipStart < nSize)
     {
+        nWidthBefore
+            = std::accumulate(rCharWidths.begin(), rCharWidths.begin() + skipStart, 0.0);
         std::copy(rCharWidths.begin() + skipStart, rCharWidths.end(), rCharWidths.begin());
     }
 
     rCharWidths.resize(amt, 0.0);
+    if (amt > 0)
+        rCharWidths[0] += nWidthBefore;
 }
 
 double GenericSalLayout::FillPartialDXArray(std::vector<double>* pCharWidths, const OUString& rStr,
@@ -340,7 +346,7 @@ double GenericSalLayout::FillPartialDXArray(std::vector<double>* pCharWidths, co
         StripPartialDXArray(*pCharWidths, skipStart, amt);
     }
 
-    return GetPartialTextWidth(skipStart, amt);
+    return GetTextWidth();
 }
 
 // the text width is the maximum logical extent of all glyphs
@@ -352,27 +358,6 @@ double GenericSalLayout::GetTextWidth() const
     double nWidth = 0;
     for (auto const& aGlyphItem : m_GlyphItems)
         nWidth += aGlyphItem.newWidth();
-
-    return nWidth;
-}
-
-double GenericSalLayout::GetPartialTextWidth(sal_Int32 skipStart, sal_Int32 amt) const
-{
-    if (!m_GlyphItems.IsValid())
-    {
-        return 0;
-    }
-
-    auto skipEnd = skipStart + amt;
-    double nWidth = 0.0;
-    for (auto const& aGlyphItem : m_GlyphItems)
-    {
-        auto pos = aGlyphItem.charPos();
-        if (pos >= skipStart && pos < skipEnd)
-        {
-            nWidth += aGlyphItem.newWidth();
-        }
-    }
 
     return nWidth;
 }
@@ -1153,29 +1138,6 @@ double MultiSalLayout::GetTextWidth() const
     return nWidth;
 }
 
-double MultiSalLayout::GetPartialTextWidth(sal_Int32 skipStart, sal_Int32 amt) const
-{
-    // Measure text width. There might be holes in each SalLayout due to
-    // missing chars, so we use GetNextGlyph() to get the glyphs across all
-    // layouts.
-    int nStart = 0;
-    basegfx::B2DPoint aPos;
-    const GlyphItem* pGlyphItem;
-
-    auto skipEnd = skipStart + amt;
-    double nWidth = 0;
-    while (GetNextGlyph(&pGlyphItem, aPos, nStart))
-    {
-        auto cpos = pGlyphItem->charPos();
-        if (cpos >= skipStart && cpos < skipEnd)
-        {
-            nWidth += pGlyphItem->newWidth();
-        }
-    }
-
-    return nWidth;
-}
-
 double MultiSalLayout::FillDXArray( std::vector<double>* pCharWidths, const OUString& rStr ) const
 {
     if (pCharWidths)
@@ -1218,7 +1180,7 @@ double MultiSalLayout::FillPartialDXArray(std::vector<double>* pCharWidths, cons
         StripPartialDXArray(*pCharWidths, skipStart, amt);
     }
 
-    return GetPartialTextWidth(skipStart, amt);
+    return GetTextWidth();
 }
 
 void MultiSalLayout::GetCaretPositions(std::vector<double>& rCaretPositions,

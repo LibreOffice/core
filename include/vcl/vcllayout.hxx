@@ -101,11 +101,6 @@ public:
                                       sal_Int32 skipStart, sal_Int32 amt) const
         = 0;
 
-    virtual double GetPartialTextWidth(sal_Int32 skipStart, sal_Int32 amt) const
-    {
-        return FillPartialDXArray(nullptr, {}, skipStart, amt);
-    }
-
     virtual void    GetCaretPositions( std::vector<double>& rCaretPositions, const OUString& rStr ) const = 0;
 
     virtual bool HasFontKashidaPositions() const = 0;

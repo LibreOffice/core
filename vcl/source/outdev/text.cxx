@@ -826,11 +826,9 @@ OutputDevice::GetPartialTextArray(const OUString& rStr, KernArray* pKernArray, s
     }
     else
     {
-        pSalLayout = ImplLayout(rStr, nIndex, nLen, Point{ 0, 0 }, 0, {}, {}, eDefaultLayout,
-                                pLayoutCache, pSalLayoutCache,
-                                /*pivot cluster*/ nPartIndex,
-                                /*min cluster*/ nPartIndex,
-                                /*end cluster*/ nPartIndex + nPartLen);
+        pSalLayout = ImplPartialLayout(*this, rStr, nIndex, nLen, nPartIndex, nPartLen,
+                                       Point{ 0, 0 }, {}, {}, eDefaultLayout, pLayoutCache,
+                                       pSalLayoutCache);
     }
 
     if( !pSalLayout )
