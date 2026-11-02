@@ -4192,9 +4192,8 @@ void DocumentBroker::handleUploadToStorageSuccessful(const StorageBase::UploadRe
                 << " filename=" << encodedName << " xfilename=" << filenameAnonym;
             session->sendTextFrame(oss.str());
 
-            const auto fileExtension = _filename.substr(_filename.find_last_of('.'));
-            if (!strcasecmp(fileExtension.c_str(), ".csv") ||
-                !strcasecmp(fileExtension.c_str(), ".txt"))
+            const std::string fileExtension = Poco::Path(_filename).getExtension();
+            if (Util::iequal(fileExtension, "csv") || Util::iequal(fileExtension, "txt"))
             {
                 broadcastMessageToOthers(
                     "warn: " + oss.str() + " username=" + session->getUserName(), session);
