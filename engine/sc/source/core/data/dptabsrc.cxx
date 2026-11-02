@@ -1528,7 +1528,7 @@ uno::Reference<beans::XPropertySetInfo> ScDPDimension::getPropertySetInfo()
         { SC_UNO_DP_FUNCTION, 0,  cppu::UnoType<sheet::GeneralFunction>::get(),   0, 0 },
         { SC_UNO_DP_FUNCTION2, 0,  cppu::UnoType<sal_Int16>::get(),   0, 0 },
         { SC_UNO_DP_ISDATALAYOUT, 0,  cppu::UnoType<bool>::get(),                      beans::PropertyAttribute::READONLY, 0 },
-        { SC_UNO_DP_NUMBERFO, 0,  cppu::UnoType<sal_Int32>::get(),                beans::PropertyAttribute::READONLY, 0 },
+        { SC_UNO_DP_NUMBERFO, 0,  cppu::UnoType<sal_Int32>::get(),                0, 0 },
         { SC_UNO_DP_ORIENTATION, 0,  cppu::UnoType<sheet::DataPilotFieldOrientation>::get(), 0, 0 },
         { SC_UNO_DP_ORIGINAL, 0,  cppu::UnoType<container::XNamed>::get(), beans::PropertyAttribute::READONLY, 0 },
         { SC_UNO_DP_ORIGINAL_POS, 0, cppu::UnoType<sal_Int32>::get(),             0, 0 },
@@ -1572,6 +1572,14 @@ void ScDPDimension::setPropertyValue( const OUString& aPropertyName, const cpo::
     }
     else if ( aPropertyName == SC_UNO_DP_REFVALUE )
         aValue >>= aReferenceValue;
+    else if ( aPropertyName == SC_UNO_DP_NUMBERFO )
+    {
+        sal_Int32 nFormat = 0;
+        if (aValue >>= nFormat)
+            moStatedNumberFormat = static_cast<sal_uInt32>(nFormat);
+        else
+            moStatedNumberFormat.reset();
+    }
     else if ( aPropertyName == SC_UNO_DP_FILTER )
     {
         bool bDone = false;
@@ -1663,8 +1671,12 @@ cpo::uno::Any ScDPDimension::getPropertyValue( const OUString& aPropertyName )
     {
         sal_Int32 nFormat = 0;
         ScGeneralFunction eFunc = getFunction();
+        // A format the document states for these results is what they are shown in, whatever
+        // the source data is shown in and whatever is counted here.
+        if ( moStatedNumberFormat )
+            nFormat = static_cast<sal_Int32>(*moStatedNumberFormat);
         // #i63745# don't use source format for "count"
-        if ( eFunc != ScGeneralFunction::COUNT && eFunc != ScGeneralFunction::COUNTNUMS )
+        else if ( eFunc != ScGeneralFunction::COUNT && eFunc != ScGeneralFunction::COUNTNUMS )
             nFormat = pSource->GetData()->GetNumberFormat( ( nSourceDim >= 0 ) ? nSourceDim : nDim );
 
         switch ( aReferenceValue.ReferenceType )

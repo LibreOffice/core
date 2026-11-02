@@ -279,6 +279,8 @@ class ScDPDimension final : public cppu::WeakImplHelper<
     std::unique_ptr<ScDPItemData>
                         pSelectedData;      // internal, temporary, created from aSelectedPage
     bool                mbHasHiddenMember;
+    /// The format the document states for the results of this dimension, or nothing.
+    std::optional<sal_uInt32> moStatedNumberFormat;
 
 public:
                             ScDPDimension( ScDPSource* pSrc, tools::Long nD );

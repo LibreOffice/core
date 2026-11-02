@@ -115,6 +115,8 @@ private:
     std::unique_ptr<css::sheet::DataPilotFieldSortInfo> pSortInfo; // (level)
     std::unique_ptr<css::sheet::DataPilotFieldAutoShowInfo> pAutoShowInfo; // (level)
     std::unique_ptr<css::sheet::DataPilotFieldLayoutInfo> pLayoutInfo; // (level)
+    /// The format the document states for the results of this dimension, or nothing.
+    std::optional<sal_uInt32> moNumberFormat;
 
 public:
     typedef std::unordered_set<OUString> MemberSetType;
@@ -201,6 +203,12 @@ public:
         { return pLayoutInfo.get(); }
 
     SC_DLLPUBLIC void SetLayoutInfo(const css::sheet::DataPilotFieldLayoutInfo* pNew);
+
+    /** The format the document states for the results of this dimension, or nothing. */
+    const std::optional<sal_uInt32>& GetNumberFormat() const
+        { return moNumberFormat; }
+
+    SC_DLLPUBLIC void SetNumberFormat( sal_uInt32 nFormat );
 
     SC_DLLPUBLIC void SetCurrentPage( const OUString* pPage ); // NULL = no selection (all)
     OUString GetCurrentPage() const; // only for ODF compatibility

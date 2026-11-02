@@ -439,6 +439,7 @@ public:
     void setOrientation(css::sheet::DataPilotFieldOrientation Orientation);
     sal_Int16 getFunction() const;
     void setFunction(ScGeneralFunction Function);
+    void setNumberFormat(sal_uInt32 nFormat);
     cpo::uno::Sequence< sal_Int16 > getSubtotals() const;
     void setSubtotals(const std::vector< ScGeneralFunction >& rFunctions);
     void setCurrentPage(const OUString& sPage);

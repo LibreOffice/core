@@ -1907,6 +1907,12 @@ void NumberFormatsBuffer::finalizeImport()
     maNumFmts.forEach( NumberFormatFinalizer( *this ) );
 }
 
+sal_Int32 NumberFormatsBuffer::getFormatIndex( sal_uInt32 nNumFmtId ) const
+{
+    const NumberFormat* pNumFmt = maNumFmts.get(nNumFmtId).get();
+    return pNumFmt ? pNumFmt->getFormatIndex() : 0;
+}
+
 sal_uInt32 NumberFormatsBuffer::fillToItemSet( SfxItemSet& rItemSet, sal_uInt32 nNumFmtId, bool bSkipPoolDefs ) const
 {
     const NumberFormat* pNumFmt = maNumFmts.get(nNumFmtId).get();

@@ -134,6 +134,7 @@ std::span<const SfxItemPropertyMapEntry> lcl_GetDataPilotFieldMap()
         { SC_UNONAME_HASREFERENCE, 0,  cppu::UnoType<bool>::get(),                          0, 0 },
         { SC_UNONAME_HASSORTINFO,  0,  cppu::UnoType<bool>::get(),                          0, 0 },
         { SC_UNONAME_ISGROUP,      0,  cppu::UnoType<bool>::get(),                          0, 0 },
+        { SC_UNONAME_NUMFMT,       0,  cppu::UnoType<sal_Int32>::get(),                    MAYBEVOID, 0 },
         { SC_UNONAME_LAYOUTINFO,   0,  cppu::UnoType<DataPilotFieldLayoutInfo>::get(),     MAYBEVOID, 0 },
         { SC_UNONAME_ORIENT,       0,  cppu::UnoType<DataPilotFieldOrientation>::get(),    MAYBEVOID, 0 },
         { SC_UNONAME_REFERENCE,    0,  cppu::UnoType<DataPilotFieldReference>::get(),      MAYBEVOID, 0 },
@@ -1730,6 +1731,12 @@ void ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyName, const
         ScGeneralFunction eFunction = static_cast<ScGeneralFunction>(ScUnoHelpFunctions::GetInt16FromAny( aValue ));
         setFunction( eFunction );
     }
+    else if ( aPropertyName == SC_UNONAME_NUMFMT )
+    {
+        sal_Int32 nFormat = 0;
+        if (aValue >>= nFormat)
+            setNumberFormat( static_cast<sal_uInt32>(nFormat) );
+    }
     else if ( aPropertyName == SC_UNONAME_SUBTOTALS )
     {
         cpo::uno::Sequence<sheet::GeneralFunction> aSeq;
@@ -2028,6 +2035,18 @@ sal_Int16 ScDataPilotFieldObj::getFunction() const
             eRet = static_cast<sal_Int16>(pDim->GetFunction());
     }
     return eRet;
+}
+
+void ScDataPilotFieldObj::setNumberFormat(sal_uInt32 nFormat)
+{
+    SolarMutexGuard aGuard;
+    ScDPObject* pDPObj = nullptr;
+    ScDPSaveDimension* pDim = GetDPDimension( &pDPObj );
+    if(!pDim)
+        return;
+
+    pDim->SetNumberFormat( nFormat );
+    SetDPObject( pDPObj );
 }
 
 void ScDataPilotFieldObj::setFunction(ScGeneralFunction eNewFunc)

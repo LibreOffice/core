@@ -223,7 +223,8 @@ ScDPSaveDimension::ScDPSaveDimension(const ScDPSaveDimension& r) :
     nShowEmptyMode( r.nShowEmptyMode ),
     bRepeatItemLabels( r.bRepeatItemLabels ),
     bSubTotalDefault( r.bSubTotalDefault ),
-    maSubTotalFuncs( r.maSubTotalFuncs )
+    maSubTotalFuncs( r.maSubTotalFuncs ),
+    moNumberFormat( r.moNumberFormat )
 {
     for (const ScDPSaveMember* pMem : r.maMemberList)
     {
@@ -262,7 +263,8 @@ bool ScDPSaveDimension::operator== ( const ScDPSaveDimension& r ) const
          nShowEmptyMode   != r.nShowEmptyMode   ||
          bRepeatItemLabels!= r.bRepeatItemLabels||
          bSubTotalDefault != r.bSubTotalDefault ||
-         maSubTotalFuncs  != r.maSubTotalFuncs   )
+         maSubTotalFuncs  != r.maSubTotalFuncs   ||
+         moNumberFormat   != r.moNumberFormat    )
         return false;
 
     if (maMemberHash.size() != r.maMemberHash.size() )
@@ -443,6 +445,11 @@ void ScDPSaveDimension::SetLayoutInfo(const sheet::DataPilotFieldLayoutInfo* pNe
         pLayoutInfo.reset();
 }
 
+void ScDPSaveDimension::SetNumberFormat( sal_uInt32 nFormat )
+{
+    moNumberFormat = nFormat;
+}
+
 void ScDPSaveDimension::SetCurrentPage( const OUString* pPage )
 {
     // We use member's visibility attribute to filter by page dimension.
@@ -526,6 +533,10 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<cpo::uno::XInterface
         if (pSubTotalName)
             // Custom subtotal name, with '?' being replaced by the visible field name later.
             ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, SC_UNO_DP_FIELD_SUBTOTALNAME, *pSubTotalName);
+
+        if (moNumberFormat)
+            xDimProp->setPropertyValue(SC_UNO_DP_NUMBERFO,
+                                       cpo::uno::Any(static_cast<sal_Int32>(*moNumberFormat)));
     }
 
     // Level loop outside of maMemberList loop

@@ -53,6 +53,8 @@
 #include <sax/fastattribs.hxx>
 #include <addressconverter.hxx>
 #include <biffhelper.hxx>
+#include <numberformatsbuffer.hxx>
+#include <stylesbuffer.hxx>
 #include <compiler.hxx>
 #include <tokenarray.hxx>
 #include <formula/errorcodes.hxx>
@@ -699,6 +701,17 @@ void PivotTableField::convertDataField( const PTDataFieldModel& rDataField )
 
     if (!rDataField.maName.isEmpty())
         aPropSet.setProperty(PROP_Name, rDataField.maName);
+
+    // The format the document states for these results. A result is shown in the format of the
+    // data it comes from unless the document names one of its own, and a count has none at all,
+    // so a document that names one is the only thing that can say how these results look.
+    if (rDataField.mnNumFmtId > 0)
+    {
+        const sal_Int32 nFormat
+            = getStyles().getNumberFormats().getFormatIndex(rDataField.mnNumFmtId);
+        if (nFormat > 0)
+            aPropSet.setProperty(PROP_NumberFormat, nFormat);
+    }
 
     /*  Field aggregation function. Documentation is a little bit confused
         about which names to use for the count functions. The name 'count'

@@ -1161,6 +1161,35 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableTwoDataFieldsXLSX)
     CPPUNIT_ASSERT_MESSAGE("Reload check failed.", bCheck);
 }
 
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableDataFieldKeepsItsNumberFormatXLSX)
+{
+    // The data field counts, and the document gives the counts a format of its own that shows
+    // one as the word less and two as the word much.
+    createScDoc("xlsx/pivot-table/data-field-with-a-number-format.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    // The field holds the format the document gives its results.
+    ScDPCollection* pDPs = pDoc->GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDPs->GetCount());
+    ScDPSaveData* pSaveData = (*pDPs)[0].GetSaveData();
+    CPPUNIT_ASSERT(pSaveData);
+    ScDPSaveDimension* pDataDim = pSaveData->GetExistingDimensionByName(u"Price");
+    CPPUNIT_ASSERT(pDataDim);
+    CPPUNIT_ASSERT(pDataDim->GetNumberFormat().has_value());
+
+    // A count of one reads as the word less and a count of two as the word much.
+    CPPUNIT_ASSERT_EQUAL(u" less"_ustr, pDoc->GetString(ScAddress(2, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(u" much"_ustr, pDoc->GetString(ScAddress(3, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(u" less"_ustr, pDoc->GetString(ScAddress(1, 5, 0)));
+    CPPUNIT_ASSERT_EQUAL(u" less"_ustr, pDoc->GetString(ScAddress(2, 5, 0)));
+    CPPUNIT_ASSERT_EQUAL(u" much"_ustr, pDoc->GetString(ScAddress(3, 5, 0)));
+    CPPUNIT_ASSERT_EQUAL(u" much"_ustr, pDoc->GetString(ScAddress(1, 6, 0)));
+    CPPUNIT_ASSERT_EQUAL(u" much"_ustr, pDoc->GetString(ScAddress(2, 6, 0)));
+
+    // The one cell the document gives a format of its own keeps the one it gives.
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, pDoc->GetString(ScAddress(1, 4, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableMedianODS)
 {
     createScDoc("ods/pivot-table-median.ods");

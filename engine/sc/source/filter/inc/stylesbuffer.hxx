@@ -888,6 +888,9 @@ public:
 
     TableStyleRef createTableStyle();
 
+    /** The formats the document states, to look one up by the identifier it is stated under. */
+    const NumberFormatsBuffer& getNumberFormats() const { return maNumFmts; }
+
     /** Reads the tableStyles element attributes (the document default table style name). */
     void                importTableStylesAttribs( const AttributeList& rAttribs );
 

@@ -77,6 +77,9 @@ public:
 
     const NumFmtModel &  getModel() const { return maModel; }
 
+    /** Returns the index the document gives this format, zero where it has none yet. */
+    sal_Int32           getFormatIndex() const { return maApiData.mnIndex; }
+
 private:
     NumFmtModel         maModel;
     ApiNumFmtData       maApiData;
@@ -101,6 +104,10 @@ public:
     void                finalizeImport();
 
     sal_uInt32          fillToItemSet( SfxItemSet& rItemSet, sal_uInt32 nNumFmtId, bool bSkipPoolDefs ) const;
+
+    /** Returns the index the document gives the format of this identifier, zero where it has
+        no such format. */
+    sal_Int32           getFormatIndex( sal_uInt32 nNumFmtId ) const;
 
     sal_uInt32          nextFreeId(){ return ++mnHighestId; }
 private:
