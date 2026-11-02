@@ -67,6 +67,15 @@ const PresetGeometryName pPresetGeometryNameArray[]
         { "textSlantDown", "fontwork-slant-down" },
         { "textCascadeUp", "fontwork-fade-up-and-right" },
         { "textCascadeDown", "fontwork-fade-up-and-left" } };
+
+// The text shape types of the binary formats before WordArt, which the engine draws with the
+// geometry of a WordArt type: the preset of that type is written for them. Only the reverse
+// lookup uses the table; the forward lookup keeps giving the WordArt type.
+const PresetGeometryName pLegacyTextTypeArray[]
+    = { { "textPlain", "mso-spt24" },       { "textStop", "mso-spt25" },
+        { "textTriangle", "mso-spt26" },    { "textCanDown", "mso-spt27" },
+        { "textWave1", "mso-spt28" },       { "textArchUpPour", "mso-spt29" },
+        { "textCanDown", "mso-spt30" },     { "textArchUp", "mso-spt31" } };
 }
 
 OUString PresetGeometryTypeNames::GetFontworkType(std::u16string_view rMsoType)
@@ -96,6 +105,8 @@ OUString PresetGeometryTypeNames::GetMsoName(std::u16string_view rFontworkType)
         PresetGeometryHashMap aHInv;
         for (const auto& item : pPresetGeometryNameArray)
             aHInv[item.pFontworkType] = item.pMsoName;
+        for (const PresetGeometryName& rLegacy : pLegacyTextTypeArray)
+            aHInv[rLegacy.pFontworkType] = rLegacy.pMsoName;
         return aHInv;
     }();
     const char* pRetValue = "";

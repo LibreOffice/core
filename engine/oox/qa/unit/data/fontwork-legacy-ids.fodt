@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:styles>
+  <style:default-style style:family="graphic">
+   <style:graphic-properties draw:fill="solid" draw:fill-color="#729fcf" draw:stroke="none"/>
+   <style:text-properties fo:font-size="18pt"/>
+  </style:default-style>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
+ </office:styles>
+ <office:automatic-styles>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <text:p text:style-name="Standard"><draw:custom-shape text:anchor-type="paragraph" draw:z-index="0" draw:name="Wave" svg:width="8cm" svg:height="3cm" svg:x="1cm" svg:y="1cm">
+     <text:p>Wave of old</text:p>
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:text-areas="0 0 21600 21600" draw:text-path="true" draw:text-path-mode="shape" draw:text-path-scale="path" draw:type="mso-spt28" draw:modifiers="4050 9180 12345" draw:enhanced-path="M 0 ?f0 C 7200 ?f1 14400 ?f2 21600 ?f0 N M 0 ?f3 C 7200 ?f4 14400 ?f5 21600 ?f3 N">
+      <draw:equation draw:name="f0" draw:formula="$0 "/>
+      <draw:equation draw:name="f1" draw:formula="$0 -4050"/>
+      <draw:equation draw:name="f2" draw:formula="$0 +4050"/>
+      <draw:equation draw:name="f3" draw:formula="21600-$0 "/>
+      <draw:equation draw:name="f4" draw:formula="?f3 -4050"/>
+      <draw:equation draw:name="f5" draw:formula="?f3 +4050"/>
+      <draw:handle draw:handle-position="$1 $0" draw:handle-range-x-minimum="8640" draw:handle-range-x-maximum="12960" draw:handle-range-y-minimum="0" draw:handle-range-y-maximum="4459"/>
+     </draw:enhanced-geometry>
+    </draw:custom-shape><draw:custom-shape text:anchor-type="paragraph" draw:z-index="1" draw:name="Arch" svg:width="8cm" svg:height="8cm" svg:x="1cm" svg:y="5cm">
+     <text:p>Arch of old</text:p>
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:text-areas="0 0 21600 21600" draw:text-path="true" draw:text-path-mode="shape" draw:text-path-scale="path" draw:type="mso-spt31" draw:modifiers="0" draw:enhanced-path="M 0 10800 A 0 0 21600 21600 0 10800 21600 10800 N">
+      <draw:handle draw:handle-position="10800 $0" draw:handle-polar="10800 10800"/>
+     </draw:enhanced-geometry>
+    </draw:custom-shape></text:p>
+  </office:text>
+ </office:body>
+</office:document>

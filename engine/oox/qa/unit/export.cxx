@@ -16,6 +16,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -1102,6 +1103,37 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkPlainTextIsDML)
     xmlDocUniquePtr pXmlHeader = parseExport(u"word/header1.xml"_ustr);
     assertXPath(pXmlHeader, "//mc:AlternateContent", 0);
     assertXPath(pXmlHeader, "//w:pict/v:shape/v:textpath", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFontworkLegacyTextTypes)
+{
+    // Given two Fontwork shapes of the text types of the binary formats: a wave (mso-spt28, with a
+    // third modifier its preset does not have) and an arch (mso-spt31):
+    loadFromFile(u"fontwork-legacy-ids.fodt");
+
+    // When saving to DOCX:
+    save(TestFilter::DOCX);
+
+    // Then they are written with the presets the engine draws them with, with the two adjustments
+    // of the wave and the one of the arch
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    OString sWarp = "//mc:Choice//wps:wsp/wps:bodyPr/a:prstTxWarp"_ostr;
+    assertXPath(pXmlDoc, sWarp + "[@prst='textWave1']/a:avLst/a:gd", 2);
+    assertXPath(pXmlDoc, sWarp + "[@prst='textWave1']/a:avLst/a:gd[1]", "fmla", u"val 18750");
+    assertXPath(pXmlDoc, sWarp + "[@prst='textWave1']/a:avLst/a:gd[2]", "fmla", u"val -7500");
+    assertXPath(pXmlDoc, sWarp + "[@prst='textArchUp']/a:avLst/a:gd", 1);
+    assertXPath(pXmlDoc, sWarp + "[@prst='textArchUp']/a:avLst/a:gd", "fmla", u"val 0");
+
+    // and reading the file back gives the WordArt types of the same geometry
+    loadFromURL(maTempFile.GetURL());
+    uno::Reference<drawing::XDrawPageSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPage());
+    uno::Reference<beans::XPropertySet> xWave(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    comphelper::SequenceAsHashMap aGeometry(xWave->getPropertyValue(u"CustomShapeGeometry"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"fontwork-wave"_ustr, aGeometry[u"Type"_ustr].get<OUString>());
+    uno::Reference<beans::XPropertySet> xArch(xPage->getByIndex(1), uno::UNO_QUERY_THROW);
+    aGeometry = comphelper::SequenceAsHashMap(xArch->getPropertyValue(u"CustomShapeGeometry"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"fontwork-arch-up-curve"_ustr, aGeometry[u"Type"_ustr].get<OUString>());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFontworkDistance)

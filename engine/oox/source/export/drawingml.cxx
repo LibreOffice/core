@@ -4630,8 +4630,9 @@ void DrawingML::WriteBodyProps(const cpo::uno::Reference< cpo::uno::XInterface >
                 }
                 OString sFmla = "val " + OString::number(std::lround(fValue));
                 mpFS->singleElementNS(XML_a, XML_gd, XML_name, sName, XML_fmla, sFmla);
-                // There exists faulty Favorite shapes with one handle but two adjustment values.
-                if (!bHasTwoHandles)
+                // There exists faulty Favorite shapes with one handle but two adjustment values,
+                // and a shape from a binary file may carry more values than its preset has.
+                if (!bHasTwoHandles || i == 1)
                     break;
             }
             mpFS->endElementNS(XML_a, XML_avLst);
