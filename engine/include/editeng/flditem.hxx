@@ -327,9 +327,9 @@ enum class SvxFileFormat {
 class EDITENG_DLLPUBLIC SvxExtFileField final : public SvxFieldData
 {
 private:
-    OUString           aFile;
-    SvxFileType             eType;
-    SvxFileFormat           eFormat;
+    OUString           m_aFile;
+    SvxFileType             m_eType;
+    SvxFileFormat           m_eFormat;
 
 public:
     static constexpr auto CLASS_ID = css::text::textfield::Type::EXTENDED_FILE;
@@ -339,14 +339,14 @@ public:
                                 SvxFileType eType = SvxFileType::Var,
                                 SvxFileFormat eFormat = SvxFileFormat::PathFull );
 
-    const OUString&         GetFile() const { return aFile; }
-    void                    SetFile( const OUString& rString ) { aFile = rString; }
+    const OUString&         GetFile() const { return m_aFile; }
+    void                    SetFile( const OUString& rString ) { m_aFile = rString; }
 
-    SvxFileType             GetType() const { return eType; }
-    void                    SetType( SvxFileType eTp ) { eType = eTp; }
+    SvxFileType             GetType() const { return m_eType; }
+    void                    SetType( SvxFileType eTp ) { m_eType = eTp; }
 
-    SvxFileFormat           GetFormat() const { return eFormat; }
-    void                    SetFormat( SvxFileFormat eFmt ) { eFormat = eFmt; }
+    SvxFileFormat           GetFormat() const { return m_eFormat; }
+    void                    SetFormat( SvxFileFormat eFmt ) { m_eFormat = eFmt; }
 
     OUString                GetFormatted() const;
 

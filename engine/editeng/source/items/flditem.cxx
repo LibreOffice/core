@@ -722,16 +722,16 @@ OUString SvxExtTimeField::GetFormatted( tools::Time const & aTime, SvxTimeFormat
 
 SvxExtFileField::SvxExtFileField()
 {
-    eType = SvxFileType::Var;
-    eFormat = SvxFileFormat::PathFull;
+    m_eType = SvxFileType::Var;
+    m_eFormat = SvxFileFormat::PathFull;
 }
 
 
 SvxExtFileField::SvxExtFileField( const OUString& rStr, SvxFileType eT, SvxFileFormat eF )
 {
-    aFile = rStr;
-    eType = eT;
-    eFormat = eF;
+    m_aFile = rStr;
+    m_eType = eT;
+    m_eFormat = eF;
 }
 
 
@@ -747,9 +747,9 @@ bool SvxExtFileField::operator==( const SvxFieldData& rOther ) const
         return false;
 
     const SvxExtFileField& rOtherFld = static_cast<const SvxExtFileField&>(rOther);
-    return ( ( aFile == rOtherFld.aFile ) &&
-                ( eType == rOtherFld.eType ) &&
-                ( eFormat == rOtherFld.eFormat ) );
+    return ( ( m_aFile == rOtherFld.m_aFile ) &&
+                ( m_eType == rOtherFld.m_eType ) &&
+                ( m_eFormat == rOtherFld.m_eFormat ) );
 }
 
 
@@ -757,14 +757,14 @@ OUString SvxExtFileField::GetFormatted() const
 {
     OUString aString;
 
-    INetURLObject aURLObj( aFile );
+    INetURLObject aURLObj( m_aFile );
 
     if( INetProtocol::NotValid == aURLObj.GetProtocol() )
     {
         // invalid? try to interpret string as system file name
         OUString aURLStr;
 
-        osl::FileBase::getFileURLFromSystemPath( aFile, aURLStr );
+        osl::FileBase::getFileURLFromSystemPath( m_aFile, aURLStr );
 
         aURLObj.SetURL( aURLStr );
     }
@@ -774,13 +774,13 @@ OUString SvxExtFileField::GetFormatted() const
     if( INetProtocol::NotValid == aURLObj.GetProtocol() )
     {
         // still not valid? Then output as is
-        aString = aFile;
+        aString = m_aFile;
     }
     else if( INetProtocol::File == aURLObj.GetProtocol() )
     {
         // Note: The path is useless in jailed kit mode, so present a view that
         // the document is in a Documents toplevel directory for COKit::isActive()
-        switch( eFormat )
+        switch( m_eFormat )
         {
             case SvxFileFormat::PathFull:
                 if (comphelper::COKit::isActive())
@@ -815,7 +815,7 @@ OUString SvxExtFileField::GetFormatted() const
     }
     else
     {
-        switch( eFormat )
+        switch( m_eFormat )
         {
             case SvxFileFormat::PathFull:
                 aString = aURLObj.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
