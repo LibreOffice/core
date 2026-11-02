@@ -4,8 +4,6 @@
     "Microsoft.VisualStudio.Workload.CoreEditor",
     "Microsoft.VisualStudio.Workload.NativeDesktop",
     "Microsoft.VisualStudio.Workload.ManagedDesktop",
-    "Microsoft.Net.Component.4.8.SDK",
-    "Microsoft.Net.Component.4.8.TargetingPack",
     "Microsoft.NetCore.Component.SDK",
     "Microsoft.VisualStudio.Component.NuGet",
     "Microsoft.VisualStudio.Component.VC.ATL",
