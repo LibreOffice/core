@@ -156,12 +156,6 @@ namespace dxcanvas
         return uno::Reference< rendering::XVolatileBitmap >();
     }
 
-    bool SpriteDeviceHelper::showBuffer( bool, bool )
-    {
-        SAL_WARN("canvas.directx", "Not supposed to be called, handled by SpriteCanvas");
-        return false;
-    }
-
     uno::Any SpriteDeviceHelper::isAccelerated() const
     {
         return css::uno::Any(true);

@@ -106,16 +106,6 @@ namespace dxcanvas
         SpriteCanvasBaseT::disposeThis();
     }
 
-    sal_Bool SAL_CALL SpriteCanvas::showBuffer( sal_Bool bUpdateAll )
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        // avoid repaints on hidden window (hidden: not mapped to
-        // screen). Return failure, since the screen really has _not_
-        // been updated (caller should try again later)
-        return mbIsVisible && SpriteCanvasBaseT::showBuffer( bUpdateAll );
-    }
-
     sal_Bool SAL_CALL SpriteCanvas::updateScreen( sal_Bool bUpdateAll )
     {
         ::osl::MutexGuard aGuard( m_aMutex );

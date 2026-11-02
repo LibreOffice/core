@@ -80,8 +80,6 @@ include/canvas/base/bitmapcanvasbase.hxx:85
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> canvas::BitmapCanvasBase::getScaledBitmap(const struct com::sun::star::geometry::RealSize2D &,unsigned char,)
 include/canvas/base/bitmapcanvasbase.hxx:106
     void canvas::BitmapCanvasBase2::copyRect(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmapCanvas> &,const struct com::sun::star::geometry::RealRectangle2D &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const struct com::sun::star::geometry::RealRectangle2D &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
-include/canvas/base/bufferedgraphicdevicebase.hxx:95
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XBufferController> canvas::BufferedGraphicDeviceBase::getBufferController()
 include/canvas/base/bufferedgraphicdevicebase.hxx:210
     void canvas::BufferedGraphicDeviceBase::disposeEventSource(const struct com::sun::star::lang::EventObject &,)
 include/canvas/base/bufferedgraphicdevicebase.hxx:220

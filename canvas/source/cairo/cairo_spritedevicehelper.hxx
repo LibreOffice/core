@@ -45,9 +45,6 @@ namespace cairocanvas
         /// Dispose all internal references
         void disposing();
 
-        // XWindowGraphicDevice
-        bool  showBuffer( bool, bool );
-
         css::uno::Any isAccelerated() const;
         css::uno::Any getDeviceHandle() const;
         css::uno::Any getSurfaceHandle() const;

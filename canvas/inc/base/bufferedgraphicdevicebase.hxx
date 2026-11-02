@@ -79,14 +79,6 @@ public:
             PropertySetHelper::MakeMap("Window", [this]() { return this->getXWindow(); }));
     }
 
-    // XBufferController
-    virtual sal_Bool SAL_CALL showBuffer(sal_Bool bUpdateAll) override
-    {
-        MutexType aGuard(BaseType::m_aMutex);
-
-        return BaseType::maDeviceHelper.showBuffer(mbIsVisible, bUpdateAll);
-    }
-
     /** Set corresponding canvas window
 
             Use this method to set the window this canvas displays

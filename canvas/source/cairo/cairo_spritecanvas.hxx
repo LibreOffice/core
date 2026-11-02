@@ -28,7 +28,6 @@
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
-#include <com/sun/star/rendering/XBufferController.hpp>
 
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
@@ -49,7 +48,6 @@ namespace cairocanvas
                                              css::rendering::XIntegerBitmap,
                                              css::rendering::XGraphicDevice,
                                              css::lang::XMultiServiceFactory,
-                                             css::rendering::XBufferController,
                                              css::awt::XWindowListener,
                                              css::util::XUpdatable,
                                              css::beans::XPropertySet,
@@ -113,9 +111,6 @@ namespace cairocanvas
         //                                       |                 |                            |
         //                                       V                 V                            V
         DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( SpriteCanvas, WindowGraphicDeviceBase_Base, ::cppu::WeakComponentImplHelperBase )
-
-        // XBufferController (partial)
-        virtual sal_Bool SAL_CALL showBuffer( sal_Bool bUpdateAll ) override;
 
         // XSpriteCanvas (partial)
         virtual sal_Bool SAL_CALL updateScreen( sal_Bool bUpdateAll ) override;

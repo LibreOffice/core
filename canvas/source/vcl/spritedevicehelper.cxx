@@ -47,12 +47,6 @@ namespace vclcanvas
         vclcanvastools::SetDefaultDeviceAntiAliasing( &mpBackBuffer->getOutDev());
     }
 
-    bool SpriteDeviceHelper::showBuffer( bool, bool )
-    {
-        OSL_FAIL("Not supposed to be called, handled by SpriteCanvas");
-        return false;
-    }
-
     void SpriteDeviceHelper::disposing()
     {
         // release all references

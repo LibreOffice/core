@@ -21,7 +21,6 @@
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
-#include <com/sun/star/rendering/XBufferController.hpp>
 
 #include "dx_rendermodule.hxx"
 #include "dx_surfacebitmap.hxx"
@@ -60,8 +59,6 @@ namespace dxcanvas
         css::uno::Reference< css::rendering::XVolatileBitmap > createVolatileAlphaBitmap(
             const css::uno::Reference< css::rendering::XGraphicDevice >&  rDevice,
             const css::geometry::IntegerSize2D&                                        size );
-
-        bool showBuffer( bool bIsVisible, bool bUpdateAll );
 
         const IDXRenderModuleSharedPtr& getRenderModule() const { return mpRenderModule; }
         const DXSurfaceBitmapSharedPtr& getBackBuffer() const { return mpBackBuffer; }

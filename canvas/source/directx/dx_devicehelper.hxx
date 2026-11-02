@@ -21,7 +21,6 @@
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
-#include <com/sun/star/rendering/XBufferController.hpp>
 
 #include "dx_rendermodule.hxx"
 #include "dx_bitmap.hxx"

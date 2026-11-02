@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <com/sun/star/rendering/XBufferController.hpp>
 #include <com/sun/star/rendering/XLinePolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XBezierPolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>

@@ -28,10 +28,6 @@ canvas/inc/base/bitmapcanvasbase.hxx:84
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> canvas::BitmapCanvasBase::getScaledBitmap(const struct com::sun::star::geometry::RealSize2D &,unsigned char,)
 canvas/inc/base/bitmapcanvasbase.hxx:105
     void canvas::BitmapCanvasBase2::copyRect(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmapCanvas> &,const struct com::sun::star::geometry::RealRectangle2D &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const struct com::sun::star::geometry::RealRectangle2D &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
-canvas/inc/base/bufferedgraphicdevicebase.hxx:92
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XBufferController> canvas::BufferedGraphicDeviceBase::getBufferController()
-canvas/inc/base/bufferedgraphicdevicebase.hxx:109
-    unsigned char canvas::BufferedGraphicDeviceBase::showBuffer(unsigned char,)
 canvas/inc/base/bufferedgraphicdevicebase.hxx:160
     void canvas::BufferedGraphicDeviceBase::disposeThis()
 canvas/inc/base/bufferedgraphicdevicebase.hxx:207
@@ -124,8 +120,6 @@ canvas/inc/base/disambiguationhelper.hxx:73
     void canvas::DisambiguationHelper::disposing(const struct com::sun::star::lang::EventObject &,)
 canvas/inc/base/graphicdevicebase.hxx:134
     void canvas::GraphicDeviceBase::disposeThis()
-canvas/inc/base/graphicdevicebase.hxx:145
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XBufferController> canvas::GraphicDeviceBase::getBufferController()
 canvas/inc/base/graphicdevicebase.hxx:150
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XColorSpace> canvas::GraphicDeviceBase::getDeviceColorSpace()
 canvas/inc/base/graphicdevicebase.hxx:157

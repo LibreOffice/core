@@ -39,8 +39,6 @@ namespace vclcanvas
         /// Dispose all internal references
         void disposing();
 
-        bool  showBuffer( bool bWindowVisible, bool bUpdateAll );
-
         css::uno::Any isAccelerated() const;
         css::uno::Any getDeviceHandle() const;
         css::uno::Any getSurfaceHandle() const;
