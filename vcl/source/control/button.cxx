@@ -2911,7 +2911,8 @@ Size RadioButton::CalcMinimumSize(tools::Long nMaxWidth) const
 
 Size RadioButton::GetOptimalSize() const
 {
-    return CalcMinimumSize();
+    int nWidthRequest(get_width_request());
+    return CalcMinimumSize(nWidthRequest != -1 ? nWidthRequest : 0);
 }
 
 void RadioButton::ShowFocus(const tools::Rectangle& rRect)
