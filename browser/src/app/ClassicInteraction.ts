@@ -878,10 +878,26 @@ class ClassicInPlaceContext implements InteractionContext {
 		return true;
 	}
 
-	/// Return and F3 go a level down, to the first part there, as the chart's own keys do. A
-	/// part with nothing below it leaves the key to the object.
+	/// Return and F3 go a level down, to the first part there, as the chart's own keys do, and
+	/// where those end, as below the data labels, to the first part held. A part with nothing
+	/// below it leaves the key to the object.
 	public enterKey(): boolean {
-		return ClassicInPlaceContext.goTo(ClassicInPlaceContext.keysOf()?.inside);
+		return ClassicInPlaceContext.goTo(
+			ClassicInPlaceContext.keysOf()?.inside ??
+				ClassicInPlaceContext.firstPartHeld(),
+		);
+	}
+
+	/// the first part the selected part holds, in the order the page draws them
+	private static firstPartHeld(): number | undefined {
+		const selected = GraphicSelection.selectedObjectIDs;
+		const data = RenderGeometrySection.currentPart();
+		if (selected.length !== 1 || !data) return undefined;
+		return data.order.find(
+			(objectId: number) =>
+				data.objects.get(objectId)?.chartPart !== undefined &&
+				ClassicInPlaceContext.partAbove(objectId) === selected[0],
+		);
 	}
 
 	/// Ctrl+F3 goes a level up.
