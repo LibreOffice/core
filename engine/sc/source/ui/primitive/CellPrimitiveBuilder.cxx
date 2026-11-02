@@ -196,13 +196,14 @@ public:
     {
     }
 
-    CellPrimitiveLayers build(SCCOL nStartColumn, SCROW nStartRow, SCCOL nEndColumn, SCROW nEndRow);
+    CellPrimitiveLayers build(SCCOL nStartColumn, SCROW nStartRow, SCCOL nEndColumn, SCROW nEndRow,
+                              ScTableInfo* pInfo);
     CellPrimitiveRows buildRows(SCCOL nStartColumn, SCROW nStartRow, SCCOL nEndColumn,
                                 SCROW nEndRow, SCROW nFirstContentRow, SCROW nLastContentRow);
 
 private:
     void collect(SCCOL nStartColumn, SCROW nStartRow, SCCOL nEndColumn, SCROW nEndRow,
-                 SCROW nFirstContentRow, SCROW nLastContentRow);
+                 SCROW nFirstContentRow, SCROW nLastContentRow, ScTableInfo* pInfo = nullptr);
     /// Whether the row gets the layers other than the shadows and borders.
     bool isContentRow(SCROW nRow) const
     {
@@ -269,9 +270,10 @@ private:
 };
 
 CellPrimitiveLayers CellPrimitiveBuilder::Impl::build(SCCOL nStartColumn, SCROW nStartRow,
-                                                      SCCOL nEndColumn, SCROW nEndRow)
+                                                      SCCOL nEndColumn, SCROW nEndRow,
+                                                      ScTableInfo* pInfo)
 {
-    collect(nStartColumn, nStartRow, nEndColumn, nEndRow, nStartRow, nEndRow);
+    collect(nStartColumn, nStartRow, nEndColumn, nEndRow, nStartRow, nEndRow, pInfo);
 
     // The rows are joined in order, with one grid cover for the areas of all of them.
     CellPrimitiveLayers aLayers;
@@ -334,7 +336,7 @@ void CellPrimitiveBuilder::Impl::computeInkRange(CellPrimitiveLayers& rLayers)
 
 void CellPrimitiveBuilder::Impl::collect(SCCOL nStartColumn, SCROW nStartRow, SCCOL nEndColumn,
                                          SCROW nEndRow, SCROW nFirstContentRow,
-                                         SCROW nLastContentRow)
+                                         SCROW nLastContentRow, ScTableInfo* pInfo)
 {
     mnStartColumn = nStartColumn;
     mnStartRow = nStartRow;
@@ -353,17 +355,25 @@ void CellPrimitiveBuilder::Impl::collect(SCCOL nStartColumn, SCROW nStartRow, SC
     mrDocument.InterpretCellsIfNeeded(
         ScRangeList(ScRange(nStartColumn, nStartRow, mnTab, nEndColumn, nEndRow, mnTab)));
 
-    // A scaled geometry fills the info in pixels, so border widths round like the cells.
-    const double fScaleX = mrGeometry.isScaled() ? mrGeometry.getScaleX() : 1.0;
-    const double fScaleY = mrGeometry.isScaled() ? mrGeometry.getScaleY() : 1.0;
-    ScTableInfo aInfo(nStartRow, nEndRow, false);
-    mrDocument.FillInfo(aInfo, nStartColumn, nStartRow, nEndColumn, nEndRow, mnTab, fScaleX,
-                        fScaleY, false, maSettings.mbShowFormulas);
+    // The info of the caller serves, unless the sheet is right to left: its border array would
+    // have to be mirrored, and the caller draws from it too.
+    std::optional<ScTableInfo> oOwnInfo;
+    if (!pInfo || mrDocument.IsLayoutRTL(mnTab))
+    {
+        // A scaled geometry fills the info in pixels, so border widths round like the cells.
+        const double fScaleX = mrGeometry.isScaled() ? mrGeometry.getScaleX() : 1.0;
+        const double fScaleY = mrGeometry.isScaled() ? mrGeometry.getScaleY() : 1.0;
+        oOwnInfo.emplace(nStartRow, nEndRow, false);
+        mrDocument.FillInfo(*oOwnInfo, nStartColumn, nStartRow, nEndColumn, nEndRow, mnTab,
+                            fScaleX, fScaleY, false, maSettings.mbShowFormulas);
 
-    // FillInfo mirrors the border array of a right-to-left sheet. Mirroring it again puts it back
-    // in document order, so cells are built left to right on any sheet.
-    if (mrDocument.IsLayoutRTL(mnTab))
-        aInfo.maArray.MirrorSelfX();
+        // FillInfo mirrors the border array of a right-to-left sheet. Mirroring it again puts it
+        // back in document order, so cells are built left to right on any sheet.
+        if (mrDocument.IsLayoutRTL(mnTab))
+            oOwnInfo->maArray.MirrorSelfX();
+        pInfo = &*oOwnInfo;
+    }
+    ScTableInfo& aInfo = *pInfo;
 
     collectBackground(aInfo);
     placeBackground();
@@ -682,7 +692,9 @@ void CellPrimitiveBuilder::Impl::buildBorders(ScTableInfo& rInfo, SCCOL nStartCo
         return;
 
     // The border array works in whole units, which are pixels for a scaled geometry and twips
-    // otherwise. The primitives are scaled back to twips afterwards.
+    // otherwise. The primitives are scaled back to twips afterwards. The sizes are set before
+    // each use and not kept: the array can be the one of the caller, which ScOutputData draws
+    // from too, and ScOutputData::DrawFrame sets its own sizes before it draws.
     const double fScaleX = mrGeometry.isScaled() ? mrGeometry.getScaleX() : 1.0;
     const double fScaleY = mrGeometry.isScaled() ? mrGeometry.getScaleY() : 1.0;
     const RowInfo* pRowInfo = rInfo.mpRowInfo.get();
@@ -1888,7 +1900,13 @@ CellPrimitiveBuilder::~CellPrimitiveBuilder() = default;
 CellPrimitiveLayers CellPrimitiveBuilder::build(SCCOL nStartColumn, SCROW nStartRow,
                                                 SCCOL nEndColumn, SCROW nEndRow)
 {
-    return mpImpl->build(nStartColumn, nStartRow, nEndColumn, nEndRow);
+    return mpImpl->build(nStartColumn, nStartRow, nEndColumn, nEndRow, nullptr);
+}
+
+CellPrimitiveLayers CellPrimitiveBuilder::build(SCCOL nStartColumn, SCROW nStartRow,
+                                                SCCOL nEndColumn, SCROW nEndRow, ScTableInfo& rInfo)
+{
+    return mpImpl->build(nStartColumn, nStartRow, nEndColumn, nEndRow, &rInfo);
 }
 
 CellPrimitiveRows CellPrimitiveBuilder::buildRows(SCCOL nStartColumn, SCROW nStartRow,

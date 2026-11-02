@@ -1499,6 +1499,8 @@ void ScOutputData::DrawFrame(vcl::RenderContext& rRenderContext)
     tools::Long nLayoutSign = mbLayoutRTL ? -1 : 1;
 
     // *** set column and row sizes of the frame border array ***
+    // The sizes are not kept between draws: the cell primitive builder sets its own in the same
+    // array when a tile takes paint steps from it, so they are set here before every use.
 
     svx::frame::Array& rArray = mrTabInfo.maArray;
     size_t nColCount = rArray.GetColCount();

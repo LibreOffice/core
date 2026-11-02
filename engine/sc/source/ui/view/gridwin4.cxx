@@ -732,7 +732,7 @@ tools::Long GetSide(const tools::Rectangle& rRect, int i)
 }
 }
 
-void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableInfo, ScOutputData& aOutputData,
+void ScGridWindow::DrawContent(OutputDevice &rDevice, ScTableInfo& rTableInfo, ScOutputData& aOutputData,
         bool bLogicText)
 {
     ScModule* pScMod = ScModule::get();
@@ -994,7 +994,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
             aSettings.moSkipCell
                 = ScAddress(aOutputData.mnEditCol, aOutputData.mnEditRow, nViewTab);
         sc::CellPrimitiveBuilder aBuilder(rDoc, nViewTab, aGeometry, std::move(aSettings));
-        aPrimitiveLayers = aBuilder.build(nX1, nY1, nX2, nY2);
+        // The builder reads the info that ScOutputData was made from, instead of filling it again.
+        aPrimitiveLayers = aBuilder.build(nX1, nY1, nX2, nY2, rTableInfo);
     }
 
     // Draw a builder layer in tile pixels. The shift matches ScOutputData, which draws borders on

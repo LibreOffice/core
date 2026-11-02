@@ -22,6 +22,7 @@
 
 class ScDocument;
 class ScFieldEditEngine;
+struct ScTableInfo;
 
 namespace sc
 {
@@ -106,6 +107,12 @@ public:
     ~CellPrimitiveBuilder();
 
     CellPrimitiveLayers build(SCCOL nStartColumn, SCROW nStartRow, SCCOL nEndColumn, SCROW nEndRow);
+    /// The same content, read from rInfo, which the caller filled for this range with
+    /// ScDocument::FillInfo at the scale of the geometry, so the range is not read twice. The
+    /// builder sets the column and row sizes of the border array of rInfo. A right-to-left sheet
+    /// is read again, because its border array would have to be mirrored.
+    CellPrimitiveLayers build(SCCOL nStartColumn, SCROW nStartRow, SCCOL nEndColumn, SCROW nEndRow,
+                              ScTableInfo& rInfo);
     /// The same content, cut into rows. Text from cells outside the range lands only in its rows.
     CellPrimitiveRows buildRows(SCCOL nStartColumn, SCROW nStartRow, SCCOL nEndColumn,
                                 SCROW nEndRow);

@@ -491,7 +491,7 @@ public:
     void Resize() override;
 
     /// Draw content of the gridwindow; shared between the desktop and the tiled rendering.
-    void DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableInfo, ScOutputData& aOutputData, bool bLogicText);
+    void DrawContent(OutputDevice &rDevice, ScTableInfo& rTableInfo, ScOutputData& aOutputData, bool bLogicText);
 
     void            CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddress);
 
