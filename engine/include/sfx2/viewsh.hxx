@@ -515,6 +515,8 @@ public:
     virtual void afterCallbackRegistered();
     /// See OutlinerViewShell::GetEditWindowForActiveOLEObj().
     virtual vcl::Window* GetEditWindowForActiveOLEObj() const override;
+    /// See OutlinerViewShell::GetActiveOLEObjBoundingBox().
+    virtual tools::Rectangle GetActiveOLEObjBoundingBox() const override;
     /// Get a color config color from this view
     virtual ::Color GetColorConfigColor(svtools::ColorConfigEntry nColorType) const;
 

@@ -121,6 +121,7 @@
 #include <sfx2/ipclient.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/objface.hxx>
+#include <sfx2/kit/componenthelpers.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <sfx2/kit/callback.hxx>
 #include <openuriexternally.hxx>
@@ -4985,6 +4986,13 @@ vcl::Window* SfxViewShell::GetEditWindowForActiveOLEObj() const
         pEditWin = pIPClient->GetEditWin();
     }
     return pEditWin;
+}
+
+tools::Rectangle SfxViewShell::GetActiveOLEObjBoundingBox() const
+{
+    if (!GetIPClient())
+        return tools::Rectangle();
+    return KitChartHelper(const_cast<SfxViewShell*>(this)).GetChartBoundingBox();
 }
 
 ::Color SfxViewShell::GetColorConfigColor(svtools::ColorConfigEntry eEntry) const

@@ -335,6 +335,9 @@ public:
     /// Wrapper around KitHelper::notifyOtherView().
     virtual void NotifyOtherView(OutlinerViewShell* pOtherShell, COKitCallbackType eType, const OString& rKey, const OString& rPayload) = 0;
     virtual vcl::Window* GetEditWindowForActiveOLEObj() const = 0;
+    /// The box of the object active in place on the tiles, in twips, the one a mouse event is
+    /// mapped into the object by. Empty while no object is active in place.
+    virtual tools::Rectangle GetActiveOLEObjBoundingBox() const = 0;
 
 protected:
     ~OutlinerViewShell() noexcept {}

@@ -281,6 +281,23 @@ void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
     }
 }
 
+// where the logic origin of a chart window lies in the document, in the window's own logic unit:
+// at the chart's box, the one a mouse event is mapped into the chart by, and without a box we
+// take the pixel place of the window
+static std::optional<Point> lcl_chartOffset(const vcl::Window& rChartWindow,
+                                            const OutlinerViewShell& rViewShell)
+{
+    const vcl::Window* pViewShellWindow = rViewShell.GetEditWindowForActiveOLEObj();
+    if (!pViewShellWindow || !pViewShellWindow->IsAncestorOf(rChartWindow))
+        return std::nullopt;
+
+    const tools::Rectangle aBox(rViewShell.GetActiveOLEObjBoundingBox());
+    if (aBox.IsEmpty())
+        return rChartWindow.PixelToLogic(rChartWindow.GetOffsetPixelFrom(*pViewShellWindow));
+    return OutputDevice::LogicToLogic(aBox.TopLeft(), MapMode(MapUnit::MapTwip),
+                                      MapMode(rChartWindow.GetMapMode().GetMapUnit()));
+}
+
 /// Translate absolute <-> relative twips: COKit wants absolute coordinates as output and gives absolute coordinates as input.
 static void lcl_translateTwips(const OutputDevice& rParent, OutputDevice& rChild)
 {
@@ -393,14 +410,10 @@ void ImpEditView::kitSelectionCallback(const std::optional<tools::PolyPolygon> &
         {
             if (mpOutputWindow->IsChart())
             {
-                const vcl::Window* pViewShellWindow = mpViewShell->GetEditWindowForActiveOLEObj();
-                if (pViewShellWindow && pViewShellWindow->IsAncestorOf(*mpOutputWindow))
-                {
-                    Point aOffsetPx = mpOutputWindow->GetOffsetPixelFrom(*pViewShellWindow);
-                    Point aLogicOffset = mpOutputWindow->PixelToLogic(aOffsetPx);
+                if (const std::optional<Point> oOffset
+                    = lcl_chartOffset(*mpOutputWindow, *mpViewShell))
                     for (tools::Rectangle& rRect : aRectangles)
-                        rRect.Move(aLogicOffset.getX(), aLogicOffset.getY());
-                }
+                        rRect.Move(oOffset->getX(), oOffset->getY());
             }
 
             std::vector<OString> v;
@@ -1466,13 +1479,9 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
 
             if (mpOutputWindow && mpOutputWindow->IsChart())
             {
-                const vcl::Window* pViewShellWindow = mpViewShell->GetEditWindowForActiveOLEObj();
-                if (pViewShellWindow && pViewShellWindow->IsAncestorOf(*mpOutputWindow))
-                {
-                    Point aOffsetPx = mpOutputWindow->GetOffsetPixelFrom(*pViewShellWindow);
-                    Point aLogicOffset = mpOutputWindow->PixelToLogic(aOffsetPx);
-                    aPos.Move(aLogicOffset.getX(), aLogicOffset.getY());
-                }
+                if (const std::optional<Point> oOffset
+                    = lcl_chartOffset(*mpOutputWindow, *mpViewShell))
+                    aPos.Move(oOffset->getX(), oOffset->getY());
             }
 
             tools::Rectangle aRect(aPos.getX(), aPos.getY(), aPos.getX() + GetCursor()->GetWidth(), aPos.getY() + GetCursor()->GetHeight());
