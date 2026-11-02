@@ -627,10 +627,13 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf107612)
 
 CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testPartialKoreanJamoComposition)
 {
-    OUString aStr = u"은"_ustr;
-    vcl::Font aFont(u"DejaVu Sans"_ustr, u"Book"_ustr, Size(0, 2048));
-
     ScopedVclPtrInstance<VirtualDevice> pOutDev;
+    // Adding it again fails on macOS, and testMixedCJKLatinScript_glyph_advancements adds it too
+    if (!pOutDev->IsFontAvailable(u"Source Han Sans"))
+        CPPUNIT_ASSERT(addFont(pOutDev, u"tdf107718.otf", u"Source Han Sans"));
+
+    OUString aStr = u"솅"_ustr;
+    vcl::Font aFont(u"Source Han Sans"_ustr, u"Regular"_ustr, Size(0, 2048));
     pOutDev->SetFont(aFont);
 
     // Absolute character widths for the complete array.
