@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-30 13:34+0100\n"
-"PO-Revision-Date: 2026-10-28 14:25+0000\n"
+"PO-Revision-Date: 2026-10-31 07:45+0000\n"
 "Last-Translator: Andras Timar <timar@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/hu/>\n"
-"Language: \n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1581,6 +1581,8 @@ msgid ""
 "This file is a spelling dictionary, not a wordbook. Upload a list of words "
 "with one word per line."
 msgstr ""
+"Ez a fájl helyesírás-ellenőrző szótár, nem saját szótár. Töltsön fel egy "
+"szólistát, soronként egy szóval."
 
 #: admin/src/integrator/WordBook.ts:471
 msgid "Invalid dictionary format. Please check the file."
@@ -1827,26 +1829,26 @@ msgstr "Stílus duplikálása"
 #: src/app/Util.ts:319
 msgid "%n year"
 msgid_plural "%n years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n év"
+msgstr[1] "%n év"
 
 #: src/app/Util.ts:321
 msgid "%n day"
 msgid_plural "%n days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n nap"
+msgstr[1] "%n nap"
 
 #: src/app/Util.ts:322
 msgid "%n hour"
 msgid_plural "%n hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n óra"
+msgstr[1] "%n óra"
 
 #: src/app/Util.ts:325
-#, fuzzy
 msgid "%n minute"
 msgid_plural "%n minutes"
-msgstr[0] "1 perc"
+msgstr[0] "%n perc"
+msgstr[1] "%n perc"
 
 #: src/app/Util.ts:339
 msgid "less than a minute"
@@ -6321,19 +6323,19 @@ msgstr "%1. dia, csatolva ehhez: %2"
 
 #: src/control/Control.PartsPreview.js:1241
 msgid "Linked to a section of %1 that is missing"
-msgstr ""
+msgstr "Csatolva egy szakaszhoz (%1), amely már nem létezik"
 
 #: src/control/Control.PartsPreview.js:1243
 msgid "Linked to a section of %1 that has changed"
-msgstr ""
+msgstr "Csatolva egy szakaszhoz (%1), amely megváltozott"
 
 #: src/control/Control.PartsPreview.js:1245
 msgid "Linked to a section of %1, disconnected"
-msgstr ""
+msgstr "Csatolva egy szakaszhoz (%1), a kapcsolat megszakadt"
 
 #: src/control/Control.PartsPreview.js:1246
 msgid "Linked to a section of %1"
-msgstr ""
+msgstr "Csatolva egy szakaszhoz (%1)"
 
 #: src/control/Control.PartsPreview.js:1390
 #: src/control/Control.PartsPreview.js:1557
@@ -6358,15 +6360,15 @@ msgstr "Szakasz lefelé mozgatása"
 
 #: src/control/Control.PartsPreview.js:1434
 msgid "Update Section"
-msgstr ""
+msgstr "Szakasz frissítése"
 
 #: src/control/Control.PartsPreview.js:1442
 msgid "Unlink Section"
-msgstr ""
+msgstr "Szakasz csatolásának megszüntetése"
 
 #: src/control/Control.PartsPreview.js:1449
 msgid "Unlink Section & Slides"
-msgstr ""
+msgstr "Szakasz és diák csatolásának megszüntetése"
 
 #: src/control/Control.PartsPreview.js:1458
 msgid "Collapse All Sections"
@@ -6500,7 +6502,7 @@ msgstr "Diák beszúrása"
 
 #: src/control/Control.SlideImportPane.tsx:904
 msgid "Insert section \"{0}\""
-msgstr ""
+msgstr "Szakasz beszúrása: „{0}”"
 
 #: src/control/Control.SlideImportPane.tsx:912
 msgid "Insert {0} from {1}"
@@ -6516,19 +6518,21 @@ msgstr "{0} dia beszúrása"
 
 #: src/control/Control.SlideImportPane.tsx:972
 msgid "How the section goes in"
-msgstr ""
+msgstr "A szakasz beszúrásának módja"
 
 #: src/control/Control.SlideImportPane.tsx:977
 msgid "Insert as section \"{0}\""
-msgstr ""
+msgstr "Beszúrás „{0}” szakaszként"
 
 #: src/control/Control.SlideImportPane.tsx:983
 msgid "Insert as separate slides"
-msgstr ""
+msgstr "Beszúrás különálló diákként"
 
 #: src/control/Control.SlideImportPane.tsx:989
 msgid "Linked to its section in {0}. Update Links brings in later changes."
 msgstr ""
+"Csatolva a forrásszakaszához ebben a fájlban: {0}. A Csatolások frissítése "
+"paranccsal a későbbi változások is átvehetők."
 
 #: src/control/Control.SlideImportPane.tsx:1038
 msgid "{0} of {1}"
@@ -6670,7 +6674,7 @@ msgstr "Csatolva ehhez: {0} ({1})"
 
 #: src/control/Control.SlideLinkToolbar.tsx:120
 msgid "In a section linked to {0}"
-msgstr ""
+msgstr "Szakaszban, amely ehhez van csatolva: {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:145
 msgid "Hide the actions for this linked slide"
@@ -6687,7 +6691,7 @@ msgstr "Csatolás megszüntetése"
 #: src/control/Control.SlideLinkToolbar.tsx:176
 #: src/slideimport/SlideLinks.ts:467
 msgid "Update section"
-msgstr ""
+msgstr "Szakasz frissítése"
 
 #: src/control/Control.SlideLinkToolbar.tsx:190
 msgid "Not available"
@@ -6716,24 +6720,27 @@ msgstr "Ennek a bemutatónak egyetlen diája sincs másik fájlhoz csatolva."
 
 #: src/slideimport/SlideLinks.ts:425
 msgid "The section cannot be updated, because its source is not available."
-msgstr ""
+msgstr "A szakasz nem frissíthető, mert a forrása nem érhető el."
 
 #: src/slideimport/SlideLinks.ts:447
 msgid ""
 "One linked section cannot be updated, because its source is not available."
-msgstr ""
+msgstr "Egy csatolt szakasz nem frissíthető, mert a forrása nem érhető el."
 
 #: src/slideimport/SlideLinks.ts:450
 msgid ""
 "{0} linked sections cannot be updated, because their sources are not "
 "available."
-msgstr ""
+msgstr "{0} csatolt szakasz nem frissíthető, mert a forrásuk nem érhető el."
 
 #: src/slideimport/SlideLinks.ts:459
 msgid ""
 "The section will hold the slides that its section in {0} holds now. Changes "
 "made to these slides in this presentation will be lost."
 msgstr ""
+"A szakaszban azok a diák lesznek, amelyek a forrásszakaszában most vannak "
+"ebben a fájlban: {0}. Az ebben a bemutatóban ezeken a diákon végzett "
+"módosítások elvesznek."
 
 #: src/slideimport/SlideLinks.ts:462
 msgid ""
@@ -6741,10 +6748,13 @@ msgid ""
 "files hold now. Changes made to these slides in this presentation will be "
 "lost."
 msgstr ""
+"{0} csatolt szakaszban azok a diák lesznek, amelyek a forrásfájlokban lévő "
+"szakaszaikban most vannak. Az ebben a bemutatóban ezeken a diákon végzett "
+"módosítások elvesznek."
 
 #: src/slideimport/SlideLinks.ts:467
 msgid "Update sections"
-msgstr ""
+msgstr "Szakaszok frissítése"
 
 #: src/slideimport/SlideLinks.ts:534
 msgid "This slide is not linked to another file."
@@ -6765,7 +6775,7 @@ msgstr "A(z) {0} nem olvasható be."
 
 #: src/slideimport/SlideLinks.ts:742
 msgid "You do not have access to {0}, so the section cannot be updated."
-msgstr ""
+msgstr "Nincs hozzáférése ehhez: {0}, ezért a szakasz nem frissíthető."
 
 #: src/slideimport/SlideLinks.ts:745
 msgid "You do not have access to {0}, so its pages cannot be refreshed."
@@ -6782,11 +6792,13 @@ msgstr "A(z) {0} diáit nem sikerült beolvasni ebbe a bemutatóba."
 
 #: src/slideimport/SlideLinks.ts:919
 msgid "The section was updated from {0}."
-msgstr ""
+msgstr "A szakasz frissítve innen: {0}."
 
 #: src/slideimport/SlideLinks.ts:1059
 msgid "Cannot update the section: {0} no longer holds its source section."
 msgstr ""
+"A szakasz nem frissíthető: a forrásszakasza már nincs meg ebben a fájlban: "
+"{0}."
 
 #: src/slideimport/SlideLinks.ts:1085
 msgid "Cannot update slide {0}: the source lacks matching slide"
@@ -6797,14 +6809,12 @@ msgid "Unlinking the slide failed."
 msgstr "A dia csatolásának megszüntetése sikertelen."
 
 #: src/slideimport/SlideLinks.ts:1105
-#, fuzzy
 msgid "Unlinking the section failed."
-msgstr "A dia csatolásának megszüntetése sikertelen."
+msgstr "A szakasz csatolásának megszüntetése sikertelen."
 
 #: src/slideimport/SlideLinks.ts:1122
-#, fuzzy
 msgid "Updating the section from {0} failed."
-msgstr "A(z) {0} diáinak frissítése sikertelen."
+msgstr "A szakasz frissítése sikertelen innen: {0}."
 
 #: src/slideimport/SlideLinks.ts:1123 src/slideimport/SlideLinks.ts:1182
 msgid "Updating the slides of {0} failed."
