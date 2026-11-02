@@ -9,6 +9,6 @@
     <meta:editing-cycles>2</meta:editing-cycles>
     <dc:date>2026-06-05T07:55:45.061889774</dc:date>
     <meta:document-statistic meta:object-count="61"/>
-    <meta:user-defined meta:name="AIDesignManifest">{"schemaVersion":1,"masters":{"Cobalt1":"opening","Cobalt":"body","Cobalt2":"divider","Cobalt3":"closing"},"artDirection":"Flat geometric vector art in deep cobalt and navy with sharp diagonal cuts and generous white space, no text in the image."}</meta:user-defined>
+    <meta:user-defined meta:name="AIDesignManifest">{"schemaVersion":1,"masters":{"Cobalt1":"opening","Cobalt":"body","Cobalt2":"divider","Cobalt3":"closing"},"artDirection":"Flat geometric vector art in deep cobalt and navy with sharp diagonal cuts and generous white space, no text in the image.","intents":{"big-number":"CobaltFigure","quote":"CobaltQuote"}}</meta:user-defined>
   </office:meta>
 </office:document-meta>

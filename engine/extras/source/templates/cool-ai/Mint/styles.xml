@@ -617,6 +617,214 @@
     <style:presentation-page-layout style:name="AL3T19">
       <presentation:placeholder presentation:object="title" svg:x="2.058cm" svg:y="1.743cm" svg:width="23.912cm" svg:height="3.507cm"/>
     </style:presentation-page-layout>
+    <style:style style:name="MintFigure-background" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#d7efe3" draw:fill-image-width="0cm" draw:fill-image-height="0cm"/>
+      <style:text-properties style:font-name="Carlito" fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" style:letter-kerning="true"/>
+    </style:style>
+    <style:style style:name="MintFigure-backgroundobjects" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="justify"/>
+      <style:paragraph-properties style:text-autospace="none" style:punctuation-wrap="simple"/>
+      <style:text-properties fo:color="#143d33" loext:opacity="100%" style:font-name="Carlito" fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="10pt" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="10pt" style:font-weight-asian="normal" style:font-size-complex="10pt" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="MintFigure-notes" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="none"/>
+      <style:paragraph-properties fo:margin-left="0.6cm" fo:margin-right="0cm" fo:text-indent="-0.6cm"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:text-shadow="none" style:text-underline-style="none" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" style:use-window-font-color="true" loext:opacity="0%" style:font-name="Carlito" fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="14pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="14pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="14pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="MintFigure-outline1" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" draw:textarea-vertical-align="middle">
+        <text:list-style style:name="MintFigure-outline1">
+          <text:list-level-style-bullet text:level="1" text:bullet-char="&#x25CF;">
+            <style:list-level-properties text:min-label-width="0.9cm"/>
+            <style:text-properties fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:color="#1fa97c" fo:font-size="75%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="2" text:bullet-char="&#x25CF;">
+            <style:list-level-properties text:space-before="1.5cm" text:min-label-width="0.9cm"/>
+            <style:text-properties fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:color="#ffb45e" fo:font-size="75%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="3" text:bullet-char="&#x25CF;">
+            <style:list-level-properties text:space-before="2.8cm" text:min-label-width="0.8cm"/>
+            <style:text-properties fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:color="#5a7b71" fo:font-size="55%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="4" text:bullet-char="&#x25CF;">
+            <style:list-level-properties text:space-before="4.2cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:color="#5a7b71" fo:font-size="55%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="5" text:bullet-char="&#x25CF;">
+            <style:list-level-properties text:space-before="5.4cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:color="#5a7b71" fo:font-size="55%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="6" text:bullet-char="&#x25CF;">
+            <style:list-level-properties text:space-before="6.6cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:color="#5a7b71" fo:font-size="55%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="7" text:bullet-char="&#x25CF;">
+            <style:list-level-properties text:space-before="7.8cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:color="#5a7b71" fo:font-size="55%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="8" text:bullet-char="&#x25CF;">
+            <style:list-level-properties text:space-before="9cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:color="#5a7b71" fo:font-size="55%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="9" text:bullet-char="&#x25CF;">
+            <style:list-level-properties text:space-before="10.2cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:color="#5a7b71" fo:font-size="55%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="10" text:bullet-char="&#x25CF;">
+            <style:list-level-properties text:space-before="11.4cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:color="#5a7b71" fo:font-size="55%"/>
+          </text:list-level-style-bullet>
+        </text:list-style>
+      </style:graphic-properties>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.35cm" fo:text-indent="0cm" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging" fo:text-align="center"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:text-shadow="none" style:text-underline-style="none" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" loext:opacity="100%" fo:color="#1fa97c" style:font-name="Belanosima" fo:font-family="Belanosima" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="18pt" fo:font-style="normal" fo:font-weight="bold" style:font-size-asian="18pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-size-complex="18pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
+    </style:style>
+    <style:style style:name="MintFigure-outline2" style:family="presentation" style:parent-style-name="MintFigure-outline1">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.3cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:text-shadow="none" style:text-underline-style="none" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" loext:opacity="100%" fo:color="#143d33" style:font-name="Carlito" fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="16pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="16pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="16pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="MintFigure-outline3" style:family="presentation" style:parent-style-name="MintFigure-outline2">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.24cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:text-shadow="none" style:text-underline-style="none" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" loext:opacity="100%" fo:color="#5a7b71" style:font-name="Carlito" fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="14pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="14pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="14pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="MintFigure-outline4" style:family="presentation" style:parent-style-name="MintFigure-outline3">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.15cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:text-shadow="none" style:text-underline-style="none" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" loext:opacity="100%" fo:color="#5a7b71" style:font-name="Carlito" fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="12pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="MintFigure-outline5" style:family="presentation" style:parent-style-name="MintFigure-outline4">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:text-shadow="none" style:text-underline-style="none" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" loext:opacity="100%" fo:color="#5a7b71" style:font-name="Carlito" fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="12pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="MintFigure-outline6" style:family="presentation" style:parent-style-name="MintFigure-outline5">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:text-shadow="none" style:text-underline-style="none" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" loext:opacity="100%" fo:color="#5a7b71" style:font-name="Carlito" fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="12pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="MintFigure-outline7" style:family="presentation" style:parent-style-name="MintFigure-outline6">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:text-shadow="none" style:text-underline-style="none" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" loext:opacity="100%" fo:color="#5a7b71" style:font-name="Carlito" fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="12pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="MintFigure-outline8" style:family="presentation" style:parent-style-name="MintFigure-outline7">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:text-shadow="none" style:text-underline-style="none" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" loext:opacity="100%" fo:color="#5a7b71" style:font-name="Carlito" fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="12pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="MintFigure-outline9" style:family="presentation" style:parent-style-name="MintFigure-outline8">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:text-shadow="none" style:text-underline-style="none" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" loext:opacity="100%" fo:color="#5a7b71" style:font-name="Carlito" fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="12pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="MintFigure-subtitle" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="left" fo:text-indent="0cm" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:text-shadow="none" style:text-underline-style="none" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" loext:opacity="100%" fo:color="#143d33" style:font-name="Carlito" fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="15pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="15pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="15pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="MintFigure-title" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="wrap"/>
+      <style:paragraph-properties fo:text-align="left" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:text-shadow="none" style:text-underline-style="none" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" loext:opacity="100%" fo:color="#143d33" style:font-name="Belanosima" fo:font-family="Belanosima" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="24pt" fo:font-style="normal" fo:font-weight="bold" style:font-size-asian="24pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-size-complex="24pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
+    </style:style>
+    <style:style style:name="MintQuote-background" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#d7efe3" draw:fill-image-width="0cm" draw:fill-image-height="0cm"/>
+      <style:text-properties style:font-name="Carlito" fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" style:letter-kerning="true"/>
+    </style:style>
+    <style:style style:name="MintQuote-backgroundobjects" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="justify"/>
+      <style:paragraph-properties style:text-autospace="none" style:punctuation-wrap="simple"/>
+      <style:text-properties fo:color="#143d33" loext:opacity="100%" style:font-name="Carlito" fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="10pt" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="10pt" style:font-weight-asian="normal" style:font-size-complex="10pt" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="MintQuote-notes" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="none"/>
+      <style:paragraph-properties fo:margin-left="0.6cm" fo:margin-right="0cm" fo:text-indent="-0.6cm"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:text-shadow="none" style:text-underline-style="none" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" style:use-window-font-color="true" loext:opacity="0%" style:font-name="Carlito" fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="14pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="14pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="14pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="MintQuote-outline1" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" draw:textarea-vertical-align="middle">
+        <text:list-style style:name="MintQuote-outline1">
+          <text:list-level-style-bullet text:level="1" text:bullet-char="&#x25CF;">
+            <style:list-level-properties text:min-label-width="0.9cm"/>
+            <style:text-properties fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:color="#1fa97c" fo:font-size="75%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="2" text:bullet-char="&#x25CF;">
+            <style:list-level-properties text:space-before="1.5cm" text:min-label-width="0.9cm"/>
+            <style:text-properties fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:color="#ffb45e" fo:font-size="75%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="3" text:bullet-char="&#x25CF;">
+            <style:list-level-properties text:space-before="2.8cm" text:min-label-width="0.8cm"/>
+            <style:text-properties fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:color="#5a7b71" fo:font-size="55%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="4" text:bullet-char="&#x25CF;">
+            <style:list-level-properties text:space-before="4.2cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:color="#5a7b71" fo:font-size="55%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="5" text:bullet-char="&#x25CF;">
+            <style:list-level-properties text:space-before="5.4cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:color="#5a7b71" fo:font-size="55%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="6" text:bullet-char="&#x25CF;">
+            <style:list-level-properties text:space-before="6.6cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:color="#5a7b71" fo:font-size="55%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="7" text:bullet-char="&#x25CF;">
+            <style:list-level-properties text:space-before="7.8cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:color="#5a7b71" fo:font-size="55%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="8" text:bullet-char="&#x25CF;">
+            <style:list-level-properties text:space-before="9cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:color="#5a7b71" fo:font-size="55%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="9" text:bullet-char="&#x25CF;">
+            <style:list-level-properties text:space-before="10.2cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:color="#5a7b71" fo:font-size="55%"/>
+          </text:list-level-style-bullet>
+          <text:list-level-style-bullet text:level="10" text:bullet-char="&#x25CF;">
+            <style:list-level-properties text:space-before="11.4cm" text:min-label-width="0.6cm"/>
+            <style:text-properties fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:color="#5a7b71" fo:font-size="55%"/>
+          </text:list-level-style-bullet>
+        </text:list-style>
+      </style:graphic-properties>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.35cm" fo:text-indent="0cm" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging" fo:text-align="left"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:text-shadow="none" style:text-underline-style="none" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" loext:opacity="100%" fo:color="#ffffff" style:font-name="Carlito" fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="28pt" fo:font-style="italic" fo:font-weight="normal" style:font-size-asian="28pt" style:font-style-asian="italic" style:font-weight-asian="normal" style:font-size-complex="28pt" style:font-style-complex="italic" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="MintQuote-outline2" style:family="presentation" style:parent-style-name="MintQuote-outline1">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.3cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:text-shadow="none" style:text-underline-style="none" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" loext:opacity="100%" fo:color="#143d33" style:font-name="Carlito" fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="16pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="16pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="16pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="MintQuote-outline3" style:family="presentation" style:parent-style-name="MintQuote-outline2">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.24cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:text-shadow="none" style:text-underline-style="none" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" loext:opacity="100%" fo:color="#5a7b71" style:font-name="Carlito" fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="14pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="14pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="14pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="MintQuote-outline4" style:family="presentation" style:parent-style-name="MintQuote-outline3">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.15cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:text-shadow="none" style:text-underline-style="none" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" loext:opacity="100%" fo:color="#5a7b71" style:font-name="Carlito" fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="12pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="MintQuote-outline5" style:family="presentation" style:parent-style-name="MintQuote-outline4">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:text-shadow="none" style:text-underline-style="none" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" loext:opacity="100%" fo:color="#5a7b71" style:font-name="Carlito" fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="12pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="MintQuote-outline6" style:family="presentation" style:parent-style-name="MintQuote-outline5">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:text-shadow="none" style:text-underline-style="none" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" loext:opacity="100%" fo:color="#5a7b71" style:font-name="Carlito" fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="12pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="MintQuote-outline7" style:family="presentation" style:parent-style-name="MintQuote-outline6">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:text-shadow="none" style:text-underline-style="none" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" loext:opacity="100%" fo:color="#5a7b71" style:font-name="Carlito" fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="12pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="MintQuote-outline8" style:family="presentation" style:parent-style-name="MintQuote-outline7">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:text-shadow="none" style:text-underline-style="none" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" loext:opacity="100%" fo:color="#5a7b71" style:font-name="Carlito" fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="12pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="MintQuote-outline9" style:family="presentation" style:parent-style-name="MintQuote-outline8">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:text-shadow="none" style:text-underline-style="none" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" loext:opacity="100%" fo:color="#5a7b71" style:font-name="Carlito" fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="12pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="MintQuote-subtitle" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="left" fo:text-indent="0cm" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:text-shadow="none" style:text-underline-style="none" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" loext:opacity="100%" fo:color="#143d33" style:font-name="Carlito" fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="15pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="15pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="15pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+    </style:style>
+    <style:style style:name="MintQuote-title" style:family="presentation">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="wrap"/>
+      <style:paragraph-properties fo:text-align="left" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:text-shadow="none" style:text-underline-style="none" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" loext:opacity="100%" fo:color="#d7efe3" style:font-name="Belanosima" fo:font-family="Belanosima" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="18pt" fo:font-style="normal" fo:font-weight="bold" style:font-size-asian="18pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-size-complex="18pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
+    </style:style>
   </office:styles>
   <office:automatic-styles>
     <style:page-layout style:name="PM0">
@@ -892,6 +1100,21 @@
         <style:text-properties fo:font-family="OpenSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
       </text:list-level-style-bullet>
     </text:list-style>
+    <style:style style:name="Mgi1" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:textarea-vertical-align="middle" fo:min-height="0cm" fo:min-width="0cm" draw:shadow="hidden" loext:decorative="true" draw:fill="solid" draw:fill-color="#ffb45e"/>
+    </style:style>
+    <style:style style:name="Mgi2" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:textarea-vertical-align="middle" fo:min-height="0cm" fo:min-width="0cm" draw:shadow="hidden" loext:decorative="true" draw:fill="solid" draw:fill-color="#143d33"/>
+    </style:style>
+    <style:style style:name="Mgi3" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:textarea-vertical-align="middle" fo:min-height="0cm" fo:min-width="0cm" draw:shadow="hidden" loext:decorative="true" draw:fill="solid" draw:fill-color="#1fa97c"/>
+    </style:style>
+    <style:style style:name="Mgi4" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:textarea-vertical-align="middle" fo:min-height="0cm" fo:min-width="0cm" draw:shadow="hidden" loext:decorative="true" draw:fill="solid" draw:fill-color="#ffb45e"/>
+    </style:style>
+    <style:style style:name="Mgi5" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:textarea-vertical-align="middle" fo:min-height="0cm" fo:min-width="0cm" draw:shadow="hidden" loext:decorative="true" draw:fill="solid" draw:fill-color="#ffb45e"/>
+    </style:style>
   </office:automatic-styles>
   <office:master-styles>
     <draw:layer-set>
@@ -1355,6 +1578,228 @@
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr16" draw:text-style-name="MP14" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
+          <draw:text-box>
+            <text:p text:style-name="MP11">
+              <text:span text:style-name="MT1">
+                <text:page-number>&lt;number&gt;</text:page-number>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+      </presentation:notes>
+    </style:master-page>
+    <style:master-page style:name="MintFigure" style:page-layout-name="PM1" draw:style-name="Mdp1">
+      <loext:theme loext:name="Office">
+        <loext:theme-colors loext:name="Classic">
+          <loext:color loext:name="dark1" loext:color="#000000"/>
+          <loext:color loext:name="light1" loext:color="#ffffff"/>
+          <loext:color loext:name="dark2" loext:color="#143d33"/>
+          <loext:color loext:name="light2" loext:color="#d7efe3"/>
+          <loext:color loext:name="accent1" loext:color="#1fa97c"/>
+          <loext:color loext:name="accent2" loext:color="#ffb45e"/>
+          <loext:color loext:name="accent3" loext:color="#143d33"/>
+          <loext:color loext:name="accent4" loext:color="#1fa97c"/>
+          <loext:color loext:name="accent5" loext:color="#ffb45e"/>
+          <loext:color loext:name="accent6" loext:color="#5a7b71"/>
+          <loext:color loext:name="hyperlink" loext:color="#1fa97c"/>
+          <loext:color loext:name="followed-hyperlink" loext:color="#143d33"/>
+        </loext:theme-colors>
+      </loext:theme>
+      <draw:custom-shape draw:style-name="Mgr3" draw:text-style-name="MP8" draw:layer="backgroundobjects" svg:width="28cm" svg:height="15.75cm" svg:x="0cm" svg:y="0cm">
+        <text:p/>
+        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+      </draw:custom-shape>
+      <draw:custom-shape draw:style-name="Mgr6" draw:text-style-name="MP8" draw:layer="backgroundobjects" svg:width="25.4cm" svg:height="11.1cm" svg:x="1.3cm" svg:y="3.2cm">
+        <text:p/>
+        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:text-areas="?f3 ?f4 ?f5 ?f6" draw:type="round-rectangle" draw:modifiers="800" draw:enhanced-path="M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N">
+          <draw:equation draw:name="f0" draw:formula="45"/>
+          <draw:equation draw:name="f1" draw:formula="$0 *sin(?f0 *(pi/180))"/>
+          <draw:equation draw:name="f2" draw:formula="?f1 *3163/7636"/>
+          <draw:equation draw:name="f3" draw:formula="left+?f2 "/>
+          <draw:equation draw:name="f4" draw:formula="top+?f2 "/>
+          <draw:equation draw:name="f5" draw:formula="right-?f2 "/>
+          <draw:equation draw:name="f6" draw:formula="bottom-?f2 "/>
+          <draw:equation draw:name="f7" draw:formula="left+$0 "/>
+          <draw:equation draw:name="f8" draw:formula="top+$0 "/>
+          <draw:equation draw:name="f9" draw:formula="bottom-$0 "/>
+          <draw:equation draw:name="f10" draw:formula="right-$0 "/>
+          <draw:handle draw:handle-position="$0 top" draw:handle-switched="true" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
+        </draw:enhanced-geometry>
+      </draw:custom-shape>
+      <draw:custom-shape draw:style-name="Mgr7" draw:text-style-name="MP8" draw:layer="backgroundobjects" svg:width="0.9cm" svg:height="0.9cm" svg:x="0.4cm" svg:y="1.1cm">
+        <text:p/>
+        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+      </draw:custom-shape>
+      <draw:custom-shape draw:style-name="Mgr8" draw:text-style-name="MP8" draw:layer="backgroundobjects" svg:width="0.85cm" svg:height="0.85cm" svg:x="25.55cm" svg:y="14.55cm">
+        <text:p/>
+        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+      </draw:custom-shape>
+      <draw:custom-shape draw:style-name="Mgi1" draw:layer="backgroundobjects" svg:width="3.2cm" svg:height="0.3cm" svg:x="12.4cm" svg:y="10.0cm">
+        <text:p/>
+        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+      </draw:custom-shape>
+      <draw:frame presentation:style-name="MintFigure-title" draw:layer="backgroundobjects" svg:width="24.8cm" svg:height="1.9cm" svg:x="1.6cm" svg:y="0.8cm" presentation:class="title" presentation:placeholder="true">
+        <draw:text-box/>
+      </draw:frame>
+      <draw:frame presentation:style-name="MintFigure-outline1" draw:layer="backgroundobjects" svg:width="22.8cm" svg:height="6.2cm" svg:x="2.6cm" svg:y="4.4cm" presentation:class="outline" presentation:placeholder="true">
+        <draw:text-box/>
+      </draw:frame>
+      <draw:frame presentation:style-name="Mpr1" draw:text-style-name="MP8" draw:layer="backgroundobjects" svg:width="7cm" svg:height="0.6cm" svg:x="1.3cm" svg:y="15.0cm" presentation:class="date-time">
+        <draw:text-box>
+          <text:p text:style-name="MP7">
+            <presentation:date-time/>
+          </text:p>
+        </draw:text-box>
+      </draw:frame>
+      <draw:frame presentation:style-name="Mpr1" draw:text-style-name="MP10" draw:layer="backgroundobjects" svg:width="10cm" svg:height="0.6cm" svg:x="9cm" svg:y="15.0cm" presentation:class="footer">
+        <draw:text-box>
+          <text:p text:style-name="MP9">
+            <presentation:footer/>
+          </text:p>
+        </draw:text-box>
+      </draw:frame>
+      <draw:frame presentation:style-name="Mpr2" draw:text-style-name="MP10" draw:layer="backgroundobjects" svg:width="0.85cm" svg:height="0.85cm" svg:x="25.55cm" svg:y="14.55cm" presentation:class="page-number">
+        <draw:text-box>
+          <text:p text:style-name="MP10">
+            <text:page-number>&lt;number&gt;</text:page-number>
+          </text:p>
+        </draw:text-box>
+      </draw:frame>
+      <presentation:notes style:page-layout-name="PM0">
+        <draw:page-thumbnail presentation:style-name="MintFigure-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="MintFigure-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:text-box/>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP8" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
+          <draw:text-box>
+            <text:p text:style-name="MP7">
+              <text:span text:style-name="MT1">
+                <presentation:header/>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP12" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
+          <draw:text-box>
+            <text:p text:style-name="MP11">
+              <text:span text:style-name="MT1">
+                <presentation:date-time/>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP13" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
+          <draw:text-box>
+            <text:p text:style-name="MP7">
+              <text:span text:style-name="MT1">
+                <presentation:footer/>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr4" draw:text-style-name="MP14" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
+          <draw:text-box>
+            <text:p text:style-name="MP11">
+              <text:span text:style-name="MT1">
+                <text:page-number>&lt;number&gt;</text:page-number>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+      </presentation:notes>
+    </style:master-page>
+    <style:master-page style:name="MintQuote" style:page-layout-name="PM1" draw:style-name="Mdp1">
+      <loext:theme loext:name="Office">
+        <loext:theme-colors loext:name="Classic">
+          <loext:color loext:name="dark1" loext:color="#000000"/>
+          <loext:color loext:name="light1" loext:color="#ffffff"/>
+          <loext:color loext:name="dark2" loext:color="#143d33"/>
+          <loext:color loext:name="light2" loext:color="#d7efe3"/>
+          <loext:color loext:name="accent1" loext:color="#1fa97c"/>
+          <loext:color loext:name="accent2" loext:color="#ffb45e"/>
+          <loext:color loext:name="accent3" loext:color="#143d33"/>
+          <loext:color loext:name="accent4" loext:color="#1fa97c"/>
+          <loext:color loext:name="accent5" loext:color="#ffb45e"/>
+          <loext:color loext:name="accent6" loext:color="#5a7b71"/>
+          <loext:color loext:name="hyperlink" loext:color="#1fa97c"/>
+          <loext:color loext:name="followed-hyperlink" loext:color="#143d33"/>
+        </loext:theme-colors>
+      </loext:theme>
+      <draw:custom-shape draw:style-name="Mgi2" draw:layer="backgroundobjects" svg:width="28cm" svg:height="15.75cm" svg:x="0cm" svg:y="0cm">
+        <text:p/>
+        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+      </draw:custom-shape>
+      <draw:custom-shape draw:style-name="Mgi3" draw:layer="backgroundobjects" svg:width="9cm" svg:height="9cm" svg:x="-3.5cm" svg:y="-3.5cm">
+        <text:p/>
+        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+      </draw:custom-shape>
+      <draw:custom-shape draw:style-name="Mgi4" draw:layer="backgroundobjects" svg:width="0.85cm" svg:height="0.85cm" svg:x="25.55cm" svg:y="14.55cm">
+        <text:p/>
+        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+      </draw:custom-shape>
+      <draw:path draw:style-name="Mgi5" draw:layer="backgroundobjects" svg:width="3.0cm" svg:height="1.826cm" svg:x="1.6cm" svg:y="1.4cm" svg:viewBox="0 0 2300 1400" svg:d="M 880 0 C 350 60 0 400 0 900 C 0 1176 224 1400 500 1400 C 776 1400 1000 1176 1000 900 C 1000 624 776 400 500 400 C 440 400 382 410 329 430 C 420 300 640 170 920 130 Z M 2180 0 C 1650 60 1300 400 1300 900 C 1300 1176 1524 1400 1800 1400 C 2076 1400 2300 1176 2300 900 C 2300 624 2076 400 1800 400 C 1740 400 1682 410 1629 430 C 1720 300 1940 170 2220 130 Z">
+        <text:p/>
+      </draw:path>
+      <draw:frame presentation:style-name="MintQuote-title" draw:layer="backgroundobjects" svg:width="20.5cm" svg:height="1.5cm" svg:x="4.2cm" svg:y="12.0cm" presentation:class="title" presentation:placeholder="true">
+        <draw:text-box/>
+      </draw:frame>
+      <draw:frame presentation:style-name="MintQuote-outline1" draw:layer="backgroundobjects" svg:width="20.5cm" svg:height="8.2cm" svg:x="4.2cm" svg:y="3.4cm" presentation:class="outline" presentation:placeholder="true">
+        <draw:text-box/>
+      </draw:frame>
+      <draw:frame presentation:style-name="Mpr1" draw:text-style-name="MP8" draw:layer="backgroundobjects" svg:width="7cm" svg:height="0.6cm" svg:x="1.3cm" svg:y="15.0cm" presentation:class="date-time">
+        <draw:text-box>
+          <text:p text:style-name="MP7">
+            <presentation:date-time/>
+          </text:p>
+        </draw:text-box>
+      </draw:frame>
+      <draw:frame presentation:style-name="Mpr1" draw:text-style-name="MP10" draw:layer="backgroundobjects" svg:width="10cm" svg:height="0.6cm" svg:x="9cm" svg:y="15.0cm" presentation:class="footer">
+        <draw:text-box>
+          <text:p text:style-name="MP9">
+            <presentation:footer/>
+          </text:p>
+        </draw:text-box>
+      </draw:frame>
+      <draw:frame presentation:style-name="Mpr2" draw:text-style-name="MP10" draw:layer="backgroundobjects" svg:width="0.85cm" svg:height="0.85cm" svg:x="25.55cm" svg:y="14.55cm" presentation:class="page-number">
+        <draw:text-box>
+          <text:p text:style-name="MP10">
+            <text:page-number>&lt;number&gt;</text:page-number>
+          </text:p>
+        </draw:text-box>
+      </draw:frame>
+      <presentation:notes style:page-layout-name="PM0">
+        <draw:page-thumbnail presentation:style-name="MintQuote-title" draw:layer="backgroundobjects" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="MintQuote-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:text-box/>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP8" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
+          <draw:text-box>
+            <text:p text:style-name="MP7">
+              <text:span text:style-name="MT1">
+                <presentation:header/>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP12" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
+          <draw:text-box>
+            <text:p text:style-name="MP11">
+              <text:span text:style-name="MT1">
+                <presentation:date-time/>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP13" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
+          <draw:text-box>
+            <text:p text:style-name="MP7">
+              <text:span text:style-name="MT1">
+                <presentation:footer/>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr4" draw:text-style-name="MP14" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
           <draw:text-box>
             <text:p text:style-name="MP11">
               <text:span text:style-name="MT1">

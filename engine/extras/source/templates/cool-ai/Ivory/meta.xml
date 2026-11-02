@@ -9,6 +9,6 @@
     <meta:editing-cycles>2</meta:editing-cycles>
     <dc:date>2026-06-05T07:55:45.061889774</dc:date>
     <meta:document-statistic meta:object-count="61"/>
-    <meta:user-defined meta:name="AIDesignManifest">{"schemaVersion":1,"masters":{"Ivory1":"opening","Ivory":"body","Ivory2":"divider","Ivory3":"closing"},"artDirection":"Classical engraving-style illustration in warm ivory and deep green with fine brass linework, no text in the image."}</meta:user-defined>
+    <meta:user-defined meta:name="AIDesignManifest">{"schemaVersion":1,"masters":{"Ivory1":"opening","Ivory":"body","Ivory2":"divider","Ivory3":"closing"},"artDirection":"Classical engraving-style illustration in warm ivory and deep green with fine brass linework, no text in the image.","intents":{"big-number":"IvoryFigure","quote":"IvoryQuote"}}</meta:user-defined>
   </office:meta>
 </office:document-meta>

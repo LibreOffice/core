@@ -9,6 +9,6 @@
     <meta:editing-cycles>2</meta:editing-cycles>
     <dc:date>2026-06-05T07:55:45.061889774</dc:date>
     <meta:document-statistic meta:object-count="61"/>
-    <meta:user-defined meta:name="AIDesignManifest">{"schemaVersion":1,"masters":{"Slate1":"opening","Slate":"body","Slate2":"divider","Slate3":"closing"},"artDirection":"Clean isometric data-graphic illustration in slate gray and off-white with a single raspberry accent, no text in the image."}</meta:user-defined>
+    <meta:user-defined meta:name="AIDesignManifest">{"schemaVersion":1,"masters":{"Slate1":"opening","Slate":"body","Slate2":"divider","Slate3":"closing"},"artDirection":"Clean isometric data-graphic illustration in slate gray and off-white with a single raspberry accent, no text in the image.","intents":{"big-number":"SlateFigure","quote":"SlateQuote"}}</meta:user-defined>
   </office:meta>
 </office:document-meta>

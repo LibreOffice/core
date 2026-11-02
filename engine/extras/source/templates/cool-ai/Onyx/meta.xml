@@ -9,6 +9,6 @@
     <meta:editing-cycles>2</meta:editing-cycles>
     <dc:date>2026-06-05T07:55:45.061889774</dc:date>
     <meta:document-statistic meta:object-count="61"/>
-    <meta:user-defined meta:name="AIDesignManifest">{"schemaVersion":1,"masters":{"Onyx1":"opening","Onyx":"body","Onyx2":"divider","Onyx3":"closing"},"artDirection":"Moody macro photography of dark banded stone with a single warm gold vein of light, no text in the image."}</meta:user-defined>
+    <meta:user-defined meta:name="AIDesignManifest">{"schemaVersion":1,"masters":{"Onyx1":"opening","Onyx":"body","Onyx2":"divider","Onyx3":"closing"},"artDirection":"Moody macro photography of dark banded stone with a single warm gold vein of light, no text in the image.","intents":{"big-number":"OnyxFigure","quote":"OnyxQuote"}}</meta:user-defined>
   </office:meta>
 </office:document-meta>
