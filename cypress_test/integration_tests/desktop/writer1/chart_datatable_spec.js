@@ -365,6 +365,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Chart Data Table dialog', 
 		cy.cGet('#ChartDataDialog #datagrid-cell-1-2').click();
 		cy.cGet('#ChartDataDialog #datagrid-cell-1-2')
 			.should('have.class', 'ui-treeview-cell-active');
+		// Core answers the click with a select and a grab_focus. The series name box keeps
+		// the focus once those answers are applied.
+		helper.processToIdle(this.win);
 
 		getSeriesNameInput().invoke('val').then(function(original) {
 			getSeriesNameInput().click().clear().type('ab');
