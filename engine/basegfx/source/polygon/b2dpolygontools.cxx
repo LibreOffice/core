@@ -812,6 +812,7 @@ namespace basegfx::utils
 
                                 if(!bDone && fEdgeLength != 0)
                                 {
+                                    // coverity[divide_by_zero : FALSE] - the if above excludes zero
                                     const double fRelValue((fTo - fPositionOfStart) / fEdgeLength);
                                     aRetval.append(interpolate(aStart, aEnd, fRelValue));
                                 }
