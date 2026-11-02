@@ -812,7 +812,14 @@ void ClientSession::downloadCompareDocument(const Poco::URI& uri, int redirectLi
         return;
     }
 
-    Poco::File(Poco::Path(stagedPath).parent()).createDirectories();
+    const std::string stagedDirectory = Poco::Path(stagedPath).parent().toString();
+    Poco::File(stagedDirectory).createDirectories();
+    if (!FileUtil::checkDiskSpace(stagedDirectory))
+    {
+        LOG_ERR("Low disk space to download the document to compare against");
+        sendTextFrameAndLogError("error: cmd=insertfile kind=failure");
+        return;
+    }
 
     // The proof is over the access_token in the URL, which is empty when the URL has none, as a
     // WOPI host that checks the proof reads it from the URL.
