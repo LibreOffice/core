@@ -22,6 +22,7 @@
 #include <testlog.hpp>
 #include <common/FileUtil.hpp>
 #include <common/JailUtil.hpp>
+#include <common/ProcUtil.hpp>
 #include <wsd/COOLWSD.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <wsd/Process.hpp>
@@ -622,10 +623,238 @@ public:
     }
 };
 
+/// When the subforkit of a configuration dies, or the forkit above it, the spare kits of that
+/// configuration exit. The kit of an open document of the same configuration keeps running, and
+/// the document still answers.
+class UnitSubForKitKilled : public WopiTestServer
+{
+    using Base = WopiTestServer;
+
+    STATE_ENUM(Phase, Load, WaitLoaded, WaitSpareKit, WaitCleanup, WaitStatus, Done)
+    _phase;
+
+    /// A kit of the configuration of the test. The kit is held weakly, so its process is ended only
+    /// by wsd.
+    struct Kit
+    {
+        std::weak_ptr<ChildProcess> child;
+        pid_t pid;
+        std::string jailPath;
+    };
+
+    const bool _killForKit;
+    const std::string _stamp;
+    std::mutex _mutex;
+    std::vector<Kit> _kits;
+    pid_t _subForKitPid;
+    pid_t _documentKitPid;
+    std::string _documentJailPath;
+    std::vector<Kit> _spareKits;
+    std::chrono::steady_clock::time_point _phaseStart;
+
+    void startPhase(Phase phase)
+    {
+        TRANSITION_STATE(_phase, phase);
+        _phaseStart = std::chrono::steady_clock::now();
+    }
+
+    bool phaseTimedOut() const
+    {
+        return std::chrono::steady_clock::now() - _phaseStart > std::chrono::seconds(20);
+    }
+
+    /// Takes the kit of the document and the spare kits, once there is at least one spare kit.
+    bool findKits()
+    {
+        std::lock_guard<std::mutex> lock(_mutex);
+        _documentKitPid = 0;
+        _spareKits.clear();
+        for (const Kit& kit : _kits)
+        {
+            const std::shared_ptr<ChildProcess> child = kit.child.lock();
+            if (child && child->getDocumentBroker())
+            {
+                _documentKitPid = kit.pid;
+                _documentJailPath = kit.jailPath;
+            }
+            else if (ProcUtil::isRunning(kit.pid))
+                _spareKits.push_back(kit);
+        }
+
+        return _documentKitPid > 0 && !_spareKits.empty();
+    }
+
+    /// Answers with a description of what is still left of the spare kits, or an empty string
+    /// once they have exited.
+    std::string spareKitsLeft() const
+    {
+        for (const Kit& kit : _spareKits)
+        {
+            if (ProcUtil::isRunning(kit.pid))
+                return "spare kit " + std::to_string(kit.pid) + " is still running";
+        }
+
+        return std::string();
+    }
+
+public:
+    UnitSubForKitKilled(const std::string& name, bool killForKit)
+        : Base(name)
+        , _phase(Phase::Load)
+        , _killForKit(killForKit)
+        , _stamp(killForKit ? "forkitkilledconfigid" : "subforkitkilledconfigid")
+        , _subForKitPid(0)
+        , _documentKitPid(0)
+    {
+    }
+
+    void newSubForKit(const std::shared_ptr<ForKitProcess>& subforkit,
+                      const std::string& configId) override
+    {
+        if (configId.find(_stamp) == std::string::npos)
+            return;
+
+        TST_LOG("New SubForKit [" << subforkit->getPid() << "]: " << configId);
+        std::lock_guard<std::mutex> lock(_mutex);
+        _subForKitPid = subforkit->getPid();
+    }
+
+    void newChild(const std::shared_ptr<ChildProcess>& child) override
+    {
+        if (child->getConfigId().find(_stamp) == std::string::npos)
+            return;
+
+        const std::string jailPath = COOLWSD::ChildRoot + child->getJailId();
+        TST_LOG("New kit [" << child->getPid() << "] of the subforkit, jail [" << jailPath << ']');
+        std::lock_guard<std::mutex> lock(_mutex);
+        _kits.push_back(Kit{ child, child->getPid(), jailPath });
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitLoaded);
+        startPhase(Phase::WaitSpareKit);
+        return true;
+    }
+
+    bool onFilterSendWebSocketMessage(std::string_view data, const WSOpCode /*code*/,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        if (_phase == Phase::WaitStatus && data.starts_with("status:"))
+        {
+            TRANSITION_STATE(_phase, Phase::Done);
+            passTest("The spare kits are gone, and the document still answers");
+        }
+
+        return false;
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& /*request*/,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        Poco::JSON::Object::Ptr sharedSettings = new Poco::JSON::Object();
+        std::string uri = helpers::getTestServerURI() +
+                          "/wopi/settings/sharedconfig.json?testname=" + getTestname();
+        sharedSettings->set("uri", Util::trim(uri));
+        sharedSettings->set("stamp", _stamp);
+        fileInfo->set("SharedSettings", sharedSettings);
+    }
+
+    std::map<std::string, std::string>
+        parallelizeCheckInfo(const Poco::Net::HTTPRequest& /*request*/,
+                             std::istream& /*message*/,
+                             const std::shared_ptr<StreamSocket>& /*socket*/) override
+    {
+        return std::map<std::string, std::string>{
+            {"wopiSrc", "/wopi/files/0"},
+            {"accessToken", "anything"},
+            {"noAuthHeader", ""},
+            {"permission", ""},
+            {"configid", _stamp}
+        };
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                startPhase(Phase::WaitLoaded);
+                initWebsocket("/wopi/files/0?access_token=anything");
+                WSD_CMD_BY_CONNECTION_INDEX(0, "load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::WaitSpareKit:
+            {
+                if (!findKits())
+                {
+                    if (phaseTimedOut())
+                        failTest("No spare kit of the configuration appeared");
+                    break;
+                }
+
+                pid_t pid = COOLWSD::ForKitProcId;
+                if (!_killForKit)
+                {
+                    std::lock_guard<std::mutex> lock(_mutex);
+                    pid = _subForKitPid;
+                }
+
+                TST_LOG("Document kit [" << _documentKitPid << "], " << _spareKits.size()
+                                         << " spare kits. Killing "
+                                         << (_killForKit ? "the forkit" : "the subforkit")
+                                         << " [" << pid << ']');
+                startPhase(Phase::WaitCleanup);
+                LOK_ASSERT_MESSAGE("No forkit to kill", pid > 0);
+                ::kill(pid, SIGKILL);
+                break;
+            }
+            case Phase::WaitCleanup:
+            {
+                const std::string left = spareKitsLeft();
+                if (!left.empty())
+                {
+                    if (phaseTimedOut())
+                        failTest("After the forkit died, " + left);
+                    break;
+                }
+
+                LOK_ASSERT_MESSAGE("The kit of the document has exited",
+                                   ProcUtil::isRunning(_documentKitPid));
+
+                startPhase(Phase::WaitStatus);
+                WSD_CMD("status");
+                break;
+            }
+            case Phase::WaitStatus:
+            {
+                if (phaseTimedOut())
+                    failTest("The document did not answer after the forkit died");
+                break;
+            }
+            case Phase::WaitLoaded:
+            {
+                if (phaseTimedOut())
+                    failTest("The document did not load");
+                break;
+            }
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase*[5]{ new UnitSubForKit(), new UnitSubForKitJails(),
-                             new UnitSubForKitNested(), new UnitSubForKitReset(), nullptr };
+    return new UnitBase*[7]{ new UnitSubForKit(),
+                             new UnitSubForKitJails(),
+                             new UnitSubForKitNested(),
+                             new UnitSubForKitReset(),
+                             new UnitSubForKitKilled("UnitSubForKitKilled", false),
+                             new UnitSubForKitKilled("UnitForKitKilled", true),
+                             nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

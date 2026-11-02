@@ -425,6 +425,23 @@ void COOLWSD::checkDiskSpaceAndWarnClients(const bool cacheLastCheck)
 #if !MOBILEAPP
 static void closeSubForKit(const std::string& configId,
                            const std::shared_ptr<ForKitProcess>& subForKit);
+static void askSpareKitsToExit(std::vector<std::shared_ptr<ChildProcess>> spareKits);
+
+/// True when forKitPid is the pid of the process that forks the kits of configId now: the forkit
+/// for the default configuration, or the subforkit of configId. A subforkit connects to wsd right
+/// after it forks its first kit, and a kit connects only once its jail is set up, so wsd has
+/// registered the subforkit by the time a kit of its connects. A kit that arrives first is
+/// orphaned and exits, and the subforkit forks another on request.
+static bool isCurrentForKit(const std::string& configId, pid_t forKitPid)
+{
+    Util::assertIsLocked(NewChildrenMutex);
+
+    if (configId.empty())
+        return forKitPid == COOLWSD::ForKitProcId;
+
+    const auto it = SubForKitProcs.find(configId);
+    return it != SubForKitProcs.end() && forKitPid == it->second->getPid();
+}
 #endif
 
 namespace {
@@ -658,6 +675,26 @@ bool COOLWSD::ensureSubForKit(const std::string& configId)
     return queueMessageToForKit(answerMessage);
 }
 
+/// Marks the spare kits of configId, or all spare kits when configId is null, as orphaned, and asks
+/// them to exit. Their forkit or subforkit has died, or was dropped. They stay in NewChildren until
+/// they have exited.
+static void orphanSpareKits(const std::string* configId)
+{
+    Util::assertIsLocked(NewChildrenMutex);
+
+    std::vector<std::shared_ptr<ChildProcess>> orphans;
+    for (const std::shared_ptr<ChildProcess>& child : NewChildren)
+    {
+        if ((!configId || child->getConfigId() == *configId) && !child->isOrphaned())
+        {
+            child->setOrphaned();
+            orphans.push_back(child);
+        }
+    }
+
+    askSpareKitsToExit(std::move(orphans));
+}
+
 /// Cleans up dead children.
 static void cleanupChildren()
 {
@@ -692,7 +729,7 @@ static void rebalanceChildren(const std::string& configId, int64_t balance)
     int64_t available = 0;
     for (const auto& elem : NewChildren)
     {
-        if (elem->getConfigId() == configId)
+        if (elem->getConfigId() == configId && !elem->isOrphaned())
             ++available;
     }
 
@@ -755,6 +792,17 @@ static size_t addNewChild(std::shared_ptr<ChildProcess> child)
     const std::string& configId = child->getConfigId();
 
     std::unique_lock<std::mutex> lock(NewChildrenMutex);
+
+#if !MOBILEAPP
+    // A kit that was forked by a forkit or subforkit other than the one wsd talks to for its
+    // configuration is orphaned from the start: that forkit has died, or was dropped.
+    const pid_t forKitPid = child->getForKitPid();
+    if (forKitPid > 0 && !isCurrentForKit(configId, forKitPid))
+    {
+        child->setOrphaned();
+        child->requestTermination();
+    }
+#endif
 
     --TotalOutstandingForks;
     --OutstandingForks[configId];
@@ -1058,7 +1106,10 @@ std::shared_ptr<ChildProcess> getNewChild_Blocks(const std::shared_ptr<SocketPol
                                    auto found = std::find_if(
                                        NewChildren.begin(), NewChildren.end(),
                                        [configId](const auto& candidate) -> bool
-                                       { return candidate->getConfigId() == configId; });
+                                       {
+                                           return candidate->getConfigId() == configId &&
+                                                  !candidate->isOrphaned();
+                                       });
 
                                    const bool candidateMatch = found != NewChildren.end();
                                    // move this candidate into the last position
@@ -1111,6 +1162,9 @@ std::shared_ptr<ChildProcess> getNewChild_Blocks(const std::shared_ptr<SocketPol
         {
             LOG_WRN("subForKit " << configId << " failed to respond, resetting it");
             dropSubForKit(it, /*askToExit=*/false);
+#if !MOBILEAPP
+            orphanSpareKits(&configId);
+#endif
         }
     }
 
@@ -1229,6 +1283,29 @@ void InotifySocket::handlePoll(SocketDisposition & /* disposition */, std::chron
 
 #if !MOBILEAPP
 
+void ForKitProcWSHandler::onDisconnect()
+{
+    WebSocketHandler::onDisconnect();
+
+    if (SigUtil::getShutdownRequestFlag())
+        return;
+
+    // A subforkit that is still in SubForKitProcs went away without being asked to, so it is
+    // dropped, and its spare kits are orphaned. The forkit is restored when wsd reaps it.
+    std::unique_lock<std::mutex> lock(NewChildrenMutex);
+    for (auto it = SubForKitProcs.begin(); it != SubForKitProcs.end(); ++it)
+    {
+        if (it->second->isHandledBy(this))
+        {
+            const std::string configId = it->first;
+            LOG_WRN("subforkit [" << configId << "] disconnected, dropping it");
+            dropSubForKit(it, /*askToExit=*/false);
+            orphanSpareKits(&configId);
+            break;
+        }
+    }
+}
+
 void ForKitProcWSHandler::handleMessage(const std::vector<char> &data)
 {
     LOG_TRC("ForKitProcWSHandler: handling incoming [" << COOLProtocol::getAbbreviatedMessage(data.data(), data.size()) << "].");
@@ -1339,17 +1416,16 @@ static void closeSubForKit(const std::string& configId,
     // The spare kits are taken now, so no document gets one of them, and the kits of a later
     // subforkit with the same configuration stay.
     std::vector<std::shared_ptr<ChildProcess>> spareKits;
+    for (auto it = NewChildren.begin(); it != NewChildren.end();)
     {
-        for (auto it = NewChildren.begin(); it != NewChildren.end();)
+        // An orphaned kit was forked by an earlier subforkit, so wsd removes its jail.
+        if ((*it)->getConfigId() == configId && !(*it)->isOrphaned())
         {
-            if ((*it)->getConfigId() == configId)
-            {
-                spareKits.push_back(*it);
-                it = NewChildren.erase(it);
-            }
-            else
-                ++it;
+            spareKits.push_back(*it);
+            it = NewChildren.erase(it);
         }
+        else
+            ++it;
     }
 
     // The sockets belong to the prisoner poll, so the messages are sent from its thread.
@@ -1360,6 +1436,20 @@ static void closeSubForKit(const std::string& configId,
                 kit->close();
 
             subForKit->close();
+        });
+}
+
+static void askSpareKitsToExit(std::vector<std::shared_ptr<ChildProcess>> spareKits)
+{
+    if (!PrisonerPoll || spareKits.empty())
+        return;
+
+    // The sockets belong to the prisoner poll, so the messages are sent from its thread.
+    PrisonerPoll->addCallback(
+        [spareKits = std::move(spareKits)]
+        {
+            for (const std::shared_ptr<ChildProcess>& kit : spareKits)
+                kit->requestTermination();
         });
 }
 
@@ -3114,6 +3204,7 @@ bool COOLWSD::checkAndRestoreForKit()
                     }
                     OutstandingSubForKitSpawns.clear();
                     LastSubForKitSpawnRequestTimes.clear();
+                    orphanSpareKits(nullptr);
                 }
 
                 // Spawn a new forkit and try to dust it off and resume.

@@ -250,6 +250,9 @@ public:
 
     void setForKitPid(pid_t forKitPid) { _forKitPid = forKitPid; }
     pid_t getForKitPid() const { return _forKitPid; }
+
+    void setOrphaned() { _orphaned = true; }
+    bool isOrphaned() const { return _orphaned; }
 #if !MOBILEAPP
     void setSMapsFD(int smapsFD)
     {
@@ -283,6 +286,8 @@ public:
 private:
     const std::string _jailId;
     const std::string _configId;
+    /// True when the forkit or subforkit that forked this spare kit has died, or was dropped.
+    bool _orphaned = false;
     /// The pid of the forkit or subforkit that forked this kit, or 0 when it is not known.
     pid_t _forKitPid = 0;
     std::weak_ptr<DocumentBroker> _docBroker;
@@ -306,6 +311,8 @@ public:
     }
 
     virtual void handleMessage(const std::vector<char>& data) override;
+
+    void onDisconnect() override;
 };
 
 class ForKitProcess final : public WSProcess
@@ -316,6 +323,12 @@ public:
         : WSProcess("ForKit", pid, socket, std::make_shared<ForKitProcWSHandler>(socket, request))
     {
         socket->setHandler(getWSHandler());
+    }
+
+    /// True when handler is the handler of the connection to this process.
+    bool isHandledBy(const WebSocketHandler* handler) const
+    {
+        return getWSHandler().get() == handler;
     }
 };
 
