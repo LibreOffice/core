@@ -878,7 +878,49 @@ class ClassicInPlaceContext implements InteractionContext {
 	private static keysOf(): cool.SlideObject['chartKeys'] {
 		const selected = GraphicSelection.selectedObjectIDs;
 		if (selected.length !== 1) return undefined;
-		return RenderGeometrySection.objectOf(selected[0])?.chartKeys;
+		return (
+			RenderGeometrySection.objectOf(selected[0])?.chartKeys ??
+			ClassicInPlaceContext.keysAmongItsSiblings(selected[0])
+		);
+	}
+
+	/*
+		the keys of a part the chart's own order does not know, a single data label or a data
+		point taken by a press: we go round the parts held by the same part, and up to that one
+	*/
+	private static keysAmongItsSiblings(
+		partId: number,
+	): cool.SlideObject['chartKeys'] {
+		const holder = ClassicInPlaceContext.partAbove(partId);
+		const data = RenderGeometrySection.currentPart();
+		if (holder === undefined || !data) return undefined;
+
+		const siblings = data.order.filter(
+			(objectId: number) =>
+				data.objects.get(objectId)?.chartPart !== undefined &&
+				ClassicInPlaceContext.partAbove(objectId) === holder,
+		);
+		const at = siblings.indexOf(partId);
+		if (at < 0) return undefined;
+
+		const count = siblings.length;
+		return {
+			next: siblings[(at + 1) % count],
+			previous: siblings[(at + count - 1) % count],
+			outside: holder,
+		};
+	}
+
+	/// the nearest part of the chart above that one, over the groups the chart holds its parts in
+	private static partAbove(objectId: number): number | undefined {
+		let above = RenderGeometrySection.objectOf(objectId)?.parent;
+		for (let guard = 0; above && guard < 100; ++guard) {
+			const object = RenderGeometrySection.objectOf(above);
+			if (!object) return undefined;
+			if (object.chartPart !== undefined) return above;
+			above = object.parent;
+		}
+		return undefined;
 	}
 
 	/// Selects that part here at once and names it to the engine; nothing for no part.
