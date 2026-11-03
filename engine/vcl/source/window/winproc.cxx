@@ -1186,6 +1186,9 @@ bool ImplKitCancelDrag(vcl::Window* pWindow)
         return false;
 
     ImplEndKitDrag(pFrameData);
+    // The button that started the cancelled drag is still down, and that press starts no other
+    // drag. The flag is cleared again when the button comes up or goes down anew.
+    pFrameData->mbStartDragCalled = true;
     return true;
 }
 

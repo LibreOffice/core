@@ -3632,6 +3632,40 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextEscape)
     CPPUNIT_ASSERT_EQUAL(u"Test2"_ustr, pWrtShell->GetSelText());
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextEscapeThenMove)
+{
+    // Given the paragraphs "Test1" and "Test2", with "Test2" selected:
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    Point aFrom, aTo;
+    lcl_selectSecondParagraph(pWrtShell, aFrom, aTo);
+
+    // When the selection is dragged to the end of "Test1", Escape is pressed, and the mouse moves
+    // on with the button still down before it comes up:
+    lcl_dragText(pXTextDocument, aFrom, aTo, 0, /*bRelease=*/false);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_ESCAPE);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+    const Point aRelease(aTo.getX() + 60, aTo.getY());
+    for (int i = 1; i <= 3; ++i)
+    {
+        pXTextDocument->postMouseEvent(COKitMouseEventType::MOVE, aTo.getX() + 20 * i,
+                                       aTo.getY(), 1, MOUSE_LEFT, 0);
+        Scheduler::ProcessEventsToIdle();
+    }
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aRelease.getX(),
+                                   aRelease.getY(), 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the drag stays cancelled and nothing moved:
+    CPPUNIT_ASSERT_EQUAL(u"Test1"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Test2"_ustr, getParagraph(2)->getString());
+
+    // And the next press inside the selection drags it again:
+    lcl_dragText(pXTextDocument, aFrom, aTo, 0);
+    CPPUNIT_ASSERT_EQUAL(u"Test1Test2"_ustr, getParagraph(1)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextReadOnlyView)
 {
     // Given the paragraphs "Test1" and "Test2", with "Test2" selected in a read-only view:
