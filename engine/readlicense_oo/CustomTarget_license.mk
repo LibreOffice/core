@@ -23,6 +23,7 @@ endif
 $(readlicense_oo_DIR)/LICENSE.html : \
 		$(SRCDIR)/readlicense_oo/license/license_html.xsl \
 		$(readlicense_oo_LICENSE_xml) \
+		$(BUILDDIR)/config_host.mk.stamp \
 		| $(readlicense_oo_DIR)/.dir \
 		  $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XSL,1)
