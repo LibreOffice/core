@@ -2544,6 +2544,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			&& data.type !== 'iconview'
 			&& data.type !== 'overflowgroup'
 			&& data.type !== 'formulabaredit'
+			&& data.type !== 'htmlcontent'
 			)
 			control.setAttribute('tabIndex', '0');
 	},
