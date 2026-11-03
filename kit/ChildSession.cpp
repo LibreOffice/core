@@ -4236,7 +4236,7 @@ bool ChildSession::contentControlEvent(const StringVector& tokens)
         sendTextFrameAndLogError("error: cmd=contentcontrolevent kind=syntax");
         return false;
     }
-    std::string arguments = R"({"type":")" + type + "\",";
+    std::string arguments = R"({"type":")" + JsonUtil::escapeJSONValue(type) + "\",";
 
     if (type == "picture")
     {
@@ -4245,7 +4245,7 @@ bool ChildSession::contentControlEvent(const StringVector& tokens)
         {
             std::string jailDoc = getJailDocRoot();
             std::string url = "file://" + jailDoc + "insertfile/" + name;
-            arguments += R"("changed":")" + url + "\"}";
+            arguments += R"("changed":")" + JsonUtil::escapeJSONValue(url) + "\"}";
         }
     }
     else if (type == "pictureurl")
@@ -4254,15 +4254,30 @@ bool ChildSession::contentControlEvent(const StringVector& tokens)
         if (getTokenString(tokens[2], "name", name))
         {
             std::string url;
-            URI::decode(name, url);
-            arguments = R"({"type":"picture","changed":")" + url + "\"}";
+            try
+            {
+                URI::decode(name, url);
+                arguments =
+                    R"({"type":"picture","changed":")" + JsonUtil::escapeJSONValue(url) + "\"}";
+            }
+            catch (const Poco::SyntaxException&)
+            {
+                // arguments stays open, so the message is refused below.
+            }
         }
     }
     else if (type == "date" || type == "drop-down")
     {
         std::string data;
         getTokenString(tokens[2], "selected", data);
-        arguments += R"("selected":")" + data + "\"" + "}";
+        arguments += R"("selected":")" + JsonUtil::escapeJSONValue(data) + "\"}";
+    }
+
+    // Each form above closes the object, so an open one is a message of another form.
+    if (!arguments.ends_with('}'))
+    {
+        sendTextFrameAndLogError("error: cmd=contentcontrolevent kind=syntax");
+        return false;
     }
 
     getLOKitDocument()->setView(_viewId);
