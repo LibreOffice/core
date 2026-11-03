@@ -2695,6 +2695,14 @@ bool ODbaseTable::ReadMemo(std::size_t nBlockNo, ORowSetValue& aVariable)
                 nLength -= 8;
             }
 
+            const sal_uInt64 nRemaining = m_pMemoStream->remainingSize();
+            if (nLength > nRemaining)
+            {
+                SAL_WARN("connectivity.drivers", "memo length " << nLength
+                         << " is more than the " << nRemaining << " bytes left in the memo file");
+                nLength = nRemaining;
+            }
+
             if ( nLength )
             {
                 if ( bIsText )
