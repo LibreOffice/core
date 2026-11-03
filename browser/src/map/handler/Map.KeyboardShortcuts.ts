@@ -516,6 +516,9 @@ keyboardShortcuts.definitions.set('default', new Array<ShortcutDescriptor>(
     new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL, key: 'f', dispatchAction: 'home-search' }),
     new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL, key: 'p', dispatchAction: 'print' }),
     new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL, key: 's', dispatchAction: 'save', dispatchData: 'keyboard' }),
+    // On a Mac, Cmd+S saves and Ctrl+S does nothing. Every save goes through the save action
+    // above, which also uploads the file to storage and checks it for conflicting changes.
+    new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.MACCTRL, key: 's', platform: Platform.MAC | Platform.IOSAPP | Platform.CODAMAC }),
     new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL | Mod.SHIFT | Mod.ALT, key: 'V', unoAction: '.uno:PasteSpecial', platform: Platform.WINDOWS | Platform.LINUX | Platform.MAC | Platform.CHROMEOSAPP}),
     new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL | Mod.SHIFT, key: 'V', dispatchAction: '.uno:PasteSpecial', platform: Platform.CODAQT | Platform.CODAWINDOWS | Platform.CODAMAC }),
 
