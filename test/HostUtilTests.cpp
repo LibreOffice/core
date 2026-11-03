@@ -39,6 +39,7 @@ class HostUtilTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testHostListWithGaps);
     CPPUNIT_TEST(testAliasGroupExtraHosts);
     CPPUNIT_TEST(testEveryAllowedKitHostIsAccepted);
+    CPPUNIT_TEST(testGroupsModeWithoutGroupIsReported);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -51,6 +52,7 @@ class HostUtilTests : public CPPUNIT_NS::TestFixture
     void testHostListWithGaps();
     void testAliasGroupExtraHosts();
     void testEveryAllowedKitHostIsAccepted();
+    void testGroupsModeWithoutGroupIsReported();
 
 public:
     /// Clear the parsed host state, matching the empty state it starts with, and
@@ -89,6 +91,7 @@ void HostUtilTests::resetHostState(bool wopiEnabled)
     HostUtil::FirstHost.clear();
     HostUtil::FirstHostRejectionLogged = false;
     HostUtil::WopiEnabled = wopiEnabled;
+    HostUtil::GroupsModeWithoutGroup = false;
 }
 
 void HostUtilTests::testParseAlias()
@@ -426,6 +429,51 @@ void HostUtilTests::testEveryAllowedKitHostIsAccepted()
         ::setenv("KIT_HOST_ALLOWLIST", saved.c_str(), 1);
     else
         ::unsetenv("KIT_HOST_ALLOWLIST");
+}
+
+/// Groups mode with no group refuses every WOPI host, and that is reported. A group, or first mode,
+/// lets a host in, and nothing is reported.
+void HostUtilTests::testGroupsModeWithoutGroupIsReported()
+{
+    constexpr std::string_view testname = __func__;
+
+    Poco::AutoPtr<Poco::Util::MapConfiguration> config(new Poco::Util::MapConfiguration);
+    config->setString("storage.wopi[@allow]", "true");
+    config->setString("storage.wopi.alias_groups", "");
+    config->setString("storage.wopi.alias_groups[@mode]", "groups");
+
+    const ScopedHostConfig scopedConfig(config.get());
+    Poco::AutoPtr<Poco::Util::LayeredConfiguration> layered(new Poco::Util::LayeredConfiguration);
+    layered->add(Poco::Util::AbstractConfiguration::Ptr(config.get(), true));
+
+    resetHostState(true);
+    HostUtil::parseAliases(*layered);
+    LOK_ASSERT_MESSAGE("groups mode with no group is reported",
+                       HostUtil::isGroupsModeWithoutGroup());
+
+    config->setString("storage.wopi.alias_groups.group[0]", "");
+    config->setString("storage.wopi.alias_groups.group[0].host", "https://wopi.example.com");
+    config->setString("storage.wopi.alias_groups.group[0].host[@allow]", "true");
+    resetHostState(true);
+    HostUtil::parseAliases(*layered);
+    LOK_ASSERT_MESSAGE("groups mode with a group is not reported",
+                       !HostUtil::isGroupsModeWithoutGroup());
+
+    // As --o: options give it: the group's host with no group[0] key of its own
+    config->remove("storage.wopi.alias_groups.group[0]");
+    config->setString("storage.wopi.alias_groups.group[0].host", "wopi.example.com");
+    config->setString("storage.wopi.alias_groups.group[0].host[@allow]", "true");
+    resetHostState(true);
+    HostUtil::parseAliases(*layered);
+    LOK_ASSERT_MESSAGE("a group given only by its host is not reported",
+                       !HostUtil::isGroupsModeWithoutGroup());
+
+    config->remove("storage.wopi.alias_groups.group[0]");
+    config->setString("storage.wopi.alias_groups[@mode]", "first");
+    resetHostState(true);
+    HostUtil::parseAliases(*layered);
+    LOK_ASSERT_MESSAGE("first mode with no group is not reported",
+                       !HostUtil::isGroupsModeWithoutGroup());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(HostUtilTests);

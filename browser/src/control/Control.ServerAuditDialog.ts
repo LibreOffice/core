@@ -108,6 +108,13 @@ class ServerAuditDialog {
 					'SDK: wopi-host',
 					'https://sdk.collaboraonline.com/docs/installation/Configuration.html#wopi-host',
 				],
+				nogroups: [
+					_(
+						'No WOPI host is allowed: alias_groups mode is "groups" but no group is defined',
+					),
+					'SDK: wopi-host',
+					'https://sdk.collaboraonline.com/docs/installation/Configuration.html#wopi-host',
+				],
 				ok: [
 					_('The trusted WOPI hosts are configured'),
 					'SDK: wopi-host',

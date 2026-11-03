@@ -27,6 +27,7 @@
 #include <net/WebSocketHandler.hpp>
 #include <wsd/COOLWSD.hpp>
 #include <wsd/Exceptions.hpp>
+#include <wsd/HostUtil.hpp>
 
 #include <Poco/JSON/Array.h>
 #include <Poco/JSON/Object.h>
@@ -597,12 +598,16 @@ void AdminModel::mergeServerAudit(const std::map<std::string, std::string>& entr
 
 std::string AdminModel::getServerAuditJSON() const
 {
-    // hardwarewarning is read live; the rest is the recorded set
+    // hardwarewarning and the WOPI host configuration are read live; the rest is the recorded set
     std::map<std::string, std::string> result = _serverAudit;
 
     const std::string& hardwareWarning = COOLWSD::getHardwareResourceWarning();
     if (!hardwareWarning.empty())
         result["hardwarewarning"] = hardwareWarning;
+
+    // No document can load to report this one, so it comes from the configuration
+    if (HostUtil::isWopiEnabled() && HostUtil::isGroupsModeWithoutGroup())
+        result["wopihost"] = "nogroups";
 
     std::ostringstream oss;
     oss << "{\"serverAudit\": [";

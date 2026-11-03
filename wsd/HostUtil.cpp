@@ -41,6 +41,7 @@ std::set<std::string> HostUtil::hostList;
 std::string HostUtil::FirstHost;
 bool HostUtil::FirstHostRejectionLogged;
 bool HostUtil::WopiEnabled;
+bool HostUtil::GroupsModeWithoutGroup;
 
 bool WopiHostList::Entry::matches(const std::string& host) const
 {
@@ -222,6 +223,7 @@ std::optional<Poco::URI> HostUtil::parseHostUri(const std::string& host)
 void HostUtil::parseAliases(Poco::Util::LayeredConfiguration& conf)
 {
     WopiEnabled = conf.getBool("storage.wopi[@allow]", false);
+    GroupsModeWithoutGroup = false;
 
     //set alias_groups mode to compat
     if (!conf.has("storage.wopi.alias_groups"))
@@ -240,12 +242,6 @@ void HostUtil::parseAliases(Poco::Util::LayeredConfiguration& conf)
             AliasHosts.clear();
             return;
         }
-    }
-    else if (Util::iequal(ConfigUtil::getString("storage.wopi.alias_groups[@mode]", "first"),
-                          "groups"))
-    {
-        LOG_WRN("alias_groups mode is 'groups' but no <group> is defined; all WOPI "
-                "hosts will be denied. Define at least one group, or use mode='first'.");
     }
 
     AliasHosts.clear();
@@ -347,6 +343,16 @@ void HostUtil::parseAliases(Poco::Util::LayeredConfiguration& conf)
         }
         warnedInvalidRegex = true;
         warnedAboutPipe = true;
+    }
+
+    // Options given on the command line hold group[0].host but no group[0] key, so a group
+    // counts once a host of it is parsed
+    if (hostList.empty() &&
+        Util::iequal(ConfigUtil::getString("storage.wopi.alias_groups[@mode]", "first"), "groups"))
+    {
+        LOG_WRN("alias_groups mode is 'groups' but no <group> is defined; all WOPI "
+                "hosts will be denied. Define at least one group, or use mode='first'.");
+        GroupsModeWithoutGroup = true;
     }
 }
 

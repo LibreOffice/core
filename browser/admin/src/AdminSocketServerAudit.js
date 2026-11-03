@@ -49,6 +49,9 @@ var AdminSocketServerAudit = AdminSocketBase.extend({
 			not_recommended: _(
 				'No WOPI host configured: trusting the first host that connected',
 			),
+			nogroups: _(
+				'No WOPI host is allowed: alias_groups mode is "groups" but no group is defined',
+			),
 		},
 		hardwarewarning: {
 			lowresources: _(

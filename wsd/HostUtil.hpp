@@ -87,6 +87,9 @@ private:
     static bool FirstHostRejectionLogged;
     /// list of host (not aliases) in alias_groups
     static std::set<std::string> hostList;
+    /// True when alias_groups mode is "groups" and no <group> is defined, so every WOPI host is
+    /// refused.
+    static bool GroupsModeWithoutGroup;
 
     static bool WopiEnabled;
 
@@ -112,6 +115,8 @@ public:
     [[nodiscard]] static bool allowedWopiHost(const std::string& host, int port);
 
     static bool isWopiEnabled() { return WopiEnabled; }
+
+    static bool isGroupsModeWithoutGroup() { return GroupsModeWithoutGroup; }
 
     /// replace the authority of aliashost to realhost if it matches
     static Poco::URI getNewLockedUri(const Poco::URI& uri);
