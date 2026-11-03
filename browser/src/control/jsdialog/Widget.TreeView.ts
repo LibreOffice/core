@@ -1358,6 +1358,10 @@ class TreeViewControl {
 		span.setAttribute('aria-selected', 'true');
 		// In grid mode the tab stop sits on the active cell, not the row.
 		if (!this._gridMode) {
+			// The selected entry is the only entry of the tree that Tab reaches.
+			this._container
+				.querySelectorAll('.ui-treeview-entry[tabindex="0"]')
+				.forEach((item: HTMLElement) => (item.tabIndex = -1));
 			span.tabIndex = 0;
 			if (shouldFocus) span.focus();
 		}

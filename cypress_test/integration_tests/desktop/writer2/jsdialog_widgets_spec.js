@@ -22,6 +22,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'JSDialog widgets visual te
 			cy.cGet('.ui-dialog-title').filter(':contains("Test Widgets")').should('be.visible');
 			// Wait for fadein animation to complete
 			cy.cGet('.jsdialog-window.fadein').should('have.css', 'opacity', '1');
+			// The About dialog closes after its fade-out and then moves the focus.
+			cy.cGet('#modal-dialog-about-dialog-box').should('not.exist');
+			helper.processToIdle(win);
 		});
 	});
 
@@ -109,6 +112,18 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'JSDialog widgets visual te
 		cy.cGet('#contenttree_0').should('have.attr', 'tabindex', '-1');
 		cy.cGet('#contenttree_2').should('have.attr', 'tabindex', '0');
 		cy.cGet('#contenttree').should('not.have.attr', 'tabindex');
+	});
+
+	it('Treelistbox entry clicked with the mouse is the only Tab stop', function() {
+		// with no selection the first entry is the Tab stop
+		cy.cGet('#contenttree_0').should('have.attr', 'tabindex', '0');
+
+		cy.cGet('#contenttree_2').click();
+		cy.cGet('#contenttree_2').should('have.class', 'selected');
+
+		cy.cGet('#contenttree_0').should('have.attr', 'tabindex', '-1');
+		cy.cGet('#contenttree_1').should('have.attr', 'tabindex', '-1');
+		cy.cGet('#contenttree_2').should('have.attr', 'tabindex', '0');
 	});
 
 	it.skip('Treelistbox with-headers', function() {
