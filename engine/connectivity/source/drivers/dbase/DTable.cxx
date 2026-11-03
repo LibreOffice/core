@@ -288,6 +288,7 @@ void ODbaseTable::fillColumns()
     m_aTypes.clear();
     m_aPrecisions.clear();
     m_aScales.clear();
+    m_aRealFieldLengths.clear();
 
     // Number of fields:
     sal_Int32 nFieldCount = (m_aHeader.headerLength - 1) / 32 - 1;
