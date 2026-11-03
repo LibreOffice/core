@@ -16,6 +16,7 @@
 
 #include <boost/property_tree/json_parser.hpp>
 
+#include <com/sun/star/document/XRedlinesSupplier.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
@@ -4158,6 +4159,35 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSavedAuthorField)
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion[1]/SwLineLayout[1]/SwFieldPortion[1]", "expand", sAuthor);
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineCommentSavedEmpty)
+{
+    // Given a recorded insertion with the comment "Old", and the cursor inside the insertion:
+    SwXTextDocument* pXTextDoc = createDoc();
+    SwWrtShell* pWrtShell = pXTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SetRedlineFlagsAndCheckInsMode(RedlineFlags::On | RedlineFlags::ShowMask);
+    pWrtShell->Insert(u"test"_ustr);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    // The comment of the only tracked change in the document.
+    auto redlineComment = [this]() {
+        auto xRedlinesSupplier = mxComponent.queryThrow<document::XRedlinesSupplier>();
+        auto xEnumeration = xRedlinesSupplier->getRedlines()->createEnumeration();
+        CPPUNIT_ASSERT(xEnumeration->hasMoreElements());
+        auto xRedline = xEnumeration->nextElement().queryThrow<beans::XPropertySet>();
+        CPPUNIT_ASSERT(!xEnumeration->hasMoreElements());
+        return xRedline->getPropertyValue(u"RedlineComment"_ustr).get<OUString>();
+    };
+    dispatchCommand(mxComponent, u".uno:CommentChangeTracking"_ustr,
+                    { comphelper::makePropertyValue(u"Text"_ustr, u"Old"_ustr) });
+    CPPUNIT_ASSERT_EQUAL(u"Old"_ustr, redlineComment());
+
+    // When the client saves the comment empty:
+    dispatchCommand(mxComponent, u".uno:CommentChangeTracking"_ustr,
+                    { comphelper::makePropertyValue(u"Text"_ustr, OUString()) });
+
+    // Then the comment is removed, without a dialog to answer:
+    CPPUNIT_ASSERT_EQUAL(OUString(), redlineComment());
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineTooltip)

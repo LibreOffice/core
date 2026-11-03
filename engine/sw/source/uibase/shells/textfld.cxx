@@ -713,8 +713,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             if (pRedline)
             {
                 // In case of COKit and comment text is already provided, skip
-                // dialog creation and just change the redline comment directly
-                if (comphelper::COKit::isActive() && !sCommentText.isEmpty())
+                // dialog creation and just change the redline comment directly. An empty text
+                // removes the comment.
+                if (comphelper::COKit::isActive() && pTextItem)
                 {
                     rSh.SetRedlineComment(sCommentText);
                     GetView().AttrChangedNotify(nullptr);
