@@ -57,6 +57,19 @@ sc::Sparkline* createTestSparkline(ScDocument& rDoc)
     return pSparkline;
 }
 
+/** Fail the test when the cached block counts of the first sheet disagree with its stores */
+void checkIntegrity(ScDocument& rDoc)
+{
+    try
+    {
+        rDoc.CheckIntegrity(0);
+    }
+    catch (const std::exception& e)
+    {
+        CPPUNIT_FAIL(std::string("document integrity check failed: ") + e.what());
+    }
+}
+
 } // end anonymous namespace
 
 CPPUNIT_TEST_FIXTURE(SparklineTest, testAddSparkline)
@@ -268,6 +281,7 @@ CPPUNIT_TEST_FIXTURE(SparklineTest, testUndoRedoDeleteSparkline)
     CPPUNIT_ASSERT(pSparkline);
     CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSparkline->getColumn());
     CPPUNIT_ASSERT_EQUAL(SCROW(6), pSparkline->getRow());
+    checkIntegrity(*m_pDoc);
 
     // Delete Sparkline
     CPPUNIT_ASSERT(rDocFunc.DeleteSparkline(ScAddress(0, 6, 0)));
@@ -275,6 +289,7 @@ CPPUNIT_TEST_FIXTURE(SparklineTest, testUndoRedoDeleteSparkline)
     // Check Sparkline at cell A7 doesn't exists
     pSparkline = m_pDoc->GetSparkline(aRange.aStart);
     CPPUNIT_ASSERT(!pSparkline);
+    checkIntegrity(*m_pDoc);
 
     // Undo
     m_pDoc->GetUndoManager()->Undo();
@@ -284,6 +299,7 @@ CPPUNIT_TEST_FIXTURE(SparklineTest, testUndoRedoDeleteSparkline)
     CPPUNIT_ASSERT(pSparkline);
     CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSparkline->getColumn());
     CPPUNIT_ASSERT_EQUAL(SCROW(6), pSparkline->getRow());
+    checkIntegrity(*m_pDoc);
 
     // Redo
     m_pDoc->GetUndoManager()->Redo();
@@ -291,6 +307,7 @@ CPPUNIT_TEST_FIXTURE(SparklineTest, testUndoRedoDeleteSparkline)
     // Check Sparkline at cell A7 doesn't exists
     pSparkline = m_pDoc->GetSparkline(aRange.aStart);
     CPPUNIT_ASSERT(!pSparkline);
+    checkIntegrity(*m_pDoc);
 
     CPPUNIT_ASSERT(!m_pDoc->HasSparkline(aRange.aStart));
 

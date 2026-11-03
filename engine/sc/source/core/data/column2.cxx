@@ -2178,9 +2178,7 @@ void ScColumn::DuplicateSparklines(SCROW nStartRow, size_t nDataSize, ScColumn& 
 
 bool ScColumn::HasSparklines() const
 {
-    if (maSparklines.block_size() == 1 && maSparklines.begin()->type == sc::element_type_empty)
-        return false; // all elements are empty
-    return true; // otherwise some must be sparklines
+    return mnBlkCountSparklines != 0;
 }
 
 SCROW ScColumn::GetSparklinesMaxRow() const

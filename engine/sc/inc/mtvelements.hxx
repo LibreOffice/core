@@ -111,6 +111,7 @@ public:
 
 struct SparklineTraits : public mdds::mtv::default_traits
 {
+    using event_func = CellStoreEvent;
     using block_funcs = mdds::mtv::element_block_funcs<sc::sparkline_block>;
 };
 

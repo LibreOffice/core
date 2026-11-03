@@ -200,6 +200,7 @@ class ScColumn : protected ScColumnData
 
     sal_uInt32 mnBlkCountFormula;
     sal_uInt32 mnBlkCountCellNotes;
+    sal_uInt32 mnBlkCountSparklines;
 
     SCCOL           nCol;
     SCTAB           nTab;

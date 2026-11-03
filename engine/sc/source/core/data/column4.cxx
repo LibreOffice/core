@@ -2288,9 +2288,11 @@ void ScColumn::CheckIntegrity() const
 
     checkEventHandlerColumnRef(maCells, "cell store");
     checkEventHandlerColumnRef(maCellNotes, "cell-note store");
+    checkEventHandlerColumnRef(maSparklines, "sparkline store");
 
     checkCachedBlockCount(maCells, sc::element_type_formula, mnBlkCountFormula, "formula");
     checkCachedBlockCount(maCellNotes, sc::element_type_cellnote, mnBlkCountCellNotes, "cell note");
+    checkCachedBlockCount(maSparklines, sc::element_type_sparkline, mnBlkCountSparklines, "sparkline");
 }
 
 void ScColumn::CollectBroadcasterState(sc::BroadcasterState& rState) const
