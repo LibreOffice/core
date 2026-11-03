@@ -91,6 +91,8 @@ public:
     void AddFamily( XmlStyleFamily nFamily, const OUString& rStrName,
                     const rtl::Reference< SvXMLExportPropertyMapper >& rMapper,
                     const OUString& rStrPrefix, bool bAsFamily = true );
+    /// Whether nFamily is already registered. A second AddFamily for it is ignored.
+    bool HasFamily( XmlStyleFamily nFamily ) const;
     void SetFamilyPropSetMapper( XmlStyleFamily nFamily,
                     const rtl::Reference< SvXMLExportPropertyMapper >& rMapper );
 

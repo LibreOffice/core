@@ -232,18 +232,20 @@ XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExp
     mxRowExportPropertySetMapper = new SvXMLExportPropertyMapper( new XMLPropertySetMapper( getRowPropertiesMap(), xFactoryRef, true ) );
     mxColumnExportPropertySetMapper = new SvXMLExportPropertyMapper( new XMLPropertySetMapper( getColumnPropertiesMap(), xFactoryRef, true ) );
 
-    mrExport.GetAutoStylePool()->AddFamily(XmlStyleFamily::TABLE_COLUMN,
-        XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME,
-        mxColumnExportPropertySetMapper.get(),
-        XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX);
-    mrExport.GetAutoStylePool()->AddFamily(XmlStyleFamily::TABLE_ROW,
-        XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME,
-        mxRowExportPropertySetMapper.get(),
-        XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX);
-    mrExport.GetAutoStylePool()->AddFamily(XmlStyleFamily::TABLE_CELL,
-        XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME,
-        mxCellExportPropertySetMapper.get(),
-        XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX);
+    // Mappers the document export registered first for these families stay in use.
+    const rtl::Reference<SvXMLAutoStylePoolP>& xPool = mrExport.GetAutoStylePool();
+    if (!xPool->HasFamily(XmlStyleFamily::TABLE_COLUMN))
+        xPool->AddFamily(XmlStyleFamily::TABLE_COLUMN, XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME,
+                         mxColumnExportPropertySetMapper.get(),
+                         XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX);
+    if (!xPool->HasFamily(XmlStyleFamily::TABLE_ROW))
+        xPool->AddFamily(XmlStyleFamily::TABLE_ROW, XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME,
+                         mxRowExportPropertySetMapper.get(),
+                         XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX);
+    if (!xPool->HasFamily(XmlStyleFamily::TABLE_CELL))
+        xPool->AddFamily(XmlStyleFamily::TABLE_CELL, XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME,
+                         mxCellExportPropertySetMapper.get(),
+                         XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX);
 }
 
 XMLTableExport::~XMLTableExport ()

@@ -185,16 +185,14 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
     xPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(rExp));
 */
 
-    mrExport.GetAutoStylePool()->AddFamily(
-        XmlStyleFamily::SD_GRAPHICS_ID,
-        XML_STYLE_FAMILY_SD_GRAPHICS_NAME,
-        GetPropertySetMapper(),
-        XML_STYLE_FAMILY_SD_GRAPHICS_PREFIX);
-    mrExport.GetAutoStylePool()->AddFamily(
-        XmlStyleFamily::SD_PRESENTATION_ID,
-        XML_STYLE_FAMILY_SD_PRESENTATION_NAME,
-        GetPropertySetMapper(),
-        XML_STYLE_FAMILY_SD_PRESENTATION_PREFIX);
+    // A mapper the document export registered first for these families stays in use.
+    const rtl::Reference<SvXMLAutoStylePoolP>& xPool = mrExport.GetAutoStylePool();
+    if (!xPool->HasFamily(XmlStyleFamily::SD_GRAPHICS_ID))
+        xPool->AddFamily(XmlStyleFamily::SD_GRAPHICS_ID, XML_STYLE_FAMILY_SD_GRAPHICS_NAME,
+                         GetPropertySetMapper(), XML_STYLE_FAMILY_SD_GRAPHICS_PREFIX);
+    if (!xPool->HasFamily(XmlStyleFamily::SD_PRESENTATION_ID))
+        xPool->AddFamily(XmlStyleFamily::SD_PRESENTATION_ID, XML_STYLE_FAMILY_SD_PRESENTATION_NAME,
+                         GetPropertySetMapper(), XML_STYLE_FAMILY_SD_PRESENTATION_PREFIX);
 
     // create table export helper and let him add his families in time
     GetShapeTableExport();

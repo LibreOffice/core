@@ -362,12 +362,17 @@ void SvXMLAutoStylePoolP_Impl::AddFamily(
         SAL_WARN_IF( iter->mxMapper != rMapper, "xmloff",
                      "Adding duplicate family " << rStrName <<
                      " with mismatching mapper ! " <<
-                     typeid(iter->mxMapper.get()).name() << " " <<
+                     typeid(*iter->mxMapper).name() << " " <<
                      typeid(*rMapper).name() );
     }
 #endif
 
     m_FamilySet.emplace(nFamily, rStrName, rMapper, aPrefix, bAsFamily);
+}
+
+bool SvXMLAutoStylePoolP_Impl::HasFamily(XmlStyleFamily nFamily) const
+{
+    return m_FamilySet.find(XMLAutoStyleFamily(nFamily)) != m_FamilySet.end();
 }
 
 void SvXMLAutoStylePoolP_Impl::SetFamilyPropSetMapper(

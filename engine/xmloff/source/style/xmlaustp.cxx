@@ -289,6 +289,11 @@ void SvXMLAutoStylePoolP::AddFamily(
     m_pImpl->AddFamily( nFamily, rStrName, rMapper, rStrPrefix, bAsFamily );
 }
 
+bool SvXMLAutoStylePoolP::HasFamily( XmlStyleFamily nFamily ) const
+{
+    return m_pImpl->HasFamily( nFamily );
+}
+
 void  SvXMLAutoStylePoolP::SetFamilyPropSetMapper(
         XmlStyleFamily nFamily,
         const rtl::Reference < SvXMLExportPropertyMapper > & rMapper )
