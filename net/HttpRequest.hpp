@@ -1467,16 +1467,19 @@ public:
     /// Note: when the server returns an error, the response body,
     /// if any, will be stored in memory and can be read via getBody().
     /// I.e. when statusLine().statusCategory() != StatusLine::StatusCodeClass::Successful.
-    std::shared_ptr<const Response>
-    syncDownload(const Request& req, const std::string& saveToFilePath, SocketPoll& poller);
+    /// bodySizeLimit is the largest body accepted, in bytes, with 0 for any size.
+    std::shared_ptr<const Response> syncDownload(const Request& req,
+                                                 const std::string& saveToFilePath,
+                                                 SocketPoll& poller, int64_t bodySizeLimit = 0);
 
     /// Make a synchronous request to download a file to the given path.
     std::shared_ptr<const Response> syncDownload(const Request& req,
-                                                       const std::string& saveToFilePath)
+                                                 const std::string& saveToFilePath,
+                                                 int64_t bodySizeLimit = 0)
     {
         std::shared_ptr<TerminatingPoll> poller(std::make_shared<TerminatingPoll>("HttpSynReqPoll"));
         poller->runOnClientThread();
-        return syncDownload(req, saveToFilePath, *poller);
+        return syncDownload(req, saveToFilePath, *poller, bodySizeLimit);
     }
 
     /// Make a synchronous request.

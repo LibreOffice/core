@@ -1286,7 +1286,8 @@ int Session::getDefaultPort(Protocol protocol)
 }
 
 std::shared_ptr<const Response>
-Session::syncDownload(const Request& req, const std::string& saveToFilePath, SocketPoll& poller)
+Session::syncDownload(const Request& req, const std::string& saveToFilePath, SocketPoll& poller,
+                      int64_t bodySizeLimit)
 {
     LOG_TRC_S("syncDownload: " << req.getVerb() << ' ' << host() << ':' << port() << ' '
                                << req.getUrl());
@@ -1295,6 +1296,7 @@ Session::syncDownload(const Request& req, const std::string& saveToFilePath, Soc
 
     if (!saveToFilePath.empty())
         _response->saveBodyToFile(saveToFilePath);
+    _response->setBodySizeLimit(bodySizeLimit);
 
     syncRequestImpl(poller);
     return _response;
