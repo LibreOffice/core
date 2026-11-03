@@ -10,8 +10,13 @@
  */
 
 #include <sctiledrenderingtest.hxx>
+#include <sfx2/kit/helper.hxx>
 
 #include <boost/property_tree/json_parser.hpp>
+
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 
 #include <attrib.hxx>
 #include <cellmergeoption.hxx>
@@ -1051,6 +1056,191 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorCellEditGrowsOutsideASmallW
     CPPUNIT_ASSERT(pEditView);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pEditView->getEditEngine().GetLineCount(0));
     CPPUNIT_ASSERT(rViewData.GetEditEndCol() > 15);
+}
+
+namespace
+{
+/// The keys of the blocks that a response names stale.
+std::set<std::string> staleBlocks(const boost::property_tree::ptree& rResponse)
+{
+    std::set<std::string> aKeys;
+    if (auto oStale = rResponse.get_child_optional("stale"))
+    {
+        for (const auto& rKey : *oStale)
+            aKeys.insert(rKey.second.get_value<std::string>());
+    }
+    return aKeys;
+}
+
+/// Ask for the blocks of the first column of blocks, from block row 0 to nBlockRows - 1, in cell
+/// positions, and give the epoch of the answer.
+std::string requestBlockColumn(ScModelObj* pModelObj, int nBlockRows)
+{
+    std::string aBlocks;
+    for (int nBlockRow = 0; nBlockRow < nBlockRows; ++nBlockRow)
+        aBlocks += (nBlockRow ? "," : "") + std::to_string(nBlockRow) + ":0";
+    const boost::property_tree::ptree aAnswer
+        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=" + aBlocks);
+    CPPUNIT_ASSERT_EQUAL(nBlockRows, blockCount(aAnswer));
+    return aAnswer.get<std::string>("epoch");
+}
+
+boost::property_tree::ptree pushCellPositions(ScModelObj* pModelObj)
+{
+    tools::JsonWriter aWriter;
+    pModelObj->pushVectorPrimitivesDelta(aWriter, "0", sc::VectorContent::constCellPositionsMode);
+    const OString aJson = aWriter.finishAndGetAsOString();
+    if (aJson == tools::JsonWriter::EMPTY_DOCUMENT)
+        return {};
+    return parseJson(aJson);
+}
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorManyChangedBlocksAreNamedStale)
+{
+    // A column that changes size may change every held block. They are not built again at once:
+    // the push names them stale, and a block is built when a client asks for it.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    const int nBlockRows = int(sc::VectorContent::constEagerBlocks) + 4;
+    for (int nBlockRow = 0; nBlockRow < nBlockRows; ++nBlockRow)
+        setCellString(*pDocShell, 0, nBlockRow * sc::VectorContent::constBlockRows,
+                      u"Text"_ustr);
+    const std::string aEpoch = requestBlockColumn(pModelObj, nBlockRows);
+
+    setColumnWidth(*pDocShell, 0, 3000);
+
+    const boost::property_tree::ptree aPush = pushCellPositions(pModelObj);
+    CPPUNIT_ASSERT_EQUAL(0, blockCount(aPush));
+    const std::set<std::string> aStale = staleBlocks(aPush);
+    CPPUNIT_ASSERT_EQUAL(size_t(nBlockRows), aStale.size());
+    CPPUNIT_ASSERT(aStale.count("3:0"));
+
+    // Asked for, the block is built and comes with the answer, which names no stale blocks: the
+    // push did, once, and the others are still stale.
+    const boost::property_tree::ptree aAnswer = requestVectorPrimitives(
+        pModelObj, "partid=0&mode=-1&epoch=" + aEpoch + "&blocks=3:0:1");
+    CPPUNIT_ASSERT_EQUAL(1, blockCount(aAnswer));
+    CPPUNIT_ASSERT(staleBlocks(aAnswer).empty());
+
+    // The blocks were named once, so the next push has nothing to say.
+    CPPUNIT_ASSERT(pushCellPositions(pModelObj).empty());
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorFewChangedBlocksArePushedAfterStaleOnes)
+{
+    // Blocks still stale from an earlier change do not count against a later one, so a change to
+    // one cell is pushed at once.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    const int nBlockRows = int(sc::VectorContent::constEagerBlocks) + 4;
+    for (int nBlockRow = 0; nBlockRow < nBlockRows; ++nBlockRow)
+        setCellString(*pDocShell, 0, nBlockRow * sc::VectorContent::constBlockRows,
+                      u"Text"_ustr);
+    requestBlockColumn(pModelObj, nBlockRows);
+    setColumnWidth(*pDocShell, 0, 3000);
+    CPPUNIT_ASSERT_EQUAL(size_t(nBlockRows), staleBlocks(pushCellPositions(pModelObj)).size());
+
+    // The client asks for block 2:0, which is built again. A cell typed in it afterwards is
+    // pushed at once, although the other blocks are still stale.
+    requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=2:0");
+    setCellString(*pDocShell, 0, 2 * sc::VectorContent::constBlockRows + 1, u"Typed"_ustr);
+
+    const boost::property_tree::ptree aPush = pushCellPositions(pModelObj);
+    CPPUNIT_ASSERT_EQUAL(1, blockCount(aPush));
+    CPPUNIT_ASSERT(cellTextAt(aPush, 0, 2 * sc::VectorContent::constBlockRows + 1));
+    // The blocks still stale were named in the push before, so this one names none.
+    CPPUNIT_ASSERT(staleBlocks(aPush).empty());
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorSheetSettingsChangeLeavesBlocksCurrent)
+{
+    // Renaming a sheet paints the extras of every sheet. No block draws them, so the held blocks
+    // are not named stale: the push carries the sheet settings.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    const int nBlockRows = int(sc::VectorContent::constEagerBlocks) + 4;
+    for (int nBlockRow = 0; nBlockRow < nBlockRows; ++nBlockRow)
+        setCellString(*pDocShell, 0, nBlockRow * sc::VectorContent::constBlockRows,
+                      u"Text"_ustr);
+    requestBlockColumn(pModelObj, nBlockRows);
+
+    CPPUNIT_ASSERT(pDocShell->GetDocFunc().RenameTable(0, u"Renamed"_ustr, false, true));
+
+    const boost::property_tree::ptree aPush = pushCellPositions(pModelObj);
+    CPPUNIT_ASSERT(staleBlocks(aPush).empty());
+    CPPUNIT_ASSERT_EQUAL(0, blockCount(aPush));
+    CPPUNIT_ASSERT_EQUAL(std::string("Renamed"), aPush.get<std::string>("sheet.name"));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorHiddenSheetKeepsEpoch)
+{
+    // Hiding a sheet renumbers no part id, so the clients keep what they hold.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    pDocShell->GetDocFunc().InsertTable(1, u"Second"_ustr, false, true);
+    const boost::property_tree::ptree aFirst
+        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    const std::string aEpoch = aFirst.get<std::string>("epoch");
+
+    cpo::uno::Reference<com::sun::star::container::XIndexAccess> xSheets(
+        pModelObj->getSheets(), cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<com::sun::star::beans::XPropertySet> xSecond(xSheets->getByIndex(1),
+                                                                     cpo::uno::UNO_QUERY_THROW);
+    xSecond->setPropertyValue(u"IsVisible"_ustr, cpo::uno::Any(false));
+    Scheduler::ProcessEventsToIdle();
+
+    const boost::property_tree::ptree aAnswer = requestVectorPrimitives(
+        pModelObj, "partid=0&mode=-1&epoch=" + aEpoch + "&blocks=0:0");
+    CPPUNIT_ASSERT_EQUAL(aEpoch, aAnswer.get<std::string>("epoch"));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorChangedBlocksShownByAViewAreBuilt)
+{
+    // Of many changed blocks, the ones a view shows are built and pushed at once, so the view
+    // does not have to ask for them. The others are named stale.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    const ScDocument& rDocument = pDocShell->GetDocument();
+    const int nBlockRows = int(sc::VectorContent::constEagerBlocks) + 4;
+    for (int nBlockRow = 0; nBlockRow < nBlockRows; ++nBlockRow)
+        setCellString(*pDocShell, 0, nBlockRow * sc::VectorContent::constBlockRows,
+                      u"Text"_ustr);
+    requestBlockColumn(pModelObj, nBlockRows);
+
+    // The current view shows the first column of one block row.
+    auto showBlockRow = [&](int nBlockRow)
+    {
+        const SCROW nFirstRow = nBlockRow * sc::VectorContent::constBlockRows;
+        const tools::Long nTop = nFirstRow ? rDocument.GetRowHeight(0, nFirstRow - 1, 0) : 0;
+        const tools::Long nHeight
+            = rDocument.GetRowHeight(nFirstRow, nFirstRow + sc::VectorContent::constBlockRows - 1, 0);
+        pModelObj->setClientVisibleArea(
+            tools::Rectangle(Point(0, nTop), Size(rDocument.GetColWidth(0, 0), nHeight)));
+    };
+    showBlockRow(3);
+    KitHelper::createView();
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<com::sun::star::beans::PropertyValue>());
+    showBlockRow(7);
+
+    // A column too narrow for the text makes it overflow, which changes the text of every block.
+    setColumnWidth(*pDocShell, 0, 300);
+
+    const boost::property_tree::ptree aPush = pushCellPositions(pModelObj);
+    CPPUNIT_ASSERT_EQUAL(2, blockCount(aPush));
+    CPPUNIT_ASSERT(cellTextAt(aPush, 0, 3 * sc::VectorContent::constBlockRows));
+    CPPUNIT_ASSERT(cellTextAt(aPush, 0, 7 * sc::VectorContent::constBlockRows));
+    const std::set<std::string> aStale = staleBlocks(aPush);
+    CPPUNIT_ASSERT_EQUAL(size_t(nBlockRows - 2), aStale.size());
+    CPPUNIT_ASSERT(!aStale.count("3:0"));
+    CPPUNIT_ASSERT(!aStale.count("7:0"));
+
+    KitHelper::destroyView(KitHelper::getCurrentView());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

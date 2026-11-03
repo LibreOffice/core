@@ -29,8 +29,27 @@ class CalcVectorManager {
 	private static readonly maxSheets = 4;
 
 	/// The most requests waiting for an answer at once. The engine answers one at a time, and one
-	/// extra request keeps it busy.
+	/// extra request keeps it busy. A refresh of stale blocks around the view takes one at most,
+	/// so a block the view comes to show is not held up behind it.
 	private static readonly maxRequestsInFlight = 2;
+
+	/// The most held blocks asked for in one request. A held block is asked for again when it may
+	/// have changed, and the engine builds it again for the answer, so a few at a time keep each
+	/// answer short and let other messages in between. A view that shows many blocks, as at a
+	/// low zoom, takes twice as many.
+	private static readonly maxHeldBlocksPerRequest = 4;
+
+	/// The most missing blocks asked for in one request. A missing block shows as soon as it is
+	/// built, so at a high zoom each gets a request of its own, and a view that shows many
+	/// blocks asks for a few at a time.
+	private static readonly maxMissingBlocksPerRequest = 4;
+
+	/// How far around the blocks asked for, in blocks, held stale blocks are asked for again while
+	/// the view has all it needs, so they are up to date before they are scrolled to. The limit
+	/// keeps the engine from building every stale block of a long sheet. A view that spans more
+	/// blocks reaches twice as many block rows as it spans, and as many block columns.
+	private static readonly refreshBlockRows = 3;
+	private static readonly refreshBlockColumns = 1;
 
 	/// How long a request waits for its answer, in milliseconds. After that it is dropped and its
 	/// blocks can be asked for again.
@@ -105,9 +124,19 @@ class CalcVectorManager {
 	> = new Map();
 	private _nextRequestId = 1;
 
+	// The block rows and columns the view spans, from the last draw. They set how many blocks go
+	// in one request and how far around the view stale blocks are refreshed.
+	private _view: { rows: number; columns: number } = { rows: 1, columns: 1 };
+
 	// Blocks of a sheet waiting to be asked for, most wanted first. Each draw replaces them, so
-	// only blocks still in view are asked for.
-	private _queue: { part: number; mode: number; keys: string[] } | null = null;
+	// only blocks still in view are asked for. A refresh holds stale blocks around the view, none
+	// of which the view shows.
+	private _queue: {
+		part: number;
+		mode: number;
+		keys: string[];
+		refresh?: boolean;
+	} | null = null;
 
 	private _changeListeners = new cool.VectorChangeListeners();
 	// Callbacks that release graphics memory held for drawing the content.
@@ -586,13 +615,18 @@ class CalcVectorManager {
 	}
 
 	/// Ask for the blocks that are not held or may be behind, most wanted first, replacing the
-	/// earlier queue. Each missing block gets a request of its own, so the first one shows as soon
-	/// as the engine has built it.
+	/// earlier queue. A missing block gets a request of its own, so the first one shows as soon
+	/// as the engine has built it, unless the view spans many blocks. direction is the sign of
+	/// the last scroll in x and y, which the stale blocks around the view are refreshed towards
+	/// first, and view the block rows and columns the view spans.
 	requestBlocks(
 		part: number,
 		mode: number,
 		blocks: Array<[number, number]>,
+		direction: [number, number] = [0, 0],
+		view?: { rows: number; columns: number },
 	): void {
+		if (view) this._view = view;
 		const sheet = this._ensureSheet(part, mode);
 		const sheetKey = CalcVectorManager._sheetKey(part, mode);
 		const keys: string[] = [];
@@ -601,16 +635,79 @@ class CalcVectorManager {
 			if (keys.indexOf(key) < 0 && this._isWanted(sheet, sheetKey, key))
 				keys.push(key);
 		}
-		this._queue = { part, mode, keys };
 
 		// The first request brings the drawing objects and settings of the sheet, even with no
-		// block.
-		if (
-			keys.length === 0 &&
-			(!this._sheetRequested.has(sheetKey) || this._sheetsBehind.has(sheetKey))
-		)
-			this._sendRequest(part, mode, []);
+		// block. A view that has all it needs refreshes the stale blocks around it.
+		const needsSheet =
+			!this._sheetRequested.has(sheetKey) || this._sheetsBehind.has(sheetKey);
+		let refresh = false;
+		if (keys.length === 0 && !needsSheet) {
+			keys.push(...this._staleAround(sheet, sheetKey, blocks, direction));
+			refresh = keys.length > 0;
+		}
+		this._queue = { part, mode, keys, refresh };
+		if (keys.length === 0 && needsSheet) this._sendRequest(part, mode, []);
 		this._sendQueued();
+	}
+
+	/// The held stale blocks near the given blocks that are not asked for yet. As the tiles are
+	/// fetched ahead, the side the view scrolls towards reaches twice as far and comes first, and
+	/// nearer blocks come before farther ones.
+	private _staleAround(
+		sheet: cool.CalcSheetData,
+		sheetKey: string,
+		blocks: Array<[number, number]>,
+		direction: [number, number],
+	): string[] {
+		if (!blocks.length || !sheet.staleBlocks.size) return [];
+		const [towardsX, towardsY] = direction;
+		const reach = (sign: number, towards: number, distance: number): number =>
+			sign === towards ? 2 * distance : distance;
+		const rows = blocks.map(([blockRow]) => blockRow);
+		const columns = blocks.map(([, blockColumn]) => blockColumn);
+		const rowReach = Math.max(
+			CalcVectorManager.refreshBlockRows,
+			2 * this._view.rows,
+		);
+		const columnReach = Math.max(
+			CalcVectorManager.refreshBlockColumns,
+			this._view.columns,
+		);
+		const top = Math.min(...rows) - reach(-1, towardsY, rowReach);
+		const bottom = Math.max(...rows) + reach(1, towardsY, rowReach);
+		const left = Math.min(...columns) - reach(-1, towardsX, columnReach);
+		const right = Math.max(...columns) + reach(1, towardsX, columnReach);
+		const middleRow = (Math.min(...rows) + Math.max(...rows)) / 2;
+		const middleColumn = (Math.min(...columns) + Math.max(...columns)) / 2;
+
+		const near: Array<{ key: string; ahead: boolean; distance: number }> = [];
+		for (const key of sheet.staleBlocks) {
+			const block = sheet.blocks.get(key);
+			if (!block || !this._isWanted(sheet, sheetKey, key)) continue;
+			if (
+				block.blockRow < top ||
+				block.blockRow > bottom ||
+				block.blockColumn < left ||
+				block.blockColumn > right
+			)
+				continue;
+			near.push({
+				key,
+				ahead:
+					(towardsY !== 0 &&
+						Math.sign(block.blockRow - middleRow) === towardsY) ||
+					(towardsX !== 0 &&
+						Math.sign(block.blockColumn - middleColumn) === towardsX),
+				distance: Math.hypot(
+					block.blockRow - middleRow,
+					block.blockColumn - middleColumn,
+				),
+			});
+		}
+		near.sort(
+			(a, b) => Number(b.ahead) - Number(a.ahead) || a.distance - b.distance,
+		);
+		return near.map((entry) => entry.key);
 	}
 
 	/// Whether a block is missing or stale and not already asked for.
@@ -635,6 +732,16 @@ class CalcVectorManager {
 			return;
 		}
 		this._expireRequests();
+		// A view that shows many blocks, as at a low zoom, asks for more blocks in one request.
+		const shown = this._view.rows * this._view.columns;
+		const missingPerRequest = Math.min(
+			CalcVectorManager.maxMissingBlocksPerRequest,
+			Math.max(1, Math.floor(shown / 8)),
+		);
+		const heldPerRequest =
+			shown > 16
+				? 2 * CalcVectorManager.maxHeldBlocksPerRequest
+				: CalcVectorManager.maxHeldBlocksPerRequest;
 		while (queue.keys.length > 0) {
 			const key = queue.keys[0];
 			// The block may have arrived in a push since it was queued.
@@ -642,23 +749,28 @@ class CalcVectorManager {
 				queue.keys.shift();
 				continue;
 			}
+			// A refresh leaves one request free for a block the view comes to show.
+			const limit = queue.refresh
+				? CalcVectorManager.maxRequestsInFlight - 1
+				: CalcVectorManager.maxRequestsInFlight;
 			if (
-				this._requests.size >= CalcVectorManager.maxRequestsInFlight &&
+				this._requests.size >= limit &&
 				!this._forgetRequestOfOtherSheet(sheetKey)
 			)
 				break;
 			queue.keys.shift();
 			const keys = [key];
-			// A held block is drawn already and asked again only to confirm its version, so all
-			// held blocks queued go in one request. A missing block gets its own, to show as soon
-			// as it is built.
-			if (sheet.blocks.has(key)) {
-				queue.keys = queue.keys.filter((other) => {
-					if (!sheet.blocks.has(other)) return true;
-					if (this._isWanted(sheet, sheetKey, other)) keys.push(other);
-					return false;
-				});
-			}
+			// Blocks of one kind go together. A held block is drawn already, so a few held blocks
+			// share a request. A missing block shows as soon as it is built, so missing blocks
+			// share one only when the view shows many of them.
+			const held = sheet.blocks.has(key);
+			const perRequest = held ? heldPerRequest : missingPerRequest;
+			queue.keys = queue.keys.filter((other) => {
+				if (sheet.blocks.has(other) !== held) return true;
+				if (keys.length >= perRequest) return true;
+				if (this._isWanted(sheet, sheetKey, other)) keys.push(other);
+				return false;
+			});
 			this._sendRequest(queue.part, queue.mode, keys);
 		}
 	}
@@ -1005,9 +1117,15 @@ class CalcVectorManager {
 
 		// A block the answer leaves out is unchanged up to the answer version. A push carries every
 		// block changed since its base, and a request names each held version. A block older than
-		// the push base may miss a change.
+		// the push base may miss a change, and so may a block the answer names stale: it is asked
+		// for again once it is shown.
+		const stale = new Set(values.stale ?? []);
 		for (const [key, block] of sheet.blocks) {
 			if (behind.has(key)) continue;
+			if (stale.has(key)) {
+				sheet.staleBlocks.add(key);
+				continue;
+			}
 			if (pushed) {
 				if (block.current >= (values.from ?? 0))
 					block.current = Math.max(block.current, current);

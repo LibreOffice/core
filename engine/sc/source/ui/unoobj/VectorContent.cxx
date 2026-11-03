@@ -785,8 +785,12 @@ void VectorContent::writeVectorPrimitives(tools::JsonWriter& rWriter, SheetState
     const sal_uInt64 nSince = bDelta ? sal_uInt64(nSinceVersion) : 0;
     auto isNew = [&](sal_uInt64 nVersion) { return !bDelta || nVersion > nSince; };
 
+    // A push also names the blocks that became stale since the last one.
+    const bool bNewStale = std::any_of(rState.maBlocks.begin(), rState.maBlocks.end(),
+                                       [](const auto& rEntry)
+                                       { return rEntry.second.mbDirty && !rEntry.second.mbStaleSent; });
     if (bPush && !rState.maVersions.isChangedSince(nSinceVersion)
-        && aTextEdits == rState.maLastTextEdits && !rState.mbTextEditChanged)
+        && aTextEdits == rState.maLastTextEdits && !rState.mbTextEditChanged && !bNewStale)
         return;
 
     svx::vector::writeAnswerHeader(rWriter, bDelta, rState.mnMode, OString::number(nTab),
@@ -849,6 +853,18 @@ void VectorContent::writeVectorPrimitives(tools::JsonWriter& rWriter, SheetState
         for (const sal_Int32 nStyle : aTextStyles)
             rWriter.putRaw(Concat2View("\"" + OString::number(nStyle)
                                        + "\": " + maTextStyles.fieldsOf(nStyle)));
+    }
+
+    // A push names the held blocks that were not built again since the last push, once. A client
+    // asks for the ones it shows, and does not take the versions of the pushes for them.
+    if (bPush)
+    {
+        writeStaleBlocks(rWriter, rState);
+        for (auto& [rKey, rBlock] : rState.maBlocks)
+        {
+            if (rBlock.mbDirty)
+                rBlock.mbStaleSent = true;
+        }
     }
 
     if (isNew(rState.maObjectBlocks.mnVersion))
@@ -956,16 +972,84 @@ void VectorContent::writeObjectEntry(tools::JsonWriter& rWriter, sal_uInt64 nId,
     rWriter.putRaw(Concat2View("\"content\": " + rEntry.maContent));
 }
 
+SCROW VectorContent::rowAt(const ScDocument& rDocument, SCTAB nTab, tools::Long nTwips)
+{
+    const SCROW nRow = rDocument.GetRowForHeight(nTab, nTwips);
+    return nRow < 0 ? rDocument.MaxRow() : nRow;
+}
+
+SCCOL VectorContent::columnAt(const ScDocument& rDocument, SCTAB nTab, tools::Long nTwips)
+{
+    tools::Long nEnd = 0;
+    for (SCCOL nColumn = 0; nColumn <= rDocument.MaxCol(); ++nColumn)
+    {
+        nEnd += rDocument.GetColWidth(nColumn, nTab, /*bHiddenAsZero*/ true);
+        if (nEnd > nTwips)
+            return nColumn;
+    }
+    return rDocument.MaxCol();
+}
+
+std::vector<VectorContent::BlockRange> VectorContent::shownBlocks(SCTAB nTab) const
+{
+    std::vector<BlockRange> aShown;
+    const ScDocument& rDocument = mrDocShell.GetDocument();
+    for (SfxViewShell* pShell = SfxViewShell::GetFirst(false); pShell;
+         pShell = SfxViewShell::GetNext(*pShell, false))
+    {
+        if (pShell->GetObjectShell() != &mrDocShell)
+            continue;
+        const auto* pTabViewShell = dynamic_cast<const ScTabViewShell*>(pShell);
+        if (!pTabViewShell)
+            continue;
+        const ScViewData& rViewData = pTabViewShell->GetViewData();
+        const tools::Rectangle& rArea = rViewData.getKitVisibleArea();
+        if (rViewData.CurrentTabForData() != nTab || rArea.IsEmpty())
+            continue;
+        aShown.push_back({ rowAt(rDocument, nTab, rArea.Top()) / constBlockRows,
+                           rowAt(rDocument, nTab, rArea.Bottom()) / constBlockRows,
+                           columnAt(rDocument, nTab, rArea.Left()) / constBlockColumns,
+                           columnAt(rDocument, nTab, rArea.Right()) / constBlockColumns });
+    }
+    return aShown;
+}
+
 void VectorContent::resolveDirtyBlocks(SheetState& rState)
 {
+    // The blocks already named stale wait for the clients to ask for them, so they do not count
+    // against the ones changed since.
     std::vector<BlockKey> aDirty;
     for (const auto& [rKey, rBlock] : rState.maBlocks)
     {
-        if (rBlock.mbDirty)
+        if (rBlock.mbDirty && !rBlock.mbStaleSent)
             aDirty.push_back(rKey);
+    }
+    // Of many changed blocks only the ones a view shows are built. The others wait for the
+    // clients, which ask for them as their views come to show them.
+    if (aDirty.size() > constEagerBlocks)
+    {
+        const std::vector<BlockRange> aShown = shownBlocks(rState.mnTab);
+        std::erase_if(aDirty,
+                      [&aShown](const BlockKey& rKey)
+                      {
+                          return std::none_of(aShown.begin(), aShown.end(),
+                                              [&rKey](const BlockRange& rRange)
+                                              { return rRange.holds(rKey); });
+                      });
     }
     for (const BlockKey& rKey : aDirty)
         resolveBlock(rState, rKey);
+}
+
+void VectorContent::writeStaleBlocks(tools::JsonWriter& rWriter, const SheetState& rState)
+{
+    auto aStale = rWriter.startArray("stale");
+    for (const auto& [rKey, rBlock] : rState.maBlocks)
+    {
+        if (rBlock.mbDirty && !rBlock.mbStaleSent)
+            rWriter.putSimpleValue(
+                rtl::Concat2View(OUString::number(rKey.first) + ":" + OUString::number(rKey.second)));
+    }
 }
 
 void VectorContent::resolveBlock(SheetState& rState, const BlockKey& rKey)
@@ -1486,6 +1570,9 @@ void VectorContent::markRowsDirty(BlockState& rBlock, SCROW nStartRow, SCROW nEn
     // A block marked in every row stays so.
     if (rBlock.mbDirty && !rBlock.moDirtyRows)
         return;
+    // A block marked again after it was built is not known to the clients as stale yet.
+    if (!rBlock.mbDirty)
+        rBlock.mbStaleSent = false;
     if (bWholeBlock)
         rBlock.moDirtyRows.reset();
     else if (rBlock.mbDirty)

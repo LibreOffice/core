@@ -189,6 +189,9 @@ namespace cool {
 		textStyles?: { [id: string]: CalcTextStyle };
 		/// The newest input message of this view that the answer includes.
 		inputSequence?: number;
+		/// The held blocks that may have changed and were not built again, by key. The engine
+		/// builds such a block when a client asks for it.
+		stale?: string[];
 	}
 
 	/// What the client holds of one sheet in one mode.

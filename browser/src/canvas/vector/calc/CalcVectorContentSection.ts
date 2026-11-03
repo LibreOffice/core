@@ -233,6 +233,8 @@ namespace cool {
 				distance: number;
 			}> = [];
 			const keep = new Set<string>();
+			// The block rows and columns the view spans, over all panes.
+			const view = { rows: 1, columns: 1 };
 
 			for (const paneBounds of paintContext.paneBoundsList) {
 				const viewBounds = paintContext.viewBounds;
@@ -275,6 +277,16 @@ namespace cool {
 				const lastBlockColumn = Math.floor(lastColumn / blockColumns) + 1;
 				const firstBlockRow = Math.max(0, Math.floor(firstRow / blockRows) - 1);
 				const lastBlockRow = Math.floor(lastRow / blockRows);
+				view.rows = Math.max(
+					view.rows,
+					lastBlockRow - Math.floor(firstRow / blockRows) + 1,
+				);
+				view.columns = Math.max(
+					view.columns,
+					Math.floor(lastColumn / blockColumns) -
+						Math.floor(firstColumn / blockColumns) +
+						1,
+				);
 				const middleRow = (firstRow + lastRow + 1) / 2 / blockRows;
 				const middleColumn = (firstColumn + lastColumn + 1) / 2 / blockColumns;
 
@@ -378,10 +390,14 @@ namespace cool {
 				(a, b) =>
 					Number(b.inView) - Number(a.inView) || a.distance - b.distance,
 			);
+			const layout = app.activeDocument && app.activeDocument.activeLayout;
+			const direction = layout ? layout.getLastPanDirection() : [0, 0];
 			manager.requestBlocks(
 				part,
 				mode,
 				wanted.map((entry) => entry.block),
+				[direction[0], direction[1]],
+				view,
 			);
 			manager.evict(part, mode, keep);
 		}

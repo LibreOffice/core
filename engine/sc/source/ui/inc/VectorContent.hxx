@@ -20,6 +20,7 @@
 #include <svl/lstner.hxx>
 #include <svx/VectorPart.hxx>
 #include <tools/gen.hxx>
+#include <tools/long.hxx>
 
 #include <map>
 #include <memory>
@@ -31,6 +32,7 @@
 #include <vector>
 
 class ScDocShell;
+class ScDocument;
 class ScTabViewShell;
 class ScRange;
 class SfxHint;
@@ -75,6 +77,10 @@ public:
     static constexpr SCCOL constBlockColumns = 16;
     /// The mode the browser asks in.
     static constexpr sal_Int32 constCellPositionsMode = -1;
+    /// The most blocks that changes are built again for at once. When more of the held blocks may
+    /// have changed, as after a column or a row changed size, only the ones a view shows are
+    /// built, and the others are named stale, so each is built again when a client asks for it.
+    static constexpr size_t constEagerBlocks = 16;
 
     explicit VectorContent(ScDocShell& rDocShell);
     virtual ~VectorContent() override;
@@ -128,6 +134,8 @@ private:
         /// The rows that may have changed, both included, when not every row of the block may
         /// have. The borders of the whole block are looked at again either way.
         std::optional<std::pair<SCROW, SCROW>> moDirtyRows;
+        /// A push named the block stale since it was marked, so the clients know to ask for it.
+        bool mbStaleSent = false;
         /// The JSON of the range the cells of the block cover.
         OString maBounds;
         /// The borders of the whole block. An empty content means there are none.
@@ -219,7 +227,32 @@ private:
     /// Tell the views of the sheets whose cells changed since they were last told.
     void notifyChangedSheets();
 
+    /// Build the blocks that may have changed since the last push again, unless there are more
+    /// of them than constEagerBlocks: then only the blocks a view shows are built, and the others
+    /// wait for a client to ask for them, as the blocks named stale before do.
     void resolveDirtyBlocks(SheetState& rState);
+    /// A range of blocks, both ends included.
+    struct BlockRange
+    {
+        sal_Int32 mnFirstRow;
+        sal_Int32 mnLastRow;
+        sal_Int32 mnFirstColumn;
+        sal_Int32 mnLastColumn;
+
+        bool holds(const BlockKey& rKey) const
+        {
+            return rKey.first >= mnFirstRow && rKey.first <= mnLastRow
+                   && rKey.second >= mnFirstColumn && rKey.second <= mnLastColumn;
+        }
+    };
+    /// The blocks of the sheet that the views show, from the visible areas their clients told.
+    std::vector<BlockRange> shownBlocks(SCTAB nTab) const;
+    /// The row at a position down the sheet, in twips, or the last row for a position past its
+    /// end.
+    static SCROW rowAt(const ScDocument& rDocument, SCTAB nTab, tools::Long nTwips);
+    /// The column at a position across the sheet, in twips, or the last column for a position
+    /// past its end.
+    static SCCOL columnAt(const ScDocument& rDocument, SCTAB nTab, tools::Long nTwips);
     /// The number of the sheet, which is also its part id, or nothing when the id names no sheet.
     std::optional<SCTAB> sheetOfPartId(std::u16string_view aPartId) const;
     /// The cell an object not inside a group is anchored to. An object anchored to the page takes
@@ -236,6 +269,9 @@ private:
     /// draw nothing.
     void writeLayers(const CellPrimitiveLayers& rLayers, SCTAB nTab, SCCOL nOriginColumn,
                      SCROW nOriginRow, OString& rContent, std::vector<sal_Int32>& rUsedTextStyles);
+    /// Name the held blocks that may have changed and were not built again, and were not named
+    /// in a push before.
+    static void writeStaleBlocks(tools::JsonWriter& rWriter, const SheetState& rState);
     void resolveBlock(SheetState& rState, const BlockKey& rKey);
     /// Write the borders of the block and the given rows, both included, or every row.
     BlockContent writeBlockContent(const SheetState& rState, const BlockKey& rKey,
