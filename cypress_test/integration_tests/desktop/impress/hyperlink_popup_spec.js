@@ -48,6 +48,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Impress hyperlink popup te
 
 		helper.typeIntoDocument('{ctrl}k');
 		cy.cGet('#target-input').should('be.visible');
+		cy.then(() => helper.processToIdle(win));
 		cy.cGet('#indication-input').clear();
 		cy.cGet('#indication-input').type('linktext');
 		cy.cGet('#target-input').type('http://www.example.com/');
@@ -174,8 +175,11 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Impress hyperlink popup te
 
 		cy.cGet('.hyperlink-pop-up-container').should('be.visible');
 		cy.cGet('#hyperlink-pop-up-edit').click();
+		cy.cGet('#target-input').should('be.visible');
+		cy.then(() => helper.processToIdle(win));
 
 		cy.cGet('#indication-input').should('have.value', 'linktext');
+		cy.cGet('#target-input').should('have.value', 'http://www.example.com/');
 		// The new text has as many letters as the old one, so the link stays
 		// where the later tests expect it on the slide.
 		cy.cGet('#indication-input').clear();
