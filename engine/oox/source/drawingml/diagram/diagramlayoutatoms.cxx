@@ -2404,6 +2404,15 @@ static std::optional<double> ownTextSizeOf(const SmartArtDiagram& rDgm, const Sh
     const rtl::Reference<svx::diagram::Point> xData(firstDataNodeOf(rDgm, rShape));
     if (!xData.is() || !xData->mbCustomText || !rDgm.getData())
         return std::nullopt;
+    // the point's own text body first, as for its text; a run we sized is no size by hand
+    if (const Shape* pPointShape = rDgm.getData()->getOrCreateAssociatedShape(*xData);
+        pPointShape && pPointShape->getTextBody())
+        for (const auto& rParagraph : pPointShape->getTextBody()->getParagraphs())
+            for (const auto& rRun : rParagraph->getRuns())
+                if (rRun->getTextCharacterProperties().moHeight.has_value()
+                    && !const_cast<SmartArtDiagram&>(rDgm).getRunsSizedByLayout().count(
+                        rRun.get()))
+                    return *rRun->getTextCharacterProperties().moHeight / 100.0;
     sal_Int32 nParagraph(-1);
     const Reference<text::XText> xText(
         rDgm.getData()->getMasterXShapeForPoint(*xData, nParagraph), UNO_QUERY);
@@ -2699,11 +2708,31 @@ shownInParagraphOrder(const svx::diagram::Point& rPoint)
     return aOut;
 }
 
-static std::vector<OUString> textParagraphsOf(const SmartArtDiagram& rDgm, const ShapePtr& rShape)
+// the text of rPoint, a paragraph to a line: from the point's own text body, which the import
+// reads from the file and a re-layout fills from the shapes, else from the shape that shows it
+static OUString textOfPoint(const SmartArtDiagram& rDgm, const svx::diagram::Point& rPoint)
+{
+    const Shape* pPointShape(rDgm.getData()->getOrCreateAssociatedShape(rPoint));
+    if (pPointShape && pPointShape->getTextBody() && !pPointShape->getTextBody()->isEmpty())
+    {
+        OUStringBuffer aText;
+        for (const auto& rParagraph : pPointShape->getTextBody()->getParagraphs())
+        {
+            if (!aText.isEmpty())
+                aText.append('\n');
+            for (const auto& rRun : rParagraph->getRuns())
+                aText.append(rRun->getText());
+        }
+        return aText.makeStringAndClear();
+    }
+    return rDgm.getData()->getTextForPoint(rPoint);
+}
+
+// the paragraphs of rShape's own text body, for a shape the data gives no text
+static std::vector<OUString> ownTextParagraphsOf(const ShapePtr& rShape)
 {
     std::vector<OUString> aOut;
     if (rShape->getTextBody() && !rShape->getTextBody()->isEmpty())
-    {
         for (const auto& rParagraph : rShape->getTextBody()->getParagraphs())
         {
             OUStringBuffer aLine;
@@ -2711,10 +2740,15 @@ static std::vector<OUString> textParagraphsOf(const SmartArtDiagram& rDgm, const
                 aLine.append(rRun->getText());
             aOut.push_back(aLine.makeStringAndClear());
         }
-        return aOut;
-    }
+    return aOut;
+}
+
+static std::vector<OUString> textParagraphsOf(const SmartArtDiagram& rDgm, const ShapePtr& rShape)
+{
+    std::vector<OUString> aOut;
     if (!rDgm.getLayout() || !rDgm.getData())
-        return aOut;
+        return ownTextParagraphsOf(rShape);
+    bool bFound(false);
     const auto aAppend = [&aOut](const OUString& rText) {
         if (rText.isEmpty())
             return;
@@ -2727,13 +2761,14 @@ static std::vector<OUString> textParagraphsOf(const SmartArtDiagram& rDgm, const
     {
         if (rEntry.second != rShape || !rEntry.first.is())
             continue;
+        bFound = true;
         // a shape that shows several points, the children of a node as its paragraphs, holds
         // the text of each of them, one after the other; one that shows the descendants of a
         // node and finds none holds no text, Vertical_Box_List's third child text
         if (!rEntry.first->maShows.empty())
         {
             for (const svx::diagram::Connection* pShown : shownInParagraphOrder(*rEntry.first))
-                aAppend(rDgm.getData()->getTextForPoint(*pShown->mpSourcePoint));
+                aAppend(textOfPoint(rDgm, *pShown->mpSourcePoint));
             if (!aOut.empty())
                 break;
         }
@@ -2762,9 +2797,11 @@ static std::vector<OUString> textParagraphsOf(const SmartArtDiagram& rDgm, const
         const OUString& rNode(rEntry.first->getPresentation().msPresentationAssociationId);
         const rtl::Reference<svx::diagram::Point> xNode(rDgm.getData()->getPointByModelID(rNode));
         if (xNode.is())
-            aAppend(rDgm.getData()->getTextForPoint(*xNode));
+            aAppend(textOfPoint(rDgm, *xNode));
         break;
     }
+    if (!bFound)
+        return ownTextParagraphsOf(rShape);
     return aOut;
 }
 
@@ -2967,13 +3004,7 @@ static std::vector<sal_Int32> textParagraphLevelsOf(const SmartArtDiagram& rDgm,
 {
     std::vector<sal_Int32> aOut;
     sal_Int32 nBase(0);
-    if (rShape->getTextBody() && !rShape->getTextBody()->isEmpty())
-    {
-        // the paragraphs' own levels, as the text was put together
-        for (const auto& rParagraph : rShape->getTextBody()->getParagraphs())
-            aOut.push_back(rParagraph->getProperties().getLevel());
-    }
-    else if (rDgm.getLayout() && rDgm.getData())
+    if (rDgm.getLayout() && rDgm.getData())
         for (const auto& rEntry : rDgm.getLayout()->getPresPointShapeMap())
         {
             if (rEntry.second != rShape || !rEntry.first.is())
@@ -3002,7 +3033,7 @@ static std::vector<sal_Int32> textParagraphLevelsOf(const SmartArtDiagram& rDgm,
             {
                 const sal_Int32 nDepth(dataDepthOfNode(rDgm, pShown->mpSourcePoint->msModelId));
                 // one entry per line of the node's text, as textParagraphsOf splits it
-                const OUString aText(rDgm.getData()->getTextForPoint(*pShown->mpSourcePoint));
+                const OUString aText(textOfPoint(rDgm, *pShown->mpSourcePoint));
                 sal_Int32 nIndex(0);
                 if (!aText.isEmpty())
                     do
@@ -3013,6 +3044,10 @@ static std::vector<sal_Int32> textParagraphLevelsOf(const SmartArtDiagram& rDgm,
             }
             break;
         }
+    // a shape the data gives no text keeps the levels of its own paragraphs
+    if (aOut.empty() && rShape->getTextBody() && !rShape->getTextBody()->isEmpty())
+        for (const auto& rParagraph : rShape->getTextBody()->getParagraphs())
+            aOut.push_back(rParagraph->getProperties().getLevel());
     std::optional<sal_Int32> oShallowest;
     for (const sal_Int32 nDepth : aOut)
         if (!oShallowest || nDepth < *oShallowest)

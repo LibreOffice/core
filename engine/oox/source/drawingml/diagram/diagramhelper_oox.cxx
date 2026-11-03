@@ -265,9 +265,9 @@ void DiagramHelper_oox::reLayout()
         aFrameTransformation * basegfx::B2DPoint(1, 1)); // bottom-right
 
     // also need to convert to Emu used by mso and thus in oox::Shape stuff
-    pShapePtr->setSize(
-        awt::Size(oox::drawingml::convertHmmToEmu(basegfx::fround(aRootRange.getWidth())),
-                  oox::drawingml::convertHmmToEmu(basegfx::fround(aRootRange.getHeight()))));
+    // the frame is kept exact, so the room is not rounded to the hundredths of a millimetre
+    pShapePtr->setSize(awt::Size(basegfx::fround(aRootRange.getWidth() * 360.0),
+                                 basegfx::fround(aRootRange.getHeight() * 360.0)));
 
     // remember exsiting DrawingLayerModelData. Do this before createShapeHierarchyFromModel
     // below, that will create a new BackgroundShapeModelID and the BGShape would
@@ -330,6 +330,9 @@ void DiagramHelper_oox::reLayout()
     // reset temporary buffered ModelData association lists & rebuild them
     // and the Diagram DataModel
     mpDiagramPtr->getData()->buildDiagramDataModel(true);
+
+    // the layout measures the text, and the old shapes are where it is now
+    mpDiagramPtr->getData()->fillTextBodiesFromXShapes();
 
     // also reset temporary buffered layout data - that might
     // still refer to changed oox::Shape data
@@ -856,13 +859,13 @@ void DiagramHelper_oox::doAnchor(uno::Reference<drawing::XShape>& rTarget,
         if (aGroupTransformation.isInvertible())
         {
             aGroupTransformation.invert();
+            // in hundredths of a millimetre, not rounded
             const basegfx::B2DRange aFrame(
                 aGroupTransformation
-                    * basegfx::B2DPoint(convertEmuToHmm(rFramePosition.X),
-                                        convertEmuToHmm(rFramePosition.Y)),
+                    * basegfx::B2DPoint(rFramePosition.X / 360.0, rFramePosition.Y / 360.0),
                 aGroupTransformation
-                    * basegfx::B2DPoint(convertEmuToHmm(rFramePosition.X + rFrameSize.Width),
-                                        convertEmuToHmm(rFramePosition.Y + rFrameSize.Height)));
+                    * basegfx::B2DPoint((rFramePosition.X + rFrameSize.Width) / 360.0,
+                                        (rFramePosition.Y + rFrameSize.Height) / 360.0));
             const bool bFits(aFrame.getWidth() > 0.2 && aFrame.getWidth() < 5.0
                              && aFrame.getHeight() > 0.2 && aFrame.getHeight() < 5.0
                              && aFrame.overlaps(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));

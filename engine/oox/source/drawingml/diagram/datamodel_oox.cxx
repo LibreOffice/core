@@ -27,11 +27,16 @@
 #include <drawingml/textrun.hxx>
 #include <oox/drawingml/shape.hxx>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
+#include <basegfx/numeric/ftools.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <editeng/unoprnms.hxx>
 #include <oox/token/namespaces.hxx>
+#include <oox/token/properties.hxx>
 #include <oox/export/drawingml.hxx>
 #include <sax/fastattribs.hxx>
 #include <oox/export/shapes.hxx>
@@ -59,6 +64,61 @@ Shape* DiagramData_oox::getOrCreateAssociatedShape(const svx::diagram::Point& rP
     }
 
     return rShapePtr.get();
+}
+
+void DiagramData_oox::fillTextBodiesFromXShapes()
+{
+    for (const rtl::Reference<svx::diagram::Point>& rPoint : getPoints())
+    {
+        if (!rPoint.is() || svx::diagram::TypeConstant::XML_node != rPoint->mnXMLType)
+            continue;
+
+        // a shape that shows several Points holds the text of this one in paragraph nParagraph
+        sal_Int32 nParagraph(-1);
+        uno::Reference<container::XEnumerationAccess> xAccess(
+            getMasterXShapeForPoint(*rPoint, nParagraph), uno::UNO_QUERY);
+        if (!xAccess)
+            continue;
+
+        // the text properties an empty bodyPr gives on import
+        TextBodyPtr pTextBody(std::make_shared<TextBody>());
+        PropertyMap& rTextProperties(pTextBody->getTextProperties().maPropertyMap);
+        rTextProperties.setProperty(PROP_TextWordWrap, true);
+        rTextProperties.setProperty(PROP_FromWordArt, false);
+        rTextProperties.setProperty(PROP_TextAutoGrowHeight, false);
+        rTextProperties.setProperty(PROP_TextFitToSize, drawing::TextFitToSizeType_NONE);
+        bool bHasText(false);
+        uno::Reference<container::XEnumeration> xParagraphs(xAccess->createEnumeration());
+        for (sal_Int32 nIndex(0); xParagraphs.is() && xParagraphs->hasMoreElements(); nIndex++)
+        {
+            uno::Reference<text::XTextRange> xParagraph(xParagraphs->nextElement(),
+                                                        uno::UNO_QUERY);
+            if (!xParagraph || (nParagraph >= 0 && nIndex != nParagraph))
+                continue;
+
+            TextParagraph& rParagraph(pTextBody->addParagraph());
+            const OUString aText(xParagraph->getString());
+            if (aText.isEmpty())
+                continue;
+
+            // only a text set by hand keeps its size, the others take the Diagram's font
+            TextRunPtr pRun(std::make_shared<TextRun>());
+            pRun->getText() = aText;
+            // the size where the paragraph starts, the paragraph itself answers with a default
+            uno::Reference<beans::XPropertySet> xProperties(xParagraph->getStart(),
+                                                            uno::UNO_QUERY);
+            float fHeight(0.0);
+            if (rPoint->mbCustomText && xProperties
+                && (xProperties->getPropertyValue(u"CharHeight"_ustr) >>= fHeight)
+                && fHeight > 0.0)
+                pRun->getTextCharacterProperties().moHeight = basegfx::fround(fHeight * 100.0);
+            rParagraph.addRun(pRun);
+            bHasText = true;
+        }
+
+        if (bHasText)
+            getOrCreateAssociatedShape(*rPoint, true)->setTextBody(pTextBody);
+    }
 }
 
 void DiagramData_oox::writeDiagramReplacement(DrawingML& rOriginalDrawingML, sax_fastparser::FSHelperPtr& rTarget)

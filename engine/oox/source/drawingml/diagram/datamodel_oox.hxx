@@ -56,6 +56,10 @@ public:
 
     Shape* getOrCreateAssociatedShape(const svx::diagram::Point& rPoint, bool bCreateOnDemand = false) const;
 
+    // give the oox::Shape of every Point the text its XShape shows, as the import has it from
+    // the file: one paragraph after the other, and the size of a text set by hand (custT)
+    void fillTextBodiesFromXShapes();
+
     // helpers to write some specific DiagramDoms
     void writeDiagramReplacement(DrawingML& rOriginalDrawingML, sax_fastparser::FSHelperPtr& rTarget);
     void writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastparser::FSHelperPtr& rTarget, std::u16string_view rDrawingRelId, bool bReducedData);
