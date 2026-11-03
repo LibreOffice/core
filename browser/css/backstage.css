@@ -611,6 +611,7 @@
 
 .backstage-section-header {
 	margin-bottom: 1rem;
+	color: var(--color-text-dark);
 }
 
 .backstage-properties-list {
