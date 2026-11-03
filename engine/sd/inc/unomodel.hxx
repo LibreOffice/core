@@ -550,22 +550,21 @@ public:
                                           const OString& rJsonOptions) override;
     /// @see vcl::ITiledRenderable::getSlideLinks().
     SD_DLLPUBLIC bool getSlideLinks(tools::JsonWriter& rJsonWriter) override;
+    /// @see vcl::ITiledRenderable::refreshSlideLink().
+    SD_DLLPUBLIC sal_Int32 refreshSlideLink(const OUString& rUnit, const OUString& rId,
+                                            const OUString& rSourceName,
+                                            const OUString& rFileUrl,
+                                            const OUString& rLastModifiedTime,
+                                            const OUString& rName,
+                                            std::vector<OString>* pNotUpdated = nullptr) override;
     /// @see vcl::ITiledRenderable::refreshSlideLinks().
     SD_DLLPUBLIC sal_Int32 refreshSlideLinks(const OUString& rSourceName,
                                              const OUString& rFileUrl,
                                              const OUString& rLastModifiedTime,
-                                             std::vector<OString>* pNotUpdated = nullptr,
-                                             sal_Int32 nPageIndex = -1) override;
-    /// @see vcl::ITiledRenderable::updateLinkedSection().
-    SD_DLLPUBLIC sal_Int32 updateLinkedSection(const OUString& rSectionId,
-                                               const OUString& rSourceName,
-                                               const OUString& rFileUrl,
-                                               const OUString& rLastModifiedTime,
-                                               const OUString& rSourceSectionName) override;
+                                             std::vector<OString>* pNotUpdated = nullptr) override;
     /// @see vcl::ITiledRenderable::breakSlideLink().
-    SD_DLLPUBLIC bool breakSlideLink(sal_Int32 nIndex) override;
-    /// @see vcl::ITiledRenderable::breakSectionLink().
-    SD_DLLPUBLIC bool breakSectionLink(const OUString& rSectionId, bool bBreakSlides) override;
+    SD_DLLPUBLIC bool breakSlideLink(const OUString& rUnit, const OUString& rId,
+                                     bool bDeep) override;
 
     /// @see vcl::ITiledRenderable::getSlideIndexOfGuid().
     SD_DLLPUBLIC sal_Int32 getSlideIndexOfGuid(const OUString& rGuid) override;

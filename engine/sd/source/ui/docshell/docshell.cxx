@@ -106,6 +106,7 @@ void DrawDocShell::Construct( bool bClipboard )
     SetPool( &mpDoc->GetItemPool() );
     std::unique_ptr<sd::UndoManager> pUndoManager(new sd::UndoManager);
     pUndoManager->SetDocShell(this);
+    pUndoManager->SetDocument(mpDoc);
     mpUndoManager = std::move(pUndoManager);
 
     if (!comphelper::IsFuzzing()

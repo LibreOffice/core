@@ -2799,106 +2799,94 @@ struct COKitDocument
      *        page, the slide to insert before as "at", whether the pages keep the design of
      *        the file they came from as "keepDesign", whether they stay linked to the
      *        document named by "source" as "link", and the time that source was last
-     *        modified as "lastModifiedTime", recorded on each linked page. "sourcePositions"
+     *        modified as "lastModifiedTime", recorded on each link. "sourcePositions"
      *        names the position each inserted page's slide holds in the source, counted from
      *        one, one for every page inserted or none at all: a page given a position is
      *        linked to that position rather than to one slide, so a refresh reads whichever
-     *        slide stands there. "sourceSection" names the identifier of the section of the
-     *        source the pages make up, and "sourceSectionName" its name: the pages then go in at
-     *        "at" as a section of their own, linked to that source section when "link" is set,
-     *        and the pages that follow them keep a section apart from it. A section asks for no
-     *        "sourcePositions".
+     *        slide stands there. "as" says what the pages go in as: "slides", the default, or
+     *        "section", a section of their own at "at" whose identifier in the source is
+     *        "sourceId" and whose name there is "sourceName", linked to that source section
+     *        when "link" is set. The pages that follow a section keep a section apart from it.
+     *        A section asks for no "sourcePositions".
      * @return whether the pages were inserted.
      */
     virtual bool insertPagesFromFile(const char* pUrl, const char* pJsonOptions) = 0;
 
     /**
-     * Get the pages of the document that are linked to a source document, grouped by the source
-     * they were made from.
+     * Get the links of the document to the slides and sections of other documents.
      *
-     * @return JSON of the form {"links":[{"source":"<source document>","slides":[{"part":<part>,
-     *         "name":"<source page>"},...]},...]}, where a source document is named as the user
-     *         knows it, a part is the unique identifier the linked page holds now and a source page
-     *         is named as the user sees it in the source document. A document that links to nothing
-     *         reports an empty array. Empty for a document that holds no pages, which is anything
-     *         but a presentation or a drawing.
+     * @return JSON of the form {"links":[{"unit":"<slide|section>","id":"<id>",
+     *         "parent":"<id>","source":"<source>","sourceId":"<id>","name":"<name>",
+     *         "lastModifiedTime":"<time>","slides":["<part>",...]},...]}: one flat array in
+     *         document order, a section before the slides it spans. The unit says what the link
+     *         holds a copy of, the id is the identifier of the page or the section here, the
+     *         parent the section that spans a slide or empty, the source the source document as
+     *         the user knows it, the sourceId the slide or section in the source, the name the
+     *         name that unit had in the source at the last read, and the slides the parts the
+     *         link spans. A document that links to nothing reports an empty array. Empty for a
+     *         document that holds no pages, which is anything but a presentation or a drawing.
      */
     virtual std::string getSlideLinks() = 0;
 
     /**
-     * Refresh the pages linked to one source document.
+     * Replace the span of one link with what the source holds for its unit now.
+     *
+     * @param pUnit "slide" or "section", the kind of link.
+     * @param pId the page or the section, by the identifier getSlideLinks reports for it.
+     * @param pSourceName the source document as the user knows it, as getSlideLinks reports it.
+     * @param pUrl a file: URL of a file on this machine holding a presentation the source wrote
+     *        out. A slide link reads the slide it follows from it. A section link reads the
+     *        slides the file lists under the identifier of the source section, in order, or every
+     *        slide of a file that lists no section; the section then holds a fresh copy of each of
+     *        those slides and no other slide, so a slide edited in this document is replaced as
+     *        well. Each page read is a page of its own, so the parts of the link change and a
+     *        caller holding them asks for the list again.
+     * @param pLastModifiedTime the time the source document was last modified now, recorded on
+     *        the link so a later comparison can tell whether it is up to date.
+     * @param pName the name the unit has in the source now. A section takes it when the section
+     *        still has the name the source section had at the last read, and keeps a name given
+     *        to it in this document.
+     * @param pNotUpdated when given, takes a JSON array of the slides the file held nothing for,
+     *        by the identifier of each one, in document order: ["{...}","{...}"]. It is an empty
+     *        array when every slide was read, and empty when the refresh did not run.
+     * @return the number of slides replaced, or -1 when no such link holds or it is not linked to
+     *         that source document, when the URL is not a file on this machine, when the time or
+     *         the name is longer than 128 characters or holds a control character, when the view
+     *         cannot edit, or when the file could not be read.
+     */
+    virtual int refreshSlideLink(const char* pUnit, const char* pId, const char* pSourceName,
+                                 const char* pUrl, const char* pLastModifiedTime,
+                                 const char* pName, std::string* pNotUpdated) = 0;
+
+    /**
+     * Refresh every link to one source document that is under no other link, from one file.
      *
      * @param pSourceName the source document as the user knows it, as getSlideLinks reports it.
-     * @param pUrl a file: URL of a file on this machine holding the source pages to read. It is a
-     *        file staged for this one refresh, so the pages keep the source document they record
-     *        and stay linked to it, and they keep their position and their name as well. A page
-     *        whose source page the file does not hold keeps the content it holds. Each refreshed
-     *        page is the page read for it, so its part changes and a caller holding the parts of
-     *        that source asks for the list again.
-     * @param pLastModifiedTime the time the source document was last modified now, recorded on
-     *        each refreshed page so a later comparison can tell whether the page is up to date.
-     * @param pNotUpdated when given, takes a JSON array of the slides the file held no slide for,
-     *        by the identifier of each one, in document order: ["{...}","{...}"]. It is an empty
-     *        array when every linked slide was read, and empty when the refresh did not run.
-     * @param pPart one page, by the identifier getSlideLinks reports for it, which is then the
-     *        only page refreshed; no part at all refreshes every page linked to the source
-     *        document.
-     * @return the number of pages refreshed, or -1 when no page is linked to that source document,
-     *         when pPart names a page that is not, when the URL is not a file on this machine, or
-     *         when the file could not be read.
+     * @param pUrl a file: URL of a file on this machine holding a presentation the source wrote
+     *        out, read as refreshSlideLink reads it for each link.
+     * @param pLastModifiedTime the time the source document was last modified now.
+     * @param pNotUpdated as for refreshSlideLink.
+     * @return the number of slides replaced, or -1 when no link to that source document holds,
+     *         when the URL is not a file on this machine, when the view cannot edit, or when the
+     *         file could not be read.
      */
     virtual int refreshSlideLinks(const char* pSourceName, const char* pUrl,
-                                  const char* pLastModifiedTime, std::string* pNotUpdated,
-                                  const char* pPart) = 0;
+                                  const char* pLastModifiedTime, std::string* pNotUpdated) = 0;
 
     /**
-     * Bring a linked section up to date with the section of the source document it is linked to.
+     * Take one link off.
      *
-     * @param pSourceName the source document as the user knows it, as getSlideLinks reports it.
-     * @param pSection the section, by the identifier getSlideLinks reports for it.
-     * @param pUrl a file: URL of a file on this machine holding the slides of the source section,
-     *        in the order the source holds them, and no other slide. The section then holds a fresh
-     *        copy of each of those slides and no other slide, in that order, so a slide edited in
-     *        this document is replaced as well, and the parts of its slides change.
-     * @param pLastModifiedTime the time the source document was last modified now.
-     * @param pSourceSectionName the name the source section has now. The section takes it when
-     *        the section still has the name the source section had at the last read, and keeps a
-     *        name given to it in this document.
-     * @return the number of slides the section holds afterwards, or -1 when no section with that
-     *         identifier is linked to that source document, when the URL is not a file on this
-     *         machine, when the time or the name is longer than 128 characters or holds a control
-     *         character, when the view cannot edit, or when the file could not be read.
+     * The page or the section keeps the slides it holds and becomes the document's own, so a
+     * refresh of the source it came from leaves it as it is. This is one undo action, and undoing
+     * it gives the link back.
+     *
+     * @param pUnit "slide" or "section", the kind of link.
+     * @param pId the page or the section, by the identifier getSlideLinks reports for it.
+     * @param bDeep whether every link beneath comes off as well: the link of each slide of a
+     *        section. Without it, each slide of a section stays linked to its source slide.
+     * @return true when the link held and is off now.
      */
-    virtual int updateLinkedSection(const char* pSourceName, const char* pSection,
-                                    const char* pUrl, const char* pLastModifiedTime,
-                                    const char* pSourceSectionName) = 0;
-
-    /**
-     * Take the source document off one linked page.
-     *
-     * The page keeps the content it holds and becomes a page of this document alone, so a refresh
-     * of the source it came from leaves it as it is. This is one undo action, and undoing it gives
-     * the page its source back.
-     *
-     * @param pPart the page, as getSlideLinks reports it.
-     * @return true when the page was linked to a source document and is not any more.
-     */
-    virtual bool breakSlideLink(const char* pPart) = 0;
-
-    /**
-     * Take the link to its source section off one linked section.
-     *
-     * The section keeps the slides it holds and becomes a section of this document alone, so it no
-     * longer follows its source section. This is one undo action, and undoing it gives the section
-     * its link back.
-     *
-     * @param pSection the section, by the identifier getSlideLinks reports for it.
-     * @param bBreakSlides whether each slide of the section loses its source document too, as
-     *        breakSlideLink does for one page, so a refresh of that source leaves those slides as
-     *        they are. Without it, each slide stays linked to its source slide.
-     * @return true when the section was linked to a source section and is not any more.
-     */
-    virtual bool breakSectionLink(const char* pSection, bool bBreakSlides) = 0;
+    virtual bool breakSlideLink(const char* pUnit, const char* pId, bool bDeep) = 0;
 
     /**
      * Writes the given pages out as a document of their own, in the order they are given.

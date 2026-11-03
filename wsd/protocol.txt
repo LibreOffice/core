@@ -358,32 +358,33 @@ slidelink update source=<source name> file=<staged name> [time=<source time>]
     record so a later comparison tells whether they are up to date.
 
     list: the reply is
-        slidelinks: {"sections":[{"section":"<section id>","name":"<section name>",
-                                  "source":"<source document>",
-                                  "sourceSection":"<source section id>",
-                                  "sourceSectionName":"<source section name at the last read>",
-                                  "lastModifiedTime":"<source time at the last read>",
-                                  "slides":[{"part":"<part>",
-                                             "sourceGuid":"<source slide id>"},...]},...],
-                     "links":[{"source":"<source document>",
-                     "slides":[{"part":"<part>","name":"<source slide>",
-                                "lastModifiedTime":"<source time at the last read>"},...]},...]}
-    with the sources in the order their first page appears and the pages of one
-    source in slide order. <part> is the linked page and <source slide> the
-    slide of the source it was made from, named as the user sees it there.
-    <source time at the last read> is the time the source was last modified when
-    the page was read from it, empty when none was recorded. A page linked to a
-    file by its path names no source document and is left out, since a refresh
-    has no way to reach it. A document that links to nothing reports an empty
-    array.
+        slidelinks: {"links":[{"unit":"<slide|section>","id":"<id>","parent":"<id>",
+                               "source":"<source document>","sourceId":"<id>",
+                               "name":"<name>","lastModifiedTime":"<time>",
+                               "slides":["<part>",...]},...]}
+    one flat array in document order: a section, then the slides it spans. The
+    unit says what the link holds a copy of: one slide of the source, or one
+    section of it. <id> is the part of the linked page for a slide and the
+    identifier of the section for a section, as the slidesections list names
+    it. parent is the section that spans a slide, or empty. source is the
+    source document. sourceId is the slide or the section in the source: the
+    identifier of the source slide, the name a slide holds by its position when
+    the link follows a position, or the identifier of the source section. name
+    is the name the slide or the section had in the source when it was last
+    read, empty for a slide that has no name of its own. lastModifiedTime is
+    the time the source was last modified when the unit was last read, empty
+    when none was recorded; comparing it with the source's current time tells
+    whether the link is out of date. slides lists the parts the link spans, in
+    slide order. A page linked to a file by its path is no link of this list,
+    since a refresh has no way to reach it. A document that links to nothing
+    reports an empty array.
 
-    sections lists, in document order, the sections that hold a copy of a
-    section of a source document, each with its slides in slide order. A
-    section stops holding that copy when a slide is inserted into it, removed
-    from it or moved within it, and is then left out; undoing the change puts
-    it back. A slide that an edit took its own link off stays listed under its
-    section. The kit sends the list on its own, to every view of the document,
-    whenever the sections listed there change: when a section link is made or
+    A section holds its copy while it spans the slides it was linked with, in
+    that order. A slide inserted into it, removed from it or moved within it
+    ends the link, and the section is then left out; undoing the change puts
+    it back. A slide that an edit took its own link off stays among the slides
+    of its section. The kit sends the list on its own, to every view of the
+    document, whenever the links listed there change: when a link is made or
     taken off, when an edit of the slides of a section unlinks it, and when an
     undo links it again.
 

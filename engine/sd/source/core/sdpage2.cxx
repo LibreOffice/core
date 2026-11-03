@@ -305,18 +305,15 @@ bool SdPage::IsReadOnly() const
 
 void SdPage::ConnectLink()
 {
-    // A page written out of a presentation records the slide of that presentation it came from,
-    // under a reference that names no document. Such a record is read off the page as it stands
-    // and there is nothing to resolve behind it.
-    if (maFileName == sd::SlideLink::OriginReference())
+    // A reference under our own scheme names no file: the record a written page keeps of the
+    // slide it came from, or the source an earlier build kept on a linked page. It is read off
+    // the page as it stands and there is nothing to resolve behind it.
+    if (sd::SlideLink::IsOwnReference(maFileName))
         return;
 
     sfx2::LinkManager* pLinkManager(getSdrModelFromSdrPage().GetLinkManager());
 
-    // A page that records the identifier of the slide it came from names the slide it reads by
-    // that identifier, so it holds a link of its own without naming a slide.
-    const bool bNamesSourceSlide = !maBookmarkName.isEmpty() || !maSourcePageGuid.isEmpty();
-    if (!(pLinkManager && !mpPageLink && !maFileName.isEmpty() && bNamesSourceSlide &&
+    if (!(pLinkManager && !mpPageLink && !maFileName.isEmpty() && !maBookmarkName.isEmpty() &&
         mePageKind==PageKind::Standard && !IsMasterPage() &&
         static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).IsNewOrLoadCompleted()))
         return;
@@ -384,8 +381,6 @@ void SdPage::lateInit(const SdPage& rSrcPage)
     maCreatedPageName.clear();
     maFileName = rSrcPage.maFileName;
     maBookmarkName = rSrcPage.maBookmarkName;
-    maSourceModifiedTime = rSrcPage.maSourceModifiedTime;
-    maSourcePageGuid = rSrcPage.maSourcePageGuid;
     mbScaleObjects = rSrcPage.mbScaleObjects;
     meCharSet = rSrcPage.meCharSet;
     mnPaperBin = rSrcPage.mnPaperBin;
@@ -694,11 +689,6 @@ void SdPage::dumpAsXml(xmlTextWriterPtr pWriter) const
     }
     if (pPageKind)
         (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("mePageKind"), BAD_CAST(pPageKind));
-
-
-    (void)xmlTextWriterWriteAttribute(
-        pWriter, BAD_CAST("maSourcePageGuid"),
-        BAD_CAST(OUStringToOString(maSourcePageGuid, RTL_TEXTENCODING_UTF8).getStr()));
 
     FmFormPage::dumpAsXml(pWriter);
     (void)xmlTextWriterEndElement(pWriter);

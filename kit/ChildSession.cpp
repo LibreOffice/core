@@ -4158,8 +4158,9 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
             << ",\"keepDesign\":" << (keepDesign ? "true" : "false")
             << ",\"link\":" << (link ? "true" : "false") << ",\"source\":\""
             << JsonUtil::escapeJSONValue(source) << "\",\"lastModifiedTime\":\""
-            << JsonUtil::escapeJSONValue(lastModifiedTime) << "\",\"sourceSection\":\""
-            << JsonUtil::escapeJSONValue(section) << "\",\"sourceSectionName\":\""
+            << JsonUtil::escapeJSONValue(lastModifiedTime) << "\",\"as\":\""
+            << (haveSection || haveSectionName ? "section" : "slides") << "\",\"sourceId\":\""
+            << JsonUtil::escapeJSONValue(section) << "\",\"sourceName\":\""
             << JsonUtil::escapeJSONValue(sectionName) << "\"}";
 
     const int slidesBefore = getLOKitDocument()->getParts();
@@ -4187,55 +4188,25 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
 
 namespace
 {
-/// Whether a link list holds an entry for the named source document, and, when a part is named,
-/// whether that entry lists the page of that part.
+/// Whether a link list holds a link of the given unit, "slide" or "section", to the named source
+/// document. An id names the one page or section to look for; an empty id takes any link of that
+/// unit, or of any unit when the unit is empty too.
 bool linksToSource(const std::string& linksJson, const std::string& source,
-                   const std::string& part = std::string())
+                   const std::string& unit = std::string(), const std::string& id = std::string())
 {
     Object::Ptr object;
     if (!JsonUtil::parseJSON(linksJson, object))
         return false;
 
     const Poco::JSON::Array::Ptr links = object->getArray("links");
-    if (!links)
-        return false;
-
-    for (std::size_t i = 0; i < links->size(); ++i)
+    for (std::size_t i = 0; links && i < links->size(); ++i)
     {
         const Object::Ptr entry = links->getObject(i);
         if (!entry || JsonUtil::getJSONValue<std::string>(entry, "source") != source)
             continue;
-        if (part.empty())
-            return true;
-
-        const Poco::JSON::Array::Ptr slides = entry->getArray("slides");
-        for (std::size_t j = 0; slides && j < slides->size(); ++j)
-        {
-            const Object::Ptr slide = slides->getObject(j);
-            if (slide && JsonUtil::getJSONValue<std::string>(slide, "part") == part)
-                return true;
-        }
-        return false;
-    }
-
-    return false;
-}
-
-/// Whether a link list holds the linked section with the identifier section, linked to the named
-/// source document.
-bool linksSectionToSource(const std::string& linksJson, const std::string& source,
-                          const std::string& section)
-{
-    Object::Ptr object;
-    if (!JsonUtil::parseJSON(linksJson, object))
-        return false;
-
-    const Poco::JSON::Array::Ptr sections = object->getArray("sections");
-    for (std::size_t i = 0; sections && i < sections->size(); ++i)
-    {
-        const Object::Ptr entry = sections->getObject(i);
-        if (entry && JsonUtil::getJSONValue<std::string>(entry, "section") == section &&
-            JsonUtil::getJSONValue<std::string>(entry, "source") == source)
+        if (!unit.empty() && JsonUtil::getJSONValue<std::string>(entry, "unit") != unit)
+            continue;
+        if (id.empty() || JsonUtil::getJSONValue<std::string>(entry, "id") == id)
             return true;
     }
 
@@ -4265,7 +4236,7 @@ std::string ChildSession::getSlideLinksJson()
 
     const std::string links = getLOKitDocument()->getSlideLinks();
     if (links.empty())
-        return "{\"sections\":[],\"links\":[]}";
+        return "{\"links\":[]}";
 
     return links;
 }
@@ -4426,10 +4397,15 @@ bool ChildSession::slideLinkUpdate(const StringVector& tokens)
     if (haveSection)
         return slideLinkUpdateSection(source, section, url, lastModifiedTime, sectionName, named);
 
+    // One page alone is read when the command names it, and every link of the source otherwise.
     std::string notUpdated;
-    const int count = getLOKitDocument()->refreshSlideLinks(
-        source.c_str(), url.c_str(), lastModifiedTime.c_str(), &notUpdated,
-        part.empty() ? nullptr : part.c_str());
+    const int count =
+        part.empty()
+            ? getLOKitDocument()->refreshSlideLinks(source.c_str(), url.c_str(),
+                                                    lastModifiedTime.c_str(), &notUpdated)
+            : getLOKitDocument()->refreshSlideLink("slide", part.c_str(), source.c_str(),
+                                                   url.c_str(), lastModifiedTime.c_str(), "",
+                                                   &notUpdated);
 
     if (count < 0)
     {
@@ -4437,7 +4413,8 @@ bool ChildSession::slideLinkUpdate(const StringVector& tokens)
         // of the document is linked to, or a page that is not linked to it, is a
         // different matter from a file whose pages could not be read, and a
         // caller can act on the second one.
-        const bool linked = linksToSource(getSlideLinksJson(), source, part);
+        const bool linked =
+            linksToSource(getSlideLinksJson(), source, part.empty() ? "" : "slide", part);
         sendTextFrameAndLogError(std::string("error: cmd=slidelink kind=") +
                                  (linked ? "failed" : "notlinked") + named);
         return false;
@@ -4461,15 +4438,15 @@ bool ChildSession::slideLinkUpdateSection(const std::string& source, const std::
                                           const std::string& sectionName,
                                           const std::string& named)
 {
-    const int count = getLOKitDocument()->updateLinkedSection(
-        source.c_str(), section.c_str(), url.c_str(), lastModifiedTime.c_str(),
-        sectionName.c_str());
+    const int count = getLOKitDocument()->refreshSlideLink(
+        "section", section.c_str(), source.c_str(), url.c_str(), lastModifiedTime.c_str(),
+        sectionName.c_str(), nullptr);
 
     if (count < 0)
     {
         // A section that is not linked to that source is a different matter from a file whose
         // slides could not be read, as for a refresh of pages.
-        const bool linked = linksSectionToSource(getSlideLinksJson(), source, section);
+        const bool linked = linksToSource(getSlideLinksJson(), source, "section", section);
         sendTextFrameAndLogError(std::string("error: cmd=slidelink kind=") +
                                  (linked ? "failed" : "notlinked") + named);
         return false;
@@ -4521,7 +4498,7 @@ bool ChildSession::slideLinkBreak(const StringVector& tokens)
 
     // A break makes the document report its links again, so the fresh list goes out on its own
     // and the reply names the page alone.
-    if (!getLOKitDocument()->breakSlideLink(part.c_str()))
+    if (!getLOKitDocument()->breakSlideLink("slide", part.c_str(), /*bDeep=*/false))
     {
         sendTextFrameAndLogError("error: cmd=slidelink kind=notlinked" + named);
         return false;
@@ -4598,7 +4575,7 @@ bool ChildSession::slideLinkBreakSection(const StringVector& tokens,
 
     // The document reports its links again when a section loses its link, so the fresh list goes
     // out on its own and the reply names the section alone.
-    if (!getLOKitDocument()->breakSectionLink(section.c_str(), slides != 0))
+    if (!getLOKitDocument()->breakSlideLink("section", section.c_str(), slides != 0))
     {
         sendTextFrameAndLogError("error: cmd=slidelink kind=notlinked" + named);
         return false;

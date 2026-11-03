@@ -70,6 +70,7 @@ namespace tools { class Rectangle; }
 class SfxItemPool;
 class Size;
 class SdXImpressDocument;
+enum class COKitCallbackType;
 
 namespace sd
 {
@@ -81,6 +82,7 @@ typedef rtl::Reference<DrawDocShell> DrawDocShellRef;
 class UndoManager;
 class ShapeList;
 class FrameView;
+class SlideLinkManager;
 class SlideSectionManager;
 class SlideShow;
 }
@@ -187,14 +189,6 @@ struct InsertBookmarkOptions
     bool bPreservePageNames;  // Preserve page names
     bool bIsFileDocument;     // Operation involves a file document
     bool bAdoptTargetDesign;  // Inserted pages take the design of the destination document
-    // The reference to record as the source of pages inserted as links, or
-    // empty for the name of the medium the pages are read from. A valid
-    // reference is absolute and holds no '#' of its own, since the name of the
-    // source page is appended to it after a '#'. It escapes the characters
-    // that would otherwise be read as delimiters and leaves the rest as they
-    // are: an escape for a character outside ASCII comes back as that
-    // character once the document has been saved and read again.
-    OUString aLinkSourceUrl;
 
     InsertBookmarkOptions()
         : bLink(false), bReplace(false), bNoDialogs(false),
@@ -380,6 +374,7 @@ private:
                         maFrameViewList;
     std::unique_ptr<SdCustomShowList>   mpCustomShowList;
     std::unique_ptr<sd::SlideSectionManager> mpSectionManager;
+    std::unique_ptr<sd::SlideLinkManager> mpSlideLinkManager;
     bool                mbInternalPageMove = false;
     ::sd::DrawDocShell* mpDocSh;
     SdTransferable *    mpCreatingTransferable;
@@ -387,12 +382,6 @@ private:
     bool                mbInitialOnlineSpellingEnabled;
     OUString            maBookmarkFile;
     ::sd::DrawDocShellRef   mxBookmarkDocShRef;
-
-    /** The local file the pages of one source document are read from, by the reference the pages
-        linked to that source record. Each entry is a file: URL of a file staged for this document,
-        holding the source pages to read. Session state, never saved with the document.
-    */
-    std::map<OUString, OUString> maStagedLinkSourceFiles;
 
     /// How many page operations of the document are running now, see KeepPageLinks.
     sal_Int32 mnPageLinksKept = 0;
@@ -833,18 +822,13 @@ public:
      * @param nInsertPos Position where resolved pages should be inserted
      * @param bNoDialogs Whether to suppress dialogs during operation
      * @param bCopy Whether to copy the linked pages
-     * @param rLinkSourceUrl The reference the resolved pages record as their source, or empty for
-     *                       the name of the medium they are read from. A reference given here is
-     *                       what keeps the pages linked to a source document when the medium is a
-     *                       file staged for one resolution and means nothing later.
      * @return true if operation was successful
      */
     bool ResolvePageLinks(
         const PageNameList &rBookmarkList,
         sal_uInt16 nInsertPos,
         bool bNoDialogs,
-        bool bCopy,
-        const OUString& rLinkSourceUrl);
+        bool bCopy);
 
     /**
      * Copy or move pages within the same document
@@ -888,19 +872,6 @@ public:
                                     Point const * pObjPos, bool bCalcObjCount);
 
     void   CloseBookmarkDoc();
-
-    /** Names the local file the pages linked to one source document are read from.
-
-        rSourceReference is the reference those pages record and rFileUrl a file: URL of a file
-        staged for this document, holding the source pages. An empty rFileUrl takes the source's
-        file away again.
-    */
-    void SetStagedLinkSourceFile(const OUString& rSourceReference, const OUString& rFileUrl);
-
-    /** The local file the pages linked to rSourceReference are read from, or empty when no file is
-        staged for that source.
-    */
-    OUString GetStagedLinkSourceFile(const OUString& rSourceReference) const;
 
     /** Whether a page operation of the document is running now, see KeepPageLinks. */
     bool ArePageLinksKept() const { return mnPageLinksKept > 0; }
@@ -1018,6 +989,9 @@ public:
     SAL_DLLPRIVATE std::vector<std::unique_ptr<sd::FrameView>>& GetFrameViewList() { return maFrameViewList; }
     SdCustomShowList* GetCustomShowList(bool bCreate = false);
     sd::SlideSectionManager& GetSectionManager();
+    sd::SlideLinkManager& GetSlideLinkManager();
+    /// Sends rPayload as a callback of type eType to every view of this document, shown or not.
+    void NotifyViews(COKitCallbackType eType, const OString& rPayload) const;
 
     SAL_DLLPRIVATE void                NbcSetChanged(bool bFlag);
 

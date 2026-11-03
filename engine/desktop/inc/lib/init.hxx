@@ -444,14 +444,12 @@ namespace desktop {
         int getPartIndex(const char* pPart, int nMode) override;
         bool insertPagesFromFile(const char* pUrl, const char* pJsonOptions) override;
         std::string getSlideLinks() override;
+        int refreshSlideLink(const char* pUnit, const char* pId, const char* pSourceName,
+                             const char* pUrl, const char* pLastModifiedTime, const char* pName,
+                             std::string* pNotUpdated) override;
         int refreshSlideLinks(const char* pSourceName, const char* pUrl,
-                              const char* pLastModifiedTime, std::string* pNotUpdated,
-                              const char* pPart) override;
-        int updateLinkedSection(const char* pSourceName, const char* pSection,
-                                const char* pUrl, const char* pLastModifiedTime,
-                                const char* pSourceSectionName) override;
-        bool breakSlideLink(const char* pPart) override;
-        bool breakSectionLink(const char* pSection, bool bBreakSlides) override;
+                              const char* pLastModifiedTime, std::string* pNotUpdated) override;
+        bool breakSlideLink(const char* pUnit, const char* pId, bool bDeep) override;
         bool exportPages(const char* pParts, const char* pUrl) override;
         void selectObjects(const char* pObjectIds) override;
         void setObjectPoints(unsigned long long nObjectId, const char* pChanges) override;

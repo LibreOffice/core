@@ -1698,28 +1698,6 @@ void SdXMLExport::ExportContent_()
                         AddAttribute ( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
                         AddAttribute ( XML_NAMESPACE_XLINK, XML_SHOW, XML_REPLACE );
                         AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONREQUEST );
-
-                        // The time the source document was last modified, kept
-                        // so a later refresh can tell whether it moved on, and
-                        // the identifier of the slide the page came from, which
-                        // names that slide wherever it stands in the source. The
-                        // coext namespace is declared only in extended ODF, so
-                        // the attributes go only there, as coext:guid does.
-                        if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
-                        {
-                            OUString aSourceModifiedTime;
-                            xProps->getPropertyValue(u"SourceModifiedTime"_ustr)
-                                >>= aSourceModifiedTime;
-                            if( !aSourceModifiedTime.isEmpty() )
-                                AddAttribute( XML_NAMESPACE_CO_EXT, XML_SOURCE_MODIFIED_TIME,
-                                              aSourceModifiedTime );
-
-                            OUString aSourcePageGuid;
-                            xProps->getPropertyValue(u"SourcePageGuid"_ustr) >>= aSourcePageGuid;
-                            if( !aSourcePageGuid.isEmpty() )
-                                AddAttribute( XML_NAMESPACE_CO_EXT, XML_SOURCE_PAGE_GUID,
-                                              aSourcePageGuid );
-                        }
                     }
                 }
                 catch(const Exception&)
@@ -1831,6 +1809,7 @@ void SdXMLExport::ExportContent_()
     if( IsImpress() )
     {
         exportSections();
+        exportSlideLinks();
         exportPresentationSettings();
     }
 }
@@ -1867,11 +1846,6 @@ void SdXMLExport::exportSections()
             OUString sSectionName;
             OUString sSectionId;
             cpo::uno::Sequence<OUString> aSlideNames;
-            OUString sSourceReference;
-            OUString sSourceSectionId;
-            OUString sSourceSectionName;
-            OUString sSourceModifiedTime;
-            cpo::uno::Sequence<OUString> aSourcePageGuids;
 
             for (const auto& rProp : aSectionProps)
             {
@@ -1881,45 +1855,18 @@ void SdXMLExport::exportSections()
                     rProp.Value >>= sSectionId;
                 else if (rProp.Name == "SlideNameList")
                     rProp.Value >>= aSlideNames;
-                else if (rProp.Name == "SourceReference")
-                    rProp.Value >>= sSourceReference;
-                else if (rProp.Name == "SourceSectionId")
-                    rProp.Value >>= sSourceSectionId;
-                else if (rProp.Name == "SourceSectionName")
-                    rProp.Value >>= sSourceSectionName;
-                else if (rProp.Name == "SourceModifiedTime")
-                    rProp.Value >>= sSourceModifiedTime;
-                else if (rProp.Name == "SourcePageGuidList")
-                    rProp.Value >>= aSourcePageGuids;
             }
-
-            // A linked section names its source section, and each of its slides names the source
-            // slide it was read from, in the order the slides are listed.
-            const bool bLinked = !sSourceReference.isEmpty()
-                                 && aSourcePageGuids.getLength() == aSlideNames.getLength();
 
             AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, sSectionName);
             if (!sSectionId.isEmpty())
                 AddAttribute(XML_NAMESPACE_LO_EXT, XML_IDENTIFIER, sSectionId);
-            if (bLinked)
-            {
-                AddAttribute(XML_NAMESPACE_CO_EXT, XML_SOURCE_DOCUMENT, sSourceReference);
-                AddAttribute(XML_NAMESPACE_CO_EXT, XML_SOURCE_SECTION_GUID, sSourceSectionId);
-                AddAttribute(XML_NAMESPACE_CO_EXT, XML_SOURCE_SECTION_NAME, sSourceSectionName);
-                if (!sSourceModifiedTime.isEmpty())
-                    AddAttribute(XML_NAMESPACE_CO_EXT, XML_SOURCE_MODIFIED_TIME,
-                                 sSourceModifiedTime);
-            }
             SvXMLElementExport aSectionElem(*this, XML_NAMESPACE_LO_EXT, XML_SECTION,
                                             true, true);
 
             // Write slide page names
-            for (sal_Int32 nSlide = 0; nSlide < aSlideNames.getLength(); ++nSlide)
+            for (const OUString& rSlideName : aSlideNames)
             {
-                AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, aSlideNames[nSlide]);
-                if (bLinked)
-                    AddAttribute(XML_NAMESPACE_CO_EXT, XML_SOURCE_PAGE_GUID,
-                                 aSourcePageGuids[nSlide]);
+                AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, rSlideName);
                 SvXMLElementExport aSlideElem(*this, XML_NAMESPACE_LO_EXT, XML_SECTION_SLIDE, true,
                                               true);
             }
@@ -1928,6 +1875,90 @@ void SdXMLExport::exportSections()
     catch (const cpo::uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("xmloff.draw", "while exporting sections");
+    }
+}
+
+void SdXMLExport::exportSlideLinks()
+{
+    // The coext namespace is declared only in extended ODF, so the list goes only there, as
+    // coext:guid does.
+    if ((getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED) == 0)
+        return;
+
+    try
+    {
+        uno::Reference<beans::XPropertySet> xDocumentProperties(GetModel(), uno::UNO_QUERY);
+        if (!xDocumentProperties.is())
+            return;
+
+        uno::Reference<beans::XPropertySetInfo> xPropertiesInfo
+            = xDocumentProperties->getPropertySetInfo();
+        if (!xPropertiesInfo.is() || !xPropertiesInfo->hasPropertyByName(u"SlideLinks"_ustr))
+            return;
+
+        cpo::uno::Sequence<beans::PropertyValue> aLinkList;
+        xDocumentProperties->getPropertyValue(u"SlideLinks"_ustr) >>= aLinkList;
+
+        if (!aLinkList.hasElements())
+            return;
+
+        SvXMLElementExport aLinkListElem(*this, XML_NAMESPACE_CO_EXT, XML_SLIDE_LINK_LIST, true,
+                                         true);
+
+        // One element per link: the unit it holds a copy of, the page or the section here, the
+        // source document, the unit in it, the name and the time it had when last read, and the
+        // slides the link spans here, in order.
+        for (const auto& rLink : aLinkList)
+        {
+            cpo::uno::Sequence<beans::PropertyValue> aLinkProperties;
+            rLink.Value >>= aLinkProperties;
+
+            OUString sUnit;
+            OUString sId;
+            OUString sSource;
+            OUString sSourceId;
+            OUString sName;
+            OUString sLastModifiedTime;
+            cpo::uno::Sequence<OUString> aSlides;
+            for (const auto& rProperty : aLinkProperties)
+            {
+                if (rProperty.Name == "Unit")
+                    rProperty.Value >>= sUnit;
+                else if (rProperty.Name == "Id")
+                    rProperty.Value >>= sId;
+                else if (rProperty.Name == "Source")
+                    rProperty.Value >>= sSource;
+                else if (rProperty.Name == "SourceId")
+                    rProperty.Value >>= sSourceId;
+                else if (rProperty.Name == "Name")
+                    rProperty.Value >>= sName;
+                else if (rProperty.Name == "LastModifiedTime")
+                    rProperty.Value >>= sLastModifiedTime;
+                else if (rProperty.Name == "Slides")
+                    rProperty.Value >>= aSlides;
+            }
+
+            AddAttribute(XML_NAMESPACE_CO_EXT, XML_UNIT, sUnit);
+            AddAttribute(XML_NAMESPACE_CO_EXT, XML_IDENTIFIER, sId);
+            AddAttribute(XML_NAMESPACE_CO_EXT, XML_SOURCE_DOCUMENT, sSource);
+            if (!sSourceId.isEmpty())
+                AddAttribute(XML_NAMESPACE_CO_EXT, XML_SOURCE_IDENTIFIER, sSourceId);
+            if (!sName.isEmpty())
+                AddAttribute(XML_NAMESPACE_CO_EXT, XML_SOURCE_NAME, sName);
+            if (!sLastModifiedTime.isEmpty())
+                AddAttribute(XML_NAMESPACE_CO_EXT, XML_SOURCE_MODIFIED_TIME, sLastModifiedTime);
+            SvXMLElementExport aLinkElem(*this, XML_NAMESPACE_CO_EXT, XML_SLIDE_LINK, true, true);
+
+            for (const OUString& rSlide : aSlides)
+            {
+                AddAttribute(XML_NAMESPACE_CO_EXT, XML_GUID, rSlide);
+                SvXMLElementExport aSlideElem(*this, XML_NAMESPACE_CO_EXT, XML_SLIDE, true, true);
+            }
+        }
+    }
+    catch (const cpo::uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "while exporting slide links");
     }
 }
 

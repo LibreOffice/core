@@ -45,6 +45,7 @@
 
 #include <strings.hrc>
 #include <drawdoc.hxx>
+#include <SlideLinkManager.hxx>
 #include <SlideSectionManager.hxx>
 #include <sdmod.hxx>
 #include <sdpage.hxx>
@@ -65,19 +66,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::cpo;
-
-namespace
-{
-/** The source document to record on the pages of one insertion, for an
-    insertion that links them to their source. An insertion that names no
-    source falls back to the name of the medium the pages are read from.
-*/
-const OUString& getLinkSourceUrl(const InsertBookmarkOptions& rOptions,
-                                 const PageInsertionParams& rParams)
-{
-    return rOptions.aLinkSourceUrl.isEmpty() ? rParams.aBookmarkName : rOptions.aLinkSourceUrl;
-}
-}
 
 /** Concrete incarnations get called by lcl_IterateBookmarkPages, for
     every page in the bookmark document/list
@@ -803,7 +791,7 @@ void SdDrawDocument::insertAllPages(PageInsertionParams& rParams,
         if (rOptions.bLink)
         {
             // Assemble all link names
-            pPage->SetFileName(getLinkSourceUrl(rOptions, rParams));
+            pPage->SetFileName(rParams.aBookmarkName);
             pPage->SetBookmarkName(aNameMap[nBMSdPage]);
         }
 
@@ -921,7 +909,7 @@ void SdDrawDocument::insertSelectedPages(const PageNameList& rBookmarkList,
             if (rOptions.bLink)
             {
                 SdPage* pPage = static_cast<SdPage*>( GetPage(nActualInsertPos) );
-                pPage->SetFileName(getLinkSourceUrl(rOptions, rParams));
+                pPage->SetFileName(rParams.aBookmarkName);
                 pPage->SetBookmarkName(aPgName);
             }
 
@@ -1511,21 +1499,6 @@ void SdDrawDocument::CloseBookmarkDoc()
     maBookmarkFile.clear();
 }
 
-void SdDrawDocument::SetStagedLinkSourceFile(const OUString& rSourceReference,
-                                             const OUString& rFileUrl)
-{
-    if (rFileUrl.isEmpty())
-        maStagedLinkSourceFiles.erase(rSourceReference);
-    else
-        maStagedLinkSourceFiles[rSourceReference] = rFileUrl;
-}
-
-OUString SdDrawDocument::GetStagedLinkSourceFile(const OUString& rSourceReference) const
-{
-    const auto it = maStagedLinkSourceFiles.find(rSourceReference);
-    return it == maStagedLinkSourceFiles.end() ? OUString() : it->second;
-}
-
 // Is this document read-only?
 bool SdDrawDocument::IsReadOnly() const
 {
@@ -1562,6 +1535,13 @@ sd::SlideSectionManager& SdDrawDocument::GetSectionManager()
     if (!mpSectionManager)
         mpSectionManager.reset(new sd::SlideSectionManager(*this));
     return *mpSectionManager;
+}
+
+sd::SlideLinkManager& SdDrawDocument::GetSlideLinkManager()
+{
+    if (!mpSlideLinkManager)
+        mpSlideLinkManager.reset(new sd::SlideLinkManager(*this));
+    return *mpSlideLinkManager;
 }
 
 // Remove unused master pages and layouts
@@ -2540,13 +2520,11 @@ bool SdDrawDocument::ResolvePageLinks(
     const PageNameList &rBookmarkList,
     sal_uInt16 nInsertPos,
     bool bNoDialogs,
-    bool bCopy,
-    const OUString& rLinkSourceUrl)
+    bool bCopy)
 {
     // Use predefined options for page link resolution
     InsertBookmarkOptions options = InsertBookmarkOptions::ForPageLinks(bCopy, bNoDialogs);
     options.bMergeMasterPagesOnly = /*bMergeMasterPagesOnly*/false;
-    options.aLinkSourceUrl = rLinkSourceUrl;
     KeepPageLinks aKeepLinks(*this);
 
     // Create insertion parameters

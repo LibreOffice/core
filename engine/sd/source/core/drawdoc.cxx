@@ -89,6 +89,7 @@
 #include <svx/documentbullets.hxx>
 #include <drawdoc.hxx>
 #include <documentbulletwatcher.hxx>
+#include <SlideLinkManager.hxx>
 #include <SlideSectionManager.hxx>
 #include <sdpage.hxx>
 #include <anminfo.hxx>

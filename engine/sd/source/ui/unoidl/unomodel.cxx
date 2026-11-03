@@ -236,6 +236,7 @@
 #include <Window.hxx>
 #include <optsitem.hxx>
 #include <SlideLink.hxx>
+#include <SlideLinkManager.hxx>
 #include <SlideshowLayerRenderer.hxx>
 
 #include <vcl/pdfextoutdevdata.hxx>
@@ -2202,6 +2203,7 @@ const sal_uInt16 WID_MODEL_THEME = 15;
 const sal_uInt16 WID_MODEL_ALLOWLINKUPDATE    = 16;
 const sal_uInt16 WID_MODEL_SLIDESECTIONS      = 17;
 const sal_uInt16 WID_MODEL_ANIMATIONSOUNDLINK = 18;
+const sal_uInt16 WID_MODEL_SLIDELINKS         = 19;
 
 static const SvxItemPropertySet* ImplGetDrawModelPropertySet()
 {
@@ -2224,6 +2226,7 @@ static const SvxItemPropertySet* ImplGetDrawModelPropertySet()
         { u"Fonts"_ustr,                  WID_MODEL_FONTS,              cppu::UnoType<cpo::uno::Sequence<cpo::uno::Any>>::get(),                     beans::PropertyAttribute::READONLY, 0},
         { sUNO_Prop_InteropGrabBag,       WID_MODEL_INTEROPGRABBAG,     cppu::UnoType<cpo::uno::Sequence< beans::PropertyValue >>::get(),       0, 0},
         { u"SlideSections"_ustr,          WID_MODEL_SLIDESECTIONS,      cppu::UnoType<cpo::uno::Sequence< beans::PropertyValue >>::get(),       0, 0},
+        { u"SlideLinks"_ustr,             WID_MODEL_SLIDELINKS,         cppu::UnoType<cpo::uno::Sequence< beans::PropertyValue >>::get(),       0, 0},
         { u"HasExternalAnimationSoundLink"_ustr, WID_MODEL_ANIMATIONSOUNDLINK, cppu::UnoType<bool>::get(),       0, 0},
         { sUNO_Prop_Theme,                WID_MODEL_THEME,              cppu::UnoType<util::XTheme>::get(),       0, 0},
     };
@@ -5121,6 +5124,13 @@ void SdXImpressDocument::setPropertyValue( const OUString& aPropertyName, const 
                 mpDoc->GetSectionManager().SetSectionsFromPropertyValues(aSections);
             break;
         }
+        case WID_MODEL_SLIDELINKS:
+        {
+            cpo::uno::Sequence<beans::PropertyValue> aLinks;
+            if (aValue >>= aLinks)
+                mpDoc->GetSlideLinkManager().SetLinksFromPropertyValues(aLinks);
+            break;
+        }
         case WID_MODEL_ANIMATIONSOUNDLINK:
         {
             bool bHasLink = false;
@@ -5259,6 +5269,9 @@ cpo::uno::Any SdXImpressDocument::getPropertyValue( const OUString& PropertyName
             break;
         case WID_MODEL_SLIDESECTIONS:
             aAny <<= mpDoc->GetSectionManager().GetSectionsAsPropertyValues();
+            break;
+        case WID_MODEL_SLIDELINKS:
+            aAny <<= mpDoc->GetSlideLinkManager().GetLinksAsPropertyValues();
             break;
         case WID_MODEL_ANIMATIONSOUNDLINK:
             aAny <<= mpDoc->MaybeHasAnimationSoundLinks();
@@ -6331,7 +6344,6 @@ void SdXImpressDocument::moveSelectedParts(int nPosition, bool bDuplicate, int n
         SdPage* pPage;
         OUString aName;
         OUString aId;
-        sd::SlideSectionLink aLink;
     };
     std::vector<SectionAnchor> aAnchors;
 
@@ -6357,7 +6369,7 @@ void SdXImpressDocument::moveSelectedParts(int nPosition, bool bDuplicate, int n
                 }
             }
 
-            aAnchors.push_back({ pAnchor, rSec.maName, rSec.maId, rSec.maLink });
+            aAnchors.push_back({ pAnchor, rSec.maName, rSec.maId });
         }
 
         // Override one section's anchor with the first moved slide so it
@@ -6402,9 +6414,6 @@ void SdXImpressDocument::moveSelectedParts(int nPosition, bool bDuplicate, int n
                     aSec.maName = rAnchor.aName;
                     aSec.maId = rAnchor.aId;
                     aSec.mnStartIndex = static_cast<sal_Int32>(p);
-                    // The section keeps the slides it was linked with, so it stays linked while
-                    // it spans them in the same order.
-                    aSec.maLink = rAnchor.aLink;
                     aNewSections.push_back(aSec);
                     break;
                 }
@@ -7901,60 +7910,44 @@ bool SdXImpressDocument::getSlideLinks(tools::JsonWriter& rJsonWriter)
     if (!mpDoc)
         return false;
 
-    sd::SlideLink::WriteLinks(*mpDoc, rJsonWriter);
+    mpDoc->GetSlideLinkManager().WriteLinks(rJsonWriter);
     return true;
+}
+
+sal_Int32 SdXImpressDocument::refreshSlideLink(const OUString& rUnit, const OUString& rId,
+                                               const OUString& rSourceName,
+                                               const OUString& rFileUrl,
+                                               const OUString& rLastModifiedTime,
+                                               const OUString& rName,
+                                               std::vector<OString>* pNotUpdated)
+{
+    const std::optional<sd::SlideLinkKind> oKind = sd::ParseSlideLinkKind(rUnit);
+    if (!mpDoc || !oKind)
+        return -1;
+
+    return mpDoc->GetSlideLinkManager().Refresh(*oKind, rId, rSourceName, rFileUrl,
+                                                rLastModifiedTime, rName, pNotUpdated);
 }
 
 sal_Int32 SdXImpressDocument::refreshSlideLinks(const OUString& rSourceName,
                                                 const OUString& rFileUrl,
                                                 const OUString& rLastModifiedTime,
-                                                std::vector<OString>* pNotUpdated,
-                                                sal_Int32 nPageIndex)
+                                                std::vector<OString>* pNotUpdated)
 {
     if (!mpDoc)
         return -1;
 
-    return sd::SlideLink::Refresh(*mpDoc, rSourceName, rFileUrl, rLastModifiedTime, pNotUpdated,
-                                  nPageIndex);
+    return mpDoc->GetSlideLinkManager().RefreshSource(rSourceName, rFileUrl, rLastModifiedTime,
+                                                      pNotUpdated);
 }
 
-bool SdXImpressDocument::breakSlideLink(sal_Int32 nIndex)
+bool SdXImpressDocument::breakSlideLink(const OUString& rUnit, const OUString& rId, bool bDeep)
 {
-    if (!mpDoc)
+    const std::optional<sd::SlideLinkKind> oKind = sd::ParseSlideLinkKind(rUnit);
+    if (!mpDoc || !oKind)
         return false;
 
-    return sd::SlideLink::Break(*mpDoc, nIndex);
-}
-
-bool SdXImpressDocument::breakSectionLink(const OUString& rSectionId, bool bBreakSlides)
-{
-    if (!mpDoc)
-        return false;
-
-    sd::SlideSectionManager& rSections = mpDoc->GetSectionManager();
-    const sal_Int32 nSection
-        = rSections.GetSectionIndexForId(sd::SlideLink::NormaliseGuid(rSectionId));
-    if (!rSections.GetSectionLink(nSection))
-        return false;
-
-    SfxUndoManager* pUndoManager = mpDoc->beginUndoAction(SdResId(STR_UNDO_UNLINK_SLIDE_SECTION));
-    comphelper::ScopeGuard aLeaveUndo([this, pUndoManager]
-                                      { mpDoc->endUndoAction(/*bUndo=*/false, pUndoManager); });
-
-    if (!rSections.SetSectionLink(nSection, sd::SlideSectionLink()))
-        return false;
-
-    // A slide keeps its identifier when its source comes off, so the section spans the same slides
-    // and only the link of each slide changes.
-    if (bBreakSlides)
-    {
-        const sal_Int32 nStart = rSections.GetSection(nSection).mnStartIndex;
-        const sal_Int32 nEnd = nStart + rSections.GetSectionSlideCount(nSection);
-        for (sal_Int32 nSlide = nStart; nSlide < nEnd; ++nSlide)
-            sd::SlideLink::Break(*mpDoc, nSlide);
-    }
-
-    return true;
+    return mpDoc->GetSlideLinkManager().Break(*oKind, rId, bDeep);
 }
 
 namespace
@@ -7986,139 +7979,6 @@ bool collectPageNames(SdDrawDocument& rDoc, const std::vector<sal_Int32>& rPages
 
     return !rNames.empty();
 }
-
-/// Takes the source document off the pages of a run, which a plain insert leaves as pages of
-/// this document alone.
-void clearInsertedPageLinks(SdDrawDocument& rDoc, sal_uInt16 nFirstSlide, sal_uInt16 nSlideCount)
-{
-    for (sal_uInt16 nSlide = nFirstSlide; nSlide < nFirstSlide + nSlideCount; ++nSlide)
-    {
-        SdPage* pPage = rDoc.GetSdPage(nSlide, PageKind::Standard);
-        if (!pPage)
-            continue;
-
-        pPage->DisconnectLink();
-        pPage->SetFileName(OUString());
-        pPage->SetBookmarkName(OUString());
-    }
-}
-
-/// Marks on the pages the slide of the source document each one came from: the position that slide
-/// holds in the source when the run names the positions, and the identifier of the slide otherwise.
-void recordInsertedPageSources(SdDrawDocument& rDoc, SdDrawDocument& rSource,
-                               const std::vector<OUString>& rReadPages, sal_uInt16 nFirstSlide,
-                               sal_uInt16 nSlideCount,
-                               const std::vector<sal_Int32>& rSourcePositions)
-{
-    if (rReadPages.size() != static_cast<size_t>(nSlideCount))
-        return;
-
-    // The run names the position of every page it inserts or of none of them.
-    if (!rSourcePositions.empty() && rSourcePositions.size() != static_cast<size_t>(nSlideCount))
-        return;
-
-    for (sal_uInt16 nSlide = nFirstSlide; nSlide < nFirstSlide + nSlideCount; ++nSlide)
-    {
-        SdPage* pPage = rDoc.GetSdPage(nSlide, PageKind::Standard);
-        if (!pPage)
-            continue;
-
-        if (!rSourcePositions.empty())
-        {
-            // The page is linked to the position its slide holds in the source and to no
-            // identifier, so an update reads whichever slide stands there.
-            pPage->SetBookmarkName(
-                sd::SlideLink::MakePositionName(rSourcePositions[nSlide - nFirstSlide]));
-            pPage->SetSourcePageGuid(OUString());
-            continue;
-        }
-
-        bool bIsMasterPage = false;
-        const OUString& rReadName = rReadPages[nSlide - nFirstSlide];
-        const sal_uInt16 nRead = rSource.GetPageByName(rReadName, bIsMasterPage);
-        if (nRead == SDRPAGE_NOTFOUND || bIsMasterPage)
-            continue;
-
-        const SdPage* pReadPage = dynamic_cast<const SdPage*>(rSource.GetPage(nRead));
-        if (!pReadPage)
-            continue;
-
-        const OUString aOriginPage = sd::SlideLink::GetOriginPage(*pReadPage);
-        const OUString aSourceName = aOriginPage.isEmpty() ? rReadName : aOriginPage;
-
-        // empty name is intentional here
-        const bool bOwnName = sd::SlideLink::GetNamedPosition(aSourceName) == 0;
-        pPage->SetBookmarkName(bOwnName ? aSourceName : OUString());
-        pPage->SetSourcePageGuid(pReadPage->GetGuid().getOUString());
-    }
-}
-
-/// Records on the pages of a run the time the source document was last modified, so each linked
-/// page carries when its source was last seen.
-void stampInsertedPageSource(SdDrawDocument& rDoc, sal_uInt16 nFirstSlide, sal_uInt16 nSlideCount,
-                             const OUString& rModifiedTime)
-{
-    for (sal_uInt16 nSlide = nFirstSlide; nSlide < nFirstSlide + nSlideCount; ++nSlide)
-    {
-        SdPage* pPage = rDoc.GetSdPage(nSlide, PageKind::Standard);
-        if (pPage)
-            pPage->SetSourceModifiedTime(rModifiedTime);
-    }
-}
-
-/** Inserts the pages rNames of rSource at nInsertPos, a page position, as the slides from
-    nFirstSlide on. A linked insert records on each page the slide of the source it came from, by
-    rSourcePositions when that names any, and rModifiedTime when that is not empty. A plain insert
-    leaves the pages as pages of rDoc alone. Returns the number of slides inserted, or -1 when the
-    pages could not be inserted. */
-sal_Int32 insertSourcePages(SdDrawDocument& rDoc, SdDrawDocument& rSource,
-                            const std::vector<OUString>& rNames,
-                            const InsertBookmarkOptions& rOptions, sal_uInt16 nInsertPos,
-                            sal_uInt16 nFirstSlide, const std::vector<sal_Int32>& rSourcePositions,
-                            const OUString& rModifiedTime)
-{
-    const sal_uInt16 nSlidesBefore = rDoc.GetSdPageCount(PageKind::Standard);
-    if (!rDoc.InsertFileAsPage(rNames, /*pExchangeList=*/nullptr, rOptions, nInsertPos,
-                               rSource.GetDocSh(), /*oScaleObjects=*/true))
-        return -1;
-
-    const sal_uInt16 nInsertedCount = rDoc.GetSdPageCount(PageKind::Standard) - nSlidesBefore;
-    if (!rOptions.bLink)
-    {
-        clearInsertedPageLinks(rDoc, nFirstSlide, nInsertedCount);
-        return nInsertedCount;
-    }
-
-    // A linked page records the slide of the source document it came from, which is the slide the
-    // file was written from rather than the page it holds in the file.
-    recordInsertedPageSources(rDoc, rSource, rNames, nFirstSlide, nInsertedCount,
-                              rSourcePositions);
-    if (!rModifiedTime.isEmpty())
-        stampInsertedPageSource(rDoc, nFirstSlide, nInsertedCount, rModifiedTime);
-    return nInsertedCount;
-}
-
-/** The link of a section to the source section rSourceSectionId named rSourceSectionName, of the
-    source document rSourceReference as it was at rModifiedTime. The section holds the nSlideCount
-    slides from nFirstSlide on, each linked to the source slide its page records. */
-sd::SlideSectionLink makeSectionLink(SdDrawDocument& rDoc, sal_Int32 nFirstSlide,
-                                     sal_Int32 nSlideCount, const OUString& rSourceReference,
-                                     const OUString& rSourceSectionId,
-                                     const OUString& rSourceSectionName,
-                                     const OUString& rModifiedTime)
-{
-    sd::SlideSectionLink aLink;
-    aLink.maSourceReference = rSourceReference;
-    aLink.maSourceSectionId = rSourceSectionId;
-    aLink.maSourceSectionName = rSourceSectionName;
-    aLink.maSourceModifiedTime = rModifiedTime;
-    for (sal_Int32 nSlide = nFirstSlide; nSlide < nFirstSlide + nSlideCount; ++nSlide)
-    {
-        const SdPage* pPage = rDoc.GetSdPage(static_cast<sal_uInt16>(nSlide), PageKind::Standard);
-        aLink.maSourcePageGuids.push_back(pPage ? pPage->GetSourcePageGuid() : OUString());
-    }
-    return aLink;
-}
 } // namespace
 
 bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OString& rJsonOptions)
@@ -8131,8 +7991,9 @@ bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OSt
     bool bLink = false;
     OUString aSourceName;
     OUString aLastModifiedTime;
-    OUString aSourceSection;
-    OUString aSourceSectionName;
+    OUString aAs;
+    OUString aSourceId;
+    OUString aSourceUnitName;
     std::vector<sal_Int32> aPages;
     std::vector<sal_Int32> aSourcePositions;
     try
@@ -8147,10 +8008,11 @@ bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OSt
                                         RTL_TEXTENCODING_UTF8);
         aLastModifiedTime = OStringToOUString(aTree.get<std::string>("lastModifiedTime", ""),
                                               RTL_TEXTENCODING_UTF8);
-        aSourceSection = OStringToOUString(aTree.get<std::string>("sourceSection", ""),
-                                           RTL_TEXTENCODING_UTF8);
-        aSourceSectionName = OStringToOUString(aTree.get<std::string>("sourceSectionName", ""),
-                                               RTL_TEXTENCODING_UTF8);
+        aAs = OStringToOUString(aTree.get<std::string>("as", "slides"), RTL_TEXTENCODING_UTF8);
+        aSourceId = OStringToOUString(aTree.get<std::string>("sourceId", ""),
+                                      RTL_TEXTENCODING_UTF8);
+        aSourceUnitName = OStringToOUString(aTree.get<std::string>("sourceName", ""),
+                                            RTL_TEXTENCODING_UTF8);
         if (auto oPages = aTree.get_child_optional("slides"))
         {
             for (const auto& rPage : *oPages)
@@ -8173,23 +8035,22 @@ bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OSt
         return false;
     }
 
-    // A page keeps its link by the persistent link of the source document, any text the storage
-    // resolves to that document, so an insert that asks for links needs one to record.
+    // A link names the source document by the persistent link of that document, any text the
+    // storage resolves to it, so an insert that asks for links needs one to record.
     if (bLink && aSourceName.isEmpty())
         return false;
 
     // The pages of a source section go in as a section of their own. A linked section holds a
     // copy of the slides of its source section, each read by the identifier of its source slide,
     // so its pages are linked to no position.
-    const bool bSection = !aSourceSection.isEmpty();
+    const bool bSection = aAs == "section";
+    if (!bSection && aAs != "slides")
+        return false;
     if (bSection
-        && (!aSourcePositions.empty()
-            || sd::SlideLink::NormaliseGuid(aSourceSection).isEmpty()
-            || !sd::SlideLink::IsReadableSourceString(aSourceSectionName)
+        && (!aSourcePositions.empty() || sd::SlideLink::NormaliseGuid(aSourceId).isEmpty()
+            || !sd::SlideLink::IsReadableSourceString(aSourceUnitName)
             || !sd::SlideLink::IsReadableSourceString(aLastModifiedTime)))
         return false;
-
-    sd::SlideSectionManager& rSections = mpDoc->GetSectionManager();
 
     SdDrawDocument* pSource = mpDoc->OpenBookmarkDoc(rFileUrl);
     if (!pSource)
@@ -8206,158 +8067,57 @@ bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OSt
     sal_uInt16 nInsertPos = 0xFFFF;
     if (nAt >= 0 && nAt < mpDoc->GetSdPageCount(PageKind::Standard))
         nInsertPos = static_cast<sal_uInt16>(2 * nAt + 1);
-
-    InsertBookmarkOptions aOptions = InsertBookmarkOptions::ForSlideImport(bKeepDesign);
-    if (bLink)
-    {
-        aOptions.bLink = true;
-        aOptions.aLinkSourceUrl = sd::SlideLink::MakeSourceReference(aSourceName);
-    }
-
-    // The slides of a section and the section itself are one undo step.
-    SfxUndoManager* pUndoManager = bSection ? mpDoc->beginUndoAction() : nullptr;
-    comphelper::ScopeGuard aLeaveUndo(
-        [pUndoManager]
-        {
-            if (pUndoManager)
-                pUndoManager->LeaveListAction();
-        });
-
     const sal_uInt16 nFirstSlide = nInsertPos == 0xFFFF
                                        ? mpDoc->GetSdPageCount(PageKind::Standard)
                                        : static_cast<sal_uInt16>(nAt);
+
+    // The slides, their links and their section are one undo step.
+    SfxUndoManager* pUndoManager = mpDoc->beginUndoAction();
+    comphelper::ScopeGuard aLeaveUndo([this, pUndoManager]
+                                      { mpDoc->endUndoAction(/*bUndo=*/false, pUndoManager); });
+
+    // The pages go in one by one, and the links are announced once they are all in place.
+    const sd::SlideLinkManager::HoldAnnouncement aHold(mpDoc->GetSlideLinkManager());
+
     const sal_Int32 nInsertedCount
-        = insertSourcePages(*mpDoc, *pSource, aBookmarkList, aOptions, nInsertPos, nFirstSlide,
-                            aSourcePositions, aLastModifiedTime);
+        = sd::SlideLink::InsertPages(*mpDoc, *pSource, aBookmarkList,
+                                     InsertBookmarkOptions::ForSlideImport(bKeepDesign),
+                                     nInsertPos);
     if (nInsertedCount < 0)
         return false;
 
+    // The slides stay in when they cannot be linked, as pages of this document alone.
+    sd::SlideLinkManager& rLinks = mpDoc->GetSlideLinkManager();
+    if (bLink
+        && !rLinks.LinkInsertedPages(*pSource, aBookmarkList, nFirstSlide, nInsertedCount,
+                                     aSourcePositions, aSourceName, aLastModifiedTime))
+        SAL_WARN("sd", "the inserted slides could not be linked to their source");
+
     if (bSection)
     {
-        const sd::SlideSectionLink aLink
-            = bLink ? makeSectionLink(*mpDoc, nFirstSlide, nInsertedCount,
-                                      aOptions.aLinkSourceUrl, aSourceSection,
-                                      aSourceSectionName, aLastModifiedTime)
-                    : sd::SlideSectionLink();
-
         // The slides stay in when the section cannot be added, as pages linked one by one.
-        const OUString aSectionName = aSourceSectionName.isEmpty()
-                                          ? SdResId(STR_DEFAULT_SLIDE_SECTION_NAME)
-                                          : aSourceSectionName;
-        if (!rSections.AddInsertedSection(nFirstSlide, nInsertedCount, aSectionName, aLink))
-            SAL_WARN("sd", "the inserted slides could not be added as a section");
+        bool bAdded = false;
+        if (bLink)
+            bAdded = rLinks.LinkInsertedSection(nFirstSlide, nInsertedCount,
+                                                { aSourceId, aSourceUnitName }, aSourceName,
+                                                aLastModifiedTime);
+        else
+            bAdded = mpDoc->GetSectionManager().AddInsertedSection(
+                nFirstSlide, nInsertedCount,
+                aSourceUnitName.isEmpty() ? SdResId(STR_DEFAULT_SLIDE_SECTION_NAME)
+                                          : aSourceUnitName);
+        SAL_WARN_IF(!bAdded, "sd", "the inserted slides could not be added as a section");
     }
 
     return true;
 }
 
-sal_Int32 SdXImpressDocument::updateLinkedSection(const OUString& rSectionId,
-                                                  const OUString& rSourceName,
-                                                  const OUString& rFileUrl,
-                                                  const OUString& rLastModifiedTime,
-                                                  const OUString& rSourceSectionName)
-{
-    // The slides are read from a file staged on this machine, as a refresh of linked pages reads
-    // them.
-    if (!mpDoc || !sd::SlideLink::IsLocalFile(rFileUrl))
-        return -1;
-
-    if (!sd::SlideLink::IsReadableSourceString(rLastModifiedTime)
-        || !sd::SlideLink::IsReadableSourceString(rSourceSectionName))
-        return -1;
-
-    sd::SlideSectionManager& rSections = mpDoc->GetSectionManager();
-    const sal_Int32 nSection
-        = rSections.GetSectionIndexForId(sd::SlideLink::NormaliseGuid(rSectionId));
-    const sd::SlideSectionLink* pLink = rSections.GetSectionLink(nSection);
-    if (!pLink || pLink->maSourceReference != sd::SlideLink::MakeSourceReference(rSourceName))
-        return -1;
-
-    // The link changes below, and the old one says what the section was linked with.
-    const sd::SlideSectionLink aOldLink = *pLink;
-    const OUString aSectionId = rSections.GetSection(nSection).maId;
-
-    // A file staged under a name used before holds other slides this time.
-    mpDoc->CloseBookmarkDoc();
-    SdDrawDocument* pSource = mpDoc->OpenBookmarkDoc(rFileUrl, /*bNoDialogs=*/true);
-    if (!pSource)
-        return -1;
-
-    comphelper::ScopeGuard aCloseSource([this] { mpDoc->CloseBookmarkDoc(); });
-
-    std::vector<OUString> aBookmarkList;
-    if (!collectPageNames(*pSource, {}, aBookmarkList))
-        return -1;
-
-    SfxUndoManager* pUndoManager
-        = mpDoc->beginUndoAction(SdResId(STR_UNDO_UPDATE_LINKED_SECTION));
-    comphelper::ScopeGuard aLeaveUndo([this, pUndoManager]
-                                      { mpDoc->endUndoAction(/*bUndo=*/false, pUndoManager); });
-
-    // The fresh slides go in after the old ones, so they join the section and the section always
-    // holds slides. Then the old slides go. The slides keep the design of the source, as a refresh
-    // of a linked slide does.
-    const sal_Int32 nStart = rSections.GetSection(nSection).mnStartIndex;
-    const sal_Int32 nOldCount = rSections.GetSectionSlideCount(nSection);
-    const sal_Int32 nEnd = nStart + nOldCount;
-    const sal_uInt16 nInsertPos = nEnd < mpDoc->GetSdPageCount(PageKind::Standard)
-                                      ? static_cast<sal_uInt16>(2 * nEnd + 1)
-                                      : 0xFFFF;
-
-    InsertBookmarkOptions aOptions = InsertBookmarkOptions::ForSlideImport(/*bKeepDesign=*/true);
-    aOptions.bLink = true;
-    aOptions.aLinkSourceUrl = aOldLink.maSourceReference;
-    const sal_Int32 nInsertedCount
-        = insertSourcePages(*mpDoc, *pSource, aBookmarkList, aOptions, nInsertPos,
-                            static_cast<sal_uInt16>(nEnd), {}, rLastModifiedTime);
-    if (nInsertedCount < 0)
-        return -1;
-
-    rtl::Reference<SdDrawPagesAccess> xPages = getSdDrawPages();
-    for (sal_Int32 nSlide = nEnd - 1; nSlide >= nStart; --nSlide)
-    {
-        uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(nSlide), uno::UNO_QUERY);
-        xPages->remove(xPage);
-    }
-
-    // The section follows the name of its source section until somebody renames it here.
-    const sal_Int32 nUpdated = rSections.GetSectionIndexForId(aSectionId);
-    const OUString aSourceSectionName
-        = rSourceSectionName.isEmpty() ? aOldLink.maSourceSectionName : rSourceSectionName;
-    const OUString& rName = rSections.GetSection(nUpdated).maName;
-    if (rName == aOldLink.maSourceSectionName && !aSourceSectionName.isEmpty()
-        && rName != aSourceSectionName)
-    {
-        if (mpDoc->IsUndoEnabled())
-            mpDoc->AddUndo(std::make_unique<UndoSlideSection>(
-                *mpDoc, SdResId(STR_UNDO_RENAME_SLIDE_SECTION)));
-        rSections.RenameSection(nUpdated, aSourceSectionName);
-    }
-
-    // The slides stay in when the section cannot be linked, as pages linked one by one.
-    if (!rSections.SetSectionLink(
-            nUpdated, makeSectionLink(*mpDoc, nStart, nInsertedCount, aOldLink.maSourceReference,
-                                      aOldLink.maSourceSectionId, aSourceSectionName,
-                                      rLastModifiedTime)))
-        SAL_WARN("sd", "the updated section could not be linked again");
-
-    return nInsertedCount;
-}
-
 sal_Int32 SdXImpressDocument::getSlideIndexOfGuid(const OUString& rGuid)
 {
-    if (!mpDoc || rGuid.isEmpty())
+    if (!mpDoc)
         return -1;
 
-    for (sal_uInt16 nIndex = 0, nCount = mpDoc->GetSdPageCount(PageKind::Standard); nIndex < nCount;
-         ++nIndex)
-    {
-        const SdPage* pPage = mpDoc->GetSdPage(nIndex, PageKind::Standard);
-        if (pPage && pPage->GetGuid().getOUString() == rGuid)
-            return nIndex;
-    }
-
-    return -1;
+    return sd::SlideLink::GetPageIndex(*mpDoc, rGuid);
 }
 
 bool SdXImpressDocument::exportPages(const std::vector<sal_Int32>& rPages, const OUString& rFileUrl)
@@ -8435,6 +8195,27 @@ bool SdXImpressDocument::exportPages(const std::vector<sal_Int32>& rPages, const
             pPage->SetFileName(sd::SlideLink::OriginReference());
             pPage->SetBookmarkName(aPageNames[nPage]);
         }
+
+        // The written presentation carries the sections of the pages it holds, under the
+        // identifiers and names they have here, trimmed to the written pages. Each section is
+        // written once and starts on the first written page of it, so a page of it written apart
+        // from the others falls into the section written before it.
+        const sd::SlideSectionManager& rSections = mpDoc->GetSectionManager();
+        std::vector<sd::SlideSection> aWrittenSections;
+        std::set<sal_Int32> aWrittenSectionIndices;
+        for (sal_uInt16 nPage = 0; nPage < nWritten; ++nPage)
+        {
+            const sal_Int32 nSection
+                = rSections.GetSectionIndexForSlide(rPages.empty() ? nPage : rPages[nPage]);
+            if (nSection >= 0 && aWrittenSectionIndices.insert(nSection).second)
+            {
+                sd::SlideSection aSection = rSections.GetSection(nSection);
+                aSection.mnStartIndex = nPage;
+                aWrittenSections.push_back(std::move(aSection));
+            }
+        }
+        if (!aWrittenSections.empty())
+            pTarget->GetSectionManager().RestoreSectionsSnapshot(aWrittenSections);
     }
 
     try

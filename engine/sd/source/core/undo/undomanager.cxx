@@ -19,6 +19,11 @@
 
 #include <undo/undomanager.hxx>
 
+#include <optional>
+
+#include <SlideLinkManager.hxx>
+#include <drawdoc.hxx>
+
 using namespace sd;
 
 UndoManager::UndoManager()
@@ -49,6 +54,27 @@ void UndoManager::AddUndoAction( std::unique_ptr<SfxUndoAction> pAction, bool bT
 void UndoManager::SetLinkedUndoManager (SfxUndoManager* pLinkedUndoManager)
 {
     mpLinkedUndoManager = pLinkedUndoManager;
+}
+
+void UndoManager::SetDocument(SdDrawDocument* pDoc)
+{
+    mpDoc = pDoc;
+}
+
+bool UndoManager::Undo()
+{
+    std::optional<SlideLinkManager::HoldAnnouncement> oHold;
+    if (mpDoc)
+        oHold.emplace(mpDoc->GetSlideLinkManager());
+    return SdrUndoManager::Undo();
+}
+
+bool UndoManager::Redo()
+{
+    std::optional<SlideLinkManager::HoldAnnouncement> oHold;
+    if (mpDoc)
+        oHold.emplace(mpDoc->GetSlideLinkManager());
+    return SdrUndoManager::Redo();
 }
 
 void UndoManager::ClearLinkedRedoActions()

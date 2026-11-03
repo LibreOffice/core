@@ -552,65 +552,58 @@ public:
         before as "at", whether the pages keep the design of the file they came from as
         "keepDesign", whether they stay linked to the document named by "source" as "link",
         and the time that source was last modified as "lastModifiedTime", recorded on each
-        linked page. "sourceSection" names the identifier of the section of the source the
-        pages make up, and "sourceSectionName" its name: the pages then go in as a section of
-        their own at "at", linked to that source section when "link" is set, and the pages that
-        follow them keep a section apart from it (Impress only function) */
+        link. "as" says what the pages go in as: "slides", the default, or "section", a section
+        of their own at "at" whose identifier in the source is "sourceId" and whose name there
+        is "sourceName", linked to that source section when "link" is set. The pages that
+        follow a section keep a section apart from it. The pages, the section and the links are
+        one undo step (Impress only function) */
     virtual bool insertPagesFromFile(const OUString& /*rFileUrl*/, const OString& /*rJsonOptions*/)
     {
         return false;
     }
 
-    /** Writes the pages of the document that are linked to a source document, grouped by the
-        source they were made from (Impress only function) */
+    /** Writes the links of the document to the slides and sections of other documents, one flat
+        list in document order (Impress only function) */
     virtual bool getSlideLinks(tools::JsonWriter& /*rJsonWriter*/) { return false; }
 
-    /** Refreshes the pages linked to one source document from a local file holding the source
-        pages, and returns how many pages were refreshed; -1 when no page is linked to that source
-        or the file could not be read. rLastModifiedTime is the time the source was last modified
-        now, recorded on each refreshed page. pNotUpdated, when it is given, takes the
-        identifier of every page the file held no slide for. nPageIndex names one page in the page
-        list of the standard pages, which is then the only page refreshed, or is -1 for every page
-        linked to the source (Impress only function) */
+    /** Replaces the span of one link with what a local file holding a presentation the source
+        wrote out holds for its unit: the slide the link follows, or the slides of the section it
+        follows. rUnit is "slide" or "section" and rId the identifier of the unit in this
+        document. rSourceName is the source document the link is to, rLastModifiedTime the time
+        it was last modified now, and rName the name the unit has in the source now, which a
+        section takes when its own name is still the name the source section had. pNotUpdated,
+        when it is given, takes the identifier of every slide the file held nothing for. One undo
+        step. Returns the number of slides replaced; -1 when no such link holds or it is not
+        linked to that source, when rFileUrl is not a file on this machine, when the time or the
+        name is longer than 128 characters or holds a control character, or when the file could
+        not be read (Impress only function) */
+    virtual sal_Int32 refreshSlideLink(const OUString& /*rUnit*/, const OUString& /*rId*/,
+                                       const OUString& /*rSourceName*/,
+                                       const OUString& /*rFileUrl*/,
+                                       const OUString& /*rLastModifiedTime*/,
+                                       const OUString& /*rName*/,
+                                       std::vector<OString>* /*pNotUpdated*/ = nullptr)
+    {
+        return -1;
+    }
+
+    /** refreshSlideLink for every link to one source document that is under no other link, from
+        one local file, in one undo step. Returns the number of slides replaced; -1 when no link to
+        that source holds, when rFileUrl is not a file on this machine, or when the file could not
+        be read (Impress only function) */
     virtual sal_Int32 refreshSlideLinks(const OUString& /*rSourceName*/,
                                         const OUString& /*rFileUrl*/,
                                         const OUString& /*rLastModifiedTime*/,
-                                        std::vector<OString>* /*pNotUpdated*/ = nullptr,
-                                        sal_Int32 /*nPageIndex*/ = -1)
+                                        std::vector<OString>* /*pNotUpdated*/ = nullptr)
     {
         return -1;
     }
 
-    /** Brings the linked section with the identifier rSectionId up to date with its source
-        section, from a local file holding the slides of that source section in source order. The
-        section then holds a fresh copy of each of those slides and no other slide, in that order,
-        so a slide edited in the document is replaced as well. rSourceName is the source document
-        the section is linked to, rLastModifiedTime the time it was last modified now, and
-        rSourceSectionName the name the source section has now. The whole update is one undo step.
-        Returns the number of slides the section holds afterwards; -1 when no section with that
-        identifier is linked to that source, when rFileUrl is not a file on this machine, when the
-        time or the name is longer than 128 characters or holds a control character, or when the
-        file could not be read (Impress only function)
-    */
-    virtual sal_Int32 updateLinkedSection(const OUString& /*rSectionId*/,
-                                          const OUString& /*rSourceName*/,
-                                          const OUString& /*rFileUrl*/,
-                                          const OUString& /*rLastModifiedTime*/,
-                                          const OUString& /*rSourceSectionName*/)
-    {
-        return -1;
-    }
-
-    /** Takes the source document off the page at nIndex in the page list of the standard pages,
-        which keeps the content it holds, and returns whether that page was linked to a source
-        (Impress only function) */
-    virtual bool breakSlideLink(sal_Int32 /*nIndex*/) { return false; }
-
-    /** Takes the link to its source section off the section with the identifier rSectionId, which
-        keeps the slides it holds. With bBreakSlides, each slide of the section loses its source
-        document as well, as breakSlideLink does for one page. The whole change is one undo step.
-        Returns whether the section was linked to a source section (Impress only function) */
-    virtual bool breakSectionLink(const OUString& /*rSectionId*/, bool /*bBreakSlides*/)
+    /** Takes the link of the unit rId of kind rUnit, "slide" or "section", off. The unit keeps
+        its slides and becomes the document's own. With bDeep, every link beneath comes off as
+        well. One undo step. Returns whether the link held (Impress only function) */
+    virtual bool breakSlideLink(const OUString& /*rUnit*/, const OUString& /*rId*/,
+                                bool /*bDeep*/)
     {
         return false;
     }

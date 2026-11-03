@@ -49,6 +49,8 @@
 #include <undo/undomanager.hxx>
 #include <GraphicViewShell.hxx>
 #include <sdpage.hxx>
+#include <SlideLinkManager.hxx>
+#include <SlideSectionManager.hxx>
 #include <glob.hxx>
 #include <strings.hxx>
 #include <app.hrc>
@@ -127,11 +129,8 @@ public:
     void testInsertFileAsPageKeepDesignTwiceSharesMaster();
     void testInsertFileAsPageKeepDesignRenamedKeepsNotesMaster();
     void testInsertFileAsPageKeepDesignTwoDesignsOfOneName();
-    void testInsertFileAsPageLinkRecordsSource();
-    void testInsertFileAsPageLinkWithoutSourceRecordsMedium();
-    void testInsertWholeFileAsPagesLinkRecordsSource();
-    void testSlideLinkKeepsOnlyAReadableSourceGuid();
-    void testSlideLinkKeepsOnlyAReadableSourceTime();
+    void testInsertFileAsPageLinkRecordsMedium();
+    void testSlideLinkListKeepsOnlyReadableLinks();
 
 private:
     SdDrawDocument* loadSlideImportDocs();
@@ -181,11 +180,8 @@ public:
     CPPUNIT_TEST(testInsertFileAsPageKeepDesignTwiceSharesMaster);
     CPPUNIT_TEST(testInsertFileAsPageKeepDesignRenamedKeepsNotesMaster);
     CPPUNIT_TEST(testInsertFileAsPageKeepDesignTwoDesignsOfOneName);
-    CPPUNIT_TEST(testInsertFileAsPageLinkRecordsSource);
-    CPPUNIT_TEST(testInsertFileAsPageLinkWithoutSourceRecordsMedium);
-    CPPUNIT_TEST(testInsertWholeFileAsPagesLinkRecordsSource);
-    CPPUNIT_TEST(testSlideLinkKeepsOnlyAReadableSourceGuid);
-    CPPUNIT_TEST(testSlideLinkKeepsOnlyAReadableSourceTime);
+    CPPUNIT_TEST(testInsertFileAsPageLinkRecordsMedium);
+    CPPUNIT_TEST(testSlideLinkListKeepsOnlyReadableLinks);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1938,51 +1934,10 @@ void SdMiscTest::testInsertFileAsPageKeepDesignTwiceSharesMaster()
                          pBackground->GetItemSet().Get(XATTR_FILLCOLOR).GetColorValue());
 }
 
-void SdMiscTest::testInsertFileAsPageLinkRecordsSource()
+void SdMiscTest::testInsertFileAsPageLinkRecordsMedium()
 {
-    // A page inserted as a link records the source document the caller named,
-    // rather than the file the pages were read from. The name a caller passes
-    // is one that still finds the source document the next time the document
-    // is opened, which the file a copy was read from need not be.
-    SdDrawDocument* pDoc = loadSlideImportDocs();
-
-    const OUString aSource = u"vnd.collabora.slide-source:Sales%20deck.odp"_ustr;
-    InsertBookmarkOptions aOptions = InsertBookmarkOptions::ForFileInsert(/*bLinkPages=*/true);
-    aOptions.aLinkSourceUrl = aSource;
-
-    std::vector<OUString> aBookmarkList{ u"SourceA"_ustr };
-    CPPUNIT_ASSERT(pDoc->InsertFileAsPage(aBookmarkList, nullptr, aOptions, 3, nullptr,
-                                          /*oScaleObjects=*/true));
-    pDoc->CloseBookmarkDoc();
-
-    SdPage* pInserted = pDoc->GetSdPage(1, PageKind::Standard);
-    CPPUNIT_ASSERT_EQUAL(aSource, pInserted->GetFileName());
-    CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pInserted->GetBookmarkName());
-
-    // Saving keeps the link on the page, as a reference to the source slide.
-    save(TestFilter::ODP);
-    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-    CPPUNIT_ASSERT_MESSAGE("Failed to get 'content.xml'", pXmlDoc);
-    CPPUNIT_ASSERT_EQUAL(
-        OUString(aSource + u"#SourceA"),
-        getXPath(pXmlDoc,
-                 "/office:document-content/office:body/office:presentation/draw:page[2]"_ostr,
-                 "href"));
-
-    // The saved reference names the same source document and page after the
-    // document is opened again, which is what a page keeps a link for.
-    loadFromURL(maTempFile.GetURL());
-    SdXImpressDocument* pReloaded = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pReloaded);
-    SdPage* pLinked = pReloaded->GetDoc()->GetSdPage(1, PageKind::Standard);
-    CPPUNIT_ASSERT_EQUAL(aSource, pLinked->GetFileName());
-    CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pLinked->GetBookmarkName());
-}
-
-void SdMiscTest::testInsertFileAsPageLinkWithoutSourceRecordsMedium()
-{
-    // An insertion that names no source keeps the older behaviour: the pages
-    // record the file they were read from.
+    // A page inserted as a link to a file records the file it was read from, which is the link
+    // the page resolves when it is updated.
     SdDrawDocument* pDoc = loadSlideImportDocs();
 
     std::vector<OUString> aBookmarkList{ u"SourceA"_ustr };
@@ -1997,75 +1952,27 @@ void SdMiscTest::testInsertFileAsPageLinkWithoutSourceRecordsMedium()
     CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pInserted->GetBookmarkName());
 }
 
-void SdMiscTest::testInsertWholeFileAsPagesLinkRecordsSource()
+void SdMiscTest::testSlideLinkListKeepsOnlyReadableLinks()
 {
-    // Inserting a whole file, rather than pages picked from it, records the
-    // named source on every page it brings in.
-    SdDrawDocument* pDoc = loadSlideImportDocs();
-
-    const OUString aSource = u"vnd.collabora.slide-source:Sales%20deck.odp"_ustr;
-    InsertBookmarkOptions aOptions = InsertBookmarkOptions::ForFileInsert(/*bLinkPages=*/true);
-    aOptions.aLinkSourceUrl = aSource;
-
-    // An empty list of page names asks for the whole file.
-    CPPUNIT_ASSERT(pDoc->InsertFileAsPage({}, nullptr, aOptions, 5, nullptr,
-                                          /*oScaleObjects=*/true));
-    pDoc->CloseBookmarkDoc();
-
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pDoc->GetSdPageCount(PageKind::Standard));
-    for (sal_uInt16 nSdPage = 2; nSdPage <= 3; ++nSdPage)
-    {
-        SdPage* pInserted = pDoc->GetSdPage(nSdPage, PageKind::Standard);
-        CPPUNIT_ASSERT_EQUAL(aSource, pInserted->GetFileName());
-        CPPUNIT_ASSERT(!pInserted->GetBookmarkName().isEmpty());
-    }
-}
-
-void SdMiscTest::testSlideLinkKeepsOnlyAReadableSourceGuid()
-{
-    // A file names the slide a linked page came from by the identifier of that slide. The file
-    // read here names one slide by an identifier and the next by a value of another shape, which
-    // names no slide: the page is left with none and the presentation opens as any other does.
-    createSdImpressDoc("slide-link-bad-guid.fodp");
+    // The file lists six links. One describes its slide and names a source slide by an identifier,
+    // which is kept in the form a slide keeps its own identifier in. The others each hold a value
+    // the record cannot keep: a source identifier of no shape, a modified time longer than any
+    // time stamp, a section link that lists one slide where the section spans two, a slide link
+    // that lists another slide than its own, and a link with no source document. They are
+    // dropped, and the presentation opens as any other does, with its section.
+    createSdImpressDoc("slide-links-unreadable.fodp");
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pDoc->GetSectionManager().GetSectionCount());
 
-    SdPage* pRead = pDoc->GetSdPage(0, PageKind::Standard);
-    CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr, pRead->GetFileName());
-    CPPUNIT_ASSERT_EQUAL(u"{11111111-1111-1111-1111-111111111111}"_ustr,
-                         pRead->GetSourcePageGuid());
-
-    // The source document the page came from and the time it was last modified are what the file
-    // holds, so the page keeps them whatever the identifier beside them came to.
-    SdPage* pUnread = pDoc->GetSdPage(1, PageKind::Standard);
-    CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr, pUnread->GetFileName());
-    CPPUNIT_ASSERT_EQUAL(u"2021-01-01T00:00:00Z"_ustr, pUnread->GetSourceModifiedTime());
-    CPPUNIT_ASSERT_EQUAL(OUString(), pUnread->GetSourcePageGuid());
-
-    // An identifier is kept in the form a page writes its own (uppercase)
-    SdPage* pLowercase = pDoc->GetSdPage(2, PageKind::Standard);
-    CPPUNIT_ASSERT_EQUAL(u"{ABCDEF01-2345-6789-ABCD-EF0123456789}"_ustr,
-                         pLowercase->GetSourcePageGuid());
-}
-
-void SdMiscTest::testSlideLinkKeepsOnlyAReadableSourceTime()
-{
-    // The fourth page of the file records a time the source was last modified that is far
-    // longer than any time stamp: the page is left with no time, and keeps the rest of what
-    // it records.
-    createSdImpressDoc("slide-link-bad-guid.fodp");
-    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXImpressDocument);
-    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pDoc->GetSdPageCount(PageKind::Standard));
-
-    SdPage* pPage = pDoc->GetSdPage(3, PageKind::Standard);
-    CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr, pPage->GetFileName());
-    CPPUNIT_ASSERT_EQUAL(u"{22222222-2222-2222-2222-222222222222}"_ustr,
-                         pPage->GetSourcePageGuid());
-    CPPUNIT_ASSERT_EQUAL(OUString(), pPage->GetSourceModifiedTime());
+    const std::vector<sd::SlideLinkRecord> aLinks = pDoc->GetSlideLinkManager().GetLinks();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aLinks.size());
+    CPPUNIT_ASSERT_EQUAL(u"{11111111-1111-1111-1111-111111111111}"_ustr, aLinks[0].maId);
+    CPPUNIT_ASSERT_EQUAL(u"Q3 deck.odp"_ustr, aLinks[0].maSource);
+    CPPUNIT_ASSERT_EQUAL(u"{ABCDEF01-2345-6789-ABCD-EF0123456789}"_ustr, aLinks[0].maSourceId);
+    CPPUNIT_ASSERT_EQUAL(u"2021-01-01T00:00:00Z"_ustr, aLinks[0].maLastModifiedTime);
 }
 
 CPPUNIT_TEST_FIXTURE(SdMiscTest, testCanvasPreviewTransformRoundTrip)

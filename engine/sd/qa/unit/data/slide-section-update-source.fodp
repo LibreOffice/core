@@ -4,6 +4,7 @@
                  xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
                  xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
                  xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
+                 xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0"
                  office:version="1.2"
                  office:mimetype="application/vnd.oasis.opendocument.presentation">
  <office:body>
@@ -23,6 +24,14 @@
      <draw:text-box><text:p>Source one</text:p></draw:text-box>
     </draw:frame>
    </draw:page>
+   <loext:section-list>
+    <loext:section loext:name="Opening, revised"
+                   loext:identifier="{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}">
+     <loext:section-slide loext:name="page1"/>
+     <loext:section-slide loext:name="page2"/>
+     <loext:section-slide loext:name="page3"/>
+    </loext:section>
+   </loext:section-list>
   </office:presentation>
  </office:body>
 </office:document>

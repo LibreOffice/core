@@ -45,7 +45,6 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/svapp.hxx>
 #include <Annotation.hxx>
-#include <SlideLink.hxx>
 #include <svx/annotation/AnnotationEnumeration.hxx>
 #include <createunopageimpl.hxx>
 #include <unomodel.hxx>
@@ -112,7 +111,7 @@ enum WID_PAGE
     WID_PAGE_DATETIMETEXT, WID_PAGE_DATETIMEFORMAT, WID_TRANSITION_TYPE, WID_TRANSITION_SUBTYPE,
     WID_TRANSITION_DIRECTION, WID_TRANSITION_FADE_COLOR, WID_TRANSITION_DURATION, WID_LOOP_SOUND,
     WID_NAVORDER, WID_PAGE_PREVIEWMETAFILE, WID_PAGE_THEME, WID_PAGE_THEME_UNO_REPRESENTATION,
-    WID_PAGE_SLIDE_LAYOUT, WID_PAGE_GUID, WID_PAGE_SOURCE_MODIFIED_TIME, WID_PAGE_SOURCE_PAGE_GUID
+    WID_PAGE_SLIDE_LAYOUT, WID_PAGE_GUID
 };
 
 }
@@ -149,8 +148,6 @@ static const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, Page
         { sUNO_Prop_IsBackgroundObjectsVisible,   WID_PAGE_BACKOBJVIS,    cppu::UnoType<bool>::get(),                        0, 0},
         { sUNO_Prop_UserDefinedAttributes,WID_PAGE_USERATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),         0,     0},
         { sUNO_Prop_BookmarkURL,          WID_PAGE_BOOKMARK,  ::cppu::UnoType<OUString>::get(),             0,  0},
-        { sUNO_Prop_SourceModifiedTime,   WID_PAGE_SOURCE_MODIFIED_TIME, ::cppu::UnoType<OUString>::get(),  0,  0},
-        { sUNO_Prop_SourcePageGuid,       WID_PAGE_SOURCE_PAGE_GUID, ::cppu::UnoType<OUString>::get(),      0,  0},
         { u"HighResDuration"_ustr,              WID_PAGE_HIGHRESDURATION,  ::cppu::UnoType<double>::get(),            0,  0},
         { u"IsBackgroundDark"_ustr ,            WID_PAGE_ISDARK,    cppu::UnoType<bool>::get(),                        beans::PropertyAttribute::READONLY, 0},
         { u"IsFooterVisible"_ustr,              WID_PAGE_FOOTERVISIBLE, cppu::UnoType<bool>::get(),                    0, 0},
@@ -223,8 +220,6 @@ static const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, Page
         { u"" UNO_NAME_PAGE_PREVIEWMETAFILE ""_ustr, WID_PAGE_PREVIEWMETAFILE, cppu::UnoType<cpo::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},\
         { sUNO_Prop_UserDefinedAttributes,WID_PAGE_USERATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),         0,     0},                          \
         { sUNO_Prop_BookmarkURL,          WID_PAGE_BOOKMARK,  ::cppu::UnoType<OUString>::get(),             0,  0},                                                                             \
-        { sUNO_Prop_SourceModifiedTime,   WID_PAGE_SOURCE_MODIFIED_TIME, ::cppu::UnoType<OUString>::get(),  0,  0},                                                                             \
-        { sUNO_Prop_SourcePageGuid,       WID_PAGE_SOURCE_PAGE_GUID, ::cppu::UnoType<OUString>::get(),      0,  0},                                                                             \
         { u"IsBackgroundDark"_ustr,        WID_PAGE_ISDARK,    cppu::UnoType<bool>::get(),                        beans::PropertyAttribute::READONLY, 0},                                             \
         { u"NavigationOrder"_ustr,         WID_NAVORDER, cppu::UnoType<css::container::XIndexAccess>::get(),0,  0},                                             \
         { u"Guid"_ustr,                    WID_PAGE_GUID, ::cppu::UnoType<OUString>::get(),             0,  0}
@@ -831,36 +826,6 @@ void SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName, const A
             setBookmarkURL( aBookmarkURL );
             break;
         }
-        case WID_PAGE_SOURCE_MODIFIED_TIME:
-        {
-            OUString aSourceModifiedTime;
-            if( ! ( aValue >>= aSourceModifiedTime ) )
-                throw lang::IllegalArgumentException();
-
-            if (!sd::SlideLink::IsReadableSourceString(aSourceModifiedTime))
-                throw lang::IllegalArgumentException();
-
-            setSourceModifiedTime( aSourceModifiedTime );
-            break;
-        }
-        case WID_PAGE_SOURCE_PAGE_GUID:
-        {
-            OUString aSourcePageGuid;
-            if( ! ( aValue >>= aSourcePageGuid ) )
-                throw lang::IllegalArgumentException();
-
-            // The value names a slide of the source document, in the braced form a page keeps
-            // its own identifier in, so a value of another shape names no slide at all.
-            if (!aSourcePageGuid.isEmpty())
-            {
-                aSourcePageGuid = sd::SlideLink::NormaliseGuid(aSourcePageGuid);
-                if (aSourcePageGuid.isEmpty())
-                    throw lang::IllegalArgumentException();
-            }
-
-            setSourcePageGuid( aSourcePageGuid );
-            break;
-        }
 
         case WID_PAGE_HEADERVISIBLE:
         case WID_PAGE_HEADERTEXT:
@@ -1332,16 +1297,6 @@ Any SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         aAny <<= getBookmarkURL();
         break;
     }
-    case WID_PAGE_SOURCE_MODIFIED_TIME:
-    {
-        aAny <<= getSourceModifiedTime();
-        break;
-    }
-    case WID_PAGE_SOURCE_PAGE_GUID:
-    {
-        aAny <<= getSourcePageGuid();
-        break;
-    }
     case WID_PAGE_ISDARK:
     {
         aAny <<= GetPage()->GetPageBackgroundColor().IsDark();
@@ -1697,34 +1652,6 @@ void SdGenericDrawPage::setBookmarkURL( std::u16string_view rURL )
         static_cast<SdPage*>(SvxDrawPage::mpPage)->SetBookmarkName( aBookmarkName );
         static_cast<SdPage*>(SvxDrawPage::mpPage)->ConnectLink();
     }
-}
-
-OUString SdGenericDrawPage::getSourceModifiedTime() const
-{
-    if( SvxDrawPage::mpPage )
-        return static_cast<SdPage*>(SvxDrawPage::mpPage)->GetSourceModifiedTime();
-
-    return OUString();
-}
-
-void SdGenericDrawPage::setSourceModifiedTime( const OUString& rTime )
-{
-    if( SvxDrawPage::mpPage )
-        static_cast<SdPage*>(SvxDrawPage::mpPage)->SetSourceModifiedTime( rTime );
-}
-
-OUString SdGenericDrawPage::getSourcePageGuid() const
-{
-    if( SvxDrawPage::mpPage )
-        return static_cast<SdPage*>(SvxDrawPage::mpPage)->GetSourcePageGuid();
-
-    return OUString();
-}
-
-void SdGenericDrawPage::setSourcePageGuid( const OUString& rGuid )
-{
-    if( SvxDrawPage::mpPage )
-        static_cast<SdPage*>(SvxDrawPage::mpPage)->SetSourcePageGuid( rGuid );
 }
 
 void SdGenericDrawPage::SetLeftBorder( sal_Int32 nValue )

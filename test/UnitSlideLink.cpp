@@ -153,33 +153,49 @@ class UnitSlideLink : public UnitWSD
         return array;
     }
 
-    /// The parts of the slides one link list entry holds, in the order it
-    /// reports them, checking the source and the slide names on the way.
-    std::vector<std::string> getParts(const Poco::JSON::Object::Ptr& source,
+    /// The parts of the linked slides a link list holds, in the order it reports them, checking
+    /// the source and the slide names on the way.
+    std::vector<std::string> getParts(const Poco::JSON::Array::Ptr& links,
                                       std::size_t expectedSlides)
     {
-        LOK_ASSERT_MESSAGE("missing source entry", source);
-        LOK_ASSERT_EQUAL(std::string(SourceName), source->getValue<std::string>("source"));
-        Poco::JSON::Array::Ptr slides = source->getArray("slides");
-        LOK_ASSERT_MESSAGE("missing slide list", slides);
-        LOK_ASSERT_EQUAL(expectedSlides, slides->size());
+        LOK_ASSERT_MESSAGE("missing link list", links);
 
         std::vector<std::string> parts;
-        for (std::size_t i = 0; i < slides->size(); ++i)
+        for (std::size_t i = 0; i < links->size(); ++i)
         {
-            Poco::JSON::Object::Ptr slide = slides->getObject(i);
-            LOK_ASSERT_MESSAGE("missing slide entry", slide);
+            Poco::JSON::Object::Ptr link = links->getObject(i);
+            LOK_ASSERT_MESSAGE("missing link entry", link);
+            if (link->getValue<std::string>("unit") != "slide")
+                continue;
+
+            LOK_ASSERT_EQUAL(std::string(SourceName), link->getValue<std::string>("source"));
             // The slides of the source carry no name of their own, so a page of
             // one of them names a slide only when the insert asked to keep the
             // name that slide holds by its position.
-            LOK_ASSERT_MESSAGE("a linked page must report a slide name entry",
-                               slide->has("name"));
-            const std::string part = slide->getValue<std::string>("part");
+            LOK_ASSERT_MESSAGE("a linked page must report a slide name entry", link->has("name"));
+            const std::string part = link->getValue<std::string>("id");
             LOK_ASSERT_MESSAGE("a linked page must report a part", !part.empty());
             parts.push_back(part);
         }
+        LOK_ASSERT_EQUAL(expectedSlides, parts.size());
 
         return parts;
+    }
+
+    /// The entries of a link list of the given unit, "slide" or "section".
+    std::vector<Poco::JSON::Object::Ptr> getLinksOfUnit(const Poco::JSON::Array::Ptr& links,
+                                                        const std::string& unit)
+    {
+        LOK_ASSERT_MESSAGE("missing link list", links);
+        std::vector<Poco::JSON::Object::Ptr> entries;
+        for (std::size_t i = 0; i < links->size(); ++i)
+        {
+            Poco::JSON::Object::Ptr link = links->getObject(i);
+            LOK_ASSERT_MESSAGE("missing link entry", link);
+            if (link->getValue<std::string>("unit") == unit)
+                entries.push_back(link);
+        }
+        return entries;
     }
 
     /// Send a command the way wsd does and assert the error reply it provokes.
@@ -236,17 +252,16 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkList()
         LOK_ASSERT_EQUAL(2, insertObject->getValue<int>("count"));
 
         Poco::JSON::Array::Ptr links = getLinks(socket);
-        LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), links->size());
-        const std::vector<std::string> parts = getParts(links->getObject(0), 2);
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(2), links->size());
+        const std::vector<std::string> parts = getParts(links, 2);
         LOK_ASSERT_MESSAGE("two linked pages must hold two parts", parts[0] != parts[1]);
 
         // Each linked page reports the source time the insert named.
-        Poco::JSON::Array::Ptr slides = links->getObject(0)->getArray("slides");
-        for (std::size_t i = 0; i < slides->size(); ++i)
+        for (std::size_t i = 0; i < links->size(); ++i)
         {
             LOK_ASSERT_EQUAL(std::string("2021-05-05T10:00:00Z"),
-                             slides->getObject(i)->getValue<std::string>("lastModifiedTime"));
-            LOK_ASSERT_EQUAL(std::string(), slides->getObject(i)->getValue<std::string>("name"));
+                             links->getObject(i)->getValue<std::string>("lastModifiedTime"));
+            LOK_ASSERT_EQUAL(std::string(), links->getObject(i)->getValue<std::string>("name"));
         }
 
         // A plain copy of the same slides is no link, so the list still holds
@@ -254,7 +269,7 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkList()
         stageSource(socket, "source.odp");
         helpers::sendTextFrame(socket, insertCommand("slides=0,1 keepdesign=0 link=0"), testname);
         helpers::getResponseString(socket, "slideimport:", testname);
-        getParts(getLinks(socket)->getObject(0), 2);
+        getParts(getLinks(socket), 2);
 
         // An insert that names the position a slide holds in the source links the page to that
         // position, which is what a source keeping no slide identifiers can be matched by later.
@@ -262,12 +277,14 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkList()
         helpers::sendTextFrame(
             socket, insertCommand("slides=2 at=0 keepdesign=0 link=1 sourcepositions=3"), testname);
         helpers::getResponseString(socket, "slideimport:", testname);
-        Poco::JSON::Array::Ptr named = getLinks(socket)->getObject(0)->getArray("slides");
+        Poco::JSON::Array::Ptr named = getLinks(socket);
         LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), named->size());
         LOK_ASSERT_MESSAGE("a page linked to a position must report the name of that position",
                            !named->getObject(0)->getValue<std::string>("name").empty());
-        LOK_ASSERT_MESSAGE("a page linked to a position must record no slide identifier",
-                           named->getObject(0)->getValue<std::string>("sourceGuid").empty());
+        LOK_ASSERT_MESSAGE("a page linked to a position must record the position and no slide "
+                           "identifier",
+                           named->getObject(0)->getValue<std::string>("sourceId") ==
+                               named->getObject(0)->getValue<std::string>("name"));
 
         // An insert that names no slides takes every page of the staged file, and reports how
         // many pages it added.
@@ -286,7 +303,7 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkList()
                                testname);
         helpers::getResponseString(socket, "slideimport:", testname);
         Poco::JSON::Array::Ptr linked = getLinks(socket);
-        LOK_ASSERT_EQUAL(static_cast<std::size_t>(2), linked->size());
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(4), linked->size());
         bool foundAddress = false;
         for (std::size_t i = 0; i < linked->size(); ++i)
         {
@@ -331,27 +348,26 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkSection()
         Poco::JSON::Object::Ptr insertObject = helpers::parseJsonReply(insertReply, "slideimport:");
         LOK_ASSERT_EQUAL(2, insertObject->getValue<int>("count"));
 
-        helpers::sendTextFrame(socket, "slidelink list", testname);
-        const std::string reply = helpers::getResponseString(socket, "slidelinks:", testname);
-        Poco::JSON::Array::Ptr sections =
-            helpers::parseJsonReply(reply, "slidelinks:")->getArray("sections");
-        LOK_ASSERT_MESSAGE("missing section list", sections);
-        LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), sections->size());
+        // The section comes with the two slides it spans, each linked under it.
+        Poco::JSON::Array::Ptr links = getLinks(socket);
+        std::vector<Poco::JSON::Object::Ptr> sections = getLinksOfUnit(links, "section");
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), sections.size());
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), links->size());
 
-        Poco::JSON::Object::Ptr section = sections->getObject(0);
+        Poco::JSON::Object::Ptr section = sections[0];
         LOK_ASSERT_EQUAL(std::string(SourceName), section->getValue<std::string>("source"));
         LOK_ASSERT_EQUAL(std::string("{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}"),
-                         section->getValue<std::string>("sourceSection"));
-        LOK_ASSERT_EQUAL(std::string("Opening slides"),
-                         section->getValue<std::string>("sourceSectionName"));
+                         section->getValue<std::string>("sourceId"));
         LOK_ASSERT_EQUAL(std::string("Opening slides"), section->getValue<std::string>("name"));
         LOK_ASSERT_EQUAL(std::string("2021-05-05T10:00:00Z"),
                          section->getValue<std::string>("lastModifiedTime"));
         LOK_ASSERT_EQUAL(static_cast<std::size_t>(2), section->getArray("slides")->size());
+        const std::string sectionId = section->getValue<std::string>("id");
+        for (const Poco::JSON::Object::Ptr& slide : getLinksOfUnit(links, "slide"))
+            LOK_ASSERT_EQUAL(sectionId, slide->getValue<std::string>("parent"));
 
         // An update of the section gives it every slide of the staged file, which holds the
         // slides its source section holds now, and the new name of that source section.
-        const std::string sectionId = section->getValue<std::string>("section");
         const std::string encodedSectionId =
             "%7B" + sectionId.substr(1, sectionId.size() - 2) + "%7D";
         stageSource(socket, "staged.odp");
@@ -360,10 +376,11 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkSection()
                   " sectionname=Opening%20slides%2C%20revised");
         const std::string updateListReply =
             helpers::getResponseString(socket, "slidelinks:", testname);
-        sections = helpers::parseJsonReply(updateListReply, "slidelinks:")->getArray("sections");
-        LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), sections->size());
-        section = sections->getObject(0);
-        LOK_ASSERT_EQUAL(sectionId, section->getValue<std::string>("section"));
+        sections = getLinksOfUnit(
+            helpers::parseJsonReply(updateListReply, "slidelinks:")->getArray("links"), "section");
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), sections.size());
+        section = sections[0];
+        LOK_ASSERT_EQUAL(sectionId, section->getValue<std::string>("id"));
         LOK_ASSERT_EQUAL(std::string("Opening slides, revised"),
                          section->getValue<std::string>("name"));
         LOK_ASSERT_EQUAL(std::string("2021-06-06T10:00:00Z"),
@@ -397,7 +414,6 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkSection()
             helpers::getResponseString(socket, "slidelinks:", testname);
         Poco::JSON::Object::Ptr breakList =
             helpers::parseJsonReply(breakListReply, "slidelinks:");
-        LOK_ASSERT_EQUAL(static_cast<std::size_t>(0), breakList->getArray("sections")->size());
         LOK_ASSERT_EQUAL(static_cast<std::size_t>(0), breakList->getArray("links")->size());
 
         // The section is linked to nothing now, and a break names a section by a GUID.
@@ -437,7 +453,7 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkRefresh()
                                testname);
         helpers::getResponseString(socket, "slideimport:", testname);
 
-        const std::vector<std::string> insertedParts = getParts(getLinks(socket)->getObject(0), 2);
+        const std::vector<std::string> insertedParts = getParts(getLinks(socket), 2);
 
         // An update that names one page reads that page alone: it holds a new
         // part afterwards and the other page of the source keeps the one it has.
@@ -446,9 +462,8 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkRefresh()
                   " file=one.odp part=" + insertedParts[1]);
         const std::string oneListReply =
             helpers::getResponseString(socket, "slidelinks:", testname);
-        const std::vector<std::string> parts = getParts(
-            helpers::parseJsonReply(oneListReply, "slidelinks:")->getArray("links")->getObject(0),
-            2);
+        const std::vector<std::string> parts =
+            getParts(helpers::parseJsonReply(oneListReply, "slidelinks:")->getArray("links"), 2);
         LOK_ASSERT_EQUAL(insertedParts[0], parts[0]);
         LOK_ASSERT_MESSAGE("the refreshed page holds a new part", parts[1] != insertedParts[1]);
         const std::string oneReply = helpers::getResponseString(socket, "slidelink:", testname);
@@ -475,8 +490,7 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkRefresh()
         // the list they hold now before it reports how many were refreshed.
         const std::string listReply = helpers::getResponseString(socket, "slidelinks:", testname);
         Poco::JSON::Object::Ptr listObject = helpers::parseJsonReply(listReply, "slidelinks:");
-        const std::vector<std::string> refreshedParts =
-            getParts(listObject->getArray("links")->getObject(0), 2);
+        const std::vector<std::string> refreshedParts = getParts(listObject->getArray("links"), 2);
         LOK_ASSERT_MESSAGE("a refreshed page holds a new part", refreshedParts[0] != parts[0]);
         LOK_ASSERT_MESSAGE("a refreshed page holds a new part", refreshedParts[1] != parts[1]);
 
@@ -525,7 +539,7 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkBreak()
                                testname);
         helpers::getResponseString(socket, "slideimport:", testname);
 
-        const std::vector<std::string> parts = getParts(getLinks(socket)->getObject(0), 2);
+        const std::vector<std::string> parts = getParts(getLinks(socket), 2);
 
         // Taking the source off the first of the two linked pages is a command a client sends.
         helpers::sendTextFrame(socket, "slidelink break part=" + parts[0], testname);
@@ -538,8 +552,7 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkBreak()
         // without being asked: the page that kept its source is the only one left.
         const std::string listReply = helpers::getResponseString(socket, "slidelinks:", testname);
         Poco::JSON::Object::Ptr listObject = helpers::parseJsonReply(listReply, "slidelinks:");
-        const std::vector<std::string> leftParts =
-            getParts(listObject->getArray("links")->getObject(0), 1);
+        const std::vector<std::string> leftParts = getParts(listObject->getArray("links"), 1);
         LOK_ASSERT_EQUAL(parts[1], leftParts[0]);
 
         // The page kept the content it holds, so the deck is the size it was.

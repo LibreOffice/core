@@ -9071,58 +9071,27 @@ std::string COKitDocumentImpl::getSlideLinks()
     return convertOStringToStdString(aLinks);
 }
 
-int COKitDocumentImpl::refreshSlideLinks(const char* pSourceName, const char* pUrl,
-                                         const char* pLastModifiedTime, std::string* pNotUpdated,
-                                         const char* pPart)
+namespace
 {
-    SolarMutexGuard aGuard;
-    SetLastExceptionMsg();
-
-    if (SfxViewShell::IsCurrentKitViewReadOnly())
-        return -1;
-
-    ITiledRenderable* pDoc = getTiledRenderable(this);
-    if (!pDoc)
-    {
-        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return -1;
-    }
-
-    // A linked page is a standard page, and the boundary names it by its page identifier. No part
-    // at all stands for every page linked to the source.
-    int nIndex = -1;
-    if (pPart && *pPart)
-    {
-        nIndex = pDoc->getPartIndex(pPart, 0);
-        if (nIndex < 0)
-            return -1;
-    }
-
-    std::vector<OString> aNotUpdated;
-    const sal_Int32 nRefreshed
-        = pDoc->refreshSlideLinks(getUString(pSourceName), getUString(pUrl),
-                                  getUString(pLastModifiedTime), &aNotUpdated, nIndex);
-    if (nRefreshed < 0 || !pNotUpdated)
-        return nRefreshed;
-
+/// The slides pNotUpdated reports, as a JSON array of their identifiers.
+std::string makeNotUpdatedList(const std::vector<OString>& rNotUpdated)
+{
     OStringBuffer aSlides("[");
-    for (size_t nSlide = 0; nSlide < aNotUpdated.size(); ++nSlide)
+    for (size_t nSlide = 0; nSlide < rNotUpdated.size(); ++nSlide)
     {
         if (nSlide)
             aSlides.append(',');
-        aSlides.append('"');
-        aSlides.append(aNotUpdated[nSlide]);
-        aSlides.append('"');
+        aSlides.append("\"" + rNotUpdated[nSlide] + "\"");
     }
     aSlides.append(']');
-
-    *pNotUpdated = convertOStringToStdString(aSlides.makeStringAndClear());
-    return nRefreshed;
+    return convertOStringToStdString(aSlides.makeStringAndClear());
+}
 }
 
-int COKitDocumentImpl::updateLinkedSection(const char* pSourceName, const char* pSection,
-                                           const char* pUrl, const char* pLastModifiedTime,
-                                           const char* pSourceSectionName)
+int COKitDocumentImpl::refreshSlideLink(const char* pUnit, const char* pId,
+                                        const char* pSourceName, const char* pUrl,
+                                        const char* pLastModifiedTime, const char* pName,
+                                        std::string* pNotUpdated)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -9137,19 +9106,53 @@ int COKitDocumentImpl::updateLinkedSection(const char* pSourceName, const char* 
         return -1;
     }
 
-    // The slides are read from a file staged on this machine, so that an update needs no network.
+    // The slides are read from a file staged on this machine, so that a refresh needs no network.
     if (!pUrl || !std::string_view(pUrl).starts_with("file://"))
     {
         SetLastExceptionMsg(u"Slides are read from a file and from nowhere else"_ustr);
         return -1;
     }
 
-    return pDoc->updateLinkedSection(getUString(pSection), getUString(pSourceName),
-                                     getUString(pUrl), getUString(pLastModifiedTime),
-                                     getUString(pSourceSectionName));
+    std::vector<OString> aNotUpdated;
+    const sal_Int32 nRefreshed = pDoc->refreshSlideLink(
+        getUString(pUnit), getUString(pId), getUString(pSourceName), getUString(pUrl),
+        getUString(pLastModifiedTime), getUString(pName), &aNotUpdated);
+    if (nRefreshed >= 0 && pNotUpdated)
+        *pNotUpdated = makeNotUpdatedList(aNotUpdated);
+    return nRefreshed;
 }
 
-bool COKitDocumentImpl::breakSlideLink(const char* pPart)
+int COKitDocumentImpl::refreshSlideLinks(const char* pSourceName, const char* pUrl,
+                                         const char* pLastModifiedTime, std::string* pNotUpdated)
+{
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    if (SfxViewShell::IsCurrentKitViewReadOnly())
+        return -1;
+
+    ITiledRenderable* pDoc = getTiledRenderable(this);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return -1;
+    }
+
+    if (!pUrl || !std::string_view(pUrl).starts_with("file://"))
+    {
+        SetLastExceptionMsg(u"Slides are read from a file and from nowhere else"_ustr);
+        return -1;
+    }
+
+    std::vector<OString> aNotUpdated;
+    const sal_Int32 nRefreshed = pDoc->refreshSlideLinks(
+        getUString(pSourceName), getUString(pUrl), getUString(pLastModifiedTime), &aNotUpdated);
+    if (nRefreshed >= 0 && pNotUpdated)
+        *pNotUpdated = makeNotUpdatedList(aNotUpdated);
+    return nRefreshed;
+}
+
+bool COKitDocumentImpl::breakSlideLink(const char* pUnit, const char* pId, bool bDeep)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -9164,30 +9167,7 @@ bool COKitDocumentImpl::breakSlideLink(const char* pPart)
         return false;
     }
 
-    // A linked page is a standard page, and the boundary names it by its page identifier.
-    const int nIndex = pPart ? pDoc->getPartIndex(pPart, 0) : -1;
-    if (nIndex < 0)
-        return false;
-
-    return pDoc->breakSlideLink(nIndex);
-}
-
-bool COKitDocumentImpl::breakSectionLink(const char* pSection, bool bBreakSlides)
-{
-    SolarMutexGuard aGuard;
-    SetLastExceptionMsg();
-
-    if (SfxViewShell::IsCurrentKitViewReadOnly())
-        return false;
-
-    ITiledRenderable* pDoc = getTiledRenderable(this);
-    if (!pDoc)
-    {
-        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return false;
-    }
-
-    return pSection && pDoc->breakSectionLink(getUString(pSection), bBreakSlides);
+    return pUnit && pId && pDoc->breakSlideLink(getUString(pUnit), getUString(pId), bDeep);
 }
 
 bool COKitDocumentImpl::exportPages(const char* pParts, const char* pUrl)

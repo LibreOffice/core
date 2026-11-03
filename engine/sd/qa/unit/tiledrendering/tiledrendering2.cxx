@@ -82,6 +82,7 @@
 #include <sdresid.hxx>
 #include <strings.hrc>
 #include <SlideLink.hxx>
+#include <SlideLinkManager.hxx>
 #include <unomodel.hxx>
 
 using namespace css;
@@ -553,6 +554,40 @@ boost::property_tree::ptree readLinks(SdXImpressDocument& rDocument)
     return aTree;
 }
 
+/// The links rDocument reports, each as parsed JSON, in the order they are reported.
+std::vector<boost::property_tree::ptree> readLinkList(SdXImpressDocument& rDocument)
+{
+    const boost::property_tree::ptree aTree = readLinks(rDocument);
+    std::vector<boost::property_tree::ptree> aLinks;
+    for (const auto& rLink : aTree.get_child("links"))
+        aLinks.push_back(rLink.second);
+    return aLinks;
+}
+
+/// The identifier of the slide at nIndex of rDoc.
+OUString getSlideId(SdDrawDocument& rDoc, sal_uInt16 nIndex)
+{
+    SdPage* pPage = rDoc.GetSdPage(nIndex, PageKind::Standard);
+    CPPUNIT_ASSERT(pPage);
+    return pPage->GetGuid().getOUString();
+}
+
+/// The link of the slide at nIndex of rDoc, or nothing when the slide is linked to nothing.
+const sd::SlideLinkRecord* findSlideLink(SdDrawDocument& rDoc, sal_uInt16 nIndex)
+{
+    return rDoc.GetSlideLinkManager().Find(sd::SlideLinkKind::Slide, getSlideId(rDoc, nIndex));
+}
+
+/// The link of the section at nSection of rDoc, or nothing when the section is linked to nothing.
+const sd::SlideLinkRecord* findSectionLink(SdDrawDocument& rDoc, sal_Int32 nSection)
+{
+    const sd::SlideSectionManager& rSections = rDoc.GetSectionManager();
+    CPPUNIT_ASSERT(nSection >= 0);
+    CPPUNIT_ASSERT(nSection < rSections.GetSectionCount());
+    return rDoc.GetSlideLinkManager().Find(sd::SlideLinkKind::Section,
+                                           rSections.GetSection(nSection).maId);
+}
+
 /// The text the slide at nIndex of rDoc shows, taking its shapes in order.
 OUString getSlideText(SdDrawDocument& rDoc, sal_uInt16 nIndex)
 {
@@ -622,28 +657,27 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkList)
     CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
         aSecondUrl, "{\"slides\":[0],\"link\":true,\"source\":\"Support deck.odp\"}"_ostr));
 
-    // Each source is reported once, under the name the pages were linked to, with the pages it
-    // holds in document order. The plain copy belongs to no source and is left out.
-    const boost::property_tree::ptree aLinks = readLinks(*pXImpressDocument);
-    std::vector<boost::property_tree::ptree> aSources;
-    for (const auto& rSource : aLinks.get_child("links"))
-        aSources.push_back(rSource.second);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aSources.size());
-    CPPUNIT_ASSERT_EQUAL(std::string("Q3 #1 100%.odp"), aSources[0].get<std::string>("source"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Support deck.odp"), aSources[1].get<std::string>("source"));
-
-    std::vector<boost::property_tree::ptree> aSlides;
-    for (const auto& rSlide : aSources[0].get_child("slides"))
-        aSlides.push_back(rSlide.second);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aSlides.size());
-    CPPUNIT_ASSERT_EQUAL(std::string("SourceA"), aSlides[0].get<std::string>("name"));
-    CPPUNIT_ASSERT_EQUAL(std::string("TargetOne"), aSlides[1].get<std::string>("name"));
+    // Each linked slide is reported once, in document order, with the source it was linked to
+    // and the slide of it. The plain copy belongs to no source and is left out.
+    const std::vector<boost::property_tree::ptree> aLinks = readLinkList(*pXImpressDocument);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aLinks.size());
+    CPPUNIT_ASSERT_EQUAL(std::string("slide"), aLinks[0].get<std::string>("unit"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Q3 #1 100%.odp"), aLinks[0].get<std::string>("source"));
+    CPPUNIT_ASSERT_EQUAL(std::string("SourceA"), aLinks[0].get<std::string>("name"));
+    CPPUNIT_ASSERT_EQUAL(std::string(), aLinks[0].get<std::string>("parent"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Q3 #1 100%.odp"), aLinks[1].get<std::string>("source"));
+    CPPUNIT_ASSERT_EQUAL(std::string("TargetOne"), aLinks[1].get<std::string>("name"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Support deck.odp"), aLinks[2].get<std::string>("source"));
 
     // A page is named by the identifier it keeps for the whole session, not by its position. The
     // plain copy landed before the linked pages, so the first of them is the second slide.
-    const OString aPartId = pDoc->GetSdPage(1, PageKind::Standard)->GetGuid().getString();
-    CPPUNIT_ASSERT_EQUAL(std::string(aPartId.getStr(), aPartId.getLength()),
-                         aSlides[0].get<std::string>("part"));
+    const std::string aPartId(OUStringToOString(getSlideId(*pDoc, 1), RTL_TEXTENCODING_ASCII_US));
+    CPPUNIT_ASSERT_EQUAL(aPartId, aLinks[0].get<std::string>("id"));
+    std::vector<std::string> aSlides;
+    for (const auto& rSlide : aLinks[0].get_child("slides"))
+        aSlides.push_back(rSlide.second.get_value<std::string>());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aSlides.size());
+    CPPUNIT_ASSERT_EQUAL(aPartId, aSlides[0]);
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLink)
@@ -665,23 +699,18 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLink)
     CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
         aSourceUrl, "{\"slides\":[0],\"at\":1,\"keepDesign\":false,\"link\":true,"
                     "\"source\":\"Q3 #1 100%.odp\",\"lastModifiedTime\":\"2020-09-13T12:26:40Z\"}"_ostr));
-    SdPage* pLinked = pDoc->GetSdPage(1, PageKind::Standard);
+    const sd::SlideLinkRecord* pLinked = findSlideLink(*pDoc, 1);
     CPPUNIT_ASSERT(pLinked);
-    CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20%231%20100%25.odp"_ustr,
-                         pLinked->GetFileName());
-    CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pLinked->GetBookmarkName());
-    CPPUNIT_ASSERT_EQUAL(u"2020-09-13T12:26:40Z"_ustr, pLinked->GetSourceModifiedTime());
+    CPPUNIT_ASSERT_EQUAL(u"Q3 #1 100%.odp"_ustr, pLinked->maSource);
+    CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pLinked->maName);
+    CPPUNIT_ASSERT_EQUAL(u"2020-09-13T12:26:40Z"_ustr, pLinked->maLastModifiedTime);
 
-    // A slide inserted from the same file without asking for a link is a plain copy, and
-    // names no source and no modified time.
+    // A slide inserted from the same file without asking for a link is a plain copy, which is
+    // linked to nothing.
     CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
         aSourceUrl,
         "{\"slides\":[0],\"at\":2,\"keepDesign\":false,\"source\":\"Q3 #1 100%.odp\"}"_ostr));
-    SdPage* pCopied = pDoc->GetSdPage(2, PageKind::Standard);
-    CPPUNIT_ASSERT(pCopied);
-    CPPUNIT_ASSERT_EQUAL(OUString(), pCopied->GetFileName());
-    CPPUNIT_ASSERT_EQUAL(OUString(), pCopied->GetBookmarkName());
-    CPPUNIT_ASSERT_EQUAL(OUString(), pCopied->GetSourceModifiedTime());
+    CPPUNIT_ASSERT(!findSlideLink(*pDoc, 2));
 
     // An insert that names no source document has nothing for a link to record, so one that
     // asks for links inserts nothing at all.
@@ -691,15 +720,15 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLink)
     CPPUNIT_ASSERT_EQUAL(nPartsBefore, pXImpressDocument->getParts());
 
     // The source is a persistent link the storage resolves, so one of the shape of an address
-    // is recorded on the linked page as it is.
+    // is recorded as it is.
     CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
         aSourceUrl,
         "{\"slides\":[0],\"link\":true,\"source\":\"https://storage.example/files/42\"}"_ostr));
     CPPUNIT_ASSERT_EQUAL(nPartsBefore + 1, pXImpressDocument->getParts());
-    SdPage* pAddressed = pDoc->GetSdPage(static_cast<sal_uInt16>(nPartsBefore), PageKind::Standard);
+    const sd::SlideLinkRecord* pAddressed
+        = findSlideLink(*pDoc, static_cast<sal_uInt16>(nPartsBefore));
     CPPUNIT_ASSERT(pAddressed);
-    CPPUNIT_ASSERT_EQUAL(u"https://storage.example/files/42"_ustr,
-                         sd::SlideLink::GetSourceName(pAddressed->GetFileName()));
+    CPPUNIT_ASSERT_EQUAL(u"https://storage.example/files/42"_ustr, pAddressed->maSource);
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportScalesLetterSizes)
@@ -851,15 +880,15 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkFollowsSourceSlidePositi
         aOneSlide.GetURL(),
         "{\"at\":1,\"link\":true,\"sourcePositions\":[3],\"source\":\"Q3 deck.odp\"}"_ostr));
 
-    SdPage* pLinked = pDoc->GetSdPage(1, PageKind::Standard);
+    const sd::SlideLinkRecord* pLinked = findSlideLink(*pDoc, 1);
     CPPUNIT_ASSERT(pLinked);
     CPPUNIT_ASSERT_EQUAL(u"Source three"_ustr, getSlideText(*pDoc, 1));
-    CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr, pLinked->GetFileName());
-    CPPUNIT_ASSERT_EQUAL(u"Slide 3"_ustr, pLinked->GetBookmarkName());
+    CPPUNIT_ASSERT_EQUAL(u"Q3 deck.odp"_ustr, pLinked->maSource);
+    CPPUNIT_ASSERT_EQUAL(u"Slide 3"_ustr, pLinked->maName);
 
     // The page is linked to the position and to no identifier, so nothing but the position says
     // which slide it reads.
-    CPPUNIT_ASSERT_EQUAL(OUString(), pLinked->GetSourcePageGuid());
+    CPPUNIT_ASSERT_EQUAL(u"Slide 3"_ustr, pLinked->maSourceId);
 
     // A refresh reading the whole source deck reads the slide standing at that position, which is
     // the slide the page came from as long as the source holds it there.
@@ -868,8 +897,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkFollowsSourceSlidePositi
                                                               aWholeDeck.GetURL(),
                                                               u"2021-01-01T00:00:00Z"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Source three"_ustr, getSlideText(*pDoc, 1));
-    CPPUNIT_ASSERT_EQUAL(u"Slide 3"_ustr,
-                         pDoc->GetSdPage(1, PageKind::Standard)->GetBookmarkName());
+    pLinked = findSlideLink(*pDoc, 1);
+    CPPUNIT_ASSERT(pLinked);
+    CPPUNIT_ASSERT_EQUAL(u"Slide 3"_ustr, pLinked->maName);
 
     // The slide the page came from moved to the front of the source, so another slide stands at
     // the position the page follows, and that is the slide it reads. The page keeps the position.
@@ -878,10 +908,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkFollowsSourceSlidePositi
                                                               aMovedDeck.GetURL(),
                                                               u"2022-02-02T00:00:00Z"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Source two"_ustr, getSlideText(*pDoc, 1));
-    SdPage* pMoved = pDoc->GetSdPage(1, PageKind::Standard);
+    const sd::SlideLinkRecord* pMoved = findSlideLink(*pDoc, 1);
     CPPUNIT_ASSERT(pMoved);
-    CPPUNIT_ASSERT_EQUAL(u"Slide 3"_ustr, pMoved->GetBookmarkName());
-    CPPUNIT_ASSERT_EQUAL(OUString(), pMoved->GetSourcePageGuid());
+    CPPUNIT_ASSERT_EQUAL(u"Slide 3"_ustr, pMoved->maName);
+    CPPUNIT_ASSERT_EQUAL(u"Slide 3"_ustr, pMoved->maSourceId);
 
     // The slides of the source are other slides now, and the page reads the one standing at its
     // position.
@@ -897,10 +927,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkFollowsSourceSlidePositi
                                                         u"Q3 deck.odp"_ustr, aNamedDeck.GetURL(),
                                                         u"2024-04-04T00:00:00Z"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Named three"_ustr, getSlideText(*pDoc, 1));
-    SdPage* pNamed = pDoc->GetSdPage(1, PageKind::Standard);
+    const sd::SlideLinkRecord* pNamed = findSlideLink(*pDoc, 1);
     CPPUNIT_ASSERT(pNamed);
-    CPPUNIT_ASSERT_EQUAL(u"Slide 3"_ustr, pNamed->GetBookmarkName());
-    CPPUNIT_ASSERT_EQUAL(OUString(), pNamed->GetSourcePageGuid());
+    CPPUNIT_ASSERT_EQUAL(u"Slide 3"_ustr, pNamed->maName);
+    CPPUNIT_ASSERT_EQUAL(u"Slide 3"_ustr, pNamed->maSourceId);
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkTracksSourceSlideByIdentifier)
@@ -945,12 +975,11 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkTracksSourceSlideByIdent
 
     CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
         aOneSlide.GetURL(), "{\"at\":1,\"link\":true,\"source\":\"Q3 deck.odp\"}"_ostr));
-    SdPage* pLinked = pDoc->GetSdPage(1, PageKind::Standard);
+    const sd::SlideLinkRecord* pLinked = findSlideLink(*pDoc, 1);
     CPPUNIT_ASSERT(pLinked);
-    CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr, pLinked->GetFileName());
-    CPPUNIT_ASSERT_EQUAL(OUString(), pLinked->GetBookmarkName());
-    CPPUNIT_ASSERT_EQUAL(u"{33333333-3333-3333-3333-333333333333}"_ustr,
-                         pLinked->GetSourcePageGuid());
+    CPPUNIT_ASSERT_EQUAL(u"Q3 deck.odp"_ustr, pLinked->maSource);
+    CPPUNIT_ASSERT_EQUAL(OUString(), pLinked->maName);
+    CPPUNIT_ASSERT_EQUAL(u"{33333333-3333-3333-3333-333333333333}"_ustr, pLinked->maSourceId);
 
     // The slide moved to the front of the source, and the page reads it there and stays nameless.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
@@ -958,11 +987,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkTracksSourceSlideByIdent
                                                               aMovedDeck.GetURL(),
                                                               u"2022-02-02T00:00:00Z"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Source three, revised"_ustr, getSlideText(*pDoc, 1));
-    SdPage* pMoved = pDoc->GetSdPage(1, PageKind::Standard);
+    const sd::SlideLinkRecord* pMoved = findSlideLink(*pDoc, 1);
     CPPUNIT_ASSERT(pMoved);
-    CPPUNIT_ASSERT_EQUAL(OUString(), pMoved->GetBookmarkName());
-    CPPUNIT_ASSERT_EQUAL(u"{33333333-3333-3333-3333-333333333333}"_ustr,
-                         pMoved->GetSourcePageGuid());
+    CPPUNIT_ASSERT_EQUAL(OUString(), pMoved->maName);
+    CPPUNIT_ASSERT_EQUAL(u"{33333333-3333-3333-3333-333333333333}"_ustr, pMoved->maSourceId);
 
     // The slide the page came from is gone from the source, and the slides standing in its place
     // are other slides. The page keeps the content it holds, and the slide it holds is reported.
@@ -973,8 +1001,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkTracksSourceSlideByIdent
                                                               u"2023-03-03T00:00:00Z"_ustr,
                                                               &aNotUpdated));
     CPPUNIT_ASSERT_EQUAL(u"Source three, revised"_ustr, getSlideText(*pDoc, 1));
-    CPPUNIT_ASSERT_EQUAL(u"2022-02-02T00:00:00Z"_ustr,
-                         pDoc->GetSdPage(1, PageKind::Standard)->GetSourceModifiedTime());
+    pMoved = findSlideLink(*pDoc, 1);
+    CPPUNIT_ASSERT(pMoved);
+    CPPUNIT_ASSERT_EQUAL(u"2022-02-02T00:00:00Z"_ustr, pMoved->maLastModifiedTime);
 
     // The slide that was left alone is reported, so the user can be told which one it was.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aNotUpdated.size());
@@ -994,16 +1023,17 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkModifiedTimeRoundtrip)
     CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
         aSourceUrl, "{\"slides\":[0],\"at\":1,\"link\":true,\"source\":\"Q3 deck.odp\","
                     "\"lastModifiedTime\":\"2020-09-13T12:26:40Z\"}"_ostr));
-    CPPUNIT_ASSERT_EQUAL(u"2020-09-13T12:26:40Z"_ustr,
-                         pDoc->GetSdPage(1, PageKind::Standard)->GetSourceModifiedTime());
+    const sd::SlideLinkRecord* pLinked = findSlideLink(*pDoc, 1);
+    CPPUNIT_ASSERT(pLinked);
+    CPPUNIT_ASSERT_EQUAL(u"2020-09-13T12:26:40Z"_ustr, pLinked->maLastModifiedTime);
 
     // The time the source was last modified survives a save to ODF and the load back.
     saveAndReload(TestFilter::ODP);
     SdXImpressDocument* pReloaded = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pReloaded);
-    SdDrawDocument* pReloadedDoc = pReloaded->GetDoc();
-    CPPUNIT_ASSERT_EQUAL(u"2020-09-13T12:26:40Z"_ustr,
-                         pReloadedDoc->GetSdPage(1, PageKind::Standard)->GetSourceModifiedTime());
+    pLinked = findSlideLink(*pReloaded->GetDoc(), 1);
+    CPPUNIT_ASSERT(pLinked);
+    CPPUNIT_ASSERT_EQUAL(u"2020-09-13T12:26:40Z"_ustr, pLinked->maLastModifiedTime);
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkNameRoundtrip)
@@ -1018,19 +1048,22 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkNameRoundtrip)
     CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
         aSourceUrl, "{\"slides\":[0],\"at\":1,\"link\":true,\"source\":\"Q3 deck.odp\"}"_ostr));
 
-    // The page records the name of its source slide, which holds the character that separates
-    // the slide from the document in the link and the one that escapes it.
-    SdPage* pPage = pDoc->GetSdPage(1, PageKind::Standard);
-    pPage->SetBookmarkName(u"Q3 #1 100%"_ustr);
+    // The link records the name of its source slide, which holds characters a reference would
+    // have to escape.
+    const sd::SlideLinkRecord* pLinked = findSlideLink(*pDoc, 1);
+    CPPUNIT_ASSERT(pLinked);
+    sd::SlideLinkRecord aRenamed = *pLinked;
+    aRenamed.maName = u"Q3 #1 100%"_ustr;
+    CPPUNIT_ASSERT(pDoc->GetSlideLinkManager().Set({ aRenamed }, OUString()));
 
     // Both the source document and the slide name come back as they were.
     saveAndReload(TestFilter::ODP);
     SdXImpressDocument* pReloaded = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pReloaded);
-    SdPage* pReloadedPage = pReloaded->GetDoc()->GetSdPage(1, PageKind::Standard);
-    CPPUNIT_ASSERT_EQUAL(u"Q3 deck.odp"_ustr,
-                         sd::SlideLink::GetSourceName(pReloadedPage->GetFileName()));
-    CPPUNIT_ASSERT_EQUAL(u"Q3 #1 100%"_ustr, pReloadedPage->GetBookmarkName());
+    pLinked = findSlideLink(*pReloaded->GetDoc(), 1);
+    CPPUNIT_ASSERT(pLinked);
+    CPPUNIT_ASSERT_EQUAL(u"Q3 deck.odp"_ustr, pLinked->maSource);
+    CPPUNIT_ASSERT_EQUAL(u"Q3 #1 100%"_ustr, pLinked->maName);
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkRefresh)
@@ -1068,13 +1101,13 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkRefresh)
     // The linked slide shows the new content, and it kept its position, its name and its link.
     CPPUNIT_ASSERT_EQUAL(u"Source title, revised"_ustr, getSlideText(*pDoc, 1));
     CPPUNIT_ASSERT_EQUAL(nParts, pXImpressDocument->getParts());
-    SdPage* pLinked = pDoc->GetSdPage(1, PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(u"Q3 numbers"_ustr, pDoc->GetSdPage(1, PageKind::Standard)->GetName());
+    const sd::SlideLinkRecord* pLinked = findSlideLink(*pDoc, 1);
     CPPUNIT_ASSERT(pLinked);
-    CPPUNIT_ASSERT_EQUAL(u"Q3 numbers"_ustr, pLinked->GetName());
-    CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr, pLinked->GetFileName());
-    CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pLinked->GetBookmarkName());
-    // The refreshed page records the source time the refresh was given.
-    CPPUNIT_ASSERT_EQUAL(u"2021-01-01T00:00:00Z"_ustr, pLinked->GetSourceModifiedTime());
+    CPPUNIT_ASSERT_EQUAL(u"Q3 deck.odp"_ustr, pLinked->maSource);
+    CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pLinked->maName);
+    // The refreshed link records the source time the refresh was given.
+    CPPUNIT_ASSERT_EQUAL(u"2021-01-01T00:00:00Z"_ustr, pLinked->maLastModifiedTime);
 
     // The plain copy of the same slide belongs to no source and keeps what it holds.
     CPPUNIT_ASSERT_EQUAL(u"Source title"_ustr, getSlideText(*pDoc, 2));
@@ -1084,11 +1117,11 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkRefresh)
     pUndoManager->Undo();
     CPPUNIT_ASSERT_EQUAL(u"Source title"_ustr, getSlideText(*pDoc, 1));
     CPPUNIT_ASSERT_EQUAL(nParts, pXImpressDocument->getParts());
-    pLinked = pDoc->GetSdPage(1, PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(u"Q3 numbers"_ustr, pDoc->GetSdPage(1, PageKind::Standard)->GetName());
+    pLinked = findSlideLink(*pDoc, 1);
     CPPUNIT_ASSERT(pLinked);
-    CPPUNIT_ASSERT_EQUAL(u"Q3 numbers"_ustr, pLinked->GetName());
-    CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr, pLinked->GetFileName());
-    CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pLinked->GetBookmarkName());
+    CPPUNIT_ASSERT_EQUAL(u"Q3 deck.odp"_ustr, pLinked->maSource);
+    CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pLinked->maName);
 
     // A source no page of this document is linked to refreshes nothing at all.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1),
@@ -1136,25 +1169,29 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkRefreshOnePage)
     const OUString aChangedUrl
         = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-link-source-changed.odp");
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
-                         pXImpressDocument->refreshSlideLinks(u"Q3 deck.odp"_ustr, aChangedUrl,
-                                                              u"2021-01-01T00:00:00Z"_ustr,
-                                                              nullptr, 1));
-    CPPUNIT_ASSERT_EQUAL(aFirstId,
-                         pDoc->GetSdPage(0, PageKind::Standard)->GetGuid().getOUString());
+                         pXImpressDocument->refreshSlideLink(
+                             u"slide"_ustr, aSecondId, u"Q3 deck.odp"_ustr, aChangedUrl,
+                             u"2021-01-01T00:00:00Z"_ustr, OUString()));
+    CPPUNIT_ASSERT_EQUAL(aFirstId, getSlideId(*pDoc, 0));
     CPPUNIT_ASSERT_EQUAL(u"Source title"_ustr, getSlideText(*pDoc, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString(),
-                         pDoc->GetSdPage(0, PageKind::Standard)->GetSourceModifiedTime());
-    CPPUNIT_ASSERT(aSecondId != pDoc->GetSdPage(1, PageKind::Standard)->GetGuid().getOUString());
-    CPPUNIT_ASSERT_EQUAL(u"2021-01-01T00:00:00Z"_ustr,
-                         pDoc->GetSdPage(1, PageKind::Standard)->GetSourceModifiedTime());
+    const sd::SlideLinkRecord* pFirst = findSlideLink(*pDoc, 0);
+    CPPUNIT_ASSERT(pFirst);
+    CPPUNIT_ASSERT_EQUAL(OUString(), pFirst->maLastModifiedTime);
+    CPPUNIT_ASSERT(aSecondId != getSlideId(*pDoc, 1));
+    const sd::SlideLinkRecord* pSecond = findSlideLink(*pDoc, 1);
+    CPPUNIT_ASSERT(pSecond);
+    CPPUNIT_ASSERT_EQUAL(u"2021-01-01T00:00:00Z"_ustr, pSecond->maLastModifiedTime);
 
-    // A page that is not linked to the source, and an index that names no page, refresh nothing.
+    // A page that is not linked to the source, and an identifier that names no page, refresh
+    // nothing.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1),
-                         pXImpressDocument->refreshSlideLinks(u"Q3 deck.odp"_ustr, aChangedUrl,
-                                                              OUString(), nullptr, 2));
+                         pXImpressDocument->refreshSlideLink(u"slide"_ustr, getSlideId(*pDoc, 2),
+                                                             u"Q3 deck.odp"_ustr, aChangedUrl,
+                                                             OUString(), OUString()));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1),
-                         pXImpressDocument->refreshSlideLinks(u"Q3 deck.odp"_ustr, aChangedUrl,
-                                                              OUString(), nullptr, 7));
+                         pXImpressDocument->refreshSlideLink(
+                             u"slide"_ustr, u"{00000000-0000-0000-0000-000000000000}"_ustr,
+                             u"Q3 deck.odp"_ustr, aChangedUrl, OUString(), OUString()));
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkRefreshKeepsSections)
@@ -1191,6 +1228,21 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkRefreshKeepsSections)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rSections.GetSection(0).mnStartIndex);
     CPPUNIT_ASSERT_EQUAL(u"Details"_ustr, rSections.GetSection(1).maName);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rSections.GetSection(1).mnStartIndex);
+
+    // The slide that starts the second section is refreshed alone, and the section still starts
+    // on it.
+    const OUString aSecondId = getSlideId(*pDoc, 1);
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<sal_Int32>(1),
+        pXImpressDocument->refreshSlideLink(
+            u"slide"_ustr, aSecondId, u"Q3 deck.odp"_ustr,
+            m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-link-source-changed.odp"),
+            OUString(), OUString()));
+    CPPUNIT_ASSERT(aSecondId != getSlideId(*pDoc, 1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rSections.GetSection(0).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rSections.GetSection(1).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSectionIndexForSlide(2) + 1);
 }
 
 // A linked section stays linked when a slide of it is refreshed in place, and when that refresh is
@@ -1212,26 +1264,27 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkRefreshKeepsSectionLink)
     sd::SlideSectionManager& rSections = pDoc->GetSectionManager();
     rSections.AddSection(0, u"Q3"_ustr);
     rSections.AddSection(2, u"Own slides"_ustr);
-    sd::SlideSectionLink aLink;
-    aLink.maSourceReference = u"vnd.collabora.slide-source:Q3 deck.odp"_ustr;
-    aLink.maSourceSectionId = u"{6A4F0F6E-2B6C-4B47-9F43-7C3C1D2E5A10}"_ustr;
-    aLink.maSourceSectionName = u"Q3"_ustr;
-    aLink.maSourcePageGuids = { u"{0B1D2C3E-4F50-4617-8293-A4B5C6D7E810}"_ustr,
-                                u"{0B1D2C3E-4F50-4617-8293-A4B5C6D7E811}"_ustr };
-    CPPUNIT_ASSERT(rSections.SetSectionLink(0, aLink));
+    sd::SlideLinkRecord aLink;
+    aLink.meKind = sd::SlideLinkKind::Section;
+    aLink.maId = rSections.GetSection(0).maId;
+    aLink.maSource = u"Q3 deck.odp"_ustr;
+    aLink.maSourceId = u"{6A4F0F6E-2B6C-4B47-9F43-7C3C1D2E5A10}"_ustr;
+    aLink.maName = u"Q3"_ustr;
+    aLink.maSlides = rSections.GetSectionPageGuids(0);
+    CPPUNIT_ASSERT(pDoc->GetSlideLinkManager().Set({ aLink }, OUString()));
 
     CPPUNIT_ASSERT_EQUAL(
         static_cast<sal_Int32>(1),
-        pXImpressDocument->refreshSlideLinks(
-            u"Q3 deck.odp"_ustr,
+        pXImpressDocument->refreshSlideLink(
+            u"slide"_ustr, getSlideId(*pDoc, 0), u"Q3 deck.odp"_ustr,
             m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-link-source-changed.odp"),
-            OUString(), nullptr, 0));
+            OUString(), OUString()));
     CPPUNIT_ASSERT_EQUAL(u"Source title, revised"_ustr, getSlideText(*pDoc, 0));
-    CPPUNIT_ASSERT(rSections.GetSectionLink(0));
+    CPPUNIT_ASSERT(findSectionLink(*pDoc, 0));
 
     pXImpressDocument->GetDocShell()->GetUndoManager()->Undo();
     CPPUNIT_ASSERT_EQUAL(u"Source title"_ustr, getSlideText(*pDoc, 0));
-    CPPUNIT_ASSERT(rSections.GetSectionLink(0));
+    CPPUNIT_ASSERT(findSectionLink(*pDoc, 0));
 }
 
 // Slides inserted as a linked section go in as a section of their own, which the link list reports
@@ -1250,8 +1303,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLinkSection)
     CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
         aSourceUrl, "{\"slides\":[0,1],\"at\":2,\"link\":true,\"source\":\"Q3 deck.odp\","
                     "\"lastModifiedTime\":\"2026-10-20T09:15:00Z\","
-                    "\"sourceSection\":\"{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}\","
-                    "\"sourceSectionName\":\"Opening\"}"_ostr));
+                    "\"as\":\"section\",\"sourceId\":\"{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}\","
+                    "\"sourceName\":\"Opening\"}"_ostr));
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pDoc->GetSdPageCount(PageKind::Standard));
     CPPUNIT_ASSERT_EQUAL(u"TargetOne"_ustr, pDoc->GetSdPage(0, PageKind::Standard)->GetName());
 
@@ -1260,43 +1313,50 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLinkSection)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSection(0).mnStartIndex);
     CPPUNIT_ASSERT_EQUAL(u"Opening"_ustr, rSections.GetSection(0).maName);
 
-    const boost::property_tree::ptree aLinks = readLinks(*pXImpressDocument);
-    std::vector<boost::property_tree::ptree> aLinkedSections;
-    for (const auto& rSection : aLinks.get_child("sections"))
-        aLinkedSections.push_back(rSection.second);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aLinkedSections.size());
-    const boost::property_tree::ptree& rLinked = aLinkedSections[0];
-    CPPUNIT_ASSERT_EQUAL(OUStringToOString(rSections.GetSection(0).maId, RTL_TEXTENCODING_UTF8),
-                         OString(rLinked.get<std::string>("section")));
+    // The section comes first, then each of its slides under it.
+    const std::vector<boost::property_tree::ptree> aLinks = readLinkList(*pXImpressDocument);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aLinks.size());
+    const boost::property_tree::ptree& rLinked = aLinks[0];
+    const std::string aSectionId(
+        OUStringToOString(rSections.GetSection(0).maId, RTL_TEXTENCODING_UTF8));
+    CPPUNIT_ASSERT_EQUAL(std::string("section"), rLinked.get<std::string>("unit"));
+    CPPUNIT_ASSERT_EQUAL(aSectionId, rLinked.get<std::string>("id"));
+    CPPUNIT_ASSERT_EQUAL(std::string(), rLinked.get<std::string>("parent"));
     CPPUNIT_ASSERT_EQUAL(std::string("Q3 deck.odp"), rLinked.get<std::string>("source"));
     CPPUNIT_ASSERT_EQUAL(std::string("{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}"),
-                         rLinked.get<std::string>("sourceSection"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Opening"), rLinked.get<std::string>("sourceSectionName"));
+                         rLinked.get<std::string>("sourceId"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Opening"), rLinked.get<std::string>("name"));
     CPPUNIT_ASSERT_EQUAL(std::string("2026-10-20T09:15:00Z"),
                          rLinked.get<std::string>("lastModifiedTime"));
 
-    // Each slide of the section names the page it is here and the source slide it was read from.
-    std::vector<boost::property_tree::ptree> aSlides;
+    // The section spans the pages it holds here, and each slide of it names the page it is here,
+    // the section it is under and the source slide it was read from.
+    std::vector<std::string> aSlides;
     for (const auto& rSlide : rLinked.get_child("slides"))
-        aSlides.push_back(rSlide.second);
+        aSlides.push_back(rSlide.second.get_value<std::string>());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aSlides.size());
     for (sal_uInt16 i = 0; i < 2; ++i)
     {
-        const SdPage* pPage = pDoc->GetSdPage(2 + i, PageKind::Standard);
-        CPPUNIT_ASSERT_EQUAL(pPage->GetGuid().getString(),
-                             OString(aSlides[i].get<std::string>("part")));
-        CPPUNIT_ASSERT_EQUAL(OUStringToOString(pPage->GetSourcePageGuid(), RTL_TEXTENCODING_UTF8),
-                             OString(aSlides[i].get<std::string>("sourceGuid")));
+        const std::string aPageId(
+            OUStringToOString(getSlideId(*pDoc, 2 + i), RTL_TEXTENCODING_ASCII_US));
+        CPPUNIT_ASSERT_EQUAL(aPageId, aSlides[i]);
+        CPPUNIT_ASSERT_EQUAL(std::string("slide"), aLinks[1 + i].get<std::string>("unit"));
+        CPPUNIT_ASSERT_EQUAL(aPageId, aLinks[1 + i].get<std::string>("id"));
+        CPPUNIT_ASSERT_EQUAL(aSectionId, aLinks[1 + i].get<std::string>("parent"));
+        const sd::SlideLinkRecord* pSlide = findSlideLink(*pDoc, 2 + i);
+        CPPUNIT_ASSERT(pSlide);
+        CPPUNIT_ASSERT_EQUAL(OUStringToOString(pSlide->maSourceId, RTL_TEXTENCODING_UTF8),
+                             OString(aLinks[1 + i].get<std::string>("sourceId")));
     }
 
     pXImpressDocument->GetDocShell()->GetUndoManager()->Undo();
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rSections.GetSectionCount());
-    CPPUNIT_ASSERT(readLinks(*pXImpressDocument).get_child("sections").empty());
+    CPPUNIT_ASSERT(readLinks(*pXImpressDocument).get_child("links").empty());
 
     // Redo gives the section its link back as well.
     pXImpressDocument->GetDocShell()->GetUndoManager()->Redo();
-    CPPUNIT_ASSERT(rSections.GetSectionLink(0));
+    CPPUNIT_ASSERT(findSectionLink(*pDoc, 0));
 }
 
 // Every view learns that the link list changed when a slide goes into the last section, which is
@@ -1314,16 +1374,16 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLinkSectionEditNotifie
         = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-sections.odp");
     CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
         aSourceUrl, "{\"slides\":[0,1],\"link\":true,\"source\":\"Q3 deck.odp\","
-                    "\"sourceSection\":\"{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}\","
-                    "\"sourceSectionName\":\"Opening\"}"_ostr));
-    CPPUNIT_ASSERT(pDoc->GetSectionManager().GetSectionLink(0));
+                    "\"as\":\"section\",\"sourceId\":\"{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}\","
+                    "\"sourceName\":\"Opening\"}"_ostr));
+    CPPUNIT_ASSERT(findSectionLink(*pDoc, 0));
     CPPUNIT_ASSERT(aView.m_nSlideLinksChanged > 0);
 
     // A new slide at the end of the deck joins the linked section, which is the last one.
     aView.m_nSlideLinksChanged = 0;
     uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY_THROW);
     xPagesSupplier->getDrawPages()->insertNewByIndex(3);
-    CPPUNIT_ASSERT(!pDoc->GetSectionManager().GetSectionLink(0));
+    CPPUNIT_ASSERT(!findSectionLink(*pDoc, 0));
     CPPUNIT_ASSERT_EQUAL(1, aView.m_nSlideLinksChanged);
 }
 
@@ -1339,7 +1399,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLinkSectionNeedsSectio
         = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-sections.odp");
     CPPUNIT_ASSERT(!pXImpressDocument->insertPagesFromFile(
         aSourceUrl, "{\"slides\":[0,1],\"link\":true,\"source\":\"Q3 deck.odp\","
-                    "\"sourceSection\":\"Opening\"}"_ostr));
+                    "\"as\":\"section\",\"sourceId\":\"Opening\"}"_ostr));
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(2),
                          pXImpressDocument->GetDoc()->GetSdPageCount(PageKind::Standard));
 }
@@ -1358,12 +1418,12 @@ OUString insertLinkedSection(SdXImpressDocument& rXImpressDocument, const OUStri
         "{\"slides\":[0,1],\"at\":" + OString::number(nAt)
             + ",\"link\":true,\"source\":\"Q3 deck.odp\","
               "\"lastModifiedTime\":\"2026-10-20T09:15:00Z\","
-              "\"sourceSection\":\"{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}\","
-              "\"sourceSectionName\":\"Opening\"}"));
+              "\"as\":\"section\",\"sourceId\":\"{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}\","
+              "\"sourceName\":\"Opening\"}"));
     const sd::SlideSectionManager& rSections = rXImpressDocument.GetDoc()->GetSectionManager();
     const sal_Int32 nSection
         = rSections.GetSectionIndexForSlide(nAt >= 0 && nAt < nSlideCount ? nAt : nSlideCount);
-    CPPUNIT_ASSERT(rSections.GetSectionLink(nSection));
+    CPPUNIT_ASSERT(findSectionLink(*rXImpressDocument.GetDoc(), nSection));
     return rSections.GetSection(nSection).maId;
 }
 
@@ -1401,7 +1461,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLinkSectionGoesInAtPos
     CPPUNIT_ASSERT_EQUAL(u"TargetTwo"_ustr, pDoc->GetSdPage(3, PageKind::Standard)->GetName());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSectionCount());
     CPPUNIT_ASSERT_EQUAL(u"Opening"_ustr, sectionStartingAt(*pDoc, 1));
-    CPPUNIT_ASSERT(rSections.GetSectionLink(rSections.GetSectionIndexForSlide(1)));
+    CPPUNIT_ASSERT(findSectionLink(*pDoc, rSections.GetSectionIndexForSlide(1)));
     CPPUNIT_ASSERT_EQUAL(SdResId(STR_DEFAULT_SLIDE_SECTION_NAME), sectionStartingAt(*pDoc, 3));
 
     CPPUNIT_ASSERT_EQUAL(nUndoActions + 1, pUndoManager->GetUndoActionCount());
@@ -1413,7 +1473,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLinkSectionGoesInAtPos
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pDoc->GetSdPageCount(PageKind::Standard));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSectionCount());
     CPPUNIT_ASSERT_EQUAL(u"Opening"_ustr, sectionStartingAt(*pDoc, 1));
-    CPPUNIT_ASSERT(rSections.GetSectionLink(rSections.GetSectionIndexForSlide(1)));
+    CPPUNIT_ASSERT(findSectionLink(*pDoc, rSections.GetSectionIndexForSlide(1)));
     CPPUNIT_ASSERT_EQUAL(SdResId(STR_DEFAULT_SLIDE_SECTION_NAME), sectionStartingAt(*pDoc, 3));
 }
 
@@ -1439,7 +1499,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLinkSectionSplitsSecti
 
         CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rSections.GetSectionCount());
         CPPUNIT_ASSERT_EQUAL(u"Opening"_ustr, sectionStartingAt(*pDoc, 0));
-        CPPUNIT_ASSERT(rSections.GetSectionLink(0));
+        CPPUNIT_ASSERT(findSectionLink(*pDoc, 0));
         CPPUNIT_ASSERT_EQUAL(u"First"_ustr, sectionStartingAt(*pDoc, 2));
         CPPUNIT_ASSERT_EQUAL(u"TargetOne"_ustr, pDoc->GetSdPage(2, PageKind::Standard)->GetName());
         CPPUNIT_ASSERT_EQUAL(u"Second"_ustr, sectionStartingAt(*pDoc, 3));
@@ -1461,7 +1521,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLinkSectionSplitsSecti
         CPPUNIT_ASSERT_EQUAL(u"First"_ustr, sectionStartingAt(*pDoc, 0));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rSections.GetSectionSlideCount(0));
         CPPUNIT_ASSERT_EQUAL(u"Opening"_ustr, sectionStartingAt(*pDoc, 1));
-        CPPUNIT_ASSERT(rSections.GetSectionLink(1));
+        CPPUNIT_ASSERT(findSectionLink(*pDoc, 1));
         CPPUNIT_ASSERT_EQUAL(u"First"_ustr, sectionStartingAt(*pDoc, 3));
         CPPUNIT_ASSERT_EQUAL(u"TargetTwo"_ustr, pDoc->GetSdPage(3, PageKind::Standard)->GetName());
     }
@@ -1481,8 +1541,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLinkSectionNeedsLinked
         = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-sections.odp");
     CPPUNIT_ASSERT(!pXImpressDocument->insertPagesFromFile(
         aSourceUrl, "{\"slides\":[0,1],\"link\":true,\"source\":\"Q3 deck.odp\","
-                    "\"sourcePositions\":[1,2],"
-                    "\"sourceSection\":\"{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}\"}"_ostr));
+                    "\"sourcePositions\":[1,2],\"as\":\"section\","
+                    "\"sourceId\":\"{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}\"}"_ostr));
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
 }
 
@@ -1497,20 +1557,17 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLinkSectionLoadedEditN
         *pXImpressDocument,
         m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-sections.odp"));
 
-    // The section list is written in the loext namespace, which the schema of the ODF check holds
-    // no element of.
-    skipValidation();
     saveAndReload(TestFilter::ODP);
     pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     pXImpressDocument->initializeForTiledRendering({});
     SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
-    CPPUNIT_ASSERT(pDoc->GetSectionManager().GetSectionLink(0));
+    CPPUNIT_ASSERT(findSectionLink(*pDoc, 0));
     SdTestViewCallback aView;
 
     uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY_THROW);
     xPagesSupplier->getDrawPages()->insertNewByIndex(3);
-    CPPUNIT_ASSERT(!pDoc->GetSectionManager().GetSectionLink(0));
+    CPPUNIT_ASSERT(!findSectionLink(*pDoc, 0));
     CPPUNIT_ASSERT(aView.m_nSlideLinksChanged > 0);
 }
 
@@ -1529,20 +1586,19 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportSectionWithoutLink)
 
     CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
         m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-sections.odp"),
-        "{\"slides\":[0,1],\"at\":1,"
-        "\"sourceSection\":\"{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}\","
-        "\"sourceSectionName\":\"Opening\"}"_ostr));
+        "{\"slides\":[0,1],\"at\":1,\"as\":\"section\","
+        "\"sourceId\":\"{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}\","
+        "\"sourceName\":\"Opening\"}"_ostr));
 
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pDoc->GetSdPageCount(PageKind::Standard));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSectionCount());
     CPPUNIT_ASSERT_EQUAL(u"Opening"_ustr, sectionStartingAt(*pDoc, 1));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSectionSlideCount(0));
-    CPPUNIT_ASSERT(!rSections.GetSectionLink(0));
+    CPPUNIT_ASSERT(!findSectionLink(*pDoc, 0));
     CPPUNIT_ASSERT_EQUAL(SdResId(STR_DEFAULT_SLIDE_SECTION_NAME), sectionStartingAt(*pDoc, 3));
     for (sal_uInt16 nSlide = 1; nSlide < 3; ++nSlide)
-        CPPUNIT_ASSERT_EQUAL(OUString(),
-                             pDoc->GetSdPage(nSlide, PageKind::Standard)->GetFileName());
-    CPPUNIT_ASSERT(readLinks(*pXImpressDocument).get_child("sections").empty());
+        CPPUNIT_ASSERT(!findSlideLink(*pDoc, nSlide));
+    CPPUNIT_ASSERT(readLinks(*pXImpressDocument).get_child("links").empty());
 
     CPPUNIT_ASSERT_EQUAL(nUndoActions + 1, pUndoManager->GetUndoActionCount());
     pUndoManager->Undo();
@@ -1639,12 +1695,11 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkUpdateSection)
     SfxUndoManager* pUndoManager = pDoc->GetDocSh()->GetUndoManager();
     const size_t nUndoActions = pUndoManager->GetUndoActionCount();
 
-    CPPUNIT_ASSERT_EQUAL(
-        static_cast<sal_Int32>(3),
-        pXImpressDocument->updateLinkedSection(
-            aSectionId, u"Q3 deck.odp"_ustr,
-            aUpdatedDeck.GetURL(),
-            u"2026-10-22T10:00:00Z"_ustr, u"Opening, revised"_ustr));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3),
+                         pXImpressDocument->refreshSlideLink(
+                             u"section"_ustr, aSectionId, u"Q3 deck.odp"_ustr,
+                             aUpdatedDeck.GetURL(), u"2026-10-22T10:00:00Z"_ustr,
+                             u"Opening, revised"_ustr));
 
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(5), pDoc->GetSdPageCount(PageKind::Standard));
     CPPUNIT_ASSERT_EQUAL(u"TargetOne"_ustr, pDoc->GetSdPage(0, PageKind::Standard)->GetName());
@@ -1658,26 +1713,25 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkUpdateSection)
     CPPUNIT_ASSERT_EQUAL(aSectionId, rSections.GetSection(0).maId);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSection(0).mnStartIndex);
     CPPUNIT_ASSERT_EQUAL(u"Opening, revised"_ustr, rSections.GetSection(0).maName);
-    const sd::SlideSectionLink* pLink = rSections.GetSectionLink(0);
+    const sd::SlideLinkRecord* pLink = findSectionLink(*pDoc, 0);
     CPPUNIT_ASSERT(pLink);
-    CPPUNIT_ASSERT_EQUAL(u"{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}"_ustr, pLink->maSourceSectionId);
-    CPPUNIT_ASSERT_EQUAL(u"Opening, revised"_ustr, pLink->maSourceSectionName);
-    CPPUNIT_ASSERT_EQUAL(u"2026-10-22T10:00:00Z"_ustr, pLink->maSourceModifiedTime);
+    CPPUNIT_ASSERT_EQUAL(u"{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}"_ustr, pLink->maSourceId);
+    CPPUNIT_ASSERT_EQUAL(u"Opening, revised"_ustr, pLink->maName);
+    CPPUNIT_ASSERT_EQUAL(u"2026-10-22T10:00:00Z"_ustr, pLink->maLastModifiedTime);
+    CPPUNIT_ASSERT(bool(rSections.GetSectionPageGuids(0) == pLink->maSlides));
+
+    // Each slide of the section is linked to its source slide on its own as well.
     const std::vector<OUString> aSourceGuids = { u"{22222222-2222-2222-2222-222222222222}"_ustr,
                                                  u"{44444444-4444-4444-4444-444444444444}"_ustr,
                                                  u"{11111111-1111-1111-1111-111111111111}"_ustr };
-    CPPUNIT_ASSERT_EQUAL(aSourceGuids.size(), pLink->maSourcePageGuids.size());
-    for (size_t i = 0; i < aSourceGuids.size(); ++i)
-        CPPUNIT_ASSERT_EQUAL(aSourceGuids[i], pLink->maSourcePageGuids[i]);
-
-    // Each slide of the section is linked to its source slide on its own as well.
     for (sal_uInt16 i = 0; i < 3; ++i)
     {
-        const SdPage* pPage = pDoc->GetSdPage(2 + i, PageKind::Standard);
-        CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr,
-                             pPage->GetFileName());
-        CPPUNIT_ASSERT_EQUAL(aSourceGuids[i], pPage->GetSourcePageGuid());
-        CPPUNIT_ASSERT_EQUAL(u"2026-10-22T10:00:00Z"_ustr, pPage->GetSourceModifiedTime());
+        const sd::SlideLinkRecord* pSlide = findSlideLink(*pDoc, 2 + i);
+        CPPUNIT_ASSERT(pSlide);
+        CPPUNIT_ASSERT_EQUAL(u"Q3 deck.odp"_ustr, pSlide->maSource);
+        CPPUNIT_ASSERT_EQUAL(aSourceGuids[i], pSlide->maSourceId);
+        CPPUNIT_ASSERT_EQUAL(u"2026-10-22T10:00:00Z"_ustr, pSlide->maLastModifiedTime);
+        CPPUNIT_ASSERT_EQUAL(aSectionId, pDoc->GetSlideLinkManager().GetParent(*pSlide));
     }
 
     // One undo brings the old slides, the old name and the old link back.
@@ -1687,16 +1741,18 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkUpdateSection)
     CPPUNIT_ASSERT_EQUAL(u"Source one"_ustr, getSlideText(*pDoc, 2));
     CPPUNIT_ASSERT_EQUAL(u"Source two"_ustr, getSlideText(*pDoc, 3));
     CPPUNIT_ASSERT_EQUAL(u"Opening"_ustr, rSections.GetSection(0).maName);
-    pLink = rSections.GetSectionLink(0);
+    pLink = findSectionLink(*pDoc, 0);
     CPPUNIT_ASSERT(pLink);
-    CPPUNIT_ASSERT_EQUAL(u"2026-10-20T09:15:00Z"_ustr, pLink->maSourceModifiedTime);
+    CPPUNIT_ASSERT_EQUAL(u"2026-10-20T09:15:00Z"_ustr, pLink->maLastModifiedTime);
+    CPPUNIT_ASSERT(findSlideLink(*pDoc, 2));
 
     // Redo brings the update back with the source design its slides came with.
     pUndoManager->Redo();
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(5), pDoc->GetSdPageCount(PageKind::Standard));
     CPPUNIT_ASSERT_EQUAL(u"Source four"_ustr, getSlideText(*pDoc, 3));
     CPPUNIT_ASSERT_EQUAL(u"Opening, revised"_ustr, rSections.GetSection(0).maName);
-    CPPUNIT_ASSERT(rSections.GetSectionLink(0));
+    CPPUNIT_ASSERT(findSectionLink(*pDoc, 0));
+    CPPUNIT_ASSERT(findSlideLink(*pDoc, 3));
 }
 
 // A linked section in the middle of the deck is updated in place: the section after it keeps its
@@ -1725,9 +1781,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkUpdateSectionInMiddle)
     sd::SlideSectionManager& rSections = pDoc->GetSectionManager();
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3),
-                         pXImpressDocument->updateLinkedSection(aSectionId, u"Q3 deck.odp"_ustr,
-                                                                aUpdatedDeck.GetURL(), OUString(),
-                                                                OUString()));
+                         pXImpressDocument->refreshSlideLink(
+                             u"section"_ustr, aSectionId, u"Q3 deck.odp"_ustr,
+                             aUpdatedDeck.GetURL(), OUString(), OUString()));
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(5), pDoc->GetSdPageCount(PageKind::Standard));
     CPPUNIT_ASSERT_EQUAL(u"TargetOne"_ustr, pDoc->GetSdPage(0, PageKind::Standard)->GetName());
     CPPUNIT_ASSERT_EQUAL(u"Source two, revised"_ustr, getSlideText(*pDoc, 1));
@@ -1736,14 +1792,14 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkUpdateSectionInMiddle)
     const sal_Int32 nSection = rSections.GetSectionIndexForId(aSectionId);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rSections.GetSection(nSection).mnStartIndex);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rSections.GetSectionSlideCount(nSection));
-    CPPUNIT_ASSERT(rSections.GetSectionLink(nSection));
+    CPPUNIT_ASSERT(findSectionLink(*pDoc, nSection));
     CPPUNIT_ASSERT_EQUAL(SdResId(STR_DEFAULT_SLIDE_SECTION_NAME), sectionStartingAt(*pDoc, 4));
 
     const sal_uInt16 nMasters = pDoc->GetMasterSdPageCount(PageKind::Standard);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3),
-                         pXImpressDocument->updateLinkedSection(aSectionId, u"Q3 deck.odp"_ustr,
-                                                                aUpdatedDeck.GetURL(), OUString(),
-                                                                OUString()));
+                         pXImpressDocument->refreshSlideLink(
+                             u"section"_ustr, aSectionId, u"Q3 deck.odp"_ustr,
+                             aUpdatedDeck.GetURL(), OUString(), OUString()));
     CPPUNIT_ASSERT_EQUAL(nMasters, pDoc->GetMasterSdPageCount(PageKind::Standard));
 
     pDoc->GetDocSh()->GetUndoManager()->Undo();
@@ -1751,7 +1807,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkUpdateSectionInMiddle)
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pDoc->GetSdPageCount(PageKind::Standard));
     CPPUNIT_ASSERT_EQUAL(u"Source one"_ustr, getSlideText(*pDoc, 1));
     CPPUNIT_ASSERT_EQUAL(SdResId(STR_DEFAULT_SLIDE_SECTION_NAME), sectionStartingAt(*pDoc, 3));
-    CPPUNIT_ASSERT(rSections.GetSectionLink(rSections.GetSectionIndexForId(aSectionId)));
+    CPPUNIT_ASSERT(findSectionLink(*pDoc, rSections.GetSectionIndexForId(aSectionId)));
 }
 
 // A section renamed in this document keeps its own name when its source section is renamed
@@ -1779,16 +1835,14 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkUpdateSectionKeepsLocalN
     sd::SlideSectionManager& rSections = pXImpressDocument->GetDoc()->GetSectionManager();
     rSections.RenameSection(0, u"Our opening"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(
-        static_cast<sal_Int32>(3),
-        pXImpressDocument->updateLinkedSection(
-            aSectionId, u"Q3 deck.odp"_ustr,
-            aUpdatedDeck.GetURL(),
-            OUString(), u"Opening, revised"_ustr));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3),
+                         pXImpressDocument->refreshSlideLink(
+                             u"section"_ustr, aSectionId, u"Q3 deck.odp"_ustr,
+                             aUpdatedDeck.GetURL(), OUString(), u"Opening, revised"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Our opening"_ustr, rSections.GetSection(0).maName);
-    const sd::SlideSectionLink* pLink = rSections.GetSectionLink(0);
+    const sd::SlideLinkRecord* pLink = findSectionLink(*pXImpressDocument->GetDoc(), 0);
     CPPUNIT_ASSERT(pLink);
-    CPPUNIT_ASSERT_EQUAL(u"Opening, revised"_ustr, pLink->maSourceSectionName);
+    CPPUNIT_ASSERT_EQUAL(u"Opening, revised"_ustr, pLink->maName);
 }
 
 // Only a section that is linked to the named source is updated, and a refused update changes
@@ -1817,19 +1871,21 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkUpdateSectionNeedsLinked
     const OUString aFileUrl = aUpdatedDeck.GetURL();
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1),
-                         pXImpressDocument->updateLinkedSection(
-                             aSectionId, u"Other deck.odp"_ustr, aFileUrl, OUString(), OUString()));
+                         pXImpressDocument->refreshSlideLink(u"section"_ustr, aSectionId,
+                                                             u"Other deck.odp"_ustr, aFileUrl,
+                                                             OUString(), OUString()));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1),
-                         pXImpressDocument->updateLinkedSection(
-                             u"{00000000-0000-0000-0000-000000000000}"_ustr, u"Q3 deck.odp"_ustr,
-                             aFileUrl, OUString(), OUString()));
+                         pXImpressDocument->refreshSlideLink(
+                             u"section"_ustr, u"{00000000-0000-0000-0000-000000000000}"_ustr,
+                             u"Q3 deck.odp"_ustr, aFileUrl, OUString(), OUString()));
 
     // A slide inserted into the section unlinks it, so there is no source section to follow.
     uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY_THROW);
     xPagesSupplier->getDrawPages()->insertNewByIndex(3);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1),
-                         pXImpressDocument->updateLinkedSection(
-                             aSectionId, u"Q3 deck.odp"_ustr, aFileUrl, OUString(), OUString()));
+                         pXImpressDocument->refreshSlideLink(u"section"_ustr, aSectionId,
+                                                             u"Q3 deck.odp"_ustr, aFileUrl,
+                                                             OUString(), OUString()));
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(5), pDoc->GetSdPageCount(PageKind::Standard));
     CPPUNIT_ASSERT_EQUAL(u"Source one"_ustr, getSlideText(*pDoc, 2));
 }
@@ -1855,29 +1911,33 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkBreakSection)
     SfxUndoManager* pUndoManager = pDoc->GetDocSh()->GetUndoManager();
     const size_t nUndoActions = pUndoManager->GetUndoActionCount();
 
-    CPPUNIT_ASSERT(pXImpressDocument->breakSectionLink(aSectionId, /*bBreakSlides=*/false));
+    CPPUNIT_ASSERT(pXImpressDocument->breakSlideLink(u"section"_ustr, aSectionId, /*bDeep=*/false));
     CPPUNIT_ASSERT_EQUAL(nUndoActions + 1, pUndoManager->GetUndoActionCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rSections.GetSectionCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSectionSlideCount(0));
-    CPPUNIT_ASSERT(!rSections.GetSectionLink(0));
-    CPPUNIT_ASSERT(readLinks(*pXImpressDocument).get_child("sections").empty());
+    CPPUNIT_ASSERT(!findSectionLink(*pDoc, 0));
+    // The slides keep their own links, and are listed under no section any more.
+    for (const boost::property_tree::ptree& rLink : readLinkList(*pXImpressDocument))
+    {
+        CPPUNIT_ASSERT_EQUAL(std::string("slide"), rLink.get<std::string>("unit"));
+        CPPUNIT_ASSERT_EQUAL(std::string(), rLink.get<std::string>("parent"));
+    }
     for (sal_uInt16 nSlide = 2; nSlide < 4; ++nSlide)
-        CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr,
-                             pDoc->GetSdPage(nSlide, PageKind::Standard)->GetFileName());
+        CPPUNIT_ASSERT(findSlideLink(*pDoc, nSlide));
 
     // A section that is no longer linked has no link to take off.
-    CPPUNIT_ASSERT(!pXImpressDocument->breakSectionLink(aSectionId, /*bBreakSlides=*/false));
+    CPPUNIT_ASSERT(
+        !pXImpressDocument->breakSlideLink(u"section"_ustr, aSectionId, /*bDeep=*/false));
     CPPUNIT_ASSERT_EQUAL(nUndoActions + 1, pUndoManager->GetUndoActionCount());
 
     pUndoManager->Undo();
-    const sd::SlideSectionLink* pLink = rSections.GetSectionLink(0);
+    const sd::SlideLinkRecord* pLink = findSectionLink(*pDoc, 0);
     CPPUNIT_ASSERT(pLink);
-    CPPUNIT_ASSERT_EQUAL(u"{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}"_ustr, pLink->maSourceSectionId);
+    CPPUNIT_ASSERT_EQUAL(u"{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}"_ustr, pLink->maSourceId);
 
     pUndoManager->Redo();
-    CPPUNIT_ASSERT(!rSections.GetSectionLink(0));
-    CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr,
-                         pDoc->GetSdPage(2, PageKind::Standard)->GetFileName());
+    CPPUNIT_ASSERT(!findSectionLink(*pDoc, 0));
+    CPPUNIT_ASSERT(findSlideLink(*pDoc, 2));
 }
 
 // A section unlinked together with its slides keeps its slides as slides of this document alone.
@@ -1902,34 +1962,152 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkBreakSectionAndSlides)
     const size_t nUndoActions = pUndoManager->GetUndoActionCount();
 
     // An identifier that names no section changes nothing.
-    CPPUNIT_ASSERT(!pXImpressDocument->breakSectionLink(
-        u"{00000000-0000-0000-0000-000000000000}"_ustr, /*bBreakSlides=*/true));
+    CPPUNIT_ASSERT(!pXImpressDocument->breakSlideLink(
+        u"section"_ustr, u"{00000000-0000-0000-0000-000000000000}"_ustr, /*bDeep=*/true));
     CPPUNIT_ASSERT_EQUAL(nUndoActions, pUndoManager->GetUndoActionCount());
 
-    CPPUNIT_ASSERT(pXImpressDocument->breakSectionLink(aSectionId, /*bBreakSlides=*/true));
+    CPPUNIT_ASSERT(pXImpressDocument->breakSlideLink(u"section"_ustr, aSectionId, /*bDeep=*/true));
     CPPUNIT_ASSERT_EQUAL(nUndoActions + 1, pUndoManager->GetUndoActionCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSectionSlideCount(0));
-    CPPUNIT_ASSERT(!rSections.GetSectionLink(0));
+    CPPUNIT_ASSERT(!findSectionLink(*pDoc, 0));
     CPPUNIT_ASSERT_EQUAL(u"Source one"_ustr, getSlideText(*pDoc, 2));
     CPPUNIT_ASSERT_EQUAL(u"Source two"_ustr, getSlideText(*pDoc, 3));
     for (sal_uInt16 nSlide = 2; nSlide < 4; ++nSlide)
-        CPPUNIT_ASSERT_EQUAL(OUString(),
-                             pDoc->GetSdPage(nSlide, PageKind::Standard)->GetFileName());
-    const boost::property_tree::ptree aLinks = readLinks(*pXImpressDocument);
-    CPPUNIT_ASSERT(aLinks.get_child("sections").empty());
-    CPPUNIT_ASSERT(aLinks.get_child("links").empty());
+        CPPUNIT_ASSERT(!findSlideLink(*pDoc, nSlide));
+    CPPUNIT_ASSERT(readLinks(*pXImpressDocument).get_child("links").empty());
 
     pUndoManager->Undo();
-    CPPUNIT_ASSERT(rSections.GetSectionLink(0));
+    CPPUNIT_ASSERT(findSectionLink(*pDoc, 0));
     for (sal_uInt16 nSlide = 2; nSlide < 4; ++nSlide)
-        CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr,
-                             pDoc->GetSdPage(nSlide, PageKind::Standard)->GetFileName());
+        CPPUNIT_ASSERT(findSlideLink(*pDoc, nSlide));
 
     pUndoManager->Redo();
-    CPPUNIT_ASSERT(!rSections.GetSectionLink(0));
+    CPPUNIT_ASSERT(!findSectionLink(*pDoc, 0));
     for (sal_uInt16 nSlide = 2; nSlide < 4; ++nSlide)
-        CPPUNIT_ASSERT_EQUAL(OUString(),
-                             pDoc->GetSdPage(nSlide, PageKind::Standard)->GetFileName());
+        CPPUNIT_ASSERT(!findSlideLink(*pDoc, nSlide));
+}
+
+// A section link finds its section in a file that lists sections by the identifier of the source
+// section, and takes the slides of that section alone; a file that lists other sections but not
+// that one refreshes nothing
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkRefreshSectionByIdentifier)
+{
+    // The source deck holds the section "Opening" with one slide and the section "Details" with
+    // another, and the whole deck is written out, sections and all.
+    utl::TempFileNamed aWholeDeck(u"", true, u".odp");
+    aWholeDeck.EnableKillingFile();
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-sections.odp"));
+    exportSlides(mxComponent, {}, aWholeDeck.GetURL());
+
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    // Both slides of the deck go in as the section "Opening", which the source holds one slide in.
+    const OUString aSectionId = insertLinkedSection(*pXImpressDocument, aWholeDeck.GetURL());
+    sd::SlideSectionManager& rSections = pDoc->GetSectionManager();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSectionSlideCount(0));
+
+    // The refresh takes the one slide the file lists under the section, out of the two it holds.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
+                         pXImpressDocument->refreshSlideLink(
+                             u"section"_ustr, aSectionId, u"Q3 deck.odp"_ustr, aWholeDeck.GetURL(),
+                             OUString(), OUString()));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rSections.GetSectionSlideCount(0));
+    CPPUNIT_ASSERT(findSectionLink(*pDoc, 0));
+
+    // A section the file lists nothing for keeps the slide it holds, which is reported: the link
+    // follows another section now, which the deck does not hold.
+    const sd::SlideLinkRecord* pLink = findSectionLink(*pDoc, 0);
+    CPPUNIT_ASSERT(pLink);
+    sd::SlideLinkRecord aOther = *pLink;
+    aOther.maSourceId = u"{00000000-0000-4000-8000-000000000000}"_ustr;
+    CPPUNIT_ASSERT(pDoc->GetSlideLinkManager().Set({ aOther }, OUString()));
+    std::vector<OString> aNotUpdated;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
+                         pXImpressDocument->refreshSlideLink(
+                             u"section"_ustr, aSectionId, u"Q3 deck.odp"_ustr, aWholeDeck.GetURL(),
+                             OUString(), OUString(), &aNotUpdated));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aNotUpdated.size());
+    CPPUNIT_ASSERT_EQUAL(OUStringToOString(getSlideId(*pDoc, 2), RTL_TEXTENCODING_ASCII_US),
+                         aNotUpdated[0]);
+    CPPUNIT_ASSERT(findSectionLink(*pDoc, 0));
+}
+
+// A refresh of a source reads every link to it that is under no other link from one file: a
+// linked slide on its own, and a linked section as a whole, in one undo step
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkRefreshSource)
+{
+    utl::TempFileNamed aSourceDeck(u"", true, u".odp");
+    aSourceDeck.EnableKillingFile();
+    loadFromURL(
+        m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-unnamed-source.fodp"));
+    exportSlides(mxComponent, {}, aSourceDeck.GetURL());
+    utl::TempFileNamed aUpdatedDeck(u"", true, u".odp");
+    aUpdatedDeck.EnableKillingFile();
+    loadFromURL(
+        m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-section-update-source.fodp"));
+    exportSlides(mxComponent, {}, aUpdatedDeck.GetURL());
+
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    // The first slide of the source goes in on its own at the front, and the other two as a
+    // section at the end.
+    CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
+        aSourceDeck.GetURL(),
+        "{\"slides\":[0],\"at\":0,\"link\":true,\"source\":\"Q3 deck.odp\"}"_ostr));
+    CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
+        aSourceDeck.GetURL(),
+        "{\"slides\":[1,2],\"link\":true,\"source\":\"Q3 deck.odp\","
+        "\"as\":\"section\",\"sourceId\":\"{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}\","
+        "\"sourceName\":\"Opening\"}"_ostr));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(5), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(u"Source one"_ustr, getSlideText(*pDoc, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Source two"_ustr, getSlideText(*pDoc, 3));
+
+    SfxUndoManager* pUndoManager = pDoc->GetDocSh()->GetUndoManager();
+    const size_t nUndoActions = pUndoManager->GetUndoActionCount();
+
+    // The slide reads the slide it follows, and the section the three slides the file lists under
+    // its source section, which count once.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4),
+                         pXImpressDocument->refreshSlideLinks(u"Q3 deck.odp"_ustr,
+                                                              aUpdatedDeck.GetURL(),
+                                                              u"2026-10-22T10:00:00Z"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(6), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(u"Source one"_ustr, getSlideText(*pDoc, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Source two, revised"_ustr, getSlideText(*pDoc, 3));
+    CPPUNIT_ASSERT_EQUAL(u"Source four"_ustr, getSlideText(*pDoc, 4));
+    CPPUNIT_ASSERT_EQUAL(u"Source one"_ustr, getSlideText(*pDoc, 5));
+    const sd::SlideLinkRecord* pSlide = findSlideLink(*pDoc, 0);
+    CPPUNIT_ASSERT(pSlide);
+    CPPUNIT_ASSERT_EQUAL(u"2026-10-22T10:00:00Z"_ustr, pSlide->maLastModifiedTime);
+    const sd::SlideLinkRecord* pSection = findSectionLink(*pDoc, 0);
+    CPPUNIT_ASSERT(pSection);
+    CPPUNIT_ASSERT_EQUAL(u"2026-10-22T10:00:00Z"_ustr, pSection->maLastModifiedTime);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pSection->maSlides.size());
+
+    // The section takes the name the file lists for its source section, since the refresh of
+    // a source names none itself.
+    CPPUNIT_ASSERT_EQUAL(u"Opening, revised"_ustr, pSection->maName);
+    CPPUNIT_ASSERT_EQUAL(u"Opening, revised"_ustr, pDoc->GetSectionManager().GetSection(0).maName);
+
+    // The whole refresh is one undo step.
+    CPPUNIT_ASSERT_EQUAL(nUndoActions + 1, pUndoManager->GetUndoActionCount());
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(5), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(u"Source two"_ustr, getSlideText(*pDoc, 3));
+    CPPUNIT_ASSERT_EQUAL(u"Opening"_ustr, pDoc->GetSectionManager().GetSection(0).maName);
+    CPPUNIT_ASSERT(findSlideLink(*pDoc, 0));
+    CPPUNIT_ASSERT(findSectionLink(*pDoc, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkSourceNotFetched)
@@ -1945,21 +2123,20 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkSourceNotFetched)
     CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
         aSourceUrl, "{\"slides\":[0],\"at\":1,\"link\":true,\"source\":\"Q3 deck.odp\"}"_ostr));
 
-    // A page holds its link with the sfx2 link manager once the document is loaded again, so the
-    // test registers it here to reach the same state in one session.
+    // A linked slide holds no link with the sfx2 link manager: its link is a record of the
+    // document, which only a refresh with a staged file reads.
     pDoc->GetSdPage(1, PageKind::Standard)->ConnectLink();
     sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
     CPPUNIT_ASSERT(pLinkManager);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pLinkManager->GetLinks().size());
+    CPPUNIT_ASSERT(pLinkManager->GetLinks().empty());
 
-    // Updating the links reads the file staged for each source document, so a source that has no
-    // staged file leaves its page the content it holds, with its link.
+    // Updating all links reaches nothing, so the slide keeps the content it holds, with its link.
     pLinkManager->UpdateAllLinks(/*bAskUpdate=*/false, u""_ustr);
     CPPUNIT_ASSERT_EQUAL(u"Source title"_ustr, getSlideText(*pDoc, 1));
-    SdPage* pLinked = pDoc->GetSdPage(1, PageKind::Standard);
+    const sd::SlideLinkRecord* pLinked = findSlideLink(*pDoc, 1);
     CPPUNIT_ASSERT(pLinked);
-    CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr, pLinked->GetFileName());
-    CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pLinked->GetBookmarkName());
+    CPPUNIT_ASSERT_EQUAL(u"Q3 deck.odp"_ustr, pLinked->maSource);
+    CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pLinked->maName);
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkBreak)
@@ -1982,27 +2159,23 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkBreak)
 
     // The first of the two keeps the content it holds and belongs to no source any more, and the
     // second is still linked to the source both came from.
-    CPPUNIT_ASSERT(pXImpressDocument->breakSlideLink(0));
+    const OUString aFirstId = getSlideId(*pDoc, 0);
+    CPPUNIT_ASSERT(pXImpressDocument->breakSlideLink(u"slide"_ustr, aFirstId, /*bDeep=*/false));
     CPPUNIT_ASSERT_EQUAL(u"Source title"_ustr, getSlideText(*pDoc, 0));
-    SdPage* pBroken = pDoc->GetSdPage(0, PageKind::Standard);
-    CPPUNIT_ASSERT(pBroken);
-    CPPUNIT_ASSERT_EQUAL(OUString(), pBroken->GetFileName());
-    CPPUNIT_ASSERT_EQUAL(OUString(), pBroken->GetBookmarkName());
+    CPPUNIT_ASSERT(!findSlideLink(*pDoc, 0));
     CPPUNIT_ASSERT_EQUAL(nUndoActions + 1, pUndoManager->GetUndoActionCount());
 
-    const boost::property_tree::ptree aLinks = readLinks(*pXImpressDocument);
-    std::vector<boost::property_tree::ptree> aSlides;
-    for (const auto& rSource : aLinks.get_child("links"))
-        for (const auto& rSlide : rSource.second.get_child("slides"))
-            aSlides.push_back(rSlide.second);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aSlides.size());
-    CPPUNIT_ASSERT_EQUAL(std::string("TargetOne"), aSlides[0].get<std::string>("name"));
+    const std::vector<boost::property_tree::ptree> aLinks = readLinkList(*pXImpressDocument);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aLinks.size());
+    CPPUNIT_ASSERT_EQUAL(std::string("TargetOne"), aLinks[0].get<std::string>("name"));
 
-    // A page that belongs to no source, and an index that names no page at all, leave the document
-    // as it is.
-    CPPUNIT_ASSERT(!pXImpressDocument->breakSlideLink(0));
-    CPPUNIT_ASSERT(!pXImpressDocument->breakSlideLink(-1));
-    CPPUNIT_ASSERT(!pXImpressDocument->breakSlideLink(pXImpressDocument->getParts()));
+    // A page that belongs to no source, an identifier that names no page at all, and a kind of no
+    // link leave the document as it is.
+    CPPUNIT_ASSERT(!pXImpressDocument->breakSlideLink(u"slide"_ustr, aFirstId, /*bDeep=*/false));
+    CPPUNIT_ASSERT(!pXImpressDocument->breakSlideLink(
+        u"slide"_ustr, u"{00000000-0000-0000-0000-000000000000}"_ustr, /*bDeep=*/false));
+    CPPUNIT_ASSERT(!pXImpressDocument->breakSlideLink(u"deck"_ustr, getSlideId(*pDoc, 1),
+                                                      /*bDeep=*/false));
 
     // A refresh of the source reads the slide of the page that is still linked and leaves the other
     // one alone.
@@ -2018,10 +2191,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkBreak)
     pUndoManager->Undo();
     pUndoManager->Undo();
     CPPUNIT_ASSERT_EQUAL(nUndoActions, pUndoManager->GetUndoActionCount());
-    pBroken = pDoc->GetSdPage(0, PageKind::Standard);
-    CPPUNIT_ASSERT(pBroken);
-    CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr, pBroken->GetFileName());
-    CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pBroken->GetBookmarkName());
+    const sd::SlideLinkRecord* pRestored = findSlideLink(*pDoc, 0);
+    CPPUNIT_ASSERT(pRestored);
+    CPPUNIT_ASSERT_EQUAL(u"Q3 deck.odp"_ustr, pRestored->maSource);
+    CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pRestored->maName);
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkBreakOnEdit)
@@ -2052,9 +2225,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkBreakOnEdit)
     SdrObject* pObject = pLinked->GetObj(0);
 
     // A change with no undo step in hand is the engine's own work on the page, the shape a link
-    // update or an embedded object gives it, so the page keeps its source.
+    // update or an embedded object gives it, so the page keeps its link.
     pObject->Move(Size(100, 100));
-    CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr, pLinked->GetFileName());
+    CPPUNIT_ASSERT(findSlideLink(*pDoc, 1));
     CPPUNIT_ASSERT_EQUAL(nUndoActions, pUndoManager->GetUndoActionCount());
 
     // A shape of the linked slide is moved by somebody editing it.
@@ -2065,8 +2238,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkBreakOnEdit)
 
     // The slide became this document's own, and a refresh of the source it came from has no page
     // left to read.
-    CPPUNIT_ASSERT_EQUAL(OUString(), pLinked->GetFileName());
-    CPPUNIT_ASSERT_EQUAL(OUString(), pLinked->GetBookmarkName());
+    CPPUNIT_ASSERT(!findSlideLink(*pDoc, 1));
     CPPUNIT_ASSERT(readLinks(*pXImpressDocument).get_child("links").empty());
     CPPUNIT_ASSERT_EQUAL(
         static_cast<sal_Int32>(-1),
@@ -2081,8 +2253,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkBreakOnEdit)
     pUndoManager->Undo();
     CPPUNIT_ASSERT_EQUAL(nUndoActions, pUndoManager->GetUndoActionCount());
     CPPUNIT_ASSERT_EQUAL(aStart, pObject->GetSnapRect().TopLeft());
-    CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr, pLinked->GetFileName());
-    CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pLinked->GetBookmarkName());
+    const sd::SlideLinkRecord* pRestored = findSlideLink(*pDoc, 1);
+    CPPUNIT_ASSERT(pRestored);
+    CPPUNIT_ASSERT_EQUAL(u"Q3 deck.odp"_ustr, pRestored->maSource);
+    CPPUNIT_ASSERT_EQUAL(u"SourceA"_ustr, pRestored->maName);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1),
                          readLinks(*pXImpressDocument).get_child("links").size());
 
@@ -2098,6 +2272,48 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkBreakOnEdit)
     pView->MoveMarkedObj(Size(500, 500));
     CPPUNIT_ASSERT_EQUAL(u"file:///decks/q3.odp"_ustr, pPathLinked->GetFileName());
     CPPUNIT_ASSERT_EQUAL(u"Slide 1"_ustr, pPathLinked->GetBookmarkName());
+}
+
+// A written presentation carries the sections of the pages it holds, under the identifiers and
+// names they have in the writing document, trimmed to the written pages
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testExportPagesWritesSections)
+{
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-sections.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    const sd::SlideSectionManager& rSections = pXImpressDocument->GetDoc()->GetSectionManager();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSectionCount());
+    const OUString aOpeningId = rSections.GetSection(0).maId;
+    const OUString aDetailsId = rSections.GetSection(1).maId;
+
+    // The pages are written in the other order, so the sections come in that order as well.
+    utl::TempFileNamed aWritten(u"", true, u".odp");
+    aWritten.EnableKillingFile();
+    CPPUNIT_ASSERT(pXImpressDocument->exportPages({ 1, 0 }, aWritten.GetURL()));
+
+    uno::Reference<lang::XComponent> xWritten(loadFromDesktop(aWritten.GetURL()));
+    SdXImpressDocument* pWrittenDocument = dynamic_cast<SdXImpressDocument*>(xWritten.get());
+    CPPUNIT_ASSERT(pWrittenDocument);
+    const sd::SlideSectionManager& rWritten = pWrittenDocument->GetDoc()->GetSectionManager();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rWritten.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(u"Details"_ustr, rWritten.GetSection(0).maName);
+    CPPUNIT_ASSERT_EQUAL(aDetailsId, rWritten.GetSection(0).maId);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rWritten.GetSection(0).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(u"Opening"_ustr, rWritten.GetSection(1).maName);
+    CPPUNIT_ASSERT_EQUAL(aOpeningId, rWritten.GetSection(1).maId);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rWritten.GetSection(1).mnStartIndex);
+    xWritten->dispose();
+
+    // A write of one page carries the section of that page alone.
+    CPPUNIT_ASSERT(pXImpressDocument->exportPages({ 1 }, aWritten.GetURL()));
+    xWritten = loadFromDesktop(aWritten.GetURL());
+    pWrittenDocument = dynamic_cast<SdXImpressDocument*>(xWritten.get());
+    CPPUNIT_ASSERT(pWrittenDocument);
+    const sd::SlideSectionManager& rOneWritten = pWrittenDocument->GetDoc()->GetSectionManager();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rOneWritten.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(aDetailsId, rOneWritten.GetSection(0).maId);
+    xWritten->dispose();
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testExportPages)

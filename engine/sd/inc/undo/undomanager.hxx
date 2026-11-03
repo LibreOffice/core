@@ -21,6 +21,8 @@
 
 #include <svx/sdrundomanager.hxx>
 
+class SdDrawDocument;
+
 namespace sd
 {
 
@@ -28,6 +30,9 @@ class UndoManager final : public SdrUndoManager
 {
 public:
     UndoManager();
+
+    /// The document whose actions this manager keeps.
+    void SetDocument(SdDrawDocument* pDoc);
 
     virtual void            EnterListAction(const OUString &rComment, const OUString& rRepeatComment, sal_uInt16 nId, ViewShellId nViewShellId) override;
 
@@ -38,8 +43,13 @@ public:
     void SetLinkedUndoManager (SfxUndoManager* pLinkedUndoManager);
 
 private:
-    using SdrUndoManager::Undo;
-    using SdrUndoManager::Redo;
+    /** The pages and the slide link records of an action come back in several steps, and the
+        document announces its links once they are all in place.
+    */
+    virtual bool Undo() override;
+    virtual bool Redo() override;
+
+    SdDrawDocument* mpDoc = nullptr;
 
     /** Used when the outline view is visible as a last resort to
         synchronize the undo managers.

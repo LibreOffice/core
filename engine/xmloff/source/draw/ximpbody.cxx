@@ -54,8 +54,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
 ,   mbHadSMILNodes( false )
 {
     bool bHaveXmlId( false );
-    OUString sXmlId, sStyleName, sContextName, sMasterPageName, sHREF, sSourceModifiedTime,
-        sSourcePageGuid;
+    OUString sXmlId, sStyleName, sContextName, sMasterPageName, sHREF;
 
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
@@ -119,16 +118,6 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
             case XML_ELEMENT(XLINK, XML_HREF):
             {
                 sHREF = sValue;
-                break;
-            }
-            case XML_ELEMENT(CO_EXT, XML_SOURCE_MODIFIED_TIME):
-            {
-                sSourceModifiedTime = sValue;
-                break;
-            }
-            case XML_ELEMENT(CO_EXT, XML_SOURCE_PAGE_GUID):
-            {
-                sSourcePageGuid = sValue;
                 break;
             }
         }
@@ -235,34 +224,6 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
             }
 
             xProps->setPropertyValue(u"BookmarkURL"_ustr, cpo::uno::Any( sHREF ) );
-
-            if( !sSourceModifiedTime.isEmpty() )
-            {
-                try
-                {
-                    xProps->setPropertyValue(u"SourceModifiedTime"_ustr,
-                                             cpo::uno::Any( sSourceModifiedTime ) );
-                }
-                catch( const cpo::uno::Exception& )
-                {
-                    TOOLS_WARN_EXCEPTION("xmloff.draw",
-                                         "while importing the source modified time of the page");
-                }
-            }
-
-            if( !sSourcePageGuid.isEmpty() )
-            {
-                try
-                {
-                    xProps->setPropertyValue(u"SourcePageGuid"_ustr,
-                                             cpo::uno::Any( sSourcePageGuid ) );
-                }
-                catch( const cpo::uno::Exception& )
-                {
-                    TOOLS_WARN_EXCEPTION("xmloff.draw",
-                                         "while importing the source slide identifier of the page");
-                }
-            }
         }
     }
 
@@ -350,12 +311,6 @@ class SdXMLSectionContext : public SvXMLImportContext
     OUString maSectionName;
     OUString maSectionId;
     std::vector<OUString> maSlideNames;
-    OUString maSourceReference;
-    OUString maSourceSectionId;
-    OUString maSourceSectionName;
-    OUString maSourceModifiedTime;
-    /// The source slide of each entry of maSlideNames, empty for a slide that names none.
-    std::vector<OUString> maSourcePageGuids;
 
 public:
     SdXMLSectionContext(SvXMLImport& rImport,
@@ -372,18 +327,6 @@ public:
                 case XML_ELEMENT(LO_EXT, XML_IDENTIFIER):
                     maSectionId = aIter.toString();
                     break;
-                case XML_ELEMENT(CO_EXT, XML_SOURCE_DOCUMENT):
-                    maSourceReference = aIter.toString();
-                    break;
-                case XML_ELEMENT(CO_EXT, XML_SOURCE_SECTION_GUID):
-                    maSourceSectionId = aIter.toString();
-                    break;
-                case XML_ELEMENT(CO_EXT, XML_SOURCE_SECTION_NAME):
-                    maSourceSectionName = aIter.toString();
-                    break;
-                case XML_ELEMENT(CO_EXT, XML_SOURCE_MODIFIED_TIME):
-                    maSourceModifiedTime = aIter.toString();
-                    break;
             }
         }
     }
@@ -394,21 +337,10 @@ public:
     {
         if (nElement == XML_ELEMENT(LO_EXT, XML_SECTION_SLIDE))
         {
-            std::optional<OUString> oSlideName;
-            OUString sSourcePageGuid;
             for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
             {
                 if (aIter.getToken() == XML_ELEMENT(LO_EXT, XML_NAME))
-                    oSlideName = aIter.toString();
-                else if (aIter.getToken() == XML_ELEMENT(CO_EXT, XML_SOURCE_PAGE_GUID))
-                    sSourcePageGuid = aIter.toString();
-            }
-            // The slides are listed by name, and the source slide of each one goes with its name,
-            // so both lists hold one entry for each named slide.
-            if (oSlideName)
-            {
-                maSlideNames.push_back(*oSlideName);
-                maSourcePageGuids.push_back(sSourcePageGuid);
+                    maSlideNames.push_back(aIter.toString());
             }
         }
         return nullptr;
@@ -417,23 +349,6 @@ public:
     const OUString& getSectionName() const { return maSectionName; }
     const OUString& getSectionId() const { return maSectionId; }
     const std::vector<OUString>& getSlideNames() const { return maSlideNames; }
-
-    /// Add the link to the source section to rProps, when the section names one.
-    void addLinkProperties(std::vector<beans::PropertyValue>& rProps) const
-    {
-        if (maSourceReference.isEmpty())
-            return;
-
-        rProps.push_back(comphelper::makePropertyValue(u"SourceReference"_ustr, maSourceReference));
-        rProps.push_back(comphelper::makePropertyValue(u"SourceSectionId"_ustr, maSourceSectionId));
-        rProps.push_back(
-            comphelper::makePropertyValue(u"SourceSectionName"_ustr, maSourceSectionName));
-        if (!maSourceModifiedTime.isEmpty())
-            rProps.push_back(
-                comphelper::makePropertyValue(u"SourceModifiedTime"_ustr, maSourceModifiedTime));
-        rProps.push_back(comphelper::makePropertyValue(
-            u"SourcePageGuidList"_ustr, comphelper::containerToSequence(maSourcePageGuids)));
-    }
 };
 
 /// Handles <loext:section-list> inside <office:presentation>
@@ -485,7 +400,6 @@ public:
                 aProps.push_back(comphelper::makePropertyValue(
                     u"SlideNameList"_ustr,
                     comphelper::containerToSequence(pSection->getSlideNames())));
-                pSection->addLinkProperties(aProps);
 
                 aSectionsList.push_back(
                     comphelper::makePropertyValue(u"Section"_ustr + OUString::number(i),
@@ -498,6 +412,131 @@ public:
         catch (const cpo::uno::Exception&)
         {
             SAL_WARN("xmloff.draw", "Failed to import sections");
+        }
+    }
+};
+
+/// Handles <coext:slide-link> inside <coext:slide-link-list>
+class SdXMLSlideLinkContext : public SvXMLImportContext
+{
+    OUString maUnit;
+    OUString maId;
+    OUString maSource;
+    OUString maSourceId;
+    OUString maName;
+    OUString maLastModifiedTime;
+    std::vector<OUString> maSlides;
+
+public:
+    SdXMLSlideLinkContext(SvXMLImport& rImport,
+                          const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
+        : SvXMLImportContext(rImport)
+    {
+        for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
+        {
+            switch (aIter.getToken())
+            {
+                case XML_ELEMENT(CO_EXT, XML_UNIT):
+                    maUnit = aIter.toString();
+                    break;
+                case XML_ELEMENT(CO_EXT, XML_IDENTIFIER):
+                    maId = aIter.toString();
+                    break;
+                case XML_ELEMENT(CO_EXT, XML_SOURCE_DOCUMENT):
+                    maSource = aIter.toString();
+                    break;
+                case XML_ELEMENT(CO_EXT, XML_SOURCE_IDENTIFIER):
+                    maSourceId = aIter.toString();
+                    break;
+                case XML_ELEMENT(CO_EXT, XML_SOURCE_NAME):
+                    maName = aIter.toString();
+                    break;
+                case XML_ELEMENT(CO_EXT, XML_SOURCE_MODIFIED_TIME):
+                    maLastModifiedTime = aIter.toString();
+                    break;
+            }
+        }
+    }
+
+    cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
+        sal_Int32 nElement,
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override
+    {
+        if (nElement == XML_ELEMENT(CO_EXT, XML_SLIDE))
+        {
+            for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
+            {
+                if (aIter.getToken() == XML_ELEMENT(CO_EXT, XML_GUID))
+                    maSlides.push_back(aIter.toString());
+            }
+        }
+        return nullptr;
+    }
+
+    /// The link as one entry of the SlideLinks property.
+    cpo::uno::Sequence<beans::PropertyValue> getLinkProperties() const
+    {
+        return { comphelper::makePropertyValue(u"Unit"_ustr, maUnit),
+                 comphelper::makePropertyValue(u"Id"_ustr, maId),
+                 comphelper::makePropertyValue(u"Source"_ustr, maSource),
+                 comphelper::makePropertyValue(u"SourceId"_ustr, maSourceId),
+                 comphelper::makePropertyValue(u"Name"_ustr, maName),
+                 comphelper::makePropertyValue(u"LastModifiedTime"_ustr, maLastModifiedTime),
+                 comphelper::makePropertyValue(u"Slides"_ustr,
+                                               comphelper::containerToSequence(maSlides)) };
+    }
+};
+
+/// Handles <coext:slide-link-list> inside <office:presentation>
+class SdXMLSlideLinkListContext : public SvXMLImportContext
+{
+    std::vector<rtl::Reference<SdXMLSlideLinkContext>> maLinks;
+
+public:
+    SdXMLSlideLinkListContext(SvXMLImport& rImport)
+        : SvXMLImportContext(rImport)
+    {
+    }
+
+    cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
+        sal_Int32 nElement,
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override
+    {
+        if (nElement == XML_ELEMENT(CO_EXT, XML_SLIDE_LINK))
+        {
+            rtl::Reference<SdXMLSlideLinkContext> pLink(
+                new SdXMLSlideLinkContext(GetImport(), xAttrList));
+            maLinks.push_back(pLink);
+            return pLink;
+        }
+        return nullptr;
+    }
+
+    void endFastElement(sal_Int32) override
+    {
+        if (maLinks.empty())
+            return;
+
+        try
+        {
+            uno::Reference<beans::XPropertySet> xDocumentProperties(GetImport().GetModel(),
+                                                                    uno::UNO_QUERY);
+            if (!xDocumentProperties.is())
+                return;
+
+            std::vector<beans::PropertyValue> aLinkList;
+            for (size_t i = 0; i < maLinks.size(); ++i)
+            {
+                aLinkList.push_back(comphelper::makePropertyValue(
+                    u"Link"_ustr + OUString::number(i), maLinks[i]->getLinkProperties()));
+            }
+
+            xDocumentProperties->setPropertyValue(
+                u"SlideLinks"_ustr, cpo::uno::Any(comphelper::containerToSequence(aLinkList)));
+        }
+        catch (const cpo::uno::Exception&)
+        {
+            SAL_WARN("xmloff.draw", "Failed to import slide links");
         }
     }
 };
@@ -569,6 +608,10 @@ cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLBodyContext::crea
         case XML_ELEMENT(LO_EXT, XML_SECTION_LIST):
         {
             return new SdXMLSectionListContext( GetImport() );
+        }
+        case XML_ELEMENT(CO_EXT, XML_SLIDE_LINK_LIST):
+        {
+            return new SdXMLSlideLinkListContext( GetImport() );
         }
         default:
             XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);

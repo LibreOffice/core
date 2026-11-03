@@ -987,6 +987,18 @@ xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
       </rng:optional>
     </rng:define>
 
+    <!-- Override presentation epilogue to allow loext:section-list and coext:slide-link-list -->
+    <rng:define name="office-presentation-content-epilogue">
+      <rng:optional>
+        <rng:ref name="loext-section-list"/>
+      </rng:optional>
+      <rng:optional>
+        <rng:ref name="coext-slide-link-list"/>
+      </rng:optional>
+      <rng:ref name="presentation-settings"/>
+      <rng:ref name="table-functions"/>
+    </rng:define>
+
     <!-- Override office-annotation to add loext:threaded-comment child element -->
     <rng:define name="office-annotation">
       <rng:element name="office:annotation">
@@ -4639,25 +4651,78 @@ xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
     </rng:optional>
   </rng:define>
   <!-- TODO no proposal -->
-  <!-- The time the source document the page came from was last modified, as
-       the integrator reported it. It goes with the reference above. -->
-  <rng:define name="draw-page-attlist" combine="interleave">
-    <rng:optional>
-      <rng:attribute name="coext:source-modified-time">
-        <rng:text/>
-      </rng:attribute>
-    </rng:optional>
+  <!-- The sections of a presentation: each one names its slides, in order, by the
+       name each slide carries. -->
+  <rng:define name="loext-section-list">
+    <rng:element name="loext:section-list">
+      <rng:zeroOrMore>
+        <rng:element name="loext:section">
+          <rng:attribute name="loext:name">
+            <rng:ref name="string"/>
+          </rng:attribute>
+          <rng:optional>
+            <rng:attribute name="loext:identifier">
+              <rng:ref name="coext-guid-value"/>
+            </rng:attribute>
+          </rng:optional>
+          <rng:zeroOrMore>
+            <rng:element name="loext:section-slide">
+              <rng:attribute name="loext:name">
+                <rng:ref name="string"/>
+              </rng:attribute>
+            </rng:element>
+          </rng:zeroOrMore>
+        </rng:element>
+      </rng:zeroOrMore>
+    </rng:element>
   </rng:define>
   <!-- TODO no proposal -->
-  <!-- The identifier of the slide of the source document the page came from,
-       which names that slide wherever it stands in the source. It goes with
-       the reference above. -->
-  <rng:define name="draw-page-attlist" combine="interleave">
-    <rng:optional>
-      <rng:attribute name="coext:source-page-guid">
-        <rng:ref name="coext-guid-value"/>
-      </rng:attribute>
-    </rng:optional>
+  <!-- The links of a presentation to the slides and sections of other documents. Each one
+       names the unit it holds a copy of, the page or section of this document that holds
+       it, the source document as a persistent link, the unit in that document, the name
+       and the modification time it had when last read, and the slides it spans here, by
+       identifier and in order. -->
+  <rng:define name="coext-slide-link-list">
+    <rng:element name="coext:slide-link-list">
+      <rng:zeroOrMore>
+        <rng:element name="coext:slide-link">
+          <rng:attribute name="coext:unit">
+            <rng:choice>
+              <rng:value>slide</rng:value>
+              <rng:value>section</rng:value>
+            </rng:choice>
+          </rng:attribute>
+          <rng:attribute name="coext:identifier">
+            <rng:ref name="coext-guid-value"/>
+          </rng:attribute>
+          <rng:attribute name="coext:source-document">
+            <rng:ref name="string"/>
+          </rng:attribute>
+          <rng:optional>
+            <rng:attribute name="coext:source-identifier">
+              <rng:ref name="string"/>
+            </rng:attribute>
+          </rng:optional>
+          <rng:optional>
+            <rng:attribute name="coext:source-name">
+              <rng:ref name="string"/>
+            </rng:attribute>
+          </rng:optional>
+          <rng:optional>
+            <rng:attribute name="coext:source-modified-time">
+              <rng:ref name="string"/>
+            </rng:attribute>
+          </rng:optional>
+          <rng:zeroOrMore>
+            <rng:element name="coext:slide">
+              <rng:attribute name="coext:guid">
+                <rng:ref name="coext-guid-value"/>
+              </rng:attribute>
+            </rng:element>
+          </rng:zeroOrMore>
+        </rng:element>
+      </rng:zeroOrMore>
+    </rng:element>
   </rng:define>
   <!-- TODO no proposal for page number on multipage formats -->
   <rng:define name="draw-image-attlist" combine="interleave">

@@ -34,9 +34,8 @@ struct RemoteLink
     /// The time the remote document was last modified, from LastModifiedTime. Empty when the
     /// storage reported none.
     std::string lastModifiedTime;
-    /// The persistent link to the remote document, from PersistentLink. It is the name after
-    /// vnd.collabora.slide-source:, the reference the storage resolves to the document, and
-    /// the one name a view knows the remote link by.
+    /// The persistent link to the remote document, from PersistentLink: the reference the
+    /// storage resolves to the document, and the one name a view knows the remote link by.
     std::string persistentLink;
 
     /// The persistent link that stands for no source in a link access request. It asks the

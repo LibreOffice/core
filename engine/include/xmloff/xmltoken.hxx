@@ -3635,10 +3635,10 @@ namespace xmloff::token {
         XML_GUID,
         XML_DATE_UTC,
         XML_SOURCE_MODIFIED_TIME,
-        XML_SOURCE_PAGE_GUID,
         XML_SOURCE_DOCUMENT,
-        XML_SOURCE_SECTION_GUID,
-        XML_SOURCE_SECTION_NAME,
+        XML_SOURCE_IDENTIFIER,
+        XML_SLIDE_LINK_LIST,
+        XML_SLIDE_LINK,
 
         XML_SHEET_VIEWS,
         XML_SHEET_VIEW,

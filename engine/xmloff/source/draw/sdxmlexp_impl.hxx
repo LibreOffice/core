@@ -146,6 +146,7 @@ class SdXMLExport : public SvXMLExport
     void exportTheme(const cpo::uno::Reference<css::drawing::XDrawPage>& xDrawPage);
     void exportPresentationSettings();
     void exportSections();
+    void exportSlideLinks();
 
     // #82003# helper function for recursive object count
     sal_uInt32 ImpRecursiveObjectCount( const cpo::uno::Reference< css::drawing::XShapes >& xShapes);

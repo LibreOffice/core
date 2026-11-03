@@ -50,6 +50,7 @@
 
 #include <sdresid.hxx>
 #include <drawdoc.hxx>
+#include <SlideLinkManager.hxx>
 #include <SlideSectionManager.hxx>
 #include <UndoSlideSection.hxx>
 #include <sdpage.hxx>
@@ -701,8 +702,8 @@ void SdDrawDocument::MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
 
     // A slide moved within a linked section, or out of one, unlinks that section, and the undo of
     // the move puts the slide back and links the section again.
-    if (mpSectionManager)
-        mpSectionManager->NotifyLinksIfChanged();
+    if (mpSlideLinkManager)
+        mpSlideLinkManager->NotifyLinksIfChanged();
 }
 
 // Insert page
@@ -743,12 +744,17 @@ void SdDrawDocument::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
         KitHelper::notifyDocumentSizeChangedAllViews(pDoc, /*bInvalidateAllParts=*/false);
     }
 
-    if (!mbInternalPageMove && mpSectionManager && !pSdPage->IsMasterPage()
+    if (!mbInternalPageMove && !pSdPage->IsMasterPage()
         && pSdPage->GetPageKind() == PageKind::Standard)
     {
         const sal_Int32 nStandardIndex = GetStandardPageIndex(pSdPage);
-        if (nStandardIndex >= 0)
+        if (nStandardIndex >= 0 && mpSectionManager)
             mpSectionManager->OnSlideInserted(nStandardIndex);
+
+        // A slide that comes back makes its link hold again, and a slide that goes into a linked
+        // section ends the link of that section.
+        if (mpSlideLinkManager)
+            mpSlideLinkManager->NotifyLinksIfChanged();
     }
 
     // The previews on a canvas page that comes back are already in place. Its notes page, which
@@ -846,8 +852,16 @@ rtl::Reference<SdrPage> SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
         updatePagePreviewsGrid(pSdPage);
     }
 
-    if (nRemovedStandardIndex >= 0 && !mbInternalPageMove && mpSectionManager)
-        mpSectionManager->OnSlideRemoved(nRemovedStandardIndex);
+    if (nRemovedStandardIndex >= 0 && !mbInternalPageMove)
+    {
+        if (mpSectionManager)
+            mpSectionManager->OnSlideRemoved(nRemovedStandardIndex);
+
+        // A linked slide that goes ends its link, and one that leaves a linked section ends the
+        // link of that section.
+        if (mpSlideLinkManager && !mbDestroying)
+            mpSlideLinkManager->NotifyLinksIfChanged();
+    }
 
     return pPage;
 }
@@ -1874,6 +1888,19 @@ void SdDrawDocument::NotifyKitHasOverviewPage(bool bHasOverviewPage)
     {
         if (pViewShell->GetObjectShell() == mpDocSh)
             pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED, aPayload);
+    }
+}
+
+void SdDrawDocument::NotifyViews(COKitCallbackType eType, const OString& rPayload) const
+{
+    if (!mpDocSh)
+        return;
+
+    for (SfxViewShell* pViewShell = SfxViewShell::GetFirst(false); pViewShell;
+         pViewShell = SfxViewShell::GetNext(*pViewShell, false))
+    {
+        if (pViewShell->GetObjectShell() == mpDocSh)
+            pViewShell->viewCallback(eType, rPayload);
     }
 }
 
