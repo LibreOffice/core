@@ -2094,6 +2094,17 @@ img.ui-combobox-value-preview {
 	background-color: var(--color-background-hover);
 }
 
+/* The menu of a point to tie a connector to is short and has no scrollbar, so its entries are as
+ * wide as the menu, and the ring of the focused entry lies inside the entry, where all of it is
+ * seen. */
+#tie-point-menu-entries .ui-combobox-entry {
+	width: 100%;
+}
+
+#tie-point-menu-entries .ui-combobox-entry:focus-visible {
+	outline-offset: -2px;
+}
+
 .ui-combobox-entry.disabled {
 	opacity: 0.5;
 	pointer-events: none;

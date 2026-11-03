@@ -1220,6 +1220,11 @@ class Dispatcher {
 				app.map.sendUnoCommand('.uno:NormalMultiPaneGUI');
 		};
 
+		// Shows the points to tie a connector to on the selected shape, or hides them again.
+		this.actionsMap[SelectionSection.tiePointsCommand] = () => {
+			GraphicSelection.selectionSection?.switchTheTiePoints();
+		};
+
 		this.actionsMap['animationdeck'] = () => {
 			app.map.sidebarFromNotebookbar.toggleAnimationsSidebar();
 		};

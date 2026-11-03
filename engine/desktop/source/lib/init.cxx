@@ -7126,6 +7126,14 @@ void COKitDocumentImpl::setObjectGluePoint(unsigned long long nObjectId, int nAt
         return;
     }
 
+    // A point the shape makes from its own geometry is laid out again with the shape, so only a
+    // point someone added stays where it is put.
+    if (!(*pGluePoints)[static_cast<sal_uInt16>(nAt)].IsUserDefined())
+    {
+        SetLastExceptionMsg(u"That point comes from the shape's geometry and cannot be moved"_ustr);
+        return;
+    }
+
     // The place on the object becomes a place on the page through the object's own mapping.
     basegfx::B2DHomMatrix aOfTheObject;
     basegfx::B2DPolyPolygon aOutline;

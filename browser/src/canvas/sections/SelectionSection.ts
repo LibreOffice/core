@@ -40,7 +40,25 @@ abstract class SelectionSection extends CanvasSectionObject {
 			this.moveHandleBy(handle, towards, event),
 		(handle: SelectionHandle, event: KeyboardEvent) =>
 			this.pressTheHandle(handle, event),
+		(name: string) => this.blinksWhileActive(name),
 	);
+
+	/// Whether the handle the keyboard is on is a point to tie a connector to.
+	private keyboardIsOnATiePoint(): boolean {
+		const handle = this.travel.activeHandle();
+		return (
+			handle !== undefined && this.groupOf(handle) instanceof TiePointHandles
+		);
+	}
+
+	/// Whether the handle of that name blinks while the keyboard is on it, as its group says.
+	private blinksWhileActive(name: string): boolean {
+		const handle = this.handles().find(
+			(one: SelectionHandle) => one.name === name,
+		);
+		const group = handle ? this.groupOf(handle) : undefined;
+		return group ? group.blinksWhileActive() : true;
+	}
 
 	/*
 		Space, Return or 0 on a handle the keyboard is on. On the handle above the selection, 0
@@ -153,6 +171,59 @@ abstract class SelectionSection extends CanvasSectionObject {
 	public static selectedHere(objectIds: number[]): void {
 		if (SelectionSection.shearing !== SelectionSection.keyOf(objectIds))
 			SelectionSection.shearing = null;
+	}
+
+	/*
+		The object whose points to tie a connector to are shown, as the key of its id, or null
+		while no points are shown. A new selection starts with them hidden.
+	*/
+	private static tiePointsShownFor: string | null = null;
+
+	/// The state of the points last told to the toolbars.
+	private static tiePointsToldAs: boolean = false;
+
+	/// The command whose state says whether the points to tie a connector to are shown.
+	public static readonly tiePointsCommand: string = 'showgluepoints';
+
+	/// Whether the points to tie a connector to are shown for this selection.
+	public tiePointsAreShown(): boolean {
+		return SelectionSection.tiePointsShownFor === this.keyOfTheSelection();
+	}
+
+	/// Shows the points to tie a connector to, or hides them again. They are shown for one
+	/// selected object only, since only one object at a time has its points drawn.
+	public switchTheTiePoints(): void {
+		if (!this.tiePointsAreShown() && this.selectedObjects().length !== 1)
+			return;
+
+		SelectionSection.tiePointsShownFor = this.tiePointsAreShown()
+			? null
+			: this.keyOfTheSelection();
+
+		// The keyboard leaves the handles, since the ones it walks are not the same any more.
+		this.travel.leave();
+		this.refresh();
+		this.containerObject.requestReDraw();
+		SelectionSection.tellTheTiePoints();
+	}
+
+	/// Hides the points to tie a connector to, as a new selection does.
+	public static hideTheTiePoints(): void {
+		SelectionSection.tiePointsShownFor = null;
+		SelectionSection.tellTheTiePoints();
+	}
+
+	/// Tells the toolbars whether the points to tie a connector to are shown, when that changed.
+	public static tellTheTiePoints(): void {
+		const shown =
+			GraphicSelection.selectionSection?.tiePointsAreShown() ?? false;
+		if (shown === SelectionSection.tiePointsToldAs) return;
+
+		SelectionSection.tiePointsToldAs = shown;
+		app.map.fire('commandstatechanged', {
+			commandName: SelectionSection.tiePointsCommand,
+			state: shown ? 'true' : 'false',
+		});
 	}
 
 	/// The mode the handle above the selection is in. It shears only where every selected object
@@ -518,7 +589,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 		Nothing where the client did not work the framing handles out.
 	*/
 	public middle(): cool.SimplePoint | undefined {
-		return SelectionSection.middleOf(this.handles());
+		return SelectionSection.middleOf(this.handlesOf(this.groups()));
 	}
 
 	/// The middle of the selection as those handles frame it.
@@ -538,6 +609,13 @@ abstract class SelectionSection extends CanvasSectionObject {
 	/// The handles as they are drawn now: where a drag would leave them while one runs, where
 	/// the objects put them otherwise.
 	public handles(): SelectionHandle[] {
+		return this.handlesOf(
+			this.groups().filter((group: HandleGroup) => group.isShown()),
+		);
+	}
+
+	/// The handles of those groups as the running interaction leaves them, shown or not.
+	private handlesOf(groups: HandleGroup[]): SelectionHandle[] {
 		const shown = this.interaction?.handles(this.known) ?? this.known;
 
 		/*
@@ -546,7 +624,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 			selection keeps its distance from the upper side however the selection is scaled, and
 			the points to tie to follow the object under the mouse rather than the drag.
 		*/
-		return this.groups().flatMap((group: HandleGroup) => {
+		return groups.flatMap((group: HandleGroup) => {
 			const placed = group.place(shown);
 			if (placed)
 				return placed.map((handle: SelectionHandle) => ({
@@ -639,9 +717,10 @@ abstract class SelectionSection extends CanvasSectionObject {
 			if (!shown[at].name || (shown[at].deactivated && !deactivatedToo))
 				continue;
 
+			const reach = this.groupOf(shown[at])?.reachOf(usual) ?? usual;
 			const half = shown[at].larger
-				? usual + HandleLook.largerBy('shaping')
-				: usual;
+				? reach + HandleLook.largerBy('shaping')
+				: reach;
 			const point = HandleLook.drawnAt(shown[at]);
 			if (Math.abs(point.vX - x) <= half && Math.abs(point.vY - y) <= half)
 				return shown[at];
@@ -663,9 +742,10 @@ abstract class SelectionSection extends CanvasSectionObject {
 	/// The four corners the eight stand on, in the order they go round, in view pixels. Empty for
 	/// a selection that is framed by no handles.
 	private framingCorners(): cool.Point[] {
+		const framing = this.handlesOf(this.groups());
 		return ['1', '3', '8', '6']
 			.map((kind: string) =>
-				this.handles().find((handle: SelectionHandle) => handle.kind === kind),
+				framing.find((handle: SelectionHandle) => handle.kind === kind),
 			)
 			.filter((handle): handle is SelectionHandle => handle !== undefined)
 			.map((handle: SelectionHandle) => {
@@ -3123,8 +3203,15 @@ abstract class SelectionSection extends CanvasSectionObject {
 				this.switchTheHandleMode();
 				this.interaction = null;
 				this.followTheOtherMode(this.pressedHandle);
-			} else if (this.pressedHandle?.name)
+			} else if (this.pressedHandle?.name) {
 				this.travel.goTo(this.pressedHandle.name);
+				this.groupOf(this.pressedHandle)?.letGoWhereItWasPressed(
+					this.pressedHandle,
+				);
+			} else if (this.pressedGroup && this.keyboardIsOnATiePoint()) {
+				// A click on the object, off the handles, takes the keyboard off the point.
+				this.travel.leave();
+			}
 
 			// The press hid the buttons beside the bands as a drag does; a click brings them back.
 			this.interaction = null;

@@ -966,6 +966,7 @@ class GraphicSelection {
 			this.selectionSection = null;
 			RenderManager.drawnElsewhere([]);
 			this.dropThePlayer();
+			SelectionSection.hideTheTiePoints();
 		}
 
 		if (wanted === null) return;
@@ -985,6 +986,10 @@ class GraphicSelection {
 		if (several)
 			(this.selectionSection as MultiSelectionSection).setObjects(objectIds);
 		else this.selectionSection.refresh();
+
+		// Objects that came into the selection start with their points hidden.
+		if (!this.selectionSection.tiePointsAreShown())
+			SelectionSection.hideTheTiePoints();
 	}
 
 	/*

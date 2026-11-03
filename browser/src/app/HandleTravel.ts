@@ -67,6 +67,10 @@ class HandleTravel {
 	*/
 	private pressHandle: (handle: any, event: KeyboardEvent) => boolean;
 
+	/// Whether the handle of that name blinks while the keyboard is on it, which is the business
+	/// of whoever owns the handles. One that does not blink is shown in its larger form throughout.
+	private blinks: (name: string) => boolean;
+
 	/*
 		The handle the keyboard works on, by the name that says what it is, or null while the
 		keyboard is on no handle. A name outlives the handles being built again after every move,
@@ -87,10 +91,12 @@ class HandleTravel {
 			event: KeyboardEvent,
 		) => cool.SimplePoint | null,
 		pressHandle: (handle: any, event: KeyboardEvent) => boolean,
+		blinks: (name: string) => boolean,
 	) {
 		this.handlesOf = handlesOf;
 		this.moveHandle = moveHandle;
 		this.pressHandle = pressHandle;
+		this.blinks = blinks;
 	}
 
 	/// Whether the handle of that name is the one the keyboard is on and is shown large now.
@@ -146,7 +152,7 @@ class HandleTravel {
 	/// The handle the keyboard works on, by name, with the blinking that shows which one it is.
 	private setActive(name: string | null): void {
 		this.activeName = name;
-		this.blink(name !== null);
+		this.blink(name !== null && this.blinks(name));
 		app.sectionContainer?.requestReDraw();
 		if (name !== null) this.scrollToActive();
 	}

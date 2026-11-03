@@ -13,7 +13,7 @@
  * window.L.Control.NotebookbarImpress - definition of notebookbar content in Impress
  */
 
-/* global _ _UNO app JSDialog */
+/* global _ _UNO app cool JSDialog */
 
 window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend({
 
@@ -2961,6 +2961,21 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				'accessibility': { focusBack: true, combination: 'IA', de: null }
 			}
 		];
+
+		// The points to tie a connector to are shown on the canvas the client draws itself.
+		if (cool.VectorRenderingConfig.isEnabled()) {
+			content.push(
+				{ type: 'separator', id: 'shape-interaction-break', orientation: 'vertical' },
+				{
+					'id': 'shape-gluepoints:GluePointsMenu',
+					'type': 'menubutton',
+					'text': _UNO('.uno:GlueEditMode', 'presentation'),
+					'command': 'showgluepoints',
+					'icon': 'lc_glueeditmode.svg',
+					'accessibility': { focusBack: true, combination: 'GP', de: null }
+				}
+			);
+		}
 
 		return this.getTabPage('Shape', content);
 	},

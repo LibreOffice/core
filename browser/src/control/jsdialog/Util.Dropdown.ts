@@ -36,6 +36,10 @@ function _createHeader(id: string, text: string): WidgetJSON {
 			tooltip: text,
 		} as TextWidget;
 
+	// The two parts are laid out side by side, which drops a plain space at the end of the first
+	// one, so a space at that end is made non-breaking and stays between the two parts.
+	const start = characters.slice(0, endStart).join('').replace(/ $/, '\u00a0');
+
 	return {
 		id: id,
 		type: 'container',
@@ -44,7 +48,7 @@ function _createHeader(id: string, text: string): WidgetJSON {
 			{
 				id: id + '-start',
 				type: 'fixedtext',
-				text: characters.slice(0, endStart).join(''),
+				text: start,
 			} as TextWidget,
 			{
 				id: id + '-end',

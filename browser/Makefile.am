@@ -1759,6 +1759,7 @@ pot:
 		js/global.js \
 		src/app/Debug.ts \
 		src/app/ExportFormats.ts \
+		src/app/HandleGroups.ts \
 		src/app/IconUtil.ts \
 		src/app/SlideAvatars.ts \
 		src/app/LOUtil.ts \

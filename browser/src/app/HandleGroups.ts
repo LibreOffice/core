@@ -71,6 +71,32 @@ abstract class HandleGroup {
 		return false;
 	}
 
+	/*
+		Whether its handles are shown now: drawn, reached by a press and walked by the keyboard.
+		A hidden group still has its handles worked out, so the frame of the selection and its
+		middle are measured from them as always.
+	*/
+	public isShown(): boolean {
+		return true;
+	}
+
+	/// Whether one of its handles blinks while the keyboard is on it. Most of them do.
+	public blinksWhileActive(): boolean {
+		return true;
+	}
+
+	/// How far from its middle a press takes hold of one of its handles, from how far it does for
+	/// a handle of the usual size, in core pixels. Most groups take that distance.
+	public reachOf(usual: number): number {
+		return usual;
+	}
+
+	/// What a press on one of its handles does when it is let go where it started, besides
+	/// putting the keyboard on that handle. Nothing for most groups.
+	public letGoWhereItWasPressed(_handle: SelectionHandle): void {
+		// Most groups do nothing more.
+	}
+
 	/// The drag a press on one of its handles begins, or nothing where it begins none.
 	public interactionFor(
 		_handle: SelectionHandle,
@@ -217,6 +243,11 @@ abstract class HandleGroup {
 */
 class FramingHandles extends HandleGroup {
 	public readonly name: string = 'framing';
+
+	/// The eight make way for the points to tie a connector to while those are shown.
+	public isShown(): boolean {
+		return !this.selection.tiePointsAreShown();
+	}
 
 	public handles(): SelectionHandle[] {
 		return (
@@ -763,6 +794,11 @@ class CropHandles extends HandleGroup {
 */
 class TurningHandle extends HandleGroup {
 	public readonly name: string = 'turning';
+
+	/// The handle makes way for the points to tie a connector to while those are shown.
+	public isShown(): boolean {
+		return !this.selection.tiePointsAreShown();
+	}
 
 	/// How far above the selection it sits, in core pixels.
 	public static readonly distance: number = 30;
@@ -1476,11 +1512,130 @@ class ShapingHandles extends HandlesMovedOneByOne {
 
 /*
 	The points someone added to an object for a connector to tie itself to, and, while an end of a
-	connector is dragged onto an object, every place that end could land. They are walked to and
-	marked; moving one is not built yet.
+	connector is dragged onto an object, every place that end could land. The points of the
+	selected object are shown only while they are asked for, in place of the eight that frame it
+	and the handle that turns it.
 */
 class TiePointHandles extends HandleGroup {
 	public readonly name: string = 'tiePoints';
+
+	public isShown(): boolean {
+		return (
+			this.selection.tiePointsAreShown() ||
+			this.selection.aimedAtObject() !== null
+		);
+	}
+
+	/// The point the keyboard is on is shown larger and holds still.
+	public blinksWhileActive(): boolean {
+		return false;
+	}
+
+	/// A point is small and sits on the edge of the object, so a press takes it from twice as far.
+	public reachOf(usual: number): number {
+		return 2 * usual;
+	}
+
+	/// A click on a point opens the menu of that point beside it.
+	public letGoWhereItWasPressed(handle: SelectionHandle): void {
+		if (handle.kind !== 'GluePoint') return;
+
+		TiePointHandles.openTheMenuOf(handle, this.held(handle)?.wayOut);
+	}
+
+	/// The id of the menu a click on a point opens.
+	private static readonly menuId: string = 'tie-point-menu';
+
+	/// The element the menu of a point opens from, or null before the first one opened.
+	private static menuAnchor: HTMLElement | null = null;
+
+	/*
+		Opens the menu of a point, below the point: the way a connector comes into the object
+		there, and taking the point away. The ways the point names are checked, both of them
+		for a point that names two sides facing each other, and none for a point that names no
+		way.
+	*/
+	private static openTheMenuOf(
+		handle: SelectionHandle,
+		wayOut: cool.ObjectGluePoint['wayOut'],
+	): void {
+		const container = document.getElementById('canvas-container');
+		if (!container) return;
+
+		if (!TiePointHandles.menuAnchor?.isConnected) {
+			TiePointHandles.menuAnchor = document.createElement('div');
+			TiePointHandles.menuAnchor.style.position = 'absolute';
+			TiePointHandles.menuAnchor.style.zIndex = '1500';
+			container.append(TiePointHandles.menuAnchor);
+		}
+
+		// The canvas fills the container, so a place on the canvas is a place in the container.
+		const at = HandleLook.drawnAt(handle);
+		const below = 0.5 * ShapeHandlesSection.gluePointSize();
+		const anchor = TiePointHandles.menuAnchor;
+		anchor.style.left = at.vX / app.dpiScale + 'px';
+		anchor.style.top = (at.vY + below) / app.dpiScale + 'px';
+
+		const entries: MenuDefinition[] = [
+			{
+				id: 'direction',
+				type: 'header',
+				text: _('Connector Entry Direction'),
+			},
+			{
+				id: 'left',
+				type: 'action',
+				text: _('Left'),
+				img: 'glueescapedirectionleft',
+				checked: wayOut === 'left' || wayOut === 'horizontal',
+			},
+			{
+				id: 'right',
+				type: 'action',
+				text: _('Right'),
+				img: 'glueescapedirectionright',
+				checked: wayOut === 'right' || wayOut === 'horizontal',
+			},
+			{
+				id: 'up',
+				type: 'action',
+				text: _('Up'),
+				img: 'glueescapedirectiontop',
+				checked: wayOut === 'top' || wayOut === 'vertical',
+			},
+			{
+				id: 'down',
+				type: 'action',
+				text: _('Down'),
+				img: 'glueescapedirectionbottom',
+				checked: wayOut === 'bottom' || wayOut === 'vertical',
+			},
+			{ id: 'separator', type: 'separator' },
+			{ id: 'delete', type: 'action', text: _('Delete'), img: 'delete' },
+		];
+
+		JSDialog.OpenDropdown(
+			TiePointHandles.menuId,
+			TiePointHandles.menuAnchor,
+			entries,
+			(
+				_objectType: string,
+				eventType: string,
+				_object: unknown,
+				_data: unknown,
+				_entry: unknown,
+			): boolean => {
+				if (eventType !== 'selected') return false;
+
+				JSDialog.CloseDropdown(TiePointHandles.menuId);
+				return true;
+			},
+			'',
+			false,
+			false,
+			true,
+		);
+	}
 
 	/// the connectors tied to a point keys took, or a drag let go of, as they will run
 	public outline(): cool.ObjectPathPolygon[] | null {
@@ -1667,14 +1822,22 @@ class TiePointHandles extends HandleGroup {
 
 	/*
 		A point the object was given is moved where it is put, by the number it has in the object's
-		own list. The four an object falls back on are not its own and are shown only, so they
-		have no name and nothing takes hold of one.
+		own list. A point the shape makes from its own geometry is laid out again with the shape,
+		so it stays where the shape puts it. The four an object falls back on are not its own and
+		are shown only, so they have no name and nothing takes hold of one.
 	*/
 	public interactionFor(
 		handle: SelectionHandle,
 		_at: cool.SimplePoint,
 	): SelectionInteraction | null {
-		return handle.name ? new ShapingInteraction(this.selection, handle) : null;
+		return this.canBeMoved(handle)
+			? new ShapingInteraction(this.selection, handle)
+			: null;
+	}
+
+	/// Whether that handle stands for a point the object holds and may be moved by a drag or a key.
+	private canBeMoved(handle: SelectionHandle): boolean {
+		return handle.name !== '' && this.held(handle)?.fromTheShape !== true;
 	}
 
 	public handOver(handle: SelectionHandle, to: cool.Point): void {
@@ -1707,7 +1870,7 @@ class TiePointHandles extends HandleGroup {
 		towards: cool.Point,
 		event: KeyboardEvent,
 	): cool.Point | null {
-		if (!handle.name) return null;
+		if (!this.canBeMoved(handle)) return null;
 
 		return this.stepAndHandOver(handle, towards, event);
 	}

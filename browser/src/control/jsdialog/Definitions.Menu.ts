@@ -2443,6 +2443,20 @@ menuDefinitions.set('PictureColorMode', [
 	},
 ] as Array<MenuDefinition>);
 
+menuDefinitions.set('GluePointsMenu', [
+	{
+		text: _('Show'),
+		action: 'showgluepoints',
+		checked: false,
+	},
+	{
+		text: _('Add New'),
+		action: 'insertgluepoint',
+		isEnabled: () =>
+			GraphicSelection.selectionSection?.tiePointsAreShown() ?? false,
+	},
+] as Array<MenuDefinition>);
+
 menuDefinitions.set('AnnotationMenu', [
 	{
 		text: _('Insert comment'),
