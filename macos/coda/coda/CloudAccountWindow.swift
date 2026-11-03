@@ -13,7 +13,7 @@ import WebKit
 
 /// A window that shows the integrator's site for one cloud account, as a browser would.
 final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigationDelegate,
-                                WKScriptMessageHandler {
+                                WKScriptMessageHandler, WKScriptMessageHandlerWithReply {
     private static let defaultSize = NSSize(width: 1200, height: 800)
     private static let world = WKContentWorld.world(name: "coda")
     private static let firstMacOSWithSafariVersion = 26
@@ -79,6 +79,8 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
             name: "frameLoaded"
         )
 
+        webView.configuration.userContentController.addScriptMessageHandler(self, contentWorld: .page, name: "lok")
+        ViewController.addDiagnosticMessageHandlers(to: webView.configuration.userContentController, handler: self)
         webView.load(URLRequest(url: url))
     }
 
@@ -109,6 +111,8 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
             contentWorld: Self.world
         )
 
+        webView.configuration.userContentController.removeScriptMessageHandler(forName: "lok")
+        ViewController.removeDiagnosticMessageHandlers(from: webView.configuration.userContentController)
         Self.openWindows[accountId] = nil
     }
 
@@ -117,6 +121,7 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         return !frameInfo.isMainFrame && frameInfo.request.url == editorFormUrl
     }
 
+    // comes from WKScriptMessageHandler
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         let frameInfo = message.frameInfo
         if !isEditorFrame(frameInfo) {
@@ -127,6 +132,24 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         editorFrameInfo = frameInfo
         COWrapper.LOG_DBG("The editor frame loaded")
         putCodaPageIn(frameInfo)
+    }
+
+    // comes from WKScriptMessageHandlerWithReply
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) async -> (Any?, String?) {
+        if !isEditorFrame(message.frameInfo) {
+            COWrapper.LOG_DBG("A message was dropped: it is not from the editor frame")
+            return (nil, nil)
+        }
+
+        if ViewController.handleDiagnosticMessage(message) {
+            return (nil, nil)
+        }
+
+        // Only "lok" messages reach this point.
+        let body = message.body as? String ?? ""
+        let kind = body.prefix { $0 != " " }
+        COWrapper.LOG_DBG("A \(kind) message from the editor frame")
+        return (nil, nil)
     }
 
     // WebKit cannot reply to a request in place of coolwsd, as WebView2 can, and
