@@ -415,9 +415,19 @@ std::string validateBlocks(const Poco::JSON::Object::Ptr& slide, unsigned index,
             const std::string text = getString(block, "text");
             if (text.empty())
                 return prefix + "a text block needs a non-empty \"text\" string.";
-            if (static_cast<int>(utf16Length(parseEmphasis(text).plain)) > budgets.maxItemLength)
+            const std::string plain = parseEmphasis(text).plain;
+            if (static_cast<int>(utf16Length(plain)) > budgets.maxItemLength)
                 return prefix + "a text block exceeds " +
                        std::to_string(budgets.maxItemLength) + " characters.";
+            // The figure is set very large, so a sentence in its place fills the slide with
+            // giant wrapped text.
+            if (intent == "big-number" &&
+                (plain.find('\n') != std::string::npos ||
+                 static_cast<int>(utf16Length(plain)) > DeckSpec::MaxBigNumberLength))
+                return prefix + "the text block holds only the figure, on one line and at most " +
+                       std::to_string(DeckSpec::MaxBigNumberLength) +
+                       " characters, such as \"40%\" or \"4,210\". Say what the figure means "
+                       "in the slide title.";
         }
         else
             return prefix + "block \"kind\" must be \"bullets\" or \"text\".";
@@ -614,6 +624,15 @@ void emitSlideCommands(Poco::JSON::Array::Ptr& cmds, const Poco::JSON::Object::P
 
     if (!options.haveDesignTemplate)
         pushEditTextObject(cmds, 0, ".uno:Bold");
+
+    // The number of a big-number slide is set large and centred, so it reads as the slide's
+    // message.
+    if (intent == "big-number")
+    {
+        pushEditTextObject(cmds, 1,
+                           R"(.uno:FontHeight {"FontHeight.Height":{"type":"float","value":"120"}})");
+        pushEditTextObject(cmds, 1, ".uno:CenterPara");
+    }
 
     // A plain SetText fills the placeholder with unmarked paragraphs, so every
     // deck turns bullet markers on for its bullet slots.

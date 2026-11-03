@@ -135,7 +135,8 @@ Which blocks each intent expects:
 - title, closing: no blocks, or a single text block used as a subtitle.
 - agenda, bullets: exactly one bullets block.
 - two-column, comparison: exactly two bullets blocks (left and right).
-- quote, big-number: exactly one text block.
+- quote: exactly one text block.
+- big-number: exactly one text block that holds only the figure, on one line and at most 12 characters, such as "40%" or "4,210". The title says what the figure means, such as "Support tickets fell by 40% this year".
 - image: no blocks; supply an "image" instead.
 - section: a title only, no blocks.)";
 

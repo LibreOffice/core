@@ -38,6 +38,9 @@ constexpr int MaxSlides = 30;
 constexpr int MaxItemsPerBullets = 6;
 /// The largest length, in characters, of a single bullet item or text block.
 constexpr int MaxItemLength = 200;
+/// The largest length, in characters, of the figure on a big-number slide. The figure is one line,
+/// such as "40%" or "4,210", and the slide title says what it means.
+constexpr int MaxBigNumberLength = 12;
 /// The largest length, in characters, of a slide title.
 constexpr int MaxTitleLength = 200;
 /// The largest length, in characters, of a slide's one or two sentence outline

@@ -14,6 +14,7 @@
 #include <common/JsonUtil.hpp>
 #include <wsd/AIUtil.hpp>
 #include <wsd/DeckSpec.hpp>
+#include <wsd/DocumentToolDescriptions.hpp>
 
 #include <test/lokassert.hpp>
 
@@ -184,6 +185,21 @@ void DeckSpecTests::testValidateSlideAccepts()
                         "blocks":[{"kind":"text","text":"Stay curious."}]})")
                     .has_value());
 
+    // A big-number slide takes a figure up to the length limit. The limit counts characters,
+    // not bytes, so a figure with a degree sign at the limit is accepted.
+    LOK_ASSERT(!slideError(
+                    R"({"part":"body","intent":"big-number","title":"Tickets fell by 40%",
+                        "blocks":[{"kind":"text","text":"40%"}]})")
+                    .has_value());
+    LOK_ASSERT(!slideError(
+                    R"({"part":"body","intent":"big-number","title":"T",
+                        "blocks":[{"kind":"text","text":"123456789 \u00b0C"}]})")
+                    .has_value());
+    LOK_ASSERT(!slideError(R"({"part":"body","intent":"big-number","title":"T",
+                              "blocks":[{"kind":"text","text":")" +
+                           std::string(DeckSpec::MaxBigNumberLength, '9') + R"("}]})")
+                   .has_value());
+
     // An image slide needs an image brief and no content blocks.
     LOK_ASSERT(!slideError(
                     R"({"part":"body","intent":"image","title":"Chart",
@@ -241,6 +257,26 @@ void DeckSpecTests::testValidateSlideRejects()
 
     // A quote with no text block reports the count rule.
     LOK_ASSERT(errorFor(R"({"part":"body","intent":"quote","title":"X"})").has_value());
+
+    // A big-number slide holds the figure alone. A sentence or a second line is refused, and
+    // the error says to move the meaning into the title.
+    for (const std::string& slide :
+         { std::string(R"({"part":"body","intent":"big-number","title":"X",
+               "blocks":[{"kind":"text","text":"About 40% fewer tickets"}]})"),
+           std::string(R"({"part":"body","intent":"big-number","title":"X",
+               "blocks":[{"kind":"text","text":"40%\nfewer"}]})"),
+           R"({"part":"body","intent":"big-number","title":"X","blocks":[{"kind":"text","text":")" +
+               std::string(DeckSpec::MaxBigNumberLength + 1, '9') + R"("}]})" })
+    {
+        auto figureErr = errorFor(slide);
+        LOK_ASSERT(figureErr.has_value());
+        LOK_ASSERT(figureErr->find("slide title") != std::string::npos);
+    }
+
+    // The tool description states the same length the validator enforces.
+    LOK_ASSERT(std::string(DocumentToolDescriptions::DECK_SLIDE_SHAPE)
+                   .find("at most " + std::to_string(DeckSpec::MaxBigNumberLength) +
+                         " characters") != std::string::npos);
 
     // An image slide with no image reports the image requirement.
     auto imgErr = errorFor(R"({"part":"body","intent":"image","title":"X"})");
