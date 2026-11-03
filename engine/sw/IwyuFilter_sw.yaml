@@ -594,9 +594,6 @@ excludelist:
     sw/source/uibase/dochdl/gloshdl.cxx:
     # Needed for direct member access
     - docsh.hxx
-    sw/source/uibase/docvw/edtdd.cxx:
-    # Needed for extern variable
-    - edtdd.hxx
     sw/source/uibase/docvw/srcedtw.cxx:
     # Needed for template
     - com/sun/star/container/XHierarchicalNameAccess.hpp

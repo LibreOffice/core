@@ -58,8 +58,6 @@ class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) SwEditWin final : public vcl::DocWind
 {
     static  QuickHelpData* s_pQuickHlpData;
 
-    static Point s_aDDStartPos;
-
     Color m_aWaterCanTextColor;     // text color; for the watering can
     Color m_aWaterCanTextBackColor; // text background; for the watering can
 
@@ -131,6 +129,17 @@ class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) SwEditWin final : public vcl::DocWind
 
      SwTextFrame* m_pSavedOutlineFrame = nullptr;
 
+    // The document position where the button went down for a drag from this window.
+    Point m_aDragStartPos;
+    // Whether a frame or a drawing object is being dragged from this window.
+    bool m_bFrameDrag = false;
+    // Whether the button press pushed a selection mode that the release pops again.
+    bool m_bModePushed = false;
+    // Whether the timer runs that starts a drag of a selection held under the button.
+    bool m_bDragTimerStarted = false;
+    // Whether the last drop replaced a hyperlink at the drop position.
+    bool m_bDroppedHyperlink = false;
+
     void            LeaveArea(const Point &);
     void            JustifyAreaTimer(bool bStart = false);
     inline void     EnterArea();
@@ -141,7 +150,7 @@ class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) SwEditWin final : public vcl::DocWind
     void            ChangeDrawing( sal_uInt8 nDir );
 
     // let a drag of the selected object start at rDocPos
-    static void ArmFrameDrag(SwWrtShell& rSh, const Point& rDocPos);
+    void ArmFrameDrag(SwWrtShell& rSh, const Point& rDocPos);
 
     bool            EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos);
     bool            RulerColumnDrag( const MouseEvent& rMEvt, bool bVerticalMode);
@@ -251,7 +260,10 @@ public:
 
     virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
-    static const Point& GetDDStartPos() { return s_aDDStartPos; }
+    const Point& GetDragStartPos() const { return m_aDragStartPos; }
+    bool IsInDrag() const { return m_bIsInDrag; }
+    void SetFrameDrag(bool bFrameDrag) { m_bFrameDrag = bFrameDrag; }
+    void SetDroppedHyperlink(bool bDroppedHyperlink) { m_bDroppedHyperlink = bDroppedHyperlink; }
 
     static void InitStaticData();
     static void FinitStaticData();
@@ -305,11 +317,6 @@ public:
     void ReleaseCommentGuideLine();
     void SetSidebarWidth(const Point& rPointPixel);
 };
-
-extern bool g_bModePushed;
-extern bool g_bFrameDrag;
-extern bool g_bDDTimerStarted;
-extern bool g_bDDINetAttr;
 
 #endif
 

@@ -92,7 +92,6 @@
 #include <IMark.hxx>
 #include <section.hxx>
 #include <ndtxt.hxx>
-#include <edtdd.hxx>
 #include <edtwin.hxx>
 #include <navicont.hxx>
 #include <swcont.hxx>
@@ -619,10 +618,11 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         {
             SwContentAtPos aContentAtPos( IsAttrAtPos::InetAttr );
 
-            bool bSelect = g_bExecuteDrag &&
+            const SwEditWin& rEditWin = m_pWrtShell->GetView().GetEditWin();
+            bool bSelect = rEditWin.IsInDrag() &&
                             m_pWrtShell->GetView().GetDocShell() &&
                             !m_pWrtShell->GetView().GetDocShell()->IsReadOnly();
-            if (m_pWrtShell->GetContentAtPos(SwEditWin::GetDDStartPos(), aContentAtPos, bSelect))
+            if (m_pWrtShell->GetContentAtPos(rEditWin.GetDragStartPos(), aContentAtPos, bSelect))
             {
                 m_oBookmark.emplace(
                         static_cast<const SwFormatINetFormat*>(aContentAtPos.aFnd.pAttr)->GetValue(),
@@ -2764,7 +2764,7 @@ void SwTransferable::SetSelInShell( SwWrtShell& rSh, bool bSelectFrame,
             {
                 rSh.HideCursor();
                 rSh.EnterSelFrameMode( pPt );
-                g_bFrameDrag = true;
+                rSh.GetView().GetEditWin().SetFrameDrag(true);
             }
         }
     }
@@ -2775,7 +2775,7 @@ void SwTransferable::SetSelInShell( SwWrtShell& rSh, bool bSelectFrame,
             rSh.UnSelectFrame();
             rSh.LeaveSelFrameMode();
             rSh.GetView().GetEditWin().StopInsFrame();
-            g_bFrameDrag = false;
+            rSh.GetView().GetEditWin().SetFrameDrag(false);
         }
         else if( rSh.GetView().GetDrawFuncPtr() )
             rSh.GetView().GetEditWin().StopInsFrame();
@@ -3903,7 +3903,8 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
         // is only one field - selected?
         SwContentAtPos aContentAtPos( IsAttrAtPos::InetAttr );
 
-        if (m_pWrtShell->GetContentAtPos(SwEditWin::GetDDStartPos(), aContentAtPos))
+        if (m_pWrtShell->GetContentAtPos(m_pWrtShell->GetView().GetEditWin().GetDragStartPos(),
+                                         aContentAtPos))
         {
             AddFormat( SotClipboardFormatId::STRING );
             AddFormat( SotClipboardFormatId::SOLK );
@@ -4141,7 +4142,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             {
                 rSh.HideCursor();
                 rSh.EnterSelFrameMode( &rDragPt );
-                g_bFrameDrag = true;
+                rSh.GetView().GetEditWin().SetFrameDrag(true);
             }
 
             const SelectionType nSelection = rSh.GetSelectionType();
@@ -4163,7 +4164,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
                 rSh.LeaveSelFrameMode();
                 rSh.UnSelectFrame();
                 rSh.ShowCursor();
-                g_bFrameDrag = false;
+                rSh.GetView().GetEditWin().SetFrameDrag(false);
             }
         }
     }
@@ -4455,7 +4456,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
     bSttWrd = !bEndWrd && rSh.IsStartWord();
     bSttPara= rSh.IsSttPara();
 
-    Point aSttPt = SwEditWin::GetDDStartPos();
+    Point aSttPt = rSrcSh.GetView().GetEditWin().GetDragStartPos();
 
     // at first, select InetFields!
     if( TransferBufferType::InetField == m_eBufferType )
@@ -4485,7 +4486,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         // is there a URL attribute at the insert point? Then replace that,
         // so simply put up a selection?
         rSh.DelINetAttrWithText();
-        g_bDDINetAttr = true;
+        rSh.GetView().GetEditWin().SetDroppedHyperlink(true);
     }
 
     if ( rSrcSh.IsSelFrameMode() )

@@ -72,7 +72,6 @@
 
 #include <editeng/acorrcfg.hxx>
 #include <SwSmartTagMgr.hxx>
-#include <edtdd.hxx>
 #include <edtwin.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
@@ -175,16 +174,10 @@ static tools::Rectangle aLastCommentSidebarPos;
 // To resolve this g_bHoldSelection is set in Down and evaluated in Up.
 static bool g_bHoldSelection      = false;
 
-bool g_bFrameDrag                   = false;
 static bool g_bValidCursorPos       = false;
-bool g_bModePushed = false;
-bool g_bDDTimerStarted            = false;
-bool g_bDDINetAttr                = false;
 static SdrHdlKind g_eSdrMoveHdl   = SdrHdlKind::User;
 
 QuickHelpData* SwEditWin::s_pQuickHlpData = nullptr;
-
-Point SwEditWin::s_aDDStartPos;
 
 /// Check if the selected shape has a TextBox: if so, go into that instead.
 static bool lcl_goIntoTextBox(SwEditWin& rEditWin, SwWrtShell& rSh)
@@ -668,7 +661,7 @@ IMPL_LINK_NOARG(SwEditWin, TimerHandler, Timer *, void)
             m_rView.Scroll( tools::Rectangle(aModPt,Size(1,1)), nMaxScroll, nMaxScroll);
             bDone = true;
         }
-        else if ( g_bFrameDrag )
+        else if ( m_bFrameDrag )
         {
             rSh.Drag(&aModPt, false);
             bDone = true;
@@ -688,7 +681,7 @@ IMPL_LINK_NOARG(SwEditWin, TimerHandler, Timer *, void)
             }
         }
     }
-    if ( !bDone && !(g_bFrameDrag || m_bInsDraw) )
+    if ( !bDone && !(m_bFrameDrag || m_bInsDraw) )
     {
         if ( m_xRowColumnSelectionStart )
         {
@@ -2966,8 +2959,8 @@ void SwEditWin::ArmFrameDrag(SwWrtShell& rSh, const Point& rDocPos)
 {
     // the mode has to be (re-)entered here: a drag counts from where it was entered
     rSh.EnterSelFrameMode(&rDocPos);
-    s_aDDStartPos = rDocPos;
-    g_bFrameDrag = true;
+    m_aDragStartPos = rDocPos;
+    m_bFrameDrag = true;
 }
 
 void SwEditWin::MoveCursor( SwWrtShell &rSh, const Point& rDocPos,
@@ -3365,9 +3358,9 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 if (!bHitHandle && !rSh.IsMultipleFlyFramesSelected())
                                 {
                                     StartDDTimer();
-                                    s_aDDStartPos = aDocPos;
+                                    m_aDragStartPos = aDocPos;
                                 }
-                                g_bFrameDrag = true;
+                                m_bFrameDrag = true;
                             }
                             g_bNoInterrupt = false;
                             return;
@@ -3404,7 +3397,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 if (1 == nNumberOfClicks)
                 {
                     UpdatePointer(aDocPos, aMEvt.GetModifier());
-                    s_aDDStartPos = aDocPos;
+                    m_aDragStartPos = aDocPos;
 
                     // hit a URL in DrawText object?
                     if (bExecHyperlinks && pSdrView)
@@ -3465,7 +3458,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                     }
 
                                     rSh.EnterSelFrameMode( &aDocPos );
-                                    g_bFrameDrag = true;
+                                    m_bFrameDrag = true;
                                     UpdatePointer(aDocPos, aMEvt.GetModifier());
                                 }
                                 return;
@@ -3543,7 +3536,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 rSh.EnterSelFrameMode( &aDocPos );
                                 rSh.SelFlyGrabCursor();
                                 rSh.MakeSelVisible();
-                                g_bFrameDrag = true;
+                                m_bFrameDrag = true;
                                 if( rSh.IsFrameSelected() &&
                                     m_rView.GetDrawFuncPtr() )
                                 {
@@ -3565,7 +3558,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         break;
                     case 2:
                     {
-                        g_bFrameDrag = false;
+                        m_bFrameDrag = false;
                         if (!bIsViewReadOnly && rSh.IsInsideSelectedObj(aDocPos)
                             && (FlyProtectFlags::NONE
                                     == rSh.IsSelObjProtected(FlyProtectFlags::Content
@@ -3727,7 +3720,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     case 3:
                     case 4:
                     {
-                        g_bFrameDrag = false;
+                        m_bFrameDrag = false;
                         // in extended mode double and triple
                         // click has no effect.
                         if ( rSh.IsExtMode() )
@@ -3789,7 +3782,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         else if( rSh.IsSelFrameMode() &&
                                  rSh.GetDrawView()->PickHandle( aDocPos ))
                         {
-                            g_bFrameDrag = true;
+                            m_bFrameDrag = true;
                             g_bNoInterrupt = false;
                             return;
                         }
@@ -3829,7 +3822,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         else if( rSh.IsSelFrameMode() &&
                                  rSh.GetDrawView()->PickHandle( aDocPos ))
                         {
-                            g_bFrameDrag = true;
+                            m_bFrameDrag = true;
                             g_bNoInterrupt = false;
                             return;
                         }
@@ -3838,7 +3831,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             if ( !rSh.IsAddMode() && !rSh.IsExtMode() && !rSh.IsBlockMode() )
                             {
                                 rSh.PushMode();
-                                g_bModePushed = true;
+                                m_bModePushed = true;
 
                                 bool bUnLockView = !rSh.IsViewLocked();
                                 rSh.LockView( true );
@@ -3855,7 +3848,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         if ( !rSh.IsAddMode() && !rSh.IsExtMode() && !rSh.IsBlockMode() )
                         {
                             rSh.PushMode();
-                            g_bModePushed = true;
+                            m_bModePushed = true;
                             bool bUnLockView = !rSh.IsViewLocked();
                             rSh.LockView( true );
                             rSh.EnterBlockMode();
@@ -3899,7 +3892,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 {
                                     rSh.LeaveSelFrameMode();
                                     m_rView.AttrChangedNotify(nullptr);
-                                    g_bFrameDrag = false;
+                                    m_bFrameDrag = false;
                                 }
                                 else
                                 {
@@ -3945,7 +3938,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 rSh.UnSelectFrame();
                                 rSh.LeaveSelFrameMode();
                                 m_rView.AttrChangedNotify(nullptr);
-                                g_bFrameDrag = false;
+                                m_bFrameDrag = false;
                             }
                             if ( !rSh.IsExtMode() )
                             {
@@ -4374,9 +4367,9 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
     // position is necessary for OS/2 because obviously after a MB-Down
     // a MB-Move is called immediately.
-    if( g_bDDTimerStarted )
+    if( m_bDragTimerStarted )
     {
-        Point aDD = LogicToPixel(s_aDDStartPos);
+        Point aDD = LogicToPixel(m_aDragStartPos);
         tools::Rectangle aRect( aDD.X()-3, aDD.Y()-3, aDD.X()+3, aDD.Y()+3 );
         if ( !aRect.Contains( aPixPt ) )
             StopDDTimer( &rSh, aDocPt );
@@ -4494,7 +4487,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 break;
             [[fallthrough]];
         case MOUSE_LEFT + KEY_MOD1:
-            if ( g_bFrameDrag && rSh.IsSelFrameMode() )
+            if ( m_bFrameDrag && rSh.IsSelFrameMode() )
             {
                 if( !m_bMBPressed )
                     break;
@@ -4613,7 +4606,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     EnterArea();
                 return;
             }
-            if ( !rSh.IsSelFrameMode() && !g_bDDINetAttr &&
+            if ( !rSh.IsSelFrameMode() && !m_bDroppedHyperlink &&
                 (IsMinMove( m_aStartPos,aPixPt ) || m_bIsInMove) &&
                 (rSh.IsInSelect() || !rSh.TestCurrPam( aDocPt )) )
             {
@@ -4645,7 +4638,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     }
                 }
             }
-            g_bDDINetAttr = false;
+            m_bDroppedHyperlink = false;
             break;
         case 0:
         {
@@ -4861,14 +4854,14 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
     Point aDocPt( PixelToLogic( rMEvt.GetPosPixel() ) );
 
-    if ( g_bDDTimerStarted )
+    if ( m_bDragTimerStarted )
     {
         StopDDTimer( &rSh, aDocPt );
         m_bMBPressed = false;
         if ( rSh.IsSelFrameMode() )
         {
             rSh.EndDrag( &aDocPt, false );
-            g_bFrameDrag = false;
+            m_bFrameDrag = false;
         }
         g_bNoInterrupt = false;
         const Point aDocPos( PixelToLogic( rMEvt.GetPosPixel() ) );
@@ -4987,7 +4980,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
         case MOUSE_LEFT + KEY_MOD1:
         case MOUSE_LEFT + KEY_MOD2:
         case MOUSE_LEFT + KEY_SHIFT + KEY_MOD1:
-            if ( g_bFrameDrag && rSh.IsSelFrameMode() )
+            if ( m_bFrameDrag && rSh.IsSelFrameMode() )
             {
                 if ( rMEvt.IsMod1() ) // copy and don't move.
                 {
@@ -5094,7 +5087,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     }
                     rSh.EndDrag( &aDocPt, false );
                 }
-                g_bFrameDrag = false;
+                m_bFrameDrag = false;
                 bCallBase = false;
                 break;
             }
@@ -5105,7 +5098,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             {
 
                 rSh.EndDrag( &aDocPt, false );
-                g_bFrameDrag = false;
+                m_bFrameDrag = false;
                 bCallBase = false;
                 break;
             }
@@ -5326,10 +5319,10 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             }
 
             // reset pushed mode in Down again if applicable
-            if ( bPopMode && g_bModePushed )
+            if ( bPopMode && m_bModePushed )
             {
                 rSh.PopMode();
-                g_bModePushed = false;
+                m_bModePushed = false;
                 bCallBase = false;
             }
             break;
@@ -5657,7 +5650,6 @@ void SwEditWin::dispose()
 
     if( s_pQuickHlpData->m_bIsDisplayed && m_rView.GetWrtShellPtr() )
         s_pQuickHlpData->Stop( m_rView.GetWrtShell() );
-    g_bExecuteDrag = false;
     m_pApplyTempl.reset();
 
     m_rView.SetDrawFuncPtr(nullptr);
@@ -6296,7 +6288,7 @@ void SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
                     }
 
                     rSh.EnterSelFrameMode( &aDocPos );
-                    g_bFrameDrag = true;
+                    m_bFrameDrag = true;
                     UpdatePointer( aDocPos );
                     return;
                 }
@@ -6340,7 +6332,7 @@ void SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
             rSh.EnterSelFrameMode( &aDocPos );
             rSh.SelFlyGrabCursor();
             rSh.MakeSelVisible();
-            g_bFrameDrag = true;
+            m_bFrameDrag = true;
             if( rSh.IsFrameSelected() &&
                 m_rView.GetDrawFuncPtr() )
             {

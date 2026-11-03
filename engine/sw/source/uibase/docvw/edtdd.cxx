@@ -33,7 +33,6 @@
 #include <frmfmt.hxx>
 #include <wrtsh.hxx>
 #include <viscrs.hxx>
-#include <edtdd.hxx>
 #include <edtwin.hxx>
 #include <view.hxx>
 #include <viewopt.hxx>
@@ -48,20 +47,18 @@ using namespace ::com::sun::star;
 
 // no include "dbgoutsw.hxx" here!!!!!!
 
-bool g_bExecuteDrag = false;
-
 void SwEditWin::StartDDTimer()
 {
     m_aTimer.SetInvokeHandler(LINK(this, SwEditWin, DDHandler));
     m_aTimer.SetTimeout(480);
     m_aTimer.Start();
-    g_bDDTimerStarted = true;
+    m_bDragTimerStarted = true;
 }
 
 void SwEditWin::StopDDTimer(SwWrtShell *pSh, const Point &rPt)
 {
     m_aTimer.Stop();
-    g_bDDTimerStarted = false;
+    m_bDragTimerStarted = false;
     if(!pSh->IsSelFrameMode())
         pSh->CallSetCursor(&rPt, false);
     m_aTimer.SetInvokeHandler(LINK(this,SwEditWin, TimerHandler));
@@ -104,7 +101,7 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
         return;
     // Several selected fly frames move by the frame drag alone, as the drag and drop copy
     // handles one fly frame.
-    else if ( !g_bFrameDrag && rSh.IsSelFrameMode() &&
+    else if ( !m_bFrameDrag && rSh.IsSelFrameMode() &&
                 rSh.IsInsideSelectedObj( aDocPos ) &&
                 nullptr == m_pAnchorMarker &&
                 !rSh.IsMultipleFlyFramesSelected() )
@@ -119,7 +116,7 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
         // already active
         bStartDragging = true;
     }
-    else if( !g_bFrameDrag && m_rView.GetDocShell()->IsReadOnly() &&
+    else if( !m_bFrameDrag && m_rView.GetDocShell()->IsReadOnly() &&
             OBJCNT_NONE != rSh.GetObjCntType( aDocPos, pObj ))
     {
         rSh.LockPaint(LockPaintReason::StartDrag);
@@ -154,10 +151,10 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
     // popped or it will remain active and noticeable in the statusbar selection control until the
     // next MouseButtonUp event after the DnD, since a MouseButtonUp event is not received by the
     // edit window when DnD is done.
-    if (g_bModePushed)
+    if (m_bModePushed)
     {
         rSh.PopMode();
-        g_bModePushed = false;
+        m_bModePushed = false;
     }
 
     m_bMBPressed = false;
@@ -175,9 +172,8 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
         return;
     }
 
-    g_bFrameDrag = false;
-    g_bExecuteDrag = true;
-    s_aDDStartPos = aDocPos;
+    m_bFrameDrag = false;
+    m_aDragStartPos = aDocPos;
     m_aMovePos = aDocPos;
     StartExecuteDrag();
     if( bDelSelect )
@@ -189,7 +185,7 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
 
 void SwEditWin::StartExecuteDrag()
 {
-    if( !g_bExecuteDrag || m_bIsInDrag )
+    if( m_bIsInDrag )
         return;
 
     // A kit process drags only a text selection. The client moves frames and drawing objects
@@ -544,13 +540,12 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
 
 IMPL_LINK_NOARG(SwEditWin, DDHandler, Timer *, void)
 {
-    g_bDDTimerStarted = false;
+    m_bDragTimerStarted = false;
     m_aTimer.Stop();
     m_aTimer.SetTimeout(240);
     m_bMBPressed = false;
     ReleaseMouse();
-    g_bFrameDrag = false;
-    g_bExecuteDrag = true;
+    m_bFrameDrag = false;
     StartExecuteDrag();
 }
 
