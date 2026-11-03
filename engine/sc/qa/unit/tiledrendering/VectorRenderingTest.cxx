@@ -22,17 +22,21 @@
 #include <docuno.hxx>
 #include <drwlayer.hxx>
 #include <globstr.hrc>
+#include <gridwin.hxx>
 #include <markdata.hxx>
 #include <scitems.hxx>
 #include <scresid.hxx>
 #include <Sparkline.hxx>
 #include <SparklineGroup.hxx>
+#include <tabvwsh.hxx>
 #include <VectorContent.hxx>
 
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editview.hxx>
 #include <editeng/justifyitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/numformat.hxx>
@@ -979,6 +983,74 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorCellPositionsClipOutsideThe
     const auto [nBottom, fBottom] = cellPosition(rClip.get_child("bottom"));
     CPPUNIT_ASSERT_EQUAL(int(pDocShell->GetDocument().MaxRow()), nBottom);
     CPPUNIT_ASSERT(fBottom > 0);
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorCompletedCellEditIsPushedAgain)
+{
+    // A text typed into a cell is completed from its column: the first character shows the whole
+    // text with the completion selected, and the next character replaces the selection and is
+    // completed again. The edit then reads as before and only the selection moved. A client shows
+    // what it typed until the engine answers, so the edit is pushed again all the same.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    setCellString(*pDocShell, 1, 3, u"Teszt asztal v"_ustr);
+    requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+
+    typeCharsInCell("T", 1, 5, pView, pModelObj, /*bInEdit*/ false, /*bCommit*/ false);
+    ScViewData& rViewData = pView->GetViewData();
+    EditView* pEditView = rViewData.GetEditView(rViewData.GetEditActivePart());
+    CPPUNIT_ASSERT(pEditView);
+    CPPUNIT_ASSERT_EQUAL(u"Teszt asztal v"_ustr, pEditView->getEditEngine().GetText());
+    {
+        tools::JsonWriter aPushWriter;
+        pModelObj->pushVectorPrimitivesDelta(aPushWriter, "0",
+                                             sc::VectorContent::constCellPositionsMode);
+        CPPUNIT_ASSERT(
+            parseJson(aPushWriter.finishAndGetAsOString()).get_child_optional("textEdits"));
+    }
+
+    typeCharsInCell("e", 1, 5, pView, pModelObj, /*bInEdit*/ true, /*bCommit*/ false);
+    CPPUNIT_ASSERT_EQUAL(u"Teszt asztal v"_ustr, pEditView->getEditEngine().GetText());
+    tools::JsonWriter aPushWriter;
+    pModelObj->pushVectorPrimitivesDelta(aPushWriter, "0",
+                                         sc::VectorContent::constCellPositionsMode);
+    const OString aPush = aPushWriter.finishAndGetAsOString();
+    CPPUNIT_ASSERT(aPush != tools::JsonWriter::EMPTY_DOCUMENT);
+    CPPUNIT_ASSERT(parseJson(aPush).get_child_optional("textEdits"));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorCellEditGrowsOutsideASmallWindow)
+{
+    // Painting a tile makes the window of the view as large as the document, which the cell editing
+    // of a kit view counts on. A view served as vectors paints no tiles, so its window kept a small
+    // size, and an edit in a cell outside it had no room: it wrapped at the width of its cell and
+    // did not grow into the empty cells after it.
+    comphelper::COKit::setCompatFlag(comphelper::COKit::Compat::scPrintTwipsMsgs);
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+
+    // Moving the cursor can extend the tiled area, which sizes the window too, so the window is
+    // made small after it, as a session that never painted a tile leaves it. Then the zoom
+    // changes: 256 pixels show 1280 twips, a zoom of 300 %.
+    pView->SetCursor(15, 7);
+    Scheduler::ProcessEventsToIdle();
+    ScViewData& rViewData = pView->GetViewData();
+    rViewData.GetActiveWin()->SetOutputSizePixel(Size(751, 442));
+    pModelObj->setClientZoom(256, 256, 1280, 1280);
+
+    typeCharsInCell("A text much longer than its cell", 15, 7, pView, pModelObj, /*bInEdit*/ true,
+                    /*bCommit*/ false);
+    Scheduler::ProcessEventsToIdle();
+
+    EditView* pEditView = rViewData.GetEditView(rViewData.GetEditActivePart());
+    CPPUNIT_ASSERT(pEditView);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pEditView->getEditEngine().GetLineCount(0));
+    CPPUNIT_ASSERT(rViewData.GetEditEndCol() > 15);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

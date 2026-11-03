@@ -786,7 +786,7 @@ void VectorContent::writeVectorPrimitives(tools::JsonWriter& rWriter, SheetState
     auto isNew = [&](sal_uInt64 nVersion) { return !bDelta || nVersion > nSince; };
 
     if (bPush && !rState.maVersions.isChangedSince(nSinceVersion)
-        && aTextEdits == rState.maLastTextEdits)
+        && aTextEdits == rState.maLastTextEdits && !rState.mbTextEditChanged)
         return;
 
     svx::vector::writeAnswerHeader(rWriter, bDelta, rState.mnMode, OString::number(nTab),
@@ -868,6 +868,8 @@ void VectorContent::writeVectorPrimitives(tools::JsonWriter& rWriter, SheetState
     // count from, and no client holds an older one.
     if (bPush || !rState.maVersions.isServed())
         rState.maLastTextEdits = aTextEdits;
+    if (bPush)
+        rState.mbTextEditChanged = false;
     rState.maVersions.noteWritten(bPush);
 }
 
@@ -1632,7 +1634,14 @@ void VectorContent::resetSheets()
     }
 }
 
-void VectorContent::textEditChanged(SCTAB nTab) { notifyViews(nTab); }
+void VectorContent::textEditChanged(SCTAB nTab)
+{
+    // The edit can read as before while what the client typed does not: completing a text the
+    // client typed into keeps the text and moves only the selection.
+    if (SheetState* pState = stateOf(nTab))
+        pState->mbTextEditChanged = true;
+    notifyViews(nTab);
+}
 
 void VectorContent::chartChanged(SCTAB nTab,
                                  const cpo::uno::Reference<cpo::uno::XInterface>& rChart)

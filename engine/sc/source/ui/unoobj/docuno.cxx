@@ -589,6 +589,20 @@ static ScViewData* lcl_getViewMatchingDocZoomTab(double fZoomX,
     return nullptr;
 }
 
+namespace
+{
+/// Make the grid window of the view as large as the document at its zoom. The cell editing of a
+/// kit view lays out its text within that window, and finds no room for it in a cell outside.
+/// Painting a tile does this; a view drawn from vectors paints none, so its zoom, its visible
+/// area and its requests do it instead.
+void lcl_fitGridWindowToDocument(ScViewData& rViewData, const Size& rDocSize)
+{
+    if (ScGridWindow* pGridWindow = rViewData.GetActiveWin())
+        pGridWindow->SetOutputSizePixel(Size(rDocSize.Width() * rViewData.GetPPTX(),
+                                             rDocSize.Height() * rViewData.GetPPTY()));
+}
+}
+
 void ScModelObj::paintTile( VirtualDevice& rDevice,
                             int nOutputWidth, int nOutputHeight,
                             int nTilePosX, int nTilePosY,
@@ -630,8 +644,7 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
     SCCOL nTiledRenderingAreaEndCol = 0;
     SCROW nTiledRenderingAreaEndRow = 0;
     Size aDocSize = getDocumentSize(nTiledRenderingAreaEndCol, nTiledRenderingAreaEndRow);
-
-    pGridWindow->SetOutputSizePixel(Size(aDocSize.Width() * pViewData->GetPPTX(), aDocSize.Height() * pViewData->GetPPTY()));
+    lcl_fitGridWindowToDocument(*pViewData, aDocSize);
 
     pGridWindow->PaintTile( rDevice, nOutputWidth, nOutputHeight,
                             nTilePosX, nTilePosY, nTileWidth, nTileHeight,
@@ -1277,6 +1290,10 @@ void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int 
         pViewShell->UpdateInPlaceClientGridOffset();
         pViewShell->VisAreaChanged();
     }
+
+    // A view drawn from vectors paints no tiles that would size its window to the new zoom.
+    if (mpVectorContent)
+        lcl_fitGridWindowToDocument(*pViewData, getDocumentSize());
 }
 
 void ScModelObj::setExportZoom(int nExportZoom)
@@ -1383,6 +1400,9 @@ void ScModelObj::setClientVisibleArea(const tools::Rectangle& rRectangle)
         if (pTabView)
             pTabView->extendTiledAreaIfNeeded();
     }
+
+    if (mpVectorContent)
+        lcl_fitGridWindowToDocument(*pViewData, getDocumentSize());
 }
 
 void ScModelObj::setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHidden)
@@ -1552,6 +1572,8 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
             return;
         if (!mpVectorContent)
             mpVectorContent = std::make_unique<sc::VectorContent>(*pDocShell);
+        if (ScViewData* pViewData = ScDocShell::GetViewData())
+            lcl_fitGridWindowToDocument(*pViewData, getDocumentSize());
         mpVectorContent->getCommandValues(rJsonWriter, rCommand);
         return;
     }

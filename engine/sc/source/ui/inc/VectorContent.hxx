@@ -185,6 +185,9 @@ private:
         EntryState maSheet;
         /// The text edits as they were last pushed.
         OString maLastTextEdits;
+        /// A text edit changed since the last push. The push goes out even when the edits read
+        /// the same, because a client shows what it typed until the engine answers.
+        bool mbTextEditChanged = false;
     };
 
     /// A block asked for, with the version the client holds when it holds one.
