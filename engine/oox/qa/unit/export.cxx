@@ -1521,6 +1521,22 @@ void assertExtrusionOfShape(const uno::Reference<beans::XPropertySet>& xShape)
     CPPUNIT_ASSERT(aLight.DirectionY < 0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFontworkFontOfOffice)
+{
+    // Given a Fontwork in Algerian, a font of Office with no Office equivalent in the font
+    // substitution table, and one in Liberation Sans, whose Office equivalent is Arial:
+    loadFromFile(u"fontwork-algerian.fodp");
+
+    // When saving to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then the runs are written in Algerian, not in a font that does not exist, and the
+    // metric-compatible font still takes the name Office has for it
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p/a:r/a:rPr/a:latin", "typeface", u"Algerian");
+    assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:p/a:r/a:rPr/a:latin", "typeface", u"Arial");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testExtrusionToScene3d)
 {
     // Given an extruded Fontwork and an extruded rectangle: depth 1 cm (three tenths of it in front

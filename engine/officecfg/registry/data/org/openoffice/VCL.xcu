@@ -913,9 +913,6 @@
         <prop oor:name="SubstFonts">
           <value>imprintmtshadow;imprintshadow;imprint;chevara;gallia;algerian;imprintmtshadow;imprintshadow;imprint;chevaraoutline;chevara;gallia;colonnamt;algerian;castellar;monotypeoldstyleboldoutline;monotypeoldstyleoutline;chevaraoutline;imprintmtshadow;imprintshadow;imprint;colonnamt;castellar</value>
         </prop>
-        <prop oor:name="SubstFontsMS">
-          <value>comic</value>
-        </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
         </prop>
@@ -1155,9 +1152,6 @@
       <node oor:name="batang" oor:op="replace">
         <prop oor:name="SubstFonts">
           <value>Noto Serif CJK KR;Source Han Serif KR;나눔명조;NanumMyeongjo;Noto Serif KR;나눔명조 옛한글;NanumMyeongjo YetHangul;KoPubWorld바탕체;KoPubWorld Batang;KoPub바탕체;애플명조;AppleMyungjo;바탕;Batang;바탕체;BatangChe;명조;Myeongjo;은 바탕;UnBatang;백묵 바탕;Baekmuk Batang;백묵 명조;Baekmuk Myeongjo;andalesansui;arialunicodems;lucidaunicode</value>
-        </prop>
-        <prop oor:name="SubstFontsMS">
-          <value>바탕</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -2517,7 +2511,7 @@
           <value>msgothic;mspgothic;ipagothic;gothic;centurygothic;avantgarde;itcavantgarde;avantgardegothic;conga;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value>msgothic</value>
+          <value>MS Gothic</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -2534,7 +2528,7 @@
           <value>msgothic;mspgothic;ipagothic;gothic;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value>msgothic</value>
+          <value>MS Gothic</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -2551,7 +2545,7 @@
           <value>msgothic;mspgothic;ipapgothic;gothic;centurygothic;avantgarde;itcavantgarde;avantgardegothic;conga;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value>msgothic</value>
+          <value>MS Gothic</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -4234,7 +4228,7 @@
           <value>mspgothic;msgothic;ipapgothic;gothic;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value>mspgothic</value>
+          <value>MS PGothic</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
@@ -5828,7 +5822,7 @@
           <value>CTL</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value>angsananew</value>
+          <value>Angsana New</value>
         </prop>
       </node>
       <node oor:name="oonaksit" oor:op="replace">
@@ -5839,7 +5833,7 @@
           <value>CTL</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value>angsananew</value>
+          <value>Angsana New</value>
         </prop>
       </node>
       <node oor:name="ooratchada" oor:op="replace">
@@ -5850,7 +5844,7 @@
           <value>CTL</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value>angsananew</value>
+          <value>Angsana New</value>
         </prop>
       </node>
       <node oor:name="oosawasdee" oor:op="replace">
@@ -5861,7 +5855,7 @@
           <value>CTL</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value>angsananew</value>
+          <value>Angsana New</value>
         </prop>
       </node>
       <node oor:name="oothanakrit" oor:op="replace">
@@ -5872,7 +5866,7 @@
           <value>CTL</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value>angsananew</value>
+          <value>Angsana New</value>
         </prop>
       </node>
       <node oor:name="garuda" oor:op="replace">
@@ -5883,7 +5877,7 @@
           <value>CTL</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value>angsananew</value>
+          <value>Angsana New</value>
         </prop>
       </node>
       <node oor:name="norasi" oor:op="replace">
@@ -5894,7 +5888,7 @@
           <value>CTL</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value>angsananew</value>
+          <value>Angsana New</value>
         </prop>
       </node>
       <node oor:name="nftnorasi" oor:op="replace">
