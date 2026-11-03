@@ -772,6 +772,8 @@ class LOUtil {
 			menurowheight: 'rowheight',
 			menumargins: 'pagemargin',
 			menuorientation: 'orientation',
+			pageorientation: 'orientation',
+			pagemargins: 'pagemargin',
 			menupagesizescalc: 'pagesize',
 			menupagesizeswriter: 'pagesize',
 			setoptimalrowheight: 'rowheight',

@@ -34,6 +34,29 @@ function inchesToHMM(inches: number): number {
 	return Math.round(inches * 25.4 * 100);
 }
 
+/// The command that sets all four margins of the current Calc page style. The margins are in
+/// inches, and the command takes them in hundredths of a millimetre.
+function calcPageMarginCommand(margins: PageMarginOption['details']): string {
+	return (
+		'.uno:CalcPageMargin' +
+		`?Page.LeftMargin:long=${inchesToHMM(margins.Left)}` +
+		`&Page.RightMargin=${inchesToHMM(margins.Right)}` +
+		`&Page.TopMargin:long=${inchesToHMM(margins.Top)}` +
+		`&Page.BottomMargin=${inchesToHMM(margins.Bottom)}`
+	);
+}
+
+/// The Calc margin presets as plain menu entries, each sending its margin command directly.
+JSDialog.calcPageMarginMenuEntries = function (): Array<MenuDefinition> {
+	const options: PageMarginOptions = JSDialog.pageMarginOptions;
+	return Object.entries(options).map(([id, option]) => ({
+		id: id,
+		text: option.title,
+		img: option.icon,
+		uno: calcPageMarginCommand(option.details),
+	})) as Array<MenuDefinition>;
+};
+
 /// The id of the preset that has the margins of the current Calc page style, or an empty string
 /// when none of the presets has them.
 JSDialog.currentCalcPageMarginId = function (): string {
@@ -97,14 +120,7 @@ JSDialog.PageMarginEntry = function (
 
 		const opt = options[key];
 		if (map.getDocType() === 'spreadsheet') {
-			const cmd =
-				`.uno:CalcPageMargin` +
-				`?Page.LeftMargin:long=${inchesToHMM(opt.details.Left)}` +
-				`&Page.RightMargin=${inchesToHMM(opt.details.Right)}` +
-				`&Page.TopMargin:long=${inchesToHMM(opt.details.Top)}` +
-				`&Page.BottomMargin=${inchesToHMM(opt.details.Bottom)}`;
-
-			map.sendUnoCommand(cmd);
+			map.sendUnoCommand(calcPageMarginCommand(opt.details));
 		} else if (map.getDocType() === 'text') {
 			const cmdLR =
 				`.uno:PageLRMargin` +

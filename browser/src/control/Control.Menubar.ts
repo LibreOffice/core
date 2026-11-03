@@ -14,6 +14,8 @@ interface MenuItem {
 	id?: string;
 	name?: string;
 	uno?: string;
+	// Name of the icon shown next to the entry, when it differs from the uno command.
+	iconCommand?: string;
 	// Tag a menu item as being for the uno command, but don't do anything.  If `uno` is set
 	// this shouldn't be. It is used by `_getItemsForCommand()`.
 	unoid?: string;
@@ -60,12 +62,21 @@ function downloadAsMenu(docType: string): MenuItem[] {
 	return items;
 }
 
+/// Notebookbar menu entries as menubar entries. Each entry sends its uno command when
+/// selected, and its id is prefixed to keep it unique in the whole menu.
+function menuDefinitionEntries(entries: MenuDefinition[], idPrefix: string): MenuItem[] {
+	return entries.map((entry: MenuDefinition) => {
+		return { name: entry.text, id: idPrefix + entry.id, uno: entry.uno, iconCommand: entry.img };
+	});
+}
+
 interface MenuStructure {
 	id?: string;
 	type: string;
 	enabled: boolean;
 	text?: string;
 	command?: string;
+	iconCommand?: string;
 	executionType?: string;
 	data?: MenuItem;
 	children: MenuStructure[];
@@ -1416,6 +1427,16 @@ class Menubar extends window.L.Control {
 					{type: 'separator'},
 					{uno: '.uno:HideDetail'},
 					{uno: '.uno:ShowDetail'}]}
+			]},
+			{name: _('Page Setup'), id: 'pagesetup', type: 'menu', menu: [
+				{name: _UNO('.uno:Orientation', 'text'), id: 'pageorientation', type: 'menu',
+					menu: menuDefinitionEntries(
+						JSDialog.MenuDefinitions.get('MenuOrientation'), 'pageorientation-')},
+				{name: _('Size'), id: 'pagesize', type: 'menu',
+					menu: menuDefinitionEntries(
+						JSDialog.MenuDefinitions.get('MenuPageSizesCalcEntries'), 'pagesize-')},
+				{name: _('Margin'), id: 'pagemargins', type: 'menu',
+					menu: menuDefinitionEntries(JSDialog.calcPageMarginMenuEntries(), 'pagemargins-')},
 			]},
 			{name: _UNO('.uno:RunMacro'), id: 'runmacro', uno: '.uno:RunMacro'},
 			{name: _('Latest Updates'), id: 'latestupdates', type: 'action', iosapp: false},
@@ -3498,6 +3519,7 @@ class Menubar extends window.L.Control {
 			enabled : !item.disabled,
 			text : itemName,
 			command : item.uno,
+			iconCommand : item.iconCommand,
 			executionType : item.type,
 			data : item,
 			'checked' : false,
@@ -3526,6 +3548,10 @@ class Menubar extends window.L.Control {
 			if (this._map['stateChangeHandler'].getItemValue(item.uno) === 'true') {
 				menuStructure['checked'] = true;
 			}
+		} else if (item.uno && item.uno.startsWith('.uno:CalcPageSize?')) {
+			menuStructure['checked'] = JSDialog.isCurrentCalcPageSize(item.uno);
+		} else if (item.id && item.id.startsWith('pagemargins-')) {
+			menuStructure['checked'] = item.id === 'pagemargins-' + JSDialog.currentCalcPageMarginId();
 		} else if (item.id === 'togglea11ystate') {
 			if (window.prefs.getBoolean('accessibilityState'))
 				menuStructure['checked'] = true;

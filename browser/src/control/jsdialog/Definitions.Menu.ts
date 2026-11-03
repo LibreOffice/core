@@ -1580,6 +1580,15 @@ const pageSizes = [
 	},
 ];
 
+menuDefinitions.set(
+	'MenuPageSizesCalcEntries',
+	pageSizes.map((item) => ({
+		id: item.id,
+		text: item.text,
+		uno: '.uno:CalcPageSize?PaperFormat:long=' + item.paper,
+	})) as Array<MenuDefinition>,
+);
+
 menuDefinitions.set('MenuPageSizesCalc', [
 	{
 		id: 'PageSizeMenu',
@@ -1587,11 +1596,7 @@ menuDefinitions.set('MenuPageSizesCalc', [
 		content: {
 			id: 'Layout-PageSizeMenu',
 			type: 'pagesizeentry',
-			options: pageSizes.map((item) => ({
-				id: item.id,
-				text: item.text,
-				uno: '.uno:CalcPageSize?PaperFormat:long=' + item.paper,
-			})),
+			options: menuDefinitions.get('MenuPageSizesCalcEntries'),
 		},
 	},
 	{ id: 'PageSizeMenuSeparator', type: 'separator' },

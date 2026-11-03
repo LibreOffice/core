@@ -1,4 +1,4 @@
-/* global describe it cy require expect */
+/* global describe it cy require expect beforeEach */
 
 var helper = require('../../common/helper');
 var calcHelper = require('../../common/calc_helper');
@@ -386,5 +386,81 @@ describe.skip(['tagmobile'], 'Trigger hamburger menu options.', function() {
 
 		// Close about dialog
 		cy.cGet('div.mobile-wizard.jsdialog-overlay.cancellable').click({force : true});
+	});
+});
+
+describe(['tagmobile'], 'Page setup from the hamburger menu.', function() {
+
+	beforeEach(function() {
+		helper.setupAndLoadDocument('calc/hamburger_menu.ods');
+		mobileHelper.enableEditingMobile();
+		cy.getFrameWindow().then(function(win) {
+			cy.spy(win.app.map, 'sendUnoCommand').as('sendUnoCommand');
+		});
+	});
+
+	it('Orientation entries switch the page to landscape and back.', function() {
+		mobileHelper.selectHamburgerMenuItem(['Page Setup', 'Orientation']);
+		cy.cGet('#mobile-wizard-content .menu-entry-icon.portrait').should('be.visible');
+		cy.cGet('body').contains('.menu-entry-with-icon', 'Landscape').click();
+		cy.get('@sendUnoCommand').should('be.calledWith', '.uno:Orientation?isLandscape:bool=true');
+
+		mobileHelper.selectHamburgerMenuItem(['Page Setup', 'Orientation']);
+		cy.cGet('body').contains('.menu-entry-with-icon', 'Portrait').click();
+		cy.get('@sendUnoCommand').should('be.calledWith', '.uno:Orientation?isLandscape:bool=false');
+	});
+
+	it('Size entries set the paper format.', function() {
+		mobileHelper.selectHamburgerMenuItem(['Page Setup', 'Size']);
+		cy.cGet('body').contains('.menu-entry-no-icon', 'Letter').click();
+		cy.get('@sendUnoCommand').should('be.calledWithMatch', /^\.uno:CalcPageSize\?PaperFormat:long=\d+$/);
+	});
+
+	it('Margin entries set all four page margins.', function() {
+		mobileHelper.selectHamburgerMenuItem(['Page Setup', 'Margin']);
+		cy.cGet('body').contains('.menu-entry-with-icon', 'Narrow').click();
+		// Narrow is half an inch on every side, which is 1270 hundredths of a millimetre.
+		cy.get('@sendUnoCommand').should('be.calledWith',
+			'.uno:CalcPageMargin?Page.LeftMargin:long=1270&Page.RightMargin=1270' +
+			'&Page.TopMargin:long=1270&Page.BottomMargin=1270');
+	});
+
+	it('The size in use carries a check mark.', function() {
+		// The document is on Letter paper.
+		mobileHelper.selectHamburgerMenuItem(['Page Setup', 'Size']);
+		cy.cGet('body').contains('.menu-entry-no-icon', 'Letter').parent()
+			.should('have.class', 'menu-entry-checked');
+		cy.cGet('body').contains('.menu-entry-no-icon', 'A5').parent()
+			.should('not.have.class', 'menu-entry-checked');
+		cy.cGet('body').contains('.menu-entry-no-icon', 'A5').click();
+		// The menu shows the state it has when it opens, so wait for the new paper to arrive.
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.map['stateChangeHandler'].getItemValue('.uno:CalcPageSize')).to.equal('5');
+		});
+
+		mobileHelper.selectHamburgerMenuItem(['Page Setup', 'Size']);
+		cy.cGet('body').contains('.menu-entry-no-icon', 'A5').parent()
+			.should('have.class', 'menu-entry-checked');
+		cy.cGet('body').contains('.menu-entry-no-icon', 'Letter').parent()
+			.should('not.have.class', 'menu-entry-checked');
+	});
+
+	it('The margins in use carry a check mark.', function() {
+		mobileHelper.selectHamburgerMenuItem(['Page Setup', 'Margin']);
+		cy.cGet('body').contains('.menu-entry-with-icon', 'Narrow').parent()
+			.should('not.have.class', 'menu-entry-checked');
+		cy.cGet('body').contains('.menu-entry-with-icon', 'Narrow').click();
+		// The menu shows the state it has when it opens, so wait for the new margins to arrive.
+		// Narrow is 1270 hundredths of a millimetre on every side.
+		cy.getFrameWindow().should(function(win) {
+			const margins = win.app.map['stateChangeHandler'].getItemValue('.uno:CalcPageMargin');
+			expect(margins && margins.left).to.equal(1270);
+		});
+
+		mobileHelper.selectHamburgerMenuItem(['Page Setup', 'Margin']);
+		cy.cGet('body').contains('.menu-entry-with-icon', 'Narrow').parent()
+			.should('have.class', 'menu-entry-checked');
+		cy.cGet('body').contains('.menu-entry-with-icon', 'Wide').parent()
+			.should('not.have.class', 'menu-entry-checked');
 	});
 });
