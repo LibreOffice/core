@@ -1789,6 +1789,11 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
             nByteOffset += nLen;
             continue;
         }
+        if (nLen < 0 || nByteOffset + nLen > m_nBufferSize)
+            return false;
+        // dates and timestamps are written as 8 bytes
+        if ((nType == DataType::DATE || nType == DataType::TIMESTAMP) && !thisColIsNull && nLen < 8)
+            return false;
         if (aIndexedCols[i].is())
         {
             ODbaseIndex* pIndex = dynamic_cast<ODbaseIndex*>(aIndexedCols[i].get());
