@@ -1568,6 +1568,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
             {
                 sApplyText = sApplyText.replaceAt(nPos, sSpellingRule.getLength(), u"");
                 pEditView->InsertText( sApplyText );
+                if (ScInputHandler* pInputHandler = ScModule::get()->GetInputHdl())
+                    pInputHandler->SetModified();
             }
         }
         break;

@@ -280,7 +280,7 @@ public:
 
     bool            TakesReturn() const     { return ( nTipVisible != nullptr ); }
 
-    void            SetModified()       { bModified = true; }
+    void            SetModified();
 
     bool            GetSelIsRef() const     { return bSelIsRef; }
     void            SetSelIsRef(bool bSet)  { bSelIsRef = bSet; }

@@ -3262,6 +3262,20 @@ bool ScInputHandler::DataChanging( sal_Unicode cTyped, bool bFromCommand )
         return false;
 }
 
+void ScInputHandler::SetModified()
+{
+    bModified = true;
+
+    // In the kit, a change of the cell edit marks the document modified, so that the content is
+    // saved even when the user leaves the document before pressing Enter.
+    if (!comphelper::COKit::isActive() || !pActiveViewSh)
+        return;
+
+    ScDocShell* pDocSh = pActiveViewSh->GetViewData().GetDocShell();
+    if (!pDocSh->IsModified())
+        pDocSh->SetModified();
+}
+
 void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified, bool bReferencePicked )
 {
     ImplCreateEditEngine();
@@ -3282,7 +3296,7 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified, bool b
     }
 
     if (bSetModified)
-        bModified = true;
+        SetModified();
     if (!bReferencePicked)
     {
         bSelIsRef = false;
@@ -4702,13 +4716,6 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
             // Cursor keys do not rebuild the range finder, so resend the marks for the new caret.
             if (bCursorKey && pRangeFindList)
                 UpdateKitReferenceMarks();
-
-            // In the COKit case, we want to set the document modified state
-            // right away at the start of the edit, so that the content is
-            // saved even when the user leaves the document before hitting
-            // Enter
-            if (comphelper::COKit::isActive() && bSetModified && pActiveViewSh && !pActiveViewSh->GetViewData().GetDocShell()->IsModified())
-                pActiveViewSh->GetViewData().GetDocShell()->SetModified();
 
             InvalidateAttribs();        //! in DataChanged?
         }

@@ -4600,6 +4600,85 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommandValues)
                          aTree.get<std::string>("DocStructure.BodyText.text"));
 }
 
+// Text pasted into a cell edit that is open marks the document modified, as typed text does.
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPasteIntoCellEditModifiesDocument)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    SfxObjectShell* pDocSh = pView->GetViewData().GetDocShell();
+
+    typeCharsInCell("abc", 0, 0, pView, pModelObj, /*bInEdit*/ false, /*bCommit*/ false);
+    ScViewData& rViewData = pView->GetViewData();
+    EditView* pEditView = rViewData.GetEditView(rViewData.GetActivePart());
+    CPPUNIT_ASSERT(pEditView);
+    pEditView->SetSelection(ESelection(0, 0, 0, 3));
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    // The typing has marked the document already, so the paste starts from an unmodified one.
+    pDocSh->SetModified(false);
+    pEditView->SetSelection(ESelection(0, 3, 0, 3));
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(u"abcabc"_ustr, pEditView->getEditEngine().GetText());
+    CPPUNIT_ASSERT(pDocSh->IsModified());
+}
+
+// Formatting a part of the text in a cell edit marks the document modified, as typed text does.
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFormatInCellEditModifiesDocument)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    SfxObjectShell* pDocSh = pView->GetViewData().GetDocShell();
+    typeCharsInCell("abc", 0, 0, pView, pModelObj);
+    pDocSh->SetModified(false);
+
+    // F2 opens the edit on the text that the cell has, which changes nothing yet.
+    pView->SetCursor(0, 0);
+    pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::F2);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pDocSh->IsModified());
+
+    ScViewData& rViewData = pView->GetViewData();
+    EditView* pEditView = rViewData.GetEditView(rViewData.GetActivePart());
+    CPPUNIT_ASSERT(pEditView);
+    pEditView->SetSelection(ESelection(0, 1, 0, 3));
+    dispatchCommand(mxComponent, u".uno:Bold"_ustr, {});
+
+    CPPUNIT_ASSERT(pDocSh->IsModified());
+}
+
+// A spelling suggestion applied in a cell edit marks the document modified, and Enter keeps it.
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSpellingSuggestionInCellEditModifiesDocument)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    SfxObjectShell* pDocSh = pView->GetViewData().GetDocShell();
+    typeCharsInCell("abc", 0, 0, pView, pModelObj);
+    pDocSh->SetModified(false);
+
+    pView->SetCursor(0, 0);
+    pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::F2);
+    Scheduler::ProcessEventsToIdle();
+
+    ScViewData& rViewData = pView->GetViewData();
+    EditView* pEditView = rViewData.GetEditView(rViewData.GetActivePart());
+    CPPUNIT_ASSERT(pEditView);
+    pEditView->SetSelection(ESelection(0, 0, 0, 3));
+    dispatchCommand(mxComponent, u".uno:SpellCheckApplySuggestion"_ustr,
+                    { comphelper::makePropertyValue(u"ApplyRule"_ustr, u"Spelling_xyz"_ustr) });
+    CPPUNIT_ASSERT(pDocSh->IsModified());
+
+    pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(u"xyz"_ustr, rViewData.GetDocument().GetString(ScAddress(0, 0, 0)));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
