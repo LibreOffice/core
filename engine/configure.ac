@@ -10090,10 +10090,10 @@ if test $enable_python = system; then
         else
             AM_PATH_PYTHON([3.3])
         fi
-        python_include=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('INCLUDEPY'));"`
-        python_version=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('VERSION'));"`
-        python_libs=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('LIBS'));"`
-        python_libdir=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('LIBDIR'));"`
+        python_include=`$PYTHON -c "import sysconfig; print(sysconfig.get_config_var('INCLUDEPY'));"`
+        python_version=`$PYTHON -c "import sysconfig; print(sysconfig.get_config_var('VERSION'));"`
+        python_libs=`$PYTHON -c "import sysconfig; print(sysconfig.get_config_var('LIBS'));"`
+        python_libdir=`$PYTHON -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR'));"`
         if test -z "$PKG_CONFIG"; then
             PYTHON_CFLAGS="-I$python_include"
             PYTHON_LIBS="-L$python_libdir -lpython$python_version $python_libs"
