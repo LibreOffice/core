@@ -1301,6 +1301,8 @@ SwView::~SwView()
     m_pPostItMgr.reset();
 
     m_bInDtor = true;
+    // A drag that still runs ends while the shell that it works on is alive.
+    m_pEditWin->CancelDrag();
     m_pEditWin->Hide(); // prevent problems with painting
 
     // Set pointer in SwDocShell to the view again

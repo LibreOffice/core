@@ -268,6 +268,8 @@ public:
     const Point& GetDragStartPos() const { return m_aDragStartPos; }
     /// The data of the drag that a drop into this window would take, or null without a drag.
     SwTransferable* GetDraggedData() const { return m_xDraggedData.get(); }
+    /// Ends the drag that runs from this window, if any, without a drop.
+    void CancelDrag();
     bool IsInDrag() const { return m_bIsInDrag; }
     void SetFrameDrag(bool bFrameDrag) { m_bFrameDrag = bFrameDrag; }
     void SetDroppedHyperlink(bool bDroppedHyperlink) { m_bDroppedHyperlink = bDroppedHyperlink; }

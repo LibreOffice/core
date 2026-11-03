@@ -3823,6 +3823,32 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextTwoViewsSameText)
     CPPUNIT_ASSERT_EQUAL(u"Aaa|BbbCcc||"_ustr, lcl_documentText(mxComponent));
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextViewClosedDuringDrag)
+{
+    // Given the paragraphs "Aaa", "Bbb" and "Ccc", open in two views:
+    SwXTextDocument* pXTextDocument = createDoc();
+    int nViewA = KitHelper::getCurrentView();
+    SwWrtShell* pWrtShellA = getSwDocShell()->GetWrtShell();
+    ThreeParagraphs aPoints = lcl_fillThreeParagraphs(pWrtShellA);
+    int nViewB = lcl_addView(pXTextDocument);
+    SwWrtShell* pWrtShellB = getSwDocShell()->GetWrtShell();
+
+    // When the second view drags "Ccc" to the end of "Aaa", holds the button and is closed, as
+    // happens when its user loses the connection:
+    lcl_selectParagraph(pWrtShellB, getParagraph(3));
+    lcl_dragText(pXTextDocument, aPoints.aInsideThird, aPoints.aEndOfFirst, 0,
+                 /*bRelease=*/false, nViewB);
+    KitHelper::destroyView(nViewB);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then nothing moved, and the first view drags "Bbb" to the end of "Aaa" as usual:
+    CPPUNIT_ASSERT_EQUAL(u"Aaa|Bbb|Ccc|"_ustr, lcl_documentText(mxComponent));
+    lcl_selectParagraph(pWrtShellA, getParagraph(2));
+    lcl_dragText(pXTextDocument, aPoints.aInsideSecond, aPoints.aEndOfFirst, 0,
+                 /*bRelease=*/true, nViewA);
+    CPPUNIT_ASSERT_EQUAL(u"AaaBbb||Ccc|"_ustr, lcl_documentText(mxComponent));
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextSourceDeletedByOtherView)
 {
     // Given the paragraphs "Aaa", "Bbb" and "Ccc", open in two views:

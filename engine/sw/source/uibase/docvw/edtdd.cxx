@@ -25,6 +25,7 @@
 #include <sfx2/bindings.hxx>
 #include <comphelper/kit.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/kit.hxx>
 #include <osl/diagnose.h>
 
 #include <sfx2/viewfrm.hxx>
@@ -191,6 +192,14 @@ void SwEditWin::StartExecuteDrag()
     m_xDraggedData = new SwTransferable( m_rView.GetWrtShell() );
 
     m_xDraggedData->StartDrag( this, m_aMovePos );
+}
+
+void SwEditWin::CancelDrag()
+{
+    // The drag source finishes the dragged data, which restores the view the way the end of
+    // any drag does.
+    vcl::kit::cancelDrag(this);
+    m_xDraggedData.clear();
 }
 
 void SwEditWin::DragFinished()
