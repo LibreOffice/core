@@ -161,6 +161,25 @@ sal_Int32 Connection::getParagraphIndex() const
     assert(TypeConstant::XML_presOf == mnXMLType
            && "a paragraph index is defined by a presOf Connection only");
 
+    if (nullptr == mpDestinationPoint)
+        return mnDestOrder;
+
+    // the Points of the shape in destOrd order, those of one destOrd as they come
+    std::vector<const Connection*> aShown(mpDestinationPoint->maShows.begin(),
+                                          mpDestinationPoint->maShows.end());
+    std::stable_sort(aShown.begin(), aShown.end(), [](const Connection* pA, const Connection* pB) {
+        return pA->mnDestOrder < pB->mnDestOrder;
+    });
+
+    sal_Int32 nParagraph(0);
+    for (const Connection* pShown : aShown)
+    {
+        if (pShown == this)
+            return nParagraph;
+        if (nullptr != pShown && nullptr != pShown->mpSourcePoint)
+            nParagraph += pShown->mpSourcePoint->mnParagraphCount;
+    }
+
     return mnDestOrder;
 }
 
@@ -1838,6 +1857,16 @@ DiagramDataState::DiagramDataState(const Connections& aConnections, const Points
                 maShapeTransformations.push_back(aCandidateTransformation);
             }
         }
+
+        SdrObjListIter aIter(*pSource, SdrIterMode::DeepNoGroups);
+        while (aIter.IsMore())
+        {
+            SdrObject* pCandidate(aIter.Next());
+            std::optional<OutlinerParaObject> oText;
+            if (nullptr != pCandidate->GetOutlinerParaObject())
+                oText = *pCandidate->GetOutlinerParaObject();
+            maShapeTexts.emplace_back(pCandidate->getUnoShape(), std::move(oText));
+        }
     }
 }
 
@@ -1888,6 +1917,14 @@ void DiagramData_svx::applyDiagramDataState(const DiagramDataStatePtr& rState)
                     basegfx::B2DPolyPolygon aShapePolyPolygon;
                     pShape->TRSetBaseGeometry(rShapeTransformations[a], aShapePolyPolygon);
                 }
+            }
+
+            // a shape gets back the text it had, a text edit may have changed it since
+            for (const auto& [rShape, rText] : rState->getShapeTexts())
+            {
+                SdrObject* pShape(SdrObject::getSdrObjectFromXShape(rShape));
+                if (nullptr != pShape && rText)
+                    pShape->NbcSetOutlinerParaObject(*rText);
             }
         }
 
@@ -1965,7 +2002,9 @@ rtl::Reference<Point> DiagramData_svx::getPointByModelID(std::u16string_view rMo
 namespace
 {
 // The text of one paragraph of a shape, and all of its text for a negative index
-OUString readTextOfShape(const uno::Reference<drawing::XShape>& rShape, sal_Int32 nParagraph)
+// the text of nCount paragraphs from nParagraph on, a line each, or all of it for nParagraph -1
+OUString readTextOfShape(const uno::Reference<drawing::XShape>& rShape, sal_Int32 nParagraph,
+                         sal_Int32 nCount = 1)
 {
     uno::Reference<text::XText> xText(rShape, uno::UNO_QUERY);
 
@@ -1982,18 +2021,24 @@ OUString readTextOfShape(const uno::Reference<drawing::XShape>& rShape, sal_Int3
 
     uno::Reference<container::XEnumeration> xParagraphs(xAccess->createEnumeration());
     sal_Int32 nIndex(0);
+    OUStringBuffer aText;
 
-    while (xParagraphs.is() && xParagraphs->hasMoreElements())
+    while (xParagraphs.is() && xParagraphs->hasMoreElements() && nIndex < nParagraph + nCount)
     {
         uno::Reference<text::XTextRange> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
 
-        if (nIndex == nParagraph)
-            return xParagraph.is() ? xParagraph->getString() : OUString();
+        if (nIndex >= nParagraph)
+        {
+            if (nIndex > nParagraph)
+                aText.append('\n');
+            if (xParagraph.is())
+                aText.append(xParagraph->getString());
+        }
 
         nIndex++;
     }
 
-    return OUString();
+    return aText.makeStringAndClear();
 }
 }
 
@@ -2032,7 +2077,7 @@ uno::Reference<drawing::XShape> DiagramData_svx::getMasterXShapeForPoint(
                                 && pCandidate->mpDestinationPoint->maShows.size() > 1);
         const sal_Int32 nParagraph(bSharedShape ? pCandidate->getParagraphIndex() : -1);
 
-        if (!readTextOfShape(xShowingShape, nParagraph).isEmpty())
+        if (!readTextOfShape(xShowingShape, nParagraph, rPoint.mnParagraphCount).isEmpty())
         {
             rParagraph = nParagraph;
 
@@ -2059,7 +2104,7 @@ OUString DiagramData_svx::getTextForPoint(const Point& rPoint) const
     // arguments of one call the order they are evaluated in is not defined.
     const uno::Reference<drawing::XShape> xMasterText(getMasterXShapeForPoint(rPoint, nParagraph));
 
-    return readTextOfShape(xMasterText, nParagraph);
+    return readTextOfShape(xMasterText, nParagraph, rPoint.mnParagraphCount);
 }
 
 std::vector<std::pair<OUString, OUString>> DiagramData_svx::getDiagramChildren(const OUString& rParentId) const

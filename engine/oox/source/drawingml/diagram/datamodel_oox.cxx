@@ -73,7 +73,8 @@ void DiagramData_oox::fillTextBodiesFromXShapes()
         if (!rPoint.is() || svx::diagram::TypeConstant::XML_node != rPoint->mnXMLType)
             continue;
 
-        // a shape that shows several Points holds the text of this one in paragraph nParagraph
+        // a shape that shows several Points holds the text of this one in its paragraphs from
+        // nParagraph on
         sal_Int32 nParagraph(-1);
         uno::Reference<container::XEnumerationAccess> xAccess(
             getMasterXShapeForPoint(*rPoint, nParagraph), uno::UNO_QUERY);
@@ -93,7 +94,9 @@ void DiagramData_oox::fillTextBodiesFromXShapes()
         {
             uno::Reference<text::XTextRange> xParagraph(xParagraphs->nextElement(),
                                                         uno::UNO_QUERY);
-            if (!xParagraph || (nParagraph >= 0 && nIndex != nParagraph))
+            if (!xParagraph
+                || (nParagraph >= 0
+                    && (nIndex < nParagraph || nIndex >= nParagraph + rPoint->mnParagraphCount)))
                 continue;
 
             TextParagraph& rParagraph(pTextBody->addParagraph());
@@ -299,7 +302,8 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastpa
             if (bWriteText)
             {
                 rTarget->startElementNS(XML_dgm, XML_t);
-                aShapeExport->setDiagramModelTextExport(true, nTextParagraph);
+                aShapeExport->setDiagramModelTextExport(true, nTextParagraph,
+                                                        rPoint->mnParagraphCount);
                 aShapeExport->WriteText(xAssociatedShape, false, true, XML_a);
                 aShapeExport->setDiagramModelTextExport(false);
                 rTarget->endElementNS(XML_dgm, XML_t);
@@ -443,7 +447,7 @@ static void Point_dump(const svx::diagram::Point& rPoint, const uno::Reference<d
     SAL_INFO("oox.drawingml", "  PRS_1: " << rPoint.getPresentation().msPresentationAssociationId << "," << rPoint.getPresentation().msPresentationLayoutName << "," << rPoint.getPresentation().msPresentationLayoutStyleLabel << "," << rRootVals.msQuickStyleCategoryId << "," << rRootVals.msQuickStyleTypeId);
     SAL_INFO("oox.drawingml", "  PRS_2: " << rPres.mnCustomAngle << "," << rPres.mnPercentageNeighbourWidth << "," << rPres.mnPercentageNeighbourHeight << "," << rPres.mnPercentageOwnWidth << "," << rPres.mnPercentageOwnHeight);
     SAL_INFO("oox.drawingml", "  PRS_3: " << rPres.mnIncludeAngleScale<< rPres.mnRadiusScale << "," << rPres.mnWidthScale << "," << rPres.mnHeightScale << "," << rPres.mnWidthOverride << "," << rPres.mnHeightOverride << "," <<  rPoint.getPresentation().mnLayoutStyleCount << "," << rPoint.getPresentation().mnLayoutStyleIndex);
-    SAL_INFO("oox.drawingml", "  PRS_4: " << rPres.mbCoherent3DOffset << "," << rPres.mbCustomHorizontalFlip << "," << rPres.mbCustomVerticalFlip << "," << rPoint.mbCustomText << "," << rPres.mbIsPlaceholder);
+    SAL_INFO("oox.drawingml", "  PRS_4: " << rPres.mbCoherent3DOffset << "," << rPres.mbCustomHorizontalFlip << "," << rPres.mbCustomVerticalFlip << "," << rPoint.mbCustomText << "," << rPres.mbIsPlaceholder << "," << rPoint.mnParagraphCount);
 
     const svx::diagram::PresentationLayoutVariables& rVars(rPoint.getLayoutVariables());
     SAL_INFO("oox.drawingml", "  PLV_0: " << rVars.msResizeHandles << ","
@@ -484,6 +488,14 @@ void DiagramData_oox::buildDiagramDataModel(bool bClearOoxShapes)
         // Delete/remove all existing oox::drawingml::Shape
         maPointShapeMap.clear();
     }
+
+    // the paragraphs of each Point's text, as the file gives them
+    if (!bClearOoxShapes)
+        for (const rtl::Reference<svx::diagram::Point>& rPoint : getPoints())
+            if (const Shape* pShape = getOrCreateAssociatedShape(*rPoint);
+                pShape && pShape->getTextBody())
+                rPoint->mnParagraphCount = std::max<sal_Int32>(
+                    1, pShape->getTextBody()->getParagraphs().size());
 
     // call parent
     svx::diagram::DiagramData_svx::buildDiagramDataModel(bClearOoxShapes);

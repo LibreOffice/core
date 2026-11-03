@@ -64,6 +64,12 @@ class DiagramHelper_oox final : public svx::diagram::DiagramHelper_svx
     OUString msNewNodeText;
     OUString msNewNodeTemplateId;
 
+    // what a text edit of a shape of the Diagram started from: the state of the Diagram with the
+    // text from before, the ModelId of the edited shape and its paragraphs from before
+    std::shared_ptr<svx::diagram::DiagramDataState> mpTextEditStartState;
+    OUString msTextEditModelId;
+    std::vector<OUString> maTextEditParagraphs;
+
     bool hasDiagramData() const;
 
     // Hands the fill, line and text attributes of xOldShape, and its text, to xNewShape. The
@@ -108,6 +114,9 @@ public:
                                     std::u16string_view rAnchorNode, bool bAsChild) override;
     virtual bool removeDiagramNode(std::u16string_view rNodeId, SdrModel& rDrawModel) override;
     virtual void TextInformationChange() override;
+    virtual void textEditEnding(const SdrObject& rObject) override;
+    virtual void textEditEnded(const SdrObject& rObject, SdrModel& rDrawModel,
+                               bool bUndo) override;
     virtual void ItemSetInformationChange(std::span< const SfxPoolItem* const > aChangedItems) override;
 
     // Undo/Redo helpers to extract/restore Diagram-defining data

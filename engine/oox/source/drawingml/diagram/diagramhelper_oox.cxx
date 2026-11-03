@@ -32,6 +32,7 @@
 #include <svx/svdundo.hxx>
 #include <svx/sdasitm.hxx>
 #include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
 #include <svx/svddef.hxx>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <svx/sdooitm.hxx>
@@ -758,6 +759,200 @@ void DiagramHelper_oox::TextInformationChange()
     if (xPropSet->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
         xPropSet->setPropertyValue(u"InteropGrabBag"_ustr,
                                    cpo::uno::Any(cpo::uno::Sequence<beans::PropertyValue>()));
+}
+
+namespace
+{
+// the paragraphs of the text of rObject, a string each
+std::vector<OUString> paragraphsOf(const SdrObject& rObject)
+{
+    std::vector<OUString> aOut;
+    if (const OutlinerParaObject* pText = rObject.GetOutlinerParaObject())
+        for (sal_Int32 n = 0; n < pText->GetTextObject().GetParagraphCount(); ++n)
+            aOut.push_back(pText->GetTextObject().GetText(n));
+    return aOut;
+}
+}
+
+void DiagramHelper_oox::textEditEnding(const SdrObject& rObject)
+{
+    mpTextEditStartState.reset();
+    msTextEditModelId.clear();
+    maTextEditParagraphs.clear();
+
+    if (!hasDiagramData())
+        return;
+
+    msTextEditModelId = rObject.getDiagramDataModelID();
+    maTextEditParagraphs = paragraphsOf(rObject);
+    mpTextEditStartState = extractDiagramDataState();
+}
+
+void DiagramHelper_oox::textEditEnded(const SdrObject& rObject, SdrModel& rDrawModel, bool bUndo)
+{
+    DiagramDataStatePtr pStartState(std::move(mpTextEditStartState));
+    const OUString aModelId(std::move(msTextEditModelId));
+    const std::vector<OUString> aOld(std::move(maTextEditParagraphs));
+    mpTextEditStartState.reset();
+    msTextEditModelId.clear();
+    maTextEditParagraphs.clear();
+
+    if (!hasDiagramData() || aModelId.isEmpty() || aModelId != rObject.getDiagramDataModelID())
+        return;
+
+    svx::diagram::DiagramData_svx& rData(*mpDiagramPtr->getData());
+    const rtl::Reference<svx::diagram::Point> xShown(rData.getPointByModelID(aModelId));
+    if (!xShown.is() || xShown->maShows.empty())
+        return;
+
+    // the nodes the shape shows, in the order of their paragraphs
+    std::vector<const svx::diagram::Connection*> aShows(xShown->maShows.begin(),
+                                                        xShown->maShows.end());
+    std::stable_sort(aShows.begin(), aShows.end(),
+                     [](const svx::diagram::Connection* pA, const svx::diagram::Connection* pB) {
+                         return pA->mnDestOrder < pB->mnDestOrder;
+                     });
+    std::vector<rtl::Reference<svx::diagram::Point>> aNodes;
+    for (const svx::diagram::Connection* pShow : aShows)
+    {
+        if (nullptr == pShow || nullptr == pShow->mpSourcePoint
+            || svx::diagram::TypeConstant::XML_node != pShow->mpSourcePoint->mnXMLType)
+            return;
+        aNodes.emplace_back(pShow->mpSourcePoint);
+    }
+
+    // a shape of a node of its own keeps all its paragraphs in that node
+    if (aNodes.size() == 1
+        && xShown->getPresentation().msPresentationAssociationId == aNodes[0]->msModelId)
+        return;
+
+    // the first paragraph of each node before the edit
+    std::vector<size_t> aFirst;
+    size_t nCount(0);
+    for (const rtl::Reference<svx::diagram::Point>& rNode : aNodes)
+    {
+        aFirst.push_back(nCount);
+        nCount += std::max<sal_Int32>(1, rNode->mnParagraphCount);
+    }
+    if (nCount != aOld.size())
+    {
+        SAL_WARN("oox", "textEditEnded: the paragraphs of the shape do not match its nodes");
+        return;
+    }
+
+    // the paragraphs that stayed as they were at the start and at the end
+    const std::vector<OUString> aNew(paragraphsOf(rObject));
+    size_t nFront(0);
+    while (nFront < aOld.size() && nFront < aNew.size() && aOld[nFront] == aNew[nFront])
+        nFront++;
+    size_t nBack(0);
+    while (nBack < aOld.size() - nFront && nBack < aNew.size() - nFront
+           && aOld[aOld.size() - 1 - nBack] == aNew[aNew.size() - 1 - nBack])
+        nBack++;
+    if (nFront == aOld.size() && nFront == aNew.size())
+        return;
+
+    // the nodes the changed paragraphs belonged to; with none, as for a paragraph only added,
+    // the node before it, or the first node for one added at the start
+    size_t nFirstNode(aNodes.size());
+    size_t nEndNode(0);
+    for (size_t n = 0; n < aNodes.size(); ++n)
+    {
+        const size_t nEnd(aFirst[n] + std::max<sal_Int32>(1, aNodes[n]->mnParagraphCount));
+        if (aFirst[n] < aOld.size() - nBack && nEnd > nFront)
+        {
+            nFirstNode = std::min(nFirstNode, n);
+            nEndNode = n + 1;
+        }
+    }
+    bool bOnlyAdded(false);
+    if (nFirstNode == aNodes.size())
+    {
+        if (nFront == 0)
+        {
+            nFirstNode = 0;
+            nEndNode = 1;
+        }
+        else
+        {
+            for (size_t n = 0; n < aNodes.size(); ++n)
+                if (aFirst[n] < nFront)
+                    nFirstNode = n;
+            nEndNode = nFirstNode + 1;
+            bOnlyAdded = true;
+        }
+    }
+
+    // the new paragraphs that take the place of the changed ones; the nodes keep as many as they
+    // had while there are enough, and every paragraph left over is a node of its own, as typing
+    // Enter in the shape makes it
+    const size_t nOldFrom(
+        aFirst[nFirstNode]
+        + (bOnlyAdded ? std::max<sal_Int32>(1, aNodes[nFirstNode]->mnParagraphCount) : 0));
+    const size_t nOldTo(aFirst[nEndNode - 1]
+                        + std::max<sal_Int32>(1, aNodes[nEndNode - 1]->mnParagraphCount));
+    size_t nLeft(aNew.size() - (aOld.size() - nOldTo) - nOldFrom);
+    std::vector<OUString> aRemove;
+    OUString aLastKept;
+    bool bCountChanged(false);
+    if (bOnlyAdded)
+        aLastKept = aNodes[nFirstNode]->msModelId;
+    else
+        for (size_t n = nFirstNode; n < nEndNode; ++n)
+        {
+            const sal_Int32 nTake(static_cast<sal_Int32>(
+                std::min<size_t>(std::max<sal_Int32>(1, aNodes[n]->mnParagraphCount), nLeft)));
+            nLeft -= nTake;
+            if (nTake == 0)
+                aRemove.push_back(aNodes[n]->msModelId);
+            else
+            {
+                bCountChanged |= aNodes[n]->mnParagraphCount != nTake;
+                aNodes[n]->mnParagraphCount = nTake;
+                aLastKept = aNodes[n]->msModelId;
+            }
+        }
+    if (aRemove.empty() && nLeft == 0 && !bCountChanged)
+        return;
+
+    DomMapFlags aChangedParts;
+    for (const OUString& rRemove : aRemove)
+    {
+        DomMapFlags aParts(rData.removeDiagramNode(rRemove, false));
+        if (aParts.empty())
+            SAL_WARN("oox", "textEditEnded: a node whose paragraph was taken out stays");
+        aChangedParts.insert(aChangedParts.end(), aParts.begin(), aParts.end());
+    }
+    // a node that is added goes behind the one before it, and a node with no node before it
+    // goes behind the first one that stays
+    if (aLastKept.isEmpty() && nEndNode < aNodes.size())
+        aLastKept = aNodes[nEndNode]->msModelId;
+    for (; nLeft > 0 && !aLastKept.isEmpty(); nLeft--)
+    {
+        const svx::diagram::AddedDiagramNode aAdded(rData.addDiagramNode(aLastKept, false));
+        if (aAdded.msNewNodeId.isEmpty())
+        {
+            SAL_WARN("oox", "textEditEnded: no node could be added for a paragraph");
+            break;
+        }
+        aChangedParts.insert(aChangedParts.end(), aAdded.maChangedParts.begin(),
+                             aAdded.maChangedParts.end());
+        aLastKept = aAdded.msNewNodeId;
+    }
+
+    if (!aChangedParts.empty())
+        mpDiagramPtr->resetOOXDomValues(std::move(aChangedParts));
+
+    // the shape keeps the text as typed, the new layout takes it over
+    reLayout();
+
+    if (bUndo && pStartState)
+    {
+        SdrObject* pRootShape(SdrObject::getSdrObjectFromXShape(accessRootShape()));
+        if (nullptr != pRootShape)
+            rDrawModel.AddUndo(rDrawModel.GetSdrUndoFactory().CreateUndoDiagramModelData(
+                *pRootShape, pStartState));
+    }
 }
 
 DiagramDataStatePtr DiagramHelper_oox::extractDiagramDataState() const

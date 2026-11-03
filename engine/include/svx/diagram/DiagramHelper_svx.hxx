@@ -128,6 +128,16 @@ public:
     // remove a node from the data model
     virtual bool removeDiagramNode(std::u16string_view rNodeId, SdrModel& rDrawModel) = 0;
     virtual void TextInformationChange() = 0;
+
+    // rObject, a shape of this Diagram, is about to take the text typed into it and still holds
+    // the text from before
+    virtual void textEditEnding(const SdrObject& rObject) = 0;
+
+    // The text typed into rObject is in it now. Where rObject shows several nodes, a paragraph
+    // that was added becomes a node next to the one it was typed after, and a node whose
+    // paragraph was taken out goes away; the Diagram is then laid out again, and with bUndo that
+    // goes into the undo of rDrawModel
+    virtual void textEditEnded(const SdrObject& rObject, SdrModel& rDrawModel, bool bUndo) = 0;
     virtual void ItemSetInformationChange(std::span< const SfxPoolItem* const > aChangedItems) = 0;
 
     // Undo/Redo helpers for extracting/restoring Diagram-defining data

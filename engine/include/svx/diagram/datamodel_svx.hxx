@@ -32,6 +32,7 @@
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ustring.hxx>
+#include <editeng/outlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/xml/dom/XDocument.hpp>
@@ -127,8 +128,9 @@ struct SVXCORE_DLLPUBLIC Connection : public salhelper::SimpleReferenceObject,
     // more than one place
     sal_Int32 getPresentationIndex() const;
 
-    // Which paragraph of the shape a presOf Connection defines, for a shape that represents more
-    // than one Point
+    // The first paragraph of the shape that the Point of a presOf Connection takes, for a shape
+    // that represents more than one Point: the paragraphs of the Points before it in destOrd
+    // order come first
     sal_Int32 getParagraphIndex() const;
 };
 
@@ -249,6 +251,10 @@ struct SVXCORE_DLLPUBLIC PointValues
     // XML_custT: The text of the node is the user's own, so the layout leaves it as it is.
     /* PRS */ bool         mbCustomText : 1 = false;
 
+    // The number of paragraphs of the text, from dgm:t: a shape that represents several Points
+    // holds their paragraphs one after the other, so this says which of them are this Point's.
+    sal_Int32              mnParagraphCount = 1;
+
     // The dgm:presLayoutVars of a presentation Point. A Point that states none of them holds no
     // variables at all, which is also what decides whether the element gets written again.
     std::optional<PresentationLayoutVariables> moLayoutVariables;
@@ -345,6 +351,11 @@ class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) DiagramDataState
     std::vector<basegfx::B2DHomMatrix> maShapeTransformations;
     basegfx::B2DHomMatrix maTransformation;
 
+    // The text of every shape of the Diagram, groups looked into, as it was when the state was
+    // taken; a shape without text holds none.
+    std::vector<std::pair<cpo::uno::Reference<css::drawing::XShape>,
+                          std::optional<OutlinerParaObject>>> maShapeTexts;
+
 public:
     DiagramDataState(const Connections& aConnections, const Points& aPoints, const cpo::uno::Reference< css::drawing::XShape >& rRootShape);//, const OUString& rBackgroundShapeModelID);
 
@@ -353,6 +364,12 @@ public:
     const std::vector<cpo::uno::Reference<css::drawing::XShape>>& getXShapes() const { return mxShapes;}
     const std::vector<basegfx::B2DHomMatrix>& getShapeTransformations() const { return maShapeTransformations; }
     const basegfx::B2DHomMatrix& getTransformation() const { return maTransformation; }
+    const std::vector<std::pair<cpo::uno::Reference<css::drawing::XShape>,
+                                std::optional<OutlinerParaObject>>>&
+    getShapeTexts() const
+    {
+        return maShapeTexts;
+    }
 };
 
 typedef std::shared_ptr< DiagramDataState > DiagramDataStatePtr;

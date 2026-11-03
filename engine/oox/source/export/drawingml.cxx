@@ -288,6 +288,7 @@ DrawingML::DrawingML(::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBa
     , mbDiagaramReplacementExport(false)
     , mbDiagramModelTextExport(false)
     , mnDiagramModelTextParagraph(-1)
+    , mnDiagramModelTextParagraphCount(1)
 {
     uno::Reference<beans::XPropertySet> xSettings(pFB->getModelFactory()->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
     if (xSettings.is())
@@ -5133,10 +5134,13 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
 
         if( any >>= paragraph)
         {
-            // A shape of a Diagram can represent several Points, one paragraph of it each. Only
-            // the paragraph that represents the Point being written belongs in it.
-            const bool bOtherPoint(isDiagramModelTextExport() && mnDiagramModelTextParagraph >= 0
-                                   && nParagraphIndex != mnDiagramModelTextParagraph);
+            // A shape of a Diagram can represent several Points, their paragraphs one after the
+            // other. Only the paragraphs that represent the Point being written belong in it.
+            const bool bOtherPoint(
+                isDiagramModelTextExport() && mnDiagramModelTextParagraph >= 0
+                && (nParagraphIndex < mnDiagramModelTextParagraph
+                    || nParagraphIndex
+                           >= mnDiagramModelTextParagraph + mnDiagramModelTextParagraphCount));
             nParagraphIndex++;
 
             if (bOtherPoint)

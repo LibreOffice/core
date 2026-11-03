@@ -271,6 +271,22 @@ SdrPageView* SdrObjEditView::ShowSdrPage(SdrPage* pPage)
 
 namespace
 {
+// the Diagram whose shape rObject is, groups in between looked through, or nothing
+SdrObjGroup* diagramOfShape(const SdrObject& rObject)
+{
+    for (SdrObject* pAbove = rObject.getParentSdrObjectFromSdrObject(); pAbove;
+         pAbove = pAbove->getParentSdrObjectFromSdrObject())
+    {
+        auto pDiagram = dynamic_cast<SdrObjGroup*>(pAbove);
+        if (pDiagram && pDiagram->isDiagram() && pDiagram->getDiagramHelper())
+            return pDiagram;
+    }
+    return nullptr;
+}
+}
+
+namespace
+{
 /// Removes outliner views registered in other draw views that use pOutputDevice.
 void lcl_RemoveTextEditOutlinerViews(SdrObjEditView const* pThis, SdrPageView const* pPageView,
                                      OutputDevice const* pOutputDevice)
@@ -1459,18 +1475,8 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
     // An object of a diagram that is edited one object at a time becomes the diagram's
     // sub-selection when its text is edited, as what is done to the diagram next goes by that.
     if (SdrObject::useAdvancedDiagramFeatures())
-    {
-        for (SdrObject* pAbove = pObj->getParentSdrObjectFromSdrObject(); pAbove;
-             pAbove = pAbove->getParentSdrObjectFromSdrObject())
-        {
-            auto pDiagram = dynamic_cast<SdrObjGroup*>(pAbove);
-            if (pDiagram && pDiagram->isDiagram() && pDiagram->getDiagramHelper())
-            {
-                pDiagram->getDiagramHelper()->markDirectDiagramSubSelection(*pObj);
-                break;
-            }
-        }
-    }
+        if (SdrObjGroup* pDiagram = diagramOfShape(*pObj))
+            pDiagram->getDiagramHelper()->markDirectDiagramSubSelection(*pObj);
 
     if (bGrabFocus && pWin)
     {
@@ -1966,6 +1972,13 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
                 BegUndo(SvxResId(STR_UndoObjSetText), aObjName);
             }
 
+            // a shape of a Diagram still holds its text from before here
+            SdrObjGroup* pDiagram(SdrObject::useAdvancedDiagramFeatures()
+                                      ? diagramOfShape(*pTEObj)
+                                      : nullptr);
+            if (pDiagram)
+                pDiagram->getDiagramHelper()->textEditEnding(*pTEObj);
+
             pTEObj->EndTextEdit(*pTEOutliner);
 
             if ((pTEObj->GetRotateAngle() != 0_deg100) || (pTEObj && pTEObj->IsFontwork()))
@@ -2024,6 +2037,14 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             else if (bDelObj)
             { // for Writer: the app has to do the deletion itself.
                 eRet = SdrEndTextEditKind::ShouldBeDeleted;
+            }
+
+            // the Diagram goes by the new text, in the same undo as the text; the layout makes
+            // new shapes, so the edited one is no longer marked
+            if (pDiagram && eRet == SdrEndTextEditKind::Changed)
+            {
+                pDiagram->getDiagramHelper()->textEditEnded(*pTEObj, GetModel(), bUndo);
+                CheckMarked();
             }
 
             if (bUndo)

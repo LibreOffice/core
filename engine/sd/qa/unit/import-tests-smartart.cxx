@@ -31,6 +31,12 @@
 #include <osl/process.h>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <svx/diagram/DiagramHelper_svx.hxx>
+#include <svx/svdview.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/outliner.hxx>
+#include <vcl/scheduler.hxx>
+#include <unomodel.hxx>
+#include <ViewShell.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::cpo;
@@ -2429,6 +2435,181 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testEachNodeReadsBackTheTextItHolds)
         rHelper->getDiagramChildren(aTopLevel[0].first));
     CPPUNIT_ASSERT_EQUAL(size_t(1), aBelow.size());
     CPPUNIT_ASSERT_EQUAL(u"coming to family"_ustr, aBelow[0].second);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testNodeKeepsItsParagraphsInASharedShape)
+{
+    createSdImpressDoc("pptx/smartart-shared-shape-paragraphs.pptx");
+
+    // one shape shows the children of a node, and the first child has two paragraphs
+    const auto aChildTexts = [this]() {
+        uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+        SdrObject* pDiagram(SdrObject::getSdrObjectFromXShape(xDiagram));
+        CPPUNIT_ASSERT(nullptr != pDiagram);
+        const std::shared_ptr<svx::diagram::DiagramHelper_svx>& rHelper(
+            pDiagram->getDiagramHelper());
+        CPPUNIT_ASSERT(rHelper);
+        const std::vector<std::pair<OUString, OUString>> aTopLevel(
+            rHelper->getDiagramChildren(EMPTY_OUSTRING));
+        CPPUNIT_ASSERT(!aTopLevel.empty());
+        std::vector<OUString> aTexts;
+        for (const std::pair<OUString, OUString>& rChild :
+             rHelper->getDiagramChildren(aTopLevel[0].first))
+            aTexts.push_back(rChild.second);
+        return aTexts;
+    };
+
+    const OUString aFirst(u"Eleven and twelve and thirteen and fourteen and fifteen and sixteen "
+                          "and seventeen"_ustr);
+    const std::vector<OUString> aExpected{ aFirst + "\n" + aFirst, u"Twelve"_ustr,
+                                           u"Thirteen"_ustr };
+    CPPUNIT_ASSERT_EQUAL(aExpected.size(), aChildTexts().size());
+    for (size_t n = 0; n < aExpected.size(); ++n)
+        CPPUNIT_ASSERT_EQUAL(aExpected[n], aChildTexts()[n]);
+
+    // the next child still starts after both paragraphs once the file is written again
+    saveAndReload(TestFilter::PPTX);
+    CPPUNIT_ASSERT_EQUAL(aExpected.size(), aChildTexts().size());
+    for (size_t n = 0; n < aExpected.size(); ++n)
+        CPPUNIT_ASSERT_EQUAL(aExpected[n], aChildTexts()[n]);
+}
+
+namespace
+{
+// the shape of the Diagram whose text starts with rStart
+SdrObject* findShapeByTextStart(SdrObject& rDiagram, std::u16string_view rStart)
+{
+    SdrObjListIter aIter(rDiagram, SdrIterMode::DeepNoGroups);
+    while (aIter.IsMore())
+    {
+        SdrObject* pCandidate(aIter.Next());
+        uno::Reference<text::XText> xText(pCandidate->getUnoShape(), uno::UNO_QUERY);
+        if (xText.is() && xText->getString().startsWith(rStart))
+            return pCandidate;
+    }
+    return nullptr;
+}
+
+// the texts of the nodes below the first node at the top level
+std::vector<OUString> textsBelowFirstNode(const svx::diagram::DiagramHelper_svx& rHelper)
+{
+    const std::vector<std::pair<OUString, OUString>> aTopLevel(
+        rHelper.getDiagramChildren(EMPTY_OUSTRING));
+    CPPUNIT_ASSERT(!aTopLevel.empty());
+    std::vector<OUString> aTexts;
+    for (const std::pair<OUString, OUString>& rChild :
+         rHelper.getDiagramChildren(aTopLevel[0].first))
+        aTexts.push_back(rChild.second);
+    return aTexts;
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testParagraphTypedIntoASharedShapeIsANode)
+{
+    createSdImpressDoc("pptx/smartart-shared-shape-paragraphs.pptx");
+
+    SdrObject* pDiagram(SdrObject::getSdrObjectFromXShape(getShapeFromPage(0, 0)));
+    CPPUNIT_ASSERT(nullptr != pDiagram);
+    const std::shared_ptr<svx::diagram::DiagramHelper_svx>& rHelper(pDiagram->getDiagramHelper());
+    CPPUNIT_ASSERT(rHelper);
+    SdrModel& rModel(pDiagram->getSdrModelFromSdrObject());
+    rModel.EnableUndo(true);
+
+    // one shape shows the children Eleven (of two paragraphs), Twelve and Thirteen
+    SdrObject* pShared(findShapeByTextStart(*pDiagram, u"Eleven"));
+    CPPUNIT_ASSERT(nullptr != pShared);
+    uno::Reference<text::XText> xText(pShared->getUnoShape(), uno::UNO_QUERY);
+    const OUString aFirst(u"Eleven and twelve and thirteen and fourteen and fifteen and sixteen "
+                          "and seventeen"_ustr);
+    const OUString aBefore(xText->getString());
+
+    // Enter after Twelve and a new paragraph, as typed into the shape
+    rHelper->textEditEnding(*pShared);
+    xText->setString(aFirst + "\n" + aFirst + "\nTwelve\nNew\nThirteen");
+    rHelper->textEditEnded(*pShared, rModel, true);
+
+    const std::vector<OUString> aExpected{ aFirst + "\n" + aFirst, u"Twelve"_ustr, u"New"_ustr,
+                                           u"Thirteen"_ustr };
+    CPPUNIT_ASSERT_EQUAL(aExpected.size(), textsBelowFirstNode(*rHelper).size());
+    for (size_t n = 0; n < aExpected.size(); ++n)
+        CPPUNIT_ASSERT_EQUAL(aExpected[n], textsBelowFirstNode(*rHelper)[n]);
+
+    // one undo brings back the three children and the text from before
+    getSdDocShell()->GetUndoManager()->Undo();
+    CPPUNIT_ASSERT_EQUAL(size_t(3), textsBelowFirstNode(*rHelper).size());
+    pShared = findShapeByTextStart(*pDiagram, u"Eleven");
+    CPPUNIT_ASSERT(nullptr != pShared);
+    xText.set(pShared->getUnoShape(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(aBefore, xText->getString());
+
+    // the line Thirteen taken out takes its node with it
+    rHelper->textEditEnding(*pShared);
+    xText->setString(aFirst + "\n" + aFirst + "\nTwelve");
+    rHelper->textEditEnded(*pShared, rModel, true);
+    const std::vector<OUString> aLeft(textsBelowFirstNode(*rHelper));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aLeft.size());
+    CPPUNIT_ASSERT_EQUAL(OUString(aFirst + "\n" + aFirst), aLeft[0]);
+    CPPUNIT_ASSERT_EQUAL(u"Twelve"_ustr, aLeft[1]);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTypingIntoASharedShapeChangesItsNodes)
+{
+    // the text edit goes by the nodes with the advanced Diagram features only
+    if (!SdrObject::useAdvancedDiagramFeatures())
+        return;
+
+    createSdImpressDoc("pptx/smartart-shared-shape-paragraphs.pptx");
+    SdXImpressDocument* pDocument(dynamic_cast<SdXImpressDocument*>(mxComponent.get()));
+    CPPUNIT_ASSERT(pDocument);
+    SdrView* pView(pDocument->GetDocShell()->GetViewShell()->GetView());
+    CPPUNIT_ASSERT(pView);
+
+    SdrObject* pDiagram(SdrObject::getSdrObjectFromXShape(getShapeFromPage(0, 0)));
+    CPPUNIT_ASSERT(nullptr != pDiagram);
+    const std::shared_ptr<svx::diagram::DiagramHelper_svx>& rHelper(pDiagram->getDiagramHelper());
+    CPPUNIT_ASSERT(rHelper);
+    const OUString aFirst(u"Eleven and twelve and thirteen and fourteen and fifteen and sixteen "
+                          "and seventeen"_ustr);
+
+    // the shape shows Eleven in paragraphs 0 and 1, Twelve in 2 and Thirteen in 3
+    const auto aEdit = [&](const ESelection& rSelection, std::u16string_view rText) {
+        SdrObject* pShared(findShapeByTextStart(*pDiagram, u"Eleven"));
+        CPPUNIT_ASSERT(nullptr != pShared);
+        Scheduler::ProcessEventsToIdle();
+        pView->SdrBeginTextEdit(pShared);
+        CPPUNIT_ASSERT(pView->IsTextEdit());
+        EditView& rEditView(pView->GetTextEditOutlinerView()->GetEditView());
+        rEditView.SetSelection(rSelection);
+        if (rText.empty())
+            rEditView.DeleteSelected();
+        else
+            rEditView.InsertText(OUString(rText));
+        pView->SdrEndTextEdit();
+        Scheduler::ProcessEventsToIdle();
+    };
+
+    // Enter after Twelve and New
+    aEdit(ESelection(2, 6), u"\nNew");
+    const std::vector<OUString> aAdded(textsBelowFirstNode(*rHelper));
+    CPPUNIT_ASSERT_EQUAL(size_t(4), aAdded.size());
+    CPPUNIT_ASSERT_EQUAL(OUString(aFirst + "\n" + aFirst), aAdded[0]);
+    CPPUNIT_ASSERT_EQUAL(u"Twelve"_ustr, aAdded[1]);
+    CPPUNIT_ASSERT_EQUAL(u"New"_ustr, aAdded[2]);
+    CPPUNIT_ASSERT_EQUAL(u"Thirteen"_ustr, aAdded[3]);
+
+    // one undo takes the node and the paragraph back
+    pDocument->GetDocShell()->GetUndoManager()->Undo();
+    Scheduler::ProcessEventsToIdle();
+    const std::vector<OUString> aUndone(textsBelowFirstNode(*rHelper));
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aUndone.size());
+    CPPUNIT_ASSERT_EQUAL(u"Twelve"_ustr, aUndone[1]);
+    CPPUNIT_ASSERT_EQUAL(u"Thirteen"_ustr, aUndone[2]);
+
+    // the line Thirteen with its paragraph break taken out
+    aEdit(ESelection(2, 6, 3, 8), u"");
+    const std::vector<OUString> aLeft(textsBelowFirstNode(*rHelper));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aLeft.size());
+    CPPUNIT_ASSERT_EQUAL(u"Twelve"_ustr, aLeft[1]);
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testNodeReadsItsTextWhenMoreThanOneShapeIsNamedForIt)
