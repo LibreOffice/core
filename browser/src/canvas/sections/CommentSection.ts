@@ -1786,6 +1786,11 @@ export class Comment extends CanvasSectionObject {
 		const props = this.sectionProperties;
 		if (props.nodeReply.style.display !== 'none')
 			return props.nodeReplyText.innerText.trim() !== '';
+		return this.isModifiedTextChanged();
+	}
+
+	private isModifiedTextChanged(): boolean {
+		const props = this.sectionProperties;
 		// a new comment has no original text; one without HTML, as in Impress, has text only
 		const origHTML = props.contentText.origHTML || '';
 		if (origHTML) {
@@ -1862,9 +1867,10 @@ export class Comment extends CanvasSectionObject {
 		}
 		if (!this.sectionProperties.commentContainerRemoved) {
 			$(this.sectionProperties.container).removeClass('annotation-active reply-annotation-container modify-annotation-container');
+			// compared before the last <br> goes, as the comparison drops it itself
+			const isChanged = this.isModifiedTextChanged();
 			this.removeLastBRTag(this.sectionProperties.nodeModifyText);
-			if (this.sectionProperties.contentText.origText !== this.sectionProperties.nodeModifyText.innerText ||
-			    this.sectionProperties.contentText.origHTML !== this.sectionProperties.nodeModifyText.innerHTML) {
+			if (isChanged) {
 				if(!document.hasFocus())
 					app.definitions.CommentSection.needFocus = this;
 				if (!this.sectionProperties.contentText.uneditedHTML)

@@ -456,6 +456,20 @@ describe(['tagdesktop'], 'Annotation Autosave Tests', function() {
 		cy.cGet('.cool-annotation-content > div').should('have.text','some text0');
 	});
 
+	// A comment here has text only, no HTML, so its text alone is compared.
+	it('Modify without a change is not autosaved', function() {
+		desktopHelper.insertComment();
+		cy.cGet('[id^=annotation-content-area-]').should('have.text','some text0');
+		cy.cGet('.cool-annotation-content-wrapper:visible .cool-annotation-menu').click();
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Modify').click();
+		cy.cGet('[id^=annotation-modify-textarea-]').should('have.focus');
+		cy.cGet('#map').focus();
+		cy.cGet('[id^=annotation-modify-textarea-]').should('not.have.focus');
+		// an autosave shows only after the reply of the server
+		helper.processToIdle(this.win);
+		cy.cGet('.annotation-button-autosaved').should('not.exist');
+	});
+
 	// Skipping reply tests in Impress since reply functionality is temporarily disabled.
 	it.skip('Reply autosave',function() {
 		desktopHelper.insertComment();
