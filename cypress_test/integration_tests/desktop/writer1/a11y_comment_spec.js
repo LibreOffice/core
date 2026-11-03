@@ -173,6 +173,24 @@ describe(['tagdesktop'], 'Writer comments for the reader', { testIsolation: fals
 		});
 	});
 
+	it('the empty status is no line of its own, and stays a live region', function () {
+		cy.then(function () {
+			win.document.getElementById('a11y-jump-status').textContent = '';
+		});
+		cy.waitUntil(function () {
+			return a11yHelper.getAXNodesWithin('#a11y-jump-status').then(function (nodes) {
+				return nodes.length === 1;
+			});
+		});
+		a11yHelper.getAXNodesWithin('#a11y-jump-status').then(function (nodes) {
+			// a reader skips an empty generic node, but not a status
+			expect(nodes[0].ignored, 'in the tree').to.equal(false);
+			expect(nodes[0].role, 'the role').to.equal('generic');
+			expect(nodes[0].properties.live, 'the live region').to.equal('polite');
+			expect(nodes[0].properties.atomic, 'the atomic flag').to.equal(true);
+		});
+	});
+
 	it('Alt+F12 before an anchor moves the focus to its comment', function () {
 		// "Before " leads to the anchor of the comment by Alice; {ctrl} stays down for the rest
 		// of a string, so the arrows go in a call of their own

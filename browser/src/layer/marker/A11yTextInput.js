@@ -557,7 +557,8 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		// present from the start, as a live region added just before its text can go unheard
 		this._commentStatus = window.L.DomUtil.create('div', 'visuallyhidden', this._container);
 		this._commentStatus.id = 'a11y-jump-status';
-		this._commentStatus.setAttribute('role', 'status');
+		this._commentStatus.setAttribute('aria-live', 'polite');
+		this._commentStatus.setAttribute('aria-atomic', 'true');
 	},
 
 	_setContextList: function(list) {
