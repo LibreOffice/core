@@ -41,6 +41,9 @@ class Document: NSDocument {
     /// The webview that contains the document.
     var webView: WKWebView!
 
+    /// The iframe the page is in, or nil when the page is the main frame of webView.
+    var editorFrame: WKFrameInfo?
+
     /// True from the moment the connection to the in-process server is released until a
     /// new one is established. The document stays loaded in the engine throughout.
     var isDetached = false
@@ -814,8 +817,8 @@ class Document: NSDocument {
                 COWrapper.LOG_TRC("No view for appDocId \(self.appDocId), dropping: \(truncatedJS)")
                 return
             }
-            webView.evaluateJavaScript(js) { (obj, error) in
-                if let error = error as NSError? {
+            webView.evaluateJavaScript(js, in: self.editorFrame, in: .page) { result in
+                if case .failure(let error as NSError) = result {
                     COWrapper.LOG_ERR("Error after \(truncatedJS): \(error.localizedDescription)")
                     if let jsException = error.userInfo["WKJavaScriptExceptionMessage"] as? String {
                         COWrapper.LOG_ERR("JavaScript exception: \(jsException)")
