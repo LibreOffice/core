@@ -655,6 +655,9 @@ class MacOSAppInitializer extends MobileAppInitializer {
 		window.postMobileDebug   = function(msg) { return window.webkit.messageHandlers.debug.postMessage(msg); };
 
 		window.userInterfaceMode = window.coolParams.get('userinterfacemode');
+
+		if (window.codaRemotePage)
+			this.setUpRemoteBridge((kind, msg) => window.postMobileCall(kind + ' ' + msg));
 	}
 }
 
