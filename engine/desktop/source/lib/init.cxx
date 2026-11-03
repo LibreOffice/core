@@ -10150,8 +10150,25 @@ static void addStyleEntry(boost::property_tree::ptree& rChildren,
     rChildren.push_back(std::make_pair("", aChild));
 }
 
+// The style families of the .uno:StyleApply values: the paragraph styles of Writer and the cell
+// styles of Calc, and no family in the other document types.
+static bool isListedStyleFamily(COKitDocumentType docType, std::u16string_view rFamily)
+{
+    switch (docType)
+    {
+        case COKitDocumentType::TEXT:
+            return rFamily == u"ParagraphStyles";
+        case COKitDocumentType::SPREADSHEET:
+            return rFamily == u"CellStyles";
+        default:
+            return false;
+    }
+}
+
+// bAllFamilies lists every style family of the document instead.
 static std::string getComponentStyles(const cpo::uno::Reference<css::lang::XComponent>& rComponent,
-                                COKitDocumentType docType, const char* pCommand)
+                                COKitDocumentType docType, const char* pCommand,
+                                bool bAllFamilies = false)
 {
     boost::property_tree::ptree aTree;
     aTree.put("commandName", pCommand);
@@ -10182,6 +10199,9 @@ static std::string getComponentStyles(const cpo::uno::Reference<css::lang::XComp
     boost::property_tree::ptree aValues;
     for (OUString const & sStyleFam : aStyleFamilies)
     {
+        if (!bAllFamilies && !isListedStyleFamily(docType, sStyleFam))
+            continue;
+
         boost::property_tree::ptree aChildren;
         uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(sStyleFam), uno::UNO_QUERY);
 
@@ -12058,8 +12078,10 @@ static void preloadData()
 
         if (component.factory == "private:factory/swriter")
         {
-            // Query document styles to initialize writer's on-demand created table style globals
-            getComponentStyles(xComp, COKitDocumentType::TEXT, ".uno:StyleApply");
+            // Query every style family to initialize writer's on-demand created table style
+            // globals before the kits are forked
+            getComponentStyles(xComp, COKitDocumentType::TEXT, ".uno:StyleApply",
+                               /*bAllFamilies=*/true);
         }
 
         uno::Reference<frame::XModel> xModel(xComp, uno::UNO_QUERY);

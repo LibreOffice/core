@@ -209,6 +209,8 @@ public:
     boost::property_tree::ptree saveWithDispatch(SaveDispatch eDispatch);
 
     void testGetStyles();
+    void testGetStylesSpreadsheet();
+    void testGetStylesPresentation();
     void testGetFonts();
     void testCreateView();
     void testGetPartPageRectangles();
@@ -334,6 +336,8 @@ public:
 
     CPPUNIT_TEST_SUITE(DesktopKitTest);
     CPPUNIT_TEST(testGetStyles);
+    CPPUNIT_TEST(testGetStylesSpreadsheet);
+    CPPUNIT_TEST(testGetStylesPresentation);
     CPPUNIT_TEST(testGetFonts);
     CPPUNIT_TEST(testCreateView);
     CPPUNIT_TEST(testGetPartPageRectangles);
@@ -659,26 +663,57 @@ void DesktopKitTest::testGetStyles()
 
     boost::property_tree::ptree aValues = aTree.get_child("commandValues");
     CPPUNIT_ASSERT( !aValues.empty() );
+    // A text document lists its paragraph styles, the page styles that have a header or a footer,
+    // and the commands, in this order.
+    std::string aFamilies;
     for (const auto& rPair : aValues)
     {
-        if( rPair.first != "ClearStyle")
-        {
-            CPPUNIT_ASSERT( !rPair.second.empty());
-        }
-        if (rPair.first != "CharacterStyles" &&
-            rPair.first != "ParagraphStyles" &&
-            rPair.first != "FrameStyles" &&
-            rPair.first != "PageStyles" &&
-            rPair.first != "NumberingStyles" &&
-            rPair.first != "CellStyles" &&
-            rPair.first != "ShapeStyles" &&
-            rPair.first != "TableStyles" &&
-            rPair.first != "HeaderFooter" &&
-            rPair.first != "Commands")
-        {
-            CPPUNIT_FAIL("Unknown style family: " + rPair.first);
-        }
+        CPPUNIT_ASSERT( !rPair.second.empty());
+        aFamilies += rPair.first + " ";
     }
+    CPPUNIT_ASSERT_EQUAL(std::string("ParagraphStyles HeaderFooter Commands "), aFamilies);
+
+    // The 7 default styles come first, by their programmatic name.
+    const boost::property_tree::ptree& rParagraph = aValues.get_child("ParagraphStyles");
+    CPPUNIT_ASSERT_EQUAL(std::string("Text body"),
+                         rParagraph.begin()->second.get<std::string>("id"));
+}
+
+namespace
+{
+/// The commandName of a .uno:StyleApply answer, and the names of its lists, sorted and
+/// separated by spaces.
+std::pair<std::string, std::string> getStyleLists(COKitDocumentImpl* pDocument)
+{
+    boost::property_tree::ptree aTree;
+    std::stringstream aStream(pDocument->getCommandValues(".uno:StyleApply"));
+    boost::property_tree::read_json(aStream, aTree);
+    std::set<std::string> aNames;
+    for (const auto& rPair : aTree.get_child("commandValues"))
+        aNames.insert(rPair.first);
+    std::string aLists;
+    for (const auto& rName : aNames)
+        aLists += (aLists.empty() ? "" : " ") + rName;
+    return { aTree.get<std::string>("commandName"), aLists };
+}
+}
+
+void DesktopKitTest::testGetStylesSpreadsheet()
+{
+    COKitDocumentImpl* pDocument = loadDoc("search.ods");
+    const auto [aCommandName, aLists] = getStyleLists(pDocument);
+    CPPUNIT_ASSERT_EQUAL(std::string(".uno:StyleApply"), aCommandName);
+    // The cell styles, the page styles that have a header or a footer, and the commands.
+    CPPUNIT_ASSERT_EQUAL(std::string("CellStyles Commands HeaderFooter"), aLists);
+}
+
+void DesktopKitTest::testGetStylesPresentation()
+{
+    COKitDocumentImpl* pDocument = loadDoc("blank_presentation.odp");
+    const auto [aCommandName, aLists] = getStyleLists(pDocument);
+    CPPUNIT_ASSERT_EQUAL(std::string(".uno:StyleApply"), aCommandName);
+    // No style family, and no page styles either: only the commands.
+    CPPUNIT_ASSERT_EQUAL(std::string("Commands"), aLists);
 }
 
 void DesktopKitTest::testGetFonts()
