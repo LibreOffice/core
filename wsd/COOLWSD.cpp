@@ -294,6 +294,21 @@ void COOLWSD::appendAllowedAliasGroups(const LayeredConfiguration& conf, std::ve
     }
 }
 
+namespace
+{
+/// The callback holds the DocumentBroker weakly, because a callback queued while its poll stops is
+/// never run.
+void alertUsersOfDocBroker(const std::shared_ptr<DocumentBroker>& docBroker, const std::string& msg)
+{
+    docBroker->addCallback(
+        [msg, weakDocBroker = std::weak_ptr<DocumentBroker>(docBroker)]()
+        {
+            if (std::shared_ptr<DocumentBroker> docBrokerLocked = weakDocBroker.lock())
+                docBrokerLocked->alertAllUsers(msg);
+        });
+}
+}
+
 /// Internal implementation to alert all clients
 /// connected to any document.
 void COOLWSD::alertAllUsersInternal(const std::string& msg)
@@ -310,8 +325,7 @@ void COOLWSD::alertAllUsersInternal(const std::string& msg)
 
     for (const auto& brokerIt : DocBrokers)
     {
-        std::shared_ptr<DocumentBroker> docBroker = brokerIt.second;
-        docBroker->addCallback([msg, docBroker](){ docBroker->alertAllUsers(msg); });
+        alertUsersOfDocBroker(brokerIt.second, msg);
     }
 }
 
@@ -346,8 +360,7 @@ void COOLWSD::alertUserInternal(const std::string& dockey, const std::string& ms
     const auto brokerIt = DocBrokers.find(dockey);
     if (brokerIt != DocBrokers.end())
     {
-        std::shared_ptr<DocumentBroker> docBroker = brokerIt->second;
-        docBroker->addCallback([msg, docBroker]() { docBroker->alertAllUsers(msg); });
+        alertUsersOfDocBroker(brokerIt->second, msg);
     }
 }
 
