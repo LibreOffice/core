@@ -83,8 +83,11 @@ class StatusBar extends JSDialog.Toolbar {
 		this._updateToolbarsVisibility(event.detail.context);
 	}
 
-	callback(objectType, eventType, object, data, /*builder*/) {
-		if (object.id === 'search-input' || object.id === 'search') {
+	callback(objectType, eventType, object, data, builder) {
+		if (objectType === 'toolbutton' && eventType === 'click' && data.indexOf('.uno:') >= 0) {
+			this.builder._defaultCallbackHandler(objectType, eventType, object, data, builder);
+			return;
+		} else if (object.id === 'search-input' || object.id === 'search') {
 			// its handled by widget itself
 			return;
 		} else if (object.id === 'zoom') {
