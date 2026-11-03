@@ -47,6 +47,7 @@
 #include <patattr.hxx>
 #include <docfunc.hxx>
 #include <scmod.hxx>
+#include <shapeuno.hxx>
 
 using namespace com::sun::star;
 using namespace ::cpo;
@@ -630,10 +631,10 @@ uno::Reference<text::XTextRange> ScHeaderFooterTextCursor::getEnd()
 
 UNO3_GETIMPLEMENTATION2_IMPL(ScHeaderFooterTextCursor, SvxUnoTextCursor);
 
-ScDrawTextCursor::ScDrawTextCursor( uno::Reference<text::XText> xParent,
+ScDrawTextCursor::ScDrawTextCursor( const rtl::Reference< ScShapeObj >& xParent,
                                     const SvxUnoTextBase& rText ) :
     SvxUnoTextCursor( rText ),
-    xParentText(std::move( xParent ))
+    mxParentText( xParent )
 
 {
 }
@@ -647,7 +648,7 @@ ScDrawTextCursor::~ScDrawTextCursor() noexcept
 uno::Reference<text::XText> ScDrawTextCursor::getText()
 {
     SolarMutexGuard aGuard;
-    return xParentText;
+    return mxParentText;
 }
 
 uno::Reference<text::XTextRange> ScDrawTextCursor::getStart()
