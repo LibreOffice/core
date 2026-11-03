@@ -52,6 +52,8 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 
 		this._updateA11yEditableStateBound = this._updateA11yEditableState.bind(this);
 		this._onStrayKeyDownBound = this._onStrayKeyDown.bind(this);
+		// for a jump that moved nothing
+		this._endCommentJumpBound = () => { this._commentJump = false; };
 	},
 
 	onAdd: function() {
@@ -63,6 +65,8 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._map.on('updateparts', this._onA11yPartChanged, this);
 		app.events.on('updatepermission', this._updateA11yEditableStateBound);
 		document.addEventListener('keydown', this._onStrayKeyDownBound, true);
+		for (const type of ['pointerdown', 'keydown', 'wheel'])
+			document.addEventListener(type, this._endCommentJumpBound, true);
 		window.L.DomEvent.on(this._textArea, 'click auxclick contextmenu dragstart',
 			this._onLinkEvent, this);
 	},
@@ -73,6 +77,8 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._map.off('updateparts', this._onA11yPartChanged, this);
 		app.events.off('updatepermission', this._updateA11yEditableStateBound);
 		document.removeEventListener('keydown', this._onStrayKeyDownBound, true);
+		for (const type of ['pointerdown', 'keydown', 'wheel'])
+			document.removeEventListener(type, this._endCommentJumpBound, true);
 		window.L.DomEvent.off(this._textArea, 'click auxclick contextmenu dragstart',
 			this._onLinkEvent, this);
 		var canvas = document.getElementById('document-canvas');
@@ -246,15 +252,13 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 	// a comment; a status message gives the comment reached.
 	_announceCommentAt: function(pos) {
 		// the paragraph refill to come carries the caret
-		if (!this._commentJumpTime || this._pendingFocusedParagraph)
+		if (!this._commentJump || this._pendingFocusedParagraph)
 			return;
-		// a key that moved nothing leaves no claim on a later caret update
-		const recent = performance.now() - this._commentJumpTime < 2000;
-		this._commentJumpTime = 0;
+		this._commentJump = false;
 		const comments = (this._focusedComments || []).filter((c) => parseInt(c.end) - 1 === pos);
 		// a range continuing past this paragraph ends here too, without its anchor here
 		const comment = comments.find((c) => parseInt(c.start) === pos) || comments[0];
-		if (!recent || !comment || !this._commentStatus)
+		if (!comment || !this._commentStatus)
 			return;
 		const status = this._commentStatus;
 		// a live region is announced on a change, so empty it for a repeated message
@@ -350,8 +354,8 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._lineNavigation = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown'].includes(ev.key)
 			|| ((ev.key === 'Home' || ev.key === 'End') && ev.ctrlKey);
 		// Ctrl or, on a Mac, Cmd: the modifier sent as Ctrl to the document
-		this._commentJumpTime = (ev.key === 'PageUp' || ev.key === 'PageDown') && ev.altKey
-			&& !ev.shiftKey && (ev.ctrlKey || ev.metaKey) ? performance.now() : 0;
+		this._commentJump = (ev.key === 'PageUp' || ev.key === 'PageDown') && ev.altKey
+			&& !ev.shiftKey && (ev.ctrlKey || ev.metaKey);
 		window.L.TextInput.prototype._onKeyDown.call(this, ev);
 	},
 

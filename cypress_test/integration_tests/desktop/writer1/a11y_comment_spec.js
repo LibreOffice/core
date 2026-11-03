@@ -121,6 +121,58 @@ describe(['tagdesktop'], 'Writer comments for the reader', { testIsolation: fals
 		cy.cGet('#a11y-jump-status').should('have.text', 'Comment by Alice: Check this word.');
 	});
 
+	it('Ctrl+Alt+PageDown gives the comment it reaches on a slow connection', function () {
+		helper.typeIntoDocument('{ctrl}{home}');
+		cy.then(function () {
+			return helper.processToIdle(win);
+		});
+		cy.then(function () {
+			win.document.getElementById('a11y-jump-status').textContent = '';
+			const textInput = win.app.map._textInput;
+			const updateCursorPosition = textInput._updateCursorPosition;
+			// the caret update arrives late
+			textInput._updateCursorPosition = function (pos) {
+				setTimeout(updateCursorPosition.bind(this, pos), 2500);
+			};
+		});
+
+		cy.realPress(['Control', 'Alt', 'PageDown']);
+		cy.cGet('#a11y-jump-status', { timeout: 10000 })
+			.should('have.text', 'Comment by Alice: Check this word.');
+		cy.then(function () {
+			delete win.app.map._textInput._updateCursorPosition;
+		});
+	});
+
+	it('a pointer press after a jump that moved nothing ends its claim', function () {
+		// no comment comes before the start
+		helper.typeIntoDocument('{ctrl}{home}');
+		cy.then(function () {
+			win.document.getElementById('a11y-jump-status').textContent = '';
+			return helper.processToIdle(win);
+		});
+		cy.realPress(['Control', 'Alt', 'PageUp']);
+		cy.then(function () {
+			return helper.processToIdle(win);
+		});
+
+		// a press that moves no caret, as on the ruler, then a move onto the anchor by Alice
+		cy.then(function () {
+			win.document.body.dispatchEvent(new win.PointerEvent('pointerdown', { bubbles: true }));
+			win.app.map.sendUnoCommand('.uno:GoRight', { Count: { type: 'long', value: 7 } });
+			return helper.processToIdle(win);
+		});
+		cy.then(function () {
+			expect(win.app.map._textInput._getLastCursorPosition(), 'the caret').to.equal(7);
+		});
+		// longer than the status takes to change, and checked once, as it empties itself later
+		cy.wait(500);
+		cy.then(function () {
+			expect(win.document.getElementById('a11y-jump-status').textContent, 'the status')
+				.to.equal('');
+		});
+	});
+
 	it('Alt+F12 before an anchor moves the focus to its comment', function () {
 		// "Before " leads to the anchor of the comment by Alice; {ctrl} stays down for the rest
 		// of a string, so the arrows go in a call of their own
