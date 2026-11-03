@@ -24,7 +24,7 @@
 #define VERSION  "3.1.4.1"
 
 /* The size of `size_t', as computed by sizeof. */
-#define SIZEOF_SIZE_T  8
+/*#define SIZEOF_SIZE_T  8 - LibreOffice tweak */
 
 #if defined(__GNUC__) && SAL_TYPES_SIZEOFLONG == SIZEOF_SIZE_T /* LibreOffice tweak */
 /* Define if your compiler has __builtin_ctzl() and sizeof(unsigned long) == sizeof(size_t). */
