@@ -2004,13 +2004,15 @@ eslint: $(COOL_ADMIN_TS_JS)
 
 # Override to check a subset, for example a pre-commit hook passing
 # only the staged files: make prettier PRETTIER_TARGETS="src/foo.ts".
+# A listed file that prettier has no parser for, such as a .glsl shader, is
+# skipped.
 PRETTIER_TARGETS ?= src js admin/src mocha_tests
 
 prettier:
-	$(call run_prettier_check,--check $(addprefix $(srcdir)/,$(PRETTIER_TARGETS)))
+	$(call run_prettier_check,--check --ignore-unknown $(addprefix $(srcdir)/,$(PRETTIER_TARGETS)))
 
 prettier-write:
-	$(call run_prettier_check,--write $(addprefix $(srcdir)/,$(PRETTIER_TARGETS)))
+	$(call run_prettier_check,--write --ignore-unknown $(addprefix $(srcdir)/,$(PRETTIER_TARGETS)))
 
 # Override to check a subset, for example a pre-commit hook passing
 # only the staged files: make stylelint STYLELINT_TARGETS="css/foo.css".

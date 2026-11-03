@@ -2,9 +2,10 @@
 precision mediump float;
 
 uniform sampler2D slideTexture;
-uniform float selectedTexture;
-uniform float time;
-uniform float hexagonSize;
+// The vertex shader declares these too, at highp. A uniform has one precision in both stages.
+uniform highp float selectedTexture;
+uniform highp float time;
+uniform highp float hexagonSize;
 
 in vec2 v_texturePosition;
 in float v_fuzz;
