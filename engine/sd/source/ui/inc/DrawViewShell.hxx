@@ -20,6 +20,7 @@
 #pragma once
 
 #include <functional>
+#include <map>
 #include <memory>
 #include "ViewShell.hxx"
 #include "tools/AsynchronousCall.hxx"
@@ -523,6 +524,14 @@ private:
         that page once the page itself has left the document. */
     bool                mbShowedCanvasPage = false;
     std::unique_ptr<PreviewEditMode> mpPreviewEditMode;
+
+    /** The views that asked this view for the text it edits. Each view id maps to the unique id
+        of the object whose text that view asked for. */
+    std::map<sal_Int32, sal_uInt64> maTextEditRequests;
+    /** The view that this view took the text edit of an object from, or -1 when there is none. */
+    sal_Int32 mnTextEditTakenFromViewId = -1;
+    /** The unique id of the object whose text edit this view took from that view. */
+    sal_uInt64 mnTextEditTakenObjectId = 0;
 };
 
 /// Merge the background properties together and deposit the result in rMergeAttr

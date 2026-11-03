@@ -119,6 +119,8 @@ class ShapeLockLabelSection extends HTMLObjectSection {
     this.sectionProperties.waitBar = waitBar;
     // The area of the text the user edits, in twips, as the lock message gives it.
     this.sectionProperties.lockRectangle = null;
+    // The unique id of the shape, as the lock message gives it.
+    this.sectionProperties.objectId = '';
     this.sectionProperties.part = 0;
     this.sectionProperties.mode = 0;
     // When the other user last typed or moved the text cursor, in milliseconds.
@@ -265,6 +267,7 @@ class ShapeLockLabelSection extends HTMLObjectSection {
     );
     app.map.sendUnoCommand('.uno:RequestTextEdit', {
       ViewId: { type: 'long', value: this.sectionProperties.viewId },
+      ObjectId: { type: 'string', value: this.sectionProperties.objectId },
     });
     ShapeLockLabelSection.showMessage(
       _('%1 needs to approve. After %2 seconds you can edit automatically.')
@@ -279,12 +282,14 @@ class ShapeLockLabelSection extends HTMLObjectSection {
   // take over without a request, this user can give the text back for a short time.
   private takeOverNow(canGiveBack: boolean) {
     const viewId = this.sectionProperties.viewId;
+    const objectId = this.sectionProperties.objectId;
     this.sectionProperties.requestTime = null;
     this.sectionProperties.takeOverTime = Date.now();
     app.map.sendUnoCommand('.uno:TakeOverTextEdit', {
       ViewId: { type: 'long', value: viewId },
+      ObjectId: { type: 'string', value: objectId },
     });
-    if (canGiveBack) ShapeLockCalloutSection.showGiveBack(viewId);
+    if (canGiveBack) ShapeLockCalloutSection.showGiveBack(viewId, objectId);
     app.map.focus();
   }
 
@@ -453,12 +458,16 @@ class ShapeLockLabelSection extends HTMLObjectSection {
   }
 
   // Keep the shape of the given view locked, or unlock it when rectangle is null. The rectangle is
-  // the area of the text in twips, part is the index of the part that holds the shape.
+  // the area of the text in twips, part is the index of the part that holds the shape, and objectId
+  // is the unique id of the shape. existing is true when the shape was already locked as this user
+  // joined, so how long the other user has not typed is not known.
   public static setLock(
     viewId: number,
     rectangle: cool.SimpleRectangle | null,
     part: number,
     mode: number,
+    objectId: string = '',
+    existing: boolean = false,
   ) {
     let section = ShapeLockLabelSection.sections.get(viewId);
 
@@ -481,6 +490,11 @@ class ShapeLockLabelSection extends HTMLObjectSection {
 
     if (!section) {
       section = new ShapeLockLabelSection(viewId);
+      // A user who held the shape before this user joined counts as active, so Take over asks
+      // that user first.
+      if (existing)
+        section.sectionProperties.lastInput =
+          Date.now() - ShapeLockLabelSection.activeAfter;
       app.sectionContainer.addSection(section);
       ShapeLockLabelSection.sections.set(viewId, section);
       if (!ShapeLockLabelSection.tickTimer)
@@ -492,6 +506,7 @@ class ShapeLockLabelSection extends HTMLObjectSection {
     }
 
     section.sectionProperties.lockRectangle = rectangle;
+    section.sectionProperties.objectId = objectId;
     section.sectionProperties.part = part;
     section.sectionProperties.mode = mode;
     section.updatePosition();

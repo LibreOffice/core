@@ -584,6 +584,18 @@ static inline OString lcl_generateJSON(const SfxViewShell& rView, std::string_vi
     return lcl_generateJSON(rView, KitHelper::getView(rView), rKey, rPayload);
 }
 
+// The viewId, part and mode are strings, as in the payloads with one key and value.
+static OString lcl_generateJSON(const SfxViewShell& rView,
+                                const std::function<void(tools::JsonWriter&)>& rFillPayload)
+{
+    tools::JsonWriter aJson;
+    aJson.put("viewId", OString::number(KitHelper::getView(rView)));
+    aJson.put("part", rView.getPartId());
+    aJson.put("mode", OString::number(rView.getEditMode()));
+    rFillPayload(aJson);
+    return aJson.finishAndGetAsOString();
+}
+
 void KitHelper::notifyOtherView(const SfxViewShell& rThisView, SfxViewShell const* pOtherView,
                                    COKitCallbackType eType, std::string_view rKey, const OString& rPayload)
 {
@@ -603,6 +615,31 @@ void KitHelper::notifyOtherView(const SfxViewShell& rThisView, SfxViewShell cons
 
     const int viewId = KitHelper::getView(rThisView);
     pOtherView->viewCallbackWithViewId(eType, lcl_generateJSON(rThisView, rTree), viewId);
+}
+
+void KitHelper::notifyOtherView(const SfxViewShell& rThisView, SfxViewShell const* pOtherView,
+                                COKitCallbackType eType,
+                                const std::function<void(tools::JsonWriter&)>& rFillPayload)
+{
+    if (DisableCallbacks::disabled() || !pOtherView)
+        return;
+
+    pOtherView->viewCallbackWithViewId(eType, lcl_generateJSON(rThisView, rFillPayload),
+                                       KitHelper::getView(rThisView));
+}
+
+void KitHelper::notifyOtherViews(const SfxViewShell* pThisView, COKitCallbackType eType,
+                                 const std::function<void(tools::JsonWriter&)>& rFillPayload)
+{
+    assert(pThisView != nullptr && "pThisView must be valid");
+    if (!pThisView || DisableCallbacks::disabled())
+        return;
+
+    const OString aPayload = lcl_generateJSON(*pThisView, rFillPayload);
+    const int nViewId = KitHelper::getView(*pThisView);
+    forEachOtherView(pThisView, [&aPayload, nViewId, eType](const SfxViewShell* pOtherView) {
+        pOtherView->viewCallbackWithViewId(eType, aPayload, nViewId);
+    });
 }
 
 void KitHelper::notifyOtherViews(const SfxViewShell* pThisView, COKitCallbackType eType, std::string_view rKey,

@@ -2030,15 +2030,19 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		else
 			OtherViewGraphicSelectionSection.setViewLockInfo(viewId, null);
 
-		// Ignore our own view and views we don't know
-		if (viewId === this._viewId || !this._map._viewInfo[viewId] || !(this.isImpress() || this.isDraw()))
+		// Ignore our own view
+		if (viewId === this._viewId || !(this.isImpress() || this.isDraw()))
+			return;
+
+		// The lock of a view whose view info has not arrived yet is kept, and its label shows once
+		// that view info arrives.
+		this._saveMessageForReplay(textMsg, viewId);
+		if (!this._map._viewInfo[viewId])
 			return;
 
 		const rectangleTwips = obj.rectangle !== 'EMPTY' ? obj.rectangle.match(/-?\d+/g) : null;
 		const rectangle = rectangleTwips ? new cool.SimpleRectangle(parseInt(rectangleTwips[0]), parseInt(rectangleTwips[1]), parseInt(rectangleTwips[2]), parseInt(rectangleTwips[3])) : null;
-		ShapeLockLabelSection.setLock(viewId, rectangle, this.getIndexFromPart(obj.part), obj.mode !== undefined ? parseInt(obj.mode) : 0);
-
-		this._saveMessageForReplay(textMsg, viewId);
+		ShapeLockLabelSection.setLock(viewId, rectangle, this.getIndexFromPart(obj.part), obj.mode !== undefined ? parseInt(obj.mode) : 0, obj.objectId !== undefined ? String(obj.objectId) : '', obj.existing === true);
 	},
 
 	// This view and another view both want to edit the text of one shape.
@@ -2130,6 +2134,11 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		}
 
 		this._map.addView(viewInfo);
+
+		// A lock of this view that arrived before its view info shows now.
+		const viewLock = this._printTwipsMessagesForReplay ? this._printTwipsMessagesForReplay.get('viewlock', parseInt(viewInfo.id)) : undefined;
+		if (viewLock)
+			this._onViewLockInfoMsg(viewLock);
 	},
 
 	_removeView: function(viewId) {

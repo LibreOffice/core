@@ -1241,6 +1241,10 @@ input, button {
 	background-color: white;
 }
 
+[dir='rtl'] .shape-lock-label-wait i {
+	transform-origin: right;
+}
+
 .shape-lock-callout {
 	display: flex;
 	align-items: center;

@@ -36,7 +36,7 @@ class ShapeLockCalloutSection extends HTMLObjectSection {
   // the take over that answers it can arrive after the text edit of this user ends.
   static requests: Map<number, number> = new Map();
 
-  constructor(viewId: number, kind: ShapeLockCalloutKind) {
+  constructor(viewId: number, kind: ShapeLockCalloutKind, objectId: string) {
     super(
       ShapeLockCalloutSection.sectionName,
       null,
@@ -94,6 +94,8 @@ class ShapeLockCalloutSection extends HTMLObjectSection {
       div.addEventListener(type, (event: Event) => event.stopPropagation());
 
     this.sectionProperties.viewId = viewId;
+    // The unique id of the shape that a give back is for, or '' for a request.
+    this.sectionProperties.objectId = objectId;
     this.sectionProperties.isRequest = isRequest;
     this.sectionProperties.countdown = countdown;
     // The text the countdown shows, or is about to show.
@@ -203,6 +205,7 @@ class ShapeLockCalloutSection extends HTMLObjectSection {
   private giveBack() {
     app.map.sendUnoCommand('.uno:ReturnTextEdit', {
       ViewId: { type: 'long', value: this.sectionProperties.viewId },
+      ObjectId: { type: 'string', value: this.sectionProperties.objectId },
     });
     ShapeLockCalloutSection.close();
   }
@@ -212,9 +215,13 @@ class ShapeLockCalloutSection extends HTMLObjectSection {
     super.onRemove();
   }
 
-  private static show(viewId: number, kind: ShapeLockCalloutKind) {
+  private static show(
+    viewId: number,
+    kind: ShapeLockCalloutKind,
+    objectId: string = '',
+  ) {
     ShapeLockCalloutSection.close();
-    const section = new ShapeLockCalloutSection(viewId, kind);
+    const section = new ShapeLockCalloutSection(viewId, kind, objectId);
     ShapeLockCalloutSection.section = section;
     app.sectionContainer.addSection(section);
     section.onTick();
@@ -236,9 +243,10 @@ class ShapeLockCalloutSection extends HTMLObjectSection {
     );
   }
 
-  // This user took the text of the given view over, and can give it back for a short time.
-  public static showGiveBack(viewId: number) {
-    ShapeLockCalloutSection.show(viewId, 'giveback');
+  // This user took the text of the given shape over from the given view, and can give it back for
+  // a short time.
+  public static showGiveBack(viewId: number, objectId: string) {
+    ShapeLockCalloutSection.show(viewId, 'giveback', objectId);
   }
 
   // The given view asked for the text that this user edits, and this user did not reject the

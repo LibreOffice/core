@@ -1492,7 +1492,7 @@ SfxVoidItem PresentationCleanup SID_PRESENTATION_CLEANUP
 ]
 
 SfxVoidItem TakeOverTextEdit SID_TAKE_OVER_TEXT_EDIT
-(SfxInt32Item ViewId FN_PARAM_1)
+(SfxInt32Item ViewId FN_PARAM_1,SfxStringItem ObjectId FN_PARAM_2)
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,
@@ -1507,7 +1507,7 @@ SfxVoidItem TakeOverTextEdit SID_TAKE_OVER_TEXT_EDIT
 ]
 
 SfxVoidItem RequestTextEdit SID_REQUEST_TEXT_EDIT
-(SfxInt32Item ViewId FN_PARAM_1)
+(SfxInt32Item ViewId FN_PARAM_1,SfxStringItem ObjectId FN_PARAM_2)
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,
@@ -1537,7 +1537,7 @@ SfxVoidItem RejectTextEditRequest SID_REJECT_TEXT_EDIT_REQUEST
 ]
 
 SfxVoidItem ReturnTextEdit SID_RETURN_TEXT_EDIT
-(SfxInt32Item ViewId FN_PARAM_1)
+(SfxInt32Item ViewId FN_PARAM_1,SfxStringItem ObjectId FN_PARAM_2)
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,

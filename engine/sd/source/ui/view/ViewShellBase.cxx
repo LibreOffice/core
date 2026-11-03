@@ -79,6 +79,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/kit.hxx>
 #include <sfx2/kit/helper.hxx>
+#include <tools/json_writer.hxx>
 #include <COKit/COKit.hxx>
 #include <editeng/editview.hxx>
 #include <svx/svdview.hxx>
@@ -1237,8 +1238,17 @@ void ViewShellBase::NotifyCursor(SfxViewShell* pOtherShell) const
             vcl::Window* pWin = pThisShell->GetActiveWindow();
             if (pWin && pWin->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
                 aRectangle = o3tl::toTwips(aRectangle, o3tl::Length::mm100);
-            OString sRectangle = aRectangle.toString();
-            KitHelper::notifyOtherView(pDrawViewShell->GetViewShellBase(), pOtherShell, COKitCallbackType::VIEW_LOCK, "rectangle", sRectangle);
+            const SdrTextObj* pTextObject = pDrawView->GetTextEditObject();
+            KitHelper::notifyOtherView(
+                pDrawViewShell->GetViewShellBase(), pOtherShell, COKitCallbackType::VIEW_LOCK,
+                [&aRectangle, pTextObject](::tools::JsonWriter& rJson) {
+                    rJson.put("rectangle", aRectangle.toString());
+                    if (pTextObject)
+                        rJson.put("objectId", OString::number(pTextObject->GetUniqueID()));
+                    // The lock was already held when the other view joined, so how long its user
+                    // has not typed is not known.
+                    rJson.put("existing", true);
+                });
         }
     }
 

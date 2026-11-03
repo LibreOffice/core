@@ -23,6 +23,7 @@
 #include <sfx2/viewsh.hxx>
 #include <tools/gen.hxx>
 #include <cstddef>
+#include <functional>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <list>
@@ -83,6 +84,7 @@ struct SFX2_DLLPUBLIC KitMouseEventData
 };
 
 namespace com::sun::star::ui { struct ContextChangeEventObject; };
+namespace tools { class JsonWriter; }
 namespace com::sun::star::beans { struct PropertyValue; };
 
 class SFX2_DLLPUBLIC KitHelper
@@ -179,6 +181,14 @@ public:
     /// Same as notifyOtherViews(), the property-tree version, but works on a selected "other" view, not on all of them.
     static void notifyOtherView(const SfxViewShell& rThisView, SfxViewShell const* pOtherView,
                                 COKitCallbackType eType, const boost::property_tree::ptree& rTree);
+    /// Invoke the Kit callback of all views except pThisView, with a JSON payload that has the
+    /// viewId, part and mode of pThisView, followed by the members that rFillPayload puts.
+    static void notifyOtherViews(const SfxViewShell* pThisView, COKitCallbackType eType,
+                                 const std::function<void(tools::JsonWriter&)>& rFillPayload);
+    /// Same as notifyOtherViews(), the JsonWriter version, but works on a selected "other" view.
+    static void notifyOtherView(const SfxViewShell& rThisView, SfxViewShell const* pOtherView,
+                                COKitCallbackType eType,
+                                const std::function<void(tools::JsonWriter&)>& rFillPayload);
 
     /// Emits a COKitCallbackType::STATE_CHANGED
     static void sendUnoStatus(const SfxViewShell* pShell, const SfxPoolItem* pItem);

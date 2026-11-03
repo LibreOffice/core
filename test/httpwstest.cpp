@@ -528,12 +528,20 @@ void HTTPWSTest::testTextEditTakenOverWhileInactive()
         response = getResponseString(socket1, "viewlock:", testname + "1 ");
         LOK_ASSERT_MESSAGE("Expected the shape to be locked",
                            response.find("EMPTY") == std::string::npos);
+        Poco::JSON::Parser viewLockParser;
+        Poco::JSON::Object::Ptr viewLock
+            = viewLockParser.parse(response.substr(std::string("viewlock:").size()))
+                  .extract<Poco::JSON::Object::Ptr>();
+        const std::string objectId = viewLock->optValue<std::string>("objectId", std::string());
+        LOK_ASSERT_MESSAGE("Expected the lock to name the shape", !objectId.empty());
 
         // The first user goes away, and the second view takes the shape over.
         sendTextFrame(socket0, "userinactive", testname + "0 ");
         sendTextFrame(socket1,
                       "uno .uno:TakeOverTextEdit {\"ViewId\":{\"type\":\"long\",\"value\":"
-                          + std::to_string(viewId0) + "}}",
+                          + std::to_string(viewId0)
+                          + "},\"ObjectId\":{\"type\":\"string\",\"value\":\"" + objectId
+                          + "\"}}",
                       testname + "1 ");
         response = getResponseString(socket1, "cursorvisible: true", testname + "1 ");
         LOK_ASSERT_MESSAGE("Expected the second view to edit the shape", !response.empty());

@@ -1405,6 +1405,12 @@ statechanged: <key>=<value>
     "requested": the other view asks this view to leave the text it edits.
     "rejected": the other view goes on with the text after this view asked.
     "returned": the other view gave the text edit back to this view.
+    .uno:RequestTextEdit, .uno:TakeOverTextEdit and .uno:ReturnTextEdit
+    take the "objectId" of the viewlock message as an ObjectId string, and
+    do nothing when that view no longer edits that shape. Only the view that
+    a shape was taken over from gets it back, and only while its user can
+    edit. .uno:RejectTextEditRequest answers only a view that asked for the
+    text that this view edits now.
     The engine does not check how long a view has not typed. The client
     decides when to offer a take over. A view that is inactive gets the
     last "takenover" or "returned" of each other view once it is active
@@ -1568,7 +1574,16 @@ viewcursorvisible:
 
 viewlock:
 
-    Per-view lock rectangle. JSON payload.
+    Per-view lock rectangle. JSON payload. In Impress and Draw, a view that
+    edits the text of a shape locks that shape for the other views:
+
+        viewlock: {"viewId":...,"part":...,"mode":...,
+            "rectangle":<the area of the text, in twips, or "EMPTY">,
+            "objectId":"<the unique id of the shape>","existing":true}
+
+    "objectId" is there while the rectangle is not "EMPTY". "existing" is
+    there when the view that gets the message joined while the shape was
+    already locked, so how long the other view has not typed is not known.
 
 viewinfo: <payload>
 

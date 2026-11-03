@@ -90,6 +90,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <comphelper/kit.hxx>
 #include <sfx2/kit/helper.hxx>
+#include <tools/json_writer.hxx>
 #include <COKit/COKit.hxx>
 #include <DrawController.hxx>
 
@@ -536,8 +537,14 @@ bool View::SdrBeginTextEdit(
                 {
                     aRectangle = o3tl::convert(aRectangle, o3tl::Length::mm100, o3tl::Length::twip);
                 }
-                OString sRectangle = aRectangle.toString();
-                KitHelper::notifyOtherViews(&mpViewSh->GetViewShellBase(), COKitCallbackType::VIEW_LOCK, "rectangle", sRectangle);
+                const SdrTextObj* pTextObject = GetTextEditObject();
+                KitHelper::notifyOtherViews(
+                    &mpViewSh->GetViewShellBase(), COKitCallbackType::VIEW_LOCK,
+                    [&aRectangle, pTextObject](::tools::JsonWriter& rJson) {
+                        rJson.put("rectangle", aRectangle.toString());
+                        if (pTextObject)
+                            rJson.put("objectId", OString::number(pTextObject->GetUniqueID()));
+                    });
             }
         }
     }
