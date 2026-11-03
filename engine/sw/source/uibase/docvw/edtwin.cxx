@@ -167,14 +167,6 @@ static bool g_bInputLanguageSwitched = false;
 // Used to draw the guide line while resizing the comment sidebar width
 static tools::Rectangle aLastCommentSidebarPos;
 
-// Usually in MouseButtonUp a selection is revoked when the selection is
-// not currently being pulled open. Unfortunately in MouseButtonDown there
-// is being selected at double/triple click. That selection is completely
-// finished in the Handler and thus can't be distinguished in the Up.
-// To resolve this g_bHoldSelection is set in Down and evaluated in Up.
-static bool g_bHoldSelection      = false;
-
-static bool g_bValidCursorPos       = false;
 static SdrHdlKind g_eSdrMoveHdl   = SdrHdlKind::User;
 
 QuickHelpData* SwEditWin::s_pQuickHlpData = nullptr;
@@ -2981,7 +2973,7 @@ void SwEditWin::MoveCursor( SwWrtShell &rSh, const Point& rDocPos,
         // the query to the content form doesn't work!!!
         SwMvContext aMvContext( &rSh );
         nTmpSetCursor = rSh.CallSetCursor(&rDocPos, bOnlyText);
-        g_bValidCursorPos = !(CRSR_POSCHG & nTmpSetCursor);
+        m_bValidCursorPos = !(CRSR_POSCHG & nTmpSetCursor);
     }
 
     // notify the edit window that from now on we do not use the input language
@@ -3525,7 +3517,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             {
                                 // move cursor here so that it is not drawn in the
                                 // frame first; ShowCursor() happens in LeaveSelFrameMode()
-                                g_bValidCursorPos = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPos, false));
+                                m_bValidCursorPos
+                                    = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPos, false));
                                 rSh.LeaveSelFrameMode();
                                 m_rView.AttrChangedNotify(nullptr);
                                 bCallBase = false;
@@ -3610,7 +3603,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
                         // if the cursor position was corrected or if a Fly
                         // was selected in ReadOnlyMode, no word selection, except when tiled rendering.
-                        if ((!g_bValidCursorPos || rSh.IsFrameSelected()) && !comphelper::COKit::isActive())
+                        if ((!m_bValidCursorPos || rSh.IsFrameSelected())
+                            && !comphelper::COKit::isActive())
                             return;
 
                         SwField *pField = rSh.GetCurField(true);
@@ -3714,7 +3708,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             }
                         }
 
-                        g_bHoldSelection = true;
+                        m_bHoldSelection = true;
                         return;
                     }
                     case 3:
@@ -3728,7 +3722,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
                         // if the cursor position was corrected or if a Fly
                         // was selected in ReadOnlyMode, no word selection.
-                        if ( !g_bValidCursorPos || rSh.IsFrameSelected() )
+                        if ( !m_bValidCursorPos || rSh.IsFrameSelected() )
                             return;
 
                         // select line, AdditionalMode if applicable
@@ -3746,7 +3740,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         if ( bMod )
                             rSh.LeaveAddMode();
 
-                        g_bHoldSelection = true;
+                        m_bHoldSelection = true;
                         return;
                     }
 
@@ -4098,7 +4092,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
             SwContentAtPos aFieldAtPos(IsAttrAtPos::Field);
 
             // Are we clicking on a field?
-            if (g_bValidCursorPos
+            if (m_bValidCursorPos
                     && rSh.GetContentAtPos(aDocPos, aFieldAtPos)
                     && aFieldAtPos.pFndTextAttr != nullptr
                     && aFieldAtPos.pFndTextAttr->Which() == RES_TXTATR_INPUTFIELD
@@ -4632,7 +4626,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                           rSh.IsAddMode() ) )
                     {
                         rSh.Drag( &aDocPt, false );
-                        g_bValidCursorPos = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPt, false,
+                        m_bValidCursorPos = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPt, false,
                             ScrollSizeMode::ScrollSizeMouseSelection));
                         EnterArea();
                     }
@@ -4742,7 +4736,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
             if( rSh.IsBlockMode() && !rMEvt.IsSynthetic() )
             {
                 rSh.Drag( &aDocPt, false );
-                g_bValidCursorPos = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPt, false));
+                m_bValidCursorPos = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPt, false));
                 EnterArea();
             }
         break;
@@ -4944,7 +4938,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             else
             {
                 const Point aDocPos( PixelToLogic( m_aStartPos ) );
-                g_bValidCursorPos = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPos, false));
+                m_bValidCursorPos = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPos, false));
                 rSh.Edit();
             }
 
@@ -5103,10 +5097,10 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 break;
             }
 
-            if( g_bHoldSelection )
+            if( m_bHoldSelection )
             {
                 // the EndDrag should be called in any case
-                g_bHoldSelection = false;
+                m_bHoldSelection = false;
                 rSh.EndDrag( &aDocPt, false );
             }
             else
@@ -5121,7 +5115,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         // the query to the content form doesn't work!!!
                         SwMvContext aMvContext( &rSh );
                         const Point aDocPos( PixelToLogic( m_aStartPos ) );
-                        g_bValidCursorPos = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPos, false));
+                        m_bValidCursorPos = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPos, false));
                     }
                     g_bNoInterrupt = bTmpNoInterrupt;
 
@@ -5190,11 +5184,12 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                         // the query to the content form doesn't work!!!
                                         SwMvContext aMvContext( &rSh );
                                         const Point aDocPos( PixelToLogic( m_aStartPos ) );
-                                        g_bValidCursorPos = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPos, false));
+                                        m_bValidCursorPos
+                                            = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPos, false));
                                     }
                                     else
                                     {
-                                        g_bValidCursorPos = true;
+                                        m_bValidCursorPos = true;
                                     }
                                 }
                                 else
@@ -5203,7 +5198,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                     // a bit of a mystery what this is good for?
                                     // in this case we assume it's valid since we
                                     // just selected a field
-                                    g_bValidCursorPos = true;
+                                    m_bValidCursorPos = true;
                                 }
                                 if (bAddMode)
                                 {
@@ -6322,7 +6317,7 @@ void SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
         {
             // move cursor here so that it is not drawn in the
             // frame at first; ShowCursor() happens in LeaveSelFrameMode()
-            g_bValidCursorPos = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPos, false));
+            m_bValidCursorPos = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPos, false));
             rSh.LeaveSelFrameMode();
             m_rView.LeaveDrawCreate();
             m_rView.AttrChangedNotify(nullptr);

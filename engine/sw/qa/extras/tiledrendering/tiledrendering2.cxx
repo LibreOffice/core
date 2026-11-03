@@ -3831,6 +3831,41 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextTwoViewsCtrlHeldByOth
     CPPUNIT_ASSERT(!pWrtShellA->IsAddMode());
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDoubleClickTwoViewsClickBetween)
+{
+    // Given the paragraphs "Aaa", "Bbb" and "Ccc", open in two views, with "Ccc" selected in the
+    // second view:
+    SwXTextDocument* pXTextDocument = createDoc();
+    int nViewA = KitHelper::getCurrentView();
+    SwWrtShell* pWrtShellA = getSwDocShell()->GetWrtShell();
+    ThreeParagraphs aPoints = lcl_fillThreeParagraphs(pWrtShellA);
+    int nViewB = lcl_addView(pXTextDocument);
+    SwWrtShell* pWrtShellB = getSwDocShell()->GetWrtShell();
+    lcl_selectParagraph(pWrtShellB, getParagraph(3));
+    auto post = [&](int nView, COKitMouseEventType eType, Point aPos, int nCount) {
+        KitHelper::setView(nView);
+        pXTextDocument->postMouseEvent(eType, aPos.getX(), aPos.getY(), nCount, MOUSE_LEFT, 0);
+        Scheduler::ProcessEventsToIdle();
+    };
+
+    // When the first view double-clicks "Bbb" and holds the second press:
+    post(nViewA, COKitMouseEventType::BUTTONDOWN, aPoints.aInsideSecond, 1);
+    post(nViewA, COKitMouseEventType::BUTTONUP, aPoints.aInsideSecond, 1);
+    post(nViewA, COKitMouseEventType::BUTTONDOWN, aPoints.aInsideSecond, 2);
+    CPPUNIT_ASSERT_EQUAL(u"Bbb"_ustr, pWrtShellA->GetSelText());
+
+    // And the second view clicks inside its selection meanwhile:
+    post(nViewB, COKitMouseEventType::BUTTONDOWN, aPoints.aInsideThird, 1);
+    post(nViewB, COKitMouseEventType::BUTTONUP, aPoints.aInsideThird, 1);
+
+    // Then the click puts the cursor of the second view there, as a click does:
+    CPPUNIT_ASSERT(!pWrtShellB->HasSelection());
+
+    // And when the first view releases its button, its double click keeps the word selected:
+    post(nViewA, COKitMouseEventType::BUTTONUP, aPoints.aInsideSecond, 2);
+    CPPUNIT_ASSERT_EQUAL(u"Bbb"_ustr, pWrtShellA->GetSelText());
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextTwoViewsOneAfterAnother)
 {
     // Given the paragraphs "Aaa", "Bbb" and "Ccc", open in two views:

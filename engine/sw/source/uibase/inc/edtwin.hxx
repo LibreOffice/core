@@ -141,6 +141,11 @@ class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) SwEditWin final : public vcl::DocWind
     bool m_bDragTimerStarted = false;
     // Whether the last drop replaced a hyperlink at the drop position.
     bool m_bDroppedHyperlink = false;
+    // Whether the selection that a double or triple click made at the press stays when the button
+    // comes up. A release otherwise drops a selection that is not being pulled open.
+    bool m_bHoldSelection = false;
+    // Whether the last click set the cursor at the clicked position without correcting it.
+    bool m_bValidCursorPos = false;
     // The data of the selection that a drag from this window carries, empty while no drag
     // runs.
     rtl::Reference<SwTransferable> m_xDraggedData;
