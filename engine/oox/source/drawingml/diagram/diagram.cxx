@@ -119,7 +119,8 @@ static void sortChildrenByZOrder(const ShapePtr& pShape)
 // along both axes, W = w cos + h sin and H = w sin + h cos. The shape gets that own size, the
 // middle stays where it was, and the angle becomes a plain rotation of the shape. A right angle
 // changes nothing but which side is which, so the turn before the sizing does the same there and
-// stays; near 45 degrees the two equations say the same thing, and the shape is taken square.
+// stays. Where the two equations give no shape, near 45 degrees or a flat box turned further, the
+// shape stops where its diagonal lies flat, as for a very flat box.
 static void unturnRotatedShapes(const ShapePtr& pShape)
 {
     for (const ShapePtr& pChild : pShape->getChildren())
@@ -138,28 +139,26 @@ static void unturnRotatedShapes(const ShapePtr& pShape)
         double fWidth(0.0);
         double fHeight(0.0);
         const double fApart(fCos * fCos - fSin * fSin);
-        if (std::abs(fApart) < 0.05)
-            fWidth = fHeight = aBox.Width / (fCos + fSin);
-        else
+        if (std::abs(fApart) >= 0.05)
         {
             fWidth = (aBox.Width * fCos - aBox.Height * fSin) / fApart;
             fHeight = (aBox.Height * fCos - aBox.Width * fSin) / fApart;
         }
-        // turned by less than 45 degrees a very flat box would tilt its diagonal against the
-        // turn, so the shape stops where its diagonal lies flat (w sin = h cos) and is as high
-        // as the box; a very high box does the same the other way round
-        if (std::abs(fApart) >= 0.05 && fSin > 0.0 && fSin < fCos)
+        // no shape from the equations, or turned by less than 45 degrees a very flat box whose
+        // diagonal would tilt against the turn: the shape stops where its diagonal lies flat
+        // (w sin = h cos) and is as high as the box; a high box the same the other way round
+        const bool bNoShape(fWidth <= 1.0 || fHeight <= 1.0);
+        const bool bTilts(!bNoShape && fSin < fCos);
+        if ((bTilts && fHeight * fCos < fWidth * fSin)
+            || (bNoShape && aBox.Width >= aBox.Height))
         {
-            if (fHeight * fCos < fWidth * fSin)
-            {
-                fWidth = aBox.Height / 2.0 / fSin;
-                fHeight = aBox.Height / 2.0 / fCos;
-            }
-            else if (fWidth * fCos < fHeight * fSin)
-            {
-                fWidth = aBox.Width / 2.0 / fCos;
-                fHeight = aBox.Width / 2.0 / fSin;
-            }
+            fWidth = aBox.Height / 2.0 / fSin;
+            fHeight = aBox.Height / 2.0 / fCos;
+        }
+        else if ((bTilts && fWidth * fCos < fHeight * fSin) || bNoShape)
+        {
+            fWidth = aBox.Width / 2.0 / fCos;
+            fHeight = aBox.Width / 2.0 / fSin;
         }
         if (fWidth <= 1.0 || fHeight <= 1.0)
             continue;
