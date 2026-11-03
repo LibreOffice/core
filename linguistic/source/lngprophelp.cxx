@@ -644,6 +644,7 @@ void PropertyHelper_Hyphen::SetTmpPropVals( const PropertyValues &rPropVals )
         else if (rVal.Name == UPN_HYPH_NO_LAST_WORD ||
                  rVal.Name == UPN_HYPH_KEEP ||
                  rVal.Name == UPN_HYPH_KEEP_LINE ||
+                 rVal.Name == UPN_HYPH_SPLIT_COMPOUND_WORD ||
                  rVal.Name == UPN_HYPH_ZONE_ALWAYS ||
                  rVal.Name == UPN_HYPH_LEVEL ||
                  rVal.Name == UPN_HYPH_KEEP_TYPE)

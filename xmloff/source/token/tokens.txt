@@ -1005,6 +1005,7 @@ hyphenation-zone-spread
 hyphenation-compound-remain-char-count
 hyphenation-compound-push-char-count
 hyphenation-level
+hyphenation-split-compound-word
 i
 icon
 icon-set

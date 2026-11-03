@@ -330,6 +330,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xAcrossPageBox;
     std::unique_ptr<weld::CheckButton> m_xAcrossSpreadBox;
     std::unique_ptr<weld::CheckButton> m_xAcrossMoveLineBox;
+    std::unique_ptr<weld::CheckButton> m_xSplitCompoundWordBox;
 
     void HyphenClickHdl();
     void PageNumBoxClickHdl();

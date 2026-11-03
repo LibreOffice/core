@@ -47,6 +47,7 @@ class EDITENG_DLLPUBLIC SvxHyphenZoneItem final : public SfxPoolItem
     sal_uInt16 nTextHyphenZoneSpread; // don't force hyphenation at spread end, allow this extra white space
     sal_uInt8 nKeepType;        // avoid hyphenation across page etc., see ParagraphHyphenationKeep
     bool      bKeepLine : 1;    // if bKeep, shift the hyphenated word (true), or the full line
+    bool      bSplitCompoundWord : 1; // do not shift, if it's possible to split as a compound word
     sal_uInt8 nCompoundMinLead; // min. characters between left compound word boundary and hyphenation
     sal_uInt8 nCompoundMinTrail; // min. characters between hyphenation and right compound word boundary
     sal_uInt8 nLevel;           // level between Fewer Hyphens (0%) or Better Spacing (100%)
@@ -119,6 +120,9 @@ public:
 
     void SetKeepLine( const bool bNew ) { bKeepLine = bNew; }
     bool IsKeepLine() const { return bKeepLine; }
+
+    void SetSplitCompoundWord( const bool bNew ) { bSplitCompoundWord = bNew; }
+    bool IsSplitCompoundWord() const { return bSplitCompoundWord; }
 
     sal_uInt8 &GetLevel() { return nLevel; }
     sal_uInt8 GetLevel() const { return nLevel; }

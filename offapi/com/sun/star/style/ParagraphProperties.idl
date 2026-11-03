@@ -650,6 +650,23 @@ published service ParagraphProperties
             @since LibreOffice 27.2
          */
         [optional, property] boolean ParaIsCompoundBased;
+
+        /** This value is `TRUE` if compound word splitting is always allowed when
+            hyphenation is disabled in other positions by ParaHyphenationKeep
+            or by the associated end zone settings.
+
+            @see ParaHyphenationKeep
+
+            @see ParaHyphenationZoneColumn
+
+            @see ParaHyphenationZonePage
+
+            @see ParaHyphenationZoneSpread
+
+            @since LibreOffice 27.2
+         */
+        [optional, property] boolean ParaHyphenationSplitCompoundWord;
+
 };
 
 

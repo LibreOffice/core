@@ -653,6 +653,27 @@
               </packing>
             </child>
             <child>
+              <object class="GtkCheckButton" id="checkSplitCompoundWord">
+                <property name="label" translatable="yes" context="textflowpage|checkSplitCompound">Split Compound Word</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="inconsistent">True</property>
+                <property name="draw-indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="checkSplitCompoundWord-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|checkMoveLine">Select this check box, if you always want to split compound words.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">3</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+
+            <child>
               <object class="GtkCheckButton" id="checkAcrossSpread">
                 <property name="label" translatable="yes" context="textflowpage|checkAcrossSpread">Spread</property>
                 <property name="visible">True</property>
@@ -672,6 +693,7 @@
                 <property name="top-attach">3</property>
               </packing>
             </child>
+
             <child>
               <object class="GtkLabel" id="labelSpreadEndZone">
                 <property name="visible">True</property>

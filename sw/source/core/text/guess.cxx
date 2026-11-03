@@ -303,11 +303,22 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
     // disable hyphenation according to hyphenation-keep and hyphenation-keep-type,
     // or modify hyphenation according to hyphenation-zone-column/page/spread (see widorp.cxx)
+    // and hyphenation-split-compound (improved hyphenation in the last line)
     sal_Int16 nEndZone = 0;
     if ( bHyph &&
-          rInf.GetTextFrame()->GetNoHyphOffset() != TextFrameIndex(COMPLETE_STRING) && // ) // &&
+          // last line in the frame
+          !rInf.GetTextFrame()->GetNext() &&
+          rInf.GetTextFrame()->GetNoHyphOffset() != TextFrameIndex(COMPLETE_STRING) &&
           // when there is a portion in the last line, rInf.GetIdx() > GetNoHyphOffset()
-          rInf.GetTextFrame()->GetNoHyphOffset() <= rInf.GetIdx() )
+          rInf.GetTextFrame()->GetNoHyphOffset() <= rInf.GetIdx() &&
+          // and editing didn't change the line text since widorp.cxx,
+          // i.e. no need to recalculate the last line with unlimited hyphenation
+          rInf.GetTextFrame()->GetNoHyphLineLen() != TextFrameIndex(COMPLETE_STRING) &&
+          rInf.GetTextFrame()->GetNoHyphOffset() + rInf.GetTextFrame()->GetNoHyphLineLen() <
+                                                    TextFrameIndex(rInf.GetText().getLength()) &&
+          rInf.GetTextFrame()->GetNoHyphLineHash() ==
+               rInf.GetText().copy( sal_Int32(rInf.GetTextFrame()->GetNoHyphOffset()),
+                         sal_Int32(rInf.GetTextFrame()->GetNoHyphLineLen())).hashCode() )
     {
           nEndZone = rInf.GetTextFrame()->GetNoHyphEndZone();
           // disable hyphenation in the last line, when hyphenation-keep-line is enabled
@@ -315,6 +326,48 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
           // also when the end zone is bigger, than the line width
           if ( nEndZone < 0 || nEndZone >= nLineWidth )
               bHyph = false;
+
+          // enable hyphenation again, if hyphenation-split-compound-word is enabled,
+          // and the last word is a compound word and it's possible to split it
+          const css::beans::PropertyValues & rHyphValues = rInf.GetHyphValues();
+          assert( rHyphValues.getLength() > 13 &&
+                          rHyphValues[13].Name == UPN_HYPH_SPLIT_COMPOUND_WORD );
+          bool bSplitCompoundWord = false;
+          rHyphValues[13].Value >>= bSplitCompoundWord;
+          if ( bSplitCompoundWord )
+          {
+              // get word boundaries of the hyphenated word
+              sal_Int32 nOriginalBreak =
+                      sal_Int32(rInf.GetTextFrame()->GetNoHyphOffset()) +
+                      sal_Int32(rInf.GetTextFrame()->GetNoHyphLineLen());
+              Boundary aBound = g_pBreakIt->GetBreakIter()->getWordBoundary(
+                  rInf.GetText(), nOriginalBreak,
+                  g_pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
+                  WordType::DICTIONARY_WORD, true );
+
+              OUString sWord( rInf.GetText().copy( aBound.startPos,
+                                               aBound.endPos-aBound.startPos ) );
+              sal_Int32 nOriginalBreakInWord = nOriginalBreak - aBound.startPos - 1;
+              sal_Int16 nSplitOffset = SwTextPortion::GetCompoundSplit( rInf, sWord,
+                                              nOriginalBreakInWord, /*bSplitOnly=*/true );
+              if ( nSplitOffset > -1 &&
+                              sal_Int32(rInf.GetIdx()) <= aBound.startPos + nSplitOffset + 1 )
+              {
+                  // adjust the line width to the size of the compound split:
+                  // in the first round, change the line break to the requested compound split,
+                  // in the second round, keep the actual compound split
+                  OUString sLine( rInf.GetText().copy( sal_Int32(rInf.GetIdx()),
+                          aBound.startPos + nSplitOffset + 1 - sal_Int32(rInf.GetIdx()) ) );
+                  sal_Int16 nLineTextWidth = rInf.GetTextSize(sLine).Width() +
+                          rInf.GetTextSize(OUString('-')).Width();
+                  if ( nEndZone < 0 || nLineTextWidth >= ( nLineWidth - nEndZone ) )
+                  {
+                      bHyph = true;
+                      nLineWidth = nLineTextWidth + 10;
+                      nEndZone = 0;
+                  }
+              }
+          }
     }
     TextFrameIndex nHyphPos(0);
 

@@ -27,11 +27,6 @@ class SwTextGuess;
 class SwTextPortion : public SwLinePortion
 {
     void BreakCut( SwTextFormatInfo &rInf, const SwTextGuess &rGuess );
-    // is this hyphenation good enough for a compound word, i.e.
-    // it splits a compound word between compound constituents or
-    // it hyphenates the compound word just before or inside its suffix
-    static bool IsCompoundSplit( SwTextFormatInfo &rInf, const SwTextGuess &rGuess,
-                          bool* pbCompoundSplitBefore = nullptr );
     void BreakUnderflow( SwTextFormatInfo &rInf );
     void SetSpacing( SwTextFormatInfo &rInf, SwTextGuess const &rGuess,
             const sal_Int32 nSpaces, const sal_Int16 nWidthOf10Spaces );
@@ -58,6 +53,20 @@ public:
     TextFrameIndex GetSpaceCnt(const SwTextSizeInfo &rInf, TextFrameIndex& rCnt) const;
 
     bool CreateHyphen( SwTextFormatInfo &rInf, SwTextGuess const &rGuess );
+
+    // Get the position of a compound splitting break, which <= nHyphenationPos.
+    // If there is no such position, it returns with -1.
+    // If bSplitOnly=false, it returns with true also if nHyphenationPos is there
+    // in the suffix of the compound word, i.e. it's a readable hyphenation of
+    // a compound word.
+    static sal_Int16 GetCompoundSplit( SwTextFormatInfo &rInf, const OUString &rWord,
+                          const sal_Int16 nHyphenationPos,
+                          bool bSplitOnly);
+    // is this a good word break for a compound word during compound-based justification, i.e.
+    // it splits a compound word between compound constituents or
+    // it hyphenates the compound word just before or inside its suffix
+    static bool IsCompoundSplit( SwTextFormatInfo &rInf, const SwTextGuess &rGuess,
+                          bool* pbHasSplitBefore = nullptr );
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;

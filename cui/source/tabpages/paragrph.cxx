@@ -1890,6 +1890,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
          m_xHyphenNoCapsBox->get_state_changed_from_saved() ||
          m_xHyphenNoLastWordBox->get_state_changed_from_saved() ||
          m_xAcrossMoveLineBox->get_state_changed_from_saved() ||
+         m_xSplitCompoundWordBox->get_state_changed_from_saved() ||
          m_xExtHyphenBeforeBox->get_value_changed_from_saved() ||
          m_xExtHyphenAfterBox->get_value_changed_from_saved() ||
          m_xExtCompoundHyphenBeforeBox->get_value_changed_from_saved() ||
@@ -1913,6 +1914,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
         aHyphen.SetNoCapsHyphenation(m_xHyphenNoCapsBox->get_state() != TRISTATE_TRUE);
         aHyphen.SetNoLastWordHyphenation(m_xHyphenNoLastWordBox->get_state() != TRISTATE_TRUE);
         aHyphen.SetKeepLine(m_xAcrossMoveLineBox->get_state() != TRISTATE_TRUE);
+        aHyphen.SetSplitCompoundWord(m_xSplitCompoundWordBox->get_state() == TRISTATE_TRUE);
 
         if ( eHyphenState == TRISTATE_TRUE )
         {
@@ -2214,6 +2216,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
         m_xAcrossSpreadBox->set_state(!rHyphen.IsKeep() || rHyphen.GetKeepType() == 0 ? TRISTATE_TRUE : TRISTATE_FALSE);
         // always disable MoveLine, if hyphenation is forbidden across spreads
         m_xAcrossMoveLineBox->set_state( m_xAcrossSpreadBox->get_state() == TRISTATE_TRUE || rHyphen.IsKeepLine() ? TRISTATE_FALSE : TRISTATE_TRUE);
+        m_xSplitCompoundWordBox->set_state(rHyphen.IsSplitCompoundWord() ? TRISTATE_TRUE : TRISTATE_FALSE);
         aAcrossParagraphState.bTriStateEnabled = false;
         aAcrossColumnState.bTriStateEnabled = false;
         aAcrossPageState.bTriStateEnabled = false;
@@ -2225,6 +2228,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
         m_xHyphenNoCapsBox->set_state(TRISTATE_INDET);
         m_xHyphenNoLastWordBox->set_state(TRISTATE_INDET);
         m_xAcrossMoveLineBox->set_state(TRISTATE_INDET);
+        m_xSplitCompoundWordBox->set_state(TRISTATE_INDET);
     }
     bool bEnable = bItemAvailable && bIsHyphen;
     m_xHyphenNoCapsBox->set_sensitive(bEnable);
@@ -2275,6 +2279,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
     // always gray out MoveLine, if hyphenation is forbidden across spreads
     bool bAcrossSpread = m_xAcrossSpreadBox->get_state() == TRISTATE_TRUE;
     m_xAcrossMoveLineBox->set_sensitive( bEnable && !bAcrossSpread );
+    m_xSplitCompoundWordBox->set_sensitive(bEnable);
 
     switch (rSet->GetItemState(SID_ATTR_PARA_PAGENUM))
     {
@@ -2533,6 +2538,7 @@ void SvxExtParagraphTabPage::ChangesApplied()
     m_xHyphenNoCapsBox->save_state();
     m_xHyphenNoLastWordBox->save_state();
     m_xAcrossMoveLineBox->save_state();
+    m_xSplitCompoundWordBox->save_state();
     m_xExtHyphenBeforeBox->save_value();
     m_xExtHyphenAfterBox->save_value();
     m_xExtCompoundHyphenBeforeBox->save_value();
@@ -2644,6 +2650,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage(weld::Container* pPage, weld::Dia
     , m_xAcrossPageBox(m_xBuilder->weld_check_button(u"checkAcrossPage"_ustr))
     , m_xAcrossSpreadBox(m_xBuilder->weld_check_button(u"checkAcrossSpread"_ustr))
     , m_xAcrossMoveLineBox(m_xBuilder->weld_check_button(u"checkMoveLine"_ustr))
+    , m_xSplitCompoundWordBox(m_xBuilder->weld_check_button(u"checkSplitCompoundWord"_ustr))
 {
     // this page needs ExchangeSupport
     SetExchangeSupport();
@@ -2691,6 +2698,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage(weld::Container* pPage, weld::Dia
     m_xHyphenNoCapsBox->set_sensitive(false);
     m_xHyphenNoLastWordBox->set_sensitive(false);
     m_xAcrossMoveLineBox->set_sensitive(false);
+    m_xSplitCompoundWordBox->set_sensitive(false);
     m_xBeforeText->set_sensitive(false);
     m_xExtHyphenBeforeBox->set_sensitive(false);
     m_xAfterText->set_sensitive(false);
@@ -2884,6 +2892,7 @@ void SvxExtParagraphTabPage::HyphenClickHdl()
     m_aSpreadEndZone.set_sensitive(bAcross);
     // only sensitive, if the hyphenation is disabled across spreads
     m_xAcrossMoveLineBox->set_sensitive( bEnable && m_xAcrossSpreadBox->get_state() != TRISTATE_TRUE );
+    m_xSplitCompoundWordBox->set_state(bEnable ? TRISTATE_TRUE : TRISTATE_FALSE);
     m_xHyphenBox->set_state(bEnable ? TRISTATE_TRUE : TRISTATE_FALSE);
 }
 

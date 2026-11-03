@@ -1106,6 +1106,7 @@ namespace xmloff::token {
         TOKEN( "hyphenation-compound-remain-char-count", XML_HYPHENATION_COMPOUND_REMAIN_CHAR_COUNT ),
         TOKEN( "hyphenation-compound-push-char-count", XML_HYPHENATION_COMPOUND_PUSH_CHAR_COUNT ),
         TOKEN( "hyphenation-level",               XML_HYPHENATION_LEVEL ),
+        TOKEN( "hyphenation-split-compound-word", XML_HYPHENATION_SPLIT_COMPOUND_WORD ),
         TOKEN( "i",                               XML_I ),
         TOKEN( "icon",                            XML_ICON ),
         TOKEN( "icon-set",                        XML_ICON_SET ),

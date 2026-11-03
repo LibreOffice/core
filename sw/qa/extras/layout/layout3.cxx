@@ -2897,6 +2897,98 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158333)
                 u"venenatis, quis commodo dolor posuere. Curabitur dignissim sapien quis ");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf174315_disabled)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale(u"de"_ustr, u"DE"_ustr, OUString())))
+        return;
+
+    // compound-based hyphenation needs Hunspell morphological analysis
+    uno::Reference<linguistic2::XSpellChecker1> xSpell = LinguMgr::GetSpellChecker();
+    LanguageType eLang
+        = LanguageTag::convertToLanguageType(lang::Locale(u"de"_ustr, u"DE"_ustr, OUString()));
+    if (!xSpell.is() || !xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
+        return;
+
+    createSwDoc("tdf174315_disabled.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // no hyphenation in the last line ("split compound word" is disabled, but "do not
+    // hyphenate across page" is enabled)
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[25]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"schaft gehalten werden; Sklaverei und ");
+
+    // delete paragraph 1 to update hyphenation
+
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Delete();
+
+    pViewShell->Reformat();
+    pXmlDoc = parseLayoutDump();
+
+    // not the last word on the page: Sklaven- -> Sklavenhan-
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[24]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"schaft gehalten werden; Sklaverei und Sklavenhan");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[24]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf174315)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale(u"de"_ustr, u"DE"_ustr, OUString())))
+        return;
+
+    // compound-based hyphenation needs Hunspell morphological analysis
+    uno::Reference<linguistic2::XSpellChecker1> xSpell = LinguMgr::GetSpellChecker();
+    LanguageType eLang
+        = LanguageTag::convertToLanguageType(lang::Locale(u"de"_ustr, u"DE"_ustr, OUString()));
+    if (!xSpell.is() || !xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
+        return;
+
+    createSwDoc("tdf174315.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // This was "...Sklavenhan-", now the last word on the page is hyphenated
+    // at the compound constituent boundary: Sklaven-handel
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[25]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"schaft gehalten werden; Sklaverei und Sklaven");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[25]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    // delete paragraph 1 to update hyphenation
+
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Delete();
+
+    pViewShell->Reformat();
+    pXmlDoc = parseLayoutDump();
+
+    // not the last word on the page: Sklaven- -> Sklavenhan-
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[24]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"schaft gehalten werden; Sklaverei und Sklavenhan");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[24]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf159085)
 {
     createSwDoc("tdf159085.fodt");

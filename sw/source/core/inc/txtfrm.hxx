@@ -206,6 +206,8 @@ class SW_DLLPUBLIC SwTextFrame final : public SwContentFrame
 
     TextFrameIndex mnOffset; // Is the offset in the Content (character count)
     TextFrameIndex mnNoHyphOffset; // Is the offset of the last line with disabled or limited hyphenation
+    TextFrameIndex mnNoHyphLineLen;// Length of the last line with disabled or limited hyphenated
+    sal_Int32 mnNoHyphLineHash;    // Hash code of the text of the last line with hyphenation
     sal_Int16 mnNoHyphEndZone;     // size of end zone (-1 means disabled hyphenation)
 
     // Separates the Master and creates a Follow or adjusts the data in the Follow
@@ -461,6 +463,10 @@ public:
     void SetNoHyphOffset(TextFrameIndex const nNewOfst) { mnNoHyphOffset = nNewOfst; }
     sal_Int16 GetNoHyphEndZone() const { return mnNoHyphEndZone; }
     void SetNoHyphEndZone(sal_Int16 nNewType) { mnNoHyphEndZone = nNewType; }
+    TextFrameIndex GetNoHyphLineLen() const { return mnNoHyphLineLen; }
+    void SetNoHyphLineLen(TextFrameIndex const nNewOfst) { mnNoHyphLineLen = nNewOfst; }
+    sal_Int32 GetNoHyphLineHash() const { return mnNoHyphLineHash; }
+    void SetNoHyphLineHash(sal_Int32 const nNewOfst) { mnNoHyphLineHash = nNewOfst; }
     void ManipOfst(TextFrameIndex const nNewOfst) { mnOffset = nNewOfst; }
            SwTextFrame   *GetFrameAtPos ( const SwPosition &rPos);
     inline const SwTextFrame *GetFrameAtPos ( const SwPosition &rPos) const;

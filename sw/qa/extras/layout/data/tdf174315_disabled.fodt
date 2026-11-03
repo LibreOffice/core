@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:font-face-decls>
+  <style:font-face style:name="Liberation Sans" svg:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="swiss" style:font-pitch="variable"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="paragraph">
+   <style:text-properties fo:language="de" fo:country="DE" style:letter-kerning="true"/>
+  </style:default-style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard" style:master-page-name="">
+   <style:paragraph-properties fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="page" loext:hyphenation-keep-type="column" loext:hyphenation-keep-line="true" loext:hyphenation-split-compound-word="false" style:page-number="auto" style:writing-mode="lr-tb"/>
+   <style:text-properties fo:font-size="22.5pt" style:script-type="latin" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-zone="no-limit"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="8.2in" fo:page-height="11in" fo:margin-top="0.79in" fo:margin-bottom="0.79in" fo:margin-left="0.79in" fo:margin-right="0.7874in">
+   </style:page-layout-properties>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:text text:use-soft-page-breaks="true">
+   <text:p text:style-name="P1"></text:p>
+   <text:p text:style-name="P1"></text:p>
+   <text:p text:style-name="P1"></text:p>
+   <text:p text:style-name="P1"></text:p>
+   <text:p text:style-name="P1"></text:p>
+   <text:p text:style-name="P1"></text:p>
+   <text:p text:style-name="P1"></text:p>
+   <text:p text:style-name="P1"></text:p>
+   <text:p text:style-name="P1"></text:p>
+   <text:p text:style-name="P1"></text:p>
+   <text:p text:style-name="P1"></text:p>
+   <text:p text:style-name="P1"></text:p>
+   <text:p text:style-name="P1"></text:p>
+   <text:p text:style-name="P1"></text:p>
+   <text:p text:style-name="P1"></text:p>
+   <text:p text:style-name="P1"></text:p>
+   <text:p text:style-name="P1"></text:p>
+   <text:p text:style-name="P1"></text:p>
+   <text:p text:style-name="P1"></text:p>
+   <text:p text:style-name="P1"></text:p>
+   <text:p text:style-name="P1"></text:p>
+   <text:p text:style-name="P1"></text:p>
+   <text:p text:style-name="P1"></text:p>
+   <text:p text:style-name="P1"></text:p>
+   <text:p text:style-name="P1">Artikel 4 Niemand darf in Sklaverei oder Leibeigenschaft gehalten werden; Sklaverei und Sklavenhandel sind in allen ihren Formen verboten. Artikel 5 Niemand darf der Folter oder grausamer, unmenschlicher oder erniedrigender Behandlung oder Strafe unterworfen werden.</text:p>
+  </office:text>
+ </office:body>
+</office:document>

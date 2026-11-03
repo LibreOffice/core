@@ -562,6 +562,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
                     pMaster->GetNoHyphOffset() != TextFrameIndex(COMPLETE_STRING) )
         {
             pMaster->SetNoHyphOffset(TextFrameIndex(COMPLETE_STRING));
+            pMaster->SetNoHyphLineLen(TextFrameIndex(COMPLETE_STRING));
             pMaster->Prepare( PrepareHint::AdjustSizeWithoutFormatting );
             pMaster->InvalidateSize_();
         }
@@ -595,6 +596,9 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
                 if ( ( bKeepLine || bApplyEndZone ) && nExtraWidLines )
                 {
                     pMaster->SetNoHyphOffset(nIdx);
+                    pMaster->SetNoHyphLineLen(pNext->GetLen());
+                    pMaster->SetNoHyphLineHash( pFrame->GetText()
+                        .copy(sal_Int32(nIdx), sal_Int32(pNext->GetLen())).hashCode() );
                     pMaster->SetNoHyphEndZone(bApplyEndZone ? nNoHyphEndZone : -1);
                     // update also columns and frames
                     pMaster->Prepare( PrepareHint::AdjustSizeWithoutFormatting );
@@ -620,6 +624,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
             {
                 // enable hyphenation for all the lines in the TextFrame again
                 pMaster->SetNoHyphOffset(TextFrameIndex(COMPLETE_STRING));
+                pMaster->SetNoHyphLineLen(TextFrameIndex(COMPLETE_STRING));
                 // update all the previous lines before the previous offset, e.g.
                 // when deleting all the lines before the last line with disabled hyphenation
                 // results a starting line with disabled hyphenation -> repaint it with enabled

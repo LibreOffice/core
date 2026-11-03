@@ -315,21 +315,11 @@ void SwTextPortion::BreakCut( SwTextFormatInfo &rInf, const SwTextGuess &rGuess 
     }
 }
 
-// is it a hyphenation of a compound word, which splits the compound word between the
-// compound constituents OR it hyphenates the compound word just before or inside its suffix?
-bool SwTextPortion::IsCompoundSplit( SwTextFormatInfo &rInf, const SwTextGuess &rGuess,
-                bool* pbHasSplitBefore )
+sal_Int16 SwTextPortion::GetCompoundSplit( SwTextFormatInfo &rInf, const OUString &rWord,
+                const sal_Int16 nHyphenationPos,
+                const bool bSplitOnly )
 {
-    if ( !rGuess.HyphWord().is() )
-        return false;
-
     LanguageType aLang = rInf.GetTextFrame()->GetLangOfChar(rInf.GetIdx(), 1, true);
-
-    // is compound-based "smart" hyphenation enabled?
-    SvxAdjustItem aAdjustItem =
-        rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust();
-    if ( !aAdjustItem.GetCompoundBased() )
-        return false;
 
     // need Hunspell dictionaries with compound-based heuristics
     // TODO update the list according to the dictionary update
@@ -353,7 +343,7 @@ bool SwTextPortion::IsCompoundSplit( SwTextFormatInfo &rInf, const SwTextGuess &
          LANGUAGE_SWEDISH_FINLAND != aLang &&
          LANGUAGE_USER_ESPERANTO != aLang )
     {
-          return false;
+          return -1;
     }
 
     LanguageTag aLanguageTag(aLang);
@@ -368,7 +358,9 @@ bool SwTextPortion::IsCompoundSplit( SwTextFormatInfo &rInf, const SwTextGuess &
     pVal[0].Handle  = UPH_HYPH_COMPOUND_MIN_LEADING;
     // 0: compound splitting: do not hyphenate inside second, third etc.
     //    constituent of compound words
-    pVal[0].Value <<= sal_Int16(0);
+    // 99:the same, plus do not hyphenate after the last constituent and
+    //     in the suffix
+    pVal[0].Value <<= sal_Int16(bSplitOnly ? 99: 0);
 
     pVal[1].Name    = UPN_HYPH_COMPOUND_MIN_TRAILING;
     pVal[1].Handle  = UPH_HYPH_COMPOUND_MIN_TRAILING;
@@ -381,32 +373,39 @@ bool SwTextPortion::IsCompoundSplit( SwTextFormatInfo &rInf, const SwTextGuess &
     pVal[1].Value   <<= sal_Int16(99);
 
     css::uno::Reference< css::linguistic2::XHyphenatedWord >
-        xHyphWord = xHyph->hyphenate( rGuess.HyphWord()->getWord(),
+        xHyphWord = xHyph->hyphenate( rWord,
                     aLanguageTag.getLocale(),
-                    rGuess.HyphWord()->getHyphenationPos() + 1,
+                    nHyphenationPos + 1,
                     aProperties );
 
-    // compound splitting resulted the same break, so the word is really a compound word
-    // and the break point split compound constituents or it breaks the compound word
-    // 1) just before its suffix or 2) inside its suffix
-    if ( xHyphWord.is() &&
-                    xHyphWord->getHyphenationPos() == rGuess.HyphWord()->getHyphenationPos() )
-    {
-        return true;
-    }
+    if ( xHyphWord.is() )
+        return xHyphWord->getHyphenationPos();
 
-    // when IsCompoundSplit() is false,  pbHasSplitBefore's return value is true, if
-    // * the word is a compound word AND the break point
-    // * is not in a compound splitting position OR just before or inside the suffix AND
-    // * not inside the first constituent
-    // otherwise is false.
-    // Note: This value is used to optimize the hyphenation of compound words, trying to
-    // show more from the first constituent(s) and the broken one before the hyphenation,
-    // if it's not possible to skip the hyphenation completely.
+    return -1;
+}
+
+// is it a hyphenation of a compound word, which splits the compound word between the
+// compound constituents OR it hyphenates the compound word just before or inside its suffix?
+// Extra condition: AdjustItem.GetCompoundBased()
+bool SwTextPortion::IsCompoundSplit( SwTextFormatInfo &rInf, const SwTextGuess &rGuess,
+                bool* pbHasSplitBefore )
+{
+    if ( !rGuess.HyphWord().is() )
+        return false;
+
+    // is compound-based "smart" hyphenation enabled?
+    SvxAdjustItem aAdjustItem =
+        rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust();
+    if ( !aAdjustItem.GetCompoundBased() )
+        return false;
+
+    sal_Int16 nSplitOffset = GetCompoundSplit( rInf, rGuess.HyphWord()->getWord(),
+                    rGuess.HyphWord()->getHyphenationPos(), /*bSplitOnly=*/false );
+
     if ( pbHasSplitBefore )
-        *pbHasSplitBefore = xHyphWord.is();
+        *pbHasSplitBefore = nSplitOffset > -1;
 
-    return false;
+    return nSplitOffset == rGuess.HyphWord()->getHyphenationPos();
 }
 
 void SwTextPortion::BreakUnderflow( SwTextFormatInfo &rInf )
