@@ -323,6 +323,7 @@ protected:
     bool mbDiagaramReplacementExport;
     bool mbDiagramModelTextExport;
     sal_Int32 mnDiagramModelTextParagraph;
+    sal_Int32 mnDiagramModelTextParagraphCount;
 
     bool mbEmbedFonts = false;
 
@@ -403,12 +404,13 @@ public:
     void SetParent(const css::uno::Reference<css::drawing::XShape>& xShape) { m_xParent = xShape; }
 
     // True while the text of the data model of a Diagram is written
-    // nParagraph gives which paragraph of the shape represents the Point being written, and -1
-    // that the shape represents the Point with all its paragraphs.
-    void setDiagramModelTextExport(bool bNew, sal_Int32 nParagraph = -1)
+    // nParagraph gives the first of the nCount paragraphs of the shape that represent the Point
+    // being written, and -1 that the shape represents the Point with all its paragraphs.
+    void setDiagramModelTextExport(bool bNew, sal_Int32 nParagraph = -1, sal_Int32 nCount = 1)
     {
         mbDiagramModelTextExport = bNew;
         mnDiagramModelTextParagraph = nParagraph;
+        mnDiagramModelTextParagraphCount = nCount;
     }
     bool isDiagramModelTextExport() const { return mbDiagramModelTextExport; }
 
