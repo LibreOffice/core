@@ -465,18 +465,8 @@ class Document: NSDocument {
 
     /**
      * Called by the system when the document is opened. The system provides the file contents as `Data`.
-     * We create a non-predictable temporary directory using a UUID, and store the `data` there.
      */
     override func read(from data: Data, ofType typeName: String) throws {
-        // Create a unique temp directory
-        let tempDirBase = FileManager.default.temporaryDirectory
-        let uniqueDirName = UUID().uuidString
-        let tempDir = tempDirBase.appendingPathComponent(uniqueDirName, isDirectory: true)
-
-        try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true, attributes: nil)
-
-        self.tempDirectoryURL = tempDir
-
         // If fileURL is available (document opened from a file), preserve the
         // original filename. A new document has no name yet, so give it a plain
         // "Untitled" that reads well wherever the name is shown. The temporary
@@ -489,6 +479,22 @@ class Document: NSDocument {
         else {
             fileName = "Untitled"
         }
+
+        try writeTemporaryCopy(data, named: fileName)
+    }
+
+    /**
+     * We create a non-predictable temporary directory using a UUID, and store the `data` there.
+     */
+    func writeTemporaryCopy(_ data: Data, named fileName: String) throws {
+        // Create a unique temp directory
+        let tempDirBase = FileManager.default.temporaryDirectory
+        let uniqueDirName = UUID().uuidString
+        let tempDir = tempDirBase.appendingPathComponent(uniqueDirName, isDirectory: true)
+
+        try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true, attributes: nil)
+
+        self.tempDirectoryURL = tempDir
 
         let tempFile = tempDir.appendingPathComponent(fileName)
         try data.write(to: tempFile, options: .atomic)
