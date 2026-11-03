@@ -111,11 +111,23 @@ MacroSecurityLevelTP::MacroSecurityLevelTP(weld::Container* pParent, MacroSecuri
     , m_xWarningLb(m_xBuilder->weld_label(u"warningmsg"_ustr))
     , m_xWarningImg(m_xBuilder->weld_image(u"warningimg"_ustr))
     , m_xWarningBox(m_xBuilder->weld_box(u"warningbox"_ustr))
+    , m_xVHighLabel(m_xBuilder->weld_label(u"veryhighLabel"_ustr))
+    , m_xHighLabel(m_xBuilder->weld_label(u"highLabel"_ustr))
+    , m_xMedLabel(m_xBuilder->weld_label(u"mediumLabel"_ustr))
+    , m_xLowLabel(m_xBuilder->weld_label(u"lowLabel"_ustr))
 {
     m_xLowRB->connect_toggled( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
     m_xMediumRB->connect_toggled( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
     m_xHighRB->connect_toggled( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
     m_xVeryHighRB->connect_toggled( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
+
+    // to make the static text underneath the radio buttons align with the radio button labels,
+    // the label was detached from the actual button; the following functions restore the common
+    // click behavior, ie. activate the radio button per click on the label
+    m_xVHighLabel->connect_mouse_press( LINK(this, MacroSecurityLevelTP, VHighLabelClicked) );
+    m_xHighLabel->connect_mouse_press( LINK(this, MacroSecurityLevelTP, HighLabelClicked) );
+    m_xMedLabel->connect_mouse_press( LINK(this, MacroSecurityLevelTP, MedLabelClicked) );
+    m_xLowLabel->connect_mouse_press( LINK(this, MacroSecurityLevelTP, LowLabelClicked) );
 
     int nPrefWidth(std::max({m_xVeryHighRB->get_preferred_size().Width(),
                              m_xHighRB->get_preferred_size().Width(),
@@ -195,6 +207,30 @@ void MacroSecurityLevelTP::SetWarningLabel(const OUString& sMsg)
         m_xWarningImg->hide();
         m_xWarningBox->set_background(COL_TRANSPARENT);
     }
+}
+
+IMPL_LINK_NOARG(MacroSecurityLevelTP, VHighLabelClicked, const MouseEvent&, bool)
+{
+    m_xVeryHighRB->set_active(true);
+    return true;
+}
+
+IMPL_LINK_NOARG(MacroSecurityLevelTP, HighLabelClicked, const MouseEvent&, bool)
+{
+    m_xHighRB->set_active(true);
+    return true;
+}
+
+IMPL_LINK_NOARG(MacroSecurityLevelTP, MedLabelClicked, const MouseEvent&, bool)
+{
+    m_xMediumRB->set_active(true);
+    return true;
+}
+
+IMPL_LINK_NOARG(MacroSecurityLevelTP, LowLabelClicked, const MouseEvent&, bool)
+{
+    m_xLowRB->set_active(true);
+    return true;
 }
 
 IMPL_LINK_NOARG(MacroSecurityLevelTP, RadioButtonHdl, weld::Toggleable&, void)

@@ -94,10 +94,18 @@ private:
     std::unique_ptr<weld::Label> m_xWarningLb;
     std::unique_ptr<weld::Image> m_xWarningImg;
     std::unique_ptr<weld::Box> m_xWarningBox;
+    std::unique_ptr<weld::Label> m_xVHighLabel;
+    std::unique_ptr<weld::Label> m_xHighLabel;
+    std::unique_ptr<weld::Label> m_xMedLabel;
+    std::unique_ptr<weld::Label> m_xLowLabel;
 
     void SetWarningLabel(const OUString& sMsg);
 
     DECL_LINK(RadioButtonHdl, weld::Toggleable&, void);
+    DECL_LINK(VHighLabelClicked, const MouseEvent&, bool);
+    DECL_LINK(HighLabelClicked, const MouseEvent&, bool);
+    DECL_LINK(MedLabelClicked, const MouseEvent&, bool);
+    DECL_LINK(LowLabelClicked, const MouseEvent&, bool);
 public:
     MacroSecurityLevelTP(weld::Container* pParent, MacroSecurity* pDlg);
     virtual void ClosePage() override;
