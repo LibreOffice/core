@@ -42,6 +42,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
+#include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -3379,6 +3380,14 @@ getFormulaController(const uno::Reference<lang::XComponent>& xComponent)
     uno::Reference<frame::XModel> xModel(xObject->getEmbeddedObject(), uno::UNO_QUERY);
     return xModel->getCurrentController();
 }
+
+/// The formula text of the first embedded object of a text document.
+OUString getFormulaText(const uno::Reference<lang::XComponent>& xComponent)
+{
+    uno::Reference<beans::XPropertySet> xFormula(
+        getFormulaController(xComponent)->getModel(), uno::UNO_QUERY);
+    return xFormula->getPropertyValue(u"Formula"_ustr).get<OUString>();
+}
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testFormulaSelectionSurvivesFrameResize)
@@ -3409,6 +3418,56 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testFormulaSelectionSurvivesFrameResi
     // Then the view still shows the selected placeholder. Without the fix, the frame of the
     // formula was reported again after it grew, together with an empty text selection.
     CPPUNIT_ASSERT(!aView.m_aOwnSelection.isEmpty());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testFormulaEditKeepingSizeRepaints)
+{
+    // Given a formula that is edited in place, a sum with the selected letter t as its upper limit:
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwTestViewCallback aView;
+    dispatchCommand(mxComponent, u".uno:InsertObjectStarMath"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    SfxInPlaceClient* pIPClient = getSwDocShell()->GetView()->GetIPClient();
+    // Leave the formula at the end, so that its view closes before the callback it reports to.
+    comphelper::ScopeGuard aLeaveFormula([pIPClient] {
+        pIPClient->DeactivateObject();
+        Scheduler::ProcessEventsToIdle();
+    });
+    // The caret of the formula shows from the first key on, as it does after a click.
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 'x', 0);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 'x', 0);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_BACKSPACE);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_BACKSPACE);
+    Scheduler::ProcessEventsToIdle();
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "Text", uno::Any(u"sum to{<?>} 6 "_ustr) } }));
+    comphelper::dispatchCommand(u".uno:InsertCommandText"_ustr, getFormulaController(mxComponent),
+                                aArgs);
+    Scheduler::ProcessEventsToIdle();
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 't', 0);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 't', 0);
+    Scheduler::ProcessEventsToIdle();
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_SHIFT | KEY_LEFT);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_SHIFT | KEY_LEFT);
+    Scheduler::ProcessEventsToIdle();
+    const awt::Size aSizeBefore
+        = pIPClient->GetObject()->getVisualAreaSize(embed::Aspects::MSOLE_CONTENT);
+
+    // When the t is replaced by an a, which keeps the size of the formula, because the sum sign
+    // is wider than its limit:
+    aView.m_bTilesInvalidated = false;
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 'a', 0);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 'a', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(u"sum to { a } 6"_ustr, getFormulaText(mxComponent));
+    const awt::Size aSizeAfter
+        = pIPClient->GetObject()->getVisualAreaSize(embed::Aspects::MSOLE_CONTENT);
+    CPPUNIT_ASSERT_EQUAL(aSizeBefore.Width, aSizeAfter.Width);
+    CPPUNIT_ASSERT_EQUAL(aSizeBefore.Height, aSizeAfter.Height);
+
+    // Then the area of the formula is painted again, so the view shows the a. Without the fix,
+    // the view kept showing the t until the formula was left.
+    CPPUNIT_ASSERT(aView.m_bTilesInvalidated);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

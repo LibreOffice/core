@@ -30,6 +30,7 @@
 #include <sal/log.hxx>
 #include <unotools/eventcfg.hxx>
 #include <sfx2/event.hxx>
+#include <COKit/COKit.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
@@ -562,9 +563,18 @@ void SmDocShell::Repaint()
     SetFormulaArranged(false);
 
     Size aVisSize = GetSize();
+    const bool bSameSize = aVisSize == GetVisArea().GetSize();
     SetVisAreaSize(aVisSize);
     if (SmViewShell* pViewSh = SmGetActiveView())
         pViewSh->GetGraphicWidget().Invalidate();
+
+    // A COKit client draws an object that is active in place from its replacement image, and the
+    // container updates that image and repaints the object when the visible area changes. A
+    // formula that changes but keeps its size sends the same event, so the edit shows at once.
+    if (bSameSize && comphelper::COKit::isActive() && IsInPlaceActive())
+        SfxGetpApp()->NotifyEvent(SfxEventHint(
+            SfxEventHintId::VisAreaChanged,
+            GlobalEventConfig::GetEventName(GlobalEventId::VISAREACHANGED), this));
 
     if (bIsEnabled)
         EnableSetModified(bIsEnabled);
