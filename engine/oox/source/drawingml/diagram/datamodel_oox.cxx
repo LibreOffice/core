@@ -115,6 +115,11 @@ void DiagramData_oox::fillTextBodiesFromXShapes()
                 && (xProperties->getPropertyValue(u"CharHeight"_ustr) >>= fHeight)
                 && fHeight > 0.0)
                 pRun->getTextCharacterProperties().moHeight = basegfx::fround(fHeight * 100.0);
+            // and the font it shows, so that the layout measures with it
+            OUString aFontName;
+            if (xProperties && (xProperties->getPropertyValue(u"CharFontName"_ustr) >>= aFontName)
+                && !aFontName.isEmpty())
+                pRun->getTextCharacterProperties().maLatinFont.setAttributes(aFontName);
             rParagraph.addRun(pRun);
             bHasText = true;
         }

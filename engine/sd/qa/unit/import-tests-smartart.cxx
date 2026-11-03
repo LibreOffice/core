@@ -2790,6 +2790,39 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTransitionOfNoWidthLeavesNoGap)
                                  std::abs(aNodes[n].Left() - aNodes[n - 1].Right()));
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testFontSetByHandIsTheOneMeasured)
+{
+    // every text is set to DejaVu Serif by hand while the theme has Calibri, and the arrows'
+    // texts hold one line of it at 25 points
+    createSdImpressDoc("pptx/smartart-font-set-by-hand.pptx");
+    SdrObject* pDiagram(SdrObject::getSdrObjectFromXShape(getShapeFromPage(0, 0)));
+    CPPUNIT_ASSERT(nullptr != pDiagram);
+    pDiagram->getDiagramHelper()->reLayout();
+
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xArrow(findChildShapeByText(xDiagram, u"One"_ustr));
+    CPPUNIT_ASSERT(xArrow.is());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(25.0, shownTextSize(xArrow), 0.5);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testFixedHeightTextShrinksBeforeItGrows)
+{
+    // the nodes are 60 mm high and their rules shrink the font before the height may grow, so
+    // the node with the level 2 texts stays in line with the others
+    createSdImpressDoc("pptx/smartart-fixed-height.pptx");
+    SdrObject* pDiagram(SdrObject::getSdrObjectFromXShape(getShapeFromPage(0, 1)));
+    CPPUNIT_ASSERT(nullptr != pDiagram);
+    pDiagram->getDiagramHelper()->reLayout();
+
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xOne(findChildShapeByText(xDiagram, u"One"_ustr));
+    uno::Reference<drawing::XShape> xTwo(
+        findChildShapeByText(xDiagram, u"Two\nLevel 2 first\nLevel 2 second"_ustr));
+    CPPUNIT_ASSERT(xOne.is());
+    CPPUNIT_ASSERT(xTwo.is());
+    CPPUNIT_ASSERT_EQUAL(xOne->getPosition().Y, xTwo->getPosition().Y);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
