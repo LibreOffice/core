@@ -234,3 +234,85 @@ describe(['tagdesktop'], 'Writer drag and drop of a text selection past the visi
 		helper.expectTextForClipboard('EndTest2');
 	});
 });
+
+// The screen position of a document point given in twips, as the active view layout shows it.
+function layoutScreenPoint(win, x, y) {
+	var point = new win.cool.SimplePoint(x, y);
+	var bounds = win.app.sectionContainer.getCanvasBoundingClientRect();
+	return {
+		x: point.vX / win.app.dpiScale + bounds.x,
+		y: point.vY / win.app.dpiScale + bounds.y,
+	};
+}
+
+describe(['tagdesktop'], 'Writer drag and drop of a text selection in the multi-page view.', function() {
+
+	beforeEach(function() {
+		cy.viewport(1920, 1080);
+		// Six pages, one paragraph each: Page one to Page six.
+		helper.setupAndLoadDocument('writer/six_pages.fodt');
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+			win.app.dispatcher.dispatch('multipageview');
+			return helper.processToIdle(win);
+		});
+	});
+
+	it('Dragging the selected word of the last page to the start of its line moves it there', function() {
+		var win = this.win;
+		cy.getFrameWindow().should(function(frameWindow) {
+			expect(frameWindow.app.activeDocument.activeLayout.type).to.equal('ViewLayoutMultiPage');
+		});
+
+		// A modifier stays held for the rest of the typed string, so each key goes alone.
+		helper.assertCursorAndFocus();
+		helper.typeIntoDocument('{ctrl}{end}');
+		helper.processToIdle(win);
+		var endOfSix = readCaretAfterMove(null);
+		helper.typeIntoDocument('{ctrl}{leftarrow}');
+		helper.processToIdle(win);
+		var startOfSix = readCaretAfterMove(endOfSix);
+		helper.typeIntoDocument('{home}');
+		helper.processToIdle(win);
+		var startOfLine = readCaretAfterMove(startOfSix);
+
+		// A mouse selection shows the context toolbar.
+		var inside;
+		cy.then(function() {
+			inside = layoutScreenPoint(win, (startOfSix.x1 + endOfSix.x1) / 2,
+				(startOfSix.y1 + startOfSix.y2) / 2);
+			cy.cGet('body').dblclick(inside.x, inside.y);
+		});
+		helper.textSelectionShouldExist();
+		helper.processToIdle(win);
+		helper.waitForTimers(win, 'clicktimer');
+		cy.cGet('#context-toolbar').should('not.have.class', 'hidden');
+
+		// When the selection is dragged from inside it to the start of the line:
+		cy.then(function() {
+			var end = layoutScreenPoint(win, startOfLine.x1, (startOfLine.y1 + startOfLine.y2) / 2);
+			cy.cGet('body').realMouseDown({ x: inside.x, y: inside.y });
+			for (let step = 1; step <= 5; ++step) {
+				cy.cGet('body').realMouseMove(inside.x + (end.x - inside.x) * step / 5,
+					inside.y + (end.y - inside.y) * step / 5);
+			}
+			helper.processToIdle(win);
+
+			// Then the drag is one of the selection: the drop caret shows, and the toolbar of the
+			// dragged selection is gone.
+			cy.cGet('.text-drop-caret').should('be.visible');
+			cy.cGet('#context-toolbar').should('have.class', 'hidden');
+
+			cy.cGet('body').realMouseUp({ x: end.x, y: end.y });
+		});
+		helper.processToIdle(win);
+
+		// And the word now starts the line:
+		helper.setDummyClipboardForCopy();
+		helper.typeIntoDocument('{ctrl}{end}');
+		helper.typeIntoDocument('{shift}{home}');
+		helper.textSelectionShouldExist();
+		helper.copy();
+		helper.expectTextForClipboard('sixPage ');
+	});
+});

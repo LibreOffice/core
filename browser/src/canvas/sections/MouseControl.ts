@@ -101,19 +101,7 @@ class MouseControl extends CanvasSectionObject {
 		buttons: number,
 		modifier: number,
 	) {
-		let viewToDocumentPos = point.clone();
-		Util.ensureValue(app.activeDocument);
-
-		// Convert to pure canvas html element coordinate.
-		viewToDocumentPos.pX +=
-			-app.activeDocument.activeLayout.viewedRectangle.pX1 +
-			app.sectionContainer.getDocumentAnchor()[0];
-		viewToDocumentPos.pY +=
-			-app.activeDocument.activeLayout.viewedRectangle.pY1 +
-			app.sectionContainer.getDocumentAnchor()[1];
-
-		viewToDocumentPos =
-			app.activeDocument.activeLayout.canvasToDocumentPoint(viewToDocumentPos);
+		const viewToDocumentPos = MouseControl.toDocumentPoint(point);
 
 		if (Number.isNaN(viewToDocumentPos.x) || Number.isNaN(viewToDocumentPos.y))
 			return;
@@ -127,6 +115,23 @@ class MouseControl extends CanvasSectionObject {
 				modifier,
 			);
 		}
+	}
+
+	// The place on the page under a point of the mouse position, which the active view layout
+	// may lay out in several pages side by side. Either coordinate is NaN when no page is there.
+	private static toDocumentPoint(point: cool.SimplePoint): cool.SimplePoint {
+		const canvasPoint = point.clone();
+		Util.ensureValue(app.activeDocument);
+
+		// Convert to pure canvas html element coordinate.
+		canvasPoint.pX +=
+			-app.activeDocument.activeLayout.viewedRectangle.pX1 +
+			app.sectionContainer.getDocumentAnchor()[0];
+		canvasPoint.pY +=
+			-app.activeDocument.activeLayout.viewedRectangle.pY1 +
+			app.sectionContainer.getDocumentAnchor()[1];
+
+		return app.activeDocument.activeLayout.canvasToDocumentPoint(canvasPoint);
 	}
 
 	/*
@@ -676,7 +681,7 @@ class MouseControl extends CanvasSectionObject {
 		this.pressedInSelection =
 			e.type !== 'touchstart' &&
 			!!app.activeDocument?.activeView.selectionContains(
-				this.positionOnMouseDown,
+				MouseControl.toDocumentPoint(this.positionOnMouseDown),
 			);
 
 		if (e.type === 'touchstart') {
