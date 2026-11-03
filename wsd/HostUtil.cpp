@@ -474,6 +474,19 @@ void HostUtil::setFirstHost(const Poco::URI& uri)
     }
 }
 
+std::string HostUtil::getWopiHostAuditStatus()
+{
+    if (!WopiEnabled)
+        return std::string();
+    if (GroupsModeWithoutGroup)
+        return "nogroups";
+    // Trusting the first host adds it to WopiHosts, so a trusted FirstHost still counts
+    if (Util::iequal(ConfigUtil::getString("storage.wopi.alias_groups[@mode]", "first"), "first") &&
+        (WopiHosts.empty() || isFirstHostTrusted()))
+        return "not_recommended";
+    return std::string();
+}
+
 bool HostUtil::isWopiHostsEmpty()
 {
     return WopiHosts.empty();

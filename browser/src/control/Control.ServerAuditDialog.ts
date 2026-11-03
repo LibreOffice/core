@@ -104,7 +104,7 @@ class ServerAuditDialog {
 			wopihost: {
 				priority: 4,
 				not_recommended: [
-					_('No WOPI host configured: trusting the first host that connected'),
+					_('No WOPI host configured: trusting the first host that connects'),
 					'SDK: wopi-host',
 					'https://sdk.collaboraonline.com/docs/installation/Configuration.html#wopi-host',
 				],

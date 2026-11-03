@@ -47,7 +47,7 @@ var AdminSocketServerAudit = AdminSocketBase.extend({
 		},
 		wopihost: {
 			not_recommended: _(
-				'No WOPI host configured: trusting the first host that connected',
+				'No WOPI host configured: trusting the first host that connects',
 			),
 			nogroups: _(
 				'No WOPI host is allowed: alias_groups mode is "groups" but no group is defined',

@@ -43,6 +43,7 @@ class HostUtilTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testEveryAllowedKitHostIsAccepted);
     CPPUNIT_TEST(testGroupsModeWithoutGroupIsReported);
     CPPUNIT_TEST(testKitHostListHasNoPostAllowHost);
+    CPPUNIT_TEST(testWopiHostAuditStatus);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -57,6 +58,7 @@ class HostUtilTests : public CPPUNIT_NS::TestFixture
     void testEveryAllowedKitHostIsAccepted();
     void testGroupsModeWithoutGroupIsReported();
     void testKitHostListHasNoPostAllowHost();
+    void testWopiHostAuditStatus();
 
 public:
     /// Clear the parsed host state, matching the empty state it starts with, and
@@ -504,6 +506,50 @@ void HostUtilTests::testKitHostListHasNoPostAllowHost()
 
     LOK_ASSERT(HostUtil::isForbiddenKitHost("10.1.2.3"));
     LOK_ASSERT(HostUtil::isForbiddenKitHost("client.example"));
+}
+
+/// The server audit names the WOPI host problem whether or not a host has connected. The options
+/// richdocumentscode passes to coolwsd configure one group, so neither problem is reported for it.
+void HostUtilTests::testWopiHostAuditStatus()
+{
+    constexpr std::string_view testname = __func__;
+
+    Poco::AutoPtr<Poco::Util::MapConfiguration> config(new Poco::Util::MapConfiguration);
+    config->setString("storage.wopi[@allow]", "true");
+    config->setString("storage.wopi.alias_groups", "");
+
+    const ScopedHostConfig scopedConfig(config.get());
+    Poco::AutoPtr<Poco::Util::LayeredConfiguration> layered(new Poco::Util::LayeredConfiguration);
+    layered->add(Poco::Util::AbstractConfiguration::Ptr(config.get(), true));
+
+    const Poco::URI uri("https://cloud.example.com/wopi/files/1");
+
+    // Groups mode with no group: every host is refused
+    config->setString("storage.wopi.alias_groups[@mode]", "groups");
+    resetHostState(true);
+    HostUtil::parseAliases(*layered);
+    LOK_ASSERT_EQUAL_STR("nogroups", HostUtil::getWopiHostAuditStatus());
+
+    // First mode is reported before any host connects, and still once one is trusted
+    config->setString("storage.wopi.alias_groups[@mode]", "first");
+    resetHostState(true);
+    HostUtil::parseAliases(*layered);
+    LOK_ASSERT_EQUAL_STR("not_recommended", HostUtil::getWopiHostAuditStatus());
+    HostUtil::setFirstHost(uri);
+    LOK_ASSERT_EQUAL_STR("not_recommended", HostUtil::getWopiHostAuditStatus());
+
+    // The options richdocumentscode passes: groups mode, Nextcloud's names as the aliases of one
+    // group, and one plain name as the group host
+    config->setString("storage.wopi.alias_groups[@mode]", "groups");
+    config->setString("storage.wopi.alias_groups.group[0].host", "cloud.example.com");
+    config->setString("storage.wopi.alias_groups.group[0].host[@allow]", "true");
+    config->setString("storage.wopi.alias_groups.group[0].alias[0]", "cloud\\.example\\.com");
+    config->setString("storage.wopi.alias_groups.group[0].alias[1]", "localhost");
+    resetHostState(true);
+    HostUtil::parseAliases(*layered);
+    HostUtil::setFirstHost(uri);
+    LOK_ASSERT_EQUAL_STR("", HostUtil::getWopiHostAuditStatus());
+    LOK_ASSERT_MESSAGE("the Nextcloud host is allowed", HostUtil::allowedWopiHost(uri.getHost()));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(HostUtilTests);

@@ -576,11 +576,12 @@ void AdminModel::mergeServerAudit(const std::map<std::string, std::string>& entr
     bool changed = false;
     for (const auto& entry : entries)
     {
-        // is_admin is per-user, hardwarewarning is read live, any status starting
+        // is_admin is per-user, hardwarewarning and wopihost are read live, any status starting
         // with "ok" is no problem (the suffix only names which mechanism is in use),
         // info_ codes carry a bare value (a number, true/false) that is never "ok"
         // and is not a condition to report
         if (entry.first == "is_admin" || entry.first == "hardwarewarning" ||
+            entry.first == "wopihost" ||
             entry.second.starts_with("ok") || entry.first.starts_with("info_"))
             continue;
 
@@ -605,9 +606,10 @@ std::string AdminModel::getServerAuditJSON() const
     if (!hardwareWarning.empty())
         result["hardwarewarning"] = hardwareWarning;
 
-    // No document can load to report this one, so it comes from the configuration
-    if (HostUtil::isWopiEnabled() && HostUtil::isGroupsModeWithoutGroup())
-        result["wopihost"] = "nogroups";
+    // Either case can leave the real WOPI host with no document loaded to report it
+    const std::string wopiHostStatus = HostUtil::getWopiHostAuditStatus();
+    if (!wopiHostStatus.empty())
+        result["wopihost"] = wopiHostStatus;
 
     std::ostringstream oss;
     oss << "{\"serverAudit\": [";

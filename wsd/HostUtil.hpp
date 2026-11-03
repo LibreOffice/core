@@ -130,6 +130,12 @@ public:
     /// because no WOPI host is configured and alias_groups mode is "first".
     static bool isFirstHostTrusted() { return !FirstHost.empty(); }
 
+    /// The server audit status of the WOPI host configuration: "nogroups" when alias_groups mode
+    /// is "groups" with no group, so every host is refused, "not_recommended" when the mode is
+    /// "first" with no WOPI host configured, so the first host to connect is trusted, or empty when
+    /// neither applies.
+    static std::string getWopiHostAuditStatus();
+
     static bool isWopiHostsEmpty();
 
     [[nodiscard]] static bool isForbiddenKitHost(const std::string& host);
