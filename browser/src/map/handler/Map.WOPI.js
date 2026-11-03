@@ -58,6 +58,10 @@ window.L.Map.WOPI = window.L.Handler.extend({
 	DisablePresentation: false,
 	PresentationLeader: '',
 
+	// True if we detect our wopi host is Microsoft SharePoint.
+	// See `_detectSharePoint`.
+	WopiHostIsSharePoint: false,
+
 	_appLoadedConditions: {
 		docloaded: false,
 		updatepermission: false,
