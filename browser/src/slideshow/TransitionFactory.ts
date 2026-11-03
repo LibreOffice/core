@@ -78,6 +78,9 @@ enum TransitionSubType {
 	HEART,
 	ROTATEIN,
 	AIRPLANE,
+	MORPH,
+	MORPHBYWORD,
+	MORPHBYCHARACTER,
 }
 
 const stringToTransitionTypeMap: Record<string, TransitionType> = {
@@ -145,6 +148,9 @@ const stringToTransitionSubTypeMap: Record<string, TransitionSubType> = {
 	Heart: TransitionSubType.HEART,
 	RotateIn: TransitionSubType.ROTATEIN,
 	Airplane: TransitionSubType.AIRPLANE,
+	Morph: TransitionSubType.MORPH,
+	MorphByWord: TransitionSubType.MORPHBYWORD,
+	MorphByCharacter: TransitionSubType.MORPHBYCHARACTER,
 };
 
 function createTransition(

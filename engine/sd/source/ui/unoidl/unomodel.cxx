@@ -526,7 +526,10 @@ constexpr auto constTransitionSubTypeToString = mapEnumToString<sal_Int16>({
     { animations::TransitionSubType::CORNERSIN, "CornersIn"},
     { animations::TransitionSubType::HEART, "Heart"},
     { animations::TransitionSubType::ROTATEIN, "RotateIn"},
-    { animations::TransitionSubType::AIRPLANE, "Airplane"}
+    { animations::TransitionSubType::AIRPLANE, "Airplane"},
+    { animations::TransitionSubType::MORPH, "Morph"},
+    { animations::TransitionSubType::MORPHBYWORD, "MorphByWord"},
+    { animations::TransitionSubType::MORPHBYCHARACTER, "MorphByCharacter"}
 });
 
 constexpr auto constAnimationNodeTypeToString = mapEnumToString<sal_Int16>({

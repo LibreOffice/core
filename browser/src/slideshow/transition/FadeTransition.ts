@@ -30,7 +30,13 @@ class FadeTransition extends SlideShow.Transition2d {
 
 		this.effectTransition = FadeSubType.FADEOVERBLACK; // default
 
-		if (transitionSubType == TransitionSubType.CROSSFADE) {
+		// A morph plays as a smooth fade from the old slide to the new one.
+		if (
+			transitionSubType == TransitionSubType.CROSSFADE ||
+			transitionSubType == TransitionSubType.MORPH ||
+			transitionSubType == TransitionSubType.MORPHBYWORD ||
+			transitionSubType == TransitionSubType.MORPHBYCHARACTER
+		) {
 			this.effectTransition = FadeSubType.SMOOTHLY;
 		} else if (
 			transitionSubType == TransitionSubType.FADEOVERCOLOR &&
