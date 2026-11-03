@@ -343,7 +343,33 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
                     log.string += body + "\n"
                 }
 
-                return await handleDocumentMessage(body)
+                if body == "BYE" {
+                    COWrapper.LOG_TRC("Document window terminating on JavaScript side. Closing our end of the socket.")
+                    view.window?.performClose(nil)
+                    return (nil, nil)
+                }
+
+                if body == "EXCHANGEMONITORS" {
+                    exchangeMonitors()
+                    return (nil, nil)
+                }
+
+                if let result = await ViewController.handleDocumentMessage(body, document: document) {
+                    return result
+                }
+
+                // The picked document opens in its own window; return the
+                // originating window to its document view.
+                let returnToDocumentView: () -> Void = { [weak self] in
+                    self?.webView?.evaluateJavaScript("window.app?.map?.backstageView?.returnToDocumentView();")
+                }
+
+                if let result = ViewController.handleBackstageMessage(body, onOpened: returnToDocumentView) {
+                    return result
+                }
+
+                // Just send the message
+                COWrapper.handleMessage(with: document, message: body)
             }
 
         default:
@@ -358,15 +384,10 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
         return (nil, nil)
     }
 
-    func handleDocumentMessage(_ body: String) async -> (Any?, String?) {
+    static func handleDocumentMessage(_ body: String, document: Document) async -> (Any?, String?)? {
         if body == "HULLO" {
             // Now we know that the JS has started completely
             COWrapper.handleHULLO(with: document)
-            return (nil, nil)
-        }
-        else if body == "BYE" {
-            COWrapper.LOG_TRC("Document window terminating on JavaScript side. Closing our end of the socket.")
-            view.window?.performClose(nil)
             return (nil, nil)
         }
         else if body.hasPrefix("COMMANDSTATECHANGED ") {
@@ -386,11 +407,8 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
             return (nil, nil)
         }
         else if body == "PRINT" {
-            document.printDocument(self)
+            document.printDocument(nil)
             return (nil, nil)
-        }
-        else if body == "EXCHANGEMONITORS" {
-            exchangeMonitors()
         }
         else if body == "FOCUSIFHWKBD" {
             COWrapper.LOG_ERR("TODO: Implement FOCUSIFHWKBD")
@@ -495,7 +513,7 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
                 }
 
                 // Remove the original extension from the file name and add the adjustedFormat
-                guard let tmpFileName = self.document?.tempFileURL?.deletingPathExtension().appendingPathExtension(adjustedFormat).lastPathComponent else { return (nil, nil) }
+                guard let tmpFileName = document.tempFileURL?.deletingPathExtension().appendingPathExtension(adjustedFormat).lastPathComponent else { return (nil, nil) }
                 let downloadAsTmpURL = tmpFileDirectory.appendingPathComponent(tmpFileName)
 
                 // Remove any existing file
@@ -559,7 +577,7 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
             // Suggest the document's own name with the exported file's
             // extension, not the kit's temp-file name (which carries the
             // internal jail/sandbox filename). Mirrors the downloadas path.
-            let suggestedName = self.document?.tempFileURL?
+            let suggestedName = document.tempFileURL?
                 .deletingPathExtension()
                 .appendingPathExtension(srcURL.pathExtension)
                 .lastPathComponent ?? srcURL.lastPathComponent
@@ -622,20 +640,8 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
             NSPasteboard.general.setString(text, forType: .string)
             return (nil, nil)
         }
-        else if let result = ViewController.handleBackstageMessage(body, onOpened: { [weak self] in
-            // The picked document opens in its own window; return the
-            // originating window to its document view.
-            self?.webView?.evaluateJavaScript(
-                "window.app?.map?.backstageView?.returnToDocumentView();")
-        }) {
-            return result
-        }
-        else {
-            // Just send the message
-            COWrapper.handleMessage(with: document, message: body)
-        }
 
-        return (nil, nil)
+        return nil
     }
 
     /**
