@@ -9,7 +9,6 @@
 
 #include <sal/config.h>
 
-#include <COKit/COKit.hxx>
 #include <openuriexternally.hxx>
 #include <rtl/ustring.hxx>
 #include <sfx2/viewsh.hxx>
@@ -17,7 +16,7 @@
 void sfx2::openUriExternally(const OUString& sURI)
 {
     if (SfxViewShell* pViewShell = SfxViewShell::Current())
-        pViewShell->viewCallback(COKitCallbackType::HYPERLINK_CLICKED, sURI.toUtf8());
+        pViewShell->sendHyperlinkClicked(sURI);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

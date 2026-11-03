@@ -5160,6 +5160,21 @@ void SfxViewShell::viewCallback(COKitCallbackType eType, const OString& pPayload
             << kitCallbackTypeToString(eType) << ": [" << pPayload << ']');
 }
 
+void SfxViewShell::sendHyperlinkClicked(const OUString& rURL, const OString& rPayload) const
+{
+    if (INetURLObject(rURL).IsExoticProtocol())
+    {
+        SAL_WARN("sfx.view", "SfxViewShell::sendHyperlinkClicked ignoring: " << rURL);
+        return;
+    }
+    viewCallback(COKitCallbackType::HYPERLINK_CLICKED, rPayload);
+}
+
+void SfxViewShell::sendHyperlinkClicked(const OUString& rURL) const
+{
+    sendHyperlinkClicked(rURL, rURL.toUtf8());
+}
+
 void SfxViewShell::viewUpdatedCallback(COKitCallbackType eType) const
 {
     if (ignoreCOKitViewCallback(eType, pImpl.get()))

@@ -16,6 +16,7 @@
 #include <svx/svxids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
 #include <vcl/jsdialog/executor.hxx>
 #include <vcl/scheduler.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
@@ -29,6 +30,8 @@
 #include <editeng/editobj.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/outliner.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/section.hxx>
 #include <editeng/lspcitem.hxx>
@@ -2367,6 +2370,38 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShowPageKeepsWindowCursor)
     // Without the fix in place, the window of the second view showed the cursor of the outliner
     // view that the first view's text edit deletes when it ends.
     CPPUNIT_ASSERT_EQUAL(pCursor2, pWindow2->GetCursor());
+}
+
+/// Puts a link to rURL at the cursor of the text being edited, with the cursor just after it.
+static void insertLinkAtCursor(SdrView* pView, const OUString& rURL)
+{
+    OutlinerView* pOutlinerView = pView->GetTextEditOutlinerView();
+    CPPUNIT_ASSERT(pOutlinerView);
+    pOutlinerView->InsertField(
+        SvxFieldItem(SvxURLField(rURL, u"link"_ustr, SvxURLFormat::Repr), EE_FEATURE_FIELD));
+    CPPUNIT_ASSERT(pOutlinerView->GetFieldAtSelection(/*AlsoCheckBeforeCursor=*/true));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testOpenHyperlinkOnlyOrdinaryProtocols)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("2slides.odp");
+    SdTestViewCallback aView;
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    SdrObject* pTitle = pViewShell->GetActualPage()->GetObj(0);
+    pView->MarkObj(pTitle, pView->GetSdrPageView());
+    pView->SdrBeginTextEdit(pTitle);
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+
+    // A link to a dispatch command is not passed to the client.
+    insertLinkAtCursor(pView, u".uno:About"_ustr);
+    pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OPEN_HYPERLINK, SfxCallMode::SYNCHRON);
+    CPPUNIT_ASSERT(aView.m_aHyperlinkClicked.isEmpty());
+
+    // A web link is.
+    insertLinkAtCursor(pView, u"https://www.example.com/"_ustr);
+    pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OPEN_HYPERLINK, SfxCallMode::SYNCHRON);
+    CPPUNIT_ASSERT_EQUAL("https://www.example.com/"_ostr, aView.m_aHyperlinkClicked);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

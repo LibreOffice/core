@@ -97,6 +97,8 @@ public:
     boost::property_tree::ptree m_aA11yFocusedParagraph;
     /// How many times this view was told that the linked pages or sections changed.
     int m_nSlideLinksChanged = 0;
+    /// The last clicked hyperlink this view was sent.
+    OString m_aHyperlinkClicked;
     TestKitCallbackWrapper m_callbackWrapper;
     bool invalidatedAll;
     int editModeOfInvalidation;

@@ -393,6 +393,11 @@ void SdTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
             m_aCommandResults.push_back(aTree);
         }
         break;
+        case COKitCallbackType::HYPERLINK_CLICKED:
+        {
+            m_aHyperlinkClicked = OString(pPayload);
+        }
+        break;
         case COKitCallbackType::A11Y_FOCUS_CHANGED:
         {
             m_aA11yFocusedParagraph.clear();

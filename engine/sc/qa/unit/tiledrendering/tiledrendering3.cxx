@@ -1836,6 +1836,22 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testOpenURL)
     CPPUNIT_ASSERT(!aView2.m_aHyperlinkClicked.isEmpty());
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testOpenURLOnlyOrdinaryProtocols)
+{
+    createDoc("empty.ods");
+    ScTestViewCallback aView;
+
+    // A link to a dispatch command is not passed to the client.
+    ScGlobal::OpenURL(u".uno:About"_ustr, u""_ustr, /*bIgnoreSettings=*/true);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView.m_aHyperlinkClicked.isEmpty());
+
+    // A web link is.
+    ScGlobal::OpenURL(u"https://www.example.com/"_ustr, u""_ustr, /*bIgnoreSettings=*/true);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL("https://www.example.com/"_ostr, aView.m_aHyperlinkClicked);
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateForSplitPanes)
 {
     comphelper::COKit::setCompatFlag(comphelper::COKit::Compat::scPrintTwipsMsgs);

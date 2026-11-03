@@ -61,7 +61,6 @@
 #include <svx/diagram/DiagramHelper_svx.hxx>
 #include <svx/annotation/ObjectAnnotationData.hxx>
 
-#include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
 #include <svl/cryptosign.hxx>
 
@@ -366,7 +365,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 if (comphelper::COKit::isActive())
                 {
                     SfxViewShell& rSfxViewShell = mrViewShell.GetViewShellBase();
-                    rSfxViewShell.viewCallback(COKitCallbackType::HYPERLINK_CLICKED, aVEvt.mpURLField->GetURL().toUtf8());
+                    rSfxViewShell.sendHyperlinkClicked(aVEvt.mpURLField->GetURL());
                     return true;
                 }
 
@@ -1463,6 +1462,13 @@ bool FuSelection::HandleImageMapClick(const SdrObject* pObj, const Point& rPos)
             {
                 // Jump to Document
                 mpWindow->ReleaseMouse();
+
+                if (comphelper::COKit::isActive() && !pIMapObj->GetURL().startsWith("#"))
+                {
+                    mrViewShell.GetViewShellBase().sendHyperlinkClicked(pIMapObj->GetURL());
+                    return true;
+                }
+
                 SfxStringItem aStrItem(SID_FILE_NAME, pIMapObj->GetURL());
                 SfxStringItem aReferer(SID_REFERER, mpDocSh->GetMedium()->GetName());
                 SfxViewFrame* pFrame = mrViewShell.GetViewFrame();

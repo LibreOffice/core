@@ -36,6 +36,7 @@
 #include <o3tl/string_view.hxx>
 
 #include <DrawViewShell.hxx>
+#include <ViewShellBase.hxx>
 #include <GraphicDocShell.hxx>
 #include <ViewShell.hxx>
 #include <anminfo.hxx>
@@ -44,6 +45,7 @@
 #include <pgjump.hxx>
 
 #include <com/sun/star/media/XPlayer.hpp>
+#include <comphelper/kit.hxx>
 
 using namespace css;
 using namespace ::cpo;
@@ -100,7 +102,13 @@ void FuExecuteInteraction::DoExecute(SfxRequest&)
         {
             OUString sBookmark(pInfo->GetBookmark());
             // Jump to document
-            if (!sBookmark.isEmpty())
+            if (sBookmark.isEmpty())
+                break;
+            if (comphelper::COKit::isActive() && !sBookmark.startsWith("#"))
+            {
+                mrViewShell.GetViewShellBase().sendHyperlinkClicked(sBookmark);
+            }
+            else
             {
                 SfxStringItem aReferer(SID_REFERER, mpDocSh->GetMedium()->GetName());
                 SfxStringItem aStrItem(SID_FILE_NAME, sBookmark);

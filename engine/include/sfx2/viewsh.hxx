@@ -454,6 +454,10 @@ public:
     /// Invokes the registered callback, if there are any.
     virtual void viewCallback(COKitCallbackType eType, const OString& pPayload) const override;
     virtual void viewCallbackWithViewId(COKitCallbackType eType, const OString& pPayload, int nViewId) const override;
+    /// Sends rPayload as a clicked hyperlink, unless rURL has an exotic protocol.
+    void sendHyperlinkClicked(const OUString& rURL, const OString& rPayload) const;
+    /// Sends rURL as a clicked hyperlink, unless it has an exotic protocol.
+    void sendHyperlinkClicked(const OUString& rURL) const;
     virtual void viewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode) const override;
     virtual void viewUpdatedCallback(COKitCallbackType eType) const override;
     virtual void viewUpdatedCallbackPerViewId(COKitCallbackType eType, int nViewId, int nSourceViewId) const override;

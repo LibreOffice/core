@@ -56,7 +56,6 @@
 
 #include <memory>
 
-#include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
 #include <sfx2/event.hxx>
 #include <sal/log.hxx>
@@ -630,16 +629,16 @@ static bool LoadURL(const SfxViewShell& rView, const OUString& rURL, LoadUrlFlag
     SfxObjectShell* pDShell = rViewFrame.GetObjectShell();
     OSL_ENSURE( pDShell, "No DocShell?!");
 
-    if (!SfxObjectShell::AllowedLinkProtocolFromDocument(rURL, pDShell, rViewFrame.GetFrameWeld()))
-        return false;
-
     // We are doing tiledRendering, let the client handles the URL loading,
     // unless we are jumping to a TOC mark.
     if (comphelper::COKit::isActive() && !rURL.startsWith("#"))
     {
-        rView.viewCallback(COKitCallbackType::HYPERLINK_CLICKED, rURL.toUtf8());
+        rView.sendHyperlinkClicked(rURL);
         return true;
     }
+
+    if (!SfxObjectShell::AllowedLinkProtocolFromDocument(rURL, pDShell, rViewFrame.GetFrameWeld()))
+        return false;
 
     OUString sTargetFrame(rTargetFrameName);
     if (sTargetFrame.isEmpty() && pDShell)

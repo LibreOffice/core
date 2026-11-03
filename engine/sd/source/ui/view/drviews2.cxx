@@ -4380,7 +4380,13 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 const std::optional<SvxFieldItem> oFieldItem
                     = pOutView->GetFieldAtSelection(/*AlsoCheckBeforeCursor=*/true);
                 const SvxFieldData* pField = oFieldItem ? oFieldItem->GetField() : nullptr;
-                if( auto pURLField = dynamic_cast< const SvxURLField *>( pField ) )
+                if (auto pURLField = dynamic_cast<const SvxURLField*>(pField);
+                    pURLField && comphelper::COKit::isActive()
+                    && !pURLField->GetURL().startsWith("#"))
+                {
+                    GetViewShellBase().sendHyperlinkClicked(pURLField->GetURL());
+                }
+                else if( pURLField )
                 {
                     SfxStringItem aUrl( SID_FILE_NAME, pURLField->GetURL() );
                     SfxStringItem aTarget( SID_TARGETNAME, pURLField->GetTargetFrame() );

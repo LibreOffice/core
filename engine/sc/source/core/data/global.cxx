@@ -890,6 +890,13 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget, bool bIgno
     if (!pViewFrm)
         return;
 
+    if (comphelper::COKit::isActive() && !rURL.startsWith("#"))
+    {
+        if (SfxViewShell* pViewShell = pViewFrm->GetViewShell())
+            pViewShell->sendHyperlinkClicked(rURL);
+        return;
+    }
+
     OUString aUrlName( rURL );
     SfxViewFrame* pFrame = nullptr;
     SfxObjectShell* pObjShell = nullptr;

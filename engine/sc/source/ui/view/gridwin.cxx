@@ -2764,7 +2764,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                     int mouseY = aPos.Y() / fPPTX;
                     OString aMsg(aUrl.toUtf8() + " coordinates: " + aCursor + ", "
                                  + OString::number(mouseX) + ", " + OString::number(mouseY));
-                    pViewShell->viewCallback(COKitCallbackType::HYPERLINK_CLICKED, aMsg);
+                    pViewShell->sendHyperlinkClicked(aUrl, aMsg);
                 } else
                     ScGlobal::OpenURL(aUrl, aTarget);
             }
@@ -2892,7 +2892,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                          + pViewShell->GetViewData().describeCellCursorAt(nPosX, nPosY) + ", "
                          + OString::number(aPos.X() / pViewShell->GetViewData().GetPPTX()) + ", "
                          + OString::number(aPos.Y() / pViewShell->GetViewData().GetPPTY()));
-            pViewShell->viewCallback(COKitCallbackType::HYPERLINK_CLICKED, aMsg);
+            pViewShell->sendHyperlinkClicked(aUrl, aMsg);
         }
     }
 

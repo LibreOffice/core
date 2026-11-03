@@ -49,7 +49,6 @@
 #include <svx/svdetc.hxx>
 #include <editeng/editview.hxx>
 #include <comphelper/kit.hxx>
-#include <COKit/COKit.hxx>
 
 #include <sdresid.hxx>
 #include <app.hrc>
@@ -600,8 +599,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
             const std::optional<SvxFieldItem> oFieldItem = pOLV->GetEditView().GetField(aPnt);
             const SvxFieldData* pField = oFieldItem ? oFieldItem->GetField() : nullptr;
             if (auto pURLField = dynamic_cast<const SvxURLField*>(pField))
-                pViewShell->viewCallback(COKitCallbackType::HYPERLINK_CLICKED,
-                                         pURLField->GetURL().toUtf8());
+                pViewShell->sendHyperlinkClicked(pURLField->GetURL());
         }
     }
 
