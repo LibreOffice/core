@@ -113,11 +113,13 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
     }
 
     // WebKit fills in frameInfo, so a page cannot pass itself off as another frame.
+    private func isEditorFrame(_ frameInfo: WKFrameInfo) -> Bool {
+        return !frameInfo.isMainFrame && frameInfo.request.url == editorFormUrl
+    }
+
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         let frameInfo = message.frameInfo
-        let isEditorFrame = !frameInfo.isMainFrame && frameInfo.request.url == editorFormUrl
-
-        if !isEditorFrame {
+        if !isEditorFrame(frameInfo) {
             COWrapper.LOG_TRC("A frame other than the editor frame loaded")
             return
         }
