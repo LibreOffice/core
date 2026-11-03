@@ -1448,14 +1448,22 @@ void SwHiddenTextField::Evaluate(SwDoc& rDoc)
             OUString sDBName( GetDBName( sTmpName, rDoc ));
             OUString sDataSource(sDBName.getToken(0, DB_DELIM, nIdx));
             OUString sDataTableOrQuery(sDBName.getToken(0, DB_DELIM, nIdx));
-            if( pMgr->IsInMerge() && !sDBName.isEmpty() &&
+            if( !sDBName.isEmpty() &&
                 pMgr->IsDataSourceOpen( sDataSource,
-                                            sDataTableOrQuery, false))
+                                        sDataTableOrQuery, false))
             {
-                double fNumber;
-                pMgr->GetMergeColumnCnt(GetColumnName( sTmpName ),
-                    GetLanguage(), m_aContent, &fNumber );
-                m_bValid = true;
+                const sal_uInt32 nRecordId =
+                    pMgr->GetSelectedRecordId(sDataSource, sDataTableOrQuery);
+                // 0xffffffff = sentinel value from:
+                // SwDBManager::GetSelectedRecordId(const OUString& rDataSource, const OUString& rTableOrQuery, sal_Int32 nCommandType)
+                if (nRecordId != 0xffffffff)
+                {
+                    double fNumber;
+                    m_bValid = pMgr->GetColumnCnt(
+                        sDataSource, sDataTableOrQuery,
+                        GetColumnName(sTmpName), nRecordId,
+                        GetLanguage(), m_aContent, &fNumber);
+                }
             }
         }
 #endif
