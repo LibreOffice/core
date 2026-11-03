@@ -1467,9 +1467,19 @@ Reference< XShape > const & Shape::createAndInsert(
     double fShapeRotateInclCamera = 0.0; // unit rad; same orientation as shape property RotateAngle
     Color aExtrusionColor;
     Scene3DHelper aScene3DHelper;
+    // A WordArt carries its 3D on its text. The Fontwork it becomes is extruded with that 3D when
+    // the shape has none of its own.
+    const Generic3DProperties* p3DProperties = mp3DPropertiesPtr.get();
+    bool bTextExtrusion = bIsCustomShape && !mp3DPropertiesPtr->mnPreset.has_value() && mpTextBody
+                          && !mpTextBody->getTextProperties().msPrst.isEmpty()
+                          && mpTextBody->getTextProperties().msPrst != u"textNoShape"
+                          && mpTextBody->get3DProperties().mnPreset.has_value();
+    if (bTextExtrusion)
+        p3DProperties = &mpTextBody->get3DProperties();
     bool bHas3DEffect = aScene3DHelper.setExtrusionProperties(
-        *mp3DPropertiesPtr, mnRotation, getCustomShapeProperties()->getExtrusionPropertyMap(),
+        *p3DProperties, mnRotation, getCustomShapeProperties()->getExtrusionPropertyMap(),
         fShapeRotateInclCamera, aExtrusionColor, bBlockExtrusion);
+    bTextExtrusion = bTextExtrusion && bHas3DEffect;
     // Currently the other places use unit 1/60000deg and MSO shape rotate orientation.
     sal_Int32 nShapeRotateInclCamera
         = -basegfx::fround(basegfx::rad2deg<60000>(fShapeRotateInclCamera));
@@ -1488,10 +1498,10 @@ Reference< XShape > const & Shape::createAndInsert(
 
     if (bHas3DEffect)
     {
-        aScene3DHelper.setLightingProperties(*mp3DPropertiesPtr, fShapeRotateInclCamera,
+        aScene3DHelper.setLightingProperties(*p3DProperties, fShapeRotateInclCamera,
                                              getCustomShapeProperties()->getExtrusionPropertyMap());
         oox::Scene3DHelper::setMaterialProperties(
-            *mp3DPropertiesPtr, getCustomShapeProperties()->getExtrusionPropertyMap());
+            *p3DProperties, getCustomShapeProperties()->getExtrusionPropertyMap());
     }
 
     if (bIsCroppedGraphic || bIs3DGraphic)
@@ -2549,7 +2559,8 @@ Reference< XShape > const & Shape::createAndInsert(
                 mpCustomShapePropertiesPtr->setMirroredY( true );
             if( getTextBody() )
             {
-                sal_Int32 nTextCameraZRotation = getTextBody()->get3DProperties().maCameraRotation.mnRevolution.value_or(0);
+                // the z-rotation of a camera that extrudes the shape is in the shape's rotation already
+                sal_Int32 nTextCameraZRotation = bTextExtrusion ? 0 : getTextBody()->get3DProperties().maCameraRotation.mnRevolution.value_or(0);
                 mpCustomShapePropertiesPtr->setTextCameraZRotateAngle( nTextCameraZRotation / 60000 );
 
                 // TextPreRotateAngle. Text rotates inside the text area. Might be used for diagram layout 'upr' and 'grav'.

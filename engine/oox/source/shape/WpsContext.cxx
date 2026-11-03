@@ -11,6 +11,7 @@
 #include "WpgContext.hxx"
 #include "WordprocessingCanvasContext.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
@@ -18,6 +19,8 @@
 #include <drawingml/customshapegeometry.hxx>
 #include <drawingml/customshapeproperties.hxx>
 #include <drawingml/fontworkhelpers.hxx>
+#include <drawingml/scene3dcontext.hxx>
+#include <drawingml/scene3dhelper.hxx>
 #include <drawingml/textbody.hxx>
 #include <drawingml/textbodyproperties.hxx>
 #include <oox/drawingml/color.hxx>
@@ -1007,6 +1010,18 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
             }
         }
         break;
+        case XML_scene3d:
+            return new oox::drawingml::SceneText3DPropertiesContext(*this, m_aText3DProperties);
+        case XML_sp3d:
+            if (rAttribs.hasAttribute(XML_extrusionH))
+                m_aText3DProperties.mnExtrusionH = rAttribs.getInteger(XML_extrusionH, 0);
+            if (rAttribs.hasAttribute(XML_contourW))
+                m_aText3DProperties.mnContourW = rAttribs.getInteger(XML_contourW, 0);
+            if (rAttribs.hasAttribute(XML_z))
+                m_aText3DProperties.mnShapeZ = rAttribs.getInteger(XML_z, 0);
+            if (rAttribs.hasAttribute(XML_prstMaterial))
+                m_aText3DProperties.mnMaterial = rAttribs.getToken(XML_prstMaterial, XML_none);
+            return new oox::drawingml::SceneText3DPropertiesContext(*this, m_aText3DProperties);
         case XML_prstTxWarp:
             if (rAttribs.hasAttribute(XML_prst))
             {
@@ -1163,6 +1178,45 @@ void WpsContext::onEndElement()
     {
         lcl_applyUsedTextPropsToAllTextRuns(xNewText, aTextPropVec);
         lcl_applyFrameTextPortions(xNewText, sFrameContent, aPortions);
+    }
+
+    // The 3D of the WordArt extrudes the Fontwork: camera, light rig and material become the
+    // shape's extrusion set, the extrusion colour its secondary fill colour.
+    if (m_aText3DProperties.mnPreset.has_value())
+    {
+        oox::PropertyMap aExtrusionMap;
+        double fRotZ = 0.0;
+        oox::drawingml::Color aExtrusionColor;
+        oox::Scene3DHelper aScene3DHelper;
+        // the rotation of the WordArt is on the created shape, in 1/100 degree counter-clockwise;
+        // the helper takes it as the file writes it, in 1/60000 degree clockwise
+        sal_Int32 nRotateAngle = 0;
+        xShapePropertySet->getPropertyValue(u"RotateAngle"_ustr) >>= nRotateAngle;
+        const sal_Int32 nMSORotation = ((36000 - nRotateAngle) % 36000) * 600;
+        if (aScene3DHelper.setExtrusionProperties(m_aText3DProperties, nMSORotation, aExtrusionMap,
+                                                  fRotZ, aExtrusionColor))
+        {
+            aScene3DHelper.setLightingProperties(m_aText3DProperties, fRotZ, aExtrusionMap);
+            oox::Scene3DHelper::setMaterialProperties(m_aText3DProperties, aExtrusionMap);
+            // the turn of the camera around z is a turn of the shape, as in pptx
+            const sal_Int32 nShapeRotateInclCamera
+                = -basegfx::fround(basegfx::rad2deg<60000>(fRotZ));
+            const sal_Int32 nNewRotateAngle
+                = sal_Int32(oox::drawingml::MSORotateAngleToAPIAngle(nShapeRotateInclCamera));
+            if (nNewRotateAngle != nRotateAngle)
+                xShapePropertySet->setPropertyValue(u"RotateAngle"_ustr,
+                                                    cpo::uno::Any(nNewRotateAngle));
+            comphelper::SequenceAsHashMap aGeometry(
+                xShapePropertySet->getPropertyValue(u"CustomShapeGeometry"_ustr));
+            aGeometry[u"Extrusion"_ustr] <<= aExtrusionMap.makePropertyValueSequence();
+            xShapePropertySet->setPropertyValue(
+                u"CustomShapeGeometry"_ustr,
+                cpo::uno::Any(aGeometry.getAsConstPropertyValueList()));
+            if (aExtrusionColor.isUsed())
+                xShapePropertySet->setPropertyValue(
+                    u"FillColor2"_ustr,
+                    cpo::uno::Any(aExtrusionColor.getColor(getFilter().getGraphicHelper())));
+        }
     }
 
     // Fontwork stretches the text to the given path. So adapt shape size to text is nonsensical.

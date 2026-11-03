@@ -288,9 +288,12 @@ void Scene3DHelper::addExtrusionDepthToMap(const oox::drawingml::Generic3DProper
     // shape inside the scene.
     // The GetExtrusionDepth() method in EnhancedCustomShape3d.cxx expects type double for both.
     sal_Int32 nDepthAmount = r3DProperties.mnExtrusionH.value_or(0); // unit EMU
-    double fDepthAmount = o3tl::convert(nDepthAmount, o3tl::Length::emu, o3tl::Length::mm100);
+    // the fraction of a hundredth of a millimetre is kept, so that the export gives the EMU back
+    double fDepthAmount = o3tl::convert(static_cast<double>(nDepthAmount), o3tl::Length::emu,
+                                        o3tl::Length::mm100);
     sal_Int32 nZPosition = r3DProperties.mnShapeZ.value_or(0); // unit EMU
-    double fZPosition = o3tl::convert(nZPosition, o3tl::Length::emu, o3tl::Length::mm100);
+    double fZPosition = o3tl::convert(static_cast<double>(nZPosition), o3tl::Length::emu,
+                                      o3tl::Length::mm100);
     double fDepthRelPos = 0.0;
     if (nDepthAmount == 0 && nZPosition != 0)
     {

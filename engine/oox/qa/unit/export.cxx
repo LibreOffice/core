@@ -13,6 +13,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
@@ -1463,6 +1464,28 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkArchScaleXWriter)
     }
 }
 
+/// Asserts the extrusion the fontwork-3d fixtures carry: 1 cm deep, metal, turned by 20 and -30.
+void assertExtrusionOfShape(const uno::Reference<beans::XPropertySet>& xShape)
+{
+    comphelper::SequenceAsHashMap aGeometry(xShape->getPropertyValue(u"CustomShapeGeometry"_ustr));
+    comphelper::SequenceAsHashMap aExtrusion(aGeometry[u"Extrusion"_ustr]);
+    CPPUNIT_ASSERT_EQUAL(true, aExtrusion[u"Extrusion"_ustr].get<bool>());
+    CPPUNIT_ASSERT_EQUAL(true, aExtrusion[u"Metal"_ustr].get<bool>());
+    drawing::EnhancedCustomShapeParameterPair aAngle;
+    aExtrusion[u"RotateAngle"_ustr] >>= aAngle;
+    double fX = 0;
+    double fY = 0;
+    aAngle.First.Value >>= fX;
+    aAngle.Second.Value >>= fY;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(20.0, fX, 0.5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-30.0, fY, 0.5);
+    drawing::EnhancedCustomShapeParameterPair aDepth;
+    aExtrusion[u"Depth"_ustr] >>= aDepth;
+    double fDepth = 0;
+    aDepth.First.Value >>= fDepth;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1000.0, fDepth, 1.0);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testExtrusionToScene3d)
 {
     // Given an extruded Fontwork and an extruded rectangle: depth 1 cm (three tenths of it in front
@@ -1490,32 +1513,84 @@ CPPUNIT_TEST_FIXTURE(Test, testExtrusionToScene3d)
     assertXPath(pXmlDoc, sShape + "a:sp3d", "extrusionH", u"360000");
     assertXPath(pXmlDoc, sShape + "a:sp3d", "z", u"108000");
 
-    // and reading the file back gives the rectangle its extrusion
+    // and reading the file back gives the rectangle and the Fontwork their extrusion
     loadFromURL(maTempFile.GetURL());
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
                                              uno::UNO_QUERY_THROW);
-    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(1), uno::UNO_QUERY_THROW);
-    comphelper::SequenceAsHashMap aGeometry(xShape->getPropertyValue(u"CustomShapeGeometry"_ustr));
-    comphelper::SequenceAsHashMap aExtrusion(aGeometry[u"Extrusion"_ustr]);
-    CPPUNIT_ASSERT_EQUAL(true, aExtrusion[u"Extrusion"_ustr].get<bool>());
-    CPPUNIT_ASSERT_EQUAL(true, aExtrusion[u"Metal"_ustr].get<bool>());
-    drawing::EnhancedCustomShapeParameterPair aAngle;
-    aExtrusion[u"RotateAngle"_ustr] >>= aAngle;
-    double fX = 0;
-    double fY = 0;
-    aAngle.First.Value >>= fX;
-    aAngle.Second.Value >>= fY;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(20.0, fX, 0.5);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(-30.0, fY, 0.5);
+    uno::Reference<beans::XPropertySet> xRectangle(xPage->getByIndex(1), uno::UNO_QUERY_THROW);
+    assertExtrusionOfShape(xRectangle);
+    comphelper::SequenceAsHashMap aRectangleGeometry(
+        xRectangle->getPropertyValue(u"CustomShapeGeometry"_ustr));
+    comphelper::SequenceAsHashMap aRectangleExtrusion(aRectangleGeometry[u"Extrusion"_ustr]);
     drawing::EnhancedCustomShapeParameterPair aDepth;
-    aExtrusion[u"Depth"_ustr] >>= aDepth;
-    double fDepth = 0;
-    aDepth.First.Value >>= fDepth;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1000.0, fDepth, 1.0);
+    aRectangleExtrusion[u"Depth"_ustr] >>= aDepth;
     double fFraction = 0;
     aDepth.Second.Value >>= fFraction;
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.3, fFraction, 0.01);
+    uno::Reference<beans::XPropertySet> xFontwork(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    assertExtrusionOfShape(xFontwork);
+    comphelper::SequenceAsHashMap aGeometry(
+        xFontwork->getPropertyValue(u"CustomShapeGeometry"_ustr));
+    comphelper::SequenceAsHashMap aTextPath(aGeometry[u"TextPath"_ustr]);
+    CPPUNIT_ASSERT_EQUAL(true, aTextPath[u"TextPath"_ustr].get<bool>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0000FF),
+                         xFontwork->getPropertyValue(u"FillColor2"_ustr).get<sal_Int32>());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testExtrusionToScene3dWriter)
+{
+    // Given the same extruded Fontwork and rectangle in a Writer document, and a Fontwork turned
+    // by 30 degrees:
+    loadFromFile(u"fontwork-3d.fodt");
+
+    // When saving to DOCX:
+    save(TestFilter::DOCX);
+
+    // Then the WordArt text box gets its 3D in the body properties
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    OString sBody = "//mc:Choice//wp:anchor[wp:docPr/@name='Fontwork3D']//wps:wsp/wps:bodyPr/"_ostr;
+    assertXPath(pXmlDoc, sBody + "a:scene3d/a:camera", "prst", u"legacyObliqueBottomRight");
+    assertXPath(pXmlDoc, sBody + "a:scene3d/a:camera/a:rot", "lat", u"20400000");
+    assertXPath(pXmlDoc, sBody + "a:scene3d/a:camera/a:rot", "lon", u"19800000");
+    assertXPath(pXmlDoc, sBody + "a:scene3d/a:lightRig", "dir", u"tr");
+    assertXPath(pXmlDoc, sBody + "a:sp3d", "extrusionH", u"360000");
+    assertXPath(pXmlDoc, sBody + "a:sp3d", "prstMaterial", u"metal");
+    assertXPath(pXmlDoc, sBody + "a:sp3d/a:extrusionClr/a:srgbClr", "val", u"0000FF");
+    OString sTurned = "//mc:Choice//wp:anchor[wp:docPr/@name='Rotated3D']//wps:wsp/"_ostr;
+    assertXPath(pXmlDoc, sTurned + "wps:spPr/a:xfrm", "rot", u"19800000");
+    assertXPath(pXmlDoc, sTurned + "wps:bodyPr/a:scene3d/a:camera", "prst",
+                u"legacyObliqueBottomRight");
+
+    // and reading the file back gives the Fontwork its extrusion, and the turned one its turn
+    loadFromURL(maTempFile.GetURL());
+    uno::Reference<drawing::XDrawPageSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage = xDoc->getDrawPage();
+    uno::Reference<beans::XPropertySet> xFontwork;
+    uno::Reference<beans::XPropertySet> xTurned;
+    for (sal_Int32 i = 0; i < xPage->getCount(); ++i)
+    {
+        uno::Reference<container::XNamed> xNamed(xPage->getByIndex(i), uno::UNO_QUERY_THROW);
+        if (xNamed->getName() == "Fontwork3D")
+            xFontwork.set(xPage->getByIndex(i), uno::UNO_QUERY_THROW);
+        else if (xNamed->getName() == "Rotated3D")
+            xTurned.set(xPage->getByIndex(i), uno::UNO_QUERY_THROW);
+    }
+    CPPUNIT_ASSERT(xFontwork.is());
+    assertExtrusionOfShape(xFontwork);
+    CPPUNIT_ASSERT(xTurned.is());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3000),
+                         xTurned->getPropertyValue(u"RotateAngle"_ustr).get<sal_Int32>());
+    comphelper::SequenceAsHashMap aTurnedGeometry(
+        xTurned->getPropertyValue(u"CustomShapeGeometry"_ustr));
+    comphelper::SequenceAsHashMap aTurnedExtrusion(aTurnedGeometry[u"Extrusion"_ustr]);
+    CPPUNIT_ASSERT_EQUAL(true, aTurnedExtrusion[u"Extrusion"_ustr].get<bool>());
+    comphelper::SequenceAsHashMap aGeometry(
+        xFontwork->getPropertyValue(u"CustomShapeGeometry"_ustr));
+    comphelper::SequenceAsHashMap aTextPath(aGeometry[u"TextPath"_ustr]);
+    CPPUNIT_ASSERT_EQUAL(true, aTextPath[u"TextPath"_ustr].get<bool>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0000FF),
+                         xFontwork->getPropertyValue(u"FillColor2"_ustr).get<sal_Int32>());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFontworkDistance)

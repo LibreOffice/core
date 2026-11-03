@@ -601,7 +601,8 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_cropped_image)
 
     // Check extrusion depth and color
     aExtrusionPropMap.getValue(u"Depth"_ustr) >>= aParaPair;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(212.0, aParaPair.First.Value.get<double>(), 1E-12);
+    // 76200 EMU, the fraction of a hundredth of a millimetre kept
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(211.6667, aParaPair.First.Value.get<double>(), 0.001);
     Color nColor;
     xShapeProps->getPropertyValue(UNO_NAME_FILLCOLOR_2) >>= nColor;
     CPPUNIT_ASSERT_EQUAL(Color(0x00b050), nColor);

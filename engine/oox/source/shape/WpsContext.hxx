@@ -13,6 +13,7 @@
 #include <oox/core/contexthandler2.hxx>
 #include <oox/drawingml/shapecontext.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
+#include <drawingml/shape3dproperties.hxx>
 
 namespace com::sun::star::drawing
 {
@@ -41,6 +42,8 @@ private:
     /// The fromWordArt attribute of the body properties: the text of a legacy WordArt is
     /// stretched to the shape, not scaled.
     bool m_bFromWordArt = false;
+    /// the 3D of the text of a WordArt, from the body properties
+    oox::drawingml::Text3DProperties m_aText3DProperties;
 };
 }
 
