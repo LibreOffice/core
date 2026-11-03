@@ -90,7 +90,7 @@
     <property name="step-increment">10</property>
     <property name="page-increment">10</property>
   </object>
-  <!-- n-columns=2 n-rows=3 -->
+  <!-- n-columns=2 n-rows=4 -->
   <object class="GtkGrid" id="TextFlowPage">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -105,7 +105,7 @@
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
-          <!-- n-columns=2 n-rows=10 -->
+          <!-- n-columns=2 n-rows=11 -->
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -416,9 +416,6 @@
               <object class="GtkGrid" id="gridSlider">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="margin-start">0</property>
-                <property name="margin-top">0</property>
-                <property name="row-spacing">0</property>
                 <property name="column-spacing">3</property>
                 <child>
                   <object class="GtkLabel" id="labelBetterSpacing">
@@ -428,6 +425,9 @@
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">hyphenslider</property>
                     <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="scale" value="0.9"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -460,6 +460,9 @@
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">hyphenslider</property>
                     <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="scale" value="0.9"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -1144,6 +1147,12 @@
         <property name="left-attach">1</property>
         <property name="top-attach">1</property>
       </packing>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="TextFlowPage-atkobject">

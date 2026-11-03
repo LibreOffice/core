@@ -104,6 +104,9 @@
             <property name="justify">center</property>
             <property name="wrap">True</property>
             <property name="yalign">0.5</property>
+            <attributes>
+              <attribute name="scale" value="0.9"/>
+            </attributes>
           </object>
           <packing>
             <property name="expand">False</property>
