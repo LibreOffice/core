@@ -36,8 +36,7 @@
                 android:layout_height="wrap_content"
                 android:elevation="3dp"
                 app:theme="@style/LibreOfficeTheme.Base"
-                app:popupTheme="@style/LibreOfficeTheme.Base"
-                app:layout_scrollFlags="enterAlways|scroll" />
+                app:popupTheme="@style/LibreOfficeTheme.Base" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
