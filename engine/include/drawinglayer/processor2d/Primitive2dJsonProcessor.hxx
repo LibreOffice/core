@@ -85,6 +85,19 @@ public:
         : mrWriter(rWriter)
     {
     }
+    virtual ~Primitive2dJsonProcessor();
+
+    /// What a matrix maps, which decides which of its values are positions.
+    enum class MatrixKind
+    {
+        /// The glyphs of a text portion. Only the translation is a position.
+        Glyphs,
+        /// The unit square onto an image. Its corners are positions.
+        Image,
+        /// The space of the children of a transformation onto its parent. The scale factor
+        /// applies to the translation only.
+        Children,
+    };
 
     /// Set a scale factor applied to all coordinates for unit conversion.
     void setScaleFactor(double fScale) { mfScaleFactor = fScale; }
@@ -136,12 +149,40 @@ public:
         maExternalPrimitiveWriter = std::move(aWriter);
     }
 
+    /// Name the fill right under the text of the primitive being written by the external writer,
+    /// which its text portions are written with, as inside a text block.
+    void setChildTextSurface(const std::optional<Color>& roSurface, double fTransparency = 0.0)
+    {
+        moChildTextSurface = roSurface;
+        mfChildTextSurfaceTransparency = fTransparency;
+        mbChildTextSurfaceSet = true;
+    }
+
     /// Write text portions compact. A portion names its font attributes in the table by id as
     /// "style". Text that is not rotated, sheared or stretched is placed by "x" and "y" in whole
     /// units. A window into the text that shows all of it is left out.
     void setTextStyles(TextStyleTable* pTable) { mpTextStyles = pTable; }
     /// The ids of the styles that the portions written so far name.
     const std::set<sal_Int32>& getUsedTextStyles() const { return maUsedTextStyles; }
+
+protected:
+    tools::JsonWriter& getWriter() { return mrWriter; }
+
+    /** Everything written as a position in the coordinates of the content goes through these.
+        They write plain numbers. A subclass can write positions relative to something else, the
+        way Calc writes them relative to the cells of a sheet. Values arrive scaled, except the
+        matrix, whose kind decides what the scale factor applies to.
+     */
+    virtual void putPosition(std::string_view sName, double fValue, bool bVertical);
+    /// The origin of a compact text portion, in whole units.
+    virtual void putTextOrigin(double fX, double fY);
+    virtual void putRange(std::string_view sName, const basegfx::B2DRange& rRange, double fScale);
+    virtual void putPath(std::string_view sName, const basegfx::B2DPolyPolygon& rPolyPolygon);
+    virtual void putMatrix(std::string_view sName, const basegfx::B2DHomMatrix& rMatrix,
+                           MatrixKind eKind);
+    /// Before and after the children of a transformation, which rTransform maps into the parent.
+    virtual void beginChildren(const basegfx::B2DHomMatrix& rTransform);
+    virtual void endChildren();
 
 private:
     void processPrimitive(const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive);
@@ -200,6 +241,10 @@ private:
     /// inside one that sits on whatever the page shows there.
     std::optional<Color> moTextSurface;
     double mfTextSurfaceTransparency = 0.0;
+    /// The surface the external writer named for the children of the primitive it wrote.
+    std::optional<Color> moChildTextSurface;
+    double mfChildTextSurfaceTransparency = 0.0;
+    bool mbChildTextSurfaceSet = false;
     ExternalPrimitiveWriter maExternalPrimitiveWriter;
     TextStyleTable* mpTextStyles = nullptr;
     std::set<sal_Int32> maUsedTextStyles;
