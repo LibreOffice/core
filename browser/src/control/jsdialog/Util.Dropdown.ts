@@ -59,6 +59,18 @@ function _createHeader(id: string, text: string): WidgetJSON {
 	} as ContainerWidgetJSON;
 }
 
+// A restricted user does not see an entry whose command is blocked, and a locked user sees it
+// locked.
+function _isRestrictedEntry(entry: MenuDefinition): boolean {
+	const map = window.L.Map.THIS;
+	return !!entry.uno && map.isRestrictedUser() && map.isRestrictedItem(entry);
+}
+
+function _isLockedEntry(entry: MenuDefinition): boolean {
+	const map = window.L.Map.THIS;
+	return !!entry.uno && map.isLockedUser() && map.isLockedItem(entry);
+}
+
 JSDialog.CreateDropdownEntriesId = function (id: string) {
 	return id + '-entries';
 };
@@ -217,7 +229,9 @@ JSDialog.OpenDropdown = function (
 			case 'action':
 			case 'menu':
 			default: {
+				if (_isRestrictedEntry(entries[i])) break;
 				const isEnabled = entries[i].isEnabled;
+				const locked = _isLockedEntry(entries[i]);
 				entry = {
 					id: id + '-entry-' + i,
 					type: 'comboboxentry',
@@ -236,7 +250,9 @@ JSDialog.OpenDropdown = function (
 							? true
 							: entries[i].selected,
 					hasSubMenu: !!entries[i].items,
-					class: entries[i].class,
+					class: locked
+						? [entries[i].class, 'locking-disabled'].filter(Boolean).join(' ')
+						: entries[i].class,
 				} as ComboBoxEntry;
 				if ((entry as ComboBoxEntry).selected) initialSelectedId = entry.id;
 				if (
@@ -352,6 +368,10 @@ JSDialog.OpenDropdown = function (
 						if (focusables && focusables.length) focusables[0].focus();
 					});
 
+					return;
+				} else if (eventType === 'selected' && entry && _isLockedEntry(entry)) {
+					JSDialog.CloseAllDropdowns();
+					window.L.Map.THIS.openUnlockPopup(entry.uno);
 					return;
 				} else if (eventType === 'selected' && entry && entry.uno) {
 					if (earlyCallbackCall && innerCallback) {
