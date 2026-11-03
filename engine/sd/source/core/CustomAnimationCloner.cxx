@@ -33,6 +33,7 @@
 #include <map>
 
 #include <tools/debug.hxx>
+#include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <animations/animationnodehelper.hxx>
 

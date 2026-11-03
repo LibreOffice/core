@@ -19,18 +19,12 @@
 
 #pragma once
 
-#include <o3tl/any.hxx>
-#include <rtl/strbuf.hxx>
-#include <sal/log.hxx>
-#include <tools/helpers.hxx>
-
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Reference.hxx>
 #include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/presentation/ParagraphTarget.hpp>
 
 #include <vector>
 
@@ -106,39 +100,6 @@ namespace anim
             }
         }
         return bVisible;
-    }
-
-    inline void convertTarget(OStringBuffer& aStringBuffer, const cpo::uno::Any& rTarget)
-    {
-        if (!rTarget.hasValue())
-            return;
-
-        cpo::uno::Reference<cpo::uno::XInterface> xRef;
-        if (auto xParagraphTarget = o3tl::tryAccess<css::presentation::ParagraphTarget>(rTarget))
-        {
-            if (xParagraphTarget->Shape.is())
-            {
-                const std::string aIdentifier(GetInterfaceHash(xParagraphTarget->Shape));
-                if (!aIdentifier.empty())
-                {
-                    sal_Int32 nParagraph(xParagraphTarget->Paragraph);
-                    aStringBuffer.append(aIdentifier);
-                    aStringBuffer.append("_");
-                    aStringBuffer.append(nParagraph);
-                }
-            }
-        }
-        else
-        {
-            rTarget >>= xRef;
-            SAL_WARN_IF(!xRef.is(), "animations", "convertTarget(), invalid target type!");
-            if (xRef.is())
-            {
-                const std::string aIdentifier(GetInterfaceHash(xRef));
-                if (!aIdentifier.empty())
-                    aStringBuffer.append(aIdentifier);
-            }
-        }
     }
 }
 

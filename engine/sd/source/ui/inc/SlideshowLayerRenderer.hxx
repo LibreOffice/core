@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <cpo/uno/Any.hxx>
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
 #include <sddllapi.h>
@@ -65,6 +66,11 @@ enum class RenderStage
     Slide = 2,
     TextFields = 3,
 };
+
+/// The name of an animation target in the slideshow information. A shape is named by the unique
+/// id of its object, and a paragraph of its text by that id, an underscore and the position of the
+/// paragraph. Empty when the target is no object.
+SD_DLLPUBLIC OString getAnimationTargetName(const cpo::uno::Any& rTarget);
 
 struct AnimationLayerInfo
 {

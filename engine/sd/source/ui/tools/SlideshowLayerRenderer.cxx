@@ -8,6 +8,7 @@
  */
 
 #include <SlideshowLayerRenderer.hxx>
+#include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdview.hxx>
@@ -27,6 +28,8 @@
 #include <tools/json_writer.hxx>
 #include <editeng/editeng.hxx>
 #include <animations/animationnodehelper.hxx>
+#include <o3tl/any.hxx>
+#include <sal/log.hxx>
 #include <sdpage.hxx>
 #include <drawdoc.hxx>
 #include <unokywds.hxx>
@@ -691,6 +694,24 @@ SdrObject* getObjectForShape(uno::Reference<drawing::XShape> const& xShape)
 
 } // end anonymous namespace
 
+OString getAnimationTargetName(const cpo::uno::Any& rTarget)
+{
+    if (auto pParagraphTarget = o3tl::tryAccess<presentation::ParagraphTarget>(rTarget))
+    {
+        const SdrObject* pObject = SdrObject::getSdrObjectFromXShape(pParagraphTarget->Shape);
+        if (!pObject)
+            return {};
+        return OString::number(pObject->GetUniqueID()) + "_"
+               + OString::number(pParagraphTarget->Paragraph);
+    }
+
+    cpo::uno::Reference<cpo::uno::XInterface> xTarget;
+    rTarget >>= xTarget;
+    const SdrObject* pObject = SdrObject::getSdrObjectFromXShape(xTarget);
+    SAL_WARN_IF(rTarget.hasValue() && !pObject, "sd", "animation target is no object");
+    return pObject ? OString::number(pObject->GetUniqueID()) : OString();
+}
+
 SlideshowLayerRenderer::SlideshowLayerRenderer(SdrPage& rPage, const OString& rSlideHash,
                                                bool bRenderBackground, bool bRenderMasterPage)
     : mrPage(rPage)
@@ -762,9 +783,7 @@ void SlideshowLayerRenderer::resolveEffect(CustomAnimationEffectPtr const& rEffe
     }
     aLayerInfo.moInitiallyVisible = bVisible;
 
-    OStringBuffer aStringBuffer;
-    anim::convertTarget(aStringBuffer, aTargetAny);
-    aLayerInfo.msHash = aStringBuffer.makeStringAndClear();
+    aLayerInfo.msHash = getAnimationTargetName(aTargetAny);
 
     // We have paragraphs
     if (nParagraph >= 0)

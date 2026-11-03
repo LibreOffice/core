@@ -1246,11 +1246,8 @@ void AnimationsExporter::convertTiming(OStringBuffer& sTmp, const Any& rValue)
         {
             if (pEvent->Source.hasValue())
             {
-                OStringBuffer aTriggerBuffer;
                 // hash must not start with a digit or on client it is parsed as a time in seconds
-                aTriggerBuffer.append("id");
-                anim::convertTarget(aTriggerBuffer, pEvent->Source);
-                OString sTriggerHash(aTriggerBuffer.makeStringAndClear());
+                const OString sTriggerHash("id" + getAnimationTargetName(pEvent->Source));
                 sTmp.append(sTriggerHash);
                 sTmp.append('.');
                 appendTrigger(pEvent->Source, sTriggerHash);
@@ -1478,8 +1475,7 @@ void AnimationsExporter::exportContainer(const Reference<XTimeContainer>& xConta
             Any aTemp(xIter->getTarget());
             if (aTemp.hasValue())
             {
-                anim::convertTarget(sTmp, aTemp);
-                mrWriter.put("targetElement", sTmp.makeStringAndClear());
+                mrWriter.put("targetElement", getAnimationTargetName(aTemp));
             }
             sal_Int16 nTemp = xIter->getSubItem();
             if (nTemp)
@@ -1521,10 +1517,9 @@ void AnimationsExporter::exportContainer(const Reference<XTimeContainer>& xConta
 
 void AnimationsExporter::exportCommand(const Reference<XCommand>& xCommand)
 {
-    OStringBuffer sTmp;
-    anim::convertTarget(sTmp, xCommand->getTarget());
-    mrWriter.put("targetElement", sTmp.makeStringAndClear());
+    mrWriter.put("targetElement", getAnimationTargetName(xCommand->getTarget()));
 
+    OStringBuffer sTmp;
     convertEnum(sTmp, xCommand->getCommand(), constCommandToString);
     mrWriter.put("command", sTmp.makeStringAndClear());
 }
@@ -1542,8 +1537,7 @@ void AnimationsExporter::exportAnimate(const Reference<XAnimate>& xAnimate)
         Any aTemp(xAnimate->getTarget());
         if (aTemp.hasValue())
         {
-            anim::convertTarget(sTmp, aTemp);
-            mrWriter.put("targetElement", sTmp.makeStringAndClear());
+            mrWriter.put("targetElement", getAnimationTargetName(aTemp));
             SdrObject* pObject = getTargetObject(aTemp);
             if (pObject)
             {
@@ -7642,9 +7636,8 @@ std::string SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                             auto const& rRectangle = pMediaObject->GetLogicRect();
                             auto aRectangle = o3tl::convert(rRectangle, o3tl::Length::mm100, o3tl::Length::twip);
                             aJsonWriter.put("id", pMediaObject->GetUniqueID());
-                            OStringBuffer aHash;
-                            anim::convertTarget(aHash, Any(pMediaObject->getUnoShape()));
-                            aJsonWriter.put("hash", aHash.makeStringAndClear());
+                            aJsonWriter.put("hash",
+                                            getAnimationTargetName(Any(pMediaObject->getUnoShape())));
                             aJsonWriter.put("url", pMediaObject->getTempURL());
                             const avmedia::MediaItem& rMediaItem = pMediaObject->getMediaProperties();
                             aJsonWriter.put("loop", rMediaItem.isLoop());

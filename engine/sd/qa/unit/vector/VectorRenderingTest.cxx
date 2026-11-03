@@ -17,6 +17,8 @@
 #include <tools/color.hxx>
 #include <tools/degree.hxx>
 
+#include <SlideshowLayerRenderer.hxx>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
@@ -26,6 +28,7 @@
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 
@@ -1822,6 +1825,29 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testObjectEntryCarriesLayerAndPlacehol
     CPPUNIT_ASSERT_EQUAL(sal_Int64(pPlaceholder->GetLayer().get()),
                          aJson.getInt("/objects/2/layer").value_or(-1));
     CPPUNIT_ASSERT_EQUAL(true, aJson.getBool("/objects/2/emptyPlaceholder").value_or(false));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testAnimationTargetNamesTheObjectEntryId)
+{
+    // An animation names its target by the id that the object entry carries, so a client can
+    // find the entry an effect is for.
+    createBlankDoc();
+    addRectangle(tools::Rectangle(Point(5000, 5000), Size(5000, 3000)), Color(0x4472c4), COL_BLACK);
+
+    auto aJson = getVectorPrimitives(u"testObjectId");
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/objects").value_or(0));
+
+    SdrObject* pObject = page(1)->GetObj(0);
+    CPPUNIT_ASSERT(pObject);
+    const sal_Int64 nId = aJson.getInt("/objects/1/id").value_or(-1);
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(pObject->GetUniqueID()), nId);
+    CPPUNIT_ASSERT_EQUAL(OString(OString::number(nId)),
+                         sd::getAnimationTargetName(cpo::uno::Any(pObject->getUnoShape())));
+
+    // A paragraph target names its shape by the same id, with the paragraph after it.
+    CPPUNIT_ASSERT_EQUAL(OString(OString::number(nId) + "_1"),
+                         sd::getAnimationTargetName(cpo::uno::Any(
+                             presentation::ParagraphTarget(pObject->getUnoShape(), 1))));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testAutoColorFollowsPageBackground)
