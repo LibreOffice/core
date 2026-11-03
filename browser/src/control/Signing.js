@@ -16,13 +16,8 @@
 
 window.L.Map.include({
 	onChangeSignStatus: function(signstatus) {
-		// Have a non-empty status text by default, so a signatures -> no signatures
-		// transition updates the status bar.
-		var statusText = _('The document is not signed.');
-		// Most documents don't have signatures, so have no disturbing icon for that case,
-		// also don't have an empty icon, which would get the icon for the matching UNO
-		// command.
-		var statusIcon = ' ';
+		var statusText = '';
+		var statusIcon = '';
 		// This is meant to be in sync with core.git
 		// include/sfx2/signaturestate.hxx, SignatureState.
 		switch (signstatus) {
@@ -55,11 +50,10 @@ window.L.Map.include({
 		}
 
 		if (signstatus === '0') {
-			let signstatusElement = document.querySelector('#signstatus');
-			if (signstatusElement && signstatusElement.classList.contains('hidden')) {
-				// Had no signatures and have no signatures: can skip the update.
-				return;
-			}
+			// No signatures, whether from the start or after the last one was removed.
+			if (app.map.statusBar)
+				app.map.statusBar.showItem('signstatus', false);
+			return;
 		}
 
 		if (statusText) {

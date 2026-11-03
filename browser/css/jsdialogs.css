@@ -649,6 +649,13 @@ td.jsdialog > [id^='table-box']:not(.sidebar) {
 #toolbar-down .menubutton:hover .unoarrow {
 	border-top-color: var(--color-main-text);
 }
+
+#toolbar-down .unoSignature .unobutton:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: -2px;
+	border-radius: var(--border-radius);
+}
+
 /* Tabs */
 
 .ui-tabs-content.jsdialog {

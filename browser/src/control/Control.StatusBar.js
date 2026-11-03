@@ -600,8 +600,10 @@ class StatusBar extends JSDialog.Toolbar {
 	}
 
 	showSigningItem(icon, text) {
+		var name = _UNO('.uno:Signature').replace('...', '');
 		this.builder.updateWidget(this.parentContainer,
-			{type: 'toolitem', id: 'signstatus', command: '.uno:Signature', w2icon: icon, text: text ? text : _UNO('.uno:Signature')});
+			{type: 'toolitem', id: 'signstatus', command: '.uno:Signature', w2icon: icon, text: text ? text : name,
+				aria: {label: text ? name + ': ' + text : name}});
 		JSDialog.RefreshScrollables();
 	}
 
