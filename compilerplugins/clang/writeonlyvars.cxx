@@ -469,10 +469,6 @@ void WriteOnlyVars::run()
         if (loplugin::isSamePathname(fn, SRCDIR "/i18npool/source/localedata/LocaleNode.cxx"))
             return;
 
-        // yynerrs?
-        if (loplugin::isSamePathname(fn, SRCDIR "/hwpfilter/source/grammar.cxx"))
-            return;
-
         for (MyVarInfo const& v : definitionSet)
         {
             bool read = readFromSet.find(v) != readFromSet.end();

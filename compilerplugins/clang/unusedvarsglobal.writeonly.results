@@ -12,8 +12,6 @@ forms/source/inc/frm_strings.hxx:216
     OUStringLiteral<15> PROPERTY_HIGHLIGHT_COLOR
 forms/source/inc/frm_strings.hxx:217
     OUStringLiteral<19> PROPERTY_HIGHLIGHT_TEXT_COLOR
-hwpfilter/source/grammar.cxx:307
-    int yynerrs
 hwpfilter/source/hbox.h:67
     int boxCount
 hwpfilter/source/ksc5601.h:184
