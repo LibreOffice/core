@@ -320,7 +320,7 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 				}
 
 				if (type === 'multimedia') {
-					window.postMobileMessage('insertfile name=' + name + ' type=' + type +
+					window.postMobileMessage('insertfile name=' + encodeURIComponent(name) + ' type=' + type +
 										       ' data=' + window.btoa(strBytes) +
 										       ' width=' + size.width + ' height=' + size.height);
 				} else if (type === 'filepicker') {
@@ -333,7 +333,7 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 										       ' id=' + filePickerRequestId);
 					fileInserter._forgetFilePicker(filePickerRequestId);
 				} else {
-					window.postMobileMessage('insertfile name=' + name + ' type=' + type +
+					window.postMobileMessage('insertfile name=' + encodeURIComponent(name) + ' type=' + type +
 										       ' data=' + window.btoa(strBytes));
 				}
 			};
@@ -352,21 +352,23 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 				if (xmlHttp.readyState === 4) {
 					map.hideBusy();
 					if (xmlHttp.status === 200) {
-						// The server names the file it staged.
+						// The server names the file it staged. The name keeps the user's file
+						// name, which can hold spaces, so it goes URL-encoded into a message.
 						var stagedName = xmlHttp.responseText;
+						var encodedName = encodeURIComponent(stagedName);
 						var sectionName = app.CSections.ContentControl.name;
 						var section;
 						if (sectionContainer.doesSectionExist(sectionName)) {
 							section = sectionContainer.getSectionWithName(sectionName);
 						}
 						if (section && section.sectionProperties.picturePicker && type === 'graphic') {
-							socket.sendMessage('contentcontrolevent type=picture' + ' name=' + stagedName);
+							socket.sendMessage('contentcontrolevent type=picture' + ' name=' + encodedName);
 						} else if (type === 'filepicker') {
 							fileInserter._answerFilePicker(filePickerRequestId, stagedName);
 						} else if (type === 'multimedia') {
-							socket.sendMessage('insertfile name=' + stagedName + ' type=' + type + ' width=' + size.width + ' height=' + size.height);
+							socket.sendMessage('insertfile name=' + encodedName + ' type=' + type + ' width=' + size.width + ' height=' + size.height);
 						} else {
-							socket.sendMessage('insertfile name=' + stagedName + ' type=' + type);
+							socket.sendMessage('insertfile name=' + encodedName + ' type=' + type);
 						}
 					}
 					else if (xmlHttp.status === 404) {

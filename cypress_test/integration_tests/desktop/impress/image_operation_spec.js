@@ -28,6 +28,31 @@ describe(['tagdesktop'], 'Image Operation Tests', function() {
 		desktopHelper.deleteImage();
 	});
 
+	it('Insert an image whose file name has a space', function () {
+		helper.processToIdle(this.win);
+		cy.cGet('#document-container svg g').should('not.exist');
+
+		cy.getFrameWindow().then(function (win) {
+			cy.spy(win.app.socket, 'sendMessage').as('sendMessage');
+		});
+
+		desktopHelper.selectNotebookbarTab('Insert');
+		desktopHelper.getNbItem('InsertGraphic', 'Insert').should('not.have.attr', 'disabled');
+		desktopHelper.getNbIcon('InsertGraphic', 'Insert').click();
+		cy.cGet('#insertgraphic[type=file]').attachFile({
+			filePath: 'desktop/writer/image_to_insert.png',
+			fileName: 'image to insert.png',
+			encoding: 'binary',
+		});
+
+		// The insert command is one name and one type, so the space stays inside the name.
+		cy.get('@sendMessage').should('have.been.calledWithMatch',
+			/^insertfile name=\S*image%20to%20insert\.png type=graphic$/);
+		helper.processToIdle(this.win);
+
+		cy.cGet('#document-container svg g').should('exist');
+	});
+
 	it("Insert multimedia", function () {
 		helper.processToIdle(this.win);
 		desktopHelper.insertVideo();
