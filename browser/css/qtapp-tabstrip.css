@@ -24,7 +24,10 @@ body {
 	app-region: drag;
 }
 [data-title-bar] .tab,
-[data-title-bar] #new-tab {
+[data-title-bar] #new-tab,
+[data-title-bar] #strip::-webkit-scrollbar,
+[data-title-bar] #strip::-webkit-scrollbar-thumb,
+[data-title-bar] #strip::-webkit-scrollbar-track {
 	app-region: no-drag;
 }
 #strip {
@@ -44,6 +47,22 @@ body {
 	/* The + button, 28px wide with a 4px margin on each side, stays at the end of a strip that
 	   scrolls, and covers the tabs under it. */
 	scroll-padding-inline-end: 36px;
+}
+#strip::-webkit-scrollbar {
+	height: 6px;
+}
+#strip::-webkit-scrollbar-track {
+	background: transparent;
+}
+#strip::-webkit-scrollbar-thumb {
+	background: var(--color-border);
+	border-radius: 3px;
+}
+#strip::-webkit-scrollbar-thumb:hover {
+	background: var(--color-text-lighter);
+}
+#strip::-webkit-scrollbar-button {
+	display: none;
 }
 .tab {
 	box-sizing: border-box;
