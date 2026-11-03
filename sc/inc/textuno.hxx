@@ -44,7 +44,7 @@ class ScCellEditSource;
 class ScEditEngineDefaulter;
 class ScFieldEditEngine;
 class ScHeaderFooterTextObj;
-
+class ScShapeObj;
 struct ScHeaderFieldData;
 
 enum class ScHeaderFooterPart{ LEFT, CENTER, RIGHT };
@@ -260,10 +260,10 @@ public:
 class ScDrawTextCursor final : public SvxUnoTextCursor
 {
 private:
-    css::uno::Reference< css::text::XText > xParentText;
+    rtl::Reference< ScShapeObj > mxParentText;
 
 public:
-                            ScDrawTextCursor( css::uno::Reference< css::text::XText > xParent,
+                            ScDrawTextCursor( const rtl::Reference< ScShapeObj >& xParent,
                                             const SvxUnoTextBase& rText );
     virtual                  ~ScDrawTextCursor() noexcept override;
 
