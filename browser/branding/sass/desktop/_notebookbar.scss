@@ -86,9 +86,7 @@ html[data-theme=dark] .sidebar.unotoolbutton.selected {
 	filter: none !important;
 }
 
-.ui-content.unotoolbutton.selected:hover,
-.unotoolbutton:not(.importslides):hover,
-.ui-content.unotoolbutton.selected:not(.has-label):not(.inline):hover,
+.unotoolbutton:not(.importslides):not(.selected):hover,
 #clearFormatting:hover,
 #FormatPaintbrush:hover {
 	border-radius: base.get-cssvar(border-radius) !important;
