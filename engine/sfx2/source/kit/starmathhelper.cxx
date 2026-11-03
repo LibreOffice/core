@@ -256,17 +256,31 @@ bool KitStarMathHelper::postMouseEvent(COKitMouseEventType eType, int nX, int nY
 
 void KitStarMathHelper::PaintTile(VirtualDevice& rDevice, const tools::Rectangle& rTileRect)
 {
+    // the formula shows on its frame, at the scale the in-place client gives it
     const tools::Rectangle aMathRect = GetBoundingBox();
-    if (rTileRect.GetIntersection(aMathRect).IsEmpty())
+    if (rTileRect.GetIntersection(ToDocument(tools::Rectangle(Point(), aMathRect.GetSize())))
+            .IsEmpty())
         return;
 
     vcl::Window* pWidgetWindow = GetWidgetWindow();
     if (!pWidgetWindow)
         return;
 
-    Point aOffset(aMathRect.Left() - rTileRect.Left(), aMathRect.Top() - rTileRect.Top());
+    // the in-place client scales the formula's own area onto its frame, as the office shows it,
+    // so the formula is drawn at that scale, and its origin, in the scaled units, keeps the
+    // upper left corner on the frame's
+    const double fScaleX(mpIPClient && mpIPClient->GetScaleWidth() > 0.0
+                             ? mpIPClient->GetScaleWidth()
+                             : 1.0);
+    const double fScaleY(mpIPClient && mpIPClient->GetScaleHeight() > 0.0
+                             ? mpIPClient->GetScaleHeight()
+                             : 1.0);
+    Point aOffset(std::round((aMathRect.Left() - rTileRect.Left()) / fScaleX),
+                  std::round((aMathRect.Top() - rTileRect.Top()) / fScaleY));
 
     MapMode newMode = rDevice.GetMapMode();
+    newMode.SetScaleX(newMode.GetScaleX() * fScaleX);
+    newMode.SetScaleY(newMode.GetScaleY() * fScaleY);
     newMode.SetOrigin(aOffset);
     rDevice.SetMapMode(newMode); // Push/Pop is done in PaintAllInPlaceOnTile
 
