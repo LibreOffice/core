@@ -981,6 +981,11 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 			if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(ev.code)) {
 				keyEventFn('input', charCode, unoKeyCode);
 			}
+			else if ((ev.code === 'PageUp' || ev.code === 'PageDown') &&
+					this._isShiftOnly(ev) && map.getDocType() === 'spreadsheet') {
+				keyEventFn('input', charCode, unoKeyCode);
+				ev.preventDefault();
+			}
 			else if (key in this._zoomKeys) {
 				const requestedZoom = map.getZoom() + (ev.shiftKey ? 3 : 1) * this._zoomKeys[key];
 				app.zoomControl.zoomTo(requestedZoom, undefined, true);
