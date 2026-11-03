@@ -13,6 +13,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
@@ -191,6 +192,9 @@ private:
     std::unordered_map<OUString, ResolvedFace>* mpFaceByKey = nullptr;
     double mfScaleFactor = 1.0;
     drawinglayer::geometry::ViewInformation2D maViewInformation2D;
+    /// The product of the transform primitives above the primitive being written, so a range
+    /// of it can be given in the twips of the part. Identity at the top of the tree.
+    basegfx::B2DHomMatrix maEnclosingTransformation;
     /// The fill right under the text of the text block being written, and the share of what
     /// lies behind that fill that shows through. The color is empty outside a text block, and
     /// inside one that sits on whatever the page shows there.

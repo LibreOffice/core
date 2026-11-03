@@ -155,6 +155,10 @@
 #include <svx/sxmtpitm.hxx>
 #include <svx/sxmtritm.hxx>
 #include <svx/xlnwtit.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xflclit.hxx>
+#include <svx/xlineit0.hxx>
+#include <svx/xlnclit.hxx>
 #include <svl/eitem.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -3919,6 +3923,7 @@ private:
         auto pObjectNode = rWriter.startStruct();
         rWriter.put("id", sal_Int64(svx::vector::idOf(rObject)));
         rWriter.put("name", rContent.maName);
+        writeProperties(rWriter, rObject);
         // The group the object sits in, 0 for an object directly on the page.
         rWriter.put("parent", sal_Int64(nParentId));
         if (rContent.moLayer)
@@ -3949,6 +3954,27 @@ private:
         }
 
         svx::vector::writeEntryGeometry(rWriter, rContent, *moProcessor);
+    }
+
+    /// The "properties" node of an object: the color of its fill and of its line, as #rrggbb,
+    /// each written only where that style is solid. The node is left out when neither is, and
+    /// for a group, since its members carry their own fill and line.
+    static void writeProperties(tools::JsonWriter& rWriter, const SdrObject& rObject)
+    {
+        if (rObject.getChildrenOfSdrObject())
+            return;
+        const SfxItemSet& rSet = rObject.GetMergedItemSet();
+        const bool bSolidFill = rSet.Get(XATTR_FILLSTYLE).GetValue() == drawing::FillStyle_SOLID;
+        const bool bSolidLine = rSet.Get(XATTR_LINESTYLE).GetValue() == drawing::LineStyle_SOLID;
+        if (!bSolidFill && !bSolidLine)
+            return;
+        auto aProperties = rWriter.startNode("properties");
+        if (bSolidFill)
+            rWriter.put("fillColor",
+                        "#" + rSet.Get(XATTR_FILLCOLOR).GetColorValue().AsRGBHexString());
+        if (bSolidLine)
+            rWriter.put("lineColor",
+                        "#" + rSet.Get(XATTR_LINECOLOR).GetColorValue().AsRGBHexString());
     }
 
     /// An entry that stands for something other than an object on the page, named by a kind

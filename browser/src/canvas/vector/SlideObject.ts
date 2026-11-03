@@ -236,11 +236,24 @@ namespace cool {
 		textTurnsItself?: boolean;
 	}
 
+	/// The style of an object that its primitives are drawn from. Each
+	/// value is present only where the object has that style.
+	export interface SlideObjectProperties {
+		/// The color of the object's fill and of its line, as #rrggbb,
+		/// where the fill and the line are solid. Absent for any other
+		/// style.
+		fillColor?: string;
+		lineColor?: string;
+	}
+
 	/// One drawable object on a slide, carrying its primitive tree.
 	export interface SlideObject {
 		/// Stable identity of the object: the engine's SdrObject unique
 		/// id, unchanged across edits to the same object.
 		id?: number;
+		/// The style of the object. Absent on a group, whose members
+		/// carry their own, and where no style of the object is solid.
+		properties?: SlideObjectProperties;
 		/// The aids that mark out a placeholder: a dashed boundary around
 		/// the area it occupies and, on a master page, the name of the
 		/// area. They are drawn apart from the object's own content.

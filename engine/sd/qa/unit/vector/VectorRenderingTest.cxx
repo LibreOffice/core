@@ -206,6 +206,19 @@ protected:
         return std::nullopt;
     }
 
+    /// Every node under rNode of the given type, in the order the tree holds them.
+    static void collectNodesOfType(const tools::JsonPath& rNode, const OString& rType,
+                                   std::vector<tools::JsonPath>& rFound)
+    {
+        if (rNode.getString("type").value_or(OString()) == rType)
+        {
+            rFound.push_back(rNode);
+            return;
+        }
+        for (const auto& rChild : rNode.tree())
+            collectNodesOfType(rNode.sub(rChild.second), rType, rFound);
+    }
+
     /// True when a node of the type with the given color is anywhere under rNode.
     static bool hasNodeWithColor(const tools::JsonPath& rNode, const OString& rType,
                                  const OString& rColor)
@@ -1848,6 +1861,65 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testAnimationTargetNamesTheObjectEntry
     CPPUNIT_ASSERT_EQUAL(OString(OString::number(nId) + "_1"),
                          sd::getAnimationTargetName(cpo::uno::Any(
                              presentation::ParagraphTarget(pObject->getUnoShape(), 1))));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testObjectEntryCarriesItsSolidColors)
+{
+    // The properties of an object entry name the fill and the line color where they are solid.
+    // A shape that has neither carries no properties.
+    createBlankDoc();
+    addRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4),
+                 Color(0x203864));
+    addTextBox(tools::Rectangle(Point(5000, 1000), Size(3000, 2000)), u"Text"_ustr);
+
+    auto aJson = getVectorPrimitives(u"testSolidColors");
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aJson.getSize("/objects").value_or(0));
+
+    assertJsonPath(aJson, "/objects/1/properties/fillColor", "#4472c4");
+    assertJsonPath(aJson, "/objects/1/properties/lineColor", "#203864");
+    CPPUNIT_ASSERT(!aJson.has("/objects/2/properties"));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testEveryParagraphCarriesItsRectangle)
+{
+    // An effect on one paragraph of a text is expressed about the center of that paragraph,
+    // so each paragraph node names the rectangle it covers, in the twips of its object.
+    createBlankDoc();
+    addTextBox(tools::Rectangle(Point(1000, 1000), Size(8000, 5000)), u"One\nTwo\nThree"_ustr);
+
+    auto aJson = getVectorPrimitives(u"testParagraphBounds");
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/objects").value_or(0));
+
+    std::vector<tools::JsonPath> aParagraphs;
+    collectNodesOfType(aJson, "textHierarchyParagraph"_ostr, aParagraphs);
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aParagraphs.size());
+
+    const double fObjectLeft = aJson.getInt("/objects/1/x").value_or(0);
+    const double fObjectTop = aJson.getInt("/objects/1/y").value_or(0);
+    const double fObjectRight = fObjectLeft + aJson.getInt("/objects/1/width").value_or(0);
+    const double fObjectBottom = fObjectTop + aJson.getInt("/objects/1/height").value_or(0);
+
+    double fPreviousTop = -1.0;
+    for (const tools::JsonPath& rParagraph : aParagraphs)
+    {
+        CPPUNIT_ASSERT_EQUAL(size_t(4), rParagraph.getSize("bounds").value_or(0));
+        const double fLeft = rParagraph.getDouble("bounds/0").value_or(0);
+        const double fTop = rParagraph.getDouble("bounds/1").value_or(0);
+        const double fRight = rParagraph.getDouble("bounds/2").value_or(0);
+        const double fBottom = rParagraph.getDouble("bounds/3").value_or(0);
+        CPPUNIT_ASSERT(fRight > fLeft);
+        CPPUNIT_ASSERT(fBottom > fTop);
+
+        // The paragraph lies inside its object, which shows that both are in the same unit.
+        CPPUNIT_ASSERT(fLeft >= fObjectLeft);
+        CPPUNIT_ASSERT(fRight <= fObjectRight);
+        CPPUNIT_ASSERT(fTop >= fObjectTop);
+        CPPUNIT_ASSERT(fBottom <= fObjectBottom);
+
+        // The paragraphs follow one another down the object, in the order of the text.
+        CPPUNIT_ASSERT(fTop > fPreviousTop);
+        fPreviousTop = fTop;
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testAutoColorFollowsPageBackground)

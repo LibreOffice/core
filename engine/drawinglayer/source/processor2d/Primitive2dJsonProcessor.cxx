@@ -1276,7 +1276,10 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             writeMatrixTranslationScaled("matrix", rPrimitive.getTransformation());
             {
                 auto aChildArray = mrWriter.startArray("children");
+                const basegfx::B2DHomMatrix aEnclosing(maEnclosingTransformation);
+                maEnclosingTransformation = aEnclosing * rPrimitive.getTransformation();
                 decomposeAndWrite(rPrimitive.getChildren());
+                maEnclosingTransformation = aEnclosing;
             }
         }
         break;
@@ -2055,6 +2058,17 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
                         default:
                             break;
                     }
+                }
+                // A paragraph can be an animation target of its own, so it carries the bounds
+                // of the rectangle it covers.
+                if (nId == PRIMITIVE2D_ID_TEXTHIERARCHYPARAGRAPHPRIMITIVE2D)
+                {
+                    // The bounds are in the twips of the part, so a paragraph in a table
+                    // cell takes the transformations above it.
+                    basegfx::B2DRange aRange(rBasePrimitive.getB2DRange(maViewInformation2D));
+                    aRange.transform(maEnclosingTransformation);
+                    if (!aRange.isEmpty())
+                        writeRange("bounds", aRange, mfScaleFactor);
                 }
             }
             else if (maExternalPrimitiveWriter
