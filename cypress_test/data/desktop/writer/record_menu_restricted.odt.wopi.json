@@ -1,0 +1,5 @@
+{
+  "_comment": "this .wopi.json is only used in tests, when setupAndLoadDocument is called with copyCertificates equal to true",
+  "IsUserRestricted": true,
+  "Test_RestrictedCommandList": ".uno:TrackChangesInThisView"
+}

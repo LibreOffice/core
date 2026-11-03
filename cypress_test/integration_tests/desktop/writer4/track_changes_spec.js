@@ -503,3 +503,99 @@ describe(['tagdesktop'], 'Restricted user tracked changes dialog button state', 
 		cy.cGet('#rejectall-button').should('not.have.attr', 'disabled');
 	});
 });
+
+describe(['tagdesktop'], 'Restricted user review mode and record menu', function() {
+	// Each review_mode_restricted* and record_menu_restricted* document has a .wopi.json that
+	// makes the user restricted, with a Test_RestrictedCommandList naming the recording commands
+	// it blocks. Without the .wopi.json the same document opens for an unrestricted user.
+	function loadDocument(fileName, restricted) {
+		cy.viewport(2048, 1080);
+		helper.setupAndLoadDocument('writer/' + fileName,
+			/* isMultiUser */ false, /* copyCertificates copies .wopi.json */ restricted);
+		desktopHelper.switchUIToNotebookbar();
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
+	}
+
+	function assertOpenMenuEntries(expected) {
+		desktopHelper.getOpenMenuEntries().should(function($entries) {
+			var texts = $entries.toArray().map(function(entry) {
+				return entry.textContent.trim();
+			});
+			expect(texts).to.deep.equal(expected);
+		});
+	}
+
+	function openModeMenu(currentMode) {
+		cy.cGet('#viewModeDropdownButton-button').should('have.text', currentMode);
+		cy.cGet('#viewModeDropdownButton-button').click();
+	}
+
+	function openRecordMenu() {
+		desktopHelper.selectNotebookbarTab('Review');
+		desktopHelper.getNbIconArrow('TrackChanges', 'Review').click();
+	}
+
+	it('Review Mode is not offered to a restricted user', function() {
+		loadDocument('review_mode_restricted.odt', true);
+		desktopHelper.selectNotebookbarTab('Review');
+		desktopHelper.getNbItem('AcceptTrackedChanges', 'Review').should('exist');
+		desktopHelper.getNbItem('TrackChanges', 'Review').should('not.exist');
+		openModeMenu('Editing');
+		assertOpenMenuEntries(['Viewing Mode', 'Editing Mode']);
+	});
+
+	it('Review Mode is offered to an unrestricted user', function() {
+		loadDocument('review_mode_restricted.odt', false);
+		openModeMenu('Editing');
+		assertOpenMenuEntries(['Viewing Mode', 'Editing Mode', 'Review Mode']);
+	});
+
+	it('A restricted user in a recording document cannot leave review mode for editing', function() {
+		loadDocument('review_mode_restricted_recording.odt', true);
+		cy.getFrameWindow().then(function(win) {
+			cy.spy(win.app.socket, 'sendMessage').as('sendMessage');
+		});
+		openModeMenu('Reviewing');
+		assertOpenMenuEntries(['Viewing Mode', 'Review Mode']);
+
+		// Viewing mode needs no change to recording, so the restricted user still reaches it
+		// without sending the command that stops recording.
+		cy.cGet('body').contains('.modalpopup [role="option"]', 'Viewing Mode').click();
+		cy.cGet('#viewModeDropdownButton-button').should('have.text', 'Viewing');
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
+		cy.get('@sendMessage').should(function(sendMessage) {
+			var stops = sendMessage.getCalls().filter(function(call) {
+				return String(call.args[0]).indexOf('.uno:TrackChanges?TrackChanges:bool=false') >= 0;
+			});
+			expect(stops).to.have.length(0);
+		});
+	});
+
+	it('An unrestricted user in a recording document can leave review mode for editing', function() {
+		loadDocument('review_mode_restricted_recording.odt', false);
+		openModeMenu('Reviewing');
+		assertOpenMenuEntries(['Viewing Mode', 'Editing Mode', 'Review Mode']);
+		cy.cGet('body').contains('.modalpopup [role="option"]', 'Editing Mode').click();
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
+		cy.cGet('#viewModeDropdownButton-button').should('have.text', 'Editing');
+		helper.waitForMapState('.uno:TrackChanges', 'false');
+	});
+
+	it('The record menu leaves out an entry that is blocked for a restricted user', function() {
+		loadDocument('record_menu_restricted.odt', true);
+		openRecordMenu();
+		assertOpenMenuEntries(['Off', 'All users']);
+	});
+
+	it('The record menu shows every entry to an unrestricted user', function() {
+		loadDocument('record_menu_restricted.odt', false);
+		openRecordMenu();
+		assertOpenMenuEntries(['Off', 'This user', 'All users']);
+	});
+});
