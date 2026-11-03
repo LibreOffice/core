@@ -1169,7 +1169,8 @@ bool ImplKitHandleDragForMouseEvent(vcl::Window* pWindow, NotifyEventType nEvent
         pFrameData->mpMouseDownWin = pWindow;
         pFrameData->mnFirstMouseX = aMousePos.X();
         pFrameData->mnFirstMouseY = aMousePos.Y();
-        pFrameData->mbStartDragCalled = false;
+        // The second press of a double click extends the selection it made, so it starts no drag.
+        pFrameData->mbStartDragCalled = rEvent.GetClicks() > 1;
     }
     else if (nEvent == NotifyEventType::MOUSEBUTTONUP)
     {

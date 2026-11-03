@@ -3666,6 +3666,39 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextEscapeThenMove)
     CPPUNIT_ASSERT_EQUAL(u"Test1Test2"_ustr, getParagraph(1)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextDoubleClickThenDrag)
+{
+    // Given the paragraphs "Aaa", "Bbb" and "Ccc":
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    ThreeParagraphs aPoints = lcl_fillThreeParagraphs(pWrtShell);
+    const Point aAt = aPoints.aInsideSecond;
+    const Point aTo = aPoints.aEndOfThird;
+    auto post = [&](COKitMouseEventType eType, Point aPos, int nCount) {
+        pXTextDocument->postMouseEvent(eType, aPos.getX(), aPos.getY(), nCount, MOUSE_LEFT, 0);
+        Scheduler::ProcessEventsToIdle();
+    };
+
+    // When "Bbb" is double-clicked, and the second press is held and moved to the end of "Ccc":
+    post(COKitMouseEventType::BUTTONDOWN, aAt, 1);
+    post(COKitMouseEventType::BUTTONUP, aAt, 1);
+    post(COKitMouseEventType::BUTTONDOWN, aAt, 2);
+    CPPUNIT_ASSERT_EQUAL(u"Bbb"_ustr, pWrtShell->GetSelText());
+    for (int i = 1; i <= 5; ++i)
+        post(COKitMouseEventType::MOVE,
+             Point(aAt.getX() + (aTo.getX() - aAt.getX()) * i / 5,
+                   aAt.getY() + (aTo.getY() - aAt.getY()) * i / 5),
+             2);
+    post(COKitMouseEventType::BUTTONUP, aTo, 2);
+
+    // Then no text moved, and the selection grows from "Bbb" into "Ccc":
+    CPPUNIT_ASSERT_EQUAL(u"Aaa|Bbb|Ccc|"_ustr, lcl_documentText(mxComponent));
+    SwPaM* pCursor = pWrtShell->GetCursor();
+    CPPUNIT_ASSERT(pCursor->HasMark());
+    CPPUNIT_ASSERT_EQUAL(u"Bbb"_ustr, pCursor->Start()->GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"Ccc"_ustr, pCursor->End()->GetNode().GetTextNode()->GetText());
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextReadOnlyView)
 {
     // Given the paragraphs "Test1" and "Test2", with "Test2" selected in a read-only view:
