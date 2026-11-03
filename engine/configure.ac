@@ -5837,6 +5837,7 @@ WITH_HELPPACKS=
 
 if test -n "$with_help" -a "$with_help" != "no"; then
     AC_MSG_WARN([--with-help is not supported in this branch (helpcontent2 is not part of the monorepo yet); falling back to --without-help])
+    add_warning "--with-help is not supported in this branch (helpcontent2 is not part of the monorepo yet); falling back to --without-help"
     with_help=no
 fi
 
@@ -12942,6 +12943,7 @@ if test -z "$WITH_LANG" -o "$WITH_LANG" = "en-US"; then
     AC_MSG_RESULT([en-US])
     if test -n "$warn_no_translations"; then
         AC_MSG_WARN([--with-lang is not supported without the translations repo checked out at $SRC_ROOT/translations; falling back to en-US])
+        add_warning "--with-lang is not supported without the translations repo checked out at $SRC_ROOT/translations; falling back to en-US"
     fi
 else
     AC_MSG_RESULT([$WITH_LANG])
