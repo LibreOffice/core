@@ -597,8 +597,15 @@ class ShapeLockLabelSection extends HTMLObjectSection {
 
   // The text cursor of the given view is at the given place, in twips. A cursor that moved means
   // that the user of that view typed or moved it.
-  public static onViewCursor(viewId: number, rectangle: Array<number>) {
-    if (rectangle.length !== 4 || rectangle.some((value) => isNaN(value)))
+  public static onViewCursor(
+    viewId: number,
+    rectangle: Array<number> | undefined,
+  ) {
+    if (
+      !rectangle ||
+      rectangle.length !== 4 ||
+      rectangle.some((value) => isNaN(value))
+    )
       return;
 
     const place = rectangle.join(',');
