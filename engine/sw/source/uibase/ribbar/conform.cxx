@@ -61,7 +61,7 @@ bool ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
     if (rMEvt.IsLeft() && !m_pWin->IsDrawAction() &&
         (eHit == SdrHitKind::UnmarkedObject || eHit == SdrHitKind::NONE || m_pSh->IsDrawCreate()))
     {
-        g_bNoInterrupt = true;
+        m_pWin->SetMousePressRunning(true);
         m_pWin->CaptureMouse();
 
         m_pWin->SetPointer(PointerStyle::DrawRect);

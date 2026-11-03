@@ -15,6 +15,7 @@
 
 #include <editeng/editids.hrc>
 #include <editeng/fontitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -4072,6 +4073,59 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextOtherViewDropsIntoDra
     KitHelper::setView(nViewA);
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(u"|Bbb|CAaacc|"_ustr, lcl_documentText(mxComponent));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPressInOtherViewKeepsStateUpdates)
+{
+    // Given "Aaa Bbb" with "Bbb" bold, open in two views, and the second view listening to the
+    // state of .uno:Bold with its cursor at the start:
+    SwXTextDocument* pXTextDocument = createDoc();
+    int nViewA = KitHelper::getCurrentView();
+    SwWrtShell* pWrtShellA = getSwDocShell()->GetWrtShell();
+    pWrtShellA->Insert(u"Aaa Bbb"_ustr);
+    pWrtShellA->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 3, /*bBasicCall=*/false);
+    pWrtShellA->SetAttrItem(SvxWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+    pWrtShellA->SttPara(/*bSelect=*/false);
+    pWrtShellA->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    const Point aInsideFirst = pWrtShellA->GetCharRect().Center();
+    int nViewB = lcl_addView(pXTextDocument);
+    SwTestViewCallback aViewB;
+    SwWrtShell* pWrtShellB = getSwDocShell()->GetWrtShell();
+    pWrtShellB->SttEndDoc(/*bStt=*/true);
+    SfxViewFrame& rFrameB = pWrtShellB->GetView().GetViewFrame();
+    SfxBindings& rBindingsB = rFrameB.GetBindings();
+    {
+        uno::Reference<util::XURLTransformer> xParser(util::URLTransformer::create(m_xContext));
+        util::URL aCommandURL;
+        aCommandURL.Complete = u".uno:Bold"_ustr;
+        xParser->parseStrict(aCommandURL);
+        const SfxSlot* pSlot = SfxSlotPool::GetSlotPool(&rFrameB).GetUnoSlot(aCommandURL.Path);
+        CPPUNIT_ASSERT(pSlot);
+        rBindingsB.GetDispatch(pSlot, aCommandURL, false);
+    }
+    // The bindings report states from their timer, twice so that a dirty message list is covered.
+    Scheduler::ProcessEventsToIdle();
+    rBindingsB.GetTimer().Invoke();
+    rBindingsB.GetTimer().Invoke();
+    aViewB.m_aStateChanges.clear();
+
+    // When the first view presses the button inside "Aaa" and holds it, and the second view
+    // moves its cursor to the end of the bold "Bbb":
+    KitHelper::setView(nViewA);
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aInsideFirst.getX(),
+                                   aInsideFirst.getY(), 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+    KitHelper::setView(nViewB);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_END);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_END);
+    Scheduler::ProcessEventsToIdle();
+    rBindingsB.GetTimer().Invoke();
+    rBindingsB.GetTimer().Invoke();
+
+    // Then the second view learns that its cursor is in bold text while the press still runs:
+    CPPUNIT_ASSERT(!FilterStateChanges(aViewB.m_aStateChanges, ".uno:Bold=true").empty());
+
+    lcl_releaseButton(pXTextDocument, nViewA, aInsideFirst);
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextDropPosition)

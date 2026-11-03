@@ -88,7 +88,7 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
     {
         if (IsCreateObj() && (eHit == SdrHitKind::UnmarkedObject || eHit == SdrHitKind::NONE || m_pSh->IsDrawCreate()))
         {
-            g_bNoInterrupt = true;
+            m_pWin->SetMousePressRunning(true);
             m_pWin->CaptureMouse();
 
             m_aStartPos = m_pWin->PixelToLogic(rMEvt.GetPosPixel());
@@ -110,14 +110,14 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
             if (eHit == SdrHitKind::Handle && aVEvt.mpHdl->GetKind() == SdrHdlKind::BezierWeight)
             {
                 // Drag handle
-                g_bNoInterrupt = true;
+                m_pWin->SetMousePressRunning(true);
                 bReturn = pSdrView->BegDragObj(m_aStartPos, nullptr, aVEvt.mpHdl);
                 m_pWin->SetDrawAction(true);
             }
             else if (eHit == SdrHitKind::MarkedObject && nEditMode == SID_BEZIER_INSERT)
             {
                 // Insert gluepoint
-                g_bNoInterrupt = true;
+                m_pWin->SetMousePressRunning(true);
                 bReturn = pSdrView->BegInsObjPoint(m_aStartPos, rMEvt.IsMod1());
                 m_pWin->SetDrawAction(true);
             }
@@ -162,7 +162,7 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
 
                     if (pHdl)
                     {
-                        g_bNoInterrupt = true;
+                        m_pWin->SetMousePressRunning(true);
                         pSdrView->MarkPoint(*pHdl);
                     }
                 }
@@ -175,12 +175,12 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                     if (pSdrView->HasMarkablePoints())
                         pSdrView->UnmarkAllPoints();
 
-                    g_bNoInterrupt = false;
+                    m_pWin->SetMousePressRunning(false);
                     // Use drag in edtwin
                     return false;
                 }
 
-                g_bNoInterrupt = true;
+                m_pWin->SetMousePressRunning(true);
 
                 if (m_pSh->GetSelectedObjCount())
                 {
@@ -443,7 +443,7 @@ void SwDrawBase::Deactivate()
 
     if (m_pWin->IsMouseCaptured())
         m_pWin->ReleaseMouse();
-    g_bNoInterrupt = false;
+    m_pWin->SetMousePressRunning(false);
 
     if (m_pWin->GetApplyTemplate())
         m_pWin->SetApplyTemplate(SwApplyTemplate());

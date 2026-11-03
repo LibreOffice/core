@@ -28,6 +28,7 @@
 #include <osl/diagnose.h>
 #include <cmdid.h>
 #include <view.hxx>
+#include <edtwin.hxx>
 #include <basesh.hxx>
 #include <wrtsh.hxx>
 #include <frmatr.hxx>
@@ -824,6 +825,8 @@ IMPL_LINK( SwWrtShell, ExecFlyMac, const SwFlyFrameFormat*, pFlyFormat, void )
             m_bLayoutMode = true;
         CallChgLnk();
         ExecMacro( rMac );
+        // The button-up of the press that selected the frame goes to the macro, not to the window.
+        GetView().GetEditWin().SetMousePressRunning(false);
     }
 }
 

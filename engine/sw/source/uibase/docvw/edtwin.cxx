@@ -2930,7 +2930,7 @@ void SwEditWin::ResetMouseButtonDownFlags()
     // So reset the statuses here and release the mouse
     // for the dialog.
     m_bMBPressed = false;
-    g_bNoInterrupt = false;
+    m_bMousePressRunning = false;
     EnterArea();
     ReleaseMouse();
 }
@@ -2958,8 +2958,8 @@ void SwEditWin::ArmFrameDrag(SwWrtShell& rSh, const Point& rDocPos)
 void SwEditWin::MoveCursor( SwWrtShell &rSh, const Point& rDocPos,
                             const bool bOnlyText, bool bLockView )
 {
-    const bool bTmpNoInterrupt = g_bNoInterrupt;
-    g_bNoInterrupt = false;
+    const bool bTmpMousePressRunning = m_bMousePressRunning;
+    m_bMousePressRunning = false;
 
     int nTmpSetCursor = 0;
 
@@ -2983,7 +2983,7 @@ void SwEditWin::MoveCursor( SwWrtShell &rSh, const Point& rDocPos,
     if( bLockView )
         rSh.LockView( false );
 
-    g_bNoInterrupt = bTmpNoInterrupt;
+    m_bMousePressRunning = bTmpMousePressRunning;
 }
 
 void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
@@ -3287,7 +3287,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     {
         bool bOnlyText = false;
         m_bMBPressed = true;
-        g_bNoInterrupt = true;
+        m_bMousePressRunning = true;
         m_nKS_NUMDOWN_Count = 0;
 
         CaptureMouse();
@@ -3319,7 +3319,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 }
                 if (EnterDrawMode(aMEvt, aDocPos))
                 {
-                    g_bNoInterrupt = false;
+                    m_bMousePressRunning = false;
                     return;
                 }
                 else  if ( m_rView.GetDrawFuncPtr() && m_bInsFrame )
@@ -3354,7 +3354,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 }
                                 m_bFrameDrag = true;
                             }
-                            g_bNoInterrupt = false;
+                            m_bMousePressRunning = false;
                             return;
                         }
                     }
@@ -3777,7 +3777,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                  rSh.GetDrawView()->PickHandle( aDocPos ))
                         {
                             m_bFrameDrag = true;
-                            g_bNoInterrupt = false;
+                            m_bMousePressRunning = false;
                             return;
                         }
                     }
@@ -3817,7 +3817,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                  rSh.GetDrawView()->PickHandle( aDocPos ))
                         {
                             m_bFrameDrag = true;
-                            g_bNoInterrupt = false;
+                            m_bMousePressRunning = false;
                             return;
                         }
                         else
@@ -4857,7 +4857,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             rSh.EndDrag( &aDocPt, false );
             m_bFrameDrag = false;
         }
-        g_bNoInterrupt = false;
+        m_bMousePressRunning = false;
         const Point aDocPos( PixelToLogic( rMEvt.GetPosPixel() ) );
         if ((PixelToLogic(m_aStartPos).Y() == (aDocPos.Y())) && (PixelToLogic(m_aStartPos).X() == (aDocPos.X())))//To make sure it was not moved
         {
@@ -4947,7 +4947,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
         else if (rMEvt.GetButtons() == MOUSE_RIGHT && rSh.IsDrawCreate())
             m_rView.GetDrawFuncPtr()->BreakCreate();   // abort drawing
 
-        g_bNoInterrupt = false;
+        m_bMousePressRunning = false;
         if (IsMouseCaptured())
             ReleaseMouse();
         return;
@@ -5109,15 +5109,15 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 if ( !rSh.IsInSelect() && rSh.TestCurrPam( aDocPt ) &&
                      !rSh.GetContentAtPos( aDocPt, aFieldAtPos ) )
                 {
-                    const bool bTmpNoInterrupt = g_bNoInterrupt;
-                    g_bNoInterrupt = false;
+                    const bool bTmpMousePressRunning = m_bMousePressRunning;
+                    m_bMousePressRunning = false;
                     {   // create only temporary move context because otherwise
                         // the query to the content form doesn't work!!!
                         SwMvContext aMvContext( &rSh );
                         const Point aDocPos( PixelToLogic( m_aStartPos ) );
                         m_bValidCursorPos = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPos, false));
                     }
-                    g_bNoInterrupt = bTmpNoInterrupt;
+                    m_bMousePressRunning = bTmpMousePressRunning;
 
                 }
                 else
@@ -5469,7 +5469,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     // Make this call just to be sure. Selecting has finished surely by now.
     // Otherwise the timeout's timer could give problems.
     EnterArea();
-    g_bNoInterrupt = false;
+    m_bMousePressRunning = false;
 
     if (bCallBase)
         Window::MouseButtonUp(rMEvt);
@@ -5817,10 +5817,10 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 CurrShell aCurr( &rSh );
                 if (!m_pApplyTempl)
                 {
-                    if (g_bNoInterrupt)
+                    if (m_bMousePressRunning)
                     {
                         ReleaseMouse();
-                        g_bNoInterrupt = false;
+                        m_bMousePressRunning = false;
                         m_bMBPressed = false;
                     }
                     if ( rCEvt.IsMouseEvent() )

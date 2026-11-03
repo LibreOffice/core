@@ -146,6 +146,8 @@ class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) SwEditWin final : public vcl::DocWind
     bool m_bHoldSelection = false;
     // Whether the last click set the cursor at the clicked position without correcting it.
     bool m_bValidCursorPos = false;
+    // Whether a mouse press in this window runs, from the press until its button comes up.
+    bool m_bMousePressRunning = false;
     // The data of the selection that a drag from this window carries, empty while no drag
     // runs.
     rtl::Reference<SwTransferable> m_xDraggedData;
@@ -276,6 +278,8 @@ public:
     /// Ends the drag that runs from this window, if any, without a drop.
     void CancelDrag();
     bool IsInDrag() const { return m_bIsInDrag; }
+    bool IsMousePressRunning() const { return m_bMousePressRunning; }
+    void SetMousePressRunning(bool bRunning) { m_bMousePressRunning = bRunning; }
     void SetFrameDrag(bool bFrameDrag) { m_bFrameDrag = bFrameDrag; }
     void SetDroppedHyperlink(bool bDroppedHyperlink) { m_bDroppedHyperlink = bDroppedHyperlink; }
 

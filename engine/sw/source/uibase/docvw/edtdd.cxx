@@ -239,7 +239,7 @@ void SwEditWin::DropCleanup()
     SwWrtShell &rSh =  m_rView.GetWrtShell();
 
     // reset statuses
-    g_bNoInterrupt = false;
+    m_bMousePressRunning = false;
     if ( m_bOldIdleSet )
     {
         rSh.GetViewOptions()->SetIdle( m_bOldIdle );

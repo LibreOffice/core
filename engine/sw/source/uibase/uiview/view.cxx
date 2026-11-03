@@ -641,6 +641,16 @@ void SwView::SelectShell()
 // But since we can no longer supply status and we want instead lock
 // the dispatcher.
 
+namespace
+{
+// Whether input to rView runs: a mouse press in the window of rView, or a step of the module that
+// holds updates back for a moment.
+bool lcl_isInputRunning(SwView& rView)
+{
+    return g_bNoInterrupt || rView.GetEditWin().IsMousePressRunning();
+}
+}
+
 IMPL_LINK_NOARG(SwView, AttrChangedNotify, LinkParamNone*, void)
 {
     if ( GetEditWin().IsChainMode() )
@@ -652,16 +662,17 @@ IMPL_LINK_NOARG(SwView, AttrChangedNotify, LinkParamNone*, void)
     }
 
     //Opt: Not if PaintLocked. During unlock a notify will be once more triggered.
-    if( !m_pWrtShell->IsPaintLocked() && !g_bNoInterrupt &&
+    const bool bInputRunning = lcl_isInputRunning(*this);
+    if( !m_pWrtShell->IsPaintLocked() && !bInputRunning &&
         GetDocShell()->IsReadOnly() )
         CheckReadonlyState();
 
-    if( !m_pWrtShell->IsPaintLocked() && !g_bNoInterrupt )
+    if( !m_pWrtShell->IsPaintLocked() && !bInputRunning )
         CheckReadonlySelection();
 
     if( !m_bAttrChgNotified )
     {
-        if (m_pWrtShell->ActionPend() || g_bNoInterrupt ||
+        if (m_pWrtShell->ActionPend() || bInputRunning ||
              GetDispatcher().IsLocked() ||               //do not confuse the SFX
              GetViewFrame().GetBindings().IsInUpdate() )//do not confuse the SFX
         {
@@ -721,7 +732,7 @@ void SwView::CheckUsedTableStyles()
 
 IMPL_LINK_NOARG(SwView, TimeoutHdl, Timer *, void)
 {
-    if (m_pWrtShell->ActionPend() || g_bNoInterrupt)
+    if (m_pWrtShell->ActionPend() || lcl_isInputRunning(*this))
     {
         m_aTimer.Start();
         return;
