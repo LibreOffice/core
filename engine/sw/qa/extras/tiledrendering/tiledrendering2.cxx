@@ -3659,9 +3659,6 @@ int lcl_addView(SwXTextDocument* pXTextDocument)
     return nView;
 }
 
-constexpr std::string_view constDragRefusedText
-    = "Another user is moving text in this document. Try again when they have finished.";
-
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextTwoViews)
 {
     // Given the paragraphs "Aaa", "Bbb" and "Ccc", open in two views:
@@ -3674,42 +3671,24 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextTwoViews)
     SwTestViewCallback aViewB;
     SwWrtShell* pWrtShellB = getSwDocShell()->GetWrtShell();
     // When the first view drags "Ccc" to the end of "Aaa" and holds the button, and the second
-    // view then tries to drag "Bbb" to the same place:
+    // view drags "Bbb" to the same place and drops:
     lcl_selectParagraph(pWrtShellA, getParagraph(3));
     lcl_selectParagraph(pWrtShellB, getParagraph(2));
     lcl_dragText(pXTextDocument, aPoints.aInsideThird, aPoints.aEndOfFirst, 0,
                  /*bRelease=*/false, nViewA);
     lcl_dragText(pXTextDocument, aPoints.aInsideSecond, aPoints.aEndOfFirst, 0,
-                 /*bRelease=*/false, nViewB);
-
-    // Then the second view starts no drag: nothing moved, its selection stays, and only that view
-    // is told why:
-    CPPUNIT_ASSERT_EQUAL(u"Aaa|Bbb|Ccc|"_ustr, lcl_documentText(mxComponent));
-    CPPUNIT_ASSERT_EQUAL(u"Bbb"_ustr, pWrtShellB->GetSelText());
-    CPPUNIT_ASSERT_EQUAL(std::string("dragrefused"), aViewB.m_aTooltipType);
-    CPPUNIT_ASSERT_EQUAL(std::string(constDragRefusedText), aViewB.m_aTooltipText);
-    CPPUNIT_ASSERT_EQUAL(std::string(), aViewA.m_aTooltipType);
-
-    // When the second view releases its button:
-    lcl_releaseButton(pXTextDocument, nViewB, aPoints.aEndOfFirst);
-
-    // Then still nothing moved, and its selection stays:
-    CPPUNIT_ASSERT_EQUAL(u"Aaa|Bbb|Ccc|"_ustr, lcl_documentText(mxComponent));
-    CPPUNIT_ASSERT_EQUAL(u"Bbb"_ustr, pWrtShellB->GetSelText());
-
-    // When the first view drops:
-    lcl_releaseButton(pXTextDocument, nViewA, aPoints.aEndOfFirst);
-
-    // Then its text moved, and no text was lost:
-    CPPUNIT_ASSERT_EQUAL(u"AaaCcc|Bbb||"_ustr, lcl_documentText(mxComponent));
-
-    // When the second view drags "Bbb" to the same place once the first drag is over:
-    lcl_selectParagraph(pWrtShellB, getParagraph(2));
-    lcl_dragText(pXTextDocument, aPoints.aInsideSecond, aPoints.aEndOfFirst, 0,
                  /*bRelease=*/true, nViewB);
 
-    // Then that text moves as well:
-    CPPUNIT_ASSERT_EQUAL(u"AaaBbbCcc|||"_ustr, lcl_documentText(mxComponent));
+    // Then the second drag lands while the first one still runs, and no view gets a tooltip:
+    CPPUNIT_ASSERT_EQUAL(u"AaaBbb||Ccc|"_ustr, lcl_documentText(mxComponent));
+    CPPUNIT_ASSERT_EQUAL(std::string(), aViewA.m_aTooltipType);
+    CPPUNIT_ASSERT_EQUAL(std::string(), aViewB.m_aTooltipType);
+
+    // When the first view drops at the same place:
+    lcl_releaseButton(pXTextDocument, nViewA, aPoints.aEndOfFirst);
+
+    // Then its text lands at the release point, before the text that the second view dropped:
+    CPPUNIT_ASSERT_EQUAL(u"AaaCccBbb|||"_ustr, lcl_documentText(mxComponent));
 }
 
 /// The text of every part of the selection that selects something, each followed by "|".
@@ -3745,15 +3724,44 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextTwoViewsCtrlAtPress)
     lcl_dragText(pXTextDocument, aPoints.aInsideSecond, aPoints.aEndOfFirst, KEY_MOD1,
                  /*bRelease=*/true, nViewB, KEY_MOD1);
 
-    // Then the second view is back in the ordinary selection mode with "Bbb" still selected, as
-    // after a Ctrl click, nothing moved, and it is told why:
+    // Then the copy lands, the second view is back in the ordinary selection mode with one
+    // selection, and the first drag still runs:
     CPPUNIT_ASSERT(!pWrtShellB->IsAddMode());
     CPPUNIT_ASSERT_EQUAL(u"Bbb|"_ustr, lcl_selectedParts(pWrtShellB));
-    CPPUNIT_ASSERT_EQUAL(u"Aaa|Bbb|Ccc|"_ustr, lcl_documentText(mxComponent));
-    CPPUNIT_ASSERT_EQUAL(std::string("dragrefused"), aViewB.m_aTooltipType);
+    CPPUNIT_ASSERT_EQUAL(u"AaaBbb|Bbb|Ccc|"_ustr, lcl_documentText(mxComponent));
+    CPPUNIT_ASSERT_EQUAL(std::string(), aViewB.m_aTooltipType);
 
     lcl_releaseButton(pXTextDocument, nViewA, aPoints.aEndOfFirst);
-    CPPUNIT_ASSERT_EQUAL(u"AaaCcc|Bbb||"_ustr, lcl_documentText(mxComponent));
+    CPPUNIT_ASSERT_EQUAL(u"AaaCccBbb|Bbb||"_ustr, lcl_documentText(mxComponent));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextTwoViewsCtrlHeldByOther)
+{
+    // Given the paragraphs "Aaa", "Bbb" and "Ccc", open in two views:
+    SwXTextDocument* pXTextDocument = createDoc();
+    int nViewA = KitHelper::getCurrentView();
+    SwWrtShell* pWrtShellA = getSwDocShell()->GetWrtShell();
+    ThreeParagraphs aPoints = lcl_fillThreeParagraphs(pWrtShellA);
+    int nViewB = lcl_addView(pXTextDocument);
+    SwWrtShell* pWrtShellB = getSwDocShell()->GetWrtShell();
+
+    // When the first view presses with Ctrl inside "Aaa" and holds the button, which keeps the
+    // add selection mode on until the release, and the second view meanwhile drags "Bbb" to
+    // the end of "Ccc":
+    KitHelper::setView(nViewA);
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aPoints.aInsideFirst.getX(),
+                                   aPoints.aInsideFirst.getY(), 1, MOUSE_LEFT, KEY_MOD1);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pWrtShellA->IsAddMode());
+    lcl_selectParagraph(pWrtShellB, getParagraph(2));
+    lcl_dragText(pXTextDocument, aPoints.aInsideSecond, aPoints.aEndOfThird, 0,
+                 /*bRelease=*/true, nViewB);
+    CPPUNIT_ASSERT_EQUAL(u"Aaa||CccBbb|"_ustr, lcl_documentText(mxComponent));
+
+    // Then the release of the first view leaves the add selection mode, as the drag of the
+    // second view is no business of the first view's press:
+    lcl_releaseButton(pXTextDocument, nViewA, aPoints.aInsideFirst);
+    CPPUNIT_ASSERT(!pWrtShellA->IsAddMode());
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextTwoViewsOneAfterAnother)
@@ -3799,21 +3807,20 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextTwoViewsSameText)
     lcl_selectParagraph(pWrtShellB, getParagraph(3));
 
     // When the first view drags "Ccc" to the end of "Aaa" and holds the button, and the second
-    // view drags the same text to the end of "Bbb":
+    // view drags the same text to the end of "Bbb" and drops:
     lcl_dragText(pXTextDocument, aPoints.aInsideThird, aPoints.aEndOfFirst, 0,
                  /*bRelease=*/false, nViewA);
     lcl_dragText(pXTextDocument, aPoints.aInsideThird, aPoints.aEndOfSecond, 0,
-                 /*bRelease=*/false, nViewB);
-    lcl_releaseButton(pXTextDocument, nViewB, aPoints.aEndOfSecond);
+                 /*bRelease=*/true, nViewB);
 
-    // Then the second drag moved nothing, and the second view keeps its selection:
-    CPPUNIT_ASSERT_EQUAL(u"Aaa|Bbb|Ccc|"_ustr, lcl_documentText(mxComponent));
-    CPPUNIT_ASSERT_EQUAL(u"Ccc"_ustr, pWrtShellB->GetSelText());
-    CPPUNIT_ASSERT_EQUAL(std::string("dragrefused"), aViewB.m_aTooltipType);
+    // Then the second drag moved the text, and the first view's selection went with it:
+    CPPUNIT_ASSERT_EQUAL(u"Aaa|BbbCcc||"_ustr, lcl_documentText(mxComponent));
+    CPPUNIT_ASSERT_EQUAL(OUString(), pWrtShellA->GetSelText());
+    CPPUNIT_ASSERT_EQUAL(std::string(), aViewB.m_aTooltipType);
 
-    // And when the first view drops, the text moves there once:
+    // And when the first view drops, the text is not inserted a second time:
     lcl_releaseButton(pXTextDocument, nViewA, aPoints.aEndOfFirst);
-    CPPUNIT_ASSERT_EQUAL(u"AaaCcc|Bbb||"_ustr, lcl_documentText(mxComponent));
+    CPPUNIT_ASSERT_EQUAL(u"Aaa|BbbCcc||"_ustr, lcl_documentText(mxComponent));
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextSourceDeletedByOtherView)

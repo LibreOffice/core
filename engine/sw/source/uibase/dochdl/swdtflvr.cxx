@@ -314,9 +314,7 @@ SwTransferable::~SwTransferable()
 
     if (SwModule* pMod = SwModule::get())
     {
-        if ( pMod->m_pDragDrop == this )
-            pMod->m_pDragDrop = nullptr;
-        else if ( pMod->m_pXSelection == this )
+        if ( pMod->m_pXSelection == this )
             pMod->m_pXSelection = nullptr;
     }
 
@@ -335,9 +333,7 @@ void SwTransferable::ObjectReleased()
     SwModule* pMod = SwModule::get();
     if (!pMod)
         return;
-    if( this == pMod->m_pDragDrop )
-        pMod->m_pDragDrop = nullptr;
-    else if( this == pMod->m_pXSelection )
+    if( this == pMod->m_pXSelection )
         pMod->m_pXSelection = nullptr;
 }
 
@@ -1834,10 +1830,14 @@ bool SwTransferable::PasteData( const TransferableDataHelper& rData,
     bool bRet = false;
     bool bCallAutoCaption = false;
 
+    // A drop carries the data of the drag that it ends, which is one of ours for a drag between
+    // the views of this process.
+    SwTransferable* pDragDrop = pPt ? GetSwTransferable(rData) : nullptr;
+
     if( pPt )
     {
         // external Drop
-        if ((bPasteSelection ? !pMod->m_pXSelection : !pMod->m_pDragDrop) &&
+        if ((bPasteSelection ? !pMod->m_pXSelection : !pDragDrop) &&
                 // The following condition is used for tdf#156111 to prevent a selection from being
                 // cleared by the default case of the nDestination switch.
                 !(rSh.GetCursorCnt() == 1 && rSh.TestCurrPam(*pPt) &&
@@ -1905,7 +1905,7 @@ bool SwTransferable::PasteData( const TransferableDataHelper& rData,
         if (bPasteSelection)
             pTrans = pMod->m_pXSelection;
         else
-            pTrans = pMod->m_pDragDrop;
+            pTrans = pDragDrop;
         bPrivateDrop = nullptr != pTrans;
     }
     bool bNeedToSelectBeforePaste(false);
@@ -3942,8 +3942,6 @@ void SwTransferable::StartDrag( vcl::Window* pWin, const Point& rPos )
 
     if( m_pWrtShell->IsSelFrameMode() )
         m_pWrtShell->ShowCursor();
-
-    SwModule::get()->m_pDragDrop = this;
 
     SetDataForDragAndDrop( rPos );
 

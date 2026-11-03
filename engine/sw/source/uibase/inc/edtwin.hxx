@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_EDTWIN_HXX
 
 #include <o3tl/deleter.hxx>
+#include <rtl/ref.hxx>
 #include <sot/exchange.hxx>
 #include <svx/svdobj.hxx>
 #include <tools/link.hxx>
@@ -37,6 +38,7 @@ class   SdrObject;
 class   SwShadowCursor;
 class   SvxAutoCorrect;
 class   SwPaM;
+class   SwTransferable;
 struct  SwApplyTemplate;
 struct  QuickHelpData;
 class   SdrDropMarkerOverlay;
@@ -139,6 +141,9 @@ class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) SwEditWin final : public vcl::DocWind
     bool m_bDragTimerStarted = false;
     // Whether the last drop replaced a hyperlink at the drop position.
     bool m_bDroppedHyperlink = false;
+    // The data of the selection that a drag from this window carries, empty while no drag
+    // runs.
+    rtl::Reference<SwTransferable> m_xDraggedData;
 
     void            LeaveArea(const Point &);
     void            JustifyAreaTimer(bool bStart = false);
@@ -261,6 +266,8 @@ public:
     virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
     const Point& GetDragStartPos() const { return m_aDragStartPos; }
+    /// The data of the drag that a drop into this window would take, or null without a drag.
+    SwTransferable* GetDraggedData() const { return m_xDraggedData.get(); }
     bool IsInDrag() const { return m_bIsInDrag; }
     void SetFrameDrag(bool bFrameDrag) { m_bFrameDrag = bFrameDrag; }
     void SetDroppedHyperlink(bool bDroppedHyperlink) { m_bDroppedHyperlink = bDroppedHyperlink; }

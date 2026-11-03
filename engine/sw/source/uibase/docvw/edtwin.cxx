@@ -5651,6 +5651,7 @@ void SwEditWin::dispose()
     if( s_pQuickHlpData->m_bIsDisplayed && m_rView.GetWrtShellPtr() )
         s_pQuickHlpData->Stop( m_rView.GetWrtShell() );
     m_pApplyTempl.reset();
+    m_xDraggedData.clear();
 
     m_rView.SetDrawFuncPtr(nullptr);
 

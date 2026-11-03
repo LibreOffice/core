@@ -137,7 +137,6 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
     m_eCTLTextNumerals(SvtCTLOptions::GetCTLTextNumerals()),
     m_bAuthorInitialised(false),
     m_bEmbeddedLoadSave( false ),
-    m_pDragDrop( nullptr ),
     m_pXSelection( nullptr )
 {
     SetName( u"StarWriter"_ustr );

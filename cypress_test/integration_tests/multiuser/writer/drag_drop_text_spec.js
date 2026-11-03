@@ -118,7 +118,7 @@ describe(['tagmultiuser'], 'Multiuser Writer drag and drop of a text selection',
 		});
 	});
 
-	it('A drag that waits for another user\'s drag keeps the selection and says why', function() {
+	it('Two users drag at the same time', function() {
 		var win1 = this.win1;
 		var win2 = this.win2;
 
@@ -134,8 +134,9 @@ describe(['tagmultiuser'], 'Multiuser Writer drag and drop of a text selection',
 		realDrag(win1, () => points.insideThird, () => points.endOfFirst, false);
 		cy.cGet('.text-drop-caret').should('be.visible');
 
-		// The second user drags Test3 meanwhile. Its mouse messages go to the document the way its
-		// browser sends them, because the test has only one real mouse, which the first user holds.
+		// The second user drags Test3 to the same place meanwhile and drops. Its mouse messages go
+		// to the document the way its browser sends them, because the test has only one real
+		// mouse, which the first user holds.
 		cy.cSetActiveFrame('#iframe2');
 		cy.then(function() {
 			var send = function(type, x, y) {
@@ -151,27 +152,24 @@ describe(['tagmultiuser'], 'Multiuser Writer drag and drop of a text selection',
 		});
 		helper.processToIdle(win2);
 
-		// Then the second user is told why nothing moves, and keeps the selection of Test3, the
-		// second paragraph.
-		cy.cGet('#snackbar').should('be.visible')
-			.and('contain.text', 'Another user is moving text in this document.');
+		// Then Test3 moved while the first drag still runs: the second paragraph is empty, so the
+		// second user's selection is no longer there.
 		cy.getFrameWindow().should(function(win) {
 			var view = win.app.activeDocument.activeView;
 			var inside = function(point) {
 				return view.selectionContains(new win.cool.SimplePoint(point.x, point.y));
 			};
-			expect(inside(points.insideSecond)).to.be.true;
-			expect(inside(points.insideThird)).to.be.false;
+			expect(inside(points.insideSecond)).to.be.false;
 		});
 
-		// When the first user drops, Test2 lands at the end of Test1.
+		// When the first user drops, Test2 lands at the release point, between Test1 and Test3.
 		cy.cSetActiveFrame('#iframe1');
 		cy.then(function() {
 			var end = screenPoint(win1, points.endOfFirst.x, points.endOfFirst.y);
 			cy.cGet('body').realMouseUp({ x: end.x, y: end.y });
 		});
 		helper.processToIdle(win1);
-		expectFirstParagraph('Test1Test2');
+		expectFirstParagraph('Test1Test2Test3');
 	});
 
 	it('Two users drag one after the other', function() {

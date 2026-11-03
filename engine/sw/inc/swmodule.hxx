@@ -129,7 +129,7 @@ class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) SwModule final : public SfxModule, pu
 
 public:
     // public Data - used for internal Clipboard / Drag & Drop / XSelection
-    SwTransferable  *m_pDragDrop, *m_pXSelection;
+    SwTransferable  *m_pXSelection;
 
     SFX_DECL_INTERFACE(SW_INTERFACE_MODULE)
 

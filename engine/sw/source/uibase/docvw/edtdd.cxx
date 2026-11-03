@@ -24,7 +24,6 @@
 #include <sot/formats.hxx>
 #include <sfx2/bindings.hxx>
 #include <comphelper/kit.hxx>
-#include <tools/json_writer.hxx>
 #include <vcl/commandevent.hxx>
 #include <osl/diagnose.h>
 
@@ -38,8 +37,6 @@
 #include <viewopt.hxx>
 #include <swdtflvr.hxx>
 #include <swmodule.hxx>
-#include <swtypes.hxx>
-#include <strings.hrc>
 #include <docsh.hxx>
 #include <wdocsh.hxx>
 
@@ -160,18 +157,6 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
     m_bMBPressed = false;
     ReleaseMouse();
 
-    // A kit process holds one drag for all its views, so a view starts none while the drag of
-    // another view runs. The press is released as for a drag that starts, which keeps the
-    // selection as it is, and the view learns why nothing moves.
-    if (comphelper::COKit::isActive() && SwModule::get()->m_pDragDrop)
-    {
-        tools::JsonWriter aJson;
-        aJson.put("type", "dragrefused");
-        aJson.put("text", SwResId(STR_DRAG_TEXT_IN_USE));
-        m_rView.viewCallback(COKitCallbackType::TOOLTIP, aJson.finishAndGetAsOString());
-        return;
-    }
-
     m_bFrameDrag = false;
     m_aDragStartPos = aDocPos;
     m_aMovePos = aDocPos;
@@ -201,9 +186,11 @@ void SwEditWin::StartExecuteDrag()
     if (bKit)
         LocalStartDrag();
 
-    rtl::Reference<SwTransferable> pTransfer = new SwTransferable( m_rView.GetWrtShell() );
+    // Each window keeps the data of its own drag, so every view can run a drag at the same
+    // time.
+    m_xDraggedData = new SwTransferable( m_rView.GetWrtShell() );
 
-    pTransfer->StartDrag( this, m_aMovePos );
+    m_xDraggedData->StartDrag( this, m_aMovePos );
 }
 
 void SwEditWin::DragFinished()
@@ -211,6 +198,7 @@ void SwEditWin::DragFinished()
     DropCleanup();
     m_aTimer.SetInvokeHandler( LINK(this,SwEditWin, TimerHandler) );
     m_bIsInDrag = false;
+    m_xDraggedData.clear();
 }
 
 void SwEditWin::DropCleanup()
@@ -297,9 +285,9 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
     if( !SwTransferable::PasteData( aData, rSh, m_nDropAction, nActionFlags, m_nDropFormat,
                                 m_nDropDestination, false, rEvt.mbDefault, &aDocPt, nRet))
         nRet = DND_ACTION_NONE;
-    else if (SwModule* mod = SwModule::get(); mod->m_pDragDrop)
+    else if (SwTransferable* pDraggedData = GetDraggedData())
         //Don't clean up anymore at internal D&D!
-        mod->m_pDragDrop->SetCleanUp(false);
+        pDraggedData->SetCleanUp(false);
 
     return nRet;
 }
@@ -449,13 +437,12 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
         const Point aDocPt( PixelToLogic( aPixPt ) );
 
         //With the default action we still want to have a say.
-        SwModule* pMod = SwModule::get();
-        if( pMod->m_pDragDrop )
+        if (SwTransferable* pDraggedData = GetDraggedData())
         {
             bool bCleanup = false;
             //Drawing objects in Headers/Footers are not allowed
 
-            SwWrtShell *pSrcSh = pMod->m_pDragDrop->GetShell();
+            SwWrtShell *pSrcSh = pDraggedData->GetShell();
             if( (pSrcSh->GetSelFrameType() == FrameTypeFlags::DRAWOBJ) &&
                 pSrcSh->IsSelContainsControl() &&
                  (rSh.GetFrameType( &aDocPt, false ) & (FrameTypeFlags::HEADER|FrameTypeFlags::FOOTER)) )
