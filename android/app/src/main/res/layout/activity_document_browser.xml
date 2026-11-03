@@ -47,6 +47,7 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
+                android:id="@+id/recent_files_content"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:orientation="vertical">

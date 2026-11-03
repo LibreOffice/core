@@ -227,16 +227,6 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         }
         // TODO FileUtilities.sortFiles(filePaths, sortMode);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            recentRecyclerView.setOnApplyWindowInsetsListener((v, windowInsets) -> {
-                Insets insets = windowInsets.getInsets(WindowInsets.Type.systemBars());
-
-                v.setPadding(insets.left, 0, insets.right, insets.bottom);
-
-                return WindowInsets.CONSUMED;
-            });
-        }
-
         recentRecyclerView.setLayoutManager(isViewModeList() ? new LinearLayoutManager(this) : new GridLayoutManager(this, 2));
         recentRecyclerView.setAdapter(new RecentFilesAdapter(this, recentUris));
     }
@@ -369,9 +359,17 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
             WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView()).setAppearanceLightNavigationBars(lightMode);
 
             toolbar.setOnApplyWindowInsetsListener((v, windowInsets) -> {
-                Insets insets = windowInsets.getInsets(WindowInsets.Type.systemBars());
+                Insets insets = windowInsets.getInsets(WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout());
 
-                v.setPadding(0, insets.top, 0, 0);
+                v.setPadding(insets.left, insets.top, insets.right, 0);
+
+                return WindowInsets.CONSUMED;
+            });
+
+            findViewById(R.id.recent_files_content).setOnApplyWindowInsetsListener((v, windowInsets) -> {
+                Insets insets = windowInsets.getInsets(WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout());
+
+                v.setPadding(insets.left, 0, insets.right, insets.bottom);
 
                 return WindowInsets.CONSUMED;
             });
@@ -419,7 +417,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             editFAB.setOnApplyWindowInsetsListener((v, windowInsets) -> {
-                Insets insets = windowInsets.getInsets(WindowInsets.Type.systemBars() | (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE ? WindowInsets.Type.systemOverlays() : 0));
+                Insets insets = windowInsets.getInsets(WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout() | (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE ? WindowInsets.Type.systemOverlays() : 0));
 
                 ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
                 mlp.leftMargin = insets.left;
