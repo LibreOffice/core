@@ -5323,6 +5323,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             break;
 
         default:
+            m_bMousePressRunning = false;
             ReleaseMouse();
             return;
     }

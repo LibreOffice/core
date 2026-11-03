@@ -4097,38 +4097,56 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextOtherViewDropsIntoDra
     CPPUNIT_ASSERT_EQUAL(u"|Bbb|CAaacc|"_ustr, lcl_documentText(mxComponent));
 }
 
+/// Fills a new document with "Aaa Bbb", with "Bbb" bold, and returns the middle of the second
+/// letter of "Aaa", in twips.
+Point lcl_fillPlainAndBold(SwWrtShell* pWrtShell)
+{
+    pWrtShell->Insert(u"Aaa Bbb"_ustr);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 3, /*bBasicCall=*/false);
+    pWrtShell->SetAttrItem(SvxWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+    pWrtShell->SttPara(/*bSelect=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    return pWrtShell->GetCharRect().Center();
+}
+
+/// Lets the bindings of the view of pWrtShell report their states. They do it from their timer,
+/// twice so that a dirty message list is covered.
+void lcl_runBindings(SwWrtShell* pWrtShell)
+{
+    SfxBindings& rBindings = pWrtShell->GetView().GetViewFrame().GetBindings();
+    rBindings.GetTimer().Invoke();
+    rBindings.GetTimer().Invoke();
+}
+
+/// Makes the view of pWrtShell report the state of the uno command rCommand.
+void lcl_listenToState(SwWrtShell* pWrtShell,
+                       const uno::Reference<uno::XComponentContext>& xContext,
+                       const OUString& rCommand)
+{
+    SfxViewFrame& rFrame = pWrtShell->GetView().GetViewFrame();
+    uno::Reference<util::XURLTransformer> xParser(util::URLTransformer::create(xContext));
+    util::URL aCommandURL;
+    aCommandURL.Complete = rCommand;
+    xParser->parseStrict(aCommandURL);
+    const SfxSlot* pSlot = SfxSlotPool::GetSlotPool(&rFrame).GetUnoSlot(aCommandURL.Path);
+    CPPUNIT_ASSERT(pSlot);
+    rFrame.GetBindings().GetDispatch(pSlot, aCommandURL, false);
+    Scheduler::ProcessEventsToIdle();
+    lcl_runBindings(pWrtShell);
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPressInOtherViewKeepsStateUpdates)
 {
     // Given "Aaa Bbb" with "Bbb" bold, open in two views, and the second view listening to the
     // state of .uno:Bold with its cursor at the start:
     SwXTextDocument* pXTextDocument = createDoc();
     int nViewA = KitHelper::getCurrentView();
-    SwWrtShell* pWrtShellA = getSwDocShell()->GetWrtShell();
-    pWrtShellA->Insert(u"Aaa Bbb"_ustr);
-    pWrtShellA->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 3, /*bBasicCall=*/false);
-    pWrtShellA->SetAttrItem(SvxWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT));
-    pWrtShellA->SttPara(/*bSelect=*/false);
-    pWrtShellA->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
-    const Point aInsideFirst = pWrtShellA->GetCharRect().Center();
+    const Point aInsideFirst = lcl_fillPlainAndBold(getSwDocShell()->GetWrtShell());
     int nViewB = lcl_addView(pXTextDocument);
     SwTestViewCallback aViewB;
     SwWrtShell* pWrtShellB = getSwDocShell()->GetWrtShell();
     pWrtShellB->SttEndDoc(/*bStt=*/true);
-    SfxViewFrame& rFrameB = pWrtShellB->GetView().GetViewFrame();
-    SfxBindings& rBindingsB = rFrameB.GetBindings();
-    {
-        uno::Reference<util::XURLTransformer> xParser(util::URLTransformer::create(m_xContext));
-        util::URL aCommandURL;
-        aCommandURL.Complete = u".uno:Bold"_ustr;
-        xParser->parseStrict(aCommandURL);
-        const SfxSlot* pSlot = SfxSlotPool::GetSlotPool(&rFrameB).GetUnoSlot(aCommandURL.Path);
-        CPPUNIT_ASSERT(pSlot);
-        rBindingsB.GetDispatch(pSlot, aCommandURL, false);
-    }
-    // The bindings report states from their timer, twice so that a dirty message list is covered.
-    Scheduler::ProcessEventsToIdle();
-    rBindingsB.GetTimer().Invoke();
-    rBindingsB.GetTimer().Invoke();
+    lcl_listenToState(pWrtShellB, m_xContext, u".uno:Bold"_ustr);
     aViewB.m_aStateChanges.clear();
 
     // When the first view presses the button inside "Aaa" and holds it, and the second view
@@ -4141,13 +4159,41 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPressInOtherViewKeepsStateUpdates
     pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_END);
     pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_END);
     Scheduler::ProcessEventsToIdle();
-    rBindingsB.GetTimer().Invoke();
-    rBindingsB.GetTimer().Invoke();
+    lcl_runBindings(pWrtShellB);
 
     // Then the second view learns that its cursor is in bold text while the press still runs:
     CPPUNIT_ASSERT(!FilterStateChanges(aViewB.m_aStateChanges, ".uno:Bold=true").empty());
 
     lcl_releaseButton(pXTextDocument, nViewA, aInsideFirst);
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testClickWithCtrlAltKeepsStateUpdates)
+{
+    // Given "Aaa Bbb" with "Bbb" bold, and the view listening to the state of .uno:Bold:
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    const Point aInsideFirst = lcl_fillPlainAndBold(pWrtShell);
+    lcl_listenToState(pWrtShell, m_xContext, u".uno:Bold"_ustr);
+
+    // When the view clicks inside "Aaa" with Ctrl and Alt held, and then moves its cursor to the
+    // end of the bold "Bbb":
+    for (COKitMouseEventType eType :
+         { COKitMouseEventType::BUTTONDOWN, COKitMouseEventType::BUTTONUP })
+    {
+        pXTextDocument->postMouseEvent(eType, aInsideFirst.getX(), aInsideFirst.getY(), 1,
+                                       MOUSE_LEFT, KEY_MOD1 | KEY_MOD2);
+        Scheduler::ProcessEventsToIdle();
+    }
+    lcl_runBindings(pWrtShell);
+    aView.m_aStateChanges.clear();
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_END);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_END);
+    Scheduler::ProcessEventsToIdle();
+    lcl_runBindings(pWrtShell);
+
+    // Then the view learns that its cursor is in bold text, as after any finished click:
+    CPPUNIT_ASSERT(!FilterStateChanges(aView.m_aStateChanges, ".uno:Bold=true").empty());
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextDropPosition)
