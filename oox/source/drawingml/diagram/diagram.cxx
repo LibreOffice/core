@@ -196,6 +196,10 @@ void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentSha
             << pParentShape->getSize().Width << "x" << pParentShape->getSize().Height);
 
     pParentShape->setChildSize(pParentShape->getSize());
+    // we lay out in the room itself, its corner at 0,0, and the room goes back to where it
+    // stands afterwards
+    const awt::Point aRoomPosition(pParentShape->getPosition());
+    pParentShape->setPosition(awt::Point(0, 0));
 
     // The names the layout settles, the statements it keeps for a shape levels down and the
     // shapes a sideways branch places as a whole all describe the tree this run builds. A run
@@ -297,6 +301,7 @@ void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentSha
         centreDrawnShapes(*this, pParentShape);
         settleUprightText(*this);
     }
+    pParentShape->setPosition(aRoomPosition);
 
     ShapePtr pBackground = std::make_shared<Shape>("com.sun.star.drawing.CustomShape");
     pBackground->setSubType(XML_rect);
