@@ -3633,6 +3633,28 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextEscape)
     CPPUNIT_ASSERT_EQUAL(u"Test2"_ustr, pWrtShell->GetSelText());
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextOneMove)
+{
+    // Given the paragraphs "Test1" and "Test2", with "Test2" selected, in a view that has not
+    // dragged before:
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    Point aFrom, aTo;
+    lcl_selectSecondParagraph(pWrtShell, aFrom, aTo);
+
+    // When the selection is pressed, moved to the end of "Test1" in one step and released there:
+    auto post = [&](COKitMouseEventType eType, Point aPos) {
+        pXTextDocument->postMouseEvent(eType, aPos.getX(), aPos.getY(), 1, MOUSE_LEFT, 0);
+        Scheduler::ProcessEventsToIdle();
+    };
+    post(COKitMouseEventType::BUTTONDOWN, aFrom);
+    post(COKitMouseEventType::MOVE, aTo);
+    post(COKitMouseEventType::BUTTONUP, aTo);
+
+    // Then the text moved there:
+    CPPUNIT_ASSERT_EQUAL(u"Test1Test2"_ustr, getParagraph(1)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextEscapeThenMove)
 {
     // Given the paragraphs "Test1" and "Test2", with "Test2" selected:

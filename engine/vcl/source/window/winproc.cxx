@@ -975,6 +975,31 @@ bool ImplKitHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, NotifyEventType
 
 namespace
 {
+// The actions that a kit drag offers to its drop target.
+constexpr sal_Int8 constKitDragSourceActions = css::datatransfer::dnd::DNDConstants::ACTION_COPY
+                                               | css::datatransfer::dnd::DNDConstants::ACTION_MOVE
+                                               | css::datatransfer::dnd::DNDConstants::ACTION_LINK;
+
+// Enters the drop target of a kit drag with the formats of the dragged data, so the target can tell
+// which drops it accepts. rPos is relative to the drop target window.
+void ImplKitEnterDropTarget(
+    ImplFrameData* pFrameData, DNDListenerContainer& rDropTarget,
+    const cpo::uno::Reference<css::datatransfer::dnd::XDropTargetDragContext>& xContext,
+    sal_Int8 nAction, const Point& rPos)
+{
+    pFrameData->mbKitDragEntered = true;
+    cpo::uno::Sequence<css::datatransfer::DataFlavor> aFlavors;
+    if (vcl::KitDragSource* pDragSource = ImplGetKitDragSource(pFrameData))
+    {
+        cpo::uno::Reference<css::datatransfer::XTransferable> xTransfer
+            = pDragSource->getKitDragTransferable();
+        if (xTransfer.is())
+            aFlavors = xTransfer->getTransferDataFlavors();
+    }
+    rDropTarget.fireDragEnterEvent(xContext, nAction, rPos.X(), rPos.Y(),
+                                   constKitDragSourceActions, aFlavors);
+}
+
 // Runs the part of a kit drag that a mouse event drives: a move over the drop target, the drop when
 // the button comes up, and the drag gesture once a move with the button held passes the drag
 // distance. aMousePos is relative to the frame and aWinPos to the window the event is for. Returns
@@ -1008,30 +1033,14 @@ std::optional<bool> ImplKitHandleDrag(ImplFrameData* pFrameData, NotifyEventType
             return false;
         }
 
-        const sal_Int8 nSourceActions = css::datatransfer::dnd::DNDConstants::ACTION_COPY
-                                        | css::datatransfer::dnd::DNDConstants::ACTION_MOVE
-                                        | css::datatransfer::dnd::DNDConstants::ACTION_LINK;
         if (pFrameData->mbKitDragEntered)
         {
             xDropTarget->fireDragOverEvent(xDropTargetDragContext, nAction, aWinPos.X(),
-                                           aWinPos.Y(), nSourceActions);
+                                           aWinPos.Y(), constKitDragSourceActions);
         }
         else
-        {
-            // The first move of the drag enters the drop target with the formats of the dragged
-            // data, so the target can tell which drops it accepts.
-            pFrameData->mbKitDragEntered = true;
-            cpo::uno::Sequence<css::datatransfer::DataFlavor> aFlavors;
-            if (vcl::KitDragSource* pDragSource = ImplGetKitDragSource(pFrameData))
-            {
-                cpo::uno::Reference<css::datatransfer::XTransferable> xTransfer
-                    = pDragSource->getKitDragTransferable();
-                if (xTransfer.is())
-                    aFlavors = xTransfer->getTransferDataFlavors();
-            }
-            xDropTarget->fireDragEnterEvent(xDropTargetDragContext, nAction, aWinPos.X(),
-                                            aWinPos.Y(), nSourceActions, aFlavors);
-        }
+            ImplKitEnterDropTarget(pFrameData, *xDropTarget, xDropTargetDragContext, nAction,
+                                   aWinPos);
 
         if (!pFrameData->moPointerBeforeKitDrag)
             pFrameData->moPointerBeforeKitDrag = pDragWin->GetPointer();
@@ -1059,12 +1068,12 @@ std::optional<bool> ImplKitHandleDrag(ImplFrameData* pFrameData, NotifyEventType
         }
 
         Point dragOverPos = pDragWin->ScreenToOutputPixel(aMousePos);
+        // A drag that ends with the move that started it enters the drop target at the drop.
+        if (!pFrameData->mbKitDragEntered)
+            ImplKitEnterDropTarget(pFrameData, *xDropTarget, new GenericDropTargetDragContext(),
+                                   nAction, dragOverPos);
         xDropTarget->fireDropEvent(xDropTargetDropContext, nAction, dragOverPos.X(),
-                                   dragOverPos.Y(),
-                                   (css::datatransfer::dnd::DNDConstants::ACTION_COPY
-                                    | css::datatransfer::dnd::DNDConstants::ACTION_MOVE
-                                    | css::datatransfer::dnd::DNDConstants::ACTION_LINK),
-                                   xTransfer);
+                                   dragOverPos.Y(), constKitDragSourceActions, xTransfer);
 
         ImplEndKitDrag(pFrameData, xDropTargetDropContext->getDropAction());
         return true;
