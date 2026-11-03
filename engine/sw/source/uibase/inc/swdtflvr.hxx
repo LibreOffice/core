@@ -96,7 +96,6 @@ class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) SwTransferable final : public Transfe
 
     TransferBufferType m_eBufferType;
 
-    bool m_bOldIdle   :1; //D&D Idle flag from the viewsettings
     bool m_bCleanUp   :1; //D&D cleanup after Drop (not by internal Drop)
 
     // helper methods for the copy

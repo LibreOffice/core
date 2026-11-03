@@ -268,7 +268,6 @@ SwTransferable::SwTransferable( SwWrtShell& rSh )
     m_pCreatorView( nullptr ),
     m_pOrigGraphic( nullptr ),
     m_eBufferType( TransferBufferType::NONE ),
-    m_bOldIdle(false),
     m_bCleanUp(false)
 {
     rSh.GetView().AddTransferable(*this);
@@ -3939,10 +3938,7 @@ void SwTransferable::StartDrag( vcl::Window* pWin, const Point& rPos )
 {
     if(!m_pWrtShell)
         return;
-    m_bOldIdle = m_pWrtShell->GetViewOptions()->IsIdle();
     m_bCleanUp = true;
-
-    m_pWrtShell->GetViewOptions()->SetIdle( false );
 
     if( m_pWrtShell->IsSelFrameMode() )
         m_pWrtShell->ShowCursor();
@@ -3999,8 +3995,6 @@ void SwTransferable::DragFinished( sal_Int8 nAction )
         m_pWrtShell->HideCursor();
     else
         m_pWrtShell->ShowCursor();
-
-    m_pWrtShell->GetViewOptions()->SetIdle( m_bOldIdle );
 }
 
 namespace
