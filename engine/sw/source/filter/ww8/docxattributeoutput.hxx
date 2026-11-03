@@ -912,6 +912,8 @@ private:
     /// Redline data to remember in the text run.
     std::vector<const SwRedlineData*> m_pRedlineData;
 
+    const SwRedlineData* m_pPrevRunRedlineData = nullptr;
+
     /// Id of the redline
     sal_Int32 m_nRedlineId;
 

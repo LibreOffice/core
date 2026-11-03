@@ -877,6 +877,26 @@ CPPUNIT_TEST_FIXTURE(Test, testRangeCommentInDeleteDocxExport)
     CPPUNIT_ASSERT_EQUAL(1, countXPathNodes(pXmlDoc, "//w:del/w:r/w:commentReference"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testRangeCommentBeforeDeleteDocxExport)
+{
+    // Given a document with a comment range that ends right where a delete
+    // redline begins:
+    createSwDoc("redline-after-range-comment.docx");
+
+    // When exporting that to DOCX:
+    save(TestFilter::DOCX);
+
+    // Then make sure that the comment reference stays outside the delete
+    // redline, only the trailing "x" is in <w:del>:
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1
+    // i.e. the comment reference was wrapped in the delete redline.
+    CPPUNIT_ASSERT_EQUAL(0, countXPathNodes(pXmlDoc, "//w:del/w:r/w:commentReference"));
+    CPPUNIT_ASSERT_EQUAL(1, countXPathNodes(pXmlDoc, "//w:del/w:r/w:delText"));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFloatingTableAnchorPosExport)
 {
     // Given a document with two floating tables after each other:

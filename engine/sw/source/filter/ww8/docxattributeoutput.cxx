@@ -1894,6 +1894,12 @@ void DocxAttributeOutput::StartRun( const SwRedlineData* pRedlineData, sal_Int32
 
 void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_Int32 nLen, bool /*bLastRun*/)
 {
+    const SwRedlineData* pLastRedlineData = nullptr;
+    if (!m_pRedlineData.empty())
+    {
+        pLastRedlineData = m_pRedlineData.back();
+    }
+
     int nFieldsInPrevHyperlink = m_nFieldsInHyperlink;
     // Reset m_nFieldsInHyperlink if a new hyperlink is about to start
     if ( m_pHyperlinkAttrList.is() )
@@ -2060,9 +2066,11 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
     DoWritePermissionsStart();
 
     // Surround annotation references with redline start/end markup if we're inside a delete.
+    // If the comment anchor is right before a delete, that doesn't count.
     const bool bHasAnnotationMarkReferencesInDel
         = !m_rAnnotationMarksEnd.empty() && m_pRedlineData.back()
-            && m_pRedlineData.back()->GetType() == RedlineType::Delete;
+            && m_pRedlineData.back()->GetType() == RedlineType::Delete
+            && m_pPrevRunRedlineData == m_pRedlineData.back();
     if (bHasAnnotationMarkReferencesInDel)
     {
         StartRedline(m_pRedlineData.back());
@@ -2282,6 +2290,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
         EndRedline(m_pRedlineData.back());
     }
     assert(m_pRedlineData.size());
+    m_pPrevRunRedlineData = pLastRedlineData;
     m_pRedlineData.pop_back();
 
     DoWriteBookmarksStart(m_rFinalBookmarksStart);
