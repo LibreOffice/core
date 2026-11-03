@@ -1191,12 +1191,6 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
 
     assert(aRg.aEnd.GetNode() == pEnd->GetNode());
     assert(aRg.aStart.GetNode() == pStart->GetNode());
-    if( aRg.aEnd.GetIndex() == aRg.aStart.GetIndex() )
-    {
-        OSL_FAIL( "empty range" );
-        ++aRg.aEnd;
-    }
-
 
     {
         // TODO: this is not Undo-able - only good enough for file import
