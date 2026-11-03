@@ -111,22 +111,19 @@ const EditTextObject* ScHeaderFooterContentObj::GetRightEditObject() const
 uno::Reference<text::XText> ScHeaderFooterContentObj::getLeftText()
 {
     SolarMutexGuard aGuard;
-    uno::Reference<text::XText> xInt(*mxLeftText, uno::UNO_QUERY);
-    return xInt;
+    return mxLeftText;
 }
 
 uno::Reference<text::XText> ScHeaderFooterContentObj::getCenterText()
 {
     SolarMutexGuard aGuard;
-    uno::Reference<text::XText> xInt(*mxCenterText, uno::UNO_QUERY);
-    return xInt;
+    return mxCenterText;
 }
 
 uno::Reference<text::XText> ScHeaderFooterContentObj::getRightText()
 {
     SolarMutexGuard aGuard;
-    uno::Reference<text::XText> xInt(*mxRightText, uno::UNO_QUERY);
-    return xInt;
+    return mxRightText;
 }
 
 rtl::Reference<ScHeaderFooterContentObj> ScHeaderFooterContentObj::getImplementation(
