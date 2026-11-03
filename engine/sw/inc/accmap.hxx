@@ -130,6 +130,7 @@ class SwAccessibleMap final : public ::accessibility::IAccessibleViewForwarder,
     void AppendEvent( const SwAccessibleEvent_Impl& rEvent );
 
     void InvalidateCursorPosition(const rtl::Reference<SwAccessibleContext>& rxAcc);
+    rtl::Reference<SwAccessibleContext> GetOrCreateContext(const SwFrame* pContextFrame);
     void DoInvalidateShapeSelection(bool bInvalidateFocusMode = false);
 
     void InvalidateShapeSelection();
