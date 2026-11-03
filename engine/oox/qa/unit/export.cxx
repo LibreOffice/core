@@ -1463,6 +1463,61 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkArchScaleXWriter)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testExtrusionToScene3d)
+{
+    // Given an extruded Fontwork and an extruded rectangle: depth 1 cm (three tenths of it in front
+    // of the rectangle), the direction bottom right of the extrusion toolbar (skew 135, origin
+    // 0.5 0.5), light from the top right, metal, turned by 20 degrees around x and -30 around y,
+    // extrusion colour blue:
+    loadFromFile(u"fontwork-3d.fodp");
+
+    // When saving to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then the text of the Fontwork and the rectangle get a camera, a light rig and an extrusion
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    OString sText = "//p:sp[1]/p:txBody/a:bodyPr/"_ostr;
+    assertXPath(pXmlDoc, sText + "a:scene3d/a:camera", "prst", u"legacyObliqueBottomRight");
+    assertXPath(pXmlDoc, sText + "a:scene3d/a:camera/a:rot", "lat", u"20400000");
+    assertXPath(pXmlDoc, sText + "a:scene3d/a:camera/a:rot", "lon", u"19800000");
+    assertXPath(pXmlDoc, sText + "a:scene3d/a:lightRig", "rig", u"legacyFlat3");
+    assertXPath(pXmlDoc, sText + "a:scene3d/a:lightRig", "dir", u"tr");
+    assertXPath(pXmlDoc, sText + "a:sp3d", "extrusionH", u"360000");
+    assertXPath(pXmlDoc, sText + "a:sp3d", "prstMaterial", u"metal");
+    assertXPath(pXmlDoc, sText + "a:sp3d/a:extrusionClr/a:srgbClr", "val", u"0000FF");
+    OString sShape = "//p:sp[2]/p:spPr/"_ostr;
+    assertXPath(pXmlDoc, sShape + "a:scene3d/a:camera", "prst", u"legacyObliqueBottomRight");
+    assertXPath(pXmlDoc, sShape + "a:sp3d", "extrusionH", u"360000");
+    assertXPath(pXmlDoc, sShape + "a:sp3d", "z", u"108000");
+
+    // and reading the file back gives the rectangle its extrusion
+    loadFromURL(maTempFile.GetURL());
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(1), uno::UNO_QUERY_THROW);
+    comphelper::SequenceAsHashMap aGeometry(xShape->getPropertyValue(u"CustomShapeGeometry"_ustr));
+    comphelper::SequenceAsHashMap aExtrusion(aGeometry[u"Extrusion"_ustr]);
+    CPPUNIT_ASSERT_EQUAL(true, aExtrusion[u"Extrusion"_ustr].get<bool>());
+    CPPUNIT_ASSERT_EQUAL(true, aExtrusion[u"Metal"_ustr].get<bool>());
+    drawing::EnhancedCustomShapeParameterPair aAngle;
+    aExtrusion[u"RotateAngle"_ustr] >>= aAngle;
+    double fX = 0;
+    double fY = 0;
+    aAngle.First.Value >>= fX;
+    aAngle.Second.Value >>= fY;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(20.0, fX, 0.5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-30.0, fY, 0.5);
+    drawing::EnhancedCustomShapeParameterPair aDepth;
+    aExtrusion[u"Depth"_ustr] >>= aDepth;
+    double fDepth = 0;
+    aDepth.First.Value >>= fDepth;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1000.0, fDepth, 1.0);
+    double fFraction = 0;
+    aDepth.Second.Value >>= fFraction;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.3, fFraction, 0.01);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFontworkDistance)
 {
     // LO ignores 'Spacing to Borders' of the 'Text Attributes' for Fontwork shapes. Word interprets

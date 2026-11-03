@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:automatic-styles>
+  <style:style style:name="gr1" style:family="graphic"><style:graphic-properties draw:fill="solid" draw:fill-color="#ff8000" draw:secondary-fill-color="#0000ff" draw:stroke="none" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle"/></style:style>
+  <style:style style:name="P1" style:family="paragraph"><style:text-properties fo:font-size="36pt"/></style:style>
+ </office:automatic-styles>
+ <office:body>
+  <office:presentation>
+   <draw:page draw:name="page1" draw:master-page-name="">
+    <draw:custom-shape draw:z-index="0" draw:name="Fontwork3D" draw:style-name="gr1" draw:text-style-name="P1" svg:width="14cm" svg:height="4cm" svg:x="2cm" svg:y="2cm">
+     <text:p text:style-name="P1">Extruded</text:p>
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:text-areas="0 0 21600 21600" draw:text-path="true" draw:text-path-mode="shape" draw:text-path-scale="path" draw:text-path-same-letter-heights="false" draw:type="fontwork-plain-text" draw:modifiers="10800" draw:extrusion="true" draw:extrusion-depth="1cm 0" draw:extrusion-viewpoint="(3.472cm 3.472cm 25cm)" draw:extrusion-origin="0.5 0.5" draw:extrusion-skew="50 135" dr3d:projection="parallel" draw:extrusion-first-light-direction="(50000 -50000 10000)" draw:extrusion-second-light-direction="(-50000 0 10000)" draw:extrusion-first-light-harsh="true" draw:extrusion-second-light-harsh="true" draw:extrusion-metal="true" draw:extrusion-specularity="122%" draw:extrusion-diffusion="100%" draw:extrusion-shininess="50%" draw:extrusion-rotation-angle="20 -30" draw:extrusion-color="true"/>
+    </draw:custom-shape>
+    <draw:custom-shape draw:z-index="1" draw:name="Shape3D" draw:style-name="gr1" draw:text-style-name="P1" svg:width="6cm" svg:height="4cm" svg:x="2cm" svg:y="8cm">
+     <text:p/>
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N" draw:extrusion="true" draw:extrusion-depth="1cm 0.3" draw:extrusion-viewpoint="(3.472cm 3.472cm 25cm)" draw:extrusion-origin="0.5 0.5" draw:extrusion-skew="50 135" dr3d:projection="parallel" draw:extrusion-first-light-direction="(50000 -50000 10000)" draw:extrusion-second-light-direction="(-50000 0 10000)" draw:extrusion-first-light-harsh="true" draw:extrusion-second-light-harsh="true" draw:extrusion-metal="true" draw:extrusion-specularity="122%" draw:extrusion-diffusion="100%" draw:extrusion-shininess="50%" draw:extrusion-rotation-angle="20 -30" draw:extrusion-color="true"/>
+    </draw:custom-shape>
+   </draw:page>
+  </office:presentation>
+ </office:body>
+</office:document>

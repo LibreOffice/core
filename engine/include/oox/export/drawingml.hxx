@@ -617,6 +617,10 @@ public:
         @param bIsText True if the 3D effects are for a text body, false if it is for a shape
      */
     OOX_DLLPUBLIC void Write3DEffects(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet, bool bIsText);
+    // Writes the extrusion of a custom shape as scene3d and sp3d; returns false, with nothing
+    // written, when the shape has no extrusion switched on or when the 3D grab bag of the shape
+    // (or of its text, bIsText) holds the 3D a file brought along, which is replayed instead.
+    OOX_DLLPUBLIC bool WriteExtrusion3D(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet, bool bIsText);
     void WriteArtisticEffect( const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     OString WriteWdpPicture( const OUString& rFileId, const cpo::uno::Sequence< sal_Int8 >& rPictureData );
 

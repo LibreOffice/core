@@ -242,6 +242,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/export/ColorPropertySet \
     oox/source/export/ColorExportUtils \
     oox/source/export/drawingml \
+    oox/source/export/drawingml3d \
     oox/source/export/DMLPresetShapeExport \
     oox/source/export/shapes \
     oox/source/export/vmlexport \

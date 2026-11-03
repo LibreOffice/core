@@ -4761,7 +4761,10 @@ void DrawingML::WriteBodyProps(const cpo::uno::Reference< cpo::uno::XInterface >
         }
     }
 
-    Write3DEffects( rXPropSet, /*bIsText=*/true );
+    // a Fontwork extruded in the engine is written with its extrusion; the 3D a file brought along
+    // is replayed as it was, so that Office gets its own presets back
+    if (!(bIsFontworkShape && WriteExtrusion3D(rXPropSet, true)))
+        Write3DEffects( rXPropSet, /*bIsText=*/true );
 
     mpFS->endElementNS((nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr);
 }

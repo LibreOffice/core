@@ -1306,16 +1306,21 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         WriteOutline( rXPropSet );
         WriteShapeEffects( rXPropSet );
 
-        bool bHas3DEffectinShape = false;
-        cpo::uno::Sequence<beans::PropertyValue> grabBag;
-        rXPropSet->getPropertyValue(u"InteropGrabBag"_ustr) >>= grabBag;
+        // an extrusion the shape has is written from the shape; the 3D effects a file brought
+        // along are replayed when the shape has none
+        if (!WriteExtrusion3D(rXPropSet, false))
+        {
+            bool bHas3DEffectinShape = false;
+            cpo::uno::Sequence<beans::PropertyValue> grabBag;
+            rXPropSet->getPropertyValue(u"InteropGrabBag"_ustr) >>= grabBag;
 
-        for (auto const& it : grabBag)
-            if (it.Name == "3DEffectProperties")
-                bHas3DEffectinShape = true;
+            for (auto const& it : grabBag)
+                if (it.Name == "3DEffectProperties")
+                    bHas3DEffectinShape = true;
 
-        if( bHas3DEffectinShape)
-            Write3DEffects( rXPropSet, /*bIsText=*/false );
+            if( bHas3DEffectinShape)
+                Write3DEffects( rXPropSet, /*bIsText=*/false );
+        }
     }
 
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
