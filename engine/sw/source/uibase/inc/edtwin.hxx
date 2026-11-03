@@ -266,7 +266,7 @@ public:
     virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
     const Point& GetDragStartPos() const { return m_aDragStartPos; }
-    /// The data of the drag that a drop into this window would take, or null without a drag.
+    /// The data of the drag that runs from this window, or null while none runs.
     SwTransferable* GetDraggedData() const { return m_xDraggedData.get(); }
     /// Ends the drag that runs from this window, if any, without a drop.
     void CancelDrag();

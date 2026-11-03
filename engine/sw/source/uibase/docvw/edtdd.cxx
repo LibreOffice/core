@@ -45,6 +45,30 @@ using namespace ::com::sun::star;
 
 // no include "dbgoutsw.hxx" here!!!!!!
 
+namespace
+{
+/// The data of the Writer drag that a drop into rWin takes, or null for a drag from outside
+/// Writer. In a kit process the drop lands in the window that its drag started from, while
+/// several views drag at the same time. Elsewhere one drag runs at a time, from the window of any
+/// view.
+SwTransferable* lcl_GetDroppedData(const SwEditWin& rWin)
+{
+    if (SwTransferable* pDraggedData = rWin.GetDraggedData())
+        return pDraggedData;
+    if (comphelper::COKit::isActive())
+        return nullptr;
+    for (SfxViewShell* pViewShell = SfxViewShell::GetFirst(false, checkSfxViewShell<SwView>);
+         pViewShell;
+         pViewShell = SfxViewShell::GetNext(*pViewShell, false, checkSfxViewShell<SwView>))
+    {
+        if (SwTransferable* pDraggedData
+            = static_cast<SwView*>(pViewShell)->GetEditWin().GetDraggedData())
+            return pDraggedData;
+    }
+    return nullptr;
+}
+}
+
 void SwEditWin::StartDDTimer()
 {
     m_aTimer.SetInvokeHandler(LINK(this, SwEditWin, DDHandler));
@@ -294,7 +318,7 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
     if( !SwTransferable::PasteData( aData, rSh, m_nDropAction, nActionFlags, m_nDropFormat,
                                 m_nDropDestination, false, rEvt.mbDefault, &aDocPt, nRet))
         nRet = DND_ACTION_NONE;
-    else if (SwTransferable* pDraggedData = GetDraggedData())
+    else if (SwTransferable* pDraggedData = lcl_GetDroppedData(*this))
         //Don't clean up anymore at internal D&D!
         pDraggedData->SetCleanUp(false);
 
@@ -446,7 +470,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
         const Point aDocPt( PixelToLogic( aPixPt ) );
 
         //With the default action we still want to have a say.
-        if (SwTransferable* pDraggedData = GetDraggedData())
+        if (SwTransferable* pDraggedData = lcl_GetDroppedData(*this))
         {
             bool bCleanup = false;
             //Drawing objects in Headers/Footers are not allowed
