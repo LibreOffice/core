@@ -590,6 +590,13 @@ export class SheetDimension {
 	private _viewStartIndex: number;
 	private _viewEndIndex: number;
 
+	// Rounds a size in core pixels down to whole pixels, the way core does. A size that is not zero
+	// is at least 1 pixel, because core draws a narrow column or row 1 pixel wide.
+	private static wholeCorePixels(sizeCorePixels: number): number {
+		const pixels = Math.floor(sizeCorePixels);
+		return pixels === 0 && sizeCorePixels > 0 ? 1 : pixels;
+	}
+
 	constructor() {
 
 		this._sizes = new SpanList();
@@ -687,7 +694,7 @@ export class SheetDimension {
 			spanLength: number /* #elements in the span */) {
 
 			// Important: rounding needs to be done in core pixels to match core.
-			var sizeCorePxOne = Math.floor(size / this._twipsPerCorePixel);
+			var sizeCorePxOne = SheetDimension.wholeCorePixels(size / this._twipsPerCorePixel);
 			posCorePx += (sizeCorePxOne * spanLength);
 			// position in core-pixel aligned twips.
 			var posTileTwips = Math.floor(posCorePx * this._twipsPerCorePixel);
@@ -711,7 +718,7 @@ export class SheetDimension {
 			var size = 0;
 			this._visibleSizes.forEachSpanInRange(0, index, function (spanData) {
 				var count = spanData.end - spanData.start + 1;
-				var sizeOneCorePx = Math.floor(spanData.size * zoomScale / 15.0);
+				var sizeOneCorePx = SheetDimension.wholeCorePixels(spanData.size * zoomScale / 15.0);
 				if (index > spanData.end) {
 					startpos += (sizeOneCorePx * count);
 				}
@@ -944,7 +951,7 @@ export class SheetDimension {
 		this._visibleSizes.forEachSpan(function (span) {
 			var elementCount = span.end - span.start + 1;
 			var sizeOneCP = span.data.sizecore;
-			var sizeOneCPZ = Math.floor(span.size / 15.0 * zoomScale);
+			var sizeOneCPZ = SheetDimension.wholeCorePixels(span.size / 15.0 * zoomScale);
 			var sizeCP = sizeOneCP * elementCount;
 			var sizeCPZ = sizeOneCPZ * elementCount;
 
@@ -983,7 +990,7 @@ export class SheetDimension {
 		this._visibleSizes.forEachSpan(function (span) {
 			var elementCount = span.end - span.start + 1;
 			var sizeOneCP = span.data.sizecore;
-			var sizeOneCPZ = Math.floor(span.size / 15.0 * zoomScale);
+			var sizeOneCPZ = SheetDimension.wholeCorePixels(span.size / 15.0 * zoomScale);
 			var sizeCP = sizeOneCP * elementCount;
 			var sizeCPZ = sizeOneCPZ * elementCount;
 
@@ -1023,7 +1030,7 @@ export class SheetDimension {
 			this._visibleSizes.forEachSpan(function (spanData) {
 				var count = spanData.end - spanData.start + 1;
 				var sizeSpanPT = spanData.size * count;
-				var sizeOneCorePx = Math.floor(spanData.size * zoomScale / 15.0);
+				var sizeOneCorePx = SheetDimension.wholeCorePixels(spanData.size * zoomScale / 15.0);
 				var sizeSpanTT = Math.floor(sizeOneCorePx * count * 15 / zoomScale);
 
 				if (posPTInc >= posPT) {

@@ -191,6 +191,47 @@ describe('SheetGeometry', function () {
 				nodeassert.equal(sg.isForSheet(1, 'sheet-c'), true);
 			});
 		});
+
+		describe('a row shorter than one pixel is one pixel high', function () {
+			var sgObj = {
+				commandName: '.uno:SheetGeometryData',
+				maxtiledcolumn: '1023',
+				maxtiledrow: '500000',
+				columns: {
+					sizes: '1280:1023 ',
+					hidden: '0:1023 ',
+					filtered: '0:1023 ',
+					groups: '',
+				},
+				rows: {
+					sizes: '10:99 256:1048575 ',
+					hidden: '0:1048575 ',
+					filtered: '0:1048575 ',
+					groups: '',
+				},
+			};
+
+			var tileSizePx = 256;
+			var tileWidthTwips = Math.round((tileSizePx * 15) / zoomToAbsScale(10));
+			var tileHeightTwips = tileWidthTwips;
+
+			var sg = new cool.SheetGeometry(
+				sgObj,
+				tileWidthTwips,
+				tileHeightTwips,
+				tileSizePx,
+				0,
+			);
+
+			it('each of the 100 short rows takes one pixel', function () {
+				nodeassert.deepEqual(sg.getRowData(0), { startpos: 0, size: 1 });
+				nodeassert.deepEqual(sg.getRowData(99), { startpos: 99, size: 1 });
+			});
+
+			it('the first normal row starts after the short rows', function () {
+				nodeassert.deepEqual(sg.getRowData(100), { startpos: 100, size: 17 });
+			});
+		});
 	});
 
 	function zoomToAbsScale(level: number): number {
