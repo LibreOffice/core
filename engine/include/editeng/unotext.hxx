@@ -112,7 +112,7 @@ struct SfxItemPropertyMapEntry;
     { u"CharContoured"_ustr,           EE_CHAR_OUTLINE,    cppu::UnoType<bool>::get(),                    0, 0 }, \
     { u"CharEscapementHeight"_ustr,    EE_CHAR_ESCAPEMENT, cppu::UnoType<sal_Int8>::get(),         0, MID_ESC_HEIGHT },\
     { u"CharAutoKerning"_ustr,         EE_CHAR_PAIRKERNING,cppu::UnoType<bool>::get(),                    0, 0 } , \
-    { u"CharKerning"_ustr,             EE_CHAR_KERNING,    ::cppu::UnoType<sal_Int16>::get()  ,      0, 0 }, \
+    { u"CharKerning"_ustr,             EE_CHAR_KERNING,    ::cppu::UnoType<sal_Int16>::get()  ,      0, CONVERT_TWIPS }, \
     { u"CharWordMode"_ustr,            EE_CHAR_WLM,        cppu::UnoType<bool>::get(),                    0, 0 }, \
     { u"CharEmphasis"_ustr,            EE_CHAR_EMPHASISMARK, ::cppu::UnoType<sal_Int16>::get(),       0, MID_EMPHASIS},\
     { UNO_NAME_EDIT_CHAR_HEIGHT_ASIAN,        EE_CHAR_FONTHEIGHT_CJK, cppu::UnoType<float>::get(),            0, MID_FONTHEIGHT|CONVERT_TWIPS }, \

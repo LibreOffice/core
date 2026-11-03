@@ -29,7 +29,6 @@
 #include <docmodel/uno/UnoGradientTools.hxx>
 #include <drawingml/customshapeproperties.hxx>
 #include <drawingml/presetgeometrynames.hxx>
-#include <o3tl/unit_conversion.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/helper/grabbagstack.hxx>
 #include <sal/log.hxx>
@@ -1093,12 +1092,8 @@ float FontworkHelpers::fittedCharHeight(const uno::Reference<beans::XPropertySet
     rXPropSet->getPropertyValue(u"CharPosture"_ustr) >>= eSlant;
     sal_Int16 nScaleWidth = 100;
     rXPropSet->getPropertyValue(u"CharScaleWidth"_ustr) >>= nScaleWidth;
-    // the letter spacing reaches Word as the item holds it, which the Word export writes as
-    // twips: that is the spacing Word lays the line out with
-    sal_Int16 nKerning = 0;
+    sal_Int16 nKerning = 0; // 1/100 mm per character
     rXPropSet->getPropertyValue(u"CharKerning"_ustr) >>= nKerning;
-    const double fKerning = o3tl::convert(static_cast<double>(nKerning), o3tl::Length::twip,
-                                          o3tl::Length::mm100);
 
     // the text at its font size, measured in 1/100 mm
     ScopedVclPtrInstance<VirtualDevice> pDevice;
@@ -1119,7 +1114,7 @@ float FontworkHelpers::fittedCharHeight(const uno::Reference<beans::XPropertySet
         const OUString sLine = sText.getToken(0, '\n', nIndex).replaceAll(u"\r", u"");
         const double fGlyphs
             = pDevice->GetTextWidth(sLine) * (nScaleWidth > 0 ? nScaleWidth : 100) / 100.0;
-        const double fSpacing = fKerning * sLine.getLength();
+        const double fSpacing = static_cast<double>(nKerning) * sLine.getLength();
         if (fGlyphs <= 0 || fGlyphs + fSpacing <= fRoom)
             continue;
         fFitted = std::min(fFitted, fHeight * std::max(fRoom - fSpacing, 0.0) / fGlyphs);

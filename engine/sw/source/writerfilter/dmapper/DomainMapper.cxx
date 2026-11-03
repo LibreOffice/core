@@ -2487,10 +2487,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             //TODO: there are two kerning values -
             // in ww8par6.cxx NS_sprm::LN_CHpsKern is used as boolean AutoKerning
             sal_Int16 nResult = static_cast<sal_Int16>(ConversionHelper::convertTwipToMm100_Limited(nIntValue));
-            if (m_pImpl->IsInComments())
-            {
-                nResult = static_cast<sal_Int16>(nIntValue);
-            }
             rContext->Insert(PROP_CHAR_CHAR_KERNING, cpo::uno::Any(nResult));
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, u"spacing"_ustr, OUString::number(nIntValue));
         }

@@ -1258,6 +1258,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkFitWidthWriter)
     const sal_Int32 nHalfPoints = getXPath(pXmlDoc, sRun + "w:sz", "val").toInt32();
     CPPUNIT_ASSERT(nHalfPoints > 0);
     CPPUNIT_ASSERT_LESS(sal_Int32(48), nHalfPoints);
+    // and the letter spacing of 0.1 cm is written in twips
+    assertXPath(pXmlDoc, sRun + "w:spacing", "val", u"57");
     assertXPath(pXmlDoc, "//mc:Choice//wps:wsp/wps:bodyPr", "wrap", u"square");
     assertXPath(pXmlDoc, "//mc:Choice//wps:wsp/wps:bodyPr/a:noAutofit", 1);
 

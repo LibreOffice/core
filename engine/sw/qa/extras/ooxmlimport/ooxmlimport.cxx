@@ -776,7 +776,8 @@ CPPUNIT_TEST_FIXTURE(Test, testGroupshapeSdt)
     // Sdt field result wasn't imported, this was "".
     CPPUNIT_ASSERT_EQUAL(u"placeholder text"_ustr, xShape->getString());
     // w:spacing was ignored in oox, this was 0.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(20), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xShape->getText()), 1), u"CharKerning"_ustr));
+    // w:spacing 20 twips is 0.035 cm, which the API gives in 1/100 mm
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(35), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xShape->getText()), 1), u"CharKerning"_ustr));
 }
 
 void lcl_countTextFrames(const cpo::uno::Reference< lang::XComponent >& xComponent,

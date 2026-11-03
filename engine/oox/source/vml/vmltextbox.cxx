@@ -29,6 +29,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <comphelper/sequence.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <utility>
 
@@ -117,10 +118,9 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
         if (rFont.monSpacing.has_value())
         {
             aPropertyValue.Name = u"CharKerning"_ustr;
-            // Value is not converted to mm100: SvxKerningItem::PutValue() gets
-            // called with nMemberId = 0, so no mm100 -> twips conversion will
-            // be done there.
-            aPropertyValue.Value <<= sal_Int16(rFont.monSpacing.value());
+            // the spacing of the file is in twips, the property takes 1/100 mm
+            aPropertyValue.Value <<= static_cast<sal_Int16>(
+                o3tl::convert(rFont.monSpacing.value(), o3tl::Length::twip, o3tl::Length::mm100));
             aPropVec.push_back(aPropertyValue);
         }
         if (rParagraph.moParaAdjust.has_value())
