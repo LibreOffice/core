@@ -2173,7 +2173,7 @@ constexpr sal_uInt16 gaShapeTextLengths[]
         EE_PARA_SBL,        EE_PARA_ULSPACE,        EE_PARA_LRSPACE };
 }
 
-void SdrObject::scaleText(double fScaleX, double fScaleY, bool bUndo)
+void SdrObject::scaleText(double fScaleX, double fScaleY)
 {
     OutlinerParaObject* pParaObject(GetOutlinerParaObject());
 
@@ -2184,23 +2184,6 @@ void SdrObject::scaleText(double fScaleX, double fScaleY, bool bUndo)
         || (std::abs(fScaleX - 1.0) < fSmallestChange
             && std::abs(fScaleY - 1.0) < fSmallestChange))
         return;
-
-    SdrModel& rModel(getSdrModelFromSdrObject());
-
-    // Two things change, the text of the object and the lengths the object holds. The one for the
-    // text reads the text it replaces and the text that replaced it further down
-    std::unique_ptr<SdrUndoObjSetText> pTextUndo;
-
-    if (bUndo)
-    {
-        rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoAttrObject(*this));
-
-        std::unique_ptr<SdrUndoAction> pAction(
-            rModel.GetSdrUndoFactory().CreateUndoObjectSetText(*this, 0));
-
-        if (dynamic_cast<SdrUndoObjSetText*>(pAction.get()))
-            pTextUndo.reset(static_cast<SdrUndoObjSetText*>(pAction.release()));
-    }
 
     // The lengths are part of the runs and the paragraphs of the text, so we need an outliner
     // and comes back with the changed lengths
@@ -2254,14 +2237,6 @@ void SdrObject::scaleText(double fScaleX, double fScaleY, bool bUndo)
 
     SetOutlinerParaObject(rOutliner.CreateParaObject());
     rOutliner.Clear();
-
-    if (pTextUndo)
-    {
-        pTextUndo->AfterSetText();
-
-        if (pTextUndo->IsDifferent())
-            rModel.AddUndo(std::move(pTextUndo));
-    }
 
     // the lengths the object holds, which stand for the runs and the paragraphs of the text that
     // carry none of their own

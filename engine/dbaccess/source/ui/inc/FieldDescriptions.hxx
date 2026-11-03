@@ -84,7 +84,7 @@ namespace dbaui
         */
         void copyColumnSettingsTo(const cpo::uno::Reference< css::beans::XPropertySet >& _rxColumn);
 
-        void FillFromTypeInfo(const TOTypeInfoSP& _pType,bool _bForce,bool _bReset);
+        void FillFromTypeInfo(const TOTypeInfoSP& _pType, bool _bReset);
 
         OUString             GetName()               const;
         OUString             GetDescription()        const;

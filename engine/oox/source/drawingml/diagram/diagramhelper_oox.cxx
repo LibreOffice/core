@@ -218,7 +218,7 @@ void DiagramHelper_oox::moveDiagramModelDataFromOldToNewXShape(
         if (oFitted && fOldHeight > 0.0)
         {
             const double fScale(*oFitted / fOldHeight);
-            pNewShape->scaleText(fScale, fScale, /*bUndo=*/false);
+            pNewShape->scaleText(fScale, fScale);
         }
     }
 

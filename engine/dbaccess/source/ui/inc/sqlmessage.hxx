@@ -114,8 +114,7 @@ class OSQLWarningBox : public OSQLMessageBox
 public:
     OSQLWarningBox( weld::Window* pParent,
                     const OUString& _rMessage,
-                    MessBoxStyle _nStyle = MessBoxStyle::Ok | MessBoxStyle::DefaultOk,
-                    const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = nullptr );
+                    MessBoxStyle _nStyle = MessBoxStyle::Ok | MessBoxStyle::DefaultOk );
 };
 
 }   // namespace dbaui

@@ -534,7 +534,7 @@ IMPL_LINK( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg, bool )
 
 void LibPage::NewLib()
 {
-    createLibImpl(m_pDialog->getDialog(), m_aCurDocument, m_xLibBox.get(), nullptr);
+    createLibImpl(m_pDialog->getDialog(), m_aCurDocument, m_xLibBox.get());
 }
 
 void LibPage::InsertLib()
@@ -1112,7 +1112,7 @@ void LibPage::ImpInsertLibEntry( const OUString& rLibName, int nPos )
 
 // Helper function
 void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
-                   weld::TreeView* pLibBox, SbTreeListBox* pBasicBox)
+                   weld::TreeView* pLibBox)
 {
     OSL_ENSURE( rDocument.isAlive(), "createLibImpl: invalid document!" );
     if ( !rDocument.isAlive() )
@@ -1197,26 +1197,6 @@ void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
             if (SfxDispatcher* pDispatcher = GetDispatcher())
                 pDispatcher->ExecuteList(SID_BASICIDE_SBXINSERTED,
                                       SfxCallMode::SYNCHRON, { &aSbxItem });
-
-            if( pBasicBox )
-            {
-                std::unique_ptr<weld::TreeIter> xIter(pBasicBox->make_iterator(nullptr));
-                bool bValidIter = pBasicBox->get_cursor(xIter.get());
-                std::unique_ptr<weld::TreeIter> xRootEntry(pBasicBox->make_iterator(xIter.get()));
-                while (bValidIter)
-                {
-                    pBasicBox->copy_iterator(*xIter, *xRootEntry);
-                    bValidIter = pBasicBox->iter_parent(*xIter);
-                }
-
-                BrowseMode nMode = pBasicBox->GetMode();
-                bool bDlgMode = ( nMode & BrowseMode::Dialogs ) && !( nMode & BrowseMode::Modules );
-                const auto sId = bDlgMode ? RID_BMP_DLGLIB : RID_BMP_MODLIB;
-                pBasicBox->AddEntry(aLibName, sId, xRootEntry.get(), false, std::make_unique<Entry>(OBJ_TYPE_LIBRARY));
-                pBasicBox->AddEntry(aModName, RID_BMP_MODULE, xRootEntry.get(), false, std::make_unique<Entry>(OBJ_TYPE_MODULE));
-                pBasicBox->set_cursor(*xRootEntry);
-                pBasicBox->select(*xRootEntry);
-            }
         }
         catch (const cpo::uno::Exception& )
         {

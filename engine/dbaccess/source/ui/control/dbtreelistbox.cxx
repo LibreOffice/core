@@ -57,7 +57,7 @@ using namespace ::com::sun::star::view;
 
 InterimDBTreeListBox::InterimDBTreeListBox(vcl::Window* pParent)
     : InterimItemWindow(pParent, u"dbaccess/ui/dbtreelist.ui"_ustr, u"DBTreeList"_ustr)
-    , TreeListBox(m_xBuilder->weld_tree_view(u"treeview"_ustr), true)
+    , TreeListBox(m_xBuilder->weld_tree_view(u"treeview"_ustr))
     , m_xStatusBar(m_xBuilder->weld_label(u"statusbar"_ustr))
 {
     InitControlBase(&GetWidget());
@@ -106,7 +106,7 @@ sal_Int8 TreeListBoxDropTarget::ExecuteDrop(const ExecuteDropEvent& rEvt)
     return m_rTreeView.ExecuteDrop(rEvt);
 }
 
-TreeListBox::TreeListBox(std::unique_ptr<weld::TreeView> xTreeView, bool bSQLType)
+TreeListBox::TreeListBox(std::unique_ptr<weld::TreeView> xTreeView)
     : m_xTreeView(std::move(xTreeView))
     , m_aDropTargetHelper(*this)
     , m_pActionListener(nullptr)
@@ -118,10 +118,7 @@ TreeListBox::TreeListBox(std::unique_ptr<weld::TreeView> xTreeView, bool bSQLTyp
     m_xTreeView->connect_query_tooltip(LINK(this, TreeListBox, QueryTooltipHdl));
     m_xTreeView->connect_popup_menu(LINK(this, TreeListBox, CommandHdl));
 
-    if (bSQLType)
-        m_xHelper.set(new ODataClipboard);
-    else
-        m_xHelper.set(new svx::OComponentTransferable);
+    m_xHelper.set(new ODataClipboard);
     m_xTreeView->enable_drag_source(m_xHelper, DND_ACTION_COPY);
     m_xTreeView->connect_drag_begin(LINK(this, TreeListBox, DragBeginHdl));
 

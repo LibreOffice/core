@@ -470,9 +470,9 @@ void OGenericUnoController::ImplInvalidateFeature( sal_Int32 _nId, const Referen
         m_aAsyncInvalidateAll.Call();
 }
 
-void OGenericUnoController::InvalidateFeature(sal_uInt16 _nId, const Reference< XStatusListener > & _xListener, bool _bForceBroadcast)
+void OGenericUnoController::InvalidateFeature(sal_uInt16 _nId, const Reference< XStatusListener > & _xListener)
 {
-    ImplInvalidateFeature( _nId, _xListener, _bForceBroadcast );
+    ImplInvalidateFeature( _nId, _xListener, /*_bForceBroadcast*/false );
 }
 
 void OGenericUnoController::InvalidateAll()

@@ -684,7 +684,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTextFollowsEachDirectionsOwnScale
     rShape.SetMergedItem(SvxKerningItem(400, EE_CHAR_KERNING));
     rShape.SetMergedItem(SvxULSpaceItem(800, 0, EE_PARA_ULSPACE));
 
-    rShape.scaleText(0.5, 0.25, /*bUndo=*/false);
+    rShape.scaleText(0.5, 0.25);
 
     // Without the accompanying fix in place, this test would have failed: both lengths took the
     // scale for down the text, so the room between the letters came out at a quarter.

@@ -731,7 +731,7 @@ bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
                         elem.second->SetPrimaryKey(false);
                     OFieldDescription* pField = new OFieldDescription();
                     pField->SetName(m_aKeyName);
-                    pField->FillFromTypeInfo(pTypeInfo,true,true);
+                    pField->FillFromTypeInfo(pTypeInfo,true);
                     pField->SetAutoIncrement(pTypeInfo->bAutoIncrement);
                     pField->SetPrimaryKey(true);
                     m_bAddPKFirstTime = false;
@@ -1011,7 +1011,7 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
         if ( !pTypeInfo )
             pTypeInfo = m_pTypeInfo;
 
-        pActFieldDescr->FillFromTypeInfo(pTypeInfo,true,false);
+        pActFieldDescr->FillFromTypeInfo(pTypeInfo,false);
         _rColVector.emplace_back(_rColumns.emplace(pActFieldDescr->GetName(),pActFieldDescr).first);
     }
 

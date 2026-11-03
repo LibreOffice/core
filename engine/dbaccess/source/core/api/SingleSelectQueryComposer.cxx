@@ -150,7 +150,7 @@ namespace
     {
         OUString sSQL = u"SELECT "_ustr;
         _pRootNode->getChild(1)->parseNodeToStr( sSQL, _rxConnection );
-        _pRootNode->getChild(2)->parseNodeToStr( sSQL, _rxConnection );
+        _pRootNode->getChild(2)->parseNodeToStr( sSQL, _rxConnection, nullptr, false, true );
         sSQL += u" FROM "_ustr;
         _pRootNode->getChild(3)->getChild(0)->getChild(1)->parseNodeToStr( sSQL, _rxConnection );
         return sSQL;
@@ -1050,7 +1050,7 @@ bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode const * pConditio
             OUString aValue;
             OUString aColumnName;
 
-            pCondition->parseNodeToStr( aValue, m_xConnection );
+            pCondition->parseNodeToStr( aValue, m_xConnection, nullptr, false, true );
             pCondition->getChild(0)->parseNodeToStr( aColumnName, m_xConnection );
 
             // don't display the column name
@@ -1510,7 +1510,7 @@ OUString OSingleSelectQueryComposer::getStatementPart( TGetParseNode const & _aG
 
     const OSQLParseNode* pNode = _aGetFunctor( &_rIterator );
     if ( pNode )
-        pNode->parseNodeToStr( sResult, m_xConnection );
+        pNode->parseNodeToStr( sResult, m_xConnection, nullptr, false, true );
 
     return sResult;
 }

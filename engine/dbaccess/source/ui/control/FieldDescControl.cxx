@@ -237,7 +237,7 @@ IMPL_LINK(OFieldDescControl, ChangeHdl, weld::ComboBox&, rListBox, void)
     if (m_xType && &rListBox == m_xType->GetWidget())
     {
         TOTypeInfoSP pTypeInfo = getTypeInfo(m_xType->get_active());
-        pActFieldDescr->FillFromTypeInfo(pTypeInfo,true,false); // SetType(pTypeInfo);
+        pActFieldDescr->FillFromTypeInfo(pTypeInfo,false); // SetType(pTypeInfo);
 
         DisplayData(pActFieldDescr);
         CellModified(-1, m_xType->GetPos());

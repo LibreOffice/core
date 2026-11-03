@@ -2260,7 +2260,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
                             // A letter size set on a run of the text belongs to that run alone,
                             // and the runs keep the size they hold whatever the shape says, so
                             // every run is scaled where it stands.
-                            pTextShape->scaleText(aFractX, aFractY, false);
+                            pTextShape->scaleText(aFractX, aFractY);
 
                             // A title or an outline shape reads the size it shows from the
                             // presentation style of its master page, which is scaled along with

@@ -207,7 +207,7 @@ public:
 SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
                         SbTreeListBox& rBasicBox, const OUString& rLibName, const OUString& aModName, bool bMain);
 void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
-                   weld::TreeView* pLibBox, SbTreeListBox* pBasicBox);
+                   weld::TreeView* pLibBox);
 
 } // namespace basctl
 

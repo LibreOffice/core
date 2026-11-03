@@ -697,7 +697,7 @@ public:
     // Multiplies every length the text holds - the size of its letters, the room between two
     // of them, and the room its paragraphs keep between their lines and around themselves - by
     // the scale for the direction that length runs in
-    void scaleText(double fScaleX, double fScaleY, bool bUndo);
+    void scaleText(double fScaleX, double fScaleY);
     virtual void NbcReformatText();
 
     void BurnInStyleSheetAttributes();

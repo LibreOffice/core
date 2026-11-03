@@ -93,7 +93,7 @@ void OColumnPeer::setColumn(const Reference< XPropertySet>& _xColumn)
         if ( !pTypeInfo )
             pTypeInfo = rControl.getDefaultTyp();
 
-        m_pActFieldDescr->FillFromTypeInfo(pTypeInfo,true,false);
+        m_pActFieldDescr->FillFromTypeInfo(pTypeInfo,false);
         m_xColumn = _xColumn;
     }
     rControl.DisplayData(m_pActFieldDescr);

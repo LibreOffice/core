@@ -85,7 +85,7 @@ namespace dbaui
         virtual bool DoChildKeyInput(const KeyEvent& rKEvt);
 
     public:
-        TreeListBox(std::unique_ptr<weld::TreeView> xTreeView, bool bSQLType);
+        TreeListBox(std::unique_ptr<weld::TreeView> xTreeView);
         virtual ~TreeListBox();
 
         std::unique_ptr<weld::TreeIter> GetEntryPosByName(std::u16string_view rName,

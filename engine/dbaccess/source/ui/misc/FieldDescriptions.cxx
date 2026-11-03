@@ -162,7 +162,7 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
     }
 }
 
-void OFieldDescription::FillFromTypeInfo(const TOTypeInfoSP& _pType,bool _bForce,bool _bReset)
+void OFieldDescription::FillFromTypeInfo(const TOTypeInfoSP& _pType, bool _bReset)
 {
     TOTypeInfoSP pOldType = getTypeInfo();
     if ( _pType == pOldType )
@@ -175,12 +175,10 @@ void OFieldDescription::FillFromTypeInfo(const TOTypeInfoSP& _pType,bool _bForce
         SetControlDefault(Any());
     }
 
-    bool bForce = _bForce || !pOldType || pOldType->nType != _pType->nType;
     switch ( _pType->nType )
     {
         case DataType::CHAR:
         case DataType::VARCHAR:
-            if ( bForce )
             {
                 sal_Int32 nPrec = DEFAULT_VARCHAR_PRECISION;
                 if ( GetPrecision() )
@@ -192,13 +190,12 @@ void OFieldDescription::FillFromTypeInfo(const TOTypeInfoSP& _pType,bool _bForce
         case DataType::TIME_WITH_TIMEZONE:
         case DataType::TIMESTAMP:
         case DataType::TIMESTAMP_WITH_TIMEZONE:
-            if ( bForce && _pType->nMaximumScale)
+            if ( _pType->nMaximumScale)
             {
                 SetScale(std::min<sal_Int32>(GetScale() ? GetScale() : DEFAULT_NUMERIC_SCALE,_pType->nMaximumScale));
             }
             break;
         default:
-            if ( bForce )
             {
                 sal_Int32 nPrec = DEFAULT_OTHER_PRECISION;
                 switch ( _pType->nType )

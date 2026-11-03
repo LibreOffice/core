@@ -593,9 +593,8 @@ IMPL_LINK_NOARG(OSQLMessageBox, ButtonClickHdl, weld::Button&, void)
 }
 
 // OSQLWarningBox
-OSQLWarningBox::OSQLWarningBox(weld::Window* pParent, const OUString& rMessage, MessBoxStyle nStyle,
-                               const ::dbtools::SQLExceptionInfo* pAdditionalErrorInfo )
-    : OSQLMessageBox(pParent, DBA_RES(STR_EXCEPTION_WARNING), rMessage, nStyle, MessageType::Warning, pAdditionalErrorInfo)
+OSQLWarningBox::OSQLWarningBox(weld::Window* pParent, const OUString& rMessage, MessBoxStyle nStyle )
+    : OSQLMessageBox(pParent, DBA_RES(STR_EXCEPTION_WARNING), rMessage, nStyle, MessageType::Warning, nullptr)
 {
 }
 

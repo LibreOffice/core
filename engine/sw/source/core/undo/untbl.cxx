@@ -145,7 +145,7 @@ public:
     void NewFrameFormatForLine(const SwTableLine&, sal_uInt16 nFormatPos, SwFrameFormat* pOldFormat);
     void NewFrameFormatForBox(const SwTableBox&, sal_uInt16 nFormatPos, SwFrameFormat* pOldFormat);
 
-    void RestoreAttr( SwTable& rTable, bool bModifyBox = false );
+    void RestoreAttr( SwTable& rTable );
     void CreateNew( SwTable& rTable, bool bCreateFrames = true,
                     bool bRestoreChart = true );
     bool IsNewModel() const { return m_bNewModel; }
@@ -917,9 +917,9 @@ sal_uInt16 SaveTable::AddFormat( SwFrameFormat* pFormat, bool bIsLine )
     return o3tl::narrowing<sal_uInt16>(nRet);
 }
 
-void SaveTable::RestoreAttr( SwTable& rTable, bool bMdfyBox )
+void SaveTable::RestoreAttr( SwTable& rTable )
 {
-    m_bModifyBox = bMdfyBox;
+    m_bModifyBox = false;
 
     FndBox_ aTmpBox( nullptr, nullptr );
     bool bHideChanges = rTable.GetFrameFormat()->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout()->IsHideRedlines();
