@@ -25,7 +25,10 @@ window.L.Clipboard = window.L.Class.extend({
 		this._selectionContent = '';
 		this._selectionPlainTextContent = '';
 		this._selectionType = null;
-		this._accessKey = [ '', '' ];
+		this._accessKey = '';
+		// Every clipboard key the server has given this page, including the rotated-out ones.
+		// Content this view copied carries one of them in its meta-origin, however long ago.
+		this._issuedKeys = new Set();
 		this._clipboardSerial = 0; // incremented on each operation
 		this._failedTimer = null;
 		this._unoCommandForCopyCutPaste = null;
@@ -126,10 +129,10 @@ window.L.Clipboard = window.L.Class.extend({
 
 
 	setKey: function(key) {
-		if (this._accessKey[0] === key)
+		if (this._accessKey === key)
 			return;
-		this._accessKey[1] = this._accessKey[0];
-		this._accessKey[0] = key;
+		this._accessKey = key;
+		this._issuedKeys.add(key);
 	},
 
 	getMetaBase: function() {
@@ -139,16 +142,18 @@ window.L.Clipboard = window.L.Class.extend({
 		return window.makeHttpUrl('');
 	},
 
-	getMetaPath: function(idx) {
-		if (!idx)
-			idx = 0;
-		if (this._accessKey[idx] === '')
+	getMetaPath: function() {
+		return this._getMetaPathForKey(this._accessKey);
+	},
+
+	_getMetaPathForKey: function(key) {
+		if (key === '')
 			return '';
 
 		var metaPath = '/cool/clipboard?WOPISrc=' + encodeURIComponent(this._map.options.doc) +
 			'&ServerId=' + app.socket.WSDServer.Id +
 			'&ViewId=' + this._map._docLayer._viewId +
-			'&Tag=' + this._accessKey[idx];
+			'&Tag=' + key;
 
 		if (window.routeToken !== '')
 			metaPath += '&RouteToken='+window.routeToken;
@@ -156,8 +161,8 @@ window.L.Clipboard = window.L.Class.extend({
 		return metaPath;
 	},
 
-	getMetaURL: function(idx) {
-		return this.getMetaBase() + this.getMetaPath(idx);
+	getMetaURL: function() {
+		return this.getMetaBase() + this.getMetaPath();
 	},
 
 	// Returns the marker used to identify stub messages.
@@ -474,12 +479,10 @@ window.L.Clipboard = window.L.Class.extend({
 		//   cf. ClientSession.cpp /textselectioncontent:/
 
 		var meta = this._getMetaOrigin(htmlText, '<div id="meta-origin" data-coolorigin="');
-		var id = this.getMetaPath(0);
-		var idOld = this.getMetaPath(1);
+		var id = this.getMetaPath();
 
 		// for the paste, we always prefer the internal COKit's copy/paste
-		if (preferInternal === true &&
-			((id !== '' && meta.indexOf(id) >= 0) || (idOld !== '' && meta.indexOf(idOld) >= 0)))
+		if (preferInternal === true && this._isOwnMetaOrigin(meta))
 		{
 			// Home from home: short-circuit internally.
 			window.app.console.log('short-circuit, internal paste');
@@ -498,6 +501,19 @@ window.L.Clipboard = window.L.Class.extend({
 		// Fallback.
 		this.dataTransferToDocumentFallback(dataTransfer, htmlText, usePasteKeyEvent);
 		return true;
+	},
+
+	// True if the meta-origin names this view of this document with a key this page was given.
+	// The server rotates the key every few minutes, so a copy made long ago carries an old one.
+	_isOwnMetaOrigin: function (meta) {
+		if (meta === '')
+			return false;
+		for (const key of this._issuedKeys) {
+			const path = this._getMetaPathForKey(key);
+			if (path !== '' && meta.indexOf(path) >= 0)
+				return true;
+		}
+		return false;
 	},
 
 	_sendToInternalClipboard: async function (content) {

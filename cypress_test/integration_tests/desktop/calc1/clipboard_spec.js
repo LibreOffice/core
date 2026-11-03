@@ -111,6 +111,47 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Calc clipboard tests.', { 
 		cy.cGet('#copy-paste-container table td:nth-of-type(1)').should('have.text', '5');
 	});
 
+	it('HTML paste, internal case after the clipboard key rotated', function() {
+		// Given C1 (a SUM() of A1 and B1, so 3) copied to the clipboard:
+		helper.typeIntoInputField(helper.addressInputSelector, 'C1');
+		cy.cGet(helper.addressInputSelector).should('have.prop', 'value', 'C1');
+		cy.window().then(win => {
+			const app = win['0'].app;
+			app.socket.sendMessage('uno .uno:Copy');
+		});
+		const html = '<div id="meta-origin" data-coolorigin="%META_URL%">ignored</div>';
+		setDummyClipboard('text/html', html);
+
+		helper.processToIdle(this.win);
+
+		// And the server rotating the clipboard key twice while the document sits idle:
+		let currentKey;
+		cy.window().then(win => {
+			const clip = win['0'].app.map._clip;
+			currentKey = clip._accessKey;
+			clip.setKey('rotated-key-1');
+			clip.setKey('rotated-key-2');
+		});
+
+		// When pasting C1 to D1:
+		helper.typeIntoInputField(helper.addressInputSelector, 'D1');
+		cy.cGet(helper.addressInputSelector).should('have.prop', 'value', 'D1');
+		cy.spy(this.win.app.socket, 'sendMessage').as('sendMessage');
+		cy.cGet('#Home .ui-overflow-group-content > .unoPaste .arrowbackground').click();
+		helper.getMenuEntry(0).click(); // Paste
+		cy.get('@sendMessage').should('have.been.calledWith', 'uno .uno:Paste');
+
+		// The server still knows the real key, so the copy below can fetch the content.
+		cy.window().then(win => {
+			win['0'].app.map._clip.setKey(currentKey);
+		});
+
+		// Then the paste is still the internal one, which rewrites the formula: D1 is 5.
+		helper.setDummyClipboardForCopy();
+		helper.copy();
+		cy.cGet('#copy-paste-container table td:nth-of-type(1)').should('have.text', '5');
+	});
+
 	it('HTML paste, external case', function() {
 		cy.cGet(helper.addressInputSelector).should('have.prop', 'value', 'A1');
 
