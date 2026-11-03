@@ -1643,7 +1643,7 @@ static std::optional<sal_Int32> resolveUserVariable(const SmartArtDiagram& rDgm,
                 sizeOfLaidOutShape(rDgm, rSpacing.msRefForName, rSpacing.mnRefType));
             if (aOf)
                 aValue = static_cast<sal_Int32>(
-                    *aOf * (rSpacing.mfFactor > 0.0 ? rSpacing.mfFactor : 1.0));
+                    *aOf * rSpacing.mfFactor);
             break;
         }
     }
@@ -1686,7 +1686,7 @@ void CompositeAlg::applyConstraintToLayout(const SmartArtDiagram& rDgm, const Sh
         {
             const_cast<SmartArtDiagram&>(rDgm).getDeferredUserVariables()[rConstraint.mnType]
                 = { rConstraint.msRefForName, rConstraint.mnRefType,
-                    rConstraint.mfFactor > 0.0 ? rConstraint.mfFactor : 1.0 };
+                    rConstraint.mfFactor };
             return;
         }
     }
@@ -2136,7 +2136,7 @@ static double secondFontPartOf(const std::vector<Constraint>& rConstraints, cons
     const auto aTake = [&oPart](const Constraint& rConstraint) {
         if (rConstraint.mnType != XML_secFontSz || rConstraint.mnRefType != XML_primFontSz)
             return;
-        oPart = rConstraint.mfFactor > 0.0 ? rConstraint.mfFactor : 1.0;
+        oPart = rConstraint.mfFactor;
     };
     for (const Constraint& rConstraint : rConstraints)
         if (rConstraint.msForName == rName)
@@ -2248,7 +2248,7 @@ static OUString fontGroupOf(const SmartArtDiagram& rDgm,
             else if (rConstraint.mnRefType == XML_primFontSz && !rConstraint.msRefForName.isEmpty())
             {
                 aNext = rConstraint.msRefForName;
-                fLinkPart = rConstraint.mfFactor > 0.0 ? rConstraint.mfFactor : 1.0;
+                fLinkPart = rConstraint.mfFactor;
                 bEqual = rConstraint.mnOperator == XML_equ;
             }
             else if (rConstraint.mnRefType == XML_secFontSz)
@@ -2899,6 +2899,10 @@ static bool layoutTextDrivenSnake(const SmartArtDiagram& rDgm, const AlgAtom& rA
         ShapePtr mpShape;
         sal_Int64 mnWidth = 0;
         sal_Int64 mnHeight = 0;
+        // least width (widest word), step, and the text's height with margins at a width
+        sal_Int64 mnLeastWidth = 0;
+        sal_Int64 mnStep = 1;
+        std::function<sal_Int64(sal_Int64)> maHeightAt;
     };
     std::vector<Cell> aCells;
     OUString aGroup;
@@ -2968,14 +2972,28 @@ static bool layoutTextDrivenSnake(const SmartArtDiagram& rDgm, const AlgAtom& rA
                 ? 0
                 : measureWidestLine(aParagraphs, fTextFont, rDgm.getTextFont(),
                                     aFontOfParagraph, aLevels));
-        aCell.mnWidth = aGrown(nStatedWidth, nLine + nSides);
-        const sal_Int64 nText(
+        const sal_Int64 nWord(
             aParagraphs.empty()
                 ? 0
-                : measureTextHeightInShape(pChild, aParagraphs,
-                                           std::max<sal_Int64>(1, aCell.mnWidth - nSides),
-                                           nSides, nOverUnder, fTextFont, aFontOfParagraph, aLevels,
-                                           spaceAfterPartsOf(rNode), rDgm.getTextFont()));
+                : measureWidestWord(aParagraphs, fTextFont, rDgm.getTextFont(),
+                                    aFontOfParagraph, aLevels));
+        // runs again after this loop, so it keeps copies
+        aCell.maHeightAt = [pChild, aParagraphs, nSides, nOverUnder, fTextFont, aFontOfParagraph,
+                            aLevels, aSpaceAfter = spaceAfterPartsOf(rNode),
+                            aTextFont = rDgm.getTextFont()](sal_Int64 nWidth) {
+            return (aParagraphs.empty()
+                        ? sal_Int64(0)
+                        : measureTextHeightInShape(pChild, aParagraphs,
+                                                   std::max<sal_Int64>(1, nWidth - nSides), nSides,
+                                                   nOverUnder, fTextFont, aFontOfParagraph, aLevels,
+                                                   aSpaceAfter, aTextFont))
+                   + nOverUnder;
+        };
+        // first as wide as the widest line, no line breaks
+        aCell.mnWidth = aGrown(nStatedWidth, nLine + nSides);
+        aCell.mnLeastWidth = aGrown(nStatedWidth, nWord + nSides);
+        aCell.mnStep = std::max<sal_Int64>(1, nStatedWidth / 32);
+        const sal_Int64 nText(aCell.maHeightAt(aCell.mnWidth) - nOverUnder);
         aCell.mnHeight = aGrown(nStatedHeight, nText + nOverUnder);
         rMutable.getFittedFontSizes()[pChild->getInternalName()] = fTextFont;
         aCells.push_back(aCell);
@@ -2994,6 +3012,11 @@ static bool layoutTextDrivenSnake(const SmartArtDiagram& rDgm, const AlgAtom& rA
             nHighest = std::max(nHighest, rCell.mnHeight);
         for (Cell& rCell : aCells)
             rCell.mnHeight = nHighest;
+        // narrow while the broken text still fits that height, down to the widest word
+        for (Cell& rCell : aCells)
+            while (rCell.mnWidth - rCell.mnStep >= rCell.mnLeastWidth
+                   && rCell.maHeightAt(rCell.mnWidth - rCell.mnStep) <= rCell.mnHeight)
+                rCell.mnWidth -= rCell.mnStep;
     }
 
     // the rows, each as full as the width allows
@@ -7127,7 +7150,7 @@ std::optional<HangingWeights> readHangingWeights(const std::vector<Constraint>& 
             && rConstraint.msForName == rChildCell && rConstraint.mnRefType == XML_h
             && !rConstraint.msRefForName.isEmpty() && rConstraint.msRefForName != rChildCell)
         {
-            aOut.fChildOfRoot = rConstraint.mfFactor > 0.0 ? rConstraint.mfFactor : 1.0;
+            aOut.fChildOfRoot = rConstraint.mfFactor;
             aOut.aRootCell = rConstraint.msRefForName;
             break;
         }
@@ -7253,8 +7276,7 @@ void gatherHeightOfWidthFactors(const LayoutAtom& rAtom, std::map<OUString, doub
                             || rConstraint.mnFor != XML_ch || rConstraint.msForName.isEmpty()
                             || rConstraint.mfFactor < 0.0)
                             continue;
-                        const double fPart(rConstraint.mfFactor != 0.0 ? rConstraint.mfFactor
-                                                                       : 1.0);
+                        const double fPart(rConstraint.mfFactor);
                         if (rConstraint.msRefForName.isEmpty())
                             aWidthOfComposite[rConstraint.msForName] = fPart;
                         else if (aWidthOfComposite.count(rConstraint.msRefForName))
@@ -7267,7 +7289,7 @@ void gatherHeightOfWidthFactors(const LayoutAtom& rAtom, std::map<OUString, doub
                         || rConstraint.mnFor != XML_ch || rConstraint.msForName.isEmpty()
                         || rConstraint.mfFactor < 0.0)
                         continue;
-                    const double fPart(rConstraint.mfFactor != 0.0 ? rConstraint.mfFactor : 1.0);
+                    const double fPart(rConstraint.mfFactor);
                     if (rConstraint.msRefForName.isEmpty())
                         fFactor = std::max(fFactor, fPart);
                     else if (aWidthOfComposite.count(rConstraint.msRefForName))
@@ -7412,7 +7434,7 @@ bool readStatedSize(const std::vector<Constraint>& rConstraints, std::u16string_
             || (rConstraint.mnRefType != XML_w && rConstraint.mnRefType != XML_h)
             || constraintRefersToItself(rConstraint, rName))
             continue;
-        const double fFactor(rConstraint.mfFactor > 0.0 ? rConstraint.mfFactor : 1.0);
+        const double fFactor(rConstraint.mfFactor);
         if (rConstraint.msRefForName.isEmpty())
         {
             rOut = fFactor * (rConstraint.mnRefType == XML_w ? rRoom.Width : rRoom.Height);
@@ -7839,6 +7861,8 @@ void LinearChildExtents::read(const SmartArtDiagram& rDgm, const LayoutNode& rRo
 
             double fFactor = 0.0;
             bool bShare(false);
+            // a part of nothing stated outright, "fact 0", is a wish of no extent
+            bool bStatedNothing(false);
             if (rConstraint.mnRefType == nAxisType || rConstraint.mnRefType == nOtherType)
             {
                 // What it refers to is a part of the parent's extent of the referred type, the
@@ -7901,6 +7925,7 @@ void LinearChildExtents::read(const SmartArtDiagram& rDgm, const LayoutNode& rRo
                     }
                 }
                 fFactor = fReference * rConstraint.mfFactor * rFrom.nExtent / rInto.nExtent;
+                bStatedNothing = rConstraint.mfFactor == 0.0;
             }
             else if (rConstraint.mnRefType == XML_none && rConstraint.mfValue != 0.0
                      && std::isfinite(rConstraint.mfValue))
@@ -7934,12 +7959,12 @@ void LinearChildExtents::read(const SmartArtDiagram& rDgm, const LayoutNode& rRo
                     resolveUserVariable(rDgm, rConstraint.mnRefType, rConstraints));
                 if (!aValue)
                     continue;
-                fFactor = *aValue * (rConstraint.mfFactor != 0.0 ? rConstraint.mfFactor : 1.0)
+                fFactor = *aValue * rConstraint.mfFactor
                           / static_cast<double>(rInto.nExtent);
             }
 
-            // A wish of no size at all says nothing about the child.
-            if (fFactor == 0.0 || !std::isfinite(fFactor))
+            // A wish of no size at all says nothing about the child, unless it was stated so.
+            if ((fFactor == 0.0 && !bStatedNothing) || !std::isfinite(fFactor))
                 continue;
 
             if (bBelow)
@@ -9686,8 +9711,7 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                                 continue;
                             const auto aOf = aWidthOf.find(aPart->second.first);
                             const double fOf(aOf == aWidthOf.end() ? 1.0 : aOf->second);
-                            aWidthOf[rEntry.first] = fOf * aPart->second.second
-                                                     * (rOwn.mfFactor > 0.0 ? rOwn.mfFactor : 1.0);
+                            aWidthOf[rEntry.first] = fOf * aPart->second.second * rOwn.mfFactor;
                             break;
                         }
                     }
@@ -10076,7 +10100,7 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                                 if (rOne.mnFor != XML_ch || rOne.msForName.isEmpty()
                                     || rOne.mnRefType != XML_w)
                                     continue;
-                                const double fPart(rOne.mfFactor != 0.0 ? rOne.mfFactor : 1.0);
+                                const double fPart(rOne.mfFactor);
                                 std::optional<double> oOf;
                                 if (rOne.msRefForName.isEmpty())
                                     oOf = 1.0;
@@ -11965,8 +11989,7 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                         const std::optional<double> oOf(rOfRow.stated(rName.msRefForName));
                         if (!oOf)
                             continue;
-                        return *oOf * (rName.mfFactor != 0.0 ? rName.mfFactor : 1.0)
-                               * (rOwn.mfFactor != 0.0 ? rOwn.mfFactor : 1.0);
+                        return *oOf * rName.mfFactor * rOwn.mfFactor;
                     }
                 }
                 return std::nullopt;
@@ -12148,9 +12171,7 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                                             && rOther.mnRefType == XML_primFontSz)
                                         {
                                             fOverUnder += rOther.mfFactor
-                                                          * (rConstraint.mfFactor != 0.0
-                                                                 ? rConstraint.mfFactor
-                                                                 : 1.0);
+                                                          * rConstraint.mfFactor;
                                             break;
                                         }
                                     continue;
@@ -12741,7 +12762,7 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                                 || rBound.msRefForName.isEmpty()
                                 || rBound.msRefForName == rBound.msForName)
                                 continue;
-                            const double fFactor(rBound.mfFactor > 0.0 ? rBound.mfFactor : 1.0);
+                            const double fFactor(rBound.mfFactor);
                             for (const ShapePtr& pText : rShape->getChildren())
                             {
                                 if (pText->getInternalName() != rBound.msRefForName)
@@ -13043,7 +13064,7 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                             resolveUserVariable(rDgm, rOwn.mnRefType, rConstraints));
                         if (!aValue)
                             continue;
-                        fReach += *aValue * (rOwn.mfFactor != 0.0 ? rOwn.mfFactor : 1.0);
+                        fReach += *aValue * rOwn.mfFactor;
                         aSizedByName.insert(rOwn.msForName);
                         bAny = true;
                     }
@@ -13592,8 +13613,7 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                         if (rOne.mnFor == XML_ch && rOne.mnType == XML_w
                             && rOne.msForName == rChild->getInternalName())
                             oWidthPart = rOne.mnRefType == XML_w && rOne.msRefForName.isEmpty()
-                                             ? std::optional<double>(
-                                                   rOne.mfFactor != 0.0 ? rOne.mfFactor : 1.0)
+                                             ? std::optional<double>(rOne.mfFactor)
                                              : std::nullopt;
                     if (!oWidthPart)
                         continue;
@@ -13632,7 +13652,7 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                             if (!oOf)
                                 continue;
                             (rOne.mnType == XML_w ? aWidths : aHeights)[rOne.msForName]
-                                = *oOf * (rOne.mfFactor != 0.0 ? rOne.mfFactor : 1.0);
+                                = *oOf * rOne.mfFactor;
                         }
                     double fDrawn(0.0);
                     bool bAllKnown(true);
@@ -13649,9 +13669,7 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                             if (rBound.mnOperator == XML_lte && rBound.mnType == XML_h
                                 && rBound.msForName == pInside->getInternalName()
                                 && rBound.mnRefType == XML_h && rBound.msRefForName.isEmpty())
-                                fOne = std::min(fOne, (rBound.mfFactor > 0.0 ? rBound.mfFactor
-                                                                             : 1.0)
-                                                          * fHeight);
+                                fOne = std::min(fOne, rBound.mfFactor * fHeight);
                         fDrawn = std::max(fDrawn, fOne);
                     }
                     if (bAllKnown && fDrawn > 0.0 && fDrawn < 0.999 * fHeight)
@@ -13794,11 +13812,22 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
             // the flow unless the alignment says otherwise.
             sal_Int32 nFillGap = 0;
             sal_Int32 nFillStart = bWalkBack ? nWalkStart : 0;
+            // what the children cover, a negative spacer at the end covers nothing
+            const auto aCovered = [&aWantedExtent, &aAdvancePart]() {
+                sal_Int32 nAt(0), nFirst(0), nLast(0);
+                for (size_t n = 0; n < aWantedExtent.size(); ++n)
+                {
+                    const sal_Int32 nAdvance(
+                        static_cast<sal_Int32>(aWantedExtent[n] * aAdvancePart[n]));
+                    nFirst = std::min(nFirst, nAt);
+                    nLast = std::max(nLast, nAt + std::max<sal_Int32>(0, nAdvance));
+                    nAt += nAdvance;
+                }
+                return nLast - nFirst;
+            };
             if (bFillAxis && !bWalkBack)
             {
-                sal_Int32 nWanted = 0;
-                for (size_t n = 0; n < aWantedExtent.size(); ++n)
-                    nWanted += static_cast<sal_Int32>(aWantedExtent[n] * aAdvancePart[n]);
+                sal_Int32 nWanted = aCovered();
                 if (nWanted < nParentExtent && aWantedExtent.size() >= 1)
                 {
                     // A row that carries its spaces as children of its own, empty groups between
@@ -13905,9 +13934,7 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                                                : (nAlongAlign == XML_l || nAlongAlign == XML_t));
                     if (nLeft > 0)
                         nFillStart = bAtStart ? 0 : bAtEnd ? nLeft : nLeft / 2;
-                    nWanted = 0;
-                    for (size_t n = 0; n < aWantedExtent.size(); ++n)
-                        nWanted += static_cast<sal_Int32>(aWantedExtent[n] * aAdvancePart[n]);
+                    nWanted = aCovered();
                 }
                 if (nIncX)
                     aTotalSize.Width = nWanted;
@@ -14107,8 +14134,7 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                             || (!isUserVariable(rConstraint.mnRefType) && !bOwnAcross)
                             || (nUnit && nUnit != rConstraint.mnRefType))
                             continue;
-                        const double fFactor(rConstraint.mfFactor != 0.0 ? rConstraint.mfFactor
-                                                                         : 1.0);
+                        const double fFactor(rConstraint.mfFactor);
                         if (rConstraint.mnType == nAxisType && fFactor > 0.0)
                         {
                             oAlongOfUnit = fFactor;
@@ -14154,7 +14180,7 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                         && (rConstraint.msForName != aCurrShape->getInternalName()
                             || rConstraint.msRefForName != aCurrShape->getInternalName()))
                         continue;
-                    oNamedCross = rConstraint.mfFactor != 0.0 ? rConstraint.mfFactor : 1.0;
+                    oNamedCross = rConstraint.mfFactor;
                 }
                 if (oNamedCross || !aCrossSettledHere.count(aCurrShape->getInternalName()))
                 {
@@ -14251,9 +14277,7 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                                     || (rConstraint.mnType != XML_w && rConstraint.mnType != XML_h)
                                     || rConstraint.msForName == aCurrShape->getInternalName())
                                     continue;
-                                const double fFactor(rConstraint.mfFactor != 0.0
-                                                         ? rConstraint.mfFactor
-                                                         : 1.0);
+                                const double fFactor(rConstraint.mfFactor);
                                 aProperties[rConstraint.msForName][rConstraint.mnType]
                                     = static_cast<sal_Int32>(rSide * fFactor);
                             }

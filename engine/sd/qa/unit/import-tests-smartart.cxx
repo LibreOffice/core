@@ -2766,6 +2766,30 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testFontBoundInABranchNotTakenHasNoEf
     CPPUNIT_ASSERT_DOUBLES_EQUAL(fWithout, shownTextSize(xArrow), 0.5);
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTransitionOfNoWidthLeavesNoGap)
+{
+    // the row states its transitions as 0 of its width, so the nodes stand side by side
+    createSdImpressDoc("pptx/smartart-sibtrans-factor-zero.pptx");
+    SdrObject* pDiagram(SdrObject::getSdrObjectFromXShape(getShapeFromPage(0, 0)));
+    CPPUNIT_ASSERT(nullptr != pDiagram);
+    pDiagram->getDiagramHelper()->reLayout();
+
+    std::vector<tools::Rectangle> aNodes;
+    for (const std::u16string_view aStart : { u"1", u"2", u"Three" })
+    {
+        SdrObject* pNode(findShapeByTextStart(*pDiagram, aStart));
+        CPPUNIT_ASSERT(nullptr != pNode);
+        aNodes.push_back(pNode->GetSnapRect());
+    }
+    std::sort(aNodes.begin(), aNodes.end(),
+              [](const tools::Rectangle& rA, const tools::Rectangle& rB) {
+                  return rA.Left() < rB.Left();
+              });
+    for (size_t n = 1; n < aNodes.size(); ++n)
+        CPPUNIT_ASSERT_LESSEQUAL(tools::Long(5),
+                                 std::abs(aNodes[n].Left() - aNodes[n - 1].Right()));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
