@@ -268,6 +268,8 @@ public:
 
     const std::string& getAdminTemplate(const std::string& name);
 
+    /// The gzip copy of the cached file at path, or nullptr when there is none. An empty file
+    /// and a file that failed to compress have no gzip copy.
     const std::string *getCompressedFile(const std::string &path);
 
     const std::string *getUncompressedFile(const std::string &path);

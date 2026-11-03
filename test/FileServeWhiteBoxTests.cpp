@@ -29,7 +29,11 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>
 
+#include <zlib.h>
+
 #include <cstddef>
+#include <cstdint>
+#include <fstream>
 #include <memory>
 
 /// File-Serve White-Box unit-tests.
@@ -46,6 +50,7 @@ class FileServeTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testCSPKeepsOutBadSources);
     CPPUNIT_TEST(testSettingsUploadFileId);
     CPPUNIT_TEST(testAttachmentNameKeepsQuotes);
+    CPPUNIT_TEST(testGzipCopyIsCompleteStream);
     CPPUNIT_TEST_SUITE_END();
 
     void testUIDefaults();
@@ -58,6 +63,7 @@ class FileServeTests : public CPPUNIT_NS::TestFixture
     void testCSPKeepsOutBadSources();
     void testSettingsUploadFileId();
     void testAttachmentNameKeepsQuotes();
+    void testGzipCopyIsCompleteStream();
 
     void preProcessedFileSubstitution(const std::string_view testname,
                                       const Util::UnorderedStringMap<std::string>& variables);
@@ -701,6 +707,83 @@ void FileServeTests::testAttachmentNameKeepsQuotes()
 
     LOK_ASSERT_EQUAL_STR("attachment; filename=\"a\\\"b\\\\c.odt\"",
                          FileServerRequestHandler::attachmentDisposition("a\"b\\c.odt"));
+}
+
+namespace
+{
+/// Decode a complete gzip stream into output. Returns false when the stream is invalid, ends
+/// before its trailer, or has bytes after it.
+bool gunzip(const std::string& input, std::string& output)
+{
+    z_stream strm{};
+    if (inflateInit2(&strm, 31) != Z_OK)
+        return false;
+
+    strm.next_in = reinterpret_cast<unsigned char*>(const_cast<char*>(input.data()));
+    strm.avail_in = input.size();
+    int result = Z_OK;
+    char buffer[16 * 1024];
+    while (result == Z_OK)
+    {
+        strm.next_out = reinterpret_cast<unsigned char*>(buffer);
+        strm.avail_out = sizeof(buffer);
+        result = inflate(&strm, Z_NO_FLUSH);
+        output.append(buffer, sizeof(buffer) - strm.avail_out);
+    }
+
+    const bool complete = result == Z_STREAM_END && strm.avail_in == 0;
+    inflateEnd(&strm);
+    return complete;
+}
+} // namespace
+
+void FileServeTests::testGzipCopyIsCompleteStream()
+{
+    constexpr std::string_view testname = __func__;
+
+    const std::string root = FileUtil::createRandomTmpDir();
+    const std::string dir = root + "/static";
+    Poco::File(dir).createDirectories();
+
+    // Bytes from a pseudo-random sequence do not compress, so their gzip stream is larger than
+    // the input, like the stream of an already-compressed PNG image.
+    std::string random(20000, '\0');
+    std::uint32_t state = 2463534242u;
+    for (char& byte : random)
+    {
+        state ^= state << 13;
+        state ^= state >> 17;
+        state ^= state << 5;
+        byte = static_cast<char>(state & 0xff);
+    }
+
+    const std::string text(20000, 'a');
+
+    std::ofstream(dir + "/random.png", std::ios::binary) << random;
+    std::ofstream(dir + "/text.css", std::ios::binary) << text;
+    std::ofstream(dir + "/empty.css", std::ios::binary).flush();
+
+    FileServerRequestHandler handler(root + "/nonexistent");
+    handler.readDirToHash(root, "/static");
+
+    for (const auto& [relPath, original] :
+         { std::make_pair("/static/random.png", random), std::make_pair("/static/text.css", text) })
+    {
+        const std::string* gzipped = handler.getCompressedFile(relPath);
+        LOK_ASSERT_MESSAGE(std::string("No gzip copy of ") + relPath, gzipped != nullptr);
+
+        std::string decoded;
+        LOK_ASSERT_MESSAGE(std::string("Incomplete gzip stream for ") + relPath,
+                           gunzip(*gzipped, decoded));
+        LOK_ASSERT_EQUAL(original.size(), decoded.size());
+        LOK_ASSERT(original == decoded);
+    }
+
+    // An empty file is served as it is, with no gzip copy to label as gzip.
+    LOK_ASSERT(handler.getCompressedFile("/static/empty.css") == nullptr);
+    LOK_ASSERT(handler.getUncompressedFile("/static/empty.css")->empty());
+
+    FileUtil::removeFile(root, true);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(FileServeTests);

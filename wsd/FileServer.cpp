@@ -784,17 +784,19 @@ bool FileServerRequestHandler::handleRequest(const HTTPRequest& request,
 
             bool compressed = false;
             const std::string* content;
+            const std::string* gzipContent =
+                request.hasToken("Accept-Encoding", "gzip") ? getCompressedFile(relPath) : nullptr;
             if (brotli && FileHash.find(relPath + ".br") != FileHash.end())
             {
                 compressed = true;
                 response.set("Content-Encoding", "br");
                 content = getUncompressedFile(relPath + ".br");
             }
-            else if (request.hasToken("Accept-Encoding", "gzip"))
+            else if (gzipContent)
             {
                 compressed = true;
                 response.set("Content-Encoding", "gzip");
-                content = getCompressedFile(relPath);
+                content = gzipContent;
             }
             else
                 content = getUncompressedFile(relPath);
@@ -1049,7 +1051,9 @@ void FileServerRequestHandler::readDirToHash(const std::string& basePath, const 
             assert(size > 0 && "No data to compress");
             assert(!uncompressedFile.empty() && "Unexpected empty uncompressedFile");
             std::string compressedFile;
-            const long unsigned int compSize = compressBound(size);
+            // deflateBound covers the gzip header and trailer, so a file that does not compress
+            // still fits and deflate finishes the stream in a single call.
+            const long unsigned int compSize = deflateBound(&strm, size);
             compressedFile.resize(compSize);
             strm.next_in = reinterpret_cast<unsigned char*>(uncompressedFile.data());
             strm.avail_in = size;
@@ -1058,7 +1062,7 @@ void FileServerRequestHandler::readDirToHash(const std::string& basePath, const 
             strm.total_out = strm.total_in = 0;
 
             const int deflateResult = deflate(&strm, Z_FINISH);
-            if (deflateResult != Z_OK && deflateResult != Z_STREAM_END)
+            if (deflateResult != Z_STREAM_END)
             {
                 LOG_ERR("Failed to deflate [" << basePath << relPath
                                               << "], result: " << deflateResult);
@@ -1084,9 +1088,11 @@ void FileServerRequestHandler::readDirToHash(const std::string& basePath, const 
 
 const std::string *FileServerRequestHandler::getCompressedFile(const std::string &path)
 {
-    // If a compressed version is not available, return the original uncompressed data.
-    const auto& pair = FileHash[path];
-    return pair.second.empty() ? &pair.first : &pair.second;
+    const auto it = FileHash.find(path);
+    if (it == FileHash.end() || it->second.second.empty())
+        return nullptr;
+
+    return &it->second.second;
 }
 
 namespace {
