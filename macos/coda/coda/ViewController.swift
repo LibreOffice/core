@@ -343,279 +343,7 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
                     log.string += body + "\n"
                 }
 
-                if body == "HULLO" {
-                    // Now we know that the JS has started completely
-                    COWrapper.handleHULLO(with: document)
-                    return (nil, nil)
-                }
-                else if body == "BYE" {
-                    COWrapper.LOG_TRC("Document window terminating on JavaScript side. Closing our end of the socket.")
-                    view.window?.performClose(nil)
-                    return (nil, nil)
-                }
-                else if body.hasPrefix("COMMANDSTATECHANGED ") {
-                    // State changes are already handled in the Document's
-                    // handleStateChanged(), straight from the engine's message stream,
-                    // so the page's echo of them carries nothing new. Swallowing it here
-                    // keeps it from being forwarded back to the engine as a client
-                    // message.
-                }
-                else if body.hasPrefix("COMMANDRESULT ") {
-                    // Command results are already handled in the Document's
-                    // handleUnoCommandResult(), straight from the engine's message
-                    // stream, so the page's echo of them carries nothing new.
-                    // Swallowing it here keeps it from being forwarded back to the
-                    // engine as a client message.
-                }
-                else if body == "PRINT" {
-                    document.printDocument(self)
-                    return (nil, nil)
-                }
-                else if body == "EXCHANGEMONITORS" {
-                    exchangeMonitors()
-                }
-                else if body == "FOCUSIFHWKBD" {
-                    COWrapper.LOG_ERR("TODO: Implement FOCUSIFHWKBD")
-                    /*
-                    if isExternalKeyboardAttached() {
-                        let hwKeyboardMagic = """
-                                {
-                                    if (window.MagicToGetHWKeyboardWorking) {
-                                        window.MagicToGetHWKeyboardWorking();
-                                    }
-                                }
-                                """
-                        self.webView.evaluateJavaScript(hwKeyboardMagic) { (result, error) in
-                            if let error = error {
-                                COOLWrapper.LOG_ERR("Error after \(hwKeyboardMagic): \(error.localizedDescription)")
-                                if let jsException = (error as NSError).userInfo["WKJavaScriptExceptionMessage"] as? String {
-                                    COOLWrapper.LOG_ERR("JavaScript exception: \(jsException)")
-                                }
-                            }
-                        }
-                    }
-                    */
-                    return (nil, nil)
-                }
-                else if body.hasPrefix("HYPERLINK") {
-                    let messageBodyItems = body.components(separatedBy: " ")
-                    if messageBodyItems.count >= 2 {
-                        if let url = URL(string: messageBodyItems[1]) {
-                            NSWorkspace.shared.open(url)
-                            return (nil, nil)
-                        }
-                    }
-                    return (nil, nil)
-                }
-                else if body == "FONTPICKER" {
-                    COWrapper.LOG_ERR("TODO: Implement FONTPICKER")
-                    /*
-                    // Font picker is not available on macOS like on iOS, but you can use NSFontPanel
-                    let fontManager = NSFontManager.shared
-                    fontManager.target = self
-                    fontManager.action = #selector(changeFont(_:))
-                    fontManager.orderFrontFontPanel(self)
-                    */
-                    return (nil, nil)
-                }
-                else if body == "WELCOME" || body == "WELCOME auto" {
-                    (NSDocumentController.shared as? DocumentController)?.openWelcome(automatic: body != "WELCOME")
-                    return (nil, nil)
-                }
-                else if body == "LICENSE" {
-                    guard let url = Bundle.main.url(forResource: "LICENSE", withExtension: "html") else {
-                        COWrapper.LOG_ERR("LICENSE.html not found in bundle")
-                        return (nil, nil)
-                     }
-
-                     NSWorkspace.shared.open(url)
-                     return (nil, nil)
-                }
-                else if body == "SYNCSETTINGS" {
-                    COWrapper.syncSettings(with: document)
-                    return (nil, nil)
-                }
-                else if body.hasPrefix("SETDARKMODE ") {
-                    COWrapper.setDarkMode(body == "SETDARKMODE true")
-                    return (nil, nil)
-                }
-                // Options dialog: AI model listing performs a network request, so
-                // handle it asynchronously rather than via handleSettingsMessage.
-                else if body.hasPrefix("FETCHAIMODELS ") {
-                    let payload = String(body.dropFirst("FETCHAIMODELS ".count))
-                    return (await ViewController.fetchAIModels(payload), nil)
-                }
-                // Other Options dialog native backend, shared with the Backstage
-                // web view (see handleSettingsMessage).
-                else if let settingsResult = ViewController.handleSettingsMessage(body) {
-                    return settingsResult
-                }
-                else if body.hasPrefix("downloadas ") {
-                    let messageBodyItems = body.components(separatedBy: " ")
-                    var format: String?
-                    if messageBodyItems.count >= 2 {
-                        for item in messageBodyItems[1...] {
-                            if item.hasPrefix("format=") {
-                                format = String(item.dropFirst("format=".count))
-                            }
-                        }
-                        guard let format = format else { return (nil, nil) }
-
-                        // Handle special "direct-" formats
-                        var adjustedFormat = format
-                        if adjustedFormat.hasPrefix("direct-") {
-                            adjustedFormat = String(adjustedFormat.dropFirst("direct-".count))
-                        }
-
-                        // Save the document in the requested format
-                        let tmpFileDirectory = FileManager.default.temporaryDirectory.appendingPathComponent("export")
-                        do {
-                            try FileManager.default.createDirectory(at: tmpFileDirectory, withIntermediateDirectories: true, attributes: nil)
-                        } catch {
-                            COWrapper.LOG_ERR("Could not create directory \(tmpFileDirectory.path)")
-                            return (nil, nil)
-                        }
-
-                        // Remove the original extension from the file name and add the adjustedFormat
-                        guard let tmpFileName = self.document?.tempFileURL?.deletingPathExtension().appendingPathExtension(adjustedFormat).lastPathComponent else { return (nil, nil) }
-                        let downloadAsTmpURL = tmpFileDirectory.appendingPathComponent(tmpFileName)
-
-                        // Remove any existing file
-                        do {
-                            try FileManager.default.removeItem(at: downloadAsTmpURL)
-                        } catch {
-                            // File may not exist, ignore error
-                        }
-
-                        // Perform the actual Save As
-                        COWrapper.saveAs(with: document, url: downloadAsTmpURL.absoluteString, format: adjustedFormat, filterOptions: nil)
-
-                        // Verify the file was saved
-                        let fileExists = FileManager.default.fileExists(atPath: downloadAsTmpURL.path)
-                        if !fileExists {
-                            COWrapper.LOG_ERR("Could not save to '\(downloadAsTmpURL.path)'")
-                            return (nil, nil)
-                        }
-
-                        // Present a save panel to let the user choose where to save the file
-                        let savePanel = NSSavePanel()
-                        savePanel.directoryURL = FileManager.default.homeDirectoryForCurrentUser
-                        savePanel.nameFieldStringValue = tmpFileName
-                        savePanel.begin { (result) in
-                            if result == .OK, let url = savePanel.url {
-                                do {
-                                    try FileManager.default.copyItem(at: downloadAsTmpURL, to: url)
-                                    // Remove the temporary file
-                                    try FileManager.default.removeItem(at: downloadAsTmpURL)
-                                } catch {
-                                    COWrapper.LOG_ERR("Error during file save: \(error)")
-                                }
-                            }
-                        }
-                    }
-                    return (nil, nil)
-                }
-                else if body == "uno .uno:SaveAs" {
-                    // Trigger the NSDocument Save As… panel
-                    document.saveAs(nil)
-                    return (nil, nil)
-                }
-                else if body.hasPrefix("exportfile ") {
-                    // The kit's COKitCallbackType::EXPORT_FILE branch sends this for
-                    // export flows like .uno:ExportToPDF (PDF with options).
-                    // The file has already been written to a tmp URL; show a
-                    // native NSSavePanel and copy it to the user's choice.
-                    var fileUrlString: String?
-                    for item in body.dropFirst("exportfile ".count).components(separatedBy: " ") {
-                        if item.hasPrefix("url=") {
-                            fileUrlString = String(item.dropFirst("url=".count))
-                        }
-                    }
-                    guard let urlString = fileUrlString,
-                          let srcURL = URL(string: urlString),
-                          FileManager.default.fileExists(atPath: srcURL.path) else {
-                        COWrapper.LOG_ERR("exportfile: source file missing: \(fileUrlString ?? "(no url)")")
-                        return (nil, nil)
-                    }
-
-                    // Suggest the document's own name with the exported file's
-                    // extension, not the kit's temp-file name (which carries the
-                    // internal jail/sandbox filename). Mirrors the downloadas path.
-                    let suggestedName = self.document?.tempFileURL?
-                        .deletingPathExtension()
-                        .appendingPathExtension(srcURL.pathExtension)
-                        .lastPathComponent ?? srcURL.lastPathComponent
-                    let savePanel = NSSavePanel()
-                    savePanel.directoryURL = FileManager.default.homeDirectoryForCurrentUser
-                    savePanel.nameFieldStringValue = suggestedName
-                    savePanel.begin { result in
-                        if result == .OK, let dstURL = savePanel.url {
-                            do {
-                                if FileManager.default.fileExists(atPath: dstURL.path) {
-                                    try FileManager.default.removeItem(at: dstURL)
-                                }
-                                try FileManager.default.copyItem(at: srcURL, to: dstURL)
-                            } catch {
-                                COWrapper.LOG_ERR("exportfile: copy failed: \(error)")
-                            }
-                        }
-                        try? FileManager.default.removeItem(at: srcURL)
-                    }
-                    return (nil, nil)
-                }
-                else if body.hasPrefix("extensionsavefile ") {
-                    // A JS extension (see browser Control.Extension.ts) generated a
-                    // file - e.g. LibreLogo's PICTURE "x.svg" export - and asked to
-                    // save it to the filesystem. The bytes travel base64 in the
-                    // message; write them to a temp file and offer a save panel,
-                    // mirroring the exportfile flow.
-                    var name = "file"
-                    var base64: String?
-                    for item in body.dropFirst("extensionsavefile ".count).components(separatedBy: " ") {
-                        if item.hasPrefix("name=") {
-                            name = String(item.dropFirst("name=".count)).removingPercentEncoding ?? "file"
-                        } else if item.hasPrefix("data=") {
-                            base64 = String(item.dropFirst("data=".count))
-                        }
-                        // mime= is accepted but not needed for a filesystem save
-                    }
-                    guard let base64 = base64, let data = Data(base64Encoded: base64) else {
-                        COWrapper.LOG_ERR("extensionsavefile: missing or invalid data")
-                        return (nil, nil)
-                    }
-                    let sanitized = (name as NSString).lastPathComponent
-                    let savePanel = NSSavePanel()
-                    savePanel.directoryURL = FileManager.default.homeDirectoryForCurrentUser
-                    savePanel.nameFieldStringValue = sanitized.isEmpty ? "file" : sanitized
-                    savePanel.begin { result in
-                        if result == .OK, let dstURL = savePanel.url {
-                            do {
-                                try data.write(to: dstURL)
-                            } catch {
-                                COWrapper.LOG_ERR("extensionsavefile: write failed: \(error)")
-                            }
-                        }
-                    }
-                    return (nil, nil)
-                }
-                else if body.hasPrefix("TEXTCLIPBOARD ") {
-                    let text = String(body.dropFirst("TEXTCLIPBOARD ".count))
-                    NSPasteboard.general.clearContents()
-                    NSPasteboard.general.setString(text, forType: .string)
-                    return (nil, nil)
-                }
-                else if let result = ViewController.handleBackstageMessage(body, onOpened: { [weak self] in
-                    // The picked document opens in its own window; return the
-                    // originating window to its document view.
-                    self?.webView?.evaluateJavaScript(
-                        "window.app?.map?.backstageView?.returnToDocumentView();")
-                }) {
-                    return result
-                }
-                else {
-                    // Just send the message
-                    COWrapper.handleMessage(with: document, message: body)
-                }
+                return await handleDocumentMessage(body)
             }
 
         default:
@@ -625,6 +353,284 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
             else {
                 COWrapper.LOG_ERR("Unrecognized kind of message received from WebView: \(message.name)")
             }
+        }
+
+        return (nil, nil)
+    }
+
+    func handleDocumentMessage(_ body: String) async -> (Any?, String?) {
+        if body == "HULLO" {
+            // Now we know that the JS has started completely
+            COWrapper.handleHULLO(with: document)
+            return (nil, nil)
+        }
+        else if body == "BYE" {
+            COWrapper.LOG_TRC("Document window terminating on JavaScript side. Closing our end of the socket.")
+            view.window?.performClose(nil)
+            return (nil, nil)
+        }
+        else if body.hasPrefix("COMMANDSTATECHANGED ") {
+            // State changes are already handled in the Document's
+            // handleStateChanged(), straight from the engine's message stream,
+            // so the page's echo of them carries nothing new. Swallowing it here
+            // keeps it from being forwarded back to the engine as a client
+            // message.
+        }
+        else if body.hasPrefix("COMMANDRESULT ") {
+            // Command results are already handled in the Document's
+            // handleUnoCommandResult(), straight from the engine's message
+            // stream, so the page's echo of them carries nothing new.
+            // Swallowing it here keeps it from being forwarded back to the
+            // engine as a client message.
+        }
+        else if body == "PRINT" {
+            document.printDocument(self)
+            return (nil, nil)
+        }
+        else if body == "EXCHANGEMONITORS" {
+            exchangeMonitors()
+        }
+        else if body == "FOCUSIFHWKBD" {
+            COWrapper.LOG_ERR("TODO: Implement FOCUSIFHWKBD")
+            /*
+            if isExternalKeyboardAttached() {
+                let hwKeyboardMagic = """
+                        {
+                            if (window.MagicToGetHWKeyboardWorking) {
+                                window.MagicToGetHWKeyboardWorking();
+                            }
+                        }
+                        """
+                self.webView.evaluateJavaScript(hwKeyboardMagic) { (result, error) in
+                    if let error = error {
+                        COOLWrapper.LOG_ERR("Error after \(hwKeyboardMagic): \(error.localizedDescription)")
+                        if let jsException = (error as NSError).userInfo["WKJavaScriptExceptionMessage"] as? String {
+                            COOLWrapper.LOG_ERR("JavaScript exception: \(jsException)")
+                        }
+                    }
+                }
+            }
+            */
+            return (nil, nil)
+        }
+        else if body.hasPrefix("HYPERLINK") {
+            let messageBodyItems = body.components(separatedBy: " ")
+            if messageBodyItems.count >= 2 {
+                if let url = URL(string: messageBodyItems[1]) {
+                    NSWorkspace.shared.open(url)
+                    return (nil, nil)
+                }
+            }
+            return (nil, nil)
+        }
+        else if body == "FONTPICKER" {
+            COWrapper.LOG_ERR("TODO: Implement FONTPICKER")
+            /*
+            // Font picker is not available on macOS like on iOS, but you can use NSFontPanel
+            let fontManager = NSFontManager.shared
+            fontManager.target = self
+            fontManager.action = #selector(changeFont(_:))
+            fontManager.orderFrontFontPanel(self)
+            */
+            return (nil, nil)
+        }
+        else if body == "WELCOME" || body == "WELCOME auto" {
+            (NSDocumentController.shared as? DocumentController)?.openWelcome(automatic: body != "WELCOME")
+            return (nil, nil)
+        }
+        else if body == "LICENSE" {
+            guard let url = Bundle.main.url(forResource: "LICENSE", withExtension: "html") else {
+                COWrapper.LOG_ERR("LICENSE.html not found in bundle")
+                return (nil, nil)
+             }
+
+             NSWorkspace.shared.open(url)
+             return (nil, nil)
+        }
+        else if body == "SYNCSETTINGS" {
+            COWrapper.syncSettings(with: document)
+            return (nil, nil)
+        }
+        else if body.hasPrefix("SETDARKMODE ") {
+            COWrapper.setDarkMode(body == "SETDARKMODE true")
+            return (nil, nil)
+        }
+        // Options dialog: AI model listing performs a network request, so
+        // handle it asynchronously rather than via handleSettingsMessage.
+        else if body.hasPrefix("FETCHAIMODELS ") {
+            let payload = String(body.dropFirst("FETCHAIMODELS ".count))
+            return (await ViewController.fetchAIModels(payload), nil)
+        }
+        // Other Options dialog native backend, shared with the Backstage
+        // web view (see handleSettingsMessage).
+        else if let settingsResult = ViewController.handleSettingsMessage(body) {
+            return settingsResult
+        }
+        else if body.hasPrefix("downloadas ") {
+            let messageBodyItems = body.components(separatedBy: " ")
+            var format: String?
+            if messageBodyItems.count >= 2 {
+                for item in messageBodyItems[1...] {
+                    if item.hasPrefix("format=") {
+                        format = String(item.dropFirst("format=".count))
+                    }
+                }
+                guard let format = format else { return (nil, nil) }
+
+                // Handle special "direct-" formats
+                var adjustedFormat = format
+                if adjustedFormat.hasPrefix("direct-") {
+                    adjustedFormat = String(adjustedFormat.dropFirst("direct-".count))
+                }
+
+                // Save the document in the requested format
+                let tmpFileDirectory = FileManager.default.temporaryDirectory.appendingPathComponent("export")
+                do {
+                    try FileManager.default.createDirectory(at: tmpFileDirectory, withIntermediateDirectories: true, attributes: nil)
+                } catch {
+                    COWrapper.LOG_ERR("Could not create directory \(tmpFileDirectory.path)")
+                    return (nil, nil)
+                }
+
+                // Remove the original extension from the file name and add the adjustedFormat
+                guard let tmpFileName = self.document?.tempFileURL?.deletingPathExtension().appendingPathExtension(adjustedFormat).lastPathComponent else { return (nil, nil) }
+                let downloadAsTmpURL = tmpFileDirectory.appendingPathComponent(tmpFileName)
+
+                // Remove any existing file
+                do {
+                    try FileManager.default.removeItem(at: downloadAsTmpURL)
+                } catch {
+                    // File may not exist, ignore error
+                }
+
+                // Perform the actual Save As
+                COWrapper.saveAs(with: document, url: downloadAsTmpURL.absoluteString, format: adjustedFormat, filterOptions: nil)
+
+                // Verify the file was saved
+                let fileExists = FileManager.default.fileExists(atPath: downloadAsTmpURL.path)
+                if !fileExists {
+                    COWrapper.LOG_ERR("Could not save to '\(downloadAsTmpURL.path)'")
+                    return (nil, nil)
+                }
+
+                // Present a save panel to let the user choose where to save the file
+                let savePanel = NSSavePanel()
+                savePanel.directoryURL = FileManager.default.homeDirectoryForCurrentUser
+                savePanel.nameFieldStringValue = tmpFileName
+                savePanel.begin { (result) in
+                    if result == .OK, let url = savePanel.url {
+                        do {
+                            try FileManager.default.copyItem(at: downloadAsTmpURL, to: url)
+                            // Remove the temporary file
+                            try FileManager.default.removeItem(at: downloadAsTmpURL)
+                        } catch {
+                            COWrapper.LOG_ERR("Error during file save: \(error)")
+                        }
+                    }
+                }
+            }
+            return (nil, nil)
+        }
+        else if body == "uno .uno:SaveAs" {
+            // Trigger the NSDocument Save As… panel
+            document.saveAs(nil)
+            return (nil, nil)
+        }
+        else if body.hasPrefix("exportfile ") {
+            // The kit's COKitCallbackType::EXPORT_FILE branch sends this for
+            // export flows like .uno:ExportToPDF (PDF with options).
+            // The file has already been written to a tmp URL; show a
+            // native NSSavePanel and copy it to the user's choice.
+            var fileUrlString: String?
+            for item in body.dropFirst("exportfile ".count).components(separatedBy: " ") {
+                if item.hasPrefix("url=") {
+                    fileUrlString = String(item.dropFirst("url=".count))
+                }
+            }
+            guard let urlString = fileUrlString,
+                  let srcURL = URL(string: urlString),
+                  FileManager.default.fileExists(atPath: srcURL.path) else {
+                COWrapper.LOG_ERR("exportfile: source file missing: \(fileUrlString ?? "(no url)")")
+                return (nil, nil)
+            }
+
+            // Suggest the document's own name with the exported file's
+            // extension, not the kit's temp-file name (which carries the
+            // internal jail/sandbox filename). Mirrors the downloadas path.
+            let suggestedName = self.document?.tempFileURL?
+                .deletingPathExtension()
+                .appendingPathExtension(srcURL.pathExtension)
+                .lastPathComponent ?? srcURL.lastPathComponent
+            let savePanel = NSSavePanel()
+            savePanel.directoryURL = FileManager.default.homeDirectoryForCurrentUser
+            savePanel.nameFieldStringValue = suggestedName
+            savePanel.begin { result in
+                if result == .OK, let dstURL = savePanel.url {
+                    do {
+                        if FileManager.default.fileExists(atPath: dstURL.path) {
+                            try FileManager.default.removeItem(at: dstURL)
+                        }
+                        try FileManager.default.copyItem(at: srcURL, to: dstURL)
+                    } catch {
+                        COWrapper.LOG_ERR("exportfile: copy failed: \(error)")
+                    }
+                }
+                try? FileManager.default.removeItem(at: srcURL)
+            }
+            return (nil, nil)
+        }
+        else if body.hasPrefix("extensionsavefile ") {
+            // A JS extension (see browser Control.Extension.ts) generated a
+            // file - e.g. LibreLogo's PICTURE "x.svg" export - and asked to
+            // save it to the filesystem. The bytes travel base64 in the
+            // message; write them to a temp file and offer a save panel,
+            // mirroring the exportfile flow.
+            var name = "file"
+            var base64: String?
+            for item in body.dropFirst("extensionsavefile ".count).components(separatedBy: " ") {
+                if item.hasPrefix("name=") {
+                    name = String(item.dropFirst("name=".count)).removingPercentEncoding ?? "file"
+                } else if item.hasPrefix("data=") {
+                    base64 = String(item.dropFirst("data=".count))
+                }
+                // mime= is accepted but not needed for a filesystem save
+            }
+            guard let base64 = base64, let data = Data(base64Encoded: base64) else {
+                COWrapper.LOG_ERR("extensionsavefile: missing or invalid data")
+                return (nil, nil)
+            }
+            let sanitized = (name as NSString).lastPathComponent
+            let savePanel = NSSavePanel()
+            savePanel.directoryURL = FileManager.default.homeDirectoryForCurrentUser
+            savePanel.nameFieldStringValue = sanitized.isEmpty ? "file" : sanitized
+            savePanel.begin { result in
+                if result == .OK, let dstURL = savePanel.url {
+                    do {
+                        try data.write(to: dstURL)
+                    } catch {
+                        COWrapper.LOG_ERR("extensionsavefile: write failed: \(error)")
+                    }
+                }
+            }
+            return (nil, nil)
+        }
+        else if body.hasPrefix("TEXTCLIPBOARD ") {
+            let text = String(body.dropFirst("TEXTCLIPBOARD ".count))
+            NSPasteboard.general.clearContents()
+            NSPasteboard.general.setString(text, forType: .string)
+            return (nil, nil)
+        }
+        else if let result = ViewController.handleBackstageMessage(body, onOpened: { [weak self] in
+            // The picked document opens in its own window; return the
+            // originating window to its document view.
+            self?.webView?.evaluateJavaScript(
+                "window.app?.map?.backstageView?.returnToDocumentView();")
+        }) {
+            return result
+        }
+        else {
+            // Just send the message
+            COWrapper.handleMessage(with: document, message: body)
         }
 
         return (nil, nil)
