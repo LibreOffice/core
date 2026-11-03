@@ -536,7 +536,6 @@ SlideShowController::SlideShowController(const rtl::Reference<sd::SlideShow>& rp
                                          SdDrawDocument& rDoc, vcl::Window* pParentWindow)
 : mxShow()
 , mxView()
-, mxModel(rDoc.getUnoModel())
 , maUpdateTimer("SlideShowController maUpdateTimer")
 , maInputFreezeTimer("SlideShowController maInputFreezeTimer")
 , maDeactivateTimer("SlideShowController maDeactivateTimer")
@@ -1493,7 +1492,9 @@ void SlideShowController::registerShapeEvents(sal_Int32 nSlideNumber)
 
     try
     {
-        Reference< XIndexAccess > xPages( mxModel->getDrawPages(), UNO_QUERY_THROW );
+        rtl::Reference<SdXImpressDocument> pModel = mrDoc.getUnoModel();
+        assert(pModel.is());
+        Reference<XIndexAccess> xPages(pModel->getDrawPages(), UNO_QUERY_THROW);
 
         Reference< XShapes > xDrawPage;
         xPages->getByIndex(nSlideNumber) >>= xDrawPage;

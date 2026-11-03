@@ -317,7 +317,6 @@ private:
 
     css::uno::Reference< css::presentation::XSlideShow > mxShow;
     rtl::Reference<sd::SlideShowView> mxView;
-    rtl::Reference< SdXImpressDocument > mxModel;
 
     Timer maUpdateTimer;
     Timer maInputFreezeTimer;
