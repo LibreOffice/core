@@ -11,7 +11,6 @@
 }:
 let
   ndkVersion = "29.0.14206865";
-  cmakeVersion = "3.22.1";
   buildToolsVersion = "37.0.0"; # can't use 'latest' because (1) this needs to be the same as the version in build.gradle (2) we need to use this version for our AAPT2 override later in this file
   platformToolsVersion = "latest";
   minPlatformVersion = "35"; # https://endoflife.date/android
@@ -20,12 +19,10 @@ let
     inherit minPlatformVersion platformToolsVersion;
     abiVersions = abis;
     includeNDK = true;
+    includeCmake = false;
     includeSources = true;
     ndkVersions = [
       ndkVersion
-    ];
-    cmakeVersions = [
-      cmakeVersion
     ];
     buildToolsVersions = [
       buildToolsVersion
@@ -43,6 +40,7 @@ pkgs.mkShell.override { stdenv = pkgs.clangStdenv; } {
     automake
     bison
     cacert
+    cmake
     curl
     flex
     git
