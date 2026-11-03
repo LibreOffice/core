@@ -336,6 +336,9 @@ const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_TransitionSubType[] =
 const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_TransitionSubTypeExt[] =
 {
     { XML_AIRPLANE,             TransitionSubType::AIRPLANE },
+    { XML_MORPH,                TransitionSubType::MORPH },
+    { XML_MORPH_BY_WORD,        TransitionSubType::MORPHBYWORD },
+    { XML_MORPH_BY_CHARACTER,   TransitionSubType::MORPHBYCHARACTER },
 
     { XML_TOKEN_INVALID, 0 }
 };
@@ -347,6 +350,11 @@ sal_Int16 getTransitionSubTypeFallback(sal_Int16 nSubtype)
         case TransitionSubType::AIRPLANE:
             // Fall: the sheet falls over instead of flying away.
             return TransitionSubType::LEFTTORIGHT;
+        case TransitionSubType::MORPH:
+        case TransitionSubType::MORPHBYWORD:
+        case TransitionSubType::MORPHBYCHARACTER:
+            // Smooth fade: the old slide fades into the new one, without matching objects.
+            return TransitionSubType::CROSSFADE;
     }
     return nSubtype;
 }

@@ -933,6 +933,50 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testAirplaneTransitionODFRoundTrip)
                         "//style:drawing-page-properties[@smil:type='miscShapeWipe']/@smil:subtype"));
 }
 
+CPPUNIT_TEST_FIXTURE(SdExportTest4, testMorphTransitionODFRoundTrip)
+{
+    // Given a document where slides 2, 3 and 4 have a morph slide transition, which matches
+    // objects, words and characters, in this order:
+    createSdImpressDoc("pptx/MorphTransition.pptx");
+
+    // When saving it to ODP and loading it back:
+    saveAndReload(TestFilter::ODP);
+
+    // Then make sure the transitions are not lost:
+    static constexpr sal_Int16 constExpectedSubtypes[]
+        = { animations::TransitionSubType::MORPH, animations::TransitionSubType::MORPHBYWORD,
+            animations::TransitionSubType::MORPHBYCHARACTER };
+    for (size_t i = 0; i < std::size(constExpectedSubtypes); ++i)
+    {
+        uno::Reference<beans::XPropertySet> xPage(getPage(i + 1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(animations::TransitionType::FADE,
+                             xPage->getPropertyValue(u"TransitionType"_ustr).get<sal_Int16>());
+        // Without the accompanying fix in place, this test would have failed, as the subtype
+        // had no ODF name, so ODP export did not write it.
+        CPPUNIT_ASSERT_EQUAL(constExpectedSubtypes[i],
+                             xPage->getPropertyValue(u"TransitionSubtype"_ustr).get<sal_Int16>());
+    }
+
+    // Then make sure that the extension attribute has the subtype, with a SMIL fallback:
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    static constexpr std::u16string_view constExpectedNames[]
+        = { u"morph", u"morphByWord", u"morphByCharacter" };
+    for (size_t i = 0; i < std::size(constExpectedNames); ++i)
+    {
+        OString aFilter = "//draw:page[" + OString::number(i + 2) + "]//anim:transitionFilter";
+        CPPUNIT_ASSERT_EQUAL(u"crossfade"_ustr,
+                             getXPathContent(pXmlDoc, OString(aFilter + "/@smil:subtype")));
+        CPPUNIT_ASSERT_EQUAL(OUString(constExpectedNames[i]),
+                             getXPathContent(pXmlDoc, OString(aFilter + "/@coext:subtype")));
+    }
+    // The page styles have only the SMIL fallback:
+    CPPUNIT_ASSERT(countXPathNodes(pXmlDoc, "//style:drawing-page-properties[@smil:type='fade']")
+                   > 0);
+    assertXPath(pXmlDoc,
+                "//style:drawing-page-properties[@smil:type='fade'][@smil:subtype!='crossfade']",
+                0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

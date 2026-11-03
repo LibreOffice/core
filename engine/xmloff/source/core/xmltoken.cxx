@@ -3657,6 +3657,9 @@ namespace xmloff::token {
 
         TOKEN( "airplane",                        XML_AIRPLANE ),
         TOKEN( "wrap-as-text",                    XML_WRAP_AS_TEXT ),
+        TOKEN( "morph",                           XML_MORPH ),
+        TOKEN( "morphByWord",                     XML_MORPH_BY_WORD ),
+        TOKEN( "morphByCharacter",                XML_MORPH_BY_CHARACTER ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, std::nullopt,               XML_TOKEN_END }

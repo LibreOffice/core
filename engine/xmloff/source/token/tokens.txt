@@ -3389,4 +3389,7 @@ reflection-end-transparency
 reflection-end-position
 airplane
 wrap-as-text
+morph
+morphByWord
+morphByCharacter
 TOKEN_END_DUMMY

@@ -3655,6 +3655,9 @@ namespace xmloff::token {
 
         XML_AIRPLANE,
         XML_WRAP_AS_TEXT,
+        XML_MORPH,
+        XML_MORPH_BY_WORD,
+        XML_MORPH_BY_CHARACTER,
 
         XML_TOKEN_END
     };
