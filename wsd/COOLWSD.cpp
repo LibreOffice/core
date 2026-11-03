@@ -1400,8 +1400,10 @@ std::shared_ptr<ChildProcess> getNewChild_Blocks(const std::shared_ptr<SocketPol
                                        NewChildren.begin(), NewChildren.end(),
                                        [configId](const auto& candidate) -> bool
                                        {
-                                           return candidate->getConfigId() == configId &&
-                                                  !candidate->isOrphaned();
+                                           return (candidate->getConfigId() == configId &&
+                                                   !candidate->isOrphaned())
+                                                || (Util::isKitInProcess()
+                                                    && candidate->getConfigId().empty());
                                        });
 
                                    const bool candidateMatch = found != NewChildren.end();
