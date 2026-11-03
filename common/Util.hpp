@@ -938,11 +938,13 @@ int main(int argc, char**argv)
     /// Convert a time_point to iso8601 formatted string.
     std::string time_point_to_iso8601(std::chrono::system_clock::time_point tp);
 
-    /// Convert time from ISO8061 fraction format
+    /// Convert time from the ISO 8601 form YYYY-MM-DDTHH:MM:SS, which may be followed by a
+    /// fraction of a second and may end in Z for UTC. Any other form logs a warning and gives
+    /// the epoch.
     std::chrono::system_clock::time_point iso8601ToTimestamp(const std::string& iso8601Time, const std::string& logName);
 
-    /// Returns true if the string is an ISO8601 timestamp that
-    /// iso8601ToTimestamp can parse (second-precision or fractional-second).
+    /// Returns true if the string is an ISO 8601 timestamp of the form YYYY-MM-DDTHH:MM:SS,
+    /// which may be followed by a fraction of a second and may end in Z for UTC.
     bool isIso8601(const std::string& iso8601Time);
 
     /// A null-converter between two identical clocks.

@@ -278,7 +278,10 @@ CheckFileInfo::wopiFileInfo(const Poco::URI& uriPublic) const
 
         if (!modifiedTime.empty() && !Util::isIso8601(modifiedTime))
             LOG_WRN("CheckFileInfo returned a LastModifiedTime ["
-                    << modifiedTime << "] that is not a parsable ISO8601 timestamp");
+                    << modifiedTime
+                    << "] that is not an ISO 8601 timestamp in UTC. Expected the WOPI round-trip "
+                       "form such as 2009-06-15T13:45:30.0000000Z, with the Z marking UTC. A time "
+                       "zone offset is not accepted");
 
         assert(filename.find_first_of('/') == std::string::npos &&
                "Invalid BaseFileName, which had passed prior validation");

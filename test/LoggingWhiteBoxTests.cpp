@@ -309,6 +309,29 @@ void LoggingTests::testIso8601Time()
     t = Util::iso8601ToTimestamp("2020-09-22T21:45:12.583Z", "LastModifiedTime");
     LOK_ASSERT_EQUAL_STR("2020-09-22T21:45:12.583000Z", Util::time_point_to_iso8601(t));
 
+    // The Z that marks UTC is read without a fraction of a second before it.
+    t = Util::iso8601ToTimestamp("2020-09-22T21:45:12Z", "LastModifiedTime");
+    LOK_ASSERT_EQUAL_STR("2020-09-22T21:45:12.000000Z", Util::time_point_to_iso8601(t));
+
+    // The digits of a fraction finer than a tick of the clock add nothing, however many there are.
+    oss.str(std::string());
+    t = Util::iso8601ToTimestamp("2020-09-22T21:45:12.1234567890123456789012345678901234567890Z",
+                                 "LastModifiedTime");
+    oss << t.time_since_epoch().count();
+    if (std::is_same_v<std::chrono::system_clock::period, std::nano>)
+        LOK_ASSERT_EQUAL_STR("1600811112123456789", oss.str());
+    else
+        LOK_ASSERT_EQUAL_STR("1600811112123456", oss.str());
+
+    t = Util::iso8601ToTimestamp(
+        "2021-03-04T05:06:07.0000000000000000000000000000000000000000000000000000000000000000Z",
+        "LastModifiedTime");
+    LOK_ASSERT_EQUAL_STR("2021-03-04T05:06:07.000000Z", Util::time_point_to_iso8601(t));
+
+    // A time zone offset is not read, so the time comes back as the epoch.
+    t = Util::iso8601ToTimestamp("2020-09-22T23:45:12+02:00", "LastModifiedTime");
+    LOK_ASSERT_EQUAL_STR("1970-01-01T00:00:00.000000Z", Util::time_point_to_iso8601(t));
+
     for (int i = 0; i < 100; ++i)
     {
         t = std::chrono::system_clock::now();

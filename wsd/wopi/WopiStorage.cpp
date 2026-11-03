@@ -1066,7 +1066,10 @@ WopiStorage::handleUploadToStorageResponse(const WopiUploadDetails& details,
                 LOG_TRC(wopiLog << " returns LastModifiedTime [" << lastModifiedTime << "].");
                 if (!lastModifiedTime.empty() && !Util::isIso8601(lastModifiedTime))
                     LOG_WRN(wopiLog << " returned a LastModifiedTime [" << lastModifiedTime
-                                    << "] that is not a parsable ISO8601 timestamp");
+                                    << "] that is not an ISO 8601 timestamp in UTC. Expected the "
+                                       "WOPI round-trip form such as "
+                                       "2009-06-15T13:45:30.0000000Z, with the Z marking UTC. A "
+                                       "time zone offset is not accepted");
                 setLastModifiedTime(lastModifiedTime);
 
                 if (details.isSaveAs || details.isRename)

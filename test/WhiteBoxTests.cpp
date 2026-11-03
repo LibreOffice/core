@@ -1378,26 +1378,35 @@ void WhiteBoxTests::testIsIso8601()
 {
     constexpr auto testname = __func__;
 
-    // Second-precision and fractional-second forms are accepted, including a
-    // trailing zone marker after the fraction (the form coolwsd itself emits).
+    // The date and time with seconds is accepted on its own, with a fraction of a second, and
+    // with the Z that marks UTC after either. The last of these is the WOPI round-trip form.
     LOK_ASSERT(Util::isIso8601("2021-03-04T05:06:07"));
+    LOK_ASSERT(Util::isIso8601("2021-03-04T05:06:07Z"));
     LOK_ASSERT(Util::isIso8601("2021-03-04T05:06:07.1"));
     LOK_ASSERT(Util::isIso8601("2021-03-04T05:06:07.123456"));
     LOK_ASSERT(Util::isIso8601("2021-03-04T05:06:07.123456Z"));
+    LOK_ASSERT(Util::isIso8601("2009-06-15T13:45:30.0000000Z"));
+    LOK_ASSERT(Util::isIso8601(
+        "2021-03-04T05:06:07.0000000000000000000000000000000000000000000000000000000000000000Z"));
 
-    // Empty, non-timestamp text, and a date with no time are rejected.
+    // Empty, non-timestamp text, a date with no time, and a time without seconds are rejected.
     LOK_ASSERT(!Util::isIso8601(""));
     LOK_ASSERT(!Util::isIso8601("not a timestamp"));
     LOK_ASSERT(!Util::isIso8601("2021-03-04"));
+    LOK_ASSERT(!Util::isIso8601("2021-03-04T05:06"));
+    LOK_ASSERT(!Util::isIso8601("2021-03-04T05:06Z"));
 
     // A dot with no following digit is rejected.
     LOK_ASSERT(!Util::isIso8601("2021-03-04T05:06:07."));
     LOK_ASSERT(!Util::isIso8601("2021-03-04T05:06:07.Z"));
 
-    // Forms iso8601ToTimestamp does not parse (bare zone marker or numeric
-    // offset without a fraction) are rejected.
-    LOK_ASSERT(!Util::isIso8601("2021-03-04T05:06:07Z"));
+    // A time zone offset is rejected, with or without a fraction of a second before it, and so
+    // is anything after the Z.
     LOK_ASSERT(!Util::isIso8601("2021-03-04T05:06:07+01:00"));
+    LOK_ASSERT(!Util::isIso8601("2021-03-04T05:06:07-01:00"));
+    LOK_ASSERT(!Util::isIso8601("2021-03-04T05:06:07.123+01:00"));
+    LOK_ASSERT(!Util::isIso8601("2021-03-04T05:06:07Z "));
+    LOK_ASSERT(!Util::isIso8601("2021-03-04T05:06:07ZZ"));
 }
 
 void WhiteBoxTests::testSaveResult()
