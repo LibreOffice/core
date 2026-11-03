@@ -210,7 +210,7 @@ class BrowserProperties {
 				return global.L.Browser.mobile && !global.mode.isSmallScreenDevice();
 			},
 			isCODesktop: function() {
-				return global.ThisIsTheMacOSApp || global.ThisIsTheQtApp || global.ThisIsTheWindowsApp;
+				return !!(global.ThisIsTheMacOSApp || global.ThisIsTheQtApp || global.ThisIsTheWindowsApp);
 			},
 			// The apps whose engine drives the system clipboard through the
 			// installed clipboard provider: copy advertises straight onto the
