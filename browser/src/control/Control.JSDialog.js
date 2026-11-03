@@ -30,6 +30,7 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		this.map.on('closealldialogs', this.onCloseAll, this);
 		this.map.on('closeAutoFilterDialog', this.closePopupsOnTabChange, this);
 		window.L.DomEvent.on(window.document, 'keyup', this.onKeyUp, this);
+		window.addEventListener('resize', this.onWindowResize);
 
 	},
 
@@ -41,7 +42,30 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		this.map.off('closealldialogs', this.onCloseAll, this);
 		this.map.off('closeAutoFilterDialog', this.closePopupsOnTabChange, this);
 		window.L.DomEvent.off(window.document, 'keyup', this.onKeyUp, this);
+		window.removeEventListener('resize', this.onWindowResize);
 
+	},
+
+	/// Dialogs in the main window have lists that give up height when the dialog does not fit.
+	fitsListsToWindow: function (instance) {
+		return !instance.isDropdown && !instance.isSnackbar && !instance.popoutWindow
+			&& !!instance.content;
+	},
+
+	/// The lists of each open dialog fit the new window height once, in the next frame.
+	onWindowResize: function () {
+		const jsdialog = app.map && app.map.jsdialog;
+		if (!jsdialog)
+			return;
+		if (jsdialog.resizeLayoutingTaskId)
+			app.layoutingService.cancelLayoutingTask(jsdialog.resizeLayoutingTaskId);
+		jsdialog.resizeLayoutingTaskId = app.layoutingService.appendLayoutingTask(() => {
+			jsdialog.resizeLayoutingTaskId = null;
+			for (const instance of Object.values(jsdialog.dialogs)) {
+				if (jsdialog.fitsListsToWindow(instance) && instance.content.isConnected)
+					JSDialog.FitListsToDialog(instance.content);
+			}
+		});
 	},
 
 	hasDialogOpened: function() {
@@ -1412,6 +1436,9 @@ window.L.Control.JSDialog = window.L.Control.extend({
 
 				// Equalize widths of widgets in the same GTK size group.
 				instance.builder.equalizeSizeGroups(instance.content);
+
+				if (this.fitsListsToWindow(instance))
+					JSDialog.FitListsToDialog(instance.content);
 
 				// do in task to apply correct focus when already shown
 				this.addHandlers(instance);

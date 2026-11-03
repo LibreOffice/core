@@ -1058,15 +1058,19 @@ body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton
 }
 
 /* Only in dialogs. A list is as tall as the rows core asks for, plus its header if it has one.
-   It takes at most 40% of the window, so in a small window the list scrolls rather than the
-   dialog, down to 150px. */
+   It takes at most 40% of the window, or less when the dialog would not fit in the window
+   otherwise, so the list scrolls rather than the dialog, down to 150px. */
 .jsdialog:not(.sidebar).ui-treeview {
 	--treeview-header-rows: 0;
 	--treeview-requested-height: calc(
 		(var(--treeview-height-rows, 0) + var(--treeview-header-rows)) *
 		(var(--default-height) + 2px)
 	);
-	--treeview-list-height: clamp(150px, var(--treeview-requested-height), 40vh);
+	--treeview-list-height: clamp(
+		150px,
+		var(--treeview-requested-height),
+		var(--dialog-list-max-height, 40vh)
+	);
 	max-height: var(--treeview-list-height);
 }
 
