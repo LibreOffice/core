@@ -19,9 +19,9 @@ namespace oox
 class Scene3DHelper
 {
 public:
-    /** Creates extrusion properties in rPropertyMap from the 3D information in p3DProperties and
+    /** Creates extrusion properties in rPropertyMap from the 3D information in r3DProperties and
         gives values which have to be set as shape properties.
-        @param [in] p3DProperties a pointer to Shape3DProperties
+        @param [in] r3DProperties the 3D properties of a shape or of a text
         @param [in] rnMSOShapeRotation a MSO shape rotation angle in 1/60000 deg
         @param [in, out] rPropertyMap a map that is filled with properties directly usable in
             CustomShapeProperties.pushToPropSet() for property Extrusion.
@@ -37,17 +37,17 @@ public:
         @return Returns true if extrusion properties are generated. Returns false if there is no 3D
             or if rendering without 3D is currently better. rPropertyMap is unchanged in such case.
     */
-    bool setExtrusionProperties(const oox::drawingml::Shape3DPropertiesPtr& p3DProperties,
+    bool setExtrusionProperties(const oox::drawingml::Generic3DProperties& r3DProperties,
                                 const sal_Int32& rnMSOShapeRotation, oox::PropertyMap& rPropertyMap,
                                 double& rRotZ, oox::drawingml::Color& rExtrusionColor,
                                 const bool bBlockExtrusion = false);
 
     /** Creates lighting properties in rPropertyMap from MSO preset and shape rotation
-        @param [in] p3DProperties a pointer to Shape3DProperties
+        @param [in] r3DProperties the 3D properties of a shape or of a text
         @param [in] rRotZ the shape rotation inclusive camera z-rotation as calculated by
             setExtrusionProperties()
         @param [in, out] rPropertyMap the map, that was already filled by setExtrusionProperties()*/
-    void setLightingProperties(const oox::drawingml::Shape3DPropertiesPtr& p3DProperties,
+    void setLightingProperties(const oox::drawingml::Generic3DProperties& r3DProperties,
                                const double& rRotZ, oox::PropertyMap& rPropertyMap);
 
     /** Puts the material properties of the 3D-shape into the property map
@@ -57,10 +57,10 @@ public:
             and API have Diffusion (double), Specularity (double), Shininess (double), Metal (bool),
             MetalType (enum). Thus a directly use of the MSO values is not possible and some material
             types cannot be rendered. The method uses workarounds and approximations.
-        @param [in] p3DProperties contains besides other properties the material preset name
+        @param [in] r3DProperties contains besides other properties the material preset name
         @param [in, out] rPropertyMap has properties directly usable in
             CustomShapeProperties.pushToPropSet() for property Extrusion.*/
-    static void setMaterialProperties(const oox::drawingml::Shape3DPropertiesPtr p3DProperties,
+    static void setMaterialProperties(const oox::drawingml::Generic3DProperties& r3DProperties,
                                       oox::PropertyMap& rPropertyMap);
 
 private:
@@ -74,14 +74,14 @@ private:
 
     /** Calculates angles suitable for API from Shape3DProperties.
         @details It considers the preset camera in case the optional, direct rotation angles have no
-            value. It integrates the given rnMSOShapeRotation into fZ.
-        @param [in] p3DProperties a pointer to Shape3DProperties
-        @param [in] rnMSOShapeRotation rotation in 1/60000 deg as given in 'rot' attribute of 'xfrm'
+            value. It integrates the given nMSOShapeRotation into fZ.
+        @param [in] r3DProperties the 3D properties of a shape or of a text
+        @param [in] nMSOShapeRotation rotation in 1/60000 deg as given in 'rot' attribute of 'xfrm'
             element in OOXML.
         @param [out] fX, fY, fZ values in unit radians with correct orientation for API properties
             EnhancedCustomShapeExtrusion::RotateAngle*/
-    void getAPIAnglesFrom3DProperties(const oox::drawingml::Shape3DPropertiesPtr p3DProperties,
-                                      const sal_Int32& rnMSOShapeRotation, double& fX, double& fY,
+    void getAPIAnglesFrom3DProperties(const oox::drawingml::Generic3DProperties& r3DProperties,
+                                      sal_Int32 nMSOShapeRotation, double& fX, double& fY,
                                       double& fZ);
 
     /** Adds the rotation angles fX and fY as property RotateAngle to the map.
@@ -93,21 +93,21 @@ private:
     /** Adds the Depth property to the map.
         @details The second component is relative, whereas the z-position in OOXML is absolute. Uses
         360EMU depth in case of zero Depth as otherwise no relative position is possible.
-        @param [in] p3DProperties a pointer to Shape3DProperties
+        @param [in] r3DProperties the 3D properties of a shape or of a text
         @param [in, out] rPropertyMap a map to add the Depth property*/
-    static void addExtrusionDepthToMap(const oox::drawingml::Shape3DPropertiesPtr p3DProperties,
+    static void addExtrusionDepthToMap(const oox::drawingml::Generic3DProperties& r3DProperties,
                                        oox::PropertyMap& rPropertyMap);
 
     /** Adds the projection mode itself and the associated camera parameters to the map.
         @details Both modes add ProjectionMode and Origin properties. Adds Skew property in case of
         mode PARALLEL and ViewPoint property in case of mode PERSPECTIVE. The Skew angles includes the
         shape rotation because MSOffice rotates after creating the projection and ODF before.
-        @param [in] p3DProperties a pointer to Shape3DProperties
+        @param [in] r3DProperties the 3D properties of a shape or of a text
         @param [in, out] rPropertyMap a map to add ProjectMode, Origin and Skew or ViewPoint
             properties.
         @param [in] bIsParallel true for mode PARALLEL, false for PERSPECTIVE
         @param [in] rnMSOShapeRotation shape rotation in 1/60000 degree*/
-    void addProjectionGeometryToMap(const oox::drawingml::Shape3DPropertiesPtr p3DProperties,
+    void addProjectionGeometryToMap(const oox::drawingml::Generic3DProperties& r3DProperties,
                                     oox::PropertyMap& rPropertyMap, const bool bIsParallel,
                                     const sal_Int32 rnMSOShapeRotation);
 

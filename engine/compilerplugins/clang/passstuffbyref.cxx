@@ -194,7 +194,6 @@ void PassStuffByRef::checkParams(const FunctionDecl * functionDecl) {
         return;
     // not sure why, but changing these causes problems
     if (dc.Function("lcl_createColorMapFromShapeProps")
-        || dc.Function("getAPIAnglesFrom3DProperties").Class("Scene3DHelper")
         || dc.Function("FillSeriesSimple").Class("ScTable")
         || dc.Function("FillAutoSimple").Class("ScTable"))
         return;

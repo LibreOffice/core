@@ -1468,7 +1468,7 @@ Reference< XShape > const & Shape::createAndInsert(
     Color aExtrusionColor;
     Scene3DHelper aScene3DHelper;
     bool bHas3DEffect = aScene3DHelper.setExtrusionProperties(
-        mp3DPropertiesPtr, mnRotation, getCustomShapeProperties()->getExtrusionPropertyMap(),
+        *mp3DPropertiesPtr, mnRotation, getCustomShapeProperties()->getExtrusionPropertyMap(),
         fShapeRotateInclCamera, aExtrusionColor, bBlockExtrusion);
     // Currently the other places use unit 1/60000deg and MSO shape rotate orientation.
     sal_Int32 nShapeRotateInclCamera
@@ -1488,10 +1488,10 @@ Reference< XShape > const & Shape::createAndInsert(
 
     if (bHas3DEffect)
     {
-        aScene3DHelper.setLightingProperties(mp3DPropertiesPtr, fShapeRotateInclCamera,
+        aScene3DHelper.setLightingProperties(*mp3DPropertiesPtr, fShapeRotateInclCamera,
                                              getCustomShapeProperties()->getExtrusionPropertyMap());
         oox::Scene3DHelper::setMaterialProperties(
-            mp3DPropertiesPtr, getCustomShapeProperties()->getExtrusionPropertyMap());
+            *mp3DPropertiesPtr, getCustomShapeProperties()->getExtrusionPropertyMap());
     }
 
     if (bIsCroppedGraphic || bIs3DGraphic)

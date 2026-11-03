@@ -214,18 +214,15 @@ void Scene3DHelper::getAPIAnglesFromOOXAngle(const sal_Int32 nLat, const sal_Int
 }
 
 void Scene3DHelper::getAPIAnglesFrom3DProperties(
-    const oox::drawingml::Shape3DPropertiesPtr p3DProperties, const sal_Int32& rnMSOShapeRotation,
+    const oox::drawingml::Generic3DProperties& r3DProperties, sal_Int32 nMSOShapeRotation,
     double& fX, double& fY, double& fZ)
 {
-    if (!p3DProperties)
-        return;
-
     // on x-axis, unit 1/60000 deg
-    sal_Int32 nLatitude = (*p3DProperties).maCameraRotation.mnLatitude.value_or(0);
+    sal_Int32 nLatitude = r3DProperties.maCameraRotation.mnLatitude.value_or(0);
     // on y-axis, unit 1/60000 deg
-    sal_Int32 nLongitude = (*p3DProperties).maCameraRotation.mnLongitude.value_or(0);
+    sal_Int32 nLongitude = r3DProperties.maCameraRotation.mnLongitude.value_or(0);
     // on z-axis, unit 1/60000 deg
-    sal_Int32 nRevolution = (*p3DProperties).maCameraRotation.mnRevolution.value_or(0);
+    sal_Int32 nRevolution = r3DProperties.maCameraRotation.mnRevolution.value_or(0);
 
     // Some projection types need special treatment:
     if (29 <= mnPrstCameraIndex && mnPrstCameraIndex <= 37)
@@ -242,7 +239,7 @@ void Scene3DHelper::getAPIAnglesFrom3DProperties(
         // and the angle for rotation on x-axis (=latitude) is >90deg and <=270deg, then MSO renders
         // the shape with an addition 180deg rotation on the z-axis. This happens only with user
         // entered angles.
-        if (rnMSOShapeRotation != 0 && nLatitude > 5400000 && nLatitude <= 16200000)
+        if (nMSOShapeRotation != 0 && nLatitude > 5400000 && nLatitude <= 16200000)
             nRevolution += 10800000;
     }
 
@@ -250,7 +247,7 @@ void Scene3DHelper::getAPIAnglesFrom3DProperties(
     // OOXML markup are given, they overwrite the values from the preset camera type. Otherwise the
     // values from the preset camera are used. OOXML requires that all three attributes must exist at
     // the same time. Thus it is enough to test one of them.
-    if (!(*p3DProperties).maCameraRotation.mnRevolution.has_value())
+    if (!r3DProperties.maCameraRotation.mnRevolution.has_value())
     {
         // The angles are given in 1/60000 deg in aPrstCameraValuesArray.
         nLatitude = aPrstCameraValuesArray[mnPrstCameraIndex].mfRotateAngleX;
@@ -264,13 +261,13 @@ void Scene3DHelper::getAPIAnglesFrom3DProperties(
     // opposite orientation than camera z-rotation.
     bool bIsLegacyCamera = 20 <= mnPrstCameraIndex && mnPrstCameraIndex <= 37;
     if (!bIsLegacyCamera)
-        nRevolution -= rnMSOShapeRotation;
+        nRevolution -= nMSOShapeRotation;
 
     // Now calculate the angles for LO rotation order and orientation.
     Scene3DHelper::getAPIAnglesFromOOXAngle(nLatitude, nLongitude, nRevolution, fX, fY, fZ);
 
     if (bIsLegacyCamera)
-        fZ -= basegfx::deg2rad<60000>(rnMSOShapeRotation);
+        fZ -= basegfx::deg2rad<60000>(nMSOShapeRotation);
 }
 
 void Scene3DHelper::addRotateAngleToMap(oox::PropertyMap& rPropertyMap, const double fX,
@@ -284,15 +281,15 @@ void Scene3DHelper::addRotateAngleToMap(oox::PropertyMap& rPropertyMap, const do
     rPropertyMap.setAnyProperty(oox::PROP_RotateAngle, cpo::uno::Any(aAnglePair));
 }
 
-void Scene3DHelper::addExtrusionDepthToMap(const oox::drawingml::Shape3DPropertiesPtr p3DProperties,
+void Scene3DHelper::addExtrusionDepthToMap(const oox::drawingml::Generic3DProperties& r3DProperties,
                                            oox::PropertyMap& rPropertyMap)
 {
     // Amount of extrusion and its position relative to the original shape face. This moves the
     // shape inside the scene.
     // The GetExtrusionDepth() method in EnhancedCustomShape3d.cxx expects type double for both.
-    sal_Int32 nDepthAmount = (*p3DProperties).mnExtrusionH.value_or(0); // unit EMU
+    sal_Int32 nDepthAmount = r3DProperties.mnExtrusionH.value_or(0); // unit EMU
     double fDepthAmount = o3tl::convert(nDepthAmount, o3tl::Length::emu, o3tl::Length::mm100);
-    sal_Int32 nZPosition = (*p3DProperties).mnShapeZ.value_or(0); // unit EMU
+    sal_Int32 nZPosition = r3DProperties.mnShapeZ.value_or(0); // unit EMU
     double fZPosition = o3tl::convert(nZPosition, o3tl::Length::emu, o3tl::Length::mm100);
     double fDepthRelPos = 0.0;
     if (nDepthAmount == 0 && nZPosition != 0)
@@ -316,7 +313,7 @@ void Scene3DHelper::addExtrusionDepthToMap(const oox::drawingml::Shape3DProperti
 }
 
 void Scene3DHelper::addProjectionGeometryToMap(
-    const oox::drawingml::Shape3DPropertiesPtr p3DProperties, oox::PropertyMap& rPropertyMap,
+    const oox::drawingml::Generic3DProperties& r3DProperties, oox::PropertyMap& rPropertyMap,
     const bool bIsParallel, const sal_Int32 rnMSOShapeRotation)
 {
     // origin is needed for parallel and perspective as well
@@ -360,9 +357,9 @@ void Scene3DHelper::addProjectionGeometryToMap(
 
         // The z-coordinate is determined bei a field of view angle in OOXML and by a
         // distance in LibreOffice. MS Office users can change its value.
-        if ((*p3DProperties).mfFieldOfVision.has_value())
+        if (r3DProperties.mfFieldOfVision.has_value())
         {
-            double fFov = (*p3DProperties).mfFieldOfVision.value();
+            double fFov = r3DProperties.mfFieldOfVision.value();
             fFov = std::clamp(fFov, 0.5, 179.5);
             // 15976 = 25000 * tan(32.5°) as in legacy. Better ideas to calculate the distance are
             // welcome.
@@ -379,7 +376,7 @@ void Scene3DHelper::addProjectionGeometryToMap(
 }
 
 bool Scene3DHelper::setExtrusionProperties(
-    const oox::drawingml::Shape3DPropertiesPtr& p3DProperties, const sal_Int32& rnMSOShapeRotation,
+    const oox::drawingml::Generic3DProperties& r3DProperties, const sal_Int32& rnMSOShapeRotation,
     oox::PropertyMap& rPropertyMap, double& rRotZ, oox::drawingml::Color& rExtrusionColor,
     const bool bBlockExtrusion)
 {
@@ -387,10 +384,10 @@ bool Scene3DHelper::setExtrusionProperties(
     // all cases.
     rRotZ = basegfx::deg2rad<60000>(-rnMSOShapeRotation);
 
-    if (!p3DProperties || !(*p3DProperties).mnPreset.has_value())
+    if (!r3DProperties.mnPreset.has_value())
         return false;
 
-    const sal_Int32 nCameraPrstID((*p3DProperties).mnPreset.value());
+    const sal_Int32 nCameraPrstID(r3DProperties.mnPreset.value());
     sal_Int16 nPrstCameraIndex
         = getPrstCameraIndex(oox::drawingml::Generic3DProperties::getCameraPrstName(nCameraPrstID));
     if (nPrstCameraIndex < 0 or nPrstCameraIndex >= nCameraPresetCount)
@@ -399,12 +396,12 @@ bool Scene3DHelper::setExtrusionProperties(
 
     // Extrusion color is not handled as extrusion property but as shape property. Thus deliver it
     // in any case, so that Shape::createAndInsert() knows about it.
-    rExtrusionColor = (*p3DProperties).maExtrusionColor;
+    rExtrusionColor = r3DProperties.maExtrusionColor;
 
     // Even if we do not extrude an image, we still want to get the z-Rotation.
     if (bBlockExtrusion)
     {
-        rRotZ = basegfx::deg2rad<60000>((*p3DProperties).maCameraRotation.mnRevolution.value_or(0)
+        rRotZ = basegfx::deg2rad<60000>(r3DProperties.maCameraRotation.mnRevolution.value_or(0)
                                         - rnMSOShapeRotation);
         return false;
     }
@@ -415,8 +412,8 @@ bool Scene3DHelper::setExtrusionProperties(
     // In other cases the rendering as normal shape is better than any current extrusion.
     double fX = 0.0;
     double fY = 0.0;
-    Scene3DHelper::getAPIAnglesFrom3DProperties(p3DProperties, rnMSOShapeRotation, fX, fY, rRotZ);
-    sal_Int32 nDepthAmount = (*p3DProperties).mnExtrusionH.value_or(0);
+    Scene3DHelper::getAPIAnglesFrom3DProperties(r3DProperties, rnMSOShapeRotation, fX, fY, rRotZ);
+    sal_Int32 nDepthAmount = r3DProperties.mnExtrusionH.value_or(0);
     bool bIsParallel = aPrstCameraValuesArray[mnPrstCameraIndex].mbIsParallel;
     bool bIsParallelFrontType
         = (nCameraPrstID == XML_legacyObliqueFront) || (nCameraPrstID == XML_orthographicFront);
@@ -442,11 +439,11 @@ bool Scene3DHelper::setExtrusionProperties(
 
     Scene3DHelper::addRotateAngleToMap(rPropertyMap, fX, fY);
 
-    Scene3DHelper::addProjectionGeometryToMap(p3DProperties, rPropertyMap, bIsParallel,
+    Scene3DHelper::addProjectionGeometryToMap(r3DProperties, rPropertyMap, bIsParallel,
                                               rnMSOShapeRotation);
 
     // Shape properties
-    Scene3DHelper::addExtrusionDepthToMap(p3DProperties, rPropertyMap);
+    Scene3DHelper::addExtrusionDepthToMap(r3DProperties, rPropertyMap);
 
     // The 'automatic' extrusion color is different in MS Office. Thus we enable it in any case.
     // CreateAndInsert method will set a suitable 'automatic' color, if rExtrusionColor is not used.
@@ -756,30 +753,30 @@ void lcl_ApplyShapeRotationToLights(std::vector<basegfx::B3DVector>& rLightDirVe
     @details A light rig has a mandatory attribute 'dir' for rotating the rig in 45deg steps. It might
         have an element 'rot', that describes a rotation by spherical coordinates 'lat', 'lon' and
         'rev'. The element has precedence over the attribute.
-    @param [in] p3DProperties contains info about light rig.
+    @param [in] r3DProperties contains info about light rig.
     @param {in, out] rLightDirVec contains for each individual light its direction in shape coordinate
         system with x-axis right, y-axis down, z-axis toward observer.*/
 void lcl_IncorporateRigRotationIntoLightDirections(
-    const oox::drawingml::Shape3DPropertiesPtr p3DProperties,
+    const oox::drawingml::Generic3DProperties& r3DProperties,
     std::vector<basegfx::B3DVector>& rLightDirVec)
 {
     basegfx::B3DHomMatrix aTransform; // unit matrix
     // if a 'rot' element exists, then all of 'lat', 'lon' and 'rev' needs to exist.
-    if ((*p3DProperties).maLightRigRotation.mnLatitude.has_value())
+    if (r3DProperties.maLightRigRotation.mnLatitude.has_value())
     {
         double fLat
-            = basegfx::deg2rad<60000>((*p3DProperties).maLightRigRotation.mnLatitude.value_or(0));
+            = basegfx::deg2rad<60000>(r3DProperties.maLightRigRotation.mnLatitude.value_or(0));
         double fLon
-            = basegfx::deg2rad<60000>((*p3DProperties).maLightRigRotation.mnLongitude.value_or(0));
+            = basegfx::deg2rad<60000>(r3DProperties.maLightRigRotation.mnLongitude.value_or(0));
         double fRev
-            = basegfx::deg2rad<60000>((*p3DProperties).maLightRigRotation.mnRevolution.value_or(0));
+            = basegfx::deg2rad<60000>(r3DProperties.maLightRigRotation.mnRevolution.value_or(0));
         aTransform.rotate(0.0, 0.0, fRev);
         aTransform.rotate(fLat, fLon, 0.0);
     }
     else
     {
         sal_Int32 nDir = 0;
-        switch ((*p3DProperties).mnLightRigDirection.value_or(XML_t))
+        switch (r3DProperties.mnLightRigDirection.value_or(XML_t))
         {
             case XML_t:
                 nDir = 0;
@@ -874,14 +871,14 @@ void lcl_tweakLightRig(std::vector<basegfx::B3DVector>& rLightDirVec, PrstLightR
 
 } // end anonymous namespace
 
-void Scene3DHelper::setLightingProperties(const oox::drawingml::Shape3DPropertiesPtr& p3DProperties,
+void Scene3DHelper::setLightingProperties(const oox::drawingml::Generic3DProperties& r3DProperties,
                                           const double& rfRotZ, oox::PropertyMap& rPropertyMap)
 {
-    if (!p3DProperties || !(*p3DProperties).mnLightRigType.has_value())
+    if (!r3DProperties.mnLightRigType.has_value())
         return;
 
     // get index of light rig in aPrstLightRigValuesArray
-    const sal_Int32 nLightRigPrstID((*p3DProperties).mnLightRigType.value()); // token
+    const sal_Int32 nLightRigPrstID(r3DProperties.mnLightRigType.value()); // token
     sal_Int16 nPrstLightRigIndex = lcl_getPrstLightRigIndex(
         oox::drawingml::Generic3DProperties::getLightRigName(nLightRigPrstID));
     if (nPrstLightRigIndex < 0 or nPrstLightRigIndex >= nLightRigPresetCount)
@@ -895,7 +892,7 @@ void Scene3DHelper::setLightingProperties(const oox::drawingml::Shape3DPropertie
     lcl_getLightDirectionsFromRig(aLightRig, aLightDirVec);
     lcl_AdaptAndNormalizeLightDirections(aLightDirVec);
 
-    lcl_IncorporateRigRotationIntoLightDirections(p3DProperties, aLightDirVec);
+    lcl_IncorporateRigRotationIntoLightDirections(r3DProperties, aLightDirVec);
 
     // Parts (1) to (6) are workarounds for the problem that our current model as well as API and
     // ODF are not able to describe or use the capabilities of extruded custom shapes of MS Office.
@@ -991,14 +988,11 @@ constexpr MaterialValues aPrstMaterialArray[nPrstMaterialCount]
         { u"translucentPowder", 100, 30, 10, true, { 0 } },
         { u"warmMatte", 100, 30, 8, false, {} } };
 
-void Scene3DHelper::setMaterialProperties(const oox::drawingml::Shape3DPropertiesPtr p3DProperties,
+void Scene3DHelper::setMaterialProperties(const oox::drawingml::Generic3DProperties& r3DProperties,
                                           oox::PropertyMap& rPropertyMap)
 {
-    if (!p3DProperties)
-        return;
-
     // PowerPoint does not write aus prstMaterial="warmMatte", but handles it as default.
-    const sal_Int32 nMaterialID = (*p3DProperties).mnMaterial.value_or(XML_warmMatte); // token
+    const sal_Int32 nMaterialID = r3DProperties.mnMaterial.value_or(XML_warmMatte); // token
 
     // special handling for 'legacyWireframe'
     if (nMaterialID == XML_legacyWireframe)
