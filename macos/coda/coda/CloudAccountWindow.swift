@@ -19,6 +19,17 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
     private static let firstMacOSWithSafariVersion = 26
     private static let safariVersionsAheadOfMacOS = 3
 
+    /// window.bridge calls that native code does not answer yet. They are not engine messages.
+    private static let unansweredBridgeCalls: Set<Substring> = [
+        // TODO: coolwsd should send the file info along with the "authenticated" message. The
+        // native code need not query the integrator for it.
+        "checkFileInfo",
+        "getAllPrefs",
+        "readLocalDocBytes",
+        "saveCompleted",
+        "setPref"
+    ]
+
     private static var openWindows: [String: CloudAccountWindow] = [:]
 
     private let accountId: String
@@ -109,6 +120,7 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         contentController.removeScriptMessageHandler(forName: "frameLoaded", contentWorld: Self.world)
         contentController.removeScriptMessageHandler(forName: "lok")
         ViewController.removeDiagnosticMessageHandlers(from: contentController)
+        closeRemoteDocument()
         Self.openWindows[accountId] = nil
     }
 
@@ -152,8 +164,32 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
             return (writeRemoteDocFile(body.dropFirst(kind.count + 1)), nil)
         }
 
-        COWrapper.LOG_DBG("A \(kind) message from the editor frame")
+        if Self.unansweredBridgeCalls.contains(kind) {
+            COWrapper.LOG_DBG("\(kind) is not answered yet")
+            return (nil, nil)
+        }
+
+        guard let remoteDocument else {
+            COWrapper.LOG_DBG("\(kind) came before the document")
+            return (nil, nil)
+        }
+
+        if body == "BYE" {
+            closeRemoteDocument()
+            return (nil, nil)
+        }
+
+        if let result = await ViewController.handleDocumentMessage(body, document: remoteDocument) {
+            return result
+        }
+
+        COWrapper.handleMessage(with: remoteDocument, message: body)
         return (nil, nil)
+    }
+
+    private func closeRemoteDocument() {
+        remoteDocument?.close()
+        remoteDocument = nil
     }
 
     // The arguments are a JSON array with the integrator's file name and the bytes in base64.
