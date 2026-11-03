@@ -541,14 +541,14 @@ void Entity::processingInstruction( const OUString& rTarget, const OUString& rDa
 
 void Entity::transferUsedEvents()
 {
-    std::unique_lock aGuard(maEventProtector);
-    if (!maUsedEvents.empty())
     {
+        std::scoped_lock aGuard(maEventProtector);
+        if (maUsedEvents.empty())
+            return;
         mxProducedEvents = std::move(maUsedEvents.front());
         maUsedEvents.pop();
-        aGuard.unlock(); // unlock
-        mnProducedEventsSize = 0;
     }
+    mnProducedEventsSize = 0;
 }
 
 EventList& Entity::getEventList()
