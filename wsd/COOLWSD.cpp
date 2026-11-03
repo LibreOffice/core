@@ -137,12 +137,12 @@ int ClientPortNumber = 0;
 #if !MOBILEAPP
 /// UDS address for kits to connect to.
 UnxSocketPath MasterLocation;
+#endif
 
 std::string COOLWSD::BuyProductUrl;
 std::string COOLWSD::LatestVersion;
 std::mutex COOLWSD::FetchUpdateMutex;
 std::mutex COOLWSD::RemoteConfigMutex;
-#endif
 
 /// The DocBrokers container; used from elsewhere as well.
 std::map<std::string, std::shared_ptr<DocumentBroker>> DocBrokers;
@@ -347,6 +347,8 @@ void COOLWSD::syncUsersBrowserSettings(const std::string& userId, const pid_t ch
                                { docBroker->syncBrowserSettings(userId, json); });
     }
 }
+#else
+void COOLWSD::syncUsersBrowserSettings(const std::string&, const pid_t, const std::string&) {}
 #endif
 
 void COOLWSD::alertUserInternal(const std::string& dockey, const std::string& msg)
@@ -378,15 +380,17 @@ void COOLWSD::writeTraceEventRecording(const std::string &recording)
     writeTraceEventRecording(recording.data(), recording.length());
 }
 
-#if !MOBILEAPP
 ssize_t COOLWSD::getInteractiveDocBrokerCount()
 {
     std::lock_guard<std::mutex> docBrokersLock(DocBrokersMutex);
+#if !MOBILEAPP
     return DocBrokers.size() - ConvertToBroker::getInstanceCount();
+#else
+    return DocBrokers.size();
+#endif
 }
 
 int COOLWSD::getOutstandingForksCount() { return TotalOutstandingForks; }
-#endif
 
 void COOLWSD::checkSessionLimitsAndWarnClients()
 {
@@ -904,6 +908,10 @@ static void prespawnChildren()
 
 #else // MOBILEAPP
 void prespawnChildren();
+
+// The app runs its kit inside this process, so it has no forkit to ask.
+bool COOLWSD::ensureSubForKit(const std::string&) { return false; }
+bool COOLWSD::sendMessageToForKit(const std::string&, const std::string&) { return false; }
 #endif // MOBILEAPP
 
 static size_t addNewChild(std::shared_ptr<ChildProcess> child)
@@ -1010,7 +1018,6 @@ inline std::string getServiceURI(const std::string &sub, bool asAdmin = false)
 
 #endif // MOBILEAPP
 
-#if !MOBILEAPP
 std::atomic<int> COOLWSD::ForKitProcId(-1);
 std::shared_ptr<ForKitProcess> COOLWSD::ForKitProc;
 bool COOLWSD::NoCapsForKit = false;
@@ -1029,7 +1036,6 @@ bool COOLWSD::ForceCaching = false;
 #endif
 bool COOLWSD::WASMEnabled = false;
 Util::UnorderedStringMap<std::chrono::steady_clock::time_point> COOLWSD::Uri2WasmModeMap;
-#endif
 std::string COOLWSD::SysTemplate;
 std::string COOLWSD::LoTemplate = LO_PATH;
 std::string COOLWSD::CleanupChildRoot;
@@ -4475,6 +4481,8 @@ std::string COOLWSD::getServerURL()
     return getServiceURI("");
 }
 #endif
+#elif ENABLE_DEBUG
+std::string COOLWSD::getServerURL() { return std::string(); }
 #endif
 
 void COOLWSD::innerMain()
@@ -5112,6 +5120,7 @@ std::vector<std::shared_ptr<DocumentBroker>> COOLWSD::getBrokersTestOnly()
         result.push_back(brokerIt.second);
     return result;
 }
+#endif
 
 void COOLWSD::runInPrisonerPollTestOnly(const std::function<void()>& callback)
 {
@@ -5126,6 +5135,7 @@ std::set<pid_t> COOLWSD::getKitPids()
     return pids;
 }
 
+#if !MOBILEAPP
 std::set<pid_t> COOLWSD::getSpareKitPids()
 {
     std::set<pid_t> pids;
@@ -5141,6 +5151,10 @@ std::set<pid_t> COOLWSD::getSpareKitPids()
     }
     return pids;
 }
+#else
+// The app forks no spare kits.
+std::set<pid_t> COOLWSD::getSpareKitPids() { return std::set<pid_t>(); }
+#endif
 
 std::set<pid_t> COOLWSD::getDocKitPids()
 {
@@ -5158,6 +5172,7 @@ std::set<pid_t> COOLWSD::getDocKitPids()
     return pids;
 }
 
+#if !MOBILEAPP
 namespace Util
 {
 

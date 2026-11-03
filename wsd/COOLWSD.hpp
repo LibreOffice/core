@@ -69,7 +69,6 @@ public:
     // An Application is a singleton anyway,
     // so just keep these as statics.
     static unsigned int NumPreSpawnedChildren;
-#if !MOBILEAPP
     static bool NoCapsForKit;
     static bool RequireLandlock;
     static bool LandlockAvailable;
@@ -86,7 +85,6 @@ public:
 #endif
     static std::shared_ptr<ForKitProcess> ForKitProc;
     static std::atomic<int> ForKitProcId;
-#endif
     static std::string UserInterface;
     static std::string ConfigFile;
     static std::string SysTemplate;
@@ -128,6 +126,7 @@ public:
 
     /// The file request handler used for file-serving.
     static std::unique_ptr<FileServerRequestHandler> FileRequestHandler;
+#endif
 
     static bool WASMEnabled;
 
@@ -135,7 +134,6 @@ public:
     /// The time is when the switch request was made. We expire the request after a certain
     /// time, in case the user fails to load WASM, it will revert to Collaborative mode.
     static Util::UnorderedStringMap<std::chrono::steady_clock::time_point> Uri2WasmModeMap;
-#endif
 
     static std::unordered_set<std::string> EditFileExtensions;
     static std::string ViewModeFileExtensions;
@@ -252,10 +250,8 @@ public:
     static void alertUserInternal(const std::string& dockey, const std::string& msg);
     static void setMigrationMsgReceived(const std::string& docKey);
     static void setAllMigrationMsgReceived();
-#if !MOBILEAPP
     static void syncUsersBrowserSettings(const std::string& userId, pid_t childPid,
                                          const std::string& json);
-#endif
 
     static void setLokitEnvironmentVariables(const Poco::Util::LayeredConfiguration& conf);
 
