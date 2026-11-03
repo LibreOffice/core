@@ -16,6 +16,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
+#include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
@@ -1484,6 +1485,11 @@ void assertExtrusionOfShape(const uno::Reference<beans::XPropertySet>& xShape)
     double fDepth = 0;
     aDepth.First.Value >>= fDepth;
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1000.0, fDepth, 1.0);
+    // and the first light still comes from the top right
+    drawing::Direction3D aLight;
+    aExtrusion[u"FirstLightDirection"_ustr] >>= aLight;
+    CPPUNIT_ASSERT(aLight.DirectionX > 0);
+    CPPUNIT_ASSERT(aLight.DirectionY < 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testExtrusionToScene3d)

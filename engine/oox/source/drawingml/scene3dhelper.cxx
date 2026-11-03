@@ -752,6 +752,29 @@ void lcl_ApplyShapeRotationToLights(std::vector<basegfx::B3DVector>& rLightDirVe
         (*it) *= aTransform;
 }
 
+// The rigs of the old lighting model: legacyFlat1..4, legacyNormal1..4 and legacyHarsh1..4.
+bool lcl_isLegacyLightRig(sal_Int32 nToken)
+{
+    switch (nToken)
+    {
+        case XML_legacyFlat1:
+        case XML_legacyFlat2:
+        case XML_legacyFlat3:
+        case XML_legacyFlat4:
+        case XML_legacyNormal1:
+        case XML_legacyNormal2:
+        case XML_legacyNormal3:
+        case XML_legacyNormal4:
+        case XML_legacyHarsh1:
+        case XML_legacyHarsh2:
+        case XML_legacyHarsh3:
+        case XML_legacyHarsh4:
+            return true;
+        default:
+            return false;
+    }
+}
+
 /** Applies the light rig rotation to the directions of the individual lights
     @details A light rig has a mandatory attribute 'dir' for rotating the rig in 45deg steps. It might
         have an element 'rot', that describes a rotation by spherical coordinates 'lat', 'lon' and
@@ -778,6 +801,13 @@ void lcl_IncorporateRigRotationIntoLightDirections(
     }
     else
     {
+        // PowerPoint writes the direction of a legacy rig with the corners by their names and the
+        // sides turned by a quarter: top as r, right as b, bottom as l, left as t (PowerPoint 2021,
+        // its preset lighting directions saved as pptx). The base light of a legacyFlat3, Normal3
+        // or Harsh3 rig comes from the left at t, the sides follow by the turn, and the corners
+        // are their own turns from the left: top left 45, top right 135, bottom right -135,
+        // bottom left -45 degrees.
+        const bool bLegacyRig = lcl_isLegacyLightRig(r3DProperties.mnLightRigType.value_or(0));
         sal_Int32 nDir = 0;
         switch (r3DProperties.mnLightRigDirection.value_or(XML_t))
         {
@@ -785,25 +815,25 @@ void lcl_IncorporateRigRotationIntoLightDirections(
                 nDir = 0;
                 break;
             case XML_tr:
-                nDir = 45;
+                nDir = bLegacyRig ? 135 : 45;
                 break;
             case XML_r:
                 nDir = 90;
                 break;
             case XML_br:
-                nDir = 135;
+                nDir = bLegacyRig ? -135 : 135;
                 break;
             case XML_b:
                 nDir = 180;
                 break; // or -180
             case XML_bl:
-                nDir = -135;
+                nDir = bLegacyRig ? -45 : -135;
                 break;
             case XML_l:
                 nDir = -90;
                 break;
             case XML_tl:
-                nDir = -45;
+                nDir = bLegacyRig ? 45 : -45;
                 break;
             default:
                 nDir = 0;
