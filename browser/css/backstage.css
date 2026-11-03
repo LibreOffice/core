@@ -176,6 +176,10 @@
 	background-image: url('images/arrow-left.svg');
 }
 
+[data-theme='dark'] .backstage-sidebar-back-icon::before {
+	background-image: url('images/dark/arrow-left.svg');
+}
+
 .backstage-sidebar-tabs {
 	display: flex;
 	flex-direction: column;
