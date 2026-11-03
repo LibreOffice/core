@@ -142,8 +142,28 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         // Only "lok" messages reach this point.
         let body = message.body as? String ?? ""
         let kind = body.prefix { $0 != " " }
+        if kind == "getBundledFile" {
+            return (Self.bundledFile(body.dropFirst(kind.count + 1)), nil)
+        }
+
         COWrapper.LOG_DBG("A \(kind) message from the editor frame")
         return (nil, nil)
+    }
+
+    // The arguments are a JSON array with the path, like ["device-desktop.css"].
+    private static func bundledFile(_ arguments: Substring) -> String {
+        let parsed = try? JSONSerialization.jsonObject(with: Data(arguments.utf8))
+        guard let path = (parsed as? [String])?.first else {
+            COWrapper.LOG_ERR("getBundledFile has no path")
+            return ""
+        }
+
+        guard let text = appFile(path) else {
+            COWrapper.LOG_DBG("Bundled file not found: \(path)")
+            return ""
+        }
+
+        return text
     }
 
     // WebKit cannot reply to a request in place of coolwsd, as WebView2 can, and

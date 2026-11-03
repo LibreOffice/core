@@ -414,12 +414,35 @@ class InitializerBase {
 			brandingLink.setAttribute("href", this.brandingUriPrefix + theme_prefix + 'branding-desktop.css');
 		}
 
+		if (window.codaRemotePage) {
+			const paths = [link.getAttribute('href'), brandingLink.getAttribute('href')];
+			this.adoptBundledStyleSheets(paths);
+			return;
+		}
+
 		const otherStylesheets = document.querySelectorAll('link[rel="stylesheet"]');
 		const lastOtherStylesheet = otherStylesheets[otherStylesheets.length - 1];
 
 		lastOtherStylesheet
 			.insertAdjacentElement('afterend', link)
 			.insertAdjacentElement('afterend', brandingLink);
+	}
+
+	// The sheets go after the other style sheets, in order, as the <link> elements do.
+	adoptBundledStyleSheets(paths) {
+		const requests = paths.map((path) => new Promise((resolve) => {
+			window.bridge.getBundledFile(path, resolve);
+		}));
+
+		Promise.all(requests).then((cssTexts) => {
+			const sheets = cssTexts.filter((css) => css).map((css) => {
+				const sheet = new CSSStyleSheet();
+				sheet.replaceSync(css);
+				return sheet;
+			});
+
+			document.adoptedStyleSheets = [...document.adoptedStyleSheets, ...sheets];
+		});
 	}
 
 	initializeViewMode() {
@@ -493,6 +516,7 @@ class InitializerBase {
 			getAllPrefs: (callback) => call('getAllPrefs', [], callback),
 			setPref: (key, value) => call('setPref', [key, value]),
 			saveCompleted: () => call('saveCompleted', []),
+			getBundledFile: (path, callback) => call('getBundledFile', [path], callback),
 		};
 
 		window.bridge.getAllPrefs((prefsJson) => {
