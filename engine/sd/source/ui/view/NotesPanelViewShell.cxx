@@ -53,6 +53,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/devtools/DevelopmentToolChildWindow.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/ipclient.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/objface.hxx>
@@ -303,6 +304,11 @@ cpo::uno::Reference<css::drawing::XDrawSubController> NotesPanelViewShell::Creat
 
 void NotesPanelViewShell::ReadFrameViewData(FrameView* /*pView*/)
 {
+    // an object active in place has the context, the selection of the slide does not take it back
+    if (SfxInPlaceClient* pClient = GetViewShellBase().GetIPClient();
+        pClient && pClient->IsObjectInPlaceActive())
+        return;
+
     DrawController& rController(*GetViewShellBase().GetDrawController());
     rController.FireSelectionChangeListener();
 }

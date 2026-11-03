@@ -45,6 +45,7 @@
 #include <ViewShellManager.hxx>
 #include <Window.hxx>
 #include <drawview.hxx>
+#include <sfx2/ipclient.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -477,6 +478,11 @@ void SlideSorterViewShell::Activate (bool bIsMDIActivate)
     ViewShell::Activate(bIsMDIActivate);
     if (mbIsArrangeGUIElementsPending)
         ArrangeGUIElements();
+
+    // an object active in place has the context, the sidebar keeps showing it
+    if (SfxInPlaceClient* pClient = GetViewShellBase().GetIPClient();
+        pClient && pClient->IsObjectInPlaceActive())
+        return;
 
     // Determine and broadcast the context that belongs to the main view shell.
     EnumContext::Context eContext = EnumContext::Context::Unknown;
