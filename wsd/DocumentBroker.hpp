@@ -2359,7 +2359,6 @@ private:
     static std::atomic<unsigned> DocBrokerId;
 };
 
-#if MOBILEAPP
 /// The broker of the open in-process document with this app-side identifier, or a null
 /// pointer when no open document has it.
 std::shared_ptr<DocumentBroker> findBrokerByMobileAppDocId(unsigned mobileAppDocId);
@@ -2368,6 +2367,7 @@ std::shared_ptr<DocumentBroker> findBrokerByMobileAppDocId(unsigned mobileAppDoc
 /// document is not in that state, because closing its last session ends it instead.
 void closeDetachedDocument(unsigned mobileAppDocId);
 
+#if MOBILEAPP
 /// Stores one settings file the Options dialog has uploaded, and, when the engine is the
 /// one that reads it, applies it to every open document, so a setting saved now takes
 /// effect without reopening them. Called from the app's own thread.

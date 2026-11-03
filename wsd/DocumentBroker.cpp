@@ -8850,9 +8850,6 @@ void DocumentBroker::endSwitchingToOnline()
 
 #endif // !MOBILEAPP && !WASMAPP
 
-// not beautiful - but neither is editing mobile project files.
-#if MOBILEAPP
-
 std::shared_ptr<DocumentBroker> findBrokerByMobileAppDocId(unsigned mobileAppDocId)
 {
     std::lock_guard<std::mutex> lock(DocBrokersMutex);
@@ -8864,6 +8861,26 @@ std::shared_ptr<DocumentBroker> findBrokerByMobileAppDocId(unsigned mobileAppDoc
 
     return nullptr;
 }
+
+void closeDetachedDocument(unsigned mobileAppDocId)
+{
+    auto broker = findBrokerByMobileAppDocId(mobileAppDocId);
+    if (!broker || !broker->isDetached())
+        return;
+
+    LOG_INF("Closing detached document with appDocId [" << mobileAppDocId << ']');
+    broker->setDetached(false);
+    // The callback runs on the broker's own poll, so it holds the broker weakly and does
+    // nothing once the broker is gone.
+    broker->addCallback([weakBroker = std::weak_ptr<DocumentBroker>(broker)]
+    {
+        if (auto docBroker = weakBroker.lock())
+            docBroker->closeDocument("closed");
+    });
+}
+
+// not beautiful - but neither is editing mobile project files.
+#if MOBILEAPP
 
 #if APP_HAS_SETTINGS_STORE
 
@@ -8926,23 +8943,6 @@ void uploadAndApplySettings(const std::string& payload)
 }
 
 #endif // APP_HAS_SETTINGS_STORE
-
-void closeDetachedDocument(unsigned mobileAppDocId)
-{
-    auto broker = findBrokerByMobileAppDocId(mobileAppDocId);
-    if (!broker || !broker->isDetached())
-        return;
-
-    LOG_INF("Closing detached document with appDocId [" << mobileAppDocId << ']');
-    broker->setDetached(false);
-    // The callback runs on the broker's own poll, so it holds the broker weakly and does
-    // nothing once the broker is gone.
-    broker->addCallback([weakBroker = std::weak_ptr<DocumentBroker>(broker)]
-    {
-        if (auto docBroker = weakBroker.lock())
-            docBroker->closeDocument("closed");
-    });
-}
 
 #  include "Exceptions.cpp"
 #endif
