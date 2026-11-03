@@ -434,8 +434,9 @@ std::vector<std::string> HostUtil::getExtraGroupHosts(const Poco::Util::Abstract
     conf.keys(groupPath, keys);
     for (const std::string& key : keys)
     {
-        // The first is "host", the others "host[1]" and on.
-        if (key.starts_with("host[") && key != "host[0]")
+        // The first is "host", the others "host[1]" and on. A configuration given as --o:
+        // options also lists an attribute, such as "host[@allow]", as a key of its own.
+        if (key.starts_with("host[") && key != "host[0]" && key.find("[@") == std::string::npos)
             extraHosts.push_back(conf.getString(groupPath + '.' + key, ""));
     }
 

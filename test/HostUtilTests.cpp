@@ -383,6 +383,7 @@ void HostUtilTests::testHostListWithGaps()
 
 /// Only the first <host> of an alias_groups <group> is used. The others are found, to warn about
 /// them: before, they were ignored without a word, and their documents rejected.
+/// An allow attribute given as an option, as richdocumentscode gives it, is not another host.
 void HostUtilTests::testAliasGroupExtraHosts()
 {
     constexpr std::string_view testname = __func__;
@@ -390,10 +391,13 @@ void HostUtilTests::testAliasGroupExtraHosts()
     Poco::AutoPtr<Poco::Util::MapConfiguration> config(new Poco::Util::MapConfiguration);
     const std::string group = "storage.wopi.alias_groups.group[0]";
     config->setString(group + ".host", "https://first.example:443");
+    config->setString(group + ".host[@allow]", "true");
     config->setString(group + ".host[1]", "https://second.example:443");
     config->setString(group + ".host[2]", "https://third.example:443");
+    config->setString(group + ".host[2][@allow]", "true");
     config->setString(group + ".alias", "https://alias.example:443");
     config->setString("storage.wopi.alias_groups.group[1].host", "https://other.example:443");
+    config->setString("storage.wopi.alias_groups.group[1].host[@allow]", "true");
 
     const std::vector<std::string> extraHosts = HostUtil::getExtraGroupHosts(*config, group);
     LOK_ASSERT_EQUAL(static_cast<std::size_t>(2), extraHosts.size());
