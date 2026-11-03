@@ -27,6 +27,8 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
     private var editorForm: Data?
     private var editorFormUrl: URL?
     private var editorFrameInfo: WKFrameInfo?
+    /// The local copy of the document open in the editor frame, edited by the engine.
+    private var remoteDocument: Document?
 
     static func open(accountId: String, url: URL) {
         if let controller = openWindows[accountId] {
@@ -146,8 +148,66 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
             return (Self.bundledFile(body.dropFirst(kind.count + 1)), nil)
         }
 
+        if kind == "writeRemoteDocFile" {
+            return (writeRemoteDocFile(body.dropFirst(kind.count + 1)), nil)
+        }
+
         COWrapper.LOG_DBG("A \(kind) message from the editor frame")
         return (nil, nil)
+    }
+
+    // The arguments are a JSON array with the integrator's file name and the bytes in base64.
+    private func writeRemoteDocFile(_ arguments: Substring) -> String {
+        let parsed = try? JSONSerialization.jsonObject(with: Data(arguments.utf8))
+        let values = parsed as? [String] ?? []
+        let bytes = values.count == 2 ? Data(base64Encoded: values[1]) : nil
+        guard let bytes else {
+            COWrapper.LOG_ERR("writeRemoteDocFile has no name and bytes")
+            return ""
+        }
+
+        // Only the extension is kept, because the engine picks its import filter by it.
+        let fileExtension = (values[0] as NSString).pathExtension
+        if !Self.isPlainExtension(fileExtension) {
+            COWrapper.LOG_ERR("writeRemoteDocFile has a name with no plain extension: \"\(fileExtension)\"")
+            return ""
+        }
+
+        guard let editorFrameInfo else {
+            COWrapper.LOG_ERR("writeRemoteDocFile has no editor frame")
+            return ""
+        }
+
+        let document = Document()
+        do {
+            try document.writeTemporaryCopy(bytes, named: "document." + fileExtension)
+        } catch {
+            COWrapper.LOG_ERR("writeRemoteDocFile could not write the local copy")
+            return ""
+        }
+
+        // AppKit sets the type of a document it opens. Without one, NSDocument.fileType asks
+        // writableTypes(for:), which asks fileType again leading to a stack overflow.
+        let fileType = document.tempFileURL.flatMap { try? NSDocumentController.shared.typeForContents(of: $0) }
+        guard let fileType else {
+            COWrapper.LOG_ERR("writeRemoteDocFile has a file of no known type")
+            return ""
+        }
+
+        document.fileType = fileType
+        document.connect(webView: webView)
+        document.editorFrame = editorFrameInfo
+        remoteDocument = document
+        return document.tempFileURL?.path ?? ""
+    }
+
+    // Only ASCII letters and digits, like "odt" or "docx".
+    private static func isPlainExtension(_ fileExtension: String) -> Bool {
+        let isPlainCharacter = { (character: Character) in
+            character.isASCII && (character.isLetter || character.isNumber)
+        }
+
+        return !fileExtension.isEmpty && fileExtension.allSatisfy(isPlainCharacter)
     }
 
     // The arguments are a JSON array with the path, like ["device-desktop.css"].
