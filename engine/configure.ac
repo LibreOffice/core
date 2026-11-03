@@ -2202,9 +2202,9 @@ libo_FUZZ_ARG_WITH(fonts,
 ,)
 
 AC_ARG_ENABLE(noto-font,
-    AS_HELP_STRING([--enable-noto-font],
-        [Add more Google Noto fonts.]),
-,)
+    AS_HELP_STRING([--disable-noto-font],
+        [Don't add more Google Noto fonts.]),
+,enable_noto_font=yes)
 
 AC_ARG_WITH(epm,
     AS_HELP_STRING([--with-epm],
@@ -12268,7 +12268,7 @@ AC_SUBST(WITH_FONTS)
 dnl Test whether to include more Google Noto fonts
 dnl ===================================================================
 AC_MSG_CHECKING([whether to include more Google Noto fonts])
-if test "$enable_noto_font" = "" -o "$enable_noto_font" = "no" -o "$with_fonts" = "no"; then
+if test "$enable_noto_font" = "no" -o "$with_fonts" = "no"; then
     AC_MSG_RESULT([no])
     WITH_NOTO_FONT=
 else
