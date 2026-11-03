@@ -3652,6 +3652,10 @@ namespace xmloff::token {
 
         XML_DATE_UTC,
 
+        XML_MORPH,
+        XML_MORPH_BY_WORD,
+        XML_MORPH_BY_CHARACTER,
+
         XML_TOKEN_END
     };
 

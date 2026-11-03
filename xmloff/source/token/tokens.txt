@@ -3386,4 +3386,7 @@ reflection-end-transparency
 reflection-end-position
 airplane
 date-utc
+morph
+morphByWord
+morphByCharacter
 TOKEN_END_DUMMY
