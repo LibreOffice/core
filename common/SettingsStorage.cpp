@@ -16,6 +16,8 @@
 #include <common/ConfigUtil.hpp>
 #include <common/Log.hpp>
 #include <common/Util.hpp>
+#include <wsd/COOLWSD.hpp>
+#include <wsd/DocumentBroker.hpp>
 
 #include <Poco/DirectoryIterator.h>
 #include <Poco/File.h>
@@ -342,3 +344,61 @@ void setUIZoomPercent(int percent)
 }
 
 } // namespace Desktop
+
+bool DocumentBroker::installUserPresets()
+{
+    ASSERT_CORRECT_THREAD();
+
+    // The message goes to the kit through a session's channel, and the kit applies the
+    // whole preset directory, so any one session carries it for the document.
+    if (_sessions.empty())
+        return false;
+
+    // Nothing is staged: an app has no jail, and the engine reads the
+    // configuration out of the profile the dialog wrote it to. Create it when
+    // there is none yet, as the engine also writes its own settings there and
+    // learns where from this message.
+    try
+    {
+        Poco::File(Desktop::getUserConfigRoot()).createDirectories();
+    }
+    catch (const Poco::Exception& exc)
+    {
+        LOG_WRN("installUserPresets: cannot create "
+                << Desktop::getUserConfigRoot().toString() << ": " << exc.displayText());
+        return false;
+    }
+
+    // The app's user is alone on the document: what they dropped goes back
+    // to the defaults.
+    return forwardToChild(_sessions.begin()->second, "addconfig reset");
+}
+
+void uploadAndApplySettings(const std::string& payload)
+{
+    if (!Desktop::uploadSettings(payload))
+        return;
+
+    std::vector<std::shared_ptr<DocumentBroker>> brokers;
+    {
+        std::lock_guard<std::mutex> lock(DocBrokersMutex);
+        brokers.reserve(DocBrokers.size());
+        for (const auto& it : DocBrokers)
+        {
+            if (it.second)
+                brokers.push_back(it.second);
+        }
+    }
+
+    // Every open document reads the same store, so they all take the change.
+    for (const std::shared_ptr<DocumentBroker>& broker : brokers)
+    {
+        // The callback runs on the broker's own poll, so it holds the broker weakly and
+        // does nothing once the broker is gone.
+        broker->addCallback([weakBroker = std::weak_ptr<DocumentBroker>(broker)]
+        {
+            if (auto docBroker = weakBroker.lock())
+                docBroker->installUserPresets();
+        });
+    }
+}
