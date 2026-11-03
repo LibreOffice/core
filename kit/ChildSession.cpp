@@ -2809,13 +2809,13 @@ bool ChildSession::insertPastedGif(const char* data, int size)
 
 namespace
 {
-/// The file name of a picked upload "<number>-<file name>", or empty for any other shape.
+/// The file name of a picked upload "<random hex>-<file name>", or empty for any other shape.
 std::string pickedFileName(const std::string& uploadName)
 {
     const std::size_t dash = uploadName.find('-');
     if (dash == std::string::npos || dash == 0 || dash + 1 >= uploadName.size() ||
         !std::all_of(uploadName.begin(), uploadName.begin() + dash,
-                     [](unsigned char c) { return std::isdigit(c) != 0; }))
+                     [](unsigned char c) { return std::isxdigit(c) != 0; }))
         return std::string();
 
     const std::string fileName = uploadName.substr(dash + 1);
@@ -2978,7 +2978,7 @@ bool ChildSession::insertFile(const StringVector& tokens)
 
     if (type == "filepicker" && Util::isMobileApp())
     {
-        // The name is URL-encoded and "<number>-<file name>" like an upload on the server.
+        // The name is URL-encoded and "<random hex>-<file name>" like an upload on the server.
         std::string uploadName;
         try
         {

@@ -6534,12 +6534,10 @@ std::string DocumentBroker::stageUpload(const std::string& credential,
         return std::string();
     }
 
-    // The name is "<number>-<file name>": a fresh number of wsd's own, then the cleaned name the
-    // file was uploaded under.
-    const uint64_t number =
-        (static_cast<uint64_t>(Util::rng::getNext()) << 32) | Util::rng::getNext();
+    // The name is "<random hex>-<file name>": a fresh random string of wsd's own, then the cleaned
+    // name the file was uploaded under.
     const std::string stagedName =
-        std::to_string(number) + '-' + Poco::Path(uploadedPath).getFileName();
+        Util::rng::getHexString(16) + '-' + Poco::Path(uploadedPath).getFileName();
     const std::string stagedPath = jailStagingPath(stagedName);
     if (stagedPath.empty())
         return std::string();
