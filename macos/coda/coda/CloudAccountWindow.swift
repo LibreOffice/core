@@ -73,14 +73,11 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         super.init(window: window)
         window.delegate = self
         webView.navigationDelegate = self
-        webView.configuration.userContentController.add(
-            self,
-            contentWorld: Self.world,
-            name: "frameLoaded"
-        )
 
-        webView.configuration.userContentController.addScriptMessageHandler(self, contentWorld: .page, name: "lok")
-        ViewController.addDiagnosticMessageHandlers(to: webView.configuration.userContentController, handler: self)
+        let contentController = webView.configuration.userContentController
+        contentController.add(self, contentWorld: Self.world, name: "frameLoaded")
+        contentController.addScriptMessageHandler(self, contentWorld: .page, name: "lok")
+        ViewController.addDiagnosticMessageHandlers(to: contentController, handler: self)
         webView.load(URLRequest(url: url))
     }
 
@@ -106,13 +103,10 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
     }
 
     func windowWillClose(_ notification: Notification) {
-        webView.configuration.userContentController.removeScriptMessageHandler(
-            forName: "frameLoaded",
-            contentWorld: Self.world
-        )
-
-        webView.configuration.userContentController.removeScriptMessageHandler(forName: "lok")
-        ViewController.removeDiagnosticMessageHandlers(from: webView.configuration.userContentController)
+        let contentController = webView.configuration.userContentController
+        contentController.removeScriptMessageHandler(forName: "frameLoaded", contentWorld: Self.world)
+        contentController.removeScriptMessageHandler(forName: "lok")
+        ViewController.removeDiagnosticMessageHandlers(from: contentController)
         Self.openWindows[accountId] = nil
     }
 
