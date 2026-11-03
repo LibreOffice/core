@@ -235,13 +235,17 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Chart Data Table dialog', 
 	it('Inline cell editing', function() {
 		// Click a data cell to select it first, then double-click to edit.
 		getEntries().first().find('[role="gridcell"]').eq(1).click();
+		helper.processToIdle(this.win);
 		getEntries().first().find('[role="gridcell"]').eq(1).dblclick();
 
 		// An input element should appear inside the entry for inline editing.
 		getEntries().first().find('input').should('be.visible');
+		helper.processToIdle(this.win);
+		getEntries().first().find('input').should('have.focus');
 
 		// Type a new value.
-		getEntries().first().find('input').clear().type('42.5{enter}');
+		getEntries().first().find('input').clear();
+		getEntries().first().find('input').type('42.5{enter}');
 
 		// The input should disappear after pressing enter.
 		getEntries().first().find('input').should('not.exist');
@@ -268,9 +272,13 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Chart Data Table dialog', 
 	it('Close button applies changes', function() {
 		// Edit a cell value.
 		getEntries().first().find('[role="gridcell"]').eq(1).click();
+		helper.processToIdle(this.win);
 		getEntries().first().find('[role="gridcell"]').eq(1).dblclick();
 		getEntries().first().find('input').should('be.visible');
-		getEntries().first().find('input').clear().type('99.9{enter}');
+		helper.processToIdle(this.win);
+		getEntries().first().find('input').should('have.focus');
+		getEntries().first().find('input').clear();
+		getEntries().first().find('input').type('99.9{enter}');
 
 		// Close the dialog.
 		closeDataTableDialog();
