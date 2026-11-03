@@ -326,7 +326,10 @@ void ScMyStylesImportHelper::AddRange(const ScRange& rRange)
     // the table, so a run of cells that reaches column 1023 covers the rest of the row.
     if (aColDefaultStyles.size() == size_t(OLD_MAXCOLCOUNT) && aRange.aStart.Col() < OLD_MAXCOLCOUNT - 1
         && aRange.aEnd.Col() == OLD_MAXCOLCOUNT - 1)
-        aRange.aEnd.SetCol(rImport.GetDocument()->MaxCol());
+    {
+        if (ScDocument* pDoc = rImport.GetDocument())
+            aRange.aEnd.SetCol(pDoc->MaxCol());
+    }
     if (!bPrevRangeAdded)
     {
         bool bAddRange(false);
