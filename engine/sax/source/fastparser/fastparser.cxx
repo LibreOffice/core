@@ -575,7 +575,7 @@ Event& Entity::getEvent( CallbackType aType )
     EventList& rEventList = getEventList();
     if (mnProducedEventsSize == rEventList.maEvents.size())
     {
-        SAL_WARN_IF(!maSavedException.hasValue(), "sax",
+        SAL_WARN_IF(!hasException(), "sax",
             "Event vector should only exceed " << mnEventListSize <<
             " temporarily while an exception is pending");
         rEventList.maEvents.resize(mnProducedEventsSize + 1);
