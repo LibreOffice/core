@@ -4040,6 +4040,40 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextDropPlaceEditedByOthe
     CPPUNIT_ASSERT_EQUAL(u"AaaCccYY|Bbb||"_ustr, lcl_documentText(mxComponent));
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextOtherViewDropsIntoDraggedText)
+{
+    // Given the paragraphs "Aaa", "Bbb" and "Ccc", open in two views, with "Ccc" selected in the
+    // first view and "Aaa" in the second:
+    SwXTextDocument* pXTextDocument = createDoc();
+    int nViewA = KitHelper::getCurrentView();
+    SwWrtShell* pWrtShellA = getSwDocShell()->GetWrtShell();
+    ThreeParagraphs aPoints = lcl_fillThreeParagraphs(pWrtShellA);
+    int nViewB = lcl_addView(pXTextDocument);
+    SwWrtShell* pWrtShellB = getSwDocShell()->GetWrtShell();
+    lcl_selectParagraph(pWrtShellA, getParagraph(3));
+    lcl_selectParagraph(pWrtShellB, getParagraph(1));
+
+    // When the first view drags "Ccc" to the end of "Bbb" and holds the button, and the second
+    // view drops "Aaa" inside "Ccc":
+    lcl_dragText(pXTextDocument, aPoints.aInsideThird, aPoints.aEndOfSecond, 0,
+                 /*bRelease=*/false, nViewA);
+    lcl_dragText(pXTextDocument, aPoints.aInsideFirst, aPoints.aInsideThird, 0,
+                 /*bRelease=*/true, nViewB);
+
+    // Then the dropped text lands inside the text of the first drag, as any edit there does:
+    CPPUNIT_ASSERT_EQUAL(u"|Bbb|CAaacc|"_ustr, lcl_documentText(mxComponent));
+    CPPUNIT_ASSERT_EQUAL(u"CAaacc|"_ustr, lcl_selectedParts(pWrtShellA));
+
+    // And when the first view drops, its text moves with the dropped text in it:
+    lcl_releaseButton(pXTextDocument, nViewA, aPoints.aEndOfSecond);
+    CPPUNIT_ASSERT_EQUAL(u"|BbbCAaacc||"_ustr, lcl_documentText(mxComponent));
+
+    // And undo in the first view takes back its own move only:
+    KitHelper::setView(nViewA);
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u"|Bbb|CAaacc|"_ustr, lcl_documentText(mxComponent));
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextDropPosition)
 {
     // Given the paragraphs "Test1" and "Test2", with "Test2" selected:
