@@ -3745,13 +3745,26 @@ bool isRecordableSourceString(const std::string& value)
     return value.size() <= MaxLength && !Util::holdsControlCharacter(value);
 }
 
+/// The number of UTF-16 code units that a UTF-8 string takes, which is how the document measures
+/// a name. Every byte that starts a sequence counts one unit, and a four-byte sequence, a code
+/// point outside the basic plane, counts two.
+std::size_t utf16Length(const std::string& value)
+{
+    std::size_t length = 0;
+    for (const unsigned char byte : value)
+    {
+        if ((byte & 0xC0) != 0x80)
+            length += byte >= 0xF0 ? 2 : 1;
+    }
+    return length;
+}
+
 /// Minimal validation of a name recorded about the source. The document limits the name to 128
-/// UTF-16 code units, which take at most three UTF-8 bytes each, so a longer name is left for the
-/// document to refuse.
+/// UTF-16 code units, so the name is measured the same way here.
 bool isRecordableSourceName(const std::string& name)
 {
-    constexpr std::size_t MaxLength = 3 * 128;
-    return name.size() <= MaxLength && !Util::holdsControlCharacter(name);
+    constexpr std::size_t MaxLength = 128;
+    return utf16Length(name) <= MaxLength && !Util::holdsControlCharacter(name);
 }
 
 bool isRecordablePersistentLink(const std::string& link)
@@ -3961,7 +3974,7 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
         return false;
     }
 
-    std::string encodedName;
+    std::string encodedFile;
     std::string encodedSource;
     // The time the source was last modified now, recorded on linked pages so a
     // later comparison tells whether they are up to date. Optional.
@@ -3970,18 +3983,22 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
     // The positions the slides of a linked insert hold in the source, which links each page to a
     // position rather than to one slide. Optional.
     std::string sourcePositionList;
-    // The section of the source the slides make up, and its name, which inserts them as a section
-    // of their own, linked to that source section with link=1. Optional.
-    std::string encodedSection;
-    std::string encodedSectionName;
+    // How the pages go in: as plain slides, or as a section of their own holding the section of
+    // the source they make up. Optional, slides when absent.
+    std::string as;
+    // The identifier and the name of the unit of the source the pages make up, which a section
+    // insert records with the section. A slides insert names no unit.
+    std::string encodedId;
+    std::string encodedName;
     int at = -1;
     bool keepDesign = false;
     bool link = false;
-    bool haveName = false;
+    bool haveFile = false;
     bool haveSource = false;
     bool haveTime = false;
-    bool haveSection = false;
-    bool haveSectionName = false;
+    bool haveAs = false;
+    bool haveId = false;
+    bool haveName = false;
     bool malformed = false;
     for (std::size_t i = 2; i < tokens.size() && !malformed; ++i)
     {
@@ -3990,8 +4007,8 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
         int number = 0;
         if (getTokenString(tokens[i], "file", value))
         {
-            malformed = std::exchange(haveName, true);
-            encodedName = std::move(value);
+            malformed = std::exchange(haveFile, true);
+            encodedFile = std::move(value);
         }
         else if (getTokenString(tokens[i], "source", value))
         {
@@ -4011,15 +4028,20 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
         {
             sourcePositionList = std::move(value);
         }
-        else if (getTokenString(tokens[i], "section", value))
+        else if (getTokenString(tokens[i], "as", value))
         {
-            malformed = std::exchange(haveSection, true);
-            encodedSection = std::move(value);
+            malformed = std::exchange(haveAs, true);
+            as = std::move(value);
         }
-        else if (getTokenString(tokens[i], "sectionname", value))
+        else if (getTokenString(tokens[i], "id", value))
         {
-            malformed = std::exchange(haveSectionName, true);
-            encodedSectionName = std::move(value);
+            malformed = std::exchange(haveId, true);
+            encodedId = std::move(value);
+        }
+        else if (getTokenString(tokens[i], "name", value))
+        {
+            malformed = std::exchange(haveName, true);
+            encodedName = std::move(value);
         }
         else if (getTokenInteger(tokens[i], "at", number))
         {
@@ -4041,24 +4063,24 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
 
     // The name of the staged file is read on its own and before the rest of the command, so
     // that the file it names is owned from here on and goes whatever the rest comes to.
-    std::string name;
-    if (haveName)
+    std::string file;
+    if (haveFile)
     {
         try
         {
-            URI::decode(encodedName, name);
+            URI::decode(encodedFile, file);
         }
         catch (const Poco::Exception& exc)
         {
             LOG_ERR("slideimport insert: cannot decode the staged name: " << exc.displayText());
-            name.clear();
+            file.clear();
         }
     }
 
     // The pages come from a file staged in the jail, picked out of the staging area by name,
     // so the name is a plain file name: no path separator and not a directory reference. A
     // name of any other shape names nothing in the staging area.
-    if (!Util::isPlainFileName(name))
+    if (!Util::isPlainFileName(file))
     {
         sendTextFrameAndLogError("error: cmd=slideimport kind=syntax");
         return false;
@@ -4066,7 +4088,7 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
 
     // The file was staged for this one insert, so it leaves the staging area when this call
     // returns, whether the insert runs or not.
-    const FileUtil::OwnedFile stagedFile(getJailDocRoot() + "insertfile/" + name,
+    const FileUtil::OwnedFile stagedFile(getJailDocRoot() + "insertfile/" + file,
                                          /*recursive=*/true);
     const std::string& sharedStagedPath = stagedFile._file;
 
@@ -4080,16 +4102,16 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
 
     std::string source;
     std::string lastModifiedTime;
-    std::string section;
-    std::string sectionName;
+    std::string sourceId;
+    std::string sourceName;
     if (!malformed)
     {
         try
         {
             URI::decode(encodedSource, source);
             URI::decode(encodedTime, lastModifiedTime);
-            URI::decode(encodedSection, section);
-            URI::decode(encodedSectionName, sectionName);
+            URI::decode(encodedId, sourceId);
+            URI::decode(encodedName, sourceName);
         }
         catch (const Poco::Exception& exc)
         {
@@ -4117,10 +4139,21 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
         return false;
     }
 
-    // The slides of a linked section are read by the identifier of each source slide, so a section
-    // takes no positions, linked or not. The identifier and the name are recorded with the section.
-    if ((haveSection || haveSectionName) &&
-        (!isSlideGuid(section) || !sourcePositions.empty() || !isRecordableSourceName(sectionName)))
+    // The pages go in as slides or as a section. A section is the one unit of the source the
+    // insert names, by its identifier and its name, both recorded with the section whether it
+    // is linked or not, and a slides insert names no unit.
+    const bool asSection = as == "section";
+    if ((haveAs && !asSection && as != "slides") ||
+        (asSection ? !(haveId && haveName) : (haveId || haveName)))
+    {
+        sendTextFrameAndLogError("error: cmd=slideimport kind=syntax");
+        return false;
+    }
+
+    // The slides of a section are read by the identifier of each source slide, so a section
+    // takes no positions. A section is named by a GUID.
+    if (asSection && (!isSlideGuid(sourceId) || !sourcePositions.empty() ||
+                      !isRecordableSourceName(sourceName)))
     {
         sendTextFrameAndLogError("error: cmd=slideimport kind=syntax");
         return false;
@@ -4143,7 +4176,7 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
 
     if (!FileUtil::Stat(sharedStagedPath).exists())
     {
-        LOG_ERR("slideimport insert: no file staged as [" << name << ']');
+        LOG_ERR("slideimport insert: no file staged as [" << file << ']');
         sendTextFrameAndLogError("error: cmd=slideimport kind=cantload");
         return false;
     }
@@ -4159,9 +4192,9 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
             << ",\"link\":" << (link ? "true" : "false") << ",\"source\":\""
             << JsonUtil::escapeJSONValue(source) << "\",\"lastModifiedTime\":\""
             << JsonUtil::escapeJSONValue(lastModifiedTime) << "\",\"as\":\""
-            << (haveSection || haveSectionName ? "section" : "slides") << "\",\"sourceId\":\""
-            << JsonUtil::escapeJSONValue(section) << "\",\"sourceName\":\""
-            << JsonUtil::escapeJSONValue(sectionName) << "\"}";
+            << (asSection ? "section" : "slides") << "\",\"sourceId\":\""
+            << JsonUtil::escapeJSONValue(sourceId) << "\",\"sourceName\":\""
+            << JsonUtil::escapeJSONValue(sourceName) << "\"}";
 
     const int slidesBefore = getLOKitDocument()->getParts();
 
@@ -4212,6 +4245,118 @@ bool linksToSource(const std::string& linksJson, const std::string& source,
 
     return false;
 }
+
+/// The options a slidelink command carries after its subcommand and, for an update, after the
+/// source and the file: each one at most once, in any order.
+struct SlideLinkOptions
+{
+    /// The unit the command names, unit=<slide|section> and id=<identifier>, as they came.
+    std::string encodedUnit;
+    std::string encodedId;
+    /// The time the source was last modified now, and the name the unit has in the source now,
+    /// as they came.
+    std::string encodedTime;
+    std::string encodedName;
+    bool haveUnit = false;
+    bool haveId = false;
+    bool haveTime = false;
+    bool haveName = false;
+    bool haveDeep = false;
+    /// Whether every link beneath the unit comes off with it.
+    bool deep = false;
+
+    /// What every answer names the unit by: unit= and id= as the command spelled them, once the
+    /// command carries both.
+    std::string named() const
+    {
+        if (!haveUnit || !haveId)
+            return std::string();
+
+        return " unit=" + encodedUnit + " id=" + encodedId;
+    }
+};
+
+/// Reads the options of a slidelink command from tokens[first] on. False when a token is no
+/// option of the family, or when one comes twice. A token that comes twice ends the read before
+/// its second value is taken, so an answer names the unit as the command spelled it first.
+bool readSlideLinkOptions(const StringVector& tokens, std::size_t first,
+                          SlideLinkOptions& options)
+{
+    for (std::size_t i = first; i < tokens.size(); ++i)
+    {
+        std::string value;
+        int number = 0;
+        if (getTokenString(tokens[i], "unit", value))
+        {
+            if (std::exchange(options.haveUnit, true))
+                return false;
+            options.encodedUnit = std::move(value);
+        }
+        else if (getTokenString(tokens[i], "id", value))
+        {
+            if (std::exchange(options.haveId, true))
+                return false;
+            options.encodedId = std::move(value);
+        }
+        else if (getTokenString(tokens[i], "time", value))
+        {
+            if (std::exchange(options.haveTime, true))
+                return false;
+            options.encodedTime = std::move(value);
+        }
+        else if (getTokenString(tokens[i], "name", value))
+        {
+            if (std::exchange(options.haveName, true))
+                return false;
+            options.encodedName = std::move(value);
+        }
+        else if (getTokenInteger(tokens[i], "deep", number) && (number == 0 || number == 1))
+        {
+            if (std::exchange(options.haveDeep, true))
+                return false;
+            options.deep = number != 0;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/// Decodes the unit the options name. unit comes out as "slide" or "section" and id as the
+/// identifier of the unit in this document, a GUID spelled the way the document spells it. False
+/// when the options name no unit, a unit of no known kind, or an identifier that is no GUID.
+bool decodeSlideLinkUnit(const SlideLinkOptions& options, std::string& unit, std::string& id)
+{
+    if (!options.haveUnit || !options.haveId)
+        return false;
+
+    if (options.encodedUnit != "slide" && options.encodedUnit != "section")
+        return false;
+
+    std::string decoded;
+    try
+    {
+        URI::decode(options.encodedId, decoded);
+    }
+    catch (const Poco::Exception& exc)
+    {
+        LOG_ERR("slidelink: cannot decode the identifier: " << exc.displayText());
+        return false;
+    }
+
+    if (!isSlideGuid(decoded))
+        return false;
+
+    // The document spells an identifier in upper case.
+    std::transform(decoded.begin(), decoded.end(), decoded.begin(),
+                   [](unsigned char c) { return std::toupper(c); });
+    unit = options.encodedUnit;
+    id = std::move(decoded);
+    return true;
+}
 }
 
 bool ChildSession::slideLink(const StringVector& tokens)
@@ -4247,16 +4392,15 @@ bool ChildSession::slideLinkUpdate(const StringVector& tokens)
 {
     std::string encodedSource;
     std::string encodedFile;
-    if (tokens.size() < 4 || tokens.size() > 7 ||
-        !getTokenString(tokens[2], "source", encodedSource) ||
+    if (tokens.size() < 4 || !getTokenString(tokens[2], "source", encodedSource) ||
         !getTokenString(tokens[3], "file", encodedFile))
     {
         sendTextFrameAndLogError("error: cmd=slidelink kind=syntax");
         return false;
     }
 
-    // Every answer of an update names the source it was sent for, so that a
-    // reader of these messages tells the answers of one command of the family
+    // Every answer of an update names the source it was sent for, and the unit when it names
+    // one, so that a reader of these messages tells the answers of one command of the family
     // from those of another.
     std::string named = " source=" + encodedSource;
 
@@ -4291,43 +4435,20 @@ bool ChildSession::slideLinkUpdate(const StringVector& tokens)
     const std::string& sharedStagedPath = stagedFile._file;
 
     // The other tokens are optional, in any order: time= names the time the source was last
-    // modified now, recorded on the refreshed pages, and part= names the one page to refresh, where
-    // no part refreshes every page linked to the source. section= names a linked section to bring
-    // up to date with its source section instead, and sectionname= the name that source section
-    // has now.
-    std::string encodedTime;
-    std::string part;
-    std::string encodedSection;
-    std::string encodedSectionName;
-    bool haveSection = false;
-    bool haveSectionName = false;
-    bool repeatedSection = false;
-    for (std::size_t i = 4; i < tokens.size(); ++i)
-    {
-        if (getTokenString(tokens[i], "sectionname", encodedSectionName))
-            haveSectionName = true;
-        else if (getTokenString(tokens[i], "section", encodedSection))
-        {
-            repeatedSection = haveSection;
-            haveSection = true;
-        }
-        else if (!getTokenString(tokens[i], "time", encodedTime) &&
-                 !(getTokenString(tokens[i], "part", part) && isValidPartId(part)))
-        {
-            sendTextFrameAndLogError("error: cmd=slidelink kind=syntax" + named);
-            return false;
-        }
-    }
+    // modified now, which the refreshed links record. unit= and id= name the one link to
+    // refresh, where no unit refreshes every link of the source that is under no other link,
+    // and name= the name that unit has in the source now.
+    SlideLinkOptions options;
+    const bool wellFormed = readSlideLinkOptions(tokens, 4, options);
+    named += options.named();
 
-    // The answers of a section update name the section as well, so that the answers of the
-    // updates of two sections of one source can be told apart.
-    if (haveSection)
-        named += " section=" + encodedSection;
-
-    // A section update reads every slide of the one section it names, so it names no single page,
-    // and a name of a source section goes with a section.
-    if (repeatedSection || (haveSection && (encodedSection.empty() || !part.empty())) ||
-        (haveSectionName && !haveSection))
+    // A unit is named by both of its tokens, a name goes with a unit, and deep is a matter of
+    // a break alone.
+    std::string unit;
+    std::string id;
+    if (!wellFormed || options.haveDeep || options.haveUnit != options.haveId ||
+        (options.haveName && !options.haveUnit) ||
+        (options.haveUnit && !decodeSlideLinkUnit(options, unit, id)))
     {
         sendTextFrameAndLogError("error: cmd=slidelink kind=syntax" + named);
         return false;
@@ -4335,41 +4456,35 @@ bool ChildSession::slideLinkUpdate(const StringVector& tokens)
 
     std::string source;
     std::string lastModifiedTime;
-    std::string section;
-    std::string sectionName;
+    std::string name;
     try
     {
         URI::decode(encodedSource, source);
-        URI::decode(encodedTime, lastModifiedTime);
-        URI::decode(encodedSection, section);
-        URI::decode(encodedSectionName, sectionName);
+        URI::decode(options.encodedTime, lastModifiedTime);
+        URI::decode(options.encodedName, name);
     }
     catch (const Poco::Exception& exc)
     {
-        LOG_ERR("slidelink update: cannot decode the source or the time: " << exc.displayText());
+        LOG_ERR("slidelink update: cannot decode the source, the time or the name: "
+                << exc.displayText());
         sendTextFrameAndLogError("error: cmd=slidelink kind=syntax" + named);
         return false;
     }
 
-    // A refresh covers the pages of one source document.
+    // A refresh covers the links to one source document.
     if (!isRecordablePersistentLink(source))
     {
         sendTextFrameAndLogError("error: cmd=slidelink kind=syntax" + named);
         return false;
     }
 
-    // The refreshed pages record the time, and write it out with them. A linked section records
-    // the name of its source section the same way.
-    if (!isRecordableSourceString(lastModifiedTime) || (haveSection && !isSlideGuid(section)) ||
-        !isRecordableSourceName(sectionName))
+    // The refreshed links record the time, and a section the name of its source section, and
+    // write them out.
+    if (!isRecordableSourceString(lastModifiedTime) || !isRecordableSourceName(name))
     {
         sendTextFrameAndLogError("error: cmd=slidelink kind=syntax" + named);
         return false;
     }
-
-    // The document spells a section identifier in upper case.
-    std::transform(section.begin(), section.end(), section.begin(),
-                   [](unsigned char c) { return std::toupper(c); });
 
     // A refresh replaces pages of the document, which is an edit.
     if (isReadOnly())
@@ -4391,30 +4506,26 @@ bool ChildSession::slideLinkUpdate(const StringVector& tokens)
     getLOKitDocument()->setView(_viewId);
 
     // The document reads the staged file within this call, so the file itself is wanted no
-    // longer. Each page records the source document it belongs to, and a later refresh of
-    // that source reads the file it is given then.
+    // longer. Each link records the source document it is to, and a later refresh of that
+    // source reads the file it is given then.
     const std::string url = Poco::URI(Poco::Path(sharedStagedPath)).toString();
-    if (haveSection)
-        return slideLinkUpdateSection(source, section, url, lastModifiedTime, sectionName, named);
 
-    // One page alone is read when the command names it, and every link of the source otherwise.
+    // One link alone is read when the command names it, and every link of the source otherwise.
     std::string notUpdated;
     const int count =
-        part.empty()
+        unit.empty()
             ? getLOKitDocument()->refreshSlideLinks(source.c_str(), url.c_str(),
                                                     lastModifiedTime.c_str(), &notUpdated)
-            : getLOKitDocument()->refreshSlideLink("slide", part.c_str(), source.c_str(),
-                                                   url.c_str(), lastModifiedTime.c_str(), "",
-                                                   &notUpdated);
+            : getLOKitDocument()->refreshSlideLink(unit.c_str(), id.c_str(), source.c_str(),
+                                                   url.c_str(), lastModifiedTime.c_str(),
+                                                   name.c_str(), &notUpdated);
 
     if (count < 0)
     {
-        // The document reports only that it refreshed nothing. A source no page
-        // of the document is linked to, or a page that is not linked to it, is a
-        // different matter from a file whose pages could not be read, and a
-        // caller can act on the second one.
-        const bool linked =
-            linksToSource(getSlideLinksJson(), source, part.empty() ? "" : "slide", part);
+        // The document reports only that it refreshed nothing. A source no link of the document
+        // is to, or a unit that is not linked to it, is a different matter from a file whose
+        // pages could not be read, and a caller can act on the second one.
+        const bool linked = linksToSource(getSlideLinksJson(), source, unit, id);
         sendTextFrameAndLogError(std::string("error: cmd=slidelink kind=") +
                                  (linked ? "failed" : "notlinked") + named);
         return false;
@@ -4426,65 +4537,37 @@ bool ChildSession::slideLinkUpdate(const StringVector& tokens)
     if (!_docManager->notifyAll("slidelinks: " + getSlideLinksJson()))
         return false;
 
-    return sendTextFrame("slidelink: {\"status\":\"updated\",\"source\":\"" +
-                         JsonUtil::escapeJSONValue(source) +
-                         "\",\"count\":" + std::to_string(count) + ",\"notUpdated\":" +
+    std::string reply = "slidelink: {\"status\":\"updated\",\"source\":\"" +
+                        JsonUtil::escapeJSONValue(source) + '"';
+    if (!unit.empty())
+        reply += ",\"unit\":\"" + unit + "\",\"id\":\"" + JsonUtil::escapeJSONValue(id) + '"';
+
+    return sendTextFrame(reply + ",\"count\":" + std::to_string(count) + ",\"notUpdated\":" +
                          (notUpdated.empty() ? "[]" : notUpdated) + '}');
-}
-
-bool ChildSession::slideLinkUpdateSection(const std::string& source, const std::string& section,
-                                          const std::string& url,
-                                          const std::string& lastModifiedTime,
-                                          const std::string& sectionName,
-                                          const std::string& named)
-{
-    const int count = getLOKitDocument()->refreshSlideLink(
-        "section", section.c_str(), source.c_str(), url.c_str(), lastModifiedTime.c_str(),
-        sectionName.c_str(), nullptr);
-
-    if (count < 0)
-    {
-        // A section that is not linked to that source is a different matter from a file whose
-        // slides could not be read, as for a refresh of pages.
-        const bool linked = linksToSource(getSlideLinksJson(), source, "section", section);
-        sendTextFrameAndLogError(std::string("error: cmd=slidelink kind=") +
-                                 (linked ? "failed" : "notlinked") + named);
-        return false;
-    }
-
-    // The section holds new slides, so its parts are new ones for every view of the document,
-    // and the list goes out before the reply that reports them.
-    if (!_docManager->notifyAll("slidelinks: " + getSlideLinksJson()))
-        return false;
-
-    return sendTextFrame("slidelink: {\"status\":\"updated\",\"source\":\"" +
-                         JsonUtil::escapeJSONValue(source) + "\",\"section\":\"" +
-                         JsonUtil::escapeJSONValue(section) +
-                         "\",\"count\":" + std::to_string(count) + '}');
 }
 
 bool ChildSession::slideLinkBreak(const StringVector& tokens)
 {
-    std::string encodedSection;
-    for (std::size_t i = 2; i < tokens.size(); ++i)
-    {
-        if (getTokenString(tokens[i], "section", encodedSection))
-            return slideLinkBreakSection(tokens, encodedSection);
-    }
+    // A break names the unit it takes the link off, by unit= and id=, and may add deep=1 to take
+    // every link beneath off as well.
+    SlideLinkOptions options;
+    const bool wellFormed = readSlideLinkOptions(tokens, 2, options);
 
-    std::string part;
-    if (tokens.size() != 3 || !getTokenString(tokens[2], "part", part) || !isValidPartId(part))
+    // Every answer of a break names the unit it was asked for, the way an update names its
+    // source, so that a reader of these messages tells the answers of one command of the family
+    // from those of another.
+    const std::string named = options.named();
+
+    std::string unit;
+    std::string id;
+    if (!wellFormed || options.haveTime || options.haveName ||
+        !decodeSlideLinkUnit(options, unit, id))
     {
-        sendTextFrameAndLogError("error: cmd=slidelink kind=syntax");
+        sendTextFrameAndLogError("error: cmd=slidelink kind=syntax" + named);
         return false;
     }
 
-    // Every answer of a break names the page it was asked for, the way an
-    // update names its source, so that a reader of these messages tells the
-    // answers of one command of the family from those of another.
-    const std::string named = " part=" + part;
-
-    // Taking the source off a page changes the document.
+    // Taking the link off a unit changes the document.
     if (isReadOnly())
     {
         LOG_ERR("slidelink break: a read-only view does not change links");
@@ -4496,93 +4579,16 @@ bool ChildSession::slideLinkBreak(const StringVector& tokens)
 
     getLOKitDocument()->setView(_viewId);
 
-    // A break makes the document report its links again, so the fresh list goes out on its own
-    // and the reply names the page alone.
-    if (!getLOKitDocument()->breakSlideLink("slide", part.c_str(), /*bDeep=*/false))
+    // The document reports its links again when a link comes off, so the fresh list goes out on
+    // its own and the reply names the unit alone.
+    if (!getLOKitDocument()->breakSlideLink(unit.c_str(), id.c_str(), options.deep))
     {
         sendTextFrameAndLogError("error: cmd=slidelink kind=notlinked" + named);
         return false;
     }
 
-    return sendTextFrame("slidelink: {\"status\":\"broken\",\"part\":\"" + part + "\"}");
-}
-
-bool ChildSession::slideLinkBreakSection(const StringVector& tokens,
-                                         const std::string& encodedSection)
-{
-    // Every answer of a break of a section names the section it was asked for.
-    const std::string named = " section=" + encodedSection;
-
-    // slides=1 takes the source off each slide of the section as well. It may come before or
-    // after section=, and each of the two comes once.
-    int slides = 0;
-    bool haveSection = false;
-    bool haveSlides = false;
-    bool malformed = tokens.size() > 4;
-    for (std::size_t i = 2; i < tokens.size() && !malformed; ++i)
-    {
-        std::string value;
-        if (getTokenString(tokens[i], "section", value))
-        {
-            malformed = haveSection;
-            haveSection = true;
-        }
-        else if (getTokenInteger(tokens[i], "slides", slides) && !haveSlides &&
-                 (slides == 0 || slides == 1))
-            haveSlides = true;
-        else
-            malformed = true;
-    }
-    if (malformed)
-    {
-        sendTextFrameAndLogError("error: cmd=slidelink kind=syntax" + named);
-        return false;
-    }
-
-    std::string section;
-    try
-    {
-        URI::decode(encodedSection, section);
-    }
-    catch (const Poco::Exception& exc)
-    {
-        LOG_ERR("slidelink break: cannot decode the section: " << exc.displayText());
-        sendTextFrameAndLogError("error: cmd=slidelink kind=syntax" + named);
-        return false;
-    }
-
-    if (!isSlideGuid(section))
-    {
-        sendTextFrameAndLogError("error: cmd=slidelink kind=syntax" + named);
-        return false;
-    }
-
-    // The document spells a section identifier in upper case.
-    std::transform(section.begin(), section.end(), section.begin(),
-                   [](unsigned char c) { return std::toupper(c); });
-
-    // Taking the link off a section changes the document.
-    if (isReadOnly())
-    {
-        LOG_ERR("slidelink break: a read-only view does not change links");
-        sendTextFrameAndLogError("error: cmd=slidelink kind=failed" + named);
-        return false;
-    }
-
-    SigUtil::addActivity(getId(), "slidelink break section");
-
-    getLOKitDocument()->setView(_viewId);
-
-    // The document reports its links again when a section loses its link, so the fresh list goes
-    // out on its own and the reply names the section alone.
-    if (!getLOKitDocument()->breakSlideLink("section", section.c_str(), slides != 0))
-    {
-        sendTextFrameAndLogError("error: cmd=slidelink kind=notlinked" + named);
-        return false;
-    }
-
-    return sendTextFrame("slidelink: {\"status\":\"broken\",\"section\":\"" +
-                         JsonUtil::escapeJSONValue(section) + "\"}");
+    return sendTextFrame("slidelink: {\"status\":\"broken\",\"unit\":\"" + unit + "\",\"id\":\"" +
+                         JsonUtil::escapeJSONValue(id) + "\"}");
 }
 
 bool ChildSession::extTextInputEvent(const StringVector& tokens)

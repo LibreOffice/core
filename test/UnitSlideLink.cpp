@@ -10,11 +10,10 @@
  */
 
 /*
- * Integration test for the slidelink command family: insert slides as links to
- * the source document they came from, read the links the document holds,
- * refresh them from a file staged in the jail, the way wsd hands the kit the
- * content of a source, and take the source off one page. Also covers the error
- * kinds and what a client may ask for itself.
+ * Integration test for the slidelink command family: insert slides and a section as links to
+ * the source document they came from, read the links the document holds, refresh them from a
+ * file staged in the jail, the way wsd hands the kit the content of a source, and take a link
+ * off. Also covers the error kinds and what a client may ask for itself.
  */
 
 #include <config.h>
@@ -45,6 +44,9 @@
 static constexpr auto SourceName = "Q3 #1 100%.odp";
 /// SourceName as it travels on the wire.
 static constexpr auto EncodedSourceName = "Q3%20%231%20100%25.odp";
+/// An identifier that no slide and no section of the documents of the test holds, as it travels
+/// on the wire.
+static constexpr auto EncodedUnknownId = "%7B00000000-0000-4000-8000-000000000000%7D";
 
 class UnitSlideLink : public UnitWSD
 {
@@ -198,6 +200,12 @@ class UnitSlideLink : public UnitWSD
         return entries;
     }
 
+    /// A braced identifier, as the link list reports one, the way it travels on the wire.
+    static std::string encodeId(const std::string& id)
+    {
+        return "%7B" + id.substr(1, id.size() - 2) + "%7D";
+    }
+
     /// Send a command the way wsd does and assert the error reply it provokes.
     void assertErrorAsWsd(const std::shared_ptr<http::WebSocketSession>& socket,
                           const std::string& command, const std::string& expectedKind,
@@ -340,8 +348,8 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkSection()
         helpers::sendTextFrame(
             socket,
             insertCommand("slides=0,1 at=0 keepdesign=0 link=1 time=2021-05-05T10:00:00Z "
-                          "section=%7BD2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21%7D "
-                          "sectionname=Opening%20slides"),
+                          "as=section id=%7BD2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21%7D "
+                          "name=Opening%20slides"),
             testname);
         const std::string insertReply =
             helpers::getResponseString(socket, "slideimport:", testname);
@@ -368,12 +376,11 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkSection()
 
         // An update of the section gives it every slide of the staged file, which holds the
         // slides its source section holds now, and the new name of that source section.
-        const std::string encodedSectionId =
-            "%7B" + sectionId.substr(1, sectionId.size() - 2) + "%7D";
+        const std::string encodedSectionId = encodeId(sectionId);
         stageSource(socket, "staged.odp");
         sendAsWsd(std::string("slidelink update source=") + EncodedSourceName +
-                  " file=staged.odp time=2021-06-06T10:00:00Z section=" + encodedSectionId +
-                  " sectionname=Opening%20slides%2C%20revised");
+                  " file=staged.odp time=2021-06-06T10:00:00Z unit=section id=" +
+                  encodedSectionId + " name=Opening%20slides%2C%20revised");
         const std::string updateListReply =
             helpers::getResponseString(socket, "slidelinks:", testname);
         sections = getLinksOfUnit(
@@ -389,26 +396,55 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkSection()
 
         const std::string updateReply = helpers::getResponseString(socket, "slidelink:", testname);
         Poco::JSON::Object::Ptr updateObject = helpers::parseJsonReply(updateReply, "slidelink:");
-        LOK_ASSERT_EQUAL(sectionId, updateObject->getValue<std::string>("section"));
+        LOK_ASSERT_EQUAL(std::string("section"), updateObject->getValue<std::string>("unit"));
+        LOK_ASSERT_EQUAL(sectionId, updateObject->getValue<std::string>("id"));
         LOK_ASSERT_EQUAL(10, updateObject->getValue<int>("count"));
+        // The file listed the section, so no slide of it was left as it was.
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(0),
+                         updateObject->getArray("notUpdated")->size());
+
+        // An update of the whole source names no unit and no name. The section follows the name
+        // the file lists for its source section, which is the name it had before the rename, and
+        // the reply names no unit.
+        stageSource(socket, "staged.odp");
+        sendAsWsd(std::string("slidelink update source=") + EncodedSourceName +
+                  " file=staged.odp time=2021-07-07T10:00:00Z");
+        const std::string sourceListReply =
+            helpers::getResponseString(socket, "slidelinks:", testname);
+        sections = getLinksOfUnit(
+            helpers::parseJsonReply(sourceListReply, "slidelinks:")->getArray("links"), "section");
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), sections.size());
+        section = sections[0];
+        LOK_ASSERT_EQUAL(sectionId, section->getValue<std::string>("id"));
+        LOK_ASSERT_EQUAL(std::string("Opening slides"), section->getValue<std::string>("name"));
+        LOK_ASSERT_EQUAL(std::string("2021-07-07T10:00:00Z"),
+                         section->getValue<std::string>("lastModifiedTime"));
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(10), section->getArray("slides")->size());
+        const std::string sourceReply = helpers::getResponseString(socket, "slidelink:", testname);
+        Poco::JSON::Object::Ptr sourceObject = helpers::parseJsonReply(sourceReply, "slidelink:");
+        LOK_ASSERT_EQUAL(10, sourceObject->getValue<int>("count"));
+        LOK_ASSERT_MESSAGE("an update of the whole source names no unit",
+                           !sourceObject->has("unit"));
+        LOK_ASSERT_MESSAGE("an update of the whole source names no id", !sourceObject->has("id"));
 
         // A section that is not linked has no source section to follow.
         stageSource(socket, "staged.odp");
-        const std::string otherSection = "%7B00000000-0000-4000-8000-000000000000%7D";
         assertErrorAsWsd(socket,
                          std::string("slidelink update source=") + EncodedSourceName +
-                             " file=staged.odp section=" + otherSection,
+                             " file=staged.odp unit=section id=" + EncodedUnknownId,
                          "notlinked",
-                         std::string(" source=") + EncodedSourceName + " section=" + otherSection);
+                         std::string(" source=") + EncodedSourceName +
+                             " unit=section id=" + EncodedUnknownId);
 
         // Taking the link off the section, and off each of its slides, leaves no link at all.
-        // slides= may come before section=.
-        helpers::sendTextFrame(socket, "slidelink break slides=1 section=" + encodedSectionId,
+        // deep= may come before the unit.
+        helpers::sendTextFrame(socket, "slidelink break deep=1 unit=section id=" + encodedSectionId,
                                testname);
         const std::string breakReply = helpers::getResponseString(socket, "slidelink:", testname);
         Poco::JSON::Object::Ptr breakObject = helpers::parseJsonReply(breakReply, "slidelink:");
         LOK_ASSERT_EQUAL(std::string("broken"), breakObject->getValue<std::string>("status"));
-        LOK_ASSERT_EQUAL(sectionId, breakObject->getValue<std::string>("section"));
+        LOK_ASSERT_EQUAL(std::string("section"), breakObject->getValue<std::string>("unit"));
+        LOK_ASSERT_EQUAL(sectionId, breakObject->getValue<std::string>("id"));
 
         const std::string breakListReply =
             helpers::getResponseString(socket, "slidelinks:", testname);
@@ -416,16 +452,16 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkSection()
             helpers::parseJsonReply(breakListReply, "slidelinks:");
         LOK_ASSERT_EQUAL(static_cast<std::size_t>(0), breakList->getArray("links")->size());
 
-        // The section is linked to nothing now, and a break names a section by a GUID.
-        helpers::assertErrorReply(socket, "slidelink break section=" + encodedSectionId,
+        // The section is linked to nothing now, a break names a section by a GUID, and deep is
+        // 0 or 1.
+        helpers::assertErrorReply(socket, "slidelink break unit=section id=" + encodedSectionId,
                                   "slidelink", "notlinked", testname,
-                                  " section=" + encodedSectionId);
-        helpers::assertErrorReply(socket, "slidelink break section=opening", "slidelink",
-                                  "syntax", testname, " section=opening");
-        helpers::assertErrorReply(socket,
-                                  "slidelink break section=" + encodedSectionId + " slides=all",
-                                  "slidelink", "syntax", testname,
-                                  " section=" + encodedSectionId);
+                                  " unit=section id=" + encodedSectionId);
+        helpers::assertErrorReply(socket, "slidelink break unit=section id=opening", "slidelink",
+                                  "syntax", testname, " unit=section id=opening");
+        helpers::assertErrorReply(
+            socket, "slidelink break unit=section id=" + encodedSectionId + " deep=all",
+            "slidelink", "syntax", testname, " unit=section id=" + encodedSectionId);
 
         socketPoll->joinThread();
     }
@@ -455,11 +491,11 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkRefresh()
 
         const std::vector<std::string> insertedParts = getParts(getLinks(socket), 2);
 
-        // An update that names one page reads that page alone: it holds a new
+        // An update that names one slide reads that page alone: it holds a new
         // part afterwards and the other page of the source keeps the one it has.
         stageSource(socket, "one.odp");
         sendAsWsd(std::string("slidelink update source=") + EncodedSourceName +
-                  " file=one.odp part=" + insertedParts[1]);
+                  " file=one.odp unit=slide id=" + encodeId(insertedParts[1]));
         const std::string oneListReply =
             helpers::getResponseString(socket, "slidelinks:", testname);
         const std::vector<std::string> parts =
@@ -467,16 +503,21 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkRefresh()
         LOK_ASSERT_EQUAL(insertedParts[0], parts[0]);
         LOK_ASSERT_MESSAGE("the refreshed page holds a new part", parts[1] != insertedParts[1]);
         const std::string oneReply = helpers::getResponseString(socket, "slidelink:", testname);
-        LOK_ASSERT_EQUAL(1,
-                         helpers::parseJsonReply(oneReply, "slidelink:")->getValue<int>("count"));
+        Poco::JSON::Object::Ptr oneObject = helpers::parseJsonReply(oneReply, "slidelink:");
+        LOK_ASSERT_EQUAL(1, oneObject->getValue<int>("count"));
+        // The reply names the unit as the command did, by the part the page held then.
+        LOK_ASSERT_EQUAL(std::string("slide"), oneObject->getValue<std::string>("unit"));
+        LOK_ASSERT_EQUAL(insertedParts[1], oneObject->getValue<std::string>("id"));
 
-        // A page that is not linked to the source is refreshed from nothing, and
+        // A slide that is not linked to the source is refreshed from nothing, and
         // the staged file goes with the answer.
         stageSource(socket, "none.odp");
         assertErrorAsWsd(socket,
                          std::string("slidelink update source=") + EncodedSourceName +
-                             " file=none.odp part=999999",
-                         "notlinked", std::string(" source=") + EncodedSourceName);
+                             " file=none.odp unit=slide id=" + EncodedUnknownId,
+                         "notlinked",
+                         std::string(" source=") + EncodedSourceName +
+                             " unit=slide id=" + EncodedUnknownId);
 
         // wsd stages the slides of the source as a file of the jail and has the
         // kit read the pages of that source from it. The staged name holds a
@@ -541,12 +582,14 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkBreak()
 
         const std::vector<std::string> parts = getParts(getLinks(socket), 2);
 
-        // Taking the source off the first of the two linked pages is a command a client sends.
-        helpers::sendTextFrame(socket, "slidelink break part=" + parts[0], testname);
+        // Taking the link off the first of the two linked pages is a command a client sends.
+        helpers::sendTextFrame(socket, "slidelink break unit=slide id=" + encodeId(parts[0]),
+                               testname);
         const std::string reply = helpers::getResponseString(socket, "slidelink:", testname);
         Poco::JSON::Object::Ptr replyObject = helpers::parseJsonReply(reply, "slidelink:");
         LOK_ASSERT_EQUAL(std::string("broken"), replyObject->getValue<std::string>("status"));
-        LOK_ASSERT_EQUAL(parts[0], replyObject->getValue<std::string>("part"));
+        LOK_ASSERT_EQUAL(std::string("slide"), replyObject->getValue<std::string>("unit"));
+        LOK_ASSERT_EQUAL(parts[0], replyObject->getValue<std::string>("id"));
 
         // The pages linked to a source are not what they were, so the kit sends the fresh list
         // without being asked: the page that kept its source is the only one left.
@@ -558,19 +601,36 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkBreak()
         // The page kept the content it holds, so the deck is the size it was.
         LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), helpers::getPartCount(socket, testname));
 
-        // A page that belongs to no source has no source to take off, and a part that names no
-        // page of the document is the same matter.
-        helpers::assertErrorReply(socket, "slidelink break part=" + parts[0], "slidelink",
-                                  "notlinked", testname, " part=" + parts[0]);
-        helpers::assertErrorReply(socket, "slidelink break part=999999", "slidelink", "notlinked",
-                                  testname, " part=999999");
+        // A page that is linked to nothing has no link to take off, and an identifier that names
+        // no page of the document is the same matter.
+        helpers::assertErrorReply(socket, "slidelink break unit=slide id=" + encodeId(parts[0]),
+                                  "slidelink", "notlinked", testname,
+                                  " unit=slide id=" + encodeId(parts[0]));
+        helpers::assertErrorReply(socket, std::string("slidelink break unit=slide id=") +
+                                              EncodedUnknownId,
+                                  "slidelink", "notlinked", testname,
+                                  std::string(" unit=slide id=") + EncodedUnknownId);
 
-        // A break names one page, and it names it with a part identifier.
+        // A break names one unit, by a unit of a known kind and a GUID together, and the answer
+        // names them as the command spelled them once it carries both.
         helpers::assertErrorReply(socket, "slidelink break", "slidelink", "syntax", testname);
-        helpers::assertErrorReply(socket, "slidelink break part=zero", "slidelink", "syntax",
+        helpers::assertErrorReply(socket, "slidelink break unit=slide id=zero", "slidelink",
+                                  "syntax", testname, " unit=slide id=zero");
+        helpers::assertErrorReply(socket, "slidelink break unit=slide id=%7B1BE1A269%7D",
+                                  "slidelink", "syntax", testname,
+                                  " unit=slide id=%7B1BE1A269%7D");
+        helpers::assertErrorReply(socket, std::string("slidelink break unit=page id=") +
+                                              EncodedUnknownId,
+                                  "slidelink", "syntax", testname,
+                                  std::string(" unit=page id=") + EncodedUnknownId);
+        helpers::assertErrorReply(socket, std::string("slidelink break id=") + EncodedUnknownId,
+                                  "slidelink", "syntax", testname);
+        helpers::assertErrorReply(socket, "slidelink break unit=slide", "slidelink", "syntax",
                                   testname);
-        helpers::assertErrorReply(socket, "slidelink break part={1BE1A269}", "slidelink", "syntax",
-                                  testname);
+        helpers::assertErrorReply(socket, std::string("slidelink break unit=slide id=") +
+                                              EncodedUnknownId + " time=now",
+                                  "slidelink", "syntax", testname,
+                                  std::string(" unit=slide id=") + EncodedUnknownId);
 
         socketPoll->joinThread();
     }
@@ -622,21 +682,33 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkErrors()
         helpers::assertErrorReply(socket, insertCommand("slides=0 link=1", /*named=*/false),
                                   "slideimport", "nosource", testname);
 
-        // A linked section reads each slide by the identifier of its source slide, so a section
-        // takes no positions, and its name is recorded like the source time, linked or not. A
-        // section is named by a GUID.
-        helpers::assertErrorReply(socket,
-                                  insertCommand("slides=0 section=%7Bs%7D sectionname=a%01"),
+        // The pages go in as slides or as a section. A section is named by the identifier of its
+        // source section, a GUID, and by its name, which is recorded like the source time,
+        // linked or not, and a slides insert names no unit. A linked section reads each slide by
+        // the identifier of its source slide, so a section takes no positions.
+        const std::string section = std::string("as=section id=") + EncodedUnknownId;
+        helpers::assertErrorReply(socket, insertCommand("slides=0 as=deck"), "slideimport",
+                                  "syntax", testname);
+        helpers::assertErrorReply(socket, insertCommand("slides=0 " + section + " name=a%01"),
                                   "slideimport", "syntax", testname);
-        helpers::assertErrorReply(socket, insertCommand("slides=0 section=opening"),
+        helpers::assertErrorReply(socket,
+                                  insertCommand("slides=0 as=section id=opening name=Opening"),
+                                  "slideimport", "syntax", testname);
+        helpers::assertErrorReply(socket, insertCommand("slides=0 " + section), "slideimport",
+                                  "syntax", testname);
+        helpers::assertErrorReply(socket, insertCommand("slides=0 as=section name=Opening"),
                                   "slideimport", "syntax", testname);
         helpers::assertErrorReply(
-            socket, insertCommand("slides=0 link=1 sourcepositions=1 section=%7Bs%7D"),
+            socket, insertCommand("slides=0 link=1 sourcepositions=1 " + section + " name=Opening"),
             "slideimport", "syntax", testname);
         helpers::assertErrorReply(socket,
-                                  insertCommand("slides=0 link=1 section=%7Bs%7D sectionname=a%01"),
+                                  insertCommand("slides=0 link=1 " + section + " name=a%01"),
                                   "slideimport", "syntax", testname);
-        helpers::assertErrorReply(socket, insertCommand("slides=0 link=1 sectionname=Opening"),
+        helpers::assertErrorReply(socket, insertCommand("slides=0 link=1 name=Opening"),
+                                  "slideimport", "syntax", testname);
+        helpers::assertErrorReply(socket,
+                                  insertCommand(std::string("slides=0 link=1 id=") +
+                                                EncodedUnknownId),
                                   "slideimport", "syntax", testname);
 
         // A file is staged for one insert, and an insert the document cannot make sense of
@@ -690,28 +762,28 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkErrors()
                                      " file=staged.odp",
                          "failed", std::string(" source=") + EncodedSourceName);
 
-        // A section update reads every slide of the section, so it takes no part, a name of a
-        // source section goes with a section, and a section is named by its identifier. The
-        // answers name the section as well.
-        const std::string anySection = "%7B00000000-0000-4000-8000-000000000000%7D";
+        // An update names a unit by unit= and id= together, a unit of a known kind and a GUID, a
+        // name goes with a unit, and deep is a matter of a break. The answers name the unit as
+        // well once the command carries both tokens.
+        const std::string update =
+            std::string("slidelink update source=") + EncodedSourceName + " file=staged.odp";
+        const std::string namedSource = std::string(" source=") + EncodedSourceName;
+        assertErrorAsWsd(socket, update + " deep=1 unit=section id=" + EncodedUnknownId, "syntax",
+                         namedSource + " unit=section id=" + EncodedUnknownId);
+        assertErrorAsWsd(socket, update + " unit=section id=", "syntax",
+                         namedSource + " unit=section id=");
+        assertErrorAsWsd(socket, update + " name=Opening", "syntax", namedSource);
+        assertErrorAsWsd(socket, update + " unit=section id=Opening", "syntax",
+                         namedSource + " unit=section id=Opening");
+        assertErrorAsWsd(socket, update + " unit=section", "syntax", namedSource);
+        assertErrorAsWsd(socket, update + " id=" + EncodedUnknownId, "syntax", namedSource);
+        assertErrorAsWsd(socket, update + " unit=deck id=" + EncodedUnknownId, "syntax",
+                         namedSource + " unit=deck id=" + EncodedUnknownId);
+        // A token that comes twice is refused, and the answer names the value that came first.
         assertErrorAsWsd(socket,
-                         std::string("slidelink update source=") + EncodedSourceName +
-                             " file=staged.odp part=1 section=" + anySection,
-                         "syntax",
-                         std::string(" source=") + EncodedSourceName + " section=" + anySection);
-        assertErrorAsWsd(socket,
-                         std::string("slidelink update source=") + EncodedSourceName +
-                             " file=staged.odp section=",
-                         "syntax", std::string(" source=") + EncodedSourceName + " section=");
-        assertErrorAsWsd(socket,
-                         std::string("slidelink update source=") + EncodedSourceName +
-                             " file=staged.odp sectionname=Opening",
-                         "syntax", std::string(" source=") + EncodedSourceName);
-        assertErrorAsWsd(socket,
-                         std::string("slidelink update source=") + EncodedSourceName +
-                             " file=staged.odp section=Opening",
-                         "syntax",
-                         std::string(" source=") + EncodedSourceName + " section=Opening");
+                         update + " unit=slide id=" + EncodedUnknownId
+                             + " id=%7B2F7A9C41-0000-4000-8000-000000000001%7D",
+                         "syntax", namedSource + " unit=slide id=" + EncodedUnknownId);
 
         // None of the failures changed the document, which still holds one
         // slide and no link at all.
@@ -753,9 +825,11 @@ UnitBase::TestResult UnitSlideLink::testReadOnly()
                                      " file=staged.odp",
                          "failed", std::string(" source=") + EncodedSourceName);
 
-        // Taking the source off a page is an edit as well.
-        helpers::assertErrorReply(socket, "slidelink break part=1", "slidelink", "failed",
-                                  testname, " part=1");
+        // Taking the link off a slide is an edit as well.
+        helpers::assertErrorReply(socket, std::string("slidelink break unit=slide id=") +
+                                              EncodedUnknownId,
+                                  "slidelink", "failed", testname,
+                                  std::string(" unit=slide id=") + EncodedUnknownId);
 
         socketPoll->joinThread();
     }

@@ -339,19 +339,9 @@ private:
     bool slideLink(const StringVector& tokens);
     bool slideLinkList();
     bool slideLinkUpdate(const StringVector& tokens);
-    /// Brings the linked section with the identifier section up to date with its source
-    /// section, from the staged file at url, and answers the client. named is what every
-    /// answer names the command by.
-    bool slideLinkUpdateSection(const std::string& source, const std::string& section,
-                                const std::string& url, const std::string& lastModifiedTime,
-                                const std::string& sectionName, const std::string& named);
     bool slideLinkBreak(const StringVector& tokens);
-    /// Takes the link to its source section off the section encodedSection names, and answers the
-    /// client.
-    bool slideLinkBreakSection(const StringVector& tokens, const std::string& encodedSection);
-    /// The sections and the pages of the document that are linked to a source
-    /// document, as the JSON body of a slidelinks: message; empty lists for a
-    /// document that reports none.
+    /// The links of the document to the slides and the sections of other documents, as the JSON
+    /// body of a slidelinks: message. A document that reports none gives an empty list.
     std::string getSlideLinksJson();
     bool keyEvent(const StringVector& tokens, LokEventTargetEnum target);
     bool extTextInputEvent(const StringVector& tokens);
