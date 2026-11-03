@@ -2749,6 +2749,23 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testArrowMarginsAndTheFontOfTheTextsB
     CPPUNIT_ASSERT_LESSEQUAL(shownTextSize(xArrow), shownTextSize(xBelow));
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testFontBoundInABranchNotTakenHasNoEffect)
+{
+    // the copy's layout binds the arrows' text to half of the texts below, but only in the
+    // branch for a single entry, and the data has four
+    createSdImpressDoc("pptx/smartart-increasing-arrows-margins.pptx");
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xArrow(findChildShapeByText(xDiagram, u"One"_ustr));
+    CPPUNIT_ASSERT(xArrow.is());
+    const double fWithout(shownTextSize(xArrow));
+
+    createSdImpressDoc("pptx/smartart-font-bound-in-untaken-branch.pptx");
+    xDiagram.set(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    xArrow = findChildShapeByText(xDiagram, u"One"_ustr);
+    CPPUNIT_ASSERT(xArrow.is());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(fWithout, shownTextSize(xArrow), 0.5);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

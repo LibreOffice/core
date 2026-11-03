@@ -2279,8 +2279,9 @@ static OUString fontGroupOf(const SmartArtDiagram& rDgm,
 }
 
 // Whether the layout of rDgm states one font for every node named rName, "primFontSz for des
-// forName rName op equ" on any of its layout nodes.
-static bool statesOneFontFor(const SmartArtDiagram& rDgm, std::u16string_view rName)
+// forName rName op equ" on any of its layout nodes, or for every node by its point type,
+// "primFontSz for ch ptType node op equ", where bNode says the shape stands for a node.
+static bool statesOneFontFor(const SmartArtDiagram& rDgm, std::u16string_view rName, bool bNode)
 {
     if (!rDgm.getLayout() || !rDgm.getLayout()->getNode())
         return false;
@@ -2295,7 +2296,9 @@ static bool statesOneFontFor(const SmartArtDiagram& rDgm, std::u16string_view rN
             {
                 const Constraint& rOne(pConstraint->getConstraint());
                 if (rOne.mnType == XML_primFontSz && rOne.mnOperator == XML_equ
-                    && rOne.msForName == rName)
+                    && (rOne.msForName == rName
+                        || (bNode && rOne.msForName.isEmpty()
+                            && rOne.mnPointType == XML_node)))
                     bFound = true;
             }
             else
@@ -2306,29 +2309,73 @@ static bool statesOneFontFor(const SmartArtDiagram& rDgm, std::u16string_view rN
     return bFound;
 }
 
-// the names the font of rName is at most as large as, primFontSz with op lte
-static std::set<OUString> fontAtMostAsOf(const SmartArtDiagram& rDgm, std::u16string_view rName)
+// the names the font of rName is at most as large as, primFontSz with op lte, in the branches
+// the data takes, each with the part of it; a reference by point type, "refPtType node", names
+// the layout nodes that show nodes
+static std::map<OUString, double> fontAtMostAsOf(const SmartArtDiagram& rDgm,
+                                                 std::u16string_view rName)
 {
-    std::set<OUString> aNames;
-    if (!rDgm.getLayout() || !rDgm.getLayout()->getNode())
+    std::map<OUString, double> aNames;
+    if (!rDgm.getLayout() || !rDgm.getLayout()->getNode() || !rDgm.getData())
         return aNames;
-    std::function<void(const LayoutAtom&)> aWalk = [&](const LayoutAtom& rAtom) {
-        for (const LayoutAtomPtr& pBelow : rAtom.getChildren())
-        {
-            if (const ConstraintAtom* pConstraint
-                = dynamic_cast<const ConstraintAtom*>(pBelow.get()))
-            {
-                const Constraint& rOne(pConstraint->getConstraint());
-                if (rOne.mnType == XML_primFontSz && rOne.mnRefType == XML_primFontSz
-                    && rOne.mnOperator == XML_lte && rOne.msForName == rName
-                    && !rOne.msRefForName.isEmpty() && rOne.msRefForName != rName)
-                    aNames.insert(rOne.msRefForName);
-            }
-            else
-                aWalk(*pBelow);
-        }
+    std::map<OUString, const LayoutNode*> aNodes;
+    gatherLayoutNodes(*rDgm.getLayout()->getNode(), aNodes);
+    // the point a layout node is laid out for, where it is one; the choices of a node laid out
+    // for several are all walked
+    const auto aPointOf = [&rDgm](const LayoutNode& rNode) {
+        rtl::Reference<svx::diagram::Point> xPoint;
+        const auto& rPresNames(rDgm.getData()->getPointsPresNameMap());
+        if (const auto aFound = rPresNames.find(rNode.getName());
+            aFound != rPresNames.end() && aFound->second.size() == 1)
+            xPoint = aFound->second.front();
+        return xPoint;
     };
-    aWalk(*rDgm.getLayout()->getNode());
+    std::function<void(const LayoutAtom&, const rtl::Reference<svx::diagram::Point>&)> aWalk
+        = [&](const LayoutAtom& rAtom, const rtl::Reference<svx::diagram::Point>& rPoint) {
+              for (const LayoutAtomPtr& pBelow : rAtom.getChildren())
+              {
+                  if (const ConstraintAtom* pConstraint
+                      = dynamic_cast<const ConstraintAtom*>(pBelow.get()))
+                  {
+                      const Constraint& rOne(pConstraint->getConstraint());
+                      if (rOne.mnType != XML_primFontSz || rOne.mnRefType != XML_primFontSz
+                          || rOne.mnOperator != XML_lte || rOne.msForName != rName)
+                          continue;
+                      if (!rOne.msRefForName.isEmpty() && rOne.msRefForName != rName)
+                          aNames.emplace(rOne.msRefForName, rOne.mfFactor);
+                      else if (rOne.msRefForName.isEmpty() && rOne.mnRefPointType == XML_node)
+                          for (const auto& [rOther, pNode] : aNodes)
+                          {
+                              if (rOther == rName || !pNode || !pNode->getPresentationOf())
+                                  continue;
+                              const std::vector<sal_Int32>& rTypes(
+                                  pNode->getPresentationOf()->maPtType);
+                              if (std::find(rTypes.begin(), rTypes.end(), XML_node)
+                                  != rTypes.end())
+                                  aNames.emplace(rOther, rOne.mfFactor);
+                          }
+                  }
+                  else if (const LayoutNode* pNode = dynamic_cast<const LayoutNode*>(pBelow.get()))
+                      aWalk(*pNode, aPointOf(*pNode));
+                  else if (rPoint.is() && dynamic_cast<const ChooseAtom*>(pBelow.get()))
+                  {
+                      // only the branch the data takes
+                      for (const LayoutAtomPtr& pBranch : pBelow->getChildren())
+                      {
+                          const ConditionAtom* pCondition
+                              = dynamic_cast<const ConditionAtom*>(pBranch.get());
+                          if (pCondition && pCondition->getDecision(rDgm, rPoint, OUString()))
+                          {
+                              aWalk(*pBranch, rPoint);
+                              break;
+                          }
+                      }
+                  }
+                  else
+                      aWalk(*pBelow, rPoint);
+              }
+          };
+    aWalk(*rDgm.getLayout()->getNode(), aPointOf(*rDgm.getLayout()->getNode()));
     return aNames;
 }
 
@@ -2363,6 +2410,27 @@ static std::optional<double> ruleFontFloorOf(const SmartArtDiagram& rDgm, const 
     return oFloor;
 }
 
+// the most the font of rName may be on this pass, by the groups it is bound to with op lte; a
+// part of another group's font is whole points, as the drawings carry it
+static std::optional<double> fontBoundOf(const SmartArtDiagram& rDgm,
+                                         const std::vector<Constraint>& rConstraints,
+                                         std::u16string_view rName, std::u16string_view rOwnGroup)
+{
+    SmartArtDiagram& rMutable(const_cast<SmartArtDiagram&>(rDgm));
+    std::optional<double> oBound;
+    for (const auto& [rOther, fBoundPart] : fontAtMostAsOf(rDgm, rName))
+    {
+        const OUString aOtherGroup(fontGroupOf(rDgm, rConstraints, rOther, nullptr));
+        const auto aOther = rMutable.getFontCandidates().find(aOtherGroup);
+        if (aOther == rMutable.getFontCandidates().end() || aOtherGroup == rOwnGroup)
+            continue;
+        const double fBound(fBoundPart == 1.0 ? aOther->second
+                                              : std::round(aOther->second * fBoundPart));
+        oBound = std::min(oBound.value_or(fBound), fBound);
+    }
+    return oBound;
+}
+
 // The font the group of rName is laid out with on this pass, in points, the stated size on the
 // first pass or 65 where none is stated.
 static double fontOfGroup(const SmartArtDiagram& rDgm, const std::vector<Constraint>& rConstraints,
@@ -2381,14 +2449,9 @@ static double fontOfGroup(const SmartArtDiagram& rDgm, const std::vector<Constra
                          .emplace(rGroup, statedFontFor(rConstraints, rName).value_or(65.0))
                          .first;
     }
-    // a group bound to be at most as large as another one comes down with it
-    for (const OUString& rOther : fontAtMostAsOf(rDgm, rName))
-    {
-        const auto aOther = rMutable.getFontCandidates().find(
-            fontGroupOf(rDgm, rConstraints, rOther, nullptr));
-        if (aOther != rMutable.getFontCandidates().end() && aOther != aCandidate)
-            aCandidate->second = std::min(aCandidate->second, aOther->second);
-    }
+    // a group bound to be at most as large as another one, or a part of it, comes down with it
+    if (const std::optional<double> oBound = fontBoundOf(rDgm, rConstraints, rName, rGroup))
+        aCandidate->second = std::min(aCandidate->second, *oBound);
     // A node stated as a part of its group's font, "primFontSz forName txLvl2 refType
     // primFontSz refForName txLvl1 fact 0.78" on Vertical_Circle_List, is at that part, rounded
     // to whole points as the drawings carry it: 12 beside a txLvl1 of 16.
@@ -14553,6 +14616,11 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                 if (rConstr.mnType == XML_primFontSz)
                     fFontSize = rConstr.mfValue;
             }
+            // a stated font is at most the part of another group's it is bound to with op lte
+            if (fFontSize > 0.0)
+                if (const std::optional<double> oBound = fontBoundOf(
+                        rDgm, rConstraints, rShape->getInternalName(), std::u16string_view()))
+                    fFontSize = std::min(fFontSize, *oBound);
             // the font a row fitted for a node whose box grows with its text
             bool bFitted(false);
             {
@@ -14653,7 +14721,8 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
             // A node whose name the layout gives one font for all, "primFontSz for des forName
             // childText op equ", is in the group of that name, and the nodes of a group show
             // their text at one scale of the fit to their boxes.
-            if (statesOneFontFor(rDgm, rShape->getInternalName()))
+            if (statesOneFontFor(rDgm, rShape->getInternalName(),
+                                 rShape->getDataNodeType() == XML_node))
             {
                 NamedShapePairs& rDiagramFontHeights
                     = const_cast<SmartArtDiagram&>(rDgm).getDiagramFontHeights();
