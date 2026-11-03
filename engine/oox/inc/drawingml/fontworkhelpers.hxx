@@ -132,6 +132,11 @@ void applyRunProps(const std::vector<RunProps>& rRunProps);
 void createCharAttrPropsFromShape(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet,
                                   std::vector<css::beans::PropertyValue>& rCharPropVec);
 
+// The font height, in points, at which the longest line of the Fontwork's text in the shape's
+// font is no wider than the shape: Word lays a warped text out at its font size and wraps it at
+// the box, while the engine fits the text to the box. The shape's own height when the text fits.
+float fittedCharHeight(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet);
+
 /** Generates the properties "CharColor", "CharLumMod", "CharLumOff", "CharColorTheme",
     "CharComplexColor" and "CharTransparence" from the shape properties "FillColor",
     "FillColorLumMod, "FillColorLumOff", "FillColorTheme", "FillComplexColor" and

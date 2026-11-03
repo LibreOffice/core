@@ -1243,6 +1243,31 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkShapeAttributes)
                          xShape->getPropertyValue(u"CharKerning"_ustr).get<sal_Int16>());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFontworkFitWidthWriter)
+{
+    // Given the same Fontwork in a box of 4 by 1.5 cm, narrower than its text at 24 pt:
+    loadFromFile(u"fontwork-fit-width.fodt");
+
+    // When saving to DOCX:
+    save(TestFilter::DOCX);
+
+    // Then the run is written with a smaller height, at which the line fits the width of the box,
+    // so that Word does not wrap it; the box keeps its size
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    OString sRun = "//mc:Choice//wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/"_ostr;
+    const sal_Int32 nHalfPoints = getXPath(pXmlDoc, sRun + "w:sz", "val").toInt32();
+    CPPUNIT_ASSERT(nHalfPoints > 0);
+    CPPUNIT_ASSERT_LESS(sal_Int32(48), nHalfPoints);
+    assertXPath(pXmlDoc, "//mc:Choice//wps:wsp/wps:bodyPr", "wrap", u"square");
+    assertXPath(pXmlDoc, "//mc:Choice//wps:wsp/wps:bodyPr/a:noAutofit", 1);
+
+    // and the document's own text keeps its 24 pt
+    uno::Reference<drawing::XDrawPageSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShape(xDoc->getDrawPage()->getByIndex(0),
+                                               uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(24.0f, xShape->getPropertyValue(u"CharHeight"_ustr).get<float>());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFontworkShapeAttributesWriter)
 {
     // Given the same Fontwork in a Writer document, with the states of the attributes of its two
@@ -1280,6 +1305,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkShapeAttributesWriter)
     assertXPath(pXmlDoc, sRun + "w:b", 1);
     assertXPath(pXmlDoc, sRun + "w:i", 1);
     assertXPath(pXmlDoc, sRun + "w:w", "val", u"150");
+    // and the box keeps its size in Word
+    assertXPath(pXmlDoc, "//mc:Choice//wps:wsp/wps:bodyPr/a:noAutofit", 1);
 
     // and the document's own text keeps its two spans after the save: the second is regular
     {

@@ -29,13 +29,18 @@
 #include <docmodel/uno/UnoGradientTools.hxx>
 #include <drawingml/customshapeproperties.hxx>
 #include <drawingml/presetgeometrynames.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/helper/grabbagstack.hxx>
 #include <sal/log.hxx>
 #include <svx/msdffdef.hxx>
 #include <tools/color.hxx>
 #include <tools/helpers.hxx>
+#include <vcl/font.hxx>
+#include <vcl/virdev.hxx>
 
+#include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -1064,6 +1069,65 @@ void FontworkHelpers::createCharAttrPropsFromShape(
             rCharPropVec.push_back(comphelper::makePropertyValue(
                 aPropertyName, rXPropSet->getPropertyValue(aPropertyName)));
     }
+}
+
+float FontworkHelpers::fittedCharHeight(const uno::Reference<beans::XPropertySet>& rXPropSet)
+{
+    float fHeight = 0;
+    if (!rXPropSet.is() || !(rXPropSet->getPropertyValue(u"CharHeight"_ustr) >>= fHeight)
+        || fHeight <= 0)
+        return fHeight;
+    uno::Reference<drawing::XShape> xShape(rXPropSet, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText(rXPropSet, uno::UNO_QUERY);
+    if (!xShape.is() || !xText.is())
+        return fHeight;
+    const sal_Int32 nShapeWidth = xShape->getSize().Width; // 1/100 mm
+    if (nShapeWidth <= 0)
+        return fHeight;
+
+    OUString sFontName;
+    rXPropSet->getPropertyValue(u"CharFontName"_ustr) >>= sFontName;
+    float fWeight = awt::FontWeight::NORMAL;
+    rXPropSet->getPropertyValue(u"CharWeight"_ustr) >>= fWeight;
+    awt::FontSlant eSlant = awt::FontSlant_NONE;
+    rXPropSet->getPropertyValue(u"CharPosture"_ustr) >>= eSlant;
+    sal_Int16 nScaleWidth = 100;
+    rXPropSet->getPropertyValue(u"CharScaleWidth"_ustr) >>= nScaleWidth;
+    // the letter spacing reaches Word as the item holds it, which the Word export writes as
+    // twips: that is the spacing Word lays the line out with
+    sal_Int16 nKerning = 0;
+    rXPropSet->getPropertyValue(u"CharKerning"_ustr) >>= nKerning;
+    const double fKerning = o3tl::convert(static_cast<double>(nKerning), o3tl::Length::twip,
+                                          o3tl::Length::mm100);
+
+    // the text at its font size, measured in 1/100 mm
+    ScopedVclPtrInstance<VirtualDevice> pDevice;
+    pDevice->SetMapMode(MapMode(MapUnit::Map100thMM));
+    vcl::Font aFont(sFontName, Size(0, std::lround(fHeight * 2540.0 / 72.0)));
+    aFont.SetWeight(fWeight > awt::FontWeight::NORMAL ? WEIGHT_BOLD : WEIGHT_NORMAL);
+    aFont.SetItalic(eSlant == awt::FontSlant_NONE ? ITALIC_NONE : ITALIC_NORMAL);
+    pDevice->SetFont(aFont);
+    // the glyphs of a line scale with the font height, the spacing between them does not; a
+    // line gets the height at which its glyphs fill what the spacing leaves of the width, with a
+    // twentieth to spare for the fonts of Word, and the text the smallest of them
+    const double fRoom = nShapeWidth * 0.95;
+    double fFitted = fHeight;
+    const OUString sText = xText->getString();
+    sal_Int32 nIndex = 0;
+    while (nIndex >= 0)
+    {
+        const OUString sLine = sText.getToken(0, '\n', nIndex).replaceAll(u"\r", u"");
+        const double fGlyphs
+            = pDevice->GetTextWidth(sLine) * (nScaleWidth > 0 ? nScaleWidth : 100) / 100.0;
+        const double fSpacing = fKerning * sLine.getLength();
+        if (fGlyphs <= 0 || fGlyphs + fSpacing <= fRoom)
+            continue;
+        fFitted = std::min(fFitted, fHeight * std::max(fRoom - fSpacing, 0.0) / fGlyphs);
+    }
+    if (fFitted >= fHeight)
+        return fHeight;
+    // in half points, as Word writes them, and at least one point
+    return static_cast<float>(std::max(std::floor(fFitted * 2.0) / 2.0, 1.0));
 }
 
 namespace

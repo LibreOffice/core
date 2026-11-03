@@ -4696,10 +4696,11 @@ void DrawingML::WriteBodyProps(const cpo::uno::Reference< cpo::uno::XInterface >
 
     if (GetDocumentType() == DOCUMENT_DOCX || GetDocumentType() == DOCUMENT_XLSX)
     {
-        // tdf#112312: only custom shapes obey the TextAutoGrowHeight option
+        // tdf#112312: only custom shapes obey the TextAutoGrowHeight option; the box of a Fontwork
+        // is never sized to its text, the text is fitted to the box
         bool bTextAutoGrowHeight = false;
         auto pSdrObjCustomShape = xShape.is() ? dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape)) : nullptr;
-        if (pSdrObjCustomShape && GetProperty(rXPropSet, u"TextAutoGrowHeight"_ustr))
+        if (pSdrObjCustomShape && !bIsFontworkShape && GetProperty(rXPropSet, u"TextAutoGrowHeight"_ustr))
         {
             mAny >>= bTextAutoGrowHeight;
         }
@@ -5052,6 +5053,17 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                                              aOldRunAttrs);
             std::vector<beans::PropertyValue> aShapeCharAttrVec;
             FontworkHelpers::createCharAttrPropsFromShape(rXPropSet, aShapeCharAttrVec);
+            // Word lays the text out at its font size and wraps it at the box, the engine fits
+            // it to the box: the runs get the height at which the longest line fits the width
+            if (GetDocumentType() == DOCUMENT_DOCX)
+            {
+                const float fFittedHeight = FontworkHelpers::fittedCharHeight(rXPropSet);
+                for (beans::PropertyValue& rProp : aShapeCharAttrVec)
+                {
+                    if (rProp.Name == "CharHeight")
+                        rProp.Value <<= fFittedHeight;
+                }
+            }
             FontworkHelpers::applyPropsToFontworkRuns(aShapeCharAttrVec, aFontworkRuns,
                                                       /*bSkipOwnColor*/ false);
         }
