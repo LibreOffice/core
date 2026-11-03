@@ -510,7 +510,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
-      <style:text-properties fo:color="#234f3d" loext:opacity="100%" style:font-name="Linux Libertine G" fo:font-family="'Linux Libertine G:liga=0'" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="15" style:font-size-asian="15" style:font-size-complex="15" fo:font-style="italic" style:font-style-asian="italic" style:font-style-complex="italic" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true"/>
+      <style:text-properties fo:color="#234f3d" loext:opacity="100%" style:font-name="Linux Libertine G" fo:font-family="'Linux Libertine G:liga=0'" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt" fo:font-style="italic" style:font-style-asian="italic" style:font-style-complex="italic" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true"/>
     </style:style>
     <style:style style:name="Ivory1-title" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="wrap">
@@ -845,7 +845,7 @@
       <style:text-properties fo:color="#2b2519" loext:opacity="100%" style:font-name="Linux Biolinum G" fo:font-family="'Linux Biolinum G'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="11pt" style:font-size-asian="11pt" style:font-size-complex="11pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true"/>
     </style:style>
     <style:style style:name="Ivory3-subtitle" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="true">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="top" draw:auto-grow-height="true">
         <text:list-style style:name="Ivory3-subtitle">
           <text:list-level-style-bullet text:level="1" text:bullet-char="&#x25CF;">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -890,7 +890,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
-      <style:text-properties fo:color="#234f3d" loext:opacity="100%" style:font-name="Linux Libertine G" fo:font-family="'Linux Libertine G:liga=0'" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="15" style:font-size-asian="15" style:font-size-complex="15" fo:font-style="italic" style:font-style-asian="italic" style:font-style-complex="italic" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true"/>
+      <style:text-properties fo:color="#2b2519" loext:opacity="100%" style:font-name="Linux Libertine G" fo:font-family="'Linux Libertine G:liga=0'" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt" fo:font-style="italic" style:font-style-asian="italic" style:font-style-complex="italic" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true"/>
     </style:style>
     <style:style style:name="Ivory3-title" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="wrap">
@@ -2361,7 +2361,7 @@
       <draw:frame presentation:style-name="Ivory1-title" draw:layer="backgroundobjects" svg:width="20cm" svg:height="2.8cm" svg:x="4cm" svg:y="5.4cm" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
-      <draw:frame presentation:style-name="Ivory1-subtitle" draw:layer="backgroundobjects" svg:width="16cm" svg:height="1.8cm" svg:x="6cm" svg:y="8.6cm" presentation:class="subtitle" presentation:placeholder="true">
+      <draw:frame presentation:style-name="Ivory1-subtitle" draw:layer="backgroundobjects" svg:width="16.0cm" svg:height="1.8cm" svg:x="6.0cm" svg:y="8.6cm" presentation:class="subtitle" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
       <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" draw:layer="backgroundobjects" svg:width="0.35cm" svg:height="0.35cm" svg:x="13.825cm" svg:y="11.225cm">
@@ -2576,7 +2576,10 @@
       <draw:frame presentation:style-name="Ivory3-title" draw:layer="backgroundobjects" svg:width="20cm" svg:height="2.6cm" svg:x="4cm" svg:y="6.4cm" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" draw:layer="backgroundobjects" svg:width="0.35cm" svg:height="0.35cm" svg:x="13.825cm" svg:y="9.425cm">
+      <draw:frame presentation:style-name="Ivory3-subtitle" draw:layer="backgroundobjects" svg:width="20cm" svg:height="1.8cm" svg:x="4cm" svg:y="9.1cm" presentation:class="subtitle" presentation:placeholder="true">
+        <draw:text-box/>
+      </draw:frame>
+      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP6" draw:layer="backgroundobjects" svg:width="0.35cm" svg:height="0.35cm" svg:x="13.825cm" svg:y="11.1cm">
         <text:p/>
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="non-primitive" draw:enhanced-path="M 10800 0 L 21600 10800 10800 21600 0 10800 Z N"/>
       </draw:custom-shape>

@@ -528,7 +528,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="left" fo:text-indent="0cm" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="uppercase" fo:color="#d1a13d" loext:opacity="100%" fo:letter-spacing="0.08cm" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Open Sans" fo:font-family="'Open Sans'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="13pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="13pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="13pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="uppercase" fo:color="#d1a13d" loext:opacity="100%" fo:letter-spacing="0.08cm" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Open Sans" fo:font-family="'Open Sans'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="20pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="20pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Onyx1-title" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="wrap">
@@ -795,9 +795,9 @@
     <style:style style:name="Onyx3-outline8" style:family="presentation" style:parent-style-name="Onyx3-outline7"/>
     <style:style style:name="Onyx3-outline9" style:family="presentation" style:parent-style-name="Onyx3-outline8"/>
     <style:style style:name="Onyx3-subtitle" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle"/>
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="top"/>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="center" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="uppercase" fo:color="#d1a13d" loext:opacity="100%" fo:letter-spacing="0.08cm" style:font-name="Open Sans" fo:font-family="'Open Sans'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="13pt" fo:font-style="normal" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="13pt" style:font-size-complex="13pt"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="uppercase" fo:color="#f2efe8" loext:opacity="100%" fo:letter-spacing="0.08cm" style:font-name="Open Sans" fo:font-family="'Open Sans'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Onyx3-title" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="wrap">
@@ -2181,7 +2181,7 @@
       <draw:frame presentation:style-name="Onyx1-title" draw:layer="backgroundobjects" svg:width="24.8cm" svg:height="3.6cm" svg:x="1.6cm" svg:y="3.4cm" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
-      <draw:frame presentation:style-name="Onyx1-subtitle" draw:layer="backgroundobjects" svg:width="20cm" svg:height="1.6cm" svg:x="1.6cm" svg:y="7.4cm" presentation:class="subtitle" presentation:placeholder="true">
+      <draw:frame presentation:style-name="Onyx1-subtitle" draw:layer="backgroundobjects" svg:width="20.0cm" svg:height="1.8cm" svg:x="1.6cm" svg:y="7.4cm" presentation:class="subtitle" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
       <draw:frame presentation:style-name="Mpr5" draw:text-style-name="MP8" draw:layer="backgroundobjects" svg:width="8cm" svg:height="0.6cm" svg:x="1.6cm" svg:y="14.95cm" presentation:class="date-time">
@@ -2376,6 +2376,9 @@
         <text:p/>
       </draw:line>
       <draw:frame presentation:style-name="Onyx3-title" draw:layer="backgroundobjects" svg:width="22cm" svg:height="2.6cm" svg:x="3cm" svg:y="6.6cm" presentation:class="title" presentation:placeholder="true">
+        <draw:text-box/>
+      </draw:frame>
+      <draw:frame presentation:style-name="Onyx3-subtitle" draw:layer="backgroundobjects" svg:width="22cm" svg:height="1.8cm" svg:x="3cm" svg:y="9.3cm" presentation:class="subtitle" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
       <draw:frame presentation:style-name="Mpr13" draw:text-style-name="MP8" draw:layer="backgroundobjects" svg:width="8cm" svg:height="0.6cm" svg:x="1.6cm" svg:y="14.95cm" presentation:class="date-time">

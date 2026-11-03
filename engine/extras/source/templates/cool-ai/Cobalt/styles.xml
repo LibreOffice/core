@@ -491,7 +491,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="left" fo:text-indent="0cm"/>
-      <style:text-properties fo:color="#5a6478" loext:opacity="100%" style:font-name="Source Sans Pro" fo:font-family="Source Sans Pro" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="16pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="16pt" style:font-weight-asian="normal" style:font-size-complex="16pt" style:font-weight-complex="normal"/>
+      <style:text-properties fo:color="#5a6478" loext:opacity="100%" style:font-name="Source Sans Pro" fo:font-family="Source Sans Pro" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="20pt" style:font-weight-asian="normal" style:font-size-complex="20pt" style:font-weight-complex="normal"/>
     </style:style>
     <style:style style:name="Cobalt1-title" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="top" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="wrap">
@@ -847,7 +847,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="left" fo:text-indent="0cm"/>
-      <style:text-properties fo:color="#dfe7fa" loext:opacity="100%" style:font-name="Source Sans Pro" fo:font-family="Source Sans Pro" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="16pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="16pt" style:font-weight-asian="normal" style:font-size-complex="16pt" style:font-weight-complex="normal"/>
+      <style:text-properties fo:color="#ffffff" loext:opacity="100%" style:font-name="Source Sans Pro" fo:font-family="Source Sans Pro" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="20pt" style:font-weight-asian="normal" style:font-size-complex="20pt" style:font-weight-complex="normal"/>
     </style:style>
     <style:style style:name="Cobalt3-title" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="wrap">
@@ -2242,7 +2242,7 @@
       <draw:frame presentation:style-name="Cobalt1-title" draw:layer="backgroundobjects" svg:width="12cm" svg:height="3.4cm" svg:x="14.5cm" svg:y="5.2cm" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
-      <draw:frame presentation:style-name="Cobalt1-subtitle" draw:layer="backgroundobjects" svg:width="12cm" svg:height="2.2cm" svg:x="14.5cm" svg:y="9.0cm" presentation:class="subtitle" presentation:placeholder="true">
+      <draw:frame presentation:style-name="Cobalt1-subtitle" draw:layer="backgroundobjects" svg:width="12.0cm" svg:height="2.2cm" svg:x="14.5cm" svg:y="9.0cm" presentation:class="subtitle" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
       <draw:frame presentation:style-name="Mpr5" draw:text-style-name="MP8" draw:layer="backgroundobjects" svg:width="8cm" svg:height="0.75cm" svg:x="1.8cm" svg:y="15cm" presentation:class="date-time">
@@ -2427,6 +2427,9 @@
         <draw:enhanced-geometry svg:viewBox="0 0 1300 1575" draw:type="non-primitive" draw:enhanced-path="M 300 1575 L 1300 1575 1300 0 0 0 Z N"/>
       </draw:custom-shape>
       <draw:frame presentation:style-name="Cobalt3-title" draw:layer="backgroundobjects" svg:width="16cm" svg:height="3.4cm" svg:x="1.8cm" svg:y="6.2cm" presentation:class="title" presentation:placeholder="true">
+        <draw:text-box/>
+      </draw:frame>
+      <draw:frame presentation:style-name="Cobalt3-subtitle" draw:layer="backgroundobjects" svg:width="16cm" svg:height="1.8cm" svg:x="1.8cm" svg:y="9.7cm" presentation:class="subtitle" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
       <draw:frame presentation:style-name="Mpr13" draw:text-style-name="MP8" draw:layer="backgroundobjects" svg:width="8cm" svg:height="0.75cm" svg:x="1.8cm" svg:y="15cm" presentation:class="date-time">
