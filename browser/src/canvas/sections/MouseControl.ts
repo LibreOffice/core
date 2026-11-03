@@ -478,9 +478,8 @@ class MouseControl extends CanvasSectionObject {
 			// reaches core with the moves and the button-up.
 			if (!this.mouseDownSent && this.positionOnMouseDown) {
 				// The context toolbar belongs to the selection being dragged away. It shows again
-				// with the selection of the dropped text.
-				if (this.pressedInSelection)
-					app.map.contextToolbar?.hideContextToolbar();
+				// once the drag is over.
+				if (this.pressedInSelection) app.map.contextToolbar?.hideForDrag();
 
 				this.postCoreMouseEvent(
 					'buttondown',

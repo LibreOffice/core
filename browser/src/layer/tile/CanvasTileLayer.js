@@ -1826,6 +1826,13 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		}
 		DropCaretSection.hide();
 
+		// A cursor without a drop position ends the drag of the selection. A drop elsewhere sends
+		// the selection of the dropped text, which shows the toolbar. A drag that changed nothing
+		// keeps the selection as it was, so its toolbar shows again here.
+		const contextToolbar = this._map.contextToolbar;
+		if (contextToolbar && contextToolbar.hiddenForDrag)
+			contextToolbar.endDrag();
+
 		// The local caret stays while predicted edits are ahead of this update.
 		const keepPredictedCaret = RenderManager.keepPredictedCaret(obj);
 		// The server's selection that waited for this caret update.

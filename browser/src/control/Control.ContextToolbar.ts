@@ -20,6 +20,8 @@ class ContextToolbar extends JSDialogComponent {
 	lastIinputEvent?: any = {};
 	pendingTask: TaskId | null = null;
 	pendingShow: boolean = false;
+	// Whether the toolbar is hidden while its text selection is dragged.
+	hiddenForDrag: boolean = false;
 	// roughly twice the height(76px) of default context toolbar in each direction from boundary
 	disappearingBoundary: number = 150; // px
 	additionalContextButtons: Array<ToolItemWidgetJSON> = [];
@@ -111,6 +113,24 @@ class ContextToolbar extends JSDialogComponent {
 			this.changeOpacity(1);
 			this.showHideToolbar(true);
 		});
+	}
+
+	// Hides the toolbar while its text selection is dragged.
+	hideForDrag(): void {
+		this.hiddenForDrag = true;
+		this.hideContextToolbar();
+	}
+
+	// Ends the drag of the selection. A selection that is still there gets its toolbar back: at
+	// once when the button came up or a key such as Escape ended the drag, otherwise at the next
+	// button-up.
+	endDrag(): void {
+		this.hiddenForDrag = false;
+		if (!TextSelections.isActive()) return;
+		const last = this.lastIinputEvent;
+		if (last.input !== 'mouse' || last.type === 'buttonup')
+			this.showContextToolbarImpl();
+		else this.pendingShow = true;
 	}
 
 	hideContextToolbar(): void {

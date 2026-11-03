@@ -28,6 +28,60 @@ function screenPoint(win, x, y) {
 	};
 }
 
+// Measures, in twips, the end of Test1 and the middle of Test2, then selects Test2 with a
+// double-click, which shows the context toolbar. A modifier stays held for the rest of the typed
+// string, so each key goes alone.
+function selectTest2WithMouse(win) {
+	var points = {};
+	helper.assertCursorAndFocus();
+	helper.typeIntoDocument('{ctrl}{home}');
+	helper.typeIntoDocument('{end}');
+	helper.processToIdle(win);
+	var dropTarget = readCaretAfterMove(null);
+
+	helper.typeIntoDocument('{ctrl}{end}');
+	helper.processToIdle(win);
+	var endOfTest2 = readCaretAfterMove(dropTarget);
+
+	helper.typeIntoDocument('{home}');
+	helper.processToIdle(win);
+	var startOfTest2 = readCaretAfterMove(endOfTest2);
+
+	// A mouse selection shows the context toolbar, the keyboard one does not.
+	cy.then(function() {
+		points.endOfTest1 = { x: dropTarget.x1, y: (dropTarget.y1 + dropTarget.y2) / 2 };
+		points.insideTest2 = {
+			x: (startOfTest2.x1 + endOfTest2.x1) / 2,
+			y: (startOfTest2.y1 + startOfTest2.y2) / 2,
+		};
+		var middle = screenPoint(win, points.insideTest2.x, points.insideTest2.y);
+		cy.cGet('body').dblclick(middle.x, middle.y);
+	});
+	helper.textSelectionShouldExist();
+	helper.processToIdle(win);
+	helper.waitForTimers(win, 'clicktimer');
+	cy.cGet('#context-toolbar').should('not.have.class', 'hidden');
+	return points;
+}
+
+// Presses the mouse button inside Test2 and drags towards the end of Test1 in five steps, so
+// the first steps are too short to start the drag and the later ones start it. The button stays
+// down.
+function dragTest2TowardsTest1(win, points) {
+	cy.then(function() {
+		var start = screenPoint(win, points.insideTest2.x, points.insideTest2.y);
+		var end = screenPoint(win, points.endOfTest1.x, points.endOfTest1.y);
+		cy.cGet('body').realMouseDown({ x: start.x, y: start.y });
+		for (let step = 1; step <= 5; ++step) {
+			cy.cGet('body').realMouseMove(start.x + (end.x - start.x) * step / 5,
+				start.y + (end.y - start.y) * step / 5);
+		}
+	});
+	helper.processToIdle(win);
+	cy.cGet('.text-drop-caret').should('be.visible');
+	cy.cGet('#context-toolbar').should('have.class', 'hidden');
+}
+
 describe(['tagdesktop'], 'Writer drag and drop of a text selection.', function() {
 
 	beforeEach(function() {
@@ -40,53 +94,14 @@ describe(['tagdesktop'], 'Writer drag and drop of a text selection.', function()
 
 	it('Dragging the selected Test2 to the end of Test1 moves it there', function() {
 		var win = this.win;
+		var points = selectTest2WithMouse(win);
 
-		helper.assertCursorAndFocus();
-		// A modifier stays held for the rest of the typed string, so each key goes alone.
-		helper.typeIntoDocument('{ctrl}{home}');
-		helper.typeIntoDocument('{end}');
-		helper.processToIdle(win);
-		var dropTarget = readCaretAfterMove(null);
+		// While the button is held, the drop caret marks where the text will land, and the
+		// toolbar of the dragged selection is gone.
+		dragTest2TowardsTest1(win, points);
 
-		helper.typeIntoDocument('{ctrl}{end}');
-		helper.processToIdle(win);
-		var endOfTest2 = readCaretAfterMove(dropTarget);
-
-		helper.typeIntoDocument('{home}');
-		helper.processToIdle(win);
-		var startOfTest2 = readCaretAfterMove(endOfTest2);
-
-		// A mouse selection shows the context toolbar, the keyboard one does not.
 		cy.then(function() {
-			var middle = screenPoint(win, (startOfTest2.x1 + endOfTest2.x1) / 2,
-				(startOfTest2.y1 + startOfTest2.y2) / 2);
-			cy.cGet('body').dblclick(middle.x, middle.y);
-		});
-		helper.textSelectionShouldExist();
-		helper.processToIdle(win);
-		helper.waitForTimers(win, 'clicktimer');
-		cy.cGet('#context-toolbar').should('not.have.class', 'hidden');
-
-		// Five steps from the middle of Test2, so the first steps are too short to start the
-		// drag and the later ones start it.
-		const STEPS = 5;
-		cy.then(function() {
-			var start = screenPoint(win, (startOfTest2.x1 + endOfTest2.x1) / 2,
-				(startOfTest2.y1 + startOfTest2.y2) / 2);
-			var end = screenPoint(win, dropTarget.x1, (dropTarget.y1 + dropTarget.y2) / 2);
-
-			cy.cGet('body').realMouseDown({ x: start.x, y: start.y });
-			for (let step = 1; step <= STEPS; ++step) {
-				cy.cGet('body').realMouseMove(start.x + (end.x - start.x) * step / STEPS,
-					start.y + (end.y - start.y) * step / STEPS);
-			}
-			helper.processToIdle(win);
-
-			// While the button is held, the drop caret marks where the text will land, and the
-			// toolbar of the dragged selection is gone.
-			cy.cGet('.text-drop-caret').should('be.visible');
-			cy.cGet('#context-toolbar').should('have.class', 'hidden');
-
+			var end = screenPoint(win, points.endOfTest1.x, points.endOfTest1.y);
 			cy.cGet('body').realMouseUp({ x: end.x, y: end.y });
 		});
 		helper.processToIdle(win);
@@ -99,6 +114,47 @@ describe(['tagdesktop'], 'Writer drag and drop of a text selection.', function()
 		helper.textSelectionShouldExist();
 		helper.copy();
 		helper.expectTextForClipboard('Test1Test2');
+	});
+
+	it('A drag that comes back to the selection keeps it and its context toolbar', function() {
+		var win = this.win;
+		var points = selectTest2WithMouse(win);
+		dragTest2TowardsTest1(win, points);
+
+		// When the selection is brought back and released on itself:
+		cy.then(function() {
+			var start = screenPoint(win, points.insideTest2.x, points.insideTest2.y);
+			var end = screenPoint(win, points.endOfTest1.x, points.endOfTest1.y);
+			for (let step = 4; step >= 0; --step) {
+				cy.cGet('body').realMouseMove(start.x + (end.x - start.x) * step / 5,
+					start.y + (end.y - start.y) * step / 5);
+			}
+			cy.cGet('body').realMouseUp({ x: start.x, y: start.y });
+		});
+		helper.processToIdle(win);
+
+		// Then Test2 is still selected, with its toolbar:
+		helper.textSelectionShouldExist();
+		cy.cGet('#context-toolbar').should('not.have.class', 'hidden');
+	});
+
+	it('Escape during a drag keeps the selection and gives its context toolbar back', function() {
+		var win = this.win;
+		var points = selectTest2WithMouse(win);
+		dragTest2TowardsTest1(win, points);
+
+		// When Escape is pressed while the button is still down, and the button then comes up:
+		cy.realPress('Escape');
+		helper.processToIdle(win);
+		cy.then(function() {
+			var end = screenPoint(win, points.endOfTest1.x, points.endOfTest1.y);
+			cy.cGet('body').realMouseUp({ x: end.x, y: end.y });
+		});
+		helper.processToIdle(win);
+
+		// Then Test2 is still selected, with its toolbar:
+		helper.textSelectionShouldExist();
+		cy.cGet('#context-toolbar').should('not.have.class', 'hidden');
 	});
 });
 
