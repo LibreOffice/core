@@ -4443,6 +4443,11 @@ kbd,
 	display: flex;
 }
 
+/* Text to Columns: keep "Column type" label and dropdown together at the left */
+#TextImportCsvDialog #box5 {
+	justify-content: start;
+}
+
 /* DocumentPropertiesDialog Custom props */
 #DocumentPropertiesDialog #headerbox,
 #DocumentPropertiesDialog #properties > .jsdialog.ui-grid {
