@@ -1534,6 +1534,7 @@ class SlideShowPresenter {
 			// opens full screen, has to be on user interaction
 			return;
 
+		this.sendSlideShowFollowMessage('newfollowmepresentation');
 		this.checkDarkMode(true);
 
 		// disable slide sorter or it will receive key events

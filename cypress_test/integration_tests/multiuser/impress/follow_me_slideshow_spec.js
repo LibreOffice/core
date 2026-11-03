@@ -27,7 +27,7 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
 
         cy.cGet('.notebookbar #slide-presentation-follow').should('be.not.visible');
         cy.cGet('.notebookbar #slide-presentation-follow-me').should('be.visible');
-        cy.cGet('.notebookbar #slide-presentation-follow-me').click();
+        impressHelper.startPresentToAll();
         getSlideShow().should('be.visible');
 
         cy.cSetActiveFrame('#iframe2');
@@ -38,9 +38,32 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
         cy.cGet('.notebookbar #slide-presentation-follow').should('be.visible');
     });
 
+    it('Fullscreen slideshow is followed when Present to All is ticked', function () {
+        cy.cSetActiveFrame('#iframe1');
+        cy.cGet('.notebookbar #slide-presentation-follow-me-input').check();
+        cy.cGet('.notebookbar #slide-fullscreen-presentation-button').click();
+        getSlideShow().should('be.visible');
+
+        cy.cSetActiveFrame('#iframe2');
+        getSlideShow().should('be.visible');
+    });
+
+    it('Slideshow stays local when Present to All is not ticked', function () {
+        cy.cSetActiveFrame('#iframe1');
+        cy.cGet('.notebookbar #slide-presentation-follow-me-input').should('not.be.checked');
+        cy.cGet('.notebookbar #slide-presentation-in-window').click();
+        getSlideShow().should('be.visible');
+        // The first slide has been shown, so a broadcast would have reached the other viewer.
+        impressHelper.waitForSlideShowIdle(win1);
+
+        cy.cSetActiveFrame('#iframe2');
+        cy.cGet('.notebookbar #slide-presentation-follow-me').should('be.visible');
+        getSlideShow().should('not.exist');
+    });
+
     it('Go to next effect', function () {
         cy.cSetActiveFrame('#iframe2');
-        cy.cGet('.notebookbar #slide-presentation-follow-me').click();
+        impressHelper.startPresentToAll();
         getSlideShow().should('be.visible');
         impressHelper.waitForSlideShowIdle(win2);
         getSlideShowContent().find('#slideshow-canvas').click();
@@ -54,7 +77,7 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
 
     it('Go to previous effect and slide', function () {
         cy.cSetActiveFrame('#iframe2');
-        cy.cGet('.notebookbar #slide-presentation-follow-me').click();
+        impressHelper.startPresentToAll();
         getSlideShow().should('be.visible');
         impressHelper.waitForSlideShowIdle(win2);
         impressHelper.waitForSlideShowIdle(win1);
@@ -97,7 +120,7 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
 
     it('Follow and unfollow', function () {
         cy.cSetActiveFrame('#iframe2');
-        cy.cGet('.notebookbar #slide-presentation-follow-me').click();
+        impressHelper.startPresentToAll();
         getSlideShow().should('be.visible');
         impressHelper.waitForSlideShowIdle(win2);
         impressHelper.waitForSlideShowIdle(win1);
@@ -139,7 +162,7 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
 
     it('Rejoin', function () {
         cy.cSetActiveFrame('#iframe2');
-        cy.cGet('.notebookbar #slide-presentation-follow-me').click();
+        impressHelper.startPresentToAll();
         getSlideShow().should('be.visible');
         impressHelper.waitForSlideShowIdle(win2);
         impressHelper.waitForSlideShowIdle(win1);
@@ -186,7 +209,7 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
     it('Follower cannot advance when at leader position', function () {
         // Leader (iframe2) starts followme and advances 1 effect
         cy.cSetActiveFrame('#iframe2');
-        cy.cGet('.notebookbar #slide-presentation-follow-me').click();
+        impressHelper.startPresentToAll();
         getSlideShow().should('be.visible');
         impressHelper.waitForSlideShowIdle(win2);
         impressHelper.waitForSlideShowIdle(win1);
@@ -210,7 +233,7 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
     it('Follower: skip to last reachable effect of leader slide', function () {
         // Leader (iframe2) starts followme and advances 4 clicks to slide2_effect2
         cy.cSetActiveFrame('#iframe2');
-        cy.cGet('.notebookbar #slide-presentation-follow-me').click();
+        impressHelper.startPresentToAll();
         getSlideShow().should('be.visible');
         impressHelper.waitForSlideShowIdle(win2);
         impressHelper.waitForSlideShowIdle(win1);
@@ -245,7 +268,7 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
 
     it('Exit', function () {
         cy.cSetActiveFrame('#iframe2');
-        cy.cGet('.notebookbar #slide-presentation-follow-me').click();
+        impressHelper.startPresentToAll();
         getSlideShow().should('be.visible');
         impressHelper.waitForSlideShowIdle(win2);
         impressHelper.waitForSlideShowIdle(win1);

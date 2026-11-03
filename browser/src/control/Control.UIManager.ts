@@ -142,9 +142,8 @@ class UIManager extends window.L.Control {
 		this.map['stateChangeHandler'].setItemValue('toggledarktheme', 'false');
 		this.map['stateChangeHandler'].setItemValue('invertbackground', 'false');
 		this.map['stateChangeHandler'].setItemValue('showannotations', 'true');
-		// A boolean here marks the Presenter View button as a toggle. The real
-		// value is applied per document type in initializeSpecializedUI.
 		this.map['stateChangeHandler'].setItemValue('presenterconsole', 'false');
+		this.map['stateChangeHandler'].setItemValue('presenttoall', 'false');
 
 		// View Changes menu: default to Hidden, sync with core state.
 		this.map['stateChangeHandler'].setItemValue('viewchanges-hidden', 'true');
@@ -955,7 +954,11 @@ class UIManager extends window.L.Control {
 		this.initDarkModeFromSettings();
 
 		if (docType === 'presentation') {
-			this.syncPresenterConsoleToggle(this.shouldShowPresenterConsole());
+			this.reportToggleState(
+				'presenterconsole',
+				this.shouldShowPresenterConsole(),
+			);
+			this.reportToggleState('presenttoall', this.shouldPresentToAll());
 			this.map.notesPanel = JSDialog.NotesPanel(this.map);
 			JSDialog.MessageRouter.flushPending('notespanel');
 		}
@@ -3657,16 +3660,17 @@ class UIManager extends window.L.Control {
 	togglePresenterConsole(): void {
 		const isOn = !this.shouldShowPresenterConsole();
 		window.prefs.set(this.map.getDocType() + '.ShowPresenterConsole', isOn);
-		this.syncPresenterConsoleToggle(isOn);
+		this.reportToggleState('presenterconsole', isOn);
 	}
 
-	private syncPresenterConsoleToggle(isOn: boolean): void {
-		const state = isOn ? 'true' : 'false';
-		this.map['stateChangeHandler'].setItemValue('presenterconsole', state);
-		this.map.fire('commandstatechanged', {
-			commandName: 'presenterconsole',
-			state: state,
-		});
+	shouldPresentToAll(): boolean {
+		return this.getBooleanDocTypePref('PresentToAll', false);
+	}
+
+	togglePresentToAll(): void {
+		const isOn = !this.shouldPresentToAll();
+		window.prefs.set(this.map.getDocType() + '.PresentToAll', isOn);
+		this.reportToggleState('presenttoall', isOn);
 	}
 
 	getStartCompareChanges(): boolean {

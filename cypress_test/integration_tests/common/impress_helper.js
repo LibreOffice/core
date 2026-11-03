@@ -325,6 +325,12 @@ function clickSlideShowNav(win, buttonSelector) {
 		errorMsg: 'slideshow nav button "' + buttonSelector + '" never reachable' });
 }
 
+function startPresentToAll() {
+	cy.cGet('.notebookbar #slide-presentation-follow-me-input').check();
+	cy.cGet('.notebookbar #slide-presentation-follow-me-input').should('be.checked');
+	cy.cGet('.notebookbar #slide-presentation-in-window').click();
+}
+
 module.exports.assertNotInTextEditMode = assertNotInTextEditMode;
 module.exports.assertInTextEditMode = assertInTextEditMode;
 module.exports.typeTextAndVerify = typeTextAndVerify;
@@ -343,3 +349,4 @@ module.exports.getSlideShowContent = getSlideShowContent;
 module.exports.getSlideShowCanvas = getSlideShowCanvas;
 module.exports.waitForSlideShowIdle = waitForSlideShowIdle;
 module.exports.clickSlideShowNav = clickSlideShowNav;
+module.exports.startPresentToAll = startPresentToAll;

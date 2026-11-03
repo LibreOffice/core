@@ -23,7 +23,7 @@ describe(['tagmultiuser'], 'Follow me slide show buttons', function () {
 	it('Attendee buttons to be disabled', function () {
 		// User A starts "Present To All"
 		cy.cSetActiveFrame('#iframe1');
-		cy.cGet('.notebookbar #slide-presentation-follow-me').click();
+		impressHelper.startPresentToAll();
 		getSlideShow().should('be.visible');
 
 		// User B is attendee on slide 1
@@ -41,7 +41,7 @@ describe(['tagmultiuser'], 'Follow me slide show buttons', function () {
 
 	it('A advances to slide 2 -> B auto-follows and buttons update', function () {
 		cy.cSetActiveFrame('#iframe1');
-		cy.cGet('.notebookbar #slide-presentation-follow-me').click();
+		impressHelper.startPresentToAll();
 		impressHelper.waitForSlideShowIdle(win1);
 
 		// A advances to slide 2

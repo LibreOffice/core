@@ -554,15 +554,6 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 						'command': 'presentation-currentslide',
 						'accessibility': { focusBack: true, combination: 'FC', de: null }
 					},
-					(!window.ThisIsAMobileApp || window.mode.isCODesktop()) && window.canvasSlideshowEnabled ?
-					{
-						'id': 'slide-presentation-in-console',
-						'type': 'bigcustomtoolitem',
-						'text': _('Presenter View'),
-						'tooltip': _('Shows your notes, next slide, and a timer'),
-						'command': 'presenterconsole',
-						'accessibility': { focusBack: true, combination: 'PC', de: null }
-					} : {},
 				],
 			},
 			!window.ThisIsAMobileApp || window.mode.isCODesktop() ?
@@ -584,15 +575,6 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 						'tooltip': _('Plays inside the document window. Starts at slide 1'),
 						'command': 'presentinwindow',
 						'accessibility': { focusBack: true, combination: 'PW', de: null }
-					} : {},
-				!window.ThisIsAMobileApp ?
-					{
-						'id': 'slide-presentation-follow-me',
-						'type': 'bigcustomtoolitem',
-						'text': _('Present to All'),
-						'tooltip': _('Starts a slideshow on every viewer\'s screen'),
-						'command': 'followmepresentation',
-						'accessibility': { focusBack: true, combination: 'PL', de: null }
 					} : {},
 				!window.ThisIsAMobileApp ?
 					{
@@ -624,6 +606,41 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 						'text': _UNO('.uno:HideSlide', 'presentation'),
 						'accessibility': { focusBack: true, combination: 'HS', de: null }
 					},
+					((!window.ThisIsAMobileApp || window.mode.isCODesktop()) && window.canvasSlideshowEnabled) || !window.ThisIsAMobileApp ?
+					{
+						'type': 'container',
+						'children': [
+							(!window.ThisIsAMobileApp || window.mode.isCODesktop()) && window.canvasSlideshowEnabled ?
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'slide-presentation-in-console',
+										'type': 'checkbox',
+										'command': 'presenterconsole',
+										'text': _('Presenter View'),
+										'tooltip': _('Shows your notes, next slide, and a timer'),
+										'accessibility': { focusBack: true, combination: 'PC', de: null }
+									}
+								]
+							} : {},
+							!window.ThisIsAMobileApp ?
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'slide-presentation-follow-me',
+										'type': 'checkbox',
+										'command': 'presenttoall',
+										'text': _('Present to All'),
+										'tooltip': _('Show your slideshow on every viewer\'s screen when you start it'),
+										'accessibility': { focusBack: true, combination: 'PL', de: null }
+									}
+								]
+							} : {},
+						],
+						'vertical': 'true'
+					} : {},
 				],
 			},
 		];
