@@ -141,7 +141,7 @@ friend class SlideShowView;
 
 public:
     explicit SlideShowController(const rtl::Reference<sd::SlideShow>& rpSlideShow,
-                                 ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc,
+                                 ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument& rDoc,
                                  vcl::Window* pParentWindow);
 
     // css::presentation::XSlideShowController:
@@ -326,7 +326,7 @@ private:
     ::sd::View* mpView;
     ViewShell* mpViewShell;
     DrawDocShell* mpDocSh;
-    SdDrawDocument* mpDoc;
+    SdDrawDocument& mrDoc;
 
     VclPtr<vcl::Window>    mpParentWindow;
     VclPtr<sd::ShowWindow>     mpShowWindow;

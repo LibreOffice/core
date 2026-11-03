@@ -533,17 +533,17 @@ constexpr OUString gsVerb( u"Verb"_ustr );
 
 SlideShowController::SlideShowController(const rtl::Reference<sd::SlideShow>& rpSlideShow,
                                          ViewShell* pViewSh, ::sd::View* pView,
-                                         SdDrawDocument* pDoc, vcl::Window* pParentWindow)
+                                         SdDrawDocument& rDoc, vcl::Window* pParentWindow)
 : mxShow()
 , mxView()
-, mxModel(pDoc->getUnoModel())
+, mxModel(rDoc.getUnoModel())
 , maUpdateTimer("SlideShowController maUpdateTimer")
 , maInputFreezeTimer("SlideShowController maInputFreezeTimer")
 , maDeactivateTimer("SlideShowController maDeactivateTimer")
 , mpView(pView)
 , mpViewShell(pViewSh)
-, mpDocSh(pDoc->GetDocSh())
-, mpDoc(pDoc)
+, mpDocSh(rDoc.GetDocSh())
+, mrDoc(rDoc)
 , mpParentWindow(pParentWindow)
 , mpShowWindow(nullptr)
 , mpSlideController()
@@ -562,7 +562,7 @@ SlideShowController::SlideShowController(const rtl::Reference<sd::SlideShow>& rp
 , mbWasPaused(false)
 , mbInputFreeze(false)
 , mbActive(false)
-, maPresSettings( pDoc->getPresentationSettings() )
+, maPresSettings(rDoc.getPresentationSettings())
 , mnUserPaintColor( 0x80ff0000L )
 , mbUsePen(false)
 , mdUserPaintStrokeWidth ( 150.0 )
@@ -618,15 +618,13 @@ SlideShowController::SlideShowController(const rtl::Reference<sd::SlideShow>& rp
 
     // to be able to react on various changes in the DrawModel, this class
     // is now derived from SfxListener and registers itself at the DrawModel
-    if (nullptr != mpDoc)
-        StartListening(*mpDoc);
+    StartListening(mrDoc);
 }
 
 SlideShowController::~SlideShowController()
 {
     // stop listening to DrawModel (see above)
-    if (nullptr != mpDoc)
-        EndListening(*mpDoc);
+    EndListening(mrDoc);
 
     SdModule* pModule = SdModule::get();
     //rhbz#806663 SlideShowController can outlive SdModule
@@ -657,10 +655,8 @@ void SlideShowController::disposing(std::unique_lock<std::mutex>&)
 #endif
     // IASS: This is the central methodology to 'steer' the
     // PresenterConsole - in this case, to shut it down
-    if( mxShow.is() && mpDoc )
-        NotifyDocumentEvent(
-            *mpDoc,
-            u"OnEndPresentation"_ustr );
+    if (mxShow.is())
+        NotifyDocumentEvent(mrDoc, u"OnEndPresentation"_ustr);
 
     if( mbAutoSaveWasOn )
         setAutoSaveState( true );
@@ -968,7 +964,7 @@ bool SlideShowController::startPreview(const Reference<XDrawPage>& xDrawPage,
         maPresSettings.mnPauseTimeout = 0;
         maPresSettings.mbShowPauseLogo = false;
 
-        rtl::Reference< SdXImpressDocument > xDrawPages( mpDoc->getUnoModel() );
+        rtl::Reference<SdXImpressDocument> xDrawPages(mrDoc.getUnoModel());
         Reference< XIndexAccess > xSlides( xDrawPages->getDrawPages(), UNO_QUERY_THROW );
         mpSlideController = std::make_unique<AnimationSlideController>( xSlides, AnimationSlideController::PREVIEW );
 
@@ -1096,7 +1092,7 @@ bool SlideShowController::startShow(PresentationSettingsEx const* pPresSettings)
                 const sal_uInt16 nNotePgNum = pStartPage->GetPageNum();
                 assert(nNotePgNum >= 2);
                 const sal_uInt16 nPgNum = ( nNotePgNum - 2 ) >> 1;
-                pStartPage = mpDoc->GetSdPage( nPgNum, PageKind::Standard );
+                pStartPage = mrDoc.GetSdPage(nPgNum, PageKind::Standard);
             }
         }
 
@@ -1204,7 +1200,7 @@ bool SlideShowController::startShow(PresentationSettingsEx const* pPresSettings)
                     beans::PropertyState_DIRECT_VALUE );
 
             const bool bZOrderEnabled(
-                SdModule::get()->GetSdOptions( mpDoc->GetDocumentType() )->IsSlideshowRespectZOrder() );
+                SdModule::get()->GetSdOptions(mrDoc.GetDocumentType())->IsSlideshowRespectZOrder());
             aProperties.emplace_back( "DisableAnimationZOrder" ,
                     -1, Any( !bZOrderEnabled ),
                     beans::PropertyState_DIRECT_VALUE );
@@ -1253,12 +1249,8 @@ bool SlideShowController::startShowImpl(const Sequence<beans::PropertyValue>& aP
     {
         mxShow.set( createSlideShow(), UNO_SET_THROW );
 
-        mxView = new SlideShowView(
-                                             *mpShowWindow,
-                                             mpDoc,
-                                             meAnimationMode,
-                                             this,
-                                             maPresSettings.mbFullScreen);
+        mxView = new SlideShowView(*mpShowWindow, &mrDoc, meAnimationMode, this,
+                                   maPresSettings.mbFullScreen);
 
         // try add wait symbol to properties:
         const Reference<rendering::XSpriteCanvas> xSpriteCanvas(
@@ -1371,9 +1363,7 @@ bool SlideShowController::startShowImpl(const Sequence<beans::PropertyValue>& aP
             // IASS: This is the central methodology to 'steer' the
             // PresenterConsole - in this case, to start it up and make
             // it visible (if activated)
-            NotifyDocumentEvent(
-                *mpDoc,
-                u"OnStartPresentation"_ustr);
+            NotifyDocumentEvent(mrDoc, u"OnStartPresentation"_ustr);
         }
 
         displaySlideIndex( mpSlideController->getStartSlideIndex() );
@@ -1604,7 +1594,7 @@ void SlideShowController::displayCurrentSlide(const bool bSkipAllMainSequenceEff
 
     if( mpSlideController && mxShow.is() )
     {
-        rtl::Reference< SdXImpressDocument > xDrawPages( mpDoc->getUnoModel() );
+        rtl::Reference<SdXImpressDocument> xDrawPages(mrDoc.getUnoModel());
         mpSlideController->displayCurrentSlide( mxShow, xDrawPages, bSkipAllMainSequenceEffects );
         registerShapeEvents(mpSlideController->getCurrentSlideNumber());
         update();
@@ -1623,7 +1613,7 @@ void SlideShowController::endPresentation()
 {
     if( maPresSettings.mbMouseAsPen)
     {
-        rtl::Reference< SdXImpressDocument > xDocFactory(mpDoc->getUnoModel() );
+        rtl::Reference<SdXImpressDocument> xDocFactory(mrDoc.getUnoModel());
         if( xDocFactory.is() )
             mxShow->registerUserPaintPolygons(xDocFactory);
     }
@@ -1859,12 +1849,12 @@ sal_Int32 SlideShowController::getSlideNumberForBookmark(const OUString& rStrBoo
 {
     bool bIsMasterPage;
     OUString aBookmark = getUiNameFromPageApiNameImpl( rStrBookmark );
-    sal_uInt16 nPgNum = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
+    sal_uInt16 nPgNum = mrDoc.GetPageByName(aBookmark, bIsMasterPage);
 
     if( nPgNum == SDRPAGE_NOTFOUND )
     {
         // Is the bookmark an object?
-        SdrObject* pObj = mpDoc->GetObj( aBookmark );
+        SdrObject* pObj = mrDoc.GetObj(aBookmark);
 
         if( pObj )
         {
@@ -1873,7 +1863,8 @@ sal_Int32 SlideShowController::getSlideNumberForBookmark(const OUString& rStrBoo
         }
     }
 
-    if( (nPgNum == SDRPAGE_NOTFOUND) || bIsMasterPage || static_cast<SdPage*>(mpDoc->GetPage(nPgNum))->GetPageKind() != PageKind::Standard )
+    if ((nPgNum == SDRPAGE_NOTFOUND) || bIsMasterPage
+        || static_cast<SdPage*>(mrDoc.GetPage(nPgNum))->GetPageKind() != PageKind::Standard)
         return -1;
 
     return ( nPgNum - 1) >> 1;
@@ -2304,7 +2295,8 @@ IMPL_LINK_NOARG(SlideShowController, ContextMenuHdl, void*, void)
         {
             if( mpSlideController->isVisibleSlideNumber( nPageNumber ) )
             {
-                SdPage* pPage = mpDoc->GetSdPage(static_cast<sal_uInt16>(nPageNumber), PageKind::Standard);
+                SdPage* pPage
+                    = mrDoc.GetSdPage(static_cast<sal_uInt16>(nPageNumber), PageKind::Standard);
                 if (pPage)
                 {
                     OUString sId(OUString::number(CM_SLIDES + nPageNumber));
@@ -2525,15 +2517,15 @@ Reference<XSlideShow> SlideShowController::createSlideShow()
 
 void SlideShowController::createSlideList(bool bAll, std::u16string_view rPresSlide)
 {
-    const sal_uInt16 nSlideCount = mpDoc->GetSdPageCount( PageKind::Standard );
+    const sal_uInt16 nSlideCount = mrDoc.GetSdPageCount(PageKind::Standard);
 
     if( !nSlideCount )
         return;
 
     SdCustomShow*   pCustomShow;
 
-    if( mpDoc->GetCustomShowList() && maPresSettings.mbCustomShow )
-        pCustomShow = mpDoc->GetCustomShowList()->GetCurObject();
+    if (mrDoc.GetCustomShowList() && maPresSettings.mbCustomShow)
+        pCustomShow = mrDoc.GetCustomShowList()->GetCurObject();
     else
         pCustomShow = nullptr;
 
@@ -2542,7 +2534,7 @@ void SlideShowController::createSlideList(bool bAll, std::u16string_view rPresSl
         ( pCustomShow && !pCustomShow->PagesVector().empty() ) ? AnimationSlideController::CUSTOM :
             (bAll ? AnimationSlideController::ALL : AnimationSlideController::FROM);
 
-    rtl::Reference< SdXImpressDocument > xDrawPages( mpDoc->getUnoModel() );
+    rtl::Reference<SdXImpressDocument> xDrawPages(mrDoc.getUnoModel());
     Reference< XIndexAccess > xSlides( xDrawPages->getDrawPages(), UNO_QUERY_THROW );
     mpSlideController = std::make_unique<AnimationSlideController>( xSlides, eMode );
 
@@ -2559,7 +2551,8 @@ void SlideShowController::createSlideList(bool bAll, std::u16string_view rPresSl
             for( nSlide = 0, nFirstVisibleSlide = -1;
                 ( nSlide < nSlideCount ) && ( -1 == nFirstVisibleSlide ); nSlide++ )
             {
-                SdPage* pTestSlide = mpDoc->GetSdPage( static_cast<sal_uInt16>(nSlide), PageKind::Standard );
+                SdPage* pTestSlide
+                    = mrDoc.GetSdPage(static_cast<sal_uInt16>(nSlide), PageKind::Standard);
 
                 if( pTestSlide->GetName() == rPresSlide )
                 {
@@ -2578,7 +2571,8 @@ void SlideShowController::createSlideList(bool bAll, std::u16string_view rPresSl
 
         for( sal_Int32 i = 0; i < nSlideCount; i++ )
         {
-            bool bVisible = ! mpDoc->GetSdPage( static_cast<sal_uInt16>(i), PageKind::Standard )->IsExcluded();
+            bool bVisible
+                = !mrDoc.GetSdPage(static_cast<sal_uInt16>(i), PageKind::Standard)->IsExcluded();
             if( bVisible || (eMode == AnimationSlideController::ALL) )
                 mpSlideController->insertSlideNumber( i, bVisible );
         }
@@ -2591,7 +2585,7 @@ void SlideShowController::createSlideList(bool bAll, std::u16string_view rPresSl
         {
             sal_Int32 nSlide;
             for( nSlide = 0; nSlide < nSlideCount; nSlide++ )
-                if( rPresSlide == mpDoc->GetSdPage( static_cast<sal_uInt16>(nSlide), PageKind::Standard )->GetName() )
+                if( rPresSlide == mrDoc.GetSdPage( static_cast<sal_uInt16>(nSlide), PageKind::Standard )->GetName() )
                     break;
 
             if( nSlide < nSlideCount )
@@ -2602,7 +2596,7 @@ void SlideShowController::createSlideList(bool bAll, std::u16string_view rPresSl
         {
             const sal_uInt16 nSdSlide = ( rpPage->GetPageNum() - 1 ) / 2;
 
-            if( ! mpDoc->GetSdPage( nSdSlide, PageKind::Standard )->IsExcluded())
+            if (!mrDoc.GetSdPage(nSdSlide, PageKind::Standard)->IsExcluded())
                 mpSlideController->insertSlideNumber( nSdSlide );
         }
     }
@@ -3383,7 +3377,7 @@ void SlideShowController::AsyncNotifyEvent(
 
             // order of pages (object pages or master pages) changed (Insert/Remove/ChangePos)
             // rXCurrentSlide is the current slide before the change.
-            rtl::Reference< SdXImpressDocument > xDrawPages( mpDoc->getUnoModel() );
+            rtl::Reference<SdXImpressDocument> xDrawPages(mrDoc.getUnoModel());
             Reference< XIndexAccess > xSlides( xDrawPages->getDrawPages(), UNO_QUERY_THROW );
             const sal_Int32 nNewSlideCount(xSlides.is() ? xSlides->getCount() : 0);
 
@@ -3470,10 +3464,6 @@ void SlideShowController::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
     if (SfxHintId::ThisIsAnSdrHint != rHint.GetId())
         // nothing to do for non-SdrHints
-        return;
-
-    if (nullptr == mpDoc)
-        // better do nothing when no DrawModel (should not happen)
         return;
 
     // tdf#158664 I am surprised, but the 'this' instance keeps incarnated
