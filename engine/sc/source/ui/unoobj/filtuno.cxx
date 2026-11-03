@@ -224,6 +224,9 @@ sal_Int16 ScFilterOptionsObj::execute()
             ScopedVclPtr<AbstractScTextImportOptionsDlg> pDlg(
                 pFact->CreateScTextImportOptionsDlg(Application::GetFrameWeld(xDialogParent)));
 
+            // this runs during the load, so the kitPoll re-entry it causes is expected
+            vcl::kit::pushExpectedReentry();
+            comphelper::ScopeGuard aPopReentry([] { vcl::kit::popExpectedReentry(); });
             if (pDlg->Execute() == RET_OK)
             {
                 LanguageType eLang = pDlg->GetLanguageType();

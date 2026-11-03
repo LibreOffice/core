@@ -248,6 +248,7 @@ constexpr auto ScalcDialogList
         { u"modules/scalc/ui/standardfilterdialog.ui" },
         { u"modules/scalc/ui/statisticsinfopage.ui" },
         { u"modules/scalc/ui/textimportcsv.ui" },
+        { u"modules/scalc/ui/textimportoptions.ui" },
         { u"modules/scalc/ui/ttestdialog.ui" },
         { u"modules/scalc/ui/ungroupdialog.ui" },
         { u"modules/scalc/ui/validationcriteriapage.ui" },
@@ -781,6 +782,10 @@ std::vector<OUString> completeCalcDialogList(const o3tl::sorted_vector<OUString>
         // Skip this one, I think it can only happen on loading
         // an archaic lotus 123 file
         else if (entry == u"modules/scalc/ui/imoptdialog.ui")
+            continue;
+        // Skip this one, with COKit active it only appears while loading
+        // a file detected as Calc HTML
+        else if (entry == u"modules/scalc/ui/textimportoptions.ui")
             continue;
         // Skip these Solver sub-dialogs. They only appear during a solve
         // run (the Options button, the progress popup, the success
