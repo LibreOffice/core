@@ -116,7 +116,8 @@ namespace connectivity::dbase
         bool CreateFile(const INetURLObject& aFile, bool& bCreateMemo);
         bool CreateMemoFile(const INetURLObject& aFile);
         bool HasMemoFields() const;
-        void ReadMemoHeader();
+        // true if the header gives a nonzero block size
+        bool ReadMemoHeader();
         bool ReadMemo(std::size_t nBlockNo, ORowSetValue& aVariable);
 
         void WriteMemo(const ORowSetValue& aVariable, std::size_t& rBlockNr);

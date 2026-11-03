@@ -546,8 +546,8 @@ void ODbaseTable::construct()
         {
             m_pMemoStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYNONE);
         }
-        if (m_pMemoStream)
-            ReadMemoHeader();
+        if (m_pMemoStream && !ReadMemoHeader())
+            m_pMemoStream.reset();
     }
 
     fillColumns();
@@ -575,7 +575,7 @@ void ODbaseTable::construct()
     AllocBuffer();
 }
 
-void ODbaseTable::ReadMemoHeader()
+bool ODbaseTable::ReadMemoHeader()
 {
     m_pMemoStream->SetEndian(SvStreamEndian::LITTLE);
     m_pMemoStream->RefreshBuffer();         // make sure that the header information is actually read again
@@ -621,6 +621,7 @@ void ODbaseTable::ReadMemoHeader()
             SAL_WARN( "connectivity.drivers", "ODbaseTable::ReadMemoHeader: unsupported memo type!" );
             break;
     }
+    return m_aMemoHeader.db_size != 0;
 }
 
 OUString ODbaseTable::getEntry(file::OConnection const * _pConnection, std::u16string_view _sName )
