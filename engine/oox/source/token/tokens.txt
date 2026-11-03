@@ -1042,7 +1042,10 @@ bwnormal
 bwpure
 bx
 by
+byChar
+byObject
 byPosition
+byWord
 byte
 c
 c15
@@ -3919,6 +3922,7 @@ openDmnd
 operator
 optimizeForBrowser
 optimizeMemory
+option
 orange
 orangeRed
 orchid
@@ -3977,6 +3981,7 @@ owners
 p
 p14
 p15
+p159
 p188
 pBdr
 pLen

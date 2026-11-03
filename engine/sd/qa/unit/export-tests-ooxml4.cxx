@@ -1828,6 +1828,47 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testAirplaneTransition)
     assertXPath(pXmlDoc, "//mc:AlternateContent/mc:Choice", "Requires", u"p15");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testMorphTransition)
+{
+    // Given a document where slides 2, 3 and 4 have a morph slide transition, which matches
+    // objects, words and characters, in this order:
+    createSdImpressDoc("pptx/MorphTransition.pptx");
+
+    // When importing that document:
+    // Then make sure the transitions are not lost:
+    static constexpr sal_Int16 constExpectedSubtypes[]
+        = { animations::TransitionSubType::MORPH, animations::TransitionSubType::MORPHBYWORD,
+            animations::TransitionSubType::MORPHBYCHARACTER };
+    for (size_t i = 0; i < std::size(constExpectedSubtypes); ++i)
+    {
+        uno::Reference<beans::XPropertySet> xPage(getPage(i + 1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(animations::TransitionType::FADE,
+                             xPage->getPropertyValue(u"TransitionType"_ustr).get<sal_Int16>());
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: 121 (MORPH)
+        // - Actual  : 101 (CROSSFADE)
+        // i.e. the fade from the fallback was imported.
+        CPPUNIT_ASSERT_EQUAL(constExpectedSubtypes[i],
+                             xPage->getPropertyValue(u"TransitionSubtype"_ustr).get<sal_Int16>());
+    }
+
+    // And when exporting that document back to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then make sure the transitions are written back, with a fade as the fallback:
+    static constexpr std::u16string_view constExpectedOptions[]
+        = { u"byObject", u"byWord", u"byChar" };
+    for (size_t i = 0; i < std::size(constExpectedOptions); ++i)
+    {
+        xmlDocUniquePtr pXmlDoc
+            = parseExport("ppt/slides/slide" + OUString::number(i + 2) + ".xml");
+        assertXPath(pXmlDoc, "//mc:AlternateContent/mc:Choice/p:transition/p159:morph", "option",
+                    constExpectedOptions[i]);
+        assertXPath(pXmlDoc, "//mc:AlternateContent/mc:Choice", "Requires", u"p159");
+        assertXPath(pXmlDoc, "//mc:AlternateContent/mc:Fallback/p:transition/p:fade", 1);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf173682_tableStyleFlags)
 {
     // Two tables. The first one has the opposite of the svx defaults: no firstRow and no bandRow,

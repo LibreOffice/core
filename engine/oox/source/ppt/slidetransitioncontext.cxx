@@ -151,6 +151,14 @@ SlideTransitionContext::~SlideTransitionContext() noexcept
             maTransition.setOoxTransitionType(aElementToken, sal_Int32(rAttribs.getBool(XML_isInverted, false)), 0);
         }
         return this;
+    case P159_TOKEN(morph):
+        if (!mbHasTransition)
+        {
+            mbHasTransition = true;
+            maTransition.setOoxTransitionType(aElementToken,
+                                              rAttribs.getToken(XML_option, XML_byObject), 0);
+        }
+        return this;
     case P15_TOKEN(prstTrans):
         if (!mbHasTransition)
         {

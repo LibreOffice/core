@@ -241,6 +241,7 @@ bool ContextHandler2Helper::prepareMceContext( sal_Int32 nElement, const Attribu
                     // u"a14", // We do not currently support inline formulas and other a14 stuff
                     u"p14",
                     u"p15",
+                    u"p159",
                     u"x12ac",
                     u"v",
                     u"cx1",
