@@ -146,6 +146,18 @@ constants TransitionSubType
     /** Airplane transition, used with TransitionType::MISCSHAPEWIPE.
     */
     const short AIRPLANE = 120;
+    /** Morph transition that matches whole objects between the two slides, used with
+        TransitionType::FADE.
+    */
+    const short MORPH = 121;
+    /** Morph transition that matches words between the two slides, used with
+        TransitionType::FADE.
+    */
+    const short MORPHBYWORD = 122;
+    /** Morph transition that matches characters between the two slides, used with
+        TransitionType::FADE.
+    */
+    const short MORPHBYCHARACTER = 123;
 };
 
 

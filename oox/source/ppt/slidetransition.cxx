@@ -443,6 +443,21 @@ namespace oox::ppt {
             mnTransitionType = TransitionType::SLIDEWIPE;
             mnTransitionSubType = ooxToOdpCornerDirections( param1 );
             break;
+        case P159_TOKEN(morph):
+            mnTransitionType = TransitionType::FADE;
+            switch (param1)
+            {
+                case XML_byWord:
+                    mnTransitionSubType = TransitionSubType::MORPHBYWORD;
+                    break;
+                case XML_byChar:
+                    mnTransitionSubType = TransitionSubType::MORPHBYCHARACTER;
+                    break;
+                default:
+                    mnTransitionSubType = TransitionSubType::MORPH;
+                    break;
+            }
+            break;
         default:
             mnTransitionType = 0;
             break;
