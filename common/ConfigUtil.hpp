@@ -32,7 +32,7 @@
 #include <type_traits>
 
 /* Default ciphers used, when not specified otherwise */
-#define DEFAULT_CIPHER_SET "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH"
+#define DEFAULT_CIPHER_SET "HIGH:!aNULL:!eNULL:!MD5:!SHA1:!RC4:!3DES:!kRSA:!PSK:!SRP:!DSS:@STRENGTH"
 
 namespace ConfigUtil
 {

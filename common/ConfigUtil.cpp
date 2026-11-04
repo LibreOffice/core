@@ -243,7 +243,7 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "serverside_config.max_idle_subforkits", "5" },
     { "ssl.ca_file_path", COOLWSD_CONFIGDIR "/ca-chain.cert.pem" },
     { "ssl.cert_file_path", COOLWSD_CONFIGDIR "/cert.pem" },
-    { "ssl.cipher_list", "" },
+    { "ssl.cipher_list", "" }, // the actual default is macro DEFAULT_CIPHER_SET
     { "ssl.enable", ENABLE_SSL ? "true" : "false" },
     { "ssl.hpkp.max_age", "1000" },
     { "ssl.hpkp.max_age[@enable]", "true" },
@@ -262,7 +262,7 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "storage.ssl.as_scheme", "true" },
     { "storage.ssl.ca_file_path", "" },
     { "storage.ssl.cert_file_path", "" },
-    { "storage.ssl.cipher_list", "" },
+    { "storage.ssl.cipher_list", "" }, // this one defaults to value of ssl.cipher_list[@default]
     // { "storage.ssl.enable" - deliberately not set; for back-compat
     { "storage.ssl.key_file_path", "" },
     { "storage.wopi.access_token.default_lifetime_mins", "0" },
