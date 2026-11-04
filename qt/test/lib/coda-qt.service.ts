@@ -19,12 +19,10 @@ import {
 	rmSync,
 	writeFileSync,
 } from 'fs';
-import http from 'http';
 import { homedir, tmpdir } from 'os';
 import { basename, join } from 'path';
-import { promisify } from 'util';
 
-const sleep = promisify(setTimeout);
+import { killProcess, pipeOutput, waitForHttp } from './processes.js';
 
 interface CodaQtServiceOptions {
 	atSpiDriverPath: string;
@@ -37,45 +35,6 @@ interface CodaQtServiceOptions {
 	appName: string;
 	remoteDebuggingPort: number | string;
 	fixturesDir: string;
-}
-
-function pipeOutput(proc: ChildProcess, label: string): void {
-	proc.stdout!.on('data', (d: Buffer) =>
-		console.log(`[${label}]: ${d.toString().trim()}`),
-	);
-	proc.stderr!.on('data', (d: Buffer) => {
-		const msg = d.toString().trim();
-		if (msg) console.log(`[${label}]: ${msg}`);
-	});
-	proc.on('exit', (c, s) =>
-		console.log(`${label} exited (code=${c}, signal=${s})`),
-	);
-}
-
-async function waitForHttp(
-	url: string,
-	label: string,
-	maxAttempts = 30,
-): Promise<void> {
-	for (let i = 0; i < maxAttempts; i++) {
-		try {
-			const ok = await new Promise((resolve, reject) => {
-				const req = http.get(url, (res) => resolve(res.statusCode === 200));
-				req.on('error', reject);
-				req.setTimeout(1000, () => req.destroy(new Error('timeout')));
-			});
-			if (ok) {
-				console.log(`${label} is ready`);
-				return;
-			}
-		} catch (e) {
-			// Not ready yet
-		}
-		await sleep(1000);
-	}
-	throw new Error(
-		`${label} not available at ${url} after ${maxAttempts} attempts`,
-	);
 }
 
 /**
@@ -107,20 +66,6 @@ function getXdgDocumentsBasename(): string {
 		// File missing or unreadable - fall through.
 	}
 	return 'Documents';
-}
-
-function killProcess(proc: ChildProcess | null, name: string): void {
-	if (proc && proc.pid && !proc.killed) {
-		console.log(`Sending SIGTERM to ${name}`);
-		proc.kill('SIGTERM');
-		const timer = setTimeout(() => {
-			if (proc.exitCode === null) {
-				console.log(`Forcing SIGKILL on ${name}`);
-				proc.kill('SIGKILL');
-			}
-		}, 2000);
-		proc.once('exit', () => clearTimeout(timer));
-	}
 }
 
 export class CodaQtServiceLauncher {

@@ -206,6 +206,7 @@ EXTRA_DIST += \
 	$(TEST_DIR)/wdio.d.ts \
 	$(TEST_DIR)/run-tests.sh \
 	$(TEST_DIR)/lib/coda-qt.service.ts \
+	$(TEST_DIR)/lib/processes.ts \
 	$(TEST_DIR)/lib/webview.ts \
 	$(TEST_DIR)/lib/file-dialog.ts \
 	$(TEST_DIR)/fixtures/simple.odt \
