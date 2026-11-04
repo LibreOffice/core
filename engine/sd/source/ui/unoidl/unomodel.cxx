@@ -8052,7 +8052,8 @@ bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OSt
             || !sd::SlideLink::IsReadableSourceString(aLastModifiedTime)))
         return false;
 
-    SdDrawDocument* pSource = mpDoc->OpenBookmarkDoc(rFileUrl);
+    // A file that cannot be read inserts nothing, with no dialog about it.
+    SdDrawDocument* pSource = mpDoc->OpenBookmarkDoc(rFileUrl, /*bNoDialogs=*/true);
     if (!pSource)
         return false;
 
