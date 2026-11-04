@@ -222,6 +222,10 @@ XMLSignature_MSCryptImpl::generate(
 
     //Sign the template
     pDsigCtx->keyInfoReadCtx.flags |= XMLSEC_KEYINFO_FLAGS_X509DATA_DONT_VERIFY_CERTS;
+
+    // Allow ODF/OOXML references to resolve.
+    pDsigCtx->enabledReferenceUris = xmlSecTransformUriTypeAny;
+
     if( xmlSecDSigCtxSign( pDsigCtx , pNode ) == 0 )
     {
         if (pDsigCtx->status == xmlSecDSigStatusSucceeded)
@@ -307,6 +311,9 @@ XMLSignature_MSCryptImpl::validate(
 
     // We do certificate verification ourselves.
     pDsigCtx->keyInfoReadCtx.flags |= XMLSEC_KEYINFO_FLAGS_X509DATA_DONT_VERIFY_CERTS;
+
+    // Allow ODF/OOXML references to resolve.
+    pDsigCtx->enabledReferenceUris = xmlSecTransformUriTypeAny;
 
     // limit possible key data to valid X509 certificates only, no KeyValues
     if (xmlSecPtrListAdd(&(pDsigCtx->keyInfoReadCtx.enabledKeyData), BAD_CAST xmlSecMSCngKeyDataX509GetKlass()) < 0)

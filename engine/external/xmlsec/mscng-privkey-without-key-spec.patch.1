@@ -13,7 +13,7 @@ still finds its key via the key identifier, so call it unconditionally as
 
 --- xmlsec/src/mscng/certkeys.c.orig
 +++ xmlsec/src/mscng/certkeys.c
-@@ -99,31 +99,24 @@
+@@ -100,31 +100,24 @@
          return(0);
      }
  
@@ -34,7 +34,7 @@ still finds its key via the key identifier, so call it unconditionally as
 -            xmlSecMSCngLastError("CryptAcquireCertificatePrivateKey", NULL);
 -            return(-1);
 -        }
--        (*needsFree) = TRUE;
+-        (*needsFree) = fCallerFreeProvOrNCryptKey;
 -        return(0);
 +    /* try persistent key: don't require CERT_KEY_SPEC_PROP_ID, a certificate
 +     * decoded from DER has no key properties, but the key can still be found
@@ -54,10 +54,10 @@ still finds its key via the key identifier, so call it unconditionally as
      }
 -
 -
--    /* no luck */
--    xmlSecMSCngLastError("CertGetCertificateContextProperty(): cert doesn't have private key", NULL);
+-    /* no luck: the certificate doesn't have a private key */
+-    xmlSecOtherError(XMLSEC_ERRORS_R_KEY_NOT_FOUND, NULL, "the certificate doesn't have a private key");
 -    return(-1);
-+    (*needsFree) = TRUE;
++    (*needsFree) = fCallerFreeProvOrNCryptKey;
 +    return(0);
  }
  
