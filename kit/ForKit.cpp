@@ -46,16 +46,20 @@
 #if HAVE_LIBCAP
 #include <sys/capability.h>
 #endif
+#include <sys/mman.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sysexits.h>
 
 #include <atomic>
 #include <chrono>
+#include <cstdint>
 #include <cstdlib>
 #include <cstring>
+#include <deque>
 #include <iostream>
 #include <map>
+#include <new>
 #include <thread>
 #include <utility>
 
@@ -91,6 +95,15 @@ std::vector<std::string> cleanupJailPaths;
 /// The [subforkit pid -> subforkit id] map.
 std::map<pid_t, std::string> subForKitPids;
 
+/// How many of the OOM kills in the kernel count of our cgroup are already counted for a kit, or
+/// dropped. It lives in memory that the forkit and all its subforkits share. It is null when that
+/// memory could not be mapped.
+std::atomic<std::uint64_t>* HandledOomKillCount = nullptr;
+/// The OOM kill count of our cgroup as this process last read it.
+std::uint64_t LastSeenOomKillCount = 0;
+/// Each value the OOM kill count reached, with the time this process first saw it, oldest first.
+std::deque<std::pair<std::uint64_t, std::chrono::steady_clock::time_point>> OomKillCountSeen;
+
 /// The Main polling main-loop of this (single threaded) process
 std::unique_ptr<SocketPoll> ForKitPoll;
 
@@ -112,6 +125,10 @@ void dump_forkit_state()
            "  NoCapsForKit: " << NoCapsForKit << "\n"
            "  RequireLandlock: " << RequireLandlock << "\n"
            "  NoSeccomp: " << NoSeccomp << "\n"
+           "  HandledOomKillCount: "
+        << (HandledOomKillCount ? HandledOomKillCount->load() : 0) << "\n"
+           "  LastSeenOomKillCount: " << LastSeenOomKillCount << "\n"
+           "  OomKillCountSeen: " << OomKillCountSeen.size() << "\n"
 #if ENABLE_DEBUG
            "  SingleKit: " << SingleKit << "\n"
 #endif
@@ -316,18 +333,80 @@ bool haveCorrectCapabilities()
 }
 #endif // HAVE_LIBCAP
 
-/// How many processes of our cgroup an OOM killer has taken since the last
-/// call. The count is per cgroup rather than per child, so a reap that finds
-/// fewer SIGKILLed kits than the kernel counted leaves the rest to the next.
-int takeCGroupOomKills()
+/// An OOM kill in the kernel count of our cgroup waits this long to be matched to a kit that was
+/// reaped with SIGKILL. The kernel counts the kill as it sends the signal, before the kit exits.
+constexpr std::chrono::seconds OomKillMatchWindow(2 * POLL_FORKIT_TIMEOUT_SECS);
+
+/// Map the OOM kill count that this forkit shares with its subforkits, and start it from the
+/// current kernel count, so the kills from before this forkit started are not counted.
+void initOomKills()
 {
-    static std::size_t lastCount = 0;
+    static_assert(std::atomic<std::uint64_t>::is_always_lock_free,
+                  "the shared OOM kill count is updated from several processes");
 
-    const std::size_t count = Util::getCGroupOomKillCount();
-    const std::size_t taken = count > lastCount ? count - lastCount : 0;
-    lastCount = count;
+    void* const memory = mmap(nullptr, sizeof(std::atomic<std::uint64_t>), PROT_READ | PROT_WRITE,
+                              MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+    if (memory == MAP_FAILED)
+    {
+        LOG_SYS("Failed to map the shared OOM kill count. Kits killed by OOM count as killed.");
+        return;
+    }
 
-    return taken;
+    LastSeenOomKillCount = Util::getCGroupOomKillCount();
+    HandledOomKillCount = new (memory) std::atomic<std::uint64_t>(LastSeenOomKillCount);
+}
+
+/// Unmap the shared OOM kill count from this process.
+void unmapOomKills()
+{
+    if (HandledOomKillCount)
+        munmap(HandledOomKillCount, sizeof(std::atomic<std::uint64_t>));
+    HandledOomKillCount = nullptr;
+}
+
+/// Read the OOM kill count of our cgroup, and drop the kills that no reap matched to a kit within
+/// OomKillMatchWindow of this process seeing them.
+void updateOomKills()
+{
+    if (!HandledOomKillCount)
+        return;
+
+    const auto now = std::chrono::steady_clock::now();
+    const std::uint64_t count = Util::getCGroupOomKillCount();
+    if (count > LastSeenOomKillCount)
+    {
+        LastSeenOomKillCount = count;
+        OomKillCountSeen.emplace_back(count, now);
+    }
+
+    // A kill that no reap matched in time took a process that is not a kit, for example a
+    // background save. It is marked handled, so a kit killed later counts as a plain kill.
+    while (!OomKillCountSeen.empty() && now - OomKillCountSeen.front().second > OomKillMatchWindow)
+    {
+        const std::uint64_t expired = OomKillCountSeen.front().first;
+        std::uint64_t handled = HandledOomKillCount->load();
+        while (handled < expired && !HandledOomKillCount->compare_exchange_weak(handled, expired))
+        {
+        }
+        OomKillCountSeen.pop_front();
+    }
+}
+
+/// Take one OOM kill of our cgroup for a kit that was reaped with SIGKILL. Returns false when every
+/// kill this process has seen is already handled.
+bool takeOomKill()
+{
+    if (!HandledOomKillCount)
+        return false;
+
+    std::uint64_t handled = HandledOomKillCount->load();
+    while (handled < LastSeenOomKillCount)
+    {
+        if (HandledOomKillCount->compare_exchange_weak(handled, handled + 1))
+            return true;
+    }
+
+    return false;
 }
 
 /// Check if some previously forked kids have died.
@@ -342,7 +421,7 @@ void cleanupChildren()
     int killedCount = 0;
     int oomKilledCount = 0;
 
-    int oomKillsToAttribute = -1; // read on the first SIGKILL of this reap
+    updateOomKills();
 
     siginfo_t info;
     memset(&info, 0, sizeof(info)); // Make sure no stale fields remain
@@ -377,12 +456,8 @@ void cleanupChildren()
                 }
                 else if (status == SIGKILL)
                 {
-                    if (oomKillsToAttribute < 0)
-                        oomKillsToAttribute = takeCGroupOomKills();
-
-                    if (oomKillsToAttribute > 0)
+                    if (takeOomKill())
                     {
-                        --oomKillsToAttribute;
                         ++oomKilledCount;
                         LOG_WRN("Child " << exitedChildPid << " was killed by OOM, with status "
                                          << status);
@@ -590,6 +665,9 @@ int createCOKit(const std::string& childRoot, const std::string& sysTemplate,
                           loTemplate, useMountNamespaces,
                           queryVersion, sysTemplateIncomplete, forKitPid = getpid()]()
         {
+            // The kit has no access to the memory the forkits share.
+            unmapOomKills();
+
             lokit_main(childRoot, jailId, configId, sysTemplate, loTemplate,
                        NoCapsForKit, RequireLandlock, NoSeccomp, useMountNamespaces,
                        queryVersion, DisplayVersion, sysTemplateIncomplete, forKitPid,
@@ -1146,8 +1224,7 @@ int forkit_main(int argc, char** argv)
 
     const auto startTime = std::chrono::steady_clock::now();
 
-    // Seed the baseline, so kills from before this forkit are not its kits'.
-    takeCGroupOomKills();
+    initOomKills();
 
     while (!SigUtil::getShutdownRequestFlag())
     {
