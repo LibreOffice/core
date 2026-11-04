@@ -42,6 +42,7 @@ class JsonWriter;
 namespace drawinglayer::primitive2d
 {
 class BasePrimitive2D;
+class ControlPrimitive2D;
 class TextSimplePortionPrimitive2D;
 class Primitive2DContainer;
 class SvgGradientHelper;
@@ -146,6 +147,10 @@ private:
 
     /// Write matrix with all 6 components scaled
     void writeMatrixScaled(std::string_view sName, const basegfx::B2DHomMatrix& rMatrix);
+
+    /// Write a form control of a kind the client draws itself as its model's values. False for
+    /// any other kind, which goes as its decomposition.
+    bool writeFormControl(const drawinglayer::primitive2d::ControlPrimitive2D& rControl);
 
     /// Write matrix with scale applied only to translation (e, f)
     void writeMatrixTranslationScaled(std::string_view sName, const basegfx::B2DHomMatrix& rMatrix);

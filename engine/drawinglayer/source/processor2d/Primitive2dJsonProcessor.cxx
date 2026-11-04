@@ -15,7 +15,15 @@
 #include <cmath>
 #include <optional>
 
+#include <com/sun/star/awt/FontDescriptor.hpp>
+#include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/awt/XControlModel.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/form/FormComponentType.hpp>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
+#include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
@@ -901,9 +909,95 @@ OString Primitive2dJsonProcessor::dumpAsJson(const Primitive2DContainer& rPrimit
     return aWriter.finishAndGetAsOString();
 }
 
+bool Primitive2dJsonProcessor::writeFormControl(const ControlPrimitive2D& rControl)
+{
+    const cpo::uno::Reference<css::beans::XPropertySet> xModel(rControl.getControlModel(),
+                                                               cpo::uno::UNO_QUERY);
+    const cpo::uno::Reference<css::beans::XPropertySetInfo> xInfo(
+        xModel.is() ? xModel->getPropertySetInfo() : nullptr);
+    if (!xInfo.is())
+        return false;
+
+    // a value the model of that kind does not have stays empty
+    const auto aValueOf = [&xModel, &xInfo](const OUString& rName) {
+        return xInfo->hasPropertyByName(rName) ? xModel->getPropertyValue(rName) : cpo::uno::Any();
+    };
+
+    sal_Int16 nClassId(0);
+    aValueOf(u"ClassId"_ustr) >>= nClassId;
+    const char* pKind(nullptr);
+    switch (nClassId)
+    {
+        case css::form::FormComponentType::COMMANDBUTTON:
+            pKind = "pushButton";
+            break;
+        case css::form::FormComponentType::CHECKBOX:
+            pKind = "checkBox";
+            break;
+        case css::form::FormComponentType::RADIOBUTTON:
+            pKind = "optionButton";
+            break;
+        default:
+            return false;
+    }
+
+    mrWriter.put("type", "formControl");
+    mrWriter.put("kind", pKind);
+    writeMatrixScaled("matrix", rControl.getTransform());
+
+    OUString aLabel;
+    if (aValueOf(u"Label"_ustr) >>= aLabel)
+        mrWriter.put("label", aLabel);
+    // 0 not checked, 1 checked, 2 neither
+    sal_Int16 nState(0);
+    if (aValueOf(u"State"_ustr) >>= nState)
+        mrWriter.put("state", sal_Int32(nState));
+    bool bEnabled(true);
+    aValueOf(u"Enabled"_ustr) >>= bEnabled;
+    if (!bEnabled)
+        mrWriter.put("disabled", true);
+    bool bDefault(false);
+    aValueOf(u"DefaultButton"_ustr) >>= bDefault;
+    if (bDefault)
+        mrWriter.put("defaultButton", true);
+    // 0 left, 1 centred, 2 right
+    sal_Int16 nAlign(0);
+    if (aValueOf(u"Align"_ustr) >>= nAlign)
+        mrWriter.put("align", sal_Int32(nAlign));
+
+    sal_Int32 nColor(0);
+    if (aValueOf(u"TextColor"_ustr) >>= nColor)
+        mrWriter.put("textColor", colorToHex(::Color(ColorTransparency, nColor).getBColor()));
+    if (aValueOf(u"BackgroundColor"_ustr) >>= nColor)
+        mrWriter.put("background", colorToHex(::Color(ColorTransparency, nColor).getBColor()));
+
+    css::awt::FontDescriptor aFont;
+    if (aValueOf(u"FontDescriptor"_ustr) >>= aFont)
+    {
+        auto aFontNode = mrWriter.startNode("font");
+        if (!aFont.Name.isEmpty())
+            mrWriter.put("name", aFont.Name);
+        // in points
+        if (aFont.Height > 0)
+            mrWriter.put("height", sal_Int32(aFont.Height));
+        if (aFont.Weight > css::awt::FontWeight::NORMAL)
+            mrWriter.put("bold", true);
+        // an unset slant is upright
+        if (aFont.Slant != css::awt::FontSlant_NONE
+            && aFont.Slant != css::awt::FontSlant_DONTKNOW)
+            mrWriter.put("italic", true);
+    }
+    return true;
+}
+
 void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrimitive)
 {
     sal_uInt32 nId = rBasePrimitive.getPrimitive2DID();
+
+    // a form control of a kind the client draws itself goes as its model's values
+    if (nId == PRIMITIVE2D_ID_CONTROLPRIMITIVE2D
+        && writeFormControl(static_cast<const ControlPrimitive2D&>(rBasePrimitive)))
+        return;
 
     // The areas the drawing layer fills for the primitive, as a group.
     const auto writeDecompositionAsGroup = [this, &rBasePrimitive]() {
