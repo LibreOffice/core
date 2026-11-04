@@ -408,6 +408,16 @@ class LOUtil {
 			if (images[relativePath]) return images[relativePath];
 		}
 
+		// The app serves CODA's files to a remote page from base,
+		// such as "/coollocal/bundled/" on Windows, or "coollocal://bundled"
+		// on Qt.
+		const base = customWindow.codaRemotePage?.base;
+		if (base) {
+			const relativePath = path.startsWith('/') ? path.substring(1) : path;
+			const baseUrl = new URL(base, location.href);
+			return new URL(relativePath, baseUrl).href;
+		}
+
 		if (customWindow.host === '' && customWindow.serviceRoot === '') {
 			// Mobile / desktop app: return a relative path so it resolves
 			// against the page's file:// origin rather than the filesystem root.
