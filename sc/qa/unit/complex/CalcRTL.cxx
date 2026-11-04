@@ -48,12 +48,9 @@ public:
 
     Reference<XShape> getInsertedShape();
     Reference<XSpreadsheet> getSpreadsheet();
-    bool changeProperty(const Reference<XPropertySet>& set, const OUString& pName,
-                        const Any& pValue);
+    bool changeProperty(const Reference<XPropertySet>& set, const OUString& pName, Any newValue);
     std::array<Any, 4> getShapeProps(const Reference<XPropertySet>& set,
                                      const Reference<XShape>& oShape);
-    bool checkResult(const Reference<XPropertySet>& set, const OUString& propName, Any oldValue,
-                     Any newValue, Any& resValue, const Any& exception);
     Any getRealValue(const Any& obj);
     Reference<XShape> createShape(const Reference<XComponent>& oDoc, int height, int width, int x,
                                   int y, std::u16string_view kind);
@@ -81,17 +78,9 @@ CPPUNIT_TEST_FIXTURE(ScComplexTest, checkShapeProperties)
 
     Reference<XPropertySet> set(getInsertedShape(), UNO_QUERY);
 
-    try
-    {
-        Any cellValue(getSpreadsheet()->getCellByPosition(5, 5));
-        CPPUNIT_ASSERT_MESSAGE("Problems when setting property 'Anchor'",
-                               changeProperty(set, u"Anchor"_ustr, cellValue));
-    }
-    catch (IndexOutOfBoundsException)
-    {
-        // assure("Problems when setting property 'Anchor'", false);
-        CPPUNIT_FAIL("Problems when setting property 'Anchor'");
-    }
+    Any cellValue(getSpreadsheet()->getCellByPosition(5, 5));
+    CPPUNIT_ASSERT_MESSAGE("Problems when setting property 'Anchor'",
+                           changeProperty(set, u"Anchor"_ustr, cellValue));
 
     CPPUNIT_ASSERT_MESSAGE("Problems when setting property 'HoriOrientPosition'",
                            changeProperty(set, u"HoriOrientPosition"_ustr, Any(sal_Int32(1000))));
@@ -138,19 +127,10 @@ std::array<Any, 4> ScComplexTest::getShapeProps(const Reference<XPropertySet>& s
 {
     std::array<Any, 4> reValue;
 
-    try
-    {
-        reValue[0] = getRealValue(set->getPropertyValue(u"Anchor"_ustr));
-        reValue[1] = set->getPropertyValue(u"HoriOrientPosition"_ustr);
-        reValue[2] = set->getPropertyValue(u"VertOrientPosition"_ustr);
-        reValue[3] <<= oShape->getPosition().X;
-    }
-    catch (UnknownPropertyException)
-    {
-    }
-    catch (WrappedTargetException)
-    {
-    }
+    reValue[0] = getRealValue(set->getPropertyValue(u"Anchor"_ustr));
+    reValue[1] = set->getPropertyValue(u"HoriOrientPosition"_ustr);
+    reValue[2] = set->getPropertyValue(u"VertOrientPosition"_ustr);
+    reValue[3] <<= oShape->getPosition().X;
 
     return reValue;
 }
@@ -166,18 +146,7 @@ Reference<XSpreadsheet> ScComplexTest::getSpreadsheet()
     Reference<XIndexAccess> oIndexAccess(xSpreadsheets, UNO_QUERY);
 
     Reference<XSpreadsheet> oSheet;
-    try
-    {
-        oSheet.set(oIndexAccess->getByIndex(0), UNO_QUERY);
-    }
-    catch (WrappedTargetException)
-    {
-        TOOLS_WARN_EXCEPTION("sc", "");
-    }
-    catch (IndexOutOfBoundsException)
-    {
-        TOOLS_WARN_EXCEPTION("sc", "");
-    }
+    oSheet.set(oIndexAccess->getByIndex(0), UNO_QUERY);
 
     return oSheet;
 }
@@ -187,76 +156,20 @@ Reference<XSpreadsheet> ScComplexTest::getSpreadsheet()
  * Parameters:
  * @param set : The XPropertySet that contains the properties
  * @param pName : The name of the Property that has to be changed
- * @param pValue : The value, the property should be changed too.
+ * @param newValue : The value, the property should be changed too.
  */
 bool ScComplexTest::changeProperty(const Reference<XPropertySet>& set, const OUString& pName,
-                                   const Any& pValue)
+                                   Any newValue)
 {
-    bool worked = true;
+    Any oldValue = set->getPropertyValue(pName);
 
-    try
-    {
-        Any oldValue = set->getPropertyValue(pName);
+    set->setPropertyValue(pName, newValue);
 
-        // for an exception thrown during setting new value
-        // to pass it to checkResult method
-        Any exception;
+    // getting result value
+    Any resValue = set->getPropertyValue(pName);
 
-        try
-        {
-            set->setPropertyValue(pName, pValue);
-        }
-        catch (IllegalArgumentException)
-        {
-            exception = ::cppu::getCaughtException();
-        }
-        catch (PropertyVetoException)
-        {
-            exception = ::cppu::getCaughtException();
-        }
-        catch (WrappedTargetException)
-        {
-            exception = ::cppu::getCaughtException();
-        }
-        catch (UnknownPropertyException)
-        {
-            exception = ::cppu::getCaughtException();
-        }
-        catch (RuntimeException)
-        {
-            exception = ::cppu::getCaughtException();
-        }
-
-        // getting result value
-        Any resValue = set->getPropertyValue(pName);
-
-        // checking results
-        worked = checkResult(set, pName, oldValue, pValue, resValue, exception);
-    }
-    catch (Exception)
-    {
-        TOOLS_WARN_EXCEPTION("sc", "Exception occurred while testing property");
-        worked = false;
-    }
-
-    return worked;
-}
-
-/*
- * This methods checks if a property has changed as expected
- * Parameters:
- * @param set : the given XPropertySet
- * @param propName : the name of the property that has been changed
- * @param oldValue : the value of the property before it has been changed
- * @param newValue : the value the property has been set to
- * @param resValue : the value getPropertyValue returned for the property
- * @param exception : the exception thrown during the change of the property
- */
-bool ScComplexTest::checkResult(const Reference<XPropertySet>& set, const OUString& propName,
-                                Any oldValue, Any newValue, Any& resValue, const Any& exception)
-{
     Reference<XPropertySetInfo> info = set->getPropertySetInfo();
-    Property prop = info->getPropertyByName(propName);
+    Property prop = info->getPropertyByName(pName);
 
     oldValue = getRealValue(oldValue);
     newValue = getRealValue(newValue);
@@ -279,81 +192,38 @@ bool ScComplexTest::checkResult(const Reference<XPropertySet>& set, const OUStri
     }
     else if (readOnly)
     {
-        // check if exception was thrown
-        if (exception.hasValue())
+        // has not changed
+        if (resValue != oldValue)
         {
-            if (exception.has<PropertyVetoException>())
-            {
-                // the change of read only prohibited - OK
-                // Property is ReadOnly and wasn't changed
-                return true;
-            }
-            else if (exception.has<IllegalArgumentException>())
-            {
-                // the change of read only prohibited - OK
-                return true;
-            }
-            else if (exception.has<UnknownPropertyException>())
-            {
-                // the change of read only prohibited - OK
-                // Property is ReadOnly and wasn't changed");
-                return true;
-            }
-            else if (exception.has<RuntimeException>())
-            {
-                // the change of read only prohibited - OK
-                // Property is ReadOnly and wasn't changed
-                return true;
-            }
-            else
-            {
-                throw exception;
-            }
+            //Read only property has changed
+            return false;
         }
         else
         {
-            // if no exception - check that value
-            // has not changed
-            if (resValue != oldValue)
-            {
-                //Read only property has changed
-                return false;
-            }
-            else
-            {
-                // Read only property hasn't changed
-                return true;
-            }
+            // Read only property hasn't changed
+            return true;
         }
     }
     else
     {
-        if (!exception.hasValue())
+        // check that the new value is set
+        if (resValue != newValue)
         {
-            // if no exception thrown
-            // check that the new value is set
-            if (resValue != newValue)
+            // Value hasn't changed as expected
+            if (resValue != oldValue)
             {
-                // Value hasn't changed as expected
-                if (resValue != oldValue)
-                {
-                    // But it has changed.
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                // But it has changed.
+                return true;
             }
             else
             {
-                // Property OK
-                return true;
+                return false;
             }
         }
         else
         {
-            throw exception;
+            // Property OK
+            return true;
         }
     }
 }
