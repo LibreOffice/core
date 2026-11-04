@@ -330,9 +330,7 @@ static void setupDocView(GtvApplicationWindow* window)
                  "tiled-annotations", priv->m_pRenderingArgs->m_bEnableTiledAnnotations,
                  nullptr);
 
-#if GLIB_CHECK_VERSION(2,40,0)
     g_assert_nonnull(window->lokdocview);
-#endif
     g_signal_connect(window->lokdocview, "edit-changed", G_CALLBACK(LOKDocViewSigHandlers::editChanged), nullptr);
     g_signal_connect(window->lokdocview, "command-changed", G_CALLBACK(LOKDocViewSigHandlers::commandChanged), nullptr);
     g_signal_connect(window->lokdocview, "command-result", G_CALLBACK(LOKDocViewSigHandlers::commandResult), nullptr);

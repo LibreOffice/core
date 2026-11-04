@@ -27,14 +27,6 @@
 
 #include "tilebuffer.hxx"
 
-#if !GLIB_CHECK_VERSION(2,32,0)
-#define G_SOURCE_REMOVE FALSE
-#define G_SOURCE_CONTINUE TRUE
-#endif
-#if !GLIB_CHECK_VERSION(2,40,0)
-#define g_info(...) g_log(G_LOG_DOMAIN, G_LOG_LEVEL_INFO, __VA_ARGS__)
-#endif
-
 // Cursor bitmaps from the installation set.
 #define CURSOR_HANDLE_DIR "/../share/libreofficekit/"
 // Number of handles around a graphic selection.

@@ -98,9 +98,6 @@ namespace shell::sessioninstall
 {
     SyncDbusSessionHelper::SyncDbusSessionHelper(Reference<XComponentContext> const&)
     {
-#if !GLIB_CHECK_VERSION(2,36,0)
-        g_type_init ();
-#endif
     }
 
 Sequence< OUString > SAL_CALL SyncDbusSessionHelper::getSupportedServiceNames()

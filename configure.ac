@@ -12721,7 +12721,7 @@ if test "$test_gtk3" = yes -a "x$enable_gtk3" = "xyes" -o "x$enable_gtk3_kde5" =
         add_warning 'Non-system cairo combined with gtk3 is known to cause trouble (eg. broken image in the splashscreen). Use --with-system-cairo unless you know what you are doing.'
     fi
     : ${with_system_cairo:=yes}
-    PKG_CHECK_MODULES(GTK3, gtk+-3.0 >= 3.24 gmodule-no-export-2.0 glib-2.0 >= 2.38 atk >= 2.36 cairo)
+    PKG_CHECK_MODULES(GTK3, gtk+-3.0 >= 3.24 gmodule-no-export-2.0 glib-2.0 >= 2.68 atk >= 2.36 cairo)
     GTK3_CFLAGS=$(printf '%s' "$GTK3_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     GTK3_CFLAGS="$GTK3_CFLAGS -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
     FilterLibs "${GTK3_LIBS}"
@@ -12758,7 +12758,7 @@ if test "$test_gtk4" = yes -a "x$enable_gtk4" = "xyes"; then
         add_warning 'Non-system cairo combined with gtk4 is assumed to cause trouble; proceed at your own risk.'
     fi
     : ${with_system_cairo:=yes}
-    PKG_CHECK_MODULES(GTK4, gtk4 >= 4.10 gmodule-no-export-2.0 glib-2.0 >= 2.38 cairo)
+    PKG_CHECK_MODULES(GTK4, gtk4 >= 4.10 gmodule-no-export-2.0 glib-2.0 >= 2.68 cairo)
     GTK4_CFLAGS=$(printf '%s' "$GTK4_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     GTK4_CFLAGS="$GTK4_CFLAGS -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
     FilterLibs "${GTK4_LIBS}"
@@ -12862,7 +12862,7 @@ if test "$test_dbus" = "yes"; then
 
     # Glib is needed for BluetoothServer
     # Sets also DBUS_GLIB_CFLAGS/DBUS_GLIB_LIBS if successful.
-    PKG_CHECK_MODULES(DBUS_GLIB,[glib-2.0 >= 2.4],
+    PKG_CHECK_MODULES(DBUS_GLIB,[glib-2.0 >= 2.68],
         [
             DBUS_HAVE_GLIB="TRUE"
             AC_DEFINE(DBUS_HAVE_GLIB,1)

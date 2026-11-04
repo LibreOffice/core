@@ -130,9 +130,6 @@ ucb_gio_ContentProvider_get_implementation(
 {
     if (isDisabled())
         return nullptr;
-#if !GLIB_CHECK_VERSION(2,36,0)
-    g_type_init();
-#endif
     return cppu::acquire(new gio::ContentProvider(context));
 }
 
