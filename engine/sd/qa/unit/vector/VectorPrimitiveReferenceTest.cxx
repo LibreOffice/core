@@ -59,6 +59,7 @@
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/ReflectionPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/invertprimitive2d.hxx>
 
 #include <basegfx/color/bcolormodifier.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
@@ -1584,6 +1585,31 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testReflectionInvisible)
 
     assertJsonPath(aJson, "/primitives/0/type", "reflection");
     assertJsonPathMissing(aJson, "/primitives/0/children");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testInvert)
+{
+    // Content painted with XOR travels with its bounds, the area whose colors it changes.
+    basegfx::B2DPolygon aRectangle(
+        basegfx::utils::createPolygonFromRect(basegfx::B2DRange(10.0, 20.0, 110.0, 70.0)));
+
+    Primitive2DContainer aChildren;
+    aChildren.append(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aRectangle),
+                                                     basegfx::BColor(1.0, 1.0, 1.0)));
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new InvertPrimitive2D(std::move(aChildren)));
+
+    auto aJson = writeReference(u"testInvert", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "invert");
+    assertJsonPathDouble(aJson, "/primitives/0/bounds/0", 10.0, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/bounds/1", 20.0, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/bounds/2", 110.0, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/bounds/3", 70.0, 1e-9);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/primitives/0/children").value_or(0));
+    assertJsonPath(aJson, "/primitives/0/children/0/type", "polyPolygonColor");
+    assertJsonPath(aJson, "/primitives/0/children/0/color", "#ffffff");
 }
 
 } // namespace

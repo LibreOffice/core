@@ -41,6 +41,7 @@
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
+#include <drawinglayer/primitive2d/invertprimitive2d.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 #include <drawinglayer/primitive2d/captiontailprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
@@ -1297,6 +1298,18 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
         {
             const auto& rPrimitive = static_cast<const GroupPrimitive2D&>(rBasePrimitive);
             mrWriter.put("type", "group");
+            {
+                auto aChildArray = mrWriter.startArray("children");
+                decomposeAndWrite(rPrimitive.getChildren());
+            }
+        }
+        break;
+
+        case PRIMITIVE2D_ID_INVERTPRIMITIVE2D:
+        {
+            const auto& rPrimitive = static_cast<const InvertPrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "invert");
+            writeBoundsScaled(rPrimitive);
             {
                 auto aChildArray = mrWriter.startArray("children");
                 decomposeAndWrite(rPrimitive.getChildren());

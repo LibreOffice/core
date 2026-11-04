@@ -568,6 +568,7 @@ COOL_JS_LST =\
 	src/canvas/vector/primitive/FillGraphicPrimitive.ts \
 	src/canvas/vector/primitive/FillHatchPrimitive.ts \
 	src/canvas/vector/primitive/GlowPrimitive.ts \
+	src/canvas/vector/primitive/InvertPrimitive.ts \
 	src/canvas/vector/primitive/GradientAttribute.ts \
 	src/canvas/vector/primitive/HatchAttribute.ts \
 	src/canvas/vector/primitive/PatternFillPrimitive.ts \

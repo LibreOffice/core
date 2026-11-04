@@ -383,6 +383,9 @@ namespace cool {
 				case ReflectionPrimitive.type:
 					this._renderReflection(context, primitive as ReflectionPrimitive);
 					return;
+				case InvertPrimitive.type:
+					this._renderInvert(context, primitive as InvertPrimitive);
+					return;
 				case MaskPrimitive.type:
 					this._renderMask(context, primitive as MaskPrimitive);
 					return;
@@ -2143,6 +2146,78 @@ namespace cool {
 				range[3] - range[1],
 			);
 			content.restore();
+		}
+
+		private _renderInvert(
+			context: CanvasRenderingContext2D,
+			primitive: InvertPrimitive,
+		): void {
+			// Without a scratch canvas, or without read access to the target,
+			// the children are drawn plainly, as the engine does on a target
+			// that has no XOR.
+			const plain = this._childrenPainter(context, primitive);
+			this._scratch.withEffectSlots(plain, (slot) => {
+				const region = VectorScratchCanvases.effectRegion(
+					context,
+					primitive.bounds,
+					0,
+				);
+				if (!region) return;
+				const content = this._renderToScratch(
+					context,
+					slot,
+					primitive.children,
+					region,
+				);
+				if (!content) {
+					plain();
+					return;
+				}
+
+				let target: ImageData;
+				try {
+					target = context.getImageData(
+						region.x,
+						region.y,
+						region.width,
+						region.height,
+					);
+				} catch {
+					// A target that holds an image from another origin cannot
+					// be read.
+					plain();
+					return;
+				}
+
+				// The scratch canvas takes the XORed pixels and goes onto the
+				// target like any other effect, so a clip around it still holds.
+				const image = content.getImageData(0, 0, region.width, region.height);
+				VectorPrimitiveRenderer._xorOnto(image.data, target.data);
+				content.putImageData(image, 0, 0);
+				this._scratch.drawOnto(context, content, region);
+			});
+		}
+
+		// Turn the content into what XOR paints over the target: the target's
+		// red, green and blue XORed with the content's, with the target's
+		// alpha. A pixel is changed wherever both have any alpha, as in the
+		// engine, and left clear everywhere else. The canvas pixels are not
+		// premultiplied, so the colors XOR as they are.
+		private static _xorOnto(
+			content: Uint8ClampedArray,
+			target: Uint8ClampedArray,
+		): void {
+			for (let index = 0; index < content.length; index += 4) {
+				const alpha = target[index + 3];
+				if (content[index + 3] === 0 || alpha === 0) {
+					content[index + 3] = 0;
+					continue;
+				}
+				content[index] ^= target[index];
+				content[index + 1] ^= target[index + 1];
+				content[index + 2] ^= target[index + 2];
+				content[index + 3] = alpha;
+			}
 		}
 
 		private _renderTransparence(

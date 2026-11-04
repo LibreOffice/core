@@ -105,6 +105,13 @@ describe('VectorPrimitiveRenderer effects', function () {
 			assert.strictEqual(context.countOf('fill'), 0);
 		});
 
+		it('draws the children of an invert plainly', function () {
+			const context = render({ type: 'invert', children: [child] });
+			const fill = context.findCall('fill');
+			assert.ok(fill, 'the children are still drawn');
+			assert.strictEqual(fill.properties.fillStyle, '#00ff00');
+		});
+
 		it('leaves out a reflection rather than repainting the object', function () {
 			const context = render(reflection);
 			assert.strictEqual(context.countOf('fill'), 0);
@@ -524,6 +531,89 @@ describe('VectorPrimitiveRenderer effects', function () {
 			const context = render({ type: 'reflection' });
 			assert.strictEqual(context.countOf('drawImage'), 0);
 			assert.strictEqual(ScratchCanvasStub.created.length, 0);
+		});
+
+		/// Draw an invert over a target whose every pixel reads back as the
+		/// given one, with content whose every pixel reads back as the other.
+		function renderInvert(
+			contentPixel: number[],
+			targetPixel: number[],
+		): CanvasRecorder {
+			ScratchCanvasStub.imagePixels.push(contentPixel);
+			const context = new CanvasRecorder(200, 200);
+			(context as any).globalAlpha = 1;
+			context.imagePixel = targetPixel;
+			const invert: cool.InvertPrimitive = {
+				type: 'invert',
+				bounds: [10, 10, 90, 90],
+				children: [child],
+			};
+			new cool.VectorPrimitiveRenderer().renderPrimitive(
+				context as any,
+				invert,
+			);
+			return context;
+		}
+
+		/// The first pixel the invert puts on its scratch canvas.
+		function invertedPixel(): number[] {
+			const put = ScratchCanvasStub.recorder(0).findCall('putImageData');
+			assert.ok(put, 'the XORed pixels are written');
+			return Array.from(put.args[0].data.slice(0, 4));
+		}
+
+		it('XORs the colors under an invert with its own', function () {
+			const context = renderInvert([255, 0, 0, 255], [255, 255, 255, 255]);
+			assert.deepStrictEqual(invertedPixel(), [0, 255, 255, 255]);
+			assert.ok(
+				context.findCall('drawImage'),
+				'the result lands on the target',
+			);
+		});
+
+		it('keeps the alpha of what is under an invert', function () {
+			renderInvert([255, 0, 0, 255], [255, 255, 255, 128]);
+			assert.deepStrictEqual(invertedPixel(), [0, 255, 255, 128]);
+		});
+
+		it('leaves alone what an invert does not cover', function () {
+			renderInvert([255, 0, 0, 0], [255, 255, 255, 255]);
+			assert.strictEqual(invertedPixel()[3], 0);
+		});
+
+		it('leaves clear what is clear under an invert', function () {
+			renderInvert([255, 0, 0, 255], [255, 255, 255, 0]);
+			assert.strictEqual(invertedPixel()[3], 0);
+		});
+
+		it('draws the children of an invert plainly when the target cannot be read', function () {
+			const context = new CanvasRecorder(200, 200);
+			(context as any).globalAlpha = 1;
+			(context as any).getImageData = () => {
+				throw new Error('The canvas has been tainted');
+			};
+			new cool.VectorPrimitiveRenderer().renderPrimitive(context as any, {
+				type: 'invert',
+				children: [child],
+			});
+
+			const fill = context.findCall('fill');
+			assert.ok(fill, 'the children are drawn on the target');
+			assert.strictEqual(fill.properties.fillStyle, '#00ff00');
+			assert.strictEqual(context.countOf('drawImage'), 0);
+		});
+
+		it('draws the invert the engine writes over the area it covers', function () {
+			const primitive =
+				loadVectorRenderingReference('testInvert').primitives[0];
+			render(primitive);
+
+			// The bounds are 100 by 50, with a pixel more on each side for
+			// the antialiased edge.
+			const content = ScratchCanvasStub.recorder(0);
+			assert.strictEqual(content.canvas.width, 102);
+			assert.strictEqual(content.canvas.height, 52);
+			assert.strictEqual(content.countOf('putImageData'), 1);
 		});
 
 		it('draws nothing of an effect whose bounds are off the target', function () {

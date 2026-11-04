@@ -146,6 +146,7 @@
 /// <reference path="../src/canvas/vector/primitive/PolyPolygonGradientPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/PolyPolygonGraphicPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/PolyPolygonHatchPrimitive.ts" />
+/// <reference path="../src/canvas/vector/primitive/InvertPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/ReflectionPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/ShadowPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/SoftEdgePrimitive.ts" />
