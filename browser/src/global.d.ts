@@ -557,6 +557,7 @@ interface Window {
 	ThisIsTheMacOSApp: boolean;
 	ThisIsTheQtApp: boolean;
 	ThisIsTheWindowsApp: boolean;
+	codaRemotePage?: object;
 	wopiSrc: string;
 	zoteroEnabled: boolean;
 	accessToken: string;

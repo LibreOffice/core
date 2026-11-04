@@ -92,13 +92,13 @@ class Socket {
 
 		const hasWorkerSupport = !!window.Worker;
 		const isMobileApp = window.ThisIsAMobileApp && !window.mode.isCODesktop();
-		if (hasWorkerSupport && !isMobileApp) {
+		const workerUrl =
+			hasWorkerSupport && !isMobileApp ? this.taskWorkerUrl() : '';
+		if (workerUrl) {
 			window.app.console.info('Creating TaskWorkers');
 			for (let i = 0; i < 4; ++i) {
 				try {
-					this.workers.push(
-						new Worker(app.LOUtil.getURL('/src/app/TaskWorker.js')),
-					);
+					this.workers.push(new Worker(workerUrl));
 					this.workers[i].addEventListener('message', (e: any) =>
 						this.onWorkerMessage(e),
 					);
@@ -111,6 +111,22 @@ class Socket {
 				}
 			}
 		}
+	}
+
+	// A worker must load from the frame's origin. On a remote page, only the app's
+	// TaskWorker.js is used, as coolwsd's may be another version than the page.
+	private taskWorkerUrl(): string {
+		const url = app.LOUtil.getURL('/src/app/TaskWorker.js');
+
+		// Windows serves the app's files on the frame's origin, under "/coollocal/bundled/".
+		// Qt uses "coollocal://", so this would be false for Qt.
+		const isServedHere = url.startsWith(location.origin + '/');
+		if (window.codaRemotePage && !isServedHere) {
+			window.app.console.info('No TaskWorkers on this remote page');
+			return '';
+		}
+
+		return url;
 	}
 
 	public getTaskWorkers(): Worker[] {
