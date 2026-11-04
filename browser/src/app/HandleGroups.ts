@@ -244,9 +244,13 @@ abstract class HandleGroup {
 class FramingHandles extends HandleGroup {
 	public readonly name: string = 'framing';
 
-	/// The eight make way for the points to tie a connector to while those are shown.
+	/// The eight make way for the points to tie a connector to, and for the crop marks, while
+	/// either is shown.
 	public isShown(): boolean {
-		return !this.selection.tiePointsAreShown();
+		return (
+			!this.selection.tiePointsAreShown() &&
+			!CropHandles.areShownFor(this.selection)
+		);
 	}
 
 	public handles(): SelectionHandle[] {
@@ -342,8 +346,10 @@ class CropHandles extends HandleGroup {
 	public readonly name: string = 'crop';
 
 	/// The picture the selection is, or nothing where it is not one picture.
-	private thePicture(): cool.SlideObject | undefined {
-		const objects = this.selection.selectedObjects();
+	private static thePictureOf(
+		selection: SelectionSection,
+	): cool.SlideObject | undefined {
+		const objects = selection.selectedObjects();
 		if (objects.length !== 1) return undefined;
 
 		const object = RenderGeometrySection.objectOf(objects[0]);
@@ -351,12 +357,16 @@ class CropHandles extends HandleGroup {
 	}
 
 	/// Whether the marks are shown at all: the crop switch is on and one picture is selected.
-	private shown(): boolean {
+	public static areShownFor(selection: SelectionSection): boolean {
 		return (
 			GraphicSelection.cropping &&
-			this.thePicture() !== undefined &&
-			ObjectHandles.canBeResized(this.selection.selectedObjects())
+			CropHandles.thePictureOf(selection) !== undefined &&
+			ObjectHandles.canBeResized(selection.selectedObjects())
 		);
+	}
+
+	private shown(): boolean {
+		return CropHandles.areShownFor(this.selection);
 	}
 
 	public handles(): SelectionHandle[] {
@@ -551,7 +561,7 @@ class CropHandles extends HandleGroup {
 	public paint(section: SelectionSection, _shown: SelectionHandle[]): void {
 		if (!this.shown()) return;
 
-		const picture = this.thePicture();
+		const picture = CropHandles.thePictureOf(this.selection);
 		const square = section.squareNow();
 		const data = RenderGeometrySection.currentPart();
 		if (!picture || !square || !data) return;
@@ -795,9 +805,13 @@ class CropHandles extends HandleGroup {
 class TurningHandle extends HandleGroup {
 	public readonly name: string = 'turning';
 
-	/// The handle makes way for the points to tie a connector to while those are shown.
+	/// The handle makes way for the points to tie a connector to, and for the crop marks, while
+	/// either is shown.
 	public isShown(): boolean {
-		return !this.selection.tiePointsAreShown();
+		return (
+			!this.selection.tiePointsAreShown() &&
+			!CropHandles.areShownFor(this.selection)
+		);
 	}
 
 	/// How far above the selection it sits, in core pixels.

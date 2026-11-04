@@ -126,6 +126,9 @@ class GraphicSelection {
 			state: this.cropping ? 'true' : 'false',
 		});
 
+		// The keyboard leaves the handles, since the ones it walks are not the same any more.
+		this.travel()?.leave();
+
 		this.selectionSection?.refresh();
 		app.sectionContainer?.requestReDraw();
 	}
