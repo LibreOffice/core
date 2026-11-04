@@ -19,14 +19,7 @@
 
 $(eval $(call gb_Library_Library,canvasfactory))
 
-$(eval $(call gb_Library_set_include,canvasfactory,\
-    $$(INCLUDE) \
-    -I$(SRCDIR)/canvas/inc \
-))
-
 $(eval $(call gb_Library_set_componentfile,canvasfactory,canvas/source/factory/canvasfactory,services))
-
-$(eval $(call gb_Library_use_external,canvasfactory,boost_headers))
 
 $(eval $(call gb_Library_use_custom_headers,canvasfactory,\
        officecfg/registry \
