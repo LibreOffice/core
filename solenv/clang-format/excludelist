@@ -577,8 +577,6 @@ canvas/source/vcl/impltools.hxx
 canvas/source/vcl/outdevprovider.hxx
 canvas/source/vcl/repainttarget.hxx
 canvas/source/vcl/sprite.hxx
-canvas/source/vcl/spritecanvas.cxx
-canvas/source/vcl/spritecanvas.hxx
 canvas/source/vcl/spritecanvashelper.cxx
 canvas/source/vcl/spritecanvashelper.hxx
 canvas/source/vcl/spritedevicehelper.cxx
