@@ -1002,9 +1002,16 @@ uno::Sequence<uno::Any> SwMailMergeConfigItem::GetSelection() const
     m_pImpl->m_xResultSet->last();
     sal_uInt32 nResultSetSize = m_pImpl->m_xResultSet->getRow()+1;
     std::vector<uno::Any> vResult;
+    sal_uInt32 nIncludedRecord = 0;
     for(sal_uInt32 nIdx=1; nIdx<nResultSetSize;++nIdx)
-        if( !IsRecordExcluded(nIdx) && IsRecordIncluded(nIdx) )
-            vResult.push_back(uno::Any(sal_uInt32(nIdx)));
+    {
+        if (!IsRecordExcluded(nIdx))
+        {
+            ++nIncludedRecord;
+            if (IsRecordIncluded(nIncludedRecord))
+                vResult.push_back(uno::Any(nIdx));
+        }
+    }
     return comphelper::containerToSequence(vResult);
 }
 
