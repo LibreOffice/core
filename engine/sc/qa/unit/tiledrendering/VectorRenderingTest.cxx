@@ -1282,6 +1282,56 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorBlockWithDroppedContentKeep
     CPPUNIT_ASSERT(cellTextAt(aWhole, 0, 0));
 }
 
+namespace
+{
+/// The shifts of rows or columns that a push names, each as "axis at by first,last".
+std::vector<std::string> shiftsOf(const boost::property_tree::ptree& rResponse)
+{
+    std::vector<std::string> aShifts;
+    if (auto oShifts = rResponse.get_child_optional("shifts"))
+    {
+        for (const auto& rShift : *oShifts)
+        {
+            std::string aAcross;
+            for (const auto& rIndex : rShift.second.get_child("across"))
+                aAcross += (aAcross.empty() ? "" : ",") + rIndex.second.get_value<std::string>();
+            aShifts.push_back(rShift.second.get<std::string>("axis") + " "
+                              + rShift.second.get<std::string>("at") + " "
+                              + rShift.second.get<std::string>("by") + " " + aAcross);
+        }
+    }
+    return aShifts;
+}
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorInsertedAndRemovedRowsArePushedAsShifts)
+{
+    // Rows inserted or removed move the cells after them. The push says so once, so a client
+    // shows a stale block moved the same way until the block is built again.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    const ScDocument& rDocument = pDocShell->GetDocument();
+    const std::string aAllColumns = "0," + std::to_string(rDocument.MaxCol());
+    setCellString(*pDocShell, 0, 0, u"Text"_ustr);
+    requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+
+    CPPUNIT_ASSERT(pDocShell->GetDocFunc().InsertCells(
+        ScRange(0, 10, 0, rDocument.MaxCol(), 12, 0), nullptr, INS_INSROWS_BEFORE, false, true));
+    std::vector<std::string> aShifts = shiftsOf(pushCellPositions(pModelObj));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aShifts.size());
+    CPPUNIT_ASSERT_EQUAL("rows 10 3 " + aAllColumns, aShifts[0]);
+
+    // Removed rows lie before the first row that moved, by the distance it moved.
+    CPPUNIT_ASSERT(pDocShell->GetDocFunc().DeleteCells(ScRange(0, 5, 0, rDocument.MaxCol(), 6, 0),
+                                                       nullptr, DelCellCmd::Rows, true));
+    aShifts = shiftsOf(pushCellPositions(pModelObj));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aShifts.size());
+    CPPUNIT_ASSERT_EQUAL("rows 7 -2 " + aAllColumns, aShifts[0]);
+
+    CPPUNIT_ASSERT(shiftsOf(pushCellPositions(pModelObj)).empty());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

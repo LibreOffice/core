@@ -388,11 +388,40 @@ namespace cool {
 		};
 	}
 
-	/// The block with its parts placed at the sheet zoom and its joined layers left empty.
+	/// Where a row or column of content from before the given shifts is now. A removed one lies
+	/// on the first that moved.
+	export interface CalcShiftedIndex {
+		index: number;
+		removed: boolean;
+	}
+
+	/// Maps the rows, or the columns, of content from before the shifts to where their cells are
+	/// now, the shifts taken in their order.
+	export function calcIndexShift(
+		shifts: CalcShift[],
+		axis: 'rows' | 'columns',
+	): (index: number) => CalcShiftedIndex {
+		const applied = shifts.filter((shift) => shift.axis === axis);
+		return (index: number): CalcShiftedIndex => {
+			let removed = false;
+			for (const shift of applied) {
+				if (shift.by < 0 && index >= shift.at + shift.by && index < shift.at) {
+					index = shift.at + shift.by;
+					removed = true;
+				} else if (index >= shift.at) index += shift.by;
+			}
+			return { index, removed };
+		};
+	}
+
+	/// The block with its parts placed at the sheet zoom and its joined layers left empty. The
+	/// shifts are those the block predates: its content is placed where its cells moved, and the
+	/// rows that were removed are left out.
 	export function calcPlacedBlock(
 		block: CalcBlockEntry<CalcCellRect>,
 		geometry: SheetGeometry,
 		pixel: number,
+		shifts: CalcShift[] = [],
 	): CalcBlockEntry | undefined {
 		const columns = geometry.getColumnsGeometry();
 		const rows = geometry.getRowsGeometry();
@@ -408,14 +437,30 @@ namespace cool {
 			pixelRow.startpos * pixel,
 		);
 
-		const frame: CalcBlockFrame = {
-			mapColumn: calcCellMap(columns, pixel),
-			mapRow: calcCellMap(rows, pixel),
-			printColumn: calcCellStart(columns),
-			printRow: calcCellStart(rows),
-			tileOrigin,
-			pixel,
-		};
+		const mapColumn = calcCellMap(columns, pixel);
+		const mapRow = calcCellMap(rows, pixel);
+		const printColumn = calcCellStart(columns);
+		const printRow = calcCellStart(rows);
+		const shiftColumn = calcIndexShift(shifts, 'columns');
+		const shiftRow = calcIndexShift(shifts, 'rows');
+		const frame: CalcBlockFrame = shifts.length
+			? {
+					mapColumn: (cell, offset) =>
+						mapColumn(shiftColumn(cell).index, offset),
+					mapRow: (cell, offset) => mapRow(shiftRow(cell).index, offset),
+					printColumn: (cell) => printColumn(shiftColumn(cell).index),
+					printRow: (cell) => printRow(shiftRow(cell).index),
+					tileOrigin,
+					pixel,
+				}
+			: {
+					mapColumn,
+					mapRow,
+					printColumn,
+					printRow,
+					tileOrigin,
+					pixel,
+				};
 		const placer = new Placer(frame);
 		const placePart = (part: CalcBlockPart<CalcCellRect>): CalcBlockPart => ({
 			version: part.version,
@@ -426,7 +471,9 @@ namespace cool {
 					: undefined,
 			},
 		});
-		const rowsInOrder = Array.from(block.rows.keys()).sort((a, b) => a - b);
+		const rowsInOrder = Array.from(block.rows.keys())
+			.filter((row) => !shiftRow(row).removed)
+			.sort((a, b) => a - b);
 		const content = block.content;
 		return {
 			...block,

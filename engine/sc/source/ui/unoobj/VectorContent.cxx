@@ -803,7 +803,8 @@ void VectorContent::writeVectorPrimitives(tools::JsonWriter& rWriter, SheetState
                                        [](const auto& rEntry)
                                        { return rEntry.second.mbDirty && !rEntry.second.mbStaleSent; });
     if (bPush && !rState.maVersions.isChangedSince(nSinceVersion)
-        && aTextEdits == rState.maLastTextEdits && !rState.mbTextEditChanged && !bNewStale)
+        && aTextEdits == rState.maLastTextEdits && !rState.mbTextEditChanged && !bNewStale
+        && rState.maShifts.empty())
         return;
 
     svx::vector::writeAnswerHeader(rWriter, bDelta, rState.mnMode, OString::number(nTab),
@@ -878,6 +879,23 @@ void VectorContent::writeVectorPrimitives(tools::JsonWriter& rWriter, SheetState
             if (rBlock.mbDirty)
                 rBlock.mbStaleSent = true;
         }
+    }
+
+    // A push tells the rows and columns moved since the last one, once.
+    if (bPush && !rState.maShifts.empty())
+    {
+        auto aShifts = rWriter.startArray("shifts");
+        for (const Shift& rShift : rState.maShifts)
+        {
+            auto aShift = rWriter.startStruct();
+            rWriter.put("axis", rShift.mbRows ? "rows" : "columns");
+            rWriter.put("at", sal_Int32(rShift.mnAt));
+            rWriter.put("by", sal_Int32(rShift.mnBy));
+            auto aAcross = rWriter.startArray("across");
+            rWriter.putSimpleValue(sal_Int32(rShift.mnAcrossFirst));
+            rWriter.putSimpleValue(sal_Int32(rShift.mnAcrossLast));
+        }
+        rState.maShifts.clear();
     }
 
     if (isNew(rState.maObjectBlocks.mnVersion))
@@ -1751,6 +1769,28 @@ void VectorContent::documentHint(const SfxHint& rHint)
             // A change is done, and the sheet listeners marked the cells it gave new results.
             notifyChangedSheets();
             break;
+        case SfxHintId::ScUpdateRef:
+        {
+            // Rows or columns inserted or removed move the cells after them. The paint of the
+            // change marks the blocks; the next push tells the clients how the cells moved.
+            const ScUpdateRefHint& rUpdate = static_cast<const ScUpdateRefHint&>(rHint);
+            if (rUpdate.GetMode() != URM_INSDEL || rUpdate.GetDz() != 0
+                || (rUpdate.GetDx() == 0 && rUpdate.GetDy() == 0))
+                break;
+            const ScRange& rRange = rUpdate.GetRange();
+            const bool bRows = rUpdate.GetDy() != 0;
+            const Shift aShift{ bRows,
+                                bRows ? SCCOLROW(rRange.aStart.Row()) : SCCOLROW(rRange.aStart.Col()),
+                                bRows ? SCCOLROW(rUpdate.GetDy()) : SCCOLROW(rUpdate.GetDx()),
+                                bRows ? SCCOLROW(rRange.aStart.Col()) : SCCOLROW(rRange.aStart.Row()),
+                                bRows ? SCCOLROW(rRange.aEnd.Col()) : SCCOLROW(rRange.aEnd.Row()) };
+            for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
+            {
+                for (SheetState* pState : statesOf(nTab))
+                    pState->maShifts.push_back(aShift);
+            }
+            break;
+        }
         case SfxHintId::ScTables:
             // Hiding a sheet renumbers nothing. The other sheet changes renumber the part ids,
             // so all clients start over in a new epoch.

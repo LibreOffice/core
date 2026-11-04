@@ -168,6 +168,19 @@ private:
         std::pair<size_t, size_t> maBuiltRows{ 0, 0 };
     };
 
+    /// Rows or columns inserted or removed, which moved the cells after them.
+    struct Shift
+    {
+        bool mbRows;
+        /// The first row or column moved, and how far. Removed ones lie before it, by a negative
+        /// distance.
+        SCCOLROW mnAt;
+        SCCOLROW mnBy;
+        /// The columns, for rows, or the rows, for columns, across which the cells moved.
+        SCCOLROW mnAcrossFirst;
+        SCCOLROW mnAcrossLast;
+    };
+
     /// A drawing object as it was last written.
     struct ObjectState
     {
@@ -210,6 +223,9 @@ private:
         /// A text edit changed since the last push. The push goes out even when the edits read
         /// the same, because a client shows what it typed until the engine answers.
         bool mbTextEditChanged = false;
+        /// The rows and columns moved since the last push, which tells the clients, so they show
+        /// a stale block moved the same way until it is built again.
+        std::vector<Shift> maShifts;
     };
 
     /// A block asked for, with the version the client holds when it holds one.

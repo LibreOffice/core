@@ -420,6 +420,50 @@ describe('CalcVectorManager requests', function () {
 		nodeassert.deepStrictEqual(blocksAsked().slice(2), ['1:0', '3:0', '2:0:1']);
 	});
 
+	it('keeps the shift of a push for the stale blocks older than it', function () {
+		// Hold blocks 0:0 and 2:0. A push after rows were inserted names 2:0 stale.
+		for (const blockRow of [0, 2]) {
+			manager.requestBlocks(0, 0, [[blockRow, 0]]);
+			const ids = requestIds();
+			manager.handleVectorPrimitives(
+				answer(0, ids[ids.length - 1], [wholeBlock(blockRow, 0)]),
+			);
+		}
+		const push = answer(0, 0, []);
+		push.type = 'vectorprimitivesdelta';
+		push.version = 2;
+		push.from = 1;
+		push.stale = ['2:0'];
+		push.shifts = [{ axis: 'rows', at: 100, by: 3, across: [0, 16383] }];
+		delete (push as any).requestId;
+		manager.handleVectorPrimitives(push);
+
+		// The stale block predates the shift, the current one does not.
+		const sheet = manager.getSheet(0, 0)!;
+		nodeassert.strictEqual(
+			manager.blockShifts(sheet, sheet.blocks.get('2:0')!).length,
+			1,
+		);
+		nodeassert.strictEqual(
+			manager.blockShifts(sheet, sheet.blocks.get('0:0')!).length,
+			0,
+		);
+
+		// Built again, the block no longer predates the shift, which is then forgotten.
+		manager.requestBlocks(0, 0, [[2, 0]]);
+		const ids = requestIds();
+		const built = answer(0, ids[ids.length - 1], [
+			{ ...wholeBlock(2, 0), version: 3 },
+		]);
+		built.version = 3;
+		manager.handleVectorPrimitives(built);
+		nodeassert.strictEqual(
+			manager.blockShifts(sheet, sheet.blocks.get('2:0')!).length,
+			0,
+		);
+		nodeassert.strictEqual(sheet.shifts.length, 0);
+	});
+
 	it('asks for a few missing blocks in one request when the view spans many blocks', function () {
 		// At a low zoom the view spans 4 by 8 blocks, so missing blocks go four to a request.
 		manager.requestBlocks(

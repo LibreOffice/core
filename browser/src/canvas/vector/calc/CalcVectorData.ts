@@ -192,6 +192,19 @@ namespace cool {
 		/// The held blocks that may have changed and were not built again, by key. The engine
 		/// builds such a block when a client asks for it.
 		stale?: string[];
+		/// The rows and columns moved since the last push, in order.
+		shifts?: CalcShift[];
+	}
+
+	/// Rows or columns inserted or removed, which moved the cells after them.
+	export interface CalcShift {
+		axis: 'rows' | 'columns';
+		/// The first row or column moved, and how far. Removed ones lie before it, by a negative
+		/// distance.
+		at: number;
+		by: number;
+		/// The columns, for rows, or the rows, for columns, across which the cells moved.
+		across: [number, number];
 	}
 
 	/// What the client holds of one sheet in one mode.
@@ -208,6 +221,9 @@ namespace cool {
 		blocks: Map<string, CalcBlockEntry<CalcCellRect>>;
 		/// Blocks held or asked for that may be out of date.
 		staleBlocks: Set<string>;
+		/// The shifts the pushes told, each with the version of its push. A block older than a
+		/// shift is placed as its cells moved, until it is built again.
+		shifts: Array<CalcShift & { version: number }>;
 		/// The objects held, from the blocks held.
 		objects: Map<number, CalcDrawingEntry>;
 		drawOrder: number[];

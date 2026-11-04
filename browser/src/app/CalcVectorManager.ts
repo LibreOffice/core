@@ -165,6 +165,8 @@ class CalcVectorManager {
 			source: cool.CalcBlockEntry<cool.CalcCellRect>;
 			count: number;
 			pixel: number;
+			/// The versions of the shifts the block was placed by.
+			shifted: string;
 			/// The block placed whole, and as shown without the cells that views edit.
 			whole: cool.CalcBlockEntry;
 			edited: string;
@@ -516,17 +518,20 @@ class CalcVectorManager {
 		const edited = editedCells
 			.map((cell) => String(cell.column) + ':' + String(cell.row))
 			.join(',');
+		const shifts = this.blockShifts(sheet, block);
+		const shifted = shifts.map((shift) => String(shift.version)).join(',');
 		const held = this._placedBlocks.get(key);
 		const placedAsHeld =
 			held &&
 			held.source === block &&
 			held.count === this._geometryCount &&
-			held.pixel === pixel;
+			held.pixel === pixel &&
+			held.shifted === shifted;
 		if (held && placedAsHeld && held.edited === edited) return held.placed;
 		const whole =
 			held && placedAsHeld
 				? held.whole
-				: cool.calcPlacedBlock(block, geometry, pixel);
+				: cool.calcPlacedBlock(block, geometry, pixel, shifts);
 		if (!whole) return undefined;
 		// A new block is drawn again, text rasters too, so only a block with an edit changes.
 		const placed = editedCells.length
@@ -536,11 +541,29 @@ class CalcVectorManager {
 			source: block,
 			count: this._geometryCount,
 			pixel,
+			shifted,
 			whole,
 			edited,
 			placed,
 		});
 		return placed;
+	}
+
+	/// The shifts of the sheet that a held block predates and that moved all of its cells, so
+	/// the block is placed as they moved until it is built again. A shift across a part of the
+	/// block leaves it in place.
+	blockShifts(
+		sheet: cool.CalcSheetData,
+		block: cool.CalcBlockEntry<cool.CalcCellRect>,
+	): Array<cool.CalcShift & { version: number }> {
+		return sheet.shifts.filter((shift) => {
+			if (shift.version <= block.current) return false;
+			const [first, last] =
+				shift.axis === 'rows'
+					? [block.startColumn, block.endColumn]
+					: [block.startRow, block.endRow];
+			return shift.across[0] <= first && last <= shift.across[1];
+		});
 	}
 
 	/// The cells of the block that views edit, whose edits are drawn over them.
@@ -604,6 +627,7 @@ class CalcVectorManager {
 				sheet: undefined,
 				blocks: new Map(),
 				staleBlocks: new Set(),
+				shifts: [],
 				objects: new Map(),
 				drawOrder: [],
 				objectBlocks: [],
@@ -1062,6 +1086,11 @@ class CalcVectorManager {
 		const answered: number[] = [];
 		// The version of the sheet that the answer brings what is held up to.
 		const current = values.version ?? 0;
+		// A push tells how rows and columns moved, which places a block older than the push as its
+		// cells moved.
+		if (pushed)
+			for (const shift of values.shifts ?? [])
+				sheet.shifts.push({ ...shift, version: current });
 		// The blocks whose update builds on parts that are not held.
 		const behind = new Set<string>();
 		for (const entry of values.objects ?? []) {
@@ -1122,7 +1151,8 @@ class CalcVectorManager {
 		const stale = new Set(values.stale ?? []);
 		for (const [key, block] of sheet.blocks) {
 			if (behind.has(key)) continue;
-			if (stale.has(key)) {
+			// A block still stale from an earlier push is not current up to this one either.
+			if (stale.has(key) || sheet.staleBlocks.has(key)) {
 				sheet.staleBlocks.add(key);
 				continue;
 			}
@@ -1196,6 +1226,13 @@ class CalcVectorManager {
 		if (!this._visualsReported && sheet.blocks.size > 0) {
 			this._visualsReported = true;
 			RenderManager.markVisualsReady();
+		}
+		// A shift that no held block predates any more has been built into every block.
+		if (sheet.shifts.length) {
+			let oldest = Infinity;
+			for (const block of sheet.blocks.values())
+				oldest = Math.min(oldest, block.current);
+			sheet.shifts = sheet.shifts.filter((shift) => shift.version > oldest);
 		}
 		this._fireChanged(answered);
 

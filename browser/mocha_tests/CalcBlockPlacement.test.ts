@@ -302,7 +302,10 @@ describe('calcPlacedBlock', function () {
 		getRowsGeometry: () => dimension(250, 16),
 	} as unknown as cool.SheetGeometry;
 
-	function placedInk(ink: cool.CalcCellRect): cool.CalcVectorRect | undefined {
+	function placedInk(
+		ink: cool.CalcCellRect,
+		shifts: cool.CalcShift[] = [],
+	): cool.CalcVectorRect | undefined {
 		const part = {
 			version: 1,
 			content: {
@@ -328,7 +331,8 @@ describe('calcPlacedBlock', function () {
 				layers: {},
 			},
 		};
-		return cool.calcPlacedBlock(block, geometry, 15)?.rows.get(8)?.content.ink;
+		return cool.calcPlacedBlock(block, geometry, 15, shifts)?.rows.get(8)
+			?.content.ink;
 	}
 
 	it('keeps the ink of text over several columns as wide as in print twips', function () {
@@ -337,6 +341,51 @@ describe('calcPlacedBlock', function () {
 		nodeassert.deepStrictEqual(
 			placedInk({ x: [1, 0], y: [8, 0], right: [5, 500], bottom: [8, 250] }),
 			{ x: 0, y: 0, width: 4500, height: 250 },
+		);
+	});
+
+	it('places the content of a block older than inserted rows where its cells moved', function () {
+		// Two rows inserted at row 3 moved row 8 to row 10, two rows of 240 tile twips down.
+		nodeassert.deepStrictEqual(
+			placedInk({ x: [1, 0], y: [8, 0], right: [5, 500], bottom: [8, 250] }, [
+				{ axis: 'rows', at: 3, by: 2, across: [0, 15] },
+			]),
+			{ x: 0, y: 480, width: 4500, height: 250 },
+		);
+	});
+
+	it('leaves out the rows of a block that were removed', function () {
+		// Rows 8 and 9 were removed: row 10 moved to row 8.
+		nodeassert.strictEqual(
+			placedInk({ x: [1, 0], y: [8, 0], right: [5, 500], bottom: [8, 250] }, [
+				{ axis: 'rows', at: 10, by: -2, across: [0, 15] },
+			]),
+			undefined,
+		);
+	});
+});
+
+describe('calcIndexShift', function () {
+	it('moves the rows after an insert and collapses the removed ones', function () {
+		const shift = cool.calcIndexShift(
+			[
+				{ axis: 'rows', at: 10, by: 3, across: [0, 15] },
+				{ axis: 'rows', at: 5, by: -2, across: [0, 15] },
+			],
+			'rows',
+		);
+		// Before both shifts a row stays. Row 12 moved to 15 with the insert and to 13 with the
+		// removal of rows 3 and 4; row 4 was removed and lies on row 3.
+		nodeassert.deepStrictEqual(shift(2), { index: 2, removed: false });
+		nodeassert.deepStrictEqual(shift(12), { index: 13, removed: false });
+		nodeassert.deepStrictEqual(shift(4), { index: 3, removed: true });
+		// A shift of the columns leaves the rows alone.
+		nodeassert.deepStrictEqual(
+			cool.calcIndexShift(
+				[{ axis: 'columns', at: 0, by: 1, across: [0, 9] }],
+				'rows',
+			)(7),
+			{ index: 7, removed: false },
 		);
 	});
 });
@@ -492,16 +541,45 @@ describe('calcPlacedFields', function () {
 			'type',
 			'vector',
 		],
+		'the values of a form control model': [
+			'background',
+			'bold',
+			'columns',
+			'defaultButton',
+			'disabled',
+			'dropdown',
+			'font',
+			'items',
+			'kind',
+			'label',
+			'max',
+			'min',
+			'multiLine',
+			'selected',
+			'spin',
+			'state',
+			'textColor',
+			'vertical',
+			'visible',
+		],
+		// The transparency of a reflection runs between fractions of its height.
+		'the fractions of a reflection': [
+			'endPosition',
+			'endTransparency',
+			'startPosition',
+			'startTransparency',
+		],
 		// The compact origin of a text becomes its matrix before the placer sees it.
 		'the compact origin of a text': ['x', 'y'],
-		// Positions that cell content does not produce: SVG gradients and point arrays. The
-		// placer has to learn them before the cells use them.
+		// Positions that cell content does not produce: SVG gradients, point arrays and the
+		// range of a reflection. The placer has to learn them before the cells use them.
 		'not in cell content': [
 			'centerX',
 			'centerY',
 			'focalX',
 			'focalY',
 			'points',
+			'range',
 			'scaleA',
 			'scaleB',
 			'translateAX',
