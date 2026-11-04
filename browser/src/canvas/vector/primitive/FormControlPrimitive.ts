@@ -22,9 +22,32 @@ namespace cool {
 	/// matrix maps the unit square to the control's place on the slide, in twips.
 	export interface FormControlPrimitive extends Primitive {
 		type: typeof FormControlPrimitive.type;
-		kind: 'pushButton' | 'checkBox' | 'optionButton';
+		kind:
+			| 'pushButton'
+			| 'checkBox'
+			| 'optionButton'
+			| 'label'
+			| 'groupBox'
+			| 'textBox'
+			| 'formattedField'
+			| 'numericField'
+			| 'currencyField'
+			| 'dateField'
+			| 'timeField'
+			| 'patternField'
+			| 'fileSelection'
+			| 'comboBox'
+			| 'listBox'
+			| 'imageButton'
+			| 'imageControl'
+			| 'scrollBar'
+			| 'spinButton'
+			| 'tableControl'
+			| 'navigationBar';
 		matrix?: number[];
 		label?: string;
+		/// The text as the control shows it, formatted as the office formats it.
+		text?: string;
 		/// 0 not checked, 1 checked, 2 neither.
 		state?: number;
 		disabled?: boolean;
@@ -33,6 +56,26 @@ namespace cool {
 		align?: number;
 		textColor?: string;
 		background?: string;
+		/// A field with a button that opens a list or a calendar.
+		dropdown?: boolean;
+		/// A field with buttons that step its value.
+		spin?: boolean;
+		multiLine?: boolean;
+		/// 0 for a control without a border. Absent for one with a border.
+		border?: number;
+		/// The entries of a list or a combo box, and which of them are selected.
+		items?: string[];
+		selected?: number[];
+		/// A scroll bar or spin button that runs down instead of across.
+		vertical?: boolean;
+		/// Where the value of a scroll bar or spin button stands, between min and max; visible is
+		/// the share a scroll bar's thumb stands for.
+		value?: number;
+		min?: number;
+		max?: number;
+		visible?: number;
+		/// The labels of the columns of a table control.
+		columns?: string[];
 		font?: FormControlFont;
 	}
 

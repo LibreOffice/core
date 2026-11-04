@@ -89,9 +89,287 @@ namespace cool {
       context.restore();
     }
 
+    // the arrows the small buttons show
+    private static readonly arrowUp = '\u25B4';
+    private static readonly arrowDown = '\u25BE';
+    private static readonly arrowLeft = '\u25C2';
+    private static readonly arrowRight = '\u25B8';
+
+    // a box with an arrow in it, as a drop-down, a spin, a scroll and a navigation button show it
+    private static _arrowBox(
+      arrow: string,
+      grow: boolean = false,
+    ): HTMLElement {
+      return (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flex: grow ? '1 1 0' : '0 0 auto',
+            minWidth: '1.2em',
+            minHeight: '0',
+            boxSizing: 'border-box',
+            padding: '0 2px',
+            border: '1px solid var(--color-border-input-dark)',
+            backgroundColor: 'var(--color-background-dark)',
+            color: 'var(--color-text-dark)',
+            fontSize: '0.8em',
+            lineHeight: '1',
+          }}
+        >
+          {arrow}
+        </div>
+      );
+    }
+
+    // a field with its text, with a drop-down button or spin buttons at its end where it has them
+    private static _field(
+      primitive: FormControlPrimitive,
+      text: string,
+    ): HTMLElement {
+      const field = (
+        <div
+          class="jsdialog ui-edit"
+          style={{
+            display: 'flex',
+            alignItems: primitive.multiLine ? 'flex-start' : 'center',
+            alignSelf: 'stretch',
+            flex: '1',
+            maxHeight: 'none',
+            padding: '0',
+            overflow: 'hidden',
+          }}
+        >
+          <div
+            style={{
+              flex: '1',
+              padding: '0 4px',
+              overflow: 'hidden',
+              whiteSpace: primitive.multiLine ? 'pre-wrap' : 'nowrap',
+              lineHeight: 'normal',
+            }}
+          >
+            {text}
+          </div>
+        </div>
+      );
+      const renderer = VectorFormControlRenderer;
+      if (primitive.dropdown)
+        field.appendChild(renderer._arrowBox(renderer.arrowDown));
+      if (primitive.spin)
+        field.appendChild(
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignSelf: 'stretch',
+            }}
+          >
+            {renderer._arrowBox(renderer.arrowUp, true)}
+            {renderer._arrowBox(renderer.arrowDown, true)}
+          </div>,
+        );
+      return field;
+    }
+
+    // the entries of a list, the selected ones in the selection's colour
+    private static _list(primitive: FormControlPrimitive): HTMLElement {
+      const selected = new Set(primitive.selected ?? []);
+      return (
+        <div
+          class="jsdialog ui-listbox"
+          style={{
+            display: 'block',
+            height: '100%',
+            padding: '0',
+            overflow: 'hidden',
+          }}
+        >
+          {(primitive.items ?? []).map((item: string, at: number) => (
+            <div
+              style={
+                selected.has(at)
+                  ? {
+                      padding: '0 4px',
+                      backgroundColor: 'var(--color-primary)',
+                      color: 'var(--color-primary-text)',
+                    }
+                  : { padding: '0 4px' }
+              }
+            >
+              {item}
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    // a scroll bar: its two arrows and the thumb on the track between, where the value stands
+    private static _scrollBar(primitive: FormControlPrimitive): HTMLElement {
+      const renderer = VectorFormControlRenderer;
+      const vertical = primitive.vertical === true;
+      const min = primitive.min ?? 0;
+      const max = primitive.max ?? 100;
+      const range = Math.max(1, max - min);
+      const visible = Math.min(
+        range,
+        Math.max(1, primitive.visible ?? range / 10),
+      );
+      const at = Math.min(
+        1,
+        Math.max(0, ((primitive.value ?? min) - min) / range),
+      );
+      const thumbShare = (visible / (range + visible)) * 100;
+      const thumbStart = at * (100 - thumbShare);
+      const thumb = (
+        <div
+          style={{
+            position: 'absolute',
+            backgroundColor: 'var(--color-border-input-dark)',
+            borderRadius: '2px',
+            ...(vertical
+              ? {
+                  left: '2px',
+                  right: '2px',
+                  top: thumbStart + '%',
+                  height: thumbShare + '%',
+                }
+              : {
+                  top: '2px',
+                  bottom: '2px',
+                  left: thumbStart + '%',
+                  width: thumbShare + '%',
+                }),
+          }}
+        />
+      );
+      return (
+        <div
+          class="jsdialog"
+          style={{
+            display: 'flex',
+            flexDirection: vertical ? 'column' : 'row',
+          }}
+        >
+          {renderer._arrowBox(vertical ? renderer.arrowUp : renderer.arrowLeft)}
+          <div
+            style={{
+              position: 'relative',
+              flex: '1',
+              backgroundColor: 'var(--color-background-dark)',
+            }}
+          >
+            {thumb}
+          </div>
+          {renderer._arrowBox(
+            vertical ? renderer.arrowDown : renderer.arrowRight,
+          )}
+        </div>
+      );
+    }
+
+    // a navigation bar: where the record stands and the buttons that go through the records,
+    // greyed as the office shows it while the form has no data source to go through
+    private static _navigationBar(compact: boolean = false): HTMLElement {
+      const renderer = VectorFormControlRenderer;
+      const small = (
+        <div
+          class="jsdialog ui-edit"
+          style={{
+            width: '3em',
+            height: '80%',
+            padding: '0',
+            maxHeight: 'none',
+          }}
+        />
+      );
+      return (
+        <div
+          class="jsdialog"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+            padding: '0 4px',
+            backgroundColor: 'var(--color-background-lighter)',
+            opacity: '0.5',
+            ...(compact
+              ? { flex: '0 0 auto', height: '1.5em', fontSize: '0.8em' }
+              : {}),
+          }}
+        >
+          <span>{_('Record')}</span>
+          {small}
+          <span>{_('of')}</span>
+          {small.cloneNode(true)}
+          {renderer._arrowBox('|' + renderer.arrowLeft)}
+          {renderer._arrowBox(renderer.arrowLeft)}
+          {renderer._arrowBox(renderer.arrowRight)}
+          {renderer._arrowBox(renderer.arrowRight + '|')}
+          {renderer._arrowBox(renderer.arrowRight + '*')}
+        </div>
+      );
+    }
+
+    // a table control: the labels of its columns over an empty row, a marker column in front
+    private static _table(primitive: FormControlPrimitive): HTMLElement {
+      const cell = {
+        border: '1px solid var(--color-border-input-dark)',
+        padding: '0 4px',
+        textAlign: 'left',
+        fontWeight: 'normal',
+        height: '1.2em',
+      };
+      const columns = primitive.columns?.length ? primitive.columns : [''];
+      return (
+        <div
+          class="jsdialog"
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            backgroundColor: 'var(--color-background-lighter)',
+            border: '1px solid var(--color-border-input-dark)',
+          }}
+        >
+          <table
+            style={{ borderCollapse: 'collapse', width: '100%', flex: '1' }}
+          >
+            <tr style={{ backgroundColor: 'var(--color-background-dark)' }}>
+              <th style={{ ...cell, width: '1.5em' }} />
+              {columns.map((label: string) => (
+                <th style={cell}>{label}</th>
+              ))}
+            </tr>
+            <tr style={{ height: '100%' }}>
+              <td
+                style={{
+                  ...cell,
+                  backgroundColor: 'var(--color-background-dark)',
+                }}
+              >
+                {VectorFormControlRenderer.arrowRight}
+              </td>
+              {columns.map(() => (
+                <td
+                  style={{
+                    ...cell,
+                    backgroundColor: 'var(--color-background-lighter)',
+                  }}
+                />
+              ))}
+            </tr>
+          </table>
+          {VectorFormControlRenderer._navigationBar(true)}
+        </div>
+      );
+    }
+
     // the element of the control's kind, with the classes of JSDialog's widgets
     private _build(primitive: FormControlPrimitive): HTMLElement {
+      const renderer = VectorFormControlRenderer;
       const label = primitive.label ?? '';
+      const text = primitive.text ?? '';
       const checked = primitive.state === 1;
       switch (primitive.kind) {
         case 'checkBox':
@@ -108,7 +386,92 @@ namespace cool {
               <label>{label}</label>
             </div>
           );
+        case 'label':
+          return (
+            <div
+              class="jsdialog ui-text"
+              style={{ display: 'block', backgroundColor: 'transparent' }}
+            >
+              {label}
+            </div>
+          );
+        case 'groupBox':
+          return (
+            <fieldset
+              class="jsdialog"
+              style={{
+                margin: '0',
+                padding: '0 4px',
+                border: '1px solid var(--color-border-input-dark)',
+                borderRadius: 'var(--border-radius)',
+              }}
+            >
+              <legend style={{ padding: '0 2px' }}>{label}</legend>
+            </fieldset>
+          );
+        case 'textBox':
+        case 'formattedField':
+        case 'numericField':
+        case 'currencyField':
+        case 'dateField':
+        case 'timeField':
+        case 'patternField':
+        case 'comboBox':
+          return renderer._field(primitive, text);
+        case 'fileSelection':
+          return (
+            <div
+              class="jsdialog"
+              style={{ display: 'flex', alignItems: 'stretch', gap: '0' }}
+            >
+              {renderer._field(primitive, text)}
+              <button class="ui-pushbutton jsdialog">
+                <span>{_('Browse...')}</span>
+              </button>
+            </div>
+          );
+        case 'listBox':
+          return primitive.dropdown
+            ? renderer._field(
+                primitive,
+                (primitive.items ?? [])[(primitive.selected ?? [])[0]] ?? '',
+              )
+            : renderer._list(primitive);
+        case 'imageButton':
+        case 'imageControl':
+          return (
+            <div
+              class="jsdialog"
+              style={{ border: '1px solid var(--color-border-input-dark)' }}
+            />
+          );
+        case 'scrollBar':
+          return renderer._scrollBar(primitive);
+        case 'spinButton':
+          return (
+            <div
+              class="jsdialog"
+              style={{
+                display: 'flex',
+                flexDirection: primitive.vertical ? 'column' : 'row',
+              }}
+            >
+              {renderer._arrowBox(
+                primitive.vertical ? renderer.arrowUp : renderer.arrowLeft,
+                true,
+              )}
+              {renderer._arrowBox(
+                primitive.vertical ? renderer.arrowDown : renderer.arrowRight,
+                true,
+              )}
+            </div>
+          );
+        case 'tableControl':
+          return renderer._table(primitive);
+        case 'navigationBar':
+          return renderer._navigationBar();
         default:
+          // a push button
           return (
             <button class="ui-pushbutton jsdialog">
               <span>{label}</span>
@@ -156,11 +519,23 @@ namespace cool {
         element
           .querySelectorAll('button, input')
           .forEach((input: Element) => input.setAttribute('disabled', ''));
-      // the label of a check box or an option button takes the model's font too
-      element.querySelectorAll('label').forEach((label: HTMLElement) => {
-        label.style.font = 'inherit';
-        label.style.color = 'inherit';
-      });
+      // all text in the control takes the model's font, a label and a set text colour its colour
+      element
+        .querySelectorAll<HTMLElement>('*')
+        .forEach((inner: HTMLElement) => {
+          inner.style.font = 'inherit';
+          if (primitive.textColor || inner.tagName === 'LABEL')
+            inner.style.color = 'inherit';
+        });
+      // a control without a border loses the border of its field too
+      if (primitive.border === 0) {
+        style.border = 'none';
+        element
+          .querySelectorAll<HTMLElement>('.ui-edit')
+          .forEach((field: HTMLElement) => {
+            field.style.border = 'none';
+          });
+      }
     }
 
     private async _paint(

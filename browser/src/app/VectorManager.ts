@@ -52,7 +52,7 @@ class VectorManager extends RenderManagerBase {
 			(checksum) => this._bitmaps.get(checksum) ?? this._standInFor(checksum),
 			(fontId) => this._fonts.has(fontId),
 			// a picture the client made of a form control is drawn once it has loaded
-			() => this._fireChanged([]),
+			() => this._onPictureReady(),
 		);
 
 	// Cached parsed JSON primitive tree keyed by page id. The id names the
@@ -1961,6 +1961,27 @@ class VectorManager extends RenderManagerBase {
 				reason,
 		);
 		this._bitmaps.setUnavailable(checksum);
+	}
+
+	// whether the previews shown are to be drawn again for pictures that loaded just now
+	private _previewsWaitForPictures = false;
+
+	/*
+		A picture the renderer made of a form control has loaded. The view draws again at once,
+		and every preview shown once for all the pictures that load at the same moment, as the
+		pictures of many controls come in together.
+	*/
+	private _onPictureReady(): void {
+		this._fireChanged([]);
+		if (this._previewsWaitForPictures) return;
+		this._previewsWaitForPictures = true;
+		app.layoutingService.appendLayoutingTask(() => {
+			this._previewsWaitForPictures = false;
+			const parts = new Set<cool.VectorPartGuid>();
+			for (const info of this._renderedPreviews.values())
+				parts.add(info.partId);
+			for (const partId of parts) this._redrawRenderedPreviews(partId);
+		});
 	}
 
 	private _redrawPartsUsing(parts: Set<cool.VectorPartGuid> | undefined): void {
