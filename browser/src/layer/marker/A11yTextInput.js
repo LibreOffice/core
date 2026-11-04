@@ -452,6 +452,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 			afterLevels, elements);
 		this._setContextList(list);
 		this._setContextTable(table);
+		this._requestHeadings();
 	},
 
 	// getPlainTextContent() reads the whole editable, and every caret offset is
