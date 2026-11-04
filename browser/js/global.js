@@ -557,9 +557,10 @@ class MobileAppInitializer extends InitializerBase {
 
 		const element = document.getElementById("initial-variables");
 
-		// A script loaded before this one can define the product name; the
-		// name baked in at build time is the fallback.
-		window.MobileAppName = window.brandProductName || element.dataset.mobileAppName;
+		// An app is named only at build time (APP_NAME, see --with-app-name),
+		// so the About dialog agrees with the native UI. This replaces the name
+		// branding.js defines.
+		window.MobileAppName = element.dataset.mobileAppName;
 		window.brandProductName = window.MobileAppName;
 		window.vendor = element.dataset.vendor;
 		window.copyrightYear = element.dataset.copyrightYear;

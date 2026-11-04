@@ -148,9 +148,9 @@ several ABIs at once (see `./configure --help`).
 
 The app gets the Collabora Office theme from `browser/branding` by default, and the
 launcher icon and drawer header in `android/app/src/main/res` are Collabora's too. The
-theme also names the product, so a build with its own `--with-app-name` wants
-`--disable-branding` for an unbranded app, or `--with-app-branding=<dir>` with its own
-`branding.css`, `branding.js` and images.
+product name comes from `--with-app-name`, also with a theme. A build with its own name
+wants `--disable-branding` for an unbranded app, or `--with-app-branding=<dir>` with its
+own `branding.css`, `branding.js` and images.
 
 ### Build
 
