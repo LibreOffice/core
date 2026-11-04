@@ -422,7 +422,7 @@
 
 
 .backstage-template-card:hover {
-	background-color: var(--color-background-dark);
+	background-color: var(--color-backstage-hover);
 }
 
 /* The star shows on hover and on keyboard focus, and stays on a favorite. It sits just above
@@ -599,7 +599,7 @@
 
 /* The desktop button hover colours in device-desktop.css are !important. */
 #backstage-view .template-type-button:hover {
-	background-color: var(--color-background-dark) !important;
+	background-color: var(--color-backstage-hover) !important;
 	color: var(--color-main-text) !important;
 	border-color: var(--color-border);
 }
@@ -900,7 +900,7 @@
 }
 
 .backstage-manage-templates-row:hover td {
-	background-color: var(--color-background-dark);
+	background-color: var(--color-backstage-hover);
 }
 
 .backstage-manage-templates-row-actions {
@@ -927,7 +927,7 @@
 	display: inline-block;
 	padding: 2px 8px;
 	border-radius: var(--border-radius);
-	background-color: var(--color-background-dark);
+	background-color: var(--color-backstage-hover);
 	color: var(--color-text-dark);
 	font-size: var(--default-font-size);
 }
@@ -1164,7 +1164,7 @@
 }
 
 .backstage-recent-document-row:hover {
-	background-color: var(--color-background-dark);
+	background-color: var(--color-backstage-hover);
 }
 
 .backstage-recent-document-name-cell,
