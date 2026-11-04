@@ -11,7 +11,13 @@
 
 #pragma once
 
+#include <QString>
 #include <QWebEngineUrlSchemeHandler>
+
+namespace coda
+{
+QString bundledFilePath(const QString& path);
+}
 
 /// Serves the files of CODA's browser folder, by their path in it. Takes an editor frame's
 /// messages at coollocal://message.

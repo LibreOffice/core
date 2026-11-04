@@ -51,6 +51,31 @@ void receiveMessage(QWebEngineUrlRequestJob* job)
 }
 }
 
+QString coda::bundledFilePath(const QString& path)
+{
+    const QStringList segments = path.split('/', Qt::SkipEmptyParts);
+    const auto isHidden = [](const QString& segment) { return segment.startsWith('.'); };
+    const bool isPlainPath =
+        !segments.isEmpty() && std::none_of(segments.begin(), segments.end(), isHidden);
+    if (!isPlainPath)
+    {
+        LOG_WRN("coollocal: refused: the path is empty or has a part starting with a dot");
+        return QString();
+    }
+
+    const QDir browserDir(QString::fromStdString(getBrowserDistDir()));
+    const QString browserPath = browserDir.canonicalPath() + '/';
+    const QFileInfo file(browserDir.filePath(segments.join('/')));
+    const bool isInBrowserDir = file.canonicalFilePath().startsWith(browserPath);
+    if (!isInBrowserDir || !file.isFile())
+    {
+        LOG_DBG("coollocal: not found: the file is not in the browser folder");
+        return QString();
+    }
+
+    return file.canonicalFilePath();
+}
+
 void CoolLocalSchemeHandler::requestStarted(QWebEngineUrlRequestJob* job)
 {
     if (job->requestUrl().host() == MESSAGE_HOST)
@@ -66,29 +91,14 @@ void CoolLocalSchemeHandler::requestStarted(QWebEngineUrlRequestJob* job)
         return;
     }
 
-    const QStringList segments = job->requestUrl().path().split('/', Qt::SkipEmptyParts);
-    const auto isHidden = [](const QString& segment) { return segment.startsWith('.'); };
-    const bool isPlainPath =
-        !segments.isEmpty() && std::none_of(segments.begin(), segments.end(), isHidden);
-    if (!isPlainPath)
+    const QString filePath = coda::bundledFilePath(job->requestUrl().path());
+    if (filePath.isEmpty())
     {
-        LOG_WRN("coollocal: refused: the path is empty or has a part starting with a dot");
-        job->fail(QWebEngineUrlRequestJob::RequestDenied);
-        return;
-    }
-
-    const QDir browserDir(QString::fromStdString(getBrowserDistDir()));
-    const QString browserPath = browserDir.canonicalPath() + '/';
-    const QFileInfo file(browserDir.filePath(segments.join('/')));
-    const bool isInBrowserDir = file.canonicalFilePath().startsWith(browserPath);
-    if (!isInBrowserDir || !file.isFile())
-    {
-        LOG_DBG("coollocal: not found: the file is not in the browser folder");
         job->fail(QWebEngineUrlRequestJob::UrlNotFound);
         return;
     }
 
-    auto* device = new QFile(file.canonicalFilePath(), job);
+    auto* device = new QFile(filePath, job);
     if (!device->open(QIODevice::ReadOnly))
     {
         LOG_WRN("coollocal: failed: the file in the browser folder cannot be read");
@@ -96,7 +106,8 @@ void CoolLocalSchemeHandler::requestStarted(QWebEngineUrlRequestJob* job)
         return;
     }
 
-    const QMimeType type = QMimeDatabase().mimeTypeForFile(file, QMimeDatabase::MatchExtension);
+    const QMimeType type =
+        QMimeDatabase().mimeTypeForFile(filePath, QMimeDatabase::MatchExtension);
     job->reply(type.name().toUtf8(), device);
 }
 
