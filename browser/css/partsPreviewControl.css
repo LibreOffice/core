@@ -383,6 +383,70 @@
 	display: none;
 }
 
+/* The header of a presentation shown in the panel beside the sorter. */
+.slide-presentation-header.panel-open {
+	background-color: var(--color-background-darker);
+	border-radius: var(--border-radius-s);
+}
+
+/* The panel of a linked presentation: a column beside everything the
+   navigation sidebar holds, as wide as the sidebar and as tall, in the shape
+   of a panel of its own. The sidebar keeps its own content at its first
+   width and grows by the width of the column, which the panel takes, so the
+   document keeps its room. */
+#navigation-sidebar.visible:has(#presentation-controls-wrapper.slide-link-panel-open) {
+	position: relative;
+	padding-inline-end: var(--navigation-sidebar-width, 250px);
+}
+
+.slide-link-panel {
+	position: absolute;
+	inset-block: 0;
+	inset-inline-end: 0;
+	width: var(--navigation-sidebar-width, 250px);
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	border-inline-start: 1px solid var(--color-border);
+	background: var(--color-background-lighter);
+}
+
+/* The header of the panel takes the shape of the navigation header: the name
+   of the presentation as the title, the mark of its link after it, and the
+   close button at the end. */
+.slide-link-panel-title {
+	flex: none;
+	gap: 8px;
+	user-select: none;
+}
+
+.slide-link-panel-title .slide-section-name {
+	flex: 1;
+}
+
+.slide-link-panel-title .slide-section-link {
+	flex: none;
+}
+
+/* The deck takes the height under the header and scrolls on its own, like
+   the sorter. */
+.slide-link-panel-deck {
+	flex: 1;
+	min-height: 0;
+	white-space: nowrap;
+	overflow-x: hidden;
+	overflow-y: auto;
+	scrollbar-color: var(--scrollbar-color);
+	scrollbar-width: var(--scrollbar-width);
+}
+
+/* The sections in the deck are the sections of the presentation itself, so
+   they start at the edge the way the sections of the sorter do. */
+.slide-link-panel-deck .slide-section-header.in-presentation {
+	margin-inline-start: 16px;
+}
+
 /* How many slides a section holds, at the end of its header. */
 .slide-section-count {
 	flex-shrink: 0;

@@ -12,7 +12,8 @@
  * window.L.Control.PartsPreview
  */
 
-/* global _ _n app $ Hammer _UNO cool JSDialog buildSlideSectionHeader buildSlideDragGhost */
+/* global _ _n app $ Hammer _UNO cool JSDialog buildSlideSectionHeader buildSlideDragGhost
+   buildSlideLinkPanel */
 
 // Drag data type that marks a drag as carrying slides to import from another
 // presentation, with a payload of {slides:[...]} source slide indices. A drag
@@ -101,6 +102,15 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		// The identifiers of the linked presentations the user expanded. A presentation
 		// shows collapsed, as one tile under its header, until it is expanded.
 		this._expandedPresentations = new Set();
+		// The panel beside the sorter that shows one linked presentation, while it is open:
+		// the identifier of the presentation, its header in the sorter, the panel element,
+		// its title row and the deck inside it that holds the section headers and the
+		// frames of the presentation.
+		this._linkPanel = null;
+		// The identifier of the presentation the panel is closed on for the length of a
+		// change to the frames or the headers, the element that held the focus in the panel
+		// then, and how far the deck of the panel was scrolled.
+		this._linkPanelSuspended = null;
 		this._direction = this.options.allowOrientation ?
 			(!window.mode.isDesktop() && window.L.DomUtil.isPortrait() ? 'x' : 'y') :
 			this.options.axis;
@@ -578,6 +588,15 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 					// needed so on-screen keyboard doesn't pop up when switching slides,
 					// but would cause PgUp/Down to not work on desktop in slide sorter
 					document.activeElement.blur();
+				}
+				// A plain click on the tile of a collapsed presentation opens the panel
+				// on the presentation, with the slide of the tile the current one.
+				if (!e.ctrlKey && !e.shiftKey && !e.altKey && !e.metaKey &&
+				    !cool.Comment.isAnyEdit() &&
+				    frame.classList.contains('presentation-tile')) {
+					const header = this._presentationHeaderStartingAt(img);
+					if (header)
+						this._openLinkPanel(header);
 				}
 			}
 			img.focus();
@@ -1130,6 +1149,8 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			const header = this._presentationHeaders[p];
 			this._setHeaderLinkMark(header, header._link.id);
 		}
+		if (this._linkPanel)
+			this._setHeaderLinkMark(this._linkPanel.title, this._linkPanel.id);
 	},
 
 	// The link list, or the state of a source, changed: the presentation headers follow the
@@ -1153,6 +1174,10 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			return;
 
 		var sections = e.sections || [];
+
+		// The panel of a linked presentation holds section headers of its own, which go
+		// with the others; the panel opens again once the presentation headers are rebuilt.
+		this._suspendLinkPanel();
 
 		// Remove existing section headers
 		for (var i = 0; i < this._sectionHeaders.length; i++) {
@@ -1541,12 +1566,17 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			return;
 		this._presentationsShown = key;
 
+		// The panel holds the frames of its presentation, which go back under the header
+		// before the header goes; the panel opens again on the header built anew.
+		this._suspendLinkPanel();
 		for (let h = 0; h < this._presentationHeaders.length; h++)
 			window.L.DomUtil.remove(this._presentationHeaders[h]);
 		this._presentationHeaders = [];
 		this._clearAllPresentationCollapse();
-		if (key === '')
+		if (key === '') {
+			this._resumeLinkPanel();
 			return;
+		}
 
 		const partIndexes = this._partIndexes();
 		const live = new Set();
@@ -1567,6 +1597,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			if (!live.has(id))
 				this._expandedPresentations.delete(id);
 		}, this);
+		this._resumeLinkPanel();
 		this._ensureVisiblePreviews();
 	},
 
@@ -1602,7 +1633,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				if (app.map.isReadOnlyMode())
 					return;
 
-				that._openPresentationContextMenu(link, e);
+				that._openPresentationContextMenu(header, e);
 			}, this);
 		}
 
@@ -1616,7 +1647,13 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			this._selectRange(run[0], run[run.length - 1]);
 	},
 
+	// Expands a collapsed presentation in the sorter, or collapses it to its tile. A
+	// presentation shown in the panel is collapsed by closing the panel.
 	_togglePresentationCollapse: function (id) {
+		if (this._isLinkPanelOn(id)) {
+			this.closeLinkPanel();
+			return;
+		}
 		if (this._expandedPresentations.has(id))
 			this._expandedPresentations.delete(id);
 		else
@@ -1652,8 +1689,11 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 	// Applies the collapsed state of one presentation to its header, to the frames of its run
 	// and to the headers of its sections. Collapsed, the first frame shows as the tile of the
 	// presentation under its header, and the other frames and the section headers are hidden.
+	// A presentation shown in the panel is expanded there, so its frames and section headers
+	// carry no collapsed state.
 	_applyPresentationCollapse: function (header, run) {
-		const collapsed = !this._expandedPresentations.has(header._link.id);
+		const id = header._link.id;
+		const collapsed = !this._expandedPresentations.has(id) && !this._isLinkPanelOn(id);
 		this._setHeaderCollapsed(header, collapsed);
 
 		for (let i = 0; i < run.length; i++) {
@@ -1687,24 +1727,249 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		}
 	},
 
-	// Expands the collapsed presentation that hides the slide at the given index, so that the
-	// slide shows. The first slide of a collapsed presentation shows as its tile already.
+	// Shows the slide at the given index when a collapsed presentation hides it: the panel
+	// opens on that presentation. The maximized grid has no panel, so there the presentation
+	// expands in the grid. The first slide of a collapsed presentation shows as its tile
+	// already.
 	_revealPart: function (index) {
 		const img = this._previewTiles[index];
 		if (!img || !img._part)
 			return;
 		for (let h = 0; h < this._presentationHeaders.length; h++) {
 			const header = this._presentationHeaders[h];
-			if (this._expandedPresentations.has(header._link.id) ||
+			const id = header._link.id;
+			if (this._expandedPresentations.has(id) || this._isLinkPanelOn(id) ||
 			    header._link.slides.indexOf(img._part) <= 0)
 				continue;
+			if (!this._gridMode && window.mode.isDesktop()) {
+				this._openLinkPanel(header);
+				continue;
+			}
 			const run = this._presentationRun(header._link, this._partIndexes());
 			if (!run)
 				continue;
-			this._expandedPresentations.add(header._link.id);
+			this._expandedPresentations.add(id);
 			this._applyPresentationCollapse(header, run);
 			this._ensureVisiblePreviews();
 		}
+	},
+
+	// Whether the slide sorter shows in the navigation sidebar. The wrapper of the sorter has
+	// an inline display of none while another tab of the sidebar shows.
+	_isSorterShown: function () {
+		const wrapper = this._container.closest('#presentation-controls-wrapper');
+		return !wrapper || wrapper.style.display !== 'none';
+	},
+
+	// Whether the panel is open on the linked presentation of the given identifier.
+	_isLinkPanelOn: function (id) {
+		return !!this._linkPanel && this._linkPanel.id === id;
+	},
+
+	// The header of the linked presentation of the given identifier, or null while the sorter
+	// shows none for it.
+	_presentationHeaderOf: function (id) {
+		for (let h = 0; h < this._presentationHeaders.length; h++) {
+			if (this._presentationHeaders[h]._link.id === id)
+				return this._presentationHeaders[h];
+		}
+		return null;
+	},
+
+	// The header of the linked presentation whose first slide the given preview shows, or
+	// null for any other preview.
+	_presentationHeaderStartingAt: function (img) {
+		for (let h = 0; h < this._presentationHeaders.length; h++) {
+			const link = this._presentationHeaders[h]._link;
+			if (link.slides.length > 0 && link.slides[0] === img._part)
+				return this._presentationHeaders[h];
+		}
+		return null;
+	},
+
+	// Opens the panel beside the sorter on the linked presentation of the given header. The
+	// section headers and the slide frames of the presentation move from the sorter into the
+	// deck of the panel, in their order, so that they keep their selection, their pictures
+	// and their handlers; the header stays in the sorter, marked as open, and the tile of the
+	// presentation stays under it as a picture of the first slide. A panel open on another
+	// presentation closes first. The panel is a column of the navigation sidebar
+	// beside everything the sidebar holds, as tall as the sidebar, while it is open; the
+	// maximized grid and the tablet and phone layouts have no panel, and neither has another
+	// tab of the sidebar, such as the navigator.
+	_openLinkPanel: function (header) {
+		if (this._gridMode || !window.mode.isDesktop() || !this._isSorterShown())
+			return;
+		const link = header._link;
+		if (this._isLinkPanelOn(link.id))
+			return;
+		const run = this._presentationRun(link, this._partIndexes());
+		if (!run)
+			return;
+		this.closeLinkPanel();
+		this._expandedPresentations.delete(link.id);
+
+		const name = this._map.slideLinks.getPresentationName(link.id);
+		const panel = buildSlideLinkPanel(name, this.closeLinkPanel.bind(this));
+		const deck = panel.querySelector('.slide-link-panel-deck');
+		deck.onscroll = this._onScroll.bind(this);
+		for (let i = 0; i < run.length; i++) {
+			const sectionHeader = this._sectionHeaderAt(run[i]);
+			if (sectionHeader)
+				deck.appendChild(sectionHeader);
+			deck.appendChild(this._previewTiles[run[i]].parentNode);
+		}
+
+		const wrapper = this._container;
+		const tileImg = this._previewTiles[run[0]];
+		const tile = this._buildLinkPanelTile(tileImg);
+		header.after(tile);
+		this._linkPanel = {
+			id: link.id,
+			header: header,
+			panel: panel,
+			title: panel.querySelector('.slide-link-panel-title'),
+			deck: deck,
+			tile: tile,
+			tileImg: tileImg,
+		};
+		this._setHeaderLinkMark(this._linkPanel.title, link.id);
+		// The panel sits in the sidebar that holds the wrapper, after everything else in it.
+		const sidebar = wrapper.closest('#navigation-sidebar') || wrapper;
+		sidebar.appendChild(panel);
+		wrapper.classList.add('slide-link-panel-open');
+		header.classList.add('panel-open');
+		this._applyPresentationCollapse(header, run);
+		this._ensureVisiblePreviews();
+	},
+
+	// Closes the panel. Its section headers and slide frames go back into the sorter after
+	// the header of the presentation, which shows the presentation as its collapsed tile
+	// again. With quiet the focus stays where it is; otherwise a focus that was in the panel
+	// moves to the current slide while that shows, else to the toggle of the header.
+	closeLinkPanel: function (quiet) {
+		const open = this._linkPanel;
+		if (!open)
+			return;
+		this._linkPanel = null;
+
+		const hadFocus = open.panel.contains(document.activeElement);
+		const header = open.header;
+		open.tile.remove();
+		// The header leaves the sorter only after the panel closed, so the frames always
+		// find it there. Should it be gone, the frames go to the end of the sorter rather
+		// than away with the panel.
+		let anchor = header.parentNode ? header : null;
+		while (open.deck.firstChild) {
+			const node = open.deck.firstChild;
+			if (anchor)
+				anchor.after(node);
+			else
+				this._partsPreviewCont.appendChild(node);
+			anchor = node;
+		}
+		open.panel.remove();
+
+		this._container.classList.remove('slide-link-panel-open');
+		header.classList.remove('panel-open');
+		if (header.parentNode) {
+			const run = this._presentationRun(header._link, this._partIndexes());
+			if (run)
+				this._applyPresentationCollapse(header, run);
+		}
+
+		if (quiet || !hadFocus)
+			return;
+		const current = this._previewTiles[this._map._docLayer._selectedPart];
+		const frame = current ? current.parentNode : null;
+		if (frame && !this._isFrameHidden(frame)) {
+			this.focusCurrentSlide();
+			return;
+		}
+		const toggle = header.querySelector('.slide-section-toggle');
+		if (toggle)
+			toggle.focus();
+	},
+
+	// The tile of a presentation that the panel shows: the picture of its first slide with the
+	// number and the link mark of that slide, under the header in the sorter. The frame of the
+	// slide itself is in the deck, so a click on the tile clicks the picture there, which
+	// selects the slide. The tile is no slide of the sorter, so it takes no drag and no focus,
+	// and its picture follows the picture of the slide.
+	_buildLinkPanelTile: function (img) {
+		const frame = img.parentNode;
+		const tile = window.L.DomUtil.create('div', 'preview-frame link-panel-tile');
+		tile.setAttribute('aria-hidden', 'true');
+		window.L.DomUtil.create('span', 'preview-helper', tile);
+		const number = window.L.DomUtil.create('span', 'preview-slide-number', tile);
+		const sourceNumber = frame.querySelector('.preview-slide-number');
+		number.textContent = sourceNumber ? sourceNumber.textContent : '';
+		const picture = window.L.DomUtil.create('img', 'preview-img', tile);
+		picture.draggable = false;
+		picture.src = img.src;
+		if (img._linkBadge)
+			tile.appendChild(img._linkBadge.cloneNode(true));
+		window.L.DomEvent.on(picture, 'click', function (e) {
+			window.L.DomEvent.stop(e);
+			img.dispatchEvent(new MouseEvent('click', {
+				bubbles: true,
+				cancelable: true,
+				ctrlKey: e.ctrlKey,
+				shiftKey: e.shiftKey,
+				altKey: e.altKey,
+				metaKey: e.metaKey,
+			}));
+		}, this);
+		return tile;
+	},
+
+	// Closes the panel for the length of a change to the frames or the headers it holds,
+	// keeping the presentation it is open on, the element that holds the focus in it and the
+	// scroll position of its deck.
+	_suspendLinkPanel: function () {
+		if (this._linkPanel && !this._linkPanelSuspended) {
+			const panel = this._linkPanel.panel;
+			this._linkPanelSuspended = {
+				id: this._linkPanel.id,
+				focused: panel.contains(document.activeElement) ? document.activeElement : null,
+				scrollTop: this._linkPanel.deck.scrollTop,
+			};
+		}
+		this.closeLinkPanel(true);
+	},
+
+	// Opens the panel again on the presentation it was closed on for a change, while the
+	// sorter still shows that presentation under a header, scrolls its deck back to where it
+	// was and puts the focus back where it was in the panel.
+	_resumeLinkPanel: function () {
+		const suspended = this._linkPanelSuspended;
+		if (!suspended)
+			return;
+		this._linkPanelSuspended = null;
+		const header = this._presentationHeaderOf(suspended.id);
+		if (header)
+			this._openLinkPanel(header);
+		// The deck of the panel opened again is a new element, scrolled to the top.
+		if (this._isLinkPanelOn(suspended.id) && suspended.scrollTop > 0) {
+			const deck = this._linkPanel.deck;
+			app.layoutingService.appendLayoutingTask(() => {
+				if (this._linkPanel && this._linkPanel.deck === deck)
+					deck.scrollTop = suspended.scrollTop;
+			});
+		}
+		if (!suspended.focused)
+			return;
+		if (this._isLinkPanelOn(suspended.id) && suspended.focused.isConnected)
+			suspended.focused.focus();
+		else
+			this.focusCurrentSlide();
+	},
+
+	// The container that scrolls the given preview: the deck of the panel while the frame of
+	// the preview is in it, else the sorter.
+	_scrollContainerOf: function (img) {
+		const deck = this._linkPanel ? this._linkPanel.deck : null;
+		return deck && img.parentNode && img.parentNode.parentNode === deck ?
+			deck : this._partsPreviewCont;
 	},
 
 	_openSectionContextMenu: function (section, sectionIndex, e) {
@@ -1876,14 +2141,30 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		);
 	},
 
-	// The menu of a presentation header: the presentation is brought up to date from its file
-	// while the file can be read, and its link taken off, on its own or with every link under
-	// it.
-	_openPresentationContextMenu: function (link, e) {
+	// The menu of a presentation header: the presentation opens in the panel beside the sorter
+	// or the panel closes, the presentation is brought up to date from its file while the file
+	// can be read, and its link taken off, on its own or with every link under it.
+	_openPresentationContextMenu: function (header, e) {
 		var that = this;
+		const link = header._link;
 		const links = this._map.slideLinks;
 
 		var entries = [];
+		if (this._isLinkPanelOn(link.id)) {
+			entries.push({
+				id: 'closePanel',
+				type: 'comboboxentry',
+				text: _('Close Panel'),
+				pos: 0,
+			});
+		} else if (!this._gridMode && window.mode.isDesktop()) {
+			entries.push({
+				id: 'openInPanel',
+				type: 'comboboxentry',
+				text: _('Open in Panel'),
+				pos: 0,
+			});
+		}
 		if (links.isUpdatable(link.id)) {
 			entries.push({
 				id: 'updatePresentation',
@@ -1914,6 +2195,12 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			if (eventType !== 'selected')
 				return false;
 			switch (entry.id) {
+			case 'openInPanel':
+				that._openLinkPanel(header);
+				break;
+			case 'closePanel':
+				that.closeLinkPanel();
+				break;
 			case 'updatePresentation':
 				that._map.slideLinks.update(link.id);
 				break;
@@ -1984,19 +2271,17 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		}
 	},
 
-	// Returns the logical child index (counting only frames, not section headers).
+	// The position of the slide whose frame or preview the given element is, counting the drop
+	// site at the start of the sorter as position 0 and the first slide as 1, or -1 for any
+	// other element. The slide is read off the preview list, so a frame finds its slide in the
+	// panel of a linked presentation as well as in the sorter.
 	_findClickedPart: function (element) {
-		var frameIndex = 0;
-		for (var i = 0; i < this._partsPreviewCont.children.length; i++) {
-			var child = this._partsPreviewCont.children[i];
-			if (child === element || child === element.parentNode) {
-				return frameIndex;
-			}
-			// Only count slide frames: not section headers, and not the
-			// drop-gap cell a grid drag keeps in the flow.
-			if (!child.classList.contains('slide-section-header') &&
-			    !child.classList.contains('drop-gap-cell'))
-				frameIndex++;
+		if (element && element.id === 'first-drop-site')
+			return 0;
+		for (var i = 0; i < this._previewTiles.length; i++) {
+			var img = this._previewTiles[i];
+			if (img && (img === element || img.parentNode === element))
+				return i + 1;
 		}
 		return -1;
 	},
@@ -2155,7 +2440,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		if (start === undefined || start === null)
 			start = this._map._docLayer._selectedPart;
 
-		var maxIndex = this._partsPreviewCont.children.length - 1;
+		var maxIndex = this._previewTiles.length - 1;
 		start = Math.max(0, Math.min(start, maxIndex));
 		end = Math.max(0, Math.min(end, maxIndex));
 
@@ -2278,9 +2563,11 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		// that already carries a part number can move to the slide's new
 		// index and show up there immediately; a part number no image
 		// carries yet is a new slide and shows the placeholder.
+		let partsMoved = false;
 		for (it = 0; it < app.impress.partList.length; it++) {
 			const newPart = app.impress.partList[it].part;
 			if (this._previewTiles[it]._part !== newPart) {
+				partsMoved = true;
 				this._previewTiles[it]._part = newPart;
 				const knownPreview = newPart ? previewByPart[newPart] : undefined;
 				if (knownPreview) {
@@ -2292,6 +2579,13 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 					this._previewTiles[it].fetched = false;
 				}
 			}
+		}
+		// The panel of a linked presentation holds the frames of the slides of the
+		// presentation. A slide now at another index shows in the frame at that index, so
+		// the panel takes the frames of its slides anew.
+		if (partsMoved && this._linkPanel) {
+			this._suspendLinkPanel();
+			this._resumeLinkPanel();
 		}
 		// A tile left with a placeholder - a new slide, or a moved
 		// preview that was never fetched - stays unfetched until it is
@@ -2322,6 +2616,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		if (this._gridMode === enabled)
 			return;
 		this._gridMode = enabled;
+		// The grid shows a linked presentation in place, so it has no panel.
+		if (enabled)
+			this.closeLinkPanel();
 
 		var wrapper = window.L.DomUtil.get('presentation-controls-wrapper');
 		if (wrapper) {
@@ -2370,6 +2667,8 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				tile.placeholderName = null;
 				tile.src = e.tile.src;
 				tile.fetched = true;
+				if (this._linkPanel && this._linkPanel.tileImg === tile)
+					this._linkPanel.tile.querySelector('.preview-img').src = tile.src;
 				window.app.console.debug('PREVIEW: part fetched : ' + parseInt(e.id));
 				this._sendTabThumbnail();
 			}
@@ -2392,6 +2691,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			// The frames are about to change; a drag in progress cannot
 			// keep its collapsed frames and gap bookkeeping.
 			this._finishDrag(false);
+			// The new frame goes in next to the frame of the selected slide, which sits in
+			// the sorter while the panel of a linked presentation is closed.
+			this._suspendLinkPanel();
 			var newIndex = e.selectedPart + 1;
 			var newPreview = this._createPreview(newIndex, (e.part === undefined ? null : e.part));
 
@@ -2412,6 +2714,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				newFrame.parentNode.insertBefore(newFrame, followingFrame);
 			}
 
+			this._resumeLinkPanel();
 			this._ensureVisiblePreviews(); // Load previews
 		}
 	},
@@ -2421,12 +2724,15 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			// The frames are about to change; a drag in progress cannot
 			// keep its collapsed frames and gap bookkeeping.
 			this._finishDrag(false);
+			// The panel of a linked presentation follows the frames that are left.
+			this._suspendLinkPanel();
 			var selectedFrame = this._previewTiles[e.selectedPart].parentNode;
 			window.L.DomUtil.remove(selectedFrame);
 
 			this._previewTiles.splice(e.selectedPart, 1);
 			// Everything after the removed preview moved down by one position.
 			this._updatePreviewPositionLabelsFrom(e.selectedPart);
+			this._resumeLinkPanel();
 			if (this._map._deletePageFromPreview || this.partsFocused)
 				this.focusCurrentSlide(); // came from focus + Delete key -> keep focus in preview
 			else
@@ -2436,15 +2742,23 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		}
 	},
 
+	// Fetches the preview of every slide in view that has none yet. A slide is in view when
+	// its preview overlaps the container that scrolls it: the deck of the panel for a slide
+	// of the linked presentation shown there, the sorter for every other slide. Each
+	// container is measured once per pass.
 	_ensureVisiblePreviews: function () {
 		if (this._previewTimer) clearTimeout(this._previewTimer);
 		this._previewTimer = setTimeout(window.L.bind(function () {
+			const sorterRect = this._partsPreviewCont.getBoundingClientRect();
+			const deck = this._linkPanel ? this._linkPanel.deck : null;
+			const deckRect = deck ? deck.getBoundingClientRect() : null;
 			for (var i = 0; i < this._previewTiles.length; ++i) {
-				if (this._isPreviewVisible(i)) {
-					var img = this._previewTiles[i];
-					if (img && !img.fetched) {
-						this._map.getPreview(i, i, this.options.maxWidth, this.options.maxHeight, {autoUpdate: this.options.autoUpdate});
-					}
+				var img = this._previewTiles[i];
+				if (!img || img.fetched)
+					continue;
+				const inDeck = this._scrollContainerOf(img) === deck;
+				if (this._isPreviewVisible(i, inDeck ? deckRect : sorterRect)) {
+					this._map.getPreview(i, i, this.options.maxWidth, this.options.maxHeight, {autoUpdate: this.options.autoUpdate});
 				}
 			}
 		}, this), 0);
@@ -2468,13 +2782,17 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		this._ensureVisiblePreviews();
 	},
 
-	_isPreviewVisible: function(part) {
+	// Whether the preview of the given slide overlaps the container that scrolls it: the deck
+	// of the panel for a slide of the linked presentation shown there, the sorter for every
+	// other slide. The rectangle of that container is measured here unless one is given.
+	_isPreviewVisible: function(part, viewRect) {
 		var el = this._previewTiles[part];
 		if (!el)
 			return false;
 
 		var elemRect = el.getBoundingClientRect();
-		var viewRect = document.getElementById('slide-sorter').getBoundingClientRect();
+		if (!viewRect)
+			viewRect = this._scrollContainerOf(el).getBoundingClientRect();
 
 		return (elemRect.left <= viewRect.right &&
 			viewRect.left <= elemRect.right &&
@@ -3014,8 +3332,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				continue;
 			const frame = this._previewTiles[i].parentNode;
 			// A frame hidden in a collapsed section or presentation measures as
-			// nothing.
-			if (this._isFrameHidden(frame))
+			// nothing, and a frame in the panel of a linked presentation is no
+			// spot of the sorter.
+			if (frame.parentNode !== this._partsPreviewCont || this._isFrameHidden(frame))
 				continue;
 			const rect = frame.getBoundingClientRect();
 			let pointerBefore;

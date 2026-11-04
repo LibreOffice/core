@@ -129,10 +129,58 @@ describe(['tagdesktop'], 'Linked presentation in the slide sorter', function() {
 		});
 	});
 
-	it('expands the presentation when the slide on show lands inside it', function() {
+	// The panel beside the sorter holds every frame and section header of the presentation,
+	// and the sorter holds the frames of the other slides, as many as given.
+	function assertPanelOpen(sorterFrames) {
+		cy.cGet('.slide-link-panel').should('exist');
+		cy.cGet('.slide-link-panel-title .slide-section-name').should('have.text', 'Q3 deck.odp');
+		cy.cGet('.slide-link-panel-title .slide-section-link').should('exist');
+		[1, 2, 3, 4].forEach(function(i) {
+			cy.cGet('.slide-link-panel-deck #preview-frame-part-' + i).should('exist');
+			cy.cGet('.slide-link-panel-deck #preview-frame-part-' + i)
+				.should('not.have.class', 'presentation-collapsed');
+		});
+		cy.cGet('.slide-link-panel-deck .slide-section-header').should('have.length', 3);
+		cy.cGet('.slide-link-panel-deck .slide-section-header.presentation-collapsed')
+			.should('not.exist');
+		cy.cGet('#slide-sorter .preview-frame:not(#first-drop-site):not(.link-panel-tile)')
+			.should('have.length', sorterFrames);
+		// The tile of the presentation stays under its header, with the picture and the number of
+		// the first slide.
+		cy.cGet('#slide-sorter .slide-presentation-header + .link-panel-tile').should('have.length', 1);
+		cy.cGet('#slide-sorter .link-panel-tile .preview-slide-number').should('have.text', '2');
+		cy.cGet('#preview-img-part-1').invoke('attr', 'src').then(function(src) {
+			cy.cGet('#slide-sorter .link-panel-tile .preview-img').should('have.attr', 'src', src);
+		});
+		cy.cGet('.slide-presentation-header').should('have.class', 'panel-open');
+		cy.cGet('#presentation-controls-wrapper').should('have.class', 'slide-link-panel-open');
+	}
+
+	// The panel is gone and the sorter holds every frame in slide order again, with the
+	// presentation collapsed to its tile.
+	function assertPanelClosed() {
+		cy.cGet('.slide-link-panel').should('not.exist');
+		cy.cGet('#presentation-controls-wrapper').should('not.have.class', 'slide-link-panel-open');
+		cy.cGet('.slide-presentation-header').should('not.have.class', 'panel-open');
+		cy.cGet('#slide-sorter .preview-frame:not(#first-drop-site)').should(function(frames) {
+			var ids = frames.toArray().map(function(frame) {
+				return frame.id;
+			});
+			expect(ids).to.deep.equal([0, 1, 2, 3, 4, 5].map(function(i) {
+				return 'preview-frame-part-' + i;
+			}));
+		});
+		cy.cGet('.slide-presentation-header + .slide-section-header .slide-section-name')
+			.should('have.text', 'Q3 deck.odp');
+		assertRunCollapsed(true);
+		cy.cGet('#preview-frame-part-1').should('have.class', 'presentation-tile');
+	}
+
+	it('opens the panel on the presentation when the slide on show lands inside it', function() {
 		helper.processToIdle(this.win);
 		waitForLinkedPresentation();
 		assertRunCollapsed(true);
+		cy.cGet('.slide-link-panel').should('not.exist');
 
 		// A hidden slide of the run becomes the current one, by whatever route.
 		cy.getFrameWindow().then(function(win) {
@@ -142,7 +190,114 @@ describe(['tagdesktop'], 'Linked presentation in the slide sorter', function() {
 		cy.getFrameWindow().should(function(win) {
 			expect(win.app.map._docLayer._selectedPart).to.equal(3);
 		});
-		assertRunCollapsed(false);
+		assertPanelOpen(2);
+		cy.cGet('.slide-link-panel-deck #preview-img-part-3')
+			.should('have.class', 'preview-img-currentpart');
+
+		// The sidebar grew by a column for the panel.
+		cy.cGet('#navigation-sidebar').should(function(sidebar) {
+			expect(sidebar.outerWidth()).to.be.greaterThan(400);
+		});
+
+		// A slide outside the presentation leaves the panel as it is.
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.setPart(5);
+		});
+		helper.processToIdle(this.win);
+		assertPanelOpen(2);
+	});
+
+	it('opens the panel from a click on the tile and closes it from its button', function() {
+		helper.processToIdle(this.win);
+		waitForLinkedPresentation();
+
+		cy.cGet('#preview-img-part-1').click();
+		helper.processToIdle(this.win);
+		assertPanelOpen(2);
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.map._docLayer._selectedPart).to.equal(1);
+		});
+
+		// A click on a slide in the panel makes it the current one.
+		cy.cGet('.slide-link-panel-deck #preview-img-part-3').click();
+		helper.processToIdle(this.win);
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.map._docLayer._selectedPart).to.equal(3);
+		});
+		cy.cGet('.slide-link-panel-deck #preview-img-part-3')
+			.should('have.class', 'preview-img-currentpart');
+
+		// A click on the tile in the sorter makes its slide the current one again, and the
+		// panel stays open.
+		cy.cGet('#slide-sorter .link-panel-tile .preview-img').click();
+		helper.processToIdle(this.win);
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.map._docLayer._selectedPart).to.equal(1);
+		});
+		assertPanelOpen(2);
+
+		// A section in the panel collapses on its own.
+		cy.cGet('.slide-link-panel-deck .slide-section-header').eq(1)
+			.find('.slide-section-toggle').click();
+		[2, 3].forEach(function(i) {
+			cy.cGet('#preview-frame-part-' + i).should('have.class', 'section-collapsed');
+		});
+		cy.cGet('.slide-link-panel-deck .slide-section-header').eq(1)
+			.find('.slide-section-toggle').click();
+		[2, 3].forEach(function(i) {
+			cy.cGet('#preview-frame-part-' + i).should('not.have.class', 'section-collapsed');
+		});
+
+		cy.cGet('.slide-link-panel-close').click();
+		assertPanelClosed();
+	});
+
+	it('opens and closes the panel from the header menu and its toggle', function() {
+		helper.processToIdle(this.win);
+		waitForLinkedPresentation();
+
+		cy.cGet('.slide-presentation-header').rightclick();
+		cy.cGet('[id$="-dropdown"]:visible').should('not.contain', 'Close Panel');
+		clickContextMenuItem('Open in Panel');
+		assertPanelOpen(2);
+
+		cy.cGet('.slide-presentation-header').rightclick();
+		cy.cGet('[id$="-dropdown"]:visible').should('not.contain', 'Open in Panel');
+		clickContextMenuItem('Close Panel');
+		assertPanelClosed();
+
+		// The toggle of the header collapses a presentation shown in the panel.
+		cy.cGet('.slide-presentation-header').rightclick();
+		clickContextMenuItem('Open in Panel');
+		assertPanelOpen(2);
+		cy.cGet('.slide-presentation-header .slide-section-toggle').click();
+		assertPanelClosed();
+	});
+
+	it('keeps the panel open while a slide is inserted after the presentation', function() {
+		helper.processToIdle(this.win);
+		waitForLinkedPresentation();
+
+		cy.cGet('#preview-img-part-1').click();
+		helper.processToIdle(this.win);
+		assertPanelOpen(2);
+
+		// The new slide follows the last slide, outside the presentation.
+		cy.cGet('#preview-img-part-5').click();
+		helper.processToIdle(this.win);
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.map._docLayer._selectedPart).to.equal(5);
+		});
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.insertPage();
+		});
+		helper.processToIdle(this.win);
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.impress.partList).to.have.length(7);
+			expect(win.app.map._docLayer._selectedPart).to.equal(6);
+		});
+		assertPanelOpen(3);
+		cy.cGet('.slide-presentation-header .slide-section-count').should('have.text', '4 slides');
 	});
 
 	it('unlinks the presentation from its header menu and keeps the links inside it', function() {

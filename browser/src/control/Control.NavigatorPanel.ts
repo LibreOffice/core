@@ -447,8 +447,13 @@ class NavigatorPanel extends SidebarBase {
 		// The maximized grid is a view of the slide list, so it lives on the
 		// slides tab: leaving that tab returns the panel to the side-by-side
 		// layout, and the grid toggle shows only while that tab is selected.
-		if (tabId !== 'tab-slide-sorter' && this.map.paneExpander)
-			this.map.paneExpander.reset();
+		if (tabId !== 'tab-slide-sorter') {
+			if (this.map.paneExpander) this.map.paneExpander.reset();
+			// The panel of a linked presentation is a view of the slide list as
+			// well, and it closes with the tab. The focus stays where it is, as
+			// the slide list is about to hide.
+			app.map._docLayer?._preview?.closeLinkPanel(true);
+		}
 		if (this.expandButton)
 			this.expandButton.classList.toggle(
 				'hidden',
