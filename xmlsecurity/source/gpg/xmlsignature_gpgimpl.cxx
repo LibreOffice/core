@@ -118,6 +118,9 @@ SAL_CALL XMLSignature_GpgImpl::generate(
     // we default to SHA512 for all digests - nss crypto does not have it...
     //pDsigCtx->defDigestMethodId = xmlSecTransformSha512Id;
 
+    // Allow ODF/OOXML references to resolve.
+    pDsigCtx->enabledReferenceUris = xmlSecTransformUriTypeAny;
+
     // Calculate digest for all references
     xmlNodePtr cur = xmlSecGetNextElementNode(pNode->children);
     if( cur != nullptr )
@@ -449,6 +452,9 @@ SAL_CALL XMLSignature_GpgImpl::validate(
         }
 
         xmlFree(pSignatureValue);
+
+        // Allow ODF/OOXML references to resolve.
+        pDsigCtx->enabledReferenceUris = xmlSecTransformUriTypeAny;
 
         // now verify digest for all references
         cur = xmlSecGetNextElementNode(pNode->children);

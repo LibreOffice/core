@@ -1,0 +1,42 @@
+mscng: use the fallback defines with MSVC as well, not just MinGW
+
+1.3.13 moved the fallback defines for symbols missing from old Windows
+headers out of globals.h into the new src/mscng/xmlsec-mingw.h (commit
+cfd67056a6e8857f5c0012223a391f859e5918e1, "(xmlsec-mscng) Refactored
+defines for MinGW (#1215)", 2026-07-16) and wrapped them in an
+"#if defined(__MINGW32__) || defined(__MINGW64__)" guard on the way, while
+in 1.3.12 the ones in globals.h were unconditional.
+
+We build mscng with MSVC against Windows SDK 10.0.22621, which has no
+BCRYPT_SHA3_{256,384,512}_ALGORITHM, those need SDK 10.0.26100. The same
+release also started looking up certs by SHA256 digest (e532ab0ad99f12a6
+"(xmlsec-mscng) Added support for SHA256 in the X509Digest element
+(#1214)", 2026-07-15), and that CERT_FIND_SHA256_HASH is missing from our
+wincrypt.h as well. So concatkdf.c, crypto.c, digests.c, signatures.c and
+x509vfy.c all fail with C2065: undeclared identifier.
+
+Drop the MinGW-only guard, each symbol in that header is wrapped in its own
+#ifndef anyway, so this turns into a no-op once the SDK catches up.
+
+--- xmlsec/src/mscng/xmlsec-mingw.h.orig
++++ xmlsec/src/mscng/xmlsec-mingw.h
+@@ -19,8 +19,10 @@
+ #error "xmlsec-mingw.h file contains private xmlsec definitions for mingw build and should not be used outside the xmlsec or xmlsec-mscng libraries"
+ #endif /* XMLSEC_PRIVATE */
+ 
+-/* This header provides fallback definitions for symbols missing from older MinGW headers. */
+-#if defined(__MINGW32__) || defined(__MINGW64__)
++/* This header provides fallback definitions for symbols missing from older MinGW headers and
++ * from older Windows SDKs: the MSVC build still uses SDK 10.0.22621, while e.g. the SHA3
++ * algorithm identifiers need 10.0.26100. Each symbol below has its own #ifndef, so this is a
++ * no-op once the headers catch up. */
+ 
+ /* ---- bcrypt.h: algorithm identifiers ------------------------------------- */
+ 
+@@ -129,6 +131,5 @@
+ 
+ 
+ 
+-#endif /* defined(__MINGW32__) || defined(__MINGW64__) */
+ 
+ #endif /* XMLSEC_MSCNG_XMLSEC_MINGW_H */
