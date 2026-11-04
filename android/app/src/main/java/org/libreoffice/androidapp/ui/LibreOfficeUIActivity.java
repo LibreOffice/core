@@ -376,7 +376,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
             findViewById(R.id.recent_files_content).setOnApplyWindowInsetsListener((v, windowInsets) -> {
                 Insets insets = windowInsets.getInsets(WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout());
 
-                v.setPadding(insets.left, 0, insets.right, insets.bottom);
+                v.setPadding(insets.left, 0, insets.right, v.getPaddingBottom());
 
                 return WindowInsets.CONSUMED;
             });
@@ -414,6 +414,17 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     /** Initialize the FloatingActionButton. */
     private void setupFloatingActionButton() {
         editFAB = findViewById(R.id.editFAB);
+        View fab = editFAB;
+        View recentFilesContent = findViewById(R.id.recent_files_content);
+        Runnable clearFab = () -> {
+            int spaceBelowFabTop = ((View) fab.getParent()).getHeight() - fab.getTop();
+            recentFilesContent.setPadding(recentFilesContent.getPaddingLeft(), 0, recentFilesContent.getPaddingRight(), spaceBelowFabTop);
+        };
+        editFAB.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            recentFilesContent.removeCallbacks(clearFab);
+            recentFilesContent.post(clearFab);
+        });
+
         if (LOActivity.isChromeOS(this)) {
             int dp = (int) getResources().getDisplayMetrics().density;
             ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) editFAB.getLayoutParams();
