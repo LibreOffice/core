@@ -735,6 +735,49 @@ std::optional<ScanlineChannelOffsets> get32BitTcChannelOffsets(ScanlineFormat eF
     }
 }
 
+void PremultiplyScanline(BitmapWriteAccess& rWriteAccess, tools::Long nY, ConstScanline pSource,
+                         ScanlineFormat eSourceFormat)
+{
+    const std::optional<ScanlineChannelOffsets> oSource = get32BitTcChannelOffsets(eSourceFormat);
+    assert(oSource && "the source rows have to be 32-bit truecolor pixels");
+    if (!oSource)
+        return;
+    const tools::Long nWidth = rWriteAccess.Width();
+    Scanline pScanline = rWriteAccess.GetScanline(nY);
+
+#if !ENABLE_WASM_STRIP_PREMULTIPLY
+    if (const std::optional<ScanlineChannelOffsets> oDestination
+        = get32BitTcChannelOffsets(rWriteAccess.GetScanlineFormat()))
+    {
+        const lookup_table& rPremultiply = get_premultiply_table();
+        for (tools::Long nX = 0; nX < nWidth; ++nX)
+        {
+            ConstScanline pSourcePixel = pSource + nX * 4;
+            const sal_uInt8 nBlue = pSourcePixel[oSource->nBlue];
+            const sal_uInt8 nGreen = pSourcePixel[oSource->nGreen];
+            const sal_uInt8 nRed = pSourcePixel[oSource->nRed];
+            const sal_uInt8 nAlpha = pSourcePixel[oSource->nAlpha];
+            const std::array<sal_uInt8, 256>& rRow = rPremultiply[nAlpha];
+            Scanline pDestination = pScanline + nX * 4;
+            pDestination[oDestination->nBlue] = rRow[nBlue];
+            pDestination[oDestination->nGreen] = rRow[nGreen];
+            pDestination[oDestination->nRed] = rRow[nRed];
+            pDestination[oDestination->nAlpha] = nAlpha;
+        }
+        return;
+    }
+#endif
+
+    for (tools::Long nX = 0; nX < nWidth; ++nX)
+    {
+        ConstScanline pSourcePixel = pSource + nX * 4;
+        const BitmapColor aColor(ColorAlpha, pSourcePixel[oSource->nRed],
+                                 pSourcePixel[oSource->nGreen], pSourcePixel[oSource->nBlue],
+                                 pSourcePixel[oSource->nAlpha]);
+        rWriteAccess.SetPixelOnData(pScanline, nX, aColor);
+    }
+}
+
 Bitmap GetDownsampledBitmap(Size const& rDstSizeTwip, Point const& rSrcPt, Size const& rSrcSz,
                             Bitmap const& rBmp, tools::Long nMaxBmpDPIX, tools::Long nMaxBmpDPIY)
 {

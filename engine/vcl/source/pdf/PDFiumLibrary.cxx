@@ -36,6 +36,7 @@
 #include <o3tl/string_view.hxx>
 #include <rtl/ustrbuf.hxx>
 
+#include <vcl/BitmapTools.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/dibtools.hxx>
 #include <functional>
@@ -1643,10 +1644,12 @@ Bitmap PDFiumBitmapImpl::createBitmapFromBuffer()
             {
                 BitmapScopedWriteAccess pWriteAccess(aBitmap);
                 ConstScanline pBuffer = getBuffer();
+                // pdfium gives straight alpha, vcl wants it premultiplied.
                 for (int nRow = 0; nRow < nHeight; ++nRow)
                 {
                     ConstScanline pLine = pBuffer + (nStride * nRow);
-                    pWriteAccess->CopyScanline(nRow, pLine, ScanlineFormat::N32BitTcBgra, nStride);
+                    vcl::bitmap::PremultiplyScanline(*pWriteAccess, nRow, pLine,
+                                                     ScanlineFormat::N32BitTcBgra);
                 }
             }
         }

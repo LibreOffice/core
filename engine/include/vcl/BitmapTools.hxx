@@ -22,6 +22,7 @@
 #include <vector>
 #include <vcl/RawBitmap.hxx>
 
+class BitmapWriteAccess;
 class SvStream;
 namespace basegfx { class B2DHomMatrix; }
 namespace com::sun::star::geometry { struct IntegerRectangle2D; }
@@ -50,6 +51,13 @@ struct ScanlineChannelOffsets
 /** For a premultiplied 32-bit truecolor scanline format (ABGR/ARGB/BGRA/RGBA), return the byte offsets */
 VCL_DLLPUBLIC std::optional<ScanlineChannelOffsets>
 get32BitTcChannelOffsets(ScanlineFormat eFormat);
+
+/** Premultiply one row of straight-alpha 32-bit pixels into row nY of rWriteAccess.
+    pSource holds Width() pixels in the channel order of eSourceFormat and may be that row itself.
+    A source format that is not 32-bit truecolor leaves the row as it is.
+*/
+VCL_DLLPUBLIC void PremultiplyScanline(BitmapWriteAccess& rWriteAccess, tools::Long nY,
+                                       ConstScanline pSource, ScanlineFormat eSourceFormat);
 
 /** Reduce an index modulo nEntryCount, so the result is below nEntryCount.
 

@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <cmath>
 #include <string_view>
 
 #include <cppunit/TestAssert.h>
@@ -25,10 +26,12 @@
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <vcl/pdfread.hxx>
 #include <vcl/BitmapReadAccess.hxx>
+#include <vcl/BitmapTools.hxx>
 
 namespace
 {
-Bitmap renderPDFPage(const void* pData, int nSize, int nPage = 0)
+Bitmap renderPDFPage(const void* pData, int nSize, int nPage = 0,
+                     sal_uInt32 nBackgroundColor = 0xFFFFFFFF)
 {
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
@@ -44,7 +47,7 @@ Bitmap renderPDFPage(const void* pData, int nSize, int nPage = 0)
     auto pPdfBitmap = pPdfium->createBitmap(nWidth, nHeight, /*nAlpha=*/1);
     if (!pPdfBitmap)
         return {};
-    pPdfBitmap->fillRect(0, 0, nWidth, nHeight, 0xFFFFFFFF);
+    pPdfBitmap->fillRect(0, 0, nWidth, nHeight, nBackgroundColor);
     pPdfBitmap->renderPageBitmap(pDocument.get(), pPage.get(), 0, 0, nWidth, nHeight);
     return pPdfBitmap->createBitmapFromBuffer();
 }
@@ -84,6 +87,40 @@ CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testDocument)
     auto aSize = pDocument->getPageSize(0);
     CPPUNIT_ASSERT_EQUAL(612.0, aSize.getWidth());
     CPPUNIT_ASSERT_EQUAL(792.0, aSize.getHeight());
+}
+
+CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testPremultipliedAlpha)
+{
+    SvFileStream aStream(getFullUrl(u"red-text.pdf"), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aStream);
+
+    Bitmap aBitmap = renderPDFPage(aMemory.GetData(), aMemory.GetSize(), /*nPage=*/0,
+                                   /*nBackgroundColor=*/0x00000000);
+    CPPUNIT_ASSERT(!aBitmap.IsEmpty());
+
+    BitmapScopedReadAccess pAccess(aBitmap);
+    auto oOffsets = vcl::bitmap::get32BitTcChannelOffsets(pAccess->GetScanlineFormat());
+    CPPUNIT_ASSERT(oOffsets);
+
+    bool bHasPartiallyCoveredRed = false;
+    for (tools::Long nY = 0; nY < pAccess->Height(); ++nY)
+    {
+        ConstScanline pLine = pAccess->GetScanline(nY);
+        for (tools::Long nX = 0; nX < pAccess->Width(); ++nX)
+        {
+            ConstScanline pPixel = pLine + nX * 4;
+            const int nAlpha = pPixel[oOffsets->nAlpha];
+            const int nRed = pPixel[oOffsets->nRed];
+            OString aMessage = "pixel " + OString::number(nX) + "," + OString::number(nY)
+                               + " has red " + OString::number(nRed) + " above alpha "
+                               + OString::number(nAlpha);
+            CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), nRed <= nAlpha);
+            if (nAlpha > 0 && nAlpha < 255 && nRed > 0)
+                bHasPartiallyCoveredRed = true;
+        }
+    }
+    CPPUNIT_ASSERT(bHasPartiallyCoveredRed);
 }
 
 CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testPages)
