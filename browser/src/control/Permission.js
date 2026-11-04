@@ -368,7 +368,7 @@ window.L.Map.include({
 			}]
 		};
 
-		this.uiManager.showModal(json);
+		this.uiManager.showModal(json, []);
 
 		// The jsdialog builder renders the dialog asynchronously, so the card containers (and
 		// the avatar <img>, if any) only exist some short time after showModal returns; poll
