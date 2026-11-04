@@ -3983,11 +3983,13 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
     // The positions the slides of a linked insert hold in the source, which links each page to a
     // position rather than to one slide. Optional.
     std::string sourcePositionList;
-    // How the pages go in: as plain slides, or as a section of their own holding the section of
-    // the source they make up. Optional, slides when absent.
+    // How the pages go in: as plain slides, as a section of their own holding the section of
+    // the source they make up, or as the whole presentation in the sections of the source.
+    // Optional, slides when absent.
     std::string as;
     // The identifier and the name of the unit of the source the pages make up, which a section
-    // insert records with the section. A slides insert names no unit.
+    // insert records with the section, and the name of the source, which a presentation insert
+    // records. A slides insert names no unit.
     std::string encodedId;
     std::string encodedName;
     int at = -1;
@@ -4139,21 +4141,25 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
         return false;
     }
 
-    // The pages go in as slides or as a section. A section is the one unit of the source the
-    // insert names, by its identifier and its name, both recorded with the section whether it
-    // is linked or not, and a slides insert names no unit.
+    // The pages go in as slides, as a section or as a whole presentation. A section is the one
+    // unit of the source the insert names, by its identifier, a GUID, and its name, both
+    // recorded with the section whether it is linked or not. Its slides are read by the
+    // identifier of each source slide, so it takes no positions. A presentation is every page of
+    // the source in the sections of the source, so it names no slides and no positions. It is
+    // named by the name of the source document, which the link records and which the section of
+    // the pages outside any section takes, so that name is given and is not empty. A slides
+    // insert names no unit. The name of a unit is recorded like the source time.
     const bool asSection = as == "section";
-    if ((haveAs && !asSection && as != "slides") ||
-        (asSection ? !(haveId && haveName) : (haveId || haveName)))
-    {
-        sendTextFrameAndLogError("error: cmd=slideimport kind=syntax");
-        return false;
-    }
-
-    // The slides of a section are read by the identifier of each source slide, so a section
-    // takes no positions. A section is named by a GUID.
-    if (asSection && (!isSlideGuid(sourceId) || !sourcePositions.empty() ||
-                      !isRecordableSourceName(sourceName)))
+    const bool asPresentation = as == "presentation";
+    bool wellFormed = false;
+    if (asSection)
+        wellFormed = haveId && isSlideGuid(sourceId) && haveName && sourcePositions.empty();
+    else if (asPresentation)
+        wellFormed = !haveId && haveName && !sourceName.empty() && slides.empty() &&
+                     sourcePositions.empty();
+    else
+        wellFormed = (!haveAs || as == "slides") && !haveId && !haveName;
+    if (!wellFormed || !isRecordableSourceName(sourceName))
     {
         sendTextFrameAndLogError("error: cmd=slideimport kind=syntax");
         return false;
@@ -4192,7 +4198,8 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
             << ",\"link\":" << (link ? "true" : "false") << ",\"source\":\""
             << JsonUtil::escapeJSONValue(source) << "\",\"lastModifiedTime\":\""
             << JsonUtil::escapeJSONValue(lastModifiedTime) << "\",\"as\":\""
-            << (asSection ? "section" : "slides") << "\",\"sourceId\":\""
+            << (asSection ? "section" : asPresentation ? "presentation" : "slides")
+            << "\",\"sourceId\":\""
             << JsonUtil::escapeJSONValue(sourceId) << "\",\"sourceName\":\""
             << JsonUtil::escapeJSONValue(sourceName) << "\"}";
 
@@ -4221,9 +4228,9 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
 
 namespace
 {
-/// Whether a link list holds a link of the given unit, "slide" or "section", to the named source
-/// document. An id names the one page or section to look for; an empty id takes any link of that
-/// unit, or of any unit when the unit is empty too.
+/// Whether a link list holds a link of the given unit, "slide", "section" or "presentation", to
+/// the named source document. An id names the one unit to look for; an empty id takes any link
+/// of that unit, or of any unit when the unit is empty too.
 bool linksToSource(const std::string& linksJson, const std::string& source,
                    const std::string& unit = std::string(), const std::string& id = std::string())
 {
@@ -4250,7 +4257,8 @@ bool linksToSource(const std::string& linksJson, const std::string& source,
 /// source and the file: each one at most once, in any order.
 struct SlideLinkOptions
 {
-    /// The unit the command names, unit=<slide|section> and id=<identifier>, as they came.
+    /// The unit the command names, unit=<slide|section|presentation> and id=<identifier>, as
+    /// they came.
     std::string encodedUnit;
     std::string encodedId;
     /// The time the source was last modified now, and the name the unit has in the source now,
@@ -4325,15 +4333,17 @@ bool readSlideLinkOptions(const StringVector& tokens, std::size_t first,
     return true;
 }
 
-/// Decodes the unit the options name. unit comes out as "slide" or "section" and id as the
-/// identifier of the unit in this document, a GUID spelled the way the document spells it. False
-/// when the options name no unit, a unit of no known kind, or an identifier that is no GUID.
+/// Decodes the unit the options name. unit comes out as "slide", "section" or "presentation" and
+/// id as the identifier of the unit in this document, a GUID spelled the way the document spells
+/// it. False when the options name no unit, a unit of no known kind, or an identifier that is no
+/// GUID.
 bool decodeSlideLinkUnit(const SlideLinkOptions& options, std::string& unit, std::string& id)
 {
     if (!options.haveUnit || !options.haveId)
         return false;
 
-    if (options.encodedUnit != "slide" && options.encodedUnit != "section")
+    if (options.encodedUnit != "slide" && options.encodedUnit != "section" &&
+        options.encodedUnit != "presentation")
         return false;
 
     std::string decoded;

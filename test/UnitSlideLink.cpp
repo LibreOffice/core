@@ -10,10 +10,10 @@
  */
 
 /*
- * Integration test for the slidelink command family: insert slides and a section as links to
- * the source document they came from, read the links the document holds, refresh them from a
- * file staged in the jail, the way wsd hands the kit the content of a source, and take a link
- * off. Also covers the error kinds and what a client may ask for itself.
+ * Integration test for the slidelink command family: insert slides, a section and a whole
+ * presentation as links to the source document they came from, read the links the document
+ * holds, refresh them from a file staged in the jail, the way wsd hands the kit the content of a
+ * source, and take a link off. Also covers the error kinds and what a client may ask for itself.
  */
 
 #include <config.h>
@@ -27,10 +27,12 @@
 
 #include <Poco/JSON/Array.h>
 #include <Poco/JSON/Object.h>
+#include <Poco/JSON/Parser.h>
 #include <Poco/File.h>
 #include <Poco/Path.h>
 #include <Poco/URI.h>
 
+#include <algorithm>
 #include <chrono>
 #include <fstream>
 #include <future>
@@ -52,6 +54,7 @@ class UnitSlideLink : public UnitWSD
 {
     TestResult testSlideLinkList();
     TestResult testSlideLinkSection();
+    TestResult testSlideLinkPresentation();
     TestResult testSlideLinkRefresh();
     TestResult testSlideLinkBreak();
     TestResult testSlideLinkErrors();
@@ -70,10 +73,12 @@ class UnitSlideLink : public UnitWSD
                                              documentURL, testname);
     }
 
-    /// Stages a ten-slide presentation in the jail of the loaded document under the given name.
-    /// An insert takes the file it names, so every insert is staged for.
+    /// Stages a presentation of the test data in the jail of the loaded document under the given
+    /// name: the ten-slide source unless another fixture is named. An insert takes the file it
+    /// names, so every insert is staged for.
     void stageSource(const std::shared_ptr<http::WebSocketSession>& socket,
-                     const std::string& stagedName)
+                     const std::string& stagedName,
+                     const std::string& fixture = "slide-link-source.odp")
     {
         // The kit answers getchildid in turn, so the answer comes after the kit is done with
         // the file staged before, and after every message sent earlier on the socket.
@@ -90,7 +95,7 @@ class UnitSlideLink : public UnitWSD
         const std::shared_ptr<DocumentBroker> docBroker = session->getDocumentBroker();
         LOK_ASSERT_MESSAGE("the session has no document broker", docBroker);
 
-        const std::string content = helpers::readFileAsString("slide-link-source.odp");
+        const std::string content = helpers::readFileAsString(fixture);
         auto staged = std::make_shared<std::promise<bool>>();
         docBroker->addCallback(
             [docBroker, stagedName, content, staged]()
@@ -184,7 +189,7 @@ class UnitSlideLink : public UnitWSD
         return parts;
     }
 
-    /// The entries of a link list of the given unit, "slide" or "section".
+    /// The entries of a link list of the given unit, "slide", "section" or "presentation".
     std::vector<Poco::JSON::Object::Ptr> getLinksOfUnit(const Poco::JSON::Array::Ptr& links,
                                                         const std::string& unit)
     {
@@ -472,6 +477,302 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkSection()
     return TestResult::Ok;
 }
 
+UnitBase::TestResult UnitSlideLink::testSlideLinkPresentation()
+{
+    try
+    {
+        std::string documentPath, documentURL;
+        helpers::getDocumentPathAndURL("insert-delete.odp", documentPath, documentURL, testname);
+
+        std::shared_ptr<SocketPoll> socketPoll = std::make_shared<SocketPoll>(testname);
+        socketPoll->startThread();
+
+        std::shared_ptr<http::WebSocketSession> socket = load(socketPoll, documentURL);
+
+        // The file holds a slide in no section, then the sections Opening of two slides and
+        // Closing of one. Inserted whole, it goes in as those sections, with the loose slide in a
+        // section named after the source document, under one link over them all.
+        stageSource(socket, "source.odp", "slide-link-presentation.odp");
+        helpers::sendTextFrame(socket,
+                               insertCommand("at=0 keepdesign=0 link=1 time=2021-05-05T10:00:00Z "
+                                             "as=presentation name=Q3%20deck.odp"),
+                               testname);
+        const std::string insertReply =
+            helpers::getResponseString(socket, "slideimport:", testname);
+        Poco::JSON::Object::Ptr insertObject = helpers::parseJsonReply(insertReply, "slideimport:");
+        LOK_ASSERT_EQUAL(4, insertObject->getValue<int>("count"));
+
+        // The presentation comes first, then each section followed by its slides.
+        Poco::JSON::Array::Ptr links = getLinks(socket);
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(8), links->size());
+        std::vector<Poco::JSON::Object::Ptr> presentations =
+            getLinksOfUnit(links, "presentation");
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), presentations.size());
+        Poco::JSON::Object::Ptr presentation = presentations[0];
+        const std::string presentationId = presentation->getValue<std::string>("id");
+        LOK_ASSERT_EQUAL(presentationId, links->getObject(0)->getValue<std::string>("id"));
+        LOK_ASSERT_EQUAL(std::string(), presentation->getValue<std::string>("parent"));
+        LOK_ASSERT_EQUAL(std::string(SourceName), presentation->getValue<std::string>("source"));
+        LOK_ASSERT_EQUAL(std::string(), presentation->getValue<std::string>("sourceId"));
+        LOK_ASSERT_EQUAL(std::string("Q3 deck.odp"), presentation->getValue<std::string>("name"));
+        LOK_ASSERT_EQUAL(std::string("2021-05-05T10:00:00Z"),
+                         presentation->getValue<std::string>("lastModifiedTime"));
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(4), presentation->getArray("slides")->size());
+
+        // The section of the loose slide names no section of the source and carries the name of
+        // the source document; the two sections of the file carry their identifiers and names.
+        std::vector<Poco::JSON::Object::Ptr> sections = getLinksOfUnit(links, "section");
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), sections.size());
+        LOK_ASSERT_EQUAL(std::string(), sections[0]->getValue<std::string>("sourceId"));
+        LOK_ASSERT_EQUAL(std::string("Q3 deck.odp"), sections[0]->getValue<std::string>("name"));
+        LOK_ASSERT_EQUAL(std::string("{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}"),
+                         sections[1]->getValue<std::string>("sourceId"));
+        LOK_ASSERT_EQUAL(std::string("Opening"), sections[1]->getValue<std::string>("name"));
+        LOK_ASSERT_EQUAL(std::string("{5C0D7A21-9F1E-4E7B-A6B3-D2A46A4F3C82}"),
+                         sections[2]->getValue<std::string>("sourceId"));
+        LOK_ASSERT_EQUAL(std::string("Closing"), sections[2]->getValue<std::string>("name"));
+        const std::string looseId = sections[0]->getValue<std::string>("id");
+        const std::string openingId = sections[1]->getValue<std::string>("id");
+        const std::string closingId = sections[2]->getValue<std::string>("id");
+        for (const Poco::JSON::Object::Ptr& section : sections)
+            LOK_ASSERT_EQUAL(presentationId, section->getValue<std::string>("parent"));
+
+        // Each slide is under its section, and the presentation spans them all in order.
+        const std::vector<std::string> parts = getParts(links, 4);
+        Poco::JSON::Array::Ptr spanned = presentation->getArray("slides");
+        for (std::size_t i = 0; i < parts.size(); ++i)
+            LOK_ASSERT_EQUAL(parts[i], spanned->getElement<std::string>(i));
+        const std::vector<Poco::JSON::Object::Ptr> slides = getLinksOfUnit(links, "slide");
+        LOK_ASSERT_EQUAL(looseId, slides[0]->getValue<std::string>("parent"));
+        LOK_ASSERT_EQUAL(openingId, slides[1]->getValue<std::string>("parent"));
+        LOK_ASSERT_EQUAL(openingId, slides[2]->getValue<std::string>("parent"));
+        LOK_ASSERT_EQUAL(closingId, slides[3]->getValue<std::string>("parent"));
+
+        // An update of the presentation reads the whole staged file, which holds the loose slide
+        // and Opening renamed Kickoff with one slide, no Closing, and a new section Wrap-up of two
+        // slides. The sections the file still lists keep their identifiers here, and the
+        // presentation and the loose section take the name the update gives.
+        const std::string encodedPresentationId = encodeId(presentationId);
+        stageSource(socket, "staged.odp", "slide-link-presentation-changed.odp");
+        sendAsWsd(std::string("slidelink update source=") + EncodedSourceName +
+                  " file=staged.odp time=2021-06-06T10:00:00Z unit=presentation id=" +
+                  encodedPresentationId + " name=Q3%20deck%20v2.odp");
+        const std::string updateListReply =
+            helpers::getResponseString(socket, "slidelinks:", testname);
+        links = helpers::parseJsonReply(updateListReply, "slidelinks:")->getArray("links");
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(8), links->size());
+        presentations = getLinksOfUnit(links, "presentation");
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), presentations.size());
+        presentation = presentations[0];
+        LOK_ASSERT_EQUAL(presentationId, presentation->getValue<std::string>("id"));
+        LOK_ASSERT_EQUAL(std::string("Q3 deck v2.odp"),
+                         presentation->getValue<std::string>("name"));
+        LOK_ASSERT_EQUAL(std::string("2021-06-06T10:00:00Z"),
+                         presentation->getValue<std::string>("lastModifiedTime"));
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(4), presentation->getArray("slides")->size());
+        sections = getLinksOfUnit(links, "section");
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), sections.size());
+        LOK_ASSERT_EQUAL(looseId, sections[0]->getValue<std::string>("id"));
+        LOK_ASSERT_EQUAL(std::string("Q3 deck v2.odp"),
+                         sections[0]->getValue<std::string>("name"));
+        LOK_ASSERT_EQUAL(openingId, sections[1]->getValue<std::string>("id"));
+        LOK_ASSERT_EQUAL(std::string("Kickoff"), sections[1]->getValue<std::string>("name"));
+        LOK_ASSERT_EQUAL(std::string("{7A21D2A4-6A4F-4C82-8E7B-A6B39F1E5C0D}"),
+                         sections[2]->getValue<std::string>("sourceId"));
+        LOK_ASSERT_EQUAL(std::string("Wrap-up"), sections[2]->getValue<std::string>("name"));
+        const std::string wrapUpId = sections[2]->getValue<std::string>("id");
+        LOK_ASSERT_MESSAGE("the section the file no longer lists is gone",
+                           wrapUpId != closingId);
+        // Every page of the presentation is a fresh one.
+        const std::vector<std::string> refreshedParts = getParts(links, 4);
+        for (const std::string& part : parts)
+            LOK_ASSERT_MESSAGE("an old page is still linked",
+                               std::find(refreshedParts.begin(), refreshedParts.end(), part) ==
+                                   refreshedParts.end());
+
+        const std::string updateReply = helpers::getResponseString(socket, "slidelink:", testname);
+        Poco::JSON::Object::Ptr updateObject = helpers::parseJsonReply(updateReply, "slidelink:");
+        LOK_ASSERT_EQUAL(std::string("updated"), updateObject->getValue<std::string>("status"));
+        LOK_ASSERT_EQUAL(std::string("presentation"),
+                         updateObject->getValue<std::string>("unit"));
+        LOK_ASSERT_EQUAL(presentationId, updateObject->getValue<std::string>("id"));
+        LOK_ASSERT_EQUAL(4, updateObject->getValue<int>("count"));
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(0),
+                         updateObject->getArray("notUpdated")->size());
+
+        // An update of the presentation that gives no name leaves it the name it recorded, and
+        // the section of the loose slides follows that name.
+        stageSource(socket, "staged.odp", "slide-link-presentation-changed.odp");
+        sendAsWsd(std::string("slidelink update source=") + EncodedSourceName +
+                  " file=staged.odp time=2021-06-07T10:00:00Z unit=presentation id=" +
+                  encodedPresentationId);
+        const std::string unnamedListReply =
+            helpers::getResponseString(socket, "slidelinks:", testname);
+        links = helpers::parseJsonReply(unnamedListReply, "slidelinks:")->getArray("links");
+        presentations = getLinksOfUnit(links, "presentation");
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), presentations.size());
+        LOK_ASSERT_EQUAL(std::string("Q3 deck v2.odp"),
+                         presentations[0]->getValue<std::string>("name"));
+        LOK_ASSERT_EQUAL(std::string("2021-06-07T10:00:00Z"),
+                         presentations[0]->getValue<std::string>("lastModifiedTime"));
+        LOK_ASSERT_EQUAL(std::string("Q3 deck v2.odp"),
+                         getLinksOfUnit(links, "section")[0]->getValue<std::string>("name"));
+        // The pages were replaced once more. A page read from the file keeps the identifier it
+        // has there while no page of the document holds it, so the comparison is with the pages
+        // this refresh replaced, not with those of an earlier one.
+        const std::vector<std::string> unnamedParts = getParts(links, 4);
+        for (const std::string& part : refreshedParts)
+            LOK_ASSERT_MESSAGE("an old page is still linked",
+                               std::find(unnamedParts.begin(), unnamedParts.end(), part) ==
+                                   unnamedParts.end());
+        LOK_ASSERT_EQUAL(4, helpers::parseJsonReply(
+                                helpers::getResponseString(socket, "slidelink:", testname),
+                                "slidelink:")
+                                ->getValue<int>("count"));
+
+        // An update of the whole source reads the presentation once, with the links under it,
+        // names no unit in its reply, and leaves the presentation the name it recorded.
+        stageSource(socket, "staged.odp", "slide-link-presentation-changed.odp");
+        sendAsWsd(std::string("slidelink update source=") + EncodedSourceName +
+                  " file=staged.odp time=2021-07-07T10:00:00Z");
+        const std::string sourceListReply =
+            helpers::getResponseString(socket, "slidelinks:", testname);
+        links = helpers::parseJsonReply(sourceListReply, "slidelinks:")->getArray("links");
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(8), links->size());
+        presentations = getLinksOfUnit(links, "presentation");
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), presentations.size());
+        presentation = presentations[0];
+        LOK_ASSERT_EQUAL(presentationId, presentation->getValue<std::string>("id"));
+        LOK_ASSERT_EQUAL(std::string("Q3 deck v2.odp"),
+                         presentation->getValue<std::string>("name"));
+        LOK_ASSERT_EQUAL(std::string("2021-07-07T10:00:00Z"),
+                         presentation->getValue<std::string>("lastModifiedTime"));
+        sections = getLinksOfUnit(links, "section");
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), sections.size());
+        LOK_ASSERT_EQUAL(looseId, sections[0]->getValue<std::string>("id"));
+        LOK_ASSERT_EQUAL(openingId, sections[1]->getValue<std::string>("id"));
+        LOK_ASSERT_EQUAL(wrapUpId, sections[2]->getValue<std::string>("id"));
+        // The presentation was read again, so every page of it is a fresh one once more.
+        const std::vector<std::string> sourceParts = getParts(links, 4);
+        for (const std::string& part : unnamedParts)
+            LOK_ASSERT_MESSAGE("an old page is still linked",
+                               std::find(sourceParts.begin(), sourceParts.end(), part) ==
+                                   sourceParts.end());
+        const std::string sourceReply = helpers::getResponseString(socket, "slidelink:", testname);
+        Poco::JSON::Object::Ptr sourceObject = helpers::parseJsonReply(sourceReply, "slidelink:");
+        LOK_ASSERT_EQUAL(4, sourceObject->getValue<int>("count"));
+        LOK_ASSERT_MESSAGE("an update of the whole source names no unit",
+                           !sourceObject->has("unit"));
+        LOK_ASSERT_MESSAGE("an update of the whole source names no id", !sourceObject->has("id"));
+
+        // Taking the link off the presentation alone leaves its sections and slides linked on
+        // their own, under no presentation now, and the pages as they are.
+        helpers::sendTextFrame(socket, "slidelink break unit=presentation id=" +
+                                           encodedPresentationId,
+                               testname);
+        const std::string breakReply = helpers::getResponseString(socket, "slidelink:", testname);
+        Poco::JSON::Object::Ptr breakObject = helpers::parseJsonReply(breakReply, "slidelink:");
+        LOK_ASSERT_EQUAL(std::string("broken"), breakObject->getValue<std::string>("status"));
+        LOK_ASSERT_EQUAL(std::string("presentation"),
+                         breakObject->getValue<std::string>("unit"));
+        LOK_ASSERT_EQUAL(presentationId, breakObject->getValue<std::string>("id"));
+        const std::string breakListReply =
+            helpers::getResponseString(socket, "slidelinks:", testname);
+        links = helpers::parseJsonReply(breakListReply, "slidelinks:")->getArray("links");
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(7), links->size());
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(0),
+                         getLinksOfUnit(links, "presentation").size());
+        sections = getLinksOfUnit(links, "section");
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), sections.size());
+        for (const Poco::JSON::Object::Ptr& section : sections)
+            LOK_ASSERT_EQUAL(std::string(), section->getValue<std::string>("parent"));
+        LOK_ASSERT_MESSAGE("a break leaves the pages as they are",
+                           sourceParts == getParts(links, 4));
+
+        // The presentation is linked to nothing now, for a break and for an update alike.
+        helpers::assertErrorReply(
+            socket, "slidelink break unit=presentation id=" + encodedPresentationId, "slidelink",
+            "notlinked", testname, " unit=presentation id=" + encodedPresentationId);
+        stageSource(socket, "staged.odp", "slide-link-presentation-changed.odp");
+        assertErrorAsWsd(socket,
+                         std::string("slidelink update source=") + EncodedSourceName +
+                             " file=staged.odp unit=presentation id=" + encodedPresentationId,
+                         "notlinked",
+                         std::string(" source=") + EncodedSourceName +
+                             " unit=presentation id=" + encodedPresentationId);
+
+        // A presentation inserted without a link goes in as the sections of the file, linked to
+        // nothing.
+        stageSource(socket, "source.odp", "slide-link-presentation.odp");
+        helpers::sendTextFrame(socket, insertCommand("as=presentation name=Q3%20deck.odp"),
+                               testname);
+        const std::string plainReply = helpers::getResponseString(socket, "slideimport:", testname);
+        LOK_ASSERT_EQUAL(4, helpers::parseJsonReply(plainReply, "slideimport:")->getValue<int>(
+                                "count"));
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(7), getLinks(socket)->size());
+        // The three sections of the file follow the three of the first presentation and the
+        // section of the slide the document had.
+        helpers::sendTextFrame(socket, "getslidesections", testname);
+        const std::string sectionsReply =
+            helpers::getResponseString(socket, "slidesections:", testname);
+        Poco::JSON::Parser sectionsParser;
+        Poco::JSON::Array::Ptr sectionList =
+            sectionsParser.parse(sectionsReply.substr(std::string("slidesections:").size()))
+                .extract<Poco::JSON::Array::Ptr>();
+        LOK_ASSERT_MESSAGE("missing section list", sectionList);
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(7), sectionList->size());
+        LOK_ASSERT_EQUAL(std::string("Q3 deck.odp"),
+                         sectionList->getObject(4)->getValue<std::string>("name"));
+        LOK_ASSERT_EQUAL(1, sectionList->getObject(4)->getValue<int>("slideCount"));
+        LOK_ASSERT_EQUAL(std::string("Opening"),
+                         sectionList->getObject(5)->getValue<std::string>("name"));
+        LOK_ASSERT_EQUAL(2, sectionList->getObject(5)->getValue<int>("slideCount"));
+        LOK_ASSERT_EQUAL(std::string("Closing"),
+                         sectionList->getObject(6)->getValue<std::string>("name"));
+        LOK_ASSERT_EQUAL(1, sectionList->getObject(6)->getValue<int>("slideCount"));
+
+        // Taking the link off a presentation with everything beneath it leaves the links of the
+        // other units of the document as they are.
+        stageSource(socket, "source.odp", "slide-link-presentation.odp");
+        helpers::sendTextFrame(socket,
+                               insertCommand("link=1 time=2021-05-05T10:00:00Z "
+                                             "as=presentation name=Q3%20deck.odp"),
+                               testname);
+        helpers::getResponseString(socket, "slideimport:", testname);
+        links = getLinks(socket);
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(15), links->size());
+        presentations = getLinksOfUnit(links, "presentation");
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), presentations.size());
+        const std::string secondId = presentations[0]->getValue<std::string>("id");
+        LOK_ASSERT_MESSAGE("the second presentation has an identifier of its own",
+                           secondId != presentationId);
+        helpers::sendTextFrame(socket, "slidelink break unit=presentation deep=1 id=" +
+                                           encodeId(secondId),
+                               testname);
+        const std::string deepReply = helpers::getResponseString(socket, "slidelink:", testname);
+        LOK_ASSERT_EQUAL(secondId, helpers::parseJsonReply(deepReply, "slidelink:")
+                                       ->getValue<std::string>("id"));
+        const std::string deepListReply =
+            helpers::getResponseString(socket, "slidelinks:", testname);
+        links = helpers::parseJsonReply(deepListReply, "slidelinks:")->getArray("links");
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(7), links->size());
+        sections = getLinksOfUnit(links, "section");
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), sections.size());
+        LOK_ASSERT_EQUAL(looseId, sections[0]->getValue<std::string>("id"));
+        LOK_ASSERT_EQUAL(openingId, sections[1]->getValue<std::string>("id"));
+        LOK_ASSERT_EQUAL(wrapUpId, sections[2]->getValue<std::string>("id"));
+        LOK_ASSERT_MESSAGE("the slides of the first presentation keep their links",
+                           sourceParts == getParts(links, 4));
+
+        socketPoll->joinThread();
+    }
+    catch (const Poco::Exception& exc)
+    {
+        LOK_ASSERT_FAIL(exc.displayText());
+    }
+    return TestResult::Ok;
+}
+
 UnitBase::TestResult UnitSlideLink::testSlideLinkRefresh()
 {
     try
@@ -711,6 +1012,39 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkErrors()
                                                 EncodedUnknownId),
                                   "slideimport", "syntax", testname);
 
+        // A presentation is every page of the file in the sections of the file, named by the
+        // name of the source document, so it takes no slides, no positions and no unit of the
+        // source, and needs its name, recorded like the name of a section.
+        const std::string presentation = "as=presentation name=Q3%20deck.odp";
+        helpers::assertErrorReply(socket, insertCommand("slides=0 " + presentation),
+                                  "slideimport", "syntax", testname);
+        helpers::assertErrorReply(socket,
+                                  insertCommand("link=1 sourcepositions=1 " + presentation),
+                                  "slideimport", "syntax", testname);
+        helpers::assertErrorReply(socket,
+                                  insertCommand(presentation + " id=" + EncodedUnknownId),
+                                  "slideimport", "syntax", testname);
+        helpers::assertErrorReply(socket, insertCommand("link=1 as=presentation"), "slideimport",
+                                  "syntax", testname);
+        helpers::assertErrorReply(socket, insertCommand("link=1 as=presentation name="),
+                                  "slideimport", "syntax", testname);
+        helpers::assertErrorReply(socket, insertCommand("as=presentation name=a%01"),
+                                  "slideimport", "syntax", testname);
+        // A name is measured in UTF-16 code units, the way the document measures it: 128 of a
+        // three-byte character pass the syntax check and reach the staging area, which holds no
+        // file by now, while 129 of them, or of a plain character, are refused.
+        std::string euros;
+        for (int i = 0; i < 128; ++i)
+            euros += "%E2%82%AC";
+        helpers::assertErrorReply(socket, insertCommand("as=presentation name=" + euros),
+                                  "slideimport", "cantload", testname);
+        helpers::assertErrorReply(socket,
+                                  insertCommand("as=presentation name=" + euros + "%E2%82%AC"),
+                                  "slideimport", "syntax", testname);
+        helpers::assertErrorReply(socket,
+                                  insertCommand("as=presentation name=" + std::string(129, 'x')),
+                                  "slideimport", "syntax", testname);
+
         // A file is staged for one insert, and an insert the document cannot make sense of
         // takes it all the same, so the insert that follows reaches nothing.
         stageSource(socket, "source.odp");
@@ -779,6 +1113,8 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkErrors()
         assertErrorAsWsd(socket, update + " id=" + EncodedUnknownId, "syntax", namedSource);
         assertErrorAsWsd(socket, update + " unit=deck id=" + EncodedUnknownId, "syntax",
                          namedSource + " unit=deck id=" + EncodedUnknownId);
+        assertErrorAsWsd(socket, update + " unit=presentation id=deck", "syntax",
+                         namedSource + " unit=presentation id=deck");
         // A token that comes twice is refused, and the answer names the value that came first.
         assertErrorAsWsd(socket,
                          update + " unit=slide id=" + EncodedUnknownId
@@ -847,6 +1183,10 @@ void UnitSlideLink::invokeWSDTest()
         exitTest(result);
 
     result = testSlideLinkSection();
+    if (result != TestResult::Ok)
+        exitTest(result);
+
+    result = testSlideLinkPresentation();
     if (result != TestResult::Ok)
         exitTest(result);
 

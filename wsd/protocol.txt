@@ -249,7 +249,8 @@ filepickerresult id=<n> [name=<name>]
 slideimport insert file=<staged name> [source=<source name>] [slides=<i0,i1,...>]
                    [at=<S>] [keepdesign=<0|1>] [link=<0|1>] [time=<source time>]
                    [sourcepositions=<p0,p1,...>]
-                   [as=<slides|section>] [id=<source section id>] [name=<source section name>]
+                   [as=<slides|section|presentation>] [id=<source section id>]
+                   [name=<source unit name>]
 
     Inserts pages of a presentation staged in the jail into the open document.
     Only Impress documents are served. The staged name is the file a remote
@@ -281,7 +282,7 @@ slideimport insert file=<staged name> [source=<source name>] [slides=<i0,i1,...>
     slides. as=section inserts them as a section of their own that holds the
     section of the source they make up: <source section id> names that section
     by the identifier the source reports for it in slidesections:, and <source
-    section name> its name, both percent-encoded and both given. The section
+    unit name> its name, both percent-encoded and both given. The section
     is named like the source section. With link=1 the section is linked to the
     source section, so that a later update can add and remove slides as the
     source section gains and loses them; without it the section is a plain
@@ -289,12 +290,20 @@ slideimport insert file=<staged name> [source=<source name>] [slides=<i0,i1,...>
     next one starts, so the pages that follow them get a section of their own:
     a section that started at <S> starts after the new pages, and the rest of
     the section the pages went into keeps its name in a section of its own, or
-    takes the default name when it was in no section. A section insert takes
-    no sourcepositions, and a slides insert takes no id= and no name=; an
-    insert of any other shape is answered kind=syntax. The slides, the section
-    and its link are one undo step. A source section id that is no GUID, or a
-    name longer than 128 characters, inserts nothing and is answered
-    kind=syntax. The reply is
+    takes the default name when it was in no section. as=presentation inserts
+    every page of the staged file at <S>, in the sections of that file, with
+    the pages outside any section first in a section named <source unit name>,
+    the name of the source document, which a presentation insert gives and
+    which is not empty. With link=1 the whole presentation is linked to the
+    source, and so is each section the file identifies, the section of the
+    pages outside any section, and each page; without it they are plain
+    sections and slides of this document. A section insert takes no
+    sourcepositions, a presentation insert takes no slides=, no sourcepositions
+    and no id=, and a slides insert takes no id= and no name=; an insert of any
+    other shape is answered kind=syntax. The slides, the sections and their
+    links are one undo step. A source section id that is no GUID, or a name
+    longer than 128 characters, inserts nothing and is answered kind=syntax.
+    The reply is
         slideimport: {"status":"inserted","count":<K>}
 
     Errors are reported as
@@ -336,15 +345,16 @@ exportslides [slides=<p0,p1,...>|guids=<g0,g1,...>]
     before any page is written.
 
 slidelink list
-slidelink break unit=<slide|section> id=<id> [deep=<0|1>]
+slidelink break unit=<slide|section|presentation> id=<id> [deep=<0|1>]
 slidelink update source=<source name> file=<staged name> [time=<source time>]
-                 [unit=<slide|section> id=<id>] [name=<unit name>]
+                 [unit=<slide|section|presentation> id=<id>] [name=<unit name>]
 
-    Reads the links the document holds to the slides and the sections of other
-    documents, refreshes them from a source, and takes a link off. Only Impress
-    and Draw documents hold such links. A link holds a copy of one unit of a
-    source document, a slide or a section of it, in a run of slides of this
-    document. A source is the persistent link of the source document, the
+    Reads the links the document holds to the slides, the sections and the
+    whole decks of other documents, refreshes them from a source, and takes a
+    link off. Only Impress and Draw documents hold such links. A link holds a
+    copy of one unit of a source document, a slide, a section or the whole
+    presentation, in a run of slides of this document. A source is the
+    persistent link of the source document, the
     value a link records: the reference the storage resolves to that document,
     which is no address the server reads itself. The server matches it against
     the remote links of the document, and for one no remote link stands for it
@@ -360,40 +370,52 @@ slidelink update source=<source name> file=<staged name> [time=<source time>]
     links record so a later comparison tells whether they are up to date.
 
     A break and an update name a unit of this document by unit= and id=
-    together: the unit is slide or section, and <id> the identifier the link
-    list reports for it, a GUID, percent-encoded. The two may come in any
+    together: the unit is slide, section or presentation, and <id> the
+    identifier the link list reports for it, a GUID, percent-encoded. The two
+    may come in any
     order among the optional tokens, and each token of a command comes once. A
     unit of another kind, an identifier that is no GUID, or one of the two
     tokens without the other is answered kind=syntax.
 
     list: the reply is
-        slidelinks: {"links":[{"unit":"<slide|section>","id":"<id>","parent":"<id>",
-                               "source":"<source document>","sourceId":"<id>",
-                               "name":"<name>","lastModifiedTime":"<time>",
+        slidelinks: {"links":[{"unit":"<slide|section|presentation>","id":"<id>",
+                               "parent":"<id>","source":"<source document>",
+                               "sourceId":"<id>","name":"<name>",
+                               "lastModifiedTime":"<time>",
                                "slides":["<part>",...]},...]}
-    one flat array in document order: a section, then the slides it spans. The
-    unit says what the link holds a copy of: one slide of the source, or one
-    section of it. <id> is the part of the linked page for a slide and the
+    one flat array in document order: a presentation, then the sections it
+    spans, each followed by the slides it spans. The unit says what the link
+    holds a copy of: one slide of the source, one section of it, or the whole
+    presentation. <id> is the part of the linked page for a slide, the
     identifier of the section for a section, as the slidesections list names
-    it. parent is the section that spans a slide, or empty. source is the
-    source document. sourceId is the slide or the section in the source: the
-    identifier of the source slide, the name a slide holds by its position when
-    the link follows a position, or the identifier of the source section. name
-    is the name the slide or the section had in the source when it was last
-    read, empty for a slide that has no name of its own. lastModifiedTime is
-    the time the source was last modified when the unit was last read, empty
-    when none was recorded; comparing it with the source's current time tells
-    whether the link is out of date. slides lists the parts the link spans, in
-    slide order. A page linked to a file by its path is no link of this list,
-    since a refresh has no way to reach it. A document that links to nothing
-    reports an empty array.
+    it, and an identifier of the link's own for a presentation. parent is the
+    innermost link that spans the unit: the section that spans a slide, else
+    the presentation that spans it, or empty. source is the source document.
+    sourceId is the slide or the section in the source: the identifier of the
+    source slide, the name a slide holds by its position when the link follows
+    a position, or the identifier of the source section. It is empty for a
+    presentation, and for the section of a presentation that holds the slides
+    of the source outside any section, which names no section of the source.
+    name is the name the slide or the section had in the source when it was
+    last read, empty for a slide that has no name of its own, or the name of
+    the source document for a presentation and for that section.
+    lastModifiedTime is the time the source was last modified when the unit
+    was last read, empty when none was recorded; comparing it with the
+    source's current time tells whether the link is out of date. slides lists
+    the parts the link spans, in slide order. A page linked to a file by its
+    path is no link of this list, since a refresh has no way to reach it. A
+    document that links to nothing reports an empty array.
 
     A link holds while its unit spans the slides it was linked with, in that
     order: the one page for a slide, the same slides in the same order for a
-    section. A slide inserted into a section, removed from it or moved within
-    it ends the link of the section, and the section is then left out; undoing
-    the change puts it back. A slide that an edit took its own link off stays
-    among the slides of its section. The kit sends the list on its own, to
+    section, and the same sections in the same order for a presentation. A
+    slide inserted into a section, removed from it or moved within it ends the
+    link of the section, and the section is then left out; undoing the change
+    puts it back. A section added to a presentation, taken out of it or moved
+    within it ends the link of the presentation the same way. A slide that an
+    edit took its own link off stays among the slides of its section, and a
+    section that lost its link stays among the sections of its presentation.
+    The kit sends the list on its own, to
     every view of the document, whenever the links listed there change: when a
     link is made or taken off, when an edit of a linked page or of the slides
     of a section ends a link, and when an undo or a redo brings it back. A
@@ -405,10 +427,10 @@ slidelink update source=<source name> file=<staged name> [time=<source time>]
     holds and becomes a unit of this document alone, so a later refresh of
     that source leaves it as it is. With deep=1 every link beneath comes off
     as well: each slide of a section loses its link to its source slide, as a
-    break of each slide would do. With deep=0, or with no deep=, the links
-    beneath stay. This is one undo step, and undoing it gives every link back.
-    The reply is
-        slidelink: {"status":"broken","unit":"<slide|section>","id":"<id>"}
+    break of each slide would do, and so does each section and each slide of a
+    presentation. With deep=0, or with no deep=, the links beneath stay. This
+    is one undo step, and undoing it gives every link back. The reply is
+        slidelink: {"status":"broken","unit":"<slide|section|presentation>","id":"<id>"}
     A unit that is linked to nothing is answered kind=notlinked, a view that
     cannot edit kind=failed, and a deep= that is neither 0 nor 1 kind=syntax.
     The fresh link list arrives on its own, as above.
@@ -419,8 +441,10 @@ slidelink update source=<source name> file=<staged name> [time=<source time>]
     source as a local file. The kit reads only the staged file, never a
     location, and removes the file once the refresh is done. With no unit,
     every link of the source that is under no other link is refreshed: each
-    linked slide outside a linked section, and each linked section with the
-    slides it spans. With unit= and id= that one link alone is refreshed, and
+    linked slide outside a linked section or presentation, each linked section
+    outside a linked presentation with the slides it spans, and each linked
+    presentation with the sections and the slides it spans. With unit= and id=
+    that one link alone is refreshed, and
     the other links to the source keep their slides and the time they record;
     a unit that is not linked to <source name> is answered kind=notlinked. The
     whole refresh is one undo step.
@@ -431,19 +455,25 @@ slidelink update source=<source name> file=<staged name> [time=<source time>]
     pages, and holds a fresh copy of each slide of that section and no other
     slide, in that order, so slides added to the source section come in, slides
     taken out of it go, and a slide edited in this document is replaced as
-    well; a client asks the user before it sends this. The slides keep the
-    design of the source, as a refreshed page does. <unit name> is the name
-    the unit has in the source now, percent-encoded, and goes with a unit.
-    Without it a section takes the name the file lists for its source section,
-    since the file carries the sections of its pages under the names they have
-    in the source. A section follows that name while its own name is still
-    the name the source section had at the last read, and keeps a name given
-    to it in this document. A unit the file holds nothing for, or whose slides
+    well; a client asks the user before it sends this. A presentation is read
+    whole, every page and every section of the file: a section the file still
+    lists is read again in place and keeps its identifier here, a section new
+    to the file comes in, one the file no longer lists goes, and the pages
+    outside any section stay in the section named after the source document.
+    The slides keep the design of the source, as a refreshed page does. <unit
+    name> is the name the unit has in the source now, percent-encoded, and
+    goes with a unit; for a presentation it is the name of the source
+    document. Without it a section takes the name the file lists for its
+    source section, since the file carries the sections of its pages under the
+    names they have in the source, and a presentation keeps the name it
+    recorded. A section follows that name while its own name is still the name
+    the source section had at the last read, and keeps a name given to it in
+    this document. A unit the file holds nothing for, or whose slides
     could not be read, keeps the slides it holds, and those slides are
     reported. Each refreshed page is the page read for it, so it holds a new
     part; the reply is therefore the fresh link list followed by
         slidelink: {"status":"updated","source":"<source document>",
-                    "unit":"<slide|section>","id":"<id>",
+                    "unit":"<slide|section|presentation>","id":"<id>",
                     "count":<K>,"notUpdated":["<part>",...]}
     where unit and id are those of the command and are left out when it named
     none, <K> counts the slides refreshed, and notUpdated lists the parts of
@@ -451,7 +481,7 @@ slidelink update source=<source name> file=<staged name> [time=<source time>]
 
     Errors are reported as
         error: cmd=slidelink kind=<syntax|notlinked|failed>
-               [source=<source name>] [unit=<slide|section> id=<id>]
+               [source=<source name>] [unit=<slide|section|presentation> id=<id>]
     where notlinked means no link of the document is to that source, that the
     unit an update names is not linked to it, or that the unit a break names
     is linked to nothing, and failed means the staged file could not be read,
