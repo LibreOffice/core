@@ -25,7 +25,7 @@ class CalcVectorManager {
 	/// The most blocks kept for one sheet. Blocks out of view go first.
 	private static readonly maxBlocks = 512;
 
-	/// The most sheets kept, counting each mode of a sheet on its own.
+	/// The most sheets kept.
 	private static readonly maxSheets = 4;
 
 	/// The most requests waiting for an answer at once. The engine answers one at a time, and one
@@ -97,13 +97,13 @@ class CalcVectorManager {
 	// Font attributes of cell text by id. An id is stable within an epoch.
 	private _textStyles: Map<number, cool.CalcTextStyle> = new Map();
 
-	// What is held of each sheet, keyed by sheet and mode.
+	// What is held of each sheet, keyed by sheet.
 	private _sheets: Map<string, cool.CalcSheetData> = new Map();
 
 	// The epoch the held versions count in.
 	private _epoch: number | undefined = undefined;
 
-	// Blocks a request is in flight for, keyed by sheet, mode and block.
+	// Blocks a request is in flight for, keyed by sheet and block.
 	private _inFlight: Set<string> = new Set();
 
 	// Sheets that were asked for at least once.
@@ -131,12 +131,8 @@ class CalcVectorManager {
 	// Blocks of a sheet waiting to be asked for, most wanted first. Each draw replaces them, so
 	// only blocks still in view are asked for. A refresh holds stale blocks around the view, none
 	// of which the view shows.
-	private _queue: {
-		part: number;
-		mode: number;
-		keys: string[];
-		refresh?: boolean;
-	} | null = null;
+	private _queue: { part: number; keys: string[]; refresh?: boolean } | null =
+		null;
 
 	private _changeListeners = new cool.VectorChangeListeners();
 	// Callbacks that release graphics memory held for drawing the content.
@@ -352,7 +348,7 @@ class CalcVectorManager {
 		const geometry: cool.SheetGeometry | undefined = docLayer.sheetGeometry;
 		if (viewId === undefined || !geometry || geometry.getPart() !== part)
 			return null;
-		const sheet = this.getSheet(part, CalcVectorManager.contentMode);
+		const sheet = this.getSheet(part);
 		if (!sheet) return null;
 		return {
 			part,
@@ -491,7 +487,7 @@ class CalcVectorManager {
 
 	/// The sheet whose drawing objects are shown, once it arrived whole.
 	private _sheetWithObjects(part: number): cool.CalcSheetData | undefined {
-		const sheet = this.getSheet(part, CalcVectorManager.contentMode);
+		const sheet = this.getSheet(part);
 		return sheet && sheet.complete ? sheet : undefined;
 	}
 
@@ -510,7 +506,7 @@ class CalcVectorManager {
 		this._listenToGeometry();
 
 		const key =
-			CalcVectorManager._sheetKey(sheet.part, sheet.mode) +
+			CalcVectorManager._sheetKey(sheet.part) +
 			'/' +
 			cool.calcBlockKey(block.blockRow, block.blockColumn);
 		const pixel = app.tile.size.x / RenderManager.tileSize;
@@ -600,8 +596,8 @@ class CalcVectorManager {
 			if (key.startsWith(sheetKey + '/')) this._placedBlocks.delete(key);
 	}
 
-	private static _sheetKey(part: number, mode: number): string {
-		return String(part) + ':' + String(mode);
+	private static _sheetKey(part: number): string {
+		return String(part);
 	}
 
 	// The owner name of the fonts and images of an entry, released with it.
@@ -609,17 +605,16 @@ class CalcVectorManager {
 		return 'calc:' + sheetKey + ':' + entryKey;
 	}
 
-	getSheet(part: number, mode: number): cool.CalcSheetData | undefined {
-		return this._sheets.get(CalcVectorManager._sheetKey(part, mode));
+	getSheet(part: number): cool.CalcSheetData | undefined {
+		return this._sheets.get(CalcVectorManager._sheetKey(part));
 	}
 
-	private _ensureSheet(part: number, mode: number): cool.CalcSheetData {
-		const key = CalcVectorManager._sheetKey(part, mode);
+	private _ensureSheet(part: number): cool.CalcSheetData {
+		const key = CalcVectorManager._sheetKey(part);
 		let sheet = this._sheets.get(key);
 		if (!sheet) {
 			sheet = {
 				part: part,
-				mode: mode,
 				version: 0,
 				complete: false,
 				blockRows: 64,
@@ -645,14 +640,13 @@ class CalcVectorManager {
 	/// first, and view the block rows and columns the view spans.
 	requestBlocks(
 		part: number,
-		mode: number,
 		blocks: Array<[number, number]>,
 		direction: [number, number] = [0, 0],
 		view?: { rows: number; columns: number },
 	): void {
 		if (view) this._view = view;
-		const sheet = this._ensureSheet(part, mode);
-		const sheetKey = CalcVectorManager._sheetKey(part, mode);
+		const sheet = this._ensureSheet(part);
+		const sheetKey = CalcVectorManager._sheetKey(part);
 		const keys: string[] = [];
 		for (const [blockRow, blockColumn] of blocks) {
 			const key = cool.calcBlockKey(blockRow, blockColumn);
@@ -669,8 +663,8 @@ class CalcVectorManager {
 			keys.push(...this._staleAround(sheet, sheetKey, blocks, direction));
 			refresh = keys.length > 0;
 		}
-		this._queue = { part, mode, keys, refresh };
-		if (keys.length === 0 && needsSheet) this._sendRequest(part, mode, []);
+		this._queue = { part, keys, refresh };
+		if (keys.length === 0 && needsSheet) this._sendRequest(part, []);
 		this._sendQueued();
 	}
 
@@ -749,7 +743,7 @@ class CalcVectorManager {
 	private _sendQueued(): void {
 		const queue = this._queue;
 		if (!queue) return;
-		const sheetKey = CalcVectorManager._sheetKey(queue.part, queue.mode);
+		const sheetKey = CalcVectorManager._sheetKey(queue.part);
 		const sheet = this._sheets.get(sheetKey);
 		if (!sheet) {
 			this._queue = null;
@@ -795,7 +789,7 @@ class CalcVectorManager {
 				if (this._isWanted(sheet, sheetKey, other)) keys.push(other);
 				return false;
 			});
-			this._sendRequest(queue.part, queue.mode, keys);
+			this._sendRequest(queue.part, keys);
 		}
 	}
 
@@ -863,9 +857,9 @@ class CalcVectorManager {
 	}
 
 	/// Ask for blocks of a sheet, and for changes to its objects and settings.
-	private _sendRequest(part: number, mode: number, keys: string[]): void {
-		const sheet = this._ensureSheet(part, mode);
-		const sheetKey = CalcVectorManager._sheetKey(part, mode);
+	private _sendRequest(part: number, keys: string[]): void {
+		const sheet = this._ensureSheet(part);
+		const sheetKey = CalcVectorManager._sheetKey(part);
 		const names: string[] = [];
 		for (const key of keys) {
 			this._inFlight.add(sheetKey + '/' + key);
@@ -887,7 +881,7 @@ class CalcVectorManager {
 		app.socket.sendMessage(
 			cool.vectorPrimitivesRequest({
 				partId: String(part),
-				mode: mode,
+				mode: CalcVectorManager.contentMode,
 				requestId: requestId,
 				blocks: names,
 				epoch: this._epoch,
@@ -899,9 +893,9 @@ class CalcVectorManager {
 	}
 
 	/// Drop blocks out of view once a sheet holds too many. Once a block in view is held, also drop
-	/// the other modes of the sheet and the sheets shown longest ago beyond maxSheets.
-	evict(part: number, mode: number, keep: Set<string>): void {
-		const sheetKey = CalcVectorManager._sheetKey(part, mode);
+	/// the sheets shown longest ago beyond maxSheets.
+	evict(part: number, keep: Set<string>): void {
+		const sheetKey = CalcVectorManager._sheetKey(part);
 		const sheet = this._sheets.get(sheetKey);
 		if (!sheet) return;
 
@@ -918,10 +912,7 @@ class CalcVectorManager {
 			this._sheets.set(sheetKey, sheet);
 			for (const [key, other] of Array.from(this._sheets.entries())) {
 				if (key === sheetKey) continue;
-				if (
-					other.part === part ||
-					this._sheets.size > CalcVectorManager.maxSheets
-				)
+				if (this._sheets.size > CalcVectorManager.maxSheets)
 					this._dropSheet(key, other);
 			}
 		}
@@ -965,8 +956,7 @@ class CalcVectorManager {
 			if (request.sheetKey === sheetKey) this._requests.delete(requestId);
 		if (
 			this._queue &&
-			CalcVectorManager._sheetKey(this._queue.part, this._queue.mode) ===
-				sheetKey
+			CalcVectorManager._sheetKey(this._queue.part) === sheetKey
 		)
 			this._queue = null;
 	}
@@ -1035,9 +1025,8 @@ class CalcVectorManager {
 	handleVectorPrimitives(values: cool.CalcVectorResponse): void {
 		const part = parseInt(values.partId);
 		if (isNaN(part)) return;
-		const mode = values.mode ?? 0;
 
-		const sheetKey = CalcVectorManager._sheetKey(part, mode);
+		const sheetKey = CalcVectorManager._sheetKey(part);
 		const requestId = values.requestId;
 		const request =
 			requestId !== undefined ? this._requests.get(requestId) : undefined;
@@ -1052,8 +1041,8 @@ class CalcVectorManager {
 			if (hadEpoch) this.clearAll();
 		}
 
-		// Pushes go to every client holding the sheet in any mode, and an answer can arrive after
-		// its request was dropped. Keep both only for a sheet held and asked for in this mode.
+		// Pushes go to every client holding the sheet, and an answer can arrive after its request
+		// was dropped. Keep both only for a sheet held and asked for.
 		const pushed = requestId === undefined;
 		if (
 			!request &&
@@ -1061,7 +1050,7 @@ class CalcVectorManager {
 		)
 			return;
 
-		const sheet = this._ensureSheet(part, mode);
+		const sheet = this._ensureSheet(part);
 		if (request) this._sheetRequested.add(sheetKey);
 		if (values.type === 'vectorprimitives') sheet.complete = true;
 		// The answer names the blocks asked for and carries those that changed, so all of them are
@@ -1193,12 +1182,10 @@ class CalcVectorManager {
 				}
 				if (moved.length > 0) {
 					const queued =
-						this._queue &&
-						this._queue.part === part &&
-						this._queue.mode === mode
+						this._queue && this._queue.part === part
 							? this._queue.keys.filter((key) => moved.indexOf(key) < 0)
 							: [];
-					this._queue = { part, mode, keys: moved.concat(queued) };
+					this._queue = { part, keys: moved.concat(queued) };
 					this._sendQueued();
 				}
 			}

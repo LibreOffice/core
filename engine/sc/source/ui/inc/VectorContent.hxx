@@ -196,7 +196,6 @@ private:
     struct SheetState
     {
         SCTAB mnTab = 0;
-        sal_Int32 mnMode = 0;
         /// The last version handed out on the sheet, the version the sheet was last pushed at,
         /// and the version at which the drawing objects or their order changed last.
         svx::vector::PartVersions maVersions;
@@ -238,13 +237,14 @@ private:
     /// Answer a request for the primitives of a sheet.
     void writeRequestedSheet(tools::JsonWriter& rWriter, const svx::vector::PartRequest& rRequest);
 
-    void writeVectorPrimitives(tools::JsonWriter& rWriter, SheetState& rState,
+    /// Write the answer or the push for the sheet. nMode is only named back in the header.
+    void writeVectorPrimitives(tools::JsonWriter& rWriter, SheetState& rState, sal_Int32 nMode,
                                const std::vector<BlockRequest>& rBlocks, sal_Int64 nSinceVersion,
                                bool bPush, std::optional<sal_Int64> oRequestId = std::nullopt);
 
     void listenToDrawLayer();
     void listenToSheet(SCTAB nTab);
-    SheetState& sheetState(SCTAB nTab, sal_Int32 nMode);
+    SheetState& sheetState(SCTAB nTab);
     /// Drop every sheet state, start a new epoch and tell the views for each held sheet and mode.
     void resetSheets();
     /// Mark the rows of the range in every held block of its block rows.
@@ -252,7 +252,8 @@ private:
     static void markRowsDirty(BlockState& rBlock, SCROW nStartRow, SCROW nEndRow, bool bWholeBlock);
     void markObjectDirty(SCTAB nTab, sal_uInt64 nId);
     /// The states of a sheet, one for each mode it was asked in.
-    std::vector<SheetState*> statesOf(SCTAB nTab);
+    /// The state of the sheet, or nullptr when no client asked for the sheet.
+    SheetState* stateOf(SCTAB nTab);
     void notifyViews(SCTAB nTab);
     /// Tell the views of the sheets whose cells changed since they were last told.
     void notifyChangedSheets();
@@ -341,8 +342,8 @@ private:
     std::map<SCTAB, std::unique_ptr<SheetListener>> maSheetListeners;
     /// The sheets with cells changed since the views were last told.
     std::set<SCTAB> maChangedTabs;
-    /// The state of each sheet, for each mode it was asked in.
-    std::map<std::pair<SCTAB, sal_Int32>, SheetState> maSheets;
+    /// The state of each sheet a client asked for.
+    std::map<SCTAB, SheetState> maSheets;
     /// An answer or a push is being written from a sheet state.
     bool mbWriting = false;
     /// The sheets have to be reset once the write in progress is done.

@@ -207,10 +207,9 @@ namespace cool {
 		across: [number, number];
 	}
 
-	/// What the client holds of one sheet in one mode.
+	/// What the client holds of one sheet.
 	export interface CalcSheetData {
 		part: number;
-		mode: number;
 		/// The newest version of the sheet the client has heard of.
 		version: number;
 		/// True once a whole answer arrived, with drawing objects and settings.

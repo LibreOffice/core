@@ -201,7 +201,6 @@ namespace cool {
 			const painter = docLayer._painter;
 			const paintContext = painter._paintContext();
 			// Content is zoom independent. Each block is placed at the view zoom.
-			const mode = CalcVectorManager.contentMode;
 			if (!app.tile.size) return;
 			const twipsPerPixel = app.tile.size.x / RenderManager.tileSize;
 
@@ -211,7 +210,7 @@ namespace cool {
 			renderer.setDocumentBackground(background);
 			renderer.setEditViewContentVisible(true);
 
-			const sheet = manager.getSheet(part, mode);
+			const sheet = manager.getSheet(part);
 			const blockRows = sheet ? sheet.blockRows : 64;
 			const blockColumns = sheet ? sheet.blockColumns : 16;
 			const columns = geometry.getColumnsGeometry();
@@ -394,12 +393,11 @@ namespace cool {
 			const direction = layout ? layout.getLastPanDirection() : [0, 0];
 			manager.requestBlocks(
 				part,
-				mode,
 				wanted.map((entry) => entry.block),
 				[direction[0], direction[1]],
 				view,
 			);
-			manager.evict(part, mode, keep);
+			manager.evict(part, keep);
 		}
 
 		private _drawPane(

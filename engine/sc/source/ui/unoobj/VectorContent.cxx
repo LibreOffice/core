@@ -657,7 +657,7 @@ void VectorContent::getCommandValues(tools::JsonWriter& rWriter, std::string_vie
 void VectorContent::writeRequestedSheet(tools::JsonWriter& rWriter,
                                         const svx::vector::PartRequest& rRequest)
 {
-    // The mode only keeps the answers to a client apart from those to another.
+    // The content has one form, so the mode is only named back to the client.
     const sal_Int32 nMode = rRequest.moMode.value_or(constCellPositionsMode);
 
     const ScDocument& rDocument = mrDocShell.GetDocument();
@@ -708,7 +708,7 @@ void VectorContent::writeRequestedSheet(tools::JsonWriter& rWriter,
     }
 
     // A client can name its request, and the answer names it back.
-    writeVectorPrimitives(rWriter, sheetState(*oTab, nMode), aBlocks, rRequest.mnSinceVersion,
+    writeVectorPrimitives(rWriter, sheetState(*oTab), nMode, aBlocks, rRequest.mnSinceVersion,
                           /*bPush*/ false, rRequest.moRequestId);
 }
 
@@ -718,7 +718,7 @@ void VectorContent::pushDelta(tools::JsonWriter& rWriter, std::string_view rPart
     if (!oTab)
         return;
 
-    auto aIterator = maSheets.find({ *oTab, nMode });
+    auto aIterator = maSheets.find(*oTab);
     if (aIterator == maSheets.end())
     {
         // A new epoch dropped the sheet state. Only the header is written, naming the new epoch.
@@ -731,19 +731,20 @@ void VectorContent::pushDelta(tools::JsonWriter& rWriter, std::string_view rPart
     if (!aIterator->second.maVersions.isServed())
         return;
 
-    writeVectorPrimitives(rWriter, aIterator->second, {}, /*nSinceVersion*/ -1, /*bPush*/ true);
+    writeVectorPrimitives(rWriter, aIterator->second, nMode, {}, /*nSinceVersion*/ -1,
+                          /*bPush*/ true);
 }
 
-VectorContent::SheetState& VectorContent::sheetState(SCTAB nTab, sal_Int32 nMode)
+VectorContent::SheetState& VectorContent::sheetState(SCTAB nTab)
 {
-    SheetState& rState = maSheets[{ nTab, nMode }];
+    SheetState& rState = maSheets[nTab];
     rState.mnTab = nTab;
-    rState.mnMode = nMode;
     listenToSheet(nTab);
     return rState;
 }
 
 void VectorContent::writeVectorPrimitives(tools::JsonWriter& rWriter, SheetState& rState,
+                                          sal_Int32 nMode,
                                           const std::vector<BlockRequest>& rBlocks,
                                           sal_Int64 nSinceVersion, bool bPush,
                                           std::optional<sal_Int64> oRequestId)
@@ -807,7 +808,7 @@ void VectorContent::writeVectorPrimitives(tools::JsonWriter& rWriter, SheetState
         && rState.maShifts.empty())
         return;
 
-    svx::vector::writeAnswerHeader(rWriter, bDelta, rState.mnMode, OString::number(nTab),
+    svx::vector::writeAnswerHeader(rWriter, bDelta, nMode, OString::number(nTab),
                                    maResources.getEpoch());
     rWriter.put("docType", "spreadsheet");
     if (oRequestId)
@@ -1614,13 +1615,10 @@ OString VectorContent::writeTextEdits(SCTAB nTab)
     return aDocument.copy(nStart, nEnd - nStart + 1);
 }
 
-std::vector<VectorContent::SheetState*> VectorContent::statesOf(SCTAB nTab)
+VectorContent::SheetState* VectorContent::stateOf(SCTAB nTab)
 {
-    std::vector<SheetState*> aStates;
-    for (auto aIterator = maSheets.lower_bound({ nTab, SAL_MIN_INT32 });
-         aIterator != maSheets.end() && aIterator->first.first == nTab; ++aIterator)
-        aStates.push_back(&aIterator->second);
-    return aStates;
+    auto aIterator = maSheets.find(nTab);
+    return aIterator == maSheets.end() ? nullptr : &aIterator->second;
 }
 
 void VectorContent::markRangeDirty(const ScRange& rRange)
@@ -1633,7 +1631,7 @@ void VectorContent::markRangeDirty(const ScRange& rRange)
 
     for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
     {
-        for (SheetState* pState : statesOf(nTab))
+        if (SheetState* pState = stateOf(nTab))
         {
             for (auto aIterator = pState->maBlocks.lower_bound({ nFirstBlockRow, 0 });
                  aIterator != pState->maBlocks.end() && aIterator->first.first <= nLastBlockRow;
@@ -1682,7 +1680,7 @@ void VectorContent::cellsChanged(const ScRange& rRange)
 
 void VectorContent::markObjectDirty(SCTAB nTab, sal_uInt64 nId)
 {
-    for (SheetState* pState : statesOf(nTab))
+    if (SheetState* pState = stateOf(nTab))
         pState->maDirtyObjects.insert(nId);
 }
 
@@ -1696,13 +1694,10 @@ void VectorContent::notifyChangedSheets()
 
 void VectorContent::notifyViews(SCTAB nTab)
 {
-    const std::vector<SheetState*> aStates = statesOf(nTab);
-    if (aStates.empty())
+    if (!stateOf(nTab))
         return;
-
-    const OString aPartId = OString::number(nTab);
-    for (const SheetState* pState : aStates)
-        KitHelper::notifyVectorPartChanged(&mrDocShell, aPartId, pState->mnMode);
+    KitHelper::notifyVectorPartChanged(&mrDocShell, OString::number(nTab),
+                                       constCellPositionsMode);
 }
 
 void VectorContent::documentHint(const SfxHint& rHint)
@@ -1758,7 +1753,7 @@ void VectorContent::documentHint(const SfxHint& rHint)
             {
                 if (eParts & PaintPartFlags::Objects)
                 {
-                    for (SheetState* pState : statesOf(nTab))
+                    if (SheetState* pState = stateOf(nTab))
                         pState->mbObjectsDirty = true;
                 }
                 notifyViews(nTab);
@@ -1786,7 +1781,7 @@ void VectorContent::documentHint(const SfxHint& rHint)
                                 bRows ? SCCOLROW(rRange.aEnd.Col()) : SCCOLROW(rRange.aEnd.Row()) };
             for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
             {
-                for (SheetState* pState : statesOf(nTab))
+                if (SheetState* pState = stateOf(nTab))
                     pState->maShifts.push_back(aShift);
             }
             break;
@@ -1809,11 +1804,11 @@ void VectorContent::documentHint(const SfxHint& rHint)
 void VectorContent::resetSheets()
 {
     mbResetSheetsPending = false;
-    // The views are told for each served sheet and mode, and their push writes the new epoch.
+    // The views are told for each served sheet, and their push writes the new epoch.
     const SCTAB nTabCount = mrDocShell.GetDocument().GetTableCount();
-    std::vector<std::pair<SCTAB, sal_Int32>> aServed;
-    for (const auto& [rSheetKey, rState] : maSheets)
-        aServed.push_back(rSheetKey);
+    std::vector<SCTAB> aServed;
+    for (const auto& [nTab, rState] : maSheets)
+        aServed.push_back(nTab);
     maSheets.clear();
     maSheetListeners.clear();
     maChangedTabs.clear();
@@ -1822,10 +1817,11 @@ void VectorContent::resetSheets()
     if (const ScDrawLayer* pDrawLayer = mrDocShell.GetDocument().GetDrawLayer())
         mxChartListener->relocate(*pDrawLayer);
 
-    for (const auto& [nTab, nMode] : aServed)
+    for (const SCTAB nTab : aServed)
     {
         if (nTab < nTabCount)
-            KitHelper::notifyVectorPartChanged(&mrDocShell, OString::number(nTab), nMode);
+            KitHelper::notifyVectorPartChanged(&mrDocShell, OString::number(nTab),
+                                               constCellPositionsMode);
     }
 }
 
@@ -1849,7 +1845,7 @@ void VectorContent::chartChanged(SCTAB nTab,
         markObjectDirty(nTab, pObject->GetUniqueID());
     else
     {
-        for (SheetState* pState : statesOf(nTab))
+        if (SheetState* pState = stateOf(nTab))
             pState->mbObjectsDirty = true;
     }
     notifyViews(nTab);
@@ -1889,7 +1885,7 @@ void VectorContent::Notify(SfxBroadcaster& /*rBroadcaster*/, const SfxHint& rHin
                 markObjectDirty(nTab, pObject->GetUniqueID());
             else
             {
-                for (SheetState* pState : statesOf(nTab))
+                if (SheetState* pState = stateOf(nTab))
                     pState->mbObjectsDirty = true;
             }
             notifyViews(nTab);
