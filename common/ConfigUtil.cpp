@@ -112,7 +112,6 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "extra_export_formats.impress_gif", "false" },
     { "extra_export_formats.impress_png", "false" },
     { "extra_export_formats.impress_svg", "false" },
-    { "extra_export_formats.impress_swf", "false" },
     { "extra_export_formats.impress_tiff", "false" },
 #if ENABLE_FEATURE_LOCK
     { "feature_lock.calc_unlock_highlights", CALC_UNLOCK_HIGHLIGHTS },

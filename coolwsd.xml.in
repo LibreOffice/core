@@ -443,7 +443,6 @@
     </preview_cache>
 
     <extra_export_formats desc="Enable various extra export formats for additional compatibility. Note that disabling options here *only* disables them visually: these are all 'safe' to export, it might just be undesirable to show them, so you can't disable exporting these server-side">
-        <impress_swf desc="Enable exporting Adobe flash .swf files from presentations" type="bool" default="false">false</impress_swf>
         <impress_bmp desc="Enable exporting .bmp bitmap files from presentation slides" type="bool" default="false">false</impress_bmp>
         <impress_gif desc="Enable exporting .gif image files from presentation slides" type="bool" default="false">false</impress_gif>
         <impress_png desc="Enable exporting .png image files from presentation slides" type="bool" default="false">false</impress_png>

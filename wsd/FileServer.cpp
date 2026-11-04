@@ -1807,8 +1807,6 @@ FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::prepro
     Poco::replaceInPlace(preprocess, std::string("%INDIRECTION_URL%"), indirectionURI.toString());
 
     std::string extraExportFormats;
-    if (ConfigUtil::getConfigValue<bool>("extra_export_formats.impress_swf", false))
-        extraExportFormats += " impress_swf";
     if (ConfigUtil::getConfigValue<bool>("extra_export_formats.impress_bmp", false))
         extraExportFormats += " impress_bmp";
     if (ConfigUtil::getConfigValue<bool>("extra_export_formats.impress_gif", false))

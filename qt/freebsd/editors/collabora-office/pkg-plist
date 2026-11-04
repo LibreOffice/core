@@ -4228,7 +4228,6 @@ share/coolwsd/browser/dist/images/dark/lc_exitsheetview.svg
 share/coolwsd/browser/dist/images/dark/lc_exportepub.svg
 share/coolwsd/browser/dist/images/dark/lc_exportpdf.svg
 share/coolwsd/browser/dist/images/dark/lc_exportsvg.svg
-share/coolwsd/browser/dist/images/dark/lc_exportswf.svg
 share/coolwsd/browser/dist/images/dark/lc_extrusiontoggle.svg
 share/coolwsd/browser/dist/images/dark/lc_feedback.svg
 share/coolwsd/browser/dist/images/dark/lc_file.svg
@@ -5517,7 +5516,6 @@ share/coolwsd/browser/dist/images/lc_exitsheetview.svg
 share/coolwsd/browser/dist/images/lc_exportepub.svg
 share/coolwsd/browser/dist/images/lc_exportpdf.svg
 share/coolwsd/browser/dist/images/lc_exportsvg.svg
-share/coolwsd/browser/dist/images/lc_exportswf.svg
 share/coolwsd/browser/dist/images/lc_exportto.svg
 share/coolwsd/browser/dist/images/lc_extrusiontoggle.svg
 share/coolwsd/browser/dist/images/lc_feedback.svg

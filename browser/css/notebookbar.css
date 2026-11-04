@@ -1237,10 +1237,6 @@ label.notebookbar.ui-checkbox-label {
 	background: url('images/lc_insertgraphic.svg') center;
 }
 
-[class*='as-swf-submenu-icon'] {
-	background: url('images/lc_exportswf.svg') center;
-}
-
 [class*='as-svg-submenu-icon'] {
 	background: url('images/lc_exportsvg.svg') center;
 }
