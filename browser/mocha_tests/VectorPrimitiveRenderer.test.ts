@@ -1945,6 +1945,72 @@ describe('VectorPrimitiveRenderer', function () {
 		});
 	});
 
+	describe('Types without a drawing of their own', function () {
+		// A stroke that every case below holds as its only child.
+		const line = {
+			type: 'polygonHairline',
+			color: '#ff0000',
+			path: 'M 0 0 L 10 10',
+		};
+
+		let warnings: string[];
+		let originalWarn: any;
+
+		beforeEach(function () {
+			warnings = [];
+			originalWarn = window.app.console.warn;
+			window.app.console.warn = (...args: any[]) => {
+				warnings.push(args.join(' '));
+			};
+		});
+
+		afterEach(function () {
+			window.app.console.warn = originalWarn;
+		});
+
+		function render(primitive: any): CanvasRecorder {
+			const recorder = new CanvasRecorder();
+			new cool.VectorPrimitiveRenderer().renderPrimitive(
+				recorder as any,
+				primitive,
+			);
+			return recorder;
+		}
+
+		it('draws the tail of a caption as its line', function () {
+			const recorder = render({ type: 'captionTail', children: [line] });
+			nodeassert.strictEqual(recorder.countOf('stroke'), 1);
+			nodeassert.deepStrictEqual(warnings, []);
+		});
+
+		it('draws the structure of a text and a decomposed primitive quietly', function () {
+			for (const type of ['textHierarchyParagraph', 'svx:12']) {
+				const recorder = render({ type: type, children: [line] });
+				nodeassert.strictEqual(recorder.countOf('stroke'), 1, type);
+			}
+			nodeassert.deepStrictEqual(warnings, []);
+		});
+
+		it('names a type it cannot draw and still draws its children', function () {
+			const recorder = render({
+				type: 'unknownToTheRenderer',
+				children: [line],
+			});
+			nodeassert.strictEqual(recorder.countOf('stroke'), 1);
+			nodeassert.strictEqual(warnings.length, 1);
+			nodeassert.ok(
+				warnings[0].includes('"unknownToTheRenderer"'),
+				warnings[0],
+			);
+		});
+
+		it('names a type it cannot draw only once', function () {
+			render({ type: 'unknownAndRepeated' });
+			render({ type: 'unknownAndRepeated' });
+			nodeassert.strictEqual(warnings.length, 1);
+		});
+	});
+
 	describe('Spell-check marks', function () {
 		// A mark under a word 20 twips high, along a line 80 twips long.
 		function drawWrongSpell(zoom: number, fontHeight = 20): CanvasRecorder {

@@ -331,6 +331,13 @@ namespace cool {
 				case GroupPrimitive.type:
 				case ObjectInfoPrimitive.type:
 				case PolygonStrokeArrowPrimitive.type:
+				case CaptionTailPrimitive.type:
+				case TextHierarchyFieldPrimitive.type:
+				case TextHierarchyLinePrimitive.type:
+				case TextHierarchyParagraphPrimitive.type:
+				case TextHierarchyBlockPrimitive.type:
+				case TextHierarchyBulletPrimitive.type:
+				case TextHierarchyEmphasisMarkPrimitive.type:
 					// Pure container - recursion into children happens
 					// below for every primitive type.
 					break;
@@ -392,10 +399,35 @@ namespace cool {
 					// recursion below descends into it only there.
 					if (!this._editViewContentVisible) return;
 					break;
+				default:
+					VectorPrimitiveRenderer._reportUnknownType(primitive.type);
+					break;
 			}
 
 			if (primitive.children)
 				this._renderPrimitives(context, primitive.children);
+		}
+
+		// The unknown types reported so far, each reported once.
+		private static readonly _reportedUnknownTypes = new Set<string>();
+
+		// A type named "module:id" is a primitive the engine writes as its
+		// decomposition, so its children are all it draws. Any other type the
+		// renderer has no case for carries fields of its own that nothing
+		// draws, which a warning names.
+		private static _reportUnknownType(type: string): void {
+			if (
+				type.includes(':') ||
+				VectorPrimitiveRenderer._reportedUnknownTypes.has(type)
+			)
+				return;
+
+			VectorPrimitiveRenderer._reportedUnknownTypes.add(type);
+			window.app.console.warn(
+				'VectorPrimitiveRenderer: no drawing for primitive type "' +
+					type +
+					'", only its children are drawn',
+			);
 		}
 
 		// The objects of the shown page sit on the fill of that page, so
