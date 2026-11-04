@@ -47,7 +47,6 @@ class CanvasFactory : public ::cppu::WeakImplHelper<>
     typedef std::pair<OUString, css::uno::Sequence<OUString>> AvailPair;
 
     mutable std::mutex m_mutex;
-    css::uno::Reference<css::uno::XComponentContext> m_xContext;
     std::unordered_map<OUString, css::uno::Sequence<OUString>> m_aAvailableImplementations;
     std::unordered_map<OUString, css::uno::Sequence<OUString>> m_aAcceleratedImplementations;
     std::unordered_map<OUString, css::uno::Sequence<OUString>> m_aAAImplementations;
@@ -57,20 +56,19 @@ class CanvasFactory : public ::cppu::WeakImplHelper<>
     mutable bool m_bCacheHasUseAAEntry;
 
     void checkConfigFlag(bool& r_bFlag, bool& r_CacheFlag, bool bCurrentConfigValue) const;
-    css::uno::Reference<css::uno::XInterface>
+    static css::uno::Reference<css::uno::XInterface>
     use(OUString const& serviceName, css::uno::Sequence<css::uno::Any> const& args,
-        css::uno::Reference<css::uno::XComponentContext> const& xContext) const;
+        css::uno::Reference<css::uno::XComponentContext> const& xContext);
     css::uno::Reference<XInterface>
     lookupAndUse(OUString const& serviceName, css::uno::Sequence<css::uno::Any> const& args,
                  css::uno::Reference<css::uno::XComponentContext> const& xContext) const;
 
 public:
     virtual ~CanvasFactory() override;
-    explicit CanvasFactory(css::uno::Reference<css::uno::XComponentContext> const& xContext);
+    explicit CanvasFactory();
 
-    css::uno::Reference<XInterface>
-    createCanvas(OUString const& name, css::uno::Sequence<css::uno::Any> const& args,
-                 css::uno::Reference<css::uno::XComponentContext> const& xContext);
+    css::uno::Reference<XInterface> createCanvas(OUString const& name,
+                                                 css::uno::Sequence<css::uno::Any> const& args);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

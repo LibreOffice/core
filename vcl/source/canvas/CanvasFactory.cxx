@@ -39,12 +39,10 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-
-CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
-    m_xContext(xContext),
-    m_bCacheHasForcedLastImpl(),
-    m_bCacheHasUseAcceleratedEntry(),
-    m_bCacheHasUseAAEntry()
+CanvasFactory::CanvasFactory()
+    : m_bCacheHasForcedLastImpl()
+    , m_bCacheHasUseAcceleratedEntry()
+    , m_bCacheHasUseAAEntry()
 {
     if (!comphelper::IsFuzzing())
     {
@@ -106,14 +104,12 @@ CanvasFactory::~CanvasFactory()
 {
 }
 
-Reference<XInterface> CanvasFactory::use(
-    OUString const & serviceName,
-    Sequence<Any> const & args,
-    Reference<XComponentContext> const & xContext ) const
+Reference<XInterface> CanvasFactory::use(OUString const& serviceName, Sequence<Any> const& args,
+                                         Reference<XComponentContext> const& xContext)
 {
     try {
-        return m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            serviceName, args, xContext);
+        return xContext->getServiceManager()->createInstanceWithArgumentsAndContext(serviceName,
+                                                                                    args, xContext);
     }
     catch (css::lang::IllegalArgumentException &)
     {
@@ -257,9 +253,9 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
 }
 
 Reference<XInterface> CanvasFactory::createCanvas(OUString const& preferredOne,
-                                                  Sequence<Any> const& args,
-                                                  Reference<XComponentContext> const& xContext)
+                                                  Sequence<Any> const& args)
 {
+    const Reference<XComponentContext>& xContext = comphelper::getProcessComponentContext();
     Reference<XInterface> xCanvas(lookupAndUse(preferredOne, args, xContext));
     if (!xCanvas.is())
         // last resort: try service name directly

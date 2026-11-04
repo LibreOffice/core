@@ -751,10 +751,7 @@ css::uno::Reference< css::rendering::XCanvas > OutputDevice::ImplGetCanvas( bool
         GetSystemGfxDataAny()
     };
 
-    const Reference< XComponentContext >& xContext = comphelper::getProcessComponentContext();
-
-    static tools::DeleteRtlReferenceOnDeinit<CanvasFactory> pStaticCanvasFactory(
-        new CanvasFactory(xContext));
+    static tools::DeleteRtlReferenceOnDeinit<CanvasFactory> pStaticCanvasFactory(new CanvasFactory);
     rtl::Reference<CanvasFactory> pCanvasFactory(pStaticCanvasFactory.get());
     Reference< css::rendering::XCanvas > xCanvas;
 
@@ -763,7 +760,7 @@ css::uno::Reference< css::rendering::XCanvas > OutputDevice::ImplGetCanvas( bool
         xCanvas.set(pCanvasFactory->createCanvas(bSpriteCanvas
                                                      ? u"com.sun.star.rendering.SpriteCanvas"_ustr
                                                      : u"com.sun.star.rendering.Canvas"_ustr,
-                                                 aArg, xContext),
+                                                 aArg),
                     UNO_QUERY);
     }
 

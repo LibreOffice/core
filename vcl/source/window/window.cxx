@@ -3479,12 +3479,9 @@ Reference< css::rendering::XCanvas > WindowOutputDevice::ImplGetCanvas( bool bSp
         GetSystemGfxDataAny()
     };
 
-    const Reference< XComponentContext >& xContext = comphelper::getProcessComponentContext();
-
     // Create canvas instance with window handle
 
-    static tools::DeleteRtlReferenceOnDeinit<CanvasFactory> pStaticCanvasFactory(
-        new CanvasFactory(xContext));
+    static tools::DeleteRtlReferenceOnDeinit<CanvasFactory> pStaticCanvasFactory(new CanvasFactory);
     rtl::Reference<CanvasFactory> pCanvasFactory(pStaticCanvasFactory.get());
     Reference< css::rendering::XCanvas > xCanvas;
 
@@ -3503,7 +3500,7 @@ Reference< css::rendering::XCanvas > WindowOutputDevice::ImplGetCanvas( bool bSp
                             bSpriteCanvas
                                 ? OUString("com.sun.star.rendering.SpriteCanvas.MultiScreen")
                                 : OUString("com.sun.star.rendering.Canvas.MultiScreen"),
-                            aArg, xContext),
+                            aArg),
                         UNO_QUERY);
         }
         else
@@ -3512,7 +3509,7 @@ Reference< css::rendering::XCanvas > WindowOutputDevice::ImplGetCanvas( bool bSp
             xCanvas.set(pCanvasFactory->createCanvas(
                             bSpriteCanvas ? u"com.sun.star.rendering.SpriteCanvas"_ustr
                                           : u"com.sun.star.rendering.Canvas"_ustr,
-                            aArg, xContext),
+                            aArg),
                         UNO_QUERY);
         }
     }
