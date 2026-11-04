@@ -15,18 +15,21 @@
 <base target="_top">
 <title>Apps Script extension</title>
 <style>
-  /* Google's absolute .sidebar layout expects a fixed-height host frame; here the iframe grows to
-   * fit content, so let it flow and hand cool.js's Resize a first-paint height: */
-  html, body { margin: 0; padding: 0; overflow: hidden; }
-  body { min-height: 480px; }
-  .sidebar { position: static !important; }
-  .sidebar.branding-below { top: auto; bottom: auto; }
-  .sidebar.bottom { position: static; }
+  html, body { margin: 0; padding: 0; }
+  /* A sidebar fills its panel, as in GAS, while the iframe of a dialog grows to fit its content,
+   * so a dialog's page flows and hands cool.js's Resize a first-paint height: */
+  html.gas-dialog, html.gas-dialog body { overflow: hidden; }
+  html.gas-dialog body { min-height: 480px; }
   #gas-error {
     color: #b00; padding: 8px; font-family: -apple-system, BlinkMacSystemFont,
     'Segoe UI', sans-serif; font-size: 13px;
   }
 </style>
+<script>
+if (new URLSearchParams(location.search).get('coolRole') === 'dialog') {
+    document.documentElement.classList.add('gas-dialog');
+}
+</script>
 <script src="cool.js"></script>
 <script src="gas-shim.js"></script>
 </head>

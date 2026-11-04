@@ -1203,7 +1203,12 @@ window.L.Control.Extension = window.L.Control.extend({
 				this._finishRemovePanel();
 				break;
 			case 'Extension_Resize':
-				if (this._iframe) {
+				// The iframe of a GAS add-on fills the panel, as the add-on's page expects a frame
+				// of a fixed height:
+				if (
+					this._iframe &&
+					!(this.options.manifest as ExtensionManifest).isGasExtension
+				) {
 					this._iframe.style.height = msg.height + 'px';
 				}
 				break;
