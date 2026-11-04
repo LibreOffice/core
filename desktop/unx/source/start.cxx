@@ -73,7 +73,6 @@ ChildInfo::~ChildInfo()
 
 static ChildInfo child_spawn(Args* args, bool bAllArgs)
 {
-    rtl_uString* pTmp = nullptr;
     int status_pipe[2];
 
     /* create pipe */
@@ -98,9 +97,6 @@ static ChildInfo child_spawn(Args* args, bool bAllArgs)
     oslProcessError nError
         = osl_executeProcess(sApp.pData, aArguments.data(), aArguments.size(), osl_Process_NORMAL,
                              nullptr, nullptr, nullptr, 0, &info.child);
-
-    if (pTmp)
-        rtl_uString_release(pTmp);
 
     if (nError != osl_Process_E_None)
     {
