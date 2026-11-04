@@ -1,9 +1,9 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
-  "version": 3,
+  "version": 4,
   "metadata": {
-    "timestamp": "2026-10-21T11:47:24Z",
+    "timestamp": "2026-11-04T11:16:13Z",
     "supplier": {
       "name": "Collabora Productivity Ltd.",
       "url": [
@@ -49,7 +49,7 @@
       "description": "Double free in OpenJPEG j2k_read_ppm_v3 as bundled by 2015-era PDFium/Chrome",
       "analysis": {
         "state": "false_positive",
-        "detail": "Fixed upstream in OpenJPEG r2997 (2015). The bundled PDFium is the 7988 snapshot (2026), which has contained the fix for a decade."
+        "detail": "Fixed upstream in OpenJPEG r2997 (2015). The bundled PDFium is the 8138 snapshot (2026), which has contained the fix for a decade."
       }
     },
     {
@@ -322,7 +322,7 @@
       "description": "libxml2: integer overflow in xmlBuildQName() leading to a stack buffer overflow",
       "analysis": {
         "state": "false_positive",
-        "detail": "Fixed upstream in libxml2 2.13.8/2.14.2 (2025); the bundled 2.15.3 contains the fix."
+        "detail": "Fixed upstream in libxml2 2.13.8/2.14.2 (2025); the bundled 2.15.4 contains the fix."
       }
     },
     {
@@ -352,7 +352,7 @@
       "description": "libxslt: use-after-free via attribute type corruption when processing result tree fragments",
       "analysis": {
         "state": "not_affected",
-        "detail": "The mitigation for this unfixed libxslt flaw lives in libxml2 >= 2.14 (per the Debian security tracker); the bundled libxml2 is 2.15.3, and libxslt only ever runs against it (both are statically linked together).",
+        "detail": "The mitigation for this unfixed libxslt flaw lives in libxml2 >= 2.14 (per the Debian security tracker); the bundled libxml2 is 2.15.4, and libxslt only ever runs against it (both are statically linked together).",
         "justification": "protected_by_mitigating_control"
       }
     },
@@ -373,8 +373,8 @@
       "id": "CVE-2026-12345",
       "description": "python: The cleanup of tempfile.TemporaryDirectory is vulnerable to a race condition",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Re-checked on 2026-10-21: still unfixed on the 3.14 series. Python 3.14.8 (2026-09-30) is listed as affected by OSV; the fix is in 3.15.0 only, so there is no 3.14 release to move to. CVSS 4.0 AV:L/AC:L/AT:P - a local attacker who can modify the tree while TemporaryDirectory cleans it up. Awaiting an assessment of whether the bundled python cleans up a temporary directory that is writable by anyone but the jail's own user."
+        "state": "resolved",
+        "detail": "Fixed in Python 3.14.9. This image ships Python 3.14.10."
       }
     },
     {
@@ -390,18 +390,16 @@
       "id": "CVE-2026-15806",
       "description": "Python: HTTPPasswordMgr can send saved HTTPS credentials over HTTP",
       "analysis": {
-        "state": "not_affected",
-        "detail": "Python scripting is optional (the pyuno packages are separate and excluded from the container image unless built with 'withpython') and macro execution is disabled by default (security.enable_macros_execution); no product code uses this module, it is only reachable from user-authored macros.",
-        "justification": "requires_configuration"
+        "state": "resolved",
+        "detail": "Fixed in Python 3.14.8. This image ships Python 3.14.10."
       }
     },
     {
       "id": "CVE-2026-17084",
       "description": "Python: stringprep.map_table_b2() deviates from RFC 3454",
       "analysis": {
-        "state": "not_affected",
-        "detail": "Python scripting is optional (the pyuno packages are separate and excluded from the container image unless built with 'withpython') and macro execution is disabled by default (security.enable_macros_execution); no product code uses this module, it is only reachable from user-authored macros.",
-        "justification": "requires_configuration"
+        "state": "resolved",
+        "detail": "Fixed in Python 3.14.8. This image ships Python 3.14.10."
       }
     },
     {
@@ -599,15 +597,15 @@
       "description": "zlib: zlib versions 1.3.1.2 through 1.3.2 contain a heap buffer overflow vulnerability in the gz_vacate() function when processing non-blocking gzwrite() operations with\u2026",
       "analysis": {
         "state": "in_triage",
-        "detail": "Re-checked on 2026-10-21: an upstream fix now exists but is unreleased. madler/zlib commit df84af25dc19 (2026-09-17, 'Fix buffer overflow bug in non-blocking gzwrite') states 'This addresses CVE-2026-85091'; it resets avail_in and next_in on the ret == -1 path in gz_write(), four lines in gzwrite.c. The latest release is still 1.3.2 (2026-02-17), which is what we bundle, so the choice is to backport the commit or wait for 1.3.3."
+        "detail": "Re-checked on 2026-11-04: an upstream fix now exists but is unreleased. madler/zlib commit df84af25dc19 (2026-09-17, 'Fix buffer overflow bug in non-blocking gzwrite') states 'This addresses CVE-2026-85091'; it resets avail_in and next_in on the ret == -1 path in gz_write(), four lines in gzwrite.c. The latest release is still 1.3.2 (2026-02-17), which is what we bundle, so the choice is to backport the commit or wait for 1.3.3."
       }
     },
     {
       "id": "CVE-2026-87910",
       "description": "python: When tarfile extracts a link on a system that doesn't support links, it falls back to extracting a member from the archive",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Re-checked on 2026-10-21: fixed in 3.10.22, 3.11.17, 3.12.15, 3.13.16 and 3.15.0, but no 3.14 release carries the fix - OSV still lists 3.14.8 (2026-09-30) as affected, so a version bump does not resolve it. The flaw needs tarfile to extract a link on a filesystem without link support, which the Linux image does not have."
+        "state": "resolved",
+        "detail": "Fixed in Python 3.14.9. This image ships Python 3.14.10."
       }
     },
     {
@@ -663,7 +661,7 @@
       "description": "dompurify: DOMPurify: IN_PLACE returns a force-removed rawtext root whose text carries attacker markup \u2014 pure HTML reparse executes",
       "analysis": {
         "state": "in_triage",
-        "detail": "Reported by grype 0.118.0 against dompurify 3.4.14 on 2026-10-07, severity Low. Re-checked on 2026-10-21: fixed in 3.4.16 (2026-09-23), and 3.4.17 (2026-10-12) is current; browser/package.json still pins 3.4.14. The flaw needs IN_PLACE, which has still to be checked against our sanitizer call sites."
+        "detail": "Reported by grype 0.118.0 against dompurify 3.4.14 on 2026-10-07, severity Low. Re-checked on 2026-11-04: fixed in 3.4.16 (2026-09-23), and 3.4.17 (2026-10-12) is current; browser/package.json still pins 3.4.14. The flaw needs IN_PLACE, which has still to be checked against our sanitizer call sites."
       }
     },
     {
@@ -671,7 +669,7 @@
       "description": "dompurify: DOMPurify: IN_PLACE: node-removing afterSanitize hook leaves detached subtree event handlers armed, causing DOM XSS",
       "analysis": {
         "state": "in_triage",
-        "detail": "Reported by grype 0.118.0 against dompurify 3.4.14 on 2026-10-07, severity Low. Re-checked on 2026-10-21: fixed in 3.4.16 (2026-09-23), and 3.4.17 (2026-10-12) is current; browser/package.json still pins 3.4.14. The flaw needs IN_PLACE and a node-removing afterSanitize hook, neither yet checked against our sanitizer call sites."
+        "detail": "Reported by grype 0.118.0 against dompurify 3.4.14 on 2026-10-07, severity Low. Re-checked on 2026-11-04: fixed in 3.4.16 (2026-09-23), and 3.4.17 (2026-10-12) is current; browser/package.json still pins 3.4.14. The flaw needs IN_PLACE and a node-removing afterSanitize hook, neither yet checked against our sanitizer call sites."
       }
     }
   ]
