@@ -640,10 +640,6 @@ bool GtkSalData::ErrorTrapPop( bool bIgnoreError )
 #endif
 }
 
-#if !GLIB_CHECK_VERSION(2,32,0)
-#define G_SOURCE_REMOVE FALSE
-#endif
-
 extern "C" {
 
     struct SalGtkTimeoutSource {
