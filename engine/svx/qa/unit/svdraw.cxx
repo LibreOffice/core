@@ -33,6 +33,7 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdorect.hxx>
+#include <svx/sdangitm.hxx>
 #include <svx/unopage.hxx>
 #include <svx/svdview.hxx>
 #include <svx/xlineit0.hxx>
@@ -943,6 +944,42 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testResizeProtectedShapeIgnoresGeoAttr)
     // the protection flag.
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(100, 100), Size(100, 100)),
                          pRectangleObject->GetLogicRect());
+
+    pPage->RemoveObject(0);
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testRotateAboutPointInDocumentCoordinates)
+{
+    // With addPageMargin the point to turn about arrives in document coordinates. A square
+    // turned about its own middle stays where it is, whatever margin the page has.
+    std::unique_ptr<SdrModel> pModel(new SdrModel(nullptr, nullptr, true));
+    rtl::Reference<SdrPage> pPage(new SdrPage(*pModel, false));
+    pPage->SetSize(Size(50000, 50000));
+    pPage->SetBorder(1000, 1000, 1000, 1000);
+    pModel->InsertPage(pPage.get(), 0);
+
+    tools::Rectangle aRect(Point(10000, 10000), Size(2000, 2000));
+    rtl::Reference<SdrRectObj> pRectangleObject = new SdrRectObj(*pModel, aRect);
+    pPage->NbcInsertObject(pRectangleObject.get());
+
+    ScopedVclPtrInstance<VirtualDevice> aVirtualDevice;
+    SdrView aView(*pModel, aVirtualDevice);
+    aView.ShowSdrPage(pPage.get());
+    aView.MarkObj(pRectangleObject.get(), aView.GetSdrPageView());
+
+    const Point aCenter(aRect.Center());
+    SfxItemSet aTurn(pModel->GetItemPool(),
+                     svl::Items<SID_ATTR_TRANSFORM_ROT_X, SID_ATTR_TRANSFORM_DELTA_ANGLE>);
+    aTurn.Put(SfxInt32Item(SID_ATTR_TRANSFORM_ROT_X, aCenter.X()));
+    aTurn.Put(SfxInt32Item(SID_ATTR_TRANSFORM_ROT_Y, aCenter.Y()));
+    aTurn.Put(SdrAngleItem(SID_ATTR_TRANSFORM_DELTA_ANGLE, 9000_deg100));
+    aView.SetGeoAttrToMarked(aTurn, /*addPageMargin=*/true);
+
+    // Without the fix, the page margin went on top of the point, and the square landed a margin
+    // away from where it started.
+    const Point aNewCenter(pRectangleObject->GetSnapRect().Center());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aCenter.X()), double(aNewCenter.X()), 2.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aCenter.Y()), double(aNewCenter.Y()), 2.0);
 
     pPage->RemoveObject(0);
 }

@@ -1738,14 +1738,15 @@ static Point ImpGetPoint(const tools::Rectangle& rRect, RectPoint eRP)
 void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr, bool addPageMargin)
 {
     tools::Rectangle aRect(GetMarkedObjRect());
+    Point aPageMargin;
 
     if(GetSdrPageView())
     {
         if (addPageMargin)
         {
             SdrPage * pPage = GetSdrPageView()->GetPage();
-            Point upperLeft(pPage->GetLeftBorder(), pPage->GetUpperBorder());
-            aRect.Move(upperLeft.getX(), upperLeft.getY());
+            aPageMargin = Point(pPage->GetLeftBorder(), pPage->GetUpperBorder());
+            aRect.Move(aPageMargin.getX(), aPageMargin.getY());
         }
         GetSdrPageView()->LogicToPagePos(aRect);
     }
@@ -1854,12 +1855,14 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr, bool addPageMargin
     }
 
     // position rotation point x
+    // With addPageMargin the caller counts the rotation point from the edge of the document,
+    // while this method counts from the edge of the page, so the margin comes off the point here.
     if(bRotate || rAttr.GetItemIfSet(SID_ATTR_TRANSFORM_ROT_X))
-        nRotateX = rAttr.Get(SID_ATTR_TRANSFORM_ROT_X).GetValue();
+        nRotateX = rAttr.Get(SID_ATTR_TRANSFORM_ROT_X).GetValue() - aPageMargin.X();
 
     // position rotation point y
     if(bRotate || rAttr.GetItemIfSet(SID_ATTR_TRANSFORM_ROT_Y))
-        nRotateY = rAttr.Get(SID_ATTR_TRANSFORM_ROT_Y).GetValue();
+        nRotateY = rAttr.Get(SID_ATTR_TRANSFORM_ROT_Y).GetValue() - aPageMargin.Y();
 
     // shearing
     if (const SdrAngleItem *pPoolItem = rAttr.GetItemIfSet(SID_ATTR_TRANSFORM_SHEAR))
