@@ -95,6 +95,7 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		this.sectionProperties.gluePointRadius = ShapeHandlesSection.gluePointSize();
 		this.sectionProperties.subSectionPrefix = 'shape-handle-';
 		this.sectionProperties.svg = null; // This is for preview of modifications.
+		this.sectionProperties.pictureRectangle = null; // The picture covers this part of the document, in twips.
 		this.sectionProperties.hasVideo = false; // Don't hide svg when there is video content.
 		this.sectionProperties.shapeRectangleProperties = []; // One entry per selected object that has scaling handles.
 		this.sectionProperties.scalingHandlesPerObject = []; // Same order, holding the handles themselves.
@@ -591,6 +592,7 @@ class ShapeHandlesSection extends CanvasSectionObject {
 	removeSVG() {
 		if (this.sectionProperties.svg)
 			this.sectionProperties.svg.remove();
+		this.sectionProperties.pictureRectangle = null;
 	}
 
 	static addVideoSupportHandlers(videos: any) {
@@ -1290,6 +1292,19 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		this.containerObject.requestReDraw();
 	}
 
+	// The picture sits this far from the top left corner of this section, in canvas pixels. The
+	// section covers the frame of the object and the picture covers the drawing itself, so the
+	// two move apart once the object is turned.
+	private getPictureOffset(): number[] {
+		const rectangle = this.sectionProperties.pictureRectangle;
+		if (!rectangle || !GraphicSelection.hasActiveSelection()) return [0, 0];
+
+		return [
+			rectangle.pX1 - GraphicSelection.rectangle.pX1,
+			rectangle.pY1 - GraphicSelection.rectangle.pY1,
+		];
+	}
+
 	private constrainDragToSheetArea(dragDistance: number[]) {
 		if (app.map.getDocType() === 'spreadsheet') {
 			// Cap the drag distance to the document boundaries
@@ -1318,10 +1333,12 @@ class ShapeHandlesSection extends CanvasSectionObject {
 				);
 				// Clip svg at the header edges
 				if (this.sectionProperties.svg) {
+					const pictureOffset = this.getPictureOffset();
 					const cropLeft =
 						Math.max(
 							calcGridSection.myTopLeft[0] -
 								this.myTopLeft[0] -
+								pictureOffset[0] -
 								dragDistance[0],
 							0,
 						) / app.dpiScale;
@@ -1329,6 +1346,7 @@ class ShapeHandlesSection extends CanvasSectionObject {
 						Math.max(
 							calcGridSection.myTopLeft[1] -
 								this.myTopLeft[1] -
+								pictureOffset[1] -
 								dragDistance[1],
 							0,
 						) / app.dpiScale;
@@ -1371,8 +1389,9 @@ class ShapeHandlesSection extends CanvasSectionObject {
 
 			if (this.sectionProperties.svg) {
 				const addition = app.map._docLayer.isCalcRTL() ? -this.size[0] : 0;
-				this.sectionProperties.svg.style.left = String((this.myTopLeft[0] + dragDistance[0] + addition) / app.dpiScale) + 'px';
-				this.sectionProperties.svg.style.top = String((this.myTopLeft[1] + dragDistance[1]) / app.dpiScale) + 'px';
+				const pictureOffset = this.getPictureOffset();
+				this.sectionProperties.svg.style.left = String((this.myTopLeft[0] + pictureOffset[0] + dragDistance[0] + addition) / app.dpiScale) + 'px';
+				this.sectionProperties.svg.style.top = String((this.myTopLeft[1] + pictureOffset[1] + dragDistance[1]) / app.dpiScale) + 'px';
 				this.sectionProperties.svg.style.opacity = 0.5;
 			}
 			this.sectionProperties.lastDragDistance = [dragDistance[0], dragDistance[1]];
@@ -1402,13 +1421,41 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		return viewBox;
 	}
 
+	// The picture names the part of the document it covers in its viewBox, in 1/100 mm, and this
+	// gives that part in twips. The selection rectangle holds the frame of the object instead,
+	// and that frame grows once the object is turned. The answer is null for a sheet that runs
+	// right to left, because the selection arrives mirrored there and the viewBox does not.
+	private getPictureRectangle(viewBox: number[]): any {
+		if (!viewBox || viewBox.length !== 4 || viewBox[2] <= 0 || viewBox[3] <= 0) return null;
+		if (app.map._docLayer.isCalcRTL()) return null;
+
+		const twipsPerUnit = 1440 / 2540;
+		const rectangle = new cool.SimpleRectangle(
+			viewBox[0] * twipsPerUnit,
+			viewBox[1] * twipsPerUnit,
+			viewBox[2] * twipsPerUnit,
+			viewBox[3] * twipsPerUnit,
+			GraphicSelection.rectangle.part,
+			GraphicSelection.rectangle.mode,
+		);
+
+		// The picture names the twips of the document, and the selection was moved into tile
+		// twips as it arrived, so the picture takes the same move.
+		rectangle.moveBy(GraphicSelection.tileTwipsOffset);
+
+		return rectangle;
+	}
+
 	adjustSVGProperties() {
 		if (this.sectionProperties.svg && this.sectionProperties.svg.style.display === '' && GraphicSelection.hasActiveSelection()) {
-			const widthText = GraphicSelection.rectangle.cWidth + 'px';
-			const heightText = GraphicSelection.rectangle.cHeight + 'px';
-
 			const viewBox: number[] = this.getViewBox(this.sectionProperties.svg.children[0]);
 			const isImage = this.sectionProperties.svg.querySelectorAll('.Graphic').length > 0;
+
+			this.sectionProperties.pictureRectangle = isImage ? null : this.getPictureRectangle(viewBox);
+
+			const rectangle = this.sectionProperties.pictureRectangle ?? GraphicSelection.rectangle;
+			const widthText = rectangle.cWidth + 'px';
+			const heightText = rectangle.cHeight + 'px';
 
 			const clientRect = (this.sectionProperties.svg.children[0] as SVGElement).getBoundingClientRect();
 
@@ -1437,8 +1484,9 @@ class ShapeHandlesSection extends CanvasSectionObject {
 	private updateSVGPosition(): void {
 		if (!this.sectionProperties.svg || !GraphicSelection.hasActiveSelection()) return;
 
-		const left = GraphicSelection.rectangle.v1X;
-		const top = GraphicSelection.rectangle.v1Y;
+		const rectangle = this.sectionProperties.pictureRectangle ?? GraphicSelection.rectangle;
+		const left = rectangle.v1X;
+		const top = rectangle.v1Y;
 
 		this.sectionProperties.svg.style.left = Math.round(left / app.dpiScale) + 'px';
 		this.sectionProperties.svg.style.top = Math.round(top / app.dpiScale) + 'px';

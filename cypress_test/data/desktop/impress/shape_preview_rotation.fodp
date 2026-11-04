@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.presentation">
+  <office:automatic-styles>
+    <style:page-layout style:name="PM1">
+      <style:page-layout-properties fo:margin-top="0cm" fo:margin-bottom="0cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:page-width="28cm" fo:page-height="15.75cm" style:print-orientation="landscape"/>
+    </style:page-layout>
+    <style:style style:name="dp1" style:family="drawing-page"/>
+    <style:style style:name="gr1" style:family="graphic">
+      <style:graphic-properties draw:stroke="solid" svg:stroke-width="0.05cm" svg:stroke-color="#000000" draw:fill="solid" draw:fill-color="#4472c4"/>
+    </style:style>
+  </office:automatic-styles>
+  <office:master-styles>
+    <style:master-page style:name="Default" style:page-layout-name="PM1" draw:style-name="dp1"/>
+  </office:master-styles>
+  <office:body>
+    <office:presentation>
+      <draw:page draw:name="slide1" draw:style-name="dp1" draw:master-page-name="Default">
+        <!-- A circle of 6 by 6 cm turned by 45 degrees, centred on the slide. This is the
+             shape the toolbar inserts, so it is a custom shape rather than a plain ellipse.
+             Turning leaves the circle itself the same, while the frame the handles sit on
+             grows by about 41 percent in each direction. -->
+        <draw:custom-shape draw:style-name="gr1" draw:layer="layout" svg:width="6cm" svg:height="6cm" draw:transform="rotate (0.785398163397448) translate (9.7574cm 7.875cm)">
+          <text:p/>
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
+        </draw:custom-shape>
+      </draw:page>
+    </office:presentation>
+  </office:body>
+</office:document>
