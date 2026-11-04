@@ -171,7 +171,6 @@ RemoteFilesDialog::~RemoteFilesDialog()
 
 void RemoteFilesDialog::EnableExtraMenuItems(bool bEnable)
 {
-    m_xManageServices->set_item_visible(u"change_password"_ustr, bEnable);
     m_xManageServices->set_item_visible(u"edit_service"_ustr, bEnable);
     m_xManageServices->set_item_visible(u"delete_service"_ustr, bEnable);
     m_xManageServices->set_item_visible(u"change_password"_ustr, bEnable);
