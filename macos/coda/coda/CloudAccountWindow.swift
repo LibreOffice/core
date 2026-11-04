@@ -39,6 +39,9 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
     /// The local copy of the document open in the editor frame, edited by the engine.
     private var remoteDocument: Document?
 
+    /// The remote document's name, like "calc.ods".
+    private var remoteDocumentName: String?
+
     static func open(accountId: String, url: URL) {
         if let controller = openWindows[accountId] {
             controller.showWindow(nil)
@@ -57,7 +60,7 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
                               styleMask: [.titled, .closable, .resizable, .miniaturizable],
                               backing: .buffered, defer: false)
         window.isReleasedWhenClosed = false
-        window.title = url.host ?? url.absoluteString
+        window.title = AppDelegate.getAppName()
         window.center()
 
         // Integrators refuse a browser they do not know. Safari always names WebKit 605.1.15.
@@ -202,6 +205,17 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         remoteDocument?.removeWindowController(self)
         remoteDocument?.close()
         remoteDocument = nil
+        remoteDocumentName = nil
+        window?.title = AppDelegate.getAppName()
+    }
+
+    // The title shows the remote document's name, not the name of its temporary copy.
+    override func windowTitle(forDocumentDisplayName displayName: String) -> String {
+        guard let remoteDocumentName else {
+            return AppDelegate.getAppName()
+        }
+
+        return AppDelegate.getAppName() + " - " + remoteDocumentName
     }
 
     // The arguments are a JSON array with the integrator's file name and the bytes in base64.
@@ -245,6 +259,8 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         document.fileType = fileType
         document.connect(webView: webView)
         document.editorFrame = editorFrameInfo
+
+        remoteDocumentName = values[0]
 
         // The document shows its Save As, print and error dialogs on this window.
         document.addWindowController(self)
