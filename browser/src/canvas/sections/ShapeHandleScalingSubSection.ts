@@ -211,6 +211,21 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 			: this.position[0] + point.pX;
 	}
 
+	// Where the drag has taken the handle, in the document. A snap takes the handle to the grid
+	// or to a line another object lines up with, and everything the drag works out follows from
+	// this one point, so the preview shows what the drop commits.
+	private draggedTo(point: cool.SimplePoint): cool.SimplePoint {
+		const p = point.clone();
+		p.pX = this.mouseToDocX(point);
+		p.pY += this.position[1];
+
+		const snapped = this.sectionProperties.parentHandlerSection.snappedAt();
+		if (snapped[0] !== null && snapped[0] !== undefined) p.pX = snapped[0];
+		if (snapped[1] !== null && snapped[1] !== undefined) p.pY = snapped[1];
+
+		return p;
+	}
+
 	/*
 		Where a drop at the given point leads: the object's new rectangle, the handle the move is
 		committed on, and the twips position that handle lands on. The preview and the drop both
@@ -225,9 +240,7 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 		*/
 		const handleId = String(Number(ownInfo.kind) - 1);
 
-		const p = point.clone();
-		p.pX = this.mouseToDocX(point);
-		p.pY += this.position[1];
+		const p = this.draggedTo(point);
 
 		const keepRatio = HandleScaling.keepsRatio(e, this.sectionProperties.cropModeEnabled);
 		const shapeRecProps = HandleScaling.shapeAfterDrag(
@@ -240,13 +253,12 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 		]);
 
 		const committedHandleId = HandleScaling.committedHandle(handleId, keepRatio);
-		const position = HandleScaling.positionOfHandle(committedHandleId, rectangle);
+		const place = HandleScaling.positionOfHandle(
+			committedHandleId, rectangle, shapeRecProps.angleRadian);
 
-		if (!keepRatio) {
-			const snapped = this.sectionProperties.parentHandlerSection.snappedAt();
-			position[0] = Math.round((snapped[0] ?? this.mouseToDocX(point)) * app.pixelsToTwips);
-			position[1] = Math.round((snapped[1] ?? point.pY + this.position[1]) * app.pixelsToTwips);
-		}
+		// Core reads the position as a whole number of twips, and it cuts off what comes after
+		// the point rather than rounding it.
+		const position = [Math.round(place[0]), Math.round(place[1])];
 
 		return { committedHandleId: committedHandleId, rectangle: rectangle, position: position };
 	}
@@ -297,9 +309,7 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 	moveHandlesOnDrag(point: cool.SimplePoint, e: MouseEvent) {
 		Util.ensureValue(app.activeDocument);
 
-		const p = point.clone();
-		p.pX = this.mouseToDocX(point);
-		p.pY += this.position[1];
+		const p = this.draggedTo(point);
 
 		const objectNumber = this.getOwnObjectNumber();
 		const shapeRecProps = HandleScaling.shapeAfterDrag(
@@ -367,15 +377,12 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 			const parentSVG = parentProperties.svg;
 			if (!useCorePreview && parentSVG) parentSVG.style.opacity = 0.5;
 
-			const snapPosition = [
-				this.mouseToDocX(point) - parentProperties.handleWidth * 0.5,
-				point.pY + this.position[1] - parentProperties.handleHeight * 0.5
-			];
+			// The snap looks from the handle, which the drag has already moved to the mouse. The
+			// size and the distance are both 0, because a handle is a single point.
+			parentHandlerSection.checkHelperLinesAndSnapPoints(
+				[0, 0], [this.mouseToDocX(point), point.pY + this.position[1]], [0, 0]);
 
 			this.moveHandlesOnDrag(point, e);
-
-			// Here we are checking a point, so the size 0. dragDistance is also 0 because we already set the new position (moveHandlesOnDrag).
-			parentHandlerSection.checkHelperLinesAndSnapPoints([0, 0], snapPosition, [0, 0]);
 
 			this.containerObject.requestReDraw();
 

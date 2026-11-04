@@ -65,23 +65,49 @@ class HandleScaling {
 	}
 
 	/// Where the handle counted as handleId sits on that rectangle, in twips.
+	/// The rectangle covers the shape before the turn, so this method turns the place about
+	/// the middle of the rectangle by the angle the shape stands at.
 	public static positionOfHandle(
 		handleId: string,
 		rectangle: cool.SimpleRectangle,
+		angleRadian = 0,
 	): number[] {
 		const isRTL = app.map._docLayer.isCalcRTL();
 		const leftHandleX = isRTL ? rectangle.x2 : rectangle.x1;
 		const rightHandleX = isRTL ? rectangle.x1 : rectangle.x2;
+		let place: number[];
 
-		if (handleId === '0') return [leftHandleX, rectangle.y1];
-		else if (handleId === '1') return [rectangle.center[0], rectangle.y1];
-		else if (handleId === '2') return [rightHandleX, rectangle.y1];
-		else if (handleId === '3') return [leftHandleX, rectangle.center[1]];
-		else if (handleId === '4') return [rightHandleX, rectangle.center[1]];
-		else if (handleId === '5') return [leftHandleX, rectangle.y2];
-		else if (handleId === '6') return [rectangle.center[0], rectangle.y2];
+		if (handleId === '0') place = [leftHandleX, rectangle.y1];
+		else if (handleId === '1') place = [rectangle.center[0], rectangle.y1];
+		else if (handleId === '2') place = [rightHandleX, rectangle.y1];
+		else if (handleId === '3') place = [leftHandleX, rectangle.center[1]];
+		else if (handleId === '4') place = [rightHandleX, rectangle.center[1]];
+		else if (handleId === '5') place = [leftHandleX, rectangle.y2];
+		else if (handleId === '6') place = [rectangle.center[0], rectangle.y2];
 		// handleId === '7'
-		else return [rightHandleX, rectangle.y2];
+		else place = [rightHandleX, rectangle.y2];
+
+		return HandleScaling.turnedAbout(place, rectangle.center, angleRadian);
+	}
+
+	// This turns the point about the middle by the given angle. The angle runs against the
+	// clock and the document counts its y downwards, so the turn flips the sign of the y.
+	private static turnedAbout(
+		point: number[],
+		center: number[],
+		angleRadian: number,
+	): number[] {
+		if (!angleRadian) return point;
+
+		const cosine = Math.cos(angleRadian);
+		const sine = Math.sin(angleRadian);
+		const x = point[0] - center[0];
+		const y = point[1] - center[1];
+
+		return [
+			center[0] + x * cosine + y * sine,
+			center[1] - x * sine + y * cosine,
+		];
 	}
 
 	/// Takes the point onto the line that keeps the ratio, and modifies it.

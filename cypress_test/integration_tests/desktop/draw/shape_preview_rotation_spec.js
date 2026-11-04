@@ -160,4 +160,49 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Picture of a shape that is
 			}.bind(this));
 		}.bind(this));
 	});
+
+	/*
+		A handle of a turned shape moves along the shape's own sides, and it snaps to the grid on
+		the way. The picture follows both, so the shape lands where the picture showed it.
+	*/
+	it('A turned shape lands where the resize preview showed it.', function() {
+		turnBy(this, 40);
+
+		cy.then(function() {
+			this.before = shapeCenter(this.win, this.canvas);
+		}.bind(this));
+
+		cy.cGet('#test-div-shape-handle-3').then(function($handle) {
+			var rect = $handle[0].getBoundingClientRect();
+			this.dragStart = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+			this.dragEnd = { x: this.dragStart.x - 60, y: this.dragStart.y - 30 };
+		}.bind(this));
+
+		cy.then(function() {
+			cy.cGet('body').realMouseMove(this.dragStart.x, this.dragStart.y);
+			cy.cGet('body').realMouseDown({ x: this.dragStart.x, y: this.dragStart.y });
+			cy.cGet('body').realMouseMove(this.dragStart.x - 30, this.dragStart.y - 15);
+			cy.cGet('body').realMouseMove(this.dragEnd.x, this.dragEnd.y);
+		}.bind(this));
+
+		cy.cGet('#canvas-container > svg > svg').should(function($inner) {
+			expect($inner[0].style.transform, 'the picture is scaled').to.contain('scale');
+		});
+
+		cy.then(function() {
+			this.preview = previewCenter(this.win);
+			cy.cGet('body').realMouseUp({ x: this.dragEnd.x, y: this.dragEnd.y });
+		}.bind(this));
+
+		cy.getFrameWindow().then(function(win) { return helper.processToIdle(win); });
+		cy.cGet('#test-div-shape-handle-3').should('exist');
+
+		cy.then(function() {
+			var now = shapeCenter(this.win, this.canvas);
+
+			expect(now.width, 'the shape is wider than it was').to.be.greaterThan(this.before.width + 10);
+			expect(now.x, 'where the shape sits across the page').to.be.closeTo(this.preview.x, 2);
+			expect(now.y, 'where the shape sits down the page').to.be.closeTo(this.preview.y, 2);
+		}.bind(this));
+	});
 });
