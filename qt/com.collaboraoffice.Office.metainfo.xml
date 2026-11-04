@@ -41,6 +41,18 @@
   </kudos>
   <content_rating type="oars-1.1"/>
   <releases>
+    <release version="26.04.5.3-1" date="2026-11-06">
+      <description>
+        <p>New features and fixes in this release:</p>
+        <ul>
+          <li>Integrated Lightproof sentence checker for English, Hungarian, Portuguese (Brazil) and Russian</li>
+          <li>Drag and drop now embeds pictures and media in documents</li>
+          <li>File managers now offer the app for Markdown (.md) files</li>
+          <li>An overview slide in Impress that can be switched on and off from the status bar, with an overview page you can pan and zoom, and where you can edit slides directly in their previews</li>
+          <li>All fixes and improvements from the shared codebase with Collabora Online 26.04.5, including many document compatibility fixes for Microsoft Word, Excel and PowerPoint files</li>
+        </ul>
+      </description>
+    </release>
     <release version="26.04.4.3-1" date="2026-10-08">
       <description>
         <p>New features and fixes in this release:</p>
