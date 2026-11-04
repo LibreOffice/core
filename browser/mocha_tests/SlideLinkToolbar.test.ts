@@ -28,7 +28,6 @@ describe('SlideLinkToolbar', function () {
 	let inSection: Set<string>;
 	let sectionOutdated: boolean;
 	let toolbar: SlideLinkToolbar;
-	let savedDispatcher: any;
 	let savedEvents: any;
 
 	// The linked pages, by the identifier each one holds.
@@ -121,7 +120,6 @@ describe('SlideLinkToolbar', function () {
 			},
 		};
 
-		savedDispatcher = app.dispatcher;
 		savedEvents = app.events;
 		app.dispatcher = {
 			dispatch: (name: string) => dispatched.push(name),
@@ -137,7 +135,6 @@ describe('SlideLinkToolbar', function () {
 	afterEach(function () {
 		const found = element();
 		if (found) found.remove();
-		app.dispatcher = savedDispatcher;
 		app.events = savedEvents;
 	});
 

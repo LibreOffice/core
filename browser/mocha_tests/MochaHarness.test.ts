@@ -15,6 +15,34 @@ afterEach('the base page still holds #document-container', function () {
 	nodeassert.ok(document.getElementById('document-container'));
 });
 
+// Tests replace these globals with stand-ins. Each test starts from the values the page loaded
+// with.
+let sharedGlobals: {
+	map: any;
+	dispatcher: any;
+	file: any;
+	mode: any;
+	locale: string;
+};
+
+beforeEach('save the shared globals', function () {
+	sharedGlobals = {
+		map: app.map,
+		dispatcher: app.dispatcher,
+		file: app.file,
+		mode: window.mode,
+		locale: String.locale,
+	};
+});
+
+afterEach('put back the shared globals', function () {
+	app.map = sharedGlobals.map;
+	app.dispatcher = sharedGlobals.dispatcher;
+	app.file = sharedGlobals.file;
+	window.mode = sharedGlobals.mode;
+	String.locale = sharedGlobals.locale;
+});
+
 describe('Mocha harness', function () {
 	beforeEach(function () {
 		setUpAIChatPage();

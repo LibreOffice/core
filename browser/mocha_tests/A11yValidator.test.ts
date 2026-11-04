@@ -115,20 +115,18 @@ describe('A11yValidator', function () {
 	});
 
 	describe('a form control in the sidebar', function () {
-		const realMap = app.map;
 		let sidebar: HTMLElement;
 
 		beforeEach(function () {
 			sidebar = document.createElement('div');
 			document.body.appendChild(sidebar);
-			app.map = Object.assign({}, realMap, {
+			app.map = Object.assign({}, app.map, {
 				sidebar: { getContainer: () => sidebar },
 			});
 		});
 
 		afterEach(function () {
 			sidebar.remove();
-			app.map = realMap;
 		});
 
 		function shownInput(id: string): HTMLInputElement {

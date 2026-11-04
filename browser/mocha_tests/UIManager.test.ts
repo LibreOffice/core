@@ -12,7 +12,6 @@
 describe('UIManager', function () {
 	describe('the theme handed to the engine', function () {
 		const realPrefs = window.prefs;
-		const realMode = window.mode;
 		const realSocket = app.socket;
 		const realSectionContainer = app.sectionContainer;
 		let sent: string[];
@@ -34,7 +33,6 @@ describe('UIManager', function () {
 
 		afterEach(function () {
 			window.prefs = realPrefs;
-			window.mode = realMode;
 			app.socket = realSocket;
 			app.sectionContainer = realSectionContainer;
 			themeAttributes.forEach((name, index) => {

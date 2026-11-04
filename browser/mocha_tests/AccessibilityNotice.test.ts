@@ -10,7 +10,6 @@
  */
 
 describe('Accessibility statement notice', function () {
-	const realMode = window.mode;
 	const realSanitizeUrl = window.sanitizeUrl;
 	const realStatementUrl = window.accessibilityStatementUrl;
 
@@ -23,7 +22,6 @@ describe('Accessibility statement notice', function () {
 	afterEach(function () {
 		AccessibilityNotice.hide();
 		restoreClock();
-		window.mode = realMode;
 		window.sanitizeUrl = realSanitizeUrl;
 		window.accessibilityStatementUrl = realStatementUrl;
 	});

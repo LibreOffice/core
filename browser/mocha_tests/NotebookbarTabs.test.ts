@@ -15,8 +15,6 @@ describe('Notebookbar tabs', function () {
 
 	beforeEach(function () {
 		saved = {
-			map: app.map,
-			windowMap: window.app.map,
 			isSlideImportSupported: app.impress.isSlideImportSupported,
 			params: window.L.Params,
 			showAINotebookbar: window.showAINotebookbar,
@@ -54,13 +52,10 @@ describe('Notebookbar tabs', function () {
 		};
 		map.uiManager.map = map;
 		app.map = map;
-		window.app.map = map;
 		app.tableStyles = new TableStylesService();
 	});
 
 	afterEach(function () {
-		app.map = saved.map;
-		window.app.map = saved.windowMap;
 		app.impress.isSlideImportSupported = saved.isSlideImportSupported;
 		window.L.Params = saved.params;
 		window.showAINotebookbar = saved.showAINotebookbar;
