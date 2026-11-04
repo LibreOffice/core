@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <mutex>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -54,9 +55,7 @@ class CanvasFactory
                                       lang::XMultiServiceFactory >
 {
     typedef std::pair< OUString, Sequence< OUString > > AvailPair;
-    typedef std::pair< OUString, OUString >             CachePair;
     typedef std::vector< AvailPair >                    AvailVector;
-    typedef std::vector< CachePair >                    CacheVector;
 
 
     mutable std::mutex                m_mutex;
@@ -64,7 +63,7 @@ class CanvasFactory
     AvailVector                       m_aAvailableImplementations;
     AvailVector                       m_aAcceleratedImplementations;
     AvailVector                       m_aAAImplementations;
-    mutable CacheVector               m_aCachedImplementations;
+    mutable std::unordered_map<OUString, OUString> m_aCachedImplementations;
     mutable bool                      m_bCacheHasForcedLastImpl;
     mutable bool                      m_bCacheHasUseAcceleratedEntry;
     mutable bool                      m_bCacheHasUseAAEntry;
@@ -274,14 +273,9 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
                      officecfg::Office::Canvas::UseAcceleratedCanvas::get() );
 
     // try to reuse last working implementation for given service name
-    const CacheVector::iterator aEnd(m_aCachedImplementations.end());
-    auto aMatch = std::find_if(
-                    m_aCachedImplementations.begin(),
-                    aEnd,
-                    [&serviceName](CachePair const& cp)
-                    { return serviceName == cp.first; }
-                    );
-    if( aMatch != aEnd ) {
+    const auto aMatch = m_aCachedImplementations.find(serviceName);
+    if (aMatch != m_aCachedImplementations.end())
+    {
         Reference<XInterface> xCanvas( use( aMatch->second, args, xContext ) );
         if(xCanvas.is())
             return xCanvas;
@@ -369,17 +363,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
 
             if(xCanvas.is())
             {
-                if( aMatch != aEnd )
-                {
-                    // cache entry exists, replace dysfunctional
-                    // implementation name
-                    aMatch->second = aCurrName;
-                }
-                else
-                {
-                    // new service name, add new cache entry
-                    m_aCachedImplementations.emplace_back(serviceName, aCurrName);
-                }
+                m_aCachedImplementations[serviceName] = aCurrName;
 
                 return xCanvas;
             }
