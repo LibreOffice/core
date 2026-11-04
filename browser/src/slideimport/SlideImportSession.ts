@@ -75,8 +75,7 @@ class SlideImportSession {
 	// section of their own rather than as plain slides. The user's choice, kept
 	// across files.
 	public insertAsSection: boolean = true;
-	// Whether the open of the current file named it as a source. Slides can
-	// only be linked to a source the open named.
+	// Whether the slides on show can be linked to their source.
 	public canLink: boolean = false;
 	public error: SlideImportError | null = null;
 
@@ -139,8 +138,13 @@ class SlideImportSession {
 	// The persistent link of the document the slides come from.
 	public setSource(fileName: string): void {
 		this.fileName = fileName;
-		this.canLink = this.sourceName() !== '';
+		this.canLink = this.sourceName() !== '' && this.formatKeepsLinks();
 		this.setState('opening');
+	}
+
+	// Does the format this document is saved in keep the link of an inserted page.
+	public formatKeepsLinks(): boolean {
+		return app.LOUtil.isFileODF(this.map);
 	}
 
 	// The slides of the document are on show, so they can be chosen and inserted.

@@ -1082,7 +1082,7 @@ class SlideImportPane {
 
     this.panel
       .querySelectorAll(
-        '.navigation-expand-button, .close-navigation-button, .slide-import-insert, .slide-import-slide',
+        '.navigation-expand-button, .close-navigation-button, .slide-import-insert, .slide-import-slide, .slide-import-linksource[data-cooltip]',
       )
       .forEach((el: Element) =>
         window.L.control.attachTooltipEventListener(el, this.map),
@@ -1598,7 +1598,14 @@ class SlideImportPane {
           />
           {_('Keep original design')}
         </label>
-        <label class="slide-import-linksource">
+        <label
+          class="slide-import-linksource"
+          data-cooltip={
+            session.formatKeepsLinks()
+              ? undefined
+              : _('Not supported in PPTX, please save as ODP to use links')
+          }
+        >
           <input
             type="checkbox"
             checked={session.linkToSource}
