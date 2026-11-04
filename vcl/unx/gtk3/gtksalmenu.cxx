@@ -1139,7 +1139,6 @@ void GtkSalMenu::NativeSetItemText( unsigned nSection, unsigned nItemPos, const 
 
 void GtkSalMenu::NativeSetItemIcon( unsigned nSection, unsigned nItemPos, const Image& rImage )
 {
-#if GLIB_CHECK_VERSION(2,38,0)
     if (!rImage && mbHasNullItemIcon)
         return;
 
@@ -1169,11 +1168,6 @@ void GtkSalMenu::NativeSetItemIcon( unsigned nSection, unsigned nItemPos, const 
         g_lo_menu_set_icon_to_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos, nullptr );
         mbHasNullItemIcon = true;
     }
-#else
-    (void)nSection;
-    (void)nItemPos;
-    (void)rImage;
-#endif
 }
 
 void GtkSalMenu::NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const vcl::KeyCode& rKeyCode, std::u16string_view rKeyName )

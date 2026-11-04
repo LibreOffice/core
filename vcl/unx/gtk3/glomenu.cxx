@@ -243,13 +243,7 @@ g_lo_menu_set_icon (GLOMenu     *menu,
     GVariant *value;
 
     if (icon != nullptr)
-    {
-#if GLIB_CHECK_VERSION(2,38,0)
         value = g_icon_serialize (const_cast<GIcon*>(icon));
-#else
-        value = nullptr;
-#endif
-    }
     else
         value = nullptr;
 
