@@ -167,6 +167,13 @@ constexpr qsizetype MAX_JS_STRING_UNITS = 536'870'888;
 /// A message from the frame is one JS string, and a UTF-16 unit is at most 3 bytes of UTF-8.
 constexpr qsizetype MAX_MESSAGE_BYTES = 3 * MAX_JS_STRING_UNITS;
 
+void answer(QWebEngineUrlRequestJob* job, const QByteArray& text)
+{
+    auto* buffer = new QBuffer(job);
+    buffer->setData(text);
+    job->reply("text/plain", buffer);
+}
+
 /// The page takes an empty answer as a file that is not there.
 QByteArray readBundledFile(const QString& path)
 {
@@ -436,7 +443,7 @@ void CloudAccountPage::checkFileInfo(QWebEngineUrlRequestJob* job, const QByteAr
     if (job->initiator() != _frameOrigin)
     {
         LOG_WRN("account window: refused: a CheckFileInfo request came from another origin");
-        job->fail(QWebEngineUrlRequestJob::RequestDenied);
+        answer(job, QByteArray());
         return;
     }
 
@@ -483,7 +490,7 @@ void CloudAccountPage::sendFileInfo(QNetworkReply* reply,
     if (!isOk)
     {
         LOG_WRN("account window: CheckFileInfo failed with HTTP status " << status);
-        job->fail(QWebEngineUrlRequestJob::RequestFailed);
+        answer(job, QByteArray());
         return;
     }
 
@@ -495,9 +502,7 @@ void CloudAccountPage::sendFileInfo(QNetworkReply* reply,
             editorFileInfo[field] = fileInfo[field];
     }
 
-    auto* buffer = new QBuffer(job);
-    buffer->setData(QJsonDocument(editorFileInfo).toJson(QJsonDocument::Compact));
-    job->reply("text/plain", buffer);
+    answer(job, QJsonDocument(editorFileInfo).toJson(QJsonDocument::Compact));
 }
 
 void CloudAccountPage::putCodaPageIn(QWebEngineFrame& frame)
@@ -550,7 +555,7 @@ void receiveEditorFrameMessage(QWebEngineUrlRequestJob* job, const QString& sess
     if (page == PagesBySession.end())
     {
         LOG_WRN("account window: refused: a message names no open editor frame session");
-        job->fail(QWebEngineUrlRequestJob::RequestDenied);
+        answer(job, QByteArray());
         return;
     }
 
@@ -563,15 +568,7 @@ void receiveEditorFrameMessage(QWebEngineUrlRequestJob* job, const QString& sess
 
     const std::optional<QByteArray> reply =
         page->second->receiveMessage(job->initiator(), kind, message);
-    if (!reply)
-    {
-        job->fail(QWebEngineUrlRequestJob::RequestDenied);
-        return;
-    }
-
-    auto* buffer = new QBuffer(job);
-    buffer->setData(*reply);
-    job->reply("text/plain", buffer);
+    answer(job, reply.value_or(QByteArray()));
 }
 
 void openRemoteFile(const QString& serverUrl, QWidget* parent,
