@@ -62,6 +62,7 @@
 #include <Poco/MemoryStream.h>
 #include <Poco/Path.h>
 #include <Poco/SAX/InputSource.h>
+#include <Poco/StringTokenizer.h>
 
 #include <common/AIHttpTransport.hpp>
 #include <common/Clipboard.hpp>
@@ -6115,6 +6116,45 @@ static void readLocalDocBytes(const DocumentTab& data, int id)
     postReplyToCall(data.hWnd, data.tabId, id, Util::base64Encode(bytes));
 }
 
+// The arguments are a JSON array with the path, like ["device-desktop.css"].
+static void getBundledFile(const DocumentTab& data, int id, const std::string& arguments)
+{
+    std::string name;
+    try
+    {
+        const auto values = Poco::JSON::Parser().parse(arguments).extract<Poco::JSON::Array::Ptr>();
+        name = values->getElement<std::string>(0);
+    }
+    catch (const Poco::Exception&)
+    {
+        LOG_WRN("A bundled file was not read: the call has no path");
+        postReplyToCall(data.hWnd, data.tabId, id, std::string());
+        return;
+    }
+
+    const Poco::StringTokenizer tokens(name, "/");
+    const std::vector<std::string> segments(tokens.begin(), tokens.end());
+    const std::string path = bundledFilePath(segments);
+    if (path.empty())
+    {
+        LOG_WRN("A bundled file was not read: its path leads out of the folder");
+        postReplyToCall(data.hWnd, data.tabId, id, std::string());
+        return;
+    }
+
+    // TODO: readFile fails for a file over 256 KiB, and the page then gets an
+    // empty reply. It should not, at least in this case.
+    std::string text;
+    if (FileUtil::readFile(path, text) < 0)
+    {
+        LOG_DBG("'" << name << "' could not be read from CODA's bundled folder");
+        postReplyToCall(data.hWnd, data.tabId, id, std::string());
+        return;
+    }
+
+    postReplyToCall(data.hWnd, data.tabId, id, text);
+}
+
 // 1 MiB, the most a CheckFileInfo response can be.
 constexpr size_t MAX_FILE_INFO_BYTES = 1024 * 1024;
 
@@ -6828,6 +6868,12 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             const std::string arguments =
                 Util::wide_string_to_string(s.substr(strlen("checkFileInfo ")));
             checkFileInfo(data, id, arguments);
+        }
+        else if (s.starts_with(L"getBundledFile "))
+        {
+            const std::string arguments =
+                Util::wide_string_to_string(s.substr(strlen("getBundledFile ")));
+            getBundledFile(data, id, arguments);
         }
         else if (s.starts_with(L"saveCompleted "))
         {
