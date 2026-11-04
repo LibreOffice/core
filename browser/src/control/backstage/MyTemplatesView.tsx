@@ -215,11 +215,14 @@ namespace BackstageTemplates {
       );
     return (
       <table class="backstage-manage-templates-table">
-        <thead>
-          <tr>
-            <th>{_('Name')}</th>
-            <th>{_('Type')}</th>
-            <th aria-label={_('Actions')} />
+        <thead class="backstage-recent-documents-header">
+          <tr class="backstage-recent-documents-header-row">
+            <th class="backstage-recent-documents-header-cell">{_('Name')}</th>
+            <th class="backstage-recent-documents-header-cell">{_('Type')}</th>
+            <th
+              class="backstage-recent-documents-header-cell"
+              aria-label={_('Actions')}
+            />
           </tr>
         </thead>
         <tbody>
@@ -231,7 +234,9 @@ namespace BackstageTemplates {
               <td class="backstage-manage-templates-name">
                 <div class="backstage-manage-templates-name-wrapper">
                   {typeIcon(template.type)}
-                  <span>{template.name}</span>
+                  <span class="backstage-recent-document-name-text">
+                    {template.name}
+                  </span>
                 </div>
               </td>
               <td>
