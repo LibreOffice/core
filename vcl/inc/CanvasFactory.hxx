@@ -43,8 +43,7 @@
     a service name to try first.
     </p>
 */
-class CanvasFactory : public ::cppu::WeakImplHelper<css::lang::XMultiComponentFactory,
-                                                    css::lang::XMultiServiceFactory>
+class CanvasFactory : public ::cppu::WeakImplHelper<css::lang::XMultiComponentFactory>
 {
     typedef std::pair<OUString, css::uno::Sequence<OUString>> AvailPair;
 
@@ -78,12 +77,6 @@ public:
     virtual css::uno::Reference<XInterface> SAL_CALL createInstanceWithArgumentsAndContext(
         OUString const& name, css::uno::Sequence<css::uno::Any> const& args,
         css::uno::Reference<css::uno::XComponentContext> const& xContext) override;
-
-    // XMultiServiceFactory
-    virtual css::uno::Reference<css::uno::XInterface>
-        SAL_CALL createInstance(OUString const& name) override;
-    virtual css::uno::Reference<css::uno::XInterface> SAL_CALL createInstanceWithArguments(
-        OUString const& name, css::uno::Sequence<css::uno::Any> const& args) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

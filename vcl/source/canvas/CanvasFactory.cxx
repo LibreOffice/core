@@ -294,20 +294,4 @@ Reference<XInterface> CanvasFactory::createInstanceWithArgumentsAndContext(
     return xCanvas;
 }
 
-// XMultiServiceFactory
-
-Reference<XInterface> CanvasFactory::createInstance( OUString const & name )
-{
-    return createInstanceWithArgumentsAndContext(
-        name, Sequence<Any>(), m_xContext );
-}
-
-
-Reference<XInterface> CanvasFactory::createInstanceWithArguments(
-    OUString const & name, Sequence<Any> const & args )
-{
-    return createInstanceWithArgumentsAndContext(
-        name, args, m_xContext );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
