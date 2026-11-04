@@ -565,3 +565,52 @@
 .parts-preview-grid .preview-link-badge::before {
 	left: -28px;
 }
+
+/* The row above the grid with the actions on every linked presentation at
+ * once. It shows in the grid only; the hidden class takes it away while the
+ * grid holds no linked presentation. */
+.slide-presentations-row {
+	display: none;
+}
+
+.parts-preview-grid > .slide-presentations-row {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	gap: var(--spacing-s);
+	padding: var(--spacing-xs) 16px;
+	border-bottom: 1px solid var(--color-border);
+}
+
+/* The actions are links in the colour of the primary action. The room for
+ * the border the desktop rules add on hover is there from the start, so the
+ * row does not move under the pointer. The colours carry !important and the
+ * hover and disabled rules an id, since the rules for every button in
+ * device-desktop.css and jsdialogs.css set theirs with !important and more
+ * than a dozen classes of specificity. */
+.slide-presentations-row .ui-linkbutton {
+	margin: 0;
+	padding: var(--spacing-xs) var(--spacing-s);
+	border: 1px solid transparent;
+	border-radius: var(--border-radius);
+	background: transparent;
+	color: var(--color-primary) !important;
+	font: inherit;
+	cursor: pointer;
+}
+
+#presentation-controls-wrapper .slide-presentations-row .ui-linkbutton:hover {
+	color: var(--color-primary-dark) !important;
+	background-color: var(--color-btn-primary-hover-bg) !important;
+	border-color: transparent;
+}
+
+/* A disabled action is dimmed, which reads the same in the light and the
+ * dark palette. */
+#presentation-controls-wrapper .slide-presentations-row .ui-linkbutton:disabled,
+#presentation-controls-wrapper .slide-presentations-row .ui-linkbutton:disabled:hover {
+	color: var(--color-text-light) !important;
+	background-color: transparent !important;
+	opacity: 0.5;
+	cursor: default;
+}

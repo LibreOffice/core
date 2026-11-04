@@ -787,6 +787,7 @@ COOL_JS_LST =\
 	src/control/SlideDragGhost.tsx \
 	src/control/SlideSectionHeader.tsx \
 	src/control/SlideLinkPanel.tsx \
+	src/control/SlidePresentationsRow.tsx \
 	src/control/Control.SlideImportPane.tsx \
 	src/control/Control.SlideLinkToolbar.tsx \
 	src/control/Control.PaneExpander.ts \
@@ -1893,6 +1894,7 @@ pot:
 		src/control/SlideDragGhost.tsx \
 		src/control/SlideSectionHeader.tsx \
 		src/control/SlideLinkPanel.tsx \
+		src/control/SlidePresentationsRow.tsx \
 		src/slideimport/SlideImportSession.ts \
 		src/slideimport/SlideLinks.ts \
 		src/control/Control.PaneExpander.ts \

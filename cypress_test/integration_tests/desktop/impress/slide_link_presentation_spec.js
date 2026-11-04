@@ -344,4 +344,91 @@ describe(['tagdesktop'], 'Linked presentation in the slide sorter', function() {
 		// The sections stay, as sections of this document alone.
 		cy.cGet('.slide-section-header .slide-section-name').should('have.length', 4);
 	});
+
+	// Maximizes the slide list into the grid over the document area, which has no panel.
+	function maximizeGrid(win) {
+		cy.cGet('.navigation-expand-button').should('be.visible').click();
+		cy.cGet('#presentation-controls-wrapper').should('have.class', 'parts-preview-grid');
+		cy.cGet('.slide-link-panel').should('not.exist');
+		helper.processToIdle(win);
+	}
+
+	// The row above the grid shows, with Expand all enabled while a presentation is collapsed
+	// and Collapse all enabled while one is expanded.
+	function assertRowActions(expandAll, collapseAll) {
+		cy.cGet('.slide-presentations-row').should('be.visible');
+		cy.cGet('.slide-presentations-expand-all')
+			.should(expandAll ? 'not.be.disabled' : 'be.disabled');
+		cy.cGet('.slide-presentations-collapse-all')
+			.should(collapseAll ? 'not.be.disabled' : 'be.disabled');
+	}
+
+	it('expands and collapses the presentation in place in the maximized grid', function() {
+		helper.processToIdle(this.win);
+		waitForLinkedPresentation();
+		// The row of the grid is not shown in the strip.
+		cy.cGet('.slide-presentations-row').should('not.be.visible');
+
+		maximizeGrid(this.win);
+		assertRunCollapsed(true);
+		assertRowActions(true, false);
+
+		// The header menu expands the presentation in the grid, where no panel is offered.
+		cy.cGet('.slide-presentation-header').rightclick();
+		cy.cGet('[id$="-dropdown"]:visible').should('not.contain', 'Open in Panel');
+		cy.cGet('[id$="-dropdown"]:visible').should('not.contain', 'Collapse Presentation');
+		clickContextMenuItem('Expand Presentation');
+		assertRunCollapsed(false);
+		cy.cGet('.slide-link-panel').should('not.exist');
+		cy.cGet('.slide-section-header.in-presentation.presentation-collapsed').should('not.exist');
+		assertRowActions(false, true);
+
+		cy.cGet('.slide-presentation-header').rightclick();
+		cy.cGet('[id$="-dropdown"]:visible').should('not.contain', 'Expand Presentation');
+		clickContextMenuItem('Collapse Presentation');
+		assertRunCollapsed(true);
+		assertRowActions(true, false);
+
+		// A hidden slide of the run becoming the current one expands the presentation in
+		// the grid rather than opening the panel.
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.setPart(3);
+		});
+		helper.processToIdle(this.win);
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.map._docLayer._selectedPart).to.equal(3);
+		});
+		assertRunCollapsed(false);
+		cy.cGet('.slide-link-panel').should('not.exist');
+		cy.cGet('#preview-img-part-3').should('have.class', 'preview-img-currentpart');
+
+		// Leaving the grid keeps the presentation expanded in the strip, and the row goes.
+		cy.cGet('.navigation-expand-button').click();
+		cy.cGet('#presentation-controls-wrapper').should('not.have.class', 'parts-preview-grid');
+		helper.processToIdle(this.win);
+		assertRunCollapsed(false);
+		cy.cGet('.slide-presentations-row').should('not.be.visible');
+		cy.cGet('.slide-link-panel').should('not.exist');
+	});
+
+	it('expands and collapses every linked presentation from the row above the grid', function() {
+		helper.processToIdle(this.win);
+		waitForLinkedPresentation();
+		maximizeGrid(this.win);
+		assertRowActions(true, false);
+
+		cy.cGet('.slide-presentations-expand-all').click();
+		assertRunCollapsed(false);
+		cy.cGet('.slide-section-header.in-presentation.presentation-collapsed').should('not.exist');
+		cy.cGet('#preview-frame-part-1').should('not.have.class', 'presentation-tile');
+		assertRowActions(false, true);
+		// The action that disabled itself hands the focus to the other one.
+		cy.cGet('.slide-presentations-collapse-all').should('be.focused');
+
+		cy.cGet('.slide-presentations-collapse-all').click();
+		assertRunCollapsed(true);
+		cy.cGet('#preview-frame-part-1').should('have.class', 'presentation-tile');
+		assertRowActions(true, false);
+		cy.cGet('.slide-presentations-expand-all').should('be.focused');
+	});
 });

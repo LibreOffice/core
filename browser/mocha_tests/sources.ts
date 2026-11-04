@@ -368,6 +368,7 @@
 /// <reference path="../src/slideimport/SlideLinks.ts" />
 /// <reference path="../src/control/SlideSectionHeader.tsx" />
 /// <reference path="../src/control/SlideLinkPanel.tsx" />
+/// <reference path="../src/control/SlidePresentationsRow.tsx" />
 /// <reference path="../src/control/SlideDragGhost.tsx" />
 /// <reference path="../src/control/Control.SlideImportPane.tsx" />
 /// <reference path="../src/control/Control.SlideLinkToolbar.tsx" />

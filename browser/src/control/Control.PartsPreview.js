@@ -13,7 +13,7 @@
  */
 
 /* global _ _n app $ Hammer _UNO cool JSDialog buildSlideSectionHeader buildSlideDragGhost
-   buildSlideLinkPanel */
+   buildSlideLinkPanel buildSlidePresentationsRow */
 
 // Drag data type that marks a drag as carrying slides to import from another
 // presentation, with a payload of {slides:[...]} source slide indices. A drag
@@ -102,6 +102,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		// The identifiers of the linked presentations the user expanded. A presentation
 		// shows collapsed, as one tile under its header, until it is expanded.
 		this._expandedPresentations = new Set();
+		// The row above the maximized grid with the actions on every linked presentation at
+		// once, with its two buttons, once the sorter has shown a presentation.
+		this._presentationsRow = null;
 		// The panel beside the sorter that shows one linked presentation, while it is open:
 		// the identifier of the presentation, its header in the sorter, the panel element,
 		// its title row and the deck inside it that holds the section headers and the
@@ -1574,6 +1577,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		this._presentationHeaders = [];
 		this._clearAllPresentationCollapse();
 		if (key === '') {
+			this._updatePresentationsRow();
 			this._resumeLinkPanel();
 			return;
 		}
@@ -1597,6 +1601,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			if (!live.has(id))
 				this._expandedPresentations.delete(id);
 		}, this);
+		this._updatePresentationsRow();
 		this._resumeLinkPanel();
 		this._ensureVisiblePreviews();
 	},
@@ -1647,20 +1652,55 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			this._selectRange(run[0], run[run.length - 1]);
 	},
 
-	// Expands a collapsed presentation in the sorter, or collapses it to its tile. A
-	// presentation shown in the panel is collapsed by closing the panel.
-	_togglePresentationCollapse: function (id) {
+	// Expands a collapsed presentation in the sorter, so that its slides and the headers of its
+	// sections show under its header, or collapses it to its tile. A presentation shown in the
+	// panel is expanded already, and is collapsed by closing the panel.
+	_setPresentationExpanded: function (id, expanded) {
 		if (this._isLinkPanelOn(id)) {
-			this.closeLinkPanel();
+			if (!expanded)
+				this.closeLinkPanel();
 			return;
 		}
-		if (this._expandedPresentations.has(id))
-			this._expandedPresentations.delete(id);
-		else
+		if (expanded)
 			this._expandedPresentations.add(id);
+		else
+			this._expandedPresentations.delete(id);
 
 		this._applyAllPresentationsCollapse();
 		// Expanding may reveal thumbnails whose images were never fetched.
+		this._ensureVisiblePreviews();
+	},
+
+	_togglePresentationCollapse: function (id) {
+		this._setPresentationExpanded(id, !this._isPresentationExpanded(id));
+	},
+
+	// Whether a linked presentation shows its slides and sections: expanded in place, or shown
+	// in the panel.
+	_isPresentationExpanded: function (id) {
+		return this._expandedPresentations.has(id) || this._isLinkPanelOn(id);
+	},
+
+	// Expands every linked presentation the sorter shows in place. The one in the panel is
+	// expanded there already.
+	_expandAllPresentations: function () {
+		for (let h = 0; h < this._presentationHeaders.length; h++) {
+			const id = this._presentationHeaders[h]._link.id;
+			if (!this._isLinkPanelOn(id))
+				this._expandedPresentations.add(id);
+		}
+		this._applyAllPresentationsCollapse();
+		// Expanding may reveal thumbnails whose images were never fetched.
+		this._ensureVisiblePreviews();
+	},
+
+	// Collapses every linked presentation to its tile, the one in the panel by closing it.
+	_collapseAllPresentations: function () {
+		this.closeLinkPanel();
+		this._expandedPresentations.clear();
+		this._applyAllPresentationsCollapse();
+		// The slides below the collapsed runs move up into view, and their thumbnails may
+		// never have been fetched.
 		this._ensureVisiblePreviews();
 	},
 
@@ -1676,6 +1716,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			if (run)
 				this._applyPresentationCollapse(header, run);
 		}
+		this._updatePresentationsRow();
 	},
 
 	// Whether the given slide frame is hidden in a collapsed section or presentation. The tile
@@ -1693,7 +1734,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 	// carry no collapsed state.
 	_applyPresentationCollapse: function (header, run) {
 		const id = header._link.id;
-		const collapsed = !this._expandedPresentations.has(id) && !this._isLinkPanelOn(id);
+		const collapsed = !this._isPresentationExpanded(id);
 		this._setHeaderCollapsed(header, collapsed);
 
 		for (let i = 0; i < run.length; i++) {
@@ -1712,6 +1753,52 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			sectionHeader.classList.add('in-presentation');
 			sectionHeader.classList.toggle('presentation-collapsed', collapsed);
 		}
+	},
+
+	// Shows the row above the grid with the actions on every linked presentation at once while
+	// the sorter shows a presentation header, and enables each action while a presentation it
+	// applies to is there: a collapsed one for Expand all, an expanded one for Collapse all.
+	// The row is built when the first presentation shows and kept from then on. An action
+	// disabled while it holds the focus hands the focus to the other action, which applies
+	// then, so the keyboard stays in the row. The row reads the state of every presentation,
+	// so it is brought up to date after each change to that state.
+	_updatePresentationsRow: function () {
+		const count = this._presentationHeaders.length;
+		if (!this._presentationsRow) {
+			if (count === 0)
+				return;
+			const row = buildSlidePresentationsRow({
+				onExpandAll: this._expandAllPresentations.bind(this),
+				onCollapseAll: this._collapseAllPresentations.bind(this),
+			});
+			this._presentationsRow = {
+				row: row,
+				expandAll: row.querySelector('.slide-presentations-expand-all'),
+				collapseAll: row.querySelector('.slide-presentations-collapse-all'),
+			};
+			this._container.insertBefore(row, this._partsPreviewCont);
+		}
+		let expanded = 0;
+		for (let h = 0; h < count; h++) {
+			if (this._isPresentationExpanded(this._presentationHeaders[h]._link.id))
+				expanded++;
+		}
+		const actions = this._presentationsRow;
+		const focused = document.activeElement;
+		actions.row.classList.toggle('hidden', count === 0);
+		this._setRowActionEnabled(actions.expandAll, expanded < count);
+		this._setRowActionEnabled(actions.collapseAll, expanded > 0);
+		if (focused === actions.expandAll && actions.expandAll.disabled)
+			actions.collapseAll.focus();
+		else if (focused === actions.collapseAll && actions.collapseAll.disabled)
+			actions.expandAll.focus();
+	},
+
+	// Enables or disables one action of the row. A disabled action carries aria-disabled as
+	// well as the disabled property, so the styles and a screen reader read the same state.
+	_setRowActionEnabled: function (button, enabled) {
+		button.disabled = !enabled;
+		button.setAttribute('aria-disabled', enabled ? 'false' : 'true');
 	},
 
 	// Takes the presentation state off every frame and every section header.
@@ -1738,7 +1825,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		for (let h = 0; h < this._presentationHeaders.length; h++) {
 			const header = this._presentationHeaders[h];
 			const id = header._link.id;
-			if (this._expandedPresentations.has(id) || this._isLinkPanelOn(id) ||
+			if (this._isPresentationExpanded(id) ||
 			    header._link.slides.indexOf(img._part) <= 0)
 				continue;
 			if (!this._gridMode && window.mode.isDesktop()) {
@@ -1752,6 +1839,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			this._applyPresentationCollapse(header, run);
 			this._ensureVisiblePreviews();
 		}
+		this._updatePresentationsRow();
 	},
 
 	// Whether the slide sorter shows in the navigation sidebar. The wrapper of the sorter has
@@ -1839,6 +1927,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		wrapper.classList.add('slide-link-panel-open');
 		header.classList.add('panel-open');
 		this._applyPresentationCollapse(header, run);
+		this._updatePresentationsRow();
 		this._ensureVisiblePreviews();
 	},
 
@@ -1876,6 +1965,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			if (run)
 				this._applyPresentationCollapse(header, run);
 		}
+		this._updatePresentationsRow();
 
 		if (quiet || !hadFocus)
 			return;
@@ -2142,8 +2232,10 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 	},
 
 	// The menu of a presentation header: the presentation opens in the panel beside the sorter
-	// or the panel closes, the presentation is brought up to date from its file while the file
-	// can be read, and its link taken off, on its own or with every link under it.
+	// or the panel closes, or in the maximized grid, which has no panel, the presentation
+	// expands in place or collapses to its tile; the presentation is brought up to date from
+	// its file while the file can be read, and its link taken off, on its own or with every
+	// link under it.
 	_openPresentationContextMenu: function (header, e) {
 		var that = this;
 		const link = header._link;
@@ -2157,7 +2249,16 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				text: _('Close Panel'),
 				pos: 0,
 			});
-		} else if (!this._gridMode && window.mode.isDesktop()) {
+		} else if (this._gridMode) {
+			const expanded = this._isPresentationExpanded(link.id);
+			entries.push({
+				id: expanded ? 'collapsePresentation' : 'expandPresentation',
+				type: 'comboboxentry',
+				text: expanded ?
+					_('Collapse Presentation') : _('Expand Presentation'),
+				pos: 0,
+			});
+		} else if (window.mode.isDesktop()) {
 			entries.push({
 				id: 'openInPanel',
 				type: 'comboboxentry',
@@ -2200,6 +2301,12 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				break;
 			case 'closePanel':
 				that.closeLinkPanel();
+				break;
+			case 'expandPresentation':
+				that._setPresentationExpanded(link.id, true);
+				break;
+			case 'collapsePresentation':
+				that._setPresentationExpanded(link.id, false);
 				break;
 			case 'updatePresentation':
 				that._map.slideLinks.update(link.id);
