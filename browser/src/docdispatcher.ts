@@ -1225,6 +1225,11 @@ class Dispatcher {
 			GraphicSelection.selectionSection?.switchTheTiePoints();
 		};
 
+		// The next press on the selected shape gives it a new point to tie a connector to.
+		this.actionsMap[SelectionSection.addTiePointCommand] = () => {
+			GraphicSelection.selectionSection?.startAddingATiePoint();
+		};
+
 		this.actionsMap['animationdeck'] = () => {
 			app.map.sidebarFromNotebookbar.toggleAnimationsSidebar();
 		};

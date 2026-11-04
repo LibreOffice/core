@@ -388,7 +388,10 @@ namespace COOLProtocol
             tokens.equals(0, "slideimport") ||
             tokens.equals(0, "inplaceobjectarea") ||
             tokens.equals(0, "textinput") || tokens.equals(0, "windowkey") ||
-            tokens.equals(0, "windowmouse") || tokens.equals(0, "windowgesture"))
+            tokens.equals(0, "windowmouse") || tokens.equals(0, "windowgesture") ||
+            tokens.equals(0, "insertobjectgluepoint") ||
+            tokens.equals(0, "deleteobjectgluepoint") ||
+            tokens.equals(0, "setobjectgluepointwayout"))
         {
             return true;
         }

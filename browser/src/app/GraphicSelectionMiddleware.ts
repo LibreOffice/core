@@ -632,6 +632,10 @@ class GraphicSelection {
 		// and is taken here. Escape goes on to call the drag off, and the selection stays.
 		if (this.selectionSection?.isDragged()) return event.key !== 'Escape';
 
+		// Escape stops adding a point to tie a connector to, and the points stay shown.
+		if (event.key === 'Escape' && SelectionSection.stopAddingATiePoint())
+			return true;
+
 		// A key that moves, turns, slants or resets what is selected waits while an undo or a redo
 		// is on its way, since the objects then stand where only the engine's answer tells. It is
 		// handled once the answer is in, from where the undo left the objects.

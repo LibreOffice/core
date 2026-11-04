@@ -2452,6 +2452,7 @@ menuDefinitions.set('GluePointsMenu', [
 	{
 		text: _('Add New'),
 		action: 'insertgluepoint',
+		checked: false,
 		isEnabled: () =>
 			GraphicSelection.selectionSection?.tiePointsAreShown() ?? false,
 	},

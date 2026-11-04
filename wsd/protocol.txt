@@ -782,6 +782,29 @@ setobjectgluepoint id=<id> at=<at> x=<x> y=<y> [sequence=<sequence>]
     object holds such a point either as a share of its own size or as a distance of its own, and
     it keeps the way it holds it.
 
+insertobjectgluepoint id=<id> x=<x> y=<y>
+
+    <id> is the unique id of a drawing object, the one the render geometry of a page names it by.
+    <x> and <y> are where a new point for a connector to tie itself to goes on that object, in the
+    terms of setobjectgluepoint. The object gets the point as the last of its points, held as a
+    share of its size and with no way out named, in one step that can be undone. An object that
+    holds no such points, as a connector does not, gets none.
+
+deleteobjectgluepoint id=<id> at=<at>
+
+    <id> and <at> name one of the points of a drawing object as for setobjectgluepoint. Takes that
+    point away in one step that can be undone, and the points after it move up one place. A point
+    the shape makes from its own geometry stays.
+
+setobjectgluepointwayout id=<id> at=<at> way=<way>
+
+    <id> and <at> name one of the points of a drawing object as for setobjectgluepoint. <way> is
+    the way a connector leaves the object at that point: left, right, top or bottom for one side,
+    horizontal or vertical for the two sides that face each other across or down the object, or
+    smart for whichever way suits the connector. These are the names the render geometry reports
+    a way out by. Sets it in one step that can be undone. A point the shape makes from its own
+    geometry keeps its way.
+
 setobjectpoints id=<id> changes=<changes> [sequence=<sequence>]
 
     <id> is the unique id of a drawing object, the one the render geometry of a page names it by.

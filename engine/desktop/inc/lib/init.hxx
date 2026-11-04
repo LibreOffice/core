@@ -456,6 +456,10 @@ namespace desktop {
         void setObjectPoints(unsigned long long nObjectId, const char* pChanges) override;
         void setObjectGluePoint(unsigned long long nObjectId, int nAt, double fX,
                                 double fY) override;
+        void insertObjectGluePoint(unsigned long long nObjectId, double fX, double fY) override;
+        void deleteObjectGluePoint(unsigned long long nObjectId, int nAt) override;
+        void setObjectGluePointWayOut(unsigned long long nObjectId, int nAt,
+                                      const char* pWayOut) override;
         void setObjectTransform(const char* pMappings, const char* pWhat) override;
         void setObjectControlPoint(unsigned long long nObjectId, int nAt, int nX, int nY,
                                    bool bWithTheShape) override;

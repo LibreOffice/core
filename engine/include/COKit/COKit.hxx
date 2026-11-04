@@ -2953,6 +2953,42 @@ struct COKitDocument
         = 0;
 
     /**
+     * Gives a drawing object a new point for a connector to tie itself to, as the last of its
+     * points. It is one step to undo.
+     *
+     * @param nObjectId the unique id of the object, as the render geometry names it
+     * @param fX where the point goes on the object, across it, 0 at its left side and 1 at its
+     * right one
+     * @param fY where the point goes on the object, down it, 0 at its upper side and 1 at its
+     * lower one
+     */
+    virtual void insertObjectGluePoint(unsigned long long nObjectId, double fX, double fY) = 0;
+
+    /**
+     * Takes one of the points a drawing object was given for a connector to tie itself to away.
+     * A point the shape makes from its own geometry stays. It is one step to undo.
+     *
+     * @param nObjectId the unique id of the object, as the render geometry names it
+     * @param nAt which of the points of that object, counted from zero as they are listed
+     */
+    virtual void deleteObjectGluePoint(unsigned long long nObjectId, int nAt) = 0;
+
+    /**
+     * Sets the way a connector leaves a drawing object at one of the points it was given for a
+     * connector to tie itself to. A point the shape makes from its own geometry keeps its way.
+     * It is one step to undo.
+     *
+     * @param nObjectId the unique id of the object, as the render geometry names it
+     * @param nAt which of the points of that object, counted from zero as they are listed
+     * @param pWayOut "left", "right", "top" or "bottom" for one side, "horizontal" or "vertical"
+     * for the two sides that face each other across or down the object, or "smart" for whichever
+     * way suits the connector
+     */
+    virtual void setObjectGluePointWayOut(unsigned long long nObjectId, int nAt,
+                                          const char* pWayOut)
+        = 0;
+
+    /**
      * Gives drawing objects the mapping they are to be drawn by, which moves, scales, turns or
      * shears them.
      *

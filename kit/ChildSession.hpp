@@ -220,6 +220,15 @@ private:
     /// Moves one of the points a drawing object was given for a connector to tie itself to.
     bool setObjectGluePoint(const StringVector& tokens);
 
+    /// Gives a drawing object a new point for a connector to tie itself to.
+    bool insertObjectGluePoint(const StringVector& tokens);
+
+    /// Takes one of the points a drawing object was given for a connector to tie itself to away.
+    bool deleteObjectGluePoint(const StringVector& tokens);
+
+    /// Sets the way a connector leaves a drawing object at one of the points it was given.
+    bool setObjectGluePointWayOut(const StringVector& tokens);
+
     /// Gives the drawing objects the client names the mapping they are to be drawn by, which
     /// moves, scales or turns them.
     bool setObjectTransform(const StringVector& tokens);

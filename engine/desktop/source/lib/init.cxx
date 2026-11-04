@@ -7088,6 +7088,83 @@ static void lcl_changeChartPart(SfxViewShell& rViewShell, const SdrObject& rPart
 }
 
 /*
+    The points the object of that id on the page the view shows holds for a connector to tie
+    itself to, and that object. Null where the view does not edit, where it shows no page, where
+    no object there has that id, where the object is not one the view can mark, or where the
+    object holds no such points, as a connector does not. The last error then says which of these
+    it was, but for a view that does not edit.
+*/
+static SdrGluePointList* lcl_gluePointsOf(unsigned long long nObjectId, SdrObject*& rpObject)
+{
+    if (SfxViewShell::IsCurrentKitViewReadOnly())
+        return nullptr;
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SdrView* pView = pViewShell ? pViewShell->GetDrawView() : nullptr;
+    SdrPageView* pPageView = pView ? pView->GetSdrPageView() : nullptr;
+    const SdrPage* pPage = pPageView ? pPageView->GetPage() : nullptr;
+
+    if (!pPage)
+    {
+        SetLastExceptionMsg(u"The view shows no page to change a point on"_ustr);
+        return nullptr;
+    }
+
+    rpObject = pPage->FindObjectByUniqueID(nObjectId);
+    if (rpObject && !lcl_viewReaches(*pPageView, *rpObject))
+        return nullptr;
+
+    SdrGluePointList* pGluePoints = rpObject ? rpObject->ForceGluePointList() : nullptr;
+    if (!pGluePoints)
+        SetLastExceptionMsg(u"No object of that id holds points for a connector"_ustr);
+
+    return pGluePoints;
+}
+
+/*
+    The point at that number in the list of the object of that id, and that object. Null where
+    there is no such point, or where the shape makes the point from its own geometry. A point the
+    shape makes is laid out again with the shape, so only a point someone added can be changed.
+    The last error then says which of these it was.
+*/
+static SdrGluePoint* lcl_addedGluePointAt(unsigned long long nObjectId, int nAt,
+                                          SdrObject*& rpObject)
+{
+    SdrGluePointList* pGluePoints = lcl_gluePointsOf(nObjectId, rpObject);
+    if (!pGluePoints)
+        return nullptr;
+
+    if (nAt < 0 || nAt >= static_cast<int>(pGluePoints->GetCount()))
+    {
+        SetLastExceptionMsg(u"No object of that id has a point of that number"_ustr);
+        return nullptr;
+    }
+
+    SdrGluePoint& rGluePoint = (*pGluePoints)[static_cast<sal_uInt16>(nAt)];
+    if (!rGluePoint.IsUserDefined())
+    {
+        SetLastExceptionMsg(
+            u"That point comes from the shape's geometry and cannot be changed"_ustr);
+        return nullptr;
+    }
+
+    return &rGluePoint;
+}
+
+/// The place on the page of a place given on the object, 0 and 0 being its upper left corner and
+/// 1 and 1 its lower right one, through the object's own mapping.
+static Point lcl_onThePage(const SdrObject& rObject, double fX, double fY)
+{
+    basegfx::B2DHomMatrix aOfTheObject;
+    basegfx::B2DPolyPolygon aOutline;
+    lcl_mappingOf(rObject, aOfTheObject, aOutline);
+
+    const basegfx::B2DPoint aOnThePage(aOfTheObject * basegfx::B2DPoint(fX, fY));
+    return Point(basegfx::fround<tools::Long>(aOnThePage.getX()),
+                 basegfx::fround<tools::Long>(aOnThePage.getY()));
+}
+
+/*
     Moves one of the points a drawing object was given for a connector to tie itself to. The place
     is given on the object, 0 and 0 being its upper left corner and 1 and 1 its lower right one,
     which is how such a point travels to the client. The object holds it either as a share of its
@@ -7101,52 +7178,109 @@ void COKitDocumentImpl::setObjectGluePoint(unsigned long long nObjectId, int nAt
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    if (SfxViewShell::IsCurrentKitViewReadOnly())
+    SdrObject* pObject = nullptr;
+    SdrGluePoint* pGluePoint = lcl_addedGluePointAt(nObjectId, nAt, pObject);
+    if (!pGluePoint)
         return;
-
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    SdrView* pView = pViewShell ? pViewShell->GetDrawView() : nullptr;
-    SdrPageView* pPageView = pView ? pView->GetSdrPageView() : nullptr;
-    const SdrPage* pPage = pPageView ? pPageView->GetPage() : nullptr;
-
-    if (!pPage)
-    {
-        SetLastExceptionMsg(u"The view shows no page to move a point on"_ustr);
-        return;
-    }
-
-    SdrObject* pObject = pPage->FindObjectByUniqueID(nObjectId);
-    if (pObject && !lcl_viewReaches(*pPageView, *pObject))
-        return;
-    SdrGluePointList* pGluePoints = pObject ? pObject->ForceGluePointList() : nullptr;
-
-    if (!pGluePoints || nAt < 0 || nAt >= static_cast<int>(pGluePoints->GetCount()))
-    {
-        SetLastExceptionMsg(u"No object of that id has a point of that number"_ustr);
-        return;
-    }
-
-    // A point the shape makes from its own geometry is laid out again with the shape, so only a
-    // point someone added stays where it is put.
-    if (!(*pGluePoints)[static_cast<sal_uInt16>(nAt)].IsUserDefined())
-    {
-        SetLastExceptionMsg(u"That point comes from the shape's geometry and cannot be moved"_ustr);
-        return;
-    }
-
-    // The place on the object becomes a place on the page through the object's own mapping.
-    basegfx::B2DHomMatrix aOfTheObject;
-    basegfx::B2DPolyPolygon aOutline;
-    lcl_mappingOf(*pObject, aOfTheObject, aOutline);
-
-    const basegfx::B2DPoint aOnThePage(aOfTheObject * basegfx::B2DPoint(fX, fY));
-    const Point aWhereTo(basegfx::fround<tools::Long>(aOnThePage.getX()),
-                         basegfx::fround<tools::Long>(aOnThePage.getY()));
 
     SdrModel& rModel(pObject->getSdrModelFromSdrObject());
     rModel.BegUndo(SvxResId(STR_DragMethMove));
     rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoGeoObject(*pObject));
-    (*pGluePoints)[static_cast<sal_uInt16>(nAt)].SetAbsolutePos(aWhereTo, *pObject);
+    pGluePoint->SetAbsolutePos(lcl_onThePage(*pObject, fX, fY), *pObject);
+    pObject->SetChanged();
+    pObject->BroadcastObjectChange();
+    rModel.EndUndo();
+}
+
+/*
+    Gives a drawing object a new point for a connector to tie itself to, at a place given on the
+    object as for setObjectGluePoint. The new point is held as a share of the size of the object
+    and lets a connector leave it whichever way suits the connector.
+*/
+void COKitDocumentImpl::insertObjectGluePoint(unsigned long long nObjectId, double fX, double fY)
+{
+    comphelper::ProfileZone aZone("COKitDocumentImpl::insertObjectGluePoint");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    SdrObject* pObject = nullptr;
+    SdrGluePointList* pGluePoints = lcl_gluePointsOf(nObjectId, pObject);
+    if (!pGluePoints)
+        return;
+
+    SdrModel& rModel(pObject->getSdrModelFromSdrObject());
+    rModel.BegUndo(SvxResId(STR_DragInsertGluePoint).replaceFirst("%1",
+                                                                  pObject->TakeObjNameSingul()));
+    rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoGeoObject(*pObject));
+    const sal_uInt16 nAt = pGluePoints->Insert(SdrGluePoint());
+    (*pGluePoints)[nAt].SetAbsolutePos(lcl_onThePage(*pObject, fX, fY), *pObject);
+    pObject->SetChanged();
+    pObject->BroadcastObjectChange();
+    rModel.EndUndo();
+}
+
+/// Takes one of the points a drawing object was given for a connector to tie itself to away.
+void COKitDocumentImpl::deleteObjectGluePoint(unsigned long long nObjectId, int nAt)
+{
+    comphelper::ProfileZone aZone("COKitDocumentImpl::deleteObjectGluePoint");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    SdrObject* pObject = nullptr;
+    if (!lcl_addedGluePointAt(nObjectId, nAt, pObject))
+        return;
+
+    SdrModel& rModel(pObject->getSdrModelFromSdrObject());
+    rModel.BegUndo(SvxResId(STR_EditDelete).replaceFirst("%1", pObject->TakeObjNameSingul()));
+    rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoGeoObject(*pObject));
+    pObject->ForceGluePointList()->Delete(static_cast<sal_uInt16>(nAt));
+    pObject->SetChanged();
+    pObject->BroadcastObjectChange();
+    rModel.EndUndo();
+}
+
+/*
+    Sets the way a connector leaves a drawing object at one of the points the object was given.
+    The names are the ones the render geometry reports a way out by, and "smart" lets the
+    connector leave whichever way suits it.
+*/
+void COKitDocumentImpl::setObjectGluePointWayOut(unsigned long long nObjectId, int nAt,
+                                                 const char* pWayOut)
+{
+    comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectGluePointWayOut");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    static const std::map<std::string_view, SdrEscapeDirection> aWaysOut{
+        { "smart", SdrEscapeDirection::SMART },
+        { "left", SdrEscapeDirection::LEFT },
+        { "right", SdrEscapeDirection::RIGHT },
+        { "top", SdrEscapeDirection::TOP },
+        { "bottom", SdrEscapeDirection::BOTTOM },
+        { "horizontal", SdrEscapeDirection::HORZ },
+        { "vertical", SdrEscapeDirection::VERT },
+    };
+
+    const auto aWayOut = aWaysOut.find(pWayOut ? std::string_view(pWayOut) : std::string_view());
+    if (aWayOut == aWaysOut.end())
+    {
+        SetLastExceptionMsg(u"A point has no way out of that name"_ustr);
+        return;
+    }
+
+    SdrObject* pObject = nullptr;
+    SdrGluePoint* pGluePoint = lcl_addedGluePointAt(nObjectId, nAt, pObject);
+    if (!pGluePoint)
+        return;
+
+    SdrModel& rModel(pObject->getSdrModelFromSdrObject());
+    rModel.BegUndo(SvxResId(STR_EditSetGlueEscDir).replaceFirst("%1",
+                                                                pObject->TakeObjNameSingul()));
+    rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoGeoObject(*pObject));
+    pGluePoint->SetEscDir(aWayOut->second);
     pObject->SetChanged();
     pObject->BroadcastObjectChange();
     rModel.EndUndo();

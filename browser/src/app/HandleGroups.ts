@@ -1540,7 +1540,7 @@ class TiePointHandles extends HandleGroup {
 	public letGoWhereItWasPressed(handle: SelectionHandle): void {
 		if (handle.kind !== 'GluePoint') return;
 
-		TiePointHandles.openTheMenuOf(handle, this.held(handle)?.wayOut);
+		this.openTheMenuOf(handle);
 	}
 
 	/// The id of the menu a click on a point opens.
@@ -1553,14 +1553,17 @@ class TiePointHandles extends HandleGroup {
 		Opens the menu of a point, below the point: the way a connector comes into the object
 		there, and taking the point away. The ways the point names are checked, both of them
 		for a point that names two sides facing each other, and none for a point that names no
-		way.
+		way. A point the shape makes from its own geometry keeps its way and stays, so for such
+		a point the entries are shown disabled.
 	*/
-	private static openTheMenuOf(
-		handle: SelectionHandle,
-		wayOut: cool.ObjectGluePoint['wayOut'],
-	): void {
+	private openTheMenuOf(handle: SelectionHandle): void {
 		const container = document.getElementById('canvas-container');
 		if (!container) return;
+
+		const objectId = this.selection.selectedObjects()[0];
+		const at = Number(handle.name.split('.')[1]);
+		const point = this.held(handle);
+		if (!point || !(at >= 0)) return;
 
 		if (!TiePointHandles.menuAnchor?.isConnected) {
 			TiePointHandles.menuAnchor = document.createElement('div');
@@ -1570,11 +1573,22 @@ class TiePointHandles extends HandleGroup {
 		}
 
 		// The canvas fills the container, so a place on the canvas is a place in the container.
-		const at = HandleLook.drawnAt(handle);
+		const drawnAt = HandleLook.drawnAt(handle);
 		const below = 0.5 * ShapeHandlesSection.gluePointSize();
 		const anchor = TiePointHandles.menuAnchor;
-		anchor.style.left = at.vX / app.dpiScale + 'px';
-		anchor.style.top = (at.vY + below) / app.dpiScale + 'px';
+		anchor.style.left = drawnAt.vX / app.dpiScale + 'px';
+		anchor.style.top = (drawnAt.vY + below) / app.dpiScale + 'px';
+
+		const ways = TiePointHandles.waysOf(point.wayOut);
+		const canBeChanged = () => point.fromTheShape !== true;
+		const side = (id: string, text: string, img: string): MenuDefinition => ({
+			id,
+			type: 'action',
+			text,
+			img,
+			checked: ways.includes(id),
+			isEnabled: canBeChanged,
+		});
 
 		const entries: MenuDefinition[] = [
 			{
@@ -1582,36 +1596,18 @@ class TiePointHandles extends HandleGroup {
 				type: 'header',
 				text: _('Connector Entry Direction'),
 			},
-			{
-				id: 'left',
-				type: 'action',
-				text: _('Left'),
-				img: 'glueescapedirectionleft',
-				checked: wayOut === 'left' || wayOut === 'horizontal',
-			},
-			{
-				id: 'right',
-				type: 'action',
-				text: _('Right'),
-				img: 'glueescapedirectionright',
-				checked: wayOut === 'right' || wayOut === 'horizontal',
-			},
-			{
-				id: 'up',
-				type: 'action',
-				text: _('Up'),
-				img: 'glueescapedirectiontop',
-				checked: wayOut === 'top' || wayOut === 'vertical',
-			},
-			{
-				id: 'down',
-				type: 'action',
-				text: _('Down'),
-				img: 'glueescapedirectionbottom',
-				checked: wayOut === 'bottom' || wayOut === 'vertical',
-			},
+			side('left', _('Left'), 'glueescapedirectionleft'),
+			side('right', _('Right'), 'glueescapedirectionright'),
+			side('top', _('Up'), 'glueescapedirectiontop'),
+			side('bottom', _('Down'), 'glueescapedirectionbottom'),
 			{ id: 'separator', type: 'separator' },
-			{ id: 'delete', type: 'action', text: _('Delete'), img: 'delete' },
+			{
+				id: 'delete',
+				type: 'action',
+				text: _('Delete'),
+				img: 'delete',
+				isEnabled: canBeChanged,
+			},
 		];
 
 		JSDialog.OpenDropdown(
@@ -1623,11 +1619,32 @@ class TiePointHandles extends HandleGroup {
 				eventType: string,
 				_object: unknown,
 				_data: unknown,
-				_entry: unknown,
+				entry: JSBuilder | MenuDefinition,
 			): boolean => {
 				if (eventType !== 'selected') return false;
 
 				JSDialog.CloseDropdown(TiePointHandles.menuId);
+
+				const chosen = (entry as MenuDefinition)?.id ?? '';
+				if (chosen === 'delete') {
+					// The points after this one move up one place, so the keyboard leaves them.
+					this.selection.travel.leave();
+					app.socket.sendMessage(
+						'deleteobjectgluepoint id=' +
+							String(objectId) +
+							' at=' +
+							String(at),
+					);
+				} else if (TiePointHandles.sides.some((one) => one.name === chosen)) {
+					app.socket.sendMessage(
+						'setobjectgluepointwayout id=' +
+							String(objectId) +
+							' at=' +
+							String(at) +
+							' way=' +
+							TiePointHandles.switchedWay(ways, chosen),
+					);
+				}
 				return true;
 			},
 			'',
@@ -1635,6 +1652,67 @@ class TiePointHandles extends HandleGroup {
 			false,
 			true,
 		);
+	}
+
+	/// The sides a way out names: one side, the two that face each other, or none.
+	private static waysOf(wayOut: cool.ObjectGluePoint['wayOut']): string[] {
+		return wayOut === 'horizontal'
+			? ['left', 'right']
+			: wayOut === 'vertical'
+				? ['top', 'bottom']
+				: wayOut
+					? [wayOut]
+					: [];
+	}
+
+	/*
+		The way out once that side is switched on or off among those ways, by the name the engine
+		takes. A point holds one side, or two that face each other, or none. A side switched on
+		joins the side facing it into a pair, and replaces any other side the point held.
+	*/
+	private static switchedWay(ways: string[], side: string): string {
+		if (ways.includes(side)) {
+			const left = ways.filter((one: string) => one !== side);
+			return left.length ? left[0] : 'smart';
+		}
+
+		const across = side === 'left' || side === 'right';
+		const facing = across
+			? side === 'left'
+				? 'right'
+				: 'left'
+			: side === 'top'
+				? 'bottom'
+				: 'top';
+		if (ways.includes(facing)) return across ? 'horizontal' : 'vertical';
+		return side;
+	}
+
+	/*
+		Gives the selected object a new point where the press landed, when it landed on the
+		object. Answers whether it did. The place goes to the engine on the object, as a share of
+		its width and of its height.
+	*/
+	public addAt(at: cool.SimplePoint): boolean {
+		const objects = this.selection.selectedObjects();
+		if (objects.length !== 1) return false;
+
+		const transform = RenderGeometrySection.transformOf(objects[0]);
+		const onTheObject = transform?.invert()?.apply(at.x, at.y);
+		if (!onTheObject) return false;
+
+		const inside = (value: number) => value >= 0 && value <= 1;
+		if (!inside(onTheObject.x) || !inside(onTheObject.y)) return false;
+
+		app.socket.sendMessage(
+			'insertobjectgluepoint id=' +
+				String(objects[0]) +
+				' x=' +
+				onTheObject.x.toFixed(4) +
+				' y=' +
+				onTheObject.y.toFixed(4),
+		);
+		return true;
 	}
 
 	/// the connectors tied to a point keys took, or a drag let go of, as they will run
@@ -1934,16 +2012,9 @@ class TiePointHandles extends HandleGroup {
 		const radius = HandleLook.widthOf('tiePoint') * 0.5 + grown;
 
 		// The two that face each other are drawn as what they are, a nose on each side.
-		const wayOut = held?.wayOut;
-		const ways = (
-			wayOut === 'horizontal'
-				? ['left', 'right']
-				: wayOut === 'vertical'
-					? ['top', 'bottom']
-					: wayOut
-						? [wayOut]
-						: []
-		).map((name: string) => this.turnedBy(name));
+		const ways = TiePointHandles.waysOf(held?.wayOut).map((name: string) =>
+			this.turnedBy(name),
+		);
 
 		// A nose sits on a whole quarter of the circle. A point never carries more than two ways
 		// out, and those two face each other, so half the circle is left between them.

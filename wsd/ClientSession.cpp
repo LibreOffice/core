@@ -1862,6 +1862,9 @@ bool ClientSession::_handleInput(const char *buffer, int length)
              tokens.equals(0, "selectobjects") ||
              tokens.equals(0, "setobjectpoints") ||
              tokens.equals(0, "setobjectgluepoint") ||
+             tokens.equals(0, "insertobjectgluepoint") ||
+             tokens.equals(0, "deleteobjectgluepoint") ||
+             tokens.equals(0, "setobjectgluepointwayout") ||
              tokens.equals(0, "setobjecttransform") ||
              tokens.equals(0, "setobjectcontrolpoint") ||
              tokens.equals(0, "setobjecthandle") ||
