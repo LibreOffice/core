@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
-"PO-Revision-Date: 2026-11-03 20:16+0000\n"
-"Last-Translator: Andras Timar <timar@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-11-04 10:08+0000\n"
+"Last-Translator: Milo Ivir <milotype@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/hr/>\n"
 "Language: hr\n"
@@ -1106,9 +1106,8 @@ msgstr "Zotero postavke"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3258
 #: admin/src/integrator/AdminIntegratorSettings.ts:3286
-#, fuzzy
 msgid "Electronic Signature"
-msgstr "Elektronski potpis …"
+msgstr "Elektronski potpis"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3261
 msgid ""
@@ -2712,10 +2711,11 @@ msgid "The AI assistant"
 msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2655
-#, fuzzy
 msgid "insert %n slide"
 msgid_plural "insert %n slides"
-msgstr[0] "Umetni slajdove"
+msgstr[0] "umetni %n slajd"
+msgstr[1] "umetni %n slajda"
+msgstr[2] "umetni %n slajdova"
 
 #: src/control/Control.AIChatSidebar.ts:2658
 msgid "delete %n slide"
@@ -5395,9 +5395,8 @@ msgid "PDF Document (.pdf) with options"
 msgstr "PDF dokument (.pdf) s opcijama"
 
 #: src/control/Control.NotebookbarBuilder.js:606
-#, fuzzy
 msgid "Unsaved changes."
-msgstr "Nespremljene promjene. Spremi"
+msgstr "Nespremljene promjene."
 
 #: src/control/Control.NotebookbarCalc.js:29
 #: src/control/Control.NotebookbarDraw.js:63
@@ -6490,9 +6489,8 @@ msgid "Close slide import"
 msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:1159
-#, fuzzy
 msgid "Add presentation…"
-msgstr "Završi prezentaciju"
+msgstr "Dodaj prezentaciju …"
 
 #: src/control/Control.SlideImportPane.tsx:1174
 msgid "No presentations yet"
@@ -9297,23 +9295,23 @@ msgstr "Umanji prikaz"
 
 #: src/slideshow/PresenterConsole.js:47
 msgid "Preview of the current slide"
-msgstr ""
+msgstr "Pregledaj trenutačni slajd"
 
 #: src/slideshow/PresenterConsole.js:48
 msgid "Preview of the next slide"
-msgstr ""
+msgstr "Pregledaj sljedeći slajd"
 
 #: src/slideshow/PresenterConsole.js:194
 msgid "Preview Slide {1}"
-msgstr "Pregled slajda {1}"
+msgstr "Pregled slajd {1}"
 
 #: src/slideshow/PresenterConsole.js:828
 msgid "You are leaving the presentation."
-msgstr ""
+msgstr "Napuštaš prezentaciju."
 
 #: src/slideshow/PresenterConsole.js:829
 msgid "The link is not valid."
-msgstr ""
+msgstr "Poveznica nije valjana."
 
 #: src/slideshow/PresenterConsole.js:1202
 #: src/slideshow/SlideShowPresenter.ts:984
