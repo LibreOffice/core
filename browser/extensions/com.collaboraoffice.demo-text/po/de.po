@@ -1,0 +1,94 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: com.collaboraoffice.demo-text\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-02 11:43+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: index.html:95
+msgid "%1 (%2) applied"
+msgstr ""
+
+#: index.html:31
+msgid "Apply"
+msgstr ""
+
+#: index.html:28
+msgid "Colorize paragraphs"
+msgstr ""
+
+#: index.html:23
+msgid "Greeting:"
+msgstr ""
+
+#: index.html:35
+msgid "Paragraph number (1-based):"
+msgstr ""
+
+#: index.html:69
+msgid "Pick a color"
+msgstr ""
+
+#: index.html:42
+msgid "Pick paragraph color..."
+msgstr ""
+
+#: index.html:37
+msgid "Read Nth paragraph"
+msgstr ""
+
+#: manifest.json:name
+msgid "Text demo"
+msgstr ""
+
+#: index.html:84
+msgid "applying %1 (%2)..."
+msgstr ""
+
+#: picker.html:31
+msgid "black"
+msgstr ""
+
+#: picker.html:28
+msgid "blue"
+msgstr ""
+
+#: index.html:74
+msgid "cancelled"
+msgstr ""
+
+#: picker.html:27
+msgid "green"
+msgstr ""
+
+#: picker.html:29
+msgid "indigo"
+msgstr ""
+
+#: index.html:43
+msgid "no color picked yet"
+msgstr ""
+
+#: picker.html:25
+msgid "orange"
+msgstr ""
+
+#: picker.html:24
+msgid "red"
+msgstr ""
+
+#: picker.html:30
+msgid "violet"
+msgstr ""
+
+#: picker.html:26
+msgid "yellow"
+msgstr ""
