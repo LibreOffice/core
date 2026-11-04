@@ -197,7 +197,9 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         return (nil, nil)
     }
 
+    // The account window stays open when its document closes.
     private func closeRemoteDocument() {
+        remoteDocument?.removeWindowController(self)
         remoteDocument?.close()
         remoteDocument = nil
     }
@@ -243,6 +245,9 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         document.fileType = fileType
         document.connect(webView: webView)
         document.editorFrame = editorFrameInfo
+
+        // The document shows its Save As, print and error dialogs on this window.
+        document.addWindowController(self)
         remoteDocument = document
         return document.tempFileURL?.path ?? ""
     }
