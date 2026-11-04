@@ -288,7 +288,9 @@ namespace dbaui
             else
             {
                 const OUString upperStatement = _rStatement.toAsciiUpperCase();
-                if (upperStatement.startsWith("UPDATE") || upperStatement.startsWith("ALTER"))
+                if (upperStatement.startsWith("UPDATE") || upperStatement.startsWith("ALTER")
+                    || upperStatement.startsWith("DROP") || upperStatement.startsWith("GRANT")
+                    || upperStatement.startsWith("COMMENT"))
                 {
                     sal_Int32 resultCount = xStatement->executeUpdate(_rStatement);
                     addOutputText(Concat2View(OUString::number(resultCount) + " rows updated\n"));
