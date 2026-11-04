@@ -25,8 +25,6 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         // native code need not query the integrator for it.
         "checkFileInfo",
         "getAllPrefs",
-        "readLocalDocBytes",
-        "saveCompleted",
         "setPref"
     ]
 
@@ -179,6 +177,18 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
             return (nil, nil)
         }
 
+        if kind == "readLocalDocBytes" {
+            return (localCopyBytes(of: remoteDocument), nil)
+        }
+
+        // TODO: Keep a flag while a save is uploading, as Qt does, so closing the window waits for
+        // the upload instead of losing it.
+        let isSaveReport = kind == "saveCompleted" || kind == "SAVESTARTED" || kind == "SAVECOMPLETED"
+            || kind == "SAVEFAILED" || kind == "CLOSE_CANCELLED"
+        if isSaveReport {
+            return (nil, nil)
+        }
+
         if let result = await ViewController.handleDocumentMessage(body, document: remoteDocument) {
             return result
         }
@@ -235,6 +245,16 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         document.editorFrame = editorFrameInfo
         remoteDocument = document
         return document.tempFileURL?.path ?? ""
+    }
+
+    // The engine saves into the local copy, and the page uploads these bytes to the integrator.
+    private func localCopyBytes(of document: Document) -> String {
+        guard let url = document.tempFileURL, let bytes = try? Data(contentsOf: url) else {
+            COWrapper.LOG_ERR("readLocalDocBytes could not read the local copy")
+            return ""
+        }
+
+        return bytes.base64EncodedString()
     }
 
     // Only ASCII letters and digits, like "odt" or "docx".
