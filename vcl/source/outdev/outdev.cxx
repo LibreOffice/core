@@ -34,6 +34,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
 
+#include <CanvasFactory.hxx>
 #include <CoordinateMapper.hxx>
 #include <ImplOutDevData.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
@@ -43,7 +44,6 @@
 #include <com/sun/star/awt/DeviceCapability.hpp>
 #include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/rendering/CanvasFactory.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 
 #ifdef DISABLE_DYNLOADING
@@ -753,8 +753,8 @@ css::uno::Reference< css::rendering::XCanvas > OutputDevice::ImplGetCanvas( bool
 
     const Reference< XComponentContext >& xContext = comphelper::getProcessComponentContext();
 
-    static tools::DeleteUnoReferenceOnDeinit<css::lang::XMultiComponentFactory> xStaticCanvasFactory(
-        css::rendering::CanvasFactory::create( xContext ) );
+    static tools::DeleteUnoReferenceOnDeinit<css::lang::XMultiComponentFactory>
+        xStaticCanvasFactory(new CanvasFactory(xContext));
     Reference<css::lang::XMultiComponentFactory> xCanvasFactory(xStaticCanvasFactory.get());
     Reference< css::rendering::XCanvas > xCanvas;
 

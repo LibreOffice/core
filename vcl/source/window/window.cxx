@@ -51,6 +51,7 @@
 
 #include <vcl/uitest/uiobject.hxx>
 
+#include <CanvasFactory.hxx>
 #include <ImplOutDevData.hxx>
 #include <impfontcache.hxx>
 #include <salframe.hxx>
@@ -73,7 +74,6 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
-#include <com/sun/star/rendering/CanvasFactory.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <comphelper/configuration.hxx>
 #include <comphelper/lok.hxx>
@@ -3484,7 +3484,7 @@ Reference< css::rendering::XCanvas > WindowOutputDevice::ImplGetCanvas( bool bSp
     // Create canvas instance with window handle
 
     static tools::DeleteUnoReferenceOnDeinit<XMultiComponentFactory> xStaticCanvasFactory(
-        css::rendering::CanvasFactory::create( xContext ) );
+        new CanvasFactory(xContext));
     Reference<XMultiComponentFactory> xCanvasFactory(xStaticCanvasFactory.get());
     Reference< css::rendering::XCanvas > xCanvas;
 
