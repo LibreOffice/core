@@ -407,9 +407,10 @@
 	gap: calc(var(--spacing-xl) + var(--spacing-m));
 }
 
+/* The top padding leaves room for the favorite star above a preview of full height. */
 .backstage-template-card {
 	position: relative;
-	padding: var(--spacing-m) var(--spacing-s) var(--spacing-s);
+	padding: calc(var(--btn-img-size) + 2 * var(--spacing-s)) var(--spacing-s) var(--spacing-s);
 	cursor: pointer;
 	text-align: center;
 	transition: background-color var(--duration-normal) var(--ease-standard);
@@ -424,10 +425,11 @@
 	background-color: var(--color-background-dark);
 }
 
-/* The star shows on hover and on keyboard focus, and stays on a favorite. */
+/* The star shows on hover and on keyboard focus, and stays on a favorite. It sits just above
+   the top corner of the preview. */
 #backstage-view .backstage-template-favorite {
 	position: absolute;
-	top: 0;
+	bottom: calc(100% + var(--spacing-s));
 	inset-inline-end: 0;
 	width: var(--btn-img-size);
 	height: var(--btn-img-size);
@@ -495,15 +497,20 @@
 	animation: fade-out var(--duration-fast) var(--ease-in) forwards;
 }
 
-/* Page and landscape previews share one height, so the names of a row line up. */
+/* Page and landscape previews share one height and sit on its bottom, so the bottom edges and
+   the names of a row line up. */
 .template-thumbnail {
 	padding: 0;
 	display: flex;
 	justify-content: center;
-	align-items: center;
+	align-items: end;
 	height: 98px;
 	background: transparent;
 	flex: 0 0 auto;
+}
+
+.template-preview-frame {
+	position: relative;
 }
 
 .template-thumbnail img {

@@ -73,15 +73,17 @@ namespace BackstageTemplates {
     return (
       <div class={cls} id={template.id} onClick={onClick}>
         <div class="template-thumbnail">
-          <img
-            class={template.preview ? null : 'is-type-icon'}
-            alt={template.name}
-            src={template.preview || defaultPreview(template.type)}
-            onError={nextPreview}
-          />
+          <div class="template-preview-frame">
+            <img
+              class={template.preview ? null : 'is-type-icon'}
+              alt={template.name}
+              src={template.preview || defaultPreview(template.type)}
+              onError={nextPreview}
+            />
+            {options.favorite ? favoriteButton(options.favorite) : null}
+          </div>
         </div>
         <div class="template-name">{template.name}</div>
-        {options.favorite ? favoriteButton(options.favorite) : null}
       </div>
     );
   }
