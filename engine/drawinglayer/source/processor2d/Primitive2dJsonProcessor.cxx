@@ -1874,36 +1874,6 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
         }
         break;
 
-        case PRIMITIVE2D_ID_SVGLINEARATOMPRIMITIVE2D:
-        {
-            const auto& rPrimitive = static_cast<const SvgLinearAtomPrimitive2D&>(rBasePrimitive);
-            mrWriter.put("type", "svgLinearAtom");
-            mrWriter.put("colorA", colorToHex(rPrimitive.getColorA()));
-            mrWriter.put("colorB", colorToHex(rPrimitive.getColorB()));
-            mrWriter.put("offsetA", rPrimitive.getOffsetA());
-            mrWriter.put("offsetB", rPrimitive.getOffsetB());
-        }
-        break;
-
-        case PRIMITIVE2D_ID_SVGRADIALATOMPRIMITIVE2D:
-        {
-            const auto& rPrimitive = static_cast<const SvgRadialAtomPrimitive2D&>(rBasePrimitive);
-            mrWriter.put("type", "svgRadialAtom");
-            mrWriter.put("colorA", colorToHex(rPrimitive.getColorA()));
-            mrWriter.put("colorB", colorToHex(rPrimitive.getColorB()));
-            mrWriter.put("scaleA", rPrimitive.getScaleA());
-            mrWriter.put("scaleB", rPrimitive.getScaleB());
-
-            if (rPrimitive.isTranslateSet())
-            {
-                mrWriter.put("translateAX", rPrimitive.getTranslateA().getX());
-                mrWriter.put("translateAY", rPrimitive.getTranslateA().getY());
-                mrWriter.put("translateBX", rPrimitive.getTranslateB().getX());
-                mrWriter.put("translateBY", rPrimitive.getTranslateB().getY());
-            }
-        }
-        break;
-
         case PRIMITIVE2D_ID_BACKGROUNDCOLORPRIMITIVE2D:
         {
             const auto& rPrimitive = static_cast<const BackgroundColorPrimitive2D&>(rBasePrimitive);
