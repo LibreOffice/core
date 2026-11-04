@@ -8,16 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
-"PO-Revision-Date: 2026-08-29 11:52+0000\n"
-"Last-Translator: Alexander Gabilondo <alexgabi@openmailbox.org>\n"
+"PO-Revision-Date: 2026-11-03 01:46+0000\n"
+"Last-Translator: Alexander Gabilondo "
+"<alexgab@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Basque <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/eu/>\n"
-"Language: \n"
+"Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.9.dev0\n"
+"X-Generator: Weblate 2026.11.1.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -505,23 +506,25 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:706
 msgid "Invalid request"
-msgstr ""
+msgstr "Eskaera baliogabea"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:707
 #: src/control/Control.AIChatSidebar.ts:2248
 msgid "Invalid API key"
-msgstr ""
+msgstr "API gako baliogabea"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:708
 #: src/control/Control.AIChatSidebar.ts:2249
 msgid "API key lacks permissions"
-msgstr ""
+msgstr "API gakoak ez du baimenik"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:711
 msgid ""
 "This AI host is not in the server's allowed AI host list "
 "(ai.allowed_hosts). Ask your administrator to permit it."
 msgstr ""
+"AA ostalari hau ez dago zerbitzariaren baimendutako AA ostalarien zerrendan "
+"(ai.allowed_hosts). Eskatu administratzaileari baimena emateko."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:713
 #: src/control/Control.AIChatSidebar.ts:2253
@@ -531,12 +534,12 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:714
 #: src/control/Control.AIChatSidebar.ts:2254
 msgid "API server error - try again later"
-msgstr ""
+msgstr "API zerbitzariaren errorea - saiatu berriro geroago"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:715
 #: src/control/Control.AIChatSidebar.ts:2255
 msgid "Service temporarily unavailable"
-msgstr ""
+msgstr "Zerbitzua aldi baterako ez dago erabilgarri"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:788
 msgid "Signature Certificate"
@@ -584,15 +587,15 @@ msgstr "Irudiaren tamaina"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:800
 msgid "Request timeout"
-msgstr ""
+msgstr "Eskaeraren denbora-muga"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:803
 msgid "Client ID"
-msgstr ""
+msgstr "Bezeroaren IDa"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:804
 msgid "Secret"
-msgstr ""
+msgstr "Sekretua"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:807
 msgid "In-document Screen Reader"
@@ -616,7 +619,7 @@ msgstr "Zuzenketa ortografiko automatikoa"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:810
 msgid "Use this server's zoom settings"
-msgstr ""
+msgstr "Erabili zerbitzari honen zoom ezarpenak"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:811
 msgid "Smart Zoom"
@@ -861,15 +864,15 @@ msgstr "Eskuliburua eskuinetik ezkerrera"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:876
 msgid "English"
-msgstr ""
+msgstr "Ingelesa"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:877
 msgid "Hungarian"
-msgstr ""
+msgstr "Hungariera"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:878
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "Portugesa (Brasil)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:879
 msgid "Russian"
