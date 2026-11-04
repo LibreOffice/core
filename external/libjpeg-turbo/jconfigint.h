@@ -1,5 +1,5 @@
 /* libjpeg-turbo build number */
-#define BUILD  "20261102"
+#define BUILD  "20261104"
 
 /* How to hide global symbols. */
 #if defined _MSC_VER /*LibreOffice tweak*/
@@ -25,7 +25,7 @@
 #define PACKAGE_NAME  "libjpeg-turbo"
 
 /* Version number of package */
-#define VERSION  "3.2.0"
+#define VERSION  "3.2.1"
 
 /* The size of `size_t', as computed by sizeof. */
 /*#define SIZEOF_SIZE_T  8 - LibreOffice tweak */
