@@ -36,14 +36,13 @@
     The latter specifies a string list of service names to use.
 
     <p>
-    You can use its com::sun::star::lang::XMultiComponentFactory
-    interface to create Canvas objects, passing an empty string
-    as service specifier (default).
+    You can use its createCanvas method to create Canvas objects,
+    passing an empty string as service specifier (default).
     If you want to manually override the configured service list, you can pass
     a service name to try first.
     </p>
 */
-class CanvasFactory : public ::cppu::WeakImplHelper<css::lang::XMultiComponentFactory>
+class CanvasFactory : public ::cppu::WeakImplHelper<>
 {
     typedef std::pair<OUString, css::uno::Sequence<OUString>> AvailPair;
 
@@ -69,14 +68,9 @@ public:
     virtual ~CanvasFactory() override;
     explicit CanvasFactory(css::uno::Reference<css::uno::XComponentContext> const& xContext);
 
-    // XMultiComponentFactory
-    virtual css::uno::Sequence<OUString> SAL_CALL getAvailableServiceNames() override;
-    virtual css::uno::Reference<XInterface> SAL_CALL createInstanceWithContext(
-        OUString const& name,
-        css::uno::Reference<css::uno::XComponentContext> const& xContext) override;
-    virtual css::uno::Reference<XInterface> SAL_CALL createInstanceWithArgumentsAndContext(
-        OUString const& name, css::uno::Sequence<css::uno::Any> const& args,
-        css::uno::Reference<css::uno::XComponentContext> const& xContext) override;
+    css::uno::Reference<XInterface>
+    createCanvas(OUString const& name, css::uno::Sequence<css::uno::Any> const& args,
+                 css::uno::Reference<css::uno::XComponentContext> const& xContext);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

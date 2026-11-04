@@ -760,13 +760,11 @@ css::uno::Reference< css::rendering::XCanvas > OutputDevice::ImplGetCanvas( bool
 
     if (pCanvasFactory.is())
     {
-        xCanvas.set( pCanvasFactory->createInstanceWithArgumentsAndContext(
-                         bSpriteCanvas ?
-                         u"com.sun.star.rendering.SpriteCanvas"_ustr :
-                         u"com.sun.star.rendering.Canvas"_ustr,
-                         aArg,
-                         xContext ),
-                     UNO_QUERY );
+        xCanvas.set(pCanvasFactory->createCanvas(bSpriteCanvas
+                                                     ? u"com.sun.star.rendering.SpriteCanvas"_ustr
+                                                     : u"com.sun.star.rendering.Canvas"_ustr,
+                                                 aArg, xContext),
+                    UNO_QUERY);
     }
 
     // no factory??? Empty reference, then.

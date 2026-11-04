@@ -106,25 +106,6 @@ CanvasFactory::~CanvasFactory()
 {
 }
 
-// XMultiComponentFactory
-Sequence<OUString> CanvasFactory::getAvailableServiceNames()
-{
-    Sequence<OUString> aServiceNames(m_aAvailableImplementations.size());
-    std::transform(m_aAvailableImplementations.begin(),
-                   m_aAvailableImplementations.end(),
-                   aServiceNames.getArray(),
-                   o3tl::select1st< AvailPair >());
-    return aServiceNames;
-}
-
-Reference<XInterface> CanvasFactory::createInstanceWithContext(
-    OUString const & name, Reference<XComponentContext> const & xContext )
-{
-    return createInstanceWithArgumentsAndContext(
-        name, Sequence<Any>(), xContext );
-}
-
-
 Reference<XInterface> CanvasFactory::use(
     OUString const & serviceName,
     Sequence<Any> const & args,
@@ -275,10 +256,9 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     return Reference<XInterface>();
 }
 
-
-Reference<XInterface> CanvasFactory::createInstanceWithArgumentsAndContext(
-    OUString const & preferredOne, Sequence<Any> const & args,
-    Reference<XComponentContext> const & xContext )
+Reference<XInterface> CanvasFactory::createCanvas(OUString const& preferredOne,
+                                                  Sequence<Any> const& args,
+                                                  Reference<XComponentContext> const& xContext)
 {
     Reference<XInterface> xCanvas(lookupAndUse(preferredOne, args, xContext));
     if (!xCanvas.is())

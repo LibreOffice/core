@@ -3499,26 +3499,21 @@ Reference< css::rendering::XCanvas > WindowOutputDevice::ImplGetCanvas( bool bSp
         const sal_uInt32 nDisplay = static_cast< WinSalFrame* >( mxOwnerWindow->mpWindowImpl->mpFrame )->mnDisplay;
         if( nDisplay >= Application::GetScreenCount() )
         {
-            xCanvas.set( pCanvasFactory->createInstanceWithArgumentsAndContext(
-                                 bSpriteCanvas ?
-                                 OUString( "com.sun.star.rendering.SpriteCanvas.MultiScreen" ) :
-                                 OUString( "com.sun.star.rendering.Canvas.MultiScreen" ),
-                                 aArg,
-                                 xContext ),
-                             UNO_QUERY );
-
+            xCanvas.set(pCanvasFactory->createCanvas(
+                            bSpriteCanvas
+                                ? OUString("com.sun.star.rendering.SpriteCanvas.MultiScreen")
+                                : OUString("com.sun.star.rendering.Canvas.MultiScreen"),
+                            aArg, xContext),
+                        UNO_QUERY);
         }
         else
 #endif
         {
-            xCanvas.set( pCanvasFactory->createInstanceWithArgumentsAndContext(
-                             bSpriteCanvas ?
-                             u"com.sun.star.rendering.SpriteCanvas"_ustr :
-                             u"com.sun.star.rendering.Canvas"_ustr,
-                             aArg,
-                             xContext ),
-                         UNO_QUERY );
-
+            xCanvas.set(pCanvasFactory->createCanvas(
+                            bSpriteCanvas ? u"com.sun.star.rendering.SpriteCanvas"_ustr
+                                          : u"com.sun.star.rendering.Canvas"_ustr,
+                            aArg, xContext),
+                        UNO_QUERY);
         }
     }
 
