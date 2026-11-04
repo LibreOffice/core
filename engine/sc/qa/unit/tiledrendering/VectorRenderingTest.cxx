@@ -1243,6 +1243,45 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorChangedBlocksShownByAViewAr
     KitHelper::destroyView(KitHelper::getCurrentView());
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorBlockWithDroppedContentKeepsItsVersion)
+{
+    // The engine keeps the JSON of a limited number of blocks of a sheet. A block whose JSON was
+    // dropped is built again when a client asks for it, and the parts that did not change keep
+    // their versions, so a client holding the block is not sent it again.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    const int nBlockRows = int(sc::VectorContent::constHeldContentBlocks) + 2;
+    for (int nBlockRow = 0; nBlockRow < nBlockRows; ++nBlockRow)
+        setCellString(*pDocShell, 0, nBlockRow * sc::VectorContent::constBlockRows,
+                      u"Text"_ustr);
+
+    const boost::property_tree::ptree aFirst
+        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    const std::string aEpoch = aFirst.get<std::string>("epoch");
+    const sal_Int64 nVersion = blockVersion(aFirst);
+    CPPUNIT_ASSERT(nVersion > 0);
+
+    // Enough other blocks are asked for to drop the content of the first one.
+    std::string aBlocks;
+    for (int nBlockRow = 1; nBlockRow < nBlockRows; ++nBlockRow)
+        aBlocks += (nBlockRow > 1 ? "," : "") + std::to_string(nBlockRow) + ":0";
+    CPPUNIT_ASSERT_EQUAL(nBlockRows - 1,
+                         blockCount(requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks="
+                                                                           + aBlocks)));
+
+    // Held in its version, the first block is not sent again, and asked for whole it comes in
+    // the same version with its text.
+    const boost::property_tree::ptree aHeld = requestVectorPrimitives(
+        pModelObj, "partid=0&mode=-1&epoch=" + aEpoch + "&blocks=0:0:" + std::to_string(nVersion));
+    CPPUNIT_ASSERT_EQUAL(0, blockCount(aHeld));
+    const boost::property_tree::ptree aWhole
+        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    CPPUNIT_ASSERT_EQUAL(1, blockCount(aWhole));
+    CPPUNIT_ASSERT_EQUAL(nVersion, blockVersion(aWhole));
+    CPPUNIT_ASSERT(cellTextAt(aWhole, 0, 0));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

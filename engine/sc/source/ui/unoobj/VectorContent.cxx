@@ -67,7 +67,9 @@
 #include <tools/json_writer.hxx>
 
 #include <algorithm>
+#include <functional>
 #include <set>
+#include <string_view>
 
 using namespace drawinglayer;
 
@@ -784,6 +786,17 @@ void VectorContent::writeVectorPrimitives(tools::JsonWriter& rWriter, SheetState
 
     const sal_uInt64 nSince = bDelta ? sal_uInt64(nSinceVersion) : 0;
     auto isNew = [&](sal_uInt64 nVersion) { return !bDelta || nVersion > nSince; };
+    // A push carries the blocks changed since the last one from their content, which a block
+    // built by a request in between may have dropped since.
+    if (bPush)
+    {
+        for (auto& [rKey, rBlock] : rState.maBlocks)
+        {
+            if (rBlock.mnVersion > std::max(nSince, rBlock.mnCreatedVersion)
+                && !rBlock.mbContentHeld)
+                resolveBlock(rState, rKey);
+        }
+    }
 
     // A push also names the blocks that became stale since the last one.
     const bool bNewStale = std::any_of(rState.maBlocks.begin(), rState.maBlocks.end(),
@@ -887,6 +900,7 @@ void VectorContent::writeVectorPrimitives(tools::JsonWriter& rWriter, SheetState
     if (bPush)
         rState.mbTextEditChanged = false;
     rState.maVersions.noteWritten(bPush);
+    dropOldContent(rState);
 }
 
 void VectorContent::writeBlockEntry(tools::JsonWriter& rWriter, const SheetState& rState,
@@ -1052,30 +1066,85 @@ void VectorContent::writeStaleBlocks(tools::JsonWriter& rWriter, const SheetStat
     }
 }
 
+sal_uInt64 VectorContent::contentHash(std::string_view rContent)
+{
+    if (rContent.empty())
+        return 0;
+    return std::hash<std::string_view>{}(rContent);
+}
+
+void VectorContent::dropOldContent(SheetState& rState)
+{
+    std::vector<std::pair<sal_uInt64, BlockState*>> aHeld;
+    for (auto& [rKey, rBlock] : rState.maBlocks)
+    {
+        if (rBlock.mbContentHeld)
+            aHeld.emplace_back(rBlock.mnLastUse, &rBlock);
+    }
+    if (aHeld.size() <= constHeldContentBlocks)
+        return;
+    std::sort(aHeld.begin(), aHeld.end(),
+              [](const auto& rFirst, const auto& rSecond) { return rFirst.first < rSecond.first; });
+    for (size_t nIndex = 0; nIndex < aHeld.size() - constHeldContentBlocks; ++nIndex)
+    {
+        BlockState& rBlock = *aHeld[nIndex].second;
+        for (EntryState& rRow : rBlock.maRows)
+            rRow.maContent = OString();
+        rBlock.maBorders.maContent = OString();
+        rBlock.mbContentHeld = false;
+    }
+}
+
 void VectorContent::resolveBlock(SheetState& rState, const BlockKey& rKey)
 {
     auto aIterator = rState.maBlocks.find(rKey);
-    if (aIterator != rState.maBlocks.end() && !aIterator->second.mbDirty)
+    if (aIterator != rState.maBlocks.end() && !aIterator->second.mbDirty
+        && aIterator->second.mbContentHeld)
+    {
+        aIterator->second.mnLastUse = ++rState.mnUseCount;
         return;
+    }
 
     // Clear the mark before the build, so a hint during the write marks the block again. A block
-    // written before is built again in the rows that may have changed, a new one in all.
+    // written before is built again in the rows that may have changed, a new one in all, and so
+    // is a block whose content was dropped, to hold it again.
     BlockState& rBlock = rState.maBlocks[rKey];
     const std::optional<std::pair<SCROW, SCROW>> oRows
-        = rBlock.mnVersion != 0 ? rBlock.moDirtyRows : std::nullopt;
+        = rBlock.mnVersion != 0 && rBlock.mbContentHeld ? rBlock.moDirtyRows : std::nullopt;
     rBlock.mbDirty = false;
     rBlock.moDirtyRows.reset();
     BlockContent aContent = writeBlockContent(rState, rKey, oRows);
 
-    // Changed parts take the next version. A new empty block takes it too, so a client can hold it.
+    // The content tells whether a part changed, or its hash where the content was dropped.
+    auto isChanged = [&rBlock](const EntryState& rOld, const EntryState& rNew)
+    {
+        if (rBlock.mbContentHeld)
+            return rOld.maContent != rNew.maContent;
+        return rOld.mnHash != rNew.mnHash;
+    };
     rBlock.maRows.resize(aContent.maRows.size());
     std::vector<size_t> aChangedRows;
     for (size_t nIndex = aContent.maBuiltRows.first; nIndex < aContent.maBuiltRows.second; ++nIndex)
     {
-        if (rBlock.maRows[nIndex].maContent != aContent.maRows[nIndex].maContent)
+        if (isChanged(rBlock.maRows[nIndex], aContent.maRows[nIndex]))
             aChangedRows.push_back(nIndex);
     }
-    const bool bBordersChanged = rBlock.maBorders.maContent != aContent.maBorders.maContent;
+    const bool bBordersChanged = isChanged(rBlock.maBorders, aContent.maBorders);
+
+    // The built parts hold their content, with the versions they had.
+    auto takeContent = [](EntryState& rPart, EntryState& rNew)
+    {
+        rPart.maContent = std::move(rNew.maContent);
+        rPart.mnHash = rNew.mnHash;
+        rPart.maTextStyles = std::move(rNew.maTextStyles);
+    };
+    for (size_t nIndex = aContent.maBuiltRows.first; nIndex < aContent.maBuiltRows.second; ++nIndex)
+        takeContent(rBlock.maRows[nIndex], aContent.maRows[nIndex]);
+    takeContent(rBlock.maBorders, aContent.maBorders);
+    rBlock.mbContentHeld = true;
+    rBlock.mnLastUse = ++rState.mnUseCount;
+
+    // Changed parts take the next version. A new empty block takes it too, so a client can hold it.
     if (rBlock.mnVersion != 0 && aChangedRows.empty() && !bBordersChanged
         && rBlock.maBounds == aContent.maBounds)
         return;
@@ -1084,15 +1153,9 @@ void VectorContent::resolveBlock(SheetState& rState, const BlockKey& rKey)
     if (rBlock.mnVersion == 0)
         rBlock.mnCreatedVersion = nVersion;
     for (size_t nIndex : aChangedRows)
-    {
-        rBlock.maRows[nIndex] = std::move(aContent.maRows[nIndex]);
         rBlock.maRows[nIndex].mnVersion = nVersion;
-    }
     if (bBordersChanged)
-    {
-        rBlock.maBorders = std::move(aContent.maBorders);
         rBlock.maBorders.mnVersion = nVersion;
-    }
     rBlock.maBounds = std::move(aContent.maBounds);
     rBlock.mnVersion = nVersion;
 }
@@ -1154,12 +1217,17 @@ VectorContent::writeBlockContent(const SheetState& rState, const BlockKey& rKey,
     // Positions relative to the cells start from the first cell of the block.
     writeLayers(aRows.maRange, nTab, nStartColumn, nStartRow, aContent.maBorders.maContent,
                 aContent.maBorders.maTextStyles);
+    aContent.maBorders.mnHash = contentHash(aContent.maBorders.maContent);
     aContent.maRows.resize(aRows.maRows.size());
     aContent.maBuiltRows
         = { size_t(nFirstContentRow - nStartRow), size_t(nLastContentRow - nStartRow + 1) };
     for (size_t nIndex = aContent.maBuiltRows.first; nIndex < aContent.maBuiltRows.second; ++nIndex)
-        writeLayers(aRows.maRows[nIndex], nTab, nStartColumn, nStartRow,
-                    aContent.maRows[nIndex].maContent, aContent.maRows[nIndex].maTextStyles);
+    {
+        EntryState& rRow = aContent.maRows[nIndex];
+        writeLayers(aRows.maRows[nIndex], nTab, nStartColumn, nStartRow, rRow.maContent,
+                    rRow.maTextStyles);
+        rRow.mnHash = contentHash(rRow.maContent);
+    }
     return aContent;
 }
 

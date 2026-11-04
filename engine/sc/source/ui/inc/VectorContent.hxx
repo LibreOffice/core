@@ -81,6 +81,10 @@ public:
     /// have changed, as after a column or a row changed size, only the ones a view shows are
     /// built, and the others are named stale, so each is built again when a client asks for it.
     static constexpr size_t constEagerBlocks = 16;
+    /// The most blocks of a sheet whose JSON is kept. The JSON of the blocks used longest ago is
+    /// dropped, and such a block is built again when a client asks for it or a push carries it,
+    /// with the versions of its parts kept where they did not change.
+    static constexpr size_t constHeldContentBlocks = 128;
 
     explicit VectorContent(ScDocShell& rDocShell);
     virtual ~VectorContent() override;
@@ -117,8 +121,12 @@ private:
     struct EntryState
     {
         sal_uInt64 mnVersion = 0;
-        /// The JSON of the content, which is compared to see whether the entry changed.
+        /// The JSON of the content, which is compared to see whether the entry changed. Empty
+        /// for a block whose content was dropped.
         OString maContent;
+        /// The hash of the content, 0 for no content, which decides whether the entry changed
+        /// after its content was dropped.
+        sal_uInt64 mnHash = 0;
         /// The ids of the text styles that the content names.
         std::vector<sal_Int32> maTextStyles;
     };
@@ -136,6 +144,10 @@ private:
         std::optional<std::pair<SCROW, SCROW>> moDirtyRows;
         /// A push named the block stale since it was marked, so the clients know to ask for it.
         bool mbStaleSent = false;
+        /// The JSON of the parts is held. It is dropped from the blocks used longest ago.
+        bool mbContentHeld = false;
+        /// The count of the sheet when the block was last built or asked for.
+        sal_uInt64 mnLastUse = 0;
         /// The JSON of the range the cells of the block cover.
         OString maBounds;
         /// The borders of the whole block. An empty content means there are none.
@@ -177,6 +189,8 @@ private:
         svx::vector::PartVersions maVersions;
 
         std::map<BlockKey, BlockState> maBlocks;
+        /// Counts the uses of the blocks, so the ones used longest ago are known.
+        sal_uInt64 mnUseCount = 0;
 
         /// Every drawing object may have changed.
         bool mbObjectsDirty = true;
@@ -272,7 +286,12 @@ private:
     /// Name the held blocks that may have changed and were not built again, and were not named
     /// in a push before.
     static void writeStaleBlocks(tools::JsonWriter& rWriter, const SheetState& rState);
+    /// Build the block again where it may have changed, or whole where its content was dropped,
+    /// and give the changed parts a new version.
     void resolveBlock(SheetState& rState, const BlockKey& rKey);
+    /// Drop the JSON of the blocks used longest ago beyond constHeldContentBlocks.
+    static void dropOldContent(SheetState& rState);
+    static sal_uInt64 contentHash(std::string_view rContent);
     /// Write the borders of the block and the given rows, both included, or every row.
     BlockContent writeBlockContent(const SheetState& rState, const BlockKey& rKey,
                                    const std::optional<std::pair<SCROW, SCROW>>& roRows);
