@@ -55,7 +55,6 @@ $(eval $(call gb_CppunitTest_use_components,drawinglayer_processors,\
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
     framework/util/fwk \
-    vcl/vcl.common \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,drawinglayer_processors))

@@ -48,7 +48,6 @@ $(eval $(call gb_CppunitTest_use_components,cppcanvas_test,\
     sax/source/expatwrap/expwrap \
     ucb/source/core/ucb1 \
     unoxml/source/service/unoxml \
-    vcl/vcl.common \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,cppcanvas_test))

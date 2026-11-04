@@ -106,23 +106,6 @@ CanvasFactory::~CanvasFactory()
 {
 }
 
-
-// XServiceInfo
-OUString CanvasFactory::getImplementationName()
-{
-    return u"com.sun.star.comp.rendering.CanvasFactory"_ustr;
-}
-
-sal_Bool CanvasFactory::supportsService( OUString const & serviceName )
-{
-    return cppu::supportsService(this, serviceName);
-}
-
-Sequence<OUString> CanvasFactory::getSupportedServiceNames()
-{
-    return { u"com.sun.star.rendering.CanvasFactory"_ustr };
-}
-
 // XMultiComponentFactory
 Sequence<OUString> CanvasFactory::getAvailableServiceNames()
 {
@@ -326,14 +309,5 @@ Reference<XInterface> CanvasFactory::createInstanceWithArguments(
     return createInstanceWithArgumentsAndContext(
         name, args, m_xContext );
 }
-
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_rendering_CanvasFactory_get_implementation(css::uno::XComponentContext* context,
-                                                             css::uno::Sequence<css::uno::Any> const &)
-{
-    return cppu::acquire(new CanvasFactory(context));
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

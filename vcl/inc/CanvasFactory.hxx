@@ -21,7 +21,6 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -29,9 +28,23 @@
 #include <mutex>
 #include <unordered_map>
 
-class CanvasFactory
-    : public ::cppu::WeakImplHelper<css::lang::XServiceInfo, css::lang::XMultiComponentFactory,
-                                    css::lang::XMultiServiceFactory>
+/** The CanvasFactory is used to create the Canvas
+    objects, evaluating the user's configuration preferences from
+
+    <code>/org.openoffice.VCL/Settings/Canvas/PreferredServices</code>.
+
+    The latter specifies a string list of service names to use.
+
+    <p>
+    You can use its com::sun::star::lang::XMultiComponentFactory
+    interface to create Canvas objects, passing an empty string
+    as service specifier (default).
+    If you want to manually override the configured service list, you can pass
+    a service name to try first.
+    </p>
+*/
+class CanvasFactory : public ::cppu::WeakImplHelper<css::lang::XMultiComponentFactory,
+                                                    css::lang::XMultiServiceFactory>
 {
     typedef std::pair<OUString, css::uno::Sequence<OUString>> AvailPair;
 
@@ -56,11 +69,6 @@ class CanvasFactory
 public:
     virtual ~CanvasFactory() override;
     explicit CanvasFactory(css::uno::Reference<css::uno::XComponentContext> const& xContext);
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(OUString const& serviceName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XMultiComponentFactory
     virtual css::uno::Sequence<OUString> SAL_CALL getAvailableServiceNames() override;

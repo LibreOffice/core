@@ -281,7 +281,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/rdf,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/rendering,\
 	Canvas \
-	CanvasFactory \
 	MtfRenderer \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/report,\

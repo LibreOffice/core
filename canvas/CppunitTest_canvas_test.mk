@@ -38,7 +38,6 @@ $(eval $(call gb_CppunitTest_use_components,canvas_test,\
     canvas/source/vcl/vclcanvas \
     configmgr/source/configmgr \
     i18npool/util/i18npool \
-    vcl/vcl.common \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,canvas_test))

@@ -461,7 +461,6 @@ core_constructor_list = [
     "com_sun_star_comp_uui_UUIInteractionHandler_get_implementation",
     "com_sun_star_comp_uui_UUIInteractionRequestStringResolver_get_implementation",
 # vcl/*.component
-    "com_sun_star_comp_rendering_CanvasFactory_get_implementation",
     "dtrans_CMimeContentTypeFactory_get_implementation",
     "vcl_SystemClipboard_get_implementation",
 # xmloff/source/transform/xof.component
