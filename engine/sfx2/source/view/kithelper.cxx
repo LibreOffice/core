@@ -14,6 +14,7 @@
 #include <list>
 #include <mutex>
 
+#include <sfx2/dispatch.hxx>
 #include <sfx2/kit/componenthelpers.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <sfx2/kit/unocommandlist.hxx>
@@ -423,7 +424,15 @@ void KitHelper::setViewReadOnly(int nId, bool readOnly)
         // disabled-during-readonly slots stay stale once editable again.
         if (bChanged)
         {
-            pViewShell->GetViewFrame().GetBindings().InvalidateAll(true);
+            SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
+            rViewFrame.GetBindings().InvalidateAll(true);
+
+            // Update_Impl_ skips child windows not allowed in read-only mode
+            // (e.g. spelling dialog); re-register them after the flip.
+            SfxDispatcher* pDispatcher = rViewFrame.GetDispatcher();
+            if (pDispatcher->IsUpdated_Impl())
+                pDispatcher->Update_Impl(true);
+
             // ScPosWnd builds its dropdown at construction time before kit-RO
             // is established. Broadcast ScAreasChanged so it rebuilds now that
             // the readonly flag is set and can be checked correctly.

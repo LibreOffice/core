@@ -1791,30 +1791,11 @@ void SfxWorkWindow::SetChildWindowVisible_Impl( sal_uInt32 lId, bool bEnabled, S
     pCW->bEnable = bEnabled;
 }
 
-SfxChildWin_Impl* SfxWorkWindow::GetChildWin_Impl(sal_uInt16 nId)
-{
-    SfxChildWin_Impl* pCW = Get_ById(aChildWins, nId);
-    if (!pCW)
-    {
-        // Ids are zeroed by ResetChildWindows_Impl() until the next dispatcher
-        // update; refresh them, but only once the view is fully set up.
-        SfxDispatcher* pDisp = GetBindings().GetDispatcher_Impl();
-        SfxViewFrame* pFram = pDisp ? pDisp->GetFrame() : nullptr;
-        if (pFram && pFram->GetViewShell())
-        {
-            pDisp->Update_Impl(true);
-            pCW = Get_ById(aChildWins, nId);
-        }
-    }
-    return pCW;
-}
-
-
 // The on/off status of a ChildWindow is switched
 
 void SfxWorkWindow::ToggleChildWindow_Impl(sal_uInt16 nId, bool bSetFocus)
 {
-    if (SfxChildWin_Impl* pCW = GetChildWin_Impl(nId))
+    if (SfxChildWin_Impl* pCW = Get_ById(aChildWins, nId))
     {
         // The Window is already known
         SfxChildWindow *pChild = pCW->pWin;
@@ -1961,7 +1942,7 @@ void SfxWorkWindow::SetChildWindow_Impl(sal_uInt16 nId, bool bOn, bool bSetFocus
 
 void SfxWorkWindow::ShowChildWindow_Impl(sal_uInt16 nId, bool bVisible, bool bSetFocus)
 {
-    if (SfxChildWin_Impl* pCW = GetChildWin_Impl(nId))
+    if (SfxChildWin_Impl* pCW = Get_ById(aChildWins, nId))
     {
         SfxChildWindow *pChildWin = pCW->pWin;
         if ( pChildWin )
