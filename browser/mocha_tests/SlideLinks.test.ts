@@ -168,6 +168,43 @@ describe('SlideLinks', function () {
 		],
 	};
 
+	// The whole sales deck linked into this document: one link over the
+	// section that holds the deck's slide outside any section, named after the
+	// deck and naming no section of it, and the section "Opening" under it.
+	const deckPresentation = '{4B1D2C3E-0010-4F00-8A00-1234567890AB}';
+	const looseSection = '{4B1D2C3E-0011-4F00-8A00-1234567890AB}';
+	const loosePart = '{6A1C31B0-0021-4C5B-9E77-2F3D4A5B6C7D}';
+
+	const presentationList = {
+		links: [
+			{
+				unit: 'presentation',
+				id: deckPresentation,
+				parent: '',
+				source: 'Sales deck.odp',
+				sourceId: '',
+				name: 'Sales deck.odp',
+				lastModifiedTime: '',
+				slides: [loosePart, openingFirst, openingSecond],
+			},
+			{
+				unit: 'section',
+				id: looseSection,
+				parent: deckPresentation,
+				source: 'Sales deck.odp',
+				sourceId: '',
+				name: 'Sales deck.odp',
+				lastModifiedTime: '',
+				slides: [loosePart],
+			},
+			{
+				...sectionLink(openingSection, [openingFirst, openingSecond]),
+				parent: deckPresentation,
+			},
+			slideLink(openingFirst, 'Sales deck.odp', 'g1', '', openingSection),
+		],
+	};
+
 	// The source answers what it holds: three slides, the last two in the
 	// section "Opening" under the name given, unless the source lost it.
 	function sourceInfo(source: string, sectionName: string | null): void {
@@ -1153,5 +1190,169 @@ describe('SlideLinks', function () {
 		pagesStaged('two.odp');
 		refreshEnded('Sales deck.odp', 1, 'slide', outlookPart);
 		nodeassert.equal(sent.length, 4);
+	});
+
+	it('lists the presentations of the document and names each by its file', function () {
+		deliver('slidelinks', { message: presentationList });
+		nodeassert.deepEqual(
+			links.getPresentations().map((link) => link.id),
+			[deckPresentation],
+		);
+		nodeassert.deepEqual(links.getLink(looseSection).parent, deckPresentation);
+
+		// The storage names the file as it is called now while the source is
+		// connected, and the link keeps the name it was read under otherwise.
+		(app as any).remoteLinks = [
+			{
+				name: 'Sales deck 2027.odp',
+				persistentLink: 'Sales deck.odp',
+				state: 'connected',
+			},
+		];
+		nodeassert.equal(
+			links.getPresentationName(deckPresentation),
+			'Sales deck 2027.odp',
+		);
+		(app as any).remoteLinks = remoteLinks('disconnected');
+		nodeassert.equal(
+			links.getPresentationName(deckPresentation),
+			'Sales deck.odp',
+		);
+		// A section is named by nothing here, whatever its link records.
+		nodeassert.equal(links.getPresentationName(openingSection), '');
+		nodeassert.equal(links.getPresentationName(unknownPart), '');
+	});
+
+	it('keeps a presentation and the section of its loose slides while the source holds anything', function () {
+		deliver('slidelinks', { message: presentationList });
+		// The source lost its section "Opening". The presentation and the
+		// section of the slides outside any section name nothing in the
+		// source, so they hold as long as the source does.
+		sourceInfo('Sales deck.odp', null);
+		nodeassert.equal(links.isMissing(openingSection), true);
+		nodeassert.equal(links.isMissing(looseSection), false);
+		nodeassert.equal(links.isMissing(deckPresentation), false);
+		nodeassert.equal(links.getLinkState(looseSection), 'connected');
+		nodeassert.equal(links.getLinkState(deckPresentation), 'connected');
+		nodeassert.equal(links.isUpdatable(deckPresentation), true);
+
+		(app as any).remoteLinks = remoteLinks('missing');
+		nodeassert.equal(links.getLinkState(looseSection), 'broken');
+		nodeassert.equal(links.getLinkState(deckPresentation), 'broken');
+		nodeassert.equal(links.isUpdatable(deckPresentation), false);
+	});
+
+	it('asks about the section of the loose slides in its own words', function () {
+		deliver('slidelinks', { message: presentationList });
+		sent = [];
+
+		links.update(looseSection);
+		nodeassert.equal(confirmed.length, 1);
+		nodeassert.ok(confirmed[0].indexOf('outside its sections') >= 0);
+		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp')]);
+	});
+
+	it('updates a linked presentation after one question that names it', function () {
+		deliver('slidelinks', { message: presentationList });
+		sent = [];
+
+		// Every slide of the presentation is replaced, so the user is asked
+		// first, and the source writes its whole deck out.
+		links.update(deckPresentation);
+		nodeassert.equal(confirmed.length, 1);
+		nodeassert.ok(confirmed[0].indexOf('linked presentation') >= 0);
+		nodeassert.ok(confirmed[0].indexOf('Sales deck.odp') >= 0);
+		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp')]);
+
+		pagesStaged('staged.odp');
+		nodeassert.equal(
+			sent[1],
+			updateOf(
+				'Sales deck.odp',
+				'staged.odp',
+				'presentation',
+				deckPresentation,
+			),
+		);
+		refreshEnded('Sales deck.odp', 3, 'presentation', deckPresentation);
+		nodeassert.deepEqual(told, ['3 slides updated from Sales deck.odp.']);
+	});
+
+	it('asks once for a presentation, its sections included', function () {
+		// The sections under the presentation are replaced along with it, so
+		// the question counts the presentation alone.
+		deliver('slidelinks', { message: presentationList });
+		sent = [];
+		links.updateAll();
+		nodeassert.equal(confirmed.length, 1);
+		nodeassert.ok(confirmed[0].indexOf('The linked presentation') >= 0);
+		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp')]);
+	});
+
+	it('counts the sections and presentations one update replaces', function () {
+		// A section of the same source linked on its own goes with the
+		// presentation in one refresh of the source, and the question counts
+		// both.
+		const alone = sectionLink('{4B1D2C3E-0002-4F00-8A00-1234567890AB}', [
+			numbersPart,
+		]);
+		deliver('slidelinks', {
+			message: { links: [...presentationList.links, alone] },
+		});
+		sent = [];
+		links.updateAll();
+		nodeassert.equal(confirmed.length, 1);
+		nodeassert.ok(
+			confirmed[0].indexOf('2 linked sections and presentations') >= 0,
+		);
+		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp')]);
+	});
+
+	it('reads the slides linked on their own when the presentation update is declined', function () {
+		map.uiManager.showConfirmModal = (
+			id: string,
+			title: string,
+			message: string,
+			button: string,
+			callback: () => void,
+			hideCancel: boolean,
+			cancel: () => void,
+		) => {
+			confirmed.push(message);
+			cancel();
+		};
+		deliver('slidelinks', {
+			message: { links: [...presentationList.links, ...list.links] },
+		});
+		sent = [];
+
+		// The presentation keeps its slides, the slide of its section among
+		// them, and the slides of the same source linked on their own are
+		// read one by one.
+		links.updateSource('Sales deck.odp');
+		nodeassert.equal(confirmed.length, 1);
+		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp', [numbersGuid])]);
+	});
+
+	it('takes the link off a presentation, and off everything in it when asked', function () {
+		deliver('slidelinks', { message: presentationList });
+		sent = [];
+
+		links.breakLink(deckPresentation, false);
+		links.breakLink(deckPresentation, true);
+		nodeassert.deepEqual(sent, [
+			'slidelink break unit=presentation id=' +
+				encodeURIComponent(deckPresentation),
+			'slidelink break unit=presentation id=' +
+				encodeURIComponent(deckPresentation) +
+				' deep=1',
+		]);
+
+		deliver('slidelinkerror', {
+			kind: 'failed',
+			unit: 'presentation',
+			id: deckPresentation,
+		});
+		nodeassert.deepEqual(told, ['Unlinking the presentation failed.']);
 	});
 });

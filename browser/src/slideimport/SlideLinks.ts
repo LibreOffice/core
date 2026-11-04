@@ -17,8 +17,9 @@
  * a source document: a slide, a section or the whole presentation. The
  * document reports every link in one list, and this class keeps the list by
  * the identifier of each link: the part of the page for a slide, the
- * identifier of the section for a section. Links nest, and each link names
- * the link that spans it as its parent.
+ * identifier of the section for a section, an identifier of its own for a
+ * presentation. Links nest, and each link names the link that spans it as
+ * its parent.
  *
  * A source is a document the storage named as a remote link of this one, and
  * the server holds the access token to read it with, so an update needs
@@ -41,7 +42,8 @@ type SlideLinkUnit = 'slide' | 'section' | 'presentation';
 interface SlideLink {
 	unit: SlideLinkUnit;
 	// The identifier of the link in this document: the part of the page for a
-	// slide, the identifier of the section for a section.
+	// slide, the identifier of the section for a section, an identifier of its
+	// own for a presentation.
 	id: string;
 	// The identifier of the link that spans this one, or an empty string for
 	// a link that sits under none.
@@ -193,7 +195,9 @@ class SlideLinks {
 	// Whether the source was read and no longer holds the unit the link was
 	// made from: the slide of that identifier, or the section. A slide that
 	// follows a position reads whichever slide stands there, so it is never
-	// missing, and a presentation is missing only when its source is.
+	// missing. A presentation, and the section that holds the slides of the
+	// source outside its sections, name nothing in the source, so each is
+	// missing only when its source is, which the state of the source tells.
 	public isMissing(id: string): boolean {
 		const link = this.links.get(id);
 		if (!link) return false;
@@ -205,9 +209,32 @@ class SlideLinks {
 				known.guids !== null &&
 				!known.guids.has(link.sourceId)
 			);
-		if (link.unit === 'section')
+		if (link.unit === 'section' && link.sourceId)
 			return known.sections !== null && !known.sections.has(link.sourceId);
 		return false;
+	}
+
+	// The links that hold a whole presentation, in the order the list
+	// reports them.
+	public getPresentations(): SlideLink[] {
+		const presentations: SlideLink[] = [];
+		this.links.forEach((link) => {
+			if (link.unit === 'presentation') presentations.push(link);
+		});
+		return presentations;
+	}
+
+	// The name of the file a presentation link holds a copy of: the name the
+	// storage reports for the source while the source is connected, and
+	// otherwise the name the link recorded when the source was last read.
+	// Empty for a link of any other unit.
+	public getPresentationName(id: string): string {
+		const link = this.links.get(id);
+		if (!link || link.unit !== 'presentation') return '';
+		const remoteLink = this.remoteLink(link.source);
+		if (remoteLink && remoteLink.state === 'connected' && remoteLink.name)
+			return remoteLink.name;
+		return link.name || link.source;
 	}
 
 	// The state of the remote link a link's source names, as the storage
@@ -382,9 +409,9 @@ class SlideLinks {
 	// Queues the given refreshes. A refresh whose source cannot be read is
 	// left out and the user told why, and one that is already running or
 	// waiting for its turn is left where it is. A refresh that replaces the
-	// slides of a section the user has not agreed to yet waits for one
-	// question first, because a slide edited here is replaced along with the
-	// others. The rest go straight in.
+	// slides of a section or a presentation the user has not agreed to yet
+	// waits for one question first, because a slide edited here is replaced
+	// along with the others. The rest go straight in.
 	private confirmRefresh(requests: SlideLinkRefreshRequest[]): void {
 		const wanted: SlideLinkRefreshRequest[] = [];
 		for (const request of requests) {
@@ -397,27 +424,17 @@ class SlideLinks {
 		}
 
 		const asked = wanted.filter(
-			(request) => this.sectionsReplacedBy(request).length > 0,
+			(request) => this.unitsReplacedBy(request).length > 0,
 		);
 		this.enqueueAll(wanted.filter((request) => asked.indexOf(request) < 0));
 		if (asked.length === 0) return;
 
-		const sections = asked
-			.map((request) => this.sectionsReplacedBy(request))
-			.flat();
-		const message =
-			sections.length === 1
-				? _(
-						'The section will hold the slides that its section in {0} holds now. Changes made to these slides in this presentation will be lost.',
-					).replace('{0}', () => sections[0].source)
-				: _(
-						'{0} linked sections will hold the slides that their sections in the source files hold now. Changes made to these slides in this presentation will be lost.',
-					).replace('{0}', String(sections.length));
+		const units = asked.map((request) => this.unitsReplacedBy(request)).flat();
 
 		this.map.uiManager.showConfirmModal(
 			'slidelink-update',
-			sections.length === 1 ? _('Update section') : _('Update sections'),
-			message,
+			SlideLinks.replacedTitle(units),
+			SlideLinks.replacedMessage(units),
 			_('Update'),
 			() => {
 				// The list may have changed while the user was asked.
@@ -429,8 +446,9 @@ class SlideLinks {
 			},
 			false,
 			() => {
-				// The sections stay as they are, and the slides of their sources
-				// that are linked on their own are read one by one.
+				// The sections and the presentations stay as they are, and the
+				// slides of their sources that are linked on their own are read
+				// one by one.
 				this.enqueueAll(
 					this.slidesAlone(asked).filter((request) => !this.isQueued(request)),
 				);
@@ -438,22 +456,83 @@ class SlideLinks {
 		);
 	}
 
-	// The linked sections a refresh replaces the slides of, which the user has
-	// not agreed to yet: the section the refresh names, or every section of a
-	// source that is refreshed whole and is not waiting for a refresh of its
-	// own.
-	private sectionsReplacedBy(request: SlideLinkRefreshRequest): SlideLink[] {
+	// The linked sections and presentations a refresh replaces the slides of,
+	// which the user has not agreed to yet: the one the refresh names, or every
+	// one of a source that is refreshed whole, sits under no other link and is
+	// not waiting for a refresh of its own. A section under a presentation is
+	// replaced along with the presentation, so it is counted once, as part of
+	// the presentation.
+	private unitsReplacedBy(request: SlideLinkRefreshRequest): SlideLink[] {
 		if (request.id !== undefined) {
 			const link = this.links.get(request.id);
-			return link && link.unit === 'section' ? [link] : [];
+			return link && link.unit !== 'slide' ? [link] : [];
 		}
-		const sections: SlideLink[] = [];
+		const units: SlideLink[] = [];
 		this.links.forEach((link) => {
-			if (link.source !== request.source || link.unit !== 'section') return;
+			if (
+				link.source !== request.source ||
+				link.unit === 'slide' ||
+				link.parent
+			)
+				return;
 			if (!this.isQueued({ source: link.source, unit: link.unit, id: link.id }))
-				sections.push(link);
+				units.push(link);
 		});
-		return sections;
+		return units;
+	}
+
+	// The title of the question asked before a refresh replaces the slides of
+	// the given sections and presentations.
+	private static replacedTitle(units: SlideLink[]): string {
+		const sections = units.some((link) => link.unit === 'section');
+		const presentations = units.some((link) => link.unit === 'presentation');
+		if (sections && presentations) return _('Update links');
+		if (presentations)
+			return units.length === 1
+				? _('Update presentation')
+				: _('Update presentations');
+		return units.length === 1 ? _('Update section') : _('Update sections');
+	}
+
+	// The question asked before a refresh replaces the slides of one section
+	// or presentation, with {0} standing for its source. A section that names
+	// no section of the source holds the slides the source keeps outside its
+	// sections.
+	private static oneReplacedMessage(unit: SlideLink): string {
+		if (unit.unit === 'presentation')
+			return _(
+				'The linked presentation will hold the slides and sections that {0} holds now. Changes made to these slides in this presentation will be lost.',
+			);
+		if (!unit.sourceId)
+			return _(
+				'The section will hold the slides that {0} keeps outside its sections now. Changes made to these slides in this presentation will be lost.',
+			);
+		return _(
+			'The section will hold the slides that its section in {0} holds now. Changes made to these slides in this presentation will be lost.',
+		);
+	}
+
+	// The question asked before a refresh replaces the slides of the given
+	// sections and presentations.
+	private static replacedMessage(units: SlideLink[]): string {
+		const sections = units.filter((link) => link.unit === 'section').length;
+		const presentations = units.length - sections;
+		if (units.length === 1)
+			return SlideLinks.oneReplacedMessage(units[0]).replace(
+				'{0}',
+				() => units[0].source,
+			);
+		if (presentations === 0)
+			return _(
+				'{0} linked sections will hold the slides that their sections in the source files hold now. Changes made to these slides in this presentation will be lost.',
+			).replace('{0}', String(sections));
+		if (sections === 0)
+			return _(
+				'{0} linked presentations will hold the slides and sections that their source files hold now. Changes made to these slides in this presentation will be lost.',
+			).replace('{0}', String(presentations));
+		return _(
+			'{0} linked sections and presentations will hold the slides that their source files hold now. Changes made to these slides in this presentation will be lost.',
+		).replace('{0}', String(units.length));
 	}
 
 	// The slides linked on their own to the sources the given refreshes read
@@ -1011,7 +1090,9 @@ class SlideLinks {
 				this.say(
 					e.unit === 'slide'
 						? _('Unlinking the slide failed.')
-						: _('Unlinking the section failed.'),
+						: e.unit === 'section'
+							? _('Unlinking the section failed.')
+							: _('Unlinking the presentation failed.'),
 				);
 			return;
 		}

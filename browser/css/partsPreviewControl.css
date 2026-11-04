@@ -359,6 +359,30 @@
 	display: none;
 }
 
+/* The header of a linked presentation, above the headers of its sections,
+   carrying the name of the file it holds a copy of. */
+.slide-presentation-header .slide-section-name {
+	font-weight: 600;
+}
+
+/* The header of a section inside a linked presentation sits under the header
+   of the presentation, indented. */
+.slide-section-header.in-presentation {
+	margin-inline-start: 36px;
+}
+
+/* A collapsed presentation shows as one tile: the frame of its first slide
+   under its header, shown even while the section of that slide is collapsed.
+   The other frames of its run and the headers of its sections are hidden. */
+.preview-frame.presentation-tile.section-collapsed {
+	display: flex;
+}
+
+.preview-frame.presentation-collapsed,
+.slide-section-header.presentation-collapsed {
+	display: none;
+}
+
 /* How many slides a section holds, at the end of its header. */
 .slide-section-count {
 	flex-shrink: 0;
@@ -438,6 +462,10 @@
 
 .parts-preview-grid #slide-sorter .slide-section-header {
 	margin-inline: calc(-1 * var(--preview-outline));
+}
+
+.parts-preview-grid #slide-sorter .slide-section-header.in-presentation {
+	margin-inline-start: calc(36px - var(--preview-outline));
 }
 
 .parts-preview-grid #slide-sorter:has(.slide-section-header:not(.preview-frame:not(#first-drop-site) ~ *)) {

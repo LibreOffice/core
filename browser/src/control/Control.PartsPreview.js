@@ -94,6 +94,13 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		this._previewTiles = [];
 		this._sectionHeaders = []; // Section header DOM elements
 		this._collapsedSections = new Set(); // Names of sections collapsed by the user
+		// The headers of the linked presentations, one above the first section of each, and
+		// what they were built from, as _presentationsKey gives it.
+		this._presentationHeaders = [];
+		this._presentationsShown = '';
+		// The identifiers of the linked presentations the user expanded. A presentation
+		// shows collapsed, as one tile under its header, until it is expanded.
+		this._expandedPresentations = new Set();
 		this._direction = this.options.allowOrientation ?
 			(!window.mode.isDesktop() && window.L.DomUtil.isPortrait() ? 'x' : 'y') :
 			this.options.axis;
@@ -112,7 +119,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		map.on('beforerequestpreview', this._beforeRequestPreview, this);
 		map.on('updatesections', this._updateSections, this);
 		map.on('docloaded', this._focusCurrentSlideOnLoad, this);
-		app.events.on('slidelink:changed', this._updateLinkMarks.bind(this));
+		app.events.on('slidelink:changed', this._onLinksChanged.bind(this));
 		map.on('addview', this._updateViewAvatars, this);
 		map.on('removeview', this._updateViewAvatars, this);
 		map.on('updateviewpart', this._updateViewAvatars, this);
@@ -168,6 +175,8 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				this._ensureVisiblePreviews(); // Load previews.
 				this._previewInitialized = true;
 				this._updateSelectedSection();
+				// The link list may be known before the previews are.
+				this._updatePresentationHeaders(true);
 			}
 			else
 			{
@@ -193,6 +202,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 					const currentPartMoved = this._focusedCurrentPart !== selectedPart;
 					this._focusedCurrentPart = selectedPart;
 					if (currentPartMoved) {
+						this._revealPart(selectedPart);
 						if (this.hasSlideFocus() || this.partsFocused)
 							this.focusCurrentSlide();
 						else
@@ -290,6 +300,15 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			this._container.appendChild(this._menuPosEl);
 		}
 		return this._menuPosEl;
+	},
+
+	// Puts the anchor of the context menus at the point of the given event and returns it.
+	_menuPosElAt: function (e) {
+		var menuPosEl = this._getMenuPosEl();
+		var rect = this._container.getBoundingClientRect();
+		menuPosEl.style.left = (e.clientX - rect.left) + 'px';
+		menuPosEl.style.top = (e.clientY - rect.top) + 'px';
+		return menuPosEl;
 	},
 
 	// The proportions of the document's slides, as height over width, from
@@ -1077,32 +1096,47 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 	},
 
 	// Shows the link mark on the preview of a slide that is linked to another
-	// file, and describes the link in the preview's labels. A link whose source
-	// is missing is marked as broken by specific class, and one whose source was
-	// read and holds no slide the page came from is marked as broken.
+	// file, and describes the link in the preview's labels.
 	_setPreviewLinkMark: function (img, i) {
-		const links = this._map.slideLinks;
-		const state = links && img._part ? links.getLinkState(img._part) : '';
-		img._linkBadge.classList.toggle('linked', state !== '');
-		this._setLinkStateClasses(img._linkBadge, state);
+		this._setLinkMark(img._linkBadge, img._part);
 		this._setPreviewPositionLabels(img, i);
 	},
 
-	// Marks element with the state a link mark shows, as SlideLinks reports it.
-	_setLinkStateClasses: function (element, state) {
+	// Marks a badge with the state of the link of the given identifier, as SlideLinks reports
+	// it: the class linked while the unit holds a link, and one of broken, outdated, connected
+	// and disconnected for the state of the link. Returns the state, an empty string for a unit
+	// that holds no link.
+	_setLinkMark: function (badge, id) {
+		const links = this._map.slideLinks;
+		const state = links && id ? links.getLinkState(id) : '';
+		badge.classList.toggle('linked', state !== '');
 		for (const name of ['broken', 'outdated', 'connected', 'disconnected'])
-			element.classList.toggle(name, state === name);
+			badge.classList.toggle(name, state === name);
+		return state;
 	},
 
-	// Brings the link marks of every preview to what the document reports
-	// its linked pages to be.
+	// Brings the link marks of every preview, section header and presentation header to what
+	// the document reports its links to be.
 	_updateLinkMarks: function () {
 		for (let i = 0; i < this._previewTiles.length; i++) {
 			if (this._previewTiles[i])
 				this._setPreviewLinkMark(this._previewTiles[i], i);
 		}
-		for (let h = 0; h < this._sectionHeaders.length; h++)
-			this._setSectionLinkMark(this._sectionHeaders[h]);
+		for (let h = 0; h < this._sectionHeaders.length; h++) {
+			const section = this._sectionHeaders[h]._section;
+			this._setHeaderLinkMark(this._sectionHeaders[h], section ? section.id : '');
+		}
+		for (let p = 0; p < this._presentationHeaders.length; p++) {
+			const header = this._presentationHeaders[p];
+			this._setHeaderLinkMark(header, header._link.id);
+		}
+	},
+
+	// The link list, or the state of a source, changed: the presentation headers follow the
+	// list, and every mark shows its state.
+	_onLinksChanged: function () {
+		this._updatePresentationHeaders(false);
+		this._updateLinkMarks();
 	},
 
 	// Relabels every preview from startIndex onward to match its current
@@ -1129,6 +1163,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		if (!sections || sections.length === 0) {
 			this._collapsedSections.clear();
 			this._clearAllSectionCollapse();
+			this._updatePresentationHeaders(true);
 			// Removing the last section un-hides its slides; fetch the
 			// thumbnails for any that were collapsed before they were loaded.
 			this._ensureVisiblePreviews();
@@ -1164,6 +1199,8 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		}
 
 		this._applyAllSectionsCollapse();
+		// The presentation headers go above the section headers just built.
+		this._updatePresentationHeaders(true);
 		// Removing a section can turn its slides back into ungrouped, visible
 		// ones; fetch their thumbnails now that they show again.
 		this._ensureVisiblePreviews();
@@ -1227,7 +1264,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			});
 
 		header._section = section;
-		this._setSectionLinkMark(header);
+		this._setHeaderLinkMark(header, section.id);
 
 		const toggleBtn = header.querySelector('.slide-section-toggle');
 
@@ -1263,13 +1300,11 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		return header;
 	},
 
-	// Shows the link mark on the header of a section that holds a copy of a
-	// section of another file, and describes the link in its tooltip.
-	_setSectionLinkMark: function (header) {
-		const section = header._section;
+	// Shows the link mark on the header of a section or a presentation that holds a copy of a
+	// unit of another file, and describes the link in the tooltip of the mark.
+	_setHeaderLinkMark: function (header, id) {
 		const links = this._map.slideLinks;
-		const link =
-			links && section && section.id ? links.getLink(section.id) : null;
+		const link = links && id ? links.getLink(id) : null;
 		let badge = header.querySelector('.slide-section-link');
 		if (!link) {
 			if (badge) badge.remove();
@@ -1282,20 +1317,44 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			header.querySelector('.slide-section-name').after(badge);
 		}
 
-		const state = links.getLinkState(section.id);
-		this._setLinkStateClasses(badge, state);
-
-		let label;
-		if (state === 'broken')
-			label = _('Linked to a section of %1 that is missing');
-		else if (state === 'outdated')
-			label = _('Linked to a section of %1 that has changed');
-		else if (state === 'disconnected')
-			label = _('Linked to a section of %1, disconnected');
-		else label = _('Linked to a section of %1');
-		label = label.replace('%1', () => link.source);
+		const state = this._setLinkMark(badge, id);
+		const label = this._linkMarkLabel(link, state).replace('%1', () => link.source);
 		badge.setAttribute('aria-label', label);
 		badge.title = label;
+	},
+
+	// Describes the link of a header by the unit it holds and the state of the link, with %1
+	// standing for the source document. A section that names no section of the source holds
+	// the slides the source keeps outside its sections.
+	_linkMarkLabel: function (link, state) {
+		if (link.unit === 'presentation') {
+			if (state === 'broken')
+				return _('Linked to the presentation %1 that is missing');
+			if (state === 'outdated')
+				return _('Linked to the presentation %1 that has changed');
+			if (state === 'disconnected')
+				return _('Linked to the presentation %1, disconnected');
+			return _('Linked to the presentation %1');
+		}
+		if (!link.sourceId) {
+			if (state === 'broken')
+				return _(
+					'Linked to the slides outside the sections of %1, which is missing');
+			if (state === 'outdated')
+				return _(
+					'Linked to the slides outside the sections of %1, which has changed');
+			if (state === 'disconnected')
+				return _(
+					'Linked to the slides outside the sections of %1, disconnected');
+			return _('Linked to the slides outside the sections of %1');
+		}
+		if (state === 'broken')
+			return _('Linked to a section of %1 that is missing');
+		if (state === 'outdated')
+			return _('Linked to a section of %1 that has changed');
+		if (state === 'disconnected')
+			return _('Linked to a section of %1, disconnected');
+		return _('Linked to a section of %1');
 	},
 
 	_selectSection: function (sectionIndex) {
@@ -1307,7 +1366,12 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		var end = (sectionIndex + 1 < sections.length)
 			? sections[sectionIndex + 1].startIndex - 1
 			: this._previewTiles.length - 1;
+		this._selectRange(start, end);
+	},
 
+	// Makes the slides from start to end the selection, with the slide at start the current
+	// one.
+	_selectRange: function (start, end) {
 		if (start < 0 || end < start)
 			return;
 
@@ -1371,18 +1435,23 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		var end = section.startIndex + section.slideCount;
 
 		var header = this._sectionHeaders[sectionIndex];
-		if (header) {
-			var toggleBtn = header.querySelector('.slide-section-toggle');
-			header.classList.toggle('collapsed', collapsed);
-			if (toggleBtn)
-				toggleBtn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
-		}
+		if (header)
+			this._setHeaderCollapsed(header, collapsed);
 
 		for (var i = section.startIndex; i < end; i++) {
 			var frame = this._previewTiles[i] && this._previewTiles[i].parentNode;
 			if (frame)
 				frame.classList.toggle('section-collapsed', collapsed);
 		}
+	},
+
+	// Shows a section or presentation header as collapsed or expanded: the
+	// chevron turns, and the toggle says which way it is.
+	_setHeaderCollapsed: function (header, collapsed) {
+		header.classList.toggle('collapsed', collapsed);
+		const toggleButton = header.querySelector('.slide-section-toggle');
+		if (toggleButton)
+			toggleButton.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
 	},
 
 	// Remove the collapsed marker from every slide frame. Section membership is
@@ -1424,6 +1493,218 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		this._applyAllSectionsCollapse();
 		// Expanding may reveal thumbnails whose images were never fetched.
 		this._ensureVisiblePreviews();
+	},
+
+	// The index of every slide the sorter shows, by the part number of the slide.
+	_partIndexes: function () {
+		const indexes = new Map();
+		for (let i = 0; i < this._previewTiles.length; i++) {
+			if (this._previewTiles[i] && this._previewTiles[i]._part)
+				indexes.set(this._previewTiles[i]._part, i);
+		}
+		return indexes;
+	},
+
+	// The indexes of the slides a presentation link spans, one run of consecutive slides in
+	// slide order, or null while this view does not show them that way: the link list and
+	// the slide list each reach the view on their own, so one can be ahead of the other.
+	_presentationRun: function (link, partIndexes) {
+		const run = [];
+		for (const part of link.slides) {
+			const index = partIndexes.get(part);
+			if (index === undefined || (run.length > 0 && index !== run[run.length - 1] + 1))
+				return null;
+			run.push(index);
+		}
+		return run.length > 0 ? run : null;
+	},
+
+	// What the presentation headers are built from, as one string: each linked presentation
+	// with its name and the slides of its run. Empty while the sorter shows no slides.
+	_presentationsKey: function () {
+		if (!this._previewInitialized || !this._map.slideLinks)
+			return '';
+		const links = this._map.slideLinks;
+		return JSON.stringify(links.getPresentations().map(function (link) {
+			return [link.id, links.getPresentationName(link.id), link.slides];
+		}));
+	},
+
+	// Rebuilds the headers of the linked presentations from the link list and the slides: one
+	// header above the first section of each presentation, or above the first slide of its run
+	// while the sections are not known yet. The headers are left as they are while nothing they
+	// are built from changed, unless the rebuild is asked for, as it is once the section
+	// headers are built anew.
+	_updatePresentationHeaders: function (rebuild) {
+		const key = this._presentationsKey();
+		if (!rebuild && key === this._presentationsShown)
+			return;
+		this._presentationsShown = key;
+
+		for (let h = 0; h < this._presentationHeaders.length; h++)
+			window.L.DomUtil.remove(this._presentationHeaders[h]);
+		this._presentationHeaders = [];
+		this._clearAllPresentationCollapse();
+		if (key === '')
+			return;
+
+		const partIndexes = this._partIndexes();
+		const live = new Set();
+		for (const link of this._map.slideLinks.getPresentations()) {
+			const run = this._presentationRun(link, partIndexes);
+			if (!run)
+				continue;
+			live.add(link.id);
+			const header = this._createPresentationHeader(link, run);
+			this._presentationHeaders.push(header);
+			const first = this._previewTiles[run[0]].parentNode;
+			const before = this._sectionHeaderAt(run[0]) || first;
+			before.parentNode.insertBefore(header, before);
+			this._applyPresentationCollapse(header, run);
+		}
+		// A presentation the document lists no longer is forgotten.
+		this._expandedPresentations.forEach(function (id) {
+			if (!live.has(id))
+				this._expandedPresentations.delete(id);
+		}, this);
+		this._ensureVisiblePreviews();
+	},
+
+	_createPresentationHeader: function (link, run) {
+		var that = this;
+		const name = this._map.slideLinks.getPresentationName(link.id);
+
+		// The shared builder wires the collapse toggle and the click that selects every
+		// slide of the presentation.
+		const header = buildSlideSectionHeader(
+			name, -1,
+			!this._expandedPresentations.has(link.id), {
+				onToggle: function () {
+					that._togglePresentationCollapse(link.id);
+				},
+				onSelect: function () {
+					that._selectPresentation(link);
+				},
+			},
+			_n('%n slide', '%n slides', run.length),
+			{ toggleLabel: _('Toggle presentation %1').replace('%1', name) });
+		header.classList.add('slide-presentation-header');
+		// The header stands for no section of the document, so it carries no section index.
+		header.removeAttribute('data-section-index');
+		header._link = link;
+		this._setHeaderLinkMark(header, link.id);
+
+		if (this._map.isEditMode()) {
+			window.L.DomEvent.on(header, 'contextmenu', function (e) {
+				window.L.DomEvent.stopPropagation(e);
+				window.L.DomEvent.preventDefault(e);
+
+				if (app.map.isReadOnlyMode())
+					return;
+
+				that._openPresentationContextMenu(link, e);
+			}, this);
+		}
+
+		return header;
+	},
+
+	// Selects every slide of a linked presentation, with its first slide the current one.
+	_selectPresentation: function (link) {
+		const run = this._presentationRun(link, this._partIndexes());
+		if (run)
+			this._selectRange(run[0], run[run.length - 1]);
+	},
+
+	_togglePresentationCollapse: function (id) {
+		if (this._expandedPresentations.has(id))
+			this._expandedPresentations.delete(id);
+		else
+			this._expandedPresentations.add(id);
+
+		this._applyAllPresentationsCollapse();
+		// Expanding may reveal thumbnails whose images were never fetched.
+		this._ensureVisiblePreviews();
+	},
+
+	// Applies the collapsed state of every linked presentation, starting from a clean slate so
+	// that only the frames and the section headers inside a presentation that is collapsed now
+	// stay hidden.
+	_applyAllPresentationsCollapse: function () {
+		this._clearAllPresentationCollapse();
+		const partIndexes = this._partIndexes();
+		for (let h = 0; h < this._presentationHeaders.length; h++) {
+			const header = this._presentationHeaders[h];
+			const run = this._presentationRun(header._link, partIndexes);
+			if (run)
+				this._applyPresentationCollapse(header, run);
+		}
+	},
+
+	// Whether the given slide frame is hidden in a collapsed section or presentation. The tile
+	// of a collapsed presentation shows even while the section of its slide is collapsed.
+	_isFrameHidden: function (frame) {
+		return frame.classList.contains('presentation-collapsed') ||
+			(frame.classList.contains('section-collapsed') &&
+			 !frame.classList.contains('presentation-tile'));
+	},
+
+	// Applies the collapsed state of one presentation to its header, to the frames of its run
+	// and to the headers of its sections. Collapsed, the first frame shows as the tile of the
+	// presentation under its header, and the other frames and the section headers are hidden.
+	_applyPresentationCollapse: function (header, run) {
+		const collapsed = !this._expandedPresentations.has(header._link.id);
+		this._setHeaderCollapsed(header, collapsed);
+
+		for (let i = 0; i < run.length; i++) {
+			const frame = this._previewTiles[run[i]].parentNode;
+			frame.classList.toggle('presentation-tile', collapsed && i === 0);
+			frame.classList.toggle('presentation-collapsed', collapsed && i > 0);
+		}
+
+		const first = run[0];
+		const last = run[run.length - 1];
+		for (let h = 0; h < this._sectionHeaders.length; h++) {
+			const sectionHeader = this._sectionHeaders[h];
+			const section = sectionHeader._section;
+			if (!section || section.startIndex < first || section.startIndex > last)
+				continue;
+			sectionHeader.classList.add('in-presentation');
+			sectionHeader.classList.toggle('presentation-collapsed', collapsed);
+		}
+	},
+
+	// Takes the presentation state off every frame and every section header.
+	_clearAllPresentationCollapse: function () {
+		for (let i = 0; i < this._previewTiles.length; i++) {
+			const frame = this._previewTiles[i] && this._previewTiles[i].parentNode;
+			if (frame)
+				frame.classList.remove('presentation-tile', 'presentation-collapsed');
+		}
+		for (let h = 0; h < this._sectionHeaders.length; h++) {
+			this._sectionHeaders[h].classList.remove(
+				'in-presentation', 'presentation-collapsed');
+		}
+	},
+
+	// Expands the collapsed presentation that hides the slide at the given index, so that the
+	// slide shows. The first slide of a collapsed presentation shows as its tile already.
+	_revealPart: function (index) {
+		const img = this._previewTiles[index];
+		if (!img || !img._part)
+			return;
+		for (let h = 0; h < this._presentationHeaders.length; h++) {
+			const header = this._presentationHeaders[h];
+			if (this._expandedPresentations.has(header._link.id) ||
+			    header._link.slides.indexOf(img._part) <= 0)
+				continue;
+			const run = this._presentationRun(header._link, this._partIndexes());
+			if (!run)
+				continue;
+			this._expandedPresentations.add(header._link.id);
+			this._applyPresentationCollapse(header, run);
+			this._ensureVisiblePreviews();
+		}
 	},
 
 	_openSectionContextMenu: function (section, sectionIndex, e) {
@@ -1517,10 +1798,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			});
 		}
 
-		var menuPosEl = this._getMenuPosEl();
-		var rect = this._container.getBoundingClientRect();
-		menuPosEl.style.left = (e.clientX - rect.left) + 'px';
-		menuPosEl.style.top = (e.clientY - rect.top) + 'px';
+		var menuPosEl = this._menuPosElAt(e);
 
 		var callback = function (objectType, eventType, object, data, entry) {
 			if (eventType !== 'selected')
@@ -1588,6 +1866,70 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 		JSDialog.OpenDropdown(
 			'slide-section-menu',
+			menuPosEl,
+			entries,
+			callback,
+			'',
+			false,
+			false,
+			true,
+		);
+	},
+
+	// The menu of a presentation header: the presentation is brought up to date from its file
+	// while the file can be read, and its link taken off, on its own or with every link under
+	// it.
+	_openPresentationContextMenu: function (link, e) {
+		var that = this;
+		const links = this._map.slideLinks;
+
+		var entries = [];
+		if (links.isUpdatable(link.id)) {
+			entries.push({
+				id: 'updatePresentation',
+				type: 'comboboxentry',
+				text: _('Update Presentation'),
+				img: 'updateall',
+				pos: 0,
+			});
+		}
+		entries.push({
+			id: 'unlinkPresentation',
+			type: 'comboboxentry',
+			text: _('Unlink Presentation'),
+			img: 'removehyperlink',
+			pos: 0,
+		});
+		entries.push({
+			id: 'unlinkPresentationAndContents',
+			type: 'comboboxentry',
+			text: _('Unlink Presentation & Contents'),
+			img: 'removehyperlink',
+			pos: 0,
+		});
+
+		var menuPosEl = this._menuPosElAt(e);
+
+		var callback = function (objectType, eventType, object, data, entry) {
+			if (eventType !== 'selected')
+				return false;
+			switch (entry.id) {
+			case 'updatePresentation':
+				that._map.slideLinks.update(link.id);
+				break;
+			case 'unlinkPresentation':
+				that._map.slideLinks.breakLink(link.id, false);
+				break;
+			case 'unlinkPresentationAndContents':
+				that._map.slideLinks.breakLink(link.id, true);
+				break;
+			}
+			JSDialog.CloseAllDropdowns();
+			return true;
+		};
+
+		JSDialog.OpenDropdown(
+			'slide-presentation-menu',
 			menuPosEl,
 			entries,
 			callback,
@@ -2629,6 +2971,14 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			this._removeDropGap(state);
 	},
 
+	// The header of the presentation whose first section the given section
+	// header is, or null for any other section header.
+	_presentationHeaderBefore: function (sectionHeader) {
+		const previous = sectionHeader.previousElementSibling;
+		return previous && previous.classList.contains('slide-presentation-header') ?
+			previous : null;
+	},
+
 	// The header of the section whose first slide sits at the given slide
 	// index, or null when no section starts there.
 	_sectionHeaderAt: function (slideIndex) {
@@ -2663,7 +3013,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			if (state.draggedParts.indexOf(i) !== -1)
 				continue;
 			const frame = this._previewTiles[i].parentNode;
-			if (frame.classList.contains('section-collapsed'))
+			// A frame hidden in a collapsed section or presentation measures as
+			// nothing.
+			if (this._isFrameHidden(frame))
 				continue;
 			const rect = frame.getBoundingClientRect();
 			let pointerBefore;
@@ -2704,9 +3056,15 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		// slides become the section's first slides, so its gap keeps to
 		// the spot below the header.
 		let intoSection = null;
-		const boundaryHeader =
+		const sectionHeader =
 			(!state.external && gapFrame && gapSide === 'before') ?
 				this._sectionHeaderAt(insertIndex) : null;
+		// The header of the first section of a collapsed presentation is
+		// hidden, and the header of the presentation stands above the slide
+		// in its place.
+		const boundaryHeader =
+			sectionHeader && sectionHeader.classList.contains('presentation-collapsed') ?
+				this._presentationHeaderBefore(sectionHeader) : sectionHeader;
 		if (boundaryHeader) {
 			const rect = boundaryHeader.getBoundingClientRect();
 			// A grid header spans its own full row, so the grid boundary
@@ -2715,11 +3073,14 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			const middle = useX ?
 				rect.left + rect.width / 2 : rect.top + rect.height / 2;
 			const pointer = useX ? state.pointer.x : state.pointer.y;
-			if (pointer < middle)
-				gapFrame = boundaryHeader;
-			else
+			if (pointer < middle) {
+				// Above the first section of a presentation the slides land
+				// before the presentation, so the gap opens above its header.
+				gapFrame = this._presentationHeaderBefore(sectionHeader) || sectionHeader;
+			} else {
 				intoSection = parseInt(
-					boundaryHeader.getAttribute('data-section-index'), 10);
+					sectionHeader.getAttribute('data-section-index'), 10);
+			}
 		}
 
 		state.insertIndex = insertIndex;
@@ -2868,15 +3229,18 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		// When the slides stay outside the section that starts at the
 		// anchor, they also go in front of its header.
 		if (!intoSection && anchorNode) {
-			const nodeBefore = anchorNode.previousElementSibling;
-			if (nodeBefore && nodeBefore.classList.contains('slide-section-header'))
+			let nodeBefore = anchorNode.previousElementSibling;
+			while (nodeBefore && nodeBefore.classList.contains('slide-section-header')) {
 				anchorNode = nodeBefore;
+				nodeBefore = anchorNode.previousElementSibling;
+			}
 		}
 		for (let i = 0; i < draggedTiles.length; i++) {
 			const frame = draggedTiles[i].parentNode;
-			// Moving takes a slide out of its section; when it lands in a
-			// collapsed one, the next sections update hides it again.
-			frame.classList.remove('section-collapsed');
+			// Moving takes a slide out of its section and its presentation. When it
+			// lands in a collapsed one, the next sections update hides it again.
+			frame.classList.remove(
+				'section-collapsed', 'presentation-collapsed', 'presentation-tile');
 			this._partsPreviewCont.insertBefore(frame, anchorNode);
 		}
 		const insertAt = anchorTile ?

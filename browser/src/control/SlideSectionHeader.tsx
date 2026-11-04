@@ -24,6 +24,9 @@ interface SlideSectionHeaderOptions {
   // rather than selecting the section's slides. The slide import pane wants
   // this; the navigator selects on the row and renames on a second press.
   rowToggles?: boolean;
+  // The name a screen reader gives the chevron toggle, in place of "Toggle
+  // section <name>", for a header that is no section's.
+  toggleLabel?: string;
   // A checkbox at the end of the row that takes the section's slides into
   // the selection or out of it. Partial means some but not all of them.
   pick?: {
@@ -65,7 +68,11 @@ function buildSlideSectionHeader(
         type="button"
         class="slide-section-toggle ui-expander-btn"
         aria-expanded={collapsed ? 'false' : 'true'}
-        aria-label={_('Toggle section %1').replace('%1', name)}
+        aria-label={
+          options && options.toggleLabel
+            ? options.toggleLabel
+            : _('Toggle section %1').replace('%1', name)
+        }
         onClick={(e: MouseEvent) => {
           e.stopPropagation();
           e.preventDefault();
