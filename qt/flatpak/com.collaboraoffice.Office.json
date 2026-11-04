@@ -408,18 +408,18 @@
           "dest-filename": "Open_Sans.zip"
         },
         {
-          "url": "https://gerrit.collaboraoffice.com/src/quickjs-0.16.2-amalgam.zip",
-          "sha256": "866bad1e2f148b6f8144a4a3d4c3f8a0754495a6920fe56a7dd698cf0ad27f65",
+          "url": "https://gerrit.collaboraoffice.com/src/quickjs-0.18.0-amalgam.zip",
+          "sha256": "6c05066a6b62b483e2ba0f83d7a16688c6958182b214bfd693529434cef84a9e",
           "type": "file",
           "dest": "engine/external/tarballs",
-          "dest-filename": "quickjs-0.16.2-amalgam.zip"
+          "dest-filename": "quickjs-0.18.0-amalgam.zip"
         },
         {
-          "url": "https://gerrit.collaboraoffice.com/src/pdfium-8073.tar.bz2",
-          "sha256": "a3624f6f0ac46a7e190969d405aa7a07dbc342baf69f81192487575bf64055a5",
+          "url": "https://gerrit.collaboraoffice.com/src/pdfium-8138.tar.bz2",
+          "sha256": "6119ad004b199dc0abdc95757b5fb592cffa7b02aac590b561f892fa239bf430",
           "type": "file",
           "dest": "engine/external/tarballs",
-          "dest-filename": "pdfium-8073.tar.bz2"
+          "dest-filename": "pdfium-8138.tar.bz2"
         },
         {
           "url": "https://gerrit.collaboraoffice.com/src/poco-1.15.4-all.tar.bz2",
@@ -443,11 +443,11 @@
           "dest-filename": "antlr4-cpp-runtime-4.13.2-source.zip"
         },
         {
-          "url": "https://gerrit.collaboraoffice.com/src/xmlsec1-1.3.12.tar.gz",
-          "sha256": "24045199af12d93fe5fdbbbf7e386e823e4842071e9432e2b90ac108b889a923",
+          "url": "https://gerrit.collaboraoffice.com/src/xmlsec1-1.3.13.tar.gz",
+          "sha256": "7e500061eed734c55d74c786998e7562e55b1aaa72a2dff8ce3130b4c5b832d5",
           "type": "file",
           "dest": "engine/external/tarballs",
-          "dest-filename": "xmlsec1-1.3.12.tar.gz"
+          "dest-filename": "xmlsec1-1.3.13.tar.gz"
         },
         {
           "url": "https://gerrit.collaboraoffice.com/src/368f114c078f94214a308a74c7e991bc-crosextrafonts-20130214.tar.gz",
