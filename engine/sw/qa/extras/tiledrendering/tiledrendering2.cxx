@@ -3489,6 +3489,23 @@ void lcl_dragText(SwXTextDocument* pXTextDocument, Point aFrom, Point aTo, int n
         post(COKitMouseEventType::BUTTONUP, aTo, nModifier);
 }
 
+/// Moves the mouse of a drag that runs, with the left button still down, from aFrom to aTo in
+/// steps, as the client sends the moves of a drag that goes on. Positions are in twips. A view
+/// other than -1 is made the current view before every event.
+void lcl_continueDrag(SwXTextDocument* pXTextDocument, Point aFrom, Point aTo, int nView = -1)
+{
+    const int nSteps = 5;
+    for (int i = 1; i <= nSteps; ++i)
+    {
+        if (nView != -1)
+            KitHelper::setView(nView);
+        pXTextDocument->postMouseEvent(
+            COKitMouseEventType::MOVE, aFrom.getX() + (aTo.getX() - aFrom.getX()) * i / nSteps,
+            aFrom.getY() + (aTo.getY() - aFrom.getY()) * i / nSteps, 1, MOUSE_LEFT, 0);
+        Scheduler::ProcessEventsToIdle();
+    }
+}
+
 /// Releases the left button at aPos in the given view.
 void lcl_releaseButton(SwXTextDocument* pXTextDocument, int nView, Point aPos)
 {
@@ -4224,7 +4241,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextOverShapeHidesDropPos
     lcl_dragText(pXTextDocument, aFrom, aTo, 0, /*bRelease=*/false);
     CPPUNIT_ASSERT(aView.m_bOwnCursorAtDropPosition);
     CPPUNIT_ASSERT(!aView.m_bOwnCursorEmpty);
-    lcl_dragText(pXTextDocument, aTo, aOnShape, 0, /*bRelease=*/false);
+    lcl_continueDrag(pXTextDocument, aTo, aOnShape);
 
     // Then the view learns that the text would land nowhere there:
     CPPUNIT_ASSERT(aView.m_bOwnCursorAtDropPosition);
@@ -4282,7 +4299,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextOtherViewEditKeepsDro
 
     // And when the drag goes on to the rectangle, where the text would land nowhere, and the
     // second view types again:
-    lcl_dragText(pXTextDocument, aTo, aOnShape, 0, /*bRelease=*/false, nViewA);
+    lcl_continueDrag(pXTextDocument, aTo, aOnShape, nViewA);
     CPPUNIT_ASSERT(aViewA.m_bOwnCursorEmpty);
     typeInViewB();
 
@@ -4316,8 +4333,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextOverProtectedSectionH
                  /*bRelease=*/false);
     CPPUNIT_ASSERT(aView.m_bOwnCursorAtDropPosition);
     CPPUNIT_ASSERT(!aView.m_bOwnCursorEmpty);
-    lcl_dragText(pXTextDocument, aPoints.aEndOfFirst, aPoints.aInsideThird, 0,
-                 /*bRelease=*/false);
+    lcl_continueDrag(pXTextDocument, aPoints.aEndOfFirst, aPoints.aInsideThird);
 
     // Then the view learns that the text would land nowhere there:
     CPPUNIT_ASSERT(aView.m_bOwnCursorAtDropPosition);
