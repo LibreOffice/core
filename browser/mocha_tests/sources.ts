@@ -154,6 +154,7 @@
 /// <reference path="../src/canvas/vector/primitive/SingleLinePrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/WrongSpellPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/TextHighlight.ts" />
+/// <reference path="../src/canvas/vector/primitive/TextHierarchyPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/TextSimplePortionPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/TextDecoratedPortionPrimitive.ts" />
 /// <reference path="../src/canvas/vector/primitive/TransformPrimitive.ts" />

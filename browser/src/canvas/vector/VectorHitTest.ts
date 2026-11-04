@@ -385,11 +385,13 @@ namespace cool {
 					// A shadow cannot be hit.
 					return undefined;
 
-				case 'textHierarchyField':
+				case TextHierarchyFieldPrimitive.type:
 					// The text of a hyperlink field answers as a link.
 					return VectorHitTest.hit(primitive.children, position, range, {
 						...walk,
-						link: walk.link || fields.fieldType === 'url',
+						link:
+							walk.link ||
+							(primitive as TextHierarchyFieldPrimitive).fieldType === 'url',
 					});
 
 				default:
@@ -796,7 +798,6 @@ namespace cool {
 
 	/// The fields the tests read, which the types of primitive carry in different combinations.
 	interface HitFields extends Primitive {
-		fieldType?: string;
 		matrix?: number[];
 		path?: string;
 		clip?: string;

@@ -262,7 +262,7 @@ namespace cool {
 		): TextRun[] {
 			if (!primitives) return out;
 			for (const primitive of primitives) {
-				if (primitive.type === TextRun.bulletType) continue;
+				if (primitive.type === TextHierarchyBulletPrimitive.type) continue;
 				let childMatrix = matrix;
 				if (primitive.type === TransformPrimitive.type) {
 					const transformMatrix = Matrix2D.fromArray(
@@ -279,9 +279,6 @@ namespace cool {
 			}
 			return out;
 		}
-
-		// The node that holds the bullet or the numbering label of a paragraph.
-		private static readonly bulletType = 'textHierarchyBullet';
 
 		private static isTextRun(primitive: Primitive): boolean {
 			return (
