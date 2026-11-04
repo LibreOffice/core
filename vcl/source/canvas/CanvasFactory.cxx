@@ -18,91 +18,27 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
-#include <algorithm>
-#include <mutex>
-#include <unordered_map>
-#include <utility>
-#include <vector>
+#include <CanvasFactory.hxx>
 
-#include <com/sun/star/configuration/theDefaultProvider.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <comphelper/propertysequence.hxx>
+#include <comphelper/configuration.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/functional.hxx>
 #include <o3tl/string_view.hxx>
+#include <sal/log.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
-#include <comphelper/configuration.hxx>
 #include <officecfg/Office/Canvas.hxx>
+
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/XServiceName.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-
-namespace
-{
-
-class CanvasFactory
-    : public ::cppu::WeakImplHelper< lang::XServiceInfo,
-                                      lang::XMultiComponentFactory,
-                                      lang::XMultiServiceFactory >
-{
-    typedef std::pair< OUString, Sequence< OUString > > AvailPair;
-
-    mutable std::mutex                m_mutex;
-    Reference<XComponentContext>      m_xContext;
-    std::unordered_map<OUString, Sequence<OUString>> m_aAvailableImplementations;
-    std::unordered_map<OUString, Sequence<OUString>> m_aAcceleratedImplementations;
-    std::unordered_map<OUString, Sequence<OUString>> m_aAAImplementations;
-    mutable std::unordered_map<OUString, OUString> m_aCachedImplementations;
-    mutable bool                      m_bCacheHasForcedLastImpl;
-    mutable bool                      m_bCacheHasUseAcceleratedEntry;
-    mutable bool                      m_bCacheHasUseAAEntry;
-
-    void checkConfigFlag( bool& r_bFlag,
-                          bool& r_CacheFlag,
-                          bool bCurrentConfigValue ) const;
-    Reference<XInterface> use(
-        OUString const & serviceName,
-        Sequence<Any> const & args,
-        Reference<XComponentContext> const & xContext ) const;
-    Reference<XInterface> lookupAndUse(
-        OUString const & serviceName, Sequence<Any> const & args,
-        Reference<XComponentContext> const & xContext ) const;
-
-public:
-    virtual ~CanvasFactory() override;
-    explicit CanvasFactory( Reference<XComponentContext> const & xContext );
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName ) override;
-    virtual Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-
-    // XMultiComponentFactory
-    virtual Sequence<OUString> SAL_CALL getAvailableServiceNames() override;
-    virtual Reference<XInterface> SAL_CALL createInstanceWithContext(
-        OUString const & name,
-        Reference<XComponentContext> const & xContext ) override;
-    virtual Reference<XInterface> SAL_CALL
-    createInstanceWithArgumentsAndContext(
-        OUString const & name,
-        Sequence<Any> const & args,
-        Reference<XComponentContext> const & xContext ) override;
-
-    // XMultiServiceFactory
-    virtual Reference<XInterface> SAL_CALL createInstance(
-        OUString const & name ) override;
-    virtual Reference<XInterface> SAL_CALL createInstanceWithArguments(
-        OUString const & name, Sequence<Any> const & args ) override;
-};
 
 CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
     m_xContext(xContext),
@@ -390,8 +326,6 @@ Reference<XInterface> CanvasFactory::createInstanceWithArguments(
     return createInstanceWithArgumentsAndContext(
         name, args, m_xContext );
 }
-
-} // anon namespace
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
