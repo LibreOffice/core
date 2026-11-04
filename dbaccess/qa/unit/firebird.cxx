@@ -16,10 +16,15 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/ParametersRequest.hpp>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
+#include <com/sun/star/sdb/XCompletedExecution.hpp>
+#include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
+#include <com/sun/star/sdb/XParametersSupplier.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
@@ -33,12 +38,18 @@
 #include <com/sun/star/sdbc/XStatement.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <connectivity/predicateinput.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <unotools/tempfile.hxx>
+
+#include <map>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdb;
@@ -69,6 +80,7 @@ public:
     void testSaveACopyKeepsOriginal();
     void testUnsavedDataNeedsRecovery();
     void testDataAfterRecoveryFileSavedOnClose();
+    void testTdf174314_UnnamedParametersOnOneColumn();
 
     CPPUNIT_TEST_SUITE(FirebirdTest);
     CPPUNIT_TEST(testEmptyDBConnection);
@@ -91,6 +103,7 @@ public:
     CPPUNIT_TEST(testSaveACopyKeepsOriginal);
     CPPUNIT_TEST(testUnsavedDataNeedsRecovery);
     CPPUNIT_TEST(testDataAfterRecoveryFileSavedOnClose);
+    CPPUNIT_TEST(testTdf174314_UnnamedParametersOnOneColumn);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -906,6 +919,160 @@ void FirebirdTest::testDataAfterRecoveryFileSavedOnClose()
     uno::Reference<XOfficeDatabaseDocument> xReopened = getDocumentForUrl(maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("rows found in the document file after close", sal_Int32(2),
                                  lcl_countRecoveredRows(getConnectionForDocument(xReopened)));
+}
+
+namespace
+{
+// Answers the parameter dialog's request with the value given for each parameter name, and
+// records the names it was asked for, separated by commas
+class ParameterHandler : public cppu::WeakImplHelper<task::XInteractionHandler>
+{
+    std::map<OUString, util::Date> maValues;
+
+public:
+    OUStringBuffer maAsked;
+
+    explicit ParameterHandler(std::map<OUString, util::Date> aValues)
+        : maValues(std::move(aValues))
+    {
+    }
+
+    void SAL_CALL handle(const uno::Reference<task::XInteractionRequest>& xRequest) override
+    {
+        ParametersRequest aRequest;
+        if (!(xRequest->getRequest() >>= aRequest))
+            return;
+        const sal_Int32 nCount = aRequest.Parameters->getCount();
+        Sequence<beans::PropertyValue> aValues(nCount);
+        auto pValues = aValues.getArray();
+        for (sal_Int32 i = 0; i < nCount; ++i)
+        {
+            uno::Reference<beans::XPropertySet> xParameter(aRequest.Parameters->getByIndex(i),
+                                                           UNO_QUERY_THROW);
+            pValues[i].Name = xParameter->getPropertyValue(u"Name"_ustr).get<OUString>();
+            maAsked.append((maAsked.isEmpty() ? u""_ustr : u","_ustr) + pValues[i].Name);
+            if (auto it = maValues.find(pValues[i].Name); it != maValues.end())
+                pValues[i].Value <<= it->second;
+        }
+        for (const auto& xContinuation : xRequest->getContinuations())
+        {
+            uno::Reference<XInteractionSupplyParameters> xSupply(xContinuation, UNO_QUERY);
+            if (xSupply.is())
+            {
+                xSupply->setParameters(aValues);
+                xSupply->select();
+                break;
+            }
+        }
+    }
+};
+
+// Returns the names of the query's parameters, separated by commas
+OUString lcl_getParameterNames(const uno::Reference<XConnection>& xConnection,
+                               const OUString& rQuery)
+{
+    uno::Reference<XParametersSupplier> xSupplier(lcl_createComposer(xConnection, rQuery),
+                                                  UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xParameters = xSupplier->getParameters();
+    OUStringBuffer aNames;
+    for (sal_Int32 i = 0; i < xParameters->getCount(); ++i)
+    {
+        if (i > 0)
+            aNames.append(",");
+        aNames.append(
+            uno::Reference<beans::XPropertySet>(xParameters->getByIndex(i), UNO_QUERY_THROW)
+                ->getPropertyValue(u"Name"_ustr)
+                .get<OUString>());
+    }
+    return aNames.makeStringAndClear();
+}
+
+// Runs the query in a row set, as Base does when a query is opened, and returns the IDs of the
+// rows, separated by commas
+OUString lcl_executeWithParameters(const uno::Reference<XConnection>& xConnection,
+                                   const OUString& rQuery, ParameterHandler& rHandler)
+{
+    uno::Reference<beans::XPropertySet> xRowSet(
+        comphelper::getProcessServiceFactory()->createInstance(u"com.sun.star.sdb.RowSet"_ustr),
+        UNO_QUERY_THROW);
+    xRowSet->setPropertyValue(u"ActiveConnection"_ustr, Any(xConnection));
+    xRowSet->setPropertyValue(u"CommandType"_ustr, Any(CommandType::COMMAND));
+    xRowSet->setPropertyValue(u"Command"_ustr, Any(rQuery));
+    uno::Reference<XCompletedExecution>(xRowSet, UNO_QUERY_THROW)->executeWithCompletion(&rHandler);
+
+    OUStringBuffer aIDs;
+    uno::Reference<XResultSet> xResultSet(xRowSet, UNO_QUERY_THROW);
+    uno::Reference<XRow> xRow(xRowSet, UNO_QUERY_THROW);
+    while (xResultSet->next())
+    {
+        if (!aIDs.isEmpty())
+            aIDs.append(",");
+        aIDs.append(xRow->getInt(1));
+    }
+    uno::Reference<lang::XComponent>(xRowSet, UNO_QUERY_THROW)->dispose();
+    return aIDs.makeStringAndClear();
+}
+}
+
+/**
+ * tdf#174314: each "?" is a parameter of its own. Before the fix, both "?" on the same column
+ * were named after the column, the parameter dialog asked for one value, and
+ * "BETWEEN ? AND ?" ran as "BETWEEN x AND x".
+ */
+void FirebirdTest::testTdf174314_UnnamedParametersOnOneColumn()
+{
+    createTempCopy(u"firebird_empty.odb");
+    uno::Reference<XOfficeDatabaseDocument> xDocument = getDocumentForUrl(maTempFile.GetURL());
+    // this old test document doesn't replace named parameters, as new documents do
+    uno::Reference<beans::XPropertySet> xSettings(
+        uno::Reference<beans::XPropertySet>(xDocument->getDataSource(), UNO_QUERY_THROW)
+            ->getPropertyValue(u"Settings"_ustr),
+        UNO_QUERY_THROW);
+    xSettings->setPropertyValue(u"ParameterNameSubstitution"_ustr, Any(true));
+    uno::Reference<XConnection> xConnection = getConnectionForDocument(xDocument);
+
+    uno::Reference<XStatement> xStmt = xConnection->createStatement();
+    xStmt->execute(u"CREATE TABLE \"T\" (\"ID\" INTEGER NOT NULL PRIMARY KEY, \"D\" DATE)"_ustr);
+    for (sal_Int32 i = 1; i <= 5; ++i)
+        xStmt->execute("INSERT INTO \"T\" VALUES(" + OUString::number(i) + ", '2026-01-0"
+                       + OUString::number(i) + "')");
+    xConnection->commit();
+    uno::Reference<util::XRefreshable>(
+        uno::Reference<sdbcx::XTablesSupplier>(xConnection, UNO_QUERY_THROW)->getTables(),
+        UNO_QUERY_THROW)
+        ->refresh();
+
+    const OUString aQueries[] = {
+        u"SELECT \"ID\" FROM \"T\" WHERE \"D\" BETWEEN ? AND ? ORDER BY \"ID\""_ustr,
+        u"SELECT \"ID\" FROM \"T\" WHERE \"D\" >= ? AND \"D\" <= ? ORDER BY \"ID\""_ustr,
+    };
+    for (auto const& rQuery : aQueries)
+    {
+        CPPUNIT_ASSERT_EQUAL(u"D,D2"_ustr, lcl_getParameterNames(xConnection, rQuery));
+
+        rtl::Reference<ParameterHandler> xHandler(new ParameterHandler(
+            { { u"D"_ustr, util::Date(2, 1, 2026) }, { u"D2"_ustr, util::Date(4, 1, 2026) } }));
+        const OUString sIDs = lcl_executeWithParameters(xConnection, rQuery, *xHandler);
+        CPPUNIT_ASSERT_EQUAL(u"D,D2"_ustr, xHandler->maAsked.toString());
+        CPPUNIT_ASSERT_EQUAL(u"2,3,4"_ustr, sIDs);
+    }
+
+    // a named parameter later in the statement keeps its name for itself
+    CPPUNIT_ASSERT_EQUAL(
+        u"D,D3,D2"_ustr,
+        lcl_getParameterNames(
+            xConnection,
+            u"SELECT \"ID\" FROM \"T\" WHERE \"D\" >= ? AND \"D\" <= ? AND \"ID\" <> :D2"_ustr));
+
+    // a named parameter used twice is still one parameter, asked once
+    const OUString sNamed
+        = u"SELECT \"ID\" FROM \"T\" WHERE \"D\" >= :X AND \"D\" <= :X ORDER BY \"ID\""_ustr;
+    CPPUNIT_ASSERT_EQUAL(u"X,X"_ustr, lcl_getParameterNames(xConnection, sNamed));
+    rtl::Reference<ParameterHandler> xHandler(
+        new ParameterHandler({ { u"X"_ustr, util::Date(2, 1, 2026) } }));
+    const OUString sIDs = lcl_executeWithParameters(xConnection, sNamed, *xHandler);
+    CPPUNIT_ASSERT_EQUAL(u"X"_ustr, xHandler->maAsked.toString());
+    CPPUNIT_ASSERT_EQUAL(u"2"_ustr, sIDs);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(FirebirdTest);

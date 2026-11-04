@@ -1144,6 +1144,42 @@ namespace
         }
         return sColumnName;
     }
+
+    // true if the statement has a named parameter (":name" or "[name]") with this name, also one
+    // that comes later than the parameter being named
+    bool lcl_hasNamedParameter( const OSQLParseNode* _pNode, const OUString& _rName )
+    {
+        if ( SQL_ISRULE( _pNode, parameter ) )
+        {
+            const OSQLParseNode* pMark = _pNode->getChild(0);
+            return ( SQL_ISPUNCTUATION( pMark, ":" ) || SQL_ISPUNCTUATION( pMark, "[" ) )
+                && _pNode->getChild(1)->getTokenValue() == _rName;
+        }
+        for ( size_t i = 0; i < _pNode->count(); ++i )
+        {
+            if ( lcl_hasNamedParameter( _pNode->getChild(i), _rName ) )
+                return true;
+        }
+        return false;
+    }
+
+    // Parameters with the same name get one value, so a name that is already taken gets a
+    // number: "date", then "date2"
+    OUString lcl_getUniqueParameterName( const OSQLColumns& _rParameters, const OSQLParseNode* _pStatement,
+                                         const OUString& _rName )
+    {
+        const OUString sPropertyName = OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_NAME );
+        auto isTaken = [&]( const OUString& rCandidate )
+        {
+            return std::ranges::any_of( _rParameters, [&]( const auto& rParameter )
+                { return getString( rParameter->getPropertyValue( sPropertyName ) ) == rCandidate; } )
+                || ( _pStatement && lcl_hasNamedParameter( _pStatement, rCandidate ) );
+        };
+        OUString sName = _rName;
+        for ( sal_Int32 i = 2; isTaken( sName ); ++i )
+            sName = _rName + OUString::number( i );
+        return sName;
+    }
 }
 
 
@@ -1411,6 +1447,9 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
                         :   !_aColumnName.isEmpty()
                         ?   _aColumnName
                         :   u"?"_ustr;
+        // each "?" is a parameter of its own, also two of them on the same column, as in
+        // "date BETWEEN ? AND ?"
+        sParameterName = lcl_getUniqueParameterName( *m_aParameters, m_pParseTree, sParameterName );
     }
     else if (SQL_ISPUNCTUATION(pMark,":"))
     {
