@@ -126,7 +126,7 @@ describe(['tagmultiuser'], 'Follow me slide show', function() {
         //start following again
         cy.cSetActiveFrame('#iframe1');
         impressHelper.waitForSlideShowIdle(win1);
-        getSlideShowContent().find("#follow").click();
+        impressHelper.clickSlideShowNav(win1, '#follow');
         impressHelper.waitForSlideShowIdle(win1);
         getSlideShowCanvas().compareSnapshot('slide2_effect2', 0.07);
 
