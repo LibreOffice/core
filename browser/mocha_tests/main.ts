@@ -111,6 +111,7 @@
 /// <reference path="./AIChatMessageCodes.test.ts" />
 /// <reference path="./OtherViewCursorSection.test.ts" />
 /// <reference path="./TextSelectionSection.test.ts" />
+/// <reference path="./SlideImportSession.test.ts" />
 /// <reference path="./SlideLinks.test.ts" />
 /// <reference path="./SlideLinkToolbar.test.ts" />
 /// <reference path="./ExportFormats.test.ts" />

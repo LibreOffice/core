@@ -515,9 +515,9 @@ class SlideImportPane {
     }
   }
 
-  // The slides a user chose are written out by the source as a presentation
-  // of their own. The server stages it in this document's jail and names it
-  // here, and the insert takes that file.
+  // The slides a user chose are written out by the source as a presentation of their own. The
+  // server stages it in this document's jail and names it here, and the insert takes that
+  // file. A whole insert has the source write every page it holds.
   private onExportWanted(): void {
     const insert = this.session.getPendingInsert();
     if (!insert) return;
@@ -528,18 +528,22 @@ class SlideImportPane {
       return;
     }
 
-    const parts = insert.slides
-      .map((index: number) => source.slideParts[index])
-      .filter((part: string) => !!part);
-    if (!parts.length) {
-      this.session.exportFailed();
-      return;
+    let command = 'exportslides';
+    if (!insert.whole) {
+      const parts = insert.slides
+        .map((index: number) => source.slideParts[index])
+        .filter((part: string) => !!part);
+      if (!parts.length) {
+        this.session.exportFailed();
+        return;
+      }
+      command += ' slides=' + parts.join(',');
     }
 
     // Update Linked Slides asks the same document for its pages, so only the
     // export this pane asked for is taken as the file an insert reads.
     this.awaitingExport = true;
-    this.sendRemoteCommand(source, 'exportslides slides=' + parts.join(','));
+    this.sendRemoteCommand(source, command);
   }
 
   private onRemoteExport(json: string): void {
@@ -558,7 +562,6 @@ class SlideImportPane {
     const source = this.activeSource();
     this.session.insertStaged(
       stagedName,
-      insert.at,
       source && this.session.insertAsSection
         ? this.wholeSectionOf(source, insert.slides)
         : null,
@@ -1459,6 +1462,20 @@ class SlideImportPane {
         text: _('Select all slides'),
       });
 
+    // The whole file goes in as one presentation linked to it, in a document whose format
+    // keeps links. The pane inserts one file at a time, so the entry waits for an insert that
+    // is running.
+    if (
+      source.slides.length &&
+      this.session.formatKeepsLinks() &&
+      this.session.state !== 'inserting'
+    )
+      entries.push({
+        id: 'linkwhole',
+        type: 'comboboxentry',
+        text: _('Link whole presentation'),
+      });
+
     const linked = this.linkedSource(source);
     if (linked)
       entries.push({
@@ -1501,6 +1518,10 @@ class SlideImportPane {
         case 'selectall':
           this.activate(source);
           this.session.setSelection(source.slides.map((slide) => slide.index));
+          break;
+        case 'linkwhole':
+          this.activate(source);
+          this.session.insertWhole(source.name);
           break;
         case 'update':
           this.map.slideLinks.updateSource(linked);

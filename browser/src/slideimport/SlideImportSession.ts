@@ -56,6 +56,18 @@ interface SlideImportError {
 	retry: (() => void) | null;
 }
 
+// One insert of the pane: the slides asked of the source, counted from zero, and the slide
+// of this document the pages go in before, counted from zero, or the count of slides for the
+// end of the document. A whole insert takes every slide of the source, lists none, and links
+// the pages as one presentation recorded under name, the source as the user knows it. name is
+// empty for an insert that is not whole.
+interface SlideImportInsert {
+	slides: number[];
+	at: number;
+	whole: boolean;
+	name: string;
+}
+
 class SlideImportSession {
 	public state: SlideImportState = 'idle';
 	public fileName: string = '';
@@ -82,8 +94,8 @@ class SlideImportSession {
 	private map: any;
 	// Insert commands sent whose reply has not arrived yet.
 	private pendingInserts: number = 0;
-	// The slides an insert is waiting on the source to write, and where they go.
-	private pendingInsert: { slides: number[]; at: number } | null = null;
+	// The insert waiting on the source to write its pages.
+	private pendingInsert: SlideImportInsert | null = null;
 
 	constructor(map: any) {
 		this.map = map;
@@ -98,13 +110,17 @@ class SlideImportSession {
 	// file. The pane asks for the export and hands the staged name over. section is the section
 	// of the source the slides go in as, which they make up all of and nothing else, or null for
 	// slides that go in as slides. The section is named to the document by the identifier and
-	// the name it has in the source, and a linked section follows that source section.
+	// the name it has in the source, and a linked section follows that source section. The
+	// pages of a whole insert go in as one presentation linked to the source, whatever the
+	// link choice and the section say, since linking is what a whole insert is for. The
+	// insert itself is the pending one.
 	public insertStaged(
 		stagedName: string,
-		at: number,
 		section: SlideImportSection | null,
 	): void {
-		const link = this.linkToSource && this.canLink;
+		const insert = this.pendingInsert;
+		if (!insert) return;
+		const link = this.canLink && (insert.whole || this.linkToSource);
 		const source = this.sourceName();
 		// A linked page records the time its source was last modified now, so a
 		// later comparison tells whether it is up to date.
@@ -112,34 +128,62 @@ class SlideImportSession {
 		// A page linked by position records the place its slide holds in the source, which is
 		// the slide this insert asked the source for, counted from one.
 		const positions =
-			link && this.linkByPosition && this.pendingInsert
-				? this.pendingInsert.slides.map((index: number) => index + 1)
+			link && this.linkByPosition
+				? insert.slides.map((index: number) => index + 1)
 				: [];
 		app.socket.sendMessage(
 			'slideimport insert file=' +
 				encodeURIComponent(stagedName) +
 				(source ? ' source=' + encodeURIComponent(source) : '') +
 				' at=' +
-				at +
+				insert.at +
 				' keepdesign=' +
 				(this.keepDesign ? '1' : '0') +
 				' link=' +
 				(link ? '1' : '0') +
 				(positions.length ? ' sourcepositions=' + positions.join(',') : '') +
 				(time ? ' time=' + encodeURIComponent(time) : '') +
-				(section
-					? ' as=section id=' +
-						encodeURIComponent(section.id) +
-						' name=' +
-						encodeURIComponent(section.name)
-					: ' as=slides'),
+				SlideImportSession.insertUnit(insert, section),
 		);
 	}
 
-	// The persistent link of the document the slides come from.
+	// The tail of the insert command that says what the pages go in as: the whole file as a
+	// presentation under the name the insert records, the given section, or plain slides.
+	private static insertUnit(
+		insert: SlideImportInsert,
+		section: SlideImportSection | null,
+	): string {
+		if (insert.whole)
+			return ' as=presentation name=' + encodeURIComponent(insert.name);
+		if (section)
+			return (
+				' as=section id=' +
+				encodeURIComponent(section.id) +
+				' name=' +
+				encodeURIComponent(SlideImportSession.recordableName(section.name))
+			);
+		return ' as=slides';
+	}
+
+	// The given name as a link records it: without control characters and at most 128 UTF-16
+	// code units long, which is as much of a name as the document keeps, cut so that a
+	// character of two code units stays whole.
+	public static recordableName(name: string): string {
+		let kept = '';
+		for (const character of name)
+			if (character.charCodeAt(0) >= 0x20) kept += character;
+		if (kept.length <= 128) return kept;
+		kept = kept.substring(0, 128);
+		const last = kept.charCodeAt(127);
+		return last >= 0xd800 && last <= 0xdbff ? kept.substring(0, 127) : kept;
+	}
+
+	// The persistent link of the document the slides come from. An error and its retry belong
+	// to the insert of the source left behind, so they go with it.
 	public setSource(fileName: string): void {
 		this.fileName = fileName;
 		this.canLink = this.sourceName() !== '' && this.formatKeepsLinks();
+		this.setError(null);
 		this.setState('opening');
 	}
 
@@ -221,7 +265,7 @@ class SlideImportSession {
 	}
 
 	// The slide the next insert lands after, counted from one, or 0 for the
-	// end of the document. insertSelected takes the same route.
+	// end of the document.
 	public insertAfter(): number {
 		const docLayer = this.map._docLayer;
 		if (!docLayer || docLayer._selectedPart === undefined) return 0;
@@ -233,12 +277,35 @@ class SlideImportSession {
 		if (this.state !== 'ready' || this.selection.size === 0) return;
 
 		const slides = Array.from(this.selection).sort((a, b) => a - b);
+		this.requestInsert({
+			slides: slides,
+			at: this.insertAt(),
+			whole: false,
+			name: '',
+		});
+	}
+
+	// Inserts every slide of the source after the slide the user is on, linked as one
+	// presentation that records the source under the given name, as far as a link keeps it.
+	public insertWhole(name: string): void {
+		if (this.state !== 'ready' || !this.canLink) return;
+
+		this.requestInsert({
+			slides: [],
+			at: this.insertAt(),
+			whole: true,
+			name: SlideImportSession.recordableName(name),
+		});
+	}
+
+	// The slide the pages of an insert go in before, counted from zero: the one after the
+	// slide the user is on, or the count of slides when no slide is on show, which puts them
+	// at the end.
+	private insertAt(): number {
 		const docLayer = this.map._docLayer;
-		const at =
-			docLayer && docLayer._selectedPart !== undefined
-				? docLayer._selectedPart + 1
-				: this.map.getNumberOfParts();
-		this.requestInsert(slides, at);
+		return docLayer && docLayer._selectedPart !== undefined
+			? docLayer._selectedPart + 1
+			: this.map.getNumberOfParts();
 	}
 
 	// A thumbnail dragged onto the slides list drops here. pos follows the
@@ -253,7 +320,7 @@ class SlideImportSession {
 			.sort((a: number, b: number) => a - b);
 		if (wanted.length === 0) return;
 		const pos = typeof detail.pos === 'number' ? detail.pos : -1;
-		this.requestInsert(wanted, pos + 1);
+		this.requestInsert({ slides: wanted, at: pos + 1, whole: false, name: '' });
 	}
 
 	public close(): void {
@@ -281,7 +348,7 @@ class SlideImportSession {
 		if (this.state === 'inserting') this.setState('ready');
 		this.setError({
 			message: _('The slides of the source could not be read.'),
-			retry: insert ? () => this.requestInsert(insert.slides, insert.at) : null,
+			retry: insert ? () => this.requestInsert(insert) : null,
 		});
 	}
 
@@ -309,11 +376,14 @@ class SlideImportSession {
 			this.pendingInserts = Math.max(0, this.pendingInserts - 1);
 			// The slides of the insert are in the document, so nothing is waiting to be
 			// inserted whatever state the pane has moved on to.
+			const insert = this.pendingInsert;
 			this.pendingInsert = null;
 			// The insert this answers was abandoned by a close or a new
 			// file pick; the session has moved on.
 			if (this.state !== 'inserting') return;
-			this.selection.clear();
+			// The pick is in, so it is done with. A whole insert takes no pick, so the slides
+			// picked meanwhile stay picked.
+			if (!insert || !insert.whole) this.selection.clear();
 			this.setState('ready');
 			this.fireEvent('slideimport:inserted', { count: message.count });
 		}
@@ -332,9 +402,7 @@ class SlideImportSession {
 				this.setState('ready');
 				this.setError({
 					message: _('Inserting the slides failed.'),
-					retry: insert
-						? () => this.requestInsert(insert.slides, insert.at)
-						: null,
+					retry: insert ? () => this.requestInsert(insert) : null,
 				});
 			} else {
 				// The pane was closed while the insert was still running.
@@ -353,18 +421,18 @@ class SlideImportSession {
 		}
 	}
 
-	// The slides a user chose, and where they go. The pane asks the source to write them out
-	// and hands back the name they were staged under.
-	public requestInsert(slides: number[], at: number): void {
-		this.pendingInsert = { slides: slides, at: at };
+	// The insert a user asked for. The pane asks the source to write the pages out and hands
+	// back the name they were staged under.
+	public requestInsert(insert: SlideImportInsert): void {
+		this.pendingInsert = insert;
 		this.pendingInserts++;
 		this.setError(null);
 		this.setState('inserting');
 		this.fireEvent('slideimport:exportwanted', {});
 	}
 
-	/// The slides the insert being prepared asks for, in the order they were chosen.
-	public getPendingInsert(): { slides: number[]; at: number } | null {
+	/// The insert being prepared, with its slides in the order they were chosen.
+	public getPendingInsert(): SlideImportInsert | null {
 		return this.pendingInsert;
 	}
 
