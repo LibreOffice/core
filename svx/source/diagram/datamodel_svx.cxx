@@ -1499,7 +1499,7 @@ AddedDiagramNode DiagramData_svx::insertDiagramNode(std::u16string_view rParentI
     aChangedParts.push_back(DomMapFlag::OOXDrawingImageRels);
     aChangedParts.push_back(DomMapFlag::OOXDrawingHlinkRels);
 
-    return { aNewNodeId, aTemplateNodeId, aChangedParts };
+    return { aNewNodeId, aTemplateNodeId, std::move(aChangedParts) };
 }
 
 DiagramDataState::DiagramDataState(const Connections& aConnections, const Points& aPoints, const uno::Reference< drawing::XShape >& rRootShape)
