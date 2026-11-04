@@ -18,13 +18,16 @@ var desktopHelper = require('../../common/desktop_helper');
 
 		beforeEach(function() {
 			var path = helper.setupDocument('impress/apply_paragraph_props_text.odp');
-			if (view.vector)
+			if (view.vector) {
 				helper.loadDocument(path, true, undefined, undefined, 'vector=true');
-			else
+				// The load checks that need no tiles, so the sidebar is open and the
+				// canvas has its final size before the click below aims at the text box.
+				helper.documentChecks(true);
+			} else
 				helper.loadDocument(path);
 			cy.getFrameWindow().then(function(w) {
 				win = w;
-				// The stock load checks wait for tiles that a vector view lacks.
+				// A vector view has no tiles, so it waits for the slides instead.
 				cy.wrap(null).should(function() {
 					expect(win.app.impress.partList).to.have.length.greaterThan(0);
 				});
