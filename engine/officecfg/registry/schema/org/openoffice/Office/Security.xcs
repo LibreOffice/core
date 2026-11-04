@@ -52,7 +52,7 @@
         <info>
           <desc>Allow using insecure and/or unencrypted protocols such as HTTP, SMTP, FTP.</desc>
         </info>
-        <value>true</value>
+        <value>false</value>
       </prop>
       <prop oor:name="AllowInsecureUNORemoteProtocol" oor:type="xs:boolean" oor:nillable="false">
         <info>

@@ -16,6 +16,10 @@ $(eval $(call gb_Library_add_defs,unotest,\
 
 $(eval $(call gb_Library_use_sdk_api,unotest))
 
+$(eval $(call gb_Library_use_custom_headers,unotest,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_libraries,unotest,\
 	comphelper \
 	cppu \

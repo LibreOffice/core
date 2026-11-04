@@ -12,6 +12,8 @@
 #include <mutex>
 #include <utility>
 
+#include <comphelper/configuration.hxx>
+#include <officecfg/Office/Security.hxx>
 #include <osl/socket.hxx>
 #include <osl/thread.hxx>
 #include <rtl/string.hxx>
@@ -140,12 +142,29 @@ private:
     std::vector<Request> m_aRequests;
 };
 
-MockHttpServer::MockHttpServer(sal_uInt16 nPort, Handler aHandler)
-    : m_pThread(new Thread(nPort, std::move(aHandler)))
+namespace
 {
+void setAllowInsecureProtocols(bool bAllow)
+{
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch
+        = comphelper::ConfigurationChanges::create();
+    officecfg::Office::Security::Net::AllowInsecureProtocols::set(bAllow, pBatch);
+    pBatch->commit();
+}
 }
 
-MockHttpServer::~MockHttpServer() { stop(); }
+MockHttpServer::MockHttpServer(sal_uInt16 nPort, Handler aHandler)
+    : m_pThread(new Thread(nPort, std::move(aHandler)))
+    , m_bOldAllowInsecureProtocols(officecfg::Office::Security::Net::AllowInsecureProtocols::get())
+{
+    setAllowInsecureProtocols(true);
+}
+
+MockHttpServer::~MockHttpServer()
+{
+    stop();
+    setAllowInsecureProtocols(m_bOldAllowInsecureProtocols);
+}
 
 bool MockHttpServer::start() { return m_pThread->start(); }
 

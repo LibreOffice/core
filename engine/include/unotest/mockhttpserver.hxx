@@ -71,6 +71,8 @@ public:
 private:
     class Thread;
     std::unique_ptr<Thread> m_pThread;
+    /// The value of Office::Security::Net::AllowInsecureProtocols before the server existed.
+    const bool m_bOldAllowInsecureProtocols;
 };
 }
 
