@@ -1585,19 +1585,6 @@ abstract class SelectionSection extends CanvasSectionObject {
 	/// performance.now(), or null while no notice of it is shown.
 	private heldBackAt: number | null = null;
 
-	/// How long the notice of a key or a drag held back is fully seen, in milliseconds.
-	private static readonly holdBackSeen: number = 700;
-
-	/// How long the notice then takes to fade away, in milliseconds.
-	private static readonly holdBackFading: number = 400;
-
-	/*
-		How long an undo or a redo has to be waited for before a key or a drag held back for it is
-		told, in milliseconds. A connection of the usual speed answers well within this, so a key
-		pressed right after an undo there is held back for a moment without a word.
-	*/
-	private static readonly holdBackToldAfter: number = 1000;
-
 	/*
 		Shows that a key or a drag was held back for an undo or a redo that has been on its way for
 		a while: a notice below the selection, fully seen for a moment and then fading away. Each
@@ -1605,7 +1592,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 		in.
 	*/
 	public showTheHoldBack(): void {
-		if (ChangeOutbox.undoWaitedFor() < SelectionSection.holdBackToldAfter)
+		if (ChangeOutbox.undoWaitedFor() < VectorSettings.holdBackToldAfter())
 			return;
 
 		const shown = this.heldBackAt !== null;
@@ -1619,7 +1606,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 			this.heldBackAt !== null &&
 			(!ChangeOutbox.undoOnItsWay() ||
 				performance.now() - this.heldBackAt >
-					SelectionSection.holdBackSeen + SelectionSection.holdBackFading)
+					VectorSettings.holdBackSeen() + VectorSettings.holdBackFading())
 		)
 			this.heldBackAt = null;
 
@@ -1636,8 +1623,8 @@ abstract class SelectionSection extends CanvasSectionObject {
 		const past = performance.now() - this.heldBackAt;
 		const seen =
 			1 -
-			Math.max(0, past - SelectionSection.holdBackSeen) /
-				SelectionSection.holdBackFading;
+			Math.max(0, past - VectorSettings.holdBackSeen()) /
+				VectorSettings.holdBackFading();
 		const corners = this.cornersInView();
 		if (seen <= 0 || !corners.length) return;
 

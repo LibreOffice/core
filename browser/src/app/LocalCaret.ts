@@ -49,11 +49,6 @@ class LocalCaret {
 	/// while the engine has not been told.
 	private static sequence: number = 0;
 
-	/// How long the caret rests before the engine is told, in milliseconds. A held key moves
-	/// the caret many times a second, and the engine shows each caret to the toolbar and the
-	/// other views.
-	private static readonly restDelay: number = 300;
-
 	/// The timer that tells the engine once the caret rests, or null while none runs.
 	private static restTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -67,7 +62,7 @@ class LocalCaret {
 				LocalCaret.restTimer = null;
 				LocalCaret.tell();
 			},
-			LocalCaret.restDelay,
+			VectorSettings.caretRestDelay(),
 		);
 	}
 

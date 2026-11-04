@@ -38,6 +38,11 @@ class HandleLook {
 	/// How wide a handle of a share of one is, before the screen's own scale is taken in.
 	public static size: number = 12;
 
+	/// that size, or the one set for the view that draws from the objects
+	private static sizeNow(): number {
+		return VectorSettings.handleSize(HandleLook.size);
+	}
+
 	/// What share of that size each kind takes.
 	public static readonly shareOfTheSize: { [kind in HandleKind]: number } = {
 		framing: 1,
@@ -181,7 +186,9 @@ class HandleLook {
 
 	/// How wide a handle of that kind is drawn, in core pixels.
 	public static widthOf(kind: HandleKind): number {
-		return HandleLook.size * HandleLook.shareOfTheSize[kind] * app.dpiScale;
+		return (
+			HandleLook.sizeNow() * HandleLook.shareOfTheSize[kind] * app.dpiScale
+		);
 	}
 
 	/// How much a larger handle reaches beyond a handle of its kind on each side, as a share of
@@ -221,14 +228,16 @@ class HandleLook {
 	/// How far a band stands off from what it goes round, in core pixels.
 	public static distanceBeforeASurround(): number {
 		return (
-			HandleLook.size * HandleLook.shareOfTheSizeBeforeASurround * app.dpiScale
+			HandleLook.sizeNow() *
+			HandleLook.shareOfTheSizeBeforeASurround *
+			app.dpiScale
 		);
 	}
 
 	/// How wide a band is drawn, in core pixels.
 	public static widthOfASurround(): number {
 		return (
-			HandleLook.size * HandleLook.shareOfTheSizeOfASurround * app.dpiScale
+			HandleLook.sizeNow() * HandleLook.shareOfTheSizeOfASurround * app.dpiScale
 		);
 	}
 

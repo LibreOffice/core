@@ -160,7 +160,7 @@ class SelectionSnap {
 			}
 		}
 
-		if (closest < 10 * app.dpiScale) {
+		if (closest < VectorSettings.snapDistance() * app.dpiScale) {
 			this.closestX = pickX;
 			this.snapOffsetX = snapOffset;
 			this.centerSnapX = centerSnap;
@@ -209,7 +209,7 @@ class SelectionSnap {
 			}
 		}
 
-		if (closest < 10 * app.dpiScale) {
+		if (closest < VectorSettings.snapDistance() * app.dpiScale) {
 			this.closestY = pickY;
 			this.snapOffsetY = snapOffset;
 			this.centerSnapY = centerSnap;

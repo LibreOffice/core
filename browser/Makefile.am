@@ -424,6 +424,7 @@ COOL_JS_LST =\
 	src/core/geometry.ts \
 	src/core/TimerRegistry.ts \
 	src/core/DPIChangeListener.ts \
+	src/app/VectorSettings.ts \
 	src/app/SelectionSnap.ts \
 	src/app/HandleLook.ts \
 	src/app/HandleScaling.ts \
