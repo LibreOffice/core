@@ -151,6 +151,9 @@ class SlideLinks {
 	// Whether a list arrived that names parts this view does not know yet, so
 	// the change is announced once the part list has caught up.
 	private announceOnParts: boolean = false;
+	// The parts of the view's part list when it last changed, or null before
+	// the first part list of a load.
+	private knownParts: Set<string> | null = null;
 
 	constructor(map: any) {
 		this.map = map;
@@ -576,6 +579,7 @@ class SlideLinks {
 		// answered again: drop it all, and let the next load start clean.
 		if (e.status === false) {
 			this.loaded = false;
+			this.knownParts = null;
 			this.abandonUpdate();
 			return;
 		}
@@ -648,10 +652,28 @@ class SlideLinks {
 		return false;
 	}
 
+	// A slide added or removed by any means, such as a delete, a paste or an
+	// undo, can add or drop a link, so the list is read again. A list waiting
+	// for this part list already names its parts, so it is announced instead.
 	private onUpdateParts(): void {
-		if (!this.announceOnParts) return;
-		this.announceOnParts = false;
-		app.events.fire('slidelink:changed', {});
+		const changed = this.partsChanged();
+		if (this.announceOnParts) {
+			this.announceOnParts = false;
+			app.events.fire('slidelink:changed', {});
+		} else if (changed && this.loaded) app.socket.sendMessage('slidelink list');
+	}
+
+	// Whether the part list holds other parts than at its last change. The
+	// first part list of a load is read with the link list of that load.
+	private partsChanged(): boolean {
+		const list = (app.impress && app.impress.partList) || [];
+		const parts = new Set<string>(list.map((info: any) => info.part));
+		const known = this.knownParts;
+		this.knownParts = parts;
+		if (!known) return false;
+		if (known.size !== parts.size) return true;
+		for (const part of parts) if (!known.has(part)) return true;
+		return false;
 	}
 
 	// The command that updates the linked slides is offered by a document
