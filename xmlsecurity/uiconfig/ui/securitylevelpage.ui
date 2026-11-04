@@ -6,11 +6,11 @@
   <object class="GtkGrid" id="SecurityLevelPage">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
+    <property name="halign">start</property>
     <property name="margin-start">12</property>
     <property name="margin-end">12</property>
     <property name="margin-top">12</property>
     <property name="margin-bottom">12</property>
-    <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <property name="border-width">6</property>
     <property name="orientation">vertical</property>
@@ -169,25 +169,9 @@
       </packing>
     </child>
     <child>
-      <object class="GtkLabel" id="empty">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <child internal-child="accessible">
-          <object class="AtkObject" id="empty-atkobject">
-            <property name="AtkObject::accessible-role">static</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">8</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkBox" id="warningbox">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="valign">end</property>
         <child>
           <object class="GtkImage" id="warningimg">
             <property name="visible">True</property>
@@ -221,7 +205,7 @@
             <property name="margin-bottom">3</property>
             <property name="hexpand">True</property>
             <property name="wrap">True</property>
-            <property name="ellipsize">end</property>
+            <property name="max-width-chars">50</property>
             <property name="xalign">0</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="warningmsg-atkobject">
@@ -237,9 +221,9 @@
         </child>
       </object>
       <packing>
-        <property name="left-attach">1</property>
+        <property name="left-attach">0</property>
         <property name="top-attach">8</property>
-        <property name="width">2</property>
+        <property name="width">3</property>
       </packing>
     </child>
     <child>
@@ -250,7 +234,7 @@
         <property name="margin-bottom">12</property>
         <property name="label" translatable="yes" context="securitylevelpage|VeryHighDescription">Only macros from trusted file locations are allowed to run. All other macros, regardless whether signed or not, are disabled.</property>
         <property name="wrap">True</property>
-        <property name="max-width-chars">70</property>
+        <property name="max-width-chars">80</property>
         <property name="xalign">0</property>
         <attributes>
           <attribute name="scale" value="0.9"/>
@@ -274,7 +258,7 @@
         <property name="margin-bottom">12</property>
         <property name="label" translatable="yes" context="securitylevelpage|HighDescription">Only signed macros and macros from trusted file locations are executed. Unsigned macros are disabled.</property>
         <property name="wrap">True</property>
-        <property name="max-width-chars">70</property>
+        <property name="max-width-chars">80</property>
         <property name="xalign">0</property>
         <attributes>
           <attribute name="scale" value="0.9"/>
@@ -298,7 +282,7 @@
         <property name="margin-bottom">12</property>
         <property name="label" translatable="yes" context="securitylevelpage|medDescription">Confirmation required before executing macros from untrusted sources.</property>
         <property name="wrap">True</property>
-        <property name="max-width-chars">70</property>
+        <property name="max-width-chars">80</property>
         <property name="xalign">0</property>
         <attributes>
           <attribute name="scale" value="0.9"/>
@@ -322,7 +306,7 @@
         <property name="margin-bottom">12</property>
         <property name="label" translatable="yes" context="securitylevelpage|LowDescription">All macros will be executed without confirmation. Use this setting only if you are certain that all documents that will be opened are safe.</property>
         <property name="wrap">True</property>
-        <property name="max-width-chars">70</property>
+        <property name="max-width-chars">80</property>
         <property name="xalign">0</property>
         <attributes>
           <attribute name="scale" value="0.9"/>
@@ -346,6 +330,8 @@
         <property name="label" translatable="yes" context="securitylevelpage|vhigh">_Very high</property>
         <property name="use-underline">True</property>
         <property name="mnemonic-widget">vhigh</property>
+        <property name="ellipsize">end</property>
+        <property name="max-width-chars">80</property>
         <property name="xalign">0</property>
       </object>
       <packing>
