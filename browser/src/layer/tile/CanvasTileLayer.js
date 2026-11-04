@@ -1814,17 +1814,25 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	_onInvalidateCursorMsg: function (textMsg) {
 		textMsg = textMsg.substring('invalidatecursor:'.length + 1);
 		var obj = JSON.parse(textMsg);
-		var recCursor = this._getEditCursorRectangle(obj);
 
 		// While a selection is dragged over the document, the cursor marks where it would land,
-		// and the caret of the view stays where it is, so this update is none of its own.
-		if (recCursor !== undefined && obj.dropPosition) {
-			DropCaretSection.showAt(new cool.SimpleRectangle(
-				recCursor.getTopLeft().x, recCursor.getTopLeft().y,
-				recCursor.getSize().x, recCursor.getSize().y));
+		// and the caret of the view stays where it is, so this update is none of its own. A drop
+		// position without a rectangle means that the selection would land nowhere there.
+		if (obj.dropPosition) {
+			if (obj.rectangle === 'EMPTY') {
+				DropCaretSection.hide();
+				return;
+			}
+			var recDrop = this._getEditCursorRectangle(obj);
+			if (recDrop !== undefined)
+				DropCaretSection.showAt(new cool.SimpleRectangle(
+					recDrop.getTopLeft().x, recDrop.getTopLeft().y,
+					recDrop.getSize().x, recDrop.getSize().y));
 			return;
 		}
 		DropCaretSection.hide();
+
+		var recCursor = this._getEditCursorRectangle(obj);
 
 		// A cursor without a drop position ends the drag of the selection. A drop elsewhere sends
 		// the selection of the dropped text, which shows the toolbar. A drag that changed nothing

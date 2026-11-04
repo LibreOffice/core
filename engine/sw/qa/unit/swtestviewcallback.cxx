@@ -92,8 +92,9 @@ void SwTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
             OString sRect(aTree.get_child("rectangle").get_value<std::string>());
             m_nOwnCursorInvalidatedBy = aTree.get_child("viewId").get_value<int>();
             m_bOwnCursorAtDropPosition = aTree.get<std::string>("dropPosition", "") == "1";
+            m_bOwnCursorEmpty = sRect == "EMPTY";
 
-            if (sRect == "EMPTY")
+            if (m_bOwnCursorEmpty)
                 return;
             cpo::uno::Sequence<OUString> aSeq
                 = comphelper::string::convertCommaSeparated(OUString::fromUtf8(sRect));

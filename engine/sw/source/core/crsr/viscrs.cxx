@@ -222,12 +222,27 @@ SwRect SwVisibleCursor::SetPos()
     return aRect;
 }
 
+void SwVisibleCursor::SetDropPosition(bool bDropPosition)
+{
+    SfxViewShell* pNotifyViewShell
+        = comphelper::COKit::isActive() ? m_pCursorShell->GetSfxViewShell() : nullptr;
+    if (pNotifyViewShell && m_bIsDropPosition && !bDropPosition)
+    {
+        m_bLeftDropPosition = true;
+        KitHelper::notifyUpdatePerViewId(*pNotifyViewShell,
+                                         COKitCallbackType::INVALIDATE_VISIBLE_CURSOR);
+    }
+    m_bIsDropPosition = bDropPosition;
+}
+
 void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
 {
     const SwRect aRect = SetPos();
 
     if (SfxViewShell* pNotifyViewShell = comphelper::COKit::isActive() ? m_pCursorShell->GetSfxViewShell() : nullptr)
     {
+        m_bLeftDropPosition = false;
+
         // notify about page number change (if that happened)
         sal_uInt16 nPage, nVirtPage;
         // bCalcFrame=false is important to avoid calculating the layout when
@@ -357,9 +372,11 @@ std::optional<OString> SwVisibleCursor::getKitPayload(COKitCallbackType eType, i
             }
         }
 
-        return KitHelper::makeVisCursorInvalidation(nViewId, sRect, bIsWrong, sHyperlink,
-                                                    m_nLastKitCursorEditorViewId,
-                                                    m_bIsDropPosition);
+        // A drop position without a rectangle tells the view that the dragged selection would
+        // land nowhere at the place where the drag is now.
+        return KitHelper::makeVisCursorInvalidation(
+            nViewId, m_bLeftDropPosition ? "EMPTY"_ostr : sRect, bIsWrong, sHyperlink,
+            m_nLastKitCursorEditorViewId, m_bIsDropPosition || m_bLeftDropPosition);
     }
     else
         abort();

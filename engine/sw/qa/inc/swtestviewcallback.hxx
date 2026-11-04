@@ -32,6 +32,8 @@ public:
     bool m_bOwnCursorAtOrigin;
     /// Whether the last own cursor payload marked a drop position.
     bool m_bOwnCursorAtDropPosition = false;
+    /// Whether the last own cursor payload had no rectangle.
+    bool m_bOwnCursorEmpty = false;
     /// The type and the text of the last tooltip, both empty while none arrived.
     std::string m_aTooltipType;
     std::string m_aTooltipText;

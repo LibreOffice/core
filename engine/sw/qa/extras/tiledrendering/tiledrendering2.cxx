@@ -46,9 +46,12 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
@@ -4194,6 +4197,45 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testClickWithCtrlAltKeepsStateUpdates
 
     // Then the view learns that its cursor is in bold text, as after any finished click:
     CPPUNIT_ASSERT(!FilterStateChanges(aView.m_aStateChanges, ".uno:Bold=true").empty());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextOverShapeHidesDropPosition)
+{
+    // Given a rectangle in the document, and the paragraphs "Test1" and "Test2", with "Test2"
+    // selected:
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwTestViewCallback aView;
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
+    xShape->setSize(awt::Size(3000, 2000));
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    xDrawPageSupplier->getDrawPage()->add(xShape);
+    xShape->setPosition(awt::Point(3000, 8000));
+    Point aFrom, aTo;
+    lcl_selectSecondParagraph(pWrtShell, aFrom, aTo);
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    const Point aOnShape = pPage->GetObj(0)->GetSnapRect().Center();
+
+    // When the selection is dragged to the end of "Test1" and on to the rectangle, with the
+    // button held:
+    lcl_dragText(pXTextDocument, aFrom, aTo, 0, /*bRelease=*/false);
+    CPPUNIT_ASSERT(aView.m_bOwnCursorAtDropPosition);
+    CPPUNIT_ASSERT(!aView.m_bOwnCursorEmpty);
+    lcl_dragText(pXTextDocument, aTo, aOnShape, 0, /*bRelease=*/false);
+
+    // Then the view learns that the text would land nowhere there:
+    CPPUNIT_ASSERT(aView.m_bOwnCursorAtDropPosition);
+    CPPUNIT_ASSERT(aView.m_bOwnCursorEmpty);
+
+    // And a release there moves no text, and the cursor is an ordinary one again:
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aOnShape.getX(),
+                                   aOnShape.getY(), 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(u"Test1"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Test2"_ustr, getParagraph(2)->getString());
+    CPPUNIT_ASSERT(!aView.m_bOwnCursorAtDropPosition);
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextDropPosition)
