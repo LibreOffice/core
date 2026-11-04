@@ -33,7 +33,7 @@ static std::set<std::string> parseCommaSeparatedList(const std::string& list)
     return result;
 }
 
-static void convert(COKit* office, const std::string& input, std::set<std::string> const & outputFormats)
+static bool convert(COKit* office, const std::string& input, std::set<std::string> const & outputFormats)
 {
 #ifdef _WIN32
     const std::string stem = Util::wide_string_to_string(std::filesystem::path(input).stem().native());
@@ -49,9 +49,10 @@ static void convert(COKit* office, const std::string& input, std::set<std::strin
         if (!doc)
         {
             std::cerr << "Error: could not load document: " << office->getError().c_str() << "\n";
-            return;
+            return false;
         }
 
+        bool succeeded = true;
         for (const auto& format : outputFormats)
         {
             try
@@ -60,19 +61,23 @@ static void convert(COKit* office, const std::string& input, std::set<std::strin
                 {
                     std::cerr << "Error: could not export document as " << format
                               << ": " << office->getError().c_str() << "\n";
+                    succeeded = false;
                 }
             }
             catch (const std::exception& e)
             {
                 std::cerr << "Error: COKit exception while exporting " << input
                           << " as " << format << ": " << e.what() << "\n";
+                succeeded = false;
             }
         }
+        return succeeded;
     }
     catch (const std::exception& e)
     {
         std::cerr << "Error: COKit exception while loading " << input
                   << ": " << e.what() << "\n";
+        return false;
     }
 }
 
@@ -129,8 +134,9 @@ int main(int argc, char** argv)
 
         std::set<std::string> outputFormats = parseCommaSeparatedList(argv[1]);
 
+        bool succeeded = true;
         for (int i = 2; i < argc; i++)
-            convert(office.get(), argv[i], outputFormats);
+            succeeded &= convert(office.get(), argv[i], outputFormats);
 
         // Shut the engine down while its libraries are still fully loaded.
         office.reset();
@@ -139,7 +145,7 @@ int main(int argc, char** argv)
         // kit session, which a command-line conversion never creates.
         // std::_Exit ends the process without running them.
         std::cout.flush();
-        std::_Exit(0);
+        std::_Exit(succeeded ? 0 : 1);
     }
     catch (const std::exception& e)
     {
