@@ -213,9 +213,10 @@ private:
 class CloudAccountPage : public QWebEnginePage
 {
 public:
-    CloudAccountPage(QWebEngineProfile* profile, QObject* parent);
+    CloudAccountPage(const QUrl& accountUrl, QWebEngineProfile* profile, QObject* parent);
     ~CloudAccountPage() override;
 
+    const QUrl& integratorOrigin() const { return _integratorOrigin; }
     void keepForm(const QUrl& url, const QByteArray& form);
     std::optional<QByteArray> receiveMessage(const QUrl& origin, const QString& kind,
                                              const QByteArray& message);
@@ -227,6 +228,7 @@ private:
     std::optional<QByteArray> callBridge(const QString& method, const QString& argumentsJson);
     void sendFileInfo(QNetworkReply* reply, const QPointer<QWebEngineUrlRequestJob>& job);
 
+    QUrl _integratorOrigin; ///< The origin of the account address from the backstage view.
     QUrl _formUrl; ///< Where the kept form went, with the frame's id as the fragment.
     QByteArray _form;
     QTimer _editorCheck;
@@ -284,6 +286,15 @@ void EditorFormInterceptor::interceptRequest(QWebEngineUrlRequestInfo& info)
     if (hasFrameId)
         return;
 
+    const bool isInIntegratorWindow = originOf(info.firstPartyUrl()) == _page.integratorOrigin();
+    const bool isPostedByIntegrator = originOf(info.initiator()) == _page.integratorOrigin();
+    if (!isInIntegratorWindow || !isPostedByIntegrator)
+    {
+        LOG_WRN("account window: refused: a form for an editor frame came from another page "
+                "than the integrator's");
+        return;
+    }
+
     QIODevice* body = info.requestBody();
     if (!body)
     {
@@ -311,8 +322,10 @@ void EditorFormInterceptor::interceptRequest(QWebEngineUrlRequestInfo& info)
     info.redirect(frameUrl);
 }
 
-CloudAccountPage::CloudAccountPage(QWebEngineProfile* profile, QObject* parent)
+CloudAccountPage::CloudAccountPage(const QUrl& accountUrl, QWebEngineProfile* profile,
+                                   QObject* parent)
     : QWebEnginePage(profile, parent)
+    , _integratorOrigin(originOf(accountUrl))
 {
     setUrlRequestInterceptor(new EditorFormInterceptor(*this));
 
@@ -579,7 +592,7 @@ void openRemoteFile(const QString& serverUrl, QWidget* parent,
     window->resize(ACCOUNT_WINDOW_SIZE);
 
     auto* view = new QWebEngineView(window);
-    view->setPage(new CloudAccountPage(pickerProfile, view));
+    view->setPage(new CloudAccountPage(QUrl(serverUrl), pickerProfile, view));
     window->setCentralWidget(view);
     QObject::connect(view, &QWebEngineView::titleChanged, window, &QWidget::setWindowTitle);
 
