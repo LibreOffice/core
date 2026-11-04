@@ -236,7 +236,7 @@ public:
     void AddMergedDocument(SwDocMergeInfo const & rInfo);
     //returns the page and database cursor information of each merged document
     SwDocMergeInfo& GetDocumentMergeInfo(sal_uInt32 nDocument);
-    sal_uInt32 GetMergedDocumentCount(bool bWithoutExcludedRecords = true);
+    sal_uInt32 GetMergedDocumentCount();
 
     const OUString&  GetSelectedPrinter() const
         { return m_sSelectedPrinter; }
