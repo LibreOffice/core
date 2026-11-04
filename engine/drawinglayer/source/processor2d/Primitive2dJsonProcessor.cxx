@@ -18,7 +18,15 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/awt/XControl.hpp>
+#include <com/sun/star/awt/XDateField.hpp>
+#include <com/sun/star/awt/XTimeField.hpp>
+#include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
+#include <com/sun/star/awt/ScrollBarOrientation.hpp>
+#include <com/sun/star/awt/XTextComponent.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
@@ -42,6 +50,13 @@
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <cpo/uno/XComponentContext.hpp>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <comphelper/processfactory.hxx>
+#include <vcl/window.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/font.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
@@ -98,6 +113,73 @@ namespace
 OString colorToHex(const basegfx::BColor& rColor)
 {
     return "#" + Color(rColor).AsRGBHexString().toUtf8();
+}
+
+// the text a form control shows: a date, a time or an amount is formatted from the model's value
+// by the control's window only, so a control gets one for the moment, out of sight, as the
+// control does itself to draw
+OUString shownTextOf(const cpo::uno::Reference<css::awt::XControlModel>& rxModel)
+{
+    const cpo::uno::Reference<css::beans::XPropertySet> xModel(rxModel, cpo::uno::UNO_QUERY);
+    OUString aControlName;
+    if (!xModel.is() || !(xModel->getPropertyValue(u"DefaultControl"_ustr) >>= aControlName)
+        || aControlName.isEmpty())
+        return OUString();
+
+    SolarMutexGuard aGuard;
+    const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext(
+        comphelper::getProcessComponentContext());
+    const cpo::uno::Reference<css::awt::XControl> xControl(
+        xContext->getServiceManager()->createInstanceWithContext(aControlName, xContext),
+        cpo::uno::UNO_QUERY);
+    const OutputDevice* pDevice(Application::GetDefaultDevice());
+    vcl::Window* pParent(pDevice ? pDevice->GetOwnerWindow() : nullptr);
+    if (!xControl.is() || !pParent)
+        return OUString();
+
+    OUString aText;
+    try
+    {
+        xControl->setModel(rxModel);
+        if (const cpo::uno::Reference<css::awt::XWindow> xWindow(xControl, cpo::uno::UNO_QUERY);
+            xWindow.is())
+            xWindow->setVisible(false);
+        xControl->createPeer(nullptr, pParent->GetComponentInterface());
+
+        // a date or a time the form has not taken from its default yet shows that default, as
+        // the office draws it; it goes to the window only, the control would set the model
+        const auto aDefaultOf
+            = [&xModel](const OUString& rName, const OUString& rDefault) -> cpo::uno::Any {
+            const cpo::uno::Reference<css::beans::XPropertySetInfo> xInfo(
+                xModel->getPropertySetInfo());
+            if (!xInfo->hasPropertyByName(rName) || !xInfo->hasPropertyByName(rDefault)
+                || xModel->getPropertyValue(rName).hasValue())
+                return cpo::uno::Any();
+            return xModel->getPropertyValue(rDefault);
+        };
+        css::util::Date aDate;
+        if (const cpo::uno::Reference<css::awt::XDateField> xDate(xControl->getPeer(),
+                                                                  cpo::uno::UNO_QUERY);
+            xDate.is() && (aDefaultOf(u"Date"_ustr, u"DefaultDate"_ustr) >>= aDate))
+            xDate->setDate(aDate);
+        css::util::Time aTime;
+        if (const cpo::uno::Reference<css::awt::XTimeField> xTime(xControl->getPeer(),
+                                                                  cpo::uno::UNO_QUERY);
+            xTime.is() && (aDefaultOf(u"Time"_ustr, u"DefaultTime"_ustr) >>= aTime))
+            xTime->setTime(aTime);
+
+        // the window, as the control answers from a text property where its model has one,
+        // empty in a date or a time field
+        if (const cpo::uno::Reference<css::awt::XTextComponent> xText(xControl->getPeer(),
+                                                                      cpo::uno::UNO_QUERY);
+            xText.is())
+            aText = xText->getText();
+    }
+    catch (const cpo::uno::Exception&)
+    {
+    }
+    xControl->dispose();
+    return aText;
 }
 
 // The color of text. An automatic text color has no fixed value, it is chosen for contrast
@@ -925,6 +1007,7 @@ bool Primitive2dJsonProcessor::writeFormControl(const ControlPrimitive2D& rContr
 
     sal_Int16 nClassId(0);
     aValueOf(u"ClassId"_ustr) >>= nClassId;
+    // a formatted field is a text field of the forms that keeps a number format
     const char* pKind(nullptr);
     switch (nClassId)
     {
@@ -936,6 +1019,57 @@ bool Primitive2dJsonProcessor::writeFormControl(const ControlPrimitive2D& rContr
             break;
         case css::form::FormComponentType::RADIOBUTTON:
             pKind = "optionButton";
+            break;
+        case css::form::FormComponentType::FIXEDTEXT:
+            pKind = "label";
+            break;
+        case css::form::FormComponentType::GROUPBOX:
+            pKind = "groupBox";
+            break;
+        case css::form::FormComponentType::TEXTFIELD:
+            pKind = xInfo->hasPropertyByName(u"FormatKey"_ustr) ? "formattedField" : "textBox";
+            break;
+        case css::form::FormComponentType::NUMERICFIELD:
+            pKind = "numericField";
+            break;
+        case css::form::FormComponentType::CURRENCYFIELD:
+            pKind = "currencyField";
+            break;
+        case css::form::FormComponentType::DATEFIELD:
+            pKind = "dateField";
+            break;
+        case css::form::FormComponentType::TIMEFIELD:
+            pKind = "timeField";
+            break;
+        case css::form::FormComponentType::PATTERNFIELD:
+            pKind = "patternField";
+            break;
+        case css::form::FormComponentType::FILECONTROL:
+            pKind = "fileSelection";
+            break;
+        case css::form::FormComponentType::COMBOBOX:
+            pKind = "comboBox";
+            break;
+        case css::form::FormComponentType::LISTBOX:
+            pKind = "listBox";
+            break;
+        case css::form::FormComponentType::IMAGEBUTTON:
+            pKind = "imageButton";
+            break;
+        case css::form::FormComponentType::IMAGECONTROL:
+            pKind = "imageControl";
+            break;
+        case css::form::FormComponentType::SCROLLBAR:
+            pKind = "scrollBar";
+            break;
+        case css::form::FormComponentType::SPINBUTTON:
+            pKind = "spinButton";
+            break;
+        case css::form::FormComponentType::GRIDCONTROL:
+            pKind = "tableControl";
+            break;
+        case css::form::FormComponentType::NAVIGATIONBAR:
+            pKind = "navigationBar";
             break;
         default:
             return false;
@@ -986,6 +1120,77 @@ bool Primitive2dJsonProcessor::writeFormControl(const ControlPrimitive2D& rContr
         if (aFont.Slant != css::awt::FontSlant_NONE
             && aFont.Slant != css::awt::FontSlant_DONTKNOW)
             mrWriter.put("italic", true);
+    }
+
+    // the text as the control shows it, so a date or an amount comes formatted as the office
+    // formats it
+    if (const cpo::uno::Reference<css::awt::XTextComponent> xText(rControl.getXControl(),
+                                                                  cpo::uno::UNO_QUERY);
+        xText.is())
+        mrWriter.put("text", shownTextOf(rControl.getControlModel()));
+
+    bool bFlag(false);
+    if ((aValueOf(u"Dropdown"_ustr) >>= bFlag) && bFlag)
+        mrWriter.put("dropdown", true);
+    if ((aValueOf(u"Spin"_ustr) >>= bFlag) && bFlag)
+        mrWriter.put("spin", true);
+    if ((aValueOf(u"MultiLine"_ustr) >>= bFlag) && bFlag)
+        mrWriter.put("multiLine", true);
+    // 0 none, 1 3D, 2 flat
+    sal_Int16 nBorder(1);
+    if ((aValueOf(u"Border"_ustr) >>= nBorder) && nBorder == 0)
+        mrWriter.put("border", sal_Int32(0));
+
+    cpo::uno::Sequence<OUString> aItems;
+    if ((aValueOf(u"StringItemList"_ustr) >>= aItems) && aItems.hasElements())
+    {
+        auto aArray = mrWriter.startArray("items");
+        for (const OUString& rItem : aItems)
+            mrWriter.putSimpleValue(rItem);
+    }
+    cpo::uno::Sequence<sal_Int16> aSelected;
+    if ((aValueOf(u"SelectedItems"_ustr) >>= aSelected) && aSelected.hasElements())
+    {
+        auto aArray = mrWriter.startArray("selected");
+        for (sal_Int16 nItem : aSelected)
+            mrWriter.putSimpleValue(sal_Int32(nItem));
+    }
+
+    // a scroll bar and a spin button: which way they run and where their value stands
+    sal_Int32 nOrientation(0);
+    if ((aValueOf(u"Orientation"_ustr) >>= nOrientation)
+        && nOrientation == css::awt::ScrollBarOrientation::VERTICAL)
+        mrWriter.put("vertical", true);
+    sal_Int32 nValue(0);
+    const bool bScroll(nClassId == css::form::FormComponentType::SCROLLBAR);
+    if (bScroll || nClassId == css::form::FormComponentType::SPINBUTTON)
+    {
+        const OUString aPrefix(bScroll ? u"Scroll"_ustr : u"Spin"_ustr);
+        if (aValueOf(u"Default"_ustr + aPrefix + u"Value"_ustr) >>= nValue)
+            mrWriter.put("value", nValue);
+        if (aValueOf(aPrefix + u"ValueMin"_ustr) >>= nValue)
+            mrWriter.put("min", nValue);
+        if (aValueOf(aPrefix + u"ValueMax"_ustr) >>= nValue)
+            mrWriter.put("max", nValue);
+        if (aValueOf(u"VisibleSize"_ustr) >>= nValue)
+            mrWriter.put("visible", nValue);
+    }
+
+    // the labels of the columns of a table control
+    if (const cpo::uno::Reference<css::container::XIndexAccess> xColumns(xModel,
+                                                                         cpo::uno::UNO_QUERY);
+        xColumns.is() && nClassId == css::form::FormComponentType::GRIDCONTROL)
+    {
+        auto aArray = mrWriter.startArray("columns");
+        for (sal_Int32 nColumn = 0; nColumn < xColumns->getCount(); ++nColumn)
+        {
+            const cpo::uno::Reference<css::beans::XPropertySet> xColumn(
+                xColumns->getByIndex(nColumn), cpo::uno::UNO_QUERY);
+            OUString aColumnLabel;
+            if (xColumn.is())
+                xColumn->getPropertyValue(u"Label"_ustr) >>= aColumnLabel;
+            mrWriter.putSimpleValue(aColumnLabel);
+        }
     }
     return true;
 }
