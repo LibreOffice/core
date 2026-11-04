@@ -55,14 +55,12 @@ class CanvasFactory
                                       lang::XMultiServiceFactory >
 {
     typedef std::pair< OUString, Sequence< OUString > > AvailPair;
-    typedef std::vector< AvailPair >                    AvailVector;
-
 
     mutable std::mutex                m_mutex;
     Reference<XComponentContext>      m_xContext;
-    AvailVector                       m_aAvailableImplementations;
-    AvailVector                       m_aAcceleratedImplementations;
-    AvailVector                       m_aAAImplementations;
+    std::unordered_map<OUString, Sequence<OUString>> m_aAvailableImplementations;
+    std::unordered_map<OUString, Sequence<OUString>> m_aAcceleratedImplementations;
+    std::unordered_map<OUString, Sequence<OUString>> m_aAAImplementations;
     mutable std::unordered_map<OUString, OUString> m_aCachedImplementations;
     mutable bool                      m_bCacheHasForcedLastImpl;
     mutable bool                      m_bCacheHasUseAcceleratedEntry;
@@ -134,15 +132,15 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
                     Sequence<OUString> implementationList;
                     if( xEntryNameAccess->getByName(u"PreferredImplementations"_ustr) >>= implementationList )
                     {
-                        m_aAvailableImplementations.emplace_back(serviceName, implementationList);
+                        m_aAvailableImplementations[serviceName] = implementationList;
                     }
                     if( xEntryNameAccess->getByName(u"AcceleratedImplementations"_ustr) >>= implementationList )
                     {
-                        m_aAcceleratedImplementations.emplace_back(serviceName, implementationList);
+                        m_aAcceleratedImplementations[serviceName] = implementationList;
                     }
                     if( xEntryNameAccess->getByName(u"AntialiasingImplementations"_ustr) >>= implementationList )
                     {
-                        m_aAAImplementations.emplace_back(serviceName, implementationList);
+                        m_aAAImplementations[serviceName] = implementationList;
                     }
                 }
             }
@@ -160,11 +158,11 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
     {
         // Ugh. Looks like configuration is borked. Fake minimal
         // setup.
-        m_aAvailableImplementations.emplace_back(u"com.sun.star.rendering.Canvas"_ustr,
-            Sequence<OUString>{ u"com.sun.star.comp.rendering.Canvas.VCL"_ustr } );
+        m_aAvailableImplementations[u"com.sun.star.rendering.Canvas"_ustr]
+            = Sequence<OUString>{ u"com.sun.star.comp.rendering.Canvas.VCL"_ustr };
 
-        m_aAvailableImplementations.emplace_back(u"com.sun.star.rendering.SpriteCanvas"_ustr,
-            Sequence<OUString>{ u"com.sun.star.comp.rendering.SpriteCanvas.VCL"_ustr } );
+        m_aAvailableImplementations[u"com.sun.star.rendering.SpriteCanvas"_ustr]
+            = Sequence<OUString>{ u"com.sun.star.comp.rendering.SpriteCanvas.VCL"_ustr };
     }
 }
 
@@ -282,36 +280,21 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     }
 
     // lookup in available service list
-    const AvailVector::const_iterator aAvailEnd(m_aAvailableImplementations.end());
-    auto aAvailImplsMatch = std::find_if(
-                    m_aAvailableImplementations.begin(),
-                    aAvailEnd,
-                    [&serviceName](AvailPair const& ap)
-                    { return serviceName == ap.first; }
-                    );
-    if( aAvailImplsMatch == aAvailEnd ) {
+    const auto aAvailImplsMatch = m_aAvailableImplementations.find(serviceName);
+    if (aAvailImplsMatch == m_aAvailableImplementations.end())
+    {
         return Reference<XInterface>();
     }
 
-    const AvailVector::const_iterator aAAEnd(m_aAAImplementations.end());
-    auto aAAImplsMatch = std::find_if(
-                    m_aAAImplementations.begin(),
-                    aAAEnd,
-                    [&serviceName](AvailPair const& ap)
-                    { return serviceName == ap.first; }
-                    );
-    if( aAAImplsMatch == aAAEnd ) {
+    const auto aAAImplsMatch = m_aAAImplementations.find(serviceName);
+    if (aAAImplsMatch == m_aAAImplementations.end())
+    {
         return Reference<XInterface>();
     }
 
-    const AvailVector::const_iterator aAccelEnd(m_aAcceleratedImplementations.end());
-    auto aAccelImplsMatch = std::find_if(
-                    m_aAcceleratedImplementations.begin(),
-                    aAccelEnd,
-                    [&serviceName](AvailPair const& ap)
-                    { return serviceName == ap.first; }
-                    );
-    if( aAccelImplsMatch == aAccelEnd ) {
+    const auto aAccelImplsMatch = m_aAcceleratedImplementations.find(serviceName);
+    if (aAccelImplsMatch == m_aAcceleratedImplementations.end())
+    {
         return Reference<XInterface>();
     }
 
