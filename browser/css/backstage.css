@@ -726,7 +726,8 @@
 	height: 14px;
 }
 
-/* The plus has lines of 1.5px with round ends. */
+/* The plus has lines of 2px with round ends. The boxes have even sizes, so the lines start on
+   whole pixels. */
 .backstage-add-template-plus::before,
 .backstage-add-template-plus::after {
 	content: '';
@@ -737,16 +738,16 @@
 
 .backstage-add-template-plus::before {
 	top: 0;
-	left: calc(50% - 0.75px);
-	width: 1.5px;
+	left: calc(50% - 1px);
+	width: 2px;
 	height: 100%;
 }
 
 .backstage-add-template-plus::after {
-	top: calc(50% - 0.75px);
+	top: calc(50% - 1px);
 	left: 0;
 	width: 100%;
-	height: 1.5px;
+	height: 2px;
 }
 
 .backstage-manage-templates-title {
