@@ -251,6 +251,7 @@ button.jsdialog[disabled] img {
 [data-theme='dark'] [data-doctype] .button-primary:not(:disabled):hover,
 [data-theme='dark'] [data-doctype] .button-primary:not(:disabled):focus-visible {
 	background-color: rgba(0, 0, 0, 0.3);
+	color: rgb(var(--doc-type));
 }
 
 .button-primary:disabled {
