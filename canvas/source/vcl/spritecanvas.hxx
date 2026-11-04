@@ -94,8 +94,7 @@ typedef ::canvas::SpriteCanvasBase<SpriteCanvasBaseSpriteSurface_Base, SpriteCan
 class SpriteCanvas : public SpriteCanvasBaseT, public RepaintTarget
 {
 public:
-    SpriteCanvas(const css::uno::Sequence<css::uno::Any>& aArguments,
-                 const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    SpriteCanvas(const css::uno::Sequence<css::uno::Any>& aArguments);
 
     void initialize();
 

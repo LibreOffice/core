@@ -33,8 +33,7 @@ using namespace ::com::sun::star;
 
 namespace vclcanvas
 {
-SpriteCanvas::SpriteCanvas(const uno::Sequence<uno::Any>& aArguments,
-                           const uno::Reference<uno::XComponentContext>& /*rxContext*/)
+SpriteCanvas::SpriteCanvas(const uno::Sequence<uno::Any>& aArguments)
     : maArguments(aArguments)
 {
 }
@@ -156,9 +155,9 @@ bool SpriteCanvas::repaint(const GraphicObjectSharedPtr& rGrf,
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_rendering_SpriteCanvas_VCL_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
+    css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const& args)
 {
-    rtl::Reference<vclcanvas::SpriteCanvas> p = new vclcanvas::SpriteCanvas(args, context);
+    rtl::Reference<vclcanvas::SpriteCanvas> p = new vclcanvas::SpriteCanvas(args);
     p->initialize();
     return cppu::acquire(p.get());
 }
