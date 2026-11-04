@@ -60,9 +60,6 @@ void SpriteCanvas::initialize()
 
     SAL_INFO("canvas.vcl", "VCLSpriteCanvas::initialize called");
 
-    ENSURE_ARG_OR_THROW(maArguments.hasElements(),
-                        "VCLSpriteCanvas::initialize: wrong number of arguments");
-
     /* maArguments:
            0: ptr to creating instance (Window or VirtualDevice)
            1: current bounds of creating instance
