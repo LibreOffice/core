@@ -97,7 +97,8 @@ class SlideImportSession {
 	// The pages the source wrote are staged in this document's jail, and the insert takes that
 	// file. The pane asks for the export and hands the staged name over. section is the section
 	// of the source the slides go in as, which they make up all of and nothing else, or null for
-	// slides that go in as slides. A linked section follows that source section.
+	// slides that go in as slides. The section is named to the document by the identifier and
+	// the name it has in the source, and a linked section follows that source section.
 	public insertStaged(
 		stagedName: string,
 		at: number,
@@ -127,11 +128,11 @@ class SlideImportSession {
 				(positions.length ? ' sourcepositions=' + positions.join(',') : '') +
 				(time ? ' time=' + encodeURIComponent(time) : '') +
 				(section
-					? ' section=' +
+					? ' as=section id=' +
 						encodeURIComponent(section.id) +
-						' sectionname=' +
+						' name=' +
 						encodeURIComponent(section.name)
-					: ''),
+					: ' as=slides'),
 		);
 	}
 

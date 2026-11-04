@@ -229,11 +229,15 @@ class Dispatcher {
 		// These act on the slide on show, or on the section that holds it.
 		this.actionsMap['updatelinkedslide'] = function () {
 			const links = app.map.slideLinks;
-			if (links) links.updatePage(links.currentPart());
+			if (links) links.update(links.currentPart());
 		};
 		this.actionsMap['updatelinkedsection'] = function () {
 			const links = app.map.slideLinks;
-			if (links) links.updateSection(links.currentSection());
+			if (!links) return;
+			const section = links
+				.linksOf(links.currentPart())
+				.find((link: SlideLink) => link.unit === 'section');
+			if (section) links.update(section.id);
 		};
 		this.actionsMap['unlinkslide'] = function () {
 			const links = app.map.slideLinks;

@@ -2887,20 +2887,19 @@ class Socket {
 			textMsg.startsWith('error:') &&
 			command.errorCmd === 'slidelink'
 		) {
-			// An answer of an update names the source it was sent for and an
-			// answer of a break names the page it was asked for, so the two
-			// travel on and a reader takes the answers it is waiting for. An
-			// answer about a section names that section as well, percent-encoded.
-			// A page is named by a part identifier, which is a decimal page index
-			// or a page identifier in braced form, and neither holds a space.
+			// An answer of an update names the source it was sent for, and an
+			// answer of a break or of an update of one unit names that unit by
+			// unit= and id=, so the answers travel on and a reader takes the
+			// ones it is waiting for. The source and the identifier are
+			// percent-encoded, so none of the three holds a space.
 			const named = textMsg.match(/\bsource=(\S+)/);
-			const page = textMsg.match(/\bpart=(\S+)/);
-			const section = textMsg.match(/\bsection=(\S+)/);
+			const unit = textMsg.match(/\bunit=(\S+)/);
+			const id = textMsg.match(/\bid=(\S+)/);
 			this._map.fire('slidelinkerror', {
 				kind: command.errorKind ? command.errorKind : '',
 				source: named ? decodeURIComponent(named[1]) : '',
-				part: page ? page[1] : '',
-				section: section ? decodeURIComponent(section[1]) : '',
+				unit: unit ? unit[1] : '',
+				id: id ? decodeURIComponent(id[1]) : '',
 			});
 			return true; // caller should exit immediately.
 		} else if (textMsg.startsWith('error:') && !this._map._docLayer) {

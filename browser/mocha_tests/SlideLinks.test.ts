@@ -30,6 +30,7 @@ describe('SlideLinks', function () {
 	let savedSocket: any;
 	let savedEvents: any;
 	let savedRemoteLinks: any;
+	let savedImpress: any;
 
 	// The linked pages, by the identifier each one holds.
 	const numbersPart = '{6A1C31B0-0001-4C5B-9E77-2F3D4A5B6C7D}';
@@ -37,20 +38,37 @@ describe('SlideLinks', function () {
 	const ticketsPart = '{6A1C31B0-0003-4C5B-9E77-2F3D4A5B6C7D}';
 	// A page this document does not hold.
 	const unknownPart = '{6A1C31B0-0099-4C5B-9E77-2F3D4A5B6C7D}';
+	// The slides of the sources those pages were made from.
+	const numbersGuid = '{7B2D42C1-0001-4D6C-8F88-3A4E5B6C7D8E}';
+	const outlookGuid = '{7B2D42C1-0002-4D6C-8F88-3A4E5B6C7D8E}';
+	const ticketsGuid = '{7B2D42C1-0003-4D6C-8F88-3A4E5B6C7D8E}';
+
+	// A slide of this document linked to one slide of a source, by the
+	// identifier of that slide.
+	function slideLink(
+		part: string,
+		source: string,
+		sourceId: string,
+		name: string,
+		parent: string = '',
+	): any {
+		return {
+			unit: 'slide',
+			id: part,
+			parent: parent,
+			source: source,
+			sourceId: sourceId,
+			name: name,
+			lastModifiedTime: '',
+			slides: [part],
+		};
+	}
 
 	const list = {
 		links: [
-			{
-				source: 'Sales deck.odp',
-				slides: [
-					{ part: numbersPart, name: 'Numbers' },
-					{ part: outlookPart, name: 'Outlook' },
-				],
-			},
-			{
-				source: 'Support deck.odp',
-				slides: [{ part: ticketsPart, name: 'Tickets' }],
-			},
+			slideLink(numbersPart, 'Sales deck.odp', numbersGuid, 'Numbers'),
+			slideLink(outlookPart, 'Sales deck.odp', outlookGuid, 'Outlook'),
+			slideLink(ticketsPart, 'Support deck.odp', ticketsGuid, 'Tickets'),
 		],
 	};
 
@@ -79,12 +97,21 @@ describe('SlideLinks', function () {
 		return { name: source, persistentLink: source, state: state };
 	}
 
-	// The command that asks one source to write its pages out.
-	function exportOf(source: string): string {
+	// The command that asks one source to write its pages out: the slides of
+	// the given identifiers, or its whole deck when none are given.
+	function exportOf(source: string, guids?: string[]): string {
 		return (
-			'remotedoccommand source=' + encodeURIComponent(source) + ' exportslides'
+			'remotedoccommand source=' +
+			encodeURIComponent(source) +
+			' exportslides' +
+			(guids ? ' guids=' + guids.join(',') : '')
 		);
 	}
+
+	// The exports of the two sources of the list above, each asked for the
+	// slides its pages were made from.
+	const salesExport = exportOf('Sales deck.odp', [numbersGuid, outlookGuid]);
+	const supportExport = exportOf('Support deck.odp', [ticketsGuid]);
 
 	// The command that asks one source for the slides it holds.
 	function infoOf(source: string): string {
@@ -95,34 +122,50 @@ describe('SlideLinks', function () {
 		);
 	}
 
-	// The command that has the document read the pages of one source from a staged file.
-	function updateOf(source: string, staged: string): string {
+	// The command that has the document read the links of one source from a
+	// staged file, or the one link it names.
+	function updateOf(
+		source: string,
+		staged: string,
+		unit?: string,
+		id?: string,
+	): string {
 		return (
 			'slidelink update source=' +
 			encodeURIComponent(source) +
 			' file=' +
-			encodeURIComponent(staged)
+			encodeURIComponent(staged) +
+			(unit ? ' unit=' + unit + ' id=' + encodeURIComponent(id) : '')
 		);
 	}
 
 	// A section of this document linked to the section "Opening" of the sales
-	// deck, and the identifier that section has in the source.
+	// deck, the identifier that section has in the source, and the two slides
+	// of the section here: the first still linked to its source slide, the
+	// second edited here, so it holds no link of its own.
 	const openingSection = '{4B1D2C3E-0001-4F00-8A00-1234567890AB}';
 	const sourceOpening = '{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}';
+	const openingFirst = '{6A1C31B0-0011-4C5B-9E77-2F3D4A5B6C7D}';
+	const openingSecond = '{6A1C31B0-0012-4C5B-9E77-2F3D4A5B6C7D}';
+
+	function sectionLink(section: string, slides: string[]): any {
+		return {
+			unit: 'section',
+			id: section,
+			parent: '',
+			source: 'Sales deck.odp',
+			sourceId: sourceOpening,
+			name: 'Opening',
+			lastModifiedTime: '',
+			slides: slides,
+		};
+	}
 
 	const sectionList = {
-		sections: [
-			{
-				section: openingSection,
-				name: 'Opening',
-				source: 'Sales deck.odp',
-				sourceSection: sourceOpening,
-				sourceSectionName: 'Opening',
-				lastModifiedTime: '',
-				slides: [],
-			},
+		links: [
+			sectionLink(openingSection, [openingFirst, openingSecond]),
+			slideLink(openingFirst, 'Sales deck.odp', 'g1', '', openingSection),
 		],
-		links: [],
 	};
 
 	// The source answers what it holds: three slides, the last two in the
@@ -149,9 +192,9 @@ describe('SlideLinks', function () {
 				'presentationinfo: ' +
 				JSON.stringify({
 					slides: [
-						{ part: 'p0', guid: 'g0' },
-						{ part: 'p1', guid: 'g1' },
-						{ part: 'p2', guid: 'g2' },
+						{ index: 0, part: 'p0', guid: numbersGuid },
+						{ index: 1, part: 'p1', guid: 'g1' },
+						{ index: 2, part: 'p2', guid: 'g2' },
 					],
 					sections: sections,
 				}),
@@ -165,11 +208,26 @@ describe('SlideLinks', function () {
 		});
 	}
 
-	// What the document made of the pages it was given.
-	function refreshEnded(source: string, count: number): void {
-		deliver('slidelink', {
-			message: { status: 'updated', source: source, count: count },
-		});
+	// What the document made of the pages it was given: the answer names the
+	// unit the update named, and none for an update of a whole source.
+	function refreshEnded(
+		source: string,
+		count: number,
+		unit?: string,
+		id?: string,
+		notUpdated: string[] = [],
+	): void {
+		const message: any = {
+			status: 'updated',
+			source: source,
+			count: count,
+			notUpdated: notUpdated,
+		};
+		if (unit) {
+			message.unit = unit;
+			message.id = id;
+		}
+		deliver('slidelink', { message: message });
 	}
 
 	beforeEach(function () {
@@ -226,6 +284,7 @@ describe('SlideLinks', function () {
 		savedSocket = app.socket;
 		savedEvents = app.events;
 		savedRemoteLinks = (app as any).remoteLinks;
+		savedImpress = (app as any).impress;
 		(app as any).remoteLinks = remoteLinks();
 		(app as any).socket = {
 			sendMessage: (message: string) => sent.push(message),
@@ -233,6 +292,12 @@ describe('SlideLinks', function () {
 		(app as any).events = {
 			on: () => {},
 			fire: () => {},
+		};
+		// The slides of this document, in order, so a part can be named by
+		// its number.
+		(app as any).impress = {
+			getIndexFromPart: (part: string) =>
+				[numbersPart, outlookPart, ticketsPart].indexOf(part),
 		};
 
 		links = new SlideLinks(map);
@@ -242,6 +307,7 @@ describe('SlideLinks', function () {
 		(app as any).socket = savedSocket;
 		(app as any).events = savedEvents;
 		(app as any).remoteLinks = savedRemoteLinks;
+		(app as any).impress = savedImpress;
 	});
 
 	it('reads the links of the document once it is open', function () {
@@ -269,16 +335,78 @@ describe('SlideLinks', function () {
 		deliver('slidelinks', { message: list });
 
 		nodeassert.equal(links.hasLinks(), true);
-		nodeassert.deepEqual(links.getPageLink(outlookPart), {
+		nodeassert.deepEqual(links.getLink(outlookPart), {
+			unit: 'slide',
+			id: outlookPart,
+			parent: '',
 			source: 'Sales deck.odp',
+			sourceId: outlookGuid,
 			name: 'Outlook',
+			lastModifiedTime: '',
+			slides: [outlookPart],
 		});
-		nodeassert.deepEqual(links.getPageLink(ticketsPart), {
-			source: 'Support deck.odp',
-			name: 'Tickets',
-		});
+		nodeassert.equal(links.getLink(ticketsPart).source, 'Support deck.odp');
 		// A page that is linked to nothing.
-		nodeassert.equal(links.getPageLink(unknownPart), null);
+		nodeassert.equal(links.getLink(unknownPart), null);
+		nodeassert.deepEqual(links.linksOf(unknownPart), []);
+	});
+
+	it('leaves out an entry it cannot read', function () {
+		deliver('slidelinks', {
+			message: {
+				links: [
+					list.links[0],
+					// No identifier, a unit of no known kind, and no slides.
+					{ unit: 'slide', source: 'Sales deck.odp', slides: [outlookPart] },
+					{ ...list.links[1], unit: 'page' },
+					{ ...list.links[2], slides: 'all' },
+				],
+			},
+		});
+		nodeassert.ok(links.getLink(numbersPart));
+		nodeassert.equal(links.getLink(outlookPart), null);
+		nodeassert.equal(links.getLink(ticketsPart), null);
+	});
+
+	it('lists the links over a slide, innermost first', function () {
+		deliver('slidelinks', { message: sectionList });
+
+		// The first slide holds a link of its own under the section's.
+		nodeassert.deepEqual(
+			links.linksOf(openingFirst).map((link) => link.unit),
+			['slide', 'section'],
+		);
+		nodeassert.equal(links.linksOf(openingFirst)[1].id, openingSection);
+		// The second slide was edited here, so only the section holds it.
+		nodeassert.deepEqual(
+			links.linksOf(openingSecond).map((link) => link.id),
+			[openingSection],
+		);
+	});
+
+	it('counts the slides linked to a source, through their section too', function () {
+		deliver('slidelinks', { message: sectionList });
+		nodeassert.equal(links.countSlidesFrom('Sales deck.odp'), 2);
+		nodeassert.equal(links.countSlidesFrom('Support deck.odp'), 0);
+		nodeassert.equal(links.countOutdatedSlidesFrom('Sales deck.odp'), 0);
+
+		// The section was read at one time, and the source has moved on since.
+		const outdated = {
+			links: [
+				{ ...sectionList.links[0], lastModifiedTime: '2026-11-01T10:00:00Z' },
+				sectionList.links[1],
+			],
+		};
+		(app as any).remoteLinks = [
+			{
+				...linkOf('Sales deck.odp', 'connected'),
+				lastModifiedTime: '2026-11-03T10:00:00Z',
+			},
+		];
+		deliver('slidelinks', { message: outdated });
+		nodeassert.equal(links.isOutdated(openingSection), true);
+		nodeassert.equal(links.isOutdated(openingFirst), false);
+		nodeassert.equal(links.countOutdatedSlidesFrom('Sales deck.odp'), 2);
 	});
 
 	it('marks a page as broken when its source is missing from storage', function () {
@@ -289,12 +417,12 @@ describe('SlideLinks', function () {
 		deliver('slidelinks', { message: list });
 
 		// Both pages read from the missing source are broken.
-		nodeassert.equal(links.isPageBroken(numbersPart), true);
-		nodeassert.equal(links.isPageBroken(outlookPart), true);
+		nodeassert.equal(links.getLinkState(numbersPart), 'broken');
+		nodeassert.equal(links.getLinkState(outlookPart), 'broken');
 		// A page whose source is present is not.
-		nodeassert.equal(links.isPageBroken(ticketsPart), false);
-		// A page that is linked to nothing is not.
-		nodeassert.equal(links.isPageBroken(unknownPart), false);
+		nodeassert.equal(links.getLinkState(ticketsPart), 'connected');
+		// A page that is linked to nothing has no state.
+		nodeassert.equal(links.getLinkState(unknownPart), '');
 	});
 
 	it('stops marking pages broken once the source is read again', function () {
@@ -303,12 +431,12 @@ describe('SlideLinks', function () {
 			linkOf('Support deck.odp', 'connected'),
 		];
 		deliver('slidelinks', { message: list });
-		nodeassert.equal(links.isPageBroken(numbersPart), true);
+		nodeassert.equal(links.getLinkState(numbersPart), 'broken');
 
 		// The source is subscribed again and connects, so its links are whole.
 		(app as any).remoteLinks = remoteLinks();
 		deliver('remotelinks', { documents: (app as any).remoteLinks });
-		nodeassert.equal(links.isPageBroken(numbersPart), false);
+		nodeassert.equal(links.getLinkState(numbersPart), 'connected');
 	});
 
 	it('marks a page as connected when its source is held open', function () {
@@ -319,12 +447,32 @@ describe('SlideLinks', function () {
 		deliver('slidelinks', { message: list });
 
 		// The pages read from the connected source are connected.
-		nodeassert.equal(links.isPageConnected(numbersPart), true);
-		nodeassert.equal(links.isPageConnected(outlookPart), true);
-		// A page whose source is only available, not held open, is not.
-		nodeassert.equal(links.isPageConnected(ticketsPart), false);
-		// A page that is linked to nothing is not.
-		nodeassert.equal(links.isPageConnected(unknownPart), false);
+		nodeassert.equal(links.getLinkState(numbersPart), 'connected');
+		nodeassert.equal(links.getLinkState(outlookPart), 'connected');
+		// A page whose source is only available, not held open, is linked
+		// and no more.
+		nodeassert.equal(links.getLinkState(ticketsPart), 'linked');
+	});
+
+	it('marks a page as broken once its source no longer holds its slide', function () {
+		deliver('slidelinks', { message: list });
+		nodeassert.equal(links.isMissing(outlookPart), false);
+
+		// The source reports the slides it holds, and the one the outlook
+		// page came from is not among them.
+		sourceInfo('Sales deck.odp', 'Opening');
+		nodeassert.equal(links.isMissing(numbersPart), false);
+		nodeassert.equal(links.isMissing(outlookPart), true);
+		nodeassert.equal(links.getLinkState(outlookPart), 'broken');
+		nodeassert.equal(links.isUpdatable(outlookPart), false);
+		nodeassert.equal(links.isUpdatable(numbersPart), true);
+
+		// Such a page is not read again, and the user is told why.
+		sent = [];
+		links.update(outlookPart);
+		nodeassert.deepEqual(sent, []);
+		nodeassert.equal(told.length, 1);
+		nodeassert.ok(told[0].indexOf('no longer holds') >= 0);
 	});
 
 	it('offers the update command for a document that holds links alone', function () {
@@ -348,27 +496,28 @@ describe('SlideLinks', function () {
 		links.updateAll();
 
 		nodeassert.deepEqual(posted, []);
-		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp')]);
+		nodeassert.deepEqual(confirmed, []);
+		nodeassert.deepEqual(sent, [salesExport]);
 	});
 
 	it('refreshes one source at a time, in the order they are listed', function () {
 		documentHoldsLinks();
 		links.updateAll();
-		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp')]);
+		nodeassert.deepEqual(sent, [salesExport]);
 
 		// While that source is writing its pages the next one waits.
 		pagesStaged('sourceslides-1.odp');
 		nodeassert.deepEqual(sent, [
-			exportOf('Sales deck.odp'),
+			salesExport,
 			updateOf('Sales deck.odp', 'sourceslides-1.odp'),
 		]);
 
 		// The document has read them, and only now is the second source asked.
 		refreshEnded('Sales deck.odp', 2);
 		nodeassert.deepEqual(sent, [
-			exportOf('Sales deck.odp'),
+			salesExport,
 			updateOf('Sales deck.odp', 'sourceslides-1.odp'),
-			exportOf('Support deck.odp'),
+			supportExport,
 		]);
 		nodeassert.deepEqual(told, ['2 slides updated from Sales deck.odp.']);
 	});
@@ -391,7 +540,7 @@ describe('SlideLinks', function () {
 		nodeassert.deepEqual(sent.slice(1), [
 			infoOf('Sales deck.odp'),
 			infoOf('Support deck.odp'),
-			exportOf('Sales deck.odp'),
+			salesExport,
 		]);
 	});
 
@@ -418,7 +567,7 @@ describe('SlideLinks', function () {
 		nodeassert.ok(told[0].indexOf('could not be read') >= 0);
 		nodeassert.deepEqual(sent.slice(1), [
 			infoOf('Support deck.odp'),
-			exportOf('Support deck.odp'),
+			supportExport,
 		]);
 	});
 
@@ -433,9 +582,9 @@ describe('SlideLinks', function () {
 		refreshEnded('Support deck.odp', 1);
 
 		nodeassert.deepEqual(sent, [
-			exportOf('Sales deck.odp'),
+			salesExport,
 			updateOf('Sales deck.odp', 'sourceslides-1.odp'),
-			exportOf('Support deck.odp'),
+			supportExport,
 			updateOf('Support deck.odp', 'sourceslides-2.odp'),
 		]);
 	});
@@ -449,10 +598,7 @@ describe('SlideLinks', function () {
 
 		nodeassert.equal(told.length, 1);
 		nodeassert.ok(told[0].indexOf('Sales deck.odp') >= 0);
-		nodeassert.deepEqual(sent, [
-			exportOf('Sales deck.odp'),
-			exportOf('Support deck.odp'),
-		]);
+		nodeassert.deepEqual(sent, [salesExport, supportExport]);
 	});
 
 	it('says so rather than waiting on a source that cannot be read', function () {
@@ -467,7 +613,7 @@ describe('SlideLinks', function () {
 		// waited on, and the next source is asked straight away.
 		nodeassert.equal(told.length, 1);
 		nodeassert.ok(told[0].indexOf('could not be read') >= 0);
-		nodeassert.deepEqual(sent, [exportOf('Support deck.odp')]);
+		nodeassert.deepEqual(sent, [supportExport]);
 	});
 
 	it('says when the document is related to no source of that name', function () {
@@ -492,13 +638,13 @@ describe('SlideLinks', function () {
 		];
 		documentHoldsLinks();
 
-		nodeassert.equal(links.isPageBroken(numbersPart), true);
-		nodeassert.equal(links.isPageBroken(ticketsPart), false);
+		nodeassert.equal(links.getLinkState(numbersPart), 'broken');
+		nodeassert.equal(links.getLinkState(ticketsPart), 'connected');
 
 		// Such a source is asked for nothing, and the user is told why.
 		links.updateAll();
 		nodeassert.ok(told[0].indexOf('could not be read') >= 0);
-		nodeassert.deepEqual(sent, [exportOf('Support deck.odp')]);
+		nodeassert.deepEqual(sent, [supportExport]);
 	});
 
 	it('names a source by its persistent link whatever the storage calls it', function () {
@@ -512,9 +658,9 @@ describe('SlideLinks', function () {
 			},
 		];
 		documentHoldsLinks();
-		links.updateAll();
+		links.updateSource('Sales deck.odp');
 
-		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp')]);
+		nodeassert.deepEqual(sent, [salesExport]);
 	});
 
 	it('drops a refresh the connection took with it', function () {
@@ -535,7 +681,7 @@ describe('SlideLinks', function () {
 		deliver('slidelinks', { message: list });
 		sent = [];
 		links.updateAll();
-		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp')]);
+		nodeassert.deepEqual(sent, [salesExport]);
 	});
 
 	it('goes on to the next source when the document refuses the pages', function () {
@@ -549,7 +695,7 @@ describe('SlideLinks', function () {
 		nodeassert.deepEqual(told, [
 			'Updating the slides of Sales deck.odp failed.',
 		]);
-		nodeassert.equal(sent[sent.length - 1], exportOf('Support deck.odp'));
+		nodeassert.equal(sent[sent.length - 1], supportExport);
 	});
 
 	it('leaves the refresh in hand alone when another command fails', function () {
@@ -559,11 +705,15 @@ describe('SlideLinks', function () {
 		// A break of a page that is linked to nothing, and an answer naming a
 		// source this one is not waiting for, are answered while the refresh in
 		// hand is still out.
-		deliver('slidelinkerror', { kind: 'notlinked', part: numbersPart });
+		deliver('slidelinkerror', {
+			kind: 'notlinked',
+			unit: 'slide',
+			id: numbersPart,
+		});
 		deliver('slidelinkerror', { kind: 'failed', source: 'Support deck.odp' });
 
 		nodeassert.deepEqual(told, []);
-		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp')]);
+		nodeassert.deepEqual(sent, [salesExport]);
 	});
 
 	it('says so rather than refreshing a document that holds no links', function () {
@@ -580,6 +730,8 @@ describe('SlideLinks', function () {
 		documentHoldsLinks();
 		editable = false;
 		links.updateAll();
+		links.update(numbersPart);
+		links.breakLink(numbersPart);
 
 		nodeassert.deepEqual(sent, []);
 		nodeassert.deepEqual(told, []);
@@ -587,65 +739,78 @@ describe('SlideLinks', function () {
 
 	it('reads one page again and leaves the rest of its source alone', function () {
 		documentHoldsLinks();
-		links.updatePage(outlookPart);
+		links.update(outlookPart);
 
-		// The source writes its pages out as for any refresh, and the update
-		// names the one page the document reads from them.
-		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp')]);
+		// The source writes the one slide out, and the update names the one
+		// page the document reads from it.
+		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp', [outlookGuid])]);
 		pagesStaged('sourceslides-1.odp');
 		nodeassert.equal(
 			sent[sent.length - 1],
-			updateOf('Sales deck.odp', 'sourceslides-1.odp') + ' part=' + outlookPart,
+			updateOf('Sales deck.odp', 'sourceslides-1.odp', 'slide', outlookPart),
 		);
-		refreshEnded('Sales deck.odp', 1);
+
+		// The answer of an update of the whole source is not the answer of
+		// this one.
+		refreshEnded('Sales deck.odp', 2);
+		nodeassert.deepEqual(told, []);
+		refreshEnded('Sales deck.odp', 1, 'slide', outlookPart);
 		nodeassert.deepEqual(told, ['1 slide updated from Sales deck.odp.']);
 	});
 
 	it('leaves the answers of another document alone', function () {
 		documentHoldsLinks();
-		links.updatePage(outlookPart);
+		links.update(outlookPart);
 
 		// The import pane may be reading a document of its own at the same time.
 		deliver('remotedoccommandresult', {
 			source: 'Support deck.odp',
 			textMsg: 'exportslides: {"status":"staged","name":"other.odp"}',
 		});
-		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp')]);
+		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp', [outlookGuid])]);
 	});
 
 	it('takes a page that left the list before its turn as up to date', function () {
 		documentHoldsLinks();
-		links.updatePage(outlookPart);
-		links.updatePage(ticketsPart);
+		links.update(outlookPart);
+		links.update(ticketsPart);
 		pagesStaged('sourceslides-1.odp');
 
 		// Another view refreshed or unlinked the page meanwhile, so the document
 		// knows no page of that part any more. Nothing is wrong, and the next
 		// refresh follows.
-		deliver('slidelinkerror', { kind: 'notlinked', source: 'Sales deck.odp' });
+		deliver('slidelinkerror', {
+			kind: 'notlinked',
+			source: 'Sales deck.odp',
+			unit: 'slide',
+			id: outlookPart,
+		});
 		nodeassert.deepEqual(told, []);
-		nodeassert.equal(sent[sent.length - 1], exportOf('Support deck.odp'));
+		nodeassert.equal(
+			sent[sent.length - 1],
+			exportOf('Support deck.odp', [ticketsGuid]),
+		);
 	});
 
 	it('reads the whole source over pages of it waiting on their own', function () {
 		documentHoldsLinks();
-		links.updatePage(numbersPart);
-		links.updatePage(outlookPart);
+		links.update(numbersPart);
+		links.update(outlookPart);
 		links.updateAll();
 
 		pagesStaged('sourceslides-1.odp');
-		refreshEnded('Sales deck.odp', 1);
+		refreshEnded('Sales deck.odp', 1, 'slide', numbersPart);
 		pagesStaged('sourceslides-2.odp');
 		refreshEnded('Sales deck.odp', 2);
 
 		// The page in hand is read on its own, the one waiting is read with the
 		// rest of its source, and then the other source follows.
 		nodeassert.deepEqual(sent, [
-			exportOf('Sales deck.odp'),
-			updateOf('Sales deck.odp', 'sourceslides-1.odp') + ' part=' + numbersPart,
-			exportOf('Sales deck.odp'),
+			exportOf('Sales deck.odp', [numbersGuid]),
+			updateOf('Sales deck.odp', 'sourceslides-1.odp', 'slide', numbersPart),
+			salesExport,
 			updateOf('Sales deck.odp', 'sourceslides-2.odp'),
-			exportOf('Support deck.odp'),
+			supportExport,
 		]);
 	});
 
@@ -668,10 +833,7 @@ describe('SlideLinks', function () {
 		deliver('slidelinks', {
 			message: {
 				links: [
-					{
-						source: 'Sales deck.odp',
-						slides: [{ part: unknownPart, name: 'Numbers' }],
-					},
+					slideLink(unknownPart, 'Sales deck.odp', numbersGuid, 'Numbers'),
 				],
 			},
 		});
@@ -688,23 +850,50 @@ describe('SlideLinks', function () {
 	it('reads a page once when its source is already being refreshed', function () {
 		documentHoldsLinks();
 		links.updateAll();
-		links.updatePage(numbersPart);
-		links.updatePage(numbersPart);
+		links.update(numbersPart);
+		links.update(numbersPart);
 
-		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp')]);
+		nodeassert.deepEqual(sent, [salesExport]);
 	});
 
 	it('says so rather than reading a page that is linked to nothing', function () {
 		documentHoldsLinks();
-		links.updatePage(unknownPart);
+		links.update(unknownPart);
 
 		nodeassert.deepEqual(sent, []);
 		nodeassert.equal(told.length, 1);
 	});
 
+	it('names the slides an update left as they were', function () {
+		documentHoldsLinks();
+		links.updateAll();
+		pagesStaged('sourceslides-1.odp');
+
+		// The file held nothing for the second page of the document.
+		refreshEnded('Sales deck.odp', 1, undefined, undefined, [outlookPart]);
+		nodeassert.deepEqual(told, [
+			'1 slide updated from Sales deck.odp.',
+			'Cannot update slide 2: the source lacks matching slide',
+		]);
+	});
+
+	it('takes the link off a slide', function () {
+		documentHoldsLinks();
+		links.breakLink(numbersPart);
+		// A page that is linked to nothing has nothing to take off.
+		links.breakLink(unknownPart);
+		nodeassert.deepEqual(sent, [
+			'slidelink break unit=slide id=' + encodeURIComponent(numbersPart),
+		]);
+	});
+
 	it('says so when the source could not be taken off a page', function () {
 		documentHoldsLinks();
-		deliver('slidelinkerror', { kind: 'failed', part: numbersPart });
+		deliver('slidelinkerror', {
+			kind: 'failed',
+			unit: 'slide',
+			id: numbersPart,
+		});
 		nodeassert.deepEqual(told, ['Unlinking the slide failed.']);
 	});
 
@@ -712,17 +901,17 @@ describe('SlideLinks', function () {
 		(app as any).remoteLinks = [linkOf('Sales deck.odp', 'noaccess')];
 		deliver('slidelinks', { message: list });
 
-		nodeassert.equal(links.getPageSourceState(numbersPart), 'noaccess');
-		nodeassert.equal(links.isPageUpdatable(numbersPart), false);
+		nodeassert.equal(links.getSourceState(numbersPart), 'noaccess');
+		nodeassert.equal(links.isUpdatable(numbersPart), false);
 		// The storage named no document for this source.
-		nodeassert.equal(links.getPageSourceState(ticketsPart), '');
-		nodeassert.equal(links.isPageUpdatable(ticketsPart), false);
+		nodeassert.equal(links.getSourceState(ticketsPart), '');
+		nodeassert.equal(links.isUpdatable(ticketsPart), false);
 
 		(app as any).remoteLinks = remoteLinks('available');
-		nodeassert.equal(links.getPageSourceState(numbersPart), 'available');
-		nodeassert.equal(links.isPageUpdatable(numbersPart), true);
+		nodeassert.equal(links.getSourceState(numbersPart), 'available');
+		nodeassert.equal(links.isUpdatable(numbersPart), true);
 		// A page that is linked to nothing has no source to speak of.
-		nodeassert.equal(links.getPageSourceState(unknownPart), '');
+		nodeassert.equal(links.getSourceState(unknownPart), '');
 	});
 
 	it('asks the server to look for the file of one source again', function () {
@@ -736,97 +925,143 @@ describe('SlideLinks', function () {
 		]);
 	});
 
+	it('reads a page that follows a position from the whole deck', function () {
+		// The page reads whichever slide stands third in the source, so the
+		// source is asked for every slide rather than for one by identifier.
+		deliver('slidelinks', {
+			message: {
+				links: [slideLink(numbersPart, 'Sales deck.odp', 'Slide 3', 'Slide 3')],
+			},
+		});
+		sent = [];
+		links.updateAll();
+		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp')]);
+		// Such a page is never missing from its source.
+		sourceInfo('Sales deck.odp', 'Opening');
+		nodeassert.equal(links.isMissing(numbersPart), false);
+		nodeassert.equal(links.getSourceSlideName(numbersPart), '');
+	});
+
+	it('names the slide a page came from as the source calls it now', function () {
+		deliver('slidelinks', { message: list });
+		nodeassert.equal(links.getSourceSlideName(numbersPart), '');
+
+		// The source reports its slides, the first with no name of its own.
+		sourceInfo('Sales deck.odp', 'Opening');
+		nodeassert.equal(links.getSourceSlideName(numbersPart), 'Slide 1');
+	});
+
 	it('updates a linked section from the slides its source section holds now', function () {
 		deliver('slidelinks', { message: sectionList });
 		sent = [];
 
-		links.updateSection(openingSection);
+		// The document finds the section in the file by its identifier, so
+		// the source writes its whole deck out, after the user agreed.
+		links.update(openingSection);
 		nodeassert.equal(confirmed.length, 1);
-		nodeassert.deepEqual(sent, [infoOf('Sales deck.odp')]);
-
-		// An export that the import pane asked of the same source is no answer
-		// to the update, which has not asked for one yet.
-		pagesStaged('picked.odp');
-		nodeassert.deepEqual(sent, [infoOf('Sales deck.odp')]);
-
-		sourceInfo('Sales deck.odp', 'Opening, revised');
-		nodeassert.equal(
-			sent[1],
-			'remotedoccommand source=Sales%20deck.odp exportslides slides=p1,p2',
-		);
+		nodeassert.ok(confirmed[0].indexOf('Sales deck.odp') >= 0);
+		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp')]);
 
 		pagesStaged('staged.odp');
 		nodeassert.equal(
-			sent[2],
-			updateOf('Sales deck.odp', 'staged.odp') +
-				' section=' +
-				encodeURIComponent(openingSection) +
-				' sectionname=' +
-				encodeURIComponent('Opening, revised'),
+			sent[1],
+			updateOf('Sales deck.odp', 'staged.odp', 'section', openingSection),
 		);
 
 		// The answer for another section is not the answer of this update.
-		deliver('slidelink', {
-			message: {
-				status: 'updated',
-				source: 'Sales deck.odp',
-				section: '{4B1D2C3E-0002-4F00-8A00-1234567890AB}',
-				count: 2,
-			},
-		});
+		refreshEnded(
+			'Sales deck.odp',
+			2,
+			'section',
+			'{4B1D2C3E-0002-4F00-8A00-1234567890AB}',
+		);
 		nodeassert.deepEqual(told, []);
 
-		deliver('slidelink', {
-			message: {
-				status: 'updated',
-				source: 'Sales deck.odp',
-				section: openingSection,
-				count: 2,
-			},
-		});
-		nodeassert.deepEqual(told, [
-			'The section was updated from Sales deck.odp.',
-		]);
+		refreshEnded('Sales deck.odp', 2, 'section', openingSection);
+		nodeassert.deepEqual(told, ['2 slides updated from Sales deck.odp.']);
 	});
 
-	it('ends a section update when the source no longer holds its section', function () {
+	it('asks nothing when the slides of a section go in with the source', function () {
+		// Every link of the source under no other link is refreshed by one
+		// update, the section among them, so the question is asked once for
+		// the source. The other source holds slides alone, which need no
+		// question and are read by identifier, so it goes first.
+		deliver('slidelinks', {
+			message: { links: [...sectionList.links, ...list.links] },
+		});
+		sent = [];
+
+		links.updateAll();
+		nodeassert.equal(confirmed.length, 1);
+		nodeassert.ok(confirmed[0].indexOf('Sales deck.odp') >= 0);
+		nodeassert.deepEqual(sent, [supportExport]);
+
+		pagesStaged('support.odp');
+		refreshEnded('Support deck.odp', 1);
+		nodeassert.equal(sent[2], exportOf('Sales deck.odp'));
+		pagesStaged('staged.odp');
+		nodeassert.equal(sent[3], updateOf('Sales deck.odp', 'staged.odp'));
+	});
+
+	it('asks no second time about a section already waiting for its update', function () {
+		deliver('slidelinks', {
+			message: { links: [...sectionList.links, ...list.links] },
+		});
+		sent = [];
+
+		// The user agreed to the section from its own menu, and asks for every
+		// link while that update is still out. The source is read whole, with
+		// no further question, since the one section of it is agreed to.
+		links.update(openingSection);
+		links.updateAll();
+		nodeassert.equal(confirmed.length, 1);
+		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp')]);
+
+		pagesStaged('section.odp');
+		refreshEnded('Sales deck.odp', 2, 'section', openingSection);
+		nodeassert.deepEqual(sent.slice(2), [exportOf('Sales deck.odp')]);
+	});
+
+	it('refuses to update a section its source no longer holds', function () {
 		deliver('slidelinks', { message: sectionList });
-		sent = [];
-
-		links.updateSection(openingSection);
+		nodeassert.equal(links.isMissing(openingSection), false);
 		sourceInfo('Sales deck.odp', null);
-		nodeassert.equal(told.length, 1);
-		nodeassert.deepEqual(sent, [infoOf('Sales deck.odp')]);
-
-		// The update ended, so a new one runs once the source holds the section
-		// again.
-		sourceInfo('Sales deck.odp', 'Opening');
 		sent = [];
-		links.updateSection(openingSection);
-		nodeassert.deepEqual(sent, [infoOf('Sales deck.odp')]);
+
+		nodeassert.equal(links.isMissing(openingSection), true);
+		nodeassert.equal(links.getLinkState(openingSection), 'broken');
+		nodeassert.equal(links.isUpdatable(openingSection), false);
+		links.update(openingSection);
+		nodeassert.deepEqual(confirmed, []);
+		nodeassert.deepEqual(sent, []);
+		nodeassert.equal(told.length, 1);
+		nodeassert.ok(told[0].indexOf('no longer holds') >= 0);
+
+		// The section can be updated again once the source holds it again.
+		sourceInfo('Sales deck.odp', 'Opening');
+		links.update(openingSection);
+		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp')]);
 	});
 
 	it('takes the link off a section, and off its slides when asked', function () {
 		deliver('slidelinks', { message: sectionList });
 		sent = [];
 
-		links.breakSectionLink(openingSection, false);
-		links.breakSectionLink(openingSection, true);
+		links.breakLink(openingSection, false);
+		links.breakLink(openingSection, true);
 		nodeassert.deepEqual(sent, [
-			'slidelink break section=' + encodeURIComponent(openingSection),
-			'slidelink break section=' +
+			'slidelink break unit=section id=' + encodeURIComponent(openingSection),
+			'slidelink break unit=section id=' +
 				encodeURIComponent(openingSection) +
-				' slides=1',
+				' deep=1',
 		]);
-	});
 
-	it('marks a linked section as missing once its source holds no such section', function () {
-		deliver('slidelinks', { message: sectionList });
-		nodeassert.equal(links.isSectionMissing(openingSection), false);
-
-		sourceInfo('Sales deck.odp', null);
-		nodeassert.equal(links.isSectionMissing(openingSection), true);
-		nodeassert.equal(links.isSectionUpdatable(openingSection), false);
+		deliver('slidelinkerror', {
+			kind: 'failed',
+			unit: 'section',
+			id: openingSection,
+		});
+		nodeassert.deepEqual(told, ['Unlinking the section failed.']);
 	});
 
 	it('offers Update Links in a document whose only links are sections', function () {
@@ -837,23 +1072,21 @@ describe('SlideLinks', function () {
 	});
 
 	it('updates every linked section from Update Links after one question', function () {
-		const second = {
-			...sectionList.sections[0],
-			section: '{4B1D2C3E-0002-4F00-8A00-1234567890AB}',
-		};
+		const second = sectionLink('{4B1D2C3E-0002-4F00-8A00-1234567890AB}', [
+			numbersPart,
+		]);
 		deliver('slidelinks', {
-			message: { sections: [sectionList.sections[0], second], links: [] },
+			message: { links: [sectionList.links[0], second] },
 		});
 		sent = [];
 
 		links.updateAll();
 		nodeassert.equal(confirmed.length, 1);
 		nodeassert.ok(confirmed[0].indexOf('2 linked sections') >= 0);
-		// The updates go one after another, so the first one asks its source.
-		nodeassert.deepEqual(sent, [infoOf('Sales deck.odp')]);
+		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp')]);
 	});
 
-	it('says which linked sections Update Links leaves as they are', function () {
+	it('says which sources Update Links leaves as they are', function () {
 		(app as any).remoteLinks = [linkOf('Sales deck.odp', 'noaccess')];
 		deliver('slidelinks', { message: sectionList });
 		sent = [];
@@ -862,7 +1095,63 @@ describe('SlideLinks', function () {
 		nodeassert.deepEqual(confirmed, []);
 		nodeassert.deepEqual(sent, []);
 		nodeassert.deepEqual(told, [
-			'One linked section cannot be updated, because its source is not available.',
+			'You do not have access to Sales deck.odp, so its slides cannot be updated.',
 		]);
+	});
+
+	it('drops a section update the user did not agree to', function () {
+		// The user answers every question with Cancel.
+		map.uiManager.showConfirmModal = (
+			id: string,
+			title: string,
+			message: string,
+			button: string,
+			callback: () => void,
+			hideCancel: boolean,
+			cancel: () => void,
+		) => {
+			confirmed.push(message);
+			cancel();
+		};
+		deliver('slidelinks', { message: sectionList });
+		sent = [];
+
+		links.update(openingSection);
+		nodeassert.equal(confirmed.length, 1);
+		nodeassert.deepEqual(sent, []);
+	});
+
+	it('reads the slides linked on their own when the section update is declined', function () {
+		map.uiManager.showConfirmModal = (
+			id: string,
+			title: string,
+			message: string,
+			button: string,
+			callback: () => void,
+			hideCancel: boolean,
+			cancel: () => void,
+		) => {
+			confirmed.push(message);
+			cancel();
+		};
+		deliver('slidelinks', {
+			message: { links: [...sectionList.links, ...list.links] },
+		});
+		sent = [];
+
+		// The section keeps its slides, and the two slides of the same source
+		// that are linked on their own are read one by one, the slide of the
+		// section not among them.
+		links.updateSource('Sales deck.odp');
+		nodeassert.equal(confirmed.length, 1);
+		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp', [numbersGuid])]);
+		pagesStaged('one.odp');
+		refreshEnded('Sales deck.odp', 1, 'slide', numbersPart);
+		nodeassert.deepEqual(sent.slice(2), [
+			exportOf('Sales deck.odp', [outlookGuid]),
+		]);
+		pagesStaged('two.odp');
+		refreshEnded('Sales deck.odp', 1, 'slide', outlookPart);
+		nodeassert.equal(sent.length, 4);
 	});
 });

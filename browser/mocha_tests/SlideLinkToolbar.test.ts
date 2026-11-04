@@ -17,16 +17,14 @@ describe('SlideLinkToolbar', function () {
 	let editable: boolean;
 	// The identifier of the slide on show.
 	let current: string;
-	// The pages that are linked, with what they are linked to.
+	// The pages that hold a link of their own, with what they are linked to.
 	let linked: Map<string, { source: string; name: string }>;
-	// The pages whose source has moved on since they were read.
+	// The links whose source has moved on since they were read.
 	let outdated: Set<string>;
 	// The state of every source, as the storage announced it.
 	let sourceState: string;
-	// The slides that sit in a linked section, and whether its source section
-	// has moved on since the section was read.
+	// The slides that sit in the linked section.
 	let inSection: Set<string>;
-	let sectionOutdated: boolean;
 	let toolbar: SlideLinkToolbar;
 	let savedEvents: any;
 
@@ -69,6 +67,32 @@ describe('SlideLinkToolbar', function () {
 		listener({ selectedPart: 0 });
 	}
 
+	// The links over a slide, innermost first, as SlideLinks lists them: the
+	// slide's own link when it holds one, then the section that holds it.
+	function linksOf(part: string): any[] {
+		const chain: any[] = [];
+		const link = linked.get(part);
+		if (link)
+			chain.push({
+				unit: 'slide',
+				id: part,
+				parent: inSection.has(part) ? sectionId : '',
+				source: link.source,
+				name: link.name,
+				slides: [part],
+			});
+		if (inSection.has(part))
+			chain.push({
+				unit: 'section',
+				id: sectionId,
+				parent: '',
+				source: 'Sales deck.odp',
+				name: 'Opening',
+				slides: [numbersPart, editedPart],
+			});
+		return chain;
+	}
+
 	// The JSX runtime tells a node from a text child by its class, which the
 	// jsdom window has and the Node global does not.
 	before(function () {
@@ -88,8 +112,11 @@ describe('SlideLinkToolbar', function () {
 		outdated = new Set();
 		sourceState = 'connected';
 		inSection = new Set();
-		sectionOutdated = false;
 
+		const readable = () =>
+			sourceState !== '' &&
+			sourceState !== 'noaccess' &&
+			sourceState !== 'missing';
 		const map: any = {
 			on: function (name: string, callback: any, context: any) {
 				listeners.set(name, callback.bind(context));
@@ -98,25 +125,11 @@ describe('SlideLinkToolbar', function () {
 			isPresentationOrDrawing: () => true,
 			slideLinks: {
 				currentPart: () => current,
-				getPageLink: (part: string) => linked.get(part) || null,
+				linksOf: linksOf,
 				getSourceSlideName: () => '',
-				isPageOutdated: (part: string) => outdated.has(part),
-				getPageSourceState: (part: string) =>
-					linked.has(part) ? sourceState : '',
-				isPageUpdatable: (part: string) =>
-					linked.has(part) &&
-					sourceState !== '' &&
-					sourceState !== 'noaccess' &&
-					sourceState !== 'missing',
-				currentSection: () => (inSection.has(current) ? sectionId : ''),
-				getSectionLink: (section: string) =>
-					section === sectionId ? { source: 'Sales deck.odp' } : null,
-				isSectionOutdated: () => sectionOutdated,
-				getSectionSourceState: () => sourceState,
-				isSectionUpdatable: () =>
-					sourceState !== '' &&
-					sourceState !== 'noaccess' &&
-					sourceState !== 'missing',
+				isOutdated: (id: string) => outdated.has(id),
+				getSourceState: () => sourceState,
+				isUpdatable: () => readable(),
 			},
 		};
 
@@ -265,7 +278,7 @@ describe('SlideLinkToolbar', function () {
 
 	it('offers a section update alone while folded when the source section has moved on', function () {
 		inSection.add(numbersPart);
-		sectionOutdated = true;
+		outdated.add(sectionId);
 		slideShown(numbersPart);
 		nodeassert.deepEqual(actions(), ['Update section']);
 	});

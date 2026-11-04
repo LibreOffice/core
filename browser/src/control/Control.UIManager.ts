@@ -3553,6 +3553,7 @@ class UIManager extends window.L.Control {
 	/// message - message
 	/// buttonText - text inside OK button
 	/// callback - callback on button press
+	/// cancelCallback - callback on the cancel button, which closes the dialog either way
 	showConfirmModal(
 		id: string,
 		title: string,
@@ -3560,6 +3561,7 @@ class UIManager extends window.L.Control {
 		buttonText: string,
 		callback: () => void,
 		hideCancelButton?: boolean,
+		cancelCallback?: () => void,
 	): void {
 		var dialogId = this.generateModalId(id);
 		var json = this._modalDialogJSON(id, title, !window.mode.isDesktop(), [
@@ -3592,14 +3594,17 @@ class UIManager extends window.L.Control {
 			},
 		]);
 
-		this.showModal(json, [
+		const callbacks: any[] = [
 			{id: 'response-ok', func: () => {
 				if (typeof callback === 'function') {
 					callback();
 				}
 				this.closeModal(dialogId);
 			}}
-		]);
+		];
+		if (typeof cancelCallback === 'function')
+			callbacks.push({id: 'response-cancel', func: cancelCallback});
+		this.showModal(json, callbacks);
 	}
 
 	/// shows an error modal (message + optional "Technical details")

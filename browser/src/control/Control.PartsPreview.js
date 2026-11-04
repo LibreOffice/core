@@ -1022,13 +1022,13 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 	// shows, or what is wrong with the source when it cannot be read.
 	_linkLabels: function (img, sourceSlide) {
 		const links = this._map.slideLinks;
-		const state = links.getPageSourceState(img._part);
+		const state = links.getSourceState(img._part);
 		if (state === 'missing')
 			return [
 				_('preview of page %1, %3 is missing'),
 				_('%1, %3 is missing'),
 			];
-		if (links.isPageMissing(img._part))
+		if (links.isMissing(img._part))
 			return [
 				_('preview of page %1, not found in %3'),
 				_('%1, not found in %3'),
@@ -1043,7 +1043,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				_('preview of page %1, could not open %3'),
 				_('%1, could not open %3'),
 			];
-		if (links.isPageOutdated(img._part))
+		if (links.isOutdated(img._part))
 			return sourceSlide
 				? [
 						_('preview of page %1, %2 changed in %3'),
@@ -1069,11 +1069,11 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				];
 	},
 
-	// The source document a slide is linked to and the slide of that document
-	// it was made from, or null for a slide that is linked to nothing.
+	// The link of a slide, naming the source document and the slide of it the
+	// page was made from, or null for a slide that holds no link of its own.
 	_pageLink: function (img) {
 		const links = this._map.slideLinks;
-		return links && img._part ? links.getPageLink(img._part) : null;
+		return links && img._part ? links.getLink(img._part) : null;
 	},
 
 	// Shows the link mark on the preview of a slide that is linked to another
@@ -1082,8 +1082,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 	// read and holds no slide the page came from is marked as broken.
 	_setPreviewLinkMark: function (img, i) {
 		const links = this._map.slideLinks;
-		const state =
-			links && img._part ? links.getPageLinkState(img._part) : '';
+		const state = links && img._part ? links.getLinkState(img._part) : '';
 		img._linkBadge.classList.toggle('linked', state !== '');
 		this._setLinkStateClasses(img._linkBadge, state);
 		this._setPreviewPositionLabels(img, i);
@@ -1270,7 +1269,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		const section = header._section;
 		const links = this._map.slideLinks;
 		const link =
-			links && section && section.id ? links.getSectionLink(section.id) : null;
+			links && section && section.id ? links.getLink(section.id) : null;
 		let badge = header.querySelector('.slide-section-link');
 		if (!link) {
 			if (badge) badge.remove();
@@ -1283,7 +1282,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			header.querySelector('.slide-section-name').after(badge);
 		}
 
-		const state = links.getSectionLinkState(section.id);
+		const state = links.getLinkState(section.id);
 		this._setLinkStateClasses(badge, state);
 
 		let label;
@@ -1476,8 +1475,8 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			});
 		}
 		const links = this._map.slideLinks;
-		if (links && section.id && links.getSectionLink(section.id)) {
-			if (links.isSectionUpdatable(section.id)) {
+		if (links && section.id && links.getLink(section.id)) {
+			if (links.isUpdatable(section.id)) {
 				entries.push({
 					id: 'updateSection',
 					type: 'comboboxentry',
@@ -1568,13 +1567,13 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				break;
 			}
 			case 'updateSection':
-				that._map.slideLinks.updateSection(section.id);
+				that._map.slideLinks.update(section.id);
 				break;
 			case 'unlinkSection':
-				that._map.slideLinks.breakSectionLink(section.id, false);
+				that._map.slideLinks.breakLink(section.id, false);
 				break;
 			case 'unlinkSectionAndSlides':
-				that._map.slideLinks.breakSectionLink(section.id, true);
+				that._map.slideLinks.breakLink(section.id, true);
 				break;
 			case 'collapseAllSections':
 				that._collapseAllSections();

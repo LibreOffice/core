@@ -60,10 +60,7 @@ class SlideLinkToolbar {
     const links = this.map.slideLinks;
     if (!links || !this.map.isPresentationOrDrawing()) return '';
     const part = links.currentPart();
-    if (!part) return '';
-    return links.getPageLink(part) !== null || links.currentSection()
-      ? part
-      : '';
+    return part && links.linksOf(part).length > 0 ? part : '';
   }
 
   // Draws the toolbar for the slide on show, or takes it away when that slide
@@ -96,34 +93,33 @@ class SlideLinkToolbar {
 
   private render(part: string): HTMLElement {
     const links = this.map.slideLinks;
-    // A slide edited here loses its own link and stays in its linked section,
-    // so either link can be absent.
-    const link = links.getPageLink(part);
-    const section = links.currentSection();
-    const sectionLink = section ? links.getSectionLink(section) : null;
+    // The links over the slide on show, innermost first. A slide edited here
+    // loses its own link and stays in its linked section, so either link can
+    // be absent.
+    const chain: SlideLink[] = links.linksOf(part);
+    const link = chain.find((held) => held.unit === 'slide') || null;
+    const section = chain.find((held) => held.unit === 'section') || null;
     const editable = this.map.isEditMode();
-    const outdated = link !== null && links.isPageOutdated(part);
-    const readable = link !== null && links.isPageUpdatable(part);
-    const sectionOutdated = section !== '' && links.isSectionOutdated(section);
-    const sectionReadable = section !== '' && links.isSectionUpdatable(section);
-    const stateLabel = this.sourceStateLabel(
-      link !== null
-        ? links.getPageSourceState(part)
-        : links.getSectionSourceState(section),
-    );
+    const outdated = link !== null && links.isOutdated(link.id);
+    const readable = link !== null && links.isUpdatable(link.id);
+    const sectionOutdated = section !== null && links.isOutdated(section.id);
+    const sectionReadable = section !== null && links.isUpdatable(section.id);
+    const stateLabel = this.sourceStateLabel(links.getSourceState(chain[0].id));
 
     // The label describes the link the way the slide's thumbnail does.
-    const sourceSlide = link ? links.getSourceSlideName(part) || link.name : '';
+    const sourceSlide = link
+      ? links.getSourceSlideName(link.id) || link.name
+      : '';
     const description = link
       ? sourceSlide
         ? _('Linked to {0} in {1}')
             .replace('{0}', () => sourceSlide)
             .replace('{1}', () => link.source)
         : _('Linked to {0}').replace('{0}', () => link.source)
-      : _('In a section linked to {0}').replace(
-          '{0}',
-          () => sectionLink.source,
-        );
+      : (chain[0].unit === 'section'
+          ? _('In a section linked to {0}')
+          : _('In a presentation linked to {0}')
+        ).replace('{0}', () => chain[0].source);
 
     const element = (
       <div

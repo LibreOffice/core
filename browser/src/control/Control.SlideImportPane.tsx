@@ -755,7 +755,7 @@ class SlideImportPane {
     const links = this.map.slideLinks;
     const linked = this.linkedSource(source);
     if (!links || !linked) return 0;
-    return links.countOutdatedPagesFrom(linked);
+    return links.countOutdatedSlidesFrom(linked);
   }
 
   // How many slides are picked in a source the insert is not reading from.
@@ -767,14 +767,14 @@ class SlideImportPane {
     return kept ? kept.size : 0;
   }
 
-  // How many pages this document already took from a source. A plain copy
-  // records no source, so the count speaks for linked pages alone and says
-  // nothing at all when there are none.
+  // How many slides this document already took from a source, on their own or
+  // in a linked section. A plain copy records no source, so the count speaks
+  // for linked slides alone and says nothing at all when there are none.
   private takenCount(source: SlideImportPaneSource): number {
     const links = this.map.slideLinks;
     const linked = this.linkedSource(source);
     if (!links || !linked) return 0;
-    return links.countPagesFrom(linked);
+    return links.countSlidesFrom(linked);
   }
 
   // A state that shows no slides and will not start showing them by waiting.
