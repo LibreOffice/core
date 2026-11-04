@@ -465,8 +465,7 @@ PoHeader::PoHeader( std::string_view rExtSrc )
     m_pGenPo->setExtractCom(Concat2View(OString::Concat("extracted from ") + rExtSrc));
     m_pGenPo->setMsgStr(
         "Project-Id-Version: PACKAGE VERSION\n"
-        "Report-Msgid-Bugs-To: https://bugs.libreoffice.org/enter_bug.cgi?"
-        "product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
+        "Report-Msgid-Bugs-To: https://github.com/CollaboraOnline/online/issues/new/choose\n"
         "POT-Creation-Date: " + lcl_GetTime() +
         "\nPO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
         "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"

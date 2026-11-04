@@ -270,8 +270,8 @@ def natural_sort(lst):
     Sort naturally the given list.
     Credits: http://stackoverflow.com/a/4836734
     """
-    convert = lambda text: int(text) if text.isdigit() else text.lower() 
-    alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ] 
+    convert = lambda text: int(text) if text.isdigit() else text.lower()
+    alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ]
     return sorted(lst, key = alphanum_key)
 # }}}
 # class _BaseFile {{{
