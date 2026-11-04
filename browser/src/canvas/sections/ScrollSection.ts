@@ -934,7 +934,12 @@ export class ScrollSection extends CanvasSectionObject {
 			this.sectionProperties.lastElapsedTime = 0;
 			// We're about to start a duration-less animation, so we need to
 			// ensure the animation is reset.
-			if (!this.startAnimating({ 'defer': true })) this.resetAnimation();
+			if (!this.startAnimating({ 'defer': true })) {
+				if (this.isAnimating) this.resetAnimation();
+				// Another section, such as a zoom, holds the animation. This wheel turn
+				// is dropped, and the next one starts the scroll animation again.
+				else this.sectionProperties.animatingScroll = false;
+			}
 		}
 	}
 

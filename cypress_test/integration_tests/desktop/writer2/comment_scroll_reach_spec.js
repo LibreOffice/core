@@ -188,3 +188,62 @@ describe(['tagdesktop'], 'Writer comments can be scrolled into view.', function(
 		});
 	});
 });
+
+// A read-only document animates the wheel scroll.
+describe(['tagdesktop'], 'Writer wheel scrolling in a read-only document.', function() {
+
+	beforeEach(function() {
+		// A read-only view has no notebookbar, which the usual load checks wait for.
+		var filePath = helper.setupDocument('writer/scrolling.odt');
+		helper.loadDocument(filePath, true, undefined, undefined, 'permission=readonly');
+		cy.getFrameWindow().should((win) => {
+			expect(win.app.map._docLoaded, 'document loaded').to.equal(true);
+			this.win = win;
+		});
+		cy.then(() => {
+			return helper.processToIdle(this.win);
+		});
+	});
+
+	it('The wheel still scrolls after a wheel turn during a zoom animation.', function() {
+		var layout;
+		var topBeforeScroll;
+
+		// One mouse wheel notch on the middle of the canvas, so the document area gets it.
+		function turnWheel(win) {
+			var canvas = win.document.querySelector('#document-canvas');
+			var rect = canvas.getBoundingClientRect();
+			canvas.dispatchEvent(new win.WheelEvent('wheel', {
+				deltaY: 3,
+				deltaMode: win.WheelEvent.DOM_DELTA_LINE,
+				clientX: rect.left + rect.width / 2,
+				clientY: rect.top + rect.height / 2,
+				bubbles: true,
+				cancelable: true,
+			}));
+		}
+
+		cy.then(() => {
+			var win = this.win;
+			var scroll = win.app.sectionContainer.getSectionWithName(win.app.CSections.Scroll.name);
+			expect(scroll.sectionProperties.animateWheelScroll, 'animated wheel scroll').to.be.true;
+
+			// The zoom section holds the canvas animation while the wheel turns.
+			var zoom = win.app.sectionContainer.getSectionWithName(win.app.CSections.ZoomControl.name);
+			expect(zoom.startAnimating({ duration: 250 }), 'zoom animation started').to.be.true;
+			turnWheel(win);
+			return helper.waitForCanvasAnimation(win);
+		});
+
+		cy.then(() => {
+			var win = this.win;
+			layout = win.app.activeDocument.activeLayout;
+			topBeforeScroll = layout.viewedRectangle.pY1;
+			turnWheel(win);
+		});
+
+		cy.wrap(null).should(function() {
+			expect(layout.viewedRectangle.pY1, 'top of the view').to.be.greaterThan(topBeforeScroll);
+		});
+	});
+});

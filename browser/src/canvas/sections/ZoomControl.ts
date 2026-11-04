@@ -150,12 +150,13 @@ class ZoomControl extends CanvasSectionObject {
 	}
 
 	// Commit the final zoom when the animation finishes.
+	// The pending target is cleared before the commit, so the zoom is committed once even if
 	public onAnimationEnded(frameCount: number, elapsedTime: number): void {
-		if (this.zoomTarget !== null && this.zoomAnchor) {
-			this.layout.endZoom(this.zoomTarget, this.zoomAnchor);
-		}
+		const target = this.zoomTarget;
+		const anchor = this.zoomAnchor;
 		this.zoomTarget = null;
 		this.zoomAnchor = null;
+		if (target !== null && anchor) this.layout.endZoom(target, anchor);
 	}
 
 	// ---- Ctrl+wheel zoom ------------------------------------------------
