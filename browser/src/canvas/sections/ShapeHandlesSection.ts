@@ -1446,6 +1446,21 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		return rectangle;
 	}
 
+	// This gives the point the picture turns about, ready for the transform-origin style. Core
+	// turns the object about the middle of the selection, and the middle of the picture element
+	// is a different point, because that element is taller than the drawing it holds.
+	public getPictureRotationOrigin(): string {
+		const rectangle = GraphicSelection.rectangle;
+		const center = rectangle.center;
+		const centerPoint = new cool.SimplePoint(center[0], center[1], rectangle.part, rectangle.mode);
+
+		const left = parseFloat(this.sectionProperties.svg.style.left);
+		const top = parseFloat(this.sectionProperties.svg.style.top);
+
+		return (centerPoint.vX / app.dpiScale - left) + 'px ' +
+			(centerPoint.vY / app.dpiScale - top) + 'px';
+	}
+
 	adjustSVGProperties() {
 		if (this.sectionProperties.svg && this.sectionProperties.svg.style.display === '' && GraphicSelection.hasActiveSelection()) {
 			const viewBox: number[] = this.getViewBox(this.sectionProperties.svg.children[0]);

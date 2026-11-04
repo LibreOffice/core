@@ -202,6 +202,8 @@ class ShapeHandleRotationSubSection extends ShapeHandleSubSection {
 		if (parentHandlerSection.sectionProperties.svg) {
 			parentHandlerSection.sectionProperties.svg.style.opacity = 0.5;
 			const angleDifference = -this.getAngleDifference() / 100;
+			parentHandlerSection.sectionProperties.svg.style.transformOrigin =
+				parentHandlerSection.getPictureRotationOrigin();
 			parentHandlerSection.sectionProperties.svg.style.transform = 'rotate(' + angleDifference + 'deg)';
 			this.containerObject.requestReDraw();
 			parentHandlerSection.showSVG();
