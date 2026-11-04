@@ -14,6 +14,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
@@ -288,6 +289,18 @@ DECLARE_WW8EXPORT_TEST(testTdf173671_textlineTop, "tdf173671_textlineTop.doc")
                          getProperty<sal_Int16>(xShape, u"VertOrientRelation"_ustr));
     CPPUNIT_ASSERT_EQUAL(css::text::VertOrientation::LINE_TOP,
                          getProperty<sal_Int16>(xShape, u"VertOrient"_ustr));
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf139998_cropOverflow, "tdf139998_cropOverflow.doc")
+{
+    // Without the fix in place, this test would have failed with
+    // - Expected: -49
+    // - Actual  : -115648
+    // i.e. the padding crop overflowed due to the large image
+    const text::GraphicCrop aCrop
+        = getProperty<text::GraphicCrop>(getShape(1), u"GraphicCrop"_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-49), aCrop.Left);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-49), aCrop.Right);
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf90408, "tdf90408.doc")

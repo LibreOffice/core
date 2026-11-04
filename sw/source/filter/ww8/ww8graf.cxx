@@ -2173,7 +2173,8 @@ static sal_Int32 lcl_ConvertCrop(sal_uInt32 const nCrop, sal_Int32 const nSize)
         SAL_INFO("sw.ww8", "ignoring suspiciously large crop: " << nIntegral);
         return 0;
     }
-    return (nIntegral * nSize) + (((nCrop & 0xffff) * nSize) >> 16);
+    // tdf#139998 - avoid wrong crop due to overflow with large image sizes
+    return (nIntegral * nSize) + ((sal_Int64(nCrop & 0xffff) * nSize) >> 16);
 }
 
 void SwWW8ImplReader::SetAttributesAtGrfNode(const SvxMSDffImportRec& rRecord,
