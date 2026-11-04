@@ -7,6 +7,11 @@
 	 * when rendered inside the backstage. */
 	--doc-type-color: rgb(var(--doc-type, 92, 41, 131));
 	--color-on-primary: #ffffff;
+	/* A page preview is 126x176. A landscape preview is at most 150px wide. */
+	--template-preview-height: 176px;
+	--template-page-preview-width: 126px;
+	--template-preview-max-width: 150px;
+	--template-card-width: calc(var(--template-preview-max-width) + 2 * var(--spacing-s));
 	--color-primary-text: #ffffff;
 	--color-accent-background: var(--color-background-lighter);
 
@@ -334,7 +339,7 @@
 .backstage-home-templates-row .backstage-template-card {
 	flex: 0 0 auto;
 	box-sizing: border-box;
-	width: 124px;
+	width: var(--template-card-width);
 }
 
 .backstage-home-more-templates {
@@ -403,7 +408,7 @@
 
 .backstage-templates-grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, 124px);
+	grid-template-columns: repeat(auto-fill, var(--template-card-width));
 	gap: calc(var(--spacing-xl) + var(--spacing-m));
 }
 
@@ -504,7 +509,7 @@
 	display: flex;
 	justify-content: center;
 	align-items: end;
-	height: 98px;
+	height: var(--template-preview-height);
 	background: transparent;
 	flex: 0 0 auto;
 }
@@ -515,8 +520,8 @@
 
 .template-thumbnail img {
 	box-sizing: border-box;
-	max-width: 98px;
-	max-height: 98px;
+	max-width: var(--template-preview-max-width);
+	max-height: var(--template-preview-height);
 	width: auto;
 	height: auto;
 	display: block;
@@ -526,9 +531,9 @@
 
 /* The icon of the document type stands in for a missing preview, on a box of page size. */
 .template-thumbnail img.is-type-icon {
-	width: 70px;
-	height: 98px;
-	padding: 33px 19px;
+	width: var(--template-page-preview-width);
+	height: var(--template-preview-height);
+	padding: 64px 39px;
 	object-fit: contain;
 	background-color: var(--color-background-lighter);
 }
@@ -666,7 +671,7 @@
 
 .template-blank-row {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, 124px);
+	grid-template-columns: repeat(auto-fill, var(--template-card-width));
 	gap: calc(var(--spacing-xl) + var(--spacing-m));
 	overflow-x: auto;
 	padding-block: var(--spacing-m);
@@ -695,8 +700,8 @@
 
 .backstage-add-template-card .template-thumbnail {
 	box-sizing: border-box;
-	width: 70px;
-	height: 98px;
+	width: var(--template-page-preview-width);
+	height: var(--template-preview-height);
 	align-items: center;
 	border: none;
 }
