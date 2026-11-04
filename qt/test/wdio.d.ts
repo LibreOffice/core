@@ -32,6 +32,10 @@ interface Window {
 	// True once a .uno:CopySlide command has reported completion through
 	// the map's 'commandresult' event; false while one is in flight.
 	__slideCopyResultSeen?: boolean;
+	// The preferences of the user, by key, such as "text.onboardingTourSeen".
+	prefs: {
+		set(key: string, value: string): void;
+	};
 }
 declare const app: {
 	map: {
