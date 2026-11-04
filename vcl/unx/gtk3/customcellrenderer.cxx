@@ -26,14 +26,7 @@ enum
 };
 }
 
-#if defined __clang__ && GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 68
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-volatile"
-#endif
 G_DEFINE_TYPE(CustomCellRenderer, custom_cell_renderer, GTK_TYPE_CELL_RENDERER_TEXT)
-#if defined __clang__ && GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 68
-#pragma clang diagnostic pop
-#endif
 
 static void custom_cell_renderer_init(CustomCellRenderer* self)
 {
