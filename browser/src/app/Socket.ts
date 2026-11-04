@@ -90,10 +90,9 @@ class Socket {
 		this.socket = undefined;
 		this.traceEvents = new TraceEvents(this);
 
-		if (
-			window.Worker &&
-			(!window.ThisIsAMobileApp || window.mode.isCODesktop())
-		) {
+		const hasWorkerSupport = !!window.Worker;
+		const isMobileApp = window.ThisIsAMobileApp && !window.mode.isCODesktop();
+		if (hasWorkerSupport && !isMobileApp) {
 			window.app.console.info('Creating TaskWorkers');
 			for (let i = 0; i < 4; ++i) {
 				try {
