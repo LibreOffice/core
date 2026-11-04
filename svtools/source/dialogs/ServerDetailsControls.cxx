@@ -149,6 +149,11 @@ bool HostDetailsContainer::verifyScheme( const OUString& sScheme )
     return sScheme == Concat2View( m_sScheme + "://" );
 }
 
+void HostDetailsContainer::setDefaultPort(sal_uInt16 nDefaultPort)
+{
+    m_nDefaultPort = nDefaultPort;
+}
+
 DavDetailsContainer::DavDetailsContainer(PlaceEditDialog* pBuilder)
     : HostDetailsContainer(pBuilder, 80, u"http"_ustr)
 {
@@ -193,6 +198,8 @@ IMPL_LINK( DavDetailsContainer, ToggledDavsHdl, weld::Toggleable&, rCheckBox, vo
         m_pDialog->m_xEDPort->set_value( 443 );
     else if ( m_pDialog->m_xEDPort->get_value() == 443 && !bCheckedDavs )
         m_pDialog->m_xEDPort->set_value( 80 );
+
+    setDefaultPort(bCheckedDavs ? 443 : 80);
 
     OUString sScheme( u"http"_ustr );
     if ( bCheckedDavs )

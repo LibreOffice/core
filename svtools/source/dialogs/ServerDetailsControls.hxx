@@ -83,6 +83,8 @@ class HostDetailsContainer : public DetailsContainer
             the container and set the proper controls accordingly if needed.
           */
         virtual bool verifyScheme( const OUString& rScheme );
+
+        void setDefaultPort(sal_uInt16 nDefaultPort);
 };
 
 class DavDetailsContainer final : public HostDetailsContainer
