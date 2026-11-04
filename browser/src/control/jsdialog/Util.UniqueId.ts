@@ -18,17 +18,9 @@ declare var JSDialog: any;
 let counter = 0;
 
 function makeIdUnique(id: string) {
-	let found = document.querySelector('[id="' + id + '"]');
 	counter++;
-
-	while (found) {
-		found = document.querySelector('[id="' + id + counter + '"]');
-		counter++;
-	}
-
-	if (counter) id = id + counter;
-
-	return id;
+	while (document.getElementById(id + counter)) counter++;
+	return id + counter;
 }
 
 JSDialog.MakeIdUnique = makeIdUnique;
