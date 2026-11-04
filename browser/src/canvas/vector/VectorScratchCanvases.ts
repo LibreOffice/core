@@ -79,35 +79,46 @@ namespace cool {
 			return scratch;
 		}
 
-		// Pixel for pixel onto the region, with the opacity on top of the
-		// target's.
+		// Onto the region, with the opacity on top of the target's. A canvas
+		// drawn at a scale is stretched back to the region.
 		drawOnto(
 			context: CanvasRenderingContext2D,
 			scratch: CanvasRenderingContext2D,
 			region: ScratchRegion,
 			opacity?: number,
+			scale: number = 1,
 		): void {
 			context.save();
 			context.setTransform(1, 0, 0, 1, 0, 0);
 			if (opacity !== undefined && opacity < 1) context.globalAlpha *= opacity;
-			context.drawImage(scratch.canvas, region.x, region.y);
+			if (scale === 1) context.drawImage(scratch.canvas, region.x, region.y);
+			else
+				context.drawImage(
+					scratch.canvas,
+					region.x,
+					region.y,
+					scratch.canvas.width / scale,
+					scratch.canvas.height / scale,
+				);
 			context.restore();
 		}
 
-		// The target's transform, with the region's corner as origin.
+		// The target's transform, with the region's corner as origin, times
+		// the scale.
 		static alignWith(
 			scratch: CanvasRenderingContext2D,
 			context: CanvasRenderingContext2D,
 			region: ScratchRegion,
+			scale: number = 1,
 		): void {
 			const matrix = context.getTransform();
 			scratch.setTransform(
-				matrix.a,
-				matrix.b,
-				matrix.c,
-				matrix.d,
-				matrix.e - region.x,
-				matrix.f - region.y,
+				scale * matrix.a,
+				scale * matrix.b,
+				scale * matrix.c,
+				scale * matrix.d,
+				scale * (matrix.e - region.x),
+				scale * (matrix.f - region.y),
 			);
 		}
 

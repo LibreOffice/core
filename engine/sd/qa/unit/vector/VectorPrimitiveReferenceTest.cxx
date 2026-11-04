@@ -58,6 +58,7 @@
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
+#include <drawinglayer/primitive2d/ReflectionPrimitive2D.hxx>
 
 #include <basegfx/color/bcolormodifier.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
@@ -1518,6 +1519,71 @@ CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testPolyPolygonStroke)
     assertJsonPath(aJson, "/primitives/0/line/linejoin", "miter");
     assertJsonPath(aJson, "/primitives/0/line/linecap", "butt");
     assertJsonPathExists(aJson, "/primitives/0/path");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testReflection)
+{
+    // The reflection is sent with its content, fade and blur, so the browser blurs at its own
+    // zoom. The content is 100 by 50, and the reflection starts 10 below it.
+    basegfx::B2DPolygon aRectangle(
+        basegfx::utils::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 100.0, 50.0)));
+
+    Primitive2DContainer aChildren;
+    aChildren.append(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aRectangle),
+                                                     basegfx::BColor(0.0, 0.0, 1.0)));
+
+    const drawinglayer::attribute::ReflectionAttribute aReflection(10, 4, 0.5, 0.0, 1.0, 0.9);
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new ReflectionPrimitive2D(aReflection, std::move(aChildren)));
+
+    auto aJson = writeReference(u"testReflection", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "reflection");
+
+    // Flipped at y = 50 and moved down by 10: y becomes 110 - y.
+    CPPUNIT_ASSERT_EQUAL(size_t(6), aJson.getSize("/primitives/0/matrix").value_or(0));
+    assertJsonPathDouble(aJson, "/primitives/0/matrix/0", 1.0, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/matrix/3", -1.0, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/matrix/4", 0.0, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/matrix/5", 110.0, 1e-9);
+
+    assertJsonPathDouble(aJson, "/primitives/0/range/1", 60.0, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/range/3", 110.0, 1e-9);
+
+    assertJsonPathDouble(aJson, "/primitives/0/startTransparency", 0.5, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/startPosition", 0.0, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/endTransparency", 1.0, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/endPosition", 0.9, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/blur", 4.0, 1e-9);
+
+    // The bounds include the blur.
+    assertJsonPathDouble(aJson, "/primitives/0/bounds/0", -4.0, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/bounds/1", 56.0, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/bounds/2", 104.0, 1e-9);
+    assertJsonPathDouble(aJson, "/primitives/0/bounds/3", 114.0, 1e-9);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/primitives/0/children").value_or(0));
+    assertJsonPath(aJson, "/primitives/0/children/0/type", "polyPolygonColor");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorPrimitiveReferenceTest, testReflectionInvisible)
+{
+    // A fully transparent reflection sends no children.
+    basegfx::B2DPolygon aRectangle(
+        basegfx::utils::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 100.0, 50.0)));
+
+    Primitive2DContainer aChildren;
+    aChildren.append(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aRectangle),
+                                                     basegfx::BColor(0.0, 0.0, 1.0)));
+
+    Primitive2DContainer aPrimitives;
+    aPrimitives.append(new ReflectionPrimitive2D(drawinglayer::attribute::ReflectionAttribute(),
+                                                 std::move(aChildren)));
+
+    auto aJson = writeReference(u"testReflectionInvisible", aPrimitives);
+
+    assertJsonPath(aJson, "/primitives/0/type", "reflection");
+    assertJsonPathMissing(aJson, "/primitives/0/children");
 }
 
 } // namespace

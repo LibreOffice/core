@@ -373,6 +373,9 @@ namespace cool {
 				case SoftEdgePrimitive.type:
 					this._renderSoftEdge(context, primitive as SoftEdgePrimitive);
 					return;
+				case ReflectionPrimitive.type:
+					this._renderReflection(context, primitive as ReflectionPrimitive);
+					return;
 				case MaskPrimitive.type:
 					this._renderMask(context, primitive as MaskPrimitive);
 					return;
@@ -1690,22 +1693,24 @@ namespace cool {
 		}
 
 		// Draw a subtree onto a scratch canvas aligned with the region. A
-		// matrix applies on top of the target's transform.
+		// matrix applies on top of the target's transform. A scale below one
+		// shrinks the canvas by that factor.
 		private _renderToScratch(
 			context: CanvasRenderingContext2D,
 			slot: number,
 			children: Primitive[] | undefined,
 			region: ScratchRegion,
 			matrix?: number[],
+			scale: number = 1,
 		): CanvasRenderingContext2D | null {
 			const scratch = this._scratch.slotContext(
 				slot,
-				region.width,
-				region.height,
+				Math.ceil(region.width * scale),
+				Math.ceil(region.height * scale),
 			);
 			if (!scratch) return null;
 
-			VectorScratchCanvases.alignWith(scratch, context, region);
+			VectorScratchCanvases.alignWith(scratch, context, region, scale);
 			if (matrix && matrix.length >= 6) {
 				scratch.transform(
 					matrix[0],
@@ -1984,6 +1989,128 @@ namespace cool {
 
 				this._scratch.drawOnto(context, content, region);
 			});
+		}
+
+		// The engine's pixel limit for a blurred reflection, which looks the
+		// same scaled up.
+		private static readonly _MAX_BLURRED_REFLECTION_PIXELS = 250000;
+
+		private _renderReflection(
+			context: CanvasRenderingContext2D,
+			primitive: ReflectionPrimitive,
+		): void {
+			const range = primitive.range;
+			if (!range || range.length < 4 || !primitive.children) return;
+
+			// Without a scratch canvas only the reflection is left out.
+			this._scratch.withEffectSlots(undefined, (slot) => {
+				// As in the engine, the radius is two deviations and a blur under
+				// a pixel is skipped.
+				const radius =
+					(primitive.blur ?? 0) * VectorScratchCanvases.pixelsPerUnit(context);
+				const deviation = radius >= 1 ? radius / 2 : 0;
+				const region = VectorScratchCanvases.effectRegion(
+					context,
+					primitive.bounds,
+					VectorPrimitiveRenderer._blurReach(deviation),
+				);
+				if (!region) return;
+
+				// The canvas filter keeps the colors, the canvas shadow does not.
+				// Without the filter the blur runs in script, on fewer pixels.
+				const filtered = deviation > 0 && VectorColorFilters.canFilter(context);
+				const scale =
+					deviation > 0 && !filtered
+						? Math.min(
+								1,
+								Math.sqrt(
+									VectorPrimitiveRenderer._MAX_BLURRED_REFLECTION_PIXELS /
+										(region.width * region.height),
+								),
+							)
+						: 1;
+				const content = this._renderToScratch(
+					context,
+					slot,
+					primitive.children,
+					region,
+					primitive.matrix,
+					scale,
+				);
+				if (!content) return;
+
+				VectorPrimitiveRenderer._fadeReflection(
+					content,
+					context,
+					region,
+					scale,
+					range,
+					primitive,
+				);
+
+				if (filtered) {
+					context.save();
+					context.filter = this._composeFilter(
+						context,
+						'blur(' + deviation + 'px)',
+					);
+					this._scratch.drawOnto(context, content, region);
+					context.restore();
+					return;
+				}
+
+				if (deviation > 0) {
+					const width = content.canvas.width;
+					const height = content.canvas.height;
+					const image = content.getImageData(0, 0, width, height);
+					VectorImageBlur.blur(image.data, width, height, deviation * scale);
+					content.putImageData(image, 0, 0);
+				}
+
+				this._scratch.drawOnto(context, content, region, undefined, scale);
+			});
+		}
+
+		// Fade the alpha down the range from the start to the end transparency,
+		// and clear it outside the range.
+		private static _fadeReflection(
+			content: CanvasRenderingContext2D,
+			context: CanvasRenderingContext2D,
+			region: ScratchRegion,
+			scale: number,
+			range: number[],
+			primitive: ReflectionPrimitive,
+		): void {
+			const clampToUnit = (value: number) => Math.min(1, Math.max(0, value));
+			const startPosition = clampToUnit(primitive.startPosition ?? 0);
+			const endPosition = Math.max(
+				startPosition,
+				clampToUnit(primitive.endPosition ?? 1),
+			);
+			const start =
+				'rgba(0,0,0,' +
+				(1 - clampToUnit(primitive.startTransparency ?? 1)) +
+				')';
+			const end =
+				'rgba(0,0,0,' + (1 - clampToUnit(primitive.endTransparency ?? 1)) + ')';
+
+			VectorScratchCanvases.alignWith(content, context, region, scale);
+			const gradient = content.createLinearGradient(0, range[1], 0, range[3]);
+			gradient.addColorStop(0, start);
+			gradient.addColorStop(startPosition, start);
+			gradient.addColorStop(endPosition, end);
+			gradient.addColorStop(1, end);
+
+			content.save();
+			content.globalCompositeOperation = 'destination-in';
+			content.fillStyle = gradient;
+			content.fillRect(
+				range[0],
+				range[1],
+				range[2] - range[0],
+				range[3] - range[1],
+			);
+			content.restore();
 		}
 
 		private _renderTransparence(

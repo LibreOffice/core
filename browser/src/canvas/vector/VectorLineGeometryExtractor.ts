@@ -42,7 +42,8 @@ namespace cool {
 				};
 
 				switch (primitive.type) {
-					case TransformPrimitive.type: {
+					case TransformPrimitive.type:
+					case ReflectionPrimitive.type: {
 						const child = Matrix2D.fromArray(fields.matrix);
 						VectorLineGeometryExtractor.walk(
 							primitive.children,

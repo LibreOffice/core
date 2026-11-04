@@ -576,6 +576,7 @@ COOL_JS_LST =\
 	src/canvas/vector/primitive/PolyPolygonGradientPrimitive.ts \
 	src/canvas/vector/primitive/PolyPolygonGraphicPrimitive.ts \
 	src/canvas/vector/primitive/PolyPolygonHatchPrimitive.ts \
+	src/canvas/vector/primitive/ReflectionPrimitive.ts \
 	src/canvas/vector/primitive/ShadowPrimitive.ts \
 	src/canvas/vector/primitive/SoftEdgePrimitive.ts \
 	src/canvas/vector/primitive/SvgGradientPrimitive.ts \
@@ -597,6 +598,7 @@ COOL_JS_LST =\
 	src/canvas/vector/VectorColorModifiers.ts \
 	src/canvas/vector/VectorColorFilters.ts \
 	src/canvas/vector/VectorModifiedImages.ts \
+	src/canvas/vector/VectorImageBlur.ts \
 	src/canvas/vector/VectorScratchCanvases.ts \
 	src/canvas/vector/VectorResourceWalker.ts \
 	src/canvas/vector/prediction/TextRuns.ts \

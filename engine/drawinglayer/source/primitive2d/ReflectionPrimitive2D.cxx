@@ -27,14 +27,6 @@ namespace drawinglayer::primitive2d
 {
 namespace
 {
-// The reflection has the size of the content and starts fDistance below its bottom edge.
-basegfx::B2DRange getReflectionRange(const basegfx::B2DRange& rContentRange, double fDistance)
-{
-    const double fTop = rContentRange.getMaxY() + fDistance;
-    return basegfx::B2DRange(rContentRange.getMinX(), fTop, rContentRange.getMaxX(),
-                             fTop + rContentRange.getHeight());
-}
-
 // The blur radius in pixels. 0.0 when there is no pixel target.
 double getDiscreteBlurRadius(double fBlurRadius,
                              const geometry::ViewInformation2D& rViewInformation)
@@ -54,6 +46,24 @@ ReflectionPrimitive2D::ReflectionPrimitive2D(const attribute::ReflectionAttribut
 {
     // activate callback to flush buffered decomposition content
     activateFlushOnTimer();
+}
+
+basegfx::B2DRange
+ReflectionPrimitive2D::getReflectionRange(const basegfx::B2DRange& rContentRange) const
+{
+    const double fTop = rContentRange.getMaxY() + getReflection().getDistance();
+    return basegfx::B2DRange(rContentRange.getMinX(), fTop, rContentRange.getMaxX(),
+                             fTop + rContentRange.getHeight());
+}
+
+basegfx::B2DHomMatrix
+ReflectionPrimitive2D::getMirrorTransformation(const basegfx::B2DRange& rContentRange) const
+{
+    basegfx::B2DHomMatrix aMirror(
+        basegfx::utils::createTranslateB2DHomMatrix(0.0, -rContentRange.getMaxY()));
+    aMirror.scale(1.0, -1.0);
+    aMirror.translate(0.0, rContentRange.getMaxY() + getReflection().getDistance());
+    return aMirror;
 }
 
 bool ReflectionPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
@@ -82,14 +92,7 @@ void ReflectionPrimitive2D::create2DDecomposition(
     if (aContentRange.isEmpty())
         return;
 
-    const basegfx::B2DRange aReflectionRange(
-        getReflectionRange(aContentRange, rReflection.getDistance()));
-
-    // Mirror the content at its bottom edge, then move it down by the distance.
-    basegfx::B2DHomMatrix aMirror(
-        basegfx::utils::createTranslateB2DHomMatrix(0.0, -aContentRange.getMaxY()));
-    aMirror.scale(1.0, -1.0);
-    aMirror.translate(0.0, aContentRange.getMaxY() + rReflection.getDistance());
+    const basegfx::B2DRange aReflectionRange(getReflectionRange(aContentRange));
 
     // The mask is a linear gradient from top to bottom, and its luminance is the transparency.
     const basegfx::BColor aStart(rReflection.getStartTransparency(),
@@ -105,8 +108,8 @@ void ReflectionPrimitive2D::create2DDecomposition(
                                                      0.0, aStops);
 
     Primitive2DContainer aReflection{ new TransparencePrimitive2D(
-        Primitive2DContainer{
-            new TransformPrimitive2D(aMirror, Primitive2DContainer(getChildren())) },
+        Primitive2DContainer{ new TransformPrimitive2D(getMirrorTransformation(aContentRange),
+                                                       Primitive2DContainer(getChildren())) },
         Primitive2DContainer{ new FillGradientPrimitive2D(aReflectionRange, aGradient) }) };
 
     const double fDiscreteBlurRadius(
@@ -240,7 +243,7 @@ ReflectionPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInfor
     if (aContentRange.isEmpty())
         return aContentRange;
 
-    basegfx::B2DRange aRetval(getReflectionRange(aContentRange, getReflection().getDistance()));
+    basegfx::B2DRange aRetval(getReflectionRange(aContentRange));
     aRetval.grow(getReflection().getBlurRadius());
     return aRetval;
 }

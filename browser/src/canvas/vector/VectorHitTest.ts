@@ -192,6 +192,8 @@ namespace cool {
 					);
 
 				case TransformPrimitive.type:
+				case ReflectionPrimitive.type:
+					// A reflection is hit where its mirrored children are.
 					return VectorHitTest.hit(
 						primitive.children,
 						VectorHitTest.positionThrough(
@@ -438,6 +440,7 @@ namespace cool {
 							break;
 
 						case TransformPrimitive.type:
+						case ReflectionPrimitive.type:
 							walk(
 								primitive.children,
 								VectorHitTest.matrixThrough(matrix, fields.matrix),

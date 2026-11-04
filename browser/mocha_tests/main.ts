@@ -79,6 +79,7 @@
 /// <reference path="./VectorImageFillPrimitives.test.ts" />
 /// <reference path="./VectorPatternFillPrimitives.test.ts" />
 /// <reference path="./VectorEffectPrimitives.test.ts" />
+/// <reference path="./VectorImageBlur.test.ts" />
 /// <reference path="./VectorResourceWalker.test.ts" />
 /// <reference path="./VectorArrowPrimitives.test.ts" />
 /// <reference path="./VectorHitTest.test.ts" />

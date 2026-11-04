@@ -16,6 +16,9 @@
 #include <drawinglayer/attribute/ReflectionAttribute.hxx>
 #include <drawinglayer/primitive2d/BufferedDecompositionGroupPrimitive2D.hxx>
 
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/range/b2drange.hxx>
+
 namespace drawinglayer::primitive2d
 {
 /** The reflection of the children: a vertically flipped copy of them, placed under them and
@@ -44,6 +47,13 @@ public:
                           Primitive2DContainer&& rChildren);
 
     const attribute::ReflectionAttribute& getReflection() const { return maReflection; }
+
+    /// The content range, moved to start the distance below its bottom edge. The blur is not
+    /// included.
+    basegfx::B2DRange getReflectionRange(const basegfx::B2DRange& rContentRange) const;
+
+    /// Flips the content at its bottom edge and moves it down by the distance.
+    basegfx::B2DHomMatrix getMirrorTransformation(const basegfx::B2DRange& rContentRange) const;
 
     bool operator==(const BasePrimitive2D& rPrimitive) const override;
 

@@ -84,6 +84,7 @@
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
 #include <drawinglayer/primitive2d/glowprimitive2d.hxx>
 #include <drawinglayer/primitive2d/softedgeprimitive2d.hxx>
+#include <drawinglayer/primitive2d/ReflectionPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
@@ -1827,6 +1828,38 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             const auto& rPrimitive = static_cast<const SoftEdgePrimitive2D&>(rBasePrimitive);
             mrWriter.put("type", "softEdge");
             mrWriter.put("radius", rPrimitive.getRadius() * mfScaleFactor);
+            writeBoundsScaled(rPrimitive);
+            {
+                auto aChildArray = mrWriter.startArray("children");
+                decomposeAndWrite(rPrimitive.getChildren());
+            }
+        }
+        break;
+
+        case PRIMITIVE2D_ID_REFLECTIONPRIMITIVE2D:
+        {
+            const auto& rPrimitive = static_cast<const ReflectionPrimitive2D&>(rBasePrimitive);
+            const drawinglayer::attribute::ReflectionAttribute& rReflection
+                = rPrimitive.getReflection();
+            mrWriter.put("type", "reflection");
+
+            // An invisible reflection, or one of empty content, has no fields.
+            const basegfx::B2DRange aContentRange(
+                rPrimitive.getChildren().getB2DRange(maViewInformation2D));
+            if (rReflection.isDefault() || aContentRange.isEmpty())
+                break;
+
+            writeMatrixTranslationScaled("matrix",
+                                         rPrimitive.getMirrorTransformation(aContentRange));
+            writeRange("range", rPrimitive.getReflectionRange(aContentRange), mfScaleFactor);
+            // The transparency is the start one down to the start position, the end one from the
+            // end position on, and linear between them. Positions are fractions of the height.
+            mrWriter.put("startTransparency", rReflection.getStartTransparency());
+            mrWriter.put("startPosition", rReflection.getStartPosition());
+            mrWriter.put("endTransparency", rReflection.getEndTransparency());
+            mrWriter.put("endPosition", rReflection.getEndPosition());
+            if (rReflection.getBlurRadius() > 0)
+                mrWriter.put("blur", rReflection.getBlurRadius() * mfScaleFactor);
             writeBoundsScaled(rPrimitive);
             {
                 auto aChildArray = mrWriter.startArray("children");

@@ -34,9 +34,27 @@ describe('VectorPrimitiveRenderer effects', function () {
 		path: 'M 10 10 L 90 10 L 90 90 Z',
 	};
 
-	function render(primitive: any): CanvasRecorder {
-		const context = new CanvasRecorder(200, 200);
+	// The child flipped onto the 80 by 80 square below it, starting at 110.
+	const reflection = {
+		type: 'reflection',
+		matrix: [1, 0, 0, -1, 0, 200],
+		range: [10, 110, 90, 190],
+		startTransparency: 0.25,
+		startPosition: 0.1,
+		endTransparency: 1,
+		endPosition: 0.8,
+		bounds: [10, 110, 90, 190],
+		children: [child],
+	};
+
+	function render(
+		primitive: any,
+		size: number = 200,
+		canFilter: boolean = false,
+	): CanvasRecorder {
+		const context = new CanvasRecorder(size, size);
 		(context as any).globalAlpha = 1;
+		if (canFilter) (context as any).filter = 'none';
 		new cool.VectorPrimitiveRenderer().renderPrimitive(
 			context as any,
 			primitive,
@@ -84,6 +102,11 @@ describe('VectorPrimitiveRenderer effects', function () {
 				radius: 20,
 				children: [child],
 			});
+			assert.strictEqual(context.countOf('fill'), 0);
+		});
+
+		it('leaves out a reflection rather than repainting the object', function () {
+			const context = render(reflection);
 			assert.strictEqual(context.countOf('fill'), 0);
 		});
 
@@ -339,6 +362,168 @@ describe('VectorPrimitiveRenderer effects', function () {
 				left + content.canvas.width > 200 + 20,
 				'the canvas reaches past the target edge by more than the radius',
 			);
+		});
+
+		it('flips a reflection by its matrix', function () {
+			render(reflection);
+			const transform = ScratchCanvasStub.recorder(0).findCall('transform');
+			assert.ok(transform);
+			assert.deepStrictEqual(transform.args, [1, 0, 0, -1, 0, 200]);
+		});
+
+		it('fades a reflection from the start transparency to the end one', function () {
+			render(reflection);
+
+			const content = ScratchCanvasStub.recorder(0);
+			const gradient = content.gradients[0];
+			assert.ok(gradient, 'the fade is a gradient');
+			// The fade runs down the range.
+			assert.deepStrictEqual(gradient.args, [0, 110, 0, 190]);
+			assert.deepStrictEqual(
+				gradient.sortedStops().map((stop) => stop.offset),
+				[0, 0.1, 0.8, 1],
+			);
+			assert.deepStrictEqual(
+				gradient.sortedStops().map((stop) => stop.color),
+				[
+					'rgba(0,0,0,0.75)',
+					'rgba(0,0,0,0.75)',
+					'rgba(0,0,0,0)',
+					'rgba(0,0,0,0)',
+				],
+			);
+
+			// The fade scales the alpha of the reflection.
+			const fade = content.findCall('fillRect');
+			assert.ok(fade);
+			assert.strictEqual(
+				fade.properties.globalCompositeOperation,
+				'destination-in',
+			);
+			assert.deepStrictEqual(fade.args, [10, 110, 80, 80]);
+		});
+
+		it('draws a reflection without a blur pixel for pixel', function () {
+			const context = render(reflection);
+
+			assert.strictEqual(
+				ScratchCanvasStub.recorder(0).countOf('getImageData'),
+				0,
+			);
+			const draw = context.findCall('drawImage');
+			assert.ok(draw, 'the reflection lands on the target');
+			assert.strictEqual(draw.args.length, 3);
+		});
+
+		it('leaves out a reflection blur of less than a pixel', function () {
+			render({ ...reflection, blur: 0.5 });
+			assert.strictEqual(
+				ScratchCanvasStub.recorder(0).countOf('getImageData'),
+				0,
+			);
+		});
+
+		it('blurs a reflection through the canvas filter where there is one', function () {
+			const context = render({ ...reflection, blur: 8 }, 200, true);
+
+			// A radius of 8 is two deviations of 4 pixels.
+			const draw = context.findCall('drawImage');
+			assert.ok(draw);
+			assert.strictEqual(draw.properties.filter, 'blur(4px)');
+			assert.strictEqual(draw.args.length, 3, 'drawn at full size');
+			assert.strictEqual(
+				ScratchCanvasStub.recorder(0).countOf('getImageData'),
+				0,
+			);
+		});
+
+		it('blurs a large reflection through the filter at full size', function () {
+			render(
+				{ ...reflection, blur: 8, bounds: [0, 0, 1000, 1000] },
+				1000,
+				true,
+			);
+			const content = ScratchCanvasStub.recorder(0);
+			assert.ok(content.canvas.width > 1000 && content.canvas.height > 1000);
+		});
+
+		it('blurs a reflection in its own colors without the canvas filter', function () {
+			const context = render({ ...reflection, blur: 8 });
+
+			// The blur runs on the pixels.
+			const content = ScratchCanvasStub.recorder(0);
+			assert.strictEqual(content.countOf('getImageData'), 1);
+			assert.strictEqual(content.countOf('putImageData'), 1);
+
+			// The canvas shadow is not used, as it paints in one color.
+			const blurring = allCalls(context).filter(
+				(call) => call.properties.filter || call.properties.shadowBlur,
+			);
+			assert.deepStrictEqual(blurring, []);
+		});
+
+		it('blurs a large reflection on fewer pixels without the filter', function () {
+			// Over a million pixels, so it draws at about half size in each
+			// direction, as in the engine.
+			const context = render(
+				{ ...reflection, blur: 8, bounds: [0, 0, 1000, 1000] },
+				1000,
+			);
+
+			const content = ScratchCanvasStub.recorder(0);
+			assert.ok(content.canvas.width < 600 && content.canvas.height < 600);
+			assert.ok(content.canvas.width * content.canvas.height <= 252000);
+
+			// One pixel more on each side for the antialiased edge.
+			const draw = context.findCall('drawImage');
+			assert.ok(draw);
+			assert.deepStrictEqual(draw.args.slice(1, 3), [-1, -1]);
+			assert.ok(
+				Math.abs(draw.args[3] - 1002) < 3,
+				'drawn ' + draw.args[3] + ' wide',
+			);
+			assert.ok(
+				Math.abs(draw.args[4] - 1002) < 3,
+				'drawn ' + draw.args[4] + ' high',
+			);
+		});
+
+		it('draws the reflection the engine writes, flipped and faded', function () {
+			// The engine's content is 100 by 50, and its reflection starts 10
+			// below it and fades from half transparent to clear at 0.9.
+			const primitive =
+				loadVectorRenderingReference('testReflection').primitives[0];
+			render(primitive);
+
+			const content = ScratchCanvasStub.recorder(0);
+			const transform = content.findCall('transform');
+			assert.ok(transform);
+			const flip = [1, 0, 0, -1, 0, 110];
+			for (let index = 0; index < 6; index++)
+				assert.ok(Math.abs(transform.args[index] - flip[index]) < 1e-9);
+
+			const gradient = content.gradients[0];
+			assert.ok(gradient);
+			assert.deepStrictEqual(gradient.args, [0, 60, 0, 110]);
+			assert.deepStrictEqual(
+				gradient.sortedStops().map((stop) => stop.color),
+				[
+					'rgba(0,0,0,0.5)',
+					'rgba(0,0,0,0.5)',
+					'rgba(0,0,0,0)',
+					'rgba(0,0,0,0)',
+				],
+			);
+
+			// A blur of 4 is two deviations of two pixels here.
+			assert.strictEqual(content.countOf('putImageData'), 1);
+		});
+
+		it('draws nothing of a reflection that has nothing to show', function () {
+			// The engine sends no range or children for an invisible one.
+			const context = render({ type: 'reflection' });
+			assert.strictEqual(context.countOf('drawImage'), 0);
+			assert.strictEqual(ScratchCanvasStub.created.length, 0);
 		});
 
 		it('draws nothing of an effect whose bounds are off the target', function () {
