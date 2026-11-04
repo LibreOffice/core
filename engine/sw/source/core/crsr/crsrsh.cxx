@@ -3249,7 +3249,12 @@ bool SwCursorShell::SetVisibleCursor( const Point &rPt, ScrollSizeMode eScrollSi
 
     // #i10137#
     if( aTmp == m_aCharRect && m_pVisibleCursor->IsVisible() )
+    {
+        // The cursor shows at this place already, as the real cursor does after an edit that
+        // updated the cursors, and a drop position here is kept all the same.
+        m_pVisibleCursor->KeepDropPositionRect();
         return true;
+    }
 
     m_pVisibleCursor->Hide(); // always hide visible cursor
     if( IsScrollMDI( *this, m_aCharRect ))

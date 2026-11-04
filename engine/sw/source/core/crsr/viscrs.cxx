@@ -241,8 +241,13 @@ void SwVisibleCursor::SetDropPosition(bool bDropPosition)
 
 void SwVisibleCursor::KeepDropPositionRect()
 {
-    if (m_bIsDropPosition && comphelper::COKit::isActive())
-        m_oDropPositionRect = m_aLastKitRect;
+    SfxViewShell* pNotifyViewShell
+        = comphelper::COKit::isActive() ? m_pCursorShell->GetSfxViewShell() : nullptr;
+    if (!pNotifyViewShell || !m_bIsDropPosition || m_oDropPositionRect == m_aLastKitRect)
+        return;
+    m_oDropPositionRect = m_aLastKitRect;
+    KitHelper::notifyUpdatePerViewId(*pNotifyViewShell,
+                                     COKitCallbackType::INVALIDATE_VISIBLE_CURSOR);
 }
 
 void SwVisibleCursor::EndDropPositions()

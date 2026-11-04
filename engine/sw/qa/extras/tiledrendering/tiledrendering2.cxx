@@ -4313,6 +4313,40 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextOtherViewEditKeepsDro
     CPPUNIT_ASSERT(!aViewA.m_bOwnCursorEmpty);
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextDropPositionAtRealCursorAfterEdit)
+{
+    // Given the paragraphs "Test1" and "Test2", with "Test2" selected in the first view, and a
+    // second view with its cursor at the end of the document:
+    SwXTextDocument* pXTextDocument = createDoc();
+    int nViewA = KitHelper::getCurrentView();
+    SwWrtShell* pWrtShellA = getSwDocShell()->GetWrtShell();
+    SwTestViewCallback aViewA;
+    Point aFrom, aTo;
+    lcl_selectSecondParagraph(pWrtShellA, aFrom, aTo);
+    int nViewB = lcl_addView(pXTextDocument);
+    getSwDocShell()->GetWrtShell()->SttEndDoc(/*bStt=*/false);
+
+    // When the first view drags the selection to the end of "Test1" and holds the button, the
+    // second view types, which shows the real cursor of the first view again, and the next move
+    // of the drag lands right at that real cursor:
+    lcl_dragText(pXTextDocument, aFrom, aTo, 0, /*bRelease=*/false, nViewA);
+    const tools::Rectangle aDropAtTest1 = aViewA.m_aOwnCursor;
+    KitHelper::setView(nViewB);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 'x', 0);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
+    const SwRect aRealCursor = pWrtShellA->GetCharRect();
+    lcl_continueDrag(pXTextDocument, aRealCursor.Center(), aRealCursor.Center(), nViewA);
+
+    // Then the drop position of the first view is at that place:
+    CPPUNIT_ASSERT(aViewA.m_bOwnCursorAtDropPosition);
+    CPPUNIT_ASSERT(!aViewA.m_bOwnCursorEmpty);
+    CPPUNIT_ASSERT(aDropAtTest1 != aViewA.m_aOwnCursor);
+    CPPUNIT_ASSERT_EQUAL(aRealCursor.Left(), aViewA.m_aOwnCursor.Left());
+
+    lcl_releaseButton(pXTextDocument, nViewA, aRealCursor.Center());
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextOverProtectedSectionHidesDropPosition)
 {
     // Given the paragraphs "Aaa", "Bbb" and "Ccc", with "Ccc" in a write-protected section and
