@@ -5155,6 +5155,27 @@ static void keepEditorForm(DocumentTab& account, ICoreWebView2WebResourceRequest
     LOG_DBG("Kept the " << account.editorForm.size() << "-byte form posted into an editor frame");
 }
 
+// The path of a file in CODA's browser folder, or an empty string when the segments lead out of it.
+// TODO: Qt and macOS check their bundled files by the same rules. Move this to common/.
+static std::string bundledFilePath(const std::vector<std::string>& segments)
+{
+    if (segments.empty())
+        return std::string();
+
+    std::string path = app_installation_path + "..\\cool";
+    for (const std::string& segment : segments)
+    {
+        const bool isHidden = segment.starts_with('.');
+        const bool hasSeparator = segment.find_first_of("\\:") != std::string::npos;
+        if (segment.empty() || isHidden || hasSeparator)
+            return std::string();
+
+        path += '\\' + segment;
+    }
+
+    return path;
+}
+
 // "/coollocal/bundled/global.js" gets global.js from CODA's browser folder.
 static void serveBundledFile(const DocumentTab& account,
                              ICoreWebView2WebResourceRequestedEventArgs* args, const Poco::URI& uri)
@@ -5171,22 +5192,8 @@ static void serveBundledFile(const DocumentTab& account,
     uri.getPathSegments(segments);
     segments.erase(segments.begin(), segments.begin() + 2);
 
-    std::string path = app_installation_path + "..\\cool";
-    bool isInFolder = !segments.empty();
-    for (const std::string& segment : segments)
-    {
-        const bool isHidden = segment.starts_with('.');
-        const bool hasSeparator = segment.find_first_of("\\:") != std::string::npos;
-        if (isHidden || hasSeparator)
-        {
-            isInFolder = false;
-            break;
-        }
-
-        path += '\\' + segment;
-    }
-
-    if (!isInFolder)
+    const std::string path = bundledFilePath(segments);
+    if (path.empty())
     {
         LOG_WRN("A request for a bundled file was refused: it leads out of the folder");
         respondWithoutBody(webViewEnvironment.get(), args, 404, L"Not Found", L"");
