@@ -445,6 +445,7 @@ shared_headers = \
                  common/RenderTiles.hpp \
                  common/RotatingToken.hpp \
                  common/SaveResult.hpp \
+                 common/Thumbnail.hpp \
                  common/Seccomp.hpp \
                  common/ServerPrivateInfo.hpp \
                  common/Session.hpp \
