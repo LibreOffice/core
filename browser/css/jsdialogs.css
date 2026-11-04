@@ -1546,7 +1546,8 @@ img.context-menu-icon {
 }
 
 /* The user agent's own grey is 3.76:1 on this field's background. */
-.ui-treeview-search-input::placeholder {
+.ui-treeview-search-input::placeholder,
+.template-search-input::placeholder {
 	color: var(--color-text-dark);
 	opacity: 1;
 }
