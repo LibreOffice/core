@@ -499,7 +499,7 @@ describe(['taga11yenabled'], 'Editable area', { testIsolation: false }, function
 		ceHelper.moveCaret('left', 'shift', 5);
 		ceHelper.checkSelectionIsEmpty(6);
 		ceHelper.moveCaret('left', 'shift');
-		ceHelper.checkSelectionRange(5, 6);
+		ceHelper.checkSelectionRange(6, 5);
 		ceHelper.moveCaret('right', 'shift');
 		ceHelper.checkSelectionIsEmpty(6);
 	});
@@ -702,7 +702,7 @@ describe(['taga11yenabled'], 'Editable area', { testIsolation: false }, function
 		ceHelper.moveCaret('left', '', 3);
 		ceHelper.moveCaret('left', 'shift', 13);
 		ceHelper.checkPlainContent('Hello World');
-		ceHelper.checkSelectionRange(6, 11);
+		ceHelper.checkSelectionRange(11, 6);
 	});
 
 	it('Typing with selection ending in next paragraph', function () {

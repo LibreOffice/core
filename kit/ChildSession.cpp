@@ -7497,12 +7497,12 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
     }
     case COKitCallbackType::A11Y_CARET_CHANGED:
     {
-        sendTextFrame("a11ycaretchanged: " + payload);
+        sendTextFrame("a11ycaretchanged: " + withInputSequence(payload));
         break;
     }
     case COKitCallbackType::A11Y_TEXT_SELECTION_CHANGED:
     {
-        sendTextFrame("a11ytextselectionchanged: " + payload);
+        sendTextFrame("a11ytextselectionchanged: " + withInputSequence(payload));
         break;
     }
     case COKitCallbackType::A11Y_FOCUSED_CELL_CHANGED:
@@ -7850,8 +7850,8 @@ std::string ChildSession::inputSequenceToken() const
     return _inputSequence > 0 ? " inputSequence=" + std::to_string(_inputSequence) : std::string();
 }
 
-// The caret payload is a JSON object, so the sequence is one of its fields. The JSON is compact, so
-// the closing brace follows the last value directly. A payload that is not a JSON object is
+// The caret payloads are JSON objects, so the sequence is one of their fields. The JSON is compact,
+// so the closing brace follows the last value directly. A payload that is not a JSON object is
 // returned unchanged.
 std::string ChildSession::withInputSequence(const std::string& json) const
 {

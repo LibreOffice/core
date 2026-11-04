@@ -111,11 +111,6 @@ function checkPlainContent(content) {
 function checkSelectionRange(start, end) {
 	cy.log('>> checkSelectionRange - start');
 
-	if (start > end) {
-		var t = start;
-		start = end;
-		end = t;
-	}
 	cy.get('@clipboard').should('have.prop', 'isSelectionNull', false);
 	_checkSelectionStart(start);
 	_checkSelectionEnd(end);

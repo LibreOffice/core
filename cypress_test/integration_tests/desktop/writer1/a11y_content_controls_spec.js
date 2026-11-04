@@ -1,4 +1,4 @@
-/* global describe expect it cy before require */
+/* global describe expect it cy before afterEach require */
 
 const helper = require('../../common/helper');
 const a11yHelper = require('../../common/a11y_helper');
@@ -22,6 +22,24 @@ describe(['tagdesktop'], 'Writer content controls for the reader', { testIsolati
 		cy.then(function () {
 			return helper.processToIdle(win);
 		});
+	});
+
+	function delayCaretReports(delay) {
+		cy.then(function () {
+			const docLayer = win.app.map._docLayer;
+			const onMessage = docLayer._onMessage;
+			docLayer._onMessage = function (textMsg, img) {
+				if (textMsg.startsWith('a11ycaretchanged:'))
+					setTimeout(onMessage.bind(this, textMsg, img), delay);
+				else
+					onMessage.call(this, textMsg, img);
+			};
+		});
+	}
+
+	afterEach(function () {
+		if (win)
+			delete win.app.map._docLayer._onMessage;
 	});
 
 	it('a checkbox is read as a checkbox, with its title', function () {
@@ -105,6 +123,55 @@ describe(['tagdesktop'], 'Writer content controls for the reader', { testIsolati
 		cy.realPress('Space');
 		cy.cGet('#clipboard-area [role="checkbox"]').should('have.attr', 'aria-checked', 'true');
 		cy.cGet('.jsdialog-window.modalpopup').should('not.exist');
+	});
+
+	it('over a slow connection the second Right at a checkbox goes past it', function () {
+		// before the checkbox, which starts at 7
+		helper.typeIntoDocument('{ctrl}{home}');
+		helper.typeIntoDocument('{rightarrow}'.repeat(7));
+		cy.then(function () {
+			return helper.processToIdle(win);
+		});
+		cy.then(function () {
+			expect(win.app.map._textInput._getSelectionEnd(), 'the caret').to.equal(7);
+		});
+		delayCaretReports(2500);
+
+		// the first only enters the control, so the caret stays; the second goes over the box
+		cy.realPress('ArrowRight');
+		cy.then(function () {
+			expect(win.app.map._textInput._getSelectionEnd(), 'the caret after one').to.equal(7);
+		});
+		cy.realPress('ArrowRight');
+		cy.then(function () {
+			expect(win.app.map._textInput._getSelectionEnd(), 'the caret after two').to.equal(8);
+		});
+		cy.wait(4000);
+		cy.then(function () {
+			expect(win.app.map._textInput._getSelectionEnd(), 'the caret').to.equal(8);
+		});
+	});
+
+	it('over a slow connection Left at a checkbox reached by Right moves at once', function () {
+		helper.typeIntoDocument('{ctrl}{home}');
+		helper.typeIntoDocument('{rightarrow}'.repeat(7));
+		cy.then(function () {
+			return helper.processToIdle(win);
+		});
+		cy.then(function () {
+			expect(win.app.map._textInput._getSelectionEnd(), 'the caret').to.equal(7);
+		});
+		delayCaretReports(2500);
+
+		// the caret is before the control, not in it
+		cy.realPress('ArrowLeft');
+		cy.then(function () {
+			expect(win.app.map._textInput._getSelectionEnd(), 'the caret after Left').to.equal(6);
+		});
+		cy.wait(4000);
+		cy.then(function () {
+			expect(win.app.map._textInput._getSelectionEnd(), 'the caret').to.equal(6);
+		});
 	});
 
 	it('Alt+Down opens the calendar of a date, on its date, and the keyboard chooses another', function () {

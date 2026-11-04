@@ -503,7 +503,8 @@ key type=<type> char=<charcode> key=<keycode> [sequence=<sequence>]
     setobjectgluepoint, setobjectpoints and cropobject message. It is
     always the last token of the message. The kit reports the newest one
     it has applied, so the client can tell which of its inputs a message
-    reflects. The invalidatecursor payload has it as its inputSequence
+    reflects. The invalidatecursor, a11ycaretchanged and
+    a11ytextselectionchanged payloads have it as their inputSequence
     field. The vector primitives frames have it in their header line:
     zstdvectorprimitives: inputSequence=<sequence>
     zstdvectorprimitivesdelta: inputSequence=<sequence>
@@ -1765,6 +1766,30 @@ comment:
 
     Signals that comment has either been added, removed or modified. See
     LOK_CALLBACK_COMMENT for JSON structure.
+
+a11ycaretchanged: <payload>
+
+    Sent while screen reader support is on, when the caret moves inside
+    the paragraph that has the accessibility focus. JSON payload:
+
+        {"position": "<offset>", "inputSequence": <sequence>}
+
+    <offset> is the caret in the accessible text of the paragraph.
+    inputSequence is the newest input of the view applied before the caret
+    was placed, absent while the client numbers no inputs, so a client that
+    moves the caret ahead of the server can find which of its Left and Right
+    keys a report does not include yet.
+
+a11ytextselectionchanged: <payload>
+
+    Sent while screen reader support is on, when the text selection in
+    the paragraph that has the accessibility focus changes. JSON payload:
+
+        {"start": "<offset>", "end": "<offset>", "inputSequence": <sequence>}
+
+    end is the end of the selection that holds the caret, start the other
+    one, both in the accessible text of the paragraph, and both -1 when
+    nothing is selected. inputSequence is as for a11ycaretchanged.
 
 celladdress: <payload>
 

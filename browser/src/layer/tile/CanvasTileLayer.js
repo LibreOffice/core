@@ -1062,11 +1062,13 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			else if (textMsg.startsWith('a11ycaretchanged:')) {
 				obj = JSON.parse(textMsg.substring('a11yfocuschanged:'.length + 1));
 				if (typeof this._map._textInput.onAccessibilityCaretChanged === 'function')
-					this._map._textInput.onAccessibilityCaretChanged(parseInt(obj.position));
+					this._map._textInput.onAccessibilityCaretChanged(parseInt(obj.position),
+						obj.inputSequence);
 			}
 			else if (textMsg.startsWith('a11ytextselectionchanged:')) {
 				obj = JSON.parse(textMsg.substring('a11ytextselectionchanged:'.length + 1));
-				this._map._textInput.onAccessibilityTextSelectionChanged(parseInt(obj.start), parseInt(obj.end));
+				this._map._textInput.onAccessibilityTextSelectionChanged(parseInt(obj.start),
+					parseInt(obj.end), obj.inputSequence);
 			}
 			else if (textMsg.startsWith('a11yfocusedcellchanged:')) {
 				obj = JSON.parse(textMsg.substring('a11yfocusedcellchanged:'.length + 1));
@@ -3270,12 +3272,16 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		if (winId === 0) {
 			app.socket.sendMessage(
-				'key' +
-				' type=' + type +
-				' char=' + charCode +
-				' key=' + unoKeyCode +
-				'\n'
+				cool.InputSequence.stamp(
+					'key' +
+					' type=' + type +
+					' char=' + charCode +
+					' key=' + unoKeyCode
+				) + '\n'
 			);
+			// read after sending, as a caret moved ahead can take the number on the way out
+			if (this._map._textInput.noteKeySequence)
+				this._map._textInput.noteKeySequence(unoKeyCode, app.file.inputSequence, type);
 		} else {
 			app.socket.sendMessage(
 				'windowkey id=' + winId +

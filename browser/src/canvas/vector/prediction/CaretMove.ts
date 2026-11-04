@@ -51,7 +51,7 @@ namespace cool {
 
 	// The boundary one grapheme cluster from index, or null at the edge of the text. Without
 	// grapheme support, a step goes over one code point.
-	function graphemeBoundary(
+	export function graphemeBoundary(
 		text: string,
 		index: number,
 		step: -1 | 1,

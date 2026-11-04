@@ -41,6 +41,12 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._lastSelectionEnd = 0;
 		this._listPrefixLength = 0;
 		this._isLeftRightArrow = 0;
+		// inputs no report includes yet, while a caret key is among them: {sequence, step, shift}
+		this._inputsAhead = [];
+		this._caretBeforeKey = null;
+		this._focusedControls = [];
+		// {pos, key, held} of the last arrow: the caret after it, whether it stayed
+		this._lastArrow = null;
 		this._pendingFocusedParagraph = null;
 		this._lineNavigation = false;
 
@@ -334,6 +340,10 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 
 	_fillFocusedParagraph: function(content, pos, start, end, elements) {
 		this._focusedComments = Array.isArray(elements.comments) ? elements.comments : [];
+		this._focusedControls = Array.isArray(elements.contentControls)
+			? elements.contentControls : [];
+		if (content !== this.getPlainTextContent())
+			this._lastArrow = null; // another paragraph
 		this.setHTML(content, elements);
 		this.updateLastContent();
 		this._updateSelection(pos, start, end, true);
@@ -356,6 +366,29 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		// Ctrl or, on a Mac, Cmd: the modifier sent as Ctrl to the document
 		this._commentJump = (ev.key === 'PageUp' || ev.key === 'PageDown') && ev.altKey
 			&& !ev.shiftKey && (ev.ctrlKey || ev.metaKey);
+		// for noteKeySequence, as TextInput may move the caret first
+		const before = {
+			end: this._getSelectionEnd(),
+			collapsed: window.getSelection().isCollapsed,
+		};
+		if (ev.key === 'ArrowLeft' || ev.key === 'ArrowRight') {
+			// at a control's edge, an arrow continuing the way the caret came only enters or leaves
+			// the control, one back moves, and one after anything else is held
+			const last = this._lastArrow;
+			const plain = !ev.ctrlKey && !ev.altKey && !ev.metaKey
+				&& (ev.shiftKey || before.collapsed);
+			const moves = last && last.pos === before.end
+				&& (last.held ? ev.key === last.key : ev.key !== last.key);
+			before.held = plain && this._isAtControlEdge(before.end) && !moves;
+			const step = ev.key === 'ArrowRight' ? 1 : -1;
+			this._lastArrow = plain ? { pos: before.held ? before.end : before.end + step,
+				key: ev.key, held: before.held } : null;
+			if (before.held)
+				ev.preventDefault();
+		} else if (!['Shift', 'Control', 'Alt', 'Meta'].includes(ev.key)) {
+			this._lastArrow = null;
+		}
+		this._caretBeforeKey = before;
 		window.L.TextInput.prototype._onKeyDown.call(this, ev);
 	},
 
@@ -1173,10 +1206,113 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		});
 	},
 
-	onAccessibilityCaretChanged: function(nPos) {
+	noteKeySequence: function(unoKeyCode, sequence, type) {
+		if (!this.hasAccessibilitySupport())
+			return;
+		const before = this._caretBeforeKey || { end: this._getSelectionEnd(), collapsed: true };
+		this._caretBeforeKey = null;
+		const key = unoKeyCode % app.UNOModifier.SHIFT;
+		const isArrow = key === UNOKey.LEFT || key === UNOKey.RIGHT;
+		// Home and End: also a Mac's Cmd+Left and Cmd+Right, which move the caret here
+		const isCaretKey = isArrow || key === UNOKey.HOME || key === UNOKey.END;
+		if (type !== 'input' || !isCaretKey) {
+			// a release moves nothing, another key moves the caret by what it does
+			this._noteInput(sequence, type === 'input' ? NaN : 0);
+			return;
+		}
+		const left = key === UNOKey.LEFT;
+		const shift = (unoKeyCode & app.UNOModifier.SHIFT) !== 0;
+		const prefix = this._listPrefixLength;
+		// steps the client takes itself: over a list prefix, or out of a selection
+		const ownStep = (prefix > 0 && (left ? before.end <= prefix : before.end === 0))
+			|| (!shift && !before.collapsed);
+		const unknown = !isArrow || ownStep || this._passesCluster(before.end, left)
+			|| before.held
+			|| (unoKeyCode & (app.UNOModifier.CTRL | app.UNOModifier.ALT)) !== 0;
+		this._pushInput(sequence, unknown ? NaN : (left ? -1 : 1), shift);
+		// a report held from before this key, for the timer after the last arrow; a held
+		// paragraph keeps its caret
+		if (this._remoteContent === undefined) {
+			this._remotePosition = undefined;
+			this._remoteSelectionStart = undefined;
+			this._remoteSelectionEnd = undefined;
+		}
+	},
+
+	_isAtControlEdge: function(pos) {
+		return this._focusedControls.some(function (control) {
+			return parseInt(control.start) === pos || parseInt(control.end) === pos;
+		});
+	},
+
+	// Whether an arrow from pos passes a character of several code units, such as an emoji or a
+	// letter with its marks, which a step of one unit misses
+	_passesCluster: function(pos, left) {
+		if (typeof pos !== 'number' || pos < 0)
+			return false;
+		const boundary = cool.graphemeBoundary(this.getPlainTextContent(), pos, left ? -1 : 1);
+		return boundary !== null && Math.abs(boundary - pos) > 1;
+	},
+
+	// an input after a caret key that no report includes yet
+	_noteInput: function(sequence, step) {
+		if (this._inputsAhead.length)
+			this._pushInput(sequence, step);
+	},
+
+	_pushInput: function(sequence, step, shift = false) {
+		// a report older than the dropped entry then has a gap
+		if (this._inputsAhead.length >= 64)
+			this._inputsAhead.shift();
+		this._inputsAhead.push({ sequence: sequence, step: step, shift: shift });
+	},
+
+	// Forgets the inputs a report includes and returns the rest, which the caret here is ahead
+	// by. A gap in their numbers, or a number sent after them, is an input not noted here, such
+	// as typed text or a click.
+	_takeInputsAfter: function(inputSequence) {
+		if (inputSequence === undefined) {
+			// a Kit that stamps no report
+			this._inputsAhead = [];
+			return this._inputsAhead;
+		}
+		this._inputsAhead = this._inputsAhead.filter((input) => input.sequence > inputSequence);
+		let expected = inputSequence + 1;
+		for (const input of this._inputsAhead) {
+			if (input.sequence !== expected)
+				break;
+			expected++;
+		}
+		if (this._inputsAhead.length && expected <= app.file.inputSequence)
+			return this._inputsAhead.concat([{ sequence: expected, step: NaN }]);
+		return this._inputsAhead;
+	},
+
+	onAccessibilityCaretChanged: function(nPos, inputSequence) {
 		this._log('onAccessibilityCaretChanged: \n' +
 			'    position: ' + nPos + '\n' +
 			'    _isComposing: ' + this._isComposing);
+		const after = this._takeInputsAfter(inputSequence);
+		if (after.length) {
+			// older than this report
+			this._remotePosition = undefined;
+			// where those keys take the caret from the reported one
+			nPos = after.reduce((pos, input) => pos + input.step, nPos);
+			if (isNaN(nPos))
+				return;
+			nPos = Math.min(Math.max(nPos, 0), this.getPlainTextContent().length);
+		}
+		// where the caret is now, also during arrow keys when the report includes them all
+		if ((after.length || (inputSequence !== undefined && this._isLeftRightArrow))
+			&& this.hasFocus() && !this._isComposing && !this._hasFormulaBarFocus()) {
+			if (!window.getSelection().isCollapsed)
+				return; // a caret report has no selection anchor
+			if (nPos !== this._getSelectionEnd())
+				this._updateCursorPosition(nPos); // the caret here missed a move, as of Home
+			else
+				this._setLastCursorPosition(nPos); // the native moves took it there
+			return;
+		}
 		if (this._isLeftRightArrow || !this.hasFocus() || this._isComposing) {
 			this._log('onAccessibilityCaretChanged: skip updating');
 			this._remotePosition = nPos;
@@ -1192,11 +1328,27 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		}
 	},
 
-	onAccessibilityTextSelectionChanged: function(start, end) {
+	onAccessibilityTextSelectionChanged: function(start, end, inputSequence) {
+		const hasSelection = !(start === -1 && end === -1);
+		const after = this._takeInputsAfter(inputSequence);
+		// a report of no selection with only releases pending is current
+		if (after.length && (hasSelection || after.some((input) => input.step !== 0))) {
+			// older than this report
+			this._remoteSelectionStart = undefined;
+			this._remoteSelectionEnd = undefined;
+			this._remotePosition = undefined;
+			// sent once, when a selection goes
+			if (!hasSelection)
+				this._setSelectionFlag(false);
+			// a selection moved only by Shift arrows
+			const moves = after.filter((input) => input.step !== 0);
+			if (hasSelection && moves.every((input) => input.shift))
+				this._rebaseSelection(start, moves.reduce((pos, input) => pos + input.step, end));
+			return;
+		}
 		if (this._isLeftRightArrow || !this.hasFocus() || this._isComposing) {
 			this._remoteSelectionStart = start;
 			this._remoteSelectionEnd = end;
-			var hasSelection = !(start === -1 && end === -1);
 			this._setSelectionFlag(hasSelection);
 			if (hasSelection) {
 				this._remotePosition = end;
@@ -1205,6 +1357,21 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		} else {
 			this._updateSelection(this._lastCursorPosition, start, end);
 		}
+	},
+
+	// end: the caret end of the reported selection, moved by the Shift arrows pending
+	_rebaseSelection: function(anchor, end) {
+		if (isNaN(end) || !this.hasFocus() || this._isComposing || this._hasFormulaBarFocus())
+			return;
+		end = Math.min(Math.max(end, 0), this.getPlainTextContent().length);
+		if (anchor === this._getSelectionStart() && end === this._getSelectionEnd()) {
+			// the last selection trails the native moves
+			this._setLastSelection(anchor, end);
+			this._setSelectionFlag(true);
+			return;
+		}
+		// the selection here missed a move, as after Shift+Home
+		this._updateSelection(end, anchor, end, true);
 	},
 
 	A11Y_FOCUS_ANNOUNCEMENT_MS: 500,

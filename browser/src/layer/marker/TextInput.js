@@ -1760,7 +1760,8 @@ window.L.TextInput = window.L.Layer.extend({
 			start = l;
 		if (end > l)
 			end = l;
-		if (start > end) {
+		const backward = start > end;
+		if (backward) {
 			var t = start;
 			start = end;
 			end = t;
@@ -1812,7 +1813,11 @@ window.L.TextInput = window.L.Layer.extend({
 			range.setEnd(...outsideImage(lastNode, lastNode.textContent.length));
 
 		// Get the selection object and add the range to it
-		selection.addRange(range);
+		if (backward) // the caret at the start
+			selection.setBaseAndExtent(range.endContainer, range.endOffset, range.startContainer,
+				range.startOffset);
+		else
+			selection.addRange(range);
 		window.console.log(msg);
 		this._statusLog('_setSelectionRange ]');
 	},
