@@ -78,6 +78,13 @@ public:
     void                CopyTableStyles(SdStyleSheetPool const & rSourcePool, XStyleVector& rCreatedSheets);
     void                CopyCellSheets(SdStyleSheetPool& rSourcePool, StyleSheetCopyResultVector& rCreatedSheets);
     void                RenameAndCopyGraphicSheets(SdStyleSheetPool& rSourcePool, StyleSheetCopyResultVector& rCreatedSheets, std::u16string_view rRenameSuffix);
+    // Brings every graphic style of the source pool here under a name that gives an object the
+    // look the source gives it. A style of the same name and look here serves as it is. A name
+    // that holds another look here is left alone, and the style comes over as a copy under the
+    // name with a numbered suffix, with what the source resolves it to, so that the copy looks
+    // the same whatever its parent and the defaults here hold. rRenamed maps the name in the
+    // source to the name here for every style that came over under another name.
+    void                CopyGraphicSheetsKeepingLook(SdStyleSheetPool& rSourcePool, StyleSheetCopyResultVector& rCreatedSheets, std::map<OUString, OUString>& rRenamed);
 
     void                CreatePseudosIfNecessary();
     void                UpdateStdNames();

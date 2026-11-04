@@ -56,7 +56,10 @@
 #include <editeng/adjustitem.hxx>
 #include <editeng/numdef.hxx>
 #include <svl/itempool.hxx>
+#include <svl/whiter.hxx>
 #include <svl/IndexedStyleSheets.hxx>
+
+#include <set>
 
 #include <stlpool.hxx>
 #include <sdresid.hxx>
@@ -713,6 +716,112 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
         rStyle.first->SetParent( rStyle.second );
     }
     // we have changed names of style sheets. Trigger reindexing.
+    Reindex();
+}
+
+namespace
+{
+// The items a style gives an object, each as an item of its own: what the style sets itself, what
+// its parents set, and the defaults of its pool for the rest.
+SfxItemSet lcl_resolvedItems(SfxStyleSheetBase& rSheet)
+{
+    const SfxItemSet& rOwn = rSheet.GetItemSet();
+    SfxItemSet aResolved(*rOwn.GetPool(), rOwn.GetRanges());
+    SfxWhichIter aIter(rOwn);
+    for (sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich())
+        aResolved.Put(rOwn.Get(nWhich, /*bSrchInParent=*/true));
+    return aResolved;
+}
+
+// Whether a style gives an object the look of the given resolved items.
+bool lcl_sameLook(SfxStyleSheetBase& rSheet, const SfxItemSet& rResolved)
+{
+    const SfxItemSet& rOwn = rSheet.GetItemSet();
+    SfxWhichIter aIter(rResolved);
+    for (sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich())
+        if (!SfxPoolItem::areSame(rOwn.Get(nWhich, /*bSrchInParent=*/true),
+                                  rResolved.Get(nWhich, /*bSrchInParent=*/true)))
+            return false;
+    return true;
+}
+
+// Puts the sheet after its parent, so that a copy of it can name the copy of its parent.
+void lcl_placeAfterParent(SfxStyleSheetBase& rSheet, SdStyleSheetPool& rPool,
+                          std::vector<SfxStyleSheetBase*>& rOrdered, std::set<OUString>& rPlaced)
+{
+    if (!rPlaced.insert(rSheet.GetName()).second)
+        return;
+    if (SfxStyleSheetBase* pParent = rPool.Find(rSheet.GetParent(), rSheet.GetFamily()))
+        lcl_placeAfterParent(*pParent, rPool, rOrdered, rPlaced);
+    rOrdered.push_back(&rSheet);
+}
+}
+
+void SdStyleSheetPool::CopyGraphicSheetsKeepingLook(SdStyleSheetPool& rSourcePool,
+                                                    StyleSheetCopyResultVector& rCreatedSheets,
+                                                    std::map<OUString, OUString>& rRenamed)
+{
+    HasFamilyPredicate aHasFamilyPredicate(SfxStyleFamily::Para);
+    const std::vector<sal_Int32> aPositions
+        = rSourcePool.GetIndexedStyleSheets().FindPositionsByPredicate(aHasFamilyPredicate);
+    std::vector<SfxStyleSheetBase*> aOrdered;
+    std::set<OUString> aPlaced;
+    for (const sal_Int32 nPosition : aPositions)
+        if (SfxStyleSheetBase* pSheet = rSourcePool.GetStyleSheetByPositionInIndex(nPosition))
+            lcl_placeAfterParent(*pSheet, rSourcePool, aOrdered, aPlaced);
+
+    for (SfxStyleSheetBase* pSource : aOrdered)
+    {
+        const OUString aName(pSource->GetName());
+        const SfxItemSet aResolved(lcl_resolvedItems(*pSource));
+
+        // The name here, or the first numbered name, that holds this look or no style at all.
+        OUString aNameHere(aName);
+        SfxStyleSheetBase* pHere = Find(aNameHere, SfxStyleFamily::Para);
+        for (sal_Int32 nSuffix = 1; pHere && !lcl_sameLook(*pHere, aResolved); ++nSuffix)
+        {
+            aNameHere = aName + "_" + OUString::number(nSuffix);
+            pHere = Find(aNameHere, SfxStyleFamily::Para);
+        }
+        if (aNameHere != aName)
+            rRenamed[aName] = aNameHere;
+        if (pHere)
+            continue;
+
+        SfxStyleSheetBase& rCopy = Make(aNameHere, SfxStyleFamily::Para);
+        rCopy.SetMask(pSource->GetMask());
+        // The help identifier of a predefined style carries its fixed name in the API and in a
+        // file, so a copy under another name stays without it and is named by its own name.
+        if (aNameHere == aName)
+        {
+            OUString aHelpFile;
+            rCopy.SetHelpId(aHelpFile, pSource->GetHelpId(aHelpFile));
+        }
+        rCopy.GetItemSet().Put(pSource->GetItemSet());
+
+        // The parent is the style the parent of the source came over as, when it has one here.
+        const OUString& rParent = pSource->GetParent();
+        if (!rParent.isEmpty())
+        {
+            const auto it = rRenamed.find(rParent);
+            const OUString aParentHere = it != rRenamed.end() ? it->second : rParent;
+            if (Find(aParentHere, SfxStyleFamily::Para))
+                rCopy.SetParent(aParentHere);
+        }
+
+        // The copy sets itself whatever its parents and the defaults here resolve differently
+        // from the source.
+        SfxItemSet& rItems = rCopy.GetItemSet();
+        SfxWhichIter aIter(aResolved);
+        for (sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich())
+        {
+            const SfxPoolItem& rWanted = aResolved.Get(nWhich, /*bSrchInParent=*/true);
+            if (!SfxPoolItem::areSame(rItems.Get(nWhich, /*bSrchInParent=*/true), rWanted))
+                rItems.Put(rWanted);
+        }
+
+        rCreatedSheets.emplace_back(static_cast<SdStyleSheet*>(&rCopy), true);
+    }
     Reindex();
 }
 

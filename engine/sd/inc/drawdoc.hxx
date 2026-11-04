@@ -149,6 +149,9 @@ struct StyleTransferContext
     StyleSheetCopyResultVector aCellStyles;     // Cell styles to be transferred
     XStyleVector aTableStyles;                  // Table styles to be transferred
     OUString aRenameString;                     // String for style renaming operations
+    // The graphic styles of the source that came over under another name, because the style of
+    // their name here gives an object another look: the name in the source and the name here.
+    std::map<OUString, OUString> aRenamedGraphicStyles;
 
     // Layout information
     SlideLayoutMap aSlideLayouts;               // Layouts to be transferred
@@ -189,12 +192,17 @@ struct InsertBookmarkOptions
     bool bPreservePageNames;  // Preserve page names
     bool bIsFileDocument;     // Operation involves a file document
     bool bAdoptTargetDesign;  // Inserted pages take the design of the destination document
+    // The inserted objects keep the look the graphic styles of the source give them. A style of
+    // the source whose name here holds another look comes over under a new name, with what the
+    // source resolves it to, and the objects that used it point to that copy.
+    bool bKeepSourceObjectStyles;
 
     InsertBookmarkOptions()
         : bLink(false), bReplace(false), bNoDialogs(false),
           bCopy(true), bMergeMasterPages(true), bMergeMasterPagesOnly(false),
           bPreservePageNames(false),
-          bIsFileDocument(false), bAdoptTargetDesign(false)
+          bIsFileDocument(false), bAdoptTargetDesign(false),
+          bKeepSourceObjectStyles(false)
     {}
 
     // Preset for paste operation
@@ -215,8 +223,9 @@ struct InsertBookmarkOptions
     }
 
     // Preset for inserting pages picked from another presentation file.
-    // With bKeepDesign the source master pages come along; without it the
-    // inserted pages are bound to the destination document's design instead.
+    // With bKeepDesign the source master pages come along and the objects keep the look of
+    // their styles; without it the inserted pages are bound to the destination document's
+    // design instead.
     static InsertBookmarkOptions ForSlideImport(bool bKeepDesign) {
         InsertBookmarkOptions options;
         options.bNoDialogs = true;
@@ -224,6 +233,7 @@ struct InsertBookmarkOptions
         options.bMergeMasterPagesOnly = false;
         options.bMergeMasterPages = bKeepDesign;
         options.bAdoptTargetDesign = !bKeepDesign;
+        options.bKeepSourceObjectStyles = bKeepDesign;
         return options;
     }
 
@@ -522,7 +532,7 @@ public:
     /**
      * Copy styles between documents with options for replacement and dialog suppression
      */
-    static void copyStyles(bool bReplace, bool bNoDialogs,
+    static void copyStyles(const InsertBookmarkOptions& rOptions,
         StyleTransferContext& rStyleContext);
 
     /**
@@ -545,6 +555,15 @@ public:
     void renameObjectStylesIfNeeded(sal_uInt32 nInsertPos,
         StyleTransferContext& rStyleContext,
         sal_uInt32 nBMSdPageCount);
+
+    /**
+     * Point the objects of the inserted pages and of the master pages that came with them at the
+     * copies of their graphic styles that keep the look of the source
+     */
+    void pointInsertedObjectsAtCopiedStyles(const PageInsertionParams& rParams,
+        const DocumentPageCounts& rPageCounts,
+        const SlideLayoutNameList& rLayoutsToTransfer,
+        const StyleTransferContext& rStyleContext);
 
     /**
      * Clean up unused styles after page insertion

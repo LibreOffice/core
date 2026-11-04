@@ -673,18 +673,29 @@ void SdDrawDocument::transferLayoutStyles(const SlideLayoutNameList& aLayoutsToT
     }
 }
 
-void SdDrawDocument::copyStyles(bool bReplace, bool bNoDialogs,
+void SdDrawDocument::copyStyles(const InsertBookmarkOptions& rOptions,
                                 StyleTransferContext& rStyleContext)
 {
     // Use the style sheet pools from the context
     SdStyleSheetPool& rBookmarkStyleSheetPool = *rStyleContext.pSourceStyleSheetPool;
     SdStyleSheetPool& rStyleSheetPool = *rStyleContext.pDestStyleSheetPool;
 
-    // Depending on whether pages are being replaced and dialog mode,
-    // decide on a renaming string and then copy graphic, cell, and table styles.
-    if (!bReplace && !bNoDialogs)
-        rStyleContext.aRenameString = u"_"_ustr;
-    rStyleSheetPool.RenameAndCopyGraphicSheets(rBookmarkStyleSheetPool, rStyleContext.aGraphicStyles, rStyleContext.aRenameString);
+    if (rOptions.bKeepSourceObjectStyles)
+    {
+        // The graphic styles come over so that an object looks as it does in the source,
+        // under another name where the name here holds another look.
+        rStyleSheetPool.CopyGraphicSheetsKeepingLook(rBookmarkStyleSheetPool,
+                                                     rStyleContext.aGraphicStyles,
+                                                     rStyleContext.aRenamedGraphicStyles);
+    }
+    else
+    {
+        // Depending on whether pages are being replaced and dialog mode,
+        // decide on a renaming string and then copy graphic styles.
+        if (!rOptions.bReplace && !rOptions.bNoDialogs)
+            rStyleContext.aRenameString = u"_"_ustr;
+        rStyleSheetPool.RenameAndCopyGraphicSheets(rBookmarkStyleSheetPool, rStyleContext.aGraphicStyles, rStyleContext.aRenameString);
+    }
     rStyleSheetPool.CopyCellSheets(rBookmarkStyleSheetPool, rStyleContext.aCellStyles);
     // TODO handle undo of table styles too
     rStyleSheetPool.CopyTableStyles(rBookmarkStyleSheetPool, rStyleContext.aTableStyles);
@@ -1245,6 +1256,57 @@ void SdDrawDocument::renameObjectStylesIfNeeded(sal_uInt32 nInsertPos,
         catch(...)
         {
             TOOLS_WARN_EXCEPTION( "sd", "Exception while renaming styles @ SdDrawDocument::InsertBookmarkAsPage");
+        }
+    }
+}
+
+// The objects took the style of their name here when they arrived. The ones whose style came
+// over under another name take that copy, keeping the attributes they set themselves. The pages
+// are the slides this insert brought in with their notes pages, and the master pages of the
+// designs that came along with them.
+void SdDrawDocument::pointInsertedObjectsAtCopiedStyles(const PageInsertionParams& rParams,
+                                                         const DocumentPageCounts& rPageCounts,
+                                                         const SlideLayoutNameList& rLayoutsToTransfer,
+                                                         const StyleTransferContext& rStyleContext)
+{
+    if (rStyleContext.aRenamedGraphicStyles.empty())
+        return;
+
+    std::vector<const SdrPage*> aPages;
+    const sal_uInt16 nFirstSlide = (rParams.nInsertPos - 1) / 2;
+    const sal_uInt16 nInserted = GetSdPageCount(PageKind::Standard) - rPageCounts.nDestPageCount;
+    for (sal_uInt16 nSlide = nFirstSlide; nSlide < nFirstSlide + nInserted; ++nSlide)
+    {
+        aPages.push_back(GetSdPage(nSlide, PageKind::Standard));
+        aPages.push_back(GetSdPage(nSlide, PageKind::Notes));
+    }
+    const sal_uInt16 nMasterPageCount = GetMasterPageCount();
+    for (sal_uInt16 nMaster = 0; nMaster < nMasterPageCount; ++nMaster)
+    {
+        const SdPage* pMaster = static_cast<const SdPage*>(GetMasterPage(nMaster));
+        if (std::find(rLayoutsToTransfer.begin(), rLayoutsToTransfer.end(),
+                      GetBaseLayoutName(pMaster->GetLayoutName()))
+            != rLayoutsToTransfer.end())
+            aPages.push_back(pMaster);
+    }
+
+    SfxStyleSheetBasePool* pPool = GetStyleSheetPool();
+    for (const SdrPage* pPage : aPages)
+    {
+        if (!pPage)
+            continue;
+        SdrObjListIter aObjectIter(pPage, SdrIterMode::DeepWithGroups);
+        for (SdrObject* pObject = aObjectIter.Next(); pObject; pObject = aObjectIter.Next())
+        {
+            const SfxStyleSheet* pSheet = pObject->GetStyleSheet();
+            if (!pSheet)
+                continue;
+            const auto it = rStyleContext.aRenamedGraphicStyles.find(pSheet->GetName());
+            if (it == rStyleContext.aRenamedGraphicStyles.end())
+                continue;
+            if (SfxStyleSheet* pCopy = static_cast<SfxStyleSheet*>(
+                    pPool->Find(it->second, SfxStyleFamily::Para)))
+                pObject->SetStyleSheet(pCopy, /*bDontRemoveHardAttr=*/true);
         }
     }
 }
@@ -2467,7 +2529,7 @@ bool SdDrawDocument::PasteBookmarkAsPage(
     // that are not used in any of the inserted pages. The unused styles
     // are then removed at the end of the function, where we also create
     // undo records for the inserted styles.
-    copyStyles(options.bReplace, options.bNoDialogs, aStyleContext);
+    copyStyles(options, aStyleContext);
 
     aInsertParams.bUndo = IsUndoEnabled();
 
@@ -2572,7 +2634,7 @@ bool SdDrawDocument::ResolvePageLinks(
     // that are not used in any of the inserted pages. The unused styles
     // are then removed at the end of the function, where we also create
     // undo records for the inserted styles.
-    copyStyles(options.bReplace, options.bNoDialogs, aStyleContext);
+    copyStyles(options, aStyleContext);
 
     aInsertParams.bUndo = IsUndoEnabled();
 
@@ -2683,7 +2745,7 @@ bool SdDrawDocument::ImportDocumentPages(
     // that are not used in any of the inserted pages. The unused styles
     // are then removed at the end of the function, where we also create
     // undo records for the inserted styles.
-    copyStyles(options.bReplace, options.bNoDialogs, aStyleContext);
+    copyStyles(options, aStyleContext);
 
     aInsertParams.bUndo = IsUndoEnabled();
 
@@ -2810,7 +2872,7 @@ bool SdDrawDocument::InsertFileAsPage(
     // that are not used in any of the inserted pages. The unused styles
     // are then removed at the end of the function, where we also create
     // undo records for the inserted styles.
-    copyStyles(rOptions.bReplace, rOptions.bNoDialogs, aStyleContext);
+    copyStyles(rOptions, aStyleContext);
 
     aInsertParams.bUndo = IsUndoEnabled();
 
@@ -2839,6 +2901,7 @@ bool SdDrawDocument::InsertFileAsPage(
 
     // Rename object styles if necessary
     renameObjectStylesIfNeeded(nInsertPos, aStyleContext, pageCounts.nSourcePageCount);
+    pointInsertedObjectsAtCopiedStyles(aInsertParams, pageCounts, aLayoutsToTransfer, aStyleContext);
 
     // Clean up any copied styles not used and record undo actions.
     cleanupStyles(pUndoMgr, aStyleContext);
@@ -2906,7 +2969,7 @@ bool SdDrawDocument::DropBookmarkAsPage(
     // that are not used in any of the inserted pages. The unused styles
     // are then removed at the end of the function, where we also create
     // undo records for the inserted styles.
-    copyStyles(options.bReplace, options.bNoDialogs, aStyleContext);
+    copyStyles(options, aStyleContext);
 
     aInsertParams.bUndo = IsUndoEnabled();
 

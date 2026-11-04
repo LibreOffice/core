@@ -552,11 +552,14 @@ public:
         before as "at", whether the pages keep the design of the file they came from as
         "keepDesign", whether they stay linked to the document named by "source" as "link",
         and the time that source was last modified as "lastModifiedTime", recorded on each
-        link. "as" says what the pages go in as: "slides", the default, or "section", a section
+        link. "as" says what the pages go in as: "slides", the default; "section", a section
         of their own at "at" whose identifier in the source is "sourceId" and whose name there
-        is "sourceName", linked to that source section when "link" is set. The pages that
-        follow a section keep a section apart from it. The pages, the section and the links are
-        one undo step (Impress only function) */
+        is "sourceName", linked to that source section when "link" is set; or "presentation",
+        every page of the file at "at" in the sections of the file, the pages outside any
+        section in one section named "sourceName" first, with a link over them all when "link"
+        is set and one per section the file identifies. The pages that follow a section keep a
+        section apart from it. The pages, the sections and the links are one undo step (Impress
+        only function) */
     virtual bool insertPagesFromFile(const OUString& /*rFileUrl*/, const OString& /*rJsonOptions*/)
     {
         return false;
@@ -567,11 +570,13 @@ public:
     virtual bool getSlideLinks(tools::JsonWriter& /*rJsonWriter*/) { return false; }
 
     /** Replaces the span of one link with what a local file holding a presentation the source
-        wrote out holds for its unit: the slide the link follows, or the slides of the section it
-        follows. rUnit is "slide" or "section" and rId the identifier of the unit in this
-        document. rSourceName is the source document the link is to, rLastModifiedTime the time
-        it was last modified now, and rName the name the unit has in the source now, which a
-        section takes when its own name is still the name the source section had. pNotUpdated,
+        wrote out holds for its unit: the slide the link follows, the slides of the section it
+        follows, or every page and section of the file for a presentation. rUnit is "slide",
+        "section" or "presentation" and rId the identifier of the unit in this document.
+        rSourceName is the source document the link is to, rLastModifiedTime the time it was
+        last modified now, and rName the name the unit has in the source now, which a section
+        takes when its own name is still the name the source section had and a presentation
+        records as the name of the source document. pNotUpdated,
         when it is given, takes the identifier of every slide the file held nothing for. One undo
         step. Returns the number of slides replaced; -1 when no such link holds or it is not
         linked to that source, when rFileUrl is not a file on this machine, when the time or the
@@ -599,9 +604,10 @@ public:
         return -1;
     }
 
-    /** Takes the link of the unit rId of kind rUnit, "slide" or "section", off. The unit keeps
-        its slides and becomes the document's own. With bDeep, every link beneath comes off as
-        well. One undo step. Returns whether the link held (Impress only function) */
+    /** Takes the link of the unit rId of kind rUnit, "slide", "section" or "presentation", off.
+        The unit keeps its slides and its sections and becomes the document's own. With bDeep,
+        every link beneath comes off as well. One undo step. Returns whether the link held
+        (Impress only function) */
     virtual bool breakSlideLink(const OUString& /*rUnit*/, const OUString& /*rId*/,
                                 bool /*bDeep*/)
     {

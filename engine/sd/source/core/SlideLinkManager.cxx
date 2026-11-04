@@ -23,6 +23,7 @@
 #include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
 #include <svl/undo.hxx>
+#include <tools/Guid.hxx>
 #include <tools/json_writer.hxx>
 
 #include <DrawDocShell.hxx>
@@ -44,6 +45,37 @@ namespace
 {
 constexpr OUString gSlideKindName = u"slide"_ustr;
 constexpr OUString gSectionKindName = u"section"_ustr;
+constexpr OUString gPresentationKindName = u"presentation"_ustr;
+
+
+/// The name a record keeps for a unit of the source: rName itself, or none when the record
+/// cannot keep it.
+OUString getRecordableName(const OUString& rName)
+{
+    return SlideLink::IsReadableSourceString(rName) ? rName : OUString();
+}
+
+/// Whether rUnits names the unit rId.
+bool contains(const std::vector<OUString>& rUnits, const OUString& rId)
+{
+    return std::find(rUnits.begin(), rUnits.end(), rId) != rUnits.end();
+}
+
+/// Where a link of kind eKind sorts among the links that start on the same slide: the one that
+/// spans the most comes first.
+int getKindRank(SlideLinkKind eKind)
+{
+    switch (eKind)
+    {
+        case SlideLinkKind::Presentation:
+            return 0;
+        case SlideLinkKind::Section:
+            return 1;
+        case SlideLinkKind::Slide:
+            return 2;
+    }
+    return 3;
+}
 
 /// The slide of rSourceDoc that the slide link rRecord follows: by the identifier of the source
 /// slide, by its position, or by its name. Nothing when the file holds no slide for it.
@@ -130,6 +162,8 @@ OUString GetSlideLinkKindName(SlideLinkKind eKind)
             return gSlideKindName;
         case SlideLinkKind::Section:
             return gSectionKindName;
+        case SlideLinkKind::Presentation:
+            return gPresentationKindName;
     }
     return OUString();
 }
@@ -140,6 +174,8 @@ std::optional<SlideLinkKind> ParseSlideLinkKind(std::u16string_view rName)
         return SlideLinkKind::Slide;
     if (rName == gSectionKindName)
         return SlideLinkKind::Section;
+    if (rName == gPresentationKindName)
+        return SlideLinkKind::Presentation;
     return std::nullopt;
 }
 
@@ -242,13 +278,77 @@ std::vector<OUString> SlideLinkManager::GetUnitSlides(const SlideLinkRecord& rRe
             const SlideSectionManager& rSections = mrDoc.GetSectionManager();
             return rSections.GetSectionPageGuids(rSections.GetSectionIndexForId(rRecord.maId));
         }
+        case SlideLinkKind::Presentation:
+        {
+            const SlideSectionManager& rSections = mrDoc.GetSectionManager();
+            std::vector<OUString> aSlides;
+            for (const OUString& rSection : rRecord.maSections)
+            {
+                const sal_Int32 nSection = rSections.GetSectionIndexForId(rSection);
+                if (nSection < 0)
+                    return {};
+
+                const std::vector<OUString> aSectionSlides
+                    = rSections.GetSectionPageGuids(nSection);
+                aSlides.insert(aSlides.end(), aSectionSlides.begin(), aSectionSlides.end());
+            }
+            return aSlides;
+        }
     }
     return {};
 }
 
+bool SlideLinkManager::IsSectionRun(const std::vector<OUString>& rSections) const
+{
+    const SlideSectionManager& rManager = mrDoc.GetSectionManager();
+    sal_Int32 nPrevious = -1;
+    for (const OUString& rSection : rSections)
+    {
+        const sal_Int32 nSection = rManager.GetSectionIndexForId(rSection);
+        if (nSection < 0 || (nPrevious >= 0 && nSection != nPrevious + 1))
+            return false;
+        nPrevious = nSection;
+    }
+    return !rSections.empty();
+}
+
+std::vector<OUString>
+SlideLinkManager::GetSectionsOfSlides(const std::vector<OUString>& rSlides) const
+{
+    if (rSlides.empty())
+        return {};
+
+    const SlideSectionManager& rSections = mrDoc.GetSectionManager();
+    const sal_Int32 nFirst = SlideLink::GetPageIndex(mrDoc, rSlides.front());
+    if (nFirst < 0)
+        return {};
+    sal_Int32 nSection = rSections.GetSectionIndexForSlide(nFirst);
+    if (nSection < 0 || rSections.GetSection(nSection).mnStartIndex != nFirst)
+        return {};
+
+    std::vector<OUString> aIds;
+    sal_Int32 nCovered = 0;
+    const sal_Int32 nSlideCount = static_cast<sal_Int32>(rSlides.size());
+    while (nCovered < nSlideCount && nSection < rSections.GetSectionCount())
+    {
+        const OUString& rId = rSections.GetSection(nSection).maId;
+        if (rId.isEmpty())
+            return {};
+        aIds.push_back(rId);
+        nCovered += rSections.GetSectionSlideCount(nSection);
+        ++nSection;
+    }
+    return nCovered == nSlideCount ? aIds : std::vector<OUString>();
+}
+
 bool SlideLinkManager::Holds(const SlideLinkRecord& rRecord) const
 {
-    return !rRecord.maSlides.empty() && rRecord.maSlides == GetUnitSlides(rRecord);
+    if (rRecord.maSlides.empty() || rRecord.maSlides != GetUnitSlides(rRecord))
+        return false;
+
+    // The sections of a presentation stay one run in the order they were linked in. The slides
+    // tell a section added or taken away, and the run tells a section moved within it.
+    return rRecord.meKind != SlideLinkKind::Presentation || IsSectionRun(rRecord.maSections);
 }
 
 bool SlideLinkManager::Holds(const SlideLinkRecord& rRecord,
@@ -273,6 +373,13 @@ std::optional<SlideLinkRecord> SlideLinkManager::Validate(const SlideLinkRecord&
     if (aRecord.maId.isEmpty())
         return std::nullopt;
 
+    for (OUString& rSlide : aRecord.maSlides)
+    {
+        rSlide = SlideLink::NormaliseGuid(rSlide);
+        if (rSlide.isEmpty())
+            return std::nullopt;
+    }
+
     switch (aRecord.meKind)
     {
         case SlideLinkKind::Slide:
@@ -292,17 +399,32 @@ std::optional<SlideLinkRecord> SlideLinkManager::Validate(const SlideLinkRecord&
                 return std::nullopt;
             break;
         case SlideLinkKind::Section:
-            aRecord.maSourceId = SlideLink::NormaliseGuid(rRecord.maSourceId);
-            if (aRecord.maSourceId.isEmpty())
+            // A section follows one section of the source, or the slides of the source outside
+            // any section when it names none.
+            if (!rRecord.maSourceId.isEmpty())
+            {
+                aRecord.maSourceId = SlideLink::NormaliseGuid(rRecord.maSourceId);
+                if (aRecord.maSourceId.isEmpty())
+                    return std::nullopt;
+            }
+            break;
+        case SlideLinkKind::Presentation:
+            // The whole source is the unit, so the link names nothing in it. The sections are
+            // the ones given, or else the ones that hold the slides, as for a link read from
+            // the file.
+            if (!rRecord.maSourceId.isEmpty())
+                return std::nullopt;
+            for (OUString& rSection : aRecord.maSections)
+            {
+                rSection = SlideLink::NormaliseGuid(rSection);
+                if (rSection.isEmpty())
+                    return std::nullopt;
+            }
+            if (aRecord.maSections.empty())
+                aRecord.maSections = GetSectionsOfSlides(aRecord.maSlides);
+            if (aRecord.maSections.empty())
                 return std::nullopt;
             break;
-    }
-
-    for (OUString& rSlide : aRecord.maSlides)
-    {
-        rSlide = SlideLink::NormaliseGuid(rSlide);
-        if (rSlide.isEmpty())
-            return std::nullopt;
     }
 
     if (!Holds(aRecord))
@@ -331,13 +453,13 @@ std::vector<SlideLinkRecord> SlideLinkManager::GetLinks() const
             aLinks.push_back(rRecord);
     }
 
-    // A link that spans a slide comes before one that starts on it, so a section comes before
-    // its first slide.
+    // A link that spans a slide comes before one that starts on it, so a presentation comes
+    // before its first section and a section before its first slide.
     const auto aPosition = [&aPageIndices](const SlideLinkRecord& rRecord)
     {
         const auto it = aPageIndices.find(rRecord.maSlides.front());
         const sal_Int32 nIndex = it == aPageIndices.end() ? -1 : it->second;
-        return std::make_pair(nIndex, rRecord.meKind == SlideLinkKind::Section ? 0 : 1);
+        return std::make_pair(nIndex, getKindRank(rRecord.meKind));
     };
     std::stable_sort(aLinks.begin(), aLinks.end(),
                      [&aPosition](const SlideLinkRecord& rOne, const SlideLinkRecord& rOther)
@@ -361,19 +483,35 @@ const SlideLinkRecord* SlideLinkManager::Find(SlideLinkKind eKind, std::u16strin
 
 OUString SlideLinkManager::GetParent(const SlideLinkRecord& rRecord) const
 {
-    if (rRecord.meKind != SlideLinkKind::Slide)
+    if (rRecord.meKind == SlideLinkKind::Presentation)
         return OUString();
 
-    // Few sections span the slide, so the walk over the pages that Holds makes is the last test.
-    for (const SlideLinkRecord& rCandidate : maLinks)
+    // Few links span the unit, so the walk over the pages that Holds makes is the last test. A
+    // slide is under the section that spans it, and under the presentation when no linked
+    // section does.
+    const auto aFindSpanning = [this, &rRecord](SlideLinkKind eKind)
     {
-        if (rCandidate.meKind == SlideLinkKind::Section
-            && std::find(rCandidate.maSlides.begin(), rCandidate.maSlides.end(), rRecord.maId)
-                   != rCandidate.maSlides.end()
-            && Holds(rCandidate))
-            return rCandidate.maId;
+        for (const SlideLinkRecord& rCandidate : maLinks)
+        {
+            if (rCandidate.meKind != eKind)
+                continue;
+
+            const std::vector<OUString>& rUnits = rRecord.meKind == SlideLinkKind::Slide
+                                                      ? rCandidate.maSlides
+                                                      : rCandidate.maSections;
+            if (contains(rUnits, rRecord.maId) && Holds(rCandidate))
+                return rCandidate.maId;
+        }
+        return OUString();
+    };
+
+    if (rRecord.meKind == SlideLinkKind::Slide)
+    {
+        const OUString aSection = aFindSpanning(SlideLinkKind::Section);
+        if (!aSection.isEmpty())
+            return aSection;
     }
-    return OUString();
+    return aFindSpanning(SlideLinkKind::Presentation);
 }
 
 void SlideLinkManager::WriteLinks(tools::JsonWriter& rJsonWriter) const
@@ -547,22 +685,92 @@ bool SlideLinkManager::LinkInsertedSection(sal_Int32 nFirstSlide, sal_Int32 nSli
     return true;
 }
 
+bool SlideLinkManager::LinkInsertedPresentation(SdDrawDocument& rSource, sal_Int32 nFirstSlide,
+                                                sal_Int32 nSlideCount, const OUString& rFileName,
+                                                const OUString& rSourceName,
+                                                const OUString& rLastModifiedTime)
+{
+    // The sections of the source go over the slides read from it, which are every page of the
+    // source in order, so the runs of the source add up to the slides.
+    const std::vector<SlideSectionRun> aRuns
+        = rSource.GetSectionManager().GetSlideRuns(rFileName);
+    SlideSectionManager& rSections = mrDoc.GetSectionManager();
+    const std::vector<SlideSection> aSnapshot = rSections.GetSectionsSnapshot();
+    const std::vector<OUString> aSectionIds
+        = rSections.AddInsertedSections(nFirstSlide, nSlideCount, aRuns);
+    if (aSectionIds.empty())
+        return false;
+
+    // One record per section the source identifies, one for the run of its slides outside any
+    // section, which names no section, and one over them all. A section the source does not
+    // identify is linked to nothing.
+    std::vector<SlideLinkRecord> aRecords;
+    for (size_t nRun = 0; nRun < aRuns.size(); ++nRun)
+    {
+        const OUString aSourceId = SlideLink::NormaliseGuid(aRuns[nRun].maId);
+        if (aSourceId.isEmpty() && !aRuns[nRun].mbLoose)
+            continue;
+
+        SlideLinkRecord aRecord;
+        aRecord.meKind = SlideLinkKind::Section;
+        aRecord.maId = aSectionIds[nRun];
+        aRecord.maSource = rSourceName;
+        aRecord.maSourceId = aSourceId;
+        aRecord.maName = getRecordableName(aRuns[nRun].maName);
+        aRecord.maLastModifiedTime = rLastModifiedTime;
+        aRecord.maSlides
+            = rSections.GetSectionPageGuids(rSections.GetSectionIndexForId(aRecord.maId));
+        aRecords.push_back(std::move(aRecord));
+    }
+
+    SlideLinkRecord aPresentation;
+    aPresentation.meKind = SlideLinkKind::Presentation;
+    aPresentation.maId = tools::Guid(tools::Guid::Generate).getOUString();
+    aPresentation.maSource = rSourceName;
+    aPresentation.maName = rFileName;
+    aPresentation.maLastModifiedTime = rLastModifiedTime;
+    aPresentation.maSections = aSectionIds;
+    aPresentation.maSlides = GetUnitSlides(aPresentation);
+    aRecords.push_back(std::move(aPresentation));
+
+    if (!Set(std::move(aRecords), SdResId(STR_UNDO_LINK_SLIDE_PRESENTATION)))
+    {
+        rSections.RestoreSectionsSnapshot(aSnapshot);
+        return false;
+    }
+    return true;
+}
+
 std::optional<std::vector<OUString>>
 SlideLinkManager::GetSectionReadNames(const SlideLinkRecord& rRecord, SdDrawDocument& rSource)
 {
     const SlideSectionManager& rSections = rSource.GetSectionManager();
-    const sal_Int32 nSection = rSections.GetSectionIndexForId(rRecord.maSourceId);
-    if (nSection < 0)
+    const sal_Int32 nPageCount = rSource.GetSdPageCount(PageKind::Standard);
+    sal_Int32 nStart = 0;
+    sal_Int32 nEnd = 0;
+    if (rRecord.maSourceId.isEmpty())
     {
-        SAL_WARN("sd", "slide link refresh: the file lists no section " << rRecord.maSourceId);
-        return std::nullopt;
+        // The pages of the file outside any section sit before its first section.
+        nEnd = rSections.GetSectionCount() > 0
+                   ? std::min(rSections.GetSection(0).mnStartIndex, nPageCount)
+                   : nPageCount;
+    }
+    else
+    {
+        const sal_Int32 nSection = rSections.GetSectionIndexForId(rRecord.maSourceId);
+        if (nSection < 0)
+        {
+            SAL_WARN("sd",
+                     "slide link refresh: the file lists no section " << rRecord.maSourceId);
+            return std::nullopt;
+        }
+        nStart = rSections.GetSection(nSection).mnStartIndex;
+        nEnd = nStart + rSections.GetSectionSlideCount(nSection);
     }
 
     // An empty list of names would stand for every page of the file, so a section with no slide
     // reads nothing.
     std::vector<OUString> aNames;
-    const sal_Int32 nStart = rSections.GetSection(nSection).mnStartIndex;
-    const sal_Int32 nEnd = nStart + rSections.GetSectionSlideCount(nSection);
     for (sal_Int32 nPage = nStart; nPage < nEnd; ++nPage)
     {
         if (const SdPage* pPage
@@ -590,45 +798,67 @@ sal_Int32 SlideLinkManager::Refresh(SlideLinkKind eKind, std::u16string_view rId
     // The list changes in the refresh, and the record says what the link was made with.
     std::vector<SlideLinkRecord> aSlides;
     std::vector<SlideLinkRecord> aSections;
-    const bool bSection = eKind == SlideLinkKind::Section;
-    (bSection ? aSections : aSlides).push_back(*pRecord);
-    return RefreshRecords(aSlides, aSections, rFileUrl, rLastModifiedTime, rName,
-                          bSection ? STR_UNDO_UPDATE_LINKED_SECTION
-                                   : STR_UNDO_UPDATE_LINKED_SLIDES,
-                          pNotUpdated);
+    std::vector<SlideLinkRecord> aPresentations;
+    TranslateId pUndoName = STR_UNDO_UPDATE_LINKED_SLIDES;
+    switch (eKind)
+    {
+        case SlideLinkKind::Slide:
+            aSlides.push_back(*pRecord);
+            break;
+        case SlideLinkKind::Section:
+            aSections.push_back(*pRecord);
+            pUndoName = STR_UNDO_UPDATE_LINKED_SECTION;
+            break;
+        case SlideLinkKind::Presentation:
+            aPresentations.push_back(*pRecord);
+            pUndoName = STR_UNDO_UPDATE_LINKED_PRESENTATION;
+            break;
+    }
+    return RefreshRecords(aSlides, aSections, aPresentations, rFileUrl, rLastModifiedTime, rName,
+                          pUndoName, pNotUpdated);
 }
 
 sal_Int32 SlideLinkManager::RefreshSource(const OUString& rSourceName, const OUString& rFileUrl,
                                           const OUString& rLastModifiedTime,
                                           std::vector<OString>* pNotUpdated)
 {
-    // The links under no other link: every section, and every slide outside a linked section.
-    // A section brings the slides it spans along.
-    std::vector<SlideLinkRecord> aSections;
+    // The links under no other link: every presentation, every section outside a linked
+    // presentation, and every slide outside a linked section or presentation. A link brings the
+    // links it spans along.
     std::vector<SlideLinkRecord> aSlides;
+    std::vector<SlideLinkRecord> aSections;
+    std::vector<SlideLinkRecord> aPresentations;
     for (const SlideLinkRecord& rRecord : GetLinks())
     {
-        if (rRecord.maSource != rSourceName)
+        if (rRecord.maSource != rSourceName || !GetParent(rRecord).isEmpty())
             continue;
 
-        if (rRecord.meKind == SlideLinkKind::Section)
-            aSections.push_back(rRecord);
-        else if (GetParent(rRecord).isEmpty())
-            aSlides.push_back(rRecord);
+        switch (rRecord.meKind)
+        {
+            case SlideLinkKind::Slide:
+                aSlides.push_back(rRecord);
+                break;
+            case SlideLinkKind::Section:
+                aSections.push_back(rRecord);
+                break;
+            case SlideLinkKind::Presentation:
+                aPresentations.push_back(rRecord);
+                break;
+        }
     }
-    if (aSections.empty() && aSlides.empty())
+    if (aSlides.empty() && aSections.empty() && aPresentations.empty())
         return -1;
 
-    return RefreshRecords(aSlides, aSections, rFileUrl, rLastModifiedTime, OUString(),
-                          STR_UNDO_UPDATE_LINKED_SLIDES, pNotUpdated);
+    return RefreshRecords(aSlides, aSections, aPresentations, rFileUrl, rLastModifiedTime,
+                          OUString(), STR_UNDO_UPDATE_LINKED_SLIDES, pNotUpdated);
 }
 
 sal_Int32 SlideLinkManager::RefreshRecords(const std::vector<SlideLinkRecord>& rSlides,
                                            const std::vector<SlideLinkRecord>& rSections,
+                                           const std::vector<SlideLinkRecord>& rPresentations,
                                            const OUString& rFileUrl,
-                                           const OUString& rLastModifiedTime,
-                                           const OUString& rName, TranslateId pUndoName,
-                                           std::vector<OString>* pNotUpdated)
+                                           const OUString& rLastModifiedTime, const OUString& rName,
+                                           TranslateId pUndoName, std::vector<OString>* pNotUpdated)
 {
     if (!SlideLink::IsReadableSourceString(rLastModifiedTime))
         return -1;
@@ -669,6 +899,16 @@ sal_Int32 SlideLinkManager::RefreshRecords(const std::vector<SlideLinkRecord>& r
             nRefreshed += nCount;
         else
             addNotUpdated(pNotUpdated, rSection.maSlides);
+    }
+    for (const SlideLinkRecord& rPresentation : rPresentations)
+    {
+        // A presentation whose pages could not be read keeps its slides, reported the same way.
+        const sal_Int32 nCount
+            = RefreshPresentation(rPresentation, *pSource, rLastModifiedTime, rName);
+        if (nCount > 0)
+            nRefreshed += nCount;
+        else
+            addNotUpdated(pNotUpdated, rPresentation.maSlides);
     }
     return nRefreshed;
 }
@@ -735,8 +975,8 @@ sal_Int32 SlideLinkManager::RefreshSlides(const std::vector<SlideLinkRecord>& rR
         // A resolution puts the slide it read in place of the page at its position, and a page
         // read from a file holds an identifier of its own, so the identifier a position holds now
         // says whether that page was refreshed. The record takes the page read, the slide it names
-        // now and the time its source was last modified, and the links above take the page in
-        // place of the old one.
+        // now and the time its source was last modified, and the section and the presentation
+        // above take the page in place of the old one.
         for (size_t nPosition = nFirst; nPosition < nPast; ++nPosition)
         {
             const Target& rTarget = aTargets[nPosition];
@@ -758,7 +998,7 @@ sal_Int32 SlideLinkManager::RefreshSlides(const std::vector<SlideLinkRecord>& rR
                     rLink.maName = rTarget.maRecordedName;
                     rLink.maLastModifiedTime = rLastModifiedTime;
                 }
-                else if (rLink.meKind == SlideLinkKind::Section)
+                else if (rLink.meKind != SlideLinkKind::Slide)
                     std::replace(rLink.maSlides.begin(), rLink.maSlides.end(), rTarget.maId,
                                  aNewId);
             }
@@ -788,6 +1028,7 @@ sal_Int32 SlideLinkManager::RefreshSection(const SlideLinkRecord& rRecord, SdDra
         return -1;
 
     std::vector<SlideLinkRecord> aOldLinks = maLinks;
+    const OUString aPresentation = GetParent(rRecord);
 
     // The fresh slides go in after the old ones, so they join the section and the section always
     // holds slides. Then the old slides go. The slides keep the design of the source, as a
@@ -858,7 +1099,176 @@ sal_Int32 SlideLinkManager::RefreshSection(const SlideLinkRecord& rRecord, SdDra
     SAL_WARN_IF(!Find(SlideLinkKind::Section, rRecord.maId), "sd",
                 "the updated section could not be linked again");
 
+    // The presentation that held the section spans the fresh slides in place of the old ones.
+    for (SlideLinkRecord& rLink : maLinks)
+    {
+        if (rLink.meKind == SlideLinkKind::Presentation && rLink.maId == aPresentation)
+            rLink.maSlides = GetUnitSlides(rLink);
+    }
+
     AddUndo(std::move(aOldLinks), SdResId(STR_UNDO_UPDATE_LINKED_SECTION));
+    mrDoc.SetChanged();
+    NotifyLinksIfChanged();
+    return nInsertedCount;
+}
+
+sal_Int32 SlideLinkManager::RefreshPresentation(const SlideLinkRecord& rRecord,
+                                                SdDrawDocument& rSource,
+                                                const OUString& rLastModifiedTime,
+                                                const OUString& rName)
+{
+    SlideSectionManager& rSections = mrDoc.GetSectionManager();
+    rtl::Reference<SdXImpressDocument> xModel(mrDoc.getUnoModel());
+    const sal_Int32 nFirstSection
+        = rRecord.maSections.empty() ? -1
+                                     : rSections.GetSectionIndexForId(rRecord.maSections.front());
+    if (nFirstSection < 0 || !xModel.is())
+        return -1;
+
+    // The file is read whole: every page, in the sections the file lists, with the pages outside
+    // any section first.
+    const OUString aFileName = rName.isEmpty() ? rRecord.maName : rName;
+    const std::vector<SlideSectionRun> aRuns
+        = rSource.GetSectionManager().GetSlideRuns(aFileName);
+    std::vector<OUString> aReadNames;
+    for (sal_uInt16 nPage = 0, nCount = rSource.GetSdPageCount(PageKind::Standard); nPage < nCount;
+         ++nPage)
+    {
+        if (const SdPage* pPage = rSource.GetSdPage(nPage, PageKind::Standard))
+            aReadNames.push_back(pPage->GetName());
+    }
+    if (aRuns.empty() || aReadNames.empty())
+        return -1;
+
+    std::vector<SlideLinkRecord> aOldLinks = maLinks;
+    const std::vector<SlideSection> aOldSections = rSections.GetSectionsSnapshot();
+
+    // The fresh slides go in after the old ones, so they join the last section of the
+    // presentation and the run always holds slides. Then the old slides go, which empties the
+    // other sections of the presentation, and the sections of the file are built over the fresh
+    // slides. The slides keep the design of the source, as a refreshed slide does.
+    const sal_Int32 nStart = rSections.GetSection(nFirstSection).mnStartIndex;
+    const sal_Int32 nEnd = nStart + static_cast<sal_Int32>(rRecord.maSlides.size());
+    const sal_uInt16 nInsertPosition = nEnd < mrDoc.GetSdPageCount(PageKind::Standard)
+                                           ? static_cast<sal_uInt16>(2 * nEnd + 1)
+                                           : 0xFFFF;
+    const sal_Int32 nInsertedCount = SlideLink::InsertPages(
+        mrDoc, rSource, aReadNames, InsertBookmarkOptions::ForSlideImport(/*bKeepDesign=*/true),
+        nInsertPosition);
+    if (nInsertedCount <= 0)
+        return -1;
+
+    std::vector<SlideLinkRecord> aSlideRecords = MakeSlideRecords(
+        rSource, aReadNames, nEnd, nInsertedCount, {}, rRecord.maSource, rLastModifiedTime);
+
+    rtl::Reference<SdDrawPagesAccess> xPages = xModel->getSdDrawPages();
+    for (sal_Int32 nSlide = nEnd - 1; nSlide >= nStart; --nSlide)
+    {
+        cpo::uno::Reference<css::drawing::XDrawPage> xPage(xPages->getByIndex(nSlide),
+                                                           cpo::uno::UNO_QUERY);
+        xPages->remove(xPage);
+    }
+
+    // A section of the file that is linked under the presentation keeps the identifier it has
+    // here, the section of the pages outside any section among them, which names no section of
+    // the source. A kept section follows the name of its source until somebody renames it
+    // here. Any other section of the file is new here, a section the file lists with no
+    // identifier among them, and any section of the presentation the file no longer lists goes.
+    const auto aFindOldSection = [&aOldSections](const OUString& rId) -> const SlideSection*
+    {
+        for (const SlideSection& rSection : aOldSections)
+            if (rSection.maId == rId)
+                return &rSection;
+        return nullptr;
+    };
+    const auto aFindOldLink
+        = [&aOldLinks, &rRecord](const SlideSectionRun& rRun) -> const SlideLinkRecord*
+    {
+        const OUString aSourceId = SlideLink::NormaliseGuid(rRun.maId);
+        if (aSourceId.isEmpty() && !rRun.mbLoose)
+            return nullptr;
+
+        for (const SlideLinkRecord& rLink : aOldLinks)
+        {
+            if (rLink.meKind == SlideLinkKind::Section && rLink.maSourceId == aSourceId
+                && contains(rRecord.maSections, rLink.maId))
+                return &rLink;
+        }
+        return nullptr;
+    };
+
+    const std::vector<SlideSection> aSectionsBetween = rSections.GetSectionsSnapshot();
+    std::vector<SlideSection> aNewSections;
+    for (const SlideSection& rSection : aSectionsBetween)
+    {
+        if (rSection.mnStartIndex < nStart)
+            aNewSections.push_back(rSection);
+    }
+
+    std::vector<OUString> aPresentationSections;
+    std::vector<SlideLinkRecord> aSectionRecords;
+    sal_Int32 nRunStart = nStart;
+    for (const SlideSectionRun& rRun : aRuns)
+    {
+        SlideSection aSection;
+        aSection.mnStartIndex = nRunStart;
+        aSection.maName = rRun.maName;
+        nRunStart += rRun.mnSlideCount;
+
+        const OUString aSourceId = SlideLink::NormaliseGuid(rRun.maId);
+        const SlideLinkRecord* pOldLink = aFindOldLink(rRun);
+        const SlideSection* pKept = pOldLink ? aFindOldSection(pOldLink->maId) : nullptr;
+        if (pKept)
+        {
+            aSection.maId = pKept->maId;
+            if (pKept->maName != pOldLink->maName)
+                aSection.maName = pKept->maName;
+        }
+        else
+            aSection.maId = tools::Guid(tools::Guid::Generate).getOUString();
+
+        if (rRun.mbLoose || !aSourceId.isEmpty())
+        {
+            SlideLinkRecord aLink;
+            aLink.meKind = SlideLinkKind::Section;
+            aLink.maId = aSection.maId;
+            aLink.maSource = rRecord.maSource;
+            aLink.maSourceId = aSourceId;
+            aLink.maName = getRecordableName(rRun.maName);
+            aLink.maLastModifiedTime = rLastModifiedTime;
+            aSectionRecords.push_back(std::move(aLink));
+        }
+        aPresentationSections.push_back(aSection.maId);
+        aNewSections.push_back(std::move(aSection));
+    }
+    for (const SlideSection& rSection : aSectionsBetween)
+    {
+        if (rSection.mnStartIndex >= nStart + nInsertedCount)
+            aNewSections.push_back(rSection);
+    }
+    rSections.RestoreSectionsSnapshot(aNewSections);
+    if (mrDoc.IsUndoEnabled())
+        mrDoc.AddUndo(std::make_unique<UndoSlideSection>(
+            mrDoc, SdResId(STR_UNDO_UPDATE_LINKED_PRESENTATION), aSectionsBetween));
+
+    // The old slides are gone with their records, and so is every section the file no longer
+    // lists. The presentation spans the fresh sections and slides, each linked on its own as
+    // well.
+    DropRecordsOfGoneUnits();
+    for (SlideLinkRecord& rLink : aSectionRecords)
+        rLink.maSlides = rSections.GetSectionPageGuids(rSections.GetSectionIndexForId(rLink.maId));
+    SlideLinkRecord aPresentation = rRecord;
+    aPresentation.maName = aFileName;
+    aPresentation.maLastModifiedTime = rLastModifiedTime;
+    aPresentation.maSections = std::move(aPresentationSections);
+    aPresentation.maSlides = GetUnitSlides(aPresentation);
+    aSlideRecords.insert(aSlideRecords.end(), aSectionRecords.begin(), aSectionRecords.end());
+    aSlideRecords.push_back(std::move(aPresentation));
+    Put(std::move(aSlideRecords));
+    SAL_WARN_IF(!Find(SlideLinkKind::Presentation, rRecord.maId), "sd",
+                "the updated presentation could not be linked again");
+
+    AddUndo(std::move(aOldLinks), SdResId(STR_UNDO_UPDATE_LINKED_PRESENTATION));
     mrDoc.SetChanged();
     NotifyLinksIfChanged();
     return nInsertedCount;
@@ -876,22 +1286,39 @@ bool SlideLinkManager::Break(SlideLinkKind eKind, std::u16string_view rId, bool 
     std::erase_if(maLinks,
                   [&aRecord](const SlideLinkRecord& rHeld) { return isSameUnit(rHeld, aRecord); });
 
-    // The slides a section spans keep their own links unless they are asked off as well.
-    if (bDeep && aRecord.meKind == SlideLinkKind::Section)
+    // The sections and the slides a link spans keep their own links unless they are asked off
+    // as well.
+    if (bDeep && aRecord.meKind != SlideLinkKind::Slide)
     {
         std::erase_if(maLinks,
                       [&aRecord](const SlideLinkRecord& rHeld)
                       {
-                          return rHeld.meKind == SlideLinkKind::Slide
-                                 && std::find(aRecord.maSlides.begin(), aRecord.maSlides.end(),
-                                              rHeld.maId)
-                                        != aRecord.maSlides.end();
+                          switch (rHeld.meKind)
+                          {
+                              case SlideLinkKind::Slide:
+                                  return contains(aRecord.maSlides, rHeld.maId);
+                              case SlideLinkKind::Section:
+                                  return contains(aRecord.maSections, rHeld.maId);
+                              case SlideLinkKind::Presentation:
+                                  return false;
+                          }
+                          return false;
                       });
     }
 
-    AddUndo(std::move(aOldLinks),
-            SdResId(eKind == SlideLinkKind::Slide ? STR_UNDO_BREAK_SLIDE_LINK
-                                                  : STR_UNDO_UNLINK_SLIDE_SECTION));
+    TranslateId pUndoName = STR_UNDO_BREAK_SLIDE_LINK;
+    switch (eKind)
+    {
+        case SlideLinkKind::Slide:
+            break;
+        case SlideLinkKind::Section:
+            pUndoName = STR_UNDO_UNLINK_SLIDE_SECTION;
+            break;
+        case SlideLinkKind::Presentation:
+            pUndoName = STR_UNDO_UNLINK_SLIDE_PRESENTATION;
+            break;
+    }
+    AddUndo(std::move(aOldLinks), SdResId(pUndoName));
     mrDoc.SetChanged();
     NotifyLinksIfChanged();
     return true;

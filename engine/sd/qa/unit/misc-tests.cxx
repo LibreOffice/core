@@ -23,6 +23,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/table/XTable.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/XMergeableCellRange.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -41,6 +42,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
@@ -60,6 +62,7 @@
 #include <vcl/keycodes.hxx>
 #include <svx/svdoashp.hxx>
 #include <tools/gen.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <svx/view3d.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/sdmetitm.hxx>
@@ -129,6 +132,7 @@ public:
     void testInsertFileAsPageKeepDesignTwiceSharesMaster();
     void testInsertFileAsPageKeepDesignRenamedKeepsNotesMaster();
     void testInsertFileAsPageKeepDesignTwoDesignsOfOneName();
+    void testInsertFileAsPageKeepDesignKeepsObjectStyleLook();
     void testInsertFileAsPageLinkRecordsMedium();
     void testSlideLinkListKeepsOnlyReadableLinks();
 
@@ -180,6 +184,7 @@ public:
     CPPUNIT_TEST(testInsertFileAsPageKeepDesignTwiceSharesMaster);
     CPPUNIT_TEST(testInsertFileAsPageKeepDesignRenamedKeepsNotesMaster);
     CPPUNIT_TEST(testInsertFileAsPageKeepDesignTwoDesignsOfOneName);
+    CPPUNIT_TEST(testInsertFileAsPageKeepDesignKeepsObjectStyleLook);
     CPPUNIT_TEST(testInsertFileAsPageLinkRecordsMedium);
     CPPUNIT_TEST(testSlideLinkListKeepsOnlyReadableLinks);
     CPPUNIT_TEST_SUITE_END();
@@ -1738,6 +1743,96 @@ void SdMiscTest::testInsertFileAsPageKeepDesignTwoDesignsOfOneName()
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pDoc->GetSdPageCount(PageKind::Standard));
 }
 
+namespace
+{
+// The fill colour an object resolves to, through its own attributes, its style and the defaults.
+Color getFillColor(const SdrObject& rObject)
+{
+    return rObject.GetMergedItem(XATTR_FILLCOLOR).GetColorValue();
+}
+
+// The letter size the text of an object resolves to, in hundredths of a millimetre.
+sal_uInt32 getLetterSize(const SdrObject& rObject)
+{
+    return rObject.GetMergedItem(EE_CHAR_FONTHEIGHT).GetHeight();
+}
+}
+
+void SdMiscTest::testInsertFileAsPageKeepDesignKeepsObjectStyleLook()
+{
+    // Both presentations have a default object style of the same name, with a fill colour and a
+    // letter size of their own: dark and large here, light and small in the source. The slide
+    // that comes in keeps the look of the source, in its own objects and in the objects of the
+    // master page that came with it, while the objects here keep theirs.
+    createSdImpressDoc("slide-import-object-style-target.fodp");
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    const Color aDark(0x1b3a4b);
+    const Color aLight(0x729fcf);
+    const sal_uInt32 nLarge = o3tl::convert(40, o3tl::Length::pt, o3tl::Length::mm100);
+    const sal_uInt32 nSmall = o3tl::convert(24, o3tl::Length::pt, o3tl::Length::mm100);
+
+    SdPage* pOwn = pDoc->GetSdPage(0, PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(aDark, getFillColor(*pOwn->GetObj(0)));
+    CPPUNIT_ASSERT_EQUAL(nLarge, getLetterSize(*pOwn->GetObj(1)));
+
+    std::vector<OUString> aBookmarkList{ u"SourceOne"_ustr };
+    for (sal_uInt16 nRun = 0; nRun < 2; ++nRun)
+    {
+        CPPUNIT_ASSERT(
+            pDoc->OpenBookmarkDoc(createFileURL(u"slide-import-object-style-source.odp")));
+        CPPUNIT_ASSERT(pDoc->InsertFileAsPage(aBookmarkList, nullptr,
+                                              InsertBookmarkOptions::ForSlideImport(
+                                                  /*bKeepDesign=*/true),
+                                              3, nullptr, /*oScaleObjects=*/true));
+        pDoc->CloseBookmarkDoc();
+    }
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pDoc->GetSdPageCount(PageKind::Standard));
+
+    for (sal_uInt16 nSlide = 1; nSlide <= 2; ++nSlide)
+    {
+        SdPage* pInserted = pDoc->GetSdPage(nSlide, PageKind::Standard);
+        CPPUNIT_ASSERT_EQUAL(aLight, getFillColor(*pInserted->GetObj(0)));
+        CPPUNIT_ASSERT_EQUAL(nSmall, getLetterSize(*pInserted->GetObj(1)));
+        CPPUNIT_ASSERT(pInserted->TRG_HasMasterPage());
+        CPPUNIT_ASSERT_EQUAL(aLight, getFillColor(*pInserted->TRG_GetMasterPage().GetObj(0)));
+    }
+
+    // The objects here are as they were, and so is the style they use: the default object
+    // style, under the name the pool shows for it.
+    CPPUNIT_ASSERT_EQUAL(aDark, getFillColor(*pOwn->GetObj(0)));
+    CPPUNIT_ASSERT_EQUAL(nLarge, getLetterSize(*pOwn->GetObj(1)));
+    SfxStyleSheetBasePool* pPool = pDoc->GetStyleSheetPool();
+    const OUString aDefaultName = pOwn->GetObj(0)->GetStyleSheet()->GetName();
+    CPPUNIT_ASSERT_EQUAL(pDoc->GetDefaultStyleSheet()->GetName(), aDefaultName);
+
+    // The look of the source came over as one style of a name of its own, which both inserts
+    // use.
+    const OUString aCopyName = aDefaultName + "_1";
+    CPPUNIT_ASSERT(pPool->Find(aCopyName, SfxStyleFamily::Para));
+    CPPUNIT_ASSERT(!pPool->Find(aDefaultName + "_2", SfxStyleFamily::Para));
+    CPPUNIT_ASSERT_EQUAL(
+        aCopyName, pDoc->GetSdPage(1, PageKind::Standard)->GetObj(0)->GetStyleSheet()->GetName());
+    CPPUNIT_ASSERT_EQUAL(
+        aCopyName, pDoc->GetSdPage(2, PageKind::Standard)->GetObj(0)->GetStyleSheet()->GetName());
+    // The copy is named by its own name in a file and in the API as well, apart from the
+    // default style.
+    uno::Reference<style::XStyleFamiliesSupplier> xFamiliesSupplier(mxComponent,
+                                                                    uno::UNO_QUERY_THROW);
+    uno::Reference<container::XNameAccess> xGraphicStyles(
+        xFamiliesSupplier->getStyleFamilies()->getByName(u"graphics"_ustr), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xGraphicStyles->hasByName(aCopyName));
+
+    // Undo takes the slides out again with the style they brought.
+    pDoc->GetDocSh()->GetUndoManager()->Undo();
+    pDoc->GetDocSh()->GetUndoManager()->Undo();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT(!pPool->Find(aCopyName, SfxStyleFamily::Para));
+    CPPUNIT_ASSERT_EQUAL(aDark, getFillColor(*pOwn->GetObj(0)));
+}
+
 void SdMiscTest::testInsertFileAsPageKeepDesign()
 {
     // Pages inserted from another presentation keep their own design when the
@@ -1954,12 +2049,13 @@ void SdMiscTest::testInsertFileAsPageLinkRecordsMedium()
 
 void SdMiscTest::testSlideLinkListKeepsOnlyReadableLinks()
 {
-    // The file lists six links. One describes its slide and names a source slide by an identifier,
-    // which is kept in the form a slide keeps its own identifier in. The others each hold a value
-    // the record cannot keep: a source identifier of no shape, a modified time longer than any
-    // time stamp, a section link that lists one slide where the section spans two, a slide link
-    // that lists another slide than its own, and a link with no source document. They are
-    // dropped, and the presentation opens as any other does, with its section.
+    // The file lists seven links. One describes its slide and names a source slide by an
+    // identifier, which is kept in the form a slide keeps its own identifier in. The others each
+    // hold a value the record cannot keep: a source identifier of no shape, a modified time longer
+    // than any time stamp, a section link that lists one slide where the section spans two, a
+    // slide link that lists another slide than its own, a link with no source document, and a
+    // presentation link over slides that sit in no section. They are dropped, and the
+    // presentation opens as any other does, with its section.
     createSdImpressDoc("slide-links-unreadable.fodp");
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);

@@ -70,6 +70,12 @@
                       coext:source-identifier="{44444444-4444-4444-4444-444444444444}">
      <coext:slide coext:guid="{44444444-4444-4444-4444-444444444444}"/>
     </coext:slide-link>
+    <coext:slide-link coext:unit="presentation" coext:identifier="{CCCCCCCC-CCCC-4CCC-8CCC-CCCCCCCCCCCC}"
+                      coext:source-document="Q3 deck.odp"
+                      coext:source-name="Q3 deck.odp">
+     <coext:slide coext:guid="{11111111-1111-1111-1111-111111111111}"/>
+     <coext:slide coext:guid="{22222222-2222-2222-2222-222222222222}"/>
+    </coext:slide-link>
    </coext:slide-link-list>
   </office:presentation>
  </office:body>

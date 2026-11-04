@@ -34,6 +34,20 @@ struct SlideSection
     sal_Int32 mnStartIndex; // 0-based index of first slide in this section
 };
 
+/// A run of consecutive slides that one section spans, or that sit before the first section.
+struct SlideSectionRun
+{
+    /// How many slides the run holds, at least one.
+    sal_Int32 mnSlideCount = 0;
+    /// The name of the section, or the name given to the slides before the first section.
+    OUString maName;
+    /// The identifier of the section, empty for the slides before the first section and for a
+    /// section that has none.
+    OUString maId;
+    /// Whether the run is the slides before the first section, which belong to no section.
+    bool mbLoose = false;
+};
+
 /** Manages slide sections for a presentation document.
  *
  *  Sections group consecutive slides under a named header.
@@ -77,6 +91,23 @@ public:
     */
     bool AddInsertedSection(sal_Int32 nStartSlideIndex, sal_Int32 nSlideCount,
                             const OUString& rName);
+
+    /** Adds one section per run of rRuns over the nSlideCount slides from nStartSlideIndex on,
+        the runs one after the other, each named after its run. The runs add up to nSlideCount,
+        or nothing changes. One undo action. The slides that follow keep a section apart from
+        the new ones, as for AddInsertedSection.
+
+        @return the identifiers of the sections added, in order, or none when nothing changed.
+    */
+    std::vector<OUString> AddInsertedSections(sal_Int32 nStartSlideIndex, sal_Int32 nSlideCount,
+                                              const std::vector<SlideSectionRun>& rRuns);
+
+    /** The slides of the document as runs, in slide order: the slides before the first section
+        as one loose run named rLooseName, or the default name of a section when rLooseName is
+        empty, with no identifier, then one run per section that spans a slide, with the name
+        and the identifier of that section.
+    */
+    std::vector<SlideSectionRun> GetSlideRuns(const OUString& rLooseName) const;
 
     /// Write the sections as a JSON array under the given key. Each entry
     /// carries the section's name, its id when it has one, the 0-based

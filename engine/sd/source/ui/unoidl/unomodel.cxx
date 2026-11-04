@@ -8044,10 +8044,20 @@ bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OSt
     // copy of the slides of its source section, each read by the identifier of its source slide,
     // so its pages are linked to no position.
     const bool bSection = aAs == "section";
-    if (!bSection && aAs != "slides")
+    const bool bPresentation = aAs == "presentation";
+    if (!bSection && !bPresentation && aAs != "slides")
         return false;
     if (bSection
         && (!aSourcePositions.empty() || sd::SlideLink::NormaliseGuid(aSourceId).isEmpty()
+            || !sd::SlideLink::IsReadableSourceString(aSourceUnitName)
+            || !sd::SlideLink::IsReadableSourceString(aLastModifiedTime)))
+        return false;
+
+    // A whole presentation is every page of the file in the sections of the file, so it names
+    // no pages, no positions and no unit of the source. "sourceName" is the name of the source
+    // document.
+    if (bPresentation
+        && (!aPages.empty() || !aSourcePositions.empty() || !aSourceId.isEmpty()
             || !sd::SlideLink::IsReadableSourceString(aSourceUnitName)
             || !sd::SlideLink::IsReadableSourceString(aLastModifiedTime)))
         return false;
@@ -8108,6 +8118,28 @@ bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OSt
                 aSourceUnitName.isEmpty() ? SdResId(STR_DEFAULT_SLIDE_SECTION_NAME)
                                           : aSourceUnitName);
         SAL_WARN_IF(!bAdded, "sd", "the inserted slides could not be added as a section");
+    }
+
+    if (bPresentation)
+    {
+        // The slides stay in when the sections cannot be added, as pages linked one by one.
+        bool bAdded = false;
+        if (bLink)
+            bAdded
+                = rLinks.LinkInsertedPresentation(*pSource, nFirstSlide, nInsertedCount,
+                                                  aSourceUnitName, aSourceName, aLastModifiedTime);
+        else
+        {
+            // The sections of the file go over the pages read from it, which are every page of
+            // the file when all of them went in.
+            const std::vector<sd::SlideSectionRun> aRuns
+                = pSource->GetSectionManager().GetSlideRuns(aSourceUnitName);
+            bAdded = !mpDoc->GetSectionManager()
+                          .AddInsertedSections(nFirstSlide, nInsertedCount, aRuns)
+                          .empty();
+        }
+        SAL_WARN_IF(!bAdded, "sd",
+                    "the inserted slides could not be added as the sections of a presentation");
     }
 
     return true;

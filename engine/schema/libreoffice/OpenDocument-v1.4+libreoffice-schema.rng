@@ -4677,11 +4677,12 @@ xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
     </rng:element>
   </rng:define>
   <!-- TODO no proposal -->
-  <!-- The links of a presentation to the slides and sections of other documents. Each one
-       names the unit it holds a copy of, the page or section of this document that holds
-       it, the source document as a persistent link, the unit in that document, the name
-       and the modification time it had when last read, and the slides it spans here, by
-       identifier and in order. -->
+  <!-- The links of a presentation to the slides, sections and whole decks of other documents.
+       Each one names the unit it holds a copy of, the page or section of this document that
+       holds it or an identifier of its own for a whole deck, the source document as a
+       persistent link, the unit in that document, the name and the modification time it had
+       when last read, and the slides it spans here, by identifier and in order. A whole deck
+       spans the sections that hold those slides. -->
   <rng:define name="coext-slide-link-list">
     <rng:element name="coext:slide-link-list">
       <rng:zeroOrMore>
@@ -4690,6 +4691,7 @@ xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
             <rng:choice>
               <rng:value>slide</rng:value>
               <rng:value>section</rng:value>
+              <rng:value>presentation</rng:value>
             </rng:choice>
           </rng:attribute>
           <rng:attribute name="coext:identifier">

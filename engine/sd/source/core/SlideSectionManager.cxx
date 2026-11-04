@@ -230,6 +230,68 @@ bool SlideSectionManager::AddInsertedSection(sal_Int32 nStartSlideIndex, sal_Int
     return true;
 }
 
+std::vector<OUString>
+SlideSectionManager::AddInsertedSections(sal_Int32 nStartSlideIndex, sal_Int32 nSlideCount,
+                                         const std::vector<SlideSectionRun>& rRuns)
+{
+    sal_Int32 nRunSlides = 0;
+    for (const SlideSectionRun& rRun : rRuns)
+    {
+        if (rRun.mnSlideCount <= 0)
+            return {};
+        nRunSlides += rRun.mnSlideCount;
+    }
+    if (rRuns.empty() || nRunSlides != nSlideCount)
+        return {};
+
+    // The first run goes in the way one inserted section does, which records the undo action
+    // and keeps the slides that follow apart. Each other run starts a section inside it.
+    const std::vector<SlideSection> aSnapshot = GetSectionsSnapshot();
+    if (!AddInsertedSection(nStartSlideIndex, nSlideCount, rRuns.front().maName))
+        return {};
+
+    std::vector<OUString> aIds{ maSections[GetSectionIndexForSlide(nStartSlideIndex)].maId };
+    sal_Int32 nRunStart = nStartSlideIndex + rRuns.front().mnSlideCount;
+    for (size_t nRun = 1; nRun < rRuns.size(); ++nRun)
+    {
+        if (IsSectionStart(nRunStart))
+        {
+            RestoreSectionsSnapshot(aSnapshot);
+            return {};
+        }
+        AddSection(nRunStart, rRuns[nRun].maName);
+        aIds.push_back(maSections[GetSectionIndexForSlide(nRunStart)].maId);
+        nRunStart += rRuns[nRun].mnSlideCount;
+    }
+    return aIds;
+}
+
+std::vector<SlideSectionRun> SlideSectionManager::GetSlideRuns(const OUString& rLooseName) const
+{
+    std::vector<SlideSectionRun> aRuns;
+    const sal_Int32 nPageCount = mrDoc.GetSdPageCount(PageKind::Standard);
+    const sal_Int32 nFirstStart
+        = maSections.empty() ? nPageCount
+                             : std::min<sal_Int32>(maSections.front().mnStartIndex, nPageCount);
+    if (nFirstStart > 0)
+    {
+        SlideSectionRun aLoose;
+        aLoose.mnSlideCount = nFirstStart;
+        aLoose.maName
+            = rLooseName.isEmpty() ? SdResId(STR_DEFAULT_SLIDE_SECTION_NAME) : rLooseName;
+        aLoose.mbLoose = true;
+        aRuns.push_back(std::move(aLoose));
+    }
+
+    for (sal_Int32 nSection = 0; nSection < GetSectionCount(); ++nSection)
+    {
+        const sal_Int32 nCount = GetSectionSlideCount(nSection);
+        if (nCount > 0)
+            aRuns.push_back({ nCount, maSections[nSection].maName, maSections[nSection].maId });
+    }
+    return aRuns;
+}
+
 void SlideSectionManager::WriteSectionsJson(::tools::JsonWriter& rJsonWriter,
                                             std::string_view aArrayName) const
 {
