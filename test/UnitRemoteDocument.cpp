@@ -564,7 +564,13 @@ public:
 /// to is refused.
 class UnitRemoteDocumentCycle : public WopiTestServer
 {
-    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitCycleError, WaitNotFoundError, Done) _phase;
+    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitCycleError, WaitNotFoundError, WaitRefusedState,
+               Done)
+    _phase;
+
+    /// Whether the remote links list reported the refused subscription as failed, with the
+    /// kind of the refusal.
+    bool _sawRefusedState = false;
 
     std::string ownWopiSrc() const { return getWopiHostURI() + "/wopi/files/1"; }
 
@@ -619,9 +625,39 @@ public:
             LOK_ASSERT_MESSAGE("Expected a not-found rejection",
                                message.find("event=error kind=notfound") != std::string::npos);
 
-            TRANSITION_STATE(_phase, Phase::Done);
-            passTest("Cycle and unbound-source subscriptions were both refused");
+            TRANSITION_STATE(_phase, Phase::WaitRefusedState);
+            finishWhenRefusedStateSeen();
         }
+    }
+
+    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        if (!message.starts_with("remotelinks:"))
+            return false;
+
+        TST_LOG("Got: [" << message << ']');
+
+        // The refused subscription stays on the list as failed, with the kind of the refusal,
+        // so a view reads why it cannot open the source instead of asking again.
+        if (message.find("\"state\":\"failed\"") != std::string_view::npos &&
+            message.find("\"error\":\"cycledetected\"") != std::string_view::npos)
+        {
+            _sawRefusedState = true;
+            finishWhenRefusedStateSeen();
+        }
+
+        return false;
+    }
+
+    void finishWhenRefusedStateSeen()
+    {
+        if (_phase != Phase::WaitRefusedState || !_sawRefusedState)
+            return;
+
+        TRANSITION_STATE(_phase, Phase::Done);
+        passTest("Cycle and unbound-source subscriptions were both refused, and the refused "
+                 "one stays listed as failed");
     }
 
     void invokeWSDTest() override
@@ -639,6 +675,7 @@ public:
             case Phase::WaitLoadStatus:
             case Phase::WaitCycleError:
             case Phase::WaitNotFoundError:
+            case Phase::WaitRefusedState:
             case Phase::Done:
             {
                 break;

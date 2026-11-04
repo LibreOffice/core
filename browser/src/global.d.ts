@@ -334,6 +334,7 @@ interface AppInterface {
 	remoteLinks: Array<{
 		name?: string;
 		state: string;
+		error?: string;
 		lastModifiedTime?: string;
 		persistentLink: string;
 		access?: string;

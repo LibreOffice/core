@@ -52,6 +52,9 @@ interface SlideImportPaneSource {
   // The state the server reports for this view: available, subscribed,
   // connected, disconnected, failed, missing or noaccess.
   state: string;
+  // Why the server reports the source failed or missing: the kind it
+  // named, such as cycledetected, or empty.
+  error: string;
   // Whether the source's slides are on show under its expander.
   expanded: boolean;
   // Whether the source has been asked for its slides since it connected.
@@ -264,6 +267,7 @@ class SlideImportPane {
           persistentLink: doc.persistentLink,
           access: doc.access || '',
           state: doc.state,
+          error: doc.error || '',
           expanded: false,
           asked: false,
           opening: false,
@@ -279,6 +283,7 @@ class SlideImportPane {
       source.name = name;
       source.access = doc.access || '';
       source.state = doc.state;
+      source.error = doc.error || '';
       // The source answered, so it is not opening any more.
       if (source.state !== 'available' && source.state !== 'disconnected')
         source.opening = false;
@@ -335,9 +340,12 @@ class SlideImportPane {
   }
 
   // Asks an open source for its slides: a source that is not connected yet is
-  // subscribed to first, and the slides follow once it answers.
-  private askSource(source: SlideImportPaneSource): void {
+  // subscribed to first, and the slides follow once it answers. A source
+  // whose last subscription failed, or was refused, keeps that answer on
+  // show until the user asks for the source again.
+  private askSource(source: SlideImportPaneSource, again = false): void {
     if (!this.canShowSlides(source)) return;
+    if (source.state === 'failed' && !again) return;
 
     if (source.state === 'connected') {
       if (source.asked) return;
@@ -393,7 +401,7 @@ class SlideImportPane {
       this.session.slideCount = 0;
       this.session.clearSelection();
     }
-    this.askSource(source);
+    this.askSource(source, true);
     this.render();
   }
 
@@ -480,6 +488,12 @@ class SlideImportPane {
   }): void {
     const source = this.findSource(e.source);
     if (!source) return;
+
+    // An answer that arrives after the link failed belongs to the slides
+    // the source showed before, which the pane has dropped. The pane shows
+    // why the source cannot be read, and takes slides from it again once
+    // it connects again.
+    if (source.state !== 'connected') return;
 
     const textMsg = e.textMsg || '';
     if (textMsg.startsWith('presentationinfo:')) {
@@ -793,6 +807,10 @@ class SlideImportPane {
     }
     if (source.state === 'noaccess')
       return _('This file is here. You do not have permission to open it.');
+    if (source.state === 'failed' && source.error === 'cycledetected')
+      return _(
+        'Slides cannot be linked from this file: the link would lead back to this presentation.',
+      );
     if (source.state === 'failed')
       return _('This file could not be read this time.');
     return _('Reading the slides...');
@@ -817,7 +835,9 @@ class SlideImportPane {
         });
       return actions;
     }
-    if (source.state === 'failed')
+    // A link that would lead back to this presentation is refused every
+    // time, so there is nothing to try again.
+    if (source.state === 'failed' && source.error !== 'cycledetected')
       return [
         {
           text: _('Reload slides'),

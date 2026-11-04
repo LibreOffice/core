@@ -98,9 +98,10 @@ public:
     void sendCommand(DocumentBroker& docBroker, const std::string& tag,
                      const std::string& persistentLink, const std::string& command);
 
-    /// Drops the record of one view's subscription that was not accepted.
-    void removeSubscription(DocumentBroker& docBroker, const std::string& tag,
-                            const std::string& wopiSrc);
+    /// Records that one view's subscription was refused: it stays listed as failed, with the
+    /// kind of the refusal.
+    void refuseSubscription(DocumentBroker& docBroker, const std::string& tag,
+                            const std::string& wopiSrc, const std::string& kind);
 
     /// Drops everything one view held, its tokens and its subscriptions, when
     /// the view leaves.
@@ -138,6 +139,9 @@ private:
         /// failed or missing. A subscription is connected once the preview index of the
         /// source arrived or the live link is up, whichever comes first.
         std::string state;
+        /// Why the subscription is failed or missing: the kind the server or the remote
+        /// document named, such as cycledetected. Empty while no kind was named.
+        std::string error;
         /// The preview index of the source and the pictures of its slides, which answer the
         /// view before the live link is up.
         std::shared_ptr<RemoteLinkPrefetcher> prefetcher;

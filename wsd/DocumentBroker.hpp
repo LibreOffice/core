@@ -609,9 +609,10 @@ public:
     /// Returns the live session with the given id, or null when there is none.
     std::shared_ptr<ClientSession> findSession(const std::string& id) const;
 
-    /// Removes the record of one view's remote document subscription that was
-    /// not accepted. The view is named by its tag.
-    void removeRemoteSubscription(const std::string& tag, const std::string& wopiSrc);
+    /// Records that one view's remote document subscription was refused, with
+    /// the kind of the refusal. The view is named by its tag.
+    void refuseRemoteSubscription(const std::string& tag, const std::string& wopiSrc,
+                                  const std::string& kind);
 
     /// Drops everything one view held for remote links when it leaves.
     void removeRemoteDocumentView(const std::string& tag);

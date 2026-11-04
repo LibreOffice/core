@@ -962,14 +962,14 @@ void RemoteDocumentBroker::reject(const RemoteDocumentRequest& request, const st
     RemoteDocument::sendEvent(consumer, request.wopiSrc, "event=error kind=" + kind);
 
     // The consumer recorded the subscription when sending it; a rejection
-    // removes that record again.
+    // marks that record failed, with the kind of the refusal.
     if (std::shared_ptr<DocumentBroker> docBroker = request.consumer.lock())
     {
         docBroker->addCallback(
-            [weakDocBroker = request.consumer, wopiSrc = request.wopiSrc, tag = request.tag]()
+            [weakDocBroker = request.consumer, wopiSrc = request.wopiSrc, tag = request.tag, kind]()
             {
                 if (const std::shared_ptr<DocumentBroker> broker = weakDocBroker.lock())
-                    broker->removeRemoteSubscription(tag, wopiSrc);
+                    broker->refuseRemoteSubscription(tag, wopiSrc, kind);
             });
     }
 }

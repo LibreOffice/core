@@ -833,6 +833,12 @@ void RemoteLinks::onRemoteEvent(DocumentBroker& docBroker, const std::string& ta
     if (arguments.size())
         COOLProtocol::getTokenString(arguments[0], "event", event);
 
+    // The kind of a failed or missing event says why the source cannot be read.
+    std::string kind;
+    for (std::size_t i = 1; i < arguments.size(); ++i)
+        if (COOLProtocol::getTokenString(arguments[i], "kind", kind))
+            break;
+
     // Every event reaches the kit, which will drive the shared freshness of
     // linked slides once the engine reads these events.
     sendEventToKit(docBroker, tag, persistentLink, eventArguments);
@@ -881,7 +887,10 @@ void RemoteLinks::onRemoteEvent(DocumentBroker& docBroker, const std::string& ta
         itView->second.subscriptions.erase(itSub);
     else if (event == "connected" || event == "disconnected" || event == "failed" ||
              event == "missing")
+    {
         itSub->second.state = std::move(event);
+        itSub->second.error = std::move(kind);
+    }
 
     refreshView(docBroker, tag);
 }
@@ -904,13 +913,23 @@ void RemoteLinks::sendCommand(DocumentBroker& docBroker, const std::string& tag,
         return;
     }
 
-    // A command only reaches a remote the view itself is subscribed to.
+    // A command only reaches a remote the view itself is subscribed to. A subscription that
+    // failed or found the source missing answers nothing, its preview index included, so the
+    // view shows the refusal and not the slides.
     const auto itView = _views.find(tag);
     if (itView != _views.end())
     {
         const auto itSub = itView->second.subscriptions.find(itEntry->first);
         if (itSub != itView->second.subscriptions.end())
         {
+            if (itSub->second.state == "failed" || itSub->second.state == "missing")
+            {
+                LOG_DBG("Ignoring a remote document command from view ["
+                        << tag << "] for [" << linkAnonym << "]: the subscription is "
+                        << itSub->second.state);
+                return;
+            }
+
             itSub->second.prefetcher->handleCommand(docBroker, command);
             return;
         }
@@ -920,8 +939,8 @@ void RemoteLinks::sendCommand(DocumentBroker& docBroker, const std::string& tag,
                                                              << "]: no live subscription");
 }
 
-void RemoteLinks::removeSubscription(DocumentBroker& docBroker, const std::string& tag,
-                                          const std::string& wopiSrc)
+void RemoteLinks::refuseSubscription(DocumentBroker& docBroker, const std::string& tag,
+                                     const std::string& wopiSrc, const std::string& kind)
 {
     docBroker.assertCorrectThread();
 
@@ -932,12 +951,19 @@ void RemoteLinks::removeSubscription(DocumentBroker& docBroker, const std::strin
     try
     {
         const std::string docKey = RequestDetails::getDocKey(wopiSrc);
-        if (itView->second.subscriptions.erase(docKey))
-            refreshView(docBroker, tag);
+        const auto itSub = itView->second.subscriptions.find(docKey);
+        if (itSub == itView->second.subscriptions.end())
+            return;
+
+        // The refused subscription stays listed, so the view reads why it was refused and
+        // asks for the source again only on purpose.
+        itSub->second.state = "failed";
+        itSub->second.error = kind;
+        refreshView(docBroker, tag);
     }
     catch (const std::exception& exc)
     {
-        LOG_ERR("Cannot drop the remote document subscription: " << exc.what());
+        LOG_ERR("Cannot record the refused remote document subscription: " << exc.what());
     }
 }
 
@@ -1034,7 +1060,8 @@ void RemoteLinks::addToIncomingDocKeyChain(DocumentBroker& docBroker,
                           itEntry != _entries.end() ? itEntry->second.persistentLink
                                                     : std::string(),
                           "cycledetected");
-                itView.second.subscriptions.erase(itSub);
+                itSub->second.state = "failed";
+                itSub->second.error = "cycledetected";
                 refreshView(docBroker, itView.first);
             }
         }
@@ -1137,11 +1164,15 @@ std::string RemoteLinks::buildJson(const std::string& tag) const
         // the state is this view's own: its live connection when subscribed,
         // otherwise whether it holds a token to reach the source at all.
         std::string state = "noaccess";
+        std::string error;
         if (view)
         {
             const auto itSub = view->subscriptions.find(it.first);
             if (itSub != view->subscriptions.end())
+            {
                 state = itSub->second.state;
+                error = itSub->second.error;
+            }
             else if (view->tokens.find(it.first) != view->tokens.end())
                 state = "available";
         }
@@ -1149,6 +1180,7 @@ std::string RemoteLinks::buildJson(const std::string& tag) const
         Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
         entry->set("name", entryName(it.second));
         entry->set("state", state);
+        entry->set("error", error);
         entry->set("lastModifiedTime", it.second.lastModifiedTime);
         entry->set("persistentLink", it.second.persistentLink);
         entry->set("access", access(it.second.persistentLink));
@@ -1166,6 +1198,7 @@ std::string RemoteLinks::buildJson(const std::string& tag) const
         Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
         entry->set("name", name);
         entry->set("state", "missing");
+        entry->set("error", std::string());
         entry->set("lastModifiedTime", std::string());
         entry->set("persistentLink", name);
         entry->set("access", access(name));
@@ -1233,8 +1266,8 @@ void RemoteLinks::dumpState(std::ostream& os) const
            << " link access asked: " << itView.second.linkAccess.size();
         for (const auto& it : itView.second.subscriptions)
         {
-            os << "\n      " << Anonymizer::anonymizeUrl(it.second.wopiSrc) << " state: "
-               << it.second.state
+            os << "\n      " << Anonymizer::anonymizeUrl(it.second.wopiSrc)
+               << " state: " << it.second.state << " error: " << it.second.error
                << " live link dialed: " << (it.second.liveLinkDialed ? "yes" : "no");
             it.second.prefetcher->dumpState(os);
         }

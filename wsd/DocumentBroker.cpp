@@ -6149,9 +6149,10 @@ void DocumentBroker::addToIncomingDocKeyChain(const std::string& docKeyChain)
     _remoteLinks.addToIncomingDocKeyChain(*this, docKeyChain);
 }
 
-void DocumentBroker::removeRemoteSubscription(const std::string& tag, const std::string& wopiSrc)
+void DocumentBroker::refuseRemoteSubscription(const std::string& tag, const std::string& wopiSrc,
+                                              const std::string& kind)
 {
-    _remoteLinks.removeSubscription(*this, tag, wopiSrc);
+    _remoteLinks.refuseSubscription(*this, tag, wopiSrc, kind);
 }
 
 void DocumentBroker::removeRemoteDocumentView(const std::string& tag)

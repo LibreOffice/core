@@ -1195,13 +1195,25 @@ remotelinks: <json>
                     file name at the end of its WOPISrc>",
           "lastModifiedTime": "<time or empty>",
           "state": "noaccess|available|subscribed|connected|disconnected|failed|missing",
+          "error": "<why the subscription is failed or missing, or empty>",
           "persistentLink": "<the reference the document's pages store for the source>",
           "access": "pending|resolved|notfound|denied|failed, or empty" }
 
     'noaccess' means the view holds no token for the source. 'available'
     means the view holds a token but has no live subscription. The other
     values follow the connection events of the view's subscription, which
-    the remotedocevent message in the parent -> child section lists.
+    the remotedocevent message in the parent -> child section lists. A
+    subscription the server refused stays listed as 'failed', so the view
+    asks for the source again only on purpose.
+
+    'error' is the kind the server or the remote document gave a 'failed'
+    or 'missing' subscription, and it is empty for every other state and
+    when no kind was given. Among the kinds are 'cycledetected' for a
+    subscription that would link the documents in a circle, 'chaindepth'
+    for one that would chain more documents than the server allows,
+    'limitreached' for one over the number of remote documents or links
+    the server allows, and 'disconnected' for a live link that was lost
+    for good.
     'missing' means the source cannot be read: either it could not be read
     from storage, or it is a document the open one names as the source of
     its slides that no remote link stands for. Such an entry carries its
