@@ -14,10 +14,12 @@
 #include <qt/RemoteOpen.hpp>
 #include <common/Log.hpp>
 #include <net/FakeSocket.hpp>
+#include <qt/CoolLocalSchemeHandler.hpp>
 #include <qt/bridge.hpp>
 
 #include <QBuffer>
 #include <QByteArray>
+#include <QFile>
 #include <QIODevice>
 #include <QJsonDocument>
 #include <QJsonArray>
@@ -164,6 +166,23 @@ constexpr qsizetype MAX_JS_STRING_UNITS = 536'870'888;
 
 /// A message from the frame is one JS string, and a UTF-16 unit is at most 3 bytes of UTF-8.
 constexpr qsizetype MAX_MESSAGE_BYTES = 3 * MAX_JS_STRING_UNITS;
+
+/// The page takes an empty answer as a file that is not there.
+QByteArray readBundledFile(const QString& path)
+{
+    const QString filePath = coda::bundledFilePath(path);
+    if (filePath.isEmpty())
+        return QByteArray();
+
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        LOG_WRN("account window: \"" << path.toStdString() << "\" not found in the coda bundle");
+        return QByteArray();
+    }
+
+    return file.readAll();
+}
 
 class CloudAccountPage;
 
@@ -395,6 +414,8 @@ std::optional<QByteArray> CloudAccountPage::callBridge(const QString& method,
         return _bridge->readLocalDocBytes().toUtf8();
     else if (method == QStringLiteral("getAllPrefs"))
         return _bridge->getAllPrefs().toUtf8();
+    else if (method == QStringLiteral("getBundledFile"))
+        return readBundledFile(first);
     else if (method == QStringLiteral("setPref"))
     {
         _bridge->setPref(first, second);
