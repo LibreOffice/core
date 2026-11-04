@@ -6,15 +6,16 @@ msgstr ""
 "Project-Id-Version: com.collaboraoffice.librelogo\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 11:43+0000\n"
-"PO-Revision-Date: 2026-09-04 20:00+0000\n"
-"Last-Translator: Collabora Online contributors\n"
-"Language-Team: Hungarian\n"
+"PO-Revision-Date: 2026-11-02 11:55+0000\n"
+"Last-Translator: Andras Timar <timar@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/collabora-"
+"online/extensions/librelogo/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.18.1\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: panel.js:443
 msgid "%1 has no embedded LibreLogo program."
@@ -239,7 +240,7 @@ msgstr "A dokumentum üres. Írjon programot a szerkesztőbe vagy a dokumentumba
 
 #: panel.js:467
 msgid "The editor is empty, so there is no program to write to the document."
-msgstr ""
+msgstr "A szerkesztő üres, nincs program, amit be lehetne írni a dokumentumba."
 
 #: index.html:47
 msgid "To document"
@@ -266,6 +267,8 @@ msgid ""
 "Write the editor's program into the document, over the selection or at the "
 "cursor"
 msgstr ""
+"A szerkesztőben lévő program beírása a dokumentumba a kijelölést lecserélve "
+"vagy az adott kurzorpozíciónál"
 
 #: index.html:76
 msgid "at the cursor, as an inline image"

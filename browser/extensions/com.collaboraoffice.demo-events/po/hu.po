@@ -1,0 +1,66 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: com.collaboraoffice.demo-events\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-02 11:43+0000\n"
+"PO-Revision-Date: 2026-11-02 12:14+0000\n"
+"Last-Translator: Andras Timar <timar@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/collabora-"
+"online/extensions/demo-events/hu/>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: hu\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2026.11.dev0\n"
+
+#: index.html:30
+msgid "Active comments:"
+msgstr "Aktív megjegyzések:"
+
+#: index.html:21
+msgid ""
+"Counters maintained from the cool.document.on* events. Modify the document, "
+"click around to change the selection, or add, edit or remove a comment in "
+"the sidebar."
+msgstr ""
+"A cool.document.on* eseményekből vezetett számlálók. Módosítsa a "
+"dokumentumot, kattintson máshová a kijelölés módosításához, vagy adjon "
+"hozzá, szerkesszen vagy töröljön megjegyzést az oldalsávon."
+
+#: manifest.json:name
+msgid "Events demo"
+msgstr "Eseménybemutató"
+
+#: index.html:32
+msgid "Last comment activity:"
+msgstr "Legutóbbi megjegyzésművelet:"
+
+#: index.html:20
+msgid "Live document state:"
+msgstr "A dokumentum élő állapota:"
+
+#: index.html:26
+msgid "Modifications:"
+msgstr "Módosítások:"
+
+#: index.html:35
+msgid "Reset counters"
+msgstr "Számlálók nullázása"
+
+#: index.html:28
+msgid "Selection changes:"
+msgstr "Kijelölésváltozások:"
+
+#: index.html:56 index.html:75
+msgid "added by %1"
+msgstr "hozzáadta: %1"
+
+#: index.html:80
+msgid "changed by %1"
+msgstr "módosította: %1"
+
+#: index.html:85
+msgid "removed by %1"
+msgstr "törölte: %1"

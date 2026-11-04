@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0200\n"
-"PO-Revision-Date: 2026-06-08 17:01+0000\n"
-"Last-Translator: ButterflyOfFire <boffire@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-11-03 20:15+0000\n"
+"Last-Translator: Andras Timar <timar@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Kabyle <https://hosted.weblate.org/projects/collabora-online/"
 "help/kab/>\n"
 "Language: kab\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Translate Toolkit 3.18.1\n"
+"X-Generator: Weblate 2026.11.1.dev0\n"
 "X-POOTLE-MTIME: 1475585999.000000\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
@@ -1434,7 +1434,7 @@ msgstr "Fren akk deg umray / sebter n usunneɣ"
 
 #: html/cool-help.html%2Bdiv.h2:338-5
 msgid "<span class=\"productname\">{productname}</span> Help"
-msgstr "<span class=\"productname\">{isem n ufaris}</span> Tallelt"
+msgstr "<span class=\"productname\">{productname}</span> Tallelt"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:341-13
 msgid "Collaborative editing"
@@ -1442,7 +1442,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:342-13
 msgid "<span class=\"productname\">{productname}</span> user interface"
-msgstr "<span class=\"productname\">{isem n ufaris}</span>agrudem n useqdac"
+msgstr "<span class=\"productname\">{productname}</span>agrudem n useqdac"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:343-13
 msgid "Opening, closing, saving, printing and downloading documents"
@@ -1462,7 +1462,7 @@ msgstr "Tiwuriwin tinaẓiyin"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:348-13
 msgid "<span class=\"productname\">{productname}</span> spreadsheets"
-msgstr "<span class=\"productname\">{isem n ufaris}</span> imbellezen"
+msgstr "<span class=\"productname\">{productname}</span> imbellezen"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:349-13
 msgid "Editing spreadsheets"
@@ -1482,7 +1482,7 @@ msgstr "Tiferlit n usiḍen"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:355-13
 msgid "<span class=\"productname\">{productname}</span> text documents"
-msgstr "<span class=\"productname\">{isem n ufaris}</span> isemliyen n uḍris"
+msgstr "<span class=\"productname\">{productname}</span> isemliyen n uḍris"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:356-13
 msgid "Editing text documents"
@@ -1502,7 +1502,7 @@ msgstr "Isemliyen n uḍris"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:361-13
 msgid "<span class=\"productname\">{productname}</span> presentations"
-msgstr "<span class=\"productname\">{isem n ufaris}</span> isenkiden"
+msgstr "<span class=\"productname\">{productname}</span> isenkiden"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:362-13
 msgid "Editing presentations"
@@ -1645,7 +1645,7 @@ msgid ""
 "integrated with <span class=\"productname\">{productname}</span>."
 msgstr ""
 "Isemliyen-ik·im ttwakelsen daɣen ttusefraken deg usekles n usigna i yellan "
-"deg <span class=\"productname\">{isem n ufaris}</span>."
+"deg <span class=\"productname\">{productname}</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:431-30
 msgid ""
@@ -1662,7 +1662,7 @@ msgid ""
 "document format."
 msgstr ""
 "I ulday n yisemli, sit ɣef ufaylu i wakken ad teldiḍ<span "
-"class=\"productname\">{isem n ufaris}</span> uzegrir icudden ɣer umasal n "
+"class=\"productname\">{productname}</span> uzegrir icudden ɣer umasal n "
 "isemli."
 
 #: html/cool-help.html%2Bdiv.div.div.p:433-30
@@ -1956,7 +1956,7 @@ msgid ""
 "document from your local computer or from your cloud storage. Inserted "
 "images are always embedded in the document."
 msgstr ""
-"<span class=\"productname\">{isem n ufaris}</span> ad tegreḍ tugniwin deg "
+"<span class=\"productname\">{productname}</span> ad tegreḍ tugniwin deg "
 "isemli aḍris seg uselkim-inek·inem adigan neɣ seg weḥraz-inek·inem n usigna. "
 "Tugniwin yettwarnan dima ttwaselɣen deg isemli."
 
@@ -1994,7 +1994,7 @@ msgid ""
 "places that need special reader attention. Comments are displayed on the "
 "right and carry the name and date of the issuer."
 msgstr ""
-"Ger iwenniten deg <span class=\"productname\">{isem n ufaris}</span> deg "
+"Ger iwenniten deg <span class=\"productname\">{productname}</span> deg "
 "imukan i yesran lwelha umeɣṛi uzzig. Iwenniten ttwaseknen di tama tayeffust, "
 "ttawin isem akked wazemz n wugur."
 
@@ -2023,7 +2023,7 @@ msgid ""
 "misspelled words. Click on the right mouse button to open a context menu "
 "with suggested misspelling corrections."
 msgstr ""
-"<span class=\"productname\">{isem n ufaris}</span> tzemreḍ ad tessenqed tira "
+"<span class=\"productname\">{productname}</span> tzemreḍ ad tessenqed tira "
 "deg isemliyen n uḍris, ambellez akked isenkaden. Ajerriḍ azeggaɣ mmalen-d "
 "awalen ur yettwarun akken iwata. Sit ɣef tqeffalt tayeffust n tɣerdayt i "
 "wakken ad teldiḍ umuɣ n usatal s uskan i d-yettwasumren i yiseɣtiyen."
@@ -2460,8 +2460,8 @@ msgid ""
 "To exit a <span class=\"productname\">{productname}</span> slide show, "
 "press the <kbd>Esc</kbd> key to return to the presentation edit mode."
 msgstr ""
-"Akken ad teffɣeḍ seg <span class=\"productname\">{isem n ufaris}</span> "
-"tigri n tugna, sit ɣef tqeffalt <kbd>Esc</kbd> akken ad tuɣaleḍ ɣer uskar n "
+"Akken ad teffɣeḍ seg <span class=\"productname\">{productname}</span> tigri "
+"n tugna, sit ɣef tqeffalt <kbd>Esc</kbd> akken ad tuɣaleḍ ɣer uskar n "
 "teẓrigt n tihawt."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:676-5
@@ -2943,7 +2943,7 @@ msgid ""
 "Activate the <span class=\"productname\">{productname}</span> spreadsheet "
 "window."
 msgstr ""
-"Rmed <span class=\"productname\">{isem n ufaris}</span> asfaylu n tfelwit "
+"Rmed <span class=\"productname\">{productname}</span> asfaylu n tfelwit "
 "taliktṛunant."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:835-7
@@ -3022,7 +3022,7 @@ msgstr "Amek ara slekmeɣ asenked-iw tura?"
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:868-7
 msgid ""
 "Open the presentation in <span class=\"productname\">{productname}</span>"
-msgstr "Ldi tihawt deg <span class=\"productname\">{isem n ufaris}</span>"
+msgstr "Ldi tihawt deg <span class=\"productname\">{productname}</span>"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:869-7
 msgid ""
