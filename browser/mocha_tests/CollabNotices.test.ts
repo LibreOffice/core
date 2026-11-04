@@ -1,4 +1,4 @@
-/* -*- js-indent-level: 8 -*- */
+/* -*- js-indent-level: 8; fill-column: 100 -*- */
 /*
  * Copyright the Collabora Online contributors.
  *
@@ -10,69 +10,81 @@
  */
 
 describe('Collaboration notices in a document window', function () {
-	// Permission.js adds its methods to the map, so they run with the map itself as
-	// "this". A bare object built on those methods stands in for the map.
-	function mapShowing(shown: any[]): any {
-		const methods = (globalThis as any).L.Map.included.find(
-			(set: any) => set && typeof set._onCollabUserJoined === 'function',
+	let page: DocumentPage;
+
+	before(async function () {
+		this.timeout(60000);
+		page = await openDocumentPage('text');
+		// The user may edit, and has changed the document.
+		page.serverSays('perm: edit');
+		page.serverSays('statechanged: .uno:ModifiedStatus=true');
+		await page.waitFor(() => page.map.isEditMode(), 'edit mode');
+	});
+
+	after(function () {
+		page.close();
+	});
+
+	afterEach(async function () {
+		page.map.uiManager.closeAll();
+		await page.waitFor(
+			() => !page.window.document.getElementById('collab-choice-title'),
+			'the notice to close',
 		);
-		const map = Object.create(methods);
-		map._showTwoCardDialog = (
-			id: string,
-			title: any,
-			subtitle: string,
-			cards: any[],
-		) => {
-			shown.push({ title, choices: cards.map((card) => card.heading), cards });
+	});
+
+	// The notice on screen: its title, and the heading of each choice.
+	async function noticeShown() {
+		const document = page.window.document;
+		await page.waitFor(
+			() =>
+				document.querySelector('[id$="-card"][data-coda-collab-card-wired]'),
+			'the notice with its choices',
+		);
+		return {
+			title: document.getElementById('collab-choice-title').textContent,
+			choices: Array.from(
+				document.querySelectorAll('[id$="-card-heading"]'),
+			).map((heading: any) => heading.textContent),
 		};
-		map.uiManager = { isAnyDialogOpen: () => false };
-		return map;
 	}
 
-	afterEach(function () {
-		delete (window as any).collabEditingActive;
-		delete (window as any).collabUsers;
-	});
+	it('someone opening the document being edited is named, with a choice of how to go on', async function () {
+		page.map._onCollabUserJoined('Robin');
 
-	it('someone opening the document being edited is named, with a choice of how to go on', function () {
-		const shown: any[] = [];
-		const map = mapShowing(shown);
-		map.isEditMode = () => true;
-
-		map._onCollabUserJoined('Robin');
-
-		nodeassert.equal(shown.length, 1);
-		nodeassert.equal(shown[0].title, 'Robin opened this document');
-		nodeassert.deepEqual(shown[0].choices, [
+		const notice = await noticeShown();
+		nodeassert.equal(notice.title, 'Robin opened this document');
+		nodeassert.deepEqual(notice.choices, [
 			'Edit locally',
 			'Collaborative editing',
 		]);
 	});
 
-	it('choosing to edit together saves the local changes and joins the others', function () {
-		const shown: any[] = [];
-		const map = mapShowing(shown);
-		map.isEditMode = () => true;
-		let joined = 0;
-		map._saveAndSwitchToServerMode = () => joined++;
+	it('choosing to edit together saves the local changes', async function () {
+		page.map._onCollabUserJoined('Robin');
+		await noticeShown();
+		const sentBefore = page.sent.length;
 
-		map._onCollabUserJoined('Robin');
-		shown[0].cards[1].onClick();
+		page.window.document.getElementById('start-collaborative-card').click();
 
-		nodeassert.equal(joined, 1);
+		const saves = page.sent
+			.slice(sentBefore)
+			.filter((message) => message.startsWith('save '));
+		nodeassert.equal(saves.length, 1);
 	});
 
-	it('someone starting to edit while this window edits is named the same way', function () {
-		const shown: any[] = [];
-		const map = mapShowing(shown);
-		map.isEditMode = () => true;
+	it('someone starting to edit while this window edits is named the same way', async function () {
+		page.map._onOtherUserEditingStarted('Robin');
 
-		map._onOtherUserEditingStarted('Robin');
-
-		nodeassert.equal(shown[0].title, 'Robin started editing');
-		nodeassert.deepEqual(shown[0].choices, [
+		const notice = await noticeShown();
+		nodeassert.equal(notice.title, 'Robin started editing');
+		nodeassert.deepEqual(notice.choices, [
 			'Edit locally',
 			'Collaborative editing',
 		]);
+	});
+
+	it('the page reported no errors', function () {
+		nodeassert.deepEqual(page.errors, []);
 	});
 });

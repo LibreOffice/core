@@ -2071,10 +2071,10 @@ check-introdocs:
 
 MOCHA_TEST_LOG = "`pwd`/mocha.log"
 DUPLICATION_TEST_LOG = "`pwd`/duplication.log"
-check-local: $(MOCHA_JS_DIR)/main.js check-introdocs
+check-local: $(MOCHA_JS_DIR)/main.js $(DIST_FOLDER)/cool.html check-introdocs
 	@echo "Running mocha tests..."
 	@echo > ${MOCHA_TEST_LOG}
-	@if (cd $(srcdir) && PATH="$(abs_builddir)/node_modules/.bin:$$PATH" NODE_PATH="$(call node_module_dir,$(abs_builddir)/node_modules)" ENGINE_WORKDIR="$(ENGINE_WORKDIR)" npm test) 2> ${MOCHA_TEST_LOG} 1>&2; then \
+	@if (cd $(srcdir) && PATH="$(abs_builddir)/node_modules/.bin:$$PATH" NODE_PATH="$(call node_module_dir,$(abs_builddir)/node_modules)" ENGINE_WORKDIR="$(ENGINE_WORKDIR)" COOL_DIST_DIR="$(abspath $(DIST_FOLDER))" npm test) 2> ${MOCHA_TEST_LOG} 1>&2; then \
 		echo "Mocha tests finished successfully. Results in ${MOCHA_TEST_LOG}"; \
 	else \
 		cat ${MOCHA_TEST_LOG}; \

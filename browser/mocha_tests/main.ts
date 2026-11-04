@@ -34,6 +34,7 @@
 /// <reference path="./helper/rectUtil.ts" />
 /// <reference path="./helper/Events.ts"/>
 /// <reference path="./helper/util.ts"/>
+/// <reference path="./helper/DocumentPage.ts"/>
 /// <reference path="./helper/CanvasRecorder.ts"/>
 /// <reference path="./helper/ScratchCanvasStub.ts"/>
 /// <reference path="./helper/Path2DRecorder.ts"/>

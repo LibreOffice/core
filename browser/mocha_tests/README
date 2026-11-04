@@ -27,3 +27,24 @@ Lets take the example of ViewLayout test suite.
 Now to run this newly created test suite, run from browser/ dir:
 
 $ touch mocha_tests/main.ts && make build-tests && npm run test-single ViewLayout
+
+Testing against the real page
+
+A test that needs the map, the dialogs or anything else the running page sets up can load the
+built page itself, rather than build a stand-in for the map:
+
+    let page: DocumentPage;
+    before(async function () {
+        this.timeout(60000);
+        page = await openDocumentPage('text');
+        page.serverSays('perm: edit');
+    });
+    after(function () {
+        page.close();
+    });
+
+openDocumentPage() loads dist/cool.html with all its scripts and plays the server's side of a
+document load, so page.map is the real map with a real document layer. page.serverSays() sends
+a message from the server, and page.sent holds what the page sent. A page takes a second or two
+to load, so a suite loads one in before() and shares it between its tests.
+CollabNotices.test.ts is an example. It needs a built dist, which "make check" builds first.
