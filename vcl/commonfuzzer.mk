@@ -148,7 +148,6 @@ fuzzer_core_libraries = \
     srtrs1 \
     storagefd \
     mtfrenderer \
-    canvasfactory \
     vclcanvas \
     pdfimport \
     xof \

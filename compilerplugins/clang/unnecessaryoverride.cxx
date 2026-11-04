@@ -99,6 +99,8 @@ public:
             return false;
         if (loplugin::isSamePathname(fn, SRCDIR "/unotools/source/streaming/streamhelper.cxx"))
             return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/source/canvas/"))
+            return false;
         return true;
     }
 

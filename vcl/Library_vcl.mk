@@ -440,6 +440,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/BlendFrameCache \
     vcl/source/bitmap/Octree \
     vcl/source/bitmap/salbmp \
+    vcl/source/canvas/CanvasFactory \
     vcl/source/image/Image \
     vcl/source/image/ImageTree \
     vcl/source/image/ImageRepository \

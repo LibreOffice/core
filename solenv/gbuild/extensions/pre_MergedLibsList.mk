@@ -18,7 +18,6 @@ gb_MERGE_LIBRARY_LIST := \
 		basprov \
 	) \
 	basegfx \
-	canvasfactory \
 	canvastools \
 	chart2 \
 	chart2api \

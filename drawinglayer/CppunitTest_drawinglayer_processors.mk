@@ -50,12 +50,12 @@ $(eval $(call gb_CppunitTest_use_vcl,drawinglayer_processors))
 
 $(eval $(call gb_CppunitTest_use_components,drawinglayer_processors,\
     canvas/source/vcl/vclcanvas \
-    canvas/source/factory/canvasfactory \
     configmgr/source/configmgr \
     i18npool/util/i18npool \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
     framework/util/fwk \
+    vcl/vcl.common \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,drawinglayer_processors))

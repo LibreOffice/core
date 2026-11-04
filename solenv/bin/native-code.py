@@ -34,8 +34,6 @@ core_constructor_list = [
     "stardiv_UnoControls_ProgressBar_get_implementation",
     "stardiv_UnoControls_ProgressMonitor_get_implementation",
     "stardiv_UnoControls_StatusIndicator_get_implementation",
-# canvas/source/factory/canvasfactory.component
-    "com_sun_star_comp_rendering_CanvasFactory_get_implementation",
 # canvas/source/vcl/vclcanvas.component
     "com_sun_star_comp_rendering_Canvas_VCL_get_implementation",
     "com_sun_star_comp_rendering_SpriteCanvas_VCL_get_implementation",
@@ -463,6 +461,7 @@ core_constructor_list = [
     "com_sun_star_comp_uui_UUIInteractionHandler_get_implementation",
     "com_sun_star_comp_uui_UUIInteractionRequestStringResolver_get_implementation",
 # vcl/*.component
+    "com_sun_star_comp_rendering_CanvasFactory_get_implementation",
     "dtrans_CMimeContentTypeFactory_get_implementation",
     "vcl_SystemClipboard_get_implementation",
 # xmloff/source/transform/xof.component
