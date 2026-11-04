@@ -454,7 +454,12 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
     SdrObject *pObj = nullptr;
     m_nDropDestination = GetDropDestination( aPixPt, &pObj );
     if( m_nDropDestination == SotExchangeDest::NONE )
+    {
+        // A place that takes no drop, such as protected text, shows no drop position.
+        CleanupDropUserMarker();
+        rSh.UnSetVisibleCursor();
         return DND_ACTION_NONE;
+    }
 
     sal_uInt8 nEventAction;
     sal_Int8 nUserOpt = rEvt.mbDefault ? EXCHG_IN_ACTION_DEFAULT

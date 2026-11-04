@@ -61,6 +61,7 @@
 #include <svx/xdef.hxx>
 #include <ndole.hxx>
 #include <ndtxt.hxx>
+#include <section.hxx>
 #include <txtfrm.hxx>
 #include <view.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -4293,6 +4294,40 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextOtherViewEditKeepsDro
     lcl_releaseButton(pXTextDocument, nViewA, aOnShape);
     CPPUNIT_ASSERT(!aViewA.m_bOwnCursorAtDropPosition);
     CPPUNIT_ASSERT(!aViewA.m_bOwnCursorEmpty);
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextOverProtectedSectionHidesDropPosition)
+{
+    // Given the paragraphs "Aaa", "Bbb" and "Ccc", with "Ccc" in a write-protected section and
+    // "Bbb" selected:
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwTestViewCallback aView;
+    ThreeParagraphs aPoints = lcl_fillThreeParagraphs(pWrtShell);
+    lcl_selectParagraph(pWrtShell, getParagraph(3));
+    SwSectionData aSection(SectionType::Content, UIName(u"Protected"_ustr));
+    aSection.SetProtectFlag(true);
+    pWrtShell->InsertSection(aSection);
+    lcl_selectParagraph(pWrtShell, getParagraph(2));
+    Scheduler::ProcessEventsToIdle();
+
+    // When the selection is dragged to the end of "Aaa" and on into "Ccc", with the button held:
+    lcl_dragText(pXTextDocument, aPoints.aInsideSecond, aPoints.aEndOfFirst, 0,
+                 /*bRelease=*/false);
+    CPPUNIT_ASSERT(aView.m_bOwnCursorAtDropPosition);
+    CPPUNIT_ASSERT(!aView.m_bOwnCursorEmpty);
+    lcl_dragText(pXTextDocument, aPoints.aEndOfFirst, aPoints.aInsideThird, 0,
+                 /*bRelease=*/false);
+
+    // Then the view learns that the text would land nowhere there:
+    CPPUNIT_ASSERT(aView.m_bOwnCursorAtDropPosition);
+    CPPUNIT_ASSERT(aView.m_bOwnCursorEmpty);
+
+    // And a release there moves no text:
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aPoints.aInsideThird.getX(),
+                                   aPoints.aInsideThird.getY(), 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(u"Aaa|Bbb|Ccc|"_ustr, lcl_documentText(mxComponent));
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextDropPosition)
