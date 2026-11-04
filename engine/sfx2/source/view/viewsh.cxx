@@ -1608,18 +1608,18 @@ getTablePieces(const uno::Reference<accessibility::XAccessibleTable>& xTable, si
         return continuesPreviousPiece(
             uno::Reference<accessibility::XAccessibleContext>(xPiece, uno::UNO_QUERY));
     };
-    // Writer lists a page's footnotes and footer, and the next page's header, between two pieces.
-    auto isPageFurniture = [&xParentContext](sal_Int64 i) {
+    // Between two pieces Writer lists footnotes, footer, header and floating objects in layer order.
+    auto isBetweenPieces = [&xParentContext](sal_Int64 i) {
         uno::Reference<accessibility::XAccessible> xChild = xParentContext->getAccessibleChild(i);
         uno::Reference<accessibility::XAccessibleContext> xChildContext
             = xChild.is() ? xChild->getAccessibleContext() : nullptr;
         if (!xChildContext.is())
             return false;
         const sal_Int16 nRole = xChildContext->getAccessibleRole();
-        return nRole == accessibility::AccessibleRole::HEADER
-               || nRole == accessibility::AccessibleRole::FOOTER
-               || nRole == accessibility::AccessibleRole::FOOTNOTE
-               || nRole == accessibility::AccessibleRole::END_NOTE;
+        return nRole != accessibility::AccessibleRole::TABLE
+               && nRole != accessibility::AccessibleRole::PARAGRAPH
+               && nRole != accessibility::AccessibleRole::HEADING
+               && nRole != accessibility::AccessibleRole::BLOCK_QUOTE;
     };
 
     const sal_Int64 nIndex = xTableContext->getAccessibleIndexInParent();
@@ -1628,7 +1628,7 @@ getTablePieces(const uno::Reference<accessibility::XAccessibleTable>& xTable, si
     while (nFirst > 0 && continues(tableAt(nFirst)))
     {
         sal_Int64 nPrevious = nFirst - 1;
-        while (nPrevious >= 0 && isPageFurniture(nPrevious))
+        while (nPrevious >= 0 && isBetweenPieces(nPrevious))
             --nPrevious;
         if (nPrevious < 0 || !tableAt(nPrevious).is())
             break;
@@ -1639,7 +1639,7 @@ getTablePieces(const uno::Reference<accessibility::XAccessibleTable>& xTable, si
     sal_Int32 nRow = 0;
     for (sal_Int64 i = nFirst; i < nCount; ++i)
     {
-        if (i > nFirst && isPageFurniture(i))
+        if (i > nFirst && isBetweenPieces(i))
             continue;
         uno::Reference<accessibility::XAccessibleTable> xPiece = i == nIndex ? xTable : tableAt(i);
         if (!xPiece.is() || (i > nFirst && !continues(xPiece)))

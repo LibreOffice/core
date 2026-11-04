@@ -2243,6 +2243,30 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11ySplitTableWithPageHeaderAndFo
     CPPUNIT_ASSERT_EQUAL(80, aView.m_aA11yFocusedCell.get<int>("paragraph.table.rowCount"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11ySplitTableWithFloatingFrame)
+{
+    // Given a table split across two pages, with a frame floating at the bottom of the first:
+    createDoc("a11y-split-table-frame.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pWrtShell->GetPageCnt());
+
+    // When the cursor goes to a row on the second page:
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    for (int i = 0; i < 21; ++i)
+        pWrtShell->Up(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pWrtShell->GetPhyPageNum());
+
+    // Then the reader is given that row and the row count of the whole table:
+    CPPUNIT_ASSERT_EQUAL(std::string("Row 60"),
+                         aView.m_aA11yFocusedCell.get<std::string>("paragraph.content"));
+    // Without the fix, the frame made the second page's piece a table of its own: row 7.
+    CPPUNIT_ASSERT_EQUAL(59, aView.m_aA11yFocusedCell.get<int>("row"));
+    CPPUNIT_ASSERT_EQUAL(80, aView.m_aA11yFocusedCell.get<int>("paragraph.table.rowCount"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphLinkURLChangeSameText)
 {
     // Given the cursor moving between two paragraphs of the same text and link:
