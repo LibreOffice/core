@@ -656,6 +656,13 @@ public:
     /// Called when a new view is loaded.
     virtual void onDocBrokerViewLoaded(const std::string&, const std::shared_ptr<ClientSession>&) {}
 
+    /// Called when a DocumentBroker tells its kit of an event about a remote document one of
+    /// its views subscribed to, with the remotedocevent frame it sends.
+    virtual void onDocBrokerRemoteDocumentEvent(const std::string& /*docKey*/,
+                                                const std::string& /*message*/)
+    {
+    }
+
     // ---------------- TileCache events ----------------
     virtual void onTileCacheHit(const std::string& /*part*/, int /*mode*/,
                                 int /*width*/, int /*height*/,

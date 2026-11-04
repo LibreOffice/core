@@ -243,6 +243,12 @@ private:
     static void sendError(DocumentBroker& docBroker, const std::string& tag,
                           const std::string& persistentLink, const std::string& kind);
 
+    /// Tells the kit of an event about one view's subscription to a remote document, as
+    /// "remotedocevent tag=<tag> source=<encoded persistent link> <event arguments>".
+    static void sendEventToKit(DocumentBroker& docBroker, const std::string& tag,
+                               const std::string& persistentLink,
+                               const std::string& eventArguments);
+
     /// Builds the remotelinks: list for one view: every known source,
     /// stamped with that view's access and connection state.
     std::string buildJson(const std::string& tag) const;

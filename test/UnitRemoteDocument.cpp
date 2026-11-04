@@ -175,9 +175,12 @@ public:
             return false;
         }
 
-        if (!message.starts_with("remotedocevent:"))
-            return false;
+        return false;
+    }
 
+    void onDocBrokerRemoteDocumentEvent(const std::string& /*docKey*/,
+                                        const std::string& message) override
+    {
         TST_LOG("Got: [" << message << ']');
 
         if (message.find("event=connected") != std::string::npos)
@@ -195,8 +198,6 @@ public:
         {
             failTest("Unexpected remote document error: " + std::string(message));
         }
-
-        return false;
     }
 
     bool onViewLoaded(const std::string& message) override
@@ -345,15 +346,11 @@ public:
         return true;
     }
 
-    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
-                                      const bool /*flush*/, int& /*unitReturn*/) override
+    void onDocBrokerRemoteDocumentEvent(const std::string& /*docKey*/,
+                                        const std::string& message) override
     {
-        if (!message.starts_with("remotedocevent:"))
-            return false;
-
         TST_LOG("Got: [" << message << ']');
 
-        // The kit sends the event to both views, so only the first copy acts.
         if (message.find("event=connected") != std::string::npos &&
             _phase == Phase::WaitConnected)
         {
@@ -367,8 +364,6 @@ public:
         {
             failTest("Unexpected remote document error: " + std::string(message));
         }
-
-        return false;
     }
 
     void onDocBrokerRemoveSession(const std::string& docKey,
@@ -489,12 +484,9 @@ public:
         return true;
     }
 
-    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
-                                      const bool /*flush*/, int& /*unitReturn*/) override
+    void onDocBrokerRemoteDocumentEvent(const std::string& /*docKey*/,
+                                        const std::string& message) override
     {
-        if (!message.starts_with("remotedocevent:"))
-            return false;
-
         TST_LOG("Got: [" << message << ']');
 
         if (message.find("event=connected") != std::string::npos)
@@ -511,8 +503,6 @@ public:
         {
             failTest("Unexpected remote document error: " + std::string(message));
         }
-
-        return false;
     }
 
     void onDocBrokerRemoveSession(const std::string& docKey,
@@ -608,12 +598,9 @@ public:
         return true;
     }
 
-    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
-                                      const bool /*flush*/, int& /*unitReturn*/) override
+    void onDocBrokerRemoteDocumentEvent(const std::string& /*docKey*/,
+                                        const std::string& message) override
     {
-        if (!message.starts_with("remotedocevent:"))
-            return false;
-
         TST_LOG("Got: [" << message << ']');
 
         if (_phase == Phase::WaitCycleError)
@@ -635,8 +622,6 @@ public:
             TRANSITION_STATE(_phase, Phase::Done);
             passTest("Cycle and unbound-source subscriptions were both refused");
         }
-
-        return false;
     }
 
     void invokeWSDTest() override
@@ -801,9 +786,12 @@ public:
             return false;
         }
 
-        if (!message.starts_with("remotedocevent:"))
-            return false;
+        return false;
+    }
 
+    void onDocBrokerRemoteDocumentEvent(const std::string& /*docKey*/,
+                                        const std::string& message) override
+    {
         TST_LOG("Got: [" << message << ']');
 
         if (message.find("event=connected") != std::string::npos)
@@ -818,8 +806,6 @@ public:
         {
             failTest("Unexpected remote document error: " + std::string(message));
         }
-
-        return false;
     }
 
     void invokeWSDTest() override
@@ -932,12 +918,9 @@ public:
         return true;
     }
 
-    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
-                                      const bool /*flush*/, int& /*unitReturn*/) override
+    void onDocBrokerRemoteDocumentEvent(const std::string& /*docKey*/,
+                                        const std::string& message) override
     {
-        if (!message.starts_with("remotedocevent:"))
-            return false;
-
         TST_LOG("Got: [" << message << ']');
 
         if (message.find("event=connected") != std::string::npos)
@@ -952,8 +935,6 @@ public:
         {
             failTest("Unexpected remote document error: " + std::string(message));
         }
-
-        return false;
     }
 
     void invokeWSDTest() override
@@ -1145,9 +1126,12 @@ public:
             return false;
         }
 
-        if (!message.starts_with("remotedocevent:"))
-            return false;
+        return false;
+    }
 
+    void onDocBrokerRemoteDocumentEvent(const std::string& /*docKey*/,
+                                        const std::string& message) override
+    {
         TST_LOG("Got: [" << message << ']');
 
         if (message.find("event=connected") != std::string::npos)
@@ -1162,8 +1146,6 @@ public:
         {
             failTest("Unexpected remote document error: " + std::string(message));
         }
-
-        return false;
     }
 
     void invokeWSDTest() override
@@ -1430,11 +1412,11 @@ public:
         return true;
     }
 
-    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
-                                      const bool /*flush*/, int& /*unitReturn*/) override
+    void onDocBrokerRemoteDocumentEvent(const std::string& /*docKey*/,
+                                        const std::string& message) override
     {
-        if (!message.starts_with("remotedocevent:") || _phase != Phase::WaitOutcome)
-            return false;
+        if (_phase != Phase::WaitOutcome)
+            return;
 
         TST_LOG("Got: [" << message << ']');
 
@@ -1452,16 +1434,14 @@ public:
             ++_cycleCount;
         }
 
-        // The event echo reaches every view of a document, including the
-        // headless one of the surviving link, so the rejection may be seen
-        // more than once.
+        // Each document reports the rejection it was answered with, and the
+        // registry and the connection chain can each refuse one end, so the
+        // rejection may be seen more than once.
         if (_connectedCount == 1 && _cycleCount > 0)
         {
             TRANSITION_STATE(_phase, Phase::Done);
             passTest("One of two mutual subscriptions connected, the other was refused");
         }
-
-        return false;
     }
 
     void invokeWSDTest() override
@@ -1546,37 +1526,35 @@ public:
         return true;
     }
 
+    void onDocBrokerRemoteDocumentEvent(const std::string& /*docKey*/,
+                                        const std::string& message) override
+    {
+        if (message.find("event=connected") != std::string_view::npos &&
+            _phase == Phase::WaitConnected)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitResult);
+
+            // A modifying command must be refused by the read-only filter
+            // and never reach the remote.
+            WSD_CMD("remotedoccommand source=" + encodedRemoteWopiSrc() +
+                    " key type=input char=97 key=0");
+
+            // A read-only command round-trips to the remote and back.
+            WSD_CMD("remotedoccommand source=" + encodedRemoteWopiSrc() + " getslidesections");
+        }
+        else if (message.find("event=modified value=true") != std::string_view::npos)
+        {
+            failTest("A read-only command modified the remote document");
+        }
+        else if (message.find("event=error") != std::string_view::npos)
+        {
+            failTest("Unexpected remote document error: " + std::string(message));
+        }
+    }
+
     bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
                                       const bool /*flush*/, int& /*unitReturn*/) override
     {
-        if (message.starts_with("remotedocevent:"))
-        {
-            if (message.find("event=connected") != std::string_view::npos &&
-                _phase == Phase::WaitConnected)
-            {
-                TRANSITION_STATE(_phase, Phase::WaitResult);
-
-                // A modifying command must be refused by the read-only filter
-                // and never reach the remote.
-                WSD_CMD("remotedoccommand source=" + encodedRemoteWopiSrc() +
-                        " key type=input char=97 key=0");
-
-                // A read-only command round-trips to the remote and back.
-                WSD_CMD("remotedoccommand source=" + encodedRemoteWopiSrc() +
-                        " getslidesections");
-            }
-            else if (message.find("event=modified value=true") != std::string_view::npos)
-            {
-                failTest("A read-only command modified the remote document");
-            }
-            else if (message.find("event=error") != std::string_view::npos)
-            {
-                failTest("Unexpected remote document error: " + std::string(message));
-            }
-
-            return false;
-        }
-
         // The remote streams several frames once a command channel is open;
         // the test passes on the getslidesections reply and ignores the rest.
         if (message.starts_with("remotedoccommandresult:") && _phase == Phase::WaitResult &&
@@ -1998,12 +1976,9 @@ public:
         return true;
     }
 
-    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
-                                      const bool /*flush*/, int& /*unitReturn*/) override
+    void onDocBrokerRemoteDocumentEvent(const std::string& /*docKey*/,
+                                        const std::string& message) override
     {
-        if (!message.starts_with("remotedocevent:"))
-            return false;
-
         TST_LOG("Got: [" << message << ']');
 
         if (message.find("event=connected") != std::string::npos)
@@ -2017,8 +1992,6 @@ public:
             TRANSITION_STATE(_phase, Phase::Done);
             passTest("Only the view holding the token subscribed; the other was refused");
         }
-
-        return false;
     }
 
     void invokeWSDTest() override
@@ -2156,9 +2129,12 @@ public:
             return false;
         }
 
-        if (!message.starts_with("remotedocevent:"))
-            return false;
+        return false;
+    }
 
+    void onDocBrokerRemoteDocumentEvent(const std::string& /*docKey*/,
+                                        const std::string& message) override
+    {
         TST_LOG("Got: [" << message << ']');
 
         if (message.find("event=connected") != std::string::npos)
@@ -2175,8 +2151,6 @@ public:
         {
             failTest("Unexpected remote document error: " + std::string(message));
         }
-
-        return false;
     }
 
     bool onViewLoaded(const std::string& message) override
@@ -2849,9 +2823,12 @@ public:
             return false;
         }
 
-        if (!message.starts_with("remotedocevent:"))
-            return false;
+        return false;
+    }
 
+    void onDocBrokerRemoteDocumentEvent(const std::string& /*docKey*/,
+                                        const std::string& message) override
+    {
         TST_LOG("Got: [" << message << ']');
 
         if (message.find("event=connected") != std::string::npos)
@@ -2866,8 +2843,6 @@ public:
         {
             failTest("Unexpected remote document error: " + std::string(message));
         }
-
-        return false;
     }
 
     void invokeWSDTest() override
@@ -3123,9 +3098,12 @@ public:
             return false;
         }
 
-        if (!message.starts_with("remotedocevent:"))
-            return false;
+        return false;
+    }
 
+    void onDocBrokerRemoteDocumentEvent(const std::string& /*docKey*/,
+                                        const std::string& message) override
+    {
         TST_LOG("Got: [" << message << ']');
 
         if (message.find("event=connected") != std::string::npos)
@@ -3140,8 +3118,6 @@ public:
         {
             failTest("Unexpected remote document error: " + std::string(message));
         }
-
-        return false;
     }
 
     void invokeWSDTest() override
@@ -3232,12 +3208,9 @@ public:
         return true;
     }
 
-    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
-                                      const bool /*flush*/, int& /*unitReturn*/) override
+    void onDocBrokerRemoteDocumentEvent(const std::string& /*docKey*/,
+                                        const std::string& message) override
     {
-        if (!message.starts_with("remotedocevent:"))
-            return false;
-
         TST_LOG("Got: [" << message << ']');
 
         if (message.find("event=connected") != std::string::npos)
@@ -3252,8 +3225,6 @@ public:
         {
             failTest("Unexpected remote document error: " + std::string(message));
         }
-
-        return false;
     }
 
     void invokeWSDTest() override
@@ -3346,12 +3317,9 @@ public:
         return true;
     }
 
-    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
-                                      const bool /*flush*/, int& /*unitReturn*/) override
+    void onDocBrokerRemoteDocumentEvent(const std::string& /*docKey*/,
+                                        const std::string& message) override
     {
-        if (!message.starts_with("remotedocevent:"))
-            return false;
-
         TST_LOG("Got: [" << message << ']');
 
         if (message.find("event=connected") != std::string::npos)
@@ -3367,8 +3335,6 @@ public:
         {
             failTest("Unexpected remote document error: " + std::string(message));
         }
-
-        return false;
     }
 
     void invokeWSDTest() override
@@ -3464,12 +3430,9 @@ public:
         return true;
     }
 
-    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
-                                      const bool /*flush*/, int& /*unitReturn*/) override
+    void onDocBrokerRemoteDocumentEvent(const std::string& /*docKey*/,
+                                        const std::string& message) override
     {
-        if (!message.starts_with("remotedocevent:"))
-            return false;
-
         TST_LOG("Got: [" << message << ']');
 
         if (message.find("event=connected") != std::string::npos)
@@ -3484,8 +3447,6 @@ public:
         {
             failTest("Unexpected remote document error: " + std::string(message));
         }
-
-        return false;
     }
 
     void invokeWSDTest() override

@@ -3202,15 +3202,11 @@ void Document::drainQueue()
             }
             else if (tokens.equals(0, "remotedocevent"))
             {
-                // An event about a subscribed remote document. Forward it to
-                // every view until the engine consumes these events itself.
-                const std::string firstLine =
-                    COOLProtocol::getFirstLine(input.data(), input.size());
-                LOG_INF("Remote document event: " << firstLine);
-                const std::string message =
-                    "remotedocevent:" + firstLine.substr(std::string("remotedocevent").size());
-                for (auto const& [id, session] : _sessions)
-                    session->sendTextFrame(message);
+                // An event about a subscribed remote document, for the engine to read once it
+                // drives the freshness of linked slides. The views learn the state of their
+                // links from the remotelinks message.
+                LOG_INF("Remote document event: " << COOLProtocol::getFirstLine(input.data(),
+                                                                                input.size()));
             }
             else
             {

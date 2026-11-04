@@ -1200,7 +1200,8 @@ remotelinks: <json>
 
     'noaccess' means the view holds no token for the source. 'available'
     means the view holds a token but has no live subscription. The other
-    values follow the remotedocevent states of the view's subscription.
+    values follow the connection events of the view's subscription, which
+    the remotedocevent message in the parent -> child section lists.
     'missing' means the source cannot be read: either it could not be read
     from storage, or it is a document the open one names as the source of
     its slides that no remote link stands for. Such an entry carries its
@@ -1215,30 +1216,6 @@ remotelinks: <json>
     reach it, and 'failed' any other answer or none. A source that is
     'resolved' is the remote link the storage named. See remotelinkresolve
     for asking again.
-
-remotedocevent: tag=<t> source=<encoded persistent link> event=<event> [part=<p>] [value=<v>] [kind=<k>] [time=<encoded-time>]
-
-    An event about a remote document a view subscribed to with
-    remotedocsubscribe, named by the persistent link its remote link is
-    bound to. The tag is the session id of the view that opened the
-    subscription. <event> is one of:
-    * 'connected': the remote document is loaded and events are flowing
-    * 'modified': the remote document's modified state changed to <value>
-    * 'saved': the remote document uploaded a new file to storage; <time> is
-      the storage's last-modified time for the new content, so the source is
-      newer than the copy shown here
-    * 'invalidated': the content of part <part> changed (-1 covers documents
-      without parts); invalidations are coalesced, so one event stands for a
-      burst of changes
-    * 'structure': parts were added, removed or resized
-    * 'disconnected': the connection was lost; the server is reconnecting
-    * 'failed': the connection is given up until a new subscription
-    * 'missing': the source could not be read from storage (a missing file
-      among the reasons); <kind> names the reason and the links to it are broken
-    * 'unsubscribed': the link was dropped on request
-    * 'error': the subscription failed; <kind> names the reason, among them
-      'notfound' for a persistent link no remote link is bound to and
-      'notoken' for a source the view holds no token for
 
 remotedoccommandresult: source=<encoded persistent link>\n<inner server frame>
 
@@ -1858,6 +1835,32 @@ child-<sessionId> setclipboard name=<name>:
      length\n
      <binary selection content>
      ...
+
+remotedocevent tag=<t> source=<encoded persistent link> event=<event> [part=<p>] [value=<v>] [kind=<k>] [time=<encoded-time>]
+
+    An event about a remote document a view subscribed to with
+    remotedocsubscribe, named by the persistent link its remote link is
+    bound to. The tag is the session id of the view that opened the
+    subscription. The engine does not read these events yet, and the views
+    learn the state of their links from the remotelinks message. <event> is
+    one of:
+    * 'connected': the remote document is loaded and events are flowing
+    * 'modified': the remote document's modified state changed to <value>
+    * 'saved': the remote document uploaded a new file to storage; <time> is
+      the storage's last-modified time for the new content, so the source is
+      newer than the copy shown here
+    * 'invalidated': the content of part <part> changed (-1 covers documents
+      without parts); invalidations are coalesced, so one event stands for a
+      burst of changes
+    * 'structure': parts were added, removed or resized
+    * 'disconnected': the connection was lost; the server is reconnecting
+    * 'failed': the connection is given up until a new subscription
+    * 'missing': the source could not be read from storage (a missing file
+      among the reasons); <kind> names the reason and the links to it are broken
+    * 'unsubscribed': the link was dropped on request
+    * 'error': the subscription failed; <kind> names the reason, among them
+      'notfound' for a persistent link no remote link is bound to and
+      'notoken' for a source the view holds no token for
 
 disconnect
 

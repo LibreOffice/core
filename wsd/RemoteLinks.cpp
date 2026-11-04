@@ -20,6 +20,7 @@
 #include <common/Protocol.hpp>
 #include <common/SigUtil.hpp>
 #include <common/StringVector.hpp>
+#include <common/Unit.hpp>
 #include <common/Uri.hpp>
 #include <net/HttpRequest.hpp>
 #include <wsd/ClientSession.hpp>
@@ -834,8 +835,7 @@ void RemoteLinks::onRemoteEvent(DocumentBroker& docBroker, const std::string& ta
 
     // Every event reaches the kit, which will drive the shared freshness of
     // linked slides once the engine reads these events.
-    docBroker.sendTextFrameToKit("remotedocevent tag=" + tag + " source=" +
-                                 Uri::encode(persistentLink) + ' ' + eventArguments);
+    sendEventToKit(docBroker, tag, persistentLink, eventArguments);
 
     // The index of a source that changed is fetched anew the next time its slides are asked
     // for.
@@ -1046,8 +1046,19 @@ void RemoteLinks::addToIncomingDocKeyChain(DocumentBroker& docBroker,
 void RemoteLinks::sendError(DocumentBroker& docBroker, const std::string& tag,
                             const std::string& persistentLink, const std::string& kind)
 {
-    docBroker.sendTextFrameToKit("remotedocevent tag=" + tag + " source=" +
-                                 Uri::encode(persistentLink) + " event=error kind=" + kind);
+    sendEventToKit(docBroker, tag, persistentLink, "event=error kind=" + kind);
+}
+
+void RemoteLinks::sendEventToKit(DocumentBroker& docBroker, const std::string& tag,
+                                 const std::string& persistentLink,
+                                 const std::string& eventArguments)
+{
+    const std::string message = "remotedocevent tag=" + tag +
+                                " source=" + Uri::encode(persistentLink) + ' ' + eventArguments;
+    docBroker.sendTextFrameToKit(message);
+
+    if (UnitWSD::isUnitTesting())
+        UnitWSD::get().onDocBrokerRemoteDocumentEvent(docBroker.getDocKey(), message);
 }
 
 std::string RemoteLinks::persistentLinkOf(const std::string& wopiSrc) const
