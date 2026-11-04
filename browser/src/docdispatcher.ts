@@ -58,7 +58,15 @@ class Dispatcher {
 		};
 
 		this.actionsMap['closeapp'] = () => {
+			const postUICloseToIntegrator = () => {
+				app.map.fire('postMessage', {
+					msgId: 'UI_Close',
+					args: { EverModified: app.map._everModified },
+				});
+			};
+
 			if (window.ThisIsAMobileApp && !window.ThisIsTheEmscriptenApp) {
+				if ((window as any).codaRemotePage) postUICloseToIntegrator();
 				window.postMobileMessage('BYE');
 			} else {
 				if (app.map) app.map.acceptPendingCellEdit();
@@ -68,10 +76,7 @@ class Dispatcher {
 					msgId: 'close',
 					args: { EverModified: app.map._everModified, Deprecated: true },
 				});
-				app.map.fire('postMessage', {
-					msgId: 'UI_Close',
-					args: { EverModified: app.map._everModified },
-				});
+				postUICloseToIntegrator();
 			}
 			if (!app.map._disableDefaultAction['UI_Close']) app.map.remove();
 		};
