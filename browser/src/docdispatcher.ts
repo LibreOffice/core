@@ -239,6 +239,14 @@ class Dispatcher {
 				.find((link: SlideLink) => link.unit === 'section');
 			if (section) links.update(section.id);
 		};
+		this.actionsMap['updatelinkedpresentation'] = function () {
+			const links = app.map.slideLinks;
+			if (!links) return;
+			const presentation = links
+				.linksOf(links.currentPart())
+				.find((link: SlideLink) => link.unit === 'presentation');
+			if (presentation) links.update(presentation.id);
+		};
 		this.actionsMap['unlinkslide'] = function () {
 			const links = app.map.slideLinks;
 			if (links) links.breakLink(links.currentPart());

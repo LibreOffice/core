@@ -25,6 +25,8 @@ describe('SlideLinkToolbar', function () {
 	let sourceState: string;
 	// The slides that sit in the linked section.
 	let inSection: Set<string>;
+	// The slides whose section sits in the linked presentation.
+	let inPresentation: Set<string>;
 	let toolbar: SlideLinkToolbar;
 	let savedEvents: any;
 
@@ -37,6 +39,7 @@ describe('SlideLinkToolbar', function () {
 	// link.
 	const editedPart = '{6A1C31B0-0003-4C5B-9E77-2F3D4A5B6C7D}';
 	const sectionId = '{6A1C31B0-0100-4C5B-9E77-2F3D4A5B6C7D}';
+	const presentationId = '{6A1C31B0-0200-4C5B-9E77-2F3D4A5B6C7D}';
 
 	function element(): HTMLElement | null {
 		return document.getElementById('slide-link-toolbar');
@@ -68,7 +71,8 @@ describe('SlideLinkToolbar', function () {
 	}
 
 	// The links over a slide, innermost first, as SlideLinks lists them: the
-	// slide's own link when it holds one, then the section that holds it.
+	// slide's own link when it holds one, then the section that holds it,
+	// then the presentation that holds the section.
 	function linksOf(part: string): any[] {
 		const chain: any[] = [];
 		const link = linked.get(part);
@@ -85,10 +89,19 @@ describe('SlideLinkToolbar', function () {
 			chain.push({
 				unit: 'section',
 				id: sectionId,
-				parent: '',
+				parent: inPresentation.has(part) ? presentationId : '',
 				source: 'Sales deck.odp',
 				name: 'Opening',
 				slides: [numbersPart, editedPart],
+			});
+		if (inPresentation.has(part))
+			chain.push({
+				unit: 'presentation',
+				id: presentationId,
+				parent: '',
+				source: 'Sales deck.odp',
+				name: 'Sales deck.odp',
+				slides: [numbersPart, editedPart, outlookPart],
 			});
 		return chain;
 	}
@@ -112,6 +125,7 @@ describe('SlideLinkToolbar', function () {
 		outdated = new Set();
 		sourceState = 'connected';
 		inSection = new Set();
+		inPresentation = new Set();
 
 		const readable = () =>
 			sourceState !== '' &&
@@ -302,5 +316,57 @@ describe('SlideLinkToolbar', function () {
 		slideShown(numbersPart);
 		toolbar.setExpanded(true);
 		nodeassert.equal(action('update-section').disabled, true);
+	});
+
+	it('offers an update of the presentation that holds the slide on show', function () {
+		inSection.add(numbersPart);
+		inPresentation.add(numbersPart);
+		slideShown(numbersPart);
+		nodeassert.deepEqual(actions(), []);
+
+		toolbar.setExpanded(true);
+		nodeassert.deepEqual(actions(), [
+			'Unlink',
+			'Update',
+			'Update section',
+			'Update presentation',
+		]);
+		action('update-presentation').click();
+		nodeassert.deepEqual(dispatched, ['updatelinkedpresentation']);
+	});
+
+	it('offers a presentation update alone while folded when the source has moved on', function () {
+		inSection.add(numbersPart);
+		inPresentation.add(numbersPart);
+		outdated.add(presentationId);
+		slideShown(numbersPart);
+		nodeassert.deepEqual(actions(), ['Update presentation']);
+		nodeassert.equal(action('update-presentation').disabled, false);
+	});
+
+	it('stays on a slide of a linked presentation whose section lost its link', function () {
+		// The section was taken apart here, so the slide sits under the
+		// presentation alone, and the toolbar says so.
+		inPresentation.add(editedPart);
+		slideShown(editedPart);
+		nodeassert.ok(
+			(element().getAttribute('aria-label') || '').indexOf('presentation') >= 0,
+		);
+		nodeassert.ok(
+			(element().getAttribute('aria-label') || '').indexOf('Sales deck.odp') >=
+				0,
+		);
+
+		toolbar.setExpanded(true);
+		nodeassert.deepEqual(actions(), ['Update presentation']);
+	});
+
+	it('offers no presentation update from a source that cannot be read', function () {
+		inSection.add(numbersPart);
+		inPresentation.add(numbersPart);
+		sourceState = 'missing';
+		slideShown(numbersPart);
+		toolbar.setExpanded(true);
+		nodeassert.equal(action('update-presentation').disabled, true);
 	});
 });

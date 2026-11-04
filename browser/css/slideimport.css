@@ -1159,7 +1159,8 @@
 }
 
 #slide-link-toolbar .slide-link-toolbar-action.update::before,
-#slide-link-toolbar .slide-link-toolbar-action.update-section::before {
+#slide-link-toolbar .slide-link-toolbar-action.update-section::before,
+#slide-link-toolbar .slide-link-toolbar-action.update-presentation::before {
 	background-image: url('images/lc_updateall.svg');
 }
 
@@ -1176,6 +1177,7 @@
 }
 
 [data-theme='dark'] #slide-link-toolbar .slide-link-toolbar-action.update::before,
-[data-theme='dark'] #slide-link-toolbar .slide-link-toolbar-action.update-section::before {
+[data-theme='dark'] #slide-link-toolbar .slide-link-toolbar-action.update-section::before,
+[data-theme='dark'] #slide-link-toolbar .slide-link-toolbar-action.update-presentation::before {
 	background-image: url('images/dark/lc_updateall.svg');
 }

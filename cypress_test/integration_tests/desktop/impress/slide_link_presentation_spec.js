@@ -431,4 +431,84 @@ describe(['tagdesktop'], 'Linked presentation in the slide sorter', function() {
 		assertRowActions(true, false);
 		cy.cGet('.slide-presentations-expand-all').should('be.focused');
 	});
+
+	// Makes the given slide the one on show, by whatever route, and waits for it.
+	function showSlide(win, part) {
+		cy.then(function() {
+			win.app.map.setPart(part);
+		});
+		helper.processToIdle(win);
+		cy.getFrameWindow().should(function(frameWindow) {
+			expect(frameWindow.app.map._docLayer._selectedPart).to.equal(part);
+		});
+	}
+
+	// The labels of the actions the toolbar offers, in order.
+	function assertToolbarActions(labels) {
+		cy.cGet('#slide-link-toolbar').should(function(toolbar) {
+			var found = Array.from(toolbar[0].querySelectorAll('.slide-link-toolbar-action'))
+				.map(function(button) { return button.textContent; });
+			expect(found).to.deep.equal(labels);
+		});
+	}
+
+	it('offers the update of the presentation over the slide on show in the toolbar', function() {
+		helper.processToIdle(this.win);
+		waitForLinkedPresentation();
+		// The slide on show after the load is the first one, which sits under no link.
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.map._docLayer._selectedPart).to.equal(0);
+		});
+		cy.cGet('#slide-link-toolbar').should('not.exist');
+		// The panel that opens on the presentation widens the navigation sidebar, and the
+		// toolbar needs the room of the document area beside it, so the properties sidebar
+		// goes. The deck command closes the sidebar while that deck is the one on show.
+		cy.cGet('#sidebar-dock-wrapper').should('be.visible');
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.sendUnoCommand('.uno:SidebarDeck.PropertyDeck');
+		});
+		helper.processToIdle(this.win);
+		cy.cGet('#sidebar-dock-wrapper').should('not.be.visible');
+
+		// A slide inside the presentation is linked on its own, through its section and through
+		// the presentation. The toolbar names the slide's own link.
+		showSlide(this.win, 2);
+		cy.cGet('#slide-link-toolbar').should('be.visible');
+		cy.cGet('#slide-link-toolbar').should(function(toolbar) {
+			expect(toolbar.attr('aria-label')).to.equal('Linked to OpenOne in Q3 deck.odp');
+		});
+		// The deck is no document the server can find, so nothing can be read from it. The state
+		// says so before the server looked for the deck and after.
+		cy.cGet('#slide-link-toolbar .slide-link-toolbar-state').should(function(state) {
+			expect(state.text()).to.be.oneOf(['Not available', 'Missing']);
+		});
+		// Folded, the toolbar offers no action while no link has moved on.
+		assertToolbarActions([]);
+
+		cy.cGet('#slide-link-toolbar .slide-link-toolbar-expander').click();
+		assertToolbarActions(['Unlink', 'Update', 'Update section', 'Update presentation']);
+		cy.cGet('#slide-link-toolbar .slide-link-toolbar-action').should(function(buttons) {
+			buttons.toArray().forEach(function(button) {
+				expect(button.disabled, button.textContent).to.equal(button.textContent !== 'Unlink');
+			});
+		});
+
+		// Taking the slide's own link off leaves the section and the presentation linked, so
+		// the toolbar stays, with the updates of those two.
+		cy.cGet('#slide-link-toolbar .slide-link-toolbar-action.unlink').click();
+		helper.processToIdle(this.win);
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.map.slideLinks.getLink(win.app.map._docLayer.getSelectedPart())).to.equal(null);
+			expect(win.app.map.slideLinks.getLink(openingId)).to.not.equal(null);
+			expect(win.app.map.slideLinks.getPresentations()).to.have.length(1);
+		});
+		cy.cGet('#slide-link-toolbar').should(function(toolbar) {
+			expect(toolbar.attr('aria-label')).to.equal('In a section linked to Q3 deck.odp');
+		});
+		assertToolbarActions(['Update section', 'Update presentation']);
+
+		// The toolbar goes with a slide that sits under no link.
+		showSlide(this.win, 0);
+		cy.cGet('#slide-link-toolbar').should('not.exist');
+	});
 });

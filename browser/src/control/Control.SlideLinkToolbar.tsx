@@ -12,16 +12,18 @@
 
 /*
  * SlideLinkToolbar - the small toolbar over the slide on show when that slide,
- * or the section that holds it, is linked to another file. It says that the
- * slide is linked and offers what can be done about this one slide: take the
- * link off, and read the slide again from the file it came from. For a slide
- * of a linked section it also offers to update that section.
+ * the section that holds it, or the presentation that holds that section, is
+ * linked to another file. It says that the slide is linked and offers what can
+ * be done about this one slide: take the link off, and read the slide again
+ * from the file it came from. For a slide of a linked section it also offers
+ * to update that section, and for a slide of a linked presentation to update
+ * that presentation.
  *
- * The toolbar follows the slide on show and acts on that slide or its section.
- * Folded, it names the link and offers an update when the file has moved on
- * since the slide or the section was read from it. Unfolded, it offers every
- * action. Each action changes the document, so a view that cannot edit is
- * offered none.
+ * The toolbar follows the slide on show and acts on that slide, its section or
+ * its presentation. Folded, it names the link and offers an update when the
+ * file has moved on since the slide, the section or the presentation was read
+ * from it. Unfolded, it offers every action. Each action changes the document,
+ * so a view that cannot edit is offered none.
  */
 
 /* global app _ */
@@ -54,8 +56,9 @@ class SlideLinkToolbar {
     this.refresh();
   }
 
-  // The identifier of the slide on show when that slide, or the section that
-  // holds it, is linked to another file, or an empty string otherwise.
+  // The identifier of the slide on show when that slide, the section that
+  // holds it, or the presentation that holds that section, is linked to
+  // another file, or an empty string otherwise.
   private linkedPart(): string {
     const links = this.map.slideLinks;
     if (!links || !this.map.isPresentationOrDrawing()) return '';
@@ -94,16 +97,23 @@ class SlideLinkToolbar {
   private render(part: string): HTMLElement {
     const links = this.map.slideLinks;
     // The links over the slide on show, innermost first. A slide edited here
-    // loses its own link and stays in its linked section, so either link can
-    // be absent.
+    // loses its own link and stays in its linked section, and a section whose
+    // slides changed loses its link and stays in its presentation, so any of
+    // them can be absent.
     const chain: SlideLink[] = links.linksOf(part);
     const link = chain.find((held) => held.unit === 'slide') || null;
     const section = chain.find((held) => held.unit === 'section') || null;
+    const presentation =
+      chain.find((held) => held.unit === 'presentation') || null;
     const editable = this.map.isEditMode();
     const outdated = link !== null && links.isOutdated(link.id);
     const readable = link !== null && links.isUpdatable(link.id);
     const sectionOutdated = section !== null && links.isOutdated(section.id);
     const sectionReadable = section !== null && links.isUpdatable(section.id);
+    const presentationOutdated =
+      presentation !== null && links.isOutdated(presentation.id);
+    const presentationReadable =
+      presentation !== null && links.isUpdatable(presentation.id);
     const stateLabel = this.sourceStateLabel(links.getSourceState(chain[0].id));
 
     // The label describes the link the way the slide's thumbnail does.
@@ -173,6 +183,16 @@ class SlideLinkToolbar {
             onClick={() => app.dispatcher.dispatch('updatelinkedsection')}
           >
             {_('Update section')}
+          </button>
+        ) : null}
+        {(this.expanded || presentationOutdated) && editable && presentation ? (
+          <button
+            type="button"
+            class="button slide-link-toolbar-action update-presentation"
+            disabled={!presentationReadable}
+            onClick={() => app.dispatcher.dispatch('updatelinkedpresentation')}
+          >
+            {_('Update presentation')}
           </button>
         ) : null}
       </div>
