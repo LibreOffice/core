@@ -3483,12 +3483,12 @@ Reference< css::rendering::XCanvas > WindowOutputDevice::ImplGetCanvas( bool bSp
 
     // Create canvas instance with window handle
 
-    static tools::DeleteUnoReferenceOnDeinit<XMultiComponentFactory> xStaticCanvasFactory(
+    static tools::DeleteRtlReferenceOnDeinit<CanvasFactory> pStaticCanvasFactory(
         new CanvasFactory(xContext));
-    Reference<XMultiComponentFactory> xCanvasFactory(xStaticCanvasFactory.get());
+    rtl::Reference<CanvasFactory> pCanvasFactory(pStaticCanvasFactory.get());
     Reference< css::rendering::XCanvas > xCanvas;
 
-    if(xCanvasFactory.is())
+    if (pCanvasFactory.is())
     {
 #ifdef _WIN32
         // see #140456# - if we're running on a multiscreen setup,
@@ -3499,7 +3499,7 @@ Reference< css::rendering::XCanvas > WindowOutputDevice::ImplGetCanvas( bool bSp
         const sal_uInt32 nDisplay = static_cast< WinSalFrame* >( mxOwnerWindow->mpWindowImpl->mpFrame )->mnDisplay;
         if( nDisplay >= Application::GetScreenCount() )
         {
-            xCanvas.set( xCanvasFactory->createInstanceWithArgumentsAndContext(
+            xCanvas.set( pCanvasFactory->createInstanceWithArgumentsAndContext(
                                  bSpriteCanvas ?
                                  OUString( "com.sun.star.rendering.SpriteCanvas.MultiScreen" ) :
                                  OUString( "com.sun.star.rendering.Canvas.MultiScreen" ),
@@ -3511,7 +3511,7 @@ Reference< css::rendering::XCanvas > WindowOutputDevice::ImplGetCanvas( bool bSp
         else
 #endif
         {
-            xCanvas.set( xCanvasFactory->createInstanceWithArgumentsAndContext(
+            xCanvas.set( pCanvasFactory->createInstanceWithArgumentsAndContext(
                              bSpriteCanvas ?
                              u"com.sun.star.rendering.SpriteCanvas"_ustr :
                              u"com.sun.star.rendering.Canvas"_ustr,

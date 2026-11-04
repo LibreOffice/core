@@ -753,14 +753,14 @@ css::uno::Reference< css::rendering::XCanvas > OutputDevice::ImplGetCanvas( bool
 
     const Reference< XComponentContext >& xContext = comphelper::getProcessComponentContext();
 
-    static tools::DeleteUnoReferenceOnDeinit<css::lang::XMultiComponentFactory>
-        xStaticCanvasFactory(new CanvasFactory(xContext));
-    Reference<css::lang::XMultiComponentFactory> xCanvasFactory(xStaticCanvasFactory.get());
+    static tools::DeleteRtlReferenceOnDeinit<CanvasFactory> pStaticCanvasFactory(
+        new CanvasFactory(xContext));
+    rtl::Reference<CanvasFactory> pCanvasFactory(pStaticCanvasFactory.get());
     Reference< css::rendering::XCanvas > xCanvas;
 
-    if(xCanvasFactory.is())
+    if (pCanvasFactory.is())
     {
-        xCanvas.set( xCanvasFactory->createInstanceWithArgumentsAndContext(
+        xCanvas.set( pCanvasFactory->createInstanceWithArgumentsAndContext(
                          bSpriteCanvas ?
                          u"com.sun.star.rendering.SpriteCanvas"_ustr :
                          u"com.sun.star.rendering.Canvas"_ustr,
