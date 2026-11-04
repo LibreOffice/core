@@ -805,6 +805,23 @@ setobjectgluepointwayout id=<id> at=<at> way=<way>
     a way out by. Sets it in one step that can be undone. A point the shape makes from its own
     geometry keeps its way.
 
+setobjectgluepointdistance id=<id> at=<at> keeps=<keeps>
+
+    <id> and <at> name one of the points of a drawing object as for setobjectgluepoint. <keeps>
+    is true for a point that keeps its distance from the side it is measured from when the object
+    changes size, and false for a point that keeps its share of the size of the object. The point
+    stays where it is on the page. Sets it in one step that can be undone. A point the shape makes
+    from its own geometry stays as it is.
+
+setobjectgluepointfrom id=<id> at=<at> across=<side>
+setobjectgluepointfrom id=<id> at=<at> down=<side>
+
+    <id> and <at> name one of the points of a drawing object as for setobjectgluepoint. <side> is
+    the side of the object the point is measured from: left, middle or right across the object,
+    top, middle or bottom down it. These are the names the render geometry reports the side by,
+    where middle is the one it leaves out. The point stays where it is on the page. Sets it in one
+    step that can be undone. A point the shape makes from its own geometry stays as it is.
+
 setobjectpoints id=<id> changes=<changes> [sequence=<sequence>]
 
     <id> is the unique id of a drawing object, the one the render geometry of a page names it by.

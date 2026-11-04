@@ -132,8 +132,11 @@ describe(['tagdesktop'], 'Glue points of a shape on a vector slide', function() 
 		helper.waitForMapState('insertgluepoint', 'true');
 	}
 
-	// Opens the menu of the glue point at that place in the list of the selected object. Its
-	// entries are Left, Right, Up and Down at 1 to 4, and Delete at 6.
+	/*
+		Opens the menu of the glue point at that place in the list of the selected object. Its
+		entries are Left, Right, Up and Down at 1 to 4, Relative at 6, the Horizontal Alignment
+		and Vertical Alignment submenus at 7 and 8, and Delete at 10.
+	*/
 	function openMenuOfPoint(win, at) {
 		helper.waitForMapState('showgluepoints', 'true');
 		cy.then(function() {
@@ -152,6 +155,28 @@ describe(['tagdesktop'], 'Glue points of a shape on a vector slide', function() 
 		});
 	}
 
+	// Chooses an entry of a submenu of the menu of a point and waits until the engine has
+	// answered. The entry the point holds now is checked when the submenu opens.
+	function chooseInSubmenu(win, entry, item, checkedItem) {
+		var submenu = '#tie-point-menu-' + entry + '-entry-';
+		cy.cGet('#tie-point-menu-entry-' + entry).click();
+		cy.cGet(submenu + checkedItem).should('have.class', 'checked');
+		cy.cGet(submenu + item).click();
+		cy.cGet('#tie-point-menu-entry-' + entry).should('not.exist');
+		cy.then(function() {
+			return helper.processToIdle(win);
+		});
+	}
+
+	// The one point of the selected object, once the engine reports it as the check expects.
+	function expectThePoint(win, check) {
+		cy.wrap(null).should(function() {
+			var points = gluePoints(win);
+			expect(points, 'glue points').to.have.length(1);
+			check(points[0]);
+		});
+	}
+
 	function expectWayOut(win, wayOut) {
 		cy.wrap(null).should(function() {
 			var points = gluePoints(win);
@@ -160,7 +185,7 @@ describe(['tagdesktop'], 'Glue points of a shape on a vector slide', function() 
 		});
 	}
 
-	it('A point is added with one press, its way out is chosen and it is deleted.', function() {
+	it('A point is added with one press, its menu changes it and Delete takes it away.', function() {
 		var win = this.win;
 		selectByTab(win, 1);
 		cy.wrap(null).should(function() {
@@ -244,10 +269,58 @@ describe(['tagdesktop'], 'Glue points of a shape on a vector slide', function() 
 		chooseInPointMenu(win, 3);
 		expectWayOut(win, undefined);
 
+		// A new point keeps its share of the size, so the sides it is measured from count for
+		// nothing and are disabled. Turning Relative off keeps the point where it is.
 		openMenuOfPoint(win, 0);
+		cy.cGet('#tie-point-menu-entry-6').should('have.class', 'checked');
+		cy.cGet('#tie-point-menu-entry-7').should('have.attr', 'disabled');
+		cy.cGet('#tie-point-menu-entry-8').should('have.attr', 'disabled');
 		chooseInPointMenu(win, 6);
+		expectThePoint(win, function(point) {
+			expect(point.keepsItsDistance, 'keeps its distance').to.equal(true);
+			expect(point.x, 'across the object').to.be.closeTo(0.25, 0.01);
+			expect(point.y, 'down the object').to.be.closeTo(0.25, 0.01);
+		});
+
+		// Measured from the left side and then from the upper one, the point stays where it is.
+		openMenuOfPoint(win, 0);
+		cy.cGet('#tie-point-menu-entry-6').should('not.have.class', 'checked');
+		chooseInSubmenu(win, 7, 0, 1);
+		expectThePoint(win, function(point) {
+			expect(point.fromAcross, 'measured across from').to.equal('left');
+			expect(point.x, 'across the object').to.be.closeTo(0.25, 0.01);
+		});
+
+		openMenuOfPoint(win, 0);
+		chooseInSubmenu(win, 8, 0, 1);
+		expectThePoint(win, function(point) {
+			expect(point.fromDown, 'measured down from').to.equal('top');
+			expect(point.y, 'down the object').to.be.closeTo(0.25, 0.01);
+		});
+
+		openMenuOfPoint(win, 0);
+		chooseInPointMenu(win, 10);
 		cy.wrap(null).should(function() {
 			expect(gluePoints(win), 'points after Delete').to.have.length(0);
+		});
+
+		// A click on a point puts the keyboard on it. Once its menu is closed, the Delete key
+		// takes the point away and the rectangle stays.
+		startAddingAPoint(win);
+		clickOnTheObject(win, 0.5, 0.5);
+		cy.wrap(null).should(function() {
+			expect(gluePoints(win), 'points after the second add').to.have.length(1);
+		});
+		openMenuOfPoint(win, 0);
+		cy.realPress('Escape');
+		cy.cGet('#tie-point-menu-entry-1').should('not.exist');
+		helper.typeIntoDocument('{del}');
+		cy.then(function() {
+			return helper.processToIdle(win);
+		});
+		cy.wrap(null).should(function() {
+			expect(selectedObject(win), 'the rectangle').to.not.be.undefined;
+			expect(gluePoints(win), 'points after the Delete key').to.have.length(0);
 		});
 	});
 
@@ -265,7 +338,7 @@ describe(['tagdesktop'], 'Glue points of a shape on a vector slide', function() 
 		});
 
 		openMenuOfPoint(win, 0);
-		[1, 2, 3, 4, 6].forEach(function(entry) {
+		[1, 2, 3, 4, 6, 7, 8, 10].forEach(function(entry) {
 			cy.cGet('#tie-point-menu-entry-' + entry).should('have.attr', 'disabled');
 		});
 	});

@@ -51,6 +51,20 @@ abstract class SelectionSection extends CanvasSectionObject {
 		);
 	}
 
+	/*
+		Takes away the point to tie a connector to that the keyboard is on. Answers whether the
+		keyboard was on such a point. A point the shape makes from its own geometry stays.
+	*/
+	public deleteTheTiePointByKey(): boolean {
+		const handle = this.travel.activeHandle();
+		const group = handle ? this.groupOf(handle) : undefined;
+		return (
+			handle !== undefined &&
+			group instanceof TiePointHandles &&
+			group.deleteThePoint(handle)
+		);
+	}
+
 	/// Whether the handle of that name blinks while the keyboard is on it, as its group says.
 	private blinksWhileActive(name: string): boolean {
 		const handle = this.handles().find(

@@ -2402,6 +2402,16 @@ img.ui-combobox-value-preview {
 	grid-template-columns: 25px 1fr 25px;
 }
 
+/* In a menu whose entries carry a check mark, every entry starts with the place of the mark, so an
+ * entry that opens a submenu has a column for it in front of the others. */
+.ui-grid:has(.ui-combobox-entry.checked, .ui-combobox-entry.notchecked) .ui-combobox-entry.ui-has-menu {
+	grid-template-columns: auto 1fr 25px;
+}
+
+.ui-grid:has(.ui-combobox-entry.checked, .ui-combobox-entry.notchecked) .ui-combobox-entry.ui-has-menu.ui-has-img {
+	grid-template-columns: auto 25px 1fr 25px;
+}
+
 /* Arrow/chevron. Masked rather than drawn, so it takes the text colour: the
    asset's own #bbb is under 3:1 on white and vanishes on a focused entry. */
 .ui-combobox-entry.ui-has-menu::after {

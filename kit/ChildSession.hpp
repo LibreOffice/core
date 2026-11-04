@@ -229,6 +229,12 @@ private:
     /// Sets the way a connector leaves a drawing object at one of the points it was given.
     bool setObjectGluePointWayOut(const StringVector& tokens);
 
+    /// Sets whether a point a drawing object was given keeps its distance or its share of the size.
+    bool setObjectGluePointDistance(const StringVector& tokens);
+
+    /// Sets the side of a drawing object that a point it was given is measured from.
+    bool setObjectGluePointFrom(const StringVector& tokens);
+
     /// Gives the drawing objects the client names the mapping they are to be drawn by, which
     /// moves, scales or turns them.
     bool setObjectTransform(const StringVector& tokens);

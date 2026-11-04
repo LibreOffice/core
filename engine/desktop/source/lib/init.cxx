@@ -81,6 +81,7 @@
 #include <chrono>
 #include <optional>
 #include <set>
+#include <functional>
 #include <map>
 #include <iostream>
 #include <mutex>
@@ -7165,6 +7166,29 @@ static Point lcl_onThePage(const SdrObject& rObject, double fX, double fY)
 }
 
 /*
+    Changes the point at that number in the list of the object of that id, as one step to undo.
+    The description of the step names the object where it holds %1. A point the shape makes from
+    its own geometry stays as it is.
+*/
+static void lcl_changeAddedGluePoint(
+    unsigned long long nObjectId, int nAt, TranslateId pUndo,
+    const std::function<void(SdrGluePoint& rGluePoint, const SdrObject& rObject)>& rChange)
+{
+    SdrObject* pObject = nullptr;
+    SdrGluePoint* pGluePoint = lcl_addedGluePointAt(nObjectId, nAt, pObject);
+    if (!pGluePoint)
+        return;
+
+    SdrModel& rModel(pObject->getSdrModelFromSdrObject());
+    rModel.BegUndo(SvxResId(pUndo).replaceFirst("%1", pObject->TakeObjNameSingul()));
+    rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoGeoObject(*pObject));
+    rChange(*pGluePoint, *pObject);
+    pObject->SetChanged();
+    pObject->BroadcastObjectChange();
+    rModel.EndUndo();
+}
+
+/*
     Moves one of the points a drawing object was given for a connector to tie itself to. The place
     is given on the object, 0 and 0 being its upper left corner and 1 and 1 its lower right one,
     which is how such a point travels to the client. The object holds it either as a share of its
@@ -7178,18 +7202,11 @@ void COKitDocumentImpl::setObjectGluePoint(unsigned long long nObjectId, int nAt
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    SdrObject* pObject = nullptr;
-    SdrGluePoint* pGluePoint = lcl_addedGluePointAt(nObjectId, nAt, pObject);
-    if (!pGluePoint)
-        return;
-
-    SdrModel& rModel(pObject->getSdrModelFromSdrObject());
-    rModel.BegUndo(SvxResId(STR_DragMethMove));
-    rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoGeoObject(*pObject));
-    pGluePoint->SetAbsolutePos(lcl_onThePage(*pObject, fX, fY), *pObject);
-    pObject->SetChanged();
-    pObject->BroadcastObjectChange();
-    rModel.EndUndo();
+    lcl_changeAddedGluePoint(nObjectId, nAt, STR_DragMethMove,
+                             [fX, fY](SdrGluePoint& rGluePoint, const SdrObject& rObject) {
+                                 rGluePoint.SetAbsolutePos(lcl_onThePage(rObject, fX, fY),
+                                                           rObject);
+                             });
 }
 
 /*
@@ -7271,19 +7288,78 @@ void COKitDocumentImpl::setObjectGluePointWayOut(unsigned long long nObjectId, i
         return;
     }
 
-    SdrObject* pObject = nullptr;
-    SdrGluePoint* pGluePoint = lcl_addedGluePointAt(nObjectId, nAt, pObject);
-    if (!pGluePoint)
-        return;
+    const SdrEscapeDirection eWayOut = aWayOut->second;
+    lcl_changeAddedGluePoint(nObjectId, nAt, STR_EditSetGlueEscDir,
+                             [eWayOut](SdrGluePoint& rGluePoint, const SdrObject&) {
+                                 rGluePoint.SetEscDir(eWayOut);
+                             });
+}
 
-    SdrModel& rModel(pObject->getSdrModelFromSdrObject());
-    rModel.BegUndo(SvxResId(STR_EditSetGlueEscDir).replaceFirst("%1",
-                                                                pObject->TakeObjNameSingul()));
-    rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoGeoObject(*pObject));
-    pGluePoint->SetEscDir(aWayOut->second);
-    pObject->SetChanged();
-    pObject->BroadcastObjectChange();
-    rModel.EndUndo();
+/*
+    Sets whether one of the points a drawing object was given keeps its distance from the side it
+    is measured from when the object changes size, or keeps its share of the size of the object.
+    The point stays where it is on the page either way.
+*/
+void COKitDocumentImpl::setObjectGluePointKeepsItsDistance(unsigned long long nObjectId, int nAt,
+                                                           bool bKeepsItsDistance)
+{
+    comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectGluePointKeepsItsDistance");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    lcl_changeAddedGluePoint(nObjectId, nAt, STR_EditSetGluePercent,
+                             [bKeepsItsDistance](SdrGluePoint& rGluePoint,
+                                                 const SdrObject& rObject) {
+                                 const Point aOnThePage(rGluePoint.GetAbsolutePos(rObject));
+                                 rGluePoint.SetPercent(!bKeepsItsDistance);
+                                 rGluePoint.SetAbsolutePos(aOnThePage, rObject);
+                             });
+}
+
+/*
+    Sets the side of a drawing object that one of the points the object was given is measured
+    from, across the object or down it. The names are the ones the render geometry reports the
+    side by, and "middle" measures the point from the middle of the object. The point stays where
+    it is on the page.
+*/
+void COKitDocumentImpl::setObjectGluePointFrom(unsigned long long nObjectId, int nAt, bool bDown,
+                                               const char* pSide)
+{
+    comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectGluePointFrom");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    static const std::map<std::string_view, SdrAlign> aAcross{
+        { "left", SdrAlign::HORZ_LEFT },
+        { "middle", SdrAlign::HORZ_CENTER },
+        { "right", SdrAlign::HORZ_RIGHT },
+    };
+    static const std::map<std::string_view, SdrAlign> aDown{
+        { "top", SdrAlign::VERT_TOP },
+        { "middle", SdrAlign::VERT_CENTER },
+        { "bottom", SdrAlign::VERT_BOTTOM },
+    };
+
+    const std::map<std::string_view, SdrAlign>& rSides = bDown ? aDown : aAcross;
+    const auto aSide = rSides.find(pSide ? std::string_view(pSide) : std::string_view());
+    if (aSide == rSides.end())
+    {
+        SetLastExceptionMsg(u"A point is measured from no side of that name"_ustr);
+        return;
+    }
+
+    const SdrAlign eSide = aSide->second;
+    lcl_changeAddedGluePoint(nObjectId, nAt, STR_EditSetGlueAlign,
+                             [bDown, eSide](SdrGluePoint& rGluePoint, const SdrObject& rObject) {
+                                 const Point aOnThePage(rGluePoint.GetAbsolutePos(rObject));
+                                 if (bDown)
+                                     rGluePoint.SetVertAlign(eSide);
+                                 else
+                                     rGluePoint.SetHorzAlign(eSide);
+                                 rGluePoint.SetAbsolutePos(aOnThePage, rObject);
+                             });
 }
 
 /*

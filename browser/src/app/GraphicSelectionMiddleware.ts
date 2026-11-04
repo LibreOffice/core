@@ -636,6 +636,17 @@ class GraphicSelection {
 		if (event.key === 'Escape' && SelectionSection.stopAddingATiePoint())
 			return true;
 
+		// Delete and Backspace take away the point to tie a connector to that the keyboard is on,
+		// and the object stays.
+		if (
+			(event.key === 'Delete' || event.key === 'Backspace') &&
+			!event.ctrlKey &&
+			!event.altKey &&
+			!event.metaKey &&
+			this.selectionSection?.deleteTheTiePointByKey()
+		)
+			return true;
+
 		// A key that moves, turns, slants or resets what is selected waits while an undo or a redo
 		// is on its way, since the objects then stand where only the engine's answer tells. It is
 		// handled once the answer is in, from where the undo left the objects.

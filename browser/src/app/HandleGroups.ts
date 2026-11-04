@@ -1551,16 +1551,18 @@ class TiePointHandles extends HandleGroup {
 
 	/*
 		Opens the menu of a point, below the point: the way a connector comes into the object
-		there, and taking the point away. The ways the point names are checked, both of them
-		for a point that names two sides facing each other, and none for a point that names no
-		way. A point the shape makes from its own geometry keeps its way and stays, so for such
-		a point the entries are shown disabled.
+		there, whether the point keeps its share of the size of the object, the side it is
+		measured from across the object and down it, and taking the point away. The ways the point
+		names are checked, both of them for a point that names two sides facing each other, and
+		none for a point that names no way. A point the shape makes from its own geometry keeps
+		all of these and stays, so for such a point the entries are shown disabled. The sides a
+		point is measured from count only for a point that keeps its distance, so they are
+		disabled for a point that keeps its share.
 	*/
 	private openTheMenuOf(handle: SelectionHandle): void {
 		const container = document.getElementById('canvas-container');
 		if (!container) return;
 
-		const objectId = this.selection.selectedObjects()[0];
 		const at = Number(handle.name.split('.')[1]);
 		const point = this.held(handle);
 		if (!point || !(at >= 0)) return;
@@ -1581,6 +1583,7 @@ class TiePointHandles extends HandleGroup {
 
 		const ways = TiePointHandles.waysOf(point.wayOut);
 		const canBeChanged = () => point.fromTheShape !== true;
+		const keepsItsDistance = point.keepsItsDistance === true;
 		const side = (id: string, text: string, img: string): MenuDefinition => ({
 			id,
 			type: 'action',
@@ -1590,16 +1593,67 @@ class TiePointHandles extends HandleGroup {
 			isEnabled: canBeChanged,
 		});
 
+		// A side the point is measured from, named by the axis and the side as the engine takes
+		// them. The render geometry leaves the middle out.
+		const from = (
+			axis: 'across' | 'down',
+			name: string,
+			text: string,
+			img: string,
+		): MenuDefinition => ({
+			id: axis + '-' + name,
+			type: 'action',
+			text,
+			img,
+			checked:
+				(axis === 'across' ? point.fromAcross : point.fromDown) ===
+				(name === 'middle' ? undefined : name),
+		});
+		const sidesCanBeChanged = () => canBeChanged() && keepsItsDistance;
+
 		const entries: MenuDefinition[] = [
 			{
-				id: 'direction',
+				id: 'gluepoint',
 				type: 'header',
-				text: _('Connector Entry Direction'),
+				text: _('Gluepoint'),
 			},
 			side('left', _('Left'), 'glueescapedirectionleft'),
 			side('right', _('Right'), 'glueescapedirectionright'),
 			side('top', _('Up'), 'glueescapedirectiontop'),
 			side('bottom', _('Down'), 'glueescapedirectionbottom'),
+			{ id: 'separator', type: 'separator' },
+			{
+				id: 'relative',
+				type: 'action',
+				text: _('Relative'),
+				img: 'gluepercent',
+				checked: !keepsItsDistance,
+				isEnabled: canBeChanged,
+			},
+			{
+				id: 'across',
+				type: 'menu',
+				text: _('Horizontal Alignment'),
+				img: 'gluehorzaligncenter',
+				isEnabled: sidesCanBeChanged,
+				items: [
+					from('across', 'left', _('Left'), 'gluehorzalignleft'),
+					from('across', 'middle', _('Center'), 'gluehorzaligncenter'),
+					from('across', 'right', _('Right'), 'gluehorzalignright'),
+				],
+			},
+			{
+				id: 'down',
+				type: 'menu',
+				text: _('Vertical Alignment'),
+				img: 'gluevertaligncenter',
+				isEnabled: sidesCanBeChanged,
+				items: [
+					from('down', 'top', _('Top'), 'gluevertaligntop'),
+					from('down', 'middle', _('Center'), 'gluevertaligncenter'),
+					from('down', 'bottom', _('Bottom'), 'gluevertalignbottom'),
+				],
+			},
 			{ id: 'separator', type: 'separator' },
 			{
 				id: 'delete',
@@ -1623,28 +1677,30 @@ class TiePointHandles extends HandleGroup {
 			): boolean => {
 				if (eventType !== 'selected') return false;
 
-				JSDialog.CloseDropdown(TiePointHandles.menuId);
+				// An entry of a submenu closes the submenu as well as the menu.
+				JSDialog.CloseAllDropdowns();
 
 				const chosen = (entry as MenuDefinition)?.id ?? '';
-				if (chosen === 'delete') {
-					// The points after this one move up one place, so the keyboard leaves them.
-					this.selection.travel.leave();
-					app.socket.sendMessage(
-						'deleteobjectgluepoint id=' +
-							String(objectId) +
-							' at=' +
-							String(at),
+				const [axis, name] = chosen.split('-');
+				if (chosen === 'delete') this.deleteThePoint(handle);
+				else if (chosen === 'relative')
+					this.sendAboutThePoint(
+						'setobjectgluepointdistance',
+						at,
+						'keeps=' + String(!keepsItsDistance),
 					);
-				} else if (TiePointHandles.sides.some((one) => one.name === chosen)) {
-					app.socket.sendMessage(
-						'setobjectgluepointwayout id=' +
-							String(objectId) +
-							' at=' +
-							String(at) +
-							' way=' +
-							TiePointHandles.switchedWay(ways, chosen),
+				else if ((axis === 'across' || axis === 'down') && name)
+					this.sendAboutThePoint(
+						'setobjectgluepointfrom',
+						at,
+						chosen.replace('-', '='),
 					);
-				}
+				else if (TiePointHandles.sides.some((one) => one.name === chosen))
+					this.sendAboutThePoint(
+						'setobjectgluepointwayout',
+						at,
+						'way=' + TiePointHandles.switchedWay(ways, chosen),
+					);
 				return true;
 			},
 			'',
@@ -1652,6 +1708,35 @@ class TiePointHandles extends HandleGroup {
 			false,
 			true,
 		);
+	}
+
+	/// Sends a change of the point at that place in the list of the selected object, with the
+	/// parameters that say what the change is, or none for a change that needs none.
+	private sendAboutThePoint(command: string, at: number, change: string): void {
+		app.socket.sendMessage(
+			command +
+				' id=' +
+				String(this.selection.selectedObjects()[0]) +
+				' at=' +
+				String(at) +
+				(change ? ' ' + change : ''),
+		);
+	}
+
+	/*
+		Takes away the point that handle stands for. Answers whether the handle stands for a
+		point. A point the shape makes from its own geometry stays. The points after the one
+		taken away move up one place, so the keyboard leaves the points.
+	*/
+	public deleteThePoint(handle: SelectionHandle): boolean {
+		const at = Number(handle.name.split('.')[1]);
+		const point = this.held(handle);
+		if (!point || !(at >= 0)) return false;
+		if (point.fromTheShape === true) return true;
+
+		this.selection.travel.leave();
+		this.sendAboutThePoint('deleteobjectgluepoint', at, '');
+		return true;
 	}
 
 	/// The sides a way out names: one side, the two that face each other, or none.
