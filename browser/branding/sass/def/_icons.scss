@@ -102,6 +102,10 @@ $img-copy: false !default;
 $img-resetattributes: false !default;
 $img-grow: false !default;
 $img-shrink: false !default;
+$img-bold: false !default;
+$img-italic: false !default;
+$img-underline: false !default;
+$img-strikeout: false !default;
 $img-graphicdialog: false !default;
 $img-delete: false !default;
 $img-subscript: false !default;
@@ -808,6 +812,22 @@ $color-navigator-tab: false !default;
 	@if $img-grow { #{$notdark} .unoGrow .unobutton img {background-image: url($img-grow); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
 	@if $img-shrink { #{$notdark} .unoShrink .unobutton img {background-image: url($img-shrink); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}}
 	@if $img-graphicdialog { #{$notdark} .ui-combobox-entry.unoGraphicDialog img {content: url($img-graphicdialog)}}
+	@if $img-bold {
+		#{$notdark} .unoBold:not(.mobile-wizard) .unobutton img , #{$notdark} #bold img {background-image: url($img-bold) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .mobile-wizard.unoBold .unobutton img {content: url($img-bold)}
+	}
+	@if $img-italic {
+		#{$notdark} .unoItalic:not(.mobile-wizard) .unobutton img , #{$notdark} #italic img {background-image: url($img-italic) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .mobile-wizard.unoItalic .unobutton img {content: url($img-italic)}
+	}
+	@if $img-underline {
+		#{$notdark} .unoUnderline:not(.mobile-wizard) .unobutton img , #{$notdark} #underline img {background-image: url($img-underline) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .mobile-wizard.unoUnderline .unobutton img {content: url($img-underline)}
+	}
+	@if $img-strikeout {
+		#{$notdark} .unoStrikeout:not(.mobile-wizard) .unobutton img , #{$notdark} #strikeout img {background-image: url($img-strikeout) !important; background-repeat: no-repeat !important; background-position: center !important; box-sizing: border-box; padding-left: $pad-l !important}
+		#{$notdark} .mobile-wizard.unoStrikeout .unobutton img {content: url($img-strikeout)}
+	}
 	@if $img-subscript {
 		#{$notdark} .unoSubScript:not(.mobile-wizard) .unobutton img {background-image: url($img-subscript); background-repeat: no-repeat; background-position: center; box-sizing: border-box; padding-left: $pad-l !important}
 		#{$notdark} .mobile-wizard.unoSubScript .unobutton img {content: url($img-subscript)}
