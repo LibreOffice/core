@@ -116,6 +116,54 @@ describe(['tagdesktop'], 'Writer drag and drop of a text selection.', function()
 		helper.expectTextForClipboard('Test1Test2');
 	});
 
+	it('A short drag with Shift from inside the selection extends it to the release point', function() {
+		var win = this.win;
+
+		// The caret after "Te" in the paragraph Test2. A modifier stays held for the rest of the
+		// typed string, so each key goes alone.
+		helper.assertCursorAndFocus();
+		helper.typeIntoDocument('{ctrl}{end}');
+		helper.typeIntoDocument('{home}');
+		helper.processToIdle(win);
+		var startOfTest2 = readCaretAfterMove(null);
+		for (let i = 0; i < 2; ++i)
+			helper.typeIntoDocument('{rightarrow}');
+		helper.processToIdle(win);
+		var afterTe = readCaretAfterMove(startOfTest2);
+
+		var points = selectTest2WithMouse(win);
+
+		// When Shift is held, the button is pressed just after "Te" inside the selection, and comes
+		// up 8 pixels further on: a drag for the canvas, which starts one at 5 pixels, but closer
+		// than a clear drag of the selection. A button held still long enough also makes a clear
+		// drag, and a slow test machine could hold it that long, so the test lengthens that time
+		// while it drags and measures the distance alone.
+		var mouseControlClass;
+		var holdTime;
+		cy.then(function() {
+			mouseControlClass = win.app.activeDocument.mouseControl.constructor;
+			holdTime = mouseControlClass.selectionDragHoldTime;
+			mouseControlClass.selectionDragHoldTime = 600000;
+			var press = screenPoint(win, afterTe.x1, points.insideTest2.y);
+			press.x += 1;
+			cy.cGet('body').realMouseDown({ x: press.x, y: press.y, shiftKey: true });
+			cy.cGet('body').realMouseMove(press.x + 4, press.y, { shiftKey: true });
+			cy.cGet('body').realMouseMove(press.x + 8, press.y, { shiftKey: true });
+			cy.cGet('body').realMouseUp({ x: press.x + 8, y: press.y, shiftKey: true });
+		});
+		cy.then(function() {
+			mouseControlClass.selectionDragHoldTime = holdTime;
+		});
+		helper.processToIdle(win);
+
+		// Then the selection ends past the press point, at the release point:
+		helper.setDummyClipboardForCopy();
+		helper.copy();
+		cy.cGet('#copy-paste-container p').should(function($paragraph) {
+			expect($paragraph.text()).to.match(/^Test?$/);
+		});
+	});
+
 	it('A drag that comes back to the selection keeps it and its context toolbar', function() {
 		var win = this.win;
 		var points = selectTest2WithMouse(win);

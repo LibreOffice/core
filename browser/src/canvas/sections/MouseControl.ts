@@ -678,8 +678,10 @@ class MouseControl extends CanvasSectionObject {
 		this.modifierOnMouseDown = MouseControl.readModifier(e);
 		this.timeOfPress = Date.now();
 		this.timeOfFirstDragMove = 0;
+		// A press with Shift extends the selection, so it drags no selection.
 		this.pressedInSelection =
 			e.type !== 'touchstart' &&
+			!(this.modifierOnMouseDown & app.UNOModifier.SHIFT) &&
 			!!app.activeDocument?.activeView.selectionContains(
 				MouseControl.toDocumentPoint(this.positionOnMouseDown),
 			);
