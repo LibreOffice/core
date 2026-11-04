@@ -20,7 +20,7 @@ namespace shell::sessioninstall
     class SyncDbusSessionHelper : public ::cppu::WeakImplHelper< ::org::freedesktop::PackageKit::XSyncDbusSessionHelper, css::lang::XServiceInfo >
     {
         public:
-            SyncDbusSessionHelper(css::uno::Reference< css::uno::XComponentContext> const&);
+            SyncDbusSessionHelper();
 
             // XServiceInfo
             virtual OUString SAL_CALL getImplementationName() override;

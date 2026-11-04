@@ -96,7 +96,7 @@ void request(
 
 namespace shell::sessioninstall
 {
-    SyncDbusSessionHelper::SyncDbusSessionHelper(Reference<XComponentContext> const&)
+    SyncDbusSessionHelper::SyncDbusSessionHelper()
     {
     }
 
@@ -199,9 +199,9 @@ void SAL_CALL SyncDbusSessionHelper::IsInstalled( const OUString& sPackagename, 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 shell_sessioninstall_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new SyncDbusSessionHelper(context));
+    return cppu::acquire(new SyncDbusSessionHelper);
 }
 
 }
