@@ -8,9 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
-"PO-Revision-Date: 2026-11-03 09:29+0000\n"
-"Last-Translator: Stephan Paternotte <stephan-"
-"p@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-11-03 20:16+0000\n"
+"Last-Translator: Andras Timar <timar@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/nl/>\n"
 "Language: nl\n"
@@ -6252,7 +6251,7 @@ msgstr "Sectie toevoegen"
 msgid "with 1 other"
 msgid_plural "with %n others"
 msgstr[0] "met 1 ander"
-msgstr[1] "met %1 anderen"
+msgstr[1] "met %n anderen"
 
 #: src/control/Control.PartsPreview.js:926
 msgid "with %1"
@@ -6400,8 +6399,8 @@ msgstr "Alle secties uitvouwen"
 #: src/control/Control.PartsPreview.js:1512 src/docdispatcher.ts:1030
 msgid "Delete section \"%1\" and its %n slide?"
 msgid_plural "Delete section \"%1\" and its %n slides?"
-msgstr[0] "Sectie \"%1\" en zijn %2 dia verwijderen?"
-msgstr[1] "Sectie \"%1\" en zijn %2 dia's verwijderen?"
+msgstr[0] "Sectie \"%1\" en zijn %n dia verwijderen?"
+msgstr[1] "Sectie \"%1\" en zijn %n dia's verwijderen?"
 
 #: src/control/Control.PartsPreview.js:1570
 msgid "Enter new section name:"
@@ -9480,8 +9479,8 @@ msgstr "Geen notities"
 #: src/slideshow/PresenterConsole.js:1767
 msgid "Repeat in %n second"
 msgid_plural "Repeat in %n seconds"
-msgstr[0] "Herhalen over {0} seconde"
-msgstr[1] "Herhalen over {0} seconden"
+msgstr[0] "Herhalen over %n seconde"
+msgstr[1] "Herhalen over %n seconden"
 
 #: src/slideshow/PresenterConsole.js:1774
 #: src/slideshow/SlideShowPresenter.ts:728

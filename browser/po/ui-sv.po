@@ -8,9 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-11-02 12:35+0100\n"
-"PO-Revision-Date: 2026-11-03 01:46+0000\n"
-"Last-Translator: bittin1ddc447d824349b2 "
-"<bittin1ddc447d824349b2@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-11-03 20:16+0000\n"
+"Last-Translator: Andras Timar <timar@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/sv/>\n"
 "Language: sv\n"
@@ -2720,7 +2719,7 @@ msgstr "{0} bilder kunde inte skapas och hoppades därför över."
 
 #: src/control/Control.AIChatSidebar.ts:2349
 msgid "{0} image(s) could not be generated and show a placeholder."
-msgstr "bilder kunde inte skapas och visar därför en platshållare."
+msgstr "{0} bilder kunde inte skapas och visar därför en platshållare."
 
 #: src/control/Control.AIChatSidebar.ts:2402
 #: src/control/Control.AIChatSidebar.ts:4089
@@ -9334,7 +9333,7 @@ msgstr "Övergång: {0}"
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
-msgstr "Paus ... (% SECONDS%)"
+msgstr "Paus ... (%SECONDS%)"
 
 #: src/slideshow/PresenterConsole.js:31
 msgid "Current Slide"
