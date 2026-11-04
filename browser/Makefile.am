@@ -544,6 +544,7 @@ COOL_JS_LST =\
 	src/canvas/vector/primitive/CaptionTailPrimitive.ts \
 	src/canvas/vector/primitive/ExclusiveEditViewPrimitive.ts \
 	src/canvas/vector/primitive/FilledRectanglePrimitive.ts \
+	src/canvas/vector/primitive/FormControlPrimitive.ts \
 	src/canvas/vector/primitive/GraphicPrimitive.ts \
 	src/canvas/vector/primitive/GraphicResource.ts \
 	src/canvas/vector/primitive/GroupPrimitive.ts \
@@ -588,6 +589,7 @@ COOL_JS_LST =\
 	src/canvas/vector/VectorColors.ts \
 	src/canvas/vector/VectorFillGraphicPrimitiveRenderer.ts \
 	src/canvas/vector/VectorGradientFrame.ts \
+	src/canvas/vector/VectorFormControlRenderer.tsx \
 	src/canvas/vector/VectorGradientPrimitiveRenderer.ts \
 	src/canvas/vector/VectorWrongSpellPrimitiveRenderer.ts \
 	src/canvas/vector/VectorColorModifiers.ts \

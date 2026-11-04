@@ -51,6 +51,8 @@ class VectorManager extends RenderManagerBase {
 		new cool.VectorPrimitiveRenderer(
 			(checksum) => this._bitmaps.get(checksum) ?? this._standInFor(checksum),
 			(fontId) => this._fonts.has(fontId),
+			// a picture the client made of a form control is drawn once it has loaded
+			() => this._fireChanged([]),
 		);
 
 	// Cached parsed JSON primitive tree keyed by page id. The id names the

@@ -40,6 +40,7 @@ namespace cool {
 		private _fillGraphics: VectorFillGraphicPrimitiveRenderer;
 		private _colorFilters = new VectorColorFilters();
 		private _modifiedImages = new VectorModifiedImages();
+		private _formControls: VectorFormControlRenderer;
 		// Whether the content an editing view alone shows is drawn. Every
 		// entry point sets it from what the render is for, so it never
 		// carries over from an earlier render.
@@ -59,9 +60,14 @@ namespace cool {
 		// the colors it has.
 		private _pictureDepth = 0;
 
-		constructor(bitmapLookup?: BitmapLookup, fontLoaded?: FontLoadedLookup) {
+		constructor(
+			bitmapLookup?: BitmapLookup,
+			fontLoaded?: FontLoadedLookup,
+			onPictureReady?: () => void,
+		) {
 			this._bitmapLookup = bitmapLookup;
 			this._fontLoaded = fontLoaded;
+			this._formControls = new VectorFormControlRenderer(onPictureReady);
 			this._scratch = new VectorScratchCanvases();
 			this._gradients = new VectorGradientPrimitiveRenderer(
 				this._scratch,
@@ -297,6 +303,9 @@ namespace cool {
 					break;
 				case BitmapPrimitive.type:
 					this._renderBitmap(context, primitive as BitmapPrimitive);
+					break;
+				case FormControlPrimitive.type:
+					this._formControls.render(context, primitive as FormControlPrimitive);
 					break;
 				case BitmapAlphaPrimitive.type:
 					this._renderBitmapAlpha(context, primitive as BitmapAlphaPrimitive);

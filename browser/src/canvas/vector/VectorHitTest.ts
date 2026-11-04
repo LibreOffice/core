@@ -347,7 +347,8 @@ namespace cool {
 
 				case BitmapPrimitive.type:
 				case BitmapAlphaPrimitive.type:
-				case GraphicPrimitive.type: {
+				case GraphicPrimitive.type:
+				case FormControlPrimitive.type: {
 					/*
 						An image is hit anywhere inside the area it covers, see-through pixels
 						included, as the engine does while it serves a client.
