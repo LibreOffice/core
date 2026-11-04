@@ -229,6 +229,7 @@ void SwEditWin::CancelDrag()
 void SwEditWin::DragFinished()
 {
     DropCleanup();
+    m_rView.GetWrtShell().GetVisibleCursor()->EndDropPositions();
     m_aTimer.SetInvokeHandler( LINK(this,SwEditWin, TimerHandler) );
     m_bIsInDrag = false;
     m_xDraggedData.clear();

@@ -66,9 +66,13 @@ class SW_DLLPUBLIC SwVisibleCursor
     /// Whether the cursor marks where a dragged selection would be dropped.
     bool m_bIsDropPosition = false;
     /// For COKit only - whether the cursor stopped marking a drop position while the drag goes
-    /// on, as over a place where the selection cannot be dropped. Until the cursor shows again,
-    /// the view hears of a drop position without a rectangle.
+    /// on, as over a place where the selection cannot be dropped. Until the next drop position or
+    /// the end of the drag, the view hears of a drop position without a rectangle.
     bool m_bLeftDropPosition = false;
+    /// For COKit only - the rectangle of the drop position that the cursor marks, empty while it
+    /// marks none. The cursor may show at the real cursor of the shell meanwhile, as when an edit
+    /// of another view updates the cursors.
+    std::optional<SwRect> m_oDropPositionRect;
 
 public:
     SwVisibleCursor(::sw::VisibleCursorState const& rState, const SwCursorShell * pCShell);
@@ -80,6 +84,10 @@ public:
     bool IsVisible() const { return m_bIsVisible; }
     void SetDragCursor( bool bFlag = true ) { m_bIsDragCursor = bFlag; }
     void SetDropPosition(bool bDropPosition);
+    /// Keeps the place where the cursor shows now as its drop position, if it marks one.
+    void KeepDropPositionRect();
+    /// Ends the drop positions of a drag that is over.
+    void EndDropPositions();
     SwRect SetPos();
     void SetPosAndShow(SfxViewShell const * pViewShell);
     /// Hold the view whose change is moving this cursor.

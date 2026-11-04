@@ -3269,6 +3269,7 @@ bool SwCursorShell::SetVisibleCursor( const Point &rPt, ScrollSizeMode eScrollSi
 
         m_pVisibleCursor->SetDragCursor();
         m_pVisibleCursor->Show(); // show again
+        m_pVisibleCursor->KeepDropPositionRect();
     }
     return bRet;
 }

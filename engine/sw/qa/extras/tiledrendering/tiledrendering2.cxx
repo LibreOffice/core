@@ -4238,6 +4238,63 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextOverShapeHidesDropPos
     CPPUNIT_ASSERT(!aView.m_bOwnCursorAtDropPosition);
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextOtherViewEditKeepsDropPosition)
+{
+    // Given a rectangle in the document, and the paragraphs "Test1" and "Test2", with "Test2"
+    // selected in the first view, and a second view with its cursor at the end of the document:
+    SwXTextDocument* pXTextDocument = createDoc();
+    int nViewA = KitHelper::getCurrentView();
+    SwWrtShell* pWrtShellA = getSwDocShell()->GetWrtShell();
+    SwTestViewCallback aViewA;
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
+    xShape->setSize(awt::Size(3000, 2000));
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    xDrawPageSupplier->getDrawPage()->add(xShape);
+    xShape->setPosition(awt::Point(3000, 8000));
+    Point aFrom, aTo;
+    lcl_selectSecondParagraph(pWrtShellA, aFrom, aTo);
+    SdrPage* pPage
+        = pWrtShellA->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    const Point aOnShape = pPage->GetObj(0)->GetSnapRect().Center();
+    int nViewB = lcl_addView(pXTextDocument);
+    getSwDocShell()->GetWrtShell()->SttEndDoc(/*bStt=*/false);
+    auto typeInViewB = [&]() {
+        KitHelper::setView(nViewB);
+        pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 'x', 0);
+        pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 'x', 0);
+        Scheduler::ProcessEventsToIdle();
+    };
+
+    // When the first view drags the selection to the end of "Test1" and holds the button, and
+    // the second view types meanwhile:
+    lcl_dragText(pXTextDocument, aFrom, aTo, 0, /*bRelease=*/false, nViewA);
+    CPPUNIT_ASSERT(aViewA.m_bOwnCursorAtDropPosition);
+    const tools::Rectangle aDropPosition = aViewA.m_aOwnCursor;
+    typeInViewB();
+
+    // Then the drop position of the first view stays where its drag put it:
+    CPPUNIT_ASSERT(aViewA.m_bOwnCursorAtDropPosition);
+    CPPUNIT_ASSERT(!aViewA.m_bOwnCursorEmpty);
+    CPPUNIT_ASSERT_EQUAL(aDropPosition, aViewA.m_aOwnCursor);
+
+    // And when the drag goes on to the rectangle, where the text would land nowhere, and the
+    // second view types again:
+    lcl_dragText(pXTextDocument, aTo, aOnShape, 0, /*bRelease=*/false, nViewA);
+    CPPUNIT_ASSERT(aViewA.m_bOwnCursorEmpty);
+    typeInViewB();
+
+    // Then the first view still hears that its drag would land nowhere, which keeps its drag:
+    CPPUNIT_ASSERT(aViewA.m_bOwnCursorAtDropPosition);
+    CPPUNIT_ASSERT(aViewA.m_bOwnCursorEmpty);
+
+    // And after the release, the cursor of the first view is an ordinary one again:
+    lcl_releaseButton(pXTextDocument, nViewA, aOnShape);
+    CPPUNIT_ASSERT(!aViewA.m_bOwnCursorAtDropPosition);
+    CPPUNIT_ASSERT(!aViewA.m_bOwnCursorEmpty);
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextDropPosition)
 {
     // Given the paragraphs "Test1" and "Test2", with "Test2" selected:

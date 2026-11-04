@@ -232,7 +232,23 @@ void SwVisibleCursor::SetDropPosition(bool bDropPosition)
         KitHelper::notifyUpdatePerViewId(*pNotifyViewShell,
                                          COKitCallbackType::INVALIDATE_VISIBLE_CURSOR);
     }
+    if (bDropPosition)
+        m_bLeftDropPosition = false;
+    else
+        m_oDropPositionRect.reset();
     m_bIsDropPosition = bDropPosition;
+}
+
+void SwVisibleCursor::KeepDropPositionRect()
+{
+    if (m_bIsDropPosition && comphelper::COKit::isActive())
+        m_oDropPositionRect = m_aLastKitRect;
+}
+
+void SwVisibleCursor::EndDropPositions()
+{
+    m_bLeftDropPosition = false;
+    m_oDropPositionRect.reset();
 }
 
 void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
@@ -241,7 +257,6 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
 
     if (SfxViewShell* pNotifyViewShell = comphelper::COKit::isActive() ? m_pCursorShell->GetSfxViewShell() : nullptr)
     {
-        m_bLeftDropPosition = false;
 
         // notify about page number change (if that happened)
         sal_uInt16 nPage, nVirtPage;
@@ -308,7 +323,10 @@ std::optional<OString> SwVisibleCursor::getKitPayload(COKitCallbackType eType, i
     assert(eType == COKitCallbackType::INVALIDATE_VISIBLE_CURSOR || eType == COKitCallbackType::INVALIDATE_VIEW_CURSOR);
     if (comphelper::COKit::isActive())
     {
-        SwRect aRect = m_aLastKitRect;
+        // A drop position stays where it was placed, also when the cursor showed at the real
+        // cursor of the shell since.
+        SwRect aRect = m_bIsDropPosition && m_oDropPositionRect ? *m_oDropPositionRect
+                                                                : m_aLastKitRect;
 
         // notify about the cursor position & size
         tools::Rectangle aSVRect(aRect.Pos().getX(), aRect.Pos().getY(), aRect.Pos().getX() + aRect.SSize().Width(), aRect.Pos().getY() + aRect.SSize().Height());
