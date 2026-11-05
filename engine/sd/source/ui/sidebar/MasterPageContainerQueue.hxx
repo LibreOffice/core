@@ -96,10 +96,6 @@ private:
     */
     static const sal_Int32 snDelayedCreationTimeout;
 
-    /** The time to wait when the system is not idle.
-    */
-    static const sal_Int32 snDelayedCreationTimeoutWhenNotIdle;
-
     /** Requests for previews of master pages in a document have their
         priority increased by this value.
     */

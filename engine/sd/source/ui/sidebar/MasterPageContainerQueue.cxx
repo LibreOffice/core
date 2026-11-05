@@ -28,7 +28,6 @@
 namespace sd::sidebar {
 
 const sal_Int32 MasterPageContainerQueue::snDelayedCreationTimeout (15);
-const sal_Int32 MasterPageContainerQueue::snDelayedCreationTimeoutWhenNotIdle (100);
 const sal_Int32 MasterPageContainerQueue::snMasterPagePriorityBoost (5);
 const sal_Int32 MasterPageContainerQueue::snWaitForMoreRequestsPriorityThreshold (-10);
 sal_uInt32 MasterPageContainerQueue::snWaitForMoreRequestsCount(15);
@@ -180,7 +179,6 @@ sal_Int32 MasterPageContainerQueue::CalculatePriority (
 
 IMPL_LINK(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer, void)
 {
-    bool bIsShowingFullScreenShow (false);
     bool bWaitForMoreRequests (false);
 
     do
@@ -192,8 +190,6 @@ IMPL_LINK(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer, void
         sdtools::IdleState nIdleState (sdtools::IdleDetection::GetIdleState(nullptr));
         if (nIdleState != sdtools::IdleState::Idle)
         {
-            if (nIdleState & sdtools::IdleState::FullScreenShowActive)
-                bIsShowingFullScreenShow = true;
             break;
         }
 
@@ -231,10 +227,7 @@ IMPL_LINK(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer, void
 
     if (!mpRequestQueue->empty() && ! bWaitForMoreRequests)
     {
-        int nTimeout (snDelayedCreationTimeout);
-        if (bIsShowingFullScreenShow)
-            nTimeout = snDelayedCreationTimeoutWhenNotIdle;
-        maDelayedPreviewCreationTimer.SetTimeout(nTimeout);
+        maDelayedPreviewCreationTimer.SetTimeout(snDelayedCreationTimeout);
         pTimer->Start();
     }
 }

@@ -33,19 +33,13 @@ namespace sdtools {
         */
         SystemEventPending = 0x0001,
 
-        /** A full screen slide show is running and is active.  In contrast
-            there may be a full screen show be running in an inactive window,
-            i.e. in the background.
-        */
-        FullScreenShowActive = 0x0002,
-
         /** A window is being painted.
         */
         WindowPainting = 0x0008,
     };
 } // end of namespace ::sdtools
 namespace o3tl {
-    template<> struct typed_flags<::sdtools::IdleState> : is_typed_flags<::sdtools::IdleState, 0x0b> {};
+    template<> struct typed_flags<::sdtools::IdleState> : is_typed_flags<::sdtools::IdleState, 0x09> {};
 }
 
 namespace sdtools {
