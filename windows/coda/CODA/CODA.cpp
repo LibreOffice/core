@@ -6599,9 +6599,11 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             if (WindowState* window = findWindow(data.hWnd))
                 window->closingAll = false;
         }
-        else if (s == L"SAVECOMPLETED" || s == L"SAVEFAILED")
+        else if (s == L"SAVESTARTED" || s == L"SAVECOMPLETED" || s == L"SAVEFAILED")
         {
             // Nothing here waits on a save; the message must just not reach wsd.
+            // TODO: An account window closes without asking its page, so a close during a save
+            // can cut off the upload. Defer it from SAVESTARTED to SAVECOMPLETED, as Qt does.
         }
         else if (s == L"SAVEFAILED prompt")
         {
