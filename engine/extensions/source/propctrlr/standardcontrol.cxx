@@ -772,7 +772,7 @@ namespace pcr
         , m_nOperationMode(eMode)
         , m_xEntry(m_xBuilder->weld_entry(u"entry"_ustr))
         , m_xButton(m_xBuilder->weld_menu_button(u"button"_ustr))
-        , m_xPopover(m_xBuilder->weld_widget(u"popover"_ustr))
+        , m_xPopover(m_xBuilder->weld_popover(u"popover"_ustr))
         , m_xTextView(m_xBuilder->weld_text_view(u"textview"_ustr))
         , m_xOk(m_xBuilder->weld_button(u"ok"_ustr))
     {

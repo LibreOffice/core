@@ -358,7 +358,7 @@ namespace pcr
         MultiLineOperationMode m_nOperationMode;
         std::unique_ptr<weld::Entry> m_xEntry;
         std::unique_ptr<weld::MenuButton> m_xButton;
-        std::unique_ptr<weld::Widget> m_xPopover;
+        std::unique_ptr<weld::Popover> m_xPopover;
         std::unique_ptr<weld::TextView> m_xTextView;
         std::unique_ptr<weld::Button> m_xOk;
 

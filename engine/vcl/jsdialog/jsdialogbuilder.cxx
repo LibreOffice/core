@@ -816,6 +816,17 @@ std::unique_ptr<weld::Frame> JSInstanceBuilder::weld_frame(const OUString& id)
     return pWeldWidget;
 }
 
+std::unique_ptr<weld::Grid> JSInstanceBuilder::weld_grid(const OUString& id)
+{
+    ::VclGrid* pGrid = m_xBuilder->get<::VclGrid>(id);
+    auto pWeldWidget = pGrid ? std::make_unique<JSGrid>(this, pGrid, this, false) : nullptr;
+
+    if (pWeldWidget)
+        RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
 std::unique_ptr<weld::MenuButton> JSInstanceBuilder::weld_menu_button(const OUString& id)
 {
     ::MenuButton* pMenuButton = m_xBuilder->get<::MenuButton>(id);
@@ -2194,6 +2205,30 @@ JSFrame::JSFrame(JSDialogSender* pSender, ::VclFrame* pFrame, SalInstanceBuilder
                  bool bTakeOwnership)
     : JSWidget<SalInstanceFrame, ::VclFrame>(pSender, pFrame, pBuilder, bTakeOwnership)
 {
+}
+
+JSGrid::JSGrid(JSDialogSender* pSender, ::VclGrid* pGrid, SalInstanceBuilder* pBuilder,
+               bool bTakeOwnership)
+    : JSWidget<SalInstanceGrid, ::VclGrid>(pSender, pGrid, pBuilder, bTakeOwnership)
+{
+}
+
+void JSGrid::set_child_left_attach(weld::Widget& rWidget, int nAttach)
+{
+    SalInstanceGrid::set_child_left_attach(rWidget, nAttach);
+    sendUpdate();
+}
+
+void JSGrid::set_child_top_attach(weld::Widget& rWidget, int nAttach)
+{
+    SalInstanceGrid::set_child_top_attach(rWidget, nAttach);
+    sendUpdate();
+}
+
+void JSGrid::set_child_column_span(weld::Widget& rWidget, int nCols)
+{
+    SalInstanceGrid::set_child_column_span(rWidget, nCols);
+    sendUpdate();
 }
 
 JSMenuButton::JSMenuButton(JSDialogSender* pSender, ::MenuButton* pMenuButton,

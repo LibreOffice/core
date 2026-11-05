@@ -3432,6 +3432,13 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         auto childrenNode = rJsonWriter.startArray("children");
         while (pChild)
         {
+            // a popover is a hidden docking window, sent as a popup of its own when opened
+            if (pChild->GetType() == WindowType::DOCKINGWINDOW && !pChild->IsVisible())
+            {
+                pChild = pChild->mpWindowImpl->mpNext;
+                continue;
+            }
+
             {
                 auto childNode = rJsonWriter.startStruct();
                 pChild->DumpAsPropertyTree(rJsonWriter);

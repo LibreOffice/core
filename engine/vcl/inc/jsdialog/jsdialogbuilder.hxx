@@ -207,6 +207,7 @@ public:
     weld_scrolled_window(const OUString& id, bool bUserManagedScrolling = false) override;
     virtual std::unique_ptr<weld::RadioButton> weld_radio_button(const OUString& id) override;
     virtual std::unique_ptr<weld::Frame> weld_frame(const OUString& id) override;
+    virtual std::unique_ptr<weld::Grid> weld_grid(const OUString& id) override;
     virtual std::unique_ptr<weld::MenuButton> weld_menu_button(const OUString& id) override;
     virtual std::unique_ptr<weld::Menu> weld_menu(const OUString& id) override;
     virtual std::unique_ptr<weld::Popover> weld_popover(const OUString& id) override;
@@ -869,6 +870,18 @@ public:
         if (bIsSensitive != sensitive)
             sendUpdate();
     }
+};
+
+class JSGrid final : public JSWidget<SalInstanceGrid, ::VclGrid>
+{
+public:
+    JSGrid(JSDialogSender* pSender, ::VclGrid* pGrid, SalInstanceBuilder* pBuilder,
+           bool bTakeOwnership);
+
+    // a child put into its place at runtime reaches the client there
+    virtual void set_child_left_attach(weld::Widget& rWidget, int nAttach) override;
+    virtual void set_child_top_attach(weld::Widget& rWidget, int nAttach) override;
+    virtual void set_child_column_span(weld::Widget& rWidget, int nCols) override;
 };
 
 class JSMenuButton : public JSWidget<SalInstanceMenuButton, ::MenuButton>
