@@ -113,6 +113,7 @@
 #include <map>
 #include <memory>
 #include <mutex>
+#include <optional>
 #include <set>
 #include <sstream>
 #include <string>
@@ -3261,15 +3262,27 @@ void COOLWSD::handleOption(const std::string& optionName,
 
 #if !MOBILEAPP
 
+/// The value of an environment variable, which is removed from the environment once read. The
+/// processes coolwsd starts inherit its environment, and they need none of these options.
+static std::optional<std::string> takeEnvironmentVariable(const std::string& name)
+{
+    const char* value = std::getenv(name.c_str());
+    if (!value)
+        return std::nullopt;
+    std::string result(value);
+    ::unsetenv(name.c_str());
+    return result;
+}
+
 void COOLWSD::initializeEnvOptions()
 {
     int n = 0;
-    char* aliasGroup;
-    while ((aliasGroup = std::getenv(("aliasgroup" + std::to_string(n + 1)).c_str())) != nullptr)
+    std::optional<std::string> aliasGroup;
+    while ((aliasGroup = takeEnvironmentVariable("aliasgroup" + std::to_string(n + 1))))
     {
         bool first = true;
         std::istringstream aliasGroupStream;
-        aliasGroupStream.str(aliasGroup);
+        aliasGroupStream.str(*aliasGroup);
         int j = 0;
         for (std::string alias; std::getline(aliasGroupStream, alias, ',');)
         {
@@ -3295,13 +3308,19 @@ void COOLWSD::initializeEnvOptions()
         _overrideSettings["alias_groups[@mode]"] = "groups";
     }
 
-    char* optionValue;
-    if ((optionValue = std::getenv("username")) != nullptr) _overrideSettings["admin_console.username"] = optionValue;
-    if ((optionValue = std::getenv("password")) != nullptr) _overrideSettings["admin_console.password"] = optionValue;
-    if ((optionValue = std::getenv("server_name")) != nullptr) _overrideSettings["server_name"] = optionValue;
-    if ((optionValue = std::getenv("dictionaries")) != nullptr) _overrideSettings["allowed_languages"] = optionValue;
-    if ((optionValue = std::getenv("remoteconfigurl")) != nullptr) _overrideSettings["remote_config.remote_url"] = optionValue;
-    if ((optionValue = std::getenv("content_security_policy")) != nullptr) _overrideSettings["net.content_security_policy"] = optionValue;
+    static constexpr std::pair<const char*, const char*> settingForVariable[] = {
+        { "username", "admin_console.username" },
+        { "password", "admin_console.password" },
+        { "server_name", "server_name" },
+        { "dictionaries", "allowed_languages" },
+        { "remoteconfigurl", "remote_config.remote_url" },
+        { "content_security_policy", "net.content_security_policy" },
+    };
+    for (const auto& [variable, setting] : settingForVariable)
+    {
+        if (std::optional<std::string> value = takeEnvironmentVariable(variable))
+            _overrideSettings[setting] = std::move(*value);
+    }
 }
 
 void COOLWSD::displayHelp()

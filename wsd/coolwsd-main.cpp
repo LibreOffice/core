@@ -67,6 +67,7 @@ int main(int argc, char** argv)
             argStore.emplace_back(argv[i]);
         for (auto& tok : tokenizeOnWhitespace(extraParams))
             argStore.push_back(std::move(tok));
+        ::unsetenv("extra_params");
 
         argPtrs.reserve(argStore.size() + 1);
         for (auto& a : argStore)
