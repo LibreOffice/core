@@ -494,13 +494,35 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction,
                  decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        let isFrame = navigationAction.targetFrame?.isMainFrame == false
-        if !isFrame {
+        guard let targetFrame = navigationAction.targetFrame else {
             decisionHandler(.allow)
             return
         }
 
+        if targetFrame.isMainFrame {
+            decideMainFrameNavigation(navigationAction, decisionHandler: decisionHandler)
+            return
+        }
+
         decideFrameNavigation(navigationAction, decisionHandler: decisionHandler)
+    }
+
+    // The account window stays on the integrator's site. Anything that would leave it is refused.
+    private func decideMainFrameNavigation(_ navigationAction: WKNavigationAction,
+                                           decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        guard let url = navigationAction.request.url else {
+            decisionHandler(.allow)
+            return
+        }
+
+        let targetOrigin = Self.origin(of: url)
+        if targetOrigin != nil && targetOrigin == integratorOrigin {
+            decisionHandler(.allow)
+            return
+        }
+
+        decisionHandler(.cancel)
+        COWrapper.LOG_ERR("The account window was kept from going to \(targetOrigin ?? "a page with no origin")")
     }
 
     // The integrator opens a document by posting a form with the token and settings into the
