@@ -2964,7 +2964,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	Texture \
 	TexturingMode \
 	ViewState \
-	XAnimation \
 	XBezierPolyPolygon2D \
 	XBitmap \
 	XBitmapCanvas \
