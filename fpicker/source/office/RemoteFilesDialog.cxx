@@ -417,7 +417,7 @@ void RemoteFilesDialog::EnableControls()
 
                         UrlRecord aURLEntries = m_xMasterPasswd->find( sUrl, Reference< XInteractionHandler>() );
 
-                        if( aURLEntries.UserList.hasElements() )
+                        if( aURLEntries.Url == sUrl && aURLEntries.UserList.hasElements() )
                         {
                             m_xManageServices->set_item_sensitive(u"change_password"_ustr, true);
                         }
