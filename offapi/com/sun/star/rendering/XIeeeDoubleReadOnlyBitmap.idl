@@ -21,9 +21,8 @@
 module com { module sun { module star { module rendering {
 
 /** This is a specialized interface for bitmaps containing IEEE
-    doubles for their color components. In contrast to
-    XIeeeDoubleBitmap, this interface only permits
-    read-only access.<p>
+    doubles for their color components.
+    This interface only permits read-only access.<p>
 
     Use this interface for e.g. bitmaps that are calculated
     on-the-fly, or that are pure functional, and thus cannot be
