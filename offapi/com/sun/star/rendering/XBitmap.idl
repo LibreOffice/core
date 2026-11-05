@@ -23,9 +23,8 @@ module com { module sun { module star { module rendering {
 
     This interface contains the generic functionality to be used on
     every XCanvas bitmap object. More format-specific
-    methods can be found at the XIntegerBitmap,
-    XIeeeDoubleBitmap and
-    XHalfFloatBitmap interfaces.<p>
+    methods can be found at the XIntegerBitmap and
+    XIeeeDoubleBitmap interfaces.<p>
 
     @since OOo 2.0
  */

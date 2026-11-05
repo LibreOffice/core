@@ -21,9 +21,8 @@ module com { module sun { module star { module rendering {
 
 /** Specialized interface for bitmaps containing half floats as their
     color components. Half floats are 16 bit wide, and some high-end
-    GPUs already have them as supported frame buffer format. In
-    contrast to XHalfFloatBitmap, this interface only
-    permits read-only access.<p>
+    GPUs already have them as supported frame buffer format.
+    This interface only permits read-only access.<p>
 
     Use this interface for e.g. bitmaps that are calculated
     on-the-fly, or that are pure functional, and thus cannot be
