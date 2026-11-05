@@ -142,17 +142,6 @@
 
     <issue
         id="GradleDependency"
-        message="A newer version of androidx.constraintlayout:constraintlayout than 2.2.1 is available: 2.2.2"
-        errorLine1="constraintlayout_version = &quot;2.2.1&quot;"
-        errorLine2="                           ~~~~~~~">
-        <location
-            file="$HOME/development/git/libreoffice-WORKTREE-android/android/gradle/libs.versions.toml"
-            line="2"
-            column="28"/>
-    </issue>
-
-    <issue
-        id="GradleDependency"
         message="A newer version of com.google.android.material:material than 1.13.0 is available: 1.14.0"
         errorLine1="material_version = &quot;1.13.0&quot;"
         errorLine2="                   ~~~~~~~~">
