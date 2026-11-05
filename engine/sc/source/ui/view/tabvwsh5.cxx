@@ -282,6 +282,10 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     {
                         SetTabNo(0);
                     }
+                    // An edit can record a change or remove one, which changes whether there
+                    // are changes to go to, accept or reject.
+                    if (rDoc.GetChangeTrack())
+                        InvalidateChangeActionSlots();
                 }
                 break;
 

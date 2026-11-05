@@ -16,13 +16,17 @@ describe(['tagdesktop'], 'Accept and reject tracked changes from the Calc Review
 		}.bind(this));
 	});
 
-	// Record two edits, in A1 and A2, and come back to A1.
-	function recordTwoEdits(win) {
+	function startRecording(win) {
 		desktopHelper.selectNotebookbarTab('Review');
 		desktopHelper.getNbItem('TraceChangeMode', 'Review').should('not.have.attr', 'disabled');
 		desktopHelper.getNbIcon('TraceChangeMode', 'Review').click();
 		helper.processToIdle(win);
 		helper.waitForMapState('.uno:TraceChangeMode', 'true');
+	}
+
+	// Record two edits, in A1 and A2, and come back to A1.
+	function recordTwoEdits(win) {
+		startRecording(win);
 
 		calcHelper.enterCellAddressAndConfirm(win, 'A1');
 		helper.typeIntoDocument('first{enter}second{enter}');
@@ -62,6 +66,24 @@ describe(['tagdesktop'], 'Accept and reject tracked changes from the Calc Review
 		desktopHelper.getNbItem('PreviousTrackedChange', 'Review').should('not.have.attr', 'disabled');
 		desktopHelper.getNbIcon('PreviousTrackedChange', 'Review').click();
 		calcHelper.assertAddressAfterIdle(this.win, 'A1');
+	});
+
+	it('Next and Previous turn on when deleting cell content records a change', function() {
+		calcHelper.enterCellAddressAndConfirm(this.win, 'A1');
+		helper.typeIntoDocument('first{enter}');
+		calcHelper.assertAddressAfterIdle(this.win, 'A2');
+
+		startRecording(this.win);
+		desktopHelper.getNbItem('NextTrackedChange', 'Review').should('have.attr', 'disabled');
+		desktopHelper.getNbItem('PreviousTrackedChange', 'Review').should('have.attr', 'disabled');
+
+		// Delete empties the cell without starting to edit it, so only the recorded change can
+		// turn the buttons on.
+		calcHelper.enterCellAddressAndConfirm(this.win, 'A1');
+		helper.typeIntoDocument('{del}');
+		helper.processToIdle(this.win);
+		desktopHelper.getNbItem('NextTrackedChange', 'Review').should('not.have.attr', 'disabled');
+		desktopHelper.getNbItem('PreviousTrackedChange', 'Review').should('not.have.attr', 'disabled');
 	});
 
 	it('Reject All from the Reject menu removes every recorded edit', function() {
