@@ -1,6 +1,7 @@
 /* global describe it cy beforeEach require expect */
 
 var helper = require('../../common/helper');
+var desktopHelper = require('../../common/desktop_helper');
 
 // The caret rectangle in twips, read once the caret has left the given rectangle.
 function readCaretAfterMove(previous) {
@@ -362,5 +363,145 @@ describe(['tagdesktop'], 'Writer drag and drop of a text selection in the multi-
 		helper.textSelectionShouldExist();
 		helper.copy();
 		helper.expectTextForClipboard('sixPage ');
+	});
+});
+
+describe(['tagdesktop'], 'Writer drag and drop of a text selection over a shape.', function() {
+
+	beforeEach(function() {
+		// Three paragraphs: Test1 followed by a rectangle in the same line, Test3, Test2.
+		helper.setupAndLoadDocument('writer/drag_drop_text_shape.fodt');
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
+	});
+
+	it('Over the shape the drop caret goes away, and a release there moves nothing', function() {
+		var win = this.win;
+
+		// The rectangle lies between the end of "Test1" and the end of the first paragraph. A
+		// modifier stays held for the rest of the typed string, so each key goes alone.
+		helper.assertCursorAndFocus();
+		helper.typeIntoDocument('{ctrl}{home}');
+		helper.processToIdle(win);
+		var startOfTest1 = readCaretAfterMove(null);
+		for (let i = 0; i < 5; ++i)
+			helper.typeIntoDocument('{rightarrow}');
+		helper.processToIdle(win);
+		var endOfTest1Text = readCaretAfterMove(startOfTest1);
+		helper.typeIntoDocument('{end}');
+		helper.processToIdle(win);
+		var endOfFirstParagraph = readCaretAfterMove(endOfTest1Text);
+		helper.typeIntoDocument('{downarrow}');
+		helper.typeIntoDocument('{end}');
+		helper.processToIdle(win);
+		var endOfTest3 = readCaretAfterMove(endOfFirstParagraph);
+		helper.typeIntoDocument('{ctrl}{end}');
+		helper.processToIdle(win);
+		var endOfTest2 = readCaretAfterMove(endOfTest3);
+		helper.typeIntoDocument('{home}');
+		helper.processToIdle(win);
+		var startOfTest2 = readCaretAfterMove(endOfTest2);
+
+		cy.then(function() {
+			var middle = screenPoint(win, (startOfTest2.x1 + endOfTest2.x1) / 2,
+				(startOfTest2.y1 + startOfTest2.y2) / 2);
+			cy.cGet('body').dblclick(middle.x, middle.y);
+		});
+		helper.textSelectionShouldExist();
+		helper.processToIdle(win);
+		helper.waitForTimers(win, 'clicktimer');
+
+		// When Test2 is dragged from inside it to the end of Test3, where the drop caret shows,
+		// and on to the rectangle, with the button held:
+		var onShape;
+		cy.then(function() {
+			var start = screenPoint(win, (startOfTest2.x1 + endOfTest2.x1) / 2,
+				(startOfTest2.y1 + startOfTest2.y2) / 2);
+			var overText = screenPoint(win, endOfTest3.x1, (endOfTest3.y1 + endOfTest3.y2) / 2);
+			onShape = screenPoint(win, (endOfTest1Text.x1 + endOfFirstParagraph.x1) / 2,
+				(endOfFirstParagraph.y1 + endOfFirstParagraph.y2) / 2);
+			cy.cGet('body').realMouseDown({ x: start.x, y: start.y });
+			for (let step = 1; step <= 5; ++step) {
+				cy.cGet('body').realMouseMove(start.x + (overText.x - start.x) * step / 5,
+					start.y + (overText.y - start.y) * step / 5);
+			}
+			helper.processToIdle(win);
+			cy.cGet('.text-drop-caret').should('be.visible');
+			for (let step = 1; step <= 5; ++step) {
+				cy.cGet('body').realMouseMove(overText.x + (onShape.x - overText.x) * step / 5,
+					overText.y + (onShape.y - overText.y) * step / 5);
+			}
+		});
+		helper.processToIdle(win);
+
+		// Then the drop caret goes away, as the text would land nowhere there:
+		cy.cGet('.text-drop-caret').should('not.be.visible');
+
+		// And a release there moves nothing:
+		cy.then(function() {
+			cy.cGet('body').realMouseUp({ x: onShape.x, y: onShape.y });
+		});
+		helper.processToIdle(win);
+		helper.setDummyClipboardForCopy();
+		helper.typeIntoDocument('{ctrl}{end}');
+		helper.typeIntoDocument('{shift}{home}');
+		helper.textSelectionShouldExist();
+		helper.copy();
+		helper.expectTextForClipboard('Test2');
+	});
+});
+
+describe(['tagdesktop'], 'Writer drag and drop of a text selection in the compare view.', function() {
+
+	beforeEach(function() {
+		cy.viewport(1400, 600);
+		// Three paragraphs: Test1, Test3, Test2.
+		helper.setupAndLoadDocument('writer/drag_drop_text.fodt');
+		desktopHelper.switchUIToNotebookbar();
+		cy.cGet('#Review-tab-label').click();
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
+	});
+
+	it('A press inside the selection starts its drag where the compare view shows it', function() {
+		var win = this.win;
+
+		// Given the compare view, with Test2 selected:
+		desktopHelper.getNbIconArrow('TrackChanges', 'Review').click();
+		cy.cGet('#compare-tracked-change-button').filter(':visible').click();
+		cy.cGet('#compare-tracked-change-entry-1').click();
+		cy.cGet('.compare-changes-labels').should('not.have.css', 'display', 'none');
+		helper.processToIdle(win);
+		cy.getFrameWindow().should(function(frameWindow) {
+			expect(frameWindow.app.activeDocument.activeLayout.type).to.equal('ViewLayoutCompareChanges');
+		});
+		helper.typeIntoDocument('{ctrl}{end}');
+		helper.typeIntoDocument('{shift}{home}');
+		helper.textSelectionShouldExist();
+		helper.processToIdle(win);
+
+		// When the button is pressed in the middle of the selection, where the view shows it:
+		var press;
+		cy.getFrameWindow().should(function(frameWindow) {
+			var rectangles = frameWindow.app.activeDocument.activeView.selectionRectangles;
+			expect(rectangles.length).to.be.above(0);
+			var middle = layoutScreenPoint(frameWindow, rectangles[0][0] + rectangles[0][2] / 2,
+				rectangles[0][1] + rectangles[0][3] / 2);
+			press = middle;
+		});
+		cy.then(function() {
+			cy.cGet('body').realMouseDown({ x: press.x, y: press.y });
+		});
+
+		// Then the press counts as one inside the selection, which a drag of it starts from:
+		cy.getFrameWindow().should(function(frameWindow) {
+			expect(frameWindow.app.activeDocument.mouseControl.pressedInSelection).to.be.true;
+		});
+
+		cy.then(function() {
+			cy.cGet('body').realMouseUp({ x: press.x, y: press.y });
+		});
 	});
 });
