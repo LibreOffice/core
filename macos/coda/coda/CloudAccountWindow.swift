@@ -34,6 +34,7 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
 
     private let accountId: String
     private let webView: WKWebView
+    private let integratorOrigin: String?
     private var blockedOrigins: Set<String> = []
     private var editorForm: Data?
     private var editorFormUrl: URL?
@@ -57,6 +58,7 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
 
     private init(accountId: String, url: URL) {
         self.accountId = accountId
+        self.integratorOrigin = Self.origin(of: url)
 
         let window = NSWindow(contentRect: NSRect(origin: .zero, size: Self.defaultSize),
                               styleMask: [.titled, .closable, .resizable, .miniaturizable],
@@ -130,6 +132,27 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
     // WebKit fills in frameInfo, so a page cannot pass itself off as another frame.
     private func isEditorFrame(_ frameInfo: WKFrameInfo) -> Bool {
         return !frameInfo.isMainFrame && frameInfo.request.url == editorFormUrl
+    }
+
+    // "https://host", with ":port" only when a port is given. WebKit gives port 0 for none.
+    private static func origin(scheme: String?, host: String?, port: Int?) -> String? {
+        guard let scheme = scheme?.lowercased(), let host = host?.lowercased(), !host.isEmpty else {
+            return nil
+        }
+
+        guard let port, port != 0 else {
+            return scheme + "://" + host
+        }
+
+        return scheme + "://" + host + ":\(port)"
+    }
+
+    private static func origin(of url: URL) -> String? {
+        return origin(scheme: url.scheme, host: url.host, port: url.port)
+    }
+
+    private static func origin(of securityOrigin: WKSecurityOrigin) -> String? {
+        return origin(scheme: securityOrigin.protocol, host: securityOrigin.host, port: securityOrigin.port)
     }
 
     // comes from WKScriptMessageHandler
@@ -494,6 +517,14 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         let isEditorPage = url.path.hasSuffix("/cool.html")
         if !isPost || !isEditorPage {
             decisionHandler(.allow)
+            return
+        }
+
+        // Only the integrator's pages open an editor.
+        let posterOrigin = Self.origin(of: navigationAction.sourceFrame.securityOrigin)
+        if posterOrigin == nil || posterOrigin != integratorOrigin {
+            COWrapper.LOG_ERR("An editor form was refused: it came from \(posterOrigin ?? "no origin")")
+            decisionHandler(.cancel)
             return
         }
 
