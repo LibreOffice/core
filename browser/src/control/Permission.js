@@ -252,6 +252,13 @@ window.L.Map.include({
 	// of the title text follows outside the pill.
 	_showTwoCardDialog: function (id, title, subtitle, cards, titleAvatar) {
 		var dialogId = this.uiManager.generateModalId(id);
+		// The same dialog again (as when a user joins and starts editing at once) keeps the one
+		// that is shown or still being built (as a second build would replace its wired cards):
+		this._twoCardDialogsBuilding = this._twoCardDialogsBuilding || new Set();
+		if (document.getElementById(dialogId) || this._twoCardDialogsBuilding.has(dialogId)) {
+			return;
+		}
+		this._twoCardDialogsBuilding.add(dialogId);
 		var that = this;
 
 		var titleChildren = [];
@@ -409,8 +416,11 @@ window.L.Map.include({
 						img.style.display = 'none';
 				}
 			}
-			if (anyMissing && ++tries < 50)
+			if (anyMissing && ++tries < 50) {
 				setTimeout(wire, 50);
+			} else {
+				that._twoCardDialogsBuilding.delete(dialogId);
+			}
 		};
 		setTimeout(wire, 0);
 	},
