@@ -3869,6 +3869,12 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
     if (GetProperty(rXPropSet, u"ParaIsHangingPunctuation"_ustr))
         mAny >>= bHangingPunctuation;
 
+    // A paragraph states whether its Latin text may break between lines either way round,
+    // because a paragraph that leaves the attribute out may break it.
+    bool bLatinLineBreak = false;
+    if (GetProperty(rXPropSet, u"ParaIsHyphenation"_ustr))
+        mAny >>= bLatinLineBreak;
+
     // ST_TextIndentLevelType
     const sal_Int16 nOutLevel = std::min(nLevel, sal_Int16(8));
 
@@ -3893,6 +3899,7 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
                            XML_algn, GetAlignment( nAlignment, mbPlaceholder ),
                            XML_defTabSz, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaDefaultTabSize)), nParaDefaultTabSize > 0),
                            XML_rtl, sax_fastparser::UseIf(ToPsz10(bRtl), bRtl),
+                           XML_latinLnBrk, ToPsz10(bLatinLineBreak),
                            XML_hangingPunct, ToPsz10(bHangingPunctuation));
     else
         // A placeholder paragraph with no visible bullet, an empty line, or a level without
@@ -3906,6 +3913,7 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
                            XML_algn, GetAlignment( nAlignment, mbPlaceholder ),
                            XML_defTabSz, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaDefaultTabSize)), nParaDefaultTabSize > 0),
                            XML_rtl, sax_fastparser::UseIf(ToPsz10(bRtl), bRtl),
+                           XML_latinLnBrk, ToPsz10(bLatinLineBreak),
                            XML_hangingPunct, ToPsz10(bHangingPunctuation));
 
 

@@ -762,6 +762,21 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testParagraphStatesItsHangingPunctuatio
     assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p[2]/a:pPr", "hangingPunct", u"1");
 }
 
+// A paragraph states whether its Latin text may break between lines, whichever way round it is.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testParagraphStatesItsLatinLineBreak)
+{
+    // Given one paragraph that keeps its Latin text whole and one that lets it break:
+    createSdImpressDoc("pptx/latin-line-break.pptx");
+
+    save(TestFilter::PPTX);
+
+    // Without the fix in place, neither paragraph said anything, and the setting of a paragraph
+    // that says nothing is the one the reader holds rather than the one the document gave.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p[1]/a:pPr", "latinLnBrk", u"0");
+    assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p[2]/a:pPr", "latinLnBrk", u"1");
+}
+
 // A paragraph keeps the room it holds its text away from the right edge in.
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testParagraphKeepsItsRightIndent)
 {
