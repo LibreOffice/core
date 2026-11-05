@@ -29,6 +29,7 @@ public:
 
     void testTextDistancesOOXML();
     void testTextDistancesOOXML_LargerThanTextAreaSpecialCase();
+    void testShortShapeStatesNoDistancesOfItsOwn();
     void testTextDistancesOOXML_Export();
     void testTextDistancesODP_OOXML_Export();
     void testTextDistancesWithRotationOOXML();
@@ -36,6 +37,7 @@ public:
     CPPUNIT_TEST_SUITE(ShapeImportExportTest);
     CPPUNIT_TEST(testTextDistancesOOXML);
     CPPUNIT_TEST(testTextDistancesOOXML_LargerThanTextAreaSpecialCase);
+    CPPUNIT_TEST(testShortShapeStatesNoDistancesOfItsOwn);
     CPPUNIT_TEST(testTextDistancesOOXML_Export);
     CPPUNIT_TEST(testTextDistancesODP_OOXML_Export);
     CPPUNIT_TEST(testTextDistancesWithRotationOOXML);
@@ -251,6 +253,31 @@ void ShapeImportExportTest::testTextDistancesOOXML_LargerThanTextAreaSpecialCase
             CPPUNIT_ASSERT_EQUAL(tools::Long(-792), pTextObj->GetTextLowerDistance());
         }
     }
+}
+
+/* A shape too short for the distances it is read with states none of its own */
+void ShapeImportExportTest::testShortShapeStatesNoDistancesOfItsOwn()
+{
+    createSdImpressDoc("TextDistancesShortShape.pptx");
+
+    save(TestFilter::PPTX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // The drawing takes the excess off a distance that reaches past the text area, and the
+    // reading of a presentation does the same, so a shape keeping the distances it is read with
+    // comes back with them whether the file names them or not.
+    // Without the fix: tIns and bIns of 18000.
+    assertXPathNoAttribute(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr", "tIns");
+    assertXPathNoAttribute(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr", "bIns");
+
+    // A shape stating distances of its own keeps them, cut down to what its text area holds.
+    assertXPathAttrs(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:bodyPr",
+                     { { "tIns", u"18000" }, { "bIns", u"18000" } });
+
+    // A shape long enough for them states none either.
+    assertXPathNoAttribute(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[3]/p:txBody/a:bodyPr", "tIns");
+    assertXPathNoAttribute(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[3]/p:txBody/a:bodyPr", "bIns");
 }
 
 /* Test export of text distances (insets) - conversion back of special case */

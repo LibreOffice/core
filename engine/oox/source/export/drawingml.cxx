@@ -4692,6 +4692,46 @@ void DrawingML::WriteBodyProps(const cpo::uno::Reference< cpo::uno::XInterface >
     const sal_Int32 nReadTopBottomInset
         = bReadWithItsOwnInsets ? mconstReadTopBottomInset : mconstDefaultTopBottomInset;
 
+    // What the file states is decided on the distances the shape keeps, before the drawing takes
+    // any excess off them below. A shape keeping the distances a file is read with states none of
+    // its own, and the reading of a presentation takes the same excess off again.
+    const bool bStatesLeftInset = bRequireInset || nLeft != nReadLeftRightInset;
+    const bool bStatesRightInset = bRequireInset || nRight != nReadLeftRightInset;
+    const bool bStatesTopInset = bRequireInset || nTop != nReadTopBottomInset;
+    const bool bStatesBottomInset = bRequireInset || nBottom != nReadTopBottomInset;
+
+    // Transform the text distance values so they are compatible with OOXML insets
+    if (xShape.is())
+    {
+        sal_Int32 nTextHeight = xShape->getSize().Height; // Hmm, default
+
+        // CustomShape can have text area different from shape rectangle
+        auto* pCustomShape
+            = dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape));
+        if (pCustomShape)
+        {
+            const EnhancedCustomShape2d aCustomShape2d(*pCustomShape);
+            nTextHeight = aCustomShape2d.GetTextRect().getOpenHeight();
+            if (DOCUMENT_DOCX == meDocumentType)
+                nTextHeight = convertTwipToMm100(nTextHeight);
+        }
+
+        // A shape that states no height of its own has no text area to measure against.
+        if (nTextHeight > 0 && nTop + nBottom >= nTextHeight)
+        {
+            // Where the two distances together reach further than the text area, the slide is
+            // drawn by taking half of what they reach past it off each of them. The reading of a
+            // presentation does the same, so a document written this way comes back as it went.
+            // One of them can go below nothing that way, and is written so, because reading a
+            // PPTX file gives such a distance wherever the insets in the file reach past the
+            // shape. Half of an odd excess is rounded to the nearest, as the drawing takes the
+            // exact half.
+            const sal_Int32 nExcess = (nTop + nBottom - nTextHeight + 1) / 2;
+            nTop -= nExcess;
+            nBottom -= nExcess;
+        }
+    }
+
     mpFS->startElementNS( (nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr,
                            XML_rot, sTextRotateAngleMSUnit,
                            XML_vertOverflow, sVertOverflow,
@@ -4699,13 +4739,13 @@ void DrawingML::WriteBodyProps(const cpo::uno::Reference< cpo::uno::XInterface >
                            XML_vert, sWritingMode,
                            XML_wrap, pWrap,
                            XML_lIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeft)),
-                                                           bRequireInset || nLeft != nReadLeftRightInset),
+                                                           bStatesLeftInset),
                            XML_tIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nTop)),
-                                                           bRequireInset || nTop != nReadTopBottomInset),
+                                                           bStatesTopInset),
                            XML_rIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nRight)),
-                                                           bRequireInset || nRight != nReadLeftRightInset),
+                                                           bStatesRightInset),
                            XML_bIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nBottom)),
-                                                           bRequireInset || nBottom != nReadTopBottomInset),
+                                                           bStatesBottomInset),
                            XML_numCol, sax_fastparser::UseIf(OString::number(nCols), nCols > 0),
                            XML_spcCol, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nColSpacing)), nCols > 0 && nColSpacing >= 0),
                            XML_fromWordArt, sax_fastparser::UseIf("1", bFromWordArt),
@@ -5042,38 +5082,6 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         nRight = 0;
         nTop = 0;
         nBottom = 0;
-    }
-
-    // Transform the text distance values so they are compatible with OOXML insets
-    if (xShape.is())
-    {
-        sal_Int32 nTextHeight = xShape->getSize().Height; // Hmm, default
-
-        // CustomShape can have text area different from shape rectangle
-        auto* pCustomShape
-            = dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape));
-        if (pCustomShape)
-        {
-            const EnhancedCustomShape2d aCustomShape2d(*pCustomShape);
-            nTextHeight = aCustomShape2d.GetTextRect().getOpenHeight();
-            if (DOCUMENT_DOCX == meDocumentType)
-                nTextHeight = convertTwipToMm100(nTextHeight);
-        }
-
-        // A shape that states no height of its own has no text area to measure against.
-        if (nTextHeight > 0 && nTop + nBottom >= nTextHeight)
-        {
-            // Where the two distances together reach further than the text area, the slide is
-            // drawn by taking half of what they reach past it off each of them. The reading of a
-            // presentation does the same, so a document written this way comes back as it went.
-            // One of them can go below nothing that way, and is written so, because reading a
-            // PPTX file gives such a distance wherever the insets in the file reach past the
-            // shape. Half of an odd excess is rounded to the nearest, as the drawing takes the
-            // exact half.
-            const sal_Int32 nExcess = (nTop + nBottom - nTextHeight + 1) / 2;
-            nTop -= nExcess;
-            nBottom -= nExcess;
-        }
     }
 
     if (bBodyPr)
