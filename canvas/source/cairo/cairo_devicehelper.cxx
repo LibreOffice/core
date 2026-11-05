@@ -165,13 +165,6 @@ namespace cairocanvas
                 false ));
     }
 
-    uno::Reference< rendering::XVolatileBitmap > DeviceHelper::createVolatileBitmap(
-        const uno::Reference< rendering::XGraphicDevice >&  ,
-        const geometry::IntegerSize2D&                      /*size*/ )
-    {
-        return uno::Reference< rendering::XVolatileBitmap >();
-    }
-
     uno::Reference< rendering::XBitmap > DeviceHelper::createCompatibleAlphaBitmap(
         const uno::Reference< rendering::XGraphicDevice >&  rDevice,
         const geometry::IntegerSize2D&                      size )

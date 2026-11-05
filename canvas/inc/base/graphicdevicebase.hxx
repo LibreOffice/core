@@ -177,17 +177,6 @@ namespace canvas
             return maDeviceHelper.createCompatibleBitmap( this, size );
         }
 
-        virtual css::uno::Reference< css::rendering::XVolatileBitmap > SAL_CALL createVolatileBitmap( const css::geometry::IntegerSize2D& size ) override
-        {
-            canvastools::verifyBitmapSize(size,
-                                    __func__,
-                                    static_cast< cppu::OWeakObject* >(this));
-
-            MutexType aGuard( BaseType::m_aMutex );
-
-            return maDeviceHelper.createVolatileBitmap( this, size );
-        }
-
         virtual css::uno::Reference< css::rendering::XBitmap > SAL_CALL createCompatibleAlphaBitmap( const css::geometry::IntegerSize2D& size ) override
         {
             canvastools::verifyBitmapSize(size,

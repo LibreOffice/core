@@ -126,8 +126,6 @@ canvas/inc/base/graphicdevicebase.hxx:178
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XBezierPolyPolygon2D> canvas::GraphicDeviceBase::createCompatibleBezierPolyPolygon(const class com::sun::star::uno::Sequence<class com::sun::star::uno::Sequence<struct com::sun::star::geometry::RealBezierSegment2D> > &,)
 canvas/inc/base/graphicdevicebase.hxx:185
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> canvas::GraphicDeviceBase::createCompatibleBitmap(const struct com::sun::star::geometry::IntegerSize2D &,)
-canvas/inc/base/graphicdevicebase.hxx:196
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XVolatileBitmap> canvas::GraphicDeviceBase::createVolatileBitmap(const struct com::sun::star::geometry::IntegerSize2D &,)
 canvas/inc/base/graphicdevicebase.hxx:207
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> canvas::GraphicDeviceBase::createCompatibleAlphaBitmap(const struct com::sun::star::geometry::IntegerSize2D &,)
 canvas/inc/base/graphicdevicebase.hxx:218
