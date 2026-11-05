@@ -13,17 +13,6 @@
 //import org.openoffice.test.tools.DocumentType;
 //import org.openoffice.test.tools.OfficeDocument;
 
-enum class DocumentType
-{
-    WRITER,
-    CALC,
-    DRAWING,
-    XMLFORM,
-    PRESENTATION,
-    FORMULA,
-    UNKNOWN
-};
-
 class DocumentTestBase : public DocumentTest
 {
 public:

@@ -66,12 +66,6 @@ class ViewShell;
 class ViewShellBase;
 class FrameView;
 
-enum AnimationMode
-{
-    ANIMATIONMODE_SHOW,
-    ANIMATIONMODE_PREVIEW
-};
-
 typedef comphelper::WeakComponentImplHelper< css::presentation::XPresentation, css::lang::XServiceInfo > SlideshowBase;
 
 class SlideShow final : public SlideshowBase

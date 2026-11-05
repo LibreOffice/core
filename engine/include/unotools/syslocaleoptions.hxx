@@ -39,14 +39,6 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtSysLocaleOptions final : public utl:
 
 public:
 
-    enum class EOption
-    {
-        Locale,
-        Currency,
-        DatePatterns,
-        DecimalSeparator,
-        IgnoreLanguageChange
-    };
                                 SvtSysLocaleOptions();
                                 virtual ~SvtSysLocaleOptions() override;
 

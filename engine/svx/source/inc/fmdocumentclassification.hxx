@@ -34,7 +34,6 @@ namespace svxform
         eDrawingDocument,
         ePresentationDocument,
         eEnhancedForm,
-        eDatabaseForm,
 
         eUnknownDocumentType
     };

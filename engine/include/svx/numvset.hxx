@@ -26,8 +26,7 @@ enum class NumberingPageType
     DOCBULLET,
     BULLET,
     SINGLENUM,
-    OUTLINE,
-    BITMAP
+    OUTLINE
 };
 
 #endif

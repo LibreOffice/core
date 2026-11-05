@@ -39,17 +39,13 @@ namespace sdtools {
         */
         FullScreenShowActive = 0x0002,
 
-        /** A slide show is running in a window.
-        */
-        WindowShowActive = 0x0004,
-
         /** A window is being painted.
         */
         WindowPainting = 0x0008,
     };
 } // end of namespace ::sdtools
 namespace o3tl {
-    template<> struct typed_flags<::sdtools::IdleState> : is_typed_flags<::sdtools::IdleState, 0x0f> {};
+    template<> struct typed_flags<::sdtools::IdleState> : is_typed_flags<::sdtools::IdleState, 0x0b> {};
 }
 
 namespace sdtools {

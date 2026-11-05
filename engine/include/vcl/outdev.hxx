@@ -132,7 +132,7 @@ namespace com::sun::star::awt {
 
 enum OutDevType { OUTDEV_WINDOW, OUTDEV_PRINTER, OUTDEV_VIRDEV, OUTDEV_PDF };
 
-enum class OutDevViewType { DontKnow, PrintPreview, SlideShow };
+enum class OutDevViewType { DontKnow, PrintPreview };
 
 // OutputDevice
 
