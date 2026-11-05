@@ -67,6 +67,7 @@
 #include <common/AIHttpTransport.hpp>
 #include <common/Clipboard.hpp>
 #include <common/Common.hpp>
+#include <common/EditorFrameMessages.hpp>
 #include <common/JsonUtil.hpp>
 #include <common/LangUtil.hpp>
 #include <common/Protocol.hpp>
@@ -5368,6 +5369,35 @@ static bool isEditorFrame(const DocumentTab& account, ICoreWebView2Frame* frame)
     return id != 0 && id == frameIdOf(account.editorFrame.get());
 }
 
+// What CODA's editor page may ask native code for. A refused call still gets an
+// empty reply, because the page code that made it waits for one.
+static bool isAllowedFromEditorPage(const DocumentTab& account, const std::wstring& message)
+{
+    const std::string text = Util::wide_string_to_string(message);
+    if (text.starts_with("ERR ") || text.starts_with("DBG "))
+        return true;
+
+    if (text.starts_with("MSG "))
+        return EditorFrameMessages::isAllowed(text.substr(4));
+
+    // "CALL <id> <name> <arguments>"
+    const StringVector tokens = StringVector::tokenize(text);
+    const bool isCall = tokens.size() > 2 && tokens.equals(0, "CALL");
+    if (!isCall)
+    {
+        LOG_WRN("A message from the editor frame was refused: it is not MSG, CALL, ERR or DBG: "
+                << text);
+        return false;
+    }
+
+    if (EditorFrameMessages::isAllowedCall(tokens[2]))
+        return true;
+
+    const int id = std::atoi(tokens[1].c_str());
+    postReplyToCall(account.hWnd, account.tabId, id, std::string());
+    return false;
+}
+
 static void handleEditorFrameMessage(int accountTabId, ICoreWebView2Frame* sender,
                                      ICoreWebView2WebMessageReceivedEventArgs* args)
 {
@@ -5399,6 +5429,9 @@ static void handleEditorFrameMessage(int accountTabId, ICoreWebView2Frame* sende
         LOG_WRN("A message from the editor frame was refused: it is not text");
         return;
     }
+
+    if (!isAllowedFromEditorPage(*account, message.get()))
+        return;
 
     processMessage(*account, message);
 }
