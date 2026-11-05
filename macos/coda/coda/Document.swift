@@ -827,7 +827,9 @@ class Document: NSDocument {
                 COWrapper.LOG_TRC("No view for appDocId \(self.appDocId), dropping: \(truncatedJS)")
                 return
             }
-            webView.evaluateJavaScript(js, in: self.editorFrame, in: .page) { result in
+            // For a remote document, CODA runs in the "coda" world, so its messages go there too.
+            let world = self.editorFrame == nil ? WKContentWorld.page : CloudAccountWindow.world
+            webView.evaluateJavaScript(js, in: self.editorFrame, in: world) { result in
                 if case .failure(let error as NSError) = result {
                     COWrapper.LOG_ERR("Error after \(truncatedJS): \(error.localizedDescription)")
                     if let jsException = error.userInfo["WKJavaScriptExceptionMessage"] as? String {

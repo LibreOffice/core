@@ -649,31 +649,34 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
      * message handlers. Registers both on the given content controller.
      */
     static func addDiagnosticMessageHandlers(to contentController: WKUserContentController,
-                                             handler: WKScriptMessageHandlerWithReply) {
-        contentController.addScriptMessageHandler(handler, contentWorld: .page, name: "error")
-        contentController.addScriptMessageHandler(handler, contentWorld: .page, name: "debug")
+                                             handler: WKScriptMessageHandlerWithReply,
+                                             world: WKContentWorld = .page) {
+        contentController.addScriptMessageHandler(handler, contentWorld: world, name: "error")
+        contentController.addScriptMessageHandler(handler, contentWorld: world, name: "debug")
 #if DEBUG
-        addConsoleForwarding(to: contentController, handler: handler)
+        addConsoleForwarding(to: contentController, handler: handler, world: world)
 #endif
     }
 
     /** Counterpart to addDiagnosticMessageHandlers, for use when tearing a web view down. */
-    static func removeDiagnosticMessageHandlers(from contentController: WKUserContentController?) {
-        contentController?.removeScriptMessageHandler(forName: "error")
-        contentController?.removeScriptMessageHandler(forName: "debug")
+    static func removeDiagnosticMessageHandlers(from contentController: WKUserContentController?,
+                                                world: WKContentWorld = .page) {
+        contentController?.removeScriptMessageHandler(forName: "error", contentWorld: world)
+        contentController?.removeScriptMessageHandler(forName: "debug", contentWorld: world)
 #if DEBUG
-        contentController?.removeScriptMessageHandler(forName: "console")
+        contentController?.removeScriptMessageHandler(forName: "console", contentWorld: world)
 #endif
     }
 
     private static func addConsoleForwarding(to contentController: WKUserContentController,
-                                             handler: WKScriptMessageHandlerWithReply) {
-        contentController.addScriptMessageHandler(handler, contentWorld: .page, name: "console")
+                                             handler: WKScriptMessageHandlerWithReply,
+                                             world: WKContentWorld) {
+        contentController.addScriptMessageHandler(handler, contentWorld: world, name: "console")
         let levels = COWrapper.traceEnabled()
             ? "['debug', 'log', 'info', 'warn', 'error']" : "['warn', 'error']"
         let source = consoleForwardingScript.replacingOccurrences(of: "%LEVELS%", with: levels)
         contentController.addUserScript(WKUserScript(source: source, injectionTime: .atDocumentStart,
-                                                     forMainFrameOnly: false, in: .page))
+                                                     forMainFrameOnly: false, in: world))
     }
 
     private static let consoleForwardingScript = #"""

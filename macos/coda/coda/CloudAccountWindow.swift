@@ -15,7 +15,9 @@ import WebKit
 final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigationDelegate,
                                 WKScriptMessageHandler, WKScriptMessageHandlerWithReply {
     private static let defaultSize = NSSize(width: 1200, height: 800)
-    private static let world = WKContentWorld.world(name: "coda")
+    // CODA's scripts run in this "coda" world. The COOL server's scripts run in WebKit's default
+    // page world, which has no access to CODA's message handlers.
+    static let world = WKContentWorld.world(name: "coda")
     private static let firstMacOSWithSafariVersion = 26
     private static let safariVersionsAheadOfMacOS = 3
 
@@ -90,8 +92,8 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
 
         let contentController = webView.configuration.userContentController
         contentController.add(self, contentWorld: Self.world, name: "frameLoaded")
-        contentController.addScriptMessageHandler(self, contentWorld: .page, name: "lok")
-        ViewController.addDiagnosticMessageHandlers(to: contentController, handler: self)
+        contentController.addScriptMessageHandler(self, contentWorld: Self.world, name: "lok")
+        ViewController.addDiagnosticMessageHandlers(to: contentController, handler: self, world: Self.world)
         webView.load(URLRequest(url: url))
     }
 
@@ -119,8 +121,8 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
     func windowWillClose(_ notification: Notification) {
         let contentController = webView.configuration.userContentController
         contentController.removeScriptMessageHandler(forName: "frameLoaded", contentWorld: Self.world)
-        contentController.removeScriptMessageHandler(forName: "lok")
-        ViewController.removeDiagnosticMessageHandlers(from: contentController)
+        contentController.removeScriptMessageHandler(forName: "lok", contentWorld: Self.world)
+        ViewController.removeDiagnosticMessageHandlers(from: contentController, world: Self.world)
         closeRemoteDocument()
         Self.openWindows[accountId] = nil
     }
@@ -353,7 +355,7 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
             Self.putCodaPageInScript,
             arguments: ["codaHtml": codaHtml],
             in: frameInfo,
-            in: .page
+            in: Self.world
         ) { result in
             guard case .success(let value) = result, let files = value as? [String: [String]] else {
                 COWrapper.LOG_ERR("CODA's page was not put in the editor frame")
@@ -434,7 +436,7 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
             script,
             arguments: ["sheets": sheets, "images": Self.appImages],
             in: frameInfo,
-            in: .page
+            in: Self.world
         ) { result in
             if case .failure = result {
                 COWrapper.LOG_ERR("CODA's style sheets were not attached in the editor frame")
@@ -452,7 +454,7 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
             // "void 0": the script ends on undefined, which WebKit can pass back.
             // "sourceURL": names the script in the Web Inspector.
             let program = source + "\n;void 0\n//# sourceURL=" + path
-            webView.evaluateJavaScript(program, in: frameInfo, in: .page) { result in
+            webView.evaluateJavaScript(program, in: frameInfo, in: Self.world) { result in
                 if case .failure = result {
                     COWrapper.LOG_ERR("Script failed: \(path)")
                 }
@@ -464,7 +466,7 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
             document.dispatchEvent(new Event('DOMContentLoaded'));
             window.dispatchEvent(new Event('load'));
         """
-        webView.evaluateJavaScript(pageLoaded, in: frameInfo, in: .page)
+        webView.evaluateJavaScript(pageLoaded, in: frameInfo, in: Self.world)
     }
 
     // The integrator opens a document by posting a form with the token and settings into the
