@@ -599,13 +599,16 @@ OUString lcl_joinFrameTextPortions(
 // Gives the portions of the shape text, which was set as one string, their properties back: one
 // cursor walks the whole text, portion by portion and over the paragraph ends, the way the string
 // was taken apart into paragraphs. Nothing is applied when the portions do not add up to the
-// string the text was set from.
+// destination text.
 void lcl_applyFrameTextPortions(
-    const uno::Reference<text::XText>& xText, std::u16string_view rFrameContent,
+    const uno::Reference<text::XText>& xText,
     const std::vector<std::vector<std::pair<OUString, std::vector<beans::PropertyValue>>>>&
         rPortions)
 {
-    if (lcl_joinFrameTextPortions(rPortions) != rFrameContent)
+    const OUString aPortionText = lcl_joinFrameTextPortions(rPortions);
+    const OUString aShapeText = xText->getString();
+    // The frame can have a final empty paragraph whose separator NbcSetText() drops.
+    if (aPortionText != aShapeText && aPortionText != aShapeText + "\n")
         return;
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
     xCursor->gotoStart(false);
@@ -1177,7 +1180,7 @@ void WpsContext::onEndElement()
     if (xNewText.is())
     {
         lcl_applyUsedTextPropsToAllTextRuns(xNewText, aTextPropVec);
-        lcl_applyFrameTextPortions(xNewText, sFrameContent, aPortions);
+        lcl_applyFrameTextPortions(xNewText, aPortions);
     }
 
     // The 3D of the WordArt extrudes the Fontwork: camera, light rig and material become the
