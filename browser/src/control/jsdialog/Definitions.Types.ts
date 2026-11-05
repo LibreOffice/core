@@ -382,6 +382,8 @@ interface ToolItemWidgetJSON extends WidgetJSON {
 	noLabel?: boolean;
 	inlineLabel?: boolean;
 	command?: string; // command to trigger options for a panel
+	stateCommand?: string; // command whose state selects the item, instead of command
+	stateValue?: string; // selected while stateCommand has this value
 	text?: string; // title to show or for tooltip
 	icon?: string; // url to an svg
 	postmessage?: boolean; // postmessage to WOPI in case the toolitem is added via postmessage

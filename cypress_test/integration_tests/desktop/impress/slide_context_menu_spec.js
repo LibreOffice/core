@@ -44,6 +44,33 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide pane context menu', 
 		}.bind(this));
 	});
 
+	it('Layout submenu marks the layout of the current slide', function() {
+		var layoutCell = function(layout) {
+			return cy.cGet('[id$="-dropdown"]:visible #slidelayoutgrid [class*="WhatLayout:long=' + layout + '"]');
+		};
+
+		cy.window().should(function() {
+			var state = this.win.app.map['stateChangeHandler'].getItemValue('.uno:AssignLayout');
+			expect(state).to.match(/^\d+$/);
+		}.bind(this)).then(function() {
+			var layout = this.win.app.map['stateChangeHandler'].getItemValue('.uno:AssignLayout');
+			openSlideContextMenu(0);
+			clickContextMenuItem('Layout');
+			layoutCell(layout).should('have.class', 'selected');
+			cy.cGet('[id$="-dropdown"]:visible #slidelayoutgrid div.selected').should('have.length', 1);
+		}.bind(this));
+
+		// Layout 18 is "Title, 4 Content".
+		layoutCell(18).find('button').click();
+		cy.cGet('#slide-img-menu-dropdown').should('not.exist');
+		helper.processToIdle(this.win);
+
+		openSlideContextMenu(0);
+		clickContextMenuItem('Layout');
+		layoutCell(18).should('have.class', 'selected');
+		cy.cGet('[id$="-dropdown"]:visible #slidelayoutgrid div.selected').should('have.length', 1);
+	});
+
 	it('Layout submenu stops listening for state changes once closed', function() {
 		var listenerCount = function(win) {
 			var evented = win.app.map._evented;

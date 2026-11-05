@@ -1614,7 +1614,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			// Set aria-pressed only if:
 			// 1. A real toggle button
 			const setAriaPressedForToggleBtn = (value) => {
-				if (JSDialog.IsToggleButton(id, data.command, builder)) {
+				if (data.stateValue !== undefined || JSDialog.IsToggleButton(id, data.command, builder)) {
 					button.setAttribute('aria-pressed', value);
 				}
 			};
@@ -1631,10 +1631,15 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			};
 
 			if (data.command) {
+				// A button with a stateValue is selected while stateCommand has that
+				// value, like the cell of the current slide's layout in a layout grid.
+				const stateCommand = data.stateCommand || data.command;
 				const updateFunction = () => {
 					const items = builder.map['stateChangeHandler'];
-					const state = items.getItemValue(data.command);
-					const isOn = state && state === 'true';
+					const state = items.getItemValue(stateCommand);
+					const isOn = data.stateValue !== undefined
+						? state === data.stateValue
+						: state && state === 'true';
 
 					if (isOn)
 						selectFn();
@@ -1722,6 +1727,9 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 					}
 					else if (data.hideWhenEnabled && e.commandName === data.hideWhenEnabled) {
 						updateVisibility();
+					}
+					else if (data.stateCommand && e.commandName === data.stateCommand) {
+						updateFunction();
 					}
 				};
 				builder.map.on('commandstatechanged', onCommandStateChanged, this);
