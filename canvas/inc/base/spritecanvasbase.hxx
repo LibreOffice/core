@@ -27,8 +27,6 @@
 #include <sal/log.hxx>
 #include <spriteredrawmanager.hxx>
 
-namespace com::sun::star::rendering { class XAnimation; }
-namespace com::sun::star::rendering { class XAnimatedSprite; }
 namespace com::sun::star::rendering { class XCustomSprite; }
 namespace com::sun::star::rendering { class XSprite; }
 
@@ -87,15 +85,6 @@ namespace canvas
         }
 
         // XSpriteCanvas
-        virtual css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL createSpriteFromAnimation( const css::uno::Reference< css::rendering::XAnimation >& animation ) override
-        {
-            canvastools::verifyArgs(animation, __func__, static_cast<cppu::OWeakObject*>(this));
-
-            typename BaseType::MutexType aGuard( BaseType::m_aMutex );
-
-            return BaseType::maCanvasHelper.createSpriteFromAnimation(animation);
-        }
-
         virtual css::uno::Reference< css::rendering::XCustomSprite > SAL_CALL createCustomSprite( const css::geometry::RealSize2D& spriteSize ) override
         {
             canvastools::verifySpriteSize(spriteSize, __func__,

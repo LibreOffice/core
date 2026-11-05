@@ -208,10 +208,6 @@ public:
 
     // XSpriteCanvas
 
-    css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL
-        createSpriteFromAnimation (
-            const css::uno::Reference< css::rendering::XAnimation >& animation) override;
-
     css::uno::Reference< css::rendering::XCustomSprite > SAL_CALL
         createCustomSprite (
             const css::geometry::RealSize2D& spriteSize) override;

@@ -20,7 +20,6 @@
 module com { module sun { module star { module rendering {
 
 interface XSprite;
-interface XAnimatedSprite;
 interface XCustomSprite;
 
 /** Specialization of a XCanvas, where moving, animated objects
@@ -36,13 +35,6 @@ interface XCustomSprite;
  */
 interface XSpriteCanvas : XCanvas
 {
-    /** Create a sprite object from the specified animation
-        sequence. A sprite is a back-buffered object with its own,
-        independent animation.
-     */
-    XAnimatedSprite createSpriteFromAnimation( [in] XAnimation animation )
-        raises (com::sun::star::lang::IllegalArgumentException);
-
     /** Create a custom, user-handles-it-all sprite object.
 
         A sprite is a back-buffered object with its own, independent

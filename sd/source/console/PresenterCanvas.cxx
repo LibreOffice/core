@@ -300,19 +300,6 @@ css::uno::Reference<css::rendering::XGraphicDevice> SAL_CALL
 
 //----- XSpriteCanvas ---------------------------------------------------------
 
-Reference<rendering::XAnimatedSprite> SAL_CALL
-    PresenterCanvas::createSpriteFromAnimation (
-        const css::uno::Reference<css::rendering::XAnimation>& rAnimation)
-{
-    ThrowIfDisposed();
-
-    Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxSharedCanvas, UNO_QUERY);
-    if (xSpriteCanvas.is())
-        return xSpriteCanvas->createSpriteFromAnimation(rAnimation);
-    else
-        return nullptr;
-}
-
 Reference<rendering::XCustomSprite> SAL_CALL
     PresenterCanvas::createCustomSprite (
         const css::geometry::RealSize2D& rSpriteSize)

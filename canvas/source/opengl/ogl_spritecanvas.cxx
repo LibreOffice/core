@@ -74,12 +74,6 @@ namespace oglcanvas
         SpriteCanvasBaseT::disposeThis();
     }
 
-    uno::Reference< rendering::XAnimatedSprite > SAL_CALL SpriteCanvas::createSpriteFromAnimation(
-        const uno::Reference< rendering::XAnimation >& /*animation*/ )
-    {
-        return uno::Reference< rendering::XAnimatedSprite >();
-    }
-
     uno::Reference< rendering::XCustomSprite > SAL_CALL SpriteCanvas::createCustomSprite(
         const geometry::RealSize2D& spriteSize )
     {

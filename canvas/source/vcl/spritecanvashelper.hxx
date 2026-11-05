@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <com/sun/star/rendering/XAnimatedSprite.hpp>
-#include <com/sun/star/rendering/XAnimation.hpp>
 #include <com/sun/star/rendering/XCustomSprite.hpp>
 
 #include <vcl/vclptr.hxx>
@@ -51,10 +49,6 @@ namespace vclcanvas
         void disposing();
 
         // XSpriteCanvas
-        css::uno::Reference<
-              css::rendering::XAnimatedSprite >        createSpriteFromAnimation(
-                const css::uno::Reference< css::rendering::XAnimation >& animation );
-
         css::uno::Reference<
               css::rendering::XCustomSprite >      createCustomSprite(
                 const css::geometry::RealSize2D& spriteSize );

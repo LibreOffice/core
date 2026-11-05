@@ -160,12 +160,6 @@ namespace vclcanvas
         CanvasHelper::disposing();
     }
 
-    uno::Reference< rendering::XAnimatedSprite > SpriteCanvasHelper::createSpriteFromAnimation(
-        const uno::Reference< rendering::XAnimation >&  )
-    {
-        return uno::Reference< rendering::XAnimatedSprite >();
-    }
-
     uno::Reference< rendering::XCustomSprite > SpriteCanvasHelper::createCustomSprite( const geometry::RealSize2D& spriteSize )
     {
         if( !mpRedrawManager || !mpDevice )
