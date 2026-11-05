@@ -4176,6 +4176,7 @@ kbd,
 	color: var(--color-main-text);
 	font-family: monospace;
 	font-size: 12px;
+	margin-top: 8px;
 }
 
 .ui-csv-ruler-wrapper {
