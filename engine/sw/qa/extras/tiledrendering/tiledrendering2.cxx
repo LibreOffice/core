@@ -41,6 +41,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -4405,6 +4406,157 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextOverProtectedSectionH
                                    aPoints.aInsideThird.getY(), 1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(u"Aaa|Bbb|Ccc|"_ustr, lcl_documentText(mxComponent));
+}
+
+/// Adds a rectangle to the document of pXTextDocument that makes the line of "Test1" tall, so
+/// that the rectangle stands beside the text, and returns its middle, in twips.
+Point lcl_addRectangleBesideTest1(const cpo::uno::Reference<css::lang::XComponent>& xComponent,
+                                  SwWrtShell* pWrtShell)
+{
+    uno::Reference<lang::XMultiServiceFactory> xFactory(xComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
+    xShape->setSize(awt::Size(3000, 2000));
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xComponent, uno::UNO_QUERY);
+    xDrawPageSupplier->getDrawPage()->add(xShape);
+    xShape->setPosition(awt::Point(3000, 8000));
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    return pPage->GetObj(0)->GetSnapRect().Center();
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextKeepsIdleOn)
+{
+    // Given the paragraphs "Test1" and "Test2", with "Test2" selected, open in two views:
+    SwXTextDocument* pXTextDocument = createDoc();
+    int nViewA = KitHelper::getCurrentView();
+    SwWrtShell* pWrtShellA = getSwDocShell()->GetWrtShell();
+    Point aFrom, aTo;
+    lcl_selectSecondParagraph(pWrtShellA, aFrom, aTo);
+    lcl_addView(pXTextDocument);
+    SwWrtShell* pWrtShellB = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShellA->GetViewOptions()->IsIdle());
+
+    // When the first view drags the selection and holds the button:
+    lcl_dragText(pXTextDocument, aFrom, aTo, 0, /*bRelease=*/false, nViewA);
+
+    // Then idle work such as the layout and the spell check stays on for both views:
+    CPPUNIT_ASSERT(pWrtShellA->GetViewOptions()->IsIdle());
+    CPPUNIT_ASSERT(pWrtShellB->GetViewOptions()->IsIdle());
+
+    lcl_releaseButton(pXTextDocument, nViewA, aTo);
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTripleClickTwoViewsClickBetween)
+{
+    // Given the sentence "Aaa bbb." and a second paragraph, open in two views:
+    SwXTextDocument* pXTextDocument = createDoc();
+    int nViewA = KitHelper::getCurrentView();
+    SwWrtShell* pWrtShellA = getSwDocShell()->GetWrtShell();
+    pWrtShellA->Insert(u"Aaa bbb."_ustr);
+    pWrtShellA->SttPara(/*bSelect=*/false);
+    pWrtShellA->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    const Point aInsideAaa = pWrtShellA->GetCharRect().Center();
+    pWrtShellA->EndPara(/*bSelect=*/false);
+    pWrtShellA->SplitNode();
+    pWrtShellA->Insert(u"Ccc"_ustr);
+    const Point aBelowText(aInsideAaa.getX(), pWrtShellA->GetCharRect().Bottom() + 3000);
+    int nViewB = lcl_addView(pXTextDocument);
+    SwWrtShell* pWrtShellB = getSwDocShell()->GetWrtShell();
+    auto post = [&](int nView, COKitMouseEventType eType, Point aPos, int nCount) {
+        KitHelper::setView(nView);
+        pXTextDocument->postMouseEvent(eType, aPos.getX(), aPos.getY(), nCount, MOUSE_LEFT, 0);
+        Scheduler::ProcessEventsToIdle();
+    };
+
+    // When the second view clicks three times inside "Aaa", and the first view clicks below the
+    // text, where its cursor goes to the nearest text, before the third click:
+    post(nViewB, COKitMouseEventType::BUTTONDOWN, aInsideAaa, 1);
+    post(nViewB, COKitMouseEventType::BUTTONUP, aInsideAaa, 1);
+    post(nViewB, COKitMouseEventType::BUTTONDOWN, aInsideAaa, 2);
+    post(nViewB, COKitMouseEventType::BUTTONUP, aInsideAaa, 2);
+    post(nViewA, COKitMouseEventType::BUTTONDOWN, aBelowText, 1);
+    post(nViewA, COKitMouseEventType::BUTTONUP, aBelowText, 1);
+    post(nViewB, COKitMouseEventType::BUTTONDOWN, aInsideAaa, 3);
+    post(nViewB, COKitMouseEventType::BUTTONUP, aInsideAaa, 3);
+
+    // Then the triple click of the second view selects its whole sentence:
+    CPPUNIT_ASSERT_EQUAL(u"Aaa bbb."_ustr, pWrtShellB->GetSelText());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextOverInputFieldHidesDropPosition)
+{
+    // Given the paragraphs "Aaa", "Bbb" and "Ccc", with an input field holding "Field" after
+    // "Ccc", and "Bbb" selected:
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwTestViewCallback aView;
+    ThreeParagraphs aPoints = lcl_fillThreeParagraphs(pWrtShell);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xField(
+        xFactory->createInstance(u"com.sun.star.text.TextField.Input"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet>(xField, uno::UNO_QUERY_THROW)
+        ->setPropertyValue(u"Content"_ustr, uno::Any(u"Field"_ustr));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    xTextDocument->getText()->insertTextContent(getParagraph(3)->getEnd(), xField,
+                                                /*bAbsorb=*/false);
+    Scheduler::ProcessEventsToIdle();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 3, /*bBasicCall=*/false);
+    const Point aInsideField = pWrtShell->GetCharRect().Center();
+    lcl_selectParagraph(pWrtShell, getParagraph(2));
+
+    // When the selection is dragged to the end of "Aaa" and on into the field, with the button
+    // held:
+    lcl_dragText(pXTextDocument, aPoints.aInsideSecond, aPoints.aEndOfFirst, 0,
+                 /*bRelease=*/false);
+    CPPUNIT_ASSERT(aView.m_bOwnCursorAtDropPosition);
+    CPPUNIT_ASSERT(!aView.m_bOwnCursorEmpty);
+    lcl_continueDrag(pXTextDocument, aPoints.aEndOfFirst, aInsideField);
+
+    // Then the view learns that the text would land nowhere there:
+    CPPUNIT_ASSERT(aView.m_bOwnCursorAtDropPosition);
+    CPPUNIT_ASSERT(aView.m_bOwnCursorEmpty);
+
+    // And a release there moves no text:
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aInsideField.getX(),
+                                   aInsideField.getY(), 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(u"Bbb"_ustr, getParagraph(2)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextFromNowhereToRealCursorAfterEdit)
+{
+    // Given a rectangle beside "Test1", and the paragraphs "Test1" and "Test2", with "Test2"
+    // selected in the first view, and a second view with its cursor at the end of the document:
+    SwXTextDocument* pXTextDocument = createDoc();
+    int nViewA = KitHelper::getCurrentView();
+    SwWrtShell* pWrtShellA = getSwDocShell()->GetWrtShell();
+    SwTestViewCallback aViewA;
+    const Point aOnShape = lcl_addRectangleBesideTest1(mxComponent, pWrtShellA);
+    Point aFrom, aTo;
+    lcl_selectSecondParagraph(pWrtShellA, aFrom, aTo);
+    int nViewB = lcl_addView(pXTextDocument);
+    getSwDocShell()->GetWrtShell()->SttEndDoc(/*bStt=*/false);
+
+    // When the first view drags the selection to the end of "Test1" and on to the rectangle,
+    // where the text would land nowhere, and holds the button, the second view types, and the
+    // next move of the drag lands right at the real cursor of the first view:
+    lcl_dragText(pXTextDocument, aFrom, aTo, 0, /*bRelease=*/false, nViewA);
+    lcl_continueDrag(pXTextDocument, aTo, aOnShape, nViewA);
+    CPPUNIT_ASSERT(aViewA.m_bOwnCursorEmpty);
+    KitHelper::setView(nViewB);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 'x', 0);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
+    const SwRect aRealCursor = pWrtShellA->GetCharRect();
+    lcl_continueDrag(pXTextDocument, aRealCursor.Center(), aRealCursor.Center(), nViewA);
+
+    // Then the first view has a drop position at that place again:
+    CPPUNIT_ASSERT(aViewA.m_bOwnCursorAtDropPosition);
+    CPPUNIT_ASSERT(!aViewA.m_bOwnCursorEmpty);
+    CPPUNIT_ASSERT_EQUAL(aRealCursor.Left(), aViewA.m_aOwnCursor.Left());
+
+    lcl_releaseButton(pXTextDocument, nViewA, aRealCursor.Center());
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextDropPosition)
