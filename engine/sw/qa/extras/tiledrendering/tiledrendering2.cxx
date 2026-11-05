@@ -3676,6 +3676,33 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextOneMove)
     CPPUNIT_ASSERT_EQUAL(u"Test1Test2"_ustr, getParagraph(1)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextPressDuringDrag)
+{
+    // Given the paragraphs "Test1" and "Test2", with "Test2" selected:
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    Point aFrom, aTo;
+    lcl_selectSecondParagraph(pWrtShell, aFrom, aTo);
+
+    // When the selection is dragged to the end of "Test1" and held, and a new press then arrives
+    // inside "Test1" without a release before it, moves a little and is released:
+    lcl_dragText(pXTextDocument, aFrom, aTo, 0, /*bRelease=*/false);
+    const Point aPress(aTo.getX() - 300, aTo.getY());
+    auto post = [&](COKitMouseEventType eType, Point aPos) {
+        pXTextDocument->postMouseEvent(eType, aPos.getX(), aPos.getY(), 1, MOUSE_LEFT, 0);
+        Scheduler::ProcessEventsToIdle();
+    };
+    post(COKitMouseEventType::BUTTONDOWN, aPress);
+    post(COKitMouseEventType::MOVE, Point(aPress.getX() + 150, aPress.getY()));
+    post(COKitMouseEventType::MOVE, Point(aPress.getX() + 300, aPress.getY()));
+    post(COKitMouseEventType::BUTTONUP, Point(aPress.getX() + 300, aPress.getY()));
+
+    // Then the press ends the drag without a drop, and starts no second drag of the old
+    // selection, so no text moved:
+    CPPUNIT_ASSERT_EQUAL(u"Test1"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Test2"_ustr, getParagraph(2)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextEscapeThenMove)
 {
     // Given the paragraphs "Test1" and "Test2", with "Test2" selected:

@@ -1169,7 +1169,10 @@ bool ImplKitHandleDragForMouseEvent(vcl::Window* pWindow, NotifyEventType nEvent
     // A kit client sends the macOS Command key as KEY_MOD3, which GetModifier leaves out.
     const sal_uInt16 nCode
         = rEvent.GetButtons() | rEvent.GetModifier() | (rEvent.IsMod3() ? KEY_MOD3 : 0);
-    if (ImplKitHandleDrag(pFrameData, nEvent, aMousePos, aWinPos, nCode, rEvent.GetClicks()))
+    // An event that only ended a drag, such as a press that arrives while a drag runs, goes on to
+    // the window as any other event.
+    if (ImplKitHandleDrag(pFrameData, nEvent, aMousePos, aWinPos, nCode, rEvent.GetClicks())
+            .value_or(false))
         return true;
 
     // The drag gesture is measured from the position where the button went down.
