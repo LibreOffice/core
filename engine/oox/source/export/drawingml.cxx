@@ -6524,19 +6524,27 @@ void lcl_CollectCoordinateTokens(
                         // below to the right or above to the left; along y it starts at 0 when
                         // the target is to the left, else at 180, and turns clockwise when the
                         // target is below to the left or above to the right.
+                        // OOXML angles use 60000 units per degree.
+                        constexpr sal_Int32 nQuarterTurn = 90 * 60000;
+                        constexpr sal_Int32 nHalfTurn = 180 * 60000;
+                        constexpr sal_Int32 nThreeQuarterTurn = 270 * 60000;
                         const OString aStart
                             = bHorizontal
                                   ? rCtx.addGuide("?: "
                                                   + rCtx.addGuide("+- " + aCurrentY + " 0 " + aY)
-                                                  + " 5400000 16200000")
+                                                  + " " + OString::number(nQuarterTurn) + " "
+                                                  + OString::number(nThreeQuarterTurn))
                                   : rCtx.addGuide("?: "
                                                   + rCtx.addGuide("+- " + aCurrentX + " 0 " + aX)
-                                                  + " 0 10800000");
+                                                  + " 0 " + OString::number(nHalfTurn));
                         const OString aSwing
                             = bHorizontal
-                                  ? rCtx.addGuide("?: " + aProduct + " 5400000 -5400000")
+                                  ? rCtx.addGuide("?: " + aProduct + " "
+                                                  + OString::number(nQuarterTurn) + " "
+                                                  + OString::number(-nQuarterTurn))
                                   : rCtx.addGuide("?: " + rCtx.addGuide("*/ " + aProduct + " -1 1")
-                                                  + " 5400000 -5400000");
+                                                  + " " + OString::number(nQuarterTurn) + " "
+                                                  + OString::number(-nQuarterTurn));
                         OString aWR = rCtx.addGuide("abs " + aDX);
                         OString aHR = rCtx.addGuide("abs " + aDY);
                         if (rCtx.bStretched)
