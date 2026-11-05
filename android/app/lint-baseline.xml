@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<issues format="6" by="lint 8.13.1" type="baseline" client="gradle" dependencies="false" name="AGP (8.13.1)" variant="all" version="8.13.1">
+<issues format="6" by="lint 9.5.0" type="baseline" client="gradle" dependencies="false" name="AGP (9.5.0)" variant="all" version="9.5.0">
+
+    <issue
+        id="ObsoleteLintCustomCheck"
+        message="Library lint checks out of date;&#xA;these checks **will be skipped**!&#xA;&#xA;Lint found an issue registry (`androidx.lifecycle.lint.LifecycleRuntimeIssueRegistry`)&#xA;which was compiled against an older version of lint&#xA;than this one. This is usually fine, but not in this&#xA;case; some basic verification shows that the lint&#xA;check jar references (for example) the following API&#xA;which is no longer valid in this version of lint:&#xA;org.jetbrains.kotlin.asJava.elements.KtLightModifierList#getKotlinOrigin(): org.jetbrains.kotlin.psi.KtModifierList&#xA;(Referenced from androidx/lifecycle/lint/LifecycleWhenChecksKt.class)&#xA;&#xA;Therefore, this lint check library is **not** included&#xA;in analysis. This affects the following lint checks:&#xA;`UnsafeLifecycleWhenUsage`,`RepeatOnLifecycleWrongUsage`&#xA;&#xA;Recompile the checks against the latest version, or if&#xA;this is a check bundled with a third-party library, see&#xA;if there is a more recent version available.&#xA;&#xA;Version of Lint API this lint check is using is 14.&#xA;The Lint API version currently running is 16 (8.7+).">
+        <location
+            file="$GRADLE_USER_HOME/caches/9.6.0/transforms/cbd7c09a18bd7709f40fbaccde21ced7/transformed/lifecycle-runtime-ktx-2.6.2/jars/lint.jar"/>
+    </issue>
 
     <issue
         id="ScrollViewSize"
@@ -68,13 +75,24 @@
     </issue>
 
     <issue
+        id="MissingExplicitUriGrant"
+        message="This intent attaches a URI but is missing `FLAG_GRANT_READ_URI_PERMISSION` and `FLAG_GRANT_WRITE_URI_PERMISSION`; the receiving app will not be granted access to the URI on Android 18 and higher"
+        errorLine1="        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);"
+        errorLine2="                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/java/org/libreoffice/FormattingController.java"
+            line="366"
+            column="36"/>
+    </issue>
+
+    <issue
         id="OldTargetApi"
         message="Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the `android.os.Build.VERSION_CODES` javadoc for details."
-        errorLine1="        targetSdkVersion 35"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~">
+        errorLine1="        targetSdk = 36"
+        errorLine2="        ~~~~~~~~~~~~~~">
         <location
-            file="build.gradle"
-            line="63"
+            file="build.gradle.kts"
+            line="87"
             column="9"/>
     </issue>
 
@@ -101,14 +119,47 @@
     </issue>
 
     <issue
-        id="GradleDependency"
-        message="A newer version of `compileSdkVersion` than 35 is available: 36"
-        errorLine1="    compileSdk 35"
-        errorLine2="    ~~~~~~~~~~~~~">
+        id="AndroidGradlePluginVersion"
+        message="A newer version of Gradle than 9.6.0 is available: 9.8.2"
+        errorLine1="distributionUrl=https\://services.gradle.org/distributions/gradle-9.6.0-all.zip"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="build.gradle"
-            line="46"
+            file="$HOME/development/git/libreoffice-WORKTREE-android/android/gradle/wrapper/gradle-wrapper.properties"
+            line="4"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of `compileSdk` than 36 is available: 37"
+        errorLine1="    compileSdk = 36"
+        errorLine2="    ~~~~~~~~~~~~~~~">
+        <location
+            file="build.gradle.kts"
+            line="49"
             column="5"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.constraintlayout:constraintlayout than 2.2.1 is available: 2.2.2"
+        errorLine1="constraintlayout_version = &quot;2.2.1&quot;"
+        errorLine2="                           ~~~~~~~">
+        <location
+            file="$HOME/development/git/libreoffice-WORKTREE-android/android/gradle/libs.versions.toml"
+            line="2"
+            column="28"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of com.google.android.material:material than 1.13.0 is available: 1.14.0"
+        errorLine1="material_version = &quot;1.13.0&quot;"
+        errorLine2="                   ~~~~~~~~">
+        <location
+            file="$HOME/development/git/libreoffice-WORKTREE-android/android/gradle/libs.versions.toml"
+            line="4"
+            column="20"/>
     </issue>
 
     <issue
@@ -118,7 +169,7 @@
         errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="res/layout/activity_document_browser.xml"
-            line="77"
+            line="79"
             column="21"/>
     </issue>
 
@@ -129,7 +180,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="AndroidManifest.xml"
-            line="104"
+            line="105"
             column="13"/>
     </issue>
 
@@ -162,7 +213,7 @@
         errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/java/org/libreoffice/PresentationActivity.java"
-            line="39"
+            line="54"
             column="9"/>
     </issue>
 
@@ -294,7 +345,7 @@
         errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="res/layout/activity_document_browser.xml"
-            line="73"
+            line="75"
             column="21"/>
     </issue>
 
@@ -1348,7 +1399,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/java/org/libreoffice/ui/LibreOfficeUIActivity.java"
-            line="397"
+            line="452"
             column="13"/>
     </issue>
 
@@ -1392,7 +1443,7 @@
         errorLine2="        ^">
         <location
             file="src/java/org/libreoffice/PresentationActivity.java"
-            line="40"
+            line="55"
             column="9"/>
     </issue>
 
@@ -1403,7 +1454,7 @@
         errorLine2="                           ~~~~~~~">
         <location
             file="src/java/org/libreoffice/PresentationActivity.java"
-            line="42"
+            line="57"
             column="28"/>
     </issue>
 
@@ -1414,7 +1465,7 @@
         errorLine2="                           ~~~~~~~">
         <location
             file="src/java/org/libreoffice/PresentationActivity.java"
-            line="77"
+            line="92"
             column="28"/>
     </issue>
 
@@ -1425,7 +1476,7 @@
         errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="res/layout/activity_document_browser.xml"
-            line="137"
+            line="139"
             column="10"/>
     </issue>
 
@@ -1436,7 +1487,7 @@
         errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="res/layout/activity_document_browser.xml"
-            line="169"
+            line="171"
             column="10"/>
     </issue>
 
@@ -1447,7 +1498,7 @@
         errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="res/layout/activity_document_browser.xml"
-            line="201"
+            line="203"
             column="10"/>
     </issue>
 
@@ -1458,7 +1509,7 @@
         errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="res/layout/activity_document_browser.xml"
-            line="233"
+            line="235"
             column="10"/>
     </issue>
 
@@ -1832,7 +1883,7 @@
         errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="res/layout/activity_document_browser.xml"
-            line="111"
+            line="113"
             column="9"/>
     </issue>
 
@@ -1843,7 +1894,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="res/layout/activity_document_browser.xml"
-            line="143"
+            line="145"
             column="13"/>
     </issue>
 
@@ -1854,7 +1905,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="res/layout/activity_document_browser.xml"
-            line="175"
+            line="177"
             column="13"/>
     </issue>
 
@@ -1865,7 +1916,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="res/layout/activity_document_browser.xml"
-            line="207"
+            line="209"
             column="13"/>
     </issue>
 
@@ -1876,7 +1927,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="res/layout/activity_document_browser.xml"
-            line="239"
+            line="241"
             column="13"/>
     </issue>
 
@@ -1942,7 +1993,7 @@
         errorLine2="                 ~~~~~~~~">
         <location
             file="res/layout/activity_main.xml"
-            line="42"
+            line="43"
             column="18"/>
     </issue>
 
@@ -1953,7 +2004,7 @@
         errorLine2="                 ~~~~~~~~">
         <location
             file="res/layout/activity_main.xml"
-            line="52"
+            line="53"
             column="18"/>
     </issue>
 
@@ -2107,7 +2158,7 @@
         errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="res/layout/activity_main.xml"
-            line="78"
+            line="79"
             column="21"/>
     </issue>
 
@@ -2118,7 +2169,7 @@
         errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="res/layout/activity_main.xml"
-            line="93"
+            line="94"
             column="21"/>
     </issue>
 
