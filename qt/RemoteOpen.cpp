@@ -19,6 +19,7 @@
 
 #include <QBuffer>
 #include <QByteArray>
+#include <QDesktopServices>
 #include <QFile>
 #include <QIODevice>
 #include <QJsonDocument>
@@ -35,6 +36,7 @@
 #include <QUrlQuery>
 #include <QUuid>
 #include <QWebEngineFrame>
+#include <QWebEngineNewWindowRequest>
 #include <QWebEnginePage>
 #include <QWebEngineScript>
 #include <QWebEngineScriptCollection>
@@ -222,7 +224,11 @@ public:
                                              const QByteArray& message);
     void checkFileInfo(QWebEngineUrlRequestJob* job, const QByteArray& argumentsJson);
 
+protected:
+    bool acceptNavigationRequest(const QUrl& url, NavigationType type, bool isMainFrame) override;
+
 private:
+    void openNewWindow(QWebEngineNewWindowRequest& request);
     void findEditorFrame();
     void putCodaPageIn(QWebEngineFrame& frame);
     std::optional<QByteArray> callBridge(const QString& method, const QString& argumentsJson);
@@ -249,6 +255,20 @@ QUrl originOf(const QUrl& url)
 {
     return url.adjusted(QUrl::RemoveUserInfo | QUrl::RemovePath | QUrl::RemoveQuery
                         | QUrl::RemoveFragment);
+}
+
+/// Other schemes would open other apps, so only web addresses go to the system browser.
+void openInSystemBrowser(const QUrl& url)
+{
+    const bool isWebAddress = url.scheme() == "https" || url.scheme() == "http";
+    if (!isWebAddress)
+    {
+        LOG_WRN("account window: refused: the link is not a web address: "
+                << url.toString(QUrl::RemoveUserInfo).toStdString());
+        return;
+    }
+
+    QDesktopServices::openUrl(url);
 }
 
 /// The frame whose address is url, searched from frame down.
@@ -338,11 +358,39 @@ CloudAccountPage::CloudAccountPage(const QUrl& accountUrl, QWebEngineProfile* pr
 
     _editorCheck.setInterval(EDITOR_CHECK_INTERVAL);
     connect(&_editorCheck, &QTimer::timeout, this, &CloudAccountPage::findEditorFrame);
+    connect(this, &QWebEnginePage::newWindowRequested, this, &CloudAccountPage::openNewWindow);
 }
 
 CloudAccountPage::~CloudAccountPage()
 {
     PagesBySession.erase(_session);
+}
+
+/// TODO: A sign-in through another site, such as an identity provider, is refused too.
+bool CloudAccountPage::acceptNavigationRequest(const QUrl& url, NavigationType type,
+                                               bool isMainFrame)
+{
+    const bool isOtherSite = originOf(url) != _integratorOrigin;
+    if (!isMainFrame || !isOtherSite)
+        return true;
+
+    if (type != NavigationTypeLinkClicked)
+    {
+        LOG_WRN("account window: refused: the window would leave the integrator's site for "
+                << url.toString(QUrl::RemoveUserInfo).toStdString());
+        return false;
+    }
+
+    LOG_INF("account window: opening a link in the system browser");
+    openInSystemBrowser(url);
+    return false;
+}
+
+/// The request is never opened in a page, so the app shows no new window.
+void CloudAccountPage::openNewWindow(QWebEngineNewWindowRequest& request)
+{
+    LOG_INF("account window: opening in the system browser");
+    openInSystemBrowser(request.requestedUrl());
 }
 
 void CloudAccountPage::keepForm(const QUrl& url, const QByteArray& form)
