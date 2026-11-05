@@ -5266,13 +5266,40 @@ static void handleAccountRequest(int accountTabId, ICoreWebView2WebResourceReque
     }
 }
 
-static void handleEditorFrameMessage(int accountTabId,
+static UINT32 frameIdOf(ICoreWebView2Frame* frame)
+{
+    // Only the newer ICoreWebView2Frame5 interface of a frame has its id.
+    const auto frameWithId = wil::try_com_query<ICoreWebView2Frame5>(frame);
+    if (!frameWithId)
+        return 0;
+
+    UINT32 id = 0;
+    frameWithId->get_FrameId(&id);
+    return id;
+}
+
+static bool isEditorFrame(const DocumentTab& account, ICoreWebView2Frame* frame)
+{
+    if (!account.editorFrame)
+        return false;
+
+    const UINT32 id = frameIdOf(frame);
+    return id != 0 && id == frameIdOf(account.editorFrame.get());
+}
+
+static void handleEditorFrameMessage(int accountTabId, ICoreWebView2Frame* sender,
                                      ICoreWebView2WebMessageReceivedEventArgs* args)
 {
     DocumentTab* account = findTab(accountTabId);
     if (!account)
     {
         LOG_DBG("A message from an editor frame arrived after its account window closed");
+        return;
+    }
+
+    if (!isEditorFrame(*account, sender))
+    {
+        LOG_WRN("A message was refused: it came from a frame without CODA's editor page");
         return;
     }
 
@@ -5366,10 +5393,10 @@ static void watchAccountFrame(int accountTabId, ICoreWebView2Frame* created)
 
     frame->add_WebMessageReceived(
         Microsoft::WRL::Callback<ICoreWebView2FrameWebMessageReceivedEventHandler>(
-            [accountTabId](ICoreWebView2Frame*, ICoreWebView2WebMessageReceivedEventArgs* args)
-                -> HRESULT
+            [accountTabId](ICoreWebView2Frame* sender,
+                           ICoreWebView2WebMessageReceivedEventArgs* args) -> HRESULT
             {
-                handleEditorFrameMessage(accountTabId, args);
+                handleEditorFrameMessage(accountTabId, sender, args);
                 return S_OK;
             })
             .Get(),
