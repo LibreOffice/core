@@ -507,8 +507,8 @@ MWAW_TARBALL := libmwaw-0.3.$(MWAW_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-MYTHES_SHA256SUM := 97bd2ba5738aebdba1bc31f30f1be42f1404386c94105ad5990d839a1311c8a5
-MYTHES_TARBALL := mythes-1.2.6.tar.xz
+MYTHES_SHA256SUM := 861af73ad57ee240647a79a64e31f214de6d63ea53e406d2d4c1f730706dd921
+MYTHES_TARBALL := mythes-1.2.7.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
