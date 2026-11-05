@@ -6815,15 +6815,19 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
         else if (s.starts_with(L"FETCHSETTINGSFILE "))
         {
             auto result = Desktop::fetchSettingsFile(Util::wide_string_to_string(s.substr(strlen("FETCHSETTINGSFILE "))));
-            if (!result.content.empty())
+            if (result.content.empty())
             {
-                // The JS caller reads result.content, so the reply is an object.
-                Poco::JSON::Object::Ptr reply = new Poco::JSON::Object();
-                reply->set("fileName", result.fileName);
-                reply->set("mimeType", result.mimeType);
-                reply->set("content", result.content);
-                postReplyToCall(data.hWnd, data.tabId, id, reply);
+                LOG_WRN("FETCHSETTINGSFILE found no file to return");
+                postReplyToCall(data.hWnd, data.tabId, id, std::string());
+                return;
             }
+
+            // The JS caller reads result.content, so the reply is an object.
+            Poco::JSON::Object::Ptr reply = new Poco::JSON::Object();
+            reply->set("fileName", result.fileName);
+            reply->set("mimeType", result.mimeType);
+            reply->set("content", result.content);
+            postReplyToCall(data.hWnd, data.tabId, id, reply);
         }
         else if (s.starts_with(L"removecloudaccount "))
         {
@@ -6891,7 +6895,11 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             postReplyToCall(data.hWnd, data.tabId, id, std::string());
         }
         else
+        {
+            // The page code that made the call waits for a reply.
             LOG_ERR("Unhandled CALL message: " + Util::wide_string_to_string(s));
+            postReplyToCall(data.hWnd, data.tabId, id, std::string());
+        }
     }
     else if (s.starts_with(L"ERR "))
     {
