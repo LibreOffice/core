@@ -641,7 +641,7 @@ window.L.Map.include({
 			window.postMobileMessage('CLOSE_WINDOW');
 	},
 
-	_nativeSaveFailed: function (autosave, errorDetail) {
+	_nativeSaveFailed: function (autosave, errorDetail, storageConflict) {
 		if (this._takeAutosaveResult(autosave))
 			return;
 		var pending = this._pendingNativeSave;
@@ -650,8 +650,49 @@ window.L.Map.include({
 		// follows, so it can bring a hidden tab to the front for it.
 		var prompts = pending !== 'quiet';
 		window.postMobileMessage(prompts ? 'SAVEFAILED prompt' : 'SAVEFAILED');
-		if (prompts)
+		if (prompts && storageConflict && pending !== 'close') {
+			this._showCollabConflictPrompt(errorDetail, storageConflict.wasSwitching);
+		} else if (prompts) {
 			this._showSaveFailedPrompt(errorDetail, undefined, pending === 'close');
+		}
+	},
+
+	// A remote document whose upload was refused because it changed in storage in the meantime
+	// offers the choices of the document conflict dialog (with Discard joining the others on the
+	// server):
+	_showCollabConflictPrompt: function (errorDetail, wasSwitching) {
+		const buttons = [
+			{ id: 'collab-conflict-cancel', text: _('Cancel') },
+			{ id: 'collab-conflict-discard', text: _('Discard') },
+			{ id: 'collab-conflict-overwrite', text: _('Overwrite') },
+			{ id: 'collab-conflict-saveas', text: _('Save to new file') },
+		];
+		const callbacks = [
+			{ id: 'collab-conflict-cancel', func_: null },
+			{
+				id: 'collab-conflict-discard',
+				func_: () => {
+					window.collabSendMessage({type: 'saved_and_switching'});
+					window.switchToServerMode();
+				},
+			},
+			{
+				id: 'collab-conflict-overwrite',
+				func_: () => {
+					window._codaForceNextUpload = true;
+					window._switchToServerAfterSave = wasSwitching;
+					this.save(true /* dontTerminateEdit */, false /* dontSaveIfUnmodified */);
+				},
+			},
+			{
+				id: 'collab-conflict-saveas',
+				func_: () => { window.postMobileMessage('uno .uno:SaveAs'); },
+			},
+		];
+		this.uiManager.showModalWithCustomButtons(
+			'collab-conflict', _('Document has been changed'),
+			_('Document has been changed in storage. What would you like to do with your unsaved changes?'),
+			false, buttons, callbacks, errorDetail);
 	},
 
 	// The desktop apps write the user's own file, which can be read-only

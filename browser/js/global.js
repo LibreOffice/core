@@ -3000,7 +3000,7 @@ function showWelcomeSVG() {
 	// spurious user_joined/user_left notifications that confuse peers -
 	// e.g., a peer's collabUsers filter (by userId) would drop the main
 	// socket's entry too, making them think all users left.
-	global.collabUploadFile = function(fileBytes) {
+	global.collabUploadFile = function(fileBytes, force) {
 		return new Promise(function(resolve, reject) {
 			var ws = global.collabWs;
 			if (!ws || ws.readyState !== WebSocket.OPEN) {
@@ -3039,8 +3039,10 @@ function showWelcomeSVG() {
 						headers: { 'Content-Type': 'application/octet-stream' }
 					}).then(function(response) {
 						if (response.ok) return response.json();
-						throw new Error('Upload failed with status '
+						const error = new Error('Upload failed with status '
 							+ response.status);
+						error.status = response.status;
+						throw error;
 					}).then((result) => {
 						global._collabLastModifiedTime = result && result.LastModifiedTime;
 						return result;
@@ -3058,7 +3060,8 @@ function showWelcomeSVG() {
 				type: 'upload',
 				stream: 'contents',
 				requestId: 'wasm-save',
-				lastModifiedTime: global._collabLastModifiedTime
+				// Without it, the upload replaces whatever is in storage:
+				lastModifiedTime: force ? undefined : global._collabLastModifiedTime
 			}));
 		});
 	};

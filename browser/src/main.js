@@ -144,17 +144,17 @@ var initUI = function() {
 	}
 };
 
-const _codaUpload = function(fileBytes) {
+const _codaUpload = function(fileBytes, force) {
 	const ws = global.collabWs;
 	const info = window._codaRemoteInfo;
 	if (!info || (ws && ws.readyState !== WebSocket.CLOSED))
-		return global.collabUploadFile(fileBytes);
+		return global.collabUploadFile(fileBytes, force);
 
 	return global.collabConnect(info.wopiSrc, info.accessToken, info.coolServer).then(function() {
 		// A restarted coolwsd no longer knows that we are editing.
 		if (!global.collabEditingActive)
 			window.collabSendMessage({type: 'editing_started'}); 
-		return global.collabUploadFile(fileBytes);
+		return global.collabUploadFile(fileBytes, force);
 	});
 };
 
@@ -162,10 +162,10 @@ const _codaUpload = function(fileBytes) {
 // Both flavours have already saved the document bytes locally; this
 // pushes them up to the integrator via /co/collab/put, then runs any
 // queued "save-and-switch-to-server-mode" hand-off.
-var _codaUploadOnSave = function(fileBytes, tag) {
+var _codaUploadOnSave = function(fileBytes, tag, force) {
 	window.app.console.log(tag + ': uploading ' + fileBytes.length + ' bytes');
 	map.fire('showbusy', {label: _('Saving...')});
-	return _codaUpload(fileBytes).then(function() {
+	return _codaUpload(fileBytes, force).then(function() {
 		window.app.console.log(tag + ': upload completed');
 		map.fire('hidebusy');
 		if (window._switchToServerAfterSave) {
@@ -177,10 +177,10 @@ var _codaUploadOnSave = function(fileBytes, tag) {
 	}).catch(function(err) {
 		window.app.console.error(tag + ': upload failed: ' + err.message);
 		map.fire('hidebusy');
-		if (window._switchToServerAfterSave) {
-			window._switchToServerAfterSave = false;
-			window.switchToServerMode();
-		}
+		// Stay with the local document, which is the only copy of the changes:
+		err.wasSwitching = window._switchToServerAfterSave;
+		window._switchToServerAfterSave = false;
+		throw err;
 	});
 };
 
@@ -254,7 +254,15 @@ if (window.ThisIsTheQtApp || window.ThisIsTheWindowsApp || window.codaRemotePage
 			var arr = new Uint8Array(bin.length);
 			for (var i = 0; i < bin.length; i++)
 				arr[i] = bin.charCodeAt(i);
-			_codaUploadOnSave(arr, 'CODA').then(done, done);
+			const force = window._codaForceNextUpload;
+			window._codaForceNextUpload = false;
+			_codaUploadOnSave(arr, 'CODA', force).then(done, (err) => {
+				// A save that a switch to server mode asked for always gets its prompt (the
+				// in-process server can report it as its autosave, when it joined one):
+				map._nativeSaveFailed(
+					ev.isAutosave && !err.wasSwitching, err.message,
+					err.status === 409 ? {wasSwitching: err.wasSwitching} : undefined);
+			});
 		}, done);
 	});
 }
@@ -282,7 +290,7 @@ if (window.ThisIsTheEmscriptenApp) {
 		// The C++ saveToServer() calls this via MAIN_THREAD_EM_ASM
 		// with the file bytes.
 		globalThis.collabSaveToServer = function(fileBytes) {
-			_codaUploadOnSave(fileBytes, 'WASM');
+			_codaUploadOnSave(fileBytes, 'WASM').catch(() => {});
 		};
 
 		global.collabFetchFile(fullDocUrl, accessToken).then(function(result) {
