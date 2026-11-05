@@ -259,13 +259,10 @@
         <host desc="Carrier-grade NAT range used as the pod network">100.64.0.0/10</host>
         -->
       </post_allow>
-      <lok_allow desc="Allowed hosts as an external data source inside edited files. Each entry is either a network in CIDR notation or a regular expression matched against the host of the URL. Every storage.wopi host and alias group host whose allow attribute is true, and the aliases of those groups, is also allowed as a data source. The post_allow hosts are not. The host a document was loaded from is also allowed for that document. Used for example in: PostMessage Action_InsertGraphic, =WEBSERVICE() function, external reference in the cell. If this section is present but no host ends up allowed, every other host is denied. Without this section every host is allowed.">
-        <host desc="The IPv4 private 192.168.0.0/16 block.">192.168.0.0/16</host>
-        <host desc="The IPv4 loopback (localhost) address.">127.0.0.1/32</host>
-        <host desc="The IPv6 loopback (localhost) address.">::1/128</host>
-        <host desc="The IPv4 private 172.16.0.0/12 block.">172.16.0.0/12</host>
-        <host desc="The IPv4 private 10.0.0.0/8 block (Podman).">10.0.0.0/8</host>
-        <host desc="Localhost access by name">localhost</host>
+      <lok_allow desc="Allowed hosts as an external data source inside edited files. Each entry is either a network in CIDR notation or a regular expression matched against the host of the URL. A network matches only a URL whose host is written as an IP address. Every storage.wopi host and alias group host whose allow attribute is true, and the aliases of those groups, is also allowed as a data source. The post_allow hosts are not. The host a document was loaded from is also allowed for that document. Used for example in: PostMessage Action_InsertGraphic, =WEBSERVICE() function, external reference in the cell. If this section is present but no host ends up allowed, every other host is denied. Without this section every host is allowed.">
+        <!-- example: allow images and data from an intranet server
+        <host desc="An intranet server, by name.">images\.intranet\.example\.com</host>
+        -->
       </lok_allow>
       <content_security_policy desc="Customize the CSP header by specifying one or more policy-directive, separated by semicolons. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy">
       <!-- example:
