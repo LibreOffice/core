@@ -7513,6 +7513,7 @@ void lcl_CollectArcTokens(
                     return;
                 }
                 rCtx.bFailed = false;
+                rCtx.aFailure.clear();
                 continue;
             }
             for (size_t i = 0; i < aTokens.size(); ++i)
