@@ -115,6 +115,13 @@ class ServerAuditDialog {
 					'SDK: wopi-host',
 					'https://sdk.collaboraonline.com/docs/installation/Configuration.html#wopi-host',
 				],
+				groupsignored: [
+					_(
+						'The alias_groups groups are ignored because the mode is "first", not "groups"',
+					),
+					'SDK: wopi-host',
+					'https://sdk.collaboraonline.com/docs/installation/Configuration.html#wopi-host',
+				],
 				ok: [
 					_('The trusted WOPI hosts are configured'),
 					'SDK: wopi-host',

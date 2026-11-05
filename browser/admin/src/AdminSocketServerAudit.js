@@ -52,6 +52,9 @@ var AdminSocketServerAudit = AdminSocketBase.extend({
 			nogroups: _(
 				'No WOPI host is allowed: alias_groups mode is "groups" but no group is defined',
 			),
+			groupsignored: _(
+				'The alias_groups groups are ignored because the mode is "first", not "groups"',
+			),
 		},
 		hardwarewarning: {
 			lowresources: _(

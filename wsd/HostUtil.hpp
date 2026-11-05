@@ -87,6 +87,9 @@ private:
     /// True when alias_groups mode is "groups" and no <group> is defined, so every WOPI host is
     /// refused.
     static bool GroupsModeWithoutGroup;
+    /// True when alias_groups defines a <group> in coolwsd.xml but mode is "first", so the groups
+    /// are ignored.
+    static bool GroupsIgnoredInFirstMode;
 
     static bool WopiEnabled;
 
@@ -128,7 +131,8 @@ public:
     static bool isFirstHostTrusted() { return !FirstHost.empty(); }
 
     /// The server audit status of the WOPI host configuration: "nogroups" when alias_groups mode
-    /// is "groups" with no group, so every host is refused, "not_recommended" when the mode is
+    /// is "groups" with no group, so every host is refused, "groupsignored" when groups are defined
+    /// but mode is "first", so they are ignored, "not_recommended" when the mode is
     /// "first" with no WOPI host configured, so the first host to connect is trusted, or empty when
     /// neither applies.
     static std::string getWopiHostAuditStatus();

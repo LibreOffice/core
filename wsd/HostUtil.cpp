@@ -42,6 +42,7 @@ std::string HostUtil::FirstHost;
 bool HostUtil::FirstHostRejectionLogged;
 bool HostUtil::WopiEnabled;
 bool HostUtil::GroupsModeWithoutGroup;
+bool HostUtil::GroupsIgnoredInFirstMode;
 
 bool WopiHostList::Entry::matches(const std::string& host) const
 {
@@ -237,6 +238,7 @@ void HostUtil::parseAliases(Poco::Util::LayeredConfiguration& conf)
 {
     WopiEnabled = conf.getBool("storage.wopi[@allow]", false);
     GroupsModeWithoutGroup = false;
+    GroupsIgnoredInFirstMode = false;
 
     //set alias_groups mode to compat
     if (!conf.has("storage.wopi.alias_groups"))
@@ -253,6 +255,7 @@ void HostUtil::parseAliases(Poco::Util::LayeredConfiguration& conf)
         {
             LOG_ERR("Admins did not set the alias_groups mode to 'groups'");
             AliasHosts.clear();
+            GroupsIgnoredInFirstMode = true;
             return;
         }
     }
@@ -481,6 +484,8 @@ std::string HostUtil::getWopiHostAuditStatus()
         return std::string();
     if (GroupsModeWithoutGroup)
         return "nogroups";
+    if (GroupsIgnoredInFirstMode)
+        return "groupsignored";
     // Trusting the first host adds it to WopiHosts, so a trusted FirstHost still counts
     if (Util::iequal(ConfigUtil::getString("storage.wopi.alias_groups[@mode]", "first"), "first") &&
         (WopiHosts.empty() || isFirstHostTrusted()))

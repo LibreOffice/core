@@ -98,6 +98,7 @@ void HostUtilTests::resetHostState(bool wopiEnabled)
     HostUtil::FirstHostRejectionLogged = false;
     HostUtil::WopiEnabled = wopiEnabled;
     HostUtil::GroupsModeWithoutGroup = false;
+    HostUtil::GroupsIgnoredInFirstMode = false;
 }
 
 void HostUtilTests::testParseAlias()
@@ -541,6 +542,14 @@ void HostUtilTests::testWopiHostAuditStatus()
     LOK_ASSERT_EQUAL_STR("not_recommended", HostUtil::getWopiHostAuditStatus());
     HostUtil::setFirstHost(uri);
     LOK_ASSERT_EQUAL_STR("not_recommended", HostUtil::getWopiHostAuditStatus());
+
+    // A group in coolwsd.xml with mode left at "first" is ignored
+    config->setString("storage.wopi.alias_groups.group[0]", "");
+    config->setString("storage.wopi.alias_groups.group[0].host", "cloud.example.com");
+    resetHostState(true);
+    HostUtil::parseAliases(*layered);
+    LOK_ASSERT_EQUAL_STR("groupsignored", HostUtil::getWopiHostAuditStatus());
+    config->remove("storage.wopi.alias_groups.group[0]");
 
     // The options richdocumentscode passes: groups mode, Nextcloud's names as the aliases of one
     // group, and one plain name as the group host
