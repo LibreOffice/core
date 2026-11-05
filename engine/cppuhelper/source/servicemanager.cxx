@@ -2043,6 +2043,9 @@ void cppuhelper::ServiceManager::preloadImplementations() {
     {
         maMaps.push_back(cpo::uno::Mapping(it.maFrom, it.maTo, it.maPurpose));
     }
+
+    // Everything the process needs is loaded now.
+    cppuhelper::detail::loadOnlyLoadedLibraries();
 #endif
 }
 

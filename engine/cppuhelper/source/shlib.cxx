@@ -19,9 +19,18 @@
 
 #include <sal/config.h>
 
+#include <atomic>
 #include <cassert>
 #include <cstdlib>
 #include <string_view>
+
+#if defined UNX
+#include <dlfcn.h>
+#elif defined _WIN32
+#include <prewin.h>
+#include <postwin.h>
+#include <o3tl/char16_t2wchar_t.hxx>
+#endif
 
 #ifdef IOS
 #include <premac.h>
@@ -36,7 +45,9 @@
 #include <cppuhelper/shlib.hxx>
 #include <o3tl/environment.hxx>
 #include <o3tl/string_view.hxx>
+#include <osl/file.hxx>
 #include <osl/module.hxx>
+#include <osl/thread.h>
 #include <sal/log.hxx>
 #include <uno/environment.hxx>
 #include <uno/mapping.hxx>
@@ -45,6 +56,47 @@
 
 #if defined DISABLE_DYNLOADING
 #include <osl/detail/component-mapping.h>
+#endif
+
+#if !defined DISABLE_DYNLOADING
+
+namespace {
+
+std::atomic<bool> g_bOnlyLoadedLibraries(false);
+
+// Whether the library is already in this process. The lookup maps nothing new, so no code in the
+// file runs.
+bool isLibraryLoaded(OUString const & rLibrary)
+{
+    OUString aSystemPath;
+    if (osl::FileBase::getSystemPathFromFileURL(rLibrary, aSystemPath) != osl::FileBase::E_None)
+        aSystemPath = rLibrary;
+#if defined UNX
+    OString aPath(OUStringToOString(aSystemPath, osl_getThreadTextEncoding()));
+    void * pHandle = dlopen(aPath.getStr(), RTLD_LAZY | RTLD_NOLOAD);
+    if (!pHandle)
+        return false;
+    dlclose(pHandle);
+    return true;
+#elif defined _WIN32
+    return GetModuleHandleW(o3tl::toW(aSystemPath.getStr())) != nullptr;
+#else
+    return false;
+#endif
+}
+
+bool mayLoadLibrary(OUString const & rLibrary)
+{
+    return !g_bOnlyLoadedLibraries.load() || isLibraryLoaded(rLibrary);
+}
+
+}
+
+void cppuhelper::detail::loadOnlyLoadedLibraries()
+{
+    g_bOnlyLoadedLibraries.store(true);
+}
+
 #endif
 
 cpo::uno::Environment cppuhelper::detail::getEnvironment(
@@ -315,6 +367,11 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
         dllName = u"" SAL_MODULENAME("unitedlo") ""_ustr;
 #endif
 #endif
+    if (!mayLoadLibrary(dllName)) {
+        throw css::loader::CannotActivateFactoryException(
+            "component library <" + dllName + "> is not loaded and loading is closed",
+            cpo::uno::Reference<cpo::uno::XInterface>());
+    }
     osl::Module mod(dllName, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL);
     if (!mod.is()) {
         throw css::loader::CannotActivateFactoryException(
@@ -395,6 +452,11 @@ void cppu::writeSharedLibComponentInfo(
     cpo::uno::Reference<css::lang::XMultiServiceFactory> const & xMgr,
     cpo::uno::Reference<css::registry::XRegistryKey> const & xKey)
 {
+    if (!mayLoadLibrary(uri)) {
+        throw css::registry::CannotRegisterImplementationException(
+            "component library <" + uri + "> is not loaded and loading is closed",
+            cpo::uno::Reference<cpo::uno::XInterface>());
+    }
     osl::Module mod(uri, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL);
     if (!mod.is()) {
         throw css::registry::CannotRegisterImplementationException(

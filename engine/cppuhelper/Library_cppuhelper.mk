@@ -39,6 +39,12 @@ $(eval $(call gb_Library_use_externals,cppuhelper,\
     boost_headers \
 ))
 
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_add_libs,cppuhelper,\
+	-ldl \
+))
+endif
+
 ifeq ($(OS),iOS)
 $(eval $(call gb_Library_add_cxxflags,cppuhelper,\
     $(gb_OBJCXXFLAGS) \

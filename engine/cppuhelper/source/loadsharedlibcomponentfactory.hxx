@@ -34,6 +34,10 @@ void loadSharedLibComponentFactory(
     WrapperConstructorFn * constructorFunction,
     cpo::uno::Reference<cpo::uno::XInterface> * factory);
 
+// From now on, refuse to load a component library that is not already loaded. There is no way
+// to turn this off again.
+void loadOnlyLoadedLibraries();
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
