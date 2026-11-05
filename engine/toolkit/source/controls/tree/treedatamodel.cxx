@@ -39,7 +39,7 @@ using namespace ::com::sun::star::lang;
 
 namespace {
 
-    enum broadcast_type { nodes_changed, nodes_inserted, nodes_removed, structure_changed };
+    enum broadcast_type { nodes_changed, structure_changed };
 
 class MutableTreeNode;
 class MutableTreeDataModel;
@@ -153,8 +153,6 @@ void MutableTreeDataModel::broadcastImpl( std::unique_lock<std::mutex>& rGuard, 
         switch( eType )
         {
         case nodes_changed:     pListener->treeNodesChanged(aEvent); break;
-        case nodes_inserted:    pListener->treeNodesInserted(aEvent); break;
-        case nodes_removed:     pListener->treeNodesRemoved(aEvent); break;
         case structure_changed: pListener->treeStructureChanged(aEvent); break;
         }
     }

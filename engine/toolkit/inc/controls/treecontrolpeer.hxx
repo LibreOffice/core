@@ -88,8 +88,6 @@ public:
 
     // css::awt::tree::TreeDataModelListener
     virtual void treeNodesChanged( const css::awt::tree::TreeDataModelEvent& aEvent ) override;
-    virtual void treeNodesInserted( const css::awt::tree::TreeDataModelEvent& aEvent ) override;
-    virtual void treeNodesRemoved( const css::awt::tree::TreeDataModelEvent& aEvent ) override;
     virtual void treeStructureChanged( const css::awt::tree::TreeDataModelEvent& aEvent ) override;
 
     // XEventListener

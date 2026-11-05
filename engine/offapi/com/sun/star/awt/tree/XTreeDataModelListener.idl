@@ -43,23 +43,6 @@ interface XTreeDataModelListener: com::sun::star::lang::XEventListener
     */
     void treeNodesChanged( [in] TreeDataModelEvent Event );
 
-    /** Invoked after nodes have been inserted into the tree.
-
-        Use TreeDataModelEvent::ParentNode to get the parent of the new node(s).
-        TreeDataModelEvent::Nodes contains the new node(s).
-    */
-    void treeNodesInserted( [in] TreeDataModelEvent Event );
-
-    /** Invoked after nodes have been removed from the tree.
-        <p>Note that if a subtree is removed from the tree,
-        this method may only be invoked once for the root of the removed subtree,
-        not once for each individual set of siblings removed.
-
-        Use TreeDataModelEvent::ParentNode to get the former parent of the deleted node(s).
-        TreeDataModelEvent::Nodes contains the removed node(s).
-    */
-    void treeNodesRemoved( [in] TreeDataModelEvent Event );
-
     /** Invoked after the tree has drastically changed structure from a given node down.
 
         Use TreeDataModelEvent::ParentNode to get the node which

@@ -962,26 +962,6 @@ void TreeControlPeer::treeNodesChanged( const css::awt::tree::TreeDataModelEvent
     updateTree( rEvent );
 }
 
-void TreeControlPeer::treeNodesInserted( const css::awt::tree::TreeDataModelEvent& rEvent )
-{
-    SolarMutexGuard aGuard;
-
-    if( mnEditLock != 0 )
-        return;
-
-    updateTree( rEvent );
-}
-
-void TreeControlPeer::treeNodesRemoved( const css::awt::tree::TreeDataModelEvent& rEvent )
-{
-    SolarMutexGuard aGuard;
-
-    if( mnEditLock != 0 )
-        return;
-
-    updateTree( rEvent );
-}
-
 void TreeControlPeer::treeStructureChanged( const css::awt::tree::TreeDataModelEvent& rEvent )
 {
     SolarMutexGuard aGuard;
