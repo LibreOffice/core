@@ -3727,6 +3727,20 @@ void DocumentBroker::checkAndUploadToStorage(const std::shared_ptr<ClientSession
         }
         break;
 
+        case DocumentState::Activity::SyncFileTimestamp:
+        {
+            // A fresh save replaces the pending CheckFileInfo: end the activity and upload the new
+            // version.
+            if (_checkFileInfo)
+            {
+                LOG_TRC("Deferring upload: CheckFileInfo in flight during "
+                        "Activity::SyncFileTimestamp");
+                return;
+            }
+            endActivity();
+        }
+        break;
+
 #if !MOBILEAPP && !WASMAPP
         case DocumentState::Activity::SwitchingToOffline:
         {
