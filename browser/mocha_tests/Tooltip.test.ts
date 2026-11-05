@@ -86,6 +86,9 @@ describe('Tooltip', function () {
 	}
 
 	beforeEach(function () {
+		// The tooltip waits for the pointer only while the accessibility setting
+		// is on. The checks below need it on.
+		(window as any).prefs.set('accessibilityState', true);
 		installFakeClock();
 		// docstate.ts hands the jsdom window an app of its own, so the registry
 		// the bundle built there is not the one the tooltip reaches for.
@@ -110,6 +113,7 @@ describe('Tooltip', function () {
 		// The tooltip keeps listening on the window, so a switched off one ignores the keys.
 		tooltip.disable();
 		restoreClock();
+		(window as any).prefs.remove('accessibilityState');
 		container.remove();
 		trigger.remove();
 		neighbour.remove();
@@ -301,5 +305,62 @@ describe('Tooltip', function () {
 
 		nodeassert.strictEqual(shown(), true);
 		nodeassert.strictEqual(container.textContent, 'Redo');
+	});
+
+	describe('without accessibility', function () {
+		// Half the show delay, which is what a tooltip that the pointer is not
+		// meant to reach stays for.
+		let quickGrace: number;
+
+		beforeEach(function () {
+			(window as any).prefs.set('accessibilityState', false);
+			quickGrace = showDelay / 2;
+		});
+
+		it('goes shortly after the pointer leaves the widget', function () {
+			tooltip.show(trigger);
+			tooltip.beginHide();
+
+			advanceClock(quickGrace - 1);
+			nodeassert.strictEqual(shown(), true);
+
+			advanceClock(1);
+			nodeassert.strictEqual(shown(), false);
+		});
+
+		it('goes even while the pointer rests on it', function () {
+			tooltip.show(trigger);
+			tooltip.beginHide();
+
+			pointerAt(BOX.left + 10, BOX.top + 10);
+			advanceClock(quickGrace);
+
+			nodeassert.strictEqual(shown(), false);
+		});
+
+		it('still takes the show delay to come up', function () {
+			tooltip.beginShow(trigger);
+
+			advanceClock(showDelay - 1);
+			nodeassert.strictEqual(shown(), false);
+
+			advanceClock(1);
+			nodeassert.strictEqual(shown(), true);
+		});
+
+		it('releases a tooltip the pointer was holding when it is switched off', function () {
+			(window as any).prefs.set('accessibilityState', true);
+			tooltip.show(trigger);
+			tooltip.beginHide();
+			pointerAt(BOX.left + 10, BOX.top + 10);
+			advanceClock(grace * 10);
+			nodeassert.strictEqual(shown(), true);
+
+			(window as any).prefs.set('accessibilityState', false);
+			pointerAt(BOX.left + 10, BOX.top + 10);
+			advanceClock(quickGrace);
+
+			nodeassert.strictEqual(shown(), false);
+		});
 	});
 });

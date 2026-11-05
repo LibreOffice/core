@@ -19,6 +19,7 @@ describe(['tagdesktop'], 'Tooltip', { testIsolation: false }, function () {
 		cy.getFrameWindow().then(function (frameWindow) {
 			win = frameWindow;
 		});
+		cy.then(function () { win.prefs.set('accessibilityState', true); });
 
 		calcHelper.dblClickOnFirstCell();
 		cy.then(function () { win.app.map.sendUnoCommand('.uno:FormatCellDialog'); });

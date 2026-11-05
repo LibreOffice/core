@@ -20,6 +20,7 @@ describe(['tagdesktop'], 'Tooltip reach', { testIsolation: false }, function () 
 			'tooltips=true');
 
 		cy.getFrameWindow().then(function (frameWindow) { win = frameWindow; });
+		cy.then(function () { win.prefs.set('accessibilityState', true); });
 	});
 
 	function tooltip() {

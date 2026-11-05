@@ -18,7 +18,8 @@
 class Tooltip {
 	constructor(options) {
 		// hoverGrace: how long the tooltip outlives the pointer leaving the
-		// widget, so the pointer can cross the gap and reach it.
+		// widget while the accessibility setting is on, so the pointer can
+		// cross the gap and reach it.
 		this._options = window.L.extend({ timeout: 150, hoverGrace: 600 }, options);
 		let win = this._options.window ? this._options.window : window;
 		this._container = this._options.container
@@ -91,8 +92,20 @@ class Tooltip {
 			this._hideTimeout = app.timerRegistry.setTimeout(
 				'tooltip',
 				window.L.bind(this.hide, this, this._current),
-				this._options.hoverGrace,
+				this.hideDelay(),
 			);
+	}
+
+	isHoverable() {
+		return window.prefs.getBoolean('accessibilityState');
+	}
+
+	// A hoverable tooltip stays long enough to be reached and read, and a plain one leaves
+	// with the pointer so it is not in the way of the next button.
+	hideDelay() {
+		return this.isHoverable()
+			? this._options.hoverGrace
+			: this._options.timeout / 2;
 	}
 
 	// Pin the tooltip on a specific element so it stays visible while the
@@ -286,6 +299,13 @@ class Tooltip {
 	pointerMoved(e) {
 		this.buttonsChanged(e);
 		if (this._disabled || !this._current) return;
+
+		// A plain tooltip takes no notice of the pointer resting on it, and a hold that
+		// the accessibility setting granted ends when the setting goes off.
+		if (!this.isHoverable()) {
+			if (this._cancel) this.mouseLeave();
+			return;
+		}
 
 		if (this.isPointerOn(e)) this.mouseEnter();
 		else if (this._cancel) this.mouseLeave();
