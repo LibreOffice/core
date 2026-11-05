@@ -1048,6 +1048,15 @@ void cppuhelper::ServiceManager::insert(cpo::uno::Any const & aElement)
 {
     cpo::uno::Sequence< css::beans::NamedValue > args;
     if (aElement >>= args) {
+#ifndef DISABLE_DYNLOADING
+        // The registration data of the process is complete once preloading is done, so a
+        // registration file is only read before that.
+        if (cppuhelper::detail::onlyLoadedLibraries()) {
+            throw css::lang::IllegalArgumentException(
+                u"ServiceManager insert: no registration file after preload"_ustr,
+                static_cast< cppu::OWeakObject * >(this), 0);
+        }
+#endif
         std::vector< OUString > uris;
         cpo::uno::Reference< cpo::uno::XComponentContext > alienContext;
         for (const auto & arg : args) {

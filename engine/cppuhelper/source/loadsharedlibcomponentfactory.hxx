@@ -38,6 +38,9 @@ void loadSharedLibComponentFactory(
 // to turn this off again.
 void loadOnlyLoadedLibraries();
 
+// Whether loadOnlyLoadedLibraries has been called.
+bool onlyLoadedLibraries();
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

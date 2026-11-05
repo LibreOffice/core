@@ -97,6 +97,11 @@ void cppuhelper::detail::loadOnlyLoadedLibraries()
     g_bOnlyLoadedLibraries.store(true);
 }
 
+bool cppuhelper::detail::onlyLoadedLibraries()
+{
+    return g_bOnlyLoadedLibraries.load();
+}
+
 #endif
 
 cpo::uno::Environment cppuhelper::detail::getEnvironment(
