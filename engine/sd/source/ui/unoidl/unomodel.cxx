@@ -6945,8 +6945,15 @@ void SdXImpressDocument::postMouseEvent(COKitMouseEventType eType, int nX, int n
         return;
     }
 
-    if (KitControlHandler::postMouseEvent(pPage, pDrawView, *pActiveWin, eType, aPointHMM, nCount, nButtons, nModifier))
-            return;
+    // a view that draws from the objects draws the form controls itself and has no live ones,
+    // so the click goes to the view, which selects them and offers their menu as the office does
+    SfxViewShell* pSfxViewShell = pViewShell->GetViewShell();
+    const bool bDrawsFromObjects(pSfxViewShell && pSfxViewShell->drawsFromObjects());
+
+    if (!bDrawsFromObjects
+        && KitControlHandler::postMouseEvent(pPage, pDrawView, *pActiveWin, eType, aPointHMM,
+                                             nCount, nButtons, nModifier))
+        return;
 
     KitMouseEventData aMouseEventData(eType, aPointHMM, nCount, MouseEventModifiers::SIMPLECLICK,
                                       nButtons, nModifier);

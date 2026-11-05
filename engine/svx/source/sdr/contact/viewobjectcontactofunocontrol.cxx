@@ -58,6 +58,11 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
+#include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <sfx2/viewsh.hxx>
 
 #include <utility>
 /*
@@ -1666,8 +1671,26 @@ namespace sdr::contact {
             return;
 
         if ( GetObjectContact().getViewInformation2D().getViewTransformation().isIdentity() )
+        {
+            // a view that draws from the objects never paints, so its transformation stays like
+            // this. we give its hit test the area of the control, without making the control
+            SdrPageView* pPageView(GetObjectContact().TryToGetSdrPageView());
+            const SfxViewShell* pViewShell(pPageView ? pPageView->GetView().GetSfxViewShell()
+                                                     : nullptr);
+            if (pViewShell && pViewShell->drawsFromObjects())
+            {
+                const basegfx::B2DRange aArea(
+                    vcl::unotools::b2DRectangleFromRectangle(getSdrObject().GetLogicRect()));
+                rVisitor.visit(new drawinglayer::primitive2d::HiddenGeometryPrimitive2D(
+                    drawinglayer::primitive2d::Primitive2DContainer{
+                        new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                            basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aArea)),
+                            basegfx::BColor()) }));
+            }
+
             // remove this when #i115754# is fixed
             return;
+        }
 
         // ignore existing controls which are in alive mode and manually switched to "invisible" #i102090#
         const ControlHolder& rControl( m_pImpl->getExistentControl() );
