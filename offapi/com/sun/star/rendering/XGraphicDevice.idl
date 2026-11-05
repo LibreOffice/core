@@ -20,7 +20,6 @@
 module com { module sun { module star { module rendering {
 
 interface XBitmap;
-interface XVolatileBitmap;
 
 /** This interface provides access to a graphic device, such as a
     printer, or a screen device. Every canvas (@see XCanvas) has
@@ -108,27 +107,6 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
      */
     XBitmap                         createCompatibleAlphaBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
         raises (com::sun::star::lang::IllegalArgumentException);
-
-
-    /** Create a volatile bitmap with alpha channel that is usable
-        with this graphic device.
-
-        A volatile bitmap's difference in comparison to a plain bitmap
-        (e.g. generated via createCompatibleBitmap()) is the fact that
-        its content might vanish at any point in time (making any
-        operation with them produce a
-        VolatileContentDestroyedException). The benefit,
-        on the other hand, is that they might be easy to
-        hardware-accelerate on certain platforms, without the need to
-        keep a safety copy of the content internally.
-
-        @param size
-        Size of the requested bitmap in pixel. Both components of the
-        size must be greater than 0
-     */
-    XVolatileBitmap                 createVolatileAlphaBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
-        raises (com::sun::star::lang::IllegalArgumentException);
-
 
     /** Get a reference to this device's parametric polygon factory.
 

@@ -22,7 +22,6 @@
 #include <com/sun/star/rendering/XLinePolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XBezierPolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
-#include <com/sun/star/rendering/XVolatileBitmap.hpp>
 
 #include <rtl/ref.hxx>
 
@@ -186,17 +185,6 @@ namespace canvas
             MutexType aGuard( BaseType::m_aMutex );
 
             return maDeviceHelper.createCompatibleAlphaBitmap( this, size );
-        }
-
-        virtual css::uno::Reference< css::rendering::XVolatileBitmap > SAL_CALL createVolatileAlphaBitmap( const css::geometry::IntegerSize2D& size ) override
-        {
-            canvastools::verifyBitmapSize(size,
-                                    __func__,
-                                    static_cast< cppu::OWeakObject* >(this));
-
-            MutexType aGuard( BaseType::m_aMutex );
-
-            return maDeviceHelper.createVolatileAlphaBitmap( this, size );
         }
 
         virtual css::uno::Reference< css::lang::XMultiServiceFactory > SAL_CALL getParametricPolyPolygonFactory(  ) override

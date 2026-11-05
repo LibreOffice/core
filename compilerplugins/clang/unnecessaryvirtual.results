@@ -128,8 +128,6 @@ canvas/inc/base/graphicdevicebase.hxx:185
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> canvas::GraphicDeviceBase::createCompatibleBitmap(const struct com::sun::star::geometry::IntegerSize2D &,)
 canvas/inc/base/graphicdevicebase.hxx:207
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> canvas::GraphicDeviceBase::createCompatibleAlphaBitmap(const struct com::sun::star::geometry::IntegerSize2D &,)
-canvas/inc/base/graphicdevicebase.hxx:218
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XVolatileBitmap> canvas::GraphicDeviceBase::createVolatileAlphaBitmap(const struct com::sun::star::geometry::IntegerSize2D &,)
 canvas/inc/base/graphicdevicebase.hxx:229
     class com::sun::star::uno::Reference<class com::sun::star::lang::XMultiServiceFactory> canvas::GraphicDeviceBase::getParametricPolyPolygonFactory()
 canvas/inc/base/graphicdevicebase.hxx:245

@@ -132,13 +132,6 @@ namespace vclcanvas
                               mpOutDev ) );
     }
 
-    uno::Reference< rendering::XVolatileBitmap > DeviceHelper::createVolatileAlphaBitmap(
-        const uno::Reference< rendering::XGraphicDevice >&  ,
-        const geometry::IntegerSize2D&                       )
-    {
-        return uno::Reference< rendering::XVolatileBitmap >();
-    }
-
     void DeviceHelper::disposing()
     {
         // release all references

@@ -229,13 +229,6 @@ namespace oglcanvas
                               *this ) );
     }
 
-    uno::Reference< rendering::XVolatileBitmap > SpriteDeviceHelper::createVolatileAlphaBitmap(
-        const uno::Reference< rendering::XGraphicDevice >&  /*rDevice*/,
-        const geometry::IntegerSize2D&                      /*size*/ )
-    {
-        return uno::Reference< rendering::XVolatileBitmap >();
-    }
-
     namespace
     {
         /** Functor providing a StrictWeakOrdering for XSprites (over
