@@ -937,9 +937,20 @@ public:
 #endif // !MOBILEAPP
 
     /// Update the stored last-modified timestamp to match a collab
-    /// PutFile that was done outside this DocumentBroker.
+    /// PutFile that was done outside this DocumentBroker, or flag a
+    /// conflict when the loaded document is older than that upload.
     void updateLastModifiedTime(const std::string& lastModifiedTime)
     {
+        if (isLoaded()) {
+            LOG_INF(
+                "DocumentBroker [" << _docKey << "]: has loaded an older version than "
+                << lastModifiedTime << " of a collab PutFile");
+            _documentChangedInStorageByCollab = true;
+            handleDocumentConflict(
+                "Document changed in storage by a local editor.\nTimestamp in storage: "
+                + lastModifiedTime);
+            return;
+        }
         LOG_INF("DocumentBroker [" << _docKey
                 << "]: updating last modified time to " << lastModifiedTime
                 << " (was " << _storageManager.getLastModifiedServerTimeString() << ')');
@@ -2340,6 +2351,10 @@ private:
     /// Set to true when document changed in storage and we are waiting
     /// for user's command to act.
     bool _documentChangedInStorage;
+
+    /// Whether a /co/collab client uploaded the document changed in storage (only meaningful
+    /// while _documentChangedInStorage is set).
+    bool _documentChangedInStorageByCollab;
 
     /// Whether we know that our last upload did not reach storage. When we do,
     /// any change in storage is somebody else's. When we don't, our own upload

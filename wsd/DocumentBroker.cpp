@@ -298,6 +298,7 @@ DocumentBroker::DocumentBroker(ChildType type, const std::string& uri, const Poc
     , _isModified(false)
     , _stop(false)
     , _documentChangedInStorage(false)
+    , _documentChangedInStorageByCollab(false)
     , _lastUploadDefinitelyFailed(false)
     , _lastResortUpload(false)
     , _lastResortUploadFailed(false)
@@ -3417,13 +3418,15 @@ DocumentBroker::NeedToUpload DocumentBroker::needToUploadToStorage() const
     // Finally, see if we have a newer version than storage.
     if (isStorageOutdated())
     {
-        if (_documentChangedInStorage && !_storageManager.lastUploadSuccessful())
+        if (_documentChangedInStorage
+            && (!_storageManager.lastUploadSuccessful() || _documentChangedInStorageByCollab))
         {
-            // Our last upload was refused and storage has moved on, so the two
-            // versions have genuinely diverged and the user has been asked which
-            // one to keep. Sending ours again before they answer would decide it
-            // for them. Their answer comes back as a forced upload, which does
-            // not pass through here.
+            // Our last upload was refused (or a /co/collab client uploaded its
+            // own version) and storage has moved on, so the two versions have
+            // genuinely diverged and the user has been asked which one to keep.
+            // Sending ours again before they answer would decide it for them.
+            // Their answer comes back as a forced upload, which does not pass
+            // through here.
             //
             // A conflict found any other way - a peer joining a document whose
             // timestamp moved, say - leaves our uploads working: giving up on
@@ -3784,7 +3787,8 @@ void DocumentBroker::checkAndUploadToStorage(const std::shared_ptr<ClientSession
     {
         uploadToStorage(session, /*force=*/false);
     }
-    else if (_documentChangedInStorage && !_storageManager.lastUploadSuccessful())
+    else if (_documentChangedInStorage
+             && (!_storageManager.lastUploadSuccessful() || _documentChangedInStorageByCollab))
     {
         // We are holding back because the versions have diverged and the user
         // has not said which to keep. Saying nothing would have them save, be
@@ -4193,6 +4197,7 @@ void DocumentBroker::handleUploadToStorageSuccessful(const StorageBase::UploadRe
 
         // After a successful save, we are sure that document in the storage is same as ours
         _documentChangedInStorage = false;
+        _documentChangedInStorageByCollab = false;
 
         // Reset the storage attributes; They've been used and we can discard them.
         _lastStorageAttrs.reset();
@@ -4644,6 +4649,12 @@ void DocumentBroker::handleDocumentConflict(std::string details)
 
     const std::size_t activeClients = broadcastMessage(message);
     LOG_TRC("There are " << activeClients << " active clients after broadcasting documentconflict");
+    // A document that its clients reload after a /co/collab upload unloads at once (so that they
+    // get the uploaded version, not this one):
+    if (_documentChangedInStorageByCollab && message.starts_with("close:")) {
+        stop("documentconflict");
+        return;
+    }
     if (activeClients == 0 && isDetached())
     {
         // A detached document has no client to answer right now. The conflict is put to
@@ -5962,6 +5973,25 @@ std::shared_ptr<ClientSession> DocumentBroker::createNewClientSession(
 
             return nullptr;
         }
+
+#if !MOBILEAPP
+        // A session of a document that is in conflict with a /co/collab upload waits like one of
+        // an unloading document while a user here decides (as the version here is the one that
+        // the upload replaced):
+        if (_documentChangedInStorage && _documentChangedInStorageByCollab
+            && countActiveSessions() > 0) {
+            LOG_INF(
+                "DocBroker [" << getDocKey() << "] is in conflict with storage. Rejecting client"
+                " request to load session [" << id << "] until a user decides");
+            if (ws) {
+                static constexpr std::string_view msg("error: cmd=load kind=docunloading");
+                ws->sendTextMessage(msg);
+                ws->shutdown(true, msg);
+            }
+
+            return nullptr;
+        }
+#endif
 
         // Now we have a DocumentBroker and we're ready to process client commands.
         if (ws)
@@ -8592,6 +8622,7 @@ void DocumentBroker::dumpState(std::ostream& os)
     os << "\n  isStorageOutdated: " << isStorageOutdated();
     os << "\n  needToUpload: " << name(needToUploadToStorage());
     os << "\n  documentChangedInStorage: " << _documentChangedInStorage;
+    os << "\n  documentChangedInStorageByCollab: " << _documentChangedInStorageByCollab;
     os << "\n  lastUploadDefinitelyFailed: " << _lastUploadDefinitelyFailed;
     os << "\n  refusedUpload: " << isRefusedUpload();
     os << "\n  lastResortUpload: " << _lastResortUpload;

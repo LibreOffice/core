@@ -550,11 +550,241 @@ private:
     std::string _lastModifiedTime;
 };
 
+/// An upload by a collab client reloads a plain-COOL session that has an older version of the
+/// document loaded, with that document unloading at once:
+class UnitCollabUploadConflict: public WopiTestServer {
+public:
+    UnitCollabUploadConflict():
+        WopiTestServer("UnitCollabUploadConflict"), _phase(Phase::ConnectCollab) {}
+
+    bool onDocumentLoaded(std::string const & message) override {
+        TST_LOG("Loaded: " << message);
+        LOK_ASSERT_MESSAGE("Expected the document to load only once", _phase == Phase::WaitLoad);
+        PHASE_TRANSITION(Upload);
+        return true;
+    }
+
+    bool onFilterSendWebSocketMessage(
+        std::string_view const message, WSOpCode const /*code*/, bool const /*flush*/,
+        int & /*unitReturn*/) override {
+        if (message.starts_with("close: documentconflict")) {
+            TST_LOG("Received: " << message);
+            // The unloading document sends its reason once more:
+            if (_phase == Phase::WaitReload) {
+                PHASE_TRANSITION(WaitUnload);
+            } else {
+                LOK_ASSERT_MESSAGE(
+                    "Expected the reload only after the upload of the collab client",
+                    _phase == Phase::WaitUnload);
+            }
+        }
+        return false;
+    }
+
+    void onDocBrokerDestroy(std::string const & docKey) override {
+        TST_LOG("Destroyed: " << docKey);
+        LOK_ASSERT_MESSAGE(
+            "Expected the document to unload right after the reload", _phase == Phase::WaitUnload);
+        PHASE_TRANSITION(Done);
+        _collabWs->asyncShutdown();
+        passTest("The collab upload reloaded the older document, which unloaded");
+    }
+
+    void invokeWSDTest() override {
+        switch (_phase) {
+        case Phase::ConnectCollab: {
+            PHASE_TRANSITION(WaitCollabAuth);
+
+            Poco::URI const wopiURL(
+                getWopiHostURI()
+                + "/wopi/files/0?access_token=anything"
+                  "&testname=UnitCollabUploadConflict");
+            _collabWs = startCollabConnection(
+                socketPoll(), Uri::encode(wopiURL.toString()), "anything");
+            break;
+        }
+        case Phase::WaitCollabAuth: {
+            if (!pollCollabMessage(_collabWs, "user_list")) {
+                break;
+            }
+
+            PHASE_TRANSITION(WaitLoad);
+            initWebsocket("/wopi/files/0?access_token=anything");
+            WSD_CMD("load url=" + getWopiSrc());
+            break;
+        }
+        case Phase::Upload: {
+            PHASE_TRANSITION(WaitUploadURL);
+            _collabWs->sendMessage(R"({"type":"upload","stream":"contents","requestId":"r1"})");
+            break;
+        }
+        case Phase::WaitUploadURL: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(_collabWs, "upload_url");
+            if (!msg) {
+                break;
+            }
+
+            PHASE_TRANSITION(WaitReload);
+            http::Request request(msg->getValue<std::string>("url"), http::Request::VERB_POST);
+            request.setBody("Uploaded by the collab client", "application/octet-stream");
+            std::shared_ptr<http::Response const> const response
+                = http::Session::create(helpers::getTestServerURI())->syncRequest(request);
+            LOK_ASSERT_EQUAL(http::StatusCode::OK, response->statusLine().statusCode());
+            break;
+        }
+        case Phase::WaitLoad:
+        case Phase::WaitReload:
+        case Phase::WaitUnload:
+        case Phase::Done:
+            break;
+        }
+    }
+
+private:
+    enum class Phase {
+        ConnectCollab, WaitCollabAuth, WaitLoad, Upload, WaitUploadURL, WaitReload, WaitUnload,
+        Done
+    } _phase;
+
+    std::shared_ptr<http::WebSocketSession> _collabWs;
+};
+
+/// An upload by a collab client asks a plain-COOL user with unsaved changes what to do, and until
+/// that user decides, another session cannot load the document and a save of that user does not
+/// reach storage:
+class UnitCollabUploadConflictModified: public WopiTestServer {
+public:
+    UnitCollabUploadConflictModified():
+        WopiTestServer("UnitCollabUploadConflictModified"), _phase(Phase::ConnectCollab) {}
+
+    bool onDocumentLoaded(std::string const & message) override {
+        TST_LOG("Loaded: " << message);
+        LOK_ASSERT_MESSAGE("Expected the document to load only once", _phase == Phase::WaitLoad);
+        PHASE_TRANSITION(WaitModified);
+        WSD_CMD("key type=input char=97 key=0");
+        WSD_CMD("key type=up char=0 key=512");
+        return true;
+    }
+
+    bool onDocumentModified(std::string const & message) override {
+        TST_LOG("Modified: " << message);
+        if (_phase == Phase::WaitModified) {
+            PHASE_TRANSITION(Upload);
+        }
+        return true;
+    }
+
+    bool onFilterSendWebSocketMessage(
+        std::string_view const message, WSOpCode const /*code*/, bool const /*flush*/,
+        int & /*unitReturn*/) override {
+        if (message.starts_with("close: documentconflict")) {
+            LOK_ASSERT_FAIL("Expected no reload of a document with unsaved changes");
+        } else if (message.starts_with("error: cmd=storage kind=documentconflict")) {
+            TST_LOG("Received: " << message);
+            if (_phase == Phase::WaitConflict) {
+                PHASE_TRANSITION(JoinOther);
+            } else {
+                LOK_ASSERT_MESSAGE(
+                    "Expected the question again only after the save",
+                    _phase == Phase::WaitAskedAgain);
+                LOK_ASSERT_EQUAL_MESSAGE(
+                    "Expected the save not to reach storage", _putFileCount, getCountPutFile());
+                PHASE_TRANSITION(Done);
+                passTest(
+                    "The conflict kept another session out and the save of the user away from"
+                    " storage");
+            }
+        } else if (message.starts_with("error: cmd=load kind=docunloading")) {
+            TST_LOG("Received: " << message);
+            LOK_ASSERT_MESSAGE(
+                "Expected the other session to wait only while the user decides",
+                _phase == Phase::WaitJoinRefused);
+            PHASE_TRANSITION(Save);
+        }
+        return false;
+    }
+
+    void invokeWSDTest() override {
+        switch (_phase) {
+        case Phase::ConnectCollab: {
+            PHASE_TRANSITION(WaitCollabAuth);
+
+            Poco::URI const wopiURL(
+                getWopiHostURI()
+                + "/wopi/files/0?access_token=anything"
+                  "&testname=UnitCollabUploadConflictModified");
+            _collabWs = startCollabConnection(
+                socketPoll(), Uri::encode(wopiURL.toString()), "anything");
+            break;
+        }
+        case Phase::WaitCollabAuth: {
+            if (!pollCollabMessage(_collabWs, "user_list")) {
+                break;
+            }
+
+            PHASE_TRANSITION(WaitLoad);
+            initWebsocket("/wopi/files/0?access_token=anything");
+            WSD_CMD("load url=" + getWopiSrc());
+            break;
+        }
+        case Phase::Upload: {
+            PHASE_TRANSITION(WaitUploadURL);
+            _collabWs->sendMessage(R"({"type":"upload","stream":"contents","requestId":"r1"})");
+            break;
+        }
+        case Phase::WaitUploadURL: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(_collabWs, "upload_url");
+            if (!msg) {
+                break;
+            }
+
+            PHASE_TRANSITION(WaitConflict);
+            http::Request request(msg->getValue<std::string>("url"), http::Request::VERB_POST);
+            request.setBody("Uploaded by the collab client", "application/octet-stream");
+            std::shared_ptr<http::Response const> const response
+                = http::Session::create(helpers::getTestServerURI())->syncRequest(request);
+            LOK_ASSERT_EQUAL(http::StatusCode::OK, response->statusLine().statusCode());
+            break;
+        }
+        case Phase::JoinOther: {
+            PHASE_TRANSITION(WaitJoinRefused);
+            addWebSocket();
+            WSD_CMD_BY_CONNECTION_INDEX(1, "load url=" + getWopiSrc());
+            break;
+        }
+        case Phase::Save: {
+            PHASE_TRANSITION(WaitAskedAgain);
+            _putFileCount = getCountPutFile();
+            WSD_CMD("save dontTerminateEdit=0 dontSaveIfUnmodified=0");
+            break;
+        }
+        case Phase::WaitLoad:
+        case Phase::WaitModified:
+        case Phase::WaitConflict:
+        case Phase::WaitJoinRefused:
+        case Phase::WaitAskedAgain:
+        case Phase::Done:
+            break;
+        }
+    }
+
+private:
+    enum class Phase {
+        ConnectCollab, WaitCollabAuth, WaitLoad, WaitModified, Upload, WaitUploadURL,
+        WaitConflict, JoinOther, WaitJoinRefused, Save, WaitAskedAgain, Done
+    } _phase;
+
+    std::shared_ptr<http::WebSocketSession> _collabWs;
+
+    std::size_t _putFileCount;
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* [4] { new UnitCollabProtocol(),
+    return new UnitBase* [6] { new UnitCollabProtocol(),
                                new UnitCollabCheckFileInfoTransient(),
-                               new UnitCollabUploadTimestamp(), nullptr };
+                               new UnitCollabUploadTimestamp(), new UnitCollabUploadConflict(),
+                               new UnitCollabUploadConflictModified(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
