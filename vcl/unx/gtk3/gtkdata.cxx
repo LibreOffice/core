@@ -612,7 +612,7 @@ void GtkSalData::ErrorTrapPush()
 
 bool GtkSalData::ErrorTrapPop( bool bIgnoreError )
 {
-# if defined(GDK_WINDOWING_X11)
+#if defined(GDK_WINDOWING_X11)
     GdkDisplay* pGdkDisp = gdk_display_get_default();
     if (DLSYM_GDK_IS_X11_DISPLAY(pGdkDisp))
     {
@@ -623,7 +623,9 @@ bool GtkSalData::ErrorTrapPop( bool bIgnoreError )
         }
         return gdk_x11_display_error_trap_pop(pGdkDisp) != 0;
     }
-# endif
+#else
+    (void)bIgnoreError;
+#endif
     return false;
 }
 
