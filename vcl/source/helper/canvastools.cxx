@@ -24,7 +24,6 @@
 
 #include <com/sun/star/rendering/ColorSpaceType.hpp>
 #include <com/sun/star/rendering/RenderingIntent.hpp>
-#include <com/sun/star/rendering/VolatileContentDestroyedException.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
 #include <com/sun/star/rendering/ColorComponentTag.hpp>
@@ -85,15 +84,7 @@ namespace vcl::unotools
                 for( aRect.Y1=0; aRect.Y1<nHeight; ++aRect.Y1 )
                 {
                     aRect.X1 = 0; aRect.X2 = nWidth; aRect.Y2 = aRect.Y1+1;
-                    try
-                    {
-                        aPixelData = xInputBitmap->getData(aCurrLayout,aRect);
-                    }
-                    catch( rendering::VolatileContentDestroyedException& )
-                    {
-                        // re-read bmp from the start
-                        return false;
-                    }
+                    aPixelData = xInputBitmap->getData(aCurrLayout,aRect);
                     if( !equalsLayout(aCurrLayout, rLayout) )
                         return false; // re-read bmp from the start
 

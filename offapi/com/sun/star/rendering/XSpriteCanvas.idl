@@ -58,13 +58,9 @@ interface XSpriteCanvas : XCanvas
         Value of InterpolationMode, to determine whether
         and how to interpolate between the provided bitmaps, if
         animation runs fast enough.
-
-        @throws VolatileContentDestroyedException
-        if at least one of the bitmap is volatile, and its content has been destroyed by the system.
      */
     XAnimatedSprite createSpriteFromBitmaps( [in] sequence<XBitmap> animationBitmaps, [in] byte interpolationMode )
-        raises (com::sun::star::lang::IllegalArgumentException,
-                VolatileContentDestroyedException);
+        raises (com::sun::star::lang::IllegalArgumentException);
 
     /** Create a custom, user-handles-it-all sprite object.
 

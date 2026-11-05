@@ -55,16 +55,12 @@ interface XIntegerReadOnlyBitmap : XBitmap
         A rectangle, within the bounds of the bitmap, to retrieve the
         consent from.
 
-        @throws VolatileContentDestroyedException
-        if the bitmap is volatile, and the content has been destroyed by the system.
-
         @throws com::sun::star::lang::IndexOutOfBoundsException
         if parts of the given rectangle are outside the permissible
         bitmap area.
      */
     sequence<byte>      getData( [out] IntegerBitmapLayout bitmapLayout, [in] ::com::sun::star::geometry::IntegerRectangle2D rect )
-        raises (com::sun::star::lang::IndexOutOfBoundsException,
-                VolatileContentDestroyedException);
+        raises (com::sun::star::lang::IndexOutOfBoundsException);
 
 
     /** Get a single pixel of the bitmap, returning its color
@@ -89,15 +85,11 @@ interface XIntegerReadOnlyBitmap : XBitmap
         A position, within the bounds of the bitmap, to retrieve the
         color from.
 
-        @throws VolatileContentDestroyedException
-        if the bitmap is volatile, and the content has been destroyed by the system.
-
         @throws com::sun::star::lang::IndexOutOfBoundsException
         if the given position is outside the permissible bitmap area.
      */
     sequence<byte>      getPixel( [out] IntegerBitmapLayout bitmapLayout, [in] ::com::sun::star::geometry::IntegerPoint2D pos )
-        raises (com::sun::star::lang::IndexOutOfBoundsException,
-                VolatileContentDestroyedException);
+        raises (com::sun::star::lang::IndexOutOfBoundsException);
 
 
     /** Query the memory layout for this bitmap.<p>

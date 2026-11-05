@@ -92,8 +92,7 @@ interface XBitmapCanvas : XCanvas
     void copyRect( [in] XBitmapCanvas sourceCanvas,
                    [in] ::com::sun::star::geometry::RealRectangle2D sourceRect, [in] ViewState sourceViewState, [in] RenderState sourceRenderState,
                    [in] ::com::sun::star::geometry::RealRectangle2D destRect, [in] ViewState destViewState, [in] RenderState destRenderState )
-        raises (com::sun::star::lang::IllegalArgumentException,
-                VolatileContentDestroyedException);
+        raises (com::sun::star::lang::IllegalArgumentException);
 
 };
 
