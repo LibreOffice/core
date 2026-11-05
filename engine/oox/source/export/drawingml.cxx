@@ -5644,6 +5644,11 @@ sal_Int32 lcl_AdjustmentScale(AdjustmentKind eKind, sal_Int32 nViewBoxWidth,
     }
 }
 
+// OOXML angles use 60000 units per degree. 34377468 / 10 approximates
+// 180 * 60000 / pi, keeping the operands integral; its reciprocal converts to radians.
+constexpr std::string_view sRadiansToOoxmlAngle = "34377468 10";
+constexpr std::string_view sOoxmlAngleToRadians = "10 34377468";
+
 enum class EqState : sal_Int8
 {
     NotEmitted,
@@ -5749,7 +5754,8 @@ struct OoxmlEqContext
         if (nScale == 0)
         {
             // An angle stored in 60000ths of a degree, used as a plain number: its value in
-            // the unit the idiom X*(pi/c) gives it.
+            // the unit the idiom X*(pi/c) gives it. A half turn is pi radians, or
+            // 180 * 60000 = 10800000 OOXML angle units.
             if (rAngleAdjustments60000.count(nIndex) > 0)
                 return addGuide("*/ " + aName + " "
                                 + OString::number(static_cast<sal_Int32>(
@@ -5757,6 +5763,7 @@ struct OoxmlEqContext
                                 + " 10800000");
             return aName;
         }
+        // OOXML length adjustments are fractions with 100000 representing the full size.
         return addGuide("*/ " + aName + " " + OString::number(nScale) + " 100000");
     }
 
@@ -6014,7 +6021,7 @@ OString lcl_EmitTrig(const ExpressionNode* pTrig, const ExpressionNode* pMul, Oo
         // The angle is not in the pi/c idiom: it is a value in radians, which Office reads
         // in 60000ths of a degree, so a guide scales it by 10800000/pi.
         const OString aRadians = lcl_EmitOoxmlNode(pTrig->getChild(0), rCtx);
-        aAngle = rCtx.addGuide("*/ " + aRadians + " 34377468 10");
+        aAngle = rCtx.addGuide("*/ " + aRadians + " " + sRadiansToOoxmlAngle);
     }
     const char* pOp = pTrig->getType() == ExpressionFunct::UnarySin
                           ? "sin"
@@ -6071,7 +6078,7 @@ OString lcl_PlainTokenOfEquation(sal_Int32 nEquation, OoxmlEqContext& rCtx)
     if (pNode && pNode->getType() == ExpressionFunct::EnumAdjustment
         && rCtx.rAngleAdjustments60000.count(pNode->getIndex()) > 0)
         return rCtx.adjustmentToken(pNode->getIndex());
-    return rCtx.addGuide("*/ " + rCtx.rEqNames[nEquation] + " 10 34377468");
+    return rCtx.addGuide("*/ " + rCtx.rEqNames[nEquation] + " " + sOoxmlAngleToRadians);
 }
 
 OString lcl_EmitOoxmlNode(const ExpressionNode* pNode, OoxmlEqContext& rCtx)
@@ -6216,13 +6223,14 @@ OString lcl_EmitOoxmlNode(const ExpressionNode* pNode, OoxmlEqContext& rCtx)
             // at2 gives 60000ths of a degree of y/x; the shape reads radians
             return rCtx.addGuide(
                 "*/ " + rCtx.addGuide("at2 1 " + lcl_EmitOoxmlNode(pNode->getChild(0), rCtx))
-                + " 10 34377468");
+                + " " + sOoxmlAngleToRadians);
         case ExpressionFunct::BinaryAtan2:
         {
             // atan2(a, b) of the shape is the angle of a/b, at2 b a
             const OString aX = lcl_EmitOoxmlNode(pNode->getChild(1), rCtx);
             const OString aY = lcl_EmitOoxmlNode(pNode->getChild(0), rCtx);
-            return rCtx.addGuide("*/ " + rCtx.addGuide("at2 " + aX + " " + aY) + " 10 34377468");
+            return rCtx.addGuide("*/ " + rCtx.addGuide("at2 " + aX + " " + aY) + " "
+                                 + sOoxmlAngleToRadians);
         }
         case ExpressionFunct::TernaryIf:
         {
