@@ -44,7 +44,6 @@ DataLabelModel::~DataLabelModel()
 
 DataLabelsModel::DataLabelsModel(bool bMSO2007Doc) :
     DataLabelModelBase(bMSO2007Doc),
-    mpLabelsSource( nullptr ),
     mbShowLeaderLines( !bMSO2007Doc )
 {
 }

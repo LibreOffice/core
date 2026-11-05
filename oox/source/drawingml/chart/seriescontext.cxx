@@ -480,10 +480,11 @@ ContextHandlerRef SeriesContextBase::onCreateContext( sal_Int32 nElement, const 
                     if (mrModel.maSources.has( DataSourceType::DATALABELS ))
                         break;
 
-                    DataSourceModel& rLabelsSource = mrModel.maSources.create( DataSourceType::DATALABELS );
+                    mrModel.maSources.create( DataSourceType::DATALABELS );
+                    auto xLabelsSource = mrModel.maSources.get( DataSourceType::DATALABELS );
                     if (mrModel.mxLabels.is())
-                        mrModel.mxLabels->mpLabelsSource = &rLabelsSource;
-                    return new DataSourceContext( *this, rLabelsSource );
+                        mrModel.mxLabels->mxLabelsSource = xLabelsSource;
+                    return new DataSourceContext( *this, *xLabelsSource );
             }
             break;
     }

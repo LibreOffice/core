@@ -78,8 +78,8 @@ struct DataLabelsModel : public DataLabelModelBase
     DataLabelVector     maPointLabels;      /// Settings for individual data point labels.
     ShapeRef            mxLeaderLines;      /// Formatting of connector lines between data points and labels.
 
-    /// Labels source (owned by SeriesModel's DataSourceMap)
-    const DataSourceModel*  mpLabelsSource;
+    /// Source range of the data label texts
+    std::shared_ptr< const DataSourceModel > mxLabelsSource;
     bool                mbShowLeaderLines;  /// True = show connector lines between data points and labels.
 
     explicit            DataLabelsModel(bool bMSO2007Doc);
