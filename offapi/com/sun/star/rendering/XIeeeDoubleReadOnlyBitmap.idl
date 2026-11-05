@@ -30,7 +30,7 @@ module com { module sun { module star { module rendering {
     modified.<p>
 
     If you get passed an instance of
-    XHalfFloatReadOnlyBitmap that also supports the
+    XIeeeDoubleReadOnlyBitmap that also supports the
     XVolatileBitmap interface, things become a bit more
     complicated. When reading data, one has to check for both
     VolatileContentDestroyedException and mismatching
