@@ -3083,6 +3083,27 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeAngleUsedAsCoordinateKeepsHandle)
                 "fmla", u"*/ adj1 180 10800000");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeNegativeAngleKeepsHandle)
+{
+    // A -45 degree adjustment rotates a clock hand and places a mark as a plain coordinate.
+    loadFromFile(u"custGeom_negativeAngle.fodp");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    // Keep the sign instead of normalizing to 315 degrees, which would move the mark.
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd", 1);
+    assertXPath(pXmlDoc, "//a:custGeom/a:avLst/a:gd[@name='adj1']", "fmla", u"val -2700000");
+    assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahPolar", "gdRefAng", u"adj1");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='cos 9000 adj1']", 1);
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='sin 9000 adj1']", 1);
+
+    // Both ends of the mark use the guide that converts the stored angle back to degrees.
+    const OUString aMark = getXPath(pXmlDoc, "//a:pathLst/a:path[3]/a:moveTo/a:pt", "x");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[3]/a:lnTo/a:pt", "x", aMark);
+    assertXPath(pXmlDoc, OString("//a:custGeom/a:gdLst/a:gd[@name='" + aMark.toUtf8() + "']"),
+                "fmla", u"*/ adj1 180 10800000");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testCustomShapeFromOOXMLKeepsHandle)
 {
     // Given a shape that came from a pptx with its own geometry, an adjustment in Office's
