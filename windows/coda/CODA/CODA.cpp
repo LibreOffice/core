@@ -6512,8 +6512,8 @@ static void checkFileInfo(const DocumentTab& data, int id, const std::string& ar
         return;
     }
 
-    // TODO: Send CheckFileInfo only after comparing the scheme, host and port of
-    // wopiSrc with those of the cloud account's server.
+    // TODO: Take the file info from coolwsd's "authenticated" message on /co/collab, which
+    // comes from the CheckFileInfo coolwsd does already, instead of sending one from here.
     Poco::URI url(wopiSrc);
     url.setQueryParameters({ { "access_token", token } });
 
