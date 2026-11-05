@@ -212,12 +212,6 @@ public:
         createSpriteFromAnimation (
             const css::uno::Reference< css::rendering::XAnimation >& animation) override;
 
-    css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL
-        createSpriteFromBitmaps (
-            const css::uno::Sequence<
-                css::uno::Reference< css::rendering::XBitmap > >& animationBitmaps,
-            ::sal_Int8 interpolationMode) override;
-
     css::uno::Reference< css::rendering::XCustomSprite > SAL_CALL
         createCustomSprite (
             const css::geometry::RealSize2D& spriteSize) override;

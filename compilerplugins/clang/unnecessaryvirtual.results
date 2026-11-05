@@ -166,8 +166,6 @@ canvas/inc/base/spritecanvasbase.hxx:84
     void canvas::SpriteCanvasBase::disposeThis()
 canvas/inc/base/spritecanvasbase.hxx:95
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XAnimatedSprite> canvas::SpriteCanvasBase::createSpriteFromAnimation(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XAnimation> &,)
-canvas/inc/base/spritecanvasbase.hxx:106
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XAnimatedSprite> canvas::SpriteCanvasBase::createSpriteFromBitmaps(const class com::sun::star::uno::Sequence<class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> > &,signed char,)
 canvas/inc/base/spritecanvasbase.hxx:121
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XCustomSprite> canvas::SpriteCanvasBase::createCustomSprite(const struct com::sun::star::geometry::RealSize2D &,)
 canvas/inc/base/spritecanvasbase.hxx:132

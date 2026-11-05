@@ -313,21 +313,6 @@ Reference<rendering::XAnimatedSprite> SAL_CALL
         return nullptr;
 }
 
-Reference<rendering::XAnimatedSprite> SAL_CALL
-    PresenterCanvas::createSpriteFromBitmaps (
-        const css::uno::Sequence<
-            css::uno::Reference< css::rendering::XBitmap > >& rAnimationBitmaps,
-    ::sal_Int8 nInterpolationMode)
-{
-    ThrowIfDisposed();
-
-    Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxSharedCanvas, UNO_QUERY);
-    if (xSpriteCanvas.is())
-        return xSpriteCanvas->createSpriteFromBitmaps(rAnimationBitmaps, nInterpolationMode);
-    else
-        return nullptr;
-}
-
 Reference<rendering::XCustomSprite> SAL_CALL
     PresenterCanvas::createCustomSprite (
         const css::geometry::RealSize2D& rSpriteSize)

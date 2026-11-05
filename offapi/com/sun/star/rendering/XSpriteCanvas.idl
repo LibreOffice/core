@@ -43,25 +43,6 @@ interface XSpriteCanvas : XCanvas
     XAnimatedSprite createSpriteFromAnimation( [in] XAnimation animation )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    /** Create a sprite object from the specified animation
-        sequence.
-
-        A sprite is a back-buffered object with its own,
-        independent animation.
-
-        @param animationBitmaps
-        Sequence of bitmaps. The bitmaps don't need to have the same
-        size, but they are all rendered with their left, top edges
-        aligned.
-
-        @param interpolationMode
-        Value of InterpolationMode, to determine whether
-        and how to interpolate between the provided bitmaps, if
-        animation runs fast enough.
-     */
-    XAnimatedSprite createSpriteFromBitmaps( [in] sequence<XBitmap> animationBitmaps, [in] byte interpolationMode )
-        raises (com::sun::star::lang::IllegalArgumentException);
-
     /** Create a custom, user-handles-it-all sprite object.
 
         A sprite is a back-buffered object with its own, independent

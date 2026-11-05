@@ -80,13 +80,6 @@ namespace oglcanvas
         return uno::Reference< rendering::XAnimatedSprite >();
     }
 
-    uno::Reference< rendering::XAnimatedSprite > SAL_CALL SpriteCanvas::createSpriteFromBitmaps(
-        const uno::Sequence< uno::Reference< rendering::XBitmap > >& /*animationBitmaps*/,
-        ::sal_Int8 /*interpolationMode*/ )
-    {
-        return uno::Reference< rendering::XAnimatedSprite >();
-    }
-
     uno::Reference< rendering::XCustomSprite > SAL_CALL SpriteCanvas::createCustomSprite(
         const geometry::RealSize2D& spriteSize )
     {
