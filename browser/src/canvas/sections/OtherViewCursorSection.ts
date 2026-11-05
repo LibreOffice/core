@@ -27,7 +27,7 @@ class TextCursorSection extends HTMLObjectSection {
 		viewId: number,
 		color: string,
 		rectangle: cool.SimpleRectangle,
-		part: number,
+		part: string,
 		mode: number,
 	) {
 		super(
@@ -53,6 +53,13 @@ class TextCursorSection extends HTMLObjectSection {
 			super.onDraw(frameCount, elapsedTime);
 	}
 
+	// The index the part of this cursor holds in the current part list, or -1 when no part
+	// carries it. The part is kept as its identifier, because the index of a slide changes when
+	// slides are inserted, deleted or moved.
+	public getPartIndex(): number {
+		return app.map._docLayer.getIndexFromPart(this.sectionProperties.part);
+	}
+
 	checkMyVisibility() {
 		Util.ensureValue(app.activeDocument);
 
@@ -61,7 +68,7 @@ class TextCursorSection extends HTMLObjectSection {
 		if (result) {
 			if (!app.map._docLayer.isWriter()) {
 				if (
-					this.sectionProperties.part !== app.map._docLayer._selectedPart ||
+					this.getPartIndex() !== app.map._docLayer._selectedPart ||
 					!app.activeDocument.isModeActive(this.sectionProperties.mode)
 				)
 					result = false;
@@ -122,7 +129,7 @@ class TextCursorSection extends HTMLObjectSection {
 		viewId: number,
 		username: string,
 		rectangleData: Array<string>,
-		part: number,
+		part: string,
 		mode: number,
 	) {
 		let rectangle = new cool.SimpleRectangle(0, 0, 0, 0);
@@ -196,10 +203,10 @@ class TextCursorSection extends HTMLObjectSection {
 		return app.sectionContainer.doesSectionExist(name);
 	}
 
-	public static getViewCursorSection(viewId: number) {
+	public static getViewCursorSection(viewId: number): TextCursorSection | null {
 		if (TextCursorSection.doesViewCursorSectionExist(viewId)) {
 			const name = TextCursorSection.sectionNamePrefix + viewId;
-			return app.sectionContainer.getSectionWithName(name);
+			return app.sectionContainer.getSectionWithName(name) as TextCursorSection;
 		} else return null;
 	}
 

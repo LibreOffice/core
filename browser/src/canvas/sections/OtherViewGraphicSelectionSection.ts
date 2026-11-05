@@ -22,7 +22,7 @@ class OtherViewGraphicSelectionSection extends CanvasSectionObject {
     static sectionNamePrefix = 'OtherViewGraphicSelection ';
     static sectionPointers: Array<OtherViewGraphicSelectionSection> = [];
 
-    constructor(viewId: number, rectangle: cool.SimpleRectangle, part: number, mode: number) {
+    constructor(viewId: number, rectangle: cool.SimpleRectangle, part: string, mode: number) {
         super(OtherViewGraphicSelectionSection.sectionNamePrefix + viewId);
 
         this.size = [rectangle.pWidth, rectangle.pHeight];
@@ -44,6 +44,13 @@ class OtherViewGraphicSelectionSection extends CanvasSectionObject {
         this.context.restore();
     }
 
+    // The index the part of this selection holds in the current part list, or -1 when no part
+    // carries it. The part is kept as its identifier, because the index of a slide changes when
+    // slides are inserted, deleted or moved.
+    public getPartIndex(): number {
+        return app.map._docLayer.getIndexFromPart(this.sectionProperties.part);
+    }
+
     checkMyVisibility() {
         Util.ensureValue(app.activeDocument);
 
@@ -51,7 +58,7 @@ class OtherViewGraphicSelectionSection extends CanvasSectionObject {
 
         if (result) {
             if (!app.map._docLayer.isWriter()) {
-                if (this.sectionProperties.part !== app.map._docLayer._selectedPart ||
+                if (this.getPartIndex() !== app.map._docLayer._selectedPart ||
                     !app.activeDocument.isModeActive(this.sectionProperties.mode))
                     result = false;
             }
@@ -59,7 +66,7 @@ class OtherViewGraphicSelectionSection extends CanvasSectionObject {
         return result;
     }
 
-    public static addOrUpdateGraphicSelectionIndicator(viewId: number, rectangleData: Array<string>, part: number, mode: number) {
+    public static addOrUpdateGraphicSelectionIndicator(viewId: number, rectangleData: Array<string>, part: string, mode: number) {
         let rectangle = new cool.SimpleRectangle(0, 0, 0, 0);
         if (rectangleData)
             rectangle = new cool.SimpleRectangle(parseInt(rectangleData[0]), parseInt(rectangleData[1]), parseInt(rectangleData[2]), parseInt(rectangleData[3]));

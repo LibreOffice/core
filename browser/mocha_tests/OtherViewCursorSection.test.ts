@@ -70,6 +70,10 @@ describe('OtherViewCursorSection', function () {
 					isWriter: function () {
 						return false;
 					},
+					// A sheet's part identifier is its index in decimal form.
+					getIndexFromPart: function (part: string) {
+						return parseInt(part);
+					},
 					_selectedPart: 0,
 				},
 			} as any;
@@ -130,7 +134,7 @@ describe('OtherViewCursorSection', function () {
 				otherViewId,
 				'#ff0000',
 				rectangle,
-				0,
+				'0',
 				0,
 			);
 

@@ -1677,9 +1677,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		var strTwips = obj.selection.match(/-?\d+/g);
 
-		// The message names the part by its part identifier; the section
-		// tracks parts by index.
-		OtherViewGraphicSelectionSection.addOrUpdateGraphicSelectionIndicator(viewId, strTwips, this.getIndexFromPart(obj.part), obj.mode !== undefined ? parseInt(obj.mode): 0);
+		OtherViewGraphicSelectionSection.addOrUpdateGraphicSelectionIndicator(viewId, strTwips, obj.part, obj.mode !== undefined ? parseInt(obj.mode): 0);
 
 		// A selection with coordinates points at what the view is working on.
 		if (strTwips)
@@ -2012,9 +2010,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			for (let i = 0; i < rectangle.length; i++) rectangle[i] = parseInt(rectangle[i]);
 		}
 
-		// The message names the part by its part identifier; the section
-		// tracks parts by index.
-		TextCursorSection.addOrUpdateOtherViewCursor(viewId, username, rectangle, this.getIndexFromPart(obj.part), mode);
+		TextCursorSection.addOrUpdateOtherViewCursor(viewId, username, rectangle, obj.part, mode);
 
 		// The message names the view that moved this caret, which is another view
 		// when its own change moved the text the caret sits in. A server that
@@ -2070,7 +2066,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		const rectangleTwips = obj.rectangle !== 'EMPTY' ? obj.rectangle.match(/-?\d+/g) : null;
 		const rectangle = rectangleTwips ? new cool.SimpleRectangle(parseInt(rectangleTwips[0]), parseInt(rectangleTwips[1]), parseInt(rectangleTwips[2]), parseInt(rectangleTwips[3])) : null;
-		ShapeLockLabelSection.setLock(viewId, rectangle, this.getIndexFromPart(obj.part), obj.mode !== undefined ? parseInt(obj.mode) : 0, obj.objectId !== undefined ? String(obj.objectId) : '', obj.existing === true);
+		ShapeLockLabelSection.setLock(viewId, rectangle, obj.part, obj.mode !== undefined ? parseInt(obj.mode) : 0, obj.objectId !== undefined ? String(obj.objectId) : '', obj.existing === true);
 	},
 
 	// This view and another view both want to edit the text of one shape.
@@ -3451,8 +3447,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		// The part is -1 when the other view is on a page this view does not list, such as the
 		// handout page, so this view stays where it is.
-		if (graphicSection && graphicSection.sectionProperties.part >= 0) {
-			const part = graphicSection.sectionProperties.part;
+		const part = graphicSection ? graphicSection.getPartIndex() : -1;
+		if (part >= 0) {
 			if (this._selectedPart !== part) {
 				this._map.deselectAll();
 				this._map.setPart(part);
@@ -3472,7 +3468,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		if (section) {
 			// The part is -1 when the other view is on a page this view does not list, such as
 			// the handout page, so this view stays on its own part.
-			const part = section.sectionProperties.part;
+			const part = section.getPartIndex();
 			if ((this.isImpress() || this.isDraw()) && part >= 0 && this._selectedPart !== part) {
 				this._map.deselectAll();
 				this._map.setPart(part);

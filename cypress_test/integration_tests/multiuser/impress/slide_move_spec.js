@@ -178,4 +178,137 @@ describe(['tagmultiuser'], 'Multiuser slide reorder and delete', function() {
 			});
 		});
 	});
+	it('inserting a slide keeps the cursor and the lock label of another user on that user\'s slide', function() {
+		cy.cSetActiveFrame('#iframe1');
+		waitForLayout(win1);
+		cy.cSetActiveFrame('#iframe2');
+		waitForLayout(win2);
+
+		// User A edits the text of the shape on slide index 1.
+		cy.cSetActiveFrame('#iframe1');
+		clickSlideThumbnail(1);
+		helper.processToIdle(win1);
+		cy.wrap(null).should(function() {
+			expect(win1.app.map.getCurrentPartNumber()).to.equal(1);
+		});
+		// Tab selects the shape. The key goes to the server, because the Tab key of Cypress moves
+		// the focus.
+		cy.then(function() {
+			win1.app.socket.sendMessage('key type=input char=9 key=1282');
+			win1.app.socket.sendMessage('key type=up char=9 key=1282');
+		});
+		cy.cGet('#test-div-shape-handle-rotation').should('exist');
+		helper.typeIntoDocument('{enter}');
+		helper.processToIdle(win1);
+		helper.typeIntoDocument('x');
+		helper.processToIdle(win1);
+		cy.then(function() {
+			win1.__editedSlide = win1.app.impress.partList[1].part;
+		});
+
+		// User B, on slide index 0, knows the cursor of user A and the label that marks the shape
+		// as locked by user A, and shows neither of them.
+		cy.cSetActiveFrame('#iframe2');
+		helper.processToIdle(win2);
+		function cursorOfUserA() {
+			var name = 'OtherViewCursor ' + win1.app.map._docLayer._viewId;
+			return win2.app.sectionContainer.getSectionWithName(name);
+		}
+		function lockLabelOfUserA() {
+			var name = 'ShapeLockLabel ' + win1.app.map._docLayer._viewId;
+			return win2.app.sectionContainer.getSectionWithName(name);
+		}
+		cy.wrap(null).should(function() {
+			expect(win2.app.map.getCurrentPartNumber()).to.equal(0);
+			var cursor = cursorOfUserA();
+			expect(cursor, 'cursor of user A').to.exist;
+			expect(cursor.showSection, 'cursor of user A shown').to.equal(false);
+			var label = lockLabelOfUserA();
+			expect(label, 'lock label of user A').to.exist;
+			expect(label.showSection, 'lock label of user A shown').to.equal(false);
+		});
+
+		// User B inserts a slide after slide index 0 and lands on it. The new slide takes index 1,
+		// the index the slide of user A had before, and the slide of user A moves to index 2.
+		cy.then(function() {
+			win2.app.map.insertPage();
+		});
+		helper.processToIdle(win2);
+		cy.wrap(null).should(function() {
+			expect(win2.app.impress.partList).to.have.length(4);
+			expect(win2.app.impress.partList[2].part).to.equal(win1.__editedSlide);
+			expect(win2.app.map.getCurrentPartNumber()).to.equal(1);
+		});
+
+		// User B sees neither the cursor nor the lock label of user A on its slide, because user A
+		// edits another slide.
+		cy.wrap(null).should(function() {
+			var cursor = cursorOfUserA();
+			expect(cursor, 'cursor of user A').to.exist;
+			expect(cursor.showSection, 'cursor of user A shown').to.equal(false);
+			var label = lockLabelOfUserA();
+			expect(label, 'lock label of user A').to.exist;
+			expect(label.showSection, 'lock label of user A shown').to.equal(false);
+		});
+	});
+	it('inserting a slide keeps the shape selection of another user on that user\'s slide', function() {
+		cy.cSetActiveFrame('#iframe1');
+		waitForLayout(win1);
+		cy.cSetActiveFrame('#iframe2');
+		waitForLayout(win2);
+
+		// User A selects the shape on slide index 1.
+		cy.cSetActiveFrame('#iframe1');
+		clickSlideThumbnail(1);
+		helper.processToIdle(win1);
+		cy.wrap(null).should(function() {
+			expect(win1.app.map.getCurrentPartNumber()).to.equal(1);
+		});
+		// Tab selects the shape. The key goes to the server, because the Tab key of Cypress moves
+		// the focus.
+		cy.then(function() {
+			win1.app.socket.sendMessage('key type=input char=9 key=1282');
+			win1.app.socket.sendMessage('key type=up char=9 key=1282');
+		});
+		cy.cGet('#test-div-shape-handle-rotation').should('exist');
+		helper.processToIdle(win1);
+		cy.then(function() {
+			win1.__selectedSlide = win1.app.impress.partList[1].part;
+		});
+
+		// User B, on slide index 0, knows the shape selection of user A, and does not show it.
+		cy.cSetActiveFrame('#iframe2');
+		helper.processToIdle(win2);
+		function selectionOfUserA() {
+			var name = 'OtherViewGraphicSelection ' + win1.app.map._docLayer._viewId;
+			return win2.app.sectionContainer.getSectionWithName(name);
+		}
+		cy.wrap(null).should(function() {
+			expect(win2.app.map.getCurrentPartNumber()).to.equal(0);
+			var selection = selectionOfUserA();
+			expect(selection, 'selection of user A').to.exist;
+			expect(selection.size[0], 'width of the selection of user A').to.be.greaterThan(0);
+			expect(selection.showSection, 'selection of user A shown').to.equal(false);
+		});
+
+		// User B inserts a slide after slide index 0 and lands on it. The new slide takes index 1,
+		// the index the slide of user A had before, and the slide of user A moves to index 2.
+		cy.then(function() {
+			win2.app.map.insertPage();
+		});
+		helper.processToIdle(win2);
+		cy.wrap(null).should(function() {
+			expect(win2.app.impress.partList).to.have.length(4);
+			expect(win2.app.impress.partList[2].part).to.equal(win1.__selectedSlide);
+			expect(win2.app.map.getCurrentPartNumber()).to.equal(1);
+		});
+
+		// User B sees no shape selection of user A on its slide, because user A works on another
+		// slide.
+		cy.wrap(null).should(function() {
+			var selection = selectionOfUserA();
+			expect(selection, 'selection of user A').to.exist;
+			expect(selection.showSection, 'selection of user A shown').to.equal(false);
+		});
+	});
 });

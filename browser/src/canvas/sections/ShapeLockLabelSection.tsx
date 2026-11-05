@@ -121,7 +121,8 @@ class ShapeLockLabelSection extends HTMLObjectSection {
     this.sectionProperties.lockRectangle = null;
     // The unique id of the shape, as the lock message gives it.
     this.sectionProperties.objectId = '';
-    this.sectionProperties.part = 0;
+    // The part identifier of the part that holds the shape, as the lock message gives it.
+    this.sectionProperties.part = '';
     this.sectionProperties.mode = 0;
     // When the other user last typed or moved the text cursor, in milliseconds.
     this.sectionProperties.lastInput = Date.now();
@@ -172,10 +173,17 @@ class ShapeLockLabelSection extends HTMLObjectSection {
     );
   }
 
+  // The index the part that holds the shape has in the current part list, or -1 when no part
+  // carries it. The part is kept as its identifier, because the index of a slide changes when
+  // slides are inserted, deleted or moved.
+  private getPartIndex(): number {
+    return app.map._docLayer.getIndexFromPart(this.sectionProperties.part);
+  }
+
   // The shape is on the part and in the mode shown here.
   private checkMyVisibility(): boolean {
     return (
-      this.sectionProperties.part === app.map._docLayer._selectedPart &&
+      this.getPartIndex() === app.map._docLayer._selectedPart &&
       app.activeDocument.isModeActive(this.sectionProperties.mode)
     );
   }
@@ -458,13 +466,13 @@ class ShapeLockLabelSection extends HTMLObjectSection {
   }
 
   // Keep the shape of the given view locked, or unlock it when rectangle is null. The rectangle is
-  // the area of the text in twips, part is the index of the part that holds the shape, and objectId
-  // is the unique id of the shape. existing is true when the shape was already locked as this user
-  // joined, so how long the other user has not typed is not known.
+  // the area of the text in twips, part is the part identifier of the part that holds the shape,
+  // and objectId is the unique id of the shape. existing is true when the shape was already locked
+  // as this user joined, so how long the other user has not typed is not known.
   public static setLock(
     viewId: number,
     rectangle: cool.SimpleRectangle | null,
-    part: number,
+    part: string,
     mode: number,
     objectId: string = '',
     existing: boolean = false,
@@ -636,7 +644,7 @@ class ShapeLockLabelSection extends HTMLObjectSection {
   public static removeView(viewId: number) {
     ShapeLockLabelSection.takeOvers.delete(viewId);
     ShapeLockLabelSection.cursors.delete(viewId);
-    ShapeLockLabelSection.setLock(viewId, null, 0, 0);
+    ShapeLockLabelSection.setLock(viewId, null, '', 0);
     ShapeLockCalloutSection.closeIfFrom(viewId);
   }
 }
