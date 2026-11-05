@@ -202,6 +202,7 @@ test_base_sources = \
 	LoggingWhiteBoxTests.cpp \
 	NetUtilWhiteBoxTests.cpp \
 	NumUtilWhiteBoxTests.cpp \
+	OomKillsWhiteBoxTests.cpp \
 	ProcessWhiteBoxTests.cpp \
 	RequestDetailsTests.cpp \
 	StringVectorTests.cpp \

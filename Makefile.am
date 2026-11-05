@@ -501,6 +501,7 @@ kit_headers = \
               kit/Kit.hpp \
               kit/KitHelper.hpp \
               kit/KitWebSocket.hpp \
+              kit/OomKills.hpp \
               kit/SetupKitEnvironment.hpp \
               kit/SlideCompressor.hpp \
               kit/StateRecorder.hpp \
