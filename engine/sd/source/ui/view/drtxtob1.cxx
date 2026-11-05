@@ -132,11 +132,6 @@ void TextObjectBar::Execute(SfxRequest& rReq)
                 aSel.Adjust();
                 sal_Int32 nStartPara = aSel.start.nPara;
                 sal_Int32 nEndPara = aSel.end.nPara;
-                if( !aSel.HasRange() )
-                {
-                    nStartPara = 0;
-                    nEndPara = pOLV->GetOutliner().GetParagraphCount() - 1;
-                }
 
                 pOLV->GetOutliner().UndoActionStart( OLUNDO_ATTR );
                 for( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
