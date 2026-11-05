@@ -33,13 +33,12 @@ enum class SvxLanguageListFlags
     WESTERN           = 0x0002,
     CTL               = 0x0004,
     CJK               = 0x0008,
-    FBD_CHARS         = 0x0010,
     ONLY_KNOWN        = 0x0020,  // list only locales provided by I18N
     SPELL_USED        = 0x0040,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SvxLanguageListFlags> : is_typed_flags<SvxLanguageListFlags, 0x007f> {};
+    template<> struct typed_flags<SvxLanguageListFlags> : is_typed_flags<SvxLanguageListFlags, 0x006f> {};
 }
 
 // load language strings from resource

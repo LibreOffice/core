@@ -378,8 +378,6 @@ void SvxLanguageBox::SetLanguageList(SvxLanguageListFlags nLangList, bool bHasLa
             nLangType = SvtLanguageTable::GetLanguageTypeAtIndex( i );
         if ( lcl_isPrerequisite( nLangType, true ) &&
              (lcl_isScriptTypeRequested( nLangType, nLangList) ||
-              (bool(nLangList & SvxLanguageListFlags::FBD_CHARS) &&
-               MsLangId::hasForbiddenCharacters(nLangType)) ||
               (bool(nLangList & SvxLanguageListFlags::SPELL_USED) &&
                lcl_SeqHasLang(aSpellUsedLang, static_cast<sal_uInt16>(nLangType)))
               ) )
