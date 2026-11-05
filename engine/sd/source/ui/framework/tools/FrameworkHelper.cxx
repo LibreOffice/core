@@ -188,7 +188,6 @@ const OUString FrameworkHelper::msNotesViewURL( msViewURLPrefix + "NotesView");
 const OUString FrameworkHelper::msHandoutViewURL( msViewURLPrefix + "HandoutView");
 const OUString FrameworkHelper::msSlideSorterURL( msViewURLPrefix + "SlideSorter");
 const OUString FrameworkHelper::msPresentationViewURL( msViewURLPrefix + "PresentationView");
-const OUString FrameworkHelper::msSidebarViewURL( msViewURLPrefix + "SidebarView");
 const OUString FrameworkHelper::msNotesPanelViewURL( msViewURLPrefix + "NotesPanelView");
 
 // Tool bar URLs.
@@ -437,7 +436,6 @@ const OUString & FrameworkHelper::GetViewURL (ViewShell::ShellType eType)
         case ViewShell::ST_HANDOUT : return msHandoutViewURL;
         case ViewShell::ST_SLIDE_SORTER : return msSlideSorterURL;
         case ViewShell::ST_PRESENTATION : return msPresentationViewURL;
-        case ViewShell::ST_SIDEBAR : return msSidebarViewURL;
         case ViewShell::ST_NOTESPANEL: return msNotesPanelViewURL;
         default:
             return EMPTY_OUSTRING;

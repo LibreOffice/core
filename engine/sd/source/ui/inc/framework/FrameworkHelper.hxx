@@ -73,7 +73,6 @@ public:
     static const OUString msHandoutViewURL;
     static const OUString msSlideSorterURL;
     static const OUString msPresentationViewURL;
-    static const OUString msSidebarViewURL;
     static const OUString msNotesPanelViewURL;
 
     // URLs of frequently used tool bars.
