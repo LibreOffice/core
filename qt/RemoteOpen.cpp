@@ -229,6 +229,7 @@ protected:
 
 private:
     void openNewWindow(QWebEngineNewWindowRequest& request);
+    void insertEmptyCoolPageScript();
     void findEditorFrame();
     void putCodaPageIn(QWebEngineFrame& frame);
     std::optional<QByteArray> callBridge(const QString& method, const QString& argumentsJson);
@@ -348,13 +349,7 @@ CloudAccountPage::CloudAccountPage(const QUrl& accountUrl, QWebEngineProfile* pr
     , _integratorOrigin(originOf(accountUrl))
 {
     setUrlRequestInterceptor(new EditorFormInterceptor(*this));
-
-    QWebEngineScript emptyCoolPage;
-    emptyCoolPage.setSourceCode(QString::fromUtf8(EMPTY_COOL_PAGE_SCRIPT));
-    emptyCoolPage.setInjectionPoint(QWebEngineScript::DocumentCreation);
-    emptyCoolPage.setWorldId(QWebEngineScript::ApplicationWorld);
-    emptyCoolPage.setRunsOnSubFrames(true);
-    scripts().insert(emptyCoolPage);
+    insertEmptyCoolPageScript();
 
     _editorCheck.setInterval(EDITOR_CHECK_INTERVAL);
     connect(&_editorCheck, &QTimer::timeout, this, &CloudAccountPage::findEditorFrame);
@@ -384,6 +379,16 @@ bool CloudAccountPage::acceptNavigationRequest(const QUrl& url, NavigationType t
     LOG_INF("account window: opening a link in the system browser");
     openInSystemBrowser(url);
     return false;
+}
+
+void CloudAccountPage::insertEmptyCoolPageScript()
+{
+    QWebEngineScript emptyCoolPage;
+    emptyCoolPage.setSourceCode(QString::fromUtf8(EMPTY_COOL_PAGE_SCRIPT));
+    emptyCoolPage.setInjectionPoint(QWebEngineScript::DocumentCreation);
+    emptyCoolPage.setWorldId(QWebEngineScript::ApplicationWorld);
+    emptyCoolPage.setRunsOnSubFrames(true);
+    scripts().insert(emptyCoolPage);
 }
 
 /// The request is never opened in a page, so the app shows no new window.
