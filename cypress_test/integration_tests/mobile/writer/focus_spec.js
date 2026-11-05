@@ -29,8 +29,9 @@ describe(['tagmobile', 'tagproxy'], 'Focus tests', function() {
 		// Clipboard has the focus -> can type in the document
 		helper.assertFocus('className', 'clipboard');
 		mobileHelper.openMobileWizard();
-		// Body should have the focus (no focus on document)
+		// Body should have the focus (no focus on document), keyboard is down
 		helper.assertFocus('tagName', 'BODY');
+		helper.assertNoKeyboardInput();
 		mobileHelper.closeMobileWizard();
 	});
 
@@ -133,8 +134,9 @@ describe(['tagmobile', 'tagproxy'], 'Focus tests', function() {
 		});
 
 		helper.processToIdle(this.win);
-		// No focus on the document
-		helper.assertFocus('tagName', 'BODY');
+		// No keyboard
+		helper.assertFocus('className', 'clipboard');
+		helper.assertNoKeyboardInput();
 
 		// Double tap on the shape to enter text editing
 		impressHelper.dblclickOnSelectedShape();
@@ -166,20 +168,22 @@ describe(['tagmobile', 'tagproxy'], 'Focus tests', function() {
 		// Clipboard has the focus -> can type in the document
 		helper.assertFocus('className', 'clipboard');
 		mobileHelper.openMobileWizard();
-		// No focus
+		// No focus, no keyboard
 		helper.assertFocus('tagName', 'BODY');
+		helper.assertNoKeyboardInput();
 		// Apply bold
 		cy.cGet('#mobile-wizard .unoBold').click();
 		cy.cGet('#mobile-wizard .unoBold').should('have.class', 'selected');
-		// No focus
+		// No focus, no keyboard
 		helper.assertFocus('tagName', 'BODY');
+		helper.assertNoKeyboardInput();
 		mobileHelper.closeMobileWizard();
 	});
 
 	it('Apply bold, check keyboard.', function() {
 		// Click on edit button
 		mobileHelper.enableEditingMobile();
-		// Grab focus to the document
+		helper.clickIntoDocument();
 		helper.typeIntoDocument('x');
 		helper.selectAllText();
 		cy.cGet('#toolbar-down .unoBold').should('not.have.class', 'selected');
@@ -192,7 +196,8 @@ describe(['tagmobile', 'tagproxy'], 'Focus tests', function() {
 	it('Apply italic, check keyboard.', function() {
 		// Click on edit button
 		mobileHelper.enableEditingMobile();
-		// Grab focus to the document
+		// Raise the keyboard
+		helper.clickIntoDocument();
 		helper.typeIntoDocument('x');
 		helper.selectAllText();
 		cy.cGet('#toolbar-down .unoItalic').should('not.have.class', 'selected');
@@ -205,7 +210,8 @@ describe(['tagmobile', 'tagproxy'], 'Focus tests', function() {
 	it('Apply underline, check keyboard.', function() {
 		// Click on edit button
 		mobileHelper.enableEditingMobile();
-		// Grab focus to the document
+		// Raise the keyboard
+		helper.clickIntoDocument();
 		helper.typeIntoDocument('x');
 		helper.selectAllText();
 		cy.cGet('#toolbar-down .unoUnderline').should('not.have.class', 'selected');

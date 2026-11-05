@@ -1461,7 +1461,7 @@ class CanvasSectionContainer {
 			app.timerRegistry.setTimeout(
 				'focusafterpress',
 				() => {
-					if (document.activeElement === document.body) app.map.refocus();
+					if (document.activeElement === document.body) app.map.focus();
 				},
 				0,
 			);

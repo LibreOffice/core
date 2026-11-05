@@ -1657,6 +1657,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 	_onCursorVisibleMsg: function(textMsg) {
 		var command = textMsg.match('cursorvisible: true');
+		if (command && !app.file.textCursor.visible)
+			this._map._textInput.caretAppeared();
 		// With the caret hidden, the last selection the engine sent applies.
 		if (!command)
 			for (const held of LocalCaret.release())
@@ -3576,10 +3578,10 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 				if (this.isWriter()) {
 					var section = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name);
 					if (!section || !section.sectionProperties.selectedComment || !section.sectionProperties.selectedComment.isEdit())
-						this._map.focus(true);
+						this._map.focus(this._map._textInput.takeKeyboardRequest() ? true : undefined);
 				}
 				else
-					this._map.focus(true);
+					this._map.focus(this._map._textInput.takeKeyboardRequest() ? true : undefined);
 			}
 		} else {
 			this._map._textInput.hideCursor();

@@ -16,8 +16,9 @@ describe(['tagmobile', 'tagproxy'], 'Impress focus tests', function() {
 
 		impressHelper.assertNotInTextEditMode();
 
-		// Body has the focus -> can't type in the document
-		helper.assertFocus('tagName', 'BODY');
+		// Clipboard has the focus but the keyboard stays down
+		helper.assertFocus('className', 'clipboard');
+		helper.assertNoKeyboardInput();
 
 		// One tap on a text shape, on the whitespace area,
 		// does not start editing.
@@ -33,8 +34,9 @@ describe(['tagmobile', 'tagproxy'], 'Impress focus tests', function() {
 				cy.cGet('#document-container').click(posX, posY);
 			});
 
-		// No focus
-		helper.assertFocus('tagName', 'BODY');
+		// Still no keyboard
+		helper.assertFocus('className', 'clipboard');
+		helper.assertNoKeyboardInput();
 
 		// Shape selection.
 		cy.cGet('#document-container svg g').should('exist');
@@ -67,6 +69,77 @@ describe(['tagmobile', 'tagproxy'], 'Impress focus tests', function() {
 		helper.clearAllText();
 
 		impressHelper.typeTextAndVerify('Bazinga Impress', undefined, true);
+	});
+
+	it('Zoom while editing shape text does not raise the keyboard', function() {
+		mobileHelper.enableEditingMobile();
+
+		cy.cGet('#document-container').dblclick();
+		helper.assertHaveKeyboardInput();
+
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.setAcceptInput(false);
+			win.app.map.fire('zoomstart');
+			win.app.map.fire('zoomend');
+			helper.processToIdle(win);
+		});
+
+		helper.assertNoKeyboardInput();
+	});
+
+	it('Tap into edited text raises the keyboard', function() {
+		mobileHelper.enableEditingMobile();
+
+		cy.cGet('#document-container').dblclick();
+		helper.assertHaveKeyboardInput();
+
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.setAcceptInput(false);
+			helper.processToIdle(win);
+		});
+
+		helper.assertNoKeyboardInput();
+
+		// Centre of the text box the double click entered.
+		cy.cGet('#document-container').click();
+		helper.assertHaveKeyboardInput();
+	});
+
+	it('Graphic selection reply keeps the keyboard down', function() {
+		mobileHelper.enableEditingMobile();
+
+		cy.getFrameWindow().then(function(win) {
+			cy.spy(win.app.socket, '_onMessage');
+		});
+
+		cy.cGet('#document-container').dblclick();
+		helper.assertHaveKeyboardInput();
+
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.setAcceptInput(false);
+			helper.processToIdle(win);
+		});
+
+		cy.getFrameWindow().then(function(win) {
+			var last = null;
+			win.app.socket._onMessage.getCalls().forEach(function(call) {
+				var textMsg = call.args[0] && call.args[0].textMsg;
+				if (typeof textMsg === 'string' && textMsg.startsWith('graphicselection:'))
+					last = textMsg;
+			});
+			expect(last).to.be.a('string');
+			expect(last).not.to.contain('EMPTY');
+
+			// The shape stays selected while its text is edited.
+			win.app.map._docLayer._onMessage(last);
+			helper.processToIdle(win);
+		});
+
+		helper.assertNoKeyboardInput();
+
+		cy.getFrameWindow().then(function(win) {
+			win.app.socket._onMessage.restore();
+		});
 	});
 
 	it.skip('Single-click to edit', function() {

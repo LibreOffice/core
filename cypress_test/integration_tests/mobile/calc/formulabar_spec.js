@@ -442,6 +442,10 @@ describe(['tagmobile', 'tagnextcloud'], 'The view while a formula is edited.', f
 		helper.typeIntoInputField(helper.addressInputSelector, 'A2');
 		helper.typeIntoDocument('=2*');
 		cy.cGet(formulaText).should('have.text', '=2*');
+
+		cy.then(() => {
+			this.win.app.map.focus(true);
+		});
 	});
 
 	// A one finger pan. The cypress browser has no touch support, so the events go straight

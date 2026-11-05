@@ -107,6 +107,7 @@ describe(['tagmobile', 'tagnextcloud'], 'Cell handles on a formula reference.', 
 
 		var closings;
 		cy.then(function() {
+			win.app.map.focus(true);
 			closings = mobileHelper.watchKeyboardClosing(win);
 		});
 

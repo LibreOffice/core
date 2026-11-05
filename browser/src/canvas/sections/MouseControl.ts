@@ -875,7 +875,7 @@ class MouseControl extends CanvasSectionObject {
 		this.pressedInSelection = false;
 
 		// A touch pan is a drag too.
-		if (this.containerObject.isDraggingSomething()) app.map.refocus();
+		if (this.containerObject.isDraggingSomething()) app.map.focus();
 	}
 
 	onMouseEnter(point: cool.SimplePoint, e: MouseEvent): void {
@@ -906,7 +906,14 @@ class MouseControl extends CanvasSectionObject {
 					this.currentPosition.toArray(),
 				);
 			return acceptInput as boolean;
-		} else return false;
+		} else
+			// editing text in a shape
+			return !!(
+				app.file.textCursor.visible &&
+				GraphicSelection.rectangle?.containsPoint(
+					this.currentPosition.toArray(),
+				)
+			);
 	}
 
 	private sendClick(clickInfo: any, count: number) {
@@ -1253,8 +1260,13 @@ class MouseControl extends CanvasSectionObject {
 			this.clickCount = 1;
 		}
 
-		if (this.clickTimer) app.timerRegistry.clearTimeout(this.clickTimer);
-		else {
+		if (this.clickTimer) {
+			app.timerRegistry.clearTimeout(this.clickTimer);
+			if (this.clickCount === 2 && !(<any>window).mode.isDesktop())
+				app.map._textInput.requestKeyboardWhenCaretAppears();
+		} else {
+			app.map._textInput.cancelKeyboardRequest();
+
 			// Old code always sends the first click, so do we, unless the client marks
 			// the object or places the caret itself. A second click within the timer
 			// counts with it, and is answered here or sent when the timer runs out.

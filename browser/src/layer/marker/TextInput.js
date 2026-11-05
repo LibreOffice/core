@@ -49,6 +49,9 @@ window.L.TextInput = window.L.Layer.extend({
 		// Signifies whether the keyboard is meant to be visible.
 		this._setAcceptInput(false);
 
+		// tristate - null = no keyboard request, false = wait for caret, true = show keyboard
+		this._keyboardRequest = null;
+
 		// Date.now() of the last mousedown anywhere in the page.
 		this._lastPressTime = 0;
 		this._onPressBound = this._onPress.bind(this);
@@ -319,58 +322,51 @@ window.L.TextInput = window.L.Layer.extend({
 			return;
 		}
 
-		// Trick to avoid showing the software keyboard: Set the textarea
-		// read-only before focus() and reset it again after the blur()
-		if (!window.ThisIsTheiOSApp && navigator.platform !== 'iPhone' && !window.mode.isChromebook()) {
-			if (window.keyboard.guessOnscreenKeyboard() && acceptInput !== true)
-				this._textArea.setAttribute('readonly', true);
-		}
-
-		if (!window.ThisIsTheiOSApp && navigator.platform !== 'iPhone' && !window.keyboard.guessOnscreenKeyboard()) {
-			// preventScroll keeps Chromium from auto-scrolling html or body to bring
-			// the caret in this hidden contenteditable back into view when focus
-			// arrives during a chrome rebuild like the readonly-to-edit transition
-			// (which would otherwise shift the visible UI up by the chrome-height
-			// delta even though body has overflow:hidden):
-			this._textArea.focus({ preventScroll: true });
-		} else if (acceptInput === true) {
-			// On the iPhone, only call the textarea's focus() when we get an explicit
-			// true parameter. On the other hand, never call the textarea's blur().
-
-			// Calling blur() leads to so confusing behaviour with the keyboard not
-			// showing up when we want. Better to have it show up a bit too long that
-			// strictly needed.
-
-			// Probably whether the calls to the textarea's focus() and blur() functions
-			// actually do anything or not might depend on whether the call stack
-			// originates in a user input event handler or not, for security reasons.
-
-			// To investigate, uncomment the call to console.trace() at the start of
-			// this function, and check when the topmost slot in the stack trace is
-			// "(anonymous function)" in hammer.js (an event handler), and when it is
-			// _onMessage (the WebSocket message handler in Socket.js).
-
-			// preventScroll keeps Chromium from auto-scrolling html or body to bring
-			// the caret in this hidden contenteditable back into view when focus
-			// arrives during a chrome rebuild like the readonly-to-edit transition
-			// (which would otherwise shift the visible UI up by the chrome-height
-			// delta even though body has overflow:hidden):
-			this._textArea.focus({ preventScroll: true });
-		}
-
-		if (!window.ThisIsTheiOSApp && navigator.platform !== 'iPhone' && !window.mode.isChromebook()) {
-			if (window.keyboard.guessOnscreenKeyboard() && acceptInput !== true) {
-				this._setAcceptInput(false);
-				this._textArea.blur();
-				this._textArea.removeAttribute('readonly');
-			} else {
-				this._setAcceptInput(true);
-			}
-		} else if (acceptInput !== false) {
+		if (!window.keyboard.guessOnscreenKeyboard()) {
 			this._setAcceptInput(true);
-		} else {
-			this._setAcceptInput(false);
+			// preventScroll keeps Chromium from auto-scrolling html or body to bring
+			// the caret in this hidden contenteditable back into view when focus
+			// arrives during a chrome rebuild like the readonly-to-edit transition
+			// (which would otherwise shift the visible UI up by the chrome-height
+			// delta even though body has overflow:hidden):
+			this._textArea.focus({ preventScroll: true });
+			return;
 		}
+
+		// The text area stays focused so that a hardware keyboard works, so to avoid
+		// an onscreen keyboard popping up when we don't want that we need to use
+		// inputmode=none to hide it
+		this._updateInputMode();
+
+		if (acceptInput === true && !this._acceptInput && document.activeElement === this._textArea) {
+			this._textArea.blur();
+		}
+
+		if (acceptInput !== undefined)
+			this._setAcceptInput(acceptInput);
+
+		if (document.activeElement !== this._textArea)
+			this._textArea.focus({ preventScroll: true });
+	},
+
+	requestKeyboardWhenCaretAppears: function() {
+		this._keyboardRequest = false;
+	},
+
+	cancelKeyboardRequest: function() {
+		this._keyboardRequest = null;
+	},
+
+	caretAppeared: function() {
+		if (this._keyboardRequest === false)
+			this._keyboardRequest = true;
+	},
+
+	takeKeyboardRequest: function() {
+		if (this._keyboardRequest !== true)
+			return false;
+		this._keyboardRequest = null;
+		return true;
 	},
 
 	blur: function() {
@@ -769,6 +765,7 @@ window.L.TextInput = window.L.Layer.extend({
 		}
 
 		this._setupStyles();
+		this._updateInputMode();
 
 		this._emptyArea();
 
@@ -1633,6 +1630,15 @@ window.L.TextInput = window.L.Layer.extend({
 		}
 	},
 
+	_updateInputMode: function() {
+		if (!this._textArea)
+			return;
+		if (!window.keyboard.guessOnscreenKeyboard())
+			this._textArea.removeAttribute('inputmode');
+		else
+			this._textArea.setAttribute('inputmode', this._acceptInput ? 'text' : 'none');
+	},
+
 	_setAcceptInput: function(accept) {
 		if (window.L.Browser.cypressTest && this._textArea) {
 			// This is used to track whether we *intended*
@@ -1661,6 +1667,7 @@ window.L.TextInput = window.L.Layer.extend({
 				}
 			}
 		}
+		this._updateInputMode();
 	},
 
 	_hasPreSpace: function() {

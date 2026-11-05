@@ -36,6 +36,8 @@ interface MapInterface extends Evented {
 		_isDebugOn: boolean;
 		onVisibleAreaChanged?(): void;
 		update(): void;
+		requestKeyboardWhenCaretAppears(): void;
+		cancelKeyboardRequest(): void;
 	};
 	addressInputField: AddressInputField;
 
@@ -195,7 +197,6 @@ interface MapInterface extends Evented {
 	_cacheSVG: string[];
 	calcInputBarHasFocus(): boolean;
 	hasFocus(): boolean;
-	refocus(): void;
 	lockAccessibilityOn(): void;
 	setAccessibilityLock(locked: boolean): void;
 	_partsDirection: number;

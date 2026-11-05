@@ -1600,6 +1600,11 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		point.pY += this.position[1];
 		var modifier = MouseControl.readModifier(e);
 
+		app.map._textInput.cancelKeyboardRequest();
+
+		if (!(<any>window).mode.isDesktop() && app.file.textCursor.visible)
+			app.map.focus(true);
+
 		// Capture position for the timer callback.
 		const clickX = point.x;
 		const clickY = point.y;
@@ -1658,6 +1663,9 @@ class ShapeHandlesSection extends CanvasSectionObject {
 	}
 
 	onDoubleClick(point: cool.SimplePoint, e: MouseEvent): void {
+		if (!(<any>window).mode.isDesktop())
+			app.map._textInput.requestKeyboardWhenCaretAppears();
+
 		// Cancel the pending click - a double-click replaces it.
 		if (this.sectionProperties.clickTimer) {
 			app.timerRegistry.clearTimeout(this.sectionProperties.clickTimer);
