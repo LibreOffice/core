@@ -169,6 +169,35 @@ CPPUNIT_TEST_FIXTURE(ThemeTest, testThemeChange)
     CPPUNIT_ASSERT_EQUAL(Color(0xd5eda2), GetShapeFillColor(xShape5));
 }
 
+CPPUNIT_TEST_FIXTURE(ThemeTest, testEffectStylesRoundtrip)
+{
+    // The effects an effect style of a theme holds come back after a save, so a shape drawn in
+    // that style keeps the shadow or the glow the theme gives it.
+    createSdImpressDoc("ThemeEffectStyle.pptx");
+
+    save(TestFilter::PPTX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/theme/theme1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    static constexpr OString aStyle(
+        "/a:theme/a:themeElements/a:fmtScheme/a:effectStyleLst/a:effectStyle"_ostr);
+
+    // A style holding no effect keeps an empty list, which is what keeps a shape drawn in it
+    // from taking the effects of another style.
+    assertXPath(pXmlDoc, aStyle + "[1]/a:effectLst");
+    assertXPathChildren(pXmlDoc, aStyle + "[1]/a:effectLst", 0);
+
+    // Without the fix: every list was written empty.
+    assertXPathAttrs(pXmlDoc, aStyle + "[2]/a:effectLst/a:outerShdw",
+                     { { "blurRad", u"40000" }, { "dist", u"23000" }, { "dir", u"5400000" } });
+    assertXPath(pXmlDoc, aStyle + "[2]/a:effectLst/a:outerShdw/a:srgbClr", "val", u"000000");
+    assertXPath(pXmlDoc, aStyle + "[2]/a:effectLst/a:outerShdw/a:srgbClr/a:alpha", "val",
+                u"35000");
+
+    assertXPath(pXmlDoc, aStyle + "[3]/a:effectLst/a:glow", "rad", u"63500");
+    assertXPath(pXmlDoc, aStyle + "[3]/a:effectLst/a:glow/a:schemeClr", "val", u"accent2");
+}
+
 CPPUNIT_TEST_FIXTURE(ThemeTest, testExplicitShapeColorsRoundtrip)
 {
     // A plain shape colour survives a round trip, and so does one that names a theme colour.

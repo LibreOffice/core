@@ -9889,6 +9889,20 @@ void DrawingML::WriteInnerShadowEffect(model::InnerShadowEffect const& rInnerSha
     mpFS->endElementNS(XML_a, XML_innerShdw);
 }
 
+/// Writes an outer shadow. Its distance and its direction are stated whatever they are.
+void DrawingML::WriteOuterShadowEffect(model::OuterShadowEffect const& rShadow)
+{
+    rtl::Reference<sax_fastparser::FastAttributeList> pAttributes
+        = FastSerializerHelper::createAttrList();
+    addLengthAttribute(pAttributes, XML_blurRad, rShadow.maBlurRadius);
+    pAttributes->add(XML_dist, OString::number(rShadow.maDistance.as_emu<sal_Int64>()));
+    pAttributes->add(XML_dir, OString::number(rShadow.mnDirection.get()));
+    addTransformAttributes(pAttributes, rShadow);
+    mpFS->startElementNS(XML_a, XML_outerShdw, pAttributes);
+    WriteEffectColor(rShadow.maColor);
+    mpFS->endElementNS(XML_a, XML_outerShdw);
+}
+
 void DrawingML::WriteShadowEffect(const Reference<XPropertySet>& rXPropSet)
 {
     // The shadow distances are an offset, which DrawingML has as a distance and a direction.
@@ -9900,6 +9914,8 @@ void DrawingML::WriteShadowEffect(const Reference<XPropertySet>& rXPropSet)
 
     model::OuterShadowEffect aShadow;
     aShadow.maBlurRadius = gfx::Length::hmm(nBlur);
+    aShadow.maDistance = gfx::Length::emu(lcl_CalculateDist(dX, dY));
+    aShadow.mnDirection = Degree60000(lcl_CalculateDir(dX, dY));
     aShadow.mbRotateWithShape = false;
     aShadow.meAlignment = model::RectangleAlignment::Unset;
     if (GetProperty(rXPropSet, u"ShadowSizeX"_ustr))
@@ -9917,33 +9933,25 @@ void DrawingML::WriteShadowEffect(const Reference<XPropertySet>& rXPropSet)
     if (GetProperty(rXPropSet, u"ShadowAlignment"_ustr) && (mAny >>= nAlignment))
         aShadow.meAlignment = static_cast<model::RectangleAlignment>(nAlignment);
 
-    rtl::Reference<sax_fastparser::FastAttributeList> pAttributes
-        = FastSerializerHelper::createAttrList();
-    addLengthAttribute(pAttributes, XML_blurRad, aShadow.maBlurRadius);
-    pAttributes->add(XML_dist, OString::number(lcl_CalculateDist(dX, dY)));
-    pAttributes->add(XML_dir, OString::number(lcl_CalculateDir(dX, dY)));
-    addTransformAttributes(pAttributes, aShadow);
-    mpFS->startElementNS(XML_a, XML_outerShdw, pAttributes);
-
     // A theme color keeps its reference, and the transparency is the alpha of the color.
     sal_Int16 nTransparency = 0;
     rXPropSet->getPropertyValue(u"ShadowTransparence"_ustr) >>= nTransparency;
     Reference<util::XComplexColor> xComplexColor;
     if (GetProperty(rXPropSet, u"ShadowComplexColor"_ustr))
         mAny >>= xComplexColor;
-    model::ComplexColor aColor = model::color::getFromXComplexColor(xComplexColor);
-    if (!aColor.isValidThemeType())
+    aShadow.maColor = model::color::getFromXComplexColor(xComplexColor);
+    if (!aShadow.maColor.isValidThemeType())
     {
         ::Color nColor;
         rXPropSet->getPropertyValue(u"ShadowColor"_ustr) >>= nColor;
-        aColor = model::ComplexColor::createRGB(nColor);
+        aShadow.maColor = model::ComplexColor::createRGB(nColor);
     }
-    aColor.removeTransformations(model::TransformationType::Alpha);
+    aShadow.maColor.removeTransformations(model::TransformationType::Alpha);
     if (nTransparency)
-        aColor.addTransformation(
+        aShadow.maColor.addTransformation(
             { model::TransformationType::Alpha, (100 - nTransparency) * 100 });
-    WriteEffectColor(aColor);
-    mpFS->endElementNS(XML_a, XML_outerShdw);
+
+    WriteOuterShadowEffect(aShadow);
 }
 
 void DrawingML::WriteTextGlowEffect(const Reference< XPropertySet >& rXPropSet)

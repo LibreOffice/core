@@ -874,10 +874,31 @@ void ThemeExport::writeLineStyle(model::LineStyle const& rLineStyle)
     mpFS->endElementNS(XML_a, XML_ln);
 }
 
-void ThemeExport::writeEffectStyle(model::EffectStyle const& /*rEffectStyle*/)
+void ThemeExport::writeEffectStyle(model::EffectStyle const& rEffectStyle)
 {
     mpFS->startElementNS(XML_a, XML_effectStyle);
-    mpFS->singleElementNS(XML_a, XML_effectLst);
+    if (rEffectStyle.empty())
+    {
+        mpFS->singleElementNS(XML_a, XML_effectLst);
+    }
+    else
+    {
+        oox::drawingml::DrawingML aDrawingML(mpFS, mpFilterBase, meDocumentType);
+        mpFS->startElementNS(XML_a, XML_effectLst);
+        if (rEffectStyle.moBlur)
+            aDrawingML.WriteBlurEffect(*rEffectStyle.moBlur);
+        if (rEffectStyle.moGlow)
+            aDrawingML.WriteGlowEffect(*rEffectStyle.moGlow);
+        if (rEffectStyle.moInnerShadow)
+            aDrawingML.WriteInnerShadowEffect(*rEffectStyle.moInnerShadow);
+        if (rEffectStyle.moOuterShadow)
+            aDrawingML.WriteOuterShadowEffect(*rEffectStyle.moOuterShadow);
+        if (rEffectStyle.moReflection)
+            aDrawingML.WriteReflectionEffect(*rEffectStyle.moReflection);
+        if (rEffectStyle.moSoftEdge)
+            aDrawingML.WriteSoftEdgeEffect(*rEffectStyle.moSoftEdge);
+        mpFS->endElementNS(XML_a, XML_effectLst);
+    }
     mpFS->endElementNS(XML_a, XML_effectStyle);
 }
 

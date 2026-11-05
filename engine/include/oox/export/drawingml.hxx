@@ -395,13 +395,8 @@ protected:
     /** Writes a color of an effect. A color that needs the style of the theme to resolve, like
         phClr, is written as its final color. */
     void WriteEffectColor(model::ComplexColor const& rColor);
-    void WriteBlurEffect(model::BlurEffect const& rBlur);
-    void WriteGlowEffect(model::GlowEffect const& rGlow);
-    void WriteInnerShadowEffect(model::InnerShadowEffect const& rInnerShadow);
     void WriteShadowEffect(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet);
     void WriteTextGlowEffect(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet);
-    void WriteReflectionEffect(model::ReflectionEffect const& rReflection);
-    void WriteSoftEdgeEffect(model::SoftEdgeEffect const& rSoftEdge);
     // pTokenX / pTokenY: a guide or adjustment name to write instead of the resolved number
     void WriteCustomGeometryPoint(const css::drawing::EnhancedCustomShapeParameterPair& rParamPair,
                                   const EnhancedCustomShape2d& rCustomShape2d,
@@ -420,6 +415,16 @@ protected:
 
 public:
     OOX_DLLPUBLIC DrawingML(::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = nullptr);
+
+    /** Writes one effect as an element of its own. An effect list holds the effects of a shape
+        or of a style, in the order the schema gives them. */
+    void WriteBlurEffect(model::BlurEffect const& rBlur);
+    void WriteGlowEffect(model::GlowEffect const& rGlow);
+    void WriteInnerShadowEffect(model::InnerShadowEffect const& rInnerShadow);
+    void WriteOuterShadowEffect(model::OuterShadowEffect const& rShadow);
+    void WriteReflectionEffect(model::ReflectionEffect const& rReflection);
+    void WriteSoftEdgeEffect(model::SoftEdgeEffect const& rSoftEdge);
+
     void SetFS(const ::sax_fastparser::FSHelperPtr& pFS) { mpFS = pFS; }
     const ::sax_fastparser::FSHelperPtr& GetFS() const { return mpFS; }
     ::oox::core::XmlFilterBase* GetFB() { return mpFB; }
