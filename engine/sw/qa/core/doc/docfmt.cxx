@@ -16,6 +16,7 @@
 #include <fmtcol.hxx>
 #include <ndtxt.hxx>
 #include <numrule.hxx>
+#include <wrtsh.hxx>
 
 using namespace css;
 using namespace ::cpo;
@@ -69,6 +70,65 @@ CPPUNIT_TEST_FIXTURE(Test, testMergedPasteParaStyle)
     // - Actual  : Title and Content~LT~Gliederung 1
     // i.e. the unwanted paragraph style was pasted.
     CPPUNIT_ASSERT_EQUAL(u"Default Paragraph Style"_ustr, pColl->GetName().toString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testMergedPasteHeading)
+{
+    // Given an empty Writer document with the merged-paste flag on:
+    createSwDoc();
+    SwDoc* pDoc = getSwDocShell()->GetDoc();
+    pDoc->SetInMergedPaste(true);
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwTextNode* pOrigDestNode = pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode();
+    pDoc->SetMergedPasteOrigDestNode(pOrigDestNode);
+    comphelper::ScopeGuard g([pDoc] {
+        pDoc->SetInMergedPaste(false);
+        pDoc->SetMergedPasteOrigDestNode(nullptr);
+    });
+
+    // When importing an HTML file whose middle paragraph is a <h1>:
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
+        = { comphelper::makePropertyValue(u"Name"_ustr,
+                                          createFileURL(u"merged-paste-heading.html")) };
+    dispatchCommand(mxComponent, u".uno:InsertDoc"_ustr, aArgs);
+
+    // Then the heading paragraph keeps its Heading 1 style, so the pasted
+    // outline level survives:
+    SwTextNode* pHeadingNode = nullptr;
+    SwNodes& rNodes = pDoc->GetNodes();
+    for (SwNodeOffset i(0); i < rNodes.Count(); ++i)
+    {
+        SwTextNode* pCandidate = rNodes[i]->GetTextNode();
+        if (pCandidate && pCandidate->GetText() == u"Heading 1")
+        {
+            pHeadingNode = pCandidate;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pHeadingNode);
+    SwTextFormatColl* pColl = pHeadingNode->GetTextColl();
+    CPPUNIT_ASSERT(pColl);
+    // Without the accompanying fix in place, this failed with:
+    // - Expected: Heading 1
+    // - Actual  : Default Paragraph Style
+    // i.e. the heading style was lost.
+    CPPUNIT_ASSERT_EQUAL(u"Heading 1"_ustr, pColl->GetName().toString());
+
+    // Also, the paragraph following the heading keeps the paste position's
+    // own paragraph style, not Heading 1 inherited from the pasted heading:
+    SwTextNode* pAfterNode = nullptr;
+    for (SwNodeOffset i(0); i < rNodes.Count(); ++i)
+    {
+        SwTextNode* pCandidate = rNodes[i]->GetTextNode();
+        if (pCandidate && pCandidate->GetText() == u"after")
+        {
+            pAfterNode = pCandidate;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pAfterNode);
+    CPPUNIT_ASSERT_EQUAL(u"Default Paragraph Style"_ustr,
+                         pAfterNode->GetTextColl()->GetName().toString());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testMergedPasteListAnonymous)

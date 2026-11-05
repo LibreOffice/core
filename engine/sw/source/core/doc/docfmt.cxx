@@ -1111,6 +1111,15 @@ static bool lcl_SetTextFormatColl( SwNode* pNode, void* pArgs )
     return true;
 }
 
+namespace
+{
+bool IsHeadingFormatId(SwPoolFormatId nPoolId)
+{
+    return nPoolId >= SwPoolFormatId::COLL_HEADLINE1
+           && nPoolId <= SwPoolFormatId::COLL_HEADLINE10;
+}
+}
+
 bool SwDoc::SetTextFormatColl(const SwPaM &rRg,
                           SwTextFormatColl *pFormat,
                           const bool bReset,
@@ -1123,21 +1132,48 @@ bool SwDoc::SetTextFormatColl(const SwPaM &rRg,
 
     if (IsInMergedPaste() && pFormat)
     {
-        // The style itself is dropped and its content is flattened into direct formatting.
-        SfxItemSet aFormatSet(pFormat->GetAttrSet());
-        if (aFormatSet.Count())
+        const bool bIsHeading = IsHeadingFormatId(pFormat->GetPoolFormatId());
+        bool bLeavingHeading = false;
+        for (SwNodeOffset nIndex = pStart->GetNodeIndex(); nIndex <= pEnd->GetNodeIndex();
+             ++nIndex)
         {
-            for (SwNodeOffset nIndex = pStart->GetNodeIndex(); nIndex <= pEnd->GetNodeIndex();
-                 ++nIndex)
+            SwTextNode* pTextNode = GetNodes()[nIndex]->GetTextNode();
+            if (pTextNode && IsHeadingFormatId(pTextNode->GetTextColl()->GetPoolFormatId()))
             {
-                if (SwTextNode* pTextNode = GetNodes()[nIndex]->GetTextNode())
+                bLeavingHeading = true;
+                break;
+            }
+        }
+        if (bLeavingHeading && !bIsHeading)
+        {
+            // The paragraph after heading gets the paragraph style of the paste position.
+            if (const SwNode* pOrigDest = GetMergedPasteOrigDestNode())
+            {
+                if (const SwTextNode* pOrigDestTextNode = pOrigDest->GetTextNode())
                 {
-                    pTextNode->SetAttr(aFormatSet);
+                    pFormat = pOrigDestTextNode->GetTextColl();
                 }
             }
-            getIDocumentState().SetModified();
         }
-        return true;
+        else if (!bIsHeading)
+        {
+            // The style itself is dropped and its content is flattened into direct formatting,
+            // unless it's a heading.
+            SfxItemSet aFormatSet(pFormat->GetAttrSet());
+            if (aFormatSet.Count())
+            {
+                for (SwNodeOffset nIndex = pStart->GetNodeIndex(); nIndex <= pEnd->GetNodeIndex();
+                     ++nIndex)
+                {
+                    if (SwTextNode* pTextNode = GetNodes()[nIndex]->GetTextNode())
+                    {
+                        pTextNode->SetAttr(aFormatSet);
+                    }
+                }
+                getIDocumentState().SetModified();
+            }
+            return true;
+        }
     }
 
     SwHistory* pHst = nullptr;
