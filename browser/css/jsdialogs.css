@@ -176,21 +176,21 @@ div.ui-treeview-icon-column {
    width exactly, so nothing overflows horizontally. */
 #SelectCertificateDialog .ui-treeview {
 	grid-template-columns: minmax(8em, 2fr) minmax(8em, 2fr) minmax(3em, auto) minmax(6em, auto)
-		minmax(6em, 1fr) !important;
+		minmax(6em, min-content) !important;
 	max-width: 60em;
 	max-height: 20em;
 	overflow-y: auto;
 	overflow-x: hidden;
 }
-#SelectCertificateDialog .ui-treeview .ui-treeview-entry > div,
-#SelectCertificateDialog .ui-treeview .ui-treeview-headers > div {
+#SelectCertificateDialog .ui-treeview .ui-treeview-entry > div {
 	white-space: normal !important;
 	overflow-wrap: anywhere;
 }
 /* The header cells have a 16px sort-indicator padding on a content-box,
    which made each header overflow its subgrid track and produced a
    permanent horizontal scrollbar. */
-#SelectCertificateDialog .ui-treeview-headers > .ui-treeview-header {
+#SelectCertificateDialog .ui-treeview-headers > .ui-treeview-header,
+#DigitalSignaturesDialog .ui-treeview-headers > .ui-treeview-header {
 	box-sizing: border-box;
 }
 #SelectCertificateDialog #box1 > .ui-grid-cell:last-child {
@@ -236,6 +236,7 @@ div.ui-treeview-icon-column {
 #SelectCertificateDialog #signatures.ui-treeview,
 #DigitalSignaturesDialog #signatures.ui-treeview {
 	overflow-x: auto;
+	padding-top: 0;
 	/* width:100% + the 1px border and padding overflow the container under the
 	   default content-box, clipping the right border; include them in the width. */
 	box-sizing: border-box;
@@ -250,6 +251,14 @@ div.ui-treeview-icon-column {
    shrink and scroll horizontally. */
 #SelectCertificateDialog #signatures.ui-treeview {
 	min-width: 0;
+}
+
+#SelectCertificateDialog .ui-treeview-headers,
+#DigitalSignaturesDialog .ui-treeview-headers {
+	position: sticky;
+	top: 0;
+	background-color: var(--color-background-lighter);
+	z-index: 1;
 }
 
 /* Trailing space so adjacent columns (esp. header labels) don't touch... */
