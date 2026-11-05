@@ -440,10 +440,9 @@ void SvxMacroTabPage_::GenericHandler_Impl(const weld::Button* pBtn)
     if (pBtn == mpImpl->xDeletePB.get())
     {
         // delete pressed
-        sEventType =  u"Script"_ustr ;
-        sEventURL.clear();
         if (!bAppEvents)
             bDocModified = true;
+        AssignEvent_Impl(nEntry, sEventName, u"Script"_ustr, OUString());
     }
     else if (   (   ( pBtn != nullptr )
                 &&  ( pBtn == mpImpl->xAssignComponentPB.get() )
@@ -453,52 +452,70 @@ void SvxMacroTabPage_::GenericHandler_Impl(const weld::Button* pBtn)
                 )
             )
     {
-        AssignComponentDialog aAssignDlg(GetFrameWeld(), sEventURL);
-
-        short ret = aAssignDlg.run();
-        if( ret )
-        {
-            sEventType = u"UNO"_ustr;
-            sEventURL = aAssignDlg.getURL();
-            if (!bAppEvents)
-                bDocModified = true;
-        }
+        // the dialog runs on its own, so we take its result when it ends
+        auto xAssignDlg = std::make_shared<AssignComponentDialog>(GetFrameWeld(), sEventURL);
+        weld::DialogController::runAsync(xAssignDlg,
+            [this, xAssignDlg, nEntry, sEventName, sEventType, sEventURL](sal_Int32 nResult)
+            {
+                if (!nResult)
+                {
+                    AssignEvent_Impl(nEntry, sEventName, sEventType, sEventURL);
+                    return;
+                }
+                if (!bAppEvents)
+                    bDocModified = true;
+                AssignEvent_Impl(nEntry, sEventName, u"UNO"_ustr, xAssignDlg->getURL());
+            });
     }
     else if( bAssEnabled )
     {
         // assign pressed
-        SvxScriptSelectorDialog aDlg(GetFrameWeld(), GetFrame());
-        short ret = aDlg.run();
-        if ( ret )
-        {
-            sEventType = u"Script"_ustr;
-            sEventURL = aDlg.GetScriptURL();
-            if (!bAppEvents)
-                bDocModified = true;
-        }
+        auto xSelectorDlg = std::make_shared<SvxScriptSelectorDialog>(GetFrameWeld(), GetFrame());
+        weld::DialogController::runAsync(xSelectorDlg,
+            [this, xSelectorDlg, nEntry, sEventName, sEventType, sEventURL](sal_Int32 nResult)
+            {
+                if (!nResult)
+                {
+                    AssignEvent_Impl(nEntry, sEventName, sEventType, sEventURL);
+                    return;
+                }
+                if (!bAppEvents)
+                    bDocModified = true;
+                AssignEvent_Impl(nEntry, sEventName, u"Script"_ustr,
+                                 xSelectorDlg->GetScriptURL());
+            });
     }
+    else
+        AssignEvent_Impl(nEntry, sEventName, sEventType, sEventURL);
+}
+
+// takes the assignment of the event into the hashes and shows it in the list
+void SvxMacroTabPage_::AssignEvent_Impl(int nEntry, const OUString& rEventName,
+                                        const OUString& rEventType, const OUString& rEventURL)
+{
+    weld::TreeView& rListBox = *mpImpl->xEventLB;
 
     // update the hashes
     if (bAppEvents)
     {
-        EventsHash::iterator h_it = m_appEventsHash.find(sEventName);
+        EventsHash::iterator h_it = m_appEventsHash.find(rEventName);
         assert(h_it != m_appEventsHash.end());
-        h_it->second.first = sEventType;
-        h_it->second.second = sEventURL;
+        h_it->second.first = rEventType;
+        h_it->second.second = rEventURL;
     }
     else
     {
-        EventsHash::iterator h_it = m_docEventsHash.find(sEventName);
+        EventsHash::iterator h_it = m_docEventsHash.find(rEventName);
         assert(h_it != m_docEventsHash.end());
-        h_it->second.first = sEventType;
-        h_it->second.second = sEventURL;
+        h_it->second.first = rEventType;
+        h_it->second.second = rEventURL;
     }
 
-    if (!sEventURL.isEmpty())
+    if (!rEventURL.isEmpty())
         ++m_nAssignedEvents;
 
-    rListBox.set_image(nEntry, GetEventDisplayImage(sEventURL), 1);
-    rListBox.set_text(nEntry, OUString(GetEventDisplayText(sEventURL)), 2);
+    rListBox.set_image(nEntry, GetEventDisplayImage(rEventURL), 1);
+    rListBox.set_text(nEntry, OUString(GetEventDisplayText(rEventURL)), 2);
 
     rListBox.select(nEntry );
     rListBox.scroll_to_row(nEntry);

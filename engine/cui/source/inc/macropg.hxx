@@ -42,6 +42,8 @@ class SvxMacroTabPage_ : public SfxTabPage
     DECL_LINK( DeleteAllHdl_Impl, weld::Button&, void );
 
     void GenericHandler_Impl(const weld::Button* pBtn);
+    void AssignEvent_Impl(int nEntry, const OUString& rEventName, const OUString& rEventType,
+                          const OUString& rEventURL);
     const EventPair* LookupEvent(const OUString& rEventName);
 
     cpo::uno::Reference< css::container::XNameReplace > m_xAppEvents;
