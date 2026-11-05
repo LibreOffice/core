@@ -66,6 +66,7 @@
 #include <unotools/charclass.hxx>
 #include <unotools/datetime.hxx>
 
+#include <o3tl/test_info.hxx>
 #include <comphelper/kit.hxx>
 #include <tools/json_writer.hxx>
 #include <sfx2/kit/helper.hxx>
@@ -1481,7 +1482,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     bool bAppendSpace = s_pQuickHlpData->m_bAppendSpace;
     s_pQuickHlpData->m_bAppendSpace = false;
 
-    if (nKey == KEY_F12 && getenv("SW_DEBUG"))
+    if (nKey == KEY_F12 && getenv("SW_DEBUG") && !o3tl::IsRunningUnitTest() && !o3tl::IsRunningUITest())
     {
         if( rKEvt.GetKeyCode().IsShift())
         {
