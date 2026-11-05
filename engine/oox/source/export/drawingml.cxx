@@ -5607,6 +5607,13 @@ sal_Int32 lcl_AdjustmentScale(AdjustmentKind eKind, sal_Int32 nViewBoxWidth,
     }
 }
 
+enum class EqState : sal_Int8
+{
+    NotEmitted,
+    Emitting,
+    Done
+};
+
 // Carries the guides built so far while one expression tree is walked.
 struct OoxmlEqContext
 {
@@ -5645,10 +5652,9 @@ struct OoxmlEqContext
     // The EMU of one unit of the shape's logical size (logwidth, logheight): 360 for 1/100 mm,
     // 635 for the twips of a text document.
     sal_Int32 nEmuPerLogicUnit = 360;
-    // While the guides of the equations are created: 0 for an equation not yet emitted, 1 for
-    // one being emitted, 2 for one that is done, so that a reference to a later equation emits
-    // it first.
-    std::vector<sal_Int8>* pEqState = nullptr;
+    // Track equation emission so that a reference to a later equation emits it first,
+    // and a reference to an equation being emitted detects a cycle.
+    std::vector<EqState>* pEqState = nullptr;
     // A shape with a stretch point on an axis is scaled on that axis by its shorter side (the
     // built-in ss) instead of by w or h, and a coordinate at the far edge of the view box moves
     // to the far edge of the shape; the path is then written in the extent of the shape.
@@ -6251,15 +6257,15 @@ void lcl_EmitEquation(sal_Int32 nEquation, OoxmlEqContext& rCtx)
     if (!rCtx.pEqState || !rCtx.pNodes || nEquation < 0
         || o3tl::make_unsigned(nEquation) >= rCtx.pEqState->size())
         return;
-    sal_Int8& rState = (*rCtx.pEqState)[nEquation];
-    if (rState == 2)
+    EqState& rState = (*rCtx.pEqState)[nEquation];
+    if (rState == EqState::Done)
         return;
-    if (rState == 1)
+    if (rState == EqState::Emitting)
     {
         rCtx.fail("circular reference between equations");
         return;
     }
-    rState = 1;
+    rState = EqState::Emitting;
     const ExpressionNode* pNode = (*rCtx.pNodes)[nEquation].get();
     OString aToken;
     if (!pNode)
@@ -6276,7 +6282,7 @@ void lcl_EmitEquation(sal_Int32 nEquation, OoxmlEqContext& rCtx)
     else
         aToken = lcl_EmitOoxmlNode(pNode, rCtx);
     rCtx.rEqNames[nEquation] = aToken;
-    rState = 2;
+    rState = EqState::Done;
 }
 
 // Converts all of a shape's ODF "Equations" to OOXML guides. Returns false, leaving rSet empty,
@@ -6308,7 +6314,7 @@ bool lcl_CreateOoxmlGuides(const std::vector<std::shared_ptr<ExpressionNode>>& r
     if (bStretchY)
         aContext.aScaleY = "ss"_ostr;
     aContext.pNodes = &rSet.aNodes;
-    std::vector<sal_Int8> aState(rNodes.size(), 0);
+    std::vector<EqState> aState(rNodes.size(), EqState::NotEmitted);
     aContext.pEqState = &aState;
     for (size_t i = 0; i < rNodes.size(); ++i)
     {
