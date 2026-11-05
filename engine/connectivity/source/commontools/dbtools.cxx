@@ -779,14 +779,6 @@ namespace
                 pCatalogCall = &XDatabaseMetaData::supportsCatalogsInIndexDefinitions;
                 pSchemaCall = &XDatabaseMetaData::supportsSchemasInIndexDefinitions;
                 break;
-            case EComposeRule::InProcedureCalls:
-                pCatalogCall = &XDatabaseMetaData::supportsCatalogsInProcedureCalls;
-                pSchemaCall = &XDatabaseMetaData::supportsSchemasInProcedureCalls;
-                break;
-            case EComposeRule::InPrivilegeDefinitions:
-                pCatalogCall = &XDatabaseMetaData::supportsCatalogsInPrivilegeDefinitions;
-                pSchemaCall = &XDatabaseMetaData::supportsSchemasInPrivilegeDefinitions;
-                break;
             case EComposeRule::Complete:
                 bIgnoreMetaData = true;
                 break;

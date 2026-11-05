@@ -457,26 +457,6 @@ bool OEvoabDatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
     return true;
 }
 
-bool OEvoabDatabaseMetaData::supportsSchemasInProcedureCalls(  )
-{
-    return false;
-}
-
-bool OEvoabDatabaseMetaData::supportsSchemasInPrivilegeDefinitions(  )
-{
-    return false;
-}
-
-bool OEvoabDatabaseMetaData::supportsCatalogsInProcedureCalls(  )
-{
-    return false;
-}
-
-bool OEvoabDatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  )
-{
-    return false;
-}
-
 OUString OEvoabDatabaseMetaData::getURL(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );

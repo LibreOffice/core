@@ -201,26 +201,6 @@ bool MacabDatabaseMetaData::supportsMixedCaseQuotedIdentifiers(  )
     return false;
 }
 
-bool MacabDatabaseMetaData::supportsSchemasInProcedureCalls(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::supportsSchemasInPrivilegeDefinitions(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::supportsCatalogsInProcedureCalls(  )
-{
-    return false;
-}
-
-bool MacabDatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  )
-{
-    return false;
-}
-
 OUString MacabDatabaseMetaData::getURL(  )
 {
     // if someday we support more than the default address book,

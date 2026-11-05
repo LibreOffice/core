@@ -78,12 +78,8 @@ namespace connectivity
         virtual bool supportsANSI92EntryLevelSQL(  ) override;
         virtual bool supportsIntegrityEnhancementFacility(  ) override;
         virtual bool supportsFullOuterJoins(  ) override;
-        virtual bool supportsSchemasInProcedureCalls(  ) override;
         virtual bool supportsSchemasInIndexDefinitions(  ) override;
-        virtual bool supportsSchemasInPrivilegeDefinitions(  ) override;
-        virtual bool supportsCatalogsInProcedureCalls(  ) override;
         virtual bool supportsCatalogsInIndexDefinitions(  ) override;
-        virtual bool supportsCatalogsInPrivilegeDefinitions(  ) override;
         virtual sal_Int32 getMaxColumnNameLength(  ) override;
         virtual sal_Int32 getMaxTableNameLength(  ) override;
         virtual cpo::uno::Reference< css::sdbc::XResultSet > getTables( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const cpo::uno::Sequence< OUString >& types ) override;

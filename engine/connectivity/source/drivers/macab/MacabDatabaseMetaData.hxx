@@ -63,15 +63,11 @@ namespace connectivity::macab
         virtual bool isCatalogAtStart(  ) override;
         virtual OUString getCatalogSeparator(  ) override;
         virtual bool supportsSchemasInDataManipulation(  ) override;
-        virtual bool supportsSchemasInProcedureCalls(  ) override;
         virtual bool supportsSchemasInTableDefinitions(  ) override;
         virtual bool supportsSchemasInIndexDefinitions(  ) override;
-        virtual bool supportsSchemasInPrivilegeDefinitions(  ) override;
         virtual bool supportsCatalogsInDataManipulation(  ) override;
-        virtual bool supportsCatalogsInProcedureCalls(  ) override;
         virtual bool supportsCatalogsInTableDefinitions(  ) override;
         virtual bool supportsCatalogsInIndexDefinitions(  ) override;
-        virtual bool supportsCatalogsInPrivilegeDefinitions(  ) override;
         virtual sal_Int32 getMaxColumnNameLength(  ) override;
         virtual sal_Int32 getMaxStatements(  ) override;
         virtual sal_Int32 getMaxTableNameLength(  ) override;

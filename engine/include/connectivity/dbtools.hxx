@@ -84,8 +84,6 @@ namespace dbtools
         InTableDefinitions,
         InIndexDefinitions,
         InDataManipulation,
-        InProcedureCalls,
-        InPrivilegeDefinitions,
         Complete
     };
 

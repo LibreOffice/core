@@ -489,26 +489,6 @@ bool ODatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
     return false;
 }
 
-bool ODatabaseMetaData::supportsSchemasInProcedureCalls(  )
-{
-    return false;
-}
-
-bool ODatabaseMetaData::supportsSchemasInPrivilegeDefinitions(  )
-{
-    return false;
-}
-
-bool ODatabaseMetaData::supportsCatalogsInProcedureCalls(  )
-{
-    return false;
-}
-
-bool ODatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  )
-{
-    return false;
-}
-
 OUString ODatabaseMetaData::getURL(  )
 {
     return u"sdbc:file:"_ustr;

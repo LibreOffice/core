@@ -10293,15 +10293,11 @@ module com {
      boolean isCatalogAtStart() raises (::com::sun::star::sdbc::SQLException);
      string getCatalogSeparator() raises (::com::sun::star::sdbc::SQLException);
      boolean supportsSchemasInDataManipulation() raises (::com::sun::star::sdbc::SQLException);
-     boolean supportsSchemasInProcedureCalls() raises (::com::sun::star::sdbc::SQLException);
      boolean supportsSchemasInTableDefinitions() raises (::com::sun::star::sdbc::SQLException);
      boolean supportsSchemasInIndexDefinitions() raises (::com::sun::star::sdbc::SQLException);
-     boolean supportsSchemasInPrivilegeDefinitions() raises (::com::sun::star::sdbc::SQLException);
      boolean supportsCatalogsInDataManipulation() raises (::com::sun::star::sdbc::SQLException);
-     boolean supportsCatalogsInProcedureCalls() raises (::com::sun::star::sdbc::SQLException);
      boolean supportsCatalogsInTableDefinitions() raises (::com::sun::star::sdbc::SQLException);
      boolean supportsCatalogsInIndexDefinitions() raises (::com::sun::star::sdbc::SQLException);
-     boolean supportsCatalogsInPrivilegeDefinitions() raises (::com::sun::star::sdbc::SQLException);
      long getMaxColumnNameLength() raises (::com::sun::star::sdbc::SQLException);
      long getMaxStatements() raises (::com::sun::star::sdbc::SQLException);
      long getMaxTableNameLength() raises (::com::sun::star::sdbc::SQLException);

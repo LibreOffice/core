@@ -435,36 +435,6 @@ bool ODatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
     return nValue == SQL_IC_MIXED;
 }
 
-bool ODatabaseMetaData::supportsSchemasInProcedureCalls(  )
-{
-    SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SCHEMA_USAGE,nValue,*this);
-    return (nValue & SQL_SU_PROCEDURE_INVOCATION) == SQL_SU_PROCEDURE_INVOCATION;
-}
-
-bool ODatabaseMetaData::supportsSchemasInPrivilegeDefinitions(  )
-{
-    SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SCHEMA_USAGE,nValue,*this);
-    return (nValue & SQL_SU_PRIVILEGE_DEFINITION) == SQL_SU_PRIVILEGE_DEFINITION;
-}
-
-bool ODatabaseMetaData::supportsCatalogsInProcedureCalls(  )
-{
-    SQLUINTEGER nValue=0;
-    if(m_bUseCatalog)
-        OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CATALOG_USAGE,nValue,*this);
-    return (nValue & SQL_CU_PROCEDURE_INVOCATION) == SQL_CU_PROCEDURE_INVOCATION;
-}
-
-bool ODatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  )
-{
-    SQLUINTEGER nValue=0;
-    if(m_bUseCatalog)
-        OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CATALOG_USAGE,nValue,*this);
-    return (nValue & SQL_CU_PRIVILEGE_DEFINITION) == SQL_CU_PRIVILEGE_DEFINITION;
-}
-
 OUString ODatabaseMetaData::getURLImpl()
 {
     OUString aValue;

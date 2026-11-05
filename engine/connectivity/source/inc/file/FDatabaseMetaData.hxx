@@ -69,12 +69,8 @@ namespace connectivity::file
         virtual bool supportsANSI92EntryLevelSQL(  ) override;
         virtual bool supportsIntegrityEnhancementFacility(  ) override;
         virtual bool supportsFullOuterJoins(  ) override;
-        virtual bool supportsSchemasInProcedureCalls(  ) override;
         virtual bool supportsSchemasInIndexDefinitions(  ) override;
-        virtual bool supportsSchemasInPrivilegeDefinitions(  ) override;
-        virtual bool supportsCatalogsInProcedureCalls(  ) override;
         virtual bool supportsCatalogsInIndexDefinitions(  ) override;
-        virtual bool supportsCatalogsInPrivilegeDefinitions(  ) override;
         virtual sal_Int32 getMaxColumnNameLength(  ) override;
         virtual sal_Int32 getMaxTableNameLength(  ) override;
 

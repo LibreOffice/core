@@ -238,14 +238,6 @@ published interface XDatabaseMetaData: cpo::uno::XInterface
      */
     boolean supportsSchemasInDataManipulation() raises (SQLException);
 
-    /** Can a schema name be used in a procedure call statement?
-        @returns
-            `TRUE` if so
-        @throws SQLException
-            if a database access error occurs.
-     */
-    boolean supportsSchemasInProcedureCalls() raises (SQLException);
-
     /** Can a schema name be used in a table definition statement?
         @returns
             `TRUE` if so
@@ -262,15 +254,6 @@ published interface XDatabaseMetaData: cpo::uno::XInterface
      */
     boolean supportsSchemasInIndexDefinitions() raises (SQLException);
 
-    /** Can a schema name be used in a privilege definition statement?
-        @returns
-            `TRUE` if so
-        @throws SQLException
-            if a database access error occurs.
-     */
-    boolean supportsSchemasInPrivilegeDefinitions()
-        raises (SQLException);
-
     /** Can a catalog name be used in a data manipulation statement?
         @returns
             `TRUE` if so
@@ -278,14 +261,6 @@ published interface XDatabaseMetaData: cpo::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsCatalogsInDataManipulation() raises (SQLException);
-
-    /** Can a catalog name be used in a procedure call statement?
-        @returns
-            `TRUE` if so
-        @throws SQLException
-            if a database access error occurs.
-     */
-    boolean supportsCatalogsInProcedureCalls() raises (SQLException);
 
     /** Can a catalog name be used in a table definition statement?
         @returns
@@ -302,15 +277,6 @@ published interface XDatabaseMetaData: cpo::uno::XInterface
             if a database access error occurs.
      */
     boolean supportsCatalogsInIndexDefinitions() raises (SQLException);
-
-    /** Can a catalog name be used in a privilege definition statement?
-        @returns
-            `TRUE` if so
-        @throws SQLException
-            if a database access error occurs.
-     */
-    boolean supportsCatalogsInPrivilegeDefinitions()
-        raises (SQLException);
 
     /** return the limit on column name length
         @returns

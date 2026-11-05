@@ -364,26 +364,6 @@ bool ODatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
     return (getInt32Property("Identifier Case Sensitivity") & DBPROPVAL_IC_MIXED) == DBPROPVAL_IC_MIXED;
 }
 
-bool ODatabaseMetaData::supportsSchemasInProcedureCalls(  )
-{
-    return false;
-}
-
-bool ODatabaseMetaData::supportsSchemasInPrivilegeDefinitions(  )
-{
-    return (getInt32Property("Schema Usage") & DBPROPVAL_SU_PRIVILEGE_DEFINITION) == DBPROPVAL_SU_PRIVILEGE_DEFINITION;
-}
-
-bool ODatabaseMetaData::supportsCatalogsInProcedureCalls(  )
-{
-    return false;
-}
-
-bool ODatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  )
-{
-    return false;
-}
-
 OUString ODatabaseMetaData::getURL(  )
 {
     return "sdbc:ado:"+ m_rADOConnection.GetConnectionString();
