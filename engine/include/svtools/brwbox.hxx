@@ -58,7 +58,6 @@ enum class BrowserMode
     HLINES               = 0x000010,
     VLINES               = 0x000020,
 
-    HIDESELECT           = 0x000100,
     HIDECURSOR           = 0x000200,
 
     NO_HSCROLL           = 0x000400,
@@ -79,7 +78,7 @@ enum class BrowserMode
 };
 namespace o3tl
 {
-    template<> struct typed_flags<BrowserMode> : is_typed_flags<BrowserMode, 0x24f73b> {};
+    template<> struct typed_flags<BrowserMode> : is_typed_flags<BrowserMode, 0x24f63b> {};
 }
 
 enum class BrowserDispatchId
@@ -302,7 +301,6 @@ private:
     bool            bScrolling;     // hidden cursor while scrolling
     bool            bNotToggleSel;  // set while in ToggleSelection() etc.
     bool            bHasFocus;      // set/unset in Get/LoseFocus
-    bool            bHideSelect;    // hide selection (highlight)
     TriState        bHideCursor;    // hide cursor (frame)
     Range           aSelRange;      // for selection expansion
 

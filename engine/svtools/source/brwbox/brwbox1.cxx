@@ -164,7 +164,6 @@ BrowseBox::BrowseBox( vcl::Window* pParent, WinBits nBits, BrowserMode nMode )
     bRowDividerDrag = false;
     bHit = false;
     mbInteractiveRowHeight = false;
-    bHideSelect = false;
     bHideCursor = TRISTATE_FALSE;
     nRowCount = 0;
     m_bFocusOnlyCursor = true;
@@ -1649,7 +1648,6 @@ void BrowseBox::SelectAll()
     tools::Long nOfsX = pFirstCol->GetId() ? 0 : pFirstCol->Width();
 
     // highlight the row selection
-    if ( !bHideSelect )
     {
         tools::Rectangle aHighlightRect;
         sal_uInt16 nVisibleRows =
@@ -1721,15 +1719,14 @@ void BrowseBox::SelectRow( sal_Int32 nRow, bool _bSelect, bool bExpand )
     }
 
     // set new selection
-    if  (   !bHideSelect
-        &&  (   (   bMultiSelection
+    if  (       (   bMultiSelection
                 &&  uRow.pSel->GetTotalRange().Max() >= nRow
                 &&  uRow.pSel->Select( nRow, _bSelect )
                 )
             ||  (   !bMultiSelection
-                &&  ( uRow.nSel = nRow ) != BROWSER_ENDOFSELECTION )
+                &&  ( uRow.nSel = nRow ) != BROWSER_ENDOFSELECTION
                 )
-            )
+        )
     {
         // don't highlight handle column
         BrowserColumn *pFirstCol = mvCols[ 0 ].get();
@@ -2153,7 +2150,6 @@ void BrowseBox::SetMode( BrowserMode nMode )
     bColumnCursor = bool( nMode & BrowserMode::COLUMNSELECTION );
     bKeepHighlight = bool( nMode & BrowserMode::KEEPHIGHLIGHT );
 
-    bHideSelect = ((nMode & BrowserMode::HIDESELECT) == BrowserMode::HIDESELECT);
     // default: do not hide the cursor at all (untaken scrolling and such)
     bHideCursor = TRISTATE_FALSE;
 

@@ -231,8 +231,6 @@ void BrowseBox::ToggleSelection()
 {
 
     // selection highlight-toggling allowed?
-    if ( bHideSelect )
-        return;
     if ( bNotToggleSel || !IsUpdateMode() || !bSelectionIsVisible )
         return;
 
@@ -838,8 +836,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
         tools::Rectangle aRowRect( Point( _rRect.Left(), aPos.Y() ),
                 Size( _rRect.GetSize().Width(), nDataRowHeight ) );
 
-        bool bRowSelected   =   !bHideSelect
-                            &&  IsRowSelected( nRow );
+        bool bRowSelected   = IsRowSelected( nRow );
         if ( bRowSelected )
         {
             _rOut.SetTextColor( rHighlightTextColor );
