@@ -131,7 +131,9 @@ private:
                      const std::string& ifNoneMatch, const std::string& ifModifiedSince);
 
     /// Handle upload request - returns a one-time upload URL for HTTP PUT
-    void handleUpload(const std::string& stream, const std::string& requestId);
+    /// (one that is refused if storage no longer has lastModifiedTime, unless that is empty)
+    void handleUpload(const std::string& stream, const std::string& requestId,
+                      const std::string& lastModifiedTime);
 
     /// Handle editing_started notification - broadcast to other users
     void handleEditingStarted();

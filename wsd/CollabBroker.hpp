@@ -61,6 +61,7 @@ struct CollabUploadRequest
     std::string docKey;          ///< Document key to verify live CollabBroker
     std::string brokerTag;       ///< Broker access token at time of request
     std::string requestId;       ///< Client-provided request ID
+    std::string lastModifiedTime; ///< The client's version in storage, if the upload checks it
     std::chrono::steady_clock::time_point expiry;  ///< When this token expires
 };
 
@@ -279,7 +280,8 @@ std::string createCollabUploadRequest(const std::string& targetUrl,
                                        const std::string& wopiSrc,
                                        const std::string& docKey,
                                        const std::string& brokerTag,
-                                       const std::string& requestId);
+                                       const std::string& requestId,
+                                       std::string const & lastModifiedTime);
 
 /// Look up and consume an upload request by token.
 /// Returns true if found and valid, fills in the request details.

@@ -644,7 +644,8 @@ std::string createCollabUploadRequest(const std::string& targetUrl,
                                        const std::string& wopiSrc,
                                        const std::string& docKey,
                                        const std::string& brokerTag,
-                                       const std::string& requestId)
+                                       const std::string& requestId,
+                                       std::string const & lastModifiedTime)
 {
     const std::string token = Util::rng::getHexString(CollabAccessTokenLength);
 
@@ -655,6 +656,7 @@ std::string createCollabUploadRequest(const std::string& targetUrl,
     request.docKey = docKey;
     request.brokerTag = brokerTag;
     request.requestId = requestId;
+    request.lastModifiedTime = lastModifiedTime;
     request.expiry = std::chrono::steady_clock::now() + CollabUploadTokenExpiry;
 
     {

@@ -12,6 +12,7 @@
 #include <config.h>
 
 #include <WopiTestServer.hpp>
+#include <common/JsonUtil.hpp>
 #include <common/Log.hpp>
 #include <helpers.hpp>
 
@@ -427,10 +428,133 @@ public:
     }
 };
 
+/// An upload by a collab client with the version that it got is refused once the document changed
+/// in storage, unless the client leaves the version out:
+class UnitCollabUploadTimestamp: public WopiTestServer {
+public:
+    UnitCollabUploadTimestamp():
+        WopiTestServer("UnitCollabUploadTimestamp"), _phase(Phase::ConnectCollab) {}
+
+    void invokeWSDTest() override {
+        switch (_phase) {
+        case Phase::ConnectCollab: {
+            PHASE_TRANSITION(WaitCollabAuth);
+
+            Poco::URI const wopiURL(
+                getWopiHostURI()
+                + "/wopi/files/0?access_token=anything"
+                  "&testname=UnitCollabUploadTimestamp");
+            _collabWs = startCollabConnection(
+                socketPoll(), Uri::encode(wopiURL.toString()), "anything");
+            break;
+        }
+        case Phase::WaitCollabAuth: {
+            if (!pollCollabMessage(_collabWs, "user_list")) {
+                break;
+            }
+
+            PHASE_TRANSITION(WaitFetchURL);
+            _collabWs->sendMessage(R"({"type":"fetch","stream":"contents","requestId":"f1"})");
+            break;
+        }
+        case Phase::WaitFetchURL: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(_collabWs, "fetch_url");
+            if (!msg) {
+                break;
+            }
+
+            _lastModifiedTime = msg->optValue<std::string>("lastModifiedTime", std::string());
+            LOK_ASSERT_MESSAGE("Expected the version with the URL", !_lastModifiedTime.empty());
+
+            PHASE_TRANSITION(WaitUploadURL);
+            _collabWs->sendMessage(
+                R"({"type":"upload","stream":"contents","requestId":"r1","lastModifiedTime":")"
+                + _lastModifiedTime + R"("})");
+            break;
+        }
+        case Phase::WaitUploadURL: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(_collabWs, "upload_url");
+            if (!msg) {
+                break;
+            }
+
+            http::Request request(msg->getValue<std::string>("url"), http::Request::VERB_POST);
+            request.setBody("Uploaded by the collab client", "application/octet-stream");
+            std::shared_ptr<http::Response const> const response
+                = http::Session::create(helpers::getTestServerURI())->syncRequest(request);
+            LOK_ASSERT_EQUAL(http::StatusCode::OK, response->statusLine().statusCode());
+            LOK_ASSERT_EQUAL(std::string("Uploaded by the collab client"), getFileContent());
+            Poco::JSON::Object::Ptr result;
+            LOK_ASSERT(JsonUtil::parseJSON(response->getBody(), result));
+            _lastModifiedTime = result->optValue<std::string>("LastModifiedTime", std::string());
+            LOK_ASSERT_MESSAGE(
+                "Expected the new version with the answer", !_lastModifiedTime.empty());
+
+            // Someone else saves the document in storage:
+            setFileContent("Saved by someone else");
+
+            PHASE_TRANSITION(WaitStaleUploadURL);
+            _collabWs->sendMessage(
+                R"({"type":"upload","stream":"contents","requestId":"r2","lastModifiedTime":")"
+                + _lastModifiedTime + R"("})");
+            break;
+        }
+        case Phase::WaitStaleUploadURL: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(_collabWs, "upload_url");
+            if (!msg) {
+                break;
+            }
+
+            PHASE_TRANSITION(WaitForcedUploadURL);
+            http::Request request(msg->getValue<std::string>("url"), http::Request::VERB_POST);
+            request.setBody("Uploaded again by the collab client", "application/octet-stream");
+            std::shared_ptr<http::Response const> const response
+                = http::Session::create(helpers::getTestServerURI())->syncRequest(request);
+            LOK_ASSERT_EQUAL(http::StatusCode::Conflict, response->statusLine().statusCode());
+            LOK_ASSERT_EQUAL(std::string("Saved by someone else"), getFileContent());
+
+            _collabWs->sendMessage(R"({"type":"upload","stream":"contents","requestId":"r3"})");
+            break;
+        }
+        case Phase::WaitForcedUploadURL: {
+            Poco::JSON::Object::Ptr const msg = pollCollabMessage(_collabWs, "upload_url");
+            if (!msg) {
+                break;
+            }
+
+            PHASE_TRANSITION(Done);
+            http::Request request(msg->getValue<std::string>("url"), http::Request::VERB_POST);
+            request.setBody("Forced by the collab client", "application/octet-stream");
+            std::shared_ptr<http::Response const> const response
+                = http::Session::create(helpers::getTestServerURI())->syncRequest(request);
+            LOK_ASSERT_EQUAL(http::StatusCode::OK, response->statusLine().statusCode());
+            LOK_ASSERT_EQUAL(std::string("Forced by the collab client"), getFileContent());
+
+            _collabWs->asyncShutdown();
+            passTest("A stale collab upload was refused, and one without a version was not");
+            break;
+        }
+        case Phase::Done:
+            break;
+        }
+    }
+
+private:
+    enum class Phase {
+        ConnectCollab, WaitCollabAuth, WaitFetchURL, WaitUploadURL, WaitStaleUploadURL,
+        WaitForcedUploadURL, Done
+    } _phase;
+
+    std::shared_ptr<http::WebSocketSession> _collabWs;
+
+    std::string _lastModifiedTime;
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* [3] { new UnitCollabProtocol(),
-                               new UnitCollabCheckFileInfoTransient(), nullptr };
+    return new UnitBase* [4] { new UnitCollabProtocol(),
+                               new UnitCollabCheckFileInfoTransient(),
+                               new UnitCollabUploadTimestamp(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

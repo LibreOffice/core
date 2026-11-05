@@ -71,7 +71,9 @@ void CollabFileProxy::handleFetchRequest(const std::string& streamUrl,
         });
 }
 
-void CollabFileProxy::handleUploadRequest(const std::string& targetUrl, std::istream& message,
+void CollabFileProxy::handleUploadRequest(const std::string& targetUrl,
+                                          std::string const & lastModifiedTime,
+                                          std::istream& message,
                                           const std::shared_ptr<TerminatingPoll>& poll,
                                           SocketDisposition& disposition)
 {
@@ -87,6 +89,7 @@ void CollabFileProxy::handleUploadRequest(const std::string& targetUrl, std::ist
 
     // Read the POST body
     _uploadBody = std::string(std::istreambuf_iterator<char>(message), {});
+    _uploadLastModifiedTime = lastModifiedTime;
 
     // Parse the target URL and add access token; the URL may already
     // contain query parameters, so use Poco::URI to add it properly.
@@ -228,6 +231,11 @@ void CollabFileProxy::doUpload(const std::shared_ptr<TerminatingPoll>& poll,
     httpRequest.setContentType("application/octet-stream");
     httpRequest.setContentLength(body.size());
     httpRequest.setBody(body);
+    // Have the WOPI host refuse the upload if storage no longer has the version that the client
+    // edited:
+    if (!_uploadLastModifiedTime.empty()) {
+        httpRequest.set("X-COOL-WOPI-Timestamp", _uploadLastModifiedTime);
+    }
 
     const auto startTime = std::chrono::steady_clock::now();
 

@@ -1557,8 +1557,8 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
                 uploadRequest.accessToken);
 
             // Upload directly to the pre-authorized target URL
-            proxy->handleUploadRequest(uploadRequest.targetUrl, message,
-                                        COOLWSD::getWebServerPoll(), disposition);
+            proxy->handleUploadRequest(uploadRequest.targetUrl, uploadRequest.lastModifiedTime,
+                                        message, COOLWSD::getWebServerPoll(), disposition);
         }
         else if (requestDetails.equals(0, "co") &&
                  requestDetails.equals(1, "collab") &&

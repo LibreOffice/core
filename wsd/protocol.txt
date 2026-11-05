@@ -2339,11 +2339,14 @@ client -> server messages on /co/collab
     {"type":"fetch_url"} (success) or {"type":"fetch_error"} (failure), carrying the same
     "requestId" so the client can correlate replies with requests.
 
-{"type":"upload","stream":"document","requestId":"<id>"}
+{"type":"upload","stream":"document","requestId":"<id>"[,"lastModifiedTime":"<time>"]}
 
     Request a one-shot URL for uploading modified document bytes.  Reply shape mirrors "fetch": a
     {"type":"fetch_url"} carrying a /co/collab/put URL on success, or {"type":"fetch_error"} on
-    failure.
+    failure.  With "lastModifiedTime", the upload is refused with 409 if storage no longer has the
+    version of that time.  The client gets that time as "lastModifiedTime" in the
+    {"type":"fetch_url"} for the "contents" stream, and then as "LastModifiedTime" in the JSON that
+    each successful /co/collab/put returns.
 
 {"type":"editing_started"}
 

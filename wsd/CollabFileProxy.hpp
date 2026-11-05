@@ -37,7 +37,8 @@ public:
 
     /// Handle an upload request with a pre-authorized URL (from WebSocket token)
     /// This bypasses CheckFileInfo since the token already validated access.
-    void handleUploadRequest(const std::string& targetUrl, std::istream& message,
+    void handleUploadRequest(const std::string& targetUrl, std::string const & lastModifiedTime,
+                             std::istream& message,
                              const std::shared_ptr<TerminatingPoll>& poll,
                              SocketDisposition& disposition);
 
@@ -56,6 +57,7 @@ private:
     const std::string _accessToken;
     std::shared_ptr<http::Session> _httpSession;
     std::string _uploadBody;
+    std::string _uploadLastModifiedTime;
     int _logFD;
 };
 

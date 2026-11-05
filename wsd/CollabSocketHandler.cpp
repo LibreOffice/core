@@ -333,7 +333,8 @@ void CollabSocketHandler::handleAuthenticatedMessage(const std::string& msg)
     else if (type == "upload")
     {
         const std::string stream = json->optValue<std::string>("stream", "contents");
-        handleUpload(stream, requestId);
+        handleUpload(
+            stream, requestId, json->optValue<std::string>("lastModifiedTime", std::string()));
     }
     else if (type == "editing_started")
     {
@@ -483,6 +484,13 @@ void CollabSocketHandler::handleFetch(const std::string& stream, const std::stri
             _wopiInfo->optValue<std::string>("BaseFileName", std::string());
         if (!filename.empty())
             oss << ",\"filename\":\"" << JsonUtil::escapeJSONValue(filename) << "\"";
+        // The version in storage of the bytes behind the URL:
+        const std::string lastModifiedTime =
+            _wopiInfo->optValue<std::string>("LastModifiedTime", std::string());
+        if (!lastModifiedTime.empty()) {
+            oss << ",\"lastModifiedTime\":\"" << JsonUtil::escapeJSONValue(lastModifiedTime)
+                << "\"";
+        }
     }
     oss << "}";
 
@@ -490,7 +498,8 @@ void CollabSocketHandler::handleFetch(const std::string& stream, const std::stri
     LOG_DBG("Collab: sent fetch URL for stream: " << stream << ", token: " << token);
 }
 
-void CollabSocketHandler::handleUpload(const std::string& stream, const std::string& requestId)
+void CollabSocketHandler::handleUpload(const std::string& stream, const std::string& requestId,
+                                       const std::string& lastModifiedTime)
 {
     LOG_INF("Collab: handling upload request for stream: " << stream
             << ", requestId: " << requestId);
@@ -542,8 +551,8 @@ void CollabSocketHandler::handleUpload(const std::string& stream, const std::str
     const std::string brokerTag = broker->getCurrentAccessToken();
 
     // Create an upload token that the client can use to POST via HTTP
-    const std::string token = createCollabUploadRequest(targetUrl, _accessToken, _wopiSrc,
-                                                         _docKey, brokerTag, requestId);
+    const std::string token = createCollabUploadRequest(
+        targetUrl, _accessToken, _wopiSrc, _docKey, brokerTag, requestId, lastModifiedTime);
 
     // Send the upload URL to the client
     std::ostringstream oss;
