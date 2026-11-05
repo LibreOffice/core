@@ -234,6 +234,48 @@ describe('SheetGeometry', function () {
 		});
 	});
 
+	describe('getNextVisibleIndex', function () {
+		// Hide rows 5 to 7, and every row from 1000 to the end.
+		var sgObj = {
+			commandName: '.uno:SheetGeometryData',
+			maxtiledcolumn: '1023',
+			maxtiledrow: '1999',
+			columns: {
+				sizes: '1280:1023 ',
+				hidden: '0:1023 ',
+				filtered: '0:1023 ',
+				groups: '',
+			},
+			rows: {
+				sizes: '256:1999 ',
+				hidden: '0:4 7 999 1999 ',
+				filtered: '0:1999 ',
+				groups: '',
+			},
+		};
+		var tileSizePx = 256; // width and height of one tile in device pixels
+		var tileTwips = Math.round((tileSizePx * 15) / zoomToAbsScale(10));
+		var sg = new cool.SheetGeometry(sgObj, tileTwips, tileTwips, tileSizePx, 0);
+		var rows = sg.getRowsGeometry();
+		const forward = cool.IndexDirection.Forward;
+		const backward = cool.IndexDirection.Backward;
+
+		it('steps to the next row when it is visible', function () {
+			nodeassert.equal(rows.getNextVisibleIndex(3, forward), 4);
+			nodeassert.equal(rows.getNextVisibleIndex(9, backward), 8);
+		});
+
+		it('skips a run of hidden rows', function () {
+			nodeassert.equal(rows.getNextVisibleIndex(4, forward), 8);
+			nodeassert.equal(rows.getNextVisibleIndex(8, backward), 4);
+		});
+
+		it('finds no row past the sheet edge or the last visible row', function () {
+			nodeassert.equal(rows.getNextVisibleIndex(0, backward), -1);
+			nodeassert.equal(rows.getNextVisibleIndex(999, forward), -1);
+		});
+	});
+
 	function zoomToAbsScale(level: number): number {
 		return Math.pow(1.2, level - 10);
 	}

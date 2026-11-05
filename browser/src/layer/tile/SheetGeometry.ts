@@ -15,6 +15,12 @@ namespace cool {
 
 export type GeometryUnit = 'corepixels' | 'tiletwips' | 'printtwips';
 
+/** Step forward or backward through row or column indexes. */
+export enum IndexDirection {
+	Forward = 1,
+	Backward = -1,
+}
+
 export interface DimensionRange {
 	start: number;
 	end: number;
@@ -924,6 +930,25 @@ export class SheetDimension {
 
 	public getMaxIndex(): number {
 		return this._maxIndex;
+	}
+
+	/**
+	 * Get the next / previous visible index from the index specified.
+	 */
+	public getNextVisibleIndex(index: number, direction: IndexDirection): number {
+		let next = index + direction;
+		while (next >= 0 && next <= this._maxIndex) {
+			const span = this._visibleSizes.getSpanDataByIndex(next) as SpanViewData;
+			if (span === undefined)
+				return -1;
+
+			if (span.size > 0)
+				return next;
+
+			// Skip the whole run of hidden elements.
+			next = direction === IndexDirection.Forward ? span.end + 1 : span.start - 1;
+		}
+		return -1;
 	}
 
 	// Accepts a position in display twips at current zoom and returns corresponding
