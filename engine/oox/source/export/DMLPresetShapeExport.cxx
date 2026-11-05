@@ -1371,35 +1371,23 @@ bool DMLPresetShapeExporter::WriteShapeWithAVlist()
         }
         if (sShapeType == "roundRect")
         {
-            tools::Long nVal1 = 0;
-            if (m_xShape->getSize().Width >= m_xShape->getSize().Height)
+            const auto hasValues = [](const AdjustmentPointValueBase& rPoint) {
+                return rPoint.nCurrVal.has_value() && rPoint.nMaxVal.has_value()
+                       && rPoint.nMinVal.has_value();
+            };
+            AdjustmentPointValueBase aPoint;
+            if (m_xShape->getSize().Width < m_xShape->getSize().Height)
+                aPoint = GetAdjustmentPointYValue(0);
+            if (!hasValues(aPoint))
             {
-                auto aPointX = GetAdjustmentPointXValue(0);
-                if (!aPointX.nCurrVal.has_value() || !aPointX.nMaxVal.has_value()
-                    || !aPointX.nMinVal.has_value())
-                    return false;
-                nVal1 = std::lround(*aPointX.nCurrVal / (*aPointX.nMaxVal - *aPointX.nMinVal)
-                                    * 50000);
+                // The preset's switched handle can have an x range only. The corner is
+                // a fraction of the shorter side, so that range serves tall shapes too.
+                aPoint = GetAdjustmentPointXValue(0);
             }
-            else
-            {
-                auto aPointY = GetAdjustmentPointYValue(0);
-                if (!aPointY.nCurrVal.has_value() || !aPointY.nMaxVal.has_value()
-                    || !aPointY.nMinVal.has_value())
-                {
-                    // The preset's handle has a range for x only; the corner is a fraction
-                    // of the shorter side in both orientations, so that range serves y too.
-                    XAdjustmentValue aPointX = GetAdjustmentPointXValue(0);
-                    if (!aPointX.nCurrVal.has_value() || !aPointX.nMaxVal.has_value()
-                        || !aPointX.nMinVal.has_value())
-                        return false;
-                    aPointY.nCurrVal = aPointX.nCurrVal;
-                    aPointY.nMaxVal = aPointX.nMaxVal;
-                    aPointY.nMinVal = aPointX.nMinVal;
-                }
-                nVal1 = std::lround(*aPointY.nCurrVal / (*aPointY.nMaxVal - *aPointY.nMinVal)
-                                    * 50000);
-            }
+            if (!hasValues(aPoint))
+                return false;
+            const tools::Long nVal1
+                = std::lround(*aPoint.nCurrVal / (*aPoint.nMaxVal - *aPoint.nMinVal) * 50000);
 
             m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
                                                      false, false);

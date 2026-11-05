@@ -2689,6 +2689,70 @@ CPPUNIT_TEST_FIXTURE(Test, testRoundRectangleTallerThanWide)
     assertXPath(pXmlDoc, "//a:prstGeom/a:avLst/a:gd", "fmla", u"val 16667");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testRoundRectangleAdjustmentAxis)
+{
+    loadFromFile(u"custGeom_roundRectTall.fodp");
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
+                                           uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xProps(xShape, uno::UNO_QUERY_THROW);
+    const auto aOriginalGeometry = xProps->getPropertyValue(u"CustomShapeGeometry"_ustr);
+    struct TestCase
+    {
+        bool bTall;
+        bool bHasY;
+        bool bCompleteY;
+        sal_Int32 nExpected;
+    };
+    // X gives 3600 / 10800 * 50000 = 16667. A complete Y gives
+    // 1800 / 7200 * 50000 = 12500 and must take precedence only for tall shapes.
+    const TestCase aCases[] = { { false, false, false, 16667 },
+                               { false, true, true, 16667 },
+                               { true, true, true, 12500 },
+                               { true, true, false, 16667 } };
+    for (const TestCase& rCase : aCases)
+    {
+        comphelper::SequenceAsHashMap aGeometry(aOriginalGeometry);
+        if (rCase.bHasY)
+        {
+            auto aHandles = aGeometry[u"Handles"_ustr].get<uno::Sequence<beans::PropertyValues>>();
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aHandles.getLength());
+            comphelper::SequenceAsHashMap aHandle(aHandles[0]);
+            auto aPosition
+                = aHandle[u"Position"_ustr].get<drawing::EnhancedCustomShapeParameterPair>();
+            aPosition.Second.Type = drawing::EnhancedCustomShapeParameterType::ADJUSTMENT;
+            aPosition.Second.Value <<= sal_Int32(1);
+            aHandle[u"Position"_ustr] <<= aPosition;
+            drawing::EnhancedCustomShapeParameter aLimit;
+            aLimit.Type = drawing::EnhancedCustomShapeParameterType::NORMAL;
+            aLimit.Value <<= 0.0;
+            aHandle[u"RangeYMinimum"_ustr] <<= aLimit;
+            if (rCase.bCompleteY)
+            {
+                aLimit.Value <<= 7200.0;
+                aHandle[u"RangeYMaximum"_ustr] <<= aLimit;
+            }
+            aHandles.getArray()[0] = aHandle.getAsConstPropertyValueList();
+            aGeometry[u"Handles"_ustr] <<= aHandles;
+            auto aAdjustments = aGeometry[u"AdjustmentValues"_ustr]
+                                    .get<uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue>>();
+            aAdjustments.realloc(2);
+            aAdjustments.getArray()[1].Value <<= 1800.0;
+            aAdjustments.getArray()[1].State = beans::PropertyState_DIRECT_VALUE;
+            aGeometry[u"AdjustmentValues"_ustr] <<= aAdjustments;
+        }
+        xProps->setPropertyValue(u"CustomShapeGeometry"_ustr,
+                                 uno::Any(aGeometry.getAsConstPropertyValueList()));
+        xShape->setSize(rCase.bTall ? awt::Size(4000, 6000) : awt::Size(6000, 4000));
+        save(TestFilter::PPTX);
+        xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+        assertXPath(pXmlDoc, "//a:prstGeom", "prst", u"roundRect");
+        const OUString aExpected = u"val " + OUString::number(rCase.nExpected);
+        assertXPath(pXmlDoc, "//a:prstGeom/a:avLst/a:gd", "fmla", aExpected);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testCustomShapeForwardReference)
 {
     // Given a brace whose equations refer to a later one (?f2 = ?f4 - $0, with f4 = $1):
