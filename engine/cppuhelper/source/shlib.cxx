@@ -107,6 +107,14 @@ bool cppuhelper::detail::onlyLoadedLibraries()
 cpo::uno::Environment cppuhelper::detail::getEnvironment(
     OUString const & name, std::u16string_view implementation)
 {
+#if !defined DISABLE_DYNLOADING
+    // After preload the only environment is the current language binding.
+    if (onlyLoadedLibraries() && name != CPPU_CURRENT_LANGUAGE_BINDING_NAME) {
+        throw css::loader::CannotActivateFactoryException(
+            "environment " + name + " is not available after preload",
+            cpo::uno::Reference<cpo::uno::XInterface>());
+    }
+#endif
     OUString n(name);
     if (!implementation.empty()) {
         OUString imps = o3tl::getEnvironment(u"UNO_ENV_LOG"_ustr);
