@@ -681,4 +681,16 @@ describe('LOUtil', function () {
 			nodeassert.notStrictEqual(image.style.display, 'none');
 		});
 	});
+
+	describe('generateNewFileName()', function () {
+		it('the suffix is added before the extension', function () {
+			const newFileName = LOUtil.generateNewFileName('README.txt', '_new');
+			nodeassert.equal(newFileName, 'README_new.txt');
+		});
+
+		it('the suffix is added at the end if there is no extension', function () {
+			const newFileName = LOUtil.generateNewFileName('README', '_new');
+			nodeassert.equal(newFileName, 'README_new');
+		});
+	});
 });

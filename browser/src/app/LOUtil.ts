@@ -1046,6 +1046,9 @@ class LOUtil {
 		suffix: string,
 	): string {
 		const idx = oldFileName.lastIndexOf('.');
+		if (idx == -1) {
+			return oldFileName + suffix;
+		}
 		return oldFileName.substring(0, idx) + suffix + oldFileName.substring(idx);
 	}
 
