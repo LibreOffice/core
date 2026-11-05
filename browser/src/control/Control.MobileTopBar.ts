@@ -39,7 +39,7 @@ class MobileTopBar extends JSDialog.Toolbar {
 				{type: 'toolitem', id: 'signstatus', command: '.uno:Signature', w2icon: '', text: _UNO('.uno:Signature'), visible: false},
 				{type: 'toolitem',  id: 'undo', text: _UNO('.uno:Undo'), command: '.uno:Undo', icon: 'lc_undo_mobile.svg', enabled: false},
 				{type: 'toolitem',  id: 'redo', text: _UNO('.uno:Redo'), command: '.uno:Redo', icon: 'lc_redo_mobile.svg', enabled: false},
-				{type: 'customtoolitem', visible: false, id: 'acceptformula', command: 'acceptformula', icon: 'lc_ok_mobile.svg', text: _('Accept')},
+				{type: 'customtoolitem', visible: false, id: 'acceptformula', command: 'acceptformula', icon: 'lc_listitem-selected_mobile.svg', text: _('Accept')},
 				{type: 'customtoolitem', visible: false, id: 'cancelformula', command: 'cancelformula', icon: 'lc_cancel_mobile.svg', text: _('Cancel')},
 				{type: 'spacer', id: 'before-PermissionMode'},
 				this._generateHtmlItem('permissionmode'),

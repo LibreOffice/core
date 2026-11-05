@@ -1,0 +1,10 @@
+<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+  <path
+     d="M 0,0 H 20 V 20 H 0 Z"
+     fill="none"
+     style="stroke-width:1" />
+  <path
+     style="fill:none;stroke:#0b87e7;stroke-linecap:round;stroke-linejoin:round"
+     d="M 2.5,12.499728 7,16.5 17.5,4.5"
+     />
+</svg>
