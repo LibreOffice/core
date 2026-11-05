@@ -3145,6 +3145,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_CHANGEBEZIER:
         case SID_CHANGEPOLYGON:
+        case SID_CONVERT_TO_EDITABLE_SHAPE:
             if ( mpDrawView->IsTextEdit() )
             {
                 mpDrawView->SdrEndTextEdit();
@@ -3165,6 +3166,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     weld::WaitObject aWait(GetFrameWeld());
                     mpDrawView->ConvertMarkedToPathObj(false);
                 }
+                else if (rReq.GetSlot() == SID_CONVERT_TO_EDITABLE_SHAPE)
+                {
+                    weld::WaitObject aWait(GetFrameWeld());
+                    mpDrawView->ConvertMarkedToEditablePathObj();
+                }
                 else
                 {
                     if( mpDrawView->IsVectorizeAllowed() )
@@ -3180,6 +3186,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 Invalidate(SID_CHANGEBEZIER);
                 Invalidate(SID_CHANGEPOLYGON);
+                Invalidate(SID_CONVERT_TO_EDITABLE_SHAPE);
             }
             Cancel();
 

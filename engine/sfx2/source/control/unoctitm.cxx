@@ -1427,6 +1427,9 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"InsertPlainTextContentControl", { PayloadType::EnabledPayload, true } },
         { u"InsertPictureContentControl", { PayloadType::EnabledPayload, true } },
         { u"ChangeBezier", { PayloadType::EnabledPayload, true } },
+        { u"ConvertToEditableShape", { PayloadType::EnabledPayload, true } },
+        { u"ChangePolygon", { PayloadType::EnabledPayload, true } },
+        { u"convert_to_contour", { PayloadType::EnabledPayload, true } },
         { u"DistributeHorzCenter", { PayloadType::EnabledPayload, true } },
         { u"DistributeHorzDistance", { PayloadType::EnabledPayload, true } },
         { u"DistributeHorzLeft", { PayloadType::EnabledPayload, true } },
@@ -1551,7 +1554,7 @@ static void InterceptKitStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
         u"DistributeHorzRight",    u"DistributeVertTop",      u"DistributeVertCenter",
         u"DistributeVertDistance", u"DistributeVertBottom",   u"DistributeSelection",
         u"FlipHorizontal",         u"FlipVertical",           u"ChangeBezier",
-        u"FormatArea",             u"FormatLine"
+        u"ConvertToEditableShape", u"FormatArea",             u"FormatLine"
     };
     if (pViewShell->drawsFromObjects()
         && std::find(std::begin(aGivenByTheView), std::end(aGivenByTheView),

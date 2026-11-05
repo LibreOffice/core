@@ -172,7 +172,8 @@ abstract class ClassicContext implements InteractionContext {
 		  back.
 		- By the kind of the objects and what they allow: flipping where none is held in place
 		  and each may be turned over; changing to curves for one object that may be and is no
-		  curve yet, or for several of which one may be; the area unless each object is a line
+		  curve yet, or for several of which one may be; converting to a polygon where one object
+		  at least may be changed to curves or is a curve, and is no empty placeholder; the area unless each object is a line
 		  or a table and one at least is a line, a picture having a fill behind what it shows;
 		  the line where no table is selected.
 		  With nothing selected the area and the line are offered, for the objects drawn next.
@@ -257,6 +258,12 @@ abstract class ClassicContext implements InteractionContext {
 				: objects.some(
 						(object: cool.SlideObject) => !object.cannotBeChangedToCurves,
 					);
+		const curves = [10, 11];
+		states['.uno:ConvertToEditableShape'] = objects.some(
+			(object: cool.SlideObject, at: number) =>
+				!object.emptyPlaceholder &&
+				(!object.cannotBeChangedToCurves || curves.includes(kinds[at])),
+		);
 
 		// The kinds with no area: the line, the arc, the polyline, the open curve, the freehand
 		// line and the connector. The table, kind 35, fills its cells with an area of their own.
@@ -718,6 +725,7 @@ class ClassicDiagramContext extends ClassicGroupContext {
 			states['.uno:FlipHorizontal'] = false;
 			states['.uno:FlipVertical'] = false;
 			states['.uno:ChangeBezier'] = false;
+			states['.uno:ConvertToEditableShape'] = false;
 		}
 		return states;
 	}

@@ -734,6 +734,11 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     if( !( mpDrawView->IsConvertToPolyObjPossible() || mpDrawView->IsConvertToContourPossible() ) )
         rSet.DisableItem(SID_CONVERT_TO_CONTOUR);
 
+    // A curve converts as well, its straight edges become lines.
+    if (!(mpDrawView->IsConvertToPathObjPossible() || mpDrawView->IsConvertToPolyObjPossible())
+        || mpDrawView->IsPresObjSelected())
+        rSet.DisableItem(SID_CONVERT_TO_EDITABLE_SHAPE);
+
     if ( !mpDrawView->IsConvertTo3DObjPossible() )
     {
         rSet.DisableItem(SID_CONVERT_TO_3D);

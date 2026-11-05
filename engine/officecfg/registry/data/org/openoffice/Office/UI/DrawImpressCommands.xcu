@@ -953,6 +953,14 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:ConvertToEditableShape" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Convert to Polygon</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ChangePolygon" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">To ~Polygon</value>

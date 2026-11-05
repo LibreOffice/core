@@ -449,5 +449,6 @@
 #define SID_REQUEST_TEXT_EDIT               (SID_SD_START+469)
 #define SID_REJECT_TEXT_EDIT_REQUEST        (SID_SD_START+470)
 #define SID_RETURN_TEXT_EDIT                (SID_SD_START+471)
+#define SID_CONVERT_TO_EDITABLE_SHAPE       (SID_SD_START+472)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

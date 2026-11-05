@@ -80,6 +80,8 @@
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xlndsit.hxx>
+#include <svx/xlnwtit.hxx>
+#include <svx/sderitm.hxx>
 #include <DrawViewShell.hxx>
 #include <SdSecurityLabelTarget.hxx>
 #include <SlideSorterViewShell.hxx>
@@ -7611,6 +7613,51 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testRenameDeletedSlide)
     // A rename that arrives after its slide was deleted renames nothing.
     CPPUNIT_ASSERT(!pViewShell->RenameSlide(nPageId, u"Renamed"_ustr));
     CPPUNIT_ASSERT(pDoc->GetSdPage(0, PageKind::Standard)->GetRealName().isEmpty());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testConvertToEditableShape)
+{
+    // Given a selected rectangle with rounded corners and a wide line:
+    createSdDrawDoc();
+    auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    SdPage* pPage = pViewShell->GetActualPage();
+
+    rtl::Reference<SdrRectObj> pRect
+        = new SdrRectObj(pView->getSdrModelFromSdrView(), tools::Rectangle(1000, 1000, 9000, 5000));
+    pRect->SetMergedItem(makeSdrEckenradiusItem(1000));
+    pRect->SetMergedItem(XLineStyleItem(drawing::LineStyle_SOLID));
+    pRect->SetMergedItem(XLineWidthItem(500));
+    pPage->NbcInsertObject(pRect.get());
+    pView->MarkObj(pRect.get(), pView->GetSdrPageView());
+
+    // When it is converted to a polygon whose points can be edited:
+    dispatchCommand(mxComponent, u".uno:ConvertToEditableShape"_ustr, {});
+
+    // Then it is one path, and its line is still a line of the same width:
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
+    auto* pPath = dynamic_cast<SdrPathObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pPath);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(500), pPath->GetMergedItem(XATTR_LINEWIDTH).GetValue());
+
+    // And its four sides are straight lines while its corners are curves:
+    const basegfx::B2DPolyPolygon& rPolyPolygon = pPath->GetPathPoly();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), rPolyPolygon.count());
+    const basegfx::B2DPolygon aPolygon = rPolyPolygon.getB2DPolygon(0);
+    CPPUNIT_ASSERT(aPolygon.isClosed());
+    sal_uInt32 nLines = 0;
+    sal_uInt32 nCurves = 0;
+    for (sal_uInt32 nEdge = 0; nEdge < aPolygon.count(); ++nEdge)
+    {
+        const sal_uInt32 nNext = (nEdge + 1) % aPolygon.count();
+        if (aPolygon.isNextControlPointUsed(nEdge) || aPolygon.isPrevControlPointUsed(nNext))
+            ++nCurves;
+        else
+            ++nLines;
+    }
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), nLines);
+    CPPUNIT_ASSERT(nCurves > 0);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

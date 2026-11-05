@@ -2004,9 +2004,30 @@ void SdrEditView::UnGroupMarked()
 // ConvertToPoly
 
 
-rtl::Reference<SdrObject> SdrEditView::ImpConvertOneObj(SdrObject* pObj, bool bPath, bool bLineToArea)
+namespace
+{
+// Every edge of the paths in rObject, or in the objects it holds, that runs straight becomes a line.
+void lcl_straightEdgesAsLines(SdrObject& rObject)
+{
+    if (rObject.IsGroupObject())
+    {
+        SdrObjListIter aIter(rObject, SdrIterMode::DeepNoGroups);
+        while (aIter.IsMore())
+            lcl_straightEdgesAsLines(*aIter.Next());
+        return;
+    }
+
+    if (SdrPathObj* pPath = dynamic_cast<SdrPathObj*>(&rObject))
+        pPath->SetPathPoly(basegfx::utils::simplifyCurveSegments(pPath->GetPathPoly()));
+}
+}
+
+rtl::Reference<SdrObject> SdrEditView::ImpConvertOneObj(SdrObject* pObj, bool bPath, bool bLineToArea,
+                                                        bool bStraightEdgesAsLines)
 {
     rtl::Reference<SdrObject> pNewObj = pObj->ConvertToPolyObj(bPath, bLineToArea);
+    if (pNewObj && bStraightEdgesAsLines)
+        lcl_straightEdgesAsLines(*pNewObj);
     if (pNewObj)
     {
         SdrObjList* pOL = pObj->getParentSdrObjListFromSdrObject();
@@ -2019,7 +2040,7 @@ rtl::Reference<SdrObject> SdrEditView::ImpConvertOneObj(SdrObject* pObj, bool bP
     return pNewObj;
 }
 
-void SdrEditView::ImpConvertTo(bool bPath, bool bLineToArea)
+void SdrEditView::ImpConvertTo(bool bPath, bool bLineToArea, bool bStraightEdgesAsLines)
 {
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     if (rMarkList.GetMarkCount() == 0)
@@ -2035,6 +2056,11 @@ void SdrEditView::ImpConvertTo(bool bPath, bool bLineToArea)
         else
             pDscrID = STR_EditConvToContours;
 
+        BegUndo(SvxResId(pDscrID), rMarkList.GetMarkDescription());
+    }
+    else if (bStraightEdgesAsLines)
+    {
+        pDscrID = nMarkCount == 1 ? STR_EditConvToPoly : STR_EditConvToPolys;
         BegUndo(SvxResId(pDscrID), rMarkList.GetMarkDescription());
     }
     else
@@ -2059,10 +2085,11 @@ void SdrEditView::ImpConvertTo(bool bPath, bool bLineToArea)
             SdrObjListIter aIter(*pGrp, SdrIterMode::DeepNoGroups);
             while (aIter.IsMore()) {
                 pObj=aIter.Next();
-                ImpConvertOneObj(pObj,bPath,bLineToArea);
+                ImpConvertOneObj(pObj, bPath, bLineToArea, bStraightEdgesAsLines);
             }
         } else {
-            rtl::Reference<SdrObject> pNewObj=ImpConvertOneObj(pObj,bPath,bLineToArea);
+            rtl::Reference<SdrObject> pNewObj
+                = ImpConvertOneObj(pObj, bPath, bLineToArea, bStraightEdgesAsLines);
             if (pNewObj) {
                 bMrkChg=true;
                 GetMarkedObjectListWriteAccess().ReplaceMark(SdrMark(pNewObj.get(),pPV),nm);
@@ -2085,6 +2112,11 @@ void SdrEditView::ConvertMarkedToPathObj(bool bLineToArea)
 void SdrEditView::ConvertMarkedToPolyObj()
 {
     ImpConvertTo(false, false/*bLineToArea*/);
+}
+
+void SdrEditView::ConvertMarkedToEditablePathObj()
+{
+    ImpConvertTo(true, false/*bLineToArea*/, true/*bStraightEdgesAsLines*/);
 }
 
 namespace

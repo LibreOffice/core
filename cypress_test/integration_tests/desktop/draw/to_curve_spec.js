@@ -51,13 +51,23 @@ describe(['tagdesktop'], 'Convert to curve', function() {
 		cy.cGet('#Shape-container').should('be.visible');
 	}
 
-	function clickConvertToCurveButton() {
-		const button = '#Shape-container .unoChangeBezier';
+	function clickConvertToPolygonButton() {
+		const button = '#Shape-container .unoConvertToEditableShape';
 		cy.cGet(button).should('not.have.attr', 'disabled');
-		cy.cGet(button).click();
+		// The button holds the polygon command, its arrow opens the other conversions.
+		cy.cGet(button + ' .unobutton').click();
 		cy.getFrameWindow().then(function(win) {
 			helper.processToIdle(win);
 		});
+	}
+
+	const convertMenu = '[id^="shape-convert-editable"].modalpopup';
+
+	function openConvertMenu() {
+		const button = '#Shape-container .unoConvertToEditableShape';
+		cy.cGet(button).should('not.have.attr', 'disabled');
+		cy.cGet(button + ' > .arrowbackground').click();
+		cy.cGet(convertMenu).should('be.visible');
 	}
 
 	it('Keeps the shape selected after converting it to a curve', function() {
@@ -95,9 +105,10 @@ describe(['tagdesktop'], 'Convert to curve', function() {
 		drawnHandle().should('exist');
 
 		openShapeTab();
-		clickConvertToCurveButton();
+		clickConvertToPolygonButton();
 
-		selectionKind().should('equal', 'pathFill');
+		// The edges of a rectangle are straight, so it becomes a polygon with no curve.
+		selectionKind().should('equal', 'polygon');
 		drawnHandle().should('exist');
 
 		helper.typeIntoDocument('{esc}');
@@ -105,5 +116,32 @@ describe(['tagdesktop'], 'Convert to curve', function() {
 
 		selectObject(1);
 		drawnHandle().should('exist');
+	});
+
+	it('The arrow of the polygon button offers the other conversions', function() {
+		selectObject(1);
+		selectionKind().should('equal', 'rectangle');
+
+		openShapeTab();
+		openConvertMenu();
+
+		cy.cGet(convertMenu + ' .ui-combobox-entry').should(function($entries) {
+			const texts = $entries.toArray().map(function(entry) {
+				return entry.textContent.trim();
+			});
+			expect(texts).to.deep.equal(['To Curve', 'To Contour', 'To Polygon']);
+		});
+
+		// The rectangle is no curve yet, so it may be changed to one.
+		cy.cGet(convertMenu).contains('.ui-combobox-entry', 'To Curve')
+			.should('not.have.class', 'disabled')
+			.click();
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
+
+		cy.cGet(convertMenu).should('not.exist');
+		// The curve keeps its straight edges as curves, unlike the polygon of the button itself.
+		selectionKind().should('equal', 'pathFill');
 	});
 });

@@ -164,6 +164,7 @@ class Interaction {
 		'.uno:FlipHorizontal',
 		'.uno:FlipVertical',
 		'.uno:ChangeBezier',
+		'.uno:ConvertToEditableShape',
 		'.uno:FormatArea',
 		'.uno:FormatLine',
 	];

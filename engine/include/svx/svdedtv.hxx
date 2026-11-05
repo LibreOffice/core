@@ -115,12 +115,15 @@ protected:
     SAL_DLLPRIVATE void ImpBroadcastEdgesOfMarkedNodes();
 
     // convert the objects marked in poly resp. bezier
-    SAL_DLLPRIVATE void ImpConvertTo(bool bPath, bool bLineToArea);
+    // With bStraightEdgesAsLines, an edge of the result that runs straight is a line, not a curve.
+    SAL_DLLPRIVATE void ImpConvertTo(bool bPath, bool bLineToArea,
+                                     bool bStraightEdgesAsLines = false);
 
     // converts an object, when positive it removes the old one from its List
     // and inserts the new one instead. including Undo.
     // Nor MarkEntry nor ModelChgBroadcast is created.
-    SAL_DLLPRIVATE rtl::Reference<SdrObject> ImpConvertOneObj(SdrObject* pObj, bool bPath, bool bLineToArea);
+    SAL_DLLPRIVATE rtl::Reference<SdrObject> ImpConvertOneObj(SdrObject* pObj, bool bPath, bool bLineToArea,
+                                                              bool bStraightEdgesAsLines = false);
 
     // set both flags: bToTopPossible and bToBtmPossible.
     // bToTopPossibleDirty and bToBtmPossibleDirty are reset at the same time
@@ -375,6 +378,9 @@ public:
     bool IsConvertToContourPossible() const { ForcePossibilities(); return m_bCanConvToContour; }
     void ConvertMarkedToPathObj(bool bLineToArea);
     SAL_DLLPRIVATE void ConvertMarkedToPolyObj();
+    // Convert the marked objects to paths whose points can be edited. A curved edge stays a
+    // curve, a straight edge is a line, and the line width stays an attribute of the path.
+    void ConvertMarkedToEditablePathObj();
 
     // Align all marked objects vertically. Normally the SnapRect of an object is used.
     void AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert);

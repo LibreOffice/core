@@ -827,6 +827,12 @@ interface DrawView
         StateMethod = GetMenuState ;
         ReadOnlyDoc = FALSE ;
     ]
+    SID_CONVERT_TO_EDITABLE_SHAPE
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+        ReadOnlyDoc = FALSE ;
+    ]
     SID_CONVERT_TO_CONTOUR // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;

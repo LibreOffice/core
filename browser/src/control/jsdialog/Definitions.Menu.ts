@@ -149,6 +149,12 @@ function canStyleCellBorder(): boolean {
 	return !!items && items.getItemValue('.uno:LineStyle') === 'enabled';
 }
 
+// Whether the last state told for the command says it can be run.
+function isCommandEnabled(command: string): boolean {
+	const items = window.L.Map.THIS['stateChangeHandler'];
+	return !!items && items.getItemValue(command) === 'enabled';
+}
+
 function getLineStyleModificationCommand(
 	LineStyle: UNO_BorderLineStyle,
 	nOut: number, // outer line width, maps to SvxBorderLine nOut
@@ -2455,6 +2461,26 @@ menuDefinitions.set('GluePointsMenu', [
 		checked: false,
 		isEnabled: () =>
 			GraphicSelection.selectionSection?.tiePointsAreShown() ?? false,
+	},
+] as Array<MenuDefinition>);
+
+// The other ways to change the selected shape into one whose points can be edited.
+menuDefinitions.set('ConvertShapeMenu', [
+	{
+		text: _UNO('.uno:ChangeBezier', 'presentation'),
+		img: 'changebezier',
+		uno: '.uno:ChangeBezier',
+		isEnabled: () => isCommandEnabled('.uno:ChangeBezier'),
+	},
+	{
+		text: _UNO('.uno:convert_to_contour', 'presentation'),
+		uno: '.uno:convert_to_contour',
+		isEnabled: () => isCommandEnabled('.uno:convert_to_contour'),
+	},
+	{
+		text: _UNO('.uno:ChangePolygon', 'presentation'),
+		uno: '.uno:ChangePolygon',
+		isEnabled: () => isCommandEnabled('.uno:ChangePolygon'),
 	},
 ] as Array<MenuDefinition>);
 

@@ -2700,14 +2700,6 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 			this.getShapeLineSection(),
 			{ type: 'separator', id: 'shape-line-break', orientation: 'vertical' },
 			{
-				'id': 'shape-convert-curve',
-				'type': 'bigtoolitem',
-				'text': _UNO('.uno:ChangeBezier', 'presentation'),
-				'command': '.uno:ChangeBezier',
-				'accessibility': { focusBack: true, combination: 'CB', de: null }
-			},
-			{ type: 'separator', id: 'shape-convertcurve-break', orientation: 'vertical' },
-			{
 				'type': 'overflowgroup',
 				'id': 'shape-align',
 				'name':_('Align'),
@@ -2969,13 +2961,22 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				'text': _UNO('.uno:AnimationEffects', 'presentation'),
 				'command': '.uno:AnimationEffects',
 				'accessibility': { focusBack: true, combination: 'IA', de: null }
+			},
+			{ type: 'separator', id: 'shape-interaction-break', orientation: 'vertical' },
+			{
+				'id': 'shape-convert-editable:ConvertShapeMenu',
+				'type': 'menubutton',
+				'text': _UNO('.uno:ConvertToEditableShape', 'presentation'),
+				'command': '.uno:ConvertToEditableShape',
+				'applyCallback': '.uno:ConvertToEditableShape',
+				'icon': 'lc_changebezier.svg',
+				'accessibility': { focusBack: true, combination: 'CP', de: null }
 			}
 		];
 
 		// The points to tie a connector to are shown on the canvas the client draws itself.
 		if (cool.VectorRenderingConfig.isEnabled()) {
 			content.push(
-				{ type: 'separator', id: 'shape-interaction-break', orientation: 'vertical' },
 				{
 					'id': 'shape-gluepoints:GluePointsMenu',
 					'type': 'menubutton',
