@@ -59,6 +59,9 @@ describe('Socket reload after a fatal error', function () {
 			loadDocument: () => {
 				++loads;
 			},
+			uiManager: {
+				generateModalId: (id: string) => id,
+			},
 		};
 
 		socket = new Socket(map);

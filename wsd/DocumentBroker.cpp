@@ -93,6 +93,7 @@
 #include <filesystem>
 #include <fstream>
 #include <memory>
+#include <set>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -5984,7 +5985,19 @@ std::shared_ptr<ClientSession> DocumentBroker::createNewClientSession(
                 "DocBroker [" << getDocKey() << "] is in conflict with storage. Rejecting client"
                 " request to load session [" << id << "] until a user decides");
             if (ws) {
-                static constexpr std::string_view msg("error: cmd=load kind=docunloading");
+                std::set<std::string> userNames;
+                for (auto const & pair: _sessions) {
+                    if (pair.second->isLive()) {
+                        userNames.insert(pair.second->getUserName());
+                    }
+                }
+                std::string names;
+                for (std::string const & name: userNames) {
+                    names += (names.empty() ? "" : ", ") + name;
+                }
+                std::string const msg(
+                    "error: cmd=load kind=docunloading:collabconflict username="
+                    + Uri::encode(names));
                 ws->sendTextMessage(msg);
                 ws->shutdown(true, msg);
             }

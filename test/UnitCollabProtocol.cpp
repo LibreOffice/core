@@ -694,7 +694,7 @@ public:
                     "The conflict kept another session out and the save of the user away from"
                     " storage");
             }
-        } else if (message.starts_with("error: cmd=load kind=docunloading")) {
+        } else if (message.starts_with("error: cmd=load kind=docunloading:collabconflict")) {
             TST_LOG("Received: " << message);
             LOK_ASSERT_MESSAGE(
                 "Expected the other session to wait only while the user decides",

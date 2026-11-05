@@ -2765,8 +2765,19 @@ class Socket {
 				app.idleHandler._active = false;
 				app.idleHandler._serverRecycling = true;
 
+				// A conflict with what this page uploaded waits for as long as the other users take
+				// to decide (as the upload already holds the changes of this page):
+				const waitsForConflict = errorKind === 'docunloading:collabconflict';
+				const waitDialogId = this._map.uiManager.generateModalId(
+					'collab-conflict-wait',
+				);
+
 				clearTimeout(this.timer);
-				if (this.ReconnectCount++ >= 10) {
+				if (waitsForConflict) {
+					// Counted as retrying (where a closing socket reports no error), but without
+					// nearing the limit:
+					this.ReconnectCount = 1;
+				} else if (this.ReconnectCount++ >= 10) {
 					this._map.fire('error', { msg: errorMessages.docunloadinggiveup });
 					// Give up.
 					return true; // caller should exit immediately.
@@ -2778,6 +2789,9 @@ class Socket {
 						// dialog.
 						if (this.connected() || this._map._fatal) {
 							clearTimeout(this.timer);
+							if (document.getElementById(waitDialogId)) {
+								this._map.uiManager.closeModal(waitDialogId);
+							}
 							return;
 						}
 
@@ -2788,10 +2802,31 @@ class Socket {
 						}
 						// .5, 2, 4.5, 8, 12.5, 18, 24.5, 32, 40.5 seconds
 					},
-					500 * this.ReconnectCount * this.ReconnectCount,
+					waitsForConflict
+						? 3000
+						: 500 * this.ReconnectCount * this.ReconnectCount,
 				); // Quadratic back-off.
 
-				if (this.ReconnectCount > 1) {
+				if (waitsForConflict) {
+					if (!document.getElementById(waitDialogId)) {
+						this._map.uiManager.showInfoModal(
+							'collab-conflict-wait',
+							'',
+							_(
+								'Your changes are saved. %USERS has unsaved changes in this document and is deciding which version to keep.',
+							).replace('%USERS', decodeURIComponent(command.username || '')),
+							null,
+							_('Close'),
+							() => {
+								// No action runs while a dialog is open, so the message goes first:
+								clearTimeout(this.timer);
+								this._map.uiManager.closeModal(waitDialogId);
+								app.dispatcher.dispatch('closeapp');
+								return true;
+							},
+						);
+					}
+				} else if (this.ReconnectCount > 1) {
 					this._map.showBusy(errorMessages.docunloadingretry, false);
 				}
 			} else {

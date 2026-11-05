@@ -27,6 +27,12 @@ window.L.Control.AlertDialog = window.L.Control.extend({
 		if (!e.cmd && !e.msg)
 			return;
 
+		// A load that waits for other users to settle a conflict shows a dialog of its own, which
+		// stays:
+		if (e.cmd === 'load' && e.kind === 'docunloading:collabconflict') {
+			return;
+		}
+
 		if (!this._map._fatal &&
 		    e.cmd !== 'notasync' &&
 		    e.type !== 'warn') {
