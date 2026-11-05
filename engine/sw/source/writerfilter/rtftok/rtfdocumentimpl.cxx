@@ -1989,6 +1989,7 @@ void RTFDocumentImpl::swapShapeTextTableState(ShapeTextTableState& rState)
     std::swap(m_aBackupTableRowSprms, rState.aBackupTableRowSprms);
     std::swap(m_aBackupTableRowAttributes, rState.aBackupTableRowAttributes);
     std::swap(m_aDefaultState.getTableCellSprms(), rState.aDefaultTableCellSprms);
+    std::swap(m_aDefaultState.getTableCellAttributes(), rState.aDefaultTableCellAttributes);
     std::swap(m_nNestedCells, rState.nNestedCells);
     std::swap(m_aNestedTableCellsSprms, rState.aNestedTableCellsSprms);
     std::swap(m_aNestedTableCellsAttributes, rState.aNestedTableCellsAttributes);

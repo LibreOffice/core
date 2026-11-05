@@ -1011,6 +1011,7 @@ private:
         RTFSprms aBackupTableRowSprms;
         RTFSprms aBackupTableRowAttributes;
         RTFSprms aDefaultTableCellSprms;
+        RTFSprms aDefaultTableCellAttributes;
         int nNestedCells{ 0 };
         std::deque<RTFSprms> aNestedTableCellsSprms;
         std::deque<RTFSprms> aNestedTableCellsAttributes;
