@@ -2981,7 +2981,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	XHalfFloatReadOnlyBitmap \
 	XIeeeDoubleBitmap \
 	XIeeeDoubleReadOnlyBitmap \
-	XIeeeFloatBitmap \
 	XIeeeFloatReadOnlyBitmap \
 	XIntegerBitmap \
 	XIntegerBitmapColorSpace \
