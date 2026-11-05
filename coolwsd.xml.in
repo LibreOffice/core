@@ -246,11 +246,10 @@
            expression that must match the whole client IP address. An IPv4
            network also matches the IPv4-mapped IPv6 spelling of its addresses
            (::ffff:100.64.1.2), so one CIDR entry replaces a pair of regular
-           expressions. The allow attribute is separate from that filter: when
-           it is true these hosts also count as allowed external data sources,
-           the same role as net.lok_allow below. Turning the attribute off does
-           not disable the POST and REST filter. -->
-      <post_allow desc="Allow/deny client IP address for POST(REST)." allow="true">
+           expressions. These hosts are not external data sources. Those are
+           listed in net.lok_allow below. An allow attribute on this element,
+           found in older files, has no effect. -->
+      <post_allow desc="Allow/deny client IP address for POST(REST).">
         <host desc="The IPv4 private 192.168.0.0/16 block.">192.168.0.0/16</host>
         <host desc="The IPv4 loopback (localhost) address.">127.0.0.1/32</host>
         <host desc="The IPv6 loopback (localhost) address.">::1/128</host>
@@ -260,7 +259,7 @@
         <host desc="Carrier-grade NAT range used as the pod network">100.64.0.0/10</host>
         -->
       </post_allow>
-      <lok_allow desc="Allowed hosts as an external data source inside edited files. Each entry is either a network in CIDR notation or a regular expression matched against the host of the URL. All allowed post_allow.host and storage.wopi entries are also considered to be allowed as a data source. Used for example in: PostMessage Action_InsertGraphic, =WEBSERVICE() function, external reference in the cell. If this section is present but no host ends up allowed, every host is denied. Without this section every host is allowed.">
+      <lok_allow desc="Allowed hosts as an external data source inside edited files. Each entry is either a network in CIDR notation or a regular expression matched against the host of the URL. Every storage.wopi host and alias group host whose allow attribute is true, and the aliases of those groups, is also allowed as a data source. The post_allow hosts are not. Used for example in: PostMessage Action_InsertGraphic, =WEBSERVICE() function, external reference in the cell. If this section is present but no host ends up allowed, every host is denied. Without this section every host is allowed.">
         <host desc="The IPv4 private 192.168.0.0/16 block.">192.168.0.0/16</host>
         <host desc="The IPv4 loopback (localhost) address.">127.0.0.1/32</host>
         <host desc="The IPv6 loopback (localhost) address.">::1/128</host>

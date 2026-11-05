@@ -47,7 +47,6 @@ const std::map<std::string, std::string> specialAttribute {
                     {".trace", "enable"},
                     {".trace.path","compress"},
                     {".trace.path","snapshot"},
-                    {".net.post_allow","allow"},
                     {".ssl.hpkp","enable"},
                     {".ssl.hpkp","report_only"},
                     {".ssl.hpkp.max_age","enable"},

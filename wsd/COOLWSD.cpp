@@ -3136,11 +3136,7 @@ void COOLWSD::setLokitEnvironmentVariables(const Poco::Util::LayeredConfiguratio
     // Allowed hosts for being external data source in the documents
     std::vector<std::string> lokAllowedHosts;
     appendAllowedHostsFrom(conf, "net.lok_allow", lokAllowedHosts);
-    // For backward compatibility post_allow hosts are also allowed
-    bool postAllowed = conf.getBool("net.post_allow[@allow]", false);
-    if (postAllowed)
-        appendAllowedHostsFrom(conf, "net.post_allow", lokAllowedHosts);
-    // For backward compatibility wopi hosts are also allowed
+    // The WOPI hosts are allowed as well
     bool wopiAllowed = conf.getBool("storage.wopi[@allow]", false);
     if (wopiAllowed)
     {
