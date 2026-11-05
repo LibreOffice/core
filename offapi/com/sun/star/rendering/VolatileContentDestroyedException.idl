@@ -21,7 +21,7 @@ module com { module sun { module star { module rendering {
 
     /** This exception indicates an invalid volatile bitmap content.<p>
 
-        When accessing or rendering XVolatileBitmap data, that has
+        When accessing or rendering volatile bitmap data, that has
         been invalidated by the system, this exception will be thrown.<p>
 
         @since OOo 2.0

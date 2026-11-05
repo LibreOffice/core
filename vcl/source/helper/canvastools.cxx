@@ -167,6 +167,7 @@ namespace vcl::unotools
             // from...
 
             // loop a few times, until successfully read (for XVolatileBitmap)
+            // NOTE: XVolatileBitmap no longer exists, so could revisit whether the looping here is still needed
             for( int i=0; i<10; ++i )
             {
                 sal_Int32 nDepth=0;

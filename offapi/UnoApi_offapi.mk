@@ -2987,7 +2987,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/rendering,\
 	XSprite \
 	XSpriteCanvas \
 	XTextLayout \
-	XVolatileBitmap \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/report,\
 	Calculation \
