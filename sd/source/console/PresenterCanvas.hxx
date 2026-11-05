@@ -153,15 +153,6 @@ public:
             const css::uno::Sequence< css::rendering::Texture >& aTextures,
             const css::rendering::StrokeAttributes& aStrokeAttributes) override;
 
-    virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
-        strokeTextureMappedPolyPolygon(
-            const css::uno::Reference<css::rendering::XPolyPolygon2D >& xPolyPolygon,
-            const css::rendering::ViewState& aViewState,
-            const css::rendering::RenderState& aRenderState,
-            const css::uno::Sequence<css::rendering::Texture>& aTextures,
-            const css::uno::Reference<css::geometry::XMapping2D>& xMapping,
-            const css::rendering::StrokeAttributes& aStrokeAttributes) override;
-
     virtual css::uno::Reference<css::rendering::XPolyPolygon2D> SAL_CALL
         queryStrokeShapes(
             const css::uno::Reference<css::rendering::XPolyPolygon2D>& xPolyPolygon,

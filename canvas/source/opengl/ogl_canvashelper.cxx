@@ -494,18 +494,6 @@ namespace oglcanvas
         return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokeTextureMappedPolyPolygon( const rendering::XCanvas*                           /*pCanvas*/,
-                                                                                                const uno::Reference< rendering::XPolyPolygon2D >&  /*xPolyPolygon*/,
-                                                                                                const rendering::ViewState&                         /*viewState*/,
-                                                                                                const rendering::RenderState&                       /*renderState*/,
-                                                                                                const uno::Sequence< rendering::Texture >&          /*textures*/,
-                                                                                                const uno::Reference< geometry::XMapping2D >&       /*xMapping*/,
-                                                                                                const rendering::StrokeAttributes&                  /*strokeAttributes*/ )
-    {
-        // TODO
-        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
-    }
-
     uno::Reference< rendering::XPolyPolygon2D >   CanvasHelper::queryStrokeShapes( const rendering::XCanvas*                            /*pCanvas*/,
                                                                                    const uno::Reference< rendering::XPolyPolygon2D >&   /*xPolyPolygon*/,
                                                                                    const rendering::ViewState&                          /*viewState*/,
