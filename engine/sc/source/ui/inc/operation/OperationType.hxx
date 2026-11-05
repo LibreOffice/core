@@ -75,7 +75,6 @@ enum class OperationType
     SparklineUngroup,
     SparklineGroupDelete,
     SparklineGroupChange,
-    EnterData,
     InsertSheetView,
 };
 
