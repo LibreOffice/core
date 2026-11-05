@@ -35,30 +35,6 @@ public:
         case svtools::RESTART_REASON_MAILMERGE_INSTALL:
             reason_ = m_xBuilder->weld_widget(u"reason_mailmerge_install"_ustr);
             break;
-        case svtools::RESTART_REASON_LANGUAGE_CHANGE:
-            reason_ = m_xBuilder->weld_widget(u"reason_language_change"_ustr);
-            break;
-        case svtools::RESTART_REASON_ADDING_PATH:
-            reason_ = m_xBuilder->weld_widget(u"reason_adding_path"_ustr);
-            break;
-        case svtools::RESTART_REASON_ASSIGNING_JAVAPARAMETERS:
-            reason_ = m_xBuilder->weld_widget(u"reason_assigning_javaparameters"_ustr);
-            break;
-        case svtools::RESTART_REASON_ASSIGNING_FOLDERS:
-            reason_ = m_xBuilder->weld_widget(u"reason_assigning_folders"_ustr);
-            break;
-        case svtools::RESTART_REASON_EXP_FEATURES:
-            reason_ = m_xBuilder->weld_widget(u"reason_exp_features"_ustr);
-            break;
-        case svtools::RESTART_REASON_THEME_CHANGE:
-            reason_ = m_xBuilder->weld_widget(u"reason_theme_reload"_ustr);
-            break;
-        case svtools::RESTART_REASON_SKIA:
-            reason_ = m_xBuilder->weld_widget(u"reason_skia"_ustr);
-            break;
-        case svtools::RESTART_REASON_CALCULATION:
-            reason_ = m_xBuilder->weld_widget(u"reason_calculation"_ustr);
-            break;
         case svtools::RESTART_REASON_UI_CHANGE:
             reason_ = m_xBuilder->weld_widget(u"reason_uichange"_ustr);
             break;

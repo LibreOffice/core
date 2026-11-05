@@ -96,96 +96,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="reason_assigning_folders">
-                <property name="can-focus">False</property>
-                <property name="no-show-all">True</property>
-                <property name="label" translatable="yes" context="restartdialog|reason_assigning_folders">For the assigned folders and archives to take effect, %PRODUCTNAME must be restarted.</property>
-                <property name="wrap">True</property>
-                <property name="max-width-chars">50</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="reason_assigning_javaparameters">
-                <property name="can-focus">False</property>
-                <property name="no-show-all">True</property>
-                <property name="label" translatable="yes" context="restartdialog|reason_assigning_javaparameters">For the assigned Java parameters to take effect, %PRODUCTNAME must be restarted.</property>
-                <property name="wrap">True</property>
-                <property name="max-width-chars">50</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">5</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="reason_adding_path">
-                <property name="can-focus">False</property>
-                <property name="no-show-all">True</property>
-                <property name="label" translatable="yes" context="restartdialog|reason_adding_path">For the added path to take effect, %PRODUCTNAME must be restarted.</property>
-                <property name="wrap">True</property>
-                <property name="max-width-chars">50</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">6</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="reason_language_change">
-                <property name="can-focus">False</property>
-                <property name="no-show-all">True</property>
-                <property name="label" translatable="yes" context="restartdialog|reason_language_change">For the updated UI language setting to take effect, %PRODUCTNAME must be restarted.</property>
-                <property name="wrap">True</property>
-                <property name="max-width-chars">50</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">7</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="reason_exp_features">
-                <property name="can-focus">False</property>
-                <property name="no-show-all">True</property>
-                <property name="label" translatable="yes" context="restartdialog|reason_exp_features">For the modified experimental features to take effect, %PRODUCTNAME must be restarted.</property>
-                <property name="wrap">True</property>
-                <property name="max-width-chars">50</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">8</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="reason_theme_reload">
-                <property name="can-focus">False</property>
-                <property name="no-show-all">True</property>
-                <property name="label" translatable="yes" context="restartdialog|reason_theme_reload">To apply theme changes, %PRODUCTNAME must be restarted.</property>
-                <property name="wrap">True</property>
-                <property name="max-width-chars">50</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">9</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkLabel" id="reason_uichange">
                 <property name="can-focus">False</property>
                 <property name="no-show-all">True</property>
@@ -201,21 +111,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="reason_calculation">
-                <property name="can-focus">False</property>
-                <property name="no-show-all">True</property>
-                <property name="label" translatable="yes" context="restartdialog|reason_calculation">For the Calculation settings changes to take effect, %PRODUCTNAME must be restarted.</property>
-                <property name="wrap">True</property>
-                <property name="max-width-chars">50</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">11</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkLabel" id="label">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -227,21 +122,6 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">13</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="reason_skia">
-                <property name="can-focus">False</property>
-                <property name="no-show-all">True</property>
-                <property name="label" translatable="yes" context="restartdialog|reason_skia">For the Skia changes to take effect, %PRODUCTNAME must be restarted.</property>
-                <property name="wrap">True</property>
-                <property name="max-width-chars">50</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">14</property>
               </packing>
             </child>
           </object>

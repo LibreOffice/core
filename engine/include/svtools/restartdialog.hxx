@@ -27,30 +27,6 @@ enum RestartReason {
     // "For the mail merge to work properly,
     // %PRODUCTNAME must be restarted.":
     RESTART_REASON_MAILMERGE_INSTALL,
-    // "For the updated language settings to take effect,
-    // %PRODUCTNAME must be restarted.":
-    RESTART_REASON_LANGUAGE_CHANGE,
-    // "For the added path to take effect,
-    // %PRODUCTNAME must be restarted.":
-    RESTART_REASON_ADDING_PATH,
-    // "For the assigned java parameters to take effect,
-    // %PRODUCTNAME must be restarted.":
-    RESTART_REASON_ASSIGNING_JAVAPARAMETERS,
-    // "For the assigned folders and archives to take effect,
-    // %PRODUCTNAME must be restarted.":
-    RESTART_REASON_ASSIGNING_FOLDERS,
-    // "For the modified experimental features to take effect,
-    // %PRODUCTNAME must be restarted.":
-    RESTART_REASON_EXP_FEATURES,
-    // "To apply theme changes,
-    // %PRODUCTNAME must be restarted.":
-    RESTART_REASON_THEME_CHANGE,
-    // For the Skia changes to take effect,
-    // %PRODUCTNAME must be restarted:
-    RESTART_REASON_SKIA,
-    // For the Calculation settings changes to take effect,
-    // %PRODUCTNAME must be restarted:
-    RESTART_REASON_CALCULATION,
     // To apply changes, %PRODUCTNAME,
     // %PRODUCTNAME must be restarted:
     RESTART_REASON_UI_CHANGE,
