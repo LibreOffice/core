@@ -9,6 +9,7 @@
  */
 
 import Cocoa
+import UniformTypeIdentifiers
 import WebKit
 
 /// A window that shows the integrator's site for one cloud account, as a browser would.
@@ -265,6 +266,11 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
             return ""
         }
 
+        if !Self.documentExtensions.contains(fileExtension.lowercased()) {
+            COWrapper.LOG_ERR("writeRemoteDocFile: extension \(fileExtension) not supported")
+            return ""
+        }
+
         guard let editorFrameInfo else {
             COWrapper.LOG_ERR("writeRemoteDocFile has no editor frame")
             return ""
@@ -307,6 +313,11 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
 
         return bytes.base64EncodedString()
     }
+
+    // App declared document extensions, like "odt" or "csv".
+    private static let documentExtensions = Set(Document.readableTypes.flatMap {
+        UTType($0)?.tags[.filenameExtension] ?? []
+    })
 
     // Only ASCII letters and digits, like "odt" or "docx".
     private static func isPlainExtension(_ fileExtension: String) -> Bool {
