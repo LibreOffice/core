@@ -48,6 +48,12 @@ describe('Test harness', () => {
 				expect(source).toContain(
 					'accessibility-id="CODA.BackstageWindow.WebView"',
 				);
+			} else if (process.env.CODA_PLATFORM === 'windows') {
+				// Win32 windows have no accessibility ids, so the window
+				// classes stand in: CODA for a document window, and a
+				// class starting with Chrome_ for its WebView2 web view.
+				expect(source).toContain('class="CODA"');
+				expect(source).toMatch(/class="Chrome_[^"]*"/);
 			} else {
 				// The app node id is the desktop file name; the WebView path
 				// varies by window type.

@@ -56,7 +56,11 @@ export const config = {
 
 	// Specs to run, in order, in the same WebDriver session.
 	specs: [[
+		join(QT_SPECS_DIR, 'harness.spec.ts'),
 		join(QT_SPECS_DIR, 'document-lifecycle.spec.ts'),
+		join(QT_SPECS_DIR, 'open-file.spec.ts'),
+		join(QT_SPECS_DIR, 'multipage-backstage.spec.ts'),
+		join(QT_SPECS_DIR, 'slide-copy-paste.spec.ts'),
 	].map(forwardSlashes)],
 
 	exclude: [],
