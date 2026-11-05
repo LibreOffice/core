@@ -321,7 +321,8 @@ static HMONITOR primaryMonitor;
 
 static RecentFiles recentFiles;
 
-static FilenameAndUri fileSaveDialog(const std::string& name,
+static FilenameAndUri fileSaveDialog(HWND hWnd,
+                                     const std::string& name,
                                      const std::string& folder,
                                      const std::vector<COMDLG_FILTERSPEC>& extensions,
                                      size_t defaultTypeIndex = 0);
@@ -683,7 +684,7 @@ void output_file_dialog_from_core(const char* suggestedURI, char* result, size_t
     const auto folder = path.substr(0, lastSlash);
     auto lastPeriod = filename.find_last_of('.');
     auto extension = filename.substr(lastPeriod + 1);
-    auto filenameAndUri = fileSaveDialog(filename, folder,
+    auto filenameAndUri = fileSaveDialog(hiddenOwnerWindow, filename, folder,
                                          {
                                              {
                                                  Util::string_to_wide_string(extension).c_str(),
@@ -1314,7 +1315,8 @@ static std::string pathToURI(const Poco::Path& path)
     return uri.toString();
 }
 
-static std::vector<FilenameAndUri> fileOpenDialog(const std::wstring& title,
+static std::vector<FilenameAndUri> fileOpenDialog(HWND hWnd,
+                                                  const std::wstring& title,
                                                   const std::vector<COMDLG_FILTERSPEC>& filters,
                                                   bool multiSelect)
 {
@@ -1340,7 +1342,7 @@ static std::vector<FilenameAndUri> fileOpenDialog(const std::wstring& title,
         dialog->SetOptions(options);
     }
 
-    HRESULT dialogResult = dialog->Show(hiddenOwnerWindow);
+    HRESULT dialogResult = dialog->Show(hWnd);
 
     if (!SUCCEEDED(dialogResult))
         return {};
@@ -1405,7 +1407,8 @@ static std::vector<COMDLG_FILTERSPEC>getSaveAsFormats(COKitDocumentType docType)
     return result;
 }
 
-static FilenameAndUri fileSaveDialog(const std::string& name,
+static FilenameAndUri fileSaveDialog(HWND hWnd,
+                                     const std::string& name,
                                      const std::string& folder,
                                      const std::vector<COMDLG_FILTERSPEC>& extensions,
                                      size_t defaultTypeIndex)
@@ -1463,7 +1466,7 @@ static FilenameAndUri fileSaveDialog(const std::string& name,
         }
     }
 
-    if (!SUCCEEDED(dialog->Show(hiddenOwnerWindow)))
+    if (!SUCCEEDED(dialog->Show(hWnd)))
         return {};
 
     IShellItem* item;
@@ -1945,7 +1948,9 @@ static LRESULT CALLBACK HiddenOwnerWndProc(HWND hWnd, UINT message, WPARAM wPara
             for (auto const& f : request->filters)
                 filterSpecs.push_back({ f.first.c_str(), f.second.c_str() });
 
-            auto openResult = fileOpenDialog(request->title, filterSpecs, false);
+            const HWND foreground = GetForegroundWindow();
+            const HWND owner = findWindow(foreground) ? foreground : hiddenOwnerWindow;
+            auto openResult = fileOpenDialog(owner, request->title, filterSpecs, false);
             if (!openResult.empty())
                 request->pfnPicked(request->pContext, openResult[0].uri.c_str());
             else
@@ -7053,7 +7058,7 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             auto const extension = name.substr(dot + 1);
             auto const basename = data.filenameAndUri.filename.substr(
                 0, data.filenameAndUri.filename.find_last_of('.'));
-            auto filenameAndUri = fileSaveDialog(basename + "." + extension,
+            auto filenameAndUri = fileSaveDialog(data.hWnd, basename + "." + extension,
                                                  "",
                                                  {
                                                      {
@@ -7090,7 +7095,7 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             }
 
             auto const extension = Poco::Path(srcPath).getExtension();
-            auto filenameAndUri = fileSaveDialog("image." + extension,
+            auto filenameAndUri = fileSaveDialog(data.hWnd, "image." + extension,
                                                  "",
                                                  {
                                                      {
@@ -7152,7 +7157,7 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
 
             auto const extension = Poco::Path(name).getExtension();
             auto filenameAndUri = fileSaveDialog(
-                Poco::Path(name).getFileName(), "",
+                data.hWnd, Poco::Path(name).getFileName(), "",
                 extension.empty()
                     ? std::vector<COMDLG_FILTERSPEC>{}
                     : std::vector<COMDLG_FILTERSPEC>{
@@ -7229,6 +7234,7 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
         else if (s == L"uno .uno:Open")
         {
             auto openResult = fileOpenDialog(
+                data.hWnd,
                 L"",
                 { { L"",
                     L"*.odt;*.fodt;*.docx;*.docm;*.doc;*.rtf;*.txt;*.md;*.ods;*.fods;*.xlsx;*.xlsm;*.xls;*.odp;*.fodp;*.pptx;*.pptm;*.ppsx;*.ppt" },
@@ -7280,7 +7286,7 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
                     formats.push_back({ currentLabel.c_str(), currentPattern.c_str() });
                 }
             }
-            auto filenameAndUri = fileSaveDialog(currentName, "", formats, typeIndex);
+            auto filenameAndUri = fileSaveDialog(data.hWnd, currentName, "", formats, typeIndex);
 
             if (filenameAndUri.filename != "")
             {
