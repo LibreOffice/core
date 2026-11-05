@@ -945,7 +945,7 @@
           <value>albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value>Trebuchet</value>
+          <value>Trebuchet MS</value>
         </prop>
         <prop oor:name="FontWeight">
           <value>Normal</value>
