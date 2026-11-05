@@ -212,19 +212,6 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         xPolyPolygon, MergeViewState(aViewState), aRenderState, xTextures);
 }
 
-css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
-        PresenterCanvas::fillTextureMappedPolyPolygon(
-            const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
-            const css::rendering::ViewState& aViewState,
-            const css::rendering::RenderState& aRenderState,
-            const css::uno::Sequence< css::rendering::Texture >& xTextures,
-            const css::uno::Reference< css::geometry::XMapping2D >& xMapping)
-{
-    ThrowIfDisposed();
-    return mxSharedCanvas->fillTextureMappedPolyPolygon(
-        xPolyPolygon, MergeViewState(aViewState), aRenderState, xTextures, xMapping);
-}
-
 css::uno::Reference<css::rendering::XCanvasFont> SAL_CALL
         PresenterCanvas::createFont(
             const css::rendering::FontRequest& aFontRequest,

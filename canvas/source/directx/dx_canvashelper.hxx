@@ -131,16 +131,6 @@ namespace dxcanvas
                                      const css::rendering::RenderState&        renderState,
                                      const css::uno::Sequence<
                                              css::rendering::Texture >&        textures );
-        css::uno::Reference< css::rendering::XCachedPrimitive >
-            fillTextureMappedPolyPolygon( const css::rendering::XCanvas*           pCanvas,
-                                          const css::uno::Reference<
-                                                  css::rendering::XPolyPolygon2D >&    xPolyPolygon,
-                                          const css::rendering::ViewState&         viewState,
-                                          const css::rendering::RenderState&       renderState,
-                                          const css::uno::Sequence<
-                                                  css::rendering::Texture >&       textures,
-                                          const css::uno::Reference<
-                                                  css::geometry::XMapping2D >&         xMapping );
 
         css::uno::Reference< css::rendering::XCanvasFont >
             createFont( const css::rendering::XCanvas*             pCanvas,

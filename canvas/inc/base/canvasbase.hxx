@@ -244,25 +244,6 @@ public:
                                                       textures);
     }
 
-    virtual css::uno::Reference<css::rendering::XCachedPrimitive>
-        SAL_CALL fillTextureMappedPolyPolygon(
-            const css::uno::Reference<css::rendering::XPolyPolygon2D>& xPolyPolygon,
-            const css::rendering::ViewState& viewState,
-            const css::rendering::RenderState& renderState,
-            const css::uno::Sequence<css::rendering::Texture>& textures,
-            const css::uno::Reference<css::geometry::XMapping2D>& xMapping) override
-    {
-        canvastools::verifyArgs(xPolyPolygon, viewState, renderState, textures, xMapping, __func__,
-                                static_cast<cppu::OWeakObject*>(this));
-
-        MutexType aGuard(BaseType::m_aMutex);
-
-        mbSurfaceDirty = true;
-
-        return maCanvasHelper.fillTextureMappedPolyPolygon(this, xPolyPolygon, viewState,
-                                                           renderState, textures, xMapping);
-    }
-
     virtual css::uno::Reference<css::rendering::XCanvasFont> SAL_CALL
     createFont(const css::rendering::FontRequest& fontRequest,
                const css::uno::Sequence<css::beans::PropertyValue>& extraFontProperties,

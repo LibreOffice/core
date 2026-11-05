@@ -58,8 +58,6 @@ canvas/inc/base/canvasbase.hxx:276
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::fillPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
 canvas/inc/base/canvasbase.hxx:292
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::fillTexturedPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const class com::sun::star::uno::Sequence<struct com::sun::star::rendering::Texture> &,)
-canvas/inc/base/canvasbase.hxx:309
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::fillTextureMappedPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const class com::sun::star::uno::Sequence<struct com::sun::star::rendering::Texture> &,const class com::sun::star::uno::Reference<class com::sun::star::geometry::XMapping2D> &,)
 canvas/inc/base/canvasbase.hxx:328
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XCanvasFont> canvas::CanvasBase::createFont(const struct com::sun::star::rendering::FontRequest &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,const struct com::sun::star::geometry::Matrix2D &,)
 canvas/inc/base/canvasbase.hxx:346

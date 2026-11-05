@@ -158,14 +158,6 @@ public:
             const css::rendering::RenderState& aRenderState,
             const css::uno::Sequence<css::rendering::Texture>& xTextures) override;
 
-    virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
-        fillTextureMappedPolyPolygon(
-            const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
-            const css::rendering::ViewState& aViewState,
-            const css::rendering::RenderState& aRenderState,
-            const css::uno::Sequence< css::rendering::Texture >& xTextures,
-            const css::uno::Reference< css::geometry::XMapping2D >& xMapping) override;
-
     virtual css::uno::Reference<css::rendering::XCanvasFont> SAL_CALL
         createFont(
             const css::rendering::FontRequest& aFontRequest,

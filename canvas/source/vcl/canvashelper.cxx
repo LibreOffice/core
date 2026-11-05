@@ -467,16 +467,6 @@ namespace vclcanvas
         return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTextureMappedPolyPolygon( const rendering::XCanvas*                             ,
-                                                                                              const uno::Reference< rendering::XPolyPolygon2D >&    ,
-                                                                                              const rendering::ViewState&                           ,
-                                                                                              const rendering::RenderState&                         ,
-                                                                                              const uno::Sequence< rendering::Texture >&            ,
-                                                                                              const uno::Reference< geometry::XMapping2D >&              )
-    {
-        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
-    }
-
     uno::Reference< rendering::XCanvasFont > CanvasHelper::createFont( const rendering::XCanvas*                        ,
                                                                        const rendering::FontRequest&                    fontRequest,
                                                                        const uno::Sequence< beans::PropertyValue >&     extraFontProperties,

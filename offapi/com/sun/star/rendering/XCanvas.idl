@@ -273,41 +273,6 @@ interface XCanvas : ::com::sun::star::uno::XInterface
     XCachedPrimitive    fillTexturedPolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState, [in] sequence<Texture> xTextures )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-
-    /** Fill the given poly-polygon with a mapped texture.<p>
-
-        This method fills the given poly-polygon according to the
-        RenderState's color, the given textures and
-        poly-polygon's fill rule. The texture is mapped to the
-        poly-polygon's interior via the given texture mapping.<p>
-
-        @param xPolyPolygon
-        The poly-polygon to render.
-
-        @param aViewState
-        The view state to be used when filling this polygon.
-
-        @param aRenderState
-        The render state to be used when filling this polygon.
-
-        @param xTextures
-        A sequence of texture definitions, with which to fill the
-        polygonal area.
-
-        @param xMapping
-        A bilinear mapping function which defines the warping of the
-        textures on the output area.
-
-        @return a handle to the cached rendering output.
-
-        @throws com::sun::star::lang::IllegalArgumentException
-        if one of the view and render state parameters are outside the
-        specified range.
-     */
-    XCachedPrimitive    fillTextureMappedPolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState, [in] sequence<Texture> xTextures, [in] ::com::sun::star::geometry::XMapping2D xMapping )
-        raises (com::sun::star::lang::IllegalArgumentException);
-
-
     /** Create a suitable font for the specified font description.
 
         @param aFontRequest
