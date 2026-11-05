@@ -328,6 +328,8 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
             }
         }
 
+        // a meaning with no synonyms gets no entry, so aMeanings ends up with only filled entries
+        sal_Int32 nFilledMeanings = 0;
         for (int j = 0; j < nmean; j++)
         {
             int count = pe->count;
@@ -383,14 +385,14 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
                 OUString dTerm(pe->defn,strlen(pe->defn),eEnc );
                 pMn->SetMeaning(dTerm);
                 pMn->SetSynonyms(aStr);
-                Reference<XMeaning>* pMeaning = aMeanings.getArray();
-                pMeaning[j] = pMn;
+                aMeanings.getArray()[nFilledMeanings++] = pMn;
             }
             pe++;
         }
         pTH->CleanUpAfterLookup(&pmean,nmean);
+        aMeanings.realloc(nFilledMeanings);
 
-        if (nmean)
+        if (nFilledMeanings)
         {
             prevTerm = qTerm;
             prevMeanings = aMeanings;
