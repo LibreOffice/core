@@ -17,7 +17,7 @@ native-code.cxx: $(SRCDIR)/solenv/bin/native-code.py
 	$< -j -g core -g writer -g calc -g draw -g edit > $@
 
 install:
-	if test "$$ENABLE_ANDROID_LOK" != "TRUE" ; then ../gradlew $(if $(verbose),--info) $(if $(versionCode),-PcmdVersionCode=$(versionCode)) install$(if $(DISABLE_UI),StrippedUI)$(if $(ENABLE_ANDROID_EDITING),Editing)Debug ; fi
+	if test "$$ENABLE_ANDROID_LOK" != "TRUE" ; then ../gradlew $(if $(verbose),--info) install$(if $(DISABLE_UI),StrippedUI)$(if $(ENABLE_ANDROID_EDITING),Editing)Debug ; fi
 	@if test "$$ENABLE_ANDROID_LOK" != "TRUE" ; then echo ; echo 'Run it with "make run"' ; echo ; fi
 
 uninstall:
@@ -30,7 +30,7 @@ clean:
 
 build-gradle: liboSettings.gradle.kts link-so
 ifeq ($(ENABLE_JAVA),TRUE)
-	if test "$$ENABLE_ANDROID_LOK" != "TRUE" ; then ../gradlew $(if $(verbose),--info) $(if $(versionCode),-PcmdVersionCode=$(versionCode)) assemble$(BUILD_VARIANT) lint$(BUILD_VARIANT)  ; fi
+	if test "$$ENABLE_ANDROID_LOK" != "TRUE" ; then ../gradlew $(if $(verbose),--info) assemble$(BUILD_VARIANT) lint$(BUILD_VARIANT)  ; fi
 endif
 
 run:

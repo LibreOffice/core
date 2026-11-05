@@ -13,14 +13,13 @@ include $(module_directory)/../solenv/gbuild/partial_build.mk
 .PHONY: sign
 
 SIGNED_APK := $(BUILDDIR)/android/source/bin/LibreOfficeViewer.apk
-RELEASE_APK_USAGE := echo; echo "Usage: make versionCode=<version_num+1> key=<key_name> release-apk"
+RELEASE_APK_USAGE := echo; echo "Usage: make key=<key_name> release-apk"
 
 local.properties: $(BUILDDIR)/config_host.mk
 	echo sdk.dir=$(ANDROID_SDK_DIR) >local.properties
 
 release-apk: build
-	# versionCode and key are mandatory
-	@if test -z "$(versionCode)" ; then $(RELEASE_APK_USAGE) ; exit 1 ; fi
+	# key is mandatory
 	@if test -z "$(key)" ; then $(RELEASE_APK_USAGE) ; exit 1 ; fi
 
 	rm -f $(SIGNED_APK)
