@@ -433,7 +433,7 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
             */
             return (nil, nil)
         }
-        else if body.hasPrefix("HYPERLINK") {
+        else if body.hasPrefix("HYPERLINK ") {
             let messageBodyItems = body.components(separatedBy: " ")
             if messageBodyItems.count >= 2 {
                 if let url = URL(string: messageBodyItems[1]) {

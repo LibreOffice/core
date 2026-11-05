@@ -28,6 +28,7 @@
 #include <cstring>
 #include <set>
 #include <common/Clipboard.hpp>
+#include <common/EditorFrameMessages.hpp>
 #include <common/LangUtil.hpp>
 #include <common/AIHttpTransport.hpp>
 #include <common/SettingsStorage.hpp>
@@ -560,6 +561,10 @@ void install_filepicker_provider(COKit &rOffice)
 + (void)handleMessageWith:(Document *)document message:(NSString *)message {
     const char *buf = [message UTF8String];
     fakeSocketWriteQueue(document.fakeClientFd, buf, strlen(buf));
+}
+
++ (bool)isAllowedFromEditorFrame:(NSString *)message {
+    return EditorFrameMessages::isAllowed([message UTF8String]);
 }
 
 + (void)saveAsWith:(Document *)document url:(NSString *)url format:(NSString *)format filterOptions:(NSString *)filterOptions {

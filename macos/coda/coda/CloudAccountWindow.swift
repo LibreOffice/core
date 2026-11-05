@@ -182,6 +182,10 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
 
         // Only "lok" messages reach this point.
         let body = message.body as? String ?? ""
+        if !COWrapper.isAllowedFromEditorFrame(body) {
+            return (nil, nil)
+        }
+
         let kind = body.prefix { $0 != " " }
         if kind == "getBundledFile" {
             return (Self.bundledFile(body.dropFirst(kind.count + 1)), nil)
