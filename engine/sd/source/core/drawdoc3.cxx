@@ -20,6 +20,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <set>
 #include <string_view>
 
 #include <sfx2/docfile.hxx>
@@ -1125,12 +1126,22 @@ void SdDrawDocument::updateInsertedPages(PageInsertionParams& rParams,
     if (rParams.pExchangeList)
         rParams.pExchangeList->erase(rParams.pExchangeList->begin(), pExchangeIter);
 
+    // Each inserted page brings its own copy of its master page, and the copies of one master
+    // share the style sheets of its layout. Scaling a master scales those style sheets as well,
+    // so only the first copy of each master is scaled. The pages use that copy, and the other
+    // copies are removed once the pages are in.
+    std::set<std::pair<PageKind, OUString>> aScaledMasters;
     for (sal_uInt16 nPage = rPageCounts.nMasterPageCount; nPage < rPageCounts.nNewMPageCount; nPage++)
     {
         rParams.mainProps.pPage = static_cast<SdPage*>(GetMasterPage(nPage));
+        const bool bFirstCopy
+            = aScaledMasters
+                  .emplace(rParams.mainProps.pPage->GetPageKind(),
+                           rParams.mainProps.pPage->GetLayoutName())
+                  .second;
         if (rParams.mainProps.pPage->GetPageKind() == PageKind::Standard)
         {
-            if (rParams.bScaleObjects)
+            if (rParams.bScaleObjects && bFirstCopy)
             {
                 ::tools::Rectangle aBorderRect(rParams.mainProps.left, rParams.mainProps.upper, rParams.mainProps.right, rParams.mainProps.lower);
                 rParams.mainProps.pPage->ScaleObjects(rParams.mainProps.size, aBorderRect, true);
@@ -1171,7 +1182,7 @@ void SdDrawDocument::updateInsertedPages(PageInsertionParams& rParams,
         }
         else // Can only be notes
         {
-            if (rParams.bScaleObjects)
+            if (rParams.bScaleObjects && bFirstCopy)
             {
                 ::tools::Rectangle aBorderRect(rParams.notesProps.left, rParams.notesProps.upper, rParams.notesProps.right, rParams.notesProps.lower);
                 rParams.notesProps.pPage->ScaleObjects(rParams.notesProps.size, aBorderRect, true);

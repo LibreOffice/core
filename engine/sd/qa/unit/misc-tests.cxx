@@ -133,6 +133,7 @@ public:
     void testInsertFileAsPageKeepDesignRenamedKeepsNotesMaster();
     void testInsertFileAsPageKeepDesignTwoDesignsOfOneName();
     void testInsertFileAsPageKeepDesignKeepsObjectStyleLook();
+    void testInsertFileAsPageKeepDesignScalesSharedMasterOnce();
     void testInsertFileAsPageLinkRecordsMedium();
     void testSlideLinkListKeepsOnlyReadableLinks();
 
@@ -185,6 +186,7 @@ public:
     CPPUNIT_TEST(testInsertFileAsPageKeepDesignRenamedKeepsNotesMaster);
     CPPUNIT_TEST(testInsertFileAsPageKeepDesignTwoDesignsOfOneName);
     CPPUNIT_TEST(testInsertFileAsPageKeepDesignKeepsObjectStyleLook);
+    CPPUNIT_TEST(testInsertFileAsPageKeepDesignScalesSharedMasterOnce);
     CPPUNIT_TEST(testInsertFileAsPageLinkRecordsMedium);
     CPPUNIT_TEST(testSlideLinkListKeepsOnlyReadableLinks);
     CPPUNIT_TEST_SUITE_END();
@@ -1831,6 +1833,46 @@ void SdMiscTest::testInsertFileAsPageKeepDesignKeepsObjectStyleLook()
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pDoc->GetSdPageCount(PageKind::Standard));
     CPPUNIT_ASSERT(!pPool->Find(aCopyName, SfxStyleFamily::Para));
     CPPUNIT_ASSERT_EQUAL(aDark, getFillColor(*pOwn->GetObj(0)));
+}
+
+void SdMiscTest::testInsertFileAsPageKeepDesignScalesSharedMasterOnce()
+{
+    // Two slides of one master come from a presentation with wider pages than this one, and
+    // keep their design. The letter sizes of the master's title and outline follow the page
+    // once, as they would for one slide, however many of the inserted slides use that master.
+    createSdImpressDoc("slide-import-target.odp");
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    SdPage* pPage = pDoc->GetSdPage(0, PageKind::Standard);
+    const double fScale
+        = double(pPage->GetSize().Height() - pPage->GetUpperBorder() - pPage->GetLowerBorder())
+          / 28575.0;
+
+    CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
+        createFileURL(u"slide-import-shared-master-source.odp"),
+        "{\"slides\":[0,1],\"at\":1,\"keepDesign\":true}"_ostr));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pDoc->GetSdPageCount(PageKind::Standard));
+
+    // 80pt and 40pt are 2822 and 1411 hundredths of a millimetre.
+    SfxStyleSheetBasePool* pPool = pDoc->GetStyleSheetPool();
+    SfxStyleSheetBase* pTitle = pPool->Find(
+        u"SharedDesign"_ustr + SD_LT_SEPARATOR + STR_LAYOUT_TITLE, SfxStyleFamily::Page);
+    CPPUNIT_ASSERT(pTitle);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        2822.0 * fScale,
+        static_cast<double>(pTitle->GetItemSet().Get(EE_CHAR_FONTHEIGHT).GetHeight()), 4.0);
+    SfxStyleSheetBase* pOutline = pPool->Find(
+        u"SharedDesign"_ustr + SD_LT_SEPARATOR + STR_LAYOUT_OUTLINE + " 1", SfxStyleFamily::Page);
+    CPPUNIT_ASSERT(pOutline);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        1411.0 * fScale,
+        static_cast<double>(pOutline->GetItemSet().Get(EE_CHAR_FONTHEIGHT).GetHeight()), 4.0);
+
+    // The two slides share one master page.
+    CPPUNIT_ASSERT_EQUAL(&pDoc->GetSdPage(1, PageKind::Standard)->TRG_GetMasterPage(),
+                         &pDoc->GetSdPage(2, PageKind::Standard)->TRG_GetMasterPage());
 }
 
 void SdMiscTest::testInsertFileAsPageKeepDesign()
