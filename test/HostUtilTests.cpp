@@ -14,6 +14,7 @@
 #include <HostUtil.hpp>
 
 #include <common/ConfigUtil.hpp>
+#include <test/SavedEnvironmentVariable.hpp>
 #include <test/lokassert.hpp>
 
 #include <Poco/URI.h>
@@ -402,8 +403,7 @@ void HostUtilTests::testEveryAllowedKitHostIsAccepted()
 {
     constexpr std::string_view testname = __func__;
 
-    const char* previous = std::getenv("KIT_HOST_ALLOWLIST");
-    const std::string saved = previous ? previous : std::string();
+    const SavedEnvironmentVariable allowlist("KIT_HOST_ALLOWLIST");
 
     ::setenv("KIT_HOST_ALLOWLIST", "192.168.0.0/16\n127.0.0.1/32\n::1/128\nlocalhost", 1);
 
@@ -424,11 +424,6 @@ void HostUtilTests::testEveryAllowedKitHostIsAccepted()
     // No list at all allows every host.
     ::unsetenv("KIT_HOST_ALLOWLIST");
     LOK_ASSERT(!HostUtil::isForbiddenKitHost("example.com"));
-
-    if (previous)
-        ::setenv("KIT_HOST_ALLOWLIST", saved.c_str(), 1);
-    else
-        ::unsetenv("KIT_HOST_ALLOWLIST");
 }
 
 /// Groups mode with no group refuses every WOPI host, and that is reported. A group, or first mode,

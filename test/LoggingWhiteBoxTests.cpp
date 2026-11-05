@@ -21,6 +21,7 @@
 #include <common/Log.hpp>
 #include <common/Util.hpp>
 
+#include <test/SavedEnvironmentVariable.hpp>
 #include <test/lokassert.hpp>
 
 #include <cppunit/TestAssert.h>
@@ -72,8 +73,7 @@ void LoggingTests::testLogPrefix()
 
     // getTimeForLog returns the time in local timezone.
     // To get reliable tests across different timezones, we use GMT.
-    const char* tz = ::getenv("TZ");
-    const std::string timezoneName = (tz ? tz : "");
+    const SavedEnvironmentVariable savedTimezone("TZ");
     ::setenv("TZ", "GMT", 1);
     tzset();
 
@@ -214,8 +214,6 @@ void LoggingTests::testLogPrefix()
         LOG_INF("New prefix took: " << sw.elapsed<std::chrono::microseconds>());
     }
 #endif
-
-    ::setenv("TZ", timezoneName.data(), 1); // Restore the timezone.
 }
 
 void LoggingTests::testGetTimeForLog()
