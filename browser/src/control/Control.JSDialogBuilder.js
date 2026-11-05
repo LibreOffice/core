@@ -1687,7 +1687,31 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 				updateVisibility();
 				setDisabled(data.enabled === false);
 
-				builder.map.on('commandstatechanged', function(e) {
+				// A button is built before it is put into the document. Once it has been in the
+				// document and has left it again, the dialog, the dropdown or the widget that held
+				// it is gone, and its listener is removed. A dialog is put into the document by a
+				// layouting task, so the button is checked again after the queued tasks have run.
+				let hasBeenInDocument = false;
+				let isCheckQueued = false;
+				const checkInDocument = () => {
+					isCheckQueued = false;
+					if (div.isConnected)
+						hasBeenInDocument = true;
+					else if (hasBeenInDocument)
+						builder.map.off('commandstatechanged', onCommandStateChanged, this);
+				};
+				const queueCheckInDocument = () => {
+					if (isCheckQueued)
+						return;
+					isCheckQueued = true;
+					app.layoutingService.onDrain(checkInDocument);
+				};
+				const onCommandStateChanged = function(e) {
+					if (div.isConnected)
+						hasBeenInDocument = true;
+					else if (hasBeenInDocument)
+						queueCheckInDocument();
+
 					if (e.commandName === data.command)
 					{
 						updateFunction();
@@ -1699,7 +1723,9 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 					else if (data.hideWhenEnabled && e.commandName === data.hideWhenEnabled) {
 						updateVisibility();
 					}
-				}, this);
+				};
+				builder.map.on('commandstatechanged', onCommandStateChanged, this);
+				queueCheckInDocument();
 			}
 
 			setDisabled(data.enabled === false);
