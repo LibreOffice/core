@@ -469,20 +469,30 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         webView.evaluateJavaScript(pageLoaded, in: frameInfo, in: Self.world)
     }
 
-    // The integrator opens a document by posting a form with the token and settings into the
-    // iframe that holds the editor. WebKit gives us the form's body here, and we keep a copy.
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction,
                  decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        let isFrame = navigationAction.targetFrame?.isMainFrame == false
+        if !isFrame {
+            decisionHandler(.allow)
+            return
+        }
+
+        decideFrameNavigation(navigationAction, decisionHandler: decisionHandler)
+    }
+
+    // The integrator opens a document by posting a form with the token and settings into the
+    // iframe that holds the editor. WebKit gives us the form's body here, and we keep a copy.
+    private func decideFrameNavigation(_ navigationAction: WKNavigationAction,
+                                       decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         let request = navigationAction.request
         guard let url = request.url else {
             decisionHandler(.allow)
             return
         }
 
-        let isFrame = navigationAction.targetFrame?.isMainFrame == false
         let isPost = request.httpMethod == "POST"
         let isEditorPage = url.path.hasSuffix("/cool.html")
-        if !isFrame || !isPost || !isEditorPage {
+        if !isPost || !isEditorPage {
             decisionHandler(.allow)
             return
         }
