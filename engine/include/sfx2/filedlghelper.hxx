@@ -81,7 +81,6 @@ public:
     enum Context
     {
         UnknownContext,
-        AcceleratorConfig,
         AutoRedact,
         BasicExportDialog,
         BasicExportSource,
@@ -101,7 +100,6 @@ public:
         ExportImage,
         FormsAddInstance,
         FormsInsertImage,
-        IconImport,
         ImpressClickAction,
         ImpressExport,
         ImpressPhotoDialog,
@@ -113,7 +111,6 @@ public:
         InsertImage,
         InsertMedia,
         InsertOLE,
-        JavaClassPath,
         ScreenshotAnnotation,
         SignatureLine,
         TemplateImport,

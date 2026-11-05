@@ -2376,8 +2376,6 @@ OUString FileDialogHelper::contextToString(Context context)
     // These strings are used in the configuration, to store the last used directory for each context.
     // Please don't change them.
     switch(context) {
-        case AcceleratorConfig:
-            return u"AcceleratorConfig"_ustr;
         case AutoRedact:
             return u"AutoRedact"_ustr;
         case BasicExportDialog:
@@ -2420,8 +2418,6 @@ OUString FileDialogHelper::contextToString(Context context)
             return u"DrawExport"_ustr;
         case DrawSaveAs:
             return u"DrawSaveAs"_ustr;
-        case IconImport:
-            return u"IconImport"_ustr;
         case ImpressClickAction:
             return u"ImpressClickAction"_ustr;
         case ImpressExport:
@@ -2440,8 +2436,6 @@ OUString FileDialogHelper::contextToString(Context context)
             return u"InsertOLE"_ustr;
         case InsertMedia:
             return u"InsertMedia"_ustr;
-        case JavaClassPath:
-            return u"JavaClassPath"_ustr;
         case ScreenshotAnnotation:
             return u"ScreenshotAnnotation"_ustr;
         case SignatureLine:
