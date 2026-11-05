@@ -654,7 +654,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="checkSplitCompoundWord">
-                <property name="label" translatable="yes" context="textflowpage|checkSplitCompound">Split Compound Word</property>
+                <property name="label" translatable="yes" context="textflowpage|checkSplitCompound">Split compound word</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -723,7 +723,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="checkMoveLine">
-                <property name="label" translatable="yes" context="textflowpage|checkMoveLine">Move Line</property>
+                <property name="label" translatable="yes" context="textflowpage|checkMoveLine">Move line</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
