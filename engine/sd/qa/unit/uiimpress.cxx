@@ -53,6 +53,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/outliner.hxx>
+#include <editeng/ulspitem.hxx>
 #include <sfx2/cokitfilepicker.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -1781,6 +1782,56 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testIncrementIndentCursorParagraphOnly)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getLeft(0));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), getLeft(1));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getLeft(2));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testParaspaceIncreaseCursorParagraphOnly)
+{
+    // Given a text box with three paragraphs and the cursor in the second one, with no
+    // selection:
+    createSdImpressDoc();
+    auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    SdPage* pPage = pViewShell->GetActualPage();
+
+    rtl::Reference<SdrRectObj> pRect
+        = new SdrRectObj(pView->getSdrModelFromSdrView(), tools::Rectangle(1000, 1000, 9000, 9000));
+    pPage->NbcInsertObject(pRect.get());
+
+    pView->MarkObj(pRect.get(), pView->GetSdrPageView());
+    Scheduler::ProcessEventsToIdle();
+    typeString(pXImpressDocument, u"first");
+    typeKey(pXImpressDocument, KEY_RETURN);
+    typeString(pXImpressDocument, u"second");
+    typeKey(pXImpressDocument, KEY_RETURN);
+    typeString(pXImpressDocument, u"third");
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+
+    OutlinerView* pOlView = pView->GetTextEditOutlinerView();
+    CPPUNIT_ASSERT(pOlView);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pOlView->GetOutliner().GetParagraphCount());
+    pOlView->SetSelection(ESelection(1, 2));
+    CPPUNIT_ASSERT(!pOlView->HasSelection());
+
+    // When increasing the paragraph spacing:
+    dispatchCommand(mxComponent, u".uno:ParaspaceIncrease"_ustr, {});
+
+    // Then only the paragraph with the cursor gets more spacing:
+    pView->SdrEndTextEdit();
+    const OutlinerParaObject* pOPO = pRect->GetOutlinerParaObject();
+    CPPUNIT_ASSERT(pOPO);
+    const EditTextObject& rText = pOPO->GetTextObject();
+    auto getUpper = [&rText](sal_Int32 nPara) -> sal_uInt16 {
+        const SvxULSpaceItem* pItem = rText.GetParaAttribs(nPara).GetItem(EE_PARA_ULSPACE);
+        return pItem ? pItem->GetUpper() : 0;
+    };
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 100
+    // i.e. every paragraph of the text box got more spacing.
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), getUpper(0));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(100), getUpper(1));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), getUpper(2));
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSetHyperlinkKeepSelection)
