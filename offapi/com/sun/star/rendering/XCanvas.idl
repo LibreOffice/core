@@ -220,48 +220,6 @@ interface XCanvas : ::com::sun::star::uno::XInterface
     XCachedPrimitive    strokePolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState, [in] StrokeAttributes aStrokeAttributes )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-
-    /** Stroke each polygon of the provided poly-polygon with the
-        specified stroke attributes, fill the stroked outline
-        with the specified texture graphics.<p>
-
-        This method considers the stroking of all polygons as an
-        atomic operation in relation to the RenderState's
-        CompositeOp operation. That means, overlapping
-        strokes from distinct polygons will look exactly as
-        overlapping segments of the same polygon, even with
-        transparency.<p>
-
-        @param xPolyPolygon
-        The poly-polygon to render.
-
-        @param aViewState
-        The view state to be used when strokes this polygon.
-
-        @param aRenderState
-        The render state to be used when stroking this polygon.
-
-        @param aTextures
-        A sequence of texture definitions, with which to fill the
-        stroked area.
-
-        @param aStrokeAttributes
-        Further attributes used to parameterize the stroking.
-
-        @return a handle to the cached rendering output.
-
-        @throws com::sun::star::lang::IllegalArgumentException
-        if one of the view and render state parameters are outside the
-        specified range.
-
-        @throws VolatileContentDestroyedException
-        if a texture bitmap was volatile, and the content was
-        destroyed before the rendering could take place.
-     */
-    XCachedPrimitive    strokeTexturedPolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState, [in] sequence<Texture> aTextures, [in] StrokeAttributes aStrokeAttributes )
-        raises (com::sun::star::lang::IllegalArgumentException,
-                VolatileContentDestroyedException);
-
     /** Fill the given poly-polygon.<p>
 
         This method fills the given poly-polygon according to the

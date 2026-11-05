@@ -419,16 +419,6 @@ namespace vclcanvas
         return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokeTexturedPolyPolygon( const rendering::XCanvas*                            ,
-                                                                                           const uno::Reference< rendering::XPolyPolygon2D >&   ,
-                                                                                           const rendering::ViewState&                          ,
-                                                                                           const rendering::RenderState&                        ,
-                                                                                           const uno::Sequence< rendering::Texture >&           ,
-                                                                                           const rendering::StrokeAttributes&                    )
-    {
-        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
-    }
-
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillPolyPolygon( const rendering::XCanvas*                          ,
                                                                                  const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
                                                                                  const rendering::ViewState&                        viewState,

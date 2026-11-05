@@ -413,17 +413,6 @@ namespace dxcanvas
         return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokeTexturedPolyPolygon( const rendering::XCanvas*                            /*pCanvas*/,
-                                                                                           const uno::Reference< rendering::XPolyPolygon2D >&   /*xPolyPolygon*/,
-                                                                                           const rendering::ViewState&                          /*viewState*/,
-                                                                                           const rendering::RenderState&                        /*renderState*/,
-                                                                                           const uno::Sequence< rendering::Texture >&           /*textures*/,
-                                                                                           const rendering::StrokeAttributes&                   /*strokeAttributes*/ )
-    {
-        // TODO
-        return uno::Reference< rendering::XCachedPrimitive >(nullptr);
-    }
-
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillPolyPolygon( const rendering::XCanvas*                          /*pCanvas*/,
                                                                                  const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
                                                                                  const rendering::ViewState&                        viewState,

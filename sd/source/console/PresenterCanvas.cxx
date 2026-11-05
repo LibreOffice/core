@@ -190,19 +190,6 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL PresenterCanvas::
 }
 
 css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
-        PresenterCanvas::strokeTexturedPolyPolygon (
-            const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
-            const css::rendering::ViewState& aViewState,
-            const css::rendering::RenderState& aRenderState,
-            const css::uno::Sequence< css::rendering::Texture >& aTextures,
-            const css::rendering::StrokeAttributes& aStrokeAttributes)
-{
-    ThrowIfDisposed();
-    return mxSharedCanvas->strokeTexturedPolyPolygon(
-        xPolyPolygon, MergeViewState(aViewState), aRenderState, aTextures, aStrokeAttributes);
-}
-
-css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         PresenterCanvas::fillPolyPolygon(
             const css::uno::Reference<css::rendering::XPolyPolygon2D>& xPolyPolygon,
             const css::rendering::ViewState& aViewState,

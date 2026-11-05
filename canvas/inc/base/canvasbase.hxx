@@ -213,25 +213,6 @@ public:
                                                 strokeAttributes);
     }
 
-    virtual css::uno::Reference<css::rendering::XCachedPrimitive>
-        SAL_CALL strokeTexturedPolyPolygon(
-            const css::uno::Reference<css::rendering::XPolyPolygon2D>& xPolyPolygon,
-            const css::rendering::ViewState& viewState,
-            const css::rendering::RenderState& renderState,
-            const css::uno::Sequence<css::rendering::Texture>& textures,
-            const css::rendering::StrokeAttributes& strokeAttributes) override
-    {
-        canvastools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes, __func__,
-                                static_cast<cppu::OWeakObject*>(this));
-
-        MutexType aGuard(BaseType::m_aMutex);
-
-        mbSurfaceDirty = true;
-
-        return maCanvasHelper.strokeTexturedPolyPolygon(this, xPolyPolygon, viewState, renderState,
-                                                        textures, strokeAttributes);
-    }
-
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
     fillPolyPolygon(const css::uno::Reference<css::rendering::XPolyPolygon2D>& xPolyPolygon,
                     const css::rendering::ViewState& viewState,
