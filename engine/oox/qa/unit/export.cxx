@@ -7,8 +7,20 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <functional>
+
 #include <test/unoapixml_test.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <tools/stream.hxx>
+#include <unotools/streamwrap.hxx>
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/export/shapes.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <sax/fshelper.hxx>
+#include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -1241,6 +1253,112 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkShapeAttributes)
     CPPUNIT_ASSERT_EQUAL(24.0f, xShape->getPropertyValue(u"CharHeight"_ustr).get<float>());
     CPPUNIT_ASSERT_EQUAL(sal_Int16(100),
                          xShape->getPropertyValue(u"CharKerning"_ustr).get<sal_Int16>());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFontworkFormattingAfterExportException)
+{
+    loadFromFile(u"fontwork-shape-attributes.fodt");
+    uno::Reference<drawing::XDrawPageSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShape(xDoc->getDrawPage()->getByIndex(0),
+                                             uno::UNO_QUERY_THROW);
+    uno::Reference<container::XEnumerationAccess> xParas(xShape, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xParagraph(xParas->createEnumeration()->nextElement(),
+                                                 uno::UNO_QUERY_THROW);
+    xParagraph->setPropertyValue(u"ParaAdjust"_ustr, uno::Any(sal_Int16(style::ParagraphAdjust_RIGHT)));
+    xParagraph->setPropertyValue(u"ParaLastLineAdjust"_ustr,
+                                 uno::Any(sal_Int16(style::ParagraphAdjust_CENTER)));
+    uno::Reference<container::XEnumerationAccess> xRuns(xParagraph, uno::UNO_QUERY_THROW);
+    auto xRunEnum = xRuns->createEnumeration();
+    uno::Reference<beans::XPropertySet> xFirst(xRunEnum->nextElement(), uno::UNO_QUERY_THROW);
+    xFirst->setPropertyValue(u"CharColor"_ustr, uno::Any(sal_Int32(0x00ff00)));
+    xFirst->setPropertyValue(u"CharInteropGrabBag"_ustr,
+                            uno::Any(uno::Sequence<beans::PropertyValue>{
+                                comphelper::makePropertyValue(u"Sentinel"_ustr, u"keep"_ustr) }));
+
+    // Keep values and inheritance states for both runs, including their grab bags.
+    const std::vector<OUString> aNames
+        = { u"CharHeight"_ustr, u"CharWeight"_ustr, u"CharPosture"_ustr,
+            u"CharFontName"_ustr, u"CharScaleWidth"_ustr, u"CharKerning"_ustr,
+            u"CharColor"_ustr, u"CharTransparence"_ustr, u"CharInteropGrabBag"_ustr };
+    struct SavedRun
+    {
+        uno::Reference<beans::XPropertySet> xRun;
+        std::vector<uno::Any> aValues;
+        std::vector<beans::PropertyState> aStates;
+    };
+    std::vector<SavedRun> aSavedRuns;
+    xRunEnum = xRuns->createEnumeration();
+    while (xRunEnum->hasMoreElements())
+    {
+        SavedRun aRun;
+        aRun.xRun.set(xRunEnum->nextElement(), uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertyState> xState(aRun.xRun, uno::UNO_QUERY_THROW);
+        for (const OUString& rName : aNames)
+        {
+            aRun.aValues.push_back(aRun.xRun->getPropertyValue(rName));
+            aRun.aStates.push_back(xState->getPropertyState(rName));
+        }
+        aSavedRuns.push_back(std::move(aRun));
+    }
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aSavedRuns.size());
+
+    class ThrowingTextExport final : public oox::drawingml::DMLTextExport
+    {
+    public:
+        std::function<void()> aCheckFormatting;
+        void WriteOutliner(const OutlinerParaObject&) override
+        {
+            aCheckFormatting();
+            throw uno::RuntimeException(u"Forced Fontwork export failure"_ustr);
+        }
+        void WriteTextBox(uno::Reference<drawing::XShape>) override {}
+        uno::Reference<text::XTextFrame> GetUnoTextFrame(uno::Reference<drawing::XShape>) override
+        {
+            return {};
+        }
+    } aTextExport;
+    bool bReachedTextExport = false;
+    aTextExport.aCheckFormatting = [&] {
+        bReachedTextExport = true;
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER),
+                             xParagraph->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
+        CPPUNIT_ASSERT_EQUAL(u"Impact"_ustr,
+                             xFirst->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0xff8000),
+                             xFirst->getPropertyValue(u"CharColor"_ustr).get<sal_Int32>());
+    };
+
+    uno::Reference<document::XExporter> xFilter(
+        getComponentContext()->getServiceManager()->createInstanceWithContext(
+            u"com.sun.star.comp.Impress.oox.PowerPointExport"_ustr, getComponentContext()),
+        uno::UNO_QUERY_THROW);
+    xFilter->setSourceDocument(mxComponent);
+    auto* pFilter = dynamic_cast<oox::core::XmlFilterBase*>(xFilter.get());
+    CPPUNIT_ASSERT(pFilter);
+    SvMemoryStream aOutput;
+    uno::Reference<io::XOutputStream> xOutput = new utl::OOutputStreamWrapper(aOutput);
+    auto pFS = std::make_shared<sax_fastparser::FastSerializerHelper>(xOutput, false);
+    comphelper::ScopeGuard aEndDocument([&] { pFS->endDocument(); });
+    oox::drawingml::ShapeExport aShapeExport(0, pFS, nullptr, pFilter,
+                                            oox::drawingml::DOCUMENT_DOCX, &aTextExport);
+    CPPUNIT_ASSERT_THROW(aShapeExport.WriteTextBox(xShape, 0), uno::RuntimeException);
+    CPPUNIT_ASSERT(bReachedTextExport);
+
+    // The exception must leave the editable document as it was before export.
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_RIGHT),
+                         xParagraph->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER),
+                         xParagraph->getPropertyValue(u"ParaLastLineAdjust"_ustr).get<sal_Int16>());
+    for (const SavedRun& rRun : aSavedRuns)
+    {
+        uno::Reference<beans::XPropertyState> xState(rRun.xRun, uno::UNO_QUERY_THROW);
+        for (size_t i = 0; i < aNames.size(); ++i)
+        {
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aNames[i].toUtf8().getStr(), rRun.aValues[i],
+                                         rRun.xRun->getPropertyValue(aNames[i]));
+            CPPUNIT_ASSERT_EQUAL(rRun.aStates[i], xState->getPropertyState(aNames[i]));
+        }
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFontworkFitWidthWriter)

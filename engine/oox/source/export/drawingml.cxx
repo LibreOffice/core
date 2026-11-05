@@ -5076,6 +5076,40 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         std::vector<FontworkHelpers::RunProps> aOldRunAttrs;
         std::vector<ParaAdjustPair> aOldParaAdjust;
         std::vector<FontworkHelpers::FontworkRun> aFontworkRuns;
+        // Install cleanup before the first temporary change, including changes made while
+        // preparing the export. Keep the groups independent if restoring one of them fails.
+        comphelper::ScopeGuard aRestoreParaAdjust([&] {
+            if (aOldParaAdjust.empty())
+                return;
+            try
+            {
+                lcl_ApplyParaAdjust(xXText, aOldParaAdjust);
+            }
+            catch (...)
+            {
+                TOOLS_WARN_EXCEPTION("oox", "restoring Fontwork paragraph alignment");
+            }
+        });
+        comphelper::ScopeGuard aRestoreRunColors([&] {
+            try
+            {
+                FontworkHelpers::applyRunProps(aOldRunColors);
+            }
+            catch (...)
+            {
+                TOOLS_WARN_EXCEPTION("oox", "restoring Fontwork run colours");
+            }
+        });
+        comphelper::ScopeGuard aRestoreRunAttrs([&] {
+            try
+            {
+                FontworkHelpers::applyRunProps(aOldRunAttrs);
+            }
+            catch (...)
+            {
+                TOOLS_WARN_EXCEPTION("oox", "restoring Fontwork run attributes");
+            }
+        });
         if (bIsFontworkShape)
         {
             // Word aligns the text of a WordArt by its paragraphs; the engine aligns a Fontwork
@@ -5152,8 +5186,11 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         if (bIsFontworkShape)
         {
             FontworkHelpers::applyRunProps(aOldRunAttrs);
+            aRestoreRunAttrs.dismiss();
             FontworkHelpers::applyRunProps(aOldRunColors);
+            aRestoreRunColors.dismiss();
             lcl_ApplyParaAdjust(xXText, aOldParaAdjust);
+            aRestoreParaAdjust.dismiss();
         }
         return;
     }

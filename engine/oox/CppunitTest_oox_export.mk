@@ -26,10 +26,12 @@ $(eval $(call gb_CppunitTest_use_libraries,oox_export, \
     cppuhelper \
     oox \
     sal \
+    sax \
     subsequenttest \
     test \
     unotest \
     utl \
+    vcl \
     tl \
 ))
 
