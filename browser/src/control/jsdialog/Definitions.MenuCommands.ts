@@ -94,10 +94,12 @@ const MenuCommands: MenuCommandsInterface = {
 				  'DistributeRows', 'DistributeColumns',
 				  'ObjectAlign', 'ObjectAlignLeft', 'AlignCenter', 'ObjectAlignRight',
 				  'AlignUp', 'AlignMiddle', 'AlignDown', 'AlignOnSlide',
-				  'TextAutoFitToSize', 'MeasureAttributes', 'ConnectorAttributes'],
+				  'TextAutoFitToSize', 'MeasureAttributes', 'ConnectorAttributes',
+				  'ControlProperties', 'FormProperties'],
 		drawing: ['ObjectAlign', 'ObjectAlignLeft', 'AlignCenter', 'ObjectAlignRight',
 				  'AlignUp', 'AlignMiddle', 'AlignDown', 'AlignOnPage',
-				  'TextAutoFitToSize', 'MeasureAttributes', 'ConnectorAttributes']
+				  'TextAutoFitToSize', 'MeasureAttributes', 'ConnectorAttributes',
+				  'ControlProperties', 'FormProperties']
 	},
 	// UNOCOMMANDS_EXTRACT_END <- don't remove this line, it's used by unocommands.py
 

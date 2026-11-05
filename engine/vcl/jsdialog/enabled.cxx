@@ -361,7 +361,29 @@ constexpr auto SimpressDialogList
         { u"modules/simpress/ui/headerfooterdialog.ui" },
         { u"modules/simpress/ui/headerfootertab.ui" },
         { u"modules/simpress/ui/interactiondialog.ui" },
-        { u"modules/simpress/ui/interactionpage.ui" }
+        { u"modules/simpress/ui/interactionpage.ui" },
+        // the properties of a form control and its form, offered on a slide
+        { u"cui/ui/macroassigndialog.ui" },
+        { u"cui/ui/macroassignpage.ui" },
+        { u"modules/spropctrlr/ui/browserline.ui" },
+        { u"modules/spropctrlr/ui/browserpage.ui" },
+        { u"modules/spropctrlr/ui/colorlistbox.ui" },
+        { u"modules/spropctrlr/ui/combobox.ui" },
+        { u"modules/spropctrlr/ui/controlfontdialog.ui" },
+        { u"modules/spropctrlr/ui/datefield.ui" },
+        { u"modules/spropctrlr/ui/formattedcontrol.ui" },
+        { u"modules/spropctrlr/ui/formattedsample.ui" },
+        { u"modules/spropctrlr/ui/formproperties.ui" },
+        { u"modules/spropctrlr/ui/labelselectiondialog.ui" },
+        { u"modules/spropctrlr/ui/listbox.ui" },
+        { u"modules/spropctrlr/ui/listselectdialog.ui" },
+        { u"modules/spropctrlr/ui/multiline.ui" },
+        { u"modules/spropctrlr/ui/numericfield.ui" },
+        { u"modules/spropctrlr/ui/taborder.ui" },
+        { u"modules/spropctrlr/ui/textfield.ui" },
+        { u"modules/spropctrlr/ui/timefield.ui" },
+        { u"modules/spropctrlr/ui/urlcontrol.ui" },
+        { u"svx/ui/formpropertydialog.ui" }
     });
 
 constexpr auto SdrawDialogList

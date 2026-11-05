@@ -93,6 +93,7 @@ namespace pcr
         virtual void disposing() override;
 
         virtual weld::Widget* getWidget() override { return getTypedControlWindow(); }
+        virtual weld::Widget* getMnemonicWidget() override { return m_xEntry.get(); }
     };
 
     //= OEditControl
@@ -382,6 +383,7 @@ namespace pcr
         virtual void setValue( const cpo::uno::Any& _value ) override;
         virtual cpo::uno::Type getValueType() override;
         virtual weld::Widget* getWidget() override { return getTypedControlWindow(); }
+        virtual weld::Widget* getMnemonicWidget() override { return m_xEntry.get(); }
 
         virtual void editChanged() override;
 

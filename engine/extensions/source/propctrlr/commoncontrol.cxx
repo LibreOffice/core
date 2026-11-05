@@ -129,6 +129,8 @@ namespace pcr
         notifyModifiedValue();
     }
 
+    ControlWindowTransport::~ControlWindowTransport() = default;
+
     // return in a text field takes its value as leaving the field does
     IMPL_LINK_NOARG( CommonBehaviourControlHelper, ActivateHdl, weld::Entry&, bool )
     {

@@ -75,6 +75,7 @@
 #include <com/sun/star/graphic/GraphicObject.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 
+#include <comphelper/kit.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbconversion.hxx>
@@ -1001,9 +1002,11 @@ namespace pcr
             pControl->SetModifyHandler();
             aDescriptor.Control = pControl;
 
-            aDescriptor.PrimaryButtonId = PROPERTY_ID_TARGET_URL == nPropId
-                ? UID_PROP_DLG_ATTR_TARGET_URL
-                : UID_PROP_DLG_IMAGE_URL;
+            // the button picks a file, and the kit has no file picker there, so the URL is typed
+            if (!comphelper::COKit::isActive())
+                aDescriptor.PrimaryButtonId = PROPERTY_ID_TARGET_URL == nPropId
+                    ? UID_PROP_DLG_ATTR_TARGET_URL
+                    : UID_PROP_DLG_IMAGE_URL;
             break;
         }
 

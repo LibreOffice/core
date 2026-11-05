@@ -397,4 +397,107 @@ describe(['taglighthouse'], 'Accessibility Impress Dialog Tests', { testIsolatio
         helper.typeIntoDocument('{esc}');
     });
 
+    // form controls are created and selected only in design mode, and the document opens its
+    // forms in alive mode
+    function switchControlDesignMode(on) {
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:SwitchControlDesignMode', {
+                SwitchControlDesignMode: { type: 'boolean', value: on }
+            });
+        });
+    }
+
+    // the ids of the objects the client knows as selected
+    function selectedObjectIds() {
+        return win.app.definitions.graphicSelection.selectedObjectIDs;
+    }
+
+    // a form control of the given kind in the middle of the slide, selected
+    function insertFormControl(command) {
+        // nothing is selected, so the object selected next is the new control; a form control
+        // gets no handles in the tiled view, so the selection itself is what we wait for
+        helper.typeIntoDocument('{esc}{esc}');
+        cy.wrap(null).should(() => {
+            expect(selectedObjectIds(), 'selected objects').to.have.length(0);
+        });
+        cy.then(() => {
+            // Ctrl creates the control at once, at its default size
+            win.app.map.sendUnoCommand(command, {
+                KeyModifier: { type: 'unsigned short', value: 8192 }
+            });
+        });
+        cy.wrap(null).should(() => {
+            expect(selectedObjectIds(), 'selected objects').to.have.length(1);
+        });
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:ControlProperties');
+        });
+        a11yHelper.getActiveDialog(1);
+        // the dialog opens on the tab used last, the lines below are on General
+        selectPropertyTab('General');
+    }
+
+    function selectPropertyTab(name) {
+        cy.cGet('#FormPropertyDialog .ui-tab').contains(name).click();
+    }
+
+    // the property line with that title
+    function propertyLine(title) {
+        return cy.cGet('#FormPropertyDialog [id^="BrowserLine"]')
+            .filter(function (index, line) {
+                const label = line.firstElementChild;
+                return label && label.textContent.replace(/\.+$/, '').trim() === title;
+            });
+    }
+
+    // the button at the end of the property line with that title, which opens its dialog
+    function clickPropertyLineButton(title) {
+        propertyLine(title)
+            .find('[id^="browse"]:not(.hidden) button')
+            .first()
+            .scrollIntoView()
+            .click();
+    }
+
+    // the entries of a list box, typed into the editor of several lines behind the arrow; a list
+    // without entries offers no default selection
+    function setListEntries(entries) {
+        propertyLine('List entries').find('.menubutton').first().scrollIntoView().click();
+        cy.cGet('.jsdialog-window.modalpopup textarea#textview').type(entries.join('{enter}'));
+        cy.cGet('.jsdialog-window.modalpopup #ok-button').click();
+        cy.cGet('.jsdialog-window.modalpopup').should('not.exist');
+    }
+
+    it('Form control properties dialogs', function () {
+        switchControlDesignMode(true);
+        insertFormControl('.uno:Pushbutton');
+        clickPropertyLineButton('Font');
+        a11yHelper.handleDialog(win, 2);
+        clickPropertyLineButton('Tab order');
+        a11yHelper.handleDialog(win, 2);
+        selectPropertyTab('Events');
+        clickPropertyLineButton('Execute action');
+        a11yHelper.handleDialog(win, 2);
+        a11yHelper.handleDialog(win, 1, '.uno:ControlProperties');
+
+        insertFormControl('.uno:ListBox');
+        setListEntries(['One', 'Two']);
+        clickPropertyLineButton('Label Field');
+        a11yHelper.handleDialog(win, 2);
+        clickPropertyLineButton('Default selection');
+        a11yHelper.handleDialog(win, 2);
+        a11yHelper.handleDialog(win, 1, '.uno:ControlProperties');
+
+        // these show the fields for dates, times and formatted numbers in their lines
+        insertFormControl('.uno:DateField');
+        a11yHelper.handleDialog(win, 1, '.uno:ControlProperties');
+        insertFormControl('.uno:TimeField');
+        a11yHelper.handleDialog(win, 1, '.uno:ControlProperties');
+        insertFormControl('.uno:FormattedField');
+        a11yHelper.handleDialog(win, 1, '.uno:ControlProperties');
+
+        helper.typeIntoDocument('{esc}');
+        switchControlDesignMode(false);
+    });
+
 });

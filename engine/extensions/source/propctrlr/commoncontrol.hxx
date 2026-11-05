@@ -33,6 +33,22 @@ class SvtCalendarBox;
 namespace pcr
 {
 
+    /// the window of a property control, with the widget inside it that the property's title names
+    class ControlWindowTransport final : public weld::TransportAsXWindow
+    {
+        weld::Widget* m_pMnemonicWidget;
+
+    public:
+        ControlWindowTransport(weld::Widget* pWidget, weld::Widget* pMnemonicWidget)
+            : weld::TransportAsXWindow(pWidget)
+            , m_pMnemonicWidget(pMnemonicWidget)
+        {
+        }
+        virtual ~ControlWindowTransport() override;
+
+        weld::Widget* getMnemonicWidget() const { return m_pMnemonicWidget; }
+    };
+
     //= CommonBehaviourControlHelper
 
     /** A helper class for implementing the <type scope="css::inspection">XPropertyControl</type>
@@ -82,6 +98,8 @@ namespace pcr
         void notifyModifiedValue(  );
 
         virtual weld::Widget* getWidget() = 0;
+        /// the widget the title of the property names, where the input happens
+        virtual weld::Widget* getMnemonicWidget() { return getWidget(); }
 
         /// may be used by derived classes, they forward the event to the PropCtrListener
         DECL_LINK( ModifiedHdl, weld::ComboBox&, void );
@@ -133,7 +151,7 @@ namespace pcr
         virtual void setControlContext( const cpo::uno::Reference< css::inspection::XPropertyControlContext >& controlcontext ) override
             { CommonBehaviourControlHelper::setControlContext( controlcontext ); }
         virtual cpo::uno::Reference< css::awt::XWindow > getControlWindow() override
-            { return new weld::TransportAsXWindow(getWidget()); }
+            { return new ControlWindowTransport(getWidget(), getMnemonicWidget()); }
         virtual bool isModified(  ) override
             { return CommonBehaviourControlHelper::isModified(); }
         virtual void notifyModifiedValue(  ) override

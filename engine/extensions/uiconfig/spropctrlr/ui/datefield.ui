@@ -34,6 +34,11 @@
         <property name="image">image7</property>
         <property name="margin-start">1</property>
         <property name="always_show_image">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="button-atkobject">
+            <property name="AtkObject::accessible-name" translatable="yes" context="datefield|button|accessible_name">Choose a date</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>

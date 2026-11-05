@@ -662,6 +662,14 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
                     GetDispatcher()->Execute( SID_INSERT_GRAPHIC,
                                               SfxCallMode::ASYNCHRON );
             }
+            else if (nInv == SdrInventor::FmForm && !bReadOnly && mpView->IsDesignMode()
+                     && mrViewShell.GetViewShell()
+                     && mrViewShell.GetViewShell()->drawsFromObjects())
+            {
+                // a view that draws from the objects opens the properties of a form control
+                mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_FM_CTL_PROPERTIES,
+                                                                     SfxCallMode::ASYNCHRON);
+            }
             else if ( ( DynCastSdrTextObj( pObj ) != nullptr || dynamic_cast< const SdrObjGroup *>( pObj ) !=  nullptr ) &&
                       !SdModule::get()->GetWaterCan() &&
                       mrViewShell.GetFrameView()->IsDoubleClickTextEdit() &&

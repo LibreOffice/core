@@ -90,6 +90,46 @@ div.ui-treeview-icon-column {
 	margin: 5px;
 }
 
+/* properties of a form control or a form (svx/ui/formpropertydialog.ui). each property is
+   a grid of its own, label, field and up to two buttons; we let all of them take part in
+   the one grid of the page, so labels and fields line up as in the office. the builder
+   puts the column of a field and the width inline, hence the !important */
+#FormPropertyDialog .ui-scrollwindow {
+	width: 30em !important;
+	height: auto !important;
+	max-height: 50vh !important;
+	overflow-x: hidden;
+}
+#FormPropertyDialog [id^='playground'].ui-grid-cell {
+	display: grid !important;
+	grid-template-columns: max-content minmax(0, 1fr) auto auto !important;
+	grid-auto-rows: auto !important;
+	align-content: start !important;
+	align-items: center;
+	column-gap: 8px;
+	row-gap: 6px;
+}
+#FormPropertyDialog [id^='BrowserLine'].ui-grid {
+	display: contents !important;
+}
+#FormPropertyDialog [id^='BrowserLine'] > :first-child {
+	grid-column: 1;
+}
+/* a field reaches the right edge, unless a button of its line stands there */
+#FormPropertyDialog [id^='BrowserLine'] > :nth-child(2) {
+	grid-column: 2 / -1 !important;
+}
+#FormPropertyDialog [id^='BrowserLine']:has(> .ui-pushbutton-wrapper:not(.hidden)) > :nth-child(2) {
+	grid-column: 2 !important;
+}
+#FormPropertyDialog [id^='BrowserLine']:has(> [id^='morebrowse'].hidden) > [id^='browse']:not(.hidden) {
+	grid-column: 3 / -1 !important;
+	justify-content: flex-end !important;
+}
+#FormPropertyDialog [id^='BrowserLine'] > .ui-pushbutton-wrapper.hidden {
+	display: none !important;
+}
+
 /* Select Certificate dialog (xmlsec/ui/selectcertificatedialog.ui). The
    !important overrides beat the inline styles the builder puts on
    containers (display: grid with stretched auto columns, which tore the
