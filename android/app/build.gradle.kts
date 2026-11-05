@@ -18,6 +18,7 @@ val liboVersionMinor: String by extra
 val liboGitFullCommit: String by extra
 val androidNdkPath: String by extra
 val androidNdkVersion: String by extra
+val androidVersionCode: Int by extra
 val androidVersionName: String by extra
 val buildIdShort: String by extra
 val vendor: String by extra
@@ -54,7 +55,7 @@ android {
     defaultConfig {
         applicationId = androidApplicationId
         minSdk = androidMinSdkVersion
-        versionCode = if (project.hasProperty("cmdVersionCode")) project.property("cmdVersionCode").toString().toInt() else 1
+        versionCode = androidVersionCode
         versionName = androidVersionName
         buildConfigField("String", "BUILD_ID_SHORT", buildIdShort)
         buildConfigField("String", "VENDOR", vendor)

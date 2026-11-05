@@ -826,6 +826,11 @@ AC_ARG_WITH(android-api-level,
         [Specify the API level when building for Android. Defaults to 16 for ARM and x86 and to 21 for ARM64 and x86-64]),
 ,)
 
+AC_ARG_WITH(android-version-code,
+    AS_HELP_STRING([--with-android-version-code],
+        [Specify the versionCode for the app when building for Android. Defaults to 1]),
+,)
+
 ANDROID_NDK_DIR=
 if test -z "$with_android_ndk" -a -e "$SRC_ROOT/external/android-ndk" -a "$build" != "$host"; then
     with_android_ndk="$SRC_ROOT/external/android-ndk"
@@ -836,6 +841,11 @@ if test -n "$with_android_ndk"; then
     ANDROID_API_LEVEL=21
     if test -n "$with_android_api_level" ; then
         ANDROID_API_LEVEL="$with_android_api_level"
+    fi
+
+    ANDROID_VERSION_CODE=1
+    if test -n "$with_android_version_code" ; then
+        ANDROID_VERSION_CODE="$with_android_version_code"
     fi
 
     if test $host_cpu = arm; then
@@ -941,6 +951,7 @@ AC_SUBST(ANDROID_API_LEVEL)
 AC_SUBST(ANDROID_APP_ABI)
 AC_SUBST(ANDROID_SYSROOT_PLATFORM)
 AC_SUBST(ANDROID_TOOLCHAIN)
+AC_SUBST(ANDROID_VERSION_CODE)
 
 dnl ===================================================================
 dnl --with-android-sdk

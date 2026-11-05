@@ -102,6 +102,7 @@ liboSettings.gradle.kts: $(BUILDDIR)/config_build.mk $(BUILDDIR)/config_host.mk 
 		&& echo "    set(\"androidNdkVersion\", \"$(ANDROID_NDK_VERSION)\")" \
 		&& echo "    set(\"androidApplicationId\", \"$(ANDROID_PACKAGE_NAME)\")" \
 		&& echo "    set(\"androidMinSdkVersion\", $(ANDROID_API_LEVEL))" \
+		&& echo "    set(\"androidVersionCode\", $(ANDROID_VERSION_CODE))" \
 		&& echo "    set(\"androidVersionName\", \"$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX)\")" \
 		&& echo "    set(\"buildIdShort\", \"\\\"$(shell cd $(SRCDIR) && git log -1 --format=%h)\\\"\")" \
 		&& echo "    set(\"vendor\", \"\\\"$(OOO_VENDOR)\\\"\")" \
