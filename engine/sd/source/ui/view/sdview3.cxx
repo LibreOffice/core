@@ -1692,8 +1692,13 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 if( pOLV )
                 {
                     // tdf#139269 - prevent text pasting into readonly areas of master views
+                    // The page is the one of the edited object. The notes panel edits no object.
                     if (!pPage)
-                        pPage = static_cast<SdPage*>(GetSdrPageView()->GetPage());
+                    {
+                        SdrObject* pTextEditObject = GetTextEditObject();
+                        pPage = static_cast<SdPage*>(
+                            pTextEditObject ? pTextEditObject->getSdrPageFromSdrObject() : nullptr);
+                    }
 
                     if (pPage && pPage->IsMasterPage() && pOLV->IsReadOnly())
                         return false;

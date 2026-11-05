@@ -34,6 +34,7 @@
 #include <editeng/lspcitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/kernitem.hxx>
+#include <osl/thread.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svl/cryptosign.hxx>
@@ -47,6 +48,7 @@
 #include <tools/json_writer.hxx>
 
 #include <vcl/keycodes.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 
 #include <tools/UnitConversion.hxx>
@@ -262,6 +264,81 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testNotesViewInvalidations)
     CPPUNIT_ASSERT_EQUAL(true, aView.invalidatedAll);
     CPPUNIT_ASSERT_EQUAL(1, aView.partOfInvalidation);
     CPPUNIT_ASSERT_EQUAL(2, aView.editModeOfInvalidation);
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testNotesPanelPasteSpecialUnformatted)
+{
+    // Given a copy of the title text of the first slide, and the notes pane open with the focus in
+    // it.
+    SdXImpressDocument* pXImpressDocument = createDoc("2slides.odp");
+    SdTestViewCallback aView;
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    SdrObject* pTitle = pViewShell->GetActualPage()->GetObj(0);
+    pView->MarkObj(pTitle, pView->GetSdrPageView());
+    pView->SdrBeginTextEdit(pTitle);
+    OutlinerView* pOutlinerView = pView->GetTextEditOutlinerView();
+    CPPUNIT_ASSERT(pOutlinerView);
+    pOutlinerView->GetEditView().SetSelection(ESelection(0, 0, 0, 11)); // "First slide"
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+    pView->SdrEndTextEdit();
+    pView->UnmarkAll();
+    dispatchCommand(mxComponent, u".uno:BottomPaneImpress"_ustr,
+                    { comphelper::makePropertyValue(u"BottomPaneImpress"_ustr, true) });
+    const OUString sNotesPanelId
+        = OUString::number(reinterpret_cast<sal_uInt64>(&pViewShell->GetViewShellBase()))
+          + "notespanel";
+    StringMap aFocus{ { u"type"_ustr, u"customwidget"_ustr },
+                      { u"cmd"_ustr, u"focus"_ustr },
+                      { u"data"_ustr, u"{}"_ustr } };
+    // The pane opens on a later update of the view configuration, which waits on a timer.
+    bool bFocused = false;
+    for (int i = 0; i < 100 && !bFocused; ++i)
+    {
+        Scheduler::ProcessEventsToIdle();
+        bFocused = jsdialog::ExecuteAction(sNotesPanelId, u"notesedit"_ustr, aFocus);
+        if (!bFocused)
+            osl::Thread::wait(std::chrono::milliseconds(50));
+    }
+    CPPUNIT_ASSERT(bFocused);
+    Scheduler::ProcessEventsToIdle();
+
+    // When the text is pasted with Paste Special as unformatted text, which the dialog offers in
+    // its second row, after the text with its formatting.
+    dispatchCommand(mxComponent, u".uno:PasteSpecial"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    OUString sDialogId;
+    for (vcl::Window* pWindow = Application::GetFirstTopLevelWindow(); pWindow;
+         pWindow = Application::GetNextTopLevelWindow(pWindow))
+    {
+        vcl::Window* pDialog = pWindow->GetWindow(GetWindowType::Client);
+        if (pDialog && pDialog->IsDialog())
+            sDialogId = OUString::number(static_cast<sal_uInt64>(pDialog->GetKitWindowId()));
+    }
+    CPPUNIT_ASSERT(!sDialogId.isEmpty());
+    StringMap aSelect{ { u"type"_ustr, u"treeview"_ustr },
+                       { u"cmd"_ustr, u"select"_ustr },
+                       { u"data"_ustr, u"1"_ustr } };
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(sDialogId, u"list"_ustr, aSelect));
+    StringMap aClick{ { u"type"_ustr, u"responsebutton"_ustr },
+                      { u"cmd"_ustr, u"click"_ustr },
+                      { u"data"_ustr, OUString::number(RET_OK) } };
+    // Without the accompanying fix in place, the paste crashed here.
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(sDialogId, u"ok"_ustr, aClick));
+    Scheduler::ProcessEventsToIdle();
+    StringMap aBlur{ { u"type"_ustr, u"customwidget"_ustr },
+                     { u"cmd"_ustr, u"blur"_ustr },
+                     { u"data"_ustr, u"{}"_ustr } };
+    CPPUNIT_ASSERT(jsdialog::ExecuteAction(sNotesPanelId, u"notesedit"_ustr, aBlur));
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the notes of the slide hold the text.
+    SdPage* pNotesPage = pXImpressDocument->GetDoc()->GetSdPage(0, PageKind::Notes);
+    auto pNotes = dynamic_cast<SdrTextObj*>(pNotesPage->GetPresObj(PresObjKind::Notes));
+    CPPUNIT_ASSERT(pNotes);
+    const OutlinerParaObject* pParaObject = pNotes->GetOutlinerParaObject();
+    CPPUNIT_ASSERT(pParaObject);
+    CPPUNIT_ASSERT_EQUAL(u"First slide"_ustr, pParaObject->GetTextObject().GetText(0));
 }
 
 #if ENABLE_PDFIMPORT
