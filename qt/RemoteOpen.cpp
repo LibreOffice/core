@@ -378,6 +378,8 @@ bool CloudAccountPage::acceptNavigationRequest(const QUrl& url, NavigationType t
 
     LOG_INF("account window: opening a link in the system browser");
     openInSystemBrowser(url);
+    // Qt WebEngine stops injecting the page's scripts after it refuses a link click.
+    QTimer::singleShot(0, this, &CloudAccountPage::insertEmptyCoolPageScript);
     return false;
 }
 
@@ -388,6 +390,9 @@ void CloudAccountPage::insertEmptyCoolPageScript()
     emptyCoolPage.setInjectionPoint(QWebEngineScript::DocumentCreation);
     emptyCoolPage.setWorldId(QWebEngineScript::ApplicationWorld);
     emptyCoolPage.setRunsOnSubFrames(true);
+
+    // It is the only script of the page, so clear() takes away an earlier copy.
+    scripts().clear();
     scripts().insert(emptyCoolPage);
 }
 
