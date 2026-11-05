@@ -285,6 +285,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		this._lastValidPart = -1;
 		this._lastViewportHeight = 0;
+		this._lastViewportWidth = 0;
+		this._viewportWidthChangedAt = 0;
 		// Cursor marker
 		this._cursorMarker = null;
 
@@ -4293,13 +4295,20 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	},
 
 	_mobileChecksAfterResizeEvent: function(heightIncreased) {
-		if (!window.mode.isSmallScreenDevice()) return;
+		const isSmallScreen = window.mode.isSmallScreenDevice();
+		if (!isSmallScreen && !window.mode.isTablet()) return;
 
 		// The document area grows when the wizard closes too, so go by the viewport.
-		const viewportHeight = window.visualViewport
-			? window.visualViewport.height : window.innerHeight;
-		const viewportGrew = this._lastViewportHeight < viewportHeight;
-		this._lastViewportHeight = viewportHeight;
+		const viewport = window.visualViewport
+			? { width: window.visualViewport.width, height: window.visualViewport.height }
+			: { width: window.innerWidth, height: window.innerHeight };
+		const now = Date.now();
+		if (this._lastViewportWidth !== viewport.width)
+			this._viewportWidthChangedAt = now; // for keyboard down detection, we want to rule out rotations/etc. we can do that by making sure the width isn't also changing
+		const viewportGrew = this._lastViewportHeight < viewport.height
+			&& now - this._viewportWidthChangedAt > 1000;
+		this._lastViewportHeight = viewport.height;
+		this._lastViewportWidth = viewport.width;
 
 		const hasMobileWizardOpened = this._map.uiManager.mobileWizard ? this._map.uiManager.mobileWizard.isOpen() : false;
 		const hasIframeModalOpened = $('.iframe-dialog-modal').is(':visible');
@@ -4307,9 +4316,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		const focusedUI = document.activeElement === document.body;
 		if (!hasMobileWizardOpened && !hasIframeModalOpened && !focusedUI) {
 			if (heightIncreased) {
-				if (viewportGrew)
+				if (viewportGrew && !window.ThisIsTheiOSApp)
 					this._map.setAcceptInput(false);
-			} else
+			} else if (isSmallScreen)
 				this._onUpdateCursor(true);
 		}
 	},

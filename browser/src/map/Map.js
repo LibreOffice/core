@@ -214,6 +214,7 @@ window.L.Map = window.L.Evented.extend({
 			});
 			this.on('hardwarekeyboarddetached', function() {
 				window.keyboard.setHardwareKeyboardAttached(false);
+				this.setAcceptInput(false);
 			});
 			this.on('darkthemeactivated', function() {
 				this.uiManager.applyDarkMode(true, false);

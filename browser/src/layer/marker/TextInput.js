@@ -168,6 +168,7 @@ window.L.TextInput = window.L.Layer.extend({
 			window.onNativeKeyboardHidden = function () {
 				if (Date.now() - that._lastPressTime < 1000)
 					return;
+				that._setAcceptInput(false);
 				if (
 					app.map.getDocType() === 'spreadsheet' &&
 					app.file.textCursor.visible
