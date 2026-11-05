@@ -287,6 +287,7 @@ class InitializerBase {
 		window.allowUpdateNotification = false;
 		window.useIntegrationTheme = false;
 		window.enableMacrosExecution = false;
+		window.macroSecurityLevel = 1;
 		window.hideLegacyScriptWarning = false;
 		window.enableAccessibility = false;
 		window.protocolDebug = false;
@@ -472,6 +473,7 @@ class BrowserInitializer extends InitializerBase {
 		window.useIntegrationTheme = element.dataset.useIntegrationTheme.toLowerCase().trim() === "true";
 		window.useStatusbarSaveIndicator = element.dataset.statusbarSaveIndicator.toLowerCase().trim() === "true";
 		window.enableMacrosExecution = element.dataset.enableMacrosExecution.toLowerCase().trim() === "true";
+		window.macroSecurityLevel = parseInt(element.dataset.macroSecurityLevel, 10);
 		window.hideLegacyScriptWarning = element.dataset.hideLegacyScriptWarning.toLowerCase().trim() === "true";
 		window.enableAccessibility = element.dataset.enableAccessibility.toLowerCase().trim() === "true";
 		window.outOfFocusTimeoutSecs = parseInt(element.dataset.outOfFocusTimeoutSecs);

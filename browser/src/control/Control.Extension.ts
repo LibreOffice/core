@@ -2412,6 +2412,13 @@ window.L.loadExtensions = async function (map: any, docType: string) {
 	// Gated on the experimental-features flag so deployments not opting in to
 	// experimental functionality never fetch the discovery index:
 	if (!window.enableExperimentalFeatures) return {};
+	// The app builds have no server macro settings.
+	if (!window.ThisIsAMobileApp) {
+		if (!window.enableMacrosExecution) return {};
+
+		// Extensions are not signed, and a level above 1 does not run unsigned macros.
+		if (window.macroSecurityLevel > 1) return {};
+	}
 
 	// The read-only state comes from the server's perm and filemode messages, so it also covers
 	// permission=readonly, comment-only sessions and view-only file types:

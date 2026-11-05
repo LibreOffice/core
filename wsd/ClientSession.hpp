@@ -653,15 +653,30 @@ private:
     }
 
     /// Whether the session may run extension scripts. Extensions are off when experimental
-    /// features are off, when the session is read-only, or when the host disables copy, export or
-    /// print.
+    /// features or macro execution are off, when the macro security level is above 1, when the
+    /// session is read-only, or when the host disables copy, export or print.
     bool allowsExtensions() const
     {
-        // (EnableExperimental is always false for MOBILEAPP, so ignore it in that case:)
-        return (EnableExperimental || Util::isMobileAppBuild()) && !isReadOnly() &&
-               (!_wopiFileInfo ||
-                (!_wopiFileInfo->getDisableCopy() && !_wopiFileInfo->getDisableExport() &&
-                 !_wopiFileInfo->getDisablePrint()));
+        // The app builds have no server settings, and EnableExperimental is always false there.
+        if (!Util::isMobileAppBuild())
+        {
+            if (!EnableExperimental)
+                return false;
+            if (!ConfigUtil::getConfigValue<bool>("security.enable_macros_execution", false))
+                return false;
+            // Extensions are not signed, and a level above 1 does not run unsigned macros.
+            if (ConfigUtil::getConfigValue<int>("security.macro_security_level", 1) > 1)
+                return false;
+        }
+
+        if (isReadOnly())
+            return false;
+
+        if (!_wopiFileInfo)
+            return true;
+
+        return !_wopiFileInfo->getDisableCopy() && !_wopiFileInfo->getDisableExport() &&
+               !_wopiFileInfo->getDisablePrint();
     }
 
     void dumpState(std::ostream& os) override;

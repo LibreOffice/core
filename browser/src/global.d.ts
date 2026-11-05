@@ -526,6 +526,7 @@ interface Window {
 	enableDebug: boolean;
 	simulateError: (name: string) => boolean;
 	enableMacrosExecution: boolean;
+	macroSecurityLevel: number;
 	hideLegacyScriptWarning: boolean;
 	enableWelcomeMessage: boolean;
 	expectedServerId: string;

@@ -318,6 +318,7 @@ m4_ifelse(APP, [true],
       data-enable-debug = "%ENABLE_DEBUG%"
       data-enable-experimental-features = "%EXPERIMENTAL_FEATURES%"
       data-enable-macros-execution = "%ENABLE_MACROS_EXECUTION%"
+      data-macro-security-level = "%MACRO_SECURITY_LEVEL%"
       data-enable-welcome-message = "%ENABLE_WELCOME_MSG%"
       data-extra-export-formats = "%EXTRA_EXPORT_FORMATS%"
       data-frame-ancestors = "%FRAME_ANCESTORS%"
