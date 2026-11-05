@@ -31,6 +31,7 @@
 #include <comphelper/sequence.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <algorithm>
 #include <utility>
 
 namespace oox::vml {
@@ -119,8 +120,10 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
         {
             aPropertyValue.Name = u"CharKerning"_ustr;
             // the spacing of the file is in twips, the property takes 1/100 mm
+            const sal_Int64 nSpacing = o3tl::convert(sal_Int64(rFont.monSpacing.value()),
+                                                   o3tl::Length::twip, o3tl::Length::mm100);
             aPropertyValue.Value <<= static_cast<sal_Int16>(
-                o3tl::convert(rFont.monSpacing.value(), o3tl::Length::twip, o3tl::Length::mm100));
+                std::clamp<sal_Int64>(nSpacing, SAL_MIN_INT16, SAL_MAX_INT16));
             aPropVec.push_back(aPropertyValue);
         }
         if (rParagraph.moParaAdjust.has_value())
