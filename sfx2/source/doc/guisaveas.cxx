@@ -1941,7 +1941,7 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
                 SfxStoringHelper::GetModelWindow(aModelData.GetModel()),
                 VclMessageType::Error, VclButtonsType::Ok,
-                SfxResId(STR_ERROR_NOMATCHINGDEFUALTCERT)));
+                SfxResId(STR_ERROR_NOMATCHINGDEFAULTCERT)));
             xBox->run();
             return;
 #else
