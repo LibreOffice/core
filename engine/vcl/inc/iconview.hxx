@@ -53,6 +53,14 @@ public:
         maDumpImageHdl = rLink;
     }
 
+    /// Called with the last entry of the top row when the user scrolls. Online asks the
+    /// client to report its scrolls only while this is set.
+    void SetTopRowScrolledHdl(const Link<const SvTreeListEntry&, void>& rLink)
+    {
+        maTopRowScrolledHdl = rLink;
+    }
+    void TopRowScrolled(const SvTreeListEntry& rLastInRow) { maTopRowScrolledHdl.Call(rLastInRow); }
+
     /// returns string with encoded image for an entry
     OUString renderEntry(int pos, int dpiscale) const;
 
@@ -64,6 +72,7 @@ protected:
 
 private:
     Link<const encoded_image_query&, bool> maDumpImageHdl;
+    Link<const SvTreeListEntry&, void> maTopRowScrolledHdl;
     void DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter, SvTreeListEntry* pEntry);
 
     bool HasSeparatorEntry() const;

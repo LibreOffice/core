@@ -32,6 +32,7 @@
 #include <vcl/toolkit/svlbitm.hxx>
 #include <vcl/toolkit/MenuButton.hxx>
 #include <vcl/toolkit/vclmedit.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <uiobject-internal.hxx>
 #include <verticaltabctrl.hxx>
@@ -42,6 +43,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
+#include <cstdlib>
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -1824,6 +1826,27 @@ StringMap IconViewUIObject::get_state()
         aMap[u"SelectedItemPos"_ustr] = OUString::number(pModel->GetAbsPos(pEntry));
 
     return aMap;
+}
+
+void IconViewUIObject::execute(const OUString& rAction, const StringMap& rParameters)
+{
+    if (rAction == "SCROLL")
+    {
+        auto it = rParameters.find(u"LINES"_ustr);
+        if (it != rParameters.end())
+        {
+            // Turn the mouse wheel, so the view scrolls the way it does for the user. More
+            // lines go further down, fewer go up.
+            const sal_Int32 nLines = it->second.toInt32();
+            const CommandWheelData aWheelData(nLines > 0 ? -120 : 120, nLines > 0 ? -1 : 1,
+                                              std::abs(nLines), CommandWheelMode::SCROLL, 0,
+                                              false, false);
+            vcl::Window* pWindow = mxTreeList.get();
+            pWindow->Command(CommandEvent(Point(), CommandEventId::Wheel, true, &aWheelData));
+        }
+    }
+    else
+        TreeListUIObject::execute(rAction, rParameters);
 }
 
 OUString IconViewUIObject::get_name() const

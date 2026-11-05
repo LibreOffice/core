@@ -870,6 +870,11 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
 
                     return true;
                 }
+                else if (sAction == "toprowscrolled")
+                {
+                    KitTrigger::trigger_top_row_scrolled(*pIconView, nPos);
+                    return true;
+                }
                 else if (sAction == "contextmenu")
                 {
                     // Data is a plain position, or URI-encoded JSON with the position in "row"

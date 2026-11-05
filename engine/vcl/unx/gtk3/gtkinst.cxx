@@ -13586,8 +13586,87 @@ private:
     gulong m_nPopupMenu;
     gulong m_nQueryTooltipSignalId = 0;
     ImplSVEvent* m_pSelectionChangeEvent;
+    // Following the scroll for connect_top_row_scrolled
+    GtkAdjustment* m_pVAdjustment = nullptr;
+    GtkWidget* m_pVScrollbar = nullptr;
+    gulong m_nVAdjustmentChangedSignalId = 0;
+    gulong m_nScrollEventSignalId = 0;
+    gulong m_nScrollbarChangeValueSignalId = 0;
+    bool m_bScrolledByUser = false;
+    int m_nReportedTopRowLast = -1;
+    ImplSVEvent* m_pTopRowScrolledEvent = nullptr;
 
     DECL_LINK(async_signal_selection_changed, void*, void);
+    DECL_LINK(async_signal_top_row_scrolled, void*, void);
+
+    // The view scrolls by itself to show what is selected; that is not the user scrolling.
+    // The dialog follows the selection too, so the row reported last may no longer be what
+    // it shows: report the next row even when it is the same one.
+    void scrolled_by_selection()
+    {
+        m_bScrolledByUser = false;
+        m_nReportedTopRowLast = -1;
+        if (m_pTopRowScrolledEvent)
+        {
+            Application::RemoveUserEvent(m_pTopRowScrolledEvent);
+            m_pTopRowScrolledEvent = nullptr;
+        }
+    }
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    static gboolean signalUserScroll(GtkWidget*, GdkEvent*, gpointer widget)
+    {
+        static_cast<GtkInstanceIconView*>(widget)->m_bScrolledByUser = true;
+        return false;
+    }
+
+    static gboolean signalScrollbarChangeValue(GtkRange*, GtkScrollType, gdouble, gpointer widget)
+    {
+        static_cast<GtkInstanceIconView*>(widget)->m_bScrolledByUser = true;
+        return false;
+    }
+
+    static void signalVAdjustmentChanged(GtkAdjustment*, gpointer widget)
+    {
+        GtkInstanceIconView* pThis = static_cast<GtkInstanceIconView*>(widget);
+        if (!pThis->m_bScrolledByUser || pThis->m_pTopRowScrolledEvent)
+            return;
+        // A smooth scroll changes the value many times; report where it ends up.
+        pThis->m_pTopRowScrolledEvent = Application::PostUserEvent(
+            LINK(pThis, GtkInstanceIconView, async_signal_top_row_scrolled));
+    }
+#endif
+
+    // The last entry of the top row, counting a row as there once more than half of it shows
+    int get_top_row_last() const
+    {
+        GtkTreePath* pStart = nullptr;
+        GtkTreePath* pEnd = nullptr;
+        if (!gtk_icon_view_get_visible_range(m_pIconView, &pStart, &pEnd))
+            return -1;
+
+        gint nTopRow = gtk_icon_view_get_item_row(m_pIconView, pStart);
+        GdkRectangle aRect;
+        if (gtk_icon_view_get_cell_rect(m_pIconView, pStart, nullptr, &aRect)
+            && aRect.y + aRect.height / 2 < 0)
+            ++nTopRow;
+
+        int nLast = -1;
+        const int nCount = n_children();
+        for (int nPos = gtk_tree_path_get_indices(pStart)[0]; nPos < nCount; ++nPos)
+        {
+            GtkTreePath* pPath = gtk_tree_path_new_from_indices(nPos, -1);
+            const gint nRow = gtk_icon_view_get_item_row(m_pIconView, pPath);
+            gtk_tree_path_free(pPath);
+            if (nRow > nTopRow)
+                break;
+            nLast = nPos;
+        }
+
+        gtk_tree_path_free(pStart);
+        gtk_tree_path_free(pEnd);
+        return nLast;
+    }
 
     bool signal_command(const CommandEvent& rCEvt)
     {
@@ -13615,6 +13694,7 @@ private:
     static void signalSelectionChanged(GtkIconView*, gpointer widget)
     {
         GtkInstanceIconView* pThis = static_cast<GtkInstanceIconView*>(widget);
+        pThis->scrolled_by_selection();
         pThis->launch_signal_selection_changed();
     }
 
@@ -13902,6 +13982,36 @@ public:
         gtk_widget_set_has_tooltip(GTK_WIDGET(m_pIconView), true);
     }
 
+    virtual void connect_top_row_scrolled(const Link<int, void>& rLink) override
+    {
+        weld::IconView::connect_top_row_scrolled(rLink);
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        if (m_nVAdjustmentChangedSignalId)
+            return;
+
+        m_pVAdjustment = gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(m_pIconView));
+        if (!m_pVAdjustment)
+            return;
+        g_object_ref(m_pVAdjustment);
+        m_nVAdjustmentChangedSignalId = g_signal_connect(m_pVAdjustment, "value-changed",
+                                                         G_CALLBACK(signalVAdjustmentChanged), this);
+        // The wheel scrolls the adjustment directly, the scrollbar says when it is moved
+        m_nScrollEventSignalId = g_signal_connect(m_pIconView, "scroll-event",
+                                                  G_CALLBACK(signalUserScroll), this);
+        GtkWidget* pParent = gtk_widget_get_parent(GTK_WIDGET(m_pIconView));
+        if (pParent && GTK_IS_SCROLLED_WINDOW(pParent))
+        {
+            m_pVScrollbar = gtk_scrolled_window_get_vscrollbar(GTK_SCROLLED_WINDOW(pParent));
+            if (m_pVScrollbar)
+            {
+                g_object_ref(m_pVScrollbar);
+                m_nScrollbarChangeValueSignalId = g_signal_connect(
+                    m_pVScrollbar, "change-value", G_CALLBACK(signalScrollbarChangeValue), this);
+            }
+        }
+#endif
+    }
+
     virtual void connect_get_image(const Link<const weld::encoded_image_query&, bool>& /*rLink*/) override
     {
         //not implemented for the gtk variant
@@ -14027,6 +14137,7 @@ public:
         else
         {
             GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
+            scrolled_by_selection();
             gtk_icon_view_select_path(m_pIconView, path);
             gtk_icon_view_scroll_to_path(m_pIconView, path, false, 0, 0);
             gtk_tree_path_free(path);
@@ -14076,6 +14187,7 @@ public:
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreePath* path = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+        scrolled_by_selection();
         gtk_icon_view_set_cursor(m_pIconView, path, nullptr, false);
         gtk_tree_path_free(path);
         enable_notify_events();
@@ -14102,6 +14214,7 @@ public:
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreePath* path = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+        scrolled_by_selection();
         gtk_icon_view_scroll_to_path(m_pIconView, path, false, 0, 0);
         gtk_tree_path_free(path);
         enable_notify_events();
@@ -14171,6 +14284,19 @@ public:
     {
         if (m_pSelectionChangeEvent)
             Application::RemoveUserEvent(m_pSelectionChangeEvent);
+        if (m_pTopRowScrolledEvent)
+            Application::RemoveUserEvent(m_pTopRowScrolledEvent);
+
+        if (m_nScrollbarChangeValueSignalId)
+            g_signal_handler_disconnect(m_pVScrollbar, m_nScrollbarChangeValueSignalId);
+        if (m_pVScrollbar)
+            g_object_unref(m_pVScrollbar);
+        if (m_nScrollEventSignalId)
+            g_signal_handler_disconnect(m_pIconView, m_nScrollEventSignalId);
+        if (m_nVAdjustmentChangedSignalId)
+            g_signal_handler_disconnect(m_pVAdjustment, m_nVAdjustmentChangedSignalId);
+        if (m_pVAdjustment)
+            g_object_unref(m_pVAdjustment);
 
         if (m_nQueryTooltipSignalId)
             g_signal_handler_disconnect(m_pIconView, m_nQueryTooltipSignalId);
@@ -14187,6 +14313,16 @@ IMPL_LINK_NOARG(GtkInstanceIconView, async_signal_selection_changed, void*, void
 {
     m_pSelectionChangeEvent = nullptr;
     signal_selection_changed();
+}
+
+IMPL_LINK_NOARG(GtkInstanceIconView, async_signal_top_row_scrolled, void*, void)
+{
+    m_pTopRowScrolledEvent = nullptr;
+    const int nLast = get_top_row_last();
+    if (nLast < 0 || nLast == m_nReportedTopRowLast)
+        return;
+    m_nReportedTopRowLast = nLast;
+    signal_top_row_scrolled(nLast);
 }
 
 namespace {

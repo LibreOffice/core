@@ -377,6 +377,8 @@ void IconView::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     rJsonWriter.put("singleclickactivate", GetActivateOnSingleClick());
     rJsonWriter.put("selectionmode", selectionModeToString(GetSelectionMode()));
     rJsonWriter.put("textWithIconEnabled", IsTextColumnEnabled());
+    if (maTopRowScrolledHdl.IsSet())
+        rJsonWriter.put("notifytoprowscrolled", true);
     auto aNode = rJsonWriter.startArray("entries");
     DumpEntryAndSiblings(rJsonWriter, First());
 }

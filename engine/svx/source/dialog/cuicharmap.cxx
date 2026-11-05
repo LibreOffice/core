@@ -236,6 +236,7 @@ void SvxCharacterMap::init()
     m_xShowSet->connect_get_image(LINK(this, SvxCharacterMap, GetShowImageHdl));
     if(m_xShowSetArea)
         m_xShowSetArea->connect_vadjustment_value_changed(LINK(this, SvxCharacterMap, ShowSetScrollHdl));
+    m_xShowSet->connect_top_row_scrolled(LINK(this, SvxCharacterMap, ShowSetTopRowScrolledHdl));
 
     m_xSearchSet->connect_item_activated(LINK(this, SvxCharacterMap, CharDoubleClickHdl));
     m_xSearchSet->connect_selection_changed(LINK(this, SvxCharacterMap, CharSelectHdl));
@@ -453,6 +454,21 @@ void SvxCharacterMap::renderShowSetBatch(sal_Int32 nStartPos, sal_Int32 nCount)
 IMPL_LINK_NOARG(SvxCharacterMap, ShowSetScrollHdl, weld::ScrolledWindow&, void)
 {
     scheduleShowSetBackgroundRendering();
+}
+
+// The block the top row ends in is the one the rest of the view goes on with, even when
+// it starts partway along that row.
+IMPL_LINK(SvxCharacterMap, ShowSetTopRowScrolledHdl, int, nLastPos, void)
+{
+    if (m_isSearchMode || !m_pSubsetMap)
+        return;
+
+    const OUString sId = m_xShowSet->get_id(nLastPos);
+    if (sId.isEmpty())
+        return;
+
+    if (const Subset* pSubset = m_pSubsetMap->GetSubsetByUnicode(getCharacterFromId(sId)))
+        m_xSubsetLB->set_active_text(pSubset->GetName());
 }
 
 void SvxCharacterMap::scheduleShowSetBackgroundRendering()

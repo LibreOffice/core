@@ -1911,6 +1911,7 @@ private:
     DECL_LINK(CommandHdl, const CommandEvent&, bool);
     DECL_LINK(TooltipHdl, SvTreeListEntry*, OUString);
     DECL_LINK(DumpImageHdl, const ::IconView::encoded_image_query&, bool);
+    DECL_LINK(TopRowScrolledHdl, const SvTreeListEntry&, void);
 
     void do_insert(int pos, const OUString* pStr, const OUString* pId, const Image& rImage,
                    weld::TreeIter* pRet);
@@ -1937,6 +1938,8 @@ public:
 
     virtual void
     connect_get_image(const Link<const weld::encoded_image_query&, bool>& rLink) override;
+
+    virtual void connect_top_row_scrolled(const Link<int, void>& rLink) override;
 
     virtual OUString get_selected_id() const override;
 

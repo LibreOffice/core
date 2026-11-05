@@ -87,6 +87,8 @@ private:
 
     tools::Long GetEntryRow(const SvTreeListEntry* entry) const;
     void SetStartEntry(SvTreeListEntry* entry);
+    // Tell the view which row a scroll by the user brought to the top
+    void NotifyTopRowScrolled();
     void ScrollTo(SvTreeListEntry& rEntry);
 };
 

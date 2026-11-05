@@ -410,6 +410,94 @@ JSDialog.UpdateIconViewIndexes = function (iconview: HTMLElement) {
 	});
 };
 
+/// The last entry of the row that is at the top of the view, counting a row as there
+/// once more than half of it shows.
+function _lastEntryOfTopRow(iconview: HTMLElement): HTMLElement | null {
+	const entries = iconview.querySelectorAll(
+		'.ui-iconview-entry',
+	) as NodeListOf<HTMLElement>;
+	if (!entries.length) return null;
+
+	const viewTop = iconview.getBoundingClientRect().top;
+	const isBelowTop = (entry: HTMLElement) => {
+		const rect = entry.getBoundingClientRect();
+		return rect.top + rect.height / 2 > viewTop;
+	};
+
+	// The entries go down the view in order, so the first one below the top is found
+	// by halving.
+	let low = 0;
+	let high = entries.length - 1;
+	if (!isBelowTop(entries[high])) return null;
+	while (low < high) {
+		const middle = (low + high) >> 1;
+		if (isBelowTop(entries[middle])) high = middle;
+		else low = middle + 1;
+	}
+
+	const rowTop = entries[low].offsetTop;
+	let last = low;
+	while (last + 1 < entries.length && entries[last + 1].offsetTop === rowTop)
+		last++;
+	return entries[last];
+}
+
+/// Tells the engine which row the user has scrolled to the top, so the dialog can follow
+/// it. A scroll that the view does itself to show a selection is not reported: there the
+/// dialog already follows the selected entry.
+function _setupTopRowScrolledReport(
+	iconview: IconViewElement,
+	data: IconViewJSON,
+	builder: JSBuilder,
+) {
+	let scrolledByUser = false;
+	const userScrolls = () => {
+		scrolledByUser = true;
+	};
+	iconview.addEventListener('wheel', userScrolls, { passive: true });
+	iconview.addEventListener('touchstart', userScrolls, { passive: true });
+	// A press on the view itself rather than on an entry is one on its scrollbar.
+	iconview.addEventListener('pointerdown', (e: PointerEvent) => {
+		if (e.target === iconview) userScrolls();
+	});
+	iconview.addEventListener('keydown', (e: KeyboardEvent) => {
+		if (e.target === iconview) userScrolls();
+	});
+
+	let reportedRow: string | null = null;
+	let timer: ReturnType<typeof setTimeout> | null = null;
+
+	// The dialog follows a selection too, so the row reported last may no longer be what
+	// it shows: report the next row even when it is the same one.
+	iconview.scrolledBySelection = () => {
+		scrolledByUser = false;
+		reportedRow = null;
+		if (timer) clearTimeout(timer);
+		timer = null;
+	};
+	const report = () => {
+		timer = null;
+		const entry = _lastEntryOfTopRow(iconview);
+		if (!entry) return;
+
+		const row = entry.id.substring(data.id.length + 1);
+		if (row === reportedRow) return;
+
+		reportedRow = row;
+		iconview.builderCallback('iconview', 'toprowscrolled', row, builder);
+	};
+
+	iconview.addEventListener(
+		'scroll',
+		() => {
+			if (!scrolledByUser) return;
+			if (timer) clearTimeout(timer);
+			timer = setTimeout(report, 100);
+		},
+		{ passive: true },
+	);
+}
+
 JSDialog.iconView = function (
 	parentContainer: Element,
 	data: IconViewJSON,
@@ -545,6 +633,8 @@ JSDialog.iconView = function (
 		iconview.updateSelection(position);
 
 		if (entry) {
+			if (iconview.scrolledBySelection) iconview.scrolledBySelection();
+
 			window.L.DomUtil.addClass(entry, 'selected');
 			entry.setAttribute(ariaStateAttr, 'true');
 
@@ -650,6 +740,9 @@ JSDialog.iconView = function (
 		if (isMultiSelect) JSDialog.KeyboardListNavigation(iconview);
 		else JSDialog.KeyboardRadioGroupNavigation(iconview);
 	}
+
+	if (data.notifytoprowscrolled)
+		_setupTopRowScrolledReport(iconview, data, builder);
 
 	iconview.addEventListener('focusin', function (e: FocusEvent) {
 		const target = e.target as HTMLElement;

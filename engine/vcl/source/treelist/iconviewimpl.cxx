@@ -105,6 +105,26 @@ void IconViewImpl::SetStartEntry(SvTreeListEntry* entry)
     m_pView->Invalidate(GetVisibleArea());
 }
 
+void IconViewImpl::NotifyTopRowScrolled()
+{
+    // Only the scrollbar handler scrolls for the user: keys move the cursor, and the view
+    // follows the cursor.
+    if (!m_bInVScrollHdl || !m_pStartEntry)
+        return;
+
+    SvTreeListEntry* pLast = m_pStartEntry;
+    auto FindLast = [&pLast](const EntryAreaInfo& info)
+    {
+        if (&info.entry != pLast && info.column == 0)
+            return CallbackResult::Stop;
+        pLast = &info.entry;
+        return CallbackResult::Continue;
+    };
+    IterateVisibleEntryAreas(FindLast, true);
+
+    GetIconView().TopRowScrolled(*pLast);
+}
+
 void IconViewImpl::ScrollTo(SvTreeListEntry& rEntry)
 {
     if (!m_aVerSBar->IsVisible())
@@ -186,6 +206,7 @@ void IconViewImpl::CursorUp()
     SetStartEntry(pPrevFirstToDraw);
     ShowCursor( true );
     m_pView->NotifyScrolled();
+    NotifyTopRowScrolled();
 }
 
 void IconViewImpl::CursorDown()
@@ -200,6 +221,7 @@ void IconViewImpl::CursorDown()
     SetStartEntry(pNextFirstToDraw);
     ShowCursor( true );
     m_pView->NotifyScrolled();
+    NotifyTopRowScrolled();
 }
 
 void IconViewImpl::PageDown( sal_uInt16 nDelta )
@@ -218,6 +240,7 @@ void IconViewImpl::PageDown( sal_uInt16 nDelta )
     SetStartEntry(pNext);
 
     ShowCursor( true );
+    NotifyTopRowScrolled();
 }
 
 void IconViewImpl::PageUp( sal_uInt16 nDelta )
@@ -236,6 +259,7 @@ void IconViewImpl::PageUp( sal_uInt16 nDelta )
     SetStartEntry(pPrev);
 
     ShowCursor( true );
+    NotifyTopRowScrolled();
 }
 
 void IconViewImpl::KeyDown( bool bPageDown )

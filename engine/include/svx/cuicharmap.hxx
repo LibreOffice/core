@@ -184,6 +184,7 @@ private:
     DECL_DLLPRIVATE_LINK(UpdateFavHdl, SfxCharmapContainer::CharChange*, void);
     DECL_DLLPRIVATE_LINK(UpdateRecentHdl, SfxCharmapContainer::CharChange*, void);
     DECL_DLLPRIVATE_LINK(ShowSetScrollHdl, weld::ScrolledWindow&, void);
+    DECL_DLLPRIVATE_LINK(ShowSetTopRowScrolledHdl, int, void);
     DECL_DLLPRIVATE_LINK(ShowRenderIdleHdl, void*, void);
     DECL_DLLPRIVATE_LINK(SearchSetScrollHdl, weld::ScrolledWindow&, void);
     DECL_DLLPRIVATE_LINK(SearchRenderIdleHdl, void*, void);

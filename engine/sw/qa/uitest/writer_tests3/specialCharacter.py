@@ -32,6 +32,21 @@ class specialCharacter(UITestCase):
                 # Without the fix in place, no font would be selected
                 self.assertEqual(get_state_as_dict(xComboFont)["Text"], fontName)
 
+    def test_subset_follows_scroll(self):
+        with self.ui_test.create_doc_in_start_center("writer"):
+
+            with self.ui_test.execute_dialog_through_command(".uno:InsertSymbol", close_button="cancel") as xDialog:
+                xSubset = xDialog.getChild("subsetlb")
+                xCharSet = xDialog.getChild("showcharset")
+                firstBlock = get_state_as_dict(xSubset)["SelectEntryText"]
+
+                xCharSet.executeAction("SCROLL", mkPropertyValues({"LINES": "40"}))
+                # Without the fix in place, the block would stay the first one
+                self.assertNotEqual(get_state_as_dict(xSubset)["SelectEntryText"], firstBlock)
+
+                xCharSet.executeAction("SCROLL", mkPropertyValues({"LINES": "-1000"}))
+                self.assertEqual(get_state_as_dict(xSubset)["SelectEntryText"], firstBlock)
+
     def test_special_character(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 

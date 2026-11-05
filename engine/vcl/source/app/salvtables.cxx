@@ -5364,6 +5364,19 @@ void SalInstanceIconView::connect_get_image(
     m_xIconView->SetDumpImageHdl(LINK(this, SalInstanceIconView, DumpImageHdl));
 }
 
+void SalInstanceIconView::connect_top_row_scrolled(const Link<int, void>& rLink)
+{
+    weld::IconView::connect_top_row_scrolled(rLink);
+    m_xIconView->SetTopRowScrolledHdl(rLink.IsSet()
+                                          ? LINK(this, SalInstanceIconView, TopRowScrolledHdl)
+                                          : Link<const SvTreeListEntry&, void>());
+}
+
+IMPL_LINK(SalInstanceIconView, TopRowScrolledHdl, const SvTreeListEntry&, rLastInRow, void)
+{
+    signal_top_row_scrolled(m_xIconView->GetAbsPos(&rLastInRow));
+}
+
 OUString SalInstanceIconView::get_selected_id() const
 {
     assert(m_xIconView->IsUpdateMode() && "don't request selection when frozen");
@@ -5610,6 +5623,7 @@ SalInstanceIconView::~SalInstanceIconView()
     m_xIconView->SetPopupMenuHdl(Link<const CommandEvent&, bool>());
     m_xIconView->SetTooltipHdl(Link<SvTreeListEntry*, OUString>());
     m_xIconView->SetDumpImageHdl(Link<const ::IconView::encoded_image_query&, bool>());
+    m_xIconView->SetTopRowScrolledHdl(Link<const SvTreeListEntry&, void>());
 
     for (SvTreeListEntry* pEntry = m_xIconView->First(); pEntry; pEntry = m_xIconView->Next(pEntry))
         pEntry->SetUserData(nullptr);

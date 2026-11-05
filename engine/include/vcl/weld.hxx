@@ -1715,12 +1715,20 @@ protected:
     Link<const CommandEvent&, bool> m_aCommandHdl;
     Link<const TreeIter&, OUString> m_aQueryTooltipHdl;
     Link<const encoded_image_query&, bool> m_aGetPropertyTreeElemHdl;
+    Link<int, void> m_aTopRowScrolledHdl;
 
     void signal_selection_changed()
     {
         if (notify_events_disabled())
             return;
         m_aSelectionChangeHdl.Call(*this);
+    }
+
+    void signal_top_row_scrolled(int nLastPos)
+    {
+        if (notify_events_disabled())
+            return;
+        m_aTopRowScrolledHdl.Call(nLastPos);
     }
 
     bool signal_item_activated()
@@ -1808,6 +1816,15 @@ public:
     virtual void connect_get_image(const Link<const encoded_image_query&, bool>& rLink)
     {
         m_aGetPropertyTreeElemHdl = rLink;
+    }
+
+    /* Called when the user has scrolled a different row to the top of the view, with the
+       position of the last entry in that row. Scrolling that only follows the selection
+       is not reported. Not reported under gtk4.
+    */
+    virtual void connect_top_row_scrolled(const Link<int, void>& rLink)
+    {
+        m_aTopRowScrolledHdl = rLink;
     }
 
     virtual OUString get_selected_id() const = 0;

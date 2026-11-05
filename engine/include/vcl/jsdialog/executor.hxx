@@ -44,6 +44,11 @@ public:
 
     static void trigger_changed(weld::IconView& rIconView) { rIconView.signal_selection_changed(); }
 
+    static void trigger_top_row_scrolled(weld::IconView& rIconView, int nLastPos)
+    {
+        rIconView.signal_top_row_scrolled(nLastPos);
+    }
+
     static void trigger_scrollv(weld::ScrolledWindow& rScrolledWindow)
     {
         rScrolledWindow.signal_vadjustment_value_changed();

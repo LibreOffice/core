@@ -620,6 +620,7 @@ interface IconViewJSON extends WidgetJSON {
 	singleclickactivate: boolean; // activates element on single click instead of just selection
 	textWithIconEnabled: boolean; // To identify if we should add text below the icon or not.
 	selectionmode: string; // single or multiple
+	notifytoprowscrolled?: boolean; // report the row the user scrolls to the top
 }
 
 interface IconViewListJSON extends WidgetJSON {
@@ -637,6 +638,10 @@ interface IconViewElement extends HTMLElement {
 	) => void;
 
 	updateRenders: (pos: number) => void;
+
+	// Set when the view reports the row scrolled to the top, and called when it
+	// scrolls by itself to show the selection.
+	scrolledBySelection?: () => void;
 
 	updateRendersImpl: (pos: number, id: string, where: HTMLElement) => void;
 
