@@ -198,6 +198,26 @@ CPPUNIT_TEST_FIXTURE(ThemeTest, testEffectStylesRoundtrip)
     assertXPath(pXmlDoc, aStyle + "[3]/a:effectLst/a:glow/a:schemeClr", "val", u"accent2");
 }
 
+CPPUNIT_TEST_FIXTURE(ThemeTest, testConnectorWithoutEffectsStatesAnEmptyList)
+{
+    // A connector pointing at an effect style of the theme while holding no effects of its own
+    // states an empty list, and that is what keeps the shadow of the style off it.
+    createSdImpressDoc("ConnectorEffectList.pptx");
+
+    save(TestFilter::PPTX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Without the fix: a connector wrote no effect list at all, so a reader gave it the shadow
+    // of the style and the document came back with a shadow it does not ask for.
+    static constexpr OString aConnector("/p:sld/p:cSld/p:spTree/p:cxnSp"_ostr);
+    assertXPath(pXmlDoc, aConnector + "/p:spPr/a:effectLst");
+    assertXPathChildren(pXmlDoc, aConnector + "/p:spPr/a:effectLst", 0);
+
+    // The style it points at is still named.
+    assertXPath(pXmlDoc, aConnector + "/p:style/a:effectRef", "idx", u"2");
+}
+
 CPPUNIT_TEST_FIXTURE(ThemeTest, testExplicitShapeColorsRoundtrip)
 {
     // A plain shape colour survives a round trip, and so does one that names a theme colour.

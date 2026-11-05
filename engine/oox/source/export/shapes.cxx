@@ -2106,6 +2106,9 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
     Reference< XPropertySet > xShapeProps( xShape, UNO_QUERY );
     if( xShapeProps.is() )
         WriteOutline( xShapeProps );
+    // A connector states its effects the same way every other shape does. A connector without
+    // any states an empty list, which is what keeps it from taking the effects of its style.
+    WriteShapeEffects( rXPropSet );
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
     // A connector carries the style that names the theme its colors come from, the same way
