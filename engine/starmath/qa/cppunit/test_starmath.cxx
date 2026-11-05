@@ -17,6 +17,7 @@
 #include <smdll.hxx>
 #include <document.hxx>
 #include <view.hxx>
+#include <dialog.hxx>
 
 #include <tmpdevice.hxx>
 
@@ -67,6 +68,7 @@ public:
 
     void replacePlaceholder();
     void viewZoom();
+    void testFontDialogAttrFrame();
 
 #if HAVE_MORE_FONTS
     void testSmTmpDeviceRestoreFont();
@@ -91,6 +93,7 @@ public:
     CPPUNIT_TEST(ParseErrorDoubleSubsupscript);
     CPPUNIT_TEST(replacePlaceholder);
     CPPUNIT_TEST(viewZoom);
+    CPPUNIT_TEST(testFontDialogAttrFrame);
 #if HAVE_MORE_FONTS
     CPPUNIT_TEST(testSmTmpDeviceRestoreFont);
 #endif
@@ -174,6 +177,19 @@ void Test::testSmTmpDeviceRestoreFont()
     CPPUNIT_ASSERT_EQUAL(COL_RED, pPrinter->GetTextColor());
 }
 #endif
+
+void Test::testFontDialogAttrFrame()
+{
+    // Without the fix in place, this test would have failed with:
+    // Assertion `!dynamic_cast<VclFrame*>(pWidget) && "a frame needs weld_frame, not weld_widget"' failed.
+    // when the dialog welded its "attrframe" GtkFrame as a plain widget.
+    OutputDevice* pDevice = Application::GetDefaultDevice();
+    for (bool bHideCheckboxes : { false, true })
+    {
+        SmFontDialog aDialog(nullptr, pDevice, bHideCheckboxes);
+        CPPUNIT_ASSERT(aDialog.getDialog());
+    }
+}
 
 void Test::editMarker()
 {

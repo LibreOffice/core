@@ -94,7 +94,7 @@ class SmFontDialog : public weld::GenericDialogController
     vcl::Font maFont;
     SmShowFont m_aShowFont;
     std::unique_ptr<weld::EntryTreeView> m_xFontBox;
-    std::unique_ptr<weld::Widget> m_xAttrFrame;
+    std::unique_ptr<weld::Frame> m_xAttrFrame;
     std::unique_ptr<weld::CheckButton> m_xBoldCheckBox;
     std::unique_ptr<weld::CheckButton> m_xItalicCheckBox;
     std::unique_ptr<weld::CustomWeld> m_xShowFont;
