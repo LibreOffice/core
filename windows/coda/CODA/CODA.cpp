@@ -5354,6 +5354,20 @@ static void putCodaPageIn(int accountTabId, ICoreWebView2Frame* frame, const std
     LOG_DBG("Putting CODA's editor page into the editor frame");
 }
 
+// Engine output and replies go to editorFrame, so it is forgotten once the
+// iframe loads another page or goes away.
+static void forgetEditorFrame(int accountTabId, ICoreWebView2Frame* frame)
+{
+    DocumentTab* account = findTab(accountTabId);
+    if (!account)
+        return;
+    if (!isEditorFrame(*account, frame))
+        return;
+
+    LOG_DBG("The editor frame left CODA's editor page");
+    account->editorFrame = nullptr;
+}
+
 // WebView2 does not say which frame a request is for. So each frame reports where it navigates,
 // and gets CODA's page once it has loaded the address the kept form was posted to.
 static void watchAccountFrame(int accountTabId, ICoreWebView2Frame* created)
@@ -5369,12 +5383,13 @@ static void watchAccountFrame(int accountTabId, ICoreWebView2Frame* created)
     EventRegistrationToken token;
     frame->add_NavigationStarting(
         Microsoft::WRL::Callback<ICoreWebView2FrameNavigationStartingEventHandler>(
-            [address](ICoreWebView2Frame*, ICoreWebView2NavigationStartingEventArgs* args)
-                -> HRESULT
+            [accountTabId, address](ICoreWebView2Frame* sender,
+                                    ICoreWebView2NavigationStartingEventArgs* args) -> HRESULT
             {
                 wil::unique_cotaskmem_string uri;
                 args->get_Uri(&uri);
                 *address = Util::wide_string_to_string(uri.get());
+                forgetEditorFrame(accountTabId, sender);
                 return S_OK;
             })
             .Get(),
@@ -5386,6 +5401,16 @@ static void watchAccountFrame(int accountTabId, ICoreWebView2Frame* created)
                                     ICoreWebView2NavigationCompletedEventArgs*) -> HRESULT
             {
                 putCodaPageIn(accountTabId, sender, *address);
+                return S_OK;
+            })
+            .Get(),
+        &token);
+
+    frame->add_Destroyed(
+        Microsoft::WRL::Callback<ICoreWebView2FrameDestroyedEventHandler>(
+            [accountTabId](ICoreWebView2Frame* sender, IUnknown*) -> HRESULT
+            {
+                forgetEditorFrame(accountTabId, sender);
                 return S_OK;
             })
             .Get(),
