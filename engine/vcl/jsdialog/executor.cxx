@@ -503,6 +503,13 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
         }
         else if (sControlType == "spinfield")
         {
+            // leaving the field, which takes its value where the dialog waits for that
+            if (sAction == "focus_out")
+            {
+                KitTrigger::trigger_focus_out(*pWidget);
+                return true;
+            }
+
             auto pSpinField = dynamic_cast<weld::SpinButton*>(pWidget);
             if (pSpinField)
             {
@@ -596,6 +603,12 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
                 if (sAction == "activate")
                 {
                     KitTrigger::trigger_activated(*pEdit);
+                    return true;
+                }
+                // leaving the field, which takes its value where the dialog waits for that
+                if (sAction == "focus_out")
+                {
+                    KitTrigger::trigger_focus_out(*pEdit);
                     return true;
                 }
             }

@@ -185,7 +185,7 @@ JSDialog.baseSpinField = function (
 	parentContainer: HTMLElement,
 	data: any,
 	builder: JSBuilder,
-	_customCallback: JSDialogCallback,
+	customCallback?: JSDialogCallback,
 ): SpinFieldControls {
 	const div: SpinFieldContainer = window.L.DomUtil.create(
 		'div',
@@ -341,6 +341,12 @@ JSDialog.baseSpinField = function (
 			);
 			spinfield.dispatchEvent(new Event('change'));
 		}
+	});
+
+	// leaving the field is told to the engine, where a dialog may take the value then
+	spinfield.addEventListener('blur', function () {
+		if (customCallback || div.hasAttribute('disabled')) return;
+		builder.callback('spinfield', 'focus_out', div, spinfield.value, builder);
 	});
 
 	const controls: SpinFieldControls = {

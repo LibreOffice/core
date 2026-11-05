@@ -140,9 +140,22 @@ class EditWidget {
 		e.stopPropagation();
 	}
 
+	// leaving the field is told to the engine, where a dialog may take the value then
+	protected onBlur() {
+		if (this.callback) return;
+		this.builder.callback(
+			'edit',
+			'focus_out',
+			this.edit.container,
+			this.edit.input.value,
+			this.builder,
+		);
+	}
+
 	protected setupEventListeners() {
 		this.edit.input.addEventListener('keyup', this.onKeyUp.bind(this));
 		this.edit.input.addEventListener('click', this.onClick.bind(this));
+		this.edit.input.addEventListener('blur', this.onBlur.bind(this));
 	}
 
 	public build(): boolean {

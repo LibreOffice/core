@@ -129,6 +129,13 @@ namespace pcr
         notifyModifiedValue();
     }
 
+    // return in a text field takes its value as leaving the field does
+    IMPL_LINK_NOARG( CommonBehaviourControlHelper, ActivateHdl, weld::Entry&, bool )
+    {
+        notifyModifiedValue();
+        return false;
+    }
+
 } // namespace pcr
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

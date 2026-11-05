@@ -113,6 +113,7 @@ namespace pcr
         {
             OEditControl_Base::SetModifyHandler();
             getTypedControlWindow()->connect_changed( LINK( this, CommonBehaviourControlHelper, EditModifiedHdl ) );
+            getTypedControlWindow()->connect_activate( LINK( this, CommonBehaviourControlHelper, ActivateHdl ) );
         }
 
     private:
@@ -392,6 +393,7 @@ namespace pcr
             m_xButton->connect_focus_out( LINK( this, CommonBehaviourControlHelper, LoseFocusHdl ) );
 
             m_xEntry->connect_changed( LINK( this, CommonBehaviourControlHelper, EditModifiedHdl ) );
+            m_xEntry->connect_activate( LINK( this, CommonBehaviourControlHelper, ActivateHdl ) );
             m_xTextView->connect_changed( LINK( this, OMultilineEditControl, TextViewModifiedHdl ) );
         }
 

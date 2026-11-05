@@ -93,6 +93,7 @@ namespace pcr
         DECL_LINK( DateModifiedHdl, SvtCalendarBox&, void );
         DECL_LINK( GetFocusHdl, weld::Widget&, void );
         DECL_LINK( LoseFocusHdl, weld::Widget&, void );
+        DECL_LINK( ActivateHdl, weld::Entry&, bool );
     };
 
 
