@@ -71,7 +71,6 @@ enum class BrowserMode
     NO_VSCROLL           = 0x008000,
 
     HEADERBAR_NEW        = 0x040000,
-    AUTOSIZE_LASTCOL     = 0x080000,
 
     CURSOR_WO_FOCUS      = 0x200000,
     // Allows a cursor which is shown even if the control does not have the focus. This does not affect other
@@ -80,7 +79,7 @@ enum class BrowserMode
 };
 namespace o3tl
 {
-    template<> struct typed_flags<BrowserMode> : is_typed_flags<BrowserMode, 0x2cf73b> {};
+    template<> struct typed_flags<BrowserMode> : is_typed_flags<BrowserMode, 0x24f73b> {};
 }
 
 enum class BrowserDispatchId
@@ -157,7 +156,6 @@ public:
     bool            bAutoHScroll;   // autohide horizontaler Scrollbar
     bool            bAutoVScroll;   // autohide horizontaler Scrollbar
     bool            bUpdateMode;    // not SV-UpdateMode because of Invalidate()
-    bool            bAutoSizeLastCol; // last column always fills up window
     bool            bResizeOnPaint;   // outstanding resize-event
     bool            bUpdateOnUnlock;  // Update() while locked
     bool            bInUpdateScrollbars;  // prevents recursions
@@ -352,7 +350,6 @@ private:
     SVT_DLLPRIVATE void            ToggleSelection();
 
     SVT_DLLPRIVATE void            UpdateScrollbars();
-    SVT_DLLPRIVATE void            AutoSizeLastColumn();
 
     SVT_DLLPRIVATE tools::Long            ImpGetDataRowHeight() const;
     SVT_DLLPRIVATE tools::Rectangle       ImplFieldRectPixel( sal_Int32 nRow, sal_uInt16 nColId ) const;

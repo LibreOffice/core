@@ -587,11 +587,8 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, tools::Long nWidth )
     {
         if ( IsVisible() )
         {
-            tools::Long nMaxWidth = pDataWin->GetSizePixel().Width();
-            nMaxWidth -= pDataWin->bAutoSizeLastCol
-                ? GetFieldRect(nItemId).Left()
-                : GetFrozenWidth();
-            if ( pDataWin->bAutoSizeLastCol || nWidth > nMaxWidth )
+            tools::Long nMaxWidth = pDataWin->GetSizePixel().Width() - GetFrozenWidth();
+            if ( nWidth > nMaxWidth )
             {
                 nWidth = nMaxWidth > 16 ? nMaxWidth : nOldWidth;
             }
@@ -676,22 +673,6 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, tools::Long nWidth )
     if ( pDataWin->pHeaderBar )
         pDataWin->pHeaderBar->SetItemSize(
                 nItemId ? nItemId : USHRT_MAX - 1, nWidth );
-
-    // adjust last column
-    if ( nItemPos != mvCols.size() - 1 )
-        AutoSizeLastColumn();
-}
-
-
-void BrowseBox::AutoSizeLastColumn()
-{
-    if ( pDataWin->bAutoSizeLastCol &&
-         pDataWin->GetUpdateMode() )
-    {
-        sal_uInt16 nId = GetColumnId( static_cast<sal_uInt16>(mvCols.size()) - 1 );
-        SetColumnWidth( nId, LONG_MAX );
-        ColumnResized( nId );
-    }
 }
 
 
@@ -746,8 +727,6 @@ void BrowseBox::RemoveColumn( sal_uInt16 nItemId )
     {
         pDataWin->Invalidate();
         Control::Invalidate();
-        if ( pDataWin->bAutoSizeLastCol && nPos ==ColCount() )
-            SetColumnWidth( GetColumnId( nPos - 1 ), LONG_MAX );
     }
 
     if ( !isAccessibleAlive() )
@@ -1220,7 +1199,6 @@ void BrowseBox::RowInserted( sal_Int32 nRow, sal_Int32 nNumRows, bool bDoPaint, 
     if ( bDoPaint )
     {
         UpdateScrollbars();
-        AutoSizeLastColumn();
     }
 
     DoShowCursor();
@@ -1361,7 +1339,6 @@ void BrowseBox::RowRemoved( sal_Int32 nRow, sal_Int32 nNumRows, bool bDoPaint )
 
         // adjust the vertical scrollbar
         UpdateScrollbars();
-        AutoSizeLastColumn();
     }
 
     if ( isAccessibleAlive() )
@@ -2194,9 +2171,6 @@ void BrowseBox::SetMode( BrowserMode nMode )
     pVScroll->SetLineSize( 1 );
     pVScroll->SetPageSize(1);
     pVScroll->SetScrollHdl( LINK( this, BrowseBox, VertScrollHdl ) );
-
-    pDataWin->bAutoSizeLastCol =
-            BrowserMode::AUTOSIZE_LASTCOL == ( nMode & BrowserMode::AUTOSIZE_LASTCOL );
 
     // create a headerbar. what happens, if a headerbar has to be created and
     // there already are columns?

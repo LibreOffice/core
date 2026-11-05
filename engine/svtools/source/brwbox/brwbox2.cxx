@@ -134,7 +134,6 @@ void BrowseBox::StateChanged( StateChangedType nStateChange )
             bHasFocus = true;
         }
         UpdateScrollbars();
-        AutoSizeLastColumn();
         CursorMoved();
     }
     else if (StateChangedType::Zoom == nStateChange)
@@ -224,7 +223,6 @@ void BrowseBox::StartScroll()
 void BrowseBox::EndScroll()
 {
     UpdateScrollbars();
-    AutoSizeLastColumn();
     DoShowCursor();
 }
 
@@ -540,7 +538,6 @@ void BrowseBox::Resize()
         pHeaderBar->SetPosSizePixel( Point( nOfsX, 0 ), Size( GetOutputSizePixel().Width() - nOfsX, GetTitleHeight() ) );
     }
 
-    AutoSizeLastColumn(); // adjust last column width
     DoShowCursor();
 }
 
@@ -1232,10 +1229,7 @@ void BrowseBox::SetUpdateMode( bool bUpdate )
     if ( bUpdate )
     {
         if ( bBootstrapped )
-        {
             UpdateScrollbars();
-            AutoSizeLastColumn();
-        }
         DoShowCursor();
     }
     else
