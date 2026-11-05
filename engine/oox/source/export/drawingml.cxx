@@ -7361,19 +7361,19 @@ void lcl_CollectArcTokens(
             default:
                 break;
         }
+        const bool bArc
+            = rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::ARCANGLETO
+              || rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO
+              || rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE
+              || rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::ARCTO
+              || rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::ARC
+              || rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO
+              || rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC;
         for (sal_Int32 k = 0; k < rSegment.Count; ++k, nPairIndex += nPairsPerCommand)
         {
             if (nPairIndex + nPairsPerCommand > rPairs.getLength())
                 break;
             const drawing::EnhancedCustomShapeParameterPair* pPair = &rPairs[nPairIndex];
-            const bool bArc
-                = rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::ARCANGLETO
-                  || rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO
-                  || rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE
-                  || rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::ARCTO
-                  || rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::ARC
-                  || rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO
-                  || rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC;
             if (!bArc)
                 continue;
             // an arc of plain numbers stays as it is, unless the path is in the extent
