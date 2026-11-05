@@ -507,7 +507,8 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         decideFrameNavigation(navigationAction, decisionHandler: decisionHandler)
     }
 
-    // The account window stays on the integrator's site. Anything that would leave it is refused.
+    // The account window stays on the integrator's site. A link the user clicks to another site
+    // opens in the browser, and anything else that would leave the site is refused.
     private func decideMainFrameNavigation(_ navigationAction: WKNavigationAction,
                                            decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         guard let url = navigationAction.request.url else {
@@ -522,7 +523,21 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         }
 
         decisionHandler(.cancel)
+        if navigationAction.navigationType == .linkActivated {
+            Self.openInBrowser(url)
+            return
+        }
+
         COWrapper.LOG_ERR("The account window was kept from going to \(targetOrigin ?? "a page with no origin")")
+    }
+
+    private static func openInBrowser(_ url: URL) {
+        guard url.scheme == "http" || url.scheme == "https" else {
+            COWrapper.LOG_ERR("A link was not opened: URL scheme \(url.scheme ?? "none") not supported")
+            return
+        }
+
+        NSWorkspace.shared.open(url)
     }
 
     // The integrator opens a document by posting a form with the token and settings into the
