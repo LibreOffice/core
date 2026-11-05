@@ -109,6 +109,7 @@ bool prefixEqual(const unsigned char* pA, const unsigned char* pB, int nPrefixLe
 static std::regex g_AllowedHostsRegex("");
 static std::vector<IpNetwork> g_AllowedNetworks;
 static OUString g_ExceptVerifyHost;
+static OUString g_DocumentHost;
 static bool g_AllowedHostsSet = false;
 static bool g_AllowlistConfigured = false;
 static bool g_AllowedHostsExemptVerifyHost = false;
@@ -165,6 +166,8 @@ void HostFilter::setAllowedHostsExemptVerifyHost(bool allowedHostsExemptVerifyHo
     g_AllowedHostsExemptVerifyHost = allowedHostsExemptVerifyHost;
 }
 
+void HostFilter::setDocumentHost(const OUString& rDocumentHost) { g_DocumentHost = rDocumentHost; }
+
 static bool isAllowedHost(const OString& rHost)
 {
     if (g_AllowedHostsSet && std::regex_match(rHost.getStr(), g_AllowedHostsRegex))
@@ -190,6 +193,9 @@ static bool isAllowedHost(const OString& rHost)
 bool HostFilter::isForbidden(const OUString& rHost)
 {
     if (!g_AllowlistConfigured)
+        return false;
+
+    if (!g_DocumentHost.isEmpty() && rHost.equalsIgnoreAsciiCase(g_DocumentHost))
         return false;
 
     return !isAllowedHost(rHost.toUtf8());

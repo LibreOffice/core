@@ -28,6 +28,10 @@ public:
 
     static void setAllowedHostsExemptVerifyHost(bool allowedHostExceptVerifyHost);
 
+    /// The host name of the server the document was loaded from. When an allowlist is set, this
+    /// host is allowed as well, compared without regard to ASCII case. Empty means no such host.
+    static void setDocumentHost(const OUString& rDocumentHost);
+
     /// Return true when a host allowlist is configured and rHost is neither
     /// matched by a regular expression nor inside an allowed network.
     static bool isForbidden(const OUString& rHost);

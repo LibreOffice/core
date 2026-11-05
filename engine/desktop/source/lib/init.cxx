@@ -2968,6 +2968,9 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
         if (const char* pExemptVerifyHost = ::getenv("KIT_EXEMPT_VERIFY_HOST"))
             HostFilter::setExemptVerifyHost(OUString(pExemptVerifyHost, strlen(pExemptVerifyHost), RTL_TEXTENCODING_UTF8));
 
+        if (const char* pDocumentHost = ::getenv("KIT_DOCUMENT_HOST"))
+            HostFilter::setDocumentHost(OUString::fromUtf8(pDocumentHost));
+
         const int nThisDocumentId = nDocumentIdCounter++;
         comphelper::COKit::setDocId(ViewShellDocId(nThisDocumentId));
         std::optional<comphelper::COKit::SuppressDialogsLoadGuard> oSuppressDialogsGuard;

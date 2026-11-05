@@ -2539,13 +2539,17 @@ std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession
 
     if (!Util::isMobileApp())
     {
-        // if ssl client verification was disabled in online for the wopi server,
-        // and this is a https connection then also exempt that host from ssl host
-        // verification in 'core'
-        if (session->isDisableVerifyHost())
+        std::string scheme, host, port;
+        if (net::parseUri(session->getDocURL(), scheme, host, port) &&
+            (scheme == "https://" || scheme == "http://"))
         {
-            std::string scheme, host, port;
-            if (net::parseUri(session->getDocURL(), scheme, host, port) && scheme == "https://")
+            // The document's own storage server is a data source for the engine.
+            ::setenv("KIT_DOCUMENT_HOST", host.c_str(), 1);
+
+            // if ssl client verification was disabled in online for the wopi server,
+            // and this is a https connection then also exempt that host from ssl host
+            // verification in 'core'
+            if (session->isDisableVerifyHost() && scheme == "https://")
                 ::setenv("KIT_EXEMPT_VERIFY_HOST", host.c_str(), 1);
         }
     }
