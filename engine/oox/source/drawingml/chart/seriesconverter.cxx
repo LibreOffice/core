@@ -369,7 +369,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
             std::optional< OUString > oaCellRange;
             if (mrModel.mobShowDataLabelsRange.value_or(false))
             {
-                const DataSourceModel* pLabelSource = mrModel.mrParent.mpLabelsSource;
+                const DataSourceModel* pLabelSource = mrModel.mrParent.mxLabelsSource.get();
                 if (pLabelSource && pLabelSource->mxDataSeq.is())
                 {
                     oaCellRange = pLabelSource->mxDataSeq->maFormula;
