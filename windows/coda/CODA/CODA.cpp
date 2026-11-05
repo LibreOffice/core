@@ -147,8 +147,13 @@ struct DocumentTab
     wil::com_ptr<ICoreWebView2Controller> webViewController;
     wil::com_ptr<ICoreWebView2> webView;
     std::thread app2js;
+    // The origin of the address an account window was opened with, empty in any other window.
+    std::string accountOrigin;
     std::string editorForm;
     std::string editorFormUrl;
+    // The form's Origin header named the integrator. Nextcloud's says "null" (Referrer-Policy:
+    // no-referrer), so then only a fresh frame takes the form: see putCodaPageIn.
+    bool isEditorFormPosterKnown = false;
     std::set<std::string> editorOrigins;
     // The frame of an account window that shows CODA's editor
     // page, null in any other window.
@@ -5108,11 +5113,59 @@ static std::wstring bundledContentType(const std::string& name)
     return known->second;
 }
 
+// A web address (http or https) with a host, which Poco::URI can parse.
+static bool isValidURI(const std::string& address)
+{
+    try
+    {
+        const Poco::URI uri(address);
+        return (uri.getScheme() == "https" || uri.getScheme() == "http") &&
+               !uri.getHost().empty();
+    }
+    catch (const Poco::SyntaxException&)
+    {
+        return false;
+    }
+}
+
 // The port is always written, so two addresses of one origin give the same text.
 static std::string originOf(const Poco::URI& uri)
 {
     return uri.getScheme() + "://" + Util::toLower(uri.getHost()) + ':' +
            std::to_string(uri.getPort());
+}
+
+static std::string originOf(const wchar_t* address)
+{
+    try
+    {
+        return originOf(Poco::URI(Util::wide_string_to_string(address)));
+    }
+    catch (const Poco::SyntaxException&)
+    {
+        return std::string();
+    }
+}
+
+static std::string posterOf(ICoreWebView2WebResourceRequest* request)
+{
+    wil::com_ptr<ICoreWebView2HttpRequestHeaders> headers;
+    wil::unique_cotaskmem_string poster;
+    request->get_Headers(&headers);
+
+    if (!headers || FAILED(headers->GetHeader(L"Origin", &poster)))
+    {
+        LOG_DBG("The form has no Origin header");
+        return std::string();
+    }
+
+    if (std::wstring_view(poster.get()) == L"null")
+    {
+        LOG_DBG("The form's Origin header is null");
+        return std::string();
+    }
+
+    return originOf(poster.get());
 }
 
 // The integrator opens a document by posting a form with the token and settings into the iframe
@@ -5153,6 +5206,7 @@ static void keepEditorForm(DocumentTab& account, ICoreWebView2WebResourceRequest
 
     account.editorForm = std::move(form);
     account.editorFormUrl = url;
+    account.isEditorFormPosterKnown = !posterOf(request).empty();
     LOG_DBG("Kept the " << account.editorForm.size() << "-byte form posted into an editor frame");
 }
 
@@ -5228,6 +5282,31 @@ static void serveBundledFile(const DocumentTab& account,
     args->put_Response(response.get());
 }
 
+// We keep an editor form only while the window shows the account address the
+// user entered in the backstage view, and only when a page on that address
+// posted it. When the browser does not say who posted it, we check that the
+// frame it goes into is a fresh one: see putCodaPageIn.
+static bool isPostedByIntegrator(const DocumentTab& account,
+                                 ICoreWebView2WebResourceRequest* request)
+{
+    wil::unique_cotaskmem_string mainAddress;
+    account.webView->get_Source(&mainAddress);
+    if (originOf(mainAddress.get()) != account.accountOrigin)
+    {
+        LOG_WRN("No form was kept: the account window does not show the integrator's page");
+        return false;
+    }
+
+    const std::string poster = posterOf(request);
+    if (!poster.empty() && poster != account.accountOrigin)
+    {
+        LOG_WRN("No form was kept: a page other than the integrator's posted it");
+        return false;
+    }
+
+    return true;
+}
+
 // WebView2 calls this for every request that matches one of the account window's filters.
 static void handleAccountRequest(int accountTabId, ICoreWebView2WebResourceRequestedEventArgs* args)
 {
@@ -5257,7 +5336,9 @@ static void handleAccountRequest(int accountTabId, ICoreWebView2WebResourceReque
 
     if (isDocument && isEditorPage && isPost)
     {
-        account->editorOrigins.insert(originOf(uri));
+        if (!isPostedByIntegrator(*account, request.get()))
+            return;
+
         keepEditorForm(*account, request.get(), url);
     }
     else if (isBundledFile && isGet)
@@ -5322,7 +5403,8 @@ static void handleEditorFrameMessage(int accountTabId, ICoreWebView2Frame* sende
     processMessage(*account, message);
 }
 
-static void putCodaPageIn(int accountTabId, ICoreWebView2Frame* frame, const std::string& address)
+static void putCodaPageIn(int accountTabId, ICoreWebView2Frame* frame, const std::string& address,
+                          bool isFreshFrame)
 {
     DocumentTab* account = findTab(accountTabId);
     if (!account)
@@ -5333,6 +5415,17 @@ static void putCodaPageIn(int accountTabId, ICoreWebView2Frame* frame, const std
 
     if (account->editorForm.empty() || address != account->editorFormUrl)
         return;
+
+    // Only the page that made a frame can post into it while it is still blank. A page that goes
+    // blank later keeps its own origin. Only the main frame's direct children are watched (see
+    // FrameCreated), so a frame nested in another iframe never gets here.
+    if (!account->isEditorFormPosterKnown && !isFreshFrame)
+    {
+        LOG_WRN("The form was not used: another site's page posted it");
+        return;
+    }
+
+    account->editorOrigins.insert(originOf(Poco::URI(account->editorFormUrl)));
 
     wil::com_ptr<ICoreWebView2Frame2> frame2;
     if (FAILED(frame->QueryInterface(IID_PPV_ARGS(&frame2))))
@@ -5380,6 +5473,7 @@ static void watchAccountFrame(int accountTabId, ICoreWebView2Frame* created)
     }
 
     auto address = std::make_shared<std::string>();
+    auto isFreshFrame = std::make_shared<bool>(true);
     EventRegistrationToken token;
     frame->add_NavigationStarting(
         Microsoft::WRL::Callback<ICoreWebView2FrameNavigationStartingEventHandler>(
@@ -5397,10 +5491,13 @@ static void watchAccountFrame(int accountTabId, ICoreWebView2Frame* created)
 
     frame->add_NavigationCompleted(
         Microsoft::WRL::Callback<ICoreWebView2FrameNavigationCompletedEventHandler>(
-            [accountTabId, address](ICoreWebView2Frame* sender,
-                                    ICoreWebView2NavigationCompletedEventArgs*) -> HRESULT
+            [accountTabId, address, isFreshFrame](
+                ICoreWebView2Frame* sender, ICoreWebView2NavigationCompletedEventArgs*) -> HRESULT
             {
-                putCodaPageIn(accountTabId, sender, *address);
+                putCodaPageIn(accountTabId, sender, *address, *isFreshFrame);
+                // A frame is fresh until it loads something other than about:blank.
+                if (*address != "about:blank")
+                    *isFreshFrame = false;
                 return S_OK;
             })
             .Get(),
@@ -5430,6 +5527,12 @@ static void watchAccountFrame(int accountTabId, ICoreWebView2Frame* created)
 
 static void openAccountWindow(const std::string& url)
 {
+    if (!isValidURI(url))
+    {
+        LOG_WRN("Can't open a window, invalid address: " << url);
+        return;
+    }
+
     int width, height;
     defaultWindowSize(width, height);
     WindowState& window = createAppWindow(Util::string_to_wide_string(APP_NAME),
@@ -5437,6 +5540,7 @@ static void openAccountWindow(const std::string& url)
                                           width, height);
     DocumentTab& account = createTab(window, {}, DocumentMode::CLOUD_ACCOUNT);
     account.hasContent = true;
+    account.accountOrigin = originOf(Poco::URI(url));
     activateTab(window, account.tabId);
 
     const int accountTabId = account.tabId;
