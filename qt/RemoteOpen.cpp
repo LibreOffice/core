@@ -12,6 +12,7 @@
 #include <config.h>
 
 #include <qt/RemoteOpen.hpp>
+#include <common/EditorFrameMessages.hpp>
 #include <common/Log.hpp>
 #include <net/FakeSocket.hpp>
 #include <qt/CoolLocalSchemeHandler.hpp>
@@ -460,6 +461,9 @@ std::optional<QByteArray> CloudAccountPage::receiveMessage(const QUrl& origin, c
 
     if (kind == QStringLiteral("cool"))
     {
+        if (!EditorFrameMessages::isAllowed(whole.toStdString()))
+            return QByteArray();
+
         const QVariant reply = _bridge->cool(whole);
         return reply.isValid() ? reply.toString().toUtf8() : QByteArray();
     }
