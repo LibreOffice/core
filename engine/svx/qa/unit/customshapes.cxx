@@ -18,6 +18,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <editeng/unoprnms.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/intitem.hxx>
@@ -25,6 +26,8 @@
 #include <svx/EnhancedCustomShapeGeometry.hxx>
 #include <svx/EnhancedCustomShapeTypeNames.hxx>
 #include <svx/extrusionbar.hxx>
+#include <svx/chrtitem.hxx>
+#include <svx/sdasitm.hxx>
 #include <svx/graphichelper.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdogrp.hxx>
@@ -38,6 +41,10 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/BitmapReadAccess.hxx>
+#include <com/sun/star/awt/XDialog2.hpp>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
+#include <vcl/scheduler.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/propertysequence.hxx>
 
 #include <cppunit/TestAssert.h>
@@ -565,6 +572,61 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf141021ExtrusionNorth)
     // Verify height. Without the fix in place the height would 4001.
     tools::Rectangle aBoundRect(rSdrCustomShape.GetCurrentBoundRect());
     CPPUNIT_ASSERT_EQUAL(tools::Long(5895), aBoundRect.GetHeight());
+}
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testExtrusionDepthDialogOriginatingView)
+{
+    loadFromFile(u"tdf141021_ExtrusionNorth.odp");
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    auto& rShape = static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape));
+    SfxViewShell* pOrigin = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pOrigin);
+    const int nOriginId = pOrigin->GetViewShellId().get();
+    SdrView* pOriginDrawView = pOrigin->GetDrawView();
+    pOriginDrawView->MarkObj(&rShape, pOriginDrawView->GetSdrPageView());
+
+    // Another view of the same document has no selection.
+    const int nOtherId = KitHelper::createView();
+    CPPUNIT_ASSERT(nOtherId != nOriginId);
+    comphelper::ScopeGuard aRestoreView([nOriginId] { KitHelper::setView(nOriginId); });
+    SfxViewShell* pOther = KitHelper::getViewOfId(nOtherId);
+    CPPUNIT_ASSERT(pOther);
+    pOther->GetDrawView()->UnmarkAllObj();
+    KitHelper::setView(nOriginId);
+
+    SfxRequest aReq(pOrigin->GetViewFrame(), SID_EXTRUSION_DEPTH_DIALOG);
+    aReq.AppendItem(SvxDoubleItem(4321.0, SID_EXTRUSION_DEPTH));
+    aReq.AppendItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast<sal_uInt16>(FieldUnit::MM)));
+    const DialogCancelMode eCancelMode = Application::GetDialogCancelMode();
+    Application::SetDialogCancelMode(DialogCancelMode::Off);
+    comphelper::ScopeGuard aRestoreCancelMode([eCancelMode] {
+        Application::SetDialogCancelMode(eCancelMode);
+    });
+    svx::ExtrusionBar::execute(pOriginDrawView, aReq, pOrigin->GetViewFrame().GetBindings());
+    VclPtr<vcl::Window> xDialog;
+    for (tools::Long i = 0; i < Application::GetTopWindowCount(); ++i)
+    {
+        vcl::Window* pWindow = Application::GetTopWindow(i);
+        if (pWindow->GetHelpId().endsWith(u"/ExtrustionDepthDialog"))
+        {
+            xDialog = pWindow;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(xDialog);
+    uno::Reference<awt::XDialog2> xDialogPeer(xDialog->GetComponentInterface(), uno::UNO_QUERY_THROW);
+    comphelper::ScopeGuard aCloseDialog([&xDialogPeer] { xDialogPeer->endDialog(RET_CANCEL); });
+
+    // Confirming the dialog after switching views must still update the original selection.
+    KitHelper::setView(nOtherId);
+    xDialogPeer->endDialog(RET_OK);
+    aCloseDialog.dismiss();
+    Scheduler::ProcessEventsToIdle();
+    const SdrCustomShapeGeometryItem& rGeometry = rShape.GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
+    const uno::Any* pDepth = rGeometry.GetPropertyValueByName(u"Extrusion"_ustr, u"Depth"_ustr);
+    CPPUNIT_ASSERT(pDepth);
+    const auto aDepth = pDepth->get<drawing::EnhancedCustomShapeParameterPair>();
+    CPPUNIT_ASSERT_EQUAL(4321.0, aDepth.First.Value.get<double>());
 }
 
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testResizeRotatedShape)

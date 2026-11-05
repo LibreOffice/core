@@ -31,6 +31,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/xsflclit.hxx>
 #include <svx/dialmgr.hxx>
@@ -654,20 +655,30 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest const & rReq, SfxBindi
                 double fDepth = pDepthItem->GetValue();
                 FieldUnit eUnit = static_cast<FieldUnit>(pMetricItem->GetValue());
 
+                SfxDispatcher* pDispatcher = rBindings.GetDispatcher();
+                SfxViewFrame* pViewFrame = pDispatcher ? pDispatcher->GetFrame() : nullptr;
+                SfxViewShell* pViewShell = pViewFrame ? pViewFrame->GetViewShell() : nullptr;
+                if (!pViewShell)
+                    return;
+                const ViewShellId nViewShellId = pViewShell->GetViewShellId();
+
                 std::shared_ptr<ExtrusionDepthDialog> xDlg
                     = std::make_shared<ExtrusionDepthDialog>(rReq.GetFrameWeld(), fDepth, eUnit);
-                weld::DialogController::runAsync(xDlg, [xDlg](sal_Int32 nResult) {
+                weld::DialogController::runAsync(xDlg, [xDlg, nViewShellId](sal_Int32 nResult) {
                     if (nResult != RET_OK)
                         return;
 
-                    // the view that ran the command may be gone by now
-                    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-                    if (!pViewFrame)
+                    // Only the view that opened the dialog may receive its result.
+                    SfxViewShell* pTargetView = SfxViewShell::GetFirst(
+                        false, [nViewShellId](const SfxViewShell& rViewShell) {
+                            return rViewShell.GetViewShellId() == nViewShellId;
+                        });
+                    if (!pTargetView)
                         return;
 
                     SvxDoubleItem aItem(xDlg->getDepth(), SID_EXTRUSION_DEPTH);
                     const SfxPoolItem* aItems[] = { &aItem, nullptr };
-                    pViewFrame->GetBindings().Execute(SID_EXTRUSION_DEPTH, aItems);
+                    pTargetView->GetViewFrame().GetBindings().Execute(SID_EXTRUSION_DEPTH, aItems);
                 });
             }
             break;
