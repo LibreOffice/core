@@ -208,7 +208,7 @@ var _codaWireCollabNotifications = function() {
 				msg.user.name || msg.user.id,
 				msg.user.avatar);
 		} else if (msg.type === 'switch_to_collab') {
-			map._onSwitchToCollabRequest();
+			map._onSwitchToCollabRequest(msg.user ? msg.user.name || msg.user.id : '');
 		} else if (msg.type === 'saved_and_switching') {
 			map._onEditorSavedAndSwitching();
 		} else if (msg.type === 'user_left') {

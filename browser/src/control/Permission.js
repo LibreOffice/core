@@ -706,14 +706,22 @@ window.L.Map.include({
 			'savefailed-saveas');
 	},
 
-	// Another user wants to start collaborative editing.  Save
-	// local changes and switch to server mode.  If a dialog is
-	// already open (e.g., the edit choice dialog), do nothing -
-	// the user will make their own choice via the dialog buttons.
-	_onSwitchToCollabRequest: function () {
+	// Another user wants to start collaborative editing.  Ask
+	// whether to save local changes and switch to server mode.  If
+	// a dialog is already open (e.g., the edit choice dialog), do
+	// nothing - the user will make their own choice via the dialog
+	// buttons.
+	_onSwitchToCollabRequest: function (userName) {
 		if (this.uiManager.isAnyDialogOpen())
 			return;
-		this._saveAndSwitchToServerMode();
+		if (this.isEditMode()) {
+			this._showCollabEditChoiceDialog(
+				_('{0} wants to edit together').replace('{0}', userName),
+				_('Choose how you\'d like to continue:'),
+				() => {});
+		} else {
+			this._saveAndSwitchToServerMode();
+		}
 	},
 
 	// A newly-joining user opens a document where a
