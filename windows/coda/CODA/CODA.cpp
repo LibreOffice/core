@@ -5525,6 +5525,65 @@ static void watchAccountFrame(int accountTabId, ICoreWebView2Frame* created)
         &token);
 }
 
+// Other schemes would start other apps, so only web addresses go to the system browser.
+static void openInSystemBrowser(HWND hWnd, const std::wstring& address)
+{
+    const std::string lowerAddress = Util::toLower(Util::wide_string_to_string(address));
+    const bool isWebAddress =
+        lowerAddress.starts_with("https://") || lowerAddress.starts_with("http://");
+    if (!isWebAddress)
+    {
+        LOG_WRN("A link from an account window was not opened: it is not a web address");
+        return;
+    }
+
+    ShellExecuteW(hWnd, nullptr, address.c_str(), nullptr, nullptr, SW_SHOW);
+}
+
+// TODO: A sign-in through another site, such as an identity provider, is refused too.
+static void keepOnIntegratorSite(int accountTabId, ICoreWebView2NavigationStartingEventArgs* args)
+{
+    DocumentTab* account = findTab(accountTabId);
+    if (!account)
+        return;
+
+    wil::unique_cotaskmem_string address;
+    args->get_Uri(&address);
+    if (originOf(address.get()) == account->accountOrigin)
+        return;
+
+    args->put_Cancel(TRUE);
+
+    BOOL isUserInitiated = FALSE;
+    BOOL isRedirected = FALSE;
+    args->get_IsUserInitiated(&isUserInitiated);
+    args->get_IsRedirected(&isRedirected);
+
+    if (!isUserInitiated || isRedirected)
+    {
+        LOG_WRN("The account window was kept from leaving the integrator's site");
+        return;
+    }
+
+    LOG_INF("Opening a link from an account window in the system browser");
+    openInSystemBrowser(account->hWnd, address.get());
+}
+
+// No window opens; the address goes to the system browser instead.
+static void openNewWindowInBrowser(int accountTabId, ICoreWebView2NewWindowRequestedEventArgs* args)
+{
+    args->put_Handled(TRUE);
+
+    DocumentTab* account = findTab(accountTabId);
+    if (!account)
+        return;
+
+    wil::unique_cotaskmem_string address;
+    args->get_Uri(&address);
+    LOG_INF("Opening a new window of an account window in the system browser");
+    openInSystemBrowser(account->hWnd, address.get());
+}
+
 static void openAccountWindow(const std::string& url)
 {
     if (!isValidURI(url))
@@ -5594,6 +5653,32 @@ static void openAccountWindow(const std::string& url)
                                     -> HRESULT
                                 {
                                     handleAccountRequest(accountTabId, args);
+                                    return S_OK;
+                                })
+                                .Get(),
+                            &token);
+
+                        // The main frame loads a page: a link click, a form post or a redirect.
+                        account->webView->add_NavigationStarting(
+                            Microsoft::WRL::Callback<ICoreWebView2NavigationStartingEventHandler>(
+                                [accountTabId](ICoreWebView2*,
+                                               ICoreWebView2NavigationStartingEventArgs* args)
+                                    -> HRESULT
+                                {
+                                    keepOnIntegratorSite(accountTabId, args);
+                                    return S_OK;
+                                })
+                                .Get(),
+                            &token);
+
+                        // Any frame asks for another window: window.open or a target=_blank link.
+                        account->webView->add_NewWindowRequested(
+                            Microsoft::WRL::Callback<ICoreWebView2NewWindowRequestedEventHandler>(
+                                [accountTabId](ICoreWebView2*,
+                                               ICoreWebView2NewWindowRequestedEventArgs* args)
+                                    -> HRESULT
+                                {
+                                    openNewWindowInBrowser(accountTabId, args);
                                     return S_OK;
                                 })
                                 .Get(),
