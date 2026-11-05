@@ -134,17 +134,7 @@ class LocalCaret {
 	public static isUnrelated(message: string): boolean {
 		return (
 			LocalCaret.unrelated.some((prefix) => message.startsWith(prefix)) ||
-			LocalCaret.isHover(message)
-		);
-	}
-
-	// True for a mouse move with no button down, which neither reads nor moves the caret.
-	private static isHover(message: string): boolean {
-		const parser = new MessageParser(message);
-		return (
-			parser.command === 'mouse' &&
-			parser.value('type') === 'move' &&
-			parser.value('buttons') === '0'
+			new MessageParser(message).isHover
 		);
 	}
 
