@@ -6313,6 +6313,25 @@ void materialize_clipboard_formats()
     }
 }
 
+// Closes the tab's document in the in-process kit.
+static void endLocalSession(DocumentTab& data)
+{
+    // Close the existing fakesocket
+    if (data.fakeClientFd != -1)
+    {
+        fakeSocketClose(data.fakeClientFd);
+        data.fakeClientFd = -1;
+    }
+
+    // Close the existing forwarding thread
+    if (data.app2js.joinable()) {
+        fakeSocketClose(data.closeNotificationPipeForForwardingThread[0]);
+        data.app2js.join();
+    }
+    else
+        DocumentData::deallocate(data.appDocId);
+}
+
 // Writes the remote document to a temporary file and returns its path.
 static void writeRemoteDocFile(DocumentTab& data, int id, const std::string& arguments)
 {
@@ -6362,6 +6381,9 @@ static void writeRemoteDocFile(DocumentTab& data, int id, const std::string& arg
         postReplyToCall(data.hWnd, data.tabId, id, std::string());
         return;
     }
+
+    // A reload, or another document in the same window, ends the earlier document first.
+    endLocalSession(data);
 
     data.fakeClientFd = fakeSocketSocket();
     data.appDocId = generate_new_app_doc_id();
@@ -6542,6 +6564,12 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             // If displaying the starter screen, do nothing
             if (data.mode == DocumentMode::STARTER)
                 return;
+
+            if (data.fakeClientFd == -1)
+            {
+                LOG_WRN("HULLO was ignored: no document is open yet");
+                return;
+            }
 
             do_hullo_handling_things(data);
         }
@@ -6848,20 +6876,7 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
                 LOG_ERR("No url parameter in message '" << ns << "'");
                 return;
             }
-            // Close the existing fakesocket
-            if (data.fakeClientFd != -1)
-            {
-                fakeSocketClose(data.fakeClientFd);
-                data.fakeClientFd = -1;
-            }
-
-            // Close the existing forwarding thread
-            if (data.app2js.joinable()) {
-                fakeSocketClose(data.closeNotificationPipeForForwardingThread[0]);
-                data.app2js.join();
-            }
-            else
-                DocumentData::deallocate(data.appDocId);
+            endLocalSession(data);
 
             data.fakeClientFd = fakeSocketSocket();
             data.appDocId = generate_new_app_doc_id();
