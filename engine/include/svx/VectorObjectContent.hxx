@@ -196,6 +196,8 @@ struct ObjectContent
      */
     bool mbIsPicture = false;
     sal_Int64 mnGraphicChecksum = 0;
+    /// For a form control, how often the values of its model changed. Zero for anything else.
+    sal_uInt64 mnControlModelChanges = 0;
     /// How the graphic is turned over as it is drawn: bit 0 across, bit 1 down.
     sal_Int32 mnGraphicMirror = 0;
     double mfGraphicWidth = 0.0;
@@ -499,6 +501,7 @@ struct ObjectContent
                && mbIsDiagram == rOther.mbIsDiagram
                && maGraphicExtension == rOther.maGraphicExtension && mbSigning == rOther.mbSigning
                && mbIsPicture == rOther.mbIsPicture && mnGraphicChecksum == rOther.mnGraphicChecksum
+               && mnControlModelChanges == rOther.mnControlModelChanges
                && mnGraphicMirror == rOther.mnGraphicMirror
                && mfGraphicWidth == rOther.mfGraphicWidth
                && mfGraphicHeight == rOther.mfGraphicHeight && mfCropLeft == rOther.mfCropLeft

@@ -516,8 +516,9 @@ namespace cool {
       if (font?.bold) style.fontWeight = 'bold';
       if (font?.italic) style.fontStyle = 'italic';
       if (primitive.disabled)
-        element
-          .querySelectorAll('button, input')
+        // the control itself may be the button, as a push button is
+        [element, ...Array.from(element.querySelectorAll('button, input'))]
+          .filter((input: Element) => input.matches('button, input'))
           .forEach((input: Element) => input.setAttribute('disabled', ''));
       // all text in the control takes the model's font, a label and a set text colour its colour
       element
@@ -568,14 +569,14 @@ namespace cool {
       control.style.height = height + 'px';
       const holder = (
         <div
-          style={
-            'position: fixed; left: -10000px; top: 0; font-family: var(--cool-font);' +
-            ' width: ' +
-            width +
-            'px; height: ' +
-            height +
-            'px;'
-          }
+          style={{
+            position: 'fixed',
+            left: '-10000px',
+            top: '0',
+            fontFamily: 'var(--cool-font)',
+            width: width + 'px',
+            height: height + 'px',
+          }}
         >
           {control}
         </div>

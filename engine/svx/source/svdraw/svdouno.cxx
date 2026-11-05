@@ -24,6 +24,9 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
+#include <comphelper/kit.hxx>
+#include <vcl/svapp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svx/svdouno.hxx>
@@ -45,18 +48,28 @@ using namespace ::cpo;
 using namespace sdr::contact;
 
 
-class SdrControlEventListenerImpl : public ::cppu::WeakImplHelper< css::lang::XEventListener >
+class SdrControlEventListenerImpl : public ::cppu::WeakImplHelper< css::beans::XPropertyChangeListener >
 {
 protected:
     SdrUnoObj*                  pObj;
+    // the report of changed values of the model, while one is posted
+    ImplSVEvent*                pPendingChange = nullptr;
+
+    DECL_LINK(ReportChangeHdl, void*, void);
 
 public:
     explicit SdrControlEventListenerImpl(SdrUnoObj* _pObj)
     :   pObj(_pObj)
     {}
 
+    // the object is gone, so is a report for it
+    void ForgetObject();
+
     // XEventListener
     virtual void disposing( const css::lang::EventObject& Source ) override;
+
+    // XPropertyChangeListener
+    virtual void propertyChange( const css::beans::PropertyChangeEvent& rEvent ) override;
 
     void StopListening(const uno::Reference< lang::XComponent >& xComp);
     void StartListening(const uno::Reference< lang::XComponent >& xComp);
@@ -73,14 +86,30 @@ void SdrControlEventListenerImpl::disposing( const css::lang::EventObject& /*Sou
 
 void SdrControlEventListenerImpl::StopListening(const uno::Reference< lang::XComponent >& xComp)
 {
-    if (xComp.is())
-        xComp->removeEventListener(this);
+    if (!xComp.is())
+        return;
+
+    xComp->removeEventListener(this);
+    if (comphelper::COKit::isActive())
+    {
+        uno::Reference< beans::XPropertySet > xSet(xComp, uno::UNO_QUERY);
+        if (xSet.is())
+            xSet->removePropertyChangeListener(OUString(), this);
+    }
 }
 
 void SdrControlEventListenerImpl::StartListening(const uno::Reference< lang::XComponent >& xComp)
 {
-    if (xComp.is())
-        xComp->addEventListener(this);
+    if (!xComp.is())
+        return;
+
+    xComp->addEventListener(this);
+    if (comphelper::COKit::isActive())
+    {
+        uno::Reference< beans::XPropertySet > xSet(xComp, uno::UNO_QUERY);
+        if (xSet.is())
+            xSet->addPropertyChangeListener(OUString(), this);
+    }
 }
 
 
@@ -88,7 +117,45 @@ struct SdrUnoObjDataHolder
 {
     mutable ::rtl::Reference< SdrControlEventListenerImpl >
                                     pEventListener;
+    sal_uInt64 nModelChanges = 0;
 };
+
+// in the kit a changed value of the model is a change of the object. we report it from a user
+// event: a value may change while the primitives of the object are decomposed, and the change
+// drops them. several changes in a row become one report
+void SdrControlEventListenerImpl::propertyChange( const css::beans::PropertyChangeEvent& /*rEvent*/)
+{
+    SolarMutexGuard aGuard;
+    if (!pObj || pPendingChange)
+        return;
+
+    // the posted event holds the listener alive until it ran
+    acquire();
+    pPendingChange = Application::PostUserEvent(LINK(this, SdrControlEventListenerImpl, ReportChangeHdl));
+}
+
+IMPL_LINK_NOARG(SdrControlEventListenerImpl, ReportChangeHdl, void*, void)
+{
+    pPendingChange = nullptr;
+    if (pObj && pObj->getSdrPageFromSdrObject())
+    {
+        ++pObj->m_pImpl->nModelChanges;
+        pObj->ActionChanged();
+        pObj->BroadcastObjectChange();
+    }
+    release();
+}
+
+void SdrControlEventListenerImpl::ForgetObject()
+{
+    pObj = nullptr;
+    if (!pPendingChange)
+        return;
+
+    Application::RemoveUserEvent(pPendingChange);
+    pPendingChange = nullptr;
+    release();
+}
 
 
 namespace
@@ -203,6 +270,8 @@ SdrUnoObj::SdrUnoObj(
 
 SdrUnoObj::~SdrUnoObj()
 {
+    m_pImpl->pEventListener->ForgetObject();
+
     try
     {
         // clean up the control model
@@ -222,6 +291,8 @@ SdrUnoObj::~SdrUnoObj()
         TOOLS_WARN_EXCEPTION( "svx", "SdrUnoObj::~SdrUnoObj" );
     }
 }
+
+sal_uInt64 SdrUnoObj::getModelChangeCount() const { return m_pImpl->nModelChanges; }
 
 void SdrUnoObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {

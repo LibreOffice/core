@@ -53,6 +53,7 @@
 #include <svx/svdoedge.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdomeas.hxx>
+#include <svx/svdouno.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdotext.hxx>
@@ -1239,6 +1240,10 @@ void describeObject(SdrObject& rObject, ObjectContent& rContent,
                 rContent.maOwnGluePoints.push_back(aOne);
             }
         }
+
+        // the primitive of a form control does not show its model's values, the count does
+        if (const auto* pControl = dynamic_cast<const SdrUnoObj*>(&rObject))
+            rContent.mnControlModelChanges = pControl->getModelChangeCount();
 
         decomposeForComparison(rContent, rViewInformation);
     }

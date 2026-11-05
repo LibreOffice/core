@@ -73,6 +73,9 @@ public:
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual SdrObjKind GetObjIdentifier() const override;
 
+    /// How often a value of the control model changed while it belonged to this object.
+    sal_uInt64 getModelChangeCount() const;
+
     virtual void NbcResize(const Point& rRef, double xFact, double yFact) override;
     virtual void NbcSetLayer(SdrLayerID nLayer) override;
 
