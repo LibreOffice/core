@@ -13,7 +13,7 @@ import WebKit
 
 /// A window that shows the integrator's site for one cloud account, as a browser would.
 final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigationDelegate,
-                                WKScriptMessageHandler, WKScriptMessageHandlerWithReply {
+                                WKUIDelegate, WKScriptMessageHandler, WKScriptMessageHandlerWithReply {
     private static let defaultSize = NSSize(width: 1200, height: 800)
     // CODA's scripts run in this "coda" world. The COOL server's scripts run in WebKit's default
     // page world, which has no access to CODA's message handlers.
@@ -91,6 +91,7 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         super.init(window: window)
         window.delegate = self
         webView.navigationDelegate = self
+        webView.uiDelegate = self
 
         let contentController = webView.configuration.userContentController
         contentController.add(self, contentWorld: Self.world, name: "frameLoaded")
@@ -494,6 +495,8 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction,
                  decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        // A request for a new window has no target frame. Allowing it makes WebKit call
+        // createWebViewWith below, which opens only http and https addresses, in the browser.
         guard let targetFrame = navigationAction.targetFrame else {
             decisionHandler(.allow)
             return
@@ -529,6 +532,16 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         }
 
         COWrapper.LOG_ERR("The account window was kept from going to \(targetOrigin ?? "a page with no origin")")
+    }
+
+    // window.open and target="_blank" links: only web addresses are opened, in the browser.
+    func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration,
+                 for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+        if let url = navigationAction.request.url {
+            Self.openInBrowser(url)
+        }
+
+        return nil
     }
 
     private static func openInBrowser(_ url: URL) {
