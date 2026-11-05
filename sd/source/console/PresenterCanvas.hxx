@@ -164,11 +164,6 @@ public:
             const css::uno::Sequence< css::beans::PropertyValue >& aExtraFontProperties,
             const css::geometry::Matrix2D& aFontMatrix) override;
 
-    virtual css::uno::Sequence<css::rendering::FontInfo> SAL_CALL
-        queryAvailableFonts(
-            const css::rendering::FontInfo& aFilter,
-            const css::uno::Sequence< css::beans::PropertyValue >& aFontProperties) override;
-
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         drawText(
             const css::rendering::StringContext& aText,

@@ -223,15 +223,6 @@ css::uno::Reference<css::rendering::XCanvasFont> SAL_CALL
         aFontRequest, aExtraFontProperties, aFontMatrix);
 }
 
-css::uno::Sequence<css::rendering::FontInfo> SAL_CALL
-        PresenterCanvas::queryAvailableFonts(
-            const css::rendering::FontInfo& aFilter,
-            const css::uno::Sequence< css::beans::PropertyValue >& aFontProperties)
-{
-    ThrowIfDisposed();
-    return mxSharedCanvas->queryAvailableFonts(aFilter, aFontProperties);
-}
-
 css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         PresenterCanvas::drawText(
             const css::rendering::StringContext& aText,

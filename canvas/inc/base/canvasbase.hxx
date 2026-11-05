@@ -259,17 +259,6 @@ public:
         return maCanvasHelper.createFont(this, fontRequest, extraFontProperties, fontMatrix);
     }
 
-    virtual css::uno::Sequence<css::rendering::FontInfo> SAL_CALL queryAvailableFonts(
-        const css::rendering::FontInfo& aFilter,
-        const css::uno::Sequence<css::beans::PropertyValue>& aFontProperties) override
-    {
-        canvastools::verifyArgs(aFilter, __func__, static_cast<cppu::OWeakObject*>(this));
-
-        MutexType aGuard(BaseType::m_aMutex);
-
-        return maCanvasHelper.queryAvailableFonts(this, aFilter, aFontProperties);
-    }
-
     virtual css::uno::Reference<css::rendering::XCachedPrimitive>
         SAL_CALL drawText(const css::rendering::StringContext& text,
                           const css::uno::Reference<css::rendering::XCanvasFont>& xFont,

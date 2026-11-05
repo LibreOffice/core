@@ -299,29 +299,6 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         raises (com::sun::star::lang::IllegalArgumentException);
 
 
-    /** Query font information, specific to this canvas.<p>
-
-        @param aFilter
-        Filter parameter to reduce the list of returned fonts. Every
-        member of FontInfo that is not the empty string
-        or the "don't care" value restricts the list of returned fonts
-        to contain only those that have the specified attribute.
-
-        @param aFontProperties
-        This interface can provide additional font properties to
-        filter the list of available fonts against.
-
-        @returns the list of fonts matching the filter set.
-
-        @throws com::sun::star::lang::IllegalArgumentException
-        if one of the font properties are invalid or not recognized,
-        or if one of the FontInfo members is not within
-        the permitted range.
-     */
-    sequence< FontInfo > queryAvailableFonts( [in] FontInfo aFilter, [in] sequence< ::com::sun::star::beans::PropertyValue > aFontProperties )
-        raises (com::sun::star::lang::IllegalArgumentException);
-
-
     /** Draw the text given by the substring of the specified string
         with the given font.<p>
 

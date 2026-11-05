@@ -144,12 +144,6 @@ namespace vclcanvas
                             css::beans::PropertyValue >&       extraFontProperties,
                         const css::geometry::Matrix2D&         fontMatrix );
 
-        css::uno::Sequence< css::rendering::FontInfo >
-            queryAvailableFonts( const css::rendering::XCanvas*        rCanvas,
-                                 const css::rendering::FontInfo&       aFilter,
-                                 const css::uno::Sequence<
-                                         css::beans::PropertyValue >&  aFontProperties );
-
         css::uno::Reference< css::rendering::XCachedPrimitive >
             drawText( const css::rendering::XCanvas*       rCanvas,
                       const css::rendering::StringContext& text,

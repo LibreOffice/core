@@ -483,14 +483,6 @@ namespace vclcanvas
         return uno::Reference< rendering::XCanvasFont >();
     }
 
-    uno::Sequence< rendering::FontInfo > CanvasHelper::queryAvailableFonts( const rendering::XCanvas*                       ,
-                                                                            const rendering::FontInfo&                      ,
-                                                                            const uno::Sequence< beans::PropertyValue >&     )
-    {
-        // TODO(F2)
-        return uno::Sequence< rendering::FontInfo >();
-    }
-
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawText( const rendering::XCanvas*                         ,
                                                                           const rendering::StringContext&                   text,
                                                                           const uno::Reference< rendering::XCanvasFont >&   xFont,

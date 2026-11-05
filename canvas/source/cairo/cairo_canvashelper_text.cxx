@@ -49,14 +49,6 @@ CanvasHelper::createFont(const rendering::XCanvas*, const rendering::FontRequest
         new CanvasFont(fontRequest, extraFontProperties, fontMatrix, mpSurfaceProvider));
 }
 
-uno::Sequence<rendering::FontInfo>
-CanvasHelper::queryAvailableFonts(const rendering::XCanvas*, const rendering::FontInfo& /*aFilter*/,
-                                  const uno::Sequence<beans::PropertyValue>& /*aFontProperties*/)
-{
-    // TODO
-    return uno::Sequence<rendering::FontInfo>();
-}
-
 static bool setupFontTransform(::OutputDevice const& rOutDev, ::Point& o_rPoint,
                                vcl::Font& io_rVCLFont, const rendering::ViewState& rViewState,
                                const rendering::RenderState& rRenderState)

@@ -638,14 +638,6 @@ namespace oglcanvas
         return uno::Reference< rendering::XCanvasFont >();
     }
 
-    uno::Sequence< rendering::FontInfo > CanvasHelper::queryAvailableFonts( const rendering::XCanvas*                       /*pCanvas*/,
-                                                                            const rendering::FontInfo&                      /*aFilter*/,
-                                                                            const uno::Sequence< beans::PropertyValue >&    /*aFontProperties*/ )
-    {
-        // TODO
-        return uno::Sequence< rendering::FontInfo >();
-    }
-
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawText( const rendering::XCanvas*                         /*pCanvas*/,
                                                                           const rendering::StringContext&                   /*text*/,
                                                                           const uno::Reference< rendering::XCanvasFont >&   /*xFont*/,
