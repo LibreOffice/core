@@ -23,8 +23,10 @@
 #include <Poco/Util/AbstractConfiguration.h>
 #include <Poco/Util/XMLConfiguration.h>
 
+#include <algorithm>
 #include <cassert>
 #include <fstream>
+#include <iterator>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -487,6 +489,24 @@ std::map<std::string, std::string> extractAll(const Poco::Util::AbstractConfigur
     return map;
 }
 
+bool isWsdOnlyKey(std::string_view key)
+{
+    static constexpr std::string_view wsdOnlyKeys[] = {
+        "admin_console.password",
+        "admin_console.secure_password",
+        "admin_console.username",
+        "ai.api_key",
+        "ai.image_api_key",
+        "deepl.auth_key",
+        "duden.api_key",
+        "languagetool.api_key",
+        "libretranslate.api_key",
+        "logging.anonymize.anonymization_salt",
+        "support_key",
+    };
+    return std::find(std::begin(wsdOnlyKeys), std::end(wsdOnlyKeys), key) != std::end(wsdOnlyKeys);
+}
+
 std::string getLoggableConfig(const Poco::Util::AbstractConfiguration& config)
 {
     const std::map<std::string, std::string> allConfigs = extractAll(config);
@@ -497,12 +517,7 @@ std::string getLoggableConfig(const Poco::Util::AbstractConfiguration& config)
         const auto it = defAppConfig.find(pair.first);
         if (it == defAppConfig.end() || it->second != pair.second)
         {
-            if (pair.first == "admin_console.username" || pair.first == "admin_console.password" ||
-                pair.first == "admin_console.secure_password" ||
-                pair.first == "languagetool.api_key" || pair.first == "duden.api_key" ||
-                pair.first == "deepl.auth_key" || pair.first == "libretranslate.api_key" ||
-                pair.first == "ai.api_key" || pair.first == "ai.image_api_key" ||
-                pair.first == "logging.anonymize.anonymization_salt" || pair.first == "support_key")
+            if (isWsdOnlyKey(pair.first))
             {
                 // Redact sensitive entries.
                 ossConfig << '\t' << pair.first << ": <redacted>\n";

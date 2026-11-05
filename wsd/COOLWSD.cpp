@@ -2377,6 +2377,8 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
     KitXmlConfig.reset(new Poco::Util::XMLConfiguration);
     for (const auto& pair : defAppConfig)
     {
+        if (ConfigUtil::isWsdOnlyKey(pair.first))
+            continue;
         try
         {
             KitXmlConfig->setString(pair.first, config().getRawString(pair.first));
