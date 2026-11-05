@@ -202,18 +202,6 @@ css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         xPolyPolygon, MergeViewState(aViewState), aRenderState, aTextures, aStrokeAttributes);
 }
 
-css::uno::Reference<css::rendering::XPolyPolygon2D> SAL_CALL
-        PresenterCanvas::queryStrokeShapes(
-            const css::uno::Reference<css::rendering::XPolyPolygon2D>& xPolyPolygon,
-            const css::rendering::ViewState& aViewState,
-            const css::rendering::RenderState& aRenderState,
-            const css::rendering::StrokeAttributes& aStrokeAttributes)
-{
-    ThrowIfDisposed();
-    return mxSharedCanvas->queryStrokeShapes(
-        xPolyPolygon, MergeViewState(aViewState), aRenderState, aStrokeAttributes);
-}
-
 css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         PresenterCanvas::fillPolyPolygon(
             const css::uno::Reference<css::rendering::XPolyPolygon2D>& xPolyPolygon,

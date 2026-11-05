@@ -424,16 +424,6 @@ namespace dxcanvas
         return uno::Reference< rendering::XCachedPrimitive >(nullptr);
     }
 
-    uno::Reference< rendering::XPolyPolygon2D >   CanvasHelper::queryStrokeShapes( const rendering::XCanvas*                            /*pCanvas*/,
-                                                                                   const uno::Reference< rendering::XPolyPolygon2D >&   /*xPolyPolygon*/,
-                                                                                   const rendering::ViewState&                          /*viewState*/,
-                                                                                   const rendering::RenderState&                        /*renderState*/,
-                                                                                   const rendering::StrokeAttributes&                   /*strokeAttributes*/ )
-    {
-        // TODO
-        return uno::Reference< rendering::XPolyPolygon2D >(nullptr);
-    }
-
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillPolyPolygon( const rendering::XCanvas*                          /*pCanvas*/,
                                                                                  const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
                                                                                  const rendering::ViewState&                        viewState,

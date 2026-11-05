@@ -131,13 +131,6 @@ namespace vclcanvas
                                        const css::uno::Sequence<
                                                css::rendering::Texture >&      textures,
                                        const css::rendering::StrokeAttributes& strokeAttributes );
-        css::uno::Reference< css::rendering::XPolyPolygon2D >
-            queryStrokeShapes( const css::rendering::XCanvas*          rCanvas,
-                               const css::uno::Reference<
-                                       css::rendering::XPolyPolygon2D >&   xPolyPolygon,
-                               const css::rendering::ViewState&        viewState,
-                               const css::rendering::RenderState&      renderState,
-                               const css::rendering::StrokeAttributes& strokeAttributes );
         css::uno::Reference< css::rendering::XCachedPrimitive >
             fillPolyPolygon( const css::rendering::XCanvas*            rCanvas,
                              const css::uno::Reference<
