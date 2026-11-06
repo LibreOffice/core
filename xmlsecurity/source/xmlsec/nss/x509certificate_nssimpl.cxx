@@ -281,7 +281,12 @@ void X509Certificate_NssImpl::setCert( CERTCertificate* cert ) {
     }
 
     if( cert != nullptr ) {
-        m_pCert = CERT_DupCertificate( cert ) ;
+        CERTCertificate *const pCertificate{CERT_DupCertificate(cert)};
+        if (!pCertificate->nssCertificate)
+        {
+            throw css::uno::RuntimeException(u"certificate has no NSSCertificate"_ustr);
+        }
+        m_pCert = pCertificate;
     }
 }
 
@@ -309,7 +314,14 @@ void X509Certificate_NssImpl::setRawCert( const css::uno::Sequence< sal_Int8 >& 
         m_pCert = nullptr ;
     }
 
-    m_pCert = cert ;
+    // CERT_DupCertificate creates the NSSCertificate that holds the reference count of
+    // the certificate. If this fails, the CERTCertificate is uniquely owned and rejected.
+    CERT_DupCertificate(cert);
+    if (cert->nssCertificate != nullptr)
+    {
+        m_pCert = cert;
+    }
+    CERT_DestroyCertificate(cert);
 }
 
 SECKEYPrivateKey* X509Certificate_NssImpl::getPrivateKey()
