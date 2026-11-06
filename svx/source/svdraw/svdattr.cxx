@@ -1427,10 +1427,9 @@ bool SdrTextAniAmountItem::HasMetrics() const
 
 void SdrTextAniAmountItem::ScaleMetrics(double fScale)
 {
-    if (GetValue()>0) {
-        BigInt aVal(GetValue());
-        aVal*=fScale;
-        SetValue(short(aVal));
+    if (GetValue()>0)
+    {
+        SetValue(short(BigInt::Scale(GetValue(), fScale)));
     }
 }
 
