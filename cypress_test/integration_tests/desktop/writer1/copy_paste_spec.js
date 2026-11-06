@@ -363,4 +363,42 @@ describe(['tagdesktop', 'tagnextcloud'], 'Clipboard operations.', function() {
 		// the font color was red.
 		cy.cGet('#copy-paste-container font[color="#ff0000"]').should('not.exist');
 	});
+
+	it('Copy shows a progress indicator', function() {
+		helper.setupAndLoadDocument('writer/copy_paste.odt');
+		helper.selectAllText();
+
+		// Given a test clipboard where write() blocks till the test resolves its promise:
+		cy.getFrameWindow().then(function(win) {
+			var promiseResolve;
+			win._copyProgressPromise = new Promise(function(resolve) {
+				promiseResolve = resolve;
+			});
+			win._copyProgressPromiseResolve = promiseResolve;
+			win.app.map._clip._dummyClipboard = {
+				write: function() {
+					return win._copyProgressPromise;
+				},
+			};
+		});
+
+		// When copying:
+		cy.getFrameWindow().then(function(win) {
+			win.app.map._clip.filterExecCopyPaste('.uno:Copy');
+		});
+
+		// Then the copy should show a progress indicator:
+		// Without the accompanying fix in place, this test would have failed with:
+		// expected #modal-dialog-copy_paste_download_progress to be visible
+		// i.e. the user had no way to know when the copy finished before pasting.
+		cy.cGet('#modal-dialog-copy_paste_download_progress').should('be.visible');
+
+		// And when finishing the copy:
+		cy.getFrameWindow().then(function(win) {
+			win._copyProgressPromiseResolve();
+		});
+
+		// Then there should be no progress indicator
+		cy.cGet('#modal-dialog-copy_paste_download_progress').should('not.exist');
+	});
 });

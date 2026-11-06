@@ -1046,11 +1046,25 @@ window.L.Clipboard = window.L.Class.extend({
 			return false;
 		}
 
+		// A copy is already in progress: ignore the new one, so the old one can finish.
+		if (this._copyInProgress) {
+			return true;
+		}
+
 		this._asyncAttemptNavigatorClipboardWrite(params);
 		return true;
 	},
 
 	_asyncAttemptNavigatorClipboardWrite: async function(params) {
+		this._copyInProgress = true;
+		try {
+			await this._asyncAttemptNavigatorClipboardWriteInner(params);
+		} finally {
+			this._copyInProgress = false;
+		}
+	},
+
+	_asyncAttemptNavigatorClipboardWriteInner: async function(params) {
 		const command = this._unoCommandForCopyCutPaste;
 
 		const check_ = this._sendCommandAndWaitForCompletion(command, params);
@@ -1071,81 +1085,100 @@ window.L.Clipboard = window.L.Class.extend({
 		if (window.mode.hasEngineClipboardProvider()) {
 			// The engine advertises the copied formats straight onto the system
 			// clipboard through the installed clipboard provider, so there is no
-			// write to make here; just confirm the copy went through.
+			// write to make here; just confirm the copy went through. No
+			// progress indicator here: the engine is local.
 			await check_;
-		} else {
-			const mimeTypes = this._copyAsMarkdown ? 'text/markdown;charset=utf-8' : 'text/html,text/plain;charset=utf-8';
-			const url = this.getMetaURL() + '&MimeType=' + mimeTypes;
+			return;
+		}
 
-			// It's important in DisableCopy to write something to the clipboard so that future paste actions can trigger an internal paste
-			const text = (this._map['wopi'].DisableCopy ? this._getDisabledCopyStubHtml() : (async () => {
-				if (await check_ === null)
-					throw new Error('Failed check, either wrong command or pending event');
-					// We need to throw an error here rather than just returning so that a failure halts copying the ClipboardItem to the clipboard
+		const mimeTypes = this._copyAsMarkdown ? 'text/markdown;charset=utf-8' : 'text/html,text/plain;charset=utf-8';
+		const url = this.getMetaURL() + '&MimeType=' + mimeTypes;
 
-				const result = await fetch(url);
-				return await result.text();
-			})());
+		// It's important in DisableCopy to write something to the clipboard so that future paste actions can trigger an internal paste
+		const text = (this._map['wopi'].DisableCopy ? this._getDisabledCopyStubHtml() : (async () => {
+			if (await check_ === null)
+				throw new Error('Failed check, either wrong command or pending event');
+				// We need to throw an error here rather than just returning so that a failure halts copying the ClipboardItem to the clipboard
 
-			const clipboardItem = this._copyAsMarkdown
-				? new ClipboardItem({
-					'text/plain': this._parseClipboardFetchResult(text, 'text/plain', 'markdown'),
-				})
-				: new ClipboardItem({
-					'text/html': this._parseClipboardFetchResult(text, 'text/html', 'html'),
-					'text/plain': this._parseClipboardFetchResult(text, 'text/plain', 'plain'),
-				});
-			this._copyAsMarkdown = false;
-			// Again, despite fetch(url), this._parseClipboardFetchResult(...) and check_ all being promises, we need to let browser internals await them after we have safely succeeded in calling clipboard.write
-			// We throw an error if our checks fail before returning our text to cause these promises to reject - that way everything can be deferred for later, with failures causing the clipboard write to fail later
-			// We define the text promise outside to allow us to reuse the fetch rather than fetching twice (as in Ic23f7f817cc855ff08f25a2afefcd73d6fc3472b)
+			const result = await fetch(url);
+			return await result.text();
+		})());
 
-			let clipboard = navigator.clipboard;
-			if (window.L.Browser.cypressTest) {
-				clipboard = this._dummyClipboard;
+		const clipboardItem = this._copyAsMarkdown
+			? new ClipboardItem({
+				'text/plain': this._parseClipboardFetchResult(text, 'text/plain', 'markdown'),
+			})
+			: new ClipboardItem({
+				'text/html': this._parseClipboardFetchResult(text, 'text/html', 'html'),
+				'text/plain': this._parseClipboardFetchResult(text, 'text/plain', 'plain'),
+			});
+		this._copyAsMarkdown = false;
+		// Again, despite fetch(url), this._parseClipboardFetchResult(...) and check_ all being promises, we need to let browser internals await them after we have safely succeeded in calling clipboard.write
+		// We throw an error if our checks fail before returning our text to cause these promises to reject - that way everything can be deferred for later, with failures causing the clipboard write to fail later
+		// We define the text promise outside to allow us to reuse the fetch rather than fetching twice (as in Ic23f7f817cc855ff08f25a2afefcd73d6fc3472b)
+
+		let clipboard = navigator.clipboard;
+		if (window.L.Browser.cypressTest) {
+			clipboard = this._dummyClipboard;
+		}
+
+		// Show a progress indicator, so the user can delay Ctrl+V before the copy finishes.
+		// DisableCopy has a synchronous stub, no fetch, so no indicator there.
+		// The mobile UI uses a mobile wizard that a modal popup would close, so no
+		// indicator there either.
+		const mobileUI = window.mode.isSmallScreenDevice() || window.mode.isTablet();
+		const showProgress = !this._map['wopi'].DisableCopy && !mobileUI;
+		if (showProgress) {
+			this._startProgress(false);
+			this._downloadProgress.startProgressMode();
+		}
+
+		try {
+			await clipboard.write([clipboardItem]);
+		} catch (error) {
+			// When document is not focused, writing to clipboard is not allowed. But this error shouldn't stop the usage of clipboard API.
+			if (!document.hasFocus()) {
+				window.app.console.warn('navigator.clipboard.write() failed: ' + error.message);
+				// The user switched to another tab before the async clipboard write completed.
+				// Schedule a one-shot retry when this window regains focus so the system
+				// clipboard is updated with the latest copied content, enabling correct
+				// cross-tab paste behaviour.
+				// Remove any previous pending retry - only the latest copy matters.
+				if (this._pendingClipboardRetryHandler) {
+					window.removeEventListener('focus', this._pendingClipboardRetryHandler);
+				}
+				var retryClipboardItem = clipboardItem;
+				var retryClipboard = clipboard;
+				var self = this;
+				var retryHandler = function() {
+					window.removeEventListener('focus', retryHandler);
+					self._pendingClipboardRetryHandler = null;
+					retryClipboard.write([retryClipboardItem]).catch(function(retryError) {
+						window.app.console.warn('navigator.clipboard.write() retry failed: ' + retryError.message);
+					});
+				};
+				this._pendingClipboardRetryHandler = retryHandler;
+				window.addEventListener('focus', retryHandler);
+				return;
 			}
 
-			try {
-				await clipboard.write([clipboardItem]);
-			} catch (error) {
-				// When document is not focused, writing to clipboard is not allowed. But this error shouldn't stop the usage of clipboard API.
-				if (!document.hasFocus()) {
-					window.app.console.warn('navigator.clipboard.write() failed: ' + error.message);
-					// The user switched to another tab before the async clipboard write completed.
-					// Schedule a one-shot retry when this window regains focus so the system
-					// clipboard is updated with the latest copied content, enabling correct
-					// cross-tab paste behaviour.
-					// Remove any previous pending retry - only the latest copy matters.
-					if (this._pendingClipboardRetryHandler) {
-						window.removeEventListener('focus', this._pendingClipboardRetryHandler);
-					}
-					var retryClipboardItem = clipboardItem;
-					var retryClipboard = clipboard;
-					var self = this;
-					var retryHandler = function() {
-						window.removeEventListener('focus', retryHandler);
-						self._pendingClipboardRetryHandler = null;
-						retryClipboard.write([retryClipboardItem]).catch(function(retryError) {
-							window.app.console.warn('navigator.clipboard.write() retry failed: ' + retryError.message);
-						});
-					};
-					this._pendingClipboardRetryHandler = retryHandler;
-					window.addEventListener('focus', retryHandler);
-					return;
-				}
+			// Similarly, we'll get an error that is identical to the permission error if our `text` promise rejects
+			// But this is really a check failure - if we can see that check failed we don't need to act on the bogus permission error
+			if (await check_ === null) {
+				 window.app.console.warn('navigator.clipboard.write() failed due to a failing check');
+				 return;
+			}
 
-				// Similarly, we'll get an error that is identical to the permission error if our `text` promise rejects
-				// But this is really a check failure - if we can see that check failed we don't need to act on the bogus permission error
-				if (await check_ === null) {
-					 window.app.console.warn('navigator.clipboard.write() failed due to a failing check');
-					 return;
-				}
-
-				window.app.console.error('navigator.clipboard.write() failed: ' + error.message);
-				// Warn that the copy failed.
-				this._warnCopyPaste();
-				// Prefetch selection, so next time copy will work with the keyboard.
-				app.socket.sendMessage('gettextselection mimetype=text/html,text/plain;charset=utf-8');
+			window.app.console.error('navigator.clipboard.write() failed: ' + error.message);
+			// Warn that the copy failed.
+			this._warnCopyPaste();
+			// Prefetch selection, so next time copy will work with the keyboard.
+			app.socket.sendMessage('gettextselection mimetype=text/html,text/plain;charset=utf-8');
+		} finally {
+			// Hide progress indicator.
+			if (showProgress) {
+				this._downloadProgress._onComplete();
+				this._downloadProgress._onClose();
 			}
 		}
 	},
