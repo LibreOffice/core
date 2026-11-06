@@ -14792,7 +14792,9 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                 const bool bAcross(bUpright
                                    && ((nTurn > 45 && nTurn < 135)
                                        || (nTurn > 225 && nTurn < 315)));
-                if (!bFitted && !ownRuleGrows(getLayoutNode(), XML_h)
+                // a font a row fitted is checked in the final box too: a text whose width the row
+                // gives breaks its lines there, Continuous_Block_Process's Twenty-one
+                if (!ownRuleGrows(getLayoutNode(), XML_h)
                     && rShape->getSize().Width > 0
                     && rShape->getSize().Height > 0 && !textParagraphsOf(rDgm, rShape).empty())
                 {
@@ -14834,7 +14836,7 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                     // not finer than that
                     if (oNeed && (*oNeed > fRoomHeight * 1.001 || !bWordsFit))
                         const_cast<SmartArtDiagram&>(rDgm).getGroupsThatDidNotFit().insert(aGroup);
-                    if (oNeed)
+                    if (oNeed && !bFitted)
                     {
                         fFontSize = fGroupFont;
                         // the shape keeps its text within the margins we fitted with, a side

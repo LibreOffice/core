@@ -2924,6 +2924,19 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testHiddenShapeWithoutAdjustmentsHasT
     CPPUNIT_ASSERT_DOUBLES_EQUAL(25.0, shownTextSize(xAccent), 0.5);
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testRowTextBreaksWithinItsBox)
+{
+    // the row gives its texts one width, so Twenty-one and Twenty-two break after the hyphen
+    // and the second node needs five lines; the texts come down until those fit, at 31 they
+    // stood over the box
+    createSdImpressDoc("pptx/smartart-row-text-breaks-in-its-box.pptx");
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xSecond(
+        findChildShapeByText(xDiagram, u"Two\nTwenty-one\nTwenty-two"_ustr));
+    CPPUNIT_ASSERT(xSecond.is());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(27.0, shownTextSize(xSecond), 0.5);
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testHiddenTextIsDrawnOverItsNode)
 {
     // the layout states the hidden text node before the node it is written on
