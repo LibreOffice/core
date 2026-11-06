@@ -834,6 +834,9 @@ sal_Int8 PPTWriterBase::GetTransition( sal_Int16 nTransitionType, sal_Int16 nTra
             nPPTTransitionType = PPT_TRANSITION_TYPE_NEWSFLASH;
             break;
         default:
+            // A zoom that does not turn as it grows is a plain zoom, which both
+            // presentation formats state in a transition of their own.
+            nPPTTransitionType = PPT_TRANSITION_TYPE_ZOOM;
             break;
         }
     }

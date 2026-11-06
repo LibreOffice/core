@@ -1815,6 +1815,22 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testShapeShadowScaleAndAlignment)
     assertXPath(pXmlDoc, sShadow, "rotWithShape", u"0");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testZoomTransitionIsKept)
+{
+    // The slide of this document is brought in by a zoom that does not turn as it grows.
+    createSdImpressDoc("pptx/zoom-transition.pptx");
+
+    uno::Reference<beans::XPropertySet> xPage(getPage(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(animations::TransitionType::ZOOM,
+                         xPage->getPropertyValue(u"TransitionType"_ustr).get<sal_Int16>());
+
+    // Saving states the zoom again. Only a zoom that turns as it grows used to be stated, so a
+    // plain one left the slide with no transition at all.
+    save(TestFilter::PPTX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "/p:sld/p:transition/p:zoom", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testAirplaneTransition)
 {
     // Given a document with an airplane slide transition:
