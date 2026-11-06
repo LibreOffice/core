@@ -73,7 +73,8 @@ void ThemeExport::write(OUString const& rPath, model::Theme const& rTheme)
 
     const auto& pColorSet = rTheme.getColorSet();
 
-    mpFS->startElementNS(XML_a, XML_clrScheme, XML_name, pColorSet->getName());
+    mpFS->startElementNS(XML_a, XML_clrScheme, XML_name,
+                         pColorSet ? pColorSet->getName() : OUString());
     writeColorSet(rTheme);
     mpFS->endElementNS(XML_a, XML_clrScheme);
 
