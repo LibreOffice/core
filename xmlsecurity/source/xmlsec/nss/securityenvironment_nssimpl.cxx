@@ -365,6 +365,11 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_NssImpl::buildCertifi
     if (!cert)
         return {};
 
+    if (!cert->nssCertificate)
+    {   // should have been created by setRawCert
+        return {};
+    }
+
     //Get the system clock time
     int64 timeboundary = PR_Now() ;
     CERTCertList* certChain = CERT_GetCertChainFromCert( const_cast<CERTCertificate*>(cert), timeboundary, certUsageAnyCA ) ;
