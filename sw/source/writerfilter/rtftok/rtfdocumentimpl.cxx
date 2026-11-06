@@ -320,8 +320,13 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     , m_bNeedPar(true)
     , m_bNeedFinalPar(false)
     , m_nNestedCells(0)
+    , m_nTopLevelCells(0)
+    , m_nInheritingCells(0)
     , m_nNestedTRLeft(0)
+    , m_nTopLevelTRLeft(0)
     , m_nNestedCurrentCellX(0)
+    , m_nTopLevelCurrentCellX(0)
+    , m_nBackupTopLevelCurrentCellX(0)
     , m_aTableBufferStack(1) // create top-level buffer already
     , m_pSuperstream(nullptr)
     , m_nStreamType(0)
@@ -341,6 +346,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     , m_bWasInFrame(false)
     , m_bHadPicture(false)
     , m_bHadSect(false)
+    , m_nCellxMax(0)
     , m_nListPictureId(0)
     , m_bIsNewDoc(!rMediaDescriptor.getUnpackedValueOrDefault(u"InsertMode"_ustr, false))
     , m_rMediaDescriptor(rMediaDescriptor)
@@ -1710,7 +1716,7 @@ void RTFDocumentImpl::text(OUString& rString)
 
     // Are we in the middle of the table definition? (No cell defs yet, but we already have some cell props.)
     if (m_aStates.top().getTableCellSprms().find(NS_ooxml::LN_CT_TcPrBase_vAlign)
-        && m_TopLevelTableRow.getCells() == 0)
+        && m_nTopLevelCells == 0)
     {
         m_aTableBufferStack.back().emplace_back(RTFBufferTypes::UText, new RTFValue(rString),
                                                 nullptr);
@@ -2032,11 +2038,11 @@ bool findPropertyName(const std::vector<beans::PropertyValue>& rProperties, cons
 
 void RTFDocumentImpl::backupTableRowProperties()
 {
-    if (m_TopLevelTableRow.nCurrentCellX)
+    if (m_nTopLevelCurrentCellX)
     {
         m_aBackupTableRowSprms = m_aStates.top().getTableRowSprms();
         m_aBackupTableRowAttributes = m_aStates.top().getTableRowAttributes();
-        m_BackupTopLevelTableRow = m_TopLevelTableRow;
+        m_nBackupTopLevelCurrentCellX = m_nTopLevelCurrentCellX;
     }
 }
 
@@ -2044,7 +2050,7 @@ void RTFDocumentImpl::restoreTableRowProperties()
 {
     m_aStates.top().getTableRowSprms() = m_aBackupTableRowSprms;
     m_aStates.top().getTableRowAttributes() = m_aBackupTableRowAttributes;
-    m_TopLevelTableRow = m_BackupTopLevelTableRow;
+    m_nTopLevelCurrentCellX = m_nBackupTopLevelCurrentCellX;
 }
 
 void RTFDocumentImpl::resetTableRowProperties()
@@ -2060,7 +2066,8 @@ void RTFDocumentImpl::resetTableRowProperties()
     }
     else
     {
-        m_TopLevelTableRow.reset();
+        m_nTopLevelTRLeft = 0;
+        m_nTopLevelCurrentCellX = 0;
     }
 }
 

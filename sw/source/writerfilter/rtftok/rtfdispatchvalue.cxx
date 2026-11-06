@@ -394,7 +394,7 @@ bool RTFDocumentImpl::dispatchTableValue(RTFKeyword nKeyword, int nParam)
             int& rCurrentCellX(
                 (Destination::NESTEDTABLEPROPERTIES == m_aStates.top().getDestination())
                     ? m_nNestedCurrentCellX
-                    : m_TopLevelTableRow.nCurrentCellX);
+                    : m_nTopLevelCurrentCellX);
             const int nCellWidth = static_cast<int>(std::clamp<sal_Int64>(
                 sal_Int64(nParam) - rCurrentCellX, SAL_MIN_INT32, SAL_MAX_INT32));
             rCurrentCellX = nParam;
@@ -410,16 +410,26 @@ bool RTFDocumentImpl::dispatchTableValue(RTFKeyword nKeyword, int nParam)
             }
             else
             {
+                m_nTopLevelCells++;
                 // Push cell properties.
-                m_TopLevelTableRow.cellSprms.push_back(m_aStates.top().getTableCellSprms());
-                m_TopLevelTableRow.cellAttributes.push_back(
-                    m_aStates.top().getTableCellAttributes());
-                m_TopLevelTableRow.setCellXMax();
+                m_aTopLevelTableCellsSprms.push_back(m_aStates.top().getTableCellSprms());
+                m_aTopLevelTableCellsAttributes.push_back(m_aStates.top().getTableCellAttributes());
             }
 
             m_aStates.top().getTableCellSprms() = m_aDefaultState.getTableCellSprms();
             m_aStates.top().getTableCellAttributes() = m_aDefaultState.getTableCellAttributes();
             // Don't assume that following text is in a table!
+            if (!m_nCellxMax)
+            {
+                // Wasn't in table, but now is -> tblStart.
+                RTFSprms aAttributes;
+                RTFSprms aSprms;
+                aSprms.set(NS_ooxml::LN_tblStart, new RTFValue(1));
+                writerfilter::Reference<Properties>::Pointer_t pProperties
+                    = new RTFReferenceProperties(std::move(aAttributes), std::move(aSprms));
+                Mapper().props(pProperties);
+            }
+            m_nCellxMax = std::max(m_nCellxMax, nParam);
             return true;
         }
         break;
@@ -452,7 +462,7 @@ bool RTFDocumentImpl::dispatchTableValue(RTFKeyword nKeyword, int nParam)
             auto const aDestination = m_aStates.top().getDestination();
             int& rCurrentTRLeft((Destination::NESTEDTABLEPROPERTIES == aDestination)
                                     ? m_nNestedTRLeft
-                                    : m_TopLevelTableRow.nTRLeft);
+                                    : m_nTopLevelTRLeft);
             rCurrentTRLeft = nParam;
             return true;
         }

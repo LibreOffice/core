@@ -24,37 +24,6 @@ using namespace com::sun::star;
 
 namespace writerfilter::rtftok
 {
-void RTFDocumentImpl::checkTableStart()
-{
-    if (m_TopLevelTableRow.checkTableStart())
-    {
-        // Wasn't in table, but now is -> tblStart.
-        // (this detection only works if the table definition
-        // precedes the cells...)
-        RTFSprms aAttributes;
-        RTFSprms aSprms;
-        aSprms.set(NS_ooxml::LN_tblStart, new RTFValue(1));
-        writerfilter::Reference<Properties>::Pointer_t pProperties
-            = new RTFReferenceProperties(std::move(aAttributes), std::move(aSprms));
-        Mapper().props(pProperties);
-    }
-}
-
-void RTFDocumentImpl::checkTableEnd()
-{
-    // Not in table? Reset max width.
-    if (m_TopLevelTableRow.checkTableEnd())
-    {
-        // Was in table, but not anymore -> tblEnd.
-        RTFSprms aAttributes;
-        RTFSprms aSprms;
-        aSprms.set(NS_ooxml::LN_tblEnd, new RTFValue(1));
-        writerfilter::Reference<Properties>::Pointer_t pProperties
-            = new RTFReferenceProperties(std::move(aAttributes), std::move(aSprms));
-        Mapper().props(pProperties);
-    }
-}
-
 RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 {
     setNeedSect(true);
@@ -155,24 +124,30 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                     pCurrentBuffer->push_back(Buf_t(RTFBufferTypes::PAR, pValue, nullptr));
                 }
 
-                if (isTable)
-                {
-                    checkTableStart();
-                }
-                else
+                if (!isTable)
                 {
                     // Not actually in table!
                     // Clear the buffer so this new \par will not be seen
                     // when next \par or \cell checks the buffer.
                     replayBuffer(*pCurrentBuffer, nullptr, nullptr);
                     assert(pCurrentBuffer->empty());
-                    checkTableEnd();
                 }
             }
             else
             {
                 parBreak();
-                checkTableEnd();
+                // Not in table? Reset max width.
+                if (m_nCellxMax)
+                {
+                    // Was in table, but not anymore -> tblEnd.
+                    RTFSprms aAttributes;
+                    RTFSprms aSprms;
+                    aSprms.set(NS_ooxml::LN_tblEnd, new RTFValue(1));
+                    writerfilter::Reference<Properties>::Pointer_t pProperties
+                        = new RTFReferenceProperties(std::move(aAttributes), std::move(aSprms));
+                    Mapper().props(pProperties);
+                }
+                m_nCellxMax = 0;
             }
 
             // but don't emit properties yet, since they may change till the first text token arrives
@@ -263,7 +238,6 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 // if there was no \par, it is also a table regardless of \itap
                 if (iter == pCurrentBuffer->end() || ::std::get<0>(*iter) == RTFBufferTypes::Props)
                 {
-                    checkTableStart(); // testTdf59454
                     // must send *all* paragraph properties (testTdf164945),
                     // else getDefaultSPRM() will overwrite things
                     oSprms.emplace(m_aStates.top().getParagraphSprms());
@@ -335,7 +309,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                                                        RTFConflictPolicy::Append);
                 dispatchSymbol(RTFKeyword::CELL);
                 // Adjust total width, which is done in the \cellx handler for normal cells.
-                m_TopLevelTableRow.nCurrentCellX += m_aStates.top().getTableRowWidthAfter();
+                m_nTopLevelCurrentCellX += m_aStates.top().getTableRowWidthAfter();
 
                 int nCellCount = 0;
                 for (Buf_t& i : m_aTableBufferStack.back())
@@ -343,19 +317,20 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                     if (RTFBufferTypes::CellEnd == std::get<0>(i))
                         ++nCellCount;
                 }
-                if (m_TopLevelTableRow.getCells() < o3tl::make_unsigned(nCellCount))
+                if (m_nTopLevelCells < nCellCount)
                 {
-                    m_TopLevelTableRow.cellSprms.push_back(m_aStates.top().getTableCellSprms());
-                    m_TopLevelTableRow.cellAttributes.push_back(
+                    m_nTopLevelCells++;
+                    m_aTopLevelTableCellsSprms.push_back(m_aStates.top().getTableCellSprms());
+                    m_aTopLevelTableCellsAttributes.push_back(
                         m_aStates.top().getTableCellAttributes());
                 }
 
-                if (m_TopLevelTableRow.getCells() >= o3tl::make_unsigned(nCellCount))
+                if (m_aTopLevelTableCellsSprms.size() >= o3tl::make_unsigned(nCellCount))
                 {
                     Id aBorderIds[]
                         = { NS_ooxml::LN_CT_TcBorders_bottom, NS_ooxml::LN_CT_TcBorders_top,
                             NS_ooxml::LN_CT_TcBorders_left, NS_ooxml::LN_CT_TcBorders_right };
-                    RTFSprms& rCurrentCellSprms{ m_TopLevelTableRow.cellSprms[nCellCount - 1] };
+                    RTFSprms& rCurrentCellSprms = m_aTopLevelTableCellsSprms[nCellCount - 1];
                     for (size_t i = 0; i < 4; i++)
                     {
                         RTFSprms aAttributes;
@@ -420,37 +395,39 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             bool bRestored = false;
             // Ending a row, but no cells defined?
             // See if there was an invalid table row reset, so we can restore cell infos to help invalid documents.
-            if (!m_TopLevelTableRow.nCurrentCellX && m_BackupTopLevelTableRow.nCurrentCellX)
+            if (!m_nTopLevelCurrentCellX && m_nBackupTopLevelCurrentCellX)
             {
                 restoreTableRowProperties();
                 bRestored = true;
             }
 
-            if (m_TopLevelTableRow.getCells() != 0)
+            // If the right edge of the last cell (row width) is smaller than the width of some other row, mimic WW8TabDesc::CalcDefaults(): resize the last cell
+            const int MINLAY = 23; // sw/inc/swtypes.hxx, minimal possible size of frames.
+            if ((m_nCellxMax - m_nTopLevelCurrentCellX) >= MINLAY)
             {
-                // If the right edge of the last cell (row width) is smaller than the width of some other row, mimic WW8TabDesc::CalcDefaults(): resize the last cell
-                const int MINLAY = 23; // sw/inc/swtypes.hxx, minimal possible size of frames.
-                if ((m_TopLevelTableRow.nCellXMax - m_TopLevelTableRow.nCurrentCellX) >= MINLAY)
-                {
-                    auto pXValueLast = m_aStates.top().getTableRowSprms().find(
-                        NS_ooxml::LN_CT_TblGridBase_gridCol, false);
-                    const int nXValueLast = pXValueLast ? pXValueLast->getInt() : 0;
-                    auto pXValue = new RTFValue(nXValueLast + m_TopLevelTableRow.nCellXMax
-                                                - m_TopLevelTableRow.nCurrentCellX);
-                    m_aStates.top().getTableRowSprms().eraseLast(
-                        NS_ooxml::LN_CT_TblGridBase_gridCol);
-                    m_aStates.top().getTableRowSprms().set(NS_ooxml::LN_CT_TblGridBase_gridCol,
-                                                           pXValue, RTFConflictPolicy::Append);
-                    m_TopLevelTableRow.nCurrentCellX = m_TopLevelTableRow.nCellXMax;
-                }
+                auto pXValueLast = m_aStates.top().getTableRowSprms().find(
+                    NS_ooxml::LN_CT_TblGridBase_gridCol, false);
+                const int nXValueLast = pXValueLast ? pXValueLast->getInt() : 0;
+                auto pXValue = new RTFValue(nXValueLast + m_nCellxMax - m_nTopLevelCurrentCellX);
+                m_aStates.top().getTableRowSprms().eraseLast(NS_ooxml::LN_CT_TblGridBase_gridCol);
+                m_aStates.top().getTableRowSprms().set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue,
+                                                       RTFConflictPolicy::Append);
+                m_nTopLevelCurrentCellX = m_nCellxMax;
+            }
 
+            if (m_nTopLevelCells)
+            {
                 // Make a backup before we start popping elements
-                m_PreviousTopLevelTableRow = m_TopLevelTableRow;
+                m_aTableInheritingCellsSprms = m_aTopLevelTableCellsSprms;
+                m_aTableInheritingCellsAttributes = m_aTopLevelTableCellsAttributes;
+                m_nInheritingCells = m_nTopLevelCells;
             }
             else
             {
                 // No table definition? Then inherit from the previous row
-                m_TopLevelTableRow = m_PreviousTopLevelTableRow;
+                m_aTopLevelTableCellsSprms = m_aTableInheritingCellsSprms;
+                m_aTopLevelTableCellsAttributes = m_aTableInheritingCellsAttributes;
+                m_nTopLevelCells = m_nInheritingCells;
             }
 
             while (m_aTableBufferStack.size() > 1)
@@ -467,9 +444,8 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 m_aTableBufferStack.pop_back();
             }
 
-            auto const nCells{ m_TopLevelTableRow.getCells() }; // replayRowBuffer clears it!
-            replayRowBuffer(m_aTableBufferStack.back(), m_TopLevelTableRow.cellSprms,
-                            m_TopLevelTableRow.cellAttributes, nCells);
+            replayRowBuffer(m_aTableBufferStack.back(), m_aTopLevelTableCellsSprms,
+                            m_aTopLevelTableCellsAttributes, m_nTopLevelCells);
 
             // The scope of the table cell defaults is one row.
             m_aDefaultState.getTableCellSprms().clear();
@@ -480,13 +456,13 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             writerfilter::Reference<Properties>::Pointer_t frameProperties;
             writerfilter::Reference<Properties>::Pointer_t rowProperties;
             prepareProperties(m_aStates.top(), paraProperties, frameProperties, rowProperties,
-                              nCells, m_TopLevelTableRow.nCurrentCellX, m_TopLevelTableRow.nTRLeft);
+                              m_nTopLevelCells, m_nTopLevelCurrentCellX, m_nTopLevelTRLeft);
             sendProperties(paraProperties, frameProperties, rowProperties);
 
             m_bNeedPap = true;
             m_bNeedFinalPar = true;
             m_aTableBufferStack.back().clear();
-            m_TopLevelTableRow.reset();
+            m_nTopLevelCells = 0;
             // reset buffer => outside of table, until next \trowd
             // table buffer is our own concept, doesn't map to RTF pushState/popState
             // ... see test165805Tdf where \row is in deeper scope than \intbl

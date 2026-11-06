@@ -179,14 +179,12 @@ ErrCodeMsg SwReader::Read( const Reader& rOptions )
 
         mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
 
-        ::std::shared_ptr<SwUnoCursor> pUndoPam;
+        std::optional<SwPaM> pUndoPam;
         if( bDocUndo || mpCursor )
         {
             // set Pam to the previous node, so that it is not also moved
             const SwNode& rTmp = pPam->GetPoint()->GetNode();
-            pUndoPam = mxDoc->CreateUnoCursor(*pPam->GetPoint(), false);
-            pUndoPam->SetMark();
-            *pUndoPam->GetPoint() = SwPosition(rTmp, SwNodeOffset(-1));
+            pUndoPam.emplace( rTmp, rTmp, SwNodeOffset(0), SwNodeOffset(-1) );
         }
 
         // store for now all Fly's
