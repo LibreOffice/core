@@ -1491,6 +1491,23 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testLayoutsKeepTheirEmptyAreas)
     // this leaves as it is.
 }
 
+// A picture that fills an area of a slide keeps saying which area it fills.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testPictureKeepsTheAreaItFills)
+{
+    // Given a slide whose picture fills the area its layout states for a picture:
+    createSdImpressDoc("pptx/picture-placeholder.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the picture went out as an ordinary picture, so the slide stopped following its
+    // layout for the place and the size of that picture.
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:pic/p:nvPicPr/p:nvPr/p:ph[@type='pic']", 1);
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:pic/p:nvPicPr/p:nvPr/p:ph", "idx", u"1");
+}
+
 // Every area of a layout keeps a number of its own.
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testPlaceholderNumbersStayApart)
 {

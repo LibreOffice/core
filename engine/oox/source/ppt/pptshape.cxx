@@ -315,6 +315,37 @@ void keepStatedPlaceholderIndex(const Reference<XShape>& rxShape,
     }
 }
 
+/** Keeps the kind of area a shape fills, on the shape that fills it.
+
+    A picture or a table that fills an area of a page is held as an ordinary picture or table,
+    with nothing on it to say which kind of area it fills. The name the document gave that kind
+    is kept here, as the document spelled it, and is empty where the document named none. */
+void keepStatedPlaceholderKind(const Reference<XShape>& rxShape, sal_Int32 nSubType)
+{
+    // An area that names no kind is read as holding an object, so that one kind stands for the
+    // documents that name it and for the documents that name nothing. Only a kind the document
+    // spelled out is kept.
+    if (!nSubType || nSubType == XML_obj)
+        return;
+
+    try
+    {
+        SdrObject* pObject = SdrObject::getSdrObjectFromXShape(rxShape);
+        if (!pObject)
+            return;
+
+        Any aHeld;
+        pObject->GetGrabBagItem(aHeld);
+        comphelper::SequenceAsHashMap aShapeBag(aHeld);
+        aShapeBag[u"mso-ph-kind"_ustr] <<= oox::TokenMap::getUnicodeTokenName(nSubType);
+        pObject->SetGrabBagItem(Any(aShapeBag.getAsConstPropertyValueList()));
+    }
+    catch (const Exception&)
+    {
+        SAL_WARN("oox.ppt", "keepStatedPlaceholderKind: failed to keep the kind");
+    }
+}
+
 /// Keeps what a document states about a placeholder that the model has no room for
 void keepStatedPlaceholder(const SlidePersist& rSlidePersist, const Reference<XShape>& rxShape,
                            oox::core::XmlFilterBase& rFilterBase, sal_Int32 nSubType,
@@ -701,6 +732,7 @@ void PPTShape::addShape(
             keepStatedPlaceholder(rSlidePersist, xShape, rFilterBase, mnSubType,
                                   getTextBody() && !getTextBody()->isEmpty());
             keepStatedPlaceholderIndex(xShape, rFilterBase, getSubTypeIndex());
+            keepStatedPlaceholderKind(xShape, mnSubType);
 
             // Apply text properties on placeholder text inside this placeholder shape
             if (meShapeLocation == Slide && mpPlaceholder && getTextBody() && getTextBody()->isEmpty())

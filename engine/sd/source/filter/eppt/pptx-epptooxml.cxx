@@ -591,6 +591,32 @@ std::optional<sal_Int32> statedPlaceholderIndex(const Reference<css::drawing::XS
     }
 }
 
+/** The kind of area this shape fills, as the document named it.
+
+    Empty where the document named none, and empty for every document the import did not read. */
+OString statedPlaceholderKind(const Reference<css::drawing::XShape>& rxShape)
+{
+    SdrObject* pObject = SdrObject::getSdrObjectFromXShape(rxShape);
+    if (!pObject)
+        return OString();
+
+    try
+    {
+        uno::Any aHeld;
+        pObject->GetGrabBagItem(aHeld);
+        comphelper::SequenceAsHashMap aGrabBag(aHeld);
+        const auto aEntry = aGrabBag.find(u"mso-ph-kind"_ustr);
+        OUString aKind;
+        if (aEntry == aGrabBag.end() || !(aEntry->second >>= aKind))
+            return OString();
+        return OUStringToOString(aKind, RTL_TEXTENCODING_UTF8);
+    }
+    catch (const uno::Exception&)
+    {
+        return OString();
+    }
+}
+
 /** Whether the document stated any text for the area this shape stands for.
 
     Unknown where the import kept nothing, which is every document it did not read. */
@@ -737,9 +763,24 @@ void PowerPointShapeExport::SetPageType(PageType ePageType)
     mePageType = ePageType;
 }
 
-ShapeExport& PowerPointShapeExport::WriteNonVisualProperties(const Reference< XShape >&)
+ShapeExport& PowerPointShapeExport::WriteNonVisualProperties(const Reference< XShape >& xShape)
 {
-    GetFS()->singleElementNS(XML_p, XML_nvPr);
+    // A picture or a table that fills an area of the page says which kind of area, and which of
+    // that kind, so that the page goes on following its layout. A shape that fills none says
+    // nothing here.
+    const OString aKind = statedPlaceholderKind(xShape);
+    if (aKind.isEmpty())
+    {
+        GetFS()->singleElementNS(XML_p, XML_nvPr);
+        return *this;
+    }
+
+    const std::optional<sal_Int32> oIndex = statedPlaceholderIndex(xShape);
+    GetFS()->startElementNS(XML_p, XML_nvPr);
+    GetFS()->singleElementNS(XML_p, XML_ph, XML_type, aKind, XML_idx,
+                             sax_fastparser::UseIf(OString::number(oIndex.value_or(0)),
+                                                   oIndex.has_value()));
+    GetFS()->endElementNS(XML_p, XML_nvPr);
 
     return *this;
 }
