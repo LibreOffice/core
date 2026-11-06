@@ -197,7 +197,7 @@ class ScalingInteraction extends SelectionInteraction {
 
 		const matrix = this.transformation();
 		if (matrix)
-			SelectionSection.sendTransform(
+			this.sentWith = SelectionSection.sendTransform(
 				this.selection.selectedObjects(),
 				matrix,
 				'scale',

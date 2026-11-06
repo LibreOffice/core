@@ -61,14 +61,17 @@ class TurningInteraction extends SelectionInteraction {
 		selection: SelectionSection,
 		middle: cool.SimplePoint,
 		degrees: number,
-	): cool.Matrix2D | null {
+	): SentChange | null {
 		if (!degrees) return null;
 
 		const matrix = TurningInteraction.turnAbout(middle, degrees);
+		const ticket = SelectionSection.sendTransform(
+			selection.selectedObjects(),
+			matrix,
+			'turn',
+		);
 
-		SelectionSection.sendTransform(selection.selectedObjects(), matrix, 'turn');
-
-		return matrix;
+		return { change: matrix, ticket };
 	}
 
 	/// The change that turns the objects around that point by that many degrees, counted against
@@ -206,11 +209,12 @@ class TurningInteraction extends SelectionInteraction {
 		this.move(to, event);
 
 		// The canvas counts an angle with the clock, the engine against it.
-		TurningInteraction.turnObjects(
+		const sent = TurningInteraction.turnObjects(
 			this.selection,
 			this.middle,
 			(-this.turned * 180) / Math.PI,
 		);
+		this.sentWith = sent?.ticket ?? null;
 	}
 
 	public transformation(): cool.Matrix2D | null {

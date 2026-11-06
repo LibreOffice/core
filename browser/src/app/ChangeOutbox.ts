@@ -183,10 +183,6 @@ class ChangeOutbox {
 	/// Empty while no such press is being handled.
 	private static repeatingKey: string = '';
 
-	/// The ticket of the change of objects taken last, or null where the message offered last
-	/// as such a change was not taken as one.
-	private static lastTicket: cool.InputTicket | null = null;
-
 	/*
 		Runs what a key press does with the changes it makes held until the keys are let go. The
 		key is remembered as down until its release is seen.
@@ -207,9 +203,10 @@ class ChangeOutbox {
 	/*
 		Takes a message on its way to the engine, if it is one the outbox holds to the engine's
 		pace, and answers whether it took it. It holds the changes of objects, the undos and
-		redos and the typed text, in a view that draws from the objects only.
+		redos and the typed text, in a view that draws from the objects only. A change of objects
+		that it takes gets a ticket, which is added to the given tickets.
 	*/
-	public static take(message: string): boolean {
+	public static take(message: string, tickets?: cool.InputTicket[]): boolean {
 		// What the outbox sends itself comes through here too, and is not a new offer.
 		if (ChangeOutbox.sending) return false;
 		if (!RenderManager.isVectorRendering()) return false;
@@ -220,7 +217,7 @@ class ChangeOutbox {
 		if (entry.kind === 'transform' || entry.kind === 'other') {
 			const ticket = new cool.InputTicket();
 			entry.tickets.push(ticket);
-			ChangeOutbox.lastTicket = ticket;
+			tickets?.push(ticket);
 		}
 		ChangeOutbox.listen();
 
@@ -335,9 +332,9 @@ class ChangeOutbox {
 	/// Sends a message that changes objects and returns the ticket it was taken with, or null
 	/// where it was not taken as a change of objects, as when the socket let it go unsent.
 	public static sendAChange(message: string): cool.InputTicket | null {
-		ChangeOutbox.lastTicket = null;
-		app.socket.sendMessage(message);
-		return ChangeOutbox.lastTicket;
+		const tickets: cool.InputTicket[] = [];
+		app.socket.sendMessage(message, tickets);
+		return tickets[0] ?? null;
 	}
 
 	/// Whether an undo or a redo waits to go out or has not been answered yet.

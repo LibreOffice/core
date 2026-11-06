@@ -207,7 +207,12 @@ class Socket {
 		this.socket = inner;
 	}
 
-	public sendMessage(msg: MessageInterface): void {
+	/// Sends the message. Where the outbox takes it as a change of objects, the ticket of that
+	/// change is added to the given tickets.
+	public sendMessage(
+		msg: MessageInterface,
+		tickets?: cool.InputTicket[],
+	): void {
 		if (!this.socket) {
 			console.error('sendMessage() called with non-existent socket!');
 			return;
@@ -244,7 +249,7 @@ class Socket {
 		if (typeof msg === 'string') {
 			// The positions of objects go in the unit the engine places them in.
 			msg = RenderManager.toEngine(msg);
-			if (ChangeOutbox.take(msg)) return;
+			if (ChangeOutbox.take(msg, tickets)) return;
 			msg = ChangeOutbox.sendAhead(msg);
 		}
 

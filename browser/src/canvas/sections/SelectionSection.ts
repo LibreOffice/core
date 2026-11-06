@@ -2188,8 +2188,10 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 		ShearingInteraction.forgetTheKeys();
 		TurningInteraction.forgetTheKeys();
-		SelectionSection.sendMappings(reached, kind === 'turn' ? 'turn' : 'shear');
-		const ticket = SelectionSection.takeTheTicket();
+		const ticket = SelectionSection.sendMappings(
+			reached,
+			kind === 'turn' ? 'turn' : 'shear',
+		);
 
 		// A tied connector is laid out anew by the engine between what it is tied to.
 		for (const [objectId, change] of changes)
@@ -2745,8 +2747,12 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 		const matrix = cool.Matrix2D.IDENTITY.translate(by.x, by.y);
 
-		SelectionSection.sendTransform(this.selectedObjects(), matrix, 'move');
-		this.layTheChangeOn(matrix);
+		const ticket = SelectionSection.sendTransform(
+			this.selectedObjects(),
+			matrix,
+			'move',
+		);
+		this.layTheChangeOn(matrix, ticket);
 
 		// The view follows every step, a key held down included.
 		GraphicSelection.showTheObjects(this.selectedObjects());
@@ -2793,9 +2799,13 @@ abstract class SelectionSection extends CanvasSectionObject {
 		);
 	}
 
-	/// Lays a change a key made over the objects, as the end of a drag does with its own.
-	public layTheChangeOn(matrix: cool.Matrix2D | null): void {
-		this.leaveTheChangeOnTheObjects(matrix);
+	/// Lays a change a key made over the objects, as the end of a drag does with its own. The
+	/// ticket is the one of the message that carries the change.
+	public layTheChangeOn(
+		matrix: cool.Matrix2D | null,
+		ticket: cool.InputTicket | null,
+	): void {
+		this.leaveTheChangeOnTheObjects(matrix, ticket);
 	}
 
 	/*
@@ -2882,10 +2892,10 @@ abstract class SelectionSection extends CanvasSectionObject {
 		the drag left them. The engine's own version of an object replaces this one when it
 		arrives, so a change it made differently puts itself right then.
 	*/
-	private leaveTheChangeOnTheObjects(matrix: cool.Matrix2D | null): void {
-		// The ticket is taken whether or not anything is laid on, so each one goes with the
-		// change sent just before.
-		const ticket = SelectionSection.takeTheTicket();
+	private leaveTheChangeOnTheObjects(
+		matrix: cool.Matrix2D | null,
+		ticket: cool.InputTicket | null,
+	): void {
 		if (!matrix) return;
 		if (!SelectionSection.withinReason(this.selectedObjects(), matrix)) return;
 
@@ -2975,9 +2985,8 @@ abstract class SelectionSection extends CanvasSectionObject {
 		matrix: cool.Matrix2D,
 		what: string,
 		from?: Map<number, cool.Matrix2D>,
-	): void {
-		SelectionSection.ticketOfTheLastChange = null;
-		if (!SelectionSection.withinReason(objectIds, matrix)) return;
+	): cool.InputTicket | null {
+		if (!SelectionSection.withinReason(objectIds, matrix)) return null;
 
 		// A change worked out from what the objects are drawn by now ends a slant keys gave, and
 		// any change ends a turn they gave, which a turn by a key takes up again after it.
@@ -2996,19 +3005,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 			if (mapping) reached.set(objectId, mapping.then(matrix));
 		}
 
-		SelectionSection.sendMappings(reached, what);
-	}
-
-	/// The ticket of the change of objects sent last, or null where the last one sent was not
-	/// numbered, nothing went out for it, or the ticket was taken already.
-	private static ticketOfTheLastChange: cool.InputTicket | null = null;
-
-	/// The ticket of the change of objects sent last, once: a second call gets null until another
-	/// change is sent.
-	private static takeTheTicket(): cool.InputTicket | null {
-		const ticket = SelectionSection.ticketOfTheLastChange;
-		SelectionSection.ticketOfTheLastChange = null;
-		return ticket;
+		return SelectionSection.sendMappings(reached, what);
 	}
 
 	/*
@@ -3024,7 +3021,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 	public static sendMappings(
 		reached: Map<number, cool.Matrix2D>,
 		what: string,
-	): void {
+	): cool.InputTicket | null {
 		const mappings: string[] = [];
 		for (const [objectId, mapping] of reached)
 			mappings.push(
@@ -3036,10 +3033,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 						.join(','),
 			);
 
-		SelectionSection.ticketOfTheLastChange = null;
-		if (!mappings.length) return;
+		if (!mappings.length) return null;
 
-		SelectionSection.ticketOfTheLastChange = ChangeOutbox.sendAChange(
+		return ChangeOutbox.sendAChange(
 			'setobjecttransform to=' +
 				mappings.join(';') +
 				' as=' +
@@ -3765,7 +3761,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 			this.known = interaction.handles(
 				interaction.isACrop() ? this.handlesOfTheGroups() : this.known,
 			);
-		this.leaveTheChangeOnTheObjects(ghost);
+		this.leaveTheChangeOnTheObjects(ghost, interaction.ticketOfTheChange());
 
 		const window = interaction.transformation();
 		const objectId = this.selectedObjects()[0];

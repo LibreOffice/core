@@ -452,7 +452,7 @@ class FramingHandles extends HandleGroup {
 		);
 
 		const change = scaling.transformation();
-		this.selection.layTheChangeOn(change);
+		this.selection.layTheChangeOn(change, scaling.ticketOfTheChange());
 
 		/*
 			The handle keeps its name through a change that takes a side past the one opposite
@@ -1262,7 +1262,7 @@ class TurningHandle extends HandleGroup {
 		the turn keys turned it around before where they did, and keeps the angle and the middle
 		for the next key.
 	*/
-	private turnByKey(degrees: number): cool.Matrix2D | null {
+	private turnByKey(degrees: number): SentChange | null {
 		const byKeys = TurningInteraction.keysStillHold(this.selection);
 		const middle = byKeys?.middle ?? this.middle();
 		if (!middle) return null;
@@ -1307,7 +1307,10 @@ class TurningHandle extends HandleGroup {
 				: this.turnByKey(this.keyTurn(event, against ? 1 : -1));
 
 		// What the key did is laid on the objects, as the end of a drag lays its own.
-		this.selection.layTheChangeOn(changed);
+		this.selection.layTheChangeOn(
+			changed?.change ?? null,
+			changed?.ticket ?? null,
+		);
 
 		return null;
 	}
@@ -1320,7 +1323,7 @@ class TurningHandle extends HandleGroup {
 		const middle = this.middle();
 		if (!middle) return;
 
-		let changed: cool.Matrix2D | null;
+		let changed: SentChange | null;
 		if (this.selection.handleMode() === 'shear') {
 			changed = ShearingInteraction.shearObjects(
 				this.selection,
@@ -1338,7 +1341,10 @@ class TurningHandle extends HandleGroup {
 			changed = this.turnByKey(back);
 		}
 
-		this.selection.layTheChangeOn(changed);
+		this.selection.layTheChangeOn(
+			changed?.change ?? null,
+			changed?.ticket ?? null,
+		);
 	}
 }
 

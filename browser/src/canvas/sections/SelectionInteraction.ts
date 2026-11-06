@@ -24,6 +24,15 @@ interface AngleMark {
 	label: string;
 }
 
+/// A change of the objects that went out to the engine.
+interface SentChange {
+	/// The change laid over the objects as they are drawn now.
+	change: cool.Matrix2D;
+	/// The ticket of the message that carries the change, or null where that message was not
+	/// numbered.
+	ticket: cool.InputTicket | null;
+}
+
 /*
 	One thing a person does to a selection between taking hold of it and letting go: scaling it
 	by a handle, turning it, moving it, moving a point of a path. It begins when it is made,
@@ -95,6 +104,15 @@ abstract class SelectionInteraction {
 	*/
 	public ghostTransformation(): cool.Matrix2D | null {
 		return this.transformation();
+	}
+
+	/// The ticket of the message that carries the ghost transformation to the engine. Null
+	/// before the finish, where the finish sent no such message, and where the message was not
+	/// numbered. An interaction with no ghost transformation has none.
+	protected sentWith: cool.InputTicket | null = null;
+
+	public ticketOfTheChange(): cool.InputTicket | null {
+		return this.sentWith;
 	}
 
 	/// Whether it crops rather than scales: the window onto a picture moves, the picture stays.

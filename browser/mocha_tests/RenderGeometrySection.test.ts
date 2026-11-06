@@ -86,7 +86,6 @@ describe('RenderGeometrySection', function () {
 			(GraphicSelection as any).unpredictedAnswer = savedUnpredicted;
 			(RenderManager as any)._instance = savedInstance;
 			(RenderGeometrySection as any).pending.clear();
-			(ChangeOutbox as any).lastTicket = null;
 		});
 
 		// A ticket for a message that went out with that number.

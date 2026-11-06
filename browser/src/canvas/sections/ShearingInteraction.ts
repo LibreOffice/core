@@ -148,15 +148,15 @@ class ShearingInteraction extends SelectionInteraction {
 	/*
 		Slants the selection around that middle, in the frame turned by that angle, to the slant
 		worked out from the one there is, both in degrees as the canvas counts angles. Where keys
-		gave the slant there is, it goes on from their start. Sends the change and gives it back,
-		or nothing where the slant stays.
+		gave the slant there is, it goes on from their start. Sends the change and gives it back
+		with the ticket of its message, or nothing where the slant stays.
 	*/
 	public static shearObjects(
 		selection: SelectionSection,
 		middle: cool.SimplePoint,
 		turnedBy: number,
 		slantFrom: (stands: number) => number,
-	): cool.Matrix2D | null {
+	): SentChange | null {
 		let shearing = ShearingInteraction.keysStillHold(selection);
 		if (!shearing || !ShearingInteraction.keys) {
 			const objects = selection.selectedObjects();
@@ -197,9 +197,14 @@ class ShearingInteraction extends SelectionInteraction {
 		const objects = selection.selectedObjects();
 		// The engine is told the slant worked out from the start, since it keeps sizes rounded
 		// and a slant opening up a thin line again would make that rounding grow.
-		SelectionSection.sendTransform(objects, wanted, 'shear', keys.mappings);
+		const ticket = SelectionSection.sendTransform(
+			objects,
+			wanted,
+			'shear',
+			keys.mappings,
+		);
 		keys.laid = wanted;
-		return change;
+		return { change, ticket };
 	}
 
 	/*
@@ -326,7 +331,7 @@ class ShearingInteraction extends SelectionInteraction {
 
 		const matrix = this.transformation();
 		if (matrix)
-			SelectionSection.sendTransform(
+			this.sentWith = SelectionSection.sendTransform(
 				this.selection.selectedObjects(),
 				matrix,
 				'shear',

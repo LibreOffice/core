@@ -69,8 +69,11 @@ describe('ChangeOutbox typed text', function () {
 	// and returns the ticket the outbox took it with.
 	function aChange(message: string): cool.InputTicket | null {
 		const saved = (app as any).socket.sendMessage;
-		(app as any).socket.sendMessage = (one: string) => {
-			if (!ChangeOutbox.take(one)) sent.push(one);
+		(app as any).socket.sendMessage = (
+			one: string,
+			tickets?: cool.InputTicket[],
+		) => {
+			if (!ChangeOutbox.take(one, tickets)) sent.push(one);
 		};
 		try {
 			return ChangeOutbox.sendAChange(message);
