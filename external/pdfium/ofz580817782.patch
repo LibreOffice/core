@@ -1,0 +1,18 @@
+--- core/fxcodec/jbig2/jbig2_sdd_proc.cpp
++++ core/fxcodec/jbig2/jbig2_sdd_proc.cpp
+@@ -190,9 +190,15 @@
+   bool CUREXFLAG = false;
+   uint32_t EXINDEX = 0;
+   uint32_t num_ex_syms = 0;
++  bool previous_run_empty = false;
+   while (EXINDEX < SDNUMINSYMS + SDNUMNEWSYMS) {
+     uint32_t EXRUNLENGTH;
+     IAEX->Decode(pArithDecoder, (int*)&EXRUNLENGTH);
++    // Two empty runs in a row leave EXINDEX where it was.
++    if (EXRUNLENGTH == 0 && previous_run_empty) {
++      return nullptr;
++    }
++    previous_run_empty = EXRUNLENGTH == 0;
+     FX_SAFE_UINT32 new_ex_size = EXINDEX;
+     new_ex_size += EXRUNLENGTH;
+     if (!new_ex_size.IsValid() ||

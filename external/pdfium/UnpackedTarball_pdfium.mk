@@ -33,6 +33,7 @@ pdfium_patches += charbboxinflation.patch.1
 pdfium_patches += freetype-hidden-visibility.patch
 pdfium_patches += ofz464123310.patch
 pdfium_patches += ofz503815636.patch
+pdfium_patches += ofz580817782.patch
 pdfium_patches += abseil-hashtablez-sampler.patch
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
