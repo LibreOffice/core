@@ -32,14 +32,12 @@ SfxMacroInfoItem::SfxMacroInfoItem(
     const BasicManager* pMgr,
     OUString _aLibName,
     OUString _aModuleName,
-    OUString _aMethodName,
-    OUString _aComment) :
+    OUString _aMethodName) :
     SfxPoolItem(nWhichId),
     pBasicManager(pMgr),
     aLibName(std::move(_aLibName)),
     aModuleName(std::move(_aModuleName)),
-    aMethodName(std::move(_aMethodName)),
-    aCommentText(std::move(_aComment))
+    aMethodName(std::move(_aMethodName))
 {
 }
 
@@ -52,8 +50,7 @@ bool SfxMacroInfoItem::operator==( const SfxPoolItem& rCmp) const
             pBasicManager == rItem.pBasicManager &&
             aLibName == rItem.aLibName &&
             aModuleName == rItem.aModuleName &&
-            aMethodName == rItem.aMethodName &&
-            aCommentText == rItem.aCommentText;
+            aMethodName == rItem.aMethodName;
 }
 
 SfxMacroInfoItem* SfxMacroInfoItem::Clone( SfxItemPool *) const

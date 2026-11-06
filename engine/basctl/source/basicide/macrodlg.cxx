@@ -589,7 +589,7 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
             aMod = aMod.getToken( 0, ' ' );
         }
         const OUString& aSub( aDesc.GetMethodName() );
-        SfxMacroInfoItem aInfoItem( SID_BASICIDE_ARG_MACROINFO, pBasMgr, aLib, aMod, aSub, OUString() );
+        SfxMacroInfoItem aInfoItem( SID_BASICIDE_ARG_MACROINFO, pBasMgr, aLib, aMod, aSub );
         if (&rButton == m_xEditButton.get())
         {
             if (m_xMacroBox->get_selected(m_xMacroBoxIter.get()))
