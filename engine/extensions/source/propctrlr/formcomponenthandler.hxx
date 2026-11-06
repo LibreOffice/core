@@ -227,11 +227,9 @@ namespace pcr
         void impl_displaySQLError_nothrow( const ::dbtools::SQLExceptionInfo& _rErrorDescriptor ) const;
 
         /** let's the user chose a selection of entries from a string list, and stores this
-            selection in the given property
-            @return
-                <TRUE/> if and only if the user successfully changed the property
+            selection in the given property when the dialog, which runs asynchronously, ends
         */
-        bool impl_dialogListSelection_nothrow( const OUString& _rProperty, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
+        void impl_dialogListSelection_nothrow( const OUString& _rProperty, ::osl::ClearableMutexGuard& _rClearBeforeDialog );
 
         /** executes a dialog for choosing a filter or sort criterion for a database form
             @param _bFilter
@@ -257,16 +255,12 @@ namespace pcr
         bool impl_dialogLinkedFormFields_nothrow( ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
         /** executes a dialog which allows the user to modify the FormatKey
-            property of our component, by choosing a (number) format.
+            property of our component, by choosing a (number) format. The dialog runs
+            asynchronously, a chosen formatting is set to the property when it ends.
             @precond
                 Our component actually has a FormatKey property.
-            @param _out_rNewValue
-                the new property value, if the user chose a new formatting
-            @return
-                <TRUE/> if and only if a new formatting has been chosen by the user.
-                In this case, ->_out_rNewValue is filled with the new property value
         */
-        bool impl_dialogFormatting_nothrow( cpo::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
+        void impl_dialogFormatting_nothrow( const OUString& _rProperty, ::osl::ClearableMutexGuard& _rClearBeforeDialog );
 
         /** executes a dialog which allows to the user to change the ImageURL property
             of our component by browsing for an image file.
@@ -293,15 +287,12 @@ namespace pcr
         bool impl_browseForTargetURL_nothrow( cpo::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
         /** executes a dialog which allows the user to change the font, plus related properties,
-            of our component
+            of our component. The dialog runs asynchronously, a chosen font is set to the
+            property, as <code>Sequence&lt; NamedValue &gt;</code>, when it ends.
             @precond
                 our component actually has a Font property
-            @param _out_rNewValue
-                a value describing the new font, as <code>Sequence&lt; NamedValue &gt;</code>
-            @return
-                <TRUE/> if and only if the user successfully changed the font of our component
         */
-        bool impl_executeFontDialog_nothrow( cpo::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
+        void impl_executeFontDialog_nothrow( const OUString& _rProperty, ::osl::ClearableMutexGuard& _rClearBeforeDialog );
 
         /** allows the user browsing for a database document
             @precond
@@ -314,32 +305,32 @@ namespace pcr
         */
         bool impl_browseForDatabaseDocument_throw( cpo::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
-        /** raises a dialog which allows the user to choose a color
+        /** raises a dialog which allows the user to choose a color. The dialog runs
+            asynchronously, a chosen color is set to the property when it ends.
             @param  _nColorPropertyId
                 the ID of the color property
-            @param  _out_rNewValue
-                the chosen color value
-            @return
-                <TRUE/> if and only if a color was chosen by the user
         */
-        bool impl_dialogColorChooser_throw( sal_Int32 _nColorPropertyId, cpo::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
+        void impl_dialogColorChooser_throw( sal_Int32 _nColorPropertyId, ::osl::ClearableMutexGuard& _rClearBeforeDialog );
 
-        /** raises a dialog which allows the user to choose a label control for our component
-            @param  _out_rNewValue
-                the chosen label control, if any
-            @return
-                <TRUE/> if and only if a label control was chosen by the user
+        /** raises a dialog which allows the user to choose a label control for our component.
+            The dialog runs asynchronously, the chosen label control is set to the property
+            when it ends.
         */
-        bool impl_dialogChooseLabelControl_nothrow( cpo::uno::Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
+        void impl_dialogChooseLabelControl_nothrow( const OUString& _rProperty, ::osl::ClearableMutexGuard& _rClearBeforeDialog );
 
-        /** raises a dialog that lets the user choose the tab order of controls on a form
+        /** raises a dialog that lets the user choose the tab order of controls on a form. The
+            dialog runs asynchronously and sets the order itself when it ends.
             @precond
                 we have a view control container in which our controls live
-            @return
-                <TRUE/> if and only if the user successfully changed the tab order
             @seealso impl_getContextControlContainer_nothrow
         */
-        bool impl_dialogChangeTabOrder_nothrow( ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
+        void impl_dialogChangeTabOrder_nothrow( ::osl::ClearableMutexGuard& _rClearBeforeDialog );
+
+        /** sets the value a dialog obtained for a property, when it ends, if we still inspect the
+            component the dialog was opened for
+        */
+        void impl_setDialogValue_nothrow( const cpo::uno::Reference< css::beans::XPropertySet >& _rxDialogComponent,
+            const OUString& _rProperty, const cpo::uno::Any& _rValue );
 
         /** retrieves the context for controls, whose model(s) we're inspecting
 

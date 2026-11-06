@@ -770,7 +770,7 @@ namespace pcr
         // the dialog
         SvxAbstractDialogFactory* pFactory = SvxAbstractDialogFactory::Create();
 
-        ScopedVclPtr<VclAbstractDialog> pDialog( pFactory->CreateSvxMacroAssignDlg(
+        VclPtr<VclAbstractDialog> pDialog( pFactory->CreateSvxMacroAssignDlg(
             PropertyHandlerHelper::getDialogParentFrame( m_xContext ),
             impl_getContextFrame_nothrow(),
             m_bIsDialogElement,
@@ -781,30 +781,38 @@ namespace pcr
         if ( !pDialog )
             return InteractiveSelectionResult_Cancelled;
 
-        // DF definite problem here
-        // OK & Cancel seem to be both returning 0
-        if ( pDialog->Execute() == RET_CANCEL )
-            return InteractiveSelectionResult_Cancelled;
-
-        try
+        // the dialog runs on its own, we take the assignments when it ends, if we still inspect
+        // the component it was opened for
+        rtl::Reference<EventHandler> xThis(this);
+        const cpo::uno::Reference<css::beans::XPropertySet> xComponent(m_xComponent);
+        pDialog->StartExecuteAsync([pDialog, xThis, xComponent, pEventHolder](sal_Int32 nResult)
         {
-            for (auto const& event : m_aEvents)
+            // DF definite problem here
+            // OK & Cancel seem to be both returning 0
+            if (nResult != RET_CANCEL && xThis->m_xComponent == xComponent)
             {
-                ScriptEventDescriptor aScriptDescriptor( pEventHolder->getNormalizedDescriptorByName( event.second.sListenerMethodName ) );
+                try
+                {
+                    for (auto const& event : xThis->m_aEvents)
+                    {
+                        ScriptEventDescriptor aScriptDescriptor( pEventHolder->getNormalizedDescriptorByName( event.second.sListenerMethodName ) );
 
-                // set the new "property value"
-                setPropertyValue(
-                    lcl_getEventPropertyName( event.second.sListenerClassName, event.second.sListenerMethodName ),
-                    Any( aScriptDescriptor )
-                );
+                        // set the new "property value"
+                        xThis->setPropertyValue(
+                            lcl_getEventPropertyName( event.second.sListenerClassName, event.second.sListenerMethodName ),
+                            Any( aScriptDescriptor )
+                        );
+                    }
+                }
+                catch( const Exception& )
+                {
+                    DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
+                }
             }
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
-        }
+            pDialog->disposeOnce();
+        });
 
-        return InteractiveSelectionResult_Success;
+        return css::inspection::InteractiveSelectionResult_Pending;
     }
 
     void EventHandler::actuatingPropertyChanged( const OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, bool /*_bFirstTimeInit*/ )

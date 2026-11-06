@@ -222,7 +222,6 @@ namespace pcr
         */
         cpo::uno::Reference< css::frame::XFrame >
                 impl_getContextFrame_nothrow() const;
-
         /** approves or denies a certain method to be included in the UI
             @return
                 <TRUE/> if and only if the given method is allowed.

@@ -52,17 +52,6 @@ using namespace cpo::uno;
     {
     }
 
-    short ListSelectionDialog::run()
-    {
-        short nResult = GenericDialogController::run();
-
-        if ( RET_OK == nResult )
-            commitSelection();
-
-        return nResult;
-    }
-
-
     void ListSelectionDialog::initialize( )
     {
         if ( !m_xListBox.is() )

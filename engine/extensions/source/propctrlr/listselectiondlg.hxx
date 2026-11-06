@@ -42,11 +42,11 @@ namespace pcr
         );
         virtual ~ListSelectionDialog() override;
 
-        virtual short run() override;
+        /// sets the selection the user made to the property of the list box
+        void    commitSelection();
 
     private:
         void    initialize( );
-        void    commitSelection();
 
         void    fillEntryList   ( const cpo::uno::Sequence< OUString >& _rListEntries );
 

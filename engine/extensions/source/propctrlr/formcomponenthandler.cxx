@@ -1396,8 +1396,8 @@ namespace pcr
         {
         case PROPERTY_ID_DEFAULT_SELECT_SEQ:
         case PROPERTY_ID_SELECTEDITEMS:
-            if ( impl_dialogListSelection_nothrow( _rPropertyName, aGuard ) )
-                eResult = InteractiveSelectionResult_Success;
+            impl_dialogListSelection_nothrow( _rPropertyName, aGuard );
+            eResult = InteractiveSelectionResult_Pending;
             break;
 
         case PROPERTY_ID_FILTER:
@@ -1419,8 +1419,8 @@ namespace pcr
             break;
 
         case PROPERTY_ID_FORMATKEY:
-            if ( impl_dialogFormatting_nothrow( _rData, aGuard ) )
-                eResult = InteractiveSelectionResult_ObtainedValue;
+            impl_dialogFormatting_nothrow( _rPropertyName, aGuard );
+            eResult = InteractiveSelectionResult_Pending;
             break;
 
         case PROPERTY_ID_IMAGE_URL:
@@ -1434,8 +1434,8 @@ namespace pcr
             break;
 
         case PROPERTY_ID_FONT:
-            if ( impl_executeFontDialog_nothrow( _rData, aGuard ) )
-                eResult = InteractiveSelectionResult_ObtainedValue;
+            impl_executeFontDialog_nothrow( _rPropertyName, aGuard );
+            eResult = InteractiveSelectionResult_Pending;
             break;
 
         case PROPERTY_ID_DATASOURCE:
@@ -1454,18 +1454,18 @@ namespace pcr
         case PROPERTY_ID_ACTIVESELECTIONTEXTCOLOR:
         case PROPERTY_ID_INACTIVESELECTIONBACKGROUNDCOLOR:
         case PROPERTY_ID_INACTIVESELECTIONTEXTCOLOR:
-            if ( impl_dialogColorChooser_throw( nPropId, _rData, aGuard ) )
-                eResult = InteractiveSelectionResult_ObtainedValue;
+            impl_dialogColorChooser_throw( nPropId, aGuard );
+            eResult = InteractiveSelectionResult_Pending;
             break;
 
         case PROPERTY_ID_CONTROLLABEL:
-            if ( impl_dialogChooseLabelControl_nothrow( _rData, aGuard ) )
-                eResult = InteractiveSelectionResult_ObtainedValue;
+            impl_dialogChooseLabelControl_nothrow( _rPropertyName, aGuard );
+            eResult = InteractiveSelectionResult_Pending;
             break;
 
         case PROPERTY_ID_TABINDEX:
-            if ( impl_dialogChangeTabOrder_nothrow( aGuard ) )
-                eResult = InteractiveSelectionResult_Success;
+            impl_dialogChangeTabOrder_nothrow( aGuard );
+            eResult = InteractiveSelectionResult_Pending;
             break;
 
         default:
@@ -2554,15 +2554,19 @@ namespace pcr
         }
     }
 
-    bool FormComponentPropertyHandler::impl_dialogListSelection_nothrow( const OUString& _rProperty, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
+    void FormComponentPropertyHandler::impl_dialogListSelection_nothrow( const OUString& _rProperty, ::osl::ClearableMutexGuard& _rClearBeforeDialog )
     {
         OSL_PRECOND(m_pInfoService, "FormComponentPropertyHandler::impl_dialogListSelection_"
                                     "nothrow: no property meta data!");
 
         OUString sPropertyUIName( m_pInfoService->getPropertyTranslation( m_pInfoService->getPropertyId( _rProperty ) ) );
-        ListSelectionDialog aDialog(impl_getDefaultDialogFrame_nothrow(), m_xComponent, _rProperty, sPropertyUIName);
+        auto xDialog = std::make_shared<ListSelectionDialog>(impl_getDefaultDialogFrame_nothrow(), m_xComponent, _rProperty, sPropertyUIName);
         _rClearBeforeDialog.clear();
-        return ( RET_OK == aDialog.run() );
+        weld::DialogController::runAsync(xDialog, [xDialog](sal_Int32 nResult)
+        {
+            if (nResult == RET_OK)
+                xDialog->commitSelection();
+        });
     }
 
     bool FormComponentPropertyHandler::impl_dialogFilterOrSort_nothrow( bool _bFilter, OUString& _out_rSelectedClause, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
@@ -2640,17 +2644,41 @@ namespace pcr
         return ( RET_OK == aDialog.run() );
     }
 
-    bool FormComponentPropertyHandler::impl_dialogFormatting_nothrow( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
+    namespace
     {
-        bool bChanged = false;
+        /// the items of the number format dialog; as a base class it is made before the dialog
+        /// and destroyed after it, the dialog works on it
+        struct NumberFormatItems
+        {
+            SfxItemSet maCoreSet;
+            NumberFormatItems()
+                : maCoreSet(SfxGetpApp()->GetPool(),
+                            svl::Items<SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO>)
+            {
+            }
+        };
+
+        /// the number format dialog, which owns the items it works on
+        class NumberFormatDialog : private NumberFormatItems, public SfxSingleTabDialogController
+        {
+        public:
+            explicit NumberFormatDialog(weld::Window* pParent)
+                : SfxSingleTabDialogController(pParent, &maCoreSet,
+                                               u"cui/ui/formatnumberdialog.ui"_ustr,
+                                               u"FormatNumberDialog"_ustr)
+            {
+            }
+
+            SfxItemSet& coreSet() { return maCoreSet; }
+        };
+    }
+
+    void FormComponentPropertyHandler::impl_dialogFormatting_nothrow( const OUString& _rProperty, ::osl::ClearableMutexGuard& _rClearBeforeDialog )
+    {
         try
         {
-            // create the itemset for the dialog
-            SfxItemSet aCoreSet(
-                SfxGetpApp()->GetPool(),
-                svl::Items<
-                    SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO>);
-                // ripped this somewhere ... don't understand it :(
+            auto xDialog = std::make_shared<NumberFormatDialog>(impl_getDefaultDialogFrame_nothrow());
+            SfxItemSet& rCoreSet = xDialog->coreSet();
 
             // get the number formats supplier
             Reference< XNumberFormatsSupplier >  xSupplier;
@@ -2664,46 +2692,46 @@ namespace pcr
 
             sal_Int32 nFormatKey = 0;
             impl_getPropertyValue_throw( PROPERTY_FORMATKEY ) >>= nFormatKey;
-            aCoreSet.Put( SfxUInt32Item( SID_ATTR_NUMBERFORMAT_VALUE, nFormatKey ) );
+            rCoreSet.Put( SfxUInt32Item( SID_ATTR_NUMBERFORMAT_VALUE, nFormatKey ) );
 
             SvNumberFormatter* pFormatter = pSupplier->GetNumberFormatter();
             double dPreviewVal = OFormatSampleControl::getPreviewValue(pFormatter,nFormatKey);
             SvxNumberInfoItem aFormatter( pFormatter, dPreviewVal, PcrRes(RID_STR_TEXT_FORMAT), SID_ATTR_NUMBERFORMAT_INFO );
-            aCoreSet.Put( aFormatter );
+            rCoreSet.Put( aFormatter );
 
             // a tab dialog with a single page
-            SfxSingleTabDialogController aDialog(impl_getDefaultDialogFrame_nothrow(), &aCoreSet,
-                u"cui/ui/formatnumberdialog.ui"_ustr, u"FormatNumberDialog"_ustr);
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT );
             if ( !fnCreatePage )
                 throw RuntimeException();   // caught below
 
-            aDialog.SetTabPage((*fnCreatePage)(aDialog.get_content_area(), &aDialog, &aCoreSet));
+            xDialog->SetTabPage((*fnCreatePage)(xDialog->get_content_area(), xDialog.get(), &rCoreSet));
 
             _rClearBeforeDialog.clear();
-            if ( RET_OK == aDialog.run() )
-            {
-                const SfxItemSet* pResult = aDialog.GetOutputItemSet();
-
-                if (const SvxNumberInfoItem* pInfoItem = pResult->GetItem( SID_ATTR_NUMBERFORMAT_INFO ))
+            rtl::Reference<FormComponentPropertyHandler> xThis(this);
+            const Reference<XPropertySet> xComponent(m_xComponent);
+            weld::DialogController::runAsync(xDialog,
+                [xThis, xComponent, xDialog, pFormatter, _rProperty](sal_Int32 nResult)
                 {
-                    for (sal_uInt32 key : pInfoItem->GetDelFormats())
-                        pFormatter->DeleteEntry(key);
-                }
+                    if (nResult != RET_OK)
+                        return;
 
-                if ( const SfxUInt32Item* pItem = pResult->GetItemIfSet( SID_ATTR_NUMBERFORMAT_VALUE, false ) )
-                {
-                    _out_rNewValue <<= static_cast<sal_Int32>( pItem->GetValue() );
-                    bChanged = true;
-                }
-            }
+                    const SfxItemSet* pResult = xDialog->GetOutputItemSet();
+                    if (const SvxNumberInfoItem* pInfoItem = pResult->GetItem( SID_ATTR_NUMBERFORMAT_INFO ))
+                    {
+                        for (sal_uInt32 key : pInfoItem->GetDelFormats())
+                            pFormatter->DeleteEntry(key);
+                    }
+
+                    if ( const SfxUInt32Item* pItem = pResult->GetItemIfSet( SID_ATTR_NUMBERFORMAT_VALUE, false ) )
+                        xThis->impl_setDialogValue_nothrow(xComponent, _rProperty,
+                                                           Any(static_cast<sal_Int32>(pItem->GetValue())));
+                });
         }
         catch( const Exception& )
         {
             TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "FormComponentPropertyHandler::impl_dialogFormatting_nothrow" );
         }
-        return bChanged;
     }
 
     bool FormComponentPropertyHandler::impl_browseForImage_nothrow( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
@@ -2794,36 +2822,58 @@ namespace pcr
         return bSuccess;
     }
 
-    bool FormComponentPropertyHandler::impl_executeFontDialog_nothrow( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
+    namespace
     {
-        bool bSuccess = false;
+        /// the items of the font dialog; as a base class it is made before the dialog and
+        /// destroyed after it, the dialog works on it
+        struct FontDialogItems
+        {
+            FontList maFontList;
+            std::unique_ptr<SfxItemSet> mpSet;
+            rtl::Reference<SfxItemPool> mpPool;
 
-        // create an item set for use with the dialog
-        std::unique_ptr<SfxItemSet> pSet;
-        rtl::Reference<SfxItemPool> pPool;
-        FontList aFontList(Application::GetDefaultDevice());
-        ControlCharacterDialog::createItemSet(pSet, pPool, aFontList);
-        ControlCharacterDialog::translatePropertiesToItems(m_xComponent, pSet.get());
-
-        {   // do this in an own block. The dialog needs to be destroyed before we call
-            // destroyItemSet
-            ControlCharacterDialog aDlg(impl_getDefaultDialogFrame_nothrow(), *pSet);
-            _rClearBeforeDialog.clear();
-            if (RET_OK == aDlg.run())
+            explicit FontDialogItems(const Reference<XPropertySet>& rxComponent)
+                : maFontList(Application::GetDefaultDevice())
             {
-                const SfxItemSet* pOut = aDlg.GetOutputItemSet();
-                if ( pOut )
-                {
-                    std::vector< NamedValue > aFontPropertyValues;
-                    ControlCharacterDialog::translateItemsToProperties( *pOut, aFontPropertyValues );
-                    _out_rNewValue <<= comphelper::containerToSequence(aFontPropertyValues);
-                    bSuccess = true;
-                }
+                ControlCharacterDialog::createItemSet(mpSet, mpPool, maFontList);
+                ControlCharacterDialog::translatePropertiesToItems(rxComponent, mpSet.get());
             }
-        }
 
-        ControlCharacterDialog::destroyItemSet(pSet, pPool);
-        return bSuccess;
+            ~FontDialogItems() { ControlCharacterDialog::destroyItemSet(mpSet, mpPool); }
+        };
+
+        /// the font dialog, which owns the items it works on
+        class FontDialog : private FontDialogItems, public ControlCharacterDialog
+        {
+        public:
+            FontDialog(weld::Window* pParent, const Reference<XPropertySet>& rxComponent)
+                : FontDialogItems(rxComponent)
+                , ControlCharacterDialog(pParent, *mpSet)
+            {
+            }
+        };
+    }
+
+    void FormComponentPropertyHandler::impl_executeFontDialog_nothrow( const OUString& _rProperty, ::osl::ClearableMutexGuard& _rClearBeforeDialog )
+    {
+        auto xDialog = std::make_shared<FontDialog>(impl_getDefaultDialogFrame_nothrow(), m_xComponent);
+        _rClearBeforeDialog.clear();
+        rtl::Reference<FormComponentPropertyHandler> xThis(this);
+        const Reference<XPropertySet> xComponent(m_xComponent);
+        weld::DialogController::runAsync(xDialog, [xThis, xComponent, xDialog, _rProperty](sal_Int32 nResult)
+        {
+            if (nResult != RET_OK)
+                return;
+
+            const SfxItemSet* pOut = xDialog->GetOutputItemSet();
+            if ( !pOut )
+                return;
+
+            std::vector< NamedValue > aFontPropertyValues;
+            ControlCharacterDialog::translateItemsToProperties( *pOut, aFontPropertyValues );
+            xThis->impl_setDialogValue_nothrow(xComponent, _rProperty,
+                                               Any(comphelper::containerToSequence(aFontPropertyValues)));
+        });
     }
 
 
@@ -2858,32 +2908,38 @@ namespace pcr
         return bSuccess;
     }
 
-    bool FormComponentPropertyHandler::impl_dialogColorChooser_throw( sal_Int32 _nColorPropertyId, Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
+    void FormComponentPropertyHandler::impl_dialogColorChooser_throw( sal_Int32 _nColorPropertyId, ::osl::ClearableMutexGuard& _rClearBeforeDialog )
     {
+        const OUString sProperty(impl_getPropertyNameFromId_nothrow(_nColorPropertyId));
         ::Color aColor;
-        if( ! (impl_getPropertyValue_throw( impl_getPropertyNameFromId_nothrow( _nColorPropertyId )) >>= aColor) )
+        if( ! (impl_getPropertyValue_throw( sProperty ) >>= aColor) )
             SAL_WARN("extensions.propctrlr", "impl_dialogColorChooser_throw: unable to get property " << _nColorPropertyId);
 
         _rClearBeforeDialog.clear();
         weld::Window* pParent = impl_getDefaultDialogFrame_nothrow();
-        ColorDialog aColorDlg(pParent);
-        aColorDlg.SetColor(aColor);
-        if (!aColorDlg.Execute())
-            return false;
-
-        _out_rNewValue <<= aColorDlg.GetColor();
-        return true;
+        auto xColorDialog = std::make_shared<ColorDialog>(pParent);
+        xColorDialog->SetColor(aColor);
+        rtl::Reference<FormComponentPropertyHandler> xThis(this);
+        const Reference<XPropertySet> xComponent(m_xComponent);
+        xColorDialog->ExecuteAsync([xThis, xComponent, xColorDialog, sProperty](sal_Int32 nResult)
+        {
+            if (nResult)
+                xThis->impl_setDialogValue_nothrow(xComponent, sProperty, Any(xColorDialog->GetColor()));
+        });
     }
 
-    bool FormComponentPropertyHandler::impl_dialogChooseLabelControl_nothrow( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
+    void FormComponentPropertyHandler::impl_dialogChooseLabelControl_nothrow( const OUString& _rProperty, ::osl::ClearableMutexGuard& _rClearBeforeDialog )
     {
         weld::Window* pParent = impl_getDefaultDialogFrame_nothrow();
-        OSelectLabelDialog dlgSelectLabel(pParent, m_xComponent);
+        auto xDialog = std::make_shared<OSelectLabelDialog>(pParent, m_xComponent);
         _rClearBeforeDialog.clear();
-        bool bSuccess = (RET_OK == dlgSelectLabel.run());
-        if ( bSuccess )
-            _out_rNewValue <<= dlgSelectLabel.GetSelected();
-        return bSuccess;
+        rtl::Reference<FormComponentPropertyHandler> xThis(this);
+        const Reference<XPropertySet> xComponent(m_xComponent);
+        weld::DialogController::runAsync(xDialog, [xThis, xComponent, xDialog, _rProperty](sal_Int32 nResult)
+        {
+            if (nResult == RET_OK)
+                xThis->impl_setDialogValue_nothrow(xComponent, _rProperty, Any(xDialog->GetSelected()));
+        });
     }
 
 
@@ -2896,15 +2952,33 @@ namespace pcr
     }
 
 
-    bool FormComponentPropertyHandler::impl_dialogChangeTabOrder_nothrow( ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
+    void FormComponentPropertyHandler::impl_dialogChangeTabOrder_nothrow( ::osl::ClearableMutexGuard& _rClearBeforeDialog )
     {
         OSL_PRECOND( impl_getContextControlContainer_nothrow().is(), "FormComponentPropertyHandler::impl_dialogChangeTabOrder_nothrow: invalid control context!" );
 
         Reference< XTabControllerModel > xTabControllerModel( impl_getRowSet_nothrow(), UNO_QUERY );
-        TabOrderDialog aDialog(impl_getDefaultDialogFrame_nothrow(), xTabControllerModel,
+        auto xDialog = std::make_shared<TabOrderDialog>(impl_getDefaultDialogFrame_nothrow(), xTabControllerModel,
                                impl_getContextControlContainer_nothrow(), m_xContext);
         _rClearBeforeDialog.clear();
-        return RET_OK == aDialog.run();
+        // the dialog sets the order itself when it ends with OK
+        weld::DialogController::runAsync(xDialog, [](sal_Int32) {});
+    }
+
+    void FormComponentPropertyHandler::impl_setDialogValue_nothrow( const Reference< XPropertySet >& _rxDialogComponent,
+        const OUString& _rProperty, const Any& _rValue )
+    {
+        // the dialog ran on its own, meanwhile we may have moved on to another component
+        if ( m_xComponent != _rxDialogComponent )
+            return;
+
+        try
+        {
+            setPropertyValue( _rProperty, _rValue );
+        }
+        catch( const Exception& )
+        {
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "FormComponentPropertyHandler::impl_setDialogValue_nothrow" );
+        }
     }
 
     bool FormComponentPropertyHandler::impl_hasValidDataSourceSignature_nothrow( const Reference< XPropertySet >& _xFormProperties, bool _bAllowEmptyDataSourceName )
