@@ -32,6 +32,7 @@
 #include <com/sun/star/awt/XCheckBox.hpp>
 #include <com/sun/star/awt/XRadioButton.hpp>
 #include <com/sun/star/awt/XListBox.hpp>
+#include <com/sun/star/awt/XScrollBar.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <comphelper/OAccessible.hxx>
@@ -154,6 +155,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -8143,6 +8145,22 @@ void COKitDocumentImpl::formControlAction(unsigned long long nObjectId, const ch
             }
             else
                 SetLastExceptionMsg(u"The control is no list"_ustr);
+        }
+        else if (aAction == "value")
+        {
+            // a scroll bar scrolls there as after a move of its thumb, which calls its listeners;
+            // a spin button takes its value from the model, as it calls none for a value set
+            cpo::uno::Reference<css::awt::XScrollBar> xScrollBar(xPeer, cpo::uno::UNO_QUERY);
+            cpo::uno::Reference<css::beans::XPropertySet> xModel(
+                xControl->getModel(), cpo::uno::UNO_QUERY);
+            if (xScrollBar.is())
+                xScrollBar->setValue(o3tl::toInt32(aValue));
+            else if (xModel.is()
+                     && xModel->getPropertySetInfo()->hasPropertyByName(u"SpinValue"_ustr))
+                xModel->setPropertyValue(u"SpinValue"_ustr,
+                                         cpo::uno::Any(o3tl::toInt32(aValue)));
+            else
+                SetLastExceptionMsg(u"The control holds no value"_ustr);
         }
         else if (aAction == "check")
         {

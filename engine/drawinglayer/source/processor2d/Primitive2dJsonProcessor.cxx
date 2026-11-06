@@ -1208,7 +1208,9 @@ bool Primitive2dJsonProcessor::writeFormControl(const ControlPrimitive2D& rContr
     if (bScroll || nClassId == css::form::FormComponentType::SPINBUTTON)
     {
         const OUString aPrefix(bScroll ? u"Scroll"_ustr : u"Spin"_ustr);
-        if (aValueOf(u"Default"_ustr + aPrefix + u"Value"_ustr) >>= nValue)
+        // the value it holds now, or where it holds none the one it starts with
+        if ((aValueOf(aPrefix + u"Value"_ustr) >>= nValue)
+            || (aValueOf(u"Default"_ustr + aPrefix + u"Value"_ustr) >>= nValue))
             mrWriter.put("value", nValue);
         if (aValueOf(aPrefix + u"ValueMin"_ustr) >>= nValue)
             mrWriter.put("min", nValue);
@@ -1216,6 +1218,11 @@ bool Primitive2dJsonProcessor::writeFormControl(const ControlPrimitive2D& rContr
             mrWriter.put("max", nValue);
         if (aValueOf(u"VisibleSize"_ustr) >>= nValue)
             mrWriter.put("visible", nValue);
+        // how far one step of an arrow and one of a click on the track go
+        if (aValueOf(bScroll ? u"LineIncrement"_ustr : u"SpinIncrement"_ustr) >>= nValue)
+            mrWriter.put("step", nValue);
+        if (bScroll && (aValueOf(u"BlockIncrement"_ustr) >>= nValue))
+            mrWriter.put("pageStep", nValue);
     }
 
     // the labels of the columns of a table control

@@ -76,6 +76,9 @@ namespace cool {
 		min?: number;
 		max?: number;
 		visible?: number;
+		/// How far one step of an arrow goes, and for a scroll bar how far a click on its track.
+		step?: number;
+		pageStep?: number;
 		/// The labels of the columns of a table control.
 		columns?: string[];
 		font?: FormControlFont;

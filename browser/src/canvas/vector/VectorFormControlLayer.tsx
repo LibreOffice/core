@@ -218,6 +218,17 @@ namespace cool {
             layer._makeDropDownList(id, element, primitive);
           else layer._makeList(id, element, primitive);
           break;
+        case 'fileSelection':
+          layer._makeTypable(id, element, primitive);
+          // the kit has no file picker for it, the path is typed
+          element.querySelector('button')?.setAttribute('disabled', '');
+          break;
+        case 'spinButton':
+          layer._makeSpinButton(id, element, primitive);
+          break;
+        case 'scrollBar':
+          layer._makeScrollBar(id, element, primitive);
+          break;
       }
 
       // the keyboard stays with the document: the controls take no focus, by click or by Tab
@@ -449,6 +460,117 @@ namespace cool {
             VectorFormControlLayer._send(id, 'select', wanted.join(','));
           });
         });
+    }
+
+    // where the value of a scroll bar or a spin button goes, kept within its bounds
+    private static _moveTo(
+      id: number,
+      primitive: FormControlPrimitive,
+      value: number,
+    ): void {
+      const min = primitive.min ?? 0;
+      const max = primitive.max ?? 100;
+      const within = Math.round(Math.min(max, Math.max(min, value)));
+      if (within !== (primitive.value ?? min))
+        VectorFormControlLayer._send(id, 'value', String(within));
+    }
+
+    /// A spin button: up, or right where it runs across, adds a step, the other arrow takes one.
+    private static _makeSpinButton(
+      id: number,
+      element: HTMLElement,
+      primitive: FormControlPrimitive,
+    ): void {
+      if (primitive.disabled) return;
+      const arrows = element.firstElementChild?.children;
+      if (!arrows || arrows.length < 2) return;
+      const step = primitive.step ?? 1;
+      const value = primitive.value ?? primitive.min ?? 0;
+      const first = primitive.vertical ? step : -step;
+      (arrows[0] as HTMLElement).addEventListener('click', () =>
+        VectorFormControlLayer._moveTo(id, primitive, value + first),
+      );
+      (arrows[1] as HTMLElement).addEventListener('click', () =>
+        VectorFormControlLayer._moveTo(id, primitive, value - first),
+      );
+    }
+
+    /*
+      A scroll bar: its arrows go a step, a click on the track before or after the thumb a page,
+      and the thumb is dragged to where the value goes, which is sent when it is let go.
+    */
+    private static _makeScrollBar(
+      id: number,
+      element: HTMLElement,
+      primitive: FormControlPrimitive,
+    ): void {
+      if (primitive.disabled) return;
+      const parts = element.firstElementChild?.children;
+      if (!parts || parts.length < 3) return;
+      const before = parts[0] as HTMLElement;
+      const track = parts[1] as HTMLElement;
+      const after = parts[2] as HTMLElement;
+      const thumb = track.firstElementChild as HTMLElement | null;
+      if (!thumb) return;
+
+      const layer = VectorFormControlLayer;
+      const vertical = primitive.vertical === true;
+      const min = primitive.min ?? 0;
+      const max = primitive.max ?? 100;
+      const value = primitive.value ?? min;
+      const step = primitive.step ?? 1;
+      const pageStep =
+        primitive.pageStep ??
+        primitive.visible ??
+        Math.max(1, (max - min) / 10);
+
+      before.addEventListener('click', () =>
+        layer._moveTo(id, primitive, value - step),
+      );
+      after.addEventListener('click', () =>
+        layer._moveTo(id, primitive, value + step),
+      );
+      track.addEventListener('click', (event: MouseEvent) => {
+        if (event.target === thumb) return;
+        const box = thumb.getBoundingClientRect();
+        const ahead = vertical
+          ? event.clientY > box.bottom
+          : event.clientX > box.right;
+        layer._moveTo(id, primitive, value + (ahead ? pageStep : -pageStep));
+      });
+
+      // the thumb follows the pointer along the track, from where it was taken hold of
+      thumb.addEventListener('pointerdown', (event: PointerEvent) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const trackBox = track.getBoundingClientRect();
+        const thumbBox = thumb.getBoundingClientRect();
+        const along = (e: PointerEvent) => (vertical ? e.clientY : e.clientX);
+        const trackStart = vertical ? trackBox.top : trackBox.left;
+        const travel =
+          (vertical
+            ? trackBox.height - thumbBox.height
+            : trackBox.width - thumbBox.width) || 1;
+        const grab = along(event) - (vertical ? thumbBox.top : thumbBox.left);
+        const shareAt = (e: PointerEvent) =>
+          Math.min(1, Math.max(0, (along(e) - grab - trackStart) / travel));
+        const travelPercent =
+          100 -
+          (parseFloat(vertical ? thumb.style.height : thumb.style.width) || 0);
+        thumb.setPointerCapture(event.pointerId);
+        const move = (e: PointerEvent) => {
+          const placed = shareAt(e) * travelPercent + '%';
+          if (vertical) thumb.style.top = placed;
+          else thumb.style.left = placed;
+        };
+        const up = (e: PointerEvent) => {
+          thumb.removeEventListener('pointermove', move);
+          thumb.removeEventListener('pointerup', up);
+          layer._moveTo(id, primitive, min + shareAt(e) * (max - min));
+        };
+        thumb.addEventListener('pointermove', move);
+        thumb.addEventListener('pointerup', up);
+      });
     }
 
     private static _send(id: number, action: string, value: string): void {
