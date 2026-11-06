@@ -29,6 +29,10 @@ window.L.Control.DocumentNameInput = window.L.Control.extend({
 		);
 		this.titlebar = document.getElementById('document-titlebar');
 
+		this._onKeyPress = this.onDocumentNameKeyPress.bind(this);
+		this._onFocus = this.onDocumentNameFocus.bind(this);
+		this._onBlur = this.documentNameCancel.bind(this, true);
+
 		var label = document.querySelector('label[for="document-name-input"]');
 		if (label) label.textContent = _('Document name');
 
@@ -116,24 +120,17 @@ window.L.Control.DocumentNameInput = window.L.Control.extend({
 	disableDocumentNameInput: function () {
 		this.nameInput.disabled = true;
 		this.nameInput.classList.remove('editable');
-		this.nameInput.removeEventListener('keypress', this.onDocumentNameKeyPress);
+		this.nameInput.removeEventListener('keypress', this._onKeyPress);
 	},
 
 	enableDocumentNameInput: function () {
 		this.nameInput.disabled = false;
 		this.nameInput.classList.add('editable');
-		this.nameInput.removeEventListener('keypress', this.onDocumentNameKeyPress);
-		this.nameInput.addEventListener(
-			'keypress',
-			this.onDocumentNameKeyPress.bind(this),
-		);
-		this.nameInput.removeEventListener('focus', this.onDocumentNameFocus);
-		this.nameInput.addEventListener(
-			'focus',
-			this.onDocumentNameFocus.bind(this),
-		);
-		this.nameInput.removeEventListener('blur', this.documentNameCancel);
-		this.nameInput.addEventListener('blur', this.documentNameCancel.bind(this, true));
+		// addEventListener ignores a listener that is already registered,
+		// so repeated enables do not stack handlers.
+		this.nameInput.addEventListener('keypress', this._onKeyPress);
+		this.nameInput.addEventListener('focus', this._onFocus);
+		this.nameInput.addEventListener('blur', this._onBlur);
 	},
 
 	onDocumentNameKeyPress: function (e) {
