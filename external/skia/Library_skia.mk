@@ -540,6 +540,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkStream \
     UnpackedTarball/skia/src/core/SkStrike \
     UnpackedTarball/skia/src/core/SkStrikeCache \
+    UnpackedTarball/skia/src/core/SkStrikeRef \
     UnpackedTarball/skia/src/core/SkStrikeSpec \
     UnpackedTarball/skia/src/core/SkString \
     UnpackedTarball/skia/src/core/SkStringUtils \
@@ -1011,6 +1012,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/ganesh/GrTestUtils \
     UnpackedTarball/skia/src/gpu/ganesh/GrTexture \
     UnpackedTarball/skia/src/gpu/ganesh/GrTextureProxy \
+    UnpackedTarball/skia/src/gpu/ganesh/GrTextureProxyCacheAccess \
     UnpackedTarball/skia/src/gpu/ganesh/GrTextureRenderTargetProxy \
     UnpackedTarball/skia/src/gpu/ganesh/GrTextureResolveRenderTask \
     UnpackedTarball/skia/src/gpu/ganesh/GrThreadSafeCache \
