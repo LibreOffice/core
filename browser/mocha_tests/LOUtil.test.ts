@@ -682,6 +682,20 @@ describe('LOUtil', function () {
 		});
 	});
 
+	describe('getFileExtension()', function () {
+		it('the extension is found', function () {
+			const map = { wopi: { BaseFileName: 'README.odt' } };
+			let extension = LOUtil.getFileExtension(map);
+			nodeassert.equal(extension, 'odt');
+		});
+
+		it('there is no extension', function () {
+			const map = { wopi: { BaseFileName: 'README' } };
+			let extension = LOUtil.getFileExtension(map);
+			nodeassert.equal(extension, '');
+		});
+	});
+
 	describe('generateNewFileName()', function () {
 		it('the suffix is added before the extension', function () {
 			const newFileName = LOUtil.generateNewFileName('README.txt', '_new');

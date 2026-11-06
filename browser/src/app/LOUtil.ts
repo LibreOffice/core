@@ -1187,7 +1187,11 @@ class LOUtil {
 
 	public static getFileExtension(map: any): string {
 		const filename: string = map['wopi'].BaseFileName;
-		return filename.substring(filename.lastIndexOf('.') + 1);
+		const idx = filename.lastIndexOf('.');
+		if (idx == -1) {
+			return '';
+		}
+		return filename.substring(idx + 1);
 	}
 
 	public static isFileODF(map: any): boolean {
