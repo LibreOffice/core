@@ -98,6 +98,23 @@ uno::Reference<drawing::XShape> findChildShapeByText(const uno::Reference<drawin
 
     return uno::Reference<drawing::XShape>();
 }
+
+/// how many shapes below xShape, xShape itself included, show the text rText
+sal_Int32 countShapesByText(const uno::Reference<drawing::XShape>& xShape, const OUString& rText)
+{
+    sal_Int32 nCount(0);
+    uno::Reference<text::XText> xText(xShape, uno::UNO_QUERY);
+    if (xText.is() && xText->getString() == rText)
+        nCount++;
+
+    uno::Reference<container::XIndexAccess> xGroup(xShape, uno::UNO_QUERY);
+    if (xGroup.is())
+        for (sal_Int32 i = 0; i < xGroup->getCount(); i++)
+            nCount += countShapesByText(
+                uno::Reference<drawing::XShape>(xGroup->getByIndex(i), uno::UNO_QUERY), rText);
+
+    return nCount;
+}
 /// the size the first run of xShape is shown at, with the shape's autofit scale
 double shownTextSize(const uno::Reference<drawing::XShape>& xShape)
 {
@@ -145,6 +162,7 @@ protected:
         return uno::Reference<drawing::XShape>(getShapeFromPage(0, 0), uno::UNO_QUERY);
     }
 };
+
 
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testBase)
 {
@@ -356,6 +374,29 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testRotation)
     uno::Reference<beans::XPropertySet> xShape2(xShapeGroup->getByIndex(3), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(12000),
                          xShape2->getPropertyValue(u"RotateAngle"_ustr).get<sal_Int32>());
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTurnedShapeLiesWithItsDiagonalFlat)
+{
+    // a flat box turned by 75 degrees: the shape stops where its diagonal lies flat, two corners
+    // on the long sides of the box, as the reference program draws it
+    createSdImpressDoc("pptx/smartart-turned-shape-flat-diagonal.pptx");
+    SdrObject* pDiagram(SdrObject::getSdrObjectFromXShape(getShapeFromPage(0, 0)));
+    CPPUNIT_ASSERT(nullptr != pDiagram);
+    pDiagram->getDiagramHelper()->reLayout();
+
+    uno::Reference<container::XIndexAccess> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDiagram.is());
+    uno::Reference<drawing::XShape> xTurned;
+    for (sal_Int32 n = 0; n < xDiagram->getCount() && !xTurned.is(); ++n)
+    {
+        uno::Reference<beans::XPropertySet> xChild(xDiagram->getByIndex(n), uno::UNO_QUERY);
+        if (xChild.is() && xChild->getPropertyValue(u"RotateAngle"_ustr).get<sal_Int32>() != 0)
+            xTurned.set(xChild, uno::UNO_QUERY);
+    }
+    CPPUNIT_ASSERT(xTurned.is());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3623.0, double(xTurned->getSize().Width), 5.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(13523.0, double(xTurned->getSize().Height), 5.0);
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTextAutoRotation)
