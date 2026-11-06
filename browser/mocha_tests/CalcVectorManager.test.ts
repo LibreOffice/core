@@ -11,23 +11,34 @@
 
 describe('CalcVectorManager requests', function () {
 	let recorder: SocketRecorder;
-	let savedInstance: any;
 	let manager: CalcVectorManager;
 	let changes: number;
 
 	beforeEach(function () {
 		recorder = new SocketRecorder();
-		// The first content that arrives reports the first visuals.
-		savedInstance = (RenderManager as any)._instance;
-		(RenderManager as any)._instance = { markVisualsReady() {} };
 		manager = new CalcVectorManager();
 		changes = 0;
-		manager.onChanged(() => changes++);
+		manager.onVectorChanged(() => changes++);
 	});
 	afterEach(function () {
 		(manager as any)._disarmExpiry();
 		recorder.restore();
-		(RenderManager as any)._instance = savedInstance;
+	});
+
+	it('acknowledges a tile that comes after the view switched to vectors, and keeps none', function () {
+		const savedParse = (app.socket as any).parseServerCmd;
+		// The tile message as the socket parses it.
+		(app.socket as any).parseServerCmd = () => ({ part: '0', wireId: 5 });
+		try {
+			manager.onTileMsg('tile: wid=5', {
+				rawData: new Uint8Array(8),
+				isKeyframe: true,
+			});
+		} finally {
+			(app.socket as any).parseServerCmd = savedParse;
+		}
+		nodeassert.deepStrictEqual(recorder.sent, ['tileprocessed wids=5']);
+		nodeassert.strictEqual(manager.tileCount(), 0);
 	});
 
 	// The request ids named by the messages sent, in their order.
@@ -552,19 +563,15 @@ describe('CalcVectorManager requests', function () {
 
 describe('CalcVectorManager eviction', function () {
 	let recorder: SocketRecorder;
-	let savedInstance: any;
 	let manager: CalcVectorManager;
 
 	beforeEach(function () {
 		recorder = new SocketRecorder();
-		savedInstance = (RenderManager as any)._instance;
-		(RenderManager as any)._instance = { markVisualsReady() {} };
 		manager = new CalcVectorManager();
 	});
 	afterEach(function () {
 		(manager as any)._disarmExpiry();
 		recorder.restore();
-		(RenderManager as any)._instance = savedInstance;
 	});
 
 	// Holds the sheet with its first block in view.
@@ -625,5 +632,57 @@ describe('CalcVectorManager eviction', function () {
 
 		nodeassert.strictEqual(manager.getSheet(0) !== undefined, true);
 		nodeassert.strictEqual(manager.getSheet(1), undefined);
+	});
+});
+
+describe('RenderManager for a spreadsheet', function () {
+	let savedInstance: any;
+	let savedIsEnabled: () => boolean;
+	beforeEach(function () {
+		savedInstance = (RenderManager as any)._instance;
+		savedIsEnabled = cool.VectorRenderingConfig.isEnabled;
+		(RenderManager as any)._instance = undefined;
+	});
+	afterEach(function () {
+		(cool.VectorRenderingConfig as any).isEnabled = savedIsEnabled;
+		(RenderManager as any)._instance = savedInstance;
+	});
+
+	it('draws a spreadsheet from vector primitives when the option is on', function () {
+		(cool.VectorRenderingConfig as any).isEnabled = () => true;
+		const manager = (RenderManager as any).makeInstance('spreadsheet');
+		nodeassert.ok(manager instanceof CalcVectorManager);
+		nodeassert.strictEqual(RenderManager.calcVectorManager(), manager);
+		nodeassert.strictEqual(RenderManager.drawsFromObjects(), true);
+		nodeassert.strictEqual(RenderManager.isVectorRendering(), false);
+	});
+
+	it('keeps the change listeners when another manager takes over', function () {
+		const savedListeners = (RenderManager as any)._vectorListeners;
+		(RenderManager as any)._vectorListeners = [];
+		try {
+			const tiles: any = new BitmapTileManager();
+			// The manager that draws tiles holds nothing to release here.
+			tiles.discardAllCache = () => undefined;
+			(RenderManager as any)._instance = tiles;
+			let changes = 0;
+			RenderManager.onVectorChanged(() => changes++);
+
+			(cool.VectorRenderingConfig as any).isEnabled = () => true;
+			const manager = (RenderManager as any).makeInstance('spreadsheet');
+			manager.changedHere();
+
+			nodeassert.strictEqual(changes, 1);
+		} finally {
+			(RenderManager as any)._vectorListeners = savedListeners;
+		}
+	});
+
+	it('draws a spreadsheet from tiles when the option is off', function () {
+		(cool.VectorRenderingConfig as any).isEnabled = () => false;
+		const manager = (RenderManager as any).makeInstance('spreadsheet');
+		nodeassert.ok(manager instanceof BitmapTileManager);
+		nodeassert.strictEqual(RenderManager.calcVectorManager(), undefined);
+		nodeassert.strictEqual(RenderManager.drawsFromObjects(), false);
 	});
 });

@@ -9,7 +9,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-describe('VectorManager', function () {
+describe('ImpressVectorManager', function () {
 	// A dropped part re-fetches in full, which sends a request. Give the
 	// socket a no-op so those requests do not need a live connection.
 	before(function () {
@@ -62,7 +62,7 @@ describe('VectorManager', function () {
 	// manager keys the cached objects by that id and keeps the paint order
 	// beside them, so a later update can reach one object by its id.
 	it('keeps each object id from a primitive tree response', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 
 		// Two objects with empty primitive lists.
 		manager.handleVectorPrimitivesResponse({
@@ -84,7 +84,7 @@ describe('VectorManager', function () {
 	// keeps it on the cached tree so a later update can tell whether the
 	// client is still in step with the engine.
 	it('keeps the part version from a primitive tree response', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S0',
@@ -101,7 +101,7 @@ describe('VectorManager', function () {
 	// An order that comes with it sets the paint order, here reversing the
 	// two objects.
 	it('applies a delta, reusing cached content for unchanged objects', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S0',
 			version: 1,
@@ -132,7 +132,7 @@ describe('VectorManager', function () {
 	// delta without one leaves the order alone and touches nothing but the
 	// object it names.
 	it('applies a delta that carries no order', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S0',
 			version: 1,
@@ -158,7 +158,7 @@ describe('VectorManager', function () {
 	// An object the order no longer names is gone, so it is dropped from
 	// the cache rather than left behind holding its primitives.
 	it('drops an object the delta order no longer names', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S0',
 			version: 1,
@@ -185,7 +185,7 @@ describe('VectorManager', function () {
 	// When the order names an object the client never cached, the delta
 	// cannot be rebuilt, so the part is dropped and re-fetched in full.
 	it('drops the part when a delta order names unknown content', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S0',
 			version: 1,
@@ -212,7 +212,7 @@ describe('VectorManager', function () {
 	// full response. It describes an older state, so it must not roll the
 	// cache backwards.
 	it('ignores a delta that is not newer than the cache', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S0',
 			version: 5,
@@ -239,7 +239,7 @@ describe('VectorManager', function () {
 	// A client that comes back to a new model keeps drawing what it holds until each page
 	// arrives again.
 	it('keeps drawing the other cached parts when a full response has a new epoch', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S0',
 			epoch: 100,
@@ -263,7 +263,7 @@ describe('VectorManager', function () {
 	// A delta from a new epoch counts from another start, so it is not applied on top of the
 	// content cached for its own part.
 	it('drops a cached part instead of applying a delta from a new epoch', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S0',
 			epoch: 100,
@@ -288,7 +288,7 @@ describe('VectorManager', function () {
 	// A delta that starts below the version held carries more objects than are needed. Each of
 	// them replaces a whole object, so the delta is applied as it is.
 	it('applies a delta that starts below the version held', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S0',
 			version: 5,
@@ -314,7 +314,7 @@ describe('VectorManager', function () {
 	// A delta that starts above the version held leaves out the changes in between, and no
 	// later delta carries them, so the part is dropped and fetched whole.
 	it('drops the part when a delta starts above the version held', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S0',
 			version: 5,
@@ -338,7 +338,7 @@ describe('VectorManager', function () {
 	// Versions count in a space the engine names. A model that started counting again can
 	// answer with a lower version, and its page still replaces what is cached.
 	it('takes a full response from a new epoch whatever its version', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S0',
 			epoch: 100,
@@ -387,7 +387,7 @@ describe('VectorManager', function () {
 	// its cache may be behind. A page drawn after that asks what changed since
 	// the version it holds, and is drawn from the cache until the answer comes.
 	it('asks what changed on a cached page when it is drawn after being away', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse(cachedSlide(0));
 		const answers: (number[] | undefined)[] = [];
 		manager.onVectorChanged((answered) => answers.push(answered));
@@ -432,7 +432,7 @@ describe('VectorManager', function () {
 
 	// Coming back with many pages cached asks only for the ones drawn.
 	it('leaves a cached page that is not drawn after being away unasked', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		for (let i = 0; i < 10; i++)
 			manager.handleVectorPrimitivesResponse(cachedSlide(i));
 
@@ -451,7 +451,7 @@ describe('VectorManager', function () {
 	// Coming back with many pages in view asks for them a few at a time, in the order they
 	// were drawn, and the next one asks when an answer lands.
 	it('asks what changed on the pages drawn after being away a few at a time', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		for (let i = 0; i < 5; i++)
 			manager.handleVectorPrimitivesResponse(cachedSlide(i));
 
@@ -500,7 +500,7 @@ describe('VectorManager', function () {
 	// ones waiting their turn are forgotten with them. The reconnect marks every page stale
 	// again, and the pages drawn then ask afresh, up to the few at a time.
 	it('lets the pages ask again after the connection dropped', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		for (let i = 0; i < 3; i++)
 			manager.handleVectorPrimitivesResponse(cachedSlide(i));
 
@@ -526,7 +526,7 @@ describe('VectorManager', function () {
 	// A page that arrives whole after being away is current, so drawing it asks
 	// for nothing.
 	it('asks nothing for a page that arrived whole after being away', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse(cachedSlide(0));
 
 		const { sent } = recording(() => {
@@ -543,7 +543,7 @@ describe('VectorManager', function () {
 	// A pushed delta for a page that is not cached yet answers no request, so
 	// the full request for the page stays the one in flight.
 	it('keeps the request for a page open when a delta for it arrives first', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		const sent = SocketRecorder.during(() => {
 			manager.requestPartById('M0', cool.VectorMode.MasterPages);
 			manager.handleVectorPrimitivesDelta({
@@ -563,7 +563,7 @@ describe('VectorManager', function () {
 	// A request sent before the connection dropped gets no answer, so a reconnect forgets it
 	// and the next draw asks for the part again. A request still in flight is not sent twice.
 	it('asks again for a cached part once its request is forgotten', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse(cachedSlide(0));
 
 		const whileInFlight = recording(() => {
@@ -585,7 +585,7 @@ describe('VectorManager', function () {
 	// A page removed while the client was away is answered with the header
 	// alone, and its cache entry is dropped.
 	it('drops a cached part when the answer says the page is gone', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S3',
 			version: 5,
@@ -606,7 +606,7 @@ describe('VectorManager', function () {
 	// A delta without a version cannot be checked against later ones, so the
 	// cache keeps what it held.
 	it('leaves a delta without a version unapplied', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S0',
 			version: 5,
@@ -624,7 +624,7 @@ describe('VectorManager', function () {
 	// A full response older than a delta already applied does not roll the
 	// cache back.
 	it('ignores a full response older than the cache', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S0',
 			version: 6,
@@ -643,7 +643,7 @@ describe('VectorManager', function () {
 	// A delta that brings a new object without an order has no place to draw
 	// it, so the part is fetched whole.
 	it('drops the part when a delta brings a new object without an order', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S0',
 			version: 1,
@@ -662,7 +662,7 @@ describe('VectorManager', function () {
 
 	// A listener that is no longer wanted is not called again.
 	it('forgets a listener that was removed', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		let notified = 0;
 		const listener = () => notified++;
 		manager.onVectorChanged(listener);
@@ -677,7 +677,7 @@ describe('VectorManager', function () {
 	// engine, so the listeners hear that no object was answered rather
 	// than that a whole part arrived.
 	it('answers no object when a layer is hidden or the page list changes', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse(cachedSlide(0));
 		const answers: (number[] | undefined)[] = [];
 		manager.onVectorChanged((answered) => answers.push(answered));
@@ -690,7 +690,7 @@ describe('VectorManager', function () {
 	// its own, so it arrives with a full response and a delta that carries
 	// that entry updates it, which is how a resized page reaches the client.
 	it('takes the page rectangle from the page entry', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S0',
 			version: 1,
@@ -722,7 +722,7 @@ describe('VectorManager', function () {
 	// carries its entry only when the background or the master page
 	// changed, and then it replaces the cached one.
 	it('replaces the page entry when a delta carries it', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S0',
 			version: 1,
@@ -753,7 +753,7 @@ describe('VectorManager', function () {
 	// is on, whether it is an empty placeholder and where it paints. The
 	// manager keeps all of that so the view can hit-test and frame objects.
 	it('keeps the geometry and grouping of each object', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S0',
 			objects: [
@@ -790,7 +790,7 @@ describe('VectorManager', function () {
 	// Hiding a layer leaves the objects on it out of the drawing while the
 	// rest of the slide still paints, and showing it again brings them back.
 	it('skips the objects on a hidden layer when drawing', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		const hairline = { type: 'polygonHairline', path: 'M0 0 L1 1' };
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S0',
@@ -817,7 +817,7 @@ describe('VectorManager', function () {
 	// own background arrives, so text on a dark slide comes out light even
 	// though the view around it is light.
 	it('draws automatic text against the background the page entry carries', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		const text = {
 			type: 'textSimplePortion',
 			text: 'Hi',
@@ -853,7 +853,7 @@ describe('VectorManager', function () {
 	});
 
 	it('names automatic text by the color it is drawn in on its page', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		const text = {
 			type: 'textSimplePortion',
 			text: 'Hi',
@@ -890,7 +890,7 @@ describe('VectorManager', function () {
 	// The picture a drag shows of an object takes its colors from the page
 	// the object is on, even when another part was drawn before it.
 	it('draws a drag picture against the background of its own page', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		const text = {
 			type: 'textSimplePortion',
 			text: 'Hi',
@@ -955,7 +955,7 @@ describe('VectorManager', function () {
 			(app as any).sectionContainer = originalSectionContainer;
 		});
 
-		function whiteShapeOnSlide(manager: VectorManager): any {
+		function whiteShapeOnSlide(manager: ImpressVectorManager): any {
 			const whiteFill = {
 				type: 'polyPolygonColor',
 				color: '#FFFFFF',
@@ -974,7 +974,7 @@ describe('VectorManager', function () {
 		}
 
 		function fillStyleOfShape(
-			manager: VectorManager,
+			manager: ImpressVectorManager,
 			data: any,
 			options?: any,
 		): string {
@@ -986,7 +986,7 @@ describe('VectorManager', function () {
 		}
 
 		it('draws a white shape dark in the view and white in a slideshow', function () {
-			const manager = new VectorManager();
+			const manager = new ImpressVectorManager();
 			const data = whiteShapeOnSlide(manager);
 
 			nodeassert.strictEqual(fillStyleOfShape(manager, data), DARK);
@@ -1006,7 +1006,10 @@ describe('VectorManager', function () {
 				getNumber: (_key: string, byDefault: number) => byDefault,
 			};
 			try {
-				nodeassert.strictEqual((VectorManager as any)._ghosting().color, DARK);
+				nodeassert.strictEqual(
+					(ImpressVectorManager as any)._ghosting().color,
+					DARK,
+				);
 			} finally {
 				(window as any).prefs = originalPrefs;
 			}
@@ -1021,7 +1024,7 @@ describe('VectorManager', function () {
 	// slides is never drawn.
 	it('paints the master a page names under the page', function () {
 		const hairline = (path: string): any => ({ type: 'polygonHairline', path });
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'M0',
 			mode: cool.VectorMode.MasterPages,
@@ -1083,7 +1086,7 @@ describe('VectorManager', function () {
 	// that slide while another slide still shows them.
 	it('leaves out the master layers a page hides', function () {
 		const hairline = (path: string): any => ({ type: 'polygonHairline', path });
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'M0',
 			mode: cool.VectorMode.MasterPages,
@@ -1127,7 +1130,7 @@ describe('VectorManager', function () {
 	// under that master draws the entry, so the typed text shows on the slide.
 	it('draws a master edit on the slides under the master', function () {
 		const hairline = (path: string): any => ({ type: 'polygonHairline', path });
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'M0',
 			mode: cool.VectorMode.MasterPages,
@@ -1175,7 +1178,7 @@ describe('VectorManager', function () {
 	// the master is asked for. It becomes drawable once the master arrives.
 	it('waits for the master a page names before drawing it', function () {
 		const recorder = new SocketRecorder();
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S2',
 			mode: cool.VectorMode.Slides,
@@ -1223,7 +1226,7 @@ describe('VectorManager', function () {
 	// nothing. A new list changes what the slide shows, so the views
 	// listening for vector changes redraw.
 	it('takes the hidden layers from the layer visibility state', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		let notified = 0;
 		manager.onVectorChanged(() => notified++);
 
@@ -1246,7 +1249,7 @@ describe('VectorManager', function () {
 	// a wrapper only an editing view unfolds, so a thumbnail and a slideshow
 	// leave the prompt out and the editing view shows it.
 	it('draws the prompt of an empty placeholder in the edit view only', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		const prompt = {
 			type: 'exclusiveEditView',
 			children: [{ type: 'polygonHairline', path: 'M0 0 L1 1' }],
@@ -1274,7 +1277,7 @@ describe('VectorManager', function () {
 	it('requests the font a text portion names', function () {
 		const recorder = new SocketRecorder();
 
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S0',
 			objects: [
@@ -1301,7 +1304,7 @@ describe('VectorManager', function () {
 	it('drops all cached parts when the cache is discarded', function () {
 		const recorder = new SocketRecorder();
 
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S0',
 			version: 1,
@@ -1326,7 +1329,7 @@ describe('VectorManager', function () {
 	// A graphics-memory reclaim drops the cached parts and tells the
 	// listeners, so views re-fetch on their next paint.
 	it('drops cached parts and notifies on graphics memory reclaim', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S0',
 			version: 1,
@@ -1347,7 +1350,7 @@ describe('VectorManager', function () {
 	// The same index names a different page in each mode, so slide 0 and
 	// master page 0 are cached apart and each keeps its own content.
 	it('caches the same index in two modes as separate pages', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S0',
@@ -1376,7 +1379,7 @@ describe('VectorManager', function () {
 	it('does not let one mode satisfy a request for the other', function () {
 		const recorder = new SocketRecorder();
 
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'M0',
 			mode: cool.VectorMode.MasterPages,
@@ -1405,7 +1408,7 @@ describe('VectorManager', function () {
 	it('asks again for a missing part once the page list is replaced', function () {
 		const recorder = new SocketRecorder();
 
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		nodeassert.strictEqual(
 			manager.requestPartById('M4', cool.VectorMode.MasterPages),
 			undefined,
@@ -1452,7 +1455,7 @@ describe('VectorManager', function () {
 	// in a pass of its own, so the page content stays free of it.
 	it('paints the area name of a master placeholder', function () {
 		const response = loadVectorRenderingReference('testMasterAreaName');
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse(response);
 		const master = manager.requestPartById(
 			response.partId,
@@ -1493,7 +1496,7 @@ describe('VectorManager', function () {
 	// edits the page, so the page content is drawn without them.
 	it('draws the placeholder aids apart from the page content', function () {
 		const hairline = (path: string): any => ({ type: 'polygonHairline', path });
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'M0',
 			mode: cool.VectorMode.MasterPages,
@@ -1523,7 +1526,7 @@ describe('VectorManager', function () {
 
 	// A response that names no mode is filed as the slide at that index.
 	it('treats a response with no mode as a slide', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S2',
 			version: 1,
@@ -1540,7 +1543,7 @@ describe('VectorManager', function () {
 		const recorder = new SocketRecorder();
 		const originalImpress = (app as any).impress;
 		try {
-			const manager = new VectorManager();
+			const manager = new ImpressVectorManager();
 			manager.handleVectorPrimitivesResponse({
 				partId: 'S0',
 				mode: cool.VectorMode.Slides,
@@ -1588,7 +1591,7 @@ describe('VectorManager', function () {
 	// A delta names the page by its id, so it reaches the page wherever the
 	// page now sits in its list.
 	it('applies a delta to a page whose index moved', function () {
-		const manager = new VectorManager();
+		const manager = new ImpressVectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S0',
 			version: 1,
@@ -1647,7 +1650,7 @@ describe('VectorManager', function () {
 		try {
 			// This client is view 2, so its own entry is the one drawn.
 			(app as any).map = { _docLayer: { _viewId: 2 } };
-			let manager = new VectorManager();
+			let manager = new ImpressVectorManager();
 			manager.handleVectorPrimitivesResponse(response);
 			let recorder = new CanvasRecorder();
 			manager.renderInto(
@@ -1661,7 +1664,7 @@ describe('VectorManager', function () {
 
 			// A view that is not editing the box draws the first entry.
 			(app as any).map = { _docLayer: { _viewId: 7 } };
-			manager = new VectorManager();
+			manager = new ImpressVectorManager();
 			manager.handleVectorPrimitivesResponse(response);
 			recorder = new CanvasRecorder();
 			manager.renderInto(
@@ -1765,7 +1768,7 @@ describe('VectorManager', function () {
 			(app as any).impress = {
 				partList: pageList(cool.VectorMode.MasterPages, 5),
 			};
-			const manager = new VectorManager();
+			const manager = new ImpressVectorManager();
 			manager.requestThumbnail(0, 0, cool.VectorMode.MasterPages, 100, 100);
 			manager.handleVectorPrimitivesResponse(
 				page(0, cool.VectorMode.MasterPages, [
@@ -1793,7 +1796,7 @@ describe('VectorManager', function () {
 			(app as any).impress = {
 				partList: pageList(cool.VectorMode.MasterPages, 5),
 			};
-			const manager = new VectorManager();
+			const manager = new ImpressVectorManager();
 			manager.requestThumbnail(0, 4, cool.VectorMode.MasterPages, 100, 100);
 
 			manager.handleVectorPrimitivesResponse({
@@ -1811,7 +1814,7 @@ describe('VectorManager', function () {
 		// A page asked for again after being away answers with a full response,
 		// and a preview already shown for it is drawn again from that.
 		it('draws a shown preview again when its page arrives anew', function () {
-			const manager = new VectorManager();
+			const manager = new ImpressVectorManager();
 			manager.requestThumbnail(0, 0, cool.VectorMode.Slides, 100, 100);
 			manager.handleVectorPrimitivesResponse(
 				page(0, cool.VectorMode.Slides, [{ id: 1, primitives: [] }]),
@@ -1829,7 +1832,7 @@ describe('VectorManager', function () {
 		// A preview of a page that may be behind the document is drawn from the
 		// cache at once, and asks what changed since the version held.
 		it('draws a stale preview from the cache and asks what changed', function () {
-			const manager = new VectorManager();
+			const manager = new ImpressVectorManager();
 			const held = page(0, cool.VectorMode.Slides, [{ id: 1, primitives: [] }]);
 			held.epoch = 100;
 			manager.handleVectorPrimitivesResponse(held);
@@ -1849,7 +1852,7 @@ describe('VectorManager', function () {
 
 		// A preview asked for twice while its page is pending is drawn once.
 		it('draws a waiting preview once however often it asked', function () {
-			const manager = new VectorManager();
+			const manager = new ImpressVectorManager();
 			manager.requestThumbnail(0, 0, cool.VectorMode.Slides, 100, 100);
 			manager.requestThumbnail(0, 0, cool.VectorMode.Slides, 120, 120);
 			manager.handleVectorPrimitivesResponse(
@@ -1862,7 +1865,7 @@ describe('VectorManager', function () {
 		// A slide stands on its own, so the prompt that invites an edit is
 		// not part of the picture.
 		it('leaves the prompt text out of a slide thumbnail', function () {
-			const manager = new VectorManager();
+			const manager = new ImpressVectorManager();
 			manager.requestThumbnail(0, 0, cool.VectorMode.Slides, 100, 100);
 			manager.handleVectorPrimitivesResponse(
 				page(0, cool.VectorMode.Slides, [
@@ -1883,7 +1886,7 @@ describe('VectorManager', function () {
 	// canvas. The document state is set up as during a text edit.
 	describe('predicted text edits', function () {
 		const measure: cool.TextRunMeasure = (_run, text) => text.length * 100;
-		class TestManager extends VectorManager {
+		class TestManager extends ImpressVectorManager {
 			protected _textMeasure(): cool.TextRunMeasure {
 				return measure;
 			}
@@ -1914,7 +1917,7 @@ describe('VectorManager', function () {
 			};
 		}
 
-		function textOf(manager: VectorManager): string {
+		function textOf(manager: ImpressVectorManager): string {
 			const data: any = manager.requestPart(0, cool.VectorMode.Slides);
 			return data.objects.get(5).primitives[0].children[0].text;
 		}
@@ -1951,7 +1954,7 @@ describe('VectorManager', function () {
 			cool.InputSequence.forget();
 		});
 
-		function managerWith(text: string): VectorManager {
+		function managerWith(text: string): ImpressVectorManager {
 			const manager = new TestManager();
 			manager.handleVectorPrimitivesResponse({
 				partId: 'S0',
@@ -1968,7 +1971,7 @@ describe('VectorManager', function () {
 		}
 
 		// A manager that holds "Hi" and predicted the 'a' sent as input 11.
-		function afterTypingA(): VectorManager {
+		function afterTypingA(): ImpressVectorManager {
 			const manager = managerWith('Hi');
 			manager.predictTextInsert('a');
 			sendTheEdit();
@@ -1977,7 +1980,7 @@ describe('VectorManager', function () {
 
 		// Sends a delta that holds the text box with that text and reflects that input.
 		function sendDelta(
-			manager: VectorManager,
+			manager: ImpressVectorManager,
 			inputSequence: number,
 			text: string,
 			version = 2,
@@ -2254,11 +2257,11 @@ describe('VectorManager', function () {
 				viewId: 0,
 				parent: 5,
 			});
-			const editText = (manager: VectorManager): string => {
+			const editText = (manager: ImpressVectorManager): string => {
 				const data: any = manager.requestPart(0, cool.VectorMode.Slides);
 				return data.objects.get(-2).primitives[0].children[0].text;
 			};
-			const managerEditing = (): VectorManager => {
+			const managerEditing = (): ImpressVectorManager => {
 				const manager = new TestManager();
 				manager.handleVectorPrimitivesResponse({
 					partId: 'S0',
@@ -2976,7 +2979,7 @@ describe('VectorManager', function () {
 
 			(cool.VectorRenderingConfig as any).isEnabled = () => true;
 			const manager = (RenderManager as any).makeInstance('presentation');
-			nodeassert.ok(manager instanceof VectorManager);
+			nodeassert.ok(manager instanceof ImpressVectorManager);
 			nodeassert.strictEqual(runs, 0, 'nothing runs before the first page');
 
 			manager.handleVectorPrimitivesResponse({ partId: 'S0', objects: [] });
@@ -3014,13 +3017,13 @@ describe('VectorManager', function () {
 			};
 		}
 
-		function cachedPart(manager: VectorManager, objects: any[]): any {
+		function cachedPart(manager: ImpressVectorManager, objects: any[]): any {
 			manager.handleVectorPrimitivesResponse({ partId: 'S0', objects });
 			return manager.requestPart(0, cool.VectorMode.Slides);
 		}
 
 		it('draws only the objects in the paint range, the page with the first', function () {
-			const manager = new VectorManager();
+			const manager = new ImpressVectorManager();
 			const data = cachedPart(manager, [
 				{
 					id: 0,
@@ -3050,7 +3053,7 @@ describe('VectorManager', function () {
 		});
 
 		it('leaves out a hidden object', function () {
-			const manager = new VectorManager();
+			const manager = new ImpressVectorManager();
 			const data = cachedPart(manager, [
 				{ id: 11, primitives: [hairline] },
 				{ id: 22, primitives: [hairline] },
@@ -3065,7 +3068,7 @@ describe('VectorManager', function () {
 		});
 
 		it('draws an object under its transform, opacity and colors', function () {
-			const manager = new VectorManager();
+			const manager = new ImpressVectorManager();
 			const data = cachedPart(manager, [{ id: 11, primitives: [filled] }]);
 
 			const recorder = new CanvasRecorder();
@@ -3093,7 +3096,7 @@ describe('VectorManager', function () {
 		});
 
 		it('draws the next object as it comes', function () {
-			const manager = new VectorManager();
+			const manager = new ImpressVectorManager();
 			const data = cachedPart(manager, [
 				{ id: 11, primitives: [filled] },
 				{ id: 22, primitives: [filled] },
@@ -3112,7 +3115,7 @@ describe('VectorManager', function () {
 		});
 
 		it('draws a paragraph that moves on its own without the object around it', function () {
-			const manager = new VectorManager();
+			const manager = new ImpressVectorManager();
 			const data = cachedPart(manager, [
 				{
 					id: 11,
@@ -3143,7 +3146,7 @@ describe('VectorManager', function () {
 		});
 
 		it('moves the members of a group with the group', function () {
-			const manager = new VectorManager();
+			const manager = new ImpressVectorManager();
 			const data = cachedPart(manager, [
 				{ id: 11 },
 				{ id: 22, parent: 11, primitives: [filled] },
@@ -3162,7 +3165,7 @@ describe('VectorManager', function () {
 		});
 
 		it('draws an animated paragraph apart from its object', function () {
-			const manager = new VectorManager();
+			const manager = new ImpressVectorManager();
 			const data = cachedPart(manager, [
 				{
 					id: 11,
@@ -3204,7 +3207,7 @@ describe('VectorManager', function () {
 		});
 
 		it('draws the text of an object in the font look its state gives', function () {
-			const manager = new VectorManager();
+			const manager = new ImpressVectorManager();
 			const data = cachedPart(manager, [
 				{
 					id: 11,
@@ -3242,7 +3245,7 @@ describe('VectorManager', function () {
 		});
 
 		it('grows the text of an object about the middle of its paragraphs', function () {
-			const manager = new VectorManager();
+			const manager = new ImpressVectorManager();
 			const first = paragraph('One');
 			first.bounds = [0, 0, 100, 20];
 			const second = paragraph('Two');
@@ -3274,7 +3277,7 @@ describe('VectorManager', function () {
 		});
 
 		it('draws only the part of an object its clip names', function () {
-			const manager = new VectorManager();
+			const manager = new ImpressVectorManager();
 			const data = cachedPart(manager, [{ id: 11, primitives: [filled] }]);
 
 			const recorder = new CanvasRecorder();
@@ -3317,7 +3320,7 @@ describe('VectorManager', function () {
 		});
 
 		it('draws the frame without the pieces of an inverted clip', function () {
-			const manager = new VectorManager();
+			const manager = new ImpressVectorManager();
 			const data = cachedPart(manager, [{ id: 11, primitives: [filled] }]);
 
 			const recorder = new CanvasRecorder();
@@ -3346,7 +3349,7 @@ describe('VectorManager', function () {
 		});
 
 		it('leaves out a hidden paragraph and keeps the rest', function () {
-			const manager = new VectorManager();
+			const manager = new ImpressVectorManager();
 			const data = cachedPart(manager, [
 				{
 					id: 11,

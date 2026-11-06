@@ -464,7 +464,7 @@ class DebugManager {
 		// A document drawn from vector primitives has no tiles, so the switches that watch or
 		// steer the tiles are left out of its panel.
 		const tilesDrawn =
-			!RenderManager.isVectorRendering() && !CalcVectorManager.isActive();
+			!RenderManager.isVectorRendering() && !RenderManager.calcVectorManager();
 
 		this._addDebugTool({
 			name: 'Data Overlay',
@@ -499,8 +499,6 @@ class DebugManager {
 				keepOnClose: true,
 				onAdd: function () {
 					self.vectorOn = true;
-					// The content held may have changed while drawing from tiles, so ask again.
-					if (vectorSpreadsheet) CalcVectorManager.instance().markAllStale();
 					RenderManager.reinitialize(self._docLayer._docType);
 					DebugManager.updateVectorSections();
 					GraphicSelection.drawingSwitched();

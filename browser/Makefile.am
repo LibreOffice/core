@@ -469,7 +469,8 @@ COOL_JS_LST =\
 	src/app/BitmapTileManager.ts \
 	src/app/VectorResourceTracker.ts \
 	src/app/VectorResourceLoader.ts \
-	src/app/VectorManager.ts \
+	src/app/VectorManagerBase.ts \
+	src/app/ImpressVectorManager.ts \
 	src/app/ImageDecoderPolyfill.ts \
 	src/app/CalcVectorManager.ts \
 	src/app/GifFrameSource.ts \

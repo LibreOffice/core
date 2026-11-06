@@ -14,35 +14,56 @@
 class RenderManager {
 	private static _instance: RenderManagerBase;
 
-	/// True when the document renders from vector primitives: an Impress or
-	/// Draw document with the vector rendering option enabled.
-	private static wantsVector(docType?: string): boolean {
-		return (
-			(docType === 'presentation' || docType === 'drawing') &&
-			cool.VectorRenderingConfig.isEnabled()
-		);
+	/// The change listeners registered here, which a manager that replaces another takes over.
+	private static _vectorListeners: VectorChangeListener[] = [];
+
+	/// The kind of manager the document type draws with. With the vector rendering option on,
+	/// Impress, Draw and Calc documents draw from vector primitives, and any other from bitmap
+	/// tiles.
+	private static kindFor(docType?: string): RenderManagerKind {
+		if (!cool.VectorRenderingConfig.isEnabled()) return 'tiles';
+		if (docType === 'presentation' || docType === 'drawing') return 'slides';
+		if (docType === 'spreadsheet') return 'sheet';
+		return 'tiles';
+	}
+
+	private static newManager(kind: RenderManagerKind): RenderManagerBase {
+		switch (kind) {
+			case 'slides':
+				return new ImpressVectorManager();
+			case 'sheet':
+				return new CalcVectorManager();
+			default:
+				return new BitmapTileManager();
+		}
 	}
 
 	/// Pick the manager for the document type, replacing the instance when
 	/// an earlier one is of the wrong kind.
 	private static makeInstance(docType?: string): RenderManagerBase {
-		const wantVector = RenderManager.wantsVector(docType);
-		const haveVector = RenderManager._instance instanceof VectorManager;
-		if (!RenderManager._instance || wantVector !== haveVector) {
+		const kind = RenderManager.kindFor(docType);
+		if (!RenderManager._instance || RenderManager._instance.kind() !== kind) {
 			// The replaced manager releases everything it holds, such as
 			// the font faces it registered on the document.
 			const previous = RenderManager._instance;
 			if (previous) previous.discardAllCache();
-			RenderManager._instance = wantVector
-				? new VectorManager()
-				: new BitmapTileManager();
+			RenderManager._instance = RenderManager.newManager(kind);
 			// The tasks that wait for the first visuals move to the new
 			// manager. The provisional manager made before the document type
 			// is known shows no content when the document draws from vectors.
 			if (previous)
 				RenderManager._instance.adoptAfterVisualsReadyTasks(previous);
+			for (const listener of RenderManager._vectorListeners)
+				RenderManager._instance.onVectorChanged(listener);
 		}
 		return RenderManager._instance;
+	}
+
+	/// The manager of a spreadsheet drawn from vector primitives, or undefined while the
+	/// document draws otherwise.
+	static calcVectorManager(): CalcVectorManager | undefined {
+		const instance = RenderManager._instance;
+		return instance instanceof CalcVectorManager ? instance : undefined;
 	}
 
 	private static ensureInstance(): RenderManagerBase {
@@ -60,8 +81,8 @@ class RenderManager {
 		RenderManager.makeInstance(docType).initialize();
 	}
 
-	/// Pick the manager again, for when the answer to wantsVector has changed while a document is
-	/// open. A manager of the wrong kind is replaced and the new one initialized.
+	/// Pick the manager again, for when the vector rendering option has changed while a document
+	/// is open. A manager of the wrong kind is replaced and the new one initialized.
 	static reinitialize(docType?: string): void {
 		const previous = RenderManager._instance;
 		const instance = RenderManager.makeInstance(docType);
@@ -174,10 +195,6 @@ class RenderManager {
 
 	static discardAllCache(): void {
 		RenderManager.ensureInstance().discardAllCache();
-	}
-
-	static discardTiles(): void {
-		RenderManager.ensureInstance().discardTiles();
 	}
 
 	static tileCount(): number {
@@ -454,10 +471,13 @@ class RenderManager {
 	}
 
 	static onVectorChanged(callback: VectorChangeListener): void {
+		RenderManager._vectorListeners.push(callback);
 		RenderManager.ensureInstance().onVectorChanged(callback);
 	}
 
 	static offVectorChanged(callback: () => void): void {
+		const index = RenderManager._vectorListeners.indexOf(callback);
+		if (index >= 0) RenderManager._vectorListeners.splice(index, 1);
 		RenderManager.ensureInstance().offVectorChanged(callback);
 	}
 

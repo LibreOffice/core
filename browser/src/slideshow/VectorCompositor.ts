@@ -237,7 +237,7 @@ class VectorCompositor extends SlideCompositor {
 		shapeId: number,
 	): AnimatedContentLook | undefined {
 		if (!states) return undefined;
-		const state = VectorManager.stateOf(data, shapeId, states);
+		const state = ImpressVectorManager.stateOf(data, shapeId, states);
 		if (!state) return undefined;
 		return {
 			state,

@@ -19,9 +19,7 @@
  * and the engine answers only when it is newer. Changes arrive as pushed deltas.
  */
 
-class CalcVectorManager {
-	private static _instance: CalcVectorManager | null = null;
-
+class CalcVectorManager extends VectorManagerBase {
 	/// The most blocks kept for one sheet. Blocks out of view go first.
 	private static readonly maxBlocks = 512;
 
@@ -55,44 +53,20 @@ class CalcVectorManager {
 	/// blocks can be asked for again.
 	private static readonly requestTimeout = 10000;
 
-	/// True when the document is a spreadsheet drawn from vector primitives.
-	static isActive(): boolean {
-		const docLayer = app.map && app.map._docLayer;
-		return (
-			!!docLayer &&
-			docLayer._docType === 'spreadsheet' &&
-			cool.VectorRenderingConfig.isEnabled()
-		);
+	constructor() {
+		super();
+		// The document state names the manager, for the tests.
+		app.calc.vectorManager = this;
 	}
 
-	static instance(): CalcVectorManager {
-		if (!CalcVectorManager._instance) {
-			CalcVectorManager._instance = new CalcVectorManager();
-			// The document state names the manager, for the tests.
-			app.calc.vectorManager = CalcVectorManager._instance;
-		}
-		return CalcVectorManager._instance;
+	kind(): RenderManagerKind {
+		return 'sheet';
 	}
-
-	// The images and fonts the content names, each owned by the blocks, drawing objects and
-	// text edits that name it.
-	private _resources = new VectorResourceLoader(() => {
-		this._resourceVersion++;
-		this._fireChanged([]);
-	});
 
 	// The typing of this view in its cell edit, measured like the renderer.
 	private _typing = new cool.CalcTyping(
-		new cool.TextMeasurer(
-			cool.canvasTextMeasure((fontId) => this._resources.fonts.has(fontId)),
-		),
+		new cool.TextMeasurer(this._textMeasure()),
 	);
-
-	readonly renderer: cool.VectorPrimitiveRenderer =
-		new cool.VectorPrimitiveRenderer(
-			(checksum) => this._resources.image(checksum),
-			(fontId) => this._resources.fonts.has(fontId),
-		);
 
 	// Font attributes of cell text by id. An id is stable within an epoch.
 	private _textStyles: Map<number, cool.CalcTextStyle> = new Map();
@@ -134,15 +108,11 @@ class CalcVectorManager {
 	private _queue: { part: number; keys: string[]; refresh?: boolean } | null =
 		null;
 
-	private _changeListeners = new cool.VectorChangeListeners();
 	// Callbacks that release graphics memory held for drawing the content.
 	private _reclaimListeners: (() => void)[] = [];
 
-	// Objects drawn outside the sheet, such as the selection during a drag.
-	private _drawnElsewhere = new cool.DrawnElsewhere();
 	// Counts up each time a font or an image the content names has loaded.
 	private _resourceVersion = 0;
-	private _visualsReported = false;
 
 	// The drawing objects of each sheet in tile twips, keyed by part.
 	private _objectViews: Map<number, cool.CalcObjectView> = new Map();
@@ -174,12 +144,6 @@ class CalcVectorManager {
 	/// column or a row that changes size moves the content after it without sending it again.
 	static readonly contentMode = -1;
 
-	/// Call back on every change of what is held, with the ids of the drawing objects replaced or
-	/// removed. Undefined means anything may have changed.
-	onChanged(callback: (answered?: number[]) => void): void {
-		this._changeListeners.add(callback);
-	}
-
 	/// Call back to release graphics memory, such as when the document is hidden.
 	onReclaimGraphicsMemory(callback: () => void): void {
 		this._reclaimListeners.push(callback);
@@ -190,23 +154,17 @@ class CalcVectorManager {
 		if (index >= 0) this._reclaimListeners.splice(index, 1);
 	}
 
-	/// Release graphics memory: the decoded images and what the renderer keeps between draws.
-	/// What is still needed is asked for and drawn again when shown. The fonts stay registered,
-	/// since they are few and small.
+	/// Release graphics memory: what the sections keep for drawing, the decoded images and what
+	/// the renderer keeps between draws. What is still needed is asked for and drawn again when
+	/// shown.
 	reclaimGraphicsMemory(): void {
 		for (const listener of this._reclaimListeners) listener();
-		this._resources.dropImages();
-		this.renderer.releaseScratchCanvases();
-		this.renderer.releaseColorChangedImages();
+		super.reclaimGraphicsMemory();
 	}
 
-	offChanged(callback: (answered?: number[]) => void): void {
-		this._changeListeners.remove(callback);
-	}
-
-	private _fireChanged(answered?: number[]): void {
+	protected _fireChanged(answered?: number[], inputSequence?: number): void {
 		this._changeCount++;
-		this._changeListeners.fire(answered);
+		super._fireChanged(answered, inputSequence);
 	}
 
 	/// Draw again the objects the client changed, such as after a drag.
@@ -214,13 +172,15 @@ class CalcVectorManager {
 		this._fireChanged([]);
 	}
 
-	/// Leave out of the sheet the objects that something else draws.
-	drawnElsewhere(objectIds: number[]): void {
-		this._drawnElsewhere.set(objectIds);
+	/// The renderer the content of the sheet is drawn with.
+	get renderer(): cool.VectorPrimitiveRenderer {
+		return this._renderer;
 	}
 
-	drawnElsewhereVersion(): number {
-		return this._drawnElsewhere.version();
+	/// A loaded image or font counts the resource version up, so the drawings made before it go.
+	protected _resourcesLoaded(owners: Set<string> | undefined): void {
+		this._resourceVersion++;
+		super._resourcesLoaded(owners);
 	}
 
 	/// Counts up each time a font or image that the content names has loaded.
@@ -385,6 +345,7 @@ class CalcVectorManager {
 
 	renderPrimitives(
 		context: CanvasRenderingContext2D,
+		_data: cool.VectorPrimitivesData,
 		primitives: cool.Primitive[],
 	): void {
 		this.renderer.setEditViewContentVisible(true);
@@ -997,7 +958,7 @@ class CalcVectorManager {
 
 	/// Forget all content and the fonts and images it named, and take the fonts off the
 	/// document.
-	discardAll(): void {
+	discardAllCache(): void {
 		this.clearAll();
 		this._resources.discard();
 	}
@@ -1210,10 +1171,7 @@ class CalcVectorManager {
 			);
 		}
 
-		if (!this._visualsReported && sheet.blocks.size > 0) {
-			this._visualsReported = true;
-			RenderManager.markVisualsReady();
-		}
+		if (sheet.blocks.size > 0) this.markVisualsReady();
 		// A shift that no held block predates any more has been built into every block.
 		if (sheet.shifts.length) {
 			let oldest = Infinity;
@@ -1284,15 +1242,47 @@ class CalcVectorManager {
 		if (typed) this._showTypedCaret(typed);
 	}
 
-	/// Cache a fetched image and draw again, or mark it unavailable.
-	handleVectorRenderingGraphics(
-		values: cool.VectorRenderingGraphicsResponse,
-	): void {
-		this._resources.handleImage(values);
+	// The client selects and moves the drawing objects of the sheet itself.
+	drawsFromObjects(): boolean {
+		return true;
 	}
 
-	/// Register a fetched font as a FontFace and draw again once it loads.
-	handleVectorRenderingFont(values: cool.VectorRenderingFontResponse): void {
-		this._resources.handleFont(values);
+	// The engine places the objects of a sheet in print twips. An input that ends the cell edit
+	// or moves its caret drops the typing shown.
+	toEngine(message: string): string {
+		this.noteInput(message);
+		return this.messageInPrintTwips(message);
+	}
+
+	// The drawing objects of a sheet are the same in every mode.
+	requestPart(
+		part: number,
+		_mode: number,
+	): cool.VectorPrimitivesData | undefined {
+		return this.objectsOf(part);
+	}
+
+	// Only objects on the front layer take the pointer and keys. Back layer objects need the
+	// selection mode of the drawing toolbar, and the internal layer holds comment captions,
+	// which the comments handle.
+	isLayerVisible(layer: number): boolean {
+		return layer === cool.calcLayerId('front');
+	}
+
+	/// Changes may have been missed while away, so ask again for what is held.
+	revalidateCachedParts(): void {
+		this.markAllStale();
+	}
+
+	/// Answers to requests sent before a reconnect never come.
+	forgetRequestsInFlight(): void {
+		this.markAllStale();
+	}
+
+	/// A tile still on its way from before the view drew from vectors is acknowledged and dropped.
+	onTileMsg(textMsg: string, _img: any): void {
+		const tileMessage = app.socket.parseServerCmd(textMsg);
+		if (tileMessage.wireId !== undefined)
+			app.socket.sendMessage('tileprocessed wids=' + tileMessage.wireId);
 	}
 }

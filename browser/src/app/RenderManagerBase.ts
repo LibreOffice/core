@@ -14,9 +14,8 @@
  * RenderManagerBase - Base class for the tile-managing implementations that
  * sit behind the static RenderManager facade.
  *
- * The tile methods have a safe no-op default, so a subclass overrides only the
- * parts that apply to it. The vector rendering methods are abstract, and each
- * subclass says what they do for its kind of content.
+ * Every method has a default, a no-op or an answer that nothing is held, so a subclass overrides
+ * only the parts that apply to its kind of content.
  */
 
 type AfterVisualsReadyTask = () => void;
@@ -43,7 +42,14 @@ namespace cool {
 	}
 }
 
+/// What a render manager draws: the objects of slides or drawing pages or the cells of a
+/// spreadsheet from vector primitives, or bitmap tiles.
+type RenderManagerKind = 'slides' | 'sheet' | 'tiles';
+
 abstract class RenderManagerBase {
+	/// What the manager draws.
+	abstract kind(): RenderManagerKind;
+
 	// Whether some of the document's content has arrived and can be painted.
 	private visualsReady: boolean = false;
 
@@ -120,9 +126,6 @@ abstract class RenderManagerBase {
 	tileCount(): number {
 		return 0;
 	}
-	/// Drop every tile held, keeping the rest of what the manager holds.
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	discardTiles(): void {}
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	markThumbnailStale(): void {}
 
@@ -224,7 +227,10 @@ abstract class RenderManagerBase {
 	touchImage(_tile: Tile): void {}
 
 	// -- vector rendering --
-	abstract isVectorRendering(): boolean;
+	/// Whether the view draws the objects of slides or drawing pages from vector primitives.
+	isVectorRendering(): boolean {
+		return false;
+	}
 
 	/// Whether the client holds the drawing objects and selects, hit tests
 	/// and moves them itself.
@@ -237,174 +243,225 @@ abstract class RenderManagerBase {
 		return message;
 	}
 
-	abstract predictTextInsert(text: string): boolean;
+	// Shows typed text before the engine answers. True when it shows.
+	predictTextInsert(_text: string): boolean {
+		return false;
+	}
 
-	abstract predictTextDelete(before: number, after: number): boolean;
+	// Removes characters before and after the caret before the engine answers. True when it
+	// shows.
+	predictTextDelete(_before: number, _after: number): boolean {
+		return false;
+	}
 
 	// True when the local caret is ahead of the update's input.
-	abstract keepPredictedCaret(update: cool.CaretUpdate): boolean;
+	keepPredictedCaret(_update: cool.CaretUpdate): boolean {
+		return false;
+	}
 
 	// Returns true when a keystroke at the caret would be predicted.
-	abstract canPredictAtCaret(): boolean;
+	canPredictAtCaret(): boolean {
+		return false;
+	}
 
 	// Moves the caret one character without the server, and with extend selects text to it.
 	// True when it moved.
-	abstract moveCaretByCharacter(step: -1 | 1, extend?: boolean): boolean;
+	moveCaretByCharacter(_step: -1 | 1, _extend?: boolean): boolean {
+		return false;
+	}
 
 	// Moves the caret one word without the server, and with extend selects text to it. True
 	// when it moved.
-	abstract moveCaretByWord(step: -1 | 1, extend?: boolean): boolean;
+	moveCaretByWord(_step: -1 | 1, _extend?: boolean): boolean {
+		return false;
+	}
 
 	// Moves the caret one line up or down without the server, and with extend selects text to
 	// it. True when it moved.
-	abstract moveCaretByLine(step: -1 | 1, extend?: boolean): boolean;
+	moveCaretByLine(_step: -1 | 1, _extend?: boolean): boolean {
+		return false;
+	}
 
 	// Starts a drag that selects text without the server. True when the press is in the edited
 	// text.
-	abstract startTextDrag(
-		x: number,
-		y: number,
-		hitId: number | undefined,
-	): boolean;
+	startTextDrag(_x: number, _y: number, _hitId: number | undefined): boolean {
+		return false;
+	}
 
 	// Selects the text from where the drag started to the mouse.
-	abstract dragTextTo(x: number, y: number): void;
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	dragTextTo(_x: number, _y: number): void {}
 
-	abstract endTextDrag(): void;
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	endTextDrag(): void {}
 
 	// Puts the caret where a click lands in the edited text, without the server. True when it
 	// moved.
-	abstract placeCaretAt(
-		x: number,
-		y: number,
-		hitId: number | undefined,
-	): boolean;
+	placeCaretAt(_x: number, _y: number, _hitId: number | undefined): boolean {
+		return false;
+	}
 
 	// Selects the word under a double click in the edited text, without the server. True when
 	// the word is selected.
-	abstract selectWordAt(
-		x: number,
-		y: number,
-		hitId: number | undefined,
-	): boolean;
+	selectWordAt(_x: number, _y: number, _hitId: number | undefined): boolean {
+		return false;
+	}
 
 	// Selects the paragraph under a triple click in the edited text, without the server. True
 	// when the paragraph is selected.
-	abstract selectParagraphAt(
-		x: number,
-		y: number,
-		hitId: number | undefined,
-	): boolean;
+	selectParagraphAt(
+		_x: number,
+		_y: number,
+		_hitId: number | undefined,
+	): boolean {
+		return false;
+	}
 
-	abstract requestThumbnail(
-		id: cool.PreviewId,
-		part: number,
-		mode: number,
-		maxWidth: number,
-		maxHeight: number,
-	): void;
+	requestThumbnail(
+		_id: cool.PreviewId,
+		_part: number,
+		_mode: number,
+		_maxWidth: number,
+		_maxHeight: number,
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+	): void {}
 
-	abstract requestPart(
-		part: number,
-		mode: number,
-	): cool.VectorPrimitivesData | undefined;
+	/// The vector content of a part, or undefined when none is held.
+	requestPart(
+		_part: number,
+		_mode: number,
+	): cool.VectorPrimitivesData | undefined {
+		return undefined;
+	}
 
-	abstract partIdAt(
-		part: number,
-		mode: number,
-	): cool.VectorPartGuid | undefined;
+	partIdAt(_part: number, _mode: number): cool.VectorPartGuid | undefined {
+		return undefined;
+	}
 
-	abstract renderInto(
-		context: CanvasRenderingContext2D,
-		data: cool.VectorPrimitivesData,
-		options?: cool.VectorRenderOptions,
-	): void;
+	renderInto(
+		_context: CanvasRenderingContext2D,
+		_data: cool.VectorPrimitivesData,
+		_options?: cool.VectorRenderOptions,
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+	): void {}
 
-	abstract renderObjectsWith(
-		context: CanvasRenderingContext2D,
-		data: cool.VectorPrimitivesData,
-		objectIds: number[],
-		matrix: cool.Matrix2D,
-	): void;
+	renderObjectsWith(
+		_context: CanvasRenderingContext2D,
+		_data: cool.VectorPrimitivesData,
+		_objectIds: number[],
+		_matrix: cool.Matrix2D,
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+	): void {}
 
-	abstract renderPrimitives(
-		context: CanvasRenderingContext2D,
-		data: cool.VectorPrimitivesData,
-		primitives: cool.Primitive[],
-	): void;
+	renderPrimitives(
+		_context: CanvasRenderingContext2D,
+		_data: cool.VectorPrimitivesData,
+		_primitives: cool.Primitive[],
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+	): void {}
 
-	abstract renderObjectParagraph(
-		context: CanvasRenderingContext2D,
-		data: cool.VectorPrimitivesData,
-		objectId: number,
-		paragraph: number,
-		colorOverride?: cool.ColorOverride,
-		textOverride?: cool.TextOverride,
-	): void;
+	/// Draw one paragraph of an object's text alone, in the colors and text look given. The
+	/// context transform maps the part's twips to the target pixels.
+	renderObjectParagraph(
+		_context: CanvasRenderingContext2D,
+		_data: cool.VectorPrimitivesData,
+		_objectId: number,
+		_paragraph: number,
+		_colorOverride?: cool.ColorOverride,
+		_textOverride?: cool.TextOverride,
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+	): void {}
 
-	abstract renderPlaceholderAids(
-		context: CanvasRenderingContext2D,
-		data: cool.VectorPrimitivesData,
-	): void;
+	renderPlaceholderAids(
+		_context: CanvasRenderingContext2D,
+		_data: cool.VectorPrimitivesData,
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+	): void {}
 
-	abstract textColorOf(
-		data: cool.VectorPrimitivesData,
+	/// The color the text run is drawn in, with no animation color in its place.
+	textColorOf(
+		_data: cool.VectorPrimitivesData,
 		primitive:
 			| cool.TextSimplePortionPrimitive
 			| cool.TextDecoratedPortionPrimitive,
-	): string;
+	): string {
+		return primitive.fontcolor;
+	}
 
-	abstract setHiddenLayers(layers: unknown): void;
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	setHiddenLayers(_layers: unknown): void {}
 
-	abstract drawnElsewhere(objectIds: number[]): void;
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	drawnElsewhere(_objectIds: number[]): void {}
 
-	abstract drawnElsewhereVersion(): number;
+	drawnElsewhereVersion(): number {
+		return 0;
+	}
 
-	abstract isPartDrawable(part: number, mode: number): boolean;
+	isPartDrawable(_part: number, _mode: number): boolean {
+		return false;
+	}
 
-	abstract requestPartById(
-		partId: cool.VectorPartGuid,
-		mode: number,
-	): cool.VectorPrimitivesData | undefined;
+	requestPartById(
+		_partId: cool.VectorPartGuid,
+		_mode: number,
+	): cool.VectorPrimitivesData | undefined {
+		return undefined;
+	}
 
-	abstract isPartDrawableById(
-		partId: cool.VectorPartGuid,
-		mode: number,
-	): boolean;
+	isPartDrawableById(_partId: cool.VectorPartGuid, _mode: number): boolean {
+		return false;
+	}
 
-	abstract isLayerVisible(layer: number): boolean;
+	isLayerVisible(_layer: number): boolean {
+		return true;
+	}
 
-	abstract onVectorChanged(callback: VectorChangeListener): void;
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	onVectorChanged(_callback: VectorChangeListener): void {}
 
-	abstract offVectorChanged(callback: () => void): void;
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	offVectorChanged(_callback: () => void): void {}
 
-	abstract changedHere(): void;
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	changedHere(): void {}
 
-	abstract handleVectorPrimitivesResponse(
-		values: cool.VectorPrimitivesResponse,
-	): void;
+	handleVectorPrimitivesResponse(
+		_values: cool.VectorPrimitivesResponse,
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+	): void {}
 
-	abstract handleVectorRenderingGraphicsResponse(
-		values: cool.VectorRenderingGraphicsResponse,
-	): void;
+	handleVectorRenderingGraphicsResponse(
+		_values: cool.VectorRenderingGraphicsResponse,
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+	): void {}
 
-	abstract handleVectorRenderingFontResponse(
-		values: cool.VectorRenderingFontResponse,
-	): void;
+	handleVectorRenderingFontResponse(
+		_values: cool.VectorRenderingFontResponse,
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+	): void {}
 
-	abstract handleVectorPrimitivesDelta(
-		values: cool.VectorPrimitivesResponse,
-	): void;
+	handleVectorPrimitivesDelta(
+		_values: cool.VectorPrimitivesResponse,
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+	): void {}
 
-	abstract partListChanged(): void;
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	partListChanged(): void {}
 
-	abstract revalidateCachedParts(): void;
+	/// Changes may have been missed while away, so ask again for what is held.
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	revalidateCachedParts(): void {}
 
-	abstract forgetRequestsInFlight(): void;
+	/// Answers to requests sent before a reconnect never come.
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	forgetRequestsInFlight(): void {}
 
-	abstract clearCachedPart(partId: cool.VectorPartGuid): void;
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	clearCachedPart(_partId: cool.VectorPartGuid): void {}
 
-	abstract clearAllParts(): void;
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	clearAllParts(): void {}
 
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	refreshTheme(): void {}

@@ -14,14 +14,14 @@ describe('ChangeOutbox typed text', function () {
 	let sent: string[];
 	let savedInstance: any;
 	let savedOuterSequence: number;
-	let manager: VectorManager;
+	let manager: ImpressVectorManager;
 
 	// Empties the outbox and has it listen to a fresh manager.
 	beforeEach(function () {
 		recorder = new SocketRecorder();
 		sent = recorder.sent;
 		savedInstance = (RenderManager as any)._instance;
-		manager = new VectorManager();
+		manager = new ImpressVectorManager();
 		(RenderManager as any)._instance = manager;
 		savedOuterSequence = app.file.inputSequence;
 		app.file.inputSequence = 10;

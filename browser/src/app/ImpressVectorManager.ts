@@ -10,7 +10,7 @@
  */
 
 /*
- * VectorManager - Renders the document content with vector primitives.
+ * ImpressVectorManager - Renders the document content with vector primitives.
  *
  * It owns the per-part vector data, the bitmap cache and the primitive
  * renderer. It exposes thumbnail rendering (requestThumbnail) and per-part
@@ -34,15 +34,7 @@ interface EditTarget {
 	logical: cool.LogicalCaret | null;
 }
 
-class VectorManager extends RenderManagerBase {
-	private _renderer: cool.VectorPrimitiveRenderer =
-		new cool.VectorPrimitiveRenderer(
-			(checksum) => this._bitmaps.get(checksum) ?? this._standInFor(checksum),
-			(fontId) => this._fonts.has(fontId),
-			// a picture the client made of a form control is drawn once it has loaded
-			() => this._onPictureReady(),
-		);
-
+class ImpressVectorManager extends VectorManagerBase {
 	// Cached parsed JSON primitive tree keyed by page id. The id names the
 	// page wherever it sits in its list, so a slide inserted or removed
 	// before a cached page leaves that page's content valid.
@@ -77,17 +69,21 @@ class VectorManager extends RenderManagerBase {
 	// until the page list is replaced.
 	private _missingParts: Set<cool.VectorPartGuid> = new Set();
 
-	// The bitmaps and fonts the parts name. Each part is an owner under its id, and keeps what
-	// it named until it leaves the cache.
-	private _resources = new VectorResourceLoader(
-		(partIds) => {
-			this._redrawPartsUsing(partIds);
-			// A decoded bitmap or a loaded font changes nothing at the engine, so no
-			// object is answered.
-			this._fireChanged([]);
-		},
-		(checksum) => this._standIns.delete(checksum),
-	);
+	/// A decoded bitmap, or the one drawn in its place until it is decoded.
+	protected _imageFor(checksum: number): HTMLImageElement | undefined {
+		return this._bitmaps.get(checksum) ?? this._standInFor(checksum);
+	}
+
+	/// The parts that use a loaded image or font draw again.
+	protected _resourcesLoaded(partIds: Set<string> | undefined): void {
+		this._redrawPartsUsing(partIds);
+		super._resourcesLoaded(partIds);
+	}
+
+	/// A bitmap that decoded, or turned out unavailable, needs its stand-in no more.
+	protected _imageSettled(checksum: number): void {
+		this._standIns.delete(checksum);
+	}
 
 	// Decoded bitmap images keyed by their checksum.
 	private _bitmaps = this._resources.images;
@@ -110,18 +106,9 @@ class VectorManager extends RenderManagerBase {
 	private _renderedPreviews: Map<cool.PreviewId, cool.RenderedPreview> =
 		new Map();
 
-	// Callbacks fired when cached vector data changes: a part's
-	// primitive tree arrived, a deferred bitmap decoded, or the cache
-	// was cleared.
-	private _changeListeners = new cool.VectorChangeListeners();
-
 	// Ids of the layers this view does not show. Objects on them are
 	// kept in the cache and skipped when drawing.
 	private _hiddenLayers: Set<number> = new Set();
-
-	/// The objects left out of the drawing of a part because they are drawn elsewhere. Its
-	/// version tells a drawing kept from before apart from one that matches them.
-	private _drawnElsewhere = new cool.DrawnElsewhere();
 
 	// The Impress or Draw doc layer, read lazily so the manager can be
 	// created before the layer is registered on the map.
@@ -138,33 +125,18 @@ class VectorManager extends RenderManagerBase {
 		return docLayer?._viewId;
 	}
 
-	isVectorRendering(): boolean {
-		return true;
+	kind(): RenderManagerKind {
+		return 'slides';
 	}
 
-	/*
-		Register a callback fired whenever cached vector data changes. It is handed the ids of
-		the objects an answer from the engine replaced, an empty list where the change was made
-		here and the engine answered nothing, and nothing at all where everything may have
-		changed, as when a whole part arrives.
-	*/
-	onVectorChanged(callback: VectorChangeListener): void {
-		this._changeListeners.add(callback);
+	isVectorRendering(): boolean {
+		return true;
 	}
 
 	/// The view draws the part that is now selected, from the cache when it holds it, at once
 	/// and without an answer from the engine.
 	updateOnChangePart(): void {
 		this._fireChanged();
-	}
-
-	/// Forget a callback registered with onVectorChanged.
-	offVectorChanged(callback: () => void): void {
-		this._changeListeners.remove(callback);
-	}
-
-	private _fireChanged(answered?: number[], inputSequence?: number): void {
-		this._changeListeners.fire(answered, inputSequence);
 	}
 
 	/*
@@ -175,7 +147,7 @@ class VectorManager extends RenderManagerBase {
 	changedHere(): void {
 		// The objects changed in place, so text measured from them is out of date.
 		this._objectText = null;
-		this._fireChanged([]);
+		super.changedHere();
 	}
 
 	/// The id of the page at the given index of the page list on screen, or
@@ -235,7 +207,7 @@ class VectorManager extends RenderManagerBase {
 		const partId = held.partId;
 		if (!this._staleParts.has(partId) || this._inFlightParts.has(partId))
 			return;
-		if (this._revalidating.size >= VectorManager.revalidationsAtATime) {
+		if (this._revalidating.size >= ImpressVectorManager.revalidationsAtATime) {
 			if (!this._revalidationsWaiting.includes(partId))
 				this._revalidationsWaiting.push(partId);
 			return;
@@ -303,16 +275,6 @@ class VectorManager extends RenderManagerBase {
 		return !this._hiddenLayers.has(layer);
 	}
 
-	/// The objects to leave out of the drawing of a part from now on, since they are drawn
-	/// elsewhere. An empty list leaves nothing out.
-	drawnElsewhere(objectIds: number[]): void {
-		this._drawnElsewhere.set(objectIds);
-	}
-
-	drawnElsewhereVersion(): number {
-		return this._drawnElsewhere.version();
-	}
-
 	/// The page rectangle carried by the entry that stands for the page, or
 	/// zeroes when there is no such entry among the given objects.
 	static pageBoundsOf(objects: cool.SlideObject[]): [number, number] {
@@ -330,7 +292,7 @@ class VectorManager extends RenderManagerBase {
 		this._renderer.setDocumentBackground(
 			cool.VectorColors.documentBackground(),
 		);
-		const page = VectorManager._pageEntryOf(data.objects.values());
+		const page = ImpressVectorManager._pageEntryOf(data.objects.values());
 		this._renderer.setPageBackdrop(page?.backdrop, page?.backdropTransparency);
 	}
 
@@ -410,7 +372,7 @@ class VectorManager extends RenderManagerBase {
 		const window = options?.activeInPlace?.area;
 		const edited =
 			options?.edited !== undefined
-				? VectorManager._editedPart(
+				? ImpressVectorManager._editedPart(
 						data,
 						options.edited.objectId,
 						options.activeInPlace?.objectId === options.edited.objectId &&
@@ -439,20 +401,20 @@ class VectorManager extends RenderManagerBase {
 			if (obj.masterContent) continue;
 			if (
 				options?.withoutFormControls &&
-				obj.objectKind === VectorManager.formControlKind
+				obj.objectKind === ImpressVectorManager.formControlKind
 			)
 				continue;
-			const state = VectorManager.stateOf(data, id, options?.states);
+			const state = ImpressVectorManager.stateOf(data, id, options?.states);
 			if (state?.hidden) continue;
 			if (obj.primitives) {
 				const outside =
 					edited !== undefined &&
 					obj.kind === undefined &&
-					!VectorManager._isInside(data, id, edited.objectId);
+					!ImpressVectorManager._isInside(data, id, edited.objectId);
 				const inFront =
 					outside &&
 					index > edited.lastAt &&
-					VectorManager._overlaps(obj, edited.box);
+					ImpressVectorManager._overlaps(obj, edited.box);
 				const pale = outside && options?.edited?.paleOutside === true;
 				if (pale || inFront) this._renderGhosted(context, obj, inFront, pale);
 				else if (state) this._renderInState(context, obj, state);
@@ -542,7 +504,7 @@ class VectorManager extends RenderManagerBase {
 		if (state.alpha !== undefined) context.globalAlpha = state.alpha;
 		const matrix = cool.Matrix2D.fromArray(state.transform);
 		if (matrix) matrix.applyTo(context);
-		if (state.clip) VectorManager.clipTo(context, state.clip);
+		if (state.clip) ImpressVectorManager.clipTo(context, state.clip);
 		this._renderer.setColorOverride(state.colorOverride ?? null);
 		this._renderer.setTextOverride(state.textOverride ?? null);
 		this._renderer.setParagraphFilter(paragraphFilter);
@@ -571,7 +533,8 @@ class VectorManager extends RenderManagerBase {
 		// Frame and pieces in one even-odd path: the frame minus the pieces, which do not overlap.
 		const area = new Path2D();
 		if (clip.inverted) area.rect(x, y, width, height);
-		for (const piece of clip.pieces) VectorManager._addPiece(area, piece);
+		for (const piece of clip.pieces)
+			ImpressVectorManager._addPiece(area, piece);
 		context.clip(area, clip.inverted ? 'evenodd' : 'nonzero');
 
 		context.setTransform(saved);
@@ -632,10 +595,10 @@ class VectorManager extends RenderManagerBase {
 		data.order.forEach((id: number, at: number) => {
 			const object = data.objects.get(id);
 			if (!object || object.kind !== undefined) return;
-			if (!VectorManager._isInside(data, id, objectId)) return;
+			if (!ImpressVectorManager._isInside(data, id, objectId)) return;
 
 			lastAt = at;
-			const own = VectorManager._boxOf(object);
+			const own = ImpressVectorManager._boxOf(object);
 			if (!own || given) return;
 			box = box
 				? [
@@ -663,7 +626,7 @@ class VectorManager extends RenderManagerBase {
 		object: cool.SlideObject,
 		box: number[] | undefined,
 	): boolean {
-		const own = VectorManager._boxOf(object);
+		const own = ImpressVectorManager._boxOf(object);
 		return (
 			!!own &&
 			!!box &&
@@ -710,7 +673,7 @@ class VectorManager extends RenderManagerBase {
 		inFront: boolean,
 		pale: boolean,
 	): void {
-		const ghosting = VectorManager._ghosting();
+		const ghosting = ImpressVectorManager._ghosting();
 		// the box the object paints in bounds the change, without one it covers the view
 		const mixed = {
 			type: cool.ModifiedColorPrimitive.type,
@@ -718,7 +681,7 @@ class VectorManager extends RenderManagerBase {
 			color: ghosting.color,
 			// the value is the share of the original colour
 			value: 1 - ghosting.amount,
-			bounds: VectorManager._boxOf(object),
+			bounds: ImpressVectorManager._boxOf(object),
 			children: object.primitives,
 		} as cool.ModifiedColorPrimitive;
 		const drawn: cool.Primitive[] = pale ? [mixed] : (object.primitives ?? []);
@@ -967,7 +930,7 @@ class VectorManager extends RenderManagerBase {
 			arrived.push(object.id);
 		}
 
-		const [nWidth, nHeight] = VectorManager.pageBoundsOf(received);
+		const [nWidth, nHeight] = ImpressVectorManager.pageBoundsOf(received);
 		const data: cool.VectorPrimitivesData = {
 			partId: partId,
 			mode: mode,
@@ -980,7 +943,7 @@ class VectorManager extends RenderManagerBase {
 			// they arrive in is the order they are drawn in.
 			order: values.order || arrived,
 		};
-		const page = VectorManager._pageEntryOf(received);
+		const page = ImpressVectorManager._pageEntryOf(received);
 		if (page) this._takeMasterReference(data, page);
 		this._cache.set(partId, data);
 		this._staleParts.delete(partId);
@@ -1105,12 +1068,12 @@ class VectorManager extends RenderManagerBase {
 		// The page rectangle rides on the page entry, so a delta that carries
 		// that entry is also how a resized page reaches the client. So does the
 		// master the page draws under itself and the page's copies of its objects.
-		const [nWidth, nHeight] = VectorManager.pageBoundsOf(carried);
+		const [nWidth, nHeight] = ImpressVectorManager.pageBoundsOf(carried);
 		if (nWidth > 0 && nHeight > 0) {
 			cached.slideWidth = nWidth;
 			cached.slideHeight = nHeight;
 		}
-		const page = VectorManager._pageEntryOf(carried);
+		const page = ImpressVectorManager._pageEntryOf(carried);
 		if (page) this._takeMasterReference(cached, page);
 
 		// The order travels only when the object set or its order changed.
@@ -1184,8 +1147,8 @@ class VectorManager extends RenderManagerBase {
 		before: cool.SlideObject,
 		after: cool.SlideObject,
 	): void {
-		const was = VectorManager._bitmapsInOrder(before.primitives);
-		const now = VectorManager._bitmapsInOrder(after.primitives);
+		const was = ImpressVectorManager._bitmapsInOrder(before.primitives);
+		const now = ImpressVectorManager._bitmapsInOrder(after.primitives);
 		const count = Math.min(was.length, now.length);
 		for (let at = 0; at < count; ++at) {
 			if (now[at] === was[at] || this._bitmaps.get(now[at])) continue;
@@ -1195,12 +1158,6 @@ class VectorManager extends RenderManagerBase {
 				: this._standIns.get(was[at]);
 			if (standIn !== undefined) this._standIns.set(now[at], standIn);
 		}
-	}
-
-	// The width of a string as the renderer draws the run, so predicted widths
-	// match the screen.
-	protected _textMeasure(): cool.TextRunMeasure {
-		return cool.canvasTextMeasure((fontId) => this._fonts.has(fontId));
 	}
 
 	// The measurer over that width, created on first use.
@@ -1485,7 +1442,7 @@ class VectorManager extends RenderManagerBase {
 		y: number,
 	): boolean {
 		const objects = this._cache.get(partId)?.objects;
-		if (objects?.get(hitId)?.objectKind !== VectorManager.tableKind)
+		if (objects?.get(hitId)?.objectKind !== ImpressVectorManager.tableKind)
 			return true;
 		const text = objects.get(entryId);
 		if (
@@ -1737,7 +1694,7 @@ class VectorManager extends RenderManagerBase {
 	// where a delta replaces only those the server changed. The cached tree
 	// stays drawn until the response arrives.
 	private _abandonEdits(partId: cool.VectorPartGuid): void {
-		this._typedEdits.forget(VectorManager._ofPart(partId));
+		this._typedEdits.forget(ImpressVectorManager._ofPart(partId));
 		const data = this._cache.get(partId);
 		if (!data) return;
 		this._inFlightParts.add(partId);
@@ -1774,7 +1731,7 @@ class VectorManager extends RenderManagerBase {
 		inputSequence: number | undefined,
 		replaced?: number[],
 	): void {
-		const ofPart = VectorManager._ofPart(partId);
+		const ofPart = ImpressVectorManager._ofPart(partId);
 		if (!this._typedEdits.has(ofPart)) return;
 		const remaining = this._typedEdits.answered(inputSequence, ofPart);
 		const toReplay = replaced
@@ -1849,7 +1806,7 @@ class VectorManager extends RenderManagerBase {
 			// edited object.
 			(objectId, newest) =>
 				objectId === this._editedObjectOf(partId, newest.objectId),
-			VectorManager._ofPart(partId),
+			ImpressVectorManager._ofPart(partId),
 			// A caret moved here after the newest edit is where the engine's caret
 			// answers from.
 			(newest) =>
@@ -1875,15 +1832,6 @@ class VectorManager extends RenderManagerBase {
 			: objectId;
 	}
 
-	/// Handle a fetched bitmap: cache it and re-render the previews
-	/// that use it. Data that is missing or fails to decode marks
-	/// the checksum as unavailable.
-	handleVectorRenderingGraphicsResponse(
-		values: cool.VectorRenderingGraphicsResponse,
-	): void {
-		this._resources.handleImage(values);
-	}
-
 	// whether the previews shown are to be drawn again for pictures that loaded just now
 	private _previewsWaitForPictures = false;
 
@@ -1892,8 +1840,8 @@ class VectorManager extends RenderManagerBase {
 		and every preview shown once for all the pictures that load at the same moment, as the
 		pictures of many controls come in together.
 	*/
-	private _onPictureReady(): void {
-		this._fireChanged([]);
+	protected _onPictureReady(): void {
+		super._onPictureReady();
 		if (this._previewsWaitForPictures) return;
 		this._previewsWaitForPictures = true;
 		app.layoutingService.appendLayoutingTask(() => {
@@ -1928,14 +1876,6 @@ class VectorManager extends RenderManagerBase {
 			if (info.partId !== partId || except?.has(id)) continue;
 			this._renderAndFire(id, info.maxWidth, info.maxHeight, data);
 		}
-	}
-
-	/// Handle a fetched font: register it as a FontFace under a synthetic
-	/// family name and re-render the parts that use it.
-	handleVectorRenderingFontResponse(
-		values: cool.VectorRenderingFontResponse,
-	): void {
-		this._resources.handleFont(values);
 	}
 
 	/// The page list on screen has been replaced, so an index may name
@@ -1996,13 +1936,11 @@ class VectorManager extends RenderManagerBase {
 	/// fonts stay registered, since they are few and small. The predicted
 	/// edits stay pending.
 	reclaimGraphicsMemory(): void {
-		this._resources.dropImages();
+		super.reclaimGraphicsMemory();
 		this._resources.forgetOwners();
 		this._cache.clear();
 		this._staleParts.clear();
 		this._inFlightParts.clear();
-		this._renderer.releaseScratchCanvases();
-		this._renderer.releaseColorChangedImages();
 		this._fireChanged();
 	}
 

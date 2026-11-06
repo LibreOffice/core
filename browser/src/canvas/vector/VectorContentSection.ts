@@ -52,17 +52,20 @@ namespace cool {
 			// Redraw when a part's data arrives, a deferred bitmap decodes, or
 			// the part is invalidated. Drop the cache key so the next draw
 			// re-renders the part.
-			RenderManager.onVectorChanged(() => {
-				this._lastRenderKey = '';
-				if (app.sectionContainer) app.sectionContainer.requestReDraw();
-			});
+			RenderManager.onVectorChanged(this._onVectorChanged);
 		}
+
+		private _onVectorChanged = (): void => {
+			this._lastRenderKey = '';
+			if (app.sectionContainer) app.sectionContainer.requestReDraw();
+		};
 
 		onInitialize(): void {
 			this._docLayer = app.map._docLayer;
 		}
 
 		onRemove(): void {
+			RenderManager.offVectorChanged(this._onVectorChanged);
 			VectorFormControlLayer.update(undefined, 0, 0, 0);
 		}
 

@@ -78,7 +78,7 @@ describe('RenderGeometrySection', function () {
 				if (objectId !== undefined) notForeseen.push(objectId);
 			};
 			savedInstance = (RenderManager as any)._instance;
-			(RenderManager as any)._instance = new VectorManager();
+			(RenderManager as any)._instance = new ImpressVectorManager();
 			(RenderGeometrySection as any).pending.clear();
 		});
 		afterEach(function () {

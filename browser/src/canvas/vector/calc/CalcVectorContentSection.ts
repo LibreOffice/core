@@ -138,40 +138,38 @@ namespace cool {
 			this._nextRasterJob = 0;
 		};
 
-		constructor() {
+		/// The manager the section draws the content of.
+		private readonly _manager: CalcVectorManager;
+
+		constructor(manager: CalcVectorManager) {
 			super(app.CSections.CalcVectorContent.name);
-			CalcVectorManager.instance().onChanged(this._onChanged);
-			CalcVectorManager.instance().onReclaimGraphicsMemory(
-				this._onReclaimGraphicsMemory,
-			);
+			this._manager = manager;
+			manager.onVectorChanged(this._onChanged);
+			manager.onReclaimGraphicsMemory(this._onReclaimGraphicsMemory);
 		}
 
 		onRemove(): void {
-			CalcVectorManager.instance().offChanged(this._onChanged);
-			CalcVectorManager.instance().offReclaimGraphicsMemory(
-				this._onReclaimGraphicsMemory,
-			);
+			this._manager.offVectorChanged(this._onChanged);
+			this._manager.offReclaimGraphicsMemory(this._onReclaimGraphicsMemory);
 			this._onReclaimGraphicsMemory();
 		}
 
-		/// Add or remove the section to match whether vector rendering is active.
+		/// Add or remove the section to match whether the sheet is drawn from vector primitives.
 		static update(): void {
 			if (!app.sectionContainer) return;
-			const wanted = CalcVectorManager.isActive();
-			const present = app.sectionContainer.doesSectionExist(
-				app.CSections.CalcVectorContent.name,
-			);
-			if (wanted === present) return;
-			if (wanted) {
-				app.sectionContainer.addSection(new cool.CalcVectorContentSection());
-				// The tiles held show the sheet as it was, and none is drawn from now on.
-				RenderManager.discardTiles();
-			} else
-				app.sectionContainer.removeSection(
-					app.CSections.CalcVectorContent.name,
+			const manager = RenderManager.calcVectorManager();
+			const name = app.CSections.CalcVectorContent.name;
+			const section = app.sectionContainer.getSectionWithName(name) as
+				| CalcVectorContentSection
+				| undefined;
+			if (section ? section._manager === manager : !manager) return;
+			if (section) app.sectionContainer.removeSection(name);
+			if (manager)
+				app.sectionContainer.addSection(
+					new cool.CalcVectorContentSection(manager),
 				);
 			// The tiles are asked for again when the view draws from them.
-			if (!wanted) RenderManager.update();
+			else RenderManager.update();
 		}
 
 		onDraw(): void {
@@ -204,7 +202,7 @@ namespace cool {
 			if (!app.tile.size) return;
 			const twipsPerPixel = app.tile.size.x / RenderManager.tileSize;
 
-			const manager = CalcVectorManager.instance();
+			const manager = this._manager;
 			const renderer = manager.renderer;
 			const background = this.containerObject.getClearColor();
 			renderer.setDocumentBackground(background);
@@ -533,7 +531,7 @@ namespace cool {
 			view: { left: number; top: number; right: number; bottom: number },
 			background: string,
 		): void {
-			const resources = CalcVectorManager.instance().resourceVersion();
+			const resources = this._manager.resourceVersion();
 			for (const strip of cool.calcTextStrips(
 				block,
 				CalcVectorContentSection.stripRows,
@@ -683,7 +681,7 @@ namespace cool {
 
 			context.translate(-left, -top);
 			context.scale(1 / twipsPerPixel, 1 / twipsPerPixel);
-			const renderer = CalcVectorManager.instance().renderer;
+			const renderer = this._manager.renderer;
 			for (const name of CalcVectorContentSection.rasterLayers)
 				for (const part of parts)
 					for (const primitive of part.content.layers?.[name] ?? [])
@@ -862,7 +860,7 @@ namespace cool {
 		private _runRasterJobs(timeLeft: () => number): void {
 			if (!app.tile.size) return;
 			const twipsPerPixel = app.tile.size.x / RenderManager.tileSize;
-			const manager = CalcVectorManager.instance();
+			const manager = this._manager;
 			const resources = manager.resourceVersion();
 			const background = this.containerObject.getClearColor();
 			while (this._nextRasterJob < this._rasterJobs.length) {
@@ -1036,7 +1034,7 @@ namespace cool {
 			context.save();
 			context.translate(origin.x + shiftX, origin.y + shiftY);
 			context.scale(1 / twipsPerPixel, 1 / twipsPerPixel);
-			const renderer = CalcVectorManager.instance().renderer;
+			const renderer = this._manager.renderer;
 			for (const primitive of primitives)
 				renderer.renderPrimitive(context, primitive);
 			context.restore();
@@ -1077,7 +1075,7 @@ namespace cool {
 			layers: DrawingLayer[],
 			twipsPerPixel: number,
 		): void {
-			const manager = CalcVectorManager.instance();
+			const manager = this._manager;
 			const view = manager.objectsOf(sheet.part);
 			if (!view) return;
 			const layerIds = layers.map((layer) => cool.calcLayerId(layer));
@@ -1103,7 +1101,7 @@ namespace cool {
 			primitives: Primitive[],
 			twipsPerPixel: number,
 		): void {
-			const renderer = CalcVectorManager.instance().renderer;
+			const renderer = this._manager.renderer;
 			const context = this.context;
 			context.save();
 			context.translate(-pane.offset.x, -pane.offset.y);
@@ -1122,9 +1120,9 @@ namespace cool {
 			twipsPerPixel: number,
 		): void {
 			const context = this.context;
-			for (const edit of CalcVectorManager.instance().textEditsOf(sheet)) {
+			for (const edit of this._manager.textEditsOf(sheet)) {
 				if (edit.parent !== undefined) {
-					const placing = CalcVectorManager.instance().objectPlacingOf(
+					const placing = this._manager.objectPlacingOf(
 						sheet.part,
 						edit.parent,
 					);

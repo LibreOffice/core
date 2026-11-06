@@ -3,7 +3,7 @@
  * window.L.CanvasTileLayer is a layer with canvas based rendering.
  */
 
-/* global app JSDialog CanvasSectionContainer GraphicSelection CanvasOverlay CursorHeaderSection $ _ CPolyUtil CPolygon Cursor UNOKey cool OtherViewCellCursorSection RenderManager SplitSection TextSelections CellSelectionMarkers URLPopUpSection CalcValidityDropDown DocumentBase CellCursorSection FormFieldButton TextCursorSection CStyleData CSelections CReferences OtherViewGraphicSelectionSection ShapeLockLabelSection ShapeLockCalloutSection CompareChangesLabelSection AnimatedGifManager ViewState RenderGeometrySection LocalCaret DropCaretSection CalcVectorManager */
+/* global app JSDialog CanvasSectionContainer GraphicSelection CanvasOverlay CursorHeaderSection $ _ CPolyUtil CPolygon Cursor UNOKey cool OtherViewCellCursorSection RenderManager SplitSection TextSelections CellSelectionMarkers URLPopUpSection CalcValidityDropDown DocumentBase CellCursorSection FormFieldButton TextCursorSection CStyleData CSelections CReferences OtherViewGraphicSelectionSection ShapeLockLabelSection ShapeLockCalloutSection CompareChangesLabelSection AnimatedGifManager ViewState RenderGeometrySection LocalCaret DropCaretSection */
 
 function clamp(num, min, max)
 {
@@ -370,8 +370,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		}
 
 		// A vector-drawn spreadsheet draws its cells in its own section and asks for no tiles.
-		if (this._docType === 'spreadsheet' && cool.VectorRenderingConfig.isEnabled())
-			app.sectionContainer.addSection(new cool.CalcVectorContentSection());
+		cool.CalcVectorContentSection.update();
 
 		this._canvasOverlay = new CanvasOverlay(this._map, app.sectionContainer.getContext());
 		app.sectionContainer.addSection(this._canvasOverlay);
@@ -1235,8 +1234,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		// A whole-sheet invalidation can be a structural change that has no pushed delta, so ask
 		// again for what is held of that sheet.
-		if (this.isCalc() && CalcVectorManager.isActive() && command.width === Number.MAX_SAFE_INTEGER)
-			CalcVectorManager.instance().markPartStale(parseInt(command.part));
+		const calcVectorManager = RenderManager.calcVectorManager();
+		if (calcVectorManager && command.width === Number.MAX_SAFE_INTEGER)
+			calcVectorManager.markPartStale(parseInt(command.part));
 
 		if (this.isImpress() || this.isDraw()) {
 			// The message names the part by its part identifier, the way

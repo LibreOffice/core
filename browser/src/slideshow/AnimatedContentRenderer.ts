@@ -200,7 +200,7 @@ abstract class AnimatedContentRenderer2d extends AnimatedContentRenderer {
 		context.scale(scaleX, scaleY);
 		const matrix = cool.Matrix2D.fromArray(state.transform);
 		if (matrix) matrix.applyTo(context);
-		if (state.clip) VectorManager.clipTo(context, state.clip);
+		if (state.clip) ImpressVectorManager.clipTo(context, state.clip);
 		context.scale(1 / scaleX, 1 / scaleY);
 	}
 

@@ -600,7 +600,7 @@ export class TilesSection extends CanvasSectionObject {
 		this.context.translate(this.myTopLeft[0], this.myTopLeft[1]);
 
 		// A spreadsheet drawn from vector primitives draws its cells in a section of its own.
-		if (CalcVectorManager.isActive())
+		if (RenderManager.calcVectorManager())
 			return;
 
 		var doneTiles = new Set();
@@ -919,7 +919,7 @@ export class TilesSection extends CanvasSectionObject {
 	/// Keep the frame the canvas shows for the zoom frames, when the sheet is drawn from vectors.
 	public captureVectorZoomSnapshot(): void {
 		this._vectorZoomSnapshot = undefined;
-		if (!CalcVectorManager.isActive()) return;
+		if (!RenderManager.calcVectorManager()) return;
 		const snapshot = document.createElement('canvas');
 		snapshot.width = this.size[0];
 		snapshot.height = this.size[1];
@@ -1057,7 +1057,7 @@ export class TilesSection extends CanvasSectionObject {
 			}
 			// A spreadsheet drawn from vector primitives shows its last frame scaled, since the
 			// tiles held are not drawn in vector mode and can be out of date.
-			if (CalcVectorManager.isActive()) {
+			if (RenderManager.calcVectorManager()) {
 				this._drawVectorZoomFrame(paneBounds, docRange, destPos, scale);
 				continue;
 			}
