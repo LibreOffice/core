@@ -1580,6 +1580,13 @@ void KitQueueTests::testTextInputCombinedKeepsNewestSequence()
     queue.put("sess textinput id=0 text=d");
     p = queue.pop();
     LOK_ASSERT_EQUAL_STR("sess textinput id=0 text=cd", std::string_view(p.data(), p.size()));
+
+    // A message without a sequence number leaves the number of the queued one in place.
+    queue.put("sess textinput id=0 text=e sequence=9");
+    queue.put("sess textinput id=0 text=f");
+    p = queue.pop();
+    LOK_ASSERT_EQUAL_STR("sess textinput id=0 text=ef sequence=9",
+                         std::string_view(p.data(), p.size()));
 }
 
 void KitQueueTests::testRemoveTextCombinedKeepsNewestSequence()
@@ -1595,6 +1602,13 @@ void KitQueueTests::testRemoveTextCombinedKeepsNewestSequence()
     LOK_ASSERT_EQUAL(static_cast<size_t>(1), queue.size());
     KitQueue::Payload p = queue.pop();
     LOK_ASSERT_EQUAL_STR("sess removetextcontext id=0 before=2 after=0 sequence=4",
+                         std::string_view(p.data(), p.size()));
+
+    // A message without a sequence number leaves the number of the queued one in place.
+    queue.put("sess removetextcontext id=0 before=1 after=0 sequence=5");
+    queue.put("sess removetextcontext id=0 before=1 after=0");
+    p = queue.pop();
+    LOK_ASSERT_EQUAL_STR("sess removetextcontext id=0 before=2 after=0 sequence=5",
                          std::string_view(p.data(), p.size()));
 }
 

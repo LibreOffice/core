@@ -15,6 +15,8 @@
 #include <common/StringVector.hpp>
 #include <common/Util.hpp>
 
+#include <algorithm>
+#include <array>
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
@@ -368,6 +370,48 @@ namespace COOLProtocol
             return {};
         const std::string_view name = command.substr(prefix.size());
         return name.substr(0, name.find_first_of("?#."));
+    }
+
+    /// Whether the token at that index names a command that changes a drawing object.
+    inline bool isObjectChange(const StringVector& tokens, std::size_t command)
+    {
+        static constexpr auto names = std::to_array<std::string_view>({
+            "setobjecttransform",
+            "setobjecthandle",
+            "setobjectcontrolpoint",
+            "setobjectgluepoint",
+            "setobjectpoints",
+            "cropobject",
+        });
+        return std::ranges::any_of(names, [&tokens, command](std::string_view name)
+                                   { return tokens.equals(command, name); });
+    }
+
+    /// Whether the token at that index names a command with an optional input sequence token:
+    /// the key, mouse, text, caret and form control commands, and the object changes.
+    inline bool carriesInputSequence(const StringVector& tokens, std::size_t command)
+    {
+        static constexpr auto names = std::to_array<std::string_view>({
+            "key",
+            "windowkey",
+            "mouse",
+            "textinput",
+            "removetextcontext",
+            "textcursor",
+            "formcontrol",
+        });
+        return isObjectChange(tokens, command)
+               || std::ranges::any_of(names, [&tokens, command](std::string_view name)
+                                      { return tokens.equals(command, name); });
+    }
+
+    /// Reads the input sequence number of a message whose command is the token at that index.
+    /// The sequence token is the last token, and only of a command with an input sequence token.
+    /// The last token of any other command is a part of that command.
+    inline bool getInputSequence(const StringVector& tokens, std::size_t command, int& sequence)
+    {
+        return tokens.size() > command + 1 && carriesInputSequence(tokens, command)
+               && getTokenInteger(tokens[tokens.size() - 1], "sequence", sequence);
     }
 
     /// Returns true if the token is a likely document modifying command.

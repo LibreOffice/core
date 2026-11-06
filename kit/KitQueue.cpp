@@ -61,29 +61,19 @@ namespace {
         return false;
     }
 
-    /// A combined message carries the sequence number of the newest input it merges, the one being
-    /// combined in.
-    void appendInputSequence(const StringVector& tokens, std::string& message)
+    /// A combined message carries the sequence number of the newest input it merges. That is the
+    /// number of the message being combined in, or the number of the queued message where the one
+    /// being combined in has none.
+    void appendInputSequence(const StringVector& tokens, const StringVector& queuedTokens,
+                             std::string& message)
     {
-        std::string sequence;
-        if (COOLProtocol::getTokenString(tokens, "sequence", sequence))
+        int sequence = 0;
+        if (COOLProtocol::getInputSequence(tokens, 1, sequence)
+            || COOLProtocol::getInputSequence(queuedTokens, 1, sequence))
         {
             message.append(" sequence=");
-            message.append(sequence);
+            message.append(std::to_string(sequence));
         }
-    }
-
-    /// Whether the queued message changes a drawing object: setobjecttransform, setobjecthandle,
-    /// setobjectcontrolpoint, setobjectgluepoint, setobjectpoints or cropobject. Each of them can
-    /// carry the client's input sequence number.
-    bool isObjectChange(const StringVector& queuedTokens)
-    {
-        return queuedTokens.equals(1, "setobjecttransform")
-               || queuedTokens.equals(1, "setobjecthandle")
-               || queuedTokens.equals(1, "setobjectcontrolpoint")
-               || queuedTokens.equals(1, "setobjectgluepoint")
-               || queuedTokens.equals(1, "setobjectpoints")
-               || queuedTokens.equals(1, "cropobject");
     }
 }
 
@@ -750,7 +740,7 @@ std::string KitQueue::combineTextInput(const StringVector& tokens)
               queuedTokens.equals(1, "removetextcontext") ||
               queuedTokens.equals(1, "textcursor") ||
               queuedTokens.equals(1, "windowkey") ||
-              isObjectChange(queuedTokens))))
+              COOLProtocol::isObjectChange(queuedTokens, 1))))
             return std::string();
 
         std::string queuedId;
@@ -772,7 +762,7 @@ std::string KitQueue::combineTextInput(const StringVector& tokens)
             newMsg.append(" text=");
             newMsg.append(queuedText);
             newMsg.append(text);
-            appendInputSequence(tokens, newMsg);
+            appendInputSequence(tokens, queuedTokens, newMsg);
 
             LOG_TRC("Combined [" << queuedMessage << "] with current message to [" << newMsg
                     << ']');
@@ -880,7 +870,7 @@ std::string KitQueue::combineRemoveText(const StringVector& tokens)
               queuedTokens.equals(1, "textinput") ||
               queuedTokens.equals(1, "textcursor") ||
               queuedTokens.equals(1, "windowkey") ||
-              isObjectChange(queuedTokens))))
+              COOLProtocol::isObjectChange(queuedTokens, 1))))
             return std::string();
 
         std::string queuedId;
@@ -899,7 +889,7 @@ std::string KitQueue::combineRemoveText(const StringVector& tokens)
             std::string newMsg = queuedTokens[0] + " removetextcontext id=" + id +
                 " before=" + std::to_string(queuedBefore + before) +
                 " after=" + std::to_string(queuedAfter + after);
-            appendInputSequence(tokens, newMsg);
+            appendInputSequence(tokens, queuedTokens, newMsg);
 
             LOG_TRC("Combined [" << queuedMessage << "] with current message to [" << newMsg << "]");
 

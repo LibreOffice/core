@@ -60,6 +60,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
 {
     CPPUNIT_TEST_SUITE(WhiteBoxTests);
     CPPUNIT_TEST(testCOOLProtocolFunctions);
+    CPPUNIT_TEST(testInputSequence);
     CPPUNIT_TEST(testSplitting);
     CPPUNIT_TEST(testMessage);
     CPPUNIT_TEST(testPathPrefixTrimming);
@@ -102,6 +103,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST_SUITE_END();
 
     void testCOOLProtocolFunctions();
+    void testInputSequence();
     void testSplitting();
     void testMessage();
     void testPathPrefixTrimming();
@@ -283,6 +285,37 @@ void WhiteBoxTests::testCOOLProtocolFunctions()
     LOK_ASSERT_EQUAL_STR("SecurityLabel", COOLProtocol::getUnoCommandName(".uno:SecurityLabel.x"));
     LOK_ASSERT_EQUAL_STR("", COOLProtocol::getUnoCommandName("slot:1234"));
     LOK_ASSERT_EQUAL_STR("", COOLProtocol::getUnoCommandName("vnd.sun.star.script:a.py$b"));
+}
+
+void WhiteBoxTests::testInputSequence()
+{
+    constexpr std::string_view testname = __func__;
+
+    // A numbered command gives its sequence number.
+    int sequence = 0;
+    LOK_ASSERT(COOLProtocol::getInputSequence(
+        StringVector::tokenize("key type=input char=97 key=0 sequence=3"), 0, sequence));
+    LOK_ASSERT_EQUAL(3, sequence);
+
+    // The command follows the session id in a queued message.
+    LOK_ASSERT(COOLProtocol::getInputSequence(
+        StringVector::tokenize("sess setobjecttransform to=1,1,0,0,1,0,0 as=move sequence=4"), 1,
+        sequence));
+    LOK_ASSERT_EQUAL(4, sequence);
+
+    // A numbered command without the token has no sequence number.
+    LOK_ASSERT(!COOLProtocol::getInputSequence(
+        StringVector::tokenize("mouse type=move x=1 y=2 count=1 buttons=0 modifier=0"), 0,
+        sequence));
+
+    // Only the last token is the sequence token.
+    LOK_ASSERT(!COOLProtocol::getInputSequence(
+        StringVector::tokenize("textinput id=0 sequence=5 text=a"), 0, sequence));
+
+    // The last token of any other command is a part of that command.
+    LOK_ASSERT(!COOLProtocol::getInputSequence(
+        StringVector::tokenize("dialogevent 5 {\"id\":\"entry\"} sequence=999"), 0, sequence));
+    LOK_ASSERT(!COOLProtocol::getInputSequence(StringVector::tokenize("sequence=7"), 0, sequence));
 }
 
 void WhiteBoxTests::testSplitting()

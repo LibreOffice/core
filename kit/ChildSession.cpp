@@ -7760,13 +7760,10 @@ void ChildSession::updateCursorPositionJSON(const std::string &rect)
     updateCursorPosition(command->get("rectangle").toString());
 }
 
-// The sequence token is the last token of a numbered command. The tokens before it are the
-// command's own, and a payload among them may hold anything.
 void ChildSession::noteInputSequence(const StringVector& tokens)
 {
     int sequence = 0;
-    if (tokens.size() > 1 && getTokenInteger(tokens[tokens.size() - 1], "sequence", sequence)
-        && sequence > _inputSequence)
+    if (getInputSequence(tokens, 0, sequence) && sequence > _inputSequence)
         _inputSequence = sequence;
 }
 
