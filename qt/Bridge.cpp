@@ -38,6 +38,7 @@
 #include <Poco/Path.h>
 #include <Poco/URI.h>
 
+#include <algorithm>
 #include <cstdlib>
 #include <map>
 #include <mutex>
@@ -59,6 +60,7 @@
 #include <QObject>
 #include <QPointer>
 #include <QString>
+#include <QStringList>
 #include <QTemporaryFile>
 #include <QTimer>
 #include <QUrl>
@@ -541,7 +543,7 @@ void Bridge::promptSaveLocation(std::function<void(const std::string&, const std
     }
 
     const COKitDocumentType docType = loKitDoc->getDocumentType();
-    const auto formats = getSaveAsFormats(docType);
+    auto formats = getSaveAsFormats(docType);
 
     if (formats.empty())
     {
@@ -557,32 +559,59 @@ void Bridge::promptSaveLocation(std::function<void(const std::string&, const std
                                ? QStringLiteral("document")
                                : docInfo.completeBaseName();
 
-    // Build file filter string with all available formats
-    QString fileFilter;
-    for (size_t i = 0; i < formats.size(); ++i)
+    const QString docSuffix = _requiresSaveAs ? QString() : docInfo.suffix();
+    size_t formatIndex = 0;
+    if (!docSuffix.isEmpty())
     {
-        if (i > 0)
-            fileFilter += QStringLiteral(";;");
-        fileFilter += formats[i].displayName + QStringLiteral(" (*.") + formats[i].extension + QStringLiteral(")");
+        const auto match = std::find_if(
+            formats.begin(), formats.end(), [&docSuffix](const SaveAsFormat& fmt)
+            { return docSuffix.compare(fmt.extension, Qt::CaseInsensitive) == 0; });
+        formatIndex = match - formats.begin();
+        if (match == formats.end())
+        {
+            const QString extension = docSuffix.toLower();
+            formats.push_back(
+                { QStringLiteral("saveas-") + extension, extension, extension.toUpper() });
+        }
     }
+    const QString defaultExtension = formats[formatIndex].extension;
+
+    // Build file filter string with all available formats
+    QStringList nameFilters;
+    for (const auto& fmt : formats)
+        nameFilters << fmt.displayName + QStringLiteral(" (*.") + fmt.extension +
+                           QStringLiteral(")");
 
     // Under flatpak the file picker is the xdg-desktop-portal FileChooser,
     // which exports the chosen file to the document portal under the exact
     // name the user confirms and ignores setDefaultSuffix().
-    const QString suggestedName = baseName + QStringLiteral(".") + formats[0].extension;
+    const QString suggestedName =
+        baseName + QStringLiteral(".") + (docSuffix.isEmpty() ? defaultExtension : docSuffix);
+
+    QString startFolder = QDir::homePath();
+    if (docUrl.isLocalFile() && !_requiresSaveAs)
+    {
+        const QString hostUri = QString::fromStdString(coda::hostDisplayUriForPath(docPath));
+        const QString docFolder = hostUri.isEmpty()
+                                      ? docInfo.absolutePath()
+                                      : QFileInfo(QUrl(hostUri).toLocalFile()).absolutePath();
+        const QString tempFolder = QDir::tempPath();
+        if (docFolder != tempFolder && !docFolder.startsWith(tempFolder + '/'))
+            startFolder = docFolder;
+    }
 
     QFileDialog* dialog = new QFileDialog(
         _webView,
         QObject::tr("Save Document"),
-        QDir::home().filePath(suggestedName),
-        fileFilter);
+        QDir(startFolder).filePath(suggestedName),
+        nameFilters.join(QStringLiteral(";;")));
 
     dialog->setAcceptMode(QFileDialog::AcceptSave);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->selectNameFilter(nameFilters[formatIndex]);
 
     // Set default suffix to enforce extension in GUI
-    if (!formats.empty())
-        dialog->setDefaultSuffix(formats[0].extension);
+    dialog->setDefaultSuffix(defaultExtension);
 
     // Update default suffix and the proposed filename when the user changes
     // the selected filter, so the name registered by the portal keeps the
@@ -602,7 +631,7 @@ void Bridge::promptSaveLocation(std::function<void(const std::string&, const std
                      });
 
     QObject::connect(dialog, &QFileDialog::fileSelected,
-                     [callback, formats](const QString& destPath)
+                     [callback, formats, defaultExtension](const QString& destPath)
                      {
                          // The format is determined by file name not the
                          // file format dropdown menu. We can't change the
@@ -619,8 +648,8 @@ void Bridge::promptSaveLocation(std::function<void(const std::string&, const std
                              }
                          }
 
-                         if (format.isEmpty() && !formats.empty())
-                             format = formats[0].extension;
+                         if (format.isEmpty())
+                             format = defaultExtension;
 
                          // Ensure file ends with the selected format's extension - save-as fails otherwise!
                          QString finalPath = destPath;
