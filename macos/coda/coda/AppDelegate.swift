@@ -227,10 +227,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // save the continuation so we can reply later
         pendingQuitReply = { sender.reply(toApplicationShouldTerminate: $0) }
 
-        closeAllDocuments()
+        let accountWindows = CloudAccountWindow.openAccountWindows
+        if accountWindows.isEmpty {
+            closeAllDocuments()
+        } else {
+            // As with the close button, each editor page saves first. The quit goes on in
+            // lastAccountWindowClosed, or stops in accountWindowKeptOpen.
+            for window in accountWindows {
+                window.performClose(nil)
+            }
+        }
 
         // tell App Kit we’ll decide later
         return .terminateLater
+    }
+
+    func lastAccountWindowClosed() {
+        if pendingQuitReply != nil {
+            closeAllDocuments()
+        }
+    }
+
+    func accountWindowKeptOpen() {
+        finishQuit(.terminateCancel)
     }
 
     private func closeAllDocuments() {

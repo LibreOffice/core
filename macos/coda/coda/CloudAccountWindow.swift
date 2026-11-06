@@ -122,6 +122,14 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         fatalError("CloudAccountWindow is created in code only")
     }
 
+    static var openAccountWindows: [NSWindow] {
+        return openWindows.values.compactMap { $0.window }
+    }
+
+    private static var appDelegate: AppDelegate? {
+        return NSApp.delegate as? AppDelegate
+    }
+
     // The page saves, then sends CLOSE_WINDOW.
     private static let saveAndCloseScript = "window.app.map._saveAndClose()"
 
@@ -147,6 +155,10 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         ViewController.removeDiagnosticMessageHandlers(from: contentController, world: Self.world)
         closeRemoteDocument()
         Self.openWindows[accountId] = nil
+
+        if Self.openWindows.isEmpty {
+            Self.appDelegate?.lastAccountWindowClosed()
+        }
     }
 
     // WebKit fills in frameInfo, so a page cannot pass itself off as another frame.
@@ -236,8 +248,13 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         // TODO: Keep a flag while a save is uploading, as Qt does, so closing the window waits for
         // the upload instead of losing it.
         let isSaveReport = kind == "saveCompleted" || kind == "SAVESTARTED" || kind == "SAVECOMPLETED"
-            || kind == "SAVEFAILED" || kind == "CLOSE_CANCELLED"
+            || kind == "SAVEFAILED"
         if isSaveReport {
+            return (nil, nil)
+        }
+
+        if kind == "CLOSE_CANCELLED" {
+            Self.appDelegate?.accountWindowKeptOpen()
             return (nil, nil)
         }
 
