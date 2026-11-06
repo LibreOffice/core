@@ -1691,18 +1691,8 @@ window.L.Clipboard = window.L.Class.extend({
 				const cell = document.createElement('td');
 				row.appendChild(cell);
 
-				let kbd = document.createElement('kbd');
-				kbd.textContent = ctrlText;
-				cell.appendChild(kbd);
-
-				const span = document.createElement('span');
-				span.textContent = '+';
-				span.className = 'kbd--plus';
-				cell.appendChild(span);
-
-				kbd = document.createElement('kbd');
-				kbd.textContent = i === 0 ? 'C': (i === 1 ? 'X': 'V');
-				cell.appendChild(kbd);
+				const letter = i === 0 ? 'C': (i === 1 ? 'X': 'V');
+				cell.appendChild(JSDialog.ShortcutsUtil.createKeyCap(ctrlText + '+' + letter));
 			}
 
 			// Add table headers as second row.
@@ -1786,16 +1776,7 @@ window.L.Clipboard = window.L.Class.extend({
 
 		p = document.createElement('p');
 		innerDiv.appendChild(p);
-		let kbd = document.createElement('kbd');
-		kbd.textContent = ctrlText;
-		p.appendChild(kbd);
-		const span = document.createElement('span');
-		span.className = 'kbd--plus';
-		span.textContent = '+';
-		p.appendChild(span);
-		kbd = document.createElement('kbd');
-		kbd.textContent = 'V';
-		p.appendChild(kbd);
+		p.appendChild(JSDialog.ShortcutsUtil.createKeyCap(ctrlText + '+V'));
 
 		p = document.createElement('p');
 		innerDiv.appendChild(p);

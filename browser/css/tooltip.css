@@ -19,6 +19,10 @@
 	gap: 8px;
 }
 
+.cooltip-text:not(.cooltip-with-icon) kbd {
+	margin-inline-start: var(--spacing-m);
+}
+
 .cooltip-text .cooltip-icon {
 	flex: 0 0 auto;
 	width: 24px;

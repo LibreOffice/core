@@ -4168,24 +4168,23 @@ div [id^='TemplateDialog'] {
 }
 
 /* Keyboard input keys */
-kbd,
-.kbd {
-	background-color: var(--color-background-dark);
+kbd {
+	background-color: color-mix(in srgb, var(--color-main-text) 8%, transparent);
 	border-radius: var(--border-radius);
-	border: 1px solid var(--color-border-dark);
-	color: var(--color-text-dark);
+	color: var(--color-main-text);
 	display: inline-block;
-	font-family: monospace;
-	font-size: .85em;
-	line-height: 1;
-	padding: var(--spacing-s);
+	font-family: var(--cool-font);
+	font-size: 13px;
+	font-weight: normal;
+	line-height: normal;
+	padding: var(--spacing-xs) var(--spacing-m);
 	white-space: nowrap;
 }
 
-.kbd--plus {
-	color: var(--color-text-dark);
-	padding: 0 4px;
-	font-size: 0.85em;
+/* The "+" between two keys: a gap to the eye, still read by screen readers. */
+kbd .kbd--plus {
+	font-size: 0;
+	padding-inline-start: var(--spacing-m);
 }
 
 .warn-copy-paste {

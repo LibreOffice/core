@@ -577,6 +577,7 @@ window.L.Map.include({
 			}
 			// eslint-disable-next-line no-restricted-syntax -- help page markup that we ship
 			document.getElementById('online-help-content').innerHTML = app.util.replaceCtrlAltInMac(document.getElementById('online-help-content').innerHTML);
+			window.JSDialog.ShortcutsUtil.groupKeys(document.getElementById('online-help-content'));
 
 			// The screenshots are taken in the languages of the products. One
 			// that a language lacks falls back to the English screenshot.
@@ -609,24 +610,12 @@ window.L.Map.include({
 							+ ' or add the binding to Accelerators.xcu / unoshortcuts.py.');
 						continue;
 					}
-					var parts = shortcut.split('+');
-					cell.replaceChildren();
-					for (var j = 0; j < parts.length; j++) {
-						if (j > 0) {
-							const plus = document.createElement('span');
-							plus.className = 'kbd--plus';
-							plus.setAttribute('aria-hidden', 'true');
-							plus.textContent = '+';
-							cell.appendChild(plus);
-						}
-						const key = document.createElement('kbd');
-						key.textContent = parts[j];
-						cell.appendChild(key);
-					}
+					cell.replaceChildren(window.JSDialog.ShortcutsUtil.createKeyCap(shortcut));
 				}
 			}
 			// eslint-disable-next-line no-restricted-syntax -- help page markup that we ship
 			document.getElementById('keyboard-shortcuts-content').innerHTML = app.util.replaceCtrlAltInMac(document.getElementById('keyboard-shortcuts-content').innerHTML);
+			window.JSDialog.ShortcutsUtil.groupKeys(document.getElementById('keyboard-shortcuts-content'));
 		}
 		var searchInput = document.getElementById('online-help-search-input');
 		searchInput.setAttribute('placeholder',_('Search'));

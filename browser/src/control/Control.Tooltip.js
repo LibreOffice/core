@@ -13,7 +13,7 @@
  * Class Tooltip - tooltip manager
  */
 
-/* global app */
+/* global app JSDialog */
 
 class Tooltip {
 	constructor(options) {
@@ -229,6 +229,11 @@ class Tooltip {
 			return;
 		}
 
+		const parts = textContent
+			? null
+			: JSDialog.ShortcutsUtil.splitTooltip(content || '');
+		if (parts) content = parts.label;
+
 		this._container.classList.toggle('cooltip-with-icon', !!iconUrl);
 
 		if (iconUrl) {
@@ -244,6 +249,10 @@ class Tooltip {
 			label.textContent = content;
 			this._container.appendChild(label);
 		}
+		if (parts)
+			this._container.appendChild(
+				JSDialog.ShortcutsUtil.createKeyCap(parts.shortcut),
+			);
 
 		rectCont = this._container.getBoundingClientRect();
 

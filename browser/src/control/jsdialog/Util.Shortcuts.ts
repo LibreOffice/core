@@ -146,6 +146,53 @@ class ShortcutsUtil {
 		);
 	}
 
+	/** Split "Bold (Ctrl+B)" into label and shortcut; null for "Font Color (Black)". */
+	public splitTooltip(
+		text: string,
+	): { label: string; shortcut: string } | null {
+		const found = /^(.*\S)\s*\(([^()]+)\)$/.exec(text);
+		if (!found) return null;
+		const modifiers = (
+			'Ctrl+Shift+Alt+⌘+⌥+' + this.localizeModifiers('Ctrl+Shift+Alt')
+		).split('+');
+		const first = found[2].split('+')[0];
+		const isShortcut =
+			first === found[2] ? /^F\d+$/.test(first) : modifiers.includes(first);
+		return isShortcut ? { label: found[1], shortcut: found[2] } : null;
+	}
+
+	/** One kbd element for all keys of a shortcut such as "Ctrl+B". */
+	public createKeyCap(shortcut: string): HTMLElement {
+		const macNames: Record<string, string> = {
+			'⌘': _('Command'),
+			'⌥': _('Option'),
+		};
+		const cap = document.createElement('kbd');
+		// A "+" at the very end is the key itself, as in "Ctrl++".
+		for (const key of shortcut.split(/\+(?=.)/)) {
+			if (cap.hasChildNodes())
+				window.L.DomUtil.create('span', 'kbd--plus', cap).textContent = '+';
+			if (macNames[key]) {
+				const symbol = window.L.DomUtil.create('span', '', cap);
+				symbol.setAttribute('role', 'img');
+				symbol.setAttribute('aria-label', macNames[key]);
+				symbol.textContent = key;
+			} else cap.append(key);
+		}
+		return cap;
+	}
+
+	/** Merge the help page's per-key kbd elements into one cap per shortcut. */
+	public groupKeys(container: Element): void {
+		// eslint-disable-next-line no-restricted-syntax -- help page markup that we ship
+		container.innerHTML = container.innerHTML.replace(
+			/<\/kbd><span class="kbd--plus"[^>]*>\+<\/span><kbd>/g,
+			'+',
+		);
+		for (const key of Array.from(container.querySelectorAll('kbd')))
+			key.replaceWith(this.createKeyCap(key.textContent || ''));
+	}
+
 	/**
 	 * Return the locale-aware shortcut display string for a UNO command,
 	 * or undefined if none is registered. On Mac, "Ctrl"/"Alt" are replaced
