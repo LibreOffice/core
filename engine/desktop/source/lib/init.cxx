@@ -31,6 +31,7 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <com/sun/star/awt/XCheckBox.hpp>
 #include <com/sun/star/awt/XRadioButton.hpp>
+#include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <comphelper/OAccessible.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -8098,6 +8099,15 @@ void COKitDocumentImpl::formControlAction(unsigned long long nObjectId, const ch
                 xCheckBox->setState(o3tl::toInt32(aValue));
             else
                 SetLastExceptionMsg(u"The control is no check box"_ustr);
+        }
+        else if (aAction == "text")
+        {
+            // the field reads the text as typed, as its own format says
+            cpo::uno::Reference<css::awt::XTextComponent> xText(xPeer, cpo::uno::UNO_QUERY);
+            if (xText.is())
+                xText->setText(OUString::fromUtf8(aValue));
+            else
+                SetLastExceptionMsg(u"The control holds no text"_ustr);
         }
         else if (aAction == "check")
         {

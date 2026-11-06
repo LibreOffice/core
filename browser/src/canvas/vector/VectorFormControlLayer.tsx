@@ -203,6 +203,15 @@ namespace cool {
             .querySelector('input')
             ?.addEventListener('change', () => layer._send(id, 'check', ''));
           break;
+        case 'textBox':
+        case 'formattedField':
+        case 'numericField':
+        case 'currencyField':
+        case 'dateField':
+        case 'timeField':
+        case 'patternField':
+          layer._makeTypable(id, element, primitive);
+          break;
       }
 
       // the keyboard stays with the document: the controls take no focus, by click or by Tab
@@ -211,9 +220,11 @@ namespace cool {
         .forEach((focusable: HTMLElement) =>
           focusable.setAttribute('tabindex', '-1'),
         );
-      element.addEventListener('mousedown', (event: MouseEvent) =>
-        event.preventDefault(),
-      );
+      // a field takes the focus, as it is typed into
+      element.addEventListener('mousedown', (event: MouseEvent) => {
+        if (!(event.target as Element).classList.contains('vector-form-field'))
+          event.preventDefault();
+      });
 
       // the wheel scrolls and zooms the document, as it does over the page
       element.addEventListener(
@@ -236,6 +247,66 @@ namespace cool {
         });
 
       return element;
+    }
+
+    /*
+      The text a field shows becomes an input to type in, a text area where the field holds
+      several lines. Return, or leaving the field, sends what was typed; Escape takes it back.
+      The keys typed there are the field's, the document does not see them, and Return and
+      Escape give the keyboard back to the document.
+    */
+    private static _makeTypable(
+      id: number,
+      element: HTMLElement,
+      primitive: FormControlPrimitive,
+    ): void {
+      const shown = element.querySelector('.ui-edit')?.firstElementChild;
+      if (!shown) return;
+
+      const original = primitive.text ?? '';
+      const style = {
+        flex: '1',
+        minWidth: '0',
+        alignSelf: 'stretch',
+        boxSizing: 'border-box',
+        margin: '0',
+        padding: '0 4px',
+        border: 'none',
+        backgroundColor: 'transparent',
+        font: 'inherit',
+        color: 'inherit',
+        textAlign:
+          primitive.align !== undefined
+            ? (['left', 'center', 'right'][primitive.align] ?? 'left')
+            : 'left',
+        resize: 'none',
+      };
+      const input = (
+        primitive.multiLine ? (
+          <textarea class="vector-form-field" style={style} />
+        ) : (
+          <input type="text" class="vector-form-field" style={style} />
+        )
+      ) as HTMLInputElement | HTMLTextAreaElement;
+      input.value = original;
+      if (primitive.disabled) input.disabled = true;
+      shown.replaceWith(input);
+
+      input.addEventListener('change', () =>
+        VectorFormControlLayer._send(id, 'text', input.value),
+      );
+      input.addEventListener('keydown', (event: Event) => {
+        event.stopPropagation();
+        const key = (event as KeyboardEvent).key;
+        if (key === 'Escape') input.value = original;
+        if (key === 'Escape' || (key === 'Enter' && !primitive.multiLine)) {
+          event.preventDefault();
+          input.blur();
+          app.map.focus();
+        }
+      });
+      for (const type of ['keypress', 'keyup', 'input'])
+        input.addEventListener(type, (event: Event) => event.stopPropagation());
     }
 
     private static _send(id: number, action: string, value: string): void {

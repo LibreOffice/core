@@ -3092,8 +3092,9 @@ struct COKitDocument
      *
      * @param nObjectId the unique id of the form control
      * @param pAction "press" presses a button, "state" sets the state of a check box to pValue,
-     * "check" checks an option button
-     * @param pValue for "state": 0 not checked, 1 checked, 2 undetermined; empty for the others
+     * "check" checks an option button, "text" types pValue into a field as its new text
+     * @param pValue for "state": 0 not checked, 1 checked, 2 undetermined; for "text" the text,
+     * in UTF-8; empty for the others
      */
     virtual void formControlAction(unsigned long long nObjectId, const char* pAction,
                                    const char* pValue)
