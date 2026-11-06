@@ -1,11 +1,8 @@
 /* Backstage View Styles */
 
 .backstage-view {
-	/* Backstage-specific accent color, varies by document type. Not the
-	 * same as --color-primary, which stays as the global brand color so
-	 * that generic widgets (e.g. .button-primary) keep their app-wide look
-	 * when rendered inside the backstage. */
-	--doc-type-color: rgb(var(--doc-type, 92, 41, 131));
+	/* Backstage accent color: the document type color, or purple when no document is open. */
+	--doc-type-color: rgb(var(--doc-type));
 	--color-on-primary: #ffffff;
 	/* A page preview is 126x176. A landscape preview is at most 150px wide. */
 	--template-preview-height: 176px;
@@ -30,6 +27,10 @@
 	display: flex;
 	flex-direction: column;
 	font-family: var(--cool-font);
+}
+
+body:not([data-doctype]) .backstage-view {
+	--doc-type: 92, 41, 131;
 }
 
 /* Fills for the classes in the embedded icons, which take theme colours here. In an icon
