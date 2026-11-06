@@ -12643,10 +12643,10 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
             }
 
             // In a column, lin fromT, a text node that grows across with its text, "rule type=w
-            // val=INF", is as wide as its widest line and its side margins, at least the width
-            // stated for it and at most the column's: Varying_Width_List's texts of a stated
-            // 20 mm are 45, 57, 34 and 50 thirty-seconds of that, each its own words wide. The
-            // width is kept by the shape, the texts of a column sharing their name.
+            // val=INF", grows from the width stated for it in thirty-seconds of that until its
+            // text fits the height, at most to its widest line and the column's width:
+            // Varying_Width_List's texts of a stated 20 mm. The width is kept by the shape, the
+            // texts of a column sharing their name.
             std::map<const Shape*, sal_Int32> aTextWidthAcross;
             if (nIncY && !rShape->getChildren().empty())
             {
@@ -12678,19 +12678,47 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                             && rConstraint.mfValue > 0.0)
                             nStated = static_cast<sal_Int64>(o3tl::convert(
                                 rConstraint.mfValue, o3tl::Length::mm, o3tl::Length::emu));
-                    const sal_Int64 nWidth(std::min(nRoom, std::max(nStated, *oNeed)));
-                    aTextWidthAcross[pChild.get()] = static_cast<sal_Int32>(nWidth);
+                    sal_Int64 nWidth(std::min(nRoom, std::max(nStated, *oNeed)));
                     // The text's height is its share of the column, and it holds its text at
                     // that width or its group is a point smaller on the next pass.
                     const std::optional<double> oAlong(aExtents.get(*pChild));
                     if (!oAlong || nParentExtent <= 0)
+                    {
+                        aTextWidthAcross[pChild.get()] = static_cast<sal_Int32>(nWidth);
                         continue;
+                    }
                     // the shares are scaled down together where they add up past the column
                     double fTotal(0.0);
                     for (const ShapePtr& pOther : rShape->getChildren())
                         fTotal += aExtents.get(*pOther).value_or(0.0);
                     const sal_Int64 nSlot(
                         static_cast<sal_Int64>(*oAlong / std::max(1.0, fTotal) * nParentExtent));
+                    // the width grows in thirty-seconds of the stated one only until the text,
+                    // broken into lines, fits its height: Varying_Width_List's "Forty-one long
+                    // item" breaks once and its box is 39.375 mm, not the 69 of the whole line
+                    if (nStated > 0 && nSlot > 0)
+                    {
+                        // a width tried here and not taken is no text that did not fit
+                        const auto aDidNotFit(
+                            const_cast<SmartArtDiagram&>(rDgm).getGroupsThatDidNotFit());
+                        const sal_Int64 nStep(std::max<sal_Int64>(1, nStated / 32));
+                        for (sal_Int64 nTry(nStated); nTry < nWidth; nTry += nStep)
+                        {
+                            bool bTryWordsFit(true);
+                            const std::optional<sal_Int64> oTry(textDrivenHeight(
+                                rDgm, rConstraints, *aNode->second,
+                                aPoint != aRowPoints.end() ? aPoint->second
+                                                           : rtl::Reference<svx::diagram::Point>(),
+                                pChild, nTry, bTryWordsFit, /*bGrowingOnly*/ false));
+                            if (oTry && bTryWordsFit && *oTry <= nSlot)
+                            {
+                                nWidth = nTry;
+                                break;
+                            }
+                        }
+                        const_cast<SmartArtDiagram&>(rDgm).getGroupsThatDidNotFit() = aDidNotFit;
+                    }
+                    aTextWidthAcross[pChild.get()] = static_cast<sal_Int32>(nWidth);
                     bool bWordsFit(true);
                     const std::optional<sal_Int64> oHeightNeed(textDrivenHeight(
                         rDgm, rConstraints, *aNode->second,
@@ -12753,8 +12781,9 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                         double fTotal(0.0);
                         for (const ShapePtr& pOther : rShape->getChildren())
                             fTotal += aExtents.get(*pOther).value_or(0.0);
-                        nWidth = static_cast<sal_Int64>(*oAlong / std::max(1.0, fTotal)
-                                                        * rShape->getSize().Width);
+                        // to the nearest EMU, as the extents are handed out below
+                        nWidth = std::llround(*oAlong / std::max(1.0, fTotal)
+                                              * rShape->getSize().Width);
                     }
                     double fOverUnder(0.0), fSides(0.0);
                     std::optional<double> oPartOfFont;
@@ -13774,7 +13803,10 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                     const std::optional<double> oFactor(aExtents.get(*rChild));
                     if (oFactor.has_value())
                     {
-                        aWantedExtent.push_back(oFactor.value() * nParentExtent * fUniformFit);
+                        // to the nearest EMU: a text as wide as its words is kept as a part of
+                        // the row, and cut down it lost the EMU its longest word needs
+                        aWantedExtent.push_back(static_cast<sal_Int32>(
+                            std::lround(oFactor.value() * nParentExtent * fUniformFit)));
                         continue;
                     }
 

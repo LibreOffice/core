@@ -2979,6 +2979,21 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testThirdLevelHasTheSecondLevelsFont)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(aSizes[u"Forty-one"_ustr], aSizes[u"Level 3a"_ustr], 0.5);
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testWidthGrowsOnlyUntilTheTextFits)
+{
+    // Four's text has room for one more line, so "Forty-one long item" breaks and the box
+    // stays narrow; Seven's four lines fill the box, so its long sentence makes it wide
+    createSdImpressDoc("pptx/smartart-width-grows-until-text-fits.pptx");
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xFour(
+        findChildShapeByText(xDiagram, u"Four\nForty-one long item\nForty-two"_ustr));
+    uno::Reference<drawing::XShape> xSeven(findChildShapeByText(
+        xDiagram, u"Seven\nThis is a long sentence.\nhandkerchief\nrefrigerator"_ustr));
+    CPPUNIT_ASSERT(xFour.is());
+    CPPUNIT_ASSERT(xSeven.is());
+    CPPUNIT_ASSERT_LESS(0.6 * xSeven->getSize().Width, double(xFour->getSize().Width));
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testHiddenTextIsDrawnOverItsNode)
 {
     // the layout states the hidden text node before the node it is written on
@@ -3106,6 +3121,26 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testFixedHeightTextShrinksBeforeItGro
     CPPUNIT_ASSERT(xOne.is());
     CPPUNIT_ASSERT(xTwo.is());
     CPPUNIT_ASSERT_EQUAL(xOne->getPosition().Y, xTwo->getPosition().Y);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTextAsWideAsItsWordKeepsItsFont)
+{
+    // the box of "Three" is as wide as its one word, and the word fits it at the font the other
+    // texts of the group fit at
+    createSdImpressDoc("pptx/smartart-text-as-wide-as-its-word.pptx");
+    SdrObject* pDiagram(SdrObject::getSdrObjectFromXShape(getShapeFromPage(0, 0)));
+    CPPUNIT_ASSERT(nullptr != pDiagram);
+    pDiagram->getDiagramHelper()->reLayout();
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xThree(findChildShapeByText(xDiagram, u"Three"_ustr));
+    CPPUNIT_ASSERT(xThree.is());
+    uno::Reference<container::XEnumerationAccess> xParagraphs(xThree, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParagraph(
+        xParagraphs->createEnumeration()->nextElement(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xRun(xParagraph->createEnumeration()->nextElement(),
+                                             uno::UNO_QUERY);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(36.0, xRun->getPropertyValue(u"CharHeight"_ustr).get<double>(),
+                                 0.5);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
