@@ -766,9 +766,8 @@ void TypeGroupConverter::moveDataToSeries(DataSourceCxModel::DataMap& raDataMap)
             // series, where the later series have no dataId. I'm not sure
             // exactly how that's to be handled, but work around it here.
             if (elem->mnDataId >= 0) {
-                // This ID must be present in the map
-                assert(raDataMap.contains(elem->mnDataId));
-                elem->maSources = *(raDataMap[elem->mnDataId]);
+                if (const auto xDataSources = raDataMap.get(elem->mnDataId))
+                    elem->maSources = *xDataSources;
             }
         }
     }
