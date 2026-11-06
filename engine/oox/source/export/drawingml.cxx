@@ -2985,6 +2985,7 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
             {
                 mpFS->startElementNS(XML_a, XML_effectLst);
                 WriteTextGlowEffect(rRunInput.xShapePropSet);
+                WriteTextShadowEffect(rXPropSet);
                 mpFS->endElementNS(XML_a, XML_effectLst);
             }
         }
@@ -9984,6 +9985,27 @@ void DrawingML::WriteTextGlowEffect(const Reference< XPropertySet >& rXPropSet)
     // TODO other stuff like saturation or luminance
 
     WriteShapeEffect(u"glowtext", aGlowProps);
+}
+
+void DrawingML::WriteTextShadowEffect(const Reference<XPropertySet>& rXPropSet)
+{
+    if (!GetProperty(rXPropSet, u"CharShadowed"_ustr) || !mAny.get<bool>())
+        return;
+
+    // The shadow sits one twenty fourth of the height of the text below it and to its right, in
+    // black. A direction of 45 degrees is stated in sixtieths of a thousandth of a degree.
+    // A point is a seventy second of an inch, and an inch holds 914400 of the units a file
+    // measures a length in.
+    constexpr double fEmuPerPoint = 12700.0;
+    float fCharHeight = 0;
+    if (GetProperty(rXPropSet, u"CharHeight"_ustr))
+        mAny >>= fCharHeight;
+    const sal_Int64 nDistance = std::lround(fCharHeight * fEmuPerPoint / 24.0);
+
+    mpFS->startElementNS(XML_a, XML_outerShdw, XML_blurRad, OString::number(0), XML_dist,
+                         OString::number(nDistance), XML_dir, OString::number(2700000));
+    WriteColor(COL_BLACK);
+    mpFS->endElementNS(XML_a, XML_outerShdw);
 }
 
 void DrawingML::WriteReflectionEffect(model::ReflectionEffect const& rReflection)

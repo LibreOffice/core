@@ -521,6 +521,22 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf127379)
     CPPUNIT_ASSERT_EQUAL(Color(0x2a6099), Color(aColorStops.getStopColor(1)));
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testShadowedTextKeepsItsShadow)
+{
+    createSdImpressDoc("pptx/text-with-shadow.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    // Text that is read with a shadow is shadowed text, and shadowed text is written with a
+    // shadow. Without the fix the shadow was dropped on the way in and nothing was written.
+    assertXPath(pXmlDoc,
+                "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p[1]/a:r/a:rPr/a:effectLst/a:outerShdw",
+                "dir", u"2700000");
+    // The text beside it is read without one and stays without one.
+    assertXPath(pXmlDoc,
+                "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p[2]/a:r/a:rPr/a:effectLst/a:outerShdw", 0);
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf98603)
 {
     createSdImpressDoc("pptx/tdf98603.pptx");

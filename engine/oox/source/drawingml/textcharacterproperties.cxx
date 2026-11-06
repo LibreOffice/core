@@ -165,6 +165,12 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         }
     }
 
+    // Text given an outer shadow is shadowed text, and text given none is not. The drawing of
+    // it places one shadow of its own, so the distance, the direction and the colour the file
+    // states are not kept.
+    rPropMap.setProperty(PROP_CharShadowed,
+                         mpEffectPropertiesPtr->maShadow.moShadowDist.has_value());
+
     auto setLanguage = [&rPropMap](const OUString& rName)
     {
         LanguageTag aTag(rName);

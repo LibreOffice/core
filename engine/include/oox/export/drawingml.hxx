@@ -397,6 +397,8 @@ protected:
     void WriteEffectColor(model::ComplexColor const& rColor);
     void WriteShadowEffect(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet);
     void WriteTextGlowEffect(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet);
+    /** Writes an outer shadow for shadowed text, and nothing for text that is not shadowed. */
+    void WriteTextShadowEffect(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet);
     // pTokenX / pTokenY: a guide or adjustment name to write instead of the resolved number
     void WriteCustomGeometryPoint(const css::drawing::EnhancedCustomShapeParameterPair& rParamPair,
                                   const EnhancedCustomShape2d& rCustomShape2d,
