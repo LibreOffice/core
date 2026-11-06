@@ -191,6 +191,51 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf68759)
                 u"1615320");
 }
 
+// A bullet that takes the size of the text it belongs to states no size of its own.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testBulletSizedWithItsText)
+{
+    // Given a text box whose bullet is as big as its text:
+    createSdImpressDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance(u"com.sun.star.drawing.TextShape"_ustr), uno::UNO_QUERY_THROW);
+    xShape->setPosition(awt::Point(2000, 2000));
+    xShape->setSize(awt::Size(10000, 3000));
+    uno::Reference<drawing::XShapes> xShapes(getPage(0), uno::UNO_QUERY_THROW);
+    xShapes->add(xShape);
+    uno::Reference<text::XText>(xShape, uno::UNO_QUERY_THROW)->setString(u"Item"_ustr);
+
+    uno::Reference<beans::XPropertySet> xPara(
+        getParagraphFromShape(0, uno::Reference<beans::XPropertySet>(xShape, uno::UNO_QUERY_THROW)),
+        uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexReplace> xRules(
+        xPara->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aLevel;
+    xRules->getByIndex(0) >>= aLevel;
+    for (auto& rProp : asNonConstRange(aLevel))
+    {
+        if (rProp.Name == "BulletRelSize")
+            rProp.Value <<= sal_Int16(100);
+        else if (rProp.Name == "NumberingType")
+            rProp.Value <<= sal_Int16(style::NumberingType::CHAR_SPECIAL);
+        else if (rProp.Name == "BulletChar")
+            rProp.Value <<= u"\u2022"_ustr;
+    }
+    xRules->replaceByIndex(0, uno::Any(aLevel));
+    xPara->setPropertyValue(u"NumberingRules"_ustr, uno::Any(xRules));
+    xPara->setPropertyValue(u"NumberingIsNumber"_ustr, uno::Any(true));
+    xPara->setPropertyValue(u"NumberingLevel"_ustr, uno::Any(sal_Int16(0)));
+
+    save(TestFilter::PPTX);
+
+    // The bullet keeps the size of its text, and states neither a size in points nor a share of
+    // the size of its text.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:buChar", 1);
+    assertXPath(pXmlDoc, "//a:buSzPts", 0);
+    assertXPath(pXmlDoc, "//a:buSzPct", 0);
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf127901)
 {
     createSdImpressDoc("odp/tdf127901.odp");
@@ -224,6 +269,26 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf48735)
                 u"23627");
     assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:pic/p:blipFill/a:srcRect", "t",
                 u"18842");
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testBulletSizeInPoints)
+{
+    createSdImpressDoc("pptx/bullet-size-in-points.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    // A bullet of 27 points on text of 18 keeps its size, as half as much again as its text.
+    // Without the fix it came back at the size of its text.
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p[1]/a:pPr/a:buSzPct", "val",
+                u"150000");
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p[1]/a:pPr/a:buSzPts", 0);
+    // A bullet sized against its text keeps the share it is given.
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p[2]/a:pPr/a:buSzPct", "val",
+                u"50000");
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p[2]/a:pPr/a:buSzPts", 0);
+    // A bullet that is given no size of its own states none.
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p[3]/a:pPr/a:buSzPts", 0);
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p[3]/a:pPr/a:buSzPct", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf90626)

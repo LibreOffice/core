@@ -21,6 +21,7 @@
 #include <drawingml/textliststyle.hxx>
 
 #include <algorithm>
+#include <cmath>
 
 #include <com/sun/star/text/XNumberingRulesSupplier.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
@@ -259,9 +260,9 @@ void BulletList::setBulletAspectRatio(double nAspectRatio)
     mnAspectRatio <<= nAspectRatio;
 }
 
-void BulletList::setFontSize(sal_Int16 nSize)
+void BulletList::setFontSizeInHundredthPoints(sal_Int32 nSize)
 {
-    mnFontSize <<= nSize;
+    mnFontSizeInHundredthPoints <<= nSize;
 }
 
 void BulletList::apply( const BulletList& rSource )
@@ -289,15 +290,16 @@ void BulletList::apply( const BulletList& rSource )
         mnSize = rSource.mnSize;
     if ( rSource.mnAspectRatio.hasValue() )
         mnAspectRatio = rSource.mnAspectRatio;
-    if ( rSource.mnFontSize.hasValue() )
-        mnFontSize = rSource.mnFontSize;
+    if ( rSource.mnFontSizeInHundredthPoints.hasValue() )
+        mnFontSizeInHundredthPoints = rSource.mnFontSizeInHundredthPoints;
     if ( rSource.maStyleName.hasValue() )
         maStyleName = rSource.maStyleName;
     if ( rSource.maGraphic.hasValue() )
         maGraphic = rSource.maGraphic;
 }
 
-void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, PropertyMap& rPropMap ) const
+void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, PropertyMap& rPropMap,
+    float fCharacterSize ) const
 {
     if( msNumberingPrefix.hasValue() )
         rPropMap.setAnyProperty( PROP_Prefix, msNumberingPrefix);
@@ -321,10 +323,6 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, P
         if (!bFollowTextFont && maBulletFont.getFontData( aBulletFontName, nBulletFontPitch, nBulletFontFamily, &bSymbolFont, *pFilterBase ) )
         {
             FontDescriptor aFontDesc;
-            sal_Int16 nFontSize = 0;
-            if( mnFontSize >>= nFontSize )
-                aFontDesc.Height = nFontSize;
-
             // TODO It is likely that bSymbolFont from getFontData is sufficient to check here
             // and looking at the font name is not necessary, if it is necessary then moving
             // the name lookup into getFontData is likely the best fix
@@ -372,7 +370,18 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, P
     }
     bool bFollowTextSize = false;
     mbBulletSizeFollowText >>= bFollowTextSize;
-    if( !bFollowTextSize && mnSize.hasValue() )
+    sal_Int32 nSizeInHundredthPoints = 0;
+    if( !bFollowTextSize && ( mnFontSizeInHundredthPoints >>= nSizeInHundredthPoints )
+        && nSizeInHundredthPoints > 0 && fCharacterSize > 0 )
+    {
+        // A bullet can be given a size of its own in points. The size a bullet keeps is the share
+        // it takes of the size of the text it belongs to, so the points become that share. A
+        // bullet is a quarter of its text at the smallest and four times it at the largest.
+        const double fShare = std::round( nSizeInHundredthPoints / fCharacterSize );
+        rPropMap.setProperty( PROP_BulletRelSize,
+                              static_cast< sal_Int16 >( std::clamp( fShare, 25.0, 400.0 ) ) );
+    }
+    else if( !bFollowTextSize && mnSize.hasValue() )
         rPropMap.setAnyProperty( PROP_BulletRelSize, mnSize);
     if ( maStyleName.hasValue() )
         rPropMap.setAnyProperty( PROP_CharStyleName, maStyleName);
@@ -434,7 +443,8 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
         && aPropSet.hasProperty(PROP_NumberingLevel) )
         aPropSet.setProperty< sal_Int16 >( PROP_NumberingLevel, -1 );
 
-    maBulletList.pushToPropMap( pFilterBase, rioBulletMap );
+    maBulletList.pushToPropMap( pFilterBase, rioBulletMap,
+                                fCharacterSize != 0.0 ? fCharacterSize : getCharHeightPoints( 0.0 ) );
 
     if ( maParaTopMargin.bHasValue || bPushDefaultValues )
         aPropSet.setProperty( PROP_ParaTopMargin, maParaTopMargin.toMargin( fCharacterSize != 0.0 ? fCharacterSize : getCharHeightPoints ( 12.0 ) ) );

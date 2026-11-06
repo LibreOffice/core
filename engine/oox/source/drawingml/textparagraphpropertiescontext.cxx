@@ -262,7 +262,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
             break;
         case A_TOKEN( buSzPts ):        // CT_TextBulletSizePoint
             mrBulletList.setBulletSize(0);
-            mrBulletList.setFontSize( static_cast<sal_Int16>(GetTextSize( rAttribs.getStringDefaulted( XML_val ) ) ) );
+            mrBulletList.setFontSizeInHundredthPoints( rAttribs.getInteger( XML_val, 0 ) );
             break;
 
         // EG_TextBulletTypeface

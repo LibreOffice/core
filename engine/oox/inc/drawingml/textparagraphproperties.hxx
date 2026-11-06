@@ -39,7 +39,8 @@ public:
     BulletList( );
     bool is() const;
     void apply( const BulletList& );
-    void pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, PropertyMap& xPropMap ) const;
+    void pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, PropertyMap& xPropMap,
+        float fCharacterSize ) const;
     void setBulletChar( const OUString & sChar );
     void setStartAt( sal_Int32 nStartAt ){ mnStartAt <<= static_cast< sal_Int16 >( nStartAt ); }
     void setType( sal_Int32 nType );
@@ -51,7 +52,7 @@ public:
     void setSuffixMinusRight();
     void setBulletSize(sal_Int16 nSize);
     void setBulletAspectRatio(double nAspectRatio);
-    void setFontSize(sal_Int16 nSize);
+    void setFontSizeInHundredthPoints(sal_Int32 nSize);
     void setStyleName( const OUString& rStyleName ) { maStyleName <<= rStyleName; }
     void setGraphic( cpo::uno::Reference< css::graphic::XGraphic > const & rXGraphic );
 
@@ -67,7 +68,8 @@ public:
     cpo::uno::Any               msNumberingSuffix;
     cpo::uno::Any               mnSize;
     cpo::uno::Any               mnAspectRatio; // Width/Height
-    cpo::uno::Any               mnFontSize;
+    /** The size a bullet is given of its own, in hundredths of a point. */
+    cpo::uno::Any               mnFontSizeInHundredthPoints;
     cpo::uno::Any               maStyleName;
     cpo::uno::Any               maGraphic;
 };
