@@ -169,7 +169,9 @@ void RemoteLinks::setViewToken(DocumentBroker& docBroker, const std::string& tag
     {
         const std::string docKey = RequestDetails::getDocKey(wopiSrc);
         _views[tag].tokens[docKey] = accessToken;
-        refreshView(docBroker, tag);
+        // The token shows in the view's list once the source is listed.
+        if (_entries.find(docKey) != _entries.end())
+            refreshView(docBroker, tag);
     }
     catch (const std::exception& exc)
     {
@@ -549,11 +551,12 @@ void RemoteLinks::applyLinkAccessAnswer(DocumentBroker& docBroker, const std::st
                                   << linkAnonym << "] of [" << docBroker.getDocKey()
                                   << "] for view [" << tag << ']');
 
-    // The document stands for the source asked for, for every view, and the token is this
-    // view's own.
+    // The token is this view's own, and the document stands for the source asked for, for
+    // every view. The token is recorded first, so the list this view gets for the new source
+    // names the document from the start.
     link.persistentLink = persistentLink;
-    setSource(docBroker, link);
     setViewToken(docBroker, tag, link.wopiSrc, link.accessToken);
+    setSource(docBroker, link);
 }
 
 void RemoteLinks::addLinkFromStorage(DocumentBroker& docBroker, const std::string& tag,
@@ -585,10 +588,11 @@ void RemoteLinks::addLinkFromStorage(DocumentBroker& docBroker, const std::strin
                                   << Anonymizer::anonymize(link.persistentLink) << "] of ["
                                   << docBroker.getDocKey() << "] for view [" << tag << ']');
 
-    // The document stands for its persistent link for every view, and the token is this
-    // view's own.
-    setSource(docBroker, link);
+    // The token is this view's own, and the document stands for its persistent link for every
+    // view. The token is recorded first, so the list this view gets for the new source names
+    // the document from the start.
     setViewToken(docBroker, tag, link.wopiSrc, link.accessToken);
+    setSource(docBroker, link);
 }
 
 std::string RemoteLinks::linkProblem(const DocumentBroker& docBroker,
@@ -1160,9 +1164,8 @@ std::string RemoteLinks::buildJson(const std::string& tag) const
     Poco::JSON::Array::Ptr documents = new Poco::JSON::Array();
     for (const auto& it : _entries)
     {
-        // The source and its last-modified time are the same for every view;
-        // the state is this view's own: its live connection when subscribed,
-        // otherwise whether it holds a token to reach the source at all.
+        // The state is this view's own: its live connection when subscribed, otherwise
+        // whether it holds a token to reach the source at all.
         std::string state = "noaccess";
         std::string error;
         if (view)
@@ -1177,11 +1180,13 @@ std::string RemoteLinks::buildJson(const std::string& tag) const
                 state = "available";
         }
 
+        const bool readable = state != "noaccess";
+
         Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
-        entry->set("name", entryName(it.second));
+        entry->set("name", readable ? entryName(it.second) : it.second.persistentLink);
         entry->set("state", state);
         entry->set("error", error);
-        entry->set("lastModifiedTime", it.second.lastModifiedTime);
+        entry->set("lastModifiedTime", readable ? it.second.lastModifiedTime : std::string());
         entry->set("persistentLink", it.second.persistentLink);
         entry->set("access", access(it.second.persistentLink));
         documents->add(entry);

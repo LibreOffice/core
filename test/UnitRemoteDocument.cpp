@@ -3034,7 +3034,9 @@ public:
 };
 
 /// Two views of one document each resolve the source the document names on their own: each
-/// request carries that view's own token, and the answer's token serves that view alone.
+/// request carries that view's own token, and the answer's token serves that view alone. The
+/// name and the time of the source reach a view once it holds a token for it; before that, the
+/// second view knows the source by its persistent link alone.
 class UnitLinkAccessPerView : public LinkAccessTestServer
 {
     STATE_ENUM(Phase, Load, WaitFirstLoad, WaitFirstResolved, WaitSecondResolved,
@@ -3043,6 +3045,9 @@ class UnitLinkAccessPerView : public LinkAccessTestServer
 
     /// The second view of the same document.
     std::unique_ptr<UnitWebSocket> _secondWs;
+
+    /// Whether the second view was listed the source without a token for it.
+    bool _sawNoAccess = false;
 
     std::pair<http::StatusCode, std::string>
     answerLinkAccess(const LinkAccessRequest& request) override
@@ -3095,8 +3100,30 @@ public:
         {
             TST_LOG("Got: [" << message << ']');
 
+            // Only the second view is ever without a token for a source the first view
+            // resolved, so a list with the source in the noaccess state is its own. The
+            // name and the time the first view's storage gave the source stay out of it.
+            if (message.find("\"state\":\"noaccess\"") != std::string_view::npos)
+            {
+                LOK_ASSERT_MESSAGE("A view without a token must not be given the name",
+                                   message.find("Quarter.odp") == std::string_view::npos);
+                LOK_ASSERT_MESSAGE("A view without a token must not be given the time",
+                                   message.find("2026-09-01T12:00:00.000000Z") ==
+                                       std::string_view::npos);
+                LOK_ASSERT_MESSAGE("A view without a token knows the source by its link",
+                                   message.find("\"name\":\"" + std::string(SourceName) +
+                                                '"') != std::string_view::npos);
+                _sawNoAccess = true;
+                return false;
+            }
+
             if (message.find("\"state\":\"available\"") == std::string_view::npos)
                 return false;
+
+            // A view that holds a token is given the name the storage gave the source.
+            LOK_ASSERT_MESSAGE("A view with a token is given the name",
+                               message.find("\"name\":\"Quarter.odp\"") !=
+                                   std::string_view::npos);
 
             if (_phase == Phase::WaitFirstResolved)
             {
@@ -3147,6 +3174,9 @@ public:
         {
             if (_phase == Phase::WaitConnected)
             {
+                LOK_ASSERT_MESSAGE("The second view must have been listed the source "
+                                   "without a token first",
+                                   _sawNoAccess);
                 TRANSITION_STATE(_phase, Phase::Done);
                 passTest("Each view resolved the source with its own token");
             }

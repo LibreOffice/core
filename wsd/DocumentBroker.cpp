@@ -6029,10 +6029,12 @@ bool DocumentBroker::registerRemoteDocumentLinks(const std::string& oneTimeToken
         if (!byOneTimeToken && !byAccessToken)
             continue;
 
+        // The token is recorded first, so the list this view gets for the new source names
+        // the document from the start.
         for (const RemoteLinkRegistration& link : links)
         {
-            setRemoteDocumentSource(link);
             setRemoteDocumentViewToken(it.first, link.wopiSrc, link.accessToken);
+            setRemoteDocumentSource(link);
         }
 
         // Consume the one-time token and hand the view its next one.

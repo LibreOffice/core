@@ -1228,16 +1228,18 @@ remotelinks: <json>
     /cool/links, and from the sources the document's own slide
     links name. A remotelinkremove takes one off the list, for every view,
     and the fresh list goes out to all of them. Built for the receiving
-    view: the source list and last-modified times are the same for every
-    view, but the state is that view's own. Sent to a view when it joins
-    and again when the shared list or that view's own access or
+    view: the source list is the same for every view, but the state is
+    that view's own, and the name and last-modified time of a source are
+    given only to a view that holds a token for it. Sent to a view when it
+    joins and again when the shared list or that view's own access or
     subscription state changes. Access tokens and the addresses of the
     remote documents are never included: a view knows a remote link by its
     persistent link alone. The JSON carries a documents array of entries:
 
         { "name": "<the BaseFileName the integrator gave the document, or the
-                    file name at the end of its WOPISrc>",
-          "lastModifiedTime": "<time or empty>",
+                    file name at the end of its WOPISrc, for a view that holds
+                    a token for it; the persistent link for any other view>",
+          "lastModifiedTime": "<time for a view that holds a token, else empty>",
           "state": "noaccess|available|subscribed|connected|disconnected|failed|missing",
           "error": "<why the subscription is failed or missing, or empty>",
           "persistentLink": "<the reference the document's pages store for the source>",
