@@ -7906,6 +7906,21 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFormulaSeparatorsChangedBackForgetReplace
     CPPUNIT_ASSERT(!rHashMap.contains(u"`"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testCalculationErrorConstant)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // The #CALC! error can be written in a formula like the other error values, and it is of
+    // error type 14.
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"=#CALC!"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"#CALC!"_ustr, m_pDoc->GetString(ScAddress(0, 0, 0)));
+    m_pDoc->SetString(ScAddress(0, 1, 0), u"=ERROR.TYPE(#CALC!)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(14.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testExternalNameAsArgumentHasNoParameters)
 {
     // An add-in name that stands in an argument position rather than being

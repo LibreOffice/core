@@ -576,6 +576,7 @@
 #define STR_ERR_NAME_INVALID_CELL_REF           NC_("STR_ERR_NAME_INVALID_CELL_REF", "Invalid name. Reference to a cell, or a range of cells not allowed.")
 #define STR_ERR_LONG_LINK_FORMULA_NEEDING_CHECK NC_("STR_ERR_LONG_LINK_FORMULA_NEEDING_CHECK", "External content disabled.")
 #define STR_LONG_ERR_SPILL                      NC_("STR_LONG_ERR_SPILL", "Error: Array result could not expand because it would overwrite non-empty cells.")
+#define STR_LONG_ERR_CALCULATION                NC_("STR_LONG_ERR_CALCULATION", "Error: A calculation step gave a result that cannot be used here, for example an array where a single value belongs.")
 #define STR_TEXTORIENTANGLE                     NC_("STR_TEXTORIENTANGLE", "Text orientation angle")
 #define STR_SHRINKTOFITCELL_ON                  NC_("STR_SHRINKTOFITCELL_ON", "Shrink to fit cell: On")
 #define STR_SHRINKTOFITCELL_OFF                 NC_("STR_SHRINKTOFITCELL_OFF", "Shrink to fit cell: Off")

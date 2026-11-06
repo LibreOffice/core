@@ -348,6 +348,8 @@ OUString ScGlobal::GetErrorString(FormulaError nErr)
             return ScCompiler::GetNativeSymbol(ocErrNum);
         case FormulaError::Spill:
             return ScCompiler::GetNativeSymbol(ocErrSpill);
+        case FormulaError::Calculation:
+            return ScCompiler::GetNativeSymbol(ocErrCalculation);
         default:
             return ScResId(STR_ERROR_STR) + OUString::number( static_cast<int>(nErr) );
     }
@@ -439,6 +441,9 @@ OUString ScGlobal::GetLongErrorString(FormulaError nErr)
         case FormulaError::Spill:
             pErrNumber = STR_LONG_ERR_SPILL;
         break;
+        case FormulaError::Calculation:
+            pErrNumber = STR_LONG_ERR_CALCULATION;
+        break;
         case FormulaError::NoValue:
             pErrNumber = STR_LONG_ERR_NO_VALUE;
         break;
@@ -466,6 +471,7 @@ bool ScGlobal::IsValidOOXMLError(FormulaError nErrNumber)
         case FormulaError::NoRef:
         case FormulaError::NoValue:
         case FormulaError::Spill:
+        case FormulaError::Calculation:
             return true;
         default:
             return false;

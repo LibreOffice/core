@@ -5461,6 +5461,9 @@ void appendTokenByType( ScSheetLimits& rLimits, sc::TokenStringContext& rCxt, OU
                 case FormulaError::NotAvailable:
                     eOpErr = ocErrNA;
                 break;
+                case FormulaError::Calculation:
+                    eOpErr = ocErrCalculation;
+                break;
                 case FormulaError::NoCode:
                 default:
                     eOpErr = ocErrNull;

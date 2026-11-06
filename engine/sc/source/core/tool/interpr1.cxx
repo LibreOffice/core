@@ -13880,6 +13880,9 @@ void ScInterpreter::ScErrorType_ODF()
         case FormulaError::NotAvailable :       // #N/A
             nErrType = 7;
             break;
+        case FormulaError::Calculation :        // #CALC!
+            nErrType = 14;
+            break;
         /*
         #GETTING_DATA is a message that can appear in Excel when a large or
         complex worksheet is being calculated. In Excel 2007 and newer,

@@ -91,6 +91,9 @@ enum class FormulaError : sal_uInt16
     Spill                = 541,
 // Expected function here; signaled when attempting to call a non-function
     NotAFunction         = 542,
+// A calculation step gave a result that the formula can't use, for example an array where a
+// single value belongs. Shown as #CALC!.
+    Calculation          = 543,
 
 // Interpreter: NA() not available condition, not a real error
     NotAvailable         = 0x7fff
@@ -182,6 +185,7 @@ inline bool isPublishedFormulaError( FormulaError nErr )
         case FormulaError::LinkFormulaNeedingCheck:
         case FormulaError::Spill:
         case FormulaError::NotAFunction:
+        case FormulaError::Calculation:
             return true;
 
         case FormulaError::NotAvailable:

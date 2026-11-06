@@ -214,6 +214,8 @@ sal_uInt8 XclTools::GetXclErrorCode( FormulaError nScError )
         case FormulaError::NoMacro:                return EXC_ERR_NAME;
         case FormulaError::NotAvailable:           return EXC_ERR_NA;
         case FormulaError::Spill:                  return EXC_ERR_SPILL;
+        // The binary and the OOXML cell error codes have no #CALC!. #VALUE! is the closest.
+        case FormulaError::Calculation:            return EXC_ERR_VALUE;
         default: break;
     }
     return EXC_ERR_NA;

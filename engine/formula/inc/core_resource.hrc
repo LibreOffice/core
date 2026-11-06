@@ -492,6 +492,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF[] =
     { "#NUM!" , ocErrNum },
     { "#N/A" , ocErrNA },
     { "#SPILL!" , ocErrSpill },
+    { "#CALC!" , ocErrCalculation },
     /* END defined ERROR.TYPE() values. */
     { "COM.MICROSOFT.FILTERXML" , ocFilterXML },
     { "COM.MICROSOFT.WEBSERVICE" , ocWebservice },
@@ -976,6 +977,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML[] =
     { "#NUM!" , ocErrNum },
     { "#N/A" , ocErrNA },
     { "#SPILL!" , ocErrSpill },
+    { "#CALC!" , ocErrCalculation },
     /* END defined ERROR.TYPE() values. */
     { "_xlfn.FILTERXML" , ocFilterXML },
     { "_xlfn.WEBSERVICE" , ocWebservice },
@@ -1464,6 +1466,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF[] =
     { "#NUM!" , ocErrNum },
     { "#N/A" , ocErrNA },
     { "#SPILL!" , ocErrSpill },
+    { "#CALC!" , ocErrCalculation },
     /* END defined ERROR.TYPE() values. */
     { "FILTERXML" , ocFilterXML },
     { "WEBSERVICE" , ocWebservice },
@@ -1950,6 +1953,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_API[] =
     { "#NUM!" , ocErrNum },
     { "#N/A" , ocErrNA },
     { "#SPILL!" , ocErrSpill },
+    { "#CALC!" , ocErrCalculation },
     /* END defined ERROR.TYPE() values. */
     { "FILTERXML" , ocFilterXML },
     { "WEBSERVICE" , ocWebservice },
@@ -2435,6 +2439,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH[] =
     { "#NUM!" , ocErrNum },
     { "#N/A" , ocErrNA },
     { "#SPILL!" , ocErrSpill },
+    { "#CALC!" , ocErrCalculation },
     /* END defined ERROR.TYPE() values. */
     { "FILTERXML" , ocFilterXML },
     { "WEBSERVICE" , ocWebservice },
@@ -2913,6 +2918,7 @@ const std::pair<TranslateId, int> RID_STRLIST_FUNCTION_NAMES[] =
     { NC_("RID_STRLIST_FUNCTION_NAMES", "#N/A") , ocErrNA },
     /* L10n: preserve the leading '#' hash character and trailing '!' in translations. */
     { NC_("RID_STRLIST_FUNCTION_NAMES", "#SPILL!") , ocErrSpill },
+    { NC_("RID_STRLIST_FUNCTION_NAMES", "#CALC!") , ocErrCalculation },
     /* END defined ERROR.TYPE() values. */
 
     { NC_("RID_STRLIST_FUNCTION_NAMES", "FILTERXML") , ocFilterXML },
