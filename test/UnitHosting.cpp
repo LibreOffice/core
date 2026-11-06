@@ -34,6 +34,7 @@ class UnitHosting : public UnitWSD
 {
     TestResult testDiscovery();
     TestResult testCapabilities();
+    TestResult testActionUrlsAreAppendReady();
 
 public:
     UnitHosting()
@@ -150,6 +151,50 @@ UnitBase::TestResult UnitHosting::testCapabilities()
     return TestResult::Ok;
 }
 
+// WOPI hosts append "WOPISrc=..." to the urlsrc of the action they pick, so every urlsrc must end
+// with a query separator. Naive hosts do not insert one, and end up requesting a URL whose path is
+// e.g. "cool-preview.htmlWOPISrc=...", which the static file server cannot find (404).
+UnitBase::TestResult UnitHosting::testActionUrlsAreAppendReady()
+{
+    TST_LOG("Checking that every action's urlsrc is append-ready.");
+
+    auto httpSession = http::Session::create(helpers::getTestServerURI());
+    std::shared_ptr<const http::Response> httpResponse
+        = httpSession->syncRequest(http::Request("/hosting/discovery"));
+
+    LOK_ASSERT(httpResponse->done());
+    LOK_ASSERT_EQUAL(http::Response::State::Complete, httpResponse->state());
+    LOK_ASSERT_EQUAL(http::StatusCode::OK, httpResponse->statusLine().statusCode());
+
+    Poco::XML::DOMParser parser;
+    Poco::XML::AutoPtr<Poco::XML::Document> docXML = parser.parseString(httpResponse->getBody());
+    Poco::XML::AutoPtr<Poco::XML::NodeList> listNodes = docXML->getElementsByTagName("action");
+
+    unsigned long checkedActions = 0;
+    for (unsigned long index = 0; index < listNodes->length(); ++index)
+    {
+        Poco::XML::Element* elem = static_cast<Poco::XML::Element*>(listNodes->item(index));
+        Poco::XML::Element* parent = elem->parentNode()
+                                         ? static_cast<Poco::XML::Element*>(elem->parentNode())
+                                         : nullptr;
+
+        // The capabilities and the settings iframe are not document actions; they are fetched
+        // as-is, without appending any query string.
+        if (parent && (parent->getAttribute("name") == "Capabilities" ||
+                       parent->getAttribute("name") == "Settings"))
+            continue;
+
+        const std::string name = elem->getAttribute("name");
+        const std::string urlsrc = elem->getAttribute("urlsrc");
+        LOK_ASSERT_MESSAGE("action '" << name << "' urlsrc is not append-ready: " << urlsrc,
+                           !urlsrc.empty() && (urlsrc.back() == '?' || urlsrc.back() == '&'));
+        ++checkedActions;
+    }
+    LOK_ASSERT(checkedActions > 0);
+
+    return TestResult::Ok;
+}
+
 void UnitHosting::invokeWSDTest()
 {
     UnitBase::TestResult result = testDiscovery();
@@ -157,6 +202,10 @@ void UnitHosting::invokeWSDTest()
         exitTest(result);
 
     result = testCapabilities();
+    if (result != TestResult::Ok)
+        exitTest(result);
+
+    result = testActionUrlsAreAppendReady();
     if (result != TestResult::Ok)
         exitTest(result);
 

@@ -3490,7 +3490,7 @@ std::string ClientRequestDispatcher::getDiscoveryXML()
         + "cool.html?";
     const std::string previewUriValue = uriBaseValue
         + (COOLWSD::WASMEnabled ? "wasm/" : "")
-        + "cool-preview.html";
+        + "cool-preview.html?";
 
     LOG_DBG_S("Processing discovery.xml from " << discoveryPath);
     Poco::XML::InputSource inputSrc(discoveryPath);
