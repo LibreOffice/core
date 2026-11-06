@@ -493,6 +493,8 @@ public:
     const OUString&     GetTitle() const;           // Title
     const OUString&     GetBookmarkName() const;
     OUString const &    GetTypeName() const;        // Name
+    /// Built-in type name translated for the current UI, or the custom user index name.
+    OUString            GetTypeNameForUI() const;
     const SwForm&       GetTOXForm() const;         // description of the lines
 
     void                SetCreate(SwTOXElement);

@@ -311,7 +311,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 {
                     const OUString sLabel
                         = SwResId(nWhich == FN_EDIT_CURRENT_TOX ? STR_EDITINDEX : STR_UPDATEINDEX)
-                              .replaceAll("%1", pBase->GetTypeName());
+                              .replaceAll("%1", pBase->GetTypeNameForUI());
                     rSet.Put(SfxStringItem(nWhich, sLabel));
                 }
             }

@@ -637,6 +637,25 @@ SwTOXBase::~SwTOXBase()
 //        delete aData.pTemplateName;
 }
 
+OUString SwTOXBase::GetTypeNameForUI() const
+{
+    // Type names belong to the document and may have been initialized in another
+    // user's language. Translate built-in types when constructing UI labels.
+    switch (GetType())
+    {
+        case TOX_CONTENT: return SwResId(STR_TOC);
+        case TOX_INDEX: return SwResId(STR_TOI);
+        case TOX_ILLUSTRATIONS: return SwResId(STR_TOX_ILL);
+        case TOX_OBJECTS: return SwResId(STR_TOX_OBJ);
+        case TOX_TABLES: return SwResId(STR_TOX_TBL);
+        case TOX_AUTHORITIES: return SwResId(STR_TOX_AUTH);
+        case TOX_CITATION: return SwResId(STR_TOX_CITATION);
+        case TOX_BIBLIOGRAPHY: return SwResId(STR_TOX_AUTH);
+        case TOX_USER: return GetTypeName();
+    }
+    return GetTypeName();
+}
+
 void SwTOXBase::SetTitle(const OUString& rTitle)
     {   m_aTitle = rTitle; }
 

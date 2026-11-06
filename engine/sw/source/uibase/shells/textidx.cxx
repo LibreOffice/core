@@ -277,7 +277,7 @@ void SwTextShell::GetIdxState(SfxItemSet &rSet)
             SfxWhichIter aIter(rSet);
             if (aIter.FirstWhich() == FN_REMOVE_CUR_TOX)
             {
-                const OUString sLabel = SwResId(STR_DELETEINDEX).replaceAll("%1", pBase->GetTypeName());
+                const OUString sLabel = SwResId(STR_DELETEINDEX).replaceAll("%1", pBase->GetTypeNameForUI());
                 rSet.Put(SfxStringItem(FN_REMOVE_CUR_TOX, sLabel));
             }
         }

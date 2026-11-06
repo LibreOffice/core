@@ -20,6 +20,8 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <authfld.hxx>
 #include <fmtfld.hxx>
+#include <doc.hxx>
+#include <tox.hxx>
 
 using namespace css;
 using namespace ::cpo;
@@ -31,6 +33,28 @@ namespace
 class Test : public SwModelTestBase
 {
 };
+
+CPPUNIT_TEST_FIXTURE(Test, testIndexTypeNameForUI)
+{
+    createSwDoc();
+    SwDoc& rDoc = *getSwDoc();
+    SwTOXBase aBase(rDoc.GetTOXType(TOX_CONTENT, 0), SwForm(TOX_CONTENT),
+                    SwTOXElement::OutlineLevel, OUString());
+    CPPUNIT_ASSERT_EQUAL(u"Table of Contents"_ustr, aBase.GetTypeNameForUI());
+
+    // User-defined type names are document content and must be preserved.
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xIndex(
+        xFactory->createInstance(u"com.sun.star.text.UserIndex"_ustr), uno::UNO_QUERY);
+    xIndex->setPropertyValue(u"UserIndexName"_ustr, uno::Any(u"Custom index"_ustr));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    xText->insertTextContent(xText->createTextCursor(),
+                            uno::Reference<text::XTextContent>(xIndex, uno::UNO_QUERY), false);
+    SwTOXBase aUserBase(rDoc.GetTOXType(TOX_USER, 1), SwForm(TOX_USER),
+                        SwTOXElement::Mark, OUString());
+    CPPUNIT_ASSERT_EQUAL(u"Custom index"_ustr, aUserBase.GetTypeNameForUI());
+}
 
 CPPUNIT_TEST_FIXTURE(Test, testAuthorityLinkClick)
 {
