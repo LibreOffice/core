@@ -1764,6 +1764,9 @@ static void lcl_FlipHFlipV(const tools::Polygon& rPoly, sal_Int32 nAngle, bool& 
 
 static sal_Int32 lcl_GetAngle(const tools::Polygon& rPoly)
 {
+    if (rPoly.GetSize() < 2)
+        return 0;
+
     sal_Int32 nAngle;
     Point aStartPoint = rPoly[0];
     Point aEndPoint = rPoly[rPoly.GetSize() - 1];
