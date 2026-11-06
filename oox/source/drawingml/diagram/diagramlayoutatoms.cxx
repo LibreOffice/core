@@ -1504,7 +1504,7 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                         pChild->setSize(aElbowSize);
                         pChild->setChildSize(aElbowSize);
 
-                        // A bent connector deines that elbow once its corner sits on its own left
+                        // A bent connector defines that elbow once its corner sits on its own left
                         // edge, which is where an adjustment of zero puts it
                         pChild->setSubType(XML_bentConnector3);
                         auto& rProperties(*pChild->getCustomShapeProperties());

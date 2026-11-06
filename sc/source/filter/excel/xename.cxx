@@ -1108,7 +1108,7 @@ void XclExpNameManagerImpl::CreateSourceRangeName(
         return;
 
     // Take the next unused name of the form _xlchart.v<version>.<index>.
-    // Index is distinct for every datat range of every chart
+    // Index is distinct for every data range of every chart
     sal_Int32& rNameIndex = maChartNameCounters[ nVersion ];
     OUString sName;
     do

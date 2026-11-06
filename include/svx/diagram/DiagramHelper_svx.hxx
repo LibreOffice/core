@@ -117,7 +117,7 @@ public:
     // true for a node that can take a node below it, which depends on what the layout draws
     virtual bool canHoldChildNode(std::u16string_view rNodeId) const = 0;
 
-    // Adds a node holding rText next to the node that rAnchorNode adresses and gives back the id of
+    // Adds a node holding rText next to the node that rAnchorNode addresses and gives back the id of
     // the new node. An empty rAnchorNode puts the new node in front of the ones at the top level.
     // With bAsChild the new node is created below the anchor
     virtual OUString addDiagramNode(std::u16string_view rText, SdrModel& rDrawModel,

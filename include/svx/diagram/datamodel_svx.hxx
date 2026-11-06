@@ -466,7 +466,7 @@ protected:
     // helpers
     // Adds a new node under the node that rParentId names, at the place among the nodes there
     // that nNewSourceOrder gives, and gives back as AddedDiagramNode the ModelId of the node, the
-    // node that was used as templateand what DomMaps to delete. These stay empty when nothing
+    // node that was used as template and what DomMaps to delete. These stay empty when nothing
     // was added. The node rTemplateNodeId is used to set stuff like name and style label
     // of the presentation Points, and it may hang under another parent. The orders and the
     // presentation style indexes are renumbered afterwards to close gaps.

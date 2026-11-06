@@ -493,7 +493,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf164402_FindWhiteColor)
     uno::Reference<util::XPropertyReplace> xPropReplace(xReplaceDes, uno::UNO_QUERY_THROW);
     xPropReplace->setSearchAttributes(aSearchAttribute);
 
-    // a simple search should report one occurence in the document
+    // a simple search should report one occurrence in the document
     uno::Reference<css::container::XIndexAccess> xIndex = xReplace->findAll(xReplaceDes);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndex->getCount());
 

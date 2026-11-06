@@ -1890,7 +1890,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testPageSetupPaperSizeXLSB)
 {
     createScDoc("xlsb/multiple_page_sizes.xlsb");
 
-    // File has two sheets, one in A3, landscape oritentation
+    // File has two sheets, one in A3, landscape orientation
     const SfxItemSet& rSet1 = getPageStyleItemSet(*getScDoc(), 0);
     CPPUNIT_ASSERT(rSet1.Get(ATTR_PAGE).IsLandscape());
     const Size& rSize1 = rSet1.Get(ATTR_PAGE_SIZE).GetSize();

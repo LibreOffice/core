@@ -1550,7 +1550,7 @@ AddedDiagramNode DiagramData_svx::insertDiagramNode(std::u16string_view rParentI
     const OUString aNewSibTransId(createModelId());
     const OUString aNewParOfId(createModelId());
 
-    // One new presentation Point per role, and the separator that the template may be owed comes
+    // One new presentation Point per role, and the separator that the template may be owned comes
     // first because it sits between the template and the new node.
     struct NewPresentationPoint
     {
