@@ -2095,14 +2095,16 @@ img.ui-combobox-value-preview {
 	background-color: var(--color-background-hover);
 }
 
-/* The menu of a point to tie a connector to is short and has no scrollbar, so its entries are as
- * wide as the menu, and the ring of the focused entry lies inside the entry, where all of it is
- * seen. */
-#tie-point-menu-entries .ui-combobox-entry {
+/* The menus of a point to tie a connector to and of a point of a path are short and have no
+ * scrollbar. Their entries are as wide as the menu, and the focus ring is drawn inside the entry
+ * so that all of it is visible. */
+#tie-point-menu-entries .ui-combobox-entry,
+#path-point-menu-entries .ui-combobox-entry {
 	width: 100%;
 }
 
-#tie-point-menu-entries .ui-combobox-entry:focus-visible {
+#tie-point-menu-entries .ui-combobox-entry:focus-visible,
+#path-point-menu-entries .ui-combobox-entry:focus-visible {
 	outline-offset: -2px;
 }
 

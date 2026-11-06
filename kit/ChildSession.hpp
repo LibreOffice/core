@@ -217,6 +217,39 @@ private:
     /// of the path as it stands.
     bool setObjectPoints(const StringVector& tokens);
 
+    /// Deletes one point of the path of a drawing object.
+    bool deleteObjectPoint(const StringVector& tokens);
+
+    /// Adds a point to the path of a drawing object, on the edge nearest to a place on the page.
+    bool insertObjectPoint(const StringVector& tokens);
+
+    /// Sets the continuity at one point of the path of a drawing object.
+    bool setObjectPointContinuity(const StringVector& tokens);
+
+    /// Makes the edge after one point of the path of a drawing object a curve or a line.
+    bool setObjectSegmentCurved(const StringVector& tokens);
+
+    /// Splits the path of a drawing object at one of its points.
+    bool splitObjectPath(const StringVector& tokens);
+
+    /// Closes the path of a drawing object, or opens it.
+    bool setObjectPathClosed(const StringVector& tokens);
+
+    /// Turns every curved edge of the path of a drawing object that runs straight into a line.
+    bool simplifyObjectPath(const StringVector& tokens);
+
+    /// Reads the object id from the token after the command name, and makes this view the
+    /// current one. Returns false and sends an error when the id is missing or the view is
+    /// read-only.
+    bool readObjectToChange(const StringVector& tokens, const std::string_view command,
+                            unsigned long long& objectId);
+
+    /// Reads the object id, the polygon and the point from the three tokens after the command
+    /// name, and makes this view the current one. Returns false and sends an error when a token
+    /// is missing or the view is read-only.
+    bool readPointToChange(const StringVector& tokens, const std::string_view command,
+                           unsigned long long& objectId, int& polygon, int& point);
+
     /// Moves one of the points a drawing object was given for a connector to tie itself to.
     bool setObjectGluePoint(const StringVector& tokens);
 

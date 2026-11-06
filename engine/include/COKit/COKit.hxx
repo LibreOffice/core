@@ -2939,6 +2939,87 @@ struct COKitDocument
     virtual void setObjectPoints(unsigned long long nObjectId, const char* pChanges) = 0;
 
     /**
+     * Deletes one point of the path of a drawing object. A polygon left with fewer than two
+     * points is deleted too, and an object left with no polygon is deleted. It is one undo step.
+     *
+     * @param nObjectId the object, by the id SdrObject::GetUniqueID() answers.
+     * @param nPolygon the index of the polygon in the path, from zero, in the order of the render
+     *        geometry.
+     * @param nPoint the index of the point in that polygon, from zero, in the order of the render
+     *        geometry.
+     */
+    virtual void deleteObjectPoint(unsigned long long nObjectId, int nPolygon, int nPoint) = 0;
+
+    /**
+     * Adds a point to the path of a drawing object, on the edge nearest to the given place. A
+     * curved edge keeps its shape and passes through the new point. It is one undo step.
+     *
+     * @param nObjectId the object, by the id SdrObject::GetUniqueID() answers.
+     * @param nX the horizontal position on the page, in twips.
+     * @param nY the vertical position on the page, in twips.
+     */
+    virtual void insertObjectPoint(unsigned long long nObjectId, int nX, int nY) = 0;
+
+    /**
+     * Sets the continuity at one point of the path of a drawing object, and moves the weights of
+     * the point to match. It is one undo step.
+     *
+     * @param nObjectId the object, by the id SdrObject::GetUniqueID() answers.
+     * @param nPolygon which polygon of the path, counted from zero.
+     * @param nPoint which point of that polygon, counted from zero.
+     * @param nContinuity 0 for a corner, 1 for smooth, 2 for symmetric.
+     */
+    virtual void setObjectPointContinuity(unsigned long long nObjectId, int nPolygon, int nPoint,
+                                          int nContinuity)
+        = 0;
+
+    /**
+     * Makes the edge after one point of the path of a drawing object a curve or a straight line.
+     * A new curve looks like the line at first. It is one undo step.
+     *
+     * @param nObjectId the object, by the id SdrObject::GetUniqueID() answers.
+     * @param nPolygon which polygon of the path, counted from zero.
+     * @param nPoint the index of the point in that polygon, from zero. The edge goes from this
+     *        point to the next one. In a closed polygon, the last point's edge goes to the first.
+     * @param bCurved true for a curve, false for a straight line.
+     */
+    virtual void setObjectSegmentCurved(unsigned long long nObjectId, int nPolygon, int nPoint,
+                                        bool bCurved)
+        = 0;
+
+    /**
+     * Splits the path of a drawing object at one of its points. A closed path opens there. An
+     * open path becomes two objects that meet at the point, so the point cannot be one of its
+     * ends. Only a path of one polygon can be split. It is one undo step.
+     *
+     * @param nObjectId the object, by the id SdrObject::GetUniqueID() answers.
+     * @param nPolygon which polygon of the path, counted from zero.
+     * @param nPoint which point of that polygon, counted from zero.
+     */
+    virtual void splitObjectPath(unsigned long long nObjectId, int nPolygon, int nPoint) = 0;
+
+    /**
+     * Closes the path of a drawing object by adding an edge from its last point to its first, or
+     * opens it by removing that edge. A path can be closed only when one of its polygons has at
+     * least three points. It is one undo step.
+     *
+     * @param nObjectId the object, by the id SdrObject::GetUniqueID() answers.
+     * @param bClosed true to close the path, false to open it.
+     */
+    virtual void setObjectPathClosed(unsigned long long nObjectId, bool bClosed) = 0;
+
+    /**
+     * Turns every curved edge of the path of a drawing object that runs straight into a line. A
+     * curve runs straight when its weights lie on the line between its ends. It is one undo step,
+     * and none when nothing changes.
+     *
+     * @param nObjectId the object, by the id SdrObject::GetUniqueID() answers.
+     * @param bPointsOnALine true to also delete the points that lie on a straight line between
+     *        their neighbours.
+     */
+    virtual void simplifyObjectPath(unsigned long long nObjectId, bool bPointsOnALine) = 0;
+
+    /**
      * Moves one of the points a drawing object was given for a connector to tie itself to.
      *
      * The place is given on the object rather than on the page: 0 and 0 is its upper left corner

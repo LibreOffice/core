@@ -454,6 +454,15 @@ namespace desktop {
         bool exportPages(const char* pParts, const char* pUrl) override;
         void selectObjects(const char* pObjectIds) override;
         void setObjectPoints(unsigned long long nObjectId, const char* pChanges) override;
+        void deleteObjectPoint(unsigned long long nObjectId, int nPolygon, int nPoint) override;
+        void insertObjectPoint(unsigned long long nObjectId, int nX, int nY) override;
+        void setObjectPointContinuity(unsigned long long nObjectId, int nPolygon, int nPoint,
+                                      int nContinuity) override;
+        void setObjectSegmentCurved(unsigned long long nObjectId, int nPolygon, int nPoint,
+                                    bool bCurved) override;
+        void splitObjectPath(unsigned long long nObjectId, int nPolygon, int nPoint) override;
+        void setObjectPathClosed(unsigned long long nObjectId, bool bClosed) override;
+        void simplifyObjectPath(unsigned long long nObjectId, bool bPointsOnALine) override;
         void setObjectGluePoint(unsigned long long nObjectId, int nAt, double fX,
                                 double fY) override;
         void insertObjectGluePoint(unsigned long long nObjectId, double fX, double fY) override;

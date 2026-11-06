@@ -2464,24 +2464,66 @@ menuDefinitions.set('GluePointsMenu', [
 	},
 ] as Array<MenuDefinition>);
 
+/*
+	The ways to convert the selected shape: to a curve, to the outline of its line, or to a
+	polygon. They work on any shape, with a path or without. Each menu gets its own array.
+*/
+function convertShapeEntries(): Array<MenuDefinition> {
+	return [
+		{
+			text: _UNO('.uno:ChangeBezier', 'presentation'),
+			img: 'changebezier',
+			uno: '.uno:ChangeBezier',
+			isEnabled: () => isCommandEnabled('.uno:ChangeBezier'),
+		},
+		{
+			text: _UNO('.uno:convert_to_contour', 'presentation'),
+			img: 'convert_to_contour',
+			uno: '.uno:convert_to_contour',
+			isEnabled: () => isCommandEnabled('.uno:convert_to_contour'),
+		},
+		{
+			text: _UNO('.uno:ChangePolygon', 'presentation'),
+			img: 'changepolygon',
+			uno: '.uno:ChangePolygon',
+			isEnabled: () => isCommandEnabled('.uno:ChangePolygon'),
+		},
+	] as Array<MenuDefinition>;
+}
+
 // The other ways to change the selected shape into one whose points can be edited.
-menuDefinitions.set('ConvertShapeMenu', [
+menuDefinitions.set('ConvertShapeMenu', convertShapeEntries());
+
+// Changes to the whole path of the selected object, and the ways to convert it again.
+menuDefinitions.set('EditPointsMenu', [
 	{
-		text: _UNO('.uno:ChangeBezier', 'presentation'),
-		img: 'changebezier',
-		uno: '.uno:ChangeBezier',
-		isEnabled: () => isCommandEnabled('.uno:ChangeBezier'),
+		text: _('Add Point'),
+		img: 'bezierinsert',
+		action: 'insertpathpoint',
+		checked: false,
+	},
+	{ type: 'separator' },
+	{
+		text: _('Close Path'),
+		img: 'bezierclose',
+		action: 'closepath',
+		checked: false,
+		isEnabled: () =>
+			GraphicSelection.selectionSection?.pathGroup()?.canBeClosedOrOpened() ??
+			false,
 	},
 	{
-		text: _UNO('.uno:convert_to_contour', 'presentation'),
-		uno: '.uno:convert_to_contour',
-		isEnabled: () => isCommandEnabled('.uno:convert_to_contour'),
+		text: _('Simplify Curves'),
+		img: 'beziereliminatepoints',
+		action: 'simplifypathcurves',
 	},
 	{
-		text: _UNO('.uno:ChangePolygon', 'presentation'),
-		uno: '.uno:ChangePolygon',
-		isEnabled: () => isCommandEnabled('.uno:ChangePolygon'),
+		text: _('Simplify All'),
+		img: 'beziersimplifyall',
+		action: 'simplifypathall',
 	},
+	{ type: 'separator' },
+	...convertShapeEntries(),
 ] as Array<MenuDefinition>);
 
 menuDefinitions.set('AnnotationMenu', [

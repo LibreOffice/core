@@ -1861,6 +1861,13 @@ bool ClientSession::_handleInput(const char *buffer, int length)
              tokens.equals(0, "reportmousepointer") ||
              tokens.equals(0, "selectobjects") ||
              tokens.equals(0, "setobjectpoints") ||
+             tokens.equals(0, "deleteobjectpoint") ||
+             tokens.equals(0, "insertobjectpoint") ||
+             tokens.equals(0, "setobjectpointcontinuity") ||
+             tokens.equals(0, "setobjectsegmentcurved") ||
+             tokens.equals(0, "splitobjectpath") ||
+             tokens.equals(0, "setobjectpathclosed") ||
+             tokens.equals(0, "simplifyobjectpath") ||
              tokens.equals(0, "setobjectgluepoint") ||
              tokens.equals(0, "insertobjectgluepoint") ||
              tokens.equals(0, "deleteobjectgluepoint") ||

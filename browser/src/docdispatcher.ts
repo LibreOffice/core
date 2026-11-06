@@ -1235,6 +1235,36 @@ class Dispatcher {
 			GraphicSelection.selectionSection?.startAddingATiePoint();
 		};
 
+		// Shows the points of the path of the selected object for editing, or hides them again.
+		this.actionsMap[SelectionSection.pathPointsCommand] = () => {
+			GraphicSelection.selectionSection?.switchThePathPoints();
+		};
+
+		// The next press on the selected object adds a point to its path. The points are shown
+		// first if they are hidden.
+		this.actionsMap[SelectionSection.addPathPointCommand] = () => {
+			const section = GraphicSelection.selectionSection;
+			if (section && !section.pathPointsAreShown())
+				section.switchThePathPoints();
+			section?.startAddingAPathPoint();
+		};
+
+		// Closes the path of the selected object, or opens it again.
+		this.actionsMap[GraphicSelection.closedPathCommand] = () => {
+			GraphicSelection.selectionSection?.pathGroup()?.switchClosed();
+		};
+
+		// Turns every curved edge of the selected path that runs straight into a line.
+		this.actionsMap[GraphicSelection.simplifyCurvesCommand] = () => {
+			GraphicSelection.selectionSection?.pathGroup()?.simplify(false);
+		};
+
+		// Does the same, and also deletes the points that lie on a straight line between their
+		// neighbours.
+		this.actionsMap[GraphicSelection.simplifyAllCommand] = () => {
+			GraphicSelection.selectionSection?.pathGroup()?.simplify(true);
+		};
+
 		this.actionsMap['animationdeck'] = () => {
 			app.map.sidebarFromNotebookbar.toggleAnimationsSidebar();
 		};

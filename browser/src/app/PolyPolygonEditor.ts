@@ -36,9 +36,47 @@ class PolyPolygonEditor implements HandleSource {
 		return HandleLook.widthOf('weight');
 	}
 
+	/*
+		The path whose points can be edited when these objects are selected, or undefined. That
+		is the case when one object with a path is selected and it can be resized. Moving a point
+		changes the size of the object, so an object protected against resizing is left out.
+	*/
+	public static editedPath(
+		objectIds: number[],
+	): cool.ObjectPathPolygon[] | undefined {
+		if (objectIds.length !== 1 || !ObjectHandles.canBeResized(objectIds))
+			return undefined;
+
+		return RenderGeometrySection.objectOf(objectIds[0])?.path;
+	}
+
+	/// Whether a path is closed, meaning one of its polygons is closed.
+	public static isClosed(path: cool.ObjectPathPolygon[] | undefined): boolean {
+		return (path ?? []).some(
+			(polygon: cool.ObjectPathPolygon) => polygon.closed === true,
+		);
+	}
+
 	/// The path of the object, or nothing where it holds none.
-	private path(): cool.ObjectPathPolygon[] | undefined {
+	public path(): cool.ObjectPathPolygon[] | undefined {
 		return RenderGeometrySection.objectOf(this.objectId)?.path;
+	}
+
+	/// The point that a handle stands for, with its polygon and the whole path. It is null for a
+	/// weight, and for a point that the path no longer has.
+	public pointOf(handleName: string): {
+		polygon: number;
+		point: number;
+		of: cool.ObjectPathPolygon;
+		path: cool.ObjectPathPolygon[];
+	} | null {
+		const place = PolyPolygonEditor.named(handleName);
+		const path = this.path();
+		const of = place && path?.[place.polygon];
+		if (!place || place.part !== 0 || !path || !of?.points?.[place.point])
+			return null;
+
+		return { polygon: place.polygon, point: place.point, of, path };
 	}
 
 	/*

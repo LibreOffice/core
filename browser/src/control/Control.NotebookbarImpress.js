@@ -13,7 +13,7 @@
  * window.L.Control.NotebookbarImpress - definition of notebookbar content in Impress
  */
 
-/* global _ _UNO app cool JSDialog */
+/* global _ _UNO app cool GraphicSelection JSDialog */
 
 window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend({
 
@@ -2655,6 +2655,10 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 	},
 
 	getShapeTab: function() {
+		// Two buttons share one place: Edit Points when the selection is already one path, and
+		// the convert button otherwise.
+		const editsPoints = cool.VectorRenderingConfig.isEnabled() && GraphicSelection.isOnePath();
+		GraphicSelection.pathButtonsBuiltFor(editsPoints);
 		var content = [
 			{
 				'id': 'shape-transform-dialog',
@@ -2970,13 +2974,25 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				'command': '.uno:ConvertToEditableShape',
 				'applyCallback': '.uno:ConvertToEditableShape',
 				'icon': 'lc_changebezier.svg',
+				'visible': !editsPoints,
 				'accessibility': { focusBack: true, combination: 'CP', de: null }
 			}
 		];
 
-		// The points to tie a connector to are shown on the canvas the client draws itself.
+		// The points of a path and the points to tie a connector to exist only on the canvas the
+		// client draws itself.
 		if (cool.VectorRenderingConfig.isEnabled()) {
 			content.push(
+				{
+					'id': 'shape-edit-points:EditPointsMenu',
+					'type': 'menubutton',
+					'text': _('Edit Points'),
+					'command': 'editpathpoints',
+					'applyCallback': 'editpathpoints',
+					'icon': 'lc_toggleobjectbeziermode.svg',
+					'visible': editsPoints,
+					'accessibility': { focusBack: true, combination: 'EP', de: null }
+				},
 				{
 					'id': 'shape-gluepoints:GluePointsMenu',
 					'type': 'menubutton',

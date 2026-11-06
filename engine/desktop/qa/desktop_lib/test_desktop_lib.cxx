@@ -97,6 +97,7 @@
 #include <svx/svdview.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <svx/svdopath.hxx>
 
 #include <cppunit/TestAssert.h>
 #include <vcl/BitmapTools.hxx>
@@ -329,6 +330,7 @@ public:
     void testInsertFiles();
     void testObjectCommandsLeaveAReadOnlyViewAlone();
     void testObjectCommandsKeepTheObjectsProtection();
+    void testObjectPathCommands();
 
     CPPUNIT_TEST_SUITE(DesktopKitTest);
     CPPUNIT_TEST(testGetStyles);
@@ -453,6 +455,7 @@ public:
     CPPUNIT_TEST(testInsertFiles);
     CPPUNIT_TEST(testObjectCommandsLeaveAReadOnlyViewAlone);
     CPPUNIT_TEST(testObjectCommandsKeepTheObjectsProtection);
+    CPPUNIT_TEST(testObjectPathCommands);
     CPPUNIT_TEST_SUITE_END();
 
     OString m_aTextSelection;
@@ -6139,6 +6142,106 @@ void DesktopKitTest::testObjectCommandsKeepTheObjectsProtection()
     // With nothing holding it, the same mapping makes the object wider.
     pDocument->setObjectTransform(mappingOf(*pObject, 0.0, 2.0).getStr(), "scale");
     CPPUNIT_ASSERT(pObject->GetSnapRect().GetWidth() > aWas.GetWidth());
+}
+
+namespace
+{
+// Adds a closed square, in model units, to the page that the view shows.
+SdrPathObj* squareOnThePage(SdrPageView& rPageView)
+{
+    SdrPage* pPage = rPageView.GetPage();
+    basegfx::B2DPolygon aSquare;
+    aSquare.append(basegfx::B2DPoint(1000, 1000));
+    aSquare.append(basegfx::B2DPoint(5000, 1000));
+    aSquare.append(basegfx::B2DPoint(5000, 5000));
+    aSquare.append(basegfx::B2DPoint(1000, 5000));
+    aSquare.setClosed(true);
+
+    rtl::Reference<SdrPathObj> pSquare = new SdrPathObj(
+        pPage->getSdrModelFromSdrPage(), SdrObjKind::Polygon, basegfx::B2DPolyPolygon(aSquare));
+    pPage->InsertObject(pSquare.get());
+    return pSquare.get();
+}
+}
+
+void DesktopKitTest::testObjectPathCommands()
+{
+    // Each command that edits the points of a path changes a square as expected.
+    COKitDocumentImpl* pDocument = loadDoc("2slides.odp");
+    pDocument->initializeForRendering("{}");
+    SdrPageView* pPageView = nullptr;
+    firstObjectOfThePage(pPageView);
+    SdrPathObj* pSquare = squareOnThePage(*pPageView);
+    const unsigned long long nId = pSquare->GetUniqueID();
+    const auto aPolygon = [pSquare]() { return pSquare->GetPathPoly().getB2DPolygon(0); };
+
+    // The first edge becomes a curve that still looks straight, so simplifying makes it a line
+    // again.
+    pDocument->setObjectSegmentCurved(nId, 0, 0, true);
+    CPPUNIT_ASSERT(aPolygon().isNextControlPointUsed(0));
+    pDocument->simplifyObjectPath(nId, false);
+    CPPUNIT_ASSERT(!pSquare->GetPathPoly().areControlPointsUsed());
+
+    // The point is added on the nearest edge, the top one, after the first point. The square
+    // keeps its shape.
+    pDocument->insertObjectPoint(nId, o3tl::convert(3000, o3tl::Length::mm100, o3tl::Length::twip),
+                                 o3tl::convert(1200, o3tl::Length::mm100, o3tl::Length::twip));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(5), aPolygon().count());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3000.0, aPolygon().getB2DPoint(1).getX(), 2.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1000.0, aPolygon().getB2DPoint(1).getY(), 2.0);
+
+    // Deleting that point gives back the square.
+    pDocument->deleteObjectPoint(nId, 0, 1);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), aPolygon().count());
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(5000, 1000), aPolygon().getB2DPoint(1));
+
+    // A point added on an edge lies on the line between its neighbours. Simplify Curves keeps it,
+    // and Simplify All deletes it. The corners of the square stay.
+    pDocument->insertObjectPoint(nId, o3tl::convert(3001, o3tl::Length::mm100, o3tl::Length::twip),
+                                 o3tl::convert(1200, o3tl::Length::mm100, o3tl::Length::twip));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(5), aPolygon().count());
+    pDocument->simplifyObjectPath(nId, false);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(5), aPolygon().count());
+    pDocument->simplifyObjectPath(nId, true);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), aPolygon().count());
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(5000, 1000), aPolygon().getB2DPoint(1));
+
+    // Opening the path keeps its points and removes the edge from the last point to the first.
+    // Closing it adds that edge again.
+    pDocument->setObjectPathClosed(nId, false);
+    CPPUNIT_ASSERT(!pSquare->IsClosed());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), aPolygon().count());
+    CPPUNIT_ASSERT(aPolygon().getB2DPoint(0) != aPolygon().getB2DPoint(3));
+    pDocument->setObjectPathClosed(nId, true);
+    CPPUNIT_ASSERT(pSquare->IsClosed());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), aPolygon().count());
+
+    // Splitting a closed path opens it at the point, which becomes both of its ends.
+    pDocument->splitObjectPath(nId, 0, 2);
+    CPPUNIT_ASSERT(!pSquare->IsClosed());
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(5000, 5000), aPolygon().getB2DPoint(0));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(5000, 5000),
+                         aPolygon().getB2DPoint(aPolygon().count() - 1));
+
+    // Splitting an open path at a point between its ends gives two objects that meet there.
+    const size_t nObjects = pPageView->GetPage()->GetObjCount();
+    pDocument->splitObjectPath(nId, 0, 2);
+    CPPUNIT_ASSERT_EQUAL(nObjects + 1, pPageView->GetPage()->GetObjCount());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(3), aPolygon().count());
+
+    // A corner point with two weights becomes smooth: its two weights then lie on one line
+    // through the point.
+    pDocument->setObjectSegmentCurved(nId, 0, 0, true);
+    pDocument->setObjectSegmentCurved(nId, 0, 1, true);
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2VectorContinuity::NONE, aPolygon().getContinuityInPoint(1));
+    pDocument->setObjectPointContinuity(nId, 0, 1, 1);
+    CPPUNIT_ASSERT(basegfx::B2VectorContinuity::NONE != aPolygon().getContinuityInPoint(1));
+
+    // A read-only view cannot change the path.
+    KitHelper::setViewReadOnly(pDocument->getView(), true);
+    pDocument->deleteObjectPoint(nId, 0, 0);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(3), aPolygon().count());
+    KitHelper::setViewReadOnly(pDocument->getView(), false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopKitTest);

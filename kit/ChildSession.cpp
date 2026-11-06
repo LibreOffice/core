@@ -677,6 +677,13 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "reportmousepointer") ||
                tokens.equals(0, "selectobjects") ||
                tokens.equals(0, "setobjectpoints") ||
+               tokens.equals(0, "deleteobjectpoint") ||
+               tokens.equals(0, "insertobjectpoint") ||
+               tokens.equals(0, "setobjectpointcontinuity") ||
+               tokens.equals(0, "setobjectsegmentcurved") ||
+               tokens.equals(0, "splitobjectpath") ||
+               tokens.equals(0, "setobjectpathclosed") ||
+               tokens.equals(0, "simplifyobjectpath") ||
                tokens.equals(0, "setobjectgluepoint") ||
                tokens.equals(0, "insertobjectgluepoint") ||
                tokens.equals(0, "deleteobjectgluepoint") ||
@@ -773,6 +780,34 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "setobjectpoints"))
         {
             return setObjectPoints(tokens);
+        }
+        else if (tokens.equals(0, "deleteobjectpoint"))
+        {
+            return deleteObjectPoint(tokens);
+        }
+        else if (tokens.equals(0, "insertobjectpoint"))
+        {
+            return insertObjectPoint(tokens);
+        }
+        else if (tokens.equals(0, "setobjectpointcontinuity"))
+        {
+            return setObjectPointContinuity(tokens);
+        }
+        else if (tokens.equals(0, "setobjectsegmentcurved"))
+        {
+            return setObjectSegmentCurved(tokens);
+        }
+        else if (tokens.equals(0, "splitobjectpath"))
+        {
+            return splitObjectPath(tokens);
+        }
+        else if (tokens.equals(0, "setobjectpathclosed"))
+        {
+            return setObjectPathClosed(tokens);
+        }
+        else if (tokens.equals(0, "simplifyobjectpath"))
+        {
+            return simplifyObjectPath(tokens);
         }
         else if (tokens.equals(0, "setobjectgluepoint"))
         {
@@ -1924,6 +1959,183 @@ bool ChildSession::setObjectPoints(const StringVector& tokens)
     getLOKitDocument()->setView(_viewId);
     getLOKitDocument()->setObjectPoints(std::strtoull(objectId.c_str(), nullptr, 10),
                                         changes.c_str());
+    return true;
+}
+
+bool ChildSession::readObjectToChange(const StringVector& tokens,
+                                      const std::string_view command,
+                                      unsigned long long& objectId)
+{
+    std::string id;
+
+    if (tokens.size() < 2 || !getTokenString(tokens[1], "id", id))
+    {
+        sendTextFrameAndLogError("error: cmd=" + std::string(command) + " kind=syntax");
+        return false;
+    }
+
+    // Changing a path changes the document, which a read-only view may not do.
+    if (isReadOnly())
+    {
+        sendTextFrameAndLogError("error: cmd=" + std::string(command) + " kind=failure");
+        return false;
+    }
+
+    // The id an object is named by counts as far as an unsigned long long does.
+    objectId = std::strtoull(id.c_str(), nullptr, 10);
+    getLOKitDocument()->setView(_viewId);
+    return true;
+}
+
+bool ChildSession::readPointToChange(const StringVector& tokens,
+                                     const std::string_view command,
+                                     unsigned long long& objectId, int& polygon, int& point)
+{
+    if (tokens.size() < 4 || !getTokenInteger(tokens[2], "polygon", polygon)
+        || !getTokenInteger(tokens[3], "point", point))
+    {
+        sendTextFrameAndLogError("error: cmd=" + std::string(command) + " kind=syntax");
+        return false;
+    }
+
+    return readObjectToChange(tokens, command, objectId);
+}
+
+bool ChildSession::deleteObjectPoint(const StringVector& tokens)
+{
+    unsigned long long objectId = 0;
+    int polygon = 0;
+    int point = 0;
+
+    if (tokens.size() != 4)
+    {
+        sendTextFrameAndLogError("error: cmd=deleteobjectpoint kind=syntax");
+        return false;
+    }
+
+    if (!readPointToChange(tokens, "deleteobjectpoint", objectId, polygon, point))
+        return false;
+
+    getLOKitDocument()->deleteObjectPoint(objectId, polygon, point);
+    return true;
+}
+
+bool ChildSession::insertObjectPoint(const StringVector& tokens)
+{
+    unsigned long long objectId = 0;
+    int x = 0;
+    int y = 0;
+
+    if (tokens.size() != 4 || !getTokenInteger(tokens[2], "x", x)
+        || !getTokenInteger(tokens[3], "y", y))
+    {
+        sendTextFrameAndLogError("error: cmd=insertobjectpoint kind=syntax");
+        return false;
+    }
+
+    if (!readObjectToChange(tokens, "insertobjectpoint", objectId))
+        return false;
+
+    // The place is on the page, in twips.
+    getLOKitDocument()->insertObjectPoint(objectId, x, y);
+    return true;
+}
+
+bool ChildSession::setObjectPointContinuity(const StringVector& tokens)
+{
+    unsigned long long objectId = 0;
+    int polygon = 0;
+    int point = 0;
+    int continuity = 0;
+
+    if (tokens.size() != 5 || !getTokenInteger(tokens[4], "continuity", continuity))
+    {
+        sendTextFrameAndLogError("error: cmd=setobjectpointcontinuity kind=syntax");
+        return false;
+    }
+
+    if (!readPointToChange(tokens, "setobjectpointcontinuity", objectId, polygon, point))
+        return false;
+
+    getLOKitDocument()->setObjectPointContinuity(objectId, polygon, point, continuity);
+    return true;
+}
+
+bool ChildSession::setObjectSegmentCurved(const StringVector& tokens)
+{
+    unsigned long long objectId = 0;
+    int polygon = 0;
+    int point = 0;
+    std::string curved;
+
+    if (tokens.size() != 5 || !getTokenString(tokens[4], "curved", curved)
+        || (curved != "true" && curved != "false"))
+    {
+        sendTextFrameAndLogError("error: cmd=setobjectsegmentcurved kind=syntax");
+        return false;
+    }
+
+    if (!readPointToChange(tokens, "setobjectsegmentcurved", objectId, polygon, point))
+        return false;
+
+    getLOKitDocument()->setObjectSegmentCurved(objectId, polygon, point, curved == "true");
+    return true;
+}
+
+bool ChildSession::splitObjectPath(const StringVector& tokens)
+{
+    unsigned long long objectId = 0;
+    int polygon = 0;
+    int point = 0;
+
+    if (tokens.size() != 4)
+    {
+        sendTextFrameAndLogError("error: cmd=splitobjectpath kind=syntax");
+        return false;
+    }
+
+    if (!readPointToChange(tokens, "splitobjectpath", objectId, polygon, point))
+        return false;
+
+    getLOKitDocument()->splitObjectPath(objectId, polygon, point);
+    return true;
+}
+
+bool ChildSession::setObjectPathClosed(const StringVector& tokens)
+{
+    unsigned long long objectId = 0;
+    std::string closed;
+
+    if (tokens.size() != 3 || !getTokenString(tokens[2], "closed", closed)
+        || (closed != "true" && closed != "false"))
+    {
+        sendTextFrameAndLogError("error: cmd=setobjectpathclosed kind=syntax");
+        return false;
+    }
+
+    if (!readObjectToChange(tokens, "setobjectpathclosed", objectId))
+        return false;
+
+    getLOKitDocument()->setObjectPathClosed(objectId, closed == "true");
+    return true;
+}
+
+bool ChildSession::simplifyObjectPath(const StringVector& tokens)
+{
+    unsigned long long objectId = 0;
+    std::string points;
+
+    if (tokens.size() != 3 || !getTokenString(tokens[2], "points", points)
+        || (points != "true" && points != "false"))
+    {
+        sendTextFrameAndLogError("error: cmd=simplifyobjectpath kind=syntax");
+        return false;
+    }
+
+    if (!readObjectToChange(tokens, "simplifyobjectpath", objectId))
+        return false;
+
+    getLOKitDocument()->simplifyObjectPath(objectId, points == "true");
     return true;
 }
 

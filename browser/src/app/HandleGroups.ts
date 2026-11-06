@@ -10,6 +10,83 @@
  */
 
 /*
+	Whether the points of one kind are shown, and whether the next press on the object adds one.
+	The points are shown for one selection, named by the key of its objects. A new selection
+	starts with them hidden. Each of the two states is also the state of a command.
+*/
+class ShownPoints {
+	/// The key of the selection whose points are shown, or null when they are hidden.
+	private shownFor: string | null = null;
+
+	/// Whether the next press on the object adds a point. It is always false when no points are
+	/// shown.
+	private beingAdded: boolean = false;
+
+	/// The states last told to the toolbars.
+	private shownToldAs: boolean = false;
+	private addingToldAs: boolean = false;
+
+	/// The command whose state is whether the points are shown, and the command whose state is
+	/// whether the next press adds a point.
+	public readonly showCommand: string;
+	public readonly addCommand: string;
+
+	constructor(showCommand: string, addCommand: string) {
+		this.showCommand = showCommand;
+		this.addCommand = addCommand;
+	}
+
+	/// Whether the points are shown for the selection of that key.
+	public areShownFor(key: string): boolean {
+		return this.shownFor === key;
+	}
+
+	/// Whether the next press on the object of that selection adds a point.
+	public areAddedFor(key: string): boolean {
+		return this.beingAdded && this.areShownFor(key);
+	}
+
+	/// Shows the points for the selection of that key, or hides them for null.
+	public showFor(key: string | null): void {
+		this.shownFor = key;
+		if (key === null) this.beingAdded = false;
+	}
+
+	/// Makes the next press on the object add a point.
+	public startAdding(): void {
+		this.beingAdded = true;
+	}
+
+	/// Makes the next press on the object add no point. Returns whether a point was being added.
+	public stopAdding(): boolean {
+		if (!this.beingAdded) return false;
+
+		this.beingAdded = false;
+		return true;
+	}
+
+	/// Tells the toolbars whether the points are shown and whether a point is being added. Each
+	/// state is told only when it changed.
+	public tell(shown: boolean, adding: boolean): void {
+		if (shown !== this.shownToldAs) {
+			this.shownToldAs = shown;
+			app.map.fire('commandstatechanged', {
+				commandName: this.showCommand,
+				state: shown ? 'true' : 'false',
+			});
+		}
+
+		if (adding !== this.addingToldAs) {
+			this.addingToldAs = adding;
+			app.map.fire('commandstatechanged', {
+				commandName: this.addCommand,
+				state: adding ? 'true' : 'false',
+			});
+		}
+	}
+}
+
+/*
 	One group of handles of a selection, and everything that is its own: which handles it has and
 	where they lie, how they are drawn, whether a press reaches one, what a drag of one does and
 	what the engine is told when the drag ends.
@@ -24,6 +101,62 @@ abstract class HandleGroup {
 
 	constructor(selection: SelectionSection) {
 		this.selection = selection;
+	}
+
+	/// The element that the menu of a point opens from, or null before any menu opened. Only one
+	/// such menu is open at a time, so they all share this element.
+	private static menuAnchor: HTMLElement | null = null;
+
+	/*
+		Opens a menu with these entries, the given number of core pixels below the handle. When
+		an entry is chosen, the menu and its submenus close, and chosen gets the id of the entry.
+	*/
+	protected openAMenuBelow(
+		handle: SelectionHandle,
+		below: number,
+		menuId: string,
+		entries: MenuDefinition[],
+		chosen: (id: string) => void,
+	): void {
+		const container = document.getElementById('canvas-container');
+		if (!container) return;
+
+		if (!HandleGroup.menuAnchor?.isConnected) {
+			HandleGroup.menuAnchor = document.createElement('div');
+			HandleGroup.menuAnchor.style.position = 'absolute';
+			HandleGroup.menuAnchor.style.zIndex = '1500';
+			container.append(HandleGroup.menuAnchor);
+		}
+
+		// The canvas fills the container, so a place on the canvas is a place in the container.
+		const drawnAt = HandleLook.drawnAt(handle);
+		const anchor = HandleGroup.menuAnchor;
+		anchor.style.left = drawnAt.vX / app.dpiScale + 'px';
+		anchor.style.top = (drawnAt.vY + below) / app.dpiScale + 'px';
+
+		JSDialog.OpenDropdown(
+			menuId,
+			anchor,
+			entries,
+			(
+				_objectType: string,
+				eventType: string,
+				_object: unknown,
+				_data: unknown,
+				entry: JSBuilder | MenuDefinition,
+			): boolean => {
+				if (eventType !== 'selected') return false;
+
+				// An entry of a submenu closes the submenu as well as the menu.
+				JSDialog.CloseAllDropdowns();
+				chosen((entry as MenuDefinition)?.id ?? '');
+				return true;
+			},
+			'',
+			false,
+			false,
+			true,
+		);
 	}
 
 	/// What the group is called, which is what marks a handle as belonging to it.
@@ -244,11 +377,12 @@ abstract class HandleGroup {
 class FramingHandles extends HandleGroup {
 	public readonly name: string = 'framing';
 
-	/// The eight make way for the points to tie a connector to, and for the crop marks, while
-	/// either is shown.
+	/// The eight handles are hidden while the points to tie a connector to, the points of the
+	/// path or the crop marks are shown.
 	public isShown(): boolean {
 		return (
 			!this.selection.tiePointsAreShown() &&
+			!this.selection.pathPointsAreShown() &&
 			!CropHandles.areShownFor(this.selection)
 		);
 	}
@@ -805,11 +939,12 @@ class CropHandles extends HandleGroup {
 class TurningHandle extends HandleGroup {
 	public readonly name: string = 'turning';
 
-	/// The handle makes way for the points to tie a connector to, and for the crop marks, while
-	/// either is shown.
+	/// The handle is hidden while the points to tie a connector to, the points of the path or the
+	/// crop marks are shown.
 	public isShown(): boolean {
 		return (
 			!this.selection.tiePointsAreShown() &&
+			!this.selection.pathPointsAreShown() &&
 			!CropHandles.areShownFor(this.selection)
 		);
 	}
@@ -1560,9 +1695,6 @@ class TiePointHandles extends HandleGroup {
 	/// The id of the menu a click on a point opens.
 	private static readonly menuId: string = 'tie-point-menu';
 
-	/// The element the menu of a point opens from, or null before the first one opened.
-	private static menuAnchor: HTMLElement | null = null;
-
 	/*
 		Opens the menu of a point, below the point: the way a connector comes into the object
 		there, whether the point keeps its share of the size of the object, the side it is
@@ -1574,26 +1706,9 @@ class TiePointHandles extends HandleGroup {
 		disabled for a point that keeps its share.
 	*/
 	private openTheMenuOf(handle: SelectionHandle): void {
-		const container = document.getElementById('canvas-container');
-		if (!container) return;
-
 		const at = Number(handle.name.split('.')[1]);
 		const point = this.held(handle);
 		if (!point || !(at >= 0)) return;
-
-		if (!TiePointHandles.menuAnchor?.isConnected) {
-			TiePointHandles.menuAnchor = document.createElement('div');
-			TiePointHandles.menuAnchor.style.position = 'absolute';
-			TiePointHandles.menuAnchor.style.zIndex = '1500';
-			container.append(TiePointHandles.menuAnchor);
-		}
-
-		// The canvas fills the container, so a place on the canvas is a place in the container.
-		const drawnAt = HandleLook.drawnAt(handle);
-		const below = 0.5 * ShapeHandlesSection.gluePointSize();
-		const anchor = TiePointHandles.menuAnchor;
-		anchor.style.left = drawnAt.vX / app.dpiScale + 'px';
-		anchor.style.top = (drawnAt.vY + below) / app.dpiScale + 'px';
 
 		const ways = TiePointHandles.waysOf(point.wayOut);
 		const canBeChanged = () => point.fromTheShape !== true;
@@ -1678,23 +1793,12 @@ class TiePointHandles extends HandleGroup {
 			},
 		];
 
-		JSDialog.OpenDropdown(
+		this.openAMenuBelow(
+			handle,
+			0.5 * ShapeHandlesSection.gluePointSize(),
 			TiePointHandles.menuId,
-			TiePointHandles.menuAnchor,
 			entries,
-			(
-				_objectType: string,
-				eventType: string,
-				_object: unknown,
-				_data: unknown,
-				entry: JSBuilder | MenuDefinition,
-			): boolean => {
-				if (eventType !== 'selected') return false;
-
-				// An entry of a submenu closes the submenu as well as the menu.
-				JSDialog.CloseAllDropdowns();
-
-				const chosen = (entry as MenuDefinition)?.id ?? '';
+			(chosen: string): void => {
 				const [axis, name] = chosen.split('-');
 				if (chosen === 'delete') this.deleteThePoint(handle);
 				else if (chosen === 'relative')
@@ -1715,12 +1819,7 @@ class TiePointHandles extends HandleGroup {
 						at,
 						'way=' + TiePointHandles.switchedWay(ways, chosen),
 					);
-				return true;
 			},
-			'',
-			false,
-			false,
-			true,
 		);
 	}
 
@@ -2221,6 +2320,269 @@ class TiePointHandles extends HandleGroup {
 class PathHandles extends HandlesMovedOneByOne {
 	public readonly name: string = 'path';
 
+	/// The points are shown while they are edited.
+	public isShown(): boolean {
+		return this.selection.pathPointsAreShown();
+	}
+
+	/*
+		While a point is being added, a press counts when it is inside the box of the object or on
+		its line. The box of a straight path has no height or no width, and a thick line reaches
+		outside its box, so the box alone is not enough.
+	*/
+	public takesAPress(x: number, y: number): boolean {
+		if (!this.selection.isAddingAPathPoint()) return false;
+		if (this.selection.within(x, y)) return true;
+
+		const at = this.selection.inDocumentFromCanvas(x, y);
+		return RenderGeometrySection.objectHitAt(
+			this.selection.selectedObjects()[0],
+			at.x,
+			at.y,
+		);
+	}
+
+	/// A closed path can always be opened. An open path can be closed when one of its polygons
+	/// has at least three points.
+	public canBeClosedOrOpened(): boolean {
+		const path = this.selection.pathEditor()?.path() ?? [];
+		return (
+			PolyPolygonEditor.isClosed(path) ||
+			path.some(
+				(polygon: cool.ObjectPathPolygon) =>
+					PathHandles.pointsOnceClosed(polygon) >= 3,
+			)
+		);
+	}
+
+	/// The number of points the polygon has once it is closed. Points at the end that equal the
+	/// first point are not counted, because a closed polygon does not repeat its first point.
+	private static pointsOnceClosed(polygon: cool.ObjectPathPolygon): number {
+		const points = polygon.points ?? [];
+		let count = points.length;
+		while (
+			count > 1 &&
+			points[count - 1].x === points[0].x &&
+			points[count - 1].y === points[0].y
+		)
+			--count;
+		return count;
+	}
+
+	/// The parameters that name a point of the path to the engine.
+	private static parametersOf(place: {
+		polygon: number;
+		point: number;
+	}): string {
+		return 'polygon=' + String(place.polygon) + ' point=' + String(place.point);
+	}
+
+	/// The point the keyboard is on is drawn larger and does not blink.
+	public blinksWhileActive(): boolean {
+		return false;
+	}
+
+	/// Points and weights are drawn smaller than the eight handles, so a press reaches them from
+	/// twice the usual distance.
+	public reachOf(usual: number): number {
+		return 2 * usual;
+	}
+
+	/// A click on a point opens the menu of the point below it. A click on a weight does not.
+	public letGoWhereItWasPressed(handle: SelectionHandle): void {
+		if (handle.kind === '9') this.openTheMenuOf(handle);
+	}
+
+	/// The id of the menu a click on a point opens.
+	private static readonly menuId: string = 'path-point-menu';
+
+	/// The point that a handle stands for. It is null for a weight, and for a point that the path
+	/// no longer has.
+	private placeOf(handle: SelectionHandle) {
+		return this.selection.pathEditor()?.pointOf(handle.name) ?? null;
+	}
+
+	/*
+		Opens the menu of a point below the point. The entries delete the point, make the edge
+		after it a curve or a line, set how the curve runs through the point, and split the path
+		there. An entry is disabled when it does not apply to this point:
+		- The last point of an open polygon has no edge after it.
+		- The edge is a curve when a weight bends it at either end.
+		- Smooth and symmetric need a point with both weights. The current choice is checked and
+		  disabled. A point that reports no choice is a corner.
+		- A path of one polygon can be split at any point of a closed polygon, and at any point
+		  of an open polygon except its two ends.
+	*/
+	private openTheMenuOf(handle: SelectionHandle): void {
+		const place = this.placeOf(handle);
+		if (!place) return;
+
+		const points = place.of.points;
+		const point = points[place.point];
+		const next = points[(place.point + 1) % points.length];
+		const closed = place.of.closed === true;
+		const hasAnEdgeOut = place.point + 1 < points.length || closed;
+		const curved =
+			hasAnEdgeOut &&
+			(point.aheadX !== undefined || next.behindX !== undefined);
+		const weightIn = point.behindX !== undefined;
+		const weightOut = point.aheadX !== undefined;
+		const continuity = point.continuity ?? 0;
+		const canBeSplit =
+			place.path.length === 1 &&
+			points.length >= 3 &&
+			(closed || (place.point > 0 && place.point + 1 < points.length));
+
+		const way = (
+			id: string,
+			text: string,
+			img: string,
+			value: number,
+			enabled: boolean,
+		): MenuDefinition => ({
+			id,
+			type: 'action',
+			text,
+			img,
+			checked: continuity === value,
+			isEnabled: () => enabled && continuity !== value,
+		});
+
+		const entries: MenuDefinition[] = [
+			{ id: 'point', type: 'header', text: _('Point') },
+			{ id: 'delete', type: 'action', text: _('Delete'), img: 'bezierdelete' },
+			{ id: 'separator', type: 'separator' },
+			{
+				id: curved ? 'line' : 'curve',
+				type: 'action',
+				text: curved ? _('To Line') : _('To Curve'),
+				img: 'bezierconvert',
+				isEnabled: () => hasAnEdgeOut,
+			},
+			{ id: 'separator', type: 'separator' },
+			way('corner', _('Corner Point'), 'bezieredge', 0, weightIn || weightOut),
+			way(
+				'smooth',
+				_('Smooth Transition'),
+				'beziersmooth',
+				1,
+				weightIn && weightOut,
+			),
+			way(
+				'symmetric',
+				_('Symmetric Transition'),
+				'beziersymmetric',
+				2,
+				weightIn && weightOut,
+			),
+			{ id: 'separator', type: 'separator' },
+			{
+				id: 'split',
+				type: 'action',
+				text: _('Split Path'),
+				img: 'beziercutline',
+				isEnabled: () => canBeSplit,
+			},
+		];
+
+		this.openAMenuBelow(
+			handle,
+			0.5 * PolyPolygonEditor.pointSize(),
+			PathHandles.menuId,
+			entries,
+			(chosen: string): void => {
+				const at = PathHandles.parametersOf(place);
+				if (chosen === 'delete') this.deleteThePoint(handle);
+				else if (chosen === 'curve' || chosen === 'line')
+					this.sendAboutThePath(
+						'setobjectsegmentcurved',
+						at + ' curved=' + String(chosen === 'curve'),
+					);
+				else if (chosen === 'corner')
+					this.sendAboutThePath(
+						'setobjectpointcontinuity',
+						at + ' continuity=0',
+					);
+				else if (chosen === 'smooth')
+					this.sendAboutThePath(
+						'setobjectpointcontinuity',
+						at + ' continuity=1',
+					);
+				else if (chosen === 'symmetric')
+					this.sendAboutThePath(
+						'setobjectpointcontinuity',
+						at + ' continuity=2',
+					);
+				else if (chosen === 'split') {
+					this.sendAboutThePath('splitobjectpath', at);
+				}
+			},
+		);
+	}
+
+	/*
+		Sends a change of the path of the selected object, with its parameters if it has any.
+		The change names points by their index in the path the client has. So it is not sent
+		while an undo or a redo is on its way, and point moves that still wait are sent first.
+		The change can add or remove points and weights, so the keyboard leaves the points.
+	*/
+	private sendAboutThePath(command: string, change: string): void {
+		if (ChangeOutbox.undoOnItsWay()) {
+			this.selection.showTheHoldBack();
+			return;
+		}
+
+		this.selection.travel.leave();
+		ChangeOutbox.sendEverythingAhead();
+		app.socket.sendMessage(
+			command +
+				' id=' +
+				String(this.selection.selectedObjects()[0]) +
+				(change ? ' ' + change : ''),
+		);
+	}
+
+	/*
+		Deletes the point that the handle stands for. On a weight it does nothing. It returns
+		true for every handle of the path, so the key is used up and the object is not deleted.
+	*/
+	public deleteThePoint(handle: SelectionHandle): boolean {
+		const place = this.placeOf(handle);
+		if (!place) return true;
+
+		this.sendAboutThePath('deleteobjectpoint', PathHandles.parametersOf(place));
+		return true;
+	}
+
+	/// Adds a point to the path of the selected object, on the edge nearest to the press. The
+	/// press is in twips on the page.
+	public addAt(at: cool.SimplePoint): void {
+		this.sendAboutThePath(
+			'insertobjectpoint',
+			'x=' + String(Math.round(at.x)) + ' y=' + String(Math.round(at.y)),
+		);
+	}
+
+	/// Closes the path of the selected object, or opens it again where it is closed.
+	public switchClosed(): void {
+		const path = this.selection.pathEditor()?.path();
+		if (!path) return;
+
+		this.sendAboutThePath(
+			'setobjectpathclosed',
+			'closed=' + String(!PolyPolygonEditor.isClosed(path)),
+		);
+	}
+
+	/// Turns every curved edge of the path that runs straight into a line. With pointsOnALine,
+	/// it also deletes the points that lie on a straight line between their neighbours.
+	public simplify(pointsOnALine: boolean): void {
+		this.sendAboutThePath(
+			'simplifyobjectpath',
+			'points=' + String(pointsOnALine),
+		);
+	}
+
 	public handOver(handle: SelectionHandle, to: cool.Point): void {
 		const change = this.selection.pathEditor()?.changeFor(handle.name, to);
 		if (!change) return;
@@ -2267,9 +2629,8 @@ class PathHandles extends HandlesMovedOneByOne {
 		grown: number,
 	): string {
 		/*
-			A point of the path is smaller than the eight and drawn over them, so that it can be
-			taken hold of where the two meet. A weight that bends the curve at a point is smaller
-			again, since there are two of them for every point of a curve.
+			A point of the path is smaller than the eight. A weight that bends the curve at a
+			point is smaller again, since there are two of them for every point of a curve.
 		*/
 		return HandleLook.lay(
 			context,
@@ -2297,9 +2658,13 @@ class TheObjectItself extends HandleGroup {
 		return '';
 	}
 
+	/// The object does not move while the points of its path are shown, so a press that misses a
+	/// point does not change the shape.
 	public interactionForThePlace(
 		at: cool.SimplePoint,
 	): SelectionInteraction | null {
+		if (this.selection.pathPointsAreShown()) return null;
+
 		if (!ObjectHandles.canBeMoved(this.selection.selectedObjects()))
 			return null;
 

@@ -43,24 +43,24 @@ abstract class SelectionSection extends CanvasSectionObject {
 		(name: string) => this.blinksWhileActive(name),
 	);
 
-	/// Whether the handle the keyboard is on is a point to tie a connector to.
-	private keyboardIsOnATiePoint(): boolean {
+	/// Whether the keyboard is on a point to tie a connector to, or on a point of the path.
+	private keyboardIsOnAPoint(): boolean {
 		const handle = this.travel.activeHandle();
-		return (
-			handle !== undefined && this.groupOf(handle) instanceof TiePointHandles
-		);
+		const group = handle ? this.groupOf(handle) : undefined;
+		return group instanceof TiePointHandles || group instanceof PathHandles;
 	}
 
 	/*
-		Takes away the point to tie a connector to that the keyboard is on. Answers whether the
-		keyboard was on such a point. A point the shape makes from its own geometry stays.
+		Takes away the point to tie a connector to, or the point of the path, that the keyboard is
+		on. Answers whether the keyboard was on such a point. A point to tie a connector to that
+		the shape makes from its own geometry stays.
 	*/
-	public deleteTheTiePointByKey(): boolean {
+	public deleteThePointByKey(): boolean {
 		const handle = this.travel.activeHandle();
 		const group = handle ? this.groupOf(handle) : undefined;
 		return (
 			handle !== undefined &&
-			group instanceof TiePointHandles &&
+			(group instanceof TiePointHandles || group instanceof PathHandles) &&
 			group.deleteThePoint(handle)
 		);
 	}
@@ -187,62 +187,108 @@ abstract class SelectionSection extends CanvasSectionObject {
 			SelectionSection.shearing = null;
 	}
 
-	/*
-		The object whose points to tie a connector to are shown, as the key of its id, or null
-		while no points are shown. A new selection starts with them hidden.
-	*/
-	private static tiePointsShownFor: string | null = null;
+	/// The points to tie a connector to, shown for one selected object at a time.
+	private static readonly tiePoints: ShownPoints = new ShownPoints(
+		'showgluepoints',
+		'insertgluepoint',
+	);
 
-	/// Whether the next press on the object with its points shown gives it a new point. It is false
-	/// whenever no points are shown.
-	private static tiePointBeingAdded: boolean = false;
-
-	/// The state of the points last told to the toolbars.
-	private static tiePointsToldAs: boolean = false;
-
-	/// The state of adding a point last told to the toolbars.
-	private static addingToldAs: boolean = false;
+	/// The points of the path of the selected object, shown while they are edited.
+	private static readonly pathPoints: ShownPoints = new ShownPoints(
+		'editpathpoints',
+		'insertpathpoint',
+	);
 
 	/// The command whose state says whether the points to tie a connector to are shown.
-	public static readonly tiePointsCommand: string = 'showgluepoints';
+	public static readonly tiePointsCommand: string =
+		SelectionSection.tiePoints.showCommand;
 
 	/// The command whose state says whether a press on the object gives it a new point.
-	public static readonly addTiePointCommand: string = 'insertgluepoint';
+	public static readonly addTiePointCommand: string =
+		SelectionSection.tiePoints.addCommand;
+
+	/// The command whose state is whether the points of the path are shown for editing.
+	public static readonly pathPointsCommand: string =
+		SelectionSection.pathPoints.showCommand;
+
+	/// The command whose state is whether the next press on the object adds a point to its path.
+	public static readonly addPathPointCommand: string =
+		SelectionSection.pathPoints.addCommand;
 
 	/// Whether the points to tie a connector to are shown for this selection.
 	public tiePointsAreShown(): boolean {
-		return SelectionSection.tiePointsShownFor === this.keyOfTheSelection();
+		return SelectionSection.tiePoints.areShownFor(this.keyOfTheSelection());
+	}
+
+	/// Whether the points of the path are shown for editing in this selection.
+	public pathPointsAreShown(): boolean {
+		return SelectionSection.pathPoints.areShownFor(this.keyOfTheSelection());
 	}
 
 	/// Shows the points to tie a connector to, or hides them again. They are shown for one
 	/// selected object only, since only one object at a time has its points drawn.
 	public switchTheTiePoints(): void {
-		if (!this.tiePointsAreShown() && this.selectedObjects().length !== 1)
-			return;
+		this.switchThePoints(
+			SelectionSection.tiePoints,
+			SelectionSection.pathPoints,
+			this.selectedObjects().length === 1,
+		);
+	}
 
-		SelectionSection.tiePointsShownFor = this.tiePointsAreShown()
-			? null
-			: this.keyOfTheSelection();
-		if (SelectionSection.tiePointsShownFor === null)
-			SelectionSection.tiePointBeingAdded = false;
+	/// Shows the points of the path for editing, or hides them again. They are shown only when one
+	/// object is selected and its path can be edited.
+	public switchThePathPoints(): void {
+		this.switchThePoints(
+			SelectionSection.pathPoints,
+			SelectionSection.tiePoints,
+			this.editor !== null,
+		);
+	}
+
+	/*
+		Shows these points, or hides them again. They are shown only when allowed. Showing them
+		hides the other kind of points, because both lie on the same object and a press could not
+		tell which one it meant.
+	*/
+	private switchThePoints(
+		points: ShownPoints,
+		other: ShownPoints,
+		canBeShown: boolean,
+	): void {
+		const key = this.keyOfTheSelection();
+		const shown = points.areShownFor(key);
+		if (!shown && !canBeShown) return;
+
+		points.showFor(shown ? null : key);
+		if (!shown) other.showFor(null);
 
 		// The keyboard leaves the handles, since the ones it walks are not the same any more.
 		this.travel.leave();
 		this.refresh();
 		this.containerObject.requestReDraw();
-		SelectionSection.tellTheTiePoints();
+		SelectionSection.tellThePoints();
 	}
 
 	/// Hides the points to tie a connector to, as a new selection does.
 	public static hideTheTiePoints(): void {
-		SelectionSection.tiePointsShownFor = null;
-		SelectionSection.tiePointBeingAdded = false;
-		SelectionSection.tellTheTiePoints();
+		SelectionSection.tiePoints.showFor(null);
+		SelectionSection.tellThePoints();
+	}
+
+	/// Hides the points of the path, as a new selection does.
+	public static hideThePathPoints(): void {
+		SelectionSection.pathPoints.showFor(null);
+		SelectionSection.tellThePoints();
 	}
 
 	/// Whether a press on the object gives it a new point to tie a connector to.
 	public isAddingATiePoint(): boolean {
-		return SelectionSection.tiePointBeingAdded && this.tiePointsAreShown();
+		return SelectionSection.tiePoints.areAddedFor(this.keyOfTheSelection());
+	}
+
+	/// Whether the next press on the object adds a point to its path.
+	public isAddingAPathPoint(): boolean {
+		return SelectionSection.pathPoints.areAddedFor(this.keyOfTheSelection());
 	}
 
 	/*
@@ -251,47 +297,51 @@ abstract class SelectionSection extends CanvasSectionObject {
 		ends with that point, with Escape, or when the points are hidden.
 	*/
 	public startAddingATiePoint(): void {
-		if (!this.tiePointsAreShown()) return;
-
-		SelectionSection.tiePointBeingAdded = true;
-		this.travel.leave();
-		this.containerObject.requestReDraw();
-		SelectionSection.tellTheTiePoints();
+		this.startAddingAPoint(SelectionSection.tiePoints);
 	}
 
-	/// Stops adding a point to tie a connector to, and the pointer is the one for where the mouse
-	/// stands. Answers whether a point was being added.
-	public static stopAddingATiePoint(): boolean {
-		if (!SelectionSection.tiePointBeingAdded) return false;
+	/*
+		Starts adding a point to the path. The next press on the object, away from its handles,
+		adds a point on the nearest edge. The pointer over the object becomes a cross. Adding ends
+		after that point, on Escape, or when the points are hidden.
+	*/
+	public startAddingAPathPoint(): void {
+		this.startAddingAPoint(SelectionSection.pathPoints);
+	}
 
-		SelectionSection.tiePointBeingAdded = false;
+	private startAddingAPoint(points: ShownPoints): void {
+		if (!points.areShownFor(this.keyOfTheSelection())) return;
+
+		points.startAdding();
+		this.travel.leave();
+		this.containerObject.requestReDraw();
+		SelectionSection.tellThePoints();
+	}
+
+	/// Stops adding a point of either kind and sets the pointer for where the mouse is. Returns
+	/// whether a point was being added.
+	public static stopAddingAPoint(): boolean {
+		const stoppedATiePoint = SelectionSection.tiePoints.stopAdding();
+		const stoppedAPathPoint = SelectionSection.pathPoints.stopAdding();
+		if (!stoppedATiePoint && !stoppedAPathPoint) return false;
+
 		GraphicSelection.selectionSection?.pointAtTheMouse();
-		SelectionSection.tellTheTiePoints();
+		SelectionSection.tellThePoints();
 		return true;
 	}
 
-	/// Tells the toolbars whether the points to tie a connector to are shown, and whether a point
-	/// is being added, each when it changed.
-	public static tellTheTiePoints(): void {
+	/// Tells the toolbars, for each kind of points, whether they are shown and whether one is
+	/// being added. Each state is told only when it changed.
+	public static tellThePoints(): void {
 		const section = GraphicSelection.selectionSection;
-		const shown = section?.tiePointsAreShown() ?? false;
-		const adding = section?.isAddingATiePoint() ?? false;
-
-		if (shown !== SelectionSection.tiePointsToldAs) {
-			SelectionSection.tiePointsToldAs = shown;
-			app.map.fire('commandstatechanged', {
-				commandName: SelectionSection.tiePointsCommand,
-				state: shown ? 'true' : 'false',
-			});
-		}
-
-		if (adding !== SelectionSection.addingToldAs) {
-			SelectionSection.addingToldAs = adding;
-			app.map.fire('commandstatechanged', {
-				commandName: SelectionSection.addTiePointCommand,
-				state: adding ? 'true' : 'false',
-			});
-		}
+		SelectionSection.tiePoints.tell(
+			section?.tiePointsAreShown() ?? false,
+			section?.isAddingATiePoint() ?? false,
+		);
+		SelectionSection.pathPoints.tell(
+			section?.pathPointsAreShown() ?? false,
+			section?.isAddingAPathPoint() ?? false,
+		);
 	}
 
 	/// The group of the points to tie a connector to.
@@ -299,6 +349,14 @@ abstract class SelectionSection extends CanvasSectionObject {
 		return this.groups().find(
 			(group: HandleGroup): group is TiePointHandles =>
 				group instanceof TiePointHandles,
+		);
+	}
+
+	/// The group of the points of the path.
+	public pathGroup(): PathHandles | undefined {
+		return this.groups().find(
+			(group: HandleGroup): group is PathHandles =>
+				group instanceof PathHandles,
 		);
 	}
 
@@ -625,19 +683,24 @@ abstract class SelectionSection extends CanvasSectionObject {
 		*/
 		this.groupsHeld = null;
 
-		const objects = this.selectedObjects();
 		/*
-			The points of a path are edited only where the objects may be made larger or smaller:
-			moving one changes the shape of the object, which is the thing that is held against
-			being changed. Where they may not, the editor is not made at all, so there are no
-			points to walk to and nothing to take hold of.
+			Where the points of the path may not be edited, the editor is not made at all, so there
+			are no points to walk to and nothing to take hold of. Points that were shown are hidden
+			then, once the object has arrived, so the other handles come back: a path left with two
+			points becomes a line, which has no path to edit.
 		*/
-		this.editor =
-			objects.length === 1 &&
-			RenderGeometrySection.objectOf(objects[0])?.path &&
-			ObjectHandles.canBeResized(objects)
-				? new PolyPolygonEditor(objects[0])
-				: null;
+		const objects = this.selectedObjects();
+		this.editor = PolyPolygonEditor.editedPath(objects)
+			? new PolyPolygonEditor(objects[0])
+			: null;
+		if (
+			!this.editor &&
+			this.pathPointsAreShown() &&
+			objects.every((objectId: number) =>
+				RenderGeometrySection.objectOf(objectId),
+			)
+		)
+			SelectionSection.hideThePathPoints();
 
 		const worked = this.handlesOfTheGroups();
 
@@ -3086,15 +3149,18 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 		/*
 			While a point is being added, a press on the object off its handles gives the object a
-			new point there, and adding ends. The press is taken like a press on a handle, so the
-			click that follows goes nowhere else.
+			new point there, and adding ends. A point of the path goes on the edge of the path
+			nearest to the press. The press is taken like a press on a handle, so the click that
+			follows goes nowhere else.
 		*/
+		const addsAPathPoint =
+			!handle && this.pathGroup()?.takesAPress(onCanvas[0], onCanvas[1]);
+		if (addsAPathPoint) this.pathGroup()?.addAt(at);
 		if (
-			!handle &&
-			this.isAddingATiePoint() &&
-			this.tiePointGroup()?.addAt(at)
+			addsAPathPoint ||
+			(!handle && this.isAddingATiePoint() && this.tiePointGroup()?.addAt(at))
 		) {
-			SelectionSection.stopAddingATiePoint();
+			SelectionSection.stopAddingAPoint();
 			this.pressedAHandle = true;
 			this.pressedGroup = null;
 			this.interaction = null;
@@ -3196,7 +3262,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 			? this.pointerOver(over)
 			: this.handleAt(onCanvas[0], onCanvas[1], true)
 				? 'not-allowed'
-				: onTheObject && this.isAddingATiePoint()
+				: onTheObject && (this.isAddingATiePoint() || this.isAddingAPathPoint())
 					? 'crosshair'
 					: this.partMarkedAt(inTheDocument) !== undefined
 						? 'pointer'
@@ -3323,7 +3389,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 				this.groupOf(this.pressedHandle)?.letGoWhereItWasPressed(
 					this.pressedHandle,
 				);
-			} else if (this.pressedGroup && this.keyboardIsOnATiePoint()) {
+			} else if (this.pressedGroup && this.keyboardIsOnAPoint()) {
 				// A click on the object, off the handles, takes the keyboard off the point.
 				this.travel.leave();
 			}

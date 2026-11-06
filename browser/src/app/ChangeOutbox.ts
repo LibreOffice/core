@@ -299,6 +299,15 @@ class ChangeOutbox {
 		if (ChangeOutbox.textWaits()) ChangeOutbox.sendAllWaiting();
 	}
 
+	/// Sends every waiting or held change now, even when many changes are in flight. Call it
+	/// before a message that the engine must apply after these changes.
+	public static sendEverythingAhead(): void {
+		if (ChangeOutbox.sending) return;
+
+		ChangeOutbox.letGoOfWhatIsHeld();
+		ChangeOutbox.sendAllWaiting();
+	}
+
 	/// Sends everything waiting, however many changes are in flight.
 	public static sendAllWaiting(): void {
 		if (ChangeOutbox.sending) return;

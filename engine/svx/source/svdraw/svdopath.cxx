@@ -2636,10 +2636,15 @@ rtl::Reference<SdrPathObj> SdrPathObj::RipPoint(sal_uInt32 nHdlNum, sal_uInt32& 
                 if(IsClosed())
                 {
                     // when closed, RipPoint means to open the polygon at the selected point. To
-                    // be able to do that, it is necessary to make the selected point the first one
+                    // be able to do that, it is necessary to make the selected point the first one.
+                    // The point becomes both ends of the open path, so a copy of it is added at
+                    // the end and no edge is lost. makeStartPoint returns an open polygon, so it
+                    // is marked closed first.
                     basegfx::B2DPolygon aNewPolygon(basegfx::utils::makeStartPoint(aCandidate, nPnt));
-                    SetPathPoly(basegfx::B2DPolyPolygon(aNewPolygon));
+                    aNewPolygon.setClosed(true);
+                    basegfx::utils::openWithGeometryChange(aNewPolygon);
                     ToggleClosed();
+                    SetPathPoly(basegfx::B2DPolyPolygon(aNewPolygon));
 
                     // give back new position of old start point (historical reasons)
                     rNewPt0Index = (nPointCount - nPnt) % nPointCount;
@@ -2764,6 +2769,22 @@ void SdrPathObj::ToggleClosed()
     tools::Rectangle aBoundRect0;
     if(m_pUserCall != nullptr)
         aBoundRect0 = GetLastBoundRect();
+
+    // Opening a path keeps its points and removes the edge from the last point to the first,
+    // together with the weights of that edge.
+    if (IsClosed())
+    {
+        for (auto& rPolygon : maPathPolygon)
+        {
+            if (rPolygon.count())
+            {
+                rPolygon.resetPrevControlPoint(0);
+                rPolygon.resetNextControlPoint(rPolygon.count() - 1);
+            }
+            rPolygon.setClosed(false);
+        }
+    }
+
     ImpSetClosed(!IsClosed()); // set new ObjKind
     ImpForceKind(); // because we want Line -> Poly -> PolyLine instead of Line -> Poly -> Line
     SetBoundAndSnapRectsDirty();

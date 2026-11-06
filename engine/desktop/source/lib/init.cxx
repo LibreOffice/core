@@ -18,12 +18,15 @@
 #include <svx/svdglue.hxx>
 #include <svx/svdomeas.hxx>
 #include <svx/svdopath.hxx>
+#include <svx/polypolygoneditor.hxx>
 #include <svx/VectorObjectContent.hxx>
 #include <cmath>
 
+#include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdouno.hxx>
@@ -6894,25 +6897,15 @@ static bool lcl_viewReaches(const SdrPageView& rPageView, const SdrObject& rObje
 }
 
 /*
-    Moves points of the path an object is drawn along. A client that draws the document from the
-    objects it holds edits the path it was given and says what moved, so a path of many thousand
-    points travels neither way and nothing that was not touched can change.
-
-    The changes arrive in twips as "polygon,point,part,x,y,continuity", several of them separated
-    by ";", where the part is 0 for the point itself, 1 for the weight of the curve coming into it
-    and 2 for the weight of the one going out, and the continuity is 0 for a corner, 1 for a point
-    the curve runs smoothly through and 2 for one it runs symmetrically through.
+    The object of that id drawn along a path, on the page the current view shows, where this view
+    may change its points. Answers nothing for a read-only view, for an id that names no such
+    object, for an object the view does not reach and for one held against being resized, and sets
+    the message for the last three.
 */
-void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId,
-                                        const char* pChanges)
+static SdrPathObj* lcl_pathToChange(unsigned long long nObjectId)
 {
-    comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectPoints");
-
-    SolarMutexGuard aGuard;
-    SetLastExceptionMsg();
-
     if (SfxViewShell::IsCurrentKitViewReadOnly())
-        return;
+        return nullptr;
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
     SdrView* pView = pViewShell ? pViewShell->GetDrawView() : nullptr;
@@ -6921,8 +6914,8 @@ void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId,
 
     if (!pPage)
     {
-        SetLastExceptionMsg(u"The view shows no page to move a point on"_ustr);
-        return;
+        SetLastExceptionMsg(u"The view shows no page to change a point on"_ustr);
+        return nullptr;
     }
 
     SdrPathObj* pPathObject = dynamic_cast<SdrPathObj*>(pPage->FindObjectByUniqueID(nObjectId));
@@ -6930,18 +6923,83 @@ void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId,
     if (!pPathObject)
     {
         SetLastExceptionMsg(u"No object of that id is drawn along a path"_ustr);
-        return;
+        return nullptr;
     }
 
     if (!lcl_viewReaches(*pPageView, *pPathObject))
-        return;
+        return nullptr;
 
-    // A point moved changes the path's size, which the office's own view holds to the same rule.
+    // Moving a point changes the size of the object. The desktop view applies the same rule.
     if (pPathObject->IsResizeProtect())
     {
         SetLastExceptionMsg(u"The object is held against being changed"_ustr);
-        return;
+        return nullptr;
     }
+
+    return pPathObject;
+}
+
+/*
+    Turns a polygon index and a point index into the index of the point across all polygons of
+    the path, which is how SdrPathObj numbers points. Returns false when the path has no such
+    point.
+*/
+static bool lcl_placeAmongAllPoints(const basegfx::B2DPolyPolygon& rPath, sal_Int32 nPolygon,
+                                    sal_Int32 nPoint, sal_uInt32& rPlace)
+{
+    if (nPolygon < 0 || nPoint < 0 || o3tl::make_unsigned(nPolygon) >= rPath.count())
+        return false;
+
+    if (o3tl::make_unsigned(nPoint) >= rPath.getB2DPolygon(nPolygon).count())
+        return false;
+
+    rPlace = nPoint;
+    for (sal_Int32 nBefore = 0; nBefore < nPolygon; ++nBefore)
+        rPlace += rPath.getB2DPolygon(nBefore).count();
+
+    // SdrPathObj numbers the points of a path with sal_uInt16.
+    return rPlace <= SAL_MAX_UINT16;
+}
+
+/// The continuity for a number: 1 is smooth, 2 is symmetric, and any other number is a corner.
+static basegfx::B2VectorContinuity lcl_continuityOf(sal_Int32 nContinuity)
+{
+    if (1 == nContinuity)
+        return basegfx::B2VectorContinuity::C1;
+    if (2 == nContinuity)
+        return basegfx::B2VectorContinuity::C2;
+    return basegfx::B2VectorContinuity::NONE;
+}
+
+/// Sets the path of the object as one undo step, with that description.
+static void lcl_changePath(SdrPathObj& rPathObject, TranslateId aDescription,
+                           const basegfx::B2DPolyPolygon& rPath)
+{
+    SdrModel& rModel(rPathObject.getSdrModelFromSdrObject());
+    rModel.BegUndo(SvxResId(aDescription).replaceFirst("%1", rPathObject.TakeObjNameSingul()));
+    rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoGeoObject(rPathObject));
+    rPathObject.SetPathPoly(rPath);
+    rModel.EndUndo();
+}
+
+/*
+    Moves points of the path of an object. The client sends only the points that moved, so a
+    large path is not sent in full, and points that were not touched cannot change.
+
+    Each change is "polygon,point,part,x,y,continuity" in twips, and changes are separated by
+    ";". The part is 0 for the point itself, 1 for its incoming weight and 2 for its outgoing
+    weight. The continuity is 0 for a corner, 1 for smooth and 2 for symmetric.
+*/
+void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId, const char* pChanges)
+{
+    comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectPoints");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    SdrPathObj* pPathObject = lcl_pathToChange(nObjectId);
+    if (!pPathObject)
+        return;
 
     // The changes arrive in twips and the model holds the path in its own unit.
     const double fToModel(o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::mm100));
@@ -6979,10 +7037,7 @@ void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId,
 
         // The client draws the curve at the point the way it says here, and that is the way the
         // model is made to hold it.
-        const basegfx::B2VectorContinuity eWanted(
-            1 == nContinuity ? basegfx::B2VectorContinuity::C1
-                             : (2 == nContinuity ? basegfx::B2VectorContinuity::C2
-                                                 : basegfx::B2VectorContinuity::NONE));
+        const basegfx::B2VectorContinuity eWanted(lcl_continuityOf(nContinuity));
 
         if (0 == nPart)
         {
@@ -7009,11 +7064,363 @@ void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId,
     if (!bMoved)
         return;
 
+    lcl_changePath(*pPathObject, STR_DragMethMove, aPath);
+}
+
+/*
+    Deletes one point of the path of an object. A polygon left with fewer than two points is
+    deleted too, and an object left with no polygon is deleted.
+*/
+void COKitDocumentImpl::deleteObjectPoint(unsigned long long nObjectId, int nPolygon, int nPoint)
+{
+    comphelper::ProfileZone aZone("COKitDocumentImpl::deleteObjectPoint");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    SdrPathObj* pPathObject = lcl_pathToChange(nObjectId);
+    sal_uInt32 nPlace = 0;
+    if (!pPathObject
+        || !lcl_placeAmongAllPoints(pPathObject->GetPathPoly(), nPolygon, nPoint, nPlace))
+        return;
+
+    o3tl::sorted_vector<sal_uInt16> aPoints;
+    aPoints.insert(static_cast<sal_uInt16>(nPlace));
+    sdr::PolyPolygonEditor aEditor(pPathObject->GetPathPoly());
+    if (!aEditor.DeletePoints(aPoints))
+        return;
+
+    if (aEditor.GetPolyPolygon().count())
+    {
+        lcl_changePath(*pPathObject, STR_EditDeletePoint, aEditor.GetPolyPolygon());
+        return;
+    }
+
+    SdrObjList* pList = pPathObject->getParentSdrObjListFromSdrObject();
+    if (!pList)
+        return;
+
+    // Unselect the object before removing it from the page.
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (SdrView* pView = pViewShell ? pViewShell->GetDrawView() : nullptr)
+        pView->UnmarkAllObj();
+
     SdrModel& rModel(pPathObject->getSdrModelFromSdrObject());
-    rModel.BegUndo(SvxResId(STR_DragMethMove));
-    rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoGeoObject(*pPathObject));
-    pPathObject->SetPathPoly(aPath);
+    rModel.BegUndo(SvxResId(STR_EditDelete).replaceFirst("%1", pPathObject->TakeObjNameSingul()));
+    rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoDeleteObject(*pPathObject));
+    pList->RemoveObject(pPathObject->GetOrdNum());
     rModel.EndUndo();
+}
+
+/*
+    Adds a point to the path of an object, on the edge nearest to the given place in twips. The
+    path keeps its shape: a curved edge is split there into two curves. If the nearest place is
+    an existing point, nothing is added.
+*/
+void COKitDocumentImpl::insertObjectPoint(unsigned long long nObjectId, int nX, int nY)
+{
+    comphelper::ProfileZone aZone("COKitDocumentImpl::insertObjectPoint");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    SdrPathObj* pPathObject = lcl_pathToChange(nObjectId);
+    if (!pPathObject || !pPathObject->GetPathPoly().count())
+        return;
+
+    // Convert the place from twips to the unit of the model.
+    const basegfx::B2DPoint aGiven(o3tl::convert(nX, o3tl::Length::twip, o3tl::Length::mm100),
+                                   o3tl::convert(nY, o3tl::Length::twip, o3tl::Length::mm100));
+
+    const basegfx::B2DPolyPolygon& rPath(pPathObject->GetPathPoly());
+    sal_uInt32 nPolygon = 0;
+    sal_uInt32 nEdge = 0;
+    double fCut = 0.0;
+    basegfx::utils::getSmallestDistancePointToPolyPolygon(rPath, aGiven, nPolygon, nEdge, fCut);
+    const basegfx::B2DPolygon& rPolygon(rPath.getB2DPolygon(nPolygon));
+    if (rPolygon.count() < 2 || fCut <= 0.0 || fCut >= 1.0)
+    {
+        SetLastExceptionMsg(u"The nearest place on the path is one of its points"_ustr);
+        return;
+    }
+
+    // Find the point at the cut, on the curve or on the line. A curve whose weights lie on the
+    // line between its ends is treated as that line, as the search for the cut treats it.
+    basegfx::B2DCubicBezier aEdge;
+    rPolygon.getBezierSegment(nEdge, aEdge);
+    aEdge.testAndSolveTrivialBezier();
+    const basegfx::B2DPoint aOnTheEdge(
+        aEdge.isBezier() ? aEdge.interpolatePoint(fCut)
+                         : basegfx::B2DPoint(basegfx::interpolate(aEdge.getStartPoint(),
+                                                                  aEdge.getEndPoint(), fCut)));
+    const Point aAt(basegfx::fround<tools::Long>(aOnTheEdge.getX()),
+                    basegfx::fround<tools::Long>(aOnTheEdge.getY()));
+
+    // The new point is rounded to whole model units, so a cut very close to an end of the edge
+    // can land on that end.
+    const Point aStart(basegfx::fround<tools::Long>(aEdge.getStartPoint().getX()),
+                       basegfx::fround<tools::Long>(aEdge.getStartPoint().getY()));
+    const Point aEnd(basegfx::fround<tools::Long>(aEdge.getEndPoint().getX()),
+                     basegfx::fround<tools::Long>(aEdge.getEndPoint().getY()));
+    if (aAt == aStart || aAt == aEnd)
+    {
+        SetLastExceptionMsg(u"The nearest place on the path is one of its points"_ustr);
+        return;
+    }
+
+    // Let the object compute the path with the new point, then put the old path back and set the
+    // new one as a change. That notifies the views and records an undo step.
+    const basegfx::B2DPolyPolygon aBefore(pPathObject->GetPathPoly());
+    pPathObject->NbcInsPoint(aAt, false);
+    const basegfx::B2DPolyPolygon aAfter(pPathObject->GetPathPoly());
+    pPathObject->NbcSetPathPoly(aBefore);
+    lcl_changePath(*pPathObject, STR_DragInsertPoint, aAfter);
+}
+
+/*
+    Sets the continuity at one point of the path of an object: 0 for a corner, 1 for smooth and
+    2 for symmetric. The weights of the point are moved to match.
+*/
+void COKitDocumentImpl::setObjectPointContinuity(unsigned long long nObjectId, int nPolygon,
+                                                 int nPoint, int nContinuity)
+{
+    comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectPointContinuity");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    SdrPathObj* pPathObject = lcl_pathToChange(nObjectId);
+    sal_uInt32 nPlace = 0;
+    if (!pPathObject
+        || !lcl_placeAmongAllPoints(pPathObject->GetPathPoly(), nPolygon, nPoint, nPlace))
+        return;
+
+    const basegfx::B2VectorContinuity eContinuity(lcl_continuityOf(nContinuity));
+
+    o3tl::sorted_vector<sal_uInt16> aPoints;
+    aPoints.insert(static_cast<sal_uInt16>(nPlace));
+    sdr::PolyPolygonEditor aEditor(pPathObject->GetPathPoly());
+    if (aEditor.SetPointsSmooth(eContinuity, aPoints))
+        lcl_changePath(*pPathObject, STR_EditSetPointsSmooth, aEditor.GetPolyPolygon());
+}
+
+/*
+    Makes the edge after one point of the path of an object a curve or a straight line. A new
+    curve looks like the line at first: its weights are on the line, at one third and at two
+    thirds of its length.
+*/
+void COKitDocumentImpl::setObjectSegmentCurved(unsigned long long nObjectId, int nPolygon,
+                                               int nPoint, bool bCurved)
+{
+    comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectSegmentCurved");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    SdrPathObj* pPathObject = lcl_pathToChange(nObjectId);
+    sal_uInt32 nPlace = 0;
+    if (!pPathObject
+        || !lcl_placeAmongAllPoints(pPathObject->GetPathPoly(), nPolygon, nPoint, nPlace))
+        return;
+
+    o3tl::sorted_vector<sal_uInt16> aPoints;
+    aPoints.insert(static_cast<sal_uInt16>(nPlace));
+    sdr::PolyPolygonEditor aEditor(pPathObject->GetPathPoly());
+    if (aEditor.SetSegmentsKind(bCurved ? SdrPathSegmentKind::Curve : SdrPathSegmentKind::Line,
+                                aPoints))
+        lcl_changePath(*pPathObject, STR_EditSetSegmentsKind, aEditor.GetPolyPolygon());
+}
+
+/*
+    Splits the path of an object at one of its points. A closed path opens there, and the point
+    becomes both of its ends. An open path becomes two objects that meet at the point, so the
+    point cannot be one of its ends. Only a path of one polygon can be split.
+*/
+void COKitDocumentImpl::splitObjectPath(unsigned long long nObjectId, int nPolygon, int nPoint)
+{
+    comphelper::ProfileZone aZone("COKitDocumentImpl::splitObjectPath");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    SdrPathObj* pPathObject = lcl_pathToChange(nObjectId);
+    sal_uInt32 nPlace = 0;
+    if (!pPathObject
+        || !lcl_placeAmongAllPoints(pPathObject->GetPathPoly(), nPolygon, nPoint, nPlace))
+        return;
+
+    const basegfx::B2DPolyPolygon& rPath(pPathObject->GetPathPoly());
+    const sal_uInt32 nCount(rPath.getB2DPolygon(0).count());
+    const bool bClosed(pPathObject->IsClosed());
+    if (rPath.count() != 1 || nCount < 3 || (!bClosed && (nPlace == 0 || nPlace + 1 >= nCount)))
+    {
+        SetLastExceptionMsg(u"The path is not split at that point"_ustr);
+        return;
+    }
+
+    SdrObjList* pList = pPathObject->getParentSdrObjListFromSdrObject();
+    if (!pList)
+        return;
+
+    SdrModel& rModel(pPathObject->getSdrModelFromSdrObject());
+    rModel.BegUndo(SvxResId(STR_EditRipUp).replaceFirst("%1", pPathObject->TakeObjNameSingul()));
+    rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoGeoObject(*pPathObject));
+
+    sal_uInt32 nNewStart = 0;
+    rtl::Reference<SdrPathObj> pSecond = pPathObject->RipPoint(nPlace, nNewStart);
+    if (pSecond)
+    {
+        pList->InsertObject(pSecond.get(), pPathObject->GetOrdNum() + 1);
+        rModel.AddUndo(SdrUndoFactory::CreateUndoNewObject(*pSecond));
+    }
+
+    rModel.EndUndo();
+}
+
+/*
+    Closes the path of an object by adding an edge from its last point to its first, or opens it
+    by removing that edge. A path can be closed only when one of its polygons has at least three
+    points. Any closed path can be opened.
+*/
+void COKitDocumentImpl::setObjectPathClosed(unsigned long long nObjectId, bool bClosed)
+{
+    comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectPathClosed");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    SdrPathObj* pPathObject = lcl_pathToChange(nObjectId);
+    if (!pPathObject || pPathObject->IsClosed() == bClosed)
+        return;
+
+    const basegfx::B2DPolyPolygon& rPath(pPathObject->GetPathPoly());
+    bool bLongEnough = !bClosed;
+    for (sal_uInt32 nPolygon = 0; nPolygon < rPath.count() && !bLongEnough; ++nPolygon)
+    {
+        // Points at the end that equal the first point do not count, because closing removes them.
+        const basegfx::B2DPolygon& rPolygon(rPath.getB2DPolygon(nPolygon));
+        sal_uInt32 nPoints(rPolygon.count());
+        while (nPoints > 1 && rPolygon.getB2DPoint(nPoints - 1) == rPolygon.getB2DPoint(0))
+            --nPoints;
+        bLongEnough = nPoints >= 3;
+    }
+
+    if (!bLongEnough)
+    {
+        SetLastExceptionMsg(u"The path has too few points to be closed"_ustr);
+        return;
+    }
+
+    SdrModel& rModel(pPathObject->getSdrModelFromSdrObject());
+    rModel.BegUndo(SvxResId(bClosed ? STR_EditClosePath : STR_EditOpenPath)
+                       .replaceFirst("%1", pPathObject->TakeObjNameSingul()));
+    rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoGeoObject(*pPathObject));
+    pPathObject->ToggleClosed();
+    rModel.EndUndo();
+}
+
+/*
+    Whether the point nPoint lies on the straight line from nBefore to nAfter. The point has no
+    weights, nBefore has no outgoing weight and nAfter has no incoming weight. The point lies
+    between the two others, at most one model unit away from the line. One unit is allowed
+    because a point added on a line is rounded to whole units.
+*/
+static bool lcl_liesOnTheLine(const basegfx::B2DPolygon& rPolygon, sal_uInt32 nBefore,
+                              sal_uInt32 nPoint, sal_uInt32 nAfter)
+{
+    if (rPolygon.isNextControlPointUsed(nBefore) || rPolygon.isPrevControlPointUsed(nPoint)
+        || rPolygon.isNextControlPointUsed(nPoint) || rPolygon.isPrevControlPointUsed(nAfter))
+        return false;
+
+    double fCut = 0.0;
+    const double fDistance(basegfx::utils::getSmallestDistancePointToEdge(
+        rPolygon.getB2DPoint(nBefore), rPolygon.getB2DPoint(nAfter), rPolygon.getB2DPoint(nPoint),
+        fCut));
+    return fCut > 0.0 && fCut < 1.0 && fDistance <= 1.0;
+}
+
+/*
+    Whether every point between nFrom and nTo lies on the straight line from nFrom to nTo. The
+    count wraps around the end of the polygon. If true, one line from nFrom to nTo can replace
+    those points without changing the shape.
+*/
+static bool lcl_runsStraight(const basegfx::B2DPolygon& rPolygon, sal_uInt32 nFrom, sal_uInt32 nTo)
+{
+    const sal_uInt32 nCount(rPolygon.count());
+    for (sal_uInt32 nPoint = (nFrom + 1) % nCount; nPoint != nTo; nPoint = (nPoint + 1) % nCount)
+    {
+        if (!lcl_liesOnTheLine(rPolygon, nFrom, nPoint, nTo))
+            return false;
+    }
+    return true;
+}
+
+/*
+    The polygon without the points that lie on a straight line between their neighbours. An open
+    polygon keeps its two ends, and a closed polygon keeps at least three points.
+
+    It walks the polygon once. A point is removed when it, and every point removed since the last
+    kept point, lie on the line from the last kept point to the next point. So each remaining line
+    stays close to all the points it replaces. A closed polygon keeps its first point during the
+    walk and tests it at the end, against the kept points on each side of it.
+*/
+static basegfx::B2DPolygon lcl_withoutPointsOnALine(const basegfx::B2DPolygon& rPolygon)
+{
+    const sal_uInt32 nCount(rPolygon.count());
+    const bool bClosed(rPolygon.isClosed());
+    const sal_uInt32 nLeast(bClosed ? 3 : 2);
+    if (nCount <= nLeast)
+        return rPolygon;
+
+    std::vector<sal_uInt32> aKept{ 0 };
+    sal_uInt32 nLeft = nCount;
+    const sal_uInt32 nEnd(bClosed ? nCount : nCount - 1);
+    for (sal_uInt32 nPoint = 1; nPoint < nEnd; ++nPoint)
+    {
+        if (nLeft > nLeast && lcl_runsStraight(rPolygon, aKept.back(), (nPoint + 1) % nCount))
+            --nLeft;
+        else
+            aKept.push_back(nPoint);
+    }
+    if (!bClosed)
+        aKept.push_back(nCount - 1);
+    else if (aKept.size() > nLeast && lcl_runsStraight(rPolygon, aKept.back(), aKept[1]))
+        aKept.erase(aKept.begin());
+
+    if (aKept.size() == nCount)
+        return rPolygon;
+
+    basegfx::B2DPolygon aPolygon;
+    for (const sal_uInt32 nPoint : aKept)
+        aPolygon.append(rPolygon, nPoint, 1);
+    aPolygon.setClosed(bClosed);
+    return aPolygon;
+}
+
+/*
+    Turns every curved edge of the path of an object that runs straight into a line. A curve
+    whose weights lie on the line between its ends runs straight. Other curves stay. With
+    bPointsOnALine, it then also deletes the points that lie on a straight line between their
+    neighbours.
+*/
+void COKitDocumentImpl::simplifyObjectPath(unsigned long long nObjectId, bool bPointsOnALine)
+{
+    comphelper::ProfileZone aZone("COKitDocumentImpl::simplifyObjectPath");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    SdrPathObj* pPathObject = lcl_pathToChange(nObjectId);
+    if (!pPathObject)
+        return;
+
+    const basegfx::B2DPolyPolygon aLines(
+        basegfx::utils::simplifyCurveSegments(pPathObject->GetPathPoly()));
+    basegfx::B2DPolyPolygon aSimpler;
+    for (const basegfx::B2DPolygon& rPolygon : aLines)
+        aSimpler.append(bPointsOnALine ? lcl_withoutPointsOnALine(rPolygon) : rPolygon);
+    if (aSimpler != pPathObject->GetPathPoly())
+        lcl_changePath(*pPathObject, STR_EditSimplifyPath, aSimpler);
 }
 
 /*

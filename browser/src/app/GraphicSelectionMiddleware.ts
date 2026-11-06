@@ -206,6 +206,67 @@ class GraphicSelection {
 		return false;
 	}
 
+	/// Whether one object is selected and its path can be edited point by point, so it needs no
+	/// conversion first.
+	public static isOnePath(): boolean {
+		return PolyPolygonEditor.editedPath(this.selectedObjectIDs) !== undefined;
+	}
+
+	/// What the toolbars were last told: whether the selection is one path, and whether that
+	/// path is closed.
+	private static onePathToldAs: boolean = false;
+	private static closedToldAs: boolean = false;
+
+	/// The command whose state is whether the path of the selected object is closed.
+	public static readonly closedPathCommand: string = 'closepath';
+
+	/// The command that turns every curved edge of the selected path that runs straight into a
+	/// line.
+	public static readonly simplifyCurvesCommand: string = 'simplifypathcurves';
+
+	/// The command that does the same as simplifyCurvesCommand, and also deletes the points that
+	/// lie on a straight line between their neighbours.
+	public static readonly simplifyAllCommand: string = 'simplifypathall';
+
+	/// Records which of the two buttons the Shape tab was built with: Edit Points when onePath is
+	/// true, and the convert button otherwise.
+	public static pathButtonsBuiltFor(onePath: boolean): void {
+		this.onePathToldAs = onePath;
+	}
+
+	/*
+		The Edit Points button and the convert button share one place on the Shape tab. Shows
+		Edit Points when the selection is one path, and the convert button otherwise. Also tells
+		whether the path is closed, as the state of a command.
+	*/
+	private static tellThePathButtons(): void {
+		const path = PolyPolygonEditor.editedPath(this.selectedObjectIDs);
+		const onePath = path !== undefined;
+		const notebookbar = app.map.uiManager?.notebookbar;
+		if (
+			onePath !== this.onePathToldAs &&
+			notebookbar &&
+			cool.VectorRenderingConfig.isEnabled()
+		) {
+			this.onePathToldAs = onePath;
+			const shown = onePath ? 'shape-edit-points' : 'shape-convert-editable';
+			// A button the integrator hid stays hidden.
+			if (app.map.uiManager.isButtonVisible(shown)) notebookbar.showItem(shown);
+			notebookbar.hideItem(
+				onePath ? 'shape-convert-editable' : 'shape-edit-points',
+			);
+		}
+
+		const closed = PolyPolygonEditor.isClosed(path);
+		if (closed !== this.closedToldAs) {
+			this.closedToldAs = closed;
+			app.map.fire('commandstatechanged', {
+				commandName: this.closedPathCommand,
+				state: closed ? 'true' : 'false',
+			});
+		}
+	}
+
 	/*
 		Tells the states this view gives itself, as the engine tells a state: to the client's
 		widgets, and to the application around it where there is one. Only a state that changed
@@ -222,6 +283,8 @@ class GraphicSelection {
 			)
 		)
 			return;
+
+		this.tellThePathButtons();
 
 		const states = Interaction.context().commandStates();
 		for (const commandName of Interaction.statesGivenHere) {
@@ -636,18 +699,18 @@ class GraphicSelection {
 		// and is taken here. Escape goes on to call the drag off, and the selection stays.
 		if (this.selectionSection?.isDragged()) return event.key !== 'Escape';
 
-		// Escape stops adding a point to tie a connector to, and the points stay shown.
-		if (event.key === 'Escape' && SelectionSection.stopAddingATiePoint())
+		// Escape stops adding a point, and the points stay shown.
+		if (event.key === 'Escape' && SelectionSection.stopAddingAPoint())
 			return true;
 
-		// Delete and Backspace take away the point to tie a connector to that the keyboard is on,
-		// and the object stays.
+		// Delete and Backspace delete the point the keyboard is on, a point to tie a connector to
+		// or a point of the path. The object stays.
 		if (
 			(event.key === 'Delete' || event.key === 'Backspace') &&
 			!event.ctrlKey &&
 			!event.altKey &&
 			!event.metaKey &&
-			this.selectionSection?.deleteTheTiePointByKey()
+			this.selectionSection?.deleteThePointByKey()
 		)
 			return true;
 
@@ -986,6 +1049,7 @@ class GraphicSelection {
 			RenderManager.drawnElsewhere([]);
 			this.dropThePlayer();
 			SelectionSection.hideTheTiePoints();
+			SelectionSection.hideThePathPoints();
 		}
 
 		if (wanted === null) return;
@@ -1009,6 +1073,8 @@ class GraphicSelection {
 		// Objects that came into the selection start with their points hidden.
 		if (!this.selectionSection.tiePointsAreShown())
 			SelectionSection.hideTheTiePoints();
+		if (!this.selectionSection.pathPointsAreShown())
+			SelectionSection.hideThePathPoints();
 	}
 
 	/*

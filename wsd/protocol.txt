@@ -843,6 +843,53 @@ setobjectpoints id=<id> changes=<changes> [sequence=<sequence>]
     so a point whose numbers had drifted a little off comes out lying on the line. A point named
     twice, or one the path does not have, is left out.
 
+deleteobjectpoint id=<id> polygon=<polygon> point=<point>
+
+    <id> is a drawing object, as for setobjectpoints. <polygon> and <point> are the index of a
+    polygon of its path and of a point in that polygon, as for setobjectpoints. Deletes that
+    point, as one undo step. A polygon left with fewer than two points is deleted too, and an
+    object left with no polygon is deleted.
+
+insertobjectpoint id=<id> x=<x> y=<y>
+
+    <id> is a drawing object, as for setobjectpoints. <x> and <y> are a place on the page, in
+    twips. Adds a point to the path of the object on the edge nearest to that place, as one undo
+    step. The path keeps its shape. If the nearest place is an existing point, nothing is added.
+
+setobjectpointcontinuity id=<id> polygon=<polygon> point=<point> continuity=<continuity>
+
+    <id>, <polygon> and <point> name a point, as for deleteobjectpoint. <continuity> is 0 for a
+    corner, 1 for smooth and 2 for symmetric. Sets the continuity at the point and moves its
+    weights to match, as one undo step.
+
+setobjectsegmentcurved id=<id> polygon=<polygon> point=<point> curved=<curved>
+
+    <id>, <polygon> and <point> name a point, as for deleteobjectpoint. <curved> is 'true' or
+    'false'. Makes the edge after the point a curve or a straight line, as one undo step. In a
+    closed polygon, the edge after the last point goes to the first. A new curve looks like the
+    line at first.
+
+splitobjectpath id=<id> polygon=<polygon> point=<point>
+
+    <id>, <polygon> and <point> name a point, as for deleteobjectpoint. Splits the path at the
+    point, as one undo step. A closed path opens there. An open path becomes two objects that
+    meet at the point, so the point cannot be one of its ends. Only a path of one polygon can be
+    split.
+
+setobjectpathclosed id=<id> closed=<closed>
+
+    <id> is a drawing object, as for setobjectpoints. <closed> is 'true' or 'false'. Closes the
+    path by adding an edge from its last point to its first, or opens it by removing that edge,
+    as one undo step. A path can be closed only when one of its polygons has at least three
+    points.
+
+simplifyobjectpath id=<id> points=<points>
+
+    <id> is a drawing object, as for setobjectpoints. <points> is 'true' or 'false'. Turns every
+    curved edge of the path that runs straight into a line, as one undo step. A curve runs
+    straight when its weights lie on the line between its ends. With 'true', the same step also
+    deletes the points that lie on a straight line between their neighbours.
+
 reportmousepointer wanted=<wanted>
 
     <wanted> is 'true' or 'false'. Says whether this view wants to be told the mouse pointer the
