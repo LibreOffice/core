@@ -8,7 +8,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { openFixture } from '../lib/file-dialog.js';
+import { copyFixture, openFixture } from '../lib/file-dialog.js';
 
 // Saving a coda-m document writes the file and must then refresh the app's
 // record of the file's date on disk. If that record is left stale, the next
@@ -77,16 +77,23 @@ async function save(): Promise<void> {
 
 describe('Saving a document more than once', () => {
 	before(function () {
-		// The stale-date defect is in the coda-m save path, and the alert it
-		// raised is read from the coda-m native driver's page source, so run
-		// this only there.
-		if (process.env.CODA_PLATFORM !== 'macos') {
+		// The stale-date defect was in the coda-m save path. The check reads
+		// the native driver's page source, where the coda-m driver reports an
+		// alert as <dialog> and coda-driver on coda-w a message box, so it
+		// holds for the coda-w save path as well.
+		if (!['macos', 'windows'].includes(process.env.CODA_PLATFORM ?? '')) {
 			this.skip();
 		}
 	});
 
 	it('does not report the file as changed by another application', async function () {
-		await openFixture(browser.webEngine, browser.native, 'simple.odt');
+		// A copy, because an earlier spec may have opened the fixture, and
+		// opening an open document gives no new window.
+		await openFixture(
+			browser.webEngine,
+			browser.native,
+			copyFixture('simple.odt'),
+		);
 		await enterEditMode();
 
 		await makeModified();

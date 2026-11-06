@@ -8,7 +8,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { openFixture } from '../lib/file-dialog.js';
+import { copyFixture, openFixture } from '../lib/file-dialog.js';
 
 // Two documents share one kit. Closing one of them must leave the other still
 // talking to the engine. This targets the coda-m close-notification wiring,
@@ -48,23 +48,27 @@ async function enterEditMode(): Promise<void> {
 
 describe('Closing one document keeps another responsive', () => {
 	before(function () {
-		// The shared-pipe defect is coda-m specific, and closing a document by
-		// posting BYE is the coda-m close path, so run this only there.
-		if (process.env.CODA_PLATFORM !== 'macos') {
+		// The test closes a document by posting BYE, which coda-m answers by
+		// closing the document's window and coda-w by closing its tab. The
+		// shared-pipe defect was coda-m specific, but a surviving document
+		// that stops hearing from the engine is the same failure on coda-w.
+		if (!['macos', 'windows'].includes(process.env.CODA_PLATFORM ?? '')) {
 			this.skip();
 		}
 	});
 
 	it('still marks the surviving document modified after an edit', async function () {
+		// Copies, because earlier specs may have opened these fixtures, and
+		// opening an open document gives no new window.
 		const handleToClose = await openFixture(
 			browser.webEngine,
 			browser.native,
-			'simple.odt',
+			copyFixture('simple.odt'),
 		);
 		const handleToKeep = await openFixture(
 			browser.webEngine,
 			browser.native,
-			'scrolling.odt',
+			copyFixture('scrolling.odt'),
 		);
 
 		// Put the surviving document into edit mode while both are still open,
