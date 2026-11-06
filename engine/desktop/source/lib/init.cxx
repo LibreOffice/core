@@ -9095,6 +9095,26 @@ static std::string getFontSubset (std::string_view aFontName)
     return aStream.str();
 }
 
+// Could be anonymous in principle, but for the unit testing purposes, we
+// declare it in init.hxx.
+OUString desktop::getStyleDisplayName(const uno::Reference<beans::XPropertySet>& xStyle,
+                                      const OUString& rName)
+{
+    if (!xStyle.is())
+        return rName;
+
+    // Some styles have no DisplayName, such as the cell styles of Writer, and reading a property
+    // that a style does not have throws UnknownPropertyException.
+    uno::Reference<beans::XPropertySetInfo> xInfo = xStyle->getPropertySetInfo();
+    if (!xInfo.is() || !xInfo->hasPropertyByName(u"DisplayName"_ustr))
+        return rName;
+
+    OUString aName;
+    if ((xStyle->getPropertyValue(u"DisplayName"_ustr) >>= aName) && !aName.isEmpty())
+        return aName;
+    return rName;
+}
+
 // Append one style to the command-values list as { text, id }, where text is the
 // localized display name (so the client toolbar/notebookbar can show it directly
 // without re-translating) and id is the programmatic name used to apply the style.
@@ -9106,13 +9126,7 @@ static void addStyleEntry(boost::property_tree::ptree& rChildren,
     try
     {
         uno::Reference<style::XStyle> xProperty(xStyleFamily->getStyleByName(rStyle));
-        OUString aName;
-        if (xProperty.is()
-            && (xProperty->getPropertyValue(u"DisplayName"_ustr) >>= aName)
-            && !aName.isEmpty())
-        {
-            aDisplayName = aName;
-        }
+        aDisplayName = desktop::getStyleDisplayName(xProperty, rStyle);
     }
     catch (const cpo::uno::Exception&)
     {

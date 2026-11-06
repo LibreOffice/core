@@ -44,6 +44,9 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/linguistic2/DictionaryList.hpp>
 #include <com/sun/star/linguistic2/DictionaryType.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <editeng/unolingu.hxx>
 #include <linguistic/misc.hxx>
 #include <com/sun/star/util/XCloseable.hpp>
@@ -223,6 +226,7 @@ public:
     void testGetStylesSpreadsheet();
     void testGetStylesPresentation();
     void testExternalLinksDisabledWithHeldBackStyleSheet();
+    void testGetStyleDisplayName();
     void testGetFonts();
     void testCreateView();
     void testGetPartPageRectangles();
@@ -362,6 +366,7 @@ public:
     CPPUNIT_TEST(testGetStylesSpreadsheet);
     CPPUNIT_TEST(testGetStylesPresentation);
     CPPUNIT_TEST(testExternalLinksDisabledWithHeldBackStyleSheet);
+    CPPUNIT_TEST(testGetStyleDisplayName);
     CPPUNIT_TEST(testGetFonts);
     CPPUNIT_TEST(testCreateView);
     CPPUNIT_TEST(testGetPartPageRectangles);
@@ -771,6 +776,54 @@ void DesktopKitTest::testGetStylesPresentation()
     CPPUNIT_ASSERT_EQUAL(std::string(".uno:StyleApply"), aCommandName);
     // No style family, and no page styles either: only the commands.
     CPPUNIT_ASSERT_EQUAL(std::string("Commands"), aLists);
+}
+
+void DesktopKitTest::testGetStyleDisplayName()
+{
+    COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
+    uno::Reference<style::XStyleFamiliesSupplier> xSupplier(pDocument->mxComponent,
+                                                            uno::UNO_QUERY_THROW);
+    uno::Reference<container::XNameAccess> xFamilies = xSupplier->getStyleFamilies();
+
+    // A paragraph style is listed under its DisplayName.
+    uno::Reference<container::XNameAccess> xParagraphStyles(
+        xFamilies->getByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xStandard(xParagraphStyles->getByName(u"Standard"_ustr),
+                                                  uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(u"Default Paragraph Style"_ustr,
+                         desktop::getStyleDisplayName(xStandard, u"Standard"_ustr));
+
+    // A table style added to the document is listed under its DisplayName. A cell style of
+    // Writer has no DisplayName and is listed under its own name. A new document lists no cell
+    // style, so the test adds the ones it checks.
+    uno::Reference<container::XNameAccess> xCellStyles(xFamilies->getByName(u"CellStyles"_ustr),
+                                                       uno::UNO_QUERY_THROW);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(pDocument->mxComponent,
+                                                        uno::UNO_QUERY_THROW);
+    uno::Reference<container::XNameAccess> xNewTableStyle(
+        xFactory->createInstance(u"com.sun.star.style.TableStyle"_ustr), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XNameContainer> xTableStyles(
+        xFamilies->getByName(u"TableStyles"_ustr), uno::UNO_QUERY_THROW);
+    xTableStyles->insertByName(u"Test Table Style"_ustr, uno::Any(xNewTableStyle));
+    uno::Reference<beans::XPropertySet> xNewTableStyleProps(xNewTableStyle, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(
+        u"Test Table Style"_ustr,
+        desktop::getStyleDisplayName(xNewTableStyleProps, u"Test Table Style"_ustr));
+
+    // The first-row cell of the table style is listed in the cell styles as "Test Table Style.1".
+    uno::Reference<beans::XPropertySet> xNewTableCell(
+        xCellStyles->getByName(u"Test Table Style.1"_ustr), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(!xNewTableCell->getPropertySetInfo()->hasPropertyByName(u"DisplayName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Test Table Style.1"_ustr,
+                         desktop::getStyleDisplayName(xNewTableCell, u"Test Table Style.1"_ustr));
+
+    uno::Reference<beans::XPropertySet> xNewCellStyle(
+        xFactory->createInstance(u"com.sun.star.style.CellStyle"_ustr), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XNameContainer> xCellStyleContainer(xCellStyles,
+                                                                  uno::UNO_QUERY_THROW);
+    xCellStyleContainer->insertByName(u"Test Cell Style"_ustr, uno::Any(xNewCellStyle));
+    CPPUNIT_ASSERT_EQUAL(u"Test Cell Style"_ustr,
+                         desktop::getStyleDisplayName(xNewCellStyle, u"Test Cell Style"_ustr));
 }
 
 void DesktopKitTest::testGetFonts()

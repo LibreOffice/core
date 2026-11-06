@@ -21,6 +21,7 @@
 #include <rtl/strbuf.hxx>
 #include <COKit/COKit.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <tools/gen.hxx>
 #include <sfx2/kit/helper.hxx>
@@ -397,6 +398,12 @@ namespace desktop {
     /// Public to be unit-test-able.
     DESKTOP_DLLPUBLIC bool isFontPresent(std::u16string_view rOriginalFont,
                                          const std::vector<OUString>& rUsedFonts);
+
+    /// The name of a style in the style list: its DisplayName, or rName when the style has no
+    /// DisplayName property or an empty one.
+    /// Public to be unit-test-able.
+    DESKTOP_DLLPUBLIC OUString getStyleDisplayName(
+        const cpo::uno::Reference<css::beans::XPropertySet>& xStyle, const OUString& rName);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
