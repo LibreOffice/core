@@ -74,10 +74,11 @@ class DiagramHelper_oox final : public svx::diagram::DiagramHelper_svx
 
     // Hands the fill, line and text attributes of xOldShape, and its text, to xNewShape. The
     // shape geometry is not changed; the text keeps its sizes, or takes the font the layout
-    // fitted for the node.
+    // fitted for the node. With bAlsoIntoEmpty false the text goes only into a new shape that
+    // has text of its own.
     void moveDiagramModelDataFromOldToNewXShape(
         const cpo::uno::Reference<css::drawing::XShape>& xOldShape,
-        const cpo::uno::Reference<css::drawing::XShape>& xNewShape);
+        const cpo::uno::Reference<css::drawing::XShape>& xNewShape, bool bAlsoIntoEmpty);
 
 protected:
     // access associated SdrObjGroup/XShape/RootShape

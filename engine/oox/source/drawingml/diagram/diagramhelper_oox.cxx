@@ -175,7 +175,7 @@ static float firstRunHeightOf(const uno::Reference<drawing::XShape>& xShape)
 
 void DiagramHelper_oox::moveDiagramModelDataFromOldToNewXShape(
     const uno::Reference<drawing::XShape>& xOldShape,
-    const uno::Reference<drawing::XShape>& xNewShape)
+    const uno::Reference<drawing::XShape>& xNewShape, bool bAlsoIntoEmpty)
 {
     SdrObject* pOldShape(SdrObject::getSdrObjectFromXShape(xOldShape));
     SdrObject* pNewShape(SdrObject::getSdrObjectFromXShape(xNewShape));
@@ -196,7 +196,9 @@ void DiagramHelper_oox::moveDiagramModelDataFromOldToNewXShape(
     // that its first run has that font. A node with text of its own keeps its sizes.
     OutlinerParaObject* pParaObject(pOldShape->GetOutlinerParaObject());
 
-    if (nullptr != pParaObject)
+    // a shape the layout gives no text shows none: one shape of the drawing can stand for a
+    // shape and the text node beside it, and the text belongs to the text node now
+    if (nullptr != pParaObject && (bAlsoIntoEmpty || pNewShape->HasText()))
     {
         std::optional<double> oFitted;
         if (mpDiagramPtr && mpDiagramPtr->getData())
@@ -456,7 +458,7 @@ void DiagramHelper_oox::reLayout()
     if (xOldBGShape && xNewBGShape)
     {
         // we have old and new BGShapes, copy necessary data
-        moveDiagramModelDataFromOldToNewXShape(xOldBGShape, xNewBGShape);
+        moveDiagramModelDataFromOldToNewXShape(xOldBGShape, xNewBGShape, false);
     }
 
     for (const auto& rNewShape : xNewXShapes)
@@ -482,7 +484,7 @@ void DiagramHelper_oox::reLayout()
                     if (rNewModelID == pOldShape->getDiagramDataModelID())
                     {
                         // we have old and new version of this shape, copy necessary data
-                        moveDiagramModelDataFromOldToNewXShape(rOldShape, rNewShape);
+                        moveDiagramModelDataFromOldToNewXShape(rOldShape, rNewShape, false);
 
                         // A name belongs to one shape alone, so it goes from the old version
                         // to the new one, and a new node made after a template takes none.
@@ -505,7 +507,7 @@ void DiagramHelper_oox::reLayout()
             if (nullptr != pOldShape)
             {
                 // take the look of the template, text included
-                moveDiagramModelDataFromOldToNewXShape(xNewShapeTemplate, xNewShape);
+                moveDiagramModelDataFromOldToNewXShape(xNewShapeTemplate, xNewShape, true);
 
                 // the text that came with the template gives way to the text of the new node
                 if (nullptr != pOldShape->GetOutlinerParaObject())

@@ -2270,6 +2270,21 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testRelayoutPlacesProcessNodesWhereTh
                       getShapeBoxByText(xLaidOut, rNode.first));
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testRelayoutShowsTheTextOfADrawnShapeOnce)
+{
+    // the drawing has one shape for the arrow and the hidden text node over it, with the
+    // children's text in it
+    createSdImpressDoc("pptx/smartart-drawing-shape-and-text-node.pptx");
+    const OUString aChildren(u"Twenty-one\nTwenty-two"_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1),
+                         countShapesByText(uno::Reference<drawing::XShape>(
+                                               getShapeFromPage(0, 0), uno::UNO_QUERY),
+                                           aChildren));
+
+    // laid out again the text node shows the text, the arrow none
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), countShapesByText(reLayoutDiagram(), aChildren));
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testAddedChildGetsTheSameConnectorLineAsItsSiblings)
 {
     createSdImpressDoc("pptx/smartart-hierarchy3-two-parents.pptx");
