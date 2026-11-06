@@ -268,9 +268,11 @@ SlideFragmentHandler::~SlideFragmentHandler()
         break;
 
     case PPT_TOKEN( pos ):
-        mpSlidePersistPtr->getCommentsList().cmLst.back().setPoint(
-            rAttribs.getStringDefaulted(XML_x),
-            rAttribs.getStringDefaulted(XML_y));
+        // The position belongs to the last comment, without a comment there is nothing to place
+        if (!mpSlidePersistPtr->getCommentsList().cmLst.empty())
+            mpSlidePersistPtr->getCommentsList().cmLst.back().setPoint(
+                rAttribs.getStringDefaulted(XML_x),
+                rAttribs.getStringDefaulted(XML_y));
         break;
 
     case PPT_TOKEN( cmAuthor ):
