@@ -704,6 +704,7 @@ COOL_JS_LST =\
 	src/canvas/sections/ShapeLockCalloutSection.tsx \
 	src/canvas/sections/CursorHandler.ts \
 	src/canvas/sections/TableInsertMarkerSection.ts \
+	src/canvas/sections/TableCornerResizeMarkerSection.ts \
 	src/canvas/sections/GenericButtonSection.ts \
 	src/canvas/sections/ChartContextButtonSection.ts \
 	src/canvas/sections/DiagramButtonSection.ts \

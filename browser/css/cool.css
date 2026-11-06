@@ -1965,6 +1965,18 @@ body.slideshow-presenting-in-window .jsdialog-window.modalpopup {
 	background: url('images/insert-plus-marker-hover.svg') no-repeat center center /20px;
 }
 
+.table-corner-resize-marker {
+	border-radius: var(--border-radius);
+	background-color: var(--color-insert-marker-background) !important;
+	box-shadow: 1px var(--color-box-shadow);
+	background: url('images/table-corner-resize-marker.svg') no-repeat center center /20px;
+}
+
+.table-corner-resize-marker.hovered {
+	background-color: var(--color-insert-marker-background-dark) !important;
+	background: url('images/table-corner-resize-marker-hover.svg') no-repeat center center /20px;
+}
+
 .general-select-theme {
 	border-radius: var(--border-radius);
 	background-color: var(--color-insert-marker-background) !important;

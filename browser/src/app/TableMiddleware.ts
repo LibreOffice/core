@@ -21,6 +21,7 @@ class TableMiddleware {
 	public tableSelectionColumnMarkers: Array<TableSelectMarkerSection> = [];
 	public tableSelectionRowMarkers: Array<TableSelectMarkerSection> = [];
 	public tableInsertMarkers: Array<TableInsertMarkerSection> = [];
+	public tableCornerResizeMarker: TableCornerResizeMarkerSection | null = null;
 	public resizeMarkerMaxApproximation = 10 * app.dpiScale; // in pixels
 
 	private tableAnchorSection: ShapeHandleAnchorSubSection | null = null;
@@ -147,6 +148,11 @@ class TableMiddleware {
 			);
 		}
 		this.tableInsertMarkers = [];
+
+		if (this.tableCornerResizeMarker) {
+			app.sectionContainer.removeSection(this.tableCornerResizeMarker.name);
+			this.tableCornerResizeMarker = null;
+		}
 
 		if (this.tableAnchorSection) {
 			app.sectionContainer.removeSection(this.tableAnchorSection.name);
@@ -531,6 +537,25 @@ class TableMiddleware {
 		this.tableInsertMarkers.push(insertRowMarkerSection);
 	}
 
+	/*
+		The button between the two insert markers, in the lower right corner. A table that is a
+		shape of its own, as in Impress, comes with its rectangle and can be resized as a whole.
+	*/
+	private addCornerResizeMarker() {
+		if (!this.currentTableData.rectangle) return;
+
+		const offset = this.addButtonOffset * app.dpiScale * app.pixelsToTwips;
+		const x = this.getTableRightX() * app.pixelsToTwips + offset;
+		const y = this.getTableBottomY() * app.pixelsToTwips + offset;
+
+		this.tableCornerResizeMarker = new TableCornerResizeMarkerSection(
+			new cool.SimplePoint(x, y),
+			this.addButtonWidth,
+			this.addButtonOffset,
+		);
+		app.sectionContainer.addSection(this.tableCornerResizeMarker);
+	}
+
 	private ensureDataIntegrity() {
 		// Core Impress sends the integer data in string type.
 		this.currentTableData.columns.tableOffset = parseInt(
@@ -610,6 +635,7 @@ class TableMiddleware {
 			this.addResizeMarkers();
 			this.addSelectionMarkers();
 			this.addInsertMarkers();
+			this.addCornerResizeMarker();
 		}
 	}
 }

@@ -277,6 +277,7 @@
 /// <reference path="../src/canvas/sections/CursorHeaderSection.ts" />
 /// <reference path="../src/canvas/sections/CursorHandler.ts" />
 /// <reference path="../src/canvas/sections/TableInsertMarkerSection.ts" />
+/// <reference path="../src/canvas/sections/TableCornerResizeMarkerSection.ts" />
 /// <reference path="../src/canvas/sections/GenericButtonSection.ts" />
 /// <reference path="../src/canvas/sections/ChartContextButtonSection.ts" />
 /// <reference path="../src/canvas/sections/DiagramButtonSection.ts" />

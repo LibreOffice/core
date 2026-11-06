@@ -314,4 +314,49 @@ describe(['tagdesktop'], 'Table operations', { testIsolation: false }, function(
 		cy.cGet('.table-row-resize-marker')
 			.should('have.length', 4);
 	});
+
+	it('Resize the table with the corner button', function() {
+		selectFullTable(this.win);
+
+		// The button sits in the lower right corner, between the two insert markers. Its
+		// place on screen is written in a layouting task, so idle before reading it.
+		cy.cGet('.table-corner-resize-marker').should('be.visible');
+		helper.processToIdle(this.win);
+
+		var sizeBefore;
+		cy.getFrameWindow().should(function(win) {
+			var data = win.app.activeDocument.tableMiddleware.currentTableData;
+			expect(data.columns).to.not.be.undefined;
+			sizeBefore = {
+				width: data.columns.right - data.columns.left,
+				height: data.rows.right - data.rows.left,
+			};
+		});
+
+		cy.cGet('.table-corner-resize-marker').then(function($button) {
+			var rect = $button[0].getBoundingClientRect();
+			var startX = rect.left + rect.width / 2;
+			var startY = rect.top + rect.height / 2;
+			var endX = startX + 80;
+			var endY = startY + 50;
+
+			cy.cGet('body').realMouseDown({ x: startX, y: startY });
+			cy.cGet('body').realMouseMove(startX + 40, startY + 25);
+			cy.cGet('body').realMouseMove(endX, endY);
+			cy.cGet('body').realMouseUp({ x: endX, y: endY });
+		});
+
+		// The table grows in both directions. The new size arrives with the next table
+		// selection message from core.
+		cy.getFrameWindow().should(function(win) {
+			var data = win.app.activeDocument.tableMiddleware.currentTableData;
+			expect(data.columns.right - data.columns.left).to.be.greaterThan(sizeBefore.width);
+			expect(data.rows.right - data.rows.left).to.be.greaterThan(sizeBefore.height);
+		});
+
+		// The rows and columns are the same ones, only wider and taller.
+		cy.cGet('.table-column-resize-marker').should('have.length', 3);
+		cy.cGet('.table-row-resize-marker').should('have.length', 3);
+		cy.cGet('.table-corner-resize-marker').should('have.length', 1);
+	});
 });
