@@ -775,16 +775,17 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     {
         PropertySet( xShape ).setAnyProperty( PROP_FrameIsAutomaticHeight, Any( maTypeModel.mbAutoHeight ) );
         PropertySet( xShape ).setAnyProperty( PROP_SizeType, Any( maTypeModel.mbAutoHeight ? SizeType::MIN : SizeType::FIX ) );
-        if( getTextBox()->borderDistanceSet )
+        const TextBox* pTextBox = getTextBox();
+        if( pTextBox && pTextBox->borderDistanceSet )
         {
-            PropertySet( xShape ).setAnyProperty( PROP_LeftBorderDistance, Any( sal_Int32( getTextBox()->borderDistanceLeft )));
-            PropertySet( xShape ).setAnyProperty( PROP_TopBorderDistance, Any( sal_Int32( getTextBox()->borderDistanceTop )));
-            PropertySet( xShape ).setAnyProperty( PROP_RightBorderDistance, Any( sal_Int32( getTextBox()->borderDistanceRight )));
-            PropertySet( xShape ).setAnyProperty( PROP_BottomBorderDistance, Any( sal_Int32( getTextBox()->borderDistanceBottom )));
+            PropertySet( xShape ).setAnyProperty( PROP_LeftBorderDistance, Any( sal_Int32( pTextBox->borderDistanceLeft )));
+            PropertySet( xShape ).setAnyProperty( PROP_TopBorderDistance, Any( sal_Int32( pTextBox->borderDistanceTop )));
+            PropertySet( xShape ).setAnyProperty( PROP_RightBorderDistance, Any( sal_Int32( pTextBox->borderDistanceRight )));
+            PropertySet( xShape ).setAnyProperty( PROP_BottomBorderDistance, Any( sal_Int32( pTextBox->borderDistanceBottom )));
         }
 
         sal_Int16 nWritingMode = text::WritingMode2::LR_TB;
-        if (getTextBox()->maLayoutFlow == "vertical" && maTypeModel.maLayoutFlowAlt.isEmpty())
+        if (pTextBox && pTextBox->maLayoutFlow == "vertical" && maTypeModel.maLayoutFlowAlt.isEmpty())
         {
             nWritingMode = text::WritingMode2::TB_RL;
         }
