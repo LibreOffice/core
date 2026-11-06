@@ -328,9 +328,8 @@ CPPU_DLLPUBLIC void uno_dumpEnvironmentByName(
     default environment gets returned (e.g. the "uno" or "gcc3" Environment).
 
     @param ppEnv      inout parameter; a given environment will be released
-    @param pTypeName  the optional type of the environment, falls back to "uno"
 */
-CPPU_DLLPUBLIC void uno_getCurrentEnvironment(uno_Environment ** ppEnv, rtl_uString * pTypeName)
+CPPU_DLLPUBLIC void uno_getCurrentEnvironment(uno_Environment ** ppEnv)
     SAL_THROW_EXTERN_C();
 
 /** Typedef for variable argument function.

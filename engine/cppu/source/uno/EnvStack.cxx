@@ -105,7 +105,7 @@ static uno_Environment * s_getCurrent()
 }
 
 
-extern "C" void uno_getCurrentEnvironment(uno_Environment ** ppEnv, rtl_uString * pTypeName) noexcept
+extern "C" void uno_getCurrentEnvironment(uno_Environment ** ppEnv) noexcept
 {
     if (*ppEnv)
     {
@@ -119,25 +119,9 @@ extern "C" void uno_getCurrentEnvironment(uno_Environment ** ppEnv, rtl_uString 
     if (pCurrEnv) // no environment means no purpose
         currPurpose = cppu::EnvDcp::getPurpose(pCurrEnv->pTypeName);
 
-    if (pTypeName && rtl_uString_getLength(pTypeName))
-    {
-        OUString envDcp = OUString::unacquired(&pTypeName) + currPurpose;
+    OUString envDcp = CPPU_CURRENT_LANGUAGE_BINDING_NAME + currPurpose;
 
-        uno_getEnvironment(ppEnv, envDcp.pData, nullptr);
-    }
-    else
-    {
-        if (pCurrEnv)
-        {
-            *ppEnv = pCurrEnv;
-            (*ppEnv)->acquire(*ppEnv);
-        }
-        else
-        {
-            OUString uno_envDcp(u"" UNO_LB_UNO ""_ustr);
-            uno_getEnvironment(ppEnv, uno_envDcp.pData, nullptr);
-        }
-    }
+    uno_getEnvironment(ppEnv, envDcp.pData, nullptr);
 }
 
 static OUString s_getPrefix(std::u16string_view str1, std::u16string_view str2)

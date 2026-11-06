@@ -45,11 +45,8 @@ class Environment
 
 public:
     /** Returns the current Environment.
-
-        @param typeName   the optional type of the Environment, falls back to "uno" in case being empty,
-                          respectively to current C++ Environment.
     */
-    inline static Environment getCurrent(rtl::OUString const & typeName = rtl::OUString(CPPU_CURRENT_LANGUAGE_BINDING_NAME));
+    inline static Environment getCurrent();
 
     /** Constructor: acquires given environment
 
@@ -235,12 +232,12 @@ inline int  Environment::isValid(rtl::OUString * pReason) const
     return uno_Environment_isValid(_pEnv, &pReason->pData);
 }
 
-inline Environment Environment::getCurrent(rtl::OUString const & typeName)
+inline Environment Environment::getCurrent()
 {
     Environment environment;
 
     uno_Environment * pEnv = NULL;
-    uno_getCurrentEnvironment(&pEnv, typeName.pData);
+    uno_getCurrentEnvironment(&pEnv);
     environment = pEnv;
     if (pEnv)
         pEnv->release(pEnv);
