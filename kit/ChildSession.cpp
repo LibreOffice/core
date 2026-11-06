@@ -3035,7 +3035,7 @@ std::string pickedFileName(const std::string& uploadName)
         return std::string();
 
     const std::string fileName = uploadName.substr(dash + 1);
-    if (fileName == "." || fileName == ".." || fileName.find('/') != std::string::npos)
+    if (!Util::isPlainFileName(fileName))
         return std::string();
     return fileName;
 }
@@ -3281,8 +3281,25 @@ bool ChildSession::insertFile(const StringVector& tokens)
             {
                 decodedName = std::move(name);
             }
-            url = writeFileToJail(FileUtil::createRandomTmpDir() + '/' + decodedName,
-                                  binaryData.data(), binaryData.size());
+
+            if (!Util::isPlainFileName(decodedName))
+            {
+                sendTextFrameAndLogError("error: cmd=insertfile kind=syntax");
+                return false;
+            }
+
+            const std::string directory = FileUtil::createRandomTmpDir();
+            const bool tmpDirCreationFailed = directory == FileUtil::getSysTempDirectoryPath();
+            const std::string path = directory + '/' + decodedName;
+            const bool pathNotInTmpDir = Poco::Path(path).parent().toString() !=
+                                         Poco::Path::forDirectory(directory).toString();
+            if (tmpDirCreationFailed || pathNotInTmpDir)
+            {
+                sendTextFrameAndLogError("error: cmd=insertfile kind=failure");
+                return false;
+            }
+
+            url = writeFileToJail(path, binaryData.data(), binaryData.size());
         }
 
         postInsertCommand(type, url, multimedia_width, multimedia_height);
