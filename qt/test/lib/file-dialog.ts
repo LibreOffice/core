@@ -8,8 +8,28 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { join } from 'path';
+import { copyFileSync } from 'fs';
+import { join, parse } from 'path';
 import * as webview from './webview.js';
+
+let fixtureCopies = 0;
+
+/**
+ * Copy a fixture to a new name in the test documents directory, and
+ * return that name.
+ *
+ * Opening a file that is already open activates its window or tab
+ * instead of opening it again, so a test that needs a document of its
+ * own opens a copy.
+ */
+export function copyFixture(fixture: string): string {
+	fixtureCopies++;
+	const { name, ext } = parse(fixture);
+	const copy = `${name}-copy-${process.pid}-${fixtureCopies}${ext}`;
+	const dir = process.env.CODA_TEST_DOCUMENTS_DIR!;
+	copyFileSync(join(dir, fixture), join(dir, copy));
+	return copy;
+}
 
 /**
  * Open a file from the test fixtures directory via the native file dialog.

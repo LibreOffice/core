@@ -18,7 +18,7 @@ import {
 	writeFileSync,
 } from 'fs';
 import { join } from 'path';
-import { openFixture } from '../lib/file-dialog.js';
+import { copyFixture, openFixture } from '../lib/file-dialog.js';
 import * as webview from '../lib/webview.js';
 
 // A document whose file cannot be written must never lose its edits. Saving it
@@ -54,14 +54,6 @@ function documentPath(name: string): string {
 function uniqueName(extension: string): string {
 	copyCount++;
 	return `save-failed-${process.pid}-${copyCount}.${extension}`;
-}
-
-// Opening a file that is already open activates its window instead of
-// creating a new one, so every case works on a copy of its own.
-function copyFixture(fixture: string): string {
-	const name = uniqueName('odt');
-	copyFileSync(documentPath(fixture), documentPath(name));
-	return name;
 }
 
 // A one-page PDF with one line of text; the cross-reference offsets are
