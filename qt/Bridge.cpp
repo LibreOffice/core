@@ -720,11 +720,30 @@ void Bridge::closeWaitsForSave(std::function<void(bool)> then)
 
 void Bridge::saveAndClose()
 {
-    evalJS(
+    static constexpr char script[] =
         "if (window.app && window.app.map "
         "    && typeof window.app.map._saveAndClose === 'function')"
         "  window.app.map._saveAndClose();"
-        "else window.postMobileMessage('CLOSE_WINDOW');");
+        "else window.postMobileMessage('CLOSE_WINDOW');";
+    if (_frame) {
+        // An editor frame that no longer shows CODA's page cannot answer (the script throws there,
+        // so its result is not true), and then its account window closes at once:
+        _frame->runJavaScript(
+            QString::fromLatin1(script) + QStringLiteral("true"),
+            [self = QPointer<Bridge>(this)](QVariant const & answered) {
+                if (self && !answered.toBool()) {
+                    self->_readyToClose = true;
+                    self->closeAccountWindow();
+                }
+            });
+    } else {
+        evalJS(script);
+    }
+}
+
+void Bridge::closeAccountWindow() {
+    QWidget * window = _webView->window();
+    QMetaObject::invokeMethod(window, [window]() { window->close(); }, Qt::QueuedConnection);
 }
 
 void Bridge::saveDocumentAs()
@@ -1515,6 +1534,9 @@ QVariant Bridge::cool(const QString& messageStr)
         if (WebView* owner = _owner.data())
             QMetaObject::invokeMethod(
                 owner, [owner]() { owner->requestClose(); }, Qt::QueuedConnection);
+        else if (_frame) {
+            closeAccountWindow();
+        }
     }
     else if (_requiresSaveAs && tokens.equals(0, "save"))
     {

@@ -38,6 +38,9 @@ class Bridge : public QObject
     QWebEngineView* _webView;
     // The frame of _webView's page that shows this document, when it is not the page itself.
     std::optional<QWebEngineFrame> _frame;
+
+    // The window of a bridge for an editor frame (with _frame set) is its account window:
+    void closeAccountWindow();
     int _closeNotificationPipeForForwardingThread[2];
     std::thread _app2js;
     bool _modified = false;

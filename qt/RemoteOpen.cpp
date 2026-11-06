@@ -18,8 +18,10 @@
 #include <qt/CoolLocalSchemeHandler.hpp>
 #include <qt/bridge.hpp>
 
+#include <QApplication>
 #include <QBuffer>
 #include <QByteArray>
+#include <QCloseEvent>
 #include <QDesktopServices>
 #include <QFile>
 #include <QIODevice>
@@ -224,6 +226,7 @@ public:
     std::optional<QByteArray> receiveMessage(const QUrl& origin, const QString& kind,
                                              const QByteArray& message);
     void checkFileInfo(QWebEngineUrlRequestJob* job, const QByteArray& argumentsJson);
+    bool readyToClose();
 
 protected:
     bool acceptNavigationRequest(const QUrl& url, NavigationType type, bool isMainFrame) override;
@@ -235,6 +238,7 @@ private:
     void putCodaPageIn(QWebEngineFrame& frame);
     std::optional<QByteArray> callBridge(const QString& method, const QString& argumentsJson);
     void sendFileInfo(QNetworkReply* reply, const QPointer<QWebEngineUrlRequestJob>& job);
+    void releaseParkedClose();
 
     QUrl _integratorOrigin; ///< The origin of the account address from the backstage view.
     QUrl _formUrl; ///< Where the kept form went, with the frame's id as the fragment.
@@ -247,6 +251,21 @@ private:
     coda::DocumentData _document; ///< The document the editor frame shows.
     std::unique_ptr<Bridge> _bridge; ///< Takes the frame's messages. It refers to _document.
     QNetworkAccessManager _network;
+    bool _closeWaitsForSave = false; ///< A close of the window waits for the save under way.
+};
+
+/// A cloud account window, which closes only after the editor frame's page saved its document:
+class CloudAccountWindow: public QMainWindow {
+public:
+    explicit CloudAccountWindow(QWidget * parent): QMainWindow(parent) {}
+
+    void setPage(CloudAccountPage * page) { _page = page; }
+
+protected:
+    void closeEvent(QCloseEvent * event) override;
+
+private:
+    QPointer<CloudAccountPage> _page;
 };
 
 /// The pages with an editor frame, by the session of the frame.
@@ -359,7 +378,54 @@ CloudAccountPage::CloudAccountPage(const QUrl& accountUrl, QWebEngineProfile* pr
 
 CloudAccountPage::~CloudAccountPage()
 {
+    releaseParkedClose();
     PagesBySession.erase(_session);
+}
+
+/// A close that waits for the save under way stops waiting (as when a document tab is detached, the
+/// callback goes with the bridge, so the wait cursor that the bridge set is restored here):
+void CloudAccountPage::releaseParkedClose() {
+    if (!_closeWaitsForSave) {
+        return;
+    }
+    _closeWaitsForSave = false;
+    _bridge->onSaveComplete(nullptr);
+    QApplication::restoreOverrideCursor();
+}
+
+/// Whether the window can close now, or else first asks the editor frame's page to save its
+/// document (and the window closes again once the page is done):
+bool CloudAccountPage::readyToClose() {
+    if (!_bridge || _bridge->isReadyToClose()) {
+        if (_bridge) {
+            _bridge->sendCollabBye();
+        }
+        return true;
+    }
+    if (_bridge->isSaveInFlight()) {
+        // The save that is under way decides, as it does for a document tab:
+        QPointer<QWidget> window = QWebEngineView::forPage(this)->window();
+        _closeWaitsForSave = true;
+        _bridge->closeWaitsForSave([window, page = QPointer<CloudAccountPage>(this)](bool saved) {
+            if (page) {
+                page->_closeWaitsForSave = false;
+            }
+            if (saved && window) {
+                window->close();
+            }
+        });
+    } else {
+        _bridge->saveAndClose();
+    }
+    return false;
+}
+
+void CloudAccountWindow::closeEvent(QCloseEvent * event) {
+    if (_page && !_page->readyToClose()) {
+        event->ignore();
+        return;
+    }
+    QMainWindow::closeEvent(event);
 }
 
 /// TODO: A sign-in through another site, such as an identity provider, is refused too.
@@ -594,6 +660,7 @@ void CloudAccountPage::putCodaPageIn(QWebEngineFrame& frame)
     remoteInfo->coolServer = _frameOrigin.toString();
     remoteInfo->coolPath = _formUrl.path();
 
+    releaseParkedClose();
     _bridge.reset();
     _document = {
         ._fileURL = Poco::URI(), ///< Set on REMOTEDOC_WRITE, once the page has the document.
@@ -646,15 +713,19 @@ void receiveEditorFrameMessage(QWebEngineUrlRequestJob* job, const QString& sess
     answer(job, reply.value_or(QByteArray()));
 }
 
-void openRemoteFile(const QString& serverUrl, QWidget* parent,
+void openRemoteFile(const QString& serverUrl, QWidget* /*parent*/,
                     QWebEngineProfile* /*profile*/, QWebEngineProfile* pickerProfile)
 {
-    auto* window = new QMainWindow(parent);
+    // The account window has no parent, so that it outlives the window it was opened from, and is
+    // always asked before it closes:
+    auto* window = new CloudAccountWindow(nullptr);
     window->setAttribute(Qt::WA_DeleteOnClose);
     window->resize(ACCOUNT_WINDOW_SIZE);
 
     auto* view = new QWebEngineView(window);
-    view->setPage(new CloudAccountPage(QUrl(serverUrl), pickerProfile, view));
+    auto * page = new CloudAccountPage(QUrl(serverUrl), pickerProfile, view);
+    view->setPage(page);
+    window->setPage(page);
     window->setCentralWidget(view);
     QObject::connect(view, &QWebEngineView::titleChanged, window, &QWidget::setWindowTitle);
 
