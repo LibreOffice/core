@@ -78,10 +78,6 @@
 	width: auto;
 }
 
-.main-nav:not(.readonly) #document-name-input {
-	display: none;
-}
-
 .main-nav.readonly.hasnotebookbar #document-titlebar {
 	width: auto;
 }
