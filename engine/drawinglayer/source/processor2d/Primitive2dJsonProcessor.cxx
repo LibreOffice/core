@@ -1175,6 +1175,9 @@ bool Primitive2dJsonProcessor::writeFormControl(const ControlPrimitive2D& rContr
         mrWriter.put("spin", true);
     if ((aValueOf(u"MultiLine"_ustr) >>= bFlag) && bFlag)
         mrWriter.put("multiLine", true);
+    // a list of which several entries can be selected at once
+    if ((aValueOf(u"MultiSelection"_ustr) >>= bFlag) && bFlag)
+        mrWriter.put("multiSelection", true);
     // 0 none, 1 3D, 2 flat
     sal_Int16 nBorder(1);
     if ((aValueOf(u"Border"_ustr) >>= nBorder) && nBorder == 0)

@@ -31,6 +31,7 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <com/sun/star/awt/XCheckBox.hpp>
 #include <com/sun/star/awt/XRadioButton.hpp>
+#include <com/sun/star/awt/XListBox.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <comphelper/OAccessible.hxx>
@@ -8020,7 +8021,10 @@ void COKitDocumentImpl::formControlAction(unsigned long long nObjectId, const ch
     SetLastExceptionMsg();
 
     if (SfxViewShell::IsCurrentKitViewReadOnly())
+    {
+        SAL_WARN("kit", "formControlAction: the view is read-only");
         return;
+    }
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
     SdrView* pView = pViewShell ? pViewShell->GetDrawView() : nullptr;
@@ -8029,6 +8033,7 @@ void COKitDocumentImpl::formControlAction(unsigned long long nObjectId, const ch
 
     if (!pPage)
     {
+        SAL_WARN("kit", "formControlAction: the view shows no page");
         SetLastExceptionMsg(u"The view shows no page with a form control"_ustr);
         return;
     }
@@ -8036,6 +8041,7 @@ void COKitDocumentImpl::formControlAction(unsigned long long nObjectId, const ch
     // in design mode a form control is an object to edit, not a control to use
     if (pView->IsDesignMode())
     {
+        SAL_WARN("kit", "formControlAction: the view is in design mode");
         SetLastExceptionMsg(u"The form controls of the view are in design mode"_ustr);
         return;
     }
@@ -8044,6 +8050,7 @@ void COKitDocumentImpl::formControlAction(unsigned long long nObjectId, const ch
         = dynamic_cast<const SdrUnoObj*>(pPage->FindObjectByUniqueID(nObjectId));
     if (!pUnoObject)
     {
+        SAL_WARN("kit", "formControlAction: no form control " << nObjectId << " on the page");
         SetLastExceptionMsg(u"No form control of that id is on the page"_ustr);
         return;
     }
@@ -8108,6 +8115,34 @@ void COKitDocumentImpl::formControlAction(unsigned long long nObjectId, const ch
                 xText->setText(OUString::fromUtf8(aValue));
             else
                 SetLastExceptionMsg(u"The control holds no text"_ustr);
+        }
+        else if (aAction == "select")
+        {
+            // the places of the entries the list is to have selected, separated by commas; the
+            // others are no longer selected
+            cpo::uno::Reference<css::awt::XListBox> xList(xPeer, cpo::uno::UNO_QUERY);
+            if (xList.is())
+            {
+                std::vector<sal_Int16> aWanted;
+                for (sal_Int32 nIndex = 0; nIndex >= 0;)
+                {
+                    const std::string_view aPlace(o3tl::getToken(aValue, 0, ',', nIndex));
+                    if (!aPlace.empty())
+                        aWanted.push_back(o3tl::toInt32(aPlace));
+                }
+
+                std::vector<sal_Int16> aDropped;
+                for (sal_Int16 nPlace : xList->getSelectedItemsPos())
+                    if (std::find(aWanted.begin(), aWanted.end(), nPlace) == aWanted.end())
+                        aDropped.push_back(nPlace);
+
+                if (!aDropped.empty())
+                    xList->selectItemsPos(comphelper::containerToSequence(aDropped), false);
+                if (!aWanted.empty())
+                    xList->selectItemsPos(comphelper::containerToSequence(aWanted), true);
+            }
+            else
+                SetLastExceptionMsg(u"The control is no list"_ustr);
         }
         else if (aAction == "check")
         {

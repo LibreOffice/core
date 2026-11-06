@@ -210,7 +210,13 @@ namespace cool {
         case 'dateField':
         case 'timeField':
         case 'patternField':
+        case 'comboBox':
           layer._makeTypable(id, element, primitive);
+          break;
+        case 'listBox':
+          if (primitive.dropdown)
+            layer._makeDropDownList(id, element, primitive);
+          else layer._makeList(id, element, primitive);
           break;
       }
 
@@ -307,6 +313,142 @@ namespace cool {
       });
       for (const type of ['keypress', 'keyup', 'input'])
         input.addEventListener(type, (event: Event) => event.stopPropagation());
+
+      // a combo box offers its entries in a list under the field, which its arrow opens
+      if (primitive.kind !== 'comboBox' || !primitive.items?.length) return;
+      const arrow = input.nextElementSibling as HTMLElement | null;
+      if (!arrow) return;
+      const entries = primitive.items;
+      let list: HTMLElement | null = null;
+      const close = () => {
+        list?.remove();
+        list = null;
+        element.style.zIndex = '';
+        window.removeEventListener('pointerdown', closeOutside, true);
+        window.removeEventListener('keydown', closeByEscape, true);
+      };
+      const closeOutside = (event: Event) => {
+        if (!element.contains(event.target as Node)) close();
+      };
+      // the keyboard need not be in the field while the list is open
+      const closeByEscape = (event: KeyboardEvent) => {
+        if (event.key !== 'Escape') return;
+        event.stopPropagation();
+        close();
+      };
+      arrow.style.cursor = 'pointer';
+      arrow.addEventListener('click', () => {
+        if (input.disabled) return;
+        if (list) {
+          close();
+          return;
+        }
+        list = (
+          <div
+            class="jsdialog ui-listbox"
+            style={{
+              position: 'absolute',
+              left: '0',
+              top: '100%',
+              width: '100%',
+              height: 'auto',
+              maxHeight: 'none',
+              display: 'block',
+              boxSizing: 'border-box',
+              padding: '0',
+              border: '1px solid var(--color-border-input-dark)',
+              backgroundColor: 'var(--color-background-lighter)',
+            }}
+          >
+            {entries.map((entry: string) => (
+              <div
+                style={{ padding: '0 4px', cursor: 'pointer' }}
+                onClick={() => {
+                  input.value = entry;
+                  close();
+                  VectorFormControlLayer._send(id, 'text', entry);
+                  app.map.focus();
+                }}
+              >
+                {entry}
+              </div>
+            ))}
+          </div>
+        );
+        // the open list lies over the controls below it
+        element.style.zIndex = '1';
+        element.appendChild(list);
+        window.addEventListener('pointerdown', closeOutside, true);
+        window.addEventListener('keydown', closeByEscape, true);
+      });
+    }
+
+    /*
+      A list that drops down: a list of the browser's own lies over the drawn field, unseen, so
+      a click on the field opens it, and the entry chosen there is selected.
+    */
+    private static _makeDropDownList(
+      id: number,
+      element: HTMLElement,
+      primitive: FormControlPrimitive,
+    ): void {
+      const chosen = (primitive.selected ?? [])[0] ?? -1;
+      const list = (
+        <select
+          class="vector-form-field"
+          style={{
+            position: 'absolute',
+            left: '0',
+            top: '0',
+            width: '100%',
+            height: '100%',
+            opacity: '0',
+            cursor: 'pointer',
+          }}
+        >
+          {(primitive.items ?? []).map((item: string, at: number) => (
+            <option value={String(at)}>{item}</option>
+          ))}
+        </select>
+      ) as HTMLSelectElement;
+      list.selectedIndex = chosen;
+      if (primitive.disabled) list.disabled = true;
+      list.addEventListener('change', () => {
+        VectorFormControlLayer._send(id, 'select', String(list.selectedIndex));
+        app.map.focus();
+      });
+      list.addEventListener('keydown', (event: Event) =>
+        event.stopPropagation(),
+      );
+      element.appendChild(list);
+    }
+
+    /*
+      A list that shows its entries: a click selects the entry alone; with Ctrl, in a list that
+      takes several, the entry joins the selection or leaves it.
+    */
+    private static _makeList(
+      id: number,
+      element: HTMLElement,
+      primitive: FormControlPrimitive,
+    ): void {
+      if (primitive.disabled) return;
+      const selected = primitive.selected ?? [];
+      element
+        .querySelectorAll<HTMLElement>('.ui-listbox > div')
+        .forEach((entry: HTMLElement, at: number) => {
+          entry.style.cursor = 'pointer';
+          entry.addEventListener('click', (event: MouseEvent) => {
+            const toggling =
+              primitive.multiSelection && (event.ctrlKey || event.metaKey);
+            const wanted = !toggling
+              ? [at]
+              : selected.includes(at)
+                ? selected.filter((place: number) => place !== at)
+                : selected.concat([at]);
+            VectorFormControlLayer._send(id, 'select', wanted.join(','));
+          });
+        });
     }
 
     private static _send(id: number, action: string, value: string): void {

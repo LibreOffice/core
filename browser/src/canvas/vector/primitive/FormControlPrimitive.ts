@@ -61,6 +61,8 @@ namespace cool {
 		/// A field with buttons that step its value.
 		spin?: boolean;
 		multiLine?: boolean;
+		/// A list of which several entries can be selected at once.
+		multiSelection?: boolean;
 		/// 0 for a control without a border. Absent for one with a border.
 		border?: number;
 		/// The entries of a list or a combo box, and which of them are selected.
