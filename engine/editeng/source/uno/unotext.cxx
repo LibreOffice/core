@@ -1306,28 +1306,37 @@ void SvxUnoTextRangeBase::_setPropertyToDefault(const OUString& PropertyName, sa
     throw beans::UnknownPropertyException(PropertyName);
 }
 
+namespace
+{
+void lcl_collectDefaultProperty(SvxTextForwarder* pForwarder,
+                               const SfxItemPropertyMapEntry* pMap, sal_Int32 nPara,
+                               SfxItemSet& rSet)
+{
+    if (pMap->nWID == WID_FONTDESC)
+    {
+        SvxUnoFontDescriptor::setPropertyToDefault(rSet);
+    }
+    else if (pMap->nWID == WID_NUMBERINGSTARTVALUE)
+    {
+        pForwarder->SetNumberingStartValue(nPara, -1);
+    }
+    else if (pMap->nWID == WID_PARAISNUMBERINGRESTART)
+    {
+        pForwarder->SetParaIsNumberingRestart(nPara, false);
+    }
+    else
+    {
+        rSet.InvalidateItem(pMap->nWID);
+    }
+}
+}
+
 void SvxUnoTextRangeBase::_setPropertyToDefault(SvxTextForwarder* pForwarder, const SfxItemPropertyMapEntry* pMap, sal_Int32 nPara )
 {
     do
     {
         SfxItemSet aSet(*pForwarder->GetPool());
-
-        if( pMap->nWID == WID_FONTDESC )
-        {
-            SvxUnoFontDescriptor::setPropertyToDefault( aSet );
-        }
-        else if( pMap->nWID == WID_NUMBERINGSTARTVALUE )
-        {
-            pForwarder->SetNumberingStartValue(maSelection.start.nPara, -1);
-        }
-        else if( pMap->nWID == WID_PARAISNUMBERINGRESTART )
-        {
-            pForwarder->SetParaIsNumberingRestart(maSelection.start.nPara, false);
-        }
-        else
-        {
-            aSet.InvalidateItem( pMap->nWID );
-        }
+        lcl_collectDefaultProperty(pForwarder, pMap, maSelection.start.nPara, aSet);
 
         if(nPara != -1)
             pForwarder->SetParaAttribs( nPara, aSet );
@@ -1401,12 +1410,21 @@ void SvxUnoTextRangeBase::setAllPropertiesToDefault()
 
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : nullptr;
 
-    if( pForwarder )
+    if (pForwarder && !mpPropSet->getPropertyMap().getPropertyEntries().empty())
     {
-        for (const SfxItemPropertyMapEntry* entry : mpPropSet->getPropertyMap().getPropertyEntries())
+        const ESelection aSelection = GetSelection();
+        SfxItemSet aSet(*pForwarder->GetPool());
+        for (const SfxItemPropertyMapEntry* pEntry : mpPropSet->getPropertyMap().getPropertyEntries())
+            lcl_collectDefaultProperty(pForwarder, pEntry, aSelection.start.nPara, aSet);
+
+        // Several properties share an item, and FontDescriptor covers multiple items.
+        // Reset each collected character item once, retaining paragraph character defaults.
+        for (sal_uInt16 nWhich = EE_CHAR_START; nWhich <= EE_CHAR_END; ++nWhich)
         {
-            _setPropertyToDefault( pForwarder, entry, -1 );
+            if (aSet.GetItemState(nWhich, false) == SfxItemState::INVALID)
+                pForwarder->RemoveAttribs(aSelection, nWhich);
         }
+        GetEditSource()->UpdateData();
     }
 }
 

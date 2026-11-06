@@ -37,6 +37,8 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/unofield.hxx>
 #include <editeng/unofored.hxx>
+#include <editeng/unoforou.hxx>
+#include <editeng/unotext.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/section.hxx>
@@ -132,6 +134,7 @@ public:
     void testHyperlinkSpanKeptOnClearFormatting();
     /// The text forwarder removes one attribute from a selection, part of a span included.
     void testForwarderRemovesOneAttribute();
+    void testResetAllPropertiesBatchesItems();
 
     /// A hyperlink span wraps like ordinary text, a legacy wrap span moves to the next line whole.
     void testHyperlinkSpanNoWrapInside();
@@ -270,6 +273,7 @@ public:
     CPPUNIT_TEST(testHyperlinkInsertAsSpan);
     CPPUNIT_TEST(testHyperlinkSpanKeptOnClearFormatting);
     CPPUNIT_TEST(testForwarderRemovesOneAttribute);
+    CPPUNIT_TEST(testResetAllPropertiesBatchesItems);
     CPPUNIT_TEST(testHyperlinkSpanNoWrapInside);
     CPPUNIT_TEST(testHyperlinkSpanLegacyCellBreak);
     CPPUNIT_TEST(testHyperlinkSpanLegacyLineEndsAfterLink);
@@ -915,6 +919,95 @@ void Test::testForwarderRemovesOneAttribute()
             bHasWeight = true;
     CPPUNIT_ASSERT(!bHasWeight);
     CPPUNIT_ASSERT_EQUAL(u"Hello World"_ustr, aEditEngine.GetText(0));
+}
+
+void Test::testResetAllPropertiesBatchesItems()
+{
+    EditEngine aEngine(mpItemPool.get());
+    aEngine.SetText(u"Hello World"_ustr);
+    SfxItemSet aParagraph(aEngine.GetEmptyItemSet());
+    aParagraph.Put(SvxWeightItem(WEIGHT_LIGHT, EE_CHAR_WEIGHT));
+    aParagraph.Put(SvxAdjustItem(SvxAdjust::Right, EE_PARA_JUST));
+    aEngine.SetParaAttribs(0, aParagraph);
+    aEngine.SetNumberingStartValue(0, 3);
+    aEngine.SetNumberingRestart(0, true);
+    SfxItemSet aDirect(aEngine.GetEmptyItemSet());
+    aDirect.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT));
+    aDirect.Put(SvxPostureItem(ITALIC_NORMAL, EE_CHAR_ITALIC));
+    aEngine.QuickSetAttribs(aDirect, ESelection(0, 0, 0, 11));
+    SfxItemSet aLink(aEngine.GetEmptyItemSet());
+    aLink.Put(SvxFieldItem(SvxURLField(u"https://example.com/"_ustr, u"World"_ustr,
+                                     SvxURLFormat::Repr), EE_CHAR_URL));
+    aEngine.QuickSetAttribs(aLink, ESelection(0, 6, 0, 11));
+
+    SvxEditEngineForwarder aForwarder(aEngine);
+    sal_Int32 nUpdates = 0;
+    class Source final : public SvxEditSource
+    {
+        SvxTextForwarder& mrForwarder;
+        sal_Int32& mrUpdates;
+
+    public:
+        Source(SvxTextForwarder& rForwarder, sal_Int32& rUpdates)
+            : mrForwarder(rForwarder)
+            , mrUpdates(rUpdates)
+        {
+        }
+        std::unique_ptr<SvxEditSource> Clone() const override
+        {
+            return std::make_unique<Source>(mrForwarder, mrUpdates);
+        }
+        SvxTextForwarder* GetTextForwarder() override { return &mrForwarder; }
+        void UpdateData() override { ++mrUpdates; }
+    } aSource(aForwarder, nUpdates);
+    rtl::Reference<SvxUnoText> xText(new SvxUnoText(
+        &aSource, ImplGetSvxUnoOutlinerTextCursorSvxPropertySet(), {}));
+    rtl::Reference<SvxUnoTextRange> xRange(new SvxUnoTextRange(*xText));
+    xRange->SetSelection(ESelection(0, 6, 0, 11));
+    aEngine.EnableUndo(true);
+    aEngine.GetUndoManager().Clear();
+    nUpdates = 0;
+
+    xRange->setAllPropertiesToDefault();
+
+    // Aliases of one item must not create more reset actions than the item range allows.
+    const size_t nActions = aEngine.GetUndoManager().GetUndoActionCount();
+    CPPUNIT_ASSERT_MESSAGE("reset actions: " + std::to_string(nActions)
+                               + ", model updates: " + std::to_string(nUpdates),
+                           nActions <= EE_CHAR_END - EE_CHAR_START + 3);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nUpdates);
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_LIGHT, aEngine.GetParaAttribs(0).Get(EE_CHAR_WEIGHT).GetWeight());
+    CPPUNIT_ASSERT_EQUAL(SvxAdjust::Right, aEngine.GetParaAttribs(0).Get(EE_PARA_JUST).GetAdjust());
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD,
+                         aForwarder.GetAttribs(ESelection(0, 0, 0, 5)).Get(EE_CHAR_WEIGHT).GetWeight());
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_LIGHT,
+                         aForwarder.GetAttribs(ESelection(0, 6, 0, 11)).Get(EE_CHAR_WEIGHT).GetWeight());
+    CPPUNIT_ASSERT_EQUAL(ITALIC_NONE,
+                         aForwarder.GetAttribs(ESelection(0, 6, 0, 11)).Get(EE_CHAR_ITALIC).GetPosture());
+    // The plain EditEngine forwarder does not implement numbering resets.
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(3), aEngine.GetNumberingStartValue(0));
+    CPPUNIT_ASSERT(aEngine.IsNumberingRestart(0));
+    const auto aFields = aEngine.GetFieldInfo(0);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aFields.size());
+    const auto* pURL = dynamic_cast<const SvxURLField*>(aFields[0].pFieldItem->GetField());
+    CPPUNIT_ASSERT(pURL);
+    CPPUNIT_ASSERT_EQUAL(u"https://example.com/"_ustr, pURL->GetURL());
+    CPPUNIT_ASSERT_EQUAL(u"Hello World"_ustr, aEngine.GetText(0));
+
+    // The Outliner forwarder does implement the special numbering properties.
+    Outliner aOutliner(mpItemPool.get(), OutlinerMode::OutlineObject);
+    aOutliner.SetText(u"Hello World"_ustr, 0);
+    aOutliner.SetNumberingStartValue(0, 3);
+    aOutliner.SetParaIsNumberingRestart(0, true);
+    SvxOutlinerForwarder aOutlineForwarder(aOutliner, false);
+    Source aOutlineSource(aOutlineForwarder, nUpdates);
+    rtl::Reference<SvxUnoText> xOutlineText(new SvxUnoText(
+        &aOutlineSource, ImplGetSvxUnoOutlinerTextCursorSvxPropertySet(), {}));
+    nUpdates = 0;
+    xOutlineText->setAllPropertiesToDefault();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nUpdates);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(-1), aOutliner.GetNumberingStartValue(0));
+    CPPUNIT_ASSERT(!aOutliner.IsParaIsNumberingRestart(0));
 }
 
 void Test::testHyperlinkSpanKeptOnClearFormatting()
