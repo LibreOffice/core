@@ -288,7 +288,8 @@ static bool isSPRMChildrenExpected(Id nId)
 
 /// Does the clone / deduplication of a single sprm.
 static void cloneAndDeduplicateSprm(std::pair<Id, RTFValue::Pointer_t> const& rSprm, RTFSprms& ret,
-                                    Id nStyleType, RTFSprms* pDirect = nullptr)
+                                    Id nStyleType, RTFSprms* pDirect = nullptr,
+                                    bool bKeepEqual = false)
 {
     RTFValue::Pointer_t const pValue(ret.find(rSprm.first));
     if (pValue)
@@ -297,7 +298,7 @@ static void cloneAndDeduplicateSprm(std::pair<Id, RTFValue::Pointer_t> const& rS
         {
             //this removes properties that are equal at the style and at the sprm
             //don't do that for paragraph styles
-            if (nStyleType == NS_ooxml::LN_Value_ST_StyleType_character)
+            if (nStyleType == NS_ooxml::LN_Value_ST_StyleType_character && !bKeepEqual)
             {
                 if (!isSPRMDeduplicateDenylist(rSprm.first, pDirect))
                 {
@@ -308,9 +309,11 @@ static void cloneAndDeduplicateSprm(std::pair<Id, RTFValue::Pointer_t> const& rS
         else if (!rSprm.second->getSprms().empty() || !rSprm.second->getAttributes().empty())
         {
             RTFSprms const sprms(pValue->getSprms().cloneAndDeduplicate(
-                rSprm.second->getSprms(), nStyleType, /*bImplicitPPr =*/false, pDirect));
+                rSprm.second->getSprms(), nStyleType, /*bImplicitPPr =*/false, pDirect,
+                bKeepEqual));
             RTFSprms const attributes(pValue->getAttributes().cloneAndDeduplicate(
-                rSprm.second->getAttributes(), nStyleType, /*bImplicitPPr =*/false, pDirect));
+                rSprm.second->getAttributes(), nStyleType, /*bImplicitPPr =*/false, pDirect,
+                bKeepEqual));
             // Don't copy the sprm in case we expect it to have children but it doesn't have some.
             if (!isSPRMChildrenExpected(rSprm.first) || !sprms.empty() || !attributes.empty())
                 ret.set(rSprm.first,
@@ -420,7 +423,8 @@ void RTFSprms::duplicateList(const RTFValue::Pointer_t& pAbstract)
 }
 
 RTFSprms RTFSprms::cloneAndDeduplicate(RTFSprms& rReference, Id const nStyleType,
-                                       bool const bImplicitPPr, RTFSprms* pDirect) const
+                                       bool const bImplicitPPr, RTFSprms* pDirect,
+                                       bool const bKeepEqual) const
 {
     RTFSprms ret(*this);
     ret.ensureCopyBeforeWrite();
@@ -436,10 +440,10 @@ RTFSprms RTFSprms::cloneAndDeduplicate(RTFSprms& rReference, Id const nStyleType
         if (bImplicitPPr && rSprm.first == NS_ooxml::LN_CT_Style_pPr)
         {
             for (const auto& i : rSprm.second->getSprms())
-                cloneAndDeduplicateSprm(i, ret, nStyleType, pDirect);
+                cloneAndDeduplicateSprm(i, ret, nStyleType, pDirect, bKeepEqual);
         }
         else
-            cloneAndDeduplicateSprm(rSprm, ret, nStyleType, pDirect);
+            cloneAndDeduplicateSprm(rSprm, ret, nStyleType, pDirect, bKeepEqual);
     }
     return ret;
 }

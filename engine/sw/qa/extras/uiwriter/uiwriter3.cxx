@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 #include <COKit/COKit.hxx>
 #include <vcl/scheduler.hxx>
+#include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/document/XDocumentInsertable.hpp>
@@ -2985,6 +2986,38 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testHTMLPasteStyleSheetEmptyString)
     // - Actual  : Liberation Serif
     // i.e. the empty string ran on to the next quote and the font declaration was lost.
     CPPUNIT_ASSERT_EQUAL(u"Calibri"_ustr, getProperty<OUString>(xRun, u"CharFontName"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testRTFPasteKeepsFormattingOfPastedStyle)
+{
+    // Given a new document, where the default paragraph style has a serif font, a size of 12pt and
+    // no underline:
+    createSwDoc();
+
+    // When pasting RTF where the Normal style and the text both have the Calibri font, a size of
+    // 11pt and an underline, and the style also has an East Asian font. The size is equal as a
+    // whole, while the font differs from the style in its East Asian part and is equal only in its
+    // Western part. The underline is an attribute, not a sprm:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    OString const aRtf = "{\\rtf1{\\fonttbl{\\f1 Calibri;}{\\f2 Mangal;}}"
+                         "{\\stylesheet{\\f1\\fs22\\ul\\dbch\\f2 Normal;}}"
+                         "\\pard\\f1\\fs22\\ul first\\par}"_ostr;
+    rtl::Reference<TransferDataContainer> xTransferable(new TransferDataContainer);
+    xTransferable->CopyByteString(SotClipboardFormatId::RTF, aRtf);
+    TransferableDataHelper aHelper(xTransferable);
+    SwTransferable::PasteFormat(*pWrtShell, aHelper, SotClipboardFormatId::RTF);
+
+    // Then make sure the pasted text keeps its font, size and underline:
+    uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 1, u"first"_ustr);
+    // Without the fix in place, this test would have failed with:
+    // - Expected: Calibri
+    // - Actual  : Liberation Serif
+    // i.e. the font was removed as the same as in the pasted style, while the document kept its own
+    // definition of that style.
+    CPPUNIT_ASSERT_EQUAL(u"Calibri"_ustr, getProperty<OUString>(xRun, u"CharFontName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(11.0f, getProperty<float>(xRun, u"CharHeight"_ustr));
+    CPPUNIT_ASSERT_EQUAL(awt::FontUnderline::SINGLE,
+                         getProperty<sal_Int16>(xRun, u"CharUnderline"_ustr));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -629,8 +629,13 @@ RTFDocumentImpl::getProperties(const RTFSprms& rAttributes, RTFSprms const& rSpr
             }
         }
 
-        RTFSprms sprms(aSprms.cloneAndDeduplicate(aStyleSprms, nStyleType, true, &aSprms));
-        RTFSprms attributes(rAttributes.cloneAndDeduplicate(aStyleAttributes, nStyleType, true));
+        // When pasting, the target document keeps its own definition of a style that it already
+        // has, so a value that is the same as in the pasted style stays direct formatting.
+        const bool bKeepEqual = !m_bIsNewDoc;
+        RTFSprms sprms(
+            aSprms.cloneAndDeduplicate(aStyleSprms, nStyleType, true, &aSprms, bKeepEqual));
+        RTFSprms attributes(rAttributes.cloneAndDeduplicate(aStyleAttributes, nStyleType, true,
+                                                            nullptr, bKeepEqual));
         return new RTFReferenceProperties(std::move(attributes), std::move(sprms));
     }
 
