@@ -325,15 +325,108 @@ namespace cool {
       for (const type of ['keypress', 'keyup', 'input'])
         input.addEventListener(type, (event: Event) => event.stopPropagation());
 
+      const layer = VectorFormControlLayer;
+      const extras = Array.from(input.parentElement?.children ?? []).slice(1);
+      const dropArrow = primitive.dropdown
+        ? (extras[0] as HTMLElement | undefined)
+        : undefined;
+      const spinArrows = primitive.spin
+        ? extras[primitive.dropdown ? 1 : 0]?.children
+        : undefined;
+
+      // the spin buttons step the value as the field's format says; what was typed goes first
+      const spin = (up: boolean) => {
+        if (input.disabled) return;
+        if (input.value !== original) layer._send(id, 'text', input.value);
+        layer._send(id, 'spin', up ? 'up' : 'down');
+      };
+      if (spinArrows && spinArrows.length >= 2) {
+        (spinArrows[0] as HTMLElement).addEventListener('click', () =>
+          spin(true),
+        );
+        (spinArrows[1] as HTMLElement).addEventListener('click', () =>
+          spin(false),
+        );
+        input.addEventListener('keydown', (event: Event) => {
+          const key = (event as KeyboardEvent).key;
+          if (key !== 'ArrowUp' && key !== 'ArrowDown') return;
+          event.preventDefault();
+          spin(key === 'ArrowUp');
+        });
+      }
+      if (!dropArrow) return;
+      dropArrow.style.cursor = 'pointer';
+
       // a combo box offers its entries in a list under the field, which its arrow opens
-      if (primitive.kind !== 'comboBox' || !primitive.items?.length) return;
-      const arrow = input.nextElementSibling as HTMLElement | null;
-      if (!arrow) return;
-      const entries = primitive.items;
-      let list: HTMLElement | null = null;
+      if (primitive.kind === 'comboBox' && primitive.items?.length) {
+        const entries = primitive.items;
+        dropArrow.addEventListener('click', () => {
+          if (input.disabled || layer._closeOpenPart(element)) return;
+          const close = layer._openUnder(
+            element,
+            <div
+              class="jsdialog ui-listbox"
+              style={{
+                height: 'auto',
+                maxHeight: 'none',
+                display: 'block',
+                padding: '0',
+              }}
+            >
+              {entries.map((entry: string) => (
+                <div
+                  style={{ padding: '0 4px', cursor: 'pointer' }}
+                  onClick={() => {
+                    input.value = entry;
+                    close();
+                    layer._send(id, 'text', entry);
+                    app.map.focus();
+                  }}
+                >
+                  {entry}
+                </div>
+              ))}
+            </div>,
+          );
+        });
+      }
+
+      // a date field opens a calendar of the month of its date, where a day is picked
+      if (primitive.kind === 'dateField')
+        dropArrow.addEventListener('click', () => {
+          if (input.disabled || layer._closeOpenPart(element)) return;
+          const close = layer._openUnder(
+            element,
+            layer._calendar(primitive.date, (picked: string) => {
+              close();
+              layer._send(id, 'date', picked);
+              app.map.focus();
+            }),
+          );
+        });
+    }
+
+    /*
+      Opens a part under the control, a list of entries or a calendar, over the controls below
+      it. A click elsewhere or Escape closes it, also with the keyboard outside the field.
+      Answers the function that closes it.
+    */
+    private static _openUnder(
+      element: HTMLElement,
+      part: HTMLElement,
+    ): () => void {
+      part.classList.add('vector-form-open-part');
+      Object.assign(part.style, {
+        position: 'absolute',
+        left: '0',
+        top: '100%',
+        minWidth: '100%',
+        boxSizing: 'border-box',
+        border: '1px solid var(--color-border-input-dark)',
+        backgroundColor: 'var(--color-background-lighter)',
+      });
       const close = () => {
-        list?.remove();
-        list = null;
+        part.remove();
         element.style.zIndex = '';
         window.removeEventListener('pointerdown', closeOutside, true);
         window.removeEventListener('keydown', closeByEscape, true);
@@ -341,57 +434,131 @@ namespace cool {
       const closeOutside = (event: Event) => {
         if (!element.contains(event.target as Node)) close();
       };
-      // the keyboard need not be in the field while the list is open
       const closeByEscape = (event: KeyboardEvent) => {
         if (event.key !== 'Escape') return;
         event.stopPropagation();
         close();
       };
-      arrow.style.cursor = 'pointer';
-      arrow.addEventListener('click', () => {
-        if (input.disabled) return;
-        if (list) {
-          close();
-          return;
-        }
-        list = (
-          <div
-            class="jsdialog ui-listbox"
-            style={{
-              position: 'absolute',
-              left: '0',
-              top: '100%',
-              width: '100%',
-              height: 'auto',
-              maxHeight: 'none',
-              display: 'block',
-              boxSizing: 'border-box',
-              padding: '0',
-              border: '1px solid var(--color-border-input-dark)',
-              backgroundColor: 'var(--color-background-lighter)',
-            }}
-          >
-            {entries.map((entry: string) => (
-              <div
-                style={{ padding: '0 4px', cursor: 'pointer' }}
-                onClick={() => {
-                  input.value = entry;
-                  close();
-                  VectorFormControlLayer._send(id, 'text', entry);
-                  app.map.focus();
-                }}
-              >
-                {entry}
-              </div>
-            ))}
-          </div>
+      element.style.zIndex = '1';
+      element.appendChild(part);
+      window.addEventListener('pointerdown', closeOutside, true);
+      window.addEventListener('keydown', closeByEscape, true);
+      (part as HTMLElement & { closePart?: () => void }).closePart = close;
+      return close;
+    }
+
+    // closes the part open under the control, answering whether there was one
+    private static _closeOpenPart(element: HTMLElement): boolean {
+      const open = element.querySelector('.vector-form-open-part') as
+        | (HTMLElement & { closePart?: () => void })
+        | null;
+      open?.closePart?.();
+      return !!open;
+    }
+
+    /*
+      A calendar of a month, the one of the date given as YYYY-MM-DD, or of today: the month
+      with arrows to the one before and after, the days of the week, and the days, the given
+      one marked. A click on a day answers it as YYYY-MM-DD.
+    */
+    private static _calendar(
+      given: string | undefined,
+      onPick: (picked: string) => void,
+    ): HTMLElement {
+      const parts = (given ?? '').split('-').map(Number);
+      const chosen = parts.length === 3 && parts[0] ? parts : undefined;
+      const today = new Date();
+      let year = chosen ? chosen[0] : today.getFullYear();
+      let month = chosen ? chosen[1] - 1 : today.getMonth();
+      const language = navigator.language;
+      const calendar = (
+        <div class="jsdialog" style={{ padding: '2px', fontSize: '0.9em' }} />
+      );
+      const two = (n: number) => (n < 10 ? '0' : '') + n;
+
+      const show = () => {
+        calendar.textContent = '';
+        const first = new Date(year, month, 1);
+        const step = (by: number) => {
+          month += by;
+          year += Math.floor(month / 12);
+          month = ((month % 12) + 12) % 12;
+          show();
+        };
+        const cell = {
+          textAlign: 'center',
+          padding: '1px 3px',
+          cursor: 'pointer',
+        };
+        calendar.appendChild(
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span style={cell} onClick={() => step(-1)}>
+              {'\u25C2'}
+            </span>
+            <span>
+              {first.toLocaleDateString(language, {
+                month: 'long',
+                year: 'numeric',
+              })}
+            </span>
+            <span style={cell} onClick={() => step(1)}>
+              {'\u25B8'}
+            </span>
+          </div>,
         );
-        // the open list lies over the controls below it
-        element.style.zIndex = '1';
-        element.appendChild(list);
-        window.addEventListener('pointerdown', closeOutside, true);
-        window.addEventListener('keydown', closeByEscape, true);
-      });
+
+        // the week starts on Monday
+        const grid = (
+          <div
+            style={{ display: 'grid', gridTemplateColumns: 'repeat(7, auto)' }}
+          />
+        );
+        for (let day = 0; day < 7; ++day)
+          grid.appendChild(
+            <span
+              style={{
+                textAlign: 'center',
+                padding: '1px 3px',
+                opacity: '0.6',
+              }}
+            >
+              {new Date(2024, 0, 1 + day).toLocaleDateString(language, {
+                weekday: 'narrow',
+              })}
+            </span>,
+          );
+        for (let gap = (first.getDay() + 6) % 7; gap > 0; --gap)
+          grid.appendChild(<span />);
+        const days = new Date(year, month + 1, 0).getDate();
+        for (let day = 1; day <= days; ++day) {
+          const isChosen =
+            !!chosen &&
+            chosen[0] === year &&
+            chosen[1] === month + 1 &&
+            chosen[2] === day;
+          grid.appendChild(
+            <span
+              style={
+                isChosen
+                  ? {
+                      ...cell,
+                      backgroundColor: 'var(--color-primary)',
+                      color: 'var(--color-primary-text)',
+                    }
+                  : cell
+              }
+              onClick={() =>
+                onPick(year + '-' + two(month + 1) + '-' + two(day))
+              }
+            >
+              {String(day)}
+            </span>,
+          );
+        }
+        calendar.appendChild(grid);
+      };
+      show();
+      return calendar;
     }
 
     /*

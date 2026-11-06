@@ -33,6 +33,9 @@
 #include <com/sun/star/awt/XRadioButton.hpp>
 #include <com/sun/star/awt/XListBox.hpp>
 #include <com/sun/star/awt/XScrollBar.hpp>
+#include <com/sun/star/awt/XSpinField.hpp>
+#include <com/sun/star/awt/XDateField.hpp>
+#include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <comphelper/OAccessible.hxx>
@@ -8161,6 +8164,28 @@ void COKitDocumentImpl::formControlAction(unsigned long long nObjectId, const ch
                                          cpo::uno::Any(o3tl::toInt32(aValue)));
             else
                 SetLastExceptionMsg(u"The control holds no value"_ustr);
+        }
+        else if (aAction == "spin")
+        {
+            // the spin buttons of a field, which step its value as its format says
+            cpo::uno::Reference<css::awt::XSpinField> xSpin(xPeer, cpo::uno::UNO_QUERY);
+            if (!xSpin.is())
+                SetLastExceptionMsg(u"The control has no spin buttons"_ustr);
+            else if (aValue == "up")
+                xSpin->up();
+            else
+                xSpin->down();
+        }
+        else if (aAction == "date")
+        {
+            // the date picked in the calendar of a date field, as year-month-day
+            cpo::uno::Reference<css::awt::XDateField> xDateField(xPeer, cpo::uno::UNO_QUERY);
+            if (xDateField.is() && aValue.size() == 10)
+                xDateField->setDate(css::util::Date(o3tl::toInt32(aValue.substr(8, 2)),
+                                                    o3tl::toInt32(aValue.substr(5, 2)),
+                                                    o3tl::toInt32(aValue.substr(0, 4))));
+            else
+                SetLastExceptionMsg(u"The control takes no date"_ustr);
         }
         else if (aAction == "check")
         {

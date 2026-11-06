@@ -48,6 +48,8 @@ namespace cool {
 		label?: string;
 		/// The text as the control shows it, formatted as the office formats it.
 		text?: string;
+		/// The date of a date field as YYYY-MM-DD, where it holds one.
+		date?: string;
 		/// 0 not checked, 1 checked, 2 neither.
 		state?: number;
 		disabled?: boolean;

@@ -1168,6 +1168,15 @@ bool Primitive2dJsonProcessor::writeFormControl(const ControlPrimitive2D& rContr
         xText.is())
         mrWriter.put("text", shownTextOf(rControl.getControlModel()));
 
+    // the date of a date field, as year-month-day, where it holds one
+    css::util::Date aDate;
+    if ((aValueOf(u"Date"_ustr) >>= aDate) && aDate.Year != 0)
+        mrWriter.put("date", rtl::Concat2View(OString::number(aDate.Year)
+                                              + (aDate.Month < 10 ? "-0" : "-")
+                                              + OString::number(aDate.Month)
+                                              + (aDate.Day < 10 ? "-0" : "-")
+                                              + OString::number(aDate.Day)));
+
     bool bFlag(false);
     if ((aValueOf(u"Dropdown"_ustr) >>= bFlag) && bFlag)
         mrWriter.put("dropdown", true);
