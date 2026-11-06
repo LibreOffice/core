@@ -6599,6 +6599,12 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             if (WindowState* window = findWindow(data.hWnd))
                 window->closingAll = false;
         }
+        else if (s == L"switchToServerMode")
+        {
+            // The page now edits on the COOL server, so the local document is closed.
+            if (data.mode == DocumentMode::CLOUD_ACCOUNT && data.app2js.joinable())
+                endLocalSession(data);
+        }
         else if (s == L"SAVESTARTED" || s == L"SAVECOMPLETED" || s == L"SAVEFAILED")
         {
             // Nothing here waits on a save; the message must just not reach wsd.
