@@ -1585,6 +1585,56 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkGlowShadowRoundTrip)
                          xShape->getPropertyValue(u"ShadowXDistance"_ustr).get<sal_Int32>());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFontworkVerticalAnchorWriter)
+{
+    // A plain Fontwork has no arch preset that could supply the expected bottom anchor.
+    loadFromFile(u"fontwork-vertical-anchor.fodt");
+    struct Anchor
+    {
+        OUString aName;
+        OUString aOOXML;
+        drawing::TextVerticalAdjust eAdjust;
+    };
+    const Anchor aAnchors[] = { { u"TopAnchor"_ustr, u"t"_ustr, drawing::TextVerticalAdjust_TOP },
+                                { u"CenterAnchor"_ustr, u"ctr"_ustr,
+                                  drawing::TextVerticalAdjust_CENTER },
+                                { u"BottomAnchor"_ustr, u"b"_ustr,
+                                  drawing::TextVerticalAdjust_BOTTOM } };
+    const auto assertAnchors = [&] {
+        uno::Reference<drawing::XDrawPageSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+        const auto xPage = xDoc->getDrawPage();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xPage->getCount());
+        for (sal_Int32 i = 0; i < 3; ++i)
+        {
+            uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(i), uno::UNO_QUERY_THROW);
+            CPPUNIT_ASSERT_EQUAL(aAnchors[i].aName,
+                                 xShape->getPropertyValue(u"Name"_ustr).get<OUString>());
+            comphelper::SequenceAsHashMap aGeometry(
+                xShape->getPropertyValue(u"CustomShapeGeometry"_ustr));
+            CPPUNIT_ASSERT_EQUAL(u"fontwork-plain-text"_ustr,
+                                 aGeometry[u"Type"_ustr].get<OUString>());
+            CPPUNIT_ASSERT_EQUAL(aAnchors[i].eAdjust,
+                                 xShape->getPropertyValue(u"TextVerticalAdjust"_ustr)
+                                     .get<drawing::TextVerticalAdjust>());
+        }
+    };
+    assertAnchors();
+    for (int nRoundTrip = 0; nRoundTrip < 2; ++nRoundTrip)
+    {
+        save(TestFilter::DOCX);
+        xmlDocUniquePtr pXml = parseExport(u"word/document.xml"_ustr);
+        for (const auto& rAnchor : aAnchors)
+        {
+            const OString aBody = "//wp:anchor[wp:docPr/@name='"
+                                 + rAnchor.aName.toUtf8() + "']//wps:bodyPr";
+            assertXPath(pXml, aBody, "anchor", rAnchor.aOOXML);
+            assertXPath(pXml, aBody + "/a:prstTxWarp", "prst", u"textPlain");
+        }
+        loadFromURL(maTempFile.GetURL());
+        assertAnchors();
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFontworkArchScaleXWriter)
 {
     // Given two arch Fontworks anchored at the bottom, one with the text scaled to the path, one
@@ -1614,6 +1664,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontworkArchScaleXWriter)
         CPPUNIT_ASSERT_EQUAL(bScaleX, aTextPath[u"ScaleX"_ustr].get<bool>());
         drawing::TextVerticalAdjust eAdjust = drawing::TextVerticalAdjust_TOP;
         xShape->getPropertyValue(u"TextVerticalAdjust"_ustr) >>= eAdjust;
+        // testFontworkVerticalAnchorWriter covers explicit anchors on plain Fontwork.
         CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_BOTTOM, eAdjust);
     }
 }
