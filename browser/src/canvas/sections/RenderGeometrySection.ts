@@ -449,6 +449,14 @@ class RenderGeometrySection extends CanvasSectionObject {
 		this.context.restore();
 	}
 
+	/// What the form controls are depends on the design mode, so a switch of the mode drops the
+	/// last hit test answer and draws the document again.
+	public static formControlModeChanged(): void {
+		RenderGeometrySection._lastHit = undefined;
+		RenderGeometrySection._drawnHitKey = '';
+		if (app.sectionContainer) app.sectionContainer.requestReDraw();
+	}
+
 	/// The objects the point meets, from the front to the back: the topmost alone, or with
 	/// everyOne set every one of them.
 	private walkObjectsAt(

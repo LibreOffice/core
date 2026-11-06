@@ -1954,6 +1954,16 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				],
 				'vertical': 'true'
 			},
+			{ type: 'separator', id: 'insert-designmode-break', orientation: 'vertical' },
+			// temporary, until we have a final place for it: the icon is taken from the engine's
+			// theme and does not match the others yet
+			{
+				'id': 'insert-switch-control-design-mode',
+				'type': 'bigtoolitem',
+				'text': _UNO('.uno:SwitchControlDesignMode'),
+				'command': '.uno:SwitchControlDesignMode',
+				'accessibility': { focusBack: true, combination: 'KD', de: null }
+			},
 		];
 
 		return this.getTabPage('Insert', content);

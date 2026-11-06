@@ -794,6 +794,21 @@ window.L.Map = window.L.Evented.extend({
 		return this._viewInfo[viewid].parked === 'true';
 	},
 
+	// true when the form controls of this view are in design mode and are edited as objects, false
+	// when they are alive and work as controls; until the office says so they count as in design
+	// mode
+	isFormControlDesignMode: function() {
+		const state = this['stateChangeHandler'].getItemValue('.uno:SwitchControlDesignMode');
+		return state !== false && state !== 'false';
+	},
+
+	// switches the form controls of this view in the office into or out of design mode
+	setFormControlDesignMode: function(designMode) {
+		this.sendUnoCommand('.uno:SwitchControlDesignMode', {
+			SwitchControlDesignMode: { type: 'boolean', value: designMode },
+		});
+	},
+
 	getZoom: function () {
 		return this._zoom;
 	},

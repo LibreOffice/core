@@ -1481,6 +1481,7 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"NumberFormatDecimal", { PayloadType::BooleanPayload, true } },
         { u"NumberFormatDate", { PayloadType::BooleanPayload, true } },
         { u"ShowResolvedAnnotations", { PayloadType::BooleanPayload, true } },
+        { u"SwitchControlDesignMode", { PayloadType::BooleanPayload, true } },
 
         { u"ToggleMergeCells", { PayloadType::BooleanOrDisabledPayload, true } },
         { u"SheetRightToLeft", { PayloadType::BooleanOrDisabledPayload, true } },

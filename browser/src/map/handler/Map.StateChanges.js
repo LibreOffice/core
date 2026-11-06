@@ -3,7 +3,7 @@
  * window.L.Map.StateChanges stores the state changes commands coming from core
  * LOK_CALLBACK_STATE_CHANGED callback
  */
-/* global $ app cool _ RenderManager HandleTravel PreviewEditSection OverviewPreviewsSection OverviewNavigation */
+/* global $ app cool _ RenderManager HandleTravel PreviewEditSection OverviewPreviewsSection OverviewNavigation RenderGeometrySection */
 /*eslint no-extend-native:0*/
 window.L.Map.mergeOptions({
 	stateChangeHandler: true
@@ -68,6 +68,11 @@ window.L.Map.StateChangeHandler = window.L.Handler.extend({
 			if (annotations) annotations.selectById(redlineId);
 			else console.error('_onStateChanged: section "CommentList" missing');
 		}
+
+		// the form controls are objects in design mode and controls out of it, so a switch of the
+		// mode asks the hit test again and draws the page anew
+		if (commandName === '.uno:SwitchControlDesignMode' && RenderManager.isVectorRendering())
+			RenderGeometrySection.formControlModeChanged();
 
 		if (e.commandName === '.uno:SlideMasterPage') {
 			const mode = (state === true || state === 'true') ? 1 : 0;
