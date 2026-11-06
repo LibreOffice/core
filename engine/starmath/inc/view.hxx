@@ -118,10 +118,9 @@ public:
     SmDocShell* GetDoc();
     SmCursor& GetCursor();
 
-    const Point& GetFormulaDrawPos() const
-    {
-        return aFormulaDrawPos;
-    }
+    // top left corner of the formula in the widget: the formula starts after its left and top
+    // margins
+    Point GetFormulaDrawPos() const;
 
     // for Accessibility
     virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
@@ -153,7 +152,6 @@ private:
 
     SmGraphicWindow& mrGraphicWindow;
 
-    Point aFormulaDrawPos;
     // old style editing pieces
     tools::Rectangle aCursorRect;
     bool bIsCursorVisible;

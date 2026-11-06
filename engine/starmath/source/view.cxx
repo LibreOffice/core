@@ -357,6 +357,14 @@ SmGraphicWidget::~SmGraphicWidget()
 
 SmDocShell* SmGraphicWidget::GetDoc() { return GetView().GetDoc(); }
 
+Point SmGraphicWidget::GetFormulaDrawPos() const
+{
+    // the formula starts after its left and top margins, as SmDocShell::DrawFormula draws it
+    assert(mrViewShell.GetDoc());
+    const SmFormat& rFormat = mrViewShell.GetDoc()->GetFormat();
+    return Point(rFormat.GetDistance(DIS_LEFTSPACE), rFormat.GetDistance(DIS_TOPSPACE));
+}
+
 SmCursor& SmGraphicWidget::GetCursor()
 {
     assert(GetDoc());
@@ -605,7 +613,6 @@ void SmGraphicWidget::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
 
     rDoc.DrawFormula(rRenderContext, aPoint, true);  //! modifies aPoint to be the topleft
                                                      //! corner of the formula
-    aFormulaDrawPos = aPoint;
     if (SmViewShell::IsInlineEditEnabled())
     {
         //Draw cursor if any...

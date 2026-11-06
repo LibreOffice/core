@@ -69,6 +69,7 @@ public:
     void replacePlaceholder();
     void viewZoom();
     void testFontDialogAttrFrame();
+    void formulaDrawPosIncludesMargins();
 
 #if HAVE_MORE_FONTS
     void testSmTmpDeviceRestoreFont();
@@ -94,6 +95,7 @@ public:
     CPPUNIT_TEST(replacePlaceholder);
     CPPUNIT_TEST(viewZoom);
     CPPUNIT_TEST(testFontDialogAttrFrame);
+    CPPUNIT_TEST(formulaDrawPosIncludesMargins);
 #if HAVE_MORE_FONTS
     CPPUNIT_TEST(testSmTmpDeviceRestoreFont);
 #endif
@@ -459,6 +461,19 @@ void Test::replacePlaceholder()
     rEditWindow.InsertText(u"+<?>"_ustr);
     OUString sFinalText = rEditWindow.GetText();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be '+a + b'", u"+a + b"_ustr, sFinalText);
+}
+
+void Test::formulaDrawPosIncludesMargins()
+{
+    // The caret and the clicks of a formula are placed from where the formula is drawn. That
+    // includes its margins before the formula was ever painted: in the Kit, Writer shows a formula
+    // edited in place from its replacement image, and its widget is not painted at all.
+    SmFormat aFormat(m_xDocShRef->GetFormat());
+    aFormat.SetDistance(DIS_LEFTSPACE, 100);
+    aFormat.SetDistance(DIS_TOPSPACE, 50);
+    m_xDocShRef->SetFormat(aFormat);
+
+    CPPUNIT_ASSERT_EQUAL(Point(100, 50), m_pViewShell->GetGraphicWidget().GetFormulaDrawPos());
 }
 
 void Test::viewZoom()

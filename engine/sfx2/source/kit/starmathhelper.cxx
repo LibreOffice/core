@@ -240,8 +240,7 @@ bool KitStarMathHelper::postMouseEvent(COKitMouseEventType eType, int nX, int nY
             aMousePos
                 = Point(std::round(aMousePos.X() * fScaleX), std::round(aMousePos.Y() * fScaleY));
             // 3. Take window own scaling into account (reverses the conversion done in
-            // SmGraphicWidget::MouseButtonDown, albeit incompletely - it does not handle
-            // GetFormulaDrawPos; hopefully, in lok/in-place case, it's always [ 0, 0 ]?)
+            // SmGraphicWidget::MouseButtonDown, which then subtracts the formula's margins)
             aMousePos = pWindow->LogicToPixel(aMousePos);
 
             KitMouseEventData aMouseEventData(
