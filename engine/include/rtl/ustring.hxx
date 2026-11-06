@@ -2501,67 +2501,6 @@ public:
         return rtl_ustr_toDouble( pData->buffer );
     }
 
-
-    /**
-       Return a canonical representation for a string.
-
-       A pool of strings, initially empty is maintained privately
-       by the string class. On invocation, if present in the pool
-       the original string will be returned. Otherwise this string,
-       or a copy thereof will be added to the pool and returned.
-
-       @return
-       a version of the string from the pool.
-
-       @exception std::bad_alloc is thrown if an out-of-memory condition occurs
-    */
-    OUString intern() const
-    {
-        rtl_uString * pNew = NULL;
-        rtl_uString_intern( &pNew, pData );
-        if (pNew == NULL) {
-            throw std::bad_alloc();
-        }
-        return OUString( pNew, SAL_NO_ACQUIRE );
-    }
-
-    /**
-       Return a canonical representation for a converted string.
-
-       A pool of strings, initially empty is maintained privately
-       by the string class. On invocation, if present in the pool
-       the original string will be returned. Otherwise this string,
-       or a copy thereof will be added to the pool and returned.
-
-       @param    value           a 8-Bit character array.
-       @param    length          the number of character which should be converted.
-                                 The 8-Bit character array length must be
-                                 greater than or equal to this value.
-       @param    encoding        the text encoding from which the 8-Bit character
-                                 sequence should be converted.
-       @param    convertFlags    flags which controls the conversion.
-                                 see RTL_TEXTTOUNICODE_FLAGS_...
-       @param    pInfo           pointer to return conversion status or NULL.
-
-       @return
-       a version of the converted string from the pool.
-
-       @exception std::bad_alloc is thrown if an out-of-memory condition occurs
-    */
-    static OUString intern( const char * value, sal_Int32 length,
-                            rtl_TextEncoding encoding,
-                            sal_uInt32 convertFlags = OSTRING_TO_OUSTRING_CVTFLAGS,
-                            sal_uInt32 *pInfo = NULL )
-    {
-        rtl_uString * pNew = NULL;
-        rtl_uString_internConvert( &pNew, value, length, encoding,
-                                   convertFlags, pInfo );
-        if (pNew == NULL) {
-            throw std::bad_alloc();
-        }
-        return OUString( pNew, SAL_NO_ACQUIRE );
-    }
-
     /**
       Converts to an OString, signalling failure.
 

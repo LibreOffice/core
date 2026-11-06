@@ -101,7 +101,6 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/rtl/cmdargs \
 	sal/rtl/crc \
 	sal/rtl/digest \
-	sal/rtl/hash \
 	sal/rtl/locale \
 	sal/rtl/math \
 	sal/rtl/preinit \

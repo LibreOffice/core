@@ -45,8 +45,6 @@
 
 #include <dragonbox/dragonbox.h>
 
-void internRelease(rtl_uString*);
-
 namespace rtl::str
 {
 template <typename C> auto UChar(C c) { return std::make_unsigned_t<C>(c); }
@@ -743,16 +741,6 @@ template <typename rtl_tString> void release(rtl_tString* pThis)
     if (SAL_UNLIKELY(SAL_STRING_IS_STATIC (pThis)))
         return;
 
-    /* OString doesn't have an 'intern' */
-    if constexpr (sizeof(Char_T<rtl_tString>) == sizeof(sal_Unicode))
-    {
-        if (SAL_STRING_IS_INTERN (pThis))
-        {
-            internRelease (pThis);
-            return;
-        }
-    }
-
     if ( !osl_atomic_decrement( &(pThis->refCount) ) )
     {
         RTL_LOG_STRING_DELETE( pThis );
@@ -772,9 +760,9 @@ template <typename rtl_tString> struct EmptyStringImpl
 
 template <>
 inline rtl_uString EmptyStringImpl<rtl_uString>::data = {
-    sal_Int32(SAL_STRING_INTERN_FLAG | SAL_STRING_STATIC_FLAG | 1), /* sal_Int32   refCount;  */
-    0,                                                              /* sal_Int32   length;    */
-    { 0 }                                                           /* sal_Unicode buffer[1]; */
+    SAL_STRING_STATIC_FLAG | 1, /* sal_Int32   refCount;  */
+    0,                          /* sal_Int32   length;    */
+    { 0 }                       /* sal_Unicode buffer[1]; */
 };
 
 template <>
