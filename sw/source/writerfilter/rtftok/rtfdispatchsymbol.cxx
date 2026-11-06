@@ -337,20 +337,20 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 // Adjust total width, which is done in the \cellx handler for normal cells.
                 m_TopLevelTableRow.nCurrentCellX += m_aStates.top().getTableRowWidthAfter();
 
-                size_t nCellCount{ 0 };
+                int nCellCount = 0;
                 for (Buf_t& i : m_aTableBufferStack.back())
                 {
                     if (RTFBufferTypes::CellEnd == std::get<0>(i))
                         ++nCellCount;
                 }
-                if (m_TopLevelTableRow.getCells() < nCellCount)
+                if (m_TopLevelTableRow.getCells() < o3tl::make_unsigned(nCellCount))
                 {
                     m_TopLevelTableRow.cellSprms.push_back(m_aStates.top().getTableCellSprms());
                     m_TopLevelTableRow.cellAttributes.push_back(
                         m_aStates.top().getTableCellAttributes());
                 }
 
-                if (m_TopLevelTableRow.getCells() >= nCellCount)
+                if (m_TopLevelTableRow.getCells() >= o3tl::make_unsigned(nCellCount))
                 {
                     Id aBorderIds[]
                         = { NS_ooxml::LN_CT_TcBorders_bottom, NS_ooxml::LN_CT_TcBorders_top,
@@ -377,7 +377,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 //Overwrite font size attribute on fill cells
                 RTFValue::Pointer_t pFontSize;
                 RTFValue::Pointer_t pFontSizeCs;
-                size_t nCell{ 1 };
+                int nCell = 1;
                 for (Buf_t& rTableBufferElement : m_aTableBufferStack.back())
                 {
                     if (RTFBufferTypes::CellEnd == std::get<0>(rTableBufferElement))
