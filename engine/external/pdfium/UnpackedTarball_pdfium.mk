@@ -30,6 +30,7 @@ endif
 pdfium_patches += ofz451333752.patch
 pdfium_patches += ofz464123310.patch
 pdfium_patches += ofz503815636.patch
+pdfium_patches += ofz580817782.patch
 pdfium_patches += container-stream-concepts.patch
 pdfium_patches += abseil-hashtablez-sampler.patch
 
