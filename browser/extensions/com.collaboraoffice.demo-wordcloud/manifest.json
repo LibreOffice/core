@@ -1,7 +1,8 @@
 {
-    "manifestVersion": "0.1",
+    "manifestVersion": "0.2",
     "name": "Word cloud",
     "entry": "index.html",
     "icon": "icon.svg",
-    "supports": ["text"]
+    "supports": ["text"],
+    "remote": ["remote.js"]
 }

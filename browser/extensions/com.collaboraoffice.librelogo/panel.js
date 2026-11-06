@@ -468,12 +468,7 @@ class Panel {
 			return;
 		}
 		try {
-			await window.cool.callRemote(function (program) {
-				const doc = DocumentApp.getActiveDocument();
-				const selection = doc.getSelection();
-				if (selection) selection.replace(program);
-				else doc.getCursor().insertText(program);
-			}, text);
+			await window.cool.remote.kitWriteProgram(text);
 			this.log('info', cool._('Program written to the document.'));
 		} catch (e) {
 			this.log('error', e.message);

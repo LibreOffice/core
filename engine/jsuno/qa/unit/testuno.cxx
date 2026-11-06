@@ -26,7 +26,7 @@ public:
     {
         // The string literal needs to be cut into multiple parts to avoid MSVC "error C2026: string
         // too big, trailing characters truncated":
-        testexec(R"(
+        testexec(R"((function () {
 console.assert(uno.type.void.toString() == 'void');
 console.assert(uno.type.boolean.toString() == 'boolean');
 console.assert(uno.type.byte.toString() == 'byte');
@@ -976,6 +976,7 @@ console.assert(test.StringAttribute === 'foo');
 console.assert(
     uno.idl.com.sun.star.uno.TypeClass.VOID.toString()
     === uno.idl.cpo.uno.TypeClass.VOID.toString());
+})
 )"_ostr);
     }
 

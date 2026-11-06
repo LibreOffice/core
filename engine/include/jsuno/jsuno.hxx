@@ -45,7 +45,9 @@ struct Result {
 
 // Run `prelude` and then `script` (for both of which the last element must be a terminating NUL) in
 // one JS UNO
-// context, and return the JSON-stringified result of `script` (empty string for values
+// context, call the function that `script` evaluates to with the elements of `arguments` (JSON
+// text of an array, whose last element must be a terminating NUL) as its arguments, and return
+// the JSON-stringified result of that call (empty string for values
 // JSON.stringify drops: `undefined`, a function, or a symbol).
 //
 // All strings passed in and out are UTF-8.
@@ -74,6 +76,7 @@ struct Result {
 // @throws jsuno::Exception
 LO_DLLPUBLIC_JSUNO Result execute(
     std::u8string_view prelude, std::string_view script, std::string_view source, int line,
+    std::string_view arguments,
     std::function<void(std::string_view level, std::string_view message)> consoleHook,
     std::function<bool(std::string_view payload)> proxyCallHook);
 

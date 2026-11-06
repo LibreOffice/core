@@ -6494,48 +6494,46 @@ bool ChildSession::getPresentationInfo()
 }
 
 bool ChildSession::executeScript(char const * buffer, int length, StringVector const & tokens) {
-    // Wire format: "executescript <id> <line> <source>\n<script>".  The id is opaque to us; the
+    // Wire format: "executescript <id> <line> <argumentsLength> <source>\n<arguments><script>".
+    // The ID is opaque to us; the
     // iframe uses it to correlate the result with the originating call.  The source and line are
-    // used for any exception stack frames that are reported back (and source is guaranteed to be
-    // newline-free; cf. Control.Extension.ts's Extension_Call handler).  The script is the tail
+    // used for any exception stack frames that are reported back.  The arguments (argumentsLength
+    // bytes of JSON, possibly none) and the script are the tail
     // after the newline and can contain any bytes.
-    if (tokens.size() < 4) {
+    if (tokens.size() != 5) {
         sendTextFrameAndLogError("error: cmd=executescript kind=syntax");
         return false;
     }
     std::string_view const full(buffer, length);
-    static constexpr std::string_view prefix("executescript ");
-    auto const idEnd = full.find(' ', prefix.size());
-    if (idEnd == std::string_view::npos) {
+    auto const headerEnd = full.find('\n');
+    if (headerEnd == std::string_view::npos) {
         sendTextFrameAndLogError("error: cmd=executescript kind=syntax");
         return false;
     }
-    std::string const callId(full.substr(prefix.size(), idEnd - prefix.size()));
-    auto const lineEnd = full.find(' ', idEnd + 1);
-    if (lineEnd == std::string_view::npos) {
-        sendTextFrameAndLogError("error: cmd=executescript kind=syntax");
-        return false;
-    }
+    std::string const callId(tokens[1]);
     int line;
+    std::size_t argumentsLength;
     try {
-        line = std::stoi(std::string(full.substr(idEnd + 1, lineEnd - idEnd - 1)));
+        line = std::stoi(tokens[2]);
+        argumentsLength = std::stoul(tokens[3]);
     } catch (std::exception const &) {
-        line = 1;
-    }
-    auto const sourceEnd = full.find('\n', lineEnd + 1);
-    if (sourceEnd == std::string_view::npos) {
         sendTextFrameAndLogError("error: cmd=executescript kind=syntax");
         return false;
     }
-    auto const source = full.substr(lineEnd + 1, sourceEnd - lineEnd - 1);
-    std::string const script(full.substr(sourceEnd + 1));
+    if (argumentsLength > full.size() - headerEnd - 1) {
+        sendTextFrameAndLogError("error: cmd=executescript kind=syntax");
+        return false;
+    }
+    auto const source = tokens[4];
+    std::string const arguments(full.substr(headerEnd + 1, argumentsLength));
+    std::string const script(full.substr(headerEnd + 1 + argumentsLength));
 
     getLOKitDocument()->setView(_viewId);
 
     // The proxy callback can fire long after executeScript has returned, until
     // cancelPendingProxyCalls detaches it from this session:
     const COKitScriptResult aScriptResult = _docManager->getLOKit()->executeScript(
-        script, source, line,
+        script, source, line, arguments,
         [](void * data, std::string_view level, std::string_view message) {
             static_cast<ChildSession *>(data)->sendTextFrame(
                 std::string("consolemsg ").append(level).append("\n").append(message));

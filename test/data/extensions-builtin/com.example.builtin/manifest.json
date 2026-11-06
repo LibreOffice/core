@@ -1,0 +1,5 @@
+{
+    "manifestVersion": "0.2",
+    "name": "Built-in",
+    "remote": ["remote.js"]
+}

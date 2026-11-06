@@ -192,6 +192,7 @@ test_base_sources = \
 	ConfigUtilTests.cpp \
 	DeckSpecTests.cpp \
 	DeltaTests.cpp \
+	ExtensionsTests.cpp \
 	FileServeWhiteBoxTests.cpp \
 	HexUtilTests.cpp \
 	HostUtilTests.cpp \

@@ -23,9 +23,11 @@
  * COOL via postMessage.  The interface between extensions and COOL
  * consists of these messages, each tagged with its own msgId:
  *
- *   { msgId: 'Extension_Call', callId, fn, args }
- *     Calls a JS function in core via QuickJS UNO.  fn is the
- *     function source as a string; args is an array of
+ *   { msgId: 'Extension_Call', callId, kind, name, args }
+ *     Calls a function of the extension's installed code in core via
+ *     QuickJS UNO: with kind 'remote' the function name of the
+ *     extension's remote file, with kind 'listen' or 'unlisten' the
+ *     built-in listener for the document event name.  args is an array of
  *     JSON-serializable arguments.  callId is an opaque token used
  *     to correlate the response.
  *
@@ -105,11 +107,8 @@
 // A command an extension registers for use in menu/notebookbar contributions
 // (see ExtensionContributes below).  `script` is a path to a JS file (resolved
 // the same way `entry`/`icon` are, relative to the manifest) whose top-level
-// binding named `commands` is an object mapping command ids to functions;
-// discovery fetches it once and fills in `source` with the raw text.
-// invokeCommand ships that text to the kit's JS-UNO context verbatim, with a
-// call to the right entry of `commands` tacked on after it, the same way
-// cool.callRemote ships a function's source from inside the sidebar iframe.
+// binding named `commands` is an object mapping command ids to functions, and
+// the function of a command runs in the kit's JS-UNO context.
 // More than one command may name the same `script` file, sharing its
 // `commands` object rather than each getting a one-function file of its own.
 // `icon` is shown on a notebookbar button or dropdown-menu entry that
@@ -120,7 +119,6 @@ interface ExtensionCommand {
 	icon?: string;
 	// Kit-side command: the script file holding the `commands` object.
 	script?: string;
-	source?: string;
 	// Panel command: instead of running a script in the kit, open the
 	// extension's sidebar panel (if it isn't open) and deliver the command
 	// id to it as an Extension_Command postMessage; cool.js hands it to
@@ -244,17 +242,6 @@ interface ExtensionContributes {
 	keybindings?: ExtensionKeybinding[];
 }
 
-// An Apps Script library that an add-on declares, as scripts/gas/fetch-gas-addon.py has put it
-// into the add-on's _cool-gas-libraries directory under dir, with the code files in the order in
-// which GAS runs them, and with the sources of those files where they are loaded:
-interface GasLibrary {
-	userSymbol: string;
-	dir: string;
-	scripts: string[];
-	sources?: string[];
-	libraries: GasLibrary[];
-}
-
 interface ExtensionManifest {
 	manifestVersion: string;
 	name: string;
@@ -264,9 +251,7 @@ interface ExtensionManifest {
 	supports?: string[];
 	isGasExtension?: boolean;
 	gasContext?: {
-		sources: string[];
 		names: string[];
-		libraries: GasLibrary[];
 	};
 	// On disk this is a string naming a separate JSON file (resolved the same way
 	// entry/icon are) holding the ExtensionContributes object - keeping UI wiring
@@ -280,9 +265,8 @@ interface ExtensionManifest {
 interface ExtensionCallMessage {
 	msgId: 'Extension_Call';
 	callId: string;
-	fn: string;
-	source: string;
-	line: number;
+	kind: 'remote' | 'listen' | 'unlisten';
+	name: string;
 	args?: unknown[];
 }
 
@@ -442,7 +426,7 @@ window.L.Control.Extension = window.L.Control.extend({
 	_panel: null as HTMLDivElement | null,
 	_iframe: null as HTMLIFrameElement | null,
 	_teardownTimer: null as ReturnType<typeof setTimeout> | null,
-	// Correlates executescript callIds issued directly by invokeCommand (menu clicks) with
+	// Correlates callextension callIds issued directly by invokeCommand (menu clicks) with
 	// their completion callbacks, so _onScriptResult can tell them apart from callIds that
 	// originated inside the sidebar iframe and must be relayed back there instead.
 	// invokeCommand is void and returns no Promise, so these are plain callbacks, not a
@@ -455,7 +439,7 @@ window.L.Control.Extension = window.L.Control.extend({
 	} | null,
 	_nextCommandCallId: 0,
 	// The google.script.run calls of GAS add-on frames that are running in the kit, keyed by
-	// their executescript callId, each with the frame's window and own callId, and the call's
+	// their callextension callId, each with the frame's window and own callId, and the call's
 	// proxyId:
 	_pendingGasRuns: null as {
 		[callId: string]: {
@@ -600,8 +584,8 @@ window.L.Control.Extension = window.L.Control.extend({
 	},
 
 	// Dispatcher entry point for a contributed menu command (docdispatcher's
-	// `ext:<id>:<commandId>` branch).  Ships the command's script straight to the
-	// kit's JS-UNO context via the same executescript wire message
+	// `ext:<id>:<commandId>` branch).  Runs the command's script in the
+	// kit's JS-UNO context via the same callextension wire message
 	// _handleSidebarMessage's Extension_Call case uses, but without needing the
 	// sidebar iframe to exist: the command runs whether or not this extension's
 	// panel has ever been opened.
@@ -619,7 +603,7 @@ window.L.Control.Extension = window.L.Control.extend({
 			this._invokeGasCommand(command);
 			return;
 		}
-		if (!command || command.source === undefined) {
+		if (!command || !command.script) {
 			console.warn(
 				'extension ' + this.options.id + ': unknown command ' + commandId,
 			);
@@ -668,26 +652,16 @@ window.L.Control.Extension = window.L.Control.extend({
 			delete this._pendingCommandCalls[callId];
 			pending.onError(new Error('timed out waiting for a response'));
 		}, 30000);
-		// Wire format `executescript <id> <line> <source>\n<script>` (see
-		// ChildSession::executeScript), matching what _handleSidebarMessage's
-		// Extension_Call case sends for a cool.callRemote call: source/line let
-		// a thrown exception's stack frames point back at the command's own file.
-		// The script is command.source verbatim, with the call to invoke tacked on
-		// after it rather than wrapped around it - nothing is prepended, so the
-		// file's own line 1 column 1 stays line 1 column 1 in any reported frame.
-		const source = (this.options.baseUrl + command.script).replace(/\n/g, '');
+		// Wire format `callextension <id> <extensionId> command <commandId>\n<arguments>`:
 		app.socket.sendMessage(
-			'executescript ' +
+			'callextension ' +
 				callId +
-				' 1 ' +
-				source +
+				' ' +
+				this.options.id +
+				' command ' +
+				commandId +
 				'\n' +
-				command.source +
-				'\ncommands[' +
-				JSON.stringify(commandId) +
-				'].apply(null, [' +
-				JSON.stringify(commandContext()) +
-				']);',
+				JSON.stringify([commandContext()]),
 		);
 	},
 
@@ -786,7 +760,6 @@ window.L.Control.Extension = window.L.Control.extend({
 				callId,
 				proxyId,
 				this.options.id,
-				(this.options.manifest as ExtensionManifest).gasContext,
 				functionName,
 				functionArgs,
 			),
@@ -809,9 +782,10 @@ window.L.Control.Extension = window.L.Control.extend({
 		}
 		// As in GAS, google.script.run cannot call a private function, whose name ends in
 		// "_", and the reserved names __coolGasMenu and __coolGasCommand name none of the
-		// add-on's functions:
+		// add-on's functions (and a name with whitespace cannot be sent):
 		if (
 			typeof msg.functionName !== 'string' ||
+			!/^\S+$/.test(msg.functionName) ||
 			msg.functionName.endsWith('_') ||
 			msg.functionName === '__coolGasMenu' ||
 			msg.functionName === '__coolGasCommand'
@@ -1150,19 +1124,33 @@ window.L.Control.Extension = window.L.Control.extend({
 	) {
 		switch (msg.msgId) {
 			case 'Extension_Call': {
-				// Wire format `executescript <id> <line> <source>\n<script>`:
+				// Wire format `callextension <id> <extensionId> <kind>
+				// <name>\n<arguments>`:
+				if (
+					!['remote', 'listen', 'unlisten'].includes(msg.kind) ||
+					typeof msg.name !== 'string' ||
+					!/^\S+$/.test(msg.name) ||
+					typeof msg.callId !== 'string' ||
+					!/^\S+$/.test(msg.callId)
+				) {
+					this._postToCaller(msg.callId, {
+						msgId: 'Extension_CallResult',
+						callId: msg.callId,
+						err: 'malformed call',
+					});
+					break;
+				}
 				app.socket.sendMessage(
-					'executescript ' +
+					'callextension ' +
 						msg.callId +
 						' ' +
-						(msg.line - 1) +
+						this.options.id +
 						' ' +
-						msg.source.replace(/\n/g, '') +
-						'\n(\n' +
-						msg.fn +
-						'\n).apply(null, ' +
-						JSON.stringify(msg.args || []) +
-						');',
+						msg.kind +
+						' ' +
+						msg.name +
+						'\n' +
+						JSON.stringify(msg.args || []),
 				);
 				break;
 			}
@@ -1434,7 +1422,7 @@ window.L.Control.Extension = window.L.Control.extend({
 	},
 
 	// Reconstructs a proper Error from the engine's jsuno::Exception payload, the
-	// same way cool.js's makeStructuredError does for a cool.callRemote call: the
+	// same way cool.js's makeStructuredError does for a cool.remote call: the
 	// stack text lets the browser console show the command's own source location
 	// for each frame rather than just a bare message.
 	_toScriptError: function (err: string | ExtensionScriptError): Error {
@@ -1534,7 +1522,6 @@ async function tryLoadAppsScriptExtension(
 ): Promise<ExtensionManifest | null> {
 	const gasResp = await fetch(app.LOUtil.getURL(baseRel + 'appsscript.json'));
 	if (!responseSucceeded(gasResp)) return null;
-	const libraries = await loadGasLibraries(id, baseRel, await gasResp.json());
 	let listing: {
 		scripts?: string[];
 		supports?: string[];
@@ -1582,7 +1569,7 @@ async function tryLoadAppsScriptExtension(
 	const manifest: ExtensionManifest = {
 		manifestVersion:
 			gasManifest.manifestVersion === undefined
-				? '0.1'
+				? '0.2'
 				: gasManifest.manifestVersion,
 		name: gasManifest.name || listing.name || id,
 		isGasExtension: true,
@@ -1604,13 +1591,7 @@ async function tryLoadAppsScriptExtension(
 	}[] = [];
 	if (scriptNames.length) {
 		try {
-			items = await collectGasAddonMenu(
-				id,
-				baseRel,
-				scriptNames,
-				libraries,
-				map,
-			);
+			items = await collectGasAddonMenu(id, map);
 		} catch (err) {
 			console.warn(
 				'extension ' + id + ': __coolGasMenu invocation failed:',
@@ -1704,98 +1685,21 @@ async function tryLoadAppsScriptExtension(
 		});
 	}
 
-	// Cache the .gs sources so a menu click doesn't refetch them:
 	if (commands.length && scriptNames.length) {
-		try {
-			const sources = await Promise.all(
-				scriptNames.map(async (name) => {
-					const resp = await fetch(app.LOUtil.getURL(baseRel + name));
-					if (!responseSucceeded(resp)) {
-						throw new Error(baseRel + name + ' HTTP ' + resp.status);
-					}
-					return await resp.text();
-				}),
-			);
-			manifest.gasContext = {
-				sources: sources,
-				names: scriptNames,
-				libraries: libraries,
-			};
-			manifest.contributes = {
-				...contributes,
-				commands: commands,
-				extensionsMenu: placement,
-			};
-		} catch (err) {
-			console.warn(
-				'extension ' + id + ': Apps Script sources unreadable:',
-				err,
-			);
-		}
+		manifest.gasContext = {
+			names: scriptNames,
+		};
+		manifest.contributes = {
+			...contributes,
+			commands: commands,
+			extensionsMenu: placement,
+		};
 	}
 	return manifest;
 }
 
 // Ask the runner for the menu items the add-on's onOpen() puts together, at extension load:
 let nextGasCollectId = 0;
-// The libraries that an appsscript.json declares, loaded from the add-on's _cool-gas-libraries
-// directory together with the libraries that each of them declares in turn:
-async function loadGasLibraries(
-	id: string,
-	baseRel: string,
-	appsscript: any,
-): Promise<GasLibrary[]> {
-	const declared =
-		(appsscript.dependencies && appsscript.dependencies.libraries) || [];
-	const libraries = await Promise.all(
-		declared.map(async (library: any): Promise<GasLibrary | null> => {
-			const dir =
-				'_cool-gas-libraries/' +
-				library.libraryId +
-				'/' +
-				(library.developmentMode ? 'HEAD' : String(library.version)) +
-				'/';
-			const fetchFile = async (name: string) => {
-				const resp = await fetch(app.LOUtil.getURL(baseRel + dir + name));
-				if (!responseSucceeded(resp)) {
-					throw new Error(baseRel + dir + name + ' HTTP ' + resp.status);
-				}
-				return resp;
-			};
-			const listResp = await fetch(
-				app.LOUtil.getURL(baseRel + dir + '_cool-gas.json'),
-			);
-			if (!responseSucceeded(listResp)) {
-				console.warn(
-					'extension ' +
-						id +
-						': Apps Script library ' +
-						library.userSymbol +
-						' is missing from ' +
-						dir +
-						' (see scripts/gas/fetch-gas-addon.py)',
-				);
-				return null;
-			}
-			const scripts: string[] = (await listResp.json()).scripts;
-			const [sources, manifest] = await Promise.all([
-				Promise.all(
-					scripts.map(async (name) => (await fetchFile(name)).text()),
-				),
-				fetchFile('appsscript.json').then((resp) => resp.json()),
-			]);
-			return {
-				userSymbol: library.userSymbol,
-				dir: dir,
-				scripts: scripts,
-				sources: sources,
-				libraries: await loadGasLibraries(id, baseRel, manifest),
-			};
-		}),
-	);
-	return libraries.filter((library): library is GasLibrary => library !== null);
-}
-
 // The proxy calls that the Extension controls are passing on, by call id, each with whether one of
 // the controls found a frame for it:
 const proxyCallDeliveries = new Map<string, { delivered: boolean }>();
@@ -2206,19 +2110,8 @@ function makeGasProxyHandlers(extensionId: string): GasProxyHandlers {
 
 async function collectGasAddonMenu(
 	id: string,
-	baseRel: string,
-	scriptNames: string[],
-	libraries: GasLibrary[],
 	map: any,
 ): Promise<{ caption?: string; functionName?: string; separator?: boolean }[]> {
-	const sources = await Promise.all(
-		scriptNames.map(async (s) => {
-			const resp = await fetch(app.LOUtil.getURL(baseRel + s));
-			if (!responseSucceeded(resp))
-				throw new Error(baseRel + s + ' HTTP ' + resp.status);
-			return await resp.text();
-		}),
-	);
 	const seq = nextGasCollectId++;
 	const callId = 'gas-collect-' + id + '-' + seq;
 	const proxyId = 'gas-collect-proxy-' + id + '-' + seq;
@@ -2247,50 +2140,29 @@ async function collectGasAddonMenu(
 		};
 		map.on('executescriptresult', handler);
 		app.socket.sendMessage(
-			gasRunnerMessage(
-				callId,
-				proxyId,
-				id,
-				{ sources, names: scriptNames, libraries },
-				'__coolGasMenu',
-				[],
-			),
+			gasRunnerMessage(callId, proxyId, id, '__coolGasMenu', []),
 		);
 	});
 }
 
-// The executescript message that runs the add-on's function functionName with functionArgs in
+// The callextension message that runs the add-on's function functionName with functionArgs in
 // the kit, through the GAS runner that the kit has in its prelude:
 function gasRunnerMessage(
 	callId: string,
 	proxyId: string,
 	extensionId: string,
-	gc: ExtensionManifest['gasContext'],
 	functionName: string,
 	functionArgs: unknown[],
 ): string {
-	const args =
-		'[' +
-		JSON.stringify(proxyId) +
-		', ' +
-		JSON.stringify(gc.sources) +
-		', ' +
-		JSON.stringify(gc.names) +
-		', ' +
-		JSON.stringify(functionName) +
-		', ' +
-		JSON.stringify(functionArgs) +
-		', ' +
-		JSON.stringify(extensionId) +
-		', ' +
-		JSON.stringify(gc.libraries) +
-		']';
 	return (
-		'executescript ' +
+		'callextension ' +
 		callId +
-		' 1 <gas-call>\n$internal.runGasAddOn.apply(null, ' +
-		args +
-		');'
+		' ' +
+		extensionId +
+		' gas ' +
+		functionName +
+		'\n' +
+		JSON.stringify([proxyId, functionArgs])
 	);
 }
 
@@ -2498,41 +2370,6 @@ window.L.loadExtensions = async function (map: any, docType: string) {
 						manifest.contributes = undefined;
 					}
 				}
-				if (manifest.contributes && manifest.contributes.commands) {
-					await Promise.all(
-						manifest.contributes.commands.map(async (command) => {
-							// Panel commands have no kit-side script to fetch.
-							if (command.panel) return;
-							if (!command.script) {
-								console.warn(
-									'extension ' +
-										id +
-										': command ' +
-										command.id +
-										' has neither script nor panel',
-								);
-								return;
-							}
-							try {
-								const scriptResp = await fetch(
-									app.LOUtil.getURL(baseRel + command.script),
-								);
-								if (!responseSucceeded(scriptResp))
-									throw new Error('HTTP ' + scriptResp.status);
-								command.source = await scriptResp.text();
-							} catch (err) {
-								console.warn(
-									'extension ' +
-										id +
-										': command ' +
-										command.id +
-										' script unreadable:',
-									err,
-								);
-							}
-						}),
-					);
-				}
 				await localizeManifest(manifest, baseRel);
 				return { id, baseRel, manifest };
 			} catch (err) {
@@ -2559,7 +2396,7 @@ window.L.loadExtensions = async function (map: any, docType: string) {
 	for (const entry of loaded) {
 		if (entry === null) continue;
 		const { id, baseRel, manifest } = entry;
-		if (manifest.manifestVersion !== '0.1') {
+		if (manifest.manifestVersion !== '0.2') {
 			console.warn(
 				'extension ' +
 					id +

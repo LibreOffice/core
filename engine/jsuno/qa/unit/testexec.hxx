@@ -20,10 +20,11 @@
 #include <jsuno/jsuno.hxx>
 #include <rtl/string.hxx>
 
-jsuno::Result testexec(OString const & script) {
+jsuno::Result testexec(OString const & script, OString const & arguments = "[]"_ostr) {
     return jsuno::execute(
         std::u8string_view(u8"", 1),
         std::string_view(script.getStr(), script.getLength() + 1), "<input>", 1,
+        std::string_view(arguments.getStr(), arguments.getLength() + 1),
         [](std::string_view level, std::string_view message) {
             std::cout << "console." << level << ": " << message << std::endl;
             if (level == "assert") {

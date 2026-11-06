@@ -1,0 +1,6 @@
+{
+    "manifestVersion": "0.2",
+    "name": "Remote",
+    "remote": ["helper.js", "remote.js"],
+    "contributes": "ui.json"
+}

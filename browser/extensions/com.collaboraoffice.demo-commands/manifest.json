@@ -1,5 +1,5 @@
 {
-    "manifestVersion": "0.1",
+    "manifestVersion": "0.2",
     "name": "Commands demo",
     "icon": "icon.svg",
     "supports": ["text"],

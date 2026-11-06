@@ -46,6 +46,7 @@
 #endif
 #include <wsd/COOLWSD.hpp>
 #include <wsd/DocumentBroker.hpp>
+#include <wsd/Extensions.hpp>
 #include <wsd/FileServer.hpp>
 #if !MOBILEAPP
 #include <wsd/HostUtil.hpp>
@@ -2091,14 +2092,14 @@ bool ClientSession::_handleInput(const char *buffer, int length)
         }
     }
 #endif
-    else if (tokens.equals(0, "executescript"))
+    else if (tokens.equals(0, "callextension"))
     {
         if (!allowsExtensions())
         {
-            LOG_WRN("Dropping executescript from a session where extensions are off");
+            LOG_WRN("Dropping callextension from a session where extensions are off");
             return true;
         }
-        return forwardToChild(std::string(buffer, length), docBroker);
+        return runExtensionCall(std::string_view(buffer, length), tokens, docBroker);
     }
     else if (tokens.equals(0, "proxyreturn"))
     {
@@ -3253,6 +3254,56 @@ bool ClientSession::forwardToChild(const std::string& message,
 {
     const bool binary = message.starts_with("paste") || message.starts_with("urp");
     return docBroker->forwardToChild(client_from_this(), message, binary);
+}
+
+bool ClientSession::runExtensionCall(
+    std::string_view message, StringVector const & tokens,
+    std::shared_ptr<DocumentBroker> const & docBroker)
+{
+    // The message is "callextension <callId> <extensionId> <kind> <name>\n<arguments>" (with the
+    // arguments as JSON text, where empty stands for none), and the kit gets a script made only of
+    // the extension's installed code, together with the arguments as data:
+    if (tokens.size() < 2) {
+        sendTextFrameAndLogError("error: cmd=callextension kind=syntax");
+        return false;
+    }
+    std::string const callId = tokens[1];
+    std::string error;
+    std::optional<Extensions::CallScript> script;
+    if (tokens.size() != 5) {
+        error = "malformed callextension";
+    } else {
+#if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP) || defined(_WIN32)
+#if !MOBILEAPP
+        std::string const childRoot = COOLWSD::ChildRoot;
+#else
+        std::string const childRoot;
+#endif
+        script = Extensions::makeCallScript(
+            childRoot, docBroker->getConfigId(), tokens[2], tokens[3], tokens[4], error);
+#else
+        error = "no extensions in this app";
+#endif
+    }
+    if (!script) {
+        LOG_WRN("Refusing callextension [" << callId << "]: " << error);
+        sendTextFrame(
+            "executescriptresult: {\"id\":\"" + JsonUtil::escapeJSONValue(callId)
+            + "\",\"err\":{\"name\":\"Error\",\"message\":\"" + JsonUtil::escapeJSONValue(error)
+            + "\"}}");
+        return true;
+    }
+    auto const newline = message.find('\n');
+    std::string arguments(
+        newline == std::string_view::npos ? std::string_view() : message.substr(newline + 1));
+    if (arguments.empty()) {
+        arguments = "[]";
+    }
+    return forwardToChild(
+        "executescript " + callId + ' ' + std::to_string(script->line) + ' '
+            + std::to_string(arguments.size()) + ' ' + script->source + '\n' + arguments
+            + script->text,
+        docBroker);
 }
 
 bool ClientSession::filterMessage(const std::string& message) const

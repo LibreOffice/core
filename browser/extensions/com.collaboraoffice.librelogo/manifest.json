@@ -1,8 +1,9 @@
 {
-    "manifestVersion": "0.1",
+    "manifestVersion": "0.2",
     "name": "LibreLogo",
     "entry": "index.html",
     "icon": "icon.svg",
     "supports": ["text"],
+    "remote": ["remote.js"],
     "contributes": "ui.json"
 }

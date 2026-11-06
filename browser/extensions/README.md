@@ -3,21 +3,63 @@
 An extension is a directory (or zip, for the integrator preset pipeline) containing a
 `manifest.json` plus whatever HTML/JS/CSS/icon files it references.
 
+The name of the directory is the extension's ID, e.g. `com.example.wordcount`. It must
+consist of ASCII letters, digits, `.`, `_` and `-`, must not start with `.`, and must
+be at most 255 characters long.
+
 ## manifest.json fields
 
 | Field | Meaning |
 |---|---|
-| `manifestVersion` | Currently always `"0.1"`. Bumped on backwards-incompatible format changes. |
+| `manifestVersion` | Currently always `"0.2"`. Bumped on backwards-incompatible changes. |
 | `name` | Human-readable name shown in the notebookbar tab, menu, and panel header when `entry` is set. Unused for a commands-only extension. |
 | `entry` | Path (relative to the manifest) to the HTML page loaded into the sidebar panel's iframe. Omit it for a commands-only extension with no sidebar UI. |
 | `icon` | Path (relative to the manifest) to an icon shown in the notebookbar's "Extensions" tab, on the extension's toggle button when `entry` is set, and on the dropdown that offers its `contributes.extensionsMenu` commands. A generic icon stands in when it is absent. See `contributes.commands[].icon` for a per-command icon. |
 | `supports` | Array of doc classes: `"text"`, `"spreadsheet"`, `"presentation"`, `"drawing"`. Absent or empty means all. |
+| `remote` | Array of paths (relative to the manifest) to the JS files that add to the object `remote` the functions that the panel calls in the kit through `cool.remote`. See "Calling into the kit" below. |
 | `contributes` | See below. |
 
 An extension with `entry` gets a toggle button in the notebookbar's "Extensions" tab
 and the compact-UI "Extensions" menu; activating it opens `entry` as a foldable
 sidebar panel. This is unrelated to `contributes` below and works the same regardless
 of whether the extension also declares commands.
+
+## Calling into the kit
+
+The panel runs in an iframe in the browser, and code that works on the document
+runs in the kit, with the Apps Script services and the UNO API. The kit only runs
+code that is installed with the extension. The files that the manifest's `remote`
+field lists add the functions that the panel can call to the object `remote`:
+
+```json
+"remote": ["remote.js"]
+```
+
+```js
+remote.readParagraph = function readParagraph(n) {
+    return DocumentApp.getActiveDocument().getBody().getChildren()[n - 1].getText();
+};
+```
+
+The files run in the order of the list, in one context in which `const remote = {}`
+is already declared, so they can use each other's top-level functions, and they
+must add to `remote` rather than declare or assign it. (A function expression that
+repeats the name, as above, gives the function its name in the stack traces of
+errors, which a function assigned to a property does not get otherwise.)
+
+The name of such a function must not contain whitespace. The panel calls one of them
+through `cool.remote`, which returns a promise of the function's return value:
+
+```js
+const text = await cool.remote.readParagraph(3);
+```
+
+The arguments and the return value travel as JSON. Each call runs the files in a
+fresh QuickJS context, so nothing is kept from one call to the next. An exception
+in the kit rejects the promise with an error whose stack names the lines of the
+`remote` files. `cool.document.onSelectionChanged` and `cool.document.onModified`
+take a function in the panel that the kit calls back when the selection or the
+document changes.
 
 ## contributes
 
@@ -32,7 +74,7 @@ manifest.json:
 
 ```json
 {
-  "manifestVersion": "0.1",
+  "manifestVersion": "0.2",
   "name": "Commands demo",
   "supports": ["text"],
   "contributes": "ui.json"
@@ -249,6 +291,7 @@ ui.json:
   running the command.
 
 Command ids are namespaced internally so two extensions can never collide.
+A command id must not contain whitespace.
 
 ## Localization
 
@@ -348,8 +391,8 @@ Extension load asks the runner for that menu through the reserved name
 the Extensions menu and in the Extensions notebookbar tab, where an editor
 add-on's menu belongs.
 
-Choosing an item ships the add-on's sources and a call to the item's function to
-the kit as one `executescript` message, the same way any contributed command
+Choosing an item runs the item's function in the kit, with the add-on's installed
+sources, the same way any contributed command
 runs. Messages the add-on passes to `getUi().alert()` then appear in a modal
 dialog in the document window, which the script waits on.
 

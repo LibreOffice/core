@@ -1832,9 +1832,10 @@ struct COKit
     /**
      * Execute a JavaScript snippet via the embedded JS UNO support.
      *
-     * On success the returned oResult holds the script's last expression result,
+     * On success the returned oResult holds the result of calling the function that the script
+     * evaluates to with the @c arguments,
      * JSON-stringified, and oError is empty.  On error oResult is empty and oError holds the
-     * JS exception message.  A script whose value stringifies to nothing, such as `undefined`,
+     * JS exception message.  A result that stringifies to nothing, such as `undefined`,
      * leaves both empty.
      *
      * The @c script is UTF-8.
@@ -1856,9 +1857,10 @@ struct COKit
      * the callback it captured at creation time, so a later executeScript with a different
      * callback only affects proxies created by that later call.
      *
-     * @param script the script source.
+     * @param script the script source, which evaluates to the function that is called.
      * @param source used for any exception stack frames that are reported back.
      * @param line (1-based) used for any exception stack frames that are reported back.
+     * @param arguments UTF-8 JSON text of the array of the arguments for the function.
      * @param consoleCallback hook for console.* method calls.
      * @param consoleCallbackData opaque pointer passed to @c consoleCallback on each call.
      * @param proxyCallback hook for proxy listener fires; may be null.
@@ -1868,6 +1870,7 @@ struct COKit
      */
     virtual COKitScriptResult executeScript(std::string const & script,
                                std::string_view source, int line,
+                               std::string const & arguments,
                                std::function<void(
                                    void * data, std::string_view level, std::string_view message)>
                                    consoleCallback,

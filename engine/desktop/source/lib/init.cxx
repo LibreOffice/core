@@ -11640,7 +11640,7 @@ std::map<void *, std::shared_ptr<ProxyCallbackState>> g_proxyCallbackStates;
 #endif
 
 COKitScriptResult COKitImpl::executeScript(
-    std::string const & script, std::string_view source, int line,
+    std::string const & script, std::string_view source, int line, std::string const & arguments,
     std::function<void(void * data, std::string_view level, std::string_view message)>
         consoleCallback,
     void * consoleCallbackData,
@@ -11675,6 +11675,7 @@ COKitScriptResult COKitImpl::executeScript(
         auto [value, legacy] = jsuno::execute(
             prelude,
             std::string_view(script.c_str(), script.size() + 1), source, line,
+            std::string_view(arguments.c_str(), arguments.size() + 1),
             [consoleCallback, consoleCallbackData](std::string_view level, std::string_view message)
             { consoleCallback(consoleCallbackData, level, message); },
             std::move(hook));
@@ -11708,6 +11709,7 @@ COKitScriptResult COKitImpl::executeScript(
     (void) script;
     (void) source;
     (void) line;
+    (void) arguments;
     (void) consoleCallback;
     (void) consoleCallbackData;
     (void) proxyCallback;

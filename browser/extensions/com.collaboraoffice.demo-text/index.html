@@ -46,21 +46,7 @@ button { padding: 6px 14px; border: none; border-radius: 4px; cursor: pointer; f
 function apply() {
   const greeting = document.getElementById('greeting').value;
   const colorize = document.getElementById('colorize').checked;
-  cool.callRemote(function (greeting, colorize) {
-    console.log('script called with:', greeting, colorize);
-    const doc = DocumentApp.getActiveDocument();
-    doc.getBody().getChild(0).editAsText().insertText(0, greeting);
-    if (colorize) {
-      for (const para of doc.getBody().getChildren()) {
-        const color = '#' + Math.floor(Math.random() * 0x1000000).toString(16).padStart(6, '0');
-        try {
-          para.editAsText().setForegroundColor(color);
-        } catch (e) {
-          console.log('caught:', e);
-        }
-      }
-    }
-  }, greeting, colorize);
+  cool.remote.apply(greeting, colorize);
 }
 
 async function pickAndColorize() {
@@ -82,15 +68,7 @@ async function pickAndColorize() {
   el.appendChild(s);
   el.appendChild(document.createTextNode(
     cool._('applying %1 (%2)...').replace('%1', picked.name).replace('%2', picked.color)));
-  await cool.callRemote(function (color) {
-    for (const para of DocumentApp.getActiveDocument().getBody().getChildren()) {
-      try {
-        para.editAsText().setForegroundColor(color);
-      } catch (e) {
-        console.log('caught:', e);
-      }
-    }
-  }, picked.color);
+  await cool.remote.colorizeParagraphs(picked.color);
   el.lastChild.textContent
     = cool._('%1 (%2) applied').replace('%1', picked.name).replace('%2', picked.color);
 }
@@ -100,9 +78,7 @@ function readNthParagraph() {
   const resultEl = document.getElementById('readResult');
   resultEl.classList.remove('error');
   resultEl.textContent = '...';
-  cool.callRemote(function (n) {
-    return DocumentApp.getActiveDocument().getBody().getChildren()[n - 1].getText();
-  }, n).then(function (text) {
+  cool.remote.readParagraph(n).then(function (text) {
     resultEl.textContent = text;
   }).catch(function (err) {
     resultEl.classList.add('error');

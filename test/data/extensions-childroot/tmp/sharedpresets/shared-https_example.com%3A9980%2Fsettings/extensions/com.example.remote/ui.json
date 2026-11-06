@@ -1,0 +1,6 @@
+{
+    "commands": [
+        { "id": "hello", "script": "commands/hello.js" },
+        { "id": "outside", "script": "../com.example.gas/a.gs" }
+    ]
+}

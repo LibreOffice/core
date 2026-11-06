@@ -365,7 +365,7 @@ def record_icon(dest, external, internal):
     elif not target.is_file():
         sys.exit(f"internal icon {internal!r} is not a file in the add-on")
     path = dest / "_cool-gas-manifest.json"
-    manifest = {"manifestVersion": "0.1"}
+    manifest = {"manifestVersion": "0.2"}
     if path.exists():
         try:
             manifest = json.loads(path.read_text())

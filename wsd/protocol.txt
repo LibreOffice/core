@@ -169,22 +169,27 @@ aichatcancel: <requestId>
     Cancel an in-progress AI chat request. <requestId> is the identifier
     from the original 'aichat' message.
 
-executescript <callId> <startLine> <source>
-<script>
+callextension <callId> <extensionId> <kind> <name>
+<arguments>
 
-    Run <script> as a JavaScript snippet in the kit's JS UNO and reply via 'executescriptresult:'
-    tagged with the same <callId>.  <script> occupies everything after the first newline; the header
-    line carries only <callId>, <startLine> and <source>.
+    Call a function of the installed code of the extension <extensionId> in the kit's JS UNO, and
+    reply via 'executescriptresult:' tagged with the same <callId>.  <arguments> occupies everything
+    after the first newline and is a JSON array of the arguments, where an empty <arguments> stands
+    for no arguments.  <kind> is one of
 
-    <startLine> (1-based) and <source> are the coordinates QuickJS attributes to any stack frame the
-    script produces, so an exception thrown from inside <script> at its own (1-based) line N reports
-    as <source>:<startLine>+N-1:<column>.  <source> is typically the URL of the .js file the caller
-    took the code from; <startLine> compensates for any lines the caller prepends before <script>
-    (e.g. cool.callRemote wraps the function's own source in an outer expression).
+    * 'remote': the function <name> that the files that the "remote" field of the extension's
+      manifest.json lists add to the object 'remote'
+    * 'command': the function <name> of the object that the variable 'commands' holds in the
+      "script" file of the command <name> in the extension's contributions
+    * 'gas': the function <name> of the Apps Script add-on, run through the GAS runner of the kit
+      with the add-on's code files and libraries, with the arguments [<proxyId>, [<arg>, ...]]
+    * 'listen' or 'unlisten': add or remove the built-in listener for the document event <name>
+      ('selectionChanged' or 'modified'), which calls the JS-UNO proxy whose ID is the only argument
 
-    Used by the iframe-extension framework (browser/extensions/cool.js's cool.callRemote helper) to
-    call into the kit from extension iframes.  <callId> is an opaque string the client picks for
-    matching the resulting 'executescriptresult:'.
+    The server looks the extension up among the extension presets of the document's configuration
+    first, then among the built-in extensions.  When it cannot make a call of the message, it
+    replies with an 'executescriptresult:' whose "err" gives the reason.  <callId> is an opaque
+    string that the client picks for matching the resulting 'executescriptresult:'.
 
 proxyreturn <callId> <json-value>
 
@@ -1554,7 +1559,7 @@ aichatresult:<json>
 
 executescriptresult: <json>
 
-    Reply to an 'executescript' message.  The JSON payload has the shape
+    Reply to a 'callextension' message.  The JSON payload has the shape
 
         { "id": <callId> [, "ok": <jsonValue>] [, "err": <error>] [, "legacyUnoApi": true] }
 
@@ -1579,7 +1584,7 @@ executescriptresult: <json>
 
 proxycall: <json>
 
-    Notification that a UNO listener proxy installed via an earlier 'executescript' has been invoked
+    Notification that a UNO listener proxy installed via an earlier 'callextension' has been invoked
     from UNO.  The JSON payload has the shape
 
         { "proxyId": <string>, "callId": <string>, "method": <string>, "args": [...] }
@@ -1591,7 +1596,7 @@ proxycall: <json>
 consolemsg <level>
 <message>
 
-    Notification that a script running under an 'executescript' called one of the WHATWG Console API
+    Notification that a script running under a 'callextension' called one of the WHATWG Console API
     methods jsuno registers on the global `console` object: log, info, warn, error, debug, trace or
     assert.  <level> is that method name; <message> occupies everything after the first newline and
     is the stringified-and-space-joined args the script passed.  For "trace" and "assert" the JS
@@ -1985,6 +1990,18 @@ remotedocevent tag=<t> source=<encoded persistent link> event=<event> [part=<p>]
     * 'error': the subscription failed; <kind> names the reason, among them
       'notfound' for a persistent link no remote link is bound to and
       'notoken' for a source the view holds no token for
+
+child-<sessionId> executescript <callId> <startLine> <argumentsLength> <source>
+<arguments><script>
+
+    Runs <script>, which the server made from the installed code of an extension for an
+    'callextension' of the client, as a JavaScript snippet in the kit's JS UNO, calls the function
+    that <script> evaluates to with the elements of <arguments> as its arguments, and replies via
+    'executescriptresult:' tagged with the same <callId>.  After the first newline, the first
+    <argumentsLength> bytes are <arguments>, the JSON text of an array, and the rest is <script>.
+    <startLine> (1-based) and <source> are the coordinates QuickJS attributes to any stack frame the
+    script produces, so an exception thrown from inside <script> at its own (1-based) line N reports
+    as <source>:<startLine>+N-1:<column>.
 
 disconnect
 

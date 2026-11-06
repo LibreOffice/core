@@ -3359,6 +3359,37 @@ ValueRef eval(JSContext * ctx, std::string_view script, char const * source, int
     return ValueRef(ctx, JS_Eval2(ctx, script.data(), script.size() - 1, &opts));
 }
 
+// Call the function with the elements of the JSON array in arguments (whose last element must be a
+// terminating NUL) as its arguments:
+ValueRef callWithArguments(JSContext * ctx, JSValueConst function, std::string_view arguments) {
+    assert(!arguments.empty() && arguments.back() == '\0');
+    if (!JS_IsFunction(ctx, function)) {
+        return ValueRef(ctx, JS_ThrowTypeError(ctx, "the script is not a function"));
+    }
+    ValueRef const array(
+        ctx, JS_ParseJSON(ctx, arguments.data(), arguments.size() - 1, "<arguments>"));
+    if (JS_IsException(array)) {
+        return ValueRef(ctx, JS_EXCEPTION);
+    }
+    if (!JS_IsArray(array)) {
+        return ValueRef(ctx, JS_ThrowTypeError(ctx, "the arguments are not an array"));
+    }
+    int64_t length;
+    if (JS_GetLength(ctx, array, &length) == -1) {
+        return ValueRef(ctx, JS_EXCEPTION);
+    }
+    std::vector<ValueRef> elements;
+    std::vector<JSValue> argv;
+    for (int64_t i = 0; i != length; ++i) {
+        elements.emplace_back(ctx, JS_GetPropertyInt64(ctx, array, i));
+        if (JS_IsException(elements.back())) {
+            return ValueRef(ctx, JS_EXCEPTION);
+        }
+        argv.push_back(elements.back());
+    }
+    return ValueRef(ctx, JS_Call(ctx, function, JS_UNDEFINED, argv.size(), argv.data()));
+}
+
 // Parse err.stack (QuickJS format) into structured frames.  Each frame appears on its own
 // line, typically "    at NAME (SOURCE:LINE:COL)".  Non-matching lines (e.g. a synthesized
 // "Error\n" preamble, or "at <anonymous> (native)" frames without a source location) are
@@ -3455,6 +3486,7 @@ jsuno::Exception::~Exception() = default;
 
 jsuno::Result jsuno::execute(
     std::u8string_view prelude, std::string_view script, std::string_view source, int line,
+    std::string_view arguments,
     std::function<void(std::string_view level, std::string_view message)> consoleHook,
     std::function<bool(std::string_view payload)> proxyCallHook)
 {
@@ -3628,6 +3660,9 @@ jsuno::Result jsuno::execute(
             "<prelude>", 1));
         if (!JS_IsException(evalRes)) {
             evalRes = eval(ctx, script, getRuntimeData(ctx)->source.c_str(), line);
+        }
+        if (!JS_IsException(evalRes)) {
+            evalRes = callWithArguments(ctx, evalRes, arguments);
         }
         if (JS_IsException(evalRes))
         {

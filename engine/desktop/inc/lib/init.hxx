@@ -538,6 +538,7 @@ namespace desktop {
         void registerFileSaveDialogCallback(COKitFileSaveDialogCallback pCallback) override;
         COKitScriptResult executeScript(std::string const & script,
                            std::string_view source, int line,
+                           std::string const & arguments,
                            std::function<void(
                                void * data, std::string_view level, std::string_view message)>
                                consoleCallback,

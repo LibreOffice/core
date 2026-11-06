@@ -125,9 +125,9 @@ protected:
         std::u16string_view libraries)
     {
         OUString const script(
-            "$internal.runGasAddOn('scriptinterop_document_test', ["
+            "(function () { return $internal.runGasAddOn('scriptinterop_document_test', ["
             + jsLiteral(read(url)) + "], ["
-            + jsLiteral(url) + "], 'test', [], 'scriptinterop_test', [" + libraries + "]);");
+            + jsLiteral(url) + "], 'test', [], 'scriptinterop_test', [" + libraries + "]); })");
         std::function<bool(std::string_view)> hook;
         if (proxyCallHook) {
             hook = [proxyCallHook](std::string_view payload) {
@@ -139,6 +139,7 @@ protected:
         try {
             auto const result = jsuno::execute(
                 prelude, std::string_view(utf8.getStr(), utf8.getLength() + 1), "<input>", 1,
+                std::string_view("[]", 3),
                 [](std::string_view level, std::string_view message) {
                     std::string const msg
                         = "console." + std::string(level) + ": " + std::string(message);

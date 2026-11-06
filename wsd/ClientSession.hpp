@@ -635,6 +635,11 @@ private:
     bool forwardToChild(const std::string& message,
                         const std::shared_ptr<DocumentBroker>& docBroker);
 
+    /// Run the extension call of a callextension message in the kit:
+    bool runExtensionCall(
+        std::string_view message, StringVector const & tokens,
+        std::shared_ptr<DocumentBroker> const & docBroker);
+
     bool forwardToClient(const std::shared_ptr<Message>& payload);
 
     /// Returns true if given message from the client should be allowed or not

@@ -1,0 +1,7 @@
+{
+    "dependencies": {
+        "libraries": [
+            { "userSymbol": "Lib", "libraryId": "lib1", "version": "3" }
+        ]
+    }
+}

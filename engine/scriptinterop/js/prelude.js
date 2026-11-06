@@ -394,6 +394,51 @@ $internal.installGasServices = function(uiStub, menuItems, pendingAlerts) {
         noUi, { push: addOnOnly('Spreadsheet.addMenu') }, { push: addOnOnly('Spreadsheet.toast') });
 })();
 
+// The UNO listeners for the document events selectionChanged and modified, each attached through
+// the proxy with the given ID, which passes its calls on to the client:
+(function() {
+    function controller() {
+        return uno.idl.com.sun.star.frame.Desktop.create(uno.componentContext).getCurrentFrame()
+            .getController();
+    }
+    const listeners = {
+        selectionChanged: {
+            type: () => uno.idl.com.sun.star.view.XSelectionChangeListener,
+            attach: proxy => controller().addSelectionChangeListener(proxy),
+            detach: proxy => controller().removeSelectionChangeListener(proxy)
+        },
+        modified: {
+            type: () => uno.idl.com.sun.star.util.XModifyListener,
+            attach: proxy => controller().getModel().addModifyListener(proxy),
+            detach: proxy => controller().getModel().removeModifyListener(proxy)
+        }
+    };
+    function listener(name) {
+        if (!Object.prototype.hasOwnProperty.call(listeners, name)) {
+            throw new Error('no document event ' + name);
+        }
+        return listeners[name];
+    }
+    $internal.listenToDocument = function(name, proxyId) {
+        const l = listener(name);
+        $internal.suppressLegacyUnoApiStart();
+        try {
+            l.attach($internal.createProxy(l.type(), String(proxyId)));
+        } finally {
+            $internal.suppressLegacyUnoApiEnd();
+        }
+    };
+    $internal.stopListeningToDocument = function(name, proxyId) {
+        const l = listener(name);
+        $internal.suppressLegacyUnoApiStart();
+        try {
+            l.detach($internal.takeProxy(String(proxyId)));
+        } finally {
+            $internal.suppressLegacyUnoApiEnd();
+        }
+    };
+})();
+
 // Runs the add-on's function fnName with callArgs, after the add-on's libraries and sources, and
 // returns its result together with what the add-on asked the user interface for:
 $internal.runGasAddOn = function(

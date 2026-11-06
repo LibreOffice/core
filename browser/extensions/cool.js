@@ -134,7 +134,7 @@
 	const pending = Object.create(null);
 
 	let nextProxyId = 0;
-	// Mapping from proxyId to { on: { method: handler, ... }, detach } objects:
+	// Mapping from proxyId to { on: { method: handler, ... }, event } objects:
 	const listeners = Object.create(null);
 
 	let nextDialogId = 0;
@@ -142,89 +142,31 @@
 	// promise's { resolve } so Extension_DialogResult can settle it:
 	const pendingDialogs = Object.create(null);
 
-	function attachTrampoline(typeName, proxyId, fnSrc, facade) {
-		$internal.suppressLegacyUnoApiStart();
-		let ended = false;
-		try {
-			const parts = typeName.split('.');
-			let type = uno.idl;
-			for (const p of parts) type = type[p];
-			if (!facade) {
-				$internal.suppressLegacyUnoApiEnd();
-				ended = true;
-			}
-			const proxy = $internal.createProxy(type, proxyId);
-			(0, eval)('(' + fnSrc + ')')(proxy);
-		} finally {
-			if (!ended) $internal.suppressLegacyUnoApiEnd();
-		}
-	}
-	function detachTrampoline(proxyId, fnSrc, facade) {
-		if (facade) $internal.suppressLegacyUnoApiStart();
-		try {
-			const proxy = $internal.takeProxy(proxyId);
-			(0, eval)('(' + fnSrc + ')')(proxy);
-		} finally {
-			if (facade) $internal.suppressLegacyUnoApiEnd();
-		}
-	}
-
-	// Best-effort parse of `new Error().stack` to locate the first frame that isn't inside
-	// cool.js itself; handles the two common stack shapes (Chrome/Edge: `at foo (URL:L:C)`;
-	// Firefox/Safari: `foo@URL:L:C`):
-	function detectCallerLocation() {
-		let stackText;
-		try { throw new Error(); } catch (e) { stackText = e.stack || ''; }
-		const frameRe = /(?:at\s+[^(\n]*\(([^)]+?):(\d+):(\d+)\))|(?:(?:^|@)([^\s@]+?):(\d+):(\d+))/;
-		for (const line of stackText.split('\n')) {
-			const m = frameRe.exec(line);
-			if (!m) continue;
-			const url = m[1] || m[4];
-			if (!url) continue;
-			if (/(?:^|\/)cool\.js(?:[:?]|$)/.test(url)) continue;
-			return { source: url, line: parseInt(m[2] || m[5], 10) };
-		}
-		return null;
-	}
-
-	// Takes a function `fn` followed by arguments `args`.  Runs `fn.apply(null, args)` inside a
+	// cool.remote.f(...args) runs the function f of the extension's remote files inside a
 	// JS UNO context in the document's kit process and returns a Promise that resolves to the
 	// function application's JSON-decoded return value, or rejects with an Error whose `.name`,
 	// `.message` and `.stack` reflect the JS engine's own error.
 	//
-	// The first argument may also be an `{fn, source, line}` object, giving an explicit source
-	// name and 1-based start line reported back in stack traces.
-	//
-	// The function `fn` is shipped as source text via `fn.toString()` and evaluated on the
-	// server side, so it must be self-contained: it cannot close over variables in the iframe's
-	// scope, but it can use the JS UNO `uno` global and its own arguments and locals.  The
+	// The remote files are the ones that manifest.json lists as "remote", and one of them adds f
+	// to the object `remote`, as in `remote.f = function (...) {...}`, where f can use the JS UNO
+	// `uno` global and its own arguments and locals.  Only f's name and the `args` leave the
+	// frame, and the
 	// `args` must be JSON-serializable.
-	window.cool.callRemote = function (fnOrOpts) {
-		const args = Array.prototype.slice.call(arguments, 1);
-		let fn, source, line;
-		if (typeof fnOrOpts === 'function') {
-			fn = fnOrOpts;
-			const loc = detectCallerLocation();
-			if (loc) {
-				source = loc.source;
-				line = loc.line;
-			} else {
-				source = '<input>';
-				line = 1;
-			}
-		} else {
-			fn = fnOrOpts.fn;
-			source = fnOrOpts.source;
-			line = fnOrOpts.line;
+	window.cool.remote = new Proxy(Object.create(null), {
+		get: function (target, name) {
+			// Neither a symbol nor "then" (which would make cool.remote look like a
+			// Promise) names a function:
+			if (typeof name !== 'string' || name === 'then') return undefined;
+			return function () {
+				return window.cool._postCall({
+					msgId: 'Extension_Call',
+					kind: 'remote',
+					name: name,
+					args: Array.prototype.slice.call(arguments)
+				});
+			};
 		}
-		return window.cool._postCall({
-			msgId: 'Extension_Call',
-			fn: fn.toString(),
-			source,
-			line,
-			args: args
-		});
-	};
+	});
 
 	// Post message to the host under a new callId, and return a Promise that the host's
 	// Extension_CallResult for that callId settles:
@@ -252,58 +194,6 @@
 		err.toString = function () { return this.name + ': ' + this.message; };
 		return err;
 	}
-
-	// Bundle a UNO listener registration with its iframe-side per-method handlers.
-	//
-	// `typeName` is the UNO interface name as a dotted string, e.g.
-	// "com.sun.star.document.XDocumentEventListener".
-	//
-	// `spec.attach(proxy)` runs in the kit's JS UNO context with a freshly-created proxy
-	// already bound to that interface; the implementation just wires the proxy into the
-	// relevant UNO API (e.g. `model.addDocumentEventListener(proxy)`).  `spec.detach(proxy)`
-	// gets the same proxy back and must do the matching unwire (e.g.
-	// `model.removeDocumentEventListener(proxy)`); skipping it would leak the kit-side
-	// listener.  Both run as cool.callRemote scripts.
-	//
-	// `spec.on` is an object mapping UNO method names to handler functions; handlers receive
-	// the method's UNO arguments and may return a value (or a Promise of one) to be sent back
-	// as the listener method's return value (only relevant for non-void methods).
-	//
-	// Returns `{ready, detach}`: `ready` resolves after the kit-side attach script has run;
-	// `detach()` runs `spec.detach` on the kit as the matching callRemote.
-	function attachListenerImpl(typeName, spec, facade) {
-		const proxyId = window.cool.idPrefix + 'p' + (nextProxyId++);
-		listeners[proxyId] = {
-			on: spec.on,
-			detach: spec.detach,
-			facade: facade
-		};
-		const ready = window.cool.callRemote(
-			attachTrampoline, typeName, proxyId, spec.attach.toString(), facade);
-		return {
-			ready,
-			detach: function () {
-				const entry = listeners[proxyId];
-				if (!entry) return;
-				delete listeners[proxyId];
-				window.cool.callRemote(
-					detachTrampoline, proxyId, entry.detach.toString(), entry.facade);
-			}
-		};
-	}
-	window.cool.attachListener = function (typeName, spec) {
-		return attachListenerImpl(typeName, spec, false);
-	};
-
-	// Register a handler map under a caller-chosen proxyId; pairs with a kit-side
-	// `$internal.createProxy(type, proxyId)` inside one callRemote body whose runner takes
-	// the proxy back before returning:
-	window.cool.registerProxy = function (proxyId, handlers) {
-		listeners[proxyId] = { on: handlers, detach: null, facade: false };
-	};
-	window.cool.unregisterProxy = function (proxyId) {
-		delete listeners[proxyId];
-	};
 
 	// cool.onCommand = function (id) {...}: receives `panel: true` commands
 	// from the notebookbar, menus and shortcuts. Commands posted before the
@@ -368,7 +258,7 @@
 	// immediately as cancelled.
 	//
 	// The dialog iframe loads its own copy of this cool.js and uses cool.dialog.close/
-	// cool.dialog.cancel to dismiss itself.  It can also use cool.callRemote etc.
+	// cool.dialog.cancel to dismiss itself.  It can also use cool.remote etc.
 	//
 	// opts: { url, title, width, height }.  url is relative to the extension's base URL.
 	window.cool.dialog = {
@@ -400,14 +290,14 @@
 		},
 	};
 
-	// Define a property on cool.document that lazily wires a UNO listener of `typeName` to the
-	// attach/detach scripts when set to a function, and unwires it when set back to null.  The
+	// Define a property on cool.document that lazily attaches the kit's UNO listener for the
+	// event `eventName` when set to a function, and unwires it when set back to null.  The
 	// listener interface's relevant method name `methodName` is delivered to the iframe-side
 	// handler stored in `current`, which is whatever the property currently holds.  Inherited
 	// XEventListener.disposing has no handler installed; the dispatcher's default null
 	// response is fine for a void return type.
-	function defineUnoDocEvent(propName, typeName, attachFn, detachFn, methodName) {
-		let handle = null;
+	function defineUnoDocEvent(propName, eventName, methodName) {
+		let proxyId = null;
 		let current = null;
 		const on = {};
 		on[methodName] = function (event) {
@@ -418,17 +308,33 @@
 			get: function () { return current; },
 			set: function (fn) {
 				current = (typeof fn === 'function') ? fn : null;
-				if (current && !handle) {
-					handle = attachListenerImpl(typeName, {
-						attach: attachFn,
-						detach: detachFn,
-						on: on
-					}, true);
-				} else if (!current && handle) {
-					handle.detach();
-					handle = null;
+				if (current && proxyId === null) {
+					proxyId = window.cool.idPrefix + 'p' + (nextProxyId++);
+					listeners[proxyId] = { on: on, event: eventName };
+					window.cool._postCall({
+						msgId: 'Extension_Call',
+						kind: 'listen',
+						name: eventName,
+						args: [proxyId]
+					});
+				} else if (!current && proxyId !== null) {
+					detach(proxyId);
+					proxyId = null;
 				}
 			}
+		});
+	}
+
+	// Detach the UNO listener under proxyId:
+	function detach(proxyId) {
+		const entry = listeners[proxyId];
+		if (!entry) return;
+		delete listeners[proxyId];
+		window.cool._postCall({
+			msgId: 'Extension_Call',
+			kind: 'unlisten',
+			name: entry.event,
+			args: [proxyId]
 		});
 	}
 
@@ -440,45 +346,14 @@
 		onCommentChanged: null,
 		onCommentRemoved: null
 	};
-	defineUnoDocEvent(
-		'onSelectionChanged',
-		'com.sun.star.view.XSelectionChangeListener',
-		function (proxy) {
-			const desktop
-				= uno.idl.com.sun.star.frame.Desktop.create(uno.componentContext);
-			desktop.getCurrentFrame().getController().addSelectionChangeListener(proxy);
-		},
-		function (proxy) {
-			const desktop
-				= uno.idl.com.sun.star.frame.Desktop.create(uno.componentContext);
-			desktop.getCurrentFrame().getController()
-				.removeSelectionChangeListener(proxy);
-		},
-		'selectionChanged');
-	defineUnoDocEvent(
-		'onModified',
-		'com.sun.star.util.XModifyListener',
-		function (proxy) {
-			const desktop
-				= uno.idl.com.sun.star.frame.Desktop.create(uno.componentContext);
-			desktop.getCurrentFrame().getController().getModel().addModifyListener(proxy);
-		},
-		function (proxy) {
-			const desktop
-				= uno.idl.com.sun.star.frame.Desktop.create(uno.componentContext);
-			desktop.getCurrentFrame().getController().getModel()
-				.removeModifyListener(proxy);
-		},
-		'modified');
+	defineUnoDocEvent('onSelectionChanged', 'selectionChanged', 'selectionChanged');
+	defineUnoDocEvent('onModified', 'modified', 'modified');
 
-	// Detach every listener still registered with cool.attachListener, so closing the iframe
+	// Detach every listener still attached, so closing the iframe
 	// doesn't leave orphaned proxies on the kit side:
 	function detachAll() {
 		for (const proxyId of Object.keys(listeners)) {
-			const entry = listeners[proxyId];
-			delete listeners[proxyId];
-			window.cool.callRemote(
-				detachTrampoline, proxyId, entry.detach.toString(), entry.facade);
+			detach(proxyId);
 		}
 	}
 

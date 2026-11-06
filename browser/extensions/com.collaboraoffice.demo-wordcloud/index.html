@@ -159,13 +159,7 @@ async function generate() {
     btn.disabled = true;
     try {
         resultEl.textContent = cool._('gathering text...');
-        const text = await cool.callRemote(function (useSelection) {
-            const doc = DocumentApp.getActiveDocument();
-            if (useSelection) {
-                return doc.getSelection().getText();
-            }
-            return doc.getBody().getText();
-        }, source === 'selection');
+        const text = await cool.remote.documentText(source === 'selection');
         if (!text || !text.trim()) {
             resultEl.classList.add('error');
             resultEl.textContent = source === 'selection'
@@ -194,34 +188,12 @@ async function generate() {
         // Encode the SVG as a UTF-8 byte array on the browser side and ship the
         // bytes; QuickJS in the kit does not have atob/btoa, so encoding here
         // saves the kit from writing a UTF-8 encoder itself.  The array of
-        // small integers travels through the executescript JSON envelope fine.
+        // small integers travels through the callextension JSON envelope fine.
         const utf8 = unescape(encodeURIComponent(svg));
         const svgBytes = new Array(utf8.length);
         for (let i = 0; i < utf8.length; i++) svgBytes[i] = utf8.charCodeAt(i);
         const heightCm = widthCm * H / W;
-        await cool.callRemote(function (bytes, widthCm, heightCm) {
-            const doc = DocumentApp.getActiveDocument();
-            // With a selection, the image goes right after the end of it:
-            let position = doc.getCursor();
-            if (!position) {
-                const elements = doc.getSelection().getRangeElements();
-                const last = elements[elements.length - 1];
-                const element = last.getElement();
-                if (last.isPartial()) {
-                    position = doc.newPosition(element, last.getEndOffsetInclusive() + 1);
-                } else if (element.getType() === DocumentApp.ElementType.TEXT) {
-                    position = doc.newPosition(element, element.asText().getText().length);
-                } else if (element.getNumChildren) {
-                    position = doc.newPosition(element, element.getNumChildren());
-                } else {
-                    const parent = element.getParent();
-                    position = doc.newPosition(parent, parent.getChildIndex(element) + 1);
-                }
-            }
-            const pixels = (cm) => Math.round(cm / 2.54 * 96);
-            position.insertInlineImage(Utilities.newBlob(bytes, 'image/svg+xml', 'wordcloud.svg'))
-                .setWidth(pixels(widthCm)).setHeight(pixels(heightCm));
-        }, svgBytes, widthCm, heightCm);
+        await cool.remote.insertImage(svgBytes, widthCm, heightCm);
         resultEl.textContent = cool._n('inserted %1 word', 'inserted %1 words', placed.length).replace('%1', placed.length);
     } catch (err) {
         resultEl.classList.add('error');
