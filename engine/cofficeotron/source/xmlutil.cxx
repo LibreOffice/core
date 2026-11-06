@@ -76,8 +76,10 @@ void XMLCALL onStartElement(void* userData, const XML_Char* name, const XML_Char
     splitTriplet(name, element->nsHref, element->localName, element->prefix);
 #if XML_MAJOR_VERSION > 2 || (XML_MAJOR_VERSION == 2 && XML_MINOR_VERSION > 8)
     element->line = static_cast<int>(XML_GetCurrentLineNumber64(context->parser));
+    element->col = static_cast<int>(XML_GetCurrentColumnNumber64(context->parser)) + 1;
 #else
     element->line = static_cast<int>(XML_GetCurrentLineNumber(context->parser));
+    element->col = static_cast<int>(XML_GetCurrentColumnNumber(context->parser)) + 1;
 #endif
     element->nsDecls = std::move(context->pendingNsDecls);
     context->pendingNsDecls.clear();

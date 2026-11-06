@@ -63,6 +63,7 @@ public:
     std::vector<XmlAttribute> attributes;
     std::vector<XmlNamespaceDecl> nsDecls;
     int line = 0;
+    int col = 0;
 
     // Text content, for text nodes.
     std::string text;

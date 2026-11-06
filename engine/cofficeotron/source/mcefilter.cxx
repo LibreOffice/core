@@ -149,7 +149,7 @@ bool checkMCEElement(const XmlNode* element, const std::vector<McScope>& stack, 
     bool validName = localName == TAG_ALTERNATE_CONTENT || localName == TAG_CHOICE
                      || localName == TAG_FALLBACK;
     if (!validName)
-        errors.error(element->line, 0, "Invalid MCE element: " + localName);
+        errors.error(element->line, element->col, "Invalid MCE element: " + localName);
 
     std::string mcePrefix = prefixForNamespace(element, NS_MCE);
 
@@ -157,14 +157,14 @@ bool checkMCEElement(const XmlNode* element, const std::vector<McScope>& stack, 
     {
         if (stack.empty())
         {
-            errors.error(element->line, 0, "Invalid root element: " + mcePrefix + ":" + localName);
+            errors.error(element->line, element->col, "Invalid root element: " + mcePrefix + ":" + localName);
         }
         else
         {
             const McScope& parent = stack.back();
             if (parent.nsHref != NS_MCE || parent.localName != TAG_ALTERNATE_CONTENT)
             {
-                errors.error(element->line, 0,
+                errors.error(element->line, element->col,
                              "Parent of " + mcePrefix + ":" + localName + " element should be "
                                  + mcePrefix + ":" + TAG_ALTERNATE_CONTENT);
             }
@@ -186,12 +186,12 @@ bool checkMCEElement(const XmlNode* element, const std::vector<McScope>& stack, 
             else
                 message = mcePrefix + ":" + localName
                           + " element shouldn't have any attribute with no namespace";
-            errors.error(element->line, 0, message);
+            errors.error(element->line, element->col, message);
         }
         else if (attribute.nsHref == NS_XML
                  && (attribute.localName == "lang" || attribute.localName == "space"))
         {
-            errors.error(element->line, 0,
+            errors.error(element->line, element->col,
                          "xml:" + attribute.localName + " is not allowed in " + mcePrefix + ":"
                              + localName + " element");
         }
@@ -205,7 +205,7 @@ bool checkMCEElement(const XmlNode* element, const std::vector<McScope>& stack, 
             }
             else if (attribute.nsHref == NS_MCE && attribute.localName == "Requires")
             {
-                errors.error(element->line, 0,
+                errors.error(element->line, element->col,
                              mcePrefix
                                  + ":Choice element shouldn't have a Requires element with the "
                                  + mcePrefix + " prefix");
@@ -215,7 +215,7 @@ bool checkMCEElement(const XmlNode* element, const std::vector<McScope>& stack, 
 
     if (isChoice && (!haveRequires || requiresValue.empty()))
     {
-        errors.error(element->line, 0,
+        errors.error(element->line, element->col,
                      mcePrefix + ":Choice element needs a Requires attribute with no namespace");
     }
 
@@ -234,7 +234,7 @@ void transformElement(XmlNode* element, std::vector<McScope>& stack, bool vmlStr
     if (mceElement && element->localName != TAG_ALTERNATE_CONTENT
         && element->localName != TAG_CHOICE && element->localName != TAG_FALLBACK)
     {
-        errors.error(element->line, 0, "Invalid MCE element: " + element->localName);
+        errors.error(element->line, element->col, "Invalid MCE element: " + element->localName);
     }
 
     McScope scope;
@@ -274,7 +274,7 @@ void transformElement(XmlNode* element, std::vector<McScope>& stack, bool vmlStr
     {
         if (qualified != TAG_XML)
         {
-            errors.error(element->line, 0, "VML streams need to start with <xml>: 8.1 (Part 4)");
+            errors.error(element->line, element->col, "VML streams need to start with <xml>: 8.1 (Part 4)");
         }
         else
         {

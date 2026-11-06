@@ -90,6 +90,7 @@ struct ValidationWalk
 {
     ErrorCapper* capper = nullptr;
     int line = 0;
+    int col = 0;
     int current = 0;
     int previous = 0;
     bool mixed = false;
@@ -108,7 +109,7 @@ void rnvErrorHandler(int erno, va_list ap)
     messageCollector = outer;
 
     if (activeWalk && activeWalk->capper)
-        activeWalk->capper->error(activeWalk->line, 0, collapse(message));
+        activeWalk->capper->error(activeWalk->line, activeWalk->col, collapse(message));
 }
 
 std::string* schemaLoadErrors = nullptr;
@@ -162,6 +163,7 @@ void walkElement(ValidationWalk& walk, const XmlNode* element)
     if (walk.current != rn_notAllowed)
     {
         walk.line = element->line;
+        walk.col = element->col;
         walk.mixed = true;
         flushText(walk);
         rnv_start_tag(&walk.current, &walk.previous, name.data(), attributes.data());
