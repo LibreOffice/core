@@ -41,12 +41,10 @@ namespace utl
     public:
         static std::unique_ptr<SvStream>
         CreateStream(const OUString& rFileName, StreamMode eOpenMode,
-                     const cpo::uno::Reference<css::awt::XWindow> & xParentWin = nullptr,
-                     bool bUseSimpleFileAccessInteraction = true);
+                     const cpo::uno::Reference<css::awt::XWindow> & xParentWin = nullptr);
         static std::unique_ptr<SvStream>
         CreateStream(const OUString& rFileName, StreamMode eOpenMode, bool bFileExists,
-                     const cpo::uno::Reference<css::awt::XWindow> & xParentWin = nullptr,
-                     bool bUseSimpleFileAccessInteraction = true);
+                     const cpo::uno::Reference<css::awt::XWindow> & xParentWin = nullptr);
         static std::unique_ptr<SvStream> CreateStream( const cpo::uno::Reference < css::io::XInputStream >& xStream );
         static std::unique_ptr<SvStream> CreateStream( const cpo::uno::Reference < css::io::XStream >& xStream );
         static std::unique_ptr<SvStream> CreateStream( const cpo::uno::Reference < css::io::XInputStream >& xStream, bool bCloseStream );

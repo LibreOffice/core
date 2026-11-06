@@ -140,34 +140,19 @@ static std::unique_ptr<SvStream> lcl_CreateStream( const OUString& rFileName, St
 
 std::unique_ptr<SvStream>
 UcbStreamHelper::CreateStream(const OUString& rFileName, StreamMode eOpenMode,
-                              const cpo::uno::Reference<css::awt::XWindow>& xParentWin,
-                              bool bUseSimpleFileAccessInteraction)
+                              const cpo::uno::Reference<css::awt::XWindow>& xParentWin)
 {
-    // related tdf#99312
-    // create a specialized interaction handler to manages Web certificates and Web credentials when needed
-    Reference< XInteractionHandler > xIH(
-        css::task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), xParentWin));
-
-    if (!bUseSimpleFileAccessInteraction)
-        return lcl_CreateStream(rFileName, eOpenMode, xIH, true /* bEnsureFileExists */);
-
-    Reference<XInteractionHandler> xIHScoped(new comphelper::SimpleFileAccessInteraction(xIH));
-
-    return lcl_CreateStream( rFileName, eOpenMode, xIHScoped, true /* bEnsureFileExists */ );
+    return CreateStream(rFileName, eOpenMode, /*bFileExists*/false, xParentWin);
 }
 
 std::unique_ptr<SvStream>
 UcbStreamHelper::CreateStream(const OUString& rFileName, StreamMode eOpenMode, bool bFileExists,
-                              const cpo::uno::Reference<css::awt::XWindow> & xParentWin,
-                              bool bUseSimpleFileAccessInteraction)
+                              const cpo::uno::Reference<css::awt::XWindow> & xParentWin)
 {
     // related tdf#99312
     // create a specialized interaction handler to manages Web certificates and Web credentials when needed
     Reference< XInteractionHandler > xIH(
         css::task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), xParentWin));
-
-    if (!bUseSimpleFileAccessInteraction)
-        return lcl_CreateStream(rFileName, eOpenMode, xIH, !bFileExists);
 
     Reference<XInteractionHandler> xIHScoped(new comphelper::SimpleFileAccessInteraction(xIH));
     return lcl_CreateStream( rFileName, eOpenMode, xIHScoped,!bFileExists );
