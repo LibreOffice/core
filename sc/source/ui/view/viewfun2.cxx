@@ -1086,7 +1086,9 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
         }
         else    // NULL = use selection (print range is always set), use empty string to delete all ranges
         {
-            if ( GetViewData().GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
+            // tdf#37259 - allow defining print ranges across filtered rows
+            const ScMarkType eMarkType = GetViewData().GetSimpleArea(aRange);
+            if (eMarkType == SC_MARK_SIMPLE || eMarkType == SC_MARK_SIMPLE_FILTERED)
             {
                 rDoc.AddPrintRange( nTab, aRange );
             }

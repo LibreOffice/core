@@ -2844,6 +2844,27 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf55870_CopyFilteredSubtotalAsMetafile)
     assertXPath(pXmlDoc, "//textarray[text='9']", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf37259_DefinePrintRangeAcrossFilteredRows)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    // Third and fourth row are filtered and hidden
+    pDoc->SetRowFiltered(2, 3, 0, true);
+    pDoc->SetRowHidden(2, 3, 0, true);
+
+    // Define the print range from a selection including the filtered rows
+    goToCell(u"A1:D6"_ustr);
+    dispatchCommand(mxComponent, u".uno:DefinePrintArea"_ustr, {});
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. no print range was defined because the selection across filtered rows
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1), pDoc->GetPrintRangeCount(0));
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 3, 5, 0), *pDoc->GetPrintRange(0, 0));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
