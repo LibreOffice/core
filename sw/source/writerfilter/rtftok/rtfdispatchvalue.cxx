@@ -270,16 +270,20 @@ bool RTFDocumentImpl::dispatchParagraphSprmValue(RTFKeyword nKeyword, int nParam
     {
         case RTFKeyword::ITAP:
             nSprm = NS_ooxml::LN_tblDepth;
+            // tdf#117268: If \itap0 is encountered inside tables (between \cellxN and \cell), then
+            // use the default value (1), as Word apparently does
+            if (nParam == 0 && (m_nTopLevelCells != 0 || m_nNestedCells != 0))
+            {
+                nParam = 1;
+                pIntValue = new RTFValue(nParam);
+            }
             break;
         default:
             break;
     }
     if (nSprm > 0)
     {
-        // If \itap0 is encountered after \intbl, the \intbl wins!
-        // Therefore always *prepend* \itap, so any \intbl will override it.
-        m_aStates.top().getParagraphSprms().set(nSprm, pIntValue,
-                                                RTFConflictPolicy::ReplaceAtStart);
+        m_aStates.top().getParagraphSprms().set(nSprm, pIntValue);
         if (nKeyword == RTFKeyword::ITAP && nParam > 0)
         {
             while (m_aTableBufferStack.size() < sal::static_int_cast<std::size_t>(nParam))
@@ -418,7 +422,8 @@ bool RTFDocumentImpl::dispatchTableValue(RTFKeyword nKeyword, int nParam)
 
             m_aStates.top().getTableCellSprms() = m_aDefaultState.getTableCellSprms();
             m_aStates.top().getTableCellAttributes() = m_aDefaultState.getTableCellAttributes();
-            // Don't assume that following text is in a table!
+            // We assume text after a row definition always belongs to the table, to handle text before the real INTBL token
+            dispatchFlag(RTFKeyword::INTBL);
             if (!m_nCellxMax)
             {
                 // Wasn't in table, but now is -> tblStart.
