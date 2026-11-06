@@ -2876,6 +2876,54 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testFontBoundInABranchNotTakenHasNoEf
     CPPUNIT_ASSERT_DOUBLES_EQUAL(fWithout, shownTextSize(xArrow), 0.5);
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testSecondFontTiedByNameIsOneFont)
+{
+    // the children's texts of the first node and of the second have two names, and the layout
+    // ties the second font of the one to the other's
+    createSdImpressDoc("pptx/smartart-second-font-tied-by-name.pptx");
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xFirst(
+        findChildShapeByText(xDiagram, u"Eleven\nTwelve\nThirteen\nLevel 3a\nLevel 3b"_ustr));
+    uno::Reference<drawing::XShape> xSecond(
+        findChildShapeByText(xDiagram, u"Twenty-one\nTwenty-two"_ustr));
+    CPPUNIT_ASSERT(xFirst.is());
+    CPPUNIT_ASSERT(xSecond.is());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(shownTextSize(xFirst), shownTextSize(xSecond), 0.5);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testMarginOfTheSecondFontIsKept)
+{
+    // the children's text node takes its second font for all its text and states its margins
+    // as 0.15 of that font
+    createSdImpressDoc("pptx/smartart-second-font-tied-by-name.pptx");
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xChildren(
+        findChildShapeByText(xDiagram, u"Twenty-one\nTwenty-two"_ustr));
+    CPPUNIT_ASSERT(xChildren.is());
+    uno::Reference<beans::XPropertySet> xProperties(xChildren, uno::UNO_QUERY);
+    const sal_Int32 nLeft(xProperties->getPropertyValue(u"TextLeftDistance"_ustr).get<sal_Int32>());
+    uno::Reference<container::XEnumerationAccess> xParagraphs(xChildren, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParagraph(
+        xParagraphs->createEnumeration()->nextElement(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xRun(xParagraph->createEnumeration()->nextElement(),
+                                             uno::UNO_QUERY);
+    const double fFont(xRun->getPropertyValue(u"CharHeight"_ustr).get<float>());
+    // a point is 2540 / 72 hundredths of a millimetre
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.15 * fFont * 2540.0 / 72.0, double(nLeft), 3.0);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testHiddenShapeWithoutAdjustmentsHasTheWholeBox)
+{
+    // the accent texts beside the pyramid are hidden trapezoids that state no adjustments,
+    // their text has the whole box; in the trapezoid's text area they would come out at 24
+    createSdImpressDoc("pptx/smartart-pyramid-accent-text.pptx");
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xAccent(
+        findChildShapeByText(xDiagram, u"Eleven\nTwelve\nThirteen"_ustr));
+    CPPUNIT_ASSERT(xAccent.is());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(25.0, shownTextSize(xAccent), 0.5);
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testHiddenTextIsDrawnOverItsNode)
 {
     // the layout states the hidden text node before the node it is written on

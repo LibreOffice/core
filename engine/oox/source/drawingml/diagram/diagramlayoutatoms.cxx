@@ -2127,9 +2127,9 @@ static double fontOfLevel(double fFont, sal_Int32 nLevel, double fSecondPart)
 
 // The part of the first level's font the deeper levels of the text node rNode, named rName, are
 // set in: the factor of a "secFontSz refType primFontSz" stated for the node, by the nodes
-// above in rConstraints or by the node itself, Bracket_List's desTx at the whole of it; 0.78
-// where none is stated, as the drawings have the children's texts wherever two sizes stand, 27
-// for 35 and 21 for 27.
+// above in rConstraints or by the node itself, Bracket_List's desTx at the whole of it; the
+// whole too for a node whose font is its second one; 0.78 where none is stated, as the drawings
+// have the children's texts wherever two sizes stand, 27 for 35 and 21 for 27.
 static double secondFontPartOf(const std::vector<Constraint>& rConstraints, const LayoutNode& rNode,
                                std::u16string_view rName)
 {
@@ -2147,6 +2147,14 @@ static double secondFontPartOf(const std::vector<Constraint>& rConstraints, cons
     for (const Constraint& rConstraint : aOwn)
         if (rConstraint.msForName.isEmpty())
             aTake(rConstraint);
+    // a node whose font is its second one, "primFontSz refType secFontSz", has all its text in
+    // that font, deeper paragraphs too: the pyramids' and Alternating_Flow's child texts
+    if (!oPart
+        && std::any_of(aOwn.begin(), aOwn.end(), [](const Constraint& rConstraint) {
+               return rConstraint.msForName.isEmpty() && rConstraint.mnType == XML_primFontSz
+                      && rConstraint.mnRefType == XML_secFontSz;
+           }))
+        oPart = 1.0;
     return oPart.value_or(0.78);
 }
 
@@ -2223,12 +2231,13 @@ static std::optional<double> statedFontFor(const std::vector<Constraint>& rConst
     return oSize;
 }
 
-// The group of text nodes the node named rName belongs to, by the name of the node that states
-// the size, followed through "primFontSz refType primFontSz refForName X", and through a node's
-// own "primFontSz refType secFontSz" on to "secFontSz refType primFontSz refForName X",
-// Horizontal_Bullet_List's desTx taking parTx's size that way; the node itself where no link
-// leads on, a group of its own. pPart, where given, is set to the part of the group's font the
-// node is stated at, the factors of the primFontSz links multiplied, 1 where none states one.
+// The group of text nodes the node named rName belongs to, by the name of the node that states the
+// size, followed through "primFontSz refType primFontSz refForName X", and through a node's own
+// "primFontSz refType secFontSz" on to "secFontSz refType primFontSz refForName X" or "secFontSz
+// refType secFontSz refForName X", Horizontal_Bullet_List's desTx taking parTx's size that way; the
+// node itself where no link leads on, a group of its own. pPart, where given, is set to the part of
+// the group's font the node is stated at, the factors of the primFontSz links multiplied, 1 where
+// none states one.
 static OUString fontGroupOf(const SmartArtDiagram& rDgm,
                             const std::vector<Constraint>& rConstraints, const OUString& rName,
                             double* pPart = nullptr)
@@ -2273,9 +2282,13 @@ static OUString fontGroupOf(const SmartArtDiagram& rDgm,
             else if (rConstraint.mnRefType == XML_secFontSz)
                 bOverSecond = true;
         }
+        // the second font may also be tied to another node's second font, Alternating_Flow's
+        // childNode2tx to childNode1tx
         if (bOverSecond && aNext.isEmpty())
             for (const Constraint& rConstraint : aFor)
-                if (rConstraint.mnType == XML_secFontSz && rConstraint.mnRefType == XML_primFontSz
+                if (rConstraint.mnType == XML_secFontSz
+                    && (rConstraint.mnRefType == XML_primFontSz
+                        || rConstraint.mnRefType == XML_secFontSz)
                     && !rConstraint.msRefForName.isEmpty())
                     aNext = rConstraint.msRefForName;
         // an op equ link holds over a size the node states itself
@@ -2569,11 +2582,23 @@ static TextMargin textMarginOf(const SmartArtDiagram& rDgm,
 {
     TextMargin aMargin;
     const bool bOverUnder(nSide == XML_tMarg || nSide == XML_bMarg);
+    std::vector<Constraint> aOwn;
+    gatherDecidedConstraints(rDgm, rNode, rPoint, aOwn);
+    // a node whose font is its second one, "primFontSz refType secFontSz", may state its margins
+    // as parts of the second font, Alternating_Flow's child texts and the pyramids' do
+    const bool bFontIsSecond(
+        std::any_of(aOwn.begin(), aOwn.end(), [](const Constraint& rConstraint) {
+            return rConstraint.msForName.isEmpty() && rConstraint.mnType == XML_primFontSz
+                   && rConstraint.mnRefType == XML_secFontSz;
+        }));
+    const auto aOfFont = [bFontIsSecond](sal_Int32 nRefType) {
+        return nRefType == XML_primFontSz || (bFontIsSecond && nRefType == XML_secFontSz);
+    };
     for (const Constraint& rConstraint : rConstraints)
     {
         if (rConstraint.msForName != rName || rConstraint.mnType != nSide)
             continue;
-        if (rConstraint.mnRefType == XML_primFontSz)
+        if (aOfFont(rConstraint.mnRefType))
             aMargin.mfPartOfFont += rConstraint.mfFactor;
         else if (rConstraint.mnRefType == XML_w && !bOverUnder)
             aMargin.mfPartOfWidth
@@ -2581,13 +2606,11 @@ static TextMargin textMarginOf(const SmartArtDiagram& rDgm,
         else if (rConstraint.mnRefType == XML_none && rConstraint.mfValue > 0.0 && bOverUnder)
             aMargin.mnLengthEmu += static_cast<sal_Int64>(rConstraint.mfValue * 12700.0);
     }
-    std::vector<Constraint> aOwn;
-    gatherDecidedConstraints(rDgm, rNode, rPoint, aOwn);
     for (const Constraint& rConstraint : aOwn)
     {
         if (!rConstraint.msForName.isEmpty() || rConstraint.mnType != nSide)
             continue;
-        if (rConstraint.mnRefType == XML_primFontSz)
+        if (aOfFont(rConstraint.mnRefType))
             aMargin.mfPartOfFont += rConstraint.mfFactor;
         // margin in points, height in mm: the part of the height carries the conversion
         else if (rConstraint.mnRefType == XML_h)
@@ -2598,7 +2621,7 @@ static TextMargin textMarginOf(const SmartArtDiagram& rDgm,
             aMargin.mnLengthEmu += static_cast<sal_Int64>(rConstraint.mfValue * 12700.0);
         else if (rConstraint.mnRefType == XML_tMarg || rConstraint.mnRefType == XML_bMarg)
             for (const Constraint& rOther : aOwn)
-                if (rOther.mnType == rConstraint.mnRefType && rOther.mnRefType == XML_primFontSz)
+                if (rOther.mnType == rConstraint.mnRefType && aOfFont(rOther.mnRefType))
                 {
                     aMargin.mfPartOfFont += rOther.mfFactor;
                     break;
