@@ -279,12 +279,15 @@ void SwViewShell::CalcPagesForPrint( sal_uInt16 nMax )
 
     SwRootFrame* pMyLayout = GetLayout();
 
-    const SwFrame *pPage = pMyLayout->Lower();
     SwLayAction aAction( pMyLayout, Imp() );
 
     pMyLayout->StartAllAction();
-    for ( sal_uInt16 i = 1; pPage && i <= nMax; pPage = pPage->GetNext(), ++i )
+    for (sal_uInt16 i = 1; i <= nMax; ++i)
     {
+        // The layout action can remove pages, so look up each page by its number
+        const SwFrame* pPage = pMyLayout->GetPageByPageNum(i);
+        if (!pPage)
+            break;
         pPage->Calc(GetOut());
         SwRect aOldVis( VisArea() );
         maVisArea = pPage->getFrameArea();
