@@ -52,6 +52,8 @@ pushd instdir/program
 # xml tags to merge these into a single xml file
 head -c -14 services.rdb  > templateservices.rdb
 tail -c +85 ./services/services.rdb >> templateservices.rdb
+$SRC/libreoffice/bin/oss-fuzz-registry-xcd.py ../share/registry fuzzer.xcd \
+    org.openoffice.Office/Embedding
 for a in *fuzzer; do
     #some minimal fonts required
     mv $a $OUT
@@ -67,6 +69,13 @@ for a in *fuzzer; do
 URE_INTERNAL_LIB_DIR=\${ORIGIN}
 UNO_TYPES=\${ORIGIN}/$a.types.rdb \${ORIGIN}/$a.moretypes.rdb
 UNO_SERVICES=\${ORIGIN}/$a.services.rdb
+EOF
+    #configuration the fuzzers need: Embedding, so that charts and other objects in documents load
+    mkdir -p $OUT/$a.registry
+    cp fuzzer.xcd $OUT/$a.registry
+    cat > $OUT/${a}rc << EOF
+[Bootstrap]
+CONFIGURATION_LAYERS=xcsxcu:\${ORIGIN}/$a.registry
 EOF
 done
 popd
