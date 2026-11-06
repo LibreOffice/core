@@ -160,7 +160,7 @@
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="checkAsianMode-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="cellalignment|extended_tip|checkAsianMode">Aligns Asian characters one below the other in the selected cell(s). If the cell contains more than one line of text, the lines are converted to text columns that are arranged from right to left. Western characters in the converted text are rotated 90 degrees to the right. Asian characters are not rotated.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="cellalignment|extended_tip|checkAsianMode">Stacks Asian characters vertically in the selected cell(s). If the cell contains more than one line of text, the lines are converted to text columns that are arranged from right to left. Western characters in the converted text are rotated 90 degrees clockwise. Asian characters are not rotated.</property>
                       </object>
                     </child>
                   </object>

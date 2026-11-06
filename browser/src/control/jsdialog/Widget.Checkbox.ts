@@ -56,6 +56,12 @@ function _createCheckboxContainer(
 		parentContainer,
 	);
 	container.id = data.id;
+	if (data.command)
+		window.L.DomUtil.addClass(
+			container,
+			data.command.replace(':', '').replace('.', ''),
+		);
+	if (data.class) window.L.DomUtil.addClass(container, data.class);
 	return container;
 }
 
@@ -107,6 +113,7 @@ JSDialog.Checkbox = function (
 			data,
 			builder,
 		);
+	JSDialog.AddAriaDescription(checkbox, data);
 
 	checkbox.addEventListener('change', () => {
 		if (container.getAttribute('disabled') === 'true') return;
@@ -145,6 +152,10 @@ JSDialog.Checkbox = function (
 				return;
 			}
 			app.dispatcher.dispatch(data.command);
+			// The browser ticks the box before the command runs, and the command may
+			// not run at all, for example while a dialog is open. So show the stored
+			// state again, which the command updates if it runs.
+			toggleFunction();
 			return;
 		}
 
@@ -174,6 +185,12 @@ JSDialog.Checkbox = function (
 	setDisabled(data.enabled === false);
 
 	JSDialog.SynchronizeDisabledState(container, [checkbox]);
+
+	if (data.command) {
+		builder._preventDocumentLosingFocusOnClick(container);
+		builder.map.hideRestrictedItems(data, container, container);
+		builder.map.disableLockedItem(data, container, container);
+	}
 
 	const toggleFunction = () => {
 		// Compound command read: data.commandField names a property within

@@ -515,7 +515,7 @@
                                 <property name="draw-indicator">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="addstylescb-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|addstylescb">Includes the paragraph styles that you specify in the Assign Styles dialog as index entries. To select the paragraph styles that you want to include in the index, click the Assign Styles (...) button to the right of this box.</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|addstylescb">Includes the paragraph styles that you specify in the Assign Styles dialog as index entries. To select the paragraph styles that you want to include in the index, click the Assign styles button.</property>
                                   </object>
                                 </child>
                               </object>

@@ -471,7 +471,7 @@ describe(['taga11yenabled'], 'Options dialog and the screen reading lock', funct
 		// The toggle is back in use, no reload needed, and still shows screen
 		// reading on.
 		cy.cGet('#togglea11ystate').should('not.have.attr', 'disabled');
-		cy.cGet('#togglea11ystate').should('have.class', 'selected');
+		cy.cGet('#togglea11ystate-input').should('be.checked');
 		cy.then(function () {
 			expect(win.app.map._lockAccessibilityOn).to.eq(false);
 			expect(win.app.map._textInput.hasAccessibilitySupport()).to.eq(true);
@@ -479,8 +479,8 @@ describe(['taga11yenabled'], 'Options dialog and the screen reading lock', funct
 		});
 
 		// And the toggle works again: it turns screen reading off.
-		cy.cGet('#togglea11ystate-button').click();
-		cy.cGet('#togglea11ystate').should('not.have.class', 'selected');
+		cy.cGet('#togglea11ystate-input').click();
+		cy.cGet('#togglea11ystate-input').should('not.be.checked');
 		cy.then(function () {
 			expect(win.app.map._textInput.hasAccessibilitySupport()).to.eq(false);
 		});

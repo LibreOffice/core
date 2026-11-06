@@ -159,6 +159,7 @@ class UIManager extends window.L.Control {
 		this.map['stateChangeHandler'].setItemValue('showannotations', 'true');
 		this.map['stateChangeHandler'].setItemValue('presenterconsole', 'false');
 		this.map['stateChangeHandler'].setItemValue('presenttoall', 'false');
+		this.map['stateChangeHandler'].setItemValue('multipageview', 'false');
 
 		// View Changes menu: default to Hidden, sync with core state.
 		this.map['stateChangeHandler'].setItemValue('viewchanges-hidden', 'true');

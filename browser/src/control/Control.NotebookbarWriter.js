@@ -633,12 +633,24 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 					} : {},
 				hasAccessibilitySupport ?
 					{
-						'id':'togglea11ystate',
-						'type': 'bigcustomtoolitem',
-						'text': _('Screen Reading'),
-						'tooltip': screenReadingPurpose,
-						'aria': { description: screenReadingPurpose },
-						'accessibility': { focusBack: true,	combination: 'SR', de: null }
+						'type': 'container',
+						'children': [
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'togglea11ystate',
+										'type': 'checkbox',
+										'command': 'togglea11ystate',
+										'text': _('Screen Reading'),
+										'tooltip': screenReadingPurpose,
+										'aria': { description: screenReadingPurpose },
+										'accessibility': { focusBack: true,	combination: 'SR', de: null }
+									}
+								]
+							}
+						],
+						'vertical': 'true'
 					} : {},
 				hasAccessibilityCheck ?
 					{
@@ -1823,18 +1835,34 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 					'command': 'closetablet',
 				} : {},
 			{
-				'id': 'view-control-codes',
-				'type': 'bigtoolitem',
-				'text': _UNO('.uno:ControlCodes', 'text'),
-				'command': '.uno:ControlCodes',
-				'accessibility': { focusBack: true, combination: 'CC', de: null }
-			},
-			{
-				'id': 'view-show-boundaries',
-				'type': 'bigtoolitem',
-				'text': _UNO('.uno:ShowBoundaries', 'text'),
-				'command': '.uno:ShowBoundaries',
-				'accessibility': { focusBack: true, combination: 'BO', de: null }
+				'type': 'container',
+				'children': [
+					{
+						'type': 'toolbox',
+						'children': [
+							{
+								'id': 'view-control-codes',
+								'type': 'checkbox',
+								'text': _UNO('.uno:ControlCodes', 'text'),
+								'command': '.uno:ControlCodes',
+								'accessibility': { focusBack: true, combination: 'CC', de: null }
+							}
+						]
+					},
+					{
+						'type': 'toolbox',
+						'children': [
+							{
+								'id': 'view-show-boundaries',
+								'type': 'checkbox',
+								'text': _UNO('.uno:ShowBoundaries', 'text'),
+								'command': '.uno:ShowBoundaries',
+								'accessibility': { focusBack: true, combination: 'BO', de: null }
+							}
+						]
+					}
+				],
+				'vertical': 'true'
 			},
 			{ type: 'separator', id: 'view-controlcodes-break', orientation: 'vertical' },
 			zoomOverflowGroup,
@@ -1847,11 +1875,22 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				'accessibility': { focusBack: false, combination: 'UI', de: null }
 			},
 			{
-				'id': 'multipageview',
-				'type': 'bigcustomtoolitem',
-				'command': 'multipageview',
-				'text': _('Multi Page View'),
-				'accessibility': { focusBack: true, combination: 'MV', de: null }
+				'type': 'container',
+				'children': [
+					{
+						'type': 'toolbox',
+						'children': [
+							{
+								'id': 'multipageview',
+								'type': 'checkbox',
+								'command': 'multipageview',
+								'text': _('Multi Page View'),
+								'accessibility': { focusBack: true, combination: 'MV', de: null }
+							}
+						]
+					}
+				],
+				'vertical': 'true'
 			},
 			{
 				'id': 'collapsenotebookbar',
@@ -2382,14 +2421,10 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 								'children': [
 									{
 										'id': 'review-spell-online',
-										'type': 'toolitem',
+										'type': 'checkbox',
 										'text': _('Auto Spell Check'),
 										'command': '.uno:SpellOnline',
 										'accessibility': { focusBack: true, combination: 'SO', de: null},
-										'stateIcons': {
-											on: 'autospellcheck-on',
-											off: 'autospellcheck-off',
-										},
 									}
 								]
 							},
@@ -2414,7 +2449,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 								'children': [
 									{
 										'id': 'review-online-autoformat',
-										'type': 'toolitem',
+										'type': 'checkbox',
 										'text': _UNO('.uno:OnlineAutoFormat', 'text'),
 										'command': '.uno:OnlineAutoFormat',
 										'accessibility': { focusBack: true, combination: 'AW', de: null },
@@ -2479,7 +2514,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 								'children': [
 									{
 										'id': 'showannotations',
-										'type': 'customtoolitem',
+										'type': 'checkbox',
 										'text': _('Show Comments'),
 										'command': 'showannotations',
 										'accessibility': { focusBack: true, combination: 'SA', de: null }
@@ -2491,7 +2526,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 								'children': [
 									{
 										'id': 'review-show-resolved-annotations',
-										'type': 'customtoolitem',
+										'type': 'checkbox',
 										'text': _UNO('.uno:ShowResolvedAnnotations', 'text'),
 										'command': '.uno:ShowResolvedAnnotations',
 										'accessibility': { focusBack: true, combination: 'RA', de: null }

@@ -238,7 +238,7 @@
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="shadowcb-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="effectspage|extended_tip|shadowcb">Adds a shadow that casts below and to the right of the selected characters.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="effectspage|extended_tip|shadowcb">Adds a drop shadow to the selected characters.</property>
                   </object>
                 </child>
               </object>

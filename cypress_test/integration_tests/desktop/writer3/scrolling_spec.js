@@ -87,9 +87,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 		helper.waitForMapState('.uno:ControlCodes', 'false');
 
 		cy.cGet('.notebookbar #View-tab-label').click();
-		cy.cGet('.notebookbar #View-container .unoControlCodes').click();
+		cy.cGet('.notebookbar #View-container .unoControlCodes input').click();
 
-		cy.cGet('.notebookbar #View-container .unoControlCodes').should('have.class', 'selected');
+		cy.cGet('.notebookbar #View-container .unoControlCodes input').should('be.checked');
 		desktopHelper.assertScrollbarPosition('vertical', 0, 10);
 	});
 

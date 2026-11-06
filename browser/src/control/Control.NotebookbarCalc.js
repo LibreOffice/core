@@ -1235,20 +1235,31 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 						'type': 'container',
 						'children': [
 							{
-								'id': 'view-togglegrid',
-								'type': 'bigtoolitem',
-								'text': _UNO('.uno:ToggleSheetGrid','spreadsheet'),
-								'command': '.uno:ToggleSheetGrid',
-								'accessibility': { focusBack: true,	combination: 'SG', de: null }
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'view-togglegrid',
+										'type': 'checkbox',
+										'text': _UNO('.uno:ToggleSheetGrid','spreadsheet'),
+										'command': '.uno:ToggleSheetGrid',
+										'accessibility': { focusBack: true,	combination: 'SG', de: null }
+									}
+								]
 							},
 							{
-								'id': 'view-toggleprintgrid',
-								'type': 'bigtoolitem',
-								'text': _UNO('.uno:TogglePrintGrid', 'spreadsheet'),
-								'command': '.uno:TogglePrintGrid',
-								'accessibility': { focusBack: true,	combination: 'PG', de: null }
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'view-toggleprintgrid',
+										'type': 'checkbox',
+										'text': _UNO('.uno:TogglePrintGrid', 'spreadsheet'),
+										'command': '.uno:TogglePrintGrid',
+										'accessibility': { focusBack: true,	combination: 'PG', de: null }
+									}
+								]
 							}
-						]
+						],
+						'vertical': 'true'
 					},
 				]
 			},
@@ -1591,11 +1602,22 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 			},
 			{ type: 'separator', id: 'layout-freezepanesrow-break', orientation: 'vertical' },
 			{
-				'id': 'colrowhighlight',
-				'type': 'bigcustomtoolitem',
-				'text': _('Focus Cell'),
-				'command': 'columnrowhighlight',
-				'accessibility': { focusBack: true,	combination: 'HL', de: null }
+				'type': 'container',
+				'children': [
+					{
+						'type': 'toolbox',
+						'children': [
+							{
+								'id': 'colrowhighlight',
+								'type': 'checkbox',
+								'text': _('Focus Cell'),
+								'command': 'columnrowhighlight',
+								'accessibility': { focusBack: true,	combination: 'HL', de: null }
+							}
+						]
+					}
+				],
+				'vertical': 'true'
 			},
 			{ type: 'separator', id: 'layout-colrowhighlight-break', orientation: 'vertical' },
 			{
@@ -2715,14 +2737,10 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 								'children': [
 									{
 										'id': 'review-spell-online',
-										'type': 'toolitem',
+										'type': 'checkbox',
 										'text': _('Auto Spell Check'),
 										'command': '.uno:SpellOnline',
-										'accessibility': { focusBack: true,	combination: 'O', de: null },
-										'stateIcons': {
-											on: 'autospellcheck-on',
-											off: 'autospellcheck-off',
-										}
+										'accessibility': { focusBack: true,	combination: 'O', de: null }
 									}
 								]
 							},
@@ -2809,11 +2827,22 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 				'accessibility': { focusBack: true, combination: 'TR', de: null },
 				'children' : [
 					{
-						'id': 'review-track-changes',
-						'type': 'bigtoolitem',
-						'text': _UNO('.uno:TraceChangeMode', 'spreadsheet'),
-						'command': '.uno:TraceChangeMode',
-						'accessibility': { focusBack: true, combination: 'RC', de: null }
+						'type': 'container',
+						'children': [
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'review-track-changes',
+										'type': 'checkbox',
+										'text': _UNO('.uno:TraceChangeMode', 'spreadsheet'),
+										'command': '.uno:TraceChangeMode',
+										'accessibility': { focusBack: true, combination: 'RC', de: null }
+									}
+								]
+							}
+						],
+						'vertical': 'true'
 					},
 					{
 						'type': 'container',

@@ -561,21 +561,31 @@ window.L.Control.NotebookbarDraw = window.L.Control.NotebookbarImpress.extend({
 				'accessibility': { focusBack: true, combination: 'GV', de: null },
 				'children' : [
 					{
-						'type': 'toolbox',
+						'type': 'container',
 						'children': [
 							{
-								'id': 'home-grid-visible',
-								'type': 'toolitem',
-								'text': _UNO('.uno:GridVisible'),
-								'command': '.uno:GridVisible',
-								'accessibility': { focusBack: true, combination: 'GV', de: null }
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'home-grid-visible',
+										'type': 'checkbox',
+										'text': _UNO('.uno:GridVisible'),
+										'command': '.uno:GridVisible',
+										'accessibility': { focusBack: true, combination: 'GV', de: null }
+									}
+								]
 							},
 							{
-								'id': 'home-grid-use',
-								'type': 'toolitem',
-								'text': _UNO('.uno:GridUse'),
-								'command': '.uno:GridUse',
-								'accessibility': { focusBack: true, combination: 'GU', de: null }
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'home-grid-use',
+										'type': 'checkbox',
+										'text': _UNO('.uno:GridUse'),
+										'command': '.uno:GridUse',
+										'accessibility': { focusBack: true, combination: 'GU', de: null }
+									}
+								]
 							}
 						],
 						'vertical': 'true'

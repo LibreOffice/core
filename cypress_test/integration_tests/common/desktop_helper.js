@@ -454,16 +454,16 @@ function toggleComments(resolved = false) {
 			// once it is done with the document. Wait for that, so the click is
 			// not dropped without a trace.
 			getNbItem('ShowResolvedAnnotations', 'Review').should('not.have.attr', 'disabled');
-			// The engine's answer to this click sets the selected class, so the class
+			// The engine's answer to this click sets the checked state, so the state
 			// changing shows that the toggle was applied.
-			getNbItem('ShowResolvedAnnotations', 'Review').then(function($item) {
-				var wasSelected = $item.hasClass('selected');
-				getNbIcon('ShowResolvedAnnotations', 'Review').click();
-				getNbItem('ShowResolvedAnnotations', 'Review')
-					.should(wasSelected ? 'not.have.class' : 'have.class', 'selected');
+			getNbCheckbox('ShowResolvedAnnotations', 'Review').then(function($input) {
+				var wasChecked = $input.is(':checked');
+				getNbCheckbox('ShowResolvedAnnotations', 'Review').click();
+				getNbCheckbox('ShowResolvedAnnotations', 'Review')
+					.should(wasChecked ? 'not.be.checked' : 'be.checked');
 			});
 		}
-		else cy.cGet('#showannotations').click();
+		else cy.cGet('#showannotations-input').click();
 		// to avoid notebookbar collapse in subsequent calls to toggleComments.
 		cy.cGet('#Home-tab-label').click();
 	} else {
@@ -578,9 +578,9 @@ function checkAccessibilityEnabledToBe(state) {
 			var userInterfaceMode = win['0'].userInterfaceMode;
 			if (userInterfaceMode === 'notebookbar') {
 				if (state) {
-					cy.cGet('#togglea11ystate').should('have.class', 'selected');
+					cy.cGet('#togglea11ystate-input').should('be.checked');
 				} else {
-					cy.cGet('#togglea11ystate').should('not.have.class', 'selected');
+					cy.cGet('#togglea11ystate-input').should('not.be.checked');
 				}
 			} else {
 				cy.cGet('#menu-tools').click();
@@ -612,11 +612,10 @@ function setAccessibilityState(enable) {
 			var userInterfaceMode = win['0'].userInterfaceMode;
 			if (userInterfaceMode === 'notebookbar') {
 				cy.cGet('#Help-tab-label').click();
-				cy.cGet('#togglea11ystate').then((button) => {
-					//var currentState = button.get(0).classList.contains('selected');
-					var currentState = button.hasClass('selected');
+				cy.cGet('#togglea11ystate-input').then((input) => {
+					var currentState = input.is(':checked');
 					if (currentState !== enable) {
-						button.click();
+						input.click();
 						cy.log('accessibility state changed: ' + enable);
 					} else {
 						cy.log('accessibility already in requested state: ' + enable);
@@ -701,6 +700,11 @@ function getNbIcon(unoCommand, tabName) {
 // acted on.
 function getNbItem(unoCommand, tabName) {
 	return cy.cGet((tabName ? '#' + tabName + '-container' : '') + '.notebookbar  .uno' + unoCommand + ':visible');
+}
+
+/// get the input of a notebookbar checkbox for the given uno command
+function getNbCheckbox(unoCommand, tabName) {
+	return cy.cGet((tabName ? '#' + tabName + '-container' : '') + '.notebookbar  .uno' + unoCommand + ':visible input.ui-checkbox-input');
 }
 
 // Bring a notebookbar tab's icons on screen.
@@ -1055,6 +1059,7 @@ module.exports.assertSidebarStealsFocus = assertSidebarStealsFocus;
 module.exports.getCompactIcon = getCompactIcon;
 module.exports.getNbIcon = getNbIcon;
 module.exports.getNbItem = getNbItem;
+module.exports.getNbCheckbox = getNbCheckbox;
 module.exports.selectNotebookbarTab = selectNotebookbarTab;
 module.exports.getCompactIconArrow = getCompactIconArrow;
 module.exports.getNbIconArrow = getNbIconArrow;

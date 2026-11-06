@@ -434,7 +434,7 @@
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="checkCB_RUBYBELOW-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="textgridpage|extended_tip|checkCB_RUBYBELOW">Displays Ruby text to the left of or below the base text.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="textgridpage|extended_tip|checkCB_RUBYBELOW">Displays Ruby text on the other side of the base text.</property>
                   </object>
                 </child>
               </object>

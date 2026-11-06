@@ -785,23 +785,34 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				'accessibility': { focusBack: true, combination: 'GV', de: null },
 				'children' : [
 					{
-						'type': 'toolbox',
+						'type': 'container',
 						'children': [
 							{
-								'id': 'home-grid-visible',
-								'type': 'bigtoolitem',
-								'text': _('Show Grid'),
-								'command': '.uno:GridVisible',
-								'accessibility': { focusBack: true, combination: 'GV', de: null }
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'home-grid-visible',
+										'type': 'checkbox',
+										'text': _('Show Grid'),
+										'command': '.uno:GridVisible',
+										'accessibility': { focusBack: true, combination: 'GV', de: null }
+									}
+								]
 							},
 							{
-								'id': 'home-grid-use',
-								'type': 'bigtoolitem',
-								'text': _('Snap to Grid'),
-								'command': '.uno:GridUse',
-								'accessibility': { focusBack: true, combination: 'GU', de: null }
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'home-grid-use',
+										'type': 'checkbox',
+										'text': _('Snap to Grid'),
+										'command': '.uno:GridUse',
+										'accessibility': { focusBack: true, combination: 'GU', de: null }
+									}
+								]
 							}
 						],
+						'vertical': 'true'
 					},
 				]
 			},
@@ -2182,14 +2193,10 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 						'children': [
 							{
 								'id': 'review-spell-online',
-								'type': 'toolitem',
+								'type': 'checkbox',
 								'text': _('Auto Spell Check'),
 								'command': '.uno:SpellOnline',
-								'accessibility': { focusBack: true, combination: 'SO', de: null },
-								'stateIcons': {
-									on: 'autospellcheck-on',
-									off: 'autospellcheck-off',
-								}
+								'accessibility': { focusBack: true, combination: 'SO', de: null }
 							}
 						]
 					},

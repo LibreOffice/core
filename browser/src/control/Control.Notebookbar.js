@@ -1242,32 +1242,23 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 		{
 			$('#review-show-resolved-annotations').removeClass('disabled');
 			$('#review-show-resolved-annotations').attr('disabled', false);
-			$('#review-show-resolved-annotations-button').attr('disabled', false);
 		}
 		else
 		{
 			$('#review-show-resolved-annotations').addClass('disabled');
 			$('#review-show-resolved-annotations').attr('disabled', true);
-			$('#review-show-resolved-annotations-button').attr('disabled', true);
 		}
 	},
 
 	onAccessibilityToggleChange: function() {
-		const on = window.prefs.getBoolean('accessibilityState');
-		if (on) {
-			$('#togglea11ystate').addClass('selected');
-		} else {
-			$('#togglea11ystate').removeClass('selected');
-		}
-		$('#togglea11ystate-button').attr('aria-pressed', on);
+		this.map.uiManager.reportToggleState('togglea11ystate',
+			window.prefs.getBoolean('accessibilityState'));
 		if (this._map && this._map._lockAccessibilityOn) {
 			$('#togglea11ystate').addClass('disabled');
 			$('#togglea11ystate').attr('disabled', true);
-			$('#togglea11ystate-button').attr('disabled', true);
 		} else {
 			$('#togglea11ystate').removeClass('disabled');
 			$('#togglea11ystate').removeAttr('disabled');
-			$('#togglea11ystate-button').removeAttr('disabled');
 		}
 	},
 

@@ -128,7 +128,7 @@ describe(['tagdesktop'], 'Notebookbar tests.', function() {
 		// with label
 		cy.cGet('.notebookbar #Review-tab-label').click();
 		cy.cGet('.notebookbar .unoSpellOnline').should('be.visible');
-		cy.cGet('.notebookbar .unoSpellOnline span').contains('Auto Spell Check');
+		cy.cGet('.notebookbar .unoSpellOnline label').contains('Auto Spell Check');
 	});
 
 	it('A folded group opens from anywhere on its button', function() {

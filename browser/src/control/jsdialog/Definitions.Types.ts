@@ -700,6 +700,7 @@ interface CheckboxWidgetJSON extends WidgetJSON {
 	commandFieldFlat?: boolean; // send commandField as its own top-level SDI argument instead of wrapping the whole state object
 	checked?: boolean; // checkbox state
 	hidden?: boolean;
+	class?: string;
 }
 
 interface AriaLabelAttributes {

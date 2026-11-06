@@ -19,7 +19,7 @@ describe(['tagdesktop'], 'Accept and reject tracked changes from the Calc Review
 	function startRecording(win) {
 		desktopHelper.selectNotebookbarTab('Review');
 		desktopHelper.getNbItem('TraceChangeMode', 'Review').should('not.have.attr', 'disabled');
-		desktopHelper.getNbIcon('TraceChangeMode', 'Review').click();
+		desktopHelper.getNbCheckbox('TraceChangeMode', 'Review').click();
 		helper.processToIdle(win);
 		helper.waitForMapState('.uno:TraceChangeMode', 'true');
 	}

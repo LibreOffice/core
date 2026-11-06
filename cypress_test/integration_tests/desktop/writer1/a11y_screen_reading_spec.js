@@ -32,18 +32,22 @@ describe(['tagdesktop'], 'Screen Reading button', { testIsolation: false }, func
 	}
 
 	function label() {
-		return container().querySelector('.unolabel');
+		return container().querySelector('.ui-checkbox-label');
 	}
 
-	function buttonNode() {
-		return a11yHelper.getAXNodesWithin('#togglea11ystate-button')
+	function checkboxInput() {
+		return container().querySelector('input');
+	}
+
+	function checkboxNode() {
+		return a11yHelper.getAXNodesWithin('#togglea11ystate')
 			.then(function (nodes) {
-				const button = nodes.filter(function (node) {
-					return node.role === 'button';
+				const checkbox = nodes.filter(function (node) {
+					return node.role === 'checkbox';
 				})[0];
 
-				expect(button, 'an AX node for the button').to.not.be.undefined;
-				return button;
+				expect(checkbox, 'an AX node for the checkbox').to.not.be.undefined;
+				return checkbox;
 			});
 	}
 
@@ -68,20 +72,20 @@ describe(['tagdesktop'], 'Screen Reading button', { testIsolation: false }, func
 	}
 
 	it('says what it is there for', function () {
-		cy.then(function () { return buttonNode(); }).then(function (button) {
-			expect(button.description, 'a description of ' + button.name)
+		cy.then(function () { return checkboxNode(); }).then(function (checkbox) {
+			expect(checkbox.description, 'a description of ' + checkbox.name)
 				.to.not.be.empty;
-			expect(button.description, 'the description of ' + button.name)
+			expect(checkbox.description, 'the description of ' + checkbox.name)
 				.to.equal(container().getAttribute('data-cooltip'));
 		});
 	});
 
 	it('says whether screen reading is on', function () {
-		cy.then(function () { return buttonNode(); }).then(function (button) {
-			expect(String(button.properties.pressed),
-				'the state of ' + button.name + ', which looks '
-				+ (container().classList.contains('selected') ? 'on' : 'off'))
-				.to.equal(String(container().classList.contains('selected')));
+		cy.then(function () { return checkboxNode(); }).then(function (checkbox) {
+			expect(String(checkbox.properties.checked),
+				'the state of ' + checkbox.name + ', which looks '
+				+ (checkboxInput().checked ? 'on' : 'off'))
+				.to.equal(String(checkboxInput().checked));
 		});
 	});
 
@@ -92,8 +96,8 @@ describe(['tagdesktop'], 'Screen Reading button', { testIsolation: false }, func
 	it('is off limits to a screen reader once it is locked on', function () {
 		lockOn();
 
-		cy.then(function () { return buttonNode(); }).then(function (button) {
-			expect(button.properties.disabled, 'the button, greyed out').to.be.true;
+		cy.then(function () { return checkboxNode(); }).then(function (checkbox) {
+			expect(checkbox.properties.disabled, 'the checkbox, greyed out').to.be.true;
 		});
 	});
 

@@ -28,7 +28,7 @@ describe(['tagdesktop'], 'Screen Reading button locked on', { testIsolation: fal
 	});
 
 	function label() {
-		return win.document.getElementById('togglea11ystate').querySelector('.unolabel');
+		return win.document.getElementById('togglea11ystate').querySelector('.ui-checkbox-label');
 	}
 
 	it('the deployment locked it on, without the spec saying so', function () {
@@ -38,15 +38,15 @@ describe(['tagdesktop'], 'Screen Reading button locked on', { testIsolation: fal
 		});
 	});
 
-	it('and a screen reader is told the button is off limits', function () {
-		cy.then(function () { return a11yHelper.getAXNodesWithin('#togglea11ystate-button'); })
+	it('and a screen reader is told the checkbox is off limits', function () {
+		cy.then(function () { return a11yHelper.getAXNodesWithin('#togglea11ystate'); })
 			.then(function (nodes) {
-				const button = nodes.filter(function (node) {
-					return node.role === 'button';
+				const checkbox = nodes.filter(function (node) {
+					return node.role === 'checkbox';
 				})[0];
 
-				expect(button, 'an AX node for the button').to.not.be.undefined;
-				expect(button.properties.disabled, 'the button, greyed out').to.be.true;
+				expect(checkbox, 'an AX node for the checkbox').to.not.be.undefined;
+				expect(checkbox.properties.disabled, 'the checkbox, greyed out').to.be.true;
 			});
 	});
 

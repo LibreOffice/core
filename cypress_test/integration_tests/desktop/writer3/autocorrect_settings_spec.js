@@ -98,7 +98,7 @@ describe(['tagdesktop'], 'AutoCorrect settings.', function() {
 	function typeWithoutAutoCorrect() {
 		cy.viewport(1920, 1080);
 		cy.cGet('#Review-tab-label').click();
-		desktopHelper.getNbIcon('OnlineAutoFormat', 'Review').click();
+		desktopHelper.getNbCheckbox('OnlineAutoFormat', 'Review').click();
 		ceHelper.type('hello. world');
 		ceHelper.checkPlainContent('hello. world');
 	}
