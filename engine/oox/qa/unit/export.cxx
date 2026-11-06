@@ -1711,6 +1711,75 @@ CPPUNIT_TEST_FIXTURE(Test, testExtrusionToScene3d)
                          xFontwork->getPropertyValue(u"FillColor2"_ustr).get<sal_Int32>());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFontworkText3DRotationRoundTrip)
+{
+    // The camera contributes +30 degrees and the shape -10 degrees to the model's turn.
+    loadFromFile(u"fontwork-camera-rotation.pptx");
+    const auto getShape = [&] {
+        uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0),
+                                               uno::UNO_QUERY_THROW);
+        return uno::Reference<beans::XPropertySet>(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    };
+    const auto assertText3D = [&](const xmlDocUniquePtr& rXml) {
+        const OString aBody = "//p:sp/p:txBody/a:bodyPr/"_ostr;
+        assertXPath(rXml, aBody + "a:scene3d", 1);
+        assertXPath(rXml, aBody + "a:scene3d/a:camera", "prst", u"perspectiveFront");
+        assertXPath(rXml, aBody + "a:scene3d/a:camera/a:rot", "lat", u"0");
+        assertXPath(rXml, aBody + "a:scene3d/a:camera/a:rot", "lon", u"0");
+        assertXPath(rXml, aBody + "a:scene3d/a:camera/a:rot", "rev", u"1800000");
+        assertXPath(rXml, aBody + "a:scene3d/a:lightRig", "rig", u"threePt");
+        assertXPath(rXml, aBody + "a:scene3d/a:lightRig", "dir", u"t");
+        assertXPath(rXml, aBody + "a:sp3d", 1);
+        assertXPath(rXml, aBody + "a:sp3d", "extrusionH", u"360000");
+        assertXPath(rXml, aBody + "a:sp3d", "prstMaterial", u"metal");
+    };
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000),
+                         getShape()->getPropertyValue(u"RotateAngle"_ustr).get<sal_Int32>());
+    for (int nRoundTrip = 0; nRoundTrip < 2; ++nRoundTrip)
+    {
+        save(TestFilter::PPTX);
+        xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+        assertXPath(pXmlDoc, "//p:sp/p:spPr/a:xfrm", "rot", u"600000");
+        assertText3D(pXmlDoc);
+        loadFromURL(maTempFile.GetURL());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2000),
+                             getShape()->getPropertyValue(u"RotateAngle"_ustr).get<sal_Int32>());
+    }
+
+    // A rotation edit changes xfrm, keeping the original camera, lighting and material.
+    // Exercise both directions and normalization across the full-turn boundary.
+    struct Rotation
+    {
+        sal_Int32 nModel;
+        OUString aOOXML;
+    };
+    for (const auto& rRotation : { Rotation{ 4000, u"21000000"_ustr },
+                                  Rotation{ 500, u"1500000"_ustr },
+                                  Rotation{ 35900, u"1860000"_ustr },
+                                  Rotation{ 0, u"1800000"_ustr } })
+    {
+        getShape()->setPropertyValue(u"RotateAngle"_ustr, uno::Any(rRotation.nModel));
+        save(TestFilter::PPTX);
+        xmlDocUniquePtr pEdited = parseExport(u"ppt/slides/slide1.xml"_ustr);
+        assertXPath(pEdited, "//p:sp/p:spPr/a:xfrm", "rot", rRotation.aOOXML);
+        assertText3D(pEdited);
+        loadFromURL(maTempFile.GetURL());
+        CPPUNIT_ASSERT_EQUAL(rRotation.nModel,
+                             getShape()->getPropertyValue(u"RotateAngle"_ustr).get<sal_Int32>());
+    }
+
+    loadFromFile(u"fontwork-camera-rotation.pptx");
+    const auto xShape = getShape();
+    xShape->setPropertyValue(u"RotateAngle"_ustr, uno::Any(sal_Int32(4000)));
+    // Restoring the original model angle also restores the original shape rotation.
+    xShape->setPropertyValue(u"RotateAngle"_ustr, uno::Any(sal_Int32(2000)));
+    save(TestFilter::PPTX);
+    xmlDocUniquePtr pRestored = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pRestored, "//p:sp/p:spPr/a:xfrm", "rot", u"600000");
+    assertText3D(pRestored);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testExtrusionToScene3dWriter)
 {
     // Given the same extruded Fontwork and rectangle in a Writer document, and a Fontwork turned

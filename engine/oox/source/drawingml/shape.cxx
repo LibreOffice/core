@@ -2837,6 +2837,13 @@ Reference< XShape > const & Shape::createAndInsert(
                 }
             }
         }
+        if (bTextExtrusion)
+        {
+            // Keep the final model angle so export can apply later rotation changes
+            // without changing the imported text camera, including after undo.
+            putPropertyToGrabBag(u"OriginalText3DRotateAngle"_ustr,
+                                 xSet->getPropertyValue(u"RotateAngle"_ustr));
+        }
     }
     return mxShape;
 }

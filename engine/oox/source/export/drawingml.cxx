@@ -2487,6 +2487,35 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
             auto p3DEffectProps = std::find_if(
                 std::cbegin(aGrabBagProps), std::cend(aGrabBagProps),
                 [](const PropertyValue& rProp) { return rProp.Name == "3DEffectProperties"; });
+            // Text 3D also contributes its camera turn to the model rotation.
+            // Keep its camera and apply only later model rotation changes to xfrm.
+            if (p3DEffectProps == std::cend(aGrabBagProps) && IsFontworkShape(xPropertySet))
+            {
+                p3DEffectProps = std::find_if(
+                    std::cbegin(aGrabBagProps), std::cend(aGrabBagProps),
+                    [](const PropertyValue& rProp) { return rProp.Name == "Text3DEffectProperties"; });
+                if (p3DEffectProps != std::cend(aGrabBagProps))
+                {
+                    auto pImportedRotation = std::find_if(
+                        std::cbegin(aGrabBagProps), std::cend(aGrabBagProps),
+                        [](const PropertyValue& rProp) {
+                            return rProp.Name == "OriginalText3DRotateAngle";
+                        });
+                    sal_Int32 nImportedRotation = 0;
+                    if (pImportedRotation != std::cend(aGrabBagProps)
+                        && (pImportedRotation->Value >>= nImportedRotation))
+                    {
+                        constexpr sal_Int32 nFullTurn = 21600000;
+                        sal_Int64 nAdjustedRotation
+                            = sal_Int64(oMSORotation.value_or(0))
+                              + ExportRotateClockwisify(nRotation - Degree100(nImportedRotation));
+                        nAdjustedRotation %= nFullTurn;
+                        if (nAdjustedRotation < 0)
+                            nAdjustedRotation += nFullTurn;
+                        oMSORotation = static_cast<sal_Int32>(nAdjustedRotation);
+                    }
+                }
+            }
             if (p3DEffectProps != std::cend(aGrabBagProps))
             {
                 cpo::uno::Sequence<beans::PropertyValue> a3DEffectProps;
