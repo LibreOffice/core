@@ -2285,6 +2285,60 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testRelayoutShowsTheTextOfADrawnShape
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), countShapesByText(reLayoutDiagram(), aChildren));
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testArrowDotStandsOverTheTopOfItsBox)
+{
+    // the dot at the tip of the arrow is centred a little above the top of its composite
+    createSdImpressDoc("pptx/smartart-arrow-dot-above-its-box.pptx");
+    std::vector<uno::Reference<drawing::XShape>> aEllipses;
+    collectShapesWithGeometry(uno::Reference<drawing::XShape>(getShapeFromPage(0, 0),
+                                                              uno::UNO_QUERY),
+                              u"ooxml-ellipse"_ustr, aEllipses);
+    CPPUNIT_ASSERT(!aEllipses.empty());
+
+    // the dots are the smallest ellipses, the arrow's rows of them the topmost
+    sal_Int32 nDot(SAL_MAX_INT32);
+    for (const auto& xEllipse : aEllipses)
+        nDot = std::min(nDot, xEllipse->getSize().Width);
+    std::vector<sal_Int32> aRows;
+    for (const auto& xEllipse : aEllipses)
+        if (xEllipse->getSize().Width == nDot)
+            aRows.push_back(xEllipse->getPosition().Y);
+    std::sort(aRows.begin(), aRows.end());
+    aRows.erase(std::unique(aRows.begin(), aRows.end(),
+                            [](sal_Int32 nA, sal_Int32 nB) { return nB - nA < 5; }),
+                aRows.end());
+    CPPUNIT_ASSERT(aRows.size() >= 3);
+
+    // the tip stands a step above the next row, as that row does above the one after it
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aRows[2] - aRows[1]), double(aRows[1] - aRows[0]), 5.0);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testRingArrowWithoutPadsRunsMostOfTheWay)
+{
+    // the arrows between the circles state no pads
+    createSdImpressDoc("pptx/smartart-ring-arrow-without-pads.pptx");
+    const uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    std::vector<uno::Reference<drawing::XShape>> aCircles, aArrows;
+    collectShapesWithGeometry(xDiagram, u"ooxml-ellipse"_ustr, aCircles);
+    collectShapesWithGeometry(xDiagram, u"ooxml-rightArrow"_ustr, aArrows);
+    CPPUNIT_ASSERT_EQUAL(size_t(4), aCircles.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(4), aArrows.size());
+
+    // the way between two neighbours, from edge to edge
+    double fNearest(std::numeric_limits<double>::max());
+    for (size_t a = 0; a < aCircles.size(); ++a)
+        for (size_t b = a + 1; b < aCircles.size(); ++b)
+        {
+            const awt::Point aA(aCircles[a]->getPosition()), aB(aCircles[b]->getPosition());
+            fNearest = std::min(fNearest, std::hypot(double(aA.X - aB.X), double(aA.Y - aB.Y)));
+        }
+    const double fWay(fNearest - aCircles[0]->getSize().Width);
+
+    // 0.47 of it is left free, as for any connector without pads
+    for (const auto& xArrow : aArrows)
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.53 * fWay, double(xArrow->getSize().Width), 0.01 * fWay);
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testAddedChildGetsTheSameConnectorLineAsItsSiblings)
 {
     createSdImpressDoc("pptx/smartart-hierarchy3-two-parents.pptx");

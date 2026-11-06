@@ -3877,16 +3877,19 @@ void CompositeAlg::layoutShapeChildren(const SmartArtDiagram& rDgm, AlgAtom& rAl
             if ((it = rProp.find(XML_t)) != rProp.end() && (it2 = rProp.find(XML_b)) != rProp.end())
                 aSize.Height = it2->second + aOffset(XML_bOff) - it->second - aOffset(XML_tOff);
 
-            // A child placed by its middle stays inside the composite's box: the pictures of
-            // Accented_Picture's pairs are centred at half the pair's width down, and the pair
-            // is a strip as high as the pictures, so they stand at its bottom, which is its top.
-            // A child larger than the box starts at its edge.
+            // A child placed by its middle does not run past the far side of the composite's
+            // box: the pictures of Accented_Picture's pairs are centred at half the pair's
+            // width down, and the pair is a strip as high as the pictures, so they stand at its
+            // bottom, which is its top. A child larger than the box starts at its edge. Over the
+            // near side it may stand out, the top dot of Ascending_Picture_Accent_Process's arrow
+            // is centred a little above its box.
+            const auto aFarSide = [](sal_Int32 nPos, sal_Int32 nBox, sal_Int32 nSize) {
+                return nPos > nBox - nSize ? std::max<sal_Int32>(0, nBox - nSize) : nPos;
+            };
             if (rProp.count(XML_ctrX) && !rProp.count(XML_l) && !rProp.count(XML_r))
-                aPos.X = std::max<sal_Int32>(
-                    0, std::min<sal_Int32>(aPos.X, rParent[XML_w] - aSize.Width));
+                aPos.X = aFarSide(aPos.X, rParent[XML_w], aSize.Width);
             if (rProp.count(XML_ctrY) && !rProp.count(XML_t) && !rProp.count(XML_b))
-                aPos.Y = std::max<sal_Int32>(
-                    0, std::min<sal_Int32>(aPos.Y, rParent[XML_h] - aSize.Height));
+                aPos.Y = aFarSide(aPos.Y, rParent[XML_h], aSize.Height);
 
             aPos.X += nParentXOffset;
             aPos.Y += nParentYOffset;
@@ -11188,6 +11191,37 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                                 // the connector's own algorithm leaves the shape as it is
                                 const_cast<SmartArtDiagram&>(rDgm).getLaidOutSideways().insert(
                                     aCurrShape.get());
+                            }
+                            // On a ring of other nodes a connector that states no pads runs
+                            // 0.53 of the way between the edges of its two nodes as well, as
+                            // thick as before: Basic_Cycle's arrows are 460478 of a way of
+                            // 868827 between its circles.
+                            else if (!aPadsStated.count(aCurrShape->getInternalName()))
+                            {
+                                const auto aOfShape = std::find_if(
+                                    aCycleChildren.begin(), aCycleChildren.end(),
+                                    [&aOfNode](const oox::drawingml::ShapePtr& rChild) {
+                                        return rChild->getInternalName() == aOfNode;
+                                    });
+                                // the connector stands halfway between two nodes, fStep from
+                                // each, so the chord between their middles is across the ring
+                                const double fChord(2.0 * nRadius
+                                                    * std::abs(sin(basegfx::deg2rad(fStep))));
+                                const double fWhole(
+                                    aOfShape == aCycleChildren.end()
+                                        ? 0.0
+                                        : fChord
+                                              - 2.0
+                                                    * aEdgeAlong(*aOfShape, aNode,
+                                                                 basegfx::deg2rad(fAngle + 90.0)));
+                                if (fWhole > 1.0)
+                                {
+                                    aCurrSize.Width
+                                        = static_cast<sal_Int32>(fWhole * (1.0 - 0.47));
+                                    const_cast<SmartArtDiagram&>(rDgm)
+                                        .getLaidOutSideways()
+                                        .insert(aCurrShape.get());
+                                }
                             }
                             break;
                         }
