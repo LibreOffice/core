@@ -3084,6 +3084,21 @@ struct COKitDocument
     virtual void cropObject(unsigned long long nObjectId, int nUpperLeftX, int nUpperLeftY,
                             int nLowerRightX, int nLowerRightY) = 0;
 
+    /**
+     * Operates a form control on the page the view shows, the way a person using it does, while
+     * the form controls of the view are not in design mode. The control the view holds for it
+     * takes the action and calls the same listeners as after a click, so the events and macros
+     * of the form run as in the office.
+     *
+     * @param nObjectId the unique id of the form control
+     * @param pAction "press" presses a button, "state" sets the state of a check box to pValue,
+     * "check" checks an option button
+     * @param pValue for "state": 0 not checked, 1 checked, 2 undetermined; empty for the others
+     */
+    virtual void formControlAction(unsigned long long nObjectId, const char* pAction,
+                                   const char* pValue)
+        = 0;
+
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

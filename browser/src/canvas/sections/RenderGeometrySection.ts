@@ -427,6 +427,9 @@ class RenderGeometrySection extends CanvasSectionObject {
 		);
 	}
 
+	// the objectKind of a form control
+	private static readonly formControlKind: number = 32;
+
 	/// The selection frame being drawn, from where the press was to the pointer, in twips. Absent
 	/// while none is drawn.
 	public static frame: cool.Range2D | undefined;
@@ -449,11 +452,30 @@ class RenderGeometrySection extends CanvasSectionObject {
 		this.context.restore();
 	}
 
-	/// What the form controls are depends on the design mode, so a switch of the mode drops the
-	/// last hit test answer and draws the document again.
+	/// The ones of those objects that can be selected: out of design mode a form control works as
+	/// a control and is no object to select.
+	public static theSelectable(objectIds: number[]): number[] {
+		if (app.map.isFormControlDesignMode()) return objectIds;
+		return objectIds.filter(
+			(id: number) =>
+				RenderGeometrySection.objectOf(id)?.objectKind !==
+				RenderGeometrySection.formControlKind,
+		);
+	}
+
+	/// The form controls are hit only in design mode, so a switch of the mode drops the last hit
+	/// test answer and draws the document again. Out of design mode the controls are no objects
+	/// to edit, so they leave the selection.
 	public static formControlModeChanged(): void {
 		RenderGeometrySection._lastHit = undefined;
 		RenderGeometrySection._drawnHitKey = '';
+
+		if (!app.map.isFormControlDesignMode()) {
+			const selected = GraphicSelection.selectedObjectIDs;
+			const kept = RenderGeometrySection.theSelectable(selected);
+			if (kept.length !== selected.length) GraphicSelection.selectObjects(kept);
+		}
+
 		if (app.sectionContainer) app.sectionContainer.requestReDraw();
 	}
 
@@ -531,6 +553,14 @@ class RenderGeometrySection extends CanvasSectionObject {
 						}
 					: undefined);
 			if (!hit) continue;
+
+			// out of design mode a form control works as a control: it is not selected and covers
+			// what lies behind it
+			if (
+				object.objectKind === RenderGeometrySection.formControlKind &&
+				!app.map.isFormControlDesignMode()
+			)
+				break;
 
 			hits.push({ id: id, hit: hit });
 			if (!everyOne) break;

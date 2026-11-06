@@ -437,6 +437,11 @@ class VectorManager extends RenderManagerBase {
 			if (this._drawnElsewhere.has(id)) continue;
 			// The slide's copy of a master placeholder is drawn with the master.
 			if (obj.masterContent) continue;
+			if (
+				options?.withoutFormControls &&
+				obj.objectKind === VectorManager.formControlKind
+			)
+				continue;
 			const state = VectorManager.stateOf(data, id, options?.states);
 			if (state?.hidden) continue;
 			if (obj.primitives) {
@@ -1466,6 +1471,9 @@ class VectorManager extends RenderManagerBase {
 
 	// The objectKind of a table.
 	private static readonly tableKind: number = 35;
+
+	// the objectKind of a form control
+	private static readonly formControlKind: number = 32;
 
 	// True when a press at (x, y) on the object hitId may land in the entry's text. A table
 	// edits one cell at a time, so there the press has to be inside that cell's text.

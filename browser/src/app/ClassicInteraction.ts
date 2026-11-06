@@ -303,18 +303,22 @@ abstract class ClassicContext implements InteractionContext {
 		travels.
 	*/
 	protected objectsOfTheLevel(): number[] {
-		return this.groupStoodIn === undefined
-			? RenderGeometrySection.heldByThePage()
-			: RenderGeometrySection.heldBy(this.groupStoodIn);
+		return RenderGeometrySection.theSelectable(
+			this.groupStoodIn === undefined
+				? RenderGeometrySection.heldByThePage()
+				: RenderGeometrySection.heldBy(this.groupStoodIn),
+		);
 	}
 
 	/// The objects at the level of that one, in the order the page draws them, from the back to
 	/// the front.
 	protected objectsOfTheLevelOf(objectId: number): number[] {
 		const parent = RenderGeometrySection.parentOf(objectId);
-		return parent
-			? RenderGeometrySection.heldBy(parent)
-			: RenderGeometrySection.heldByThePage();
+		return RenderGeometrySection.theSelectable(
+			parent
+				? RenderGeometrySection.heldBy(parent)
+				: RenderGeometrySection.heldByThePage(),
+		);
 	}
 
 	/// Selects that one object alone and brings it on screen, for a key going forwards or, with

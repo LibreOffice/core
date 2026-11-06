@@ -687,6 +687,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "setobjectcontrolpoint") ||
                tokens.equals(0, "setobjecthandle") ||
                tokens.equals(0, "cropobject") ||
+               tokens.equals(0, "formcontrol") ||
                tokens.equals(0, "downloadas") ||
                tokens.equals(0, "getchildid") ||
                tokens.equals(0, "gettextselection") ||
@@ -812,6 +813,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "cropobject"))
         {
             return cropObject(tokens);
+        }
+        else if (tokens.equals(0, "formcontrol"))
+        {
+            return formControl(tokens);
         }
         else if (tokens.equals(0, "downloadas"))
         {
@@ -2165,6 +2170,27 @@ bool ChildSession::cropObject(const StringVector& tokens)
     getLOKitDocument()->setView(_viewId);
     getLOKitDocument()->cropObject(std::strtoull(objectId.c_str(), nullptr, 10), nUpperLeftX,
                                    nUpperLeftY, nLowerRightX, nLowerRightY);
+
+    return true;
+}
+
+bool ChildSession::formControl(const StringVector& tokens)
+{
+    std::string objectId;
+    std::string action;
+    std::string value;
+
+    if (!hasTokens(tokens, 4) || !getTokenString(tokens[1], "id", objectId)
+        || !getTokenString(tokens[2], "action", action)
+        || !getTokenString(tokens[3], "value", value))
+    {
+        sendTextFrameAndLogError("error: cmd=formcontrol kind=syntax");
+        return false;
+    }
+
+    getLOKitDocument()->setView(_viewId);
+    getLOKitDocument()->formControlAction(std::strtoull(objectId.c_str(), nullptr, 10),
+                                          action.c_str(), Uri::decode(value).c_str());
 
     return true;
 }

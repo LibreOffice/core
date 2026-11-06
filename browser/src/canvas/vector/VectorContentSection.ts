@@ -62,6 +62,10 @@ namespace cool {
 			this._docLayer = app.map._docLayer;
 		}
 
+		onRemove(): void {
+			VectorFormControlLayer.update(undefined, 0, 0, 0);
+		}
+
 		private _ensureOffscreen(width: number, height: number): void {
 			if (!this._offscreen) {
 				this._offscreen = document.createElement('canvas');
@@ -77,10 +81,16 @@ namespace cool {
 		}
 
 		onDraw(): void {
-			if (this.containerObject.isInZoomAnimation()) return;
+			// the working form controls are shown only over the page the view edits, and a zoom
+			// animation scales the canvas alone
+			if (this.containerObject.isInZoomAnimation()) {
+				VectorFormControlLayer.update(undefined, 0, 0, 0);
+				return;
+			}
 			if (!this._docLayer) return;
 
 			if (app.file.fileBasedView) {
+				VectorFormControlLayer.update(undefined, 0, 0, 0);
 				this._drawFileBasedView();
 				return;
 			}
@@ -107,6 +117,20 @@ namespace cool {
 						(cached ? 'objects=' + cached.objects.size : 'not ready'),
 				);
 			}
+			// while the page's objects are asked for again, its controls stay as they are
+			if (
+				cached ||
+				String(RenderManager.partIdAt(part, mode)) !==
+					VectorFormControlLayer.shownPart
+			)
+				VectorFormControlLayer.update(
+					cached,
+					this.myTopLeft[0] -
+						app.activeDocument.activeLayout.viewedRectangle.pX1,
+					this.myTopLeft[1] -
+						app.activeDocument.activeLayout.viewedRectangle.pY1,
+					app.twipsToPixels,
+				);
 			if (!cached) {
 				// Data not ready. Blit the prior frame only when it holds
 				// the page now at this index, so the view keeps the current
@@ -156,9 +180,14 @@ namespace cool {
 						}
 					: undefined;
 
+			// out of design mode the form controls work as controls and are not drawn into the page
+			const withoutFormControls = !app.map.isFormControlDesignMode();
+
 			// The objects drawn elsewhere are left out of the page, so the drawing is made again
 			// when they change.
 			const renderKey =
+				String(withoutFormControls) +
+				':' +
 				String(edited?.objectId) +
 				':' +
 				String(activeInPlace?.area) +
@@ -185,6 +214,7 @@ namespace cool {
 					editView: true,
 					edited: edited,
 					activeInPlace: activeInPlace,
+					withoutFormControls: withoutFormControls,
 				});
 				// The view edits the page, so it marks out the placeholders.
 				RenderManager.renderPlaceholderAids(this._offscreenCtx, cached);

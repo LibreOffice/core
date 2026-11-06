@@ -1871,6 +1871,7 @@ bool ClientSession::_handleInput(const char *buffer, int length)
              tokens.equals(0, "setobjectcontrolpoint") ||
              tokens.equals(0, "setobjecthandle") ||
              tokens.equals(0, "cropobject") ||
+             tokens.equals(0, "formcontrol") ||
              tokens.equals(0, "downloadas") ||
              tokens.equals(0, "getchildid") ||
              tokens.equals(0, "gettextselection") ||

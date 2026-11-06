@@ -601,6 +601,7 @@ COOL_JS_LST =\
 	src/canvas/vector/VectorFillGraphicPrimitiveRenderer.ts \
 	src/canvas/vector/VectorGradientFrame.ts \
 	src/canvas/vector/VectorFormControlRenderer.tsx \
+	src/canvas/vector/VectorFormControlLayer.tsx \
 	src/canvas/vector/VectorGradientPrimitiveRenderer.ts \
 	src/canvas/vector/VectorWrongSpellPrimitiveRenderer.ts \
 	src/canvas/vector/VectorColorModifiers.ts \

@@ -243,6 +243,9 @@ private:
     bool setObjectControlPoint(const StringVector& tokens);
     bool setObjectHandle(const StringVector& tokens);
     bool cropObject(const StringVector& tokens);
+    /// Operates a form control of the page the way a person using it does: presses a button,
+    /// sets the state of a check box, checks an option button.
+    bool formControl(const StringVector& tokens);
     bool downloadAs(const StringVector& tokens);
     /// Whether core will put a question to the person while writing the document out in
     /// this format.

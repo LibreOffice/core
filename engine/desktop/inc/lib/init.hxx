@@ -471,6 +471,8 @@ namespace desktop {
                              int nAt, int nX, int nY, bool bOrtho) override;
         void cropObject(unsigned long long nObjectId, int nUpperLeftX, int nUpperLeftY,
                         int nLowerRightX, int nLowerRightY) override;
+        void formControlAction(unsigned long long nObjectId, const char* pAction,
+                               const char* pValue) override;
     };
 
     struct DESKTOP_DLLPUBLIC COKitImpl : public COKit

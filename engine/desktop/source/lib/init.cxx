@@ -26,6 +26,14 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/svdpagv.hxx>
+#include <svx/svdouno.hxx>
+#include <svx/sdrpagewindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
+#include <com/sun/star/awt/XCheckBox.hpp>
+#include <com/sun/star/awt/XRadioButton.hpp>
+#include <com/sun/star/accessibility/XAccessibleAction.hpp>
+#include <comphelper/OAccessible.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/diagram/DiagramHelper_svx.hxx>
 #include <config_buildconfig.h>
@@ -7999,6 +8007,112 @@ void COKitDocumentImpl::cropObject(unsigned long long nObjectId, int nUpperLeftX
     {
         pPicture->SetChanged();
         pPicture->BroadcastObjectChange();
+    }
+}
+
+void COKitDocumentImpl::formControlAction(unsigned long long nObjectId, const char* pAction,
+                                          const char* pValue)
+{
+    comphelper::ProfileZone aZone("COKitDocumentImpl::formControlAction");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    if (SfxViewShell::IsCurrentKitViewReadOnly())
+        return;
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SdrView* pView = pViewShell ? pViewShell->GetDrawView() : nullptr;
+    SdrPageView* pPageView = pView ? pView->GetSdrPageView() : nullptr;
+    const SdrPage* pPage = pPageView ? pPageView->GetPage() : nullptr;
+
+    if (!pPage)
+    {
+        SetLastExceptionMsg(u"The view shows no page with a form control"_ustr);
+        return;
+    }
+
+    // in design mode a form control is an object to edit, not a control to use
+    if (pView->IsDesignMode())
+    {
+        SetLastExceptionMsg(u"The form controls of the view are in design mode"_ustr);
+        return;
+    }
+
+    const SdrUnoObj* pUnoObject
+        = dynamic_cast<const SdrUnoObj*>(pPage->FindObjectByUniqueID(nObjectId));
+    if (!pUnoObject)
+    {
+        SetLastExceptionMsg(u"No form control of that id is on the page"_ustr);
+        return;
+    }
+
+    // the view holds its controls for the window it paints into
+    cpo::uno::Reference<css::awt::XControl> xControl;
+    for (sal_uInt32 nWindow = 0; nWindow < pPageView->PageWindowCount() && !xControl.is();
+         ++nWindow)
+    {
+        const OutputDevice& rDevice
+            = pPageView->GetPageWindow(nWindow)->GetPaintWindow().GetOutputDevice();
+        if (rDevice.GetOutDevType() == OUTDEV_WINDOW)
+            xControl = pUnoObject->GetUnoControl(*pView, rDevice);
+    }
+
+    cpo::uno::Reference<css::awt::XWindowPeer> xPeer(xControl.is() ? xControl->getPeer()
+                                                                   : nullptr);
+    if (!xPeer.is())
+    {
+        SAL_WARN("kit", "formControlAction: the view holds no working control for " << nObjectId);
+        SetLastExceptionMsg(u"The view holds no working control for the object"_ustr);
+        return;
+    }
+
+    const std::string_view aAction(pAction ? pAction : "");
+    const std::string_view aValue(pValue ? pValue : "");
+
+    try
+    {
+        if (aAction == "press")
+        {
+            // the action of the accessible part of a button's window is its click, a toggle
+            // button toggles
+            VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xPeer);
+            rtl::Reference<comphelper::OAccessible> pAccessible(
+                pWindow ? pWindow->GetAccessible() : nullptr);
+            cpo::uno::Reference<css::accessibility::XAccessibleAction> xAccessibleAction(
+                pAccessible.is() ? pAccessible->getAccessibleContext() : nullptr,
+                cpo::uno::UNO_QUERY);
+            if (xAccessibleAction.is() && xAccessibleAction->getAccessibleActionCount() > 0)
+                xAccessibleAction->doAccessibleAction(0);
+            else
+            {
+                SAL_WARN("kit", "formControlAction: the control " << nObjectId
+                                                                   << " cannot be pressed");
+                SetLastExceptionMsg(u"The control cannot be pressed"_ustr);
+            }
+        }
+        else if (aAction == "state")
+        {
+            cpo::uno::Reference<css::awt::XCheckBox> xCheckBox(xPeer, cpo::uno::UNO_QUERY);
+            if (xCheckBox.is())
+                xCheckBox->setState(o3tl::toInt32(aValue));
+            else
+                SetLastExceptionMsg(u"The control is no check box"_ustr);
+        }
+        else if (aAction == "check")
+        {
+            cpo::uno::Reference<css::awt::XRadioButton> xRadioButton(xPeer, cpo::uno::UNO_QUERY);
+            if (xRadioButton.is())
+                xRadioButton->setState(true);
+            else
+                SetLastExceptionMsg(u"The control is no option button"_ustr);
+        }
+        else
+            SetLastExceptionMsg(u"Unknown action for a form control"_ustr);
+    }
+    catch (const cpo::uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("kit", "formControlAction");
     }
 }
 

@@ -1,0 +1,252 @@
+/* -*- js-indent-level: 8 -*- */
+/*
+ * Copyright the Collabora Online contributors.
+ *
+ * SPDX-License-Identifier: MPL-2.0
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+/* global app RenderManager */
+
+namespace cool {
+  /*
+		The form controls of the page the view edits, as working HTML elements over the canvas,
+		while the form controls of the view are not in design mode. Each element lies where its
+		control lies on the page and follows the scroll and the zoom. An element changes nothing
+		itself: what is done with it goes to the server, which operates its own control there, so
+		the events and macros of the form run as in the office, and the changed control comes
+		back with its object.
+	*/
+  export class VectorFormControlLayer {
+    // the objectKind of a form control
+    private static readonly formControlKind: number = 32;
+
+    /// How many twips one CSS pixel is at a zoom of one.
+    private static readonly twipsPerPixel = 15;
+
+    private static _holder: HTMLElement | undefined;
+
+    // the element of each control by its object id, with what it was built from
+    private static _elements = new Map<
+      number,
+      { built: string; element: HTMLElement }
+    >();
+
+    /// The id of the page the elements are shown for, empty where none are shown.
+    public static shownPart: string = '';
+
+    /// Places the elements of the form controls of the page, or takes them all away where
+    /// data is absent. originX and originY are where the page's origin lies on the canvas
+    /// and scale the canvas pixels to a twip.
+    public static update(
+      data: VectorPrimitivesData | undefined,
+      originX: number,
+      originY: number,
+      scale: number,
+    ): void {
+      const layer = VectorFormControlLayer;
+      const shown = new Set<number>();
+      layer.shownPart = data ? String(data.partId) : '';
+      if (data && !app.map.isFormControlDesignMode()) {
+        for (const id of data.order) {
+          const object = data.objects.get(id);
+          if (object?.objectKind !== layer.formControlKind) continue;
+          if (
+            object.layer !== undefined &&
+            !RenderManager.isLayerVisible(object.layer)
+          )
+            continue;
+          const primitive = layer._primitiveIn(object.primitives ?? []);
+          if (!primitive) continue;
+          shown.add(id);
+          layer._place(id, primitive, originX, originY, scale);
+        }
+      }
+
+      for (const [id, entry] of layer._elements)
+        if (!shown.has(id)) {
+          entry.element.remove();
+          layer._elements.delete(id);
+        }
+    }
+
+    // the form control among the primitives of an object, at any depth
+    private static _primitiveIn(
+      primitives: Primitive[],
+    ): FormControlPrimitive | undefined {
+      for (const primitive of primitives) {
+        if (primitive.type === FormControlPrimitive.type)
+          return primitive as FormControlPrimitive;
+        const children = (primitive as { children?: Primitive[] }).children;
+        const found = children
+          ? VectorFormControlLayer._primitiveIn(children)
+          : undefined;
+        if (found) return found;
+      }
+      return undefined;
+    }
+
+    private static _place(
+      id: number,
+      primitive: FormControlPrimitive,
+      originX: number,
+      originY: number,
+      scale: number,
+    ): void {
+      const layer = VectorFormControlLayer;
+      const matrix = Matrix2D.fromArray(primitive.matrix);
+      if (!matrix) return;
+
+      // a changed control is made anew; the page sends its objects again unchanged as well
+      const built = JSON.stringify(primitive);
+      let entry = layer._elements.get(id);
+      if (!entry || entry.built !== built) {
+        entry?.element.remove();
+        entry = { built: built, element: layer._make(id, primitive) };
+        layer._elements.set(id, entry);
+        layer._holderElement().appendChild(entry.element);
+      }
+
+      // the element has its size at a zoom of one and is scaled to the view's zoom
+      const origin = matrix.apply(0, 0);
+      const style = entry.element.style;
+      style.left = (originX + origin.x * scale) / app.dpiScale + 'px';
+      style.top = (originY + origin.y * scale) / app.dpiScale + 'px';
+      style.transform =
+        'scale(' + (scale * layer.twipsPerPixel) / app.dpiScale + ')';
+    }
+
+    // the element over the canvas that holds the controls; it lets the pointer through
+    // where no control is
+    private static _holderElement(): HTMLElement {
+      const layer = VectorFormControlLayer;
+      if (!layer._holder || !layer._holder.isConnected) {
+        layer._holder = (
+          <div
+            class="vector-form-controls"
+            style={{
+              position: 'absolute',
+              left: '0',
+              top: '0',
+              right: '0',
+              bottom: '0',
+              overflow: 'hidden',
+              pointerEvents: 'none',
+            }}
+          />
+        );
+        document.getElementById('canvas-container')?.appendChild(layer._holder);
+
+        // a drag that starts on the page goes on over the controls, a selection frame or a
+        // move of an object
+        const holder = layer._holder;
+        window.addEventListener(
+          'pointerdown',
+          (event: PointerEvent) => {
+            if (!holder.contains(event.target as Node))
+              holder.classList.add('passing');
+          },
+          true,
+        );
+        window.addEventListener(
+          'pointerup',
+          () => holder.classList.remove('passing'),
+          true,
+        );
+      }
+      return layer._holder;
+    }
+
+    private static _make(
+      id: number,
+      primitive: FormControlPrimitive,
+    ): HTMLElement {
+      const layer = VectorFormControlLayer;
+      const control = VectorFormControlRenderer.element(primitive);
+      // the element is laid exactly over the control's square
+      control.style.margin = '0';
+      const element = (
+        <div
+          class="vector-form-control"
+          style={{
+            position: 'absolute',
+            transformOrigin: '0 0',
+            pointerEvents: 'auto',
+            fontFamily: 'var(--cool-font)',
+          }}
+        >
+          {control}
+        </div>
+      );
+
+      switch (primitive.kind) {
+        case 'pushButton':
+        case 'imageButton':
+          element.addEventListener('click', () => layer._send(id, 'press', ''));
+          break;
+        case 'checkBox':
+          element
+            .querySelector('input')
+            ?.addEventListener('change', (event: Event) =>
+              layer._send(
+                id,
+                'state',
+                (event.target as HTMLInputElement).checked ? '1' : '0',
+              ),
+            );
+          break;
+        case 'optionButton':
+          element
+            .querySelector('input')
+            ?.addEventListener('change', () => layer._send(id, 'check', ''));
+          break;
+      }
+
+      // the keyboard stays with the document: the controls take no focus, by click or by Tab
+      element
+        .querySelectorAll<HTMLElement>('button, input, select, textarea, a')
+        .forEach((focusable: HTMLElement) =>
+          focusable.setAttribute('tabindex', '-1'),
+        );
+      element.addEventListener('mousedown', (event: MouseEvent) =>
+        event.preventDefault(),
+      );
+
+      // the wheel scrolls and zooms the document, as it does over the page
+      element.addEventListener(
+        'wheel',
+        (event: WheelEvent) => {
+          event.preventDefault();
+          document
+            .getElementById('document-canvas')
+            ?.dispatchEvent(new WheelEvent('wheel', event));
+        },
+        { passive: false },
+      );
+
+      // the label of a check box or an option button takes the click as the box does
+      const input = element.querySelector('input');
+      const label = element.querySelector('label');
+      if (input && label)
+        label.addEventListener('click', () => {
+          if (!input.disabled) input.click();
+        });
+
+      return element;
+    }
+
+    private static _send(id: number, action: string, value: string): void {
+      app.socket.sendMessage(
+        'formcontrol id=' +
+          id +
+          ' action=' +
+          action +
+          ' value=' +
+          encodeURIComponent(value),
+      );
+    }
+  }
+}

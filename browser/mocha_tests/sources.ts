@@ -165,6 +165,7 @@
 /// <reference path="../src/canvas/vector/VectorFillGraphicPrimitiveRenderer.ts" />
 /// <reference path="../src/canvas/vector/VectorGradientFrame.ts" />
 /// <reference path="../src/canvas/vector/VectorFormControlRenderer.tsx" />
+/// <reference path="../src/canvas/vector/VectorFormControlLayer.tsx" />
 /// <reference path="../src/canvas/vector/VectorGradientPrimitiveRenderer.ts" />
 /// <reference path="../src/canvas/vector/VectorWrongSpellPrimitiveRenderer.ts" />
 /// <reference path="../src/canvas/vector/VectorColorModifiers.ts" />

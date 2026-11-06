@@ -62,3 +62,14 @@ html[data-bg-theme='dark'] .cursor-handler {
 	z-index: 11;
 	user-select: none;
 }
+
+/* the working form controls over the page in a view that draws from objects */
+.vector-form-controls {
+	z-index: 11;
+	user-select: none;
+}
+
+/* a drag that started on the page passes over them */
+.vector-form-controls.passing .vector-form-control {
+	pointer-events: none !important;
+}

@@ -78,7 +78,7 @@ namespace cool {
       if (!picture) {
         const made = new Image();
         this._pictures.set(primitive, made);
-        void this._paint(primitive, matrix, made);
+        void this._paint(primitive, made);
         return;
       }
       if (!picture.complete || !picture.naturalWidth) return;
@@ -366,7 +366,44 @@ namespace cool {
     }
 
     // the element of the control's kind, with the classes of JSDialog's widgets
-    private _build(primitive: FormControlPrimitive): HTMLElement {
+    /// The HTML element of the control, with the look its model sets, at its size at a zoom of one.
+    public static element(primitive: FormControlPrimitive): HTMLElement {
+      const renderer = VectorFormControlRenderer;
+      const control = renderer._build(primitive);
+      renderer._applyModel(control, primitive);
+      const size = renderer.sizeOf(primitive);
+      if (size) {
+        control.style.width = size.width + 'px';
+        control.style.height = size.height + 'px';
+      }
+      return control;
+    }
+
+    /// The size of the control in CSS pixels at a zoom of one, from the matrix of its square.
+    public static sizeOf(
+      primitive: FormControlPrimitive,
+    ): { width: number; height: number } | undefined {
+      const matrix = Matrix2D.fromArray(primitive.matrix);
+      if (!matrix) return undefined;
+      const origin = matrix.apply(0, 0);
+      const across = matrix.apply(1, 0);
+      const down = matrix.apply(0, 1);
+      const twips = VectorFormControlRenderer.twipsPerPixel;
+      return {
+        width: Math.max(
+          1,
+          Math.round(
+            Math.hypot(across.x - origin.x, across.y - origin.y) / twips,
+          ),
+        ),
+        height: Math.max(
+          1,
+          Math.round(Math.hypot(down.x - origin.x, down.y - origin.y) / twips),
+        ),
+      };
+    }
+
+    private static _build(primitive: FormControlPrimitive): HTMLElement {
       const renderer = VectorFormControlRenderer;
       const label = primitive.label ?? '';
       const text = primitive.text ?? '';
@@ -481,7 +518,7 @@ namespace cool {
     }
 
     // what the model sets itself goes over the look of the widget
-    private _applyModel(
+    private static _applyModel(
       element: HTMLElement,
       primitive: FormControlPrimitive,
     ): void {
@@ -541,32 +578,15 @@ namespace cool {
 
     private async _paint(
       primitive: FormControlPrimitive,
-      matrix: Matrix2D,
       picture: HTMLImageElement,
     ): Promise<void> {
-      const origin = matrix.apply(0, 0);
-      const across = matrix.apply(1, 0);
-      const down = matrix.apply(0, 1);
-      const width = Math.max(
-        1,
-        Math.round(
-          Math.hypot(across.x - origin.x, across.y - origin.y) /
-            VectorFormControlRenderer.twipsPerPixel,
-        ),
-      );
-      const height = Math.max(
-        1,
-        Math.round(
-          Math.hypot(down.x - origin.x, down.y - origin.y) /
-            VectorFormControlRenderer.twipsPerPixel,
-        ),
-      );
+      const size = VectorFormControlRenderer.sizeOf(primitive);
+      if (!size) return;
+      const width = size.width;
+      const height = size.height;
 
       // built out of view in the page, so the page's rules give it its look
-      const control = this._build(primitive);
-      this._applyModel(control, primitive);
-      control.style.width = width + 'px';
-      control.style.height = height + 'px';
+      const control = VectorFormControlRenderer.element(primitive);
       const holder = (
         <div
           style={{
