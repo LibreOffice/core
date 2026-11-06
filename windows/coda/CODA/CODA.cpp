@@ -3965,22 +3965,31 @@ static void requestCloseTab(HWND hWnd, int tabId)
                                (tab->mode != DocumentMode::CLOUD_ACCOUNT || tab->editorFrame);
     if (mayHaveEdits && pageCanAnswer)
     {
-        const wchar_t* script = L"try {"
-                                L"  if (window.app && window.app.map"
-                                L"      && typeof window.app.map._saveAndClose === 'function')"
-                                L"    window.app.map._saveAndClose();"
-                                L"  else window.postMobileMessage('CLOSE_WINDOW');"
-                                L"} catch (e) { window.postMobileMessage('CLOSE_WINDOW'); }";
+        const wchar_t* script =
+            L"(() => {"
+            L"  try {"
+            L"    if (window.app && window.app.map"
+            L"        && typeof window.app.map._saveAndClose === 'function')"
+            L"      window.app.map._saveAndClose();"
+            L"    else window.postMobileMessage('CLOSE_WINDOW');"
+            L"    return true;"
+            L"  } catch (e) {"
+            L"    try { window.postMobileMessage('CLOSE_WINDOW'); return true; }"
+            L"    catch (e) { return false; }"
+            L"  }"
+            L"})()";
 
-        // A page that fails while it answers closes its tab too, and so does a page that
-        // cannot run the script at all, such as one whose renderer process died.
+        // The tab closes anyway when the script cannot run, such as after the
+        // renderer process died, or when the frame has no CODA page to ask.
         auto completed = Microsoft::WRL::Callback<ICoreWebView2ExecuteScriptCompletedHandler>(
-            [tabId](HRESULT errorCode, LPCWSTR) -> HRESULT
+            [tabId](HRESULT errorCode, LPCWSTR result) -> HRESULT
             {
-                if (SUCCEEDED(errorCode))
+                const bool asked =
+                    SUCCEEDED(errorCode) && result && std::wstring_view(result) == L"true";
+                if (asked)
                     return S_OK;
-                LOG_WRN("The page of tab "
-                        << tabId << " could not run its close script: " << std::hex << errorCode);
+                LOG_WRN("No CODA page in tab " << tabId << ", closing it: " << std::hex
+                                               << errorCode);
                 if (DocumentTab* closing = findTab(tabId))
                 {
                     closing->readyToClose = true;
