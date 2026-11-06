@@ -76,7 +76,7 @@
       "sources": [
         {
           "type": "git",
-          "url": "https://git.libreoffice.org/cppunit",
+          "url": "https://github.com/CollaboraOnline/cppunit.git",
           "tag": "cppunit-1.15.1",
           "commit": "7e1c90fa717eb2253ca1901d4065f06b2469cfa2"
         }
