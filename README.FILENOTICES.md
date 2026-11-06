@@ -7,7 +7,7 @@ Notices (ie. header in the file describing the Copyright and License):
 
 ```
 /*
- * Copyright the Collabora Online contributors.
+ * Copyright the Collabora Office contributors.
  *
  * SPDX-License-Identifier: MPL-2.0
  *
@@ -21,7 +21,7 @@ Notices (ie. header in the file describing the Copyright and License):
 
 ```
 #
-# Copyright the Collabora Online contributors.
+# Copyright the Collabora Office contributors.
 #
 # SPDX-License-Identifier: MPL-2.0
 #
