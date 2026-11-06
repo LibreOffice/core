@@ -122,6 +122,24 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         fatalError("CloudAccountWindow is created in code only")
     }
 
+    // The page saves, then sends CLOSE_WINDOW.
+    private static let saveAndCloseScript = "window.app.map._saveAndClose()"
+
+    func windowShouldClose(_ sender: NSWindow) -> Bool {
+        guard remoteDocument != nil, let editorFrameInfo else {
+            return true
+        }
+
+        webView.evaluateJavaScript(Self.saveAndCloseScript, in: editorFrameInfo, in: Self.world) { result in
+            if case .failure = result {
+                COWrapper.LOG_ERR("The editor page was not asked to save")
+                self.close()
+            }
+        }
+
+        return false
+    }
+
     func windowWillClose(_ notification: Notification) {
         let contentController = webView.configuration.userContentController
         contentController.removeScriptMessageHandler(forName: "frameLoaded", contentWorld: Self.world)
@@ -220,6 +238,11 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         let isSaveReport = kind == "saveCompleted" || kind == "SAVESTARTED" || kind == "SAVECOMPLETED"
             || kind == "SAVEFAILED" || kind == "CLOSE_CANCELLED"
         if isSaveReport {
+            return (nil, nil)
+        }
+
+        if kind == "CLOSE_WINDOW" {
+            close()
             return (nil, nil)
         }
 

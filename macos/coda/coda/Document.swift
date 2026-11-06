@@ -44,6 +44,12 @@ class Document: NSDocument {
     /// The iframe the page is in, or nil when the page is the main frame of webView.
     var editorFrame: WKFrameInfo?
 
+    // The page of a remote document saves and uploads it, so AppKit must not
+    // ask about its changes. The account window asks the page when it closes.
+    override var isDocumentEdited: Bool {
+        return editorFrame == nil && super.isDocumentEdited
+    }
+
     /// True from the moment the connection to the in-process server is released until a
     /// new one is established. The document stays loaded in the engine throughout.
     var isDetached = false
