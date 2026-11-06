@@ -35,6 +35,8 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/scriptspaceitem.hxx>
 #include <tools/debug.hxx>
+#include <osl/file.hxx>
+#include <osl/thread.h>
 
 #include <unotools/configmgr.hxx>
 #include <unotools/useroptions.hxx>
@@ -1788,7 +1790,10 @@ void SdDrawDocument::dumpAsXml(xmlTextWriterPtr pWriter) const
     bool bOwns = false;
     if (!pWriter)
     {
-        pWriter = xmlNewTextWriterFilename("model.xml", 0);
+        // The current directory may not be writable, e.g. when sandboxed.
+        OString aPath
+            = OUStringToOString(osl::FileBase::getTempDirPath(), osl_getThreadTextEncoding()) + "/model.xml";
+        pWriter = xmlNewTextWriterFilename(aPath.getStr(), 0);
         xmlTextWriterSetIndent(pWriter,1);
         (void)xmlTextWriterSetIndentString(pWriter, BAD_CAST("  "));
         (void)xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);

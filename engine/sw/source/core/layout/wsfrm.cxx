@@ -21,6 +21,8 @@
 
 #include <hints.hxx>
 #include <osl/diagnose.h>
+#include <osl/file.hxx>
+#include <osl/thread.h>
 #include <o3tl/safeint.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/brushitem.hxx>
@@ -4927,7 +4929,10 @@ bool SwRootFrame::HasMergedParas() const
 namespace {
     xmlTextWriterPtr lcl_createDefaultWriter()
     {
-        xmlTextWriterPtr writer = xmlNewTextWriterFilename( "layout.xml", 0 );
+        // The current directory may not be writable, e.g. when sandboxed.
+        OString aPath
+            = OUStringToOString(osl::FileBase::getTempDirPath(), osl_getThreadTextEncoding()) + "/layout.xml";
+        xmlTextWriterPtr writer = xmlNewTextWriterFilename( aPath.getStr(), 0 );
         xmlTextWriterSetIndent(writer,1);
         (void)xmlTextWriterSetIndentString(writer, BAD_CAST("  "));
         (void)xmlTextWriterStartDocument( writer, nullptr, nullptr, nullptr );

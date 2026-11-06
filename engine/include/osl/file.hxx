@@ -251,6 +251,21 @@ public:
         return static_cast< RC >( osl_getTempDirURL( &ustrTempDirURL.pData ) );
     }
 
+    /** Retrieves the system path of the system's temporary directory.
+
+        @return the system path, without a trailing slash, or an empty string on failure.
+
+        @see getTempDirURL()
+    */
+    static ::rtl::OUString getTempDirPath()
+    {
+        ::rtl::OUString aTempDirURL;
+        ::rtl::OUString aTempDirPath;
+        if (getTempDirURL(aTempDirURL) == E_None)
+            getSystemPathFromFileURL(aTempDirURL, aTempDirPath);
+        return aTempDirPath;
+    }
+
     /** Creates a temporary file in the directory provided by the caller or the
         directory returned by getTempDirURL.
         Under UNIX Operating Systems the file will be created with read and write
