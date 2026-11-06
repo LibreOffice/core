@@ -3393,10 +3393,27 @@ bool AIChatSession::tryConsumeCommandValues(const std::shared_ptr<Message>& payl
 {
     if (!_toolLoop || !_toolLoop->awaitingKitResponse)
         return false;
-    if (_toolLoop->pendingToolName != AIToolNames::ListCalcFunctions
-        && _toolLoop->pendingToolName != AIToolNames::EvaluateFormula)
+
+    // Check if this commandvalues reply is meant for this AI chat session ...
+
+    std::string_view expectedCommand;
+    if (_toolLoop->pendingToolName == AIToolNames::ListCalcFunctions)
+        expectedCommand = ".uno:CalcFunctionList";
+    else if (_toolLoop->pendingToolName == AIToolNames::EvaluateFormula)
+        expectedCommand = ".uno:EvaluateFormula";
+    else
         return false;
 
+    Poco::JSON::Object::Ptr reply = new Poco::JSON::Object();
+    if (!JsonUtil::parseJSON(payload->jsonString(), reply))
+        return false;
+
+    std::string commandName;
+    JsonUtil::findJSONValue(reply, "commandName", commandName);
+    if (commandName != expectedCommand)
+        return false;
+
+    // The answer is yes
     _toolLoop->awaitingKitResponse = false;
     continueToolLoop(_toolLoop->pendingToolCallId, payload->jsonString());
     return true;
