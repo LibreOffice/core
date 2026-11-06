@@ -7892,6 +7892,20 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncARRAYTOTEXTFormulaSeparators)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFormulaSeparatorsChangedBackForgetReplacedSymbols)
+{
+    // After the array separators change and change back, the symbols that stood in for them in
+    // between are no longer read as separators.
+    {
+        FormulaSeparatorsSwitch aSeparatorsSwitch(u";"_ustr, u"\\"_ustr, u"`"_ustr);
+    }
+    ScCompiler aCompiler(*m_pDoc, ScAddress(), FormulaGrammar::GRAM_NATIVE);
+    const OpCodeHashMap& rHashMap
+        = aCompiler.GetOpCodeMap(css::sheet::FormulaLanguage::NATIVE)->getHashMap();
+    CPPUNIT_ASSERT(!rHashMap.contains(u"\\"_ustr));
+    CPPUNIT_ASSERT(!rHashMap.contains(u"`"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testExternalNameAsArgumentHasNoParameters)
 {
     // An add-in name that stands in an argument position rather than being

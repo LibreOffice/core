@@ -748,9 +748,13 @@ void FormulaCompiler::OpCodeMap::putOpCode( const OUString & rStr, const OpCode 
                     bPutOp = true;
                     bRemoveFromMap = (mpTable[ocArrayRowSep] != mpTable[eOp] && mpTable[ocSep] != mpTable[eOp]);
                 break;
+                // Keep the "|" in map, so an inline array written with it
+                // reads the same under every array row separator.
                 case ocArrayRowSep:
                     bPutOp = true;
-                    bRemoveFromMap = (mpTable[ocArrayColSep] != mpTable[eOp] && mpTable[ocSep] != mpTable[eOp]);
+                    bRemoveFromMap = (mpTable[eOp] != "|" &&
+                            mpTable[ocArrayColSep] != mpTable[eOp] &&
+                            mpTable[ocSep] != mpTable[eOp]);
                 break;
                 // For ocSep keep the ";" in map but remove any other if it is
                 // not used for ocArrayColSep or ocArrayRowSep.
@@ -806,7 +810,7 @@ void FormulaCompiler::OpCodeMap::putOpCode( const OUString & rStr, const OpCode 
         // Case preserving opcode -> string, upper string -> opcode
         if (bRemoveFromMap)
         {
-            OUString aUpper( pCharClass ? pCharClass->uppercase( mpTable[eOp]) : rStr.toAsciiUpperCase());
+            OUString aUpper = pCharClass ? pCharClass->uppercase(mpTable[eOp]) : mpTable[eOp].toAsciiUpperCase();
             // Ensure we remove a mapping only for the requested OpCode.
             OpCodeHashMap::const_iterator it( maHashMap.find( aUpper));
             if (it != maHashMap.end() && (*it).second == eOp)
