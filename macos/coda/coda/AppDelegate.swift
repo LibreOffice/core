@@ -227,6 +227,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // save the continuation so we can reply later
         pendingQuitReply = { sender.reply(toApplicationShouldTerminate: $0) }
 
+        closeAllDocuments()
+
+        // tell App Kit we’ll decide later
+        return .terminateLater
+    }
+
+    private func closeAllDocuments() {
         // ask every open document to close; the delegate callback will run
         for doc in NSDocumentController.shared.documents {
             // In UI testing mode the quit comes from the test harness and
@@ -245,9 +252,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if NSDocumentController.shared.documents.isEmpty {
             finishQuit(.terminateNow)
         }
-
-        // tell App Kit we’ll decide later
-        return .terminateLater
     }
 
     /**
