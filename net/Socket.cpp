@@ -1562,7 +1562,9 @@ void StreamSocket::ensureDisconnected()
         }
     }
 
-    if (isOpen())
+    // A socket that skips the shutdown, such as one of a background save pair, stays open until
+    // it is closed.
+    if (isOpen() && shutsDownBeforeClose())
     {
         // Note: Ensure proper semantics of onDisconnect()
         LOG_WRN("Socket still open post onDisconnect(), forced shutdown.");

@@ -414,6 +414,7 @@ protected:
 
     /// avoid doing a shutdown before close
     void setNoShutdown() { _noShutdown = true; }
+    bool shutsDownBeforeClose() const { return !_noShutdown; }
 
     /// Explicitly marks this socket FD as shut down, but not necessarily closed.
     void setShutdown() { _isShutdown = true; }
