@@ -8,6 +8,7 @@
  */
 
 #include <functional>
+#include <set>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <svx/svdoashp.hxx>
@@ -42,6 +43,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
+#include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 
@@ -1709,6 +1711,42 @@ CPPUNIT_TEST_FIXTURE(Test, testExtrusionToScene3d)
     CPPUNIT_ASSERT_EQUAL(true, aTextPath[u"TextPath"_ustr].get<bool>());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0000FF),
                          xFontwork->getPropertyValue(u"FillColor2"_ustr).get<sal_Int32>());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFontworkRotatedLettersWriter)
+{
+    // Word-native wave WordArt: normal characters and rotated characters at two shape turns.
+    loadFromFile(u"fontwork-vml-rotated-letters.docx");
+    const auto assertRotations = [&] {
+        uno::Reference<drawing::XDrawPageSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+        const auto xPage = xDoc->getDrawPage();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xPage->getCount());
+        std::set<std::pair<text::WritingMode, sal_Int32>> aRotations;
+        for (sal_Int32 i = 0; i < 3; ++i)
+        {
+            uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(i), uno::UNO_QUERY_THROW);
+            aRotations.emplace(xShape->getPropertyValue(u"TextWritingMode"_ustr)
+                                   .get<text::WritingMode>(),
+                               xShape->getPropertyValue(u"RotateAngle"_ustr).get<sal_Int32>());
+        }
+        CPPUNIT_ASSERT_EQUAL(size_t(3), aRotations.size());
+        CPPUNIT_ASSERT(aRotations.contains({ text::WritingMode_LR_TB, 0 }));
+        CPPUNIT_ASSERT(aRotations.contains({ text::WritingMode_TB_RL, 0 }));
+        CPPUNIT_ASSERT(aRotations.contains({ text::WritingMode_TB_RL, 27000 }));
+    };
+    assertRotations();
+    for (int nRoundTrip = 0; nRoundTrip < 2; ++nRoundTrip)
+    {
+        save(TestFilter::DOCX);
+        xmlDocUniquePtr pXml = parseExport(u"word/document.xml"_ustr);
+        // Only the ordinary WordArt uses DrawingML. Its writing modes cannot
+        // express the independent character rotation of the other two legacy shapes.
+        assertXPath(pXml, "//mc:Choice", 1);
+        assertXPath(pXml, "//wps:bodyPr[@vert='eaVert']", 0);
+        assertXPath(pXml, "//v:textpath[contains(@style, 'v-rotate-letters:t')]", 2);
+        loadFromURL(maTempFile.GetURL());
+        assertRotations();
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFontworkText3DRotationRoundTrip)

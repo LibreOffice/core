@@ -1612,10 +1612,13 @@ bool DocxSdrExport::Impl::isSupportedDMLShape(const uno::Reference<drawing::XSha
             return false;
     }
 
-    // A FontWork shape with bitmap fill cannot be expressed as a modern 'abc transform'
-    // in Word. Only the legacy VML WordArt allows bitmap fill.
+    // Bitmap fills and individually rotated characters need legacy VML WordArt.
+    // DrawingML writing modes rotate the text flow instead of each character.
     if (pSdrObject->IsTextPath())
     {
+        const auto* pCustomShape = dynamic_cast<const SdrObjCustomShape*>(pSdrObject);
+        if (pCustomShape && pCustomShape->IsVerticalWriting())
+            return false;
         css::drawing::FillStyle eFillStyle = css::drawing::FillStyle_SOLID;
         xShapeProperties->getPropertyValue(u"FillStyle"_ustr) >>= eFillStyle;
         if (eFillStyle == css::drawing::FillStyle_BITMAP)

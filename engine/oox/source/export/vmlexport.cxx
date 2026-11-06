@@ -191,6 +191,13 @@ void VMLExport::AddShape( sal_uInt32 nShapeType, ShapeFlag nShapeFlags, sal_uInt
     m_nShapeType = nShapeType;
     m_nShapeFlags = nShapeFlags;
 
+    // Standalone rotated WordArt must not share the zero ID of DOCX fallback shapes.
+    if (!nShapeId && m_pSdrObject->IsTextPath())
+    {
+        const SdrTextObj* pTextObj = DynCastSdrTextObj(m_pSdrObject);
+        if (pTextObj && pTextObj->IsVerticalWriting())
+            nShapeId = ++m_nShapeIDCounter;
+    }
     m_sShapeId = ShapeIdString( nShapeId );
     if (m_sShapeId.startsWith("_x0000_"))
     {
@@ -990,6 +997,8 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                                 aStyle += ";font-style:italic";
                             if ((nGtextFlags & 0x00800080) == 0x00800080) // no DFF, PID gtextFNormalize = 248
                                 aStyle += ";v-same-letter-heights:t";
+                            if ((nGtextFlags & 0x20002000) == 0x20002000)
+                                aStyle += ";v-rotate-letters:t";
 
                             // The value 'Fontwork character spacing' in LO is bound to field 'Scaling'
                             // not to 'Spacing' in character properties. In fact the characters are
@@ -1350,7 +1359,11 @@ sal_Int32 VMLExport::StartShape()
             nShapeElement = XML_shape;
             if (m_pSdrObject->IsTextPath())
             {
-                bReferToShapeType = m_aShapeTypeWritten[m_nShapeType];
+                // Rotated WordArt is exported as VML in DOCX. Its template must not
+                // depend on one hidden inside an earlier DrawingML fallback.
+                const SdrTextObj* pTextObj = DynCastSdrTextObj(m_pSdrObject);
+                bReferToShapeType = m_aShapeTypeWritten[m_nShapeType]
+                                   && !(pTextObj && pTextObj->IsVerticalWriting());
                 if (!bReferToShapeType)
                 {
                     // Does a predefined markup exist at all?
