@@ -32,6 +32,21 @@
 namespace Desktop
 {
 
+// Whether target, a path appended to the config folder, names a file in <config folder>/settings/.
+static bool fileInSettingsFolder(const Poco::Path& target)
+{
+    const int configDepth = Poco::Path(getConfigPath()).makeDirectory().depth();
+    if (target.depth() <= configDepth || target.directory(configDepth) != "settings")
+        return false;
+
+    for (int i = configDepth; i < target.depth(); ++i)
+        if (target.directory(i) == "..")
+            return false;
+
+    const std::string fileName = target.getFileName();
+    return !fileName.empty() && fileName != "..";
+}
+
 bool uploadSettings(const std::string& payload)
 {
     try
@@ -45,6 +60,12 @@ bool uploadSettings(const std::string& payload)
 
         Poco::Path target = getConfigPath();
         target.append(filePath).append(fileName);
+        if (!fileInSettingsFolder(target))
+        {
+            LOG_WRN("uploadSettings refused: " << target.toString()
+                                               << " is not a file in the settings folder");
+            return false;
+        }
 
         Poco::File(target.parent()).createDirectories();
 
@@ -72,6 +93,12 @@ FileResult fetchSettingsFile(const std::string& relPath)
 {
     Poco::Path target = getConfigPath();
     target.append(relPath);
+    if (!fileInSettingsFolder(target))
+    {
+        LOG_WRN("fetchSettingsFile refused: " << target.toString()
+                                              << " is not a file in the settings folder");
+        return {};
+    }
 
     if (!Poco::File(target).exists())
         return {};
