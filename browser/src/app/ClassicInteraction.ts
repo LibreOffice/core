@@ -332,6 +332,36 @@ abstract class ClassicContext implements InteractionContext {
 		return true;
 	}
 
+	/// The objects of the level that lie wholly inside the frame, as the office takes them. With
+	/// extending each of them changes its state instead: a selected one leaves the selection, one
+	/// not selected joins it, and the selected ones outside the frame stay.
+	public frameSelects(
+		frame: cool.Range2D,
+		extending: boolean,
+	): number[] | undefined {
+		const level = this.objectsOfTheLevel();
+		const framed = level.filter((objectId: number) => {
+			const box = RenderGeometrySection.boxOf(objectId);
+			return (
+				!!box &&
+				box.minX >= frame.minX &&
+				box.minY >= frame.minY &&
+				box.maxX <= frame.maxX &&
+				box.maxY <= frame.maxY
+			);
+		});
+		if (!extending) return framed;
+
+		const selected = GraphicSelection.selectedObjectIDs.filter(
+			(objectId: number) => level.includes(objectId),
+		);
+		return selected
+			.filter((objectId: number) => !framed.includes(objectId))
+			.concat(
+				framed.filter((objectId: number) => !selected.includes(objectId)),
+			);
+	}
+
 	/*
 		Tab selects the next object of the level after the selection, Shift+Tab the one before it,
 		going round from the last to the first. With nothing selected it starts at the first, or
@@ -1071,6 +1101,15 @@ class ClassicInPlaceContext implements InteractionContext {
 						RenderGeometrySection.standingFor([objectId]),
 					),
 		);
+	}
+
+	/// Inside an object active in place the object's own rules select its parts, and no frame is
+	/// drawn.
+	public frameSelects(
+		_frame: cool.Range2D,
+		_extending: boolean,
+	): number[] | undefined {
+		return undefined;
 	}
 
 	/*

@@ -427,6 +427,28 @@ class RenderGeometrySection extends CanvasSectionObject {
 		);
 	}
 
+	/// The selection frame being drawn, from where the press was to the pointer, in twips. Absent
+	/// while none is drawn.
+	public static frame: cool.Range2D | undefined;
+
+	// the selection frame, dashed in the colour of the outline under the pointer
+	private strokeTheFrame(xDiff: number, yDiff: number): void {
+		const frame = RenderGeometrySection.frame;
+		if (!frame) return;
+		const scale = app.twipsToPixels;
+		this.context.save();
+		this.context.strokeStyle = RenderGeometrySection.hoverColor();
+		this.context.lineWidth = 1;
+		this.context.setLineDash(RenderGeometrySection.hoverDashes);
+		this.context.strokeRect(
+			xDiff + Math.round(frame.minX * scale) + 0.5,
+			yDiff + Math.round(frame.minY * scale) + 0.5,
+			Math.round(frame.width * scale),
+			Math.round(frame.height * scale),
+		);
+		this.context.restore();
+	}
+
 	/// The objects the point meets, from the front to the back: the topmost alone, or with
 	/// everyOne set every one of them.
 	private walkObjectsAt(
@@ -1034,7 +1056,9 @@ class RenderGeometrySection extends CanvasSectionObject {
 		const xDiff = -viewedRectangle.pX1;
 		const yDiff = -viewedRectangle.pY1;
 
-		this.outlineHitUnderMouse(data, xDiff, yDiff);
+		// while a selection frame is drawn it is what the pointer shows, not the object under it
+		if (RenderGeometrySection.frame) this.strokeTheFrame(xDiff, yDiff);
+		else this.outlineHitUnderMouse(data, xDiff, yDiff);
 
 		// The rectangles and the name of the hit are feedback about the geometry the client holds,
 		// so they follow the debug panel's "Vector Overlays" tool.

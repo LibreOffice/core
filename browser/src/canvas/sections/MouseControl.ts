@@ -52,6 +52,8 @@ class MouseControl extends CanvasSectionObject {
 	/// The selection this press is carrying, where the press marked the object itself. Null
 	/// while no such drag is running.
 	private carrying: SelectionSection | null = null;
+	// where a selection frame being drawn here began, in twips; null while none is drawn
+	private frameFrom: cool.SimplePoint | null = null;
 
 	// The last mouse position during a button-down drag, in canvas-local
 	// coordinates that do not include the scroll offset, together with the
@@ -464,6 +466,19 @@ class MouseControl extends CanvasSectionObject {
 			// so no drag of the engine's own is begun.
 			if (this.carryTheObject(modifier)) return;
 
+			// A press that met no object, and became a drag: in a view that draws from objects the
+			// client draws the selection frame itself, and the engine hears only what it selects.
+			if (this.drawTheFrame()) {
+				point.pX += this.position[0];
+				point.pY += this.position[1];
+				app.map.fire('handleautoscroll', {
+					pos: { x: point.cX, y: point.cY },
+					map: app.map,
+				});
+				app.idleHandler.notifyActive();
+				return;
+			}
+
 			// A press inside the selection drags the selection itself, so it selects no text
 			// here and waits for a clear drag before the engine hears of it.
 			if (this.pressedInSelection) {
@@ -602,6 +617,58 @@ class MouseControl extends CanvasSectionObject {
 		return true;
 	}
 
+	/*
+		Draws the selection frame from where the press landed to the mouse, where the client draws
+		the document from objects, the press met no object and had no modifier but Shift, and the
+		place one stands at draws frames. Answers whether the frame is drawn here, so that nothing
+		of the drag goes to the engine.
+	*/
+	private drawTheFrame(): boolean {
+		if (!this.frameFrom) {
+			const press = this.positionOnMouseDown;
+			if (this.mouseDownSent || !press || this.pressedInSelection) return false;
+			if (!RenderGeometrySection.answersPointer()) return false;
+			if (app.file.textCursor.visible) return false;
+			const modifier = this.modifierOnMouseDown;
+			if (modifier !== 0 && modifier !== app.UNOModifier.SHIFT) return false;
+			if (RenderGeometrySection.objectIdAt(press.x, press.y) !== undefined)
+				return false;
+			const nowhere = new cool.Range2D(0, 0, 0, 0);
+			if (Interaction.context().frameSelects(nowhere, false) === undefined)
+				return false;
+
+			this.frameFrom = press.clone();
+		}
+
+		RenderGeometrySection.frame = cool.Range2D.fromPoints([
+			this.frameFrom,
+			this.currentPosition,
+		]);
+		this.containerObject.requestReDraw();
+		return true;
+	}
+
+	/// Selects what the frame holds, where finish is set, and takes the frame away either way.
+	private stopTheFrame(finish: boolean): void {
+		if (!this.frameFrom) return;
+
+		const frame = RenderGeometrySection.frame;
+		const extending = this.modifierOnMouseDown === app.UNOModifier.SHIFT;
+		this.frameFrom = null;
+		RenderGeometrySection.frame = undefined;
+		// The drag was scrolling the view while it reached past the edge.
+		app.map.fire('scrollvelocity', { vx: 0, vy: 0 });
+		this.containerObject.requestReDraw();
+
+		const selection =
+			finish && frame
+				? Interaction.context().frameSelects(frame, extending)
+				: undefined;
+		if (!selection) return;
+		GraphicSelection.selectObjects(selection);
+		GraphicSelection.updateSelectionSection();
+	}
+
 	/// Lets a carried object go where it now stands, or lets it be, and forgets it either way.
 	private stopCarrying(finish: boolean): void {
 		if (!this.carrying) return;
@@ -638,6 +705,7 @@ class MouseControl extends CanvasSectionObject {
 	onDragCancel(): void {
 		DropCaretSection.hide();
 		this.stopCarrying(false);
+		this.stopTheFrame(false);
 		this.hideShapeDragPreview();
 		this.stopSelectingText();
 		this.mouseDownSent = false;
@@ -667,6 +735,13 @@ class MouseControl extends CanvasSectionObject {
 			return;
 		}
 
+		// a selection frame keeps its corner at the mouse while the view scrolls under it
+		if (this.frameFrom && this.lastDragLocalPoint) {
+			this.refreshPosition(this.lastDragLocalPoint);
+			this.drawTheFrame();
+			return;
+		}
+
 		if (!this.mouseDownSent || !this.lastDragLocalPoint) return;
 
 		this.refreshPosition(this.lastDragLocalPoint);
@@ -681,6 +756,8 @@ class MouseControl extends CanvasSectionObject {
 	}
 
 	onMouseDown(point: cool.SimplePoint, e: MouseEvent): void {
+		// a frame whose release never arrived, let go outside the window, ends unused
+		this.stopTheFrame(false);
 		this.refreshPosition(point);
 		this.positionOnMouseDown = this.currentPosition.clone();
 		this.modifierOnMouseDown = MouseControl.readModifier(e);
@@ -706,6 +783,7 @@ class MouseControl extends CanvasSectionObject {
 		this.refreshPosition(point);
 
 		this.stopCarrying(true);
+		this.stopTheFrame(true);
 		this.stopSelectingText();
 
 		this.hideShapeDragPreview();

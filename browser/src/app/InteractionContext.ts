@@ -93,6 +93,11 @@ interface InteractionContext {
 	/// Tab, forwards, or with Shift backwards.
 	tabKey(forwards: boolean): boolean;
 
+	/// The selection a frame drawn over that range of the page makes, in twips: the objects of
+	/// the level one stands at that lie wholly inside it; with extending those change their
+	/// state in the selection there is. Nothing where no frame is drawn here.
+	frameSelects(frame: cool.Range2D, extending: boolean): number[] | undefined;
+
 	/// Ctrl+Home for the first object, Ctrl+End for the last.
 	toAnEnd(first: boolean): boolean;
 
