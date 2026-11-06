@@ -141,7 +141,7 @@ git clone --depth 1 https://github.com/mozilla/pdf.js pdf.js && \
     zip -q $SRC/pdffuzzer_seed_corpus.zip pdf.js/test/pdfs/*.pdf && \
     rm -rf pdf.js
 
-curl --no-progress-meter -S -C - https://storage.googleapis.com/skia-fuzzer/oss-fuzz/svg_seed_corpus.zip -o svgfuzzer_seed_corpus.zip
+zip -qj $SRC/svgfuzzer_seed_corpus.zip $SRC/libreoffice/svgio/qa/cppunit/data/*.svg
 curl --no-progress-meter -S \
     -C - -O https://dev-www.libreoffice.org/corpus/wmffuzzer_seed_corpus.zip \
     -C - -O https://dev-www.libreoffice.org/corpus/xbmfuzzer_seed_corpus.zip \
