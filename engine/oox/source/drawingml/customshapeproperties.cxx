@@ -30,7 +30,9 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
 #include <svx/EnhancedCustomShapeFormulas.hxx>
@@ -108,6 +110,7 @@ sal_Int32 CustomShapeGuideContainer::SetCustomShapeGuideValue( const CustomShape
 
 CustomShapeProperties::CustomShapeProperties()
 : mnShapePresetType ( -1 )
+, mnHiddenPresetType ( -1 )
 , mbShapeTypeOverride(false)
 , mbMirroredX   ( false )
 , mbMirroredY   ( false )
@@ -276,7 +279,8 @@ Sequence< PropertyValue > CustomShapeProperties::presetGeometry() const
 {
     if (maPresetDataMap.empty())
         initializePresetDataMap();
-    const auto aPreset = maPresetDataMap.find(mnShapePresetType);
+    const auto aPreset
+        = maPresetDataMap.find(mnShapePresetType >= 0 ? mnShapePresetType : mnHiddenPresetType);
     if (aPreset == maPresetDataMap.end())
         return {};
     PropertyMap aPropertyMap(aPreset->second);
@@ -289,7 +293,11 @@ Sequence< PropertyValue > CustomShapeProperties::presetGeometry() const
 
 std::optional<awt::Rectangle> CustomShapeProperties::getPresetTextArea(const awt::Size& rSize) const
 {
-    if (mnShapePresetType < 0 || rSize.Width <= 0 || rSize.Height <= 0)
+    // a hidden shape keeps the text area of its preset only where it states adjustments, the
+    // drawings show it so: Opposing_Ideas' hidden arrows have their stem, the pyramids' hidden
+    // accent trapezoids, which state none, the whole box
+    if ((mnShapePresetType < 0 && (mnHiddenPresetType < 0 || maAdjustmentGuideList.empty()))
+        || rSize.Width <= 0 || rSize.Height <= 0)
         return std::nullopt;
     const Sequence<PropertyValue> aGeometry(presetGeometry());
     if (!aGeometry.hasElements())
@@ -302,6 +310,34 @@ std::optional<awt::Rectangle> CustomShapeProperties::getPresetTextArea(const awt
 void CustomShapeProperties::pushToPropSet(
     const Reference < XPropertySet >& xPropSet, const awt::Size &aSize )
 {
+    // a hidden shape draws nothing, and its text stands where the preset it is stated with has its
+    // text area, the stem of a hidden arrow: we keep the preset's formulas and text frames, so
+    // that area follows the shape's final size, and drop what it draws
+    if (mnShapePresetType < 0 && mnHiddenPresetType >= 0 && maPath2DList.empty()
+        && !maAdjustmentGuideList.empty())
+    {
+        comphelper::SequenceAsHashMap aGeometry(presetGeometry());
+        if (!aGeometry.empty())
+        {
+            aGeometry[u"Type"_ustr] <<= u"ooxml-non-primitive"_ustr;
+            aGeometry.erase(u"Handles"_ustr);
+            comphelper::SequenceAsHashMap aPath(aGeometry[u"Path"_ustr]);
+            Sequence<PropertyValue> aFramesOnly;
+            if (aPath.contains(u"TextFrames"_ustr))
+                aFramesOnly = { comphelper::makePropertyValue(u"TextFrames"_ustr,
+                                                              aPath[u"TextFrames"_ustr]) };
+            aGeometry[u"Path"_ustr] <<= aFramesOnly;
+            if (mnTextPreRotateAngle)
+                aGeometry[u"TextPreRotateAngle"_ustr] <<= mnTextPreRotateAngle;
+            if (mnTextCameraZRotateAngle)
+                aGeometry[u"TextCameraZRotateAngle"_ustr] <<= mnTextCameraZRotateAngle;
+            if (moTextAreaRotateAngle.has_value())
+                aGeometry[u"TextRotateAngle"_ustr] <<= moTextAreaRotateAngle.value();
+            PropertySet(xPropSet).setProperty(PROP_CustomShapeGeometry,
+                                              aGeometry.getAsConstPropertyValueList());
+            return;
+        }
+    }
     if ( mnShapePresetType >= 0 )
     {
         SAL_INFO("oox.drawingml", "preset: " << mnShapePresetType);

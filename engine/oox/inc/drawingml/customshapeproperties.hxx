@@ -127,13 +127,15 @@ public:
     void pushToPropSet( const cpo::uno::Reference < css::beans::XPropertySet > & xPropSet,
                         const css::awt::Size &aSize );
 
-    /// text area of the preset in a shape of rSize, in EMU from its top left; none for no
-    /// preset
+    /// text area of the preset in a shape of rSize, in EMU from its top left, or of the hidden
+    /// preset where the shape draws none and states adjustments; none for no preset
     std::optional<css::awt::Rectangle> getPresetTextArea(const css::awt::Size& rSize) const;
 
     sal_Int32 getShapePresetType() const { return mnShapePresetType; }
     OUString getShapePresetTypeName() const;
     void setShapePresetType( sal_Int32 nShapePresetType ){ mnShapePresetType = nShapePresetType; };
+    void setHiddenPresetType(sal_Int32 nPresetType) { mnHiddenPresetType = nPresetType; }
+    sal_Int32 getHiddenPresetType() const { return mnHiddenPresetType; }
     bool                                getShapeTypeOverride() const { return mbShapeTypeOverride; };
     void                                setShapeTypeOverride( bool bShapeTypeOverride ) { mbShapeTypeOverride = bShapeTypeOverride; };
 
@@ -166,6 +168,9 @@ public:
 private:
 
     sal_Int32                       mnShapePresetType;
+    // the preset a shape with hidden geometry is stated with: it draws nothing, its text has
+    // the area of that preset; -1 for none
+    sal_Int32                       mnHiddenPresetType;
     bool                            mbShapeTypeOverride;
     CustomShapeGuideContainer       maAdjustmentGuideList;
     CustomShapeGuideContainer       maGuideList;

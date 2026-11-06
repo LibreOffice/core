@@ -293,12 +293,14 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
         if( rAttribs.hasAttribute( XML_type ) )
         {
             pShape = std::make_shared<Shape>(u"com.sun.star.drawing.CustomShape"_ustr);
+            const sal_Int32 nType(rAttribs.getToken( XML_type, XML_obj ));
             if (!rAttribs.getBool(XML_hideGeom, false))
             {
-                const sal_Int32 nType(rAttribs.getToken( XML_type, XML_obj ));
                 pShape->setSubType( nType );
                 pShape->getCustomShapeProperties()->setShapePresetType( nType );
             }
+            else
+                pShape->getCustomShapeProperties()->setHiddenPresetType(nType);
         }
         else
         {

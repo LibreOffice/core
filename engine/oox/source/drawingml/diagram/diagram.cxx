@@ -33,6 +33,7 @@
 #include <drawingml/fillproperties.hxx>
 #include <drawingml/lineproperties.hxx>
 #include <drawingml/customshapeproperties.hxx>
+#include <drawingml/textbody.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <algorithm>
 #include <cmath>
@@ -107,6 +108,34 @@ static void sortChildrenByZOrder(const ShapePtr& pShape)
     // Now that the ZOrders are adjusted, sort the children.
     std::sort(rChildren.begin(), rChildren.end(),
               [](const ShapePtr& a, const ShapePtr& b) { return a->getZOrder() < b->getZOrder(); });
+
+    // a shape with hidden geometry draws only its text, and that text stands over the shape it
+    // shares its place with: Reverse_List's hidden text comes before the node it is written on
+    const auto aHiddenText = [](const ShapePtr& rChild) {
+        return rChild->getCustomShapeProperties()->getHiddenPresetType() >= 0
+               && rChild->getTextBody() && !rChild->getTextBody()->isEmpty();
+    };
+    for (size_t i = rChildren.size(); i-- > 0;)
+    {
+        if (!aHiddenText(rChildren[i]))
+            continue;
+        const awt::Point aPosition(rChildren[i]->getPosition());
+        const awt::Size aSize(rChildren[i]->getSize());
+        for (size_t j = rChildren.size(); --j > i;)
+        {
+            const awt::Point aOther(rChildren[j]->getPosition());
+            const awt::Size aOtherSize(rChildren[j]->getSize());
+            if (aOther.X == aPosition.X && aOther.Y == aPosition.Y
+                && aOtherSize.Width == aSize.Width && aOtherSize.Height == aSize.Height)
+            {
+                std::rotate(rChildren.begin() + i, rChildren.begin() + i + 1,
+                            rChildren.begin() + j + 1);
+                break;
+            }
+        }
+    }
+    for (size_t i = 0; i < rChildren.size(); ++i)
+        rChildren[i]->setZOrder(i);
 
     // Apply also for children.
     for (const auto& rChild : rChildren)

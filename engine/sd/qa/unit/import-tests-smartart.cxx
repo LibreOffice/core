@@ -2876,6 +2876,78 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testFontBoundInABranchNotTakenHasNoEf
     CPPUNIT_ASSERT_DOUBLES_EQUAL(fWithout, shownTextSize(xArrow), 0.5);
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testHiddenTextIsDrawnOverItsNode)
+{
+    // the layout states the hidden text node before the node it is written on
+    createSdImpressDoc("pptx/smartart-hidden-text-over-its-node.pptx");
+    uno::Reference<drawing::XShapes> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDiagram.is());
+    sal_Int32 nText(-1), nNode(-1);
+    awt::Point aTextAt;
+    for (sal_Int32 i = 0; i < xDiagram->getCount(); ++i)
+    {
+        uno::Reference<drawing::XShape> xShape(xDiagram->getByIndex(i), uno::UNO_QUERY);
+        uno::Reference<text::XText> xText(xShape, uno::UNO_QUERY);
+        if (xText.is() && xText->getString().startsWith("One"))
+        {
+            nText = i;
+            aTextAt = xShape->getPosition();
+        }
+    }
+    CPPUNIT_ASSERT(nText >= 0);
+    for (sal_Int32 i = 0; i < xDiagram->getCount(); ++i)
+    {
+        uno::Reference<drawing::XShape> xShape(xDiagram->getByIndex(i), uno::UNO_QUERY);
+        uno::Reference<text::XText> xText(xShape, uno::UNO_QUERY);
+        if (i != nText && xText.is() && xText->getString().isEmpty()
+            && std::abs(xShape->getPosition().X - aTextAt.X) < 5
+            && std::abs(xShape->getPosition().Y - aTextAt.Y) < 5)
+            nNode = i;
+    }
+    CPPUNIT_ASSERT(nNode >= 0);
+    CPPUNIT_ASSERT_GREATER(nNode, nText);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testHiddenArrowKeepsItsTextRoom)
+{
+    // the parent's text node is a turned arrow with its geometry hidden, its text has the
+    // arrow's stem, a half of the box across
+    createSdImpressDoc("pptx/smartart-hidden-arrow-text-room.pptx");
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xParent(findChildShapeByText(xDiagram, u"One"_ustr));
+    uno::Reference<drawing::XShape> xChildren(
+        findChildShapeByText(xDiagram, u"Eleven\nTwelve\nThirteen"_ustr));
+    CPPUNIT_ASSERT(xParent.is());
+    CPPUNIT_ASSERT(xChildren.is());
+    CPPUNIT_ASSERT_LESS(shownTextSize(xChildren), shownTextSize(xParent));
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testHiddenTextStandsInItsArrowsTextArea)
+{
+    // the hidden text node draws nothing, and its text stands where the arrow it is written on
+    // has its text, the arrow's stem
+    createSdImpressDoc("pptx/smartart-hidden-arrow-text-room.pptx");
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xText(findChildShapeByText(xDiagram, u"One"_ustr));
+    CPPUNIT_ASSERT(xText.is());
+    auto pText(dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xText)));
+    CPPUNIT_ASSERT(pText);
+    std::vector<uno::Reference<drawing::XShape>> aArrows;
+    collectShapesWithGeometry(xDiagram, u"ooxml-rightArrow"_ustr, aArrows);
+    SdrObjCustomShape* pArrow(nullptr);
+    for (const auto& xArrow : aArrows)
+    {
+        auto pOne(dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xArrow)));
+        if (pOne && pOne->GetSnapRect() == pText->GetSnapRect())
+            pArrow = pOne;
+    }
+    CPPUNIT_ASSERT(pArrow);
+    tools::Rectangle aTextArea, aArrowArea;
+    CPPUNIT_ASSERT(pText->GetTextBounds(aTextArea));
+    CPPUNIT_ASSERT(pArrow->GetTextBounds(aArrowArea));
+    CPPUNIT_ASSERT_EQUAL(aArrowArea, aTextArea);
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTransitionOfNoWidthLeavesNoGap)
 {
     // the row states its transitions as 0 of its width, so the nodes stand side by side
