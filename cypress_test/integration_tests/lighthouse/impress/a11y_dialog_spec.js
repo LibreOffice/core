@@ -437,14 +437,18 @@ describe(['taglighthouse'], 'Accessibility Impress Dialog Tests', { testIsolatio
         selectPropertyTab('General');
     }
 
-    // the lines of the new tab arrive in a later update of the dialog, which rebuilds it
+    // The property dialog keeps rebuilding its tabs and lines for a while after it opens, after a
+    // tab is switched and after one of its own dialogs closes. Each lookup waits until that is
+    // done, so the element it finds is the one that stays on the page.
     function selectPropertyTab(name) {
+        cy.then(() => helper.processToIdle(win));
         cy.cGet('#FormPropertyDialog .ui-tab').contains(name).click();
         cy.then(() => helper.processToIdle(win));
     }
 
     // the property line with that title
     function propertyLine(title) {
+        cy.then(() => helper.processToIdle(win));
         return cy.cGet('#FormPropertyDialog [id^="BrowserLine"]')
             .filter(function (index, line) {
                 const label = line.firstElementChild;
