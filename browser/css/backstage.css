@@ -930,6 +930,10 @@ body:not([data-doctype]) .backstage-view {
 	font-size: var(--default-font-size);
 }
 
+.backstage-manage-templates-row:hover .backstage-template-type-tag {
+	background-color: var(--color-background-lighter);
+}
+
 /* The dialog takes the widest size of .backstage-modal, 480px less its padding. */
 .backstage-template-file-area {
 	width: 432px;
