@@ -2188,16 +2188,14 @@ static sal_Int32 dataDepthOfNode(const SmartArtDiagram& rDgm, const OUString& rN
 }
 
 // The font a paragraph of level nLevel is set in, in points, where the first level is at fFont:
-// each level below is fSecondPart of the one above, rounded to whole points as the drawings
-// carry them, 37 under 48 and 22 under 28.
+// every level below is fSecondPart of it, rounded to whole points as the drawings carry them,
+// 37 under 48 and 22 under 28; a third level is as large as the second, Vertical_Process_Pair's
+// Level 3a at 20 like Forty-one.
 static double fontOfLevel(double fFont, sal_Int32 nLevel, double fSecondPart)
 {
     if (nLevel <= 1)
         return fFont;
-    double fPart(1.0);
-    for (sal_Int32 n = 2; n <= nLevel; ++n)
-        fPart *= fSecondPart;
-    return std::round(fFont * fPart);
+    return std::round(fFont * fSecondPart);
 }
 
 // The part of the first level's font the deeper levels of the text node rNode, named rName, are
@@ -2669,21 +2667,41 @@ static TextMargin textMarginOf(const SmartArtDiagram& rDgm,
     const auto aOfFont = [bFontIsSecond](sal_Int32 nRefType) {
         return nRefType == XML_primFontSz || (bFontIsSecond && nRefType == XML_secFontSz);
     };
+    bool bStatedAbove(false);
     for (const Constraint& rConstraint : rConstraints)
     {
         if (rConstraint.msForName != rName || rConstraint.mnType != nSide)
             continue;
+        bStatedAbove = true;
         if (aOfFont(rConstraint.mnRefType))
             aMargin.mfPartOfFont += rConstraint.mfFactor;
+        else if ((rConstraint.mnRefType == XML_w || rConstraint.mnRefType == XML_h)
+                 && !rConstraint.msRefForName.isEmpty())
+        {
+            // a part of another node's size, its millimetres taken as points:
+            // Vertical_Curved_List's text keeps 1.8 of its accent circle's width to the left
+            for (const auto& rEntry : rDgm.getLayout()->getPresPointShapeMap())
+                if (rEntry.second && rEntry.second->getInternalName() == rConstraint.msRefForName)
+                {
+                    const awt::Size aSize(rEntry.second->getSize());
+                    const double fMm(
+                        (rConstraint.mnRefType == XML_w ? aSize.Width : aSize.Height) / 36000.0);
+                    aMargin.mnLengthEmu
+                        += static_cast<sal_Int64>(rConstraint.mfFactor * fMm * 12700.0);
+                    break;
+                }
+        }
         else if (rConstraint.mnRefType == XML_w && !bOverUnder)
             aMargin.mfPartOfWidth
                 = 1.0 - (1.0 - aMargin.mfPartOfWidth) * (1.0 - rConstraint.mfFactor);
         else if (rConstraint.mnRefType == XML_none && rConstraint.mfValue > 0.0 && bOverUnder)
             aMargin.mnLengthEmu += static_cast<sal_Int64>(rConstraint.mfValue * 12700.0);
     }
+    // a side the node above states for it holds over the node's own, Vertical_Curved_List's
+    // text has 1.8 of its accent's width to the left, not that and its own 0.2 of the font
     for (const Constraint& rConstraint : aOwn)
     {
-        if (!rConstraint.msForName.isEmpty() || rConstraint.mnType != nSide)
+        if (bStatedAbove || !rConstraint.msForName.isEmpty() || rConstraint.mnType != nSide)
             continue;
         if (aOfFont(rConstraint.mnRefType))
             aMargin.mfPartOfFont += rConstraint.mfFactor;

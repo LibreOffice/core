@@ -2937,6 +2937,48 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testRowTextBreaksWithinItsBox)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(27.0, shownTextSize(xSecond), 0.5);
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTextMarginOfAnotherNodesWidth)
+{
+    // the texts keep 1.8 of their accent circle's width to the left, its millimetres taken as
+    // points; read as a part of the text's own width it left no room at all
+    createSdImpressDoc("pptx/smartart-text-margin-of-another-node.pptx");
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xText(findChildShapeByText(xDiagram, u"One"_ustr));
+    CPPUNIT_ASSERT(xText.is());
+    std::vector<uno::Reference<drawing::XShape>> aCircles;
+    collectShapesWithGeometry(xDiagram, u"ooxml-ellipse"_ustr, aCircles);
+    CPPUNIT_ASSERT(!aCircles.empty());
+
+    // a point is 2540 / 72 hundredths of a millimetre
+    const double fCircleMm(aCircles.front()->getSize().Width / 100.0);
+    uno::Reference<beans::XPropertySet> xProperties(xText, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        1.8 * fCircleMm * 2540.0 / 72.0,
+        double(xProperties->getPropertyValue(u"TextLeftDistance"_ustr).get<sal_Int32>()), 5.0);
+    CPPUNIT_ASSERT_GREATER(5.5, shownTextSize(xText));
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testThirdLevelHasTheSecondLevelsFont)
+{
+    // the children's text shows a child and its children, Level 3a one level further down
+    createSdImpressDoc("pptx/smartart-third-level-font.pptx");
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText(
+        findChildShapeByText(xDiagram, u"Forty-one\nForty-two\nLevel 3a\nLevel 3b"_ustr),
+        uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xText.is());
+    std::map<OUString, double> aSizes;
+    uno::Reference<container::XEnumerationAccess> xParagraphs(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xEnumeration(xParagraphs->createEnumeration());
+    while (xEnumeration->hasMoreElements())
+    {
+        uno::Reference<text::XTextRange> xParagraph(xEnumeration->nextElement(), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xStart(xParagraph->getStart(), uno::UNO_QUERY);
+        aSizes[xParagraph->getString()] = xStart->getPropertyValue(u"CharHeight"_ustr).get<float>();
+    }
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(aSizes[u"Forty-one"_ustr], aSizes[u"Level 3a"_ustr], 0.5);
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testHiddenTextIsDrawnOverItsNode)
 {
     // the layout states the hidden text node before the node it is written on
