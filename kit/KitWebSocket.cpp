@@ -525,7 +525,7 @@ void BgSaveParentWebSocketHandler::onDisconnect()
         if (sig)
             reportFailure(std::string("crashed with status ") + SigUtil::signalName(sig));
         else if (ret <= 0)
-            LOG_WRN("Background save process disconnected but not terminated " << _childPid);
+            LOG_DBG("Background save process disconnected but not terminated yet " << _childPid);
     }
 
     if (!_saveCompleted)
