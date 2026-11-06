@@ -73,7 +73,10 @@ CERTCertificate const* GetNssCert(
 xmlSecKeyPtr CreateKeyFromCertificate(css::uno::Reference<css::security::XCertificate> const& xCertificate)
 {
     CERTCertificate const* pCertificate{GetNssCert(xCertificate)};
-    assert(pCertificate);
+    if (!pCertificate)
+    {
+        return nullptr;
+    }
     // xmlsec will take ownership of "signKey"
     pCertificate = CERT_DupCertificate(const_cast<CERTCertificate *>(pCertificate));
     // NSS keeps the reference count of a certificate in its NSSCertificate, so a certificate that
