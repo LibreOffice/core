@@ -157,6 +157,8 @@ private:
 
     void AddService();
 
+    UrlRecord FindPersistentPassword(std::u16string_view aUrl, const Reference<XInteractionHandler>& rHandler) const;
+
     DECL_LINK ( SelectServiceHdl, weld::ComboBox&, void );
     DECL_LINK ( EditServiceMenuHdl, const OUString&, void );
 

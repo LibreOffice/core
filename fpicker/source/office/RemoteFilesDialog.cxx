@@ -415,9 +415,9 @@ void RemoteFilesDialog::EnableControls()
                     {
                         OUString sUrl( m_aServices[nPos]->GetUrl() );
 
-                        UrlRecord aURLEntries = m_xMasterPasswd->find( sUrl, Reference< XInteractionHandler>() );
+                        UrlRecord aURLEntries = FindPersistentPassword(sUrl, Reference< XInteractionHandler>());
 
-                        if( aURLEntries.Url == sUrl && aURLEntries.UserList.hasElements() )
+                        if( aURLEntries.UserList.hasElements() )
                         {
                             m_xManageServices->set_item_sensitive(u"change_password"_ustr, true);
                         }
@@ -553,6 +553,19 @@ void RemoteFilesDialog::AddService()
     }
 }
 
+UrlRecord RemoteFilesDialog::FindPersistentPassword(std::u16string_view aUrl, const Reference<XInteractionHandler>& rHandler) const
+{
+    const Sequence<UrlRecord> aUrlRecords = m_xMasterPasswd->getAllPersistent(rHandler);
+    for(const UrlRecord& rRecord : aUrlRecords)
+    {
+        if(rRecord.Url == aUrl)
+        {
+            return rRecord;
+        }
+    }
+    return UrlRecord();
+}
+
 IMPL_LINK_NOARG( RemoteFilesDialog, SelectServiceHdl, weld::ComboBox&, void )
 {
     int nPos = GetSelectedServicePos();
@@ -633,9 +646,9 @@ IMPL_LINK ( RemoteFilesDialog, EditServiceMenuHdl, const OUString&, rIdent, void
                         Reference< XInteractionHandler > xInteractionHandler =
                             InteractionHandler::createWithParent( m_xContext, nullptr );
 
-                        UrlRecord aURLEntries = m_xMasterPasswd->find( sUrl, xInteractionHandler );
+                        UrlRecord aURLEntries = FindPersistentPassword(sUrl, xInteractionHandler);
 
-                        if( aURLEntries.Url == sUrl && aURLEntries.UserList.hasElements() )
+                        if( aURLEntries.UserList.hasElements() )
                         {
                             OUString sUserName = aURLEntries.UserList[0].UserName;
 
@@ -674,9 +687,9 @@ IMPL_LINK ( RemoteFilesDialog, EditServiceMenuHdl, const OUString&, rIdent, void
                     Reference< XInteractionHandler > xInteractionHandler =
                         InteractionHandler::createWithParent( m_xContext, nullptr );
 
-                    UrlRecord aURLEntries = m_xMasterPasswd->find( sUrl, xInteractionHandler );
+                    UrlRecord aURLEntries = FindPersistentPassword(sUrl, xInteractionHandler);
 
-                    if( aURLEntries.Url == sUrl && aURLEntries.UserList.hasElements() )
+                    if( aURLEntries.UserList.hasElements() )
                     {
                         OUString sUserName = aURLEntries.UserList[0].UserName;
 
