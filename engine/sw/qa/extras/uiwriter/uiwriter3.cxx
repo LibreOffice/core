@@ -2959,6 +2959,34 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testHTMLPasteIntoEmptyParagraphKeepsParagr
                          getProperty<sal_Int16>(getParagraph(1), u"ParaAdjust"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testHTMLPasteStyleSheetEmptyString)
+{
+    // Given a new document, where the default paragraph style has a serif font:
+    createSwDoc();
+
+    // When pasting HTML whose style sheet rule has an empty string value before the font, as a word
+    // processor writes it on the clipboard:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    OString const aHtml = "<html><head><style><!--\n"
+                          "p.MsoNormal\n"
+                          "{mso-style-parent:\"\"; font-family:\"Calibri\";}\n"
+                          "--></style></head><body>"
+                          "<p class=MsoNormal>first</p>"
+                          "</body></html>"_ostr;
+    rtl::Reference<TransferDataContainer> xTransferable(new TransferDataContainer);
+    xTransferable->CopyByteString(SotClipboardFormatId::HTML, aHtml);
+    TransferableDataHelper aHelper(xTransferable);
+    SwTransferable::PasteFormat(*pWrtShell, aHelper, SotClipboardFormatId::HTML);
+
+    // Then make sure the pasted text has the font from the style sheet rule:
+    uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 1, u"first"_ustr);
+    // Without the fix in place, this test would have failed with:
+    // - Expected: Calibri
+    // - Actual  : Liberation Serif
+    // i.e. the empty string ran on to the next quote and the font declaration was lost.
+    CPPUNIT_ASSERT_EQUAL(u"Calibri"_ustr, getProperty<OUString>(xRun, u"CharFontName"_ustr));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

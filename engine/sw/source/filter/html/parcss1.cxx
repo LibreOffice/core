@@ -280,10 +280,11 @@ CSS1Token CSS1Parser::GetNextToken()
                 m_cNextCh = GetNextChar();
 
                 OUStringBuffer sTmpBuffer( MAX_LEN );
-                do {
+                while( cQuoteChar != m_cNextCh && !IsEOF() )
+                {
                     sTmpBuffer.append( m_cNextCh );
                     m_cNextCh = GetNextChar();
-                } while( cQuoteChar != m_cNextCh && !IsEOF() );
+                }
 
                 m_aToken += sTmpBuffer;
 
