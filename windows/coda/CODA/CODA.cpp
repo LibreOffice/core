@@ -3975,23 +3975,22 @@ static void requestCloseTab(HWND hWnd, int tabId)
 
         // A page that fails while it answers closes its tab too, and so does a page that
         // cannot run the script at all, such as one whose renderer process died.
-        tab->webView->ExecuteScript(
-            script,
-            Microsoft::WRL::Callback<ICoreWebView2ExecuteScriptCompletedHandler>(
-                [tabId](HRESULT errorCode, LPCWSTR) -> HRESULT
-                {
-                    if (SUCCEEDED(errorCode))
-                        return S_OK;
-                    LOG_WRN("The page of tab " << tabId << " could not run its close script: "
-                                               << std::hex << errorCode);
-                    if (DocumentTab* closing = findTab(tabId))
-                    {
-                        closing->readyToClose = true;
-                        PostMessageW(closing->hWnd, CODA_WM_CLOSETAB, (WPARAM)tabId, 0);
-                    }
+        auto completed = Microsoft::WRL::Callback<ICoreWebView2ExecuteScriptCompletedHandler>(
+            [tabId](HRESULT errorCode, LPCWSTR) -> HRESULT
+            {
+                if (SUCCEEDED(errorCode))
                     return S_OK;
-                })
-                .Get());
+                LOG_WRN("The page of tab "
+                        << tabId << " could not run its close script: " << std::hex << errorCode);
+                if (DocumentTab* closing = findTab(tabId))
+                {
+                    closing->readyToClose = true;
+                    PostMessageW(closing->hWnd, CODA_WM_CLOSETAB, (WPARAM)tabId, 0);
+                }
+                return S_OK;
+            });
+
+        tab->webView->ExecuteScript(script, completed.Get());
         return;
     }
 
