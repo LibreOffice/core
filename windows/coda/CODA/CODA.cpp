@@ -3958,13 +3958,12 @@ static void requestCloseTab(HWND hWnd, int tabId)
     if (!window || !tab)
         return;
 
-    // The starter, the welcome slideshow and the presenter console have nothing to save, and a
-    // page that has not shown its document yet cannot answer.
-    const bool pageAnswers = !tab->readyToClose && !tab->isConsole &&
-                             tab->mode != DocumentMode::STARTER &&
-                             tab->mode != DocumentMode::WELCOME && tab->app2js.joinable() &&
-                             tab->webView && tab->hasContent;
-    if (pageAnswers)
+    const bool mayHaveEdits = !tab->readyToClose && !tab->isConsole &&
+                              tab->mode != DocumentMode::STARTER &&
+                              tab->mode != DocumentMode::WELCOME;
+    const bool pageCanAnswer = tab->app2js.joinable() && tab->webView && tab->hasContent &&
+                               (tab->mode != DocumentMode::CLOUD_ACCOUNT || tab->editorFrame);
+    if (mayHaveEdits && pageCanAnswer)
     {
         const wchar_t* script = L"try {"
                                 L"  if (window.app && window.app.map"
@@ -3990,7 +3989,10 @@ static void requestCloseTab(HWND hWnd, int tabId)
                 return S_OK;
             });
 
-        tab->webView->ExecuteScript(script, completed.Get());
+        if (tab->editorFrame)
+            tab->editorFrame->ExecuteScript(script, completed.Get());
+        else
+            tab->webView->ExecuteScript(script, completed.Get());
         return;
     }
 
