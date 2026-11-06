@@ -232,7 +232,8 @@ namespace {
 
         bool IsPrintMarkedOnly() const
         {
-            return GetBoolValue("PrintContent", sal_Int32(4));
+            // tdf#151113 - selection index changed after removing the even/odd radio buttons
+            return GetBoolValue("PrintContent", sal_Int32(2));
         }
 
         OUString GetPrinterSelection (sal_Int32 nPageCount, sal_Int32 nCurrentPageIndex) const
