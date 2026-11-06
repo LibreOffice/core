@@ -6,7 +6,7 @@
 # Version 1.0 (11.02.2020)
 # Version 1.1 (13.01.2022)
 # Version 1.2 (27.03.2026)
-# Version 1.3 (21.10.2026)
+# Version 1.3 (05.11.2026)
 #
 # This file is part of the Albanian spell checker.
 #
@@ -4612,7 +4612,7 @@ SFX I6 ua ash ua po:noun is:pl is:fem
 SFX I6 ua atë ua po:noun is:pl is:fem
 SFX I6 ua ave ua po:noun is:pl is:fem
 
-SFX I7 Y 32
+SFX I7 Y 31
 SFX I7 0 ja [ey] po:noun is:pl is:fem
 SFX I7 0 jave [ey] po:noun is:pl is:fem
 SFX I7 0 qe i po:noun is:pl is:fem
@@ -4623,7 +4623,6 @@ SFX I7 ë ash ë po:noun is:pl is:fem
 SFX I7 ë at ë po:noun is:pl is:fem
 SFX I7 ë ave ë po:noun is:pl is:fem
 SFX I7 ël la ël po:noun is:sg is:fem
-SFX I7 ël le ël po:noun is:sg is:fem
 SFX I7 ël lën ël po:noun is:sg is:fem
 SFX I7 ël lës ël po:noun is:sg is:fem
 SFX I7 ëll lla ëll po:noun is:sg is:fem
@@ -4711,10 +4710,11 @@ SFX J7 ëm met [cçdghklpqrstz]ëm po:noun is:pl is:fem
 SFX J7 ëm meve [cçdghklpqrstz]ëm po:noun is:pl is:fem
 SFX J7 o yre o po:noun is:pl is:fem
 
-SFX J8 Y 7
+SFX J8 Y 8
 SFX J8 a e a po:noun is:sg is:fem
 SFX J8 e ia e po:noun is:sg is:fem
 SFX J8 ë a ë po:noun is:sg is:fem
+SFX J8 ël le ël po:noun is:sg is:fem
 SFX J8 ëm me ëm po:noun is:sg is:fem
 SFX J8 ër re ër po:noun is:sg is:fem
 SFX J8 0 a i po:num is:pl is:fem
@@ -5341,12 +5341,11 @@ SFX L7 uall ollesh uall po:noun is:pl is:mas
 SFX L7 uall ollet uall po:noun is:pl is:mas
 SFX L7 uall olleve uall po:noun is:pl is:mas
 
-SFX L8 Y 33
+SFX L8 Y 32
 SFX L8 0 je [aeouy] po:noun is:sg is:mas
 SFX L8 do ndo do po:noun is:pl is:mas
 SFX L8 do tdo do po:noun is:pl is:mas
 SFX L8 ë a ë po:noun is:sg is:mas
-SFX L8 ë e ë po:noun is:sg is:mas
 SFX L8 ëm mi ëm po:noun is:sg is:mas
 SFX L8 ëm min ëm po:noun is:sg is:mas
 SFX L8 ëm mit ëm po:noun is:sg is:mas
@@ -5400,8 +5399,9 @@ SFX M1 in it in po:noun is:sg is:mas
 SFX M1 ll jt ll po:noun is:pl is:mas
 SFX M1 tdo vedo do po:noun is:pl is:mas
 
-SFX M2 Y 9
+SFX M2 Y 10
 SFX M2 e ja e po:noun is:sg is:mas
+SFX M2 ë e ë po:noun is:sg is:mas
 SFX M2 ër i tër po:noun is:sg is:mas
 SFX M2 i ë i po:noun is:pl is:mas
 SFX M2 k qsh k po:noun is:pl is:mas
@@ -5634,7 +5634,7 @@ SFX N5 0 t [aeëijo] po:noun is:pl is:mas
 SFX N6 Y 6
 SFX N6 0 jish g po:noun is:pl is:mas
 SFX N6 0 jit g po:noun is:pl is:mas
-SFX N6 0 s [oeë] po:noun is:sg is:mas
+SFX N6 0 s [aoeë] po:noun is:sg is:mas
 SFX N6 0 t [iju] po:noun is:sg is:mas
 SFX N6 ël lish ël po:noun is:pl is:mas
 SFX N6 ël lit ël po:noun is:pl is:mas
@@ -6231,7 +6231,7 @@ SFX P4 t-shtet teve-shtet t-shtet po:noun is:pl is:mas
 
 # MBIEMRAT
 
-SFX P5 Y 25
+SFX P5 Y 24
 SFX P5 0 qe lla po:adj is:pl is:fem
 SFX P5 0 ër eq po:adj is:pl is:fem
 SFX P5 a enj lla po:adj is:pl is:mas
@@ -6252,14 +6252,12 @@ SFX P5 i eshë [çhl]i po:adj is:sg is:fem
 SFX P5 i esha [çhl]i po:adj is:pl is:fem
 SFX P5 i ezë zi po:adj is:sg is:fem
 SFX P5 i eza zi po:adj is:pl is:fem
-SFX P5 i inj zi po:adj is:pl is:mas
 SFX P5 0 ja ve po:adj is:pl is:fem
 SFX P5 k qe k po:adj is:pl is:fem
 SFX P5 nëre nare ëre po:adj is:pl is:fem
 SFX P5 ua a ua po:adj is:pl is:fem
 
-SFX P6 Y 245
-SFX P6 0 nj [^t]i po:adj is:pl is:mas
+SFX P6 Y 242
 SFX P6 adh ëdhenj adh po:adj is:pl is:mas
 SFX P6 ah eh ah po:adj is:pl is:mas
 SFX P6 ak eq ak po:adj is:pl is:mas
@@ -6271,239 +6269,237 @@ SFX P6 k q [^a]k po:adj is:pl is:mas
 SFX P6 ll j [aeëu]ll po:adj is:pl is:mas
 SFX P6 ogël egjël ogël po:adj is:pl is:mas
 SFX P6 ogël ogla ogël po:adj is:pl is:fem
-SFX P6 ti të ti po:adj is:pl is:mas
 SFX P6 0 ditësh [deërty] po:adj is:sg is:mas
-SFX P6 0 ditëshi [deërty] po:adj is:sg is:mas
-SFX P6 0 ditëshin [deërty] po:adj is:sg is:mas
-SFX P6 0 ditëshit [deërty] po:adj is:sg is:mas
-SFX P6 0 ditëshat [deërty] po:adj is:pl is:mas
-SFX P6 0 ditëshave [deërty] po:adj is:pl is:mas
-SFX P6 0 ditëshe [dërty] po:adj is:sg is:fem
-SFX P6 0 ditëshen [dërty] po:adj is:sg is:fem
-SFX P6 0 ditëshes [dërty] po:adj is:sg is:fem
-SFX P6 0 ditëshja [dërty] po:adj is:sg is:fem
-SFX P6 0 ditëshet [dërty] po:adj is:pl is:fem
-SFX P6 0 ditësheve [dërty] po:adj is:pl is:fem
-SFX P6 0 ditëshe tri po:adj is:sg is:fem
-SFX P6 0 ditëshen tri po:adj is:sg is:fem
-SFX P6 0 ditëshes tri po:adj is:sg is:fem
-SFX P6 0 ditëshja tri po:adj is:sg is:fem
-SFX P6 0 ditëshet tri po:adj is:pl is:fem
-SFX P6 0 ditësheve tri po:adj is:pl is:fem
+SFX P6 0 ditëshi [deërty] po:noun is:sg is:mas
+SFX P6 0 ditëshin [deërty] po:noun is:sg is:mas
+SFX P6 0 ditëshit [deërty] po:noun is:sg is:mas
+SFX P6 0 ditëshat [deërty] po:noun is:pl is:mas
+SFX P6 0 ditëshave [deërty] po:noun is:pl is:mas
+SFX P6 0 ditëshe [dëirty] po:adj is:sg is:fem
+SFX P6 0 ditëshen [dëirty] po:noun is:sg is:fem
+SFX P6 0 ditëshes [dëirty] po:noun is:sg is:fem
+SFX P6 0 ditëshja [dëirty] po:noun is:sg is:fem
+SFX P6 0 ditëshet [dëirty] po:noun is:pl is:fem
+SFX P6 0 ditësheve [dëirty] po:noun is:pl is:fem
 SFX P6 0 ditor [deërty] po:adj is:sg is:mas
-SFX P6 0 ditori [deërty] po:adj is:sg is:mas
-SFX P6 0 ditorin [deërty] po:adj is:sg is:mas
-SFX P6 0 ditorit [deërty] po:adj is:sg is:mas
-SFX P6 0 ditore [dërty] po:adj is:sg is:fem
-SFX P6 0 ditoren [dërty] po:adj is:sg is:fem
-SFX P6 0 ditores [dërty] po:adj is:sg is:fem
-SFX P6 0 ditorja [dërty] po:adj is:sg is:fem
-SFX P6 0 ditore tri po:adj is:sg is:fem
-SFX P6 0 ditoren tri po:adj is:sg is:fem
-SFX P6 0 ditores tri po:adj is:sg is:fem
-SFX P6 0 ditorja tri po:adj is:sg is:fem
+SFX P6 0 ditori [deërty] po:noun is:sg is:mas
+SFX P6 0 ditorin [deërty] po:noun is:sg is:mas
+SFX P6 0 ditorit [deërty] po:noun is:sg is:mas
+SFX P6 0 ditorë [^j][deërty] po:adj is:pl is:mas
+SFX P6 0 ditorësh [deërty] po:noun is:pl is:mas
+SFX P6 0 ditorët [deërty] po:noun is:pl is:mas
+SFX P6 0 ditorëve [deërty] po:noun is:pl is:mas
+SFX P6 0 ditore [dëirty] po:adj is:sg is:fem
+SFX P6 0 ditoren [dëirty] po:noun is:sg is:fem
+SFX P6 0 ditores [dëirty] po:noun is:sg is:fem
+SFX P6 0 ditorja [dëirty] po:noun is:sg is:fem
+SFX P6 0 ditoresh [dëirty] po:noun is:pl is:fem
+SFX P6 0 ditoret [dëirty] po:noun is:pl is:fem
+SFX P6 0 ditoreve [dëirty] po:noun is:pl is:fem
 SFX P6 0 fish [deërty] po:adj is:sg is:mas
-SFX P6 0 fishi [deërty] po:adj is:sg is:mas
-SFX P6 0 fishin [deërty] po:adj is:sg is:mas
-SFX P6 0 fishit [deërty] po:adj is:sg is:mas
+SFX P6 0 fishi [deërty] po:noun is:sg is:mas
+SFX P6 0 fishin [deërty] po:noun is:sg is:mas
+SFX P6 0 fishit [deërty] po:noun is:sg is:mas
 SFX P6 0 fishe [deërty] po:adj is:sg is:fem
 SFX P6 0 gramësh [deërty] po:adj is:sg is:mas
-SFX P6 0 gramëshi [deërty] po:adj is:sg is:mas
-SFX P6 0 gramëshin [deërty] po:adj is:sg is:mas
-SFX P6 0 gramëshit [deërty] po:adj is:sg is:mas
-SFX P6 0 gramëshat [deërty] po:adj is:pl is:mas
-SFX P6 0 gramëshave [deërty] po:adj is:pl is:mas
-SFX P6 0 gramëshe [dërty] po:adj is:sg is:fem
-SFX P6 0 gramëshen [dërty] po:adj is:sg is:fem
-SFX P6 0 gramëshes [dërty] po:adj is:sg is:fem
-SFX P6 0 gramëshja [dërty] po:adj is:sg is:fem
-SFX P6 0 gramëshet [dërty] po:adj is:pl is:fem
-SFX P6 0 gramësheve [dërty] po:adj is:pl is:fem
-SFX P6 0 gramëshe tri po:adj is:sg is:fem
-SFX P6 0 gramëshen tri po:adj is:sg is:fem
-SFX P6 0 gramëshes tri po:adj is:sg is:fem
-SFX P6 0 gramëshja tri po:adj is:sg is:fem
-SFX P6 0 gramëshet tri po:adj is:pl is:fem
-SFX P6 0 gramësheve tri po:adj is:pl is:fem
+SFX P6 0 gramëshi [deërty] po:noun is:sg is:mas
+SFX P6 0 gramëshin [deërty] po:noun is:sg is:mas
+SFX P6 0 gramëshit [deërty] po:noun is:sg is:mas
+SFX P6 0 gramëshat [deërty] po:noun is:pl is:mas
+SFX P6 0 gramëshave [deërty] po:noun is:pl is:mas
+SFX P6 0 gramëshe [dëirty] po:adj is:sg is:fem
+SFX P6 0 gramëshen [dëirty] po:noun is:sg is:fem
+SFX P6 0 gramëshes [dëirty] po:noun is:sg is:fem
+SFX P6 0 gramëshja [dëirty] po:noun is:sg is:fem
+SFX P6 0 gramëshet [dëirty] po:noun is:pl is:fem
+SFX P6 0 gramësheve [dëirty] po:noun is:pl is:fem
 SFX P6 0 javësh [deërty] po:adj is:sg is:mas
-SFX P6 0 javëshi [deërty] po:adj is:sg is:mas
-SFX P6 0 javëshin [deërty] po:adj is:sg is:mas
-SFX P6 0 javëshit [deërty] po:adj is:sg is:mas
-SFX P6 0 javëshat [deërty] po:adj is:pl is:mas
-SFX P6 0 javëshave [deërty] po:adj is:pl is:mas
-SFX P6 0 javëshe [dërty] po:adj is:sg is:fem
-SFX P6 0 javëshen [dërty] po:adj is:sg is:fem
-SFX P6 0 javëshes [dërty] po:adj is:sg is:fem
-SFX P6 0 javëshja [dërty] po:adj is:sg is:fem
-SFX P6 0 javëshet [dërty] po:adj is:pl is:fem
-SFX P6 0 javësheve [dërty] po:adj is:pl is:fem
-SFX P6 0 javëshe tri po:adj is:sg is:fem
-SFX P6 0 javëshen tri po:adj is:sg is:fem
-SFX P6 0 javëshes tri po:adj is:sg is:fem
-SFX P6 0 javëshja tri po:adj is:sg is:fem
-SFX P6 0 javëshet tri po:adj is:pl is:fem
-SFX P6 0 javësheve tri po:adj is:pl is:fem
+SFX P6 0 javëshi [deërty] po:noun is:sg is:mas
+SFX P6 0 javëshin [deërty] po:noun is:sg is:mas
+SFX P6 0 javëshit [deërty] po:noun is:sg is:mas
+SFX P6 0 javëshat [deërty] po:noun is:pl is:mas
+SFX P6 0 javëshave [deërty] po:noun is:pl is:mas
+SFX P6 0 javëshe [dëirty] po:adj is:sg is:fem
+SFX P6 0 javëshen [dëirty] po:noun is:sg is:fem
+SFX P6 0 javëshes [dëirty] po:noun is:sg is:fem
+SFX P6 0 javëshja [dëirty] po:noun is:sg is:fem
+SFX P6 0 javëshet [dëirty] po:noun is:pl is:fem
+SFX P6 0 javësheve [dëirty] po:noun is:pl is:fem
 SFX P6 0 javor [deërty] po:adj is:sg is:mas
-SFX P6 0 javori [deërty] po:adj is:sg is:mas
-SFX P6 0 javorin [deërty] po:adj is:sg is:mas
-SFX P6 0 javorit [deërty] po:adj is:sg is:mas
-SFX P6 0 javore [dërty] po:adj is:sg is:fem
-SFX P6 0 javoren [dërty] po:adj is:sg is:fem
-SFX P6 0 javores [dërty] po:adj is:sg is:fem
-SFX P6 0 javorja [dërty] po:adj is:sg is:fem
-SFX P6 0 javore tri po:adj is:sg is:fem
-SFX P6 0 javoren tri po:adj is:sg is:fem
-SFX P6 0 javores tri po:adj is:sg is:fem
-SFX P6 0 javorja tri po:adj is:sg is:fem
+SFX P6 0 javori [deërty] po:noun is:sg is:mas
+SFX P6 0 javorin [deërty] po:noun is:sg is:mas
+SFX P6 0 javorit [deërty] po:noun is:sg is:mas
+SFX P6 0 javorë [^j][deërty] po:adj is:pl is:mas
+SFX P6 0 javorësh [deërty] po:noun is:pl is:mas
+SFX P6 0 javorët [deërty] po:noun is:pl is:mas
+SFX P6 0 javorëve [deërty] po:noun is:pl is:mas
+SFX P6 0 javore [dëirty] po:adj is:sg is:fem
+SFX P6 0 javoren [dëirty] po:noun is:sg is:fem
+SFX P6 0 javores [dëirty] po:noun is:sg is:fem
+SFX P6 0 javorja [dëirty] po:noun is:sg is:fem
+SFX P6 0 javoresh [dëirty] po:noun is:pl is:fem
+SFX P6 0 javoret [dëirty] po:noun is:pl is:fem
+SFX P6 0 javoreve [dëirty] po:noun is:pl is:fem
 SFX P6 0 katësh [deërty] po:adj is:sg is:mas
-SFX P6 0 katëshi [deërty] po:adj is:sg is:mas
-SFX P6 0 katëshin [deërty] po:adj is:sg is:mas
-SFX P6 0 katëshit [deërty] po:adj is:sg is:mas
-SFX P6 0 katëshat [deërty] po:adj is:pl is:mas
-SFX P6 0 katëshave [deërty] po:adj is:pl is:mas
-SFX P6 0 katëshe [dërty] po:adj is:sg is:fem
-SFX P6 0 katëshen [dërty] po:adj is:sg is:fem
-SFX P6 0 katëshes [dërty] po:adj is:sg is:fem
-SFX P6 0 katëshja [dërty] po:adj is:sg is:fem
-SFX P6 0 katëshet [dërty] po:adj is:pl is:fem
-SFX P6 0 katësheve [dërty] po:adj is:pl is:fem
-SFX P6 0 katëshe tri po:adj is:sg is:fem
-SFX P6 0 katëshen tri po:adj is:sg is:fem
-SFX P6 0 katëshes tri po:adj is:sg is:fem
-SFX P6 0 katëshja tri po:adj is:sg is:fem
-SFX P6 0 katëshet tri po:adj is:pl is:fem
-SFX P6 0 katësheve tri po:adj is:pl is:fem
+SFX P6 0 katëshi [deërty] po:noun is:sg is:mas
+SFX P6 0 katëshin [deërty] po:noun is:sg is:mas
+SFX P6 0 katëshit [deërty] po:noun is:sg is:mas
+SFX P6 0 katëshat [deërty] po:noun is:pl is:mas
+SFX P6 0 katëshave [deërty] po:noun is:pl is:mas
+SFX P6 0 katëshe [dëirty] po:adj is:sg is:fem
+SFX P6 0 katëshen [dëirty] po:noun is:sg is:fem
+SFX P6 0 katëshes [dëirty] po:noun is:sg is:fem
+SFX P6 0 katëshja [dëirty] po:noun is:sg is:fem
+SFX P6 0 katëshet [dëirty] po:noun is:pl is:fem
+SFX P6 0 katësheve [dëirty] po:noun is:pl is:fem
 SFX P6 0 kilësh [deërty] po:adj is:sg is:mas
-SFX P6 0 kilëshi [deërty] po:adj is:sg is:mas
-SFX P6 0 kilëshin [deërty] po:adj is:sg is:mas
-SFX P6 0 kilëshit [deërty] po:adj is:sg is:mas
-SFX P6 0 kilëshat [deërty] po:adj is:pl is:mas
-SFX P6 0 kilëshave [deërty] po:adj is:pl is:mas
-SFX P6 0 kilëshe [dërty] po:adj is:sg is:fem
-SFX P6 0 kilëshen [dërty] po:adj is:sg is:fem
-SFX P6 0 kilëshes [dërty] po:adj is:sg is:fem
-SFX P6 0 kilëshja [dërty] po:adj is:sg is:fem
-SFX P6 0 kilëshet [dërty] po:adj is:pl is:fem
-SFX P6 0 kilësheve [dërty] po:adj is:pl is:fem
-SFX P6 0 kilëshe tri po:adj is:sg is:fem
-SFX P6 0 kilëshen tri po:adj is:sg is:fem
-SFX P6 0 kilëshes tri po:adj is:sg is:fem
-SFX P6 0 kilëshja tri po:adj is:sg is:fem
-SFX P6 0 kilëshet tri po:adj is:pl is:fem
-SFX P6 0 kilësheve tri po:adj is:pl is:fem
+SFX P6 0 kilëshi [deërty] po:noun is:sg is:mas
+SFX P6 0 kilëshin [deërty] po:noun is:sg is:mas
+SFX P6 0 kilëshit [deërty] po:noun is:sg is:mas
+SFX P6 0 kilëshat [deërty] po:noun is:pl is:mas
+SFX P6 0 kilëshave [deërty] po:noun is:pl is:mas
+SFX P6 0 kilëshe [dëirty] po:adj is:sg is:fem
+SFX P6 0 kilëshen [dëirty] po:noun is:sg is:fem
+SFX P6 0 kilëshes [dëirty] po:noun is:sg is:fem
+SFX P6 0 kilëshja [dëirty] po:noun is:sg is:fem
+SFX P6 0 kilëshet [dëirty] po:noun is:pl is:fem
+SFX P6 0 kilësheve [dëirty] po:noun is:pl is:fem
 SFX P6 0 kilogramësh [deërty] po:adj is:sg is:mas
-SFX P6 0 kilogramëshi [deërty] po:adj is:sg is:mas
-SFX P6 0 kilogramëshin [deërty] po:adj is:sg is:mas
-SFX P6 0 kilogramëshit [deërty] po:adj is:sg is:mas
-SFX P6 0 kilogramëshat [deërty] po:adj is:pl is:mas
-SFX P6 0 kilogramëshave [deërty] po:adj is:pl is:mas
-SFX P6 0 kilogramëshe [dërty] po:adj is:sg is:fem
-SFX P6 0 kilogramëshen [dërty] po:adj is:sg is:fem
-SFX P6 0 kilogramëshes [dërty] po:adj is:sg is:fem
-SFX P6 0 kilogramëshja [dërty] po:adj is:sg is:fem
-SFX P6 0 kilogramëshet [dërty] po:adj is:pl is:fem
-SFX P6 0 kilogramësheve [dërty] po:adj is:pl is:fem
-SFX P6 0 kilogramëshe tri po:adj is:sg is:fem
-SFX P6 0 kilogramëshen tri po:adj is:sg is:fem
-SFX P6 0 kilogramëshes tri po:adj is:sg is:fem
-SFX P6 0 kilogramëshja tri po:adj is:sg is:fem
-SFX P6 0 kilogramëshet tri po:adj is:pl is:fem
-SFX P6 0 kilogramësheve tri po:adj is:pl is:fem
+SFX P6 0 kilogramëshi [deërty] po:noun is:sg is:mas
+SFX P6 0 kilogramëshin [deërty] po:noun is:sg is:mas
+SFX P6 0 kilogramëshit [deërty] po:noun is:sg is:mas
+SFX P6 0 kilogramëshat [deërty] po:noun is:pl is:mas
+SFX P6 0 kilogramëshave [deërty] po:noun is:pl is:mas
+SFX P6 0 kilogramëshe [dëirty] po:adj is:sg is:fem
+SFX P6 0 kilogramëshen [dëirty] po:noun is:sg is:fem
+SFX P6 0 kilogramëshes [dëirty] po:noun is:sg is:fem
+SFX P6 0 kilogramëshja [dëirty] po:noun is:sg is:fem
+SFX P6 0 kilogramëshet [dëirty] po:noun is:pl is:fem
+SFX P6 0 kilogramësheve [dëirty] po:noun is:pl is:fem
+SFX P6 0 lekësh [deërty] po:adj is:sg is:mas
+SFX P6 0 lekëshi [deërty] po:noun is:sg is:mas
+SFX P6 0 lekëshin [deërty] po:noun is:sg is:mas
+SFX P6 0 lekëshit [deërty] po:noun is:sg is:mas
+SFX P6 0 lekëshat [deërty] po:noun is:sg is:mas
+SFX P6 0 lekëshave [deërty] po:noun is:sg is:mas
+SFX P6 0 lekëshe [dëirty] po:adj is:sg is:fem
+SFX P6 0 lekëshen [dëirty] po:noun is:sg is:fem
+SFX P6 0 lekëshes [dëirty] po:noun is:sg is:fem
+SFX P6 0 lekëshja [dëirty] po:noun is:sg is:fem
+SFX P6 0 lekëshet [dëirty] po:noun is:pl is:fem
+SFX P6 0 lekësheve [dëirty] po:noun is:pl is:fem
 SFX P6 0 litërsh [deërty] po:adj is:sg is:mas
-SFX P6 0 litërshi [deërty] po:adj is:sg is:mas
-SFX P6 0 litërshin [deërty] po:adj is:sg is:mas
-SFX P6 0 litërshit [deërty] po:adj is:sg is:mas
-SFX P6 0 litërshat [deërty] po:adj is:sg is:mas
-SFX P6 0 litërshave [deërty] po:adj is:sg is:mas
-SFX P6 0 litërshe [dërty] po:adj is:sg is:fem
-SFX P6 0 litërshen [dërty] po:adj is:sg is:fem
-SFX P6 0 litërshes [dërty] po:adj is:sg is:fem
-SFX P6 0 litërshja [dërty] po:adj is:sg is:fem
-SFX P6 0 litërshet [dërty] po:adj is:pl is:fem
-SFX P6 0 litërsheve [dërty] po:adj is:pl is:fem
-SFX P6 0 litërshe tri po:adj is:sg is:fem
-SFX P6 0 litërshen tri po:adj is:sg is:fem
-SFX P6 0 litërshes tri po:adj is:sg is:fem
-SFX P6 0 litërshja tri po:adj is:sg is:fem
-SFX P6 0 litërshet tri po:adj is:pl is:fem
-SFX P6 0 litërsheve tri po:adj is:pl is:fem
+SFX P6 0 litërshi [deërty] po:noun is:sg is:mas
+SFX P6 0 litërshin [deërty] po:noun is:sg is:mas
+SFX P6 0 litërshit [deërty] po:noun is:sg is:mas
+SFX P6 0 litërshat [deërty] po:noun is:sg is:mas
+SFX P6 0 litërshave [deërty] po:noun is:sg is:mas
+SFX P6 0 litërshe [dëirty] po:adj is:sg is:fem
+SFX P6 0 litërshen [dëirty] po:noun is:sg is:fem
+SFX P6 0 litërshes [dëirty] po:noun is:sg is:fem
+SFX P6 0 litërshja [dëirty] po:noun is:sg is:fem
+SFX P6 0 litërshet [dëirty] po:noun is:pl is:fem
+SFX P6 0 litërsheve [dëirty] po:noun is:pl is:fem
 SFX P6 0 metërsh [deërty] po:adj is:sg is:mas
-SFX P6 0 metërshi [deërty] po:adj is:sg is:mas
-SFX P6 0 metërshin [deërty] po:adj is:sg is:mas
-SFX P6 0 metërshit [deërty] po:adj is:sg is:mas
-SFX P6 0 metërshat [deërty] po:adj is:sg is:mas
-SFX P6 0 metërshave [deërty] po:adj is:sg is:mas
-SFX P6 0 metërshe [dërty] po:adj is:sg is:fem
-SFX P6 0 metërshen [dërty] po:adj is:sg is:fem
-SFX P6 0 metërshes [dërty] po:adj is:sg is:fem
-SFX P6 0 metërshja [dërty] po:adj is:sg is:fem
-SFX P6 0 metërshet [dërty] po:adj is:pl is:fem
-SFX P6 0 metërsheve [dërty] po:adj is:pl is:fem
-SFX P6 0 metërshe tri po:adj is:sg is:fem
-SFX P6 0 metërshen tri po:adj is:sg is:fem
-SFX P6 0 metërshes tri po:adj is:sg is:fem
-SFX P6 0 metërshja tri po:adj is:sg is:fem
-SFX P6 0 metërshet tri po:adj is:pl is:fem
-SFX P6 0 metërsheve tri po:adj is:pl is:fem
+SFX P6 0 metërshi [deërty] po:noun is:sg is:mas
+SFX P6 0 metërshin [deërty] po:noun is:sg is:mas
+SFX P6 0 metërshit [deërty] po:noun is:sg is:mas
+SFX P6 0 metërshat [deërty] po:noun is:sg is:mas
+SFX P6 0 metërshave [deërty] po:noun is:sg is:mas
+SFX P6 0 metërshe [dëirty] po:adj is:sg is:fem
+SFX P6 0 metërshen [dëirty] po:noun is:sg is:fem
+SFX P6 0 metërshes [dëirty] po:noun is:sg is:fem
+SFX P6 0 metërshja [dëirty] po:noun is:sg is:fem
+SFX P6 0 metërshet [dëirty] po:noun is:pl is:fem
+SFX P6 0 metërsheve [dëirty] po:noun is:pl is:fem
+SFX P6 0 minutësh [deërty] po:adj is:sg is:mas
+SFX P6 0 minutëshi [deërty] po:noun is:sg is:mas
+SFX P6 0 minutëshin [deërty] po:noun is:sg is:mas
+SFX P6 0 minutëshit [deërty] po:noun is:sg is:mas
+SFX P6 0 minutëshat [deërty] po:noun is:sg is:mas
+SFX P6 0 minutëshave [deërty] po:noun is:sg is:mas
+SFX P6 0 minutëshe [dëirty] po:adj is:sg is:fem
+SFX P6 0 minutëshen [dëirty] po:noun is:sg is:fem
+SFX P6 0 minutëshes [dëirty] po:noun is:sg is:fem
+SFX P6 0 minutëshja [dëirty] po:noun is:sg is:fem
+SFX P6 0 minutëshet [dëirty] po:noun is:pl is:fem
+SFX P6 0 minutësheve [dëirty] po:noun is:pl is:fem
 SFX P6 0 muajsh [deërty] po:adj is:sg is:mas
-SFX P6 0 muajshi [deërty] po:adj is:sg is:mas
-SFX P6 0 muajshin [deërty] po:adj is:sg is:mas
-SFX P6 0 muajshit [deërty] po:adj is:sg is:mas
-SFX P6 0 muajshat [deërty] po:adj is:sg is:mas
-SFX P6 0 muajshave [deërty] po:adj is:sg is:mas
-SFX P6 0 muajshe [dërty] po:adj is:sg is:fem
-SFX P6 0 muajshen [dërty] po:adj is:sg is:fem
-SFX P6 0 muajshes [dërty] po:adj is:sg is:fem
-SFX P6 0 muajshja [dërty] po:adj is:sg is:fem
-SFX P6 0 muajshet [dërty] po:adj is:pl is:fem
-SFX P6 0 muajsheve [dërty] po:adj is:pl is:fem
-SFX P6 0 muajshe tri po:adj is:sg is:fem
-SFX P6 0 muajshen tri po:adj is:sg is:fem
-SFX P6 0 muajshes tri po:adj is:sg is:fem
-SFX P6 0 muajshja tri po:adj is:sg is:fem
-SFX P6 0 muajshet tri po:adj is:pl is:fem
-SFX P6 0 muajsheve tri po:adj is:pl is:fem
+SFX P6 0 muajshi [deërty] po:noun is:sg is:mas
+SFX P6 0 muajshin [deërty] po:noun is:sg is:mas
+SFX P6 0 muajshit [deërty] po:noun is:sg is:mas
+SFX P6 0 muajshat [deërty] po:noun is:sg is:mas
+SFX P6 0 muajshave [deërty] po:noun is:sg is:mas
+SFX P6 0 muajshe [dëirty] po:adj is:sg is:fem
+SFX P6 0 muajshen [dëirty] po:noun is:sg is:fem
+SFX P6 0 muajshes [dëirty] po:noun is:sg is:fem
+SFX P6 0 muajshja [dëirty] po:noun is:sg is:fem
+SFX P6 0 muajshet [dëirty] po:noun is:pl is:fem
+SFX P6 0 muajsheve [dëirty] po:noun is:pl is:fem
 SFX P6 0 mujor [deërty] po:adj is:sg is:mas
-SFX P6 0 mujori [deërty] po:adj is:sg is:mas
-SFX P6 0 mujorin [deërty] po:adj is:sg is:mas
-SFX P6 0 mujorit [deërty] po:adj is:sg is:mas
-SFX P6 0 mujore [dërty] po:adj is:sg is:fem
-SFX P6 0 mujoren [dërty] po:adj is:sg is:fem
-SFX P6 0 mujores [dërty] po:adj is:sg is:fem
-SFX P6 0 mujorja [dërty] po:adj is:sg is:fem
-SFX P6 0 mujore tri po:adj is:sg is:fem
-SFX P6 0 mujoren tri po:adj is:sg is:fem
-SFX P6 0 mujores tri po:adj is:sg is:fem
-SFX P6 0 mujorja tri po:adj is:sg is:fem
+SFX P6 0 mujori [deërty] po:noun is:sg is:mas
+SFX P6 0 mujorin [deërty] po:noun is:sg is:mas
+SFX P6 0 mujorit [deërty] po:noun is:sg is:mas
+SFX P6 0 mujorë [^j][deërty] po:adj is:pl is:mas
+SFX P6 0 mujorësh [deërty] po:noun is:pl is:mas
+SFX P6 0 mujorët [deërty] po:noun is:pl is:mas
+SFX P6 0 mujorëve [deërty] po:noun is:pl is:mas
+SFX P6 0 mujore [dëirty] po:adj is:sg is:fem
+SFX P6 0 mujoren [dëirty] po:noun is:sg is:fem
+SFX P6 0 mujores [dëirty] po:noun is:sg is:fem
+SFX P6 0 mujorja [dëirty] po:noun is:sg is:fem
+SFX P6 0 mujoresh [dëirty] po:noun is:pl is:fem
+SFX P6 0 mujoret [dëirty] po:noun is:pl is:fem
+SFX P6 0 mujoreve [dëirty] po:noun is:pl is:fem
+SFX P6 0 sekondësh [deërty] po:adj is:sg is:mas
+SFX P6 0 sekondëshi [deërty] po:noun is:sg is:mas
+SFX P6 0 sekondëshin [deërty] po:noun is:sg is:mas
+SFX P6 0 sekondëshit [deërty] po:noun is:sg is:mas
+SFX P6 0 sekondëshat [deërty] po:noun is:sg is:mas
+SFX P6 0 sekondëshave [deërty] po:noun is:sg is:mas
+SFX P6 0 sekondëshe [dëirty] po:adj is:sg is:fem
+SFX P6 0 sekondëshen [dëirty] po:noun is:sg is:fem
+SFX P6 0 sekondëshes [dëirty] po:noun is:sg is:fem
+SFX P6 0 sekondëshja [dëirty] po:noun is:sg is:fem
+SFX P6 0 sekondëshet [dëirty] po:noun is:pl is:fem
+SFX P6 0 sekondësheve [dëirty] po:noun is:pl is:fem
+SFX P6 0 shifror [deërty] po:adj is:sg is:mas
+SFX P6 0 shifrori [deërty] po:noun is:sg is:mas
+SFX P6 0 shifrorin [deërty] po:noun is:sg is:mas
+SFX P6 0 shifrorit [deërty] po:noun is:sg is:mas
+SFX P6 0 shifrorë [^j][deërty] po:adj is:pl is:mas
+SFX P6 0 shifrorësh [deërty] po:noun is:pl is:mas
+SFX P6 0 shifrorët [deërty] po:noun is:pl is:mas
+SFX P6 0 shifrorëve [deërty] po:noun is:pl is:mas
+SFX P6 0 shifrore [dëirty] po:adj is:sg is:fem
+SFX P6 0 shifroren [dëirty] po:noun is:sg is:fem
+SFX P6 0 shifrores [dëirty] po:noun is:sg is:fem
+SFX P6 0 shifrorja [dëirty] po:noun is:sg is:fem
+SFX P6 0 shifroresh [dëirty] po:noun is:pl is:fem
+SFX P6 0 shifroret [dëirty] po:noun is:pl is:fem
+SFX P6 0 shifroreve [dëirty] po:noun is:pl is:fem
 SFX P6 0 vjeçar [deërty] po:adj is:sg is:mas
-SFX P6 0 vjeçari [deërty] po:adj is:sg is:mas
-SFX P6 0 vjeçarin [deërty] po:adj is:sg is:mas
-SFX P6 0 vjeçarit [deërty] po:adj is:sg is:mas
+SFX P6 0 vjeçari [deërty] po:noun is:sg is:mas
+SFX P6 0 vjeçarin [deërty] po:noun is:sg is:mas
+SFX P6 0 vjeçarit [deërty] po:noun is:sg is:mas
 SFX P6 0 vjeçarë [^j][deërty] po:adj is:pl is:mas
-SFX P6 0 vjeçarësh [deërty] po:adj is:pl is:mas
-SFX P6 0 vjeçarët [deërty] po:adj is:pl is:mas
-SFX P6 0 vjeçarëve [deërty] po:adj is:pl is:mas
-SFX P6 0 vjeçare [dërty] po:adj is:sg is:fem
-SFX P6 0 vjeçaren [dërty] po:adj is:sg is:fem
-SFX P6 0 vjeçares [dërty] po:adj is:sg is:fem
-SFX P6 0 vjeçarja [dërty] po:adj is:sg is:fem
-SFX P6 0 vjeçaresh [dërty] po:adj is:pl is:fem
-SFX P6 0 vjeçaret [dërty] po:adj is:pl is:fem
-SFX P6 0 vjeçareve [dërty] po:adj is:pl is:fem
-SFX P6 0 vjeçare tri po:adj is:sg is:fem
-SFX P6 0 vjeçaren tri po:adj is:sg is:fem
-SFX P6 0 vjeçares tri po:adj is:sg is:fem
-SFX P6 0 vjeçarja tri po:adj is:sg is:fem
-SFX P6 0 vjeçaresh tri po:adj is:pl is:fem
-SFX P6 0 vjeçaret tri po:adj is:pl is:fem
-SFX P6 0 vjeçareve tri po:adj is:pl is:fem
+SFX P6 0 vjeçarësh [deërty] po:noun is:pl is:mas
+SFX P6 0 vjeçarët [deërty] po:noun is:pl is:mas
+SFX P6 0 vjeçarëve [deërty] po:noun is:pl is:mas
+SFX P6 0 vjeçare [dëirty] po:adj is:sg is:fem
+SFX P6 0 vjeçaren [dëirty] po:noun is:sg is:fem
+SFX P6 0 vjeçares [dëirty] po:noun is:sg is:fem
+SFX P6 0 vjeçarja [dëirty] po:noun is:sg is:fem
+SFX P6 0 vjeçaresh [dëirty] po:noun is:pl is:fem
+SFX P6 0 vjeçaret [dëirty] po:noun is:pl is:fem
+SFX P6 0 vjeçareve [dëirty] po:noun is:pl is:fem
 SFX P6 0 vjetor [deërty] po:adj is:sg is:mas
-SFX P6 0 vjetori [deërty] po:adj is:sg is:mas
-SFX P6 0 vjetorin [deërty] po:adj is:sg is:mas
-SFX P6 0 vjetorit [deërty] po:adj is:sg is:mas
-SFX P6 0 vjetorësh [deërty] po:adj is:pl is:mas
-SFX P6 0 vjetorët [deërty] po:adj is:pl is:mas
-SFX P6 0 vjetorëve [deërty] po:adj is:pl is:mas
+SFX P6 0 vjetori [deërty] po:noun is:sg is:mas
+SFX P6 0 vjetorin [deërty] po:noun is:sg is:mas
+SFX P6 0 vjetorit [deërty] po:noun is:sg is:mas
+SFX P6 0 vjetorësh [deërty] po:noun is:pl is:mas
+SFX P6 0 vjetorët [deërty] po:noun is:pl is:mas
+SFX P6 0 vjetorëve [deërty] po:noun is:pl is:mas
 
 SFX P7 Y 2
 SFX P7 0 a [fghjklnprtz] po:adj is:pl is:fem
@@ -6564,8 +6560,9 @@ SFX Q1 Y 2
 SFX Q1 0 e [^ë] po:adj is:pl is:fem
 SFX Q1 ë e ë po:adj is:pl is:fem
 
-SFX Q2 Y 1
+SFX Q2 Y 2
 SFX Q2 0 ë [bcçdfgqhjklmnprstvz] po:adj is:pl is:mas
+SFX Q2 0 nj i po:adj is:pl is:mas
 
 SFX Q3 Y 2
 SFX Q3 0 ë [^r] po:adj is:sg is:fem
@@ -6731,45 +6728,85 @@ SFX T0 0 0 po:undf
 
 # PËRPARA
 
-PFX Sa Y 2
-PFX Sa 0 bashk [aeiouy]
-PFX Sa 0 bashkë [^aeiouy]
+PFX Sa Y 1
+PFX Sa 0 anti .
 
-PFX Sb Y 2
-PFX Sb 0 gjysm [aeiou]
-PFX Sb 0 gjysmë [^aeiou]
+PFX Sb Y 1
+PFX Sb 0 auto .
 
-PFX Sc Y 1
-PFX Sc 0 krye .
+PFX Sc Y 2
+PFX Sc 0 bashk [aeiouy]
+PFX Sc 0 bashkë [^aeiouy]
 
-PFX Sd Y 3
-PFX Sd 0 kundër r[^r]
-PFX Sd r kundër rr
-PFX Sd 0 kundër [abcçdefghijklmnopqstuvyz]
+PFX Sd Y 1
+PFX Sd 0 bi .
 
 PFX Se Y 1
-PFX Se 0 mbi .
+PFX Se 0 ç .
 
 PFX Sf Y 1
-PFX Sf 0 ndihmës .
+PFX Sf 0 de .
 
-PFX Sg Y 1
-PFX Sg 0 nën .
+PFX Sg Y 2
+PFX Sg 0 gjysm [aeiou]
+PFX Sg 0 gjysmë [^aeiou]
 
 PFX Sh Y 1
-PFX Sh 0 ri .
+PFX Sh 0 jo .
 
-PFX Si Y 2
-PFX Si 0 zëvendës .
-PFX Si 0 zëvendëskrye [mr][ei][dn]
+PFX Si Y 1
+PFX Si 0 krye .
 
 PFX Sj Y 3
-PFX Sj 0 ndër r[^r]
-PFX Sj r ndër rr
-PFX Sj 0 ndër [abcçdefghijklmnopqstuvyz]
+PFX Sj 0 kundër r[^r]
+PFX Sj r kundër rr
+PFX Sj 0 kundër [abcçdefghijklmnopqstuvyz]
 
 PFX Sk Y 1
-PFX Sk 0 mos .
+PFX Sk 0 mbi .
 
 PFX Sl Y 1
-PFX Sl 0 anti .
+PFX Sl 0 mos .
+
+PFX Sm Y 3
+PFX Sm 0 ndër r[^r]
+PFX Sm r ndër rr
+PFX Sm 0 ndër [abcçdefghijklmnopqstuvyz]
+
+PFX Sn Y 1
+PFX Sn 0 ndihmës .
+
+PFX So Y 1
+PFX So 0 nën .
+
+PFX Sp Y 1
+PFX Sp 0 pa .
+
+PFX Sq Y 1
+PFX Sq 0 para .
+
+PFX Sr Y 1
+PFX Sr 0 pas .
+
+PFX Ss Y 1
+PFX Ss 0 ri .
+
+PFX St Y 1
+PFX St 0 stër .
+
+PFX Su Y 1
+PFX Su 0 sh .
+
+PFX Sv Y 1
+PFX Sv 0 tej .
+
+PFX Sx Y 2
+PFX Sx 0 vet [aeiou]
+PFX Sx 0 vetë [^aeiou]
+
+PFX Sy Y 2
+PFX Sy 0 zëvendës .
+PFX Sy 0 zëvendëskrye [mr][ei][dn]
+
+PFX Sz Y 1
+PFX Sz 0 zh .
