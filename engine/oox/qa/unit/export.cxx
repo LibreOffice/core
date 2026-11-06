@@ -8,6 +8,10 @@
  */
 
 #include <functional>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <svx/svdoashp.hxx>
+#include <svx/EnhancedCustomShape2d.hxx>
 
 #include <test/unoapixml_test.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -3024,6 +3028,89 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapeLogwidthInWriter)
     assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='*/ w 1 635']", 1);
     assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='*/ w 1 360']", 0);
     assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeLogicalSizeRoundTrip)
+{
+    struct EvaluatedGeometry
+    {
+        basegfx::B2DPolyPolygon aOutline;
+        std::vector<awt::Point> aHandles;
+        tools::Rectangle aTextRect;
+    };
+    const auto getGeometry = [&] {
+        uno::Reference<drawing::XDrawPage> xPage;
+        uno::Reference<drawing::XDrawPageSupplier> xSingle(mxComponent, uno::UNO_QUERY);
+        if (xSingle.is())
+            xPage = xSingle->getDrawPage();
+        else
+        {
+            uno::Reference<drawing::XDrawPagesSupplier> xPages(mxComponent, uno::UNO_QUERY_THROW);
+            xPage.set(xPages->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+        }
+        uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+        auto* pShape = dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape));
+        CPPUNIT_ASSERT(pShape);
+        EvaluatedGeometry aResult;
+        aResult.aOutline = pShape->GetLineGeometry(false);
+        for (const auto& rHandle : pShape->GetInteractionHandles())
+            aResult.aHandles.push_back(rHandle.aPosition);
+        EnhancedCustomShape2d aCustomShape(*pShape);
+        aResult.aTextRect = aCustomShape.GetTextRect();
+        return aResult;
+    };
+    // Writer uses twips, Impress uses 1/100 mm. Both exported guides use EMU size symbols.
+    for (bool bWriter : { true, false })
+    {
+        loadFromFile(bWriter ? u"custGeom_logwidthWriter.fodt" : u"custGeom_logicalSize.fodp");
+        const auto aBefore = getGeometry();
+        CPPUNIT_ASSERT(aBefore.aOutline.count() > 0);
+        for (int nRoundTrip = 0; nRoundTrip < 2; ++nRoundTrip)
+        {
+            save(bWriter ? TestFilter::DOCX : TestFilter::PPTX);
+            xmlDocUniquePtr pXmlDoc
+                = parseExport(bWriter ? u"word/document.xml"_ustr : u"ppt/slides/slide1.xml"_ustr);
+            const OString aUnit = bWriter ? "635"_ostr : "360"_ostr;
+            // Re-export must keep the original conversion, without an extra scale factor.
+            assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='*/ w 1 " + aUnit + "']", 1);
+            assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[@fmla='*/ h 1 " + aUnit + "']", 1);
+            assertXPath(pXmlDoc, "//a:custGeom/a:ahLst/a:ahXY", 1);
+            loadFromURL(maTempFile.GetURL());
+            const auto aAfter = getGeometry();
+            CPPUNIT_ASSERT_EQUAL(aBefore.aOutline.count(), aAfter.aOutline.count());
+            CPPUNIT_ASSERT_EQUAL(aBefore.aHandles.size(), aAfter.aHandles.size());
+            const auto aOldShapeOrigin = aBefore.aOutline.getB2DPolygon(0).getB2DPoint(0);
+            const auto aNewShapeOrigin = aAfter.aOutline.getB2DPolygon(0).getB2DPoint(0);
+            for (size_t i = 0; i < aBefore.aHandles.size(); ++i)
+            {
+                CPPUNIT_ASSERT_DOUBLES_EQUAL(aBefore.aHandles[i].X - aOldShapeOrigin.getX(),
+                                             aAfter.aHandles[i].X - aNewShapeOrigin.getX(), 2.0);
+                CPPUNIT_ASSERT_DOUBLES_EQUAL(aBefore.aHandles[i].Y - aOldShapeOrigin.getY(),
+                                             aAfter.aHandles[i].Y - aNewShapeOrigin.getY(), 2.0);
+            }
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aBefore.aTextRect.GetWidth(),
+                                         aAfter.aTextRect.GetWidth(), 2.0);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aBefore.aTextRect.GetHeight(),
+                                         aAfter.aTextRect.GetHeight(), 2.0);
+            for (sal_uInt32 i = 0; i < aBefore.aOutline.count(); ++i)
+            {
+                const auto aOldPolygon = aBefore.aOutline.getB2DPolygon(i);
+                const auto aNewPolygon = aAfter.aOutline.getB2DPolygon(i);
+                CPPUNIT_ASSERT_EQUAL(aOldPolygon.count(), aNewPolygon.count());
+                CPPUNIT_ASSERT(aOldPolygon.count() > 0);
+                const auto aOldOrigin = aOldPolygon.getB2DPoint(0);
+                const auto aNewOrigin = aNewPolygon.getB2DPoint(0);
+                for (sal_uInt32 j = 0; j < aOldPolygon.count(); ++j)
+                {
+                    const auto aOldPoint = aOldPolygon.getB2DPoint(j) - aOldOrigin;
+                    const auto aNewPoint = aNewPolygon.getB2DPoint(j) - aNewOrigin;
+                    // Ignore page placement, allowing two model units for rounding.
+                    CPPUNIT_ASSERT_DOUBLES_EQUAL(aOldPoint.getX(), aNewPoint.getX(), 2.0);
+                    CPPUNIT_ASSERT_DOUBLES_EQUAL(aOldPoint.getY(), aNewPoint.getY(), 2.0);
+                }
+            }
+        }
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCustomShapeBrokenEquation)

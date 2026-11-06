@@ -21,6 +21,8 @@
 
 #include <o3tl/string_view.hxx>
 #include <svx/EnhancedCustomShape2d.hxx>
+#include <svx/svdmodel.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <svx/EnhancedCustomShapeGeometry.hxx>
 #include <svx/EnhancedCustomShapeTypeNames.hxx>
 #include <svx/svdoashp.hxx>
@@ -573,7 +575,10 @@ EnhancedCustomShape2d::EnhancedCustomShape2d(SdrObjCustomShape& rSdrObjCustomSha
         rSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ),
         logicRectOf( rSdrObjCustomShape ),
         rSdrObjCustomShape.GetMergedItem( XATTR_FILLSTYLE ).GetValue() != drawing::FillStyle_NONE,
-        rSdrObjCustomShape.GetMergedItem( XATTR_LINESTYLE ).GetValue() != drawing::LineStyle_NONE ),
+        rSdrObjCustomShape.GetMergedItem( XATTR_LINESTYLE ).GetValue() != drawing::LineStyle_NONE,
+        o3tl::convert(1, rSdrObjCustomShape.getSdrModelFromSdrObject().GetScaleUnit() == MapUnit::MapTwip
+                             ? o3tl::Length::twip : o3tl::Length::mm100,
+                      o3tl::Length::emu) ),
     mrSdrObjCustomShape ( rSdrObjCustomShape ),
     m_nColorData          ( 0 )
 {

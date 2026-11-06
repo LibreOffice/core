@@ -61,6 +61,7 @@ protected:
     double m_fYRatio;
 
     bool m_bOOXMLShape;
+    double m_fOOXMLCoordScale; // EMU per model unit for custom paths with explicit boxes
 
     sal_Int32 m_nXRef;
     sal_Int32 m_nYRef;
@@ -101,9 +102,11 @@ protected:
     SAL_DLLPRIVATE void SetPathSize(sal_Int32 nIndex = 0);
 
 public:
-    /// bFilled and bStroked are what the equations ask for as hasfill and hasstroke
+    /// bFilled and bStroked are what the equations ask for as hasfill and hasstroke.
+    /// fEmuPerLogicUnit converts size guides in OOXML custom paths with explicit boxes.
     EnhancedCustomShapeFormulas(const SdrCustomShapeGeometryItem& rGeometryItem,
-                                const tools::Rectangle& rLogicRect, bool bFilled, bool bStroked);
+                                const tools::Rectangle& rLogicRect, bool bFilled, bool bStroked,
+                                double fEmuPerLogicUnit = 1.0);
 
     /// the text frame of the geometry rGeometry in a shape of rSize, in the unit of rSize and
     /// from the shape's top left

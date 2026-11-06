@@ -21,6 +21,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,oox_export, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,oox_export, \
+    basegfx \
     comphelper \
     cppu \
     cppuhelper \
@@ -28,6 +29,7 @@ $(eval $(call gb_CppunitTest_use_libraries,oox_export, \
     sal \
     sax \
     subsequenttest \
+    svxcore \
     test \
     unotest \
     utl \

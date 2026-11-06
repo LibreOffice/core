@@ -28,6 +28,7 @@
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 
+#include <algorithm>
 #include <cmath>
 
 using namespace ::com::sun::star;
@@ -38,7 +39,7 @@ using EnhancedCustomShape::ExpressionFunct;
 
 EnhancedCustomShapeFormulas::EnhancedCustomShapeFormulas(
     const SdrCustomShapeGeometryItem& rGeometryItem, const tools::Rectangle& rLogicRect,
-    bool bFilled, bool bStroked)
+    bool bFilled, bool bStroked, double fEmuPerLogicUnit)
     : m_eSpType(mso_sptNil)
     , m_nCoordLeft(0)
     , m_nCoordTop(0)
@@ -52,6 +53,7 @@ EnhancedCustomShapeFormulas::EnhancedCustomShapeFormulas(
     , m_fXRatio(1.0)
     , m_fYRatio(1.0)
     , m_bOOXMLShape(false)
+    , m_fOOXMLCoordScale(1.0)
     , m_nXRef(0x80000000)
     , m_nYRef(0x80000000)
     , m_bFilled(bFilled)
@@ -77,6 +79,12 @@ EnhancedCustomShapeFormulas::EnhancedCustomShapeFormulas(
         *pAny >>= m_bFlipV;
 
     ApplyShapeAttributes(rGeometryItem);
+    // These paths scale their coordinates through SubViewSize. Their shared guides still
+    // use the shape's EMU extent for w and h, independently of the path coordinate boxes.
+    if (sShapeType == "ooxml-non-primitive" && m_seqSubViewSize.hasElements()
+        && std::all_of(m_seqSubViewSize.begin(), m_seqSubViewSize.end(),
+                       [](const css::awt::Size& rSize) { return rSize.Width > 0 && rSize.Height > 0; }))
+        m_fOOXMLCoordScale = fEmuPerLogicUnit;
     SetPathSize();
 
     if (m_seqEquations.hasElements())
@@ -282,8 +290,8 @@ double EnhancedCustomShapeFormulas::GetEnumFunc( const ExpressionFunct eFunc ) c
         case ExpressionFunct::EnumHasFill :    fRet = m_bFilled ? 1.0 : 0.0; break;
         case ExpressionFunct::EnumWidth :      fRet = m_nCoordWidth; break;
         case ExpressionFunct::EnumHeight :     fRet = m_nCoordHeight; break;
-        case ExpressionFunct::EnumLogWidth :   fRet = m_aLogicRect.GetWidth(); break;
-        case ExpressionFunct::EnumLogHeight :  fRet = m_aLogicRect.GetHeight(); break;
+        case ExpressionFunct::EnumLogWidth :   fRet = m_aLogicRect.GetWidth() * m_fOOXMLCoordScale; break;
+        case ExpressionFunct::EnumLogHeight :  fRet = m_aLogicRect.GetHeight() * m_fOOXMLCoordScale; break;
         default: break;
     }
     return fRet;
@@ -400,6 +408,10 @@ Point EnhancedCustomShapeFormulas::GetPoint( const css::drawing::EnhancedCustomS
                                         const bool bScale, const bool bReplaceGeoSize ) const
 {
     basegfx::B2DPoint aPoint(GetPointAsB2DPoint(rPair, bScale, bReplaceGeoSize));
+    // Handles, glue points and text rectangles use model coordinates, whereas the raw
+    // floating-point getter also serves path radii and angles and must retain their units.
+    if (!bScale)
+        aPoint /= m_fOOXMLCoordScale;
     return Point(static_cast<tools::Long>(aPoint.getX()), static_cast<tools::Long>(aPoint.getY()));
 }
 
@@ -451,6 +463,12 @@ void EnhancedCustomShapeFormulas::GetParameter( double& rRetValue, const Enhance
             }
         }
         break;
+        case EnhancedCustomShapeParameterType::LOGWIDTH:
+            rRetValue = GetEnumFunc(ExpressionFunct::EnumLogWidth);
+            break;
+        case EnhancedCustomShapeParameterType::LOGHEIGHT:
+            rRetValue = GetEnumFunc(ExpressionFunct::EnumLogHeight);
+            break;
         case EnhancedCustomShapeParameterType::LEFT :
         case EnhancedCustomShapeParameterType::TOP :
         {
