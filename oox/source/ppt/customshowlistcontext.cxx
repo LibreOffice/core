@@ -63,11 +63,13 @@ CustomShowContext::CustomShowContext( FragmentHandler2 const & rParent,
     switch( aElementToken )
     {
         case PPT_TOKEN( sld ) :
-            mrCustomShowList.back().maSldLst.push_back(
-                getRelations()
-                    .getRelationFromRelId(rAttribs.getStringDefaulted(R_TOKEN(id)))
-                    ->maTarget);
+        {
+            const oox::core::Relation* pRelation
+                = getRelations().getRelationFromRelId(rAttribs.getStringDefaulted(R_TOKEN(id)));
+            if (pRelation)
+                mrCustomShowList.back().maSldLst.push_back(pRelation->maTarget);
             return this;
+        }
         default:
         break;
     }
