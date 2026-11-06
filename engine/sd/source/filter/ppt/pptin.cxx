@@ -79,6 +79,7 @@
 #include "pptanimations.hxx"
 #include "pptinanimations.hxx"
 #include "ppt97animations.hxx"
+#include <CustomAnimationEffect.hxx>
 
 #include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/animations/TransitionType.hpp>
@@ -1895,6 +1896,12 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
             if( pPpt97Animation )
                 pPpt97Animation->createAndSetCustomAnimationEffect( rEntry.first );
         }
+
+        // The effects go into the animation nodes of the page here, so that the page carries
+        // them from the moment it is read. They are otherwise written there by a timer, which
+        // a document that is read and saved again without an idle moment never reaches.
+        if( !aAnimationsOnThisPage.empty() )
+            pPage->getMainSequence()->rebuildNow();
     }
     rStCtrl.Seek( nOldFilePos );
 }

@@ -29,6 +29,7 @@
 #include <svx/svdomedia.hxx>
 #include <rtl/ustring.hxx>
 
+#include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
@@ -490,6 +491,24 @@ CPPUNIT_TEST_FIXTURE(SdExportTest3, testTdf113818)
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc, "//anim:animate[1]", "formula", u"width*sin(2.5*pi*$)");
     assertXPath(pXmlDoc, "//anim:animate[1]", "values", u"0;1");
+}
+
+CPPUNIT_TEST_FIXTURE(SdExportTest3, testAnimationFromMsPowerpoint97IsSaved)
+{
+    // The slides of this document animate their shapes, and the older binary format keeps an
+    // animation in a record of its own on each shape.
+    createSdImpressDoc("tdf124708.ppt");
+
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 1));
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"Effect"_ustr).get<presentation::AnimationEffect>()
+                   != presentation::AnimationEffect_NONE);
+
+    // Saving states the animations, with no idle moment in between. Without the fix they were
+    // held for a timer that a document read and saved in one go never reaches, so the save
+    // stated none of them and the animations were gone for good.
+    save(TestFilter::PPTX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide2.xml"_ustr);
+    assertXPath(pXmlDoc, "/p:sld/p:timing", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest3, testTdf119629)

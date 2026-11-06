@@ -386,6 +386,11 @@ public:
     /** this method rebuilds the animation nodes */
     virtual void rebuild() override;
 
+    /** Writes the effects this sequence holds into the animation nodes straight away. The
+        ordinary rebuild leaves that to a timer, so the nodes carry the effects only once the
+        program has been idle. */
+    void rebuildNow();
+
     virtual CustomAnimationEffectPtr findEffect( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode ) const override;
 
     virtual bool disposeShape( const cpo::uno::Reference< css::drawing::XShape >& xShape ) override;

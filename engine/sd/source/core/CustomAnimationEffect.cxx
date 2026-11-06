@@ -3361,6 +3361,11 @@ void MainSequence::rebuild()
     startRebuildTimer();
 }
 
+void MainSequence::rebuildNow()
+{
+    implRebuild();
+}
+
 void MainSequence::lockRebuilds()
 {
     mnRebuildLockGuard++;
