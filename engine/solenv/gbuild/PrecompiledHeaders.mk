@@ -164,11 +164,12 @@ $(gb_PrecompiledHeader_ignore_flags_for_flags_file) \
 # $(call gb_PrecompiledHeader_check_flags_internal,pchfileflags,flags,pchcxxfile)
 # Check if two sets of flags are compatible, allowing reuse of the PCH. Flags are compatible if
 # - they are the same
-# - the PCH is precompiled_system and the linktarget has additional defines listed above
+# - the PCH is precompiled_system or precompiled_system_unoptimized and the linktarget has
+#   additional defines listed above
 define gb_PrecompiledHeader_check_flags_internal
 $(if $(filter-out $(2),$(1)),$(filter-out $(2),$(1)), \
 	$(if $(filter-out $(1),$(2)),\
-		$(if $(filter-out precompiled_system,$(notdir $(3))),$(filter-out $(1),$(2)), \
+		$(if $(filter-out precompiled_system precompiled_system_unoptimized,$(notdir $(3))),$(filter-out $(1),$(2)), \
 			$(foreach flag,$(filter-out $(1),$(2)),$(filter-out $(gb_PrecompiledHeader_ignore_flags_system),$(flag))) \
 		) \
 	,) \

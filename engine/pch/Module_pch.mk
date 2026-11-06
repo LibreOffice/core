@@ -23,4 +23,12 @@ $(eval $(call gb_Module_add_targets,pch,\
     StaticLibrary_precompiled_system \
 ))
 
+# The unoptimized copy of the common precompiled header only exists in an optimized build. In
+# any other build the common precompiled header already has the flags of the unoptimized targets.
+ifneq ($(ENABLE_OPTIMIZED),)
+$(eval $(call gb_Module_add_targets,pch,\
+    StaticLibrary_precompiled_system_unoptimized \
+))
+endif
+
 # vim: set noet sw=4 ts=4:

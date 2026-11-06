@@ -42,9 +42,18 @@
 # FYI: on Windows, gb_Library_use_system_win32_libs also calls gb_LinkTarget_add_libs; easy to miss.
 gb_LinkTarget__syslib = %@
 
-# debug flags, if the LinkTarget is named in the list of libraries of ENABLE_SYMBOLS_FOR
+# Avoid wasting time optimizing test code, that is run just once. The result is non-empty for
+# a link target that compiles without optimization in a build that is otherwise optimized. In a
+# build without optimization every target already compiles that way.
+# call gb_LinkTarget__is_unoptimized_target,linktargetmakefilename
+gb_LinkTarget__is_unoptimized_target = \
+    $(if $(ENABLE_OPTIMIZED),$(filter CppunitTest_% StaticLibrary_precompiled_system_unoptimized,$(1)))
+
+# optimization flags, and debug flags if the LinkTarget is named in the list of libraries of
+# ENABLE_SYMBOLS_FOR
+# call gb_LinkTarget__get_debugflags,linktargetmakefilename
 gb_LinkTarget__get_debugflags= \
-    $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS), \
+    $(if $(and $(ENABLE_OPTIMIZED),$(if $(call gb_LinkTarget__is_unoptimized_target,$(1)),,$(true))),$(gb_COMPILEROPTFLAGS), \
         $(if $(ENABLE_OPTIMIZED_DEBUG),$(gb_COMPILERDEBUGOPTFLAGS),$(gb_COMPILERNOOPTFLAGS))) \
     $(if $(call gb_target_symbols_enabled,$(1)),$(gb_DEBUGINFO_FLAGS))
 
@@ -1968,7 +1977,7 @@ ifeq ($(COM_IS_CLANG),TRUE)
 $(call gb_LinkTarget_add_defs,$(1),$(gb_CXXFLAGS_include)$(SRCDIR)/pch/inc/clangfix.hxx)
 $(call gb_LinkTarget_add_defs,$(1),$(gb_CXXFLAGS_no_pch_warnings))
 endif
-$(if $(filter precompiled_system,$(3)), $(call gb_LinkTarget_add_defs,$(1),-DBOOST_ALL_NO_LIB))
+$(if $(filter precompiled_system precompiled_system_unoptimized,$(3)), $(call gb_LinkTarget_add_defs,$(1),-DBOOST_ALL_NO_LIB))
 endef
 
 # call gb_LinkTarget_reuse_precompiled_header,linktarget,pchcxxfile,,linktargetmakefilename
@@ -1985,9 +1994,12 @@ endif
 
 endef
 
+# The common precompiled header exists in two copies, one per optimization level, because the
+# compiler only accepts a precompiled header built with the same optimization level as the
+# compilation that uses it.
 # call gb_LinkTarget_use_common_precompiled_header,linktarget,,,linktargetmakefilename
 define gb_LinkTarget_use_common_precompiled_header
-$(call gb_LinkTarget_reuse_precompiled_header,$(1),pch/inc/pch/precompiled_system,,$(4))
+$(call gb_LinkTarget_reuse_precompiled_header,$(1),pch/inc/pch/precompiled_system$(if $(call gb_LinkTarget__is_unoptimized_target,$(4)),_unoptimized),,$(4))
 
 endef
 
