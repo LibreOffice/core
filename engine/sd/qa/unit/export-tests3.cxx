@@ -380,6 +380,35 @@ CPPUNIT_TEST_FIXTURE(SdExportTest3, testBulletsAsImageImpressOfficeOpenXml)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(790), aSize.Height);
 }
 
+CPPUNIT_TEST_FIXTURE(SdExportTest3, testParagraphSpacingStaysPutMsPowerpoint97)
+{
+    createSdImpressDoc("pptx/paragraph-spacing.pptx");
+    saveAndReload(TestFilter::PPT);
+
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
+    uno::Reference<beans::XPropertySet> xFirst(getParagraphFromShape(0, xShape), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xSecond(getParagraphFromShape(1, xShape), uno::UNO_QUERY_THROW);
+
+    // A paragraph with no spacing above or below keeps none. Without the fix each save added
+    // one of the units the format measures a spacing in, so the spacing grew every time.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xFirst->getPropertyValue(u"ParaTopMargin"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xFirst->getPropertyValue(u"ParaBottomMargin"_ustr).get<sal_Int32>());
+
+    // Five points above and below, which is 176 hundredths of a millimetre.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(176), xSecond->getPropertyValue(u"ParaTopMargin"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(176), xSecond->getPropertyValue(u"ParaBottomMargin"_ustr).get<sal_Int32>());
+
+    // Saving the same document again leaves both of them where they are.
+    saveAndReload(TestFilter::PPT);
+    uno::Reference<beans::XPropertySet> xShapeAgain(getShapeFromPage(0, 0));
+    uno::Reference<beans::XPropertySet> xFirstAgain(getParagraphFromShape(0, xShapeAgain),
+                                                    uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xSecondAgain(getParagraphFromShape(1, xShapeAgain),
+                                                     uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xFirstAgain->getPropertyValue(u"ParaTopMargin"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(176), xSecondAgain->getPropertyValue(u"ParaTopMargin"_ustr).get<sal_Int32>());
+}
+
 CPPUNIT_TEST_FIXTURE(SdExportTest3, testBulletsAsImageMsPowerpoint97)
 {
     createSdImpressDoc("odp/BulletsAsImage.odp");

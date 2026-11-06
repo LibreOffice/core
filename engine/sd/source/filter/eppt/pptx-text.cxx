@@ -46,6 +46,7 @@
 #include <filter/msfilter/util.hxx>
 #include <i18nutil/scripttypedetector.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <svl/languageoptions.hxx>
 #include <osl/diagnose.h>
 #include <i18nlangtag/languagetag.hxx>
@@ -1141,15 +1142,21 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider* pBuProv, bool bG
 
     if ( ImplGetPropertyValue( u"ParaBottomMargin"_ustr, bGetPropStateValue ) )
     {
-        double fSpacing = *o3tl::doAccess<sal_uInt32>(mAny) + convertMasterUnitToMm100(1.0) - 1;
-        mnLineSpacingBottom = std::round(-convertMm100ToMasterUnit(fSpacing));
+        // The spacing goes out as the nearest whole master unit, which is the unit the reading
+        // turns back into a spacing. Each one it is given the same way is the one it comes back as.
+        const sal_uInt32 nSpacing = *o3tl::doAccess<sal_uInt32>(mAny);
+        mnLineSpacingBottom
+            = -o3tl::convertNarrowing<sal_Int16, o3tl::Length::mm100, o3tl::Length::master>(
+                nSpacing);
     }
     meLineSpacingBottom = ePropState;
 
     if ( ImplGetPropertyValue( u"ParaTopMargin"_ustr, bGetPropStateValue ) )
     {
-        double fSpacing = *o3tl::doAccess<sal_uInt32>(mAny) + convertMasterUnitToMm100(1.0) - 1;
-        mnLineSpacingTop = std::round(-convertMm100ToMasterUnit(fSpacing));
+        const sal_uInt32 nSpacing = *o3tl::doAccess<sal_uInt32>(mAny);
+        mnLineSpacingTop
+            = -o3tl::convertNarrowing<sal_Int16, o3tl::Length::mm100, o3tl::Length::master>(
+                nSpacing);
     }
     meLineSpacingTop = ePropState;
 
