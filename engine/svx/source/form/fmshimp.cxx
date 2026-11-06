@@ -77,6 +77,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <comphelper/evtmethodhelper.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
@@ -2751,17 +2752,21 @@ void FmXFormShell::SetDesignMode_Lock(bool bDesign)
 
     if (bDesign)
     {
-        SdrMarkList aList;
+        // the kit starts design mode with nothing selected, as it switches the mode at will
+        if (!comphelper::COKit::isActive())
         {
-            // during changing the mark list, don't track the selected objects in the property browser
-            SuspendPropertyTracking aSuspend( *this );
-            // restore the marks
-            pFormView->GetImpl()->restoreMarkList( aList );
-        }
+            SdrMarkList aList;
+            {
+                // during changing the mark list, don't track the selected objects in the property browser
+                SuspendPropertyTracking aSuspend( *this );
+                // restore the marks
+                pFormView->GetImpl()->restoreMarkList( aList );
+            }
 
-        // synchronize with the restored mark list
-        if ( aList.GetMarkCount() )
-            SetSelection_Lock(aList);
+            // synchronize with the restored mark list
+            if ( aList.GetMarkCount() )
+                SetSelection_Lock(aList);
+        }
     }
     else
     {

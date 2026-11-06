@@ -765,7 +765,13 @@ void DrawViewShell::Notify (SfxBroadcaster&, const SfxHint& rHint)
     {
         mbReadOnly = GetDocSh()->IsReadOnly();
 
-        SfxBoolItem aItem( SID_FM_DESIGN_MODE, !mbReadOnly );
+        bool bDesignMode = !mbReadOnly;
+        // the kit can switch the mode, so we take the one the file asks for, as at load
+        if (bDesignMode && comphelper::COKit::isActive())
+            bDesignMode
+                = GetDoc()->GetOpenInDesignMode() || GetDoc()->OpenInDesignModeIsDefaulted();
+
+        SfxBoolItem aItem( SID_FM_DESIGN_MODE, bDesignMode );
         GetViewFrame()->GetDispatcher()->ExecuteList(SID_FM_DESIGN_MODE,
             SfxCallMode::ASYNCHRON, { &aItem });
     }
