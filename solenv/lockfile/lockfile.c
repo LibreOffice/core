@@ -441,6 +441,8 @@ int lockfile_create2(const char *lockfile, int retries,
 
 #endif
 
+#define LOCKPIDREADSZ 16
+
 /*
  *	See if a valid lockfile is present.
  *	Returns 0 if so, -1 if not.
@@ -448,7 +450,7 @@ int lockfile_create2(const char *lockfile, int retries,
 int lockfile_check(const char *lockfile, int flags)
 {
 	struct stat	st, st2;
-	char		buf[16];
+	char		buf[LOCKPIDREADSZ + 1];
 	time_t		now;
 	pid_t		pid;
 	int		fd, len, r;
@@ -469,7 +471,7 @@ int lockfile_check(const char *lockfile, int flags)
 		 */
 		len = 0;
 		if (fstat(fd, &st) == 0 &&
-		    (len = read(fd, buf, sizeof(buf))) >= 0 &&
+		    (len = read(fd, buf, sizeof(LOCKPIDREADSZ))) >= 0 &&
 		    fstat(fd, &st2) == 0 &&
 		    st.st_atime != st2.st_atime)
 			now = st.st_atime;
