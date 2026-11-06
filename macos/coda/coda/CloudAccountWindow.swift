@@ -223,6 +223,12 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
             return (nil, nil)
         }
 
+        // The page edits on the COOL server from now on.
+        if kind == "switchToServerMode" {
+            closeRemoteDocument()
+            return (nil, nil)
+        }
+
         if let result = await ViewController.handleDocumentMessage(body, document: remoteDocument) {
             return result
         }
