@@ -3966,15 +3966,17 @@ static void requestCloseTab(HWND hWnd, int tabId)
                              tab->webView && tab->hasContent;
     if (pageAnswers)
     {
+        const wchar_t* script = L"try {"
+                                L"  if (window.app && window.app.map"
+                                L"      && typeof window.app.map._saveAndClose === 'function')"
+                                L"    window.app.map._saveAndClose();"
+                                L"  else window.postMobileMessage('CLOSE_WINDOW');"
+                                L"} catch (e) { window.postMobileMessage('CLOSE_WINDOW'); }";
+
         // A page that fails while it answers closes its tab too, and so does a page that
         // cannot run the script at all, such as one whose renderer process died.
         tab->webView->ExecuteScript(
-            L"try {"
-            L"  if (window.app && window.app.map"
-            L"      && typeof window.app.map._saveAndClose === 'function')"
-            L"    window.app.map._saveAndClose();"
-            L"  else window.postMobileMessage('CLOSE_WINDOW');"
-            L"} catch (e) { window.postMobileMessage('CLOSE_WINDOW'); }",
+            script,
             Microsoft::WRL::Callback<ICoreWebView2ExecuteScriptCompletedHandler>(
                 [tabId](HRESULT errorCode, LPCWSTR) -> HRESULT
                 {
