@@ -1245,30 +1245,29 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorChangedBlocksShownByAViewAr
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorBlockWithDroppedContentKeepsItsVersion)
 {
-    // The engine keeps the JSON of a limited number of blocks of a sheet. A block whose JSON was
+    // The engine keeps the JSON of the blocks within a budget of bytes. A block whose JSON was
     // dropped is built again when a client asks for it, and the parts that did not change keep
     // their versions, so a client holding the block is not sent it again.
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     CPPUNIT_ASSERT(pDocShell);
-    const int nBlockRows = int(sc::VectorContent::constHeldContentBlocks) + 2;
-    for (int nBlockRow = 0; nBlockRow < nBlockRows; ++nBlockRow)
-        setCellString(*pDocShell, 0, nBlockRow * sc::VectorContent::constBlockRows,
-                      u"Text"_ustr);
+    setCellString(*pDocShell, 0, 0, u"Text"_ustr);
+    setCellString(*pDocShell, 0, sc::VectorContent::constBlockRows, u"Other"_ustr);
 
     const boost::property_tree::ptree aFirst
         = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
     const std::string aEpoch = aFirst.get<std::string>("epoch");
     const sal_Int64 nVersion = blockVersion(aFirst);
     CPPUNIT_ASSERT(nVersion > 0);
+    sc::VectorContent* pContent = pModelObj->getVectorContent();
+    CPPUNIT_ASSERT(pContent);
+    CPPUNIT_ASSERT_GREATER(size_t(0), pContent->heldContentBytes());
 
-    // Enough other blocks are asked for to drop the content of the first one.
-    std::string aBlocks;
-    for (int nBlockRow = 1; nBlockRow < nBlockRows; ++nBlockRow)
-        aBlocks += (nBlockRow > 1 ? "," : "") + std::to_string(nBlockRow) + ":0";
-    CPPUNIT_ASSERT_EQUAL(nBlockRows - 1,
-                         blockCount(requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks="
-                                                                           + aBlocks)));
+    // A budget below the content drops the JSON of every block after the next answer.
+    pContent->setHeldContentBudget(0);
+    CPPUNIT_ASSERT_EQUAL(1, blockCount(requestVectorPrimitives(pModelObj,
+                                                               "partid=0&mode=-1&blocks=1:0")));
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pContent->heldContentBytes());
 
     // Held in its version, the first block is not sent again, and asked for whole it comes in
     // the same version with its text.
@@ -1280,6 +1279,48 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorBlockWithDroppedContentKeep
     CPPUNIT_ASSERT_EQUAL(1, blockCount(aWhole));
     CPPUNIT_ASSERT_EQUAL(nVersion, blockVersion(aWhole));
     CPPUNIT_ASSERT(cellTextAt(aWhole, 0, 0));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorHeldContentBudgetSpansTheSheets)
+{
+    // The budget covers the blocks of every sheet, and the block used longest ago goes first,
+    // whichever sheet it is on.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    pDocShell->GetDocFunc().InsertTable(1, u"Second"_ustr, false, true);
+    setCellString(*pDocShell, 0, 0, u"First"_ustr);
+    pDocShell->GetDocFunc().SetStringCell(ScAddress(0, 0, 1), u"Second"_ustr, true);
+    Scheduler::ProcessEventsToIdle();
+
+    const boost::property_tree::ptree aFirst
+        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    const sal_Int64 nFirstVersion = blockVersion(aFirst);
+    sc::VectorContent* pContent = pModelObj->getVectorContent();
+    CPPUNIT_ASSERT(pContent);
+    const size_t nFirstBytes = pContent->heldContentBytes();
+    CPPUNIT_ASSERT_GREATER(size_t(0), nFirstBytes);
+    const boost::property_tree::ptree aSecond
+        = requestVectorPrimitives(pModelObj, "partid=1&mode=-1&blocks=0:0");
+    const std::string aSecondEpoch = aSecond.get<std::string>("epoch");
+    const sal_Int64 nSecondVersion = blockVersion(aSecond);
+    const size_t nBothBytes = pContent->heldContentBytes();
+    CPPUNIT_ASSERT_GREATER(nFirstBytes, nBothBytes);
+    const size_t nSecondBytes = nBothBytes - nFirstBytes;
+
+    // One byte short of both: using the second sheet's block again drops the first sheet's.
+    pContent->setHeldContentBudget(nBothBytes - 1);
+    CPPUNIT_ASSERT_EQUAL(0, blockCount(requestVectorPrimitives(
+                                pModelObj, "partid=1&mode=-1&epoch=" + aSecondEpoch
+                                               + "&blocks=0:0:" + std::to_string(nSecondVersion))));
+    CPPUNIT_ASSERT_EQUAL(nSecondBytes, pContent->heldContentBytes());
+
+    // The first sheet's block is built again in its version, and the second sheet's goes.
+    const boost::property_tree::ptree aWhole
+        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    CPPUNIT_ASSERT_EQUAL(nFirstVersion, blockVersion(aWhole));
+    CPPUNIT_ASSERT(cellTextAt(aWhole, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(nFirstBytes, pContent->heldContentBytes());
 }
 
 namespace

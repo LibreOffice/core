@@ -919,7 +919,7 @@ void VectorContent::writeVectorPrimitives(tools::JsonWriter& rWriter, SheetState
     if (bPush)
         rState.mbTextEditChanged = false;
     rState.maVersions.noteWritten(bPush);
-    dropOldContent(rState);
+    dropOldContent();
 }
 
 void VectorContent::writeBlockEntry(tools::JsonWriter& rWriter, const SheetState& rState,
@@ -1092,24 +1092,51 @@ sal_uInt64 VectorContent::contentHash(std::string_view rContent)
     return std::hash<std::string_view>{}(rContent);
 }
 
-void VectorContent::dropOldContent(SheetState& rState)
+size_t VectorContent::contentBytesOf(const BlockState& rBlock)
+{
+    size_t nBytes = rBlock.maBorders.maContent.getLength();
+    for (const EntryState& rRow : rBlock.maRows)
+        nBytes += rRow.maContent.getLength();
+    return nBytes;
+}
+
+size_t VectorContent::heldContentBytes() const
+{
+    size_t nBytes = 0;
+    for (const auto& rSheet : maSheets)
+        for (const auto& rEntry : rSheet.second.maBlocks)
+            nBytes += rEntry.second.mnContentBytes;
+    return nBytes;
+}
+
+void VectorContent::dropOldContent()
 {
     std::vector<std::pair<sal_uInt64, BlockState*>> aHeld;
-    for (auto& [rKey, rBlock] : rState.maBlocks)
+    size_t nBytes = 0;
+    for (auto& rSheet : maSheets)
     {
-        if (rBlock.mbContentHeld)
+        for (auto& [rKey, rBlock] : rSheet.second.maBlocks)
+        {
+            if (!rBlock.mbContentHeld)
+                continue;
             aHeld.emplace_back(rBlock.mnLastUse, &rBlock);
+            nBytes += rBlock.mnContentBytes;
+        }
     }
-    if (aHeld.size() <= constHeldContentBlocks)
+    if (nBytes <= mnHeldContentBudget)
         return;
     std::sort(aHeld.begin(), aHeld.end(),
               [](const auto& rFirst, const auto& rSecond) { return rFirst.first < rSecond.first; });
-    for (size_t nIndex = 0; nIndex < aHeld.size() - constHeldContentBlocks; ++nIndex)
+    for (const auto& rUse : aHeld)
     {
-        BlockState& rBlock = *aHeld[nIndex].second;
+        if (nBytes <= mnHeldContentBudget)
+            break;
+        BlockState& rBlock = *rUse.second;
         for (EntryState& rRow : rBlock.maRows)
             rRow.maContent = OString();
         rBlock.maBorders.maContent = OString();
+        nBytes -= rBlock.mnContentBytes;
+        rBlock.mnContentBytes = 0;
         rBlock.mbContentHeld = false;
     }
 }
@@ -1120,7 +1147,7 @@ void VectorContent::resolveBlock(SheetState& rState, const BlockKey& rKey)
     if (aIterator != rState.maBlocks.end() && !aIterator->second.mbDirty
         && aIterator->second.mbContentHeld)
     {
-        aIterator->second.mnLastUse = ++rState.mnUseCount;
+        aIterator->second.mnLastUse = ++mnUseCount;
         return;
     }
 
@@ -1161,7 +1188,8 @@ void VectorContent::resolveBlock(SheetState& rState, const BlockKey& rKey)
         takeContent(rBlock.maRows[nIndex], aContent.maRows[nIndex]);
     takeContent(rBlock.maBorders, aContent.maBorders);
     rBlock.mbContentHeld = true;
-    rBlock.mnLastUse = ++rState.mnUseCount;
+    rBlock.mnContentBytes = contentBytesOf(rBlock);
+    rBlock.mnLastUse = ++mnUseCount;
 
     // Changed parts take the next version. A new empty block takes it too, so a client can hold it.
     if (rBlock.mnVersion != 0 && aChangedRows.empty() && !bBordersChanged

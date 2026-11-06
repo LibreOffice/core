@@ -12,6 +12,7 @@
 #pragma once
 
 #include <address.hxx>
+#include <scdllapi.h>
 #include <cpo/uno/Reference.hxx>
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
 #include <drawinglayer/processor2d/VectorResourceCache.hxx>
@@ -81,16 +82,21 @@ public:
     /// have changed, as after a column or a row changed size, only the ones a view shows are
     /// built, and the others are named stale, so each is built again when a client asks for it.
     static constexpr size_t constEagerBlocks = 16;
-    /// The most blocks of a sheet whose JSON is kept. The JSON of the blocks used longest ago is
-    /// dropped, and such a block is built again when a client asks for it or a push carries it,
-    /// with the versions of its parts kept where they did not change.
-    static constexpr size_t constHeldContentBlocks = 128;
+    /// The most bytes of block JSON the document keeps, over all its sheets. The JSON of the
+    /// blocks used longest ago is dropped beyond it, and such a block is built again when a
+    /// client asks for it or a push carries it, with the versions of its parts kept where they
+    /// did not change. A block of a dense sheet takes about 300 KB.
+    static constexpr size_t constHeldContentBytes = 8 * 1024 * 1024;
 
     explicit VectorContent(ScDocShell& rDocShell);
     virtual ~VectorContent() override;
 
     /// Answer the commands svx::vector::isPartCommand names.
     void getCommandValues(tools::JsonWriter& rWriter, std::string_view rCommand);
+    /// The bytes of block JSON kept, over all sheets.
+    SC_DLLPUBLIC size_t heldContentBytes() const;
+    /// Keep at most nBytes of block JSON, instead of constHeldContentBytes.
+    void setHeldContentBudget(size_t nBytes) { mnHeldContentBudget = nBytes; }
 
     /// Write the changes of a sheet since it was last pushed, or nothing when it did not change.
     void pushDelta(tools::JsonWriter& rWriter, std::string_view rPartId, sal_Int32 nMode);
@@ -146,8 +152,10 @@ private:
         bool mbStaleSent = false;
         /// The JSON of the parts is held. It is dropped from the blocks used longest ago.
         bool mbContentHeld = false;
-        /// The count of the sheet when the block was last built or asked for.
+        /// The use count of the document when the block was last built or asked for.
         sal_uInt64 mnLastUse = 0;
+        /// The bytes of the JSON held, 0 once it was dropped.
+        size_t mnContentBytes = 0;
         /// The JSON of the range the cells of the block cover.
         OString maBounds;
         /// The borders of the whole block. An empty content means there are none.
@@ -201,8 +209,6 @@ private:
         svx::vector::PartVersions maVersions;
 
         std::map<BlockKey, BlockState> maBlocks;
-        /// Counts the uses of the blocks, so the ones used longest ago are known.
-        sal_uInt64 mnUseCount = 0;
 
         /// Every drawing object may have changed.
         bool mbObjectsDirty = true;
@@ -306,8 +312,10 @@ private:
     /// Build the block again where it may have changed, or whole where its content was dropped,
     /// and give the changed parts a new version.
     void resolveBlock(SheetState& rState, const BlockKey& rKey);
-    /// Drop the JSON of the blocks used longest ago beyond constHeldContentBlocks.
-    static void dropOldContent(SheetState& rState);
+    /// The bytes of the JSON of the block, as held.
+    static size_t contentBytesOf(const BlockState& rBlock);
+    /// Drop the JSON of the blocks used longest ago, of any sheet, beyond the budget.
+    void dropOldContent();
     static sal_uInt64 contentHash(std::string_view rContent);
     /// Write the borders of the block and the given rows, both included, or every row.
     BlockContent writeBlockContent(const SheetState& rState, const BlockKey& rKey,
@@ -344,6 +352,10 @@ private:
     std::set<SCTAB> maChangedTabs;
     /// The state of each sheet a client asked for.
     std::map<SCTAB, SheetState> maSheets;
+    /// Counts the uses of the blocks of every sheet, so the ones used longest ago are known.
+    sal_uInt64 mnUseCount = 0;
+    /// The most bytes of block JSON kept, constHeldContentBytes unless set otherwise.
+    size_t mnHeldContentBudget = constHeldContentBytes;
     /// An answer or a push is being written from a sheet state.
     bool mbWriting = false;
     /// The sheets have to be reset once the write in progress is done.

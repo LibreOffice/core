@@ -436,6 +436,9 @@ public:
     /// @see vcl::ITiledRenderable::getCommandValues().
     void getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand) override;
 
+    /// The content served to clients that draw vector primitives, once one asked for it.
+    sc::VectorContent* getVectorContent() { return mpVectorContent.get(); }
+
 private:
     Size getDocumentSize(SCCOL& rnTiledRenderingAreaEndCol, SCROW& rnTiledRenderingAreaEndRow );
 };
