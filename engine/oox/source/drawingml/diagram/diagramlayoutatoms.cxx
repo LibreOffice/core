@@ -35,6 +35,8 @@
 #include <functional>
 #include <algorithm>
 #include <optional>
+#include <mutex>
+#include <unordered_map>
 #include <set>
 #include <utility>
 #include <vector>
@@ -1851,6 +1853,8 @@ static void setUpTextEngine(EditEngine& rEngine, const std::vector<OUString>& rP
                             const std::vector<sal_Int32>& rLevelOfParagraph,
                             const SpaceAfterParts& rSpaceAfter = SpaceAfterParts(0.35, 0.15))
 {
+    // text and attributes first, the engine lays it out once at the end
+    rEngine.SetUpdateLayout(false);
     // an Aptos line is a bit higher than the line of the stand-in, the proportional spacing
     // brings it up to that; an Arial line is its own, the space after a paragraph a part of it
     const sal_uInt16 nLineSpacingPercent(103);
@@ -1925,11 +1929,68 @@ static void setUpTextEngine(EditEngine& rEngine, const std::vector<OUString>& rP
         }
         rEngine.SetParaAttribs(nParagraph, aOwn);
     }
+    rEngine.SetUpdateLayout(true);
 }
 
 // The height the paragraphs rParagraphs take as the Diagram's text at fFontPt points of the font
 // rFontName in a box nWidthEmu wide, in EMU, each paragraph at its own size from rFontOfParagraph
 // and with the space after its level from rLevelOfParagraph and rSpaceAfter where given.
+namespace
+{
+// The fit measures the same texts at the same fonts again on every pass. A measure depends on
+// its input alone, so we keep what was measured by the whole input, and start over when the
+// store gets large.
+class MeasuredTexts
+{
+    std::mutex maMutex;
+    std::unordered_map<OUString, sal_Int64> maMeasured;
+
+public:
+    static OUString keyOf(char cKind, const std::vector<OUString>& rParagraphs, sal_Int64 nWidthEmu,
+                          double fFontPt, std::u16string_view rFontName,
+                          const std::vector<double>& rFontOfParagraph,
+                          const std::vector<sal_Int32>& rLevelOfParagraph,
+                          const SpaceAfterParts& rSpaceAfter)
+    {
+        OUStringBuffer aKey;
+        aKey.append(OUStringChar(cKind) + OUString::number(nWidthEmu) + "|"
+                    + OUString::number(fFontPt) + "|" + rFontName + "|"
+                    + OUString::number(rSpaceAfter.first) + "|"
+                    + OUString::number(rSpaceAfter.second));
+        for (size_t n = 0; n < rParagraphs.size(); ++n)
+            aKey.append(
+                "\n"
+                + OUString::number(n < rFontOfParagraph.size() ? rFontOfParagraph[n] : 0.0) + "|"
+                + OUString::number(n < rLevelOfParagraph.size() ? rLevelOfParagraph[n] : 0) + "|"
+                + rParagraphs[n]);
+        return aKey.makeStringAndClear();
+    }
+
+    std::optional<sal_Int64> find(const OUString& rKey)
+    {
+        std::scoped_lock aGuard(maMutex);
+        const auto aFound = maMeasured.find(rKey);
+        if (aFound == maMeasured.end())
+            return std::nullopt;
+        return aFound->second;
+    }
+
+    void keep(const OUString& rKey, sal_Int64 nMeasured)
+    {
+        std::scoped_lock aGuard(maMutex);
+        if (maMeasured.size() > 20000)
+            maMeasured.clear();
+        maMeasured[rKey] = nMeasured;
+    }
+};
+
+MeasuredTexts& measuredTexts()
+{
+    static MeasuredTexts aMeasured;
+    return aMeasured;
+}
+}
+
 static sal_Int64 measureTextHeight(const std::vector<OUString>& rParagraphs, sal_Int64 nWidthEmu,
                                    double fFontPt, std::u16string_view rFontName,
                                    const std::vector<double>& rFontOfParagraph = {},
@@ -1939,6 +2000,10 @@ static sal_Int64 measureTextHeight(const std::vector<OUString>& rParagraphs, sal
 {
     if (rParagraphs.empty() || nWidthEmu <= 0 || fFontPt <= 0.0)
         return 0;
+    const OUString aKey(MeasuredTexts::keyOf('h', rParagraphs, nWidthEmu, fFontPt, rFontName,
+                                             rFontOfParagraph, rLevelOfParagraph, rSpaceAfter));
+    if (const std::optional<sal_Int64> oMeasured = measuredTexts().find(aKey))
+        return *oMeasured;
     static rtl::Reference<SfxItemPool> xPool(EditEngine::CreatePool());
     ScopedVclPtrInstance<VirtualDevice> pDevice;
     pDevice->SetMapMode(MapMode(MapUnit::Map100thMM));
@@ -1946,7 +2011,9 @@ static sal_Int64 measureTextHeight(const std::vector<OUString>& rParagraphs, sal
     aEngine.SetRefDevice(pDevice.get());
     setUpTextEngine(aEngine, rParagraphs, nWidthEmu, fFontPt, rFontName, rFontOfParagraph,
                     rLevelOfParagraph, rSpaceAfter);
-    return static_cast<sal_Int64>(aEngine.GetTextHeight()) * 360;
+    const sal_Int64 nHeight(static_cast<sal_Int64>(aEngine.GetTextHeight()) * 360);
+    measuredTexts().keep(aKey, nHeight);
+    return nHeight;
 }
 
 // the parts of rShape's box (fWidth x fHeight) its preset keeps free of text: left, top,
@@ -2031,6 +2098,11 @@ static sal_Int64 measureWidestLine(const std::vector<OUString>& rParagraphs, dou
 {
     if (rParagraphs.empty() || fFontPt <= 0.0)
         return 0;
+    const OUString aKey(MeasuredTexts::keyOf('w', rParagraphs, 0, fFontPt, rFontName,
+                                             rFontOfParagraph, rLevelOfParagraph,
+                                             SpaceAfterParts(0.35, 0.15)));
+    if (const std::optional<sal_Int64> oMeasured = measuredTexts().find(aKey))
+        return *oMeasured;
     static rtl::Reference<SfxItemPool> xPool(EditEngine::CreatePool());
     ScopedVclPtrInstance<VirtualDevice> pDevice;
     pDevice->SetMapMode(MapMode(MapUnit::Map100thMM));
@@ -2038,7 +2110,10 @@ static sal_Int64 measureWidestLine(const std::vector<OUString>& rParagraphs, dou
     aEngine.SetRefDevice(pDevice.get());
     setUpTextEngine(aEngine, rParagraphs, sal_Int64(0x7fffffff) * 360, fFontPt, rFontName,
                     rFontOfParagraph, rLevelOfParagraph);
-    return static_cast<sal_Int64>(aEngine.CalcTextWidth() * 360 * textWidthPartFor(rFontName));
+    const sal_Int64 nWidth(
+        static_cast<sal_Int64>(aEngine.CalcTextWidth() * 360 * textWidthPartFor(rFontName)));
+    measuredTexts().keep(aKey, nWidth);
+    return nWidth;
 }
 
 // The width of the widest word of rParagraphs at fFontPt points, in EMU: the width a box has to
