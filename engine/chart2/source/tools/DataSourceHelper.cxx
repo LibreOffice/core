@@ -282,9 +282,12 @@ rtl::Reference< DataSource > DataSourceHelper::getUsedData(
     std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aResult;
 
     rtl::Reference< Diagram > xDiagram =  rModel.getFirstChartDiagram();
-    uno::Reference< chart2::data::XLabeledDataSequence > xCategories( xDiagram->getCategories() );
-    if( xCategories.is() )
-        aResult.push_back( xCategories );
+    if (xDiagram.is())
+    {
+        uno::Reference< chart2::data::XLabeledDataSequence > xCategories( xDiagram->getCategories() );
+        if( xCategories.is() )
+            aResult.push_back( xCategories );
+    }
 
     std::vector< rtl::Reference< DataSeries > > aSeriesVector = rModel.getDataSeries();
     for (auto const& series : aSeriesVector)
