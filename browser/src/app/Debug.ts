@@ -311,6 +311,10 @@ class DebugManager {
 			app.sectionContainer.addSection(new RenderGeometrySection());
 		else if (!objectsWanted && objectsPresent)
 			app.sectionContainer.removeSection(app.CSections.RenderGeometry.name);
+		// The objects the client holds answer what lies under the mouse while they are there,
+		// so the engine is asked for the pointer only while they are not.
+		if (objectsWanted !== objectsPresent)
+			RenderGeometrySection.requestPointerFromServer(!objectsWanted);
 
 		const wanted = RenderManager.isVectorRendering();
 		const present = app.sectionContainer.doesSectionExist(
@@ -321,10 +325,6 @@ class DebugManager {
 		if (wanted)
 			app.sectionContainer.addSection(new cool.VectorContentSection());
 		else app.sectionContainer.removeSection(app.CSections.VectorContent.name);
-
-		// The objects the client holds answer what lies under the mouse while they are there,
-		// so the engine is asked for the pointer only while they are not.
-		RenderGeometrySection.requestPointerFromServer(!wanted);
 
 		// Drawing from the objects has a layout of its own, with the lawn round the page.
 		ViewLayoutVector.switchTheRendering();
