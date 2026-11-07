@@ -119,10 +119,13 @@ class SlideShowNavigator {
 		);
 		this.lastClickTime = currentTime;
 
-		// Every press skips the transition or the effects that are playing. A rapid press also
-		// skips the transition into the next slide.
+		// Every press skips the transition or the effects that are playing. A rapid press
+		// finishes the next effect at once, so each press of a click-through ends one effect.
+		// A rapid press also skips the transition into the next slide.
 		const bRapid = timeDiff < this.RAPID_CLICK_THRESHOLD && timeDiff > 0;
-		const bRet = this.slideShowHandler.nextEffect();
+		const bRet = bRapid
+			? this.slideShowHandler.skipPlayingOrNextEffect()
+			: this.slideShowHandler.nextEffect();
 		if (!bRet) {
 			this.switchSlide(1, bRapid);
 		}
