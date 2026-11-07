@@ -29,10 +29,12 @@ $(eval $(call gb_Executable_set_include,slkfuzzer,\
 $(eval $(call gb_Executable_use_libraries,slkfuzzer,\
     $(fuzzer_calc_libraries) \
     $(fuzzer_core_libraries) \
+    pdffilter \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,slkfuzzer,\
     $(fuzzer_statics) \
+    fuzzer_calc \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,slkfuzzer,\

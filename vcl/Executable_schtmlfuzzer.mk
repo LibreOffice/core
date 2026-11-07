@@ -29,10 +29,12 @@ $(eval $(call gb_Executable_set_include,schtmlfuzzer,\
 $(eval $(call gb_Executable_use_libraries,schtmlfuzzer,\
     $(fuzzer_calc_libraries) \
     $(fuzzer_core_libraries) \
+    pdffilter \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,schtmlfuzzer,\
     $(fuzzer_statics) \
+    fuzzer_calc \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,schtmlfuzzer,\

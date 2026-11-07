@@ -10,64 +10,6 @@
 #include <tools/stream.hxx>
 #include "commonfuzzer.hxx"
 
-#include <config_features.h>
-#include <osl/detail/component-mapping.h>
-
-extern "C" {
-void * i18npool_component_getFactory( const char* , void* , void* );
-
-void com_sun_star_i18n_LocaleDataImpl_get_implementation( void );
-void com_sun_star_i18n_BreakIterator_Unicode_get_implementation( void );
-void com_sun_star_i18n_BreakIterator_get_implementation( void );
-void com_sun_star_comp_framework_Desktop_get_implementation( void );
-void com_sun_star_i18n_CharacterClassification_Unicode_get_implementation( void );
-void com_sun_star_i18n_CharacterClassification_get_implementation( void );
-void com_sun_star_i18n_Collator_get_implementation( void );
-void com_sun_star_i18n_NativeNumberSupplier_get_implementation( void );
-void com_sun_star_i18n_NumberFormatCodeMapper_get_implementation( void );
-void com_sun_star_i18n_Transliteration_get_implementation( void );
-void emfio_emfreader_XEmfParser_get_implementation( void );
-void i18npool_CalendarImpl_get_implementation( void );
-}
-
-const lib_to_factory_mapping *
-lo_get_factory_map(void)
-{
-    static lib_to_factory_mapping map[] = {
-        { "libi18npoollo.a", i18npool_component_getFactory },
-        { 0, 0 }
-    };
-
-    return map;
-}
-
-const lib_to_constructor_mapping *
-lo_get_constructor_map(void)
-{
-    static lib_to_constructor_mapping map[] = {
-        { "com_sun_star_i18n_LocaleDataImpl_get_implementation", com_sun_star_i18n_LocaleDataImpl_get_implementation },
-        { "com_sun_star_i18n_BreakIterator_Unicode_get_implementation", com_sun_star_i18n_BreakIterator_Unicode_get_implementation },
-        { "com_sun_star_i18n_BreakIterator_get_implementation", com_sun_star_i18n_BreakIterator_get_implementation },
-        { "com_sun_star_comp_framework_Desktop_get_implementation", com_sun_star_comp_framework_Desktop_get_implementation },
-        { "com_sun_star_i18n_CharacterClassification_Unicode_get_implementation", com_sun_star_i18n_CharacterClassification_Unicode_get_implementation },
-        { "com_sun_star_i18n_CharacterClassification_get_implementation", com_sun_star_i18n_CharacterClassification_get_implementation },
-        { "com_sun_star_i18n_Collator_get_implementation", com_sun_star_i18n_Collator_get_implementation },
-        { "com_sun_star_i18n_NativeNumberSupplier_get_implementation", com_sun_star_i18n_NativeNumberSupplier_get_implementation },
-        { "com_sun_star_i18n_NumberFormatCodeMapper_get_implementation", com_sun_star_i18n_NumberFormatCodeMapper_get_implementation },
-        { "com_sun_star_i18n_Transliteration_get_implementation", com_sun_star_i18n_Transliteration_get_implementation },
-        { "emfio_emfreader_XEmfParser_get_implementation", emfio_emfreader_XEmfParser_get_implementation},
-        { "i18npool_CalendarImpl_get_implementation", i18npool_CalendarImpl_get_implementation},
-        { 0, 0 }
-    };
-
-    return map;
-}
-
-extern "C" void* lo_get_custom_widget_func(const char*)
-{
-    return nullptr;
-}
-
 extern "C" void* ScCreateDialogFactory()
 {
     return nullptr;
