@@ -180,6 +180,8 @@ namespace cool {
 			this._rasterJobs = [];
 			this._nextRasterJob = 0;
 			this._drawSheet();
+			// Every pane has added the rasters it shows by now, so none of them goes.
+			this._evictRasters(CalcVectorContentSection.rasterBudget);
 			if (this._rasterLeftOver)
 				setTimeout(() => {
 					if (app.sectionContainer) app.sectionContainer.requestReDraw();
@@ -511,7 +513,6 @@ namespace cool {
 					view,
 					background,
 				);
-			this._evictRasters();
 
 			if (sheet) {
 				this._drawObjects(pane, sheet, ['front', 'internal'], twipsPerPixel);
@@ -913,11 +914,15 @@ namespace cool {
 					)
 						continue;
 					const bytes = (right - left) * (bottom - top) * 4;
-					if (
-						this._rasterBytes - (held ? held.bytes : 0) + bytes >
-						CalcVectorContentSection.rasterBudget
-					) {
-						// The budget is full. The next draw queues the jobs left again.
+					const budget =
+						CalcVectorContentSection.rasterBudget -
+						bytes +
+						(held ? held.bytes : 0);
+					// A strip ahead of the view takes the place of the rasters drawn longest ago.
+					this._evictRasters(budget, key);
+					if (this._rasterBytes > budget) {
+						// The rasters this frame shows fill the budget. The next draw queues the
+						// jobs left again.
 						this._rasterJobs = [];
 						this._nextRasterJob = 0;
 						return;
@@ -947,11 +952,12 @@ namespace cool {
 			}
 		}
 
-		/// Drop old rasters until under budget. Rasters shown this frame stay.
-		private _evictRasters(): void {
+		/// Drop the rasters drawn longest ago until all take no more than limit bytes. The
+		/// rasters this frame shows, and the one under keep, stay.
+		private _evictRasters(limit: number, keep?: string): void {
 			for (const [key, raster] of this._rasters) {
-				if (this._rasterBytes <= CalcVectorContentSection.rasterBudget) break;
-				if (this._frameRasters.has(key)) continue;
+				if (this._rasterBytes <= limit) break;
+				if (this._frameRasters.has(key) || key === keep) continue;
 				this._rasters.delete(key);
 				this._rasterBytes -= raster.bytes;
 			}
