@@ -1208,32 +1208,35 @@ void GraphicImport::lcl_attribute(Id nName, const Value& rValue)
                                 }
                             }
 
-                            // Add difference between shape and wrap range to margin and remember
-                            // difference in Twips for export.
-                            comphelper::SequenceAsHashMap aAnchorDistDiff;
+                            if (!aShapeRange.isEmpty() && !aB2DWrapRange.isEmpty())
+                            {
+                                // Add difference between shape and wrap range to margin and remember
+                                // difference in Twips for export.
+                                comphelper::SequenceAsHashMap aAnchorDistDiff;
 
-                            const double fTopDiff = aShapeRange.getMinY() - aB2DWrapRange.getMinY();
-                            m_nTopMargin += basegfx::fround(fTopDiff);
-                            aAnchorDistDiff[u"distTDiff"_ustr] <<= basegfx::fround(
-                                o3tl::convert(fTopDiff, o3tl::Length::mm100, o3tl::Length::twip));
+                                const double fTopDiff = aShapeRange.getMinY() - aB2DWrapRange.getMinY();
+                                m_nTopMargin += basegfx::fround(fTopDiff);
+                                aAnchorDistDiff[u"distTDiff"_ustr] <<= basegfx::fround(
+                                    o3tl::convert(fTopDiff, o3tl::Length::mm100, o3tl::Length::twip));
 
-                            const double fBottomDiff = aB2DWrapRange.getMaxY() - aShapeRange.getMaxY();
-                            m_nBottomMargin += basegfx::fround(fBottomDiff);
-                            aAnchorDistDiff[u"distBDiff"_ustr] <<= basegfx::fround(
-                                o3tl::convert(fBottomDiff, o3tl::Length::mm100, o3tl::Length::twip));
+                                const double fBottomDiff = aB2DWrapRange.getMaxY() - aShapeRange.getMaxY();
+                                m_nBottomMargin += basegfx::fround(fBottomDiff);
+                                aAnchorDistDiff[u"distBDiff"_ustr] <<= basegfx::fround(
+                                    o3tl::convert(fBottomDiff, o3tl::Length::mm100, o3tl::Length::twip));
 
-                            const double fLeftDiff = aShapeRange.getMinX() - aB2DWrapRange.getMinX();
-                            m_nLeftMargin += basegfx::fround(fLeftDiff);
-                            aAnchorDistDiff[u"distLDiff"_ustr] <<= basegfx::fround(
-                                o3tl::convert(fLeftDiff, o3tl::Length::mm100, o3tl::Length::twip));
+                                const double fLeftDiff = aShapeRange.getMinX() - aB2DWrapRange.getMinX();
+                                m_nLeftMargin += basegfx::fround(fLeftDiff);
+                                aAnchorDistDiff[u"distLDiff"_ustr] <<= basegfx::fround(
+                                    o3tl::convert(fLeftDiff, o3tl::Length::mm100, o3tl::Length::twip));
 
-                            const double fRightDiff = aB2DWrapRange.getMaxX() - aShapeRange.getMaxX();
-                            m_nRightMargin += basegfx::fround(fRightDiff);
-                            aAnchorDistDiff[u"distRDiff"_ustr] <<= basegfx::fround(
-                                o3tl::convert(fRightDiff, o3tl::Length::mm100, o3tl::Length::twip));
+                                const double fRightDiff = aB2DWrapRange.getMaxX() - aShapeRange.getMaxX();
+                                m_nRightMargin += basegfx::fround(fRightDiff);
+                                aAnchorDistDiff[u"distRDiff"_ustr] <<= basegfx::fround(
+                                    o3tl::convert(fRightDiff, o3tl::Length::mm100, o3tl::Length::twip));
 
-                            m_aInteropGrabBag[u"AnchorDistDiff"_ustr]
-                                <<= aAnchorDistDiff.getAsConstPropertyValueList();
+                                m_aInteropGrabBag[u"AnchorDistDiff"_ustr]
+                                    <<= aAnchorDistDiff.getAsConstPropertyValueList();
+                            }
 
                             // FixMe: tdf#141880. LibreOffice cannot handle negative horizontal margin in contour wrap
                             if (m_nLeftMargin < 0)
