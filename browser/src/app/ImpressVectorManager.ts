@@ -1834,8 +1834,9 @@ class ImpressVectorManager extends VectorManagerBase {
 			: objectId;
 	}
 
-	// whether the previews shown are to be drawn again for pictures that loaded just now
-	private _previewsWaitForPictures = false;
+	// The parts whose previews draw again in the layouting task planned for them, if one is.
+	private _previewPartsToRedraw = new Set<cool.VectorPartGuid>();
+	private _previewRedrawPlanned = false;
 
 	/*
 		A picture the renderer made of a form control has loaded. The view draws again at once,
@@ -1844,26 +1845,34 @@ class ImpressVectorManager extends VectorManagerBase {
 	*/
 	protected _onPictureReady(): void {
 		super._onPictureReady();
-		if (this._previewsWaitForPictures) return;
-		this._previewsWaitForPictures = true;
-		app.layoutingService.appendLayoutingTask(() => {
-			this._previewsWaitForPictures = false;
-			const parts = new Set<cool.VectorPartGuid>();
-			for (const info of this._renderedPreviews.values())
-				parts.add(info.partId);
-			for (const partId of parts) this._redrawRenderedPreviews(partId);
-		});
+		const parts = new Set<cool.VectorPartGuid>();
+		for (const info of this._renderedPreviews.values()) parts.add(info.partId);
+		this._redrawPartsUsing(parts);
 	}
 
+	/*
+		Draw the previews of the parts again, with the pages under a master among them, as a page
+		draws the objects of its master too. They draw once in a layouting task, however many
+		bitmaps and fonts come in at the same moment, as the ones of a master do.
+	*/
 	private _redrawPartsUsing(parts: Set<cool.VectorPartGuid> | undefined): void {
 		if (!parts) return;
 		for (const partId of parts) {
-			this._redrawRenderedPreviews(partId);
-			// A page draws the objects of its master too, so it shows what the master uses.
+			this._previewPartsToRedraw.add(partId);
 			for (const [pageId, data] of this._cache) {
-				if (data.masterPartId === partId) this._redrawRenderedPreviews(pageId);
+				if (data.masterPartId === partId)
+					this._previewPartsToRedraw.add(pageId);
 			}
 		}
+		if (this._previewRedrawPlanned || this._previewPartsToRedraw.size === 0)
+			return;
+		this._previewRedrawPlanned = true;
+		app.layoutingService.appendLayoutingTask(() => {
+			this._previewRedrawPlanned = false;
+			const pending = this._previewPartsToRedraw;
+			this._previewPartsToRedraw = new Set();
+			for (const partId of pending) this._redrawRenderedPreviews(partId);
+		});
 	}
 
 	/// Re-render every preview already shown for a part against its

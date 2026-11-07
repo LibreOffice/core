@@ -1910,6 +1910,81 @@ describe('ImpressVectorManager', function () {
 				'the slide thumbnail drew prompt text',
 			);
 		});
+
+		// The bitmaps of a master come in together, and every slide under the
+		// master shows them. The thumbnails of those slides draw again once
+		// for the whole burst, in a layouting task.
+		it('draws the thumbnails under a master again once for all its bitmaps', function () {
+			const realLayoutingService = app.layoutingService;
+			const realImage = (globalThis as any).Image;
+			app.layoutingService = new LayoutingService();
+			// A fetched bitmap decodes as soon as its data is set.
+			(globalThis as any).Image = function (this: any) {
+				Object.defineProperty(this, 'src', {
+					set: function () {
+						if (this.onload) this.onload();
+					},
+				});
+			};
+			try {
+				const manager = new ImpressVectorManager();
+				const bitmap = (checksum: number) => ({
+					type: 'bitmap',
+					checksum: checksum,
+					matrix: [10, 0, 0, 10, 0, 0],
+				});
+				const slide = (part: number): any => ({
+					mode: cool.VectorMode.Slides,
+					partId: 'S' + String(part),
+					version: 1,
+					objects: [
+						{
+							id: 0,
+							kind: 'page',
+							width: 100,
+							height: 100,
+							masterPartId: 'M0',
+							primitives: [],
+						},
+					],
+				});
+				manager.handleVectorPrimitivesResponse(
+					page(0, cool.VectorMode.MasterPages, [
+						{ id: 1, primitives: [bitmap(7), bitmap(8)] },
+					]),
+				);
+				manager.requestThumbnail(1, 0, cool.VectorMode.Slides, 100, 100);
+				manager.requestThumbnail(2, 1, cool.VectorMode.Slides, 100, 100);
+				manager.handleVectorPrimitivesResponse(slide(0));
+				manager.handleVectorPrimitivesResponse(slide(1));
+				nodeassert.strictEqual(drawn.length, 2);
+				drawn.length = 0;
+
+				manager.handleVectorRenderingGraphicsResponse({
+					checksum: 7,
+					data: 'data:image/png;base64,',
+				});
+				manager.handleVectorRenderingGraphicsResponse({
+					checksum: 8,
+					data: 'data:image/png;base64,',
+				});
+				nodeassert.strictEqual(
+					drawn.length,
+					0,
+					'drew before the layouting task',
+				);
+
+				while (app.layoutingService.hasTasksPending())
+					app.layoutingService.runTheTopTask();
+				nodeassert.deepStrictEqual(
+					drawn.map((event: any) => event.id).sort(),
+					[1, 2],
+				);
+			} finally {
+				app.layoutingService = realLayoutingService;
+				(globalThis as any).Image = realImage;
+			}
+		});
 	});
 
 	// The manager measures text with a stub, so widths do not depend on a
