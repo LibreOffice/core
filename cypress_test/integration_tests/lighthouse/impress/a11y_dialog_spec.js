@@ -437,8 +437,10 @@ describe(['taglighthouse'], 'Accessibility Impress Dialog Tests', { testIsolatio
         selectPropertyTab('General');
     }
 
+    // the lines of the new tab arrive in a later update of the dialog, which rebuilds it
     function selectPropertyTab(name) {
         cy.cGet('#FormPropertyDialog .ui-tab').contains(name).click();
+        cy.then(() => helper.processToIdle(win));
     }
 
     // the property line with that title
@@ -452,6 +454,7 @@ describe(['taglighthouse'], 'Accessibility Impress Dialog Tests', { testIsolatio
 
     // the button at the end of the property line with that title, which opens its dialog
     function clickPropertyLineButton(title) {
+        cy.then(() => helper.processToIdle(win));
         propertyLine(title)
             .find('[id^="browse"]:not(.hidden) button')
             .first()
