@@ -19,6 +19,9 @@
 
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
@@ -46,9 +49,11 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <sal/log.hxx>
 #include <sfx2/frame.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <unotools/streamwrap.hxx>
 #include <swerror.h>
 #include <fltini.hxx>
 #include <drawdoc.hxx>
@@ -61,6 +66,8 @@
 #include <DocumentRedlineManager.hxx>
 #include <docary.hxx>
 #include <docsh.hxx>
+#include <swdll.hxx>
+#include <pam.hxx>
 #include <unotextrange.hxx>
 #include <SwXMLSectionList.hxx>
 
@@ -1024,6 +1031,49 @@ size_t XMLReader::GetSectionList( SfxMedium& rMedium,
         }
     }
     return rStrings.size();
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportODT(SvStream& rStream)
+{
+    SwGlobals::ensure();
+
+    SfxObjectShellLock xDocSh(new SwDocShell(SfxObjectCreateMode::INTERNAL));
+    xDocSh->DoInitNew(SfxNewDocumentMacros::Disallow);
+    SwDoc* pD = static_cast<SwDocShell*>(&xDocSh)->GetDoc();
+
+    // In loading state the import's changes to the half initialised document properties do not
+    // mark the document modified.
+    xDocSh->SetLoading(SfxLoadedFlags::NONE);
+    pD->SetInReading(true);
+    bool bRet = false;
+    try
+    {
+        uno::Reference<io::XInputStream> xStream(new utl::OSeekableInputStreamWrapper(rStream));
+        XMLReader aReader;
+        aReader.m_xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
+            PACKAGE_STORAGE_FORMAT_STRING, xStream);
+        SwPaM aPaM(pD->GetNodes().GetEndOfContent(), SwNodeOffset(-1));
+        bRet = !aReader.Read(*pD, OUString(), aPaM, OUString()).IsError();
+        // Embedded objects load when first drawn. Load them all so that their content is
+        // imported too.
+        comphelper::EmbeddedObjectContainer& rContainer = xDocSh->GetEmbeddedObjectContainer();
+        for (const OUString& rName : rContainer.GetObjectNames())
+        {
+            uno::Reference<embed::XEmbeddedObject> xObj = rContainer.GetEmbeddedObject(rName);
+            if (xObj.is())
+                xObj->changeState(embed::EmbedStates::RUNNING);
+        }
+    }
+    catch (const uno::Exception&)
+    {
+    }
+    pD->SetInReading(false);
+    xDocSh->SetLoading(SfxLoadedFlags::ALL);
+
+    xDocSh->DoClose();
+
+    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
