@@ -3,69 +3,57 @@
         {
             "id": "insertDate",
             "title": "Insert Date",
-            "icon": "icon.svg",
-            "script": "commands/dates.js"
+            "icon": "icon.svg"
         },
         {
             "id": "insertTime",
             "title": "Insert Time",
-            "icon": "icon.svg",
-            "script": "commands/dates.js"
+            "icon": "icon.svg"
         },
         {
             "id": "insertIsoDate",
-            "title": "ISO 8601",
-            "script": "commands/dates.js"
+            "title": "ISO 8601"
         },
         {
             "id": "insertLocaleDate",
-            "title": "Long Format",
-            "script": "commands/dates.js"
+            "title": "Long Format"
         },
         {
             "id": "makeBold",
             "title": "Bold",
-            "icon": "icon.svg",
-            "script": "commands/formatting.js"
+            "icon": "icon.svg"
         },
         {
             "id": "makeItalic",
             "title": "Italic",
-            "icon": "icon.svg",
-            "script": "commands/formatting.js"
+            "icon": "icon.svg"
         },
         {
             "id": "makeUnderline",
             "title": "Underline",
-            "icon": "icon.svg",
-            "script": "commands/formatting.js"
+            "icon": "icon.svg"
         },
         {
             "id": "heading1",
-            "title": "Heading 1",
-            "script": "commands/headings.js"
+            "title": "Heading 1"
         },
         {
             "id": "heading2",
-            "title": "Heading 2",
-            "script": "commands/headings.js"
+            "title": "Heading 2"
         },
         {
             "id": "heading3",
-            "title": "Heading 3",
-            "script": "commands/headings.js"
+            "title": "Heading 3"
         },
         {
             "id": "clearFormatting",
             "title": "Clear Formatting",
-            "icon": "icon.svg",
-            "script": "commands/formatting.js"
+            "icon": "icon.svg"
         },
         {
             "id": "insertWordCount",
             "title": "Word Count",
-            "icon": "icon.svg",
-            "script": "commands/insertWordCount.js"
+            "icon": "icon.svg"
         }
     ],
     "menus": {

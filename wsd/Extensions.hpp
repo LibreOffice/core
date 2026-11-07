@@ -33,7 +33,7 @@ struct CallScript {
 };
 
 // The script, which evaluates to the function that takes the call's arguments, for a call of the
-// given kind ("remote", "command", "gas", "listen" or "unlisten") and name to the extension with
+// given kind ("remote", "gas", "listen" or "unlisten") and name to the extension with
 // the given ID (found first among the presets of configuration configId under childRoot, either
 // empty for none, then among the built-in extensions), or an empty optional with the reason in
 // error:

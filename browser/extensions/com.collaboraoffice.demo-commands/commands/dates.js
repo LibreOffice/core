@@ -6,22 +6,23 @@ function insertText(text) {
 	else doc.getCursor().insertText(text);
 }
 
-var commands = {
-	insertDate: function () {
-		insertText(new Date().toLocaleDateString());
-	},
-	insertTime: function () {
-		insertText(new Date().toLocaleTimeString());
-	},
-	insertIsoDate: function () {
-		insertText(new Date().toISOString().slice(0, 10));
-	},
-	insertLocaleDate: function () {
-		insertText(new Date().toLocaleDateString(undefined, {
-			weekday: 'long',
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric',
-		}));
-	},
+remote.insertDate = function insertDate() {
+	insertText(new Date().toLocaleDateString());
+};
+
+remote.insertTime = function insertTime() {
+	insertText(new Date().toLocaleTimeString());
+};
+
+remote.insertIsoDate = function insertIsoDate() {
+	insertText(new Date().toISOString().slice(0, 10));
+};
+
+remote.insertLocaleDate = function insertLocaleDate() {
+	insertText(new Date().toLocaleDateString(undefined, {
+		weekday: 'long',
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric',
+	}));
 };

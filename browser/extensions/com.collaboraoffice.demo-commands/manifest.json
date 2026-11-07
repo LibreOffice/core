@@ -3,5 +3,11 @@
     "name": "Commands demo",
     "icon": "icon.svg",
     "supports": ["text"],
+    "remote": [
+        "commands/dates.js",
+        "commands/formatting.js",
+        "commands/headings.js",
+        "commands/insertWordCount.js"
+    ],
     "contributes": "ui.json"
 }

@@ -43,48 +43,49 @@ function toggleSelected(selection, getter, setter) {
 	}
 }
 
-var commands = {
-	makeBold: function () {
-		const doc = DocumentApp.getActiveDocument();
-		const selection = doc.getSelection();
-		if (selection) {
-			toggleSelected(selection, 'isBold', 'setBold');
-		} else {
-			const cursor = doc.getCursor();
-			if (cursor) cursor.setBold(!cursor.isBold());
+remote.makeBold = function makeBold() {
+	const doc = DocumentApp.getActiveDocument();
+	const selection = doc.getSelection();
+	if (selection) {
+		toggleSelected(selection, 'isBold', 'setBold');
+	} else {
+		const cursor = doc.getCursor();
+		if (cursor) cursor.setBold(!cursor.isBold());
+	}
+};
+
+remote.makeItalic = function makeItalic() {
+	const doc = DocumentApp.getActiveDocument();
+	const selection = doc.getSelection();
+	if (selection) {
+		toggleSelected(selection, 'isItalic', 'setItalic');
+	} else {
+		const cursor = doc.getCursor();
+		if (cursor) cursor.setItalic(!cursor.isItalic());
+	}
+};
+
+remote.makeUnderline = function makeUnderline() {
+	const doc = DocumentApp.getActiveDocument();
+	const selection = doc.getSelection();
+	if (selection) {
+		toggleSelected(selection, 'isUnderline', 'setUnderline');
+	} else {
+		const cursor = doc.getCursor();
+		if (cursor) cursor.setUnderline(!cursor.isUnderline());
+	}
+};
+
+remote.clearFormatting = function clearFormatting() {
+	const doc = DocumentApp.getActiveDocument();
+	const selection = doc.getSelection();
+	if (selection) {
+		for (const part of selectedParts(selection)) {
+			part.text.setBold(part.start, part.end, false);
+			part.text.setItalic(part.start, part.end, false);
+			part.text.setUnderline(part.start, part.end, false);
 		}
-	},
-	makeItalic: function () {
-		const doc = DocumentApp.getActiveDocument();
-		const selection = doc.getSelection();
-		if (selection) {
-			toggleSelected(selection, 'isItalic', 'setItalic');
-		} else {
-			const cursor = doc.getCursor();
-			if (cursor) cursor.setItalic(!cursor.isItalic());
-		}
-	},
-	makeUnderline: function () {
-		const doc = DocumentApp.getActiveDocument();
-		const selection = doc.getSelection();
-		if (selection) {
-			toggleSelected(selection, 'isUnderline', 'setUnderline');
-		} else {
-			const cursor = doc.getCursor();
-			if (cursor) cursor.setUnderline(!cursor.isUnderline());
-		}
-	},
-	clearFormatting: function () {
-		const doc = DocumentApp.getActiveDocument();
-		const selection = doc.getSelection();
-		if (selection) {
-			for (const part of selectedParts(selection)) {
-				part.text.setBold(part.start, part.end, false);
-				part.text.setItalic(part.start, part.end, false);
-				part.text.setUnderline(part.start, part.end, false);
-			}
-		} else {
-			doc.getCursor()?.setBold(false).setItalic(false).setUnderline(false);
-		}
-	},
+	} else {
+		doc.getCursor()?.setBold(false).setItalic(false).setUnderline(false);
+	}
 };

@@ -77,6 +77,7 @@ manifest.json:
   "manifestVersion": "0.2",
   "name": "Commands demo",
   "supports": ["text"],
+  "remote": ["commands/dates.js"],
   "contributes": "ui.json"
 }
 ```
@@ -86,7 +87,7 @@ ui.json:
 ```json
 {
   "commands": [
-    { "id": "insertDate", "title": "Insert Date", "icon": "icon.svg", "script": "commands/dates.js" }
+    { "id": "insertDate", "title": "Insert Date", "icon": "icon.svg" }
   ],
   "menus": {
     "insert": ["insertDate"]
@@ -109,23 +110,18 @@ ui.json:
 }
 ```
 
-- `contributes.commands` - each entry's `script` is a path (relative to the manifest)
-  to a JS file whose top-level binding named `commands` is an object mapping
-  command ids to functions, e.g.:
+- `contributes.commands` - choosing a command runs the function of `remote` (see
+  "Calling into the kit" above) that has the command's id as its name, in the
+  kit, e.g. for commands/dates.js in the extension's `remote` list:
 
   ```js
-  var commands = {
-      insertDate: function () {
-          var doc = DocumentApp.getActiveDocument();
-          // ... call into the document via the API ...
-      },
+  remote.insertDate = function insertDate() {
+      var doc = DocumentApp.getActiveDocument();
+      // ... call into the document via the API ...
   };
   ```
 
-  More than one command may name the same `script` file - add another key to its
-  `commands` object rather than giving each command a one-function file of its own.
-
-  A command may instead set `"panel": true` and omit `script`. Choosing it opens
+  A command may instead set `"panel": true`. Choosing it opens
   the extension's sidebar panel (`entry`) if it is not showing and posts the
   command id to the iframe, where `cool.js` calls `cool.onCommand(id)`:
 
@@ -405,21 +401,21 @@ the `contributes` file of a native extension (see above). Only its
 `extensionsMenu` is not used, as the menu that `onOpen()` builds takes that
 place.
 
-A command's `script` names one of the add-on's own server files. Instead of the
-`commands` of a native extension, that file has a top-level binding
-`__coolGasCommands`. Its functions run in the kit like the add-on's other server
-code, with all of the shimmed services:
+Choosing a command runs the add-on's function that has the command's id as its
+name, as choosing an item of the add-on's menu runs the function that the item
+names. It runs in the kit like the add-on's other server code, with all of the
+shimmed services:
 
 ```js
-var __coolGasCommands = {
-    editMath: function () { openEditor('general'); },
-};
+function editMath() {
+    openEditor('general');
+}
 ```
 
 ```json
 {
   "commands": [
-    { "id": "editMath", "title": "Edit with MathType", "script": "cool-commands.js" }
+    { "id": "editMath", "title": "Edit with MathType" }
   ],
   "contextMenu": [
     { "command": "editMath", "contexts": ["image"] }

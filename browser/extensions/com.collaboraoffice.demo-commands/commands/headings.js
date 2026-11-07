@@ -33,14 +33,14 @@ function setHeading(heading) {
 	}
 }
 
-var commands = {
-	heading1: function () {
-		setHeading(DocumentApp.ParagraphHeading.HEADING1);
-	},
-	heading2: function () {
-		setHeading(DocumentApp.ParagraphHeading.HEADING2);
-	},
-	heading3: function () {
-		setHeading(DocumentApp.ParagraphHeading.HEADING3);
-	},
+remote.heading1 = function heading1() {
+	setHeading(DocumentApp.ParagraphHeading.HEADING1);
+};
+
+remote.heading2 = function heading2() {
+	setHeading(DocumentApp.ParagraphHeading.HEADING2);
+};
+
+remote.heading3 = function heading3() {
+	setHeading(DocumentApp.ParagraphHeading.HEADING3);
 };

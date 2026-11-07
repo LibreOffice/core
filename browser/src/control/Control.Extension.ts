@@ -105,27 +105,22 @@
 /* global app */
 
 // A command an extension registers for use in menu/notebookbar contributions
-// (see ExtensionContributes below).  `script` is a path to a JS file (resolved
-// the same way `entry`/`icon` are, relative to the manifest) whose top-level
-// binding named `commands` is an object mapping command ids to functions, and
-// the function of a command runs in the kit's JS-UNO context.
-// More than one command may name the same `script` file, sharing its
-// `commands` object rather than each getting a one-function file of its own.
+// (see ExtensionContributes below).  Unless it is a panel command, it runs the
+// function that has the command's id as its name, of the object `remote` that
+// the extension's remote files add their functions to, in the kit's JS-UNO
+// context.
 // `icon` is shown on a notebookbar button or dropdown-menu entry that
 // references this command; the classic menu never renders it.
 interface ExtensionCommand {
 	id: string;
 	title: string;
 	icon?: string;
-	// Kit-side command: the script file holding the `commands` object.
-	script?: string;
-	// Panel command: instead of running a script in the kit, open the
+	// Panel command: instead of running a function in the kit, open the
 	// extension's sidebar panel (if it isn't open) and deliver the command
 	// id to it as an Extension_Command postMessage; cool.js hands it to
 	// cool.onCommand. For extensions whose logic lives in the panel.
 	panel?: boolean;
 	gasFunctionName?: string;
-	gasArguments?: unknown[];
 }
 
 // One notebookbar button, referencing a command declared in
@@ -584,7 +579,7 @@ window.L.Control.Extension = window.L.Control.extend({
 	},
 
 	// Dispatcher entry point for a contributed menu command (docdispatcher's
-	// `ext:<id>:<commandId>` branch).  Runs the command's script in the
+	// `ext:<id>:<commandId>` branch).  Runs the command's function in the
 	// kit's JS-UNO context via the same callextension wire message
 	// _handleSidebarMessage's Extension_Call case uses, but without needing the
 	// sidebar iframe to exist: the command runs whether or not this extension's
@@ -603,7 +598,7 @@ window.L.Control.Extension = window.L.Control.extend({
 			this._invokeGasCommand(command);
 			return;
 		}
-		if (!command || !command.script) {
+		if (!command) {
 			console.warn(
 				'extension ' + this.options.id + ': unknown command ' + commandId,
 			);
@@ -652,13 +647,13 @@ window.L.Control.Extension = window.L.Control.extend({
 			delete this._pendingCommandCalls[callId];
 			pending.onError(new Error('timed out waiting for a response'));
 		}, 30000);
-		// Wire format `callextension <id> <extensionId> command <commandId>\n<arguments>`:
+		// Wire format `callextension <id> <extensionId> remote <commandId>\n<arguments>`:
 		app.socket.sendMessage(
 			'callextension ' +
 				callId +
 				' ' +
 				this.options.id +
-				' command ' +
+				' remote ' +
 				commandId +
 				'\n' +
 				JSON.stringify([commandContext()]),
@@ -727,12 +722,7 @@ window.L.Control.Extension = window.L.Control.extend({
 			delete this._pendingCommandCalls[callId];
 			pending.onError(new Error('timed out waiting for a response'));
 		}, 30000);
-		this._sendGasRunner(
-			callId,
-			proxyId,
-			command.gasFunctionName,
-			command.gasArguments || [],
-		);
+		this._sendGasRunner(callId, proxyId, command.gasFunctionName, []);
 	},
 
 	// Open the sidebar and the dialog that the add-on asked for in a GAS runner result:
@@ -781,14 +771,13 @@ window.L.Control.Extension = window.L.Control.extend({
 			return;
 		}
 		// As in GAS, google.script.run cannot call a private function, whose name ends in
-		// "_", and the reserved names __coolGasMenu and __coolGasCommand name none of the
+		// "_", and the reserved name __coolGasMenu names none of the
 		// add-on's functions (and a name with whitespace cannot be sent):
 		if (
 			typeof msg.functionName !== 'string' ||
 			!/^\S+$/.test(msg.functionName) ||
 			msg.functionName.endsWith('_') ||
-			msg.functionName === '__coolGasMenu' ||
-			msg.functionName === '__coolGasCommand'
+			msg.functionName === '__coolGasMenu'
 		) {
 			this._postToCaller(msg.callId, {
 				msgId: 'Extension_CallResult',
@@ -1636,8 +1625,8 @@ async function tryLoadAppsScriptExtension(
 	}
 
 	// An add-on can have the same contributions as a native extension, in the file that its
-	// _cool-gas-manifest.json names, whose commands each name one of the add-on's own server files
-	// as their script, where the add-on's __coolGasCommands object has the command's function:
+	// _cool-gas-manifest.json names, whose commands each run the add-on's function that has the
+	// command's id as its name, as a menu item that its onOpen() adds runs the function it names:
 	let contributes: ExtensionContributes = {};
 	if (gasManifest.contributes) {
 		try {
@@ -1659,16 +1648,6 @@ async function tryLoadAppsScriptExtension(
 		}
 	}
 	for (const command of contributes.commands || []) {
-		if (!command.script || !scriptNames.includes(command.script)) {
-			console.warn(
-				'extension ' +
-					id +
-					': command ' +
-					command.id +
-					" does not name one of the add-on's scripts",
-			);
-			continue;
-		}
 		if (usedIds.has(command.id)) {
 			console.warn(
 				'extension ' + id + ': command ' + command.id + ' is already defined',
@@ -1680,8 +1659,7 @@ async function tryLoadAppsScriptExtension(
 			id: command.id,
 			title: command.title,
 			icon: command.icon,
-			gasFunctionName: '__coolGasCommand',
-			gasArguments: [command.id],
+			gasFunctionName: command.id,
 		});
 	}
 

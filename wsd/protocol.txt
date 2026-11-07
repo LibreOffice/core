@@ -179,8 +179,6 @@ callextension <callId> <extensionId> <kind> <name>
 
     * 'remote': the function <name> that the files that the "remote" field of the extension's
       manifest.json lists add to the object 'remote'
-    * 'command': the function <name> of the object that the variable 'commands' holds in the
-      "script" file of the command <name> in the extension's contributions
     * 'gas': the function <name> of the Apps Script add-on, run through the GAS runner of the kit
       with the add-on's code files and libraries, with the arguments [<proxyId>, [<arg>, ...]]
     * 'listen' or 'unlisten': add or remove the built-in listener for the document event <name>

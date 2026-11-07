@@ -404,64 +404,46 @@ std::optional<Extensions::CallScript> Extensions::makeCallScript(
             error = "no extension " + id;
             return {};
         }
-        if (kind == "remote" || kind == "command") {
+        if (kind == "remote") {
             auto const manifest = readJsonObject(*dir, "manifest.json");
             if (!manifest || manifest->optValue<std::string>("manifestVersion", "") != "0.2") {
                 error = "extension " + id + " has no usable manifest.json";
                 return {};
             }
             std::vector<std::string> files;
-            std::string table;
-            if (kind == "remote") {
-                auto const remote = manifest->getArray("remote");
-                for (std::size_t i = 0; remote && i != remote->size(); ++i) {
-                    if (!remote->get(i).isString()) {
-                        error = "extension " + id + " has a malformed remote list";
-                        return {};
-                    }
-                    files.push_back(remote->getElement<std::string>(i));
+            auto const remote = manifest->getArray("remote");
+            for (std::size_t i = 0; remote && i != remote->size(); ++i) {
+                if (!remote->get(i).isString()) {
+                    error = "extension " + id + " has a malformed remote list";
+                    return {};
                 }
-                table = "remote";
-            } else {
-                auto const contributes
-                    = readJsonObject(*dir, manifest->optValue<std::string>("contributes", ""));
-                auto const commands = contributes ? contributes->getArray("commands") : nullptr;
-                for (std::size_t i = 0; commands && i != commands->size(); ++i) {
-                    auto const command = commands->getObject(i);
-                    if (command && command->optValue<std::string>("id", "") == name) {
-                        files.push_back(command->optValue<std::string>("script", ""));
-                        break;
-                    }
-                }
-                table = "typeof commands === 'undefined' ? undefined : commands";
+                files.push_back(remote->getElement<std::string>(i));
             }
             if (files.empty()) {
-                error = "extension " + id + " has no script for " + kind + ' ' + name;
+                error = "extension " + id + " has no remote files";
                 return {};
             }
-            // Each file runs on its own (so the lines and columns of its frames are its own, and a
-            // remote file adds its functions to the remote object), and the script's value is the
-            // function that passes the call's arguments on to the function of the table under the
-            // call's name:
-            std::string text = kind == "remote" ? "const remote = {};\n" : "";
+            // Each file runs on its own (so the lines and columns of its frames are its own) and
+            // adds its functions to the remote object, and the script's value is the function that
+            // passes the call's arguments on to the function of the remote object under the call's
+            // name:
+            std::string text = "const remote = {};\n";
             for (auto const & file: files) {
                 auto const path = entryWithin(*dir, file, false);
                 if (!path) {
-                    error = "extension " + id + " has no script for " + kind + ' ' + name;
+                    error = "extension " + id + " has no remote file " + file;
                     return {};
                 }
                 text += "$internal.evalWithSource(" + jsonQuote(readFile(*path)) + ", "
                     + jsonQuote(id + '/' + file) + ", 1);\n";
             }
             return CallScript{
-                "<" + kind + "-call>", 1,
-                text + "(function (table, name) { return function (...args) {"
-                " if (typeof table !== 'object' || table === null"
-                " || !Object.prototype.hasOwnProperty.call(table, name)"
-                " || typeof table[name] !== 'function') { throw new TypeError(name + ' is not a "
-                + kind + " function of the extension'); }"
-                " return table[name].apply(null, args); }; })(" + table + ", " + jsonQuote(name)
-                + ')'};
+                "<remote-call>", 1,
+                text + "(function (name) { return function (...args) {"
+                " if (!Object.prototype.hasOwnProperty.call(remote, name)"
+                " || typeof remote[name] !== 'function') {"
+                " throw new TypeError(name + ' is not a remote function of the extension'); }"
+                " return remote[name].apply(null, args); }; })(" + jsonQuote(name) + ')'};
         }
         if (kind == "gas") {
             auto const appsscript = readJsonObject(*dir, "appsscript.json");

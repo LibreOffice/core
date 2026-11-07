@@ -40,7 +40,6 @@ public:
     CPPUNIT_TEST_SUITE(ExtensionsTests);
 
     CPPUNIT_TEST(testRemote);
-    CPPUNIT_TEST(testCommand);
     CPPUNIT_TEST(testGas);
     CPPUNIT_TEST(testDocumentEvent);
     CPPUNIT_TEST(testUnknown);
@@ -69,15 +68,15 @@ public:
                 "$internal.evalWithSource(\"remote.add = function add(a, b) {\\n")
             != std::string::npos);
         LOK_ASSERT(
-            script->text.find(", \"com.example.remote/remote.js\", 1);\n(function (table, name) {")
+            script->text.find(", \"com.example.remote/remote.js\", 1);\n(function (name) {")
             != std::string::npos);
-        LOK_ASSERT(script->text.ends_with("})(remote, \"add\")"));
+        LOK_ASSERT(script->text.ends_with("})(\"add\")"));
 
         // Any name can be looked up in the remote object:
         auto const other = Extensions::makeCallScript(
             childRoot, configId, "com.example.remote", "remote", "foo-bar", error);
         LOK_ASSERT(other);
-        LOK_ASSERT(other->text.ends_with("})(remote, \"foo-bar\")"));
+        LOK_ASSERT(other->text.ends_with("})(\"foo-bar\")"));
 
         // An extension that is neither a preset nor built-in is not installed:
         error.clear();
@@ -89,35 +88,6 @@ public:
         error.clear();
         LOK_ASSERT(!Extensions::makeCallScript(
             childRoot, configId, "com.example.gas/../com.example.remote", "remote", "add", error));
-        LOK_ASSERT(!error.empty());
-    }
-
-    void testCommand() {
-        constexpr std::string_view testname = __func__;
-
-        // A command runs the script file that the extension's contributions name for it:
-        std::string error;
-        auto const script = Extensions::makeCallScript(
-            childRoot, configId, "com.example.remote", "command", "hello", error);
-        LOK_ASSERT(script);
-        LOK_ASSERT_EQUAL(std::string("<command-call>"), script->source);
-        LOK_ASSERT(
-            script->text.find(", \"com.example.remote/commands/hello.js\", 1);\n")
-            != std::string::npos);
-        LOK_ASSERT(script->text.find("return 'hello';") != std::string::npos);
-        LOK_ASSERT(script->text.ends_with(
-            "})(typeof commands === 'undefined' ? undefined : commands, \"hello\")"));
-
-        // A command whose script file is not within the extension has no script:
-        error.clear();
-        LOK_ASSERT(!Extensions::makeCallScript(
-            childRoot, configId, "com.example.remote", "command", "outside", error));
-        LOK_ASSERT(!error.empty());
-
-        // A command that the contributions do not list has no script:
-        error.clear();
-        LOK_ASSERT(!Extensions::makeCallScript(
-            childRoot, configId, "com.example.remote", "command", "add", error));
         LOK_ASSERT(!error.empty());
     }
 
