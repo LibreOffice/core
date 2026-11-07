@@ -305,6 +305,9 @@ void SwInsertBookmarkDlg::GotoSelectedBookmark()
 
     m_rSh.EnterStdMode();
     m_rSh.GotoMark(pBookmark);
+
+    if (SwDocShell* pDocShell = m_rSh.GetView().GetDocShell())
+        pDocShell->Broadcast(SfxHint(SfxHintId::SwNavigatorUpdateTracking));
 }
 
 bool SwInsertBookmarkDlg::ValidateBookmarks()
