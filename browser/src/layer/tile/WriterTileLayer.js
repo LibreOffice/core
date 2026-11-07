@@ -54,6 +54,11 @@ window.L.WriterTileLayer = window.L.CanvasTileLayer.extend({
 			return;
 		}
 
+		this._readInputSequence(textMsg, values);
+		if (this._onVectorValues(values)) {
+			return;
+		}
+
 		if (values.comments && !window.mode.isInteractivePreview()) {
 			values.comments.forEach(function(comment) {
 				comment.id = comment.id.toString();
@@ -213,6 +218,14 @@ window.L.WriterTileLayer = window.L.CanvasTileLayer.extend({
 		}
 		this._pages = statusJSON.partscount;
 		app.file.writer.pageRectangleList = statusJSON.pagerectangles.slice(); // Copy the array.
+		// The ids of the same pages, in the same order.
+		app.file.writer.pageIds = statusJSON.pageids ? statusJSON.pageids.slice() : [];
+		// Pages without ids are drawn from tiles. A loaded document that goes to tiles has none
+		// yet, so it asks for them.
+		if (RenderManager.layoutChanged() && !RenderManager.drawsFromPrimitives() &&
+			this._map._docLoaded)
+			this._requestNewTiles();
+		RenderManager.partListChanged();
 		// Recalculate view layout so view size reflects the new pages.
 		// Needed for ViewLayoutMultiPage where the viewSize setter is a no-op.
 		if (app.activeDocument.activeLayout.type === 'ViewLayoutMultiPage')

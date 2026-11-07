@@ -161,10 +161,11 @@ class ImpressVectorManager extends VectorPartManagerBase {
 		data: cool.VectorPrimitivesData,
 		options?: cool.VectorRenderOptions,
 	): void {
-		this._renderer.setSlideBounds(data.slideWidth, data.slideHeight);
-		this._renderer.setEditViewContentVisible(options?.editView === true);
-		this._renderer.setAuthoredColors(options?.authoredColors === true);
-		this._setUpColors(data);
+		this._setUpRenderer(
+			data,
+			options?.editView === true,
+			options?.authoredColors === true,
+		);
 		const textEdits = this._textEditEntriesToDraw(data);
 		// an object active in place covers its upright window, not its own box
 		const window = options?.activeInPlace?.area;
@@ -242,10 +243,11 @@ class ImpressVectorManager extends VectorPartManagerBase {
 	): void {
 		const object = data.objects.get(objectId);
 		if (!object) return;
-		this._renderer.setSlideBounds(data.slideWidth, data.slideHeight);
-		this._renderer.setEditViewContentVisible(false);
-		this._renderer.setAuthoredColors(options?.authoredColors === true);
-		this._setUpColors(data);
+		this._setUpRenderer(
+			data,
+			/*editView=*/ false,
+			options?.authoredColors === true,
+		);
 		this._renderUnder(
 			context,
 			object,
@@ -519,10 +521,7 @@ class ImpressVectorManager extends VectorPartManagerBase {
 		objectIds: number[],
 		matrix: cool.Matrix2D,
 	): void {
-		this._renderer.setSlideBounds(data.slideWidth, data.slideHeight);
-		this._renderer.setEditViewContentVisible(true);
-		this._renderer.setAuthoredColors(false);
-		this._setUpColors(data);
+		this._setUpRenderer(data, /*editView=*/ true, /*authoredColors=*/ false);
 		this._renderer.renderObjectsMoved(context, data.objects, objectIds, matrix);
 	}
 

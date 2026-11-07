@@ -293,43 +293,6 @@ class DebugManager {
 		}
 	}
 
-	/*
-		The sections that draw a page from primitives and answer for the mouse are added while a
-		document loads, and only when the vector rendering was on then. The switch turns it on
-		while the document is open, so they are added and removed with it instead.
-	*/
-	private static updateVectorSections(): void {
-		// A spreadsheet has a vector section of its own.
-		cool.CalcVectorContentSection.update();
-
-		// The drawing objects of a vector-drawn sheet answer what lies under the mouse.
-		const objectsWanted = RenderManager.drawsFromObjects();
-		const objectsPresent = app.sectionContainer.doesSectionExist(
-			app.CSections.RenderGeometry.name,
-		);
-		if (objectsWanted && !objectsPresent)
-			app.sectionContainer.addSection(new RenderGeometrySection());
-		else if (!objectsWanted && objectsPresent)
-			app.sectionContainer.removeSection(app.CSections.RenderGeometry.name);
-		// The objects the client holds answer what lies under the mouse while they are there,
-		// so the engine is asked for the pointer only while they are not.
-		if (objectsWanted !== objectsPresent)
-			RenderGeometrySection.requestPointerFromServer(!objectsWanted);
-
-		const wanted = RenderManager.isVectorRendering();
-		const present = app.sectionContainer.doesSectionExist(
-			app.CSections.VectorContent.name,
-		);
-		if (wanted === present) return;
-
-		if (wanted)
-			app.sectionContainer.addSection(new cool.VectorContentSection());
-		else app.sectionContainer.removeSection(app.CSections.VectorContent.name);
-
-		// Drawing from the objects has a layout of its own, with the lawn round the page.
-		ViewLayoutVector.switchTheRendering();
-	}
-
 	/// Offer the tools that belong under the given one, or take the offer away. One that is on
 	/// when the offer goes is switched off first, so what it draws goes with it.
 	private setDependentToolsEnabled(name: string, enabled: boolean): void {
@@ -464,7 +427,8 @@ class DebugManager {
 		// A document drawn from vector primitives has no tiles, so the switches that watch or
 		// steer the tiles are left out of its panel.
 		const tilesDrawn =
-			!RenderManager.isVectorRendering() && !RenderManager.calcVectorManager();
+			!RenderManager.drawsFromPrimitives() &&
+			!RenderManager.calcVectorManager();
 
 		this._addDebugTool({
 			name: 'Data Overlay',
@@ -485,13 +449,14 @@ class DebugManager {
 			},
 		});
 
-		// The engine sends vector primitives for Draw, Impress and spreadsheets only. The tools
-		// for the objects of a page are for Draw and Impress.
+		// The engine sends the primitives of slides, drawings and text document pages, and the
+		// cells of spreadsheets. The tools for the objects of a page are for slides and drawings.
 		const docType = self._docLayer._docType;
 		const vectorDocument = docType === 'presentation' || docType === 'drawing';
+		const vectorText = docType === 'text';
 		const vectorSpreadsheet = docType === 'spreadsheet';
 
-		if (vectorDocument || vectorSpreadsheet)
+		if (vectorDocument || vectorText || vectorSpreadsheet)
 			this._addDebugTool({
 				name: 'Vector',
 				category: 'Display',
@@ -500,7 +465,7 @@ class DebugManager {
 				onAdd: function () {
 					self.vectorOn = true;
 					RenderManager.reinitialize(self._docLayer._docType);
-					DebugManager.updateVectorSections();
+					RenderManager.updateVectorSections();
 					GraphicSelection.drawingSwitched();
 					self.setDependentToolsEnabled('Vector', true);
 					app.sectionContainer.requestReDraw();
@@ -509,16 +474,16 @@ class DebugManager {
 					self.setDependentToolsEnabled('Vector', false);
 					self.vectorOn = false;
 					RenderManager.reinitialize(self._docLayer._docType);
-					DebugManager.updateVectorSections();
+					RenderManager.updateVectorSections();
 					GraphicSelection.drawingSwitched();
 
 					// Tell the engine, the kit and the server that this view draws from tiles again.
-					if (!RenderManager.isVectorRendering())
+					if (!RenderManager.drawsFromPrimitives())
 						app.socket.sendMessage('commandvalues command=.uno:DrawFromTiles');
 
 					// The manager that draws tiles starts out holding none, and the next
 					// request for them waits for something to change the view. Ask now.
-					if (!RenderManager.isVectorRendering())
+					if (!RenderManager.drawsFromPrimitives())
 						self._docLayer._requestNewTiles();
 
 					app.sectionContainer.requestReDraw();

@@ -73,8 +73,16 @@ class DocumentBase {
 	public set activeLayout(newLayout: ViewLayoutBase) {
 		if (this._activeLayout === newLayout) return;
 
+		const comparing = (layout: ViewLayoutBase): boolean =>
+			layout.type === 'ViewLayoutCompareChanges';
+		const comparingChanged =
+			comparing(this._activeLayout) !== comparing(newLayout);
+
 		this._activeLayout.dispose();
 		this._activeLayout = newLayout;
+
+		// A text document draws from tiles while its changes are compared side by side.
+		if (comparingChanged) RenderManager.layoutChanged();
 
 		newLayout.setStartYPosition();
 	}

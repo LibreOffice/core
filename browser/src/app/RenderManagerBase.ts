@@ -42,9 +42,9 @@ namespace cool {
 	}
 }
 
-/// What a render manager draws: the objects of slides or drawing pages or the cells of a
-/// spreadsheet from vector primitives, or bitmap tiles.
-type RenderManagerKind = 'slides' | 'sheet' | 'tiles';
+/// What a render manager draws: the objects of slides or drawing pages, the pages of a text
+/// document or the cells of a spreadsheet from vector primitives, or bitmap tiles.
+type RenderManagerKind = 'slides' | 'text' | 'sheet' | 'tiles';
 
 abstract class RenderManagerBase {
 	/// What the manager draws.
@@ -241,6 +241,13 @@ abstract class RenderManagerBase {
 	/// The message with object positions in the engine's placement.
 	toEngine(message: string): string {
 		return message;
+	}
+
+	/// True when the view draws the pages of the document from vector primitives. Unlike
+	/// isVectorRendering, it is also true for a text document, whose objects the server handles.
+	/// A vector-drawn spreadsheet draws its cells in a section of its own and is false here.
+	drawsFromPrimitives(): boolean {
+		return false;
 	}
 
 	// Shows typed text before the engine answers. True when it shows.

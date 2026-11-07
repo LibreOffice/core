@@ -133,6 +133,9 @@
 		fileBasedView: false, // (draw-impress only) Default is false. For read-only documents, user can view all parts at once. In that case, this variable is set to "true".
 		writer: {
 			pageRectangleList: [], // Array of arrays: [x, y, w, h] (as usual) // twips only. Pixels will be calculated on the fly. Corresponding pixels may change too often.
+			// The ids of the pages, in the order of pageRectangleList. An id names its page for as
+			// long as the page exists.
+			pageIds: [],
 		},
 		viewModeExtensions: '',
 		// True when the file is a hybrid PDF, a PDF that carries the document it was made from.

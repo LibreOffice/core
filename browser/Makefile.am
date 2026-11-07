@@ -483,6 +483,7 @@ COOL_JS_LST =\
 	src/app/VectorManagerBase.ts \
 	src/app/VectorPartManagerBase.ts \
 	src/app/ImpressVectorManager.ts \
+	src/app/WriterVectorManager.ts \
 	src/app/ImageDecoderPolyfill.ts \
 	src/app/CalcVectorManager.ts \
 	src/app/GifFrameSource.ts \
@@ -646,6 +647,7 @@ COOL_JS_LST =\
 	src/canvas/vector/calc/CalcObjectView.ts \
 	src/canvas/vector/calc/CalcBlockPlacement.ts \
 	src/canvas/vector/calc/CalcVectorContentSection.ts \
+	src/canvas/vector/TextPageVectorSection.ts \
 	src/canvas/sections/AutoFillBaseSection.ts \
 	src/canvas/sections/CellFillMarkerSection.ts \
 	src/canvas/sections/ImpressSelectionRectangle.ts \

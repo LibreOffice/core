@@ -298,6 +298,7 @@ interface AppInterface {
 		fileBasedView: boolean;
 		writer: {
 			pageRectangleList: Array<any>;
+			pageIds: string[];
 		};
 	};
 	roundedDpiScale: number;

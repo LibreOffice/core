@@ -17,12 +17,22 @@ class RenderManager {
 	/// The change listeners registered here, which a manager that replaces another takes over.
 	private static _vectorListeners: VectorChangeListener[] = [];
 
-	/// The kind of manager the document type draws with. With the vector rendering option on,
-	/// Impress, Draw and Calc documents draw from vector primitives, and any other from bitmap
-	/// tiles.
+	/// The kind of manager the document type draws with.
 	private static kindFor(docType?: string): RenderManagerKind {
 		if (!cool.VectorRenderingConfig.isEnabled()) return 'tiles';
 		if (docType === 'presentation' || docType === 'drawing') return 'slides';
+		// The side-by-side view of tracked changes shows the document in two redline render
+		// modes, which come as tiles only, so a text document draws from tiles while it is on.
+		// The pages are asked for by the ids the status names them by, so pages that come without
+		// ids are drawn from tiles too.
+		if (docType === 'text') {
+			const comparing =
+				app.activeDocument?.activeLayout?.type === 'ViewLayoutCompareChanges';
+			const writer = app.file?.writer;
+			const unnamed =
+				writer?.pageRectangleList?.length > 0 && !writer?.pageIds?.length;
+			return comparing || unnamed ? 'tiles' : 'text';
+		}
 		if (docType === 'spreadsheet') return 'sheet';
 		return 'tiles';
 	}
@@ -31,6 +41,8 @@ class RenderManager {
 		switch (kind) {
 			case 'slides':
 				return new ImpressVectorManager();
+			case 'text':
+				return new WriterVectorManager();
 			case 'sheet':
 				return new CalcVectorManager();
 			default:
@@ -66,6 +78,13 @@ class RenderManager {
 		return instance instanceof CalcVectorManager ? instance : undefined;
 	}
 
+	/// The manager of a text document drawn from vector primitives, or undefined while the
+	/// document draws otherwise.
+	static writerVectorManager(): WriterVectorManager | undefined {
+		const instance = RenderManager._instance;
+		return instance instanceof WriterVectorManager ? instance : undefined;
+	}
+
 	private static ensureInstance(): RenderManagerBase {
 		// Provisional default before the document type is known.
 		if (!RenderManager._instance)
@@ -87,6 +106,80 @@ class RenderManager {
 		const previous = RenderManager._instance;
 		const instance = RenderManager.makeInstance(docType);
 		if (instance !== previous) instance.initialize();
+	}
+
+	/*
+		Pick the manager of a text document again for the view layout and the page list now in
+		place. The sections follow the manager. A view that goes to tiles tells the server, which
+		sends it tiles from then on, and a view that goes back to vector primitives asks for the
+		pages as it draws them. True when the manager was replaced.
+	*/
+	static layoutChanged(): boolean {
+		const docType = app.map._docLayer?._docType;
+		if (docType !== 'text') return false;
+		const previous = RenderManager._instance;
+		RenderManager.reinitialize(docType);
+		const instance = RenderManager._instance;
+		if (instance === previous) return false;
+
+		RenderManager.updateVectorSections();
+		if (!instance.drawsFromPrimitives())
+			app.socket.sendMessage('commandvalues command=.uno:DrawFromTiles');
+		app.sectionContainer.requestReDraw();
+		return true;
+	}
+
+	/*
+		Add and remove the sections that draw a part from primitives and answer for the mouse, so
+		that they match the manager in use, and swap the layout of a presentation for the one the
+		manager draws in.
+	*/
+	static updateVectorSections(): void {
+		// Drawing from the objects has a layout of its own, with the lawn round the page.
+		if (RenderManager.matchVectorSections())
+			ViewLayoutVector.switchTheRendering();
+	}
+
+	/*
+		Add and remove the sections that draw a part from primitives and answer for the mouse, so
+		that they match the manager in use. True when the section that draws the parts was added
+		or removed.
+	*/
+	static matchVectorSections(): boolean {
+		// A spreadsheet has a vector section of its own.
+		cool.CalcVectorContentSection.update();
+
+		// The drawing objects of a vector-drawn sheet or slide answer what lies under the mouse.
+		const objectsWanted = RenderManager.drawsFromObjects();
+		const objectsPresent = app.sectionContainer.doesSectionExist(
+			app.CSections.RenderGeometry.name,
+		);
+		if (objectsWanted && !objectsPresent)
+			app.sectionContainer.addSection(new RenderGeometrySection());
+		else if (!objectsWanted && objectsPresent)
+			app.sectionContainer.removeSection(app.CSections.RenderGeometry.name);
+		// The objects the client holds answer what lies under the mouse while they are there,
+		// so the engine is asked for the pointer only while they are not.
+		if (objectsWanted !== objectsPresent)
+			RenderGeometrySection.requestPointerFromServer(!objectsWanted);
+
+		const wanted = RenderManager.drawsFromPrimitives();
+		const present = app.sectionContainer.doesSectionExist(
+			app.CSections.VectorContent.name,
+		);
+		if (wanted === present) return false;
+
+		// The objects of slides are held here. The pages of a text document are drawn here
+		// and the server answers for the mouse.
+		const writerManager = RenderManager.writerVectorManager();
+		if (!wanted)
+			app.sectionContainer.removeSection(app.CSections.VectorContent.name);
+		else if (writerManager)
+			app.sectionContainer.addSection(
+				new cool.TextPageVectorSection(writerManager),
+			);
+		else app.sectionContainer.addSection(new cool.VectorContentSection());
+		return true;
 	}
 
 	static appendAfterVisualsReady(task: AfterVisualsReadyTask): void {
@@ -283,6 +376,10 @@ class RenderManager {
 
 	static toEngine(message: string): string {
 		return RenderManager.ensureInstance().toEngine(message);
+	}
+
+	static drawsFromPrimitives(): boolean {
+		return RenderManager.ensureInstance().drawsFromPrimitives();
 	}
 
 	static predictTextInsert(text: string): boolean {

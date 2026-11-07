@@ -10,7 +10,8 @@
  */
 
 /*
- * VectorPartManagerBase - Draws the parts of a document, such as slides, from vector primitives.
+ * VectorPartManagerBase - Draws the parts of a document, slides or text document pages, from
+ * vector primitives.
  *
  * It owns the vector data of each part. A part is fetched and decoded only once, kept up to date
  * by deltas, and the change listeners hear of each change. The typing, caret moves and
@@ -51,8 +52,9 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	private static readonly revalidationsAtATime = 2;
 
 	// The pages a JSON primitive tree request is out for, by page id, each with the mode it
-	// was asked for in. A stale page that asks for what changed is a limited request, so a
-	// few ask at a time and the rest wait in the order they were drawn.
+	// was asked for in. A stale page that asks for what changed, and a page asked for ahead of
+	// its draw, are limited requests, so a few ask at a time and the rest wait in the order
+	// they were asked in.
 	private _pageRequests = new cool.RequestTracker<cool.VectorPartGuid, number>({
 		limit: VectorPartManagerBase.revalidationsAtATime,
 		timeout: VectorPartManagerBase.requestTimeout,
@@ -62,6 +64,14 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	// Pages the document said it does not hold. Asking again is pointless
 	// until the page list is replaced.
 	private _missingParts: Set<cool.VectorPartGuid> = new Set();
+
+	// The parts the server was asked for and has not been told to forget since. The server
+	// pushes the changes of each of them to this view.
+	private _askedParts: Set<cool.VectorPartGuid> = new Set();
+
+	// The parts the server was told to forget while a request for them was out. The answer to
+	// that request is the last the server sends of the part, so it is left out of the cache.
+	private _answersToLeaveOut: Set<cool.VectorPartGuid> = new Set();
 
 	/// A decoded bitmap, or the one drawn in its place until it is decoded.
 	protected _imageFor(checksum: number): HTMLImageElement | undefined {
@@ -106,6 +116,10 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		const docLayer = app.map?._docLayer as unknown as
 			cool.CanvasTileLayerInterface | undefined;
 		return docLayer?._viewId;
+	}
+
+	drawsFromPrimitives(): boolean {
+		return true;
 	}
 
 	/// The view draws the part that is now selected, from the cache when it holds it, at once
@@ -175,9 +189,30 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		);
 	}
 
+	/// Send for a page ahead of its draw, unless a request for it is already out. It is a
+	/// limited request, so a few are out at a time and the rest wait in the order they were
+	/// asked for. A page whose turn comes when it is cached, or when wanted answers false,
+	/// asks for nothing.
+	protected _requestAhead(
+		partId: cool.VectorPartGuid,
+		mode: number,
+		wanted: () => boolean,
+	): void {
+		if (this._cache.has(partId) || this._missingParts.has(partId)) return;
+		this._pageRequests.request(
+			partId,
+			() => this._sendVectorPrimitivesRequest(partId, mode),
+			{
+				limited: true,
+				needed: () => !this._cache.has(partId) && wanted(),
+				data: mode,
+			},
+		);
+	}
+
 	// The requests got no answer in time. A page that is held asks again for what changed
 	// when it is next drawn. A page that is not held is asked for again now, as a preview may
-	// wait for it.
+	// wait for it. A page asked for ahead of its draw is asked for again by a later draw.
 	private _pageRequestsExpired(
 		requests: cool.RequestOut<cool.VectorPartGuid, number>[],
 	): void {
@@ -187,7 +222,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 				if (this._cache.has(partId)) {
 					this._staleParts.add(partId);
 					stale = true;
-				} else if (request.data !== undefined) {
+				} else if (!request.limited && request.data !== undefined) {
 					this._request(partId, request.data);
 				}
 			}
@@ -228,6 +263,21 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		this._renderer.setPageBackdrop(page?.backdrop, page?.backdropTransparency);
 	}
 
+	/// Set the renderer up for a draw of the part: the bounds of its page, whether the content
+	/// that only an editing view shows is drawn, whether fills and lines keep the colors the
+	/// document gives them or follow a dark view, and the colors of the view and of the page.
+	/// The renderer keeps each of them as it was last given.
+	protected _setUpRenderer(
+		data: cool.VectorPrimitivesData,
+		editView: boolean,
+		authoredColors: boolean,
+	): void {
+		this._renderer.setSlideBounds(data.slideWidth, data.slideHeight);
+		this._renderer.setEditViewContentVisible(editView);
+		this._renderer.setAuthoredColors(authoredColors);
+		this._setUpColors(data);
+	}
+
 	/*
 		Draw primitives the client built itself, in document twips, the way the objects of the
 		part are drawn. The caller sets up the context the same way as for a whole part.
@@ -237,10 +287,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		data: cool.VectorPrimitivesData,
 		primitives: cool.Primitive[],
 	): void {
-		this._renderer.setSlideBounds(data.slideWidth, data.slideHeight);
-		this._renderer.setEditViewContentVisible(true);
-		this._renderer.setAuthoredColors(false);
-		this._setUpColors(data);
+		this._setUpRenderer(data, /*editView=*/ true, /*authoredColors=*/ false);
 
 		for (const primitive of primitives)
 			this._renderer.renderPrimitive(context, primitive);
@@ -262,6 +309,8 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		// version space, so the answer is the step from there rather than
 		// the whole page.
 		const holds = held?.version !== undefined && held.epoch !== undefined;
+		this._askedParts.add(partId);
+		this._answersToLeaveOut.delete(partId);
 		app.socket.sendMessage(
 			cool.vectorPrimitivesRequest({
 				partId: partId,
@@ -311,6 +360,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		const partId = values.partId;
 		if (partId === undefined) return;
 		this._pageRequests.answered(partId);
+		if (this._answersToLeaveOut.delete(partId)) return;
 
 		// A response with no objects names a part the document does not
 		// hold. It happens while the page list is catching up with a mode
@@ -319,6 +369,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		// is not there are dropped, and the page is not asked for again until
 		// the page list is replaced.
 		if (values.objects === undefined) {
+			this._forgetAtServer(partId);
 			this._cache.delete(partId);
 			this._staleParts.delete(partId);
 			this._missingParts.add(partId);
@@ -392,7 +443,8 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	/// the cache is ignored. A part that is not cached, a delta that starts
 	/// above the version held, or an order that names content the client
 	/// never had, falls back to a full re-fetch. Returns the ids of the
-	/// objects it replaced, or null when the cached tree is unchanged.
+	/// objects whose content it replaced, or null when the cached tree is
+	/// unchanged.
 	private _applyDelta(values: cool.VectorPrimitivesResponse): number[] | null {
 		const partId = values.partId;
 		if (partId === undefined) return null;
@@ -459,9 +511,15 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 				return null;
 			}
 		}
+		// The entries whose content the delta replaced. An entry without primitives only moved,
+		// so it keeps what it draws, the edits typed here included.
+		const replaced: number[] = [];
 		for (const object of carried) {
 			if (object.id === undefined) continue;
 			const before = cached.objects.get(object.id);
+			if (before && object.primitives === undefined)
+				object.primitives = before.primitives;
+			else replaced.push(object.id);
 			if (before) this._noteStandIns(before, object);
 			cached.objects.set(object.id, object);
 		}
@@ -502,10 +560,10 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		});
 
 		this._partArrived(cached, /*whole=*/ false);
-		const replaced = carried.flatMap((object) =>
+		const answered = carried.flatMap((object) =>
 			object.id === undefined ? [] : [object.id],
 		);
-		this._fireChanged(replaced, values.inputSequence);
+		this._fireChanged(answered, values.inputSequence);
 		return replaced;
 	}
 
@@ -1257,11 +1315,40 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		this._fireChanged();
 	}
 
+	/// Drop the cached data of a part and any request for it, and tell the server to forget
+	/// the part.
 	protected _dropCachedPart(partId: cool.VectorPartGuid): void {
+		this._forgetAtServer(partId);
 		this._cache.delete(partId);
 		this._staleParts.delete(partId);
 		this._pageRequests.forget(partId);
 		this._resources.release(partId);
+	}
+
+	/// Drop the cached data of every part and every request, and tell the server to forget
+	/// each part.
+	protected _dropAllCachedParts(): void {
+		for (const partId of Array.from(this._askedParts))
+			this._forgetAtServer(partId);
+		this._cache.clear();
+		this._staleParts.clear();
+		this._pageRequests.forgetAll();
+	}
+
+	// Tell the server that a part it was asked for is held no more, so it stops pushing the
+	// changes of the part. Messages arrive in the order they are sent, so a request that
+	// follows makes the server push them again.
+	private _forgetAtServer(partId: cool.VectorPartGuid): void {
+		if (!this._askedParts.has(partId)) return;
+		const requestOut = this._pageRequests.isOut(partId);
+		// A part that is not cached has its answer on the way. The answer is taken into the
+		// cache when it comes, so the part stays one the server pushes the changes of.
+		if (requestOut && !this._cache.has(partId)) return;
+		if (requestOut) this._answersToLeaveOut.add(partId);
+		this._askedParts.delete(partId);
+		app.socket.sendMessage(
+			'commandvalues command=.uno:VectorForgetPart?partid=' + partId,
+		);
 	}
 
 	/// Drop the cached primitive trees for every part so the views
@@ -1269,9 +1356,7 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	/// actually changed comes back under a new checksum anyway. The
 	/// predicted edits stay pending.
 	clearAllParts(): void {
-		this._cache.clear();
-		this._staleParts.clear();
-		this._pageRequests.forgetAll();
+		this._dropAllCachedParts();
 		this._resources.forgetOwners();
 		this._fireChanged();
 	}
@@ -1283,18 +1368,14 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 	reclaimGraphicsMemory(): void {
 		super.reclaimGraphicsMemory();
 		this._resources.forgetOwners();
-		this._cache.clear();
-		this._staleParts.clear();
-		this._pageRequests.forgetAll();
+		this._dropAllCachedParts();
 		this._fireChanged();
 	}
 
 	/// Drop all cached data for all parts.
 	discardAllCache(): void {
 		LocalCaret.forget();
-		this._cache.clear();
-		this._staleParts.clear();
-		this._pageRequests.forgetAll();
+		this._dropAllCachedParts();
 		this._typedEdits.forget();
 		this._resources.discard();
 		this._renderer.releaseScratchCanvases();

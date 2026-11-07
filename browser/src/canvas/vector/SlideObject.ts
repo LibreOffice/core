@@ -246,6 +246,27 @@ namespace cool {
 		lineColor?: string;
 	}
 
+	/// The kinds of entries a text document page has besides the page itself: the frames of its
+	/// layout, the border lines a table draws over its cells, the border lines of a frame, and
+	/// drawing objects.
+	export type TextPageEntryKind =
+		| 'header'
+		| 'footer'
+		| 'body'
+		| 'column'
+		| 'section'
+		| 'footnotecontainer'
+		| 'footnote'
+		| 'table'
+		| 'tableborders'
+		| 'borders'
+		| 'row'
+		| 'cell'
+		| 'textframe'
+		| 'notextframe'
+		| 'fly'
+		| 'shape';
+
 	/// One drawable object on a slide, carrying its primitive tree.
 	export interface SlideObject {
 		/// Stable identity of the object: the engine's SdrObject unique
@@ -265,8 +286,9 @@ namespace cool {
 		/// running text edit: it is drawn last, over the object it runs
 		/// on, which hides its own text while the edit runs. There is one
 		/// per view that is editing, and two of them can name the same
-		/// object. Absent for a drawing object.
-		kind?: 'page' | 'texteditoverlay';
+		/// object. Absent for a drawing object of a slide. Every entry of
+		/// a text document page names its kind.
+		kind?: 'page' | 'texteditoverlay' | TextPageEntryKind;
 		/// Which view's text edit an entry of kind "texteditoverlay"
 		/// carries, so a reader can tell its own from another user's.
 		viewId?: number;

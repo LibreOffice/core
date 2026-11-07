@@ -105,7 +105,7 @@ window.L.TileSectionManager = window.L.Class.extend({
 	},
 
 	_addPreloadMap: function () {
-		if (RenderManager.isVectorRendering())
+		if (RenderManager.drawsFromPrimitives())
 			return; // no bitmap tile grid to map
 		this._preloadMap = new app.definitions.preloadMapOverlay();
 	},
@@ -357,20 +357,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		app.sectionContainer.getSectionWithName('tiles').onResize();
 
-		// Add the vector main-view section for Impress and Draw when vector
-		// rendering is enabled. The tile grid stays empty in this mode.
-		if (RenderManager.isVectorRendering())
-			app.sectionContainer.addSection(new cool.VectorContentSection());
-
-		// The geometry the client holds answers what lies under the mouse, so
-		// the pointer is worked out here and the engine is told not to send it.
-		if (RenderManager.drawsFromObjects()) {
-			app.sectionContainer.addSection(new RenderGeometrySection());
-			RenderGeometrySection.requestPointerFromServer(false);
-		}
-
-		// A vector-drawn spreadsheet draws its cells in its own section and asks for no tiles.
-		cool.CalcVectorContentSection.update();
+		// The sections that draw from vector primitives and answer for the mouse are added for
+		// the manager in use. The layout made with the document is the one that manager draws in.
+		RenderManager.matchVectorSections();
 
 		this._canvasOverlay = new CanvasOverlay(this._map, app.sectionContainer.getContext());
 		app.sectionContainer.addSection(this._canvasOverlay);
