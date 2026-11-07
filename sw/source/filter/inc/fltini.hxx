@@ -40,6 +40,8 @@ public:
 
 class XMLReader final : public Reader
 {
+    friend bool TestImportODT(SvStream& rStream);
+
     virtual ErrCodeMsg Read(SwDoc&, const OUString& rBaseURL, SwPaM&, const OUString&) override;
 
 public:
