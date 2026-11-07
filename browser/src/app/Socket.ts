@@ -3074,7 +3074,7 @@ class Socket {
 				' bytes JSON' +
 				detail,
 		);
-		const docLayer = (this._map as any)?._docLayer;
+		const docLayer = (this._map as any)._docLayer;
 		if (docLayer && docLayer._onCommandValuesMsg)
 			docLayer._onCommandValuesMsg(
 				'commandvalues:' +
