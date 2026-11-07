@@ -14,6 +14,8 @@ describe('SlideAnimations', function () {
 		const iterate: any = {
 			nodeName: 'Iterate',
 			targetElement: 'shape',
+			title: 'Title 1',
+			objectName: 'Text box',
 			subItem: 'OnlyText',
 			children: [
 				{ nodeName: 'Set', attributeName: 'Visibility' },
@@ -24,13 +26,16 @@ describe('SlideAnimations', function () {
 			],
 		};
 
-		inheritIterateTarget(iterate, iterate.targetElement, iterate.subItem);
+		inheritIterateTarget(iterate, iterate);
 
 		nodeassert.strictEqual(iterate.children[0].targetElement, 'shape');
 		nodeassert.strictEqual(iterate.children[0].subItem, 'OnlyText');
 		const animate = iterate.children[1].children[0];
 		nodeassert.strictEqual(animate.targetElement, 'shape');
 		nodeassert.strictEqual(animate.subItem, 'OnlyText');
+		// The announcement of the effect names the target by its title.
+		nodeassert.strictEqual(animate.title, 'Title 1');
+		nodeassert.strictEqual(animate.objectName, 'Text box');
 	});
 
 	it('keeps the target that a node under an iterate container names itself', function () {
@@ -46,7 +51,7 @@ describe('SlideAnimations', function () {
 			],
 		};
 
-		inheritIterateTarget(iterate, iterate.targetElement, iterate.subItem);
+		inheritIterateTarget(iterate, iterate);
 
 		nodeassert.strictEqual(iterate.children[0].targetElement, 'other');
 	});

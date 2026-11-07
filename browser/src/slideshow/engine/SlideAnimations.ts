@@ -50,20 +50,21 @@ function collectCommandTargets(
 	}
 }
 
-// An iterate container holds the target and the sub item of its effect, and the nodes under it
-// name none of their own. Give them the ones of the container.
+// An iterate container holds the target of its effect, with its sub item, title and object
+// name, and the nodes under it name none of their own. Give them the ones of the container.
 function inheritIterateTarget(
 	aNode: ContainerNodeInfo,
-	sTarget: string,
-	sSubItem: string,
+	aTarget: IterateNodeInfo | AnimateNodeInfo,
 ) {
 	for (const aChild of getNodeChildren(aNode)) {
 		const aAnimate = aChild as AnimateNodeInfo;
 		if (!aAnimate.targetElement) {
-			aAnimate.targetElement = sTarget;
-			if (!aAnimate.subItem) aAnimate.subItem = sSubItem;
+			aAnimate.targetElement = aTarget.targetElement;
+			if (!aAnimate.subItem) aAnimate.subItem = aTarget.subItem;
+			if (!aAnimate.title) aAnimate.title = aTarget.title;
+			if (!aAnimate.objectName) aAnimate.objectName = aTarget.objectName;
 		}
-		inheritIterateTarget(aChild, aAnimate.targetElement, aAnimate.subItem);
+		inheritIterateTarget(aChild, aAnimate);
 	}
 }
 
@@ -120,11 +121,7 @@ function createAnimationNode(
 			// paragraphs together.
 			const aIterateInfo = aNodeInfo as IterateNodeInfo;
 			if (aIterateInfo.targetElement)
-				inheritIterateTarget(
-					aIterateInfo,
-					aIterateInfo.targetElement,
-					aIterateInfo.subItem,
-				);
+				inheritIterateTarget(aIterateInfo, aIterateInfo);
 			aCreatedNode = aCreatedContainer = new ParallelTimeContainer(
 				aNodeInfo,
 				aParentNode,

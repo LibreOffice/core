@@ -49,6 +49,8 @@ interface ContainerNodeInfo extends BaseNodeInfo {
 
 interface IterateNodeInfo extends ContainerNodeInfo {
 	targetElement?: string;
+	title?: string;
+	objectName?: string;
 	subItem?: string;
 	iterateType?: string;
 	iterateInterval?: string;
