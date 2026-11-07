@@ -381,7 +381,40 @@ class VectorCompositor extends SlideCompositor {
 				state.paragraphs.set(paragraph, drawState);
 			}
 		});
+		// A paragraph is drawn in its own state on top of its shape's, so a shape that an effect
+		// moved shows its paragraphs where it is.
+		for (const state of states.values()) {
+			if (!state.paragraphs) continue;
+			for (const [paragraph, own] of state.paragraphs)
+				state.paragraphs.set(paragraph, VectorCompositor.overOwner(state, own));
+		}
 		return states;
+	}
+
+	/// A paragraph's state on top of its shape's. Transforms chain, opacities multiply, and
+	/// an unset clip, colors or text look falls back to the shape's. Hidden when either is.
+	public static overOwner(
+		owner: cool.DrawState,
+		own: cool.DrawState,
+	): cool.DrawState {
+		if (owner.hidden || own.hidden) return { hidden: true };
+		const state: cool.DrawState = {};
+		const ownMatrix = cool.Matrix2D.fromArray(own.transform);
+		const ownerMatrix = cool.Matrix2D.fromArray(owner.transform);
+		const matrix =
+			ownMatrix && ownerMatrix
+				? ownMatrix.then(ownerMatrix)
+				: (ownMatrix ?? ownerMatrix);
+		if (matrix) state.transform = matrix.toArray();
+		if (own.alpha !== undefined || owner.alpha !== undefined)
+			state.alpha = (own.alpha ?? 1) * (owner.alpha ?? 1);
+		const clip = own.clip ?? owner.clip;
+		if (clip) state.clip = clip;
+		const colorOverride = own.colorOverride ?? owner.colorOverride;
+		if (colorOverride) state.colorOverride = colorOverride;
+		const textOverride = own.textOverride ?? owner.textOverride;
+		if (textOverride) state.textOverride = textOverride;
+		return state;
 	}
 
 	// A shape target is its object id, a paragraph target the id, an
