@@ -73,6 +73,7 @@ fuzzer_core_libraries = \
     file \
     filterconfig \
     fsstorage \
+    frm \
     fwk \
     i18npool \
     i18nutil \
