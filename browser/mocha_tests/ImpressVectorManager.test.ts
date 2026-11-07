@@ -812,6 +812,36 @@ describe('ImpressVectorManager', function () {
 		nodeassert.strictEqual(countCalls(recorder, 'stroke'), 2);
 	});
 
+	// What an option names to draw over an object is drawn right after that
+	// object, before the next one, so a later object covers it like it
+	// covers the object itself.
+	it('draws what is named over an object before the objects after it', function () {
+		const manager = new ImpressVectorManager();
+		const hairline = { type: 'polygonHairline', path: 'M0 0 L1 1' };
+		manager.handleVectorPrimitivesResponse({
+			partId: 'S0',
+			objects: [
+				{ id: 11, primitives: [hairline] },
+				{ id: 22, primitives: [hairline] },
+			],
+		});
+		const data: any = manager.requestPart(0, cool.VectorMode.Slides);
+
+		const recorder = new CanvasRecorder();
+		manager.renderInto(recorder as any, data, {
+			drawOver: new Map([
+				[
+					11,
+					(context: CanvasRenderingContext2D) => context.fillRect(0, 0, 1, 1),
+				],
+			]),
+		});
+		const order = recorder.calls
+			.map((call) => call.method)
+			.filter((method) => method === 'stroke' || method === 'fillRect');
+		nodeassert.deepStrictEqual(order, ['stroke', 'fillRect', 'stroke']);
+	});
+
 	// Text that carries the automatic color is drawn with contrast against
 	// the surface behind it. The entry for the page is where the slide's
 	// own background arrives, so text on a dark slide comes out light even

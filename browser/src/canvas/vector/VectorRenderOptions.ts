@@ -86,5 +86,8 @@ namespace cool {
 		/// True when the form controls of the page are left out of the render. False or absent
 		/// when they are drawn.
 		withoutFormControls?: boolean;
+		/// What to draw over an object, by object id. Each entry draws into the context given to
+		/// it, right after its object. Absent where nothing is.
+		drawOver?: Map<number, (context: CanvasRenderingContext2D) => void>;
 	}
 }

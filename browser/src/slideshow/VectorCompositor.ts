@@ -212,21 +212,46 @@ class VectorCompositor extends SlideCompositor {
 			this.canvasHeight / data.slideHeight,
 		);
 		const states = this._drawStates(slideHash, data);
-		// A slideshow shows the document in its own colors.
+		// A slideshow shows the document in its own colors. Each video is drawn right after
+		// its shape, in the state of the shape, so the shapes after it cover it.
 		RenderManager.renderInto(
 			context as unknown as CanvasRenderingContext2D,
 			data,
-			{ authoredColors: true, states },
+			{
+				authoredColors: true,
+				states,
+				drawOver: this._videosOverShapes(slideHash, data, states),
+			},
 		);
 		context.restore();
 
-		// The videos are placed on the canvas in pixels, each in the state
-		// of its shape.
-		this.videos.render(slideHash, (shapeId) =>
-			this._videoLook(data, states, shapeId),
-		);
-
 		return this.offscreenCanvas.transferToImageBitmap();
+	}
+
+	// What draws the video of each shape that holds one, by shape id. A video is placed on the
+	// canvas in pixels, so the context goes back to pixels while it is drawn.
+	private _videosOverShapes(
+		slideHash: string,
+		data: cool.VectorPrimitivesData,
+		states: Map<number, cool.ObjectRenderState> | undefined,
+	): Map<number, (context: CanvasRenderingContext2D) => void> {
+		const overShapes = new Map<
+			number,
+			(context: CanvasRenderingContext2D) => void
+		>();
+		for (const shapeId of this.videos.shapeIds(slideHash)) {
+			overShapes.set(shapeId, (context) => {
+				context.save();
+				context.setTransform(1, 0, 0, 1, 0, 0);
+				this.videos.renderVideo(
+					slideHash,
+					shapeId,
+					this._videoLook(data, states, shapeId),
+				);
+				context.restore();
+			});
+		}
+		return overShapes;
 	}
 
 	// How the video of the shape is drawn: in the state of the shape.

@@ -423,6 +423,7 @@ class ImpressVectorManager extends VectorManagerBase {
 			}
 			// The master lies between the page's own background and its objects.
 			if (obj.kind === 'page') this._renderMaster(context, data);
+			options?.drawOver?.get(id)?.(context);
 		}
 	}
 
