@@ -20,6 +20,7 @@
 #include <tools/degree.hxx>
 #include <fillinfo.hxx>
 #include <rtl/ustring.hxx>
+#include <svx/rotmodit.hxx>
 #include <tools/color.hxx>
 #include <vcl/font.hxx>
 
@@ -39,6 +40,17 @@ struct CellFill
     SCCOL mnStartColumn;
     SCCOL mnEndColumn;
     Color maColor;
+};
+
+/// The fill of a cell with rotated text. It leans with the text over the edge of the cell above
+/// it, below it or both, as the rotate mode says.
+struct CellRotatedFill
+{
+    SCROW mnRow;
+    SCCOL mnColumn;
+    Color maColor;
+    Degree100 mnRotation;
+    SvxRotateMode meMode;
 };
 
 /// The data bar of a cell.
@@ -219,6 +231,7 @@ struct CellEditText
 struct CellContent
 {
     std::vector<CellFill> maFills;
+    std::vector<CellRotatedFill> maRotatedFills;
     std::vector<CellDataBar> maDataBars;
     std::vector<CellIconSet> maIconSets;
     /// The horizontal part of a cell comes before its vertical part.

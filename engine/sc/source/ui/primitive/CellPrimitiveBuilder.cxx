@@ -30,6 +30,7 @@
 #include <fillinfo.hxx>
 #include <formulacell.hxx>
 #include <global.hxx>
+#include <output.hxx>
 #include <patattr.hxx>
 #include <scitems.hxx>
 #include <scopetools.hxx>
@@ -209,7 +210,9 @@ private:
     static void computeInkRange(CellPrimitiveLayers& rLayers);
 
     void collectBackground(const ScTableInfo& rInfo);
+    void collectRotatedFill(const ScCellInfo& rCell, SCCOL nColumn, SCROW nRow);
     void placeBackground();
+    void placeRotatedFills();
     void addDataBar(const ScDataBarInfo& rDataBar, const basegfx::B2DRange& rCell, SCROW nRow);
     void addIconSet(const ScIconSetInfo& rIconSet, const basegfx::B2DRange& rCell, SCROW nRow);
     void collectShadows(const ScTableInfo& rInfo);
@@ -382,6 +385,9 @@ void CellPrimitiveBuilder::Impl::collect(SCCOL nStartColumn, SCROW nStartRow, SC
         // back in document order, so cells are built left to right on any sheet.
         if (mrDocument.IsLayoutRTL(mnTab))
             oOwnInfo->maArray.MirrorSelfX();
+        // The borders of a cell with rotated text lean with the text, in document order too.
+        ScOutputData::SetCellRotations(*oOwnInfo, mrDocument, mnTab, nStartColumn, nStartRow,
+                                       nEndColumn, /*bLayoutRTL=*/false);
         pInfo = &*oOwnInfo;
     }
     ScTableInfo& aInfo = *pInfo;
@@ -392,6 +398,7 @@ void CellPrimitiveBuilder::Impl::collect(SCCOL nStartColumn, SCROW nStartRow, SC
 
     collectBackground(aInfo);
     placeBackground();
+    placeRotatedFills();
     collectShadows(aInfo);
     placeShadows();
     // The border array of the info holds the borders by address; only their placing is left.
@@ -432,6 +439,9 @@ void CellPrimitiveBuilder::Impl::collectBackground(const ScTableInfo& rInfo)
             if (isColumnHidden(nColumn))
                 continue;
             const ScCellInfo& rCell = rRow.cellInfo(nColumn);
+            // Under rotated text a cell shows the fill of a neighbor, and its own fill leans with
+            // the text.
+            const bool bRotated = rCell.nRotateDir > ScRotateDir::Standard;
 
             std::optional<Color> oColor;
             if (rCell.mxColorScale)
@@ -439,9 +449,13 @@ void CellPrimitiveBuilder::Impl::collectBackground(const ScTableInfo& rInfo)
             else if (const auto* pBrush
                      = static_cast<const SvxBrushItem*>(rCell.maBackground.getItem()))
             {
+                if (bRotated && !pBrush->GetColor().IsFullyTransparent())
+                    pBrush = ScOutputData::FindRotatedBackground(mrDocument, nColumn, nRow, mnTab);
                 if (!pBrush->GetColor().IsTransparent())
                     oColor = pBrush->GetColor();
             }
+            if (bRotated && !rCell.bHOverlapped && !rCell.bVOverlapped)
+                collectRotatedFill(rCell, nColumn, nRow);
             if (oColor && oColor->IsTransparent())
                 oColor.reset();
 
@@ -459,6 +473,84 @@ void CellPrimitiveBuilder::Impl::collectBackground(const ScTableInfo& rInfo)
                 maContent.maIconSets.push_back(CellIconSet{ nColumn, nRow, *rCell.pIconSet });
         }
         flushRun();
+    }
+}
+
+void CellPrimitiveBuilder::Impl::collectRotatedFill(const ScCellInfo& rCell, SCCOL nColumn,
+                                                    SCROW nRow)
+{
+    const ScPatternAttr* pPattern = rCell.getPatternAttr();
+    const SfxItemSet* pCondSet = rCell.pConditionSet;
+    if (!pPattern)
+    {
+        pPattern = mrDocument.GetPattern(nColumn, nRow, mnTab);
+        pCondSet = mrDocument.GetCondResult(nColumn, nRow, mnTab);
+    }
+    const Degree100 nRotation = pPattern->GetRotateVal(pCondSet);
+    if (!nRotation)
+        return;
+
+    std::optional<Color> oColor = rCell.mxColorScale;
+    if (!oColor)
+    {
+        const auto* pBrush = static_cast<const SvxBrushItem*>(rCell.maBackground.getItem());
+        if (!pBrush)
+            pBrush = &pPattern->GetItem(ATTR_BACKGROUND, pCondSet);
+        if (pBrush->GetColor().IsFullyTransparent())
+            return;
+        oColor = pBrush->GetColor();
+    }
+    maContent.maRotatedFills.push_back(
+        CellRotatedFill{ nRow, nColumn, *oColor, nRotation,
+                         pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet).GetValue() });
+}
+
+void CellPrimitiveBuilder::Impl::placeRotatedFills()
+{
+    for (const CellRotatedFill& rFill : maContent.maRotatedFills)
+    {
+        const double fLeft = mrGeometry.getColumnStart(rFill.mnColumn);
+        const double fRight = fLeft + mrGeometry.getColumnWidth(rFill.mnColumn);
+        const double fTop = mrGeometry.getRowStart(rFill.mnRow);
+        const double fBottom = fTop + mrGeometry.getRowHeight(rFill.mnRow);
+        const double fAngle = toRadians(rFill.mnRotation);
+        const double fSin = std::sin(fAngle);
+        // Text along the row has no slant for the fill to follow.
+        if (std::abs(fSin) < 1e-9 || fRight <= fLeft)
+            continue;
+
+        // The fill moves sideways by the slant of the text over the height of the row: its top
+        // edge for text that stands on the bottom of the cell, its bottom edge for text that
+        // hangs from the top, and both by half for centered text.
+        const double fSkew = (fBottom - fTop) * std::cos(fAngle) / fSin;
+        double fTopShift = 0.0;
+        double fBottomShift = 0.0;
+        switch (rFill.meMode)
+        {
+            case SVX_ROTATE_MODE_BOTTOM:
+                fTopShift = fSkew;
+                break;
+            case SVX_ROTATE_MODE_CENTER:
+                fTopShift = fSkew / 2;
+                fBottomShift = -fSkew / 2;
+                break;
+            case SVX_ROTATE_MODE_TOP:
+                fBottomShift = -fSkew;
+                break;
+            default:
+                break;
+        }
+
+        basegfx::B2DPolygon aPolygon;
+        aPolygon.append(basegfx::B2DPoint(fLeft + fTopShift, fTop));
+        aPolygon.append(basegfx::B2DPoint(fRight + fTopShift, fTop));
+        aPolygon.append(basegfx::B2DPoint(fRight + fBottomShift, fBottom));
+        aPolygon.append(basegfx::B2DPoint(fLeft + fBottomShift, fBottom));
+        aPolygon.setClosed(true);
+        // The leaning fills cover the upright fills, data bars and icons of the row.
+        rowLayers(rFill.mnRow)
+            .maBackground.push_back(new primitive2d::PolyPolygonColorPrimitive2D(
+                basegfx::B2DPolyPolygon(aPolygon), rFill.maColor.getBColor()));
     }
 }
 

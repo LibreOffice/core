@@ -664,18 +664,27 @@ void ScOutputData::SetPagebreakMode( ScPageBreakData* pPageData )
 
 void ScOutputData::SetCellRotations()
 {
-    //! save nRotMax
-    SCCOL nRotMax = mnX2;
-    for (SCSIZE nRotY=0; nRotY<mnArrCount; nRotY++)
-        if (mpRowInfo[nRotY].nRotMaxCol != SC_ROTMAX_NONE && mpRowInfo[nRotY].nRotMaxCol > nRotMax)
-            nRotMax = mpRowInfo[nRotY].nRotMaxCol;
+    SetCellRotations(mrTabInfo, *mpDoc, mnTab, mnVisX1, mnVisY1, mnX2, mbLayoutRTL);
+}
 
-    for (SCSIZE nArrY=1; nArrY<mnArrCount; nArrY++)
+void ScOutputData::SetCellRotations( ScTableInfo& rTabInfo, const ScDocument& rDoc, SCTAB nTab,
+                                     SCCOL nVisX1, SCROW nVisY1, SCCOL nX2, bool bLayoutRTL )
+{
+    RowInfo* pRowInfo = rTabInfo.mpRowInfo.get();
+    const SCSIZE nArrCount = rTabInfo.mnArrCount;
+
+    //! save nRotMax
+    SCCOL nRotMax = nX2;
+    for (SCSIZE nRotY=0; nRotY<nArrCount; nRotY++)
+        if (pRowInfo[nRotY].nRotMaxCol != SC_ROTMAX_NONE && pRowInfo[nRotY].nRotMaxCol > nRotMax)
+            nRotMax = pRowInfo[nRotY].nRotMaxCol;
+
+    for (SCSIZE nArrY=1; nArrY<nArrCount; nArrY++)
     {
-        RowInfo* pThisRowInfo = &mpRowInfo[nArrY];
+        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
         if ( pThisRowInfo->nRotMaxCol != SC_ROTMAX_NONE &&
-             ( pThisRowInfo->bChanged || mpRowInfo[nArrY-1].bChanged ||
-               ( nArrY+1<mnArrCount && mpRowInfo[nArrY+1].bChanged ) ) )
+             ( pThisRowInfo->bChanged || pRowInfo[nArrY-1].bChanged ||
+               ( nArrY+1<nArrCount && pRowInfo[nArrY+1].bChanged ) ) )
         {
             SCROW nY = pThisRowInfo->nRowNo;
 
@@ -685,10 +694,10 @@ void ScOutputData::SetCellRotations()
                 const ScPatternAttr* pPattern = pInfo->getPatternAttr();
                 const SfxItemSet* pCondSet = pInfo->pConditionSet;
 
-                if ( !pPattern && !mpDoc->ColHidden(nX, mnTab) )
+                if ( !pPattern && !rDoc.ColHidden(nX, nTab) )
                 {
-                    pPattern = mpDoc->GetPattern( nX, nY, mnTab );
-                    pCondSet = mpDoc->GetCondResult( nX, nY, mnTab );
+                    pPattern = rDoc.GetPattern( nX, nY, nTab );
+                    pCondSet = rDoc.GetCondResult( nX, nY, nTab );
                 }
 
                 if ( pPattern )     // column isn't hidden
@@ -700,8 +709,8 @@ void ScOutputData::SetCellRotations()
                         pInfo->nRotateDir = nDir;
 
                         // create target coordinates
-                        const SCCOL nTargetX(nX - mnVisX1 + 1);
-                        const SCROW nTargetY(nY - mnVisY1 + 1);
+                        const SCCOL nTargetX(nX - nVisX1 + 1);
+                        const SCROW nTargetY(nY - nVisY1 + 1);
 
                         // Check for values - below in SetCellRotation these will
                         // be converted to size_t and thus may not be negative
@@ -711,8 +720,8 @@ void ScOutputData::SetCellRotations()
                             // add rotation info to Array information
                             const Degree100 nAttrRotate(pPattern->GetRotateVal(pCondSet));
                             const SvxRotateMode eRotMode(pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet).GetValue());
-                            const double fOrient((mbLayoutRTL ? -1.0 : 1.0) * toRadians(nAttrRotate)); // 1/100th degrees -> [0..2PI]
-                            svx::frame::Array& rArray = mrTabInfo.maArray;
+                            const double fOrient((bLayoutRTL ? -1.0 : 1.0) * toRadians(nAttrRotate)); // 1/100th degrees -> [0..2PI]
+                            svx::frame::Array& rArray = rTabInfo.maArray;
 
                             rArray.SetCellRotation(nTargetX, nTargetY, eRotMode, fOrient);
                         }
@@ -756,8 +765,10 @@ static ScRotateDir lcl_GetRotateDir( const ScDocument* pDoc, SCCOL nCol, SCROW n
     return nRet;
 }
 
-static const SvxBrushItem* lcl_FindBackground( const ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB mnTab )
+const SvxBrushItem* ScOutputData::FindRotatedBackground( const ScDocument& rDoc, SCCOL nCol,
+                                                        SCROW nRow, SCTAB mnTab )
 {
+    const ScDocument* pDoc = &rDoc;
     const ScPatternAttr* pPattern = pDoc->GetPattern( nCol, nRow, mnTab );
     const SfxItemSet* pCondSet = pDoc->GetCondResult( nCol, nRow, mnTab );
     const SvxBrushItem* pBackground =
@@ -1200,7 +1211,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                             !bCellContrast )
                     {
                         SCROW nY = mpRowInfo[nArrY].nRowNo;
-                        pBackground = lcl_FindBackground( mpDoc, nX, nY, mnTab );
+                        pBackground = FindRotatedBackground(*mpDoc, nX, nY, mnTab);
                     }
 
                     std::optional<Color> const & pColor = pInfo->mxColorScale;

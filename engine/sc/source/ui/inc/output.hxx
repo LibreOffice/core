@@ -59,6 +59,7 @@ class ScPageBreakData;
 class FmFormView;
 class ScFieldEditEngine;
 class SdrPaintWindow;
+class SvxBrushItem;
 class ScDrawStringsVars;
 
 #define SC_SCENARIO_HSPACE      60
@@ -384,6 +385,18 @@ private:
     RangeEdges GetRangeEdges( SCCOL nStartX, SCROW nStartY, SCCOL nEndX, SCROW nEndY ) const;
 
 public:
+    /** Set the rotation of every cell with rotated text on the border array of rTabInfo, and the
+        direction of its text on the cell info. The info starts at nVisX1 and nVisY1, and a row
+        counts up to nX2 or to the last column whose rotated content reaches into it.
+     */
+    static void SetCellRotations( ScTableInfo& rTabInfo, const ScDocument& rDoc, SCTAB nTab,
+                                  SCCOL nVisX1, SCROW nVisY1, SCCOL nX2, bool bLayoutRTL );
+
+    /// The background under the rotated text of a cell: its own, or the one of the first cell,
+    /// on the side the text leans away from, that is not rotated the same way or not filled.
+    static const SvxBrushItem* FindRotatedBackground( const ScDocument& rDoc, SCCOL nCol,
+                                                      SCROW nRow, SCTAB nTab );
+
 
     /**
      * @param nNewScrX: X-Offset in the output device for the table
