@@ -77,6 +77,13 @@ struct MSFILTER_DLLPUBLIC PptCurrentUserAtom
 
 public:
 
+    bool IsEncrypted() const
+    {
+        // MS-PPT Spec 2.3.2 CurrentUserAtom headerToken
+        // 0xF3D1C4DF identifies an encrypted document
+        return nMagic == 0xF3D1C4DF;
+    }
+
     PptCurrentUserAtom() :  nMagic              ( 0 ),
                             nCurrentUserEdit    ( 0 ),
                             nDocFileVersion     ( 0 ),
@@ -316,6 +323,7 @@ struct PptUserEditAtom
     sal_uInt32          nDocumentRef;
     sal_uInt32          nMaxPersistWritten;      // total number of Persist entries up to this point
     PptViewTypeEnum     eLastViewType;           // enum view type
+    std::optional<sal_uInt32>  nEncryptSessionPersistIdRef; // Persist ID of the CryptSession10Container, if present
 
 public:
     PptUserEditAtom()

@@ -466,6 +466,8 @@ SvStream& ReadPptFontEntityAtom( SvStream& rIn, PptFontEntityAtom& rAtom )
 SvStream& ReadPptUserEditAtom( SvStream& rIn, PptUserEditAtom& rAtom )
 {
     sal_Int16 lastViewType = 0;
+    sal_uInt16 unused = 0;
+    rAtom.nEncryptSessionPersistIdRef.reset();
     ReadDffRecordHeader( rIn, rAtom.aHd );
     rIn
        .ReadInt32( rAtom.nLastSlideID )
@@ -474,8 +476,20 @@ SvStream& ReadPptUserEditAtom( SvStream& rIn, PptUserEditAtom& rAtom )
        .ReadUInt32( rAtom.nOffsetPersistDirectory )
        .ReadUInt32( rAtom.nDocumentRef )
        .ReadUInt32( rAtom.nMaxPersistWritten )
-       .ReadInt16( lastViewType );
+       .ReadInt16( lastViewType )
+       .ReadUInt16( unused );
     rAtom.eLastViewType = static_cast<PptViewTypeEnum>(lastViewType);
+
+    // From MS-PPT Spec 2.3.3 UserEditAtom:
+    // nRecLen MUST be 0x0000001C or 0x00000020
+    // when encrypted file, it's 0x20
+    if (rAtom.aHd.nRecLen == 0x20)
+    {
+        sal_uInt32 nEncryptSessionPersistIdRef = 0;
+        rIn.ReadUInt32(nEncryptSessionPersistIdRef);
+        rAtom.nEncryptSessionPersistIdRef = nEncryptSessionPersistIdRef;
+    }
+
     rAtom.aHd.SeekToEndOfRecord(rIn);
     return rIn;
 }
