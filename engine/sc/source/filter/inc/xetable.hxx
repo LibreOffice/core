@@ -151,11 +151,18 @@ private:
 class XclExpShrfmla : public XclExpRangeFmlaBase
 {
 public:
-    /** Creates a SHRFMLA record that consists of the passed cell address only. */
-    explicit            XclExpShrfmla( const XclTokenArrayRef& xTokArr, const ScAddress& rScPos );
+    /** Creates a SHRFMLA record that consists of the passed cell address only. The index is the
+        number of the shared formula in its sheet, counting from zero. */
+    explicit XclExpShrfmla(const XclTokenArrayRef& xTokArr, const ScAddress& rScPos,
+                           sal_uInt32 nSharedIndex);
 
     /** Extends the cell range to include the passed cell address. */
     void                ExtendRange( const ScAddress& rScPos );
+
+    /** Returns the number of the shared formula in its sheet, counting from zero. */
+    sal_uInt32 GetSharedIndex() const { return mnSharedIndex; }
+    /** Returns the range that holds all cells of the shared formula. */
+    const XclRange& GetXclRange() const { return maXclRange; }
 
     /** Creates and returns the token array for a corresponding FORMULA cell record. */
     virtual XclTokenArrayRef CreateCellTokenArray( const XclExpRoot& rRoot ) const override;
@@ -166,8 +173,9 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
-    XclTokenArrayRef    mxTokArr;       /// The token array of a shared formula.
-    sal_uInt8           mnUsedCount;    /// Number of FORMULA records referring to this record.
+    XclTokenArrayRef mxTokArr; /// The token array of a shared formula.
+    sal_uInt8 mnUsedCount = 1; /// Number of FORMULA records referring to this record.
+    sal_uInt32 mnSharedIndex;  /// Number of the shared formula in its sheet.
 };
 
 typedef rtl::Reference< XclExpShrfmla > XclExpShrfmlaRef;

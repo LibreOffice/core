@@ -38,14 +38,15 @@ struct StoredFormula
     bool operator==(const StoredFormula& rOther) const = default;
 };
 
-// The formulas of one sheet part, keyed by the cell reference, and the references of all its
-// cells. An f element with no text of its own carries no formula: a shared-group member keeps
-// its text in the master, and the cells a spill covers get an empty one. Those hold no formula
-// to compare, but the cell is there.
+// The formulas of one sheet part, keyed by the cell reference, the references of all its cells, and
+// the references of the cells that take their formula from a shared group. An f element with no
+// text of its own carries no formula: a shared-group member keeps its text in the master, and the
+// cells a spill covers get an empty one. Those hold no formula to compare, but the cell is there.
 struct SheetFormulas
 {
     std::map<OUString, StoredFormula> aFormulas;
     std::set<OUString> aCells;
+    std::set<OUString> aSharedMembers;
 };
 
 OString toReport(std::u16string_view aText)
@@ -81,6 +82,11 @@ void assertSameStoredFormulas(const SheetFormulas& rInput, const SheetFormulas& 
     {
         const bool bIgnored = rIgnored.find(rEntry.first) != rIgnored.end();
         auto aWritten = rWritten.aFormulas.find(rEntry.first);
+        // The export writes a formula group as a shared formula, and the text of the group is
+        // compared in its master.
+        if (aWritten == rWritten.aFormulas.end()
+            && rWritten.aSharedMembers.find(rEntry.first) != rWritten.aSharedMembers.end())
+            continue;
         if (aWritten == rWritten.aFormulas.end())
         {
             if (!bIgnored)
@@ -152,7 +158,11 @@ SheetFormulas DynamicArrayImportExportTest::collectStoredFormulas(const xmlDocUn
         StoredFormula aFormula;
         aFormula.aText = pFormula->content();
         if (aFormula.aText.isEmpty())
+        {
+            if (pFormula->attribute("t") == "shared")
+                aSheet.aSharedMembers.insert(aReference);
             continue;
+        }
         aFormula.aMetadata = pCells->at(nIndex)->attribute("cm");
         aFormula.bArray = pFormula->attribute("t") == "array";
         // A shared-formula group also carries a ref, over the cells of the group. Only the

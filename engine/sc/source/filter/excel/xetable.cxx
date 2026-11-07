@@ -186,10 +186,11 @@ XclExpArrayRef XclExpArrayBuffer::FindArray( const ScTokenArray& rScTokArr, cons
 
 // Shared formulas ============================================================
 
-XclExpShrfmla::XclExpShrfmla( const XclTokenArrayRef& xTokArr, const ScAddress& rScPos ) :
-    XclExpRangeFmlaBase( EXC_ID_SHRFMLA, 10 + xTokArr->GetSize(), rScPos ),
-    mxTokArr( xTokArr ),
-    mnUsedCount( 1 )
+XclExpShrfmla::XclExpShrfmla(const XclTokenArrayRef& xTokArr, const ScAddress& rScPos,
+                             sal_uInt32 nSharedIndex)
+    : XclExpRangeFmlaBase(EXC_ID_SHRFMLA, 10 + xTokArr->GetSize(), rScPos)
+    , mxTokArr(xTokArr)
+    , mnSharedIndex(nSharedIndex)
 {
 }
 
@@ -285,7 +286,7 @@ XclExpShrfmlaRef XclExpShrfmlaBuffer::CreateOrExtendShrfmla(
     {
         // create a new record
         XclTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_SHARED, *pShrdScTokArr, &rScPos );
-        xRec = new XclExpShrfmla( xTokArr, rScPos );
+        xRec = new XclExpShrfmla(xTokArr, rScPos, sal_uInt32(maRecMap.size()));
         maRecMap[ pShrdScTokArr ] = xRec;
     }
     else
@@ -1167,16 +1168,42 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
         }
         if (bValid)
         {
+            // The first cell of a shared formula holds the formula text and the range of the
+            // cells that share it. Every cell names the shared formula by its index, and the
+            // other cells hold no text.
+            const XclExpShrfmla* pSharedFormula
+                = dynamic_cast<const XclExpShrfmla*>(mxAddRec.get());
+            const bool bSharedFormulaBase
+                = pSharedFormula && pSharedFormula->IsBasePos(GetXclCol(), GetXclRow());
             if (!bTagStarted)
             {
-                rWorksheet->startElement(XML_f, XML_aca,
-                                         ToPsz((mxTokArr && mxTokArr->IsVolatile())
-                                               || (mxAddRec && mxAddRec->IsVolatile())));
+                OString sSharedIndex;
+                OStringBuffer sSharedRange;
+                if (pSharedFormula)
+                {
+                    sSharedIndex = OString::number(pSharedFormula->GetSharedIndex());
+                    const XclRange& rRange = pSharedFormula->GetXclRange();
+                    XclXmlUtils::ToOString(sSharedRange, rRange.maFirst);
+                    if (rRange.GetColCount() > 1 || rRange.GetRowCount() > 1)
+                    {
+                        sSharedRange.append(':');
+                        XclXmlUtils::ToOString(sSharedRange, rRange.maLast);
+                    }
+                }
+                rWorksheet->startElement(XML_f,
+                        XML_aca, ToPsz((mxTokArr && mxTokArr->IsVolatile())
+                                       || (mxAddRec && mxAddRec->IsVolatile())),
+                        XML_t, pSharedFormula ? "shared" : nullptr,
+                        XML_ref, bSharedFormulaBase ? sSharedRange.getStr() : nullptr,
+                        XML_si, pSharedFormula ? sSharedIndex.getStr() : nullptr);
                 bTagStarted = true;
             }
-            rWorksheet->writeEscaped(XclXmlUtils::ToOUString(
-                rStrm.GetRoot().GetCompileFormulaContext(), mrScFmlaCell.aPos, &aTokenArray,
-                mrScFmlaCell.GetErrCode()));
+            if (!pSharedFormula || bSharedFormulaBase)
+            {
+                rWorksheet->writeEscaped(XclXmlUtils::ToOUString(
+                    rStrm.GetRoot().GetCompileFormulaContext(), mrScFmlaCell.aPos, &aTokenArray,
+                    mrScFmlaCell.GetErrCode()));
+            }
         }
     }
 

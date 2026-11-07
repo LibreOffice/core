@@ -35,6 +35,7 @@
 #include <svl/zformat.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
+#include <tools/XPath.hxx>
 
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
 
@@ -2193,6 +2194,81 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testArrayFormulaSpillRoundtripODS)
     CPPUNIT_ASSERT_EQUAL(20.0, pDocument->GetValue(ScAddress(0, 1, 0)));
     CPPUNIT_ASSERT_EQUAL(30.0, pDocument->GetValue(ScAddress(0, 2, 0)));
     CPPUNIT_ASSERT_EQUAL(40.0, pDocument->GetValue(ScAddress(0, 3, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testFormulaGroupsAsSharedFormulasXLSX)
+{
+    // A formula group is written as a shared formula. The first cell holds the formula text and
+    // the range, and the other cells only name the shared formula. A formula on its own stays a
+    // plain formula.
+    createScDoc();
+    ScDocument* pDocument = getScDoc();
+    for (SCROW nRow = 0; nRow < 3; ++nRow)
+    {
+        const OUString aRow = OUString::number(nRow + 1);
+        pDocument->SetValue(ScAddress(0, nRow, 0), nRow + 1);
+        pDocument->SetString(ScAddress(1, nRow, 0), OUString("=A" + aRow + "*2"));
+        pDocument->SetString(ScAddress(2, nRow, 0), OUString("=B" + aRow + "+A" + aRow));
+    }
+    pDocument->SetString(ScAddress(3, 0, 0), u"=SUM(A1:A3)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(SCROW(3),
+                         pDocument->GetFormulaCell(ScAddress(1, 0, 0))->GetSharedLength());
+    CPPUNIT_ASSERT_EQUAL(SCROW(3),
+                         pDocument->GetFormulaCell(ScAddress(2, 0, 0))->GetSharedLength());
+
+    saveAndReload(TestFilter::XLSX);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+    tools::XPath aXPath(pSheet.get(),
+                        [this](xmlXPathContextPtr pContext) { registerNamespaces(pContext); });
+
+    // The t, ref and si attributes of the formula of each cell, its formula text and its cached
+    // value. An empty string stands for an attribute that is not there.
+    static constexpr struct
+    {
+        std::string_view aCell;
+        std::u16string_view aType;
+        std::u16string_view aRange;
+        std::u16string_view aIndex;
+        std::u16string_view aFormula;
+        std::u16string_view aValue;
+    } aExpectedCells[] = {
+        { "//x:c[@r='B1']", u"shared", u"B1:B3", u"0", u"A1*2", u"2" },
+        { "//x:c[@r='B2']", u"shared", u"", u"0", u"", u"4" },
+        { "//x:c[@r='B3']", u"shared", u"", u"0", u"", u"6" },
+        { "//x:c[@r='C1']", u"shared", u"C1:C3", u"1", u"B1+A1", u"3" },
+        { "//x:c[@r='C2']", u"shared", u"", u"1", u"", u"6" },
+        { "//x:c[@r='C3']", u"shared", u"", u"1", u"", u"9" },
+        { "//x:c[@r='D1']", u"", u"", u"", u"SUM(A1:A3)", u"6" },
+    };
+    for (const auto& rExpected : aExpectedCells)
+    {
+        const std::string aMessage(rExpected.aCell);
+        std::unique_ptr<tools::XPathObject> pCell = aXPath.create(rExpected.aCell);
+        std::unique_ptr<tools::XPathObject> pFormula = aXPath.create(pCell, "/x:f");
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage, 1, pFormula->count());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage, OUString(rExpected.aType),
+                                     pFormula->attribute("t"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage, OUString(rExpected.aRange),
+                                     pFormula->attribute("ref"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage, OUString(rExpected.aIndex),
+                                     pFormula->attribute("si"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage, OUString(rExpected.aFormula),
+                                     pFormula->content());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage, OUString(rExpected.aValue),
+                                     aXPath.create(pCell, "/x:v")->content());
+    }
+
+    pDocument = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(u"=A3*2"_ustr, pDocument->GetFormula(1, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u"=B3+A3"_ustr, pDocument->GetFormula(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(6.0, pDocument->GetValue(ScAddress(1, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, pDocument->GetValue(ScAddress(2, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(SCROW(3),
+                         pDocument->GetFormulaCell(ScAddress(1, 0, 0))->GetSharedLength());
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(A1:A3)"_ustr, pDocument->GetFormula(3, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(6.0, pDocument->GetValue(ScAddress(3, 0, 0)));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
