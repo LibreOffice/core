@@ -8548,13 +8548,15 @@ bool DrawingML::WriteCustomGeometry(
         if (aPlan.bPathInExtent)
             mpFS->startElementNS(XML_a, XML_path, XML_fill, sFill, XML_stroke, sStroke);
         else
-            mpFS->startElementNS(
-                XML_a, XML_path, XML_fill, sFill, XML_stroke, sStroke, XML_w,
-                OString::number(bUseGlobalViewBox ? nViewBoxWidth
-                                                  : aPathSize[nPathSizeIndex].Width),
-                XML_h,
-                OString::number(bUseGlobalViewBox ? nViewBoxHeight
-                                                  : aPathSize[nPathSizeIndex].Height));
+        {
+            const awt::Size aSubpathSize
+                = bUseGlobalViewBox
+                      ? awt::Size(nViewBoxWidth, nViewBoxHeight)
+                      : aPathSize[std::min(nPathSizeIndex, aPathSize.getLength() - 1)];
+            mpFS->startElementNS(XML_a, XML_path, XML_fill, sFill, XML_stroke, sStroke, XML_w,
+                                 OString::number(aSubpathSize.Width), XML_h,
+                                 OString::number(aSubpathSize.Height));
+        }
 
         // Arcs drawn by commands ELLIPTICALQUADRANTX and ELLIPTICALQUADRANTY depend on the position
         // of the target point in regard to the current point. Therefore we need to track the
