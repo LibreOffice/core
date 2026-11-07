@@ -213,6 +213,21 @@ void sweepIfDue()
     if (std::chrono::steady_clock::now() - LastSweep >= SweepPeriod)
         sweep();
 }
+
+/// Makes the given tag a name for the entry of the document with the given key until the given
+/// time. The caller holds the mutex.
+void storeTag(const std::string& tag, const std::string& docKey,
+              const std::chrono::steady_clock::time_point expiresAt)
+{
+    if (CachePath.empty())
+        return;
+
+    dropExpiredTags(std::chrono::steady_clock::now());
+    Tag& entry = Tags[tag];
+    entry.docKey = docKey;
+    entry.expiresAt = expiresAt;
+    entry.slides.clear();
+}
 } // namespace
 
 void PreviewCache::initialize(const std::string& path, const std::size_t maxSizeBytes,
@@ -361,21 +376,15 @@ void PreviewCache::store(const std::string& docKey, const std::string& lastModif
 
 void PreviewCache::registerTag(const std::string& tag, const std::string& docKey)
 {
-    registerTag(tag, docKey, std::chrono::steady_clock::now() + TagTtl);
+    std::lock_guard<std::mutex> lock(Mutex);
+    storeTag(tag, docKey, std::chrono::steady_clock::now() + TagTtl);
 }
 
 void PreviewCache::registerTag(const std::string& tag, const std::string& docKey,
                                const std::chrono::steady_clock::time_point expiresAt)
 {
     std::lock_guard<std::mutex> lock(Mutex);
-    if (CachePath.empty())
-        return;
-
-    dropExpiredTags(std::chrono::steady_clock::now());
-    Tag& entry = Tags[tag];
-    entry.docKey = docKey;
-    entry.expiresAt = expiresAt;
-    entry.slides.clear();
+    storeTag(tag, docKey, expiresAt);
 }
 
 PreviewCache::Lookup PreviewCache::readPicture(const std::string& tag, const std::string& guid,
