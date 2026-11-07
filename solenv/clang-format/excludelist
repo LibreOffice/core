@@ -1283,7 +1283,6 @@ comphelper/source/streaming/seqstream.cxx
 comphelper/source/streaming/streamsection.cxx
 comphelper/source/windows/windows_process.cxx
 comphelper/source/xml/attributelist.cxx
-comphelper/source/xml/ofopxmlhelper.cxx
 comphelper/source/xml/xmltools.cxx
 compilerplugins/clang/automem.cxx
 compilerplugins/clang/badstatics.cxx
