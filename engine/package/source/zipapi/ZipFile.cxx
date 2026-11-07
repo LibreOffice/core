@@ -149,6 +149,16 @@ uno::Reference< xml::crypto::XDigestContext > ZipFile::StaticGetDigestContextFor
     return xDigestContext;
 }
 
+namespace
+{
+// The export writes at most 600000 PBKDF2 iterations, and Argon2id with 3 passes, 64 MiB and 4
+// lanes. These limits are far above that.
+constexpr sal_Int32 MAX_PBKDF2_ITERATIONS = 10000000;
+constexpr sal_Int32 MAX_ARGON2_PASSES = 32;
+constexpr sal_Int32 MAX_ARGON2_MEMORY_KIB = 512 * 1024;
+constexpr sal_Int32 MAX_ARGON2_LANES = 32;
+}
+
 uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const uno::Reference< cpo::uno::XComponentContext >& xArgContext, const ::rtl::Reference< EncryptionData >& xEncryptionData, bool bEncrypt )
 {
     uno::Reference< xml::crypto::XCipherContext > xResult;
@@ -168,6 +178,12 @@ uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const un
     }
     else if (xEncryptionData->m_oArgon2Args)
     {
+        auto const& [nPasses, nMemoryKiB, nLanes] = *xEncryptionData->m_oArgon2Args;
+        if (nPasses < 1 || nPasses > MAX_ARGON2_PASSES || nMemoryKiB < 1
+            || nMemoryKiB > MAX_ARGON2_MEMORY_KIB || nLanes < 1 || nLanes > MAX_ARGON2_LANES)
+        {
+            throw ZipIOException(u"Argon2 arguments out of range!"_ustr);
+        }
         // apparently multiple lanes cannot be processed in parallel (the
         // implementation will clamp), but it doesn't make sense to have more
         // threads than CPUs
@@ -197,6 +213,12 @@ uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const un
             SAL_WARN("package", "argon2id_ctx failed to derive key: " << argon2_error_message(rc));
             throw ZipIOException(u"argon2id_ctx failed to derive key"_ustr);
         }
+    }
+    else if (!xEncryptionData->m_oPBKDFIterationCount
+             || *xEncryptionData->m_oPBKDFIterationCount < 1
+             || *xEncryptionData->m_oPBKDFIterationCount > MAX_PBKDF2_ITERATIONS)
+    {
+        throw ZipIOException(u"PBKDF2 iteration count out of range!"_ustr);
     }
     else if ( rtl_Digest_E_None != rtl_digest_PBKDF2( reinterpret_cast< sal_uInt8* >( aDerivedKey.getArray() ),
                         aDerivedKey.getLength(),
