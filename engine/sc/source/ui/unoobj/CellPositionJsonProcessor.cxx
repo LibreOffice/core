@@ -182,6 +182,14 @@ void CellPositionJsonProcessor::putRange(std::string_view sName, const basegfx::
     writePositionValue(rWriter, rRange.getMaxY() * fScale, true);
 }
 
+// A range in a part is placed in the cells like any other range: the positions of the
+// transformations above it map it there.
+void CellPositionJsonProcessor::putPartRange(std::string_view sName,
+                                             const basegfx::B2DRange& rRange)
+{
+    putRange(sName, rRange, getScaleFactor());
+}
+
 void CellPositionJsonProcessor::putPath(std::string_view sName,
                                         const basegfx::B2DPolyPolygon& rPolyPolygon)
 {

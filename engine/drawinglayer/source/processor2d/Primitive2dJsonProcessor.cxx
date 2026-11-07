@@ -503,6 +503,14 @@ void Primitive2dJsonProcessor::putRange(std::string_view sName, const basegfx::B
     writeRange(sName, rRange, fScale);
 }
 
+void Primitive2dJsonProcessor::putPartRange(std::string_view sName,
+                                            const basegfx::B2DRange& rRange)
+{
+    basegfx::B2DRange aRange(rRange);
+    aRange.transform(maEnclosingTransformation);
+    writeRange(sName, aRange, mfScaleFactor);
+}
+
 void Primitive2dJsonProcessor::putPath(std::string_view sName,
                                        const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
@@ -2113,10 +2121,10 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
                 {
                     // The bounds are in the twips of the part, so a paragraph in a table
                     // cell takes the transformations above it.
-                    basegfx::B2DRange aRange(rBasePrimitive.getB2DRange(maViewInformation2D));
-                    aRange.transform(maEnclosingTransformation);
+                    const basegfx::B2DRange aRange =
+                        rBasePrimitive.getB2DRange(maViewInformation2D);
                     if (!aRange.isEmpty())
-                        writeRange("bounds", aRange, mfScaleFactor);
+                        putPartRange("bounds", aRange);
                 }
             }
             else if (maExternalPrimitiveWriter

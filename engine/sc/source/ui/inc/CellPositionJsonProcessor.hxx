@@ -84,6 +84,7 @@ protected:
     void putPosition(std::string_view sName, double fValue, bool bVertical) override;
     void putTextOrigin(double fX, double fY) override;
     void putRange(std::string_view sName, const basegfx::B2DRange& rRange, double fScale) override;
+    void putPartRange(std::string_view sName, const basegfx::B2DRange& rRange) override;
     void putPath(std::string_view sName, const basegfx::B2DPolyPolygon& rPolyPolygon) override;
     void putMatrix(std::string_view sName, const basegfx::B2DHomMatrix& rMatrix,
                    MatrixKind eKind) override;

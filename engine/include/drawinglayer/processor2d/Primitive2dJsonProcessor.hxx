@@ -177,6 +177,9 @@ protected:
     /// The origin of a compact text portion, in whole units.
     virtual void putTextOrigin(double fX, double fY);
     virtual void putRange(std::string_view sName, const basegfx::B2DRange& rRange, double fScale);
+    /// A range in the coordinates of the primitive being written, which the plain writer writes
+    /// in the coordinates of the part, through the transformations above the primitive.
+    virtual void putPartRange(std::string_view sName, const basegfx::B2DRange& rRange);
     virtual void putPath(std::string_view sName, const basegfx::B2DPolyPolygon& rPolyPolygon);
     virtual void putMatrix(std::string_view sName, const basegfx::B2DHomMatrix& rMatrix,
                            MatrixKind eKind);

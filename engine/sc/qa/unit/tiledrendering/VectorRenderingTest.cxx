@@ -26,6 +26,7 @@
 #include <document.hxx>
 #include <docuno.hxx>
 #include <drwlayer.hxx>
+#include <editutil.hxx>
 #include <globstr.hrc>
 #include <gridwin.hxx>
 #include <markdata.hxx>
@@ -312,6 +313,18 @@ void setColumnWidth(ScDocShell& rDocShell, SCCOL nColumn, sal_uInt16 nTwips)
     Scheduler::ProcessEventsToIdle();
 }
 
+/// Every value named sName at any depth of the tree.
+void collectNamed(const boost::property_tree::ptree& rTree, std::string_view sName,
+                  std::vector<boost::property_tree::ptree>& rFound)
+{
+    for (const auto& [rKey, rChild] : rTree)
+    {
+        if (rKey == sName)
+            rFound.push_back(rChild);
+        collectNamed(rChild, sName, rFound);
+    }
+}
+
 /// The values of a position written relative to the cells, [cell, offset].
 std::pair<int, double> cellPosition(const boost::property_tree::ptree& rPosition)
 {
@@ -371,6 +384,32 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorBlockHoldsCellText)
     const auto oNumber = cellTextAt(aResponse, 1, 1);
     CPPUNIT_ASSERT(oNumber);
     CPPUNIT_ASSERT_EQUAL(std::string("right"), oNumber->get<std::string>("horizontal"));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorParagraphBoundsAreCellPositions)
+{
+    // The paragraphs of a cell with rich text carry their bounds as positions in the cells, like
+    // every other range of a block.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    ScFieldEditEngine& rEngine = pDoc->GetEditEngine();
+    rEngine.SetText(u"First\nSecond"_ustr);
+    pDoc->SetEditText(ScAddress(1, 1, 0), rEngine.CreateTextObject());
+    Scheduler::ProcessEventsToIdle();
+
+    const boost::property_tree::ptree aResponse
+        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+
+    std::vector<boost::property_tree::ptree> aBounds;
+    for (const auto& rRow : blockRows(aResponse))
+        collectNamed(rRow, "bounds", aBounds);
+    CPPUNIT_ASSERT(!aBounds.empty());
+    for (const auto& rBounds : aBounds)
+    {
+        CPPUNIT_ASSERT_EQUAL(size_t(4), rBounds.size());
+        for (const auto& rEdge : rBounds)
+            cellPosition(rEdge.second);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorCellTextNamesItsFontByStyle)
