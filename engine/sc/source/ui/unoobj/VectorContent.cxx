@@ -235,10 +235,13 @@ std::string_view layerName(SdrLayerID nLayer)
     return "front";
 }
 
-/// The object and the objects inside it, in the order they paint.
+/// The object and the members inside it, in the order they paint. A 3D scene is drawn whole and
+/// has no members of its own.
 void collectObjects(SdrObject& rObject, std::vector<SdrObject*>& rObjects)
 {
     rObjects.push_back(&rObject);
+    if (DynCastE3dScene(&rObject))
+        return;
     if (const SdrObjList* pChildren = rObject.GetSubList())
     {
         for (const rtl::Reference<SdrObject>& pChild : *pChildren)
