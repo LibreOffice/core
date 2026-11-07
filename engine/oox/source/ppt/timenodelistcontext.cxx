@@ -311,13 +311,16 @@ namespace oox::ppt {
                         }
                         else if (msCommand.startsWith("playFrom"))
                         {
-                            std::u16string_view aMediaTime( msCommand.subView( 9, msCommand.getLength() - 10 ) );
-                            rtl_math_ConversionStatus eStatus;
-                            double fMediaTime = ::rtl::math::stringToDouble( aMediaTime, u'.', u',', &eStatus );
-                            if( eStatus == rtl_math_ConversionStatus_Ok )
+                            if (msCommand.getLength() >= 10)
                             {
-                                aParamValue.Name = u"MediaTime"_ustr;
-                                aParamValue.Value <<= fMediaTime;
+                                std::u16string_view aMediaTime( msCommand.subView( 9, msCommand.getLength() - 10 ) );
+                                rtl_math_ConversionStatus eStatus;
+                                double fMediaTime = ::rtl::math::stringToDouble( aMediaTime, u'.', u',', &eStatus );
+                                if( eStatus == rtl_math_ConversionStatus_Ok )
+                                {
+                                    aParamValue.Name = u"MediaTime"_ustr;
+                                    aParamValue.Value <<= fMediaTime;
+                                }
                             }
                             nCommand = EffectCommands::PLAY;
                         }
