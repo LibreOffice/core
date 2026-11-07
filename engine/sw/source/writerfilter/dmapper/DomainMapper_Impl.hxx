@@ -219,6 +219,8 @@ enum class SubstreamType
 struct SubstreamContext
 {
     SubstreamType eSubstreamType = SubstreamType::Body;
+    /// The text of the foot or endnote of this substream is on the text append stack.
+    bool bNoteTextAppendPushed = false;
     bool      bTextInserted = false;
     /**
      * This contains the raw table depth. nTableDepth > 0 is the same as

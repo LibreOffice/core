@@ -4418,6 +4418,7 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
         appendTextContent( xFootnote, aFontProperties );
         m_aTextAppendStack.push(TextAppendContext(xFootnote,
                     xFootnote->createTextCursorByRange(xFootnote->getStart())));
+        m_StreamStateStack.top().bNoteTextAppendPushed = true;
 
         // Redlines for the footnote anchor in the main text content
         std::vector< RedlineParamsPtr > aFootnoteRedline = std::move(m_aRedlines.top());
@@ -4884,8 +4885,11 @@ void DomainMapper_Impl::PopFootOrEndnote()
     if (!IsRTFImport() && !bCopied)
         RemoveLastParagraph();
 
-    if (!m_aTextAppendStack.empty())
+    if (m_StreamStateStack.top().bNoteTextAppendPushed)
+    {
         m_aTextAppendStack.pop();
+        m_StreamStateStack.top().bNoteTextAppendPushed = false;
+    }
 
     if (m_aRedlines.size() == 1)
     {

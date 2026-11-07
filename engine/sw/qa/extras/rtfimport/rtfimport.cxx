@@ -1256,6 +1256,20 @@ CPPUNIT_TEST_FIXTURE(Test, testShapeTableInNestedCell)
     CPPUNIT_ASSERT_EQUAL(u"after"_ustr, getParagraphOfText(2, xShapeText)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFootnoteInTextBox)
+{
+    // Given a text box whose text has a footnote, and a form field after the text box:
+    // Without the accompanying fix in place, this test would have crashed on load.
+    createSwDoc("footnote-in-text-box.rtf");
+
+    // Then the text box keeps the words of the note, which a text box cannot hold as a note:
+    uno::Reference<text::XText> xShapeText(getShape(1), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(u"frame text note text"_ustr, xShapeText->getString());
+
+    // And the text after the text box is in the body:
+    CPPUNIT_ASSERT_EQUAL(u"after "_ustr, getParagraph(2)->getString());
+}
+
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
