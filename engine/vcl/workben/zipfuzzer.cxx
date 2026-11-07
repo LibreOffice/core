@@ -23,9 +23,17 @@ const lib_to_factory_mapping* lo_get_factory_map(void)
     return map;
 }
 
+extern "C" void com_sun_star_comp_extensions_xml_sax_ParserExpat_get_implementation(void);
+extern "C" void package_ManifestReader_get_implementation(void);
+
 const lib_to_constructor_mapping* lo_get_constructor_map(void)
 {
-    static lib_to_constructor_mapping map[] = { { 0, 0 } };
+    static lib_to_constructor_mapping map[]
+        = { { "com_sun_star_comp_extensions_xml_sax_ParserExpat_get_implementation",
+              com_sun_star_comp_extensions_xml_sax_ParserExpat_get_implementation },
+            { "package_ManifestReader_get_implementation",
+              package_ManifestReader_get_implementation },
+            { 0, 0 } };
 
     return map;
 }
