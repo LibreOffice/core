@@ -922,19 +922,6 @@ class CalcVectorManager extends VectorManagerBase {
 			this._queue = null;
 	}
 
-	/// Mark everything held as possibly behind, after the client was away. It is still drawn, and
-	/// asked for again with the versions held.
-	markAllStale(): void {
-		for (const [sheetKey, sheet] of this._sheets)
-			this._markSheetStale(sheetKey, sheet);
-		this._inFlight.clear();
-		this._requests.clear();
-		this._disarmExpiry();
-		this._queue = null;
-		this._sheetRequested.clear();
-		this._fireChanged([]);
-	}
-
 	/// Mark one sheet as possibly behind, to ask again with the versions held.
 	markPartStale(part: number): void {
 		for (const [sheetKey, sheet] of this._sheets) {
@@ -1269,14 +1256,25 @@ class CalcVectorManager extends VectorManagerBase {
 		return layer === cool.calcLayerId('front');
 	}
 
-	/// Changes may have been missed while away, so ask again for what is held.
+	/// Changes may have been missed while away, so every sheet held is asked for again with the
+	/// versions held, its drawing objects and settings too. It is still drawn meanwhile, and the
+	/// answers on their way are kept.
 	revalidateCachedParts(): void {
-		this.markAllStale();
+		for (const [sheetKey, sheet] of this._sheets) {
+			this._markSheetStale(sheetKey, sheet);
+			this._sheetsBehind.add(sheetKey);
+		}
+		this._fireChanged([]);
 	}
 
-	/// Answers to requests sent before a reconnect never come.
+	/// Answers to requests sent before a reconnect never come, so their blocks are asked for
+	/// again when they are drawn.
 	forgetRequestsInFlight(): void {
-		this.markAllStale();
+		this._inFlight.clear();
+		this._requests.clear();
+		this._disarmExpiry();
+		this._queue = null;
+		this._sheetRequested.clear();
 	}
 
 	/// A tile still on its way from before the view drew from vectors is acknowledged and dropped.

@@ -269,6 +269,25 @@ describe('CalcVectorManager requests', function () {
 		nodeassert.strictEqual(manager.getSheet(0)?.blocks.has('0:0'), true);
 	});
 
+	it('keeps an answer on its way when it asks again after the view was away', function () {
+		manager.requestBlocks(0, [[0, 0]]);
+		const asked = requestIds()[0];
+
+		manager.revalidateCachedParts();
+		manager.handleVectorPrimitives(answer(0, asked, [wholeBlock(0, 0)]));
+
+		nodeassert.ok(manager.getSheet(0)?.blocks.has('0:0'));
+	});
+
+	it('asks again for the blocks of the requests on their way before a reconnect', function () {
+		manager.requestBlocks(0, [[0, 0]]);
+
+		manager.forgetRequestsInFlight();
+		manager.requestBlocks(0, [[0, 0]]);
+
+		nodeassert.deepStrictEqual(blocksAsked(), ['0:0', '0:0']);
+	});
+
 	it('asks again for a block that went stale while it was asked for', function () {
 		manager.requestBlocks(0, [[0, 0]]);
 		manager.handleVectorPrimitives(
