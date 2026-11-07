@@ -717,7 +717,7 @@ Poco::JSON::Object::Ptr PreviewSession::buildIndex() const
     if (_presentationInfo)
     {
         if (Poco::JSON::Array::Ptr infoSections = _presentationInfo->getArray("sections"))
-            sections = infoSections;
+            sections = std::move(infoSections);
 
         if (Poco::JSON::Array::Ptr infoSlides = _presentationInfo->getArray("slides"))
         {

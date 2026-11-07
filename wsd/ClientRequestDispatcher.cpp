@@ -2423,7 +2423,8 @@ bool ClientRequestDispatcher::handlePreviewIndexRequest(const Poco::Net::HTTPReq
         // The document's own thread opens the view and answers on the moved socket.
         docBroker->setupTransfer(
             *COOLWSD::getWebServerPoll(), weakSocket,
-            [docBroker, id, documentUri, wopiFileInfo](const std::shared_ptr<Socket>& moveSocket)
+            [docBroker, id, documentUri,
+             wopiFileInfo = std::move(wopiFileInfo)](const std::shared_ptr<Socket>& moveSocket)
             {
                 docBroker->handlePreviewIndex(std::static_pointer_cast<StreamSocket>(moveSocket),
                                               id, documentUri, std::move(*wopiFileInfo));
