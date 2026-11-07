@@ -331,6 +331,37 @@ void initOomKills()
         LOG_SYS("Failed to map the shared OOM kill count. Kits killed by OOM count as killed.");
 }
 
+/// Make the kernel OOM killer take a kit before a forkit or coolwsd. The kit adds 300 to the
+/// oom_score_adj it inherits, so it scores above a forkit that holds less than 30% of the memory,
+/// whatever value the service manager gave coolwsd. Raising the value needs no privilege, and the
+/// background saves of the kit inherit it.
+void raiseOomScoreAdj()
+{
+    constexpr int KitOomScoreAdjRaise = 300;
+    constexpr int MaxOomScoreAdj = 1000;
+
+    const int fd = open("/proc/self/oom_score_adj", O_RDWR | O_CLOEXEC);
+    if (fd < 0)
+    {
+        LOG_SYS("Failed to open oom_score_adj of the kit");
+        return;
+    }
+
+    char value[16] = {};
+    const ssize_t length = pread(fd, value, sizeof(value) - 1, 0);
+    if (length > 0)
+    {
+        const int raised = std::min(std::atoi(value) + KitOomScoreAdjRaise, MaxOomScoreAdj);
+        const std::string text = std::to_string(raised);
+        if (pwrite(fd, text.data(), text.size(), 0) != static_cast<ssize_t>(text.size()))
+            LOG_SYS("Failed to raise oom_score_adj of the kit to " << raised);
+    }
+    else
+        LOG_SYS("Failed to read oom_score_adj of the kit");
+
+    close(fd);
+}
+
 /// Check if some previously forked kids have died.
 void cleanupChildren()
 {
@@ -583,6 +614,8 @@ int createCOKit(const std::string& childRoot, const std::string& sysTemplate,
         {
             // The kit has no access to the memory the forkits share.
             OomKills.unmap();
+            // Before the jail, which has no /proc.
+            raiseOomScoreAdj();
 
             lokit_main(childRoot, jailId, configId, sysTemplate, loTemplate,
                        NoCapsForKit, RequireLandlock, NoSeccomp, useMountNamespaces,
