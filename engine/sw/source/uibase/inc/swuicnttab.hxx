@@ -302,6 +302,8 @@ private:
 
 class SwTOXEntryTabPage final : public SfxTabPage
 {
+    SwWrtShell &    m_shell;
+
     OUString        m_sDelimStr;
     OUString        m_sLevelStr;
     OUString        m_sAuthTypeStr;

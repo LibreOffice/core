@@ -1943,6 +1943,7 @@ namespace
 
 SwTOXEntryTabPage::SwTOXEntryTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttrSet)
     : SfxTabPage(pPage, pController, u"modules/swriter/ui/tocentriespage.ui"_ustr, u"TocEntriesPage"_ustr, &rAttrSet)
+    , m_shell(static_cast<SwMultiTOXTabDialog *>(pController)->GetWrtShell())
     , m_sDelimStr(SwResId(STR_DELIM))
     , m_sAuthTypeStr(SwResId(STR_AUTH_FIELD_AUTHORITY_TYPE))
     , m_sNoCharStyle(SwResId(STR_NO_CHAR_STYLE))
@@ -2110,7 +2111,7 @@ SwTOXEntryTabPage::~SwTOXEntryTabPage()
     // tdf#135266 - remember last used entry level depending on the index type
     if (const auto aSelectedIndex = m_xLevelLB->get_selected_index(); aSelectedIndex != -1)
     {
-        auto& rSh = static_cast<SwMultiTOXTabDialog*>(GetDialogController())->GetWrtShell();
+        auto& rSh = m_shell;
         SwViewOption* pVOpt = const_cast<SwViewOption*>(rSh.GetViewOptions());
         if (m_aLastTOXType == TOX_INDEX)
             pVOpt->SetIdxEntryLvl(aSelectedIndex);
