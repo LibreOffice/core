@@ -367,8 +367,7 @@ abstract class RenderManagerBase {
 		_data: cool.VectorPrimitivesData,
 		_objectId: number,
 		_paragraph: number,
-		_colorOverride?: cool.ColorOverride,
-		_textOverride?: cool.TextOverride,
+		_options?: cool.ParagraphRenderOptions,
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
 	): void {}
 

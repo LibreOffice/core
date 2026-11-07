@@ -411,16 +411,14 @@ class RenderManager {
 		data: cool.VectorPrimitivesData,
 		objectId: number,
 		paragraph: number,
-		colorOverride?: cool.ColorOverride,
-		textOverride?: cool.TextOverride,
+		options?: cool.ParagraphRenderOptions,
 	): void {
 		RenderManager.ensureInstance().renderObjectParagraph(
 			context,
 			data,
 			objectId,
 			paragraph,
-			colorOverride,
-			textOverride,
+			options,
 		);
 	}
 

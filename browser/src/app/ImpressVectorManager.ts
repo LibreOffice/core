@@ -433,18 +433,21 @@ class ImpressVectorManager extends VectorManagerBase {
 		data: cool.VectorPrimitivesData,
 		objectId: number,
 		paragraph: number,
-		colorOverride?: cool.ColorOverride,
-		textOverride?: cool.TextOverride,
+		options?: cool.ParagraphRenderOptions,
 	): void {
 		const object = data.objects.get(objectId);
 		if (!object) return;
 		this._renderer.setSlideBounds(data.slideWidth, data.slideHeight);
 		this._renderer.setEditViewContentVisible(false);
+		this._renderer.setAuthoredColors(options?.authoredColors === true);
 		this._setUpColors(data);
 		this._renderUnder(
 			context,
 			object,
-			{ colorOverride, textOverride },
+			{
+				colorOverride: options?.colorOverride,
+				textOverride: options?.textOverride,
+			},
 			{ only: paragraph },
 		);
 	}

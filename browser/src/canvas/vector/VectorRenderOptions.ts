@@ -51,6 +51,14 @@ namespace cool {
 		paragraphs?: Map<number, DrawState>;
 	}
 
+	/// How one paragraph of an object's text is drawn alone: the colors and text look in
+	/// place of its own, and whether fills and lines keep the colors the document gives them.
+	export interface ParagraphRenderOptions {
+		colorOverride?: ColorOverride;
+		textOverride?: TextOverride;
+		authoredColors?: boolean;
+	}
+
 	/// What a render of a part's primitive tree is for.
 	export interface VectorRenderOptions {
 		/// True when the render is the editable view of the document.

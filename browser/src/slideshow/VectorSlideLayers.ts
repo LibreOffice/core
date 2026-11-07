@@ -582,9 +582,11 @@ class VectorSlideLayers {
 		context.setTransform(this.scaleX, 0, 0, this.scaleY, -x, -y);
 		const target = context as unknown as CanvasRenderingContext2D;
 
+		// A slideshow shows the document in its own colors.
 		const owner = layer.run.owner;
 		if (owner === undefined) {
 			RenderManager.renderInto(target, data, {
+				authoredColors: true,
 				paintRange: { start: layer.run.start, end: layer.run.end },
 			});
 		} else if (layer.paragraph !== undefined) {
@@ -593,8 +595,11 @@ class VectorSlideLayers {
 				data,
 				owner,
 				layer.paragraph,
-				colorOverride,
-				textOverride,
+				{
+					colorOverride,
+					textOverride,
+					authoredColors: true,
+				},
 			);
 		} else {
 			const paragraphs = new Map<number, cool.DrawState>();
@@ -602,6 +607,7 @@ class VectorSlideLayers {
 				if (other.run === layer.run && other.paragraph !== undefined)
 					paragraphs.set(other.paragraph, { hidden: true });
 			RenderManager.renderInto(target, data, {
+				authoredColors: true,
 				paintRange: { start: layer.run.start, end: layer.run.end },
 				states: new Map([[owner, { colorOverride, textOverride, paragraphs }]]),
 			});
