@@ -1898,6 +1898,43 @@ package_ZipPackage_get_implementation(
     return cppu::acquire(new ZipPackage(context));
 }
 
+static void ReadAllEntries(const uno::Reference<XNameAccess>& xRoot)
+{
+    std::vector<uno::Reference<XNameAccess>> aFolders{ xRoot };
+    while (!aFolders.empty())
+    {
+        uno::Reference<XNameAccess> xFolder = aFolders.back();
+        aFolders.pop_back();
+        for (const OUString& rName : xFolder->getElementNames())
+        {
+            try
+            {
+                uno::Reference<XInterface> xElement;
+                xFolder->getByName(rName) >>= xElement;
+                uno::Reference<XNameAccess> xSubFolder(xElement, UNO_QUERY);
+                if (xSubFolder.is())
+                {
+                    aFolders.push_back(xSubFolder);
+                    continue;
+                }
+                uno::Reference<XActiveDataSink> xSink(xElement, UNO_QUERY);
+                if (!xSink.is())
+                    continue;
+                uno::Reference<XInputStream> xEntryStream = xSink->getInputStream();
+                if (!xEntryStream.is())
+                    continue;
+                uno::Sequence<sal_Int8> aBuffer;
+                while (xEntryStream->readBytes(aBuffer, 65536) > 0)
+                {
+                }
+            }
+            catch (const uno::Exception&)
+            {
+            }
+        }
+    }
+}
+
 extern "C" bool TestImportZip(SvStream& rStream)
 {
     // explicitly tests the "RepairPackage" recovery mode
@@ -1906,6 +1943,20 @@ extern "C" bool TestImportZip(SvStream& rStream)
         new utl::OSeekableInputStreamWrapper(rStream));
     cpo::uno::Sequence<Any> aArgs{ Any(xStream), Any(NamedValue(u"RepairPackage"_ustr, Any(true))) };
     xPackage->initialize(aArgs);
+    try
+    {
+        // the password of the encrypted ODF test documents in the tree
+        xPackage->setPropertyValue(
+            STORAGE_ENCRYPTION_KEYS_PROPERTY,
+            Any(comphelper::OStorageHelper::CreatePackageEncryptionData(u"test")));
+        uno::Reference<XNameAccess> xRoot;
+        xPackage->getByHierarchicalName(u"/"_ustr) >>= xRoot;
+        if (xRoot.is())
+            ReadAllEntries(xRoot);
+    }
+    catch (const uno::Exception&)
+    {
+    }
     return true;
 }
 
