@@ -259,6 +259,10 @@ public:
     static void                     GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& sType, OUString& rValue);
     /** Returns the name the format gives this error, which is the same in every language. */
     static const char*              GetErrorName( FormulaError nScErrCode );
+    /** Returns the error type of the error rich value that carries this error, or -1 when the
+        cell error name already says which error it is. The error type is the ERROR.TYPE number of
+        the error minus one. */
+    static sal_Int32                GetRichValueErrorType( FormulaError nScErrCode );
     static OUString          GetStreamName( const char* sStreamDir, const char* sStream, sal_Int32 nId );
 
     static OString ToOString( const Color& rColor );
@@ -286,6 +290,16 @@ public:
         return pStream;
     }
     static sax_fastparser::FSHelperPtr  WriteFontData( sax_fastparser::FSHelperPtr pStream, const XclFontData& rFontData, sal_Int32 nNameId );
+};
+
+/** A rich value of the workbook, which names either a picture that sits in a cell or an error
+    without a cell error name of its own. */
+struct XclExpRichValue
+{
+    /// The position of the picture among the pictures in cells, or -1 for an error.
+    sal_Int32 mnImage;
+    /// The rich value error type of the error, or -1 for a picture.
+    sal_Int32 mnErrorType;
 };
 
 class XclExpXmlStream : public oox::core::XmlFilterBase
@@ -349,10 +363,24 @@ public:
     {
         maInCellImages.push_back( rGraphic );
         maInCellImageAddresses.insert( rAddress );
-        return static_cast< sal_Int32 >( maInCellImages.size() );
+        const sal_Int32 nImage = static_cast< sal_Int32 >( maInCellImages.size() ) - 1;
+        maRichValues.push_back( XclExpRichValue{ nImage, -1 } );
+        return static_cast< sal_Int32 >( maRichValues.size() );
     }
-    /** Returns the pictures that sit in cells, in the order their value metadata indexes count. */
+    /** Notes an error of the passed rich value error type and returns the value metadata index the
+        cell writes. The index counts from one, and all cells with the same error share it. */
+    sal_Int32 NoteErrorValue( sal_Int32 nErrorType )
+    {
+        auto [aIterator, bInserted] = maErrorValueMetadata.try_emplace(
+            nErrorType, static_cast< sal_Int32 >( maRichValues.size() ) + 1 );
+        if( bInserted )
+            maRichValues.push_back( XclExpRichValue{ -1, nErrorType } );
+        return aIterator->second;
+    }
+    /** Returns the pictures that sit in cells, in the order of their relationship entries. */
     const std::vector< Graphic >& GetInCellImages() const { return maInCellImages; }
+    /** Returns the rich values of the workbook, in the order their value metadata indexes count. */
+    const std::vector< XclExpRichValue >& GetRichValues() const { return maRichValues; }
     /** Returns true when the passed cell was written as a picture. */
     bool HasInCellImageAt( const ScAddress& rAddress ) const
         { return maInCellImageAddresses.find( rAddress ) != maInCellImageAddresses.end(); }
@@ -392,6 +420,9 @@ private:
     bool mbHasDynamicArrayFormula = false;
     std::vector< Graphic > maInCellImages;
     std::set< ScAddress > maInCellImageAddresses;
+    std::vector< XclExpRichValue > maRichValues;
+    /// The value metadata index of each rich value error type written so far.
+    std::map< sal_Int32, sal_Int32 > maErrorValueMetadata;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

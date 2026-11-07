@@ -14,6 +14,7 @@
 #include <sal/config.h>
 
 #include <map>
+#include <string_view>
 #include <vector>
 
 #include <rtl/ustring.hxx>
@@ -40,11 +41,13 @@ struct RichValue
     std::vector<OUString> maValues;
 };
 
-/** The rich value parts of a workbook, and the picture each image rich value stands for.
+/** The rich value parts of a workbook, and the picture or the error each rich value stands for.
 
     A cell that carries a picture holds the error value #VALUE! and a value metadata index. That
     index leads through the metadata part to a rich value, and a rich value of the "_localImage"
-    structure names a picture in the media folder of the package. */
+    structure names a picture in the media folder of the package. A cell with an error that has no
+    cell error name of its own, like #SPILL!, also holds #VALUE!, and its rich value of the
+    "_error" structure says which error it is. */
 class RichValueBuffer final : public WorkbookHelper
 {
 public:
@@ -57,6 +60,11 @@ public:
     /** Returns the picture a value metadata index stands for, empty when the index names anything
         other than a picture. The index counts from one, the way a cell writes it. */
     Graphic getImage(sal_Int32 nValueMetadataIndex) const;
+
+    /** Returns the formula name of the error a value metadata index stands for, like "#SPILL!",
+        and empty when the index names anything other than an error. An error that the document
+        does not have is "#VALUE!". The index counts from one, the way a cell writes it. */
+    OUString getErrorName(sal_Int32 nValueMetadataIndex) const;
 
     /** Adds a structure read from the rich value structure part. */
     void addStructure(RichValueStructure aStructure)
@@ -75,6 +83,11 @@ public:
     void addValueMetadata(sal_Int32 nEntry, sal_Int32 nBlock);
 
 private:
+    /** Returns the value under the passed key of the rich value a value metadata index leads to,
+        empty when that rich value has a structure of another type or no such key. */
+    OUString getRichValueEntry(sal_Int32 nValueMetadataIndex, std::u16string_view aType,
+                               std::u16string_view aKey) const;
+
     /** Returns the path of the picture a value metadata index leads to, empty when the index names
         anything other than a picture. */
     OUString getImagePath(sal_Int32 nValueMetadataIndex) const;

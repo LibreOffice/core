@@ -179,10 +179,16 @@ void SheetDataContext::onEndElement()
                 // #VALUE! and reclassify via valueMetadata.
                 // Plumbing this through keeps the import path from writing
                 // reference cells over the blocker.
+                // The value metadata says which error the #VALUE! stands for.
+                // Without value metadata, a #VALUE! on a dynamic array master
+                // reads as a blocked spill.
+                const OUString aErrorName
+                    = getRichValues().getErrorName(maCellData.mnValueMetadata);
                 const bool bCachedSpill
                     = maCellData.mnCellType == XML_e
                       && mbCellMetadata
-                      && maCellValue == u"#VALUE!";
+                      && (aErrorName.isEmpty() ? maCellValue == u"#VALUE!"
+                                               : aErrorName == u"#SPILL!");
                 setCellArrayFormula(maFmlaData.maFormulaRef, maCellData.maCellAddr, maFormulaStr,
                                     bCachedSpill, mbCellMetadata);
             }
@@ -226,7 +232,13 @@ void SheetDataContext::onEndElement()
                 && getRichValues().isImage( maCellData.mnValueMetadata ) )
                 mrSheetData.setImageCell( maCellData );
             else
-                mrSheetData.setErrorCell( maCellData, maCellValue );
+            {
+                // The value metadata says which error a #VALUE! like #SPILL! stands for.
+                const OUString aErrorName
+                    = getRichValues().getErrorName( maCellData.mnValueMetadata );
+                mrSheetData.setErrorCell( maCellData,
+                                          aErrorName.isEmpty() ? maCellValue : aErrorName );
+            }
         break;
         case XML_str:
             mrSheetData.setStringCell( maCellData, maCellValue );

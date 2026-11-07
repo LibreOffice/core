@@ -1036,12 +1036,23 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
     if (bDynamicArrayMaster)
         rStrm.NoteDynamicArrayFormula();
 
+    // The cell error name of an error like #CALC! is #VALUE!, and the value metadata of the cell
+    // leads to the rich value that says which error it is.
+    OString sValueMetadata;
+    if (std::string_view(sType) == "e")
+    {
+        const sal_Int32 nErrorType = XclXmlUtils::GetRichValueErrorType(mrScFmlaCell.GetErrCode());
+        if (nErrorType >= 0)
+            sValueMetadata = OString::number(rStrm.NoteErrorValue(nErrorType));
+    }
+
     rWorksheet->startElement( XML_c,
             XML_r, XclXmlUtils::ToOString(rStrm.GetRoot().GetStringBuf(), GetXclPos()).getStr(),
             XML_s, lcl_GetStyleId(rStrm, *this),
             XML_t, sType,
-            XML_cm, bDynamicArrayMaster ? "1" : nullptr
-            // OOXTODO: XML_vm, XML_ph
+            XML_cm, bDynamicArrayMaster ? "1" : nullptr,
+            XML_vm, sValueMetadata.isEmpty() ? nullptr : sValueMetadata.getStr()
+            // OOXTODO: XML_ph
     );
 
     bool bWriteFormula = true;

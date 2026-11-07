@@ -11,6 +11,7 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <drwlayer.hxx>
 
 #include <docsh.hxx>
@@ -24,6 +25,7 @@
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <formula/grammar.hxx>
@@ -1859,12 +1861,128 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testSpillErrorRoundtripXLSX)
     // The OOXML cell error vocabulary has no #SPILL! literal, so the cached
     // result is written as #VALUE!.
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row/x:c/x:v", u"#VALUE!");
+    // The value metadata of the cell leads to a rich value that says the error is #SPILL!.
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row/x:c", "vm", u"1");
+
+    xmlDocUniquePtr pMetadata = parseExport(u"xl/metadata.xml"_ustr);
+    CPPUNIT_ASSERT(pMetadata);
+    assertXPath(pMetadata, "/x:metadata/x:metadataTypes/x:metadataType", "name", u"XLRICHVALUE");
+    assertXPath(pMetadata, "/x:metadata/x:valueMetadata/x:bk/x:rc", "t", u"1");
+    assertXPath(pMetadata, "/x:metadata/x:valueMetadata/x:bk/x:rc", "v", u"0");
+    assertXPath(pMetadata,
+                "/x:metadata/x:futureMetadata[@name='XLRICHVALUE']/x:bk/x:extLst/x:ext/xlrd:rvb",
+                "i", u"0");
+
+    xmlDocUniquePtr pStructure = parseExport(u"xl/richData/rdrichvaluestructure.xml"_ustr);
+    CPPUNIT_ASSERT(pStructure);
+    assertXPath(pStructure, "/xlrd:rvStructures/xlrd:s", "t", u"_error");
+    assertXPath(pStructure, "/xlrd:rvStructures/xlrd:s/xlrd:k", 4);
+    assertXPath(pStructure, "/xlrd:rvStructures/xlrd:s/xlrd:k[1]", "n", u"colOffset");
+    assertXPath(pStructure, "/xlrd:rvStructures/xlrd:s/xlrd:k[2]", "n", u"errorType");
+    assertXPath(pStructure, "/xlrd:rvStructures/xlrd:s/xlrd:k[3]", "n", u"rwOffset");
+    assertXPath(pStructure, "/xlrd:rvStructures/xlrd:s/xlrd:k[4]", "n", u"subType");
+
+    xmlDocUniquePtr pValues = parseExport(u"xl/richData/rdrichvalue.xml"_ustr);
+    CPPUNIT_ASSERT(pValues);
+    assertXPath(pValues, "/xlrd:rvData/xlrd:rv", "s", u"0");
+    assertXPathContent(pValues, "/xlrd:rvData/xlrd:rv/xlrd:v[1]", u"0");
+    assertXPathContent(pValues, "/xlrd:rvData/xlrd:rv/xlrd:v[2]", u"8");
+    assertXPathContent(pValues, "/xlrd:rvData/xlrd:rv/xlrd:v[3]", u"0");
+    assertXPathContent(pValues, "/xlrd:rvData/xlrd:rv/xlrd:v[4]", u"0");
+
+    // A workbook without pictures has no rich value relationship part.
+    uno::Reference<packages::zip::XZipFileAccess> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      maTempFile.GetURL());
+    CPPUNIT_ASSERT(!xNameAccess->hasByName(u"xl/richData/richValueRel.xml"_ustr));
 
     pDocument = getScDoc();
     CPPUNIT_ASSERT_EQUAL(u"#SPILL!"_ustr, pDocument->GetString(ScAddress(0, 0, 0)));
     ScFormulaCell* pFormulaCell = pDocument->GetFormulaCell(ScAddress(0, 0, 0));
     CPPUNIT_ASSERT_MESSAGE("Expected a formula cell after reload.", pFormulaCell != nullptr);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::Spill), sal_Int32(pFormulaCell->GetErrCode()));
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testCalculationErrorRoundtripXLSX)
+{
+    // A #CALC! result is written as #VALUE! with an error rich value of error type 13, and it is
+    // #CALC! again after reload.
+    createScDoc();
+    ScDocument* pDocument = getScDoc();
+    pDocument->SetString(ScAddress(0, 0, 0), u"=#CALC!"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"#CALC!"_ustr, pDocument->GetString(ScAddress(0, 0, 0)));
+
+    saveAndReload(TestFilter::XLSX);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row/x:c", "t", u"e");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row/x:c", "vm", u"1");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row/x:c/x:f", u"#CALC!");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row/x:c/x:v", u"#VALUE!");
+
+    xmlDocUniquePtr pStructure = parseExport(u"xl/richData/rdrichvaluestructure.xml"_ustr);
+    CPPUNIT_ASSERT(pStructure);
+    assertXPath(pStructure, "/xlrd:rvStructures/xlrd:s", "t", u"_error");
+    assertXPath(pStructure, "/xlrd:rvStructures/xlrd:s/xlrd:k", 2);
+    assertXPath(pStructure, "/xlrd:rvStructures/xlrd:s/xlrd:k[1]", "n", u"errorType");
+    assertXPath(pStructure, "/xlrd:rvStructures/xlrd:s/xlrd:k[2]", "n", u"subType");
+
+    xmlDocUniquePtr pValues = parseExport(u"xl/richData/rdrichvalue.xml"_ustr);
+    CPPUNIT_ASSERT(pValues);
+    assertXPathContent(pValues, "/xlrd:rvData/xlrd:rv/xlrd:v[1]", u"13");
+    assertXPathContent(pValues, "/xlrd:rvData/xlrd:rv/xlrd:v[2]", u"0");
+
+    pDocument = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(u"#CALC!"_ustr, pDocument->GetString(ScAddress(0, 0, 0)));
+    ScFormulaCell* pFormulaCell = pDocument->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell after reload.", pFormulaCell != nullptr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::Calculation),
+                         sal_Int32(pFormulaCell->GetErrCode()));
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testErrorRichValuesRoundtripXLSX)
+{
+    // The cells hold #VALUE! without a formula, and the error rich values say which error each
+    // one is: #CALC! in A1, #SPILL! in A2, and #BLOCKED! in A3, which reads as #VALUE!. A4 holds a
+    // plain #DIV/0!.
+    createScDoc("xlsx/error-rich-values.xlsx");
+    ScDocument* pDocument = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(u"#CALC!"_ustr, pDocument->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"#SPILL!"_ustr, pDocument->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDocument->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"#DIV/0!"_ustr, pDocument->GetString(ScAddress(0, 3, 0)));
+
+    saveAndReload(TestFilter::XLSX);
+
+    // The cells are numbered by the order in which their errors first appear, and the
+    // structures are listed with the spill error first.
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row/x:c[@r='A1']", "vm", u"1");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row/x:c[@r='A2']", "vm", u"2");
+    assertXPathNoAttribute(pSheet, "/x:worksheet/x:sheetData/x:row/x:c[@r='A3']", "vm");
+    assertXPathNoAttribute(pSheet, "/x:worksheet/x:sheetData/x:row/x:c[@r='A4']", "vm");
+
+    xmlDocUniquePtr pStructure = parseExport(u"xl/richData/rdrichvaluestructure.xml"_ustr);
+    CPPUNIT_ASSERT(pStructure);
+    assertXPath(pStructure, "/xlrd:rvStructures", "count", u"2");
+    assertXPath(pStructure, "/xlrd:rvStructures/xlrd:s[1]/xlrd:k", 4);
+    assertXPath(pStructure, "/xlrd:rvStructures/xlrd:s[2]/xlrd:k", 2);
+
+    xmlDocUniquePtr pValues = parseExport(u"xl/richData/rdrichvalue.xml"_ustr);
+    CPPUNIT_ASSERT(pValues);
+    assertXPath(pValues, "/xlrd:rvData/xlrd:rv", 2);
+    assertXPath(pValues, "/xlrd:rvData/xlrd:rv[1]", "s", u"1");
+    assertXPathContent(pValues, "/xlrd:rvData/xlrd:rv[1]/xlrd:v[1]", u"13");
+    assertXPath(pValues, "/xlrd:rvData/xlrd:rv[2]", "s", u"0");
+    assertXPathContent(pValues, "/xlrd:rvData/xlrd:rv[2]/xlrd:v[2]", u"8");
+
+    pDocument = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(u"#CALC!"_ustr, pDocument->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"#SPILL!"_ustr, pDocument->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDocument->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"#DIV/0!"_ustr, pDocument->GetString(ScAddress(0, 3, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testSpillErrorRoundtripODS)
@@ -1941,13 +2059,20 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testArrayFormulaSpillRoundtripXLSX)
     xmlDocUniquePtr pMetadata = parseExport(u"xl/metadata.xml"_ustr);
     CPPUNIT_ASSERT_MESSAGE("xl/metadata.xml must be written", pMetadata);
 
-    assertXPath(pMetadata, "/x:metadata/x:metadataTypes/x:metadataType", "name", u"XLDAPR");
+    assertXPath(pMetadata, "/x:metadata/x:metadataTypes/x:metadataType[1]", "name", u"XLDAPR");
     assertXPath(pMetadata,
                 "/x:metadata/x:futureMetadata[@name='XLDAPR']/x:bk/x:extLst/x:ext"
                 "/xda:dynamicArrayProperties",
                 "fDynamic", u"1");
     assertXPath(pMetadata, "/x:metadata/x:cellMetadata/x:bk/x:rc", "t", u"1");
     assertXPath(pMetadata, "/x:metadata/x:cellMetadata/x:bk/x:rc", "v", u"0");
+
+    // The blocked master also carries value metadata, which leads to the rich value that says the
+    // error is #SPILL!.
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[@r='A1']", "vm", u"1");
+    assertXPath(pMetadata, "/x:metadata/x:metadataTypes/x:metadataType[2]", "name",
+                u"XLRICHVALUE");
+    assertXPath(pMetadata, "/x:metadata/x:valueMetadata/x:bk/x:rc", "t", u"2");
 
     xmlDocUniquePtr pContentTypes = parseExport(u"[Content_Types].xml"_ustr);
     CPPUNIT_ASSERT(pContentTypes);

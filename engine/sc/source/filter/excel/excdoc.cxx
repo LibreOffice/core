@@ -72,16 +72,55 @@
 using namespace oox;
 using namespace ::cpo;
 
-/*  Writes the rich data parts of the workbook. Together those parts say that a cell holds a
-    picture: the value metadata index of the cell leads to a rich value of the "_localImage"
-    structure, that rich value holds the position of an entry in the relationship part, and that
-    entry names a picture in the media folder of the package. */
-static void lcl_WriteRichDataParts( XclExpXmlStream& rStrm, const std::vector<Graphic>& rImages )
+namespace {
+
+/// The kinds of rich value structure the export writes, in the order the list of structures takes.
+enum class RichValueStructure
+{
+    LocalImage,
+    SpillError,
+    Error,
+};
+
+RichValueStructure lcl_GetRichValueStructure( const XclExpRichValue& rRichValue )
+{
+    if (rRichValue.mnImage >= 0)
+        return RichValueStructure::LocalImage;
+    if (rRichValue.mnErrorType == XclXmlUtils::GetRichValueErrorType(FormulaError::Spill))
+        return RichValueStructure::SpillError;
+    return RichValueStructure::Error;
+}
+
+void lcl_WriteRichValueEntry( const sax_fastparser::FSHelperPtr& pValues, sal_Int32 nValue )
+{
+    pValues->startElement(XML_v);
+    pValues->write(OString::number(nValue));
+    pValues->endElement(XML_v);
+}
+
+}
+
+/*  Writes the rich data parts of the workbook. The value metadata index of a cell leads to a rich
+    value. A rich value of the "_localImage" structure holds the position of an entry in the
+    relationship part, and that entry names a picture in the media folder of the package. A rich
+    value of the "_error" structure holds the type of an error that has no cell error name of its
+    own. */
+static void lcl_WriteRichDataParts( XclExpXmlStream& rStrm,
+                                    const std::vector<XclExpRichValue>& rRichValues,
+                                    const std::vector<Graphic>& rImages )
 {
     const cpo::uno::Reference<css::io::XOutputStream> xWorkbook
         = rStrm.GetCurrentStream()->getOutputStream();
     const OUString sRichDataNamespace = rStrm.getNamespaceURL(OOX_NS(xlrd));
-    const OString sImageCount = OString::number(static_cast<sal_Int32>(rImages.size()));
+
+    // A rich value names its structure by the position of the structure in the list, and the list
+    // holds only the structures that the rich values use.
+    std::map<RichValueStructure, sal_Int32> aStructureIndexes;
+    for (const XclExpRichValue& rRichValue : rRichValues)
+        aStructureIndexes.try_emplace(lcl_GetRichValueStructure(rRichValue), 0);
+    sal_Int32 nStructureIndex = 0;
+    for (auto& rStructureIndex : aStructureIndexes)
+        rStructureIndex.second = nStructureIndex++;
 
     // xl/richData/rdrichvaluestructure.xml
     sax_fastparser::FSHelperPtr pStructure = rStrm.CreateOutputStream(
@@ -92,11 +131,31 @@ static void lcl_WriteRichDataParts( XclExpXmlStream& rStrm, const std::vector<Gr
         oox::getRelationship(Relationship::RDRICHVALUESTRUCTURE));
     pStructure->startElement(XML_rvStructures,
         XML_xmlns, sRichDataNamespace,
-        XML_count, "1");
-    pStructure->startElement(XML_s, XML_t, "_localImage");
-    pStructure->singleElement(XML_k, XML_n, "_rvRel:LocalImageIdentifier", XML_t, "i");
-    pStructure->singleElement(XML_k, XML_n, "CalcOrigin", XML_t, "i");
-    pStructure->endElement(XML_s);
+        XML_count, OString::number(nStructureIndex));
+    for (const auto& rStructureIndex : aStructureIndexes)
+    {
+        switch (rStructureIndex.first)
+        {
+            case RichValueStructure::LocalImage:
+                pStructure->startElement(XML_s, XML_t, "_localImage");
+                pStructure->singleElement(XML_k, XML_n, "_rvRel:LocalImageIdentifier", XML_t, "i");
+                pStructure->singleElement(XML_k, XML_n, "CalcOrigin", XML_t, "i");
+                break;
+            case RichValueStructure::SpillError:
+                pStructure->startElement(XML_s, XML_t, "_error");
+                pStructure->singleElement(XML_k, XML_n, "colOffset", XML_t, "i");
+                pStructure->singleElement(XML_k, XML_n, "errorType", XML_t, "i");
+                pStructure->singleElement(XML_k, XML_n, "rwOffset", XML_t, "i");
+                pStructure->singleElement(XML_k, XML_n, "subType", XML_t, "i");
+                break;
+            case RichValueStructure::Error:
+                pStructure->startElement(XML_s, XML_t, "_error");
+                pStructure->singleElement(XML_k, XML_n, "errorType", XML_t, "i");
+                pStructure->singleElement(XML_k, XML_n, "subType", XML_t, "i");
+                break;
+        }
+        pStructure->endElement(XML_s);
+    }
     pStructure->endElement(XML_rvStructures);
 
     // xl/richData/rdrichvalue.xml
@@ -108,18 +167,33 @@ static void lcl_WriteRichDataParts( XclExpXmlStream& rStrm, const std::vector<Gr
         oox::getRelationship(Relationship::RDRICHVALUE));
     pValues->startElement(XML_rvData,
         XML_xmlns, sRichDataNamespace,
-        XML_count, sImageCount);
-    for (size_t nImage = 0; nImage < rImages.size(); ++nImage)
+        XML_count, OString::number(static_cast<sal_Int32>(rRichValues.size())));
+    for (const XclExpRichValue& rRichValue : rRichValues)
     {
-        pValues->startElement(XML_rv, XML_s, "0");
-        pValues->startElement(XML_v);
-        pValues->write(OString::number(static_cast<sal_Int32>(nImage)));
-        pValues->endElement(XML_v);
-        // The second value is the calculation origin, which is 5 for a picture that was
-        // inserted from a file.
-        pValues->startElement(XML_v);
-        pValues->write("5");
-        pValues->endElement(XML_v);
+        const RichValueStructure eStructure = lcl_GetRichValueStructure(rRichValue);
+        pValues->startElement(XML_rv, XML_s, OString::number(aStructureIndexes[eStructure]));
+        // The values follow the order of the keys of the structure. The sub type 0 says nothing
+        // more than the error type.
+        switch (eStructure)
+        {
+            case RichValueStructure::LocalImage:
+                lcl_WriteRichValueEntry(pValues, rRichValue.mnImage);
+                // The calculation origin is 5 for a picture that was inserted from a file.
+                lcl_WriteRichValueEntry(pValues, 5);
+                break;
+            case RichValueStructure::SpillError:
+                // The offsets lead to the cell that blocks the spill. The document does not keep
+                // that cell, so the offsets lead to the formula cell itself.
+                lcl_WriteRichValueEntry(pValues, 0);
+                lcl_WriteRichValueEntry(pValues, rRichValue.mnErrorType);
+                lcl_WriteRichValueEntry(pValues, 0);
+                lcl_WriteRichValueEntry(pValues, 0);
+                break;
+            case RichValueStructure::Error:
+                lcl_WriteRichValueEntry(pValues, rRichValue.mnErrorType);
+                lcl_WriteRichValueEntry(pValues, 0);
+                break;
+        }
         pValues->endElement(XML_rv);
     }
     pValues->endElement(XML_rvData);
@@ -161,6 +235,9 @@ static void lcl_WriteRichDataParts( XclExpXmlStream& rStrm, const std::vector<Gr
     pTypes->endElement(XML_keyFlags);
     pTypes->endElement(XML_global);
     pTypes->endElement(XML_rvTypesInfo);
+
+    if (rImages.empty())
+        return;
 
     // xl/richData/richValueRel.xml, and the pictures themselves in xl/media
     sax_fastparser::FSHelperPtr pRelations = rStrm.CreateOutputStream(
@@ -1084,17 +1161,17 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
         }
 
         /*  xl/metadata.xml: the dynamic array property block, and one rich value for every
-            picture that sits in a cell. */
-        const std::vector<Graphic>& rInCellImages = rStrm.GetInCellImages();
+            picture that sits in a cell and for every error type without a cell error name. */
+        const std::vector<XclExpRichValue>& rRichValues = rStrm.GetRichValues();
         const bool bDynamicArray = rStrm.HasDynamicArrayFormula();
-        const bool bRichValues = !rInCellImages.empty();
+        const bool bRichValues = !rRichValues.empty();
         if (bDynamicArray || bRichValues)
         {
             // A metadata entry names its type by the position of that type in the list of types,
             // counting from one.
             const sal_Int32 nRichValueType = bDynamicArray ? 2 : 1;
             const sal_Int32 nTypeCount = (bDynamicArray ? 1 : 0) + (bRichValues ? 1 : 0);
-            const sal_Int32 nImageCount = static_cast<sal_Int32>(rInCellImages.size());
+            const sal_Int32 nRichValueCount = static_cast<sal_Int32>(rRichValues.size());
 
             sax_fastparser::FSHelperPtr pMetadata = rStrm.CreateOutputStream(
                 u"xl/metadata.xml"_ustr,
@@ -1148,15 +1225,15 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
             if (bRichValues)
             {
                 pMetadata->startElement(XML_futureMetadata,
-                    XML_name, "XLRICHVALUE", XML_count, OString::number(nImageCount));
-                for (sal_Int32 nImage = 0; nImage < nImageCount; ++nImage)
+                    XML_name, "XLRICHVALUE", XML_count, OString::number(nRichValueCount));
+                for (sal_Int32 nRichValue = 0; nRichValue < nRichValueCount; ++nRichValue)
                 {
                     pMetadata->startElement(XML_bk);
                     pMetadata->startElement(XML_extLst);
                     pMetadata->startElement(XML_ext,
                         XML_uri, "{3e2802c4-a4d2-4d8b-9148-e3be6c30e623}");
                     pMetadata->singleElement(FSNS(XML_xlrd, XML_rvb),
-                        XML_i, OString::number(nImage));
+                        XML_i, OString::number(nRichValue));
                     pMetadata->endElement(XML_ext);
                     pMetadata->endElement(XML_extLst);
                     pMetadata->endElement(XML_bk);
@@ -1175,13 +1252,14 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
 
             if (bRichValues)
             {
-                pMetadata->startElement(XML_valueMetadata, XML_count, OString::number(nImageCount));
-                for (sal_Int32 nImage = 0; nImage < nImageCount; ++nImage)
+                pMetadata->startElement(XML_valueMetadata,
+                    XML_count, OString::number(nRichValueCount));
+                for (sal_Int32 nRichValue = 0; nRichValue < nRichValueCount; ++nRichValue)
                 {
                     pMetadata->startElement(XML_bk);
                     pMetadata->singleElement(XML_rc,
                         XML_t, OString::number(nRichValueType),
-                        XML_v, OString::number(nImage));
+                        XML_v, OString::number(nRichValue));
                     pMetadata->endElement(XML_bk);
                 }
                 pMetadata->endElement(XML_valueMetadata);
@@ -1191,7 +1269,7 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
         }
 
         if (bRichValues)
-            lcl_WriteRichDataParts(rStrm, rInCellImages);
+            lcl_WriteRichDataParts(rStrm, rRichValues, rStrm.GetInCellImages());
     }
 
     if( m_xExpChangeTrack )

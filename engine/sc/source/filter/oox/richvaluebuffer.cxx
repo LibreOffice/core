@@ -14,6 +14,8 @@
 #include <richvaluebuffer.hxx>
 
 #include <algorithm>
+#include <iterator>
+#include <string_view>
 
 #include <o3tl/safeint.hxx>
 #include <oox/core/filterbase.hxx>
@@ -30,6 +32,12 @@ constexpr OUString gaLocalImageType = u"_localImage"_ustr;
 
 /** Name of the key of a picture rich value that holds the index into the relationship part. */
 constexpr OUString gaLocalImageKey = u"_rvRel:LocalImageIdentifier"_ustr;
+
+/** Name of the rich value structure that stands for an error. */
+constexpr OUString gaErrorStructureType = u"_error"_ustr;
+
+/** Name of the key of an error rich value that holds the type of the error. */
+constexpr OUString gaErrorTypeKey = u"errorType"_ustr;
 }
 
 RichValueBuffer::RichValueBuffer(const WorkbookHelper& rHelper)
@@ -49,7 +57,9 @@ void RichValueBuffer::addValueMetadata(sal_Int32 nEntry, sal_Int32 nBlock)
         maValueMetadataToBlock[nEntry] = nBlock;
 }
 
-OUString RichValueBuffer::getImagePath(sal_Int32 nValueMetadataIndex) const
+OUString RichValueBuffer::getRichValueEntry(sal_Int32 nValueMetadataIndex,
+                                            std::u16string_view aType,
+                                            std::u16string_view aKey) const
 {
     const auto aBlock = maValueMetadataToBlock.find(nValueMetadataIndex);
     if (aBlock == maValueMetadataToBlock.end())
@@ -67,23 +77,51 @@ OUString RichValueBuffer::getImagePath(sal_Int32 nValueMetadataIndex) const
         || o3tl::make_unsigned(rRichValue.mnStructure) >= maStructures.size())
         return OUString();
     const RichValueStructure& rStructure = maStructures[rRichValue.mnStructure];
-    if (rStructure.maType != gaLocalImageType)
+    if (rStructure.maType != aType)
         return OUString();
 
-    // The value that names the picture sits at the place its key takes among the keys.
-    const auto aKey
-        = std::find(rStructure.maKeys.begin(), rStructure.maKeys.end(), gaLocalImageKey);
-    if (aKey == rStructure.maKeys.end())
+    // The value sits at the place its key takes among the keys.
+    const auto aKeyPosition = std::find(rStructure.maKeys.begin(), rStructure.maKeys.end(), aKey);
+    if (aKeyPosition == rStructure.maKeys.end())
         return OUString();
 
-    const size_t nKey = aKey - rStructure.maKeys.begin();
+    const size_t nKey = aKeyPosition - rStructure.maKeys.begin();
     if (nKey >= rRichValue.maValues.size())
         return OUString();
+    return rRichValue.maValues[nKey];
+}
 
-    const sal_Int32 nImage = rRichValue.maValues[nKey].toInt32();
+OUString RichValueBuffer::getImagePath(sal_Int32 nValueMetadataIndex) const
+{
+    const OUString aImage
+        = getRichValueEntry(nValueMetadataIndex, gaLocalImageType, gaLocalImageKey);
+    if (aImage.isEmpty())
+        return OUString();
+
+    const sal_Int32 nImage = aImage.toInt32();
     if (nImage < 0 || o3tl::make_unsigned(nImage) >= maImagePaths.size())
         return OUString();
     return maImagePaths[nImage];
+}
+
+OUString RichValueBuffer::getErrorName(sal_Int32 nValueMetadataIndex) const
+{
+    const OUString aErrorType
+        = getRichValueEntry(nValueMetadataIndex, gaErrorStructureType, gaErrorTypeKey);
+    if (aErrorType.isEmpty())
+        return OUString();
+
+    // The error type is the ERROR.TYPE number of the error minus one. An error the document does
+    // not have reads as #VALUE!, which is also the cell error name the cell holds.
+    static constexpr std::u16string_view aErrorNames[] = {
+        u"#NULL!", u"#DIV/0!", u"#VALUE!", u"#REF!", u"#NAME?", u"#NUM!", u"#N/A",
+        u"",       u"#SPILL!", u"",        u"",      u"",       u"",     u"#CALC!",
+    };
+    const sal_Int32 nErrorType = aErrorType.toInt32();
+    if (nErrorType < 0 || o3tl::make_unsigned(nErrorType) >= std::size(aErrorNames)
+        || aErrorNames[nErrorType].empty())
+        return u"#VALUE!"_ustr;
+    return OUString(aErrorNames[nErrorType]);
 }
 
 bool RichValueBuffer::isImage(sal_Int32 nValueMetadataIndex) const

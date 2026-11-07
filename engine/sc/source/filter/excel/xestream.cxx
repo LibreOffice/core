@@ -671,6 +671,16 @@ const char* XclXmlUtils::GetErrorName( FormulaError nScErrCode )
     }
 }
 
+sal_Int32 XclXmlUtils::GetRichValueErrorType( FormulaError nScErrCode )
+{
+    switch( nScErrCode )
+    {
+        case FormulaError::Spill:       return 8;
+        case FormulaError::Calculation: return 13;
+        default:                        return -1;
+    }
+}
+
 void XclXmlUtils::GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& rsType, OUString& rsValue )
 {
     sc::FormulaResultValue aResValue = rCell.GetResult();
