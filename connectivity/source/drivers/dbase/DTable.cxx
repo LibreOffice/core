@@ -1015,7 +1015,7 @@ bool ODbaseTable::CreateImpl()
     if(aName.isEmpty())
     {
         OUString aIdent = m_pConnection->getContent()->getIdentifier()->getContentIdentifier();
-        if ( aIdent.lastIndexOf('/') != (aIdent.getLength()-1) )
+        if (!aIdent.endsWith('/'))
             aIdent += "/";
         aIdent += m_Name;
         aName = aIdent;
@@ -2295,7 +2295,7 @@ namespace
         if(aName.isEmpty())
         {
             OUString aIdent = _pConnection->getContent()->getIdentifier()->getContentIdentifier();
-            if ( aIdent.lastIndexOf('/') != (aIdent.getLength()-1) )
+            if (!aIdent.endsWith('/'))
                 aIdent += "/";
             aIdent += oldName;
             aName = aIdent;
@@ -2454,7 +2454,7 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
 OUString ODbaseTable::createTempFile()
 {
     OUString aIdent = m_pConnection->getContent()->getIdentifier()->getContentIdentifier();
-    if ( aIdent.lastIndexOf('/') != (aIdent.getLength()-1) )
+    if (!aIdent.endsWith('/'))
         aIdent += "/";
 
     OUString sExt("." + m_pConnection->getExtension());
