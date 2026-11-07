@@ -306,6 +306,8 @@ describe(['taglighthouse'], 'Accessibility Impress Dialog Tests', { testIsolatio
         });
         cy.cGet('#test-div-shapeHandlesSection').should('exist');
         helper.typeIntoDocument('Callout{esc}');
+        // the typed keys are handled after a command sent now would be
+        cy.then(() => helper.processToIdle(win));
         cy.cGet('#test-div-shapeHandlesSection').should('exist');
 
         // Position and Size opens the callout dialog for a legacy callout
