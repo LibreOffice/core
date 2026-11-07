@@ -11,7 +11,7 @@ mkdir $SRC/external-tar
 cd $SRC/external-tar
 
 #cache build dependencies
-curl --no-progress-meter -S \
+curl --no-progress-meter -S --fail \
     -C - -O https://dev-www.libreoffice.org/src/$FONT_LIBERATION_TARBALL \
     -C - -O https://dev-www.libreoffice.org/extern/$OPENSYMBOL_TTF \
     -C - -O https://dev-www.libreoffice.org/src/$RASQAL_TARBALL \
@@ -79,7 +79,7 @@ curl --no-progress-meter -S \
 cd $SRC
 
 #fuzzing dictionaries
-curl --no-progress-meter -S \
+curl --no-progress-meter -S --fail \
     -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/gif.dict \
     -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/jpeg.dict \
     -C - -O https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/pdf.dict \
@@ -113,7 +113,7 @@ grep -h "rng:value" libreoffice/schema/odf1.3/OpenDocument-v1.3-schema.rng libre
 
 # fuzzing corpora
 # afl jpeg, gif, bmp, png, webp
-curl --no-progress-meter -S -C - -O https://lcamtuf.coredump.cx/afl/demo/afl_testcases.tgz
+curl --no-progress-meter -S --fail -C - -O https://lcamtuf.coredump.cx/afl/demo/afl_testcases.tgz
 mkdir -p afl-testcases && cd afl-testcases/ && tar xf $SRC/afl_testcases.tgz && cd .. && \
     zip -q $SRC/jpgfuzzer_seed_corpus.zip afl-testcases/jpeg*/full/images/* && \
     zip -q $SRC/giffuzzer_seed_corpus.zip afl-testcases/gif*/full/images/* && \
@@ -123,7 +123,7 @@ mkdir -p afl-testcases && cd afl-testcases/ && tar xf $SRC/afl_testcases.tgz && 
 
 # TTF/OTF/SFT
 mkdir -p $SRC/sample-sft-fonts/adobe
-curl --no-progress-meter -S \
+curl --no-progress-meter -S --fail \
     -C - -o $SRC/sample-sft-fonts/adobe/AdobeVFPrototype.otf https://github.com/adobe-fonts/adobe-variable-font-prototype/releases/download/1.005a/AdobeVFPrototype.otf
 git clone --depth 1 --filter=blob:none --sparse https://github.com/khaledhosny/ots.git && \
     cd ots && git sparse-checkout set tests/fonts && cd .. && \
@@ -144,7 +144,7 @@ git clone --depth 1 https://github.com/mozilla/pdf.js pdf.js && \
     rm -rf pdf.js
 
 zip -qj $SRC/svgfuzzer_seed_corpus.zip $SRC/libreoffice/svgio/qa/cppunit/data/*.svg
-curl --no-progress-meter -S \
+curl --no-progress-meter -S --fail \
     -C - -O https://dev-www.libreoffice.org/corpus/wmffuzzer_seed_corpus.zip \
     -C - -O https://dev-www.libreoffice.org/corpus/xbmfuzzer_seed_corpus.zip \
     -C - -O https://dev-www.libreoffice.org/corpus/xpmfuzzer_seed_corpus.zip \
