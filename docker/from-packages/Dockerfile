@@ -108,51 +108,17 @@ RUN --mount=type=secret,id=secret_key \
     echo "deb [signed-by=/usr/share/keyrings/${keyring}.gpg] ${repourl} /" > /etc/apt/sources.list.d/collabora.list && \
 # Update repos again
     apt-get update && \
+# Find the language packs: the repo has one for every language in the
+# engine's Langs.conf, a collaboraofficebasis-<lang> package described as
+# "Language module for ..."
+    langpacks=$(apt-cache search '^Language module for ' | awk '/^collaboraofficebasis-/ {print $1}') && \
+    [ -n "$langpacks" ] && \
 # Install Collabora Online (Collabora Office is a dependency)
     apt-get -y install coolwsd coolwsd-deprecated \
 # Install all dictionaries
                        collaboraoffice-dict-* \
 # Install all language packs
-                       collaboraofficebasis-ar \
-                       collaboraofficebasis-bg \
-                       collaboraofficebasis-ca \
-                       collaboraofficebasis-cs \
-                       collaboraofficebasis-da \
-                       collaboraofficebasis-de \
-                       collaboraofficebasis-el \
-                       collaboraofficebasis-en-gb \
-                       collaboraofficebasis-en-us \
-                       collaboraofficebasis-eo \
-                       collaboraofficebasis-es \
-                       collaboraofficebasis-eu \
-                       collaboraofficebasis-fi \
-                       collaboraofficebasis-fr \
-                       collaboraofficebasis-gl \
-                       collaboraofficebasis-he \
-                       collaboraofficebasis-hr \
-                       collaboraofficebasis-hu \
-                       collaboraofficebasis-id \
-                       collaboraofficebasis-is \
-                       collaboraofficebasis-it \
-                       collaboraofficebasis-ja \
-                       collaboraofficebasis-ko \
-                       collaboraofficebasis-lo \
-                       collaboraofficebasis-nb \
-                       collaboraofficebasis-nl \
-                       collaboraofficebasis-oc \
-                       collaboraofficebasis-pl \
-                       collaboraofficebasis-pt \
-                       collaboraofficebasis-pt-br \
-                       collaboraofficebasis-ru \
-                       collaboraofficebasis-sk \
-                       collaboraofficebasis-sl \
-                       collaboraofficebasis-sq \
-                       collaboraofficebasis-sv \
-                       collaboraofficebasis-tr \
-                       collaboraofficebasis-uk \
-                       collaboraofficebasis-vi \
-                       collaboraofficebasis-zh-cn \
-                       collaboraofficebasis-zh-tw && \
+                       $langpacks && \
 # Install Python scripting support (or not): pyuno and the Python script
 # provider are not dependencies of coolwsd, and the distroless image offers no
 # way to add packages at runtime, so server-side Python macros need them baked
