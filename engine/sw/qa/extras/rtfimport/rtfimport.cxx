@@ -9,6 +9,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <string_view>
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/awt/FontDescriptor.hpp>
@@ -65,6 +66,21 @@ public:
         : SwModelTestBase(u"/sw/qa/extras/rtfimport/data/"_ustr)
     {
     }
+    uno::Reference<text::XTextTable> getTableByFirstCellText(std::u16string_view aText)
+    {
+        uno::Reference<text::XTextTablesSupplier> xSupplier(mxComponent, uno::UNO_QUERY_THROW);
+        auto xTables = xSupplier->getTextTables();
+        for (const OUString& rName : xTables->getElementNames())
+        {
+            uno::Reference<text::XTextTable> xTable(xTables->getByName(rName),
+                                                    uno::UNO_QUERY_THROW);
+            uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"A1"_ustr),
+                                                   uno::UNO_QUERY_THROW);
+            if (xCell->getString() == aText)
+                return xTable;
+        }
+        CPPUNIT_FAIL("Table not found by first-cell text");
+    }
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf173728RowInheritance)
@@ -110,6 +126,149 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf173728LastCellFormatting)
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
                          getProperty<awt::FontSlant>(xValue, u"CharPosture"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0000ff), getProperty<sal_Int32>(xValue, u"CharColor"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf173698ShapeParagraphsInExplicitRow)
+{
+    createSwDoc("tdf173698-shape-in-explicit-row.rtf");
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    uno::Reference<text::XTextRange> xShapeRange(getShape(1), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xShapeText = xShapeRange->getText();
+    CPPUNIT_ASSERT_EQUAL(u"Shape paragraph one"_ustr,
+                         getParagraphOfText(1, xShapeText)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Shape paragraph two"_ustr,
+                         getParagraphOfText(2, xShapeText)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf173698ShapeCellDefaultsAreStoryLocal)
+{
+    createSwDoc("tdf173698-shape-cell-defaults.rtf");
+    auto xOuterTable = getTableByFirstCellText(u"Outer A");
+    auto xChildTable = getTableByFirstCellText(u"Child A");
+    auto xChildTableWithOwnDefaults = getTableByFirstCellText(u"Child C");
+
+    auto getLeftCellMargin
+        = [this](const uno::Reference<text::XTextTable>& xTable, const OUString& rCellName) {
+              uno::Reference<table::XCell> xCell = xTable->getCellByName(rCellName);
+              return getProperty<sal_Int32>(xCell, u"LeftBorderDistance"_ustr);
+          };
+    // \\trpaddl200 is a 200-twip row default (353 hundredths of a millimeter).
+    // The first child story has no padding; the second has 100 twips (176).
+    // After both shape stories end, the parent keeps its original default.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getLeftCellMargin(xChildTable, u"A1"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getLeftCellMargin(xChildTable, u"B1"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(176), getLeftCellMargin(xChildTableWithOwnDefaults, u"A1"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(176), getLeftCellMargin(xChildTableWithOwnDefaults, u"B1"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(353), getLeftCellMargin(xOuterTable, u"A1"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(353), getLeftCellMargin(xOuterTable, u"B1"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf173698ShapeTablesPreserveOuterRow)
+{
+    createSwDoc("tdf173698-shape-table-explicit-row.rtf");
+    auto xOuterTable = getTableByFirstCellText(u"A1");
+    auto xTwoCellShapeTable = getTableByFirstCellText(u"A");
+    auto xOneCellShapeTable = getTableByFirstCellText(u"X");
+
+    auto getCellString = [](const uno::Reference<text::XTextTable>& xTable, const OUString& rName) {
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName(rName), uno::UNO_QUERY_THROW);
+        return xCell->getString();
+    };
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xOuterTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xOuterTable->getColumns()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xOuterTable->getCellNames().getLength());
+    CPPUNIT_ASSERT_EQUAL(u"A1"_ustr, getCellString(xOuterTable, u"A1"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"B1"_ustr, getCellString(xOuterTable, u"B1"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"C1"_ustr, getCellString(xOuterTable, u"C1"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"PrefixMiddleSuffix"_ustr, getCellString(xOuterTable, u"A2"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"B2"_ustr, getCellString(xOuterTable, u"B2"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"C2"_ustr, getCellString(xOuterTable, u"C2"_ustr));
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTwoCellShapeTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTwoCellShapeTable->getColumns()->getCount());
+    CPPUNIT_ASSERT_EQUAL(u"A"_ustr, getCellString(xTwoCellShapeTable, u"A1"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"B"_ustr, getCellString(xTwoCellShapeTable, u"B1"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xOneCellShapeTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xOneCellShapeTable->getColumns()->getCount());
+    CPPUNIT_ASSERT_EQUAL(u"X"_ustr, getCellString(xOneCellShapeTable, u"A1"_ustr));
+
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+    int nTwoCellTablesInShapes = 0;
+    int nOneCellTablesInShapes = 0;
+    for (sal_Int32 i = 1; i <= 2; ++i)
+    {
+        uno::Reference<text::XTextContent> xShape(getShape(i), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(
+            u"A2"_ustr, getProperty<OUString>(xShape->getAnchor()->getText(), u"CellName"_ustr));
+        uno::Reference<text::XTextRange> xShapeRange(xShape, uno::UNO_QUERY_THROW);
+        auto xShapeText = xShapeRange->getText();
+        int nTablesInShape = 0;
+        const int nElements = getParagraphs(xShapeText);
+        for (int nElement = 1; nElement <= nElements; ++nElement)
+        {
+            uno::Reference<text::XTextTable> xTable(getParagraphOrTable(nElement, xShapeText),
+                                                    uno::UNO_QUERY);
+            if (xTable.is())
+                ++nTablesInShape;
+            if (xTable == xTwoCellShapeTable)
+                ++nTwoCellTablesInShapes;
+            if (xTable == xOneCellShapeTable)
+                ++nOneCellTablesInShapes;
+        }
+        CPPUNIT_ASSERT_EQUAL(1, nTablesInShape);
+    }
+    CPPUNIT_ASSERT_EQUAL(1, nTwoCellTablesInShapes);
+    CPPUNIT_ASSERT_EQUAL(1, nOneCellTablesInShapes);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf173698ShapeInNestedParentTable)
+{
+    createSwDoc("tdf173698-shape-in-explicit-nested-parent-table.rtf");
+    auto xOuterTable = getTableByFirstCellText(u"Header A");
+    auto xChildTable = getTableByFirstCellText(u"Child A");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xOuterTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xOuterTable->getColumns()->getCount());
+    CPPUNIT_ASSERT_EQUAL(u"Outer B2 sentinel"_ustr,
+                         uno::Reference<text::XTextRange>(xOuterTable->getCellByName(u"B2"_ustr),
+                                                          uno::UNO_QUERY_THROW)
+                             ->getString());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xChildTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xChildTable->getColumns()->getCount());
+    CPPUNIT_ASSERT_EQUAL(u"Child A2"_ustr,
+                         uno::Reference<text::XTextRange>(xChildTable->getCellByName(u"A2"_ustr),
+                                                          uno::UNO_QUERY_THROW)
+                             ->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Child B2"_ustr,
+                         uno::Reference<text::XTextRange>(xChildTable->getCellByName(u"B2"_ustr),
+                                                          uno::UNO_QUERY_THROW)
+                             ->getString());
+
+    uno::Reference<text::XTextRange> xA2(xOuterTable->getCellByName(u"A2"_ustr),
+                                         uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xA2Text = xA2->getText();
+    CPPUNIT_ASSERT_EQUAL(u"Nested parent prefix"_ustr, getParagraphOfText(1, xA2Text)->getString());
+    uno::Reference<text::XTextTable> xNestedTable(getParagraphOrTable(2, xA2Text),
+                                                  uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xNestedTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xNestedTable->getColumns()->getCount());
+    CPPUNIT_ASSERT_EQUAL(u"Nested cell prefixNested cell suffix"_ustr,
+                         uno::Reference<text::XTextRange>(xNestedTable->getCellByName(u"A1"_ustr),
+                                                          uno::UNO_QUERY_THROW)
+                             ->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Nested parent suffix"_ustr, getParagraphOfText(3, xA2Text)->getString());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    uno::Reference<text::XTextRange> xShapeRange(getShape(1), uno::UNO_QUERY_THROW);
+    auto xShapeText = xShapeRange->getText();
+    bool bChildInShape = false;
+    const int nElements = getParagraphs(xShapeText);
+    for (int nElement = 1; nElement <= nElements; ++nElement)
+    {
+        uno::Reference<text::XTextTable> xTable(getParagraphOrTable(nElement, xShapeText),
+                                                uno::UNO_QUERY);
+        if (xTable == xChildTable)
+            bChildInShape = true;
+    }
+    CPPUNIT_ASSERT(bChildInShape);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testN695479)

@@ -2000,12 +2000,11 @@ void RTFDocumentImpl::swapShapeTextTableState(ShapeTextTableState& rState)
 void RTFDocumentImpl::startShapeTextTableState()
 {
     RTFBuffer_t* pCurrentBuffer = m_aStates.top().getCurrentBuffer();
-    if (!pCurrentBuffer)
-        return;
     ShapeTextTableState& rState = m_aShapeTextTableStates.emplace_back();
     rState.pOuterBuffer = pCurrentBuffer;
     rState.nStateDepth = m_aStates.size();
     swapShapeTextTableState(rState);
+    resetTableRowCellDefaults();
 }
 
 void RTFDocumentImpl::endShapeTextTableState()

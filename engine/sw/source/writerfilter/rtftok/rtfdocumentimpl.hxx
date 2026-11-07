@@ -844,7 +844,7 @@ private:
     void bufferTableRow(RTFBuffer_t& rOuterBuffer, std::deque<RTFSprms> const& rCellsSprms,
                         std::deque<RTFSprms> const& rCellsAttributes, int nCells, int nCurrentCellX,
                         int nTRLeft);
-    /// Gives shape text that starts inside a table buffer a table state of its own.
+    /// Gives shape text a table state of its own for its duration.
     void startShapeTextTableState();
     /// Brings back the table state around the shape when its shape text group ends.
     void endShapeTextTableState();
@@ -1000,8 +1000,7 @@ private:
     /// for nested table, one buffer per table level
     std::deque<RTFBuffer_t> m_aTableBufferStack;
 
-    /// The table state around a shape whose text is read into a table buffer. The shape text has
-    /// a table state of its own while it lasts.
+    /// The table state around shape text. Shape text has a table state of its own while it lasts.
     struct ShapeTextTableState
     {
         std::deque<RTFBuffer_t> aTableBufferStack{ 1 };
