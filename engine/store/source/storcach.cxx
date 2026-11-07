@@ -83,13 +83,7 @@ EntryCache::EntryCache()
     m_entry_cache = rtl_cache_create (
         "store_cache_entry_cache",
         sizeof(Entry),
-        0, // objalign
-        nullptr, // constructor
-        nullptr, // destructor
-        nullptr, // reclaim
-        nullptr, // userarg
-        nullptr, // default source
-        0  // flags
+        nullptr // constructor
         );
 }
 

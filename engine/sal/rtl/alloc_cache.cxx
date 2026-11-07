@@ -41,39 +41,18 @@ rtl_cache_type * rtl_cache_activate(
     rtl_cache_type * cache,
     const char *     name,
     size_t           objsize,
-    size_t           objalign,
-    int  (* constructor)(void * obj, void * userarg),
-    void (* destructor) (void * obj, void * userarg),
-    void *           userarg
+    int  (* constructor)(void * obj)
 )
 {
     assert(cache);
 
     snprintf (cache->m_name, sizeof(cache->m_name), "%s", name);
 
-    if (objalign == 0)
-    {
-        /* determine default alignment */
-        if (objsize >= RTL_MEMORY_ALIGNMENT_8)
-            objalign = RTL_MEMORY_ALIGNMENT_8;
-        else
-            objalign = RTL_MEMORY_ALIGNMENT_4;
-    }
-    else
-    {
-        /* ensure minimum alignment */
-        if(objalign < RTL_MEMORY_ALIGNMENT_4)
-        {
-            objalign = RTL_MEMORY_ALIGNMENT_4;
-        }
-    }
-    assert(RTL_MEMORY_ISP2(objalign));
+    size_t const objalign = objsize >= RTL_MEMORY_ALIGNMENT_8 ? RTL_MEMORY_ALIGNMENT_8 : RTL_MEMORY_ALIGNMENT_4;
 
     cache->m_type_size = RTL_MEMORY_P2ROUNDUP(objsize, objalign);
 
     cache->m_constructor = constructor;
-    cache->m_destructor  = destructor;
-    cache->m_userarg     = userarg;
 
     return cache;
 }
@@ -83,13 +62,7 @@ rtl_cache_type * rtl_cache_activate(
 rtl_cache_type * rtl_cache_create(
     const char *     name,
     sal_Size         objsize,
-    sal_Size         objalign,
-    int  (* constructor)(void * obj, void * userarg),
-    void (* destructor) (void * obj, void * userarg),
-    void (* /*reclaim*/)    (void * userarg),
-    void *           userarg,
-    rtl_arena_type *,
-    int
+    int  (* constructor)(void * obj)
 ) noexcept
 {
     rtl_cache_type * result = nullptr;
@@ -106,10 +79,7 @@ try_alloc:
             cache,
             name,
             objsize,
-            objalign,
-            constructor,
-            destructor,
-            userarg
+            constructor
         );
 
         if (!result)
@@ -148,7 +118,7 @@ void * rtl_cache_alloc(rtl_cache_type * cache) noexcept
     obj = std::malloc(cache->m_type_size);
     if (obj && cache->m_constructor)
     {
-        if (!(cache->m_constructor)(obj, cache->m_userarg))
+        if (!(cache->m_constructor)(obj))
         {
             /* construction failure */
             std::free(obj);
@@ -165,11 +135,6 @@ void rtl_cache_free(
 {
     if (obj && cache)
     {
-        if (cache->m_destructor)
-        {
-            /* destruct object */
-            (cache->m_destructor)(obj, cache->m_userarg);
-        }
         std::free(obj);
     }
 }

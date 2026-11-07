@@ -357,8 +357,7 @@ OStorePageBIOS::Ace::~Ace()
 }
 
 int
-OStorePageBIOS::Ace::constructor (
-    void * obj, SAL_UNUSED_PARAMETER void*)
+OStorePageBIOS::Ace::constructor (void * obj)
 {
   Ace * ace = static_cast<Ace*>(obj);
   ace->m_next = ace->m_prev = ace;
@@ -422,13 +421,7 @@ OStorePageBIOS::AceCache::AceCache()
   m_ace_cache = rtl_cache_create (
     "store_ace_cache",
     sizeof (OStorePageBIOS::Ace),
-    0, // objalign
-    OStorePageBIOS::Ace::constructor,
-    nullptr, // destructor,
-    nullptr, // reclaim,
-    nullptr, // userarg,
-    nullptr, // default source,
-    0  // flags
+    OStorePageBIOS::Ace::constructor
     );
 }
 

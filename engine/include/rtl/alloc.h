@@ -211,18 +211,10 @@ typedef struct rtl_cache_st rtl_cache_type;
 
 #define RTL_CACHE_NAME_LENGTH 31
 
-#define RTL_CACHE_FLAG_BULKDESTROY 1 /* obsolete */
-
 /**
  *  @param[in] pName       descriptive name; for debugging purposes.
  *  @param[in] nObjSize    object size.
- *  @param[in] nObjAlign   object alignment; usually 0 for suitable default.
  *  @param[in] constructor object constructor callback function; returning 1 for success or 0 for failure.
- *  @param[in] destructor  object destructor callback function.
- *  @param[in] reclaim     reclaim callback function.
- *  @param[in] pUserArg    opaque argument passed to callback functions.
- *  @param[in] pSource     unused argument (should be null).
- *  @param[in] nFlags      flags (unused).
  *
  *  @return pointer to rtl_cache_type, or NULL upon failure.
  *
@@ -231,13 +223,7 @@ typedef struct rtl_cache_st rtl_cache_type;
 SAL_DLLPUBLIC rtl_cache_type * rtl_cache_create (
     const char *     pName,
     sal_Size         nObjSize,
-    sal_Size         nObjAlign,
-    int  (* constructor)(void * pObj, void * pUserArg),
-    void (* destructor) (void * pObj, void * pUserArg),
-    void (* reclaim)    (void * pUserArg),
-    void *           pUserArg,
-    rtl_arena_type * pSource,
-    int              nFlags
+    int  (* constructor)(void * pObj)
 ) SAL_THROW_EXTERN_C();
 
 
