@@ -52,7 +52,7 @@ bool CellTextPrimitive2D::operator==(
            && maClipRange == rOther.maClipRange && mbClip == rOther.mbClip
            && meHorizontal == rOther.meHorizontal && meVertical == rOther.meVertical
            && meFlags == rOther.meFlags && maText == rOther.maText
-           && maTextRange == rOther.maTextRange;
+           && maTextRange == rOther.maTextRange && moSurface == rOther.moSurface;
 }
 
 basegfx::B2DRange CellTextPrimitive2D::getB2DRange(
