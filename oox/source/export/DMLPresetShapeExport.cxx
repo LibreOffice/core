@@ -19,6 +19,7 @@
 #include <osl/diagnose.h>
 #include <filter/msfilter/util.hxx>
 
+#include <optional>
 #include <string_view>
 
 using namespace ::css;
@@ -26,6 +27,18 @@ using namespace ::css::drawing;
 
 namespace oox::drawingml
 {
+namespace
+{
+// The adjustment value at the index, or no value when the index is outside rAdjustmentValues
+std::optional<double> GetAdjustmentValueAt(
+    const css::uno::Sequence<EnhancedCustomShapeAdjustmentValue>& rAdjustmentValues, long nIndex)
+{
+    if (nIndex < 0 || nIndex >= rAdjustmentValues.getLength())
+        return {};
+    return rAdjustmentValues[nIndex].Value.get<double>();
+}
+}
+
 // DMLPresetShapeExporter class
 
 // ctor
@@ -137,7 +150,8 @@ DMLPresetShapeExporter::GetAdjustmentPointRadiusValue(sal_Int32 nPoint)
         aRet.nMaxVal = GetHandleValueOfModificationPoint(nPoint, u"RadiusRangeMaximum")
                            .get<EnhancedCustomShapeParameter>()
                            .Value.get<double>();
-        aRet.nCurrVal = GetAdjustmentValues()[aValPos.First.Value.get<long>()].Value.get<double>();
+        aRet.nCurrVal
+            = GetAdjustmentValueAt(GetAdjustmentValues(), aValPos.First.Value.get<long>());
     }
     catch (...)
     {
@@ -156,7 +170,8 @@ DMLPresetShapeExporter::GetAdjustmentPointAngleValue(sal_Int32 nPoint)
                            .get<EnhancedCustomShapeParameterPair>();
         aRet.nMinVal = 0;
         aRet.nMaxVal = 360;
-        aRet.nCurrVal = GetAdjustmentValues()[aValPos.Second.Value.get<long>()].Value.get<double>();
+        aRet.nCurrVal
+            = GetAdjustmentValueAt(GetAdjustmentValues(), aValPos.Second.Value.get<long>());
     }
     catch (...)
     {
@@ -179,7 +194,8 @@ DMLPresetShapeExporter::GetAdjustmentPointXValue(sal_Int32 nPoint)
         aRet.nMaxVal = GetHandleValueOfModificationPoint(nPoint, u"RangeXMaximum")
                            .get<EnhancedCustomShapeParameter>()
                            .Value.get<double>();
-        aRet.nCurrVal = GetAdjustmentValues()[aValPos.First.Value.get<long>()].Value.get<double>();
+        aRet.nCurrVal
+            = GetAdjustmentValueAt(GetAdjustmentValues(), aValPos.First.Value.get<long>());
     }
     catch (...)
     {
@@ -202,7 +218,8 @@ DMLPresetShapeExporter::GetAdjustmentPointYValue(sal_Int32 nPoint)
         aRet.nMaxVal = GetHandleValueOfModificationPoint(nPoint, u"RangeYMaximum")
                            .get<EnhancedCustomShapeParameter>()
                            .Value.get<double>();
-        aRet.nCurrVal = GetAdjustmentValues()[aValPos.Second.Value.get<long>()].Value.get<double>();
+        aRet.nCurrVal
+            = GetAdjustmentValueAt(GetAdjustmentValues(), aValPos.Second.Value.get<long>());
     }
     catch (...)
     {
