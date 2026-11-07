@@ -193,6 +193,8 @@ cp rtffuzzer_seed_corpus.zip rtf2pdffuzzer_seed_corpus.zip
 cp fodsfuzzer_seed_corpus.zip fods2xlsfuzzer_seed_corpus.zip
 cp htmlfuzzer_seed_corpus.zip schtmlfuzzer_seed_corpus.zip
 cp pdffuzzer_seed_corpus.zip pdf2fodgfuzzer_seed_corpus.zip
+#packaged ODT test documents
+(cd $SRC/libreoffice && find sw/qa -name '*.odt' -size -64k -print | zip -q $SRC/odtfuzzer_seed_corpus.zip -@)
 #encrypted packages, password "test"
 zip -qj zipfuzzer_seed_corpus.zip \
     $SRC/libreoffice/sc/qa/unit/data/ods/password.ods \
