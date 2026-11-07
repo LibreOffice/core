@@ -123,12 +123,14 @@ mkdir -p afl-testcases && cd afl-testcases/ && tar xf $SRC/afl_testcases.tgz && 
 mkdir -p $SRC/sample-sft-fonts/adobe
 curl --no-progress-meter -S --fail \
     -C - -o $SRC/sample-sft-fonts/adobe/AdobeVFPrototype.otf https://github.com/adobe-fonts/adobe-variable-font-prototype/releases/download/1.005a/AdobeVFPrototype.otf
-git clone --depth 1 --filter=blob:none --sparse https://github.com/khaledhosny/ots.git && \
-    cd ots && git sparse-checkout set tests/fonts && cd .. && \
-    cp -r ots/tests/fonts $SRC/sample-sft-fonts/ots && rm -rf ots
-git clone --depth 1 --filter=blob:none --sparse https://github.com/harfbuzz/harfbuzz.git && \
-    cd harfbuzz && git sparse-checkout set test/shape/data/in-house/fonts && cd .. && \
-    cp -r harfbuzz/test/shape/data/in-house/fonts $SRC/sample-sft-fonts/harfbuzz && rm -rf harfbuzz
+git clone --depth 1 --filter=blob:none --no-checkout https://github.com/khaledhosny/ots.git
+git -C ots checkout HEAD -- tests/fonts
+cp -r ots/tests/fonts $SRC/sample-sft-fonts/ots
+rm -rf ots
+git clone --depth 1 --filter=blob:none --no-checkout https://github.com/harfbuzz/harfbuzz.git
+git -C harfbuzz checkout HEAD -- test/shape/data/in-house/fonts
+cp -r harfbuzz/test/shape/data/in-house/fonts $SRC/sample-sft-fonts/harfbuzz
+rm -rf harfbuzz
 # exclude very large fonts that are slow to process under sanitizers
 find $SRC/sample-sft-fonts -size +1M -delete
 zip -qr $SRC/eotfuzzer_seed_corpus.zip $SRC/sample-sft-fonts
