@@ -448,23 +448,7 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 
 		this._readInputSequence(textMsg, values);
 
-		if (values.type === 'vectorprimitives') {
-			RenderManager.handleVectorPrimitivesResponse(values);
-			return;
-		}
-
-		if (values.type === 'vectorprimitivesdelta') {
-			RenderManager.handleVectorPrimitivesDelta(values);
-			return;
-		}
-
-		if (values.type === 'vectorrenderinggraphics') {
-			RenderManager.handleVectorRenderingGraphicsResponse(values);
-			return;
-		}
-
-		if (values.type === 'vectorrenderingfont') {
-			RenderManager.handleVectorRenderingFontResponse(values);
+		if (this._onVectorValues(values)) {
 			return;
 		}
 

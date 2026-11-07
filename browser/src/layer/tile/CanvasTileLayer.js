@@ -1363,6 +1363,26 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			values.inputSequence = sequence;
 	},
 
+	// Hands an answer that carries vector primitives, a graphic or a font of them to the render
+	// manager. Returns true when the values were such an answer.
+	_onVectorValues: function (values) {
+		switch (values.type) {
+		case 'vectorprimitives':
+			RenderManager.handleVectorPrimitivesResponse(values);
+			return true;
+		case 'vectorprimitivesdelta':
+			RenderManager.handleVectorPrimitivesDelta(values);
+			return true;
+		case 'vectorrenderinggraphics':
+			RenderManager.handleVectorRenderingGraphicsResponse(values);
+			return true;
+		case 'vectorrenderingfont':
+			RenderManager.handleVectorRenderingFontResponse(values);
+			return true;
+		}
+		return false;
+	},
+
 	_onCommandValuesMsg: function (textMsg) {
 		var jsonIdx = textMsg.indexOf('{');
 		if (jsonIdx === -1) {

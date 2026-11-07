@@ -212,6 +212,7 @@
 /// <reference path="../src/app/VectorResourceTracker.ts" />
 /// <reference path="../src/app/VectorResourceLoader.ts" />
 /// <reference path="../src/app/VectorManagerBase.ts" />
+/// <reference path="../src/app/VectorPartManagerBase.ts" />
 /// <reference path="../src/app/ImpressVectorManager.ts" />
 /// <reference path="../src/app/CalcVectorManager.ts" />
 /// <reference path="../src/canvas/sections/AutoFillBaseSection.ts" />
