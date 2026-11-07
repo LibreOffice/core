@@ -288,6 +288,20 @@ describe('CalcVectorManager requests', function () {
 		nodeassert.deepStrictEqual(blocksAsked(), ['0:0', '0:0']);
 	});
 
+	it('tells the listeners the newest input that an answer reflects', function () {
+		let reflected: number | undefined;
+		manager.onVectorChanged((_answered, inputSequence) => {
+			reflected = inputSequence;
+		});
+		manager.requestBlocks(0, [[0, 0]]);
+		const values = answer(0, requestIds()[0], [wholeBlock(0, 0)]);
+		values.inputSequence = 12;
+
+		manager.handleVectorPrimitives(values);
+
+		nodeassert.strictEqual(reflected, 12);
+	});
+
 	it('asks again for a block that went stale while it was asked for', function () {
 		manager.requestBlocks(0, [[0, 0]]);
 		manager.handleVectorPrimitives(

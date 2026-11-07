@@ -1166,7 +1166,7 @@ class CalcVectorManager extends VectorManagerBase {
 				oldest = Math.min(oldest, block.current);
 			sheet.shifts = sheet.shifts.filter((shift) => shift.version > oldest);
 		}
-		this._fireChanged(answered);
+		this._fireChanged(answered, values.inputSequence);
 
 		// An answer frees a place for the next block waiting.
 		if (request) this._sendQueued();
