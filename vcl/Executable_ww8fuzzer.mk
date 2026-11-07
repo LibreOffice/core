@@ -19,6 +19,8 @@ $(eval $(call gb_Executable_use_api,ww8fuzzer,\
 
 $(eval $(call gb_Executable_use_externals,ww8fuzzer,\
 	$(fuzzer_externals) \
+	epubgen \
+	revenge \
 ))
 
 $(eval $(call gb_Executable_set_include,ww8fuzzer,\
@@ -29,10 +31,12 @@ $(eval $(call gb_Executable_set_include,ww8fuzzer,\
 $(eval $(call gb_Executable_use_libraries,ww8fuzzer,\
     $(fuzzer_writer_libraries) \
     $(fuzzer_core_libraries) \
+    pdffilter \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,ww8fuzzer,\
     $(fuzzer_statics) \
+    fuzzer_writer \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,ww8fuzzer,\
