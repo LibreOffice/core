@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="clip">
+      <rect x="0" y="0" width="100" height="40"/>
+    </clipPath>
+  </defs>
+  <line x1="20" y1="20" x2="180" y2="20" stroke="#ff0000" stroke-width="2" clip-path="url(#clip)"/>
+  <line x1="20" y1="80" x2="180" y2="80" stroke="#0000ff" stroke-width="2"/>
+</svg>
