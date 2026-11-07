@@ -71,9 +71,9 @@ void alloc_preInit (bool start) noexcept
     {
         rtl_allocateString = pre_allocateStringFn;
         rtl_freeString = pre_freeStringFn;
-        pre_arena = rtl_arena_create("pre-init strings", 4, 0,
+        pre_arena = rtl_arena_create("pre-init strings", 4,
                                      nullptr, rtl_arena_alloc,
-                                     rtl_arena_free, 0);
+                                     rtl_arena_free);
 
         // To be consistent (and to ensure the rtl_cache threads are started).
         ensureCacheSingleton();

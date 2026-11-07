@@ -201,11 +201,9 @@ void rtl_cache_init()
     gp_cache_arena = rtl_arena_create (
         "rtl_cache_internal_arena",
         64,   /* quantum */
-        0,    /* no quantum caching */
         nullptr, /* default source */
         rtl_arena_alloc,
-        rtl_arena_free,
-        0     /* flags */
+        rtl_arena_free
     );
     assert(gp_cache_arena);
 

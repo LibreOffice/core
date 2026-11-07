@@ -150,11 +150,9 @@ typedef struct rtl_arena_st rtl_arena_type;
 /**
  *  @param[in] pName             descriptive name; for debugging purposes.
  *  @param[in] quantum           resource allocation unit / granularity; rounded up to next power of 2.
- *  @param[in] quantum_cache_max no longer used, should be 0.
  *  @param[in] source_arena      passed as argument to source_alloc, source_free; usually NULL.
  *  @param[in] source_alloc      function to allocate resources; usually rtl_arena_alloc.
  *  @param[in] source_free       function to free resources; usually rtl_arena_free.
- *  @param[in] nFlags            flags; usually 0.
  *
  *  @return pointer to rtl_arena_type, or NULL upon failure.
  *
@@ -163,11 +161,9 @@ typedef struct rtl_arena_st rtl_arena_type;
 SAL_DLLPUBLIC rtl_arena_type * rtl_arena_create (
     const char *       pName,
     sal_Size           quantum,
-    sal_Size           quantum_cache_max,
     rtl_arena_type *   source_arena,
     void * (* source_alloc)(rtl_arena_type *, sal_Size *),
-    void   (* source_free) (rtl_arena_type *, void *, sal_Size),
-    int                nFlags
+    void   (* source_free) (rtl_arena_type *, void *, sal_Size)
 ) SAL_THROW_EXTERN_C();
 
 

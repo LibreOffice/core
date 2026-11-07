@@ -735,11 +735,9 @@ void rtl_arena_deactivate(rtl_arena_type * arena)
 rtl_arena_type * rtl_arena_create(
     const char *       name,
     sal_Size           quantum,
-    sal_Size,
     rtl_arena_type *   source_arena,
     void * (* source_alloc)(rtl_arena_type *, sal_Size *),
-    void   (* source_free) (rtl_arena_type *, void *, sal_Size),
-    SAL_UNUSED_PARAMETER int
+    void   (* source_free) (rtl_arena_type *, void *, sal_Size)
 ) noexcept
 {
     rtl_arena_type * result = nullptr;

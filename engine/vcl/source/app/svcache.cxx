@@ -99,8 +99,8 @@ void* CacheMemory::do_allocate(std::size_t bytes, std::size_t alignment)
     if (!maCacheArenas[nSlot])
     {
         maCacheArenas[nSlot]
-            = rtl_arena_create("cache_internal_arena", alignment, 0,
-                               reinterpret_cast<rtl_arena_type*>(this), allocPages, freePages, 0);
+            = rtl_arena_create("cache_internal_arena", alignment,
+                               reinterpret_cast<rtl_arena_type*>(this), allocPages, freePages);
     }
 
     mnSmallest = std::min(mnSmallest, bytes);
