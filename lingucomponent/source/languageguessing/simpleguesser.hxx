@@ -96,11 +96,18 @@ private:
     //Where typical fingerprints (n-gram tables) are stored
     void* h;
 
-    //Is used to select languages into the fingerprints DB, the mask is used to indicate if we want enabled disabled or both
-    std::vector<Guess> GetManagedLanguages(const char mask);
+    enum class LanguageState
+    {
+        Enabled,
+        Disabled,
+        Any
+    };
 
-    //Like getManagedLanguages, this function enable or disable a language and it depends of the mask
-    void XableLanguage(const std::string& lang, char mask);
+    //Lists the languages of the fingerprints DB that are in state eState
+    std::vector<Guess> GetManagedLanguages(LanguageState eState);
+
+    //Enables or disables every language whose name starts with lang
+    void SetLanguageEnabled(const std::string& lang, bool bEnabled);
 };
 
 #endif
