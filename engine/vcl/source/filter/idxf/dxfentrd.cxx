@@ -382,6 +382,7 @@ void DXFAttribEntity::EvaluateGroup(DXFGroupReader & rDGR)
 
 DXFPolyLineEntity::DXFPolyLineEntity() : DXFBasicEntity(DXF_POLYLINE)
 {
+    fElevation=0.0;
     nFlags=0;
     fSWidth=0.0;
     fEWidth=0.0;
@@ -395,6 +396,7 @@ DXFPolyLineEntity::DXFPolyLineEntity() : DXFBasicEntity(DXF_POLYLINE)
 void DXFPolyLineEntity::EvaluateGroup(DXFGroupReader & rDGR)
 {
     switch (rDGR.GetG()) {
+        case 30: fElevation=rDGR.GetF(); break;
         case 70: nFlags=rDGR.GetI(); break;
         case 40: fSWidth=rDGR.GetF(); break;
         case 41: fEWidth=rDGR.GetF(); break;
@@ -411,12 +413,11 @@ void DXFPolyLineEntity::EvaluateGroup(DXFGroupReader & rDGR)
 
 DXFLWPolyLineEntity::DXFLWPolyLineEntity() :
     DXFBasicEntity( DXF_LWPOLYLINE ),
-    nIndex( 0 ),
     nCount( 0 ),
+    bVertexAccepted( false ),
     nFlags( 0 ),
     fConstantWidth( 0.0 ),
-    fStartWidth( 0.0 ),
-    fEndWidth( 0.0 )
+    fElevation( 0.0 )
 {
 }
 
@@ -427,36 +428,47 @@ void DXFLWPolyLineEntity::EvaluateGroup( DXFGroupReader & rDGR )
         case 90 :
         {
             nCount = rDGR.GetI();
-            // limit alloc to max reasonable size based on remaining data in stream
-            if (nCount > 0 && o3tl::make_unsigned(nCount) <= rDGR.remainingSize())
-                aP.reserve(nCount);
+            // limit alloc to max reasonable size based on remaining data in stream, a vertex
+            // takes at least ten bytes
+            if (nCount > 0)
+                aVertices.reserve(std::min<sal_uInt64>(nCount, rDGR.remainingSize() / 10));
             else
                 nCount = 0;
         }
         break;
         case 70: nFlags = rDGR.GetI(); break;
         case 43: fConstantWidth = rDGR.GetF(); break;
-        case 40: fStartWidth = rDGR.GetF(); break;
-        case 41: fEndWidth = rDGR.GetF(); break;
+        case 38: fElevation = rDGR.GetF(); break;
         case 10:
         {
-            if (nIndex < nCount)
+            // a new vertex
+            bVertexAccepted = aVertices.size() < o3tl::make_unsigned(nCount);
+            if (bVertexAccepted)
             {
-                aP.resize(nIndex+1);
-                aP[nIndex].fx = rDGR.GetF();
+                DXFPathVertex aVertex;
+                aVertex.maPoint.setX(rDGR.GetF());
+                aVertex.mfStartWidth = -1.0;
+                aVertex.mfEndWidth = -1.0;
+                aVertices.push_back(aVertex);
             }
         }
         break;
         case 20:
-        {
-            if (nIndex < nCount)
-            {
-                aP.resize(nIndex+1);
-                aP[nIndex].fy = rDGR.GetF();
-                ++nIndex;
-            }
-        }
-        break;
+            if (bVertexAccepted)
+                aVertices.back().maPoint.setY(rDGR.GetF());
+            break;
+        case 40:
+            if (bVertexAccepted)
+                aVertices.back().mfStartWidth = rDGR.GetF();
+            break;
+        case 41:
+            if (bVertexAccepted)
+                aVertices.back().mfEndWidth = rDGR.GetF();
+            break;
+        case 42:
+            if (bVertexAccepted)
+                aVertices.back().mfBulge = rDGR.GetF();
+            break;
         default: DXFBasicEntity::EvaluateGroup(rDGR);
     }
 }
@@ -729,6 +741,7 @@ DXFVertexEntity::DXFVertexEntity() : DXFBasicEntity(DXF_VERTEX)
     fBulge=0.0;
     nFlags=0;
     fCFTDir=0.0;
+    nFaceIndex[0]=nFaceIndex[1]=nFaceIndex[2]=nFaceIndex[3]=0;
 
 }
 
@@ -743,6 +756,10 @@ void DXFVertexEntity::EvaluateGroup(DXFGroupReader & rDGR)
         case 42: fBulge=rDGR.GetF(); break;
         case 70: nFlags=rDGR.GetI(); break;
         case 50: fCFTDir=rDGR.GetF(); break;
+        case 71: nFaceIndex[0]=rDGR.GetI(); break;
+        case 72: nFaceIndex[1]=rDGR.GetI(); break;
+        case 73: nFaceIndex[2]=rDGR.GetI(); break;
+        case 74: nFaceIndex[3]=rDGR.GetI(); break;
         default: DXFBasicEntity::EvaluateGroup(rDGR);
     }
 }

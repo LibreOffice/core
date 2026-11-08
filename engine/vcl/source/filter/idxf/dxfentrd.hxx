@@ -21,6 +21,7 @@
 
 #include "dxfgrprd.hxx"
 #include "dxfvec.hxx"
+#include "dxfgeom.hxx"
 #include <tools/long.hxx>
 
 #include <memory>
@@ -311,6 +312,7 @@ class DXFPolyLineEntity : public DXFBasicEntity {
 
 public:
 
+    double fElevation; // 30
     tools::Long nFlags;       // 70
     double fSWidth;    // 40
     double fEWidth;    // 41
@@ -329,17 +331,19 @@ protected:
 
 class DXFLWPolyLineEntity : public DXFBasicEntity
 {
-        sal_Int32   nIndex;
         sal_Int32   nCount;         // 90
+        // the groups of a vertex beyond the count are ignored
+        bool        bVertexAccepted;
 
     public:
 
         sal_Int32   nFlags;         // 70   1 = closed, 128 = plinegen
-        double      fConstantWidth; // 43   (optional - default: 0, not used if fStartWidth and/or fEndWidth is used)
-        double      fStartWidth;    // 40
-        double      fEndWidth;      // 41
+        double      fConstantWidth; // 43   used by the vertices without their own widths
+        double      fElevation;     // 38
 
-        std::vector<DXFVector>  aP;
+        // 10, 20, and the 40, 41 widths (-1 if not given) and 42 bulge of the segment
+        // starting there
+        std::vector<DXFPathVertex> aVertices;
 
         DXFLWPolyLineEntity();
 
@@ -467,6 +471,7 @@ public:
     double fBulge;     // 42
     tools::Long nFlags;       // 70
     double fCFTDir;    // 50
+    tools::Long nFaceIndex[4]; // 71-74, polyface mesh faces
 
     DXFVertexEntity();
 

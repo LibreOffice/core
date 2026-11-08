@@ -113,6 +113,12 @@ private:
 
     void DrawAttribEntity(const DXFAttribEntity & rE, const DXFTransform & rTransform);
 
+    // metafile units per drawing unit
+    double GetDeviceScale(const DXFTransform & rTransform) const;
+
+    void Draw2DPolyLine(const DXFBasicEntity & rE, const std::vector<DXFPathVertex> & rVertices,
+                        bool bClosed, double fElevation, const DXFTransform & rTransform);
+
     void DrawPolyLineEntity(const DXFPolyLineEntity & rE, const DXFTransform & rTransform);
 
     void Draw3DFaceEntity(const DXF3DFaceEntity & rE, const DXFTransform & rTransform);

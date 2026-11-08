@@ -22,6 +22,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <comphelper/configuration.hxx>
+#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/virdev.hxx>
@@ -48,6 +49,14 @@ constexpr tools::Long MAX_LINE_WEIGHT = 211;
 
 // The shortest line type pattern drawn in metafile units, a denser one looks solid anyway
 constexpr double MIN_PATTERN_PERIOD = 10.0;
+
+// a grid of rows and columns of at most nPoints points
+bool IsGrid(tools::Long nRows, tools::Long nColumns, sal_uInt64 nPoints)
+{
+    return nRows >= 1 && nColumns >= 1 && o3tl::make_unsigned(nRows) <= nPoints
+           && o3tl::make_unsigned(nColumns) <= nPoints
+           && o3tl::make_unsigned(nRows) * o3tl::make_unsigned(nColumns) <= nPoints;
+}
 
 basegfx::B2DPoint Project(const DXFTransform& rTransform, const DXFVector& rVector)
 {
@@ -629,33 +638,188 @@ void DXF2GDIMetaFile::DrawAttribEntity(const DXFAttribEntity & rE, const DXFTran
 }
 
 
-void DXF2GDIMetaFile::DrawPolyLineEntity(const DXFPolyLineEntity & rE, const DXFTransform & rTransform)
+double DXF2GDIMetaFile::GetDeviceScale(const DXFTransform & rTransform) const
 {
+    DXFVector aX, aY;
+    rTransform.TransDir(DXFVector(1, 0, 0), aX);
+    rTransform.TransDir(DXFVector(0, 1, 0), aY);
+    return (std::hypot(aX.fx, aX.fy) + std::hypot(aY.fx, aY.fy)) / 2 * mfDeviceScale;
+}
+
+void DXF2GDIMetaFile::Draw2DPolyLine(const DXFBasicEntity & rE, const std::vector<DXFPathVertex> & rVertices,
+                                     bool bClosed, double fElevation, const DXFTransform & rTransform)
+{
+    if (rVertices.empty())
+        return;
+
+    const basegfx::B2DPolygon aPolygon(
+        Project(rTransform, dxf::createPolyline(rVertices, bClosed), fElevation));
+
+    bool bWide = false;
+    bool bConstantWidth = true;
+    const size_t nSegments = bClosed ? rVertices.size() : rVertices.size() - 1;
+    for (size_t i = 0; i < nSegments; ++i)
+    {
+        const DXFPathVertex& rVertex = rVertices[i];
+        if (rVertex.mfStartWidth > 0 || rVertex.mfEndWidth > 0)
+            bWide = true;
+        if (rVertex.mfStartWidth != rVertices[0].mfStartWidth
+            || rVertex.mfEndWidth != rVertices[0].mfStartWidth)
+            bConstantWidth = false;
+    }
+
+    if (bWide && !bConstantWidth)
+    {
+        // each segment is filled between its start and end widths
+        if (!SetAreaAttribute(rE))
+            return;
+        // one by one, the outlines of neighbouring segments overlap
+        for (const basegfx::B2DPolygon& rOutline : dxf::createWidePolyline(rVertices, bClosed))
+            OutPolygon(basegfx::B2DPolyPolygon(Project(rTransform, rOutline, fElevation)));
+    }
+
     if (!SetLineAttribute(rE))
         return;
+    LineInfo aLineInfo = GetEntityLineInfo(rE, rTransform);
+    if (bWide && bConstantWidth && !mbMeasure)
+    {
+        aLineInfo.SetWidth(rVertices[0].mfStartWidth * GetDeviceScale(rTransform));
+        aLineInfo.SetLineJoin(basegfx::B2DLineJoin::Miter);
+    }
+    OutPolyLine(aPolygon, aLineInfo);
+    OutThickness(aPolygon, rTransform, rE.fThickness, false);
+}
 
-    basegfx::B2DPolygon aPolygon;
+void DXF2GDIMetaFile::DrawPolyLineEntity(const DXFPolyLineEntity & rE, const DXFTransform & rTransform)
+{
+    std::vector<const DXFVertexEntity*> aVertices;
     for (const DXFBasicEntity* pBE = rE.pSucc; pBE != nullptr && pBE->eType == DXF_VERTEX;
          pBE = pBE->pSucc)
-        aPolygon.append(Project(rTransform, static_cast<const DXFVertexEntity*>(pBE)->aP0));
-    if (aPolygon.count() < 2)
+        aVertices.push_back(static_cast<const DXFVertexEntity*>(pBE));
+    if (aVertices.empty())
         return;
-    aPolygon.setClosed((rE.nFlags & 1) != 0);
 
-    OutPolyLine(aPolygon, GetEntityLineInfo(rE, rTransform));
-    OutThickness(aPolygon, rTransform, rE.fThickness, false);
+    if (rE.nFlags & 64)
+    {
+        // polyface mesh: the vertices, then the faces referring to them; a negative index
+        // hides the edge starting at that vertex
+        if (!SetLineAttribute(rE))
+            return;
+        std::vector<basegfx::B2DPoint> aPoints;
+        for (const DXFVertexEntity* pVertex : aVertices)
+            if ((pVertex->nFlags & 128) == 0 || (pVertex->nFlags & 64) != 0)
+                aPoints.push_back(Project(rTransform, pVertex->aP0));
+        for (const DXFVertexEntity* pVertex : aVertices)
+        {
+            if ((pVertex->nFlags & 128) == 0 || (pVertex->nFlags & 64) != 0)
+                continue;
+            std::vector<tools::Long> aIndices;
+            for (tools::Long nIndex : pVertex->nFaceIndex)
+                if (nIndex != 0)
+                    aIndices.push_back(nIndex);
+            for (size_t i = 0; i < aIndices.size(); ++i)
+            {
+                const tools::Long nFrom = aIndices[i];
+                const tools::Long nTo = std::abs(aIndices[(i + 1) % aIndices.size()]);
+                if (nFrom < 0 || o3tl::make_unsigned(nFrom) > aPoints.size()
+                    || o3tl::make_unsigned(nTo) > aPoints.size())
+                    continue;
+                basegfx::B2DPolygon aEdge;
+                aEdge.append(aPoints[nFrom - 1]);
+                aEdge.append(aPoints[nTo - 1]);
+                OutPolyLine(aEdge, LineInfo());
+            }
+        }
+        return;
+    }
+
+    if (rE.nFlags & 16)
+    {
+        // polygon mesh: M rows of N vertices, the smoothed surface replaces the control points
+        if (!SetLineAttribute(rE))
+            return;
+        std::vector<basegfx::B2DPoint> aPoints;
+        const bool bSmooth = rE.nCSSType != 0 && rE.nMDensity > 1 && rE.nNDensity > 1;
+        for (const DXFVertexEntity* pVertex : aVertices)
+            if (!bSmooth || (pVertex->nFlags & 16) == 0)
+                aPoints.push_back(Project(rTransform, pVertex->aP0));
+        // the counts are checked against the points before they are multiplied
+        const sal_uInt64 nPoints = aPoints.size();
+        size_t nM = 0, nN = 0;
+        if (bSmooth && IsGrid(rE.nMDensity, rE.nNDensity, nPoints)
+            && o3tl::make_unsigned(rE.nMDensity) * o3tl::make_unsigned(rE.nNDensity) == nPoints)
+        {
+            nM = rE.nMDensity;
+            nN = rE.nNDensity;
+        }
+        else if (IsGrid(rE.nMeshMCount, rE.nMeshNCount, nPoints))
+        {
+            nM = rE.nMeshMCount;
+            nN = rE.nMeshNCount;
+        }
+        else
+            return;
+        for (size_t m = 0; m < nM; ++m)
+        {
+            basegfx::B2DPolygon aRow;
+            for (size_t n = 0; n < nN; ++n)
+                aRow.append(aPoints[m * nN + n]);
+            aRow.setClosed((rE.nFlags & 32) != 0);
+            OutPolyLine(aRow, LineInfo());
+        }
+        for (size_t n = 0; n < nN; ++n)
+        {
+            basegfx::B2DPolygon aColumn;
+            for (size_t m = 0; m < nM; ++m)
+                aColumn.append(aPoints[m * nN + n]);
+            aColumn.setClosed((rE.nFlags & 1) != 0);
+            OutPolyLine(aColumn, LineInfo());
+        }
+        return;
+    }
+
+    // a fitted polyline is drawn through its fit vertices, not its frame
+    const bool bSplineFit = (rE.nFlags & 4) != 0;
+    if (rE.nFlags & 8)
+    {
+        // 3D polyline
+        if (!SetLineAttribute(rE))
+            return;
+        basegfx::B2DPolygon aPolygon;
+        for (const DXFVertexEntity* pVertex : aVertices)
+            if (!bSplineFit || (pVertex->nFlags & 16) == 0)
+                aPolygon.append(Project(rTransform, pVertex->aP0));
+        aPolygon.setClosed((rE.nFlags & 1) != 0);
+        OutPolyLine(aPolygon, GetEntityLineInfo(rE, rTransform));
+        return;
+    }
+
+    std::vector<DXFPathVertex> aPath;
+    for (const DXFVertexEntity* pVertex : aVertices)
+    {
+        if (bSplineFit && (pVertex->nFlags & 16) != 0)
+            continue;
+        DXFPathVertex aVertex;
+        aVertex.maPoint = basegfx::B2DPoint(pVertex->aP0.fx, pVertex->aP0.fy);
+        aVertex.mfBulge = pVertex->fBulge;
+        aVertex.mfStartWidth = pVertex->fSWidth >= 0 ? pVertex->fSWidth : rE.fSWidth;
+        aVertex.mfEndWidth = pVertex->fEWidth >= 0 ? pVertex->fEWidth : rE.fEWidth;
+        aPath.push_back(aVertex);
+    }
+    Draw2DPolyLine(rE, aPath, (rE.nFlags & 1) != 0, rE.fElevation, rTransform);
 }
 
 void DXF2GDIMetaFile::DrawLWPolyLineEntity(const DXFLWPolyLineEntity & rE, const DXFTransform & rTransform )
 {
-    if (rE.aP.empty() || !SetLineAttribute(rE))
-        return;
-
-    basegfx::B2DPolygon aPolygon;
-    for (const DXFVector& rPoint : rE.aP)
-        aPolygon.append(Project(rTransform, rPoint));
-    aPolygon.setClosed((rE.nFlags & 1) != 0);
-    OutPolyLine(aPolygon, GetEntityLineInfo(rE, rTransform));
+    std::vector<DXFPathVertex> aPath(rE.aVertices);
+    for (DXFPathVertex& rVertex : aPath)
+    {
+        if (rVertex.mfStartWidth < 0)
+            rVertex.mfStartWidth = rE.fConstantWidth;
+        if (rVertex.mfEndWidth < 0)
+            rVertex.mfEndWidth = rE.fConstantWidth;
+    }
+    Draw2DPolyLine(rE, aPath, (rE.nFlags & 1) != 0, rE.fElevation, rTransform);
 }
 
 void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransform & rTransform )

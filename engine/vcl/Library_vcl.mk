@@ -498,6 +498,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/filter/idxf/dxf2mtf \
     vcl/source/filter/idxf/dxfblkrd \
     vcl/source/filter/idxf/dxfentrd \
+    vcl/source/filter/idxf/dxfgeom \
     vcl/source/filter/idxf/dxfgrprd \
     vcl/source/filter/idxf/dxfreprd \
     vcl/source/filter/idxf/dxftblrd \
