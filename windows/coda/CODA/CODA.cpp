@@ -154,6 +154,11 @@ struct DocumentTab
     unsigned long long lastActiveTick = 0;
     // The GetTickCount64() value when the current WebView2 of the tab was asked for.
     ULONGLONG viewLiveSince = 0;
+    // The live-view limit asked the page to save the document, and the answer has not come yet.
+    bool dropWaitsForSave = false;
+    // The live-view limit has asked the page to save the document since the tab was last brought
+    // to the front.
+    bool dropSaveAsked = false;
     wil::com_ptr<ICoreWebView2Controller> webViewController;
     wil::com_ptr<ICoreWebView2> webView;
     std::thread app2js;
@@ -3968,6 +3973,42 @@ static void restoreTabView(DocumentTab& tab)
     createDocumentView(tab.tabId);
 }
 
+static void scheduleLiveViewLimit(WindowState& window, UINT delayMilliseconds);
+
+// Ask the page of a tab beyond the live-view limit to save its document, so that the tab can lose
+// its WebView2 without losing a change. One drop asks for one save, so a document whose save fails
+// keeps its WebView2.
+static void requestSaveThenDiscard(DocumentTab& tab)
+{
+    if (tab.dropWaitsForSave || tab.dropSaveAsked || !tab.webView)
+        return;
+
+    LOG_TRC("Tab " << tab.tabId << " saves before its WebView2 goes");
+    tab.dropWaitsForSave = true;
+    tab.dropSaveAsked = true;
+
+    // The page answers with SAVECOMPLETED or SAVEFAILED when the save finishes, or with
+    // SAVECOMPLETED at once when there is nothing to save. The save is a quiet one, so a failure
+    // shows no prompt, and the user stays on the tab they are on. A page that cannot run the
+    // script answers nothing.
+    const int tabId = tab.tabId;
+    tab.webView->ExecuteScript(
+        L"if (window.app && window.app.map)"
+        L"  window.app.map._saveQuietlyForNativeHost();"
+        L"else window.postMobileMessage('SAVECOMPLETED');",
+        Microsoft::WRL::Callback<ICoreWebView2ExecuteScriptCompletedHandler>(
+            [tabId](HRESULT errorCode, LPCWSTR) -> HRESULT
+            {
+                if (FAILED(errorCode))
+                {
+                    if (DocumentTab* saving = findTab(tabId))
+                        saving->dropWaitsForSave = false;
+                }
+                return S_OK;
+            })
+            .Get());
+}
+
 // Run the live-view limit of a tabbed window after a delay, so that a run of tab switches settles
 // first.
 static void scheduleLiveViewLimit(WindowState& window, UINT delayMilliseconds)
@@ -4026,8 +4067,11 @@ static void enforceLiveViewLimit(WindowState& window)
 
         // Only a document whose content is already in its file loses its view, so the drop costs
         // no content at all.
-        if (tab->isModified)
+        if (tab->isModified || tab->dropWaitsForSave)
+        {
+            requestSaveThenDiscard(*tab);
             continue;
+        }
 
         discardTabView(*tab);
         if (tab->viewDiscarded)
@@ -4071,6 +4115,10 @@ static void activateTab(WindowState& window, int tabId)
 
     window.activeTabId = tabId;
     tab->lastActiveTick = ++activationTick;
+    // A save that the live-view limit asked for still finishes. The next time the user leaves
+    // this tab, the limit may ask for another one.
+    tab->dropSaveAsked = false;
+    tab->dropWaitsForSave = false;
 
     // A tab the user passes through gets no WebView2 until they stay on it.
     if (tab->viewDiscarded)
@@ -6845,9 +6893,17 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
         }
         else if (s == L"SAVESTARTED" || s == L"SAVECOMPLETED" || s == L"SAVEFAILED")
         {
-            // Nothing here waits on a save; the message must just not reach wsd.
+            // The message does not go on to wsd. The live-view limit can wait for it, and by the
+            // time it comes the user can be back on this tab, so the limit is asked again rather
+            // than the WebView2 going now.
             // TODO: An account window closes without asking its page, so a close during a save
             // can cut off the upload. Defer it from SAVESTARTED to SAVECOMPLETED, as Qt does.
+            if ((s == L"SAVECOMPLETED" || s == L"SAVEFAILED") && data.dropWaitsForSave)
+            {
+                data.dropWaitsForSave = false;
+                if (WindowState* window = findWindow(data.hWnd))
+                    scheduleLiveViewLimit(*window, LIVE_VIEW_LIMIT_DELAY);
+            }
         }
         else if (s == L"SAVEFAILED prompt")
         {
@@ -6967,10 +7023,15 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             if (modified == data.isModified)
                 return;
 
-            // The tab shows a document with unwritten changes differently.
+            // The tab shows a document with unwritten changes differently. A document whose
+            // changes have just reached its file can lose its WebView2 now.
             data.isModified = modified;
             if (WindowState* window = findWindow(data.hWnd))
+            {
                 pushTabsToStrip(*window);
+                if (!modified)
+                    scheduleLiveViewLimit(*window, LIVE_VIEW_LIMIT_DELAY);
+            }
         }
         else if (s.starts_with(L"downloadas "))
         {
