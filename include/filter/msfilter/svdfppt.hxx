@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <array>
 #include <cstddef>
 #include <memory>
 #include <vector>
@@ -93,12 +94,34 @@ public:
     MSFILTER_DLLPUBLIC friend SvStream& ReadPptCurrentUserAtom( SvStream& rIn, PptCurrentUserAtom& rAtom );
 };
 
+struct MSFILTER_DLLPUBLIC PptCryptoApiEncryptionInfo
+{
+    sal_uInt16 nMajorVersion = 0;
+    sal_uInt16 nMinorVersion = 0;
+
+    sal_uInt32 nFlags = 0;
+    sal_uInt32 nAlgID = 0;
+    sal_uInt32 nAlgIDHash = 0;
+    sal_uInt32 nKeySize = 0;
+    sal_uInt32 nProviderType = 0;
+
+    OUString aCSPName;
+
+    std::array<sal_uInt8, 16> aSalt{};
+    std::array<sal_uInt8, 16> aEncryptedVerifier{};
+
+    sal_uInt32 nVerifierHashSize = 0;
+    std::vector<sal_uInt8> aEncryptedVerifierHash;
+};
+
+
 struct MSFILTER_DLLPUBLIC PowerPointImportParam
 {
     SvStream&           rDocStream;
     sal_uInt32          nImportFlags;
     PptCurrentUserAtom  aCurrentUserAtom;
     std::vector<sal_uInt8> aCryptSession10ContainerData;
+    std::optional<PptCryptoApiEncryptionInfo> oCryptoApiEncryptionInfo;
 
     PowerPointImportParam( SvStream& rDocStream );
 };
