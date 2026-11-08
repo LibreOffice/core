@@ -47,7 +47,8 @@ enum DXFEntityType {
     DXF_LWPOLYLINE,
     DXF_HATCH,
     DXF_ELLIPSE,
-    DXF_SPLINE
+    DXF_SPLINE,
+    DXF_MTEXT
 };
 
 // base class of an entity
@@ -541,6 +542,33 @@ public:
 protected:
 
     virtual void EvaluateGroup(DXFGroupReader & rDGR) override;
+};
+
+//--------------------------MText-----------------------------------------------
+
+// multiline text with inline formatting, the insertion point is in world coordinates
+class DXFMTextEntity : public DXFBasicEntity {
+public:
+    DXFVector aP0;                 // 10,20,30
+    DXFVector aXDirection;         // 11,21,31, wins over the rotation
+    bool bHasXDirection;
+    double fHeight;                // 40
+    double fReferenceWidth;        // 41, for word wrapping
+    double fLineSpacing;           // 44
+    double fRotAngle;              // 50, degrees
+    tools::Long nAttachment;       // 71, 1-9: top/middle/bottom x left/center/right
+    OString m_sText;               // 3 chunks then 1
+    OString m_sStyle;              // 7
+
+    DXFMTextEntity();
+
+protected:
+
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) override;
+
+private:
+    // the groups after 101 describe an embedded object, not the text
+    bool bInEmbeddedObject;
 };
 
 class DXFDimensionEntity : public DXFBasicEntity {

@@ -79,7 +79,9 @@ public:
 
     rtl_TextEncoding getTextEncoding() const;
     void setTextEncoding(rtl_TextEncoding aEnc) { mEnc = aEnc; }
-    OUString ToOUString(std::string_view s) const;
+    // the text in the encoding of the drawing with its special characters decoded; without
+    // bEscapes the \U+ and \M+ escapes are left for the MTEXT parser
+    OUString ToOUString(std::string_view s, bool bEscapes = true) const;
 
     double getGlobalLineTypeScale() const { return mfGlobalLineTypeScale; }
     void setGlobalLineTypeScale(double fGlobalLineTypeScale) { mfGlobalLineTypeScale = fGlobalLineTypeScale; }

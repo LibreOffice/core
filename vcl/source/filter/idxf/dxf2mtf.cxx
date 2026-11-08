@@ -25,6 +25,7 @@
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
@@ -142,17 +143,23 @@ const DXFLayer * DXF2GDIMetaFile::GetEntityLayer(const DXFBasicEntity & rE) cons
 
 std::optional<Color> DXF2GDIMetaFile::GetEntityColor(const DXFBasicEntity & rE) const
 {
+    return ResolveColor(rE, rE.nColor, rE.nTrueColor);
+}
+
+std::optional<Color> DXF2GDIMetaFile::ResolveColor(const DXFBasicEntity & rE, tools::Long nColor,
+                                                   tools::Long nTrueColor) const
+{
     if (rE.bInvisible)
         return {};
     const DXFLayer * pLayer = GetEntityLayer(rE);
     if (pLayer != nullptr && pLayer->IsHidden())
         return {};
 
-    if (rE.nTrueColor >= 0)
-        return Color(ColorTransparency, rE.nTrueColor);
-    if (rE.nColor == 0) // BYBLOCK
+    if (nTrueColor >= 0)
+        return Color(ColorTransparency, nTrueColor);
+    if (nColor == 0) // BYBLOCK
         return moBlockColor;
-    if (rE.nColor == 256) // BYLAYER
+    if (nColor == 256) // BYLAYER
     {
         if (pLayer == nullptr)
             return ConvertColor(7);
@@ -160,7 +167,7 @@ std::optional<Color> DXF2GDIMetaFile::GetEntityColor(const DXFBasicEntity & rE) 
             return Color(ColorTransparency, pLayer->nTrueColor);
         return ConvertColor(pLayer->nColor);
     }
-    return ConvertColor(rE.nColor);
+    return ConvertColor(nColor);
 }
 
 DXFLineInfo DXF2GDIMetaFile::LTypeToDXFLineInfo(std::string_view rLineType) const
@@ -408,11 +415,15 @@ void DXF2GDIMetaFile::OutPolygon(const basegfx::B2DPolyPolygon & rPolyPolygon)
 
 void DXF2GDIMetaFile::OutPoint(const basegfx::B2DPoint & rPoint)
 {
+    // Points are often stray definition points far from the drawing: they count for the
+    // extents only if there is nothing else, and they are not drawn outside of them.
     if (mbMeasure)
     {
-        maExtents.expand(rPoint);
+        maPointExtents.expand(rPoint);
         return;
     }
+    if (!maExtents.isInside(rPoint))
+        return;
     const basegfx::B2DPoint aPoint = maDeviceTransform * rPoint;
     pVirDev->DrawPixel(Point(basegfx::fround<tools::Long>(aPoint.getX()),
                              basegfx::fround<tools::Long>(aPoint.getY())));
@@ -457,6 +468,114 @@ void DXF2GDIMetaFile::OutText(const DXFBasicEntity & rE, const DXFTransform & rT
     pVirDev->DrawText(Point(basegfx::fround<tools::Long>(aOrigin.getX()),
                             basegfx::fround<tools::Long>(aOrigin.getY())),
                       aText);
+}
+
+vcl::Font DXF2GDIMetaFile::MakeFont(const DXFTextFormat & rFormat, double fSize)
+{
+    vcl::Font aFont;
+    if (!rFormat.maFontName.isEmpty())
+        aFont.SetFamilyName(rFormat.maFontName);
+    aFont.SetFamily(FAMILY_SWISS);
+    aFont.SetFontSize(Size(0, basegfx::fround(fSize)));
+    aFont.SetWeight(rFormat.mbBold ? WEIGHT_BOLD : WEIGHT_NORMAL);
+    aFont.SetItalic(rFormat.mbItalic ? ITALIC_NORMAL : ITALIC_NONE);
+    aFont.SetUnderline(rFormat.mbUnderline ? LINESTYLE_SINGLE : LINESTYLE_NONE);
+    aFont.SetOverline(rFormat.mbOverline ? LINESTYLE_SINGLE : LINESTYLE_NONE);
+    aFont.SetStrikeout(rFormat.mbStrikeout ? STRIKEOUT_SINGLE : STRIKEOUT_NONE);
+    aFont.SetAlignment(ALIGN_BASELINE);
+    aFont.SetTransparent(true);
+    return aFont;
+}
+
+double DXF2GDIMetaFile::GetCapHeightRatio(const DXFTextFormat & rFormat)
+{
+    const std::pair<OUString, bool> aKey(rFormat.maFontName, rFormat.mbBold);
+    std::map<std::pair<OUString, bool>, double>::const_iterator it = maCapHeightRatios.find(aKey);
+    if (it != maCapHeightRatios.end())
+        return it->second;
+
+    // the height of the text is the height of its capital letters
+    double fRatio = 0.7;
+    mpMeasureDev->SetFont(MakeFont(rFormat, 1000));
+    tools::Rectangle aRect;
+    if (mpMeasureDev->GetTextBoundRect(aRect, u"H"_ustr) && aRect.GetHeight() > 100
+        && aRect.GetHeight() <= 1000)
+        fRatio = aRect.GetHeight() / 1000.0;
+    maCapHeightRatios[aKey] = fRatio;
+    return fRatio;
+}
+
+double DXF2GDIMetaFile::MeasureText(std::u16string_view aText, const DXFTextFormat & rFormat)
+{
+    if (aText.empty())
+        return 0;
+    mpMeasureDev->SetFont(MakeFont(rFormat, 1000));
+    const double fSize = rFormat.mfHeight / GetCapHeightRatio(rFormat);
+    return mpMeasureDev->GetTextWidth(OUString(aText)) / 1000.0 * fSize * rFormat.mfWidthFactor;
+}
+
+void DXF2GDIMetaFile::OutTextRun(const DXFBasicEntity & rE, const DXFTransform & rTextTransform,
+                                 double fX, double fY, const OUString & rText,
+                                 const DXFTextFormat & rFormat, double fWidth)
+{
+    if (rText.isEmpty() || !(rFormat.mfHeight > 0))
+        return;
+    std::optional<Color> oColor = rFormat.mnColorIndex >= 0 || rFormat.mnTrueColor >= 0
+                                      ? ResolveColor(rE, rFormat.mnColorIndex, rFormat.mnTrueColor)
+                                      : GetEntityColor(rE);
+    if (!oColor)
+        return;
+
+    if (mbMeasure)
+    {
+        const double fHeight = rFormat.mfHeight;
+        maExtents.expand(Project(rTextTransform, DXFVector(fX, fY - fHeight / 3, 0)));
+        maExtents.expand(Project(rTextTransform, DXFVector(fX + fWidth, fY - fHeight / 3, 0)));
+        maExtents.expand(Project(rTextTransform, DXFVector(fX + fWidth, fY + fHeight, 0)));
+        maExtents.expand(Project(rTextTransform, DXFVector(fX, fY + fHeight, 0)));
+        return;
+    }
+
+    const basegfx::B2DPoint aOrigin
+        = maDeviceTransform * Project(rTextTransform, DXFVector(fX, fY, 0));
+    const basegfx::B2DVector aBaseline(
+        maDeviceTransform * Project(rTextTransform, DXFVector(fX + 1, fY, 0)) - aOrigin);
+    const basegfx::B2DVector aUp(
+        maDeviceTransform * Project(rTextTransform, DXFVector(fX, fY + 1, 0)) - aOrigin);
+
+    const double fSize = rFormat.mfHeight / GetCapHeightRatio(rFormat) * aUp.getLength();
+    if (!(fSize >= 1.0) || fSize > SAL_MAX_INT32)
+        return;
+    // the metafile y axis points down, the orientation is counter-clockwise
+    const double fAngle = basegfx::rad2deg(atan2(-aBaseline.getY(), aBaseline.getX()));
+    sal_Int32 nOrientation = basegfx::fround(fAngle * 10.0) % 3600;
+    if (nOrientation < 0)
+        nOrientation += 3600;
+
+    vcl::Font aFont = MakeFont(rFormat, fSize);
+    aFont.SetColor(*oColor);
+    aFont.SetOrientation(Degree10(static_cast<sal_Int16>(nOrientation)));
+    // the width factor of the text and the stretching of the text space
+    const double fStretch
+        = rFormat.mfWidthFactor * aBaseline.getLength() / aUp.getLength();
+    // squeezed to nothing, as by an insert with a zero scale
+    if (!(fStretch > 0.001))
+        return;
+    if (std::fabs(fStretch - 1.0) > 0.01)
+    {
+        mpMeasureDev->SetFont(aFont);
+        const tools::Long nWidth = mpMeasureDev->GetFontMetric().GetFontWidth();
+        if (nWidth > 0)
+            aFont.SetFontWidth(basegfx::fround(nWidth * fStretch));
+    }
+    if (aActFont != aFont)
+    {
+        aActFont = aFont;
+        pVirDev->SetFont(aActFont);
+    }
+    pVirDev->DrawText(Point(basegfx::fround<tools::Long>(aOrigin.getX()),
+                            basegfx::fround<tools::Long>(aOrigin.getY())),
+                      rText);
 }
 
 void DXF2GDIMetaFile::OutThickness(const basegfx::B2DPolygon & rBase, const DXFTransform & rTransform,
@@ -954,6 +1073,145 @@ void DXF2GDIMetaFile::DrawSplineEntity(const DXFSplineEntity & rE, const DXFTran
     OutPolyLine(aPolygon, GetEntityLineInfo(rE, rTransform));
 }
 
+namespace
+{
+struct MTextPiece
+{
+    const DXFTextRun* mpRun;
+    OUString maText;
+    double mfWidth;
+};
+
+struct MTextLine
+{
+    std::vector<MTextPiece> maPieces;
+    double mfWidth = 0;
+    double mfHeight = 0;
+};
+
+std::u16string_view trimTrailingSpaces(std::u16string_view aText)
+{
+    while (!aText.empty() && aText.back() == ' ')
+        aText.remove_suffix(1);
+    return aText;
+}
+}
+
+void DXF2GDIMetaFile::DrawMTextEntity(const DXFMTextEntity & rE, const DXFTransform & rTransform)
+{
+    if (!GetEntityColor(rE))
+        return;
+
+    DXFTextFormat aBase;
+    aBase.mfHeight = rE.fHeight > 0 ? rE.fHeight : 1.0;
+    const std::vector<DXFTextParagraph> aParagraphs
+        = dxf::parseMText(pDXF->ToOUString(rE.m_sText, false), aBase, pDXF->getTextEncoding());
+
+    // the text runs along x, in the plane of the extrusion direction
+    const DXFVector aNormal = rE.aExtrusion.Unit();
+    DXFVector aXAxis;
+    if (rE.bHasXDirection && rE.aXDirection.Abs() > 0)
+        aXAxis = rE.aXDirection.Unit();
+    else
+    {
+        const double fAngle = basegfx::deg2rad(rE.fRotAngle);
+        DXFTransform(rE.aExtrusion).TransDir(DXFVector(cos(fAngle), sin(fAngle), 0), aXAxis);
+    }
+    const DXFVector aYAxis = (aNormal * aXAxis).Unit();
+    const DXFTransform aTextTransform(DXFTransform(aXAxis, aYAxis, aNormal, rE.aP0), rTransform);
+
+    // break the paragraphs into lines at the reference width
+    const double fWrapWidth = rE.fReferenceWidth;
+    std::vector<MTextLine> aLines;
+    for (const DXFTextParagraph& rParagraph : aParagraphs)
+    {
+        MTextLine aLine;
+        aLine.mfHeight = rParagraph.maRuns.empty() ? aBase.mfHeight : 0;
+        for (const DXFTextRun& rRun : rParagraph.maRuns)
+        {
+            aLine.mfHeight = std::max(aLine.mfHeight, rRun.maFormat.mfHeight);
+            std::vector<OUString> aWords;
+            if (fWrapWidth > 0)
+            {
+                sal_Int32 nStart = 0;
+                for (sal_Int32 i = 0; i < rRun.maText.getLength(); ++i)
+                    if (rRun.maText[i] == ' ' && (i + 1 == rRun.maText.getLength() || rRun.maText[i + 1] != ' '))
+                    {
+                        aWords.push_back(rRun.maText.copy(nStart, i + 1 - nStart));
+                        nStart = i + 1;
+                    }
+                if (nStart < rRun.maText.getLength())
+                    aWords.push_back(rRun.maText.copy(nStart));
+            }
+            else
+                aWords.push_back(rRun.maText);
+
+            for (const OUString& rWord : aWords)
+            {
+                const double fWidth = MeasureText(rWord, rRun.maFormat);
+                const std::u16string_view aTrimmed = trimTrailingSpaces(rWord);
+                if (fWrapWidth > 0 && !aLine.maPieces.empty()
+                    && aLine.mfWidth
+                               + (aTrimmed.size() == o3tl::make_unsigned(rWord.getLength())
+                                      ? fWidth
+                                      : MeasureText(aTrimmed, rRun.maFormat))
+                           > fWrapWidth)
+                {
+                    aLines.push_back(aLine);
+                    aLine = MTextLine();
+                    aLine.mfHeight = rRun.maFormat.mfHeight;
+                }
+                if (!aLine.maPieces.empty() && aLine.maPieces.back().mpRun == &rRun)
+                {
+                    aLine.maPieces.back().maText += rWord;
+                    aLine.maPieces.back().mfWidth += fWidth;
+                }
+                else
+                    aLine.maPieces.push_back({ &rRun, rWord, fWidth });
+                aLine.mfWidth += fWidth;
+            }
+        }
+        aLines.push_back(aLine);
+    }
+    if (aLines.empty())
+        return;
+
+    // trailing spaces do not count for the alignment
+    for (MTextLine& rLine : aLines)
+    {
+        if (rLine.maPieces.empty())
+            continue;
+        const MTextPiece& rLast = rLine.maPieces.back();
+        const std::u16string_view aTrimmed = trimTrailingSpaces(rLast.maText);
+        if (aTrimmed.size() != o3tl::make_unsigned(rLast.maText.getLength()))
+            rLine.mfWidth += MeasureText(aTrimmed, rLast.mpRun->maFormat) - rLast.mfWidth;
+    }
+
+    // the line pitch is 5/3 of the text height times the line spacing factor
+    const double fSpacing = rE.fLineSpacing > 0 ? rE.fLineSpacing : 1.0;
+    double fTotalHeight = aLines[0].mfHeight;
+    for (size_t i = 1; i < aLines.size(); ++i)
+        fTotalHeight += aLines[i].mfHeight * 5.0 / 3.0 * fSpacing;
+
+    const tools::Long nAttachment = rE.nAttachment >= 1 && rE.nAttachment <= 9 ? rE.nAttachment : 1;
+    const tools::Long nRow = (nAttachment - 1) / 3;
+    const tools::Long nColumn = (nAttachment - 1) % 3;
+    double fY = (nRow == 0 ? 0 : nRow == 1 ? fTotalHeight / 2 : fTotalHeight) - aLines[0].mfHeight;
+    for (size_t i = 0; i < aLines.size(); ++i)
+    {
+        const MTextLine& rLine = aLines[i];
+        if (i > 0)
+            fY -= rLine.mfHeight * 5.0 / 3.0 * fSpacing;
+        double fX = nColumn == 0 ? 0 : nColumn == 1 ? -rLine.mfWidth / 2 : -rLine.mfWidth;
+        for (const MTextPiece& rPiece : rLine.maPieces)
+        {
+            OutTextRun(rE, aTextTransform, fX, fY, rPiece.maText, rPiece.mpRun->maFormat,
+                       rPiece.mfWidth);
+            fX += rPiece.mfWidth;
+        }
+    }
+}
+
 void DXF2GDIMetaFile::DrawDimensionEntity(const DXFDimensionEntity & rE, const DXFTransform & rTransform)
 {
     const DXFBlock * pB;
@@ -987,6 +1245,7 @@ void DXF2GDIMetaFile::DrawEntities(const DXFEntities & rEntities,
             const bool bWorld
                 = pE->eType == DXF_LINE || pE->eType == DXF_POINT || pE->eType == DXF_3DFACE
                   || pE->eType == DXF_ELLIPSE || pE->eType == DXF_SPLINE
+                  || pE->eType == DXF_MTEXT
                   || (pE->eType == DXF_POLYLINE
                       && (static_cast<const DXFPolyLineEntity*>(pE)->nFlags & (8 | 16 | 64)) != 0);
             if (bWorld || pE->aExtrusion.fz==1.0) {
@@ -1045,6 +1304,9 @@ void DXF2GDIMetaFile::DrawEntities(const DXFEntities & rEntities,
             case DXF_SPLINE:
                 DrawSplineEntity(static_cast<const DXFSplineEntity&>(*pE),*pT);
                 break;
+            case DXF_MTEXT:
+                DrawMTextEntity(static_cast<const DXFMTextEntity&>(*pE),*pT);
+                break;
             default:
                 break;  // four other values not handled -Wall
             }
@@ -1083,15 +1345,20 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
     if (pVPort != nullptr && (pVPort->aDirection.fx != 0 || pVPort->aDirection.fy != 0))
         aViewTransform = DXFTransform(pVPort->aDirection, pVPort->aTarget);
 
+    mpMeasureDev.disposeAndReset(VclPtr<VirtualDevice>::Create());
+
     // first pass: the extents
     pVirDev = VclPtr<VirtualDevice>::Create();
     pVirDev->EnableOutput(false);
     ResetState();
     mbMeasure = true;
     maExtents.reset();
+    maPointExtents.reset();
     DrawEntities(pDXF->aEntities, aViewTransform);
     pVirDev.disposeAndClear();
     mbMeasure = false;
+    if (maExtents.isEmpty())
+        maExtents = maPointExtents;
 
     if (maExtents.isEmpty() || !IsFinite(maExtents))
         return false;

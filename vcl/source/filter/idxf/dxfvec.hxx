@@ -110,6 +110,10 @@ public:
         // destination point of a viewport
         // (See DXF-Docu from AutoDesk: VPORT)
 
+    DXFTransform(const DXFVector & rX, const DXFVector & rY, const DXFVector & rZ,
+                 const DXFVector & rOrigin);
+        // dest coordinate = rOrigin + x * rX + y * rY + z * rZ
+
     DXFTransform(const DXFTransform & rT1, const DXFTransform & rT2);
         // destination coordinate = rT2(rT1(source coordinate))
 

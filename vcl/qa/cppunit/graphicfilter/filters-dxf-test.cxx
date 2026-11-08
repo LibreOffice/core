@@ -46,6 +46,10 @@ public:
     void testWorldCoordinates();
     void testSpline();
     void testSplineKnots();
+    void testMTextFormatting();
+    void testMTextLayout();
+    void testMTextInDimension();
+    void testStrayPoint();
 
     CPPUNIT_TEST_SUITE(DxfFilterTest);
     CPPUNIT_TEST(testCVEs);
@@ -58,6 +62,10 @@ public:
     CPPUNIT_TEST(testWorldCoordinates);
     CPPUNIT_TEST(testSpline);
     CPPUNIT_TEST(testSplineKnots);
+    CPPUNIT_TEST(testMTextFormatting);
+    CPPUNIT_TEST(testMTextLayout);
+    CPPUNIT_TEST(testMTextInDimension);
+    CPPUNIT_TEST(testStrayPoint);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -290,6 +298,103 @@ void DxfFilterTest::testSplineKnots()
     assertXPath(pDoc, "/metafile/polyline[1]/point[last()]", "x", u"8050");
     assertXPath(pDoc, "/metafile/polyline[2]/point[1]", "y", u"2050");
     assertXPath(pDoc, "/metafile/polyline[2]/point[last()]", "x", u"8050");
+}
+
+void DxfFilterTest::testMTextFormatting()
+{
+    GDIMetaFile aMTF = importFile(u"mtext-formatting.dxf");
+    MetafileXmlDump aDumper;
+    aDumper.filterAllActionTypes();
+    aDumper.filterActionType(MetaActionType::TEXT, false);
+    aDumper.filterActionType(MetaActionType::FONT, false);
+    xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
+
+    // four paragraphs, the second one has a run for each format
+    assertXPath(pDoc, "/metafile/text", 8);
+    assertXPathContent(pDoc, "/metafile/text[1]/textcontent", u"First line");
+    assertXPathContent(pDoc, "/metafile/text[2]/textcontent", u"Red");
+    assertXPathContent(pDoc, "/metafile/text[4]/textcontent", u"underlined");
+    assertXPathContent(pDoc, "/metafile/text[6]/textcontent", u"big");
+    // the special characters, the non-breaking space, the stacked fraction and a double byte
+    // character of the Japanese code page
+    assertXPathContent(pDoc, "/metafile/text[7]/textcontent",
+                       u"Diameter \u220510 \u00e9t\u00a01/2\u3042");
+    // the paragraphs are below each other
+    CPPUNIT_ASSERT_LESS(getXPath(pDoc, "/metafile/text[2]", "y").toInt32(),
+                        getXPath(pDoc, "/metafile/text[1]", "y").toInt32());
+    CPPUNIT_ASSERT_LESS(getXPath(pDoc, "/metafile/text[7]", "y").toInt32(),
+                        getXPath(pDoc, "/metafile/text[2]", "y").toInt32());
+
+    // the colour, underline and height changes
+    assertXPath(pDoc, "/metafile/font[2]", "color", u"#ff0000");
+    assertXPath(pDoc, "/metafile/font[4]", "underline", u"1");
+    // the inline true colour has red in its low byte
+    assertXPathContent(pDoc, "/metafile/text[8]/textcontent", u"Blue");
+    assertXPath(pDoc, "/metafile/font[@color='#0000ff']", 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2 * getXPath(pDoc, "/metafile/font[1]", "height").toDouble(),
+                                 getXPath(pDoc, "/metafile/font[6]", "height").toDouble(), 2.0);
+}
+
+void DxfFilterTest::testMTextLayout()
+{
+    // the drawing is 100 x 100, one unit is 100 in the metafile; the texts are 5 high at (50, 50)
+    GDIMetaFile aMTF = importFile(u"mtext-layout.dxf");
+    MetafileXmlDump aDumper;
+    aDumper.filterAllActionTypes();
+    aDumper.filterActionType(MetaActionType::TEXT, false);
+    xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
+
+    // top left: the first baseline is one text height below the insertion point
+    assertXPath(pDoc, "/metafile/text[1]", "x", u"5050");
+    assertXPath(pDoc, "/metafile/text[1]", "y", u"5550");
+    // top right ends at the insertion point, top center is half way between
+    const sal_Int32 nRight = getXPath(pDoc, "/metafile/text[2]", "x").toInt32();
+    CPPUNIT_ASSERT_LESS(sal_Int32(5050), nRight);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL((5050 + nRight) / 2.0,
+                                 getXPath(pDoc, "/metafile/text[3]", "x").toDouble(), 2.0);
+    // bottom left: the baseline is at the insertion point
+    assertXPath(pDoc, "/metafile/text[4]", "x", u"5050");
+    assertXPath(pDoc, "/metafile/text[4]", "y", u"5050");
+
+    // the last text is wrapped at its reference width into lines of 5 * 5 / 3 pitch
+    const int nTexts = countXPathNodes(pDoc, "/metafile/text");
+    CPPUNIT_ASSERT_GREATER(5, nTexts);
+    for (int i = 6; i <= nTexts; ++i)
+    {
+        const OString aPath("/metafile/text[" + OString::number(i) + "]");
+        const OString aPrevious("/metafile/text[" + OString::number(i - 1) + "]");
+        assertXPath(pDoc, aPath, "x", u"50");
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(833.0,
+                                     getXPath(pDoc, aPath, "y").toDouble()
+                                         - getXPath(pDoc, aPrevious, "y").toDouble(),
+                                     1.0);
+    }
+}
+
+void DxfFilterTest::testMTextInDimension()
+{
+    // the text of a dimension is an MTEXT in its block
+    GDIMetaFile aMTF = importFile(u"mtext-dimension.dxf");
+    MetafileXmlDump aDumper;
+    aDumper.filterAllActionTypes();
+    aDumper.filterActionType(MetaActionType::TEXT, false);
+    xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
+    assertXPath(pDoc, "/metafile/text", 1);
+    assertXPathContent(pDoc, "/metafile/text/textcontent", u"34,00");
+}
+
+void DxfFilterTest::testStrayPoint()
+{
+    // a point far away from the rest of the drawing does not count for its extents
+    GDIMetaFile aMTF = importFile(u"stray-point.dxf");
+    CPPUNIT_ASSERT_EQUAL(Size(10100, 10100), aMTF.GetPrefSize());
+    MetafileXmlDump aDumper;
+    aDumper.filterAllActionTypes();
+    aDumper.filterActionType(MetaActionType::POINT, false);
+    aDumper.filterActionType(MetaActionType::PIXEL, false);
+    xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
+    assertXPath(pDoc, "/metafile/point", 0);
+    assertXPath(pDoc, "/metafile/pixel", 0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DxfFilterTest);

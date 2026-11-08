@@ -131,6 +131,15 @@ DXFTransform::DXFTransform(const DXFVector & rViewDir, const DXFVector & rViewTa
 }
 
 
+DXFTransform::DXFTransform(const DXFVector & rX, const DXFVector & rY, const DXFVector & rZ,
+                           const DXFVector & rOrigin) :
+    aMX(rX),
+    aMY(rY),
+    aMZ(rZ),
+    aMP(rOrigin)
+{
+}
+
 DXFTransform::DXFTransform(const DXFTransform & rT1, const DXFTransform & rT2)
 {
     rT2.TransDir(rT1.aMX,aMX);

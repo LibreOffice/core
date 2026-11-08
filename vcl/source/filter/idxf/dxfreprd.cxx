@@ -22,8 +22,8 @@
 #include <string_view>
 
 #include "dxfreprd.hxx"
+#include "dxfmtext.hxx"
 #include <osl/nlsupport.h>
-#include <rtl/character.hxx>
 #include <unotools/defaultencoding.hxx>
 #include <unotools/wincodepage.hxx>
 
@@ -235,47 +235,13 @@ void DXFRepresentation::ReadHeader(DXFGroupReader & rDGR)
     }
 }
 
-OUString DXFRepresentation::ToOUString(std::string_view s) const
+OUString DXFRepresentation::ToOUString(std::string_view s, bool bEscapes) const
 {
-    OUString result = OStringToOUString(s, getTextEncoding(),
-                                           RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
-                                         | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
-                                         | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR);
-    result = result.replaceAll("%%o", "")                     // Overscore - simply remove
-                   .replaceAll("%%u", "")                     // Underscore - simply remove
-                   .replaceAll("%%d", u"\u00B0") // Degrees symbol (°)
-                   .replaceAll("%%p", u"\u00B1") // Tolerance symbol (±)
-                   .replaceAll("%%c", u"\u2205") // Diameter symbol
-                   .replaceAll("%%%", "%");                   // Percent symbol
-
-    sal_Int32 pos = result.indexOf("%%"); // %%nnn, where nnn - 3-digit decimal ASCII code
-    while (pos != -1 && pos <= result.getLength() - 5) {
-        OUString asciiNum = result.copy(pos + 2, 3);
-        if (rtl::isAsciiDigit(asciiNum[0]) &&
-            rtl::isAsciiDigit(asciiNum[1]) &&
-            rtl::isAsciiDigit(asciiNum[2]))
-        {
-            char ch = static_cast<char>(asciiNum.toUInt32());
-            OUString codePt(&ch, 1, mEnc);
-            result = result.replaceAll(result.subView(pos, 5), codePt, pos);
-        }
-        pos = result.indexOf("%%", pos + 1);
-    }
-
-    pos = result.indexOf("\\U+"); // \U+XXXX, where XXXX - 4-digit hex unicode
-    while (pos != -1 && pos <= result.getLength() - 7) {
-        OUString codePtNum = result.copy(pos + 3, 4);
-        if (rtl::isAsciiHexDigit(codePtNum[0]) &&
-            rtl::isAsciiHexDigit(codePtNum[1]) &&
-            rtl::isAsciiHexDigit(codePtNum[2]) &&
-            rtl::isAsciiHexDigit(codePtNum[3]))
-        {
-            OUString codePt(static_cast<sal_Unicode>(codePtNum.toUInt32(16)));
-            result = result.replaceAll(result.subView(pos, 7), codePt, pos);
-        }
-        pos = result.indexOf("\\U+", pos + 1);
-    }
-    return result;
+    const OUString aText = OStringToOUString(s, getTextEncoding(),
+                                             RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
+                                           | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
+                                           | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR);
+    return dxf::decodeSpecialCharacters(aText, getTextEncoding(), bEscapes);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
