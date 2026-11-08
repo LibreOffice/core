@@ -29,6 +29,8 @@ libeot_patches += 0008-check-the-MTX-block-offsets-are-in-order-before-usin.patc
 libeot_patches += 0009-check-that-a-copy-item-s-source-starts-within-the-de.patch
 libeot_patches += 0010-stop-DecodeLength-once-the-length-passes-out_len.patch
 libeot_patches += 0011-check-the-results-of-the-MTX_mem-allocations.patch
+# upstreamed as: https://github.com/umanwizard/libeot/pull/21
+libeot_patches += 0012-limit-the-decoded-size-of-one-MTX-block-to-256-MiB.patch
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,libeot))
 
