@@ -101,6 +101,15 @@ Size OutputDevice::ImplLogicToDevicePixel( const Size& rLogicSize ) const
     return Size(mpMapper->LogicToViewDistanceX(rLogicSize.Width()), mpMapper->LogicToViewDistanceY(rLogicSize.Height()));
 }
 
+static void lcl_ApplyEmptyState(tools::Rectangle& rDest, const tools::Rectangle& rSrc)
+{
+    if (rSrc.IsWidthEmpty())
+        rDest.SetWidthEmpty();
+
+    if (rSrc.IsHeightEmpty())
+        rDest.SetHeightEmpty();
+}
+
 tools::Rectangle OutputDevice::LogicToDevicePixel(const tools::Rectangle& rLogicRect) const
 {
     // tdf#141761 IsEmpty() removed
@@ -127,11 +136,7 @@ tools::Rectangle OutputDevice::LogicToDevicePixel(const tools::Rectangle& rLogic
         rLogicRect.IsHeightEmpty() ? 0 : mpMapper->LogicToDevicePixelY(rLogicRect.Bottom())
     );
 
-    if (rLogicRect.IsWidthEmpty())
-        aRetval.SetWidthEmpty();
-
-    if (rLogicRect.IsHeightEmpty())
-        aRetval.SetHeightEmpty();
+    lcl_ApplyEmptyState(aRetval, rLogicRect);
 
     return aRetval;
 }
