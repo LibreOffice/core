@@ -23,10 +23,11 @@ describe(['tagdesktop'], 'Impress F6 region navigation', function () {
 
 		// let the slide panel and sidebar focus-grabs settle before we anchor
 		// focus in the document, so neither can steal it back mid-test
-		cy.getFrameWindow().then(function (win) {
-			helper.waitUntilLayoutingIsIdle(win);
-			helper.waitForTimers(win, 'sidebarstealfocus');
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
 		});
+		cy.then(() => helper.processToIdle(this.win));
+		cy.then(() => helper.waitForTimers(this.win, 'sidebarstealfocus'));
 
 		// start with the keyboard focus in the document
 		helper.typeIntoDocument('{esc}');
