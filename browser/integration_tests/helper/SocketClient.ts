@@ -68,6 +68,17 @@ function requireCompressed(message: ServerMessage): void {
 		);
 }
 
+/// The parameters of a .uno:VectorPrimitives request.
+export interface VectorPrimitivesOptions {
+	/// The page list of the part, 0 for the slides.
+	mode?: number;
+	/// The version of the part that the client holds. The answer is then the change since that
+	/// version.
+	since?: number;
+	/// The epoch that since counts in. Two versions compare only within one epoch.
+	epoch?: number;
+}
+
 /// A client for the COOL protocol over WebSocket, running in Node. It connects to a running
 /// coolwsd, loads a document, and lets tests send commands and wait for the answers.
 export class SocketClient {
@@ -178,23 +189,22 @@ export class SocketClient {
 		return jsonOf(await this.waitForPrefix('status:', undefined, since));
 	}
 
-	/// Asks for the vector primitives of a part and returns the JSON object of the answer. With
-	/// since and epoch, the answer is the change since that version.
+	/// Asks for the vector primitives of a part and returns the JSON object of the answer.
 	async vectorPrimitives(
 		partId: string,
-		mode: number = 0,
-		since?: number,
-		epoch?: number,
+		options: VectorPrimitivesOptions = {},
 	): Promise<any> {
+		// The mode is 0, the slides, when it is not given. since and epoch go out only when they
+		// are given, so a test can also send one without the other.
 		let request =
 			'commandvalues command=.uno:VectorPrimitives?partid=' +
 			partId +
 			'&mode=' +
-			String(mode);
-		if (epoch !== undefined) {
-			if (since !== undefined) request += '&since=' + String(since);
-			request += '&epoch=' + String(epoch);
-		}
+			String(options.mode ?? 0);
+		if (options.since !== undefined)
+			request += '&since=' + String(options.since);
+		if (options.epoch !== undefined)
+			request += '&epoch=' + String(options.epoch);
 		const mark = this.mark();
 		this.send(request);
 		// The answer to a request comes under zstdvectorprimitives, even when it is a delta.
@@ -225,6 +235,64 @@ export class SocketClient {
 		);
 		requireCompressed(message);
 		return vectorAnswerOf(message, partId);
+	}
+
+	/// Asks for the file of the font face with the given id and returns the JSON object of the
+	/// answer. It comes compressed under zstdvectorrenderingfont, or as commandvalues when it
+	/// cannot be compressed.
+	async vectorFont(fontId: string): Promise<any> {
+		const mark = this.mark();
+		this.send('commandvalues command=.uno:VectorRenderingFont?id=' + fontId);
+		const answer = await this.waitFor(
+			(m) =>
+				m.text.startsWith('zstdvectorrenderingfont:') ||
+				(m.text.startsWith('commandvalues:') &&
+					m.text.includes('vectorrenderingfont')),
+			undefined,
+			mark,
+		);
+		return vectorJsonOf(answer);
+	}
+
+	/// Asks for the image with the given checksum and returns the JSON object of the answer.
+	async vectorGraphics(checksum: string): Promise<any> {
+		const mark = this.mark();
+		this.send(
+			'commandvalues command=.uno:VectorRenderingGraphics?checksum=' + checksum,
+		);
+		const answer = await this.waitFor(
+			(m) =>
+				m.text.startsWith('commandvalues:') &&
+				m.text.includes('vectorrenderinggraphics'),
+			undefined,
+			mark,
+		);
+		return jsonOf(answer);
+	}
+
+	/// Makes the part with the given page id the one that mouse and key input go to.
+	setClientPart(partId: string): void {
+		this.send('setclientpart part=' + partId);
+	}
+
+	/// Clicks the left button at a point of the current part, in twips.
+	click(x: number, y: number): void {
+		const at = ' x=' + String(Math.round(x)) + ' y=' + String(Math.round(y));
+		this.send('mouse type=buttondown' + at + ' count=1 buttons=1 modifier=0');
+		this.send('mouse type=buttonup' + at + ' count=1 buttons=1 modifier=0');
+	}
+
+	/// Presses and releases a key that types no character, such as an arrow, by its UNO key code.
+	pressKey(keyCode: number): void {
+		this.send('key type=input char=0 key=' + String(keyCode));
+		this.send('key type=up char=0 key=' + String(keyCode));
+	}
+
+	/// Runs a UNO command, with its arguments as the JSON the browser sends.
+	uno(command: string, args?: object): void {
+		this.send(
+			'uno ' + command + (args !== undefined ? ' ' + JSON.stringify(args) : ''),
+		);
 	}
 
 	close(): void {

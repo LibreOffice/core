@@ -47,7 +47,6 @@
 #include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>
 
-#include <editeng/adjustitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 
@@ -77,7 +76,6 @@
 
 #include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>
-#include <editeng/lrspitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/outliner.hxx>
 #include <sfx2/ipclient.hxx>
@@ -390,12 +388,8 @@ protected:
     /// Raw JSON written by the most recent getVectorPrimitives call.
     OString m_aLastVectorJson;
 
-    /// Add a text box to the first slide. Newlines in rText start new
-    /// paragraphs. oAdjust sets the paragraph alignment, and
-    /// oLeftIndentTwips sets the left indent.
-    void addTextBox(const tools::Rectangle& rRect, const OUString& rText,
-                    std::optional<SvxAdjust> oAdjust = std::nullopt,
-                    std::optional<sal_Int32> oLeftIndentTwips = std::nullopt)
+    /// Add a text box to the first slide. Newlines in rText start new paragraphs.
+    void addTextBox(const tools::Rectangle& rRect, const OUString& rText)
     {
         SdrPage* pPage = page(1);
         rtl::Reference<SdrRectObj> pText
@@ -403,14 +397,6 @@ protected:
         pText->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
         pText->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
         pText->SetText(rText);
-        if (oAdjust)
-            pText->SetMergedItem(SvxAdjustItem(*oAdjust, EE_PARA_JUST));
-        if (oLeftIndentTwips)
-        {
-            pText->SetMergedItem(SvxLRSpaceItem(SvxIndentValue::twips(*oLeftIndentTwips),
-                                                SvxIndentValue::zero(), SvxIndentValue::zero(),
-                                                EE_PARA_LRSPACE));
-        }
         pPage->NbcInsertObject(pText.get());
     }
 
@@ -1429,31 +1415,6 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMasterPlaceholderCarriesItsAreaNam
                            !findNodeOfType(*oPrimitives, "polygonStroke"_ostr).has_value());
 }
 
-CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMissingPageStillAnswers)
-{
-    // A client whose page list has not caught up with a mode switch asks for
-    // a master that is not there. The answer carries the header, so the
-    // client can tell the request was seen instead of waiting forever.
-    createBlankDoc();
-
-    tools::JsonWriter aJsonWriter;
-    SdXImpressDocument* pDoc = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pDoc);
-    static constexpr OString aCommand
-        = ".uno:VectorPrimitives?partid={6F1D3C9A-2B4E-4F8A-9C1D-0E7B5A3F2D61}&mode=1"_ostr;
-    pDoc->getCommandValues(aJsonWriter, std::string_view(aCommand.getStr(), aCommand.getLength()));
-    const OString aResult = aJsonWriter.finishAndGetAsOString();
-
-    auto oJson = tools::JsonPath::parse(std::string_view(aResult.getStr(), aResult.getLength()));
-    CPPUNIT_ASSERT_MESSAGE("JSON parse error", oJson.has_value());
-    assertJsonPath(*oJson, "/type", "vectorprimitives");
-    assertJsonPath(*oJson, "/partId", "{6F1D3C9A-2B4E-4F8A-9C1D-0E7B5A3F2D61}");
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(1), oJson->getInt("/mode").value_or(-1));
-    // No page means no content, so nothing describes one.
-    CPPUNIT_ASSERT(!oJson->has("/order"));
-    CPPUNIT_ASSERT(!oJson->has("/objects"));
-}
-
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPartStateFollowsThePage)
 {
     // A part is the page, wherever it sits in the list. Removing the slide in front of one leaves
@@ -1506,25 +1467,6 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPartStateFollowsThePage)
         = requestVectorPrimitives(".uno:VectorPrimitives?partid=" + aRemovedPartId + "&mode=0");
     CPPUNIT_ASSERT(oGone.has_value());
     CPPUNIT_ASSERT(!oGone->has("/objects"));
-}
-
-CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPartIdOfAnotherListNamesNoPage)
-{
-    // A page id names one page, and the mode says which list it is asked from. The id of a
-    // slide asked for in master mode names no page there, so the answer is the header alone,
-    // with the id so the asker can tell which request it answers.
-    createBlankDoc();
-
-    auto aFull = getVectorPrimitives(u"testPartIdOfAnotherList");
-    const OString aPartId = aFull.getString("/partId").value_or(OString());
-    CPPUNIT_ASSERT(!aPartId.isEmpty());
-
-    auto oJson = requestVectorPrimitives(".uno:VectorPrimitives?partid=" + aPartId + "&mode=1");
-    CPPUNIT_ASSERT(oJson.has_value());
-    assertJsonPath(*oJson, "/type", "vectorprimitives");
-    assertJsonPath(*oJson, "/partId", aPartId);
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(1), oJson->getInt("/mode").value_or(-1));
-    CPPUNIT_ASSERT(!oJson->has("/objects"));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testSlideCarriesTheMembersOfAMasterGroupWithAField)
@@ -1646,20 +1588,6 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testSlideNamesTheMasterLayersItHides)
                          oPage->getInt("masterHiddenLayers/0").value_or(-1));
 }
 
-CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testUnservedModeCarriesNoPage)
-{
-    // A mode outside the page lists the command serves names no page, so the
-    // answer carries the header and no content rather than the slide at that
-    // index.
-    createBlankDoc();
-    addRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4), COL_BLACK);
-
-    auto aJson = getVectorPrimitives(u"testUnservedMode", -1, 3);
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(3), aJson.getInt("/mode").value_or(-1));
-    CPPUNIT_ASSERT(!aJson.has("/order"));
-    CPPUNIT_ASSERT(!aJson.has("/objects"));
-}
-
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPartVersionRisesOnBackgroundChange)
 {
     // Changing the slide's background fill must raise the slide's
@@ -1701,37 +1629,6 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesResizedPage)
     // The page entry comes first whenever a response carries it.
     assertJsonPath(aDelta, "/objects/0/kind", "page");
     CPPUNIT_ASSERT_GREATER(nWidthBefore, aDelta.getInt("/objects/0/width").value_or(-1));
-}
-
-// A delta since a version carries full content only for objects that
-// changed after it, while the order array still lists every object.
-CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesOnlyChangedObjects)
-{
-    createBlankDoc();
-    addRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4), COL_BLACK);
-    addRectangle(tools::Rectangle(Point(6000, 1000), Size(3000, 2000)), Color(0xc00000), COL_BLACK);
-
-    SdrObject* pFirst = page(1)->GetObj(0);
-    // Look at both objects once so the part holds what was written for them.
-    pFirst->BroadcastObjectChange();
-    page(1)->GetObj(1)->BroadcastObjectChange();
-
-    auto aFull = getVectorPrimitives(u"testDeltaFull");
-    assertJsonPath(aFull, "/type", "vectorprimitives");
-    const sal_Int64 nVersion = aFull.getInt("/version").value_or(-1);
-    CPPUNIT_ASSERT_EQUAL(size_t(3), aFull.getSize("/objects").value_or(0));
-
-    // Change only the first object after that version.
-    moveObject(pFirst, Size(500, 0));
-
-    auto aDelta = getVectorPrimitives(u"testDeltaSince", nVersion);
-    assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
-    // The object set did not move, so the client keeps the order it has and
-    // only the changed object travels.
-    CPPUNIT_ASSERT(!aDelta.has("/order"));
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aDelta.getSize("/objects").value_or(0));
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(pFirst->GetUniqueID()),
-                         aDelta.getInt("/objects/0/id").value_or(-1));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testEveryObjectKeepsItsEntry)
@@ -1846,31 +1743,6 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesGroupOnMemberChange)
                          aDelta.getInt("/objects/1/id").value_or(-1));
 }
 
-// Raising an object above another changes nothing about the object itself,
-// only where it paints in the order, so the delta carries the order.
-CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesOrderOnZOrderChange)
-{
-    createBlankDoc();
-    addRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4), COL_BLACK);
-    addRectangle(tools::Rectangle(Point(2000, 2000), Size(3000, 2000)), Color(0xc00000), COL_BLACK);
-    SdrObject* pLower = page(1)->GetObj(0);
-    SdrObject* pUpper = page(1)->GetObj(1);
-
-    const sal_Int64 nVersion
-        = getVectorPrimitives(u"testZOrderFull").getInt("/version").value_or(-1);
-
-    // Bring the lower one to the front.
-    page(1)->SetObjectOrdNum(0, 1);
-
-    auto aDelta = getVectorPrimitives(u"testZOrderDelta", nVersion);
-    assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
-    CPPUNIT_ASSERT_GREATER(nVersion, aDelta.getInt("/version").value_or(-1));
-    // The page entry first, then the two in their new order.
-    CPPUNIT_ASSERT_EQUAL(size_t(3), aDelta.getSize("/order").value_or(0));
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(pUpper->GetUniqueID()), aDelta.getInt("/order/1").value_or(-1));
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(pLower->GetUniqueID()), aDelta.getInt("/order/2").value_or(-1));
-}
-
 // The first paint order recorded for a part is what the first pull writes, so
 // recording it moves nothing. A part pulled twice with nothing changed between
 // reports the same version, and the delta between them carries no object.
@@ -1957,74 +1829,6 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testGroupMembersAreOwnEntries)
     CPPUNIT_ASSERT_EQUAL(sal_Int64(pAdded->GetUniqueID()), aDelta.getInt("/order/3").value_or(-1));
 }
 
-// Every entry carries where the object paints and how the unit rectangle
-// maps onto it, both in twips.
-CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testObjectEntryCarriesGeometry)
-{
-    createBlankDoc();
-    // No border, so the painted rectangle is the fill alone.
-    addTransparentRectangle(tools::Rectangle(Point(1000, 2000), Size(4000, 3000)),
-                            Color(0x4472c4), 0);
-
-    auto aJson = getVectorPrimitives(u"testObjectGeometry");
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/objects").value_or(0));
-
-    // 1/100 mm to twips is 1440 / 2540.
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(567), aJson.getInt("/objects/1/x").value_or(-1));
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(1134), aJson.getInt("/objects/1/y").value_or(-1));
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(2268), aJson.getInt("/objects/1/width").value_or(-1));
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(1701), aJson.getInt("/objects/1/height").value_or(-1));
-
-    // An unrotated rectangle scales the unit square to its size and moves it
-    // to its top-left corner.
-    CPPUNIT_ASSERT_EQUAL(size_t(6), aJson.getSize("/objects/1/transform").value_or(0));
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2267.7, aJson.getDouble("/objects/1/transform/0").value_or(0),
-                                 0.1);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, aJson.getDouble("/objects/1/transform/1").value_or(1),
-                                 0.001);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, aJson.getDouble("/objects/1/transform/2").value_or(1),
-                                 0.001);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1700.8, aJson.getDouble("/objects/1/transform/3").value_or(0),
-                                 0.1);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(566.9, aJson.getDouble("/objects/1/transform/4").value_or(0),
-                                 0.1);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1133.9, aJson.getDouble("/objects/1/transform/5").value_or(0),
-                                 0.1);
-}
-
-// A rotation shows up in the transform, while the painted rectangle stays
-// the axis-aligned box around the rotated shape.
-CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testRotatedObjectTransform)
-{
-    createBlankDoc();
-    addRotatedRectangle(tools::Rectangle(Point(5000, 5000), Size(4000, 4000)), Color(0x4472c4),
-                        Degree100(9000));
-
-    auto aJson = getVectorPrimitives(u"testRotatedTransform");
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/objects").value_or(0));
-
-    // A quarter turn puts the whole scale into the off-diagonal entries.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, aJson.getDouble("/objects/1/transform/0").value_or(1),
-                                 0.5);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2267.7,
-                                 std::abs(aJson.getDouble("/objects/1/transform/1").value_or(0)),
-                                 0.5);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2267.7,
-                                 std::abs(aJson.getDouble("/objects/1/transform/2").value_or(0)),
-                                 0.5);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, aJson.getDouble("/objects/1/transform/3").value_or(1),
-                                 0.5);
-
-    // A square turned by a quarter covers the same box. The box is rounded to
-    // whole twips, so a twip either way is what the rounding leaves.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2835.0, double(aJson.getInt("/objects/1/x").value_or(-1)), 1.0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2835.0, double(aJson.getInt("/objects/1/y").value_or(-1)), 1.0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2268.0, double(aJson.getInt("/objects/1/width").value_or(-1)),
-                                 1.0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2268.0, double(aJson.getInt("/objects/1/height").value_or(-1)),
-                                 1.0);
-}
-
 // Each entry names the layer the object is on, and a placeholder that holds
 // no content yet is flagged as such.
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testObjectEntryCarriesLayerAndPlaceholderFlag)
@@ -2068,23 +1872,6 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testAnimationTargetNamesTheObjectEntry
     CPPUNIT_ASSERT_EQUAL(OString(OString::number(nId) + "_1"),
                          sd::getAnimationTargetName(cpo::uno::Any(
                              presentation::ParagraphTarget(pObject->getUnoShape(), 1))));
-}
-
-CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testObjectEntryCarriesItsSolidColors)
-{
-    // The properties of an object entry name the fill and the line color where they are solid.
-    // A shape that has neither carries no properties.
-    createBlankDoc();
-    addRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4),
-                 Color(0x203864));
-    addTextBox(tools::Rectangle(Point(5000, 1000), Size(3000, 2000)), u"Text"_ustr);
-
-    auto aJson = getVectorPrimitives(u"testSolidColors");
-    CPPUNIT_ASSERT_EQUAL(size_t(3), aJson.getSize("/objects").value_or(0));
-
-    assertJsonPath(aJson, "/objects/1/properties/fillColor", "#4472c4");
-    assertJsonPath(aJson, "/objects/1/properties/lineColor", "#203864");
-    CPPUNIT_ASSERT(!aJson.has("/objects/2/properties"));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testEveryParagraphCarriesItsRectangle)
@@ -2214,30 +2001,6 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTransparentShapeFillKeepsItsTransp
     assertJsonPathDouble(*oText, "backdropTransparency", 0.5, 1e-9);
 }
 
-CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testBackgroundChangeMovesThePageEntryNotTheText)
-{
-    // Text in the automatic color keeps its marker through a background change. What the color
-    // means travels with the page entry, so a delta after the change carries the page with its
-    // new backdrop and leaves the untouched text object out.
-    createBlankDoc();
-    addTextBox(tools::Rectangle(Point(1000, 1000), Size(8000, 2000)), u"Hello"_ustr);
-    const SdrObject* pText = page(1)->GetObj(0);
-
-    auto aFull = getVectorPrimitives(u"testAutoColorDeltaFull");
-    const sal_Int64 nVersion = aFull.getInt("/version").value_or(-1);
-
-    SdrPageProperties& rProperties = page(1)->getSdrPageProperties();
-    rProperties.PutItem(XFillStyleItem(drawing::FillStyle_SOLID));
-    rProperties.PutItem(XFillColorItem(OUString(), COL_BLACK));
-
-    auto aDelta = getVectorPrimitives(u"testAutoColorDelta", nVersion);
-    assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
-    CPPUNIT_ASSERT(!carriesObject(aDelta, pText->GetUniqueID()));
-    const auto oPage = findEntryOfKind(aDelta, "page");
-    CPPUNIT_ASSERT(oPage.has_value());
-    assertJsonPath(*oPage, "backdrop", "#000000");
-}
-
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testSameBackgroundAgainSendsNothing)
 {
     // A page property set to the value it already has announces a change like any other. The
@@ -2316,55 +2079,6 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPushAfterAnotherPullStillCarriesTh
     assertJsonPath(*oDelta, "/type", "vectorprimitivesdelta");
     assertJsonPath(*oDelta, "/from", nFirst);
     CPPUNIT_ASSERT(carriesObject(*oDelta, page(1)->GetObj(0)->GetUniqueID()));
-}
-
-CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPullAnswersWithWhatTheClientLacks)
-{
-    // A client that says which version it holds is answered with the delta from there: a header
-    // alone when nothing changed, the whole page when its version counts in another epoch, names
-    // no epoch, or is one this model never served.
-    createBlankDoc();
-    addRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4), COL_BLACK);
-
-    auto aFull = getVectorPrimitives(u"testPullFull");
-    const sal_Int64 nVersion = aFull.getInt("/version").value_or(-1);
-    const sal_Int64 nEpoch = aFull.getInt("/epoch").value_or(-1);
-    const OString aPage = ".uno:VectorPrimitives?partid=" + firstPartId() + "&mode=0";
-
-    // A client that holds the current version.
-    auto oQuiet = requestVectorPrimitives(aPage + "&since=" + OString::number(nVersion)
-                                          + "&epoch=" + OString::number(nEpoch));
-    CPPUNIT_ASSERT(oQuiet.has_value());
-    assertJsonPath(*oQuiet, "/type", "vectorprimitivesdelta");
-    assertJsonPath(*oQuiet, "/from", nVersion);
-    CPPUNIT_ASSERT_EQUAL(size_t(0), oQuiet->getSize("/objects").value_or(SIZE_MAX));
-
-    // A client whose version comes from another epoch.
-    auto oOtherEpoch = requestVectorPrimitives(aPage + "&since=" + OString::number(nVersion)
-                                               + "&epoch=" + OString::number(nEpoch + 1));
-    CPPUNIT_ASSERT(oOtherEpoch.has_value());
-    assertJsonPath(*oOtherEpoch, "/type", "vectorprimitives");
-    CPPUNIT_ASSERT_EQUAL(size_t(2), oOtherEpoch->getSize("/objects").value_or(0));
-
-    // A client whose version names no epoch.
-    auto oNoEpoch = requestVectorPrimitives(aPage + "&since=" + OString::number(nVersion));
-    CPPUNIT_ASSERT(oNoEpoch.has_value());
-    assertJsonPath(*oNoEpoch, "/type", "vectorprimitives");
-    CPPUNIT_ASSERT_EQUAL(size_t(2), oNoEpoch->getSize("/objects").value_or(0));
-
-    // A client whose version is one this model never reached.
-    auto oAhead = requestVectorPrimitives(aPage + "&since=" + OString::number(nVersion + 100)
-                                          + "&epoch=" + OString::number(nEpoch));
-    CPPUNIT_ASSERT(oAhead.has_value());
-    assertJsonPath(*oAhead, "/type", "vectorprimitives");
-
-    // A pull for a page that is not there gets the header alone.
-    auto oGone = requestVectorPrimitives(
-        ".uno:VectorPrimitives?partid={6F1D3C9A-2B4E-4F8A-9C1D-0E7B5A3F2D61}&mode=0&since="
-        + OString::number(nVersion));
-    CPPUNIT_ASSERT(oGone.has_value());
-    assertJsonPath(*oGone, "/type", "vectorprimitives");
-    CPPUNIT_ASSERT(!oGone->has("/objects"));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPushCarriesOnlyTheChangesSinceTheFirstServe)
@@ -2517,25 +2231,6 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaIncludesGroupWithEditedObject
 
     assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
     CPPUNIT_ASSERT(carriesObject(aDelta, pInner->GetUniqueID()));
-}
-
-CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testGraphicsResponseKeepsTypeOnUnknownChecksum)
-{
-    // A graphics request for a checksum the document does not know still
-    // gets a typed response naming the checksum, only without image data.
-    createBlankDoc();
-
-    SdXImpressDocument* pDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pDocument);
-
-    tools::JsonWriter aJsonWriter;
-    pDocument->getCommandValues(aJsonWriter, ".uno:VectorRenderingGraphics?checksum=12345");
-    OString aResult = aJsonWriter.finishAndGetAsOString();
-
-    auto oJson = tools::JsonPath::parse(std::string_view(aResult.getStr(), aResult.getLength()));
-    CPPUNIT_ASSERT(oJson.has_value());
-    assertJsonPath(*oJson, "/type", "vectorrenderinggraphics");
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(12345), oJson->getInt("/checksum").value_or(-1));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPullMarksTheModelAsDrawnFrom)
@@ -2819,187 +2514,6 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testHyperlinkFieldSaysWhatItIs)
         CPPUNIT_ASSERT(oLink.has_value());
         assertJsonPath(*oLink, "fieldType", "url");
     }
-}
-
-CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTextPortionCarriesFont)
-{
-    // A text portion names its face by id and the font command returns
-    // that face's file, so a client loads the exact font instead of
-    // guessing from the family name.
-
-    // The id is read from a realized face, so the test needs at least
-    // one usable font. Pass trivially when the environment has none.
-    ScopedVclPtrInstance<VirtualDevice> pProbeDevice;
-    pProbeDevice->SetFont(vcl::Font(u"Liberation Sans"_ustr, Size(0, 2000)));
-    if (pProbeDevice->GetCurrentFontRawData().isEmpty())
-        return;
-
-    createBlankDoc();
-    addRectangle(tools::Rectangle(Point(1000, 1000), Size(6000, 3000)), Color(0x4472c4), COL_BLACK);
-
-    SdrView* pView = getSdDocShell()->GetViewShell()->GetView();
-    CPPUNIT_ASSERT(pView);
-    pView->SdrBeginTextEdit(page(1)->GetObj(0));
-    pView->GetTextEditOutlinerView()->GetEditView().InsertText(u"Hello"_ustr);
-
-    SdXImpressDocument* pDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pDocument);
-    tools::JsonWriter aJsonWriter;
-    const OString aCommand = ".uno:VectorPrimitives?partid=" + firstPartId();
-    pDocument->getCommandValues(aJsonWriter,
-                                std::string_view(aCommand.getStr(), aCommand.getLength()));
-    const OString aResult = aJsonWriter.finishAndGetAsOString();
-
-    pView->SdrEndTextEdit();
-
-    // The text portion must carry a font id.
-    auto oJson = tools::JsonPath::parse(std::string_view(aResult.getStr(), aResult.getLength()));
-    CPPUNIT_ASSERT(oJson.has_value());
-    const std::optional<tools::JsonPath> oFontId = oJson->findFirst("fontId");
-    CPPUNIT_ASSERT_MESSAGE(aResult.getStr(), oFontId.has_value());
-    const OString aFontId = oFontId->getString().value_or(""_ostr);
-    CPPUNIT_ASSERT(aFontId.toUInt64(16) != 0);
-
-    // The font command returns that face's bytes as base64.
-    const OString aFontCommand = ".uno:VectorRenderingFont?id=" + aFontId;
-    tools::JsonWriter aFontWriter;
-    pDocument->getCommandValues(aFontWriter,
-                           std::string_view(aFontCommand.getStr(), aFontCommand.getLength()));
-    const OString aFontResult = aFontWriter.finishAndGetAsOString();
-    auto oFont
-        = tools::JsonPath::parse(std::string_view(aFontResult.getStr(), aFontResult.getLength()));
-    CPPUNIT_ASSERT(oFont.has_value());
-    assertJsonPath(*oFont, "/type", "vectorrenderingfont");
-    // A real font file base64-encodes to far more than this. The bound only
-    // guards against an empty or missing payload.
-    CPPUNIT_ASSERT(oFont->getString("/data").value_or(OString()).getLength() > 1000);
-}
-
-CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTextParagraphIndex)
-{
-    // A text box with two paragraphs. Every text portion carries the
-    // index of the paragraph it belongs to.
-    createBlankDoc();
-    addTextBox(tools::Rectangle(Point(2000, 2000), Size(8000, 4000)),
-               u"First paragraph\nSecond paragraph"_ustr);
-
-    getVectorPrimitives(u"testTextParagraphIndex");
-
-    const auto oFirst = findTextPortion("First paragraph"_ostr);
-    CPPUNIT_ASSERT_MESSAGE("first paragraph portion missing", oFirst.has_value());
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(0), oFirst->getInt("paragraph").value_or(-1));
-    const auto oSecond = findTextPortion("Second paragraph"_ostr);
-    CPPUNIT_ASSERT_MESSAGE("second paragraph portion missing", oSecond.has_value());
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(1), oSecond->getInt("paragraph").value_or(-1));
-}
-
-CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTextParagraphAlign)
-{
-    // A centered paragraph reports its alignment on the text portions.
-    createBlankDoc();
-    addTextBox(tools::Rectangle(Point(2000, 2000), Size(8000, 4000)), u"Centered text"_ustr,
-               SvxAdjust::Center);
-
-    getVectorPrimitives(u"testTextParagraphAlign");
-
-    const auto oPortion = findTextPortion("Centered text"_ostr);
-    CPPUNIT_ASSERT_MESSAGE("centered portion missing", oPortion.has_value());
-    CPPUNIT_ASSERT_EQUAL("center"_ostr, oPortion->getString("align").value_or(OString()));
-}
-
-CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTextAdvancesAreRelative)
-{
-    // Each advance is the step from the glyph before it, not the distance
-    // from the start of the run, so the numbers stay small however long the
-    // run is.
-    createBlankDoc();
-    addTextBox(tools::Rectangle(Point(2000, 2000), Size(8000, 4000)), u"Advances"_ustr);
-
-    getVectorPrimitives(u"testTextAdvances");
-
-    const auto oPortion = findTextPortion("Advances"_ostr);
-    CPPUNIT_ASSERT_MESSAGE("text portion missing", oPortion.has_value());
-
-    const size_t nCount = oPortion->getSize("advances").value_or(0);
-    CPPUNIT_ASSERT_EQUAL(size_t(8), nCount);
-
-    sal_Int64 nFirst = 0;
-    sal_Int64 nLast = 0;
-    for (size_t nIndex = 0; nIndex < nCount; ++nIndex)
-    {
-        nLast = oPortion
-                    ->getInt(rtl::Concat2View("advances/" + OString::number(sal_Int32(nIndex))))
-                    .value_or(0);
-        CPPUNIT_ASSERT_MESSAGE("an advance is not a forward step", nLast > 0);
-        if (nIndex == 0)
-            nFirst = nLast;
-    }
-
-    // Every step is one glyph's worth of the run, so the last one stays close to the first.
-    // Measured from the start of the run the eighth value would be around eight times the first.
-    CPPUNIT_ASSERT_LESS(nFirst * 3, nLast);
-}
-
-CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTextLineMetrics)
-{
-    // Laid-out text reports the height and ascent of its line on the
-    // portions.
-    createBlankDoc();
-    addTextBox(tools::Rectangle(Point(2000, 2000), Size(8000, 4000)), u"Line metrics"_ustr);
-
-    getVectorPrimitives(u"testTextLineMetrics");
-
-    const auto oPortion = findTextPortion("Line metrics"_ostr);
-    CPPUNIT_ASSERT_MESSAGE("text portion missing", oPortion.has_value());
-    const double fHeight = oPortion->getDouble("lineHeight").value_or(0.0);
-    const double fAscent = oPortion->getDouble("lineAscent").value_or(0.0);
-    CPPUNIT_ASSERT_MESSAGE("line height missing", fHeight > 0.0);
-    CPPUNIT_ASSERT_MESSAGE("line ascent missing", fAscent > 0.0);
-    // The ascent is the baseline's offset within the line, so it fits
-    // inside the height.
-    CPPUNIT_ASSERT(fAscent <= fHeight);
-}
-
-CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTextAreaSize)
-{
-    // Laid-out text reports the size of the area it wraps within.
-    createBlankDoc();
-    addTextBox(tools::Rectangle(Point(2000, 2000), Size(8000, 4000)), u"Box size"_ustr);
-
-    getVectorPrimitives(u"testTextAreaSize");
-
-    const auto oPortion = findTextPortion("Box size"_ostr);
-    CPPUNIT_ASSERT_MESSAGE("text portion missing", oPortion.has_value());
-    CPPUNIT_ASSERT_MESSAGE("text area width missing",
-                           oPortion->getDouble("textAreaWidth").value_or(0.0) > 0.0);
-    CPPUNIT_ASSERT_MESSAGE("text area height missing",
-                           oPortion->getDouble("textAreaHeight").value_or(0.0) > 0.0);
-}
-
-CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testLineIndentAndWidth)
-{
-    // An indented paragraph reports its line indent and line width, which add
-    // up to the text area width.
-    createBlankDoc();
-    addTextBox(tools::Rectangle(Point(2000, 2000), Size(8000, 4000)), u"Indented line"_ustr,
-               std::nullopt, 1000);
-
-    getVectorPrimitives(u"testLineIndentAndWidth");
-
-    const auto oPortion = findTextPortion("Indented line"_ostr);
-    CPPUNIT_ASSERT_MESSAGE("text portion missing", oPortion.has_value());
-    const auto oIndent = oPortion->getDouble("lineIndent");
-    const auto oWidth = oPortion->getDouble("lineWidth");
-    const double fArea = oPortion->getDouble("textAreaWidth").value_or(0.0);
-    CPPUNIT_ASSERT_MESSAGE("line width missing", oWidth.has_value());
-    CPPUNIT_ASSERT_MESSAGE("line width not positive", *oWidth > 0.0);
-    const OString sValues = "line indent " + OString::number(oIndent.value_or(-1.0))
-                            + ", line width " + OString::number(*oWidth)
-                            + ", text area width " + OString::number(fArea);
-    CPPUNIT_ASSERT_MESSAGE(sValues.getStr(), oIndent.has_value());
-    CPPUNIT_ASSERT_MESSAGE(sValues.getStr(), *oIndent > 0.0);
-    CPPUNIT_ASSERT_MESSAGE(sValues.getStr(), *oWidth < fArea);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(sValues.getStr(), fArea, *oIndent + *oWidth, 1.0);
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testStrokedRectangle)

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+                 xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+                 xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+                 xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                 xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+                 xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0"
+                 office:version="1.3"
+                 office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:automatic-styles>
+  <style:page-layout style:name="PM1">
+   <style:page-layout-properties fo:margin-top="0cm" fo:margin-bottom="0cm"
+                                 fo:margin-left="0cm" fo:margin-right="0cm"
+                                 fo:page-width="28cm" fo:page-height="15.75cm"
+                                 style:print-orientation="landscape"/>
+  </style:page-layout>
+  <style:style style:name="dp1" style:family="drawing-page">
+   <style:drawing-page-properties draw:fill="none"/>
+  </style:style>
+  <!-- A blue fill and a black line. -->
+  <style:style style:name="gr1" style:family="graphic">
+   <style:graphic-properties draw:fill="solid" draw:fill-color="#4472c4" draw:stroke="solid"
+                             svg:stroke-color="#000000"/>
+  </style:style>
+  <!-- A red fill and a black line. -->
+  <style:style style:name="gr2" style:family="graphic">
+   <style:graphic-properties draw:fill="solid" draw:fill-color="#c00000" draw:stroke="solid"
+                             svg:stroke-color="#000000"/>
+  </style:style>
+  <!-- A text box with neither fill nor line. -->
+  <style:style style:name="gr3" style:family="graphic">
+   <style:graphic-properties draw:fill="none" draw:stroke="none"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Blank" style:page-layout-name="PM1" draw:style-name="dp1"/>
+ </office:master-styles>
+ <office:body>
+  <office:presentation>
+   <!-- Order: a blue rectangle under a red one that covers its lower right corner. -->
+   <draw:page draw:name="Order" draw:master-page-name="Blank">
+    <draw:rect draw:style-name="gr1" svg:x="1cm" svg:y="1cm" svg:width="3cm" svg:height="2cm"/>
+    <draw:rect draw:style-name="gr2" svg:x="2cm" svg:y="2cm" svg:width="3cm" svg:height="2cm"/>
+   </draw:page>
+   <!-- Move: two rectangles apart from each other. -->
+   <draw:page draw:name="Move" draw:master-page-name="Blank">
+    <draw:rect draw:style-name="gr1" svg:x="1cm" svg:y="1cm" svg:width="3cm" svg:height="2cm"/>
+    <draw:rect draw:style-name="gr2" svg:x="6cm" svg:y="1cm" svg:width="3cm" svg:height="2cm"/>
+   </draw:page>
+   <!-- Background: text in the automatic color on a slide with no fill. -->
+   <draw:page draw:name="Background" draw:master-page-name="Blank">
+    <draw:frame draw:style-name="gr3" svg:x="1cm" svg:y="1cm" svg:width="8cm" svg:height="2cm">
+     <draw:text-box><text:p>Hello</text:p></draw:text-box>
+    </draw:frame>
+   </draw:page>
+  </office:presentation>
+ </office:body>
+</office:document>

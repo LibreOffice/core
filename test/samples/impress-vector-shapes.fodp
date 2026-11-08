@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+                 xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+                 xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+                 xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                 xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+                 xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0"
+                 office:version="1.3"
+                 office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:automatic-styles>
+  <style:page-layout style:name="PM1">
+   <style:page-layout-properties fo:margin-top="0cm" fo:margin-bottom="0cm"
+                                 fo:margin-left="0cm" fo:margin-right="0cm"
+                                 fo:page-width="28cm" fo:page-height="15.75cm"
+                                 style:print-orientation="landscape"/>
+  </style:page-layout>
+  <style:style style:name="dp1" style:family="drawing-page">
+   <style:drawing-page-properties draw:fill="none"/>
+  </style:style>
+  <!-- A blue fill and no line. -->
+  <style:style style:name="gr1" style:family="graphic">
+   <style:graphic-properties draw:fill="solid" draw:fill-color="#4472c4" draw:stroke="none"/>
+  </style:style>
+  <!-- A blue fill and a dark blue line. -->
+  <style:style style:name="gr2" style:family="graphic">
+   <style:graphic-properties draw:fill="solid" draw:fill-color="#4472c4" draw:stroke="solid"
+                             svg:stroke-color="#203864"/>
+  </style:style>
+  <!-- A blue fill and a black line. -->
+  <style:style style:name="gr3" style:family="graphic">
+   <style:graphic-properties draw:fill="solid" draw:fill-color="#4472c4" draw:stroke="solid"
+                             svg:stroke-color="#000000"/>
+  </style:style>
+  <!-- A text box with neither fill nor line. -->
+  <style:style style:name="gr4" style:family="graphic">
+   <style:graphic-properties draw:fill="none" draw:stroke="none"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Blank" style:page-layout-name="PM1" draw:style-name="dp1"/>
+ </office:master-styles>
+ <office:body>
+  <office:presentation>
+   <!-- Geometry: a 4cm by 3cm rectangle at 1cm, 2cm. -->
+   <draw:page draw:name="Geometry" draw:master-page-name="Blank">
+    <draw:rect draw:style-name="gr1" svg:x="1cm" svg:y="2cm" svg:width="4cm" svg:height="3cm"/>
+   </draw:page>
+   <!-- Colors: a rectangle with a solid fill and line, and a text box with neither. -->
+   <draw:page draw:name="Colors" draw:master-page-name="Blank">
+    <draw:rect draw:style-name="gr2" svg:x="1cm" svg:y="1cm" svg:width="3cm" svg:height="2cm"/>
+    <draw:frame draw:style-name="gr4" svg:x="5cm" svg:y="1cm" svg:width="3cm" svg:height="2cm">
+     <draw:text-box><text:p>Text</text:p></draw:text-box>
+    </draw:frame>
+   </draw:page>
+   <!-- Rotated: a 4cm square at 5cm, 5cm, turned a quarter around its center. -->
+   <draw:page draw:name="Rotated" draw:master-page-name="Blank">
+    <draw:rect draw:style-name="gr1" svg:width="4cm" svg:height="4cm"
+               draw:transform="rotate (1.5707963267949) translate (5cm 9cm)"/>
+   </draw:page>
+   <!-- Versions: one rectangle, to ask for again at different versions. -->
+   <draw:page draw:name="Versions" draw:master-page-name="Blank">
+    <draw:rect draw:style-name="gr3" svg:x="1cm" svg:y="1cm" svg:width="3cm" svg:height="2cm"/>
+   </draw:page>
+  </office:presentation>
+ </office:body>
+</office:document>
