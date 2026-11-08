@@ -1127,8 +1127,9 @@ void RtfAttributeOutput::TableDefinition(
 
     // Write table positioning properties in case this is a floating table. Tables nested in it
     // are not positioned.
-    if (pTableTextNodeInfoInner->getDepth() == 1)
-        TablePositioning(pTable->GetTableNode()->GetFlyFormat());
+    const SwTableNode* pTableNode = pTable->GetTableNode();
+    if (pTableNode->StartOfSectionNode()->GetStartNodeType() == SwFlyStartNode)
+        TablePositioning(pTableNode->GetFlyFormat());
 
     // Cell margins
     const SvxBoxItem& rBox = pFormat->GetBox();
@@ -2542,13 +2543,13 @@ public:
 void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Point& /*rNdTopLeft*/)
 {
     const SwFrameFormat& rFrameFormat = rFrame.GetFrameFormat();
-    // Inside a table cell, the frame's table is written as a text frame, which keeps its own table
-    // depth.
-    if (rFrameFormat.GetFlySplit().GetValue() && m_nTableDepth == 0)
+    if (rFrameFormat.GetFlySplit().GetValue())
     {
         // The frame can split: this was originally from a floating table, write it back as
-        // such.
+        // such. In a table cell it is a nested table, one level deeper than the cell.
         SaveRunState aState(*this);
+        ww8::WW8TableInfo::Pointer_t pTableInfoOrig = std::exchange(
+            m_rExport.m_pTableInfo, std::make_shared<ww8::WW8TableInfo>(m_nTableDepth));
         const SwNodeIndex* pNodeIndex = rFrameFormat.GetContent().GetContentIdx();
         SwNodeOffset nStt = pNodeIndex ? pNodeIndex->GetIndex() + 1 : SwNodeOffset(0);
         SwNodeOffset nEnd
@@ -2556,6 +2557,14 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
         m_rExport.SaveData(nStt, nEnd);
         GetExport().WriteText();
         m_rExport.RestoreData();
+        m_rExport.m_pTableInfo = std::move(pTableInfoOrig);
+        // The rest of the paragraph is back in the cell.
+        if (m_nTableDepth > 0)
+            m_rExport.Strm()
+                .WriteOString(OOO_STRING_SVTOOLS_RTF_PARD OOO_STRING_SVTOOLS_RTF_INTBL
+                                  OOO_STRING_SVTOOLS_RTF_ITAP)
+                .WriteNumberAsString(m_nTableDepth)
+                .WriteChar(' ');
         return;
     }
 
