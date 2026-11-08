@@ -22,8 +22,6 @@
 #include <sal/types.h>
 #include <vcl/lineinfo.hxx>
 
-class Point;
-
 class DXFLineInfo {
 public:
     LineStyle       eStyle;
@@ -115,27 +113,11 @@ public:
     DXFTransform(const DXFTransform & rT1, const DXFTransform & rT2);
         // destination coordinate = rT2(rT1(source coordinate))
 
-
     void Transform(const DXFVector & rSrc, DXFVector & rTgt) const;
         // Transformation from DXFVector to DXFVector
 
-    void Transform(const DXFVector & rSrc, Point & rTgt) const;
-        // Transformation from DXFVector to SvPoint
-
     void TransDir(const DXFVector & rSrc, DXFVector & rTgt) const;
         // Transformation of a relative vector (so no translation)
-
-    bool TransCircleToEllipse(double fRadius, double & rEx, double & rEy) const;
-        // Attempt to transform a circle (in xy plane) so that it results
-        // in an aligned ellipse. If the does not work because an ellipse of
-        // arbitrary position would be created, false is returned.
-        // (The center point will not be transformed, use Transform(..))
-
-    double CalcRotAngle() const;
-        // Calculates the rotation angle around z-axis (in degrees)
-
-    bool Mirror() const;
-        // Returns true, if the matrice represents a left-handed coordinate system
 
     LineInfo Transform(const DXFLineInfo& aDXFLineInfo) const;
         // Transform to LineInfo

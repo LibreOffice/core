@@ -30,7 +30,7 @@ bool ImportDxfGraphic(SvStream& rStream, ImportOutput& rImportOutput)
 
     if (!aDXF.Read(rStream))
         return false;
-    if (!aConverter.Convert(aDXF, aGDIMetaFile, 60, 100))
+    if (!aConverter.Convert(aDXF, aGDIMetaFile))
         return false;
     rImportOutput.moGDIMetaFile = aGDIMetaFile;
 

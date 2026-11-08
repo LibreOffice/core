@@ -24,6 +24,10 @@
 #include <string_view>
 
 #include "dxfreprd.hxx"
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/range/b2drange.hxx>
 #include <vcl/font.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/vclptr.hxx>
@@ -34,25 +38,24 @@ private:
 
     VclPtr<VirtualDevice> pVirDev;
     const DXFRepresentation * pDXF;
-    bool bStatus;
 
-    sal_uInt16 OptPointsPerCircle;
+    // The entities are walked twice: first only to measure the extents of what
+    // is drawn, then to record the metafile.
+    bool mbMeasure;
+    basegfx::B2DRange maExtents;
+    // projected drawing coordinates -> metafile coordinates
+    basegfx::B2DHomMatrix maDeviceTransform;
+    double mfDeviceScale;
 
-    sal_uInt16 nMinPercent;
-    sal_uInt16 nMaxPercent;
-    sal_uInt16 nLastPercent;
-    sal_uInt16 nMainEntitiesCount;
-
-    tools::Long        nBlockColor;
+    tools::Long nBlockColor;
     DXFLineInfo aBlockDXFLineInfo;
-    tools::Long        nParentLayerColor;
+    tools::Long nParentLayerColor;
     DXFLineInfo aParentLayerDXFLineInfo;
     Color       aActLineColor;
     Color       aActFillColor;
     vcl::Font   aActFont;
-    const LineInfo aDefaultLineInfo; // to share between lines to reduce memory
 
-    static sal_uInt64 CountEntities(const DXFEntities & rEntities);
+    void ResetState();
 
     Color ConvertColor(sal_uInt8 nColor) const;
 
@@ -62,12 +65,27 @@ private:
 
     DXFLineInfo GetEntityDXFLineInfo(const DXFBasicEntity & rE);
 
+    // the line style of the entity in metafile units
+    LineInfo GetEntityLineInfo(const DXFBasicEntity & rE, const DXFTransform & rTransform);
+
     bool SetLineAttribute(const DXFBasicEntity & rE);
 
     bool SetAreaAttribute(const DXFBasicEntity & rE);
 
-    bool SetFontAttribute(const DXFBasicEntity & rE, short nAngle,
-                          sal_uInt16 nHeight);
+    bool SetFontAttribute(const DXFBasicEntity & rE, Degree10 nOrientation,
+                          sal_Int32 nHeight);
+
+    // Output of projected drawing coordinates, or only measuring them in the first pass
+    void OutPolyLine(const basegfx::B2DPolygon & rPolygon, const LineInfo & rLineInfo);
+    void OutPolygon(const basegfx::B2DPolyPolygon & rPolyPolygon);
+    void OutPoint(const basegfx::B2DPoint & rPoint);
+    // rTextTransform maps text space, where the baseline runs along x and the
+    // text height is 1, to drawing coordinates
+    void OutText(const DXFBasicEntity & rE, const DXFTransform & rTextTransform,
+                 std::string_view rText);
+    // the sides of an entity with a thickness
+    void OutThickness(const basegfx::B2DPolygon & rBase, const DXFTransform & rTransform,
+                      double fThickness, bool bFilled);
 
     void DrawLineEntity(const DXFLineEntity & rE, const DXFTransform & rTransform);
 
@@ -97,17 +115,18 @@ private:
 
     void DrawHatchEntity( const DXFHatchEntity & rE, const DXFTransform & rTransform );
 
+    void DrawBlock(const DXFBlock & rBlock, const DXFBasicEntity & rE,
+                   const DXFTransform & rTransform);
+
     void DrawEntities(const DXFEntities & rEntities,
                       const DXFTransform & rTransform);
-
-    void DrawLine(const Point& rA, const Point& rB);
 
 public:
 
     DXF2GDIMetaFile();
     ~DXF2GDIMetaFile();
 
-    bool Convert( const DXFRepresentation & rDXF, GDIMetaFile & rMTF, sal_uInt16 nMinPercent, sal_uInt16 nMaxPercent);
+    bool Convert( const DXFRepresentation & rDXF, GDIMetaFile & rMTF );
 
 };
 
