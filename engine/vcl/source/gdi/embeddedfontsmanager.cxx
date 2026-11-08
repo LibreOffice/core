@@ -325,6 +325,7 @@ bool EmbeddedFontsManager::addEmbeddedFont( const uno::Reference< io::XInputStre
         if( uncompressError != libeot::EOT_SUCCESS )
         {
             SAL_WARN( "vcl.fonts", "Failed to uncompress font" );
+            libeot::EOTfreeMetadata( &eotMetadata );
             return false;
         }
         fontData.clear();
