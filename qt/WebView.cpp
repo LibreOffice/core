@@ -23,7 +23,7 @@
 
 #include <qt/bridge.hpp>
 #include <qt/CODocumentBroker.hpp>
-#include <qt/CodaConfig.hpp>
+#include <common/CODAConfig.hpp>
 #include <qt/DBusService.hpp>
 #include <net/FakeSocket.hpp>
 #include <wsd/DocumentBroker.hpp>
@@ -1258,14 +1258,14 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, b
     {
         urlAndQuery.addQueryParameter("file_path", _document._fileURL.toString());
         urlAndQuery.addQueryParameter(
-            "permission", CodaConfig::instance().isForcedReadOnly() ? "readonly" : "edit");
+            "permission", CODAConfig::instance().isForcedReadOnly() ? "readonly" : "edit");
         urlAndQuery.addQueryParameter("appdocid", std::to_string(_document._appDocId));
         urlAndQuery.addQueryParameter("userinterfacemode", "notebookbar");
-        if (CodaConfig::instance().wantsVector())
+        if (CODAConfig::instance().wantsVector())
             urlAndQuery.addQueryParameter("vector", "true");
-        if (CodaConfig::instance().messageDelay() > 0)
+        if (CODAConfig::instance().messageDelay() > 0)
             urlAndQuery.addQueryParameter(
-                "messagedelay", std::to_string(CodaConfig::instance().messageDelay()));
+                "messagedelay", std::to_string(CODAConfig::instance().messageDelay()));
     }
 
     // Dark mode: the user's saved choice wins, otherwise follow the system theme.
@@ -1278,7 +1278,7 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, b
         // A brand new file and a template-based document both open ready to edit. An existing
         // file opens read-only until the user chooses to edit it, unless it was asked to open
         // ready to edit.
-        if (!newFile && !requiresSaveAs && !CodaConfig::instance().startsInEditMode())
+        if (!newFile && !requiresSaveAs && !CODAConfig::instance().startsInEditMode())
             urlAndQuery.addQueryParameter("startreadonly", "true");
         if (_isWelcome)
             urlAndQuery.addQueryParameter("welcome", "true");
@@ -1331,10 +1331,10 @@ void coda::addRemoteCoolParams(QUrl& url,
     q.addQueryItem("appdocid",
         QString::number(document._appDocId));
     q.addQueryItem("userinterfacemode", "notebookbar");
-    if (CodaConfig::instance().wantsVector())
+    if (CODAConfig::instance().wantsVector())
         q.addQueryItem("vector", "true");
-    if (CodaConfig::instance().messageDelay() > 0)
-        q.addQueryItem("messagedelay", QString::number(CodaConfig::instance().messageDelay()));
+    if (CODAConfig::instance().messageDelay() > 0)
+        q.addQueryItem("messagedelay", QString::number(CODAConfig::instance().messageDelay()));
     if (portalPrefersDark())
         q.addQueryItem("darkTheme", "true");
     url.setQuery(q);

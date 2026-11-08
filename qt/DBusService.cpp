@@ -16,7 +16,7 @@
 #include <qt/TabManager.hpp>
 #include <qt/WebView.hpp>
 #include <qt/WindowUtils.hpp>
-#include <qt/CodaConfig.hpp>
+#include <common/CODAConfig.hpp>
 #include <common/Log.hpp>
 #include <COKit/COKit.hxx>
 #include <qt/qt.hpp>
@@ -85,7 +85,7 @@ namespace coda
             // app is forced read-only, in which case there is nothing to save
             // and we just open the template itself for viewing.
             if (WebView::isTemplate(file.toStdString())
-                && !CodaConfig::instance().isForcedReadOnly())
+                && !CODAConfig::instance().isForcedReadOnly())
             {
                 WebView* templateDocument =
                     WebView::openTemplateAsNewDocument(Application::getProfile(), fileURL);

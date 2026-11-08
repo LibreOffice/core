@@ -13,7 +13,7 @@
 
 #include <wsd/Extensions.hpp>
 #include <wsd/COOLWSD.hpp>
-#include <qt/CodaConfig.hpp>
+#include <common/CODAConfig.hpp>
 #include <qt/CODocumentBroker.hpp>
 #include <qt/CursorFix.hpp>
 #include <qt/DBusService.hpp>
@@ -292,8 +292,8 @@ int main(int argc, char** argv)
         QLoggingCategory::setFilterRules(QStringLiteral("js=false"));
 
     bool forcedReadOnly = argParser.isSet(forcedReadOnlyOption);
-    CodaConfig::instance().setForcedReadOnly(forcedReadOnly);
-    CodaConfig::instance().setStartInEditMode(argParser.isSet(editOption));
+    CODAConfig::instance().setForcedReadOnly(forcedReadOnly);
+    CODAConfig::instance().setStartInEditMode(argParser.isSet(editOption));
 
     Log::initialize(QApplication::applicationName().toStdString(), logLevel);
     Log::setDisabledAreas(argParser.value(logDisabledAreasOption).toStdString());

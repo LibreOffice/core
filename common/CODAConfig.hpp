@@ -11,12 +11,18 @@
 
 #pragma once
 
+// The settings of CODA-Q and CODA-W, which share this code. CODA-M reads its own in Swift, and the
+// server and the other apps have none of these.
+#if !defined(QTAPP) && !defined(_WIN32)
+#error "CODAConfig.hpp is only for CODA-Q and CODA-W"
+#endif
+
 #include <climits>
 #include <cstdlib>
 
-class CodaConfig
+class CODAConfig
 {
-    CodaConfig() = default;
+    CODAConfig() = default;
 
     // Disable editing mode when opening CODA with --readonly flag.
     bool _forcedReadOnly = false;
@@ -25,9 +31,9 @@ class CodaConfig
     bool _startInEditMode = false;
 
 public:
-    static CodaConfig& instance()
+    static CODAConfig& instance()
     {
-        static CodaConfig config;
+        static CODAConfig config;
         return config;
     }
 

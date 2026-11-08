@@ -417,6 +417,7 @@ shared_headers = \
                  common/CharacterConverter.hpp \
                  common/Clipboard.hpp \
                  common/ClipboardData.hpp \
+                 common/CODAConfig.hpp \
                  common/CommandControl.hpp \
                  common/Common.hpp \
                  common/ConfigUtil.hpp \

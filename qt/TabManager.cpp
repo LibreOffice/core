@@ -23,7 +23,7 @@
 #include <Poco/File.h>
 #include <Poco/Path.h>
 
-#include <qt/CodaConfig.hpp>
+#include <common/CODAConfig.hpp>
 #include <qt/qt.hpp>
 #include <common/LangUtil.hpp>
 #include <common/Log.hpp>
@@ -360,7 +360,7 @@ void TabManager::restoreTabView(std::vector<Entry>::iterator it)
 
 void TabManager::enforceLiveViewLimit()
 {
-    const int limit = CodaConfig::instance().liveViewLimit();
+    const int limit = CODAConfig::instance().liveViewLimit();
     if (limit <= 0)
         return;
 
