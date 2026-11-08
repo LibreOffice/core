@@ -2476,6 +2476,12 @@ bool ClientSession::_handleInput(const char *buffer, int length)
                 LOG_WRN("Blocking .uno:SecurityLabel: host set UserCanChangeSecurityLabel=false");
                 return true;
             }
+            // The kit sets the modified state to track saves, and a client never sets it.
+            if (COOLProtocol::isSetModifiedCommand(tokens[1]))
+            {
+                LOG_WRN("Dropping " << tokens[1] << " from a client");
+                return true;
+            }
         }
 #endif
 

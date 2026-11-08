@@ -287,6 +287,13 @@ void WhiteBoxTests::testCOOLProtocolFunctions()
     LOK_ASSERT_EQUAL_STR("SecurityLabel", COOLProtocol::getUnoCommandName(".uno:SecurityLabel.x"));
     LOK_ASSERT_EQUAL_STR("", COOLProtocol::getUnoCommandName("slot:1234"));
     LOK_ASSERT_EQUAL_STR("", COOLProtocol::getUnoCommandName("vnd.sun.star.script:a.py$b"));
+
+    // The modified state command is recognized with arguments and in any letter case.
+    LOK_ASSERT(COOLProtocol::isSetModifiedCommand(".uno:Modified"));
+    LOK_ASSERT(COOLProtocol::isSetModifiedCommand(".uno:modified?Modified:bool=false"));
+    LOK_ASSERT(!COOLProtocol::isSetModifiedCommand(".uno:ModifiedStatus"));
+    LOK_ASSERT(!COOLProtocol::isSetModifiedCommand(".uno:fakeModified"));
+    LOK_ASSERT(!COOLProtocol::isSetModifiedCommand(".uno:Save"));
 }
 
 void WhiteBoxTests::testInputSequence()

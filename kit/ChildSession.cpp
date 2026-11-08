@@ -5409,6 +5409,13 @@ bool ChildSession::unoCommand(const StringVector& tokens)
         return true;
     }
 
+    // Sets the modified state with the arguments of .uno:Modified.
+    if (tokens.equals(1, ".uno:fakeModified") && Util::isDebugEnabled())
+    {
+        getLOKitDocument()->postUnoCommand(".uno:Modified", saveArgs.c_str(), notify);
+        return true;
+    }
+
     // The engine links a pasted file list in Writer; the in-process apps
     // embed its pictures and media files instead.
     if (Util::isMobileApp() && tokens.equals(1, ".uno:Paste") && pasteFileList())

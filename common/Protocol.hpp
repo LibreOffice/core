@@ -438,6 +438,12 @@ namespace COOLProtocol
                && getTokenInteger(tokens[tokens.size() - 1], "sequence", sequence);
     }
 
+    /// Returns true if the command sets the document's modified state.
+    inline bool isSetModifiedCommand(const std::string_view command)
+    {
+        return Util::iequal(getUnoCommandName(command), "Modified");
+    }
+
     /// Returns true if the token is a likely document modifying command.
     /// This is never 100% accurate, but it is needed to filter out tokens
     /// that certainly do not modify the document, such as 'load' and 'save'

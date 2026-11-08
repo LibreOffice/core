@@ -149,8 +149,8 @@ public:
             // and also get correct notifications from the core for bgsave to work.
             const std::string args =
                 "{ \"Modified\": { \"type\": \"boolean\", \"value\": \"false\" } }";
-            TST_LOG("post force modified command: .uno:Modified " << args);
-            WSD_CMD("uno .uno:Modified " + args);
+            TST_LOG("post force modified command: .uno:fakeModified " << args);
+            WSD_CMD("uno .uno:fakeModified " + args);
 
             modifyDocument();
         }

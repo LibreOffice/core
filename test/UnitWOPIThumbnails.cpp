@@ -185,7 +185,7 @@ public:
             if (_mode == Mode::NotesView)
                 WSD_CMD("uno .uno:NotesMode");
 
-            WSD_CMD("uno .uno:Modified {\"Modified\":{\"type\":\"boolean\",\"value\":true}}");
+            WSD_CMD("uno .uno:fakeModified {\"Modified\":{\"type\":\"boolean\",\"value\":true}}");
         }
 
         return true;
