@@ -40,12 +40,16 @@ public:
     void testExtents();
     void testColors();
     void testLineTypes();
+    void testPolylines();
+    void testPolygonMesh();
 
     CPPUNIT_TEST_SUITE(DxfFilterTest);
     CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST(testExtents);
     CPPUNIT_TEST(testColors);
     CPPUNIT_TEST(testLineTypes);
+    CPPUNIT_TEST(testPolylines);
+    CPPUNIT_TEST(testPolygonMesh);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -146,6 +150,53 @@ void DxfFilterTest::testLineTypes()
     assertXPath(pDoc, "/metafile/polyline[3]", "width", u"50");
     // thin line weights are hairlines
     assertXPath(pDoc, "/metafile/polyline[4]", "width", u"0");
+}
+
+void DxfFilterTest::testPolylines()
+{
+    // The bulges reach from y = -10 to y = 10 and the widening polyline is 4 wide at y = 30:
+    // the drawing is 50 x 42, one unit is 200 in the metafile.
+    GDIMetaFile aMTF = importFile(u"polylines.dxf");
+    CPPUNIT_ASSERT_EQUAL(Size(10100, 8500), aMTF.GetPrefSize());
+
+    MetafileXmlDump aDumper;
+    aDumper.filterAllActionTypes();
+    aDumper.filterActionType(MetaActionType::POLYLINE, false);
+    aDumper.filterActionType(MetaActionType::POLYGON, false);
+    xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
+
+    // the bulge is a curve from (0, 0) to (20, 0)
+    assertXPath(pDoc, "/metafile/polyline[1]/point[1]", "x", u"50");
+    assertXPath(pDoc, "/metafile/polyline[1]/point[1]", "y", u"6450");
+    assertXPath(pDoc, "/metafile/polyline[1]/point[@flags='control']", 4);
+    assertXPath(pDoc, "/metafile/polyline[1]/point[last()]", "x", u"4050");
+    assertXPath(pDoc, "/metafile/polyline[1]/point[last()]", "y", u"6450");
+    // the constant width is the line width
+    assertXPath(pDoc, "/metafile/polyline[2]", "width", u"400");
+    // the widening segment is filled
+    assertXPath(pDoc, "/metafile/polygon", 1);
+    // the five polylines, with the centre line of the widening one, and the three visible
+    // edges of the polyface mesh
+    assertXPath(pDoc, "/metafile/polyline", 7);
+}
+
+void DxfFilterTest::testPolygonMesh()
+{
+    // the drawing is 20 x 20, one unit is 500 in the metafile
+    GDIMetaFile aMTF = importFile(u"mesh.dxf");
+    CPPUNIT_ASSERT_EQUAL(Size(10100, 10100), aMTF.GetPrefSize());
+    MetafileXmlDump aDumper;
+    aDumper.filterAllActionTypes();
+    aDumper.filterActionType(MetaActionType::POLYLINE, false);
+    xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
+    // the two rows and the three columns of the mesh, and the polyline
+    assertXPath(pDoc, "/metafile/polyline", 6);
+    assertXPath(pDoc, "/metafile/polyline[1]/point", 3);
+    assertXPath(pDoc, "/metafile/polyline[3]/point", 2);
+    // the vertex beyond the declared two changes neither the polyline nor the extents
+    assertXPath(pDoc, "/metafile/polyline[6]/point", 2);
+    assertXPath(pDoc, "/metafile/polyline[6]/point[2]", "x", u"10050");
+    assertXPath(pDoc, "/metafile/polyline[6]/point[2]", "y", u"50");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DxfFilterTest);
