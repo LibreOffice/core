@@ -287,7 +287,7 @@ void Gallery::ImplLoad( std::u16string_view rMultiPath )
     else
         m_aRelURL = INetURLObject( rMultiPath );
 
-    DBG_ASSERT( m_aUserURL.GetProtocol() != INetProtocol::NotValid, "no writable Gallery user directory available" );
+    DBG_ASSERT( m_bAssumeReadOnly || m_aUserURL.GetProtocol() != INetProtocol::NotValid, "no writable Gallery user directory available" );
     DBG_ASSERT( m_aRelURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 }
 
