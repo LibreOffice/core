@@ -35,6 +35,8 @@ DXFBasicEntity::DXFBasicEntity(DXFEntityType eThisType)
     nColor=256;
     nTrueColor=-1;
     bInvisible=false;
+    fLineTypeScale=1.0;
+    nLineWeight=DXF_LINEWEIGHT_BYLAYER;
     nSpace=0;
     aExtrusion.fx=0.0;
     aExtrusion.fy=0.0;
@@ -56,6 +58,8 @@ void DXFBasicEntity::EvaluateGroup(DXFGroupReader & rDGR)
         case  62: nColor=rDGR.GetI(); break;
         case 420: nTrueColor=rDGR.GetI() & 0xffffff; break;
         case  60: bInvisible=rDGR.GetI()!=0; break;
+        case  48: fLineTypeScale=rDGR.GetF(); break;
+        case 370: nLineWeight=rDGR.GetI(); break;
         case  67: nSpace=rDGR.GetI(); break;
         case 210: aExtrusion.fx=rDGR.GetF(); break;
         case 220: aExtrusion.fy=rDGR.GetF(); break;

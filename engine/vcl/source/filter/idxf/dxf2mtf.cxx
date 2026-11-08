@@ -43,6 +43,12 @@ constexpr double DEVICE_SIZE = 10000.0;
 // Space around the drawing in metafile units, so that lines on the border are not clipped
 constexpr double DEVICE_MARGIN = 50.0;
 
+// The widest line weight of the DXF format, in 1/100 mm like the metafile
+constexpr tools::Long MAX_LINE_WEIGHT = 211;
+
+// The shortest line type pattern drawn in metafile units, a denser one looks solid anyway
+constexpr double MIN_PATTERN_PERIOD = 10.0;
+
 basegfx::B2DPoint Project(const DXFTransform& rTransform, const DXFVector& rVector)
 {
     DXFVector aResult;
@@ -95,6 +101,7 @@ void DXF2GDIMetaFile::ResetState()
 {
     moBlockColor = ConvertColor(7);
     aBlockDXFLineInfo = DXFLineInfo();
+    mnBlockLineWeight = DXF_LINEWEIGHT_DEFAULT;
     mpParentLayer = nullptr;
 
     aActLineColor = pVirDev->GetLineColor();
@@ -211,16 +218,51 @@ DXFLineInfo DXF2GDIMetaFile::GetEntityDXFLineInfo(const DXFBasicEntity & rE)
     return aDXFLineInfo;
 }
 
+tools::Long DXF2GDIMetaFile::GetEntityLineWeight(const DXFBasicEntity & rE) const
+{
+    tools::Long nLineWeight = rE.nLineWeight;
+    if (nLineWeight == DXF_LINEWEIGHT_BYLAYER)
+    {
+        const DXFLayer * pLayer = GetEntityLayer(rE);
+        nLineWeight = pLayer != nullptr ? pLayer->nLineWeight : DXF_LINEWEIGHT_DEFAULT;
+    }
+    else if (nLineWeight == DXF_LINEWEIGHT_BYBLOCK)
+        nLineWeight = mnBlockLineWeight;
+    return nLineWeight;
+}
+
 LineInfo DXF2GDIMetaFile::GetEntityLineInfo(const DXFBasicEntity & rE, const DXFTransform & rTransform)
 {
     if (mbMeasure)
         return LineInfo();
+
+    LineInfo aLineInfo;
     DXFLineInfo aDXFLineInfo = GetEntityDXFLineInfo(rE);
-    if (aDXFLineInfo.eStyle == LineStyle::Solid)
-        return LineInfo();
-    DXFTransform aDeviceTransform(
-        rTransform, DXFTransform(mfDeviceScale, mfDeviceScale, mfDeviceScale, DXFVector()));
-    return aDeviceTransform.Transform(aDXFLineInfo);
+    if (aDXFLineInfo.eStyle != LineStyle::Solid && rE.fLineTypeScale > 0)
+    {
+        aDXFLineInfo.fDashLen *= rE.fLineTypeScale;
+        aDXFLineInfo.fDotLen *= rE.fLineTypeScale;
+        aDXFLineInfo.fDistance *= rE.fLineTypeScale;
+        DXFTransform aDeviceTransform(
+            rTransform, DXFTransform(mfDeviceScale, mfDeviceScale, mfDeviceScale, DXFVector()));
+        aLineInfo = aDeviceTransform.Transform(aDXFLineInfo);
+        // a pattern too dense to be seen is drawn as a solid line
+        const double fPeriod
+            = aLineInfo.GetDashCount() * (aLineInfo.GetDashLen() + aLineInfo.GetDistance())
+              + aLineInfo.GetDotCount() * (aLineInfo.GetDotLen() + aLineInfo.GetDistance());
+        if (!(fPeriod >= MIN_PATTERN_PERIOD))
+            aLineInfo = LineInfo();
+    }
+
+    // Line weights are in 1/100 mm like the metafile, the thin ones are drawn as hairlines
+    // like on the screen.
+    if (pDXF->mbLineWeightDisplay)
+    {
+        const tools::Long nLineWeight = GetEntityLineWeight(rE);
+        if (nLineWeight > 25 && nLineWeight <= MAX_LINE_WEIGHT)
+            aLineInfo.SetWidth(nLineWeight);
+    }
+    return aLineInfo;
 }
 
 bool DXF2GDIMetaFile::SetLineAttribute(const DXFBasicEntity & rE)
@@ -544,14 +586,17 @@ void DXF2GDIMetaFile::DrawBlock(const DXFBlock & rBlock, const DXFBasicEntity & 
 
     std::optional<Color> oSavedBlockColor = moBlockColor;
     DXFLineInfo aSavedBlockDXFLineInfo = aBlockDXFLineInfo;
+    const tools::Long nSavedBlockLineWeight = mnBlockLineWeight;
     const DXFLayer * pSavedParentLayer = mpParentLayer;
     // with the insert on a layer that is off, only the entities on layer 0 are hidden
     moBlockColor = GetEntityColor(rE);
     aBlockDXFLineInfo = GetEntityDXFLineInfo(rE);
+    mnBlockLineWeight = GetEntityLineWeight(rE);
     mpParentLayer = pLayer;
     DrawEntities(rBlock, rTransform);
     moBlockColor = std::move(oSavedBlockColor);
     aBlockDXFLineInfo = aSavedBlockDXFLineInfo;
+    mnBlockLineWeight = nSavedBlockLineWeight;
     mpParentLayer = pSavedParentLayer;
 }
 
@@ -789,6 +834,7 @@ DXF2GDIMetaFile::DXF2GDIMetaFile()
     , pDXF(nullptr)
     , mbMeasure(false)
     , mfDeviceScale(1.0)
+    , mnBlockLineWeight(DXF_LINEWEIGHT_DEFAULT)
     , mpParentLayer(nullptr)
 {
 }
@@ -837,9 +883,12 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
     fWidth = std::max(fWidth, fSize / 1000.0);
     fHeight = std::max(fHeight, fSize / 1000.0);
     mfDeviceScale = DEVICE_SIZE / fSize;
+    // half of the widest line weight on the border is drawn outside of the extents
+    const double fMargin
+        = DEVICE_MARGIN + (pDXF->mbLineWeightDisplay ? MAX_LINE_WEIGHT / 2.0 : 0.0);
     maDeviceTransform = basegfx::utils::createScaleTranslateB2DHomMatrix(
-        mfDeviceScale, -mfDeviceScale, DEVICE_MARGIN - maExtents.getMinX() * mfDeviceScale,
-        DEVICE_MARGIN + maExtents.getMaxY() * mfDeviceScale);
+        mfDeviceScale, -mfDeviceScale, fMargin - maExtents.getMinX() * mfDeviceScale,
+        fMargin + maExtents.getMaxY() * mfDeviceScale);
 
     // second pass: the metafile
     pVirDev = VclPtr<VirtualDevice>::Create();
@@ -850,8 +899,8 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
     DrawEntities(pDXF->aEntities, aViewTransform);
     rMTF.Stop();
 
-    Size aPrefSize(basegfx::fround<tools::Long>(fWidth * mfDeviceScale + 2 * DEVICE_MARGIN),
-                   basegfx::fround<tools::Long>(fHeight * mfDeviceScale + 2 * DEVICE_MARGIN));
+    Size aPrefSize(basegfx::fround<tools::Long>(fWidth * mfDeviceScale + 2 * fMargin),
+                   basegfx::fround<tools::Long>(fHeight * mfDeviceScale + 2 * fMargin));
     rMTF.SetPrefSize( aPrefSize );
     rMTF.SetPrefMapMode( MapMode( MapUnit::Map100thMM ) );
 

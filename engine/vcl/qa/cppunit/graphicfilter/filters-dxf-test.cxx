@@ -39,11 +39,13 @@ public:
 
     void testExtents();
     void testColors();
+    void testLineTypes();
 
     CPPUNIT_TEST_SUITE(DxfFilterTest);
     CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST(testExtents);
     CPPUNIT_TEST(testColors);
+    CPPUNIT_TEST(testLineTypes);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -120,6 +122,30 @@ void DxfFilterTest::testColors()
     // in the block, layer 0 is the layer of the insert, BYBLOCK is the colour of the insert
     assertXPath(pDoc, "/metafile/linecolor[4]", "color", u"#ff0000");
     assertXPath(pDoc, "/metafile/linecolor[5]", "color", u"#00ffff");
+}
+
+void DxfFilterTest::testLineTypes()
+{
+    // the drawing is 100 units wide, one unit is 100 in the metafile
+    GDIMetaFile aMTF = importFile(u"linetypes.dxf");
+    MetafileXmlDump aDumper;
+    aDumper.filterAllActionTypes();
+    aDumper.filterActionType(MetaActionType::POLYLINE, false);
+    xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
+
+    assertXPath(pDoc, "/metafile/polyline", 4);
+    // the pattern is scaled by $LTSCALE and by the line type scale of the entity
+    assertXPath(pDoc, "/metafile/polyline[1]", "style", u"dash");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        1000.0, getXPath(pDoc, "/metafile/polyline[1]", "dotlen").toDouble(), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        500.0, getXPath(pDoc, "/metafile/polyline[1]", "distance").toDouble(), 1.0);
+    // a pattern too dense to see
+    assertXPath(pDoc, "/metafile/polyline[2]", "style", u"solid");
+    // the line weight of the layer, in 1/100 mm
+    assertXPath(pDoc, "/metafile/polyline[3]", "width", u"50");
+    // thin line weights are hairlines
+    assertXPath(pDoc, "/metafile/polyline[4]", "width", u"0");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DxfFilterTest);

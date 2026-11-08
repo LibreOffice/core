@@ -51,6 +51,7 @@ private:
     // the colour and line type of the innermost insert, for BYBLOCK
     std::optional<Color> moBlockColor;
     DXFLineInfo aBlockDXFLineInfo;
+    tools::Long mnBlockLineWeight;
     // the layer of the innermost insert, for the entities on layer 0 of the block
     const DXFLayer * mpParentLayer;
     Color       aActLineColor;
@@ -69,6 +70,8 @@ private:
     DXFLineInfo LTypeToDXFLineInfo(std::string_view rLineType) const;
 
     DXFLineInfo GetEntityDXFLineInfo(const DXFBasicEntity & rE);
+
+    tools::Long GetEntityLineWeight(const DXFBasicEntity & rE) const;
 
     // the line style of the entity in metafile units
     LineInfo GetEntityLineInfo(const DXFBasicEntity & rE, const DXFTransform & rTransform);
