@@ -827,6 +827,32 @@ void DXFEllipseEntity::EvaluateGroup(DXFGroupReader & rDGR)
     }
 }
 
+//--------------------------DXFSplineEntity-------------------------------------
+
+DXFSplineEntity::DXFSplineEntity()
+    : DXFBasicEntity(DXF_SPLINE)
+    , nFlags(0)
+    , nDegree(3)
+{
+}
+
+void DXFSplineEntity::EvaluateGroup(DXFGroupReader & rDGR)
+{
+    switch (rDGR.GetG()) {
+        case 70: nFlags=rDGR.GetI(); break;
+        case 71: nDegree=rDGR.GetI(); break;
+        case 40: aKnots.push_back(rDGR.GetF()); break;
+        case 41: aWeights.push_back(rDGR.GetF()); break;
+        case 10: aControlPoints.emplace_back(rDGR.GetF(), 0.0, 0.0); break;
+        case 20: if (!aControlPoints.empty()) aControlPoints.back().fy=rDGR.GetF(); break;
+        case 30: if (!aControlPoints.empty()) aControlPoints.back().fz=rDGR.GetF(); break;
+        case 11: aFitPoints.emplace_back(rDGR.GetF(), 0.0, 0.0); break;
+        case 21: if (!aFitPoints.empty()) aFitPoints.back().fy=rDGR.GetF(); break;
+        case 31: if (!aFitPoints.empty()) aFitPoints.back().fz=rDGR.GetF(); break;
+        default: DXFBasicEntity::EvaluateGroup(rDGR);
+    }
+}
+
 //--------------------------DXFDimensionEntity----------------------------------
 
 DXFDimensionEntity::DXFDimensionEntity() : DXFBasicEntity(DXF_DIMENSION)
@@ -876,6 +902,7 @@ void DXFEntities::Read(DXFGroupReader & rDGR)
         else if (rDGR.GetS() == "DIMENSION" ) pE=new DXFDimensionEntity;
         else if (rDGR.GetS() == "HATCH"     ) pE=new DXFHatchEntity;
         else if (rDGR.GetS() == "ELLIPSE"   ) pE=new DXFEllipseEntity;
+        else if (rDGR.GetS() == "SPLINE"    ) pE=new DXFSplineEntity;
         else
         {
             do {

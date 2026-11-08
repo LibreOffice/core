@@ -44,6 +44,8 @@ public:
     void testPolygonMesh();
     void testEllipse();
     void testWorldCoordinates();
+    void testSpline();
+    void testSplineKnots();
 
     CPPUNIT_TEST_SUITE(DxfFilterTest);
     CPPUNIT_TEST(testCVEs);
@@ -54,6 +56,8 @@ public:
     CPPUNIT_TEST(testPolygonMesh);
     CPPUNIT_TEST(testEllipse);
     CPPUNIT_TEST(testWorldCoordinates);
+    CPPUNIT_TEST(testSpline);
+    CPPUNIT_TEST(testSplineKnots);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -235,6 +239,57 @@ void DxfFilterTest::testWorldCoordinates()
     xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
     assertXPath(pDoc, "/metafile/polyline[1]/point[1]", "x", u"3383");
     assertXPath(pDoc, "/metafile/polyline[1]/point[2]", "x", u"6717");
+}
+
+void DxfFilterTest::testSpline()
+{
+    // the drawing is 80 wide and goes up to y = 10, one unit is 125 in the metafile
+    GDIMetaFile aMTF = importFile(u"spline.dxf");
+    MetafileXmlDump aDumper;
+    aDumper.filterAllActionTypes();
+    aDumper.filterActionType(MetaActionType::POLYLINE, false);
+    xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
+    assertXPath(pDoc, "/metafile/polyline", 3);
+
+    // a clamped spline starts and ends on its end control points, (0, 0) and (30, 0)
+    assertXPath(pDoc, "/metafile/polyline[1]/point[1]", "x", u"50");
+    assertXPath(pDoc, "/metafile/polyline[1]/point[1]", "y", u"1300");
+    assertXPath(pDoc, "/metafile/polyline[1]/point[last()]", "x", u"3800");
+    assertXPath(pDoc, "/metafile/polyline[1]/point[last()]", "y", u"1300");
+
+    // the weighted spline is a quarter of the circle around (40, 0) with a radius of 10
+    const int nPoints = countXPathNodes(pDoc, "/metafile/polyline[2]/point");
+    CPPUNIT_ASSERT_GREATER(4, nPoints);
+    for (int i = 1; i <= nPoints; ++i)
+    {
+        const OString aPath("/metafile/polyline[2]/point[" + OString::number(i) + "]");
+        const double fX = getXPath(pDoc, aPath, "x").toDouble() - 5050;
+        const double fY = getXPath(pDoc, aPath, "y").toDouble() - 1300;
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1250.0, std::hypot(fX, fY), 2.0);
+    }
+
+    // without control points the curve passes through the fit points
+    assertXPath(pDoc, "/metafile/polyline[3]/point[1]", "x", u"7550");
+    assertXPath(pDoc, "/metafile/polyline[3]/point[last()]", "x", u"10050");
+    assertXPath(pDoc, "/metafile/polyline[3]/point[@flags='control']", 4);
+}
+
+void DxfFilterTest::testSplineKnots()
+{
+    // A wrong knot vector is replaced by a clamped uniform one, and the degree is at most the
+    // number of control points less one: both curves go from their first to their last control
+    // point. The curves reach y = 25: the drawing is 20 x 25, one unit is 400 in the metafile.
+    GDIMetaFile aMTF = importFile(u"spline-knots.dxf");
+    MetafileXmlDump aDumper;
+    aDumper.filterAllActionTypes();
+    aDumper.filterActionType(MetaActionType::POLYLINE, false);
+    xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
+    assertXPath(pDoc, "/metafile/polyline", 2);
+    assertXPath(pDoc, "/metafile/polyline[1]/point[1]", "x", u"50");
+    assertXPath(pDoc, "/metafile/polyline[1]/point[1]", "y", u"10050");
+    assertXPath(pDoc, "/metafile/polyline[1]/point[last()]", "x", u"8050");
+    assertXPath(pDoc, "/metafile/polyline[2]/point[1]", "y", u"2050");
+    assertXPath(pDoc, "/metafile/polyline[2]/point[last()]", "x", u"8050");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DxfFilterTest);

@@ -125,6 +125,8 @@ private:
 
     void DrawEllipseEntity(const DXFEllipseEntity & rE, const DXFTransform & rTransform);
 
+    void DrawSplineEntity(const DXFSplineEntity & rE, const DXFTransform & rTransform);
+
     void DrawDimensionEntity(const DXFDimensionEntity & rE, const DXFTransform & rTransform);
 
     void DrawLWPolyLineEntity( const DXFLWPolyLineEntity & rE, const DXFTransform & rTransform );

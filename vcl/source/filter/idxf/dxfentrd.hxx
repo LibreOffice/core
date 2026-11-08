@@ -46,7 +46,8 @@ enum DXFEntityType {
     DXF_DIMENSION,
     DXF_LWPOLYLINE,
     DXF_HATCH,
-    DXF_ELLIPSE
+    DXF_ELLIPSE,
+    DXF_SPLINE
 };
 
 // base class of an entity
@@ -517,6 +518,25 @@ public:
     double fEnd;         // 42
 
     DXFEllipseEntity();
+
+protected:
+
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) override;
+};
+
+//--------------------------Spline----------------------------------------------
+
+// in world coordinates
+class DXFSplineEntity : public DXFBasicEntity {
+public:
+    tools::Long nFlags;                  // 70, 1 = closed
+    tools::Long nDegree;                 // 71
+    std::vector<double> aKnots;          // 40
+    std::vector<double> aWeights;        // 41
+    std::vector<DXFVector> aControlPoints; // 10,20,30
+    std::vector<DXFVector> aFitPoints;     // 11,21,31
+
+    DXFSplineEntity();
 
 protected:
 
