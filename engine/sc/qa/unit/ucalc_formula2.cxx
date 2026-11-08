@@ -7899,6 +7899,45 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncARRAYTOTEXTFormulaSeparators)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncARRAYTOTEXTErrorInOneCellRange)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    FormulaSeparatorsSwitch aSeparatorsSwitch(u";"_ustr, u","_ustr, u";"_ustr);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // A1 holds an error and B1 a number.
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"=1/0"_ustr);
+    m_pDoc->SetValue(ScAddress(1, 0, 0), 2.0);
+
+    // A range of one cell is a single value, like a reference to that cell, so its error is
+    // the result.
+    m_pDoc->SetString(ScAddress(2, 0, 0), u"=ARRAYTOTEXT(A1:A1;1)"_ustr);
+    m_pDoc->SetString(ScAddress(2, 1, 0), u"=ARRAYTOTEXT(TRIMRANGE(A1:A5);1)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::DivisionByZero, m_pDoc->GetErrCode(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(FormulaError::DivisionByZero, m_pDoc->GetErrCode(ScAddress(2, 1, 0)));
+
+    // In a range of several cells the error is written as its text.
+    m_pDoc->SetString(ScAddress(2, 2, 0), u"=ARRAYTOTEXT(A1:B1;1)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"{#DIV/0!,2}"_ustr, m_pDoc->GetString(ScAddress(2, 2, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncEXPANDSingleValue)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    FormulaSeparatorsSwitch aSeparatorsSwitch(u";"_ustr, u","_ustr, u";"_ustr);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // A number or a text expands like a 1 by 1 array, padded with #N/A or the pad value.
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"=ARRAYTOTEXT(EXPAND(1;2;2);1)"_ustr);
+    m_pDoc->SetString(ScAddress(0, 1, 0), u"=ARRAYTOTEXT(EXPAND(\"x\";1;3;0);1)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"{1,#N/A;#N/A,#N/A}"_ustr, m_pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"{\"x\",0,0}"_ustr, m_pDoc->GetString(ScAddress(0, 1, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncVALUETOTEXTConvertsInBothFormats)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);

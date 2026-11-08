@@ -9432,6 +9432,9 @@ void ScInterpreter::ScExpand()
     SCSIZE nsC = 0, nsR = 0;
     switch (GetStackType())
     {
+        // A number or a text is a 1 by 1 array.
+        case svDouble:
+        case svString:
         case svSingleRef:
         case svDoubleRef:
         case svMatrix:
@@ -10476,10 +10479,11 @@ void ScInterpreter::ScArrayToText()
             SCROW nRow2;
             SCTAB nTable1;
             SCTAB nTable2;
-            // A single-cell reference is a scalar argument, so an error in
-            // that one cell propagates as the result. In a multi-cell range
-            // an error cell instead lists as its error text.
-            const bool bScalarRef = (GetStackType() == svSingleRef);
+            // A reference to one cell is a scalar argument, so an error in
+            // that one cell propagates as the result. This also holds for a
+            // range of one cell, such as a function result. In a multi-cell
+            // range an error cell instead lists as its error text.
+            bool bScalarRef = (GetStackType() == svSingleRef);
             if (bScalarRef)
             {
                 ScAddress aAddress;
@@ -10491,6 +10495,7 @@ void ScInterpreter::ScArrayToText()
             else
             {
                 PopDoubleRef(nColumn1, nRow1, nTable1, nColumn2, nRow2, nTable2);
+                bScalarRef = (nColumn1 == nColumn2 && nRow1 == nRow2);
             }
             if (nGlobalError != FormulaError::NONE)
             {
