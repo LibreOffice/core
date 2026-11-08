@@ -50,6 +50,14 @@ void closePolygon(basegfx::B2DPolygon& rPolygon);
 // The centre line of a 2D polyline, with arcs as curves.
 basegfx::B2DPolygon createPolyline(const std::vector<DXFPathVertex>& rVertices, bool bClosed);
 
+// A B-spline curve sampled as a polyline. The control points are weighted if there is a
+// positive weight for each of them. An inconsistent knot vector is replaced by a clamped
+// uniform one. Without control points the curve passes through the fit points.
+basegfx::B2DPolygon createSpline(sal_Int32 nDegree, const std::vector<double>& rKnots,
+                                 const std::vector<basegfx::B2DPoint>& rControlPoints,
+                                 const std::vector<double>& rWeights,
+                                 const std::vector<basegfx::B2DPoint>& rFitPoints);
+
 // The outlines of the segments of a polyline with widths, one filled polygon per segment.
 // The segments without a width are not part of it.
 basegfx::B2DPolyPolygon createWidePolyline(const std::vector<DXFPathVertex>& rVertices,

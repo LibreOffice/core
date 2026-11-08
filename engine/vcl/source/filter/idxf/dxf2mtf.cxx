@@ -928,6 +928,31 @@ void DXF2GDIMetaFile::DrawEllipseEntity(const DXFEllipseEntity & rE, const DXFTr
     OutPolyLine(aPolygon, GetEntityLineInfo(rE, rTransform));
 }
 
+void DXF2GDIMetaFile::DrawSplineEntity(const DXFSplineEntity & rE, const DXFTransform & rTransform)
+{
+    if (!SetLineAttribute(rE))
+        return;
+
+    // the projection is affine, the curve of the projected control points is the projected curve
+    std::vector<basegfx::B2DPoint> aControlPoints, aFitPoints;
+    for (const DXFVector& rPoint : rE.aControlPoints)
+        aControlPoints.push_back(Project(rTransform, rPoint));
+    for (const DXFVector& rPoint : rE.aFitPoints)
+        aFitPoints.push_back(Project(rTransform, rPoint));
+    basegfx::B2DPolygon aPolygon
+        = dxf::createSpline(rE.nDegree, rE.aKnots, aControlPoints, rE.aWeights, aFitPoints);
+    if (aPolygon.count() < 2)
+        return;
+    if ((rE.nFlags & 1) != 0)
+    {
+        if (aPolygon.getB2DPoint(0).equal(aPolygon.getB2DPoint(aPolygon.count() - 1)))
+            dxf::closePolygon(aPolygon);
+        else
+            aPolygon.setClosed(true);
+    }
+    OutPolyLine(aPolygon, GetEntityLineInfo(rE, rTransform));
+}
+
 void DXF2GDIMetaFile::DrawDimensionEntity(const DXFDimensionEntity & rE, const DXFTransform & rTransform)
 {
     const DXFBlock * pB;
@@ -960,7 +985,7 @@ void DXF2GDIMetaFile::DrawEntities(const DXFEntities & rEntities,
             // the coordinates of these are in the world coordinate system
             const bool bWorld
                 = pE->eType == DXF_LINE || pE->eType == DXF_POINT || pE->eType == DXF_3DFACE
-                  || pE->eType == DXF_ELLIPSE
+                  || pE->eType == DXF_ELLIPSE || pE->eType == DXF_SPLINE
                   || (pE->eType == DXF_POLYLINE
                       && (static_cast<const DXFPolyLineEntity*>(pE)->nFlags & (8 | 16 | 64)) != 0);
             if (bWorld || pE->aExtrusion.fz==1.0) {
@@ -1015,6 +1040,9 @@ void DXF2GDIMetaFile::DrawEntities(const DXFEntities & rEntities,
                 break;
             case DXF_ELLIPSE:
                 DrawEllipseEntity(static_cast<const DXFEllipseEntity&>(*pE),*pT);
+                break;
+            case DXF_SPLINE:
+                DrawSplineEntity(static_cast<const DXFSplineEntity&>(*pE),*pT);
                 break;
             default:
                 break;  // four other values not handled -Wall
