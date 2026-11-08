@@ -683,12 +683,22 @@ public:
                                   const std::shared_ptr<SocketPoll>&,
                                   const AsyncUploadCallback& asyncUploadCallback) override;
 
+    void dumpState(std::ostream& os, const std::string& indent = "\n  ") const override
+    {
+        StorageBase::dumpState(os, indent);
+        os << indent << "userCanWrite: "
+           << (_userCanWrite.has_value() ? (*_userCanWrite ? "true" : "false") : "not asked yet");
+    }
+
 private:
     /// True if we the source file a temporary that we own.
     /// Typically for convert-to requests.
     [[maybe_unused]] const bool _isTemporaryFile;
     /// True if the jailed file is not linked but copied.
     bool _isCopy;
+    /// Whether the desktop apps can write the file, as found for the first session. Empty until
+    /// then, and always empty in the other builds.
+    std::optional<bool> _userCanWrite;
     static std::atomic<unsigned> LastLocalStorageId;
 };
 

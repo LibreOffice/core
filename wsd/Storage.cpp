@@ -297,8 +297,13 @@ std::unique_ptr<LocalStorage::LocalFileInfo> LocalStorage::getLocalFileInfo()
 
 #if defined(QTAPP) || defined(_WIN32)
     // The desktop apps save to the user's own file, which the permissions can already
-    // forbid. Under the flatpak the document portal answers for the host file.
-    const bool userCanWrite = FileUtil::isWritable(path.toString());
+    // forbid. Under the flatpak the document portal answers for the host file. The file is
+    // asked once, for the first session, before the engine loads it. The engine keeps a loaded
+    // document open, and on Windows nobody else can open the file for writing meanwhile, so a
+    // session that joins later gets the answer of the first one.
+    if (!_userCanWrite.has_value())
+        _userCanWrite = FileUtil::isWritable(path.toString());
+    const bool userCanWrite = *_userCanWrite;
 #else
     // Fix issue #5887 by assuming that documents are writable on iOS and Android.
     // The iOS and Android app saves directly to local disk so, other than for
