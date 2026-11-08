@@ -54,6 +54,7 @@ public:
     void testText();
     void testTextAligned();
     void testInserts();
+    void testHatch();
 
     CPPUNIT_TEST_SUITE(DxfFilterTest);
     CPPUNIT_TEST(testCVEs);
@@ -74,6 +75,7 @@ public:
     CPPUNIT_TEST(testText);
     CPPUNIT_TEST(testTextAligned);
     CPPUNIT_TEST(testInserts);
+    CPPUNIT_TEST(testHatch);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -491,6 +493,40 @@ void DxfFilterTest::testInserts()
     assertXPath(pDoc, "/metafile/polyline[6]/point[1]", "x", u"50");
     assertXPath(pDoc, "/metafile/polyline[6]/point[1]", "y", u"526");
     assertXPath(pDoc, "/metafile/polyline[6]/point[2]", "y", u"50");
+}
+
+void DxfFilterTest::testHatch()
+{
+    // the drawing is 100 x 40, one unit is 100 in the metafile
+    GDIMetaFile aMTF = importFile(u"hatch.dxf");
+    MetafileXmlDump aDumper;
+    aDumper.filterAllActionTypes();
+    aDumper.filterActionType(MetaActionType::POLYGON, false);
+    aDumper.filterActionType(MetaActionType::POLYPOLYGON, false);
+    aDumper.filterActionType(MetaActionType::HATCH, false);
+    aDumper.filterActionType(MetaActionType::FILLCOLOR, false);
+    aDumper.filterActionType(MetaActionType::GRADIENT, false);
+    aDumper.filterActionType(MetaActionType::GRADIENTEX, false);
+    xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
+
+    // a solid fill bounded by a full circle edge
+    assertXPath(pDoc, "/metafile/fillcolor[@color='#00ff00']", 1);
+    assertXPath(pDoc, "/metafile/polygon[1]/point[@flags='control']", 8);
+    // a pattern of one continuous line family is a hatch
+    assertXPath(pDoc, "/metafile/hatch", 1);
+    assertXPath(pDoc, "/metafile/hatch/hatch", "style", u"Single");
+    assertXPath(pDoc, "/metafile/hatch/hatch", "angle", u"450");
+    assertXPath(pDoc, "/metafile/hatch/hatch", "distance", u"318");
+    // dashed lines of two families are cut to the area bounded by a polyline with a bulge
+    const int nLines = countXPathNodes(pDoc, "/metafile/polypolygon/polygon");
+    CPPUNIT_ASSERT_GREATER(20, nLines);
+    // a solid fill bounded by a line and an elliptic arc
+    assertXPath(pDoc, "/metafile/fillcolor[@color='#0000ff']", 1);
+    assertXPath(pDoc, "/metafile/polygon[2]/point[@flags='control']", 4);
+    // a gradient between two colours
+    assertXPath(pDoc, "/metafile/gradient", 1);
+    assertXPath(pDoc, "/metafile/gradient", "startcolor", u"#ff0000");
+    assertXPath(pDoc, "/metafile/gradient", "endcolor", u"#0000ff");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DxfFilterTest);

@@ -89,7 +89,7 @@ protected:
 public:
 
     virtual ~DXFBasicEntity();
-    void Read(DXFGroupReader & rDGR);
+    virtual void Read(DXFGroupReader & rDGR);
         // Reads a parameter till the next 0-group
 
 protected:
@@ -364,112 +364,33 @@ class DXFLWPolyLineEntity : public DXFBasicEntity
 
 };
 
-struct DXFEdgeType
+// a line family of a hatch pattern, already rotated and scaled
+struct DXFHatchPatternLine
 {
-    sal_Int32 nEdgeType;
-
-    virtual ~DXFEdgeType(){};
-    virtual bool EvaluateGroup( DXFGroupReader & /*rDGR*/ ){ return true; };
-
-    protected:
-
-        DXFEdgeType( sal_Int32 EdgeType ):nEdgeType(EdgeType){};
-};
-
-struct DXFEdgeTypeLine : public DXFEdgeType
-{
-    DXFVector aStartPoint;              // 10,20
-    DXFVector aEndPoint;                // 11,21
-    DXFEdgeTypeLine();
-    virtual bool EvaluateGroup( DXFGroupReader & rDGR ) override;
-};
-
-class DXFEdgeTypeCircularArc : public DXFEdgeType
-{
-    DXFVector aCenter;                  // 10,20
-    double    fRadius;                  // 40
-    double    fStartAngle;              // 50
-    double    fEndAngle;                // 51
-    sal_Int32 nIsCounterClockwiseFlag;  // 73
-public:
-    DXFEdgeTypeCircularArc();
-    virtual bool EvaluateGroup( DXFGroupReader & rDGR ) override;
-};
-
-class DXFEdgeTypeEllipticalArc : public DXFEdgeType
-{
-    DXFVector aCenter;                  // 10,20
-    DXFVector aEndPoint;                // 11,21
-    double    fLength;                  // 40
-    double    fStartAngle;              // 50
-    double    fEndAngle;                // 51
-    sal_Int32 nIsCounterClockwiseFlag;  // 73
-public:
-    DXFEdgeTypeEllipticalArc();
-    virtual bool EvaluateGroup( DXFGroupReader & rDGR ) override;
-};
-
-class DXFEdgeTypeSpline : public DXFEdgeType
-{
-    sal_Int32 nDegree;                  // 94
-    sal_Int32 nRational;                // 73
-    sal_Int32 nPeriodic;                // 74
-    sal_Int32 nKnotCount;               // 75
-    sal_Int32 nControlCount;            // 76
-public:
-    DXFEdgeTypeSpline();
-    virtual bool EvaluateGroup( DXFGroupReader & rDGR ) override;
-};
-
-struct DXFBoundaryPathData
-{
-private:
-    sal_Int32           nPointCount;            // 93
-public:
-    sal_Int32           nFlags;                 // 92
-    sal_Int32           nHasBulgeFlag;          // 72
-    sal_Int32           nIsClosedFlag;          // 73
-    double              fBulge;                 // 42
-    sal_Int32           nSourceBoundaryObjects; // 97
-    sal_Int32           nEdgeCount;             // 93
-
-    bool                bIsPolyLine;
-    sal_Int32           nPointIndex;
-
-    std::vector<DXFVector> aP;
-    std::vector<std::unique_ptr<DXFEdgeType>> aEdges;
-
-    DXFBoundaryPathData();
-
-    bool EvaluateGroup( DXFGroupReader & rDGR );
+    double fAngle = 0.0;                // 53, degrees
+    basegfx::B2DPoint aBase;            // 43, 44
+    basegfx::B2DVector aOffset;         // 45, 46, from one line to the next
+    std::vector<double> aDashes;        // 49, positive for dashes, negative for gaps
 };
 
 class DXFHatchEntity : public DXFBasicEntity
 {
-        bool    bIsInBoundaryPathContext;
-        sal_Int32   nCurrentBoundaryPathIndex;
-
     public:
 
-        sal_Int32   nFlags;                         // 70 (solid fill = 1, pattern fill = 0)
-        sal_Int32   nAssociativityFlag;             // 71 (associative = 1, non-associative = 0)
-        sal_Int32   nMaxBoundaryPathCount;          // 91
-        sal_Int32   nHatchStyle;                    // 75 (odd parity = 0, outmost area = 1, entire area = 2 )
-        sal_Int32   nHatchPatternType;              // 76 (user defined = 0, predefined = 1, custom = 2)
-        double      fHatchPatternAngle;             // 52 (pattern fill only)
-        double      fHatchPatternScale;             // 41 (pattern fill only:scale or spacing)
-        sal_Int32   nHatchDoubleFlag;               // 77 (pattern fill only:double = 1, not double = 0)
-        sal_Int32   nHatchPatternDefinitionLines;   // 78
-        double      fPixelSize;                     // 47
-        sal_Int32   nNumberOfSeedPoints;            // 98
-
-        std::vector<DXFBoundaryPathData> aBoundaryPathData;
+        double      fElevation;         // 30
+        bool        bSolid;             // 70
+        // the boundary paths in the entity coordinate system, filled with the even-odd rule
+        basegfx::B2DPolyPolygon aBoundaries;
+        std::vector<DXFHatchPatternLine> aPatternLines;
+        bool        bGradient;          // 450
+        double      fGradientAngle;     // 460, radians
+        std::vector<sal_Int32> aGradientColors; // 421, 0xRRGGBB
 
         DXFHatchEntity();
 
-    protected:
-
-        virtual void EvaluateGroup( DXFGroupReader & rDGR ) override;
+        // the groups use the same codes for different values in their sections, read them
+        // in their order
+        virtual void Read(DXFGroupReader & rDGR) override;
 };
 
 class DXFVertexEntity : public DXFBasicEntity {

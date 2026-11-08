@@ -21,6 +21,7 @@
 
 #include <o3tl/safeint.hxx>
 
+#include <algorithm>
 #include <cmath>
 
 #include "dxfentrd.hxx"
@@ -487,260 +488,314 @@ void DXFLWPolyLineEntity::EvaluateGroup( DXFGroupReader & rDGR )
 
 //--------------------------DXFHatchEntity-------------------------------------
 
-DXFEdgeTypeLine::DXFEdgeTypeLine() :
-    DXFEdgeType( 1 )
+namespace
 {
-
-}
-
-bool DXFEdgeTypeLine::EvaluateGroup( DXFGroupReader & rDGR )
+// a group of a hatch, its value as a number
+struct HatchGroup
 {
-    bool bExecutingGroupCode = true;
-    switch ( rDGR.GetG() )
+    sal_uInt16 nCode;
+    double fValue;
+    tools::Long nValue;
+};
+
+// Reads the groups in their order. Reading an expected group that is not the next one does
+// not advance and gives the default value.
+class HatchReader
+{
+public:
+    explicit HatchReader(const std::vector<HatchGroup>& rGroups)
+        : mrGroups(rGroups)
+        , mnPos(0)
     {
-        case 10 : aStartPoint.fx = rDGR.GetF(); break;
-        case 20 : aStartPoint.fy = rDGR.GetF(); break;
-        case 11 : aEndPoint.fx = rDGR.GetF(); break;
-        case 21 : aEndPoint.fy = rDGR.GetF(); break;
-        default : bExecutingGroupCode = false; break;
     }
-    return  bExecutingGroupCode;
-}
 
-DXFEdgeTypeCircularArc::DXFEdgeTypeCircularArc() :
-    DXFEdgeType( 2 ),
-    fRadius( 0.0 ),
-    fStartAngle( 0.0 ),
-    fEndAngle( 0.0 ),
-    nIsCounterClockwiseFlag( 0 )
-{
-}
+    bool at(sal_uInt16 nCode) const { return mnPos < mrGroups.size() && mrGroups[mnPos].nCode == nCode; }
+    bool atEnd() const { return mnPos >= mrGroups.size(); }
+    sal_uInt16 code() const { return mrGroups[mnPos].nCode; }
+    void skip() { ++mnPos; }
 
-bool DXFEdgeTypeCircularArc::EvaluateGroup( DXFGroupReader & rDGR )
-{
-    bool bExecutingGroupCode = true;
-    switch ( rDGR.GetG() )
+    double getF(sal_uInt16 nCode, double fDefault = 0.0)
     {
-        case 10 : aCenter.fx = rDGR.GetF(); break;
-        case 20 : aCenter.fy = rDGR.GetF(); break;
-        case 40 : fRadius = rDGR.GetF(); break;
-        case 50 : fStartAngle = rDGR.GetF(); break;
-        case 51 : fEndAngle = rDGR.GetF(); break;
-        case 73 : nIsCounterClockwiseFlag = rDGR.GetI(); break;
-        default : bExecutingGroupCode = false; break;
+        if (!at(nCode))
+            return fDefault;
+        return mrGroups[mnPos++].fValue;
     }
-    return  bExecutingGroupCode;
-}
 
-DXFEdgeTypeEllipticalArc::DXFEdgeTypeEllipticalArc() :
-    DXFEdgeType( 3 ),
-    fLength( 0.0 ),
-    fStartAngle( 0.0 ),
-    fEndAngle( 0.0 ),
-    nIsCounterClockwiseFlag( 0 )
-{
-}
-
-bool DXFEdgeTypeEllipticalArc::EvaluateGroup( DXFGroupReader & rDGR )
-{
-    bool bExecutingGroupCode = true;
-    switch( rDGR.GetG() )
+    tools::Long getI(sal_uInt16 nCode, tools::Long nDefault = 0)
     {
-        case 10 : aCenter.fx = rDGR.GetF(); break;
-        case 20 : aCenter.fy = rDGR.GetF(); break;
-        case 11 : aEndPoint.fx = rDGR.GetF(); break;
-        case 21 : aEndPoint.fy = rDGR.GetF(); break;
-        case 40 : fLength = rDGR.GetF(); break;
-        case 50 : fStartAngle = rDGR.GetF(); break;
-        case 51 : fEndAngle = rDGR.GetF(); break;
-        case 73 : nIsCounterClockwiseFlag = rDGR.GetI(); break;
-        default : bExecutingGroupCode = false; break;
+        if (!at(nCode))
+            return nDefault;
+        return mrGroups[mnPos++].nValue;
     }
-    return  bExecutingGroupCode;
-}
 
-DXFEdgeTypeSpline::DXFEdgeTypeSpline() :
-    DXFEdgeType( 4 ),
-    nDegree( 0 ),
-    nRational( 0 ),
-    nPeriodic( 0 ),
-    nKnotCount( 0 ),
-    nControlCount( 0 )
-{
-}
-
-bool DXFEdgeTypeSpline::EvaluateGroup( DXFGroupReader & rDGR )
-{
-    bool bExecutingGroupCode = true;
-    switch ( rDGR.GetG() )
+    // a count, at most the number of groups left
+    size_t getCount(sal_uInt16 nCode)
     {
-        case 94 : nDegree = rDGR.GetI(); break;
-        case 73 : nRational = rDGR.GetI(); break;
-        case 74 : nPeriodic = rDGR.GetI(); break;
-        case 95 : nKnotCount = rDGR.GetI(); break;
-        case 96 : nControlCount = rDGR.GetI(); break;
-        default : bExecutingGroupCode = false; break;
+        const tools::Long nCount = getI(nCode);
+        if (nCount <= 0)
+            return 0;
+        return std::min(o3tl::make_unsigned(nCount), mrGroups.size() - mnPos);
     }
-    return  bExecutingGroupCode;
-}
 
-DXFBoundaryPathData::DXFBoundaryPathData() :
-    nPointCount( 0 ),
-    nFlags( 0 ),
-    nHasBulgeFlag( 0 ),
-    nIsClosedFlag( 0 ),
-    fBulge( 0.0 ),
-    nSourceBoundaryObjects( 0 ),
-    nEdgeCount( 0 ),
-    bIsPolyLine( true ),
-    nPointIndex( 0 )
-{
-}
-
-bool DXFBoundaryPathData::EvaluateGroup( DXFGroupReader & rDGR )
-{
-    bool bExecutingGroupCode = true;
-    if ( bIsPolyLine )
+    basegfx::B2DPoint getPoint(sal_uInt16 nCode)
     {
-        switch( rDGR.GetG() )
+        const double fX = getF(nCode);
+        return basegfx::B2DPoint(fX, getF(nCode + 10));
+    }
+
+private:
+    const std::vector<HatchGroup>& mrGroups;
+    size_t mnPos;
+};
+
+// the angle in radians of a counter-clockwise arc edge, or of a clockwise one whose angles
+// are stored mirrored
+double edgeAngle(double fDegrees, bool bCounterClockwise)
+{
+    return basegfx::deg2rad(bCounterClockwise ? fDegrees : -fDegrees);
+}
+
+// the sweep in radians from the start to the end angle, in degrees, in the edge direction
+double edgeSweep(double fStart, double fEnd, bool bCounterClockwise)
+{
+    double fSweep = std::fmod(fEnd - fStart, 360.0);
+    if (fSweep <= 0)
+        fSweep += 360.0;
+    return basegfx::deg2rad(bCounterClockwise ? fSweep : -fSweep);
+}
+
+// the parameter of the ellipse point in the direction fAngle
+double ellipseParameter(double fAngle, double fRatio)
+{
+    if (fRatio == 0)
+        return fAngle;
+    double fParameter = std::atan2(std::sin(fAngle) / fRatio, std::cos(fAngle));
+    // keep the number of turns
+    fParameter += std::round((fAngle - fParameter) / (2 * M_PI)) * 2 * M_PI;
+    return fParameter;
+}
+
+basegfx::B2DPolygon readEdge(HatchReader& rReader, tools::Long nType)
+{
+    basegfx::B2DPolygon aEdge;
+    switch (nType)
+    {
+        case 1: // line
+            aEdge.append(rReader.getPoint(10));
+            aEdge.append(rReader.getPoint(11));
+            break;
+        case 2: // circular arc
         {
-            case 92 :
-            {
-                nFlags = rDGR.GetI();
-                if ( ( nFlags & 2 ) == 0 )
-                    bIsPolyLine = false;
-            }
+            const basegfx::B2DPoint aCenter = rReader.getPoint(10);
+            const double fRadius = rReader.getF(40);
+            const double fStart = rReader.getF(50);
+            const double fEnd = rReader.getF(51);
+            const bool bCounterClockwise = rReader.getI(73, 1) != 0;
+            dxf::appendEllipseArc(aEdge, aCenter, basegfx::B2DVector(fRadius, 0),
+                                  basegfx::B2DVector(0, fRadius),
+                                  edgeAngle(fStart, bCounterClockwise),
+                                  edgeSweep(fStart, fEnd, bCounterClockwise), true);
             break;
-            case 93 :
-            {
-                nPointCount = rDGR.GetI();
-                // limit alloc to max reasonable size based on remaining data in stream
-                if (nPointCount > 0 && o3tl::make_unsigned(nPointCount) <= rDGR.remainingSize())
-                    aP.reserve(nPointCount);
-                else
-                    nPointCount = 0;
-            }
+        }
+        case 3: // elliptic arc
+        {
+            const basegfx::B2DPoint aCenter = rReader.getPoint(10);
+            const basegfx::B2DPoint aMajorEnd = rReader.getPoint(11);
+            const basegfx::B2DVector aMajor(aMajorEnd.getX(), aMajorEnd.getY());
+            const double fRatio = rReader.getF(40, 1.0);
+            const double fStart = rReader.getF(50);
+            const double fEnd = rReader.getF(51);
+            const bool bCounterClockwise = rReader.getI(73, 1) != 0;
+            const basegfx::B2DVector aMinor(-aMajor.getY() * fRatio, aMajor.getX() * fRatio);
+            const double fStartAngle = edgeAngle(fStart, bCounterClockwise);
+            const double fEndAngle = fStartAngle + edgeSweep(fStart, fEnd, bCounterClockwise);
+            const double fStartParameter = ellipseParameter(fStartAngle, fRatio);
+            dxf::appendEllipseArc(aEdge, aCenter, aMajor, aMinor, fStartParameter,
+                                  ellipseParameter(fEndAngle, fRatio) - fStartParameter, true);
             break;
-            case 72 : nHasBulgeFlag = rDGR.GetI(); break;
-            case 73 : nIsClosedFlag = rDGR.GetI(); break;
-            case 97 : nSourceBoundaryObjects = rDGR.GetI(); break;
-            case 42 : fBulge = rDGR.GetF(); break;
-            case 10:
+        }
+        case 4: // spline
+        {
+            const sal_Int32 nDegree = rReader.getI(94, 3);
+            const bool bRational = rReader.getI(73) != 0;
+            rReader.getI(74);
+            const size_t nKnots = rReader.getCount(95);
+            const size_t nControlPoints = rReader.getCount(96);
+            std::vector<double> aKnots;
+            for (size_t i = 0; i < nKnots && rReader.at(40); ++i)
+                aKnots.push_back(rReader.getF(40));
+            std::vector<basegfx::B2DPoint> aControlPoints;
+            std::vector<double> aWeights;
+            for (size_t i = 0; i < nControlPoints && rReader.at(10); ++i)
             {
-                if (nPointIndex < nPointCount)
-                {
-                    aP.resize(nPointIndex+1);
-                    aP[nPointIndex].fx = rDGR.GetF();
-                }
+                aControlPoints.push_back(rReader.getPoint(10));
+                if (bRational || rReader.at(42))
+                    aWeights.push_back(rReader.getF(42, 1.0));
             }
+            std::vector<basegfx::B2DPoint> aFitPoints;
+            const size_t nFitPoints = rReader.getCount(97);
+            for (size_t i = 0; i < nFitPoints && rReader.at(11); ++i)
+                aFitPoints.push_back(rReader.getPoint(11));
+            // the tangents of the fit points
+            rReader.getPoint(12);
+            rReader.getPoint(13);
+            aEdge = dxf::createSpline(nDegree, aKnots, aControlPoints, aWeights, aFitPoints);
             break;
-            case 20:
-            {
-                if (nPointIndex < nPointCount)
-                {
-                    aP.resize(nPointIndex+1);
-                    aP[nPointIndex].fy = rDGR.GetF();
-                    ++nPointIndex;
-                }
-            }
-            break;
-
-            default : bExecutingGroupCode = false; break;
         }
     }
-    else
+    return aEdge;
+}
+
+// the points are the same but for the precision of the coordinates
+bool isNear(const basegfx::B2DPoint& rA, const basegfx::B2DPoint& rB)
+{
+    const double fTolerance
+        = 1e-6 * std::max({ 1.0, std::fabs(rA.getX()), std::fabs(rA.getY()) });
+    return std::fabs(rA.getX() - rB.getX()) <= fTolerance
+           && std::fabs(rA.getY() - rB.getY()) <= fTolerance;
+}
+
+// Appends an edge to a boundary loop, turning it around if it ends where the loop ends.
+void appendEdge(basegfx::B2DPolygon& rLoop, basegfx::B2DPolygon aEdge)
+{
+    if (aEdge.count() == 0)
+        return;
+    if (rLoop.count() == 0)
     {
-        if ( rDGR.GetG() == 93 )
-            nEdgeCount = rDGR.GetI();
-        else if ( rDGR.GetG() == 72 )
-        {
-            sal_Int32 nEdgeType = rDGR.GetI();
-            switch( nEdgeType )
-            {
-                case 1 : aEdges.emplace_back( new DXFEdgeTypeLine() ); break;
-                case 2 : aEdges.emplace_back( new DXFEdgeTypeCircularArc() ); break;
-                case 3 : aEdges.emplace_back( new DXFEdgeTypeEllipticalArc() ); break;
-                case 4 : aEdges.emplace_back( new DXFEdgeTypeSpline() ); break;
-            }
-        }
-        else if ( !aEdges.empty() )
-            aEdges.back()->EvaluateGroup( rDGR );
-        else
-            bExecutingGroupCode = false;
+        rLoop = aEdge;
+        return;
     }
-    return bExecutingGroupCode;
+    const basegfx::B2DPoint aLoopEnd = rLoop.getB2DPoint(rLoop.count() - 1);
+    const basegfx::B2DPoint aEdgeStart = aEdge.getB2DPoint(0);
+    const basegfx::B2DPoint aEdgeEnd = aEdge.getB2DPoint(aEdge.count() - 1);
+    if (!isNear(aEdgeStart, aLoopEnd) && isNear(aEdgeEnd, aLoopEnd))
+        aEdge.flip();
+    // the joint point once
+    if (isNear(aEdge.getB2DPoint(0), aLoopEnd))
+    {
+        if (aEdge.areControlPointsUsed() && aEdge.isNextControlPointUsed(0))
+            rLoop.setNextControlPoint(rLoop.count() - 1, aEdge.getNextControlPoint(0));
+        aEdge.remove(0);
+    }
+    rLoop.append(aEdge);
+}
 }
 
 DXFHatchEntity::DXFHatchEntity() :
     DXFBasicEntity( DXF_HATCH ),
-    bIsInBoundaryPathContext( false ),
-    nCurrentBoundaryPathIndex( -1 ),
-    nFlags( 0 ),
-    nAssociativityFlag( 0 ),
-    nMaxBoundaryPathCount( 0 ),
-    nHatchStyle( 0 ),
-    nHatchPatternType( 0 ),
-    fHatchPatternAngle( 0.0 ),
-    fHatchPatternScale( 1.0 ),
-    nHatchDoubleFlag( 0 ),
-    nHatchPatternDefinitionLines( 0 ),
-    fPixelSize( 1.0 ),
-    nNumberOfSeedPoints( 0 )
+    fElevation( 0.0 ),
+    bSolid( false ),
+    bGradient( false ),
+    fGradientAngle( 0.0 )
 {
 }
 
-void DXFHatchEntity::EvaluateGroup( DXFGroupReader & rDGR )
+void DXFHatchEntity::Read(DXFGroupReader & rDGR)
 {
-    switch ( rDGR.GetG() )
+    std::vector<HatchGroup> aGroups;
+    while (rDGR.Read() != 0)
     {
-//      case 10 : aElevationPoint.fx = rDGR.GetF(); break;
-//      case 20 : aElevationPoint.fy = rDGR.GetF(); break;
-//      case 30 : aElevationPoint.fz = rDGR.GetF(); break;
-        case 70 : nFlags = rDGR.GetI(); break;
-        case 71 : nAssociativityFlag = rDGR.GetI(); break;
-        case 91 :
-        {
-            bIsInBoundaryPathContext = true;
-            nMaxBoundaryPathCount = rDGR.GetI();
-            // limit alloc to max reasonable size based on remaining data in stream
-            if (nMaxBoundaryPathCount > 0 && o3tl::make_unsigned(nMaxBoundaryPathCount) <= rDGR.remainingSize())
-                aBoundaryPathData.reserve(nMaxBoundaryPathCount);
-            else
-                nMaxBoundaryPathCount = 0;
-        }
-        break;
-        case 75 :
-        {
-            nHatchStyle = rDGR.GetI();
-            bIsInBoundaryPathContext = false;
-        }
-        break;
-        case 76 : nHatchPatternType = rDGR.GetI(); break;
-        case 52 : fHatchPatternAngle = rDGR.GetF(); break;
-        case 41 : fHatchPatternScale = rDGR.GetF(); break;
-        case 77 : nHatchDoubleFlag = rDGR.GetI(); break;
-        case 78 : nHatchPatternDefinitionLines = rDGR.GetI(); break;
-        case 47 : fPixelSize = rDGR.GetF(); break;
-        case 98 : nNumberOfSeedPoints = rDGR.GetI(); break;
+        DXFBasicEntity::EvaluateGroup(rDGR);
+        aGroups.push_back({ rDGR.GetG(), rDGR.GetF(), rDGR.GetI() });
+    }
 
-        case 92:
-            nCurrentBoundaryPathIndex++;
-            [[fallthrough]];
-        default:
+    HatchReader aReader(aGroups);
+    // the head, up to the number of boundary paths
+    size_t nPaths = 0;
+    while (!aReader.atEnd())
+    {
+        const sal_uInt16 nCode = aReader.code();
+        if (nCode == 30)
+            fElevation = aReader.getF(30);
+        else if (nCode == 70)
+            bSolid = aReader.getI(70) != 0;
+        else if (nCode == 91)
         {
-            bool bExecutingGroupCode = false;
-            if ( bIsInBoundaryPathContext )
-            {
-                if (nCurrentBoundaryPathIndex >= 0 && nCurrentBoundaryPathIndex < nMaxBoundaryPathCount)
-                {
-                    aBoundaryPathData.resize(nCurrentBoundaryPathIndex + 1);
-                    bExecutingGroupCode = aBoundaryPathData.back().EvaluateGroup(rDGR);
-                }
-            }
-            if ( !bExecutingGroupCode )
-                DXFBasicEntity::EvaluateGroup(rDGR);
+            nPaths = aReader.getCount(91);
+            break;
         }
-        break;
+        else
+            aReader.skip();
+    }
+
+    for (size_t nPath = 0; nPath < nPaths; ++nPath)
+    {
+        while (!aReader.atEnd() && !aReader.at(92))
+            aReader.skip();
+        if (aReader.atEnd())
+            break;
+        const tools::Long nFlags = aReader.getI(92);
+        basegfx::B2DPolygon aLoop;
+        if (nFlags & 2)
+        {
+            // polyline with bulges
+            const bool bHasBulges = aReader.getI(72) != 0;
+            aReader.getI(73);
+            const size_t nVertices = aReader.getCount(93);
+            std::vector<DXFPathVertex> aVertices;
+            for (size_t i = 0; i < nVertices && aReader.at(10); ++i)
+            {
+                DXFPathVertex aVertex;
+                aVertex.maPoint = aReader.getPoint(10);
+                if (bHasBulges || aReader.at(42))
+                    aVertex.mfBulge = aReader.getF(42);
+                aVertices.push_back(aVertex);
+            }
+            aLoop = dxf::createPolyline(aVertices, true);
+        }
+        else
+        {
+            const size_t nEdges = aReader.getCount(93);
+            for (size_t i = 0; i < nEdges; ++i)
+            {
+                // skip what an edge has beyond the expected groups
+                while (!aReader.atEnd() && !aReader.at(72) && !aReader.at(97) && !aReader.at(92))
+                    aReader.skip();
+                if (!aReader.at(72))
+                    break;
+                appendEdge(aLoop, readEdge(aReader, aReader.getI(72)));
+            }
+            if (aLoop.count() > 1 && isNear(aLoop.getB2DPoint(0), aLoop.getB2DPoint(aLoop.count() - 1)))
+                dxf::closePolygon(aLoop);
+            aLoop.setClosed(true);
+        }
+        // the source boundary objects
+        const size_t nSources = aReader.getCount(97);
+        for (size_t i = 0; i < nSources && aReader.at(330); ++i)
+            aReader.skip();
+        if (aLoop.count() > 1)
+            aBoundaries.append(aLoop);
+    }
+
+    // the pattern and the gradient
+    while (!aReader.atEnd())
+    {
+        const sal_uInt16 nCode = aReader.code();
+        if (nCode == 78)
+        {
+            const size_t nLines = aReader.getCount(78);
+            for (size_t i = 0; i < nLines && aReader.at(53); ++i)
+            {
+                DXFHatchPatternLine aLine;
+                aLine.fAngle = aReader.getF(53);
+                aLine.aBase.setX(aReader.getF(43));
+                aLine.aBase.setY(aReader.getF(44));
+                aLine.aOffset.setX(aReader.getF(45));
+                aLine.aOffset.setY(aReader.getF(46));
+                const size_t nDashes = aReader.getCount(79);
+                for (size_t j = 0; j < nDashes && aReader.at(49); ++j)
+                    aLine.aDashes.push_back(aReader.getF(49));
+                aPatternLines.push_back(aLine);
+            }
+        }
+        else if (nCode == 450)
+            bGradient = aReader.getI(450) != 0;
+        else if (nCode == 460)
+            fGradientAngle = aReader.getF(460);
+        else if (nCode == 421)
+            aGradientColors.push_back(aReader.getI(421) & 0xffffff);
+        else
+            aReader.skip();
     }
 }
 
