@@ -424,52 +424,6 @@ SAL_DLLPUBLIC double rtl_math_approxValue(double fValue) SAL_THROW_EXTERN_C();
  */
 SAL_DLLPUBLIC bool rtl_math_approxEqual(double a, double b) SAL_THROW_EXTERN_C();
 
-/** Returns more accurate e^x-1 for x near 0 than calculating directly.
-
-    expm1 is part of the C99 standard, but not provided by some compilers.
-
-    @param fValue
-    The value x in the term e^x-1.
-  */
-SAL_DLLPUBLIC double rtl_math_expm1(double fValue) SAL_THROW_EXTERN_C();
-
-/** Returns more accurate log(1+x) for x near 0 than calculating directly.
-
-    log1p is part of the C99 standard, but not provided by some compilers.
-
-    @param fValue
-    The value x in the term log(1+x).
-  */
-SAL_DLLPUBLIC double rtl_math_log1p(double fValue) SAL_THROW_EXTERN_C();
-
-/** Returns more accurate atanh(x) for x near 0 than calculating
-    0.5*log((1+x)/(1-x)).
-
-    atanh is part of the C99 standard, but not provided by some compilers.
-
-    @param fValue
-    The value x in the term atanh(x).
-  */
-SAL_DLLPUBLIC double rtl_math_atanh(double fValue) SAL_THROW_EXTERN_C();
-
-/** Returns values of the Errorfunction erf.
-
-    erf is part of the C99 standard, but not provided by some compilers.
-
-    @param fValue
-    The value x in the term erf(x).
-  */
-SAL_DLLPUBLIC double rtl_math_erf(double fValue) SAL_THROW_EXTERN_C();
-
-/** Returns values of the complement Errorfunction erfc.
-
-    erfc is part of the C99 standard, but not provided by some compilers.
-
-    @param fValue
-    The value x in the term erfc(x).
-  */
-SAL_DLLPUBLIC double rtl_math_erfc(double fValue) SAL_THROW_EXTERN_C();
-
 /** Returns values of the inverse hyperbolic sine.
 
     asinh is part of the C99 standard, but not provided by some compilers.

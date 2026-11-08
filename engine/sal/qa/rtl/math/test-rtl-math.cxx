@@ -562,90 +562,6 @@ public:
         CPPUNIT_ASSERT_EQUAL( 1.0, rtl::math::approxSub( 617673396283947.0, 617673396283946.0));
     }
 
-    void test_erf() {
-        double x, res;
-        x =  0.0;
-        res = rtl::math::erf(x);
-        CPPUNIT_ASSERT_EQUAL(0.0,res);
-        rtl::math::setInf( &x, false);
-        res = rtl::math::erf(x);
-        CPPUNIT_ASSERT_EQUAL(1.0,res);
-        rtl::math::setInf( &x, true);
-        res = rtl::math::erf(x);
-        CPPUNIT_ASSERT_EQUAL(-1.0,res);
-        rtl::math::setNan( &x);
-        res = rtl::math::erf(x);
-        CPPUNIT_ASSERT(std::isnan(res));
-        x = 3.0;
-        res = rtl::math::erf(-x);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL( -rtl::math::erf(x), res, 1E-12);
-    }
-
-    void test_erfc() {
-        double x, res;
-        x =  0.0;
-        res = rtl::math::erfc(x);
-        CPPUNIT_ASSERT_EQUAL(1.0,res);
-        rtl::math::setInf( &x, false);
-        res = rtl::math::erfc(x);
-        CPPUNIT_ASSERT_EQUAL(0.0,res);
-        rtl::math::setInf( &x, true);
-        res = rtl::math::erfc(x);
-        CPPUNIT_ASSERT_EQUAL(2.0,res);
-        rtl::math::setNan( &x);
-        res = rtl::math::erfc(x);
-        CPPUNIT_ASSERT(std::isnan(res));
-        x = 3.0;
-        res = rtl::math::erfc(-x);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL( 2.0 - rtl::math::erfc(x), res, 1E-12);
-    }
-
-    void test_expm1() {
-        double x, res;
-        x =  0.0;
-        res = rtl::math::expm1(x);
-        CPPUNIT_ASSERT_EQUAL(0.0,res);
-        x = -0.0;
-        res = rtl::math::expm1(x);
-        CPPUNIT_ASSERT_EQUAL(-0.0,res);
-        CPPUNIT_ASSERT(std::signbit(res));
-        rtl::math::setInf( &x, false);
-        res = rtl::math::expm1(x);
-        CPPUNIT_ASSERT_EQUAL(true, std::isinf(res) && !std::signbit(res));
-        rtl::math::setInf( &x, true);
-        res = rtl::math::expm1(x);
-        CPPUNIT_ASSERT_EQUAL(-1.0,res);
-        rtl::math::setNan( &x);
-        res = rtl::math::expm1(x);
-        CPPUNIT_ASSERT(std::isnan(res));
-    }
-
-    void test_log1p() {
-        double x, res;
-        x =  0.0;
-        res = rtl::math::log1p(x);
-        CPPUNIT_ASSERT_EQUAL(0.0,res);
-        x = -0.0;
-        res = rtl::math::log1p(x);
-        CPPUNIT_ASSERT_EQUAL(-0.0,res);
-        CPPUNIT_ASSERT(std::signbit(res));
-        rtl::math::setInf( &x, false);
-        res = rtl::math::log1p(x);
-        CPPUNIT_ASSERT_EQUAL(true, std::isinf(res) && !std::signbit(res));
-        x = -1.0;
-        res = rtl::math::log1p(x);
-        CPPUNIT_ASSERT_EQUAL(true, std::isinf(res) && std::signbit(res));
-        x = -1.1;
-        res = rtl::math::log1p(x);
-        CPPUNIT_ASSERT(std::isnan(res));
-        rtl::math::setInf( &x, true);
-        res = rtl::math::log1p(x);
-        CPPUNIT_ASSERT(std::isnan(res));
-        rtl::math::setNan( &x);
-        res = rtl::math::log1p(x);
-        CPPUNIT_ASSERT(std::isnan(res));
-    }
-
     void test_acosh() {
         double res;
 
@@ -693,26 +609,6 @@ public:
         CPPUNIT_ASSERT_EQUAL(-rtl::math::asinh(1.23e-300), rtl::math::asinh(-1.23e-300));
     }
 
-    void test_atanh() {
-        double res;
-
-        res = rtl::math::atanh(-2.0); // NaN
-        CPPUNIT_ASSERT(std::isnan(res));
-
-        res = rtl::math::atanh(-1.0); // -Inf
-        CPPUNIT_ASSERT(std::signbit(res));
-        CPPUNIT_ASSERT(std::isinf(res));
-
-        CPPUNIT_ASSERT_EQUAL(0.0, rtl::math::atanh(0.0));
-
-        res = rtl::math::atanh(1.0); // +Inf
-        CPPUNIT_ASSERT(!std::signbit(res));
-        CPPUNIT_ASSERT(std::isinf(res));
-
-        res = rtl::math::atanh(2.0); // NaN
-        CPPUNIT_ASSERT(std::isnan(res));
-    }
-
     void test_payloadNaN() {
         NanPayloadTest nanTest;
         CPPUNIT_ASSERT_MESSAGE(nanTest.getMessage(), nanTest.getIfSupported());
@@ -724,14 +620,9 @@ public:
     CPPUNIT_TEST(test_stringToDouble_exponent_without_digit);
     CPPUNIT_TEST(test_round);
     CPPUNIT_TEST(test_doubleToString);
-    CPPUNIT_TEST(test_erf);
-    CPPUNIT_TEST(test_erfc);
-    CPPUNIT_TEST(test_expm1);
-    CPPUNIT_TEST(test_log1p);
     CPPUNIT_TEST(test_approx);
     CPPUNIT_TEST(test_acosh);
     CPPUNIT_TEST(test_asinh);
-    CPPUNIT_TEST(test_atanh);
 #ifndef DISABLE_NAN_TESTS
     CPPUNIT_TEST(test_payloadNaN);
 #endif

@@ -222,41 +222,6 @@ inline double approxValue(double fValue)
     return rtl_math_approxValue(fValue);
 }
 
-/** A wrapper around rtl_math_expm1.
- */
-inline double expm1(double fValue)
-{
-    return rtl_math_expm1(fValue);
-}
-
-/** A wrapper around rtl_math_log1p.
- */
-inline double log1p(double fValue)
-{
-    return rtl_math_log1p(fValue);
-}
-
-/** A wrapper around rtl_math_atanh.
- */
-inline double atanh(double fValue)
-{
-    return rtl_math_atanh(fValue);
-}
-
-/** A wrapper around rtl_math_erf.
- */
-inline double erf(double fValue)
-{
-    return rtl_math_erf(fValue);
-}
-
-/** A wrapper around rtl_math_erfc.
- */
-inline double erfc(double fValue)
-{
-    return rtl_math_erfc(fValue);
-}
-
 /** A wrapper around rtl_math_asinh.
  */
 inline double asinh(double fValue)
@@ -338,55 +303,6 @@ inline double approxFloor(double a)
 inline double approxCeil(double a)
 {
     return ceil( approxValue( a ));
-}
-
-/** Tests whether a value is neither INF nor NAN.
- */
-inline bool isFinite(double d)
-{
-    return SAL_MATH_FINITE(d);
-}
-
-/** If a value represents +INF or -INF.
-
-    The sign bit may be queried with isSignBitSet().
-
-    If isFinite(d)==false and isInf(d)==false then NAN.
- */
-inline bool isInf(double d)
-{
-    // exponent==0x7ff fraction==0
-    return !SAL_MATH_FINITE(d) &&
-        (reinterpret_cast< sal_math_Double * >(&d)->inf_parts.fraction_hi == 0)
-        && (reinterpret_cast< sal_math_Double * >(&d)->inf_parts.fraction_lo
-            == 0);
-}
-
-/** Test on any QNAN or SNAN.
- */
-inline bool isNan(double d)
-{
-    // exponent==0x7ff fraction!=0
-    return !SAL_MATH_FINITE(d) && (
-        (reinterpret_cast< sal_math_Double * >(&d)->inf_parts.fraction_hi != 0)
-        || (reinterpret_cast< sal_math_Double * >(&d)->inf_parts.fraction_lo
-            != 0) );
-}
-
-/** If the sign bit is set.
- */
-inline bool isSignBitSet(double d)
-{
-    return reinterpret_cast< sal_math_Double * >(&d)->inf_parts.sign != 0;
-}
-
-/** Set to +INF if bNegative==false or -INF if bNegative==true.
- */
-inline void setInf(double * pd, bool bNegative)
-{
-    sal_math_Double& md = *reinterpret_cast<sal_math_Double*>(pd);
-    md.w32_parts.msw = bNegative ? 0xFFF00000 : 0x7FF00000;
-    md.w32_parts.lsw = 0;
 }
 
 /** Set a QNAN.

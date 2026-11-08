@@ -631,9 +631,7 @@ bool rtl_math_approxEqual(double a, double b) noexcept
     return true;
 }
 
-double rtl_math_expm1(double fValue) noexcept { return expm1(fValue); }
-
-double rtl_math_log1p(double fValue) noexcept
+static double rtl_math_log1p(double fValue) noexcept
 {
 #ifdef __APPLE__
     if (fValue == -0.0)
@@ -642,14 +640,6 @@ double rtl_math_log1p(double fValue) noexcept
 
     return log1p(fValue);
 }
-
-double rtl_math_atanh(double fValue) noexcept { return ::atanh(fValue); }
-
-/** Parent error function (erf) */
-double rtl_math_erf(double x) noexcept { return erf(x); }
-
-/** Parent complementary error function (erfc) */
-double rtl_math_erfc(double x) noexcept { return erfc(x); }
 
 /** improved accuracy of asinh for |x| large and for x near zero
     @see #i97605#
