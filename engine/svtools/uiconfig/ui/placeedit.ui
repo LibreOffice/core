@@ -7,11 +7,6 @@
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="icon-name">view-refresh</property>
-  </object>
   <object class="GtkDialog" id="PlaceEditDialog">
     <property name="can-focus">False</property>
     <property name="border-width">6</property>
@@ -327,57 +322,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="repositoryLabel">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="placeedit|repositoryLabel">Repository:</property>
-                <property name="use-underline">True</property>
-                <property name="mnemonic-widget">repositories</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">6</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox" id="RepositoryDetails">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="spacing">6</property>
-                <child>
-                  <object class="GtkComboBoxText" id="repositories">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="repositoriesRefresh">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="image">image1</property>
-                    <property name="always-show-image">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">6</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkLabel" id="nameLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -388,7 +332,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">7</property>
+                <property name="top-attach">6</property>
               </packing>
             </child>
             <child>
@@ -401,7 +345,7 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">7</property>
+                <property name="top-attach">6</property>
               </packing>
             </child>
             <child>
@@ -415,7 +359,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">8</property>
+                <property name="top-attach">7</property>
               </packing>
             </child>
             <child>
@@ -428,7 +372,7 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">8</property>
+                <property name="top-attach">7</property>
               </packing>
             </child>
             <child>

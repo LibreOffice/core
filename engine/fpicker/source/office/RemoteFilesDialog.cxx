@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <config_oauth2.h>
-
 #include "fpsmartcontent.hxx"
 #include "QueryFolderName.hxx"
 #include "RemoteFilesDialog.hxx"
@@ -199,19 +197,6 @@ static OUString lcl_GetServiceType( const ServicePtr& pService )
     INetProtocol aProtocol = pService->GetUrlObject().GetProtocol();
     switch( aProtocol )
     {
-        case INetProtocol::Cmis:
-        {
-            OUString sHost = pService->GetUrlObject().GetHost( INetURLObject::DecodeMechanism::WithCharset );
-
-            if( sHost.startsWith( GDRIVE_BASE_URL ) )
-                return u"Google Drive"_ustr;
-            else if( sHost.startsWith( ALFRESCO_CLOUD_BASE_URL ) )
-                return u"Alfresco Cloud"_ustr;
-            else if( sHost.startsWith( ONEDRIVE_BASE_URL ) )
-                return u"OneDrive"_ustr;
-
-            return u"CMIS"_ustr;
-        }
         case INetProtocol::Smb:
             return u"Windows Share"_ustr;
         case INetProtocol::File:

@@ -2715,48 +2715,6 @@ AC_ARG_WITH(all-tarballs,
     AS_HELP_STRING([--with-all-tarballs],
         [Download all external tarballs unconditionally]))
 
-AC_ARG_WITH(gdrive-client-id,
-    AS_HELP_STRING([--with-gdrive-client-id],
-        [Provides the client id of the application for OAuth2 authentication
-        on Google Drive. If either this or --with-gdrive-client-secret is
-        empty, the feature will be disabled]),
-)
-
-AC_ARG_WITH(gdrive-client-secret,
-    AS_HELP_STRING([--with-gdrive-client-secret],
-        [Provides the client secret of the application for OAuth2
-        authentication on Google Drive. If either this or
-        --with-gdrive-client-id is empty, the feature will be disabled]),
-)
-
-AC_ARG_WITH(alfresco-cloud-client-id,
-    AS_HELP_STRING([--with-alfresco-cloud-client-id],
-        [Provides the client id of the application for OAuth2 authentication
-        on Alfresco Cloud. If either this or --with-alfresco-cloud-client-secret is
-        empty, the feature will be disabled]),
-)
-
-AC_ARG_WITH(alfresco-cloud-client-secret,
-    AS_HELP_STRING([--with-alfresco-cloud-client-secret],
-        [Provides the client secret of the application for OAuth2
-        authentication on Alfresco Cloud. If either this or
-        --with-alfresco-cloud-client-id is empty, the feature will be disabled]),
-)
-
-AC_ARG_WITH(onedrive-client-id,
-    AS_HELP_STRING([--with-onedrive-client-id],
-        [Provides the client id of the application for OAuth2 authentication
-        on OneDrive. If either this or --with-onedrive-client-secret is
-        empty, the feature will be disabled]),
-)
-
-AC_ARG_WITH(onedrive-client-secret,
-    AS_HELP_STRING([--with-onedrive-client-secret],
-        [Provides the client secret of the application for OAuth2
-        authentication on OneDrive. If either this or
-        --with-onedrive-client-id is empty, the feature will be disabled]),
-)
-
 dnl Check for coredumpctl support to present information about crashing test processes:
 AC_ARG_WITH(coredumpctl,
     AS_HELP_STRING([--with-coredumpctl],
@@ -13179,50 +13137,6 @@ TESTINSTALLDIR="${BUILDDIR}/test-install"
 AC_SUBST(TESTINSTALLDIR)
 
 
-# ===================================================================
-# OAuth2 id and secrets
-# ===================================================================
-
-AC_MSG_CHECKING([for Google Drive client id and secret])
-if test "$with_gdrive_client_id" = "no" -o -z "$with_gdrive_client_id"; then
-    AC_MSG_RESULT([not set])
-    GDRIVE_CLIENT_ID="\"\""
-    GDRIVE_CLIENT_SECRET="\"\""
-else
-    AC_MSG_RESULT([set])
-    GDRIVE_CLIENT_ID="\"$with_gdrive_client_id\""
-    GDRIVE_CLIENT_SECRET="\"$with_gdrive_client_secret\""
-fi
-AC_DEFINE_UNQUOTED(GDRIVE_CLIENT_ID, $GDRIVE_CLIENT_ID)
-AC_DEFINE_UNQUOTED(GDRIVE_CLIENT_SECRET, $GDRIVE_CLIENT_SECRET)
-
-AC_MSG_CHECKING([for Alfresco Cloud client id and secret])
-if test "$with_alfresco_cloud_client_id" = "no" -o -z "$with_alfresco_cloud_client_id"; then
-    AC_MSG_RESULT([not set])
-    ALFRESCO_CLOUD_CLIENT_ID="\"\""
-    ALFRESCO_CLOUD_CLIENT_SECRET="\"\""
-else
-    AC_MSG_RESULT([set])
-    ALFRESCO_CLOUD_CLIENT_ID="\"$with_alfresco_cloud_client_id\""
-    ALFRESCO_CLOUD_CLIENT_SECRET="\"$with_alfresco_cloud_client_secret\""
-fi
-AC_DEFINE_UNQUOTED(ALFRESCO_CLOUD_CLIENT_ID, $ALFRESCO_CLOUD_CLIENT_ID)
-AC_DEFINE_UNQUOTED(ALFRESCO_CLOUD_CLIENT_SECRET, $ALFRESCO_CLOUD_CLIENT_SECRET)
-
-AC_MSG_CHECKING([for OneDrive client id and secret])
-if test "$with_onedrive_client_id" = "no" -o -z "$with_onedrive_client_id"; then
-    AC_MSG_RESULT([not set])
-    ONEDRIVE_CLIENT_ID="\"\""
-    ONEDRIVE_CLIENT_SECRET="\"\""
-else
-    AC_MSG_RESULT([set])
-    ONEDRIVE_CLIENT_ID="\"$with_onedrive_client_id\""
-    ONEDRIVE_CLIENT_SECRET="\"$with_onedrive_client_secret\""
-fi
-AC_DEFINE_UNQUOTED(ONEDRIVE_CLIENT_ID, $ONEDRIVE_CLIENT_ID)
-AC_DEFINE_UNQUOTED(ONEDRIVE_CLIENT_SECRET, $ONEDRIVE_CLIENT_SECRET)
-
-
 dnl ===================================================================
 dnl Hook up Collabora Office's nodep environmental variable to automake's equivalent
 dnl --enable-dependency-tracking configure option
@@ -14085,7 +13999,6 @@ AC_CONFIG_HEADERS([config_host/config_validation.h])
 AC_CONFIG_HEADERS([config_host/config_vendor.h])
 AC_CONFIG_HEADERS([config_host/config_vclplug.h])
 AC_CONFIG_HEADERS([config_host/config_version.h])
-AC_CONFIG_HEADERS([config_host/config_oauth2.h])
 AC_CONFIG_HEADERS([config_host/config_pdfimport.h])
 AC_CONFIG_HEADERS([config_host/config_python.h])
 AC_CONFIG_HEADERS([config_host/config_writerperfect.h])

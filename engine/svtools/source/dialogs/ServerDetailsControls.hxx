@@ -9,19 +9,11 @@
 #ifndef INCLUDED_SVTOOLS_SERVERDETAILSCONTROLS_HXX
 #define INCLUDED_SVTOOLS_SERVERDETAILSCONTROLS_HXX
 
-#include <vector>
-
-#include <cpo/uno/Reference.hxx>
-#include <ucbhelper/commandenvironment.hxx>
 #include <tools/link.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/weld.hxx>
 
-namespace com::sun::star::awt { class XWindow; }
-
 namespace weld {
-    class Button;
-    class ComboBox;
     class Entry;
     class SpinButton;
 }
@@ -50,11 +42,7 @@ class DetailsContainer
          */
         virtual bool setUrl( const INetURLObject& rUrl );
 
-        virtual void setUsername( const OUString& /*rUsername*/ ) { };
-        virtual void setPassword( const OUString& ) { };
-
         virtual bool enableUserCredentials( ) { return true; };
-        virtual bool enablePassword() { return enableUserCredentials(); }
 
     protected:
         void notifyChange( );
@@ -110,33 +98,6 @@ class SmbDetailsContainer final : public DetailsContainer
         virtual INetURLObject getUrl( ) override;
         virtual bool setUrl( const INetURLObject& rUrl ) override;
         virtual void set_visible( bool bShow ) override;
-};
-
-class CmisDetailsContainer final : public DetailsContainer
-{
-    private:
-        OUString m_sUsername;
-        OUString m_sPassword;
-        rtl::Reference< ucbhelper::CommandEnvironment > m_xCmdEnv;
-        std::vector< OUString > m_aRepoIds;
-        OUString m_sRepoId;
-        OUString m_sBinding;
-        cpo::uno::Reference< css::awt::XWindow > m_xParentDialog;
-
-    public:
-        CmisDetailsContainer(PlaceEditDialog* pDialog, OUString sBinding);
-
-        virtual void set_visible( bool bShow ) override;
-        virtual bool enablePassword() override;
-        virtual INetURLObject getUrl( ) override;
-        virtual bool setUrl( const INetURLObject& rUrl ) override;
-        virtual void setUsername( const OUString& rUsername ) override;
-        virtual void setPassword( const OUString& rPass ) override;
-
-    private:
-        void selectRepository( );
-        DECL_LINK ( RefreshReposHdl, weld::Button&, void );
-        DECL_LINK ( SelectRepoHdl, weld::ComboBox&, void );
 };
 
 #endif

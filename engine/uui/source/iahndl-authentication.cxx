@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <config_oauth2.h>
-
 #include <com/sun/star/task/DocumentPasswordRequest.hpp>
 #include <com/sun/star/task/DocumentPasswordRequest2.hpp>
 #include <com/sun/star/task/DocumentMSPasswordRequest.hpp>
@@ -53,7 +51,6 @@
 #include "passworddlg.hxx"
 
 #include "iahndl.hxx"
-#include "iahndl-oauth2.hxx"
 
 #include <memory>
 
@@ -450,19 +447,10 @@ UUIInteractionHelper::handleAuthFallbackRequest( const OUString & instructions,
         cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > const & rContinuations )
 {
     OUString code;
-    if (url.indexOf(OAUTH2_REDIRECT_URI_PREFIX) >= 0)
-    {
-        OAuth2Request request(url);
-        request.run();
-        code = request.getRetCode();
-    }
-    else
-    {
-        uno::Reference<awt::XWindow> xParent = getParentXWindow();
-        AuthFallbackDlg dlg(Application::GetFrameWeld(xParent), instructions, url);
-        if (dlg.run() == RET_OK)
-            code = dlg.GetCode();
-    }
+    uno::Reference<awt::XWindow> xParent = getParentXWindow();
+    AuthFallbackDlg dlg(Application::GetFrameWeld(xParent), instructions, url);
+    if (dlg.run() == RET_OK)
+        code = dlg.GetCode();
     uno::Reference< task::XInteractionAbort > xAbort;
     uno::Reference< ucb::XInteractionAuthFallback > xAuthFallback;
     getContinuations(rContinuations, &xAbort, &xAuthFallback);

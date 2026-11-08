@@ -250,44 +250,6 @@
     <prop oor:name="FilePickerLastService">
       <value/>
     </prop>
-    <prop oor:name="CmisServersUrls">
-      <value>
-        <it>https://www.googleapis.com/drive/v3</it>
-        <it>https://graph.microsoft.com/v1.0</it>
-        <it>https://api.alfresco.com/cmis/versions/1.0/atom/</it>
-        <it></it>
-        <it>http://&lt;host:port&gt;/alfresco/cmisatom</it>
-        <it>http://&lt;host&gt;/p8cmis/wsdl</it>
-        <it>https://apps.lotuslive.com/files/basic/cmis/my/servicedoc</it>
-        <it>http://&lt;host&gt;/servlet/cmis/repository/_P&lt;Quickr place name&gt;_RMain.nsf/servicedoc</it>
-        <it>http://&lt;host&gt;/nuxeo/webservices/cmis/RepositoryService?wsdl</it>
-        <it>https://&lt;host&gt;/cmis/atom</it>
-        <it>http://ec2-184-72-233-127.compute-1.amazonaws.com/ot-cmis/services/RepositoryService?wsdl</it>
-        <it>http://&lt;host&gt;/_vti_bin/CMISSoapwsdl.aspx</it>
-        <it>http://&lt;host&gt;/_api/Web</it>
-        <it>http://&lt;host&gt;/</it>
-        <it></it>
-      </value>
-    </prop>
-    <prop oor:name="CmisServersNames">
-      <value>
-        <it>Google Drive</it>
-        <it>OneDrive</it>
-        <it>Alfresco Cloud</it>
-        <it>--------------------</it>
-        <it>Alfresco 4/5</it>
-        <it>IBM FileNet P8</it>
-        <it>IBM Connections Cloud</it>
-        <it>Lotus Quickr Domino</it>
-        <it>Nuxeo 5.4</it>
-        <it>OpenDataSpace</it>
-        <it>OpenText ELS 10.2.0</it>
-        <it>SharePoint 2010</it>
-        <it>SharePoint 2013</it>
-        <it>Other CMIS</it>
-        <it>--------------------</it>
-      </value>
-    </prop>
     <prop oor:name="FindReplaceRememberedSearches">
      <value>10</value>
     </prop>

@@ -31,8 +31,6 @@ private:
       */
     std::vector<std::shared_ptr<DetailsContainer>> m_aDetailsContainers;
 
-    sal_Int32 m_nCurrentType;
-
     bool m_bLabelChanged;
     bool m_bShowPassword;
 
@@ -43,15 +41,10 @@ public:
     std::unique_ptr<weld::Label> m_xFTUsernameLabel;
     std::unique_ptr<weld::Button> m_xBTOk;
     std::unique_ptr<weld::Button> m_xBTDelete;
-    std::unique_ptr<weld::Button> m_xBTRepoRefresh;
     std::unique_ptr<weld::CheckButton> m_xCBPassword;
     std::unique_ptr<weld::Entry> m_xEDPassword;
     std::unique_ptr<weld::Label> m_xFTPasswordLabel;
     std::unique_ptr<weld::Widget> m_xTypeGrid;
-
-    std::unique_ptr<weld::Widget> m_xRepositoryBox;
-    std::unique_ptr<weld::Label> m_xFTRepository;
-    std::unique_ptr<weld::ComboBox> m_xLBRepository;
 
     std::unique_ptr<weld::Entry> m_xEDShare;
     std::unique_ptr<weld::Label> m_xFTShare;
@@ -90,10 +83,9 @@ private:
     DECL_DLLPRIVATE_LINK(DelHdl, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(EditHdl, DetailsContainer*, void);
     DECL_DLLPRIVATE_LINK(ModifyHdl, weld::Entry&, void);
-    void SelectType(bool bSkipSeparator);
+    void SelectType();
     DECL_DLLPRIVATE_LINK(SelectTypeHdl, weld::ComboBox&, void);
     DECL_DLLPRIVATE_LINK(EditLabelHdl, weld::Entry&, void);
-    DECL_DLLPRIVATE_LINK(EditUsernameHdl, weld::Entry&, void);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

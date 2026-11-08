@@ -5200,16 +5200,6 @@
           <desc>Contains the last used directory for the filepicker for various contexts</desc>
         </info>
       </set>
-      <prop oor:name="CmisServersUrls" oor:type="oor:string-list" oor:nillable="false">
-        <info>
-          <desc>List of sample URLs of the CMIS servers in the place edition dialog.</desc>
-        </info>
-      </prop>
-      <prop oor:name="CmisServersNames" oor:type="oor:string-list" oor:nillable="false">
-        <info>
-          <desc>List of names of the CMIS servers in the place edition dialog.</desc>
-        </info>
-      </prop>
       <prop oor:name="FindReplaceRememberedSearches" oor:type="xs:int" oor:nillable="false">
         <info>
           <desc>Number of saved searches in the Find and Replace dialog.</desc>
