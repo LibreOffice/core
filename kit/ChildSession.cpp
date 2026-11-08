@@ -6687,6 +6687,10 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
 
             const std::string message =
                 object->has("message") ? object->get("message").toString() : std::string();
+            if (object->get("kind").toString() == "network" && object->has("host"))
+                LOG_WRN("The host [" << object->get("host").toString()
+                                     << "] is not an allowed data source. To allow it, add it to"
+                                        " net.lok_allow in coolwsd.xml");
             std::string frame = COOLProtocol::buildErrorFrame(
                 object->get("cmd").toString(), object->get("kind").toString(), message);
             frame += " code=" + object->get("code").toString();

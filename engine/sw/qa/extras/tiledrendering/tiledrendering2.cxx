@@ -35,6 +35,7 @@
 #include <vcl/keycodes.hxx>
 #include <tools/json_writer.hxx>
 #include <tools/datetime.hxx>
+#include <tools/hostfilter.hxx>
 #include <unotools/datetime.hxx>
 #include <vcl/virdev.hxx>
 #include <unotxdoc.hxx>
@@ -4681,6 +4682,29 @@ OUString getFormulaText(const uno::Reference<lang::XComponent>& xComponent)
         getFormulaController(xComponent)->getModel(), uno::UNO_QUERY);
     return xFormula->getPropertyValue(u"Formula"_ustr).get<OUString>();
 }
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInsertGraphicFromRefusedHostNamesTheHost)
+{
+    // Given a list of allowed data sources that names no host:
+    HostFilter::setAllowedHosts("");
+    comphelper::ScopeGuard aResetHosts([] { HostFilter::setAllowedHosts(nullptr); });
+    createDoc();
+    SwTestViewCallback aView;
+
+    // When an image is inserted from a host that is not on the list:
+    uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"FileName"_ustr, u"https://picture.invalid/image.png"_ustr),
+    };
+    dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);
+
+    // Then the error report names the host, so it can be added to the list:
+    std::stringstream aStream(aView.m_aErrorReport.getStr());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    CPPUNIT_ASSERT_EQUAL(std::string("network"), aTree.get<std::string>("kind"));
+    CPPUNIT_ASSERT_EQUAL(std::string("insert"), aTree.get<std::string>("cmd"));
+    CPPUNIT_ASSERT_EQUAL(std::string("picture.invalid"), aTree.get<std::string>("host", ""));
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testFormulaSelectionSurvivesFrameResize)

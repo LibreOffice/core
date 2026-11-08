@@ -1670,13 +1670,14 @@ VclPtr<vcl::Window> KitHelper::getInPlaceDocWindow(SfxViewShell* pViewShell)
     return {};
 }
 
-void KitHelper::sendNetworkAccessError(std::string_view rAction)
+void KitHelper::sendNetworkAccessError(std::string_view rAction, const OUString& rHost)
 {
     tools::JsonWriter aWriter;
     aWriter.put("code", static_cast<sal_uInt32>(
         ErrCode(ErrCodeArea::Inet, sal_uInt16(ErrCodeClass::Access))));
     aWriter.put("kind", "network");
     aWriter.put("cmd", rAction);
+    aWriter.put("host", rHost);
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if (pViewShell)

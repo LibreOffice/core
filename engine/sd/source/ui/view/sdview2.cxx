@@ -1049,7 +1049,7 @@ IMPL_LINK(SdHTMLImageCollector, HTMLImportHdl, HtmlImportInfo&, rInfo, void)
         // The image is fetched from its host, which the kit allows only for the hosts on its
         // allow-list.
         if (comphelper::COKit::isActive() && HostFilter::isForbidden(aGraphicURL.GetHost()))
-            KitHelper::sendNetworkAccessError("paste");
+            KitHelper::sendNetworkAccessError("paste", aGraphicURL.GetHost());
 
         if (ERRCODE_NONE != GraphicFilter::LoadGraphic(aURL, OUString(), *oGraphic, &rFilter))
             return;

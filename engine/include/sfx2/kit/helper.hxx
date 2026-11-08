@@ -317,8 +317,8 @@ public:
 
     static VclPtr<vcl::Window> getInPlaceDocWindow(SfxViewShell* pViewShell);
 
-    /// Sends Network Access error to Kit
-    static void sendNetworkAccessError(std::string_view rAction);
+    /// Sends Network Access error to Kit. rHost is the host that is not an allowed data source.
+    static void sendNetworkAccessError(std::string_view rAction, const OUString& rHost);
 
     static void notifyLog(const std::ostringstream& stream);
 

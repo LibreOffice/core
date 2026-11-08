@@ -301,7 +301,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell&   rViewSh,
         {
             INetURLObject aURL(aFileName);
             if (INetProtocol::File != aURL.GetProtocol() && HostFilter::isForbidden(aURL.GetHost()))
-                KitHelper::sendNetworkAccessError("insert");
+                KitHelper::sendNetworkAccessError("insert", aURL.GetHost());
         }
 
         Graphic aGraphic;

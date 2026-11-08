@@ -77,6 +77,8 @@ public:
     std::vector<int> m_aRecordingForAllViewsBy;
     TestKitCallbackWrapper m_callbackWrapper;
     OString m_aExportFile;
+    /// The payload of the last error report.
+    OString m_aErrorReport;
     bool m_bCursorVisible = false;
 
     SwTestViewCallback(SfxViewShell* pViewShell = nullptr,

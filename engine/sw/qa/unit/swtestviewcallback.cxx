@@ -209,6 +209,11 @@ void SwTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
             m_aExportFile = aPayload;
             break;
         }
+        case COKitCallbackType::ERROR_REPORT:
+        {
+            m_aErrorReport = aPayload;
+            break;
+        }
         case COKitCallbackType::CURSOR_VISIBLE:
         {
             m_bCursorVisible = aPayload == "true";
