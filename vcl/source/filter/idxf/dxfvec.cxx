@@ -20,7 +20,7 @@
 
 #include <math.h>
 #include "dxfvec.hxx"
-#include <tools/gen.hxx>
+#include <basegfx/numeric/ftools.hxx>
 
 
 //---------------------------- DXFVector ---------------------------------------
@@ -148,13 +148,6 @@ void DXFTransform::Transform(const DXFVector & rSrc, DXFVector & rTgt) const
 }
 
 
-void DXFTransform::Transform(const DXFVector & rSrc, Point & rTgt) const
-{
-    rTgt.setX(static_cast<tools::Long>( rSrc.fx * aMX.fx + rSrc.fy * aMY.fx + rSrc.fz * aMZ.fx + aMP.fx + 0.5 ) );
-    rTgt.setY(static_cast<tools::Long>( rSrc.fx * aMX.fy + rSrc.fy * aMY.fy + rSrc.fz * aMZ.fy + aMP.fy + 0.5 ) );
-}
-
-
 void DXFTransform::TransDir(const DXFVector & rSrc, DXFVector & rTgt) const
 {
     rTgt.fx = rSrc.fx * aMX.fx + rSrc.fy * aMY.fx + rSrc.fz * aMZ.fx;
@@ -162,35 +155,6 @@ void DXFTransform::TransDir(const DXFVector & rSrc, DXFVector & rTgt) const
     rTgt.fz = rSrc.fx * aMX.fz + rSrc.fy * aMY.fz + rSrc.fz * aMZ.fz;
 }
 
-
-bool DXFTransform::TransCircleToEllipse(double fRadius, double & rEx, double & rEy) const
-{
-    double fMXAbs=aMX.Abs();
-    double fMYAbs=aMY.Abs();
-    double fNearNull=(fMXAbs+fMYAbs)*0.001;
-
-    if (fabs(aMX.fy)<=fNearNull && fabs(aMX.fz)<=fNearNull &&
-        fabs(aMY.fx)<=fNearNull && fabs(aMY.fz)<=fNearNull)
-    {
-        rEx=fabs(aMX.fx*fRadius);
-        rEy=fabs(aMY.fy*fRadius);
-        return true;
-    }
-    else if (fabs(aMX.fx)<=fNearNull && fabs(aMX.fz)<=fNearNull &&
-             fabs(aMY.fy)<=fNearNull && fabs(aMY.fz)<=fNearNull)
-    {
-        rEx=fabs(aMY.fx*fRadius);
-        rEy=fabs(aMX.fy*fRadius);
-        return true;
-    }
-    else if (fabs(fMXAbs-fMYAbs)<=fNearNull &&
-             fabs(aMX.fz)<=fNearNull && fabs(aMY.fz)<=fNearNull)
-    {
-        rEx=rEy=fabs(((fMXAbs+fMYAbs)/2)*fRadius);
-        return true;
-    }
-    else return false;
-}
 
 LineInfo DXFTransform::Transform(const DXFLineInfo& aDXFLineInfo) const
 {
@@ -217,16 +181,6 @@ LineInfo DXFTransform::Transform(const DXFLineInfo& aDXFLineInfo) const
         aLineInfo.SetDotLen(1);
 
     return aLineInfo;
-}
-
-double DXFTransform::CalcRotAngle() const
-{
-    return basegfx::rad2deg(atan2(aMX.fy,aMX.fx));
-}
-
-bool DXFTransform::Mirror() const
-{
-    return aMZ.SProd(aMX*aMY)<0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

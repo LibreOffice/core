@@ -18,25 +18,100 @@
  */
 
 
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/vector/b2dvector.hxx>
 #include <comphelper/configuration.hxx>
+#include <sal/log.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include "dxf2mtf.hxx"
 
-#include <math.h>
+#include <algorithm>
+#include <cmath>
 
-
-sal_uInt64 DXF2GDIMetaFile::CountEntities(const DXFEntities & rEntities)
+namespace
 {
-    const DXFBasicEntity * pBE;
-    sal_uInt64 nRes;
+// The longest polygon handed to the metafile, tools::Polygon has a 16-bit point count
+// and a curve segment takes three points there.
+constexpr sal_uInt32 MAX_POLYGON_POINTS = 16000;
 
-    nRes=0;
-    for (pBE=rEntities.pFirst; pBE!=nullptr; pBE=pBE->pSucc) nRes++;
-    return nRes;
+// The larger side of the drawing in metafile units
+constexpr double DEVICE_SIZE = 10000.0;
+
+// Space around the drawing in metafile units, so that lines on the border are not clipped
+constexpr double DEVICE_MARGIN = 50.0;
+
+basegfx::B2DPoint Project(const DXFTransform& rTransform, const DXFVector& rVector)
+{
+    DXFVector aResult;
+    rTransform.Transform(rVector, aResult);
+    return basegfx::B2DPoint(aResult.fx, aResult.fy);
+}
+
+// Projects a polygon lying in the z = fZ plane of the entity coordinate system.
+// Curve control points are transformed like the points: the projection is affine.
+basegfx::B2DPolygon Project(const DXFTransform& rTransform, const basegfx::B2DPolygon& rPolygon,
+                            double fZ)
+{
+    basegfx::B2DPolygon aResult;
+    const sal_uInt32 nCount = rPolygon.count();
+    for (sal_uInt32 i = 0; i < nCount; ++i)
+    {
+        const basegfx::B2DPoint aPoint = rPolygon.getB2DPoint(i);
+        aResult.append(Project(rTransform, DXFVector(aPoint.getX(), aPoint.getY(), fZ)));
+    }
+    if (rPolygon.areControlPointsUsed())
+    {
+        for (sal_uInt32 i = 0; i < nCount; ++i)
+        {
+            if (rPolygon.isPrevControlPointUsed(i))
+            {
+                const basegfx::B2DPoint aPoint = rPolygon.getPrevControlPoint(i);
+                aResult.setPrevControlPoint(
+                    i, Project(rTransform, DXFVector(aPoint.getX(), aPoint.getY(), fZ)));
+            }
+            if (rPolygon.isNextControlPointUsed(i))
+            {
+                const basegfx::B2DPoint aPoint = rPolygon.getNextControlPoint(i);
+                aResult.setNextControlPoint(
+                    i, Project(rTransform, DXFVector(aPoint.getX(), aPoint.getY(), fZ)));
+            }
+        }
+    }
+    aResult.setClosed(rPolygon.isClosed());
+    return aResult;
+}
+
+bool IsFinite(const basegfx::B2DRange& rRange)
+{
+    return std::isfinite(rRange.getMinX()) && std::isfinite(rRange.getMinY())
+           && std::isfinite(rRange.getMaxX()) && std::isfinite(rRange.getMaxY());
+}
+}
+
+void DXF2GDIMetaFile::ResetState()
+{
+    nBlockColor = 7;
+    aBlockDXFLineInfo = DXFLineInfo();
+
+    const DXFLayer * pLayer = pDXF->aTables.SearchLayer("0");
+    if (pLayer != nullptr)
+    {
+        nParentLayerColor = pLayer->nColor & 0xff;
+        aParentLayerDXFLineInfo = LTypeToDXFLineInfo(pLayer->m_sLineType);
+    }
+    else
+    {
+        nParentLayerColor = 7;
+        aParentLayerDXFLineInfo = DXFLineInfo();
+    }
+
+    aActLineColor = pVirDev->GetLineColor();
+    aActFillColor = pVirDev->GetFillColor();
+    aActFont = pVirDev->GetFont();
 }
 
 Color DXF2GDIMetaFile::ConvertColor(sal_uInt8 nColor) const
@@ -116,13 +191,6 @@ DXFLineInfo DXF2GDIMetaFile::GetEntityDXFLineInfo(const DXFBasicEntity & rE)
 {
     DXFLineInfo aDXFLineInfo;
 
-    aDXFLineInfo.eStyle = LineStyle::Solid;
-    aDXFLineInfo.nDashCount = 0;
-    aDXFLineInfo.fDashLen = 0;
-    aDXFLineInfo.nDotCount = 0;
-    aDXFLineInfo.fDotLen = 0;
-    aDXFLineInfo.fDistance = 0;
-
     if (rE.m_sLineType == "BYLAYER") {
         if (rE.m_sLayer.getLength() < 2) {
             aDXFLineInfo=aParentLayerDXFLineInfo;
@@ -143,6 +211,17 @@ DXFLineInfo DXF2GDIMetaFile::GetEntityDXFLineInfo(const DXFBasicEntity & rE)
     return aDXFLineInfo;
 }
 
+LineInfo DXF2GDIMetaFile::GetEntityLineInfo(const DXFBasicEntity & rE, const DXFTransform & rTransform)
+{
+    if (mbMeasure)
+        return LineInfo();
+    DXFLineInfo aDXFLineInfo = GetEntityDXFLineInfo(rE);
+    if (aDXFLineInfo.eStyle == LineStyle::Solid)
+        return LineInfo();
+    DXFTransform aDeviceTransform(
+        rTransform, DXFTransform(mfDeviceScale, mfDeviceScale, mfDeviceScale, DXFVector()));
+    return aDeviceTransform.Transform(aDXFLineInfo);
+}
 
 bool DXF2GDIMetaFile::SetLineAttribute(const DXFBasicEntity & rE)
 {
@@ -188,15 +267,12 @@ bool DXF2GDIMetaFile::SetAreaAttribute(const DXFBasicEntity & rE)
 }
 
 
-bool DXF2GDIMetaFile::SetFontAttribute(const DXFBasicEntity & rE, short nAngle, sal_uInt16 nHeight)
+bool DXF2GDIMetaFile::SetFontAttribute(const DXFBasicEntity & rE, Degree10 nOrientation,
+                                       sal_Int32 nHeight)
 {
     tools::Long nColor;
     Color aColor;
     vcl::Font aFont;
-
-    nAngle=-nAngle;
-    while (nAngle>=3600) nAngle-=3600;
-    while (nAngle<0) nAngle+=3600;
 
     nColor=GetEntityColor(rE);
     if (nColor<0) return false;
@@ -207,7 +283,7 @@ bool DXF2GDIMetaFile::SetFontAttribute(const DXFBasicEntity & rE, short nAngle, 
     aFont.SetFamily(FAMILY_SWISS);
     aFont.SetFontSize(Size(0,nHeight));
     aFont.SetAlignment(ALIGN_BASELINE);
-    aFont.SetOrientation(Degree10(nAngle));
+    aFont.SetOrientation(nOrientation);
     if (aActFont!=aFont) {
         aActFont=std::move(aFont);
         pVirDev->SetFont(aActFont);
@@ -216,185 +292,225 @@ bool DXF2GDIMetaFile::SetFontAttribute(const DXFBasicEntity & rE, short nAngle, 
     return true;
 }
 
+void DXF2GDIMetaFile::OutPolyLine(const basegfx::B2DPolygon & rPolygon, const LineInfo & rLineInfo)
+{
+    if (rPolygon.count() == 0)
+        return;
+    if (mbMeasure)
+    {
+        maExtents.expand(rPolygon.getB2DRange());
+        return;
+    }
+
+    basegfx::B2DPolygon aPolygon(rPolygon);
+    aPolygon.transform(maDeviceTransform);
+    if (aPolygon.isClosed())
+    {
+        // draw the closing edge as part of the polyline
+        aPolygon.append(aPolygon.getB2DPoint(0));
+        if (aPolygon.areControlPointsUsed() && aPolygon.isPrevControlPointUsed(0))
+            aPolygon.setPrevControlPoint(aPolygon.count() - 1, aPolygon.getPrevControlPoint(0));
+        aPolygon.setClosed(false);
+    }
+    if (aPolygon.count() == 1)
+        aPolygon.append(aPolygon.getB2DPoint(0));
+
+    // split long polylines, keeping the joint point in both parts
+    sal_uInt32 nStart = 0;
+    const sal_uInt32 nCount = aPolygon.count();
+    while (nStart + 1 < nCount)
+    {
+        const sal_uInt32 nEnd = std::min(nStart + MAX_POLYGON_POINTS, nCount - 1);
+        basegfx::B2DPolygon aPart;
+        aPart.append(aPolygon, nStart, nEnd - nStart + 1);
+        pVirDev->DrawPolyLine(tools::Polygon(aPart), rLineInfo);
+        nStart = nEnd;
+    }
+}
+
+void DXF2GDIMetaFile::OutPolygon(const basegfx::B2DPolyPolygon & rPolyPolygon)
+{
+    if (rPolyPolygon.count() == 0)
+        return;
+    if (mbMeasure)
+    {
+        maExtents.expand(rPolyPolygon.getB2DRange());
+        return;
+    }
+
+    basegfx::B2DPolyPolygon aPolyPolygon;
+    for (const basegfx::B2DPolygon& rPolygon : rPolyPolygon)
+    {
+        if (rPolygon.count() == 0 || rPolygon.count() > MAX_POLYGON_POINTS)
+        {
+            SAL_WARN_IF(rPolygon.count() > 0, "vcl.filter",
+                        "DXF2GDIMetaFile::OutPolygon: too many points: " << rPolygon.count());
+            continue;
+        }
+        basegfx::B2DPolygon aPolygon(rPolygon);
+        aPolygon.setClosed(true);
+        aPolyPolygon.append(aPolygon);
+    }
+    if (aPolyPolygon.count() == 0)
+        return;
+    aPolyPolygon.transform(maDeviceTransform);
+    if (aPolyPolygon.count() == 1)
+        pVirDev->DrawPolygon(tools::Polygon(aPolyPolygon.getB2DPolygon(0)));
+    else
+        pVirDev->DrawPolyPolygon(tools::PolyPolygon(aPolyPolygon));
+}
+
+void DXF2GDIMetaFile::OutPoint(const basegfx::B2DPoint & rPoint)
+{
+    if (mbMeasure)
+    {
+        maExtents.expand(rPoint);
+        return;
+    }
+    const basegfx::B2DPoint aPoint = maDeviceTransform * rPoint;
+    pVirDev->DrawPixel(Point(basegfx::fround<tools::Long>(aPoint.getX()),
+                             basegfx::fround<tools::Long>(aPoint.getY())));
+}
+
+void DXF2GDIMetaFile::OutText(const DXFBasicEntity & rE, const DXFTransform & rTextTransform,
+                              std::string_view rText)
+{
+    const OUString aText(pDXF->ToOUString(rText));
+    if (aText.isEmpty())
+        return;
+
+    if (mbMeasure)
+    {
+        // There is no font in drawing units to measure with, estimate the size of the text.
+        const double fWidth = 0.6 * aText.getLength();
+        maExtents.expand(Project(rTextTransform, DXFVector(0, 0, 0)));
+        maExtents.expand(Project(rTextTransform, DXFVector(fWidth, 0, 0)));
+        maExtents.expand(Project(rTextTransform, DXFVector(fWidth, 1, 0)));
+        maExtents.expand(Project(rTextTransform, DXFVector(0, 1, 0)));
+        return;
+    }
+
+    const basegfx::B2DPoint aOrigin
+        = maDeviceTransform * Project(rTextTransform, DXFVector(0, 0, 0));
+    const basegfx::B2DVector aBaseline(
+        maDeviceTransform * Project(rTextTransform, DXFVector(1, 0, 0)) - aOrigin);
+    const basegfx::B2DVector aUp(
+        maDeviceTransform * Project(rTextTransform, DXFVector(0, 1, 0)) - aOrigin);
+
+    const double fHeight = aUp.getLength();
+    if (!(fHeight >= 1.0) || fHeight > SAL_MAX_INT32)
+        return;
+    // the metafile y axis points down, the orientation is counter-clockwise
+    const double fAngle = basegfx::rad2deg(atan2(-aBaseline.getY(), aBaseline.getX()));
+    sal_Int32 nOrientation = basegfx::fround(fAngle * 10.0) % 3600;
+    if (nOrientation < 0)
+        nOrientation += 3600;
+    if (!SetFontAttribute(rE, Degree10(static_cast<sal_Int16>(nOrientation)),
+                          basegfx::fround(fHeight)))
+        return;
+    pVirDev->DrawText(Point(basegfx::fround<tools::Long>(aOrigin.getX()),
+                            basegfx::fround<tools::Long>(aOrigin.getY())),
+                      aText);
+}
+
+void DXF2GDIMetaFile::OutThickness(const basegfx::B2DPolygon & rBase, const DXFTransform & rTransform,
+                                   double fThickness, bool bFilled)
+{
+    if (fThickness == 0)
+        return;
+    DXFVector aOffset;
+    rTransform.TransDir(DXFVector(0, 0, fThickness), aOffset);
+    // seen from the top the sides are not visible
+    if (std::hypot(aOffset.fx, aOffset.fy) <= 1e-9 * std::fabs(fThickness))
+        return;
+
+    basegfx::B2DPolygon aTop(rBase);
+    aTop.transform(basegfx::utils::createTranslateB2DHomMatrix(aOffset.fx, aOffset.fy));
+    if (bFilled)
+        OutPolygon(basegfx::B2DPolyPolygon(aTop));
+    else
+        OutPolyLine(aTop, LineInfo());
+    for (sal_uInt32 i = 0; i < rBase.count(); ++i)
+    {
+        basegfx::B2DPolygon aSide;
+        aSide.append(rBase.getB2DPoint(i));
+        aSide.append(aTop.getB2DPoint(i));
+        OutPolyLine(aSide, LineInfo());
+    }
+}
 
 void DXF2GDIMetaFile::DrawLineEntity(const DXFLineEntity & rE, const DXFTransform & rTransform)
 {
     if (!SetLineAttribute(rE))
         return;
 
-    Point aP0,aP1;
-    rTransform.Transform(rE.aP0,aP0);
-    rTransform.Transform(rE.aP1,aP1);
-
-    DXFLineInfo aDXFLineInfo=GetEntityDXFLineInfo(rE);
-    LineInfo aLineInfo;
-    aLineInfo = rTransform.Transform(aDXFLineInfo);
-
-    pVirDev->DrawLine(aP0,aP1,aLineInfo);
-    if (rE.fThickness!=0) {
-        Point aP2,aP3;
-        rTransform.Transform(rE.aP0+DXFVector(0,0,rE.fThickness),aP2);
-        rTransform.Transform(rE.aP1+DXFVector(0,0,rE.fThickness),aP3);
-        DrawLine(aP2,aP3);
-        DrawLine(aP0,aP2);
-        DrawLine(aP1,aP3);
-    }
+    basegfx::B2DPolygon aLine;
+    aLine.append(Project(rTransform, rE.aP0));
+    aLine.append(Project(rTransform, rE.aP1));
+    OutPolyLine(aLine, GetEntityLineInfo(rE, rTransform));
+    OutThickness(aLine, rTransform, rE.fThickness, false);
 }
 
 
 void DXF2GDIMetaFile::DrawPointEntity(const DXFPointEntity & rE, const DXFTransform & rTransform)
 {
+    if (!SetLineAttribute(rE))
+        return;
 
-    if (SetLineAttribute(rE)) {
-        Point aP0;
-        rTransform.Transform(rE.aP0,aP0);
-        if (rE.fThickness==0) pVirDev->DrawPixel(aP0);
-        else {
-            Point aP1;
-            rTransform.Transform(rE.aP0+DXFVector(0,0,rE.fThickness),aP1);
-            DrawLine(aP0,aP1);
-        }
-    }
+    const basegfx::B2DPoint aPoint(Project(rTransform, rE.aP0));
+    OutPoint(aPoint);
+    OutThickness(basegfx::B2DPolygon{ aPoint }, rTransform, rE.fThickness, false);
 }
 
 
 void DXF2GDIMetaFile::DrawCircleEntity(const DXFCircleEntity & rE, const DXFTransform & rTransform)
 {
-    double frx,fry;
-    sal_uInt16 nPoints,i;
-    DXFVector aC;
-
-    if (!SetLineAttribute(rE)) return;
-    rTransform.Transform(rE.aP0,aC);
-    if (rE.fThickness==0 && rTransform.TransCircleToEllipse(rE.fRadius,frx,fry)) {
-        pVirDev->DrawEllipse(
-            tools::Rectangle(static_cast<tools::Long>(aC.fx-frx+0.5),static_cast<tools::Long>(aC.fy-fry+0.5),
-                      static_cast<tools::Long>(aC.fx+frx+0.5),static_cast<tools::Long>(aC.fy+fry+0.5)));
-    }
-    else {
-        double fAng;
-        nPoints=OptPointsPerCircle;
-        tools::Polygon aPoly(nPoints);
-        for (i=0; i<nPoints; i++) {
-            fAng=2*M_PI/static_cast<double>(nPoints-1)*static_cast<double>(i);
-            rTransform.Transform(
-                rE.aP0+DXFVector(rE.fRadius*cos(fAng),rE.fRadius*sin(fAng),0),
-                aPoly[i]
-            );
-        }
-        pVirDev->DrawPolyLine(aPoly);
-        if (rE.fThickness!=0) {
-            tools::Polygon aPoly2(nPoints);
-            for (i=0; i<nPoints; i++) {
-                fAng=2*M_PI/static_cast<double>(nPoints-1)*static_cast<double>(i);
-                rTransform.Transform(
-                    rE.aP0+DXFVector(rE.fRadius*cos(fAng),rE.fRadius*sin(fAng),rE.fThickness),
-                    aPoly2[i]
-                );
-
-            }
-            pVirDev->DrawPolyLine(aPoly2);
-            for (i=0; i<nPoints-1; i++) DrawLine(aPoly[i],aPoly2[i]);
-        }
-    }
-}
-
-void DXF2GDIMetaFile::DrawLine(const Point& rA, const Point& rB)
-{
-    if (comphelper::IsFuzzing())
+    if (!SetLineAttribute(rE))
         return;
-    GDIMetaFile* pMetaFile = pVirDev->GetConnectMetaFile();
-    assert(pMetaFile);
-    //use AddAction instead of OutputDevice::DrawLine so that we can explicitly share
-    //the aDefaultLineInfo between the MetaLineActions to reduce memory use
-    pMetaFile->AddAction(new MetaLineAction(rA, rB, aDefaultLineInfo));
+
+    const basegfx::B2DPolygon aCircle(Project(
+        rTransform,
+        basegfx::utils::createPolygonFromCircle(basegfx::B2DPoint(rE.aP0.fx, rE.aP0.fy),
+                                                rE.fRadius),
+        rE.aP0.fz));
+    OutPolyLine(aCircle, GetEntityLineInfo(rE, rTransform));
+    OutThickness(aCircle, rTransform, rE.fThickness, false);
 }
 
 void DXF2GDIMetaFile::DrawArcEntity(const DXFArcEntity & rE, const DXFTransform & rTransform)
 {
-    double frx,fry;
-    sal_uInt16 nPoints,i;
-    DXFVector aC;
+    if (!SetLineAttribute(rE))
+        return;
 
-    if (!SetLineAttribute(rE)) return;
-    double fA1=rE.fStart;
-    double fdA=rE.fEnd-fA1;
-    fdA = fmod(fdA, 360.0);
-    if (fdA<=0) fdA+=360.0;
-    rTransform.Transform(rE.aP0,aC);
-    if (rE.fThickness==0 && fdA>5.0 && rTransform.TransCircleToEllipse(rE.fRadius,frx,fry)) {
-        DXFVector aVS(cos(basegfx::deg2rad(fA1)),sin(basegfx::deg2rad(fA1)),0.0);
-        aVS*=rE.fRadius;
-        aVS+=rE.aP0;
-        DXFVector aVE(cos(basegfx::deg2rad(fA1+fdA)),sin(basegfx::deg2rad(fA1+fdA)),0.0);
-        aVE*=rE.fRadius;
-        aVE+=rE.aP0;
-        Point aPS,aPE;
-        if (rTransform.Mirror()) {
-            rTransform.Transform(aVS,aPS);
-            rTransform.Transform(aVE,aPE);
-        }
-        else {
-            rTransform.Transform(aVS,aPE);
-            rTransform.Transform(aVE,aPS);
-        }
-        pVirDev->DrawArc(
-            tools::Rectangle(static_cast<tools::Long>(aC.fx-frx+0.5),static_cast<tools::Long>(aC.fy-fry+0.5),
-                      static_cast<tools::Long>(aC.fx+frx+0.5),static_cast<tools::Long>(aC.fy+fry+0.5)),
-            aPS,aPE
-        );
-    }
-    else {
-        double fAng;
-        nPoints=static_cast<sal_uInt16>(fdA/360.0*static_cast<double>(OptPointsPerCircle)+0.5);
-        if (nPoints<2) nPoints=2;
-        tools::Polygon aPoly(nPoints);
-        for (i=0; i<nPoints; i++) {
-            fAng=basegfx::deg2rad( fA1 + fdA/static_cast<double>(nPoints-1)*static_cast<double>(i) );
-            rTransform.Transform(
-                rE.aP0+DXFVector(rE.fRadius*cos(fAng),rE.fRadius*sin(fAng),0),
-                aPoly[i]
-            );
-        }
-        pVirDev->DrawPolyLine(aPoly);
-        if (rE.fThickness!=0) {
-            tools::Polygon aPoly2(nPoints);
-            for (i=0; i<nPoints; i++) {
-                fAng=basegfx::deg2rad( fA1 + fdA/static_cast<double>(nPoints-1)*static_cast<double>(i) );
-                rTransform.Transform(
-                    rE.aP0+DXFVector(rE.fRadius*cos(fAng),rE.fRadius*sin(fAng),rE.fThickness),
-                    aPoly2[i]
-                );
-            }
-            pVirDev->DrawPolyLine(aPoly2);
-            for (i=0; i<nPoints; i++)
-                DrawLine(aPoly[i], aPoly2[i]);
-        }
-    }
+    // counter-clockwise from the start to the end angle
+    const double fStart = basegfx::deg2rad(rE.fStart);
+    double fSweep = fmod(rE.fEnd - rE.fStart, 360.0);
+    if (fSweep <= 0)
+        fSweep += 360.0;
+    const basegfx::B2DPolygon aArc(Project(
+        rTransform,
+        basegfx::utils::createPolygonFromEllipseSegment(
+            basegfx::B2DPoint(rE.aP0.fx, rE.aP0.fy), rE.fRadius, rE.fRadius, fStart,
+            fStart + basegfx::deg2rad(fSweep)),
+        rE.aP0.fz));
+    OutPolyLine(aArc, GetEntityLineInfo(rE, rTransform));
+    OutThickness(aArc, rTransform, rE.fThickness, false);
 }
 
 void DXF2GDIMetaFile::DrawTraceEntity(const DXFTraceEntity & rE, const DXFTransform & rTransform)
 {
-    if (!SetLineAttribute(rE))
+    if (!SetAreaAttribute(rE))
         return;
 
-    tools::Polygon aPoly(4);
-    rTransform.Transform(rE.aP0,aPoly[0]);
-    rTransform.Transform(rE.aP1,aPoly[1]);
-    rTransform.Transform(rE.aP3,aPoly[2]);
-    rTransform.Transform(rE.aP2,aPoly[3]);
-    pVirDev->DrawPolygon(aPoly);
-    if (rE.fThickness!=0) {
-        sal_uInt16 i;
-        tools::Polygon aPoly2(4);
-        DXFVector aVAdd(0,0,rE.fThickness);
-        rTransform.Transform(rE.aP0+aVAdd,aPoly2[0]);
-        rTransform.Transform(rE.aP1+aVAdd,aPoly2[1]);
-        rTransform.Transform(rE.aP3+aVAdd,aPoly2[2]);
-        rTransform.Transform(rE.aP2+aVAdd,aPoly2[3]);
-        pVirDev->DrawPolygon(aPoly2);
-        for (i=0; i<4; i++) DrawLine(aPoly[i],aPoly2[i]);
-    }
+    // the corners are in the order 1, 2, 4, 3
+    basegfx::B2DPolygon aPolygon;
+    aPolygon.append(Project(rTransform, rE.aP0));
+    aPolygon.append(Project(rTransform, rE.aP1));
+    aPolygon.append(Project(rTransform, rE.aP3));
+    aPolygon.append(Project(rTransform, rE.aP2));
+    aPolygon.setClosed(true);
+    OutPolygon(basegfx::B2DPolyPolygon(aPolygon));
+    OutThickness(aPolygon, rTransform, rE.fThickness, true);
 }
 
 
@@ -403,49 +519,51 @@ void DXF2GDIMetaFile::DrawSolidEntity(const DXFSolidEntity & rE, const DXFTransf
     if (!SetAreaAttribute(rE))
         return;
 
-    sal_uInt16 nN;
-    if (rE.aP2==rE.aP3) nN=3; else nN=4;
-    tools::Polygon aPoly(nN);
-    rTransform.Transform(rE.aP0,aPoly[0]);
-    rTransform.Transform(rE.aP1,aPoly[1]);
-    rTransform.Transform(rE.aP3,aPoly[2]);
-    if (nN>3) rTransform.Transform(rE.aP2,aPoly[3]);
-    pVirDev->DrawPolygon(aPoly);
-    if (rE.fThickness==0)        return;
-
-    tools::Polygon aPoly2(nN);
-    DXFVector aVAdd(0,0,rE.fThickness);
-    rTransform.Transform(rE.aP0+aVAdd,aPoly2[0]);
-    rTransform.Transform(rE.aP1+aVAdd,aPoly2[1]);
-    rTransform.Transform(rE.aP3+aVAdd,aPoly2[2]);
-    if (nN>3) rTransform.Transform(rE.aP2+aVAdd,aPoly2[3]);
-    pVirDev->DrawPolygon(aPoly2);
-    if (SetLineAttribute(rE)) {
-        sal_uInt16 i;
-        for (i=0; i<nN; i++) DrawLine(aPoly[i],aPoly2[i]);
-    }
+    // the corners are in the order 1, 2, 4, 3; with only three corners the fourth one
+    // repeats the third one
+    basegfx::B2DPolygon aPolygon;
+    aPolygon.append(Project(rTransform, rE.aP0));
+    aPolygon.append(Project(rTransform, rE.aP1));
+    aPolygon.append(Project(rTransform, rE.aP3));
+    if (!(rE.aP2 == rE.aP3))
+        aPolygon.append(Project(rTransform, rE.aP2));
+    aPolygon.setClosed(true);
+    OutPolygon(basegfx::B2DPolyPolygon(aPolygon));
+    OutThickness(aPolygon, rTransform, rE.fThickness, true);
 }
 
 
 void DXF2GDIMetaFile::DrawTextEntity(const DXFTextEntity & rE, const DXFTransform & rTransform)
 {
-    DXFVector aV;
-    double fA;
-    sal_uInt16 nHeight;
-    short nAng;
-    DXFTransform aT( DXFTransform(rE.fXScale,rE.fHeight,1.0,rE.fRotAngle,rE.aP0), rTransform );
-    aT.TransDir(DXFVector(0,1,0),aV);
-    nHeight=static_cast<sal_uInt16>(aV.Abs()+0.5);
-    fA=aT.CalcRotAngle();
-    nAng=static_cast<short>(fA*10.0+0.5);
-    aT.TransDir(DXFVector(1,0,0),aV);
-    if ( SetFontAttribute( rE,nAng, nHeight ) )
-    {
-        OUString const aUString(pDXF->ToOUString(rE.m_sText));
-        Point aPt;
-        aT.Transform( DXFVector( 0, 0, 0 ), aPt );
-        pVirDev->DrawText( aPt, aUString );
+    DXFTransform aT(DXFTransform(rE.fXScale * rE.fHeight, rE.fHeight, 1.0, rE.fRotAngle, rE.aP0),
+                    rTransform);
+    OutText(rE, aT, rE.m_sText);
+}
+
+
+void DXF2GDIMetaFile::DrawBlock(const DXFBlock & rBlock, const DXFBasicEntity & rE,
+                                const DXFTransform & rTransform)
+{
+    tools::Long nSavedBlockColor, nSavedParentLayerColor;
+    DXFLineInfo aSavedBlockDXFLineInfo, aSavedParentLayerDXFLineInfo;
+    nSavedBlockColor=nBlockColor;
+    nSavedParentLayerColor=nParentLayerColor;
+    aSavedBlockDXFLineInfo=aBlockDXFLineInfo;
+    aSavedParentLayerDXFLineInfo=aParentLayerDXFLineInfo;
+    nBlockColor=GetEntityColor(rE);
+    aBlockDXFLineInfo=GetEntityDXFLineInfo(rE);
+    if (rE.m_sLayer.getLength() > 1) {
+        DXFLayer * pLayer=pDXF->aTables.SearchLayer(rE.m_sLayer);
+        if (pLayer!=nullptr) {
+            nParentLayerColor=pLayer->nColor;
+            aParentLayerDXFLineInfo = LTypeToDXFLineInfo(pLayer->m_sLineType);
+        }
     }
+    DrawEntities(rBlock, rTransform);
+    aBlockDXFLineInfo=aSavedBlockDXFLineInfo;
+    aParentLayerDXFLineInfo=aSavedParentLayerDXFLineInfo;
+    nBlockColor=nSavedBlockColor;
+    nParentLayerColor=nSavedParentLayerColor;
 }
 
 
@@ -462,26 +580,7 @@ void DXF2GDIMetaFile::DrawInsertEntity(const DXFInsertEntity & rE, const DXFTran
         DXFTransform( aDXFTransform1, aDXFTransform2 ),
         rTransform
     );
-    tools::Long nSavedBlockColor, nSavedParentLayerColor;
-    DXFLineInfo aSavedBlockDXFLineInfo, aSavedParentLayerDXFLineInfo;
-    nSavedBlockColor=nBlockColor;
-    nSavedParentLayerColor=nParentLayerColor;
-    aSavedBlockDXFLineInfo=aBlockDXFLineInfo;
-    aSavedParentLayerDXFLineInfo=aParentLayerDXFLineInfo;
-    nBlockColor=GetEntityColor(rE);
-    aBlockDXFLineInfo=GetEntityDXFLineInfo(rE);
-    if (rE.m_sLayer.getLength() > 1) {
-        DXFLayer * pLayer=pDXF->aTables.SearchLayer(rE.m_sLayer);
-        if (pLayer!=nullptr) {
-            nParentLayerColor=pLayer->nColor;
-            aParentLayerDXFLineInfo = LTypeToDXFLineInfo(pLayer->m_sLineType);
-        }
-    }
-    DrawEntities(*pB,aT);
-    aBlockDXFLineInfo=aSavedBlockDXFLineInfo;
-    aParentLayerDXFLineInfo=aSavedParentLayerDXFLineInfo;
-    nBlockColor=nSavedBlockColor;
-    nParentLayerColor=nSavedParentLayerColor;
+    DrawBlock(*pB, rE, aT);
 }
 
 
@@ -490,90 +589,39 @@ void DXF2GDIMetaFile::DrawAttribEntity(const DXFAttribEntity & rE, const DXFTran
     if ((rE.nAttrFlags&1)!=0)
         return;
 
-    DXFVector aV;
-    double fA;
-    sal_uInt16 nHeight;
-    short nAng;
-    DXFTransform aT( DXFTransform( rE.fXScale, rE.fHeight, 1.0, rE.fRotAngle, rE.aP0 ), rTransform );
-    aT.TransDir(DXFVector(0,1,0),aV);
-    nHeight=static_cast<sal_uInt16>(aV.Abs()+0.5);
-    fA=aT.CalcRotAngle();
-    nAng=static_cast<short>(fA*10.0+0.5);
-    aT.TransDir(DXFVector(1,0,0),aV);
-    if (SetFontAttribute(rE,nAng,nHeight))
-    {
-        OUString const aUString(pDXF->ToOUString(rE.m_sText));
-        Point aPt;
-        aT.Transform( DXFVector( 0, 0, 0 ), aPt );
-        pVirDev->DrawText( aPt, aUString );
-    }
+    DXFTransform aT(DXFTransform(rE.fXScale * rE.fHeight, rE.fHeight, 1.0, rE.fRotAngle, rE.aP0),
+                    rTransform);
+    OutText(rE, aT, rE.m_sText);
 }
 
 
 void DXF2GDIMetaFile::DrawPolyLineEntity(const DXFPolyLineEntity & rE, const DXFTransform & rTransform)
 {
-    sal_uInt16 i,nPolySize;
-    const DXFBasicEntity * pBE;
-
-    nPolySize=0;
-    pBE=rE.pSucc;
-    while (pBE!=nullptr && pBE->eType==DXF_VERTEX) {
-        nPolySize++;
-        pBE=pBE->pSucc;
-    }
-    if (nPolySize<2)
-        return;
-    tools::Polygon aPoly(nPolySize);
-    pBE=rE.pSucc;
-    for (i=0; i<nPolySize; i++) {
-        rTransform.Transform(static_cast<const DXFVertexEntity*>(pBE)->aP0,aPoly[i]);
-        pBE=pBE->pSucc;
-    }
-
     if (!SetLineAttribute(rE))
         return;
 
-    if ((rE.nFlags&1)!=0) pVirDev->DrawPolygon(aPoly);
-    else pVirDev->DrawPolyLine(aPoly);
-    if (rE.fThickness==0)
+    basegfx::B2DPolygon aPolygon;
+    for (const DXFBasicEntity* pBE = rE.pSucc; pBE != nullptr && pBE->eType == DXF_VERTEX;
+         pBE = pBE->pSucc)
+        aPolygon.append(Project(rTransform, static_cast<const DXFVertexEntity*>(pBE)->aP0));
+    if (aPolygon.count() < 2)
         return;
+    aPolygon.setClosed((rE.nFlags & 1) != 0);
 
-    tools::Polygon aPoly2(nPolySize);
-    pBE=rE.pSucc;
-    for (i=0; i<nPolySize; i++) {
-        rTransform.Transform(
-           (static_cast<const DXFVertexEntity*>(pBE)->aP0)+DXFVector(0,0,rE.fThickness),
-           aPoly2[i]
-        );
-        pBE=pBE->pSucc;
-    }
-    if ((rE.nFlags&1)!=0) pVirDev->DrawPolygon(aPoly2);
-    else pVirDev->DrawPolyLine(aPoly2);
-    for (i=0; i<nPolySize; i++) DrawLine(aPoly[i],aPoly2[i]);
+    OutPolyLine(aPolygon, GetEntityLineInfo(rE, rTransform));
+    OutThickness(aPolygon, rTransform, rE.fThickness, false);
 }
 
 void DXF2GDIMetaFile::DrawLWPolyLineEntity(const DXFLWPolyLineEntity & rE, const DXFTransform & rTransform )
 {
-    sal_Int32 nPolySize = rE.aP.size();
-    if (nPolySize <= 0 || nPolySize > SAL_MAX_UINT16)
-    {
-        SAL_WARN("vcl.filter", "DXF2GDIMetaFile::DrawLWPolyLineEntity: invalid num of points: " << nPolySize);
+    if (rE.aP.empty() || !SetLineAttribute(rE))
         return;
-    }
 
-    sal_uInt16 nSize = static_cast<sal_uInt16>(nPolySize);
-    tools::Polygon aPoly(nSize);
-    for (sal_uInt16 i = 0; i < nSize; ++i)
-    {
-        rTransform.Transform( rE.aP[i], aPoly[i] );
-    }
-    if ( SetLineAttribute( rE ) )
-    {
-        if ( ( rE.nFlags & 1 ) != 0 )
-            pVirDev->DrawPolygon( aPoly );
-        else
-            pVirDev->DrawPolyLine( aPoly );
-    }
+    basegfx::B2DPolygon aPolygon;
+    for (const DXFVector& rPoint : rE.aP)
+        aPolygon.append(Project(rTransform, rPoint));
+    aPolygon.setClosed((rE.nFlags & 1) != 0);
+    OutPolyLine(aPolygon, GetEntityLineInfo(rE, rTransform));
 }
 
 void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransform & rTransform )
@@ -582,18 +630,14 @@ void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransf
         return;
 
     SetAreaAttribute( rE );
-    tools::PolyPolygon aPolyPoly;
+    basegfx::B2DPolyPolygon aPolyPolygon;
     for (const DXFBoundaryPathData& rPathData : rE.aBoundaryPathData)
     {
-        std::vector< Point > aPtAry;
+        basegfx::B2DPolygon aPolygon;
         if ( rPathData.bIsPolyLine )
         {
             for (const auto& a : rPathData.aP)
-            {
-                Point aPt;
-                rTransform.Transform(a, aPt);
-                aPtAry.push_back( aPt );
-            }
+                aPolygon.append(Project(rTransform, a));
         }
         else
         {
@@ -604,11 +648,8 @@ void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransf
                 {
                     case 1 :
                     {
-                        Point aPt;
-                        rTransform.Transform( static_cast<const DXFEdgeTypeLine*>(pEdge)->aStartPoint, aPt );
-                        aPtAry.push_back( aPt );
-                        rTransform.Transform( static_cast<const DXFEdgeTypeLine*>(pEdge)->aEndPoint, aPt );
-                        aPtAry.push_back( aPt );
+                        aPolygon.append(Project(rTransform, static_cast<const DXFEdgeTypeLine*>(pEdge)->aStartPoint));
+                        aPolygon.append(Project(rTransform, static_cast<const DXFEdgeTypeLine*>(pEdge)->aEndPoint));
                     }
                     break;
                     case 2 :
@@ -618,38 +659,47 @@ void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransf
                 }
             }
         }
-        size_t nPtSize = aPtAry.size();
-        if ( nPtSize > 0 && nPtSize <= SAL_MAX_UINT16 )
+        if (aPolygon.count() > 0)
         {
-            sal_uInt16 nSize = static_cast<sal_uInt16>(nPtSize);
-            tools::Polygon aPoly( nSize );
-            for ( sal_uInt16 i = 0; i < nSize; i++ )
-                aPoly[ i ] = aPtAry[ i ];
-            aPolyPoly.Insert( aPoly );
+            aPolygon.setClosed(true);
+            aPolyPolygon.append(aPolygon);
         }
     }
-    if ( aPolyPoly.Count() )
-        pVirDev->DrawPolyPolygon( aPolyPoly );
+    OutPolygon(aPolyPolygon);
 }
 
 void DXF2GDIMetaFile::Draw3DFaceEntity(const DXF3DFaceEntity & rE, const DXFTransform & rTransform)
 {
-    sal_uInt16 nN,i;
     if (!SetLineAttribute(rE))
         return;
 
-    if (rE.aP2==rE.aP3) nN=3; else nN=4;
-    tools::Polygon aPoly(nN);
-    rTransform.Transform(rE.aP0,aPoly[0]);
-    rTransform.Transform(rE.aP1,aPoly[1]);
-    rTransform.Transform(rE.aP2,aPoly[2]);
-    if (nN>3) rTransform.Transform(rE.aP3,aPoly[3]);
-    if ((rE.nIEFlags&0x0f)==0) pVirDev->DrawPolygon(aPoly);
-    else {
-        for (i=0; i<nN; i++) {
-            if ( (rE.nIEFlags & (static_cast<tools::Long>(1)<<i)) == 0 ) {
-                DrawLine(aPoly[i],aPoly[(i+1)%nN]);
-            }
+    std::vector<basegfx::B2DPoint> aCorners;
+    aCorners.push_back(Project(rTransform, rE.aP0));
+    aCorners.push_back(Project(rTransform, rE.aP1));
+    aCorners.push_back(Project(rTransform, rE.aP2));
+    if (!(rE.aP2 == rE.aP3))
+        aCorners.push_back(Project(rTransform, rE.aP3));
+    const size_t nN = aCorners.size();
+
+    if ((rE.nIEFlags & 0x0f) == 0)
+    {
+        basegfx::B2DPolygon aPolygon;
+        for (const basegfx::B2DPoint& rCorner : aCorners)
+            aPolygon.append(rCorner);
+        aPolygon.setClosed(true);
+        OutPolyLine(aPolygon, LineInfo());
+        return;
+    }
+    // only the visible edges; a triangle has an empty third edge, its closing edge is the fourth
+    for (size_t i = 0; i < nN; ++i)
+    {
+        const tools::Long nEdgeFlag = nN == 3 && i == 2 ? 8 : static_cast<tools::Long>(1) << i;
+        if ((rE.nIEFlags & nEdgeFlag) == 0)
+        {
+            basegfx::B2DPolygon aEdge;
+            aEdge.append(aCorners[i]);
+            aEdge.append(aCorners[(i + 1) % nN]);
+            OutPolyLine(aEdge, LineInfo());
         }
     }
 }
@@ -665,26 +715,7 @@ void DXF2GDIMetaFile::DrawDimensionEntity(const DXFDimensionEntity & rE, const D
         DXFTransform(1.0,1.0,1.0,DXFVector(0.0,0.0,0.0)-pB->aBasePoint),
         rTransform
     );
-    tools::Long nSavedBlockColor, nSavedParentLayerColor;
-    DXFLineInfo aSavedBlockDXFLineInfo, aSavedParentLayerDXFLineInfo;
-    nSavedBlockColor=nBlockColor;
-    nSavedParentLayerColor=nParentLayerColor;
-    aSavedBlockDXFLineInfo=aBlockDXFLineInfo;
-    aSavedParentLayerDXFLineInfo=aParentLayerDXFLineInfo;
-    nBlockColor=GetEntityColor(rE);
-    aBlockDXFLineInfo=GetEntityDXFLineInfo(rE);
-    if (rE.m_sLayer.getLength() > 1) {
-        DXFLayer * pLayer=pDXF->aTables.SearchLayer(rE.m_sLayer);
-        if (pLayer!=nullptr) {
-            nParentLayerColor=pLayer->nColor;
-            aParentLayerDXFLineInfo = LTypeToDXFLineInfo(pLayer->m_sLineType);
-        }
-    }
-    DrawEntities(*pB,aT);
-    aBlockDXFLineInfo=aSavedBlockDXFLineInfo;
-    aParentLayerDXFLineInfo=aSavedParentLayerDXFLineInfo;
-    nBlockColor=nSavedBlockColor;
-    nParentLayerColor=nSavedParentLayerColor;
+    DrawBlock(*pB, rE, aT);
 }
 
 
@@ -700,7 +731,7 @@ void DXF2GDIMetaFile::DrawEntities(const DXFEntities & rEntities,
 
     const DXFBasicEntity * pE=rEntities.pFirst;
 
-    while (pE!=nullptr && bStatus) {
+    while (pE!=nullptr) {
         if (pE->nSpace==0) {
             if (pE->aExtrusion.fz==1.0) {
                 pT=&rTransform;
@@ -766,12 +797,8 @@ void DXF2GDIMetaFile::DrawEntities(const DXFEntities & rEntities,
 DXF2GDIMetaFile::DXF2GDIMetaFile()
     : pVirDev(nullptr)
     , pDXF(nullptr)
-    , bStatus(false)
-    , OptPointsPerCircle(0)
-    , nMinPercent(0)
-    , nMaxPercent(0)
-    , nLastPercent(0)
-    , nMainEntitiesCount(0)
+    , mbMeasure(false)
+    , mfDeviceScale(1.0)
     , nBlockColor(0)
     , nParentLayerColor(0)
 {
@@ -783,125 +810,64 @@ DXF2GDIMetaFile::~DXF2GDIMetaFile()
 }
 
 
-bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF, sal_uInt16 nminpercent, sal_uInt16 nmaxpercent)
+bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF)
 {
-    double fWidth,fHeight,fScale(0.0);
-    DXFTransform aTransform;
-    Size aPrefSize;
-    const DXFLayer * pLayer;
-    const DXFVPort * pVPort;
-
-    pVirDev = VclPtr<VirtualDevice>::Create();
     pDXF    = &rDXF;
-    bStatus = true;
 
-    OptPointsPerCircle=50;
+    // A viewport looking at the drawing from another direction than the top gives the
+    // projection, the extents always come from what is drawn.
+    DXFTransform aViewTransform;
+    const DXFVPort * pVPort = pDXF->aTables.SearchVPort("*ACTIVE");
+    if (pVPort != nullptr && (pVPort->aDirection.fx != 0 || pVPort->aDirection.fy != 0))
+        aViewTransform = DXFTransform(pVPort->aDirection, pVPort->aTarget);
 
-    nMinPercent=nminpercent;
-    nMaxPercent=nmaxpercent;
-    nLastPercent=nMinPercent;
-    nMainEntitiesCount=CountEntities(pDXF->aEntities);
+    // first pass: the extents
+    pVirDev = VclPtr<VirtualDevice>::Create();
+    pVirDev->EnableOutput(false);
+    ResetState();
+    mbMeasure = true;
+    maExtents.reset();
+    DrawEntities(pDXF->aEntities, aViewTransform);
+    pVirDev.disposeAndClear();
+    mbMeasure = false;
 
-    nBlockColor=7;
-    aBlockDXFLineInfo.eStyle = LineStyle::Solid;
-    aBlockDXFLineInfo.nDashCount = 0;
-    aBlockDXFLineInfo.fDashLen = 0;
-    aBlockDXFLineInfo.nDotCount = 0;
-    aBlockDXFLineInfo.fDotLen = 0;
-    aBlockDXFLineInfo.fDistance = 0;
+    if (maExtents.isEmpty() || !IsFinite(maExtents))
+        return false;
 
-    pLayer=pDXF->aTables.SearchLayer("0");
-    if (pLayer!=nullptr) {
-        nParentLayerColor=pLayer->nColor & 0xff;
-        aParentLayerDXFLineInfo = LTypeToDXFLineInfo(pLayer->m_sLineType);
-    }
-    else {
-        nParentLayerColor=7;
-        aParentLayerDXFLineInfo.eStyle = LineStyle::Solid;
-        aParentLayerDXFLineInfo.nDashCount = 0;
-        aParentLayerDXFLineInfo.fDashLen = 0;
-        aParentLayerDXFLineInfo.nDotCount = 0;
-        aParentLayerDXFLineInfo.fDotLen = 0;
-        aParentLayerDXFLineInfo.fDistance = 0;
-    }
+    double fWidth = maExtents.getWidth();
+    double fHeight = maExtents.getHeight();
+    if (!(std::max(fWidth, fHeight) > 0))
+        return false;
+    // Far from the origin, a drawing too small for the precision of its coordinates is shown
+    // as a small part of a larger area, so that the metafile coordinates stay in range.
+    const double fMagnitude
+        = std::max({ 1.0, std::fabs(maExtents.getMinX()), std::fabs(maExtents.getMaxX()),
+                     std::fabs(maExtents.getMinY()), std::fabs(maExtents.getMaxY()) });
+    const double fSize = std::max({ fWidth, fHeight, fMagnitude * 1e-9 });
+    // a drawing that is only a horizontal or vertical line still gets an area
+    fWidth = std::max(fWidth, fSize / 1000.0);
+    fHeight = std::max(fHeight, fSize / 1000.0);
+    mfDeviceScale = DEVICE_SIZE / fSize;
+    maDeviceTransform = basegfx::utils::createScaleTranslateB2DHomMatrix(
+        mfDeviceScale, -mfDeviceScale, DEVICE_MARGIN - maExtents.getMinX() * mfDeviceScale,
+        DEVICE_MARGIN + maExtents.getMaxY() * mfDeviceScale);
 
+    // second pass: the metafile
+    pVirDev = VclPtr<VirtualDevice>::Create();
     pVirDev->EnableOutput(false);
     if (!comphelper::IsFuzzing()) // for fuzzing don't bother recording the drawing
         rMTF.Record(pVirDev);
-
-    aActLineColor = pVirDev->GetLineColor();
-    aActFillColor = pVirDev->GetFillColor();
-    aActFont = pVirDev->GetFont();
-
-    pVPort=pDXF->aTables.SearchVPort("*ACTIVE");
-    if (pVPort!=nullptr) {
-        if (pVPort->aDirection.fx==0 && pVPort->aDirection.fy==0)
-            pVPort=nullptr;
-    }
-
-    if (pVPort==nullptr) {
-        if (pDXF->aBoundingBox.bEmpty)
-            bStatus=false;
-        else {
-            fWidth=pDXF->aBoundingBox.fMaxX-pDXF->aBoundingBox.fMinX;
-            fHeight=pDXF->aBoundingBox.fMaxY-pDXF->aBoundingBox.fMinY;
-            if (fWidth<=0 || fHeight<=0) {
-                bStatus=false;
-            }
-            else {
-                if (fWidth>fHeight)
-                    fScale=10000.0/fWidth;
-                else
-                    fScale=10000.0/fHeight;
-                aTransform=DXFTransform(fScale,-fScale,fScale,
-                                        DXFVector(-pDXF->aBoundingBox.fMinX*fScale,
-                                                   pDXF->aBoundingBox.fMaxY*fScale,
-                                                  -pDXF->aBoundingBox.fMinZ*fScale));
-            }
-            aPrefSize.setWidth(static_cast<tools::Long>(fWidth*fScale+1.5) );
-            aPrefSize.setHeight(static_cast<tools::Long>(fHeight*fScale+1.5) );
-        }
-    }
-    else {
-        fHeight=pVPort->fHeight;
-        fWidth=fHeight*pVPort->fAspectRatio;
-        if (fWidth<=0 || fHeight<=0) {
-            bStatus=false;
-        } else {
-            if (fWidth>fHeight)
-                fScale=10000.0/fWidth;
-            else
-                fScale=10000.0/fHeight;
-            aTransform=DXFTransform(
-                DXFTransform(pVPort->aDirection,pVPort->aTarget),
-                DXFTransform(
-                    DXFTransform(1.0,-1.0,1.0,DXFVector(fWidth/2-pVPort->fCenterX,fHeight/2+pVPort->fCenterY,0)),
-                    DXFTransform(fScale,fScale,fScale,DXFVector(0,0,0))
-                )
-            );
-        }
-        aPrefSize.setWidth(static_cast<tools::Long>(fWidth*fScale+1.5) );
-        aPrefSize.setHeight(static_cast<tools::Long>(fHeight*fScale+1.5) );
-    }
-
-    if (bStatus)
-        DrawEntities(pDXF->aEntities,aTransform);
-
+    ResetState();
+    DrawEntities(pDXF->aEntities, aViewTransform);
     rMTF.Stop();
 
-    if ( bStatus )
-    {
-        rMTF.SetPrefSize( aPrefSize );
-        // simply set map mode to 1/100-mm (1/10-mm) if the graphic
-        // does not get not too small (<0.5cm)
-        if( ( aPrefSize.Width() < 500 ) && ( aPrefSize.Height() < 500 ) )
-            rMTF.SetPrefMapMode( MapMode( MapUnit::Map10thMM ) );
-        else
-            rMTF.SetPrefMapMode( MapMode( MapUnit::Map100thMM ) );
-    }
+    Size aPrefSize(basegfx::fround<tools::Long>(fWidth * mfDeviceScale + 2 * DEVICE_MARGIN),
+                   basegfx::fround<tools::Long>(fHeight * mfDeviceScale + 2 * DEVICE_MARGIN));
+    rMTF.SetPrefSize( aPrefSize );
+    rMTF.SetPrefMapMode( MapMode( MapUnit::Map100thMM ) );
 
     pVirDev.disposeAndClear();
-    return bStatus;
+    return true;
 }
 
 
