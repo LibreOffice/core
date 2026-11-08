@@ -4953,14 +4953,13 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                         sal_Int32 nTransitionSubtype = 0;
                         pSlide->getPropertyValue("TransitionSubtype") >>= nTransitionSubtype;
 
-                        auto iteratorSubType = constTransitionSubTypeToString.find(nTransitionSubtype);
-                        if (iteratorSubType != constTransitionSubTypeToString.end())
+                        if (nTransitionSubtype != animations::TransitionSubType::DEFAULT)
                         {
-                            aJsonWriter.put("transitionSubtype", iteratorSubType->second);
-                        }
-                        else
-                        {
-                            SAL_WARN("sd", "Transition sub-type unknown: " << nTransitionSubtype);
+                            auto iteratorSubType = constTransitionSubTypeToString.find(nTransitionSubtype);
+                            if (iteratorSubType != constTransitionSubTypeToString.end())
+                                aJsonWriter.put("transitionSubtype", iteratorSubType->second);
+                            else
+                                SAL_WARN("sd", "Transition sub-type unknown: " << nTransitionSubtype);
                         }
 
                         if (bAllyState)
