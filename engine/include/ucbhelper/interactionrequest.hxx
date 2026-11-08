@@ -26,7 +26,6 @@
 #include <com/sun/star/task/XInteractionRetry.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
-#include <com/sun/star/ucb/XInteractionAuthFallback.hpp>
 #include <com/sun/star/ucb/XInteractionReplaceExistingData.hpp>
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -423,26 +422,6 @@ public:
 
     // XInteractionContinuation
     virtual void select() override;
-};
-
-using InteractionAuthFallback_BASE = cppu::ImplInheritanceHelper<InteractionContinuation,
-                                                                 css::ucb::XInteractionAuthFallback>;
-class UCBHELPER_DLLPUBLIC InteractionAuthFallback final :
-                  public InteractionAuthFallback_BASE
-{
-    OUString m_aCode;
-
-public:
-    InteractionAuthFallback( InteractionRequest * pRequest )
-    : InteractionAuthFallback_BASE( pRequest ) {}
-
-    // XInteractionContinuation
-    virtual void select() override;
-
-    // XAuthFallback
-    virtual void setCode( const OUString& code ) override;
-    /// @throws cpo::uno::RuntimeException
-    const OUString& getCode() const;
 };
 
 

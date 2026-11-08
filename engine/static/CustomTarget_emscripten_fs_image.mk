@@ -1397,7 +1397,6 @@ gb_emscripten_fs_image_files += \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/svx/ui/xformspage.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/svx/ui/xmlsecstatmenu.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/svx/ui/zoommenu.ui \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/uui/ui/authfallback.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/uui/ui/filterselect.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/uui/ui/macrowarnmedium.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/uui/ui/masterpassworddlg.ui \

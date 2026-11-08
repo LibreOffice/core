@@ -598,21 +598,6 @@ Any UniversalContentBroker::execute(
 
         globalTransfer( aTransferArg, Environment );
     }
-    else if ( ( aCommand.Handle == CHECKIN_HANDLE ) || aCommand.Name == CHECKIN_NAME )
-    {
-        ucb::CheckinArgument aCheckinArg;
-        if ( !( aCommand.Argument >>= aCheckinArg ) )
-        {
-            ucbhelper::cancelCommandExecution(
-                Any( IllegalArgumentException(
-                                u"Wrong argument type!"_ustr,
-                                getXWeak(),
-                                -1 ) ),
-                Environment );
-            // Unreachable
-        }
-        aRet = checkIn( aCheckinArg, Environment );
-    }
     else
     {
 

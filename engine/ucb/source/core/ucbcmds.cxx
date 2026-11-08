@@ -223,11 +223,7 @@ CommandProcessorInfo::CommandProcessorInfo()
         ucb::CommandInfo(
             GLOBALTRANSFER_NAME, // Name
             GLOBALTRANSFER_HANDLE, // Handle
-            cppu::UnoType<ucb::GlobalTransferCommandArgument>::get() ), // ArgType
-        ucb::CommandInfo(
-            CHECKIN_NAME, // Name
-            CHECKIN_HANDLE, // Handle
-            cppu::UnoType<ucb::CheckinArgument>::get() ) } // ArgType
+            cppu::UnoType<ucb::GlobalTransferCommandArgument>::get() ) } // ArgType
 {
 }
 
@@ -1839,84 +1835,6 @@ void UniversalContentBroker::globalTransfer(
         OSL_FAIL( "Cannot delete source object!" );
         throw;
     }
-}
-
-cpo::uno::Any UniversalContentBroker::checkIn( const ucb::CheckinArgument& rArg,
-            const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-{
-    cpo::uno::Any aRet;
-    // Use own command environment with own interaction handler intercepting
-    // some interaction requests that shall not be handled by the user-supplied
-    // interaction handler.
-    uno::Reference< ucb::XCommandEnvironment > xLocalEnv;
-    if (xEnv.is())
-    {
-        xLocalEnv.set( ucb::CommandEnvironment::create(
-               m_xContext,
-               new InteractionHandlerProxy( xEnv->getInteractionHandler() ),
-               xEnv->getProgressHandler() ) );
-    }
-
-    uno::Reference< ucb::XContent > xTarget;
-    uno::Reference< ucb::XContentIdentifier > xId
-            = createContentIdentifier( rArg.TargetURL );
-    if ( xId.is() )
-    {
-        try
-        {
-            xTarget = queryContent( xId );
-        }
-        catch ( ucb::IllegalIdentifierException const & )
-        {
-        }
-    }
-
-    if ( !xTarget.is() )
-    {
-        cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
-        {
-            {u"Uri"_ustr, cpo::uno::Any(rArg.TargetURL)}
-        }));
-        ucbhelper::cancelCommandExecution(
-            ucb::IOErrorCode_CANT_READ,
-            aArgs,
-            xEnv,
-            u"Can't instantiate target object!"_ustr,
-            this );
-        // Unreachable
-    }
-
-    uno::Reference< ucb::XCommandProcessor > xCommandProcessor(
-                                                xTarget, uno::UNO_QUERY );
-    if ( !xCommandProcessor.is() )
-    {
-        cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
-        {
-            {u"Uri"_ustr, cpo::uno::Any(rArg.TargetURL)}
-        }));
-        ucbhelper::cancelCommandExecution(
-            ucb::IOErrorCode_CANT_READ,
-            aArgs,
-            xEnv,
-            u"Target content is not a XCommandProcessor!"_ustr,
-            this );
-        // Unreachable
-    }
-
-    try
-    {
-        ucb::Command aCommand(
-            u"checkin"_ustr, -1,
-            cpo::uno::Any( rArg ) );
-
-        aRet = xCommandProcessor->execute( aCommand, 0, xLocalEnv );
-    }
-    catch ( ucb::UnsupportedCommandException const & )
-    {
-        // 'checkin' command is not supported by commandprocessor:
-        // ignore.
-    }
-    return aRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

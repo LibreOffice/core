@@ -36,7 +36,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/NotInitializedException.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/IllegalArgumentIOException.hpp>
@@ -54,7 +53,6 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/frame/XTransientDocumentsDocumentContentFactory.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
@@ -68,9 +66,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/multicontainer2.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <o3tl/deleter.hxx>
@@ -148,7 +144,6 @@ using namespace ::com::sun::star;
 using namespace ::cpo;
 using namespace ::cpo::uno;
 using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::document::CmisProperty;
 using ::com::sun::star::frame::XFrame;
 using ::com::sun::star::frame::XController;
 using ::com::sun::star::frame::XController2;
@@ -237,7 +232,6 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     rtl::Reference< ::comphelper::NumberedCollection >         m_xNumberedControllers   ;
     rtl::Reference<::sfx2::DocumentMetadataAccess>             m_xDocumentMetadata      ;
     ::rtl::Reference< ::sfx2::DocumentUndoManager >            m_pDocumentUndoManager   ;
-    Sequence< document::CmisProperty>                          m_cmisProperties         ;
     std::shared_ptr<SfxGrabBagItem>                            m_xGrabBagItem           ;
     std::optional<std::chrono::steady_clock::time_point>       m_oDirtyTimestamp        ;
 
@@ -1764,8 +1758,6 @@ void SfxBaseModel::storeAsURL( const   OUString&                   rURL    ,
     SfxUnoArguments aSequence = TransformItems(SID_OPENDOC, m_pData->m_pObjectShell->GetMedium()->GetItemSet());
     attachResource(rURL, aSequence.getAsConstPropertyValueList());
 
-    loadCmisProperties( );
-
 #if OSL_DEBUG_LEVEL > 0
     const SfxStringItem* pPasswdItem = m_pData->m_pObjectShell->GetMedium()->GetItemSet().GetItem(SID_PASSWORD, false);
     OSL_ENSURE( !pPasswdItem, "There should be no Password property in the document MediaDescriptor!" );
@@ -2035,7 +2027,6 @@ void SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqArguments 
     m_pData->m_pObjectShell->ResetError();
 
     pMedium = handleLoadError(nError, pMedium);
-    loadCmisProperties();
 
 #if OSL_DEBUG_LEVEL > 0
     const SfxStringItem* pPasswdItem = pMedium->GetItemSet().GetItem(SID_PASSWORD, false);
@@ -2580,244 +2571,6 @@ void SfxBaseModel::removeDocumentEventListener( const Reference< document::XDocu
 void SfxBaseModel::notifyDocumentEvent( const OUString&, const Reference< frame::XController2 >&, const Any& )
 {
     throw lang::NoSupportException(u"SfxBaseModel controls all the sent notifications itself!"_ustr );
-}
-
-Sequence<document::CmisProperty> SfxBaseModel::getCmisProperties()
-{
-    if (impl_isDisposed())
-        return Sequence<document::CmisProperty>();
-    return m_pData->m_cmisProperties;
-}
-
-void SfxBaseModel::setCmisProperties( const Sequence< document::CmisProperty >& _cmisproperties )
-{
-    m_pData->m_cmisProperties = _cmisproperties;
-}
-
-void SfxBaseModel::updateCmisProperties( const Sequence< document::CmisProperty >& aProperties )
-{
-    SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
-    if ( !pMedium )
-        return;
-
-    try
-    {
-        ::ucbhelper::Content aContent( pMedium->GetName( ),
-            Reference<ucb::XCommandEnvironment>(),
-            comphelper::getProcessComponentContext() );
-
-        aContent.executeCommand( u"updateProperties"_ustr, cpo::uno::Any( aProperties ) );
-        loadCmisProperties( );
-    }
-    catch (const cpo::uno::Exception & e)
-    {
-        cpo::uno::Any anyEx = cppu::getCaughtException();
-        throw lang::WrappedTargetRuntimeException( e.Message,
-                        e.Context, anyEx );
-    }
-
-}
-
-void SfxBaseModel::checkOut(  )
-{
-    SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
-    if ( !pMedium )
-        return;
-
-    try
-    {
-        ::ucbhelper::Content aContent( pMedium->GetName(),
-            Reference<ucb::XCommandEnvironment>(),
-            comphelper::getProcessComponentContext() );
-
-        Any aResult = aContent.executeCommand( u"checkout"_ustr, Any( ) );
-        OUString sURL;
-        aResult >>= sURL;
-
-        m_pData->m_pObjectShell->GetMedium( )->SetName( sURL );
-        m_pData->m_pObjectShell->GetMedium( )->GetMedium_Impl( );
-        m_pData->m_xDocumentProperties->setTitle( getTitle( ) );
-        SfxUnoArguments aSequence = TransformItems(SID_OPENDOC, pMedium->GetItemSet());
-        attachResource(sURL, aSequence.getAsConstPropertyValueList());
-
-        // Reload the CMIS properties
-        loadCmisProperties( );
-    }
-    catch ( const cpo::uno::Exception & e )
-    {
-        cpo::uno::Any anyEx = cppu::getCaughtException();
-        throw lang::WrappedTargetRuntimeException( e.Message,
-                        e.Context, anyEx );
-    }
-}
-
-void SfxBaseModel::cancelCheckOut(  )
-{
-    SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
-    if ( !pMedium )
-        return;
-
-    try
-    {
-        ::ucbhelper::Content aContent( pMedium->GetName(),
-            Reference<ucb::XCommandEnvironment>(),
-            comphelper::getProcessComponentContext() );
-
-        Any aResult = aContent.executeCommand( u"cancelCheckout"_ustr, Any( ) );
-        OUString sURL;
-        aResult >>= sURL;
-
-        m_pData->m_pObjectShell->GetMedium( )->SetName( sURL );
-    }
-    catch ( const cpo::uno::Exception & e )
-    {
-        cpo::uno::Any anyEx = cppu::getCaughtException();
-        throw lang::WrappedTargetRuntimeException( e.Message,
-                        e.Context, anyEx );
-    }
-}
-
-void SfxBaseModel::checkIn( bool bIsMajor, const OUString& rMessage )
-{
-    SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
-    if ( !pMedium )
-        return;
-
-    try
-    {
-        Sequence< beans::PropertyValue > aProps{
-            comphelper::makePropertyValue(u"VersionMajor"_ustr, bIsMajor),
-            comphelper::makePropertyValue(u"VersionComment"_ustr, rMessage)
-        };
-
-        const OUString sName( pMedium->GetName( ) );
-        storeSelf( aProps );
-
-        // Refresh pMedium as it has probably changed during the storeSelf call
-        pMedium = m_pData->m_pObjectShell->GetMedium( );
-        const OUString sNewName( pMedium->GetName( ) );
-
-        // URL has changed, update the document
-        if ( sName != sNewName )
-        {
-            m_pData->m_xDocumentProperties->setTitle( getTitle( ) );
-            SfxUnoArguments aSequence = TransformItems(SID_OPENDOC, pMedium->GetItemSet());
-            attachResource(sNewName, aSequence.getAsConstPropertyValueList());
-
-            // Reload the CMIS properties
-            loadCmisProperties( );
-        }
-    }
-    catch ( const cpo::uno::Exception & e )
-    {
-        cpo::uno::Any anyEx = cppu::getCaughtException();
-        throw lang::WrappedTargetRuntimeException( e.Message,
-                        e.Context, anyEx );
-    }
-}
-
-cpo::uno::Sequence< document::CmisVersion > SfxBaseModel::getAllVersions( )
-{
-    cpo::uno::Sequence<document::CmisVersion> aVersions;
-    if (impl_isDisposed())
-        return aVersions;
-    SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
-    if ( pMedium )
-    {
-        try
-        {
-            ::ucbhelper::Content aContent( pMedium->GetName(),
-                Reference<ucb::XCommandEnvironment>(),
-                comphelper::getProcessComponentContext() );
-
-            Any aResult = aContent.executeCommand( u"getAllVersions"_ustr, Any( ) );
-            aResult >>= aVersions;
-        }
-        catch ( const cpo::uno::Exception & e )
-        {
-            cpo::uno::Any anyEx = cppu::getCaughtException();
-            throw lang::WrappedTargetRuntimeException( e.Message,
-                            e.Context, anyEx );
-        }
-    }
-    return aVersions;
-}
-
-bool SfxBaseModel::getBoolPropertyValue( const OUString& rName )
-{
-    bool bValue = false;
-    if ( m_pData->m_pObjectShell.is() )
-    {
-        SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
-        if ( pMedium )
-        {
-            try
-            {
-                ::ucbhelper::Content aContent( pMedium->GetName( ),
-                    utl::UCBContentHelper::getDefaultCommandEnvironment(),
-                    comphelper::getProcessComponentContext() );
-                Reference < beans::XPropertySetInfo > xProps = aContent.getProperties();
-                if ( xProps->hasPropertyByName( rName ) )
-                {
-                    aContent.getPropertyValue( rName ) >>= bValue;
-                }
-            }
-            catch ( const cpo::uno::Exception & )
-            {
-                // Simply ignore it: it's likely the document isn't versionable in that case
-                bValue = false;
-            }
-        }
-    }
-    return bValue;
-}
-
-bool SfxBaseModel::isVersionable( )
-{
-    return getBoolPropertyValue( u"IsVersionable"_ustr );
-}
-
-bool SfxBaseModel::canCheckOut( )
-{
-    return getBoolPropertyValue( u"CanCheckOut"_ustr );
-}
-
-bool SfxBaseModel::canCancelCheckOut( )
-{
-    return getBoolPropertyValue( u"CanCancelCheckOut"_ustr );
-}
-
-bool SfxBaseModel::canCheckIn( )
-{
-    return getBoolPropertyValue( u"CanCheckIn"_ustr );
-}
-
-void SfxBaseModel::loadCmisProperties( )
-{
-    SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
-    if ( !pMedium )
-        return;
-
-    try
-    {
-        ::ucbhelper::Content aContent( pMedium->GetName( ),
-            utl::UCBContentHelper::getDefaultCommandEnvironment(),
-            comphelper::getProcessComponentContext() );
-        Reference < beans::XPropertySetInfo > xProps = aContent.getProperties();
-        static constexpr OUString aCmisProps( u"CmisProperties"_ustr );
-        if ( xProps->hasPropertyByName( aCmisProps ) )
-        {
-            Sequence< document::CmisProperty> aCmisProperties;
-            aContent.getPropertyValue( aCmisProps ) >>= aCmisProperties;
-            setCmisProperties( aCmisProperties );
-        }
-    }
-    catch (const ucb::ContentCreationException &)
-    {
-    }
-    catch (const ucb::CommandAbortedException &)
-    {
-    }
 }
 
 SfxMedium* SfxBaseModel::handleLoadError( const ErrCodeMsg& rError, SfxMedium* pMedium )
@@ -3871,7 +3624,6 @@ void SfxBaseModel::loadFromStorage( const Reference< embed::XStorage >& xStorage
             "SfxBaseModel::loadFromStorage: " + nError.toString(),
             Reference< XInterface >(), sal_uInt32(nError.GetCode()));
     }
-    loadCmisProperties( );
 }
 
 void SfxBaseModel::storeToStorage( const Reference< embed::XStorage >& xStorage,

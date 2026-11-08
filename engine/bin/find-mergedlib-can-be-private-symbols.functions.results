@@ -22732,7 +22732,6 @@ transform_for_scale
 tryToUseSourceBuffer(SalBitmap const&, std::shared_ptr<BitmapHelper>&)
 u16_u8(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, std::vector<w_char, std::allocator<w_char> > const&)
 u8_u16(std::vector<w_char, std::allocator<w_char> >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool)
-ucbhelper::AuthenticationFallbackRequest::AuthenticationFallbackRequest(rtl::OUString const&, rtl::OUString const&)
 ucbhelper::CommandEnvironment::getInteractionHandler()
 ucbhelper::CommandEnvironment::getProgressHandler()
 ucbhelper::CommandEnvironment::~CommandEnvironment()
@@ -22775,9 +22774,6 @@ ucbhelper::ContentProviderImplHelper::removeAdditionalPropertySet(rtl::OUString 
 ucbhelper::ContentProviderImplHelper::renameAdditionalPropertySet(rtl::OUString const&, rtl::OUString const&, bool)
 ucbhelper::ContentProviderImplHelper::supportsService(rtl::OUString const&)
 ucbhelper::InteractionApprove::select()
-ucbhelper::InteractionAuthFallback::getCode() const
-ucbhelper::InteractionAuthFallback::select()
-ucbhelper::InteractionAuthFallback::setCode(rtl::OUString const&)
 ucbhelper::InteractionDisapprove::select()
 ucbhelper::InteractionRequest::InteractionRequest()
 ucbhelper::InteractionRequest::InteractionRequest(cpo::uno::Any const&)

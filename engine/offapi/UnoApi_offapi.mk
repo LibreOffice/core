@@ -1360,7 +1360,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/ucb,\
 	CachedContentResultSetStub \
 	CachedDynamicResultSet \
 	CachedDynamicResultSetStub \
-	CmisContentProvider \
 	Content \
 	ContentProvider \
 	ContentProviderProxy \
@@ -1998,8 +1997,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/document,\
 	AmbigousFilterRequest \
 	BrokenPackageRequest \
 	ChangedByOthersRequest \
-	CmisProperty \
-	CmisVersion \
 	CorruptedFilterConfigurationException \
 	DocumentEvent \
 	EmptyUndoStackException \
@@ -2024,7 +2021,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/document,\
 	UpdateDocMode \
 	XActionLockable \
 	XBinaryStreamResolver \
-	XCmisDocument \
 	XCodeNameQuery \
 	XCompatWriterDocProperties \
 	XDocumentEventBroadcaster \
@@ -3505,8 +3501,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/text,\
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ucb,\
 	AlreadyInitializedException \
 	AuthenticationRequest \
-	AuthenticationFallbackRequest \
-	CheckinArgument \
 	CertificateValidationRequest \
 	Command \
 	CommandAbortedException \
@@ -3644,7 +3638,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ucb,\
 	XFetchProvider \
 	XFetchProviderForContentAccess \
 	XFileIdentifierConverter \
-	XInteractionAuthFallback \
 	XInteractionHandlerSupplier \
 	XInteractionReplaceExistingData \
 	XInteractionSupplyAuthentication \

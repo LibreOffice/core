@@ -30,7 +30,4 @@ inline constexpr OUString GETCOMMANDINFO_NAME = u"getCommandInfo"_ustr;
 inline constexpr OUString GLOBALTRANSFER_NAME = u"globalTransfer"_ustr;
 #define GLOBALTRANSFER_HANDLE   1025
 
-inline constexpr OUString CHECKIN_NAME = u"checkin"_ustr;
-#define CHECKIN_HANDLE          1026
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

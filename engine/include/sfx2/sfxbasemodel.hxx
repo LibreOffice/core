@@ -27,7 +27,6 @@
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/document/XCmisDocument.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentRecovery2.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
@@ -105,7 +104,6 @@ namespace com::sun::star::ui { class XUIConfigurationManager2; }
 
 typedef ::cppu::WeakImplHelper  <   css::container::XChild
                                         ,   css::document::XDocumentPropertiesSupplier
-                                        ,   css::document::XCmisDocument
                                         ,   css::rdf::XDocumentMetadataAccess
                                         ,   css::document::XDocumentRecovery2
                                         ,   css::document::XUndoManagerSupplier
@@ -627,32 +625,6 @@ public:
             const cpo::uno::Sequence<
                 css::beans::PropertyValue > & i_rMedium) override;
 
-    // XCmisDocument
-
-    virtual cpo::uno::Sequence< css::document::CmisProperty >
-            getCmisProperties() override;
-    virtual void setCmisProperties(
-            const cpo::uno::Sequence<
-                css::document::CmisProperty >& _cmisproperties ) override;
-
-    virtual void updateCmisProperties(
-            const cpo::uno::Sequence<
-                css::document::CmisProperty >& _cmisproperties ) override;
-
-    virtual cpo::uno::Sequence< css::document::CmisVersion > getAllVersions ( ) override;
-
-    virtual void checkOut(  ) override;
-    virtual void cancelCheckOut(  ) override;
-    virtual void checkIn( bool bIsMajor, const OUString & rMessage  ) override;
-
-    virtual bool isVersionable( ) override;
-    virtual bool canCheckOut( ) override;
-    virtual bool canCancelCheckOut( ) override;
-    virtual bool canCheckIn( ) override;
-
-    /// @throws cpo::uno::RuntimeException
-    bool getBoolPropertyValue( const OUString& rName );
-
 
     //  SfxListener
 
@@ -721,8 +693,6 @@ private:
                     ) const;
 
     SAL_DLLPRIVATE void NotifyModifyListeners_Impl() const;
-
-    SAL_DLLPRIVATE void loadCmisProperties();
 
     SAL_DLLPRIVATE SfxMedium* handleLoadError( const ErrCodeMsg& nError, SfxMedium* pMedium );
 

@@ -34,7 +34,6 @@
 # This is typically a hint that these should be hard-coded in the
 # test case since they need some document and model data to work
 
-uui/ui/authfallback.ui
 uui/ui/filterselect.ui
 uui/ui/setmasterpassworddlg.ui
 uui/ui/masterpassworddlg.ui

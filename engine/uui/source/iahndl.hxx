@@ -218,12 +218,6 @@ private:
             ) const;
 
     void
-    handleAuthFallbackRequest(
-            const OUString & instructions,
-            const OUString & url,
-            cpo::uno::Sequence< cpo::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations );
-
-    void
     handleLoadReadOnlyRequest(
         const OUString& sDocumentURL,
         cpo::uno::Sequence< cpo::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations);

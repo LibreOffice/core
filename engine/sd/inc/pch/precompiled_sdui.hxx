@@ -235,7 +235,6 @@
 #include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/document/EventObject.hpp>
-#include <com/sun/star/document/XCmisDocument.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentRecovery2.hpp>

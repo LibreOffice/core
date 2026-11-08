@@ -529,7 +529,6 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/container/XChild.hpp
     - com/sun/star/document/XDocumentPropertiesSupplier.hpp
-    - com/sun/star/document/XCmisDocument.hpp
     - com/sun/star/rdf/XDocumentMetadataAccess.hpp
     - com/sun/star/document/XUndoManagerSupplier.hpp
     - com/sun/star/document/XDocumentEventBroadcaster.hpp

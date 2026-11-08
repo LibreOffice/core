@@ -356,27 +356,4 @@ void InteractionReplaceExistingData::select()
     recordSelection();
 }
 
-// InteractionAuthFallback Implementation
-
-// XInteractionContinuation methods.
-
-// virtual
-void InteractionAuthFallback::select()
-{
-    recordSelection();
-}
-
-// XInteractionAuthFallback methods
-
-// virtual
-void InteractionAuthFallback::setCode( const OUString& code )
-{
-    m_aCode = code;
-}
-
-const OUString& InteractionAuthFallback::getCode() const
-{
-    return m_aCode;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

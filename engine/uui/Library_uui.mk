@@ -40,7 +40,6 @@ $(eval $(call gb_Library_use_libraries,uui,\
 
 $(eval $(call gb_Library_add_exception_objects,uui,\
 	uui/source/alreadyopen \
-	uui/source/authfallbackdlg \
 	uui/source/filechanged \
 	uui/source/fltdlg \
 	uui/source/iahndl \

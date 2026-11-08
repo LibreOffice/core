@@ -161,7 +161,6 @@
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
-#include <com/sun/star/document/XCmisDocument.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XExporter.hpp>

@@ -28,7 +28,6 @@
 #include <com/sun/star/task/XInteractionPassword.hpp>
 #include <com/sun/star/task/XInteractionPassword2.hpp>
 #include <com/sun/star/task/XInteractionRetry.hpp>
-#include <com/sun/star/ucb/XInteractionAuthFallback.hpp>
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication.hpp>
 #include <com/sun/star/ucb/URLAuthenticationRequest.hpp>
 
@@ -41,7 +40,6 @@
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 
-#include "authfallbackdlg.hxx"
 #include <strings.hrc>
 #include "getcontinuations.hxx"
 #include "passwordcontainer.hxx"
@@ -439,27 +437,6 @@ UUIInteractionHelper::handlePasswordRequest(
     }
 
     return false;
-}
-
-void
-UUIInteractionHelper::handleAuthFallbackRequest( const OUString & instructions,
-        const OUString & url,
-        cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > const & rContinuations )
-{
-    OUString code;
-    uno::Reference<awt::XWindow> xParent = getParentXWindow();
-    AuthFallbackDlg dlg(Application::GetFrameWeld(xParent), instructions, url);
-    if (dlg.run() == RET_OK)
-        code = dlg.GetCode();
-    uno::Reference< task::XInteractionAbort > xAbort;
-    uno::Reference< ucb::XInteractionAuthFallback > xAuthFallback;
-    getContinuations(rContinuations, &xAbort, &xAuthFallback);
-
-    if (!code.isEmpty() && xAuthFallback.is())
-    {
-        xAuthFallback->setCode(code);
-        xAuthFallback->select( );
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,7 +20,6 @@
 #pragma once
 
 
-#include <com/sun/star/ucb/CheckinArgument.hpp>
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -125,10 +124,6 @@ private:
     void
     globalTransfer(
             const css::ucb::GlobalTransferCommandArgument2 & rArg,
-            const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
-
-    /// @throws cpo::uno::Exception
-    cpo::uno::Any checkIn( const css::ucb::CheckinArgument& rArg,
             const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
 
