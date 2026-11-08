@@ -723,8 +723,51 @@ void DXF2GDIMetaFile::DrawPointEntity(const DXFPointEntity & rE, const DXFTransf
         return;
 
     const basegfx::B2DPoint aPoint(Project(rTransform, rE.aP0));
-    OutPoint(aPoint);
     OutThickness(basegfx::B2DPolygon{ aPoint }, rTransform, rE.fThickness, false);
+
+    // $PDMODE: 0 dot, 1 nothing, 2 plus, 3 cross, 4 tick up, +32 circle, +64 square
+    const tools::Long nMode = pDXF->mnPointMode;
+    const tools::Long nShape = nMode & 7;
+    const bool bCircle = (nMode & 32) != 0;
+    const bool bSquare = (nMode & 64) != 0;
+    // the definition points of dimensions are dots
+    if (mbMeasure || mnDimensionDepth > 0 || (nShape == 0 && !bCircle && !bSquare))
+    {
+        OutPoint(aPoint);
+        return;
+    }
+    if (!maExtents.isInside(aPoint) || (nShape == 1 && !bCircle && !bSquare))
+        return;
+
+    // $PDSIZE: in drawing units if positive, otherwise a percentage of the drawing height
+    const double fSize = pDXF->mfPointSize > 0
+                             ? pDXF->mfPointSize * GetDeviceScale(rTransform) / mfDeviceScale
+                             : (pDXF->mfPointSize < 0 ? -pDXF->mfPointSize : 5.0) / 100.0
+                                   * maExtents.getHeight();
+    const double fR = fSize / 2;
+    const LineInfo aLineInfo;
+    const double fX = aPoint.getX();
+    const double fY = aPoint.getY();
+    if (nShape == 0)
+        OutPoint(aPoint);
+    else if (nShape == 2)
+    {
+        OutPolyLine(basegfx::B2DPolygon{ { fX - fR, fY }, { fX + fR, fY } }, aLineInfo);
+        OutPolyLine(basegfx::B2DPolygon{ { fX, fY - fR }, { fX, fY + fR } }, aLineInfo);
+    }
+    else if (nShape == 3)
+    {
+        OutPolyLine(basegfx::B2DPolygon{ { fX - fR, fY - fR }, { fX + fR, fY + fR } }, aLineInfo);
+        OutPolyLine(basegfx::B2DPolygon{ { fX - fR, fY + fR }, { fX + fR, fY - fR } }, aLineInfo);
+    }
+    else if (nShape == 4)
+        OutPolyLine(basegfx::B2DPolygon{ { fX, fY }, { fX, fY + fR } }, aLineInfo);
+    if (bCircle)
+        OutPolyLine(basegfx::utils::createPolygonFromCircle(aPoint, fR), aLineInfo);
+    if (bSquare)
+        OutPolyLine(basegfx::utils::createPolygonFromRect(
+                        basegfx::B2DRange(fX - fR, fY - fR, fX + fR, fY + fR)),
+                    aLineInfo);
 }
 
 
@@ -1583,6 +1626,91 @@ void DXF2GDIMetaFile::DrawMTextEntity(const DXFMTextEntity & rE, const DXFTransf
     }
 }
 
+void DXF2GDIMetaFile::DrawLeaderEntity(const DXFLeaderEntity & rE, const DXFTransform & rTransform)
+{
+    if (rE.aVertices.size() < 2 || !SetLineAttribute(rE))
+        return;
+
+    std::vector<basegfx::B2DPoint> aPoints;
+    for (const DXFVector& rVertex : rE.aVertices)
+        aPoints.push_back(Project(rTransform, rVertex));
+    basegfx::B2DPolygon aPath;
+    if (rE.bSpline)
+        aPath = dxf::createSpline(0, {}, {}, {}, aPoints);
+    else
+        for (const basegfx::B2DPoint& rPoint : aPoints)
+            aPath.append(rPoint);
+    OutPolyLine(aPath, GetEntityLineInfo(rE, rTransform));
+
+    if (!rE.bArrow)
+        return;
+    // the arrowhead at the first vertex: DIMASZ long, a third of it wide, times DIMSCALE
+    double fArrowSize = pDXF->mfDimArrowSize;
+    double fScale = pDXF->mfDimScale;
+    if (const DXFDimStyle * pDimStyle = pDXF->aTables.SearchDimStyle(rE.m_sDimStyle))
+    {
+        if (pDimStyle->mfArrowSize > 0)
+            fArrowSize = pDimStyle->mfArrowSize;
+        if (pDimStyle->mfScale > 0)
+            fScale = pDimStyle->mfScale;
+    }
+    if (!(fScale > 0))
+        fScale = 1.0;
+    const double fLength = fArrowSize * fScale;
+    const DXFVector aTip = rE.aVertices[0];
+    const DXFVector aBack = rE.aVertices[1] - aTip;
+    if (!(fLength > 0) || aBack.Abs() == 0)
+        return;
+    const DXFVector aDirection = aBack.Unit();
+    const DXFVector aSide = (rE.aExtrusion.Unit() * aDirection) * (fLength / 6);
+    const DXFVector aBase = aTip + aDirection * fLength;
+    basegfx::B2DPolygon aArrow{ Project(rTransform, aTip), Project(rTransform, aBase + aSide),
+                                Project(rTransform, aBase - aSide) };
+    aArrow.setClosed(true);
+    if (SetAreaAttribute(rE))
+        OutPolygon(basegfx::B2DPolyPolygon(aArrow));
+}
+
+void DXF2GDIMetaFile::DrawImageEntity(const DXFImageEntity & rE, const DXFTransform & rTransform)
+{
+    std::optional<Color> oColor = GetEntityColor(rE);
+    if (!oColor)
+        return;
+
+    // a point given in pixels from the top left corner of the image
+    const double fWidth = rE.fWidth > 0 ? rE.fWidth : 1.0;
+    const double fHeight = rE.fHeight > 0 ? rE.fHeight : 1.0;
+    std::vector<basegfx::B2DPoint> aPixels;
+    if (rE.nClipType == 2 && rE.aClipVertices.size() >= 3)
+        aPixels = rE.aClipVertices;
+    else if (rE.aClipVertices.size() == 2)
+    {
+        const basegfx::B2DPoint& rA = rE.aClipVertices[0];
+        const basegfx::B2DPoint& rB = rE.aClipVertices[1];
+        aPixels = { rA, { rB.getX(), rA.getY() }, rB, { rA.getX(), rB.getY() } };
+    }
+    else
+        aPixels = { { -0.5, -0.5 }, { fWidth - 0.5, -0.5 }, { fWidth - 0.5, fHeight - 0.5 },
+                    { -0.5, fHeight - 0.5 } };
+
+    basegfx::B2DPolygon aBoundary;
+    for (const basegfx::B2DPoint& rPixel : aPixels)
+        aBoundary.append(Project(rTransform, rE.aInsert + rE.aU * (rPixel.getX() + 0.5)
+                                                 + rE.aV * (fHeight - rPixel.getY() - 0.5)));
+    aBoundary.setClosed(true);
+
+    if (rE.bWipeout)
+    {
+        // covers what is drawn before it with the background
+        SetColors(COL_WHITE, COL_WHITE);
+        OutPolygon(basegfx::B2DPolyPolygon(aBoundary));
+        return;
+    }
+    // the raster data is in another file, draw the frame
+    if (SetLineAttribute(rE))
+        OutPolyLine(aBoundary, LineInfo());
+}
+
 void DXF2GDIMetaFile::DrawDimensionEntity(const DXFDimensionEntity & rE, const DXFTransform & rTransform)
 {
     const DXFBlock * pB;
@@ -1594,7 +1722,9 @@ void DXF2GDIMetaFile::DrawDimensionEntity(const DXFDimensionEntity & rE, const D
         DXFTransform(1.0,1.0,1.0,DXFVector(0.0,0.0,0.0)-pB->aBasePoint),
         rTransform
     );
+    ++mnDimensionDepth;
     DrawBlock(*pB, rE, aT);
+    --mnDimensionDepth;
 }
 
 
@@ -1616,7 +1746,7 @@ void DXF2GDIMetaFile::DrawEntities(const DXFEntities & rEntities,
             const bool bWorld
                 = pE->eType == DXF_LINE || pE->eType == DXF_POINT || pE->eType == DXF_3DFACE
                   || pE->eType == DXF_ELLIPSE || pE->eType == DXF_SPLINE
-                  || pE->eType == DXF_MTEXT
+                  || pE->eType == DXF_MTEXT || pE->eType == DXF_LEADER || pE->eType == DXF_IMAGE
                   || (pE->eType == DXF_POLYLINE
                       && (static_cast<const DXFPolyLineEntity*>(pE)->nFlags & (8 | 16 | 64)) != 0);
             if (bWorld || pE->aExtrusion.fz==1.0) {
@@ -1678,6 +1808,12 @@ void DXF2GDIMetaFile::DrawEntities(const DXFEntities & rEntities,
             case DXF_MTEXT:
                 DrawMTextEntity(static_cast<const DXFMTextEntity&>(*pE),*pT);
                 break;
+            case DXF_LEADER:
+                DrawLeaderEntity(static_cast<const DXFLeaderEntity&>(*pE),*pT);
+                break;
+            case DXF_IMAGE:
+                DrawImageEntity(static_cast<const DXFImageEntity&>(*pE),*pT);
+                break;
             default:
                 break;  // four other values not handled -Wall
             }
@@ -1697,6 +1833,7 @@ DXF2GDIMetaFile::DXF2GDIMetaFile()
     , mnWork(0)
     , mnVisits(0)
     , mnInsertDepth(0)
+    , mnDimensionDepth(0)
     , mnBlockLineWeight(DXF_LINEWEIGHT_DEFAULT)
     , mpParentLayer(nullptr)
 {
@@ -1729,6 +1866,7 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
     mnWork = 0;
     mnVisits = 0;
     mnInsertDepth = 0;
+    mnDimensionDepth = 0;
     maExtents.reset();
     maPointExtents.reset();
     DrawEntities(pDXF->aEntities, aViewTransform);
@@ -1770,6 +1908,7 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
     mnWork = 0;
     mnVisits = 0;
     mnInsertDepth = 0;
+    mnDimensionDepth = 0;
     DrawEntities(pDXF->aEntities, aViewTransform);
     rMTF.Stop();
 

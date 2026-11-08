@@ -958,6 +958,62 @@ void DXFMTextEntity::EvaluateGroup(DXFGroupReader & rDGR)
     }
 }
 
+//--------------------------DXFLeaderEntity-------------------------------------
+
+DXFLeaderEntity::DXFLeaderEntity()
+    : DXFBasicEntity(DXF_LEADER)
+    , bArrow(true)
+    , bSpline(false)
+{
+}
+
+void DXFLeaderEntity::EvaluateGroup(DXFGroupReader & rDGR)
+{
+    switch (rDGR.GetG()) {
+        case  3: m_sDimStyle=rDGR.GetS(); break;
+        case 71: bArrow=rDGR.GetI()!=0; break;
+        case 72: bSpline=rDGR.GetI()!=0; break;
+        case 10: aVertices.emplace_back(rDGR.GetF(), 0.0, 0.0); break;
+        case 20: if (!aVertices.empty()) aVertices.back().fy=rDGR.GetF(); break;
+        case 30: if (!aVertices.empty()) aVertices.back().fz=rDGR.GetF(); break;
+        default: DXFBasicEntity::EvaluateGroup(rDGR);
+    }
+}
+
+//--------------------------DXFImageEntity--------------------------------------
+
+DXFImageEntity::DXFImageEntity(bool bIsWipeout)
+    : DXFBasicEntity(DXF_IMAGE)
+    , bWipeout(bIsWipeout)
+    , aU(1.0, 0.0, 0.0)
+    , aV(0.0, 1.0, 0.0)
+    , fWidth(1.0)
+    , fHeight(1.0)
+    , nClipType(1)
+{
+}
+
+void DXFImageEntity::EvaluateGroup(DXFGroupReader & rDGR)
+{
+    switch (rDGR.GetG()) {
+        case 10: aInsert.fx=rDGR.GetF(); break;
+        case 20: aInsert.fy=rDGR.GetF(); break;
+        case 30: aInsert.fz=rDGR.GetF(); break;
+        case 11: aU.fx=rDGR.GetF(); break;
+        case 21: aU.fy=rDGR.GetF(); break;
+        case 31: aU.fz=rDGR.GetF(); break;
+        case 12: aV.fx=rDGR.GetF(); break;
+        case 22: aV.fy=rDGR.GetF(); break;
+        case 32: aV.fz=rDGR.GetF(); break;
+        case 13: fWidth=rDGR.GetF(); break;
+        case 23: fHeight=rDGR.GetF(); break;
+        case 71: nClipType=rDGR.GetI(); break;
+        case 14: aClipVertices.emplace_back(rDGR.GetF(), 0.0); break;
+        case 24: if (!aClipVertices.empty()) aClipVertices.back().setY(rDGR.GetF()); break;
+        default: DXFBasicEntity::EvaluateGroup(rDGR);
+    }
+}
+
 //--------------------------DXFDimensionEntity----------------------------------
 
 DXFDimensionEntity::DXFDimensionEntity() : DXFBasicEntity(DXF_DIMENSION)
@@ -1009,6 +1065,9 @@ void DXFEntities::Read(DXFGroupReader & rDGR)
         else if (rDGR.GetS() == "ELLIPSE"   ) pE=new DXFEllipseEntity;
         else if (rDGR.GetS() == "SPLINE"    ) pE=new DXFSplineEntity;
         else if (rDGR.GetS() == "MTEXT"     ) pE=new DXFMTextEntity;
+        else if (rDGR.GetS() == "LEADER"    ) pE=new DXFLeaderEntity;
+        else if (rDGR.GetS() == "IMAGE"     ) pE=new DXFImageEntity(false);
+        else if (rDGR.GetS() == "WIPEOUT"   ) pE=new DXFImageEntity(true);
         else
         {
             do {

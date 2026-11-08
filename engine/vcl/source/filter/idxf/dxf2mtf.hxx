@@ -76,6 +76,8 @@ private:
     sal_uInt64 mnWork;
     sal_uInt64 mnVisits;
     sal_Int32 mnInsertDepth;
+    // inside the block of a dimension
+    sal_Int32 mnDimensionDepth;
 
     // the colour and line type of the innermost insert, for BYBLOCK
     std::optional<Color> moBlockColor;
@@ -179,6 +181,10 @@ private:
     void DrawSplineEntity(const DXFSplineEntity & rE, const DXFTransform & rTransform);
 
     void DrawMTextEntity(const DXFMTextEntity & rE, const DXFTransform & rTransform);
+
+    void DrawLeaderEntity(const DXFLeaderEntity & rE, const DXFTransform & rTransform);
+
+    void DrawImageEntity(const DXFImageEntity & rE, const DXFTransform & rTransform);
 
     void DrawDimensionEntity(const DXFDimensionEntity & rE, const DXFTransform & rTransform);
 

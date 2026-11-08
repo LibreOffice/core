@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <string_view>
+#include <vector>
 
 #include "dxfgrprd.hxx"
 #include "dxfvec.hxx"
@@ -150,6 +151,17 @@ public:
 //------------------ Tables --------------------------------------------------
 
 
+//------------------ Dimension style -----------------------------------------
+
+struct DXFDimStyle
+{
+    OString maName;          //  2
+    double mfArrowSize = 0;  // 41, DIMASZ
+    double mfScale = 0;      // 40, DIMSCALE
+
+    void Read(DXFGroupReader & rDGR);
+};
+
 class DXFTables {
 
     DXFLType * pLTypes; // list of line types
@@ -159,6 +171,7 @@ class DXFTables {
     mutable DXFLayer * mpLastLayer;
     DXFStyle * pStyles; // list of styles
     DXFVPort * pVPorts; // list of viewports
+    std::vector<DXFDimStyle> maDimStyles;
 
 public:
 
@@ -176,6 +189,7 @@ public:
     DXFLayer * SearchLayer(std::string_view rName) const;
     DXFVPort * SearchVPort(std::string_view rName) const;
     DXFStyle * SearchStyle(std::string_view rName) const;
+    const DXFDimStyle * SearchDimStyle(std::string_view rName) const;
 
 };
 

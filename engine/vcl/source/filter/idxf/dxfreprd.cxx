@@ -99,6 +99,10 @@ DXFRepresentation::DXFRepresentation()
     : mEnc(RTL_TEXTENCODING_DONTKNOW)
     , mfGlobalLineTypeScale(1.0)
     , mbLineWeightDisplay(false)
+    , mfDimArrowSize(0.18)
+    , mfDimScale(1.0)
+    , mnPointMode(0)
+    , mfPointSize(0.0)
 {
 }
 
@@ -222,6 +226,30 @@ void DXFRepresentation::ReadHeader(DXFGroupReader & rDGR)
                 if (!rDGR.Read(40))
                     continue;
                 setGlobalLineTypeScale(getGlobalLineTypeScale() * rDGR.GetF());
+            }
+            else if (rDGR.GetS() == "$DIMASZ")
+            {
+                if (!rDGR.Read(40))
+                    continue;
+                mfDimArrowSize = rDGR.GetF();
+            }
+            else if (rDGR.GetS() == "$DIMSCALE")
+            {
+                if (!rDGR.Read(40))
+                    continue;
+                mfDimScale = rDGR.GetF();
+            }
+            else if (rDGR.GetS() == "$PDMODE")
+            {
+                if (!rDGR.Read(70))
+                    continue;
+                mnPointMode = rDGR.GetI();
+            }
+            else if (rDGR.GetS() == "$PDSIZE")
+            {
+                if (!rDGR.Read(40))
+                    continue;
+                mfPointSize = rDGR.GetF();
             }
             else if (rDGR.GetS() == "$LWDISPLAY")
             {
