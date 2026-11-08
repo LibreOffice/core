@@ -164,6 +164,8 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
                 case XML_ELEMENT(OFFICE, XML_MIMETYPE):
                     sMime = aIter.toString();
                     break;
+                case XML_ELEMENT(OFFICE, XML_VERSION):
+                    break;
                 default:
                     XMLOFF_WARN_UNKNOWN("xmloff", aIter);
             }
