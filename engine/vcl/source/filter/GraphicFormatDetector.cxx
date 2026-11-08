@@ -370,6 +370,53 @@ bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen)
     return false;
 }
 
+enum class DXFStartResult
+{
+    Match,
+    NoMatch,
+    NeedMoreData
+};
+
+// white space between the lines of a DXF file, a NUL byte belongs to binary data
+bool isDXFSpace(sal_uInt8 c) { return c != 0 && c <= 32; }
+
+// Skips the 999 comment groups at the start of an ASCII DXF and checks for "0" / "SECTION".
+DXFStartResult checkASCIIDXFStart(const sal_uInt8* pData, sal_uInt64 nSize)
+{
+    sal_uInt64 i = 0;
+    while (true)
+    {
+        while (i < nSize && isDXFSpace(pData[i]))
+            ++i;
+        if (i + 3 > nSize)
+            return DXFStartResult::NeedMoreData;
+        if (pData[i] == '9' && pData[i + 1] == '9' && pData[i + 2] == '9')
+        {
+            i += 3;
+            // the rest of the group code line, then the comment line itself
+            for (int nLine = 0; nLine < 2; ++nLine)
+            {
+                while (i < nSize && pData[i] != '\n')
+                    ++i;
+                if (i >= nSize)
+                    return DXFStartResult::NeedMoreData;
+                ++i;
+            }
+            continue;
+        }
+        if (pData[i] != '0' || !isDXFSpace(pData[i + 1]))
+            return DXFStartResult::NoMatch;
+        ++i;
+        while (i < nSize && isDXFSpace(pData[i]))
+            ++i;
+        if (i + 7 > nSize)
+            return DXFStartResult::NeedMoreData;
+        if (strncmp(reinterpret_cast<const char*>(pData + i), "SECTION", 7) == 0)
+            return DXFStartResult::Match;
+        return DXFStartResult::NoMatch;
+    }
+}
+
 } // end anonymous namespace
 
 GraphicFormatDetector::GraphicFormatDetector(SvStream& rStream, OUString aFormatExtension,
@@ -1142,55 +1189,24 @@ bool GraphicFormatDetector::checkDXF()
         return true;
     }
 
-    // ASCII DXF File Format
-    int i = 0;
-    while (i < 256 && maFirstBytes[i] <= 32)
+    // ASCII DXF: optional 999 comment groups, then a "0" group with the value "SECTION"
+    sal_uInt64 nSize = std::min<sal_uInt64>(mnStreamLength, maFirstBytes.size());
+    DXFStartResult eResult = checkASCIIDXFStart(maFirstBytes.data(), nSize);
+    if (eResult == DXFStartResult::NeedMoreData && mnStreamLength > nSize)
     {
-        ++i;
+        // A comment header can be longer than the bytes peeked so far, read some more
+        constexpr sal_uInt64 nMaxCommentHeader = 65536;
+        std::vector<sal_uInt8> aBuffer(std::min(mnStreamLength, nMaxCommentHeader));
+        SeekGuard aGuard(mrStream, mnStreamPosition);
+        mrStream.Seek(mnStreamPosition);
+        sal_uInt64 nRead = mrStream.ReadBytes(aBuffer.data(), aBuffer.size());
+        eResult = checkASCIIDXFStart(aBuffer.data(), nRead);
     }
 
-    // tdf#168265: pass comment section which begins with 999
-    // see https://help.autodesk.com/view/OARX/2024/ENU/?guid=GUID-3F0380A5-1C15-464D-BC66-2C5F094BCFB9
-    while (i < 256 - 2 && maFirstBytes[i] == '9' && maFirstBytes[i + 1] == '9'
-           && maFirstBytes[i + 2] == '9')
+    if (eResult == DXFStartResult::Match)
     {
-        // we're on the 999 line
-        i = i + 3;
-        // we want to pass this line
-        while (i < 256 && maFirstBytes[i] <= 32)
-        {
-            ++i;
-        }
-        // we're on the comment line and we want to go until new line
-        while (i < 256 && maFirstBytes[i] != 10)
-        {
-            ++i;
-        }
-        // we're on the new line
-        while (i < 256 && maFirstBytes[i] <= 32)
-        {
-            ++i;
-        }
-    }
-
-    if (i < 256 && maFirstBytes[i] == '0')
-    {
-        ++i;
-
-        // only now do we have sufficient data to make a judgement
-        // based on a '0' + 'SECTION' == DXF argument
-
-        while (i < 256 && maFirstBytes[i] <= 32)
-        {
-            ++i;
-        }
-
-        if (i + 7 < 256
-            && (strncmp(reinterpret_cast<char*>(maFirstBytes.data() + i), "SECTION", 7) == 0))
-        {
-            maMetadata.mnFormat = GraphicFileFormat::DXF;
-            return true;
-        }
+        maMetadata.mnFormat = GraphicFileFormat::DXF;
+        return true;
     }
     return false;
 }
