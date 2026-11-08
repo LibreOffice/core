@@ -62,20 +62,17 @@ COKitDocument * DocumentData::loadedKitDocument(unsigned docId)
 
 void DocumentData::deallocate(unsigned docId)
 {
-    if (idToDocDataMap.find(docId) == idToDocDataMap.end())
-    {
-        // FIXME: Something is wrong, whatever.
+    const std::lock_guard<std::mutex> lock(idToDocDataMapMutex);
+    auto it = idToDocDataMap.find(docId);
+    if (it == idToDocDataMap.end())
         return;
-    }
-    // Does get() really need to called during the destructor?
-    get(docId);
-    auto p = idToDocDataMap.find(docId);
-    delete p->second;
-    idToDocDataMap.erase(docId);
+    delete it->second;
+    idToDocDataMap.erase(it);
 }
 
 int DocumentData::count()
 {
+    const std::lock_guard<std::mutex> lock(idToDocDataMapMutex);
     return idToDocDataMap.size();
 }
 
