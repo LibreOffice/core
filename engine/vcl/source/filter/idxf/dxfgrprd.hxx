@@ -63,6 +63,9 @@ private:
 
     tools::Long   ReadI();
     double ReadF();
+    // a malformed value is read as 0 instead of being an error
+    tools::Long ReadLenientI();
+    double ReadLenientF();
     void   ReadS();
 
     SvStream & rIS;

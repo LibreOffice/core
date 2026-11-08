@@ -93,50 +93,57 @@ bool IsFinite(const basegfx::B2DRange& rRange)
 
 void DXF2GDIMetaFile::ResetState()
 {
-    nBlockColor = 7;
+    moBlockColor = ConvertColor(7);
     aBlockDXFLineInfo = DXFLineInfo();
-
-    const DXFLayer * pLayer = pDXF->aTables.SearchLayer("0");
-    if (pLayer != nullptr)
-    {
-        nParentLayerColor = pLayer->nColor & 0xff;
-        aParentLayerDXFLineInfo = LTypeToDXFLineInfo(pLayer->m_sLineType);
-    }
-    else
-    {
-        nParentLayerColor = 7;
-        aParentLayerDXFLineInfo = DXFLineInfo();
-    }
+    mpParentLayer = nullptr;
 
     aActLineColor = pVirDev->GetLineColor();
     aActFillColor = pVirDev->GetFillColor();
     aActFont = pVirDev->GetFont();
 }
 
-Color DXF2GDIMetaFile::ConvertColor(sal_uInt8 nColor) const
+Color DXF2GDIMetaFile::ConvertColor(tools::Long nColor) const
 {
+    if (nColor < 0)
+        nColor = -nColor;
+    if (nColor < 1 || nColor > 255)
+        nColor = 7;
+    const sal_uInt8 nIndex = static_cast<sal_uInt8>(nColor);
     return Color(
-        pDXF->aPalette.GetRed( nColor ),
-        pDXF->aPalette.GetGreen( nColor ),
-        pDXF->aPalette.GetBlue( nColor ) );
+        pDXF->aPalette.GetRed( nIndex ),
+        pDXF->aPalette.GetGreen( nIndex ),
+        pDXF->aPalette.GetBlue( nIndex ) );
 }
 
-tools::Long DXF2GDIMetaFile::GetEntityColor(const DXFBasicEntity & rE) const
+const DXFLayer * DXF2GDIMetaFile::GetEntityLayer(const DXFBasicEntity & rE) const
 {
-    tools::Long nColor;
+    // the entities on layer 0 of a block are on the layer of the insert
+    if (rE.m_sLayer == "0" && mpParentLayer != nullptr)
+        return mpParentLayer;
+    return pDXF->aTables.SearchLayer(rE.m_sLayer);
+}
 
-    nColor=rE.nColor;
-    if (nColor==256) {
-        if (rE.m_sLayer.getLength() < 2) {
-            nColor=nParentLayerColor;
-        } else {
-            const DXFLayer * pLayer=pDXF->aTables.SearchLayer(rE.m_sLayer);
-            if (pLayer!=nullptr) nColor=pLayer->nColor;
-            else nColor=nParentLayerColor;
-        }
+std::optional<Color> DXF2GDIMetaFile::GetEntityColor(const DXFBasicEntity & rE) const
+{
+    if (rE.bInvisible)
+        return {};
+    const DXFLayer * pLayer = GetEntityLayer(rE);
+    if (pLayer != nullptr && pLayer->IsHidden())
+        return {};
+
+    if (rE.nTrueColor >= 0)
+        return Color(ColorTransparency, rE.nTrueColor);
+    if (rE.nColor == 0) // BYBLOCK
+        return moBlockColor;
+    if (rE.nColor == 256) // BYLAYER
+    {
+        if (pLayer == nullptr)
+            return ConvertColor(7);
+        if (pLayer->nTrueColor >= 0)
+            return Color(ColorTransparency, pLayer->nTrueColor);
+        return ConvertColor(pLayer->nColor);
     }
-    else if (nColor==0) nColor=nBlockColor;
-    return nColor;
+    return ConvertColor(rE.nColor);
 }
 
 DXFLineInfo DXF2GDIMetaFile::LTypeToDXFLineInfo(std::string_view rLineType) const
@@ -191,15 +198,9 @@ DXFLineInfo DXF2GDIMetaFile::GetEntityDXFLineInfo(const DXFBasicEntity & rE)
     DXFLineInfo aDXFLineInfo;
 
     if (rE.m_sLineType == "BYLAYER") {
-        if (rE.m_sLayer.getLength() < 2) {
-            aDXFLineInfo=aParentLayerDXFLineInfo;
-        } else {
-            const DXFLayer * pLayer=pDXF->aTables.SearchLayer(rE.m_sLayer);
-            if (pLayer!=nullptr) {
-                aDXFLineInfo = LTypeToDXFLineInfo(pLayer->m_sLineType);
-            }
-            else aDXFLineInfo=aParentLayerDXFLineInfo;
-        }
+        const DXFLayer * pLayer = GetEntityLayer(rE);
+        if (pLayer != nullptr)
+            aDXFLineInfo = LTypeToDXFLineInfo(pLayer->m_sLineType);
     }
     else if (rE.m_sLineType == "BYBLOCK") {
         aDXFLineInfo=aBlockDXFLineInfo;
@@ -224,12 +225,10 @@ LineInfo DXF2GDIMetaFile::GetEntityLineInfo(const DXFBasicEntity & rE, const DXF
 
 bool DXF2GDIMetaFile::SetLineAttribute(const DXFBasicEntity & rE)
 {
-    tools::Long nColor;
-    Color aColor;
-
-    nColor=GetEntityColor(rE);
-    if (nColor<0) return false;
-    aColor=ConvertColor(static_cast<sal_uInt8>(nColor));
+    std::optional<Color> oColor = GetEntityColor(rE);
+    if (!oColor)
+        return false;
+    const Color aColor = *oColor;
 
     if (aActLineColor!=aColor) {
         aActLineColor = aColor;
@@ -246,12 +245,10 @@ bool DXF2GDIMetaFile::SetLineAttribute(const DXFBasicEntity & rE)
 
 bool DXF2GDIMetaFile::SetAreaAttribute(const DXFBasicEntity & rE)
 {
-    tools::Long nColor;
-    Color aColor;
-
-    nColor=GetEntityColor(rE);
-    if (nColor<0) return false;
-    aColor=ConvertColor(static_cast<sal_uInt8>(nColor));
+    std::optional<Color> oColor = GetEntityColor(rE);
+    if (!oColor)
+        return false;
+    const Color aColor = *oColor;
 
     if (aActLineColor!=aColor) {
         aActLineColor = aColor;
@@ -269,13 +266,11 @@ bool DXF2GDIMetaFile::SetAreaAttribute(const DXFBasicEntity & rE)
 bool DXF2GDIMetaFile::SetFontAttribute(const DXFBasicEntity & rE, Degree10 nOrientation,
                                        sal_Int32 nHeight)
 {
-    tools::Long nColor;
-    Color aColor;
+    std::optional<Color> oColor = GetEntityColor(rE);
+    if (!oColor)
+        return false;
+    const Color aColor = *oColor;
     vcl::Font aFont;
-
-    nColor=GetEntityColor(rE);
-    if (nColor<0) return false;
-    aColor=ConvertColor(static_cast<sal_uInt8>(nColor));
 
     aFont.SetColor(aColor);
     aFont.SetTransparent(true);
@@ -543,26 +538,21 @@ void DXF2GDIMetaFile::DrawTextEntity(const DXFTextEntity & rE, const DXFTransfor
 void DXF2GDIMetaFile::DrawBlock(const DXFBlock & rBlock, const DXFBasicEntity & rE,
                                 const DXFTransform & rTransform)
 {
-    tools::Long nSavedBlockColor, nSavedParentLayerColor;
-    DXFLineInfo aSavedBlockDXFLineInfo, aSavedParentLayerDXFLineInfo;
-    nSavedBlockColor=nBlockColor;
-    nSavedParentLayerColor=nParentLayerColor;
-    aSavedBlockDXFLineInfo=aBlockDXFLineInfo;
-    aSavedParentLayerDXFLineInfo=aParentLayerDXFLineInfo;
-    nBlockColor=GetEntityColor(rE);
-    aBlockDXFLineInfo=GetEntityDXFLineInfo(rE);
-    if (rE.m_sLayer.getLength() > 1) {
-        DXFLayer * pLayer=pDXF->aTables.SearchLayer(rE.m_sLayer);
-        if (pLayer!=nullptr) {
-            nParentLayerColor=pLayer->nColor;
-            aParentLayerDXFLineInfo = LTypeToDXFLineInfo(pLayer->m_sLineType);
-        }
-    }
+    const DXFLayer * pLayer = GetEntityLayer(rE);
+    if (rE.bInvisible || (pLayer != nullptr && (pLayer->nFlags & 1) != 0))
+        return;
+
+    std::optional<Color> oSavedBlockColor = moBlockColor;
+    DXFLineInfo aSavedBlockDXFLineInfo = aBlockDXFLineInfo;
+    const DXFLayer * pSavedParentLayer = mpParentLayer;
+    // with the insert on a layer that is off, only the entities on layer 0 are hidden
+    moBlockColor = GetEntityColor(rE);
+    aBlockDXFLineInfo = GetEntityDXFLineInfo(rE);
+    mpParentLayer = pLayer;
     DrawEntities(rBlock, rTransform);
-    aBlockDXFLineInfo=aSavedBlockDXFLineInfo;
-    aParentLayerDXFLineInfo=aSavedParentLayerDXFLineInfo;
-    nBlockColor=nSavedBlockColor;
-    nParentLayerColor=nSavedParentLayerColor;
+    moBlockColor = std::move(oSavedBlockColor);
+    aBlockDXFLineInfo = aSavedBlockDXFLineInfo;
+    mpParentLayer = pSavedParentLayer;
 }
 
 
@@ -628,7 +618,8 @@ void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransf
     if (rE.aBoundaryPathData.empty())
         return;
 
-    SetAreaAttribute( rE );
+    if (!SetAreaAttribute(rE))
+        return;
     basegfx::B2DPolyPolygon aPolyPolygon;
     for (const DXFBoundaryPathData& rPathData : rE.aBoundaryPathData)
     {
@@ -798,8 +789,7 @@ DXF2GDIMetaFile::DXF2GDIMetaFile()
     , pDXF(nullptr)
     , mbMeasure(false)
     , mfDeviceScale(1.0)
-    , nBlockColor(0)
-    , nParentLayerColor(0)
+    , mpParentLayer(nullptr)
 {
 }
 

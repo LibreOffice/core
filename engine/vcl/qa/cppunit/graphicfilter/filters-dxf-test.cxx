@@ -13,6 +13,7 @@
 #include <tools/stream.hxx>
 #include <vcl/filter/ImportOutput.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <filter/DxfReader.hxx>
 
 using namespace css;
@@ -37,10 +38,12 @@ public:
     void testCVEs();
 
     void testExtents();
+    void testColors();
 
     CPPUNIT_TEST_SUITE(DxfFilterTest);
     CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST(testExtents);
+    CPPUNIT_TEST(testColors);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -94,6 +97,29 @@ void DxfFilterTest::testExtents()
     // the rotated line of the block
     assertXPath(pDoc, "/metafile/polyline[2]/point[2]", "x", u"10050");
     assertXPath(pDoc, "/metafile/polyline[2]/point[2]", "y", u"50");
+}
+
+void DxfFilterTest::testColors()
+{
+    GDIMetaFile aMTF = importFile(u"colors.dxf");
+    MetafileXmlDump aDumper;
+    aDumper.filterAllActionTypes();
+    aDumper.filterActionType(MetaActionType::POLYLINE, false);
+    aDumper.filterActionType(MetaActionType::LINECOLOR, false);
+    xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
+
+    // the lines on the frozen and on the switched off layer, and the invisible one are not drawn
+    assertXPath(pDoc, "/metafile/polyline", 5);
+    assertXPath(pDoc, "/metafile/linecolor", 5);
+    // the colour of the layer
+    assertXPath(pDoc, "/metafile/linecolor[1]", "color", u"#ff0000");
+    // the true colour of the entity wins over its colour index
+    assertXPath(pDoc, "/metafile/linecolor[2]", "color", u"#00ff80");
+    // the true colour of the layer
+    assertXPath(pDoc, "/metafile/linecolor[3]", "color", u"#123456");
+    // in the block, layer 0 is the layer of the insert, BYBLOCK is the colour of the insert
+    assertXPath(pDoc, "/metafile/linecolor[4]", "color", u"#ff0000");
+    assertXPath(pDoc, "/metafile/linecolor[5]", "color", u"#00ffff");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DxfFilterTest);
