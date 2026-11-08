@@ -22,8 +22,6 @@ class SlideShowNavigator {
 	private prevSlide: number;
 	private isEnabled: boolean;
 	private isRewindingToPrevSlide: boolean;
-	private lastClickTime: number = 0;
-	private readonly RAPID_CLICK_THRESHOLD = 500; // 500ms
 	private currentLeaderSlide: number = -1;
 	private currentLeaderEffect: number = 0;
 	private isSlideLoading: boolean = false;
@@ -108,26 +106,16 @@ class SlideShowNavigator {
 			return;
 		}
 		this.presenter.sendSlideShowFollowMessage('dispatcheffect');
-		const currentTime = Date.now();
-		const timeDiff = currentTime - this.lastClickTime;
 		NAVDBG.print(
-			'SlideShowNavigator.dispatchEffect: current index: ' +
-				this.currentSlide +
-				', time diff: ' +
-				timeDiff +
-				'ms',
+			'SlideShowNavigator.dispatchEffect: current index: ' + this.currentSlide,
 		);
-		this.lastClickTime = currentTime;
 
-		// Every press skips the transition or the effects that are playing. A rapid press
-		// finishes the next effect at once, so each press of a click-through ends one effect.
-		// A rapid press also skips the transition into the next slide.
-		const bRapid = timeDiff < this.RAPID_CLICK_THRESHOLD && timeDiff > 0;
-		const bRet = bRapid
-			? this.slideShowHandler.skipPlayingOrNextEffect()
-			: this.slideShowHandler.nextEffect();
+		// A press ends the transition or the effects that are playing, and starts the next
+		// effect when nothing plays. Every press is one step, so a held key ends one effect per
+		// repeat and the slide after the last effect comes with its transition.
+		const bRet = this.slideShowHandler.nextEffect();
 		if (!bRet) {
-			this.switchSlide(1, bRapid);
+			this.switchSlide(1, false);
 		}
 	}
 
