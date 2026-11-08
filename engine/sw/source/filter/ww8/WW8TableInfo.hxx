@@ -291,6 +291,7 @@ class WW8TableInfo final
     friend class WW8TableNodeInfoInner;
     typedef std::unordered_map<const SwNode *, WW8TableNodeInfo::Pointer_t, hashNode > Map_t;
     Map_t mMap;
+    sal_uInt32 mnBaseDepth;
 
     typedef std::unordered_map<const SwTable *, WW8TableCellGrid::Pointer_t, hashTable > CellGridMap_t;
     CellGridMap_t mCellGridMap;
@@ -335,7 +336,8 @@ class WW8TableInfo final
 public:
     typedef std::shared_ptr<WW8TableInfo> Pointer_t;
 
-    WW8TableInfo();
+    /// nBaseDepth is the table depth of the text around the tables, 0 outside any table.
+    explicit WW8TableInfo(sal_uInt32 nBaseDepth = 0);
     ~WW8TableInfo();
 
     void processSwTable(const SwTable * pTable);

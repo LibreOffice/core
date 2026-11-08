@@ -1480,6 +1480,27 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableInCellRTFExport)
     CPPUNIT_ASSERT_EQUAL(u"inner"_ustr, xInnerCell->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFloattableInCellFootnoteRTFExport)
+{
+    // Given a table cell holding a floating table with a footnote in it:
+    createSwDoc("floattable-in-cell-footnote.rtf");
+
+    // When saving to RTF and loading it back:
+    saveAndReload(TestFilter::RTF);
+
+    // Then the floating table is still in the cell, and its footnote is kept:
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), getSwDoc()->GetSpzFrameFormats()->size());
+    auto xFootnotesSupplier = mxComponent.queryThrow<text::XFootnotesSupplier>();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xFootnotesSupplier->getFootnotes()->getCount());
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

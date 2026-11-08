@@ -547,7 +547,8 @@ WW8TableNodeInfoInner::Pointer_t WW8TableNodeInfo::getInnerForDepth(sal_uInt32 n
     return pResult;
 }
 
-WW8TableInfo::WW8TableInfo()
+WW8TableInfo::WW8TableInfo(sal_uInt32 nBaseDepth)
+    : mnBaseDepth(nBaseDepth)
 {
 }
 
@@ -836,6 +837,7 @@ WW8TableNodeInfo::Pointer_t WW8TableInfo::insertTableNodeInfo
  SwRect const * pRect)
 {
     WW8TableNodeInfo::Pointer_t pNodeInfo = getTableNodeInfo(pNode);
+    sal_uInt32 nOuterDepth = mnBaseDepth;
 
     if (!pNodeInfo)
     {
@@ -843,8 +845,10 @@ WW8TableNodeInfo::Pointer_t WW8TableInfo::insertTableNodeInfo
             std::make_shared<ww8::WW8TableNodeInfo>(this, pNode);
         mMap.emplace(pNode, pNodeInfo);
     }
+    else
+        nOuterDepth = pNodeInfo->getDepth();
 
-    pNodeInfo->setDepth(nDepth + pNodeInfo->getDepth());
+    pNodeInfo->setDepth(nDepth + nOuterDepth);
 
     pNodeInfo->setTable(pTable);
     pNodeInfo->setTableBox(pTableBox);
