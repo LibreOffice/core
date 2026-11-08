@@ -72,6 +72,9 @@ private:
     // projected drawing coordinates -> metafile coordinates
     basegfx::B2DHomMatrix maDeviceTransform;
     double mfDeviceScale;
+    // the last colour darkened for contrast
+    Color maContrastInput;
+    Color maContrastOutput;
     // the amount of output in the current pass and the nesting of inserts
     sal_uInt64 mnWork;
     sal_uInt64 mnVisits;
@@ -92,6 +95,9 @@ private:
     void ResetState();
 
     Color ConvertColor(tools::Long nColor) const;
+
+    // the colour darkened when it is hard to see on paper
+    Color EnsureContrast(const Color & rColor);
 
     const DXFLayer * GetEntityLayer(const DXFBasicEntity & rE) const;
 

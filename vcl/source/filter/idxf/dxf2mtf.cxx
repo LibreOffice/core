@@ -123,6 +123,42 @@ basegfx::B2DPolygon Project(const DXFTransform& rTransform, const basegfx::B2DPo
     return aResult;
 }
 
+// the relative luminance of an sRGB colour
+double Luminance(double fRed, double fGreen, double fBlue)
+{
+    double fLinear[3] = { fRed / 255.0, fGreen / 255.0, fBlue / 255.0 };
+    for (double& rComponent : fLinear)
+        rComponent = rComponent <= 0.04045 ? rComponent / 12.92
+                                           : std::pow((rComponent + 0.055) / 1.055, 2.4);
+    return 0.2126 * fLinear[0] + 0.7152 * fLinear[1] + 0.0722 * fLinear[2];
+}
+
+// The colours of drawings are chosen for the dark background of CAD programs, while the drawing
+// is shown on light paper. Darken the colours that would have less than a 3:1 contrast to white,
+// keeping their hue, the others stay as they are.
+Color DarkenForContrast(const Color& rColor)
+{
+    // the contrast to white is (1 + 0.05) / (luminance + 0.05)
+    constexpr double fMaxLuminance = 1.05 / 3.0 - 0.05;
+    const double fRed = rColor.GetRed();
+    const double fGreen = rColor.GetGreen();
+    const double fBlue = rColor.GetBlue();
+    if (Luminance(fRed, fGreen, fBlue) <= fMaxLuminance)
+        return rColor;
+    double fLow = 0.0;
+    double fHigh = 1.0;
+    for (int i = 0; i < 20; ++i)
+    {
+        const double fScale = (fLow + fHigh) / 2;
+        if (Luminance(fRed * fScale, fGreen * fScale, fBlue * fScale) > fMaxLuminance)
+            fHigh = fScale;
+        else
+            fLow = fScale;
+    }
+    return Color(static_cast<sal_uInt8>(fRed * fLow), static_cast<sal_uInt8>(fGreen * fLow),
+                 static_cast<sal_uInt8>(fBlue * fLow));
+}
+
 // Some programs write white as the true colour of colour index 7, which is black on a white
 // background.
 bool IsTrueColor(tools::Long nTrueColor, tools::Long nColor)
@@ -172,6 +208,17 @@ bool IsSane(const basegfx::B2DRange& rRange)
            && std::fabs(rRange.getMaxX()) < MAX_COORDINATE
            && std::fabs(rRange.getMaxY()) < MAX_COORDINATE;
 }
+}
+
+Color DXF2GDIMetaFile::EnsureContrast(const Color & rColor)
+{
+    // the entities of a drawing come in runs with the same colour
+    if (rColor != maContrastInput)
+    {
+        maContrastInput = rColor;
+        maContrastOutput = DarkenForContrast(rColor);
+    }
+    return maContrastOutput;
 }
 
 void DXF2GDIMetaFile::ResetState()
@@ -353,7 +400,7 @@ bool DXF2GDIMetaFile::SetLineAttribute(const DXFBasicEntity & rE)
     std::optional<Color> oColor = GetEntityColor(rE);
     if (!oColor)
         return false;
-    const Color aColor = *oColor;
+    const Color aColor = EnsureContrast(*oColor);
 
     if (aActLineColor!=aColor) {
         aActLineColor = aColor;
@@ -373,7 +420,7 @@ bool DXF2GDIMetaFile::SetAreaAttribute(const DXFBasicEntity & rE)
     std::optional<Color> oColor = GetEntityColor(rE);
     if (!oColor)
         return false;
-    const Color aColor = *oColor;
+    const Color aColor = EnsureContrast(*oColor);
 
     if (aActLineColor!=aColor) {
         aActLineColor = aColor;
@@ -656,7 +703,7 @@ void DXF2GDIMetaFile::OutTextRun(const DXFBasicEntity & rE, const DXFTransform &
         nOrientation += 3600;
 
     vcl::Font aFont = MakeFont(rFormat, fSize);
-    aFont.SetColor(*oColor);
+    aFont.SetColor(EnsureContrast(*oColor));
     aFont.SetOrientation(Degree10(static_cast<sal_Int16>(nOrientation)));
     // the width factor of the text and the stretching of the text space
     const double fStretch
@@ -1182,6 +1229,7 @@ void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransf
         return;
     }
 
+    // a filled area keeps its colour, it is readable when light
     if (rE.bSolid || rE.aPatternLines.empty())
     {
         SetColors(*oColor, *oColor);
@@ -1189,7 +1237,7 @@ void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransf
         return;
     }
 
-    DrawHatchPattern(rE, aArea, *oColor, rTransform);
+    DrawHatchPattern(rE, aArea, EnsureContrast(*oColor), rTransform);
 }
 
 void DXF2GDIMetaFile::DrawHatchPattern(const DXFHatchEntity & rE, const basegfx::B2DPolyPolygon & rArea,
@@ -1834,6 +1882,8 @@ DXF2GDIMetaFile::DXF2GDIMetaFile()
     , pDXF(nullptr)
     , mbMeasure(false)
     , mfDeviceScale(1.0)
+    , maContrastInput(COL_TRANSPARENT)
+    , maContrastOutput(COL_TRANSPARENT)
     , mnWork(0)
     , mnVisits(0)
     , mnInsertDepth(0)

@@ -534,7 +534,7 @@ public:
         const tools::Long nCount = getI(nCode);
         if (nCount <= 0)
             return 0;
-        return std::min(o3tl::make_unsigned(nCount), mrGroups.size() - mnPos);
+        return std::min<size_t>(o3tl::make_unsigned(nCount), mrGroups.size() - mnPos);
     }
 
     basegfx::B2DPoint getPoint(sal_uInt16 nCode)
