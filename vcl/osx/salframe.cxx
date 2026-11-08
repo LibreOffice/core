@@ -1821,7 +1821,6 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         aStyleSettings.SetTabHighlightTextColor(aAlternateSelectedControlTextColor);
 
     aStyleSettings.SetCursorBlinkTime( mnBlinkCursorDelay );
-    aStyleSettings.SetCursorSize(1);
 
     // no mnemonics on macOS
     aStyleSettings.SetOptions( aStyleSettings.GetOptions() | StyleSettingsOptions::NoMnemonics );
