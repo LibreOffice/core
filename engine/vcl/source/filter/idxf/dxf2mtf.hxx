@@ -22,9 +22,11 @@
 #include <sal/config.h>
 
 #include <optional>
+#include <map>
 #include <string_view>
 
 #include "dxfreprd.hxx"
+#include "dxfmtext.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -38,12 +40,17 @@ class DXF2GDIMetaFile {
 private:
 
     VclPtr<VirtualDevice> pVirDev;
+    // for measuring text, never recorded
+    ScopedVclPtr<VirtualDevice> mpMeasureDev;
+    // the cap height of fonts relative to their size
+    std::map<std::pair<OUString, bool>, double> maCapHeightRatios;
     const DXFRepresentation * pDXF;
 
     // The entities are walked twice: first only to measure the extents of what
     // is drawn, then to record the metafile.
     bool mbMeasure;
     basegfx::B2DRange maExtents;
+    basegfx::B2DRange maPointExtents;
     // projected drawing coordinates -> metafile coordinates
     basegfx::B2DHomMatrix maDeviceTransform;
     double mfDeviceScale;
@@ -66,6 +73,23 @@ private:
 
     // no colour if the entity is not visible
     std::optional<Color> GetEntityColor(const DXFBasicEntity & rE) const;
+
+    // the colour of the entity if it had the colour index nColor and the true colour nTrueColor
+    std::optional<Color> ResolveColor(const DXFBasicEntity & rE, tools::Long nColor,
+                                      tools::Long nTrueColor) const;
+
+    static vcl::Font MakeFont(const DXFTextFormat & rFormat, double fSize);
+
+    double GetCapHeightRatio(const DXFTextFormat & rFormat);
+
+    // the width of a text in drawing units
+    double MeasureText(std::u16string_view aText, const DXFTextFormat & rFormat);
+
+    // Outputs text with its baseline starting at (fX, fY) of the text space, which
+    // rTextTransform maps to drawing coordinates.
+    void OutTextRun(const DXFBasicEntity & rE, const DXFTransform & rTextTransform, double fX,
+                    double fY, const OUString & rText, const DXFTextFormat & rFormat,
+                    double fWidth);
 
     DXFLineInfo LTypeToDXFLineInfo(std::string_view rLineType) const;
 
@@ -126,6 +150,8 @@ private:
     void DrawEllipseEntity(const DXFEllipseEntity & rE, const DXFTransform & rTransform);
 
     void DrawSplineEntity(const DXFSplineEntity & rE, const DXFTransform & rTransform);
+
+    void DrawMTextEntity(const DXFMTextEntity & rE, const DXFTransform & rTransform);
 
     void DrawDimensionEntity(const DXFDimensionEntity & rE, const DXFTransform & rTransform);
 

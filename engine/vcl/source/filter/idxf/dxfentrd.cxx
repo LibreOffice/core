@@ -853,6 +853,46 @@ void DXFSplineEntity::EvaluateGroup(DXFGroupReader & rDGR)
     }
 }
 
+//--------------------------DXFMTextEntity--------------------------------------
+
+DXFMTextEntity::DXFMTextEntity()
+    : DXFBasicEntity(DXF_MTEXT)
+    , aXDirection(1.0, 0.0, 0.0)
+    , bHasXDirection(false)
+    , fHeight(1.0)
+    , fReferenceWidth(0.0)
+    , fLineSpacing(1.0)
+    , fRotAngle(0.0)
+    , nAttachment(1)
+    , m_sStyle("STANDARD"_ostr)
+    , bInEmbeddedObject(false)
+{
+}
+
+void DXFMTextEntity::EvaluateGroup(DXFGroupReader & rDGR)
+{
+    if (bInEmbeddedObject)
+        return;
+    switch (rDGR.GetG()) {
+        case 10: aP0.fx=rDGR.GetF(); break;
+        case 20: aP0.fy=rDGR.GetF(); break;
+        case 30: aP0.fz=rDGR.GetF(); break;
+        case 11: aXDirection.fx=rDGR.GetF(); bHasXDirection=true; break;
+        case 21: aXDirection.fy=rDGR.GetF(); bHasXDirection=true; break;
+        case 31: aXDirection.fz=rDGR.GetF(); bHasXDirection=true; break;
+        case 40: fHeight=rDGR.GetF(); break;
+        case 41: fReferenceWidth=rDGR.GetF(); break;
+        case 44: fLineSpacing=rDGR.GetF(); break;
+        case 50: fRotAngle=rDGR.GetF(); break;
+        case 71: nAttachment=rDGR.GetI(); break;
+        case  1:
+        case  3: m_sText += rDGR.GetS(); break;
+        case  7: m_sStyle=rDGR.GetS(); break;
+        case 101: bInEmbeddedObject=true; break;
+        default: DXFBasicEntity::EvaluateGroup(rDGR);
+    }
+}
+
 //--------------------------DXFDimensionEntity----------------------------------
 
 DXFDimensionEntity::DXFDimensionEntity() : DXFBasicEntity(DXF_DIMENSION)
@@ -903,6 +943,7 @@ void DXFEntities::Read(DXFGroupReader & rDGR)
         else if (rDGR.GetS() == "HATCH"     ) pE=new DXFHatchEntity;
         else if (rDGR.GetS() == "ELLIPSE"   ) pE=new DXFEllipseEntity;
         else if (rDGR.GetS() == "SPLINE"    ) pE=new DXFSplineEntity;
+        else if (rDGR.GetS() == "MTEXT"     ) pE=new DXFMTextEntity;
         else
         {
             do {
