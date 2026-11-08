@@ -968,12 +968,13 @@ class ImpressVectorManager extends VectorManagerBase {
 
 	/// A master arrived or changed, so every page drawing under it can be
 	/// drawn now, and every preview showing such a page is drawn again. Which
-	/// pages those are is read off the cache.
+	/// pages those are is read off the cache. A preview that was waiting for
+	/// the master is drawn by the drain alone.
 	private _onMasterArrived(masterPartId: cool.VectorPartGuid): void {
 		for (const [partId, data] of this._cache) {
 			if (data.masterPartId !== masterPartId) continue;
-			this._drainDrawable(partId);
-			this._redrawRenderedPreviews(partId);
+			const drained = this._drainDrawable(partId);
+			this._redrawRenderedPreviews(partId, drained);
 		}
 	}
 

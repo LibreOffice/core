@@ -1985,6 +1985,40 @@ describe('ImpressVectorManager', function () {
 				(globalThis as any).Image = realImage;
 			}
 		});
+
+		// A slide whose master is still to come keeps its thumbnail request
+		// waiting. The master draws each waiting thumbnail once.
+		it('draws a thumbnail waiting for its master once', function () {
+			const manager = new ImpressVectorManager();
+			const slide = (part: number): any => ({
+				mode: cool.VectorMode.Slides,
+				partId: 'S' + String(part),
+				version: 1,
+				objects: [
+					{
+						id: 0,
+						kind: 'page',
+						width: 100,
+						height: 100,
+						masterPartId: 'M0',
+						primitives: [],
+					},
+				],
+			});
+			manager.requestThumbnail(1, 0, cool.VectorMode.Slides, 100, 100);
+			manager.requestThumbnail(2, 1, cool.VectorMode.Slides, 100, 100);
+			manager.handleVectorPrimitivesResponse(slide(0));
+			manager.handleVectorPrimitivesResponse(slide(1));
+			nodeassert.strictEqual(drawn.length, 0, 'drew without the master');
+
+			manager.handleVectorPrimitivesResponse(
+				page(0, cool.VectorMode.MasterPages, [{ id: 1, primitives: [] }]),
+			);
+			nodeassert.deepStrictEqual(
+				drawn.map((event: any) => event.id).sort(),
+				[1, 2],
+			);
+		});
 	});
 
 	// The manager measures text with a stub, so widths do not depend on a
