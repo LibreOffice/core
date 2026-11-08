@@ -3332,6 +3332,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFunctionLists)
         "TEXTSPLIT",
         "TOCOL",
         "TOROW",
+        "TRIMRANGE",
         "UNIQUE",
         "VLOOKUP",
         "VSTACK",

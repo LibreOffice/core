@@ -626,6 +626,7 @@ inline constexpr OUString HID_FUNC_PERCENTOF_MS = u"SC_HID_FUNC_PERCENTOF_MS"_us
 inline constexpr OUString HID_FUNC_GROUPBY_MS = u"SC_HID_FUNC_GROUPBY_MS"_ustr;
 inline constexpr OUString HID_FUNC_PIVOTBY_MS = u"SC_HID_FUNC_PIVOTBY_MS"_ustr;
 inline constexpr OUString HID_FUNC_VALUETOTEXT_MS = u"SC_HID_FUNC_VALUETOTEXT_MS"_ustr;
+inline constexpr OUString HID_FUNC_TRIMRANGE_MS = u"SC_HID_FUNC_TRIMRANGE_MS"_ustr;
 inline constexpr OUString HID_FUNC_LAMBDA_MS = u"SC_HID_FUNC_LAMBDA_MS"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

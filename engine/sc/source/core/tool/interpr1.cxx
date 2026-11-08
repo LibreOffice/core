@@ -9671,6 +9671,188 @@ void ScInterpreter::ScTake()
     ScTakeOrDrop(/*bTake*/ true);
 }
 
+void ScInterpreter::ScTrimRange()
+{
+    sal_uInt8 nParameterCount = GetByte();
+    if (!MustHaveParamCount(nParameterCount, 1, 3))
+        return;
+
+    // Each trim mode is a bit set: 1 trims the leading blank lines, 2 the trailing ones, so 3
+    // (the default) trims both and 0 trims nothing.
+    double fTrimColumns = 3.0;
+    double fTrimRows = 3.0;
+    if (nParameterCount == 3)
+        fTrimColumns = GetDoubleWithDefault(3.0);
+    if (nParameterCount >= 2)
+        fTrimRows = GetDoubleWithDefault(3.0);
+    if (nGlobalError != FormulaError::NONE)
+    {
+        PushError(nGlobalError);
+        return;
+    }
+    // Only the whole numbers 0 to 3 are trim modes, and a fraction is #VALUE!.
+    auto aIsTrimMode = [](double fValue)
+    { return fValue >= 0.0 && fValue <= 3.0 && fValue == std::trunc(fValue); };
+    if (!aIsTrimMode(fTrimRows) || !aIsTrimMode(fTrimColumns))
+    {
+        PushNoValue();
+        return;
+    }
+    const sal_Int32 nTrimRows = static_cast<sal_Int32>(fTrimRows);
+    const sal_Int32 nTrimColumns = static_cast<sal_Int32>(fTrimColumns);
+    const bool bTrimLeadingRows = (nTrimRows & 1) != 0;
+    const bool bTrimTrailingRows = (nTrimRows & 2) != 0;
+    const bool bTrimLeadingColumns = (nTrimColumns & 1) != 0;
+    const bool bTrimTrailingColumns = (nTrimColumns & 2) != 0;
+
+    switch (GetStackType())
+    {
+        case svSingleRef:
+        case svDoubleRef:
+        {
+            // A reference gives back a reference to the part of the range that is left, so the
+            // result can be used wherever a range can. Only a cell without content is blank, a
+            // formula with an empty text result is not.
+            ScRange aRange;
+            if (GetStackType() == svSingleRef)
+            {
+                ScAddress aAddress;
+                PopSingleRef(aAddress);
+                aRange = ScRange(aAddress);
+            }
+            else
+                PopDoubleRef(aRange);
+            if (nGlobalError != FormulaError::NONE)
+            {
+                PushError(nGlobalError);
+                return;
+            }
+            if (aRange.aStart.Tab() != aRange.aEnd.Tab())
+            {
+                PushIllegalParameter();
+                return;
+            }
+
+            const SCTAB nTab = aRange.aStart.Tab();
+            SCCOL nColumn1 = aRange.aStart.Col();
+            SCCOL nColumn2 = aRange.aEnd.Col();
+            SCROW nRow1 = aRange.aStart.Row();
+            SCROW nRow2 = aRange.aEnd.Row();
+            auto aCountEmptyLines = [&](ScDirection eDirection)
+            {
+                return mrDoc.GetEmptyLinesInBlock(nColumn1, nRow1, nTab, nColumn2, nRow2, nTab,
+                                                  eDirection);
+            };
+
+            // A range with nothing left after the trim is #REF!.
+            if (bTrimTrailingRows || bTrimLeadingRows)
+            {
+                const SCSIZE nRowCount = nRow2 - nRow1 + 1;
+                const SCSIZE nTrailing = bTrimTrailingRows ? aCountEmptyLines(DIR_BOTTOM) : 0;
+                const SCSIZE nLeading = bTrimLeadingRows ? aCountEmptyLines(DIR_TOP) : 0;
+                if (nTrailing >= nRowCount || nLeading >= nRowCount)
+                {
+                    PushError(FormulaError::NoRef);
+                    return;
+                }
+                nRow2 -= nTrailing;
+                nRow1 += nLeading;
+            }
+            if (bTrimTrailingColumns || bTrimLeadingColumns)
+            {
+                const SCSIZE nColumnCount = nColumn2 - nColumn1 + 1;
+                const SCSIZE nTrailing = bTrimTrailingColumns ? aCountEmptyLines(DIR_RIGHT) : 0;
+                const SCSIZE nLeading = bTrimLeadingColumns ? aCountEmptyLines(DIR_LEFT) : 0;
+                if (nTrailing >= nColumnCount || nLeading >= nColumnCount)
+                {
+                    PushError(FormulaError::NoRef);
+                    return;
+                }
+                nColumn2 -= nTrailing;
+                nColumn1 += nLeading;
+            }
+            PushDoubleRef(nColumn1, nRow1, nTab, nColumn2, nRow2, nTab);
+            return;
+        }
+        default:
+            break;
+    }
+
+    // An array gives back the part of the array that is left. An empty element is blank, an
+    // empty text is not.
+    ScMatrixRef pSource = GetMatrix();
+    if (!pSource)
+    {
+        PushIllegalParameter();
+        return;
+    }
+    if (nGlobalError != FormulaError::NONE)
+    {
+        PushError(nGlobalError);
+        return;
+    }
+
+    SCSIZE nColumns = 0;
+    SCSIZE nRows = 0;
+    pSource->GetDimensions(nColumns, nRows);
+    auto aIsBlank = [&pSource](SCSIZE nColumn, SCSIZE nRow)
+    { return pSource->IsEmpty(nColumn, nRow) || pSource->IsEmptyPath(nColumn, nRow); };
+    auto aIsBlankRow = [&](SCSIZE nRow)
+    {
+        for (SCSIZE nColumn = 0; nColumn < nColumns; ++nColumn)
+            if (!aIsBlank(nColumn, nRow))
+                return false;
+        return true;
+    };
+    auto aIsBlankColumn = [&](SCSIZE nColumn)
+    {
+        for (SCSIZE nRow = 0; nRow < nRows; ++nRow)
+            if (!aIsBlank(nColumn, nRow))
+                return false;
+        return true;
+    };
+
+    // The kept part runs from nFirst up to, but not including, nEnd in each direction.
+    SCSIZE nFirstRow = 0;
+    SCSIZE nEndRow = nRows;
+    if (bTrimLeadingRows)
+        while (nFirstRow < nEndRow && aIsBlankRow(nFirstRow))
+            ++nFirstRow;
+    if (bTrimTrailingRows)
+        while (nEndRow > nFirstRow && aIsBlankRow(nEndRow - 1))
+            --nEndRow;
+    SCSIZE nFirstColumn = 0;
+    SCSIZE nEndColumn = nColumns;
+    if (bTrimLeadingColumns)
+        while (nFirstColumn < nEndColumn && aIsBlankColumn(nFirstColumn))
+            ++nFirstColumn;
+    if (bTrimTrailingColumns)
+        while (nEndColumn > nFirstColumn && aIsBlankColumn(nEndColumn - 1))
+            --nEndColumn;
+
+    if (nFirstRow >= nEndRow || nFirstColumn >= nEndColumn)
+    {
+        PushError(FormulaError::NoRef);
+        return;
+    }
+    if (nFirstRow == 0 && nEndRow == nRows && nFirstColumn == 0 && nEndColumn == nColumns)
+    {
+        PushMatrix(pSource);
+        return;
+    }
+
+    ScMatrixRef pResult = GetNewMat(nEndColumn - nFirstColumn, nEndRow - nFirstRow, /*bEmpty*/ true);
+    if (!pResult)
+    {
+        PushIllegalArgument();
+        return;
+    }
+    for (SCSIZE nColumn = nFirstColumn; nColumn < nEndColumn; ++nColumn)
+        for (SCSIZE nRow = nFirstRow; nRow < nEndRow; ++nRow)
+            FillMatrixCell(pSource, pResult, nColumn, nRow, nColumn - nFirstColumn, nRow - nFirstRow);
+    PushMatrix(pResult);
+}
+
 void ScInterpreter::ScTextAfter()
 {
     ScTextBeforeOrAfter(/*bBefore*/ false);

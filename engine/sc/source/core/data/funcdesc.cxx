@@ -823,6 +823,7 @@ ScFunctionList::ScFunctionList( bool bEnglishFunctionNames )
         { ocGroupBy, ENTRY(ocGROUPBY_ARY), 0, ID_FUNCTION_GRP_TABLE, HID_FUNC_GROUPBY_MS, 8, { 0, 0, 0, 1, 1, 1, 1, 1 }, 0 },
         { ocPivotBy, ENTRY(ocPIVOTBY_ARY), 0, ID_FUNCTION_GRP_TABLE, HID_FUNC_PIVOTBY_MS, 11, { 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1 }, 0 },
         { ocValueToText, ENTRY(ocVALUETOTEXT_ARY), 0, ID_FUNCTION_GRP_TEXT, HID_FUNC_VALUETOTEXT_MS, 2, { 0, 1 }, 0 },
+        { ocTrimRange, ENTRY(ocTRIMRANGE_ARY), 0, ID_FUNCTION_GRP_TABLE, HID_FUNC_TRIMRANGE_MS, 3, { 0, 1, 1 }, 0 },
     };
 
     ScFuncDesc* pDesc = nullptr;

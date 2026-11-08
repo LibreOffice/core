@@ -790,6 +790,7 @@ private:
     void ScHStack();
     void ScVStack();
     void ScTake();
+    void ScTrimRange();
     void ScTextAfter();
     void ScTextBefore();
     void ScTextSplit();

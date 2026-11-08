@@ -7964,6 +7964,102 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncVALUETOTEXTConvertsInBothFormats)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncTRIMRANGEDropsBlankEdgeLines)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // The data sits in B2:D4 of A1:E6. Row 1, rows 5 and 6, column A and column E are blank.
+    m_pDoc->SetValue(ScAddress(1, 1, 0), 1.0);
+    m_pDoc->SetValue(ScAddress(3, 1, 0), 2.0);
+    m_pDoc->SetString(ScAddress(2, 2, 0), u"x"_ustr);
+    m_pDoc->SetValue(ScAddress(3, 3, 0), 4.0);
+
+    // By default the blank rows and columns at both ends go.
+    m_pDoc->SetString(ScAddress(7, 0, 0), u"=CELL(\"address\";TRIMRANGE(A1:E6))"_ustr);
+    m_pDoc->SetString(ScAddress(7, 1, 0), u"=ROWS(TRIMRANGE(A1:E6))"_ustr);
+    m_pDoc->SetString(ScAddress(7, 2, 0), u"=COLUMNS(TRIMRANGE(A1:E6))"_ustr);
+    m_pDoc->SetString(ScAddress(7, 3, 0), u"=SUM(TRIMRANGE(A1:E6))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"$B$2"_ustr, m_pDoc->GetString(ScAddress(7, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(7, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(7, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(7, 3, 0)));
+
+    // Trimming only the trailing lines keeps the leading blank row and column.
+    m_pDoc->SetString(ScAddress(8, 0, 0), u"=CELL(\"address\";TRIMRANGE(A1:E6;2;2))"_ustr);
+    m_pDoc->SetString(ScAddress(8, 1, 0), u"=ROWS(TRIMRANGE(A1:E6;2;2))"_ustr);
+    m_pDoc->SetString(ScAddress(8, 2, 0), u"=COLUMNS(TRIMRANGE(A1:E6;2;2))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"$A$1"_ustr, m_pDoc->GetString(ScAddress(8, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(8, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(8, 2, 0)));
+
+    // Trimming only the leading lines keeps the trailing blank rows and column.
+    m_pDoc->SetString(ScAddress(9, 0, 0), u"=CELL(\"address\";TRIMRANGE(A1:E6;1;1))"_ustr);
+    m_pDoc->SetString(ScAddress(9, 1, 0), u"=ROWS(TRIMRANGE(A1:E6;1;1))"_ustr);
+    m_pDoc->SetString(ScAddress(9, 2, 0), u"=COLUMNS(TRIMRANGE(A1:E6;1;1))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"$B$2"_ustr, m_pDoc->GetString(ScAddress(9, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(9, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(9, 2, 0)));
+
+    // Mode 0 leaves that direction alone.
+    m_pDoc->SetString(ScAddress(10, 0, 0), u"=ROWS(TRIMRANGE(A1:E6;0;3))"_ustr);
+    m_pDoc->SetString(ScAddress(10, 1, 0), u"=COLUMNS(TRIMRANGE(A1:E6;0;3))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(10, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(10, 1, 0)));
+
+    // A whole column trims down to the rows with data.
+    m_pDoc->SetString(ScAddress(11, 0, 0), u"=ROWS(TRIMRANGE(D:D))"_ustr);
+    m_pDoc->SetString(ScAddress(11, 1, 0), u"=CELL(\"address\";TRIMRANGE(D:D))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(11, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"$D$2"_ustr, m_pDoc->GetString(ScAddress(11, 1, 0)));
+
+    // A formula with an empty text result is content, so its row stays.
+    m_pDoc->SetString(ScAddress(2, 5, 0), u"=\"\""_ustr);
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(7, 1, 0)));
+    m_pDoc->SetEmptyCell(ScAddress(2, 5, 0));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(7, 1, 0)));
+
+    // A blank range is #REF!. A trim mode outside 0 to 3 or with a fraction is #VALUE!.
+    m_pDoc->SetString(ScAddress(12, 0, 0), u"=TRIMRANGE(F1:F6)"_ustr);
+    m_pDoc->SetString(ScAddress(12, 1, 0), u"=ROWS(TRIMRANGE(A1:E6;4))"_ustr);
+    m_pDoc->SetString(ScAddress(12, 2, 0), u"=ROWS(TRIMRANGE(A1:E6;2.9))"_ustr);
+    m_pDoc->SetString(ScAddress(12, 3, 0), u"=ROWS(TRIMRANGE(A1:E6;3;0.5))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoRef, m_pDoc->GetErrCode(ScAddress(12, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoValue, m_pDoc->GetErrCode(ScAddress(12, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoValue, m_pDoc->GetErrCode(ScAddress(12, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoValue, m_pDoc->GetErrCode(ScAddress(12, 3, 0)));
+
+    // An array trims its empty elements, and an empty text counts as content.
+    m_pDoc->SetString(ScAddress(13, 0, 0), u"=ROWS(TRIMRANGE(IF(A1:A6=\"\";\"\";A1:A6)))"_ustr);
+    m_pDoc->SetString(ScAddress(13, 1, 0), u"=COLUMNS(TRIMRANGE(CHOOSECOLS(A1:E6;1;2;3;4;5)))"_ustr);
+    m_pDoc->SetString(ScAddress(13, 2, 0), u"=ROWS(TRIMRANGE(CHOOSECOLS(A1:E6;1;2;3;4;5)))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(13, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(13, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(13, 2, 0)));
+
+    // On its own in a cell the trimmed range spills its values.
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(14, 0, 14, 0, aMark, u"=TRIMRANGE(A1:E6)"_ustr, nullptr,
+                                formula::FormulaGrammar::GRAM_DEFAULT,
+                                /*bDynamicArrayMaster=*/true);
+    ScFormulaCell* pFormulaCell = m_pDoc->GetFormulaCell(ScAddress(14, 0, 0));
+    CPPUNIT_ASSERT(pFormulaCell);
+    // The formula is computed when its result is first read, and the result spills at the end of
+    // that computation.
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, pFormulaCell->GetErrCode());
+    SCCOL nColumns = 0;
+    SCROW nRows = 0;
+    pFormulaCell->GetMatColsRows(nColumns, nRows);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(3), nColumns);
+    CPPUNIT_ASSERT_EQUAL(SCROW(3), nRows);
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(14, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"x"_ustr, m_pDoc->GetString(ScAddress(15, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(16, 2, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testFormulaSeparatorsChangedBackForgetReplacedSymbols)
 {
     // After the array separators change and change back, the symbols that stood in for them in

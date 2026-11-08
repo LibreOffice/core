@@ -292,6 +292,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocTrimMean,        {{ Reference, Value                                     }, 0, Value }},
     { ocTrue,            {{ Bounds                                               }, 0, Value }},
     { ocType,            {{ Array                                                }, 0, Value }},
+    { ocTrimRange,       {{ ReferenceOrForceArray, Value, Value                  }, 0, Reference }},
     { ocUnion,           {{ Reference, Reference                                 }, 0, Reference }},
     { ocUnique,          {{ ReferenceOrRefArray, Value, Value,                   }, 0, ForceArrayReturn } },
     { ocVLookup,         {{ Value, ReferenceOrForceArray, Value, Value           }, 0, Value }},

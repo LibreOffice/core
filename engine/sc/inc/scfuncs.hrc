@@ -4599,6 +4599,18 @@ const TranslateId ocVALUETOTEXT_ARY[] =
     NC_("ocVALUETOTEXT", "The format of the returned text. 0 or omitted - concise format, text as it is (default). 1 - strict format, text in double quotes.")
 };
 
+// -=*# Resource for function TRIMRANGE #*=-
+const TranslateId ocTRIMRANGE_ARY[] =
+{
+    NC_("ocTRIMRANGE", "Returns a range or array without the blank rows and columns at its edges."),
+    NC_("ocTRIMRANGE", "Range"),
+    NC_("ocTRIMRANGE", "The range or array to trim."),
+    NC_("ocTRIMRANGE", "Trim rows"),
+    NC_("ocTRIMRANGE", "The blank rows to remove. 0 - none. 1 - leading rows. 2 - trailing rows. 3 - leading and trailing rows (default)."),
+    NC_("ocTRIMRANGE", "Trim columns"),
+    NC_("ocTRIMRANGE", "The blank columns to remove. 0 - none. 1 - leading columns. 2 - trailing columns. 3 - leading and trailing columns (default).")
+};
+
 // -=*# Resource for function LAMBDA #*=-
 const TranslateId ocLAMBDA_ARY[] =
 {

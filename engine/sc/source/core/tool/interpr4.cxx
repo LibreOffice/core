@@ -3943,6 +3943,7 @@ void ScInterpreter::DispatchOpCode( OpCode eOp )
         case ocHStack           : ScHStack();                   break;
         case ocVStack           : ScVStack();                   break;
         case ocTake             : ScTake();                     break;
+        case ocTrimRange        : ScTrimRange();                break;
         case ocTextAfter        : ScTextAfter();                break;
         case ocTextBefore       : ScTextBefore();               break;
         case ocTextSplit        : ScTextSplit();                break;

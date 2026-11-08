@@ -2065,6 +2065,56 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testValueToTextOdsRoundTrip)
     CPPUNIT_ASSERT_EQUAL(u"\"apple\""_ustr, pDocument->GetString(ScAddress(1, 0, 0)));
 }
 
+namespace
+{
+void fillTrimRangeDocument(ScDocument& rDocument)
+{
+    rDocument.SetValue(ScAddress(0, 1, 0), 10.0);
+    rDocument.SetValue(ScAddress(0, 2, 0), 20.0);
+    rDocument.SetString(ScAddress(2, 0, 0), u"=SUM(TRIMRANGE(A1:A5;3;3))"_ustr);
+}
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTrimRangeXlsxRoundTrip)
+{
+    // TRIMRANGE is saved to XLSX under the prefix that marks a newer function and loads back
+    // as the same function.
+    createScDoc();
+    fillTrimRangeDocument(*getScDoc());
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[@r='C1']/x:f",
+                       u"SUM(_xlfn.TRIMRANGE(A1:A5,3,3))");
+
+    saveAndReload(TestFilter::XLSX);
+    ScDocument* pDocument = getScDoc();
+    CPPUNIT_ASSERT(pDocument->GetFormula(2, 0, 0).startsWith("=SUM(TRIMRANGE("));
+    pDocument->CalcAll();
+    CPPUNIT_ASSERT_EQUAL(30.0, pDocument->GetValue(ScAddress(2, 0, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTrimRangeOdsRoundTrip)
+{
+    // ODF has no TRIMRANGE of its own, so the function is saved in the namespace for functions
+    // from OOXML and loads back as the same function.
+    createScDoc();
+    fillTrimRangeDocument(*getScDoc());
+
+    save(TestFilter::ODS);
+    xmlDocUniquePtr pContent = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT(pContent);
+    assertXPath(pContent, "(//table:table-cell[contains(@table:formula, 'TRIMRANGE')])[1]",
+                "formula", u"of:=SUM(COM.MICROSOFT.TRIMRANGE([.A1:.A5];3;3))");
+
+    saveAndReload(TestFilter::ODS);
+    ScDocument* pDocument = getScDoc();
+    CPPUNIT_ASSERT(pDocument->GetFormula(2, 0, 0).startsWith("=SUM(TRIMRANGE("));
+    pDocument->CalcAll();
+    CPPUNIT_ASSERT_EQUAL(30.0, pDocument->GetValue(ScAddress(2, 0, 0)));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
