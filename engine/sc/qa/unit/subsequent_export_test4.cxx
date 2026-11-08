@@ -2016,6 +2016,55 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testPivotByOdsRoundTrip)
     assertPivotByResult(*pDocument);
 }
 
+namespace
+{
+void fillValueToTextDocument(ScDocument& rDocument)
+{
+    rDocument.SetString(ScAddress(0, 0, 0), u"apple"_ustr);
+    rDocument.SetString(ScAddress(1, 0, 0), u"=VALUETOTEXT(A1;1)"_ustr);
+}
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testValueToTextXlsxRoundTrip)
+{
+    // VALUETOTEXT is saved to XLSX under the prefix that marks a newer function and loads back
+    // as the same function.
+    createScDoc();
+    fillValueToTextDocument(*getScDoc());
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[2]/x:f",
+                       u"_xlfn.VALUETOTEXT(A1,1)");
+
+    saveAndReload(TestFilter::XLSX);
+    ScDocument* pDocument = getScDoc();
+    CPPUNIT_ASSERT(pDocument->GetFormula(1, 0, 0).startsWith("=VALUETOTEXT("));
+    pDocument->CalcAll();
+    CPPUNIT_ASSERT_EQUAL(u"\"apple\""_ustr, pDocument->GetString(ScAddress(1, 0, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testValueToTextOdsRoundTrip)
+{
+    // ODF has no VALUETOTEXT of its own, so the function is saved in the namespace for
+    // functions from OOXML and loads back as the same function.
+    createScDoc();
+    fillValueToTextDocument(*getScDoc());
+
+    save(TestFilter::ODS);
+    xmlDocUniquePtr pContent = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT(pContent);
+    assertXPath(pContent, "(//table:table-cell[contains(@table:formula, 'VALUETOTEXT')])[1]",
+                "formula", u"of:=COM.MICROSOFT.VALUETOTEXT([.A1];1)");
+
+    saveAndReload(TestFilter::ODS);
+    ScDocument* pDocument = getScDoc();
+    CPPUNIT_ASSERT(pDocument->GetFormula(1, 0, 0).startsWith("=VALUETOTEXT("));
+    pDocument->CalcAll();
+    CPPUNIT_ASSERT_EQUAL(u"\"apple\""_ustr, pDocument->GetString(ScAddress(1, 0, 0)));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

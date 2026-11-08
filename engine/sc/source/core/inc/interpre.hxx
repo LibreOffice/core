@@ -794,6 +794,7 @@ private:
     void ScTextBefore();
     void ScTextSplit();
     void ScArrayToText();
+    void ScValueToText();
     void ScToCol();
     void ScToRow();
     void ScUnique();
@@ -809,6 +810,18 @@ private:
     void ScTextBeforeOrAfter(bool bBefore);
     void ScChooseColsOrRows(bool bCols);
     void ScToColOrRow(bool bCol);
+    // Pops the optional format argument of a value to text conversion when there are
+    // nParameterCount parameters. Format 0 or a missing argument is the concise format, 1 is the
+    // strict format. Pushes the error and returns false for an error or any other format.
+    bool PopTextConversionFormat(sal_uInt8 nParameterCount, bool& rStrict);
+    // Appends a text value, in the strict format quoted with each inner double quote doubled.
+    static void AppendTextOfString(OUStringBuffer& rResult, const OUString& rString, bool bStrict);
+    // Appends a number as TRUE or FALSE in the current locale when bLogical is set, and as its
+    // standard number text otherwise.
+    void AppendTextOfNumber(OUStringBuffer& rResult, double fValue, bool bLogical);
+    // Appends the text of the cell at rAddress. An empty cell appends nothing. A cell that holds
+    // an error appends nothing and returns that error.
+    FormulaError AppendTextOfCell(OUStringBuffer& rResult, const ScAddress& rAddress, bool bStrict);
     void ScWrapColsOrRows(bool bCols);
     void ScTakeOrDrop(bool bTake);
     void ScHorizontalOrVerticalStack(bool bHorizontal);

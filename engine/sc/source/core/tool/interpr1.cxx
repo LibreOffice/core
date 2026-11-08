@@ -10166,30 +10166,90 @@ void ScInterpreter::ScToRow()
     ScToColOrRow(/*bCol*/ false);
 }
 
+bool ScInterpreter::PopTextConversionFormat(sal_uInt8 nParameterCount, bool& rStrict)
+{
+    rStrict = false;
+    if (nParameterCount < 2)
+        return true;
+
+    const sal_Int32 nFormat = GetInt32WithDefault(0);
+    if (nGlobalError != FormulaError::NONE)
+    {
+        PushError(nGlobalError);
+        return false;
+    }
+    if (nFormat < 0 || nFormat > 1)
+    {
+        // Any format other than 0 or 1 is rejected with #VALUE!.
+        PushError(FormulaError::NoValue);
+        return false;
+    }
+    rStrict = (nFormat == 1);
+    return true;
+}
+
+void ScInterpreter::AppendTextOfString(OUStringBuffer& rResult, const OUString& rString, bool bStrict)
+{
+    if (bStrict)
+    {
+        rResult.append('"');
+        rResult.append(rString.replaceAll(u"\"", u"\"\""));
+        rResult.append('"');
+    }
+    else
+        rResult.append(rString);
+}
+
+void ScInterpreter::AppendTextOfNumber(OUStringBuffer& rResult, double fValue, bool bLogical)
+{
+    if (!bLogical)
+    {
+        rResult.append(GetStringFromDouble(fValue).getString());
+        return;
+    }
+    // Boolean values format through the LOGICAL key, so their text is TRUE or FALSE in the
+    // current locale.
+    const sal_uInt32 nLogicalKey = mrContext.NFGetStandardFormat(SvNumFormatType::LOGICAL, ScGlobal::eLnge);
+    OUString aString;
+    const Color* pColor = nullptr;
+    mrContext.NFGetOutputString(fValue, nLogicalKey, aString, &pColor);
+    rResult.append(aString);
+}
+
+FormulaError ScInterpreter::AppendTextOfCell(OUStringBuffer& rResult, const ScAddress& rAddress, bool bStrict)
+{
+    ScRefCellValue aCell(mrDoc, rAddress);
+    if (aCell.isEmpty())
+        return FormulaError::NONE;
+    if (aCell.hasError())
+        return aCell.getFormula()->GetErrCode();
+    if (aCell.hasNumeric())
+    {
+        // A formula result carries its own format type, a value cell is formatted by its cell
+        // attribute, so a number cell formatted as boolean still reads TRUE or FALSE.
+        SvNumFormatType eCellFormat;
+        if (aCell.getType() == CELLTYPE_FORMULA)
+            eCellFormat = aCell.getFormula()->GetFormatType();
+        else
+            eCellFormat = mrContext.NFGetType(mrDoc.GetNumberFormat(mrContext, rAddress));
+        AppendTextOfNumber(rResult, aCell.getValue(), eCellFormat == SvNumFormatType::LOGICAL);
+        return FormulaError::NONE;
+    }
+    svl::SharedString aSharedString;
+    GetCellString(aSharedString, aCell);
+    AppendTextOfString(rResult, aSharedString.getString(), bStrict);
+    return FormulaError::NONE;
+}
+
 void ScInterpreter::ScArrayToText()
 {
     sal_uInt8 nParameterCount = GetByte();
     if (!MustHaveParamCount(nParameterCount, 1, 2))
         return;
 
-    // 2nd argument optional - Format: 0 = concise (default), 1 = strict
-    sal_Int32 nFormat = 0;
-    if (nParameterCount == 2)
-    {
-        nFormat = GetInt32WithDefault(0);
-        if (nGlobalError != FormulaError::NONE)
-        {
-            PushError(nGlobalError);
-            return;
-        }
-        if (nFormat < 0 || nFormat > 1)
-        {
-            // Any format other than 0 or 1 is rejected with #VALUE!.
-            PushError(FormulaError::NoValue);
-            return;
-        }
-    }
-    const bool bStrict = (nFormat == 1);
+    bool bStrict = false;
+    if (!PopTextConversionFormat(nParameterCount, bStrict))
+        return;
 
     // The concise format joins all values in row order with the function
     // separator and a space. The strict format writes an array constant:
@@ -10210,32 +10270,6 @@ void ScInterpreter::ScArrayToText()
             aResult.append(aRowSeparator);
         else
             aResult.append(aColumnSeparator);
-    };
-    auto appendText = [&aResult, bStrict](const OUString& rStr)
-    {
-        if (bStrict)
-        {
-            // Each double quote inside the text is doubled.
-            aResult.append('"');
-            aResult.append(rStr.replaceAll(u"\"", u"\"\""));
-            aResult.append('"');
-        }
-        else
-            aResult.append(rStr);
-    };
-    // Boolean values format through the LOGICAL key, so their text is
-    // TRUE or FALSE in the current locale.
-    const sal_uInt32 nLogicalKey = mrContext.NFGetStandardFormat( SvNumFormatType::LOGICAL, ScGlobal::eLnge);
-    auto appendLogical = [this, &aResult, nLogicalKey](double fValue)
-    {
-        OUString aString;
-        const Color* pColor = nullptr;
-        mrContext.NFGetOutputString(fValue, nLogicalKey, aString, &pColor);
-        aResult.append(aString);
-    };
-    auto appendNumber = [this, &aResult](double fValue)
-    {
-        aResult.append(GetStringFromDouble(fValue).getString());
     };
     // An error value becomes its error text and the other elements are
     // still written out.
@@ -10296,42 +10330,18 @@ void ScInterpreter::ScArrayToText()
                     if (nColumn > nColumn1)
                         appendSeparator(/*bNewRow*/ false);
 
-                    ScAddress aAddress(nColumn, nRow, nTable1);
-                    ScRefCellValue aCell(mrDoc, aAddress);
-                    if (aCell.isEmpty())
+                    // An empty cell adds no text of its own. Only the separators around it
+                    // remain.
+                    const FormulaError nError
+                        = AppendTextOfCell(aResult, ScAddress(nColumn, nRow, nTable1), bStrict);
+                    if (nError != FormulaError::NONE)
                     {
-                        // An empty cell adds no text of its own; only the
-                        // separators around it remain.
-                    }
-                    else if (aCell.hasError())
-                    {
-                        const FormulaError nError = aCell.getFormula()->GetErrCode();
                         if (bScalarRef)
                         {
                             PushError(nError);
                             return;
                         }
                         appendError(nError);
-                    }
-                    else if (aCell.hasNumeric())
-                    {
-                        // A formula result carries its own format type, a
-                        // value cell is formatted by its cell attribute.
-                        SvNumFormatType eCellFormat;
-                        if (aCell.getType() == CELLTYPE_FORMULA)
-                            eCellFormat = aCell.getFormula()->GetFormatType();
-                        else
-                            eCellFormat = mrContext.NFGetType(mrDoc.GetNumberFormat(mrContext, aAddress));
-                        if (eCellFormat == SvNumFormatType::LOGICAL)
-                            appendLogical(aCell.getValue());
-                        else
-                            appendNumber(aCell.getValue());
-                    }
-                    else
-                    {
-                        svl::SharedString aSharedString;
-                        GetCellString(aSharedString, aCell);
-                        appendText(aSharedString.getString());
                     }
                 }
             }
@@ -10371,10 +10381,10 @@ void ScInterpreter::ScArrayToText()
                     switch (aValue.nType)
                     {
                         case ScMatValType::String:
-                            appendText(aValue.aStr.getString());
+                            AppendTextOfString(aResult, aValue.aStr.getString(), bStrict);
                             break;
                         case ScMatValType::Boolean:
-                            appendLogical(aValue.fVal);
+                            AppendTextOfNumber(aResult, aValue.fVal, /*bLogical*/ true);
                             break;
                         case ScMatValType::Value:
                         {
@@ -10382,7 +10392,7 @@ void ScInterpreter::ScArrayToText()
                             if (nError != FormulaError::NONE)
                                 appendError(nError);
                             else
-                                appendNumber(aValue.fVal);
+                                AppendTextOfNumber(aResult, aValue.fVal, /*bLogical*/ false);
                             break;
                         }
                         default:
@@ -10398,6 +10408,93 @@ void ScInterpreter::ScArrayToText()
 
     if (bStrict)
         aResult.append('}');
+
+    PushString(aResult.makeStringAndClear());
+}
+
+void ScInterpreter::ScValueToText()
+{
+    sal_uInt8 nParameterCount = GetByte();
+    if (!MustHaveParamCount(nParameterCount, 1, 2))
+        return;
+
+    bool bStrict = false;
+    if (!PopTextConversionFormat(nParameterCount, bStrict))
+        return;
+
+    // The strict format quotes text only. Numbers, booleans and an empty
+    // value read the same in both formats, and an error value stays an
+    // error.
+    OUStringBuffer aResult;
+    switch (GetStackType())
+    {
+        case svSingleRef:
+        case svDoubleRef:
+        {
+            // A range outside an array context gives the cell in the
+            // formula's row or column.
+            ScAddress aAddress;
+            if (!PopDoubleRefOrSingleRef(aAddress))
+            {
+                PushError(nGlobalError != FormulaError::NONE ? nGlobalError : FormulaError::NoValue);
+                return;
+            }
+            const FormulaError nError = AppendTextOfCell(aResult, aAddress, bStrict);
+            if (nError != FormulaError::NONE)
+            {
+                PushError(nError);
+                return;
+            }
+            break;
+        }
+        case svMatrix:
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
+        {
+            double fValue = 0.0;
+            svl::SharedString aString;
+            const ScMatValType eType = GetDoubleOrStringFromMatrix(fValue, aString);
+            if (nGlobalError != FormulaError::NONE)
+            {
+                PushError(nGlobalError);
+                return;
+            }
+            if (eType == ScMatValType::Boolean)
+                AppendTextOfNumber(aResult, fValue, /*bLogical*/ true);
+            else if (ScMatrix::IsValueType(eType))
+                AppendTextOfNumber(aResult, fValue, /*bLogical*/ false);
+            else if (ScMatrix::IsRealStringType(eType))
+                AppendTextOfString(aResult, aString.getString(), bStrict);
+            break;
+        }
+        case svMissing:
+        case svEmptyCell:
+            Pop();
+            break;
+        case svDouble:
+        {
+            // A boolean result arrives as a number typed LOGICAL.
+            const double fValue = GetDouble();
+            if (nGlobalError != FormulaError::NONE)
+            {
+                PushError(nGlobalError);
+                return;
+            }
+            AppendTextOfNumber(aResult, fValue, nCurFmtType == SvNumFormatType::LOGICAL);
+            break;
+        }
+        default:
+        {
+            const OUString aString = GetString().getString();
+            if (nGlobalError != FormulaError::NONE)
+            {
+                PushError(nGlobalError);
+                return;
+            }
+            AppendTextOfString(aResult, aString, bStrict);
+            break;
+        }
+    }
 
     PushString(aResult.makeStringAndClear());
 }

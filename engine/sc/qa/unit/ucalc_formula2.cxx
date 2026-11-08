@@ -7899,6 +7899,71 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncARRAYTOTEXTFormulaSeparators)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncVALUETOTEXTConvertsInBothFormats)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // A1:A6 holds a text, a text with a double quote, a number, a boolean, an error and an
+    // empty cell.
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"apple"_ustr);
+    m_pDoc->SetString(ScAddress(0, 1, 0), u"say \"hi\""_ustr);
+    m_pDoc->SetValue(ScAddress(0, 2, 0), 1234.01234);
+    m_pDoc->SetString(ScAddress(0, 3, 0), u"=TRUE()"_ustr);
+    m_pDoc->SetString(ScAddress(0, 4, 0), u"=1/0"_ustr);
+
+    // The concise format gives text as it is.
+    m_pDoc->SetString(ScAddress(1, 0, 0), u"=VALUETOTEXT(A1)"_ustr);
+    m_pDoc->SetString(ScAddress(1, 1, 0), u"=VALUETOTEXT(A2;0)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"apple"_ustr, m_pDoc->GetString(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"say \"hi\""_ustr, m_pDoc->GetString(ScAddress(1, 1, 0)));
+
+    // The strict format quotes text and doubles each double quote inside it.
+    m_pDoc->SetString(ScAddress(2, 0, 0), u"=VALUETOTEXT(A1;1)"_ustr);
+    m_pDoc->SetString(ScAddress(2, 1, 0), u"=VALUETOTEXT(A2;1)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"\"apple\""_ustr, m_pDoc->GetString(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"\"say \"\"hi\"\"\""_ustr, m_pDoc->GetString(ScAddress(2, 1, 0)));
+
+    // A number and a boolean read the same in both formats, and the result is text.
+    m_pDoc->SetString(ScAddress(1, 2, 0), u"=VALUETOTEXT(A3)"_ustr);
+    m_pDoc->SetString(ScAddress(2, 2, 0), u"=VALUETOTEXT(A3;1)"_ustr);
+    m_pDoc->SetString(ScAddress(1, 3, 0), u"=VALUETOTEXT(A4)"_ustr);
+    m_pDoc->SetString(ScAddress(2, 3, 0), u"=VALUETOTEXT(A4;1)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"1234.01234"_ustr, m_pDoc->GetString(ScAddress(1, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"1234.01234"_ustr, m_pDoc->GetString(ScAddress(2, 2, 0)));
+    CPPUNIT_ASSERT(!m_pDoc->HasValueData(ScAddress(1, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"TRUE"_ustr, m_pDoc->GetString(ScAddress(1, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"TRUE"_ustr, m_pDoc->GetString(ScAddress(2, 3, 0)));
+
+    // An error stays an error, and an empty cell gives empty text.
+    m_pDoc->SetString(ScAddress(1, 4, 0), u"=VALUETOTEXT(A5;1)"_ustr);
+    m_pDoc->SetString(ScAddress(1, 5, 0), u"=VALUETOTEXT(A6;1)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::DivisionByZero, m_pDoc->GetErrCode(ScAddress(1, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(ScAddress(1, 5, 0)));
+
+    // Values given in the formula convert the same way as cell contents.
+    m_pDoc->SetString(ScAddress(3, 0, 0), u"=VALUETOTEXT(\"pear\";1)"_ustr);
+    m_pDoc->SetString(ScAddress(3, 1, 0), u"=VALUETOTEXT(FALSE();1)"_ustr);
+    m_pDoc->SetString(ScAddress(3, 2, 0), u"=VALUETOTEXT(2.5;1)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"\"pear\""_ustr, m_pDoc->GetString(ScAddress(3, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"FALSE"_ustr, m_pDoc->GetString(ScAddress(3, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"2.5"_ustr, m_pDoc->GetString(ScAddress(3, 2, 0)));
+
+    // A format other than 0 or 1 is #VALUE!.
+    m_pDoc->SetString(ScAddress(3, 3, 0), u"=VALUETOTEXT(A1;2)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoValue, m_pDoc->GetErrCode(ScAddress(3, 3, 0)));
+
+    // In an array formula each value of a range converts on its own.
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(4, 0, 4, 2, aMark, u"=VALUETOTEXT(A1:A3;1)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"\"apple\""_ustr, m_pDoc->GetString(ScAddress(4, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"\"say \"\"hi\"\"\""_ustr, m_pDoc->GetString(ScAddress(4, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"1234.01234"_ustr, m_pDoc->GetString(ScAddress(4, 2, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testFormulaSeparatorsChangedBackForgetReplacedSymbols)
 {
     // After the array separators change and change back, the symbols that stood in for them in

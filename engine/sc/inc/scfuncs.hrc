@@ -4589,6 +4589,16 @@ const TranslateId ocPIVOTBY_ARY[] =
     NC_("ocPIVOTBY", "The total that a function with two parameters receives. 0 - column total (default). 1 - row total. 2 - grand total. 3 - total of the parent column group in the same row. 4 - total of the parent row group in the same column.")
 };
 
+// -=*# Resource for function VALUETOTEXT #*=-
+const TranslateId ocVALUETOTEXT_ARY[] =
+{
+    NC_("ocVALUETOTEXT", "Returns a value as text."),
+    NC_("ocVALUETOTEXT", "Value"),
+    NC_("ocVALUETOTEXT", "The value to return as text."),
+    NC_("ocVALUETOTEXT", "Format"),
+    NC_("ocVALUETOTEXT", "The format of the returned text. 0 or omitted - concise format, text as it is (default). 1 - strict format, text in double quotes.")
+};
+
 // -=*# Resource for function LAMBDA #*=-
 const TranslateId ocLAMBDA_ARY[] =
 {

@@ -886,6 +886,7 @@ const FunctionData saFuncTable2021[] =
     { "COM.MICROSOFT.RANDARRAY",           "RANDARRAY",           NOID,   NOID,   0,  5,  A, { VO }, FuncFlags::MACROCALL_NEW },
     { "COM.MICROSOFT.UNIQUE",              "UNIQUE",              NOID,   NOID,   1,  3,  A, { VO }, FuncFlags::MACROCALL_NEW },
     { "COM.MICROSOFT.ARRAYTOTEXT",         "ARRAYTOTEXT",         NOID,   NOID,   1,  2,  V, { RO, VR }, FuncFlags::MACROCALL_NEW },
+    { "COM.MICROSOFT.VALUETOTEXT",         "VALUETOTEXT",         NOID,   NOID,   1,  2,  V, { VR }, FuncFlags::MACROCALL_NEW },
     { "COM.MICROSOFT.PERCENTOF",           "PERCENTOF",           NOID,   NOID,   2,  2,  V, { RX }, FuncFlags::MACROCALL_NEW },
     { "COM.MICROSOFT.GROUPBY",             "GROUPBY",             NOID,   NOID,   3,  8,  A, { VA }, FuncFlags::MACROCALL_NEW },
     { "COM.MICROSOFT.PIVOTBY",             "PIVOTBY",             NOID,   NOID,   4,  11, A, { VA }, FuncFlags::MACROCALL_NEW },

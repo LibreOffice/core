@@ -3392,6 +3392,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFunctionLists)
         "UNICODE",
         "UPPER",
         "VALUE",
+        "VALUETOTEXT",
         "WEBSERVICE",
         nullptr
     };
