@@ -1420,6 +1420,93 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
             }
         }
     }
+
+    // Read the CryptSession10Container of an encrypted PowerPoint document.
+    if (m_bOk && rParam.aCurrentUserAtom.IsEncrypted())
+    {
+        // See MS-PPT Spec 2.13.24 RecordType
+        // 0x2F14 for CryptSession10Container
+        constexpr sal_uInt16 nCryptSession10ContainerRecordType = 0x2F14;
+
+        if (!m_aUserEditAtom.nEncryptSessionPersistIdRef)
+        {
+            SAL_WARN("filter.ms", "Encrypted PPT document without encryptSessionPersistIdRef");
+            m_bOk = false;
+        }
+        else
+        {
+            const sal_uInt32 nPersistId = *m_aUserEditAtom.nEncryptSessionPersistIdRef;
+
+            if (!m_pPersistPtr || nPersistId >= m_nPersistPtrCnt)
+            {
+                SAL_WARN("filter.ms", "Invalid CryptSession10Container Persist ID");
+                m_bOk = false;
+            }
+            else
+            {
+                const sal_uInt32 nPersistOffset = m_pPersistPtr[nPersistId];
+
+                // Save the current position before seeking to the container.
+                const sal_uInt64 nOldPos = rStCtrl.Tell();
+
+                if (!nPersistOffset || !checkSeek(rStCtrl, nPersistOffset))
+                {
+                    SAL_WARN("filter.ms", "Invalid CryptSession10Container offset");
+                    m_bOk = false;
+                }
+                else
+                {
+                    DffRecordHeader aCryptSessionHd;
+
+                    if (!ReadDffRecordHeader(rStCtrl, aCryptSessionHd)
+                        || aCryptSessionHd.nRecType != nCryptSession10ContainerRecordType)
+                    {
+                        SAL_WARN("filter.ms", "Invalid CryptSession10Container record");
+                        m_bOk = false;
+                    }
+                    else
+                    {
+                        const sal_uInt64 nDataStart = rStCtrl.Tell();
+
+                        if (nDataStart > nStreamLen
+                            || aCryptSessionHd.nRecLen > nStreamLen - nDataStart)
+                        {
+                            SAL_WARN("filter.ms", "CryptSession10Container exceeds stream size");
+                            m_bOk = false;
+                        }
+                        else
+                        {
+                            rParam.aCryptSession10ContainerData.resize(aCryptSessionHd.nRecLen);
+
+                            const sal_uInt64 nRead = rStCtrl.ReadBytes(
+                                rParam.aCryptSession10ContainerData.data(),
+                                aCryptSessionHd.nRecLen);
+
+                            if (nRead != aCryptSessionHd.nRecLen)
+                            {
+                                SAL_WARN("filter.ms", "Cannot read CryptSession10Container data");
+                                rParam.aCryptSession10ContainerData.clear();
+                                m_bOk = false;
+                            }
+                            else
+                            {
+                                SAL_INFO("filter.ms",
+                                         "CryptSession10Container successfully read: "
+                                             << aCryptSessionHd.nRecLen << " bytes");
+                            }
+                        }
+                    }
+                }
+
+                // Restore the original stream position, even if reading the record failed.
+                if (!checkSeek(rStCtrl, nOldPos))
+                {
+                    m_bOk = false;
+                }
+            }
+        }
+    }
+
     if ( rStCtrl.GetError() != ERRCODE_NONE )
         m_bOk = false;
     if ( m_bOk )

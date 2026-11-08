@@ -98,6 +98,7 @@ struct MSFILTER_DLLPUBLIC PowerPointImportParam
     SvStream&           rDocStream;
     sal_uInt32          nImportFlags;
     PptCurrentUserAtom  aCurrentUserAtom;
+    std::vector<sal_uInt8> aCryptSession10ContainerData;
 
     PowerPointImportParam( SvStream& rDocStream );
 };
