@@ -674,12 +674,15 @@ makeSignatureActionSession(std::shared_ptr<ClientSession> clientSession,
 constexpr int CompareRedirectLimit = 5;
 
 /// True when coolwsd downloads the document to compare against from this URL: an http or https
-/// URL on the same allowed WOPI host as the document, whose URL is documentUri.
+/// URL with the same scheme, host and port as the URL of the document, documentUri, on an allowed
+/// WOPI host.
 bool isCompareDownloadUrl(const Poco::URI& uri, const Poco::URI& documentUri)
 {
     const std::string scheme = Util::toLower(uri.getScheme());
     return (scheme == "http" || scheme == "https") &&
+           scheme == Util::toLower(documentUri.getScheme()) &&
            Util::iequal(uri.getHost(), documentUri.getHost()) &&
+           uri.getPort() == documentUri.getPort() &&
            HostUtil::allowedWopiHost(uri.getHost(), uri.getPort());
 }
 
