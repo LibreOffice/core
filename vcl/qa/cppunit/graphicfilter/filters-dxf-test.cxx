@@ -55,6 +55,7 @@ public:
     void testTextAligned();
     void testInserts();
     void testHatch();
+    void testPointsLeadersImages();
 
     CPPUNIT_TEST_SUITE(DxfFilterTest);
     CPPUNIT_TEST(testCVEs);
@@ -76,6 +77,7 @@ public:
     CPPUNIT_TEST(testTextAligned);
     CPPUNIT_TEST(testInserts);
     CPPUNIT_TEST(testHatch);
+    CPPUNIT_TEST(testPointsLeadersImages);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -529,6 +531,41 @@ void DxfFilterTest::testHatch()
     assertXPath(pDoc, "/metafile/gradient", 1);
     assertXPath(pDoc, "/metafile/gradient", "startcolor", u"#ff0000");
     assertXPath(pDoc, "/metafile/gradient", "endcolor", u"#0000ff");
+}
+
+void DxfFilterTest::testPointsLeadersImages()
+{
+    // the drawing is 100 x 100, one unit is 100 in the metafile
+    GDIMetaFile aMTF = importFile(u"misc.dxf");
+    MetafileXmlDump aDumper;
+    aDumper.filterAllActionTypes();
+    aDumper.filterActionType(MetaActionType::POLYLINE, false);
+    aDumper.filterActionType(MetaActionType::POLYGON, false);
+    aDumper.filterActionType(MetaActionType::FILLCOLOR, false);
+    xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
+
+    // the line, the point as a cross in a circle, the leader and the frame of the image
+    assertXPath(pDoc, "/metafile/polyline", 6);
+    // $PDSIZE is 2: the cross goes from (49, 49) to (51, 51)
+    assertXPath(pDoc, "/metafile/polyline[2]/point[1]", "x", u"4950");
+    assertXPath(pDoc, "/metafile/polyline[2]/point[1]", "y", u"5150");
+    assertXPath(pDoc, "/metafile/polyline[4]/point[@flags='control']", 24);
+    // the leader with its arrowhead: 2.5 * 2 long, pointing at (10, 10)
+    assertXPath(pDoc, "/metafile/polyline[5]/point", 3);
+    assertXPath(pDoc, "/metafile/polygon[1]/point[1]", "x", u"1050");
+    assertXPath(pDoc, "/metafile/polygon[1]/point[1]", "y", u"9050");
+    assertXPath(pDoc, "/metafile/polygon[1]/point[2]", "x", u"1550");
+    // the wipeout covers (60, 60) - (80, 70) with white
+    assertXPath(pDoc, "/metafile/fillcolor[@color='#ffffff']", 1);
+    assertXPath(pDoc, "/metafile/polygon[2]/point[1]", "x", u"6050");
+    assertXPath(pDoc, "/metafile/polygon[2]/point[1]", "y", u"3050");
+    assertXPath(pDoc, "/metafile/polygon[2]/point[3]", "x", u"8050");
+    assertXPath(pDoc, "/metafile/polygon[2]/point[3]", "y", u"4050");
+    // the image of 100 x 100 pixels of 0.1 is the frame (0, 80) - (10, 90)
+    assertXPath(pDoc, "/metafile/polyline[6]/point[1]", "x", u"50");
+    assertXPath(pDoc, "/metafile/polyline[6]/point[1]", "y", u"1050");
+    assertXPath(pDoc, "/metafile/polyline[6]/point[3]", "x", u"1050");
+    assertXPath(pDoc, "/metafile/polyline[6]/point[3]", "y", u"2050");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DxfFilterTest);

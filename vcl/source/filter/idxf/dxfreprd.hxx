@@ -73,6 +73,10 @@ public:
 
     double mfGlobalLineTypeScale; // $LTSCALE
     bool mbLineWeightDisplay; // $LWDISPLAY
+    double mfDimArrowSize; // $DIMASZ
+    double mfDimScale; // $DIMSCALE
+    tools::Long mnPointMode; // $PDMODE
+    double mfPointSize; // $PDSIZE
 
     DXFRepresentation();
     ~DXFRepresentation();

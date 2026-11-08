@@ -48,7 +48,9 @@ enum DXFEntityType {
     DXF_HATCH,
     DXF_ELLIPSE,
     DXF_SPLINE,
-    DXF_MTEXT
+    DXF_MTEXT,
+    DXF_LEADER,
+    DXF_IMAGE
 };
 
 // base class of an entity
@@ -498,6 +500,44 @@ protected:
 private:
     // the groups after 101 describe an embedded object, not the text
     bool bInEmbeddedObject;
+};
+
+//--------------------------Leader----------------------------------------------
+
+// in world coordinates
+class DXFLeaderEntity : public DXFBasicEntity {
+public:
+    OString m_sDimStyle;               // 3
+    bool bArrow;                       // 71
+    bool bSpline;                      // 72
+    std::vector<DXFVector> aVertices;  // 10,20,30
+
+    DXFLeaderEntity();
+
+protected:
+
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) override;
+};
+
+//--------------------------Image and Wipeout-----------------------------------
+
+// A raster image is drawn as its frame, a wipeout covers what is below it. In world coordinates.
+class DXFImageEntity : public DXFBasicEntity {
+public:
+    bool bWipeout;
+    DXFVector aInsert;                 // 10,20,30, the outer corner of the first pixel
+    DXFVector aU;                      // 11,21,31, one pixel along the width
+    DXFVector aV;                      // 12,22,32, one pixel along the height
+    double fWidth;                     // 13, in pixels
+    double fHeight;                    // 23
+    tools::Long nClipType;             // 71, 1 rectangle, 2 polygon
+    std::vector<basegfx::B2DPoint> aClipVertices; // 14,24, in pixels from the top left
+
+    explicit DXFImageEntity(bool bIsWipeout);
+
+protected:
+
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) override;
 };
 
 class DXFDimensionEntity : public DXFBasicEntity {

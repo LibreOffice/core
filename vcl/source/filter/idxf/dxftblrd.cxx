@@ -186,6 +186,27 @@ void DXFStyle::Read(DXFGroupReader & rDGR)
     }
 }
 
+//----------------------------------DXFDimStyle--------------------------------
+
+void DXFDimStyle::Read(DXFGroupReader & rDGR)
+{
+    while (rDGR.Read()!=0)
+    {
+        switch(rDGR.GetG())
+        {
+        case  2:
+            maName = rDGR.GetS();
+            break;
+        case 41:
+            mfArrowSize = rDGR.GetF();
+            break;
+        case 40:
+            mfScale = rDGR.GetF();
+            break;
+        }
+    }
+}
+
 //----------------------------------DXFVPort-----------------------------------
 
 DXFVPort::DXFVPort()
@@ -332,6 +353,11 @@ void DXFTables::Read(DXFGroupReader & rDGR)
             *ppSt=pSt;
             ppSt=&(pSt->pSucc);
         }
+        else if (rDGR.GetS() == "DIMSTYLE") {
+            DXFDimStyle aDimStyle;
+            aDimStyle.Read(rDGR);
+            maDimStyles.push_back(aDimStyle);
+        }
         else if (rDGR.GetS() == "VPORT") {
             pVP=new DXFVPort;
             pVP->Read(rDGR);
@@ -372,6 +398,7 @@ void DXFTables::Clear()
         pVPorts=pVP->pSucc;
         delete pVP;
     }
+    maDimStyles.clear();
 }
 
 
@@ -402,6 +429,15 @@ DXFLayer * DXFTables::SearchLayer(std::string_view rName) const
     if (p != nullptr)
         mpLastLayer = p;
     return p;
+}
+
+
+const DXFDimStyle * DXFTables::SearchDimStyle(std::string_view rName) const
+{
+    for (const DXFDimStyle& rDimStyle : maDimStyles)
+        if (o3tl::equalsIgnoreAsciiCase(rName, rDimStyle.maName))
+            return &rDimStyle;
+    return nullptr;
 }
 
 
