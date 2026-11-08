@@ -152,6 +152,9 @@ class DXFTables {
 
     DXFLType * pLTypes; // list of line types
     DXFLayer * pLayers; // list of layers
+    // the last found ones, for the next search
+    mutable DXFLType * mpLastLType;
+    mutable DXFLayer * mpLastLayer;
     DXFStyle * pStyles; // list of styles
     DXFVPort * pVPorts; // list of viewports
 

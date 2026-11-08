@@ -40,6 +40,7 @@ public:
     void testExtents();
     void testColors();
     void testLineTypes();
+    void testNamesCase();
     void testPolylines();
     void testPolygonMesh();
     void testEllipse();
@@ -56,6 +57,7 @@ public:
     CPPUNIT_TEST(testExtents);
     CPPUNIT_TEST(testColors);
     CPPUNIT_TEST(testLineTypes);
+    CPPUNIT_TEST(testNamesCase);
     CPPUNIT_TEST(testPolylines);
     CPPUNIT_TEST(testPolygonMesh);
     CPPUNIT_TEST(testEllipse);
@@ -166,6 +168,20 @@ void DxfFilterTest::testLineTypes()
     assertXPath(pDoc, "/metafile/polyline[3]", "width", u"50");
     // thin line weights are hairlines
     assertXPath(pDoc, "/metafile/polyline[4]", "width", u"0");
+}
+
+void DxfFilterTest::testNamesCase()
+{
+    // the names of layers, line types and blocks are not case-sensitive
+    GDIMetaFile aMTF = importFile(u"names-case.dxf");
+    MetafileXmlDump aDumper;
+    aDumper.filterAllActionTypes();
+    aDumper.filterActionType(MetaActionType::POLYLINE, false);
+    aDumper.filterActionType(MetaActionType::LINECOLOR, false);
+    xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
+    assertXPath(pDoc, "/metafile/polyline", 2);
+    assertXPath(pDoc, "/metafile/linecolor[1]", "color", u"#ff0000");
+    assertXPath(pDoc, "/metafile/polyline[1]", "style", u"dash");
 }
 
 void DxfFilterTest::testPolylines()
