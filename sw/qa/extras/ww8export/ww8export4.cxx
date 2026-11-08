@@ -41,6 +41,8 @@
 #include <formatflysplit.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>
 #include <fmtftntx.hxx>
+#include <fmtanchr.hxx>
+#include <node.hxx>
 
 namespace
 {
@@ -894,6 +896,23 @@ DECLARE_WW8EXPORT_TEST(testTdf117636, "tdf117636.doc")
     // Expected: 1 or 2
     // Actual:   6
     CPPUNIT_ASSERT_LESS(3, countXPathNodes(pXmlDoc, "//SwLinePortion"));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFloattableInCellDOCExport)
+{
+    // Given a table cell holding a floating table:
+    createSwDoc("floattable-in-cell.docx");
+
+    // When saving to DOC and loading it back:
+    saveAndReload(TestFilter::DOC);
+
+    // Then the floating table is still anchored in the cell:
+    sw::FrameFormats<sw::SpzFrameFormat*>* pFlys = getSwDoc()->GetSpzFrameFormats();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pFlys->size());
+    SwNode* pAnchorNode = (*pFlys)[0]->GetAnchor().GetAnchorNode();
+    // Without the accompanying fix in place, this test would have failed, i.e. the floating table
+    // was written at the depth of the outer table and was anchored after it.
+    CPPUNIT_ASSERT(pAnchorNode->FindTableNode());
 }
 
 } // end of anonymous namespace
