@@ -1127,9 +1127,6 @@ int main()
     // ucb/source/tdoc/ucptdoc1.component
     line("ucb_tdoc_ContentProvider_get_implementation");
     line("ucb_tdoc_DocumentContentFactory_get_implementation");
-    // ucb/source/ucp/cmis/ucpcmis1.component
-    // TODO this needs an entry in config_foo.h
-    line("ucb_cmis_ContentProvider_get_implementation");
     // ucb/source/ucp/expand/ucpexpand1.component
     line("ucb_expand_ExpandContentProviderImpl_get_implementation");
     // ucb/source/ucp/file/ucpfile1.component

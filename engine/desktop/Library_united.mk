@@ -68,7 +68,6 @@ $(eval $(call gb_Library_use_externals,united,\
 	icu_headers \
 	icui18n \
 	icuuc \
-	libcmis \
 	lcms2 \
 	libeot \
 	libexslt \

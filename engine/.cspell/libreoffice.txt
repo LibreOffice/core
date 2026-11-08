@@ -34,7 +34,6 @@ javac
 jfreereport
 lastrun
 libclucene
-libcmis
 libebook
 liblangtag
 LIBO

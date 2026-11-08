@@ -33,7 +33,6 @@ curl --no-progress-meter -S --fail \
     -C - -O https://gerrit.collaboraoffice.com/src/$LIBLANGTAG_TARBALL \
     -C - -O https://gerrit.collaboraoffice.com/src/$ABW_TARBALL \
     -C - -O https://gerrit.collaboraoffice.com/src/$CDR_TARBALL \
-    -C - -O https://gerrit.collaboraoffice.com/src/$LIBCMIS_TARBALL \
     -C - -O https://gerrit.collaboraoffice.com/src/$EBOOK_TARBALL \
     -C - -O https://gerrit.collaboraoffice.com/src/$ETONYEK_TARBALL \
     -C - -O https://gerrit.collaboraoffice.com/src/$FREEHAND_TARBALL \

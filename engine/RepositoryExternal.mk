@@ -641,33 +641,6 @@ endef
 endif # SYSTEM_BOOST
 
 
-ifneq ($(SYSTEM_LIBCMIS),)
-
-define gb_LinkTarget__use_libcmis
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	$(LIBCMIS_CFLAGS) \
-)
-$(call gb_LinkTarget_add_libs,$(1),$(LIBCMIS_LIBS))
-
-endef
-
-else # !SYSTEM_LIBCMIS
-
-define gb_LinkTarget__use_libcmis
-$(call gb_LinkTarget_set_include,$(1),\
-	-I$(gb_UnpackedTarball_workdir)/libcmis/inc \
-	$$(INCLUDE) \
-)
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-	libcmis \
-)
-$(call gb_Helper_LinkTarget_use_external,$(1),libcmis)
-
-endef
-
-endif # SYSTEM_LIBCMIS
-
 ifeq ($(ENABLE_JAVA),TRUE)
 
 define gb_LinkTarget__use_jawt

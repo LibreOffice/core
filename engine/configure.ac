@@ -1134,7 +1134,6 @@ ios*) # iOS
     using_freetype_fontconfig=no
     using_x11=no
     build_crypto=no
-    test_libcmis=no
     test_webdav=no
     if test -n "$LODE_HOME" ; then
         mac_sanitize_path
@@ -2966,7 +2965,6 @@ fi
 # default gtk3 plugin.
 if test "$enable_wasm_strip" = "yes"; then
     enable_avmedia=no
-    enable_libcmis=no
     enable_coinmp=no
     enable_cups=no
     enable_database_connectivity=no
@@ -2982,7 +2980,6 @@ if test "$enable_wasm_strip" = "yes"; then
     enable_skia=no
     enable_zxing=no
     test_libepubgen=no
-    test_libcmis=no
     with_galleries=no
     with_templates=no
     with_x=no
@@ -4693,11 +4690,6 @@ if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
     else
         with_system_orcus=no
     fi
-    if test "$with_system_libcmis" = "yes"; then
-        AC_MSG_ERROR([--with-system-libcmis conflicts with --enable-dbgutil])
-    else
-        with_system_libcmis=no
-    fi
     if test "$with_system_hunspell" = "yes"; then
         AC_MSG_ERROR([--with-system-hunspell conflicts with --enable-dbgutil])
     else
@@ -6041,7 +6033,6 @@ if test "$cross_compiling" = "yes"; then
         --disable-cups \
         --disable-customtarget-components \
         --disable-gtk3 \
-        --disable-libcmis \
         --disable-nss \
         --disable-opencl \
         --disable-openssl \
@@ -7828,11 +7819,6 @@ else
     AC_MSG_ERROR(["$my_gperf_ver1" is too old or unrecognized, must be at least gperf 3.1])
 fi
 AC_SUBST(GPERF)
-
-dnl ===================================================================
-dnl Check for system libcmis
-dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libcmis],[LIBCMIS],[libcmis-0.6 >= 0.6.1],enabled)
 
 dnl ===================================================================
 dnl C++11
@@ -10676,15 +10662,6 @@ if test "$enable_curl" = "yes"; then
     AC_DEFINE([HAVE_FEATURE_CURL])
 fi
 
-
-dnl ==================================================================
-dnl libcmis
-dnl ==================================================================
-if test "$enable_libcmis" = "yes"; then
-    if test "$enable_curl" != "yes"; then
-        AC_MSG_ERROR([--disable-libcmis must be used when --disable-curl is used])
-    fi
-fi
 
 dnl ===================================================================
 dnl Orcus

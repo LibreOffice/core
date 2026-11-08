@@ -133,13 +133,6 @@
         "dest-filename": "@CDR_TARBALL@"
     },
     {
-        "url": "https://gerrit.collaboraoffice.com/src/@LIBCMIS_TARBALL@",
-        "sha256": "@LIBCMIS_SHA256SUM@",
-        "type": "file",
-        "dest": "external/tarballs",
-        "dest-filename": "@LIBCMIS_TARBALL@"
-    },
-    {
         "url": "https://gerrit.collaboraoffice.com/src/@EBOOK_TARBALL@",
         "sha256": "@EBOOK_SHA256SUM@",
         "type": "file",

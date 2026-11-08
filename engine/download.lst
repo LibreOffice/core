@@ -50,8 +50,6 @@ FAST_FLOAT_TARBALL := fast_float-8.2.10.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBCMIS_SHA256SUM := 5adb3781f374adf491103b2cb2dc290085150c9b7d097baf56d8ac35df84e792
-LIBCMIS_TARBALL := libcmis-0.6.3.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

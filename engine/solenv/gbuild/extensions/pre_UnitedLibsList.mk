@@ -188,7 +188,6 @@ gb_UNITED_LIBRARY_LIST := \
     ucbhelper \
 	ucb1 \
 	$(call gb_Helper_optional,XMLHELP,ucpchelp1) \
-	$(if $(ENABLE_LIBCMIS),ucpcmis1) \
 	$(if $(WITH_WEBDAV),ucpdav1) \
 	ucppkg1 \
 	ucpexpand1 \

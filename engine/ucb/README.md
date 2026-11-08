@@ -2,7 +2,7 @@
 
 Universal Content Broker (has ucps) which do things like convert files
 to strings in content broker world, or connect LibreOffice with
-various DMS and fileshare systems like WebDAV, CMIS, or GIO.
+various DMS and fileshare systems like WebDAV or GIO.
 
 The UCPs implement the Universal Content Provider UNO interfaces in
 C++, in particular the `com.sun.star.ucb.ContentProvider` service.
