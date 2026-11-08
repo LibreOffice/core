@@ -81,6 +81,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testKeyedFromFile);
     CPPUNIT_TEST(testIsPlainFileName);
     CPPUNIT_TEST(testBuildLocalPathToJail);
+    CPPUNIT_TEST(testResolveRealpath);
     CPPUNIT_TEST(testFindFileInJail);
     CPPUNIT_TEST(testStringCompare);
     CPPUNIT_TEST(testJsonUtilEscapeJSONValue);
@@ -122,6 +123,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testKeyedFromFile();
     void testIsPlainFileName();
     void testBuildLocalPathToJail();
+    void testResolveRealpath();
     void testFindFileInJail();
     void testStringCompare();
     void testJsonUtilEscapeJSONValue();
@@ -1188,6 +1190,28 @@ void WhiteBoxTests::testBuildLocalPathToJail()
                      jailPath(true, jailRoot, "/tmp/../user/hello.odt"));
     LOK_ASSERT_EQUAL(dir + "/jails/tmp/cool-jailid/", jailPath(true, jailRoot, "/tmp"));
     LOK_ASSERT_EQUAL(dir + "/jails/tmp/cool-jailid/", jailPath(true, jailRoot, "tmp"));
+}
+
+void WhiteBoxTests::testResolveRealpath()
+{
+    constexpr std::string_view testname = __func__;
+
+    const std::string dir = FileUtil::createRandomTmpDir();
+    FileUtil::OwnedFile dirCleanup(dir, /*recursive=*/true);
+    const std::string realDir = FileUtil::realpath(dir);
+    std::ofstream(dir + "/hello.odt") << "hello";
+    LOK_ASSERT_EQUAL(0, symlink("hello.odt", (dir + "/same.odt").c_str()));
+    LOK_ASSERT_EQUAL(0, symlink("loop.odt", (dir + "/loop.odt").c_str()));
+
+    // An existing file and a link to it both resolve to the file.
+    LOK_ASSERT_EQUAL(realDir + "/hello.odt",
+                     FileUtil::resolveRealpath((dir + "/hello.odt").c_str()).value_or(""));
+    LOK_ASSERT_EQUAL(realDir + "/hello.odt",
+                     FileUtil::resolveRealpath((dir + "/same.odt").c_str()).value_or(""));
+
+    // A missing file and a link that points to itself resolve to nothing.
+    LOK_ASSERT(!FileUtil::resolveRealpath((dir + "/missing.odt").c_str()));
+    LOK_ASSERT(!FileUtil::resolveRealpath((dir + "/loop.odt").c_str()));
 }
 
 void WhiteBoxTests::testFindFileInJail()

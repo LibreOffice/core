@@ -394,10 +394,23 @@ namespace FileUtil
 
         // realpath follows every link, so the file is inside the jail only when its real path is
         // under the real path of the directory the jail maps to.
-        std::string realDir = realpath(localDir);
-        if (!realDir.ends_with('/'))
-            realDir += '/';
-        if (!realpath(localPath).starts_with(realDir))
+        const std::optional<std::string> realPath = resolveRealpath(localPath.c_str());
+        if (!realPath)
+        {
+            LOG_WRN_SYS("File [" << Anonymizer::anonymizeUrl(localPath) << "] does not resolve");
+            return std::string();
+        }
+
+        std::optional<std::string> realDir = resolveRealpath(localDir.c_str());
+        if (!realDir)
+        {
+            LOG_WRN_SYS("Jail directory [" << localDir << "] does not resolve");
+            return std::string();
+        }
+
+        if (!realDir->ends_with('/'))
+            *realDir += '/';
+        if (!realPath->starts_with(*realDir))
         {
             LOG_WRN("File [" << Anonymizer::anonymizeUrl(localPath) << "] is outside the jail");
             return std::string();

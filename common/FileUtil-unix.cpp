@@ -56,15 +56,21 @@ namespace FileUtil
         return FileUtil::copy(source, newPath, /*log=*/true, /*throw_on_error=*/false);
     }
 
-    std::string realpath(const char* path)
+    std::optional<std::string> resolveRealpath(const char* path)
     {
         char* resolved = ::realpath(path, nullptr);
-        if (resolved)
-        {
-            std::string real = resolved;
-            free(resolved);
-            return real;
-        }
+        if (!resolved)
+            return std::nullopt;
+
+        std::string real = resolved;
+        free(resolved);
+        return real;
+    }
+
+    std::string realpath(const char* path)
+    {
+        if (std::optional<std::string> real = resolveRealpath(path))
+            return std::move(*real);
 
         LOG_SYS("Failed to get the realpath of [" << path << ']');
         return path;

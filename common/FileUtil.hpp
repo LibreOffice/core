@@ -22,6 +22,7 @@
 #include <chrono>
 #include <fcntl.h>
 #include <fstream>
+#include <optional>
 #include <string>
 #include <sys/stat.h>
 
@@ -217,9 +218,13 @@ namespace FileUtil
     /// If root is empty, the current system temp directory is used.
     std::string createTmpDir(const std::string& dirName, std::string root = std::string());
 
-    /// Returns the realpath(3) of the provided path. This also has a separate implementation for
-    /// Windows.
+    /// Returns the realpath(3) of the provided path, or the path itself when it does not resolve.
+    /// This also has a separate implementation for Windows.
     std::string realpath(const char* path);
+
+    /// Returns the realpath(3) of the provided path, or nothing when it does not resolve.
+    /// On Windows it returns the path itself.
+    std::optional<std::string> resolveRealpath(const char* path);
 
     inline std::string realpath(const std::string& path)
     {
