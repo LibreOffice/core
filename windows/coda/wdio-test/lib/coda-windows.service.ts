@@ -15,7 +15,15 @@
 // browser through that port. coda-driver attaches to the CODA-W process through UI Automation.
 
 import { ChildProcess, execFileSync, spawn, spawnSync } from 'child_process';
-import { cpSync, existsSync, mkdirSync, mkdtempSync, rmSync } from 'fs';
+import {
+	cpSync,
+	existsSync,
+	mkdirSync,
+	mkdtempSync,
+	renameSync,
+	rmSync,
+	writeFileSync,
+} from 'fs';
 import http from 'http';
 import net from 'net';
 import { tmpdir } from 'os';
@@ -35,8 +43,11 @@ interface CodaWindowsServiceOptions {
 	driverProject: string;
 	// A coda-driver executable to use as it is, instead of building the project.
 	driverExe?: string;
-	// msedgedriver.exe, of the same major version as the WebView2 runtime.
-	edgeDriver: string;
+	// msedgedriver.exe, of the same major version as the WebView2 runtime. When it is not given,
+	// the msedgedriver for the WebView2 runtime is downloaded into edgeDriverCache.
+	edgeDriver?: string;
+	// The folder of the downloaded msedgedriver executables, one subfolder per version.
+	edgeDriverCache: string;
 	remoteDebuggingPort: number;
 	edgeDriverPort: number;
 	nativeUIPort: number;
@@ -66,6 +77,99 @@ function getJson(url: string): Promise<any> {
 function majorVersion(text: string): string | null {
 	const match = text.match(/(\d+)\.\d+\.\d+\.\d+/);
 	return match ? match[1] : null;
+}
+
+// The full version in a version string, for example 130.0.2849.68 for "Edg/130.0.2849.68".
+function fullVersion(text: string): string | null {
+	const match = text.match(/\d+\.\d+\.\d+\.\d+/);
+	return match ? match[0] : null;
+}
+
+const EDGEDRIVER_SITE = 'https://msedgedriver.microsoft.com';
+
+// The architecture in the names of the msedgedriver downloads, by the architecture of Node.js. A
+// driver of another architecture than the WebView2 runtime works too, because it talks to the
+// runtime over the remote debugging port.
+const EDGEDRIVER_ARCHITECTURES: { [arch: string]: string } = {
+	arm64: 'arm64',
+	x64: 'win64',
+	ia32: 'win32',
+};
+
+// The body of a download, or null when the site has no such file.
+async function download(url: string): Promise<Buffer | null> {
+	const response = await fetch(url, { signal: AbortSignal.timeout(120000) });
+	if (response.status === 404)
+		return null;
+	if (!response.ok)
+		throw new Error(`Downloading ${url} failed: HTTP ${response.status}`);
+	return Buffer.from(await response.arrayBuffer());
+}
+
+// A text file of the download site. The LATEST_RELEASE files are in UTF-16 with a byte order mark.
+function decodeText(bytes: Buffer): string {
+	const encoding = bytes[0] === 0xff && bytes[1] === 0xfe ? 'utf-16le' : 'utf-8';
+	return new TextDecoder(encoding).decode(bytes).trim();
+}
+
+// Unpack msedgedriver.exe of one version from its zip into the cache, and return its path. The
+// tar of Windows reads zip files, and a GNU tar earlier on the PATH, as from Git, does not.
+function unpackEdgeDriver(zip: Buffer, cacheDir: string, version: string): string {
+	const finalDir = join(cacheDir, version);
+	const unpackDir = `${finalDir}.partial-${process.pid}`;
+	mkdirSync(unpackDir, { recursive: true });
+	try {
+		const zipPath = join(unpackDir, 'edgedriver.zip');
+		writeFileSync(zipPath, zip);
+		const tar = join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'tar.exe');
+		execFileSync(tar, ['-xf', zipPath, '-C', unpackDir, 'msedgedriver.exe']);
+		rmSync(zipPath);
+		// The folder gets its final name only when it is complete, so an interrupted download
+		// leaves no driver in the cache.
+		renameSync(unpackDir, finalDir);
+	} finally {
+		rmSync(unpackDir, { recursive: true, force: true });
+	}
+	return join(finalDir, 'msedgedriver.exe');
+}
+
+// The msedgedriver for a WebView2 runtime version: the driver of the same version, or, when
+// Microsoft has published none for it, the latest driver of the same major version. A driver
+// is downloaded once, and taken from the cache after that.
+async function edgeDriverFor(runtimeVersion: string, cacheDir: string): Promise<string> {
+	const arch = EDGEDRIVER_ARCHITECTURES[process.arch];
+	if (!arch)
+		throw new Error(`There is no msedgedriver download for ${process.arch}`);
+
+	const cached = (version: string) => {
+		const exe = join(cacheDir, version, 'msedgedriver.exe');
+		return existsSync(exe) ? exe : null;
+	};
+	const zipUrl = (version: string) => `${EDGEDRIVER_SITE}/${version}/edgedriver_${arch}.zip`;
+
+	let version = runtimeVersion;
+	let exe = cached(version);
+	if (exe)
+		return exe;
+
+	console.log(`Downloading msedgedriver ${version}...`);
+	let zip = await download(zipUrl(version));
+	if (!zip) {
+		const major = version.split('.')[0];
+		const latestUrl = `${EDGEDRIVER_SITE}/LATEST_RELEASE_${major}_WINDOWS`;
+		const latest = await download(latestUrl);
+		if (!latest)
+			throw new Error(`There is no msedgedriver ${major}.x at ${EDGEDRIVER_SITE}`);
+		version = decodeText(latest);
+		exe = cached(version);
+		if (exe)
+			return exe;
+		console.log(`There is no msedgedriver ${runtimeVersion}, downloading ${version}...`);
+		zip = await download(zipUrl(version));
+		if (!zip)
+			throw new Error(`${latestUrl} names ${version}, but ${zipUrl(version)} is missing`);
+	}
+	return unpackEdgeDriver(zip, cacheDir, version);
 }
 
 // True when something accepts connections on the port.
@@ -144,7 +248,8 @@ export class CodaWindowsServiceLauncher {
 			appPath,
 			driverProject,
 			driverExe,
-			edgeDriver,
+			edgeDriver: givenEdgeDriver,
+			edgeDriverCache,
 			remoteDebuggingPort,
 			edgeDriverPort,
 			nativeUIPort,
@@ -182,14 +287,20 @@ export class CodaWindowsServiceLauncher {
 		const versionUrl = `http://127.0.0.1:${remoteDebuggingPort}/json/version`;
 		await waitForHttp(versionUrl, 'Remote debugging');
 
-		// msedgedriver attaches only to a WebView2 runtime of its own major version.
+		// msedgedriver attaches only to a WebView2 runtime of its own major version. The runtime
+		// on the machine updates itself, about every four weeks to a new major version.
 		const browser: string = (await getJson(versionUrl)).Browser || '';
+		const runtimeVersion = fullVersion(browser);
+		if (!runtimeVersion)
+			throw new Error(`The WebView2 runtime gave no version that can be read: "${browser}"`);
+		const edgeDriver =
+			givenEdgeDriver || (await edgeDriverFor(runtimeVersion, edgeDriverCache));
 		const driverVersion = execFileSync(edgeDriver, ['--version']).toString();
-		const wanted = majorVersion(browser);
-		if (wanted !== majorVersion(driverVersion))
+		if (majorVersion(runtimeVersion) !== majorVersion(driverVersion))
 			throw new Error(
 				`msedgedriver is "${driverVersion.trim()}", but the WebView2 runtime is ` +
-					`"${browser}". Get msedgedriver ${wanted}.x and set MSEDGEDRIVER to it.`,
+					`"${browser}". Get msedgedriver ${majorVersion(runtimeVersion)}.x and set ` +
+					'MSEDGEDRIVER to it, or leave MSEDGEDRIVER unset to have it downloaded.',
 			);
 
 		console.log('Starting msedgedriver...');

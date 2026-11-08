@@ -26,9 +26,21 @@ settings and documents of the user alone. The fixtures from
 - The .NET 8 SDK, for building coda-driver. The service builds it with
   `dotnet build` at the start of each run, unless CODA_DRIVER_EXE
   names an executable to use as it is.
-- msedgedriver.exe of the same major version as the WebView2 runtime
-  on the machine. The service compares the two at the start of a run,
-  and says which version it needs when they differ.
+- Access to msedgedriver.microsoft.com, or an msedgedriver.exe of
+  the same major version as the WebView2 runtime on the machine.
+
+  The WebView2 runtime updates itself, about every four weeks to a
+  new major version, and msedgedriver attaches only to a runtime of
+  its own major version. So at the start of a run the service
+  downloads the msedgedriver of the same version as the runtime, or
+  the latest one of the same major version when there is none of
+  exactly that version. It keeps the drivers in
+  `node_modules\.cache\msedgedriver`, so each version is downloaded
+  once.
+
+  When MSEDGEDRIVER names an msedgedriver.exe, the service uses that
+  one instead, and stops if its major version is not the one of the
+  runtime.
 - A logged-in desktop session. The run drives windows on the screen,
   so leave the mouse and keyboard alone while it runs.
 
@@ -37,7 +49,6 @@ settings and documents of the user alone. The fixtures from
     cd windows\coda\wdio-test
     npm install             # This is needed just once
     $env:CODA_APP = '<build>\windows\coda\x64\Debug\program\<APP_NAME>.exe'
-    $env:MSEDGEDRIVER = '<folder>\msedgedriver.exe'
     npm test
 
 The ports are 9222 for remote debugging, 9515 for msedgedriver and

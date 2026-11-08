@@ -38,10 +38,9 @@ const CODA_APP = required(
 	'CODA_APP',
 	'the CODA-W executable, e.g. ...\\windows\\coda\\x64\\Debug\\program\\<APP_NAME>.exe',
 );
-const MSEDGEDRIVER = required(
-	'MSEDGEDRIVER',
-	'msedgedriver.exe of the same major version as the WebView2 runtime',
-);
+// msedgedriver.exe of the same major version as the WebView2 runtime. Without it, the service
+// downloads the msedgedriver for the runtime into the cache folder.
+const MSEDGEDRIVER = process.env.MSEDGEDRIVER;
 
 const REMOTE_DEBUGGING_PORT = Number(process.env.REMOTE_DEBUGGING_PORT || 9222);
 const EDGEDRIVER_PORT = Number(process.env.EDGEDRIVER_PORT || 9515);
@@ -103,6 +102,7 @@ export const config = {
 			driverProject: join(__dirname, '..', 'coda-driver'),
 			driverExe: process.env.CODA_DRIVER_EXE,
 			edgeDriver: MSEDGEDRIVER,
+			edgeDriverCache: join(__dirname, 'node_modules', '.cache', 'msedgedriver'),
 			remoteDebuggingPort: REMOTE_DEBUGGING_PORT,
 			edgeDriverPort: EDGEDRIVER_PORT,
 			nativeUIPort: NATIVE_UI_PORT,
