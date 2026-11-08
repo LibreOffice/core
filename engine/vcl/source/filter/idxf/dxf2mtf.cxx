@@ -51,6 +51,21 @@ constexpr tools::Long MAX_LINE_WEIGHT = 211;
 // The shortest line type pattern drawn in metafile units, a denser one looks solid anyway
 constexpr double MIN_PATTERN_PERIOD = 10.0;
 
+// Limits against drawings that would never finish: the nesting of inserts, the copies of
+// an array insert, the entities and copies visited in one pass, even if they draw nothing,
+// and the output of one pass, counted in points plus an overhead for each metafile action.
+constexpr sal_Int32 MAX_INSERT_DEPTH = 32;
+constexpr tools::Long MAX_ARRAY_COUNT = 10000;
+constexpr sal_uInt64 MAX_VISITS = 4000000;
+constexpr sal_uInt64 MAX_WORK = 8000000;
+constexpr sal_uInt64 ACTION_WORK = 8;
+
+// The most points and polygons of the 16-bit counts of the metafile
+constexpr sal_uInt32 MAX_TOOLS_COUNT = 65535;
+
+// Coordinates further than this are garbage, not geometry
+constexpr double MAX_COORDINATE = 1e15;
+
 // a grid of rows and columns of at most nPoints points
 bool IsGrid(tools::Long nRows, tools::Long nColumns, sal_uInt64 nPoints)
 {
@@ -100,10 +115,47 @@ basegfx::B2DPolygon Project(const DXFTransform& rTransform, const basegfx::B2DPo
     return aResult;
 }
 
-bool IsFinite(const basegfx::B2DRange& rRange)
+// whether a polygon fits into a polygon of the metafile, a curve segment takes three points
+bool FitsToolsPolygon(const basegfx::B2DPolygon& rPolygon)
 {
-    return std::isfinite(rRange.getMinX()) && std::isfinite(rRange.getMinY())
-           && std::isfinite(rRange.getMaxX()) && std::isfinite(rRange.getMaxY());
+    const sal_uInt64 nPoints = rPolygon.count() + 1;
+    return (rPolygon.areControlPointsUsed() ? 3 * nPoints : nPoints) <= MAX_TOOLS_COUNT;
+}
+
+// the polygons that fit into the metafile, closed
+basegfx::B2DPolyPolygon ToolsPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
+{
+    basegfx::B2DPolyPolygon aResult;
+    for (const basegfx::B2DPolygon& rPolygon : rPolyPolygon)
+    {
+        if (rPolygon.count() == 0 || aResult.count() >= MAX_TOOLS_COUNT)
+            continue;
+        if (!FitsToolsPolygon(rPolygon))
+        {
+            SAL_WARN("vcl.filter", "DXF2GDIMetaFile: too many points: " << rPolygon.count());
+            continue;
+        }
+        basegfx::B2DPolygon aPolygon(rPolygon);
+        aPolygon.setClosed(true);
+        aResult.append(aPolygon);
+    }
+    return aResult;
+}
+
+sal_uInt64 PointCount(const basegfx::B2DPolyPolygon& rPolyPolygon)
+{
+    sal_uInt64 nPoints = 0;
+    for (const basegfx::B2DPolygon& rPolygon : rPolyPolygon)
+        nPoints += rPolygon.count();
+    return nPoints;
+}
+
+bool IsSane(const basegfx::B2DRange& rRange)
+{
+    return !rRange.isEmpty() && std::fabs(rRange.getMinX()) < MAX_COORDINATE
+           && std::fabs(rRange.getMinY()) < MAX_COORDINATE
+           && std::fabs(rRange.getMaxX()) < MAX_COORDINATE
+           && std::fabs(rRange.getMaxY()) < MAX_COORDINATE;
 }
 }
 
@@ -321,13 +373,37 @@ bool DXF2GDIMetaFile::SetAreaAttribute(const DXFBasicEntity & rE)
 }
 
 
+bool DXF2GDIMetaFile::AddVisit()
+{
+    ++mnVisits;
+    if (mnVisits <= MAX_VISITS)
+        return true;
+    SAL_WARN_IF(mnVisits == MAX_VISITS + 1, "vcl.filter", "DXF2GDIMetaFile: too much to visit");
+    return false;
+}
+
+bool DXF2GDIMetaFile::IsOverBudget() const { return mnWork > MAX_WORK || mnVisits > MAX_VISITS; }
+
+bool DXF2GDIMetaFile::AddWork(sal_uInt64 nWork)
+{
+    nWork += ACTION_WORK;
+    mnWork += nWork;
+    if (mnWork <= MAX_WORK)
+        return true;
+    SAL_WARN_IF(mnWork - nWork <= MAX_WORK, "vcl.filter", "DXF2GDIMetaFile: too much to draw");
+    return false;
+}
+
 void DXF2GDIMetaFile::OutPolyLine(const basegfx::B2DPolygon & rPolygon, const LineInfo & rLineInfo)
 {
-    if (rPolygon.count() == 0)
+    if (rPolygon.count() == 0 || !AddWork(rPolygon.count()))
+        return;
+    const basegfx::B2DRange aRange = rPolygon.getB2DRange();
+    if (!IsSane(aRange))
         return;
     if (mbMeasure)
     {
-        maExtents.expand(rPolygon.getB2DRange());
+        maExtents.expand(aRange);
         return;
     }
 
@@ -359,27 +435,18 @@ void DXF2GDIMetaFile::OutPolyLine(const basegfx::B2DPolygon & rPolygon, const Li
 
 void DXF2GDIMetaFile::OutPolygon(const basegfx::B2DPolyPolygon & rPolyPolygon)
 {
-    if (rPolyPolygon.count() == 0)
+    if (rPolyPolygon.count() == 0 || !AddWork(PointCount(rPolyPolygon)))
+        return;
+    const basegfx::B2DRange aRange = rPolyPolygon.getB2DRange();
+    if (!IsSane(aRange))
         return;
     if (mbMeasure)
     {
-        maExtents.expand(rPolyPolygon.getB2DRange());
+        maExtents.expand(aRange);
         return;
     }
 
-    basegfx::B2DPolyPolygon aPolyPolygon;
-    for (const basegfx::B2DPolygon& rPolygon : rPolyPolygon)
-    {
-        if (rPolygon.count() == 0 || rPolygon.count() > MAX_POLYGON_POINTS)
-        {
-            SAL_WARN_IF(rPolygon.count() > 0, "vcl.filter",
-                        "DXF2GDIMetaFile::OutPolygon: too many points: " << rPolygon.count());
-            continue;
-        }
-        basegfx::B2DPolygon aPolygon(rPolygon);
-        aPolygon.setClosed(true);
-        aPolyPolygon.append(aPolygon);
-    }
+    basegfx::B2DPolyPolygon aPolyPolygon = ToolsPolyPolygon(rPolyPolygon);
     if (aPolyPolygon.count() == 0)
         return;
     aPolyPolygon.transform(maDeviceTransform);
@@ -393,6 +460,8 @@ void DXF2GDIMetaFile::OutPoint(const basegfx::B2DPoint & rPoint)
 {
     // Points are often stray definition points far from the drawing: they count for the
     // extents only if there is nothing else, and they are not drawn outside of them.
+    if (!AddWork(1) || !IsSane(basegfx::B2DRange(rPoint)))
+        return;
     if (mbMeasure)
     {
         maPointExtents.expand(rPoint);
@@ -538,16 +607,20 @@ void DXF2GDIMetaFile::OutTextRun(const DXFBasicEntity & rE, const DXFTransform &
     std::optional<Color> oColor = rFormat.mnColorIndex >= 0 || rFormat.mnTrueColor >= 0
                                       ? ResolveColor(rE, rFormat.mnColorIndex, rFormat.mnTrueColor)
                                       : GetEntityColor(rE);
-    if (!oColor)
+    if (!oColor || !AddWork(rText.getLength()))
+        return;
+    // the box of the text, one absurd text must not spoil the extents of the drawing
+    const double fHeight = rFormat.mfHeight;
+    basegfx::B2DRange aBox(Project(rTextTransform, DXFVector(fX, fY - fHeight / 3, 0)));
+    aBox.expand(Project(rTextTransform, DXFVector(fX + fWidth, fY - fHeight / 3, 0)));
+    aBox.expand(Project(rTextTransform, DXFVector(fX + fWidth, fY + fHeight, 0)));
+    aBox.expand(Project(rTextTransform, DXFVector(fX, fY + fHeight, 0)));
+    if (!IsSane(aBox))
         return;
 
     if (mbMeasure)
     {
-        const double fHeight = rFormat.mfHeight;
-        maExtents.expand(Project(rTextTransform, DXFVector(fX, fY - fHeight / 3, 0)));
-        maExtents.expand(Project(rTextTransform, DXFVector(fX + fWidth, fY - fHeight / 3, 0)));
-        maExtents.expand(Project(rTextTransform, DXFVector(fX + fWidth, fY + fHeight, 0)));
-        maExtents.expand(Project(rTextTransform, DXFVector(fX, fY + fHeight, 0)));
+        maExtents.expand(aBox);
         return;
     }
 
@@ -728,6 +801,10 @@ void DXF2GDIMetaFile::DrawBlock(const DXFBlock & rBlock, const DXFBasicEntity & 
     const DXFLayer * pLayer = GetEntityLayer(rE);
     if (rE.bInvisible || (pLayer != nullptr && (pLayer->nFlags & 1) != 0))
         return;
+    // the content of an external reference is not in this file
+    if ((rBlock.nFlags & 4) != 0 || mnInsertDepth >= MAX_INSERT_DEPTH)
+        return;
+    ++mnInsertDepth;
 
     std::optional<Color> oSavedBlockColor = moBlockColor;
     DXFLineInfo aSavedBlockDXFLineInfo = aBlockDXFLineInfo;
@@ -743,6 +820,7 @@ void DXF2GDIMetaFile::DrawBlock(const DXFBlock & rBlock, const DXFBasicEntity & 
     aBlockDXFLineInfo = aSavedBlockDXFLineInfo;
     mnBlockLineWeight = nSavedBlockLineWeight;
     mpParentLayer = pSavedParentLayer;
+    --mnInsertDepth;
 }
 
 
@@ -753,13 +831,28 @@ void DXF2GDIMetaFile::DrawInsertEntity(const DXFInsertEntity & rE, const DXFTran
     if (pB==nullptr)
         return;
 
-    DXFTransform aDXFTransform1(1.0,1.0,1.0,DXFVector(0.0,0.0,0.0)-pB->aBasePoint);
-    DXFTransform aDXFTransform2(rE.fXScale,rE.fYScale,rE.fZScale,rE.fRotAngle,rE.aP0);
-    DXFTransform aT(
-        DXFTransform( aDXFTransform1, aDXFTransform2 ),
-        rTransform
-    );
-    DrawBlock(*pB, rE, aT);
+    // an array of copies, the spacing is rotated with the insert but not scaled
+    const tools::Long nColumns = std::clamp<tools::Long>(rE.nColCount, 1, MAX_ARRAY_COUNT);
+    const tools::Long nRows = std::clamp<tools::Long>(rE.nRowCount, 1, MAX_ARRAY_COUNT);
+    const double fAngle = basegfx::deg2rad(rE.fRotAngle);
+    const DXFVector aColumnStep(cos(fAngle) * rE.fColSpace, sin(fAngle) * rE.fColSpace, 0);
+    const DXFVector aRowStep(-sin(fAngle) * rE.fRowSpace, cos(fAngle) * rE.fRowSpace, 0);
+
+    const DXFTransform aToBase(1.0, 1.0, 1.0, DXFVector(0.0, 0.0, 0.0) - pB->aBasePoint);
+    for (tools::Long nRow = 0; nRow < nRows && !IsOverBudget(); ++nRow)
+    {
+        for (tools::Long nColumn = 0; nColumn < nColumns && AddVisit(); ++nColumn)
+        {
+            const DXFVector aPosition
+                = rE.aP0 + aColumnStep * static_cast<double>(nColumn)
+                  + aRowStep * static_cast<double>(nRow);
+            const DXFTransform aT(
+                DXFTransform(aToBase, DXFTransform(rE.fXScale, rE.fYScale, rE.fZScale,
+                                                   rE.fRotAngle, aPosition)),
+                rTransform);
+            DrawBlock(*pB, rE, aT);
+        }
+    }
 }
 
 
@@ -818,6 +911,14 @@ void DXF2GDIMetaFile::Draw2DPolyLine(const DXFBasicEntity & rE, const std::vecto
     if (!SetLineAttribute(rE))
         return;
     LineInfo aLineInfo = GetEntityLineInfo(rE, rTransform);
+    if (bWide && bConstantWidth && mbMeasure)
+    {
+        // the width reaches beyond the centre line
+        basegfx::B2DRange aRange = aPolygon.getB2DRange();
+        aRange.grow(rVertices[0].mfStartWidth * GetDeviceScale(rTransform) / mfDeviceScale / 2);
+        if (IsSane(aRange))
+            maExtents.expand(aRange);
+    }
     if (bWide && bConstantWidth && !mbMeasure)
     {
         aLineInfo.SetWidth(rVertices[0].mfStartWidth * GetDeviceScale(rTransform));
@@ -1257,7 +1358,7 @@ void DXF2GDIMetaFile::DrawEntities(const DXFEntities & rEntities,
 
     const DXFBasicEntity * pE=rEntities.pFirst;
 
-    while (pE!=nullptr) {
+    while (pE!=nullptr && !IsOverBudget() && AddVisit()) {
         if (pE->nSpace==0) {
             // the coordinates of these are in the world coordinate system
             const bool bWorld
@@ -1341,6 +1442,9 @@ DXF2GDIMetaFile::DXF2GDIMetaFile()
     , pDXF(nullptr)
     , mbMeasure(false)
     , mfDeviceScale(1.0)
+    , mnWork(0)
+    , mnVisits(0)
+    , mnInsertDepth(0)
     , mnBlockLineWeight(DXF_LINEWEIGHT_DEFAULT)
     , mpParentLayer(nullptr)
 {
@@ -1370,6 +1474,9 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
     pVirDev->EnableOutput(false);
     ResetState();
     mbMeasure = true;
+    mnWork = 0;
+    mnVisits = 0;
+    mnInsertDepth = 0;
     maExtents.reset();
     maPointExtents.reset();
     DrawEntities(pDXF->aEntities, aViewTransform);
@@ -1378,7 +1485,7 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
     if (maExtents.isEmpty())
         maExtents = maPointExtents;
 
-    if (maExtents.isEmpty() || !IsFinite(maExtents))
+    if (!IsSane(maExtents))
         return false;
 
     double fWidth = maExtents.getWidth();
@@ -1408,6 +1515,9 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
     if (!comphelper::IsFuzzing()) // for fuzzing don't bother recording the drawing
         rMTF.Record(pVirDev);
     ResetState();
+    mnWork = 0;
+    mnVisits = 0;
+    mnInsertDepth = 0;
     DrawEntities(pDXF->aEntities, aViewTransform);
     rMTF.Stop();
 
