@@ -91,6 +91,7 @@ DXFLayer::DXFLayer()
     // a layer without a colour is not switched off
     nColor=7;
     nTrueColor=-1;
+    nLineWeight=-3;
 }
 
 void DXFLayer::Read(DXFGroupReader & rDGR)
@@ -113,6 +114,9 @@ void DXFLayer::Read(DXFGroupReader & rDGR)
             break;
         case 420:
             nTrueColor=rDGR.GetI() & 0xffffff;
+            break;
+        case 370:
+            nLineWeight=rDGR.GetI();
             break;
         }
     }

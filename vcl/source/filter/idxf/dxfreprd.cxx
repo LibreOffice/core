@@ -97,8 +97,9 @@ void DXFPalette::SetColor(sal_uInt8 nIndex, sal_uInt8 nRed, sal_uInt8 nGreen, sa
 
 DXFRepresentation::DXFRepresentation()
     : mEnc(RTL_TEXTENCODING_DONTKNOW)
+    , mfGlobalLineTypeScale(1.0)
+    , mbLineWeightDisplay(false)
 {
-    setGlobalLineTypeScale(1.0);
 }
 
 DXFRepresentation::~DXFRepresentation()
@@ -221,6 +222,12 @@ void DXFRepresentation::ReadHeader(DXFGroupReader & rDGR)
                 if (!rDGR.Read(40))
                     continue;
                 setGlobalLineTypeScale(getGlobalLineTypeScale() * rDGR.GetF());
+            }
+            else if (rDGR.GetS() == "$LWDISPLAY")
+            {
+                if (!rDGR.Read(290))
+                    continue;
+                mbLineWeightDisplay = rDGR.GetI() != 0;
             }
             else rDGR.Read();
         }

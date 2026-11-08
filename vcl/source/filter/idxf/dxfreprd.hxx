@@ -72,6 +72,7 @@ public:
     rtl_TextEncoding mEnc;  // $DWGCODEPAGE
 
     double mfGlobalLineTypeScale; // $LTSCALE
+    bool mbLineWeightDisplay; // $LWDISPLAY
 
     DXFRepresentation();
     ~DXFRepresentation();

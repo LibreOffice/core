@@ -63,6 +63,7 @@ public:
     tools::Long nFlags;                          // 70
     tools::Long nColor;                          // 62, negative if the layer is off
     tools::Long nTrueColor;                      // 420, 0xRRGGBB or -1
+    tools::Long nLineWeight;                     // 370
     OString m_sLineType;                  //  6
 
     DXFLayer();

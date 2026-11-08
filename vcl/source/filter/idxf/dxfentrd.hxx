@@ -49,6 +49,11 @@ enum DXFEntityType {
 
 // base class of an entity
 
+// special line weights
+constexpr tools::Long DXF_LINEWEIGHT_BYLAYER = -1;
+constexpr tools::Long DXF_LINEWEIGHT_BYBLOCK = -2;
+constexpr tools::Long DXF_LINEWEIGHT_DEFAULT = -3;
+
 class DXFBasicEntity {
 
 public:
@@ -67,6 +72,8 @@ public:
     tools::Long nColor;                          // 62
     tools::Long nTrueColor;                      // 420, 0xRRGGBB or -1
     bool bInvisible;                             // 60
+    double fLineTypeScale;                       // 48
+    tools::Long nLineWeight;                     // 370, 1/100 mm or one of the DXF_LINEWEIGHT_* values
     tools::Long nSpace;                          // 67
     DXFVector aExtrusion;                 // 210,220,230
 
