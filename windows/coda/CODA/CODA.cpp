@@ -78,6 +78,7 @@
 #include <common/StringVector.hpp>
 #include <common/Uri.hpp>
 #include <net/FakeSocket.hpp>
+#include <qt/CodaConfig.hpp>
 #include <wsd/Extensions.hpp>
 #include <wsd/COOLWSD.hpp>
 #include <wsd/DocumentBroker.hpp>
@@ -145,6 +146,14 @@ struct DocumentTab
     bool hasContent = false;
     // The page agreed to the close, so the tab can go without asking it again.
     bool readyToClose = false;
+    // The tab has no WebView2 of its own. The document stays loaded in the engine under appDocId,
+    // with no session, until the tab gets a new WebView2.
+    bool viewDiscarded = false;
+    // The value of the activation counter when the tab was last brought to the front. The higher
+    // the value, the more recently the user was on the tab.
+    unsigned long long lastActiveTick = 0;
+    // The GetTickCount64() value when the current WebView2 of the tab was asked for.
+    ULONGLONG viewLiveSince = 0;
     wil::com_ptr<ICoreWebView2Controller> webViewController;
     wil::com_ptr<ICoreWebView2> webView;
     std::thread app2js;
@@ -187,6 +196,9 @@ struct WindowState
     bool isPresFullScreen = false;
     // The window is closing: each tab that goes takes the next one with it.
     bool closingAll = false;
+    // The GetTickCount64() value at which the pending run of the live-view limit is due, or 0
+    // when no run is pending.
+    ULONGLONG liveViewLimitDue = 0;
 };
 
 // Both keep their entries at a fixed address: the WebView2 completion handlers
@@ -438,6 +450,10 @@ static void moveTabToNewWindow(HWND hWnd, int tabId, const POINT* dropPoint = nu
 static void moveTabToWindow(int tabId, WindowState& target, int insertAt);
 
 static void layoutTabs(WindowState& window);
+
+static void enforceLiveViewLimit(WindowState& window);
+
+static void restoreActiveTabView(WindowState& window);
 
 static RECT documentArea(const WindowState& window);
 
@@ -1612,6 +1628,10 @@ static void hideDropOverlay(WindowState& data);
 
 // The timer that watches for a drag that goes away without the overlay hearing about it.
 static const int TIMER_ID_DROP_OVERLAY = 1;
+// The timer of a tabbed window that holds the pending run of the live-view limit.
+static const int TIMER_ID_LIVE_VIEW_LIMIT = 2;
+// The timer of a tabbed window that holds the pending build of the WebView2 of the tab on show.
+static const int TIMER_ID_VIEW_RESTORE = 3;
 
 // The pathnames in a CF_HDROP file list, in their order there.
 static std::vector<std::wstring> pathsInFileList(HDROP drop)
@@ -2342,6 +2362,18 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
             {
                 if (WindowState* window = findWindow(hWnd))
                     checkDropOverlayStillNeeded(*window);
+            }
+            else if (wParam == TIMER_ID_LIVE_VIEW_LIMIT)
+            {
+                KillTimer(hWnd, TIMER_ID_LIVE_VIEW_LIMIT);
+                if (WindowState* window = findWindow(hWnd))
+                    enforceLiveViewLimit(*window);
+            }
+            else if (wParam == TIMER_ID_VIEW_RESTORE)
+            {
+                KillTimer(hWnd, TIMER_ID_VIEW_RESTORE);
+                if (WindowState* window = findWindow(hWnd))
+                    restoreActiveTabView(*window);
             }
             else
                 return DefWindowProc(hWnd, message, wParam, lParam);
@@ -3840,6 +3872,184 @@ static LRESULT CALLBACK HoverCardWndProc(HWND hWnd, UINT message, WPARAM wParam,
     return DefWindowProcW(hWnd, message, wParam, lParam);
 }
 
+static void createDocumentView(int tabId);
+
+// How long the live-view limit waits before it runs, in milliseconds. A tab switch is one of a run
+// of them as often as not, and the tab the user stops on is the one that matters.
+static const UINT LIVE_VIEW_LIMIT_DELAY = 1000;
+// How long a tab has to stay the one on show before it gets a WebView2 again, in milliseconds.
+static const UINT VIEW_RESTORE_DELAY = 250;
+
+// Counts tab activations. Each tab records the value it saw when it was last activated.
+static unsigned long long activationTick = 0;
+
+// Whether the live-view limit may take the WebView2 of this tab away. The tab has to show a
+// document from a file, and the page has to have a session that the document can do without.
+static bool mayDiscardView(const DocumentTab& tab)
+{
+    // The starter backstage, the welcome slideshow and a presenter console hold no document of
+    // their own. A page that has not said hello has no session yet, and a tab that is closing goes
+    // anyway.
+    if (tab.viewDiscarded || tab.isConsole || tab.readyToClose || !tab.app2js.joinable())
+        return false;
+    if (tab.mode != DocumentMode::EDIT && tab.mode != DocumentMode::NEW)
+        return false;
+    if (!tab.filenameAndUri.uri.starts_with("file:"))
+        return false;
+
+    // A running presentation ends with the view it was started from.
+    const WindowState* window = findWindow(tab.hWnd);
+    if (!window || window->isPresFullScreen || tab.hConsoleWnd)
+        return false;
+
+    return true;
+}
+
+// Milliseconds this tab still has to keep its WebView2 before the live-view limit may take it, or
+// 0 when it has had its time.
+static int millisecondsUntilViewSettled(const DocumentTab& tab)
+{
+    // A view is kept for a few seconds after it is built, so that switching quickly between more
+    // tabs than the limit allows leaves the views it just built alone. The page needs about a
+    // second of that to load and rejoin its document.
+    constexpr ULONGLONG settleMilliseconds = 5000;
+    const ULONGLONG age = GetTickCount64() - tab.viewLiveSince;
+    if (age < settleMilliseconds)
+        return static_cast<int>(settleMilliseconds - age);
+
+    // The server stops a document whose last session goes before it has loaded.
+    const std::shared_ptr<DocumentBroker> broker = findBrokerByMobileAppDocId(tab.appDocId);
+    return broker && broker->isLoaded() ? 0 : 1000;
+}
+
+// Take the WebView2 of a tab away, and with it the renderer process of its page. The document stays
+// loaded in the engine, with no session, until the tab gets a new WebView2.
+static void discardTabView(DocumentTab& tab)
+{
+    // The broker is marked before the socket goes, so it never sees an empty session list that it
+    // would take for the end of the document.
+    const std::shared_ptr<DocumentBroker> broker = findBrokerByMobileAppDocId(tab.appDocId);
+    if (!broker)
+        return;
+
+    LOG_INF("Discarding the view of appDocId " << tab.appDocId << ", client fd "
+                                               << tab.fakeClientFd);
+    broker->setDetached(true);
+
+    // The goodbye wakes the forwarding thread, which closes the client socket, and with it the
+    // session of this view, and then ends.
+    do_bye_handling_things(tab);
+    tab.app2js.join();
+    tab.fakeClientFd = -1;
+
+    if (tab.webViewController)
+    {
+        tab.webViewController->Close();
+        tab.webViewController = nullptr;
+    }
+    tab.webView = nullptr;
+    tab.hasContent = false;
+    tab.viewDiscarded = true;
+}
+
+// Give a tab whose WebView2 was taken away a new one.
+static void restoreTabView(DocumentTab& tab)
+{
+    if (!tab.viewDiscarded)
+        return;
+
+    LOG_INF("Restoring the view of appDocId " << tab.appDocId);
+
+    // The page connects this socket when it says hello, and the first message carries the appDocId
+    // of the document that is still loaded, so the page rejoins it rather than loading the file
+    // again.
+    tab.fakeClientFd = fakeSocketSocket();
+    tab.viewDiscarded = false;
+    createDocumentView(tab.tabId);
+}
+
+// Run the live-view limit of a tabbed window after a delay, so that a run of tab switches settles
+// first.
+static void scheduleLiveViewLimit(WindowState& window, UINT delayMilliseconds)
+{
+    if (!window.isTabbed || CodaConfig::instance().liveViewLimit() <= 0)
+        return;
+
+    // A run that is already due sooner covers this one too.
+    const ULONGLONG due = GetTickCount64() + delayMilliseconds;
+    if (window.liveViewLimitDue != 0 && window.liveViewLimitDue <= due)
+        return;
+
+    window.liveViewLimitDue = due;
+    SetTimer(window.hWnd, TIMER_ID_LIVE_VIEW_LIMIT, delayMilliseconds, nullptr);
+}
+
+// Take the WebView2 away from every tab of the window beyond the live-view limit, least recently
+// used first, so the number of renderer processes stays bounded as documents are opened. The limit
+// counts the tabs of this window only, as in CODA-Q, so each window keeps up to the limit live.
+static void enforceLiveViewLimit(WindowState& window)
+{
+    window.liveViewLimitDue = 0;
+
+    const int limit = CodaConfig::instance().liveViewLimit();
+    if (limit <= 0)
+        return;
+
+    // Most recently used first. The tab on show is always the most recent one.
+    std::vector<DocumentTab*> byUse;
+    byUse.reserve(window.tabIds.size());
+    for (int tabId : window.tabIds)
+    {
+        if (DocumentTab* tab = findTab(tabId))
+            byUse.push_back(tab);
+    }
+    std::sort(byUse.begin(), byUse.end(), [](const DocumentTab* a, const DocumentTab* b)
+              { return a->lastActiveTick > b->lastActiveTick; });
+
+    int live = 0;
+    int retryInMilliseconds = -1;
+    for (DocumentTab* tab : byUse)
+    {
+        if (tab->viewDiscarded)
+            continue;
+        ++live;
+        if (live <= limit || tab->tabId == window.activeTabId || !mayDiscardView(*tab))
+            continue;
+
+        const int settleMilliseconds = millisecondsUntilViewSettled(*tab);
+        if (settleMilliseconds > 0)
+        {
+            if (retryInMilliseconds < 0 || settleMilliseconds < retryInMilliseconds)
+                retryInMilliseconds = settleMilliseconds;
+            continue;
+        }
+
+        // Only a document whose content is already in its file loses its view, so the drop costs
+        // no content at all.
+        if (tab->isModified)
+            continue;
+
+        discardTabView(*tab);
+        if (tab->viewDiscarded)
+            --live;
+    }
+
+    // A view that only has to grow older is worth asking about again once it has.
+    if (retryInMilliseconds > 0)
+        scheduleLiveViewLimit(window, static_cast<UINT>(retryInMilliseconds));
+}
+
+// Give the tab on show its WebView2 again, once the user has stayed on it.
+static void restoreActiveTabView(WindowState& window)
+{
+    DocumentTab* tab = activeTabOf(window);
+    if (!tab || !tab->viewDiscarded)
+        return;
+
+    restoreTabView(*tab);
+    scheduleLiveViewLimit(window, LIVE_VIEW_LIMIT_DELAY);
+}
+
 // Bring one document of the window to the front and leave the rest behind it.
 static void activateTab(WindowState& window, int tabId)
 {
@@ -3860,6 +4070,13 @@ static void activateTab(WindowState& window, int tabId)
                 .Get());
 
     window.activeTabId = tabId;
+    tab->lastActiveTick = ++activationTick;
+
+    // A tab the user passes through gets no WebView2 until they stay on it.
+    if (tab->viewDiscarded)
+        SetTimer(window.hWnd, TIMER_ID_VIEW_RESTORE, VIEW_RESTORE_DELAY, nullptr);
+    else
+        KillTimer(window.hWnd, TIMER_ID_VIEW_RESTORE);
 
     for (int otherId : window.tabIds)
     {
@@ -3873,6 +4090,8 @@ static void activateTab(WindowState& window, int tabId)
     SetWindowTextW(window.hWnd, windowTitleForTab(*tab).c_str());
 
     pushTabsToStrip(window);
+
+    scheduleLiveViewLimit(window, LIVE_VIEW_LIMIT_DELAY);
 }
 
 static void removeTabFromWindow(WindowState& window, int tabId);
@@ -3925,8 +4144,12 @@ static void closeTab(WindowState& window, int tabId)
             // is on its way out and joins straight away.
             tab->app2js.join();
         }
-        else
+        else if (!findBrokerByMobileAppDocId(tab->appDocId))
             DocumentData::deallocate(tab->appDocId);
+
+        // A document whose tab lost its WebView2 stays loaded with no session until it is ended
+        // here. A document that has a session of its own is left as it is.
+        closeDetachedDocument(tab->appDocId);
     }
     else if (tab->mode == DocumentMode::CLOUD_ACCOUNT)
     {
@@ -4433,6 +4656,9 @@ static void createTabStrip(WindowState& window)
 // itself is loaded once the page reports back with HULLO.
 static void createDocumentView(int tabId)
 {
+    if (DocumentTab* tab = findTab(tabId))
+        tab->viewLiveSince = GetTickCount64();
+
     withWebView2Environment(
         [tabId](ICoreWebView2Environment* env)
         {
@@ -4726,8 +4952,6 @@ static void createDocumentView(int tabId)
                             coolURL += "starterMode=true";
                         else
                         {
-                            if (data->mode != DocumentMode::WELCOME)
-                                recentFiles.add(data->filenameAndUri.uri);
                             coolURL +=
                                 "file_path=" + data->filenameAndUri.uri +
                                 std::string("&permission=edit") +
@@ -5001,6 +5225,8 @@ static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mo
         tab.fakeClientFd = fakeSocketSocket();
         tab.appDocId = generate_new_app_doc_id();
     }
+    if (mode != DocumentMode::STARTER && mode != DocumentMode::WELCOME)
+        recentFiles.add(filenameAndUri.uri);
 
     activateTab(*window, tab.tabId);
     createDocumentView(tab.tabId);

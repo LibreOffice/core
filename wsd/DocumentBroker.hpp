@@ -309,6 +309,10 @@ public:
     /// Read and written from the app's own thread as well as the polling thread.
     void setDetached(bool detached) { _detached = detached; }
 
+    /// True once the document has loaded, even if it has been unloaded since. Safe to read from
+    /// the app's own thread as well as the polling thread.
+    bool isLoaded() const { return _docState.hadLoaded(); }
+
     /// Where a view was looking when it went away. An empty part, a zoom of zero and an
     /// empty visible area each mean that value was never recorded.
     struct ViewPosition
@@ -1030,7 +1034,6 @@ private:
     std::string stageExportedSlides(std::string_view answer);
 #endif // !MOBILEAPP
 
-    bool isLoaded() const { return _docState.hadLoaded(); }
     bool isInteractive() const { return _docState.isInteractive(); }
 
     /// Before downloading the document, we lock if the document is loaded for editing.
