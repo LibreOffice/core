@@ -59,6 +59,13 @@ bool StorageConnectionManager::isStorageVerificationDisabled()
     return !ConfigUtil::getConfigValue<bool>("ssl.ssl_verification", true);
 }
 
+int64_t StorageConnectionManager::getMaxFileSize()
+{
+    CONFIG_STATIC const int64_t maxFileSize =
+        ConfigUtil::getConfigValue<int64_t>("storage.wopi.max_file_size", 0);
+    return maxFileSize;
+}
+
 namespace
 {
 // access_token must be decoded

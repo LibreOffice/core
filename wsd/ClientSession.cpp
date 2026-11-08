@@ -925,8 +925,7 @@ void ClientSession::downloadCompareDocument(const Poco::URI& uri, int redirectLi
     }
 
     httpSession->response()->saveBodyToFile(stagedPath);
-    httpSession->response()->setBodySizeLimit(
-        ConfigUtil::getConfigValue<int64_t>("storage.wopi.max_file_size", 0));
+    httpSession->response()->setBodySizeLimit(StorageConnectionManager::getMaxFileSize());
 }
 
 namespace

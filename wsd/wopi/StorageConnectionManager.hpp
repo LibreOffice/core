@@ -79,6 +79,9 @@ public:
     /// ssl.ssl_verification is false.
     static bool isStorageVerificationDisabled();
 
+    /// The largest document accepted from storage, in bytes, with 0 for any size.
+    static int64_t getMaxFileSize();
+
 private:
     StorageConnectionManager() = default;
 

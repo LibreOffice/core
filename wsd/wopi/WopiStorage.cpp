@@ -748,8 +748,7 @@ std::string WopiStorage::downloadDocument(const Poco::URI& uriObject, const std:
     };
     httpSession->setFinishedHandler(std::move(finishedCallback));
 
-    const int64_t maxFileSize =
-        ConfigUtil::getConfigValue<int64_t>("storage.wopi.max_file_size", 0);
+    const int64_t maxFileSize = StorageConnectionManager::getMaxFileSize();
     const std::shared_ptr<const http::Response> httpResponse =
         httpSession->syncDownload(httpRequest, getRootFilePath(), maxFileSize);
 
@@ -763,10 +762,10 @@ std::string WopiStorage::downloadDocument(const Poco::URI& uriObject, const std:
         LOG_TRC("WOPI::GetFile response header for URI [" << uriAnonym << "]:\n"
                                                           << httpResponse->header());
 
-        if (maxFileSize > 0 && httpResponse->state() != http::Response::State::Complete)
+        if (httpResponse->bodySizeLimitExceeded())
         {
             throw StorageConnectionException("WOPI::GetFile [" + uriAnonym +
-                                             "] failed: incomplete, or larger than " +
+                                             "] failed: larger than " +
                                              std::to_string(maxFileSize) + " bytes");
         }
     }

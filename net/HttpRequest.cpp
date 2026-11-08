@@ -891,6 +891,7 @@ int64_t Response::readData(const char* p, int64_t len)
                         LOG_ERR("Response Content-Length " << _header.getContentLength()
                                                            << " passes the body size limit of "
                                                            << _bodySizeLimit << " bytes");
+                        _bodySizeLimitExceeded = true;
                         return -1;
                     }
                     else if (_header.getContentLength() == 0)
@@ -987,6 +988,7 @@ int64_t Response::readData(const char* p, int64_t len)
                         LOG_ERR("Response body of " << _recvBodySize
                                                     << " bytes passes the body size limit of "
                                                     << _bodySizeLimit << " bytes");
+                        _bodySizeLimitExceeded = true;
                         return -1;
                     }
 
@@ -1029,6 +1031,7 @@ int64_t Response::readData(const char* p, int64_t len)
                     LOG_ERR("Response body of " << _recvBodySize
                                                 << " bytes passes the body size limit of "
                                                 << _bodySizeLimit << " bytes");
+                    _bodySizeLimitExceeded = true;
                     return -1;
                 }
 
@@ -1358,6 +1361,7 @@ void Response::dumpState(std::ostream& os, const std::string& indent) const
     os << indent << "\tparseStage: " << name(_parserStage);
     os << indent << "\trecvBodySize: " << _recvBodySize;
     os << indent << "\tbodySizeLimit: " << _bodySizeLimit;
+    os << indent << "\tbodySizeLimitExceeded: " << _bodySizeLimitExceeded;
     os << indent << "\theaders: ";
 
     std::string childIndent = indent + '\t';
