@@ -28,7 +28,10 @@ check-on-free-port. That target runs check-with-server with coolwsd on
 a port that no server listens on. make check in the browser folder
 does not run them, since coolwsd may not be built yet.
 
-The tests are compiled into workdir in the build tree.
+The tests are compiled into workdir in the build tree. The tests in
+the renderer folder draw what the engine writes with the browser
+renderer, so they build into one script with the browser sources, the
+same way the mocha_tests bundle builds.
 
 ## Environment
 
@@ -44,3 +47,7 @@ The tests are compiled into workdir in the build tree.
   folder in the temporary folder of the system.
 - COOL_TEST_DEBUG: any value other than an empty one logs every message
   sent and received, which helps when writing a new test.
+- COOL_VECTOR_PRIMITIVE_SAMPLES: set in the environment of coolwsd, any
+  value makes its kits answer .uno:VectorPrimitiveSample with the
+  primitive samples of the engine. start-coolwsd sets it. A coolwsd
+  started some other way needs it for the tests of the samples.

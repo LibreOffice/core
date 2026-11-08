@@ -233,6 +233,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/tools/primitive2dxmldump \
     drawinglayer/source/processor2d/Primitive2dJsonProcessor \
     drawinglayer/source/processor2d/VectorResourceCache \
+    drawinglayer/source/processor2d/VectorPrimitiveSamples \
     drawinglayer/source/drawinglayeruno/xprimitive2drenderer \
     drawinglayer/source/texture/texture \
     drawinglayer/source/dumper/XShapeDumper \

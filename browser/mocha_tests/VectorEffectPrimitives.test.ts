@@ -495,37 +495,6 @@ describe('VectorPrimitiveRenderer effects', function () {
 			);
 		});
 
-		it('draws the reflection the engine writes, flipped and faded', function () {
-			// The engine's content is 100 by 50, and its reflection starts 10
-			// below it and fades from half transparent to clear at 0.9.
-			const primitive =
-				loadVectorRenderingReference('testReflection').primitives[0];
-			render(primitive);
-
-			const content = ScratchCanvasStub.recorder(0);
-			const transform = content.findCall('transform');
-			assert.ok(transform);
-			const flip = [1, 0, 0, -1, 0, 110];
-			for (let index = 0; index < 6; index++)
-				assert.ok(Math.abs(transform.args[index] - flip[index]) < 1e-9);
-
-			const gradient = content.gradients[0];
-			assert.ok(gradient);
-			assert.deepStrictEqual(gradient.args, [0, 60, 0, 110]);
-			assert.deepStrictEqual(
-				gradient.sortedStops().map((stop) => stop.color),
-				[
-					'rgba(0,0,0,0.5)',
-					'rgba(0,0,0,0.5)',
-					'rgba(0,0,0,0)',
-					'rgba(0,0,0,0)',
-				],
-			);
-
-			// A blur of 4 is two deviations of two pixels here.
-			assert.strictEqual(content.countOf('putImageData'), 1);
-		});
-
 		it('draws nothing of a reflection that has nothing to show', function () {
 			// The engine sends no range or children for an invisible one.
 			const context = render({ type: 'reflection' });
@@ -601,19 +570,6 @@ describe('VectorPrimitiveRenderer effects', function () {
 			assert.ok(fill, 'the children are drawn on the target');
 			assert.strictEqual(fill.properties.fillStyle, '#00ff00');
 			assert.strictEqual(context.countOf('drawImage'), 0);
-		});
-
-		it('draws the invert the engine writes over the area it covers', function () {
-			const primitive =
-				loadVectorRenderingReference('testInvert').primitives[0];
-			render(primitive);
-
-			// The bounds are 100 by 50, with a pixel more on each side for
-			// the antialiased edge.
-			const content = ScratchCanvasStub.recorder(0);
-			assert.strictEqual(content.canvas.width, 102);
-			assert.strictEqual(content.canvas.height, 52);
-			assert.strictEqual(content.countOf('putImageData'), 1);
 		});
 
 		it('draws nothing of an effect whose bounds are off the target', function () {

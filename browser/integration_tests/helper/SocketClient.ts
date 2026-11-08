@@ -270,6 +270,36 @@ export class SocketClient {
 		return jsonOf(answer);
 	}
 
+	/// Asks for the primitive sample with the given name, such as "backgroundColor", and returns
+	/// the JSON object of the answer. The answer holds "primitives" only when the kit serves the
+	/// samples and has one under that name.
+	async vectorPrimitiveSample(name: string): Promise<any> {
+		const mark = this.mark();
+		this.send('commandvalues command=.uno:VectorPrimitiveSample?name=' + name);
+		const answer = await this.waitFor(
+			(m) =>
+				m.text.startsWith('commandvalues:') &&
+				m.text.includes('".uno:VectorPrimitiveSample"') &&
+				jsonOf(m).name === name,
+			undefined,
+			mark,
+		);
+		return jsonOf(answer);
+	}
+
+	/// The answer for the primitive sample with the given name, which holds "primitives". It
+	/// throws when the kit serves no sample under that name.
+	async primitiveSample(name: string): Promise<any> {
+		const answer = await this.vectorPrimitiveSample(name);
+		if (!Array.isArray(answer.primitives))
+			throw new Error(
+				'the kit serves no sample "' +
+					name +
+					'". Start coolwsd with COOL_VECTOR_PRIMITIVE_SAMPLES=1 in its environment.',
+			);
+		return answer;
+	}
+
 	/// Makes the part with the given page id the one that mouse and key input go to.
 	setClientPart(partId: string): void {
 		this.send('setclientpart part=' + partId);

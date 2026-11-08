@@ -19,6 +19,16 @@ BUILD_MARKER = $(WORKDIR)/.built
 
 SRCS = $(wildcard $(srcdir)/*.ts) $(wildcard $(srcdir)/helper/*.ts)
 
+# The tests that draw what the engine writes build into one script with the browser sources, the
+# same way the mocha_tests bundle builds. The rule of the bundle names RENDERER_SRCS for a second
+# expansion, so make runs the find only when it checks the bundle.
+RENDERER_BUNDLE = $(WORKDIR)/renderer/main.js
+RENDERER_SRCS = $(wildcard $(srcdir)/renderer/*.ts) \
+	$(shell find $(top_srcdir)/browser/src $(top_srcdir)/browser/js \
+		$(top_srcdir)/browser/mocha_tests/refs $(top_srcdir)/browser/mocha_tests/helper \
+		$(top_srcdir)/browser/mocha_tests/sources.ts \
+		\( -name '*.ts' -o -name '*.tsx' -o -name '*.js' \))
+
 # The port coolwsd listens on. Pass another one when a server already listens on the default.
 COOLWSD_BIN = $(abs_top_builddir)/coolwsd
 COOLWSD_PORT ?= 9980
@@ -35,7 +45,7 @@ PORT_IN_USE = $(NODE) -e "require('net').connect($(COOLWSD_PORT), 'localhost') \
 FREE_PORT = $(NODE) -e "const server = require('net').createServer(); \
 	server.listen(0, () => { console.log(server.address().port); server.close(); })"
 
-build-integration: $(BUILD_MARKER)
+build-integration: $(BUILD_MARKER) $(RENDERER_BUNDLE)
 
 # The compiled tests go to the build tree, where node finds the modules they load.
 $(BUILD_MARKER): $(SRCS) $(srcdir)/tsconfig.json
@@ -43,15 +53,25 @@ $(BUILD_MARKER): $(SRCS) $(srcdir)/tsconfig.json
 		--typeRoots $(NODE_MODULES)/@types
 	touch $(BUILD_MARKER)
 
+# tsc can report a failure and still write the script, so a failure deletes it.
+.SECONDEXPANSION:
+$(RENDERER_BUNDLE): $$(RENDERER_SRCS)
+	$(TSC) $(srcdir)/renderer/main.ts --outfile $@ --module none --moduleResolution node \
+		--lib dom,es2016 --target ES5 --downlevelIteration --allowJs --jsx react \
+		--jsxFactory h --jsxFragmentFactory Fragment --typeRoots $(NODE_MODULES)/@types \
+		|| (rm -f $@ && false)
+
 # Runs the tests against a coolwsd that already listens at COOLWSD_URL.
-check-integration: $(BUILD_MARKER)
+check-integration: $(BUILD_MARKER) $(RENDERER_BUNDLE)
 	COOLWSD_URL="$(COOLWSD_URL)" COOL_TEST_SAMPLES="$(abs_top_srcdir)/test/samples" \
 		COOL_TEST_WORKDIR="$(DOCUMENTS_DIR)" \
-		$(MOCHA) --config $(abs_srcdir)/.mocharc.json '$(WORKDIR)/**/*.test.js'
+		$(MOCHA) --config $(abs_srcdir)/.mocharc.json '$(WORKDIR)/**/*.test.js' \
+		$(RENDERER_BUNDLE)
 
 # Starts coolwsd in the background and waits until it listens on COOLWSD_PORT. A coolwsd that
 # an earlier start left running is stopped first. Another server on the port is an error, since
-# the tests would run against it. A coolwsd that does not get ready in time is stopped again.
+# the tests would run against it. A coolwsd that does not get ready in time is stopped again. The
+# kits answer with the primitive samples of the engine.
 start-coolwsd:
 	mkdir -p $(WORKDIR)
 	-test -f $(COOLWSD_PID) && kill `cat $(COOLWSD_PID)` 2>/dev/null || true
@@ -62,7 +82,7 @@ start-coolwsd:
 	echo "Port $(COOLWSD_PORT) is in use. Stop that server or pass COOLWSD_PORT=<free port>."; \
 	exit 1
 	fc-cache "@LO_PATH@"/share/fonts/truetype >/dev/null 2>&1 || true
-	ulimit -n 1024; $(COOLWSD_BIN) \
+	ulimit -n 1024; COOL_VECTOR_PRIMITIVE_SAMPLES=1 $(COOLWSD_BIN) \
 		--o:sys_template_path="@SYSTEMPLATE_PATH@" \
 		--o:child_root_path="@JAILS_PATH@" \
 		--o:cache_files.path="@CACHE_PATH@" \
@@ -87,7 +107,7 @@ stop-coolwsd:
 	-rm -f $(COOLWSD_PID)
 
 # Starts coolwsd, runs the tests and stops coolwsd, also when the start or a test fails.
-check-with-server: $(BUILD_MARKER)
+check-with-server: $(BUILD_MARKER) $(RENDERER_BUNDLE)
 	@trap '$(MAKE) stop-coolwsd' EXIT INT TERM; \
 		$(MAKE) start-coolwsd && \
 		$(MAKE) check-integration COOLWSD_URL=ws://localhost:$(COOLWSD_PORT)

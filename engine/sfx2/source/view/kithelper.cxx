@@ -58,6 +58,7 @@
 #include <comphelper/base64.hxx>
 #include <tools/json_writer.hxx>
 #include <svl/cryptosign.hxx>
+#include <drawinglayer/processor2d/VectorPrimitiveSamples.hxx>
 #include <tools/urlobj.hxx>
 #include <objshimp.hxx>
 
@@ -1284,7 +1285,8 @@ void KitHelper::ensureCommandAuthor(const SfxViewShell* pViewShell, std::u16stri
 
 bool KitHelper::supportsCommand(std::u16string_view rCommand)
 {
-    static const std::initializer_list<std::u16string_view> vSupport = { u"Signature" };
+    static const std::initializer_list<std::u16string_view> vSupport
+        = { u"Signature", u"VectorPrimitiveSample" };
 
     return std::find(vSupport.begin(), vSupport.end(), rCommand) != vSupport.end();
 }
@@ -1316,8 +1318,35 @@ std::map<OUString, OUString> KitHelper::parseCommandParameters(std::u16string_vi
     return aMap;
 }
 
+namespace
+{
+/// Writes the answer to .uno:VectorPrimitiveSample?name=<sample>. The samples are test content,
+/// so a kit answers with them only when its environment names COOL_VECTOR_PRIMITIVE_SAMPLES. The
+/// answer names the sample in every case, and has no primitives when the sample is not served.
+void writeVectorPrimitiveSampleValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
+{
+    const std::map<OUString, OUString> aParameters
+        = KitHelper::parseCommandParameters(OUString::fromUtf8(rCommand));
+    OString sName;
+    if (auto aIterator = aParameters.find(u"name"_ustr); aIterator != aParameters.end())
+        sName = aIterator->second.toUtf8();
+
+    rJsonWriter.put("commandName", ".uno:VectorPrimitiveSample");
+    rJsonWriter.put("name", sName);
+    if (getenv("COOL_VECTOR_PRIMITIVE_SAMPLES"))
+        drawinglayer::writeVectorPrimitiveSample(rJsonWriter, sName);
+}
+}
+
 void KitHelper::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
 {
+    static constexpr OString aVectorPrimitiveSample(".uno:VectorPrimitiveSample"_ostr);
+    if (o3tl::starts_with(rCommand, aVectorPrimitiveSample))
+    {
+        writeVectorPrimitiveSampleValues(rJsonWriter, rCommand);
+        return;
+    }
+
     static constexpr OString aSignature(".uno:Signature"_ostr);
     if (!o3tl::starts_with(rCommand, aSignature))
     {
