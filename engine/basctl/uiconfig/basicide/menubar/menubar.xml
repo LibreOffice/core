@@ -28,10 +28,6 @@
             <menu:menuitem menu:id=".uno:Save"/>
             <menu:menuitem menu:id=".uno:SaveAll"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:CheckOut"/>
-            <menu:menuitem menu:id=".uno:CancelCheckOut"/>
-            <menu:menuitem menu:id=".uno:CheckIn"/>
-            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:LoadBasic"/>
             <menu:menuitem menu:id=".uno:SaveBasicAs"/>
             <menu:menuitem menu:id=".uno:ImportDialog"/>

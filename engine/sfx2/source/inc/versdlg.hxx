@@ -38,7 +38,6 @@ class SfxVersionDialog final : public SfxDialogController
     std::unique_ptr<weld::Button> m_xViewButton;
     std::unique_ptr<weld::Button> m_xDeleteButton;
     std::unique_ptr<weld::Button> m_xCompareButton;
-    std::unique_ptr<weld::Button> m_xCmisButton;
     std::unique_ptr<weld::TreeView> m_xVersionBox;
 
     DECL_LINK(DClickHdl_Impl, weld::TreeView&, bool);
@@ -70,20 +69,6 @@ private:
 
 public:
     SfxViewVersionDialog_Impl(weld::Window* pParent, SfxVersionInfo& rInfo, bool bEdit);
-};
-
-class SfxCmisVersionsDialog final : public SfxDialogController
-{
-    SfxViewFrame* m_pViewFrame;
-    std::unique_ptr<SfxVersionTableDtor> m_pTable;
-
-    std::unique_ptr<weld::TreeView> m_xVersionBox;
-
-    void LoadVersions();
-
-public:
-    SfxCmisVersionsDialog(weld::Window* pParent, SfxViewFrame* pFrame);
-    virtual ~SfxCmisVersionsDialog() override;
 };
 
 #endif

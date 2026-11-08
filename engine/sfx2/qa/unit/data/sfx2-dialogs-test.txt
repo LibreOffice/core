@@ -44,14 +44,12 @@ sfx/ui/managestylepage.ui
 sfx/ui/securityinfopage.ui
 sfx/ui/licensedialog.ui
 sfx/ui/linkeditdialog.ui
-sfx/ui/checkin.ui
 sfx/ui/editdurationdialog.ui
 sfx/ui/inputdialog.ui
 sfx/ui/newstyle.ui
 sfx/ui/password.ui
 sfx/ui/versionsofdialog.ui
 sfx/ui/versioncommentdialog.ui
-sfx/ui/versionscmis.ui
 sfx/ui/loadtemplatedialog.ui
 sfx/ui/templatedlg.ui
 sfx/ui/printeroptionsdialog.ui

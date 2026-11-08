@@ -1758,7 +1758,7 @@ bool SfxObjectShell::SaveTo_Impl
         bool const bPasswdProvided(aEncryptionData.getLength() != 0);
         pFilter = rMedium.GetFilter();
 
-        const SfxStringItem *pVersionItem = !rMedium.IsInCheckIn()? SfxItemSet::GetItem(pSet, SID_DOCINFO_COMMENTS, false): nullptr;
+        const SfxStringItem *pVersionItem = SfxItemSet::GetItem(pSet, SID_DOCINFO_COMMENTS, false);
         OUString aTmpVersionURL;
 
         if ( bOk )
@@ -1835,7 +1835,7 @@ bool SfxObjectShell::SaveTo_Impl
                 }
             }
 
-            if ( bOk && pVersionItem && !rMedium.IsInCheckIn() )
+            if ( bOk && pVersionItem )
             {
                 // store a version also
                 const SfxStringItem *pAuthorItem = SfxItemSet::GetItem(pSet, SID_DOCINFO_AUTHOR, false);
@@ -2877,24 +2877,11 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     pSet->ClearItem( SID_VERSION );
     pSet->ClearItem( SID_DOC_BASEURL );
 
-    // copy the version comment and major items for the checkin only
-    if ( pRetrMedium->IsInCheckIn( ) )
-    {
-        const SfxPoolItem* pMajor = pArgs->GetItem( SID_DOCINFO_MAJOR );
-        if ( pMajor )
-            pSet->Put( *pMajor );
-
-        const SfxPoolItem* pComments = pArgs->GetItem( SID_DOCINFO_COMMENTS );
-        if ( pComments )
-            pSet->Put( *pComments );
-    }
-
     // create a medium as a copy; this medium is only for writing, because it
     // uses the same name as the original one writing is done through a copy,
     // that will be transferred to the target (of course after calling HandsOff)
     SfxMedium* pMediumTmp = new SfxMedium(pRetrMedium->GetName(), pRetrMedium->GetOpenMode(),
                                           std::move(pFilter), std::move(pSet));
-    pMediumTmp->SetInCheckIn( pRetrMedium->IsInCheckIn( ) );
     pMediumTmp->SetLongName( pRetrMedium->GetLongName() );
     if ( pMediumTmp->GetErrorCode() != ERRCODE_NONE )
     {

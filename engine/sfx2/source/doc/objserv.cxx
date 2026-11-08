@@ -47,7 +47,6 @@
 #include <svl/whiter.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
-#include <svl/visitem.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <sal/log.hxx>
@@ -94,7 +93,6 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/objface.hxx>
-#include <checkin.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -332,98 +330,6 @@ bool SfxObjectShell::APISaveAs_Impl(std::u16string_view aFileName, SfxItemSet& r
     }
 
     return bOk;
-}
-
-void SfxObjectShell::CheckOut( )
-{
-    try
-    {
-        uno::Reference< document::XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY_THROW );
-        xCmisDoc->checkOut( );
-
-        // Remove the info bar
-        if (SfxViewFrame* pViewFrame = GetFrame())
-            pViewFrame->RemoveInfoBar( u"checkout" );
-    }
-    catch ( const cpo::uno::RuntimeException& e )
-    {
-        if (SfxViewFrame* pFrame = GetFrame())
-        {
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pFrame->GetFrameWeld(),
-                                                      VclMessageType::Warning, VclButtonsType::Ok, e.Message));
-            xBox->run();
-        }
-    }
-}
-
-void SfxObjectShell::CancelCheckOut( )
-{
-    try
-    {
-        uno::Reference< document::XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY_THROW );
-        xCmisDoc->cancelCheckOut( );
-
-        uno::Reference< util::XModifiable > xModifiable( GetModel( ), uno::UNO_QUERY );
-        if ( xModifiable.is( ) )
-            xModifiable->setModified( false );
-    }
-    catch ( const cpo::uno::RuntimeException& e )
-    {
-        if (SfxViewFrame* pFrame = GetFrame())
-        {
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pFrame->GetFrameWeld(),
-                                                      VclMessageType::Warning, VclButtonsType::Ok, e.Message));
-            xBox->run();
-        }
-    }
-}
-
-void SfxObjectShell::CheckIn( )
-{
-    try
-    {
-        uno::Reference< document::XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY_THROW );
-        // Pop up dialog to ask for comment and major
-        if (SfxViewFrame* pFrame = GetFrame())
-        {
-            SfxCheckinDialog checkinDlg(pFrame->GetFrameWeld());
-            if (checkinDlg.run() == RET_OK)
-            {
-                xCmisDoc->checkIn(checkinDlg.IsMajor(), checkinDlg.GetComment());
-                uno::Reference< util::XModifiable > xModifiable( GetModel( ), uno::UNO_QUERY );
-                if ( xModifiable.is( ) )
-                    xModifiable->setModified( false );
-            }
-        }
-    }
-    catch ( const cpo::uno::RuntimeException& e )
-    {
-        if (SfxViewFrame* pFrame = GetFrame())
-        {
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pFrame->GetFrameWeld(),
-                                                      VclMessageType::Warning, VclButtonsType::Ok, e.Message));
-            xBox->run();
-        }
-    }
-}
-
-cpo::uno::Sequence< document::CmisVersion > SfxObjectShell::GetCmisVersions( ) const
-{
-    try
-    {
-        uno::Reference< document::XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY_THROW );
-        return xCmisDoc->getAllVersions( );
-    }
-    catch ( const cpo::uno::RuntimeException& e )
-    {
-        if (SfxViewFrame* pFrame = GetFrame())
-        {
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pFrame->GetFrameWeld(),
-                                                      VclMessageType::Warning, VclButtonsType::Ok, e.Message));
-            xBox->run();
-        }
-    }
-    return cpo::uno::Sequence< document::CmisVersion > ( );
 }
 
 bool SfxObjectShell::IsSignPDF() const
@@ -1385,31 +1291,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             (void)aDlg.run();
             break;
         }
-
-        case SID_CHECKOUT:
-        {
-            CheckOut( );
-            break;
-        }
-        case SID_CANCELCHECKOUT:
-        {
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
-                                                      VclMessageType::Question, VclButtonsType::YesNo, SfxResId(STR_QUERY_CANCELCHECKOUT)));
-            if (xBox->run() == RET_YES)
-            {
-                CancelCheckOut( );
-
-                // Reload the document as we may still have local changes
-                if (SfxViewFrame* pFrame = GetFrame())
-                    pFrame->GetDispatcher()->Execute(SID_RELOAD);
-            }
-            break;
-        }
-        case SID_CHECKIN:
-        {
-            CheckIn( );
-            break;
-        }
     }
 
     rReq.Done();
@@ -1424,71 +1305,6 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
     {
         switch ( nWhich )
         {
-            case SID_CHECKOUT:
-                {
-                    bool bShow = false;
-                    Reference< XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY );
-                    const cpo::uno::Sequence< document::CmisProperty> aCmisProperties = xCmisDoc->getCmisProperties();
-
-                    if ( xCmisDoc->isVersionable( ) && aCmisProperties.hasElements( ) )
-                    {
-                        // Loop over the CMIS Properties to find cmis:isVersionSeriesCheckedOut
-                        bool bIsGoogleFile = false;
-                        bool bCheckedOut = false;
-                        for ( const auto& rCmisProperty : aCmisProperties )
-                        {
-                            if ( rCmisProperty.Id == "cmis:isVersionSeriesCheckedOut" )
-                            {
-                                cpo::uno::Sequence< bool > bTmp;
-                                rCmisProperty.Value >>= bTmp;
-                                bCheckedOut = bTmp[0];
-                            }
-                            // using title to know if it's a Google Drive file
-                            // maybe there's a safer way.
-                            if ( rCmisProperty.Name == "title" )
-                                bIsGoogleFile = true;
-                        }
-                        bShow = !bCheckedOut && !bIsGoogleFile;
-                    }
-
-                    if ( !bShow )
-                    {
-                        rSet.DisableItem( nWhich );
-                        rSet.Put( SfxVisibilityItem( nWhich, false ) );
-                    }
-                }
-                break;
-
-            case SID_CANCELCHECKOUT:
-            case SID_CHECKIN:
-                {
-                    bool bShow = false;
-                    Reference< XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY );
-                    const cpo::uno::Sequence< document::CmisProperty> aCmisProperties = xCmisDoc->getCmisProperties( );
-
-                    if ( xCmisDoc->isVersionable( ) && aCmisProperties.hasElements( ) )
-                    {
-                        // Loop over the CMIS Properties to find cmis:isVersionSeriesCheckedOut
-                        bool bCheckedOut = false;
-                        auto pProp = std::find_if(aCmisProperties.begin(), aCmisProperties.end(),
-                            [](const document::CmisProperty& rProp) { return rProp.Id == "cmis:isVersionSeriesCheckedOut"; });
-                        if (pProp != aCmisProperties.end())
-                        {
-                            cpo::uno::Sequence< bool > bTmp;
-                            pProp->Value >>= bTmp;
-                            bCheckedOut = bTmp[0];
-                        }
-                        bShow = bCheckedOut;
-                    }
-
-                    if ( !bShow )
-                    {
-                        rSet.DisableItem( nWhich );
-                        rSet.Put( SfxVisibilityItem( nWhich, false ) );
-                    }
-                }
-                break;
-
             case SID_VERSION:
                 {
                     SfxObjectShell *pDoc = this;

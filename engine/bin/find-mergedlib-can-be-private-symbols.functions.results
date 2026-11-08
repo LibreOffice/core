@@ -6006,7 +6006,6 @@ SfxMedium::GetVersionList(cpo::uno::Reference<com::sun::star::embed::XStorage> c
 SfxMedium::GetWorkerReloadEvent() const
 SfxMedium::HasRestrictedFonts() const
 SfxMedium::IsExpired() const
-SfxMedium::IsInCheckIn() const
 SfxMedium::IsOpen() const
 SfxMedium::IsOriginallyLoadedReadOnly() const
 SfxMedium::IsOriginallyReadOnly() const
@@ -6019,7 +6018,6 @@ SfxMedium::ResetError()
 SfxMedium::SetArgs(cpo::uno::Sequence<com::sun::star::beans::PropertyValue> const&)
 SfxMedium::SetDoneLink(Link<void*, void> const&)
 SfxMedium::SetHasEmbeddedObjects(bool)
-SfxMedium::SetInCheckIn(bool)
 SfxMedium::SetLoadTargetFrame(SfxFrame*)
 SfxMedium::SetName(rtl::OUString const&, bool)
 SfxMedium::SetOpenMode(StreamMode, bool)

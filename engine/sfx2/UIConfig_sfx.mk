@@ -14,7 +14,6 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/autoredactdialog \
 	sfx2/uiconfig/ui/charmapcontrol \
 	sfx2/uiconfig/ui/charviewmenu \
-	sfx2/uiconfig/ui/checkin \
 	sfx2/uiconfig/ui/classificationbox \
 	sfx2/uiconfig/ui/cmisinfopage \
 	sfx2/uiconfig/ui/cmisline \
@@ -59,7 +58,6 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/urlbox \
 	sfx2/uiconfig/ui/versionsofdialog \
 	sfx2/uiconfig/ui/versioncommentdialog \
-	sfx2/uiconfig/ui/versionscmis \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -19,12 +19,9 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/document/XCmisDocument.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/util/RevisionTag.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
-#include <officecfg/Office/Common.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
@@ -67,7 +64,6 @@ private:
     std::vector<std::unique_ptr<SfxVersionInfo>> aTableList;
 public:
     explicit                SfxVersionTableDtor( const cpo::uno::Sequence < util::RevisionTag >& rInfo );
-    explicit                SfxVersionTableDtor( const cpo::uno::Sequence < document::CmisVersion > & rInfo );
                             SfxVersionTableDtor(const SfxVersionTableDtor&) = delete;
     SfxVersionTableDtor&    operator=(const SfxVersionTableDtor&) = delete;
 
@@ -84,20 +80,6 @@ SfxVersionTableDtor::SfxVersionTableDtor( const cpo::uno::Sequence < util::Revis
     {
         std::unique_ptr<SfxVersionInfo> pInfo(new SfxVersionInfo);
         pInfo->aName = rItem.Identifier;
-        pInfo->aComment = rItem.Comment;
-        pInfo->aAuthor = rItem.Author;
-
-        pInfo->aCreationDate = DateTime( rItem.TimeStamp );
-        aTableList.push_back( std::move(pInfo) );
-    }
-}
-
-SfxVersionTableDtor::SfxVersionTableDtor( const cpo::uno::Sequence < document::CmisVersion >& rInfo )
-{
-    for ( const auto& rItem : rInfo )
-    {
-        std::unique_ptr<SfxVersionInfo> pInfo(new SfxVersionInfo);
-        pInfo->aName = rItem.Id;
         pInfo->aComment = rItem.Comment;
         pInfo->aAuthor = rItem.Author;
 
@@ -155,7 +137,6 @@ SfxVersionDialog::SfxVersionDialog(weld::Window* pParent, SfxViewFrame* pVwFrame
     , m_xViewButton(m_xBuilder->weld_button(u"show"_ustr))
     , m_xDeleteButton(m_xBuilder->weld_button(u"delete"_ustr))
     , m_xCompareButton(m_xBuilder->weld_button(u"compare"_ustr))
-    , m_xCmisButton(m_xBuilder->weld_button(u"cmis"_ustr))
     , m_xVersionBox(m_xBuilder->weld_tree_view(u"versions"_ustr))
 {
     m_xVersionBox->set_size_request(m_xVersionBox->get_approximate_digit_width() * 90,
@@ -169,7 +150,6 @@ SfxVersionDialog::SfxVersionDialog(weld::Window* pParent, SfxViewFrame* pVwFrame
     m_xCompareButton->connect_clicked( aClickLink );
     m_xOpenButton->connect_clicked( aClickLink );
     m_xSaveCheckBox->connect_toggled(LINK(this, SfxVersionDialog, ToggleHdl_Impl));
-    m_xCmisButton->connect_clicked( aClickLink );
 
     m_xVersionBox->connect_selection_changed(LINK(this, SfxVersionDialog, SelectHdl_Impl));
     m_xVersionBox->connect_row_activated( LINK( this, SfxVersionDialog, DClickHdl_Impl ) );
@@ -239,14 +219,6 @@ void SfxVersionDialog::Init_Impl()
     m_xViewButton->set_sensitive(false);
     m_xDeleteButton->set_sensitive(false);
     m_xCompareButton->set_sensitive(false);
-
-    if ( !officecfg::Office::Common::Misc::ExperimentalMode::get() )
-        m_xCmisButton->hide( );
-    uno::Reference<document::XCmisDocument> xCmisDoc(pObjShell->GetModel(), uno::UNO_QUERY);
-    if (xCmisDoc && xCmisDoc->isVersionable())
-        m_xCmisButton->set_sensitive(true);
-    else
-        m_xCmisButton->set_sensitive(false);
 
     SelectHdl_Impl(*m_xVersionBox);
 }
@@ -367,11 +339,6 @@ IMPL_LINK(SfxVersionDialog, ButtonHdl_Impl, weld::Button&, rButton, void)
         m_pViewFrame->GetDispatcher()->Execute( SID_DOCUMENT_COMPARE, SfxCallMode::ASYNCHRON, aSet );
         m_xDialog->response(RET_CLOSE);
     }
-    else if (&rButton == m_xCmisButton.get())
-    {
-        SfxCmisVersionsDialog aDlg(m_xDialog.get(), m_pViewFrame);
-        aDlg.run();
-    }
 }
 
 IMPL_LINK(SfxVersionDialog, ToggleHdl_Impl, weld::Toggleable&, rButton, void)
@@ -424,47 +391,6 @@ IMPL_LINK(SfxViewVersionDialog_Impl, ButtonHdl, weld::Button&, rButton, void)
     (void)rButton;
     m_rInfo.aComment = m_xEdit->get_text();
     m_xDialog->response(RET_OK);
-}
-
-SfxCmisVersionsDialog::SfxCmisVersionsDialog(weld::Window* pParent, SfxViewFrame* pVwFrame)
-    : SfxDialogController(pParent, u"sfx/ui/versionscmis.ui"_ustr, u"VersionsCmisDialog"_ustr)
-    , m_pViewFrame(pVwFrame)
-    , m_xVersionBox(m_xBuilder->weld_tree_view(u"versions"_ustr))
-{
-    m_xVersionBox->set_size_request(m_xVersionBox->get_approximate_digit_width() * 90,
-                                    m_xVersionBox->get_height_rows(15));
-    setColSizes(*m_xVersionBox);
-
-    m_xVersionBox->grab_focus();
-
-    OUString sText = m_xDialog->get_title() +
-                    " " + m_pViewFrame->GetObjectShell()->GetTitle();
-    m_xDialog->set_title(sText);
-
-    LoadVersions();
-}
-
-SfxCmisVersionsDialog::~SfxCmisVersionsDialog()
-{
-}
-
-void SfxCmisVersionsDialog::LoadVersions()
-{
-    SfxObjectShell *pObjShell = m_pViewFrame->GetObjectShell();
-    cpo::uno::Sequence < document::CmisVersion > aVersions = pObjShell->GetCmisVersions( );
-    m_pTable.reset(new SfxVersionTableDtor( aVersions ));
-    for (size_t n = 0; n < m_pTable->size(); ++n)
-    {
-        SfxVersionInfo *pInfo = m_pTable->at( n );
-        OUString aEntry = formatDateTime(pInfo->aCreationDate, Application::GetSettings().GetLocaleDataWrapper(), false);
-        m_xVersionBox->append(weld::toId(pInfo), aEntry);
-        auto nLastRow = m_xVersionBox->n_children() - 1;
-        m_xVersionBox->set_text(nLastRow, pInfo->aAuthor, 1);
-        m_xVersionBox->set_text(nLastRow, ConvertWhiteSpaces_Impl(pInfo->aComment), 2);
-    }
-
-    if (auto nCount = m_pTable->size())
-        m_xVersionBox->select(nCount - 1);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -100,7 +100,6 @@ namespace sfx { class IDocumentModelAccessor; }
 namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::beans { struct PropertyValue; }
-namespace com::sun::star::document { struct CmisVersion; }
 namespace com::sun::star::document { class XDocumentProperties; }
 namespace com::sun::star::embed { class XStorage; }
 namespace com::sun::star::graphic { class XGraphic; }
@@ -853,11 +852,6 @@ public:
     SAL_DLLPRIVATE static bool QueryAllowExoticFormat_Impl( const cpo::uno::Reference< css::task::XInteractionHandler >& xHandler,
                                                      const OUString& rURL,
                                                      const OUString& rFilterUIName);
-
-    SAL_DLLPRIVATE void CheckOut( );
-    SAL_DLLPRIVATE void CancelCheckOut( );
-    SAL_DLLPRIVATE void CheckIn( );
-    SAL_DLLPRIVATE cpo::uno::Sequence< css::document::CmisVersion > GetCmisVersions() const;
 
     /** override this if you have a XmlIdRegistry. */
     virtual const sfx2::IXmlIdRegistry* GetXmlIdRegistry() const { return nullptr; }

@@ -46,10 +46,6 @@
       <menu:menuitem menu:id=".uno:SaveACopy" menu:style="text"/>
       <menu:menuitem menu:id=".uno:SaveAll" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:CheckOut" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:CancelCheckOut" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:CheckIn" menu:style="text"/>
-      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ExportTo"/>
       <menu:menu menu:id=".uno:ExportAsMenu">
         <menu:menupopup>

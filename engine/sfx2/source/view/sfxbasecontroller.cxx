@@ -25,7 +25,6 @@
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
-#include <com/sun/star/document/XCmisDocument.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/frame/FrameActionEvent.hpp>
@@ -53,7 +52,6 @@
 #include <unoctitm.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <sfx2/sfxresid.hxx>
 #include <workwin.hxx>
 #include <sfx2/infobar.hxx>
 
@@ -70,7 +68,6 @@
 
 #include <sfx2/event.hxx>
 #include <sfx2/viewfac.hxx>
-#include <sfx2/strings.hrc>
 #include <sfxbasecontroller_internal.hxx>
 
 #include <unordered_map>
@@ -527,7 +524,6 @@ void SfxBaseController::attachFrame( const Reference< frame::XFrame >& xFrame )
     if ( m_pData->m_pViewShell )
     {
         ConnectSfxFrame_Impl( E_CONNECT );
-        ShowInfoBars( );
 
         // attaching the frame to the controller is the last step in the creation of a new view, so notify this
         SfxViewEventHint aHint( SfxEventHintId::ViewCreated, GlobalEventConfig::GetEventName( GlobalEventId::VIEWCREATED ), m_pData->m_pViewShell->GetObjectShell(), Reference< frame::XController2 >( this ) );
@@ -1261,60 +1257,6 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
     if ( nViewNo != USHRT_MAX )
         pViewFrame->GetBindings().Invalidate( nViewNo + SID_VIEWSHELL0 );
 }
-
-void SfxBaseController::ShowInfoBars( )
-{
-    if ( !m_pData->m_pViewShell )
-        return;
-
-    // CMIS verifications
-    Reference< document::XCmisDocument > xCmisDoc( m_pData->m_pViewShell->GetObjectShell()->GetModel(), uno::UNO_QUERY );
-    if ( !xCmisDoc.is( ) || !xCmisDoc->canCheckOut( ) )
-        return;
-
-    const cpo::uno::Sequence< document::CmisProperty> aCmisProperties = xCmisDoc->getCmisProperties( );
-
-    if ( !(xCmisDoc->isVersionable( ) && aCmisProperties.hasElements( )) )
-        return;
-
-    // Loop over the CMIS Properties to find cmis:isVersionSeriesCheckedOut
-    // and find if it is a Google Drive file.
-    bool bIsGoogleFile = false;
-    bool bCheckedOut = false;
-    for ( const auto& rCmisProp : aCmisProperties )
-    {
-        if ( rCmisProp.Id == "cmis:isVersionSeriesCheckedOut" ) {
-            cpo::uno::Sequence< bool > bTmp;
-            rCmisProp.Value >>= bTmp;
-            bCheckedOut = bTmp[0];
-        }
-        // if it is a Google Drive file, we don't need the checkout bar,
-        // still need the checkout feature for the version dialog.
-        if ( rCmisProp.Name == "title" )
-            bIsGoogleFile = true;
-    }
-
-    if ( bCheckedOut || bIsGoogleFile )
-        return;
-
-    // Get the Frame and show the InfoBar if not checked out
-    SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
-    auto pInfoBar = pViewFrame->AppendInfoBar(u"checkout"_ustr, u""_ustr, SfxResId(STR_NONCHECKEDOUT_DOCUMENT),
-                                              InfobarType::WARNING);
-    if (pInfoBar)
-    {
-        weld::Button &rBtn = pInfoBar->addButton();
-        rBtn.set_label(SfxResId(STR_CHECKOUT));
-        rBtn.connect_clicked(LINK(this, SfxBaseController, CheckOutHandler));
-    }
-}
-
-IMPL_LINK_NOARG ( SfxBaseController, CheckOutHandler, weld::Button&, void )
-{
-    if ( m_pData->m_pViewShell )
-        m_pData->m_pViewShell->GetObjectShell()->CheckOut( );
-}
-
 
 Reference< frame::XTitle > SfxBaseController::impl_getTitleHelper ()
 {

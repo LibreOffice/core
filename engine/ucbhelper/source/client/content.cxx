@@ -30,7 +30,6 @@
 #include <cppuhelper/queryinterface.hxx>
 
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/ucb/CheckinArgument.hpp>
 #include <com/sun/star/ucb/ContentCreationError.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
@@ -929,11 +928,7 @@ void Content::transferContent( const Content& rSourceContent,
                                    InsertOperation eOperation,
                                    const OUString & rTitle,
                                    const sal_Int32 nNameClashAction,
-                                   const OUString & rMimeType,
-                                   bool bMajorVersion,
-                                   const OUString & rVersionComment,
-                                   OUString* pResultURL,
-                                   const OUString & rDocumentId ) const
+                                   const OUString & rMimeType ) const
 {
     Reference< XUniversalContentBroker > pBroker(
         UniversalContentBroker::create( m_xImpl->getComponentContext() ) );
@@ -941,8 +936,6 @@ void Content::transferContent( const Content& rSourceContent,
     // Execute command "globalTransfer" at UCB.
 
     TransferCommandOperation eTransOp = TransferCommandOperation();
-    OUString sCommand( u"globalTransfer"_ustr );
-    bool bCheckIn = false;
     switch ( eOperation )
     {
         case InsertOperation::Copy:
@@ -952,39 +945,22 @@ void Content::transferContent( const Content& rSourceContent,
         case InsertOperation::Move:
             eTransOp = TransferCommandOperation_MOVE;
             break;
-
-        case InsertOperation::Checkin:
-            eTransOp = TransferCommandOperation_COPY;
-            sCommand = u"checkin"_ustr;
-            bCheckIn = true;
-            break;
     }
     Command aCommand;
-    aCommand.Name     = sCommand;
+    aCommand.Name     = u"globalTransfer"_ustr;
     aCommand.Handle   = -1; // n/a
 
-    if ( !bCheckIn )
-    {
-        GlobalTransferCommandArgument2 aTransferArg(
-                                            eTransOp,
-                                            rSourceContent.getURL(), // SourceURL
-                                            getURL(),   // TargetFolderURL,
-                                            rTitle,
-                                            nNameClashAction,
-                                            rMimeType,
-                                            rDocumentId );
-        aCommand.Argument <<= aTransferArg;
-    }
-    else
-    {
-        CheckinArgument aCheckinArg( bMajorVersion, rVersionComment,
-                rSourceContent.getURL(), getURL(), rTitle, rMimeType );
-        aCommand.Argument <<= aCheckinArg;
-    }
+    GlobalTransferCommandArgument2 aTransferArg(
+                                        eTransOp,
+                                        rSourceContent.getURL(), // SourceURL
+                                        getURL(),   // TargetFolderURL,
+                                        rTitle,
+                                        nNameClashAction,
+                                        rMimeType,
+                                        OUString() );
+    aCommand.Argument <<= aTransferArg;
 
-    Any aRet = pBroker->execute( aCommand, 0, m_xImpl->getEnvironment() );
-    if ( pResultURL != nullptr )
-        aRet >>= *pResultURL;
+    pBroker->execute( aCommand, 0, m_xImpl->getEnvironment() );
 }
 
 

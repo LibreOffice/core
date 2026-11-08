@@ -1646,7 +1646,6 @@ void SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >&  aSeqAr
 
     SfxSaveGuard aSaveGuard(this, m_pData.get());
 
-    bool bCheckIn = false;
     bool bOnMainThread = false;
     for ( const auto& rArg : aSeqArgs )
     {
@@ -1656,16 +1655,11 @@ void SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >&  aSeqAr
           && rArg.Name != "InteractionHandler" && rArg.Name != "StatusIndicator"
           && rArg.Name != "VersionMajor"
           && rArg.Name != "FailOnWarning"
-          && rArg.Name != "CheckIn"
           && rArg.Name != "NoFileSync"
           && rArg.Name != "OnMainThread" )
         {
             const OUString aMessage( "Unexpected MediaDescriptor parameter: " + rArg.Name );
             throw lang::IllegalArgumentException( aMessage, Reference< XInterface >(), 1 );
-        }
-        else if ( rArg.Name == "CheckIn" )
-        {
-            rArg.Value >>= bCheckIn;
         }
         else if (rArg.Name == "OnMainThread")
         {
@@ -1673,20 +1667,8 @@ void SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >&  aSeqAr
         }
     }
 
-    // Remove CheckIn property if needed
-    sal_uInt16 nSlotId = SID_SAVEDOC;
-    Sequence< beans::PropertyValue >  aArgs = aSeqArgs;
-    if ( bCheckIn )
-    {
-        nSlotId = SID_CHECKIN;
-        sal_Int32 nLength = aSeqArgs.getLength( );
-        aArgs = Sequence< beans::PropertyValue >( nLength - 1 );
-        std::copy_if(aSeqArgs.begin(), aSeqArgs.end(), aArgs.getArray(),
-            [](const beans::PropertyValue& rProp) { return rProp.Name != "CheckIn"; });
-    }
-
     std::optional<SfxAllItemSet> pParams(SfxGetpApp()->GetPool() );
-    TransformParameters( nSlotId, aArgs, *pParams );
+    TransformParameters( SID_SAVEDOC, aSeqArgs, *pParams );
 
     SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::SaveDoc, GlobalEventConfig::GetEventName(GlobalEventId::SAVEDOC), m_pData->m_pObjectShell.get() ) );
 
@@ -1712,14 +1694,11 @@ void SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >&  aSeqAr
     }
     else
     {
-        // Tell the SfxMedium if we are in checkin instead of normal save
-        m_pData->m_pObjectShell->GetMedium( )->SetInCheckIn( nSlotId == SID_CHECKIN );
         if (bOnMainThread)
             bRet = vcl::solarthread::syncExecute(
                 [this, &pParams] { return m_pData->m_pObjectShell->Save_Impl(&*pParams); });
         else
             bRet = m_pData->m_pObjectShell->Save_Impl(&*pParams);
-        m_pData->m_pObjectShell->GetMedium( )->SetInCheckIn( nSlotId != SID_CHECKIN );
     }
 
     pParams.reset();
@@ -2708,8 +2687,7 @@ void SfxBaseModel::checkIn( bool bIsMajor, const OUString& rMessage )
     {
         Sequence< beans::PropertyValue > aProps{
             comphelper::makePropertyValue(u"VersionMajor"_ustr, bIsMajor),
-            comphelper::makePropertyValue(u"VersionComment"_ustr, rMessage),
-            comphelper::makePropertyValue(u"CheckIn"_ustr, true)
+            comphelper::makePropertyValue(u"VersionComment"_ustr, rMessage)
         };
 
         const OUString sName( pMedium->GetName( ) );

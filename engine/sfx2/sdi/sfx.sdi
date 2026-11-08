@@ -2563,54 +2563,6 @@ SfxVoidItem OpenTemplate SID_OPENTEMPLATE
     GroupId = SfxGroupId::Template;
 ]
 
-SfxVoidItem CheckOut SID_CHECKOUT
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    Asynchron;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Document;
-]
-
-SfxVoidItem CancelCheckOut SID_CANCELCHECKOUT
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    Asynchron;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Document;
-]
-
-SfxVoidItem CheckIn SID_CHECKIN
-(SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxBoolItem VersionMajor SID_DOCINFO_MAJOR)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    Asynchron;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Document;
-]
-
 
 SfxStringItem OpenUrl SID_OPENURL
 

@@ -164,9 +164,6 @@ class SvxZoomItem;
 #define SID_REDACTDOC                       (SID_SFX_START + 1732)
 #define SID_AUTOREDACTDOC                   (SID_SFX_START + 1736)
 #define SID_UPDATEDOCMODE                   TypedWhichId<SfxUInt16Item>(SID_SFX_START + 1668)
-#define SID_CHECKOUT                        TypedWhichId<SfxVisibilityItem>(SID_SFX_START + 512)
-#define SID_CANCELCHECKOUT                  TypedWhichId<SfxVisibilityItem>(SID_SFX_START + 513)
-#define SID_CHECKIN                         TypedWhichId<SfxVisibilityItem>(SID_SFX_START + 514)
 #define SID_FILTER_PROVIDER                 TypedWhichId<SfxStringItem>(SID_SFX_START + 515)
 
 #define SID_FORCERELOAD                     TypedWhichId<SfxBoolItem>(SID_SFX_START + 1502)

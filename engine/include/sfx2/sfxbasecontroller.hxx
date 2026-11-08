@@ -36,11 +36,8 @@
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 #include <com/sun/star/ui/XContextMenuInterception.hpp>
-#include <tools/link.hxx>
 
 #include <sfx2/groupid.hxx>
-
-namespace weld { class Button; }
 
 struct  IMPL_SfxBaseController_DataContainer    ;   // impl. struct to hold member of class SfxBaseController
 
@@ -189,9 +186,6 @@ private:
     };
     SAL_DLLPRIVATE void ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect );
     SAL_DLLPRIVATE SfxViewFrame& GetViewFrame_Impl() const;
-    SAL_DLLPRIVATE void ShowInfoBars( );
-
-    DECL_DLLPRIVATE_LINK( CheckOutHandler, weld::Button&, void );
 
     std::unique_ptr<IMPL_SfxBaseController_DataContainer>   m_pData ;
 

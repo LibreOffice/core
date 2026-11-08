@@ -35,10 +35,6 @@
       <menu:menuitem menu:id=".uno:SaveAs"/>
       <menu:menuitem menu:id=".uno:SaveAll" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:CheckOut"/>
-      <menu:menuitem menu:id=".uno:CancelCheckOut"/>
-      <menu:menuitem menu:id=".uno:CheckIn"/>
-      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ExportToPDF"/>
       <menu:menu menu:id=".uno:SendToMenu" menu:style="text">
         <menu:menupopup>

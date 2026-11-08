@@ -84,8 +84,7 @@ enum ResultSetInclude
 enum class InsertOperation
 {
     Copy, // copy source data
-    Move, // move source data
-    Checkin // check-in source data
+    Move  // move source data
 };
 
 class Content_Impl;
@@ -599,21 +598,13 @@ public:
       *        NameClash::RENAME will generate and supply a non-clashing title.
       *        @see com/sun/star/ucb/NameClash.idl
       * @param rMimeType contains the MIME type of the document to write.
-      * @param bMajorVersion tells to create a new major version for checkin operations
-      * @param rCommentVersion contains the comment to use for checkin operations
-      * @param rResultURL is a hacky way to get the update URL after the operation in
-      *        case there was a change (introduced for the checkin operation)
-      * @param rDocumentId is the document Id ( in case of CMIS ).
       * @throws css::ucb::CommandAbortedException
       * @throws cpo::uno::RuntimeException
       * @throws cpo::uno::Exception
       */
     void transferContent(const Content& rSourceContent, InsertOperation eOperation,
                          const OUString& rTitle, const sal_Int32 nNameClashAction,
-                         const OUString& rMimeType = OUString(), bool bMajorVersion = false,
-                         const OUString& rCommentVersion = OUString(),
-                         OUString* pResultURL = nullptr,
-                         const OUString& rDocumentId = OUString()) const;
+                         const OUString& rMimeType = OUString()) const;
 
     /**
       *  This method lock the resource.

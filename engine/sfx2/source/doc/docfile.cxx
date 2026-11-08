@@ -412,7 +412,6 @@ public:
     bool m_bTriedStorage:1;
     bool m_bRemote:1;
     bool m_bInputStreamIsReadOnly:1;
-    bool m_bInCheckIn:1;
     bool m_bDisableFileSync = false;
     bool m_bNotifyWhenEditable = false;
     /// if true, xStorage is an inner package and not directly from xStream
@@ -512,7 +511,6 @@ SfxMedium_Impl::SfxMedium_Impl() :
     m_bTriedStorage(false),
     m_bRemote(false),
     m_bInputStreamIsReadOnly(false),
-    m_bInCheckIn(false),
     m_pReloadEvent(nullptr),
     aExpireTime( DateTime( DateTime::SYSTEM ) + static_cast<sal_Int32>(10) ),
     nLastStorageError( ERRCODE_NONE ),
@@ -2622,43 +2620,36 @@ void SfxMedium::Transfer_Impl()
 
         ::ucbhelper::Content aDestContent;
         (void)::ucbhelper::Content::create( aDestURL, xComEnv, comphelper::getProcessComponentContext(), aDestContent );
-        // For checkin, we need the object URL, not the parent folder:
-        if ( !IsInCheckIn( ) )
+        // Get the parent URL from the XChild if possible, as the URL need not have a hierarchical
+        // path.
+        Reference< css::container::XChild> xChild( aDestContent.get(), uno::UNO_QUERY );
+        OUString sParentUrl;
+        if ( xChild.is( ) )
         {
-            // Get the parent URL from the XChild if possible: why would the URL necessarily have
-            // a hierarchical path? It's not always the case for CMIS.
-            Reference< css::container::XChild> xChild( aDestContent.get(), uno::UNO_QUERY );
-            OUString sParentUrl;
-            if ( xChild.is( ) )
+            Reference< css::ucb::XContent > xParent( xChild->getParent( ), uno::UNO_QUERY );
+            if ( xParent.is( ) )
             {
-                Reference< css::ucb::XContent > xParent( xChild->getParent( ), uno::UNO_QUERY );
-                if ( xParent.is( ) )
-                {
-                    sParentUrl = xParent->getIdentifier( )->getContentIdentifier();
-                }
+                sParentUrl = xParent->getIdentifier( )->getContentIdentifier();
             }
-
-            if ( sParentUrl.isEmpty() )
-                aDestURL = aDest.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-                    // adjust to above aDest.removeSegment()
-            else
-                aDestURL = sParentUrl;
         }
+
+        if ( sParentUrl.isEmpty() )
+            aDestURL = aDest.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+                // adjust to above aDest.removeSegment()
+        else
+            aDestURL = sParentUrl;
 
         // LongName wasn't defined anywhere, only used here... get the Title instead
         // as it's less probably empty
         OUString aFileName;
-        OUString sObjectId;
         try
         {
             Any aAny = aDestContent.getPropertyValue(u"Title"_ustr);
             aAny >>= aFileName;
-            aAny = aDestContent.getPropertyValue(u"ObjectId"_ustr);
-            aAny >>= sObjectId;
         }
         catch (cpo::uno::Exception const&)
         {
-            SAL_INFO("sfx.doc", "exception while getting Title or ObjectId");
+            SAL_INFO("sfx.doc", "exception while getting Title");
         }
         if ( aFileName.isEmpty() )
             aFileName = GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
@@ -2706,30 +2697,13 @@ void SfxMedium::Transfer_Impl()
             try
             {
                 OUString aMimeType = pImpl->getFilterMimeType();
-                ::ucbhelper::InsertOperation eOperation = ::ucbhelper::InsertOperation::Copy;
-                bool bMajor = false;
-                OUString sComment;
-                if ( IsInCheckIn( ) )
-                {
-                    eOperation = ::ucbhelper::InsertOperation::Checkin;
-                    const SfxBoolItem* pMajor = GetItemSet().GetItem<SfxBoolItem>(SID_DOCINFO_MAJOR, false);
-                    bMajor = pMajor && pMajor->GetValue( );
-                    const SfxStringItem* pComments = GetItemSet().GetItem(SID_DOCINFO_COMMENTS, false);
-                    if ( pComments )
-                        sComment = pComments->GetValue( );
-                }
-                OUString sResultURL;
                 aTransferContent.transferContent(
-                    aSourceContent, eOperation,
-                    aFileName, nNameClash, aMimeType, bMajor, sComment,
-                    &sResultURL, sObjectId );
+                    aSourceContent, ::ucbhelper::InsertOperation::Copy,
+                    aFileName, nNameClash, aMimeType );
 
-                if ( !sResultURL.isEmpty( ) )  // Likely to happen only for checkin
-                    SwitchDocumentToFile( sResultURL );
                 try
                 {
-                    if ( GetURLObject().isAnyKnownWebDAVScheme() &&
-                         eOperation == ::ucbhelper::InsertOperation::Copy )
+                    if ( GetURLObject().isAnyKnownWebDAVScheme() )
                     {
                         // tdf#95272 try to re-issue a lock command when a new file is created.
                         // This may be needed because some WebDAV servers fail to implement the
@@ -4902,16 +4876,6 @@ bool SfxMedium::SwitchDocumentToFile( const OUString& aURL )
     }
 
     return bResult;
-}
-
-void SfxMedium::SetInCheckIn( bool bInCheckIn )
-{
-    pImpl->m_bInCheckIn = bInCheckIn;
-}
-
-bool SfxMedium::IsInCheckIn( ) const
-{
-    return pImpl->m_bInCheckIn;
 }
 
 // should only be called on main thread

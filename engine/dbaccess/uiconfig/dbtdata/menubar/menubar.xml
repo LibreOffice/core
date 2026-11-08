@@ -30,10 +30,6 @@
       <menu:menuitem menu:id=".uno:SaveAs"/>
       <menu:menuitem menu:id=".uno:SaveAll" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:CheckOut" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:CancelCheckOut" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:CheckIn" menu:style="text"/>
-      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Quit"/>
     </menu:menupopup>
   </menu:menu>

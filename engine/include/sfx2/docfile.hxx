@@ -234,8 +234,6 @@ public:
     bool                SwitchDocumentToFile( const OUString& aURL );
 
     OUString            GetBaseURL( bool bForSaving=false );
-    void                SetInCheckIn( bool bInCheckIn );
-    bool                IsInCheckIn( ) const;
     bool                IsSkipImages( ) const;
 
     SAL_DLLPRIVATE bool HasStorage_Impl() const;
