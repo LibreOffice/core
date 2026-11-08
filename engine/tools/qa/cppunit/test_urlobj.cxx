@@ -16,8 +16,6 @@
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 
-#define OUSTR_TO_STDSTR( oustr ) std::string( OUStringToOString( oustr, RTL_TEXTENCODING_ASCII_US ) )
-
 template<> inline std::string CPPUNIT_NS::assertion_traits<INetProtocol>::toString(
     const INetProtocol& x )
 {
@@ -60,32 +58,6 @@ namespace tools_urlobj
             CPPUNIT_ASSERT_EQUAL(u"sample.file"_ustr, aUrl.getName());
             CPPUNIT_ASSERT_EQUAL(u"sample"_ustr, aUrl.getBase());
             CPPUNIT_ASSERT_EQUAL(u"file"_ustr, aUrl.getExtension());
-        }
-
-        void urlobjCmisTest(  )
-        {
-            // Test with a username part
-            {
-                INetURLObject aUrl( u"vnd.libreoffice.cmis://username@http:%2F%2Ffoo.bar.com:8080%2Fmy%2Fcmis%2Fatom%23repo-id-encoded/path/to/content" );
-                CPPUNIT_ASSERT_EQUAL( std::string( "http://foo.bar.com:8080/my/cmis/atom#repo-id-encoded" ),
-                        OUSTR_TO_STDSTR( aUrl.GetHost( INetURLObject::DecodeMechanism::WithCharset ) ) );
-                CPPUNIT_ASSERT_EQUAL( std::string( "username" ), OUSTR_TO_STDSTR( aUrl.GetUser( ) ) );
-                CPPUNIT_ASSERT_EQUAL( std::string( "/path/to/content" ),
-                        OUSTR_TO_STDSTR( aUrl.GetURLPath( INetURLObject::DecodeMechanism::NONE ) ) );
-                CPPUNIT_ASSERT_EQUAL_MESSAGE( "Wrong protocol found", INetProtocol::Cmis, aUrl.GetProtocol(  ) );
-            }
-
-            // Test without a username part
-            {
-                INetURLObject aUrl(
-                                u"vnd.libreoffice.cmis://http:%2F%2Ffoo.bar.com:8080%2Fmy%2Fcmis%2Fatom%23repo-id-encoded/path/to/content" );
-                CPPUNIT_ASSERT_EQUAL( std::string( "http://foo.bar.com:8080/my/cmis/atom#repo-id-encoded" ),
-                        OUSTR_TO_STDSTR( aUrl.GetHost( INetURLObject::DecodeMechanism::WithCharset ) ) );
-                CPPUNIT_ASSERT( !aUrl.HasUserData() );
-                CPPUNIT_ASSERT_EQUAL( std::string( "/path/to/content" ),
-                        OUSTR_TO_STDSTR( aUrl.GetURLPath( INetURLObject::DecodeMechanism::NONE ) ) );
-                CPPUNIT_ASSERT_EQUAL_MESSAGE( "Wrong protocol found", INetProtocol::Cmis, aUrl.GetProtocol(  ) );
-            }
         }
 
         void urlobjTest_emptyPath() {
@@ -419,7 +391,6 @@ namespace tools_urlobj
         CPPUNIT_TEST_SUITE( urlobjTest );
         CPPUNIT_TEST( urlobjTest_001 );
         CPPUNIT_TEST( urlobjTest_004 );
-        CPPUNIT_TEST( urlobjCmisTest );
         CPPUNIT_TEST( urlobjTest_emptyPath );
         CPPUNIT_TEST( urlobjTest_data );
         CPPUNIT_TEST( urlobjTest_isSchemeEqualTo );

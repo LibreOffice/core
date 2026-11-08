@@ -76,8 +76,7 @@ enum class INetProtocol
     Smb,
     Hid,
     Sftp,
-    Cmis,
-    LAST = Cmis
+    LAST = Sftp
 };
 
 /** The supported notations for file system paths.

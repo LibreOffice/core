@@ -1576,14 +1576,6 @@
         <array>
             <dict>
                 <key>CFBundleURLName</key>
-                <string>Collabora Office CMIS</string>
-                <key>CFBundleURLSchemes</key>
-                <array>
-                    <string>vnd.libreoffice.cmis</string>
-                </array>
-            </dict>
-            <dict>
-                <key>CFBundleURLName</key>
                 <string>Collabora Office</string>
                 <key>CFBundleURLSchemes</key>
                 <array>

@@ -340,7 +340,6 @@ INetURLObject::getSchemeInfo(INetProtocol eTheScheme)
     static constexpr OUString SMB = u"smb"_ustr;
     static constexpr OUString HID = u"hid"_ustr;
     static constexpr OUString SFTP = u"sftp"_ustr;
-    static constexpr OUString VND_CMIS = u"vnd.libreoffice.cmis"_ustr;
 
     static o3tl::enumarray<INetProtocol, SchemeInfo> constexpr map = {
         // [-loplugin:redundantfcast]:
@@ -422,10 +421,7 @@ INetURLObject::getSchemeInfo(INetProtocol eTheScheme)
             true},
         SchemeInfo{
             SFTP, u"sftp://"_ustr, true, true, false, true, true, true, true,
-            true},
-        SchemeInfo{
-            VND_CMIS, u"vnd.libreoffice.cmis://"_ustr, true, true,
-            false, false, true, false, true, true} };
+            true} };
     return map[eTheScheme];
 };
 
@@ -1014,7 +1010,6 @@ bool INetURLObject::setAbsURIRef(std::u16string_view rTheAbsURIRef,
             }
 
             case INetProtocol::VndSunStarPkg:
-            case INetProtocol::Cmis:
             {
                 if (pEnd - pPos < 2 || *pPos++ != '/' || *pPos++ != '/')
                 {
@@ -2234,7 +2229,6 @@ INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& 
             { u"staroffice:"_ustr, u"private:"_ustr, INetProtocol::PrivSoffice,
               PrefixInfo::Kind::External },
             { u"telnet:"_ustr, u""_ustr, INetProtocol::Telnet, PrefixInfo::Kind::Official },
-            { u"vnd.libreoffice.cmis:"_ustr, u""_ustr, INetProtocol::Cmis, PrefixInfo::Kind::Internal },
             { u"vnd.sun.star.cmd:"_ustr, u""_ustr, INetProtocol::VndSunStarCmd,
               PrefixInfo::Kind::Official },
             { u"vnd.sun.star.expand:"_ustr, u""_ustr, INetProtocol::VndSunStarExpand,
@@ -3034,7 +3028,6 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
         case INetProtocol::VndSunStarWebdav:
         case INetProtocol::Https:
         case INetProtocol::Smb:
-        case INetProtocol::Cmis:
             if (pPos < pEnd && *pPos != '/' && *pPos != nQueryDelimiter
                 && *pPos != nFragmentDelimiter)
                 goto failed;
@@ -4916,8 +4909,7 @@ bool INetURLObject::IsExoticProtocol() const
         || m_eScheme == INetProtocol::VndSunStarTdoc
         || m_eScheme == INetProtocol::Smb
         || m_eScheme == INetProtocol::Hid
-        || m_eScheme == INetProtocol::Sftp
-        || m_eScheme == INetProtocol::Cmis)
+        || m_eScheme == INetProtocol::Sftp)
             return false;
 
     if (m_eScheme == INetProtocol::VndSunStarPkg)

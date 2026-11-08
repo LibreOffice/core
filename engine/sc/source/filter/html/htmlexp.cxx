@@ -1441,8 +1441,7 @@ void ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
                 || INetProtocol::Https == aTargetUrl.GetProtocol()
                 || INetProtocol::VndSunStarWebdav == aTargetUrl.GetProtocol()
                 || INetProtocol::Smb == aTargetUrl.GetProtocol()
-                || INetProtocol::Sftp == aTargetUrl.GetProtocol()
-                || INetProtocol::Cmis == aTargetUrl.GetProtocol())))
+                || INetProtocol::Sftp == aTargetUrl.GetProtocol())))
     {
         return;
     }

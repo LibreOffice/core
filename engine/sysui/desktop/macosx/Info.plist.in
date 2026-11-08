@@ -1494,14 +1494,6 @@
     <array>
         <dict>
             <key>CFBundleURLName</key>
-            <string>@PRODUCTNAME@ CMIS</string>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                <string>vnd.libreoffice.cmis</string>
-            </array>
-        </dict>
-        <dict>
-            <key>CFBundleURLName</key>
             <string>@PRODUCTNAME@</string>
             <key>CFBundleURLSchemes</key>
             <array>
