@@ -135,8 +135,8 @@ void ScInterpreter::ScIfJump()
         return;
     }
 
-    if ((aMapIter = maTokenMatrixMap.find( pCur)) != maTokenMatrixMap.end())
-        xNew = (*aMapIter).second;
+    if (maTokenMatrixMap.contains(pCur))
+        xNew = maTokenMatrixMap[pCur];
     else
     {
         std::shared_ptr<ScJumpMatrix> pJumpMat( std::make_shared<ScJumpMatrix>(
@@ -311,9 +311,9 @@ void ScInterpreter::ScIfError( bool bNAonly )
 
                 FormulaConstTokenRef xNew;
                 ScTokenMatrixMap::const_iterator aMapIter;
-                if ((aMapIter = maTokenMatrixMap.find( pCur)) != maTokenMatrixMap.end())
+                if (maTokenMatrixMap.contains(pCur))
                 {
-                    xNew = (*aMapIter).second;
+                    xNew = maTokenMatrixMap[pCur];
                 }
                 else
                 {
