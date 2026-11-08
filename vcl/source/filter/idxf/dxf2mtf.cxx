@@ -904,6 +904,31 @@ void DXF2GDIMetaFile::Draw3DFaceEntity(const DXF3DFaceEntity & rE, const DXFTran
     }
 }
 
+void DXF2GDIMetaFile::DrawEllipseEntity(const DXFEllipseEntity & rE, const DXFTransform & rTransform)
+{
+    if (!SetLineAttribute(rE))
+        return;
+
+    // the minor axis follows the extrusion direction: seen from below the ellipse is mirrored
+    const DXFVector aMinor3D = (rE.aExtrusion.Unit() * rE.aMajor) * rE.fRatio;
+    DXFVector aMajor, aMinor;
+    rTransform.TransDir(rE.aMajor, aMajor);
+    rTransform.TransDir(aMinor3D, aMinor);
+
+    double fSweep = std::fmod(rE.fEnd - rE.fStart, 2 * M_PI);
+    if (fSweep <= 1e-12)
+        fSweep += 2 * M_PI;
+    const bool bFull = std::fabs(fSweep - 2 * M_PI) < 1e-9;
+
+    basegfx::B2DPolygon aPolygon;
+    dxf::appendEllipseArc(aPolygon, Project(rTransform, rE.aCenter),
+                          basegfx::B2DVector(aMajor.fx, aMajor.fy),
+                          basegfx::B2DVector(aMinor.fx, aMinor.fy), rE.fStart, fSweep, true);
+    if (bFull)
+        dxf::closePolygon(aPolygon);
+    OutPolyLine(aPolygon, GetEntityLineInfo(rE, rTransform));
+}
+
 void DXF2GDIMetaFile::DrawDimensionEntity(const DXFDimensionEntity & rE, const DXFTransform & rTransform)
 {
     const DXFBlock * pB;
@@ -933,7 +958,13 @@ void DXF2GDIMetaFile::DrawEntities(const DXFEntities & rEntities,
 
     while (pE!=nullptr) {
         if (pE->nSpace==0) {
-            if (pE->aExtrusion.fz==1.0) {
+            // the coordinates of these are in the world coordinate system
+            const bool bWorld
+                = pE->eType == DXF_LINE || pE->eType == DXF_POINT || pE->eType == DXF_3DFACE
+                  || pE->eType == DXF_ELLIPSE
+                  || (pE->eType == DXF_POLYLINE
+                      && (static_cast<const DXFPolyLineEntity*>(pE)->nFlags & (8 | 16 | 64)) != 0);
+            if (bWorld || pE->aExtrusion.fz==1.0) {
                 pT=&rTransform;
             }
             else {
@@ -982,6 +1013,9 @@ void DXF2GDIMetaFile::DrawEntities(const DXFEntities & rEntities,
                 break;
             case DXF_DIMENSION:
                 DrawDimensionEntity(static_cast<const DXFDimensionEntity&>(*pE),*pT);
+                break;
+            case DXF_ELLIPSE:
+                DrawEllipseEntity(static_cast<const DXFEllipseEntity&>(*pE),*pT);
                 break;
             default:
                 break;  // four other values not handled -Wall

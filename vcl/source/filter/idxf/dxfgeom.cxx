@@ -148,6 +148,19 @@ void appendBulge(basegfx::B2DPolygon& rPolygon, const basegfx::B2DPoint& rEnd, d
     rPolygon.setB2DPoint(rPolygon.count() - 1, rEnd);
 }
 
+void closePolygon(basegfx::B2DPolygon& rPolygon)
+{
+    // the closing segment ends on the first point, merge the two
+    const sal_uInt32 nCount = rPolygon.count();
+    if (nCount < 2)
+        return;
+    const sal_uInt32 nLast = nCount - 1;
+    if (rPolygon.areControlPointsUsed() && rPolygon.isPrevControlPointUsed(nLast))
+        rPolygon.setPrevControlPoint(0, rPolygon.getPrevControlPoint(nLast));
+    rPolygon.remove(nLast);
+    rPolygon.setClosed(true);
+}
+
 basegfx::B2DPolygon createPolyline(const std::vector<DXFPathVertex>& rVertices, bool bClosed)
 {
     basegfx::B2DPolygon aPolygon;
@@ -161,12 +174,7 @@ basegfx::B2DPolygon createPolyline(const std::vector<DXFPathVertex>& rVertices, 
     if (bClosed && nCount > 1)
     {
         appendBulge(aPolygon, rVertices[0].maPoint, rVertices[nCount - 1].mfBulge);
-        // the closing segment ends on the first point, merge the two
-        const sal_uInt32 nLast = aPolygon.count() - 1;
-        if (aPolygon.areControlPointsUsed() && aPolygon.isPrevControlPointUsed(nLast))
-            aPolygon.setPrevControlPoint(0, aPolygon.getPrevControlPoint(nLast));
-        aPolygon.remove(nLast);
-        aPolygon.setClosed(true);
+        closePolygon(aPolygon);
     }
     return aPolygon;
 }

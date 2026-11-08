@@ -42,6 +42,8 @@ public:
     void testLineTypes();
     void testPolylines();
     void testPolygonMesh();
+    void testEllipse();
+    void testWorldCoordinates();
 
     CPPUNIT_TEST_SUITE(DxfFilterTest);
     CPPUNIT_TEST(testCVEs);
@@ -50,6 +52,8 @@ public:
     CPPUNIT_TEST(testLineTypes);
     CPPUNIT_TEST(testPolylines);
     CPPUNIT_TEST(testPolygonMesh);
+    CPPUNIT_TEST(testEllipse);
+    CPPUNIT_TEST(testWorldCoordinates);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -197,6 +201,40 @@ void DxfFilterTest::testPolygonMesh()
     assertXPath(pDoc, "/metafile/polyline[6]/point", 2);
     assertXPath(pDoc, "/metafile/polyline[6]/point[2]", "x", u"10050");
     assertXPath(pDoc, "/metafile/polyline[6]/point[2]", "y", u"50");
+}
+
+void DxfFilterTest::testEllipse()
+{
+    // A full ellipse from y = -5 to 15 and two arcs; the one with the opposite extrusion is
+    // mirrored and goes down to y = -20: the drawing is 140 x 35.
+    GDIMetaFile aMTF = importFile(u"ellipse.dxf");
+    CPPUNIT_ASSERT_EQUAL(Size(10100, 2600), aMTF.GetPrefSize());
+
+    MetafileXmlDump aDumper;
+    aDumper.filterAllActionTypes();
+    aDumper.filterActionType(MetaActionType::POLYLINE, false);
+    xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
+    assertXPath(pDoc, "/metafile/polyline", 3);
+    // the full ellipse is closed: four curve segments back to the start
+    assertXPath(pDoc, "/metafile/polyline[1]/point[@flags='control']", 8);
+    assertXPath(pDoc, "/metafile/polyline[1]/point[1]", "x", u"2907");
+    assertXPath(pDoc, "/metafile/polyline[1]/point[last()]", "x", u"2907");
+    // the arc with the vertical major axis starts at its top, (50, 10)
+    assertXPath(pDoc, "/metafile/polyline[2]/point[1]", "x", u"5050");
+    assertXPath(pDoc, "/metafile/polyline[2]/point[1]", "y", u"407");
+}
+
+void DxfFilterTest::testWorldCoordinates()
+{
+    // A line with the opposite extrusion direction is not mirrored: its coordinates are world
+    // coordinates. The drawing is 30 x 10, one unit is 333.3 in the metafile.
+    GDIMetaFile aMTF = importFile(u"world-coordinates.dxf");
+    MetafileXmlDump aDumper;
+    aDumper.filterAllActionTypes();
+    aDumper.filterActionType(MetaActionType::POLYLINE, false);
+    xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
+    assertXPath(pDoc, "/metafile/polyline[1]/point[1]", "x", u"3383");
+    assertXPath(pDoc, "/metafile/polyline[1]/point[2]", "x", u"6717");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DxfFilterTest);

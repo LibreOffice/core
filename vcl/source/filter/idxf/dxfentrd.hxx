@@ -45,7 +45,8 @@ enum DXFEntityType {
     DXF_3DFACE,
     DXF_DIMENSION,
     DXF_LWPOLYLINE,
-    DXF_HATCH
+    DXF_HATCH,
+    DXF_ELLIPSE
 };
 
 // base class of an entity
@@ -498,6 +499,24 @@ public:
     tools::Long nIEFlags; // 70
 
     DXF3DFaceEntity();
+
+protected:
+
+    virtual void EvaluateGroup(DXFGroupReader & rDGR) override;
+};
+
+//--------------------------Ellipse---------------------------------------------
+
+// in world coordinates, the extrusion only orients the minor axis
+class DXFEllipseEntity : public DXFBasicEntity {
+public:
+    DXFVector aCenter;   // 10,20,30
+    DXFVector aMajor;    // 11,21,31, end of the major axis relative to the centre
+    double fRatio;       // 40, minor to major axis
+    double fStart;       // 41, parameter in radians
+    double fEnd;         // 42
+
+    DXFEllipseEntity();
 
 protected:
 
