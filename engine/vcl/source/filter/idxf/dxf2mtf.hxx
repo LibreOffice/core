@@ -123,6 +123,8 @@ private:
 
     void Draw3DFaceEntity(const DXF3DFaceEntity & rE, const DXFTransform & rTransform);
 
+    void DrawEllipseEntity(const DXFEllipseEntity & rE, const DXFTransform & rTransform);
+
     void DrawDimensionEntity(const DXFDimensionEntity & rE, const DXFTransform & rTransform);
 
     void DrawLWPolyLineEntity( const DXFLWPolyLineEntity & rE, const DXFTransform & rTransform );

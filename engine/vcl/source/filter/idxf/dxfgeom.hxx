@@ -44,6 +44,9 @@ void appendEllipseArc(basegfx::B2DPolygon& rPolygon, const basegfx::B2DPoint& rC
 // bulge, a circular arc.
 void appendBulge(basegfx::B2DPolygon& rPolygon, const basegfx::B2DPoint& rEnd, double fBulge);
 
+// Makes a polygon whose last point repeats the first one closed.
+void closePolygon(basegfx::B2DPolygon& rPolygon);
+
 // The centre line of a 2D polyline, with arcs as curves.
 basegfx::B2DPolygon createPolyline(const std::vector<DXFPathVertex>& rVertices, bool bClosed);
 

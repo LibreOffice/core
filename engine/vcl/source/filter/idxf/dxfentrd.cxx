@@ -21,6 +21,8 @@
 
 #include <o3tl/safeint.hxx>
 
+#include <cmath>
+
 #include "dxfentrd.hxx"
 
 //--------------------------DXFBasicEntity--------------------------------------
@@ -798,6 +800,33 @@ void DXF3DFaceEntity::EvaluateGroup(DXFGroupReader & rDGR)
 }
 
 
+//--------------------------DXFEllipseEntity------------------------------------
+
+DXFEllipseEntity::DXFEllipseEntity()
+    : DXFBasicEntity(DXF_ELLIPSE)
+    , aMajor(1.0, 0.0, 0.0)
+    , fRatio(1.0)
+    , fStart(0.0)
+    , fEnd(2 * M_PI)
+{
+}
+
+void DXFEllipseEntity::EvaluateGroup(DXFGroupReader & rDGR)
+{
+    switch (rDGR.GetG()) {
+        case 10: aCenter.fx=rDGR.GetF(); break;
+        case 20: aCenter.fy=rDGR.GetF(); break;
+        case 30: aCenter.fz=rDGR.GetF(); break;
+        case 11: aMajor.fx=rDGR.GetF(); break;
+        case 21: aMajor.fy=rDGR.GetF(); break;
+        case 31: aMajor.fz=rDGR.GetF(); break;
+        case 40: fRatio=rDGR.GetF(); break;
+        case 41: fStart=rDGR.GetF(); break;
+        case 42: fEnd=rDGR.GetF(); break;
+        default: DXFBasicEntity::EvaluateGroup(rDGR);
+    }
+}
+
 //--------------------------DXFDimensionEntity----------------------------------
 
 DXFDimensionEntity::DXFDimensionEntity() : DXFBasicEntity(DXF_DIMENSION)
@@ -846,6 +875,7 @@ void DXFEntities::Read(DXFGroupReader & rDGR)
         else if (rDGR.GetS() == "3DFACE"    ) pE=new DXF3DFaceEntity;
         else if (rDGR.GetS() == "DIMENSION" ) pE=new DXFDimensionEntity;
         else if (rDGR.GetS() == "HATCH"     ) pE=new DXFHatchEntity;
+        else if (rDGR.GetS() == "ELLIPSE"   ) pE=new DXFEllipseEntity;
         else
         {
             do {
