@@ -18,6 +18,7 @@
  */
 
 
+#include <o3tl/string_view.hxx>
 #include "dxfblkrd.hxx"
 
 
@@ -104,7 +105,7 @@ DXFBlock * DXFBlocks::Search(std::string_view rName) const
 {
     DXFBlock * pB;
     for (pB=pFirst; pB!=nullptr; pB=pB->pSucc) {
-        if (rName == pB->m_sName) break;
+        if (o3tl::equalsIgnoreAsciiCase(rName, pB->m_sName)) break;
     }
     return pB;
 }

@@ -18,6 +18,7 @@
  */
 
 
+#include <o3tl/string_view.hxx>
 #include "dxftblrd.hxx"
 
 //----------------------------------DXFLType-----------------------------------
@@ -266,6 +267,8 @@ DXFTables::DXFTables()
     pLayers=nullptr;
     pStyles=nullptr;
     pVPorts=nullptr;
+    mpLastLType=nullptr;
+    mpLastLayer=nullptr;
 }
 
 
@@ -334,6 +337,8 @@ void DXFTables::Clear()
     DXFStyle * pSt;
     DXFVPort * pVP;
 
+    mpLastLType=nullptr;
+    mpLastLayer=nullptr;
     while (pStyles!=nullptr) {
         pSt=pStyles;
         pStyles=pSt->pSucc;
@@ -359,20 +364,30 @@ void DXFTables::Clear()
 
 DXFLType * DXFTables::SearchLType(std::string_view rName) const
 {
+    // the entities of a drawing come in runs with the same line type
+    if (mpLastLType != nullptr && o3tl::equalsIgnoreAsciiCase(rName, mpLastLType->m_sName))
+        return mpLastLType;
     DXFLType * p;
     for (p=pLTypes; p!=nullptr; p=p->pSucc) {
-        if (rName == p->m_sName) break;
+        if (o3tl::equalsIgnoreAsciiCase(rName, p->m_sName)) break;
     }
+    if (p != nullptr)
+        mpLastLType = p;
     return p;
 }
 
 
 DXFLayer * DXFTables::SearchLayer(std::string_view rName) const
 {
+    // the entities of a drawing come in runs on the same layer
+    if (mpLastLayer != nullptr && o3tl::equalsIgnoreAsciiCase(rName, mpLastLayer->m_sName))
+        return mpLastLayer;
     DXFLayer * p;
     for (p=pLayers; p!=nullptr; p=p->pSucc) {
-        if (rName == p->m_sName) break;
+        if (o3tl::equalsIgnoreAsciiCase(rName, p->m_sName)) break;
     }
+    if (p != nullptr)
+        mpLastLayer = p;
     return p;
 }
 
@@ -381,7 +396,7 @@ DXFVPort * DXFTables::SearchVPort(std::string_view rName) const
 {
     DXFVPort * p;
     for (p=pVPorts; p!=nullptr; p=p->pSucc) {
-        if (rName == p->m_sName) break;
+        if (o3tl::equalsIgnoreAsciiCase(rName, p->m_sName)) break;
     }
     return p;
 }

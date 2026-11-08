@@ -220,12 +220,12 @@ DXFLineInfo DXF2GDIMetaFile::GetEntityDXFLineInfo(const DXFBasicEntity & rE)
 {
     DXFLineInfo aDXFLineInfo;
 
-    if (rE.m_sLineType == "BYLAYER") {
+    if (rE.m_sLineType.equalsIgnoreAsciiCase("BYLAYER")) {
         const DXFLayer * pLayer = GetEntityLayer(rE);
         if (pLayer != nullptr)
             aDXFLineInfo = LTypeToDXFLineInfo(pLayer->m_sLineType);
     }
-    else if (rE.m_sLineType == "BYBLOCK") {
+    else if (rE.m_sLineType.equalsIgnoreAsciiCase("BYBLOCK")) {
         aDXFLineInfo=aBlockDXFLineInfo;
     }
     else {
