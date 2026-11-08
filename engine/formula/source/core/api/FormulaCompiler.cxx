@@ -358,6 +358,9 @@ bool isRangeResultFunction( OpCode eOp )
         case ocIndirect:
         case ocOffset:
         case ocTrimRange:
+        case ocTrimReferenceAll:
+        case ocTrimReferenceLeading:
+        case ocTrimReferenceTrailing:
         // In OOXML the # is written before its operand, so there it is the first opcode of a
         // sub-expression that yields a reference.
         case ocSpill:
@@ -378,6 +381,9 @@ bool isRangeResultOpCode( OpCode eOp )
         case ocOffset:
         case ocIndex:
         case ocTrimRange:
+        case ocTrimReferenceAll:
+        case ocTrimReferenceLeading:
+        case ocTrimReferenceTrailing:
         // The # postfix operator gives the spill range of the master cell before it, which
         // is a reference just like the operators above.
         case ocSpill:
@@ -1385,6 +1391,9 @@ bool FormulaCompiler::IsMatrixFunction( OpCode eOpCode )
         case ocVStack :
         case ocTake :
         case ocTrimRange :
+        case ocTrimReferenceAll :
+        case ocTrimReferenceLeading :
+        case ocTrimReferenceTrailing :
         case ocTextSplit :
         case ocToCol :
         case ocToRow :
@@ -1903,6 +1912,9 @@ void FormulaCompiler::Factor()
                     case ocVStack:
                     case ocTake:
                     case ocTrimRange:
+                    case ocTrimReferenceAll:
+                    case ocTrimReferenceLeading:
+                    case ocTrimReferenceTrailing:
                     case ocTextSplit:
                     case ocToCol:
                     case ocToRow:
@@ -3028,6 +3040,13 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
     if( bSpaces )
         rBuffer.append( ' ');
 
+    // The files spell a trim reference as a call. Elsewhere a call to a range is written as the
+    // range with the dots of the operator.
+    const FormulaToken* pTrimReferenceClose = nullptr;
+    if (isTrimReferenceOpCode(eOp) && bAllowArrAdvance && !FormulaGrammar::isOOXML(meGrammar)
+        && FormulaGrammar::extractRefConvention(meGrammar) != FormulaGrammar::CONV_ODF)
+        pTrimReferenceClose = AppendTrimReference(rBuffer, eOp);
+
     if (isWhitespaceOpCode(eOp))
     {
         bool bWriteSpaces = true;
@@ -3093,6 +3112,11 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
         aName.startsWith(u"_xlfn.", &aName);
         aName.startsWith(u"_xlws.", &aName);
         rBuffer.append(u"_xleta." + aName);
+    }
+    else if (pTrimReferenceClose)
+    {
+        // The parentheses and the range are written, carry on after them.
+        t = pTrimReferenceClose;
     }
     else if (eOp == ocTTT)
         rBuffer.append("TTT");
@@ -3653,6 +3677,41 @@ bool FormulaCompiler::NextTokenIsOpCode( OpCode eOpCode )
 {
     const FormulaToken* p = maArrIterator.NextNoSpaces();
     return p && p->GetOpCode() == eOpCode;
+}
+
+const FormulaToken* FormulaCompiler::AppendTrimReference( OUStringBuffer& rBuffer, OpCode eOp )
+{
+    const sal_uInt16 nSaved = maArrIterator.GetIndex();
+    const FormulaToken* pOpen = maArrIterator.Next();
+    const FormulaToken* pRange = maArrIterator.Next();
+    const FormulaToken* pClose = maArrIterator.Next();
+    if (!pOpen || pOpen->GetOpCode() != ocOpen || !pRange || pRange->GetOpCode() != ocPush
+        || (pRange->GetType() != svDoubleRef && pRange->GetType() != svExternalDoubleRef) || !pClose
+        || pClose->GetOpCode() != ocClose)
+    {
+        maArrIterator.Jump(nSaved);
+        return nullptr;
+    }
+
+    OUStringBuffer aRange;
+    if (pRange->IsExternalRef())
+        CreateStringFromExternal(aRange, pRange);
+    else
+        CreateStringFromDoubleRef(aRange, pRange);
+    // Sheet names have no colon, so the last one is the range operator. An entire column in R1C1
+    // is written without one, and then the call stays.
+    const sal_Int32 nRangeOperator = aRange.lastIndexOf(':');
+    if (nRangeOperator <= 0)
+    {
+        maArrIterator.Jump(nSaved);
+        return nullptr;
+    }
+    if (eOp != ocTrimReferenceLeading)
+        aRange.insert(nRangeOperator + 1, '.');
+    if (eOp != ocTrimReferenceTrailing)
+        aRange.insert(nRangeOperator, '.');
+    rBuffer.append(aRange);
+    return pClose;
 }
 
 bool FormulaCompiler::NextTokenAsTableRefColumn( OUStringBuffer& rBuffer )

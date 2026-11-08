@@ -12,6 +12,7 @@
 $(eval $(call sc_functions_test_common,sc_ooxml_functions_spreadsheet_test, \
     GroupByFunctionTest \
     PivotByFunctionTest \
+    TrimRangeFunctionTest \
 ))
 
 # vim: set noet sw=4 ts=4:

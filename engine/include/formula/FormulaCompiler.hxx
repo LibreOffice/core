@@ -487,6 +487,12 @@ private:
 
     bool NextTokenAsTableRefColumn( OUStringBuffer& rBuffer );
 
+    /** Appends the call of a trim reference opcode eOp to a range as the range with the dots of
+        the operator next to its range operator. Returns the closing parenthesis of the call, or
+        nullptr with nothing appended when the argument is not a range.
+     */
+    const FormulaToken* AppendTrimReference(OUStringBuffer& rBuffer, OpCode eOp);
+
     class CurrentFactor
     {
         FormulaTokenRef  pPrevFac;

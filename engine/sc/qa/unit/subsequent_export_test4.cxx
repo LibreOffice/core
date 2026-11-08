@@ -2115,6 +2115,69 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTrimRangeOdsRoundTrip)
     CPPUNIT_ASSERT_EQUAL(30.0, pDocument->GetValue(ScAddress(2, 0, 0)));
 }
 
+namespace
+{
+void fillTrimReferenceDocument(ScDocument& rDocument)
+{
+    rDocument.SetValue(ScAddress(0, 1, 0), 10.0);
+    rDocument.SetValue(ScAddress(0, 2, 0), 20.0);
+    rDocument.SetString(ScAddress(2, 0, 0), u"=SUM(A1.:.A5)"_ustr);
+    rDocument.SetString(ScAddress(2, 1, 0), u"=ROWS(A:.A)"_ustr);
+    rDocument.SetString(ScAddress(2, 2, 0), u"=ROWS(A1.:A5)"_ustr);
+}
+
+void checkTrimReferenceDocument(ScDocument& rDocument)
+{
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(A1.:.A5)"_ustr, rDocument.GetFormula(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"=ROWS(A:.A)"_ustr, rDocument.GetFormula(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"=ROWS(A1.:A5)"_ustr, rDocument.GetFormula(2, 2, 0));
+    rDocument.CalcAll();
+    CPPUNIT_ASSERT_EQUAL(30.0, rDocument.GetValue(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, rDocument.GetValue(ScAddress(2, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, rDocument.GetValue(ScAddress(2, 2, 0)));
+}
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTrimReferenceXlsxRoundTrip)
+{
+    // XLSX spells the trim reference operators as calls with the range as the argument, and the
+    // calls load back as the operators.
+    createScDoc();
+    fillTrimReferenceDocument(*getScDoc());
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[@r='C1']/x:f",
+                       u"SUM(_xlfn._TRO_ALL(A1:A5))");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[2]/x:c[@r='C2']/x:f",
+                       u"ROWS(_xlfn._TRO_TRAILING(A:A))");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[3]/x:c[@r='C3']/x:f",
+                       u"ROWS(_xlfn._TRO_LEADING(A1:A5))");
+
+    saveAndReload(TestFilter::XLSX);
+    checkTrimReferenceDocument(*getScDoc());
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTrimReferenceOdsRoundTrip)
+{
+    // ODF has no trim reference operators, so they are saved as calls in the namespace for
+    // functions from OOXML and load back as the operators.
+    createScDoc();
+    fillTrimReferenceDocument(*getScDoc());
+
+    save(TestFilter::ODS);
+    xmlDocUniquePtr pContent = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT(pContent);
+    assertXPath(pContent, "(//table:table-cell[contains(@table:formula, '_TRO_ALL')])[1]",
+                "formula", u"of:=SUM(COM.MICROSOFT._TRO_ALL([.A1:.A5]))");
+    assertXPath(pContent, "(//table:table-cell[contains(@table:formula, '_TRO_TRAILING')])[1]",
+                "formula", u"of:=ROWS(COM.MICROSOFT._TRO_TRAILING([.A:.A]))");
+
+    saveAndReload(TestFilter::ODS);
+    checkTrimReferenceDocument(*getScDoc());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

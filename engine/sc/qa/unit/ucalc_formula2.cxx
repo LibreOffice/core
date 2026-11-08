@@ -8099,6 +8099,91 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncTRIMRANGEDropsBlankEdgeLines)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testTrimReferenceOperators)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // The data sits in B2:D4 of A1:E6. Row 1, rows 5 and 6, column A and column E are blank.
+    m_pDoc->SetValue(ScAddress(1, 1, 0), 1.0);
+    m_pDoc->SetValue(ScAddress(3, 1, 0), 2.0);
+    m_pDoc->SetString(ScAddress(2, 2, 0), u"x"_ustr);
+    m_pDoc->SetValue(ScAddress(3, 3, 0), 4.0);
+
+    // A dot on both sides of the range operator trims the blank lines at both ends.
+    m_pDoc->SetString(ScAddress(7, 0, 0), u"=SUM(A1.:.E6)"_ustr);
+    m_pDoc->SetString(ScAddress(7, 1, 0), u"=CELL(\"address\";A1.:.E6)"_ustr);
+    m_pDoc->SetString(ScAddress(7, 2, 0), u"=ROWS(A1.:.E6)*10+COLUMNS(A1.:.E6)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(7, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"$B$2"_ustr, m_pDoc->GetString(ScAddress(7, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(ScAddress(7, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(A1.:.E6)"_ustr, m_pDoc->GetFormula(7, 0, 0));
+
+    // A dot before the range operator trims only the leading lines, a dot after it only the
+    // trailing ones.
+    m_pDoc->SetString(ScAddress(8, 0, 0), u"=ROWS(A1.:E6)*10+COLUMNS(A1.:E6)"_ustr);
+    m_pDoc->SetString(ScAddress(8, 1, 0), u"=ROWS(A1:.E6)*10+COLUMNS(A1:.E6)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(54.0, m_pDoc->GetValue(ScAddress(8, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(44.0, m_pDoc->GetValue(ScAddress(8, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"=ROWS(A1.:E6)*10+COLUMNS(A1.:E6)"_ustr, m_pDoc->GetFormula(8, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"=ROWS(A1:.E6)*10+COLUMNS(A1:.E6)"_ustr, m_pDoc->GetFormula(8, 1, 0));
+
+    // Whole columns and whole rows trim down to the lines with data. Row 4 holds only D4.
+    m_pDoc->SetString(ScAddress(9, 0, 0), u"=CELL(\"address\";D.:.D)"_ustr);
+    m_pDoc->SetString(ScAddress(9, 1, 0), u"=ROWS(D:.D)"_ustr);
+    m_pDoc->SetString(ScAddress(9, 2, 0), u"=CELL(\"address\";4.:.4)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"$D$2"_ustr, m_pDoc->GetString(ScAddress(9, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(9, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"$D$4"_ustr, m_pDoc->GetString(ScAddress(9, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"=CELL(\"address\";D.:.D)"_ustr, m_pDoc->GetFormula(9, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"=ROWS(D:.D)"_ustr, m_pDoc->GetFormula(9, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"=CELL(\"address\";4.:.4)"_ustr, m_pDoc->GetFormula(9, 2, 0));
+
+    // A range with a sheet name keeps the name.
+    m_pDoc->SetString(ScAddress(10, 0, 0), u"=SUM($Sheet1.A1.:.E6)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(10, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($Sheet1.A1.:.E6)"_ustr, m_pDoc->GetFormula(10, 0, 0));
+
+    // The operator also has a function name, and a call to a range reads back as the operator.
+    m_pDoc->SetString(ScAddress(11, 0, 0), u"=SUM(TRO_TRAILING(A1:E6))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(11, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(A1:.E6)"_ustr, m_pDoc->GetFormula(11, 0, 0));
+
+    // A blank range is #REF!.
+    m_pDoc->SetString(ScAddress(12, 0, 0), u"=SUM(F1.:.F6)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoRef, m_pDoc->GetErrCode(ScAddress(12, 0, 0)));
+
+    // On its own in a cell the trimmed range spills its values.
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(14, 0, 14, 0, aMark, u"=A1.:.E6"_ustr, nullptr,
+                                formula::FormulaGrammar::GRAM_DEFAULT,
+                                /*bDynamicArrayMaster=*/true);
+    ScFormulaCell* pFormulaCell = m_pDoc->GetFormulaCell(ScAddress(14, 0, 0));
+    CPPUNIT_ASSERT(pFormulaCell);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, pFormulaCell->GetErrCode());
+    SCCOL nColumns = 0;
+    SCROW nRows = 0;
+    pFormulaCell->GetMatColsRows(nColumns, nRows);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(3), nColumns);
+    CPPUNIT_ASSERT_EQUAL(SCROW(3), nRows);
+    CPPUNIT_ASSERT_EQUAL(u"x"_ustr, m_pDoc->GetString(ScAddress(15, 1, 0)));
+
+    {
+        // The same operators read and write in the A1 syntax with sheet names before an
+        // exclamation mark.
+        FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
+        m_pDoc->SetString(ScAddress(13, 0, 0), u"=SUM(Sheet1!A1.:.E6)"_ustr);
+        m_pDoc->SetString(ScAddress(13, 1, 0), u"=ROWS(D:.D)"_ustr);
+        CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(13, 0, 0)));
+        CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(13, 1, 0)));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(Sheet1!A1.:.E6)"_ustr, m_pDoc->GetFormula(13, 0, 0));
+        CPPUNIT_ASSERT_EQUAL(u"=ROWS(D:.D)"_ustr, m_pDoc->GetFormula(13, 1, 0));
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testFormulaSeparatorsChangedBackForgetReplacedSymbols)
 {
     // After the array separators change and change back, the symbols that stood in for them in

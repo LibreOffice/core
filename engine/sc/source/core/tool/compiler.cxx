@@ -3588,6 +3588,45 @@ bool ScCompiler::ParseDoubleReference( const OUString& rName, const OUString* pE
     return ( nFlags & ScRefFlags::VALID ) != ScRefFlags::ZERO;
 }
 
+bool ScCompiler::ParseTrimReference()
+{
+    // A dot right before the range operator trims the leading blank lines of the range, a dot right
+    // after it the trailing ones. In the bracketed ODF references these dots are sheet separators.
+    const sal_Int32 nRangeOperator = mnRangeOpPosInSymbol;
+    if (nRangeOperator <= 0 || pConv->meConv == FormulaGrammar::CONV_ODF)
+        return false;
+    const bool bLeading = nRangeOperator >= 2 && cSymbol[nRangeOperator - 1] == '.';
+    const bool bTrailing = cSymbol[nRangeOperator + 1] == '.' && cSymbol[nRangeOperator + 2] != 0;
+    if (!bLeading && !bTrailing)
+        return false;
+
+    const OUString aRange(OUString(cSymbol, nRangeOperator - (bLeading ? 1 : 0)) + ":"
+                          + std::u16string_view(cSymbol + nRangeOperator + (bTrailing ? 2 : 1)));
+    if (!ParseDoubleReference(aRange) || !maRawToken.IsValidReference(rDoc))
+        return false;
+
+    PendingTrimReference aPending;
+    if (maRawToken.GetType() == svExternalDoubleRef)
+    {
+        aPending.maReference = maRawToken.extref.aRef;
+        aPending.mnFileId = maRawToken.extref.nFileId;
+        aPending.maTabName = maRawToken.maExternalName;
+        aPending.mbExternal = true;
+    }
+    else
+        aPending.maReference = maRawToken.aRef;
+    moPendingTrimReference = std::move(aPending);
+
+    // The symbol becomes a call with the range as its argument.
+    maRawToken.SetOpCode(bLeading && bTrailing ? ocTrimReferenceAll
+                         : bLeading            ? ocTrimReferenceLeading
+                                               : ocTrimReferenceTrailing);
+    maPendingOpCodes.push(ocOpen);
+    maPendingOpCodes.push(ocPush);
+    maPendingOpCodes.push(ocClose);
+    return true;
+}
+
 bool ScCompiler::ParseSingleReference( const OUString& rName, const OUString* pErrRef )
 {
     mnCurrentSheetEndPos = 0;
@@ -4801,7 +4840,21 @@ bool ScCompiler::NextNewToken( bool bInArray )
 {
     if (!maPendingOpCodes.empty())
     {
-        maRawToken.SetOpCode(maPendingOpCodes.front());
+        // The symbol went into the corrected formula with the first token made from it.
+        if (mbAutoCorrect)
+            maCorrectedSymbol.clear();
+        if (maPendingOpCodes.front() == ocPush && moPendingTrimReference)
+        {
+            if (moPendingTrimReference->mbExternal)
+                maRawToken.SetExternalDoubleRef(moPendingTrimReference->mnFileId,
+                                                moPendingTrimReference->maTabName,
+                                                moPendingTrimReference->maReference);
+            else
+                maRawToken.SetDoubleReference(moPendingTrimReference->maReference);
+            moPendingTrimReference.reset();
+        }
+        else
+            maRawToken.SetOpCode(maPendingOpCodes.front());
         maPendingOpCodes.pop();
         return true;
     }
@@ -5081,6 +5134,9 @@ Label_Rewind:
                 if (ParseOpCode( aUpper, bInArray ))
                     return true;
             }
+
+            if (ParseTrimReference())
+                return true;
 
             // Column 'DM' ("Deutsche Mark", German currency) couldn't be
             // referred => ParseReference() before ParseValue().

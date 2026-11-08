@@ -31,6 +31,7 @@
 #include <com/sun/star/sheet/ExternalLinkInfo.hpp>
 #include <com/sun/star/i18n/ParseResult.hpp>
 #include <queue>
+#include <optional>
 #include <vector>
 #include <memory>
 #include <unordered_set>
@@ -290,6 +291,16 @@ private:
     ScRawToken maRawToken;
 
     std::queue<OpCode> maPendingOpCodes; // additional opcodes generated from a single symbol
+    // The range of a trim reference, the argument of the call that the symbol became. An ocPush in
+    // maPendingOpCodes stands for this range.
+    struct PendingTrimReference
+    {
+        ScComplexRefData maReference;
+        sal_uInt16 mnFileId = 0;
+        OUString maTabName;
+        bool mbExternal = false;
+    };
+    std::optional<PendingTrimReference> moPendingTrimReference;
 
     const CharClass* pCharClass; // which character classification is used for parseAnyToken and upper/lower
     bool        mbCharClassesDiffer;    // whether pCharClass and current system locale's CharClass differ
@@ -361,6 +372,7 @@ private:
     bool ParseReference( const OUString& rSymbol, const OUString* pErrRef = nullptr );
     bool ParseSingleReference( const OUString& rSymbol, const OUString* pErrRef = nullptr );
     bool ParseDoubleReference( const OUString& rSymbol, const OUString* pErrRef = nullptr );
+    bool ParseTrimReference();
     bool ParsePredetectedReference( const OUString& rSymbol );
     bool ParsePredetectedErrRefReference( const OUString& rName, const OUString* pErrRef );
     bool ParseMacro( const OUString&, bool bParenFollows );

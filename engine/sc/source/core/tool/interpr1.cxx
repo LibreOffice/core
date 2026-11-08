@@ -9701,8 +9701,18 @@ void ScInterpreter::ScTrimRange()
         PushNoValue();
         return;
     }
-    const sal_Int32 nTrimRows = static_cast<sal_Int32>(fTrimRows);
-    const sal_Int32 nTrimColumns = static_cast<sal_Int32>(fTrimColumns);
+    TrimRangeOrArray(static_cast<sal_uInt8>(fTrimRows), static_cast<sal_uInt8>(fTrimColumns));
+}
+
+void ScInterpreter::ScTrimReference(sal_uInt8 nTrimMode)
+{
+    if (!MustHaveParamCount(GetByte(), 1))
+        return;
+    TrimRangeOrArray(nTrimMode, nTrimMode);
+}
+
+void ScInterpreter::TrimRangeOrArray(sal_uInt8 nTrimRows, sal_uInt8 nTrimColumns)
+{
     const bool bTrimLeadingRows = (nTrimRows & 1) != 0;
     const bool bTrimTrailingRows = (nTrimRows & 2) != 0;
     const bool bTrimLeadingColumns = (nTrimColumns & 1) != 0;

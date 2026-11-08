@@ -791,6 +791,11 @@ private:
     void ScVStack();
     void ScTake();
     void ScTrimRange();
+    // nTrimMode is the trim mode of TRIMRANGE, applied to both the rows and the columns.
+    void ScTrimReference(sal_uInt8 nTrimMode);
+    // Pops a reference or an array and pushes it without its blank edge lines. Each trim mode is
+    // a bit set: 1 for the leading lines, 2 for the trailing ones.
+    void TrimRangeOrArray(sal_uInt8 nTrimRows, sal_uInt8 nTrimColumns);
     void ScTextAfter();
     void ScTextBefore();
     void ScTextSplit();

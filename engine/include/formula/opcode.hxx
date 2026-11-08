@@ -234,7 +234,13 @@ enum OpCode : sal_uInt16
         // OOXML spelling of the # operator, a call in front of its operand. Only a
         // rewritten token array has this.
         ocAnchorArray       = 181,
-        ocStopOneParameter  = 182,
+        // The trim reference operators. A1.:.B9 drops the blank lines at both ends of the range,
+        // A1.:B9 only the leading ones and A1:.B9 only the trailing ones. In the token array each
+        // is a call with the range as its only argument.
+        ocTrimReferenceAll  = 182,
+        ocTrimReferenceLeading = 183,
+        ocTrimReferenceTrailing = 184,
+        ocStopOneParameter  = 185,
 
     // Functions with more than one parameter
         ocStartTwoParameters = 201,
@@ -594,6 +600,13 @@ enum OpCode : sal_uInt16
     // no OpCode
         ocNone              = 0xFFFF
 };
+
+// Whether the opcode is one of the trim reference operators.
+constexpr bool isTrimReferenceOpCode(OpCode eOp)
+{
+    return eOp == ocTrimReferenceAll || eOp == ocTrimReferenceLeading
+           || eOp == ocTrimReferenceTrailing;
+}
 
 // Whether the opcode is one of the two whitespace token forms.
 constexpr bool isWhitespaceOpCode(OpCode eOp) { return eOp == ocSpaces || eOp == ocWhitespace; }
@@ -1127,6 +1140,9 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocPivotBy: return "PivotBy";
     case ocValueToText: return "ValueToText";
     case ocTrimRange: return "TrimRange";
+    case ocTrimReferenceAll: return "TrimReferenceAll";
+    case ocTrimReferenceLeading: return "TrimReferenceLeading";
+    case ocTrimReferenceTrailing: return "TrimReferenceTrailing";
     case ocTTT: return "TTT";
     case ocDebugVar: return "DebugVar";
     case ocDataToken1: return "DataToken1";

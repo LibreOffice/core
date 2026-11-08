@@ -3944,6 +3944,9 @@ void ScInterpreter::DispatchOpCode( OpCode eOp )
         case ocVStack           : ScVStack();                   break;
         case ocTake             : ScTake();                     break;
         case ocTrimRange        : ScTrimRange();                break;
+        case ocTrimReferenceAll : ScTrimReference(3);           break;
+        case ocTrimReferenceLeading : ScTrimReference(1);       break;
+        case ocTrimReferenceTrailing : ScTrimReference(2);      break;
         case ocTextAfter        : ScTextAfter();                break;
         case ocTextBefore       : ScTextBefore();               break;
         case ocTextSplit        : ScTextSplit();                break;
