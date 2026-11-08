@@ -3611,13 +3611,20 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const ww8::Frame& rFormat, const P
         if (rFrameFormat.GetFlySplit().GetValue())
         {
             // The frame can split: this was originally from a floating table, write it back as
-            // such.
+            // such. In a table cell it is a nested table, one level deeper than the cell.
+            sal_uInt32 nCellDepth = 0;
+            if (ww8::WW8TableNodeInfo::Pointer_t pAnchorInfo
+                = m_rWW8Export.m_pTableInfo->getTableNodeInfo(&rFormat.GetPosition().GetNode()))
+                nCellDepth = pAnchorInfo->getDepth();
+            ww8::WW8TableInfo::Pointer_t pTableInfoOrig = std::exchange(
+                m_rWW8Export.m_pTableInfo, std::make_shared<ww8::WW8TableInfo>(nCellDepth));
             const SwNodeIndex* pNodeIndex = rFrameFormat.GetContent().GetContentIdx();
             SwNodeOffset nStt = pNodeIndex ? pNodeIndex->GetIndex() + 1 : SwNodeOffset(0);
             SwNodeOffset nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : SwNodeOffset(0);
             m_rWW8Export.SaveData(nStt, nEnd);
             GetExport().WriteText();
             m_rWW8Export.RestoreData();
+            m_rWW8Export.m_pTableInfo = std::move(pTableInfoOrig);
         }
         else
         {
