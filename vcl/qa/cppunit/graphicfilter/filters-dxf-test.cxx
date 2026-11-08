@@ -574,25 +574,32 @@ void DxfFilterTest::testEncodings()
 {
     static constexpr std::u16string_view aHungarian
         = u"\u00c1rv\u00edzt\u0171r\u0151 t\u00fck\u00f6rf\u00far\u00f3g\u00e9p";
-    // the code page of the drawing before the UTF-8 versions, and UTF-8 since then
-    for (std::u16string_view aFile :
-         { u"encoding-ansi1250.dxf", u"encoding-dos852.dxf", u"encoding-utf8.dxf" })
+    static constexpr std::pair<std::u16string_view, std::u16string_view> aFiles[] = {
+        // the code page of the drawing before the UTF-8 versions, and UTF-8 since then
+        { u"encoding-ansi1250.dxf", aHungarian },
+        { u"encoding-dos852.dxf", aHungarian },
+        { u"encoding-iso8859-2.dxf", aHungarian },
+        { u"encoding-ansi932.dxf", u"\u3042\u3044" },
+        { u"encoding-utf8.dxf", aHungarian },
+        // without header variables the drawing is from the DOS versions, or UTF-8
+        { u"encoding-dos-noheader.dxf", u"L\u00fcftung Flachbau" },
+        { u"encoding-noheader-utf8.dxf", aHungarian },
+        // the UTF-8 versions may still have text in the declared ANSI code page, or else in
+        // the one of the locale; neither is cut at the first unknown character
+        { u"encoding-utf8-codepage.dxf", aHungarian },
+        { u"encoding-utf8-invalid.dxf", u"L\u00fcftung Flachbau" },
+        // a character code is one of the code page, not a byte of UTF-8
+        { u"encoding-utf8-charcode.dxf", u"20\u00b0" },
+    };
+    for (const std::pair<std::u16string_view, std::u16string_view>& rFile : aFiles)
     {
-        GDIMetaFile aMTF = importFile(aFile);
+        GDIMetaFile aMTF = importFile(rFile.first);
         MetafileXmlDump aDumper;
         aDumper.filterAllActionTypes();
         aDumper.filterActionType(MetaActionType::TEXT, false);
         xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
-        assertXPathContent(pDoc, "/metafile/text[1]/textcontent", aHungarian);
+        assertXPathContent(pDoc, "/metafile/text[1]/textcontent", rFile.second);
     }
-
-    // a double byte character of the Japanese code page
-    GDIMetaFile aMTF = importFile(u"encoding-ansi1250.dxf");
-    MetafileXmlDump aDumper;
-    aDumper.filterAllActionTypes();
-    aDumper.filterActionType(MetaActionType::TEXT, false);
-    xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
-    assertXPathContent(pDoc, "/metafile/text[2]/textcontent", u"\u3042");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DxfFilterTest);

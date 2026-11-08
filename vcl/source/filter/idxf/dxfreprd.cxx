@@ -143,6 +143,8 @@ rtl_TextEncoding codePageToEncoding(std::string_view aCodePage)
 
 DXFRepresentation::DXFRepresentation()
     : mEnc(RTL_TEXTENCODING_DONTKNOW)
+    , meCodePage(RTL_TEXTENCODING_DONTKNOW)
+    , mbWithoutVersion(false)
     , mfGlobalLineTypeScale(1.0)
     , mbLineWeightDisplay(false)
     , mfDimArrowSize(0.18)
@@ -190,6 +192,15 @@ bool DXFRepresentation::Read( SvStream & rIStream )
     }
 
     bRes=DGR.GetStatus();
+
+    // Without $ACADVER and $DWGCODEPAGE this is a drawing of the DOS versions, or one written
+    // by a program that writes only the entities, possibly in UTF-8
+    if (!isTextEncodingSet())
+    {
+        mbWithoutVersion = true;
+        setTextEncoding(utl_getWinTextEncodingFromLangStr(
+            utl_getLocaleForGlobalDefaultEncoding(), true));
+    }
 
     return bRes;
 }
@@ -240,10 +251,12 @@ void DXFRepresentation::ReadHeader(DXFGroupReader & rDGR)
                 if (!rDGR.Read(3))
                     continue;
 
+                const rtl_TextEncoding eEncoding = codePageToEncoding(rDGR.GetS());
+                if (eEncoding != RTL_TEXTENCODING_UTF8)
+                    meCodePage = eEncoding;
                 // If we already use UTF8, then don't update encoding anymore
                 if (mEnc == RTL_TEXTENCODING_UTF8)
                     continue;
-                const rtl_TextEncoding eEncoding = codePageToEncoding(rDGR.GetS());
                 if (eEncoding != RTL_TEXTENCODING_DONTKNOW)
                     setTextEncoding(eEncoding);
             }
@@ -289,13 +302,41 @@ void DXFRepresentation::ReadHeader(DXFGroupReader & rDGR)
     }
 }
 
-OUString DXFRepresentation::ToOUString(std::string_view s, bool bEscapes) const
+rtl_TextEncoding DXFRepresentation::getSingleByteEncoding() const
 {
-    const OUString aText = OStringToOUString(s, getTextEncoding(),
-                                             RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
-                                           | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
-                                           | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR);
-    return dxf::decodeSpecialCharacters(aText, getTextEncoding(), bEscapes);
+    if (mEnc != RTL_TEXTENCODING_UTF8)
+        return getTextEncoding();
+    if (meCodePage != RTL_TEXTENCODING_DONTKNOW)
+        return meCodePage;
+    return RTL_TEXTENCODING_MS_1252;
+}
+
+OUString DXFRepresentation::ToOUString(std::string_view s, bool bSpecialCharacters) const
+{
+    const sal_uInt32 nStrict = RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
+                               | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
+                               | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR;
+    const rtl_TextEncoding eEncoding = getTextEncoding();
+    OUString aText;
+    // text that is valid UTF-8 in a drawing without version is hardly in a DOS code page
+    if (!(mbWithoutVersion
+          && rtl_convertStringToUString(&aText.pData, s.data(), s.size(), RTL_TEXTENCODING_UTF8,
+                                        nStrict))
+        && !rtl_convertStringToUString(&aText.pData, s.data(), s.size(), eEncoding, nStrict))
+    {
+        // Some programs write their ANSI code page even in the UTF-8 versions: the one they
+        // declare, or else the one of the locale. Otherwise keep what can be decoded.
+        rtl_TextEncoding eFallback = eEncoding;
+        if (eEncoding == RTL_TEXTENCODING_UTF8)
+            eFallback = meCodePage != RTL_TEXTENCODING_DONTKNOW
+                            ? meCodePage
+                            : utl_getWinTextEncodingFromLangStr(
+                                  utl_getLocaleForGlobalDefaultEncoding());
+        aText = OStringToOUString(s, eFallback);
+    }
+    if (!bSpecialCharacters)
+        return aText;
+    return dxf::decodeSpecialCharacters(aText, getSingleByteEncoding(), true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
