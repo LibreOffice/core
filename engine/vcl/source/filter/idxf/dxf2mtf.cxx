@@ -19,12 +19,16 @@
 
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <comphelper/configuration.hxx>
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/gradient.hxx>
+#include <vcl/hatch.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>
 #include <tools/poly.hxx>
@@ -32,6 +36,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 
 namespace
 {
@@ -1060,49 +1065,289 @@ void DXF2GDIMetaFile::DrawLWPolyLineEntity(const DXFLWPolyLineEntity & rE, const
     Draw2DPolyLine(rE, aPath, (rE.nFlags & 1) != 0, rE.fElevation, rTransform);
 }
 
+void DXF2GDIMetaFile::SetColors(const Color & rLineColor, const Color & rFillColor)
+{
+    if (aActLineColor != rLineColor)
+    {
+        aActLineColor = rLineColor;
+        pVirDev->SetLineColor(aActLineColor);
+    }
+    if (aActFillColor != rFillColor)
+    {
+        aActFillColor = rFillColor;
+        if (rFillColor == COL_TRANSPARENT)
+            pVirDev->SetFillColor();
+        else
+            pVirDev->SetFillColor(aActFillColor);
+    }
+}
+
 void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransform & rTransform )
 {
-    if (rE.aBoundaryPathData.empty())
+    if (rE.aBoundaries.count() == 0)
+        return;
+    std::optional<Color> oColor = GetEntityColor(rE);
+    if (!oColor)
         return;
 
-    if (!SetAreaAttribute(rE))
-        return;
-    basegfx::B2DPolyPolygon aPolyPolygon;
-    for (const DXFBoundaryPathData& rPathData : rE.aBoundaryPathData)
+    basegfx::B2DPolyPolygon aArea;
+    for (const basegfx::B2DPolygon& rBoundary : rE.aBoundaries)
+        aArea.append(Project(rTransform, rBoundary, rE.fElevation));
+    if (mbMeasure)
     {
-        basegfx::B2DPolygon aPolygon;
-        if ( rPathData.bIsPolyLine )
+        OutPolygon(aArea);
+        return;
+    }
+
+    if (rE.bGradient && !rE.aGradientColors.empty())
+    {
+        const Color aStart(ColorTransparency, rE.aGradientColors[0]);
+        const Color aEnd(ColorTransparency, rE.aGradientColors.size() > 1 ? rE.aGradientColors[1]
+                                                                          : rE.aGradientColors[0]);
+        if (aStart != aEnd && AddWork(PointCount(aArea)) && IsSane(aArea.getB2DRange()))
         {
-            for (const auto& a : rPathData.aP)
-                aPolygon.append(Project(rTransform, a));
+            // The colours change along the angle, a linear gradient changes across its angle.
+            // The angle is counter-clockwise in drawing coordinates, as the one of the metafile
+            // is on the screen.
+            DXFVector aDirection;
+            rTransform.TransDir(
+                DXFVector(cos(rE.fGradientAngle), sin(rE.fGradientAngle), 0), aDirection);
+            const double fAngle = basegfx::rad2deg(atan2(aDirection.fy, aDirection.fx)) + 90.0;
+            sal_Int32 nAngle = basegfx::fround(fAngle * 10.0) % 3600;
+            if (nAngle < 0)
+                nAngle += 3600;
+            Gradient aGradient(css::awt::GradientStyle_LINEAR, aStart, aEnd);
+            aGradient.SetAngle(Degree10(static_cast<sal_Int16>(nAngle)));
+            basegfx::B2DPolyPolygon aDevice = ToolsPolyPolygon(aArea);
+            aDevice.transform(maDeviceTransform);
+            if (aDevice.count() > 0)
+                pVirDev->DrawGradient(tools::PolyPolygon(aDevice), aGradient);
+            return;
         }
-        else
+        SetColors(aStart, aStart);
+        OutPolygon(aArea);
+        return;
+    }
+
+    if (rE.bSolid || rE.aPatternLines.empty())
+    {
+        SetColors(*oColor, *oColor);
+        OutPolygon(aArea);
+        return;
+    }
+
+    DrawHatchPattern(rE, aArea, *oColor, rTransform);
+}
+
+void DXF2GDIMetaFile::DrawHatchPattern(const DXFHatchEntity & rE, const basegfx::B2DPolyPolygon & rArea,
+                                       const Color & rColor, const DXFTransform & rTransform)
+{
+    // the line families in drawing coordinates
+    struct Family
+    {
+        basegfx::B2DPoint maBase;
+        basegfx::B2DVector maDirection; // unit
+        basegfx::B2DVector maOffset;
+        std::vector<double> maDashes;
+    };
+    std::vector<Family> aFamilies;
+    bool bDashed = false;
+    const double fLengthScale = GetDeviceScale(rTransform) / mfDeviceScale;
+    for (const DXFHatchPatternLine& rLine : rE.aPatternLines)
+    {
+        const double fAngle = basegfx::deg2rad(rLine.fAngle);
+        DXFVector aDirection, aOffset;
+        rTransform.TransDir(DXFVector(cos(fAngle), sin(fAngle), 0), aDirection);
+        rTransform.TransDir(DXFVector(rLine.aOffset.getX(), rLine.aOffset.getY(), 0), aOffset);
+        Family aFamily;
+        aFamily.maBase = Project(rTransform, DXFVector(rLine.aBase.getX(), rLine.aBase.getY(), rE.fElevation));
+        aFamily.maDirection = basegfx::B2DVector(aDirection.fx, aDirection.fy);
+        aFamily.maDirection.normalize();
+        aFamily.maOffset = basegfx::B2DVector(aOffset.fx, aOffset.fy);
+        for (double fDash : rLine.aDashes)
+            aFamily.maDashes.push_back(fDash * fLengthScale);
+        if (!aFamily.maDashes.empty())
+            bDashed = true;
+        if (!aFamily.maDirection.equalZero())
+            aFamilies.push_back(aFamily);
+    }
+    if (aFamilies.empty())
+        return;
+
+    if (!AddWork(PointCount(rArea)) || !IsSane(rArea.getB2DRange()))
+        return;
+
+    // the distance between the lines of a family
+    std::vector<double> aSpacings;
+    for (const Family& rFamily : aFamilies)
+    {
+        const basegfx::B2DVector aNormal(-rFamily.maDirection.getY(), rFamily.maDirection.getX());
+        aSpacings.push_back(std::fabs(rFamily.maOffset.scalar(aNormal)));
+    }
+
+    // Continuous lines in one direction, or in two perpendicular ones with the same spacing, are
+    // a hatch of the metafile, which stays a hatch in a drawing.
+    const bool bPerpendicular
+        = aFamilies.size() == 2
+          && std::fabs(aFamilies[0].maDirection.scalar(aFamilies[1].maDirection)) < 1e-6
+          && std::fabs(aSpacings[0] - aSpacings[1]) <= 1e-6 * aSpacings[0];
+    if (!bDashed && (aFamilies.size() == 1 || bPerpendicular))
+    {
+        const double fDistance = aSpacings[0] * mfDeviceScale;
+        basegfx::B2DPolyPolygon aDeviceArea = ToolsPolyPolygon(rArea);
+        aDeviceArea.transform(maDeviceTransform);
+        if (fDistance >= 1.0 && fDistance < DEVICE_SIZE * 10 && aDeviceArea.count() > 0)
         {
-            for ( auto& rEdge : rPathData.aEdges )
-            {
-                const DXFEdgeType* pEdge = rEdge.get();
-                switch( pEdge->nEdgeType )
-                {
-                    case 1 :
-                    {
-                        aPolygon.append(Project(rTransform, static_cast<const DXFEdgeTypeLine*>(pEdge)->aStartPoint));
-                        aPolygon.append(Project(rTransform, static_cast<const DXFEdgeTypeLine*>(pEdge)->aEndPoint));
-                    }
-                    break;
-                    case 2 :
-                    case 3 :
-                    case 4 :
-                    break;
-                }
-            }
-        }
-        if (aPolygon.count() > 0)
-        {
-            aPolygon.setClosed(true);
-            aPolyPolygon.append(aPolygon);
+            // the angle is counter-clockwise in drawing coordinates, as the one of the metafile
+            // is on the screen
+            const basegfx::B2DVector aDirection = aFamilies[0].maDirection;
+            const double fAngle = basegfx::rad2deg(atan2(aDirection.getY(), aDirection.getX()));
+            sal_Int32 nAngle = basegfx::fround(fAngle * 10.0) % 1800;
+            if (nAngle < 0)
+                nAngle += 1800;
+            pVirDev->DrawHatch(tools::PolyPolygon(aDeviceArea),
+                               Hatch(aFamilies.size() == 1 ? HatchStyle::Single : HatchStyle::Double,
+                                     rColor, basegfx::fround<tools::Long>(fDistance),
+                                     Degree10(static_cast<sal_Int16>(nAngle))));
+            return;
         }
     }
-    OutPolygon(aPolyPolygon);
+
+    // Otherwise the lines and their dashes are cut to the area. A pattern too dense to be seen
+    // is a tone instead.
+    const basegfx::B2DRange aRange = rArea.getB2DRange();
+    const double fMinSpacing = std::max(aRange.getWidth(), aRange.getHeight()) / 2000.0;
+    constexpr size_t nMaxSegments = 100000;
+    basegfx::B2DPolyPolygon aLines;
+    bool bTooDense = false;
+    for (size_t nFamily = 0; nFamily < aFamilies.size() && !bTooDense; ++nFamily)
+    {
+        const Family& rFamily = aFamilies[nFamily];
+        const double fSpacing = aSpacings[nFamily];
+        if (!(fSpacing > fMinSpacing))
+        {
+            bTooDense = true;
+            break;
+        }
+        const basegfx::B2DVector aNormal(-rFamily.maDirection.getY(), rFamily.maDirection.getX());
+        const double fNormalStep = rFamily.maOffset.scalar(aNormal);
+        double fMinNormal = std::numeric_limits<double>::max(), fMaxNormal = -fMinNormal;
+        for (const basegfx::B2DPoint& rCorner : { aRange.getMinimum(), aRange.getMaximum(),
+                                                  basegfx::B2DPoint(aRange.getMinX(), aRange.getMaxY()),
+                                                  basegfx::B2DPoint(aRange.getMaxX(), aRange.getMinY()) })
+        {
+            const double fNormal = basegfx::B2DVector(rCorner - rFamily.maBase).scalar(aNormal);
+            fMinNormal = std::min(fMinNormal, fNormal);
+            fMaxNormal = std::max(fMaxNormal, fNormal);
+        }
+        double fFirst = fMinNormal / fNormalStep;
+        double fLast = fMaxNormal / fNormalStep;
+        if (fFirst > fLast)
+            std::swap(fFirst, fLast);
+        // the line numbers are converted only when there are not too many of them
+        if (!std::isfinite(fFirst) || !std::isfinite(fLast) || fLast - fFirst > nMaxSegments
+            || std::fabs(fFirst) > 1e15)
+        {
+            bTooDense = true;
+            break;
+        }
+        const sal_Int64 nFirst = static_cast<sal_Int64>(std::floor(fFirst));
+        const sal_Int64 nLast = static_cast<sal_Int64>(std::ceil(fLast));
+
+        double fPeriod = 0;
+        for (double fDash : rFamily.maDashes)
+            fPeriod += std::fabs(fDash);
+        const bool bContinuous = rFamily.maDashes.empty() || !(fPeriod > fMinSpacing / 10);
+
+        for (sal_Int64 nLine = nFirst; nLine <= nLast && !bTooDense; ++nLine)
+        {
+            basegfx::B2DPoint aOrigin = rFamily.maBase + rFamily.maOffset * static_cast<double>(nLine);
+            double fStart = std::numeric_limits<double>::max(), fEnd = -fStart;
+            for (const basegfx::B2DPoint& rCorner : { aRange.getMinimum(), aRange.getMaximum(),
+                                                      basegfx::B2DPoint(aRange.getMinX(), aRange.getMaxY()),
+                                                      basegfx::B2DPoint(aRange.getMaxX(), aRange.getMinY()) })
+            {
+                const double fAlong = basegfx::B2DVector(rCorner - aOrigin).scalar(rFamily.maDirection);
+                fStart = std::min(fStart, fAlong);
+                fEnd = std::max(fEnd, fAlong);
+            }
+            if (bContinuous)
+            {
+                aLines.append(basegfx::B2DPolygon{ aOrigin + rFamily.maDirection * fStart,
+                                                   aOrigin + rFamily.maDirection * fEnd });
+                continue;
+            }
+            // The dashes start at the origin of the line: move the origin by whole periods next
+            // to the area, the positions stay small and precise.
+            const double fShift = std::floor(fStart / fPeriod) * fPeriod;
+            aOrigin += rFamily.maDirection * fShift;
+            fStart -= fShift;
+            fEnd -= fShift;
+            if (!((fEnd - fStart) / fPeriod * rFamily.maDashes.size() < nMaxSegments))
+            {
+                bTooDense = true;
+                break;
+            }
+            double fPosition = 0;
+            while (fPosition < fEnd && !bTooDense)
+            {
+                if (fPosition + fPeriod == fPosition)
+                {
+                    bTooDense = true;
+                    break;
+                }
+                for (double fDash : rFamily.maDashes)
+                {
+                    const double fLength = std::fabs(fDash);
+                    if (fDash >= 0)
+                    {
+                        // a dot is a very short dash
+                        const double fFrom = std::max(fPosition, fStart);
+                        const double fTo = std::min(fPosition + std::max(fLength, fMinSpacing / 20), fEnd);
+                        if (fTo > fFrom)
+                            aLines.append(basegfx::B2DPolygon{ aOrigin + rFamily.maDirection * fFrom,
+                                                               aOrigin + rFamily.maDirection * fTo });
+                    }
+                    fPosition += fLength;
+                }
+                if (aLines.count() > nMaxSegments)
+                    bTooDense = true;
+            }
+            if (aLines.count() > nMaxSegments)
+                bTooDense = true;
+        }
+    }
+
+    // cutting the lines takes time with each line and each edge of the area
+    const basegfx::B2DPolyPolygon aClip = basegfx::utils::adaptiveSubdivideByAngle(rArea);
+    if (static_cast<double>(aLines.count()) * PointCount(aClip) > 20000000.0)
+        bTooDense = true;
+
+    if (bTooDense)
+    {
+        const Color aTone(sal_uInt8((rColor.GetRed() + 255) / 2), sal_uInt8((rColor.GetGreen() + 255) / 2),
+                          sal_uInt8((rColor.GetBlue() + 255) / 2));
+        SetColors(aTone, aTone);
+        OutPolygon(rArea);
+        return;
+    }
+
+    const basegfx::B2DPolyPolygon aClipped
+        = basegfx::utils::clipPolyPolygonOnPolyPolygon(aLines, aClip, true, true);
+    if (!AddWork(aClipped.count() * 2))
+        return;
+    SetColors(rColor, COL_TRANSPARENT);
+    // few actions for all the lines: a two-point polygon without a fill is its line
+    basegfx::B2DPolyPolygon aDevice(aClipped);
+    aDevice.transform(maDeviceTransform);
+    constexpr sal_uInt32 nChunk = 16000;
+    for (sal_uInt32 nStart = 0; nStart < aDevice.count(); nStart += nChunk)
+    {
+        basegfx::B2DPolyPolygon aPart;
+        for (sal_uInt32 i = nStart; i < std::min(nStart + nChunk, aDevice.count()); ++i)
+            aPart.append(aDevice.getB2DPolygon(i));
+        pVirDev->DrawPolyPolygon(tools::PolyPolygon(aPart));
+    }
 }
 
 void DXF2GDIMetaFile::Draw3DFaceEntity(const DXF3DFaceEntity & rE, const DXFTransform & rTransform)

@@ -184,7 +184,12 @@ private:
 
     void DrawLWPolyLineEntity( const DXFLWPolyLineEntity & rE, const DXFTransform & rTransform );
 
+    void SetColors(const Color & rLineColor, const Color & rFillColor);
+
     void DrawHatchEntity( const DXFHatchEntity & rE, const DXFTransform & rTransform );
+
+    void DrawHatchPattern(const DXFHatchEntity & rE, const basegfx::B2DPolyPolygon & rArea,
+                          const Color & rColor, const DXFTransform & rTransform);
 
     void DrawBlock(const DXFBlock & rBlock, const DXFBasicEntity & rE,
                    const DXFTransform & rTransform);
