@@ -51,6 +51,8 @@ public:
     void testMTextLayout();
     void testMTextInDimension();
     void testStrayPoint();
+    void testText();
+    void testTextAligned();
 
     CPPUNIT_TEST_SUITE(DxfFilterTest);
     CPPUNIT_TEST(testCVEs);
@@ -68,6 +70,8 @@ public:
     CPPUNIT_TEST(testMTextLayout);
     CPPUNIT_TEST(testMTextInDimension);
     CPPUNIT_TEST(testStrayPoint);
+    CPPUNIT_TEST(testText);
+    CPPUNIT_TEST(testTextAligned);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -411,6 +415,62 @@ void DxfFilterTest::testStrayPoint()
     xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
     assertXPath(pDoc, "/metafile/point", 0);
     assertXPath(pDoc, "/metafile/pixel", 0);
+}
+
+void DxfFilterTest::testText()
+{
+    // the drawing is 100 x 100, one unit is 100 in the metafile; the texts are 5 high
+    GDIMetaFile aMTF = importFile(u"text.dxf");
+    MetafileXmlDump aDumper;
+    aDumper.filterAllActionTypes();
+    aDumper.filterActionType(MetaActionType::TEXT, false);
+    aDumper.filterActionType(MetaActionType::FONT, false);
+    xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
+
+    // the hidden attribute is not drawn
+    assertXPath(pDoc, "/metafile/text", 7);
+    // without alignment the baseline starts at the placement point (50, 50)
+    assertXPath(pDoc, "/metafile/text[1]", "x", u"5050");
+    assertXPath(pDoc, "/metafile/text[1]", "y", u"5050");
+    // centred and right aligned on the alignment point (50, 40)
+    const sal_Int32 nRight = getXPath(pDoc, "/metafile/text[3]", "x").toInt32();
+    CPPUNIT_ASSERT_LESS(sal_Int32(5050), nRight);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL((5050 + nRight) / 2.0,
+                                 getXPath(pDoc, "/metafile/text[2]", "x").toDouble(), 2.0);
+    assertXPath(pDoc, "/metafile/text[2]", "y", u"6050");
+    // the top of the text at (50, 30): the baseline is one text height lower
+    assertXPath(pDoc, "/metafile/text[4]", "y", u"7550");
+    // the fonts of the text styles: from the font file and from the extended data
+    assertXPathContent(pDoc, "/metafile/text[5]/textcontent", u"Arial");
+    assertXPath(pDoc, "/metafile/font[@name='Arial']", 1);
+    assertXPath(pDoc, "/metafile/font[@name='Liberation Serif']", "weight", u"bold");
+    // fit between (10, 10) and (60, 10): starts at the first point, stretched
+    assertXPath(pDoc, "/metafile/text[7]", "x", u"1050");
+    CPPUNIT_ASSERT(getXPath(pDoc, "/metafile/font[last()]", "width").toInt32() > 0);
+}
+
+void DxfFilterTest::testTextAligned()
+{
+    // the drawing is 100 x 100, one unit is 100 in the metafile; the texts are 5 high
+    GDIMetaFile aMTF = importFile(u"text-aligned.dxf");
+    MetafileXmlDump aDumper;
+    aDumper.filterAllActionTypes();
+    aDumper.filterActionType(MetaActionType::TEXT, false);
+    aDumper.filterActionType(MetaActionType::FONT, false);
+    xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
+
+    assertXPath(pDoc, "/metafile/text", 4);
+    // aligned between (10, 10) and (60, 10): the height grows with the width
+    assertXPath(pDoc, "/metafile/text[1]", "x", u"1050");
+    const double fAlignedHeight = getXPath(pDoc, "/metafile/font[1]", "height").toDouble();
+    const double fNormalHeight = getXPath(pDoc, "/metafile/font[2]", "height").toDouble();
+    CPPUNIT_ASSERT_GREATER(1.3 * fNormalHeight, fAlignedHeight);
+    // an oblique text is italic
+    assertXPath(pDoc, "/metafile/font[3]", "italic", u"normal");
+    // the embedded text of a multiline attribute does not move it from (10, 30)
+    assertXPathContent(pDoc, "/metafile/text[4]/textcontent", u"Attribute");
+    assertXPath(pDoc, "/metafile/text[4]", "x", u"1050");
+    assertXPath(pDoc, "/metafile/text[4]", "y", u"7050");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DxfFilterTest);

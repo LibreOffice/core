@@ -92,6 +92,8 @@ public:
     double fLastHeightUsed;                   // 42
     OString m_sPrimFontFile;                  //  3
     OString m_sBigFontFile;                   //  4
+    OString m_sFontFamily;                    // 1000 in the ACAD extended data
+    tools::Long nFontFlags;                   // 1071 in the ACAD extended data
 
     DXFStyle();
     void Read(DXFGroupReader & rDGR);
@@ -173,6 +175,7 @@ public:
     DXFLType * SearchLType(std::string_view rName) const;
     DXFLayer * SearchLayer(std::string_view rName) const;
     DXFVPort * SearchVPort(std::string_view rName) const;
+    DXFStyle * SearchStyle(std::string_view rName) const;
 
 };
 

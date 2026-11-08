@@ -134,14 +134,27 @@ DXFStyle::DXFStyle()
     fOblAngle=0.0;
     nTextGenFlags=0;
     fLastHeightUsed=0.0;
+    nFontFlags=0;
 }
 
 void DXFStyle::Read(DXFGroupReader & rDGR)
 {
+    bool bAcadData = false;
     while (rDGR.Read()!=0)
     {
         switch(rDGR.GetG())
         {
+        case 1001:
+            bAcadData = rDGR.GetS() == "ACAD";
+            break;
+        case 1000:
+            if (bAcadData && m_sFontFamily.isEmpty())
+                m_sFontFamily = rDGR.GetS();
+            break;
+        case 1071:
+            if (bAcadData)
+                nFontFlags = rDGR.GetI();
+            break;
         case  2:
             m_sName = rDGR.GetS();
             break;
@@ -388,6 +401,16 @@ DXFLayer * DXFTables::SearchLayer(std::string_view rName) const
     }
     if (p != nullptr)
         mpLastLayer = p;
+    return p;
+}
+
+
+DXFStyle * DXFTables::SearchStyle(std::string_view rName) const
+{
+    DXFStyle * p;
+    for (p=pStyles; p!=nullptr; p=p->pSucc) {
+        if (o3tl::equalsIgnoreAsciiCase(rName, p->m_sName)) break;
+    }
     return p;
 }
 

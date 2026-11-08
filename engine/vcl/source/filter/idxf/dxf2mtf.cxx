@@ -321,29 +321,6 @@ bool DXF2GDIMetaFile::SetAreaAttribute(const DXFBasicEntity & rE)
 }
 
 
-bool DXF2GDIMetaFile::SetFontAttribute(const DXFBasicEntity & rE, Degree10 nOrientation,
-                                       sal_Int32 nHeight)
-{
-    std::optional<Color> oColor = GetEntityColor(rE);
-    if (!oColor)
-        return false;
-    const Color aColor = *oColor;
-    vcl::Font aFont;
-
-    aFont.SetColor(aColor);
-    aFont.SetTransparent(true);
-    aFont.SetFamily(FAMILY_SWISS);
-    aFont.SetFontSize(Size(0,nHeight));
-    aFont.SetAlignment(ALIGN_BASELINE);
-    aFont.SetOrientation(nOrientation);
-    if (aActFont!=aFont) {
-        aActFont=std::move(aFont);
-        pVirDev->SetFont(aActFont);
-    }
-
-    return true;
-}
-
 void DXF2GDIMetaFile::OutPolyLine(const basegfx::B2DPolygon & rPolygon, const LineInfo & rLineInfo)
 {
     if (rPolygon.count() == 0)
@@ -428,45 +405,82 @@ void DXF2GDIMetaFile::OutPoint(const basegfx::B2DPoint & rPoint)
                              basegfx::fround<tools::Long>(aPoint.getY())));
 }
 
-void DXF2GDIMetaFile::OutText(const DXFBasicEntity & rE, const DXFTransform & rTextTransform,
-                              std::string_view rText)
+DXFTextFormat DXF2GDIMetaFile::GetStyleFormat(std::string_view rStyle) const
 {
-    const OUString aText(pDXF->ToOUString(rText));
+    DXFTextFormat aFormat;
+    const DXFStyle * pStyle = pDXF->aTables.SearchStyle(rStyle);
+    if (pStyle == nullptr)
+        return aFormat;
+    if (!pStyle->m_sFontFamily.isEmpty())
+        aFormat.maFontName = pDXF->ToOUString(pStyle->m_sFontFamily);
+    else if (!pStyle->m_sPrimFontFile.isEmpty())
+        aFormat.maFontName = dxf::fontNameFromFile(pDXF->ToOUString(pStyle->m_sPrimFontFile),
+                                                   aFormat.mbBold, aFormat.mbItalic);
+    if (pStyle->nFontFlags & 0x2000000)
+        aFormat.mbBold = true;
+    if (pStyle->nFontFlags & 0x1000000)
+        aFormat.mbItalic = true;
+    if (pStyle->fHeight > 0)
+        aFormat.mfHeight = pStyle->fHeight;
+    if (pStyle->fWidthFak > 0)
+        aFormat.mfWidthFactor = pStyle->fWidthFak;
+    aFormat.mfOblique = pStyle->fOblAngle;
+    return aFormat;
+}
+
+void DXF2GDIMetaFile::DrawSingleLineText(const DXFBasicEntity & rE, const DXFSingleLineText & rText,
+                                         const DXFTransform & rTransform)
+{
+    const OUString aText(pDXF->ToOUString(rText.maText));
     if (aText.isEmpty())
         return;
 
-    if (mbMeasure)
+    DXFTextFormat aFormat = GetStyleFormat(rText.maStyle);
+    if (rText.mfHeight > 0)
+        aFormat.mfHeight = rText.mfHeight;
+    aFormat.mfWidthFactor = rText.mfWidthFactor > 0 ? rText.mfWidthFactor : 1.0;
+    aFormat.mfOblique = rText.mfOblique;
+    double fWidth = MeasureText(aText, aFormat);
+
+    // the start of the baseline relative to the placement point, in the text direction
+    DXFVector aOrigin = rText.maPoint;
+    double fAngle = rText.mfRotation;
+    double fX = 0;
+    double fY = 0;
+    const bool bAligned = rText.mbHasAlignPoint && (rText.mnHorizontal != 0 || rText.mnVertical != 0);
+    if (bAligned && (rText.mnHorizontal == 3 || rText.mnHorizontal == 5))
     {
-        // There is no font in drawing units to measure with, estimate the size of the text.
-        const double fWidth = 0.6 * aText.getLength();
-        maExtents.expand(Project(rTextTransform, DXFVector(0, 0, 0)));
-        maExtents.expand(Project(rTextTransform, DXFVector(fWidth, 0, 0)));
-        maExtents.expand(Project(rTextTransform, DXFVector(fWidth, 1, 0)));
-        maExtents.expand(Project(rTextTransform, DXFVector(0, 1, 0)));
-        return;
+        // between the two points: aligned scales the height, fit only the width
+        const DXFVector aBaseline = rText.maAlignPoint - rText.maPoint;
+        const double fLength = std::hypot(aBaseline.fx, aBaseline.fy);
+        if (fLength > 0 && fWidth > 0)
+        {
+            fAngle = basegfx::rad2deg(atan2(aBaseline.fy, aBaseline.fx));
+            if (rText.mnHorizontal == 3)
+                aFormat.mfHeight *= fLength / fWidth;
+            else
+                aFormat.mfWidthFactor *= fLength / fWidth;
+            fWidth = fLength;
+        }
+    }
+    else if (bAligned)
+    {
+        aOrigin = rText.maAlignPoint;
+        if (rText.mnHorizontal == 1 || rText.mnHorizontal == 4)
+            fX = -fWidth / 2;
+        else if (rText.mnHorizontal == 2)
+            fX = -fWidth;
+        const double fHeight = aFormat.mfHeight;
+        if (rText.mnVertical == 1) // bottom: below the baseline is the descent
+            fY = fHeight / 3;
+        else if (rText.mnVertical == 2 || (rText.mnVertical == 0 && rText.mnHorizontal == 4))
+            fY = -fHeight / 2;
+        else if (rText.mnVertical == 3)
+            fY = -fHeight;
     }
 
-    const basegfx::B2DPoint aOrigin
-        = maDeviceTransform * Project(rTextTransform, DXFVector(0, 0, 0));
-    const basegfx::B2DVector aBaseline(
-        maDeviceTransform * Project(rTextTransform, DXFVector(1, 0, 0)) - aOrigin);
-    const basegfx::B2DVector aUp(
-        maDeviceTransform * Project(rTextTransform, DXFVector(0, 1, 0)) - aOrigin);
-
-    const double fHeight = aUp.getLength();
-    if (!(fHeight >= 1.0) || fHeight > SAL_MAX_INT32)
-        return;
-    // the metafile y axis points down, the orientation is counter-clockwise
-    const double fAngle = basegfx::rad2deg(atan2(-aBaseline.getY(), aBaseline.getX()));
-    sal_Int32 nOrientation = basegfx::fround(fAngle * 10.0) % 3600;
-    if (nOrientation < 0)
-        nOrientation += 3600;
-    if (!SetFontAttribute(rE, Degree10(static_cast<sal_Int16>(nOrientation)),
-                          basegfx::fround(fHeight)))
-        return;
-    pVirDev->DrawText(Point(basegfx::fround<tools::Long>(aOrigin.getX()),
-                            basegfx::fround<tools::Long>(aOrigin.getY())),
-                      aText);
+    const DXFTransform aTextTransform(DXFTransform(1.0, 1.0, 1.0, fAngle, aOrigin), rTransform);
+    OutTextRun(rE, aTextTransform, fX, fY, aText, aFormat, fWidth);
 }
 
 vcl::Font DXF2GDIMetaFile::MakeFont(const DXFTextFormat & rFormat, double fSize)
@@ -477,7 +491,9 @@ vcl::Font DXF2GDIMetaFile::MakeFont(const DXFTextFormat & rFormat, double fSize)
     aFont.SetFamily(FAMILY_SWISS);
     aFont.SetFontSize(Size(0, basegfx::fround(fSize)));
     aFont.SetWeight(rFormat.mbBold ? WEIGHT_BOLD : WEIGHT_NORMAL);
-    aFont.SetItalic(rFormat.mbItalic ? ITALIC_NORMAL : ITALIC_NONE);
+    // there is no slant angle, an oblique text is italic
+    aFont.SetItalic(rFormat.mbItalic || std::fabs(rFormat.mfOblique) > 5 ? ITALIC_NORMAL
+                                                                          : ITALIC_NONE);
     aFont.SetUnderline(rFormat.mbUnderline ? LINESTYLE_SINGLE : LINESTYLE_NONE);
     aFont.SetOverline(rFormat.mbOverline ? LINESTYLE_SINGLE : LINESTYLE_NONE);
     aFont.SetStrikeout(rFormat.mbStrikeout ? STRIKEOUT_SINGLE : STRIKEOUT_NONE);
@@ -699,9 +715,10 @@ void DXF2GDIMetaFile::DrawSolidEntity(const DXFSolidEntity & rE, const DXFTransf
 
 void DXF2GDIMetaFile::DrawTextEntity(const DXFTextEntity & rE, const DXFTransform & rTransform)
 {
-    DXFTransform aT(DXFTransform(rE.fXScale * rE.fHeight, rE.fHeight, 1.0, rE.fRotAngle, rE.aP0),
-                    rTransform);
-    OutText(rE, aT, rE.m_sText);
+    DrawSingleLineText(rE,
+                       { rE.m_sText, rE.m_sStyle, rE.aP0, rE.aAlign, rE.bHasAlign, rE.fHeight,
+                         rE.fXScale, rE.fRotAngle, rE.fOblAngle, rE.nHorzJust, rE.nVertJust },
+                       rTransform);
 }
 
 
@@ -751,9 +768,10 @@ void DXF2GDIMetaFile::DrawAttribEntity(const DXFAttribEntity & rE, const DXFTran
     if ((rE.nAttrFlags&1)!=0)
         return;
 
-    DXFTransform aT(DXFTransform(rE.fXScale * rE.fHeight, rE.fHeight, 1.0, rE.fRotAngle, rE.aP0),
-                    rTransform);
-    OutText(rE, aT, rE.m_sText);
+    DrawSingleLineText(rE,
+                       { rE.m_sText, rE.m_sStyle, rE.aP0, rE.aAlign, rE.bHasAlign, rE.fHeight,
+                         rE.fXScale, rE.fRotAngle, rE.fOblAngle, rE.nHorzJust, rE.nVertJust },
+                       rTransform);
 }
 
 
@@ -1101,8 +1119,9 @@ void DXF2GDIMetaFile::DrawMTextEntity(const DXFMTextEntity & rE, const DXFTransf
     if (!GetEntityColor(rE))
         return;
 
-    DXFTextFormat aBase;
-    aBase.mfHeight = rE.fHeight > 0 ? rE.fHeight : 1.0;
+    DXFTextFormat aBase = GetStyleFormat(rE.m_sStyle);
+    if (rE.fHeight > 0)
+        aBase.mfHeight = rE.fHeight;
     const std::vector<DXFTextParagraph> aParagraphs
         = dxf::parseMText(pDXF->ToOUString(rE.m_sText, false), aBase, pDXF->getTextEncoding());
 

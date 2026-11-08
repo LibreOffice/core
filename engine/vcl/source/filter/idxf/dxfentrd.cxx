@@ -211,6 +211,7 @@ DXFTextEntity::DXFTextEntity()
     nGenFlags=0;
     nHorzJust=0;
     nVertJust=0;
+    bHasAlign=false;
 }
 
 void DXFTextEntity::EvaluateGroup(DXFGroupReader & rDGR)
@@ -223,12 +224,12 @@ void DXFTextEntity::EvaluateGroup(DXFGroupReader & rDGR)
         case  1: m_sText = rDGR.GetS(); break;
         case 50: fRotAngle=rDGR.GetF(); break;
         case 41: fXScale=rDGR.GetF(); break;
-        case 42: fOblAngle=rDGR.GetF(); break;
+        case 51: fOblAngle=rDGR.GetF(); break;
         case  7: m_sStyle = rDGR.GetS(); break;
         case 71: nGenFlags=rDGR.GetI(); break;
         case 72: nHorzJust=rDGR.GetI(); break;
         case 73: nVertJust=rDGR.GetI(); break;
-        case 11: aAlign.fx=rDGR.GetF(); break;
+        case 11: aAlign.fx=rDGR.GetF(); bHasAlign=true; break;
         case 21: aAlign.fy=rDGR.GetF(); break;
         case 31: aAlign.fz=rDGR.GetF(); break;
         default: DXFBasicEntity::EvaluateGroup(rDGR);
@@ -310,11 +311,15 @@ DXFAttDefEntity::DXFAttDefEntity()
     nGenFlags=0;
     nHorzJust=0;
     nVertJust=0;
+    bInEmbeddedObject=false;
 }
 
 void DXFAttDefEntity::EvaluateGroup(DXFGroupReader & rDGR)
 {
+    if (bInEmbeddedObject)
+        return;
     switch (rDGR.GetG()) {
+        case 101: bInEmbeddedObject=true; break;
         case 10: aP0.fx=rDGR.GetF(); break;
         case 20: aP0.fy=rDGR.GetF(); break;
         case 30: aP0.fz=rDGR.GetF(); break;
@@ -353,11 +358,16 @@ DXFAttribEntity::DXFAttribEntity()
     nGenFlags=0;
     nHorzJust=0;
     nVertJust=0;
+    bHasAlign=false;
+    bInEmbeddedObject=false;
 }
 
 void DXFAttribEntity::EvaluateGroup(DXFGroupReader & rDGR)
 {
+    if (bInEmbeddedObject)
+        return;
     switch (rDGR.GetG()) {
+        case 101: bInEmbeddedObject=true; break;
         case 10: aP0.fx=rDGR.GetF(); break;
         case 20: aP0.fy=rDGR.GetF(); break;
         case 30: aP0.fz=rDGR.GetF(); break;
@@ -373,7 +383,7 @@ void DXFAttribEntity::EvaluateGroup(DXFGroupReader & rDGR)
         case 71: nGenFlags=rDGR.GetI(); break;
         case 72: nHorzJust=rDGR.GetI(); break;
         case 74: nVertJust=rDGR.GetI(); break;
-        case 11: aAlign.fx=rDGR.GetF(); break;
+        case 11: aAlign.fx=rDGR.GetF(); bHasAlign=true; break;
         case 21: aAlign.fy=rDGR.GetF(); break;
         case 31: aAlign.fz=rDGR.GetF(); break;
         default: DXFBasicEntity::EvaluateGroup(rDGR);

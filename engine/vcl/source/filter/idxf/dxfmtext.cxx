@@ -91,16 +91,43 @@ double readScaledValue(std::u16string_view aParameter, double fCurrent)
 }
 
 // The family name of a font given by name or by file name
-OUString fontNameFromSpec(std::u16string_view aSpec)
+OUString fontNameFromSpec(std::u16string_view aSpec, bool& rBold, bool& rItalic)
 {
-    const size_t nDot = aSpec.rfind('.');
-    if (nDot == std::u16string_view::npos)
+    if (aSpec.find('.') == std::u16string_view::npos)
         return OUString(aSpec);
-    // a file name; the SHX fonts are not available
-    if (o3tl::equalsIgnoreAsciiCase(aSpec.substr(nDot), u".shx"))
-        return OUString();
-    return OUString(aSpec.substr(0, nDot));
+    return dxf::fontNameFromFile(aSpec, rBold, rItalic);
 }
+
+struct FontFile
+{
+    std::u16string_view maStem;
+    std::u16string_view maFamily;
+    bool mbBold;
+    bool mbItalic;
+};
+
+// the files of fonts often used in drawings whose family name differs
+constexpr FontFile aFontFiles[] = {
+    { u"arial", u"Arial", false, false },
+    { u"arialbd", u"Arial", true, false },
+    { u"ariali", u"Arial", false, true },
+    { u"arialbi", u"Arial", true, true },
+    { u"arialn", u"Arial Narrow", false, false },
+    { u"times", u"Times New Roman", false, false },
+    { u"timesbd", u"Times New Roman", true, false },
+    { u"timesi", u"Times New Roman", false, true },
+    { u"timesbi", u"Times New Roman", true, true },
+    { u"cour", u"Courier New", false, false },
+    { u"courbd", u"Courier New", true, false },
+    { u"couri", u"Courier New", false, true },
+    { u"courbi", u"Courier New", true, true },
+    { u"calibrib", u"Calibri", true, false },
+    { u"calibrii", u"Calibri", false, true },
+    { u"verdanab", u"Verdana", true, false },
+    { u"tahomabd", u"Tahoma", true, false },
+    { u"simsun", u"SimSun", false, false },
+    { u"msgothic", u"MS Gothic", false, false },
+};
 
 class MTextBuilder
 {
@@ -293,11 +320,13 @@ std::vector<DXFTextParagraph> parseMText(std::u16string_view aText, const DXFTex
                 std::u16string_view aSpec = readParameter(aText, i);
                 DXFTextFormat& rFormat = aBuilder.format();
                 sal_Int32 nIndex = 0;
-                // \F gives an SHX font, which is not available
-                const std::u16string_view aName = o3tl::getToken(aSpec, 0, '|', nIndex);
-                rFormat.maFontName = cCode == 'F' ? OUString() : fontNameFromSpec(aName);
                 rFormat.mbBold = false;
                 rFormat.mbItalic = false;
+                // \F gives an SHX font, which is not available
+                const std::u16string_view aName = o3tl::getToken(aSpec, 0, '|', nIndex);
+                rFormat.maFontName = cCode == 'F' ? OUString()
+                                                  : fontNameFromSpec(aName, rFormat.mbBold,
+                                                                     rFormat.mbItalic);
                 while (nIndex >= 0)
                 {
                     std::u16string_view aOption = o3tl::getToken(aSpec, 0, '|', nIndex);
@@ -375,6 +404,32 @@ std::vector<DXFTextParagraph> parseMText(std::u16string_view aText, const DXFTex
         }
     }
     return aBuilder.finish();
+}
+
+OUString fontNameFromFile(std::u16string_view aFile, bool& rBold, bool& rItalic)
+{
+    // the base name without the directory and the extension
+    const size_t nSlash = aFile.find_last_of(u"/\\");
+    if (nSlash != std::u16string_view::npos)
+        aFile = aFile.substr(nSlash + 1);
+    std::u16string_view aStem = aFile;
+    const size_t nDot = aFile.rfind('.');
+    if (nDot != std::u16string_view::npos)
+    {
+        aStem = aFile.substr(0, nDot);
+        if (o3tl::equalsIgnoreAsciiCase(aFile.substr(nDot), u".shx"))
+            return OUString();
+    }
+    for (const FontFile& rFontFile : aFontFiles)
+    {
+        if (o3tl::equalsIgnoreAsciiCase(aStem, rFontFile.maStem))
+        {
+            rBold = rBold || rFontFile.mbBold;
+            rItalic = rItalic || rFontFile.mbItalic;
+            return OUString(rFontFile.maFamily);
+        }
+    }
+    return OUString(aStem);
 }
 
 OUString decodeSpecialCharacters(std::u16string_view aText, rtl_TextEncoding eEncoding,
