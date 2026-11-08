@@ -15,6 +15,9 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <filter/DxfReader.hxx>
+#include <o3tl/string_view.hxx>
+
+#include <cmath>
 
 using namespace css;
 
@@ -57,6 +60,7 @@ public:
     void testHatch();
     void testPointsLeadersImages();
     void testEncodings();
+    void testContrast();
 
     CPPUNIT_TEST_SUITE(DxfFilterTest);
     CPPUNIT_TEST(testCVEs);
@@ -80,6 +84,7 @@ public:
     CPPUNIT_TEST(testHatch);
     CPPUNIT_TEST(testPointsLeadersImages);
     CPPUNIT_TEST(testEncodings);
+    CPPUNIT_TEST(testContrast);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -150,12 +155,12 @@ void DxfFilterTest::testColors()
     // the colour of the layer
     assertXPath(pDoc, "/metafile/linecolor[1]", "color", u"#ff0000");
     // the true colour of the entity wins over its colour index
-    assertXPath(pDoc, "/metafile/linecolor[2]", "color", u"#00ff80");
+    assertXPath(pDoc, "/metafile/linecolor[2]", "color", u"#008040");
     // the true colour of the layer
     assertXPath(pDoc, "/metafile/linecolor[3]", "color", u"#123456");
     // in the block, layer 0 is the layer of the insert, BYBLOCK is the colour of the insert
     assertXPath(pDoc, "/metafile/linecolor[4]", "color", u"#ff0000");
-    assertXPath(pDoc, "/metafile/linecolor[5]", "color", u"#00ffff");
+    assertXPath(pDoc, "/metafile/linecolor[5]", "color", u"#0000ff");
     // white as the true colour of colour index 7 is the dark colour 7
     assertXPath(pDoc, "/metafile/linecolor[6]", "color", u"#0f0f0f");
 }
@@ -600,6 +605,54 @@ void DxfFilterTest::testEncodings()
         xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
         assertXPathContent(pDoc, "/metafile/text[1]/textcontent", rFile.second);
     }
+}
+
+namespace
+{
+// the contrast of a colour given as #rrggbb to white
+double contrastToWhite(std::u16string_view aColor)
+{
+    const sal_uInt32 nColor = o3tl::toUInt32(aColor.substr(1), 16);
+    double fLuminance = 0;
+    const double fWeights[3] = { 0.2126, 0.7152, 0.0722 };
+    for (int i = 0; i < 3; ++i)
+    {
+        const double fComponent = ((nColor >> (16 - 8 * i)) & 0xff) / 255.0;
+        fLuminance += fWeights[i]
+                      * (fComponent <= 0.04045 ? fComponent / 12.92
+                                               : std::pow((fComponent + 0.055) / 1.055, 2.4));
+    }
+    return 1.05 / (fLuminance + 0.05);
+}
+}
+
+void DxfFilterTest::testContrast()
+{
+    // The colours chosen for the dark background of CAD programs are darkened on paper when
+    // they would be hard to see, keeping their hue. Hatched areas keep their colour.
+    GDIMetaFile aMTF = importFile(u"contrast.dxf");
+    MetafileXmlDump aDumper;
+    aDumper.filterAllActionTypes();
+    aDumper.filterActionType(MetaActionType::LINECOLOR, false);
+    aDumper.filterActionType(MetaActionType::FILLCOLOR, false);
+    aDumper.filterActionType(MetaActionType::FONT, false);
+    xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
+
+    // yellow becomes a dark yellow
+    const OUString aYellow = getXPath(pDoc, "/metafile/linecolor[1]", "color");
+    CPPUNIT_ASSERT_GREATEREQUAL(2.99, contrastToWhite(aYellow));
+    CPPUNIT_ASSERT_EQUAL(aYellow.copy(1, 2), aYellow.copy(3, 2));
+    CPPUNIT_ASSERT_EQUAL(u"00"_ustr, aYellow.copy(5, 2));
+    // blue is dark enough
+    assertXPath(pDoc, "/metafile/linecolor[2]", "color", u"#0000ff");
+    // cyan text becomes teal
+    const OUString aCyan = getXPath(pDoc, "/metafile/font[1]", "color");
+    CPPUNIT_ASSERT_GREATEREQUAL(2.99, contrastToWhite(aCyan));
+    CPPUNIT_ASSERT_EQUAL(u"00"_ustr, aCyan.copy(1, 2));
+    CPPUNIT_ASSERT_EQUAL(aCyan.copy(3, 2), aCyan.copy(5, 2));
+    // a yellow hatched area stays yellow, its outline too
+    assertXPath(pDoc, "/metafile/fillcolor[@color='#ffff00']", 1);
+    assertXPath(pDoc, "/metafile/linecolor[last()]", "color", u"#ffff00");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DxfFilterTest);
