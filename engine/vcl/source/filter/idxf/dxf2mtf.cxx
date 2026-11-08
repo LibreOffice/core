@@ -1519,7 +1519,8 @@ void DXF2GDIMetaFile::DrawMTextEntity(const DXFMTextEntity & rE, const DXFTransf
     if (rE.fHeight > 0)
         aBase.mfHeight = rE.fHeight;
     const std::vector<DXFTextParagraph> aParagraphs
-        = dxf::parseMText(pDXF->ToOUString(rE.m_sText, false), aBase, pDXF->getTextEncoding());
+        = dxf::parseMText(pDXF->ToOUString(rE.m_sText, false), aBase,
+                          pDXF->getSingleByteEncoding());
 
     // the text runs along x, in the plane of the extrusion direction
     const DXFVector aNormal = rE.aExtrusion.Unit();

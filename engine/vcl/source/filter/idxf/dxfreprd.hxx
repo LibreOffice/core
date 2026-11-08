@@ -69,6 +69,10 @@ public:
         // the entities (from the Entities-Section) of the DXF file
 
     rtl_TextEncoding mEnc;  // $DWGCODEPAGE
+    // the code page of $DWGCODEPAGE, also when the text is UTF-8
+    rtl_TextEncoding meCodePage;
+    // without $ACADVER and $DWGCODEPAGE, the text may be in UTF-8 or in a DOS code page
+    bool mbWithoutVersion;
 
     double mfGlobalLineTypeScale; // $LTSCALE
     bool mbLineWeightDisplay; // $LWDISPLAY
@@ -83,8 +87,11 @@ public:
     rtl_TextEncoding getTextEncoding() const;
     void setTextEncoding(rtl_TextEncoding aEnc) { mEnc = aEnc; }
     // the text in the encoding of the drawing with its special characters decoded; without
-    // bEscapes the \U+ and \M+ escapes are left for the MTEXT parser
-    OUString ToOUString(std::string_view s, bool bEscapes = true) const;
+    // bSpecialCharacters they are left for the MTEXT parser
+    OUString ToOUString(std::string_view s, bool bSpecialCharacters = true) const;
+
+    // the single byte encoding of the drawing, for character codes in the text
+    rtl_TextEncoding getSingleByteEncoding() const;
 
     double getGlobalLineTypeScale() const { return mfGlobalLineTypeScale; }
     void setGlobalLineTypeScale(double fGlobalLineTypeScale) { mfGlobalLineTypeScale = fGlobalLineTypeScale; }
