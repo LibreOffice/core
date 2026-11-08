@@ -56,6 +56,7 @@ public:
     void testInserts();
     void testHatch();
     void testPointsLeadersImages();
+    void testEncodings();
 
     CPPUNIT_TEST_SUITE(DxfFilterTest);
     CPPUNIT_TEST(testCVEs);
@@ -78,6 +79,7 @@ public:
     CPPUNIT_TEST(testInserts);
     CPPUNIT_TEST(testHatch);
     CPPUNIT_TEST(testPointsLeadersImages);
+    CPPUNIT_TEST(testEncodings);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -566,6 +568,31 @@ void DxfFilterTest::testPointsLeadersImages()
     assertXPath(pDoc, "/metafile/polyline[6]/point[1]", "y", u"1050");
     assertXPath(pDoc, "/metafile/polyline[6]/point[3]", "x", u"1050");
     assertXPath(pDoc, "/metafile/polyline[6]/point[3]", "y", u"2050");
+}
+
+void DxfFilterTest::testEncodings()
+{
+    static constexpr std::u16string_view aHungarian
+        = u"\u00c1rv\u00edzt\u0171r\u0151 t\u00fck\u00f6rf\u00far\u00f3g\u00e9p";
+    // the code page of the drawing before the UTF-8 versions, and UTF-8 since then
+    for (std::u16string_view aFile :
+         { u"encoding-ansi1250.dxf", u"encoding-dos852.dxf", u"encoding-utf8.dxf" })
+    {
+        GDIMetaFile aMTF = importFile(aFile);
+        MetafileXmlDump aDumper;
+        aDumper.filterAllActionTypes();
+        aDumper.filterActionType(MetaActionType::TEXT, false);
+        xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
+        assertXPathContent(pDoc, "/metafile/text[1]/textcontent", aHungarian);
+    }
+
+    // a double byte character of the Japanese code page
+    GDIMetaFile aMTF = importFile(u"encoding-ansi1250.dxf");
+    MetafileXmlDump aDumper;
+    aDumper.filterAllActionTypes();
+    aDumper.filterActionType(MetaActionType::TEXT, false);
+    xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
+    assertXPathContent(pDoc, "/metafile/text[2]/textcontent", u"\u3042");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DxfFilterTest);
