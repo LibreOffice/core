@@ -38,7 +38,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libexttextcat_fingerprint,$(
 	langclass/LM/bs.lm \
 	langclass/LM/buc.lm \
 	langclass/LM/ca.lm \
-	langclass/LM/ckb.lm \
 	langclass/LM/cs.lm \
 	langclass/LM/cv.lm \
 	langclass/LM/cy.lm \
@@ -94,6 +93,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libexttextcat_fingerprint,$(
 	langclass/LM/kk.lm \
 	langclass/LM/kl.lm \
 	langclass/LM/km.lm \
+	langclass/LM/kmr.lm \
 	langclass/LM/kn.lm \
 	langclass/LM/kng.lm \
 	langclass/LM/koi.lm \
