@@ -72,6 +72,10 @@ private:
     // projected drawing coordinates -> metafile coordinates
     basegfx::B2DHomMatrix maDeviceTransform;
     double mfDeviceScale;
+    // the amount of output in the current pass and the nesting of inserts
+    sal_uInt64 mnWork;
+    sal_uInt64 mnVisits;
+    sal_Int32 mnInsertDepth;
 
     // the colour and line type of the innermost insert, for BYBLOCK
     std::optional<Color> moBlockColor;
@@ -127,6 +131,11 @@ private:
     bool SetLineAttribute(const DXFBasicEntity & rE);
 
     bool SetAreaAttribute(const DXFBasicEntity & rE);
+
+    // false when the pass has done too much already
+    bool AddWork(sal_uInt64 nWork);
+    bool AddVisit();
+    bool IsOverBudget() const;
 
     // Output of projected drawing coordinates, or only measuring them in the first pass
     void OutPolyLine(const basegfx::B2DPolygon & rPolygon, const LineInfo & rLineInfo);

@@ -53,6 +53,7 @@ public:
     void testStrayPoint();
     void testText();
     void testTextAligned();
+    void testInserts();
 
     CPPUNIT_TEST_SUITE(DxfFilterTest);
     CPPUNIT_TEST(testCVEs);
@@ -72,6 +73,7 @@ public:
     CPPUNIT_TEST(testStrayPoint);
     CPPUNIT_TEST(testText);
     CPPUNIT_TEST(testTextAligned);
+    CPPUNIT_TEST(testInserts);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -471,6 +473,24 @@ void DxfFilterTest::testTextAligned()
     assertXPathContent(pDoc, "/metafile/text[4]/textcontent", u"Attribute");
     assertXPath(pDoc, "/metafile/text[4]", "x", u"1050");
     assertXPath(pDoc, "/metafile/text[4]", "y", u"7050");
+}
+
+void DxfFilterTest::testInserts()
+{
+    // A 3 x 2 array of a line of length 1, rotated by 90 degrees: the columns go up by 10,
+    // the rows to the left by 20. The external reference has no content here.
+    GDIMetaFile aMTF = importFile(u"inserts.dxf");
+    MetafileXmlDump aDumper;
+    aDumper.filterAllActionTypes();
+    aDumper.filterActionType(MetaActionType::POLYLINE, false);
+    xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
+    assertXPath(pDoc, "/metafile/polyline", 6);
+    // the drawing is 20 x 21: from x = -20 to 0 and from y = 0 to 21
+    CPPUNIT_ASSERT_EQUAL(Size(9624, 10100), aMTF.GetPrefSize());
+    // the last copy: row 2, column 3, at (-20, 20) going up to (-20, 21)
+    assertXPath(pDoc, "/metafile/polyline[6]/point[1]", "x", u"50");
+    assertXPath(pDoc, "/metafile/polyline[6]/point[1]", "y", u"526");
+    assertXPath(pDoc, "/metafile/polyline[6]/point[2]", "y", u"50");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DxfFilterTest);
