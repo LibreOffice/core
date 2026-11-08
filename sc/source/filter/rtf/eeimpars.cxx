@@ -27,6 +27,7 @@
 #include <o3tl/unit_conversion.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdundo.hxx>
 #include <sfx2/sfxhtml.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
@@ -615,9 +616,16 @@ void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
                 aRect);
 
             // calling SetGraphicLink here doesn't work
-            pObj->SetName( pI->aURL );
+            // tdf#39217 - the name of a new object is handled by the insert undo action,
+            // recording it deletes the running paste undo and crashes
+            const bool bUndoEnabled = pModel->IsUndoEnabled();
+            pModel->EnableUndo(false);
+            pObj->SetName(pI->aURL);
+            pModel->EnableUndo(bUndoEnabled);
 
             pPage->InsertObject( pObj.get() );
+            // tdf#39217 - record inserted picture for undo of the paste
+            pModel->AddCalcUndo(std::make_unique<SdrUndoInsertObj>(*pObj));
 
             if (!pI->aURL.isEmpty())
             {

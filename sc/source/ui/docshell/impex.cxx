@@ -2644,6 +2644,10 @@ bool ScImportExport::HTML2Doc( SvStream& rStrm, const OUString& rBaseURL )
         if (pDocSh)
             pDocSh->MakeDrawLayer();
 
+        // tdf#39217 - include pictures from the html paste in the undo action
+        if (pUndoDoc)
+            rDoc.BeginDrawUndo();
+
         InsertDeleteFlags const nFlags = InsertDeleteFlags::ALL & ~InsertDeleteFlags::STYLES;
         rDoc.DeleteAreaTab( aRange, nFlags );
 

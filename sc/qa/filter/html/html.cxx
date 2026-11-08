@@ -489,6 +489,36 @@ CPPUNIT_TEST_FIXTURE(Test, testHTMLEmbeddedImagePaste)
     Color aExpectedFillColor(0xff, 0x00, 0x00);
     CPPUNIT_ASSERT_EQUAL(aExpectedFillColor, aFillColor);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf39217_paste_image_undo)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    // Create an HTML table including a picture loaded from a URL
+    OUString aImageURL = m_directories.getURLFromSrc(u"/sc/qa/unit/tiledrendering/data/smile.png");
+    OString aHtml = "<table><tr><td><img src=\""
+                    + OUStringToOString(aImageURL, RTL_TEXTENCODING_UTF8) + "\"></td></tr></table>";
+
+    // Import the HTML table into cell A1 and check that the picture exists in the sheet
+    SvMemoryStream aStream(const_cast<char*>(aHtml.getStr()), aHtml.getLength(), StreamMode::READ);
+    ScImportExport aImporter(*pDoc, ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(aImporter.ImportStream(aStream, OUString(), SotClipboardFormatId::HTML));
+    const SdrPage* pPage = pDoc->GetDrawLayer()->GetPage(0);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
+
+    // When undoing the paste, the picture has to be removed without crashing
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1
+    // i.e. the pasted picture was not removed after the undo action
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->GetObjCount());
+
+    // The redo action has to restore the picture
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
