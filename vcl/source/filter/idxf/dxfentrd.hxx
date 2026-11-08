@@ -209,6 +209,7 @@ public:
     tools::Long nHorzJust;                    // 72
     tools::Long nVertJust;                    // 73
     DXFVector aAlign;                  // 11,21,31
+    bool bHasAlign;
 
     DXFTextEntity();
 
@@ -275,6 +276,8 @@ class DXFAttDefEntity : public DXFBasicEntity {
     tools::Long nHorzJust;                     // 72
     tools::Long nVertJust;                     // 74
     DXFVector aAlign;                   // 11,21,31
+    // the groups after 101 describe the embedded multiline text, not the attribute
+    bool bInEmbeddedObject;
 
 public:
 
@@ -303,12 +306,17 @@ public:
     tools::Long nHorzJust;                     // 72
     tools::Long nVertJust;                     // 74
     DXFVector aAlign;                   // 11,21,31
+    bool bHasAlign;
 
     DXFAttribEntity();
 
 protected:
 
     virtual void EvaluateGroup(DXFGroupReader & rDGR) override;
+
+private:
+    // the groups after 101 describe the embedded multiline text, not the attribute
+    bool bInEmbeddedObject;
 };
 
 class DXFPolyLineEntity : public DXFBasicEntity {

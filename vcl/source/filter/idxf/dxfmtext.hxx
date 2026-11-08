@@ -59,6 +59,10 @@ namespace dxf
 std::vector<DXFTextParagraph> parseMText(std::u16string_view aText, const DXFTextFormat& rBase,
                                          rtl_TextEncoding eEncoding);
 
+// The family name of a font given by its file name, as text styles do. The SHX fonts of CAD
+// programs are not available, these give an empty name for the default font.
+OUString fontNameFromFile(std::u16string_view aFile, bool& rBold, bool& rItalic);
+
 // Replaces the special character codes of DXF text: %%c, %%d, %%p, %%%, %%nnn and, with
 // bEscapes, \U+XXXX and \M+nXXXX. The underline, overline and strikeout toggles %%u, %%o
 // and %%k are removed.

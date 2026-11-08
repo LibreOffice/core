@@ -36,6 +36,24 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
 
+// the properties of TEXT and ATTRIB entities
+struct DXFSingleLineText
+{
+    const OString& maText;
+    const OString& maStyle;
+    DXFVector maPoint;
+    DXFVector maAlignPoint;
+    bool mbHasAlignPoint;
+    double mfHeight;
+    double mfWidthFactor;
+    double mfRotation;
+    double mfOblique;
+    // 0 left, 1 center, 2 right, 3 aligned, 4 middle, 5 fit
+    tools::Long mnHorizontal;
+    // 0 baseline, 1 bottom, 2 middle, 3 top
+    tools::Long mnVertical;
+};
+
 class DXF2GDIMetaFile {
 private:
 
@@ -78,6 +96,12 @@ private:
     std::optional<Color> ResolveColor(const DXFBasicEntity & rE, tools::Long nColor,
                                       tools::Long nTrueColor) const;
 
+    // the character format of a text style
+    DXFTextFormat GetStyleFormat(std::string_view rStyle) const;
+
+    void DrawSingleLineText(const DXFBasicEntity & rE, const DXFSingleLineText & rText,
+                            const DXFTransform & rTransform);
+
     static vcl::Font MakeFont(const DXFTextFormat & rFormat, double fSize);
 
     double GetCapHeightRatio(const DXFTextFormat & rFormat);
@@ -104,17 +128,11 @@ private:
 
     bool SetAreaAttribute(const DXFBasicEntity & rE);
 
-    bool SetFontAttribute(const DXFBasicEntity & rE, Degree10 nOrientation,
-                          sal_Int32 nHeight);
-
     // Output of projected drawing coordinates, or only measuring them in the first pass
     void OutPolyLine(const basegfx::B2DPolygon & rPolygon, const LineInfo & rLineInfo);
     void OutPolygon(const basegfx::B2DPolyPolygon & rPolyPolygon);
     void OutPoint(const basegfx::B2DPoint & rPoint);
-    // rTextTransform maps text space, where the baseline runs along x and the
-    // text height is 1, to drawing coordinates
-    void OutText(const DXFBasicEntity & rE, const DXFTransform & rTextTransform,
-                 std::string_view rText);
+
     // the sides of an entity with a thickness
     void OutThickness(const basegfx::B2DPolygon & rBase, const DXFTransform & rTransform,
                       double fThickness, bool bFilled);
