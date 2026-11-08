@@ -210,6 +210,12 @@ public:
     static std::condition_variable KSPollsCV;
     static std::vector<std::weak_ptr<KitSocketPoll>> KSPolls;
 
+    /// Every KitSocketPoll that has not yet started its destructor. A poll removes itself at the
+    /// start of its destructor, under KSLivePollsMutex, so each poll in the list is intact for as
+    /// long as a thread holds that mutex. The list holds no references.
+    static std::mutex KSLivePollsMutex;
+    static std::vector<KitSocketPoll*> KSLivePolls;
+
     struct TerminationData
     {
         std::mutex mutex;

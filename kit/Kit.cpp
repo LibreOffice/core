@@ -3599,6 +3599,13 @@ KitSocketPoll::KitSocketPoll() : SocketPoll("kit")
 
 KitSocketPoll::~KitSocketPoll()
 {
+#if DOCS_SHARE_PROCESS
+    {
+        std::lock_guard<std::mutex> lock(KSLivePollsMutex);
+        std::erase(KSLivePolls, this);
+    }
+#endif
+
     // Just to make it easier to set a breakpoint
     mainPoll = nullptr;
 }
@@ -3627,6 +3634,10 @@ std::shared_ptr<KitSocketPoll> KitSocketPoll::create() // static
     {
         std::unique_lock<std::mutex> lock(KSPollsMutex);
         KSPolls.push_back(result);
+    }
+    {
+        std::lock_guard<std::mutex> lock(KSLivePollsMutex);
+        KSLivePolls.push_back(result.get());
     }
     KitSocketPoll::KSPollsCV.notify_all();
 #endif
@@ -3782,6 +3793,8 @@ bool pushToMainThread(COKitCallback cb, COKitCallbackType eType, const char *p, 
 std::mutex KitSocketPoll::KSPollsMutex;
 std::condition_variable KitSocketPoll::KSPollsCV;
 std::vector<std::weak_ptr<KitSocketPoll>> KitSocketPoll::KSPolls;
+std::mutex KitSocketPoll::KSLivePollsMutex;
+std::vector<KitSocketPoll*> KitSocketPoll::KSLivePolls;
 
 #endif
 
@@ -4004,20 +4017,11 @@ void KitSocketPoll::kitWakeup() {
 #if !DOCS_SHARE_PROCESS
     wakeup();
 #else
-    std::unique_lock<std::mutex> lock(KitSocketPoll::KSPollsMutex);
-    if (KitSocketPoll::KSPolls.empty())
-        return;
-
-    std::vector<std::shared_ptr<KitSocketPoll>> v;
-    for (const auto &i : KitSocketPoll::KSPolls)
-    {
-        auto sp = i.lock();
-        if (sp)
-            v.push_back(sp);
-    }
-    lock.unlock();
-    for (const auto &p : v)
-        p->wakeup();
+    // The engine calls this on any of its threads. A poll whose last reference goes meanwhile, on
+    // the thread that owns it, waits at the start of its destructor until the loop is done.
+    std::lock_guard<std::mutex> lock(KitSocketPoll::KSLivePollsMutex);
+    for (KitSocketPoll* poll : KitSocketPoll::KSLivePolls)
+        poll->wakeup();
 #endif
 }
 
