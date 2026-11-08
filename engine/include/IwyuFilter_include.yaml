@@ -508,9 +508,6 @@ excludelist:
     include/sfx2/childwin.hxx:
     # Needed in macro #define
     - comphelper/kit.hxx
-    include/sfx2/dinfdlg.hxx:
-    # Needed for implicit dtor
-    - com/sun/star/document/CmisProperty.hpp
     include/sfx2/docstoragemodifylistener.hxx:
     # base class has to be a complete type
     - com/sun/star/util/XModifyListener.hpp

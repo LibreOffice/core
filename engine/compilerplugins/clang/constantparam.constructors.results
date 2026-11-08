@@ -355,11 +355,11 @@ include/registry/registry.hxx:512
     const class rtl::OUString & keyName
     ""
 include/sfx2/dinfdlg.hxx:96
-    void SfxDocumentInfoItem::SfxDocumentInfoItem(const class rtl::OUString &,const class cpo::uno::Reference<class com::sun::star::document::XDocumentProperties> &,const class cpo::uno::Sequence<struct com::sun::star::document::CmisProperty> &,_Bool,_Bool,long)
+    void SfxDocumentInfoItem::SfxDocumentInfoItem(const class rtl::OUString &,const class cpo::uno::Reference<class com::sun::star::document::XDocumentProperties> &,_Bool,_Bool,long)
     _Bool bUseUserData
     IsUseUserData()
 include/sfx2/dinfdlg.hxx:96
-    void SfxDocumentInfoItem::SfxDocumentInfoItem(const class rtl::OUString &,const class cpo::uno::Reference<class com::sun::star::document::XDocumentProperties> &,const class cpo::uno::Sequence<struct com::sun::star::document::CmisProperty> &,_Bool,_Bool,long)
+    void SfxDocumentInfoItem::SfxDocumentInfoItem(const class rtl::OUString &,const class cpo::uno::Reference<class com::sun::star::document::XDocumentProperties> &,_Bool,_Bool,long)
     _Bool bUseThumbnailSave
     IsUseThumbnailSave()
 include/sfx2/dinfdlg.hxx:439

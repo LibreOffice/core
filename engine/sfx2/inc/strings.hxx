@@ -50,10 +50,4 @@ inline constexpr OUString STR_TEMPLATE_NAME32_DEF = u"BPMN"_ustr;
 inline constexpr OUString STR_TEMPLATE_NAME33_DEF = u"Simplified Chinese Normal"_ustr;
 inline constexpr OUString STR_TEMPLATE_NAME34_DEF = u"Japanese Normal"_ustr;
 
-inline constexpr OUString CMIS_TYPE_STRING = u"String"_ustr;
-#define CMIS_TYPE_INTEGER "Integer"
-#define CMIS_TYPE_DECIMAL "Decimal"
-#define CMIS_TYPE_DATETIME "Datetime"
-#define CMIS_TYPE_BOOL "Bool"
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

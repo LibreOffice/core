@@ -26,7 +26,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Duration.hpp>
-#include <com/sun/star/document/CmisProperty.hpp>
 
 #include <svl/numformat.hxx>
 #include <svl/stritem.hxx>
@@ -87,7 +86,6 @@ private:
     bool                         m_bUseUserData;
     bool                         m_bUseThumbnailSave;
     std::vector< std::unique_ptr<CustomProperty> >    m_aCustomProperties;
-    cpo::uno::Sequence< css::document::CmisProperty > m_aCmisProperties;
 
 public:
     static SfxPoolItem* CreateDefault();
@@ -95,7 +93,6 @@ public:
     SfxDocumentInfoItem();
     SfxDocumentInfoItem( const OUString &rFileName,
         const cpo::uno::Reference< css::document::XDocumentProperties> & i_xDocProps,
-        const cpo::uno::Sequence< css::document::CmisProperty> & i_cmisProps,
         bool bUseUserData, bool bUseThumbnailSave, sal_Int64 nFileSize );
     SfxDocumentInfoItem( const SfxDocumentInfoItem& );
     virtual ~SfxDocumentInfoItem() override;
@@ -105,7 +102,6 @@ public:
         const cpo::uno::Reference< css::document::XDocumentProperties> & i_xDocProps,
         bool i_bDoNotUpdateUserDefined = false)
         const;
-    bool        isCmisDocument() const { return m_aCmisProperties.hasElements();}
 
     bool        isAutoloadEnabled() const { return m_isAutoloadEnabled; }
     sal_Int32   getAutoloadDelay() const { return m_AutoloadDelay; }
@@ -167,11 +163,6 @@ public:
     void        ClearCustomProperties();
     void        AddCustomProperty(  const OUString& sName,
                                     const cpo::uno::Any& rValue );
-
-    const cpo::uno::Sequence< css::document::CmisProperty >&
-                        GetCmisProperties() const { return m_aCmisProperties;}
-
-    void        SetCmisProperties(const cpo::uno::Sequence< css::document::CmisProperty >& cmisProps );
     virtual SfxDocumentInfoItem* Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual bool        operator==( const SfxPoolItem& ) const override;
     // Marked as false since the SfxStringItem superclass supports hashing, but
@@ -514,123 +505,6 @@ public:
     SfxCustomPropertiesPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet&);
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
     virtual ~SfxCustomPropertiesPage() override;
-};
-
-struct CmisValue
-{
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Frame>  m_xFrame;
-    std::unique_ptr<weld::Entry> m_xValueEdit;
-
-    CmisValue(weld::Widget* pParent, const OUString& rStr);
-};
-
-struct CmisDateTime
-{
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Frame>  m_xFrame;
-    std::unique_ptr<SvtCalendarBox>  m_xDateField;
-    std::unique_ptr<weld::FormattedSpinButton> m_xTimeField;
-    std::unique_ptr<weld::TimeFormatter> m_xFormatter;
-
-    CmisDateTime(weld::Widget* pParent, const css::util::DateTime& rDateTime);
-};
-
-struct CmisYesNo
-{
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Frame>  m_xFrame;
-    std::unique_ptr<weld::RadioButton> m_xYesButton;
-    std::unique_ptr<weld::RadioButton> m_xNoButton;
-
-    CmisYesNo(weld::Widget* pParent, bool bValue);
-};
-
-// struct CmisPropertyLine ---------------------------------------------
-
-struct CmisPropertyLine
-{
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    OUString                      m_sId;
-    OUString                      m_sType;
-    bool                          m_bUpdatable;
-    bool                          m_bRequired;
-    bool                          m_bMultiValued;
-    bool                          m_bOpenChoice;
-    std::unique_ptr<weld::Frame>  m_xFrame;
-    std::unique_ptr<weld::Label>  m_xName;
-    std::unique_ptr<weld::Label>  m_xType;
-    std::vector< std::unique_ptr<CmisValue> >     m_aValues;
-    std::vector< std::unique_ptr<CmisDateTime> >  m_aDateTimes;
-    std::vector< std::unique_ptr<CmisYesNo> >     m_aYesNos;
-    CmisPropertyLine(weld::Widget* pParent);
-    ~CmisPropertyLine();
-};
-
-// class CmisPropertiesWindow ------------------------------------------
-
-class CmisPropertiesWindow
-{
-private:
-    std::unique_ptr<weld::Container>    m_xBox;
-    SvNumberFormatter                   m_aNumberFormatter;
-    std::vector< std::unique_ptr<CmisPropertyLine> > m_aCmisPropertiesLines;
-public:
-    CmisPropertiesWindow(std::unique_ptr<weld::Container> xParent);
-    ~CmisPropertiesWindow();
-
-    void AddLine( const OUString& sId, const OUString& sName,
-                  const OUString& sType, const bool bUpdatable,
-                  const bool bRequired, const bool bMultiValued,
-                  const bool bOpenChoice,
-                  cpo::uno::Any& aChoices,
-                  cpo::uno::Any const & rAny );
-    void ClearAllLines();
-
-    cpo::uno::Sequence< css::document::CmisProperty >
-                        GetCmisProperties() const;
-};
-
-// class CmisPropertiesControl -----------------------------------------
-
-class CmisPropertiesControl
-{
-private:
-    CmisPropertiesWindow m_aPropertiesWin;
-    std::unique_ptr<weld::ScrolledWindow> m_xScrolledWindow;
-
-public:
-    CmisPropertiesControl(weld::Builder& rBuilder);
-
-    void AddLine( const OUString& sId, const OUString& sName,
-                  const OUString& sType, const bool bUpdatable,
-                  const bool bRequired, const bool bMultiValude,
-                  const bool bOpenChoice,
-                  cpo::uno::Any& aChoices,
-                  cpo::uno::Any const & rAny );
-
-    void ClearAllLines();
-    cpo::uno::Sequence< css::document::CmisProperty >
-                    GetCmisProperties() const
-                        { return m_aPropertiesWin.GetCmisProperties(); }
-};
-
-// class SfxCmisPropertiesPage -------------------------------------------------
-
-class SfxCmisPropertiesPage final : public SfxTabPage
-{
-private:
-    bool m_bReadOnly;
-    std::unique_ptr<CmisPropertiesControl> m_xPropertiesCtrl;
-
-    virtual bool        FillItemSet( SfxItemSet* ) override;
-    virtual void        Reset( const SfxItemSet* ) override;
-    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
-
-public:
-    SfxCmisPropertiesPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet&);
-    virtual ~SfxCmisPropertiesPage() override;
-    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet*);
 };
 
 #endif // #ifndef _ INCLUDED_SFX2_DINFDLG_HXX

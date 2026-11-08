@@ -162,7 +162,6 @@ constexpr auto CuiDialogList
 constexpr auto SfxDialogList
     = frozen::make_unordered_set<std::u16string_view>({
         // sfx
-        { u"sfx/ui/cmisinfopage.ui" },
         { u"sfx/ui/custominfopage.ui" },
         { u"sfx/ui/descriptioninfopage.ui" },
         { u"sfx/ui/documentinfopage.ui" },
@@ -1118,12 +1117,9 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
                     continue;
             }
 
-            // Skip this one, I don't think it can appear in practice
-            if (entry == u"sfx/ui/cmisinfopage.ui")
-                continue;
             // Skip this one, I think it can only happen on loading
             // an archaic wordperfect file
-            else if (entry == u"writerperfect/ui/wpftencodingdialog.ui")
+            if (entry == u"writerperfect/ui/wpftencodingdialog.ui")
                 continue;
             // Skip this one, I don't think it can appear in practice
             else if (entry == u"cui/ui/colorpickerdialog.ui")

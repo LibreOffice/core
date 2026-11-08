@@ -38,7 +38,6 @@ sfx/ui/documentpropertiesdialog.ui
 sfx/ui/descriptioninfopage.ui
 sfx/ui/documentinfopage.ui
 sfx/ui/custominfopage.ui
-sfx/ui/cmisinfopage.ui
 sfx/ui/documentfontspage.ui
 sfx/ui/managestylepage.ui
 sfx/ui/securityinfopage.ui
@@ -56,5 +55,4 @@ sfx/ui/printeroptionsdialog.ui
 sfx/ui/errorfindemaildialog.ui
 sfx/ui/querysavedialog.ui
 sfx/ui/startcenter.ui
-sfx/ui/cmisline.ui
 sfx/ui/autoredactdialog.ui

@@ -540,7 +540,7 @@ void UseUniquePtr::CheckDeleteLocalVar(const FunctionDecl* functionDecl, const C
             "ViewContact::deleteAllVOCs", "SvxMSDffManager::ProcessObj", "SvEmbedTransferHelper::GetData",
             "SvXMLExportPropertyMapper::Filter_", "SdXMLExport::ImpGetOrCreatePageMasterInfo",
             "SfxDocumentDescPage::FillItemSet", "SfxCustomPropertiesPage::FillItemSet",
-            "SfxCmisPropertiesPage::FillItemSet", "SfxObjectShell::DoSaveCompleted",
+            "SfxObjectShell::DoSaveCompleted",
             "SfxObjectShell::DoSave_Impl", "SfxObjectShell::PreDoSaveAs_Impl", "SfxObjectShell::Save_Impl",
             "SfxFrame::DoClose_Impl", "SfxBaseModel::load",
             "SdrTextObj::TakeTextRect", "SdrTableObj::TakeTextRect", "SdrObjCustomShape::TakeTextRect",

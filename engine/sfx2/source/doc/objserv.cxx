@@ -27,7 +27,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/document/XCmisDocument.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
@@ -638,10 +637,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 sal_Int64 nFileSize = pFileSize ? pFileSize->GetValue().toInt64() : -1;
                 const OUString aURL( HasName() ? GetMedium()->GetName() : GetFactory().GetFactoryURL() );
 
-                Reference< XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY );
-                cpo::uno::Sequence< document::CmisProperty> aCmisProperties = xCmisDoc->getCmisProperties();
-
-                SfxDocumentInfoItem aDocInfoItem( aURL, getDocProperties(), aCmisProperties,
+                SfxDocumentInfoItem aDocInfoItem( aURL, getDocProperties(),
                     IsUseUserData(), IsUseThumbnailSave(), nFileSize );
                 const SfxPoolItemHolder aSlotState(GetSlotState(SID_DOCTEMPLATE));
                 if (!aSlotState)
@@ -659,7 +655,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 // creating dialog is done via virtual method; application will
                 // add its own statistics page
                 std::shared_ptr<SfxDocumentInfoDialog> xDlg(CreateDocumentInfoDialog(rReq.GetFrameWeld(), aSet));
-                auto aFunc = [this, xDlg, xCmisDoc, nFileSize](sal_Int32 nResult, SfxRequest& rRequest)
+                auto aFunc = [this, xDlg, nFileSize](sal_Int32 nResult, SfxRequest& rRequest)
                 {
                     if (RET_OK == nResult)
                     {
@@ -668,15 +664,11 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                         {
                             // user has done some changes to DocumentInfo
                             pDocInfoItem->UpdateDocumentInfo(getDocProperties());
-                            const cpo::uno::Sequence< document::CmisProperty >& aNewCmisProperties =
-                                pDocInfoItem->GetCmisProperties( );
-                            if ( aNewCmisProperties.hasElements( ) )
-                                xCmisDoc->updateCmisProperties( aNewCmisProperties );
                             SetUseUserData( pDocInfoItem->IsUseUserData() );
                             SetUseThumbnailSave( pDocInfoItem-> IsUseThumbnailSave() );
                             // add data from dialog for possible recording purpose
                             rRequest.AppendItem( SfxDocumentInfoItem( GetTitle(),
-                                getDocProperties(), aNewCmisProperties, IsUseUserData(), IsUseThumbnailSave(), nFileSize ) );
+                                getDocProperties(), IsUseUserData(), IsUseThumbnailSave(), nFileSize ) );
                         }
                         rRequest.Done();
                     }

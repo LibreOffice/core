@@ -1,10 +1,6 @@
 sfx2/uiconfig/ui/charmapcontrol.ui://GtkLabel[@id='label1'] orphan-label
 sfx2/uiconfig/ui/charmapcontrol.ui://GtkLabel[@id='label2'] orphan-label
 sfx2/uiconfig/ui/charmapcontrol.ui://GtkLabel[@id='charinfolabel'] orphan-label
-sfx2/uiconfig/ui/cmisline.ui://GtkLabel[@id='name'] orphan-label
-sfx2/uiconfig/ui/cmisline.ui://GtkLabel[@id='type'] orphan-label
-sfx2/uiconfig/ui/cmisline.ui://GtkEntry[@id='value'] no-labelled-by
-sfx2/uiconfig/ui/cmisline.ui://GtkSpinButton[@id='time'] no-labelled-by
 sfx2/uiconfig/ui/custominfopage.ui://GtkLabel[@id='name'] orphan-label
 sfx2/uiconfig/ui/custominfopage.ui://GtkLabel[@id='type'] orphan-label
 sfx2/uiconfig/ui/custominfopage.ui://GtkLabel[@id='value'] orphan-label

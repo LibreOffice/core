@@ -47,7 +47,6 @@
 
 #include <memory>
 
-#include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
@@ -62,7 +61,6 @@
 #include <com/sun/star/util/DateWithTimezone.hpp>
 #include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/document/XDocumentProperties2.hpp>
-#include <com/sun/star/document/CmisProperty.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <vcl/timer.hxx>
@@ -195,7 +193,6 @@ SfxDocumentInfoItem::SfxDocumentInfoItem()
 
 SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps,
-        const cpo::uno::Sequence<document::CmisProperty>& i_cmisProps,
         bool bIs, bool _bIs, sal_Int64 _nFileSize )
     : SfxStringItem( SID_DOCINFO, rFile )
     , m_AutoloadDelay( i_xDocProps->getAutoloadSecs() )
@@ -252,9 +249,6 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
                 AddCustomProperty( rProp.Name, aValue );
             }
         }
-
-        // get CMIS properties
-        m_aCmisProperties = i_cmisProps;
     }
     catch ( cpo::uno::Exception& ) {}
 }
@@ -297,8 +291,6 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const SfxDocumentInfoItem& rItem )
     {
         AddCustomProperty( pOtherProp->m_sName, pOtherProp->m_aValue );
     }
-
-    m_aCmisProperties = rItem.m_aCmisProperties;
 }
 
 SfxDocumentInfoItem::~SfxDocumentInfoItem()
@@ -343,8 +335,7 @@ bool SfxDocumentInfoItem::operator==( const SfxPoolItem& rItem) const
          m_Subject              == rInfoItem.m_Subject           &&
          m_Title                == rInfoItem.m_Title             &&
          m_bUseThumbnailSave    == rInfoItem.m_bUseThumbnailSave &&
-         comphelper::ContainerUniquePtrEquals(m_aCustomProperties, rInfoItem.m_aCustomProperties) &&
-         m_aCmisProperties.getLength() == rInfoItem.m_aCmisProperties.getLength();
+         comphelper::ContainerUniquePtrEquals(m_aCustomProperties, rInfoItem.m_aCustomProperties);
 }
 
 
@@ -479,12 +470,6 @@ void SfxDocumentInfoItem::AddCustomProperty( const OUString& sName, const Any& r
 {
     std::unique_ptr<CustomProperty> pProp(new CustomProperty( sName, rValue ));
     m_aCustomProperties.push_back( std::move(pProp) );
-}
-
-
-void SfxDocumentInfoItem::SetCmisProperties( const Sequence< document::CmisProperty >& cmisProps)
-{
-    m_aCmisProperties = cmisProps;
 }
 
 bool SfxDocumentInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
@@ -1273,54 +1258,6 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
 
     bool bUseThumbnailSave = rInfoItem.IsUseThumbnailSave();
 
-    // Check for cmis properties where otherwise unavailable
-    if ( rInfoItem.isCmisDocument( ) )
-    {
-        const cpo::uno::Sequence< document::CmisProperty >& aCmisProps = rInfoItem.GetCmisProperties();
-        for ( const auto& rCmisProp : aCmisProps )
-        {
-            if ( rCmisProp.Id == "cmis:contentStreamLength" &&
-                 aSizeText == m_aUnknownSize )
-            {
-                Sequence< sal_Int64 > seqValue;
-                rCmisProp.Value >>= seqValue;
-                SvNumberFormatter aNumberFormatter( ::comphelper::getProcessComponentContext(),
-                        Application::GetSettings().GetLanguageTag().getLanguageType() );
-                sal_uInt32 nIndex = aNumberFormatter.GetFormatIndex( NF_NUMBER_SYSTEM );
-                if ( seqValue.hasElements() )
-                {
-                    OUString sValue = aNumberFormatter.GetInputLineString( seqValue[0], nIndex );
-                    m_xShowSizeFT->set_label( CreateSizeText( sValue.toInt64( ) ) );
-                }
-            }
-
-            util::DateTime uDT;
-            OUString emptyDate = ConvertDateTime_Impl( u"", uDT, rLocaleWrapper );
-            if ( rCmisProp.Id == "cmis:creationDate" &&
-                 (m_xCreateValFt->get_label() == emptyDate ||
-                  m_xCreateValFt->get_label().isEmpty()))
-            {
-                Sequence< util::DateTime > seqValue;
-                rCmisProp.Value >>= seqValue;
-                if ( seqValue.hasElements() )
-                {
-                    m_xCreateValFt->set_label( ConvertDateTime_Impl( u"", seqValue[0], rLocaleWrapper ) );
-                }
-            }
-            if ( rCmisProp.Id == "cmis:lastModificationDate" &&
-                 (m_xChangeValFt->get_label() == emptyDate ||
-                  m_xChangeValFt->get_label().isEmpty()))
-            {
-                Sequence< util::DateTime > seqValue;
-                rCmisProp.Value >>= seqValue;
-                if ( seqValue.hasElements() )
-                {
-                    m_xChangeValFt->set_label( ConvertDateTime_Impl( u"", seqValue[0], rLocaleWrapper ) );
-                }
-            }
-        }
-    }
-
     m_xUseUserDataCB->set_active(bUseUserData);
     m_xUseUserDataCB->save_state();
     m_xUseUserDataCB->set_sensitive( bEnableUseUserData );
@@ -1422,9 +1359,6 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog(weld::Window* pParent, const SfxIte
     AddTabPage(u"customprops"_ustr, TabResId(RID_TAB_CUSTOM.aLabel),
                SfxCustomPropertiesPage::Create, RID_L + RID_TAB_CUSTOM.sIconName);
 
-    if (rInfoItem.isCmisDocument())
-        AddTabPage(u"cmisprops"_ustr, TabResId(RID_TAB_CMIS.aLabel),
-                   SfxCmisPropertiesPage::Create, RID_L + RID_TAB_CMIS.sIconName);
     AddTabPage(u"security"_ustr, TabResId(RID_TAB_SECURITY.aLabel), SfxSecurityPage::Create,
                RID_L + RID_TAB_SECURITY.sIconName);
 }
@@ -2243,14 +2177,6 @@ bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet* rSet )
 
     if ( pInfo )
     {
-        // If it's a CMIS document, we can't save custom properties
-        if ( pInfo->isCmisDocument( ) )
-        {
-            if ( bMustDelete )
-                delete pInfo;
-            return false;
-        }
-
         pInfo->ClearCustomProperties();
         const Sequence< beans::PropertyValue > aPropertySeq = m_xPropertiesCtrl->GetCustomProperties();
         for ( const auto& rProperty : aPropertySeq )
@@ -2300,413 +2226,6 @@ DeactivateRC SfxCustomPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
 std::unique_ptr<SfxTabPage> SfxCustomPropertiesPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rItemSet)
 {
     return std::make_unique<SfxCustomPropertiesPage>(pPage, pController, *rItemSet);
-}
-
-CmisValue::CmisValue(weld::Widget* pParent, const OUString& aStr)
-    : m_xBuilder(Application::CreateBuilder(pParent, u"sfx/ui/cmisline.ui"_ustr))
-    , m_xFrame(m_xBuilder->weld_frame(u"CmisFrame"_ustr))
-    , m_xValueEdit(m_xBuilder->weld_entry(u"value"_ustr))
-{
-    m_xValueEdit->show();
-    m_xValueEdit->set_text(aStr);
-}
-
-CmisDateTime::CmisDateTime(weld::Widget* pParent, const util::DateTime& aDateTime)
-    : m_xBuilder(Application::CreateBuilder(pParent, u"sfx/ui/cmisline.ui"_ustr))
-    , m_xFrame(m_xBuilder->weld_frame(u"CmisFrame"_ustr))
-    , m_xDateField(new SvtCalendarBox(m_xBuilder->weld_menu_button(u"date"_ustr)))
-    , m_xTimeField(m_xBuilder->weld_formatted_spin_button(u"time"_ustr))
-    , m_xFormatter(new weld::TimeFormatter(*m_xTimeField))
-{
-    m_xFormatter->SetExtFormat(ExtTimeFieldFormat::LongDuration);
-    m_xFormatter->EnableEmptyField(false);
-
-    m_xDateField->show();
-    m_xTimeField->show();
-    m_xDateField->set_date(Date(aDateTime));
-    m_xFormatter->SetTime(tools::Time(aDateTime));
-}
-
-CmisYesNo::CmisYesNo(weld::Widget* pParent, bool bValue)
-    : m_xBuilder(Application::CreateBuilder(pParent, u"sfx/ui/cmisline.ui"_ustr))
-    , m_xFrame(m_xBuilder->weld_frame(u"CmisFrame"_ustr))
-    , m_xYesButton(m_xBuilder->weld_radio_button(u"yes"_ustr))
-    , m_xNoButton(m_xBuilder->weld_radio_button(u"no"_ustr))
-{
-    m_xYesButton->show();
-    m_xNoButton->show();
-    if (bValue)
-        m_xYesButton->set_active(true);
-    else
-        m_xNoButton->set_active(true);
-}
-
-// struct CmisPropertyLine ---------------------------------------------
-CmisPropertyLine::CmisPropertyLine(weld::Widget* pParent)
-    : m_xBuilder(Application::CreateBuilder(pParent, u"sfx/ui/cmisline.ui"_ustr))
-    , m_sType(CMIS_TYPE_STRING)
-    , m_bUpdatable(false)
-    , m_bRequired(false)
-    , m_bMultiValued(false)
-    , m_bOpenChoice(false)
-    , m_xFrame(m_xBuilder->weld_frame(u"CmisFrame"_ustr))
-    , m_xName(m_xBuilder->weld_label(u"name"_ustr))
-    , m_xType(m_xBuilder->weld_label(u"type"_ustr))
-{
-    m_xFrame->set_sensitive(true);
-}
-
-CmisPropertyLine::~CmisPropertyLine( )
-{
-}
-
-// class CmisPropertiesWindow -----------------------------------------
-
-CmisPropertiesWindow::CmisPropertiesWindow(std::unique_ptr<weld::Container> xParent)
-    : m_xBox(std::move(xParent))
-    , m_aNumberFormatter(::comphelper::getProcessComponentContext(),
-                         Application::GetSettings().GetLanguageTag().getLanguageType())
-{
-}
-
-CmisPropertiesWindow::~CmisPropertiesWindow()
-{
-}
-
-void CmisPropertiesWindow::ClearAllLines()
-{
-    m_aCmisPropertiesLines.clear();
-}
-
-void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
-                                    const OUString& sType, const bool bUpdatable,
-                                    const bool bRequired, const bool bMultiValued,
-                                    const bool bOpenChoice, Any& /*aChoices*/, Any const & rAny )
-{
-    std::unique_ptr<CmisPropertyLine> pNewLine(new CmisPropertyLine(m_xBox.get()));
-
-    pNewLine->m_sId = sId;
-    pNewLine->m_sType = sType;
-    pNewLine->m_bUpdatable = bUpdatable;
-    pNewLine->m_bRequired = bRequired;
-    pNewLine->m_bMultiValued = bMultiValued;
-    pNewLine->m_bOpenChoice = bOpenChoice;
-
-    if ( sType == CMIS_TYPE_INTEGER )
-    {
-        Sequence< sal_Int64 > seqValue;
-        rAny >>= seqValue;
-        sal_uInt32 nIndex = m_aNumberFormatter.GetFormatIndex( NF_NUMBER_SYSTEM );
-        for (const auto& rValue : seqValue)
-        {
-            OUString sValue = m_aNumberFormatter.GetInputLineString( rValue, nIndex );
-            std::unique_ptr<CmisValue> pValue(new CmisValue(m_xBox.get(), sValue));
-            pValue->m_xValueEdit->set_editable(bUpdatable);
-            pNewLine->m_aValues.push_back( std::move(pValue) );
-        }
-    }
-    else if ( sType == CMIS_TYPE_DECIMAL )
-    {
-        Sequence< double > seqValue;
-        rAny >>= seqValue;
-        sal_uInt32 nIndex = m_aNumberFormatter.GetFormatIndex( NF_NUMBER_SYSTEM );
-        for (const auto& rValue : seqValue)
-        {
-            OUString sValue = m_aNumberFormatter.GetInputLineString( rValue, nIndex );
-            std::unique_ptr<CmisValue> pValue(new CmisValue(m_xBox.get(), sValue));
-            pValue->m_xValueEdit->set_editable(bUpdatable);
-            pNewLine->m_aValues.push_back( std::move(pValue) );
-        }
-
-    }
-    else if ( sType == CMIS_TYPE_BOOL )
-    {
-        Sequence<bool> seqValue;
-        rAny >>= seqValue;
-        for (const auto& rValue : seqValue)
-        {
-            std::unique_ptr<CmisYesNo> pYesNo(new CmisYesNo(m_xBox.get(), rValue));
-            pYesNo->m_xYesButton->set_sensitive( bUpdatable );
-            pYesNo->m_xNoButton->set_sensitive( bUpdatable );
-            pNewLine->m_aYesNos.push_back( std::move(pYesNo) );
-        }
-    }
-    else if ( sType == CMIS_TYPE_STRING )
-    {
-        Sequence< OUString > seqValue;
-        rAny >>= seqValue;
-        for (const auto& rValue : seqValue)
-        {
-            std::unique_ptr<CmisValue> pValue(new CmisValue(m_xBox.get(), rValue));
-            pValue->m_xValueEdit->set_editable(bUpdatable);
-            pNewLine->m_aValues.push_back( std::move(pValue) );
-        }
-    }
-    else if ( sType == CMIS_TYPE_DATETIME )
-    {
-        Sequence< util::DateTime > seqValue;
-        rAny >>= seqValue;
-        for (const auto& rValue : seqValue)
-        {
-            std::unique_ptr<CmisDateTime> pDateTime(new CmisDateTime(m_xBox.get(), rValue));
-            pDateTime->m_xDateField->set_sensitive(bUpdatable);
-            pDateTime->m_xTimeField->set_sensitive(bUpdatable);
-            pNewLine->m_aDateTimes.push_back( std::move(pDateTime) );
-        }
-    }
-    pNewLine->m_xName->set_label( sName );
-    pNewLine->m_xName->show();
-    pNewLine->m_xType->set_label( sType );
-    pNewLine->m_xType->show();
-
-    m_aCmisPropertiesLines.push_back( std::move(pNewLine) );
-}
-
-Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() const
-{
-    Sequence< document::CmisProperty > aPropertiesSeq( m_aCmisPropertiesLines.size() );
-    auto aPropertiesSeqRange = asNonConstRange(aPropertiesSeq);
-    sal_Int32 i = 0;
-    for ( auto& rxLine : m_aCmisPropertiesLines )
-    {
-        CmisPropertyLine* pLine = rxLine.get();
-
-        aPropertiesSeqRange[i].Id = pLine->m_sId;
-        aPropertiesSeqRange[i].Type = pLine->m_sType;
-        aPropertiesSeqRange[i].Updatable = pLine->m_bUpdatable;
-        aPropertiesSeqRange[i].Required = pLine->m_bRequired;
-        aPropertiesSeqRange[i].OpenChoice = pLine->m_bOpenChoice;
-        aPropertiesSeqRange[i].MultiValued = pLine->m_bMultiValued;
-
-        OUString sPropertyName = pLine->m_xName->get_label();
-        if ( !sPropertyName.isEmpty() )
-        {
-            aPropertiesSeqRange[i].Name = sPropertyName;
-            OUString sType = pLine->m_xType->get_label();
-            if ( CMIS_TYPE_DECIMAL == sType )
-            {
-                sal_uInt32 nIndex = const_cast< SvNumberFormatter& >(
-                    m_aNumberFormatter ).GetFormatIndex( NF_NUMBER_SYSTEM );
-                Sequence< double > seqValue( pLine->m_aValues.size( ) );
-                auto seqValueRange = asNonConstRange(seqValue);
-                sal_Int32 k = 0;
-                for ( const auto& rxValue : pLine->m_aValues )
-                {
-                    double dValue = 0.0;
-                    OUString sValue( rxValue->m_xValueEdit->get_text() );
-                    bool bIsNum = const_cast< SvNumberFormatter& >( m_aNumberFormatter ).
-                    IsNumberFormat( sValue, nIndex, dValue );
-                    if ( bIsNum )
-                        seqValueRange[k] = dValue;
-                    ++k;
-                }
-                aPropertiesSeqRange[i].Value <<= seqValue;
-            }
-            else if ( CMIS_TYPE_INTEGER == sType )
-            {
-                sal_uInt32 nIndex = const_cast< SvNumberFormatter& >(
-                    m_aNumberFormatter ).GetFormatIndex( NF_NUMBER_SYSTEM );
-                Sequence< sal_Int64 > seqValue( pLine->m_aValues.size( ) );
-                auto seqValueRange = asNonConstRange(seqValue);
-                sal_Int32 k = 0;
-                for ( const auto& rxValue : pLine->m_aValues )
-                {
-                    double dValue = 0;
-                    OUString sValue( rxValue->m_xValueEdit->get_text() );
-                    bool bIsNum = const_cast< SvNumberFormatter& >( m_aNumberFormatter ).
-                    IsNumberFormat( sValue, nIndex, dValue );
-                    if ( bIsNum )
-                        seqValueRange[k] = static_cast<sal_Int64>(dValue);
-                    ++k;
-                }
-                aPropertiesSeqRange[i].Value <<= seqValue;
-            }
-            else if ( CMIS_TYPE_BOOL == sType )
-            {
-                Sequence<bool> seqValue( pLine->m_aYesNos.size( ) );
-                bool* pseqValue = seqValue.getArray();
-                sal_Int32 k = 0;
-                for ( const auto& rxYesNo : pLine->m_aYesNos )
-                {
-                    bool bValue = rxYesNo->m_xYesButton->get_active();
-                    pseqValue[k] = bValue;
-                    ++k;
-                }
-                aPropertiesSeqRange[i].Value <<= seqValue;
-
-            }
-            else if ( CMIS_TYPE_DATETIME == sType )
-            {
-                Sequence< util::DateTime > seqValue( pLine->m_aDateTimes.size( ) );
-                auto seqValueRange = asNonConstRange(seqValue);
-                sal_Int32 k = 0;
-                for ( const auto& rxDateTime : pLine->m_aDateTimes )
-                {
-                    Date aTmpDate = rxDateTime->m_xDateField->get_date();
-                    tools::Time aTmpTime = rxDateTime->m_xFormatter->GetTime();
-                    util::DateTime aDateTime( aTmpTime.GetNanoSec(), aTmpTime.GetSec(),
-                                              aTmpTime.GetMin(), aTmpTime.GetHour(),
-                                              aTmpDate.GetDay(), aTmpDate.GetMonth(),
-                                              aTmpDate.GetYear(), true );
-                    seqValueRange[k] = aDateTime;
-                    ++k;
-                }
-                aPropertiesSeqRange[i].Value <<= seqValue;
-            }
-            else
-            {
-                Sequence< OUString > seqValue( pLine->m_aValues.size( ) );
-                auto seqValueRange = asNonConstRange(seqValue);
-                sal_Int32 k = 0;
-                for ( const auto& rxValue : pLine->m_aValues )
-                {
-                    seqValueRange[k] = rxValue->m_xValueEdit->get_text();
-                    ++k;
-                }
-                aPropertiesSeqRange[i].Value <<= seqValue;
-            }
-        }
-        ++i;
-    }
-
-    return aPropertiesSeq;
-}
-
-CmisPropertiesControl::CmisPropertiesControl(weld::Builder& rBuilder)
-    : m_aPropertiesWin(rBuilder.weld_container(u"CmisWindow"_ustr))
-    , m_xScrolledWindow(rBuilder.weld_scrolled_window(u"CmisScroll"_ustr))
-{
-    // set height to something small and force it to take the size
-    // dictated by the other pages
-    m_xScrolledWindow->set_size_request(-1, 42);
-}
-
-void CmisPropertiesControl::ClearAllLines()
-{
-   m_aPropertiesWin.ClearAllLines();
-}
-
-void CmisPropertiesControl::AddLine( const OUString& sId, const OUString& sName,
-                                     const OUString& sType, const bool bUpdatable,
-                                     const bool bRequired, const bool bMultiValued,
-                                     const bool bOpenChoice, Any& aChoices, Any const & rAny
-                                     )
-{
-    m_aPropertiesWin.AddLine( sId, sName, sType, bUpdatable, bRequired, bMultiValued,
-                               bOpenChoice, aChoices, rAny );
-}
-
-// class SfxCmisPropertiesPage -----------------------------------------
-SfxCmisPropertiesPage::SfxCmisPropertiesPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rItemSet)
-    : SfxTabPage(pPage, pController, u"sfx/ui/cmisinfopage.ui"_ustr, u"CmisInfoPage"_ustr, &rItemSet)
-    , m_bReadOnly(false)
-    , m_xPropertiesCtrl(new CmisPropertiesControl(*m_xBuilder))
-{
-}
-
-SfxCmisPropertiesPage::~SfxCmisPropertiesPage()
-{
-    m_xPropertiesCtrl.reset();
-}
-
-bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet* rSet )
-{
-    if (m_bReadOnly)
-        return false;
-
-    const SfxDocumentInfoItem* pItem = nullptr;
-    SfxDocumentInfoItem* pInfo = nullptr;
-    bool bMustDelete = false;
-
-    if (const SfxItemSet* pItemSet = GetDialogExampleSet())
-    {
-        pItem = pItemSet->GetItemIfSet(SID_DOCINFO);
-        if (!pItem)
-            pInfo = const_cast<SfxDocumentInfoItem*>(&rSet->Get( SID_DOCINFO ));
-        else
-        {
-            bMustDelete = true;
-            pInfo = new SfxDocumentInfoItem( *pItem );
-        }
-    }
-
-    sal_Int32 modifiedNum = 0;
-    if ( pInfo )
-    {
-        Sequence< document::CmisProperty > aOldProps = pInfo->GetCmisProperties( );
-        Sequence< document::CmisProperty > aNewProps = m_xPropertiesCtrl->GetCmisProperties();
-
-        std::vector< document::CmisProperty > changedProps;
-        for ( sal_Int32 i = 0; i< aNewProps.getLength( ); ++i )
-        {
-            if ( aOldProps[i].Updatable && !aNewProps[i].Id.isEmpty( ) )
-            {
-                if ( aOldProps[i].Type == CMIS_TYPE_DATETIME )
-                {
-                    Sequence< util::DateTime > oldValue;
-                    aOldProps[i].Value >>= oldValue;
-                    // We only edit hours and minutes
-                    // don't compare NanoSeconds and Seconds
-                    for ( auto& rDateTime : asNonConstRange(oldValue) )
-                    {
-                        rDateTime.NanoSeconds = 0;
-                        rDateTime.Seconds = 0;
-                    }
-                    Sequence< util::DateTime > newValue;
-                    aNewProps[i].Value >>= newValue;
-                    if ( oldValue != newValue )
-                    {
-                        modifiedNum++;
-                        changedProps.push_back( aNewProps[i] );
-                    }
-                }
-                else if ( aOldProps[i].Value != aNewProps[i].Value )
-                {
-                    modifiedNum++;
-                    changedProps.push_back( aNewProps[i] );
-                }
-            }
-        }
-        Sequence< document::CmisProperty> aModifiedProps( comphelper::containerToSequence(changedProps) );
-        pInfo->SetCmisProperties( aModifiedProps );
-        rSet->Put( *pInfo );
-        if ( bMustDelete )
-            delete pInfo;
-    }
-
-    return modifiedNum;
-}
-
-void SfxCmisPropertiesPage::Reset( const SfxItemSet* rItemSet )
-{
-    const SfxBoolItem* pROItem = rItemSet->GetItem(SID_DOC_READONLY, false);
-    m_bReadOnly = pROItem && pROItem->GetValue();
-
-    m_xPropertiesCtrl->ClearAllLines();
-    const SfxDocumentInfoItem& rInfoItem = rItemSet->Get(SID_DOCINFO);
-    cpo::uno::Sequence< document::CmisProperty > aCmisProps = rInfoItem.GetCmisProperties();
-    for ( auto& rCmisProp : asNonConstRange(aCmisProps) )
-    {
-        m_xPropertiesCtrl->AddLine(rCmisProp.Id,
-                                   rCmisProp.Name,
-                                   rCmisProp.Type,
-                                   rCmisProp.Updatable,
-                                   rCmisProp.Required,
-                                   rCmisProp.MultiValued,
-                                   rCmisProp.OpenChoice,
-                                   rCmisProp.Choices,
-                                   rCmisProp.Value);
-    }
-}
-
-DeactivateRC SfxCmisPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
-{
-    return DeactivateRC::LeavePage;
-}
-
-std::unique_ptr<SfxTabPage> SfxCmisPropertiesPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rItemSet)
-{
-    return std::make_unique<SfxCmisPropertiesPage>(pPage, pController, *rItemSet);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

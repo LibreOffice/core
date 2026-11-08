@@ -3596,13 +3596,12 @@ SfxDocumentInfoItem::Clone(SfxItemPool*) const
 SfxDocumentInfoItem::GetCustomProperties() const
 SfxDocumentInfoItem::PutValue(cpo::uno::Any const&, unsigned char)
 SfxDocumentInfoItem::QueryValue(cpo::uno::Any&, unsigned char) const
-SfxDocumentInfoItem::SetCmisProperties(cpo::uno::Sequence<com::sun::star::document::CmisProperty> const&)
 SfxDocumentInfoItem::SetDeleteUserData(bool)
 SfxDocumentInfoItem::SetUseThumbnailSave(bool)
 SfxDocumentInfoItem::SetUseUserData(bool)
 SfxDocumentInfoItem::SfxDocumentInfoItem()
 SfxDocumentInfoItem::SfxDocumentInfoItem(SfxDocumentInfoItem const&)
-SfxDocumentInfoItem::SfxDocumentInfoItem(rtl::OUString const&, cpo::uno::Reference<com::sun::star::document::XDocumentProperties> const&, cpo::uno::Sequence<com::sun::star::document::CmisProperty> const&, bool, bool, long)
+SfxDocumentInfoItem::SfxDocumentInfoItem(rtl::OUString const&, cpo::uno::Reference<com::sun::star::document::XDocumentProperties> const&, bool, bool, long)
 SfxDocumentInfoItem::UpdateDocumentInfo(cpo::uno::Reference<com::sun::star::document::XDocumentProperties> const&, bool) const
 SfxDocumentInfoItem::operator==(SfxPoolItem const&) const
 SfxDocumentInfoItem::resetUserData(rtl::OUString const&)
