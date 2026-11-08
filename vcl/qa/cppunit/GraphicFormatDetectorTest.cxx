@@ -18,6 +18,7 @@
 #include <graphic/GraphicFormatDetector.hxx>
 #include <graphic/DetectorTools.hxx>
 
+#include <rtl/strbuf.hxx>
 #include <tools/stream.hxx>
 #include <o3tl/string_view.hxx>
 
@@ -57,6 +58,8 @@ class GraphicFormatDetectorTest : public test::BootstrapFixtureBase
     void testDetectEMZ();
     void testDetectDXF();
     void testDetectDXF2();
+    void testDetectDXFLongComment();
+    void testDetectDXFCommentsOnly();
     void testMatchArray();
     void testCheckArrayForMatchingStrings();
 
@@ -86,6 +89,8 @@ class GraphicFormatDetectorTest : public test::BootstrapFixtureBase
     CPPUNIT_TEST(testDetectEMZ);
     CPPUNIT_TEST(testDetectDXF);
     CPPUNIT_TEST(testDetectDXF2);
+    CPPUNIT_TEST(testDetectDXFLongComment);
+    CPPUNIT_TEST(testDetectDXFCommentsOnly);
     CPPUNIT_TEST(testMatchArray);
     CPPUNIT_TEST(testCheckArrayForMatchingStrings);
     CPPUNIT_TEST_SUITE_END();
@@ -465,6 +470,36 @@ void GraphicFormatDetectorTest::testDetectDXF2()
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
     CPPUNIT_ASSERT_EQUAL(u"DXF"_ustr, rFormatExtension);
+}
+
+void GraphicFormatDetectorTest::testDetectDXFLongComment()
+{
+    // The 999 comment groups at the start are longer than the first peeked bytes
+    SvFileStream aFileStream(getFullUrl(u"TypeDetectionLongComment.dxf"), StreamMode::READ);
+    vcl::GraphicFormatDetector aDetector(aFileStream, u"<DXF"_ustr);
+
+    CPPUNIT_ASSERT(aDetector.detect());
+    CPPUNIT_ASSERT(aDetector.checkDXF());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), aFileStream.Tell());
+
+    OUString rFormatExtension;
+    CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
+    CPPUNIT_ASSERT_EQUAL(u"DXF"_ustr, rFormatExtension);
+}
+
+void GraphicFormatDetectorTest::testDetectDXFCommentsOnly()
+{
+    // Only comment groups, no section: this is not a drawing
+    OStringBuffer aBuffer;
+    for (int i = 0; i < 40; ++i)
+        aBuffer.append("999\nJust a text file that happens to look like a DXF comment\n");
+    aBuffer.append("Some text\n");
+    SvMemoryStream aStream(const_cast<char*>(aBuffer.getStr()), aBuffer.getLength(),
+                           StreamMode::READ);
+    vcl::GraphicFormatDetector aDetector(aStream, u""_ustr);
+
+    CPPUNIT_ASSERT(aDetector.detect());
+    CPPUNIT_ASSERT(!aDetector.checkDXF());
 }
 
 void GraphicFormatDetectorTest::testMatchArray()
