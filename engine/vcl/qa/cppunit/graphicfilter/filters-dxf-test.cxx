@@ -141,8 +141,8 @@ void DxfFilterTest::testColors()
     xmlDocUniquePtr pDoc = dumpAndParse(aDumper, aMTF);
 
     // the lines on the frozen and on the switched off layer, and the invisible one are not drawn
-    assertXPath(pDoc, "/metafile/polyline", 5);
-    assertXPath(pDoc, "/metafile/linecolor", 5);
+    assertXPath(pDoc, "/metafile/polyline", 6);
+    assertXPath(pDoc, "/metafile/linecolor", 6);
     // the colour of the layer
     assertXPath(pDoc, "/metafile/linecolor[1]", "color", u"#ff0000");
     // the true colour of the entity wins over its colour index
@@ -152,6 +152,8 @@ void DxfFilterTest::testColors()
     // in the block, layer 0 is the layer of the insert, BYBLOCK is the colour of the insert
     assertXPath(pDoc, "/metafile/linecolor[4]", "color", u"#ff0000");
     assertXPath(pDoc, "/metafile/linecolor[5]", "color", u"#00ffff");
+    // white as the true colour of colour index 7 is the dark colour 7
+    assertXPath(pDoc, "/metafile/linecolor[6]", "color", u"#0f0f0f");
 }
 
 void DxfFilterTest::testLineTypes()

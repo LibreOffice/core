@@ -120,6 +120,13 @@ basegfx::B2DPolygon Project(const DXFTransform& rTransform, const basegfx::B2DPo
     return aResult;
 }
 
+// Some programs write white as the true colour of colour index 7, which is black on a white
+// background.
+bool IsTrueColor(tools::Long nTrueColor, tools::Long nColor)
+{
+    return nTrueColor >= 0 && !(nTrueColor == 0xffffff && (nColor == 7 || nColor == -7));
+}
+
 // whether a polygon fits into a polygon of the metafile, a curve segment takes three points
 bool FitsToolsPolygon(const basegfx::B2DPolygon& rPolygon)
 {
@@ -211,7 +218,7 @@ std::optional<Color> DXF2GDIMetaFile::ResolveColor(const DXFBasicEntity & rE, to
     if (pLayer != nullptr && pLayer->IsHidden())
         return {};
 
-    if (nTrueColor >= 0)
+    if (IsTrueColor(nTrueColor, nColor))
         return Color(ColorTransparency, nTrueColor);
     if (nColor == 0) // BYBLOCK
         return moBlockColor;
@@ -219,7 +226,7 @@ std::optional<Color> DXF2GDIMetaFile::ResolveColor(const DXFBasicEntity & rE, to
     {
         if (pLayer == nullptr)
             return ConvertColor(7);
-        if (pLayer->nTrueColor >= 0)
+        if (IsTrueColor(pLayer->nTrueColor, pLayer->nColor))
             return Color(ColorTransparency, pLayer->nTrueColor);
         return ConvertColor(pLayer->nColor);
     }
