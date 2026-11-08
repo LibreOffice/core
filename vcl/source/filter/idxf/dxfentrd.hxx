@@ -65,6 +65,8 @@ public:
     OString m_sLineType;                  //  6
     double fThickness;                    // 39
     tools::Long nColor;                          // 62
+    tools::Long nTrueColor;                      // 420, 0xRRGGBB or -1
+    bool bInvisible;                             // 60
     tools::Long nSpace;                          // 67
     DXFVector aExtrusion;                 // 210,220,230
 

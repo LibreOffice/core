@@ -123,22 +123,40 @@ sal_uInt16 DXFGroupReader::Read()
         nG = static_cast<sal_uInt16>(ReadI());
         if ( bStatus )
         {
+            // The value types of the group code ranges. The values of the
+            // ranges read since the oldest versions must be well-formed, the
+            // others are read leniently.
             if      (nG<  10) ReadS();
             else if (nG<  60) F = ReadF();
             else if (nG<  80) I = ReadI();
             else if (nG<  90) DXFSkipLine(rIS);
             else if (nG<  99) I = ReadI();
+            else if (nG== 99) I = ReadLenientI();
             else if (nG==100) ReadS();
             else if (nG==102) ReadS();
-            else if (nG==105) DXFSkipLine(rIS);
-            else if (nG< 140) DXFSkipLine(rIS);
+            else if (nG==105) ReadS();
+            else if (nG< 110) DXFSkipLine(rIS);
+            else if (nG< 140) F = ReadLenientF();
             else if (nG< 148) F = ReadF();
-            else if (nG< 170) DXFSkipLine(rIS);
+            else if (nG< 150) F = ReadLenientF();
+            else if (nG< 160) DXFSkipLine(rIS);
+            else if (nG< 170) I = ReadLenientI();
             else if (nG< 176) I = ReadI();
-            else if (nG< 180) DXFSkipLine(rIS); // ReadI();
+            else if (nG< 180) I = ReadLenientI();
             else if (nG< 210) DXFSkipLine(rIS);
             else if (nG< 240) F = ReadF();
-            else if (nG<=369) DXFSkipLine(rIS);
+            else if (nG< 270) DXFSkipLine(rIS);
+            else if (nG< 300) I = ReadLenientI();
+            else if (nG< 370) ReadS();
+            else if (nG< 390) I = ReadLenientI();
+            else if (nG< 400) ReadS();
+            else if (nG< 410) I = ReadLenientI();
+            else if (nG< 420) ReadS();
+            else if (nG< 430) I = ReadLenientI();
+            else if (nG< 440) ReadS();
+            else if (nG< 460) I = ReadLenientI();
+            else if (nG< 470) F = ReadLenientF();
+            else if (nG< 482) ReadS();
             else if (nG<=999) DXFSkipLine(rIS);
             else if (nG<1010) ReadS();
             else if (nG<1060) F = ReadF();
@@ -184,6 +202,30 @@ tools::Long DXFGroupReader::ReadI()
     }
 
     return o3tl::toInt32(aNumber);
+}
+
+tools::Long DXFGroupReader::ReadLenientI()
+{
+    const bool bOldStatus = bStatus;
+    tools::Long nValue = ReadI();
+    if (!bStatus)
+    {
+        bStatus = bOldStatus;
+        nValue = 0;
+    }
+    return nValue;
+}
+
+double DXFGroupReader::ReadLenientF()
+{
+    const bool bOldStatus = bStatus;
+    double fValue = ReadF();
+    if (!bStatus)
+    {
+        bStatus = bOldStatus;
+        fValue = 0.0;
+    }
+    return fValue;
 }
 
 double DXFGroupReader::ReadF()

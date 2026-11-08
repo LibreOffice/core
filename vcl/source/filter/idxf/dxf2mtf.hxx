@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 
+#include <optional>
 #include <string_view>
 
 #include "dxfreprd.hxx"
@@ -47,19 +48,23 @@ private:
     basegfx::B2DHomMatrix maDeviceTransform;
     double mfDeviceScale;
 
-    tools::Long nBlockColor;
+    // the colour and line type of the innermost insert, for BYBLOCK
+    std::optional<Color> moBlockColor;
     DXFLineInfo aBlockDXFLineInfo;
-    tools::Long nParentLayerColor;
-    DXFLineInfo aParentLayerDXFLineInfo;
+    // the layer of the innermost insert, for the entities on layer 0 of the block
+    const DXFLayer * mpParentLayer;
     Color       aActLineColor;
     Color       aActFillColor;
     vcl::Font   aActFont;
 
     void ResetState();
 
-    Color ConvertColor(sal_uInt8 nColor) const;
+    Color ConvertColor(tools::Long nColor) const;
 
-    tools::Long GetEntityColor(const DXFBasicEntity & rE) const;
+    const DXFLayer * GetEntityLayer(const DXFBasicEntity & rE) const;
+
+    // no colour if the entity is not visible
+    std::optional<Color> GetEntityColor(const DXFBasicEntity & rE) const;
 
     DXFLineInfo LTypeToDXFLineInfo(std::string_view rLineType) const;
 
