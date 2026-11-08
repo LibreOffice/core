@@ -551,6 +551,13 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 xRemoveList.push_back(xChild);
             }
 
+            if (sName == "spacing" && GetParentObjectType(xChild) == "GtkStatusbar")
+            {
+                // GtkStatusbar derives from GtkBox in GTK 3,
+                // but directly from GtkWidget in GTK 4.
+                xRemoveList.push_back(xChild);
+            }
+
             if (sName == "truncate-multiline")
             {
                 if (GetParentObjectType(xChild) == "GtkSpinButton")
