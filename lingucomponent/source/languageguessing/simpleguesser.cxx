@@ -31,14 +31,8 @@
 
 #ifdef SYSTEM_LIBEXTTEXTCAT
 #include <libexttextcat/textcat.h>
-#include <libexttextcat/common.h>
-#include <libexttextcat/constants.h>
-#include <libexttextcat/fingerprint.h>
 #else
 #include <textcat.h>
-#include <common.h>
-#include <constants.h>
-#include <fingerprint.h>
 #endif
 
 #include <sal/types.h>
@@ -61,25 +55,6 @@ static int startsAsciiCaseInsensitive(const std::string &s1, const std::string &
             }
             return ret;
  }
-
-namespace {
-
-/**
- * This following structure is from textcat.c
- */
-typedef struct textcat_t{
-
-    void **fprint;
-    char *fprint_disable;
-    uint4 size;
-    uint4 maxsize;
-
-    char output[MAXOUTPUTSIZE];
-
-} textcat_t;
-// end of the 3 structs
-
-}
 
 SimpleGuesser::SimpleGuesser()
 {
@@ -148,19 +123,19 @@ Guess SimpleGuesser::GuessPrimaryLanguage(const char* text)
  * when mask = 0x0F, return only Unavailable
  * when mask = 0xFF, return both Available and Unavailable
  */
-std::vector<Guess> SimpleGuesser::GetManagedLanguages(const char mask)
+std::vector<Guess> SimpleGuesser::GetManagedLanguages(LanguageState eState)
 {
-    textcat_t *tables = static_cast<textcat_t*>(h);
-
     std::vector<Guess> lang;
     if(!h){return lang;}
 
-    for (size_t i=0; i<tables->size; ++i)
+    const uint4 nCount = textcat_GetLanguageCount(h);
+    for (uint4 i = 0; i < nCount; ++i)
     {
-        if (tables->fprint_disable[i] & mask)
+        const bool bEnabled = textcat_IsLanguageEnabled(h, i) == TC_TRUE;
+        if (eState == LanguageState::Any || bEnabled == (eState == LanguageState::Enabled))
         {
             std::string langStr = "[";
-            langStr += fp_Name(tables->fprint[i]);
+            langStr += textcat_GetLanguageName(h, i);
             lang.emplace_back(langStr.c_str());
         }
     }
@@ -170,41 +145,40 @@ std::vector<Guess> SimpleGuesser::GetManagedLanguages(const char mask)
 
 std::vector<Guess> SimpleGuesser::GetAvailableLanguages()
 {
-    return GetManagedLanguages( sal::static_int_cast< char >( 0xF0 ) );
+    return GetManagedLanguages(LanguageState::Enabled);
 }
 
 std::vector<Guess> SimpleGuesser::GetUnavailableLanguages()
 {
-    return GetManagedLanguages( sal::static_int_cast< char >( 0x0F ));
+    return GetManagedLanguages(LanguageState::Disabled);
 }
 
 std::vector<Guess> SimpleGuesser::GetAllManagedLanguages()
 {
-    return GetManagedLanguages( sal::static_int_cast< char >( 0xFF ));
+    return GetManagedLanguages(LanguageState::Any);
 }
 
-void SimpleGuesser::XableLanguage(const std::string& lang, char mask)
+void SimpleGuesser::SetLanguageEnabled(const std::string& lang, bool bEnabled)
 {
-    textcat_t *tables = static_cast<textcat_t*>(h);
-
     if(!h){return;}
 
-    for (size_t i=0; i<tables->size; i++)
+    const uint4 nCount = textcat_GetLanguageCount(h);
+    for (uint4 i = 0; i < nCount; ++i)
     {
-        std::string language(fp_Name(tables->fprint[i]));
+        std::string language(textcat_GetLanguageName(h, i));
         if (startsAsciiCaseInsensitive(language,lang) == 0)
-            tables->fprint_disable[i] = mask;
+            textcat_SetLanguageEnabled(h, i, bEnabled ? TC_TRUE : TC_FALSE);
     }
 }
 
 void SimpleGuesser::EnableLanguage(const std::string& lang)
 {
-    XableLanguage(lang,  sal::static_int_cast< char >( 0xF0 ));
+    SetLanguageEnabled(lang, true);
 }
 
 void SimpleGuesser::DisableLanguage(const std::string& lang)
 {
-    XableLanguage(lang,  sal::static_int_cast< char >( 0x0F ));
+    SetLanguageEnabled(lang, false);
 }
 
 void SimpleGuesser::SetDBPath(const char* path, const char* prefix)
