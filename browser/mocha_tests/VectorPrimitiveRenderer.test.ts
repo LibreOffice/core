@@ -2012,11 +2012,18 @@ describe('VectorPrimitiveRenderer', function () {
 	});
 
 	describe('Spell-check marks', function () {
-		// A mark under a word 20 twips high, along a line 80 twips long.
-		function drawWrongSpell(zoom: number, fontHeight = 20): CanvasRecorder {
+		// A mark under a word 20 twips high, along a line 80 twips long, in
+		// the editing view.
+		function drawWrongSpell(
+			zoom: number,
+			fontHeight = 20,
+			editView = true,
+		): CanvasRecorder {
 			const recorder = new CanvasRecorder(400, 300);
 			recorder.scale(zoom, zoom);
-			new cool.VectorPrimitiveRenderer().renderPrimitive(
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.setEditViewContentVisible(editView);
+			renderer.renderPrimitive(
 				recorder as any,
 				{
 					type: 'wrongSpell',
@@ -2057,6 +2064,12 @@ describe('VectorPrimitiveRenderer', function () {
 
 		it('draws nothing under a word smaller than 5 device pixels', function () {
 			const recorder = drawWrongSpell(1, 4);
+
+			nodeassert.strictEqual(recorder.callsOf('stroke').length, 0);
+		});
+
+		it('draws no mark outside the editing view', function () {
+			const recorder = drawWrongSpell(1, 20, false);
 
 			nodeassert.strictEqual(recorder.callsOf('stroke').length, 0);
 		});

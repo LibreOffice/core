@@ -122,8 +122,9 @@ namespace cool {
 		}
 
 		/// Show or hide the content only an editing view shows: the prompt
-		/// of an empty placeholder and the stand-in graphic of an empty
-		/// picture. A thumbnail and a slideshow leave it out.
+		/// of an empty placeholder, the stand-in graphic of an empty picture
+		/// and the wave under a misspelled word. A thumbnail and a slideshow
+		/// leave it out.
 		setEditViewContentVisible(visible: boolean): void {
 			this._editViewContentVisible = visible;
 		}
@@ -358,6 +359,8 @@ namespace cool {
 					this._renderSingleLine(context, primitive as SingleLinePrimitive);
 					break;
 				case WrongSpellPrimitive.type:
+					// The wave under a misspelled word is a mark of the editing view.
+					if (!this._editViewContentVisible) return;
 					VectorWrongSpellPrimitiveRenderer.render(
 						context,
 						primitive as WrongSpellPrimitive,
