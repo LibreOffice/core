@@ -82,10 +82,11 @@ public:
     /// have changed, as after a column or a row changed size, only the ones a view shows are
     /// built, and the others are named stale, so each is built again when a client asks for it.
     static constexpr size_t constEagerBlocks = 16;
-    /// The most bytes of block JSON the document keeps, over all its sheets. The JSON of the
-    /// blocks used longest ago is dropped beyond it, and such a block is built again when a
-    /// client asks for it or a push carries it, with the versions of its parts kept where they
-    /// did not change. A block of a dense sheet takes about 300 KB.
+    /// The most bytes of compressed block JSON the document keeps, over all its sheets. The JSON
+    /// of the blocks used longest ago is dropped beyond it, and such a block is built again when
+    /// a client asks for it or a push carries it, with the versions of its parts kept where they
+    /// did not change. The JSON of a dense block is large, but its rows repeat each other, so it
+    /// compresses well.
     static constexpr size_t constHeldContentBytes = 8 * 1024 * 1024;
 
     explicit VectorContent(ScDocShell& rDocShell);
@@ -124,6 +125,9 @@ public:
 private:
     using BlockKey = std::pair<sal_Int32, sal_Int32>;
 
+    /// The zstd level the held block JSON is compressed at, the one the kit sends answers with.
+    static constexpr int constContentCompressionLevel = 3;
+
     struct EntryState
     {
         sal_uInt64 mnVersion = 0;
@@ -154,14 +158,20 @@ private:
         bool mbContentHeld = false;
         /// The use count of the document when the block was last built or asked for.
         sal_uInt64 mnLastUse = 0;
-        /// The bytes of the JSON held, 0 once it was dropped.
+        /// The bytes of the compressed JSON held, 0 once it was dropped.
         size_t mnContentBytes = 0;
+        /// The JSON of the borders and of every row, one after the other, compressed as one. The
+        /// parts of a block repeat each other, so together they compress several times better.
+        std::vector<char> maPacked;
+        /// Where each part ends in the JSON before it was compressed, the borders first.
+        std::vector<sal_Int32> maPartEnds;
         /// The JSON of the range the cells of the block cover.
         OString maBounds;
-        /// The borders of the whole block. An empty content means there are none.
+        /// The version and hash of the borders of the whole block, whose JSON is in maPacked. A
+        /// hash of 0 means there are none.
         EntryState maBorders;
-        /// The other layers of each block row, from the first on. A row that draws nothing is
-        /// empty.
+        /// The version and hash of the other layers of each block row, from the first on. A row
+        /// that draws nothing has a hash of 0.
         std::vector<EntryState> maRows;
     };
 
@@ -312,8 +322,10 @@ private:
     /// Build the block again where it may have changed, or whole where its content was dropped,
     /// and give the changed parts a new version.
     void resolveBlock(SheetState& rState, const BlockKey& rKey);
-    /// The bytes of the JSON of the block, as held.
-    static size_t contentBytesOf(const BlockState& rBlock);
+    /// Hold the JSON of the parts of the block, the borders first, compressed as one.
+    static void packContent(BlockState& rBlock, const std::vector<OString>& rParts);
+    /// The JSON of the parts the block holds, the borders first. Empty when none is held.
+    static std::vector<OString> unpackContent(const BlockState& rBlock);
     /// Drop the JSON of the blocks used longest ago, of any sheet, beyond the budget.
     void dropOldContent();
     static sal_uInt64 contentHash(std::string_view rContent);

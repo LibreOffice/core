@@ -51,8 +51,11 @@
 #include <editeng/StripPortionsHelper.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/listener.hxx>
@@ -65,6 +68,8 @@
 #include <svx/svdpage.hxx>
 #include <svx/unoapi.hxx>
 #include <tools/json_writer.hxx>
+
+#include <zstd.h>
 
 #include <algorithm>
 #include <functional>
@@ -945,19 +950,25 @@ void VectorContent::writeBlockEntry(tools::JsonWriter& rWriter, const SheetState
     // Parts changed after nFrom are written. An emptied part is written empty, except at nFrom 0,
     // which names no earlier content of the block.
     auto isWritten = [nFrom](const EntryState& rPart)
-    { return rPart.mnVersion > nFrom && (nFrom > 0 || !rPart.maContent.isEmpty()); };
-    auto writePart = [&rWriter, &rTextStyles](const EntryState& rPart)
+    { return rPart.mnVersion > nFrom && (nFrom > 0 || rPart.mnHash != 0); };
+    // The held JSON comes out of its compression once, for the first part written.
+    std::optional<std::vector<OString>> oParts;
+    auto writePart = [&rWriter, &rTextStyles, &rBlock, &oParts](const EntryState& rPart,
+                                                                size_t nPart)
     {
+        if (!oParts)
+            oParts = unpackContent(rBlock);
+        const OString aContent = nPart < oParts->size() ? (*oParts)[nPart] : OString();
         rTextStyles.insert(rPart.maTextStyles.begin(), rPart.maTextStyles.end());
         rWriter.put("version", sal_Int64(rPart.mnVersion));
-        rWriter.putRaw(Concat2View("\"content\": "
-                                   + (rPart.maContent.isEmpty() ? "{}"_ostr : rPart.maContent)));
+        rWriter.putRaw(
+            Concat2View("\"content\": " + (aContent.isEmpty() ? "{}"_ostr : aContent)));
     };
 
     if (isWritten(rBlock.maBorders))
     {
         auto aBorders = rWriter.startNode("borders");
-        writePart(rBlock.maBorders);
+        writePart(rBlock.maBorders, 0);
     }
     {
         auto aRows = rWriter.startArray("rows");
@@ -968,7 +979,7 @@ void VectorContent::writeBlockEntry(tools::JsonWriter& rWriter, const SheetState
                 continue;
             auto aRow = rWriter.startStruct();
             rWriter.put("row", sal_Int32(nStartRow + nIndex));
-            writePart(rRow);
+            writePart(rRow, nIndex + 1);
         }
     }
 
@@ -1095,12 +1106,60 @@ sal_uInt64 VectorContent::contentHash(std::string_view rContent)
     return std::hash<std::string_view>{}(rContent);
 }
 
-size_t VectorContent::contentBytesOf(const BlockState& rBlock)
+void VectorContent::packContent(BlockState& rBlock, const std::vector<OString>& rParts)
 {
-    size_t nBytes = rBlock.maBorders.maContent.getLength();
-    for (const EntryState& rRow : rBlock.maRows)
-        nBytes += rRow.maContent.getLength();
-    return nBytes;
+    OStringBuffer aJoined;
+    std::vector<sal_Int32> aPartEnds;
+    aPartEnds.reserve(rParts.size());
+    for (const OString& rPart : rParts)
+    {
+        aJoined.append(rPart);
+        aPartEnds.push_back(aJoined.getLength());
+    }
+
+    std::vector<char> aPacked(ZSTD_compressBound(aJoined.getLength()));
+    const size_t nPacked = ZSTD_compress(aPacked.data(), aPacked.size(), aJoined.getStr(),
+                                         aJoined.getLength(), constContentCompressionLevel);
+    if (ZSTD_isError(nPacked))
+    {
+        // Without its content the block is built again whole when it is asked for.
+        SAL_WARN("sc", "VectorContent: compressing a block failed: " << ZSTD_getErrorName(nPacked));
+        rBlock.maPacked = std::vector<char>();
+        rBlock.maPartEnds.clear();
+        rBlock.mnContentBytes = 0;
+        rBlock.mbContentHeld = false;
+        return;
+    }
+    aPacked.resize(nPacked);
+    aPacked.shrink_to_fit();
+    rBlock.maPacked = std::move(aPacked);
+    rBlock.maPartEnds = std::move(aPartEnds);
+    rBlock.mnContentBytes = nPacked;
+    rBlock.mbContentHeld = true;
+}
+
+std::vector<OString> VectorContent::unpackContent(const BlockState& rBlock)
+{
+    if (!rBlock.mbContentHeld || rBlock.maPartEnds.empty())
+        return {};
+    const sal_Int32 nSize = rBlock.maPartEnds.back();
+    std::vector<char> aJoined(nSize);
+    const size_t nUnpacked = ZSTD_decompress(aJoined.data(), aJoined.size(),
+                                             rBlock.maPacked.data(), rBlock.maPacked.size());
+    if (ZSTD_isError(nUnpacked) || nUnpacked != o3tl::make_unsigned(nSize))
+    {
+        SAL_WARN("sc", "VectorContent: the content of a block does not decompress");
+        return std::vector<OString>(rBlock.maPartEnds.size());
+    }
+    std::vector<OString> aParts;
+    aParts.reserve(rBlock.maPartEnds.size());
+    sal_Int32 nStart = 0;
+    for (const sal_Int32 nEnd : rBlock.maPartEnds)
+    {
+        aParts.emplace_back(aJoined.data() + nStart, nEnd - nStart);
+        nStart = nEnd;
+    }
+    return aParts;
 }
 
 size_t VectorContent::heldContentBytes() const
@@ -1135,9 +1194,8 @@ void VectorContent::dropOldContent()
         if (nBytes <= mnHeldContentBudget)
             break;
         BlockState& rBlock = *rUse.second;
-        for (EntryState& rRow : rBlock.maRows)
-            rRow.maContent = OString();
-        rBlock.maBorders.maContent = OString();
+        rBlock.maPacked = std::vector<char>();
+        rBlock.maPartEnds.clear();
         nBytes -= rBlock.mnContentBytes;
         rBlock.mnContentBytes = 0;
         rBlock.mbContentHeld = false;
@@ -1164,34 +1222,39 @@ void VectorContent::resolveBlock(SheetState& rState, const BlockKey& rKey)
     rBlock.moDirtyRows.reset();
     BlockContent aContent = writeBlockContent(rState, rKey, oRows);
 
-    // The content tells whether a part changed, or its hash where the content was dropped.
-    auto isChanged = [&rBlock](const EntryState& rOld, const EntryState& rNew)
+    // The held content tells whether a part changed, or its hash where the content was dropped.
+    // Part 0 is the borders, and part n + 1 row n.
+    std::vector<OString> aParts = unpackContent(rBlock);
+    const size_t nHeldParts = aParts.size();
+    auto isChanged = [&aParts, nHeldParts](size_t nPart, const EntryState& rOld,
+                                           const EntryState& rNew)
     {
-        if (rBlock.mbContentHeld)
-            return rOld.maContent != rNew.maContent;
+        if (nPart < nHeldParts)
+            return aParts[nPart] != rNew.maContent;
         return rOld.mnHash != rNew.mnHash;
     };
     rBlock.maRows.resize(aContent.maRows.size());
     std::vector<size_t> aChangedRows;
     for (size_t nIndex = aContent.maBuiltRows.first; nIndex < aContent.maBuiltRows.second; ++nIndex)
     {
-        if (isChanged(rBlock.maRows[nIndex], aContent.maRows[nIndex]))
+        if (isChanged(nIndex + 1, rBlock.maRows[nIndex], aContent.maRows[nIndex]))
             aChangedRows.push_back(nIndex);
     }
-    const bool bBordersChanged = isChanged(rBlock.maBorders, aContent.maBorders);
+    const bool bBordersChanged = isChanged(0, rBlock.maBorders, aContent.maBorders);
 
-    // The built parts hold their content, with the versions they had.
-    auto takeContent = [](EntryState& rPart, EntryState& rNew)
+    // The built parts take their content, with the versions they had, and the block holds the
+    // content of every part compressed again.
+    aParts.resize(aContent.maRows.size() + 1);
+    auto takeContent = [&aParts](size_t nPart, EntryState& rPart, EntryState& rNew)
     {
-        rPart.maContent = std::move(rNew.maContent);
+        aParts[nPart] = std::move(rNew.maContent);
         rPart.mnHash = rNew.mnHash;
         rPart.maTextStyles = std::move(rNew.maTextStyles);
     };
     for (size_t nIndex = aContent.maBuiltRows.first; nIndex < aContent.maBuiltRows.second; ++nIndex)
-        takeContent(rBlock.maRows[nIndex], aContent.maRows[nIndex]);
-    takeContent(rBlock.maBorders, aContent.maBorders);
-    rBlock.mbContentHeld = true;
-    rBlock.mnContentBytes = contentBytesOf(rBlock);
+        takeContent(nIndex + 1, rBlock.maRows[nIndex], aContent.maRows[nIndex]);
+    takeContent(0, rBlock.maBorders, aContent.maBorders);
+    packContent(rBlock, aParts);
     rBlock.mnLastUse = ++mnUseCount;
 
     // Changed parts take the next version. A new empty block takes it too, so a client can hold it.

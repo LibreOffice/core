@@ -60,6 +60,7 @@ $(eval $(call gb_Library_use_externals,sc,\
     mdds_headers \
 	orcus \
 	orcus-parser \
+	zstd \
 ))
 
 ifneq ($(SYSTEM_LIBORCUS),)

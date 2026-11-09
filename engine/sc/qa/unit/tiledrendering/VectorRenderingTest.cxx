@@ -1424,6 +1424,41 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorBlockWithDroppedContentKeep
     CPPUNIT_ASSERT(cellTextAt(aWhole, 0, 0));
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorHeldBlockContentIsCompressed)
+{
+    // The engine holds the JSON of a block compressed, and the rows of a dense block repeat each
+    // other, so it takes a small part of what the answer carries.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+    for (SCROW nRow = 0; nRow < sc::VectorContent::constBlockRows; ++nRow)
+        for (SCCOL nColumn = 0; nColumn < 4; ++nColumn)
+            rDocument.SetString(ScAddress(nColumn, nRow, 0), u"Measurement value"_ustr);
+    pDocShell->PostPaintGridAll();
+    Scheduler::ProcessEventsToIdle();
+
+    tools::JsonWriter aWriter;
+    static_cast<vcl::ITiledRenderable*>(pModelObj)->getCommandValues(
+        aWriter, ".uno:VectorPrimitives?partid=0&mode=-1&blocks=0:0");
+    const sal_Int32 nAnswerBytes = aWriter.finishAndGetAsOString().getLength();
+
+    sc::VectorContent* pContent = pModelObj->getVectorContent();
+    CPPUNIT_ASSERT(pContent);
+    const size_t nHeldBytes = pContent->heldContentBytes();
+    CPPUNIT_ASSERT_GREATER(size_t(0), nHeldBytes);
+    CPPUNIT_ASSERT_LESS(size_t(nAnswerBytes / 4), nHeldBytes);
+
+    // Typing into one cell builds that row again; the block is held compressed again with it,
+    // and the other rows still come whole when the block is asked for.
+    setCellString(*pDocShell, 0, 5, u"Changed"_ustr);
+    const boost::property_tree::ptree aWhole
+        = requestVectorPrimitives(pModelObj, "partid=0&mode=-1&blocks=0:0");
+    CPPUNIT_ASSERT_EQUAL(size_t(sc::VectorContent::constBlockRows * 4), cellTexts(aWhole).size());
+    CPPUNIT_ASSERT(cellTextAt(aWhole, 0, 5));
+    CPPUNIT_ASSERT(cellTextAt(aWhole, 3, 63));
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVectorHeldContentBudgetSpansTheSheets)
 {
     // The budget covers the blocks of every sheet, and the block used longest ago goes first,
