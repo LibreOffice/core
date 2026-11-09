@@ -182,8 +182,23 @@ function documentPageGaps(pageWindow: any): void {
 	pageWindow.HTMLCanvasElement.prototype.getContext = function () {
 		return documentPageContext(pageWindow, this);
 	};
-	// Every element in the page counts as shown.
-	pageWindow.HTMLElement.prototype.checkVisibility = () => true;
+	// An element counts as shown unless it or a parent has display none. The page has no
+	// stylesheets, so only inline styles hide an element.
+	pageWindow.HTMLElement.prototype.checkVisibility = function () {
+		for (let element = this; element; element = element.parentElement)
+			if (pageWindow.getComputedStyle(element).display === 'none') return false;
+		return true;
+	};
+	// innerText is the text content, without the line breaks a browser adds from the layout.
+	Object.defineProperty(pageWindow.HTMLElement.prototype, 'innerText', {
+		get() {
+			return this.textContent;
+		},
+		set(value: string) {
+			this.textContent = value;
+		},
+		configurable: true,
+	});
 	pageWindow.HTMLElement.prototype.scrollIntoView = () => {};
 }
 
