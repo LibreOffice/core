@@ -2245,8 +2245,20 @@ fi
 AC_SUBST(ENABLE_SERVER)
 AM_CONDITIONAL([ENABLE_SERVER], [test "$ENABLE_SERVER" = "true"])
 
+ENABLE_APP=false
+if test "$ENABLE_MOBILEAPP" = "true" -o "$ENABLE_QTAPP" = "true"; then
+    ENABLE_APP=true
+fi
 dnl The tree builds a page that an app loads from file://.
-AM_CONDITIONAL([ENABLE_APP], [test "$ENABLE_MOBILEAPP" = "true" -o "$ENABLE_QTAPP" = "true"])
+AM_CONDITIONAL([ENABLE_APP], [test "$ENABLE_APP" = "true"])
+
+dnl Debug builds load local documents for testing, and an app opens the user's own files.
+ENABLE_LOCAL_FILESYSTEM=0
+if test "$ENABLE_DEBUG" = "true" -o "$ENABLE_APP" = "true"; then
+    ENABLE_LOCAL_FILESYSTEM=1
+fi
+AC_DEFINE_UNQUOTED([ENABLE_LOCAL_FILESYSTEM], [$ENABLE_LOCAL_FILESYSTEM],
+                   [Whether documents can be loaded from the local file system])
 
 if test "$host_os" = "emscripten" ; then
     ENABLE_EMSCRIPTENAPP=true

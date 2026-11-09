@@ -190,14 +190,8 @@
 #define ENABLE_WOPI (!MOBILEAPP)
 #endif
 
-/* Controls whether or not we allow loading documents from the local filesystem. */
-#ifndef ENABLE_LOCAL_FILESYSTEM
-#if MOBILEAPP || ENABLE_DEBUG
-#define ENABLE_LOCAL_FILESYSTEM 1
-#else
-#define ENABLE_LOCAL_FILESYSTEM 0
-#endif
-#endif
+/* Whether documents can be loaded from the local file system */
+#undef ENABLE_LOCAL_FILESYSTEM
 
 #if defined(__COVERITY__)
 #define CONFIG_STATIC static
