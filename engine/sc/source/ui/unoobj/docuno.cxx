@@ -36,6 +36,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <svx/fmview.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
@@ -158,6 +159,8 @@
 
 #include <prnsave.hxx>
 
+#include <algorithm>
+#include <map>
 #include <optional>
 
 using namespace com::sun::star;
@@ -1533,11 +1536,158 @@ OString ScModelObj::getViewRenderState(const SfxViewShell* pViewShell)
     return OString();
 }
 
+namespace
+{
+/**
+ * One command, split into its name and its query parameters.
+ *
+ * Make sure that it does not outlive the original command string since
+ * ParsedCommand references it directly without making copies.
+ */
+struct ParsedCommand
+{
+    /** The name, without the ".uno:" prefix and the query. */
+    std::string_view aName;
+    /** The query parameters, still URL-encoded. */
+    std::map<std::string_view, std::string_view> aParams;
+
+    /**
+     * Parse a command of the form ".uno:Name?key1=value1&key2=value2".
+     * Without the ".uno:" prefix.
+     */
+    static ParsedCommand parse(std::string_view aCommand)
+    {
+        ParsedCommand aParsed;
+
+        static constexpr std::string_view aPrefix = ".uno:";
+        if (!aCommand.starts_with(aPrefix))
+            return aParsed;
+
+        aCommand.remove_prefix(aPrefix.size());
+
+        enum class State
+        {
+            Name,
+            Key,
+            Value
+        };
+
+        State eState = State::Name;
+        std::string_view aKey;
+        size_t nStart = 0; // start of the current name, key or value
+
+        for (size_t i = 0; i <= aCommand.size(); ++i)
+        {
+            const bool bEnd = i == aCommand.size();
+            const char c = bEnd ? '\0' : aCommand[i];
+
+            switch (eState)
+            {
+                case State::Name:
+                    if (bEnd || c == '?')
+                    {
+                        aParsed.aName = aCommand.substr(0, i);
+                        eState = State::Key;
+                        nStart = i + 1;
+                    }
+                    break;
+                case State::Key:
+                    if (c == '=')
+                    {
+                        aKey = aCommand.substr(nStart, i - nStart);
+                        eState = State::Value;
+                        nStart = i + 1;
+                    }
+                    else if (bEnd || c == '&')
+                    {
+                        // A key without a value, or an empty parameter to skip.
+                        if (i > nStart)
+                            aParsed.aParams[aCommand.substr(nStart, i - nStart)]
+                                = std::string_view();
+                        nStart = i + 1;
+                    }
+                    break;
+                case State::Value:
+                    // A value may itself contain '=', as in formula==SUM(A1:A5).
+                    if (bEnd || c == '&')
+                    {
+                        aParsed.aParams[aKey] = aCommand.substr(nStart, i - nStart);
+                        eState = State::Key;
+                        nStart = i + 1;
+                    }
+                    break;
+            }
+        }
+
+        return aParsed;
+    }
+
+    /**
+     * Get the raw value of the parameter, if present.
+     */
+    std::optional<std::string_view> get(std::string_view aKey) const
+    {
+        auto it = aParams.find(aKey);
+        if (it == aParams.end())
+            return std::nullopt;
+        return it->second;
+    }
+
+    /**
+     * Get the URL-decoded value of the parameter, or an empty string if not present.
+     */
+    OUString getDecoded(std::string_view aKey) const
+    {
+        const std::optional<std::string_view> oValue = get(aKey);
+        if (!oValue)
+            return OUString();
+        return INetURLObject::decode(OUString::fromUtf8(*oValue),
+                                     INetURLObject::DecodeMechanism::WithCharset);
+    }
+};
+
+enum class CalcCommand
+{
+    Unknown,
+    SecurityLabel,
+    FormulaDepChain,
+    CalcFunctionList,
+    EvaluateFormula,
+    ExtractDocumentStructure,
+};
+
+/** The commands that getCommandValues() handles, by name. */
+constexpr std::pair<std::string_view, CalcCommand> aCalcCommands[] = {
+    { "SecurityLabel", CalcCommand::SecurityLabel },
+    { "FormulaDepChain", CalcCommand::FormulaDepChain },
+    { "CalcFunctionList", CalcCommand::CalcFunctionList },
+    { "EvaluateFormula", CalcCommand::EvaluateFormula },
+    { "ExtractDocumentStructure", CalcCommand::ExtractDocumentStructure },
+};
+
+/**
+ * Find the command with the given name, without the ".uno:" prefix, or Unknown.
+ */
+CalcCommand findCalcCommand(std::string_view aName)
+{
+    // NB: for only a handful of entries, linear search is probably fast enough.
+    // Once the size grows we can consider using something like
+    // mdds::sorted_string_map.
+    for (const auto& [rName, eCommand] : aCalcCommands)
+    {
+        if (rName == aName)
+            return eCommand;
+    }
+    return CalcCommand::Unknown;
+}
+}
+
 bool ScModelObj::supportsCommand(std::u16string_view rCommand)
 {
-    return rCommand == u"FormulaDepChain" || rCommand == u"CalcFunctionList"
-           || rCommand == u"EvaluateFormula" || rCommand == u"ExtractDocumentStructure"
-           || rCommand == u"SecurityLabel" || svx::vector::isPartCommand(rCommand);
+    return std::any_of(std::begin(aCalcCommands), std::end(aCalcCommands),
+                       [rCommand](const auto& rEntry)
+                       { return o3tl::equalsAscii(rCommand, rEntry.first); })
+           || svx::vector::isPartCommand(rCommand);
 }
 
 void ScModelObj::pushVectorPrimitivesDelta(tools::JsonWriter& rJsonWriter,
@@ -1563,10 +1713,9 @@ void ScModelObj::setDrawnFromModel(bool bDrawnFromModel)
 
 void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
 {
-    OString aCommand(rCommand);
-    if (aCommand.startsWith(".uno:VectorPrimitives")
-        || aCommand.startsWith(".uno:VectorRenderingGraphics")
-        || aCommand.startsWith(".uno:VectorRenderingFont"))
+    const ParsedCommand aCommand = ParsedCommand::parse(rCommand);
+
+    if (svx::vector::isPartCommand(OUString::fromUtf8(aCommand.aName)))
     {
         if (!pDocShell)
             return;
@@ -1577,331 +1726,320 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
         mpVectorContent->getCommandValues(rJsonWriter, rCommand);
         return;
     }
-    if (aCommand.startsWith(".uno:SecurityLabel"))
+
+    switch (findCalcCommand(aCommand.aName))
     {
-        // The document's STANAG marking (empty when unlabelled), for the browser's
-        // read-only classification banner. Rendered with the label's provisioned policy.
-        rJsonWriter.put("commandName", ".uno:SecurityLabel");
-        const cpo::uno::Reference<css::frame::XModel> xModel
-            = pDocShell ? pDocShell->GetModel() : nullptr;
-        const OUString aMarking = xModel.is() ? svx::seclabel::readMarking(xModel) : OUString();
-        auto aValues = rJsonWriter.startNode("commandValues");
-        rJsonWriter.put("marking", aMarking);
-        // Whether this document's format can carry a label; the browser hides the
-        // command and its button when false (only OOXML supports the customXml part).
-        rJsonWriter.put("supported", xModel.is() && svx::seclabel::modelSupportsLabel(xModel));
-        return;
-    }
-    if (aCommand.startsWith(".uno:FormulaDepChain"))
-    {
-        rJsonWriter.put("commandName", ".uno:FormulaDepChain");
-
-        if (!pDocShell)
-        {
-            auto aValues = rJsonWriter.startNode("commandValues");
-            rJsonWriter.put("hasError", false);
-            rJsonWriter.put("reason", "internal_error");
+        case CalcCommand::Unknown:
             return;
-        }
-
-        ScDocument& rDoc = pDocShell->GetDocument();
-        ScTabViewShell* pViewShell = pDocShell->GetBestViewShell(false);
-        if (!pViewShell)
+        case CalcCommand::SecurityLabel:
         {
+            // The document's STANAG marking (empty when unlabelled), for the browser's
+            // read-only classification banner. Rendered with the label's provisioned policy.
+            rJsonWriter.put("commandName", ".uno:SecurityLabel");
+            const cpo::uno::Reference<css::frame::XModel> xModel
+                = pDocShell ? pDocShell->GetModel() : nullptr;
+            const OUString aMarking = xModel.is() ? svx::seclabel::readMarking(xModel) : OUString();
             auto aValues = rJsonWriter.startNode("commandValues");
-            rJsonWriter.put("hasError", false);
-            rJsonWriter.put("reason", "internal_error");
-            return;
+            rJsonWriter.put("marking", aMarking);
+            // Whether this document's format can carry a label; the browser hides the
+            // command and its button when false (only OOXML supports the customXml part).
+            rJsonWriter.put("supported", xModel.is() && svx::seclabel::modelSupportsLabel(xModel));
+            break;
         }
-
-        const ScViewData& rViewData = pViewShell->GetViewData();
-        ScAddress aCurPos(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNumber());
-
+        case CalcCommand::FormulaDepChain:
         {
-            auto aValues = rJsonWriter.startNode("commandValues");
-            sc::getFormulaDependencyChain(rDoc, aCurPos, rJsonWriter);
-        }
-    }
-    else if (aCommand.startsWith(".uno:CalcFunctionList"))
-    {
-        rJsonWriter.put("commandName", ".uno:CalcFunctionList");
+            rJsonWriter.put("commandName", ".uno:FormulaDepChain");
 
-        const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
-        ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
-        if (!pFuncList || !pFuncMgr)
-            return;
-
-        // ?english=true asks for the names of the English A1 grammar. Without it the
-        // names come in the language of the view, which is what a function picker wants.
-        const bool bEnglish = aCommand.indexOf("english=true") >= 0;
-
-        ScCompiler::OpCodeMapPtr xEnglishMap;
-        if (bEnglish && pDocShell)
-        {
-            ScAddress aAddress;
-            ScCompiler aComp(pDocShell->GetDocument(), aAddress);
-            xEnglishMap = aComp.GetOpCodeMap(sheet::FormulaLanguage::XL_ENGLISH);
-        }
-
-        auto aValues = rJsonWriter.startNode("commandValues");
-
-        // Categories
-        {
-            auto aCats = rJsonWriter.startArray("categories");
-            for (sal_uInt32 i = 0; i < pFuncMgr->getCount(); ++i)
+            if (!pDocShell)
             {
-                auto aCat = rJsonWriter.startStruct();
-                rJsonWriter.put("name", ScFunctionMgr::GetCategoryName(i));
+                auto aValues = rJsonWriter.startNode("commandValues");
+                rJsonWriter.put("hasError", false);
+                rJsonWriter.put("reason", "internal_error");
+                return;
             }
-        }
 
-        // Functions: name, signature, category index.
-        // Descriptions are omitted to keep the response compact.
-        formula::FormulaHelper aHelper(pFuncMgr);
-        {
-            auto aFuncs = rJsonWriter.startArray("functions");
-            sal_uInt32 nCount = pFuncList->GetCount();
-            for (sal_uInt32 i = 0; i < nCount; ++i)
+            ScDocument& rDoc = pDocShell->GetDocument();
+            ScTabViewShell* pViewShell = pDocShell->GetBestViewShell(false);
+            if (!pViewShell)
             {
-                const ScFuncDesc* pDesc = pFuncList->GetFunction(i);
-                if (!pDesc || !pDesc->mxFuncName || pDesc->isHidden())
-                    continue;
+                auto aValues = rJsonWriter.startNode("commandValues");
+                rJsonWriter.put("hasError", false);
+                rJsonWriter.put("reason", "internal_error");
+                return;
+            }
 
-                const formula::IFunctionDescription* pIDesc = nullptr;
-                OUString eqName = "=" + *pDesc->mxFuncName + "()";
-                sal_Int32 nStart = 0;
-                ::std::vector<OUString> aArgs;
-                aHelper.GetNextFunc(eqName, false, nStart, nullptr, &pIDesc, &aArgs);
+            const ScViewData& rViewData = pViewShell->GetViewData();
+            ScAddress aCurPos(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNumber());
 
-                auto aFunc = rJsonWriter.startStruct();
+            {
+                auto aValues = rJsonWriter.startNode("commandValues");
+                sc::getFormulaDependencyChain(rDoc, aCurPos, rJsonWriter);
+            }
+            break;
+        }
+        case CalcCommand::CalcFunctionList:
+        {
+            rJsonWriter.put("commandName", ".uno:CalcFunctionList");
 
-                OUString aName = *pDesc->mxFuncName;
-                // Add-in functions sit above the last opcode and are never translated,
-                // so the name they already carry is the only one they have.
-                if (xEnglishMap && pDesc->nFIndex <= ocLastOpcodeId)
+            const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
+            ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
+            if (!pFuncList || !pFuncMgr)
+                return;
+
+            // ?english=true asks for the names of the English A1 grammar. Without it the
+            // names come in the language of the view, which is what a function picker wants.
+            const bool bEnglish = aCommand.get("english") == "true";
+
+            ScCompiler::OpCodeMapPtr xEnglishMap;
+            if (bEnglish && pDocShell)
+            {
+                ScAddress aAddress;
+                ScCompiler aComp(pDocShell->GetDocument(), aAddress);
+                xEnglishMap = aComp.GetOpCodeMap(sheet::FormulaLanguage::XL_ENGLISH);
+            }
+
+            auto aValues = rJsonWriter.startNode("commandValues");
+
+            // Categories
+            {
+                auto aCats = rJsonWriter.startArray("categories");
+                for (sal_uInt32 i = 0; i < pFuncMgr->getCount(); ++i)
                 {
-                    const OUString& rSymbol
-                        = xEnglishMap->getSymbol(static_cast<OpCode>(pDesc->nFIndex));
-                    if (!rSymbol.isEmpty())
-                        aName = rSymbol;
+                    auto aCat = rJsonWriter.startStruct();
+                    rJsonWriter.put("name", ScFunctionMgr::GetCategoryName(i));
                 }
+            }
 
-                rJsonWriter.put("name", aName);
-                if (pIDesc)
+            // Functions: name, signature, category index.
+            // Descriptions are omitted to keep the response compact.
+            formula::FormulaHelper aHelper(pFuncMgr);
+            {
+                auto aFuncs = rJsonWriter.startArray("functions");
+                sal_uInt32 nCount = pFuncList->GetCount();
+                for (sal_uInt32 i = 0; i < nCount; ++i)
                 {
-                    OUString aSignature = pIDesc->getSignature();
-                    if (bEnglish)
+                    const ScFuncDesc* pDesc = pFuncList->GetFunction(i);
+                    if (!pDesc || !pDesc->mxFuncName || pDesc->isHidden())
+                        continue;
+
+                    const formula::IFunctionDescription* pIDesc = nullptr;
+                    OUString eqName = "=" + *pDesc->mxFuncName + "()";
+                    sal_Int32 nStart = 0;
+                    ::std::vector<OUString> aArgs;
+                    aHelper.GetNextFunc(eqName, false, nStart, nullptr, &pIDesc, &aArgs);
+
+                    auto aFunc = rJsonWriter.startStruct();
+
+                    OUString aName = *pDesc->mxFuncName;
+                    // Add-in functions sit above the last opcode and are never translated,
+                    // so the name they already carry is the only one they have.
+                    if (xEnglishMap && pDesc->nFIndex <= ocLastOpcodeId)
                     {
-                        // The signature leads with the translated name and separates the
-                        // arguments the way the locale does. Lead with the English name
-                        // and separate with a comma.
-                        const sal_Int32 nParen = aSignature.indexOf('(');
-                        if (nParen >= 0)
-                            aSignature = aName + aSignature.copy(nParen).replace(';', ',');
+                        const OUString& rSymbol
+                            = xEnglishMap->getSymbol(static_cast<OpCode>(pDesc->nFIndex));
+                        if (!rSymbol.isEmpty())
+                            aName = rSymbol;
                     }
-                    rJsonWriter.put("signature", aSignature);
-                    if (pIDesc->getCategory())
-                        rJsonWriter.put("category",
-                            static_cast<sal_Int64>(pIDesc->getCategory()->getNumber()));
+
+                    rJsonWriter.put("name", aName);
+                    if (pIDesc)
+                    {
+                        OUString aSignature = pIDesc->getSignature();
+                        if (bEnglish)
+                        {
+                            // The signature leads with the translated name and separates the
+                            // arguments the way the locale does. Lead with the English name
+                            // and separate with a comma.
+                            const sal_Int32 nParen = aSignature.indexOf('(');
+                            if (nParen >= 0)
+                                aSignature = aName + aSignature.copy(nParen).replace(';', ',');
+                        }
+                        rJsonWriter.put("signature", aSignature);
+                        if (pIDesc->getCategory())
+                            rJsonWriter.put("category",
+                                static_cast<sal_Int64>(pIDesc->getCategory()->getNumber()));
+                    }
                 }
             }
+            break;
         }
-    }
-    else if (aCommand.startsWith(".uno:EvaluateFormula"))
-    {
-        rJsonWriter.put("commandName", ".uno:EvaluateFormula");
-
-        if (!pDocShell)
-            return;
-
-        ScDocument& rDoc = pDocShell->GetDocument();
-
-        // Parse cell and formula from query: ?cell=G1&formula==SUM(A1:A5)
-        OString params;
-        sal_Int32 qPos = aCommand.indexOf('?');
-        if (qPos >= 0)
-            params = aCommand.copy(qPos + 1);
-
-        OUString cellStr;
-        OUString formulaStr;
-        for (sal_Int32 nIdx = 0; nIdx >= 0;)
+        case CalcCommand::EvaluateFormula:
         {
-            OString param = params.getToken(0, '&', nIdx);
-            if (param.startsWith("cell="))
-                cellStr = OStringToOUString(param.subView(5), RTL_TEXTENCODING_UTF8);
-            else if (param.startsWith("formula="))
+            rJsonWriter.put("commandName", ".uno:EvaluateFormula");
+
+            if (!pDocShell)
+                return;
+
+            ScDocument& rDoc = pDocShell->GetDocument();
+
+            // Cell and formula from the query: ?cell=G1&formula==SUM(A1:A5)
+            const OUString cellStr = OUString::fromUtf8(aCommand.get("cell").value_or(""));
+            const OUString formulaStr = aCommand.getDecoded("formula");
+
+            auto aValues = rJsonWriter.startNode("commandValues");
+
+            if (cellStr.isEmpty() || formulaStr.isEmpty())
             {
-                OUString decoded = OStringToOUString(param.subView(8), RTL_TEXTENCODING_UTF8);
-                formulaStr = INetURLObject::decode(decoded,
-                    INetURLObject::DecodeMechanism::WithCharset);
+                rJsonWriter.put("error", "Missing cell or formula parameter");
+                return;
             }
-        }
 
-        auto aValues = rJsonWriter.startNode("commandValues");
+            rJsonWriter.put("cell", cellStr);
+            rJsonWriter.put("formula", formulaStr);
 
-        if (cellStr.isEmpty() || formulaStr.isEmpty())
-        {
-            rJsonWriter.put("error", "Missing cell or formula parameter");
-            return;
-        }
+            ScTabViewShell* pViewShell = pDocShell->GetBestViewShell(false);
+            const SCTAB nActiveTab = pViewShell ? pViewShell->GetViewData().GetTabNumber() : SCTAB(0);
 
-        rJsonWriter.put("cell", cellStr);
-        rJsonWriter.put("formula", formulaStr);
+            ScAddress aAddr;
+            aAddr.SetTab(nActiveTab);
+            ScRefFlags nRes = aAddr.Parse(cellStr, rDoc);
+            if (!(nRes & ScRefFlags::VALID))
+            {
+                rJsonWriter.put("resultType", "error");
+                rJsonWriter.put("result", "Invalid cell address");
+                return;
+            }
 
-        ScTabViewShell* pViewShell = pDocShell->GetBestViewShell(false);
-        const SCTAB nActiveTab = pViewShell ? pViewShell->GetViewData().GetTabNumber() : SCTAB(0);
+            ScSimpleFormulaCalculator aCalc(rDoc, aAddr, formulaStr, false,
+                                            formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
+            aCalc.SetLimitString(true);
 
-        ScAddress aAddr;
-        aAddr.SetTab(nActiveTab);
-        ScRefFlags nRes = aAddr.Parse(cellStr, rDoc);
-        if (!(nRes & ScRefFlags::VALID))
-        {
-            rJsonWriter.put("resultType", "error");
-            rJsonWriter.put("result", "Invalid cell address");
-            return;
-        }
-
-        ScSimpleFormulaCalculator aCalc(rDoc, aAddr, formulaStr, false,
-                                        formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
-        aCalc.SetLimitString(true);
-
-        FormulaError nErr = aCalc.GetErrCode();
-        if (nErr != FormulaError::NONE)
-        {
-            rJsonWriter.put("resultType", "error");
-            rJsonWriter.put("result", ScGlobal::GetErrorString(nErr));
-        }
-        else if (aCalc.IsValue())
-        {
-            rJsonWriter.put("resultType", "value");
-            rJsonWriter.put("result", aCalc.GetValue());
-        }
-        else
-        {
-            OUString sResult = aCalc.GetString().getString();
-            if (sResult.isEmpty())
-                rJsonWriter.put("resultType", "empty");
+            FormulaError nErr = aCalc.GetErrCode();
+            if (nErr != FormulaError::NONE)
+            {
+                rJsonWriter.put("resultType", "error");
+                rJsonWriter.put("result", ScGlobal::GetErrorString(nErr));
+            }
+            else if (aCalc.IsValue())
+            {
+                rJsonWriter.put("resultType", "value");
+                rJsonWriter.put("result", aCalc.GetValue());
+            }
             else
             {
-                rJsonWriter.put("resultType", "string");
-                rJsonWriter.put("result", sResult);
+                OUString sResult = aCalc.GetString().getString();
+                if (sResult.isEmpty())
+                    rJsonWriter.put("resultType", "empty");
+                else
+                {
+                    rJsonWriter.put("resultType", "string");
+                    rJsonWriter.put("result", sResult);
+                }
             }
+            break;
         }
-    }
-    else if (aCommand.startsWith(".uno:ExtractDocumentStructure"))
-    {
-        auto aStructNode = rJsonWriter.startNode("DocStructure");
-
-        if (!pDocShell)
-            return;
-
-        // Parse the filter argument, e.g. ?filter=text[,range:A1:D100]
-        const std::map<OUString, OUString> aArgs
-            = KitHelper::parseCommandParameters(OUString::fromUtf8(aCommand));
-        OUString filterStr;
-        if (auto it = aArgs.find(u"filter"_ustr); it != aArgs.end())
-            filterStr = it->second;
-
-        // Only the text filter is implemented for Calc; the other structure
-        // types are Writer/Impress-only.
-        if (filterStr != u"text" && !filterStr.startsWith(u"text,"))
-            return;
-
-        // The arguments after the filter name: "range:A1:D100" limits the text to a cell range,
-        // and "sheet:<name>" reads that sheet in place of the active one. The sheet comes last
-        // and runs to the end, so a sheet name may hold a comma.
-        OUString rangeStr;
-        OUString aRequestedSheet;
-        if (sal_Int32 nComma = filterStr.indexOf(','); nComma >= 0)
+        case CalcCommand::ExtractDocumentStructure:
         {
-            OUString args = filterStr.copy(nComma + 1); // e.g. "range:A1:D100,sheet:Sales"
-            if (sal_Int32 nSheet = args.indexOf(u"sheet:"); nSheet >= 0)
+            auto aStructNode = rJsonWriter.startNode("DocStructure");
+
+            if (!pDocShell)
+                return;
+
+            // The filter argument, e.g. ?filter=text[,range:A1:D100]
+            const OUString filterStr = aCommand.getDecoded("filter");
+
+            // Only the text filter is implemented for Calc; the other structure
+            // types are Writer/Impress-only.
+            if (filterStr != u"text" && !filterStr.startsWith(u"text,"))
+                return;
+
+            // The arguments after the filter name: "range:A1:D100" limits the text to a cell
+            // range, and "sheet:<name>" reads that sheet in place of the active one. The sheet
+            // comes last and runs to the end, so a sheet name may hold a comma.
+            OUString rangeStr;
+            OUString aRequestedSheet;
+            if (sal_Int32 nComma = filterStr.indexOf(','); nComma >= 0)
             {
-                aRequestedSheet = args.copy(nSheet + 6);
-                args = args.copy(0, nSheet);
+                OUString args = filterStr.copy(nComma + 1); // e.g. "range:A1:D100,sheet:Sales"
+                if (sal_Int32 nSheet = args.indexOf(u"sheet:"); nSheet >= 0)
+                {
+                    aRequestedSheet = args.copy(nSheet + 6);
+                    args = args.copy(0, nSheet);
+                }
+                if (args.startsWith(u"range:"))
+                    rangeStr = OUString(comphelper::string::stripEnd(args.subView(6), u','));
             }
-            if (args.startsWith(u"range:"))
-                rangeStr = OUString(comphelper::string::stripEnd(args.subView(6), u','));
-        }
 
-        ScDocument& rDoc = pDocShell->GetDocument();
-        ScTabViewShell* pViewShell = pDocShell->GetBestViewShell(false);
-        SCTAB nActiveTab = pViewShell ? pViewShell->GetViewData().GetTabNumber() : SCTAB(0);
+            ScDocument& rDoc = pDocShell->GetDocument();
+            ScTabViewShell* pViewShell = pDocShell->GetBestViewShell(false);
+            SCTAB nActiveTab = pViewShell ? pViewShell->GetViewData().GetTabNumber() : SCTAB(0);
 
-        // The names of all sheets come first, so a reader can ask for another one.
-        {
-            auto aSheetsNode = rJsonWriter.startArray("Sheets");
-            for (SCTAB nTab = 0; nTab < rDoc.GetTableCount(); ++nTab)
+            // The names of all sheets come first, so a reader can ask for another one.
             {
-                OUString aName;
-                rDoc.GetName(nTab, aName);
-                rJsonWriter.putSimpleValue(aName);
+                auto aSheetsNode = rJsonWriter.startArray("Sheets");
+                for (SCTAB nTab = 0; nTab < rDoc.GetTableCount(); ++nTab)
+                {
+                    OUString aName;
+                    rDoc.GetName(nTab, aName);
+                    rJsonWriter.putSimpleValue(aName);
+                }
             }
-        }
 
-        if (!aRequestedSheet.isEmpty() && !rDoc.GetTable(aRequestedSheet, nActiveTab))
-        {
+            if (!aRequestedSheet.isEmpty() && !rDoc.GetTable(aRequestedSheet, nActiveTab))
+            {
+                auto aBodyNode = rJsonWriter.startNode("BodyText");
+                rJsonWriter.put("format", "markdown");
+                rJsonWriter.put("truncated", false);
+                rJsonWriter.put("error", "There is no sheet named '" + aRequestedSheet
+                                             + "'. Sheets lists the names of the sheets.");
+                rJsonWriter.put("text", "");
+                return;
+            }
+
+            ScRange aRange;
+            // Default to the active sheet so an unprefixed range like B5:B10 parses
+            // against the sheet the user is viewing rather than always sheet 0.
+            aRange.aStart.SetTab(nActiveTab);
+            aRange.aEnd.SetTab(nActiveTab);
+            bool bHaveRange = false;
+            if (!rangeStr.isEmpty())
+                bHaveRange = bool(aRange.Parse(rangeStr, rDoc) & ScRefFlags::VALID);
+            if (!bHaveRange)
+            {
+                SCCOL nEndCol = 0;
+                SCROW nEndRow = 0;
+                rDoc.GetCellArea(nActiveTab, nEndCol, nEndRow);
+                aRange = ScRange(0, 0, nActiveTab, nEndCol, nEndRow, nActiveTab);
+            }
+
+            // A range that names its own sheet is read from that sheet, so the name comes from
+            // the range.
+            OUString aSheetName;
+            rDoc.GetName(aRange.aStart.Tab(), aSheetName);
+            rJsonWriter.put("Sheet", aSheetName);
+
+            OUString aText = ScTransferObj::GetMarkdownFromRange(rDoc, aRange, /*bAnnotated*/ true);
+            OUString aFormulas = ScTransferObj::GetFormulaListFromRange(rDoc, aRange);
+            if (!aFormulas.isEmpty())
+                aFormulas = "\n" + aFormulas;
+            // A text that is too long loses the end of the table first, so the formula list after
+            // the table is kept.
+            bool bTruncated = false;
+            if (aText.getLength() + aFormulas.getLength() > KitHelper::AIBodyTextMaxChars)
+            {
+                const sal_Int32 nTableChars = KitHelper::AIBodyTextMaxChars - aFormulas.getLength();
+                aText = aText.copy(0, nTableChars > 0 ? nTableChars : 0);
+                bTruncated = true;
+            }
+            aText += aFormulas;
+            if (aText.getLength() > KitHelper::AIBodyTextMaxChars)
+                aText = aText.copy(0, KitHelper::AIBodyTextMaxChars);
+
+            // Emit the truncation flag and an explicit instruction before the text,
+            // so the model acts on it rather than overlooking a flag buried after a
+            // large markdown table.
             auto aBodyNode = rJsonWriter.startNode("BodyText");
             rJsonWriter.put("format", "markdown");
-            rJsonWriter.put("truncated", false);
-            rJsonWriter.put("error", "There is no sheet named '" + aRequestedSheet
-                                         + "'. Sheets lists the names of the sheets.");
-            rJsonWriter.put("text", "");
-            return;
+            rJsonWriter.put("truncated", bTruncated);
+            if (bTruncated)
+                rJsonWriter.put(
+                    "note", "The sheet is large, so only the first part is included here. Tell the "
+                            "user the summary is based on a truncated portion and offer to read a "
+                            "specific area by calling this tool again with the range argument, e.g. "
+                            "range=\"A1:D100\".");
+            rJsonWriter.put("text", aText);
+            break;
         }
-
-        ScRange aRange;
-        // Default to the active sheet so an unprefixed range like B5:B10 parses
-        // against the sheet the user is viewing rather than always sheet 0.
-        aRange.aStart.SetTab(nActiveTab);
-        aRange.aEnd.SetTab(nActiveTab);
-        bool bHaveRange = false;
-        if (!rangeStr.isEmpty())
-            bHaveRange = bool(aRange.Parse(rangeStr, rDoc) & ScRefFlags::VALID);
-        if (!bHaveRange)
-        {
-            SCCOL nEndCol = 0;
-            SCROW nEndRow = 0;
-            rDoc.GetCellArea(nActiveTab, nEndCol, nEndRow);
-            aRange = ScRange(0, 0, nActiveTab, nEndCol, nEndRow, nActiveTab);
-        }
-
-        // A range that names its own sheet is read from that sheet, so the name comes from the
-        // range.
-        OUString aSheetName;
-        rDoc.GetName(aRange.aStart.Tab(), aSheetName);
-        rJsonWriter.put("Sheet", aSheetName);
-
-        OUString aText = ScTransferObj::GetMarkdownFromRange(rDoc, aRange, /*bAnnotated*/ true);
-        OUString aFormulas = ScTransferObj::GetFormulaListFromRange(rDoc, aRange);
-        if (!aFormulas.isEmpty())
-            aFormulas = "\n" + aFormulas;
-        // A text that is too long loses the end of the table first, so the formula list after
-        // the table is kept.
-        bool bTruncated = false;
-        if (aText.getLength() + aFormulas.getLength() > KitHelper::AIBodyTextMaxChars)
-        {
-            const sal_Int32 nTableChars = KitHelper::AIBodyTextMaxChars - aFormulas.getLength();
-            aText = aText.copy(0, nTableChars > 0 ? nTableChars : 0);
-            bTruncated = true;
-        }
-        aText += aFormulas;
-        if (aText.getLength() > KitHelper::AIBodyTextMaxChars)
-            aText = aText.copy(0, KitHelper::AIBodyTextMaxChars);
-
-        // Emit the truncation flag and an explicit instruction before the text,
-        // so the model acts on it rather than overlooking a flag buried after a
-        // large markdown table.
-        auto aBodyNode = rJsonWriter.startNode("BodyText");
-        rJsonWriter.put("format", "markdown");
-        rJsonWriter.put("truncated", bTruncated);
-        if (bTruncated)
-            rJsonWriter.put(
-                "note", "The sheet is large, so only the first part is included here. Tell the "
-                        "user the summary is based on a truncated portion and offer to read a "
-                        "specific area by calling this tool again with the range argument, e.g. "
-                        "range=\"A1:D100\".");
-        rJsonWriter.put("text", aText);
     }
 }
 

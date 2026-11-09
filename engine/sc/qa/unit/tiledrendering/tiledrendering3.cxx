@@ -85,7 +85,9 @@
 #include <dbdocfun.hxx>
 #include <sctestviewcallback.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <rtl/character.hxx>
 #include <cstdlib>
+#include <initializer_list>
 #include <regex>
 
 using namespace com::sun::star;
@@ -4399,6 +4401,203 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testExtractTextListsSheetsAndReadsANa
         CPPUNIT_ASSERT(aText.indexOf("\"Sheet\": \"Plain\"") >= 0);
         CPPUNIT_ASSERT(aText.indexOf("on the third sheet") >= 0);
     }
+}
+
+namespace
+{
+/**
+ * Get the response to a command as a ptree.
+ */
+boost::property_tree::ptree getCommandResponse(ScModelObj& rModelObj, std::string_view aCommand)
+{
+    tools::JsonWriter aWriter;
+    rModelObj.getCommandValues(aWriter, aCommand);
+    std::stringstream aStream(std::string(aWriter.finishAndGetAsOString()));
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    return aTree;
+}
+
+/**
+ * Build a command with its parameter values URL-encoded, the way encodeURIComponent() in the
+ * browser does.
+ */
+std::string
+makeCommand(std::string_view aName,
+            std::initializer_list<std::pair<std::string_view, std::string_view>> aParams)
+{
+    static constexpr char aHexDigits[] = "0123456789ABCDEF";
+    static constexpr std::string_view aUnreserved = "-_.!~*'()";
+
+    std::string aCommand(aName);
+    char cSep = '?';
+    for (const auto& [aKey, aValue] : aParams)
+    {
+        aCommand += cSep;
+        aCommand += aKey;
+        aCommand += '=';
+        for (unsigned char c : aValue)
+        {
+            if (rtl::isAsciiAlphanumeric(c) || aUnreserved.find(c) != std::string_view::npos)
+                aCommand += c;
+            else
+            {
+                aCommand += '%';
+                aCommand += aHexDigits[c >> 4];
+                aCommand += aHexDigits[c & 0xF];
+            }
+        }
+        cSep = '&';
+    }
+    return aCommand;
+}
+}
+
+// Each command that ScModelObj::getCommandValues() handles is found by its name and reads its
+// parameters.
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommandValues)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    CPPUNIT_ASSERT(pDoc->RenameTab(0, u"TestSheet"_ustr));
+
+    // A1 holds 2 and A2 holds 0, so B1 divides by zero.
+    pDoc->SetValue(ScAddress(0, 0, 0), 2.0); // A1
+    pDoc->SetValue(ScAddress(0, 1, 0), 0.0); // A2
+    pDoc->SetString(ScAddress(1, 0, 0), u"=A1/A2"_ustr);
+    pDoc->CalcAll();
+    pView->SetCursor(1, 0); // B1
+    Scheduler::ProcessEventsToIdle();
+
+    for (std::u16string_view aName :
+         { u"SecurityLabel", u"FormulaDepChain", u"CalcFunctionList",
+           u"EvaluateFormula", u"ExtractDocumentStructure" })
+        CPPUNIT_ASSERT(pModelObj->supportsCommand(aName));
+
+    // The name must match as a whole, and has no ".uno:" prefix here.
+    CPPUNIT_ASSERT(!pModelObj->supportsCommand(u"SecurityLabelX"));
+    CPPUNIT_ASSERT(!pModelObj->supportsCommand(u".uno:SecurityLabel"));
+    boost::property_tree::ptree aTree
+        = getCommandResponse(*pModelObj, ".uno:SecurityLabelX");
+    // {}
+    CPPUNIT_ASSERT(aTree.empty());
+
+    // The full command needs the ".uno:" prefix.
+    aTree = getCommandResponse(*pModelObj, "SecurityLabel");
+    // {}
+    CPPUNIT_ASSERT(aTree.empty());
+
+    // An ODF document carries no security label.
+    aTree = getCommandResponse(*pModelObj, ".uno:SecurityLabel");
+    // {
+    //   "commandName": ".uno:SecurityLabel",
+    //   "commandValues": { "marking": "", "supported": false }
+    // }
+    CPPUNIT_ASSERT_EQUAL(std::string(".uno:SecurityLabel"), aTree.get<std::string>("commandName"));
+    CPPUNIT_ASSERT_EQUAL(std::string(), aTree.get<std::string>("commandValues.marking"));
+    CPPUNIT_ASSERT(!aTree.get<bool>("commandValues.supported"));
+
+    // The cursor is on the error in B1.
+    aTree = getCommandResponse(*pModelObj, ".uno:FormulaDepChain");
+    // {
+    //   "commandName": ".uno:FormulaDepChain",
+    //   "commandValues": {
+    //     "hasError": true,
+    //     "cell": {
+    //       "address": "B1", "sheet": "TestSheet", "formula": "=A1/A2", "englishFormula": "=A1/A2",
+    //       "error": "#DIV/0!", "errorCode": 532
+    //     },
+    //     "dependencies": [
+    //       { "address": "A1", "sheet": "TestSheet", "type": "value", "value": 2 },
+    //       { "address": "A2", "sheet": "TestSheet", "type": "value", "value": 0 }
+    //     ]
+    //   }
+    // }
+    CPPUNIT_ASSERT_EQUAL(std::string(".uno:FormulaDepChain"),
+                         aTree.get<std::string>("commandName"));
+    CPPUNIT_ASSERT(aTree.get<bool>("commandValues.hasError"));
+    CPPUNIT_ASSERT_EQUAL(std::string("B1"), aTree.get<std::string>("commandValues.cell.address"));
+    CPPUNIT_ASSERT_EQUAL(std::string("TestSheet"),
+                         aTree.get<std::string>("commandValues.cell.sheet"));
+    // We only do light-weight test here since
+    // CppunitTest_sc_formula_depchain_test has more comprehensive coverage.
+
+    // The English names, as the AI chat tool asks for them.
+    aTree = getCommandResponse(*pModelObj, ".uno:CalcFunctionList?english=true");
+    // {
+    //   "commandName": ".uno:CalcFunctionList",
+    //   "commandValues": {
+    //     "categories": [ { "name": "Database" }, { "name": "Date&Time" }, ... ],
+    //     "functions": [
+    //       ...
+    //       { "name": "SUM", "signature": "SUM( Number 1, Number 2, ...  )", "category": 5 },
+    //       ...
+    //     ]
+    //   }
+    // }
+    CPPUNIT_ASSERT_EQUAL(std::string(".uno:CalcFunctionList"),
+                         aTree.get<std::string>("commandName"));
+    // A function refers to its category by index, so check some of them by position.
+    std::vector<std::string> aCategories;
+    for (const auto& rCategory : aTree.get_child("commandValues.categories"))
+        aCategories.push_back(rCategory.second.get<std::string>("name"));
+    CPPUNIT_ASSERT_EQUAL(std::size_t(11), aCategories.size());
+    CPPUNIT_ASSERT_EQUAL(std::string("Database"), aCategories[0]);
+    CPPUNIT_ASSERT_EQUAL(std::string("Logical"), aCategories[4]);
+    CPPUNIT_ASSERT_EQUAL(std::string("Mathematical"), aCategories[5]);
+    CPPUNIT_ASSERT_EQUAL(std::string("Text"), aCategories[9]);
+
+    // There are about 540 functions; a much lower count means some are missing.
+    const boost::property_tree::ptree& rFunctions = aTree.get_child("commandValues.functions");
+    CPPUNIT_ASSERT_GREATER(std::size_t(400), rFunctions.size());
+    CPPUNIT_ASSERT(
+        std::any_of(rFunctions.begin(), rFunctions.end(), [](const auto& rFunction)
+                    { return rFunction.second.template get<std::string>("name") == "SUM"; }));
+
+    // The formula value starts with '='.
+    aTree = getCommandResponse(
+        *pModelObj,
+        makeCommand(".uno:EvaluateFormula", { { "cell", "C1" }, { "formula", "=SUM(A1:A2)+1" } }));
+    // {
+    //   "commandName": ".uno:EvaluateFormula",
+    //   "commandValues": {
+    //     "cell": "C1", "formula": "=SUM(A1:A2)+1", "resultType": "value", "result": 3
+    //   }
+    // }
+    CPPUNIT_ASSERT_EQUAL(std::string(".uno:EvaluateFormula"),
+                         aTree.get<std::string>("commandName"));
+    CPPUNIT_ASSERT_EQUAL(std::string("C1"), aTree.get<std::string>("commandValues.cell"));
+    CPPUNIT_ASSERT_EQUAL(std::string("=SUM(A1:A2)+1"),
+                         aTree.get<std::string>("commandValues.formula"));
+    CPPUNIT_ASSERT_EQUAL(std::string("value"), aTree.get<std::string>("commandValues.resultType"));
+    CPPUNIT_ASSERT_EQUAL(3.0, aTree.get<double>("commandValues.result"));
+
+    // This one replies with no commandName.
+    aTree = getCommandResponse(*pModelObj, makeCommand(".uno:ExtractDocumentStructure",
+                                                       { { "filter", "text,range:A1:A2" } }));
+    // {
+    //   "DocStructure": {
+    //     "Sheets": [ "TestSheet" ],
+    //     "Sheet": "TestSheet",
+    //     "BodyText": {
+    //       "format": "markdown",
+    //       "truncated": false,
+    //       "text": "| Row | A |\n| --- | --- |\n| 1 | 2 |\n| 2 | 0 |\n"
+    //     }
+    //   }
+    // }
+    CPPUNIT_ASSERT_EQUAL(std::string("markdown"),
+                         aTree.get<std::string>("DocStructure.BodyText.format"));
+    // body text here is supposed to be a markdown table of A1:A2.
+    CPPUNIT_ASSERT_EQUAL(std::string("| Row | A |\n"
+                                     "| --- | --- |\n"
+                                     "| 1 | 2 |\n"
+                                     "| 2 | 0 |\n"),
+                         aTree.get<std::string>("DocStructure.BodyText.text"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
