@@ -609,6 +609,7 @@ IMPL_LINK ( RemoteFilesDialog, EditServiceMenuHdl, const OUString&, rIdent, void
 
                     m_xServices_lb->insert_text(nSelected, sPrefix + pEditedService->GetName());
                     m_xServices_lb->set_active( nSelected );
+                    SelectServiceHdl( *m_xServices_lb );
 
                     m_bIsUpdated = true;
                     break;
