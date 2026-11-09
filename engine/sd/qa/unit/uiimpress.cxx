@@ -78,6 +78,7 @@
 #include <svx/svdotable.hxx>
 #include <svx/sdtaitm.hxx>
 #include <svx/xlineit0.hxx>
+#include <svx/xlnclit.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xflclit.hxx>
@@ -7942,6 +7943,29 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testConvertToEditableShape)
     }
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), nLines);
     CPPUNIT_ASSERT(nCurves > 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTextBoxTakesALineColor)
+{
+    // a text box has no InteropGrabBag, and its line takes the new color all the same
+    createSdImpressDoc();
+    auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    SdPage* pPage = pViewShell->GetActualPage();
+    rtl::Reference<SdrRectObj> pTextBox = new SdrRectObj(pView->getSdrModelFromSdrView(),
+                                                         tools::Rectangle(1000, 1000, 9000, 4000),
+                                                         SdrObjKind::Text);
+    pPage->NbcInsertObject(pTextBox.get());
+    pView->MarkObj(pTextBox.get(), pView->GetSdrPageView());
+
+    SfxItemSet aSet(pView->getSdrModelFromSdrView().GetItemPool(),
+                    svl::Items<XATTR_LINESTYLE, XATTR_LINECOLOR>);
+    aSet.Put(XLineStyleItem(css::drawing::LineStyle_SOLID));
+    aSet.Put(XLineColorItem(OUString(), COL_LIGHTRED));
+    pView->SetAttributes(aSet);
+
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, pTextBox->GetMergedItem(XATTR_LINECOLOR).GetColorValue());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
