@@ -233,6 +233,20 @@ bool SalLayoutGlyphsImpl::IsValid() const
 
 void SalLayoutGlyphsCache::clear() { mCachedGlyphs.clear(); }
 
+void SalLayoutGlyphsCache::evictText(const OUString& rText)
+{
+    if (rText.isEmpty())
+        return;
+    // Every key copied from rText shares its buffer, so comparing the buffer finds them all
+    // without comparing contents.
+    mCachedGlyphs.remove_if([&rText](const GlyphsCache::key_value_pair_t& rEntry)
+                            { return rEntry.first.text.pData == rText.pData; });
+    if (mLastSubstringKey && mLastSubstringKey->text.pData == rText.pData)
+        mLastSubstringKey.reset();
+    if (mLastTemporaryKey && mLastTemporaryKey->text.pData == rText.pData)
+        mLastTemporaryKey.reset();
+}
+
 SalLayoutGlyphsCache* SalLayoutGlyphsCache::self()
 {
     static tools::DeleteOnDeinit<SalLayoutGlyphsCache> cache(

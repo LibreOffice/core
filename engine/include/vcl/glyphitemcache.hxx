@@ -60,6 +60,9 @@ public:
                                            tools::Long nLogicWidth = 0,
                                            const vcl::text::TextLayoutCache* layoutCache = nullptr);
     void clear();
+    /// Drop the entries whose key text shares the string buffer of rText, which are the layouts
+    /// of that string object. Entries for another string with the same content stay.
+    void evictText(const OUString& rText);
 
     /// Normally, we cannot cache glyphs when doing font fallback, because the font fallbacks
     /// can cache during the lifetime of the cache, and they are not included in the cache key.

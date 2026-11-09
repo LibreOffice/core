@@ -2121,6 +2121,7 @@ void SwTextNode::ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
 {
     assert(sal_Int32(aText.size()) - nLen <= GetSpaceLeft());
 
+    EvictLayoutGlyphs();
     m_Text = m_Text.replaceAt(nPos, nLen, aText);
 
     sal_Int32 nTLen = aText.size();

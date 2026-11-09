@@ -78,6 +78,7 @@
 #include <edtwin.hxx>
 #include <FrameControlsManager.hxx>
 #include <VectorCollector.hxx>
+#include <vcl/glyphitemcache.hxx>
 
 namespace sw {
 
@@ -1145,6 +1146,8 @@ static TextFrameIndex UpdateMergedParaForInsert(MergedPara & rMerged,
             const_cast<SwTextNode&>(rNode).SetRedlineMergeFlag(SwNode::Merge::NonFirst);
         }
     }
+    if (SalLayoutGlyphsCache* pCache = SalLayoutGlyphsCache::self())
+        pCache->evictText(rMerged.mergedText);
     rMerged.mergedText = text.makeStringAndClear();
     if ((!bInserted && rMerged.extents.size() == 1) // also if it was empty!
         || rNode.GetIndex() <= rMerged.pParaPropsNode->GetIndex())
@@ -1276,6 +1279,8 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
 // can't do: might be last one in node was erased   assert(nLen == 0 || rMerged.empty() || (it-1)->nEnd <= nIndex);
     // note: if first node gets deleted then that must call DelFrames as
     // pFirstNode is never updated
+    if (SalLayoutGlyphsCache* pCache = SalLayoutGlyphsCache::self())
+        pCache->evictText(rMerged.mergedText);
     rMerged.mergedText = text.makeStringAndClear();
 // could be all-hidden now so always check!    if (nErased && nErased == nFoundNode)
     {   // all visible text from node was erased

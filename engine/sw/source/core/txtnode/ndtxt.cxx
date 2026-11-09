@@ -78,6 +78,7 @@
 #include <docsh.hxx>
 #include <SwNodeNum.hxx>
 #include <svl/grabbagitem.hxx>
+#include <vcl/glyphitemcache.hxx>
 #include <svl/intitem.hxx>
 #include <sortedobjs.hxx>
 #include <calbck.hxx>
@@ -301,6 +302,14 @@ void SwTextNode::ImplDestroy()
         ResetAttr(RES_PAGEDESC);
     }
     InvalidateInSwCache();
+    if (!GetDoc().IsInDtor())
+        EvictLayoutGlyphs();
+}
+
+void SwTextNode::EvictLayoutGlyphs() const
+{
+    if (SalLayoutGlyphsCache* pCache = SalLayoutGlyphsCache::self())
+        pCache->evictText(m_Text);
 }
 
 SwTextNode::~SwTextNode()
@@ -2539,6 +2548,7 @@ OUString SwTextNode::InsertText( const OUString & rStr, const SwContentIndex & r
     {
         return sInserted;
     }
+    EvictLayoutGlyphs();
     if (aPos == 0 && m_Text.isEmpty())
         m_Text = sInserted;
     else
@@ -2682,6 +2692,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwContentIndex & rDest
         // unfortunately can't really do anything here to handle that...
         abort();
     }
+    pDest->EvictLayoutGlyphs();
     pDest->m_Text = pDest->m_Text.replaceAt(nDestStart, 0,
                         m_Text.subView(nTextStartIdx, nLen));
     OUString const newText = m_Text.replaceAt(nTextStartIdx, nLen, u"");
@@ -2909,6 +2920,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwContentIndex & rDest
     }
 
     // set after moving hints
+    EvictLayoutGlyphs();
     m_Text = newText;
 
     if (bMergePortionsNeeded)
@@ -2938,7 +2950,10 @@ void SwTextNode::EraseText(const SwContentIndex &rIdx, const sal_Int32 nCount,
                       ? m_Text.getLength() - nStartIdx : nCount;
     const sal_Int32 nEndIdx = nStartIdx + nCnt;
     if (nEndIdx <= m_Text.getLength())
+    {
+        EvictLayoutGlyphs();
         m_Text = m_Text.replaceAt(nStartIdx, nCnt, u"");
+    }
 
     // GCAttr(); don't remove all empty ones, just the ones that are in the
     // range but not at the end of the range.
@@ -4036,6 +4051,7 @@ void SwTextNode::ReplaceText( const SwContentIndex& rStart, const sal_Int32 nDel
     bool bOldExpFlg = IsIgnoreDontExpand();
     SetIgnoreDontExpand( true );
 
+    EvictLayoutGlyphs();
     const sal_Int32 nInsLen = sInserted.getLength();
     if (nLen && nInsLen)
     {

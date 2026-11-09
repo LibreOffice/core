@@ -213,6 +213,9 @@ class SW_DLLPUBLIC SwTextNode final
 
     SAL_DLLPRIVATE void ImplDestroy();
 
+    /// Drop the cached glyph layouts of the current m_Text string.
+    SAL_DLLPRIVATE void EvictLayoutGlyphs() const;
+
 public:
     bool IsWordCountDirty() const;
     sw::WrongState GetWrongDirty() const;
