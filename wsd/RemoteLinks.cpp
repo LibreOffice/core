@@ -275,6 +275,16 @@ void RemoteLinks::requestLinkAccess(DocumentBroker& docBroker, const std::string
     if (!session)
         return;
 
+    // The storage's answer names the document behind a source for every view, so only a view
+    // that may change the document asks.
+    if (!session->canChangeDocument())
+    {
+        LOG_INF("Not asking for the " << persistentLinks.size() << " sources of ["
+                                      << docBroker.getDocKey() << "] for view [" << tag
+                                      << "]: it may not change the document");
+        return;
+    }
+
     const auto markAll = [&view, &persistentLinks](const LinkAccess access)
     {
         for (const std::string& persistentLink : persistentLinks)
