@@ -269,9 +269,9 @@ public:
     /* Clear() elements in the vector, and free them one by one. */
     void DeleteAndDestroyAll()
     {
-        for (const_iterator it = m_vector.begin(); it != m_vector.end(); ++it)
+        for (const auto& rElement : m_vector)
         {
-            delete *it;
+            delete rElement;
         }
 
         clear();
