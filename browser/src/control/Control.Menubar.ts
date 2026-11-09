@@ -669,7 +669,7 @@ class Menubar extends window.L.Control {
 					{name: _('None (Do not check spelling)'), id: 'nonelanguage', uno: '.uno:LanguageStatus?Language:string=Default_LANGUAGE_NONE'}]},
 				{uno: '.uno:AutoCorrectDlg'},
 				{name: _('Clean Up'), unoid: '.uno:PresentationCleanup', id: 'cleanupdeck', type: 'action'},
-				{uno: '.uno:SwitchControlDesignMode'},
+				{name: _UNO('.uno:SwitchControlDesignMode'), id: 'switchcontroldesignmode', uno: '.uno:SwitchControlDesignMode'},
 				{type: 'separator'},
 				{name: _UNO('.uno:RunMacro'), id: 'runmacro', uno: '.uno:RunMacro'}
 
@@ -845,7 +845,7 @@ class Menubar extends window.L.Control {
 				{name: _UNO('.uno:LanguageMenu'), type: 'menu', menu: [
 					{name: _('None (Do not check spelling)'), id: 'nonelanguage', uno: '.uno:LanguageStatus?Language:string=Default_LANGUAGE_NONE'}]},
 				{uno: '.uno:AutoCorrectDlg'},
-				{uno: '.uno:SwitchControlDesignMode'}
+				{name: _UNO('.uno:SwitchControlDesignMode'), id: 'switchcontroldesignmode', uno: '.uno:SwitchControlDesignMode'}
 			]},
 			{name: _('Extensions'), id: 'extensions-menu', type: 'menu', menu: []},
 			{name: _UNO('.uno:HelpMenu', 'presentation'), id: 'help', type: 'menu', accessibility: {combination: 'MY'}, menu: [

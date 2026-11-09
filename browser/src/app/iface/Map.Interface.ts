@@ -56,6 +56,8 @@ interface MapInterface extends Evented {
 	sendUnoCommand(unoCmd: string, json?: any, force?: boolean): void;
 
 	isFormControlDesignMode(): boolean;
+	offersFormControlDesignMode(): boolean;
+	showFormControlDesignModeSwitch(): void;
 	setFormControlDesignMode(designMode: boolean): void;
 
 	getDocType(): 'text' | 'presentation' | 'spreadsheet' | 'drawing';

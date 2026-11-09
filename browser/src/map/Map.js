@@ -802,6 +802,29 @@ window.L.Map = window.L.Evented.extend({
 		return state !== false && state !== 'false';
 	},
 
+	// true when the switch of the design mode is offered: the office reports the mode, which it
+	// does only for a document that holds forms and can be edited
+	offersFormControlDesignMode: function() {
+		const state = this['stateChangeHandler'].getItemValue('.uno:SwitchControlDesignMode');
+		return state === true || state === false || state === 'true' || state === 'false';
+	},
+
+	// shows the switch of the design mode in the notebookbar and the menu where it is offered,
+	// and hides it elsewhere
+	showFormControlDesignModeSwitch: function() {
+		const offered = this.offersFormControlDesignMode();
+		const notebookbar = this.uiManager && this.uiManager.notebookbar;
+		for (const id of ['insert-switch-control-design-mode', 'insert-designmode-break']) {
+			if (!notebookbar) break;
+			if (offered) notebookbar.showItem(id);
+			else notebookbar.hideItem(id);
+		}
+		if (this.menubar) {
+			if (offered) this.menubar.showItem('switchcontroldesignmode');
+			else this.menubar.hideItem('switchcontroldesignmode');
+		}
+	},
+
 	// switches the form controls of this view in the office into or out of design mode
 	setFormControlDesignMode: function(designMode) {
 		this.sendUnoCommand('.uno:SwitchControlDesignMode', {

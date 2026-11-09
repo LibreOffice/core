@@ -70,9 +70,13 @@ window.L.Map.StateChangeHandler = window.L.Handler.extend({
 		}
 
 		// the form controls are objects in design mode and controls out of it, so a switch of the
-		// mode asks the hit test again and draws the page anew
-		if (commandName === '.uno:SwitchControlDesignMode' && RenderManager.isVectorRendering())
-			RenderGeometrySection.formControlModeChanged();
+		// mode asks the hit test again and draws the page anew; the switch itself shows only where
+		// the office reports a mode
+		if (commandName === '.uno:SwitchControlDesignMode') {
+			if (RenderManager.isVectorRendering())
+				RenderGeometrySection.formControlModeChanged();
+			this._map.showFormControlDesignModeSwitch();
+		}
 
 		if (e.commandName === '.uno:SlideMasterPage') {
 			const mode = (state === true || state === 'true') ? 1 : 0;

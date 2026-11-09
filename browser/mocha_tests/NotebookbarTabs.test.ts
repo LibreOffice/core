@@ -32,6 +32,8 @@ describe('Notebookbar tabs', function () {
 			on: () => undefined,
 			stateChangeHandler: { getItemValue: (): string => undefined },
 			getDocType: () => 'text',
+			// a document without forms, so no design mode switch
+			offersFormControlDesignMode: () => false,
 			// The debug tools, switched off. The layouting service of the page can
 			// still run its frame hooks while a test runs.
 			_debug: {

@@ -38,6 +38,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/fmpage.hxx>
+#include <com/sun/star/form/XForms.hpp>
 #include <svx/svditer.hxx>
 
 #include <svx/svxids.hrc>
@@ -45,6 +46,7 @@
 #include <svx/svdobjkind.hxx>
 #include <svl/eitem.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/kit.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/fmmodel.hxx>
 #include <fmshimp.hxx>
@@ -118,6 +120,28 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::form::runtime;
 using namespace ::svxform;
+
+namespace
+{
+// whether a page or a master page of the model holds a form
+bool lcl_holdsForms(const FmFormModel& rModel)
+{
+    const auto holds = [](const SdrPage* pPage) {
+        const FmFormPage* pFormPage = dynamic_cast<const FmFormPage*>(pPage);
+        if (!pFormPage)
+            return false;
+        const Reference<XForms>& xForms = pFormPage->GetForms(false);
+        return xForms.is() && xForms->getCount() > 0;
+    };
+    for (sal_uInt16 nPage = 0; nPage < rModel.GetPageCount(); ++nPage)
+        if (holds(rModel.GetPage(nPage)))
+            return true;
+    for (sal_uInt16 nPage = 0; nPage < rModel.GetMasterPageCount(); ++nPage)
+        if (holds(rModel.GetMasterPage(nPage)))
+            return true;
+    return false;
+}
+}
 
 FmDesignModeChangedHint::FmDesignModeChangedHint( bool bDesMode )
     :SfxHint(SfxHintId::FmDesignModeChanged), m_bDesignMode( bDesMode )
@@ -953,7 +977,10 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                     rSet.DisableItem( nWhich );
                 break;
             case SID_FM_DESIGN_MODE:
-                if (!m_pFormView || GetImpl()->IsReadonlyDoc_Lock())
+                // the kit offers the switch only in a document that holds forms
+                if (!m_pFormView || GetImpl()->IsReadonlyDoc_Lock()
+                    || (comphelper::COKit::isActive() && GetFormModel()
+                        && !lcl_holdsForms(*GetFormModel())))
                     rSet.DisableItem( nWhich );
                 else
                     rSet.Put( SfxBoolItem(nWhich, m_bDesignMode) );
