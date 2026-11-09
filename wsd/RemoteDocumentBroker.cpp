@@ -56,9 +56,9 @@ std::string joinDocKeyChain(const std::vector<std::string>& docKeyChain)
 /// allowedRequests lists the commands a view may send to a remote document
 /// allowedResults lists the reply frames the remote document may send back
 const std::vector<std::string> allowedRequests = {
-    "status", "commandvalues ", "setclientpart ", "selectclientpart ",
-    "clientvisiblearea ", "clientzoom ", "ping",
-    "getslidesections", "getpresentationinfo", "getthumbnail ", "tile ", "tilecombine ",
+    "status", "commandvalues", "setclientpart", "selectclientpart",
+    "clientvisiblearea", "clientzoom", "ping",
+    "getslidesections", "getpresentationinfo", "getthumbnail", "tile", "tilecombine",
     "exportslides"
 };
 
@@ -141,17 +141,8 @@ void HeadlessClientSession::sendHandshake()
 
 bool HeadlessClientSession::sendCommand(const std::string& command)
 {
-    bool allowed = false;
-    for (const std::string& prefix : allowedRequests)
-    {
-        if (command.starts_with(prefix))
-        {
-            allowed = true;
-            break;
-        }
-    }
-
-    if (!allowed)
+    const std::string_view name = std::string_view(command).substr(0, command.find(' '));
+    if (std::find(allowedRequests.begin(), allowedRequests.end(), name) == allowedRequests.end())
     {
         LOG_WRN("RemoteDoc: refusing to send the command ["
                 << COOLProtocol::getAbbreviatedMessage(command)

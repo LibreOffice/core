@@ -1516,7 +1516,8 @@ public:
 
 /// A read-only client command sent to a subscribed remote document travels
 /// over the headless session and its reply comes back to the originating
-/// view, stamped with the remote's WOPISrc; a modifying command is refused.
+/// view, stamped with the remote's WOPISrc; a modifying command is refused,
+/// and so is a command whose name only starts like a read-only one.
 class UnitRemoteDocumentCommand : public WopiTestServer
 {
     STATE_ENUM(Phase, Load, WaitLoadStatus, WaitConnected, WaitResult, Done) _phase;
@@ -1575,6 +1576,7 @@ public:
             // and never reach the remote.
             WSD_CMD("remotedoccommand source=" + encodedRemoteWopiSrc() +
                     " key type=input char=97 key=0");
+            WSD_CMD("remotedoccommand source=" + encodedRemoteWopiSrc() + " statusx");
 
             // A read-only command round-trips to the remote and back.
             WSD_CMD("remotedoccommand source=" + encodedRemoteWopiSrc() + " getslidesections");
@@ -1587,6 +1589,17 @@ public:
         {
             failTest("Unexpected remote document error: " + std::string(message));
         }
+    }
+
+    bool filterSessionInput(Session*, const char* buffer, int length,
+                            std::unique_ptr<std::vector<char>>& /*replace*/) override
+    {
+        // The commands that reach the remote document arrive in order, so the refused one
+        // would arrive before the reply the test passes on.
+        if (std::string_view(buffer, length).starts_with("statusx"))
+            failTest("A command that only starts like a read-only one reached the remote");
+
+        return false;
     }
 
     bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
