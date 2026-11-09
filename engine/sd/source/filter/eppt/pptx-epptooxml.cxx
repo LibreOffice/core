@@ -766,18 +766,20 @@ void PowerPointShapeExport::SetPageType(PageType ePageType)
 ShapeExport& PowerPointShapeExport::WriteNonVisualProperties(const Reference< XShape >& xShape)
 {
     // A picture or a table that fills an area of the page says which kind of area, and which of
-    // that kind, so that the page goes on following its layout. A shape that fills none says
-    // nothing here.
+    // that kind, so that the page goes on following its layout. Either one on its own is enough
+    // to name the area, because a kind that is left out stands for an area holding an object.
+    // A shape that fills no area of the page says nothing here.
     const OString aKind = statedPlaceholderKind(xShape);
-    if (aKind.isEmpty())
+    const std::optional<sal_Int32> oIndex = statedPlaceholderIndex(xShape);
+    if (aKind.isEmpty() && !oIndex)
     {
         GetFS()->singleElementNS(XML_p, XML_nvPr);
         return *this;
     }
 
-    const std::optional<sal_Int32> oIndex = statedPlaceholderIndex(xShape);
     GetFS()->startElementNS(XML_p, XML_nvPr);
-    GetFS()->singleElementNS(XML_p, XML_ph, XML_type, aKind, XML_idx,
+    GetFS()->singleElementNS(XML_p, XML_ph, XML_type,
+                             sax_fastparser::UseIf(aKind, !aKind.isEmpty()), XML_idx,
                              sax_fastparser::UseIf(OString::number(oIndex.value_or(0)),
                                                    oIndex.has_value()));
     GetFS()->endElementNS(XML_p, XML_nvPr);

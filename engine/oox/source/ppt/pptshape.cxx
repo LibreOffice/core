@@ -749,7 +749,8 @@ void PPTShape::addShape(
             keepStatedPlaceholder(rSlidePersist, xShape, rFilterBase, mnSubType,
                                   getTextBody() && !getTextBody()->isEmpty());
             keepStatedPlaceholderIndex(xShape, rFilterBase, getSubTypeIndex());
-            keepStatedPlaceholderKind(xShape, mnSubType);
+            keepStatedPlaceholderKind(xShape,
+                                      mnSubType ? mnSubType : getTablePlaceholderType());
 
             // Apply text properties on placeholder text inside this placeholder shape
             if (meShapeLocation == Slide && mpPlaceholder && getTextBody() && getTextBody()->isEmpty())

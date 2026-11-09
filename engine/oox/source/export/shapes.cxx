@@ -2862,7 +2862,7 @@ ShapeExport& ShapeExport::WriteTableShape( const Reference< XShape >& xShape )
     pFS->singleElementNS(mnXmlNamespace, XML_cNvGraphicFramePr);
 
     if( GetDocumentType() == DOCUMENT_PPTX )
-        pFS->singleElementNS(mnXmlNamespace, XML_nvPr);
+        WriteNonVisualProperties( xShape );
     pFS->endElementNS( mnXmlNamespace, XML_nvGraphicFramePr );
 
     WriteShapeTransformation( xShape, mnXmlNamespace );

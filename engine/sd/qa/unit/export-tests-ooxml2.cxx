@@ -1508,6 +1508,38 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testPictureKeepsTheAreaItFills)
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:pic/p:nvPicPr/p:nvPr/p:ph", "idx", u"1");
 }
 
+// A table that fills an area of a slide keeps saying which area it fills.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTableKeepsTheAreaItFills)
+{
+    // Given a slide with two tables, each filling an area its layout states, where the first
+    // names the kind of area it fills and the second names only the number of that area:
+    createSdImpressDoc("pptx/table-placeholder.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 0
+    // i.e. both tables went out as ordinary tables, so the slide stopped following its layout
+    // for the place and the size of each of them.
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:graphicFrame/p:nvGraphicFramePr/p:nvPr/p:ph",
+                2);
+    assertXPath(pXmlDoc,
+                "(/p:sld/p:cSld/p:spTree/p:graphicFrame/p:nvGraphicFramePr/p:nvPr/p:ph)[1]",
+                "type", u"tbl");
+    assertXPath(pXmlDoc,
+                "(/p:sld/p:cSld/p:spTree/p:graphicFrame/p:nvGraphicFramePr/p:nvPr/p:ph)[1]", "idx",
+                u"1");
+    // An area that names no kind holds an object, which is also what a table fills, so the
+    // number on its own is enough to say which area the second table fills.
+    assertXPathNoAttribute(
+        pXmlDoc, "(/p:sld/p:cSld/p:spTree/p:graphicFrame/p:nvGraphicFramePr/p:nvPr/p:ph)[2]",
+        "type");
+    assertXPath(pXmlDoc,
+                "(/p:sld/p:cSld/p:spTree/p:graphicFrame/p:nvGraphicFramePr/p:nvPr/p:ph)[2]", "idx",
+                u"2");
+}
+
 // Every area of a layout keeps a number of its own.
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testPlaceholderNumbersStayApart)
 {

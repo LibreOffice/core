@@ -242,6 +242,7 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , msId( pSourceShape->msId )
 , mnSubType( pSourceShape->mnSubType )
 , moSubTypeIndex( pSourceShape->moSubTypeIndex )
+, mnTablePlaceholderType( pSourceShape->mnTablePlaceholderType )
 , maShapeStyleRefs( pSourceShape->maShapeStyleRefs )
 , maSize( pSourceShape->maSize )
 , maPosition( pSourceShape->maPosition )
@@ -419,6 +420,9 @@ void Shape::setTableType()
     OSL_ENSURE( meFrameType == FRAMETYPE_GENERIC, "Shape::setTableType - multiple frame types" );
     meFrameType = FRAMETYPE_TABLE;
     msServiceName = u"com.sun.star.drawing.TableShape"_ustr;
+    // The kind of placeholder the frame states moves to a field of its own, and the shape goes
+    // on as an ordinary table.
+    mnTablePlaceholderType = mnSubType;
     mnSubType = 0;
 }
 

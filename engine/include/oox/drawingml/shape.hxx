@@ -209,6 +209,7 @@ public:
     void                            setLocked( bool bLocked ) { mbLocked = bLocked; }
     void                            setSubType( sal_Int32 nSubType ) { mnSubType = nSubType; }
     sal_Int32                       getSubType() const { return mnSubType; }
+    sal_Int32                       getTablePlaceholderType() const { return mnTablePlaceholderType; }
     void                            setSubTypeIndex( sal_Int32 nSubTypeIndex ) { moSubTypeIndex = nSubTypeIndex; }
     const std::optional< sal_Int32 >& getSubTypeIndex() const { return moSubTypeIndex; }
 
@@ -435,6 +436,10 @@ protected:
 
     sal_Int32                   mnSubType;      // if this type is not zero, then the shape is a placeholder
     std::optional< sal_Int32 >  moSubTypeIndex;
+
+    /** The kind of placeholder a frame holding a table states, as the token of the name the
+        document spelled, and zero for a frame that states none. */
+    sal_Int32                   mnTablePlaceholderType = 0;
 
     ShapeStyleRefMap            maShapeStyleRefs;
 
