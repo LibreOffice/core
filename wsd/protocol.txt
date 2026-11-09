@@ -99,8 +99,9 @@ remotedocunsubscribe source=<encoded persistent link>
     names a remote document by its persistent link alone, and the address
     the server reaches it at stays with the server. The subscription
     belongs to that one view and is opened with that view's own access
-    token for the remote document; the token comes from that view's
-    UserPrivateInfo in CheckFileInfo, or from a POST to /cool/links. A view
+    token for the remote document; the token comes from a POST to
+    /cool/links, or from that view's storage answering over
+    <WOPISrc>/linkaccess. A view
     without a token for the source is refused, and so is a persistent link
     no remote link is bound to. A remotelinkremove of the persistent link
     drops the document for every view, and the subscriptions to it go down
@@ -1309,10 +1310,10 @@ downloadas: jail=<jail directory> dir=<a tmp dir> name=<name> port=<port> filena
 
 remotelinks: <json>
 
-    The remote links the server tracks for this document, from the
-    RemoteLinks field of CheckFileInfo (WOPISrc, BaseFileName,
-    LastModifiedTime and PersistentLink per entry), from POST
-    /cool/links, and from the sources the document's own slide
+    The remote links the server tracks for this document, from POST
+    /cool/links and the storage's answers over <WOPISrc>/linkaccess
+    (WOPISrc, BaseFileName, LastModifiedTime and PersistentLink per
+    entry), and from the sources the document's own slide
     links name. A remotelinkremove takes one off the list, for every view,
     and the fresh list goes out to all of them. Built for the receiving
     view: the source list is the same for every view, but the state is
