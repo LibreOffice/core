@@ -22,6 +22,7 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -128,6 +129,7 @@
 #include <unopage.hxx>
 #include <editeng/outlobj.hxx>
 #include <sdmod.hxx>
+#include <sdxfer.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <unotools/lingucfg.hxx>
 #include <svx/sdgcpitm.hxx>
@@ -2380,6 +2382,39 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSlidePasteSizeMismatch)
     // i.e. an unexpected non-async dialog popped up, which gets cancelled in silent mode, so the
     // paste fails.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(2), nActualPageCount);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testCopiedSlidesAreToldApartFromCopiedShapes)
+{
+    // Given a presentation with a shape on its slide:
+    createSdImpressDoc("odp/4-3.odp");
+    auto pImpress = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pImpress->GetDocShell()->GetViewShell();
+    SdPage* pPage = pViewShell->GetActualPage();
+    auto holdsSlides = []() {
+        uno::Reference<datatransfer::XTransferable> xTransferable(SdModule::get()->pTransferClip);
+        uno::Reference<lang::XServiceInfo> xInfo(xTransferable, uno::UNO_QUERY);
+        return xInfo.is()
+               && xInfo->supportsService(u"com.sun.star.presentation.SlideTransferable"_ustr);
+    };
+
+    // When copying the shape, the clipboard holds no slides:
+    SdrView* pView = pViewShell->GetView();
+    pView->UnmarkAllObj();
+    pView->MarkObj(pPage->GetObj(0), pView->GetSdrPageView());
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+    CPPUNIT_ASSERT(SdModule::get()->pTransferClip);
+    CPPUNIT_ASSERT(!holdsSlides());
+
+    // When copying the slide in the slide sorter, the clipboard holds slides:
+    sd::slidesorter::controller::SlideSorterController& rController
+        = getSlideSorterViewShell()->GetSlideSorter().GetController();
+    rController.GetPageSelector().DeselectAllPages();
+    rController.GetPageSelector().SelectPage(pPage);
+    rController.GetClipboard().DoCopy();
+    // Without the accompanying fix in place, this test would have failed, because a copied slide
+    // named no service, so it looked the same as copied shapes.
+    CPPUNIT_ASSERT(holdsSlides());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf96206)

@@ -53,6 +53,7 @@
 #include <sfx2/docfile.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <svtools/embedtransfer.hxx>
 #include <DrawDocShell.hxx>
 #include <View.hxx>
@@ -719,6 +720,24 @@ std::shared_ptr<SdTransferable::UserData> SdTransferable::GetUserData (const sal
 SdTransferable* SdTransferable::getImplementation( const Reference< XInterface >& rxData ) noexcept
 {
     return dynamic_cast<SdTransferable*>(rxData.get());
+}
+
+OUString SdTransferable::getImplementationName()
+{
+    return u"com.sun.star.comp.sd.SdTransferable"_ustr;
+}
+
+bool SdTransferable::supportsService(const OUString& rServiceName)
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+cpo::uno::Sequence<OUString> SdTransferable::getSupportedServiceNames()
+{
+    // A copy of whole slides, as opposed to shapes, names the service SlideTransferable.
+    if (mbPageTransferable && mbPageTransferablePersistent)
+        return { u"com.sun.star.presentation.SlideTransferable"_ustr };
+    return {};
 }
 
 void SdTransferable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )

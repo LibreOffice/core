@@ -9484,6 +9484,23 @@ static bool isDuplicateRendering(const css::datatransfer::DataFlavor& rFlavor)
            || eFormat == SotClipboardFormatId::BMP;
 }
 
+// True when the clipboard holds whole slides, copied as slides rather than as shapes.
+static bool holdsSlides(const cpo::uno::Reference<css::datatransfer::XTransferable>& xTransferable)
+{
+    cpo::uno::Reference<css::lang::XServiceInfo> xInfo(xTransferable, cpo::uno::UNO_QUERY);
+    return xInfo.is()
+           && xInfo->supportsService(u"com.sun.star.presentation.SlideTransferable"_ustr);
+}
+
+// True for the GDIMetaFile and SVG renderings of slides. A pasted slide is rebuilt from the
+// embedded document, and these two pictures carry every image of the slide in full, so a slide
+// with a large photo makes tens of megabytes of them.
+static bool isSlidePicture(const css::datatransfer::DataFlavor& rFlavor)
+{
+    const SotClipboardFormatId eFormat = SotExchange::GetFormat(rFlavor);
+    return eFormat == SotClipboardFormatId::GDIMETAFILE || eFormat == SotClipboardFormatId::SVG;
+}
+
 // Serialize the current clipboard's contents into the out parameters. The
 // caller holds the solar mutex and has already zeroed the out parameters. The
 // clipboard is whichever getClipboardForCurView returns: the per-view one on
@@ -9516,9 +9533,12 @@ static std::vector<COKitClipboardItem> fetchClipboardContents(const char **pMime
             SetLastExceptionMsg(u"Flavourless selection"_ustr);
             return {};
         }
+        const bool bSkipSlidePictures = bSkipDuplicateRenderings && holdsSlides(xTransferable);
         for (const auto &it : flavors)
         {
             if (bSkipDuplicateRenderings && isDuplicateRendering(it))
+                continue;
+            if (bSkipSlidePictures && isSlidePicture(it))
                 continue;
             aMimeTypes.push_back(OUStringToOString(it.MimeType, RTL_TEXTENCODING_UTF8));
         }

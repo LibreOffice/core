@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <cppuhelper/implbase.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/vclptr.hxx>
@@ -37,7 +39,9 @@ class DrawDocShell;
 class View;
 }
 
-class SAL_DLLPUBLIC_RTTI SdTransferable : public TransferDataContainer, public SfxListener
+class SAL_DLLPUBLIC_RTTI SdTransferable
+    : public cppu::ImplInheritanceHelper<TransferDataContainer, css::lang::XServiceInfo>,
+      public SfxListener
 {
 public:
 
@@ -79,6 +83,11 @@ public:
 
     // SfxListener
     virtual void                    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
+
+    // XServiceInfo
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& rServiceName) override;
+    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     virtual void                    DragFinished( sal_Int8 nDropAction ) override;
     SdDrawDocument*                 GetSourceDoc() const { return mpSourceDoc;}
