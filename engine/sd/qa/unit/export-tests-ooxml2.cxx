@@ -1508,6 +1508,25 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testPictureKeepsTheAreaItFills)
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:pic/p:nvPicPr/p:nvPr/p:ph", "idx", u"1");
 }
 
+// A picture stays as it is when the shape it sits on is seen through.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testPictureOnASeeThroughFillStaysOpaque)
+{
+    // Given a slide whose picture stands on a fill that is seen through by a tenth:
+    createSdImpressDoc("pptx/picture-with-a-transparent-fill.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1
+    // i.e. the picture itself was given the transparency of the fill behind it, so it faded
+    // further on every save.
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:pic/p:blipFill/a:blip/a:alphaModFix", 0);
+    // What the fill behind it states is kept.
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:pic/p:spPr/a:solidFill/a:srgbClr/a:alpha",
+                "val", u"88000");
+}
+
 // A table that fills an area of a slide keeps saying which area it fills.
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTableKeepsTheAreaItFills)
 {

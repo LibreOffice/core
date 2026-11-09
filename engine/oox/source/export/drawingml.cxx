@@ -1817,10 +1817,15 @@ void DrawingML::WriteImageBrightnessContrastTransparence(uno::Reference<beans::X
         nBright = mAny.get<sal_Int16>();
     if (GetProperty(rXPropSet, u"AdjustContrast"_ustr))
         nContrast = mAny.get<sal_Int32>();
-    // Used for shapes with picture fill
-    if (GetProperty(rXPropSet, u"FillTransparence"_ustr))
+    // A shape that fills itself with a picture states how far that picture is seen through as
+    // the transparency of its fill. A picture that is a shape of its own states that on itself,
+    // and the transparency of its fill belongs to the colour it stands on.
+    bool bFilledWithAPicture = false;
+    if (GetProperty(rXPropSet, u"FillStyle"_ustr))
+        bFilledWithAPicture = mAny.get<drawing::FillStyle>() == drawing::FillStyle_BITMAP;
+
+    if (bFilledWithAPicture && GetProperty(rXPropSet, u"FillTransparence"_ustr))
         nTransparence = mAny.get<sal_Int32>();
-    // Used for pictures
     if (nTransparence == 0 && GetProperty(rXPropSet, u"Transparency"_ustr))
         nTransparence = static_cast<sal_Int32>(mAny.get<sal_Int16>());
 
