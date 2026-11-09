@@ -47,6 +47,7 @@
 #include <svl/itemset.hxx>
 #include <svl/lstner.hxx>
 #include <svx/compatflags.hxx>
+#include <svx/sdasitm.hxx>
 #include <svx/sdgcpitm.hxx>
 #include <svx/sdmetitm.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
@@ -1312,6 +1313,13 @@ void describeObject(SdrObject& rObject, ObjectContent& rContent,
             rContent.maHandles = shapingHandlesOf(rObject);
         rContent.maPath = pathOf(rObject);
         rContent.meKind = rObject.GetObjIdentifier();
+        if (dynamic_cast<const SdrObjCustomShape*>(&rObject))
+        {
+            const SdrCustomShapeGeometryItem& rGeometry
+                = rObject.GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
+            if (const cpo::uno::Any* pType = rGeometry.GetPropertyValueByName(u"Type"_ustr))
+                *pType >>= rContent.maShapeType;
+        }
 
         if (const SdrEdgeObj* pConnector = dynamic_cast<const SdrEdgeObj*>(&rObject))
         {
@@ -1739,6 +1747,8 @@ void writeEntryGeometry(tools::JsonWriter& rWriter, const ObjectContent& rConten
     }
     if (rContent.meKind != SdrObjKind::NONE)
         rWriter.put("objectKind", static_cast<sal_Int32>(rContent.meKind));
+    if (!rContent.maShapeType.isEmpty())
+        rWriter.put("shapeType", rContent.maShapeType);
     if (rContent.mbIsDiagram)
         rWriter.put("isDiagram", true);
     if (!rContent.maGraphicExtension.isEmpty())

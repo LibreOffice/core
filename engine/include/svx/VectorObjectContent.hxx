@@ -171,6 +171,9 @@ struct ObjectContent
 
     /// What kind of object it is, as the drawing layer numbers the kinds.
     SdrObjKind meKind = SdrObjKind::NONE;
+    /// The geometry type of a custom shape, such as "rect", "ellipse" or "ooxml-rightArrow".
+    /// Empty for any other object.
+    OUString maShapeType;
 
     /** What may be done to the object, which is the object's own business and not the
         selection's: whether it may be moved, made larger or smaller, and turned. A reader
@@ -523,7 +526,7 @@ struct ObjectContent
                && maAids == rOther.maAids && maHandles == rOther.maHandles
                && maPath == rOther.maPath && maMotionPaths == rOther.maMotionPaths
                && meKind == rOther.meKind
-               && mbIsDiagram == rOther.mbIsDiagram
+               && maShapeType == rOther.maShapeType && mbIsDiagram == rOther.mbIsDiagram
                && maGraphicExtension == rOther.maGraphicExtension && mbSigning == rOther.mbSigning
                && mbIsPicture == rOther.mbIsPicture && mnGraphicChecksum == rOther.mnGraphicChecksum
                && mnControlModelChanges == rOther.mnControlModelChanges

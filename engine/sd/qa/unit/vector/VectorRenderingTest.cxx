@@ -54,6 +54,7 @@
 
 #include <svx/VectorObjectContent.hxx>
 #include <svx/svditer.hxx>
+#include <svx/svdoashp.hxx>
 #include <svx/svdobjkind.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
@@ -403,6 +404,17 @@ protected:
         pText->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
         pText->SetText(rText);
         pPage->NbcInsertObject(pText.get());
+    }
+
+    /// A custom shape of the given geometry type, such as "rect" or "ellipse".
+    void addCustomShape(const tools::Rectangle& rRect, const OUString& rType)
+    {
+        SdrPage* pPage = page(1);
+        rtl::Reference<SdrObjCustomShape> pShape
+            = new SdrObjCustomShape(pPage->getSdrModelFromSdrPage());
+        pShape->MergeDefaultAttributes(&rType);
+        pShape->NbcSetSnapRect(rRect);
+        pPage->NbcInsertObject(pShape.get());
     }
 
     /// The first text portion in the last vector JSON whose text contains
@@ -1877,6 +1889,25 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testAnimationTargetNamesTheObjectEntry
     CPPUNIT_ASSERT_EQUAL(OString(OString::number(nId) + "_1"),
                          sd::getAnimationTargetName(cpo::uno::Any(
                              presentation::ParagraphTarget(pObject->getUnoShape(), 1))));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testObjectEntryCarriesItsShapeType)
+{
+    // A custom shape names its geometry type, so a rectangle and an ellipse can be told apart
+    // although both are custom shapes. A text box is no custom shape and names none.
+    createBlankDoc();
+    addCustomShape(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), u"rect"_ustr);
+    addCustomShape(tools::Rectangle(Point(5000, 1000), Size(3000, 2000)), u"ellipse"_ustr);
+    addTextBox(tools::Rectangle(Point(1000, 5000), Size(3000, 2000)), u"Text"_ustr);
+
+    auto aJson = getVectorPrimitives(u"testShapeType");
+    CPPUNIT_ASSERT_EQUAL(size_t(4), aJson.getSize("/objects").value_or(0));
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(static_cast<sal_Int32>(SdrObjKind::CustomShape)),
+                         aJson.getInt("/objects/1/objectKind").value_or(-1));
+    assertJsonPath(aJson, "/objects/1/shapeType", "rect");
+    assertJsonPath(aJson, "/objects/2/shapeType", "ellipse");
+    CPPUNIT_ASSERT(!aJson.has("/objects/3/shapeType"));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testEveryParagraphCarriesItsRectangle)
