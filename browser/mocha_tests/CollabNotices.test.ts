@@ -22,7 +22,7 @@ describe('Collaboration notices in a document window', function () {
 	});
 
 	after(function () {
-		page.close();
+		page?.close();
 	});
 
 	afterEach(async function () {

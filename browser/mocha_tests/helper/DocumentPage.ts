@@ -246,44 +246,54 @@ async function openDocumentPage(docType: string): Promise<DocumentPage> {
 	});
 	const pageWindow = dom.window;
 
-	await new Promise((resolve) => pageWindow.addEventListener('load', resolve));
-	await documentPageWait(() => socket, 'the page to open its socket');
+	// A page that fails to load is closed, so its timers stop and the test run can end.
+	try {
+		await new Promise((resolve) =>
+			pageWindow.addEventListener('load', resolve),
+		);
+		await documentPageWait(() => socket, 'the page to open its socket');
 
-	const serverSays = (message: string) => socket.onmessage({ data: message });
-	socket.readyState = 1;
-	socket.onopen({});
-	serverSays(
-		'coolserver {"Version":"test","Hash":"0","Protocol":"0.1","Id":"test"}',
-	);
-	serverSays(
-		'lokitversion {"ProductName":"test","ProductVersion":"0","ProductExtension":"","BuildId":"0"}',
-	);
-	serverSays(
-		'status: ' +
-			JSON.stringify({
-				type: docType,
-				parts: 1,
-				selectedPart: 0,
-				width: 12240,
-				height: 15840,
-				viewid: 0,
-				partHasComments: false,
-				readonly: 0,
-				mode: 0,
-			}),
-	);
-	await documentPageWait(
-		() => pageWindow.app.map._docLayer,
-		'the document layer',
-	);
+		const serverSays = (message: string) => socket.onmessage({ data: message });
+		socket.readyState = 1;
+		socket.onopen({});
+		serverSays(
+			'coolserver {"Version":"test","Hash":"0","Protocol":"0.1","Id":"test"}',
+		);
+		serverSays(
+			'lokitversion {"ProductName":"test","ProductVersion":"0","ProductExtension":"","BuildId":"0"}',
+		);
+		serverSays(
+			'status: ' +
+				JSON.stringify({
+					type: docType,
+					parts: 1,
+					selectedPart: 0,
+					width: 12240,
+					height: 15840,
+					viewid: 0,
+					partHasComments: false,
+					readonly: 0,
+					mode: 0,
+				}),
+		);
+		await documentPageWait(
+			() => pageWindow.app.map._docLayer,
+			'the document layer',
+		);
 
-	return {
-		window: pageWindow,
-		map: pageWindow.app.map,
-		sent,
-		errors,
-		serverSays,
-		waitFor: documentPageWait,
-		close: () => pageWindow.close(),
-	};
+		return {
+			window: pageWindow,
+			map: pageWindow.app.map,
+			sent,
+			errors,
+			serverSays,
+			waitFor: documentPageWait,
+			close: () => pageWindow.close(),
+		};
+	} catch (error) {
+		pageWindow.close();
+		if (errors.length)
+			error.message += '\nThe page reported:\n' + errors.join('\n');
+		throw error;
+	}
 }

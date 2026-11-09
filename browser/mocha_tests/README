@@ -40,7 +40,7 @@ built page itself, rather than build a stand-in for the map:
         page.serverSays('perm: edit');
     });
     after(function () {
-        page.close();
+        page?.close();
     });
 
 openDocumentPage() loads dist/cool.html with all its scripts and plays the server's side of a
