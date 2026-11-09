@@ -475,6 +475,10 @@ static int topResizeBorderHeight(HWND hWnd);
 
 static int titleBarFrameHeight(const WindowState& window);
 
+static std::string fileUriToWindowsPath(const std::string& uri);
+
+static std::string pathToURI(const Poco::Path& path);
+
 [[noreturn]] static void fatal(const std::string& message)
 {
     MessageBoxW(hiddenOwnerWindow, Util::string_to_wide_string(message).c_str(), L"ERROR", MB_OK);
@@ -514,7 +518,7 @@ static FilenameAndUri generate_new_copy(const std::wstring& templateSourcePath,
 
     auto path = Poco::Path(Util::wide_string_to_string(templateCopyPath));
 
-    return { Util::wide_string_to_string(templateCopyPath), Poco::URI(path).toString() };
+    return { Util::wide_string_to_string(templateCopyPath), pathToURI(path) };
 }
 
 static std::wstring new_document(DocumentType type,
@@ -578,12 +582,7 @@ static std::wstring new_document(DocumentType type,
     if (filenameAndUri.uri == "")
         return L"";
 
-    auto path = Poco::URI(filenameAndUri.uri).getPath();
-    if (path.length() > 4 && path[0] == '/' && path[2] == ':' && path[3] == '/')
-        path = path.substr(1);
-    auto templateCopyPath = Util::string_to_wide_string(Poco::Path(path).toString());
-
-    return templateCopyPath;
+    return Util::string_to_wide_string(fileUriToWindowsPath(filenameAndUri.uri));
 }
 
 static int generate_new_app_doc_id()
@@ -629,11 +628,10 @@ static void send2JS(const DocumentTab& tab, const char* buffer, int length)
     PostMessageW(tab.hWnd, CODA_WM_EXECUTESCRIPT, (WPARAM)wparam, (LPARAM)tab.tabId);
 }
 
-// Convert a file: URI to a native Windows path. A UNC location arrives as
-// "file://host/share/..." with the host in the authority and becomes
-// "\\host\share\..."; a local path arrives as "/C:/dir/file" and becomes
-// "C:\dir\file". Non-file URIs, and anything that fails to parse, are returned
-// unchanged.
+// Convert a file: URI to a native Windows path. A URI of a file on a network share, like
+// "file://host/share/dir/file", becomes "\\host\share\dir\file". A URI of a local file, like
+// "file:///C:/dir/file", becomes "C:\dir\file". A URI of another scheme, and one that cannot be
+// parsed, is returned unchanged.
 static std::string fileUriToWindowsPath(const std::string& uri)
 {
     if (!uri.starts_with("file:"))
@@ -896,7 +894,7 @@ static void quit_application()
 static void do_print(int appDocId)
 {
     const std::string tempFile = FileUtil::createRandomTmpDir() + "\\p.pdf";
-    const std::string tempFileUri = Poco::URI(Poco::Path(tempFile)).toString();
+    const std::string tempFileUri = pathToURI(Poco::Path(tempFile));
 
     // Leave form fields and comments out of the printout, like the browser does when printing to
     // PDF.
@@ -5224,10 +5222,10 @@ static DocumentTab* findOpenDocumentTab(const std::string& uri)
     if (uri.empty())
         return nullptr;
 
-    const std::string path = Poco::URI(uri).getPath();
+    const std::string path = fileUriToWindowsPath(uri);
     for (auto& i : documentTabs)
     {
-        if (Poco::URI(i.second.filenameAndUri.uri).getPath() == path)
+        if (fileUriToWindowsPath(i.second.filenameAndUri.uri) == path)
             return &i.second;
     }
     return nullptr;
@@ -6678,7 +6676,7 @@ static void writeRemoteDocFile(DocumentTab& data, int id, const std::string& arg
 
     data.fakeClientFd = fakeSocketSocket();
     data.appDocId = generate_new_app_doc_id();
-    data.filenameAndUri = { name, Poco::URI(Poco::Path(path)).toString() };
+    data.filenameAndUri = { name, pathToURI(Poco::Path(path)) };
     postReplyToCall(data.hWnd, data.tabId, id, path);
 }
 
@@ -7082,11 +7080,7 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
                 return;
             }
 
-            auto srcPath = Poco::URI(fileUrl).getPath();
-            // The usual hack to get rid of the leading slash in what Poco::URI::getPath() returns,
-            // like "/C:/Users/bob/AppData/Local/Temp/image.jpg".
-            if (srcPath.length() > 4 && srcPath[0] == '/' && srcPath[2] == ':' && srcPath[3] == '/')
-                srcPath = srcPath.substr(1);
+            const std::string srcPath = fileUriToWindowsPath(fileUrl);
 
             if (!std::filesystem::exists(srcPath))
             {
@@ -7106,10 +7100,7 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
 
             if (filenameAndUri.filename != "")
             {
-                auto destPath = Poco::URI(filenameAndUri.uri).getPath();
-                // As above
-                if (destPath.length() > 4 && destPath[0] == '/' && destPath[2] == ':' && destPath[3] == '/')
-                    destPath = destPath.substr(1);
+                const std::string destPath = fileUriToWindowsPath(filenameAndUri.uri);
                 std::error_code ec;
                 std::filesystem::copy_file(srcPath, destPath,
                                            std::filesystem::copy_options::overwrite_existing, ec);
@@ -7166,10 +7157,7 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
 
             if (filenameAndUri.filename != "")
             {
-                auto destPath = Poco::URI(filenameAndUri.uri).getPath();
-                // The usual hack to strip the leading slash before the drive letter.
-                if (destPath.length() > 4 && destPath[0] == '/' && destPath[2] == ':' && destPath[3] == '/')
-                    destPath = destPath.substr(1);
+                const std::string destPath = fileUriToWindowsPath(filenameAndUri.uri);
                 std::ofstream out(destPath, std::ios::binary | std::ios::trunc);
                 if (!out || !out.write(reinterpret_cast<const char*>(bytes.data()), bytes.size()))
                     LOG_ERR("extensionsavefile: failed to write '" << destPath << "'");
@@ -7345,7 +7333,7 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
             if (newDocument != L"")
             {
                 Poco::Path path = Poco::Path(Util::wide_string_to_string(newDocument));
-                openCOOLWindow({ path.getFileName(), Poco::URI(path).toString() }, DocumentMode::NEW);
+                openCOOLWindow({ path.getFileName(), pathToURI(path) }, DocumentMode::NEW);
             }
             if (data.mode == DocumentMode::STARTER)
                 PostMessageW(data.hWnd, CODA_WM_CLOSETAB, (WPARAM)data.tabId, 0);
@@ -7575,7 +7563,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int showWindowMode)
     GetModuleFileNameW(NULL, fileName, sizeof(fileName) / sizeof(fileName[0]));
     app_installation_path = app_exe_path = Util::wide_string_to_string(std::wstring(fileName));
     app_installation_path.resize(app_installation_path.find_last_of(L'\\') + 1);
-    app_installation_uri = Poco::URI(Poco::Path(app_installation_path)).toString();
+    app_installation_uri = pathToURI(Poco::Path(app_installation_path));
 
 #if ENABLE_DEBUG
     // cool/ next to the install root is the vcxproj's robocopy of browser/dist/:
