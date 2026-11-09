@@ -254,6 +254,13 @@ button.jsdialog[disabled] img {
 	color: rgb(var(--doc-type));
 }
 
+[data-theme='dark'] body:not([data-doctype]) .backstage-view .button-primary:not(:disabled):hover,
+[data-theme='dark'] body:not([data-doctype]) .backstage-view .button-primary:not(:disabled):focus-visible {
+	background-color: rgba(0, 0, 0, 0.3);
+	border-color: rgb(176, 142, 202);
+	color: rgb(176, 142, 202);
+}
+
 .button-primary:disabled {
 	background-color: var(--color-background-lighter);
 	border-color: var(--color-border-dark);
