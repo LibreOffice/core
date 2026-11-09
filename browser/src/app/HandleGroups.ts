@@ -1106,8 +1106,8 @@ class TurningHandle extends HandleGroup {
 	}
 
 	/// The handle at that point, turned by that angle, and the handle of the other mode beside it
-	/// while that one is shown. Where the objects say they cannot be turned it is there but dead,
-	/// so the selection looks the same whatever may be done to it.
+	/// while that one is shown. Where the objects say they cannot be turned, or it would do
+	/// nothing, there is none, as there is nothing to do with it.
 	private handlesAt(
 		point: cool.Point,
 		turnedBy: number,
@@ -1116,6 +1116,7 @@ class TurningHandle extends HandleGroup {
 		const dead =
 			deadAnyway ||
 			!ObjectHandles.canBeTurned(this.selection.selectedObjects());
+		if (dead) return [];
 		const handles: SelectionHandle[] = [
 			{
 				name: SelectionSection.turningKind,
@@ -1123,7 +1124,6 @@ class TurningHandle extends HandleGroup {
 				pointer: '0',
 				point: point.round(),
 				turnedBy: turnedBy,
-				deactivated: dead,
 			},
 		];
 
@@ -1133,7 +1133,7 @@ class TurningHandle extends HandleGroup {
 			are drawn as large as a handle under the mouse, with a handle between them, and a bar
 			lies behind the two.
 		*/
-		if (this.selection.showsTheOtherMode() && !dead)
+		if (this.selection.showsTheOtherMode())
 			handles.push({
 				name: SelectionSection.otherModeKind,
 				kind: SelectionSection.otherModeKind,
