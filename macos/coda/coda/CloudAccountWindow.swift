@@ -21,6 +21,8 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
     static let world = WKContentWorld.world(name: "coda")
     private static let firstMacOSWithSafariVersion = 26
     private static let safariVersionsAheadOfMacOS = 3
+    // WebKit's error code for a navigation that decidePolicyFor cancelled:
+    private static let frameLoadInterruptedByPolicyChange = 102
 
     /// window.bridge calls that native code does not answer yet. They are not engine messages.
     private static let unansweredBridgeCalls: Set<Substring> = [
@@ -45,6 +47,8 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
 
     /// The remote document's name, like "calc.ods".
     private var remoteDocumentName: String?
+
+    private var hasShownPage = false
 
     static func open(accountId: String, url: URL) {
         if let controller = openWindows[accountId] {
@@ -603,6 +607,43 @@ final class CloudAccountWindow: NSWindowController, NSWindowDelegate, WKNavigati
         }
 
         return nil
+    }
+
+    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
+        hasShownPage = true
+    }
+
+    func webView(
+        _ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!,
+        withError error: Error)
+    {
+        reportFailedLoad(error)
+    }
+
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        reportFailedLoad(error)
+    }
+
+    private func reportFailedLoad(_ error: Error) {
+        let nsError = error as NSError
+        if nsError.domain == NSURLErrorDomain && nsError.code == NSURLErrorCancelled {
+            return
+        }
+        if nsError.domain == "WebKitErrorDomain"
+            && nsError.code == Self.frameLoadInterruptedByPolicyChange
+        {
+            return
+        }
+        COWrapper.LOG_ERR("The account window could not load a page: \(nsError)")
+        guard let window else {
+            return
+        }
+        // A window that has not shown a page yet closes once the error is dismissed:
+        NSAlert(error: error).beginSheetModal(for: window) { _ in
+            if !self.hasShownPage {
+                self.close()
+            }
+        }
     }
 
     private static func openInBrowser(_ url: URL) {
