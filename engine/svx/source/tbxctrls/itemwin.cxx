@@ -27,7 +27,6 @@
 #include <sfx2/module.hxx>
 
 #include <vcl/event.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 
@@ -215,60 +214,6 @@ void SvxFillTypeBox::Fill(weld::ComboBox& rListBox)
     rListBox.set_active(1); // solid color
 }
 
-namespace
-{
-    void formatBitmapToSize(Bitmap& rBitmap, const Size& rSize)
-    {
-        if(rBitmap.IsEmpty() || rSize.IsEmpty())
-            return;
-
-        ScopedVclPtrInstance< VirtualDevice > pVirtualDevice;
-        pVirtualDevice->SetOutputSizePixel(rSize);
-
-        if(rBitmap.HasAlpha())
-        {
-            const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-
-            if(rStyleSettings.GetPreviewUsesCheckeredBackground())
-            {
-                const Point aNull(0, 0);
-                static const sal_uInt32 nLen(8);
-                static const Color aW(COL_WHITE);
-                static const Color aG(0xef, 0xef, 0xef);
-
-                pVirtualDevice->DrawCheckered(aNull, rSize, nLen, aW, aG);
-            }
-            else
-            {
-                pVirtualDevice->SetBackground(rStyleSettings.GetFieldColor());
-                pVirtualDevice->Erase();
-            }
-        }
-
-        if(rBitmap.GetSizePixel().Width() >= rSize.Width() && rBitmap.GetSizePixel().Height() >= rSize.Height())
-        {
-            rBitmap.Scale(rSize);
-            pVirtualDevice->DrawBitmap(Point(0, 0), rBitmap);
-        }
-        else
-        {
-            const Size aBitmapSize(rBitmap.GetSizePixel());
-
-            for(tools::Long y(0); y < rSize.Height(); y += aBitmapSize.Height())
-            {
-                for(tools::Long x(0); x < rSize.Width(); x += aBitmapSize.Width())
-                {
-                    pVirtualDevice->DrawBitmap(
-                        Point(x, y),
-                        rBitmap);
-                }
-            }
-        }
-
-        rBitmap = pVirtualDevice->GetBitmap(Point(0, 0), rSize);
-    }
-} // end of anonymous namespace
-
 void SvxFillAttrBox::Fill(weld::ComboBox& rBox, const XHatchListRef &pList)
 {
     if( !pList.is() )
@@ -290,23 +235,7 @@ void SvxFillAttrBox::Fill(weld::ComboBox& rBox, const XBitmapListRef &pList)
     if( !pList.is() )
         return;
 
-    tools::Long nCount = pList->Count();
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    const Size aSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
-    ScopedVclPtrInstance< VirtualDevice > pVD;
-    pVD->SetOutputSizePixel(aSize, false);
-    rBox.freeze();
-
-    for( tools::Long i = 0; i < nCount; i++ )
-    {
-        const XBitmapEntry* pEntry = pList->GetBitmap( i );
-        Bitmap aBitmap = pEntry->GetGraphicObject().GetGraphic().GetBitmap();
-        formatBitmapToSize(aBitmap, aSize);
-        pVD->DrawBitmap(Point(), aBitmap);
-        rBox.append(u""_ustr, pEntry->GetName(), *pVD);
-    }
-
-    rBox.thaw();
+    FillWithThumbnails(rBox, *pList);
 }
 
 void SvxFillAttrBox::Fill(weld::ComboBox& rBox, const XPatternListRef &pList)
@@ -314,24 +243,7 @@ void SvxFillAttrBox::Fill(weld::ComboBox& rBox, const XPatternListRef &pList)
     if( !pList.is() )
         return;
 
-    tools::Long nCount = pList->Count();
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    const Size aSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
-    ScopedVclPtrInstance< VirtualDevice > pVD;
-    pVD->SetOutputSizePixel(aSize, false);
-    rBox.freeze();
-
-    for( tools::Long i = 0; i < nCount; i++ )
-    {
-        const XBitmapEntry* pEntry = pList->GetBitmap( i );
-        Bitmap aBitmap = pEntry->GetGraphicObject().GetGraphic().GetBitmap();
-        formatBitmapToSize(aBitmap, aSize);
-        pVD->DrawBitmap(Point(), aBitmap);
-        rBox.append(u""_ustr, pEntry->GetName(), *pVD);
-    }
-
-    rBox.thaw();
-
+    FillWithThumbnails(rBox, *pList);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
