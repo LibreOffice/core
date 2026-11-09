@@ -2461,6 +2461,123 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testAnimatedGifSelectableOutsidePaint
     CPPUNIT_ASSERT_EQUAL(pGif, rMarkList.GetMark(0)->GetMarkedSdrObj());
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCtrlClickTogglesSelection)
+{
+    // Given a slide with a group of two shapes and two plain shapes, the first with text:
+    SdXImpressDocument* pXImpressDocument = createDoc("ctrl-click-selection.fodp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    SdPage* pPage = pViewShell->GetActualPage();
+    SdrObject* pGroup = pPage->GetObj(0);
+    SdrObject* pGrouped1 = pGroup->GetSubList()->GetObj(0);
+    SdrObject* pGrouped2 = pGroup->GetSubList()->GetObj(1);
+    SdrObject* pFirst = pPage->GetObj(1);
+    SdrObject* pSecond = pPage->GetObj(2);
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+
+    auto click = [pXImpressDocument](const SdrObject* pObject, int nModifier)
+    {
+        const Point aCenter = pObject->GetSnapRect().Center();
+        const int nX = o3tl::toTwips(aCenter.getX(), o3tl::Length::mm100);
+        const int nY = o3tl::toTwips(aCenter.getY(), o3tl::Length::mm100);
+        pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, nX, nY, 1, MOUSE_LEFT,
+                                          nModifier);
+        pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, nX, nY, 1, MOUSE_LEFT,
+                                          nModifier);
+        Scheduler::ProcessEventsToIdle();
+    };
+
+    // A ctrl-click on the text of a shape selects the shape and starts no text editing.
+    click(pFirst, KEY_MOD1);
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rMarkList.GetMarkCount());
+    CPPUNIT_ASSERT(pView->IsObjMarked(pFirst));
+
+    // A ctrl-click adds a shape to the selection, and a second one removes it again.
+    click(pSecond, KEY_MOD1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rMarkList.GetMarkCount());
+    CPPUNIT_ASSERT(pView->IsObjMarked(pSecond));
+    click(pSecond, KEY_MOD1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rMarkList.GetMarkCount());
+    CPPUNIT_ASSERT(pView->IsObjMarked(pFirst));
+
+    // With a top level shape selected, a ctrl-click on a grouped shape adds the whole group,
+    // and a ctrl-click on the other grouped shape removes the group again.
+    click(pGrouped1, KEY_MOD1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rMarkList.GetMarkCount());
+    CPPUNIT_ASSERT(pView->IsObjMarked(pGroup));
+    click(pGrouped2, KEY_MOD1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rMarkList.GetMarkCount());
+    CPPUNIT_ASSERT(pView->IsObjMarked(pFirst));
+
+    // With nothing selected, a ctrl-click on a grouped shape selects just that shape, and a
+    // ctrl-click on its sibling adds the sibling.
+    pView->UnmarkAll();
+    click(pGrouped1, KEY_MOD1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rMarkList.GetMarkCount());
+    CPPUNIT_ASSERT(pView->IsObjMarked(pGrouped1));
+    click(pGrouped2, KEY_MOD1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rMarkList.GetMarkCount());
+    CPPUNIT_ASSERT(pView->IsObjMarked(pGrouped2));
+
+    // A plain click still replaces the selection.
+    click(pSecond, 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rMarkList.GetMarkCount());
+    CPPUNIT_ASSERT(pView->IsObjMarked(pSecond));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCtrlClickTable)
+{
+    // Given a slide with a shape and a table of two rows and two columns:
+    SdXImpressDocument* pXImpressDocument = createDoc("ctrl-click-selection.fodp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    SdPage* pPage = pViewShell->GetActualPage();
+    SdrObject* pSecond = pPage->GetObj(2);
+    SdrObject* pTable = pPage->GetObj(3);
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+
+    auto click = [pXImpressDocument](const Point& rPosition, int nModifier)
+    {
+        const int nX = o3tl::toTwips(rPosition.getX(), o3tl::Length::mm100);
+        const int nY = o3tl::toTwips(rPosition.getY(), o3tl::Length::mm100);
+        pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, nX, nY, 1, MOUSE_LEFT,
+                                          nModifier);
+        pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, nX, nY, 1, MOUSE_LEFT,
+                                          nModifier);
+        Scheduler::ProcessEventsToIdle();
+    };
+    const tools::Rectangle aTableRect = pTable->GetSnapRect();
+    const Point aFirstCell(aTableRect.Left() + aTableRect.GetWidth() / 4,
+                           aTableRect.Top() + aTableRect.GetHeight() / 4);
+
+    // With nothing selected, a ctrl-click into a cell puts the cursor into the cell.
+    click(aFirstCell, KEY_MOD1);
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+    CPPUNIT_ASSERT_EQUAL(pTable, static_cast<SdrObject*>(pView->GetTextEditObject()));
+
+    // With a shape selected, a ctrl-click into a cell adds the table to the selection, and a
+    // second one removes it again.
+    click(pSecond->GetSnapRect().Center(), 0);
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rMarkList.GetMarkCount());
+    CPPUNIT_ASSERT(pView->IsObjMarked(pSecond));
+    click(aFirstCell, KEY_MOD1);
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rMarkList.GetMarkCount());
+    CPPUNIT_ASSERT(pView->IsObjMarked(pTable));
+    click(aFirstCell, KEY_MOD1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rMarkList.GetMarkCount());
+    CPPUNIT_ASSERT(pView->IsObjMarked(pSecond));
+
+    // With only the table selected, a ctrl-click into a cell puts the cursor into the cell.
+    pView->UnmarkAll();
+    pView->MarkObj(pTable, pView->GetSdrPageView());
+    click(aFirstCell, KEY_MOD1);
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+    CPPUNIT_ASSERT_EQUAL(pTable, static_cast<SdrObject*>(pView->GetTextEditObject()));
+}
+
 namespace
 {
 /// The parts that the view saw invalidated whole in the given edit mode, in ascending order and

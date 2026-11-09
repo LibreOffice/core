@@ -149,6 +149,22 @@ bool lcl_hitsCanvasPagePreview(::sd::View* pView, ::sd::ViewShell& rViewShell, c
     SdrObject* pObject = lcl_pickCanvasPageObject(pView, rViewShell, rPosition);
     return pObject && pObject->GetObjIdentifier() == SdrObjKind::Page;
 }
+
+/** Whether the selection holds an object that sits inside a group other than the entered one. */
+bool lcl_hasMarkedObjectInsideGroup(const ::sd::View& rView)
+{
+    const SdrPageView* pPageView = rView.GetSdrPageView();
+    const SdrObject* pEnteredGroup = pPageView ? pPageView->GetCurrentGroup() : nullptr;
+    const SdrMarkList& rMarkList = rView.GetMarkedObjectList();
+    for (size_t nMark = 0; nMark < rMarkList.GetMarkCount(); ++nMark)
+    {
+        const SdrObject* pParent
+            = rMarkList.GetMark(nMark)->GetMarkedSdrObj()->getParentSdrObjectFromSdrObject();
+        if (pParent && pParent != pEnteredGroup)
+            return true;
+    }
+    return false;
+}
 }
 
 bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
@@ -282,6 +298,18 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         // When clicking into a URl field, also go to text edit mode (when not following the link)
         if (!bTextEdit && eHit == SdrHitKind::UrlField && !rMEvt.IsMod2() && !lcl_followHyperlinkAllowed(rMEvt))
             bTextEdit = true;
+
+        // A ctrl-click adds the object to the selection or removes it, also when it lands on
+        // text, so it starts no text editing. When nothing or only the table itself is selected,
+        // a ctrl-click into a table still puts the cursor into the cell.
+        const SdrMarkList& rMarkedObjects = mpView->GetMarkedObjectList();
+        const bool bTableAloneInSelection
+            = dynamic_cast<sdr::table::SdrTableObj*>(aVEvt.mpObj) != nullptr
+              && (rMarkedObjects.GetMarkCount() == 0
+                  || (rMarkedObjects.GetMarkCount() == 1
+                      && rMarkedObjects.GetMark(0)->GetMarkedSdrObj() == aVEvt.mpObj));
+        if (rMEvt.IsMod1() && !bTableAloneInSelection)
+            bTextEdit = false;
 
         SfxViewShell* pViewShell = mrViewShell.GetViewShell();
         bool bPreventModify = mpDocSh->IsReadOnly()
@@ -487,7 +515,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     bReturn = true;
                     bool bDeactivateOLE = false;
 
-                    if ( !rMEvt.IsShift() && !rMEvt.IsMod2() )
+                    if (!rMEvt.IsShift() && !rMEvt.IsMod1() && !rMEvt.IsMod2())
                     {
                         OSL_ASSERT (mrViewShell.GetViewShell()!=nullptr);
                         Client* pIPClient = static_cast<Client*>(
@@ -838,6 +866,20 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
             mpView->ForceMarkedToAnotherPage();
 
+            if (rMEvt.IsMod1() && !rMEvt.IsShift() && !rMEvt.IsMod2() && !bWasDragged && !pHdl
+                && std::abs(aPnt.X() - aMDPos.X()) < nDrgLog
+                && std::abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
+            {
+                // A ctrl-press on a selected object starts a drag, which copies the selection
+                // when the mouse moves. Released in place, it is a ctrl-click, and the clicked
+                // object leaves the selection.
+                SdrPageView* pPV = nullptr;
+                SdrObject* pObj = mpView->PickObj(aMDPos, mpView->getHitTolLog(), pPV,
+                                                  SdrSearchOptions::MARKED);
+                if (pObj && pPV)
+                    mpView->MarkObj(pObj, pPV, true);
+            }
+
             if (comphelper::COKit::isActive() && bWasDragged
                 && mrViewShell.GetActualPage()->IsCanvasPage())
             {
@@ -937,8 +979,14 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             && std::abs(aPnt.Y() - aMDPos.Y()) < nDrgLog
             && !lcl_hitsCanvasPagePreview(mpView, mrViewShell, aPnt))
         {
-            // Enter group
-            mpView->MarkObj(aPnt, nHitLog, rMEvt.IsShift(), rMEvt.IsMod1());
+            // A ctrl-click adds the object to the selection or removes it. It picks at the
+            // level of the entered group, so a click on a grouped object toggles the whole
+            // group. With an empty selection, or a selection that already holds an object from
+            // inside a group, it picks the object inside the group instead. Ctrl and shift
+            // together always pick inside the group.
+            const bool bDeep = rMEvt.IsShift() || mpView->GetMarkedObjectList().GetMarkCount() == 0
+                               || lcl_hasMarkedObjectInsideGroup(*mpView);
+            mpView->MarkObj(aPnt, nHitLog, true, bDeep);
         }
 
         if (mpView->IsAction() )
