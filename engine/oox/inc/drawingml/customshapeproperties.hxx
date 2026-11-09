@@ -200,10 +200,17 @@ private:
     cpo::uno::Sequence< css::beans::PropertyValue > presetGeometry() const;
 
 public:
-    /// Whether the adjustment nIndex, counted from 1, of the preset nPresetType is an angle, in
-    /// 60000ths of a degree, and not a part of a hundred thousand: the preset's own equations
-    /// clamp an angle to 21599999.
-    static bool isAngleAdjustment( sal_Int32 nPresetType, sal_Int32 nIndex );
+    /// What an adjustment of a preset holds. Part: a part of one in parts of a hundred
+    /// thousand. Angle: an angle in 60000ths of a degree. TurnAngle: an angle in 60000ths of a
+    /// degree that the preset takes from 0 to 21599999 only, a start or an end angle.
+    enum class AdjustmentKind
+    {
+        Part,
+        Angle,
+        TurnAngle
+    };
+    /// what the adjustment nIndex, counted from 1, of the preset nPresetType holds
+    static AdjustmentKind getAdjustmentKind( sal_Int32 nPresetType, sal_Int32 nIndex );
 
 private:
 

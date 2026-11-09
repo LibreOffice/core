@@ -28,6 +28,7 @@
 #include <oox/token/tokens.hxx>
 #include <sal/log.hxx>
 #include <sax/fastattribs.hxx>
+#include <cmath>
 #include <utility>
 
 using namespace ::oox::core;
@@ -58,13 +59,24 @@ public:
             case DGM_TOKEN(adj):
             {
                 const sal_Int32 nIndex(rAttribs.getInteger(XML_idx, 1));
-                const double fValue(rAttribs.getDouble(XML_val, 0.0));
+                double fValue(rAttribs.getDouble(XML_val, 0.0));
                 // An angle is stated in degrees, "adj idx 1 val 270" on Segmented_Cycle's pie,
                 // and the preset takes it in 60000ths of a degree, 16200000 there, as the
                 // drawing of the file writes it. A part of one is stated as such, 0.5, and the
                 // preset takes it in parts of a hundred thousand.
-                const bool bAngle(CustomShapeProperties::isAngleAdjustment(
-                    mpShape->getCustomShapeProperties()->getShapePresetType(), nIndex));
+                const CustomShapeProperties::AdjustmentKind eKind(
+                    CustomShapeProperties::getAdjustmentKind(
+                        mpShape->getCustomShapeProperties()->getShapePresetType(), nIndex));
+                // a start or an end angle may be stated below 0, -40 on the arc of
+                // Half_Circle_Organization_Chart, and the preset pins it to 0: we take the same
+                // angle on the turn, 320
+                if (eKind == CustomShapeProperties::AdjustmentKind::TurnAngle)
+                {
+                    fValue = std::fmod(fValue, 360.0);
+                    if (fValue < 0.0)
+                        fValue += 360.0;
+                }
+                const bool bAngle(eKind != CustomShapeProperties::AdjustmentKind::Part);
                 const sal_Int32 nScaled(
                     static_cast<sal_Int32>(fValue * (bAngle ? 60000.0 : 100000.0)));
                 mpShape->getCustomShapeProperties()->getAdjustmentGuideList().push_back(

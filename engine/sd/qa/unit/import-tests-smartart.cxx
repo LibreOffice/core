@@ -10,6 +10,7 @@
 #include "sdmodeltestbase.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
@@ -3121,6 +3122,31 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testFixedHeightTextShrinksBeforeItGro
     CPPUNIT_ASSERT(xOne.is());
     CPPUNIT_ASSERT(xTwo.is());
     CPPUNIT_ASSERT_EQUAL(xOne->getPosition().Y, xTwo->getPosition().Y);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testNegativeStartAngleIsTheSameOnTheTurn)
+{
+    // Phased_Process states its arcs from -135 to -45 degrees, and the preset pins an angle below
+    // 0 to 0: the arcs go from 225 to 315
+    createSdImpressDoc("pptx/smartart-negative-start-angle.pptx");
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    std::vector<uno::Reference<drawing::XShape>> aArcs;
+    collectShapesWithGeometry(xDiagram, u"ooxml-blockArc"_ustr, aArcs);
+    CPPUNIT_ASSERT(!aArcs.empty());
+    for (const auto& xArc : aArcs)
+    {
+        uno::Reference<beans::XPropertySet> xProperties(xArc, uno::UNO_QUERY);
+        comphelper::SequenceAsHashMap aGeometry(
+            xProperties->getPropertyValue(u"CustomShapeGeometry"_ustr));
+        uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustments;
+        aGeometry[u"AdjustmentValues"_ustr] >>= aAdjustments;
+        CPPUNIT_ASSERT(aAdjustments.getLength() >= 2);
+        sal_Int32 nStart(0), nEnd(0);
+        aAdjustments[0].Value >>= nStart;
+        aAdjustments[1].Value >>= nEnd;
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(225 * 60000), nStart);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(315 * 60000), nEnd);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTextAsWideAsItsWordKeepsItsFont)
