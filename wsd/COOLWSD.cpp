@@ -1109,6 +1109,12 @@ struct ExitingKit
 static std::mutex ExitingKitsMutex;
 static std::vector<ExitingKit> ExitingKits;
 
+static std::chrono::seconds kitExitGracePeriod()
+{
+    return UnitWSD::isUnitTesting() ? UnitWSD::get().kitExitGracePeriod(KitExitGracePeriod)
+                                    : KitExitGracePeriod;
+}
+
 /// How long until the grace period of the next exiting Kit is over. The poll timeout when no Kit
 /// is exiting.
 static std::chrono::microseconds timeUntilNextKitDeadline()
@@ -1154,7 +1160,7 @@ static void killKitsPastGracePeriod()
 
     for (const ExitingKit& exiting : kitsToKill)
     {
-        LOG_ERR("Kit [" << exiting.pid << "] still runs " << KitExitGracePeriod
+        LOG_ERR("Kit [" << exiting.pid << "] still runs " << kitExitGracePeriod()
                         << " after it was asked to exit. Killing it.");
         // A Kit that did not read the request to exit for the whole grace period does not read
         // SIGTERM either, so coverage builds send SIGKILL too.
@@ -1306,7 +1312,7 @@ static void killOnceGracePeriodIsOver(const std::shared_ptr<ChildProcess>& child
         std::lock_guard<std::mutex> lock(ExitingKitsMutex);
         wasEmpty = ExitingKits.empty();
         ExitingKits.push_back(
-            ExitingKit{ child, pid, std::chrono::steady_clock::now() + KitExitGracePeriod });
+            ExitingKit{ child, pid, std::chrono::steady_clock::now() + kitExitGracePeriod() });
     }
 
     // The prisoner poll sleeps until the earliest deadline. A new deadline is the latest, so the

@@ -516,6 +516,12 @@ public:
     {
     }
 
+    /// How long a Kit has to exit by itself once asked to, before it is killed.
+    virtual std::chrono::seconds kitExitGracePeriod(std::chrono::seconds defaultPeriod) const
+    {
+        return defaultPeriod;
+    }
+
     /// When we get killed by oom message from forkit; override to test crashes ...
     virtual void kitOomKilled(int /* count */)
     {

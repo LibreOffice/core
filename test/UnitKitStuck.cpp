@@ -69,6 +69,11 @@ public:
         helpers::sendTextFrame(_socket, "versionrestore prerestore", testname);
     }
 
+    std::chrono::seconds kitExitGracePeriod(std::chrono::seconds) const override
+    {
+        return std::chrono::seconds(1);
+    }
+
     void kitKilled(int count) override
     {
         TST_LOG("Killed " << count << " Kit(s)");
