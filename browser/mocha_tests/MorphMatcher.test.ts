@@ -58,6 +58,15 @@ describe('MorphMatcher', function () {
 		};
 	}
 
+	function assertFrame(frame: cool.Matrix2D, expected: number[]) {
+		const actual = frame.toArray();
+		for (let i = 0; i < 6; i++)
+			nodeassert.ok(
+				Math.abs(actual[i] - expected[i]) < 1e-6,
+				'value ' + i + ' is ' + actual[i] + ', expected ' + expected[i],
+			);
+	}
+
 	describe('match', function () {
 		it('takes part with the objects on the slide only', function () {
 			const leaving = slide([
@@ -189,6 +198,195 @@ describe('MorphMatcher', function () {
 				MorphMatcher.contentOf(at(10, rectangle, 0, 0)),
 				undefined,
 			);
+		});
+	});
+
+	describe('text pieces', function () {
+		// A text box with one upright run of the text, at a font size of 100 twips with its
+		// baseline start at 1000, 2000, and the given glyph advances.
+		function run(textOfRun: string, advances: number[], extra?: any): any {
+			return {
+				objectKind: 16,
+				primitives: [
+					{
+						type: 'textHierarchyBlock',
+						children: [
+							{
+								type: 'textHierarchyParagraph',
+								children: [
+									Object.assign(
+										{
+											type: 'textSimplePortion',
+											text: textOfRun,
+											matrix: [100, 0, 0, 100, 1000, 2000],
+											advances,
+										},
+										extra,
+									),
+								],
+							},
+						],
+					},
+				],
+			};
+		}
+
+		// A piece from x, as wide as width, from above the baseline to below it.
+		function box(x: number, width: number): number[] {
+			return [width, 0, 0, 155, x, 1885];
+		}
+
+		it('splits the text at the blanks', function () {
+			nodeassert.deepStrictEqual(MorphMatcher.rangesOf('ab  cd', false), [
+				[0, 2],
+				[4, 6],
+			]);
+		});
+
+		it('takes each character but the blanks, a pair of surrogates as one', function () {
+			nodeassert.deepStrictEqual(
+				MorphMatcher.rangesOf('a b\ud83d\ude00', true),
+				[
+					[0, 1],
+					[2, 3],
+					[3, 5],
+				],
+			);
+		});
+
+		it('places each word along the run, its drawing reaching into the blanks', function () {
+			const text = MorphMatcher.textPiecesOf(
+				run('ab cd', [50, 50, 30, 50, 50]),
+				false,
+			);
+
+			nodeassert.strictEqual(text.paragraphCount, 1);
+			nodeassert.deepStrictEqual(
+				text.pieces.map((piece: MorphPiece) => piece.text),
+				['ab', 'cd'],
+			);
+			// The box of a word spans its glyphs, so the same word has the same box wherever it
+			// stands. The part of the drawing it takes reaches halfway into the blanks.
+			assertFrame(text.pieces[0].frame, box(1000, 100));
+			assertFrame(text.pieces[0].clip, box(1000, 115));
+			assertFrame(text.pieces[1].frame, box(1130, 100));
+			assertFrame(text.pieces[1].clip, box(1115, 115));
+		});
+
+		it('places each character at its own advance', function () {
+			const text = MorphMatcher.textPiecesOf(
+				run('ab cd', [50, 50, 30, 50, 50]),
+				true,
+			);
+
+			nodeassert.deepStrictEqual(
+				text.pieces.map((piece: MorphPiece) => piece.text),
+				['a', 'b', 'c', 'd'],
+			);
+			assertFrame(text.pieces[0].frame, box(1000, 50));
+			assertFrame(text.pieces[1].frame, box(1050, 50));
+			assertFrame(text.pieces[2].frame, box(1130, 50));
+			assertFrame(text.pieces[3].frame, box(1180, 50));
+			assertFrame(text.pieces[3].clip, box(1180, 50));
+		});
+
+		it('leaves a text whole when a run has no place for each character', function () {
+			nodeassert.strictEqual(
+				MorphMatcher.textPiecesOf(run('ab', [50, 50], { rtl: true }), false),
+				undefined,
+			);
+			nodeassert.strictEqual(
+				MorphMatcher.textPiecesOf(run('ab', [50]), false),
+				undefined,
+			);
+		});
+
+		it('pairs the pieces of one text in the order of the text', function () {
+			const piece = (text: string, x: number) => ({
+				text,
+				paragraph: 0,
+				frame: new cool.Matrix2D(10, 0, 0, 10, x, 0),
+				clip: new cool.Matrix2D(10, 0, 0, 10, x, 0),
+			});
+			// The second ABC is nearer to the first ABC of the entering text, but the two
+			// words keep their order instead of changing places.
+			const leaving = [piece('ABC', 0), piece('ABC', 100), piece('EFG', 200)];
+			const entering = [
+				piece('ABC', 150),
+				piece('ABC', 250),
+				piece('EFG', 350),
+			];
+
+			nodeassert.deepStrictEqual(MorphMatcher.matchPieces(leaving, entering), {
+				pairs: [
+					[0, 0],
+					[1, 1],
+					[2, 2],
+				],
+				leavingOnly: [],
+				enteringOnly: [],
+			});
+		});
+
+		it('lets the pieces of different texts trade places', function () {
+			const piece = (text: string, x: number) => ({
+				text,
+				paragraph: 0,
+				frame: new cool.Matrix2D(10, 0, 0, 10, x, 0),
+				clip: new cool.Matrix2D(10, 0, 0, 10, x, 0),
+			});
+			const leaving = [piece('A', 0), piece('B', 10), piece('C', 20)];
+			const entering = [piece('C', 0), piece('B', 10), piece('A', 20)];
+
+			nodeassert.deepStrictEqual(MorphMatcher.matchPieces(leaving, entering), {
+				pairs: [
+					[0, 2],
+					[1, 1],
+					[2, 0],
+				],
+				leavingOnly: [],
+				enteringOnly: [],
+			});
+		});
+
+		it('pairs the nearest of more pieces of one text, in their order', function () {
+			const piece = (text: string, x: number) => ({
+				text,
+				paragraph: 0,
+				frame: new cool.Matrix2D(10, 0, 0, 10, x, 0),
+				clip: new cool.Matrix2D(10, 0, 0, 10, x, 0),
+			});
+			const leaving = [piece('A', 0), piece('A', 100), piece('A', 200)];
+			const entering = [piece('A', 90), piece('A', 210)];
+
+			nodeassert.deepStrictEqual(MorphMatcher.matchPieces(leaving, entering), {
+				pairs: [
+					[1, 0],
+					[2, 1],
+				],
+				leavingOnly: [0],
+				enteringOnly: [],
+			});
+		});
+
+		it('pairs around a piece that was put in or taken out', function () {
+			const piece = (text: string) => ({
+				text,
+				paragraph: 0,
+				frame: new cool.Matrix2D(10, 0, 0, 10, 0, 0),
+				clip: new cool.Matrix2D(10, 0, 0, 10, 0, 0),
+			});
+			const leaving = [piece('ABC'), piece('CDE'), piece('EFG')];
+			const entering = [piece('XYZ'), piece('ABC'), piece('EFG')];
+
+			nodeassert.deepStrictEqual(MorphMatcher.matchPieces(leaving, entering), {
+				pairs: [
+					[0, 1],
+					[2, 2],
+				],
+				leavingOnly: [1],
+				enteringOnly: [0],
+			});
 		});
 	});
 });
