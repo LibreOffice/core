@@ -89,7 +89,7 @@ private:
     void UpdateStatusBar(const IdeSymbolInfo* pLeftSymbol, const IdeSymbolInfo* pRightSymbol);
 
     // Core References
-    Shell* m_pShell;
+    Shell& m_rShell;
 
     // Data Provider
     std::unique_ptr<IdeDataProviderInterface> m_pDataProvider;

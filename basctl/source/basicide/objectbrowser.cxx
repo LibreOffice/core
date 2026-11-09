@@ -609,7 +609,7 @@ void OpenDoxygenDocumentation(const vcl::Window* pParent, const IdeSymbolInfo& r
 ObjectBrowser::ObjectBrowser(Shell& rShell, vcl::Window* pParent)
     : basctl::DockingWindow(pParent, u"modules/BasicIDE/ui/objectbrowser.ui"_ustr,
                             u"ObjectBrowser"_ustr)
-    , m_pShell(&rShell)
+    , m_rShell(rShell)
     , m_pDataProvider(std::make_unique<IdeDataProvider>())
     , m_bDisposed(false)
     , m_eInitState(ObjectBrowserInitState::NotInitialized)
@@ -756,7 +756,7 @@ void ObjectBrowser::dispose()
 bool ObjectBrowser::Close()
 {
     Show(false);
-    m_pShell->GetViewFrame().GetBindings().Invalidate(SID_BASICIDE_OBJECT_BROWSER);
+    m_rShell.GetViewFrame().GetBindings().Invalidate(SID_BASICIDE_OBJECT_BROWSER);
     return false;
 }
 
@@ -1040,7 +1040,7 @@ void ObjectBrowser::NavigateToMacroSource(const IdeSymbolInfo& rSymbol)
                            << rSymbol.sOriginLibrary << "', Module='" << rSymbol.sOriginModule
                            << "', Method='" << rSymbol.sName << "'");
 
-    if (!m_pShell || rSymbol.sOriginLibrary.isEmpty() || rSymbol.sOriginModule.isEmpty())
+    if (rSymbol.sOriginLibrary.isEmpty() || rSymbol.sOriginModule.isEmpty())
     {
         SAL_WARN("basctl", "NavigateToMacroSource: Invalid parameters.");
         return;
@@ -1060,7 +1060,7 @@ void ObjectBrowser::NavigateToMacroSource(const IdeSymbolInfo& rSymbol)
         SbxItem aSbxItem(SID_BASICIDE_ARG_SBX, std::move(aDoc), rSymbol.sOriginLibrary,
                          rSymbol.sOriginModule, rSymbol.sName, basctl::SBX_TYPE_METHOD);
 
-        SfxViewFrame& rViewFrame = m_pShell->GetViewFrame();
+        SfxViewFrame& rViewFrame = m_rShell.GetViewFrame();
         if (SfxDispatcher* pDispatcher = rViewFrame.GetDispatcher())
         {
             std::ignore = pDispatcher->ExecuteList(SID_BASICIDE_SHOWSBX, SfxCallMode::SYNCHRON,
