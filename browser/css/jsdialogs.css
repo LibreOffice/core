@@ -1049,6 +1049,8 @@ body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton
 /* TreeView */
 
 .ui-treeview {
+	/* The border every row has, even when it is transparent. */
+	--treeview-entry-border-width: 1px;
 	display: grid;
 	grid-template-columns: repeat(1, auto);
 	border: 1px solid var(--color-border);
@@ -1311,7 +1313,8 @@ input[type='checkbox'].autofilter, .jsdialog input[type='checkbox'] {
 	height: 20px;
 	vertical-align: middle;
 	background: url('images/lc_checkboxoff.svg') no-repeat center;
-	margin: 1px 8px;
+	--checkbox-margin-inline: 8px;
+	margin: 1px var(--checkbox-margin-inline);
 }
 
 [data-theme='dark'] input[type='checkbox'].autofilter, [data-theme='dark'] .jsdialog input[type='checkbox'] {
@@ -1344,7 +1347,7 @@ input[type='checkbox']:checked.autofilter, .jsdialog input[type='checkbox']:chec
 .ui-treeview-entry.selected {
 	background-color: var(--color-primary);
 	color: var(--color-text-darker);
-	border: 1px solid var(--color-primary);
+	border: var(--treeview-entry-border-width) solid var(--color-primary);
 }
 
 .ui-treeview.disabled .ui-treeview-entry.selected {
@@ -1354,11 +1357,11 @@ input[type='checkbox']:checked.autofilter, .jsdialog input[type='checkbox']:chec
 .ui-treeview-entry:hover {
 	background-color: var(--color-background-darker) !important;
 	color: var(--color-text-darker);
-	border: 1px solid var(--color-background-darker);
+	border: var(--treeview-entry-border-width) solid var(--color-background-darker);
 }
 
 .ui-treeview-entry {
-	border: 1px solid transparent;
+	border: var(--treeview-entry-border-width) solid transparent;
 }
 
 #mobile-wizard tbody input[type='checkbox'] {
@@ -2737,7 +2740,7 @@ img.ui-combobox-value-preview {
 	flex: 1 1 auto;
 	max-height: 150px;
 	min-height: 0;
-	/* Count the border and padding into the stretched width, so the list ends
+	/* Count the padding into the stretched width, so the list ends
 	   at its container's edge and its vertical scrollbar stays fully visible. */
 	box-sizing: border-box;
 }
@@ -2748,10 +2751,79 @@ img.ui-combobox-value-preview {
 	max-height: none;
 }
 
-/* Drop the 1px/3px inline padding .ui-treeview gives itself, so a highlighted row spans the full width of its list. */
-.autofilter-popup .ui-treeview,
+/* The lists in the dropdown and its submenus sit frameless inside the popup.
+   With no edge left for a row to meet, the rows stand on their own: same inset
+   on every side, and rounded corners on the highlight. */
+:is(.autofilter-popup, .autofilter-submenu-popup) .ui-treeview {
+	border: none;
+	padding: var(--spacing-xs);
+}
+
+/* A submenu list is sized by its rows, so it does not need the generic
+   .ui-treeview minimums. Those are for lists that are empty (Macro Selector) or
+   would otherwise collapse to 0px (Insert Chart's chart type list); here they
+   only stretch a one-row Font Color list to 100px and pad the popup's width.
+   Engine hides the colour lists that have no rows, so none is ever empty. */
 .autofilter-submenu-popup .ui-treeview {
-	padding-inline: 0;
+	min-width: 0;
+	min-height: 0;
+}
+
+/* Same for the popup itself: the 198px floor on .jsdialog-window.modalpopup is
+   for showModal popups that would otherwise shrink to too little content; a
+   submenu should be as wide as its rows. */
+.jsdialog-window.modalpopup.autofilter-submenu-popup {
+	min-width: 0;
+}
+
+/* No frame on the focused list either; the focused row shows where focus is. */
+:is(.autofilter-popup, .autofilter-submenu-popup) .ui-treeview:focus-within {
+	outline: none;
+}
+
+:is(.autofilter-popup, .autofilter-submenu-popup) .ui-treeview .ui-treeview-entry {
+	border-radius: var(--border-radius);
+}
+
+/* The selected row is shown by its fill alone. The border stays (transparent),
+   so the row keeps the edge the checkbox and heading alignment count on. */
+:is(.autofilter-popup, .autofilter-submenu-popup) .ui-treeview .ui-treeview-entry.selected {
+	border-color: transparent;
+}
+
+/* A focused row is shown by a fill as well, not an outline. The selection does
+   not show focus on its own: it moves only when the core answers, and a list
+   can have focus with nothing selected. :focus-visible keeps the fill off rows
+   that were only clicked. The .autofilter class outweighs the date tree's row
+   outline (.ui-treeview.ui-treeview-tree .ui-treeview-entry:focus), which
+   comes later. */
+:is(.autofilter-popup, .autofilter-submenu-popup) .ui-treeview .autofilter.ui-treeview-entry:is(:focus, :focus-visible) {
+	outline: none;
+}
+
+/* The fill is the selection colour (the branding's .selected fill), so a
+   focused row and a selected row look the same. */
+:is(.autofilter-popup, .autofilter-submenu-popup) .ui-treeview .autofilter.ui-treeview-entry:focus-visible:not(.selected) {
+	background-color: var(--color-background-dark);
+}
+
+/* The engine draws an edge around each colour swatch, "No Fill" and
+   "Automatic" too; the generic image outline would double it. */
+.autofilter-submenu-popup :is(#background, #textcolor) .ui-treeview-image {
+	outline: none;
+}
+
+/* Line the checkboxes of the value list and of the date tree up under the
+   "All" checkbox above them. That one sits at its inline margin; a list
+   checkbox also has the list's inset and the row's border before it, and the
+   cell padding from .ui-treeview-entry div:not(.autofilter), which matches
+   because the cell div carries no .autofilter class. */
+.autofilter-popup :is(#check_list_box, #check_tree_box) .ui-treeview-entry > div:first-child {
+	padding-inline-start: 0;
+}
+
+.autofilter-popup :is(#check_list_box, #check_tree_box) .ui-treeview-checkbox {
+	margin-inline-start: calc(var(--checkbox-margin-inline) - var(--spacing-xs) - var(--treeview-entry-border-width));
 }
 
 /* A date tree entry is 100% of the list wide, so its borders have to count inside that or the row overflows by 2px. */
@@ -2774,9 +2846,15 @@ img.ui-combobox-value-preview {
 	display: none !important;
 }
 
+/* Start each heading where the swatches below it start (the row's border,
+   then the icon column's padding). Centring would not line the two headings
+   up: each list is its own grid, so their columns are not the same width.
+   border-box keeps the padding inside the cell's width: 100%. */
 .jsdialog.autofilter #background .ui-treeview-header,
 .jsdialog.autofilter #textcolor .ui-treeview-header {
-	text-align: center;
+	box-sizing: border-box;
+	text-align: start;
+	padding-inline-start: calc(var(--treeview-entry-border-width) + var(--spacing-m));
 }
 
 .jsdialog.autofilter #background,
@@ -2805,7 +2883,6 @@ img.ui-combobox-value-preview {
 .jsdialog.autofilter #background:not(:focus-within) .ui-treeview-entry.selected,
 .jsdialog.autofilter #textcolor:not(:focus-within) .ui-treeview-entry.selected {
 	background-color: transparent;
-	border-color: transparent;
 	color: inherit;
 }
 
