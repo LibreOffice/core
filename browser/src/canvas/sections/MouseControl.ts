@@ -628,6 +628,7 @@ class MouseControl extends CanvasSectionObject {
 			const press = this.positionOnMouseDown;
 			if (this.mouseDownSent || !press || this.pressedInSelection) return false;
 			if (!RenderGeometrySection.answersPointer()) return false;
+			if (RenderManager.kind() !== 'slides') return false;
 			if (app.file.textCursor.visible) return false;
 			const modifier = this.modifierOnMouseDown;
 			if (modifier !== 0 && modifier !== app.UNOModifier.SHIFT) return false;

@@ -147,6 +147,78 @@ describe(['tagdesktop'], 'Spreadsheet drawn from vector primitives', function() 
 		cy.cGet(formulaText).should('have.text', 'Moved');
 	});
 
+	// The middle of the cell under the fill handle and the size of a cell, in client pixels, for a
+	// real mouse drag. The handle sits on the bottom right corner of the cell cursor.
+	function cursorCellBox(callback) {
+		cy.cGet('[id="test-div-auto fill marker"]').then(function($handle) {
+			var handle = $handle[0].getBoundingClientRect();
+			var width = win.app.calc.cellCursorRectangle.pWidth / win.app.dpiScale;
+			var height = win.app.calc.cellCursorRectangle.pHeight / win.app.dpiScale;
+			callback({
+				handleX: handle.left + handle.width / 2,
+				handleY: handle.top + handle.height / 2,
+				centerX: handle.left + handle.width / 2 - width / 2,
+				centerY: handle.top + handle.height / 2 - height / 2,
+				width: width,
+				height: height,
+			});
+		});
+	}
+
+	// The texts of the cells, read through a copy, which comes from the engine.
+	function assertCellTexts(range, expected) {
+		helper.setDummyClipboardForCopy();
+		calcHelper.selectCellsInRange(range);
+		helper.copy();
+		calcHelper.assertDataClipboardTable(expected);
+	}
+
+	it('selects the cells a drag goes over', function() {
+		// A press on a cell is not on a drawing object, but the drag belongs to the engine,
+		// which selects the cells, rather than to a selection frame for objects.
+		calcHelper.clickOnFirstCell();
+		cy.cGet('[id="test-div-auto fill marker"]').should('exist');
+		// The click arms a timer during which moves are dropped.
+		helper.waitForTimers(win, 'clicktimer');
+		helper.processToIdle(win);
+
+		cursorCellBox(function(box) {
+			var endX = box.centerX + Math.round(box.width * 2);
+			var endY = box.centerY + Math.round(box.height * 2);
+			cy.cGet('body').realMouseDown({ x: box.centerX, y: box.centerY });
+			cy.cGet('body').realMouseMove(endX, endY);
+			cy.cGet('body').realMouseUp({ x: endX, y: endY });
+		});
+		helper.processToIdle(win);
+
+		calcHelper.assertAddressAfterIdle(win, 'A1:C3');
+	});
+
+	it('fills the cells the fill handle is dragged over', function() {
+		calcHelper.selectCellsInRange('E1');
+		calcHelper.assertAddressAfterIdle(win, 'E1');
+		helper.typeIntoDocument('1{enter}');
+		calcHelper.assertAddressAfterIdle(win, 'E2');
+		calcHelper.selectCellsInRange('E1');
+		calcHelper.assertAddressAfterIdle(win, 'E1');
+		cy.cGet('[id="test-div-auto fill marker"]').should('exist');
+		helper.waitForTimers(win, 'clicktimer');
+		helper.processToIdle(win);
+
+		cursorCellBox(function(box) {
+			var endY = box.handleY + Math.round(box.height * 2);
+			cy.cGet('body').realMouseDown({ x: box.handleX, y: box.handleY });
+			cy.cGet('body').realMouseMove(box.handleX, endY);
+			cy.cGet('body').realMouseUp({ x: box.handleX, y: endY });
+		});
+		helper.processToIdle(win);
+		// The engine offers to copy the cells or fill a series once the drag ends.
+		cy.cGet('#jsd-context-menu-dropdown-overlay').click();
+		cy.cGet('#jsd-context-menu-dropdown-overlay').should('not.exist');
+
+		assertCellTexts('E1:E3', ['1', '2', '3']);
+	});
+
 	it('zooms from the content it holds', function() {
 		cy.then(function() { sent.length = 0; });
 		desktopHelper.zoomIn();

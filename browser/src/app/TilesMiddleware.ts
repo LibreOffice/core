@@ -277,6 +277,10 @@ class RenderManager {
 		return RenderManager.ensureInstance().drawsFromObjects();
 	}
 
+	static kind(): RenderManagerKind {
+		return RenderManager.ensureInstance().kind();
+	}
+
 	static toEngine(message: string): string {
 		return RenderManager.ensureInstance().toEngine(message);
 	}
