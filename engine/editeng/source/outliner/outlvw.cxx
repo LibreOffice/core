@@ -313,33 +313,40 @@ bool OutlinerView::MouseMove( const MouseEvent& rMEvt )
 
 bool OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( ( rOwner.GetOutlinerMode() == OutlinerMode::TextObject ) || pEditView->getEditEngine().IsInSelectionMode() )
+    if ( rOwner.GetOutlinerMode() == OutlinerMode::TextObject )
         return pEditView->MouseButtonDown( rMEvt );
 
-    Point aMousePosWin( pEditView->GetOutputDevice().PixelToLogic( rMEvt.GetPosPixel() ) );
-    if( !pEditView->GetOutputArea().Contains( aMousePosWin ) )
+    // A press on a bullet selects its paragraph even while a selection is made, which a kit view
+    // reports for as long as any text is selected.
+    MouseTarget eTarget;
+    sal_Int32 nPara = ImpCheckMousePos( rMEvt.GetPosPixel(), eTarget );
+    if ( eTarget != MouseTarget::Bullet && pEditView->getEditEngine().IsInSelectionMode() )
+        return pEditView->MouseButtonDown( rMEvt );
+
+    if ( eTarget == MouseTarget::Outside )
         return false;
 
     PointerStyle aPointer = GetPointer( rMEvt.GetPosPixel() );
     pEditView->GetWindow()->SetPointer( aPointer );
 
-    MouseTarget eTarget;
-    sal_Int32 nPara = ImpCheckMousePos( rMEvt.GetPosPixel(), eTarget );
     if ( eTarget == MouseTarget::Bullet )
     {
         bool bHasChildren = rOwner.HasChildren(nPara);
-        if( rMEvt.GetClicks() == 1 )
+        // The outline view folds or unfolds the entry on a double click. Elsewhere every click
+        // selects the paragraph with its visible children.
+        if ( rOwner.GetOutlinerMode() == OutlinerMode::OutlineView && rMEvt.GetClicks() != 1 )
         {
-            sal_Int32 nEndPara = nPara;
-            if ( bHasChildren && rOwner.HasVisibleChildren(nPara) )
-                nEndPara += rOwner.GetChildCount( nPara );
-            // The selection is inverted, so that EditEngine does not scroll
-            ESelection aSel(nEndPara, EE_TEXTPOS_MAX, nPara, 0);
-            pEditView->SetSelection( aSel );
+            if ( rMEvt.GetClicks() == 2 && bHasChildren )
+                ImpToggleExpand( nPara );
+            return true;
         }
-        else if( rMEvt.GetClicks() == 2 && bHasChildren )
-            ImpToggleExpand( nPara );
 
+        sal_Int32 nEndPara = nPara;
+        if ( bHasChildren && rOwner.HasVisibleChildren(nPara) )
+            nEndPara += rOwner.GetChildCount( nPara );
+        // The selection is inverted, so that EditEngine does not scroll
+        ESelection aSel(nEndPara, EE_TEXTPOS_MAX, nPara, 0);
+        pEditView->SetSelection( aSel );
         return true;
     }
 

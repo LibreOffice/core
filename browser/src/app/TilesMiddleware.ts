@@ -446,6 +446,14 @@ class RenderManager {
 		return RenderManager.ensureInstance().placeCaretAt(x, y, hitId);
 	}
 
+	static labelPointerAt(
+		x: number,
+		y: number,
+		hitId: number | undefined,
+	): string | undefined {
+		return RenderManager.ensureInstance().labelPointerAt(x, y, hitId);
+	}
+
 	static selectWordAt(
 		x: number,
 		y: number,

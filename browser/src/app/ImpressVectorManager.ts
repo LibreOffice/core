@@ -120,6 +120,23 @@ class ImpressVectorManager extends VectorPartManagerBase {
 	// The objectKind of a table.
 	private static readonly tableKind: number = 35;
 
+	// The objectKind of the outline placeholder of a slide.
+	private static readonly outlineTextKind: number = 21;
+
+	/// In the outline placeholder of a slide, a press on the bullet or the number of a paragraph
+	/// selects the paragraph.
+	protected _labelSelectsItsParagraph(pressed: PressedText): boolean {
+		const partId = pressed.target.tree.data.partId;
+		const objectId = this._editedObjectOf(partId, pressed.entryId);
+		const objectKind = this._cache
+			.get(partId)
+			?.objects.get(objectId)?.objectKind;
+		return (
+			objectKind === ImpressVectorManager.outlineTextKind &&
+			pressed.text.isOnLabel(pressed.x, pressed.y)
+		);
+	}
+
 	// True when a press at (x, y) on the object hitId may land in the entry's text. A table
 	// edits one cell at a time, so there the press has to be inside that cell's text.
 	private _mayHoldTheCaret(

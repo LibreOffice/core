@@ -227,7 +227,7 @@ public:
     void testPasteURLOverSelection();
 
     /// Test that the whole space kept for a bullet selects the paragraph
-    void testBulletHitAreaCoversWholeLabel();
+    void testBulletHitAreaAroundTheBullet();
 
     void testOutlinerRemoveTrailingParagraphs();
     void testOutlinerAddTextNumbering();
@@ -317,7 +317,7 @@ public:
     CPPUNIT_TEST(testFillColorMaxAscentFraction);
 #endif
     CPPUNIT_TEST(testPasteURLOverSelection);
-    CPPUNIT_TEST(testBulletHitAreaCoversWholeLabel);
+    CPPUNIT_TEST(testBulletHitAreaAroundTheBullet);
     CPPUNIT_TEST(testOutlinerRemoveTrailingParagraphs);
     CPPUNIT_TEST(testOutlinerAddTextNumbering);
     CPPUNIT_TEST(testOutlinerLastParagraphIsChild);
@@ -3686,7 +3686,7 @@ tools::Long Test::firstLineMiddle(Outliner& rOutliner, sal_Int32 nPara)
            + rEditEngine.GetParagraphInfos(nPara).nFirstLineHeight / 2;
 }
 
-void Test::testBulletHitAreaCoversWholeLabel()
+void Test::testBulletHitAreaAroundTheBullet()
 {
     Outliner aOutliner(mpItemPool.get(), OutlinerMode::OutlineObject);
     prepareBulletedParagraphs(aOutliner);
@@ -3696,13 +3696,32 @@ void Test::testBulletHitAreaCoversWholeLabel()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(500),
                          rEditEngine.GetParaPortions().getRef(1).GetFirstLineOffset());
     const tools::Long nMiddle = firstLineMiddle(aOutliner, 1);
+    const tools::Long nLineHeight
+        = aOutliner.GetEditEngine().GetParagraphInfos(1).nFirstLineHeight;
+    const tools::Rectangle aBullet = aOutliner.GetBulletInfo(1).aBounds;
 
-    // The gap between the bullet and the text counts as the bullet.
+    // The bullet itself counts as the bullet.
     bool bBullet = false;
-    CPPUNIT_ASSERT(aOutliner.IsTextPos(Point(1100, nMiddle), 0, &bBullet));
+    CPPUNIT_ASSERT(aOutliner.IsTextPos(Point(aBullet.Center().X(), nMiddle), 0, &bBullet));
     CPPUNIT_ASSERT(bBullet);
 
-    // The text itself does not.
+    // So does the space next to it, up to a tenth of the line height away, over the whole
+    // height of the line.
+    bBullet = false;
+    const tools::Long nLineTop = nMiddle - nLineHeight / 2 + 1;
+    CPPUNIT_ASSERT(aOutliner.IsTextPos(Point(aBullet.Right() + nLineHeight / 20, nLineTop), 0,
+                                       &bBullet));
+    CPPUNIT_ASSERT(bBullet);
+
+    // The space kept for the label further from the bullet belongs to the text, so a click
+    // there puts the cursor in front of it.
+    const tools::Long nGap = aBullet.Right() + nLineHeight / 5;
+    CPPUNIT_ASSERT_LESS(tools::Long(1200), nGap);
+    bBullet = true;
+    aOutliner.IsTextPos(Point(nGap, nMiddle), 0, &bBullet);
+    CPPUNIT_ASSERT(!bBullet);
+
+    // The text itself is not the bullet either.
     bBullet = true;
     CPPUNIT_ASSERT(aOutliner.IsTextPos(Point(1300, nMiddle), 0, &bBullet));
     CPPUNIT_ASSERT(!bBullet);

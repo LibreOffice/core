@@ -1371,7 +1371,13 @@ class RenderGeometrySection extends CanvasSectionObject {
 
 		if (!section) return 'default';
 
-		return RenderGeometrySection.pointerOf(section.hitObjectInDocument(x, y));
+		// In front of a line of the edited text, the bullet or the number decides, as a press
+		// there does.
+		const hit = section.hitObjectInDocument(x, y);
+		return (
+			RenderManager.labelPointerAt(x, y, hit?.id) ??
+			RenderGeometrySection.pointerOf(hit)
+		);
 	}
 
 	/// The same answer for a point in the coordinates of the section container.

@@ -293,21 +293,53 @@ namespace cool {
 			if (!primitives) return out;
 			for (const primitive of primitives) {
 				if (primitive.type === TextHierarchyBulletPrimitive.type) continue;
-				let childMatrix = matrix;
-				if (primitive.type === TransformPrimitive.type) {
-					const transformMatrix = Matrix2D.fromArray(
-						(primitive as TransformPrimitive).matrix,
-					);
-					if (transformMatrix) childMatrix = transformMatrix.then(matrix);
-				} else if (TextRun.isTextRun(primitive)) {
+				if (TextRun.isTextRun(primitive)) {
 					const run = primitive as TextSimplePortionPrimitive;
 					const runMatrix = Matrix2D.fromArray(run.matrix) ?? Matrix2D.IDENTITY;
 					const origin = matrix.apply(runMatrix.e, runMatrix.f);
 					out.push(new TextRun(run, origin.x, origin.y, matrix, primitives));
 				}
-				TextRun.collect(primitive.children, childMatrix, out);
+				TextRun.collect(
+					primitive.children,
+					TextRun.childMatrix(primitive, matrix),
+					out,
+				);
 			}
 			return out;
+		}
+
+		// The text runs that draw the bullets and the numbers in front of the paragraphs of a
+		// subtree, with their origins in slide twips.
+		static collectLabels(
+			primitives: Primitive[] | undefined,
+			matrix: Matrix2D = Matrix2D.IDENTITY,
+			out: TextRun[] = [],
+		): TextRun[] {
+			if (!primitives) return out;
+			for (const primitive of primitives) {
+				if (primitive.type === TextHierarchyBulletPrimitive.type)
+					TextRun.collect(primitive.children, matrix, out);
+				else
+					TextRun.collectLabels(
+						primitive.children,
+						TextRun.childMatrix(primitive, matrix),
+						out,
+					);
+			}
+			return out;
+		}
+
+		// The transform from the children of the primitive to the slide, given the one from the
+		// primitive to the slide.
+		private static childMatrix(
+			primitive: Primitive,
+			matrix: Matrix2D,
+		): Matrix2D {
+			if (primitive.type !== TransformPrimitive.type) return matrix;
+			const transformMatrix = Matrix2D.fromArray(
+				(primitive as TransformPrimitive).matrix,
+			);
+			return transformMatrix ? transformMatrix.then(matrix) : matrix;
 		}
 
 		private static isTextRun(primitive: Primitive): boolean {

@@ -331,6 +331,8 @@ namespace cool {
 			// The cached object the runs were collected from.
 			private readonly object: SlideObject,
 			private readonly runs: TextRun[],
+			// The runs of the bullets and the numbers in front of the paragraphs.
+			private readonly labels: TextRun[],
 			private readonly measurer: TextMeasurer,
 		) {
 			this.shown = shownRuns(runs);
@@ -346,7 +348,8 @@ namespace cool {
 			if (!object) return null;
 			const runs = TextRun.collect(object.primitives);
 			if (runs.some((run) => run.rotated)) return null;
-			return new ObjectText(object, runs, tree.measurer);
+			const labels = TextRun.collectLabels(object.primitives);
+			return new ObjectText(object, runs, labels, tree.measurer);
 		}
 
 		/// True while the tree still holds the object this text was collected from.
@@ -364,8 +367,63 @@ namespace cool {
 			return positions;
 		}
 
+		/*
+			The label of the line at slide y, with the line's first run of text. The line spans
+			the height of that run, or of the label alone in an empty paragraph. Null when no
+			label stands in front of the line, or it stands after the text, as in right to left
+			text.
+		*/
+		private labelOfLineAt(y: number): {
+			label: TextRun;
+			first: TextRun | null;
+			top: number;
+			bottom: number;
+		} | null {
+			for (const label of this.labels) {
+				let first: TextRun | null = null;
+				for (const run of this.shown)
+					if (onSameLine(run, label) && (first === null || run.x < first.x))
+						first = run;
+				if (first !== null && first.x < label.x) continue;
+				const line = first ?? label;
+				const top = line.baseline - line.lineAscent * line.scaleY;
+				const bottom = top + line.lineHeight * line.scaleY;
+				if (y >= top && y <= bottom) return { label, first, top, bottom };
+			}
+			return null;
+		}
+
+		/*
+			True when slide (x, y) is on the strip around a bullet or a number: as tall as its
+			line, and as wide as the label with a tenth of the line height added on each side.
+			The strip grows with the text, so it is the same at every zoom.
+		*/
+		isOnLabel(x: number, y: number): boolean {
+			const line = this.labelOfLineAt(y);
+			if (!line) return false;
+			const margin = (line.bottom - line.top) / 10;
+			const positions = this.positionsOf(line.label);
+			const left = line.label.x - margin;
+			const right = line.label.slideX(positions[positions.length - 1]) + margin;
+			return x >= left && x <= right;
+		}
+
+		/// The caret at the start of the text for a click at slide (x, y) in front of a line
+		/// with a label, on the label or beside it. Null elsewhere.
+		caretInFrontAt(x: number, y: number): LogicalCaret | null {
+			const line = this.labelOfLineAt(y);
+			if (!line?.first || x >= line.first.x) return null;
+			const paragraph = line.first.paragraph;
+			if (paragraph === undefined || hasRightToLeft(line.first.text))
+				return null;
+			return { paragraph, index: line.first.start };
+		}
+
 		/// The caret where a click at slide (x, y) lands, or null off the text.
 		caretAtPoint(x: number, y: number): LogicalCaret | null {
+			const inFront = this.caretInFrontAt(x, y);
+			if (inFront) return inFront;
+
 			// A click further than a font size from the text is in the empty part of
 			// the box.
 			const lineRuns = this.shown.filter((run) => onLine(run, y, y));

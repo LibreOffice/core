@@ -3499,6 +3499,20 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 	/// Sets the pointer and the marked handle for the mouse standing at that point while no drag
 	/// runs.
+	// The pointer over text: the text pointer, but in front of a line of the edited text the
+	// bullet or the number decides, as a press there does.
+	private textPointerAt(inTheDocument: cool.SimplePoint): string {
+		const x = inTheDocument.x;
+		const y = inTheDocument.y;
+		return (
+			RenderManager.labelPointerAt(
+				x,
+				y,
+				RenderGeometrySection.objectIdAt(x, y),
+			) ?? 'text'
+		);
+	}
+
 	private pointAt(point: cool.SimplePoint): void {
 		const onCanvas = [
 			this.myTopLeft[0] + point.pX,
@@ -3535,7 +3549,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 						: !onTheObject
 							? 'default'
 							: overText
-								? 'text'
+								? this.textPointerAt(inTheDocument)
 								: ObjectHandles.canBeMoved(this.selectedObjects())
 									? SelectionSection.grabPointer()
 									: 'default';

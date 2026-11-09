@@ -1393,9 +1393,11 @@ tools::Rectangle Outliner::ImpCalcLabelArea( sal_Int32 nPara, bool bAdjust )
     return tools::Rectangle( Point( nLeft, 0 ), Size( nWidth, nHeight ) );
 }
 
-// The area where the mouse points at the label of the paragraph. The whole space kept
-// for the label counts, because a bullet character is often drawn at a fraction of the
-// size of the text and is hard to point at.
+// The area where the mouse points at the bullet or the number of the paragraph. It is a strip
+// as tall as the first line around the drawn label, wider than the label on each side by a
+// tenth of the line height. A bullet drawn at a fraction of the size of the text is easy to
+// hit that way, at any zoom and font size. The rest of the space kept for the label is left
+// to the text, so a click there puts the cursor in front of the text.
 tools::Rectangle Outliner::ImpCalcBulletHitArea( sal_Int32 nPara )
 {
     const SvxNumberFormat* pFmt = GetNumberFormat( nPara );
@@ -1408,10 +1410,14 @@ tools::Rectangle Outliner::ImpCalcBulletHitArea( sal_Int32 nPara )
     if ( !rBulletState.GetValue() )
         return tools::Rectangle();
 
-    tools::Rectangle aHitArea( ImpCalcLabelArea( nPara, true ) );
-    // A bullet can be wider or taller than the space kept for it, and it is drawn outside
-    // that space then.
-    aHitArea.Union( ImpCalcBulletArea( nPara, true, false ) );
+    const tools::Rectangle aLabelArea( ImpCalcLabelArea( nPara, true ) );
+    const tools::Rectangle aBulletArea( ImpCalcBulletArea( nPara, true, false ) );
+    const tools::Long nMargin = aLabelArea.GetHeight() / 10;
+    // A bullet taller than its line is drawn above or below it, and the strip covers it there.
+    const tools::Rectangle aHitArea( aBulletArea.Left() - nMargin,
+                                     std::min( aLabelArea.Top(), aBulletArea.Top() ),
+                                     aBulletArea.Right() + nMargin,
+                                     std::max( aLabelArea.Bottom(), aBulletArea.Bottom() ) );
 
     return ImpConvertToPaperPos( nPara, aHitArea );
 }

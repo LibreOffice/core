@@ -37,6 +37,16 @@ interface CaretPress {
 	logical: cool.LogicalCaret;
 }
 
+/// The text that a press lands in: the edit target, the entry, its text, and the point of the
+/// press in the twips of the entry.
+interface PressedText {
+	target: EditTarget;
+	entryId: number;
+	text: cool.ObjectText;
+	x: number;
+	y: number;
+}
+
 /// The cached tree and caret that a predicted edit works on.
 interface EditTarget {
 	tree: cool.PredictionTree;
@@ -1125,16 +1135,55 @@ abstract class VectorPartManagerBase extends VectorManagerBase {
 		y: number,
 		hitId: number | undefined,
 	): CaretPress | null {
+		const pressed = this._pressedText(x, y, hitId);
+		if (!pressed || this._labelSelectsItsParagraph(pressed)) return null;
+		const logical = pressed.text.caretAtPoint(pressed.x, pressed.y);
+		return logical
+			? { target: pressed.target, entryId: pressed.entryId, logical }
+			: null;
+	}
+
+	// The text where a press at (x, y) on the object hitId lands, or null when the press is for
+	// the server.
+	private _pressedText(
+		x: number,
+		y: number,
+		hitId: number | undefined,
+	): PressedText | null {
 		const pressed = this._pressedEntry(x, y, hitId);
 		if (!pressed) return null;
 		const { target, entryId } = pressed;
 		const origin = this._entryOrigin(target.tree.data, entryId);
 		if (!origin) return null;
-		const logical = this._textOf(target.tree, entryId)?.caretAtPoint(
-			x - origin.x,
-			y - origin.y,
-		);
-		return logical ? { target, entryId, logical } : null;
+		const text = this._textOf(target.tree, entryId);
+		if (!text) return null;
+		return { target, entryId, text, x: x - origin.x, y: y - origin.y };
+	}
+
+	/// True when the press lands on the bullet or the number of a paragraph, and the engine
+	/// selects the paragraph for a press there. Elsewhere a bullet is part of the text in front
+	/// of the paragraph.
+	protected _labelSelectsItsParagraph(_pressed: PressedText): boolean {
+		return false;
+	}
+
+	/*
+		The pointer at (x, y), in document twips, in front of a line of the edited text that has a
+		bullet or a number, in the names the engine sends: 'move' where a press selects the
+		paragraph, 'text' where it puts the caret at the start of the text. Undefined elsewhere.
+		hitId is the object at the point, if any.
+	*/
+	labelPointerAt(
+		x: number,
+		y: number,
+		hitId: number | undefined,
+	): string | undefined {
+		const pressed = this._pressedText(x, y, hitId);
+		if (!pressed) return undefined;
+		if (this._labelSelectsItsParagraph(pressed)) return 'move';
+		return pressed.text.caretInFrontAt(pressed.x, pressed.y)
+			? 'text'
+			: undefined;
 	}
 
 	/// Put the caret where a click at (x, y), in document twips, lands in the edited text, and

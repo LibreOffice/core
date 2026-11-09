@@ -330,6 +330,16 @@ abstract class RenderManagerBase {
 		return false;
 	}
 
+	// The pointer in front of a line of the edited text that has a bullet or a number, or
+	// undefined elsewhere.
+	labelPointerAt(
+		_x: number,
+		_y: number,
+		_hitId: number | undefined,
+	): string | undefined {
+		return undefined;
+	}
+
 	// Selects the word under a double click in the edited text, without the server. True when
 	// the word is selected.
 	selectWordAt(_x: number, _y: number, _hitId: number | undefined): boolean {

@@ -1100,6 +1100,144 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testEmptyGraphicBulletParagraphClick)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rEditView.GetSelection().start.nPara);
 }
 
+/// Selects an object of the current slide and starts to edit its text, as a user does by
+/// pressing Enter.
+static void beginTextEditByEnter(SdXImpressDocument* pXImpressDocument, size_t nObject = 0)
+{
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pViewShell->GetActualPage()->GetObj(nObject), pView->GetSdrPageView());
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_RETURN);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+}
+
+/// Clicks the left mouse button nClicks times at a point of the text being edited, given in
+/// 100th mm from the top left corner of its paper.
+static void clickAtTextPos(SdXImpressDocument* pXImpressDocument, const EditView& rEditView,
+                           const Point& rPaperPos, int nClicks)
+{
+    const Point aPos = rPaperPos + rEditView.GetOutputArea().TopLeft()
+                       - rEditView.GetVisArea().TopLeft();
+    const auto nX = o3tl::toTwips(aPos.X(), o3tl::Length::mm100);
+    const auto nY = o3tl::toTwips(aPos.Y(), o3tl::Length::mm100);
+    for (int nClick = 1; nClick <= nClicks; ++nClick)
+    {
+        pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, nX, nY, nClick,
+                                          MOUSE_LEFT, 0);
+        pXImpressDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, nX, nY, nClick,
+                                          MOUSE_LEFT, 0);
+    }
+    Scheduler::ProcessEventsToIdle();
+}
+
+/// Asserts that the whole of the paragraphs nFirstPara to nLastPara of the edited text is
+/// selected, and nothing else.
+static void assertParagraphsSelected(SdrView* pView, sal_Int32 nFirstPara, sal_Int32 nLastPara)
+{
+    OutlinerView* pOutlinerView = pView->GetTextEditOutlinerView();
+    CPPUNIT_ASSERT(pOutlinerView);
+    ESelection aSelection = pOutlinerView->GetSelection();
+    aSelection.Adjust();
+    CPPUNIT_ASSERT_EQUAL(nFirstPara, aSelection.start.nPara);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aSelection.start.nIndex);
+    CPPUNIT_ASSERT_EQUAL(nLastPara, aSelection.end.nPara);
+    CPPUNIT_ASSERT_EQUAL(pOutlinerView->GetOutliner().GetEditEngine().GetTextLen(nLastPara),
+                         aSelection.end.nIndex);
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testBulletClickZones)
+{
+    // Given a bulleted item "Text" being edited in the outline placeholder, with the cursor at
+    // its end:
+    SdXImpressDocument* pXImpressDocument = createDoc("paste_text_onslide.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    beginTextEditByEnter(pXImpressDocument, 1);
+    OutlinerView* pOutlinerView = pView->GetTextEditOutlinerView();
+    CPPUNIT_ASSERT(pOutlinerView);
+    pOutlinerView->SetSelection(ESelection(0, 4));
+    Outliner& rOutliner = pOutlinerView->GetOutliner();
+    const EditView& rEditView = pOutlinerView->GetEditView();
+    const EBulletInfo aBulletInfo = rOutliner.GetBulletInfo(0);
+    CPPUNIT_ASSERT(aBulletInfo.bVisible);
+    // The first character of the item, as tall as its line.
+    const tools::Rectangle aFirstCharacter
+        = rOutliner.GetEditEngine().GetCharacterBounds(EPaM(0, 0));
+
+    // When the bullet is clicked, then the whole item is selected:
+    clickAtTextPos(pXImpressDocument, rEditView, aBulletInfo.aBounds.Center(), 1);
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+    assertParagraphsSelected(pView, 0, 0);
+
+    // When the space between the bullet and the text is clicked, then the cursor moves to the
+    // start of the item and no text is selected. Without the fix in place, the whole space kept
+    // for the bullet selected the item:
+    pOutlinerView->SetSelection(ESelection(0, 4));
+    const tools::Long nGap
+        = aBulletInfo.aBounds.Right() + aFirstCharacter.GetHeight() / 5;
+    CPPUNIT_ASSERT_LESS(aFirstCharacter.Left(), nGap);
+    clickAtTextPos(pXImpressDocument, rEditView, Point(nGap, aBulletInfo.aBounds.Center().Y()),
+                   1);
+    ESelection aSelection = pView->GetTextEditOutlinerView()->GetSelection();
+    CPPUNIT_ASSERT(!aSelection.HasRange());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aSelection.start.nPara);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aSelection.start.nIndex);
+
+    // When the bullet is clicked three times, then the item stays selected:
+    pOutlinerView->SetSelection(ESelection(0, 4));
+    clickAtTextPos(pXImpressDocument, rEditView, aBulletInfo.aBounds.Center(), 3);
+    assertParagraphsSelected(pView, 0, 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testBulletClickSelectsSubItems)
+{
+    // Given a bulleted item of several words with a sub-item, being edited in the outline
+    // placeholder:
+    SdXImpressDocument* pXImpressDocument = createDoc("paste_text_onslide.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    beginTextEditByEnter(pXImpressDocument, 1);
+    OutlinerView* pOutlinerView = pView->GetTextEditOutlinerView();
+    CPPUNIT_ASSERT(pOutlinerView);
+    Outliner& rOutliner = pOutlinerView->GetOutliner();
+    pOutlinerView->SetSelection(ESelection(0, 4));
+    for (char16_t cCharacter : u" of several words")
+    {
+        if (!cCharacter)
+            break;
+        pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, cCharacter, 0);
+        pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, cCharacter, 0);
+    }
+    for (sal_uInt16 nKey : { KEY_RETURN, KEY_TAB })
+    {
+        pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, nKey);
+        pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 0, nKey);
+    }
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 'x', 0);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(u"Text of several words"_ustr, rOutliner.GetEditEngine().GetText(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rOutliner.GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(rOutliner.GetDepth(0) + 1), rOutliner.GetDepth(1));
+    const EditView& rEditView = pOutlinerView->GetEditView();
+    const EBulletInfo aBulletInfo = rOutliner.GetBulletInfo(0);
+    CPPUNIT_ASSERT(aBulletInfo.bVisible);
+
+    // When the bullet of the item is clicked once, twice or three times, then each time the item
+    // and its sub-item are selected, so that a drag moves them together, and the sub-item stays
+    // shown. Without the fix in place, the second click of a double click selected the first
+    // word:
+    for (int nClicks = 1; nClicks <= 3; ++nClicks)
+    {
+        pOutlinerView->SetSelection(ESelection(0, 4));
+        clickAtTextPos(pXImpressDocument, rEditView, aBulletInfo.aBounds.Center(), nClicks);
+        CPPUNIT_ASSERT(rOutliner.IsExpanded(0));
+        assertParagraphsSelected(pView, 0, 1);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorVisibility_MultiView)
 {
     // Create the first view.
