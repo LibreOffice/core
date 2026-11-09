@@ -84,6 +84,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 		handle: SelectionHandle,
 		event: KeyboardEvent,
 	): boolean {
+		if (this.groupOf(handle)?.pressByKey(handle, event)) return true;
 		if (handle.kind !== SelectionSection.turningKind) return false;
 
 		if (event.key === '0') {
@@ -159,6 +160,11 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 	/// The handle the mouse is over, marked so, or null while it is over none.
 	private hovered: string | null = null;
+
+	/// The name of the handle under the mouse, or nothing.
+	public hoveredHandle(): string | null {
+		return this.hovered;
+	}
 
 	/*
 		The objects the handle above the selection shears, as a key of their ids in any order, or
@@ -653,6 +659,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 				new ShapingHandles(this),
 				new TiePointHandles(this),
 				new PathHandles(this),
+				new TableHandles(this),
 				this.theConnector() === undefined
 					? new TheObjectItself(this)
 					: new TheConnectorItself(this),
@@ -860,8 +867,11 @@ abstract class SelectionSection extends CanvasSectionObject {
 			const half = shown[at].larger
 				? reach + HandleLook.largerBy('shaping')
 				: reach;
+			// a handle that is no square of the usual size says how far it reaches
+			const across = shown[at].reach?.x ?? half;
+			const down = shown[at].reach?.y ?? half;
 			const point = HandleLook.drawnAt(shown[at]);
-			if (Math.abs(point.vX - x) <= half && Math.abs(point.vY - y) <= half)
+			if (Math.abs(point.vX - x) <= across && Math.abs(point.vY - y) <= down)
 				return shown[at];
 		}
 
@@ -1445,7 +1455,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 				: RenderGeometrySection.transformOf(objectId);
 
 		// Without a mapping of its own the band goes round the boxes of what it holds.
-		const box = frame
+		let box = frame
 			? cool.Range2D.fromPoints([
 					frame.apply(0, 0),
 					frame.apply(1, 0),
@@ -1454,6 +1464,12 @@ abstract class SelectionSection extends CanvasSectionObject {
 				])
 			: this.boxAround(RenderGeometrySection.theOnesThatDraw([objectId]));
 		if (!box) return [];
+
+		// the band of a group the selection stands in takes in the handles that belong inside
+		// it, as the markers of a table, which stand outside what is selected
+		const beyond =
+			objects[0] !== objectId ? this.reachOfHandlesInTheBand() : undefined;
+		if (beyond) box = box.union(beyond);
 
 		return [
 			new cool.SimplePoint(box.minX, box.minY),
@@ -1494,6 +1510,27 @@ abstract class SelectionSection extends CanvasSectionObject {
 		it has none. Whatever stands beside that band is placed against this box, so that it sits
 		beside what is drawn and not beside something else.
 	*/
+	/// The box the handles that belong inside a band reach over, in twips, or nothing where
+	/// there are none.
+	private reachOfHandlesInTheBand(): cool.Range2D | undefined {
+		const usual = 0.5 * ShapeHandlesSection.handleSize() * app.pixelsToTwips;
+		let box: cool.Range2D | undefined;
+		for (const handle of this.handles()) {
+			if (!this.groupOf(handle)?.extendsTheBand()) continue;
+			const at = HandleLook.drawnAt(handle);
+			const across = (handle.reach?.x ?? 0) * app.pixelsToTwips || usual;
+			const down = (handle.reach?.y ?? 0) * app.pixelsToTwips || usual;
+			const own = new cool.Range2D(
+				at.x - across,
+				at.y - down,
+				at.x + across,
+				at.y + down,
+			);
+			box = box ? box.union(own) : own;
+		}
+		return box;
+	}
+
 	public bandBox(objectId: number): cool.Range2D | undefined {
 		const places = this.surroundPlaces(objectId);
 		if (places.length !== 4) return undefined;
@@ -3387,6 +3424,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 				this.travel.goTo(this.pressedHandle.name);
 				this.groupOf(this.pressedHandle)?.letGoWhereItWasPressed(
 					this.pressedHandle,
+					e,
 				);
 			} else if (this.pressedGroup && this.keyboardIsOnAPoint()) {
 				// A click on the object, off the handles, takes the keyboard off the point.
@@ -3573,6 +3611,13 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 		// With Alt each press is a step through the objects under the mouse, taken on its own.
 		if (e.altKey) {
+			this.stopPropagating();
+			e.stopPropagation();
+			return;
+		}
+
+		// on a handle its two clicks were taken as clicks on it, and the double click is no more
+		if (this.hovered !== null) {
 			this.stopPropagating();
 			e.stopPropagation();
 			return;

@@ -442,6 +442,7 @@ COOL_JS_LST =\
 	src/app/SelectionHandles.ts \
 	src/app/PolyPolygonEditor.ts \
 	src/app/HandleGroups.ts \
+	src/app/TableHandles.ts \
 	src/app/ConnectorRouter.ts \
 	src/app/EditSteps.ts \
 	src/app/InteractionContext.ts \
@@ -1792,6 +1793,7 @@ pot:
 		src/app/Debug.ts \
 		src/app/ExportFormats.ts \
 		src/app/HandleGroups.ts \
+		src/app/TableHandles.ts \
 		src/app/IconUtil.ts \
 		src/app/SlideAvatars.ts \
 		src/app/LOUtil.ts \

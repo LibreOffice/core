@@ -311,4 +311,121 @@ class HandleLook {
 
 		return HandleLook.colorOfTheKind[kind];
 	}
+
+	// the look of a marker class of the tiled view, read once: the address of its picture, of
+	// the picture it shows under the mouse, of its picture without the branding, which for a
+	// border marker of a table is the drag marker, and its width in CSS pixels
+	private static markerLooks = new Map<
+		string,
+		{ picture: string; lit: string; drag: string; width: number }
+	>();
+
+	// the pictures of the markers, by address, loaded once
+	private static markerPictures = new Map<string, HTMLImageElement>();
+
+	/*
+		The look of a marker class of the tiled view, as the page's rules give it, the rules of
+		the branding included: the picture of its background, its width, and the picture it
+		shows under the mouse. That one is set for the mouse over the element, which no element
+		out of view can be asked for, so it is found by its name: "-hover" before the ending of
+		a picture, "-selected" for the select square of a table. The drag marker is the picture
+		of the office's own look, the one without "_branding" in its name.
+	*/
+	public static markerLook(className: string): {
+		picture: string;
+		lit: string;
+		drag: string;
+		width: number;
+	} {
+		let look = HandleLook.markerLooks.get(className);
+		if (look) return look;
+
+		const probe = document.createElement('div');
+		probe.className = className;
+		probe.style.position = 'absolute';
+		probe.style.visibility = 'hidden';
+		document.body.appendChild(probe);
+		const style = getComputedStyle(probe);
+		const found = /url\("?([^")]+)"?\)/.exec(style.backgroundImage);
+		const width = parseFloat(style.width) || 0;
+		probe.remove();
+
+		const picture = found ? found[1] : '';
+		const lit = picture.includes('select-marker')
+			? picture.replace('select-marker', 'select-marker-selected')
+			: picture.replace(/(_branding)?\.svg$/, '-hover$1.svg');
+		look = {
+			picture: picture,
+			lit: lit,
+			drag: picture.replace('_branding.svg', '.svg'),
+			width: width,
+		};
+		if (picture) HandleLook.markerLooks.set(className, look);
+		return look;
+	}
+
+	// the picture at that address, which draws the document again once it has loaded
+	private static markerPicture(address: string): HTMLImageElement {
+		let picture = HandleLook.markerPictures.get(address);
+		if (!picture) {
+			picture = new Image();
+			picture.onload = () => app.sectionContainer?.requestReDraw();
+			picture.src = address;
+			HandleLook.markerPictures.set(address, picture);
+		}
+		return picture;
+	}
+
+	/*
+		Draws the picture of a marker class of the tiled view with its middle at that point, that
+		large in CSS pixels, upright or laid in the axes given. Under the mouse or the keyboard,
+		where grown is above nought, it grows as a handle there does, unless grows is false, and
+		shows the picture underMouse names: the one the tiled view shows under the mouse ('lit',
+		the default), the drag marker ('drag', the picture without the branding) or its usual one.
+		With always set it shows that picture always. A picture the branding does not have falls
+		back to the usual one.
+	*/
+	public static drawMarker(
+		context: CanvasRenderingContext2D,
+		className: string,
+		at: cool.SimplePoint,
+		size: number,
+		grown: number,
+		options: {
+			grows?: boolean;
+			axes?: cool.Point[];
+			underMouse?: 'lit' | 'drag' | 'usual';
+			always?: boolean;
+		} = {},
+	): void {
+		const look = HandleLook.markerLook(className);
+		if (!look.picture) return;
+		const which = options.underMouse ?? 'lit';
+		const other =
+			(grown > 0 || options.always) && which !== 'usual'
+				? HandleLook.markerPicture(which === 'drag' ? look.drag : look.lit)
+				: undefined;
+		const picture =
+			other && other.complete && other.naturalWidth
+				? other
+				: HandleLook.markerPicture(look.picture);
+		if (!picture.complete || !picture.naturalWidth) return;
+
+		const axes = options.axes;
+		const grows = options.grows ?? true;
+		const across = size * app.dpiScale + (grows ? 2 * grown : 0);
+		context.save();
+		if (axes)
+			context.setTransform(
+				axes[0].x,
+				axes[0].y,
+				axes[1].x,
+				axes[1].y,
+				at.vX,
+				at.vY,
+			);
+		else context.setTransform(1, 0, 0, 1, at.vX, at.vY);
+		context.drawImage(picture, -across * 0.5, -across * 0.5, across, across);
+		context.restore();
+	}
 }

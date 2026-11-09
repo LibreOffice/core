@@ -45,6 +45,9 @@ interface SelectionHandle {
 	/// True for a handle drawn larger than the others, behind a handle of the usual size that may
 	/// lie over it.
 	larger?: boolean;
+	/// How far from its middle it is taken hold of across and down, in core pixels, for a handle
+	/// that is no square of the usual size, as a long bar. Absent for the usual square.
+	reach?: cool.Point;
 	/// The name of the group of handles it came from, which is what draws it, what a press on it
 	/// asks and what a key on it asks. Absent for a handle that stands outside the groups.
 	group?: string;

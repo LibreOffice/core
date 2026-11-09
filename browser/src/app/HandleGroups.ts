@@ -226,8 +226,23 @@ abstract class HandleGroup {
 
 	/// What a press on one of its handles does when it is let go where it started, besides
 	/// putting the keyboard on that handle. Nothing for most groups.
-	public letGoWhereItWasPressed(_handle: SelectionHandle): void {
+	public letGoWhereItWasPressed(
+		_handle: SelectionHandle,
+		_event?: MouseEvent,
+	): void {
 		// Most groups do nothing more.
+	}
+
+	/// Whether its handles belong inside the band of a group the selection stands in, so the band
+	/// grows round them. No for most groups, whose handles stand at what is selected.
+	public extendsTheBand(): boolean {
+		return false;
+	}
+
+	/// What Return or Space does on one of its handles while the keyboard is on it. Answers
+	/// whether it did something; nothing for most groups.
+	public pressByKey(_handle: SelectionHandle, _event: KeyboardEvent): boolean {
+		return false;
 	}
 
 	/// The drag a press on one of its handles begins, or nothing where it begins none.
@@ -860,26 +875,20 @@ class CropHandles extends HandleGroup {
 		const [across, down] = CropHandles.axesOf(square);
 
 		/*
-			The handle in the middle is as wide as the mark on the top side is long, and as high
-			as the mark on the left side is long, laid in the picture's axes and standing on its
-			point. Three lines across it, kept off its sides, say that it is taken hold of to
-			move; the edge is drawn closed here, so the lines are drawn as lines alone.
+			The handle in the middle shows the drag marker, the one a border marker of a table
+			shows under the mouse, so whatever is dragged to move looks the same. It grows under
+			the mouse as the other handles do, is laid in the picture's axes and lays no shape.
 		*/
 		if (handle.kind === CropHandles.middleKind) {
-			const long = HandleLook.widthOf('crop') + 2 * grown;
-			context.save();
-			context.setTransform(across.x, across.y, down.x, down.y, at.vX, at.vY);
-			context.moveTo(-long * 0.5, -long * 0.5);
-			context.lineTo(long * 0.5, -long * 0.5);
-			context.lineTo(long * 0.5, long * 0.5);
-			context.lineTo(-long * 0.5, long * 0.5);
-			context.closePath();
-			for (const y of [-long * 0.25, 0, long * 0.25]) {
-				context.moveTo(-long * 0.3, y);
-				context.lineTo(long * 0.3, y);
-			}
-			context.restore();
-			return color;
+			HandleLook.drawMarker(
+				context,
+				'table-row-resize-marker',
+				at,
+				TableHandles.borderSize(),
+				grown,
+				{ axes: [across, down], underMouse: 'drag', always: true },
+			);
+			return 'transparent';
 		}
 
 		if (!place) return color;

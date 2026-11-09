@@ -435,8 +435,17 @@ class TableMiddleware {
 		app.sectionContainer.addSection(this.tableAnchorSection);
 	}
 
+	/// The rows and columns of the table that is selected, as the server sends them, with numbers
+	/// in place of the strings it may send. Absent while no table is selected.
+	public tableData(): any {
+		return this.hasTableSelection() && this.currentTableData.rectangle
+			? this.currentTableData
+			: undefined;
+	}
+
 	private updateMoveMarkerVisibility() {
 		if (
+			!RenderManager.isVectorRendering() &&
 			this.currentTableData &&
 			this.currentTableMarkerJson === this.lastTableMarkerJson &&
 			this.currentTableData.rows &&
@@ -631,6 +640,14 @@ class TableMiddleware {
 
 		if (this.currentTableData && this.currentTableData.columns) {
 			this.ensureDataIntegrity();
+
+			// a view that draws from the objects draws the markers among the handles of the
+			// selection, from the same rows and columns
+			if (RenderManager.isVectorRendering()) {
+				GraphicSelection.refreshLocalHandles();
+				return;
+			}
+
 			this.updateMoveMarkerVisibility();
 			this.addResizeMarkers();
 			this.addSelectionMarkers();
