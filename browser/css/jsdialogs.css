@@ -4654,6 +4654,13 @@ kbd,
 	justify-content: start;
 }
 
+/* The hidden search icon keeps its place, so the row of the search message is as tall without a
+   message as with one, and the buttons below it stay where they are. */
+#FindReplaceDialog #searchbox > #searchicon.hidden {
+	display: block !important;
+	visibility: hidden;
+}
+
 #showcomments-container[default-state='true'],
 #insertmode-container[default-state='true'],
 #permissionmode-container[default-state='true'],

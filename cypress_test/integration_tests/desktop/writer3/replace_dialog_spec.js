@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require */
+/* global describe it cy beforeEach require expect */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
@@ -147,5 +147,29 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Replace Dialog Tests', { t
 
         // Verify it's unchecked
         cy.cGet('#matchcase-input').should('not.be.checked');
+    });
+
+    it('Find Next stays in place when the search reaches the end of the document', function() {
+        helper.typeIntoDocument('{ctrl}h');
+        findHelper.waitForFindReplaceDialog(this.win);
+
+        // The document has one instance of the word, so the first Find Next selects it without a
+        // message.
+        findHelper.typeIntoSearchField('functionality');
+        findHelper.findNext(this.win);
+        helper.textSelectionShouldExist();
+        cy.cGet('#FindReplaceDialog #searchlabel').should('not.be.visible');
+
+        cy.cGet('#search-button').then(function(button) {
+            const top = button[0].getBoundingClientRect().top;
+
+            // The second Find Next wraps around the document and shows a message about it.
+            findHelper.findNext(this.win);
+            cy.cGet('#FindReplaceDialog #searchlabel').should('be.visible').and('not.be.empty');
+
+            cy.cGet('#search-button').should(function(button) {
+                expect(button[0].getBoundingClientRect().top).to.equal(top);
+            });
+        }.bind(this));
     });
 });
