@@ -24,9 +24,11 @@ class MSFilterTest
 {
 public:
     void testTransColToIco();
+    void testBestFitOpenSymbolToMSFont();
 
     CPPUNIT_TEST_SUITE(MSFilterTest);
     CPPUNIT_TEST(testTransColToIco);
+    CPPUNIT_TEST(testBestFitOpenSymbolToMSFont);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -65,6 +67,43 @@ void MSFilterTest::testTransColToIco()
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), static_cast<sal_uInt16>(msfilter::util::TransColToIco( Color( 0x6665ff ))));
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), static_cast<sal_uInt16>(msfilter::util::TransColToIco( Color( 0x6666fe ))));
 
+}
+
+void MSFilterTest::testBestFitOpenSymbolToMSFont()
+{
+    struct Expected
+    {
+        sal_Unicode cChar;
+        sal_Unicode cResult;
+        rtl_TextEncoding eEncoding;
+        OUString aFont;
+    };
+    const Expected aExpected[] = {
+        // An exact match in the most preferred font
+        { 0x2022, 0xF0B7, RTL_TEXTENCODING_SYMBOL, u"Symbol"_ustr },
+        { 0x25CF, 0xF06C, RTL_TEXTENCODING_SYMBOL, u"Wingdings"_ustr },
+        // In two of the extra tables, the preferred one wins
+        { 0xE021, 0xF0D3, RTL_TEXTENCODING_SYMBOL, u"Symbol"_ustr },
+        // Only in the last extra table
+        { 0xE0A9, 0xF05C, RTL_TEXTENCODING_SYMBOL, u"Times New Roman"_ustr },
+        // No symbol font has it, so the first font of the list shows it
+        { 0x0041, 0x0041, RTL_TEXTENCODING_UNICODE, u"OpenSymbol"_ustr },
+        // No symbol font has this private use character, so it becomes a bullet
+        { 0xE999, 0x006C, RTL_TEXTENCODING_DONTKNOW, u"Wingdings"_ustr },
+    };
+
+    for (const Expected& rExpected : aExpected)
+    {
+        const OString sMessage = "Character: " + OString::number(rExpected.cChar, 16);
+        rtl_TextEncoding eEncoding = RTL_TEXTENCODING_DONTKNOW;
+        OUString aFont(u"OpenSymbol;Arial"_ustr);
+        sal_Unicode cResult
+            = msfilter::util::bestFitOpenSymbolToMSFont(rExpected.cChar, eEncoding, aFont);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), sal_uInt32(rExpected.cResult),
+                                     sal_uInt32(cResult));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), rExpected.eEncoding, eEncoding);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), rExpected.aFont, aFont);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MSFilterTest);

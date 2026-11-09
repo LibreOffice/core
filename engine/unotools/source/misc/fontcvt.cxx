@@ -24,8 +24,11 @@
 #include <unotools/fontcvt.hxx>
 #include <unotools/fontdefs.hxx>
 
+#include <algorithm>
+#include <array>
 #include <cstddef>
-#include <map>
+#include <iterator>
+#include <utility>
 #include <vector>
 
 //These conversion tables were designed for StarSymbol. OpenSymbol
@@ -182,7 +185,7 @@ const sal_Unicode aStarMathTab[224] =
         0x2124,     0x211a,   0x211d,    0x2102
 };
 
-const sal_Unicode aWingDingsTab[224] =
+constexpr sal_Unicode aWingDingsTab[224] =
 {
     // F020
         0x0020,    0xe400,    0xe401,    0xe402,
@@ -256,7 +259,7 @@ const sal_Unicode aWingDingsTab[224] =
         0xe4c2,    0xe4c3,    0xe4c4,    0xe4c5
 };
 
-const sal_Unicode aWingDings2Tab[224] =
+constexpr sal_Unicode aWingDings2Tab[224] =
 {
     // F020
         0x0020,    0xe500,    0xe501,    0xe502,
@@ -330,7 +333,7 @@ const sal_Unicode aWingDings2Tab[224] =
              0,         0,         0,         0
 };
 
-const sal_Unicode aWingDings3Tab[224] =
+constexpr sal_Unicode aWingDings3Tab[224] =
 {
     // F020
         0x0020,    0xe600,    0xe601,    0xe602,
@@ -404,7 +407,7 @@ const sal_Unicode aWingDings3Tab[224] =
              0,         0,         0,         0
 };
 
-const sal_Unicode aWebDingsTab[224] =
+constexpr sal_Unicode aWebDingsTab[224] =
 {
     // F020
         0x0020,    0xe300,    0xe301,    0xe302,
@@ -481,7 +484,7 @@ const sal_Unicode aWebDingsTab[224] =
 // See http://www.iana.org/assignments/character-sets/character-sets.xml
 // See ftp://ftp.unicode.org/Public/MAPPINGS/VENDORS/ADOBE/symbol.txt
 
-const sal_Unicode aAdobeSymbolTab[224] =
+constexpr sal_Unicode aAdobeSymbolTab[224] =
 {
 //TODO:
     // F020
@@ -556,7 +559,7 @@ const sal_Unicode aAdobeSymbolTab[224] =
         0xf8fc,    0xf8fd,    0xf8fe,         0,
 };
 
-const sal_Unicode aMonotypeSortsTab[224] =
+constexpr sal_Unicode aMonotypeSortsTab[224] =
 {
     // F020
         0x0020,    0x2701,    0xe200,    0x2703,
@@ -630,7 +633,7 @@ const sal_Unicode aMonotypeSortsTab[224] =
         0x27bc,    0x27bd,    0x27be,         0,
 };
 
-const sal_Unicode aMTExtraTab[224] =
+constexpr sal_Unicode aMTExtraTab[224] =
 {
     // F020
         0x0020,         0,         0,    0x0300,
@@ -1026,26 +1029,11 @@ constexpr OUString aSymbolNames[] =
 
 namespace {
 
-struct SymbolEntry
-{
-    sal_uInt8 cIndex;
-    enum SymbolFont eFont;
-};
-
-class StarSymbolToMSMultiFontImpl : public StarSymbolToMSMultiFont
-{
-private:
-    ::std::multimap<sal_Unicode, SymbolEntry> maMagicMap;
-public:
-    explicit StarSymbolToMSMultiFontImpl();
-    OUString ConvertChar(sal_Unicode &rChar) override;
-};
-
 struct ExtraTable { sal_Unicode cStar; sal_uInt8 cMS;};
 
 }
 
-ExtraTable const aWingDingsExtraTab[] =
+constexpr ExtraTable aWingDingsExtraTab[] =
 {
     {0x25cf, 0x6C}, {0x2714, 0xFC}, {0x2717, 0xFB}, {0x2794, 0xE8},
     {0x27a2, 0xD8}, {0xe000, 0x6F}, {0xe001, 0x73}, {0xe002, 0x74},
@@ -1063,7 +1051,7 @@ ExtraTable const aWingDingsExtraTab[] =
     {0xe034, 0x4D}, {0xe0aa, 0x71}, {0xe422, 0x44}
 };
 
-ExtraTable const aSymbolExtraTab2[] =
+constexpr ExtraTable aSymbolExtraTab2[] =
 {
     {0x0020, 0x20}, {0x00A0, 0x20}, {0x0021, 0x21}, {0x2200, 0x22},
     {0x0023, 0x23}, {0x2203, 0x24}, {0x0025, 0x25}, {0x0026, 0x26},
@@ -1091,7 +1079,7 @@ ExtraTable const aSymbolExtraTab2[] =
     {0x2320, 0xF3}, {0x2321, 0xF5}, {0x2013, 0x2D}
 };
 
-ExtraTable const aSymbolExtraTab[] =
+constexpr ExtraTable aSymbolExtraTab[] =
 {
     {0xe021, 0xD3}, {0xe024, 0xD2}, {0xe035, 0x20}, {0xe036, 0x28},
     {0xe037, 0x29}, {0xe039, 0x20}, {0xe083, 0x2B}, {0xe084, 0x3C},
@@ -1113,7 +1101,7 @@ ExtraTable const aSymbolExtraTab[] =
     {0xe0dc, 0xAD}, {0xe0dd, 0xAF}
 };
 
-ExtraTable const aTNRExtraTab[] =
+constexpr ExtraTable aTNRExtraTab[] =
 {
     {0xe021, 0xA9},
     {0xe022, 0x40},
@@ -1130,73 +1118,111 @@ ExtraTable const aTNRExtraTab[] =
     {0xe0a9, '\\'}
 };
 
-StarSymbolToMSMultiFontImpl::StarSymbolToMSMultiFontImpl()
+namespace {
+
+/// The position of the glyph for the StarSymbol character cStar in the symbol font nFont, a
+/// SymbolFont value.
+struct SymbolEntry
 {
-    struct ConvertTable
-    {
-        enum SymbolFont meFont;
-        const sal_Unicode* pTab;
-    };
+    sal_Unicode cStar;
+    sal_uInt8 cIndex;
+    sal_uInt8 nFont;
+};
 
-    //In order of preference
-    static const ConvertTable aConservativeTable[] =
-    {
-        {Symbol,         aAdobeSymbolTab},
-        {Wingdings,      aWingDingsTab},
-        {MonotypeSorts,  aMonotypeSortsTab},
-        {Webdings,       aWebDingsTab},
-        {Wingdings2,     aWingDings2Tab},
-        {Wingdings3,     aWingDings3Tab},
-        {MTExtra,        aMTExtraTab}
-    };
+struct ConvertTable
+{
+    SymbolFont meFont;
+    const sal_Unicode* pTab;
+};
 
-    struct ExtendedConvertTable
-    {
-        enum SymbolFont meFont;
-        const ExtraTable *mpTable;
-        size_t mnSize;
-        ExtendedConvertTable(SymbolFont eFont, const ExtraTable *pTable,
-            size_t nSize)
-            : meFont(eFont), mpTable(pTable), mnSize(nSize) {}
-    };
+//In order of preference
+constexpr ConvertTable aConservativeTable[] =
+{
+    {Symbol,         aAdobeSymbolTab},
+    {Wingdings,      aWingDingsTab},
+    {MonotypeSorts,  aMonotypeSortsTab},
+    {Webdings,       aWebDingsTab},
+    {Wingdings2,     aWingDings2Tab},
+    {Wingdings3,     aWingDings3Tab},
+    {MTExtra,        aMTExtraTab}
+};
 
+struct ExtendedConvertTable
+{
+    SymbolFont meFont;
+    const ExtraTable* mpTable;
+    size_t mnSize;
+};
+
+//In order of preference
+constexpr ExtendedConvertTable aAggressiveTable[] =
+{
+    {Symbol,        aSymbolExtraTab2,   std::size(aSymbolExtraTab2)},
+    {Symbol,        aSymbolExtraTab,    std::size(aSymbolExtraTab)},
+    {Wingdings,     aWingDingsExtraTab, std::size(aWingDingsExtraTab)},
+    {TimesNewRoman, aTNRExtraTab,       std::size(aTNRExtraTab)}
+};
+
+/// Pass every mapping to rAdd, the preferred mappings of a character first.
+template <typename Add> constexpr void forEachSymbolEntry(Add rAdd)
+{
     //Reverse map from a given starsymbol char to exact matches in ms symbol
     //fonts.
     for (auto const & r: aConservativeTable)
     {
-        SymbolEntry aEntry;
-        aEntry.eFont = r.meFont;
-        for (aEntry.cIndex = 0xFF; aEntry.cIndex >= 0x20; --aEntry.cIndex)
+        for (int nIndex = 0xFF; nIndex >= 0x20; --nIndex)
         {
-            if (sal_Unicode cChar = r.pTab[aEntry.cIndex-0x20])
-                maMagicMap.emplace(cChar, aEntry);
+            if (sal_Unicode cChar = r.pTab[nIndex - 0x20])
+                rAdd(SymbolEntry{ cChar, sal_uInt8(nIndex), sal_uInt8(r.meFont) });
         }
     }
-
-    //In order of preference
-    static const ExtendedConvertTable aAggressiveTable[] =
-    {
-        ExtendedConvertTable(Symbol, aSymbolExtraTab2,
-            sizeof(aSymbolExtraTab2)),
-        ExtendedConvertTable(Symbol, aSymbolExtraTab,
-            sizeof(aSymbolExtraTab)),
-        ExtendedConvertTable(Wingdings, aWingDingsExtraTab,
-            sizeof(aWingDingsExtraTab)),
-        ExtendedConvertTable(TimesNewRoman, aTNRExtraTab,
-            sizeof(aTNRExtraTab))
-    };
 
     //Allow extra conversions that are not perfect, but "good enough"
     for (auto const & r: aAggressiveTable)
     {
-        SymbolEntry aEntry;
-        aEntry.eFont = r.meFont;
-        for (int j = r.mnSize / sizeof(r.mpTable[0]) - 1; j >=0; --j)
-        {
-            aEntry.cIndex = r.mpTable[j].cMS;
-            maMagicMap.emplace(r.mpTable[j].cStar, aEntry);
-        }
+        for (size_t j = r.mnSize; j-- > 0;)
+            rAdd(SymbolEntry{ r.mpTable[j].cStar, r.mpTable[j].cMS, sal_uInt8(r.meFont) });
     }
+}
+
+constexpr size_t countSymbolEntries()
+{
+    size_t nCount = 0;
+    forEachSymbolEntry([&nCount](const SymbolEntry&) { ++nCount; });
+    return nCount;
+}
+
+/// Every mapping, sorted by StarSymbol character. The mappings of one character keep their order
+/// of preference, so the first one is the best fit. The compiler builds the table, so it lives in
+/// the read-only data of the library.
+constexpr auto aSymbolEntries = []()
+{
+    constexpr size_t nCount = countSymbolEntries();
+    std::array<std::pair<SymbolEntry, size_t>, nCount> aNumbered{};
+    size_t nNumber = 0;
+    forEachSymbolEntry([&aNumbered, &nNumber](const SymbolEntry& rEntry) {
+        aNumbered[nNumber] = { rEntry, nNumber };
+        ++nNumber;
+    });
+    std::sort(aNumbered.begin(), aNumbered.end(),
+              [](const auto& rLeft, const auto& rRight) {
+                  if (rLeft.first.cStar != rRight.first.cStar)
+                      return rLeft.first.cStar < rRight.first.cStar;
+                  return rLeft.second < rRight.second;
+              });
+
+    std::array<SymbolEntry, nCount> aEntries{};
+    for (size_t i = 0; i < nCount; ++i)
+        aEntries[i] = aNumbered[i].first;
+    return aEntries;
+}();
+
+class StarSymbolToMSMultiFontImpl : public StarSymbolToMSMultiFont
+{
+public:
+    OUString ConvertChar(sal_Unicode &rChar) override;
+};
+
 }
 
 static const OUString & SymbolFontToString(int nResult)
@@ -1216,19 +1242,15 @@ static const OUString & SymbolFontToString(int nResult)
 
 OUString StarSymbolToMSMultiFontImpl::ConvertChar(sal_Unicode &rChar)
 {
-    OUString sRet;
+    auto aResult = std::lower_bound(
+        aSymbolEntries.begin(), aSymbolEntries.end(), rChar,
+        [](const SymbolEntry& rEntry, sal_Unicode cChar) { return rEntry.cStar < cChar; });
 
-    ::std::multimap<sal_Unicode, SymbolEntry>::const_iterator aResult =
-        maMagicMap.find(rChar);
+    if (aResult == aSymbolEntries.end() || aResult->cStar != rChar)
+        return OUString();
 
-    if (aResult != maMagicMap.end())
-    {
-        const SymbolEntry &rEntry = (*aResult).second;
-        sRet = SymbolFontToString(rEntry.eFont);
-        rChar = rEntry.cIndex;
-    }
-
-    return sRet;
+    rChar = aResult->cIndex;
+    return SymbolFontToString(aResult->nFont);
 }
 
 StarSymbolToMSMultiFont *CreateStarSymbolToMSMultiFont()
