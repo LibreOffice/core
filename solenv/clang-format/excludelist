@@ -12520,7 +12520,6 @@ sw/source/ui/chrdlg/numpara.cxx
 sw/source/ui/chrdlg/pardlg.cxx
 sw/source/ui/chrdlg/swuiccoll.cxx
 sw/source/ui/chrdlg/tblnumfm.cxx
-sw/source/ui/config/mailconfigpage.cxx
 sw/source/ui/config/optcomp.cxx
 sw/source/ui/config/optload.cxx
 sw/source/ui/config/optpage.cxx
@@ -12771,7 +12770,6 @@ sw/source/uibase/dbui/dbmgr.cxx
 sw/source/uibase/dbui/dbtree.cxx
 sw/source/uibase/dbui/dbui.cxx
 sw/source/uibase/dbui/maildispatcher.cxx
-sw/source/uibase/dbui/mailmergehelper.cxx
 sw/source/uibase/dbui/mailmergetoolbarcontrols.cxx
 sw/source/uibase/dbui/mmconfigitem.cxx
 sw/source/uibase/dialog/SwSpellDialogChildWindow.cxx

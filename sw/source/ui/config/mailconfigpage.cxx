@@ -43,13 +43,13 @@ using namespace ::com::sun::star::mail;
 
 class SwTestAccountSettingsDialog : public SfxDialogController
 {
-    ImplSVEvent*        m_pPostedEvent;
-    OUString            m_sCompleted;
-    OUString            m_sFailed;
-    OUString            m_sErrorServer;
-    bool                m_bStop;
+    ImplSVEvent* m_pPostedEvent;
+    OUString m_sCompleted;
+    OUString m_sFailed;
+    OUString m_sErrorServer;
+    bool m_bStop;
 
-    SwMailConfigPage*   m_pParent;
+    SwMailConfigPage* m_pParent;
 
     std::unique_ptr<weld::Button> m_xStopPB;
     std::unique_ptr<weld::TextView> m_xErrorsED;
@@ -60,49 +60,50 @@ class SwTestAccountSettingsDialog : public SfxDialogController
     std::unique_ptr<weld::Image> m_xImage3;
     std::unique_ptr<weld::Image> m_xImage4;
 
-    void                Test();
+    void Test();
     DECL_LINK(StopHdl, weld::Button&, void);
     DECL_LINK(TestHdl, void*, void);
+
 public:
     explicit SwTestAccountSettingsDialog(SwMailConfigPage* pParent);
     virtual ~SwTestAccountSettingsDialog() override;
 };
 
-namespace {
-
+namespace
+{
 class SwAuthenticationSettingsDialog : public SfxDialogController
 {
     SwMailMergeConfigItem& m_rConfigItem;
 
     std::unique_ptr<weld::CheckButton> m_xAuthenticationCB;
-    std::unique_ptr<weld::Widget>      m_xAuthenticationImg;
+    std::unique_ptr<weld::Widget> m_xAuthenticationImg;
     std::unique_ptr<weld::RadioButton> m_xSeparateAuthenticationRB;
-    std::unique_ptr<weld::Widget>      m_xSeparateAuthenticationImg;
+    std::unique_ptr<weld::Widget> m_xSeparateAuthenticationImg;
     std::unique_ptr<weld::RadioButton> m_xSMTPAfterPOPRB;
-    std::unique_ptr<weld::Widget>      m_xSMTPAfterPOPImg;
-    std::unique_ptr<weld::Label>       m_xOutgoingServerFT;
-    std::unique_ptr<weld::Label>       m_xUserNameFT;
-    std::unique_ptr<weld::Entry>       m_xUserNameED;
-    std::unique_ptr<weld::Widget>      m_xUserNameImg;
-    std::unique_ptr<weld::Label>       m_xOutPasswordFT;
-    std::unique_ptr<weld::Entry>       m_xOutPasswordED;
-    std::unique_ptr<weld::Label>       m_xIncomingServerFT;
-    std::unique_ptr<weld::Label>       m_xServerFT;
-    std::unique_ptr<weld::Entry>       m_xServerED;
-    std::unique_ptr<weld::Widget>      m_xServerImg;
-    std::unique_ptr<weld::Label>       m_xPortFT;
-    std::unique_ptr<weld::SpinButton>  m_xPortNF;
-    std::unique_ptr<weld::Widget>      m_xPortImg;
-    std::unique_ptr<weld::Label>       m_xProtocolFT;
+    std::unique_ptr<weld::Widget> m_xSMTPAfterPOPImg;
+    std::unique_ptr<weld::Label> m_xOutgoingServerFT;
+    std::unique_ptr<weld::Label> m_xUserNameFT;
+    std::unique_ptr<weld::Entry> m_xUserNameED;
+    std::unique_ptr<weld::Widget> m_xUserNameImg;
+    std::unique_ptr<weld::Label> m_xOutPasswordFT;
+    std::unique_ptr<weld::Entry> m_xOutPasswordED;
+    std::unique_ptr<weld::Label> m_xIncomingServerFT;
+    std::unique_ptr<weld::Label> m_xServerFT;
+    std::unique_ptr<weld::Entry> m_xServerED;
+    std::unique_ptr<weld::Widget> m_xServerImg;
+    std::unique_ptr<weld::Label> m_xPortFT;
+    std::unique_ptr<weld::SpinButton> m_xPortNF;
+    std::unique_ptr<weld::Widget> m_xPortImg;
+    std::unique_ptr<weld::Label> m_xProtocolFT;
     std::unique_ptr<weld::RadioButton> m_xPOP3RB;
-    std::unique_ptr<weld::Widget>      m_xPOP3Img;
+    std::unique_ptr<weld::Widget> m_xPOP3Img;
     std::unique_ptr<weld::RadioButton> m_xIMAPRB;
-    std::unique_ptr<weld::Label>       m_xInUsernameFT;
-    std::unique_ptr<weld::Entry>       m_xInUsernameED;
-    std::unique_ptr<weld::Widget>      m_xInUsernameImg;
-    std::unique_ptr<weld::Label>       m_xInPasswordFT;
-    std::unique_ptr<weld::Entry>       m_xInPasswordED;
-    std::unique_ptr<weld::Button>      m_xOKPB;
+    std::unique_ptr<weld::Label> m_xInUsernameFT;
+    std::unique_ptr<weld::Entry> m_xInUsernameED;
+    std::unique_ptr<weld::Widget> m_xInUsernameImg;
+    std::unique_ptr<weld::Label> m_xInPasswordFT;
+    std::unique_ptr<weld::Entry> m_xInPasswordED;
+    std::unique_ptr<weld::Button> m_xOKPB;
 
     DECL_LINK(OKHdl_Impl, weld::Button&, void);
     DECL_LINK(CheckBoxHdl_Impl, weld::Toggleable&, void);
@@ -112,11 +113,12 @@ class SwAuthenticationSettingsDialog : public SfxDialogController
 public:
     SwAuthenticationSettingsDialog(weld::Window* pParent, SwMailMergeConfigItem& rItem);
 };
-
 }
 
-SwMailConfigPage::SwMailConfigPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
-    : SfxTabPage(pPage, pController, u"modules/swriter/ui/mailconfigpage.ui"_ustr, u"MailConfigPage"_ustr, &rSet)
+SwMailConfigPage::SwMailConfigPage(weld::Container* pPage, weld::DialogController* pController,
+                                   const SfxItemSet& rSet)
+    : SfxTabPage(pPage, pController, u"modules/swriter/ui/mailconfigpage.ui"_ustr,
+                 u"MailConfigPage"_ustr, &rSet)
     , m_pConfigItem(new SwMailMergeConfigItem)
     , m_xDisplayNameED(m_xBuilder->weld_entry(u"displayname"_ustr))
     , m_xDisplayNameImg(m_xBuilder->weld_widget(u"lockdisplayname"_ustr))
@@ -142,12 +144,11 @@ SwMailConfigPage::SwMailConfigPage(weld::Container* pPage, weld::DialogControlle
     m_xSecureCB->connect_toggled(LINK(this, SwMailConfigPage, SecureHdl));
 }
 
-SwMailConfigPage::~SwMailConfigPage()
-{
-    m_pConfigItem.reset();
-}
+SwMailConfigPage::~SwMailConfigPage() { m_pConfigItem.reset(); }
 
-std::unique_ptr<SfxTabPage> SwMailConfigPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
+std::unique_ptr<SfxTabPage> SwMailConfigPage::Create(weld::Container* pPage,
+                                                     weld::DialogController* pController,
+                                                     const SfxItemSet* rAttrSet)
 {
     return std::make_unique<SwMailConfigPage>(pPage, pController, *rAttrSet);
 }
@@ -155,8 +156,9 @@ std::unique_ptr<SfxTabPage> SwMailConfigPage::Create(weld::Container* pPage, wel
 OUString SwMailConfigPage::GetAllStrings()
 {
     OUStringBuffer sAllStrings;
-    OUString labels[] = { u"label1"_ustr, u"displayname_label"_ustr, u"address_label"_ustr, u"replyto_label"_ustr,
-                          u"label2"_ustr, u"server_label"_ustr,      u"port_label"_ustr };
+    OUString labels[]
+        = { u"label1"_ustr, u"displayname_label"_ustr, u"address_label"_ustr, u"replyto_label"_ustr,
+            u"label2"_ustr, u"server_label"_ustr,      u"port_label"_ustr };
 
     for (const auto& label : labels)
     {
@@ -183,13 +185,13 @@ OUString SwMailConfigPage::GetAllStrings()
     return sAllStrings.toString().replaceAll("_", "");
 }
 
-bool SwMailConfigPage::FillItemSet( SfxItemSet* /*rSet*/ )
+bool SwMailConfigPage::FillItemSet(SfxItemSet* /*rSet*/)
 {
     if (m_xDisplayNameED->get_value_changed_from_saved())
         m_pConfigItem->SetMailDisplayName(m_xDisplayNameED->get_text());
     if (m_xAddressED->get_value_changed_from_saved())
         m_pConfigItem->SetMailAddress(m_xAddressED->get_text());
-    if (m_xReplyToCB->get_state_changed_from_saved() )
+    if (m_xReplyToCB->get_state_changed_from_saved())
         m_pConfigItem->SetMailReplyTo(m_xReplyToCB->get_active());
     if (m_xReplyToED->get_value_changed_from_saved())
         m_pConfigItem->SetMailReplyTo(m_xReplyToED->get_text());
@@ -203,28 +205,37 @@ bool SwMailConfigPage::FillItemSet( SfxItemSet* /*rSet*/ )
     return true;
 }
 
-void SwMailConfigPage::Reset( const SfxItemSet* /*rSet*/ )
+void SwMailConfigPage::Reset(const SfxItemSet* /*rSet*/)
 {
     m_xDisplayNameED->set_text(m_pConfigItem->GetMailDisplayName());
-    m_xDisplayNameED->set_sensitive(!officecfg::Office::Writer::MailMergeWizard::MailDisplayName::isReadOnly());
-    m_xDisplayNameImg->set_visible(officecfg::Office::Writer::MailMergeWizard::MailDisplayName::isReadOnly());
+    m_xDisplayNameED->set_sensitive(
+        !officecfg::Office::Writer::MailMergeWizard::MailDisplayName::isReadOnly());
+    m_xDisplayNameImg->set_visible(
+        officecfg::Office::Writer::MailMergeWizard::MailDisplayName::isReadOnly());
 
     m_xAddressED->set_text(m_pConfigItem->GetMailAddress());
-    m_xAddressED->set_sensitive(!officecfg::Office::Writer::MailMergeWizard::MailAddress::isReadOnly());
-    m_xAddressImg->set_visible(officecfg::Office::Writer::MailMergeWizard::MailAddress::isReadOnly());
+    m_xAddressED->set_sensitive(
+        !officecfg::Office::Writer::MailMergeWizard::MailAddress::isReadOnly());
+    m_xAddressImg->set_visible(
+        officecfg::Office::Writer::MailMergeWizard::MailAddress::isReadOnly());
 
     m_xReplyToED->set_text(m_pConfigItem->GetMailReplyTo());
-    m_xReplyToED->set_sensitive(!officecfg::Office::Writer::MailMergeWizard::MailReplyTo::isReadOnly());
-    m_xReplyToImg->set_visible(officecfg::Office::Writer::MailMergeWizard::MailReplyTo::isReadOnly());
+    m_xReplyToED->set_sensitive(
+        !officecfg::Office::Writer::MailMergeWizard::MailReplyTo::isReadOnly());
+    m_xReplyToImg->set_visible(
+        officecfg::Office::Writer::MailMergeWizard::MailReplyTo::isReadOnly());
 
     m_xReplyToCB->set_active(m_pConfigItem->IsMailReplyTo());
-    m_xReplyToCB->set_sensitive(!officecfg::Office::Writer::MailMergeWizard::IsMailReplyTo::isReadOnly());
-    m_xReplyToCBImg->set_visible(officecfg::Office::Writer::MailMergeWizard::IsMailReplyTo::isReadOnly());
+    m_xReplyToCB->set_sensitive(
+        !officecfg::Office::Writer::MailMergeWizard::IsMailReplyTo::isReadOnly());
+    m_xReplyToCBImg->set_visible(
+        officecfg::Office::Writer::MailMergeWizard::IsMailReplyTo::isReadOnly());
 
     ReplyToHdl(*m_xReplyToCB);
 
     m_xServerED->set_text(m_pConfigItem->GetMailServer());
-    m_xServerED->set_sensitive(!officecfg::Office::Writer::MailMergeWizard::MailServer::isReadOnly());
+    m_xServerED->set_sensitive(
+        !officecfg::Office::Writer::MailMergeWizard::MailServer::isReadOnly());
     m_xServerImg->set_visible(officecfg::Office::Writer::MailMergeWizard::MailServer::isReadOnly());
 
     m_xPortNF->set_value(m_pConfigItem->GetMailPort());
@@ -232,8 +243,10 @@ void SwMailConfigPage::Reset( const SfxItemSet* /*rSet*/ )
     m_xPortImg->set_visible(officecfg::Office::Writer::MailMergeWizard::MailPort::isReadOnly());
 
     m_xSecureCB->set_active(m_pConfigItem->IsSecureConnection());
-    m_xSecureCB->set_sensitive(!officecfg::Office::Writer::MailMergeWizard::IsSecureConnection::isReadOnly());
-    m_xSecureImg->set_visible(officecfg::Office::Writer::MailMergeWizard::IsSecureConnection::isReadOnly());
+    m_xSecureCB->set_sensitive(
+        !officecfg::Office::Writer::MailMergeWizard::IsSecureConnection::isReadOnly());
+    m_xSecureImg->set_visible(
+        officecfg::Office::Writer::MailMergeWizard::IsSecureConnection::isReadOnly());
 
     m_xDisplayNameED->save_value();
     m_xAddressED->save_value();
@@ -275,7 +288,8 @@ IMPL_LINK(SwMailConfigPage, SecureHdl, weld::Toggleable&, rBox, void)
 }
 
 SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pParent)
-    : SfxDialogController(pParent->GetFrameWeld(), u"modules/swriter/ui/testmailsettings.ui"_ustr, u"TestMailSettings"_ustr)
+    : SfxDialogController(pParent->GetFrameWeld(), u"modules/swriter/ui/testmailsettings.ui"_ustr,
+                          u"TestMailSettings"_ustr)
     , m_bStop(false)
     , m_pParent(pParent)
     , m_xStopPB(m_xBuilder->weld_button(u"stop"_ustr))
@@ -307,10 +321,7 @@ SwTestAccountSettingsDialog::~SwTestAccountSettingsDialog()
     }
 }
 
-IMPL_LINK_NOARG(SwTestAccountSettingsDialog, StopHdl, weld::Button&, void)
-{
-    m_bStop = true;
-}
+IMPL_LINK_NOARG(SwTestAccountSettingsDialog, StopHdl, weld::Button&, void) { m_bStop = true; }
 
 IMPL_LINK_NOARG(SwTestAccountSettingsDialog, TestHdl, void*, void)
 {
@@ -321,7 +332,8 @@ IMPL_LINK_NOARG(SwTestAccountSettingsDialog, TestHdl, void*, void)
 
 void SwTestAccountSettingsDialog::Test()
 {
-    const uno::Reference<uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
+    const uno::Reference<uno::XComponentContext>& xContext
+        = ::comphelper::getProcessComponentContext();
 
     OUString sException;
 
@@ -329,73 +341,64 @@ void SwTestAccountSettingsDialog::Test()
     bool bIsServer = false;
     try
     {
-        uno::Reference< mail::XMailService > xInMailService;
-        uno::Reference< mail::XMailServiceProvider > xMailServiceProvider(
-            mail::MailServiceProvider::create(xContext) );
-        uno::Reference< mail::XMailService > xMailService =
-                xMailServiceProvider->create(
-                mail::MailServiceType_SMTP);
-        if(m_bStop)
+        uno::Reference<mail::XMailService> xInMailService;
+        uno::Reference<mail::XMailServiceProvider> xMailServiceProvider(
+            mail::MailServiceProvider::create(xContext));
+        uno::Reference<mail::XMailService> xMailService
+            = xMailServiceProvider->create(mail::MailServiceType_SMTP);
+        if (m_bStop)
             return;
         uno::Reference<XConnectionListener> xConnectionListener(new SwConnectionListener);
 
-        if(m_pParent->m_pConfigItem->IsAuthentication() &&
-                m_pParent->m_pConfigItem->IsSMTPAfterPOP())
+        if (m_pParent->m_pConfigItem->IsAuthentication()
+            && m_pParent->m_pConfigItem->IsSMTPAfterPOP())
         {
-            xInMailService = xMailServiceProvider->create(
-                    m_pParent->m_pConfigItem->IsInServerPOP() ?
-                        mail::MailServiceType_POP3 : mail::MailServiceType_IMAP);
-            if(m_bStop)
+            xInMailService = xMailServiceProvider->create(m_pParent->m_pConfigItem->IsInServerPOP()
+                                                              ? mail::MailServiceType_POP3
+                                                              : mail::MailServiceType_IMAP);
+            if (m_bStop)
                 return;
             //authenticate at the POP or IMAP server first
-            uno::Reference<XAuthenticator> xAuthenticator =
-                new SwAuthenticator(
-                    m_pParent->m_pConfigItem->GetInServerUserName(),
-                    m_pParent->m_pConfigItem->GetInServerPassword(),
-                    m_xDialog.get());
+            uno::Reference<XAuthenticator> xAuthenticator = new SwAuthenticator(
+                m_pParent->m_pConfigItem->GetInServerUserName(),
+                m_pParent->m_pConfigItem->GetInServerPassword(), m_xDialog.get());
 
             xInMailService->addConnectionListener(xConnectionListener);
             //check connection
-            uno::Reference< uno::XCurrentContext> xConnectionContext =
-                    new SwConnectionContext(
-                        m_pParent->m_pConfigItem->GetInServerName(),
-                        m_pParent->m_pConfigItem->GetInServerPort(),
-                        u"Insecure"_ustr);
+            uno::Reference<uno::XCurrentContext> xConnectionContext = new SwConnectionContext(
+                m_pParent->m_pConfigItem->GetInServerName(),
+                m_pParent->m_pConfigItem->GetInServerPort(), u"Insecure"_ustr);
             xInMailService->connect(xConnectionContext, xAuthenticator);
         }
-        if(m_bStop)
+        if (m_bStop)
             return;
         rtl::Reference<SwAuthenticator> xAuthenticator;
-        if(m_pParent->m_pConfigItem->IsAuthentication() &&
-                !m_pParent->m_pConfigItem->IsSMTPAfterPOP() &&
-                !m_pParent->m_pConfigItem->GetMailUserName().isEmpty())
-            xAuthenticator =
-                new SwAuthenticator(
-                    m_pParent->m_pConfigItem->GetMailUserName(),
-                    m_pParent->m_pConfigItem->GetMailPassword(),
-                    m_xDialog.get());
+        if (m_pParent->m_pConfigItem->IsAuthentication()
+            && !m_pParent->m_pConfigItem->IsSMTPAfterPOP()
+            && !m_pParent->m_pConfigItem->GetMailUserName().isEmpty())
+            xAuthenticator
+                = new SwAuthenticator(m_pParent->m_pConfigItem->GetMailUserName(),
+                                      m_pParent->m_pConfigItem->GetMailPassword(), m_xDialog.get());
         else
-            xAuthenticator =  new SwAuthenticator();
+            xAuthenticator = new SwAuthenticator();
 
         xMailService->addConnectionListener(xConnectionListener);
-        if(m_bStop)
+        if (m_bStop)
             return;
         //just to check if the server exists
         xMailService->getSupportedConnectionTypes();
-        if(m_bStop)
+        if (m_bStop)
             return;
         bIsServer = true;
         //check connection
-        uno::Reference< uno::XCurrentContext> xConnectionContext =
-                new SwConnectionContext(
-                    m_pParent->m_xServerED->get_text(),
-                    m_pParent->m_xPortNF->get_value(),
-                    m_pParent->m_xSecureCB->get_active() ? u"Ssl"_ustr : u"Insecure"_ustr);
+        uno::Reference<uno::XCurrentContext> xConnectionContext = new SwConnectionContext(
+            m_pParent->m_xServerED->get_text(), m_pParent->m_xPortNF->get_value(),
+            m_pParent->m_xSecureCB->get_active() ? u"Ssl"_ustr : u"Insecure"_ustr);
         xMailService->connect(xConnectionContext, xAuthenticator);
         bIsLoggedIn = xMailService->isConnected();
-        if( xInMailService.is() )
+        if (xInMailService.is())
             xInMailService->disconnect();
-        if( xMailService->isConnected())
+        if (xMailService->isConnected())
             xMailService->disconnect();
     }
     catch (const uno::Exception& e)
@@ -428,9 +431,10 @@ SwMailConfigDlg::SwMailConfigDlg(weld::Window* pParent, const SfxItemSet& rSet)
     m_xDialog->set_title(SwResId(STR_MAILCONFIG_DLG_TITLE));
 }
 
-SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
-    weld::Window* pParent, SwMailMergeConfigItem& rItem)
-    : SfxDialogController(pParent, u"modules/swriter/ui/authenticationsettingsdialog.ui"_ustr, u"AuthenticationSettingsDialog"_ustr)
+SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(weld::Window* pParent,
+                                                               SwMailMergeConfigItem& rItem)
+    : SfxDialogController(pParent, u"modules/swriter/ui/authenticationsettingsdialog.ui"_ustr,
+                          u"AuthenticationSettingsDialog"_ustr)
     , m_rConfigItem(rItem)
     , m_xAuthenticationCB(m_xBuilder->weld_check_button(u"authentication"_ustr))
     , m_xAuthenticationImg(m_xBuilder->weld_widget(u"lockauthentication"_ustr))
@@ -462,16 +466,20 @@ SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
     , m_xInPasswordED(m_xBuilder->weld_entry(u"inpassword"_ustr))
     , m_xOKPB(m_xBuilder->weld_button(u"ok"_ustr))
 {
-    m_xAuthenticationCB->connect_toggled( LINK( this, SwAuthenticationSettingsDialog, CheckBoxHdl_Impl));
-    Link<weld::Toggleable&,void> aRBLink = LINK( this, SwAuthenticationSettingsDialog, RadioButtonHdl_Impl );
-    m_xSeparateAuthenticationRB->connect_toggled( aRBLink );
-    m_xSMTPAfterPOPRB->connect_toggled( aRBLink );
-    m_xOKPB->connect_clicked( LINK( this, SwAuthenticationSettingsDialog, OKHdl_Impl));
+    m_xAuthenticationCB->connect_toggled(
+        LINK(this, SwAuthenticationSettingsDialog, CheckBoxHdl_Impl));
+    Link<weld::Toggleable&, void> aRBLink
+        = LINK(this, SwAuthenticationSettingsDialog, RadioButtonHdl_Impl);
+    m_xSeparateAuthenticationRB->connect_toggled(aRBLink);
+    m_xSMTPAfterPOPRB->connect_toggled(aRBLink);
+    m_xOKPB->connect_clicked(LINK(this, SwAuthenticationSettingsDialog, OKHdl_Impl));
     m_xPOP3RB->connect_toggled(LINK(this, SwAuthenticationSettingsDialog, InServerHdl_Impl));
 
     m_xAuthenticationCB->set_active(m_rConfigItem.IsAuthentication());
-    m_xAuthenticationCB->set_sensitive(!officecfg::Office::Writer::MailMergeWizard::IsAuthentication::isReadOnly());
-    m_xAuthenticationImg->set_visible(officecfg::Office::Writer::MailMergeWizard::IsAuthentication::isReadOnly());
+    m_xAuthenticationCB->set_sensitive(
+        !officecfg::Office::Writer::MailMergeWizard::IsAuthentication::isReadOnly());
+    m_xAuthenticationImg->set_visible(
+        officecfg::Office::Writer::MailMergeWizard::IsAuthentication::isReadOnly());
     if (m_rConfigItem.IsSMTPAfterPOP())
         m_xSMTPAfterPOPRB->set_active(true);
     else
@@ -493,7 +501,7 @@ SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
 
 IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, OKHdl_Impl, weld::Button&, void)
 {
-    m_rConfigItem.SetAuthentication( m_xAuthenticationCB->get_active() );
+    m_rConfigItem.SetAuthentication(m_xAuthenticationCB->get_active());
     m_rConfigItem.SetSMTPAfterPOP(m_xSMTPAfterPOPRB->get_active());
     m_rConfigItem.SetMailUserName(m_xUserNameED->get_text());
     m_rConfigItem.SetMailPassword(m_xOutPasswordED->get_text());
@@ -505,7 +513,7 @@ IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, OKHdl_Impl, weld::Button&, void)
     m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK( SwAuthenticationSettingsDialog, CheckBoxHdl_Impl, weld::Toggleable&, rBox, void)
+IMPL_LINK(SwAuthenticationSettingsDialog, CheckBoxHdl_Impl, weld::Toggleable&, rBox, void)
 {
     bool bChecked = rBox.get_active();
     m_xSeparateAuthenticationRB->set_sensitive(bChecked);
@@ -575,7 +583,7 @@ IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, RadioButtonHdl_Impl, weld::Toggl
     m_xInPasswordED->set_sensitive(bNotSeparate);
 }
 
-IMPL_LINK_NOARG( SwAuthenticationSettingsDialog, InServerHdl_Impl, weld::Toggleable&, void)
+IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, InServerHdl_Impl, weld::Toggleable&, void)
 {
     bool bPOP = m_xPOP3RB->get_active();
     m_rConfigItem.SetInServerPOP(bPOP);
