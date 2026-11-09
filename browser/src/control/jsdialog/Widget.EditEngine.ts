@@ -307,9 +307,11 @@ function editEngineOnKeyDown(
 	if (event.isComposing || event.keyCode === 229) return;
 
 	// Let the browser handle clipboard shortcuts for the contenteditable element.
-	if ((event.ctrlKey || event.metaKey) && !event.altKey && !event.shiftKey) {
+	if ((event.ctrlKey || event.metaKey) && !event.altKey) {
 		const key = event.key.toLowerCase();
-		if (key === 'x' || key === 'c' || key === 'v') return;
+		if (!event.shiftKey && (key === 'x' || key === 'c' || key === 'v')) return;
+		// Paste unformatted. The paste only ever takes the plain text, so it is a normal paste.
+		if (event.shiftKey && key === 'v') return;
 	}
 
 	event.preventDefault();

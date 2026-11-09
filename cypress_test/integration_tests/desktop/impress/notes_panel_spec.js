@@ -797,6 +797,44 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 			'external text'
 		);
 	});
+
+	it('Ctrl+Shift+V pastes unformatted text into the notes', function () {
+		// Given an open notes panel with its editengine widget focused:
+		openNotesPane();
+		cy.cGet('#notespanel-container .ui-editengine').click();
+
+		// When simulating Ctrl+Shift+V on the focused widget and then a paste event
+		// carrying external text:
+		cy.getFrameWindow().then(function (win) {
+			const editable = win.document.querySelector(
+				'#notespanel-container .ui-editengine'
+			);
+			editable.focus();
+			const keyEvent = new win.KeyboardEvent('keydown', {
+				key: 'V', code: 'KeyV', ctrlKey: true, shiftKey: true,
+				bubbles: true, cancelable: true
+			});
+			editable.dispatchEvent(keyEvent);
+
+			// Then the browser is left to paste:
+			// Without the accompanying fix in place, this test would have failed with:
+			// expected true to equal false
+			// i.e. the key went to the engine as a key press and nothing was pasted.
+			expect(keyEvent.defaultPrevented).to.equal(false);
+			// Cypress does not produce a native paste event from a synthetic
+			// keydown, so call it directly.
+			const dt = new win.DataTransfer();
+			dt.setData('text/plain', 'unformatted text');
+			const pasteEvent = new win.ClipboardEvent('paste', {
+				clipboardData: dt, bubbles: true, cancelable: true
+			});
+			editable.dispatchEvent(pasteEvent);
+		});
+		cy.cGet('#notespanel-container .ui-editengine-paragraph').should(
+			'contain.text',
+			'unformatted text'
+		);
+	});
 	// The notes pane takes no selection of its own, so a shape selected on the
 	// slide keeps its frame while the notes are typed.
 	it('keeps the selection of a shape on the slide while the notes are typed', function () {
