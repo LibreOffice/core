@@ -952,7 +952,8 @@ OUString SwAccessibleTable::getExtendedAttributes()
     SolarMutexGuard aGuard;
 
     // Writer gives each page's piece of a split table its own accessible, and
-    // counts the heading rows a piece repeats among its rows.
+    // counts among its rows the heading rows it repeats and the rest of a row
+    // split across the page break.
     const SwTabFrame* pTabFrame = static_cast<const SwTabFrame*>(GetFrame());
     if (!pTabFrame || !pTabFrame->IsFollow())
         return OUString();
@@ -964,8 +965,10 @@ OUString SwAccessibleTable::getExtendedAttributes()
          pLower = pLower->GetNext())
         ++nRepeated;
 
+    const SwTabFrame* pMaster = pTabFrame->FindMaster();
     return "continued-from-previous-page:true;repeated-heading-rows:" + OUString::number(nRepeated)
-           + ";";
+           + ";"
+           + (pMaster && pMaster->HasFollowFlowLine() ? u"continued-row:true;"_ustr : OUString());
 }
 
 bool SwAccessibleTable::isAccessibleSelected(
